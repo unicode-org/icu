@@ -240,27 +240,11 @@ int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit,
             if (pos == limit) {
                 return syntaxError(RuleBasedTransliterator::TRAILING_BACKSLASH, rule, start);
             }
-
-            // UNLIKE THE JAVA version, we parse \uXXXX escapes.  We
-            // do not do this in Java because the compiler has already
-            // done it when the ResourceBundle file was compiled.
-            // Parse \uXXXX escapes
-            c = rule.charAt(pos++);
-            if (c == 0x0075/*u*/) {
-                if ((pos+4) > limit) {
-                    return syntaxError(RuleBasedTransliterator::MALFORMED_UNICODE_ESCAPE, rule, start);
-                }
-                c = (UChar)0x0000;
-                for (int32_t plim=pos+4; pos<plim; ++pos) { // [sic]
-                    int32_t digit = Unicode::digit(rule.charAt(pos), 16);
-                    if (digit<0) {
-                        return syntaxError(RuleBasedTransliterator::MALFORMED_UNICODE_ESCAPE, rule, start);
-                    }
-                    c = (UChar) ((c << 4) | digit);
-                }
+            UChar32 escaped = rule.unescapeAt(pos); // pos is already past '\\'
+            if (escaped == (UChar32) -1) {
+                return syntaxError(RuleBasedTransliterator::MALFORMED_UNICODE_ESCAPE, rule, start);
             }
- 
-            buf.append(c);
+            buf.append((UChar) escaped);
             continue;
         }
         // Handle quoted matter
