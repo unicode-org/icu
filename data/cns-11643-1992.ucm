@@ -29,8 +29,7 @@
 <mb_cur_max>	      3
 <mb_cur_min>	      1
 <uconv_class>	      "MBCS"
-<subchar>		      \xF4\xFE
-<subchar1>		      \x1A
+<subchar>		      \x81\x7e\x7e
 <icu:state>		      81-89:1
 <icu:state>		      21-7e:2
 <icu:state>		      21-7e
