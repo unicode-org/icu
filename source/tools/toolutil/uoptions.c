@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999, International Business Machines
+*   Copyright (C) 2000, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -20,7 +20,7 @@
 #include "cstring.h"
 #include "uoptions.h"
 
-int
+U_CAPI int U_EXPORT2
 u_parseArgs(int argc, const char *argv[],
             int optionCount, UOption options[]) {
     const char *arg;
