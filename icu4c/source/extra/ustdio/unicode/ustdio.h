@@ -38,12 +38,6 @@
     really read them.
  * The format specification should use int32_t and ICU type variants instead of
     the compiler dependent int.
- * We should consider using Microsoft's wprintf and wscanf format
-    specification.
- * %C and %S are aliases of %lc and %ls, which are used for wchar_t.
-    We should consider using this for UChar and replace %K and %U,
-    or we should make them use wchar_t.
- * + in printf format specification is incomplete.
  * Make sure that #, blank and precision in the printf format specification
     works.
  * Make sure that * in the scanf format specification works.
@@ -53,9 +47,6 @@
     wastes a lot of time and space.
  * Make sure that surrogates are supported. It doesn't look like %[], %s or %U
     properly handle surrogates in both scanf()'s.
- * The ustream header should also include operator<< and
-    operator>> for UDate (not double). This may not work on some compilers
-    that use these operators on a double.
  * Testing should be done for reading and writing multi-byte encodings,
     and make sure that a character that is contained across buffer boundries
     works even for incomplete characters.
@@ -84,7 +75,7 @@
     0 is returned if the operation was successful and EOF otherwise.
  * u_fsettransliterator does not support U_READ side of transliteration.
  * The format specifier should limit the size of a format or honor it in
-    order to prevent buffer overruns.  (e.g. %1000.1000d).
+    order to prevent buffer overruns.  (e.g. %256.256d).
  * u_fgets is different from stdio. The UChar and UFile arguments are swapped.
  * u_fread and u_fwrite don't exist. They're needed for reading and writing
     data structures without any conversion.
@@ -96,12 +87,12 @@
  * We should consider using a UnicodeSet for scanset.
  * scanset has a buffer overflow and underflow bug for both string and file
     APIs.
- * The width '*' parameter for all scanf formats, including scanset, needs
+ * The width parameter for all scanf formats, including scanset, needs
     better testing. This prevents buffer overflows.
+ * The skip '*' parameter for all scanf formats, including scanset, needs
+    better testing. This prevents writing to bad memory.
  * u_fgetc() and u_fungetc() should use UChar32 instead of UChar, or at
     least 32-bit versions should be available.
- * "%d % d %d" and "%d %+d %d" of a number doesn't work as expected.
-    The third %d will still have the sign attached.
  * More testing is needed.
 */
 
@@ -793,8 +784,6 @@ u_vsscanf_u(const UChar *buffer,
         const UChar     *patternSpecification,
         va_list         ap);
 
-
-U_CAPI int32_t u_strftime(UChar *s, int32_t maxsize, const char *locale, const char *patternSpecification, UDate time);
 
 #endif
 
