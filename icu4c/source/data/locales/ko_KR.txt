@@ -30,7 +30,7 @@ ko_KR {
         "a h'\uC2DC' mm'\uBD84' ss'\uCD08' z",
         "a h'\uC2DC' mm'\uBD84' ss'\uCD08'",
         "a h:mm:ss",
-        "a h'\uC2Dc' mm'\uBD84'",
+        "a h:mm",
         "yyyy'\uB144' M'\uC6D4' d'\uC77C' EEEE",
         "yyyy'\uB144' M'\uC6D4' d'\uC77C' EE",
         "yyyy.MM.dd",

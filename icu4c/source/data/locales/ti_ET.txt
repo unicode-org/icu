@@ -9,10 +9,6 @@
 
 ti_ET {
     Version{ "1.0" }
-    AmPmMarkers {
-        "\u1295\u1309\u1206 \u1230\u12D3\u1270",
-        "\u12F5\u1215\u122D \u1230\u12D3\u1275",
-    }
     DateTimePatterns { 
         "h:mm:ss a",
         "h:mm:ss a",

@@ -8,10 +8,10 @@
 es_CO {
     Version { "1.0" }
     DateTimePatterns { 
-        "hh:mm:ss a z",
-        "hh:mm:ss a z",
-        "hh:mm:ss a",
-        "hh:mm a",
+        "HH:mm:ss z",
+        "H:mm:ss z",
+        "H:mm:ss",
+        "H:mm",
         "EEEE d' de 'MMMM' de 'yyyy",
         "d' de 'MMMM' de 'yyyy",
         "d/MM/yyyy",

@@ -15,4 +15,15 @@ it_IT {
 //    }
 //    ShortCountry { "ITA" }
     LocaleID:int { 0x0410 }
+    DateTimePatterns { 
+        "HH:mm:ss z",
+        "H:mm:ss z",
+        "HH:mm:ss",
+        "HH:mm",
+        "EEEE d MMMM yyyy",
+        "dd MMMM yyyy",
+        "dd/MMM/yy",
+        "dd/MM/yy",
+        "{1} {0}",
+    }
 }
