@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-aix,v 1.23 2001/10/03 23:32:11 grhoten-oss Exp $
+## $Id: mh-aix,v 1.24 2001/10/16 00:29:51 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -E -M $(DEFS) $(CPPFLAGS)
@@ -73,11 +73,11 @@ STATIC_O = o
 
 %.u : $(srcdir)/%.c
 	@echo "Generating dependency information for $<"
-	@$(SHELL) -ec '$(GEN_DEPS.c) $< > /dev/null 2>&1'
+	@$(SHELL) -ec '$(GEN_DEPS.c) $< > /dev/null'
 
 %.u : $(srcdir)/%.cpp
 	@echo "Generating dependency information for $<"
-	@$(SHELL) -ec '$(GEN_DEPS.cc) $< > /dev/null 2>&1'
+	@$(SHELL) -ec '$(GEN_DEPS.cc) $< > /dev/null'
 
 ## Versioned libraries rules
 %.$(SO).$(SO_TARGET_VERSION_MAJOR): %.$(SO).$(SO_TARGET_VERSION)
