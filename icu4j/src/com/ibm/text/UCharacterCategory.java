@@ -6,8 +6,8 @@
 *
 * $Source: 
 *      /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterCategory.java $ 
-* $Date: 2001/03/23 19:51:38 $ 
-* $Revision: 1.2 $
+* $Date: 2001/10/12 23:53:16 $ 
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -62,7 +62,7 @@ public class UCharacterCategory
   */
 	public static final int OTHER_LETTER            = 5;
 	/**
-  * Character type Lu
+  * Character type Mn
   */
 	public static final int NON_SPACING_MARK        = 6;
 	/**
