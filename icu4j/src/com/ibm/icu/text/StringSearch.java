@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/StringSearch.java,v $ 
- * $Date: 2003/07/03 23:18:37 $ 
- * $Revision: 1.24 $
+ * $Date: 2003/07/31 19:51:12 $ 
+ * $Revision: 1.25 $
  *
  *****************************************************************************************
  */
@@ -2796,8 +2796,6 @@ public final class StringSearch extends SearchIterator
 	            }
 	        }
 	
-	        targetce = lastce;
-	        
 	        while (found && patternceindex > 0) {
 	            targetce = m_colEIter_.previous();
 	            if (targetce == CollationElementIterator.NULLORDER) {
@@ -2814,8 +2812,7 @@ public final class StringSearch extends SearchIterator
 	        }
 	
 	        if (!found) {
-	            textoffset = shiftForward(textoffset, targetce, 
-	            											patternceindex);
+	            textoffset = shiftForward(textoffset, lastce, patternceindex);
 	            // status checked at loop.
 	            patternceindex = m_pattern_.m_CELength_;
 	            continue;
@@ -2880,7 +2877,6 @@ public final class StringSearch extends SearchIterator
 	                break;
 	            }
 	        }
-	        targetce = lastce;
 	        
 	        while (found && patternceindex > 0) {
 	            targetce    = m_colEIter_.previous();
@@ -2903,7 +2899,7 @@ public final class StringSearch extends SearchIterator
 	        }
 	
 	        if (!found) {
-	            textoffset = shiftForward(textoffset, targetce, patternceindex);
+	            textoffset = shiftForward(textoffset, lastce, patternceindex);
 	            // status checked at loop
 	            patternceindex = m_pattern_.m_CELength_;
 	            continue;
