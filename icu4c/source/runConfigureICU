@@ -156,9 +156,6 @@ case $platform in
         THE_COMP="gcc"
         CC=`which gcc`; export CC
         CXX=`which g++`; export CXX
-        RELEASE_CFLAGS="-O2"
-        RELEASE_CXXFLAGS="-O2"
-        #LDFLAGS=-L/usr/lpp/xlC/lib; export LDFLAGS
         ;;
 # Just use --enable-threads=no. Visual Age makes no distinction between xlC and xlC_r or any other _r programs.
 #    AIX4.3VA_nothreads)
