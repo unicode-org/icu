@@ -1,16 +1,16 @@
-Generate: Derived.*
+Generate: .*
 DeltaVersion: 9
 CopyrightYear: 2005
 
-File: uax29/GraphemeBreakProperty
+File: auxiliary/GraphemeBreakProperty
 Property: Grapheme_Cluster_Break
 Format:	skipValue=Other
 
-File: uax29/WordBreakProperty
+File: auxiliary/WordBreakProperty
 Property: Word_Break
 Format:	skipValue=Other
 
-File: uax29/SentenceBreakProperty
+File: auxiliary/SentenceBreakProperty
 Property: Sentence_Break
 Format:	skipValue=Other
 

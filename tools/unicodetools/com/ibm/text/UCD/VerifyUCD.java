@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/VerifyUCD.java,v $
-* $Date: 2004/02/12 08:23:16 $
-* $Revision: 1.25 $
+* $Date: 2005/02/24 02:59:34 $
+* $Revision: 1.26 $
 *
 *******************************************************************************
 */
@@ -272,7 +272,7 @@ public class VerifyUCD implements UCD_Types {
 			}
 			System.out.println(" </tr>");
 			if (prop.doTotal(i, true)) printTotals("Subtotal", subtotalCount, true);
-			if (prop.doTotal(i, false)) printTotals("Cumulative Total", totalCount, false);
+			if (prop.doTotal(i, false)) printTotals("Cummulative Total", totalCount, false);
 		}
 		printTotals("Total", totalCount, false);
 		System.out.println("</table>");

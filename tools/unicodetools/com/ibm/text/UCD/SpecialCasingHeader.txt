@@ -15,72 +15,23 @@
 #
 # <code>; <lower> ; <title> ; <upper> ; (<condition_list> ;)? # <comment>
 #
-# <code>, <lower>, <title>, and <upper> provide character values in hex. If there is more than
-# one character, they are separated by spaces. Other than as used to separate elements,
-# spaces are to be ignored.
+# <code>, <lower>, <title>, and <upper> provide character values in hex. If there is more
+# than one character, they are separated by spaces. Other than as used to separate 
+# elements, spaces are to be ignored.
 #
-# The <condition_list> is optional. Where present, it consists of one or more locales or contexts,
-# separated by spaces. In these conditions:
+# The <condition_list> is optional. Where present, it consists of one or more locale IDs
+# or contexts, separated by spaces. In these conditions:
 # - A condition list overrides the normal behavior if all of the listed conditions are true.
 # - The context is always the context of the characters in the original string,
 #   NOT in the resulting string.
 # - Case distinctions in the condition list are not significant.
 # - Conditions preceded by "Not_" represent the negation of the condition.
 #
-# A locale is defined as:
-# <locale> := <ISO_639_code> ( "_" <ISO_3166_code> ( "_" <variant> )? )?
-# <ISO_3166_code> := 2-letter ISO country code,
-# <ISO_639_code> :=  2-letter ISO language code
+# A locale ID is defined by taking any language tag as defined by
+# RFC 3066 (or its successor), and replacing '-' by '_'.
 #
-# A context for a character C is one of the following. This overrides Table
-# 3-13. Context Specification for Casing on p. 89 of The Unicode Standard,
-# Version 4.0.
-#
-# Definitions
-# - The property "cased" is defined in D47 on that same page (p. 89)
-# - A character C is defined to be "case-ignorable" if it meets either of the
-# following criteria:
-#  A. The general category of C is Nonspacing Mark (Mn), or Enclosing Mark
-#     (Me), or Format Control (Cf), or Letter Modifier (Lm), or 
-#     Symbol Modifier (Sk)
-#  B. C is a MidLetter as defined in UAX #29
-# - A "case-ignorable sequence" is a sequence of zero or more case-ignorable
-# characters.
-#
-# A description of each context is followed by the equivalent regular
-# expression(s) describing the context before C and/or the context after C.
-# The regular expression uses the syntax of UTS #18,  with one addition: 
-# "!" means that the expression does not match. All regular expressions
-# below are case-sensitive.
-#
-# Context: Final_Sigma
-# Description: C is preceded by a sequence consisting of a cased letter and
-# a case-ignorable sequence, and C is not followed by a sequence consisting 
-# of an ignorable sequence
-# and then a cased letter.
-# Before C: \p{cased} (\p{case-ignorable})*
-# After C: !( (\p{case-ignorable})* \p{cased} )
-#
-# Context: After_Soft_Dotted
-# Description: The last preceding character with combining class of zero before C was
-# Soft_Dotted,  and there is no intervening combining character class 230 (ABOVE).
-# Before C: [\p{Soft_Dotted}] ([^{cc=230} {cc=0}])*
-#
-# Context: More_Above
-# Description: C is followed by one or more characters of combining class
-# 230 (ABOVE) in the combining character sequence.
-# After C: [^\p{cc=0}]* [\p{cc=230}]
-#
-# Context: Before_Dot
-# Description: C is followed by combining dot above (U+0307). Any sequence
-# of characters with a combining class that is neither 0 nor 230 may intervene
-# between the current character and the combining dot above.
-# After C: ([^\p{cc=230} \p{cc=0}])* [\u0307]
-#
-# Context: After_I
-# Description: The last preceding base character was an uppercase I, and
-# there is no intervening combining character class 230 (ABOVE).
-# Before C: [I] ([^\p{cc=230} \p{cc=0}])
+# A context for a character C is defined by Section 3.13 Default Case Operations,
+# on p. 89-90 of The Unicode Standard, Version 4.0, as amended by Unicode 4.0.1.
 #
 # Parsers of this file must be prepared to deal with future additions to this format:
 #  * Additional contexts
