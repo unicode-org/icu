@@ -304,8 +304,11 @@ idnaref_toASCII(const UChar* src, int32_t srcLength,
 
     // step 3 & 4
     for( j=0;j<b1Len;j++){
-        if(b1[j] > 0x7F) srcIsASCII = FALSE;
-        srcIsLDH = prep->isLDHChar(b1[j]);
+        if(b1[j] > 0x7F){
+            srcIsASCII = FALSE;
+        }else{
+            srcIsLDH = prep->isLDHChar(b1[j]);
+        }
     }
     
     if(useSTD3ASCIIRules == TRUE){
@@ -437,11 +440,10 @@ idnaref_toUnicode(const UChar* src, int32_t srcLength,
         for(;src[srcLength]!=0;){
             if(src[srcLength]> 0x7f){
                 srcIsASCII = FALSE;
-            }
-            // here we do not assemble surrogates
-            // since we know that LDH code points
-            // are in the ASCII range only
-            if(prep->isLDHChar(src[srcLength])==FALSE){
+            }if(prep->isLDHChar(src[srcLength])==FALSE){
+                // here we do not assemble surrogates
+                // since we know that LDH code points
+                // are in the ASCII range only
                 srcIsLDH = FALSE;
                 failPos = srcLength;
             }
@@ -451,11 +453,10 @@ idnaref_toUnicode(const UChar* src, int32_t srcLength,
         for(int32_t j=0; j<srcLength; j++){
             if(src[j]> 0x7f){
                 srcIsASCII = FALSE;
-            }
-            // here we do not assemble surrogates
-            // since we know that LDH code points
-            // are in the ASCII range only
-            if(prep->isLDHChar(src[j])==FALSE){
+            }else if(prep->isLDHChar(src[j])==FALSE){
+                // here we do not assemble surrogates
+                // since we know that LDH code points
+                // are in the ASCII range only
                 srcIsLDH = FALSE;
                 failPos = j;
             }
