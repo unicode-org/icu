@@ -43,6 +43,7 @@
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				ProgramDatabaseFile=".\..\..\lib\icuin33.pdb"
+				EnableCOMDATFolding="2"
 				BaseAddress="0x4a900000"
 				ImportLibrary="..\..\lib\icuin.lib"/>
 			<Tool
