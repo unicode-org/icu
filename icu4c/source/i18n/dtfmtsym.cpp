@@ -37,7 +37,7 @@ UnicodeString DateFormatSymbols::fgPatternChars = UNICODE_STRING("GyMdkHmsSEDFwW
 // files.  They aren't designed for actual use, just for backup.
 
 // These are the month names and abbreviations of last resort.
-const UChar DateFormatSymbols::fgLastResortMonthNames[kMonthNum][kMonthLen] =
+const UChar DateFormatSymbols::fgLastResortMonthNames[DateFormatSymbols::kMonthNum][DateFormatSymbols::kMonthLen] =
 {
     {0x0030, 0x0031, 0x0000}, /* "01" */
     {0x0030, 0x0032, 0x0000}, /* "02" */
@@ -55,7 +55,7 @@ const UChar DateFormatSymbols::fgLastResortMonthNames[kMonthNum][kMonthLen] =
 };
 
 // These are the weekday names and abbreviations of last resort.
-const UChar DateFormatSymbols::fgLastResortDayNames[kDayNum][kDayLen] =
+const UChar DateFormatSymbols::fgLastResortDayNames[DateFormatSymbols::kDayNum][DateFormatSymbols::kDayLen] =
 {
     {0x0000, 0x0000}, /* "" */
     {0x0031, 0x0000}, /* "1" */
@@ -68,13 +68,13 @@ const UChar DateFormatSymbols::fgLastResortDayNames[kDayNum][kDayLen] =
 };
 
 // These are the am/pm and BC/AD markers of last resort.
-const UChar DateFormatSymbols::fgLastResortAmPmMarkers[kAmPmNum][kAmPmLen] =
+const UChar DateFormatSymbols::fgLastResortAmPmMarkers[DateFormatSymbols::kAmPmNum][DateFormatSymbols::kAmPmLen] =
 {
     {0x0041, 0x004D, 0x0000}, /* "AM" */
     {0x0050, 0x004D, 0x0000}  /* "PM" */
 };
 
-const UChar DateFormatSymbols::fgLastResortEras[kEraNum][kEraLen] =
+const UChar DateFormatSymbols::fgLastResortEras[DateFormatSymbols::kEraNum][DateFormatSymbols::kEraLen] =
 {
     {0x0042, 0x0043, 0x0000}, /* "BC" */
     {0x0041, 0x0044, 0x0000}  /* "AD" */
@@ -82,7 +82,7 @@ const UChar DateFormatSymbols::fgLastResortEras[kEraNum][kEraLen] =
 
 
 // These are the zone strings of last resort.
-const UChar DateFormatSymbols::fgLastResortZoneStrings[kZoneNum][kZoneLen] =
+const UChar DateFormatSymbols::fgLastResortZoneStrings[DateFormatSymbols::kZoneNum][DateFormatSymbols::kZoneLen] =
 {
     {0x0047, 0x004D, 0x0054, 0x0000}, /* "GMT" */
     {0x0047, 0x004D, 0x0054, 0x0000}, /* "GMT" */
