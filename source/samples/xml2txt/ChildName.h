@@ -1,3 +1,7 @@
+/******************************************************************************
+ * Copyright (C) 2002, International Business Machines Corporation and
+ * others. All Rights Reserved.
+ ******************************************************************************/
 #ifndef CHILDNAME_H_
 #define CHILDNAME_H_
 #include <util/PlatformUtils.hpp>

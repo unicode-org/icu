@@ -1,3 +1,4 @@
+Copyright (c) 2002, International Business Machines Corporation and others. All Rights Reserved.
 udata: Low level ICU data
 
 This sample demonstrates

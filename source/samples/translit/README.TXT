@@ -1,3 +1,4 @@
+Copyright (c) 2002, International Business Machines Corporation and others. All Rights Reserved.
 This is an exercise for the ICU Workshop (September 2000).
   http://oss.software.ibm.com/icu/docs/workshop_2000/agenda.html
 

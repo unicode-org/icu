@@ -1,3 +1,5 @@
+Copyright (c) 2002, International Business Machines Corporation and others. All Rights Reserved.
+
 The uconv command is an iconv(1)-like conversion / transcoding
 program. Please check its manual page, or run uconv -h, for help.
 
