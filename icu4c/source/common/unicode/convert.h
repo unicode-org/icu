@@ -143,7 +143,7 @@ void fromUnicode(char*&         target,
                  const char*    targetLimit,
                  const UChar*&      source,
                  const UChar* sourceLimit,
-		 int32_t * offsets,
+                 int32_t * offsets,
                  UBool         flush,
                  UErrorCode&     err);
 
@@ -171,7 +171,7 @@ void fromUnicode(char*&         target,
         const UChar*   targetLimit,
         const char*&     source,
         const char*      sourceLimit,
-		int32_t * offsets,
+        int32_t * offsets,
         UBool           flush,
         UErrorCode&       err);
 
@@ -212,7 +212,7 @@ UConverterType getType(void) const;
  * @stable
  */
  void getStarters(UBool starters[256],
-		  UErrorCode& err) const;
+                  UErrorCode& err) const;
  /**
  * Fills in the output parameter, subChars, with the substitution characters
  * as multiple bytes.
@@ -387,6 +387,6 @@ UBool isAmbiguous(void) const;
 
 };
 
-typedef UnicodeConverter UnicodeConverterCPP;	/* Backwards compatibility. */
+typedef UnicodeConverter UnicodeConverterCPP;   /* Backwards compatibility. */
 
 #endif
