@@ -75,7 +75,7 @@ addTestDeprecatedAPI(TestNode** root)
  *TODO: The ucol_openRules method which does not take UParseError as one of its params
  * has been deprecated in 2.0 release.Please remove this API by 10/1/2002
  */
-void 
+static void 
 TestDeprecatedCollationAPI(void)
 {
   UErrorCode status = U_ZERO_ERROR;
@@ -141,7 +141,7 @@ TestDeprecatedCollationAPI(void)
  *and unum_openPattern methods have been deprecated in 2.0 release.Please remove this API by 10/1/2002
  */
 
-void 
+static void 
 TestDeprecatedNumFmtAPI(void)
 {
 
@@ -244,7 +244,7 @@ TestDeprecatedNumFmtAPI(void)
  *TODO: udat_open and udat_openPatterns methods have been unified and deprecated in 2.0 release.
  *Please remove this API by 10/1/2002.
  */
-void 
+static void 
 TestDeprecatedDateFmtAPI(void)
 {
     UDateFormat *def, *fr, *fr_pat ;

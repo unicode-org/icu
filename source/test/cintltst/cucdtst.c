@@ -1779,7 +1779,7 @@ TestCaseCompare() {
     }
 }
 
-void TestUScriptCodeAPI(){
+static void TestUScriptCodeAPI(){
     const char* testNames[]={
     /* test locale */
     "en", "en_US", "sr", "ta" , "te_IN",
