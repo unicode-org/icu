@@ -83,10 +83,10 @@ class CollationKey;
 * // Compare two strings in the default locale
 * UErrorCode success = U_ZERO_ERROR;
 * Collator* myCollator = Collator::createInstance(success);
-* if (myCollator->compare("abc", "ABC") &lt; 0)
-*   cout &lt;&lt; "abc is less than ABC" &lt;&lt; endl;
+* if (myCollator->compare("abc", "ABC") < 0)
+*   cout << "abc is less than ABC" << endl;
 * else
-*   cout &lt;&lt; "abc is greater than or equal to ABC" &lt;&lt; endl;
+*   cout << "abc is greater than or equal to ABC" << endl;
 * \endcode
 * </pre>
 * </blockquote>
@@ -109,8 +109,8 @@ class CollationKey;
 *                            Collator::createInstance(Locale::US, success);
 * usCollator->setStrength(Collator::PRIMARY);
 * if (usCollator->compare("abc", "ABC") == 0)
-*   cout &lt;&lt; 
-* "'abc' and 'ABC' strings are equivalent with strength PRIMARY" &lt;&lt; 
+*   cout << 
+* "'abc' and 'ABC' strings are equivalent with strength PRIMARY" << 
 * endl;
 * \endcode
 * </pre>
@@ -303,18 +303,20 @@ public:
   * than, greater than or equal to another string.
   * <p>Example of use:
   * <pre>
-  * .  UErrorCode status = U_ZERO_ERROR;
-  * .  Collator*myCollation = Collator::createInstance(Locale::US, 
-  * .                                                         status);
-  * .  if (U_FAILURE(status)) return;
-  * .  myCollation->setStrength(Collator::PRIMARY);
-  * .  // result would be Collator::EQUAL ("abc" == "ABC")
-  * .  // (no primary difference between "abc" and "ABC")
-  * .  UCollationResult result = myCollation->compare("abc", "ABC");
-  * .  myCollation->setStrength(Collator::TERTIARY);
-  * .  // result would be Collator::LESS (abc" &lt;&lt;&lt; "ABC")
-  * .  // (with tertiary difference between "abc" and "ABC")
-  * .  UCollationResult result = myCollation->compare("abc", "ABC");
+  * \code
+  *   UErrorCode status = U_ZERO_ERROR;
+  *   Collator*myCollation = Collator::createInstance(Locale::US, 
+  *                                                          status);
+  *   if (U_FAILURE(status)) return;
+  *   myCollation->setStrength(Collator::PRIMARY);
+  *   // result would be Collator::EQUAL ("abc" == "ABC")
+  *   // (no primary difference between "abc" and "ABC")
+  *   UCollationResult result = myCollation->compare("abc", "ABC");
+  *   myCollation->setStrength(Collator::TERTIARY);
+  *   // result would be Collator::LESS ("abc" <<< "ABC")
+  *   // (with tertiary difference between "abc" and "ABC")
+  *   UCollationResult result = myCollation->compare("abc", "ABC");
+  * \endcode
   * </pre>
   * @param source the source string to be compared with.
   * @param target the string that is to be compared with the source string.
@@ -331,18 +333,20 @@ public:
   * length
   * <p>Example of use:
   * <pre>
-  * .  UErrorCode status = U_ZERO_ERROR;
-  * .  Collator*myCollation = Collator::createInstance(Locale::US, 
-  * .                                                         status);
-  * .  if (U_FAILURE(status)) return;
-  * .  myCollation->setStrength(Collator::PRIMARY);
-  * .  // result would be Collator::EQUAL ("abc" == "ABC")
-  * .  // (no primary difference between "abc" and "ABC")
-  * .  UCollationResult result = myCollation->compare("abc", "ABC",3);
-  * .  myCollation->setStrength(Collator::TERTIARY);
-  * .  // result would be Collator::LESS (abc" &lt;&lt;&lt; "ABC")
-  * .  // (with tertiary difference between "abc" and "ABC")
-  * .  UCollationResult result = myCollation->compare("abc", "ABC",3);
+  * \code
+  *   UErrorCode status = U_ZERO_ERROR;
+  *   Collator*myCollation = Collator::createInstance(Locale::US, 
+  *                                                          status);
+  *   if (U_FAILURE(status)) return;
+  *   myCollation->setStrength(Collator::PRIMARY);
+  *   // result would be Collator::EQUAL ("abc" == "ABC")
+  *   // (no primary difference between "abc" and "ABC")
+  *   UCollationResult result = myCollation->compare("abc", "ABC",3);
+  *   myCollation->setStrength(Collator::TERTIARY);
+  *   // result would be Collator::LESS (abc" <<< "ABC")
+  *   // (with tertiary difference between "abc" and "ABC")
+  *   UCollationResult result = myCollation->compare("abc", "ABC",3);
+  * \endcode
   * </pre>
   * @param source the source string to be compared with.
   * @param target the string that is to be compared with the source string.
@@ -362,18 +366,20 @@ public:
   * is less than, greater than or equal to another string array.
   * <p>Example of use:
   * <pre>
-  * .  UErrorCode status = U_ZERO_ERROR;
-  * .  Collator*myCollation = Collator::createInstance(Locale::US, 
-  * .                                                         status);
-  * .  if (U_FAILURE(status)) return;
-  * .  myCollation->setStrength(Collator::PRIMARY);
-  * .  // result would be Collator::EQUAL ("abc" == "ABC")
-  * .  // (no primary difference between "abc" and "ABC")
-  * .  UCollationResult result = myCollation->compare(L"abc", 3, L"ABC", 3);
-  * .  myCollation->setStrength(Collator::TERTIARY);
-  * .  // result would be Collator::LESS (abc" &lt;&lt;&lt; "ABC")
-  * .  // (with tertiary difference between "abc" and "ABC")
-  * .  UCollationResult result = myCollation->compare(L"abc", 3, L"ABC", 3);
+  * \code
+  *   UErrorCode status = U_ZERO_ERROR;
+  *   Collator*myCollation = Collator::createInstance(Locale::US, 
+  *                                                          status);
+  *   if (U_FAILURE(status)) return;
+  *   myCollation->setStrength(Collator::PRIMARY);
+  *   // result would be Collator::EQUAL ("abc" == "ABC")
+  *   // (no primary difference between "abc" and "ABC")
+  *   UCollationResult result = myCollation->compare(L"abc", 3, L"ABC", 3);
+  *   myCollation->setStrength(Collator::TERTIARY);
+  *   // result would be Collator::LESS (abc" <<< "ABC")
+  *   // (with tertiary difference between "abc" and "ABC")
+  *   UCollationResult result = myCollation->compare(L"abc", 3, L"ABC", 3);
+  * \endcode
   * </pre>
   * @param source the source string array to be compared with.
   * @param sourceLength the length of the source string array.  If this value
@@ -398,40 +404,42 @@ public:
   * generated sort keys.
   * <p>Example of use:
   * <pre>
-  * . UErrorCode status = U_ZERO_ERROR;
-  * . Collator*myCollation = Collator::createInstance(Locale::US, 
-  * .                                                       status);
-  * . if (U_FAILURE(status)) return;
-  * . myCollation->setStrength(Collator::PRIMARY);
-  * . UErrorCode key1Status, key2Status;
-  * . CollationKey CollationKey1
-  * . CollationKey1 = myCollation->getCollationKey("abc", CollationKey1, 
-  * .                                              key1Status);
-  * . CollationKey CollationKey2
-  * . CollationKey2 = myCollation->getCollationKey("ABC", CollationKey2, 
-  * .                                              key2Status);
-  * . if (U_FAILURE(key1Status) || U_FAILURE(key2Status)) 
-  * . {
-  * .   delete myCollation; 
-  * .   return;
-  * . }
-  * . // Use CollationKey::compare() to compare the sort keys
-  * . // result would be 0 (CollationKey1 == CollationKey2)
-  * . int result = CollationKey1.compare(CollationKey2);
-  * . myCollation->setStrength(Collator::TERTIARY);
-  * . CollationKey1 = myCollation->getCollationKey("abc", CollationKey1, 
-  * .                                              key1Status);
-  * . CollationKey2 = myCollation->getCollationKey("ABC", CollationKey2, 
-  * .                                              key2Status);
-  * . if (U_FAILURE(key1Status) || U_FAILURE(key2Status)) 
-  * . { 
-  * .   delete myCollation; 
-  * .   return; 
-  * . }
-  * . // Use CollationKey::compareTo to compare the collation keys
-  * . // result would be -1 (CollationKey1 &lt; CollationKey2)
-  * . result = CollationKey1.compareTo(CollationKey2);
-  * . delete myCollation;
+  * \code
+  *  UErrorCode status = U_ZERO_ERROR;
+  *  Collator*myCollation = Collator::createInstance(Locale::US, 
+  *                                                        status);
+  *  if (U_FAILURE(status)) return;
+  *  myCollation->setStrength(Collator::PRIMARY);
+  *  UErrorCode key1Status, key2Status;
+  *  CollationKey CollationKey1
+  *  CollationKey1 = myCollation->getCollationKey("abc", CollationKey1, 
+  *                                               key1Status);
+  *  CollationKey CollationKey2
+  *  CollationKey2 = myCollation->getCollationKey("ABC", CollationKey2, 
+  *                                               key2Status);
+  *  if (U_FAILURE(key1Status) || U_FAILURE(key2Status)) 
+  *  {
+  *    delete myCollation; 
+  *    return;
+  *  }
+  *  // Use CollationKey::compare() to compare the sort keys
+  *  // result would be 0 (CollationKey1 == CollationKey2)
+  *  int result = CollationKey1.compare(CollationKey2);
+  *  myCollation->setStrength(Collator::TERTIARY);
+  *  CollationKey1 = myCollation->getCollationKey("abc", CollationKey1, 
+  *                                               key1Status);
+  *  CollationKey2 = myCollation->getCollationKey("ABC", CollationKey2, 
+  *                                               key2Status);
+  *  if (U_FAILURE(key1Status) || U_FAILURE(key2Status)) 
+  *  { 
+  *    delete myCollation; 
+  *    return; 
+  *  }
+  *  // Use CollationKey::compareTo to compare the collation keys
+  *  // result would be -1 (CollationKey1 < CollationKey2)
+  *  result = CollationKey1.compareTo(CollationKey2);
+  *  delete myCollation;
+  * \endcode
   * </pre>
   * <p>
   * If the source string is null, a null collation key will be returned.

@@ -61,14 +61,14 @@
  *       const int tempLen = 20;
  *       char temp[tempLen];
  *       
- *       for (int i=0; i&lt;dNumSize; i++) {
+ *       for (int i=0; i<dNumSize; i++) {
  *           FieldPosition pos(NumberFormat::INTEGER_FIELD);
  *           UnicodeString buf;
  *           char fmtText[tempLen];
  *           ToCharString(fmt->format(doubleNum[i], buf, pos), fmtText);
- *           for (int j=0; j&lt;tempLen; j++) temp[j] = ' '; // clear with spaces
+ *           for (int j=0; j<tempLen; j++) temp[j] = ' '; // clear with spaces
  *           temp[__min(tempLen, tempLen-pos.getEndIndex())] = '\0';
- *           cout &lt;&lt; temp &lt;&lt; fmtText   &lt;&lt; endl;
+ *           cout << temp << fmtText   << endl;
  *       }
  *       delete fmt;
  * \endcode

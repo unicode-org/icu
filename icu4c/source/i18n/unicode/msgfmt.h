@@ -48,8 +48,8 @@ class NumberFormat;
  *          "At {1,time} on {1,date}, there was {2} on planet {0,number}.",
  *          arguments, 3, result, success );
  *     
- *     cout &lt;&lt; "result: " &lt;&lt; result &lt;&lt; endl;
- *     //&lt;output>: At 4:34:20 PM on 23-Mar-98, there was a disturbance
+ *     cout << "result: " << result << endl;
+ *     //<output>: At 4:34:20 PM on 23-Mar-98, there was a disturbance
  *     //             in the Force on planet 7.
  * \endcode
  * </pre>  
@@ -150,7 +150,7 @@ class NumberFormat;
  *      
  *     UnicodeString string;
  *     FieldPosition fpos = 0;
- *     cout &lt;&lt; form->format(testArgs, 2, string, fpos, success) &lt;&lt; endl;
+ *     cout << form->format(testArgs, 2, string, fpos, success) << endl;
  *     
  *     // output, with different testArgs
  *     // output: The disk "MyDisk" contains no files.
@@ -163,7 +163,7 @@ class NumberFormat;
  * <pre>
  * \code
  *    form->applyPattern(
- *      "There {0,choice,0#are no files|1#is one file|1&lt;are {0,number,integer} files}.");
+ *      "There {0,choice,0#are no files|1#is one file|1<are {0,number,integer} files}.");
  * \endcode
  * </pre>
  * <P>
