@@ -1,0 +1,10 @@
+This example demonstrates running an instance of  ICU 1.8.1. together with a current version of ICU. It only tests u_getVersion and several collation APIs. 
+
+Generally, one should be able to simultaneously use one or more versions of ICU 2.0 or higher and one version of ICU 1.8.1 or lower. 
+
+Linux:
+To make it work, you should build and install both the current ICU and ICU 1.8.1. Put both data libraries to wherever ICU_DATA points (usually it is $(prefix)/share/icu/$(icu_version)/). Copy libicuuc.so.18* and libicui18n.so.18* to $(prefix)/lib directory, together with current libraries). 
+
+Change $ICU_PREFIX to point to the current installation, and $ICU_LEGACY to point to 1.8.1 installation. $ICU_LEGACY is needed solely to access the 1.8.1 include directory through $LEGACY_INCLUDE variable, so if you want to move the 1.8.1. include directory, you can set $LEGACY_INCLUDE directly to that directory.
+
+Run make check. You should get two different libraries running at the same time.
