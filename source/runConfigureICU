@@ -40,6 +40,7 @@ The following names can be supplied as the argument for platform:
     CygWin                  Use the GNU C++ compiler on CygWin
     MacOSX                  Use the GNU C++ compiler on MacOS X (Darwin)
     SOLARISCC               Use Sun's CC compiler on Solaris
+    SOLARISCC/W4.2          Use Sun's Workshop 4.2 CC compiler on Solaris
     SOLARISGCC              Use the GNU C++ compiler on Solaris
     SOLARISX86              Use Sun's CC compiler on Solaris x86
     TRU64V5.1/CXX           Use Compaq's cxx compiler on Tru64 (OSF)
@@ -171,6 +172,14 @@ case $platform in
         CXX=`which CC`; export CXX
         RELEASE_CFLAGS=-xO4
         RELEASE_CXXFLAGS=-O4
+        ;;
+    SOLARISCC/W4.2)
+        THE_OS=SOLARIS
+        THE_COMP="Sun's CC"
+        CC=`which cc`; export CC
+        CXX=`which CC`; export CXX
+        RELEASE_CFLAGS=-x04
+        RELEASE_CXXFLAGS="-O4 +d"
         ;;
     SOLARISGCC)
         THE_OS=SOLARIS
