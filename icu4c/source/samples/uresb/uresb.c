@@ -239,9 +239,9 @@ void printOutBundle(UFILE *out, UResourceBundle *resource, int32_t indent, UErro
             */
             printIndent(out, indent);
             if(key != NULL) {
-                u_fprintf(out, "%s { \"%U\" } ", key, string);
+                u_fprintf(out, "%s { \"%S\" } ", key, string);
             } else {
-                u_fprintf(out, "\"%U\",", string);
+                u_fprintf(out, "\"%S\",", string);
             }
             if(VERBOSE) {
                 u_fprintf(out, " // STRING");
