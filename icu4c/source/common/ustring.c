@@ -1004,7 +1004,7 @@ UBool ucln_ustring(void) {
         umtx_unlock(NULL);
     }
     
-    // it's safe to close a 0 converter
+    /* it's safe to close a 0 converter  */
     ucnv_close(converter);
     return TRUE;
 }
