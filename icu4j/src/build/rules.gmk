@@ -22,8 +22,8 @@ SRC_FILES_dict= $(FILES_dict:classes=src)
 endif
 
 classes: delete.classlist $(FILES_class) $(FILES_dics)
-	@if exist $(CLASSLIST) echo Compiling {
-	@if exist $(CLASSLIST) cat $(CLASSLIST)
+	echo Compiling {
+	if exist $(CLASSLIST) cat $(CLASSLIST)
 	if exist $(CLASSLIST) $(JAVAC) @$(CLASSLIST)
 	rm -f $(CLASSLIST)
 ifdef FILES_dict
