@@ -17,9 +17,6 @@
 #ifndef UNISTRM_H
 #define UNISTRM_H
 
-#include <iostream.h>
-
-
 #include "filestrm.h"
 #include "unicode/unistr.h"
 
@@ -31,14 +28,6 @@ public:
     static void streamOut(const UnicodeString* string, FileStream* os);
 };
 
-/**
- * Write the contents of a UnicodeString to an ostream. This functions writes
- * the characters in a UnicodeString to an ostream. The UChars in the
- * UnicodeString are truncated to char, leading to undefined results with
- * anything not in the Latin1 character set.
- */
-U_COMMON_API ostream& operator<<(ostream&              stream,
-                              const UnicodeString&  string);
 
 #endif
 
