@@ -2391,6 +2391,45 @@ void RBBITest::TestExtended() {
                 break;
             }
 
+            if (testString.compare(charIdx-1, 3, "\\N{") == 0) {
+                // Named character, e.g. \N{COMBINING GRAVE ACCENT}
+                // Get the code point from the name and insert it into the test data.
+                //   (Damn, no API takes names in Unicode  !!!
+                //    we've got to take it back to char *)
+                int32_t nameEndIdx = testString.indexOf((UChar)0x7d/*'}'*/, charIdx);
+                int32_t nameLength = nameEndIdx - (charIdx+2);
+                char charNameBuf[200];
+                UChar32 theChar = -1;
+                if (nameEndIdx != -1) {
+                    UErrorCode status = U_ZERO_ERROR;
+                    testString.extract(charIdx+2, nameLength, charNameBuf, sizeof(charNameBuf));
+                    charNameBuf[sizeof(charNameBuf)] = 0;
+                    theChar = u_charFromName(U_UNICODE_CHAR_NAME, charNameBuf, &status);
+                    if (U_FAILURE(status)) {
+                        theChar = -1;
+                    }
+                }
+                if (theChar == -1) {
+                    errln("Error in named character in test file at line %d, col %d", 
+                        lineNum, column);
+                } else {
+                    // Named code point was recognized.  Insert it
+                    //   into the test data.
+                    tp.dataToBreak.append(theChar);
+                    while (tp.dataToBreak.length() > tp.srcLine->size()) {
+                        tp.srcLine->addElement(lineNum, status);
+                        tp.srcCol ->addElement(column, status);
+                    }
+                }
+                if (nameEndIdx > charIdx) {
+                    charIdx = nameEndIdx+1;
+                }
+                break;
+            }
+
+
+
+
             if (testString.compare(charIdx-1, 2, "<>") == 0) {
                 charIdx++;
                 int32_t  breakIdx = tp.dataToBreak.length();
