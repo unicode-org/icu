@@ -51,6 +51,8 @@ void TestProperty()
     UChar *source, *target;
     int32_t tempLength;
     UErrorCode status = U_ZERO_ERROR;
+    UVersionInfo expectVersionArray = {0x01, 0x00, 0x00, 0x00};
+    UVersionInfo versionArray;
     
     log_verbose("The property tests begin : \n");
     log_verbose("Test ucol_strcoll : \n");
@@ -60,6 +62,13 @@ void TestProperty()
         return;
     }
 
+    ucol_getVersion(col, versionArray);
+
+    if(memcmp(versionArray, expectVersionArray, U_MAX_VERSION_LENGTH) != 0)
+      {
+        log_err("Testing ucol_getVersion() - unexpected result: %d.%d.%d.%d\n", 
+            versionArray[0], versionArray[1], versionArray[2], versionArray[3]);
+      }
     source=(UChar*)malloc(sizeof(UChar) * 12);
     target=(UChar*)malloc(sizeof(UChar) * 12);
     
