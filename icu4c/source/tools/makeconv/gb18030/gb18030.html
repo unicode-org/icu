@@ -47,7 +47,10 @@ This section is most useful for understanding the genesis and structure of GB 18
 <ol>
     <li>GBK is a specification (not a standard) that is an extension of GB 2312-1980
         to cover the ideographs in Unicode 2.0. Microsoft co-authored GBK.
-        Get a GBK table, e.g. the one for Microsoft Windows 2000 codepage 936 from ICU sample charsets.</li>
+        Get a GBK table, e.g. the one for Microsoft Windows 2000 codepage 936
+        from <a href="http://oss.software.ibm.com/icu/charset/">ICU sample charsets</a>.
+        (There are <a href="http://oss.software.ibm.com/icu/charset/CharMaps-UCM/">.ucm files</a>
+        including <a href="http://oss.software.ibm.com/icu/charset/CharMaps-UCM/windows-936-2000.ucm">windows-936-2000.ucm</a>.)</li>
     <li>From the Microsoft codepage table, remove all fallback mappings and the one for GB+ff.
         Note that the Windows 2000 version contains the Euro sign at GB+80=U+20ac.
         Leave it in there for GB 18030.</li>
@@ -115,7 +118,18 @@ This section is most useful for understanding the genesis and structure of GB 18
         any Unicode code point are of course unassigned.
         This includes 9012 sequences with a 0x84 lead byte and 9824 with a 0xe3 lead byte,
         as well as about 0.5 million with lead bytes 0x85..0x8f and 0xe4..0xfe.</li>
-</ol></p>
+</ol>
+For comparison with other data files, it is possible to reformat a mapping file so that it
+contains only mappings from Unicode to GB or only from GB to Unicode.
+<a href="gbsingle.c">gbsingle</a> takes input in the simple format of gbkuni30.txt
+and outputs even simpler format:<br>
+With no command line argument, it writes<br>
+    <code>unicode ':' gb</code><br>
+including the fallback mappings.
+With a "gb" argument, it writes<br>
+    <code>gb ':' unicode</code><br>
+excluding the fallback mappings according to their definition.
+</p>
 
 </body>
 </html>
