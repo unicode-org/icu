@@ -25,6 +25,10 @@
 #include "unicode/datefmt.h"
 #include "unicode/smpdtfmt.h"
 
+#if defined( U_DEBUG_CALSVC ) || defined (U_DEBUG_CAL)
+#include <stdio.h>
+#endif
+
 // *****************************************************************************
 // class DateFormat
 // *****************************************************************************
@@ -193,7 +197,13 @@ DateFormat::parse(const UnicodeString& text,
 
     ParsePosition pos(0);
     UDate result = parse(text, pos);
-    if (pos.getIndex() == 0) status = U_ILLEGAL_ARGUMENT_ERROR;
+    if (pos.getIndex() == 0) {
+#if defined (U_DEBUG_CAL)
+      fprintf(stderr, "%s:%d - - failed to parse  - err index %d\n"
+              , __FILE__, __LINE__, pos.getErrorIndex() );
+#endif
+      status = U_ILLEGAL_ARGUMENT_ERROR;
+    }
     return result;
 }
 

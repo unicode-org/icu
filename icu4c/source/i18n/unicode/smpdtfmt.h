@@ -798,16 +798,6 @@ private:
     /*transient*/ int32_t   fDefaultCenturyStartYear;
     
     UBool fHaveDefaultCentury;
-
-public:
-    /**
-     * If a start date is set to this value, that indicates that the system default
-     * start is in effect for this instance.
-     * @internal
-     * @obsolete ICU 2.8 Use parseAmbiguousDatesAsAfter instead, since this member will be removed in that release.
-     */
-    static const UDate        fgSystemDefaultCentury;
-    // TODO Not supposed to be public: make it private in 2.8!
 };
 
 inline UDate

@@ -167,7 +167,9 @@ public:
         kTimezoneField,      // TIMEZONE field alignment.
         kYearWOYField,   // Corrected year for week representation
         kDOWLocalField, // localized day of week
-
+        kExtendedYearField,
+        kJulianDayField,
+        kMillisecondsInDayField,
         
         
     /**

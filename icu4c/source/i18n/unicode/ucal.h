@@ -197,8 +197,17 @@ enum UCalendarDateFields {
   UCAL_YEAR_WOY,
   /** Day of week, localized (1..7) */
   UCAL_DOW_LOCAL,
+  /** Year of this calendar system, encompassing all supra-year fields. For example, in Gregorian/Julian calendars, positive Extended Year values indicate years AD,  1 BC = -1 extended, 2 BC = -2 extended, and so on. */
+  UCAL_EXTENDED_YEAR,       
+  /** Modified Julian day number, encompassing all date-related fields.  Demarcates at local midnight.*/
+  UCAL_JULIAN_DAY, 
+  /** Ranges from 0 to 23:59:59.999 (regardless of DST).  This field behaves <em>exactly</em> like a composite of all time-related fields, not including the zone fields.  As such, it also reflects discontinuities of those fields on DST transition days.  On a day of DST onset, it will jump forward.  On a day of DST cessation, it will jump backward.  This reflects the fact that is must be combined with the DST_OFFSET field to obtain a unique local time value. */
+  UCAL_MILLISECONDS_IN_DAY,
   /** Field count */
-  UCAL_FIELD_COUNT
+  UCAL_FIELD_COUNT,
+
+  /** Synonym for UCAL_DATE - @internal **/
+  UCAL_DAY_OF_MONTH=UCAL_DATE
 };
 
 /** @stable ICU 2.0 */

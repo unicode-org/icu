@@ -99,7 +99,7 @@ public:
      */
     virtual Calendar* clone(void) const;
 
-    
+    virtual int32_t handleGetExtendedYear();
 
 public:
 
@@ -144,26 +144,18 @@ public:
     virtual UDate defaultCenturyStart() const;
     virtual int32_t defaultCenturyStartYear() const;
 
-    /** 
-     * @internal
-     * API overrides
-     */
-    int32_t getMaximum(UCalendarDateFields field) const;
-    int32_t getLeastMaximum(UCalendarDateFields field) const;
-    inline virtual int32_t getMaximum(EDateFields field) const { return getMaximum((UCalendarDateFields)field); }
-    inline virtual int32_t getLeastMaximum(EDateFields field) const { return getLeastMaximum((UCalendarDateFields)field); }
-
 private:
     JapaneseCalendar(); // default constructor not implemented
 
     static const char fgClassID;
 
 protected:
-    virtual int32_t monthLength(int32_t month) const; 
-    virtual int32_t monthLength(int32_t month, int32_t year) const; 
-    int32_t getGregorianYear(UErrorCode& status) const;
+    //virtual int32_t monthLength(int32_t month) const; 
+    //virtual int32_t monthLength(int32_t month, int32_t year) const; 
+    //    int32_t getGregorianYear(UErrorCode& status) const;
     virtual int32_t internalGetEra() const;
-    virtual void timeToFields(UDate theTime, UBool quick, UErrorCode& status);
+    virtual void handleComputeFields(int32_t julianDay, UErrorCode& status);
+    virtual int32_t handleGetLimit(UCalendarDateFields field, ELimitType limitType) const;
 
     /**
      * (Overrides Calendar) Converts Calendar's time field values to GMT as
@@ -182,14 +174,14 @@ protected:
      * Called by computeJulianDay.  Returns the default month (0-based) for the year,
      * taking year and era into account.  Defaults to 0 for Gregorian, which doesn't care.
      */
-    virtual int32_t getDefaultMonthInYear() const;
+    virtual int32_t getDefaultMonthInYear() ;
 
 
     /***
      * Called by computeJulianDay.  Returns the default day (1-based) for the month,
      * taking currently-set year and era into account.  Defaults to 1 for Gregorian, which doesn't care. 
      */
-    virtual int32_t getDefaultDayInMonth(int32_t month) const;
+    virtual int32_t getDefaultDayInMonth(int32_t month) ;
 };
 
 inline UClassID

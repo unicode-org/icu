@@ -88,6 +88,14 @@ class U_I18N_API Grego {
     static inline int8_t monthLength(int32_t year, int32_t month);
 
     /**
+     * Return the length of a previous month of the Gregorian calendar.
+     * @param y the extended year
+     * @param m the 0-based month number
+     * @return the number of days in the month previous to the given month
+     */
+    static inline int8_t previousMonthLength(int y, int m);
+
+    /**
      * Convert a year, month, and day-of-month, given in the proleptic
      * Gregorian calendar, to 1970 epoch days.
      * @param year Gregorian year, with 0 == 1 BCE, -1 == 2 BCE, etc.
@@ -105,9 +113,38 @@ class U_I18N_API Grego {
      * @param month output parameter to receive month (0-based, 0==Jan)
      * @param dom output parameter to receive day-of-month (1-based)
      * @param dow output parameter to receive day-of-week (1-based, 1==Sun)
+     * @param doy output parameter to receive day-of-year (1-based)
      */
     static void dayToFields(double day, int32_t& year, int32_t& month,
-                            int32_t& dom, int32_t& dow);
+                            int32_t& dom, int32_t& dow, int32_t& doy);
+
+    /**
+     * Convert a 1970-epoch day number to proleptic Gregorian year,
+     * month, day-of-month, and day-of-week.
+     * @param day 1970-epoch day (integral value)
+     * @param year output parameter to receive year
+     * @param month output parameter to receive month (0-based, 0==Jan)
+     * @param dom output parameter to receive day-of-month (1-based)
+     * @param dow output parameter to receive day-of-week (1-based, 1==Sun)
+     */
+    static inline void dayToFields(double day, int32_t& year, int32_t& month,
+                                   int32_t& dom, int32_t& dow);
+
+    /**
+     * Converts Julian day to time as milliseconds.
+     * @param julian the given Julian day number.
+     * @return time as milliseconds.
+     * @internal
+     */
+    static inline double julianDayToMillis(int32_t julian);
+
+    /**
+     * Converts time as milliseconds to Julian day.
+     * @param millis the given milliseconds.
+     * @return the Julian day number.
+     * @internal
+     */
+    static inline int32_t millisToJulianDay(double millis);
 
  private:
     static const int16_t DAYS_BEFORE[24];
@@ -127,6 +164,45 @@ inline int8_t
 Grego::monthLength(int32_t year, int32_t month) {
     return MONTH_LENGTH[month + isLeapYear(year)?12:0];
 }
+
+inline int8_t
+Grego::previousMonthLength(int y, int m) {
+  return (m > 0) ? monthLength(y, m-1) : 31;
+}
+
+inline void Grego::dayToFields(double day, int32_t& year, int32_t& month,
+                               int32_t& dom, int32_t& dow) {
+  int32_t doy_unused;
+  return dayToFields(day,year,month,dom,dow,doy_unused);
+}
+
+// Useful millisecond constants
+static const double  kOneDay      = U_MILLIS_PER_DAY;       //  86,400,000
+static const int32_t  kOneHour   = 60*60*1000;
+#define kOneMinute 60000
+#define kOneSecond 1000
+#define kOneMillisecond 1
+static const double  kOneWeek   = 7.0 * U_MILLIS_PER_DAY; // 604,800,000
+
+static const int32_t kJan1_1JulianDay = 1721426; // January 1, year 1 (Gregorian)
+
+static const int32_t kEpochStartAsJulianDay    = 2440588; // January 1, 1970 (Gregorian)
+
+static const int32_t kEpochYear             = 1970;
+
+inline double Grego::julianDayToMillis(int32_t julian)
+{
+  return (julian - kEpochStartAsJulianDay) * kOneDay;
+}
+
+inline int32_t Grego::millisToJulianDay(double millis) {
+  return (int32_t) (kEpochStartAsJulianDay + Math::floorDivide(millis, kOneDay));
+}
+
+static const double kEarliestViableMillis = -185331720384000000.0;  // minimum representable by julian day  -1e17
+
+static const double kLatestViableMillis    = 185753453990400000.0;  // max representable by julian day      +1e17
+
 
 U_NAMESPACE_END
 
