@@ -21,6 +21,8 @@
 #include "unicode/parseerr.h"
 #include "unicode/usetiter.h"
 #include "unicode/putil.h"
+#include "unicode/uversion.h"
+#include "cmemory.h"
 #include "transrt.h"
 #include "testutil.h"
 #include <string.h>
@@ -66,6 +68,19 @@ TransliteratorRoundTripTest::runIndexedTest(int32_t index, UBool exec,
         CASE(9,TestInterIndic);
         default: name = ""; break;
     }
+}
+
+//--------------------------------------------------------------------
+// Time bomb - allows temporary behavior that expires at a given
+//             release
+//--------------------------------------------------------------------
+
+static const UVersionInfo ICU_30 = {3,0,0,0};
+
+static UBool isICUVersionAtLeast(const UVersionInfo x) {
+    UVersionInfo v;
+    u_getVersion(v);
+    return (uprv_memcmp(v, x, U_MAX_VERSION_LENGTH) >= 0);
 }
 
 //--------------------------------------------------------------------
@@ -1006,10 +1021,18 @@ void TransliteratorRoundTripTest::TestHangul() {
 }
 
 void TransliteratorRoundTripTest::TestGreek() {
+    if (isICUVersionAtLeast(ICU_30)) {
+        // We temporarily filter against Unicode 3.2, but we only do this
+        // before version 3.0.
+        errln("FAIL: TestGreek needs to be updated to remove Unicode 3.2 filter");
+        return;
+    } else {
+        logln("Warning: TestGreek needs to be updated to remove Unicode 3.2 filter");
+    }
     RTTest test("Latin-Greek");
     LegalGreek *legal = new LegalGreek(TRUE);
     test.test(UnicodeString("[a-zA-Z]", ""), 
-              UnicodeString("[\\u003B\\u00B7[:Greek:]-[\\u03D7-\\u03EF]]", 
+              UnicodeString("[[\\u003B\\u00B7[:Greek:]-[\\u03D7-\\u03EF]]&[:Age=3.2:]]", 
                             ""),
               "[\\u00B5\\u037A\\u03D0-\\u03F5]", /* exclusions */
               this, quick, legal, 50);
@@ -1018,10 +1041,18 @@ void TransliteratorRoundTripTest::TestGreek() {
 
 
 void TransliteratorRoundTripTest::TestGreekUNGEGN() {
+    if (isICUVersionAtLeast(ICU_30)) {
+        // We temporarily filter against Unicode 3.2, but we only do this
+        // before version 3.0.
+        errln("FAIL: TestGreekUNGEGN needs to be updated to remove Unicode 3.2 filter");
+        return;
+    } else {
+        logln("Warning: TestGreekUNGEGN needs to be updated to remove Unicode 3.2 filter");
+    }
     RTTest test("Latin-Greek/UNGEGN");
     LegalGreek *legal = new LegalGreek(FALSE);
     test.test(UnicodeString("[a-zA-Z]", ""), 
-              UnicodeString("[\\u003B\\u00B7[:Greek:]-[\\u03D7-\\u03EF]]", 
+              UnicodeString("[[\\u003B\\u00B7[:Greek:]-[\\u03D7-\\u03EF]]&[:Age=3.2:]]", 
                             ""), 
               "[\\u00B5\\u037A\\u03D0-\\uFFFF {\\u039C\\u03C0}]", /* roundtrip exclusions */
               this, quick, legal);
@@ -1029,10 +1060,18 @@ void TransliteratorRoundTripTest::TestGreekUNGEGN() {
 }
 
 void TransliteratorRoundTripTest::Testel() {
+    if (isICUVersionAtLeast(ICU_30)) {
+        // We temporarily filter against Unicode 3.2, but we only do this
+        // before version 3.0.
+        errln("FAIL: Testel needs to be updated to remove Unicode 3.2 filter");
+        return;
+    } else {
+        logln("Warning: Testel needs to be updated to remove Unicode 3.2 filter");
+    }
     RTTest test("Latin-el");
     LegalGreek *legal = new LegalGreek(FALSE);
     test.test(UnicodeString("[a-zA-Z]", ""), 
-              UnicodeString("[\\u003B\\u00B7[:Greek:]-[\\u03D7-\\u03EF]]", 
+              UnicodeString("[[\\u003B\\u00B7[:Greek:]-[\\u03D7-\\u03EF]]&[:Age=3.2:]]", 
                             ""), 
               "[\\u00B5\\u037A\\u03D0-\\uFFFF {\\u039C\\u03C0}]", /* exclusions */
               this, quick, legal);
