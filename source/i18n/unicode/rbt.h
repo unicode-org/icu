@@ -465,7 +465,7 @@ public:
         UNDEFINED_SEGMENT_REFERENCE,
         UNDEFINED_VARIABLE,
         UNQUOTED_SPECIAL,
-        UNTERMINATED_QUOTE,
+        UNTERMINATED_QUOTE
     };
 
 private:

@@ -107,7 +107,7 @@ private:
      */
     enum {
         ANCHOR_START = 1,
-        ANCHOR_END   = 2,
+        ANCHOR_END   = 2
     };
 
     /**
