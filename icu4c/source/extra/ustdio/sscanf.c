@@ -96,11 +96,11 @@
  * @return The number of arguments converted and assigned, or -1 if an
  * error occurred.
  */
-typedef int32_t (*u_scanf_handler) (UFILE  *stream,
-                   const u_scanf_spec_info     *info,
-                   ufmt_args  *args,
-                   const UChar            *fmt,
-                   int32_t            *consumed);
+typedef int32_t (*u_scanf_handler) (UFILE   *stream,
+                   const u_scanf_spec_info  *info,
+                   ufmt_args                *args,
+                   const UChar              *fmt,
+                   int32_t                  *consumed);
 
 typedef struct u_scanf_info {
     ufmt_type_info info;
@@ -114,10 +114,10 @@ typedef struct u_scanf_info {
 
 
 static int32_t
-u_scanf_skip_leading_ws(UFILE    *input,
-                        UChar     pad)
+u_scanf_skip_leading_ws(UFILE   *input,
+                        UChar   pad)
 {
-    UChar    c;
+    UChar   c;
     int32_t count = 0;
     UBool isNotEOF;
 
@@ -135,11 +135,11 @@ u_scanf_skip_leading_ws(UFILE    *input,
 }
 
 static int32_t 
-u_scanf_simple_percent_handler(UFILE    *input,
-                               const u_scanf_spec_info     *info,
-                               ufmt_args             *args,
-                               const UChar        *fmt,
-                               int32_t            *consumed)
+u_scanf_simple_percent_handler(UFILE        *input,
+                               const u_scanf_spec_info *info,
+                               ufmt_args    *args,
+                               const UChar  *fmt,
+                               int32_t      *consumed)
 {
     /* make sure the next character in the input is a percent */
     if(u_fgetc(input) != 0x0025) {
@@ -149,11 +149,11 @@ u_scanf_simple_percent_handler(UFILE    *input,
 }
 
 static int32_t
-u_scanf_string_handler(UFILE    *input,
-                       const u_scanf_spec_info     *info,
-                       ufmt_args             *args,
-                       const UChar        *fmt,
-                       int32_t            *consumed)
+u_scanf_string_handler(UFILE        *input,
+                       const u_scanf_spec_info *info,
+                       ufmt_args    *args,
+                       const UChar  *fmt,
+                       int32_t      *consumed)
 {
     UChar     c;
     UBool       isNotEOF;
@@ -216,11 +216,11 @@ u_scanf_string_handler(UFILE    *input,
 }
 
 static int32_t
-u_scanf_ustring_handler(UFILE    *input,
+u_scanf_ustring_handler(UFILE       *input,
                         const u_scanf_spec_info *info,
-                        ufmt_args        *args,
-                        const UChar        *fmt,
-                        int32_t            *consumed)
+                        ufmt_args   *args,
+                        const UChar *fmt,
+                        int32_t     *consumed)
 {
     UChar     c;
     UBool       isNotEOF;
@@ -258,11 +258,11 @@ u_scanf_ustring_handler(UFILE    *input,
 }
 
 static int32_t
-u_scanf_count_handler(UFILE    *input,
-                      const u_scanf_spec_info     *info,
-                      ufmt_args        *args,
-                      const UChar        *fmt,
-                      int32_t            *consumed)
+u_scanf_count_handler(UFILE         *input,
+                      const u_scanf_spec_info *info,
+                      ufmt_args     *args,
+                      const UChar   *fmt,
+                      int32_t       *consumed)
 {
     int *converted = (int*)(args[0].ptrValue);
 
@@ -275,17 +275,17 @@ u_scanf_count_handler(UFILE    *input,
 }
 
 static int32_t
-u_scanf_double_handler(UFILE    *input,
-                       const u_scanf_spec_info     *info,
-                       ufmt_args        *args,
-                       const UChar        *fmt,
-                       int32_t            *consumed)
+u_scanf_double_handler(UFILE        *input,
+                       const u_scanf_spec_info *info,
+                       ufmt_args    *args,
+                       const UChar  *fmt,
+                       int32_t      *consumed)
 {
-    int32_t        len;
-    double        *num         = (double*) (args[0].ptrValue);
-    UNumberFormat        *format;
-    int32_t        parsePos     = 0;
-    UErrorCode         status         = U_ZERO_ERROR;
+    int32_t         len;
+    double          *num        = (double*) (args[0].ptrValue);
+    UNumberFormat   *format;
+    int32_t         parsePos    = 0;
+    UErrorCode      status      = U_ZERO_ERROR;
 
 
     /* skip all ws in the input */
@@ -323,17 +323,17 @@ u_scanf_double_handler(UFILE    *input,
 }
 
 static int32_t
-u_scanf_scientific_handler(UFILE    *input,
-                           const u_scanf_spec_info     *info,
-                           ufmt_args           *args,
-                           const UChar            *fmt,
-                           int32_t            *consumed)
+u_scanf_scientific_handler(UFILE        *input,
+                           const u_scanf_spec_info *info,
+                           ufmt_args    *args,
+                           const UChar  *fmt,
+                           int32_t      *consumed)
 {
-    int32_t        len;
-    double        *num         = (double*) (args[0].ptrValue);
-    UNumberFormat        *format;
-    int32_t        parsePos     = 0;
-    UErrorCode         status         = U_ZERO_ERROR;
+    int32_t         len;
+    double          *num        = (double*) (args[0].ptrValue);
+    UNumberFormat   *format;
+    int32_t         parsePos    = 0;
+    UErrorCode      status      = U_ZERO_ERROR;
 
 
     /* skip all ws in the input */
@@ -371,11 +371,11 @@ u_scanf_scientific_handler(UFILE    *input,
 }
 
 static int32_t
-u_scanf_scidbl_handler(UFILE    *input,
-                       const u_scanf_spec_info     *info,
-                       ufmt_args        *args,
-                       const UChar        *fmt,
-                       int32_t            *consumed)
+u_scanf_scidbl_handler(UFILE        *input,
+                       const u_scanf_spec_info *info,
+                       ufmt_args    *args,
+                       const UChar  *fmt,
+                       int32_t      *consumed)
 {
     int32_t        len;
     double        *num         = (double*) (args[0].ptrValue);
@@ -445,17 +445,17 @@ u_scanf_scidbl_handler(UFILE    *input,
 }
 
 static int32_t
-u_scanf_integer_handler(UFILE    *input,
+u_scanf_integer_handler(UFILE       *input,
                         const u_scanf_spec_info *info,
-                        ufmt_args        *args,
-                        const UChar        *fmt,
-                        int32_t            *consumed)
+                        ufmt_args   *args,
+                        const UChar *fmt,
+                        int32_t     *consumed)
 {
-    int32_t        len;
-    void            *num         = (void*) (args[0].ptrValue);
+    int32_t         len;
+    void            *num        = (void*) (args[0].ptrValue);
     UNumberFormat   *format;
-    int32_t        parsePos     = 0;
-    UErrorCode      status         = U_ZERO_ERROR;
+    int32_t         parsePos    = 0;
+    UErrorCode      status      = U_ZERO_ERROR;
     int64_t         result;
 
 
@@ -498,11 +498,11 @@ u_scanf_integer_handler(UFILE    *input,
 }
 
 static int32_t
-u_scanf_uinteger_handler(UFILE    *input,
+u_scanf_uinteger_handler(UFILE          *input,
                          const u_scanf_spec_info *info,
-                         ufmt_args        *args,
-                         const UChar        *fmt,
-                         int32_t            *consumed)
+                         ufmt_args      *args,
+                         const UChar    *fmt,
+                         int32_t        *consumed)
 {
     ufmt_args uint_args;
     int32_t converted_args;
@@ -518,11 +518,11 @@ u_scanf_uinteger_handler(UFILE    *input,
 }
 
 static int32_t
-u_scanf_percent_handler(UFILE    *input,
+u_scanf_percent_handler(UFILE       *input,
                         const u_scanf_spec_info *info,
-                        ufmt_args        *args,
-                        const UChar        *fmt,
-                        int32_t            *consumed)
+                        ufmt_args   *args,
+                        const UChar *fmt,
+                        int32_t     *consumed)
 {
     int32_t        len;
     double        *num         = (double*) (args[0].ptrValue);
@@ -566,11 +566,11 @@ u_scanf_percent_handler(UFILE    *input,
 }
 
 static int32_t
-u_scanf_char_handler(UFILE    *input,
-                     const u_scanf_spec_info     *info,
-                     ufmt_args        *args,
-                     const UChar        *fmt,
-                     int32_t            *consumed)
+u_scanf_char_handler(UFILE          *input,
+                     const u_scanf_spec_info *info,
+                     ufmt_args      *args,
+                     const UChar    *fmt,
+                     int32_t        *consumed)
 {
     UChar uc = 0;
     char *result;
@@ -596,11 +596,11 @@ u_scanf_char_handler(UFILE    *input,
 }
 
 static int32_t
-u_scanf_uchar_handler(UFILE    *input,
-                      const u_scanf_spec_info     *info,
-                      ufmt_args        *args,
-                      const UChar        *fmt,
-                      int32_t            *consumed)
+u_scanf_uchar_handler(UFILE         *input,
+                      const u_scanf_spec_info *info,
+                      ufmt_args     *args,
+                      const UChar   *fmt,
+                      int32_t       *consumed)
 {
     UChar *c = (UChar*)(args[0].ptrValue);
 
@@ -617,11 +617,11 @@ u_scanf_uchar_handler(UFILE    *input,
 }
 
 static int32_t
-u_scanf_spellout_handler(UFILE    *input,
-                         const u_scanf_spec_info     *info,
-                         ufmt_args             *args,
-                         const UChar            *fmt,
-                         int32_t            *consumed)
+u_scanf_spellout_handler(UFILE          *input,
+                         const u_scanf_spec_info *info,
+                         ufmt_args      *args,
+                         const UChar    *fmt,
+                         int32_t        *consumed)
 {
     int32_t        len;
     double        *num         = (double*) (args[0].ptrValue);
@@ -665,15 +665,15 @@ u_scanf_spellout_handler(UFILE    *input,
 }
 
 static int32_t
-u_scanf_hex_handler(UFILE    *input,
-                    const u_scanf_spec_info     *info,
-                    ufmt_args            *args,
-                    const UChar            *fmt,
-                    int32_t            *consumed)
+u_scanf_hex_handler(UFILE       *input,
+                    const u_scanf_spec_info *info,
+                    ufmt_args   *args,
+                    const UChar *fmt,
+                    int32_t     *consumed)
 {
-    int32_t        len;
-    void           *num         = (void*) (args[0].ptrValue);
-    int64_t         result;
+    int32_t     len;
+    void        *num    = (void*) (args[0].ptrValue);
+    int64_t     result;
 
     /* skip all ws in the input */
     u_scanf_skip_leading_ws(input, info->fPadChar);
@@ -716,11 +716,11 @@ u_scanf_hex_handler(UFILE    *input,
 }
 
 static int32_t
-u_scanf_octal_handler(UFILE    *input,
-                      const u_scanf_spec_info     *info,
-                      ufmt_args         *args,
-                      const UChar        *fmt,
-                      int32_t            *consumed)
+u_scanf_octal_handler(UFILE         *input,
+                      const u_scanf_spec_info *info,
+                      ufmt_args     *args,
+                      const UChar   *fmt,
+                      int32_t       *consumed)
 {
     int32_t        len;
     void            *num         = (void*) (args[0].ptrValue);
@@ -758,11 +758,11 @@ u_scanf_octal_handler(UFILE    *input,
 }
 
 static int32_t
-u_scanf_pointer_handler(UFILE    *input,
+u_scanf_pointer_handler(UFILE       *input,
                         const u_scanf_spec_info *info,
-                        ufmt_args        *args,
-                        const UChar        *fmt,
-                        int32_t            *consumed)
+                        ufmt_args   *args,
+                        const UChar *fmt,
+                        int32_t     *consumed)
 {
     int32_t    len;
     void        *p     = (void*)(args[0].ptrValue);
@@ -792,11 +792,11 @@ u_scanf_pointer_handler(UFILE    *input,
 }
 
 static int32_t
-u_scanf_scanset_handler(UFILE    *input,
+u_scanf_scanset_handler(UFILE       *input,
                         const u_scanf_spec_info *info,
-                        ufmt_args        *args,
-                        const UChar        *fmt,
-                        int32_t            *consumed)
+                        ufmt_args   *args,
+                        const UChar *fmt,
+                        int32_t     *consumed)
 {
     USet            *scanset;
     int32_t         len;
@@ -804,6 +804,7 @@ u_scanf_scanset_handler(UFILE    *input,
     UChar32         c;
     UChar           *s     = (UChar*) (args[0].ptrValue);
     UChar           *alias, *limit;
+    UBool           isNotEOF = FALSE;
 
 
     /* fill the input's internal buffer */
@@ -835,11 +836,7 @@ u_scanf_scanset_handler(UFILE    *input,
 
         /* grab characters one at a time and make sure they are in the scanset */
         while(alias < limit) {
-            int32_t pos = 0;
-            len = input->str.fLimit - input->str.fPos;
-            U16_NEXT(input->str.fPos, pos, len, c);
-            input->str.fPos+=pos;
-            if(c != 0 && uset_contains(scanset, c)) {
+            if ((isNotEOF = ufile_getch32(input, &c)) && uset_contains(scanset, c)) {
                 int32_t idx = 0;
                 UBool isError = FALSE;
                 int32_t capacity = (int32_t)(1 + (limit - alias));
@@ -857,8 +854,8 @@ u_scanf_scanset_handler(UFILE    *input,
         }
 
         /* put the final character we read back on the input */
-        if(c != 0) {
-            input->str.fPos--;
+        if(isNotEOF) {
+            u_fungetc(c, input);
         }
     }
 
@@ -876,7 +873,7 @@ u_scanf_scanset_handler(UFILE    *input,
 }
 
 
-U_CAPI int32_t  U_EXPORT2 
+U_CAPI int32_t U_EXPORT2
 u_sscanf(const UChar   *buffer,
          const char    *patternSpecification,
          ... )
@@ -891,7 +888,7 @@ u_sscanf(const UChar   *buffer,
     return converted;
 }
 
-U_CAPI int32_t  U_EXPORT2 
+U_CAPI int32_t U_EXPORT2
 u_sscanf_u(const UChar    *buffer,
            const UChar    *patternSpecification,
            ... )
@@ -1007,6 +1004,9 @@ u_vsscanf_u(const UChar *buffer,
     /* alias the pattern */
     alias = patternSpecification;
 
+    /* haven't converted anything yet */
+    converted = 0;
+
     inStr.fConverter = NULL;
     inStr.fFile = NULL;
     inStr.fOwnFile = FALSE;
@@ -1015,9 +1015,6 @@ u_vsscanf_u(const UChar *buffer,
     inStr.str.fBuffer = (UChar *)buffer;
     inStr.str.fPos = (UChar *)buffer;
     inStr.str.fLimit = buffer + u_strlen(buffer);
-
-    /* haven't converted anything yet */
-    converted = 0;
 
     if(u_locbund_init(&inStr.str.fBundle, "en_US_POSIX") == 0) {
         return 0;
