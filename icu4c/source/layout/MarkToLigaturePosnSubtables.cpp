@@ -1,5 +1,5 @@
 /*
- * @(#)MarkToLigaturePosnSubtables.cpp	1.5 00/03/15
+ * %W% %E%
  *
  * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
@@ -61,9 +61,16 @@ le_int32 MarkToLigaturePositioningSubtable::process(GlyphIterator *glyphIterator
     }
 
     le_int32 markPosition = glyphIterator->getCurrStreamPosition();
-    le_int32 component = ligatureIterator.getMarkComponent(markPosition);
     Offset ligatureAttachOffset = SWAPW(ligatureArray->ligatureAttachTableOffsetArray[ligatureCoverage]);
     const LigatureAttachTable *ligatureAttachTable = (const LigatureAttachTable *) ((char *) ligatureArray + ligatureAttachOffset);
+	le_int32 componentCount = SWAPW(ligatureAttachTable->componentCount);
+    le_int32 component = ligatureIterator.getMarkComponent(markPosition);
+
+	if (component >= componentCount) {
+		// should really just bail at this point...
+		component = componentCount - 1;
+	}
+
     const ComponentRecord *componentRecord = &ligatureAttachTable->componentRecordArray[component * mcCount];
     Offset anchorTableOffset = SWAPW(componentRecord->ligatureAnchorTableOffsetArray[markClass]);
     const AnchorTable *anchorTable = (const AnchorTable *) ((char *) ligatureAttachTable + anchorTableOffset);

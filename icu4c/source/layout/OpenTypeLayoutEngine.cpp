@@ -1,6 +1,6 @@
 
 /*
- * @(#)OpenTypeLayoutEngine.cpp	1.3 00/03/15
+ * %W% %W%
  *
  * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
@@ -59,37 +59,6 @@ OpenTypeLayoutEngine::~OpenTypeLayoutEngine()
 {
     reset();
 }
-
-LETag scriptTags[] = {
-    neutScriptTag, // 'NEUT'
-    latnScriptTag, // 'latn'
-    grekScriptTag, // 'grek'
-    cyrlScriptTag, // 'cyrl'
-    armnScriptTag, // 'armn' **** Armenian: no MS definition ****
-    hebrScriptTag, // 'hebr'
-    arabScriptTag, // 'arab'
-    devaScriptTag, // 'deva'
-    bengScriptTag, // 'beng'
-    punjScriptTag, // 'punj' punjabi == gurmukhi
-    gujrScriptTag, // 'gujr'
-    oryaScriptTag, // 'orya'
-    tamlScriptTag, // 'taml'
-    teluScriptTag, // 'telu'
-    kndaScriptTag, // 'knda'
-    mlymScriptTag, // 'mlym'
-    thaiScriptTag, // 'thai'
-    laoScriptTag,  // 'lao ' **** Lao: no MS definition ****
-    tibtScriptTag, // 'tibt'
-    grgnScriptTag, // 'grgn' **** Georgian: no MS definition ****
-    hangScriptTag, // 'hang'
-    kanaScriptTag, // 'kana'
-    bpmfScriptTag, // 'bpmf' **** Bopomofo: no MS definition ****
-    knbnScriptTag, // 'knbn' **** Kanbun: no MS definition ****
-    haniScriptTag, // 'hani'
-    surrScriptTag, // 'SURR'
-    puseScriptTag, // 'PUSE'
-    spclScriptTag  // 'SPCL'
-};
 
 LETag OpenTypeLayoutEngine::getScriptTag(le_int32 scriptCode)
 {

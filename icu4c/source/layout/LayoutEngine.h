@@ -1,8 +1,8 @@
 
 /*
- * @(#)LayoutEngine.h	1.4 00/03/15
+ * %W% %W%
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -288,7 +288,7 @@ public:
 	 * Note; the glyph, character index and position array can be accessed
 	 * using the getter method below.
 	 */
-    le_int32 layoutChars(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft, float x, float y, LEErrorCode &success);
+    virtual le_int32 layoutChars(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft, float x, float y, LEErrorCode &success);
 
 	/**
 	 * This method returns the number of glyphs in the glyph array. Note
@@ -338,7 +338,7 @@ public:
 	 * @param extraBits - this value will be ORed with each glyph index
 	 * @param success - set to an error code if the operation fails
 	 */
-    void getGlyphs(le_uint32 glyphs[], le_uint32 extraBits, LEErrorCode &success) const;
+    virtual void getGlyphs(le_uint32 glyphs[], le_uint32 extraBits, LEErrorCode &success) const;
 
 	/**
 	 * This method copies the character index array into a caller supplied array.

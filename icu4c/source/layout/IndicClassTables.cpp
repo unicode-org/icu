@@ -1,15 +1,15 @@
 /*
- * @(#)IndicClassTables.cpp	1.4 00/03/15
+ * %W% %E%
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
  *
  */
 
 #include "LETypes.h"
+#include "LEScripts.h"
 #include "OpenTypeTables.h"
 #include "OpenTypeUtilities.h"
 #include "IndicReordering.h"
-#include "ScriptAndLanguageTags.h"
 
 #define ARRAY_SIZE(array) (sizeof array  / sizeof array[0])
 
@@ -60,7 +60,8 @@ enum
     _pb = _ct | IndicClassTable::CF_POST_BASE,
     _vt = _bb | IndicClassTable::CF_VATTU,
     _rv = _vt | IndicClassTable::CF_REPH,
-    _rp = _pb | IndicClassTable::CF_REPH
+    _rp = _pb | IndicClassTable::CF_REPH,
+    _rb = _bb | IndicClassTable::CF_REPH
 };
 
 //
@@ -155,7 +156,7 @@ const IndicClassTable::CharClass kndaCharClasses[] =
     _xx, _xx, _mp, _mp, _xx, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _xx, _iv, // 0C80 - 0C8F
     _iv, _xx, _iv, _iv, _iv, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, // 0C90 - 0C9F
     _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _xx, _bb, _bb, _bb, _bb, _bb, _bb, // 0CA0 - 0CAF
-    _rp, _ct, _bb, _bb, _xx, _bb, _bb, _bb, _bb, _bb, _xx, _xx, _xx, _xx, _dr, _da, // 0CB0 - 0CBF
+    _rb, _ct, _bb, _bb, _xx, _bb, _bb, _bb, _bb, _bb, _xx, _xx, _xx, _xx, _dr, _da, // 0CB0 - 0CBF
     _s1, _dr, _dr, _dr, _dr, _xx, _da, _s2, _s3, _xx, _s4, _s5, _da, _vr, _xx, _xx, // 0CC0 - 0CCF
     _xx, _xx, _xx, _xx, _xx, _lm, _dr, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _ct, _xx, // 0CD0 - 0CDF
     _iv, _iv, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx  // 0CE0 - 0CEF

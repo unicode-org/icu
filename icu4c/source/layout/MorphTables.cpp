@@ -1,5 +1,5 @@
 /*
- * @(#)MorphTables.cpp	1.6 00/03/15
+ * %W% %W%
  *
  * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
@@ -37,8 +37,8 @@ void MorphTableHeader::process(LEGlyphID *glyphs, le_int32 *glyphIndices, le_int
             SubtableCoverage coverage = SWAPW(subtableHeader->coverage);
             FeatureFlags subtableFeatures = SWAPL(subtableHeader->subtableFeatures);
 
-            // should check coverage too, really...
-            if ((subtableFeatures & defaultFlags) != 0) {
+            // should check coverage more carefully...
+            if ((coverage & scfVertical) == 0 && (subtableFeatures & defaultFlags) != 0) {
                 subtableHeader->process(glyphs, glyphIndices, glyphCount);
             }
 

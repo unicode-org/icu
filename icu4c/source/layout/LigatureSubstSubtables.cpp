@@ -1,5 +1,5 @@
 /*
- * @(#)LigatureSubstProc.cpp	1.7 00/03/15
+ * %W% %E%
  *
  * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
@@ -18,14 +18,12 @@ le_uint32 LigatureSubstitutionSubtable::process(GlyphIterator *glyphIterator, co
     LEGlyphID glyph = (LEGlyphID) glyphIterator->getCurrGlyphID();
     le_int32 coverageIndex = getGlyphCoverage(glyph);
 
-    if (coverageIndex >= 0)
-    {
+    if (coverageIndex >= 0) {
         Offset ligSetTableOffset = SWAPW(ligSetTableOffsetArray[coverageIndex]);
         const LigatureSetTable *ligSetTable = (const LigatureSetTable *) ((char *) this + ligSetTableOffset);
         le_uint16 ligCount = SWAPW(ligSetTable->ligatureCount);
 
-        for (le_uint16 lig = 0; lig < ligCount; lig += 1)
-        {
+        for (le_uint16 lig = 0; lig < ligCount; lig += 1) {
             Offset ligTableOffset = SWAPW(ligSetTable->ligatureTableOffsetArray[lig]);
             const LigatureTable *ligTable = (const LigatureTable *) ((char *)ligSetTable + ligTableOffset);
             le_uint16 compCount = SWAPW(ligTable->compCount) - 1;
@@ -33,31 +31,26 @@ le_uint32 LigatureSubstitutionSubtable::process(GlyphIterator *glyphIterator, co
             LEGlyphID ligGlyph = SWAPW(ligTable->ligGlyph);
             le_uint16 comp;
 
-            if (filter != NULL && ! filter->accept(ligGlyph))
-            {
+            if (filter != NULL && ! filter->accept(ligGlyph)) {
                 continue;
             }
 
-            for (comp = 0; comp < compCount; comp += 1)
-            {
-                if (! glyphIterator->next())
-                {
+            for (comp = 0; comp < compCount; comp += 1) {
+                if (! glyphIterator->next()) {
                     break;
                 }
 
-                if ((LEGlyphID) glyphIterator->getCurrGlyphID() != SWAPW(ligTable->componentArray[comp]))
-                {
+                if ((LEGlyphID) glyphIterator->getCurrGlyphID() != SWAPW(ligTable->componentArray[comp])) {
                     break;
                 }
             }
 
-            if (comp == compCount)
-            {
+            if (comp == compCount) {
                 GlyphIterator tempIterator(*glyphIterator);
+                LEGlyphID deletedGlyph = tempIterator.ignoresMarks()? 0xFFFE : 0xFFFF;
 
-                while (comp > 0)
-                {
-                    tempIterator.setCurrGlyphID(0xFFFF);
+                while (comp > 0) {
+                    tempIterator.setCurrGlyphID(deletedGlyph);
                     tempIterator.prev();
 
                     comp -= 1;
