@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/ICULocaleWriter.java,v $ 
- * $Date: 2002/06/20 01:17:12 $ 
- * $Revision: 1.3 $
+ * $Date: 2003/08/14 22:10:25 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -61,7 +61,26 @@ public class ICULocaleWriter extends LocaleWriter {
         printString(value);
         println(" }");
     }
+    protected void writeIntVector(String tag, String[] value) {
+        if (tag != null) {
+            print(tag);
+            println(":intvector { ");
+        } else {
+            println(":intvector{");
+        }
+        indent();
+            for (int i = 0; i < value.length; i++) {
+                printUnquotedString(value[i]);
+                println(",");
+            }
+        outdent();
+        println("}");
+    }
     protected void write(String tag, String[] value) {
+        if(tag !=null && tag.equals("DateTimeElements")){
+            writeIntVector(tag,value);
+            return;
+        }
         if (tag != null) {
             print(tag);
             println(" { ");

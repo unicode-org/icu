@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/ConvertJavaLocale.java,v $ 
- * $Date: 2002/12/12 02:08:46 $ 
- * $Revision: 1.3 $
+ * $Date: 2003/08/14 22:10:25 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -111,12 +111,23 @@ public class ConvertJavaLocale {
                 }
             }
             final Hashtable data = new Hashtable();
-            final String localeElements = packagename+".LocaleElements" +
-                    (String)((localeName != null) ? "_"+localeName : "");
-            final String DateFormatZoneData = packagename+".DateFormatZoneData" +
-                    (String)((localeName != null) ? "_"+localeName : "");
+            final String localeElements;
+            final String dateFormatZoneData;
+            
+            if(localeName != null){
+                if(!localeName.equals("root")){
+                    localeElements = packagename+".LocaleElements" +"_"+localeName;
+                    dateFormatZoneData = packagename+".DateFormatZoneData" + "_"+localeName;
+                }else{
+                    localeElements = packagename+".LocaleElements";
+                    dateFormatZoneData = packagename+".DateFormatZoneData";
+                }
+            }else{
+                printUsage();
+                return;
+            }
             addLocaleData(localeElements, data);
-            addLocaleData(DateFormatZoneData, data);
+            addLocaleData(dateFormatZoneData, data);
             final Locale locale = localeFromString(localeName);
             if ((options & OPT_11) != 0) {
                 new Java1LocaleWriter(out, System.err).write(locale, data);

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/ConvertAllJavaLocales.java,v $
- * $Date: 2002/12/18 03:56:40 $
- * $Revision: 1.3 $
+ * $Date: 2003/08/14 22:10:25 $
+ * $Revision: 1.4 $
  *
  *******************************************************************************
  */
@@ -51,8 +51,8 @@ import java.lang.reflect.*;
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/ConvertAllJavaLocales.java,v $ 
- * $Date: 2002/12/18 03:56:40 $ 
- * $Revision: 1.3 $
+ * $Date: 2003/08/14 22:10:25 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -85,13 +85,20 @@ public class ConvertAllJavaLocales {
                 
                 System.out.println("Converting "+localeName);
                 
-                final FileOutputStream outFile = new FileOutputStream("ICULocale_"+localeName);
+                final FileOutputStream outFile = new FileOutputStream(localeName + ".txt");
                 final PrintStream out = new PrintStream(outFile, true);
                 
                 new ConvertJavaLocale(args, out);
                 
                 out.close();
             }
+            System.out.println("Converting root locale");
+            final String[] args = {"-package",packageName,"-icu","root"};
+            final FileOutputStream outFile = new FileOutputStream("root.txt");
+            final PrintStream out = new PrintStream(outFile, true);
+            new ConvertJavaLocale(args, out);
+            out.close();
+                
         } catch (IOException e) {
             System.err.println("Unexpected IO error");
         }catch (Exception e) {
