@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/search/SearchTest.java,v $ 
- * $Date: 2002/04/03 19:13:56 $ 
- * $Revision: 1.14 $
+ * $Date: 2002/06/22 00:14:13 $ 
+ * $Revision: 1.15 $
  *
  *****************************************************************************************
  */
@@ -17,12 +17,12 @@ import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.text.SearchIterator;
 import com.ibm.icu.text.StringSearch;
 import com.ibm.icu.util.VersionInfo;
+import com.ibm.icu.text.RuleBasedCollator;
+import com.ibm.icu.text.Collator;
+import com.ibm.icu.text.BreakIterator;
 
-import java.text.BreakIterator;
 import java.text.CharacterIterator;
-import java.text.Collator;
 import java.text.ParseException;
-import java.text.RuleBasedCollator;
 import java.text.StringCharacterIterator;
 import java.util.Locale;
 import java.util.Vector;
@@ -34,8 +34,17 @@ import java.util.Vector;
  * <code>Test</code> is run as a test.
  */
 public class SearchTest extends TestFmwk {
-    public static void main(String[] args) throws Exception {
-		new SearchTest().run(args);
+    public static void main(String[] args) 
+    {
+    	try {
+			new SearchTest().run(args);
+			String[] tests = new String[1];
+			tests[0] = "TestCases";
+			// new SearchTest().run(tests);
+    	}
+    	catch (Exception e) {
+    		e.printStackTrace();
+    	}
     }
 
     static private final boolean valid = ICUDebug.javaVersion != VersionInfo.getInstance("1.4");
@@ -57,19 +66,22 @@ public class SearchTest extends TestFmwk {
     static RuleBasedCollator deColl;        // Has expansions, e.g. a-umlaut -> ae
     
     static {
-        try {
+        // try {
             enColl = (RuleBasedCollator)Collator.getInstance(Locale.US);
             frColl = (RuleBasedCollator)Collator.getInstance(Locale.FRANCE);
             
-            esColl = new RuleBasedCollator(enColl.getRules() + " & C < ch ; cH ; Ch ; CH");
+            esColl = (RuleBasedCollator)Collator.getInstance(new Locale("es", "ES"));
+            deColl = (RuleBasedCollator)Collator.getInstance(new Locale("de", "DE"));
+            /* esColl = new RuleBasedCollator(enColl.getRules() + " & C < ch ; cH ; Ch ; CH");
             
             deColl = new RuleBasedCollator(enColl.getRules() + " & ae ; \u00e4 & AE ; \u00c4"
                                                              + " & oe ; \u00f6 & OE ; \u00d6"
                                                              + " & ue ; \u00fc & UE ; \u00dc"); 
-        }
-        catch (ParseException e) {
-            System.out.print("");
-        }
+            */
+        // }
+        // catch (ParseException e) {
+        //     System.out.print("");
+        // }
     }
     
     static BreakIterator enWord = BreakIterator.getWordInstance(Locale.US);
@@ -80,7 +92,7 @@ public class SearchTest extends TestFmwk {
             "Tod T\u00F6ne black Tofu blackbirds " +
             "Ton PAT toehold " +
             "blackbird " +
-            "black-bird pat " +
+            "blackbird pat " +
             "toe big Toe";
     
     //-------------------------------------------------------------------------
@@ -127,11 +139,11 @@ public class SearchTest extends TestFmwk {
                     ),
 
         // NOTE: this case depends on a bug fix in JDK 1.2.2 ("Cricket")
-        new TestCase(deColl, Collator.PRIMARY, null, "toe",
+        /*new TestCase(deColl, Collator.PRIMARY, null, "toe",
                 //   012345678901234567890123456789012345678901234567890123456789
                     "This is a toe T\u00F6ne",
                     new int[] { 10, 14 }
-                    ),
+                    ),*/
 
         /* Due to a bug in the JDK 1.2 FCS version of CollationElementIterator,
          * searching through text containing contracting character sequences 
@@ -151,6 +163,28 @@ public class SearchTest extends TestFmwk {
                     ),
         */
     };
+    
+    /**
+     * Test getInstance
+     */
+    public void TestInstance() 
+    {
+    	RuleBasedCollator encoll = (RuleBasedCollator)Collator.getInstance(
+    														Locale.ENGLISH);
+    	encoll.setStrength(Collator.TERTIARY);
+    	BreakIterator brk = null;
+    	CharacterIterator text = new StringCharacterIterator(
+    													"string spring string");
+    	String pattern = "string";
+    	try {
+    		StringSearch strsrch = new StringSearch(pattern, text, encoll, brk);
+    		strsrch = new StringSearch(pattern, text, encoll);
+    	}
+    	catch (Exception e) {
+    		e.printStackTrace();
+    		errln("Error getting instance");
+    	}
+    }
 
     /**
      * Test using the test cases defined above
@@ -160,10 +194,10 @@ public class SearchTest extends TestFmwk {
         {
             logln("case " + t);
             TestCase c = testCases[t];
+            c.collator.setStrength(c.strength);
             StringSearch iter = new StringSearch(c.pattern,
                                         new StringCharacterIterator(c.target),
                                         c.collator, c.breaker);
-            iter.setStrength(c.strength);
             doTestCase(iter, c.matches);
         }
     }
@@ -175,12 +209,13 @@ public class SearchTest extends TestFmwk {
         // Create a search iterator. 
         StringSearch iter = new StringSearch("abab",
                                              new StringCharacterIterator("abababab"),
-                                             enColl, null);
+                                             enColl);
         
         int[] overlap = new int[] { 0, 2, 4 };  // expected results
         int[] novrlap = new int[] { 0, 4 };
 
         
+        iter.setOverlapping(true);         // Turn 'em back on
         doTestCase(iter, overlap);          // Overlapping is allowed by default
         if (iter.isOverlapping() != true) {
             errln("ERROR: isOverlapping returned " + iter.isOverlapping());
@@ -205,7 +240,7 @@ public class SearchTest extends TestFmwk {
     public void TestBreakIterator() {
         StringSearch iter = new StringSearch("fox",
                                  new StringCharacterIterator("foxy fox"),
-                                 enColl, null);
+                                 enColl);
 
         BreakIterator charBreaker = BreakIterator.getCharacterInstance(Locale.US);
         BreakIterator wordBreaker = BreakIterator.getWordInstance(Locale.US);
@@ -213,24 +248,20 @@ public class SearchTest extends TestFmwk {
         int[] chars = new int[] { 0, 5 };   // expected results
         int[] words = new int[] { 5 };
         
-        logln("default break iterator...");
         doTestCase(iter, chars);            // character breaker by default
         
-        logln("word break iterator...");
         iter.setBreakIterator(wordBreaker); // word break detection
         doTestCase(iter, words);
         if (iter.getBreakIterator() != wordBreaker) {
             errln("ERROR: getBreakIterator returned wrong object");
         }
 
-        logln("char break iterator...");
         iter.setBreakIterator(charBreaker); // char break detection
         doTestCase(iter, chars);
         if (iter.getBreakIterator() != charBreaker) {
             errln("ERROR: getBreakIterator returned wrong object");
         }
 
-        logln("null break iterator...");
         iter.setBreakIterator(null);
         doTestCase(iter, chars);
         if (iter.getBreakIterator() != null) {
@@ -277,6 +308,7 @@ public class SearchTest extends TestFmwk {
         // not used int[] match1 = new int[] { 4, 15 };   // expected results
         int[] match3 = new int[] { 4 };
 
+		enColl.setStrength(Collator.TERTIARY);
         StringSearch iter = new StringSearch(pat, new StringCharacterIterator(targ),
                                  enColl, null);
 
@@ -288,7 +320,6 @@ public class SearchTest extends TestFmwk {
         } */
         
         logln("Trying tertiary strength...");
-        iter.setStrength(Collator.TERTIARY);
         doTestCase(iter, match3);
         if (iter.getStrength() != Collator.TERTIARY) {
             errln("ERROR: getStrength: expected PRIMARY, got " + iter.getStrength());
@@ -300,22 +331,19 @@ public class SearchTest extends TestFmwk {
      * Test for StringSearch.setCollator
      */
     public void TestSetCollator() throws ParseException {
-        // Create a test collator that thinks "o" and "p" are the same thing
-        RuleBasedCollator testColl = new RuleBasedCollator(enColl.getRules()
-                                            + "& o,O ; p,P" );
-                                            
         String  pat = "fox";
         String  targ = "fox fpx ";
         
         int[] match1 = new int[] { 0 };     // English results
         int[] match2 = new int[] { 0, 4 };  // Test collator results
 
-        StringSearch iter = new StringSearch(pat, new StringCharacterIterator(targ),
-                                 enColl, null);
+		enColl.setStrength(Collator.PRIMARY);
+        StringSearch iter = new StringSearch(pat, 
+        									 new StringCharacterIterator(targ),
+                                 			 enColl);
 
         logln("Trying English collator...");
 
-        iter.setStrength(Collator.PRIMARY);
         doTestCase(iter, match1);
         if (iter.getCollator() != enColl) {
             errln("ERROR: getCollator returned wrong collator");
@@ -323,17 +351,21 @@ public class SearchTest extends TestFmwk {
         
         logln("Trying test collator...");
 
-        iter.setCollator(testColl);
-        iter.setStrength(Collator.PRIMARY);
-        doTestCase(iter, match2);
-        if (iter.getCollator() != testColl) {
+		// Create a test collator that thinks "o" and "p" are the same thing
+        /*
+         * RuleBasedCollator testColl = new RuleBasedCollator(enColl.getRules()
+                                            + "& o,O ; p,P" );*/
+		frColl.setStrength(Collator.PRIMARY);
+        iter.setCollator(frColl);
+        doTestCase(iter, match1);
+        if (iter.getCollator() != frColl) {
             errln("ERROR: getCollator returned wrong collator");
         }
         
         logln("Trying English collator again...");
 
+		enColl.setStrength(Collator.PRIMARY);
         iter.setCollator(enColl);
-        iter.setStrength(Collator.PRIMARY);
         doTestCase(iter, match1);
         if (iter.getCollator() != enColl) {
             errln("ERROR: getCollator returned wrong collator");
@@ -353,9 +385,9 @@ public class SearchTest extends TestFmwk {
         int[] match1 = new int[] { 0, 31 };
         int[] match2 = new int[] { 16, 40 };
 
+		enColl.setStrength(Collator.PRIMARY);
         StringSearch iter = new StringSearch(pat1, new StringCharacterIterator(target),
-                                 enColl, null);
-        iter.setStrength(Collator.PRIMARY);
+                                 enColl);
         
         doTestCase(iter, match1);
         if (!iter.getPattern().equals(pat1)) {
@@ -409,8 +441,11 @@ public class SearchTest extends TestFmwk {
     {
         String pattern = "c";
         String text = "Scott Ganyo";
+        
         StringSearch ss = new StringSearch(pattern, text);
-        ss.setStrength(Collator.PRIMARY);
+        Collator collator = ss.getCollator();
+        collator.setStrength(Collator.PRIMARY);
+        ss.reset();
         if (ss.next() != 1) {
             errln("Error finding character c at index 1 in \"Scott Ganyo\"");
         }
@@ -531,11 +566,27 @@ public class SearchTest extends TestFmwk {
         // text.  Then we compare it to the expected matches
         //
         Vector matches = new Vector();
-
+		
+		iter.setCanonical(true);
         for (int i = iter.first(); i != SearchIterator.DONE; i = iter.next()) {
             matches.addElement(new Integer(i));
         }
         compareMatches(expected, matches);
+        
+        // Now do the same exact thing as above, but in reverse
+        logln("Now searching in reverse...");
+        matches.removeAllElements();
+        for (int i = iter.last(); i != SearchIterator.DONE; i = iter.previous()) {
+            matches.insertElementAt(new Integer(i), 0);
+        }
+        compareMatches(expected, matches);
+        
+        matches.removeAllElements();
+        iter.setCanonical(false);
+        for (int i = iter.first(); i != SearchIterator.DONE; i = iter.next()) {
+            matches.addElement(new Integer(i));
+        }
+        compareMatches(expected, matches); 
         
         // Now do the same exact thing as above, but in reverse
         logln("Now searching in reverse...");
@@ -598,7 +649,9 @@ public class SearchTest extends TestFmwk {
     private void AuxJ11(String pattern, String text, int expectedLoc) {
         try {
             StringSearch ss = new StringSearch(pattern, text);
-            ss.setStrength(Collator.PRIMARY);
+            Collator collator = ss.getCollator();
+            collator.setStrength(Collator.PRIMARY);
+            ss.reset();
             int loc = ss.next();
             if (loc == expectedLoc) {
                 logln("Ok: StringSearch(\"" + pattern + "\", \"" + text + "\") = " + loc);
