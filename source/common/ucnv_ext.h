@@ -379,7 +379,7 @@ ucnv_extContinueMatchFromU(UConverter *cnv,
                            UErrorCode *pErrorCode);
 
 U_CFUNC void
-ucnv_extGetUnicodeSet(const UConverter *cnv,
+ucnv_extGetUnicodeSet(const UConverterSharedData *sharedData,
                       USet *set,
                       UConverterUnicodeSet which,
                       UErrorCode *pErrorCode);

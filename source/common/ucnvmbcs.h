@@ -369,10 +369,24 @@ _MBCSToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
  * Does not empty the set first.
  */
 U_CFUNC void
-_MBCSGetUnicodeSetForBytes(const UConverter *cnv,
+_MBCSGetUnicodeSetForBytes(const UConverterSharedData *sharedData,
                            USet *set,
                            UConverterUnicodeSet which,
                            uint8_t state, int32_t lowByte, int32_t highByte,
                            UErrorCode *pErrorCode);
+
+/*
+ * Internal function returning a UnicodeSet for toUnicode() conversion.
+ * Currently only used for ISO-2022-CN, and only handles roundtrip mappings.
+ * In the future, if we add support for fallback sets, this function
+ * needs to be updated.
+ * Handles extensions.
+ * Does not empty the set first.
+ */
+U_CFUNC void
+_MBCSGetUnicodeSetForUnicode(const UConverterSharedData *sharedData,
+                             USet *set,
+                             UConverterUnicodeSet which,
+                             UErrorCode *pErrorCode);
 
 #endif

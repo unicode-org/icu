@@ -930,7 +930,7 @@ ucnv_extContinueMatchFromU(UConverter *cnv,
 }
 
 static void
-ucnv_extGetUnicodeSetString(const UConverter *cnv,
+ucnv_extGetUnicodeSetString(const UConverterSharedData *sharedData,
                             const int32_t *cx,
                             USet *set,
                             UConverterUnicodeSet which,
@@ -974,7 +974,7 @@ ucnv_extGetUnicodeSetString(const UConverter *cnv,
             /* no mapping, do nothing */
         } else if(UCNV_EXT_FROM_U_IS_PARTIAL(value)) {
             ucnv_extGetUnicodeSetString(
-                cnv, cx, set, which, minLength,
+                sharedData, cx, set, which, minLength,
                 U_SENTINEL, s, length+1,
                 (int32_t)UCNV_EXT_FROM_U_GET_PARTIAL_INDEX(value),
                 pErrorCode);
@@ -988,7 +988,7 @@ ucnv_extGetUnicodeSetString(const UConverter *cnv,
 }
 
 U_CFUNC void
-ucnv_extGetUnicodeSet(const UConverter *cnv,
+ucnv_extGetUnicodeSet(const UConverterSharedData *sharedData,
                       USet *set,
                       UConverterUnicodeSet which,
                       UErrorCode *pErrorCode) {
@@ -1003,7 +1003,7 @@ ucnv_extGetUnicodeSet(const UConverter *cnv,
     UChar32 c;
     int32_t length;
 
-    cx=cnv->sharedData->mbcs.extIndexes;
+    cx=sharedData->mbcs.extIndexes;
     if(cx==NULL) {
         return;
     }
@@ -1017,7 +1017,7 @@ ucnv_extGetUnicodeSet(const UConverter *cnv,
     /* enumerate the from-Unicode trie table */
     c=0; /* keep track of the current code point while enumerating */
 
-    if(cnv->sharedData->mbcs.outputType==MBCS_OUTPUT_DBCS_ONLY) {
+    if(sharedData->mbcs.outputType==MBCS_OUTPUT_DBCS_ONLY) {
         /* DBCS-only, ignore single-byte results */
         minLength=2;
     } else {
@@ -1051,7 +1051,7 @@ ucnv_extGetUnicodeSet(const UConverter *cnv,
                             length=0;
                             U16_APPEND_UNSAFE(s, length, c);
                             ucnv_extGetUnicodeSetString(
-                                cnv, cx, set, which, minLength,
+                                sharedData, cx, set, which, minLength,
                                 c, s, length,
                                 (int32_t)UCNV_EXT_FROM_U_GET_PARTIAL_INDEX(value),
                                 pErrorCode);

@@ -34,6 +34,7 @@
 #include "unicode/uset.h"
 #include "unicode/ucnv_err.h"
 #include "unicode/ucnv_cb.h"
+#include "ucnv_imp.h"
 #include "ucnv_bld.h"
 #include "ucnv_cnv.h"
 #include "ucnvmbcs.h"
@@ -173,7 +174,7 @@ typedef struct{
 #endif
     Cnv2022Type currentType;
     ISO2022State toU2022State, fromU2022State;
-    UConverter* myConverterArray[UCNV_2022_MAX_CONVERTERS];
+    UConverterSharedData *myConverterArray[UCNV_2022_MAX_CONVERTERS];
     uint32_t key;
     uint32_t version;
     char locale[3];
@@ -432,24 +433,23 @@ _ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t opti
         }
         myConverterData->version= 0;
         version = options & UCNV_OPTIONS_VERSION_MASK;
-        myConverterData->myConverterArray[0] =NULL;
         if(myLocale[0]=='j' && (myLocale[1]=='a'|| myLocale[1]=='p') && 
             (myLocale[2]=='_' || myLocale[2]=='\0')){
             int len=0;
             /* open the required converters and cache them */
             if(jpCharsetMasks[version]&CSM(ISO8859_7)) {
-                myConverterData->myConverterArray[ISO8859_7]= ucnv_open("ISO8859_7", errorCode);
+                myConverterData->myConverterArray[ISO8859_7]= ucnv_loadSharedData("ISO8859_7", NULL, errorCode);
             }
-            myConverterData->myConverterArray[JISX201]      = ucnv_open("jisx-201", errorCode);
-            myConverterData->myConverterArray[JISX208]      = ucnv_open("jisx-208", errorCode);
+            myConverterData->myConverterArray[JISX201]      = ucnv_loadSharedData("jisx-201", NULL, errorCode);
+            myConverterData->myConverterArray[JISX208]      = ucnv_loadSharedData("jisx-208", NULL, errorCode);
             if(jpCharsetMasks[version]&CSM(JISX212)) {
-                myConverterData->myConverterArray[JISX212]  = ucnv_open("jisx-212", errorCode);
+                myConverterData->myConverterArray[JISX212]  = ucnv_loadSharedData("jisx-212", NULL, errorCode);
             }
             if(jpCharsetMasks[version]&CSM(GB2312)) {
-                myConverterData->myConverterArray[GB2312]   = ucnv_open("ibm-5478", errorCode);   /* gb_2312_80-1 */
+                myConverterData->myConverterArray[GB2312]   = ucnv_loadSharedData("ibm-5478", NULL, errorCode);   /* gb_2312_80-1 */
             }
             if(jpCharsetMasks[version]&CSM(KSC5601)) {
-                myConverterData->myConverterArray[KSC5601]  = ucnv_open("ksc_5601", errorCode);
+                myConverterData->myConverterArray[KSC5601]  = ucnv_loadSharedData("ksc_5601", NULL, errorCode);
             }
 
             /* set the function pointers to appropriate funtions */
@@ -491,11 +491,11 @@ _ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t opti
             (myLocale[2]=='_' || myLocale[2]=='\0')){
 
             /* open the required converters and cache them */
-            myConverterData->myConverterArray[GB2312_1]         = ucnv_open("ibm-5478",errorCode);
+            myConverterData->myConverterArray[GB2312_1]         = ucnv_loadSharedData("ibm-5478", NULL, errorCode);
             if(version==1) {
-                myConverterData->myConverterArray[ISO_IR_165]   = ucnv_open("iso-ir-165",errorCode);
+                myConverterData->myConverterArray[ISO_IR_165]   = ucnv_loadSharedData("iso-ir-165", NULL, errorCode);
             }
-            myConverterData->myConverterArray[CNS_11643]        = ucnv_open("cns-11643-1992",errorCode);
+            myConverterData->myConverterArray[CNS_11643]        = ucnv_loadSharedData("cns-11643-1992", NULL, errorCode);
 
 
             /* set the function pointers to appropriate funtions */
@@ -528,6 +528,10 @@ _ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t opti
         }
 
         cnv->maxBytesPerUChar=cnv->sharedData->staticData->maxBytesPerChar;
+
+        if(U_FAILURE(*errorCode)) {
+            _ISO2022Close(cnv);
+        }
     } else {
         *errorCode = U_MEMORY_ALLOCATION_ERROR;
     }
@@ -537,24 +541,22 @@ _ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t opti
 static void
 _ISO2022Close(UConverter *converter) {
     UConverterDataISO2022* myData =(UConverterDataISO2022 *) (converter->extraInfo);
-    UConverter **array = myData->myConverterArray;
+    UConverterSharedData **array = myData->myConverterArray;
     int32_t i;
 
     if (converter->extraInfo != NULL) {
         /*close the array of converter pointers and free the memory*/
         for (i=0; i<UCNV_2022_MAX_CONVERTERS; i++) {
             if(array[i]!=NULL) {
-                if(array[i]==myData->currentConverter) {
-                    myData->currentConverter=NULL;
-                }
-                ucnv_close(array[i]);
+                ucnv_unloadSharedDataIfReady(array[i]);
             }
         }
 
-        ucnv_close(myData->currentConverter); /* if not closed above */
+        ucnv_close(myData->currentConverter);
 
         if(!converter->isExtraLocal){
             uprv_free (converter->extraInfo);
+            converter->extraInfo = NULL;
         }
     }
 }
@@ -1435,7 +1437,7 @@ getTrail:
                 case JISX201:
                     /* G0 SBCS */
                     MBCS_SINGLE_FROM_UCHAR32(
-                        converterData->myConverterArray[cs]->sharedData,
+                        converterData->myConverterArray[cs],
                         sourceChar, &targetValue,
                         useFallback);
                     if(targetValue <= 0x7f) {
@@ -1445,7 +1447,7 @@ getTrail:
                 case ISO8859_7:
                     /* G0 SBCS forced to 7-bit output */
                     MBCS_SINGLE_FROM_UCHAR32(
-                        converterData->myConverterArray[cs]->sharedData,
+                        converterData->myConverterArray[cs],
                         sourceChar, &targetValue,
                         useFallback);
                     if(0x80 <= targetValue && targetValue <= 0xff) {
@@ -1457,7 +1459,7 @@ getTrail:
                 default:
                     /* G0 DBCS */
                     MBCS_FROM_UCHAR32_ISO2022(
-                        converterData->myConverterArray[cs]->sharedData,
+                        converterData->myConverterArray[cs],
                         sourceChar, &targetValue,
                         useFallback, &len, MBCS_OUTPUT_2);
                     if(len != 2) {
@@ -1737,7 +1739,7 @@ escape:
                         /* convert mySourceChar+0x80 to use a normal 8-bit table */
                         targetUniChar =
                             _MBCS_SINGLE_SIMPLE_GET_NEXT_BMP(
-                                myData->myConverterArray[cs]->sharedData,
+                                myData->myConverterArray[cs],
                                 mySourceChar + 0x80);
                     }
                     /* return from a single-shift state to the previous one */
@@ -1747,7 +1749,7 @@ escape:
                     if(mySourceChar <= 0x7f) {
                         targetUniChar =
                             _MBCS_SINGLE_SIMPLE_GET_NEXT_BMP(
-                                myData->myConverterArray[cs]->sharedData,
+                                myData->myConverterArray[cs],
                                 mySourceChar);
                     }
                     break;
@@ -1765,7 +1767,7 @@ getTrailByte:
                         tempBuf[0] = (char) (mySourceChar);
                         tempBuf[1] = trailByte = *mySource++;
                         mySourceChar = (mySourceChar << 8) | (uint8_t)(trailByte);
-                        targetUniChar = _MBCSSimpleGetNextUChar(myData->myConverterArray[cs]->sharedData, tempBuf, 2, FALSE);
+                        targetUniChar = _MBCSSimpleGetNextUChar(myData->myConverterArray[cs], tempBuf, 2, FALSE);
                     } else {
                         args->converter->toUBytes[0] = (uint8_t)mySourceChar;
                         args->converter->toULength = 1;
@@ -2452,7 +2454,7 @@ getTrail:
             }
             else{
                 /* convert U+0080..U+10ffff */
-                UConverter *cnv;
+                UConverterSharedData *cnv;
                 int32_t i;
                 int8_t cs, g;
 
@@ -2507,7 +2509,7 @@ getTrail:
                     if(cs > 0) {
                         if(cs > CNS_11643_0) {
                             cnv = converterData->myConverterArray[CNS_11643];
-                            MBCS_FROM_UCHAR32_ISO2022(cnv->sharedData,sourceChar,&targetValue,useFallback,&len,MBCS_OUTPUT_3);
+                            MBCS_FROM_UCHAR32_ISO2022(cnv,sourceChar,&targetValue,useFallback,&len,MBCS_OUTPUT_3);
                             if(len==3) {
                                 cs = (int8_t)(CNS_11643_0 + (targetValue >> 16) - 0x80);
                                 len = 2;
@@ -2525,7 +2527,7 @@ getTrail:
                         } else {
                             /* GB2312_1 or ISO-IR-165 */
                             cnv = converterData->myConverterArray[cs];
-                            MBCS_FROM_UCHAR32_ISO2022(cnv->sharedData,sourceChar,&targetValue,useFallback,&len,MBCS_OUTPUT_2);
+                            MBCS_FROM_UCHAR32_ISO2022(cnv,sourceChar,&targetValue,useFallback,&len,MBCS_OUTPUT_2);
                             g = 1; /* used if len == 2 */
                         }
                     }
@@ -2740,7 +2742,7 @@ escape:
                 /* convert one or two bytes */
                 if(pToU2022State->g != 0) {
                     if(mySource < mySourceLimit) {
-                        UConverter *cnv;
+                        UConverterSharedData *cnv;
                         StateEnum tempState;
                         int32_t tempBufLen;
                         char trailByte;
@@ -2765,7 +2767,7 @@ getTrailByte:
                             /* return from a single-shift state to the previous one */
                             pToU2022State->g=pToU2022State->prevG;
                         }
-                        targetUniChar = _MBCSSimpleGetNextUChar(cnv->sharedData, tempBuf, tempBufLen, FALSE);
+                        targetUniChar = _MBCSSimpleGetNextUChar(cnv, tempBuf, tempBufLen, FALSE);
                     } else {
                         args->converter->toUBytes[0] = (uint8_t)mySourceChar;
                         args->converter->toULength = 1;
@@ -2921,9 +2923,7 @@ struct cloneStruct
 {
     UConverter cnv;
     UConverterDataISO2022 mydata;
-    UConverter currentCnv; /**< for ISO_2022 converter if the current converter is open */
-
-    UConverter clonedConverters[1]; /* Actually a variable sized array for all of the sub converters to be cloned. */
+    UConverter currentConverter;
 };
 
 
@@ -2935,89 +2935,42 @@ _ISO_2022_SafeClone(
             UErrorCode *status)
 {
     struct cloneStruct * localClone;
-    int32_t bufferSizeNeeded = sizeof(struct cloneStruct);
-    UConverterDataISO2022* cnvData = (UConverterDataISO2022*)cnv->extraInfo;
-    int32_t i;
-    int32_t sizes[UCNV_2022_MAX_CONVERTERS];
-    int32_t numConverters = 0;
-    int32_t currentConverterIndex = -1;
-    int32_t currentConverterSize = 0;
-    char *ptr; /* buffer pointer */
-
-    if (U_FAILURE(*status)) {
-        return 0;
-    }
-
-    for(i=0;(i<UCNV_2022_MAX_CONVERTERS)&&cnvData->myConverterArray[i];i++) {
-        int32_t size;
-
-        size = 0;
-        ucnv_safeClone(cnvData->myConverterArray[i], NULL, &size, status);
-        bufferSizeNeeded += size;
-        sizes[i] = size;
-        numConverters++;
-
-        if(cnvData->currentConverter == cnvData->myConverterArray[i]) {
-            currentConverterIndex = i;
-        }
-    }
-
-    if(currentConverterIndex == -1) {  /* -1 means - not found in array. Clone separately */
-        currentConverterSize = 0;
-        if(cnvData->currentConverter) { 
-            ucnv_safeClone(cnvData->currentConverter, NULL, &currentConverterSize, status);
-            bufferSizeNeeded += currentConverterSize;
-        }
-    }
-
-    for(;i<UCNV_2022_MAX_CONVERTERS;i++) { /* zero the other sizes */
-        sizes[i]=0;
-    }
+    UConverterDataISO2022 *cnvData;
+    int32_t i, size;
 
     if (*pBufferSize == 0) { /* 'preflighting' request - set needed size into *pBufferSize */
-        *pBufferSize = bufferSizeNeeded;
-        return 0;
+        *pBufferSize = (int32_t)sizeof(struct cloneStruct);
+        return NULL;
     }
 
-    if(*pBufferSize < bufferSizeNeeded) {
-        *status = U_BUFFER_OVERFLOW_ERROR;
-        return 0;
-    }
-
+    cnvData = (UConverterDataISO2022 *)cnv->extraInfo;
     localClone = (struct cloneStruct *)stackBuffer;
-    uprv_memcpy(&localClone->cnv, cnv, sizeof(UConverter));
 
-    uprv_memcpy(&localClone->mydata, cnv->extraInfo, sizeof(UConverterDataISO2022));
+    /* ucnv.c/ucnv_safeClone() copied the main UConverter already */
 
-    /* clone back sub cnvs */
+    uprv_memcpy(&localClone->mydata, cnvData, sizeof(UConverterDataISO2022));
 
-    ptr = (char*)&localClone->clonedConverters;
-    for(i=0;i<numConverters;i++) {
-        int32_t size;
-        size = sizes[i];
-        localClone->mydata.myConverterArray[i] = ucnv_safeClone(cnvData->myConverterArray[i], (UConverter*)ptr, &size, status);
-        ptr += size;
-    }
-    for(;i<UCNV_2022_MAX_CONVERTERS;i++) {
-        localClone->mydata.myConverterArray[i] = NULL;
-    }
+    /* share the subconverters */
 
-    if(currentConverterIndex == -1) { /* -1 = not found in list */
-        /* KR version 1 also uses the state in currentConverter for preserving state
-         * so we need to clone it too!
-         */
-        if(cnvData->currentConverter) { 
-            localClone->mydata.currentConverter = ucnv_safeClone(cnvData->currentConverter, ptr, &currentConverterSize, status);
-            ptr += currentConverterSize;
-        } else {
-            localClone->mydata.currentConverter = NULL;
+    if(cnvData->currentConverter != NULL) {
+        size = (int32_t)sizeof(UConverter);
+        localClone->mydata.currentConverter =
+            ucnv_safeClone(cnvData->currentConverter,
+                            &localClone->currentConverter,
+                            &size, status);
+        if(U_FAILURE(*status)) {
+            return NULL;
         }
-    } else {
-        localClone->mydata.currentConverter = localClone->mydata.myConverterArray[currentConverterIndex];
+    }
+
+    for(i=0; i<UCNV_2022_MAX_CONVERTERS; ++i) {
+        if(cnvData->myConverterArray[i] != NULL) {
+            ucnv_incrementRefCount(cnvData->myConverterArray[i]);
+        }
     }
 
     localClone->cnv.extraInfo = &localClone->mydata; /* set pointer to extra data */
-
+    localClone->cnv.isExtraLocal = TRUE;
     return &localClone->cnv;
 }
 
@@ -3028,7 +2981,6 @@ _ISO_2022_GetUnicodeSet(const UConverter *cnv,
                     UErrorCode *pErrorCode)
 {
     int32_t i;
-    USet *cnvSet;
     UConverterDataISO2022* cnvData;
 
     if (U_FAILURE(*pErrorCode)) {
@@ -3044,10 +2996,6 @@ _ISO_2022_GetUnicodeSet(const UConverter *cnv,
 #endif
 
     cnvData = (UConverterDataISO2022*)cnv->extraInfo;
-    if (cnv->sharedData == &_ISO2022KRData && cnvData->currentConverter != NULL) {
-        ucnv_getUnicodeSet(cnvData->currentConverter, set, which, pErrorCode);
-        return;
-    }
 
     /* open a set and initialize it with code points that are algorithmically round-tripped */
     switch(cnvData->locale[0]){
@@ -3077,13 +3025,6 @@ _ISO_2022_GetUnicodeSet(const UConverter *cnv,
         break;
     }
 
-    /* open a helper set because ucnv_getUnicodeSet() first empties its result set */
-    cnvSet = uset_open(1, 0);
-    if (!cnvSet) {
-        *pErrorCode =U_MEMORY_ALLOCATION_ERROR;
-        return;
-    }
-
     /*
      * TODO: need to make this version-specific for CN.
      * CN version 0 does not map CNS planes 3..7 although
@@ -3103,12 +3044,10 @@ _ISO_2022_GetUnicodeSet(const UConverter *cnv,
                         0, 0x81, 0x82,
                         pErrorCode);
             } else {
-                ucnv_getUnicodeSet(cnvData->myConverterArray[i], cnvSet, which, pErrorCode);
-                uset_addAll(set, cnvSet /* pErrorCode */);
+                _MBCSGetUnicodeSetForUnicode(cnvData->myConverterArray[i], set, which, pErrorCode);
             }
         }
     }
-    uset_close(cnvSet);
 }
 
 static const UConverterImpl _ISO2022Impl={

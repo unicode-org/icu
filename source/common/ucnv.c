@@ -171,21 +171,10 @@ ucnv_safeClone(const UConverter* cnv, void *stackBuffer, int32_t *pBufferSize, U
     UTRACE_DATA3(UTRACE_OPEN_CLOSE, "clone converter %s at %p into stackBuffer %p",
                                     ucnv_getName(cnv, status), cnv, stackBuffer);
 
-    /* Pointers on 64-bit platforms need to be aligned
-     * on a 64-bit boundry in memory.
-     */
-    if (U_ALIGNMENT_OFFSET(stackBuffer) != 0) {
-        int32_t offsetUp = (int32_t)U_ALIGNMENT_OFFSET_UP(stackBufferChars);
-        *pBufferSize -= offsetUp;
-        stackBufferChars += offsetUp;
-    }
-
-    stackBuffer = (void *)stackBufferChars;
-    
     if (cnv->sharedData->impl->safeClone != NULL) {
         /* call the custom safeClone function for sizing */
         bufferSizeNeeded = 0;
-        cnv->sharedData->impl->safeClone(cnv, stackBuffer, &bufferSizeNeeded, status);
+        cnv->sharedData->impl->safeClone(cnv, NULL, &bufferSizeNeeded, status);
     }
     else
     {
@@ -200,6 +189,22 @@ ucnv_safeClone(const UConverter* cnv, void *stackBuffer, int32_t *pBufferSize, U
     }
 
 
+    /* Pointers on 64-bit platforms need to be aligned
+     * on a 64-bit boundary in memory.
+     */
+    if (U_ALIGNMENT_OFFSET(stackBuffer) != 0) {
+        int32_t offsetUp = (int32_t)U_ALIGNMENT_OFFSET_UP(stackBufferChars);
+        if(*pBufferSize > offsetUp) {
+            *pBufferSize -= offsetUp;
+            stackBufferChars += offsetUp;
+        } else {
+            /* prevent using the stack buffer but keep the size > 0 so that we do not just preflight */
+            *pBufferSize = 1;
+        }
+    }
+
+    stackBuffer = (void *)stackBufferChars;
+    
     /* Now, see if we must allocate any memory */
     if (*pBufferSize < bufferSizeNeeded || stackBuffer == NULL)
     {
@@ -223,6 +228,8 @@ ucnv_safeClone(const UConverter* cnv, void *stackBuffer, int32_t *pBufferSize, U
         localConverter = (UConverter*) stackBuffer;
         allocatedConverter = NULL;
     }
+
+    uprv_memset(localConverter, 0, bufferSizeNeeded);
 
     /* Copy initial state */
     uprv_memcpy(localConverter, cnv, sizeof(UConverter));
@@ -254,8 +261,6 @@ ucnv_safeClone(const UConverter* cnv, void *stackBuffer, int32_t *pBufferSize, U
         /* we're using user provided data - set to not destroy */
         localConverter->isCopyLocal = TRUE;
     }
-
-    localConverter->isExtraLocal = localConverter->isCopyLocal;
 
     /* allow callback functions to handle any memory allocation */
     toUArgs.converter = fromUArgs.converter = localConverter;

@@ -428,7 +428,7 @@ _MBCSSizeofFromUBytes(UConverterMBCSTable *mbcsTable) {
 
 /* similar to _MBCSGetNextUChar() but recursive */
 static void
-_getUnicodeSetForBytes(const UConverter *cnv,
+_getUnicodeSetForBytes(const UConverterSharedData *sharedData,
                        const int32_t (*stateTable)[256], const uint16_t *unicodeCodeUnits,
                        USet *set,
                        UConverterUnicodeSet which,
@@ -441,7 +441,7 @@ _getUnicodeSetForBytes(const UConverter *cnv,
         entry=stateTable[state][b];
         if(MBCS_ENTRY_IS_TRANSITION(entry)) {
             _getUnicodeSetForBytes(
-                cnv, stateTable, unicodeCodeUnits,
+                sharedData, stateTable, unicodeCodeUnits,
                 set, which,
                 (uint8_t)MBCS_ENTRY_TRANSITION_STATE(entry),
                 offset+MBCS_ENTRY_TRANSITION_OFFSET(entry),
@@ -506,24 +506,24 @@ _getUnicodeSetForBytes(const UConverter *cnv,
  * Does not empty the set first.
  */
 U_CFUNC void
-_MBCSGetUnicodeSetForBytes(const UConverter *cnv,
+_MBCSGetUnicodeSetForBytes(const UConverterSharedData *sharedData,
                            USet *set,
                            UConverterUnicodeSet which,
                            uint8_t state, int32_t lowByte, int32_t highByte,
                            UErrorCode *pErrorCode) {
     _getUnicodeSetForBytes(
-        cnv, cnv->sharedData->mbcs.stateTable, cnv->sharedData->mbcs.unicodeCodeUnits,
+        sharedData, sharedData->mbcs.stateTable, sharedData->mbcs.unicodeCodeUnits,
         set, which,
         state, 0, lowByte, highByte,
         pErrorCode);
 }
 
-static void
-_MBCSGetUnicodeSet(const UConverter *cnv,
-                   USet *set,
-                   UConverterUnicodeSet which,
-                   UErrorCode *pErrorCode) {
-    UConverterMBCSTable *mbcsTable;
+U_CFUNC void
+_MBCSGetUnicodeSetForUnicode(const UConverterSharedData *sharedData,
+                             USet *set,
+                             UConverterUnicodeSet which,
+                             UErrorCode *pErrorCode) {
+    const UConverterMBCSTable *mbcsTable;
     const uint16_t *table;
 
     uint32_t st3;
@@ -531,14 +531,8 @@ _MBCSGetUnicodeSet(const UConverter *cnv,
 
     UChar32 c;
 
-    if(cnv->options&_MBCS_OPTION_GB18030) {
-        uset_addRange(set, 0, 0xd7ff);
-        uset_addRange(set, 0xe000, 0x10ffff);
-        return;
-    }
-
     /* enumerate the from-Unicode trie table */
-    mbcsTable=&cnv->sharedData->mbcs;
+    mbcsTable=&sharedData->mbcs;
     table=mbcsTable->fromUnicodeTable;
     if(mbcsTable->unicodeMask&UCNV_HAS_SUPPLEMENTARY) {
         maxStage1=0x440;
@@ -658,7 +652,20 @@ _MBCSGetUnicodeSet(const UConverter *cnv,
         }
     }
 
-    ucnv_extGetUnicodeSet(cnv, set, which, pErrorCode);
+    ucnv_extGetUnicodeSet(sharedData, set, which, pErrorCode);
+}
+
+static void
+_MBCSGetUnicodeSet(const UConverter *cnv,
+                   USet *set,
+                   UConverterUnicodeSet which,
+                   UErrorCode *pErrorCode) {
+    if(cnv->options&_MBCS_OPTION_GB18030) {
+        uset_addRange(set, 0, 0xd7ff);
+        uset_addRange(set, 0xe000, 0x10ffff);
+    } else {
+        _MBCSGetUnicodeSetForUnicode(cnv->sharedData, set, which, pErrorCode);
+    }
 }
 
 /* conversion extensions for input not in the main table -------------------- */

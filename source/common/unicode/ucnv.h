@@ -457,8 +457,18 @@ ucnv_safeClone(const UConverter *cnv,
                int32_t          *pBufferSize, 
                UErrorCode       *status);
 
-/** @stable ICU 2.0 */
-#define U_CNV_SAFECLONE_BUFFERSIZE  4096
+/**
+ * \def U_CNV_SAFECLONE_BUFFERSIZE
+ * Definition of a buffer size that is designed to be large enough for
+ * converters to be cloned with ucnv_safeClone().
+ * @stable ICU 2.0
+ */
+#ifdef OS400
+    /* OS/400 uses 16-byte pointers, making objects larger */
+#   define U_CNV_SAFECLONE_BUFFERSIZE  2048
+#else
+#   define U_CNV_SAFECLONE_BUFFERSIZE  1024
+#endif
 
 /**
  * Deletes the unicode converter and releases resources associated

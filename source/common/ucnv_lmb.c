@@ -27,12 +27,17 @@
 
 #if !UCONFIG_NO_LEGACY_CONVERSION
 
+#include "unicode/ucnv_err.h"
+#include "unicode/ucnv.h"
+#include "unicode/uset.h"
 #include "cmemory.h"
 #include "cstring.h"
-#include "unicode/ucnv_err.h"
+#include "uassert.h"
+#include "ucnv_imp.h"
 #include "ucnv_bld.h"
-#include "unicode/ucnv.h"
 #include "ucnv_cnv.h"
+
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
 /*
   LMBCS
@@ -219,7 +224,13 @@ Because of the extensive use of other character sets, the LMBCS converter
 keeps a mapping between optimization groups and IBM character sets, so that
 ICU converters can be created and used as needed. */
 
-static const char * const OptGroupByteToCPName[ULMBCS_CTRLOFFSET] = {
+/* As you can see, even though any byte below 0x20 could be an optimization 
+byte, only those at 0x13 or below can map to an actual converter. To limit
+some loops and searches, we define a value for that last group converter:*/
+
+#define ULMBCS_GRP_LAST       0x13   /* last LMBCS group that has a converter */
+
+static const char * const OptGroupByteToCPName[ULMBCS_GRP_LAST + 1] = {
    /* 0x0000 */ "lmb-excp", /* internal home for the LOTUS exceptions list */
    /* 0x0001 */ "ibm-850",
    /* 0x0002 */ "ibm-851",
@@ -244,12 +255,6 @@ static const char * const OptGroupByteToCPName[ULMBCS_CTRLOFFSET] = {
    /* The rest are null, including the 0x0014 Unicode compatibility region
    and 0x0019, the 1-2-3 system range control char */      
 };
-
-/* As you can see, even though any byte below 0x20 could be an optimization 
-byte, only those at 0x13 or below can map to an actual converter. To limit
-some loops and searches, we define a value for that last group converter:*/
-
-#define ULMBCS_GRP_LAST       0x13   /* last LMBCS group that has a converter */
 
 
 /* That's approximately all the data that's needed for translating 
@@ -506,6 +511,13 @@ FindLMBCSLocale(const char *LocaleID)
   the definitions of these structures, see unicode\ucnv_bld.h
 */
 
+typedef struct
+  {
+    UConverterSharedData *OptGrpConverter[ULMBCS_GRP_LAST+1];    /* Converter per Opt. grp. */
+    uint8_t    OptGroup;                  /* default Opt. grp. for this LMBCS session */
+    uint8_t    localeConverterIndex;      /* reasonable locale match for index */
+  }
+UConverterDataLMBCS;
 
 
 #define DECLARE_LMBCS_DATA(n) \
@@ -523,8 +535,8 @@ static const UConverterImpl _LMBCSImpl##n={\
     NULL,\
     NULL,\
     NULL,\
-    NULL,\
-    ucnv_getCompleteUnicodeSet\
+    _LMBCSSafeClone,\
+    _LMBCSGetUnicodeSet\
 };\
 static const UConverterStaticData _LMBCSStaticData##n={\
   sizeof(UConverterStaticData),\
@@ -559,21 +571,32 @@ _LMBCSOpenWorker(UConverter*  _this,
                        ulmbcs_byte_t OptGroup
                        )
 {
-   UConverterDataLMBCS * extraInfo = (UConverterDataLMBCS*)uprv_malloc (sizeof (UConverterDataLMBCS));
-   if(extraInfo != NULL)
+    UConverterDataLMBCS * extraInfo = (UConverterDataLMBCS*)uprv_malloc (sizeof (UConverterDataLMBCS));
+    if(extraInfo != NULL)
     {
-       ulmbcs_byte_t i;
-       ulmbcs_byte_t imax;
-       imax = sizeof(extraInfo->OptGrpConverter)/sizeof(extraInfo->OptGrpConverter[0]);
+        ulmbcs_byte_t i;
 
-       for (i=0; i < imax; i++)         
-       {
-            extraInfo->OptGrpConverter[i] =
-               (OptGroupByteToCPName[i] != NULL) ? 
-               ucnv_open(OptGroupByteToCPName[i], err) : NULL;
-       }
-       extraInfo->OptGroup = OptGroup;
-       extraInfo->localeConverterIndex = FindLMBCSLocale(locale);
+        uprv_memset(extraInfo, 0, sizeof(UConverterDataLMBCS));
+
+        for (i=0; i <= ULMBCS_GRP_LAST && U_SUCCESS(*err); i++)         
+        {
+            if(OptGroupByteToCPName[i] != NULL) {
+                extraInfo->OptGrpConverter[i] = ucnv_loadSharedData(OptGroupByteToCPName[i], NULL, err);
+            }
+        }
+
+        if(U_SUCCESS(*err)) {
+            extraInfo->OptGroup = OptGroup;
+            extraInfo->localeConverterIndex = FindLMBCSLocale(locale);
+        } else {
+            /* one of the subconverters could not be loaded, unload the previous ones */
+            while(i > 0) {
+                if(extraInfo->OptGrpConverter[--i] != NULL) {
+                    ucnv_unloadSharedDataIfReady(extraInfo->OptGrpConverter[i]);
+                    extraInfo->OptGrpConverter[i] = NULL;
+                }
+            }
+        }
    } 
    else
    {
@@ -590,25 +613,62 @@ _LMBCSClose(UConverter *   _this)
         ulmbcs_byte_t Ix;
         UConverterDataLMBCS * extraInfo = (UConverterDataLMBCS *) _this->extraInfo;
 
-        for (Ix=0; Ix < ULMBCS_GRP_UNICODE; Ix++)
+        for (Ix=0; Ix <= ULMBCS_GRP_LAST; Ix++)
         {
            if (extraInfo->OptGrpConverter[Ix] != NULL)
-              ucnv_close (extraInfo->OptGrpConverter[Ix]);
+              ucnv_unloadSharedDataIfReady(extraInfo->OptGrpConverter[Ix]);
         }
         uprv_free (_this->extraInfo);
     }
 }
 
-/* 
-Here's an all-crash stop for debugging, since ICU does not have asserts.
-Turn this on by defining LMBCS_DEBUG, or by changing it to 
-#if 1 
-*/
-#if LMBCS_DEBUG
-#define MyAssert(b) {if (!(b)) {*(char *)0 = 1;}}
-#else
-#define MyAssert(b) 
-#endif
+typedef struct LMBCSClone {
+    UConverter cnv;
+    UConverterDataLMBCS lmbcs;
+} LMBCSClone;
+
+static UConverter * 
+_LMBCSSafeClone(const UConverter *cnv, 
+                void *stackBuffer, 
+                int32_t *pBufferSize, 
+                UErrorCode *status) {
+    LMBCSClone *newLMBCS;
+    UConverterDataLMBCS *extraInfo;
+    int32_t i;
+
+    if(*pBufferSize<=0) {
+        *pBufferSize=(int32_t)sizeof(LMBCSClone);
+        return NULL;
+    }
+
+    extraInfo=(UConverterDataLMBCS *)cnv->extraInfo;
+    newLMBCS=(LMBCSClone *)stackBuffer;
+
+    /* ucnv.c/ucnv_safeClone() copied the main UConverter already */
+
+    uprv_memcpy(&newLMBCS->lmbcs, extraInfo, sizeof(UConverterDataLMBCS));
+
+    /* share the subconverters */
+    for(i = 0; i <= ULMBCS_GRP_LAST; ++i) {
+        if(extraInfo->OptGrpConverter[i] != NULL) {
+            ucnv_incrementRefCount(extraInfo->OptGrpConverter[i]);
+        }
+    }
+
+    newLMBCS->cnv.extraInfo = &newLMBCS->lmbcs;
+    newLMBCS->cnv.isExtraLocal = TRUE;
+    return &newLMBCS->cnv;
+}
+
+U_CFUNC void
+_LMBCSGetUnicodeSet(const UConverter *cnv,
+                   USet *set,
+                   UConverterUnicodeSet which,
+                   UErrorCode *pErrorCode) {
+    /* all but U+F6xx, see LMBCS explanation above (search for F6xx) */
+    uset_addRange(set, 0, 0xf5ff);
+    uset_addRange(set, 0xf700, 0x10ffff);
+}
 
 /* 
    Here's the basic helper function that we use when converting from
@@ -628,33 +688,21 @@ LMBCSConversionWorker (
 )   
 {
    ulmbcs_byte_t  * pLMBCS = pStartLMBCS;
-   UConverter * xcnv = extraInfo->OptGrpConverter[group];
+   UConverterSharedData * xcnv = extraInfo->OptGrpConverter[group];
 
    int bytesConverted;
    uint32_t value;
    ulmbcs_byte_t firstByte;
 
-   MyAssert(xcnv);
-   MyAssert(group<ULMBCS_GRP_UNICODE);
+   U_ASSERT(xcnv);
+   U_ASSERT(group<ULMBCS_GRP_UNICODE);
 
-   bytesConverted = _MBCSFromUChar32(xcnv->sharedData, *pUniChar, &value, FALSE);
+   bytesConverted = _MBCSFromUChar32(xcnv, *pUniChar, &value, FALSE);
 
    /* get the first result byte */
-   switch(bytesConverted)
-   {
-   case 4:
-      firstByte = (ulmbcs_byte_t)(value >> 24);
-      break;
-   case 3:
-      firstByte = (ulmbcs_byte_t)(value >> 16);
-      break;
-   case 2:
-      firstByte = (ulmbcs_byte_t)(value >> 8);
-      break;
-   case 1:
-      firstByte = (ulmbcs_byte_t)value;
-      break;
-   default:
+   if(bytesConverted > 0) {
+      firstByte = (ulmbcs_byte_t)(value >> ((bytesConverted - 1) * 8));
+   } else {
       /* most common failure mode is an unassigned character */
       groups_tried[group] = TRUE;
       return 0;
@@ -665,7 +713,7 @@ LMBCSConversionWorker (
    /* All initial byte values in lower ascii range should have been caught by now,
       except with the exception group.
     */
-   MyAssert((firstByte <= ULMBCS_C0END) || (firstByte >= ULMBCS_C1START) || (group == ULMBCS_GRP_EXCEPT));
+   U_ASSERT((firstByte <= ULMBCS_C0END) || (firstByte >= ULMBCS_C1START) || (group == ULMBCS_GRP_EXCEPT));
    
    /* use converted data: first write 0, 1 or two group bytes */
    if (group != ULMBCS_GRP_EXCEPT && extraInfo->OptGroup != group)
@@ -1002,7 +1050,7 @@ _LMBCSGetNextUCharWorker(UConverterToUnicodeArgs*   args,
     {
         UConverterDataLMBCS * extraInfo;
         ulmbcs_byte_t group; 
-        UConverter* cnv; 
+        UConverterSharedData *cnv; 
         
         if (CurByte == ULMBCS_GRP_CTRL)  /* Control character group - no opt group update */
         {
@@ -1038,11 +1086,11 @@ _LMBCSGetNextUCharWorker(UConverterToUnicodeArgs*   args,
                 if (*args->source == group) {
                     /* single byte */
                     ++args->source;
-                    uniChar = _MBCSSimpleGetNextUChar(cnv->sharedData, args->source, 1, FALSE);
+                    uniChar = _MBCSSimpleGetNextUChar(cnv, args->source, 1, FALSE);
                     ++args->source;
                 } else {
                     /* double byte */
-                    uniChar = _MBCSSimpleGetNextUChar(cnv->sharedData, args->source, 2, FALSE);
+                    uniChar = _MBCSSimpleGetNextUChar(cnv, args->source, 2, FALSE);
                     args->source += 2;
                 }
             }
@@ -1052,7 +1100,7 @@ _LMBCSGetNextUCharWorker(UConverterToUnicodeArgs*   args,
         
                 if (CurByte >= ULMBCS_C1START)
                 {
-                    uniChar = _MBCS_SINGLE_SIMPLE_GET_NEXT_BMP(cnv->sharedData, CurByte);
+                    uniChar = _MBCS_SINGLE_SIMPLE_GET_NEXT_BMP(cnv, CurByte);
                 }
                 else
                 {
@@ -1067,7 +1115,7 @@ _LMBCSGetNextUCharWorker(UConverterToUnicodeArgs*   args,
                     /* Lookup value must include opt group */
                     bytes[0] = group;
                     bytes[1] = CurByte;
-                    uniChar = _MBCSSimpleGetNextUChar(cnv->sharedData, bytes, 2, FALSE);
+                    uniChar = _MBCSSimpleGetNextUChar(cnv, bytes, 2, FALSE);
                 }
             }
         }
@@ -1078,24 +1126,24 @@ _LMBCSGetNextUCharWorker(UConverterToUnicodeArgs*   args,
             cnv = extraInfo->OptGrpConverter[group];
             if (group >= ULMBCS_DOUBLEOPTGROUP_START)    /* double byte conversion */
             {
-                if (!_MBCSIsLeadByte(cnv->sharedData, CurByte))
+                if (!_MBCSIsLeadByte(cnv, CurByte))
                 {
                     CHECK_SOURCE_LIMIT(0);
 
                     /* let the MBCS conversion consume CurByte again */
-                    uniChar = _MBCSSimpleGetNextUChar(cnv->sharedData, args->source - 1, 1, FALSE);
+                    uniChar = _MBCSSimpleGetNextUChar(cnv, args->source - 1, 1, FALSE);
                 }
                 else
                 {
                     CHECK_SOURCE_LIMIT(1);
                     /* let the MBCS conversion consume CurByte again */
-                    uniChar = _MBCSSimpleGetNextUChar(cnv->sharedData, args->source - 1, 2, FALSE);
+                    uniChar = _MBCSSimpleGetNextUChar(cnv, args->source - 1, 2, FALSE);
                     ++args->source;
                 }
             }
             else                                   /* single byte conversion */
             {
-                uniChar = _MBCS_SINGLE_SIMPLE_GET_NEXT_BMP(cnv->sharedData, CurByte);
+                uniChar = _MBCS_SINGLE_SIMPLE_GET_NEXT_BMP(cnv, CurByte);
             }
         }
     }
