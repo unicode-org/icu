@@ -355,7 +355,7 @@ cleanupAndReturn:
 }
 
 
-static UBool
+static UBool U_CALLCONV
 isAcceptable1(void *context,
              const char *type, const char *name,
              const UDataInfo *pInfo) {
@@ -387,7 +387,7 @@ isAcceptable1(void *context,
     }
 }
 
-static UBool
+static UBool U_CALLCONV
 isAcceptable2(void *context, 
              const char *type, const char *name,
              const UDataInfo *pInfo){
@@ -411,7 +411,7 @@ isAcceptable2(void *context,
 
 
 }
-static UBool
+static UBool U_CALLCONV
 isAcceptable3(void *context, 
              const char *type, const char *name,
              const UDataInfo *pInfo){
@@ -483,7 +483,7 @@ static void TestUDataOpenChoiceDemo1() {
     }
 }
 
-static UBool
+static UBool U_CALLCONV
 isAcceptable(void *context, 
              const char *type, const char *name,
              const UDataInfo *pInfo){

@@ -178,7 +178,7 @@ _res_findTableIndex(const Resource *pRoot, const Resource res, const char *key) 
 
 /* helper for res_load() ---------------------------------------------------- */
 
-static UBool
+static UBool U_CALLCONV
 isAcceptable(void *context,
              const char *type, const char *name,
              const UDataInfo *pInfo) {

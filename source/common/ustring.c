@@ -1091,7 +1091,8 @@ u_unescapeAt(UNESCAPE_CHAR_AT charAt,
 }
 
 /* u_unescapeAt() callback to return a UChar from a char* */
-static UChar _charPtr_charAt(int32_t offset, void *context) {
+static UChar U_CALLCONV
+_charPtr_charAt(int32_t offset, void *context) {
     UChar c16;
     /* It would be more efficient to access the invariant tables
      * directly but there is no API for that. */

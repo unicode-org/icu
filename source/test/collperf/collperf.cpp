@@ -483,7 +483,7 @@ void doBinarySearch()
         if (opt_strcmp || opt_strcmpCPO) 
         {
             unsigned long startTime = timeGetTime();
-            typedef int32_t (*PF)(const UChar *, const UChar *);
+            typedef int32_t (U_EXPORT2 *PF)(const UChar *, const UChar *);
             PF pf = u_strcmp;
             if (opt_strcmpCPO) {pf = u_strcmpCodePointOrder;}
             if (opt_strcmp && opt_win) {pf = (PF)wcscmp;}   // Damn the difference between int32_t and int

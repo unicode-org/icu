@@ -3102,7 +3102,7 @@ static void TestConv(const uint16_t in[],int len, const char* conv, const char* 
     free(cBuf);
     free(offsets);
 }
-static UChar
+static UChar U_CALLCONV
 _charAt(int32_t offset, void *context) {
     return ((char*)context)[offset];
 }

@@ -65,7 +65,7 @@ getFoldingPropsOffset(uint32_t data) {
     }
 }
 
-static UBool
+static UBool U_CALLCONV
 isAcceptable(void *context,
              const char *type, const char *name,
              const UDataInfo *pInfo) {

@@ -354,7 +354,7 @@ init() {
 
 /* parsing ------------------------------------------------------------------ */
 
-static void
+static void U_CALLCONV
 lineFn(void *context,
        char *fields[][2], int32_t fieldCount,
        UErrorCode *pErrorCode) {
