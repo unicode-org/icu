@@ -5,15 +5,14 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/NormalizerImpl.java,v $
- * $Date: 2002/06/20 01:18:07 $
- * $Revision: 1.5 $
+ * $Date: 2002/07/16 00:18:33 $
+ * $Revision: 1.6 $
  *******************************************************************************
  */
  
 package com.ibm.icu.impl;
 import java.io.*;
 
-import com.ibm.icu.math.MathContext;
 import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.UTF16;	
 import com.ibm.icu.lang.UCharacter;
@@ -1127,7 +1126,7 @@ public final class NormalizerImpl {
 	        /* copy these code units all at once */
 	        if(srcIndex!=prevSrc) {
 	            length=(int)(srcIndex-prevSrc);
-	            if((destIndex+length)<=dest.length) {
+	            if((destIndex+length)<=destLimit) {
 	            	System.arraycopy(src,prevSrc,dest,destIndex,length);
 	            }
 	          
@@ -1232,7 +1231,7 @@ public final class NormalizerImpl {
 	        /* append the decomposition to the destination buffer, assume 
              * length>0 
              */
-	        if((destIndex+length)<=dest.length) {
+	        if((destIndex+length)<=destLimit) {
 	            int reorderSplit=destIndex;
 	            if(p==null) {
 	                /* fastpath: single code point */
@@ -1735,17 +1734,7 @@ public final class NormalizerImpl {
 				       	              char[] src, int start, int limit,
 	             			          int/*unsigned*/ qcMask) {
 	    int recomposeLimit;
-	    int/*unsigned*/ decompQCMask;
-	    char minNoMaybe;
-	    int/*unsigned byte*/ trailCC;
-	
-	    decompQCMask=(qcMask<<2)&0xf; /* decomposition quick check mask */
-	
-	    if((decompQCMask&QC_NFKD)==0) {
-	        minNoMaybe=(char)indexes[INDEX_MIN_NFD_NO_MAYBE];
-	    } else {
-	        minNoMaybe=(char)indexes[INDEX_MIN_NFKD_NO_MAYBE];
-	    }
+        boolean compat =((qcMask&QC_NFKC)!=0);
         
 	    /* decompose [prevStarter..src[ */
         int[] outTrailCC = new int[1];
@@ -1754,15 +1743,13 @@ public final class NormalizerImpl {
         for(;;){
             args.length=decompose(src,prevStarter,(start),
                                       buffer,0,buffer.length, 
-                                      (decompQCMask&QC_NFKD)!=0,outTrailCC);
+                                      compat,outTrailCC);
             if(args.length<=buffer.length){
                 break;
             }else{
                 buffer = new char[args.length];
             }
         } 
-        trailCC = outTrailCC[0];
-        
 	
 	    /* recompose the decomposition */
 	    recomposeLimit=args.length;
@@ -2302,7 +2289,7 @@ public final class NormalizerImpl {
 	
 	    /* initialize */
 	    decompStart=srcStart;
-	    destIndex=0;
+	    destIndex=destStart;
 	    prevCC=0;
 	    c=0;
 	    fcd16=0;
@@ -2340,7 +2327,7 @@ public final class NormalizerImpl {
 	        /* copy these code units all at once */
 	        if(srcStart!=prevSrc) {
 	            length=(int)(srcStart-prevSrc);
-	            if((destIndex+length)<=dest.length) {
+	            if((destIndex+length)<=destLimit) {
                     System.arraycopy(src,prevSrc,dest,destIndex,length);
 	            }
 	            destIndex+=length;
@@ -2409,7 +2396,7 @@ public final class NormalizerImpl {
 	
 	            /* just append (c, c2) */
 	            length= c2==0 ? 1 : 2;
-	            if((destIndex+length)<=dest.length) {
+	            if((destIndex+length)<=destLimit) {
 	                dest[destIndex++]=c;
 	                if(c2!=0) {
 	                    dest[destIndex++]=c2;
@@ -2781,7 +2768,6 @@ public final class NormalizerImpl {
         cSource1 = s1;
         cSource2 = s2;
 	    // decomposition variables
-	    char[] p;
 	    int length;
 	
 	    // stacks of previous-level start/current/limit
@@ -3162,16 +3148,13 @@ public final class NormalizerImpl {
                                   boolean codePointOrder) {
                         
         int start1, start2, limit1, limit2;
-        char[] src1, src2;
-        
+ 
         char c1, c2;
     
         /* setup for fix-up */
         start1=s1Start;
         start2=s2Start;
         
-        src1 = s1;
-        src2 = s2;
         int length1, length2;
         
         length1 = s1Limit - s1Start;
@@ -3273,8 +3256,6 @@ public final class NormalizerImpl {
 	
 	    if((options& Normalizer.INPUT_IS_FCD)==0) {
 	        char[] dest;
-            int destIndex;
-            
 	        int fcdLen1, fcdLen2;
             int foldLen1, foldLen2;
 	        boolean isFCD1, isFCD2;

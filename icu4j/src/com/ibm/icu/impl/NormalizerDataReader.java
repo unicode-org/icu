@@ -5,15 +5,15 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/NormalizerDataReader.java,v $
- * $Date: 2002/06/20 01:18:07 $
- * $Revision: 1.4 $
+ * $Date: 2002/07/16 00:18:34 $
+ * $Revision: 1.5 $
  *******************************************************************************
  */
  
 package com.ibm.icu.impl;
 import java.io.*;
 import com.ibm.icu.impl.ICUDebug;
-import com.ibm.icu.util.VersionInfo;	
+
 /**
  * @version 	1.0
  * @author		Ram Viswanadha
