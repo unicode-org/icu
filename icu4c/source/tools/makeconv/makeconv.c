@@ -858,15 +858,17 @@ UConverterSharedData* createConverterFromTableFile(const char* converterName, UE
             break;
         }
         myStaticData->conversionType = UCNV_MBCS;
-        mySharedData->table = (UConverterTable *)MBCSOpen(1);
-        if(mySharedData->table != NULL) {
-            if(!MBCSAddState((NewConverter *)mySharedData->table, "0-ff")) {
-                *err = U_INVALID_TABLE_FORMAT;
-                ((NewConverter *)mySharedData->table)->close((NewConverter *)mySharedData->table);
-                mySharedData->table=NULL;
+        if(mySharedData->table == NULL) {
+            mySharedData->table = (UConverterTable *)MBCSOpen(1);
+            if(mySharedData->table != NULL) {
+                if(!MBCSAddState((NewConverter *)mySharedData->table, "0-ff")) {
+                    *err = U_INVALID_TABLE_FORMAT;
+                    ((NewConverter *)mySharedData->table)->close((NewConverter *)mySharedData->table);
+                    mySharedData->table=NULL;
+                }
+            } else {
+                *err = U_MEMORY_ALLOCATION_ERROR;
             }
-        } else {
-            *err = U_MEMORY_ALLOCATION_ERROR;
         }
         break;
       }
@@ -884,20 +886,22 @@ UConverterSharedData* createConverterFromTableFile(const char* converterName, UE
             break;
         }
         myStaticData->conversionType = UCNV_MBCS;
-        mySharedData->table = (UConverterTable *)MBCSOpen(2);
-        if(mySharedData->table != NULL) {
-            if( !MBCSAddState((NewConverter *)mySharedData->table, "0-ff, e:1.s, f:0.s") ||
-                !MBCSAddState((NewConverter *)mySharedData->table, "initial, 0-3f:4, e:1.s, f:0.s, 40:3, 41-fe:2, ff:4") ||
-                !MBCSAddState((NewConverter *)mySharedData->table, "0-40:1.i, 41-fe:1., ff:1.i") ||
-                !MBCSAddState((NewConverter *)mySharedData->table, "0-ff:1.i, 40:1.") ||
-                !MBCSAddState((NewConverter *)mySharedData->table, "0-ff:1.i")
-            ) {
-                *err = U_INVALID_TABLE_FORMAT;
-                ((NewConverter *)mySharedData->table)->close((NewConverter *)mySharedData->table);
-                mySharedData->table=NULL;
+        if(mySharedData->table == NULL) {
+            mySharedData->table = (UConverterTable *)MBCSOpen(2);
+            if(mySharedData->table != NULL) {
+                if( !MBCSAddState((NewConverter *)mySharedData->table, "0-ff, e:1.s, f:0.s") ||
+                    !MBCSAddState((NewConverter *)mySharedData->table, "initial, 0-3f:4, e:1.s, f:0.s, 40:3, 41-fe:2, ff:4") ||
+                    !MBCSAddState((NewConverter *)mySharedData->table, "0-40:1.i, 41-fe:1., ff:1.i") ||
+                    !MBCSAddState((NewConverter *)mySharedData->table, "0-ff:1.i, 40:1.") ||
+                    !MBCSAddState((NewConverter *)mySharedData->table, "0-ff:1.i")
+                ) {
+                    *err = U_INVALID_TABLE_FORMAT;
+                    ((NewConverter *)mySharedData->table)->close((NewConverter *)mySharedData->table);
+                    mySharedData->table=NULL;
+                }
+            } else {
+                *err = U_MEMORY_ALLOCATION_ERROR;
             }
-        } else {
-            *err = U_MEMORY_ALLOCATION_ERROR;
         }
         break;
       }
@@ -910,19 +914,21 @@ UConverterSharedData* createConverterFromTableFile(const char* converterName, UE
             break;
         }
         myStaticData->conversionType = UCNV_MBCS;
-        mySharedData->table = (UConverterTable *)MBCSOpen(2);
-        if(mySharedData->table != NULL) {
-            if( !MBCSAddState((NewConverter *)mySharedData->table, "0-3f:3, 40:2, 41-fe:1, ff:3") ||
-                !MBCSAddState((NewConverter *)mySharedData->table, "41-fe") ||
-                !MBCSAddState((NewConverter *)mySharedData->table, "40") ||
-                !MBCSAddState((NewConverter *)mySharedData->table, "")
-            ) {
-                *err = U_INVALID_TABLE_FORMAT;
-                ((NewConverter *)mySharedData->table)->close((NewConverter *)mySharedData->table);
-                mySharedData->table=NULL;
+        if(mySharedData->table == NULL) {
+            mySharedData->table = (UConverterTable *)MBCSOpen(2);
+            if(mySharedData->table != NULL) {
+                if( !MBCSAddState((NewConverter *)mySharedData->table, "0-3f:3, 40:2, 41-fe:1, ff:3") ||
+                    !MBCSAddState((NewConverter *)mySharedData->table, "41-fe") ||
+                    !MBCSAddState((NewConverter *)mySharedData->table, "40") ||
+                    !MBCSAddState((NewConverter *)mySharedData->table, "")
+                ) {
+                    *err = U_INVALID_TABLE_FORMAT;
+                    ((NewConverter *)mySharedData->table)->close((NewConverter *)mySharedData->table);
+                    mySharedData->table=NULL;
+                }
+            } else {
+                *err = U_MEMORY_ALLOCATION_ERROR;
             }
-        } else {
-            *err = U_MEMORY_ALLOCATION_ERROR;
         }
         break;
       }
