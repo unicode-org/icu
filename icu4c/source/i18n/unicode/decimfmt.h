@@ -477,7 +477,7 @@ class ChoiceFormat;
  * then getMinimumSignificantDigits() and
  * getMaximumSignificantDigits() will return non-positive numbers.
  *
- * <li>If signficant digits are in use, then the fraction digit counts
+ * <li>If significant digits are in use, then the fraction digit counts
  * are ignored.
  *
  * </ul>
