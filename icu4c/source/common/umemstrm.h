@@ -48,8 +48,16 @@ U_CAPI UBool U_EXPORT2 uprv_mstrm_setError(UMemoryStream *MS);
 U_CAPI UBool U_EXPORT2 uprv_mstrm_error(UMemoryStream *MS);
 U_CAPI UBool U_EXPORT2 uprv_mstrm_eof(UMemoryStream *MS);
 U_CAPI int32_t U_EXPORT2 uprv_mstrm_read(UMemoryStream *MS, void* addr, int32_t len);
-U_CAPI int32_t U_EXPORT2 uprv_mstrm_write(UMemoryStream *MS, const uint8_t *buffer, int32_t len);
+U_CAPI int32_t U_EXPORT2 uprv_mstrm_write(UMemoryStream *MS, const void *buffer, int32_t len);
 U_CAPI uint8_t * U_EXPORT2 uprv_mstrm_getBuffer(UMemoryStream *MS, int32_t *len);
+
+U_CAPI void U_EXPORT2 uprv_mstrm_write8(UMemoryStream *MS, uint8_t byte);
+U_CAPI void U_EXPORT2 uprv_mstrm_write16(UMemoryStream *MS, uint16_t word);
+U_CAPI void U_EXPORT2 uprv_mstrm_write32(UMemoryStream *MS, uint32_t wyde);
+U_CAPI void U_EXPORT2 uprv_mstrm_writeBlock(UMemoryStream *MS, const void *s, UTextOffset length);
+U_CAPI void U_EXPORT2 uprv_mstrm_writePadding(UMemoryStream *MS, UTextOffset length);
+U_CAPI void U_EXPORT2 uprv_mstrm_writeString(UMemoryStream *MS, const char *s, UTextOffset length);
+U_CAPI void U_EXPORT2 uprv_mstrm_writeUString(UMemoryStream *MS, const UChar *s, UTextOffset length);
 
 #endif /* _FILESTRM*/
 

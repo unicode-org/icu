@@ -19,6 +19,7 @@
 #define UCMP16_H
 
 
+#include "umemstrm.h"
 #include "unicode/utypes.h"
 
 /* 32-bits.
@@ -26,6 +27,15 @@
 */
 #define ICU_UCMP16_VERSION 0x01270000
 
+/* internal constants*/
+#define UCMP16_kMaxUnicode_int 65535
+#define UCMP16_kUnicodeCount_int (UCMP16_kMaxUnicode_int + 1)
+#define UCMP16_kBlockShift_int 7
+#define UCMP16_kBlockCount_int (1 << UCMP16_kBlockShift_int)
+#define UCMP16_kBlockBytes_int (UCMP16_kBlockCount_int * sizeof(int16_t))
+#define UCMP16_kIndexShift_int (16 - UCMP16_kBlockShift_int)
+#define UCMP16_kIndexCount_int (1 << UCMP16_kIndexShift_int)
+#define UCMP16_kBlockMask_int (UCMP16_kBlockCount_int - 1)
 
 /**
  * class CompactATypeArray : use only on primitive data types
@@ -70,7 +80,7 @@
  * @see                CompactIntArray
  * @see                CompactCharArray
  * @see                CompactStringArray
- * @version            $Revision: 1.13 $ 8/25/98
+ * @version            $Revision: 1.14 $ 8/25/98
  * @author             Helena Shih
  */
 
@@ -249,6 +259,7 @@ U_CAPI  const uint16_t* U_EXPORT2 ucmp16_getIndex(const CompactShortArray* array
 
 
 /** INTERNAL USE ONLY **/
+U_CAPI  uint32_t U_EXPORT2 uprv_mstrm_write_ucmp16(UMemoryStream *MS, const CompactShortArray* array);
 U_CAPI void U_EXPORT2 ucmp16_initFromData(CompactShortArray* array, const uint8_t **source,  UErrorCode *status);
 
 #endif
