@@ -147,7 +147,7 @@ utm_allocN(UToolMemory *mem, int32_t n) {
 
 typedef void EnumTrieFn(void *context, uint32_t code, Norm *norm);
 
-static UNewTrie normTrie={ 0 }, fcdTrie={ 0 };
+static UNewTrie normTrie={ {0},0,0,0,0,0,0,0,0,{0} }, fcdTrie={ {0},0,0,0,0,0,0,0,0,{0} };
 
 static UToolMemory *normMem, *utf32Mem, *extraMem, *combiningTriplesMem;
 

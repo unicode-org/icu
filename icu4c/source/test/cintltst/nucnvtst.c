@@ -30,7 +30,7 @@ static void TestJitterbug1293(void);
 static void TestNewConvertWithBufferSizes(int32_t osize, int32_t isize) ;
 static void TestConverterTypesAndStarters(void);
 static void TestAmbiguous(void);
-static void TestSignatureDetection();
+static void TestSignatureDetection(void);
 static void TestUTF7(void);
 static void TestUTF8(void);
 static void TestUTF16BE(void);
@@ -67,7 +67,7 @@ static void TestConv(const uint16_t in[],
                      char byteArr[],
                      int byteArrLen);
 
-static void TestCoverageMBCS();
+static void TestCoverageMBCS(void);
 
 void addTestNewConvert(TestNode** root);
 
@@ -1357,7 +1357,7 @@ static void
 TestSignatureDetection(){
     /* with null terminated strings */
     {
-        char* data[] = { 
+        static const char* data[] = { 
                 "\xFE\xFF\x00\x00",     /* UTF-16BE */
                 "\xFF\xFE\x00\x00",     /* UTF-16LE */
                 "\xEF\xBB\xBF\x00",     /* UTF-8    */
@@ -1374,7 +1374,7 @@ TestSignatureDetection(){
                 "\x0E\xFE\xFF\x41",     /* SCSU     */
 
         };
-        char* expected[] = {
+        static const char* expected[] = {
                 "UTF-16BE",
                 "UTF-16LE",
                 "UTF-8",
@@ -1391,7 +1391,7 @@ TestSignatureDetection(){
                 "SCSU",
 
         };
-        int32_t expectedLength[] ={
+        static const int32_t expectedLength[] ={
             2,
             2,
             3,
@@ -1411,7 +1411,7 @@ TestSignatureDetection(){
         int i=0;
         UErrorCode err;
         int32_t signatureLength = -1;
-        char* source = NULL;
+        const char* source = NULL;
         const char* enc = NULL;
         for( ; i<sizeof(data)/sizeof(char*); i++){
             err = U_ZERO_ERROR;
@@ -1431,7 +1431,7 @@ TestSignatureDetection(){
         }
     }
     {
-        char* data[] = { 
+        static const char* data[] = { 
                 "\xFE\xFF\x00",         /* UTF-16BE */
                 "\xFF\xFE\x00",         /* UTF-16LE */
                 "\xEF\xBB\xBF\x00",     /* UTF-8    */
@@ -1452,7 +1452,7 @@ TestSignatureDetection(){
                 "\xFF\xFE\x00\x00\x42", /* UTF-32LE */
                 "\xFF\x41\x42"          /* NULL     */
         };
-        int len[] = {
+        static const int len[] = {
             3,
             3,
             4,
@@ -1474,7 +1474,7 @@ TestSignatureDetection(){
             3
         };
 
-        char* expected[] = {
+        static const char* expected[] = {
                 "UTF-16BE",
                 "UTF-16LE",
                 "UTF-8",
@@ -1495,7 +1495,7 @@ TestSignatureDetection(){
                 "UTF-32LE",
                 NULL
         };
-        int32_t expectedLength[] ={
+        static const int32_t expectedLength[] ={
             2,
             2,
             3,
@@ -1520,7 +1520,7 @@ TestSignatureDetection(){
         UErrorCode err;
         int32_t signatureLength = -1;
         int32_t sourceLength=-1;
-        char* source = NULL;
+        const char* source = NULL;
         const char* enc = NULL;
         for( ; i<sizeof(data)/sizeof(char*); i++){
             err = U_ZERO_ERROR;
