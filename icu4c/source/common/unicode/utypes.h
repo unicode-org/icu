@@ -383,14 +383,12 @@ enum UErrorCode {
     U_CE_NOT_FOUND_ERROR      = 21,     /**< Currently used only while setting variable top, but can be used generally */
     U_PRIMARY_TOO_LONG_ERROR  = 22,     /**< User tried to set variable top to a primary that is longer than two bytes */
     U_STATE_TOO_OLD_ERROR     = 23,     /**< ICU cannot construct a service from this state, as it is no longer supported */
-    /* The errorcode are for Number format C API */
-    U_UNSUPPORTED_ATTRIBUTE   = 24,
-    U_UNSUPPORTED_PROPERTY    = 25,
+    U_STANDARD_ERROR_LIMIT,             /**< This must always be the last value to indicate the limit for standard errors */
     /* 
      * the error code range 0x10000 0x10100 are reserved for Transliterator
      */
-    U_PARSE_ERROR_BASE = 0x10000,      /**< start of Transliterator specific parse Errors */
-    U_BAD_VARIABLE_DEFINITION,
+    U_PARSE_ERROR_START = 0x10000,      /**< start of Transliterator specific parse Errors */
+    U_BAD_VARIABLE_DEFINITION=0x10000,
     U_MALFORMED_RULE,
     U_MALFORMED_SET,
     U_MALFORMED_SYMBOL_REFERENCE,
@@ -411,10 +409,25 @@ enum UErrorCode {
     U_UNDEFINED_VARIABLE,
     U_UNQUOTED_SPECIAL,
     U_UNTERMINATED_QUOTE,
-    U_PARSE_ERROR_END,              /**< end of Transliterator specific parse Errors */
-    /*
-     * End Transliterator parse Errors
+    U_PARSE_ERROR_LIMIT,              /**< end of Transliterator specific parse Errors */
+
+    /* 
+     * the error code range 0x10100 0x10200 are reserved for formatting API parsing error
      */
+    U_FMT_PARSE_ERROR_START=0x10100,
+    U_UNEXPECTED_TOKEN=0x10100,
+    U_MULTIPLE_DECIMAL_SEPERATORS,
+    U_MULTIPLE_EXPONENTIAL_SYMBOLS,
+    U_MALFORMED_EXPONENTIAL_PATTERN,
+    U_MULTIPLE_PERCENT_SYMBOLS,
+    U_MULTIPLE_PAD_SPECIFIERS,
+    U_PATTERN_SYNTAX_ERROR,
+    U_ILLEGAL_PAD_POSITION,
+    U_UNMATCHED_BRACES,
+    U_UNSUPPORTED_PROPERTY,
+    U_UNSUPPORTED_ATTRIBUTE,
+    U_FMT_PARSE_ERROR_LIMIT,
+   
     U_ERROR_LIMIT                       /**< This must always be the last value to indicate the limit for UErrorCode (last error code +1) */
 };
 
