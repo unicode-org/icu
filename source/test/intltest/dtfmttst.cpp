@@ -44,6 +44,7 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
         TESTCASE(16,TestWallyWedel);
         TESTCASE(17,TestDateFormatCalendar);
         TESTCASE(18,TestSpaceParsing);
+        TESTCASE(19,TestExactCountFormat);
         default: name = ""; break;
     }
 }
@@ -1012,56 +1013,114 @@ void DateFormatTest::TestDateFormatCalendar() {
  * Test DateFormat's parsing of space characters.  See jitterbug 1916.
  */
 void DateFormatTest::TestSpaceParsing() {
-    const char* PARSE_FAILURE = "parse failure";
     const char* DATA[] = {
-        // pattern, input, expexted output (in quotes)
-        "MMMM d yy", " 04 05 06", PARSE_FAILURE, // MMMM wants Apr/April
-        "MMMM d yy", "04 05 06", PARSE_FAILURE,
-        "MM d yy", " 04 05 06", "\"2006 04 05\"",
-        "MM d yy", "04 05 06", "\"2006 04 05\"",
-        "MMMM d yy", " Apr 05 06", "\"2006 04 05\"",
-        "MMMM d yy", "Apr 05 06", "\"2006 04 05\"",
+        "yyyy MM dd HH:mm:ss",
+
+        // pattern, input, expected parse or NULL if expect parse failure
+        "MMMM d yy", " 04 05 06",  NULL, // MMMM wants Apr/April
+        NULL,        "04 05 06",   NULL,
+        "MM d yy",   " 04 05 06",  "2006 04 05 00:00:00",
+        NULL,        "04 05 06",   "2006 04 05 00:00:00",
+        "MMMM d yy", " Apr 05 06", "2006 04 05 00:00:00",
+        NULL,        "Apr 05 06",  "2006 04 05 00:00:00",
     };
     const int32_t DATA_len = sizeof(DATA)/sizeof(DATA[0]);
 
+    expectParse(DATA, DATA_len, Locale("en"));
+}
+
+/**
+ * Test handling of "HHmmss" pattern.
+ */
+void DateFormatTest::TestExactCountFormat() {
+    const char* DATA[] = {
+        "yyyy MM dd HH:mm:ss",
+
+        // pattern, input, expected parse or NULL if expect parse failure
+        "HHmmss", "123456", "1970 01 01 12:34:56",
+        NULL, "12345", "1970 01 01 12:34:05",
+        NULL, "1234",  NULL,
+        NULL, "00-05", NULL,
+        NULL, "12-34", NULL,
+        NULL, "00+05", NULL,
+    };
+    const int32_t DATA_len = sizeof(DATA)/sizeof(DATA[0]);
+
+    expectParse(DATA, DATA_len, Locale("en"));
+}
+
+/**
+ * Test parsing.  Input is an array that starts with the following
+ * header:
+ *
+ * [0]   = pattern string to parse [i+2] with
+ *
+ * followed by test cases, each of which is 3 array elements:
+ *
+ * [i]   = pattern, or NULL to reuse prior pattern
+ * [i+1] = input string
+ * [i+2] = expected parse result (parsed with pattern [0])
+ *
+ * If expect parse failure, then [i+2] should be NULL.
+ */
+void DateFormatTest::expectParse(const char** data, int32_t data_length,
+                                 const Locale& loc) {
+    const UDate FAIL = (UDate) -1;
+    const UnicodeString FAIL_STR("parse failure");
+    int32_t i = 0;
+
     UErrorCode ec = U_ZERO_ERROR;
-    Locale en("en");
-    SimpleDateFormat sdfObj("", en, ec);
+    SimpleDateFormat fmt("", loc, ec);
+    SimpleDateFormat ref(data[i++], loc, ec);
+    SimpleDateFormat gotfmt("G yyyy MM dd HH:mm:ss z", loc, ec);
     if (U_FAILURE(ec)) {
         errln("FAIL: SimpleDateFormat constructor");
         return;
     }
 
-    int32_t i;
-    for (i=0; i<DATA_len; i+=3) {
-        sdfObj.applyPattern(DATA[i]);
-        ParsePosition pp(0);
-        UDate udDate = sdfObj.parse(DATA[i+1], pp);
-        UnicodeString output;
-        if (pp.getErrorIndex() == -1) {
-            ec = U_ZERO_ERROR;
-            SimpleDateFormat formatter("yyyy MM dd", en, ec);
-            if (U_FAILURE(ec)) {
-                errln("FAIL: SimpleDateFormat constructor");
+    const char* currentPat = NULL;
+    while (i<data_length) {
+        const char* pattern  = data[i++];
+        const char* input    = data[i++];
+        const char* expected = data[i++];
+
+        ec = U_ZERO_ERROR;
+        if (pattern != NULL) {
+            fmt.applyPattern(pattern);
+            currentPat = pattern;
+        }
+        UDate got = fmt.parse(input, ec);
+        UnicodeString gotstr(FAIL_STR);
+        if (U_FAILURE(ec)) {
+            got = FAIL;
+        } else {
+            gotstr.remove();
+            gotfmt.format(got, gotstr);
+        }
+
+        UErrorCode ec2 = U_ZERO_ERROR;
+        UDate exp = FAIL;
+        UnicodeString expstr(FAIL_STR);
+        if (expected != NULL) {
+            expstr = expected;
+            exp = ref.parse(expstr, ec2);
+            if (U_FAILURE(ec2)) {
+                // This only happens if expected is in wrong format --
+                // should never happen once test is debugged.
+                errln("FAIL: Internal test error");
                 return;
             }
-            FieldPosition fp(0);
-            formatter.format(udDate, output, fp);
-            output.insert(0, (UChar)34);
-            output.append((UChar)34);
-        } else {
-            output = UnicodeString(PARSE_FAILURE, "");
         }
-        UnicodeString exp(DATA[i+2], "");
-        if (output == exp) {
-            logln((UnicodeString)"Ok: Parse of \"" + DATA[i+1] + "\" with \"" +
-                  DATA[i] + "\" => " + output);
+
+        if (got == exp) {
+            logln((UnicodeString)"Ok: " + input + " x " +
+                  currentPat + " => " + gotstr);                
         } else {
-            errln((UnicodeString)"FAIL: Parse of \"" + DATA[i+1] + "\" with \"" +
-                  DATA[i] + "\" => " +
-                  output + ", expected " + exp);
+            errln((UnicodeString)"FAIL: " + input + " x " +
+                  currentPat + " => " + gotstr + ", expected " +
+                  expstr);
         }
-    }
+    }    
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
