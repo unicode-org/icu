@@ -27,6 +27,7 @@
 #include "cpputils.h"
 #include "unicode/resbund.h"
 #include "unicode/gregocal.h"
+#include "unicode/calendar.h"
 
 // Resource bundle tags read by this class
 const char* Calendar::kDateTimeElements = "DateTimeElements";
@@ -84,13 +85,13 @@ const char* Calendar::kDateTimeElements = "DateTimeElements";
 // -------------------------------------
 
 Calendar::Calendar(UErrorCode& success)
-:   fTime(0),
-    fIsTimeSet(FALSE),
+:   fIsTimeSet(FALSE),
     fAreFieldsSet(FALSE),
     fAreAllFieldsSet(FALSE),
+    fNextStamp(kMinimumUserStamp),
+    fTime(0),
     fLenient(TRUE),
-    fZone(0),
-    fNextStamp(kMinimumUserStamp)
+    fZone(0)
 {
     clear();
     fZone = TimeZone::createDefault();
@@ -100,13 +101,13 @@ Calendar::Calendar(UErrorCode& success)
 // -------------------------------------
 
 Calendar::Calendar(TimeZone* zone, const Locale& aLocale, UErrorCode& success)
-:   fTime(0),
-    fIsTimeSet(FALSE),
+:   fIsTimeSet(FALSE),
     fAreFieldsSet(FALSE),
     fAreAllFieldsSet(FALSE),
+    fNextStamp(kMinimumUserStamp),
+    fTime(0),
     fLenient(TRUE),
-    fZone(0),
-    fNextStamp(kMinimumUserStamp)
+    fZone(0)
 {
     if(zone == 0) {
         success = U_ILLEGAL_ARGUMENT_ERROR;
@@ -122,13 +123,13 @@ Calendar::Calendar(TimeZone* zone, const Locale& aLocale, UErrorCode& success)
 // -------------------------------------
 
 Calendar::Calendar(const TimeZone& zone, const Locale& aLocale, UErrorCode& success)
-:   fTime(0),
-    fIsTimeSet(FALSE),
+:   fIsTimeSet(FALSE),
     fAreFieldsSet(FALSE),
     fAreAllFieldsSet(FALSE),
+    fNextStamp(kMinimumUserStamp),
+    fTime(0),
     fLenient(TRUE),
-    fZone(0),
-    fNextStamp(kMinimumUserStamp)
+    fZone(0)
 {
     clear();
     fZone = zone.clone();
