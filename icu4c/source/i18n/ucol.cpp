@@ -1819,6 +1819,47 @@ inline UChar getNextNormalizedChar(collIterate *data)
     return ch;
 }
 
+/** 
+* Function to copy the buffer into writableBuffer and sets the fcd position to 
+* the correct position
+* @param source data string source
+* @param buffer character buffer
+* @param tempdb current position in buffer that has been used up
+*/
+inline void setDiscontiguosAttribute(collIterate *source, UChar *buffer, 
+                                     UChar *tempdb)
+{
+    /* okay confusing part here. to ensure that the skipped characters are 
+    considered later, we need to place it in the appropriate position in the 
+    normalization buffer and reassign the pos pointer. simple case if pos 
+    reside in string, simply copy to normalization buffer and 
+    fcdposition = pos, pos = start of normalization buffer. if pos in 
+    normalization buffer, we'll insert the copy infront of pos and point pos 
+    to the start of the normalization buffer. why am i doing these copies? 
+    well, so that the whole chunk of codes in the getNextCE, getSpecialCE does 
+    not require any changes, which be really painful. */
+    uint32_t length = u_strlen(buffer);;
+    if (source->flags & UCOL_ITER_INNORMBUF) {
+        u_strcpy(tempdb, source->pos);
+    }
+    else {
+        source->fcdPosition  = source->pos;
+        source->origFlags    = source->flags;
+        source->flags       |= UCOL_ITER_INNORMBUF;
+        source->flags       &= ~(UCOL_ITER_NORM | UCOL_ITER_HASLEN);
+    }
+
+    if (length >= source->writableBufSize) {
+        freeHeapWritableBuffer(source);
+        source->writableBuffer =
+                     (UChar *)uprv_malloc((length + 1) * sizeof(UChar));
+        source->writableBufSize = length;
+    }
+
+    u_strcpy(source->writableBuffer, buffer);
+    source->pos = source->writableBuffer;
+}
+
 /**
 * Function to get the discontiguos collation element within the source.
 * Note this function will set the position to the appropriate places.
@@ -1833,10 +1874,12 @@ inline uint32_t getDiscontiguos(const UCollator *coll, collIterate *source,
     /* source->pos currently points to the second combining character after
        the start character */
           UChar   *temppos      = source->pos;
-          UChar   buffer[UCOL_MAX_BUFFER];
+          UChar    buffer[UCOL_MAX_BUFFER];
           UChar   *tempdb       = buffer;
     const UChar   *tempconstart = constart;
           uint8_t  tempflags    = source->flags;
+          UBool    multicontraction = FALSE;
+          UChar   *tempbufferpos = 0;
 
     *tempdb = *(source->pos - 1);
     tempdb ++;
@@ -1858,6 +1901,13 @@ inline uint32_t getDiscontiguos(const UCollator *coll, collIterate *source,
                  character after the discontiguos change */
                  u_getCombiningClass(*(source->pos)) == 0) {
             //constart = (UChar *)coll->image + getContractOffset(CE);
+            if (multicontraction) {
+                *tempbufferpos = 0;
+                source->pos    = temppos - 1;
+                setDiscontiguosAttribute(source, buffer, tempdb);
+                return *(coll->contractionCEs + 
+                                    (tempconstart - coll->contractionIndex));
+            }
             constart = tempconstart;
             break;
         }
@@ -1893,39 +1943,14 @@ inline uint32_t getDiscontiguos(const UCollator *coll, collIterate *source,
         } else if (isContraction(result)) {
             /* this is a multi-contraction*/
             tempconstart = (UChar *)coll->image + getContractOffset(result);
+            if (*(coll->contractionCEs + (constart - coll->contractionIndex))
+                != UCOL_NOT_FOUND) {
+                multicontraction = TRUE;
+                temppos       = source->pos + 1;
+                tempbufferpos = buffer + u_strlen(buffer);
+            }
         } else {
-            /* okay confusing part here. to ensure that the skipped characters
-            are considered later, we need to place it in the appropriate
-            position in the normalization buffer and reassign the pos pointer.
-            simple case if pos reside in string, simply copy to normalization
-            buffer and fcdposition = pos, pos = start of normalization buffer.
-            if pos in normalization buffer, we'll insert the copy infront of
-            pos and point pos to the start of the normalization buffer.
-            why am i doing these copies? well, so that the whole chunk of codes
-            in the getNextCE, getSpecialCE does not require any changes, i can
-            assure you that's going to be really painful. */
-            uint32_t length;
-            if (source->flags & UCOL_ITER_INNORMBUF) {
-                u_strcpy(tempdb, source->pos);
-            }
-            else {
-                source->fcdPosition  = source->pos;
-                source->origFlags    = source->flags;
-                source->flags       |= UCOL_ITER_INNORMBUF;
-                source->flags       &= ~(UCOL_ITER_NORM | UCOL_ITER_HASLEN);
-            }
-
-            length = (uint32_t)u_strlen(buffer);
-            if (length >= source->writableBufSize) {
-                freeHeapWritableBuffer(source);
-                source->writableBuffer =
-                            (UChar *)uprv_malloc((length + 1) * sizeof(UChar));
-                source->writableBufSize = length;
-            }
-
-            u_strcpy(source->writableBuffer, buffer);
-            source->pos = source->writableBuffer;
-
+            setDiscontiguosAttribute(source, buffer, tempdb);
             return result;
         }
     }
