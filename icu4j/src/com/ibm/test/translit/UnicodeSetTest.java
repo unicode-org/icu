@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/UnicodeSetTest.java,v $ 
- * $Date: 2001/12/01 01:32:55 $ 
- * $Revision: 1.18 $
+ * $Date: 2001/12/01 01:47:32 $ 
+ * $Revision: 1.19 $
  *
  *****************************************************************************************
  */
@@ -32,6 +32,9 @@ public class UnicodeSetTest extends TestFmwk {
      * whitespace.
      */
     public void TestToPattern() throws Exception {
+        for (int i = 0; i < OTHER_TOPATTERN_TESTS.length; ++i) {
+            checkPat(OTHER_TOPATTERN_TESTS[i], new UnicodeSet(OTHER_TOPATTERN_TESTS[i]));
+        }
         for (int i = 0; i <= 0x10FFFF; ++i) {
             if ((i <= 0xFF && !UCharacter.isLetter(i)) || UCharacter.isWhitespace(i)) {
                 // check various combinations to make sure they all work.
@@ -56,15 +59,25 @@ public class UnicodeSetTest extends TestFmwk {
         }
     }
     
+    static String[] OTHER_TOPATTERN_TESTS = {
+                "[[:latin:]&[:greek:]]", 
+                "[[:latin:]-[:greek:]]",
+                "[:nonspacing mark:]"
+    };
+    
+    
     public boolean toPatternAux(int start, int end) {
         // use Integer.toString because Utility.hex doesn't handle ints
-        String pat = "";
         String source = "0x" + Integer.toString(start,16).toUpperCase();
         if (start != end) source += "..0x" + Integer.toString(end,16).toUpperCase();
+        UnicodeSet testSet = new UnicodeSet();
+        testSet.add(start, end);
+        return checkPat(source, testSet);
+    }
+    
+    boolean checkPat (String source, UnicodeSet testSet) {
+        String pat = "";
         try {
-            UnicodeSet testSet = new UnicodeSet();
-            testSet.add(start, end);
-
             // What we want to make sure of is that a pattern generated
             // by toPattern(), with or without escaped unprintables, can
             // be passed back into the UnicodeSet constructor.
