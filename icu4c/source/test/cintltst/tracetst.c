@@ -201,7 +201,7 @@ static void TestTraceAPI() {
         test_format("%vs", 100, 0, "s1\ns2\n[00000002]", __LINE__, a1, 2);
         test_format("%vs", 100, 4, "    s1\n    s2\n    [00000002]", __LINE__, a1, 2);
 
-        test_format("%vb", 100, 0, "41 42 43 [00000003]", __LINE__, "ABC", 3);
+        test_format("%vb", 100, 0, "41 42 43 [00000003]", __LINE__, "\x41\x42\x43", 3);
 
         /* Null ptrs for strings, vectors  */
         test_format("Null string - %s", 50, 0, "Null string - *NULL*", __LINE__, NULL);
