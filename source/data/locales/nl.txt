@@ -7,6 +7,7 @@
 
 nl {
     Version { "2.0" }
+
     Countries { 
         Fallback{ "en"}
         //AD { "Andorra" }
@@ -195,6 +196,7 @@ nl {
         SA { "Saoedi-Arabi\u00EB" }
         SB { "Salomonseilanden" }
         SC { "Seychellen" }
+        SD { "Soedan" }
         SE { "Zweden" }
         //SG { "Singapore" }
         //SH { "Saint Helena" }
@@ -286,41 +288,82 @@ nl {
         "vrijdag",
         "zaterdag",
     }
-    ExemplarCharacters { "[a-z \u00e1 \u00e9 \u00ed \u00f3 \u00fa \u00e4 \u00eb \u00ef \u00f6 \u00fc \u0133]" }
+    ExemplarCharacters { "[a-z\u00e1\u00e9\u00ed\u00f3\u00fa\u00e4\u00eb\u00ef\u00f6\u00fc\u0133]" }
     Languages { 
         Fallback{ "en"}
+        //af  { "Afrikaans" }
+        am { "Amhaars" }
         ar { "Arabisch" }
+        be { "Wit-Russisch" }
         bg { "Bulgaars" }
+        bn { "Bengaals" }
+        ca { "Catalaans" }
         cs { "Tsjechisch" }
         da { "Deens" }
         de { "Duits" }
         el { "Grieks" }
         en { "Engels" }
+        //eo  { "Esperanto" }
         es { "Spaans" }
         et { "Estlands" }
+        eu { "Baskisch" }
+        fa { "Perzisch" }
         fi { "Fins" }
+        fo { "Faer\u00f6ers" }
         fr { "Frans" }
+        ga { "Iers" }
+        gl { "Galicisch" }
+        //gu  { "Gujarati" }
+        //gv  { "Manx" }
+        haw { "Hawaiiaans" }
         he { "Hebreeuws" }
+        //hi  { "Hindi" }
         hr { "Kroatisch" }
         hu { "Hongaars" }
+        hy { "Armeens" }
+        id { "Indonesisch" }
+        is { "IJslands" }
         it { "Italiaans" }
+        //iu  { "Inuktitut" }
         ja { "Japans" }
+        //kl  { "Kalaallisut" }
+        //kn  { "Kannada" }
         ko { "Koreaans" }
+        //kw  { "Cornish" }
         lt { "Litouws" }
         lv { "Letlands" }
+        mk { "Macedonisch" }
+        //mr  { "Marathi" }
+        mt { "Maltees" }
+        nb { "Noors - Bokm\u00e5l" }
         nl { "Nederlands" }
+        nn { "Noors - Nynorsk" }
         no { "Noors" }
+        //om  { "Oromo" }
         pl { "Pools" }
         pt { "Portugees" }
         ro { "Roemeens" }
         ru { "Russisch" }
+        sh { "Servokroatisch" }
         sk { "Slowaaks" }
         sl { "Sloveens" }
+        //so  { "Somali" }
+        sq { "Albanees" }
+        sr { "Servisch" }
         sv { "Zweeds" }
+        //sw  { "Swahili" }
+        //ta  { "Tamil" }
+        //th  { "Thai" }
+        //ti  { "Tigrinya" }
         tr { "Turks" }
+        uk { "Oekra\u00efens" }
+        vi { "Vietnamees" }
         zh { "Chinees" }
         //zh_cn { "Chinees (Vereenvoudigd)" }
         //zh_tw { "Chinees (Traditioneel)" }
+    }
+    LocaleScript {
+        "Latn",  // ISO 15924 Name 
     }
     MonthAbbreviations { 
         "jan",
@@ -365,9 +408,6 @@ nl {
         ",",
         "+",
     }
-    LocaleScript{ 
-        "Latn",  // ISO 15924 Name 
-    }
 
     //------------------------------------------------------------
     // Rule Based Number Format Support
@@ -395,6 +435,13 @@ nl {
         "1,000,000,000,000: << triljoen[ >>];\n"
         "1,000,000,000,000,000: =#,##0="
     }
+    Types{
+        TRADITIONAL { "Traditioneel" }
+    }
+    Variants{
+        REVISED { "Gewijzigd" }
+    }
+
     zoneStrings { 
         {
             "Africa/Casablanca",
