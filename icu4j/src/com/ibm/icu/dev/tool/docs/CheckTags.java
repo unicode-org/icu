@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/docs/CheckTags.java,v $ 
-* $Date: 2003/06/03 18:49:31 $ 
-* $Revision: 1.17 $
+* $Date: 2003/12/01 22:10:36 $ 
+* $Revision: 1.18 $
 *
 *******************************************************************************
 */
@@ -313,7 +313,7 @@ public class CheckTags {
                 break;
 
             case DRAFT:
-              if (tag.text().indexOf("ICU 2.1") != -1) {
+              if (tag.text().indexOf("ICU 2.2") != -1) {
                 foundRequiredTag = true;
                 tagErr(tag);
                 break;
