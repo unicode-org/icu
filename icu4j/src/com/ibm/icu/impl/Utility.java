@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Utility.java,v $
- * $Date: 2003/02/11 00:49:09 $
- * $Revision: 1.37 $
+ * $Date: 2003/05/09 03:31:49 $
+ * $Revision: 1.38 $
  *
  *****************************************************************************************
  */
@@ -719,6 +719,7 @@ public final class Utility {
         int bitsPerDigit = 4;
         int dig;
         int i;
+        boolean braces = false;
 
         /* Check that offset is in range */
         int offset = offset16[0];
@@ -741,7 +742,13 @@ public final class Utility {
             break;
         case 'x':
             minDig = 1;
-            maxDig = 2;
+            if (offset < length && UTF16.charAt(s, offset) == 0x7B /*{*/) {
+                ++offset;
+                braces = true;
+                maxDig = 8;
+            } else {
+                maxDig = 2;
+            }
             break;
         default:
             dig = UCharacter.digit(c, 8);
@@ -756,24 +763,23 @@ public final class Utility {
         }
         if (minDig != 0) {
             while (offset < length && n < maxDig) {
-                // TEMPORARY
-                // TODO: Restore the char32-based code when UCharacter.digit
-                // is working (Bug 66).
-
-                //c = UTF16.charAt(s, offset);
-                //dig = UCharacter.digit(c, (bitsPerDigit == 3) ? 8 : 16);
-                c = s.charAt(offset);
-                dig = Character.digit((char)c, (bitsPerDigit == 3) ? 8 : 16);
+                c = UTF16.charAt(s, offset);
+                dig = UCharacter.digit(c, (bitsPerDigit == 3) ? 8 : 16);
                 if (dig < 0) {
                     break;
                 }
                 result = (result << bitsPerDigit) | dig;
-                //offset += UTF16.getCharCount(c);
-                ++offset;
+                offset += UTF16.getCharCount(c);
                 ++n;
             }
             if (n < minDig) {
                 return -1;
+            }
+            if (braces) {
+                if (c != 0x7D /*}*/) {
+                    return -1;
+                }
+                ++offset;
             }
             offset16[0] = offset;
             return result;
