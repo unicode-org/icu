@@ -71,8 +71,7 @@ void T_UConverter_toUnicode_UTF8 (UConverter * _this,
                                   UErrorCode * err)
 {
   const unsigned char *mySource = (unsigned char *) *source;
-  const char *srcTemp; /* to match the Args definition */
-  UChar *myTarget = *target, *tgtTemp;
+  UChar *myTarget = *target;
   int32_t mySourceIndex = 0;
   int32_t myTargetIndex = 0;
   int32_t targetLength = targetLimit - myTarget;
@@ -83,7 +82,6 @@ void T_UConverter_toUnicode_UTF8 (UConverter * _this,
   uint32_t inBytes = 0;  /* Total number of bytes in the current UTF8 sequence */
   UConverterToUnicodeArgs args;
   
-  args.sourceStart = *source;
   if (_this->toUnicodeStatus)
     {
       i = _this->invalidCharLength;   /* restore # of bytes consumed */
@@ -179,25 +177,21 @@ void T_UConverter_toUnicode_UTF8 (UConverter * _this,
 #endif
 /* Needed explicit cast for mySource on MVS to make compiler happy - JJD */
                   args.converter = _this;
-                  srcTemp = mySource + mySourceIndex;
-                  tgtTemp = myTarget + myTargetIndex;
-                  args.pTarget = &tgtTemp;
+                  args.target = myTarget + myTargetIndex;
                   args.targetLimit = targetLimit;
-                  args.pSource = &srcTemp;
+                  args.source = (const char*) mySource + mySourceIndex;
                   args.sourceLimit = sourceLimit;
                   args.flush = flush;
-                  args.offsets = offsets?offsets+myTargetIndex:0;
+                  args.offsets = offsets;
                   args.size = sizeof(args);
                   ToU_CALLBACK_MACRO(_this->toUContext,
                                      args,
-                                     srcTemp,
-                                     1, 
+                                     _this->invalidCharBuffer,
+                                     _this->invalidCharLength,
                                      UCNV_UNASSIGNED,
                                      err);
                   if (U_FAILURE (*err))   break;
                   _this->invalidCharLength = 0;
-                  myTargetIndex = *(args.pTarget) - myTarget;
-                  mySourceIndex = *(args.pSource) - (const char *)mySource;
                 }
             }
         }
@@ -225,8 +219,7 @@ void T_UConverter_toUnicode_UTF8_OFFSETS_LOGIC (UConverter * _this,
                                                 UErrorCode * err)
 {
   const unsigned char *mySource = (unsigned char *) *source;
-  const char *srcTemp;
-  UChar *myTarget = *target, *tgtTemp;
+  UChar *myTarget = *target;
   int32_t mySourceIndex = 0;
   int32_t myTargetIndex = 0;
   int32_t targetLength = targetLimit - myTarget;
@@ -235,7 +228,6 @@ void T_UConverter_toUnicode_UTF8_OFFSETS_LOGIC (UConverter * _this,
   uint32_t inBytes = 0;
   UConverterToUnicodeArgs args;
 
-  args.sourceStart = *source;
   if (_this->toUnicodeStatus)
     {
       i = _this->invalidCharLength;
@@ -321,25 +313,24 @@ void T_UConverter_toUnicode_UTF8_OFFSETS_LOGIC (UConverter * _this,
               else
                 {
                   int32_t currentOffset = offsets[myTargetIndex-1];
+                  int32_t My_i = myTargetIndex;
 
                   *err = U_ILLEGAL_CHAR_FOUND;
                   _this->invalidCharLength = (int8_t)i;
                   
                   args.converter = _this;
-                  srcTemp = mySource + mySourceIndex;
-                  tgtTemp = myTarget + myTargetIndex;
-                  args.pTarget = &tgtTemp;
+                  args.target = myTarget + myTargetIndex;
                   args.targetLimit = targetLimit;
-                  args.pSource = &srcTemp;
+                  args.source = (const char*)mySource + mySourceIndex;
                   args.sourceLimit = sourceLimit;
                   args.flush = flush;
                   args.offsets = offsets?offsets+myTargetIndex:0;
                   args.size = sizeof(args);
                   /* To do HSYS: more smarts here, including offsets */
-                  ToU_CALLBACK_MACRO(_this->toUContext,
+                  ToU_CALLBACK_OFFSETS_LOGIC_MACRO(_this->toUContext,
                                      args,
-                                     srcTemp,
-                                     1, 
+                                     _this->invalidCharBuffer,
+                                     _this->invalidCharLength,
                                      UCNV_UNASSIGNED,
                                      err);
 /* Needed explicit cast for mySource on MVS to make compiler happy - JJD */
@@ -347,9 +338,7 @@ void T_UConverter_toUnicode_UTF8_OFFSETS_LOGIC (UConverter * _this,
                   
                   if (U_FAILURE (*err))   break;
                   _this->invalidCharLength = 0;
-                  myTargetIndex = *(args.pTarget) - myTarget;
-                  mySourceIndex = *(args.pSource) - (const char*)mySource;
-                }
+              }
             }
         }
       else
@@ -605,7 +594,6 @@ UChar32 T_UConverter_getNextUChar_UTF8(UConverter* converter,
   UConverterToUnicodeArgs args;
 
   /*Input boundary check*/
-  args.sourceStart = *source;
   if ((*source) >= sourceLimit) 
     {
       *err = U_INDEX_OUTOFBOUNDS_ERROR;
@@ -686,9 +674,9 @@ UChar32 T_UConverter_getNextUChar_UTF8(UConverter* converter,
     /*It is very likely that the ErrorFunctor will write to the
      *internal buffers */
     args.converter = converter;
-    args.pTarget = &myUCharPtr;
+    args.target = myUCharPtr;
     args.targetLimit = myUCharPtr + 1;
-    args.pSource = &sourceFinal;
+    args.source = sourceFinal;
     args.sourceLimit = sourceLimit;
     args.flush = TRUE;
     args.offsets = NULL;  
@@ -696,7 +684,7 @@ UChar32 T_UConverter_getNextUChar_UTF8(UConverter* converter,
     converter->fromCharErrorBehaviour(converter->toUContext,
                                     &args,
                                     sourceFinal,
-                                    1,
+                                    sourceLimit-sourceFinal,
                                     UCNV_UNASSIGNED,
                                     err);
 

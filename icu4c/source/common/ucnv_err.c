@@ -124,73 +124,71 @@ void   UCNV_FROM_U_CALLBACK_SUBSTITUTE (
                   UConverterCallbackReason reason,
                   UErrorCode * err)
 {
-  char togo[5];
-  int32_t togoLen;
+    char togo[5];
+    int32_t togoLen;
 
 
 
-  if (CONVERSION_U_SUCCESS (*err)) return;
-  
-  /*In case we're dealing with a modal converter a la UCNV_EBCDIC_STATEFUL,
+    if (CONVERSION_U_SUCCESS (*err)) return;
+
+    /*In case we're dealing with a modal converter a la UCNV_EBCDIC_STATEFUL,
     we need to make sure that the emitting of the substitution charater in the right mode*/
-  uprv_memcpy(togo, fromArgs->converter->subChar, togoLen = fromArgs->converter->subCharLen);
-  if (ucnv_getType(fromArgs->converter) == UCNV_EBCDIC_STATEFUL)
+    uprv_memcpy(togo, fromArgs->converter->subChar, togoLen = fromArgs->converter->subCharLen);
+    if (ucnv_getType(fromArgs->converter) == UCNV_EBCDIC_STATEFUL)
     {
-      if ((fromArgs->converter->fromUnicodeStatus)&&(togoLen != 2))
-	{
-	  togo[0] = UCNV_SI;
-	  togo[1] = fromArgs->converter->subChar[0];
-	  togo[2] = UCNV_SO;
-	  togoLen = 3;
-	}
-      else if (!(fromArgs->converter->fromUnicodeStatus)&&(togoLen != 1))
-	{
-	  togo[0] = UCNV_SO;
-	  togo[1] = fromArgs->converter->subChar[0];
-	  togo[2] = fromArgs->converter->subChar[1];
-	  togo[3] = UCNV_SI;
-	  togoLen = 4;
-	}
+        if ((fromArgs->converter->fromUnicodeStatus)&&(togoLen != 2))
+        {
+            togo[0] = UCNV_SI;
+            togo[1] = fromArgs->converter->subChar[0];
+            togo[2] = UCNV_SO;
+            togoLen = 3;
+        }
+        else if (!(fromArgs->converter->fromUnicodeStatus)&&(togoLen != 1))
+        {
+            togo[0] = UCNV_SO;
+            togo[1] = fromArgs->converter->subChar[0];
+            togo[2] = fromArgs->converter->subChar[1];
+            togo[3] = UCNV_SI;
+            togoLen = 4;
+        }
     }
-  
-  /*if we have enough space on the output buffer we just copy
+
+    /*if we have enough space on the output buffer we just copy
     the subchar there and update the pointer */  
-  if ((fromArgs->targetLimit - *(fromArgs->pTarget)) >= togoLen)
+    if ((fromArgs->targetLimit - fromArgs->target) >= togoLen)
     {
-      uprv_memcpy (*(fromArgs->pTarget), togo, togoLen);
-      *(fromArgs->pTarget) += togoLen;
-      *err = U_ZERO_ERROR;
-      if (fromArgs->offsets)
-	{
-	  int i=0;
-	  for (i=0;i<togoLen;i++) fromArgs->offsets[i]=0;
-	  fromArgs->offsets += togoLen;
-	}
+        uprv_memcpy (fromArgs->target, togo, togoLen);
+        fromArgs->target += togoLen;
+        *err = U_ZERO_ERROR;
+        if (fromArgs->offsets)
+        {
+            int i=0;
+            for (i=0;i<togoLen;i++) fromArgs->offsets[i]=0;
+            fromArgs->offsets += togoLen;
+        }
     }
-  else
+    else
     {
-      /*if we don't have enough space on the output buffer
-       *we copy as much as we can to it, update that pointer.
-       *copy the rest in the internal buffer, and increase the
-       *length marker
-       */
-      uprv_memcpy (*(fromArgs->pTarget), togo, (fromArgs->targetLimit - *(fromArgs->pTarget)));
-      if (fromArgs->offsets)
-	{
-	  int i=0;
-	  for (i=0;i<(fromArgs->targetLimit - *(fromArgs->pTarget));i++) fromArgs->offsets[i]=0;
-	  fromArgs->offsets += (fromArgs->targetLimit - *(fromArgs->pTarget));
-	}
-      uprv_memcpy (fromArgs->converter->charErrorBuffer + fromArgs->converter->charErrorBufferLength,
-		  togo + (fromArgs->targetLimit - *(fromArgs->pTarget)),
-		  togoLen - (fromArgs->targetLimit - *(fromArgs->pTarget)));
-      fromArgs->converter->charErrorBufferLength += togoLen - (fromArgs->targetLimit - *(fromArgs->pTarget));
-      *(fromArgs->pTarget) += (fromArgs->targetLimit - *(fromArgs->pTarget));
-      *err = U_INDEX_OUTOFBOUNDS_ERROR;
+        /*if we don't have enough space on the output buffer
+        *we copy as much as we can to it, update that pointer.
+        *copy the rest in the internal buffer, and increase the
+        *length marker
+        */
+        uprv_memcpy (fromArgs->target, togo, (fromArgs->targetLimit - fromArgs->target));
+        if (fromArgs->offsets)
+        {
+            int i=0;
+            for (i=0;i<(fromArgs->targetLimit - fromArgs->target);i++) fromArgs->offsets[i]=0;
+            fromArgs->offsets += (fromArgs->targetLimit - fromArgs->target);
+        }
+        uprv_memcpy (fromArgs->converter->charErrorBuffer + fromArgs->converter->charErrorBufferLength,
+        togo + (fromArgs->targetLimit - fromArgs->target),
+        togoLen - (fromArgs->targetLimit - fromArgs->target));
+        fromArgs->converter->charErrorBufferLength += togoLen - (fromArgs->targetLimit - fromArgs->target);
+        fromArgs->target += (fromArgs->targetLimit - fromArgs->target);
+        *err = U_INDEX_OUTOFBOUNDS_ERROR;
     }
-
-  return;
-
+    return;
 }
 
 /*uses itou to get a unicode escape sequence of the offensive sequence,
@@ -280,10 +278,10 @@ void   UCNV_FROM_U_CALLBACK_ESCAPE (
   /*if we have enough space on the output buffer we just copy
    * the subchar there and update the pointer
    */
-  if ((fromArgs->targetLimit - *(fromArgs->pTarget)) >= valueStringLength)
+  if ((fromArgs->targetLimit - fromArgs->target) >= valueStringLength)
     {
-      uprv_memcpy (*(fromArgs->pTarget), myTarget, valueStringLength);
-      *(fromArgs->pTarget) += valueStringLength;
+      uprv_memcpy (fromArgs->target, myTarget, valueStringLength);
+      fromArgs->target += valueStringLength;
       *err = U_ZERO_ERROR;
 
       if (fromArgs->offsets)
@@ -304,15 +302,15 @@ void   UCNV_FROM_U_CALLBACK_ESCAPE (
       if (fromArgs->offsets)
 	{
 	  int j=0;
-	  for (j=0;j<(fromArgs->targetLimit - *(fromArgs->pTarget));j++) fromArgs->offsets[j]=0;
-	  fromArgs->offsets += (fromArgs->targetLimit - *(fromArgs->pTarget));
+	  for (j=0;j<(fromArgs->targetLimit - fromArgs->target);j++) fromArgs->offsets[j]=0;
+	  fromArgs->offsets += (fromArgs->targetLimit - fromArgs->target);
 	}
-      uprv_memcpy (*(fromArgs->pTarget), myTarget, (fromArgs->targetLimit - *(fromArgs->pTarget)));
+      uprv_memcpy (fromArgs->target, myTarget, (fromArgs->targetLimit - fromArgs->target));
       uprv_memcpy (fromArgs->converter->charErrorBuffer + fromArgs->converter->charErrorBufferLength,
-		  myTarget + (fromArgs->targetLimit - *(fromArgs->pTarget)),
-		  valueStringLength - (fromArgs->targetLimit - *(fromArgs->pTarget)));
-      fromArgs->converter->charErrorBufferLength += valueStringLength - (fromArgs->targetLimit - *(fromArgs->pTarget));
-      *(fromArgs->pTarget) += (fromArgs->targetLimit - *(fromArgs->pTarget));
+		  myTarget + (fromArgs->targetLimit - fromArgs->target),
+		  valueStringLength - (fromArgs->targetLimit - fromArgs->target));
+      fromArgs->converter->charErrorBufferLength += valueStringLength - (fromArgs->targetLimit - fromArgs->target);
+      fromArgs->target += (fromArgs->targetLimit - fromArgs->target);
       *err = U_INDEX_OUTOFBOUNDS_ERROR;
     }
 
@@ -344,10 +342,10 @@ void   UCNV_TO_U_CALLBACK_SUBSTITUTE (
   
   if (CONVERSION_U_SUCCESS (*err))   return;
   
-  if ((toArgs->targetLimit - *(toArgs->pTarget)) >= 1)
+  if ((toArgs->targetLimit - toArgs->target) >= 1)
     {
-      **(toArgs->pTarget) = 0xFFFD;
-      (*(toArgs->pTarget))++;
+      *toArgs->target = 0xFFFD;
+      (toArgs->target)++;
       if (toArgs->offsets)  *(toArgs->offsets) = 0;
       *err = U_ZERO_ERROR;
     }
@@ -390,17 +388,17 @@ void  UCNV_TO_U_CALLBACK_ESCAPE (
       valueStringLength += 4;
     }
   
-  if ((toArgs->targetLimit - *(toArgs->pTarget)) >= valueStringLength)
+  if ((toArgs->targetLimit - toArgs->target) >= valueStringLength)
     {
       /*if we have enough space on the output buffer we just copy
        * the subchar there and update the pointer
        */
-      uprv_memcpy (*(toArgs->pTarget), uniValueString, (sizeof (UChar)) * (valueStringLength));
+      uprv_memcpy (toArgs->target, uniValueString, (sizeof (UChar)) * (valueStringLength));
       if (toArgs->offsets) 
 	{
 	  for (i = 0; i < valueStringLength; i++)  toArgs->offsets[i] = 0;
 	}
-      *(toArgs->pTarget) += valueStringLength;
+      toArgs->target += valueStringLength;
       
       *err = U_ZERO_ERROR;
     }
@@ -411,18 +409,18 @@ void  UCNV_TO_U_CALLBACK_ESCAPE (
        *copy the rest in the internal buffer, and increase the
        *length marker
        */
-      uprv_memcpy (*(toArgs->pTarget), uniValueString, (sizeof (UChar)) * (toArgs->targetLimit - *(toArgs->pTarget)));
+      uprv_memcpy (toArgs->target, uniValueString, (sizeof (UChar)) * (toArgs->targetLimit - toArgs->target));
       if (toArgs->offsets) 
 	{
-	  for (i = 0; i < (toArgs->targetLimit - *(toArgs->pTarget)); i++)  toArgs->offsets[i] = 0;
+	  for (i = 0; i < (toArgs->targetLimit - toArgs->target); i++)  toArgs->offsets[i] = 0;
 	}	    
       
       
       uprv_memcpy (toArgs->converter->UCharErrorBuffer,
-		  uniValueString + (toArgs->targetLimit - *(toArgs->pTarget)),
-		  (sizeof (UChar)) * (valueStringLength - (toArgs->targetLimit - *(toArgs->pTarget))));
-      toArgs->converter->UCharErrorBufferLength += valueStringLength - (toArgs->targetLimit - *(toArgs->pTarget));
-      *(toArgs->pTarget) += (toArgs->targetLimit - *(toArgs->pTarget));
+		  uniValueString + (toArgs->targetLimit - toArgs->target),
+		  (sizeof (UChar)) * (valueStringLength - (toArgs->targetLimit - toArgs->target)));
+      toArgs->converter->UCharErrorBufferLength += valueStringLength - (toArgs->targetLimit - toArgs->target);
+      toArgs->target += (toArgs->targetLimit - toArgs->target);
       *err = U_INDEX_OUTOFBOUNDS_ERROR;
     }
   
