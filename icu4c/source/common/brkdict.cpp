@@ -48,11 +48,11 @@ BreakDictionary::BreakDictionary(const char* dictionaryFilename, UErrorCode& sta
 BreakDictionary::~BreakDictionary()
 {
     ucmp8_close(columnMap);
-    delete [] table;
-    delete [] rowIndex;
-    delete [] rowIndexFlags;
-    delete [] rowIndexFlagsIndex;
-    delete [] rowIndexShifts;
+    uprv_free(table);
+    uprv_free(rowIndex);
+    uprv_free(rowIndexFlags);
+    uprv_free(rowIndexFlagsIndex);
+    uprv_free(rowIndexShifts);
 }
 
 // macros to support readDictionaryFile.  The data files originated from a Java
@@ -102,7 +102,7 @@ BreakDictionary::readDictionaryFile(UMemoryStream* in)
     // read in the row-number index
     uprv_mstrm_read(in, &l, 4);
     SWAP32(l);
-    rowIndex = new int16_t[l];
+    rowIndex = (int16_t *)uprv_malloc(l*2);
     uprv_mstrm_read(in, rowIndex, l * sizeof (int16_t) );
     for (i = 0; i < l; i++) {
         SWAP16(rowIndex[i]);
@@ -111,14 +111,14 @@ BreakDictionary::readDictionaryFile(UMemoryStream* in)
     // load in the populated-cells bitmap: index first, then bitmap list
     uprv_mstrm_read(in, &l, 4);
     SWAP32(l);
-    rowIndexFlagsIndex = new int16_t[l];
+    rowIndexFlagsIndex = (int16_t *)uprv_malloc(l*2);
     uprv_mstrm_read(in, rowIndexFlagsIndex, l * sizeof(int16_t) );
     for (i = 0; i < l; i++) {
         SWAP16(rowIndexFlagsIndex[i]);
     }
     uprv_mstrm_read(in, &l, 4);
     SWAP32(l);
-    rowIndexFlags = new int32_t[l];
+    rowIndexFlags = (int32_t *)uprv_malloc(l*4);
     uprv_mstrm_read(in, rowIndexFlags, l * sizeof(int32_t));
     for (i = 0; i < l; i++) {
         SWAP32(rowIndexFlags[i]);
@@ -127,13 +127,13 @@ BreakDictionary::readDictionaryFile(UMemoryStream* in)
     // load in the row-shift index
     uprv_mstrm_read(in, &l, 4);
     SWAP32(l);
-    rowIndexShifts = new int8_t[l];
+    rowIndexShifts = (int8_t *)uprv_malloc(l);
     uprv_mstrm_read(in, rowIndexShifts, l);
 
     // finally, load in the actual state table
     uprv_mstrm_read(in, &l, 4);
     SWAP32(l);
-    table = new int16_t[l];
+    table = (int16_t *)uprv_malloc(l*2);
     uprv_mstrm_read(in, table, l * sizeof(int16_t) );
     for (i = 0; i < l; i++) {
         SWAP16(table[i]);
