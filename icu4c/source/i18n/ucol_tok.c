@@ -848,7 +848,7 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
     }
   }
 
-  if(ListList[src->resultLen-1].first[UCOL_TOK_POLARITY_POSITIVE] == NULL) {
+  if(src->resultLen > 0 && ListList[src->resultLen-1].first[UCOL_TOK_POLARITY_POSITIVE] == NULL) {
     src->resultLen--;
   }
   return src->resultLen;
