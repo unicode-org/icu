@@ -2461,6 +2461,8 @@ public:
    *   If the length() was greater than minCapacity, then any contents after minCapacity
    *   may be lost.
    *   The buffer contents is not NUL-terminated by getBuffer().
+   *   If length()<getCapacity() then you can terminate it by writing a NUL
+   *   at index length().
    * - You must call releaseBuffer(newLength) before and in order to
    *   return to normal UnicodeString operation.
    *
@@ -2471,6 +2473,7 @@ public:
    *         or 0 if an error occurs (nested calls, out of memory)
    *
    * @see releaseBuffer
+   * @see getTerminatedBuffer()
    * @draft ICU 2.0
    */
   UChar *getBuffer(int32_t minCapacity);
@@ -2515,6 +2518,7 @@ public:
    * The buffer contents is (probably) not NUL-terminated.
    * You can check if it is with
    * <code>(s.length()<s.getCapacity() && buffer[s.length()]==0)</code>.
+   * (See getTerminatedBuffer().)
    *
    * The buffer may reside in read-only memory. Its contents must not
    * be modified.
@@ -2523,9 +2527,45 @@ public:
    *         or 0 if the string is empty or bogus
    *
    * @see getBuffer(int32_t minCapacity)
+   * @see getTerminatedBuffer()
    * @draft ICU 2.0
    */
   inline const UChar *getBuffer() const;
+
+  /**
+   * Get a read-only pointer to the internal buffer,
+   * making sure that it is NUL-terminated.
+   * This can be called at any time on a valid UnicodeString.
+   *
+   * It returns 0 if the string is bogus, or
+   * during an "open" getBuffer(minCapacity), or if the buffer cannot
+   * be NUL-terminated (because memory allocation failed).
+   *
+   * It can be called as many times as desired.
+   * The pointer that it returns will remain valid until the UnicodeString object is modified,
+   * at which time the pointer is semantically invalidated and must not be used any more.
+   *
+   * The capacity of the buffer can be determined with getCapacity().
+   * The part after length()+1 may or may not be initialized and valid,
+   * depending on the history of the UnicodeString object.
+   *
+   * The buffer contents is guaranteed to be NUL-terminated.
+   * getTerminatedBuffer() may reallocate the buffer if a terminating NUL
+   * is written.
+   * For this reason, this function is not const, unlike getBuffer().
+   * Note that a UnicodeString may also contain NUL characters as part of its contents.
+   *
+   * The buffer may reside in read-only memory. Its contents must not
+   * be modified.
+   *
+   * @return a read-only pointer to the internal string buffer,
+   *         or 0 if the string is empty or bogus
+   *
+   * @see getBuffer(int32_t minCapacity)
+   * @see getBuffer()
+   * @draft ICU 2.2
+   */
+  inline const UChar *getTerminatedBuffer();
 
   //========================================
   // Constructors
@@ -3708,8 +3748,16 @@ UnicodeString::length() const
 { return fLength; }
 
 inline int32_t 
+UnicodeString::getCapacity() const
+{ return fCapacity; }
+
+inline int32_t 
 UnicodeString::hashCode() const
 { return doHashCode(); }
+
+inline UBool 
+UnicodeString::isBogus() const
+{ return (UBool)(fFlags & kIsBogus); }
 
 inline const UChar *
 UnicodeString::getBuffer() const {
@@ -3721,8 +3769,22 @@ UnicodeString::getBuffer() const {
 }
 
 //========================================
-// Write alias methods
+// Write implementation methods
 //========================================
+inline const UChar *
+UnicodeString::getTerminatedBuffer() {
+  if(fFlags&(kIsBogus|kOpenGetBuffer)) {
+    return 0;
+  } else if(fLength<fCapacity && fArray[fLength]==0) {
+    return fArray;
+  } else if(cloneArrayIfNeeded(fLength+1)) {
+    fArray[fLength]=0;
+    return fArray;
+  } else {
+    return 0;
+  }
+}
+
 inline UnicodeString& 
 UnicodeString::operator= (UChar ch) 
 { return doReplace(0, fLength, &ch, 0, 1); }
@@ -3880,14 +3942,6 @@ UnicodeString::reverse(int32_t start,
 
 
 //========================================
-// Write implementation methods
-//========================================
-inline UBool 
-UnicodeString::isBogus() const
-{ return (UBool)(fFlags & kIsBogus); }
-
-
-//========================================
 // Privates
 //========================================
 
@@ -3915,10 +3969,6 @@ UnicodeString::getArrayStart()
 inline const UChar* 
 UnicodeString::getArrayStart() const
 { return fArray; }
-
-inline int32_t 
-UnicodeString::getCapacity() const
-{ return fCapacity; }
 
 U_NAMESPACE_END
 
