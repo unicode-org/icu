@@ -39,6 +39,7 @@
 #include "unicode/dcfmtsym.h"
 #include "unicode/uchar.h"
 #include "unicode/ustring.h"
+#include "uprops.h"
 #include <float.h>
 
 // *****************************************************************************
@@ -711,10 +712,10 @@ UBool SimpleDateFormat::isNumeric(UChar formatChar, int32_t count) {
 }
 
 void
-SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition& pos) const
+SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition& parsePos) const
 {
-    int32_t start = pos.getIndex();
-    int32_t oldStart = start;
+    int32_t pos = parsePos.getIndex();
+    int32_t start = pos;
     UBool ambiguousYear[] = { FALSE };
     int32_t count = 0;
 
@@ -726,54 +727,15 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
     int32_t abutPat = -1; // If >=0, we are in a run of abutting numeric fields
     int32_t abutStart = 0;
     int32_t abutPass = 0;
+    UBool inQuote = FALSE;
 
     const UnicodeString numericFormatChars(NUMERIC_FORMAT_CHARS);
 
     for (int32_t i=0; i<fPattern.length(); ++i) {
         UChar ch = fPattern.charAt(i);
 
-        // Handle quoted strings.  Two consecutive quotes is a
-        // quote literal, inside or outside of quotes.
-        if (ch == QUOTE) {
-            abutPat = -1; // End of any abutting fields
-
-            // Match a quote literal '' outside of quotes
-            if ((i+1)<fPattern.length() && fPattern.charAt(i+1)==ch) {
-                if (start==text.length() || text.charAt(start) != ch) {
-                    pos.setIndex(oldStart);
-                    pos.setErrorIndex(start);
-                    return;
-                }
-                ++start;
-                ++i; // Skip over doubled quote
-                continue;
-            }
-
-            // Match a quoted string, including any embedded ''
-            // quote literals.  Note that we allow an unclosed
-            // quote for backward compatibility.
-            while (++i<fPattern.length()) {
-                ch = fPattern.charAt(i);
-                if (ch == QUOTE) {
-                    if ((i+1)<fPattern.length() && fPattern.charAt(i+1)==ch) {
-                        ++i;
-                        // Fall through and match literal quote
-                    } else {
-                        break; // Closing quote seen
-                    }
-                }
-                if (start==text.length() || text.charAt(start) != ch) {
-                    pos.setIndex(oldStart);
-                    pos.setErrorIndex(start);
-                    return;
-                }
-                ++start;
-            }
-            continue;
-        }
-
         // Handle alphabetic field characters.
-        if ((ch >= 0x41 && ch <= 0x5A) || (ch >= 0x61 && ch <= 0x7A)) { // [A-Za-z]
+        if (!inQuote && ((ch >= 0x41 && ch <= 0x5A) || (ch >= 0x61 && ch <= 0x7A))) { // [A-Za-z]
             int32_t fieldPat = i;
 
             // Count the length of this field specifier
@@ -810,7 +772,7 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
                         // fields.
                         if (abutting) {
                             abutPat = fieldPat;
-                            abutStart = start;
+                            abutStart = pos;
                             abutPass = 0;
                         }
                     }
@@ -834,20 +796,20 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
                 if (fieldPat == abutPat) {
                     count -= abutPass++;
                     if (count == 0) {
-                        pos.setIndex(oldStart);
-                        pos.setErrorIndex(start);
+                        parsePos.setIndex(start);
+                        parsePos.setErrorIndex(pos);
                         return;
                     }
                 }
 
-                start = subParse(text, start, ch, count,
-                                 TRUE, FALSE, ambiguousYear, cal);
+                pos = subParse(text, pos, ch, count,
+                               TRUE, FALSE, ambiguousYear, cal);
 
                 // If the parse fails anywhere in the run, back up to the
                 // start of the run and retry.
-                if (start < 0) {
+                if (pos < 0) {
                     i = abutPat - 1;
-                    start = abutStart;
+                    pos = abutStart;
                     continue;
                 }
             }
@@ -855,28 +817,70 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
             // Handle non-numeric fields and non-abutting numeric
             // fields.
             else {
-                int32_t k = start;
-                start=subParse(text, start, ch, count,
+                int32_t s = pos;
+                pos = subParse(text, pos, ch, count,
                                FALSE, TRUE, ambiguousYear, cal);
 
-                if (start < 0) {
-                    pos.setErrorIndex(k);
-                    pos.setIndex(oldStart);
+                if (pos < 0) {
+                    parsePos.setErrorIndex(s);
+                    parsePos.setIndex(start);
                     return;
                 }
             }
         }
 
-        // Handle unquoted non-alphabetic characters.  These are
-        // treated as literals.
+        // Handle literal pattern characters.  These are any
+        // quoted characters and non-alphabetic unquoted
+        // characters.
         else {
+                
             abutPat = -1; // End of any abutting fields
-            if (start==text.length() || text.charAt(start) != ch) {
-                pos.setIndex(oldStart);
-                pos.setErrorIndex(start);
-                return;
+
+            // Handle quotes.  Two consecutive quotes is a quote
+            // literal, inside or outside of quotes.  Otherwise a
+            // quote indicates entry or exit from a quoted region.
+            if (ch == QUOTE) {
+                // Match a quote literal '' within OR outside of quotes
+                if ((i+1)<fPattern.length() && fPattern.charAt(i+1)==ch) {
+                    ++i; // Skip over doubled quote
+                    // Fall through and treat quote as a literal
+                } else {
+                    // Enter or exit quoted region
+                    inQuote = !inQuote;
+                    continue;
+                }
             }
-            ++start;
+
+            // A run of white space in the pattern matches a run
+            // of white space in the input text.
+            if (uprv_isRuleWhiteSpace(ch)) {
+                // Advance over run in pattern
+                while ((i+1)<fPattern.length() &&
+                       uprv_isRuleWhiteSpace(fPattern.charAt(i+1))) {
+                    ++i;
+                }
+
+                // Advance over run in input text
+                int32_t s = pos;
+                while (pos<text.length() &&
+                       u_isUWhiteSpace(text.charAt(pos))) {
+                    ++pos;
+                }
+
+                // Must see at least one white space char in input
+                if (pos > s) {
+                    continue;
+                }
+            } else if (pos<text.length() && text.charAt(pos)==ch) {
+                // Match a literal
+                ++pos;
+                continue;
+            }
+
+            // We fall through to this point if the match fails
+            parsePos.setIndex(start);
+            parsePos.setErrorIndex(pos);
+            return;
         }
     }
 
@@ -884,7 +888,7 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
     // will fill in default values for missing fields when the time
     // is computed.
 
-    pos.setIndex(start);
+    parsePos.setIndex(pos);
 
     // This part is a problem:  When we call parsedDate.after, we compute the time.
     // Take the date April 3 2004 at 2:30 am.  When this is first set up, the year
@@ -930,8 +934,8 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
     // couldn't parse the string, when in reality this isn't quite accurate--
     // we did parse it; the Calendar calls just failed.
     if (U_FAILURE(status)) { 
-        pos.setErrorIndex(start);
-        pos.setIndex(oldStart); 
+        parsePos.setErrorIndex(pos);
+        parsePos.setIndex(start); 
     }
 }
 
