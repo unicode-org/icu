@@ -33,8 +33,7 @@
 #define UTYPES_H
 
 
-#include "unicode/urenuc.h"
-#include "unicode/ureni18n.h"
+#include "unicode/urename.h"
 
 #include "unicode/umachine.h"
 #include "unicode/utf.h"
