@@ -57,7 +57,7 @@ InputName=uconv
 SOURCE="$(InputPath)"
 
 "..\..\..\..\icu\bin\$(InputName)" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(InputPath) ..\..\..\..\icu\bin
+	copy $(TargetPath) ..\..\..\..\icu\bin
 
 # End Custom Build
 
@@ -90,7 +90,7 @@ InputName=uconv
 SOURCE="$(InputPath)"
 
 "..\..\..\..\icu\bin\$(InputName)" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(InputPath) ..\..\..\..\icu\bin
+	copy $(TargetPath) ..\..\..\..\icu\bin
 
 # End Custom Build
 

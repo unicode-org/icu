@@ -72,7 +72,7 @@ char symPrefix[100];
 
 extern int
 main(int argc, char* argv[]) {
-    UBool verbose = FALSE;
+    UBool verbose = TRUE;
 
     U_MAIN_INIT_ARGS(argc, argv);
 
