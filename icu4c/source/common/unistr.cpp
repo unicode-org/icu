@@ -759,6 +759,7 @@ UnicodeString::extract(UTextOffset start,
   const UChar *mySource    = getArrayStart() + start;
   const UChar *mySourceEnd = mySource + length;
   char *myTarget           = dst;
+  char *myTargetLimit;
   UErrorCode status        = U_ZERO_ERROR;
   int32_t arraySize        = 0x0FFFFFFF;
 
@@ -780,6 +781,11 @@ UnicodeString::extract(UTextOffset start,
       ucnv_close(converter);
     return 0;
   }
+
+  myTargetLimit = myTarget + arraySize;
+
+  if(myTargetLimit < myTarget)  /* ptr wrapped around: pin to U_MAX_PTR */
+    myTargetLimit = U_MAX_PTR; 
 
   // perform the conversion
   // there is no loop here since we assume the buffer is large enough
