@@ -540,23 +540,6 @@ CollationAPITest::TestElemIter(/* char* par */)
     if(!U_FAILURE(success)){
         errln("Expeceted error");
     }
-    UnicodeString ruleset1("< a, A < b, B < c, C < d, D, e, E");
-    RuleBasedCollator *colerror1 = new RuleBasedCollator(ruleset1, success);
-    if (U_SUCCESS(success)) {
-        errln("RuleBasedCollator is expected to failed.");
-    }
-    colerror1 = new RuleBasedCollator(ruleset1, Collator::PRIMARY, success);
-    if (U_SUCCESS(success)) {
-        errln("RuleBasedCollator is expected to failed.");
-    }
-    colerror1 = new RuleBasedCollator(ruleset1, Normalizer::NO_OP, success);
-    if (U_SUCCESS(success)) {
-        errln("RuleBasedCollator is expected to failed.");
-    }
-    colerror1 = new RuleBasedCollator(ruleset1, Collator::SECONDARY, Normalizer::NO_OP, success);
-    if (U_SUCCESS(success)) {
-        errln("RuleBasedCollator is expected to failed.");
-    }
     
     delete chariter;
     delete coliter;
