@@ -538,34 +538,34 @@ DateFormatSymbols::initField(UnicodeString **field, int32_t& length, const UChar
 ResourceBundle
 DateFormatSymbols::getData(ResourceBundle &rb, const char *tag, const char *type, UErrorCode& status )
 {
-  char tmp[100];
-  char *fullTag = tmp;
-
-  if(!type || !*type) {
-    type = "gregorian";
-  }
-  
-  int32_t len = uprv_strlen(tag) + 1 + uprv_strlen(type);  // tag + _ + type  (i.e. Eras_Japanese )
-  if(len > 100) {
-    fullTag = (char*)uprv_malloc(len+1);
-  }
-
-  uprv_strcpy(fullTag, tag);
-  uprv_strcat(fullTag, "_");
-  uprv_strcat(fullTag, type);
-
-  ResourceBundle resource = rb.get(fullTag, status);
-
-  if(status == U_MISSING_RESOURCE_ERROR) {
-    status = U_ZERO_ERROR;
-    resource = rb.get(tag, status);
-  }
-
-  if(fullTag != tmp) {  
-    delete fullTag;  // not stack allocated
-  }
-
-  return resource;
+    char tmp[100];
+    char *fullTag = tmp;
+    
+    if(!type || !*type) {
+        type = "gregorian";
+    }
+    
+    int32_t len = uprv_strlen(tag) + 1 + uprv_strlen(type);  // tag + _ + type  (i.e. Eras_Japanese )
+    if(len > sizeof(tmp)) {
+        fullTag = (char*)uprv_malloc(len+1);
+    }
+    
+    uprv_strcpy(fullTag, tag);
+    uprv_strcat(fullTag, "_");
+    uprv_strcat(fullTag, type);
+    
+    ResourceBundle resource = rb.get(fullTag, status);
+    
+    if(status == U_MISSING_RESOURCE_ERROR) {
+        status = U_ZERO_ERROR;
+        resource = rb.get(tag, status);
+    }
+    
+    if(fullTag != tmp) {  
+        uprv_free(fullTag);  // not stack allocated
+    }
+    
+    return resource;
 }
 
 void
