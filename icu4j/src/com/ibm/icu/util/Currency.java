@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/Currency.java,v $
- * $Date: 2002/12/04 01:03:39 $
- * $Revision: 1.10 $
+ * $Date: 2002/12/11 23:36:08 $
+ * $Revision: 1.11 $
  *
  *******************************************************************************
  */
@@ -53,7 +53,7 @@ public class Currency implements Serializable {
     private String isoCode;
 
     // begin registry stuff 
-
+    ///CLOVER:OFF
     private static ICULocaleService service;
 
     private static ICULocaleService getService() {
@@ -78,7 +78,7 @@ public class Currency implements Serializable {
         }
         return service;
     }
-
+    ///CLOVER:ON
     /**
      * Returns a currency object for the default currency in the given
      * locale.
@@ -95,7 +95,7 @@ public class Currency implements Serializable {
     public static Currency getInstance(String theISOCode) {
         return new Currency(theISOCode);
     }
-
+    ///CLOVER:OFF
     /**
      * Registers a new currency for the provided locale.  The returned object
      * is a key that can be used to unregister this currency object.
@@ -113,7 +113,7 @@ public class Currency implements Serializable {
     /* public */ static boolean unregister(Object registryKey) {
         return getService().unregisterFactory((Factory)registryKey);
     }
-
+    ///CLOVER:ON
     /**
      * Return an array of the locales for which a currency
      * is defined.

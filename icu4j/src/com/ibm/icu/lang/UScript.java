@@ -379,10 +379,11 @@ public final class UScript {
                                                scriptCode,
                                                UProperty.NameChoice.SHORT);
     }
-    
+    ///CLOVER:OFF
     /**
      *  Private Constructor. Never default construct
      */
     private UScript(){}
+    ///CLOVER:ON
 }
 

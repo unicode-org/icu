@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Collator.java,v $ 
-* $Date: 2002/12/11 19:48:36 $ 
-* $Revision: 1.18 $
+* $Date: 2002/12/11 23:36:58 $ 
+* $Revision: 1.19 $
 *
 *******************************************************************************
 */
@@ -374,8 +374,8 @@ public abstract class Collator implements Comparator, Cloneable
         }
         return false;
     }
-    ///CLOVER:ON
     
+    ///CLOVER:ON
     /**
      * Get the set of Locales for which Collators are installed. 
      * @return the list of available locales which collators are installed.
@@ -393,12 +393,13 @@ public abstract class Collator implements Comparator, Cloneable
             ///CLOVER:ON
         }
     }
-
+    ////CLOVER:OFF
     /* @prototype */
     /* public */ static final Map getDisplayNames(Locale locale) {
         return getService().getDisplayNames(locale);
     }
-
+    ////CLOVER:ON
+    
     // end registry stuff
 
     /**

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/StringCharacterIterator.java,v $ 
- * $Date: 2002/12/03 22:03:58 $ 
- * $Revision: 1.5 $
+ * $Date: 2002/12/11 23:36:57 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -30,7 +30,7 @@ import java.text.CharacterIterator;
  * @see CharacterIterator
  * @deprecated ICU 2.4. Use java.text.StringCharacterIterator instead.
  */
-
+///CLOVER:OFF
 public final class StringCharacterIterator implements CharacterIterator
 {
     private String text;
@@ -284,3 +284,4 @@ public final class StringCharacterIterator implements CharacterIterator
     }
 
 }
+///CLOVER:ON

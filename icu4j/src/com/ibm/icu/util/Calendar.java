@@ -1578,7 +1578,7 @@ public abstract class Calendar implements Serializable, Cloneable {
     }
 
     // ==== Factory Stuff ====
-
+    ///CLOVER:OFF
     /**
      * Return a calendar of for the TimeZone and locale.  If factoryName is
      * not null, looks in the collection of CalendarFactories for a match
@@ -1605,7 +1605,7 @@ public abstract class Calendar implements Serializable, Cloneable {
             return factory.create(zone, locale);
         }
     }
-
+    ///CLOVER:ON
     /**
      * Gets the list of locales for which Calendars are installed.
      * @return the list of locales for which Calendars are installed.
@@ -1617,7 +1617,7 @@ public abstract class Calendar implements Serializable, Cloneable {
             ? ICULocaleData.getAvailableLocales()
             : service.getAvailableLocales();
     }
-
+    ///CLOVER:OFF
     private static Map factoryMap;
     private static Map getFactoryMap() {
         if (factoryMap == null) {
@@ -1715,7 +1715,7 @@ public abstract class Calendar implements Serializable, Cloneable {
         }
         return service;
     }
-
+    //CLOVER:ON
     // ==== End of factory Stuff ====
 
     /**

@@ -6,8 +6,8 @@
 *
 * $Source: 
 *      /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterCategory.java $ 
-* $Date: 2002/12/03 00:47:53 $ 
-* $Revision: 1.10 $
+* $Date: 2002/12/11 23:37:43 $ 
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */
@@ -274,11 +274,12 @@ public final class UCharacterCategory
     }
     	
     // private constructor -----------------------------------------------
-     
+    ///CLOVER:OFF 
     /**
      * Private constructor to prevent initialisation
      */
     private UCharacterCategory()
     {
     }
+    ///CLOVER:ON
 }

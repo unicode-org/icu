@@ -6,8 +6,8 @@
 *
 * $Source: 
 *     /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterDirection.java $ 
-* $Date: 2002/12/03 00:47:50 $ 
-* $Revision: 1.6 $
+* $Date: 2002/12/11 23:37:43 $ 
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -27,13 +27,14 @@ package com.ibm.icu.lang;
 public final class UCharacterDirection
 {
     // private constructor =========================================
-      
+    ///CLOVER:OFF  
     /**
      * Private constructor to prevent initialisation
      */
     private UCharacterDirection()
     {
     }
+    ///CLOVER:ON
       
     // public variable =============================================
       
