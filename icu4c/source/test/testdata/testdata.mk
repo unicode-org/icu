@@ -10,18 +10,20 @@
 
 .SUFFIXES : .res .txt
 
+
 ALL : "$(TESTDATAOUT)\testdata.dat" 
 	@echo Test data is built.
 
-"$(TESTDATAOUT)\testdata.dat" : TESTDATA_ENC  "$(TESTDATAOUT)\root.res" "$(TESTDATAOUT)\te.res" "$(TESTDATAOUT)\te_IN.res" "$(TESTDATAOUT)\testtypes.res" "$(TESTDATAOUT)\testempty.res" "$(TESTDATAOUT)\ja_data.res" $(TESTDATAOUT)test.dat
+"$(TESTDATAOUT)\testdata.dat" : "$(TESTDATABLD)\ja_data.res"  "$(TESTDATABLD)\root.res" "$(TESTDATABLD)\te.res" "$(TESTDATABLD)\te_IN.res" "$(TESTDATABLD)\testtypes.res" "$(TESTDATABLD)\testempty.res" "$(TESTDATABLD)\ja_data.res" $(TESTDATAOUT)test.dat
 	@echo Building test data
-	copy "$(TESTDATAOUT)\te.res" "$(TESTDATAOUT)\testudata_nam.typ"
-	@"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -v -m common -c -p testdata -O "$(PKGOPT)" -d "$(TESTDATAOUT)" -T "$(TESTDATAOUT)" -s "$(TESTDATAOUT)" <<
+	copy "$(TESTDATABLD)\te.res" "$(TESTDATAOUT)\testudata_nam.typ"
+	@"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -v -m common -c -p testdata -O "$(PKGOPT)" -d "$(TESTDATAOUT)" -T "$(TESTDATABLD)" -s "$(TESTDATABLD)" <<
 root.res
 te.res
 te_IN.res
 testtypes.res
 testempty.res
+ja_data.res
 test.dat
 <<
 
@@ -29,13 +31,13 @@ test.dat
 # Inference rule for creating resource bundles
 # Some test data resource bundles are known to have warnings and bad data.
 # The -q option is there on purpose, so we don't see it normally.
-{$(TESTDATA)}.txt.res: 
+{$(TESTDATA)}.txt.res:: 
 	@echo Making Test Resource Bundle files
-	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -q -s"$(TESTDATA)" -d"$(TESTDATAOUT)" $(?F)
+	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -q -s"$(TESTDATA)" -d"$(TESTDATABLD)" $<
 
-TESTDATA_ENC:
+"$(TESTDATABLD)\ja_data.res":
 	@echo Making Test Resource Bundle file with encoding ISO-2022-JP
-	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -q -s"$(TESTDATA)" -eISO_2022_JP -d"$(TESTDATAOUT)" ja_data.bin >null
+	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -q -s"$(TESTDATA)" -eISO_2022_JP -d"$(TESTDATABLD)" ja_data.bin 
 
 $(TESTDATAOUT)test.dat : {"$(ICUTOOLS)\gentest\$(CFG)"}gentest.exe
-	"$(ICUTOOLS)\gentest\$(CFG)\gentest" -d"$(TESTDATAOUT)"
+	"$(ICUTOOLS)\gentest\$(CFG)\gentest" -d"$(TESTDATABLD)"
