@@ -99,7 +99,7 @@ void DateFormatRoundTripTest::TestDateFormatRoundTrip()
 
 static const char *styleName(DateFormat::EStyle s)
 {
-  switch(s)
+    switch(s)
     {
     case DateFormat::SHORT: return "SHORT";
     case DateFormat::MEDIUM: return "MEDIUM";
@@ -109,6 +109,7 @@ static const char *styleName(DateFormat::EStyle s)
     case DateFormat::DATE_OFFSET: return "DATE_OFFSET";
     case DateFormat::NONE: return "NONE";
     case DateFormat::DATE_TIME: return "DATE_TIME";
+    default: return "Unknown";
     }
 }
 
