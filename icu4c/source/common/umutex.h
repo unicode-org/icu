@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2004, International Business Machines
+*   Copyright (C) 1997-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -39,6 +39,14 @@
 #endif
 
 /**
+ * By default assume that we are on a machine with a weak memory model,
+ * and the double check lock won't work reliably.
+ */
+#if !defined(UMTX_STRONG_MEMORY_MODEL)
+#define UMTX_STRONG_MEMORY_MODEL 0
+#endif
+
+/**
  * \def UMTX_CHECK
  * Encapsulates a safe check for an expression (usually a condition)
  * for lazy variable inititialization.
@@ -46,7 +54,7 @@
  * or mutexes.
  * @internal
  */
-#if defined(UMTX_STRONG_MEMORY_MODEL) && UMTX_STRONG_MEMORY_MODEL
+#if UMTX_STRONG_MEMORY_MODEL
 
 #define UMTX_CHECK(pMutex, expression, result) \
     (result)=(expression);
