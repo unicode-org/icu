@@ -26,7 +26,12 @@
 
 # This is the list of locales that are built, but not considered installed in ICU.
 # These are usually aliased locales or the root locale.
-COLLATION_ALIAS_SOURCE = de__PHONEBOOK.txt  es__TRADITIONAL.txt zh_TW_STROKE.txt zh__PINYIN.txt hi__DIRECT.txt
+COLLATION_ALIAS_SOURCE = \
+de__PHONEBOOK.txt \
+es__TRADITIONAL.txt \
+hi__DIRECT.txt \
+zh_TW_STROKE.txt \
+zh__PINYIN.txt
 
 # Please try to keep this list in alphabetical order
 COLLATION_SOURCE = \
@@ -38,5 +43,5 @@ kk.txt kl.txt kn.txt ko.txt lt.txt lv.txt\
 mk.txt mr.txt mt.txt nb.txt nn.txt pa.txt pl.txt ps.txt\
 ro.txt ru.txt sh.txt sk.txt sl.txt sq.txt sr.txt sv.txt\
 ta.txt te.txt th.txt tr.txt uk.txt vi.txt\
-zh.txt zh_HK.txt zh_MO.txt zh_TW.txt
+zh.txt zh_Hant.txt zh_HK.txt zh_MO.txt zh_TW.txt
 
