@@ -4,12 +4,12 @@
 ## others. All Rights Reserved.
 
 ## Commands to generate dependency files
-GEN_DEPS.c=	$(CC) -Kthread -KPIC -c $(DEFS) $(CPPFLAGS)
-GEN_DEPS.cc=	$(CXX) -M $(DEFS) $(CPPFLAGS)
+GEN_DEPS.c=	$(CC) -Kthread -KPIC -DPTX -c $(DEFS) $(CPPFLAGS)
+GEN_DEPS.cc=	$(CXX) -M -DPTX $(DEFS) $(CPPFLAGS)
 
 ## Commands to compile
-COMPILE.c=	$(CC) -Kthread -KPIC $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
-COMPILE.cc=	$(CXX) -Kthread -KPIC $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c
+COMPILE.c=	$(CC) -Kthread -KPIC -DPTX $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
+COMPILE.cc=	$(CXX) -Kthread -KPIC -DPTX $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c
 
 ## Commands to link
 #LINK.c=		$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
