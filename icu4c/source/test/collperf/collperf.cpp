@@ -711,7 +711,127 @@ void doKeyHist() {
     }
 }
 
+//---------------------------------------------------------------------------------------
+//
+//    doForwardIterTest(UBool)       Forward iteration test
+//                                   argument null-terminated string used
+//
+//---------------------------------------------------------------------------------------
+void doForwardIterTest(UBool haslen) {
+    int count = 0;
+    UErrorCode error = U_ZERO_ERROR;
+    printf("\n\nPerforming forward iteration performance test with ");
+    
+    if (haslen) {
+        printf("non-null terminated data -----------\n");
+    }
+    else {
+        printf("null terminated data -----------\n");
+    }
+    
+    gCount = 0;
+    unsigned long startTime = timeGetTime();
+    while (count < opt_loopCount) {
+        int linecount = 0;
+        while (linecount < gNumFileLines) {
+            UChar *str = gFileLines[linecount].name;
+            int strlen = haslen?gFileLines[linecount].len:-1;
+            UCollationElements *iter = ucol_openElements(gCol, str, strlen,
+                                                          &error);
+            while (ucol_next(iter, &error) != UCOL_NULLORDER) {
+                gCount++;
+            }
 
+            linecount ++;
+            ucol_closeElements(iter);
+        }
+        count ++;
+    }
+    unsigned long elapsedTime = timeGetTime() - startTime;
+
+    // empty loop recalculation
+    count = 0;
+    startTime = timeGetTime();
+    while (count < opt_loopCount) {
+        int linecount = 0;
+        while (linecount < gNumFileLines) {
+            UChar *str = gFileLines[linecount].name;
+            int strlen = haslen?gFileLines[linecount].len:-1;
+            UCollationElements *iter = ucol_openElements(gCol, str, strlen,
+                                                          &error);
+            linecount ++;
+            ucol_closeElements(iter);
+        }
+        count ++;
+    }
+    elapsedTime -= (timeGetTime() - startTime);
+
+    int ns = (int)(float(1000000) * (float)elapsedTime / (float)gCount);
+    printf("Total number of strings compared %d in %d loops\n", gNumFileLines,
+                                                                opt_loopCount);
+    printf("Average time per ucol_next() nano seconds %d\n", ns);
+}
+
+//---------------------------------------------------------------------------------------
+//
+//    doBackwardIterTest(UBool)      Backwards iteration test
+//                                   argument null-terminated string used
+//
+//---------------------------------------------------------------------------------------
+void doBackwardIterTest(UBool haslen) {
+    int count = 0;
+    UErrorCode error = U_ZERO_ERROR;
+    printf("\n\nPerforming backward iteration performance test with ");
+    
+    if (haslen) {
+        printf("non-null terminated data -----------\n");
+    }
+    else {
+        printf("null terminated data -----------\n");
+    }
+    
+    gCount = 0;
+    unsigned long startTime = timeGetTime();
+    while (count < opt_loopCount) {
+        int linecount = 0;
+        while (linecount < gNumFileLines) {
+            UChar *str = gFileLines[linecount].name;
+            int strlen = haslen?gFileLines[linecount].len:-1;
+            UCollationElements *iter = ucol_openElements(gCol, str, strlen,
+                                                          &error);
+            while (ucol_previous(iter, &error) != UCOL_NULLORDER) {
+                gCount ++;
+            }
+
+            linecount ++;
+            ucol_closeElements(iter);
+        }
+        count ++;
+    }
+    unsigned long elapsedTime = timeGetTime() - startTime;
+
+    // empty loop recalculation
+    count = 0;
+    startTime = timeGetTime();
+    while (count < opt_loopCount) {
+        int linecount = 0;
+        while (linecount < gNumFileLines) {
+            UChar *str = gFileLines[linecount].name;
+            int strlen = haslen?gFileLines[linecount].len:-1;
+            UCollationElements *iter = ucol_openElements(gCol, str, strlen,
+                                                          &error);
+            linecount ++;
+            ucol_closeElements(iter);
+        }
+        count ++;
+    }
+    elapsedTime -= (timeGetTime() - startTime);
+
+    int ns = (int)(float(1000000) * (float)elapsedTime / (float)gCount);
+    printf("Total number of strings compared %d in %d loops\n", gNumFileLines,
+                                                                opt_loopCount);
+    printf("Average time per ucol_previous() nano seconds %d\n", ns);
+}
 
 //---------------------------------------------------------------------------------------
 //
@@ -719,7 +839,8 @@ void doKeyHist() {
 //
 //---------------------------------------------------------------------------------------
 void doIterTest() {
-    printf("Faster than you can possibly imagine.\n");
+    doForwardIterTest(opt_uselen);
+    doBackwardIterTest(opt_uselen);
 }
 
 
