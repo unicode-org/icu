@@ -233,7 +233,7 @@ foreach $setName (keys %charClasses) {
         $charClasses{$setName} = 252;}
     else {
         # Normal character class.  Fill in array with a ptr to the corresponding UnicodeSet in the state machine.
-       print "    const uint8_t kRuleSet_$setName = $i;\n";
+       print "    static const uint8_t kRuleSet_$setName = $i;\n";
         $charClasses{$setName} = $i;
         $i++;
     }
@@ -270,7 +270,7 @@ print "};\n\n";
 #
 # emit the state transition table
 #
-print "struct RBBIRuleTableEl gRuleParseStateTable[] = {\n";
+print "static const struct RBBIRuleTableEl gRuleParseStateTable[] = {\n";
 print "    {doNOP, 0, 0, 0, TRUE}\n";    # State 0 is a dummy.  Real states start with index = 1.
 for ($state=1; $state < $num_states; $state++) {
     print "    , {$state_func_name[$state],";
@@ -307,7 +307,7 @@ print " };\n";
 #
 #    This array is used for producing debugging output from the rule parser.
 #
-print "const char *RBBIRuleStateNames[] = {";
+print "static const char *RBBIRuleStateNames[] = {";
 for ($state=0; $state<$num_states; $state++) {
     if ($stateNames[$state] ne "") {
         print "     \"$stateNames[$state]\",\n";
