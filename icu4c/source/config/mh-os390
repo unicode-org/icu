@@ -21,9 +21,9 @@
 ###################################################################
 
 ifeq (${IEEE390}, 1)
-ICU_IEEE          = -Wc,"float(ieee)" -DIEEE_ON
+ICU_IEEE          = -Wc,"float(ieee)" -DIEEE_754=1
 else
-ICU_IEEE          = 
+ICU_IEEE          = -DIEEE_754=0
 endif
 
 CFLAGS390=      -Wc,"langlvl(extended),spill(2000)" $(ICU_BUILD_OPTIONS)  $(ICU_IEEE) -Wc,dll,expo
