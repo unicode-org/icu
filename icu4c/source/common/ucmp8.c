@@ -29,6 +29,22 @@ static int32_t findOverlappingPosition(CompactByteArray* this_obj,
 
 int32_t ucmp8_getkUnicodeCount() { return UCMP8_kUnicodeCount;}
 int32_t ucmp8_getkBlockCount() { return UCMP8_kBlockCount;}
+void  ucmp8_initBogus(CompactByteArray* array)
+{
+  CompactByteArray* this_obj = array;
+  
+  if (this_obj == NULL) return;
+
+  this_obj->fStructSize = sizeof(CompactByteArray);
+  this_obj->fArray = NULL; 
+  this_obj->fIndex = NULL;
+  this_obj->fCount = UCMP8_kUnicodeCount;
+  this_obj->fCompact = FALSE; 
+  this_obj->fBogus = TRUE;
+  this_obj->fAlias = FALSE;
+  this_obj->fIAmOwned = TRUE;
+}
+
 /* debug flags*/
 /*=======================================================*/
 void  ucmp8_init(CompactByteArray* array, int8_t defaultValue)

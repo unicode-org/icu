@@ -10,6 +10,10 @@
 *
 *   created on: 2000feb03
 *   created by: Markus W. Scherer
+*
+*   Change history:
+*
+*   05/09/00    helena      Added implementation to handle fallback mappings.
 */
 
 #include "unicode/utypes.h"
@@ -33,13 +37,33 @@ _MBCSLoad(UConverterSharedData *sharedData, const uint8_t *raw, UErrorCode *pErr
     if(((raw-oldraw)&3)!=0) {
         raw+=4-((raw-oldraw)&3);    /* pad to 4 */
     }
+    oldraw = raw;
     ucmp16_initFromData(&sharedData->table->mbcs.fromUnicode, &raw, pErrorCode);
+    if (sharedData->staticData->hasFromUnicodeFallback == TRUE)
+    {
+        if(((raw-oldraw)&3)!=0) {
+            raw+=4-((raw-oldraw)&3);    /* pad to 4 */
+        }
+        oldraw = raw;
+        ucmp16_initFromData(&sharedData->table->mbcs.fromUnicodeFallback, &raw, pErrorCode);
+    }
+    if (sharedData->staticData->hasToUnicodeFallback == TRUE)
+    {
+        if(((raw-oldraw)&3)!=0) {
+            raw+=4-((raw-oldraw)&3);    /* pad to 4 */
+        }
+        ucmp16_initFromData(&sharedData->table->mbcs.toUnicodeFallback, &raw, pErrorCode);
+    }
 }
 
 static void
 _MBCSUnload(UConverterSharedData *sharedData) {
     ucmp16_close (&sharedData->table->mbcs.fromUnicode);
     ucmp16_close (&sharedData->table->mbcs.toUnicode);
+    if (sharedData->staticData->hasFromUnicodeFallback == TRUE)
+        ucmp16_close (&sharedData->table->mbcs.fromUnicodeFallback);
+    if (sharedData->staticData->hasToUnicodeFallback == TRUE)
+        ucmp16_close (&sharedData->table->mbcs.toUnicodeFallback);
 	uprv_free (sharedData->table);
 }
 
@@ -58,7 +82,7 @@ static void T_UConverter_toUnicode_MBCS (UConverter * _this,
   int32_t myTargetIndex = 0;
   int32_t targetLength = targetLimit - myTarget;
   int32_t sourceLength = sourceLimit - mySource;
-  CompactShortArray *myToUnicode = NULL;
+  CompactShortArray *myToUnicode = NULL, *myToUnicodeFallback = NULL;
   UChar targetUniChar = 0x0000;
   UChar mySourceChar = 0x0000;
   bool_t *myStarters = NULL;
@@ -67,6 +91,7 @@ static void T_UConverter_toUnicode_MBCS (UConverter * _this,
 
 
   myToUnicode = &_this->sharedData->table->mbcs.toUnicode;
+  myToUnicodeFallback = &_this->sharedData->table->mbcs.toUnicodeFallback;
   myStarters = _this->sharedData->table->mbcs.starters;
 
   while (mySourceIndex < sourceLength)
@@ -102,11 +127,19 @@ static void T_UConverter_toUnicode_MBCS (UConverter * _this,
               /*writing the UniChar to the output stream */
               if (targetUniChar != missingUCharMarker)
                 {
-                myTarget[myTargetIndex++] = targetUniChar;
-                  
+                    myTarget[myTargetIndex++] = targetUniChar;                  
                 }
-              else
-                {
+              else if ((_this->useFallback == TRUE) && 
+                  (_this->sharedData->staticData->hasToUnicodeFallback == TRUE))
+              {
+                  targetUniChar = (UChar) ucmp16_getu(myToUnicodeFallback, mySourceChar);
+                  if (targetUniChar != missingUCharMarker)
+                  {
+                      myTarget[myTargetIndex++] = targetUniChar;                  
+                  }
+              }
+              if (targetUniChar == missingUCharMarker)  
+              {
                   *err = U_INVALID_CHAR_FOUND;
                   if (mySourceChar > 0xff)
                     {
@@ -178,13 +211,14 @@ static void T_UConverter_toUnicode_MBCS_OFFSETS_LOGIC (UConverter * _this,
   int32_t myTargetIndex = 0;
   int32_t targetLength = targetLimit - myTarget;
   int32_t sourceLength = sourceLimit - mySource;
-  CompactShortArray *myToUnicode = NULL;
+  CompactShortArray *myToUnicode = NULL, *myToUnicodeFallback = NULL;
   UChar targetUniChar = 0x0000;
   UChar mySourceChar = 0x0000;
   UChar oldMySourceChar = 0x0000;
   bool_t *myStarters = NULL;
 
   myToUnicode = &_this->sharedData->table->mbcs.toUnicode;
+  myToUnicodeFallback = &_this->sharedData->table->mbcs.toUnicodeFallback;
   myStarters = _this->sharedData->table->mbcs.starters;
 
   while (mySourceIndex < sourceLength)
@@ -236,9 +270,25 @@ static void T_UConverter_toUnicode_MBCS_OFFSETS_LOGIC (UConverter * _this,
                 oldMySourceChar  = mySourceChar;
 
                 }
-              else
-                {
-                          int32_t currentOffset = offsets[myTargetIndex-1] + ((oldMySourceChar>0x00FF)?2:1);
+              else if ((_this->useFallback == TRUE) &&
+                  (_this->sharedData->staticData->hasToUnicodeFallback == TRUE))
+              {
+
+                  targetUniChar = (UChar) ucmp16_getu (myToUnicodeFallback, mySourceChar);
+                  /*writes the UniChar to the output stream */
+                  {                          
+                         if (targetUniChar > 0x00FF)
+                         offsets[myTargetIndex] = mySourceIndex -2; /* double byte character - make the offset point to the first char */
+                        else
+                         offsets[myTargetIndex] = mySourceIndex -1 ;  /* single byte char. Offset is OK */                        
+
+                  }
+                myTarget[myTargetIndex++] = targetUniChar;
+                oldMySourceChar  = mySourceChar;
+              }
+              if (targetUniChar == missingUCharMarker)  
+              {
+                  int32_t currentOffset = offsets[myTargetIndex-1] + ((oldMySourceChar>0x00FF)?2:1);
                           
                   *err = U_INVALID_CHAR_FOUND;
                   if (mySourceChar > 0xff)
@@ -312,11 +362,12 @@ static void   T_UConverter_fromUnicode_MBCS (UConverter * _this,
   int32_t myTargetIndex = 0;
   int32_t targetLength = targetLimit - myTarget;
   int32_t sourceLength = sourceLimit - mySource;
-  CompactShortArray *myFromUnicode = NULL;
+  CompactShortArray *myFromUnicode = NULL, *myFromUnicodeFallback = NULL;
   UChar targetUniChar = 0x0000;
   UChar mySourceChar = 0x0000;
 
   myFromUnicode = &_this->sharedData->table->mbcs.fromUnicode;
+  myFromUnicodeFallback = &_this->sharedData->table->mbcs.fromUnicodeFallback;
 
   /*writing the char to the output stream */
   while (mySourceIndex < sourceLength)
@@ -325,7 +376,6 @@ static void   T_UConverter_fromUnicode_MBCS (UConverter * _this,
         {
           mySourceChar = (UChar) mySource[mySourceIndex++];
           targetUniChar = (UChar) ucmp16_getu (myFromUnicode, mySourceChar);
-
 
           if (targetUniChar != missingCharMarker)
             {
@@ -347,8 +397,35 @@ static void   T_UConverter_fromUnicode_MBCS (UConverter * _this,
                       *err = U_INDEX_OUTOFBOUNDS_ERROR;
                     }
                 }
-            }
-          else
+          } 
+          else if ((_this->useFallback == TRUE) &&
+              (_this->sharedData->staticData->hasFromUnicodeFallback == TRUE))
+          {
+              targetUniChar = (UChar) ucmp16_getu (myFromUnicodeFallback, mySourceChar);
+
+              if (targetUniChar != missingCharMarker)
+                {
+                  if (targetUniChar <= 0x00FF)
+                    {
+                      myTarget[myTargetIndex++] = (char) targetUniChar;
+                    }
+                  else
+                    {
+                      myTarget[myTargetIndex++] = (char) (targetUniChar >> 8);
+                      if (myTargetIndex < targetLength)
+                        {
+                          myTarget[myTargetIndex++] = (char) targetUniChar;
+                        }
+                      else
+                        {
+                          _this->charErrorBuffer[0] = (char) targetUniChar;
+                          _this->charErrorBufferLength = 1;
+                          *err = U_INDEX_OUTOFBOUNDS_ERROR;
+                        }
+                    }
+              } 
+          }
+          if (targetUniChar == missingCharMarker)
             {
               *err = U_INVALID_CHAR_FOUND;
               _this->invalidUCharBuffer[0] = (UChar) mySourceChar;
@@ -401,11 +478,12 @@ static void   T_UConverter_fromUnicode_MBCS_OFFSETS_LOGIC (UConverter * _this,
   int32_t myTargetIndex = 0;
   int32_t targetLength = targetLimit - myTarget;
   int32_t sourceLength = sourceLimit - mySource;
-  CompactShortArray *myFromUnicode = NULL;
+  CompactShortArray *myFromUnicode = NULL, *myFromUnicodeFallback = NULL;
   UChar targetUniChar = 0x0000;
   UChar mySourceChar = 0x0000;
 
   myFromUnicode = &_this->sharedData->table->mbcs.fromUnicode;
+  myFromUnicodeFallback = &_this->sharedData->table->mbcs.fromUnicodeFallback;
 
   /*writing the char to the output stream */
   while (mySourceIndex < sourceLength)
@@ -440,7 +518,38 @@ static void   T_UConverter_fromUnicode_MBCS_OFFSETS_LOGIC (UConverter * _this,
                     }
                 }
             }
-          else
+          else if ((_this->useFallback == TRUE) &&
+              (_this->sharedData->staticData->hasFromUnicodeFallback == TRUE))
+          {
+              targetUniChar = (UChar) ucmp16_getu (myFromUnicodeFallback, mySourceChar);
+              if (targetUniChar != missingCharMarker)
+                {
+                  if (targetUniChar <= 0x00FF)
+                    {
+                       offsets[myTargetIndex] = mySourceIndex-1;
+                      myTarget[myTargetIndex++] = (char) targetUniChar;
+
+                    }
+                  else
+                    {
+                       offsets[myTargetIndex] = mySourceIndex-1;
+                      myTarget[myTargetIndex++] = (char) (targetUniChar >> 8);
+                      if (myTargetIndex < targetLength)
+                        {
+                           offsets[myTargetIndex] = mySourceIndex-1;
+                          myTarget[myTargetIndex++] = (char) targetUniChar;
+                        }
+                      else
+                        {
+                          _this->charErrorBuffer[0] = (char) targetUniChar;
+                          _this->charErrorBufferLength = 1;
+                          *err = U_INDEX_OUTOFBOUNDS_ERROR;
+                        }
+                    }
+                }
+          }
+
+          if (targetUniChar == missingCharMarker)
             {
               int32_t currentOffset = mySourceIndex -1;
               
@@ -501,6 +610,13 @@ static UChar32 T_UConverter_getNextUChar_MBCS(UConverter* converter,
       /*Not lead byte: we update the source ptr and get the codepoint*/
       myUChar = ucmp16_getu((&converter->sharedData->table->mbcs.toUnicode),
                             (UChar)(**source));
+      if ((converter->useFallback == TRUE) &&
+          (converter->sharedData->staticData->hasToUnicodeFallback == TRUE) && 
+          (myUChar == 0xFFFD))
+      {
+          myUChar = ucmp16_getu((&converter->sharedData->table->mbcs.toUnicodeFallback),
+                            (UChar)(**source));
+      }
       (*source)++;
     }
   else
@@ -516,6 +632,13 @@ static UChar32 T_UConverter_getNextUChar_MBCS(UConverter* converter,
       myUChar = ucmp16_getu((&converter->sharedData->table->mbcs.toUnicode),
                             (uint16_t)(((UChar)((**source)) << 8) |((uint8_t)*((*source)+1))));
 
+      if ((converter->useFallback == TRUE) && 
+          (converter->sharedData->staticData->hasToUnicodeFallback == TRUE) &&
+          (myUChar == 0xFFFD))
+      {
+      myUChar = ucmp16_getu((&converter->sharedData->table->mbcs.toUnicodeFallback),
+                            (uint16_t)(((UChar)((**source)) << 8) |((uint8_t)*((*source)+1))));
+      }
       (*source) += 2;
     }
   
