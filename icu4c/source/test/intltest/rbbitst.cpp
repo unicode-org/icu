@@ -11,11 +11,13 @@
 
 
 #include "intltest.h"
+#include "unicode/utypes.h"
 #include "unicode/brkiter.h"
 #include "unicode/rbbi.h"
 #include "unicode/unicode.h"
+#include "unicode/uchar.h"
+#include "unicode/utf16.h"
 #include <stdio.h>
-#include "unicode/utypes.h"
 #include "rbbitst.h"
 #include <string.h>
 #include "unicode/schriter.h"
@@ -270,6 +272,11 @@ void RBBITest::TestDefaultRuleBasedCharacterIteration()
     ADD_DATACHUNK(chardata, "\\ud800\\udc00", 0, status);
     ADD_DATACHUNK(chardata, "\\udbff\\udfff", 0, status);
     ADD_DATACHUNK(chardata, "x", 0, status);
+
+    // 0xffff is a legal character, and should not stop the break iterator early.
+    //    (Requires special casing in implementation, which is why it gets a test.)
+    ADD_DATACHUNK(chardata, "\\uffff", 0, status);
+    ADD_DATACHUNK(chardata, "\\uffff", 0, status);
 
 
     if(U_FAILURE(status)){
@@ -1153,6 +1160,8 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
             if(exec) TestTitleBreak();                         break;
         case 7: name = "TestStatusReturn";
             if(exec) TestStatusReturn();                       break;
+        case 8: name = "TestLineBreakData";
+            if(exec) TestLineBreakData();                       break;
 
 //      case 6: name = "TestDanda()";
 //           if(exec) TestDanda();                             break;
@@ -1414,4 +1423,208 @@ void RBBITest::doMultipleSelectionTest(RuleBasedBreakIterator& iterator, BITestD
 }
 
 
+//
+//  Token level scanner for the Unicode Line Break Test Data file.
+//      Return the next token, as follows:
+//          >= 0:       a UChar32 character, scanned from hex in the file.
+//          -1:         a break position, a division sign in the file.
+//          -2:         end of rule.  A new line in the file.
+//          -3:         end of file.  No more rules.
+//          -4:         Error
+//
+//   The scanner
+//       strips comments, ('#' to end of line)
+//       Recognizes CR, CR/LF and LF as new lines.
+//       Skips over spaces and  Xs (don't break here) in the data.
+//
+struct ScanState {
+    int32_t     fPeekChar;
+    UBool       fPeeked;
+    int32_t     fLineNum;
+    FILE        *fFile;
+    ScanState() :fPeeked(FALSE), fLineNum(0), fFile(NULL) {};
+};
+
+//  Literal characters that are of interest.  In hex to keep EBCDIC based machines happy.
+//  The data itself is latin-1 on all platforms.
+static const chSpace  = 0x20;
+static const chTab    = 0x09;
+static const chCR     = 0x0D;
+static const chLF     = 0x0A;
+static const chHash   = 0x23;
+static const chMult   = 0xD7;
+static const chDivide = 0xF7;
+
+static int32_t   nextLBDToken(ScanState *s) {
+    int32_t     c;
+
+    // Read  characters from the input file until we get something interesting
+    //   to return.  The file is in latin-1 encoding.
+    for (;;) {
+        // Get the next character to look at, 
+        if (s->fPeeked) {
+            c = s->fPeekChar;
+            s->fPeeked = FALSE;
+        } else {
+            c = getc(s->fFile);
+        }
+
+        // EOF.  Return immediately.
+        if (c == EOF) {
+            return -3;
+        }
+
+        // Spaces.  Treat the multiply sign as a space - it indicates a no-break position 
+        //          in the data, and the test program doesn't want to see them.
+        //          Continue the next char loop, looking for something significant.
+        if (c == chSpace || c == chTab || c == chMult) {
+            continue;
+        }
+
+        //  Divide sign.  Indicates an expected break position.
+        if (c == chDivide) {
+            return -1;
+        }
+
+        // New Line Handling.  Keep track of line number in the file, which in turn
+        //   requires keeping track of CR/LF as a single new line.
+        if (c == chCR) {
+            s->fLineNum++;
+            s->fPeekChar = getc(s->fFile);
+            if (s->fPeekChar != chLF) {s->fPeeked = TRUE;};
+            return -2;
+        }
+        if (c == chLF) {
+            s->fLineNum++;
+            return -2;
+        }
+
+        // Comments.  Consume everything up to the next new line.
+        if (c == chHash) {
+            do {
+                c = getc(s->fFile);
+            } while (!(c == EOF || c == chCR || c == chLF));
+            s->fPeekChar = c;
+            s->fPeeked = TRUE;
+            return nextLBDToken(s);
+        }
+
+        // Scan a hex character (UChar32) value.  
+        if (u_digit(c, 16) >= 0) { 
+            int32_t   v = u_digit(c, 16);
+            for (;;) {
+                c = getc(s->fFile);
+                if (u_digit(c, 16) < 0) {break;};
+                v <<= 4;
+                v += u_digit(c, 16);
+            }
+            s->fPeekChar = c;
+            s->fPeeked   = TRUE;
+            return v;
+        }
+
+        // Error.  Character was something unexpected.
+        return -4;
+    }
+}
+
+
+
+void RBBITest::TestLineBreakData() {
+
+    UErrorCode      status = U_ZERO_ERROR;
+    UnicodeString   testString;
+    UVector         expectedBreaks(status);
+    ScanState       ss;
+    int32_t         tok;
+
+    BreakIterator *bi = BreakIterator::createLineInstance(Locale::getDefault(), status);
+    if (U_FAILURE(status)) {
+        errln("Failure creating break iterator");
+        return;
+    }
+
+    char *       lbdfName = "LBTest.txt";
+
+    // Open the test data file.
+    //   TODO:  a proper way to handle this data.
+    ss.fFile = fopen(lbdfName, "rb");
+    if (ss.fFile == NULL) {
+        infoln("Unable to open Line Break Test Data file.  Skipping test.");
+        return;
+    }
+
+    // Loop once per line from the test data file.
+    for (;;) {
+        // Zero out test data from previous line.
+        testString.truncate(0);
+        expectedBreaks.removeAllElements();
+        
+        // Read one test's (line's) worth of data from the file.
+        //   Loop once per token on the input file line.
+        for(;;)  {
+            tok = nextLBDToken(&ss);
+            
+            // If we scanned a character number in the file.
+            //   save it in the test data array.
+            if (tok >= 0) {
+                testString.append((UChar32)tok);
+                continue;
+            }
+            
+            // If we scanned a break position in the data, record it.
+            if (tok == -1) {
+                expectedBreaks.addElement(testString.length(), status);
+                continue;
+            }
+            
+            // If we scanned a new line, or EOF
+            //    drop out of scan loop and run the test case.
+            if (tok == -2 || tok == -3) {break;};
+
+            // None of above.  Error.
+            errln("Failure:  Unrecognized data format,  test file line %d", ss.fLineNum);
+            break;
+        }
+        
+        // If this line from the test data file actually contained test data,
+        //   run the test.
+        if (testString.length() > 0) {
+            int32_t pos;                 // Break Position in the test string
+            int32_t expectedI = 0;       // Index of expected break position in vector of same.
+            int32_t expectedPos;         // Expected break position (index into test string)
+
+            bi->setText(testString);
+            pos = bi->first();       // TODO:  break iterators always return a match at pos 0.
+            pos = bi->next();        //        Line Break TR says no match at position 0.
+                                     //        Resolve.
+ 
+            for (; pos != BreakIterator::DONE; ) {
+                expectedPos = expectedBreaks.elementAti(expectedI);
+                if (pos < expectedPos) {
+                    errln("Failure: Test file line %d, unexpected break found at position %d",
+                        ss.fLineNum, pos);
+                    break;
+                }
+                if (pos > expectedPos) {
+                    errln("Failure: Test file line %d, failed to find break at position %d",
+                        ss.fLineNum, expectedPos);
+                    break;
+                }
+                pos = bi->next();
+                expectedI++;
+            }
+        }
+
+        // If we've hit EOF on the input file, we're done.
+        if (tok == -3) {
+            break;
+        }
+
+    }
+
+    fclose(ss.fFile);
+    delete bi;
+            
+}
 

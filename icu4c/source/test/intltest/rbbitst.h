@@ -63,6 +63,11 @@ public:
     void TestStatusReturn();
 
     /**
+     * Run the Unicode Line Break test data.
+     **/  
+    void TestLineBreakData();
+
+    /**
     * Test Hindi Danda i.e make sure we have a break point before and after danda 
     **/ 
 //    void TestDanda(void); 
