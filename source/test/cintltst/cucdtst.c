@@ -43,6 +43,7 @@ static void TestCharNames(void);
 static void TestMirroring(void);
 static void TestUnescape(void);
 static void TestUScriptCodeAPI(void);
+static void TestAdditionalProperties(void);
 
 /* internal methods used */
 static int32_t MakeProp(char* str);
@@ -113,12 +114,13 @@ void addUnicodeTest(TestNode** root);
 
 void addUnicodeTest(TestNode** root)
 {
+    addTest(root, &TestUnicodeData, "tsutil/cucdtst/TestUnicodeData");
+    addTest(root, &TestAdditionalProperties, "tsutil/cucdtst/TestAdditionalProperties");
     addTest(root, &TestUpperLower, "tsutil/cucdtst/TestUpperLower");
     addTest(root, &TestLetterNumber, "tsutil/cucdtst/TestLetterNumber");
     addTest(root, &TestMisc, "tsutil/cucdtst/TestMisc");
     addTest(root, &TestControlPrint, "tsutil/cucdtst/TestControlPrint");
     addTest(root, &TestIdentifier, "tsutil/cucdtst/TestIdentifier");
-    addTest(root, &TestUnicodeData, "tsutil/cucdtst/TestUnicodeData");
     addTest(root, &TestStringCopy, "tsutil/cucdtst/TestStringCopy");
     addTest(root, &TestStringFunctions, "tsutil/cucdtst/TestStringFunctions");
     addTest(root, &TestStringSearching, "tsutil/cucdtst/TestStringSearching");
@@ -1821,3 +1823,45 @@ static void TestUScriptCodeAPI(){
 	    }
     }
  }
+
+/* ### TODO: move this into uchar.h */
+U_CAPI void U_EXPORT2
+u_charAge(UChar32 c, UVersionInfo versionArray);
+
+/* test additional, non-core properties */
+static void
+TestAdditionalProperties() {
+    static struct {
+        UChar32 c;
+        UVersionInfo version;
+    } charAges[]={
+        0x41,    { 1, 1, 0, 0 },
+        0xffff,  { 1, 1, 0, 0 },
+        0x20ab,  { 2, 0, 0, 0 },
+        0x2fffe, { 2, 0, 0, 0 },
+        0x20ac,  { 2, 1, 0, 0 },
+        0xfb1d,  { 3, 0, 0, 0 },
+        0x3f4,   { 3, 1, 0, 0 },
+        0x10300, { 3, 1, 0, 0 },
+        0x220,   { 3, 2, 0, 0 },
+        0xff60,  { 3, 2, 0, 0 }
+    };
+
+    UVersionInfo version;
+    int32_t i;
+
+    u_charAge(0x20, version);
+    if(version[0]==0) {
+        /* no additional properties available */
+    }
+
+    for(i=0; i<sizeof(charAges)/sizeof(charAges[0]); ++i) {
+        u_charAge(charAges[i].c, version);
+        if(0!=uprv_memcmp(version, charAges[i].version, sizeof(UVersionInfo))) {
+            log_err("error: u_charAge(U+%04lx)={ %u, %u, %u, %u } instead of { %u, %u, %u, %u }\n",
+                charAges[i].c,
+                version[0], version[1], version[2], version[3],
+                charAges[i].version[0], charAges[i].version[1], charAges[i].version[2], charAges[i].version[3]);
+        }
+    }
+}
