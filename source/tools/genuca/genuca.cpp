@@ -677,6 +677,9 @@ void writeOutData(UCATableHeader *data,
 
     uint32_t size = data->size;
 
+    data->UCAConsts = data->size;
+    data->size += paddedsize(sizeof(UCAConstants));
+
     if(noOfcontractions != 0) {
       contractions[noOfcontractions][0] = 0;
       contractions[noOfcontractions][1] = 0;
@@ -684,9 +687,9 @@ void writeOutData(UCATableHeader *data,
       noOfcontractions++;
 
 
-      data->UCAConsts = data->size;
-      data->size += paddedsize(sizeof(UCAConstants));
       data->contractionUCACombos = data->size;
+      data->contractionUCACombosWidth = 3;
+      data->contractionUCACombosSize = noOfcontractions;
       data->size += paddedsize((noOfcontractions*3*sizeof(UChar)));
     }
 
