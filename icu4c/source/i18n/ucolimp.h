@@ -288,12 +288,14 @@ struct incrementalContext {
 /* 
 * Macro to get the maximum size of an expansion ending with the argument ce.
 * Used in the Boyer Moore algorithm.
+* Note for tailoring, the UCA maxexpansion table has been merged.
+* Hence we only have to search the tailored collator only.
 * @param coll const UCollator pointer
 * @param order last collation element of the expansion sequence
 * @param result size of the longest expansion with argument collation element
 *        as the last element
 */
-#define UCOL_GETCOLLATORMAXEXPANSION(coll, order, result) {                  \
+#define UCOL_GETMAXEXPANSION(coll, order, result) {                  \
   const uint32_t *start;                                                     \
   const uint32_t *limit;                                                     \
   const uint32_t *mid;                                                       \
@@ -323,22 +325,6 @@ struct incrementalContext {
             }                                                                \
 }
 
-/* 
-* Macro to get the maximum size of an expansion ending with the argument ce.
-* Used in the Boyer Moore algorithm.
-* @param coll const UCollator pointer
-* @param order last collation element of the expansion sequence
-* @return maximum size of the expansion sequences ending with the collation 
-*         element or 1 if collation element does not occur at the end of any 
-*         expansion sequence
-*/
-#define UCOL_GETMAXEXPANSION(coll, order, result) {                          \
-  UCOL_GETCOLLATORMAXEXPANSION((coll), (order), (result));                   \
-  if ((result) == 1) {                                                       \
-    result = ucol_getMaxExpansionUCA((order));                               \
-  }                                                                          \
-}
-
 uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, UErrorCode *status);
 uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE, 
                           collIterate *source, uint32_t length, 
@@ -347,7 +333,6 @@ U_CFUNC uint32_t ucol_getNextCE(const UCollator *coll, collIterate *collationSou
 uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *status);
 uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource, 
                          uint32_t length, UErrorCode *status);
-uint8_t ucol_getMaxExpansionUCA(uint32_t order);
 
 void incctx_cleanUpContext(incrementalContext *ctx);
 UChar incctx_appendChar(incrementalContext *ctx, UChar c);
