@@ -470,8 +470,8 @@ void TestErrorConditions(){
     }
     /*Test ures_getType() with UResourceBundle = NULL should return RES_BOGUS or -1*/
     status=U_ZERO_ERROR;
-    if(ures_getType(NULL) != -1){  
-        log_err("ERROR: ures_getType() should return RES_BOGUS when UResourceBundle=NULL.  Got =%d\n", ures_getType(NULL));
+    if(ures_getType(NULL) != RES_NONE){  
+        log_err("ERROR: ures_getType() should return RES_NONE when UResourceBundle=NULL.  Got =%d\n", ures_getType(NULL));
     }
     /*Test ures_getKey() with UResourceBundle = NULL*/
     status=U_ZERO_ERROR;

@@ -150,6 +150,7 @@ struct UResourceBundle;
 typedef struct UResourceBundle UResourceBundle;
 
 typedef enum {
+    RES_NONE=-1,
     RES_STRING=0,
     RES_BINARY=1,
     RES_TABLE=2,
