@@ -141,7 +141,12 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
   if (U_SUCCESS(status))
   {
     const UChar *r = ucol_getRules(ucollator, &length);
-    urulestring = new UnicodeString(r, length);
+    if (length > 0) {
+        urulestring = new UnicodeString(r, length);
+    }
+    else {
+        urulestring = new UnicodeString();
+    }
 
     dataIsOwned = TRUE;
   }
@@ -175,7 +180,12 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
   if (U_SUCCESS(status))
   {
     const UChar *r = ucol_getRules(ucollator, &length);
-    urulestring = new UnicodeString(r, length);
+    if (length > 0) {
+        urulestring = new UnicodeString(r, length);
+    }
+    else {
+        urulestring = new UnicodeString();
+    }
     dataIsOwned = TRUE;
   }
 
@@ -210,7 +220,12 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
   if (U_SUCCESS(status))
   {
     const UChar *r = ucol_getRules(ucollator, &length);
-    urulestring = new UnicodeString(r, length);
+    if (length > 0) {
+        urulestring = new UnicodeString(r, length);    
+    }
+    else {
+        urulestring = new UnicodeString();
+    }
     dataIsOwned = TRUE;
   }
 
@@ -244,7 +259,12 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
   if (U_SUCCESS(status))
   {
     const UChar *r = ucol_getRules(ucollator, &length);
-    urulestring = new UnicodeString(r, length);
+    if (length > 0) {
+        urulestring = new UnicodeString(r, length);
+    }
+    else {
+        urulestring = new UnicodeString();
+    }
     dataIsOwned = TRUE;
   }
 
@@ -707,7 +727,12 @@ RuleBasedCollator::RuleBasedCollator(const Locale& desiredLocale,
   {
     int32_t length;
     const UChar *r = ucol_getRules(ucollator, &length);
-    urulestring = new UnicodeString(r, length);
+    if (length > 0) {
+        urulestring = new UnicodeString(r, length);
+    }
+    else {
+        urulestring = new UnicodeString();
+    }
     dataIsOwned = TRUE;
   }
 
