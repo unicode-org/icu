@@ -470,7 +470,9 @@ UnicodeString::doCompare( UTextOffset start,
   const UChar *chars = getArrayStart();
 
   // are we comparing the same buffer contents?
-  if(chars + start == srcChars + srcStart) {
+  chars += start;
+  srcChars += srcStart;
+  if(chars == srcChars) {
     return 0;
   }
 
@@ -504,21 +506,17 @@ UnicodeString::doCompare( UTextOffset start,
 
 #   if U_IS_BIG_ENDIAN 
       // big-endian: byte comparison works
-      result = uprv_memcmp(chars + start, srcChars + srcStart, minLength * sizeof(UChar));
+      result = uprv_memcmp(chars, srcChars, minLength * sizeof(UChar));
       if(result != 0) {
         return (int8_t)(result >> 15 | 1);
       }
 #   else
       // little-endian: compare UChar units
-      chars += start;
-      srcChars += srcStart;
       do {
-        result = ((int32_t)*chars - (int32_t)*srcChars);
+        result = ((int32_t)*(chars++) - (int32_t)*(srcChars++));
         if(result != 0) {
           return (int8_t)(result >> 15 | 1);
         }
-        ++chars;
-        ++srcChars;
       } while(--minLength > 0);
 #   endif
   }
