@@ -733,11 +733,11 @@ static void TestStringFunctions()
 
     for(i=2,j=0;j<4;j++)
     {
-        UChar *findPtr = u_strchr(dataTable[i][j],'_');
+        UChar *findPtr = u_strchr(dataTable[i][j], 0x005F);
 
         log_verbose("%s ", u_austrcpy(tempOut, findPtr));
 
-        if (findPtr == NULL || *findPtr != '_') {
+        if (findPtr == NULL || *findPtr != 0x005F) {
             log_err("strchr can't find '_' in the string\n");
         }
 
