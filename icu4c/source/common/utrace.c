@@ -303,7 +303,6 @@ utrace_format(char *outBuf, int32_t capacity, int32_t indent, const char *fmt, v
 
                         case 'S':
                             charsToOutput = 0;
-                            //outputString(*ptrPtr, outBuf, &outIx, capacity, indent);
                             outputUString((const unsigned short *)*ptrPtr, -1, outBuf, &outIx, capacity, indent);
                             outputChar('\n', outBuf, &outIx, capacity, indent);
                             longArg = *ptrPtr==NULL? 0: 1;   /* for test for null term. array. */
