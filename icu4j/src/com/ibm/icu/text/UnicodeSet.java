@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2002/02/25 22:43:58 $
- * $Revision: 1.56 $
+ * $Date: 2002/03/06 19:28:32 $
+ * $Revision: 1.57 $
  *
  *****************************************************************************************
  */
@@ -15,9 +15,12 @@ package com.ibm.icu.text;
 import java.text.*;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.*;
+import java.util.TreeSet;
+import java.util.SortedSet;
+import java.util.Iterator;
 
 /**
- * A mutable set of Unicode characters.  Objects of this class
+ * A mutable set of Unicode characters and multicharacter strings.  Objects of this class
  * represent <em>character classes</em> used in regular expressions.
  * A character specifies a subset of Unicode code points.  Legal
  * code points are U+0000 to U+10FFFF, inclusive.
@@ -205,7 +208,7 @@ import com.ibm.icu.lang.*;
  * Unicode property
  * </table>
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.56 $ $Date: 2002/02/25 22:43:58 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.57 $ $Date: 2002/03/06 19:28:32 $
  */
 public class UnicodeSet extends UnicodeFilter {
 
@@ -227,6 +230,9 @@ public class UnicodeSet extends UnicodeFilter {
     private int[] list;   // MUST be terminated with HIGH
     private int[] rangeList; // internal buffer
     private int[] buffer; // internal buffer
+    
+    // NOTE: normally the field should be of type SortedSet; but that is missing a public clone!!
+    private TreeSet strings = new TreeSet();
 
     /**
      * The pattern representation of this set.  This may not be the
@@ -354,9 +360,10 @@ public class UnicodeSet extends UnicodeFilter {
      * @param start first character in the set, inclusive
      * @rparam end last character in the set, inclusive
      */
-    public void set(int start, int end) {
+    public UnicodeSet set(int start, int end) {
         clear();
         complement(start, end);
+        return this;
     }
 
     /**
@@ -364,10 +371,12 @@ public class UnicodeSet extends UnicodeFilter {
      * @param other a <code>UnicodeSet</code> whose value will be
      * copied to this object
      */
-    public void set(UnicodeSet other) {
+    public UnicodeSet set(UnicodeSet other) {
         list = (int[]) other.list.clone();
         len = other.len;
         pat = other.pat;
+        strings = (TreeSet)other.strings.clone();
+        return this;
     }
 
     /**
@@ -378,8 +387,8 @@ public class UnicodeSet extends UnicodeFilter {
      * @exception java.lang.IllegalArgumentException if the pattern
      * contains a syntax error.
      */
-    public final void applyPattern(String pattern) {
-        applyPattern(pattern, true);
+    public final UnicodeSet applyPattern(String pattern) {
+        return applyPattern(pattern, true);
     }
 
     /**
@@ -392,7 +401,7 @@ public class UnicodeSet extends UnicodeFilter {
      * @exception java.lang.IllegalArgumentException if the pattern
      * contains a syntax error.
      */
-    public void applyPattern(String pattern, boolean ignoreWhitespace) {
+    public UnicodeSet applyPattern(String pattern, boolean ignoreWhitespace) {
         ParsePosition pos = new ParsePosition(0);
         applyPattern(pattern, pos, null, ignoreWhitespace);
 
@@ -407,6 +416,7 @@ public class UnicodeSet extends UnicodeFilter {
             throw new IllegalArgumentException("Parse of \"" + pattern +
                                                "\" failed at " + i);
         }
+        return this;
     }
 
     /**
@@ -573,7 +583,7 @@ public class UnicodeSet extends UnicodeFilter {
         for (int i = 0; i < count; ++i) {
             n += getRangeEnd(i) - getRangeStart(i) + 1;
         }
-        return n;
+        return n + strings.size();
     }
 
     /**
@@ -582,7 +592,7 @@ public class UnicodeSet extends UnicodeFilter {
      * @return <tt>true</tt> if this set contains no elements.
      */
     public boolean isEmpty() {
-        return len == 1;
+        return len == 1; // TODO: optimize this
     }
 
     /**
@@ -653,6 +663,7 @@ public class UnicodeSet extends UnicodeFilter {
         } else {
             return super.matches(text, offset, limit, incremental);
         }
+        // TODO: fix this for strings!
     }
 
     /**
@@ -753,7 +764,7 @@ public class UnicodeSet extends UnicodeFilter {
      * @param end last character, inclusive, of range to be added
      * to this set.
      */
-    public void add(int start, int end) {
+    public UnicodeSet add(int start, int end) {
         if (start < MIN_VALUE || start > MAX_VALUE) {
             throw new IllegalArgumentException("Invalid code point U+" + Utility.hex(start, 6));
         }
@@ -763,6 +774,7 @@ public class UnicodeSet extends UnicodeFilter {
         if (start <= end) {
             add(range(start, end), 2, 0);
         }
+        return this;
     }
 
     /**
@@ -770,9 +782,62 @@ public class UnicodeSet extends UnicodeFilter {
      * present.  If this set already contains the specified character,
      * the call leaves this set unchanged.
      */
-    public final void add(int c) {
+    public final UnicodeSet add(int c) {
         add(c, c);
+        return this;
     }
+
+    /**
+     * Adds each of the characters in this string to the set. Thus "ch" => {"c", "h"}
+     * If this set already any particular character, it has no effect on that character.
+     * @param string to add
+     */
+    public final UnicodeSet addEach(String s) {
+        int cp;
+        for (int i = 0; i < s.length(); i += UTF16.getCharCount(cp)) {
+            cp = UTF16.charAt(s, i);
+            add(cp, cp);
+        }
+        return this;
+    }
+
+    /**
+     * Makes a set from each of the characters in the string. Thus "ch" => {"c", "h"}
+     * @param string to add
+     */
+    public static UnicodeSet fromEach(String s) {
+        return new UnicodeSet().addEach(s);
+    }
+
+    /**
+     * Adds the specified multicharacter to this set if it is not already
+     * present.  If this set already contains the multicharacter,
+     * the call leaves this set unchanged.
+     * Thus "ch" => {"ch"}
+     * @param string to add
+     */
+    public final UnicodeSet add(String s) {
+        if (s.length() < 0) return this;
+        // this is slightly odd; the reason is to avoid UTF16.countCodePoint(s)
+        // when we don't really need to iterate through the whole string
+        int cp = UTF16.charAt(s, 0);
+        if (UTF16.getCharCount(cp) == 1) {
+            add(cp, cp);
+        } else {
+           strings.add(s);
+        }
+        return this;
+    }
+    
+    /**
+     * Makes a set from a multicharacter string. Thus "ch" => {"ch"}
+     * @param string to add
+     */
+    public static UnicodeSet fromMultiple(String s) {
+        return new UnicodeSet().add(s);
+    }
+
+    
 
     /**
      * Retain only the elements in this set that are contained in the
@@ -784,7 +849,7 @@ public class UnicodeSet extends UnicodeFilter {
      * @param end last character, inclusive, of range to be retained
      * to this set.
      */
-    public void retain(int start, int end) {
+    public UnicodeSet retain(int start, int end) {
         if (start < MIN_VALUE || start > MAX_VALUE) {
             throw new IllegalArgumentException("Invalid code point U+" + Utility.hex(start, 6));
         }
@@ -796,13 +861,14 @@ public class UnicodeSet extends UnicodeFilter {
         } else {
             clear();
         }
+        return this;
     }
 
     /**
      * Retain the specified character from this set if it is present.
      */
-    public final void retain(int c) {
-        retain(c, c);
+    public final UnicodeSet retain(int c) {
+        return retain(c, c);
     }
 
     /**
@@ -816,7 +882,7 @@ public class UnicodeSet extends UnicodeFilter {
      * @param end last character, inclusive, of range to be removed
      * from this set.
      */
-    public void remove(int start, int end) {
+    public UnicodeSet remove(int start, int end) {
         if (start < MIN_VALUE || start > MAX_VALUE) {
             throw new IllegalArgumentException("Invalid code point U+" + Utility.hex(start, 6));
         }
@@ -826,6 +892,7 @@ public class UnicodeSet extends UnicodeFilter {
         if (start <= end) {
             retain(range(start, end), 2, 2);
         }
+        return this;
     }
 
     /**
@@ -833,8 +900,8 @@ public class UnicodeSet extends UnicodeFilter {
      * The set will not contain the specified character once the call
      * returns.
      */
-    public final void remove(int c) {
-        remove(c, c);
+    public final UnicodeSet remove(int c) {
+        return remove(c, c);
     }
 
     /**
@@ -848,7 +915,7 @@ public class UnicodeSet extends UnicodeFilter {
      * @param end last character, inclusive, of range to be removed
      * from this set.
      */
-    public void complement(int start, int end) {
+    public UnicodeSet complement(int start, int end) {
         if (start < MIN_VALUE || start > MAX_VALUE) {
             throw new IllegalArgumentException("Invalid code point U+" + Utility.hex(start, 6));
         }
@@ -858,6 +925,7 @@ public class UnicodeSet extends UnicodeFilter {
         if (start <= end) {
             xor(range(start, end), 2, 0);
         }
+        return this;
     }
 
     /**
@@ -865,16 +933,15 @@ public class UnicodeSet extends UnicodeFilter {
      * will be removed if it is in this set, or will be added if it is
      * not in this set.
      */
-    public final void complement(int c) {
-        complement(c, c);
+    public final UnicodeSet complement(int c) {
+        return complement(c, c);
     }
 
     /**
-     * Inverts this set.  This operation modifies this set so that its
-     * value is its complement.  This is equivalent to
+     * This is equivalent to
      * <code>complement(MIN_VALUE, MAX_VALUE)</code>.
      */
-    public void complement() {
+    public UnicodeSet complement() {
         if (list[0] == LOW) {
             System.arraycopy(list, 1, list, 0, len-1);
             --len;
@@ -885,6 +952,7 @@ public class UnicodeSet extends UnicodeFilter {
             ++len;
         }
         pat = null;
+        return this;
     }
 
     /**
@@ -905,27 +973,14 @@ public class UnicodeSet extends UnicodeFilter {
                 return false;
             }
         }
+        if (!strings.containsAll(c.strings)) return false;
         return true;
     }
     
-    // TODO: Make this public
     /**
-     * Return TRUE if one or more characters in s is in this set.
+     * @return TRUE if every character in s is in this set.
      */
-    boolean containsSome(String s) {
-        int cp;
-        for (int i = 0; i < s.length(); i += UTF16.getCharCount(cp)) {
-            cp = UTF16.charAt(s, i);
-            if (contains(cp)) return true;
-        }
-        return false;
-    }
-        
-    // TODO: Make this public
-    /**
-     * Return TRUE if every character in s is in this set.
-     */
-    boolean containsAll(String s) {
+    public boolean containsAll(String s) {
         int cp;
         for (int i = 0; i < s.length(); i += UTF16.getCharCount(cp)) {
             cp = UTF16.charAt(s, i);
@@ -936,6 +991,63 @@ public class UnicodeSet extends UnicodeFilter {
     
 
     /**
+     * Returns <tt>true</tt> if this set contains every character
+     * in the specified range of chars.
+     * If <code>end > start</code> then the results of this method
+     * are undefined.
+     *
+     * @return <tt>true</tt> if this set contains the specified range
+     * of chars.
+     */
+    public boolean containsNone(int start, int end) {
+        if (start < MIN_VALUE || start > MAX_VALUE) {
+            throw new IllegalArgumentException("Invalid code point U+" + Utility.hex(start, 6));
+        }
+        if (end < MIN_VALUE || end > MAX_VALUE) {
+            throw new IllegalArgumentException("Invalid code point U+" + Utility.hex(end, 6));
+        }
+        int i = -1;
+        while (true) {
+            if (start < list[++i]) break;
+        }
+        return ((i & 1) == 0 && end < list[i]);
+    }
+
+
+    /**
+     * Returns <tt>true</tt> if the specified set is disjoint with this set.
+     *
+     * @param c set to be checked for containment in this set.
+     * @return <tt>true</tt> if this set contains all of the elements of the
+     * 	       specified set.
+     */
+    public boolean containsNone(UnicodeSet c) {
+        // The specified set is a subset if all of its pairs are contained in
+        // this set.  It's possible to code this more efficiently in terms of
+        // direct manipulation of the inversion lists if the need arises.
+        int n = c.getRangeCount();
+        for (int i=0; i<n; ++i) {
+            if (!containsNone(c.getRangeStart(i), c.getRangeEnd(i))) {
+                return false;
+            }
+        }
+        if (!hasRelation(strings, DISJOINT, c.strings)) return false;
+        return true;
+    }
+    
+    /**
+     * @return TRUE if one or more characters in s is in this set.
+     */
+    public boolean containsNone(String s) {
+        int cp;
+        for (int i = 0; i < s.length(); i += UTF16.getCharCount(cp)) {
+            cp = UTF16.charAt(s, i);
+            if (contains(cp)) return false;
+        }
+        return true;
+    }
+        
+    /**
      * Adds all of the elements in the specified set to this set if
      * they're not already present.  This operation effectively
      * modifies this set so that its value is the <i>union</i> of the two
@@ -944,8 +1056,9 @@ public class UnicodeSet extends UnicodeFilter {
      *
      * @param c set whose elements are to be added to this set.
      */
-    public void addAll(UnicodeSet c) {
+    public UnicodeSet addAll(UnicodeSet c) {
         add(c.list, c.len, 0);
+        return this;
     }
 
     /**
@@ -957,8 +1070,9 @@ public class UnicodeSet extends UnicodeFilter {
      *
      * @param c set that defines which elements this set will retain.
      */
-    public void retainAll(UnicodeSet c) {
+    public UnicodeSet retainAll(UnicodeSet c) {
         retain(c.list, c.len, 0);
+        return this;
     }
 
     /**
@@ -970,8 +1084,9 @@ public class UnicodeSet extends UnicodeFilter {
      * @param c set that defines which elements will be removed from
      *          this set.
      */
-    public void removeAll(UnicodeSet c) {
+    public UnicodeSet removeAll(UnicodeSet c) {
         retain(c.list, c.len, 2);
+        return this;
     }
 
     /**
@@ -982,18 +1097,21 @@ public class UnicodeSet extends UnicodeFilter {
      * @param c set that defines which elements will be complemented from
      *          this set.
      */
-    public void complementAll(UnicodeSet c) {
+    public UnicodeSet complementAll(UnicodeSet c) {
         xor(c.list, c.len, 0);
+        return this;
     }
 
     /**
      * Removes all of the elements from this set.  This set will be
      * empty after this call returns.
      */
-    public void clear() {
+    public UnicodeSet clear() {
         list[0] = HIGH;
         len = 1;
         pat = null;
+        strings.clear();
+        return this;
     }
 
     /**
@@ -1034,7 +1152,7 @@ public class UnicodeSet extends UnicodeFilter {
      * Reallocate this objects internal structures to take up the least
      * possible space, without changing this object's value.
      */
-    public void compact() {
+    public UnicodeSet compact() {
         if (len != list.length) {
             int[] temp = new int[len];
             System.arraycopy(list, 0, temp, 0, len);
@@ -1042,6 +1160,7 @@ public class UnicodeSet extends UnicodeFilter {
         }
         rangeList = null;
         buffer = null;
+        return this;
     }
 
     /**
@@ -1368,6 +1487,29 @@ public class UnicodeSet extends UnicodeFilter {
                     nestedPatDone = true;
                     i = pos.getIndex();
                 }
+                /*else if (!isLiteral && c == '{') {
+                    // start of a string. find the rest.
+                    try {
+                        StringBuffer result = new StringBuffer();
+                        while (i < pattern.length()) {
+                            // don't need to worry about surrogates, since
+                            // the only significant characters are } and \\.
+                            char ch = pattern.charAt(i++);
+                            if (ch == '}') {
+                                break;
+                            } else if (ch == '\\') {
+                                result.append(pattern.charAt(i++)); // TODO, handle \\n, \\uXXXX etc.
+                            } else {
+                                result.append(ch);
+                            }
+                        }
+                        // We have new string. Add it to set and continue;
+                    } catch (Exception e) {
+                        throw new Exception("foo");
+                    }
+                    
+                }
+                */
             }
 
             /* At this point we have either a character c, or a nested set.  If
@@ -1517,7 +1659,7 @@ public class UnicodeSet extends UnicodeFilter {
             // Debug parser
             System.out.println("UnicodeSet(" +
                                pattern.substring(start, i+1) + ") -> " +
-                               com.ibm.icu.impl.Utility.escape(toString()));
+                               Utility.escape(toString()));
         }
     }
 
@@ -1770,4 +1912,104 @@ public class UnicodeSet extends UnicodeFilter {
     private static final int max(int a, int b) {
         return (a > b) ? a : b;
     }
+    
+    /**
+     * The relationship between two sets A and B can be determined by looking at:
+     * A - B
+     * A & B (intersection)
+     * B - A
+     * These are represented by a set of bits.
+     * Bit 2 is true if A - B is not empty
+     * Bit 1 is true if A & B is not empty
+     * BIT 0 is true if B - A is not empty
+     */
+    
+    public static final int
+        A_NOT_B = 4,
+        A_AND_B = 2,
+        B_NOT_A = 1;
+    
+    /**
+     * There are 8 combinations of the relationship bits. These correspond to
+     * the filters (combinations of allowed bits) in hasRelation. They also
+     * correspond to the modification functions, listed in comments.
+     */
+     
+    public static final int 
+       ANY =            A_NOT_B |   A_AND_B |   B_NOT_A,    // union,           addAll
+       CONTAINS =       A_NOT_B |   A_AND_B,                // A                (unnecessary)
+       DISJOINT =       A_NOT_B |               B_NOT_A,    // A xor B,         missing Java function
+       ISCONTAINED =                A_AND_B |   B_NOT_A,    // B                (unnecessary)
+       NO_B =           A_NOT_B,                            // A setDiff B,     removeAll
+       EQUALS =                     A_AND_B,                // A intersect B,   retainAll
+       NO_A =                                   B_NOT_A,    // B setDiff A,     removeAll
+       NONE =           0;                                  // null             (unnecessary)
+  
+    /**
+     * Utility that could be on SortedSet. Faster implementation than
+     * what is in Java.
+     * @param a first set
+     * @param allow filter, using ANY, CONTAINS, etc.
+     * @param b second set
+     * @return whether the filter relationship is true or not.
+     */
+    
+    public static boolean hasRelation(SortedSet a, int allow, SortedSet b) {
+        // extract filter conditions
+        // these are the ALLOWED conditions Set
+        
+        boolean anb = (allow & A_NOT_B) != 0;
+        boolean ab = (allow & A_AND_B) != 0;
+        boolean bna = (allow & B_NOT_A) != 0;
+        
+        // quick check on sizes
+        switch(allow) {
+            case CONTAINS: if (a.size() < b.size()) return false; break;
+            case ISCONTAINED: if (a.size() > b.size()) return false; break;
+            case EQUALS: if (a.size() != b.size()) return false; break;
+        }
+        
+        // check for null sets
+        if (a.size() == 0) {
+            if (b.size() == 0) return true;
+            return bna;
+        } else if (b.size() == 0) {
+            return anb;
+        }
+        
+        // pick up first strings, and start comparing
+        Iterator ait = a.iterator();
+        Iterator bit = b.iterator();
+        
+        Comparable aa = (Comparable) ait.next();
+        Comparable bb = (Comparable) bit.next();
+        
+        while (true) {
+            int comp = aa.compareTo(bb);
+            if (comp == 0) {
+                if (!ab) return false;
+                if (!ait.hasNext()) {
+                    if (!bit.hasNext()) return true;
+                    return bna;
+                } else if (!bit.hasNext()) {
+                    return anb;
+                }
+                aa = (Comparable) ait.next();
+                bb = (Comparable) bit.next();
+            } else if (comp < 0) {
+                if (!anb) return false;
+                if (!ait.hasNext()) {
+                    return bna;
+                }
+                aa = (Comparable) ait.next(); 
+            } else  {
+                if (!bna) return false;
+                if (!bit.hasNext()) {
+                    return anb;
+                }
+                bb = (Comparable) bit.next();
+            }
+        }
+    }
+    
 }
