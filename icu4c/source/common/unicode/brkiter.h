@@ -1,8 +1,8 @@
 /*
-*****************************************************************************************
-*   Copyright (C) 1997-2002, International Business Machines
+********************************************************************************
+*   Copyright (C) 1997-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
-*****************************************************************************************
+********************************************************************************
 *
 * File brkiter.h
 *
@@ -14,7 +14,7 @@
 *   07/09/97    jfitz       Renamed BreakIterator and interface synced with JDK
 *   08/11/98    helena      Sync-up JDK1.2.
 *   01/13/2000  helena      Added UErrorCode parameter to createXXXInstance methods.
-*****************************************************************************************
+********************************************************************************
 */
 
 #ifndef BRKITER_H
@@ -221,7 +221,7 @@ public:
 
     /**
      * Returns the complement of the result of operator==
-     * @param ths The BreakIterator to be compared for inequality
+     * @param rhs The BreakIterator to be compared for inequality
      * @return the complement of the result of operator==
      * @stable ICU 2.0
      */
