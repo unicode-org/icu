@@ -255,8 +255,7 @@
     <!-- this is a hack for now, need a way to express dependency on the .jpp files
     and to provide directories or trees of files to the code mangler tool. -->
         <java classname="com.ibm.icu.dev.tool.docs.CodeMangler"
-	classpath="${build.dir}"
-	logError="true">
+	classpath="${build.dir}">
 	    <arg value="-d"/>
 	    <arg value="VERSION_${ant.java.version}"/>
 	    <arg value="-in"/>
