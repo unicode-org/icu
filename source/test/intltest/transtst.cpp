@@ -930,12 +930,15 @@ void TransliteratorTest::TestFilterIDs(void) {
 
     for (int i=0; i<DATA_length; i+=4) {
         UnicodeString ID(DATA[i], "");
+        UnicodeString uID(DATA[i+1], "");
+        UnicodeString data2(DATA[i+2], "");
+        UnicodeString data3(DATA[i+3], "");
         Transliterator *t = Transliterator::createInstance(ID);
         if (t == 0) {
             errln("FAIL: createInstance(" + ID + ") returned NULL");
             return;
         }
-        expect(*t, DATA[i+2], DATA[i+3]);
+        expect(*t, data2, data3);
 
         // Check the ID
         if (ID != t->getID()) {
@@ -944,7 +947,6 @@ void TransliteratorTest::TestFilterIDs(void) {
         }
 
         // Check the inverse
-        UnicodeString uID(DATA[i+1], "");
         Transliterator *u = t->createInverse();
         if (u == 0) {
             errln("FAIL: " + ID + ".createInverse() returned NULL");
