@@ -49,7 +49,7 @@ ICU_CONDITIONAL(THREADS, test "$threads" = true)
 
 ICU_USE_THREADS=0
 
-if test $threads = yes; then
+if test $threads = true; then
  dnl special pthread handling 
  dnl AIX uses pthreads instead of pthread, and HP/UX uses cma
  AC_CHECK_LIB(pthread, pthread_create)
