@@ -1457,13 +1457,13 @@ struct ScanState {
 
 //  Literal characters that are of interest.  In hex to keep EBCDIC based machines happy.
 //  The data itself is latin-1 on all platforms.
-static const chSpace  = 0x20;
-static const chTab    = 0x09;
-static const chCR     = 0x0D;
-static const chLF     = 0x0A;
-static const chHash   = 0x23;
-static const chMult   = 0xD7;
-static const chDivide = 0xF7;
+static const int32_t chSpace  = 0x20;
+static const int32_t chTab    = 0x09;
+static const int32_t chCR     = 0x0D;
+static const int32_t chLF     = 0x0A;
+static const int32_t chHash   = 0x23;
+static const int32_t chMult   = 0xD7;
+static const int32_t chDivide = 0xF7;
 
 static int32_t   nextLBDToken(ScanState *s) {
     int32_t     c;
