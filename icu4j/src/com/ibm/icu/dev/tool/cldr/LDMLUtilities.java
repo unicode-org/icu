@@ -1447,4 +1447,14 @@ System.err.println(filename2 + ":" + e.getLineNumber() +  (col>=0?":" + col:"") 
         return str;
     } 
 
+	// This should be in ULocale!
+    public static String getParent(String locale) {
+        int pos = locale.lastIndexOf('_');
+        if (pos >= 0) {
+            return locale.substring(0,pos);
+        }
+        if (!locale.equals("root")) return "root";
+        return null;
+    }
+
 }
