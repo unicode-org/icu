@@ -22,6 +22,7 @@ icu4c/debian/icu-data
 icu4c/debian/icu-i18ndata
 icu4c/debian/icu-locales
 icu4c/debian/icu.postinst
+icu4c/debian/icu.prerm
 icu4c/debian/libicu16
 icu4c/debian/tmp
 icu4c/source/Makefile
