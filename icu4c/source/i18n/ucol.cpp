@@ -792,6 +792,7 @@ uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource,
 uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, UErrorCode *status) {
   uint32_t i = 0; /* general counter */
   uint32_t firstFound = UCOL_NOT_FOUND;
+  UChar *rememberPosition = NULL;
   //uint32_t CE = *source->CEpos;
   for (;;) {
     const uint32_t *CEOffset = NULL;
@@ -851,8 +852,9 @@ uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, U
             CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex)); /* So we'll pick whatever we have at the point... */
             if (CE == UCOL_NOT_FOUND && firstFound != UCOL_NOT_FOUND) {
               CE = firstFound;
+              source->pos = rememberPosition; /* spit all the not found chars, which led us in this contraction */
               firstFound = UCOL_NOT_FOUND;
-              source->pos--; /* spit out yet another char, which led us in this contraction */
+              rememberPosition = NULL;
             }
           }
           break;
@@ -889,8 +891,12 @@ uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, U
           }
         } else if(isContraction(CE)) { /* fix for the bug. Other places need to be checked */
         /* this is contraction, and we will continue. However, we can fail along the */
-        /* the road, which means that we have part of contraction correct */
-          firstFound = *(coll->contractionCEs + (ContractionStart - coll->contractionIndex));
+        /* th road, which means that we have part of contraction correct */
+          uint32_t tempCE = *(coll->contractionCEs + (ContractionStart - coll->contractionIndex));
+          if(tempCE != UCOL_NOT_FOUND) {
+            firstFound = *(coll->contractionCEs + (ContractionStart - coll->contractionIndex));
+            rememberPosition = source->pos-1;
+          }
         } else {
           break;
         }
