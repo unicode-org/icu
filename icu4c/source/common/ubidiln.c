@@ -1,7 +1,7 @@
 /*  
 *******************************************************************************
 *
-*   Copyright (C) 1999, International Business Machines
+*   Copyright (C) 1999-2000, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -81,9 +81,6 @@
 static void
 setTrailingWSStart(UBiDi *pBiDi);
 
-static bool_t
-getRuns(UBiDi *pBiDi);
-
 static void
 getSingleRun(UBiDi *pBiDi, UBiDiLevel level);
 
@@ -116,6 +113,7 @@ ubidi_setLine(const UBiDi *pParaBiDi,
     }
 
     /* set the values in pLineBiDi from its pParaBiDi parent */
+    pLineBiDi->text=pParaBiDi->text+start;
     length=pLineBiDi->length=limit-start;
     pLineBiDi->paraLevel=pParaBiDi->paraLevel;
 
@@ -336,7 +334,7 @@ U_CAPI UTextOffset U_EXPORT2
 ubidi_countRuns(UBiDi *pBiDi, UErrorCode *pErrorCode) {
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return -1;
-    } else if(pBiDi==NULL || pBiDi->runCount<0 && !getRuns(pBiDi)) {
+    } else if(pBiDi==NULL || pBiDi->runCount<0 && !ubidi_getRuns(pBiDi)) {
         *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
         return -1;
     } else {
@@ -348,7 +346,7 @@ U_CAPI UBiDiDirection U_EXPORT2
 ubidi_getVisualRun(UBiDi *pBiDi, UTextOffset runIndex,
                    UTextOffset *pLogicalStart, UTextOffset *pLength) {
     if( pBiDi==NULL || runIndex<0 ||
-        pBiDi->runCount==-1 && !getRuns(pBiDi) ||
+        pBiDi->runCount==-1 && !ubidi_getRuns(pBiDi) ||
         runIndex>=pBiDi->runCount
     ) {
         return UBIDI_LTR;
@@ -373,19 +371,19 @@ ubidi_getVisualRun(UBiDi *pBiDi, UTextOffset runIndex,
 
 /*
  * Compute the runs array from the levels array.
- * After getRuns() returns TRUE, runCount is guaranteed to be >0
+ * After ubidi_getRuns() returns TRUE, runCount is guaranteed to be >0
  * and the runs are reordered.
  * Odd-level runs have visualStart on their visual right edge and
  * they progress visually to the left.
  */
-static bool_t
-getRuns(UBiDi *pBiDi) {
+U_CFUNC bool_t
+ubidi_getRuns(UBiDi *pBiDi) {
     if(pBiDi->direction!=UBIDI_MIXED) {
         /* simple, single-run case - this covers length==0 */
         getSingleRun(pBiDi, pBiDi->paraLevel);
     } else /* UBIDI_MIXED, length>0 */ {
         /* mixed directionality */
-        UTextOffset length=pBiDi->length, limit=length;
+        UTextOffset length=pBiDi->length, limit;
 
         /*
          * If there are WS characters at the end of the line
@@ -447,39 +445,27 @@ getRuns(UBiDi *pBiDi) {
                 /* however, that would take longer and make other functions more complicated */
                 runIndex=0;
 
-                /* search for the run ends */
-                start=0;
-                level=levels[0];
-                if(level<minLevel) {
-                    minLevel=level;
-                }
-                if(level>maxLevel) {
-                    maxLevel=level;
-                }
-
-                /* initialize visualLimit values with the run lengths */
-                for(i=1; i<limit; ++i) {
-                    if(levels[i]!=level) {
-                        /* i is another run limit */
-                        runs[runIndex].logicalStart=start;
-                        runs[runIndex].visualLimit=i-start;
-                        start=i;
-
-                        level=levels[i];
-                        if(level<minLevel) {
-                            minLevel=level;
-                        }
-                        if(level>maxLevel) {
-                            maxLevel=level;
-                        }
-                        ++runIndex;
+                /* search for the run limits and initialize visualLimit values with the run lengths */
+                i=0;
+                do {
+                    /* prepare this run */
+                    start=i;
+                    level=levels[i];
+                    if(level<minLevel) {
+                        minLevel=level;
                     }
-                }
+                    if(level>maxLevel) {
+                        maxLevel=level;
+                    }
 
-                /* finish the last run at i==limit */
-                runs[runIndex].logicalStart=start;
-                runs[runIndex].visualLimit=limit-start;
-                ++runIndex;
+                    /* look for the run limit */
+                    while(++i<limit && levels[i]==level) {}
+
+                    /* i is another run limit */
+                    runs[runIndex].logicalStart=start;
+                    runs[runIndex].visualLimit=i-start;
+                    ++runIndex;
+                } while(i<limit);
 
                 if(limit<length) {
                     /* there is a separate WS run */
@@ -515,7 +501,7 @@ getRuns(UBiDi *pBiDi) {
     return TRUE;
 }
 
-/* in trivial cases there is only one trivial run; called by getRuns() */
+/* in trivial cases there is only one trivial run; called by ubidi_getRuns() */
 static void
 getSingleRun(UBiDi *pBiDi, UBiDiLevel level) {
     /* simple, single-run case */
@@ -836,7 +822,7 @@ ubidi_getVisualIndex(UBiDi *pBiDi, UTextOffset logicalIndex, UErrorCode *pErrorC
         case UBIDI_RTL:
             return pBiDi->length-logicalIndex-1;
         default:
-            if(pBiDi->runCount<0 && !getRuns(pBiDi)) {
+            if(pBiDi->runCount<0 && !ubidi_getRuns(pBiDi)) {
                 *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
                 return 0;
             } else {
@@ -881,7 +867,7 @@ ubidi_getLogicalIndex(UBiDi *pBiDi, UTextOffset visualIndex, UErrorCode *pErrorC
         case UBIDI_RTL:
             return pBiDi->length-visualIndex-1;
         default:
-            if(pBiDi->runCount<0 && !getRuns(pBiDi)) {
+            if(pBiDi->runCount<0 && !ubidi_getRuns(pBiDi)) {
                 *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
                 return 0;
             } else {
