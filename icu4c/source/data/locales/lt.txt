@@ -56,8 +56,6 @@ lt {
     Languages { 
         lt { "Lietuvi\u0173" }
     }
-    LocaleID:int { 0x27 }
-//    LocaleString { "lt" }
     MonthAbbreviations { 
         "sau",
         "vas",
@@ -100,7 +98,6 @@ lt {
         "\uFFFD",
         ",",
     }
-//    ShortLanguage { "lit" }
     localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
     zoneStrings { 
         {

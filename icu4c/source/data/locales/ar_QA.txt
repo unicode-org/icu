@@ -7,9 +7,6 @@
 
 ar_QA {
     Version{"2.0"}
-//    LocaleString { "ar_QA" }
-//    ShortCountry { "QAT" }
-    LocaleID:int { 0x4001 }
     NumberElements {
         ",",
         ".",

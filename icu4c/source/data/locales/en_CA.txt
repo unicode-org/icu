@@ -7,15 +7,6 @@
 
 en_CA {
     Version { "2.0" }
-//    Duplicated in parent
-//    Countries { 
-//        US { "United States" }
-//        GB { "United Kingdom" }
-//        CA { "Canada" }
-//        IE { "Ireland" }
-//        AU { "Australia" }
-//        NZ { "New Zealand" }
-//    }
     DateTimePatterns { 
         "h:mm:ss a z",
         "h:mm:ss a z",
@@ -33,13 +24,6 @@ en_CA {
         "#,##0%",
         "#E0",
     }
-//    Duplicated in parent
-//    Languages { 
-//        en { "English" }
-//    }
-    LocaleID:int { 0x1009 }
-//    LocaleString { "en_CA" }
-//    ShortCountry { "CAN" }
 
 // This is horrible data, just try to use the en locale data
 /*    zoneStrings {

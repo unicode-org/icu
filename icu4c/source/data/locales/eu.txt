@@ -70,7 +70,6 @@ eu {
         "\uFFFD",
         ",",
     }
-    LocaleID:int { 0x2D }
 //    LocaleScript{  
 //        "Latn",  // ISO 15924 Name 
 //    }

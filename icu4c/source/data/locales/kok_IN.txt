@@ -8,9 +8,6 @@
 
 kok_IN {
     Version { "2.0" }
-    LocaleID:int { 0x0457 }
-//    ShortCountry { IND }
-
     NumberPatterns {
         "##,##,##0.###;-##,##,##0.###",
         "\u00A4 ##,##,##0.00;-\u00A4 ##,##,##0.00",

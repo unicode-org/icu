@@ -64,11 +64,8 @@ hi {
          "<\u0941<\u0942<\u0943<\u0944<\u0962<\u0963<\u0945<\u0946"
          "<\u0947<\u0948<\u0949<\u094a<\u094b<\u094c" }
     }
-    LocaleID:int { 0x39 }
-//    ShortLanguage { hin }
 
     Languages {
-
 //Haryanvi    \u0939\u0930\u093F\u092F\u093E\u0928\u0935\u0940 // ???
 
         root { "\u0936\u093F\u0916\u0930" }

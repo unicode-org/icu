@@ -2420,8 +2420,6 @@ ko {
         za { "\uc8fc\uc559\uc5b4" }
         zu { "\uc904\ub8e8\uc5b4" }
     }
-    LocaleID:int { 0x12 }
-//    LocaleString { "ko" }
     MonthAbbreviations {
         "1\uC6D4",
         "2\uC6D4",
@@ -2455,7 +2453,6 @@ ko {
         "\uC11C\uAE30",
 //        "\uB2E8\uAE30"   // AD + 2333 but ICU doesn't use it.
     }
-//    ShortLanguage { "kor" }
     localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
     zoneStrings {
         {

@@ -7,14 +7,11 @@
 
 it_IT {
     Version{ "2.0" }
-//    LocaleString { "it_IT" }
 //    NumberPatterns { 
 //        "#,##0.###;-#,##0.###",
 //        "\u00A4 #,##0.00;-\u00A4 #,##0.00",
 //        "#,##0%",
 //    }
-//    ShortCountry { "ITA" }
-    LocaleID:int { 0x0410 }
     DateTimePatterns { 
         "HH:mm:ss z",
         "H:mm:ss z",

@@ -56,8 +56,6 @@ lv {
     Languages { 
         lv { "Latvie\u0161u" }
     }
-    LocaleID:int { 0x26 }
-//    LocaleString { "lv" }
     MonthAbbreviations { 
         "Jan",
         "Feb",
@@ -100,7 +98,6 @@ lv {
         "\uFFFD",
         ",",
     }
-//    ShortLanguage { "lav" }
     localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
     zoneStrings { 
         {

@@ -7,9 +7,6 @@
 
 kn_IN {
     Version { "2.0" }
-    LocaleID:int { 0x044B }
-//    ShortCountry { IND }
-
     DateTimePatterns {
         "hh:mm:ss a z",
         "hh:mm:ss a z",

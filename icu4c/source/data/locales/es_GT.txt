@@ -18,8 +18,6 @@ es_GT {
         "d/MM/yy",
         "{1} {0}",
     }
-    LocaleID:int { 0x100a }
-//    LocaleString { "es_GT" }
 //    NumberElements { 
 //        ".",
 //        ",",
@@ -33,5 +31,4 @@ es_GT {
 //        "\u221E",
 //        "\uFFFD",
 //    }
-//    ShortCountry { "GTM" }
 }

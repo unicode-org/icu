@@ -18,8 +18,6 @@ es_BO {
         "dd/MM/yy",
         "{1} {0}",
     }
-    LocaleID:int { 0x400a }
-//    LocaleString { "es_BO" }
     NumberElements { 
         ",",
         ".",
@@ -34,5 +32,4 @@ es_BO {
         "\uFFFD",
         ",",
     }
-//    ShortCountry { "BOL" }
 }

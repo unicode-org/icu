@@ -48,8 +48,6 @@ ca {
     Languages { 
         ca { "catal\u00E0" }
     }
-    LocaleID:int { 0x03 }
-//    LocaleString { "ca" }
     MonthAbbreviations { 
         "gen.",
         "feb.",
@@ -92,7 +90,6 @@ ca {
         "\uFFFD",
         ",",
     }
-//    ShortLanguage { "cat" }
     localPatternChars { "GuMtkHmsSEDFwWahKzUe" }
     zoneStrings { 
         {

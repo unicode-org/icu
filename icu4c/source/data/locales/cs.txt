@@ -56,8 +56,6 @@ cs {
     Languages { 
         cs { "\u010De\u0161tina" }
     }
-    LocaleID:int { 0x05 }
-//    LocaleString { "cs" }
     MonthAbbreviations { 
         "I",
         "II",
@@ -100,7 +98,6 @@ cs {
         "\uFFFD",
         ",",
     }
-//    ShortLanguage { "ces" }
     localPatternChars { "GuMtkHmsSEDFwWahKzUe" }
     zoneStrings { 
         {

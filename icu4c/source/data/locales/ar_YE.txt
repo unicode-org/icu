@@ -7,9 +7,6 @@
 
 ar_YE {
     Version{ "2.0" }
-//    LocaleString { "ar_YE" }
-//    ShortCountry { "YEM" }
-    LocaleID:int { 0x2401 }
     NumberElements {
         ",",
         ".",

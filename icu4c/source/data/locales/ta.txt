@@ -7,8 +7,6 @@
 
 ta {
     Version { "2.0" }
-
-//    ShortLanguage { tam }
     Languages {
         root { "\u0ba4\u0bae\u0bbf\u0bb4\u0bcd" }
 
@@ -251,7 +249,6 @@ ta {
         Version { "1.0" }
         Sequence { "[normalization on]" }
     }
-    LocaleID:int { 0x49 }
     LocaleScript:array {
         "Taml"   // ISO 15924 Name 
     }

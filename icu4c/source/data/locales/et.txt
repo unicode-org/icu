@@ -57,8 +57,6 @@ et {
     Languages { 
         et { "Eesti" }
     }
-    LocaleID:int { 0x25 }
-//    LocaleString { "et" }
     MonthAbbreviations { 
         "jaan.",
         "veebr.",
@@ -101,7 +99,6 @@ et {
         "\uFFFD",
         ",",
     }
-//    ShortLanguage { "est" }
     localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
     zoneStrings { 
         {

@@ -18,13 +18,10 @@ pt_BR {
         "dd/MM/yy",
         "{1} {0}",
     }
-    LocaleID:int { 0x0416 }
-//    LocaleString { "pt_BR" }
 //    NumberPatterns { 
 //        "#,##0.###;-#,##0.###",
 //        "\u00A4 #,##0.00;-\u00A4 #,##0.00",
 //        "#,##0%",
 //        "#E0",
 //    }
-//    ShortCountry { "BRA" }
 }

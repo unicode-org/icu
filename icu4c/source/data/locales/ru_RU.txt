@@ -21,13 +21,10 @@ ru_RU {
         "\uFFFD",
         ",",
     }
-//    LocaleString { "ru_RU" }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",
         "#,##0.00\u00A4;-#,##0.00\u00A4",
         "#,##0%",
         "#E0",
     }
-//    ShortCountry { "RUS" }
-    LocaleID:int { 0x0419 }
 }

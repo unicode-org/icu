@@ -75,7 +75,6 @@ te {
 //        "\u221e",
 //        "\ufffd",
 //    }
-    LocaleID:int { 0x4a }
     CollationElements {
         Version { "1.0" }
         Sequence { "[normalization on]" }

@@ -52,8 +52,6 @@ ro {
     Languages { 
         ro { "rom\u00E2n\u0103" }
     }
-    LocaleID:int { 0x18 }
-//    LocaleString { "ro" }
     MonthAbbreviations { 
         "Ian",
         "Feb",
@@ -96,7 +94,6 @@ ro {
         "\uFFFD",
         ",",
     }
-//    ShortLanguage { "ron" }
     localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
     zoneStrings { 
         {
