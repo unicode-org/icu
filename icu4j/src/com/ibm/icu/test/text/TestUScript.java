@@ -28,6 +28,8 @@ public class TestUScript extends TestFmwk{
         new Locale("te","IN"),
         new Locale("hi",""), 
         new Locale("he",""), new Locale("ar",""),
+        new Locale("abcde",""),
+        new Locale("abcde","cdef")
         };
         final int[] expected ={
                 /* locales should return */
@@ -35,6 +37,7 @@ public class TestUScript extends TestFmwk{
                 UScript.CYRILLIC, UScript.TAMIL, 
                 UScript.TELUGU,UScript.DEVANAGARI, 
                 UScript.HEBREW, UScript.ARABIC,
+                UScript.INVALID_CODE,UScript.INVALID_CODE
         };
         int i =0;
         int numErrors =0;
