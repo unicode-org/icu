@@ -31,6 +31,7 @@ static int32_t  gOutBufferSize = 0;
 static char     gNuConvTestName[1024];
 
 #define nct_min(x,y)  ((x<y) ? x : y)
+#define LENGTHOF(array) (sizeof(array)/sizeof((array)[0]))
 
 static void printSeq(const unsigned char* a, int len);
 static void printSeqErr(const unsigned char* a, int len);
@@ -65,6 +66,7 @@ static void TestRegressionUTF32(void);
 static void TestAvailableConverters(void);
 static void TestFlushInternalBuffer(void);  /*for improved code coverage in ucnv_cnv.c*/
 static void TestResetBehaviour(void);
+static void TestTruncated(void);
 
 static void TestWithBufferSize(int32_t osize, int32_t isize);
 
@@ -117,7 +119,7 @@ void addExtraTests(TestNode** root)
      addTest(root, &TestResetBehaviour,             "tsconv/ncnvtst/TestResetBehaviour");
      addTest(root, &TestRegressionUTF8,             "tsconv/ncnvtst/TestRegressionUTF8");
      addTest(root, &TestRegressionUTF32,            "tsconv/ncnvtst/TestRegressionUTF32");
-
+     addTest(root, &TestTruncated,                  "tsconv/ncnvtst/TestTruncated");
 }
 
 /*test surrogate behaviour*/
@@ -1705,4 +1707,101 @@ static void TestResetBehaviour(void){
 
     }
 
+}
+
+/* Test that U_TRUNCATED_CHAR_FOUND is set. */
+static void
+doTestTruncated(const char *cnvName, const uint8_t *bytes, int32_t length) {
+    UConverter *cnv;
+
+    UChar buffer[2];
+    UChar *target, *targetLimit;
+    const char *source, *sourceLimit;
+
+    UErrorCode errorCode;
+
+    errorCode=U_ZERO_ERROR;
+    cnv=ucnv_open(cnvName, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("error TestTruncated: unable to open \"%s\" - %s\n", cnvName, u_errorName(errorCode));
+        return;
+    }
+
+    source=(const char *)bytes;
+    sourceLimit=source+length;
+    target=buffer;
+    targetLimit=buffer+LENGTHOF(buffer);
+
+    /* 1. input bytes with flush=FALSE, then input nothing with flush=TRUE */
+    ucnv_toUnicode(cnv, &target, targetLimit, &source, sourceLimit, NULL, FALSE, &errorCode);
+    if(U_FAILURE(errorCode) || source!=sourceLimit || target!=buffer) {
+        log_err("error TestTruncated(%s, 1a): input bytes[%d], flush=FALSE: %s, input left %d, output %d\n",
+                cnvName, length, u_errorName(errorCode), (int)(sourceLimit-source), (int)(target-buffer));
+    }
+
+    errorCode=U_ZERO_ERROR;
+    source=sourceLimit;
+    target=buffer;
+    ucnv_toUnicode(cnv, &target, targetLimit, &source, sourceLimit, NULL, TRUE, &errorCode);
+    if(errorCode!=U_TRUNCATED_CHAR_FOUND || target!=buffer) {
+        log_err("error TestTruncated(%s, 1b): no input, flush=TRUE: %s (should be U_TRUNCATED_CHAR_FOUND), output %d\n",
+                cnvName, u_errorName(errorCode), (int)(target-buffer));
+    }
+
+    /*
+     * ### TODO: flush=TRUE resets; make sure this is well documented; question -
+     * does it also delete ucnv_getInvalidChars()?
+     * resetting logically should delete them, but then it is not possible to figure out which bytes are left in the converter.
+     */
+
+    /* 2. input bytes with flush=TRUE */
+    ucnv_resetToUnicode(cnv);
+
+    errorCode=U_ZERO_ERROR;
+    source=(const char *)bytes;
+    target=buffer;
+    ucnv_toUnicode(cnv, &target, targetLimit, &source, sourceLimit, NULL, TRUE, &errorCode);
+    if(errorCode!=U_TRUNCATED_CHAR_FOUND || target!=buffer) {
+        log_err("error TestTruncated(%s, 2): input bytes[%d], flush=TRUE: %s (should be U_TRUNCATED_CHAR_FOUND), input left %d, output %d\n",
+                cnvName, length, u_errorName(errorCode), (int)(sourceLimit-source), (int)(target-buffer));
+    }
+
+
+    ucnv_close(cnv);
+}
+
+static void
+TestTruncated() {
+    struct {
+        const char *cnvName;
+        uint8_t bytes[8]; /* partial input bytes resulting in no output */
+        int32_t length;
+    } testCases[]={
+        { "UTF-7",      { 0x2b, 0x42 }, 2 }, /* +B */
+        { "UTF-8",      { 0xd1 }, 1 },
+
+        { "UTF-16BE",   { 0x4e }, 1 },
+        { "UTF-16LE",   { 0x4e }, 1 },
+        { "UTF-16",     { 0x4e }, 1 },
+        { "UTF-16",     { 0xff }, 1 },
+        { "UTF-16",     { 0xfe, 0xff, 0x4e }, 3 },
+
+        { "UTF-32BE",   { 0, 0, 0x4e }, 3 },
+        { "UTF-32LE",   { 0x4e }, 1 },
+        { "UTF-32",     { 0, 0, 0x4e }, 3 },
+        { "UTF-32",     { 0xff }, 1 },
+        { "UTF-32",     { 0, 0, 0xfe, 0xff, 0 }, 5 },
+
+        { "SCSU",       { 0x0e, 0x4e }, 2 }, /* SQU 0x4e */
+        { "BOCU-1",     { 0xd5 }, 1 },
+
+        { "Shift-JIS",  { 0xe0 }, 1 },
+
+        { "ibm-939",    { 0x0e, 0x41 }, 2 } /* SO 0x41 */
+    };
+    int32_t i;
+
+    for(i=0; i<LENGTHOF(testCases); ++i) {
+        doTestTruncated(testCases[i].cnvName, testCases[i].bytes, testCases[i].length);
+    }
 }
