@@ -1180,6 +1180,8 @@ ucnv_getNextUChar(UConverter * converter,
  *                      the pivot-to-target conversion.
  *
  * @see ucnv_convert
+ * @see ucnv_fromAlgorithmic
+ * @see ucnv_toAlgorithmic
  * @see ucnv_fromUnicode
  * @see ucnv_toUnicode
  * @see ucnv_fromUChars
@@ -1196,22 +1198,53 @@ ucnv_convertEx(UConverter *targetCnv, UConverter *sourceCnv,
                UErrorCode *pErrorCode);
 
 /**
- * Will convert a sequence of bytes from one codepage to another.
- * This is <STRONG>NOT AN EFFICIENT</STRONG> way to transcode.
- * use \Ref{ucnv_toUnicode} and \Ref{ucnv_fromUnicode} for efficiency.
- * @param toConverterName The name of the converter that will be used
- *  in conversion from unicode into the output buffer
- * @param fromConverterName: The name of the converter that will be used
- *  in conversion from the source buffer into intermediate unicode.
- * @param target Pointer to the output buffer
- * @param targetCapacity capacity of the target, in bytes
- * @param source Pointer to the input buffer
- * @param sourceLength capacity of the source, in bytes
- * @param err error status. 
- * <code>U_BUFFER_OVERFLOW_ERROR</code> will be set if the target is full and there is still input left in the source.
- * @return  will be filled in with the number of bytes needed in target
+ * Convert from one external charset to another.
+ * Internally, two converters are opened according to the name arguments,
+ * then the text is converted to and from the 16-bit Unicode "pivot"
+ * using ucnv_convertEx(), then the converters are closed again.
+ *
+ * This is a convenience function, not an efficient way to convert a lot of text:
+ * ucnv_convert()
+ * - takes charset names, not converter objects, so that
+ *   - two converters are opened for each call
+ *   - only single-string conversion is possible, not streaming operation
+ * - does not provide enough information to find out,
+ *   in case of failure, whether the toUnicode or
+ *   the fromUnicode conversion failed
+ * - allows NUL-terminated input
+ *   (only a single NUL byte, will not work for charsets with multi-byte NULs)
+ *   (if sourceLength==-1, see parameters)
+ * - terminate with a NUL on output
+ *   (only a single NUL byte, not useful for charsets with multi-byte NULs),
+ *   or set U_STRING_NOT_TERMINATED_WARNING if the output exactly fills
+ *   the target buffer
+ * - a pivot buffer is provided internally
+ *
+ * The function returns when one of the following is true:
+ * - the entire source text has been converted successfully to the target buffer
+ *   and either the target buffer is terminated with a single NUL byte
+ *   or the error code is set to U_STRING_NOT_TERMINATED_WARNING
+ * - a target buffer overflow occurred (U_BUFFER_OVERFLOW_ERROR)
+ *   and the full output string length is returned ("preflighting")
+ * - a conversion error occurred
+ *   (other U_FAILURE(), see description of pErrorCode)
+ *
+ * @param toConverterName   The name of the converter that is used to convert
+ *                          from the UTF-16 pivot buffer to the target.
+ * @param fromConverterName The name of the converter that is used to convert
+ *                          from the source to the UTF-16 pivot buffer.
+ * @param target            Pointer to the output buffer.
+ * @param targetCapacity    Capacity of the target, in bytes.
+ * @param source            Pointer to the input buffer.
+ * @param sourceLength      Length of the input text, in bytes, or -1 for NUL-terminated input.
+ * @param pErrorCode        ICU error code in/out parameter.
+ *                          Must fulfill U_SUCCESS before the function call.
+ * @return Length of the complete output text in bytes, even if it exceeds the targetCapacity
+ *         and a U_BUFFER_OVERFLOW_ERROR is set.
  *
  * @see ucnv_convertEx
+ * @see ucnv_fromAlgorithmic
+ * @see ucnv_toAlgorithmic
  * @see ucnv_fromUnicode
  * @see ucnv_toUnicode
  * @see ucnv_fromUChars
@@ -1226,7 +1259,111 @@ ucnv_convert(const char *toConverterName,
              int32_t targetCapacity,
              const char *source,
              int32_t sourceLength,
-             UErrorCode *err);
+             UErrorCode *pErrorCode);
+
+/**
+ * Convert from one external charset to another.
+ * Internally, the text is converted to and from the 16-bit Unicode "pivot"
+ * using ucnv_convertEx(). ucnv_toAlgorithmic() works exactly like ucnv_convert()
+ * except that the two converters need not be looked up and opened completely.
+ *
+ * The source-to-pivot conversion uses the cnv converter parameter.
+ * The pivot-to-target conversion uses a purely algorithmic converter
+ * according to the specified type, e.g., UCNV_UTF8 for a UTF-8 converter.
+ *
+ * Internally, the algorithmic converter is opened and closed for each
+ * function call, which is more efficient than using the public ucnv_open()
+ * but somewhat less efficient than only resetting an existing converter
+ * and using ucnv_convertEx().
+ *
+ * This function is more convenient than ucnv_convertEx() for single-string
+ * conversions, especially when "preflighting" is desired (returning the length
+ * of the complete output even if it does not fit into the target buffer;
+ * see the User Guide Strings chapter). See ucnv_convert() for details.
+ *
+ * @param algorithmicType   UConverterType constant identifying the desired target
+ *                          charset as a purely algorithmic converter.
+ *                          Those are converters for Unicode charsets like
+ *                          UTF-8, BOCU-1, SCSU, UTF-7, IMAP-mailbox-name, etc.,
+ *                          as well as US-ASCII and ISO-8859-1.
+ * @param cnv               The converter that is used to convert
+ *                          from the source to the UTF-16 pivot buffer.
+ * @param target            Pointer to the output buffer.
+ * @param targetCapacity    Capacity of the target, in bytes.
+ * @param source            Pointer to the input buffer.
+ * @param sourceLength      Length of the input text, in bytes
+ * @param pErrorCode        ICU error code in/out parameter.
+ *                          Must fulfill U_SUCCESS before the function call.
+ * @return Length of the complete output text in bytes, even if it exceeds the targetCapacity
+ *         and a U_BUFFER_OVERFLOW_ERROR is set.
+ *
+ * @see ucnv_fromAlgorithmic
+ * @see ucnv_convert
+ * @see ucnv_convertEx
+ * @see ucnv_fromUnicode
+ * @see ucnv_toUnicode
+ * @see ucnv_fromUChars
+ * @see ucnv_toUChars
+ * @draft ICU 2.6
+ */
+U_CAPI int32_t U_EXPORT2
+ucnv_toAlgorithmic(UConverterType algorithmicType,
+                   UConverter *cnv,
+                   char *target, int32_t targetCapacity,
+                   const char *source, int32_t sourceLength,
+                   UErrorCode *pErrorCode);
+
+/**
+ * Convert from one external charset to another.
+ * Internally, the text is converted to and from the 16-bit Unicode "pivot"
+ * using ucnv_convertEx(). ucnv_fromAlgorithmic() works exactly like ucnv_convert()
+ * except that the two converters need not be looked up and opened completely.
+ *
+ * The source-to-pivot conversion uses a purely algorithmic converter
+ * according to the specified type, e.g., UCNV_UTF8 for a UTF-8 converter.
+ * The pivot-to-target conversion uses the cnv converter parameter.
+ *
+ * Internally, the algorithmic converter is opened and closed for each
+ * function call, which is more efficient than using the public ucnv_open()
+ * but somewhat less efficient than only resetting an existing converter
+ * and using ucnv_convertEx().
+ *
+ * This function is more convenient than ucnv_convertEx() for single-string
+ * conversions, especially when "preflighting" is desired (returning the length
+ * of the complete output even if it does not fit into the target buffer;
+ * see the User Guide Strings chapter). See ucnv_convert() for details.
+ *
+ * @param cnv               The converter that is used to convert
+ *                          from the UTF-16 pivot buffer to the target.
+ * @param algorithmicType   UConverterType constant identifying the desired source
+ *                          charset as a purely algorithmic converter.
+ *                          Those are converters for Unicode charsets like
+ *                          UTF-8, BOCU-1, SCSU, UTF-7, IMAP-mailbox-name, etc.,
+ *                          as well as US-ASCII and ISO-8859-1.
+ * @param target            Pointer to the output buffer.
+ * @param targetCapacity    Capacity of the target, in bytes.
+ * @param source            Pointer to the input buffer.
+ * @param sourceLength      Length of the input text, in bytes
+ * @param pErrorCode        ICU error code in/out parameter.
+ *                          Must fulfill U_SUCCESS before the function call.
+ * @return Length of the complete output text in bytes, even if it exceeds the targetCapacity
+ *         and a U_BUFFER_OVERFLOW_ERROR is set.
+ *
+ * @see ucnv_fromAlgorithmic
+ * @see ucnv_convert
+ * @see ucnv_convertEx
+ * @see ucnv_fromUnicode
+ * @see ucnv_toUnicode
+ * @see ucnv_fromUChars
+ * @see ucnv_toUChars
+ * @draft ICU 2.6
+ */
+U_CAPI int32_t U_EXPORT2
+ucnv_fromAlgorithmic(UConverter *cnv,
+                     UConverterType algorithmicType,
+                     char *target, int32_t targetCapacity,
+                     const char *source, int32_t sourceLength,
+                     UErrorCode *pErrorCode);
 
 /**
  * Frees up memory occupied by unused, cached converter shared data.

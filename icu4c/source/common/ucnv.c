@@ -121,7 +121,7 @@ ucnv_open (const char *name,
         return NULL;
     }
 
-    r =  ucnv_createConverter(name, err);
+    r =  ucnv_createConverter(NULL, name, err);
     UCNV_DEBUG_LOG("open", name, r);
     UCNV_DEBUG_CNV(r);
     return r;
@@ -169,7 +169,7 @@ ucnv_openCCSID (int32_t codepage,
     myNameLen = ucnv_copyPlatformString(myName, platform);
     T_CString_integerToString(myName + myNameLen, codepage, 10);
 
-    return ucnv_createConverter(myName, err);
+    return ucnv_createConverter(NULL, myName, err);
 }
 
 /* Creating a temporary stack-based object that can be used in one thread, 
@@ -1240,57 +1240,39 @@ ucnv_convertEx(UConverter *targetCnv, UConverter *sourceCnv,
     }
 }
 
-U_CAPI int32_t U_EXPORT2
-ucnv_convert(const char *toConverterName, const char *fromConverterName,
-             char *target, int32_t targetSize,
-             const char *source, int32_t sourceSize,
-             UErrorCode *pErrorCode) {
+/* internal implementation of ucnv_convert() etc. with preflighting */
+static int32_t
+ucnv_internalConvert(UConverter *outConverter, UConverter *inConverter,
+                     char *target, int32_t targetCapacity,
+                     const char *source, int32_t sourceLength,
+                     UErrorCode *pErrorCode) {
     UChar pivotBuffer[CHUNK_SIZE];
     UChar *pivot, *pivot2;
 
-    UConverter *inConverter, *outConverter;
     char *myTarget;
     const char *sourceLimit;
     const char *targetLimit;
-    int32_t targetCapacity=0;
+    int32_t targetLength=0;
 
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
-        return 0;
-    }
-
-    if(sourceSize<0 || targetSize<0 || source==NULL
-        || (targetSize>0 && target==NULL))
-    {
-        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
+    /* set up */
+    if(sourceLength<0) {
+        sourceLimit=uprv_strchr(source, 0);
+    } else {
+        sourceLimit=source+sourceLength;
     }
 
     /* if there is no input data, we're done */
-    if(sourceSize==0) {
-        return 0;
+    if(source==sourceLimit) {
+        return u_terminateChars(target, targetCapacity, 0, pErrorCode);
     }
 
-    /* create the converters */
-    inConverter=ucnv_open(fromConverterName, pErrorCode);
-    if(U_FAILURE(*pErrorCode)) {
-        return 0;
-    }
-
-    outConverter=ucnv_open(toConverterName, pErrorCode);
-    if(U_FAILURE(*pErrorCode)) {
-        ucnv_close(inConverter);
-        return 0;
-    }
-
-    /* set up the other variables */
-    sourceLimit=source+sourceSize;
     pivot=pivot2=pivotBuffer;
     myTarget=target;
-    targetCapacity=0;
+    targetLength=0;
 
-    if(targetSize>0) {
+    if(targetCapacity>0) {
         /* perform real conversion */
-        targetLimit=target+targetSize;
+        targetLimit=target+targetCapacity;
         ucnv_convertEx(outConverter, inConverter,
                        &myTarget, targetLimit,
                        &source, sourceLimit,
@@ -1298,15 +1280,15 @@ ucnv_convert(const char *toConverterName, const char *fromConverterName,
                        FALSE,
                        TRUE,
                        pErrorCode);
-        targetCapacity=myTarget-target;
+        targetLength=myTarget-target;
     }
 
     /*
      * If the output buffer is exhausted (or we are only "preflighting"), we need to stop writing
-     * to it but continue the conversion in order to store in targetSize
+     * to it but continue the conversion in order to store in targetCapacity
      * the number of bytes that was required.
      */
-    if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR || targetSize==0)
+    if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR || targetCapacity==0)
     {
         char targetBuffer[CHUNK_SIZE];
 
@@ -1321,23 +1303,145 @@ ucnv_convert(const char *toConverterName, const char *fromConverterName,
                            FALSE,
                            TRUE,
                            pErrorCode);
-            targetCapacity+=(myTarget-targetBuffer);
+            targetLength+=(myTarget-targetBuffer);
         } while(*pErrorCode==U_BUFFER_OVERFLOW_ERROR);
 
-        if(U_SUCCESS(*pErrorCode)) {
-            /*
-             * done with preflighting, set the buffer overflow error as
-             * the result for the entire function
-             */
-            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-        }
+        /* done with preflighting, set warnings and errors as appropriate */
+        return u_terminateChars(target, targetCapacity, targetLength, pErrorCode);
     }
 
-    ucnv_close (inConverter);
-    ucnv_close (outConverter);
-
     /* no need to call u_terminateChars() because ucnv_convertEx() took care of that */
-    return targetCapacity;
+    return targetLength;
+}
+
+U_CAPI int32_t U_EXPORT2
+ucnv_convert(const char *toConverterName, const char *fromConverterName,
+             char *target, int32_t targetCapacity,
+             const char *source, int32_t sourceLength,
+             UErrorCode *pErrorCode) {
+    UConverter in, out; /* stack-allocated */
+    UConverter *inConverter, *outConverter;
+    int32_t targetLength;
+
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+
+    if( source==NULL || sourceLength<-1 ||
+        targetCapacity<0 || (targetCapacity>0 && target==NULL)
+    ) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
+    /* if there is no input data, we're done */
+    if(sourceLength==0 || (sourceLength<0 && *source==0)) {
+        return u_terminateChars(target, targetCapacity, 0, pErrorCode);
+    }
+
+    /* create the converters */
+    inConverter=ucnv_createConverter(&in, fromConverterName, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+
+    outConverter=ucnv_createConverter(&out, toConverterName, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
+        ucnv_close(inConverter);
+        return 0;
+    }
+
+    targetLength=ucnv_internalConvert(outConverter, inConverter,
+                                      target, targetCapacity,
+                                      source, sourceLength,
+                                      pErrorCode);
+
+    ucnv_close(inConverter);
+    ucnv_close(outConverter);
+
+    return targetLength;
+}
+
+/* @internal */
+static int32_t
+ucnv_convertAlgorithmic(UBool convertToAlgorithmic,
+                        UConverterType algorithmicType,
+                        UConverter *cnv,
+                        char *target, int32_t targetCapacity,
+                        const char *source, int32_t sourceLength,
+                        UErrorCode *pErrorCode) {
+    UConverter algoConverterStatic; /* stack-allocated */
+    UConverter *algoConverter, *to, *from;
+    int32_t targetLength;
+
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+
+    if( cnv==NULL || source==NULL || sourceLength<-1 ||
+        targetCapacity<0 || (targetCapacity>0 && target==NULL)
+    ) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
+    /* if there is no input data, we're done */
+    if(sourceLength==0 || (sourceLength<0 && *source==0)) {
+        return u_terminateChars(target, targetCapacity, 0, pErrorCode);
+    }
+
+    /* create the algorithmic converter */
+    algoConverter=ucnv_createAlgorithmicConverter(&algoConverterStatic, algorithmicType,
+                                                  "", 0, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+
+    /* reset the other converter */
+    if(convertToAlgorithmic) {
+        /* cnv->Unicode->algo */
+        ucnv_resetToUnicode(cnv);
+        to=algoConverter;
+        from=cnv;
+    } else {
+        /* algo->Unicode->cnv */
+        ucnv_resetFromUnicode(cnv);
+        from=algoConverter;
+        to=cnv;
+    }
+
+    targetLength=ucnv_internalConvert(to, from,
+                                      target, targetCapacity,
+                                      source, sourceLength,
+                                      pErrorCode);
+
+    ucnv_close(algoConverter);
+
+    return targetLength;
+}
+
+U_CAPI int32_t U_EXPORT2
+ucnv_toAlgorithmic(UConverterType algorithmicType,
+                   UConverter *cnv,
+                   char *target, int32_t targetCapacity,
+                   const char *source, int32_t sourceLength,
+                   UErrorCode *pErrorCode) {
+    return ucnv_convertAlgorithmic(TRUE, algorithmicType, cnv,
+                                   target, targetCapacity,
+                                   source, sourceLength,
+                                   pErrorCode);
+}
+
+U_CAPI int32_t U_EXPORT2
+ucnv_fromAlgorithmic(UConverter *cnv,
+                     UConverterType algorithmicType,
+                     char *target, int32_t targetCapacity,
+                     const char *source, int32_t sourceLength,
+                     UErrorCode *pErrorCode) {
+    return ucnv_convertAlgorithmic(FALSE, algorithmicType, cnv,
+                                   target, targetCapacity,
+                                   source, sourceLength,
+                                   pErrorCode);
 }
 
 U_CAPI UConverterType  U_EXPORT2
