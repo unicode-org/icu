@@ -83,7 +83,7 @@ public:
      * Execute and test adding and rolling in GregorianCalendar extensively.
      */
     virtual void TestAddRollExtensive(void);
- 
+
 public: // package
     // internal utility routine for checking date
     virtual void check520(Calendar* c, 
@@ -151,6 +151,18 @@ public:
      * for increments of 24 days.
      */
     virtual void TestDOWProgression(void);
+    /**
+     * Test newly added fields - DOW_LOCAL and YEAR_WOY
+     */
+    virtual void TestDOW_LOCALandYEAR_WOY(void);
+    // test subroutine used by TestDOW_LOCALandYEAR_WOY
+    virtual void doYEAR_WOYLoop(Calendar *cal, 
+        SimpleDateFormat *sdf, int32_t times, UErrorCode& status);
+    // test subroutine used by TestDOW_LOCALandYEAR_WOY
+    virtual void loop_addroll(Calendar *cal, SimpleDateFormat *sdf, 
+        int times, Calendar::EDateFields field, Calendar::EDateFields field2, 
+        UErrorCode& errorCode);
+
  
 public: // package
     // test subroutine use by TestDOWProgression
