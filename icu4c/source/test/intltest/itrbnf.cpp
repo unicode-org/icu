@@ -355,6 +355,104 @@ void IntlTestRBNF::TestLLongConstructors()
 void IntlTestRBNF::TestLLongSimpleOperators()
 {
     logln("Testing simple operators");
+
+    // operator==
+    LLAssert(llong() == llong(0, 0));
+    LLAssert(llong(1,0) == llong(1, 0));
+    LLAssert(llong(0,1) == llong(0, 1));
+
+    // operator!=
+    LLAssert(llong(1,0) != llong(1,1));
+    LLAssert(llong(0,1) != llong(1,1));
+    LLAssert(llong(0xffffffff,0xffffffff) != llong(0x7fffffff, 0xffffffff));
+
+    // unsigned >
+    LLAssert(llong((int32_t)-1).ugt(llong(0x7fffffff, 0xffffffff)));
+
+    // unsigned <
+    LLAssert(llong(0x7fffffff, 0xffffffff).ult(llong((int32_t)-1)));
+
+    // unsigned >=
+    LLAssert(llong((int32_t)-1).uge(llong(0x7fffffff, 0xffffffff)));
+    LLAssert(llong((int32_t)-1).uge(llong((int32_t)-1)));
+
+    // unsigned <=
+    LLAssert(llong(0x7fffffff, 0xffffffff).ule(llong((int32_t)-1)));
+    LLAssert(llong((int32_t)-1).ule(llong((int32_t)-1)));
+
+    // operator>
+    LLAssert(llong(1, 1) > llong(1, 0));
+    LLAssert(llong(0, 0x80000000) > llong(0, 0x7fffffff));
+    LLAssert(llong(0x80000000, 1) > llong(0x80000000, 0));
+    LLAssert(llong(1, 0) > llong(0, 0x7fffffff));
+    LLAssert(llong(1, 0) > llong(0, 0xffffffff));
+    LLAssert(llong(0, 0) > llong(0x80000000, 1));
+
+    // operator<
+    LLAssert(llong(1, 0) < llong(1, 1));
+    LLAssert(llong(0, 0x7fffffff) < llong(0, 0x80000000));
+    LLAssert(llong(0x80000000, 0) < llong(0x80000000, 1));
+    LLAssert(llong(0, 0x7fffffff) < llong(1, 0));
+    LLAssert(llong(0, 0xffffffff) < llong(1, 0));
+    LLAssert(llong(0x80000000, 1) < llong(0, 0));
+
+    // operator>=
+    LLAssert(llong(1, 1) >= llong(1, 0));
+    LLAssert(llong(0, 0x80000000) >= llong(0, 0x7fffffff));
+    LLAssert(llong(0x80000000, 1) >= llong(0x80000000, 0));
+    LLAssert(llong(1, 0) >= llong(0, 0x7fffffff));
+    LLAssert(llong(1, 0) >= llong(0, 0xffffffff));
+    LLAssert(llong(0, 0) >= llong(0x80000000, 1));
+    LLAssert(llong() >= llong(0, 0));
+    LLAssert(llong(1,0) >= llong(1, 0));
+    LLAssert(llong(0,1) >= llong(0, 1));
+
+    // operator<=
+    LLAssert(llong(1, 0) <= llong(1, 1));
+    LLAssert(llong(0, 0x7fffffff) <= llong(0, 0x80000000));
+    LLAssert(llong(0x80000000, 0) <= llong(0x80000000, 1));
+    LLAssert(llong(0, 0x7fffffff) <= llong(1, 0));
+    LLAssert(llong(0, 0xffffffff) <= llong(1, 0));
+    LLAssert(llong(0x80000000, 1) <= llong(0, 0));
+    LLAssert(llong() <= llong(0, 0));
+    LLAssert(llong(1,0) <= llong(1, 0));
+    LLAssert(llong(0,1) <= llong(0, 1));
+
+    // operator==(int32)
+    LLAssert(llong() == (int32_t)0);
+    LLAssert(llong(0,1) == (int32_t)1);
+
+    // operator!=(int32)
+    LLAssert(llong(1,0) != (int32_t)0);
+    LLAssert(llong(0,1) != (int32_t)2);
+    LLAssert(llong(0,0xffffffff) != (int32_t)-1);
+
+    llong negOne(0xffffffff, 0xffffffff);
+
+    // operator>(int32)
+    LLAssert(llong(0, 0x80000000) > (int32_t)0x7fffffff);
+    LLAssert(negOne > (int32_t)-2);
+    LLAssert(llong(1, 0) > (int32_t)0x7fffffff);
+    LLAssert(llong(0, 0) > (int32_t)-1);
+
+    // operator<(int32)
+    LLAssert(llong(0, 0x7ffffffe) < (int32_t)0x7fffffff);
+    LLAssert(llong(0xffffffff, 0xfffffffe) < (int32_t)-1);
+
+    // operator>=(int32)
+    LLAssert(llong(0, 0x80000000) >= (int32_t)0x7fffffff);
+    LLAssert(negOne >= (int32_t)-2);
+    LLAssert(llong(1, 0) >= (int32_t)0x7fffffff);
+    LLAssert(llong(0, 0) >= (int32_t)-1);
+    LLAssert(llong() >= (int32_t)0);
+    LLAssert(llong(0,1) >= (int32_t)1);
+
+    // operator<=(int32)
+    LLAssert(llong(0, 0x7ffffffe) <= (int32_t)0x7fffffff);
+    LLAssert(llong(0xffffffff, 0xfffffffe) <= (int32_t)-1);
+    LLAssert(llong() <= (int32_t)0);
+    LLAssert(llong(0,1) <= (int32_t)1);
+
     // operator=
     LLAssert((llong(2,3) = llong((uint32_t)-1)).asUInt() == (uint32_t)-1);
 
@@ -426,101 +524,6 @@ void IntlTestRBNF::TestLLongSimpleOperators()
 
     // operator^=(uint32)
     LLAssert((llong(0x55555555, 0x55555555) ^= (uint32_t)0xffffaaaa) == llong(0x55555555, 0xaaaaffff));
-
-    // operator==
-    LLAssert(llong() == llong(0, 0));
-    LLAssert(llong(1,0) == llong(1, 0));
-    LLAssert(llong(0,1) == llong(0, 1));
-
-    // operator!=
-    LLAssert(llong(1,0) != llong(1,1));
-    LLAssert(llong(0,1) != llong(1,1));
-    LLAssert(llong(0xffffffff,0xffffffff) != llong(0x7fffffff, 0xffffffff));
-
-    // operator>
-    LLAssert(llong(1, 1) > llong(1, 0));
-    LLAssert(llong(0, 0x80000000) > llong(0, 0x7fffffff));
-    LLAssert(llong(0x80000000, 1) > llong(0x80000000, 0));
-    LLAssert(llong(1, 0) > llong(0, 0x7fffffff));
-    LLAssert(llong(1, 0) > llong(0, 0xffffffff));
-    LLAssert(llong(0, 0) > llong(0x80000000, 1));
-
-    // operator<
-    LLAssert(llong(1, 0) < llong(1, 1));
-    LLAssert(llong(0, 0x7fffffff) < llong(0, 0x80000000));
-    LLAssert(llong(0x80000000, 0) < llong(0x80000000, 1));
-    LLAssert(llong(0, 0x7fffffff) < llong(1, 0));
-    LLAssert(llong(0, 0xffffffff) < llong(1, 0));
-    LLAssert(llong(0x80000000, 1) < llong(0, 0));
-
-    // operator>=
-    LLAssert(llong(1, 1) >= llong(1, 0));
-    LLAssert(llong(0, 0x80000000) >= llong(0, 0x7fffffff));
-    LLAssert(llong(0x80000000, 1) >= llong(0x80000000, 0));
-    LLAssert(llong(1, 0) >= llong(0, 0x7fffffff));
-    LLAssert(llong(1, 0) >= llong(0, 0xffffffff));
-    LLAssert(llong(0, 0) >= llong(0x80000000, 1));
-    LLAssert(llong() >= llong(0, 0));
-    LLAssert(llong(1,0) >= llong(1, 0));
-    LLAssert(llong(0,1) >= llong(0, 1));
-
-    // operator<=
-    LLAssert(llong(1, 0) <= llong(1, 1));
-    LLAssert(llong(0, 0x7fffffff) <= llong(0, 0x80000000));
-    LLAssert(llong(0x80000000, 0) <= llong(0x80000000, 1));
-    LLAssert(llong(0, 0x7fffffff) <= llong(1, 0));
-    LLAssert(llong(0, 0xffffffff) <= llong(1, 0));
-    LLAssert(llong(0x80000000, 1) <= llong(0, 0));
-    LLAssert(llong() <= llong(0, 0));
-    LLAssert(llong(1,0) <= llong(1, 0));
-    LLAssert(llong(0,1) <= llong(0, 1));
-
-    // operator==(int32)
-    LLAssert(llong() == (int32_t)0);
-    LLAssert(llong(0,1) == (int32_t)1);
-
-    // operator!=(int32)
-    LLAssert(llong(1,0) != (int32_t)0);
-    LLAssert(llong(0,1) != (int32_t)2);
-    LLAssert(llong(0,0xffffffff) != (int32_t)-1);
-
-    // operator>(int32)
-    LLAssert(llong(0, 0x80000000) > (int32_t)0x7fffffff);
-    LLAssert(llong(0xffffffff, 0xffffffff) > (int32_t)-2);
-    LLAssert(llong(1, 0) > (int32_t)0x7fffffff);
-    LLAssert(llong(0, 0) > (int32_t)-1);
-
-    // operator<(int32)
-    LLAssert(llong(0, 0x7ffffffe) < (int32_t)0x7fffffff);
-    LLAssert(llong(0xffffffff, 0xfffffffe) < (int32_t)-1);
-
-    // operator>=(int32)
-    LLAssert(llong(0, 0x80000000) >= (int32_t)0x7fffffff);
-    LLAssert(llong(0xffffffff, 0xffffffff) >= (int32_t)-2);
-    LLAssert(llong(1, 0) >= (int32_t)0x7fffffff);
-    LLAssert(llong(0, 0) >= (int32_t)-1);
-    LLAssert(llong() >= (int32_t)0);
-    LLAssert(llong(0,1) >= (int32_t)1);
-
-    // operator<=(int32)
-    LLAssert(llong(0, 0x7ffffffe) <= (int32_t)0x7fffffff);
-    LLAssert(llong(0xffffffff, 0xfffffffe) <= (int32_t)-1);
-    LLAssert(llong() <= (int32_t)0);
-    LLAssert(llong(0,1) <= (int32_t)1);
-
-    // unsigned >
-    LLAssert(llong((int32_t)-1).ugt(llong(0x7fffffff, 0xffffffff)));
-
-    // unsigned <
-    LLAssert(llong(0x7fffffff, 0xffffffff).ult(llong((int32_t)-1)));
-
-    // unsigned >=
-    LLAssert(llong((int32_t)-1).uge(llong(0x7fffffff, 0xffffffff)));
-    LLAssert(llong((int32_t)-1).uge(llong((int32_t)-1)));
-
-    // unsigned <=
-    LLAssert(llong(0x7fffffff, 0xffffffff).ule(llong((int32_t)-1)));
-    LLAssert(llong((int32_t)-1).ule(llong((int32_t)-1)));
 
     // prefix inc
     LLAssert(llong(1, 0) == ++llong(0,0xffffffff));
