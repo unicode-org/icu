@@ -356,12 +356,14 @@ static void TestCodepageAndLocale(void) {
         log_err("Didn't get the proper default codepage. Got %s expected: %s\n",
             u_fgetcodepage(myFile), ucnv_getDefaultName());
     }
+#if !UCONFIG_NO_FORMATTING
     if (u_fgetlocale(myFile) == NULL
         || strcmp(u_fgetlocale(myFile), uloc_getDefault()) != 0)
     {
         log_err("Didn't get the proper default locale. Got %s expected: %s\n",
             u_fgetlocale(myFile), uloc_getDefault());
     }
+#endif
     u_fclose(myFile);
 
     myFile = u_fopen(STANDARD_TEST_FILE, "w", "es", NULL);
@@ -371,12 +373,14 @@ static void TestCodepageAndLocale(void) {
         log_err("Didn't get the proper default codepage for \"es\". Got %s expected: iso-8859-1\n",
             u_fgetcodepage(myFile));
     }
+#if !UCONFIG_NO_FORMATTING
     if (u_fgetlocale(myFile) == NULL
         || strcmp(u_fgetlocale(myFile), "es") != 0)
     {
         log_err("Didn't get the proper default locale. Got %s expected: %s\n",
             u_fgetlocale(myFile), "es");
     }
+#endif
     u_fclose(myFile);
 
     myFile = u_fopen(STANDARD_TEST_FILE, "w", NULL, "UTF-16");
@@ -386,12 +390,14 @@ static void TestCodepageAndLocale(void) {
         log_err("Didn't get the proper default codepage for \"en\". Got %s expected: iso-8859-1\n",
             u_fgetcodepage(myFile));
     }
+#if !UCONFIG_NO_FORMATTING
     if (u_fgetlocale(myFile) == NULL
         || strcmp(u_fgetlocale(myFile), uloc_getDefault()) != 0)
     {
         log_err("Didn't get the proper default locale. Got %s expected: %s\n",
             u_fgetlocale(myFile), uloc_getDefault());
     }
+#endif
     u_fclose(myFile);
 
     myFile = u_fopen(STANDARD_TEST_FILE, "w", "zh", "UTF-16");
@@ -401,12 +407,14 @@ static void TestCodepageAndLocale(void) {
         log_err("Didn't get the proper default codepage for \"en\". Got %s expected: iso-8859-1\n",
             u_fgetcodepage(myFile));
     }
+#if !UCONFIG_NO_FORMATTING
     if (u_fgetlocale(myFile) == NULL
         || strcmp(u_fgetlocale(myFile), "zh") != 0)
     {
         log_err("Didn't get the proper default locale. Got %s expected: %s\n",
             u_fgetlocale(myFile), "zh");
     }
+#endif
     u_fclose(myFile);
 }
 
@@ -462,7 +470,6 @@ static void TestfgetsBuffers(void) {
         log_err("Got %s instead of UTF-16\n", u_fgetcodepage(myFile));
     }
     u_fclose(myFile);
-
 
     log_verbose("Now trying a multi-byte encoding (UTF-8).\n");
 
@@ -796,10 +803,11 @@ static void TestFilePrintCompatibility(void) {
         log_err("Can't write test file.\n");
         return;
     }
-
+#if !UCONFIG_NO_FORMATTING
     if (strcmp(u_fgetlocale(myFile), "en_US_POSIX") != 0) {
         log_err("Got %s instead of en_US_POSIX for locale\n", u_fgetlocale(myFile));
     }
+#endif
 
     /* Compare against C API compatibility */
     for (num = -STANDARD_TEST_NUM_RANGE; num < STANDARD_TEST_NUM_RANGE; num++) {
