@@ -52,7 +52,8 @@ private:
     void testLocale(/* char *par, */const Locale& locale, const UnicodeString& localeName);
 
     NumberFormat*   fFormat;
-    UErrorCode       fStatus;
+    UErrorCode      fStatus;
+    Locale          fLocale;
 
 public:
 

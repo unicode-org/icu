@@ -13,6 +13,18 @@
 #include <float.h>
 #include <limits.h>
 
+static const char * formattableTypeName(Formattable::Type t)
+{
+  switch(t) {
+  case Formattable::kDate: return "kDate";
+  case Formattable::kDouble: return "kDouble";
+  case Formattable::kLong: return "kLong";
+  case Formattable::kString: return "kString";
+  case Formattable::kArray: return "kArray";
+  default: return "??unknown??";
+  }
+}
+
 /**
  * This test does round-trip testing (format -> parse -> format -> parse -> etc.) of
  * NumberFormat.
@@ -59,6 +71,7 @@ IntlTestNumberFormat::testLocale(/* char* par, */const Locale& locale, const Uni
 {
     const char* name;
     
+    fLocale = locale;
     name = "Number test";
     logln((UnicodeString)name + " (" + localeName + ")");
     fStatus = U_ZERO_ERROR;
@@ -299,9 +312,10 @@ IntlTestNumberFormat::tryIt(int32_t aNumber)
             dump = TRUE;
             break;
         }
+              
         if (number[i].getType() != Formattable::kLong)
         {
-            errln("********** FAIL: Parse of " + string[i-1] + " returned non-long Formattable.");
+            errln("********** FAIL: Parse of " + string[i-1] + " returned non-long Formattable, type " + UnicodeString(formattableTypeName(number[i].getType())) + ", Locale=" + UnicodeString(fLocale.getName()));
             dump = TRUE;
             break;
         }
