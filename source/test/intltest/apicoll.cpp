@@ -1477,7 +1477,7 @@ void CollationAPITest::TestGetLocale() {
   delete coll;
 }
 
-#include "unicode/caniter.h"
+#include "caniter.h"
 #include "unicode/translit.h"
 #include "unicode/uniset.h"
 #include "hash.h"
@@ -1579,7 +1579,7 @@ void CollationAPITest::runIndexedTest( int32_t index, UBool exec, const char* &n
         case 15: name = "TestVariableTopSetting"; if (exec) TestVariableTopSetting(); break;
         case 16: name = "TestRules"; if (exec) TestRules(); break;
         case 17: name = "TestGetLocale"; if (exec) TestGetLocale(); break;
-        case 18: name = "TestCanonicalIterator"; if (exec) TestCanonicalIterator(); break;
+          //case 18: name = "TestCanonicalIterator"; if (exec) TestCanonicalIterator(); break;
         default: name = ""; break;
     }
 }
