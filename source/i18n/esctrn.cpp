@@ -79,16 +79,17 @@ void EscapeTransliterator::registerIDs() {
  * parameters.  See the class member documentation for details.
  */
 EscapeTransliterator::EscapeTransliterator(const UnicodeString& ID,
-                         const UnicodeString& prefix, const UnicodeString& suffix,
-                         int32_t radix, int32_t minDigits,
-                         UBool grokSupplementals,
+                         const UnicodeString& _prefix, const UnicodeString& _suffix,
+                         int32_t _radix, int32_t _minDigits,
+                         UBool _grokSupplementals,
                          EscapeTransliterator* adoptedSupplementalHandler) :
-    Transliterator(ID, NULL) {
-    this->prefix = prefix;
-    this->suffix = suffix;
-    this->radix = radix;
-    this->minDigits = minDigits;
-    this->grokSupplementals = grokSupplementals;
+    Transliterator(ID, NULL)
+{
+    this->prefix = _prefix;
+    this->suffix = _suffix;
+    this->radix = _radix;
+    this->minDigits = _minDigits;
+    this->grokSupplementals = _grokSupplementals;
     this->supplementalHandler = adoptedSupplementalHandler;
 }
 
