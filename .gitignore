@@ -272,9 +272,11 @@ icu4c/source/tools/genqchk/genqchk
 icu4c/source/tools/genqchk/genqchk.d
 icu4c/source/tools/genrb/*.d
 icu4c/source/tools/genrb/*.pdb
+icu4c/source/tools/genrb/*.plg
 icu4c/source/tools/genrb/Debug
 icu4c/source/tools/genrb/Makefile
 icu4c/source/tools/genrb/Release
+icu4c/source/tools/genrb/derb_*
 icu4c/source/tools/genrb/genjp/Debug
 icu4c/source/tools/genrb/genjp/genjp.ncb
 icu4c/source/tools/genrb/genjp/genjp.opt
