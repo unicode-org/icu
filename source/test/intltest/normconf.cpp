@@ -54,6 +54,7 @@ void NormalizerConformanceTest::TestConformance(void) {
     char newPath[256];
     char backupPath[256];
     FileStream *input = NULL;
+    UChar32 c;
 
     /* Look inside ICU_DATA first */
     strcpy(newPath, u_getDataDirectory());
@@ -111,7 +112,15 @@ void NormalizerConformanceTest::TestConformance(void) {
 
         // Remove a single code point from the "other" UnicodeSet
         if(fields[0].length()==fields[0].moveIndex32(0, 1)) {
-            other.remove(fields[0].char32At(0));
+            c=fields[0].char32At(0);
+            if(0xac20<=c && c<=0xd73f && quick) {
+                // not an exhaustive test run: skip most Hangul syllables
+                if(c==0xac20) {
+                    other.remove(0xac20, 0xd73f);
+                }
+                continue;
+            }
+            other.remove(c);
         }
 
         if (checkConformance(fields, UnicodeString(lineBuf, ""))) {
@@ -131,13 +140,12 @@ void NormalizerConformanceTest::TestConformance(void) {
      * as single code points in column 1
      * do not change under any normalization.
      */
-    UChar32 c;
 
     // remove U+ffff because that is the end-of-iteration sentinel value
     other.remove(0xffff);
 
-    for(c=0; c<=0x10ffff; ++c) {
-        if(c==0x30000) {
+    for(c=0; c<=0x10ffff; quick ? c+=113 : ++c) {
+        if(0x30000<=c && c<0xe0000) {
             c=0xe0000;
         }
         if(!other.contains(c)) {
