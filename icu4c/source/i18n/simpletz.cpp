@@ -460,7 +460,9 @@ SimpleTimeZone::getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
         || millis < 0
         || millis >= U_MILLIS_PER_DAY
         || monthLength < 28
-        || monthLength > 31) {
+        || monthLength > 31
+        || prevMonthLength < 28
+        || prevMonthLength > 31) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return -1;
     }
