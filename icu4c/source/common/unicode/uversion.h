@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2000-2004, International Business Machines
+*   Copyright (C) 2000-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *
@@ -22,20 +22,22 @@
 #ifndef UVERSION_H
 #define UVERSION_H
 
-/** IMPORTANT: When updating version, the following things need to be done:   */
-/** source/common/unicode/uversion.h - this file: update major, minor,        */
-/**        patchlevel, suffix, version, short version constants, namespace,   */
-/**                                                             and copyright */
-/** source/common/common.dsp - update 'Output file name' on the link tab so   */
-/**                   that it contains the new major/minor combination        */
-/** source/i18n/i18n.dsp - same as for the common.dsp                         */
-/** source/layout/layout.dsp - same as for the common.dsp                     */
-/** source/stubdata/stubdata.dsp - same as for the common.dsp                 */
-/** source/extra/ustdio/ustdio.dsp - same as for the common.dsp               */
-/** source/data/makedata.mak - change U_ICUDATA_NAME so that it contains      */
-/**                            the new major/minor combination                */
-/** source/tools/genren/genren.pl - use this script according to the README   */
-/**                    in that folder                                         */
+/**
+ * IMPORTANT: When updating version, the following things need to be done:
+ * source/common/unicode/uversion.h - this file: update major, minor,
+ *        patchlevel, suffix, version, short version constants, namespace,
+ *                                                             and copyright
+ * source/common/common.vcproj - update 'Output file name' on the link tab so
+ *                   that it contains the new major/minor combination
+ * source/i18n/i18n.vcproj - same as for the common.vcproj
+ * source/layout/layout.vcproj - same as for the common.vcproj
+ * source/stubdata/stubdata.vcproj - same as for the common.vcproj
+ * source/io/io.vcproj - same as for the common.vcproj
+ * source/data/makedata.mak - change U_ICUDATA_NAME so that it contains
+ *                            the new major/minor combination
+ * source/tools/genren/genren.pl - use this script according to the README
+ *                    in that folder                                         
+ */
 
 #include "unicode/umachine.h"
 
@@ -44,7 +46,7 @@
  *  @stable ICU 2.4
  */
 #define U_COPYRIGHT_STRING \
-  " Copyright (C) 2004, International Business Machines Corporation and others. All Rights Reserved. "
+  " Copyright (C) 2005, International Business Machines Corporation and others. All Rights Reserved. "
 
 /** Maximum length of the copyright string.
  *  @stable ICU 2.4
@@ -61,7 +63,7 @@
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.6
  */
-#define U_ICU_VERSION_MINOR_NUM 2
+#define U_ICU_VERSION_MINOR_NUM 3
 
 /** The current ICU patchlevel version as an integer.  
  *  This value will change in the subsequent releases of ICU
@@ -73,20 +75,20 @@
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.6
  */
-#define U_ICU_VERSION_SUFFIX _3_2
+#define U_ICU_VERSION_SUFFIX _3_3
 
 /** The current ICU library version as a dotted-decimal string. The patchlevel
  *  only appears in this string if it non-zero. 
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.4
  */
-#define U_ICU_VERSION "3.2"
+#define U_ICU_VERSION "3.3"
 
 /** The current ICU library major/minor version as a string without dots, for library name suffixes. 
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.6
  */
-#define U_ICU_VERSION_SHORT "32"
+#define U_ICU_VERSION_SHORT "33"
 
 /** An ICU version consists of up to 4 numbers from 0..255.
  *  @stable ICU 2.4

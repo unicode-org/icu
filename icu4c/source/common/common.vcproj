@@ -41,10 +41,10 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\bin\icuuc32.dll"
+				OutputFile="..\..\bin\icuuc33.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				ProgramDatabaseFile=".\..\..\lib\icuuc32.pdb"
+				ProgramDatabaseFile=".\..\..\lib\icuuc33.pdb"
 				BaseAddress="0x4a800000"
 				ImportLibrary="..\..\lib\icuuc.lib"/>
 			<Tool
@@ -104,11 +104,11 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\bin\icuuc32d.dll"
+				OutputFile="..\..\bin\icuuc33d.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile=".\..\..\lib\icuuc32d.pdb"
+				ProgramDatabaseFile=".\..\..\lib\icuuc33d.pdb"
 				BaseAddress="0x4a800000"
 				ImportLibrary="..\..\lib\icuucd.lib"/>
 			<Tool
