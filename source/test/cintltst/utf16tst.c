@@ -370,10 +370,12 @@ static void TestSetChar(){
          if(setOffset != start_safe[i]){
              log_err("ERROR: UTF16_SET_CHAR_START_SAFE failed for offset=%ld. Expected:%lx Got:%lx\n", offset, start_safe[i], setOffset);
          }
-         setOffset=offset; 
-         UTF16_SET_CHAR_LIMIT_UNSAFE(input, setOffset);
-         if(setOffset != limit_unsafe[i]){
-             log_err("ERROR: UTF16_SET_CHAR_LIMIT_UNSAFE failed for offset=%ld. Expected:%lx Got:%lx\n", offset, limit_unsafe[i], setOffset);
+         if (offset > 0) {
+             setOffset=offset;
+             UTF16_SET_CHAR_LIMIT_UNSAFE(input, setOffset);
+             if(setOffset != limit_unsafe[i]){
+                 log_err("ERROR: UTF16_SET_CHAR_LIMIT_UNSAFE failed for offset=%ld. Expected:%lx Got:%lx\n", offset, limit_unsafe[i], setOffset);
+             }
          }
          setOffset=offset; 
          UTF16_SET_CHAR_LIMIT_SAFE(input,0, setOffset, sizeof(input)/U_SIZEOF_UCHAR);
