@@ -40,7 +40,7 @@
 #define ISCII_INV           0xD9
 #define INDIC_BLOCK_BEGIN   0x0900
 #define INDIC_BLOCK_END     0x0D7F 
-#define INDIC_RANGE         INDIC_BLOCK_END - INDIC_BLOCK_BEGIN
+#define INDIC_RANGE         (INDIC_BLOCK_END - INDIC_BLOCK_BEGIN)
 #define VOCALLIC_RR         0x0931
 #define LF                  0x0A
 #define ASCII_END           0x9f
@@ -213,9 +213,12 @@ _ISCIIReset(UConverter *cnv, UConverterResetChoice choice){
  * 
  * Telugu and Kannada have same codepoints except for Vocallic_RR which we special case
  * and combine and use 1 bit to represent these languages.
+ *
+ * TODO: It is probably easier to understand and maintain to change this
+ * to use uint16_t and give each of the 9 Unicode/script blocks its own bit.
  */
 
-static const uint8_t validityTable[113] = {
+static const uint8_t validityTable[128] = {
 /* This state table is tool generated please donot edit unless you know exactly what you are doing */
 /*ISCII:Valid:Unicode */
 /*0xa0 : 0x00: 0x900  */ ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
@@ -331,6 +334,13 @@ static const uint8_t validityTable[113] = {
 /*0xf9 : 0xff: 0x96e  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
 /*0xfa : 0xff: 0x96f  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
 /*0x00 : 0x80: 0x970  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
+
+/*
+ * The length of the array is 128 to provide values for 0x900..0x97f.
+ * The last 15 entries for 0x971..0x97f of the validity table are all zero
+ * because no Indic script uses such Unicode code points.
+ */
+/*0x00 : 0x00: 0x9yz  */ ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO
 };
 
 static const uint16_t fromUnicodeTable[128]={   
@@ -861,26 +871,27 @@ UConverter_fromUnicode_ISCII_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
        default:
             /* is the sourceChar in the INDIC_RANGE? */
             if((uint16_t)(INDIC_BLOCK_END-sourceChar) <= INDIC_RANGE){
-                /* find out to which block the souceChar belongs*/ 
-                range =(uint16_t)((sourceChar-INDIC_BLOCK_BEGIN)/DELTA);
-                newDelta =(uint16_t)(range*DELTA);
-
-                /* Now are we in the same block as the previous? */
-                if(newDelta!= converterData->currentDeltaFromUnicode || converterData->isFirstBuffer){
-                    converterData->currentDeltaFromUnicode = newDelta;
-                    converterData->currentMaskFromUnicode = lookupInitialData[range][1];
-                    deltaChanged =TRUE;
-                    converterData->isFirstBuffer=FALSE;
-                }
-                /* Normalize all Indic codepoints to Devanagari and map them to ISCII */
-                /* now subtract the new delta from sourceChar*/
                 /* Danda and Double Danda are valid in Northern scripts.. since Unicode 
                  * does not include these codepoints in all Northern scrips we need to 
                  * filter them out
                  */
                 if(sourceChar!= DANDA && sourceChar != DOUBLE_DANDA){
+                    /* find out to which block the souceChar belongs*/ 
+                    range =(uint16_t)((sourceChar-INDIC_BLOCK_BEGIN)/DELTA);
+                    newDelta =(uint16_t)(range*DELTA);
+
+                    /* Now are we in the same block as the previous? */
+                    if(newDelta!= converterData->currentDeltaFromUnicode || converterData->isFirstBuffer){
+                        converterData->currentDeltaFromUnicode = newDelta;
+                        converterData->currentMaskFromUnicode = lookupInitialData[range][1];
+                        deltaChanged =TRUE;
+                        converterData->isFirstBuffer=FALSE;
+                    }
+                    /* Normalize all Indic codepoints to Devanagari and map them to ISCII */
+                    /* now subtract the new delta from sourceChar*/
                     sourceChar -= converterData->currentDeltaFromUnicode ;
                 }
+
                 /* get the target byte unit */                  
                 targetByteUnit=fromUnicodeTable[(uint8_t)sourceChar];
                             
@@ -1069,7 +1080,7 @@ static const int32_t lookupTable[][2]={
 #define WRITE_TO_TARGET_TO_U(args,source,target,offsets,offset,targetUniChar,delta, err){\
     /* add offset to current Indic Block */                                              \
     if(targetUniChar>ASCII_END &&                                                        \
-           targetUniChar != ZWNJ &&                                                      \
+           targetUniChar != ZWJ &&                                                       \
            targetUniChar != ZWNJ &&                                                      \
            targetUniChar != DANDA &&                                                     \
            targetUniChar != DOUBLE_DANDA){                                               \
