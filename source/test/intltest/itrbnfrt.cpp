@@ -25,6 +25,7 @@ void RbnfRoundTripTest::runIndexedTest(int32_t index, UBool exec, const char* &n
 {
     if (exec) logln("TestSuite RuleBasedNumberFormatRT");
     switch (index) {
+#if U_HAVE_RBNF
       TESTCASE(0, TestEnglishSpelloutRT);
       TESTCASE(1, TestDurationsRT);
       TESTCASE(2, TestSpanishSpelloutRT);
@@ -37,11 +38,16 @@ void RbnfRoundTripTest::runIndexedTest(int32_t index, UBool exec, const char* &n
       TESTCASE(9, TestJapaneseSpelloutRT);
       TESTCASE(10, TestRussianSpelloutRT);
       TESTCASE(11, TestGreekSpelloutRT);
+#else
+	  TESTCASE(0, TestRBNFDisabled);
+#endif
     default:
       name = "";
       break;
     }
 }
+
+#if U_HAVE_RBNF
 
 /**
  * Perform an exhaustive round-trip test on the English spellout rules
@@ -339,3 +345,13 @@ RbnfRoundTripTest::doTest(const RuleBasedNumberFormat* formatter,
   }
 }
 
+/* U_HAVE_RBNF */
+#else
+
+void
+RbnfRoundTripTest::TestRBNFDisabled() {
+	logln("*** RBNF currently disabled on this platform ***");
+}
+
+/* U_HAVE_RBNF */
+#endif

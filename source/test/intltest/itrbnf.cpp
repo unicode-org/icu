@@ -6,11 +6,13 @@
  */
 #include "itrbnf.h"
 
+#include "unicode/umachine.h"
+
 #include "unicode/tblcoll.h"
 #include "unicode/coleitr.h"
 #include "unicode/ures.h"
 #include "unicode/ustring.h"
-#include "llong.h"
+//#include "llong.h"
 
 #include <string.h>
 
@@ -35,6 +37,7 @@ void IntlTestRBNF::runIndexedTest(int32_t index, UBool exec, const char* &name, 
 {
     if (exec) logln("TestSuite RuleBasedNumberFormat");
     switch (index) {
+#if U_HAVE_RBNF
       TESTCASE(0, TestEnglishSpellout);
       TESTCASE(1, TestOrdinalAbbreviations);
       TESTCASE(2, TestDurations);
@@ -46,12 +49,17 @@ void IntlTestRBNF::runIndexedTest(int32_t index, UBool exec, const char* &name, 
       TESTCASE(8, TestThaiSpellout);
       TESTCASE(9, TestAPI);
       TESTCASE(10, TestFractionalRuleSet);
-      TESTCASE(11, TestLLong);
+      // TESTCASE(11, TestLLong);
+#else
+	  TESTCASE(0, TestRBNFDisabled);
+#endif
     default:
       name = "";
       break;
     }
 }
+
+#if U_HAVE_RBNF
 
 void 
 IntlTestRBNF::TestAPI() {
@@ -265,6 +273,7 @@ void IntlTestRBNF::TestFractionalRuleSet()
     }
 }
 
+#if 0
 #define LLAssert(a) \
   if (!(a)) errln("FAIL: " #a)
 
@@ -890,6 +899,9 @@ void IntlTestRBNF::TestLLong()
     }
 }
 
+/* if 0 */
+#endif
+
 void 
 IntlTestRBNF::TestEnglishSpellout() 
 {
@@ -1389,3 +1401,13 @@ IntlTestRBNF::doLenientParseTest(RuleBasedNumberFormat* formatter, const char* t
     }
 }
 
+/* U_HAVE_RBNF */
+#else
+
+void
+IntlTestRBNF::TestRBNFDisabled() {
+	logln("*** RBNF currently disabled on this platform ***");
+}
+
+/* U_HAVE_RBNF */
+#endif

@@ -7,6 +7,11 @@
 #ifndef RBNF_H
 #define RBNF_H
 
+#if 0 //U_INT64_T_UNAVAILABLE -- fix once George defines this
+#define U_HAVE_RBNF 0
+#else
+#define U_HAVE_RBNF 1
+
 #include "unicode/coll.h"
 #include "unicode/dcfmtsym.h"
 #include "unicode/fmtable.h"
@@ -583,7 +588,7 @@ public:
   virtual int32_t getNumberOfRuleSetNames() const;
 
   /**
-   * Formats the specified number using the default ruleset.
+   * Formats the specified 32-bit number using the default ruleset.
    * @param number The number to format.
    * @param toAppendTo the string that will hold the (appended) result
    * @param pos the fieldposition
@@ -591,6 +596,18 @@ public:
    * @draft ICU 2.0
    */
   virtual UnicodeString& format(int32_t number,
+                                UnicodeString& toAppendTo,
+                                FieldPosition& pos) const;
+
+  /**
+   * Formats the specified 64-bit number using the default ruleset.
+   * @param number The number to format.
+   * @param toAppendTo the string that will hold the (appended) result
+   * @param pos the fieldposition
+   * @return A textual representation of the number.
+   * @draft ICU 2.1
+   */
+  virtual UnicodeString& format(int64_t number,
                                 UnicodeString& toAppendTo,
                                 FieldPosition& pos) const;
   /**
@@ -617,6 +634,22 @@ public:
    * @draft ICU 2.0
    */
   virtual UnicodeString& format(int32_t number,
+                                const UnicodeString& ruleSetName,
+                                UnicodeString& toAppendTo,
+                                FieldPosition& pos,
+                                UErrorCode& status) const;
+  /**
+   * Formats the specified 64-bit number using the default ruleset.
+   * @param number The number to format.
+   * @param ruleSetName The name of the rule set to format the number with.
+   * This must be the name of a valid public rule set for this formatter.
+   * @param toAppendTo the string that will hold the (appended) result
+   * @param pos the fieldposition
+   * @param status the status
+   * @return A textual representation of the number.
+   * @draft ICU 2.1
+   */
+  virtual UnicodeString& format(int64_t number,
                                 const UnicodeString& ruleSetName,
                                 UnicodeString& toAppendTo,
                                 FieldPosition& pos,
@@ -823,6 +856,9 @@ RuleBasedNumberFormat::getDefaultRuleSet() const {
 }
 
 U_NAMESPACE_END
+
+/* U_HAVE_RBNF */
+#endif
 
 /* RBNF_H */
 #endif

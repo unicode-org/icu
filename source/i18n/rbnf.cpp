@@ -6,6 +6,8 @@
 
 #include "unicode/rbnf.h"
 
+#if U_HAVE_RBNF
+
 #include "nfrs.h"
 
 #include "cmemory.h"
@@ -219,20 +221,20 @@ RuleBasedNumberFormat::format(int32_t number,
                               UnicodeString& toAppendTo,
                               FieldPosition& pos) const
 {
-    defaultRuleSet->format(llong(number), toAppendTo, toAppendTo.length());
+    defaultRuleSet->format((int64_t)number, toAppendTo, toAppendTo.length());
     return toAppendTo;
 }
 
-#if 0
+
 UnicodeString&
-RuleBasedNumberFormat::format(llong number,
+RuleBasedNumberFormat::format(int64_t number,
                               UnicodeString& toAppendTo,
                               FieldPosition& pos) const
 {
     defaultRuleSet->format(number, toAppendTo, toAppendTo.length());
     return toAppendTo;
 }
-#endif
+
 
 UnicodeString&
 RuleBasedNumberFormat::format(double number,
@@ -251,7 +253,7 @@ RuleBasedNumberFormat::format(int32_t number,
                               FieldPosition& pos,
                               UErrorCode& status) const
 {
-    // return format(llong(number), ruleSetName, toAppendTo, pos, status);
+    // return format((int64_t)number, ruleSetName, toAppendTo, pos, status);
     if (U_SUCCESS(status)) {
         if (ruleSetName.indexOf(gPercentPercent) == 0) {
             // throw new IllegalArgumentException("Can't use internal rule set");
@@ -259,16 +261,16 @@ RuleBasedNumberFormat::format(int32_t number,
         } else {
             NFRuleSet *rs = findRuleSet(ruleSetName, status);
             if (rs) {
-                rs->format(llong(number), toAppendTo, toAppendTo.length());
+                rs->format((int64_t)number, toAppendTo, toAppendTo.length());
             }
         }
     }
     return toAppendTo;
 }
 
-#if 0
+
 UnicodeString&
-RuleBasedNumberFormat::format(llong number,
+RuleBasedNumberFormat::format(int64_t number,
                               const UnicodeString& ruleSetName,
                               UnicodeString& toAppendTo,
                               FieldPosition& pos,
@@ -287,7 +289,7 @@ RuleBasedNumberFormat::format(llong number,
     }
     return toAppendTo;
 }
-#endif
+
 
 // make linker happy
 UnicodeString&
@@ -630,3 +632,5 @@ RuleBasedNumberFormat::getDecimalFormatSymbols() const
     return decimalFormatSymbols;
 }
 
+/* U_HAVE_RBNF */
+#endif

@@ -14,6 +14,9 @@
 */
 
 #include "nfrs.h"
+
+#if U_HAVE_RBNF
+
 #include "nfrule.h"
 #include "nfrlist.h"
 #include "unicode/uchar.h"
@@ -30,8 +33,8 @@ U_NAMESPACE_BEGIN
 // isn't as much range as we get with longs.  We probably still
 // want either 64-bit math, or BigInteger.
 
-static llong
-util_lcm(llong x, llong y)
+static int64_t
+util_lcm(int64_t x, int64_t y)
 {
     x.abs();
     y.abs();
@@ -41,7 +44,7 @@ util_lcm(llong x, llong y)
     } else {
         do {
             if (x < y) {
-                llong t = x; x = y; y = t;
+                int64_t t = x; x = y; y = t;
             }
             x -= y * (x/y);
         } while (x != 0);
@@ -54,13 +57,13 @@ util_lcm(llong x, llong y)
 /**
  * Calculates the least common multiple of x and y.
  */
-static llong
-util_lcm(llong x, llong y)
+static int64_t
+util_lcm(int64_t x, int64_t y)
 {
     // binary gcd algorithm from Knuth, "The Art of Computer Programming,"
     // vol. 2, 1st ed., pp. 298-299
-    llong x1 = x;
-    llong y1 = y;
+    int64_t x1 = x;
+    int64_t y1 = y;
 
     int p2 = 0;
     while ((x1 & 1) == 0 && (y1 & 1) == 0) {
@@ -69,7 +72,7 @@ util_lcm(llong x, llong y)
         y1 >>= 1;
     }
 
-    llong t;
+    int64_t t;
     if ((x1 & 1) == 1) {
         t = -y1;
     } else {
@@ -88,7 +91,7 @@ util_lcm(llong x, llong y)
         t = x1 - y1;
     }
 
-    llong gcd = x1 << p2;
+    int64_t gcd = x1 << p2;
 
     // x * y == gcd(x, y) * lcm(x, y)
     return x / gcd * y;
@@ -187,7 +190,7 @@ NFRuleSet::parseRules(UnicodeString& description, const RuleBasedNumberFormat* o
     // were initialized to 0.  Make another pass through the list and
     // set all those rules' base values.  We also remove any special
     // rules from the list and put them into their own member variables
-    llong defaultBaseValue = (int32_t)0;
+    int64_t defaultBaseValue = 0;
 
     // (this isn't a for loop because we might be deleting items from
     // the vector-- we want to make sure we only increment i when
@@ -296,7 +299,7 @@ NFRuleSet::operator==(const NFRuleSet& rhs) const
 }
 
 void
-NFRuleSet::format(llong number, UnicodeString& toAppendTo, int32_t pos) const
+NFRuleSet::format(int64_t number, UnicodeString& toAppendTo, int32_t pos) const
 {
     NFRule *rule = findNormalRule(number);
     rule->doFormat(number, toAppendTo, pos);
@@ -348,18 +351,18 @@ NFRuleSet::findDoubleRule(double number) const
 
     // and if we haven't yet returned a rule, use findNormalRule()
     // to find the applicable rule
-    llong r = number + 0.5;
+    int64_t r = util64_fromDouble(number + 0.5);
     return findNormalRule(r);
 }
 
 NFRule *
-NFRuleSet::findNormalRule(llong number) const
+NFRuleSet::findNormalRule(int64_t number) const
 {
     // if this is a fraction rule set, use findFractionRuleSetRule()
     // to find the rule (we should only go into this clause if the
     // value is 0)
     if (fIsFractionRuleSet) {
-        return findFractionRuleSetRule(number.asDouble());
+        return findFractionRuleSetRule((double)number);
     }
 
     // if the number is negative, return the negative-number rule
@@ -410,7 +413,7 @@ NFRuleSet::findNormalRule(llong number) const
         // an explanation of the rollback rule).  If we do, roll back
         // one rule and return that one instead of the one we'd normally
         // return
-        if (result->shouldRollBack(number.asDouble())) {
+        if (result->shouldRollBack((double)number)) {
             result = rules[hi - 2];
         }
         return result;
@@ -446,17 +449,17 @@ NFRuleSet::findFractionRuleSetRule(double number) const
     // and multiply this by the number being formatted.  This is
     // all the precision we need, and we can do all of the rest
     // of the math using integer arithmetic
-    llong leastCommonMultiple = rules[0]->getBaseValue();
-    llong numerator;
+    int64_t leastCommonMultiple = rules[0]->getBaseValue();
+    int64_t numerator;
     {
         for (uint32_t i = 1; i < rules.size(); ++i) {
             leastCommonMultiple = util_lcm(leastCommonMultiple, rules[i]->getBaseValue());
         }
-        numerator = number * leastCommonMultiple.asDouble() + 0.5;
+        numerator = util64_fromDouble(number * (double)leastCommonMultiple + 0.5);
     }
     // for each rule, do the following...
-    llong tempDifference;
-    llong difference(uprv_maxMantissa());
+    int64_t tempDifference;
+    int64_t difference = util64_fromDouble(uprv_maxMantissa());
     int32_t winner = 0;
     for (uint32_t i = 0; i < rules.size(); ++i) {
         // "numerator" is the numerator of the fraction if the
@@ -496,7 +499,7 @@ NFRuleSet::findFractionRuleSetRule(double number) const
     // a whole bunch of extra rule sets)
     if ((unsigned)(winner + 1) < rules.size() &&
         rules[winner + 1]->getBaseValue() == rules[winner]->getBaseValue()) {
-        double n = rules[winner]->getBaseValue().asDouble() * number;
+        double n = ((double)rules[winner]->getBaseValue()) * number;
         if (n < 0.5 || n >= 2) {
             ++winner;
         }
@@ -617,12 +620,14 @@ NFRuleSet::parse(const UnicodeString& text, ParsePosition& pos, double upperBoun
     // limit ambiguity by making sure the rules that match a rule's
     // are less significant than the rule containing the substitutions)/
     {
-        llong ub(upperBound);
+        int64_t ub = util64_fromDouble(upperBound);
 #ifdef RBNF_DEBUG
         {
             char ubstr[64];
-            ub.lltoa(ubstr, 64);
-            fprintf(stderr, "ub: %g, ll: %s(%x/%x)\n", upperBound, ubstr, ub.hi, ub.lo);
+            util64_toa(ub, ubstr, 64);
+			char ubstrhex[64];
+			util64_toa(ub, ubstrhex, 64, 16);
+            fprintf(stderr, "ub: %g, i64: %s (%s)\n", upperBound, ubstr, ubstrhex);
         }
 #endif
         for (int32_t i = rules.size(); --i >= 0 && highWaterMark.getIndex() < text.length();) {
@@ -682,4 +687,224 @@ NFRuleSet::appendRules(UnicodeString& result) const
     }
 }
 
+// utility functions
+
+int64_t util64_fromDouble(double d) {
+	int64_t result = 0;
+    if (!uprv_isNaN(d)) {
+        double mant = uprv_maxMantissa();
+        if (d < -mant) {
+            d = -mant;
+        } else if (d > mant) {
+            d = mant;
+        }
+        UBool neg = d < 0; 
+        if (neg) {
+            d = -d;
+        }
+        result = (int64_t)uprv_floor(d);
+        if (neg) {
+            result = -result;
+        }
+    }
+	return result;
+}
+
+int64_t util64_pow(int32_t r, uint32_t e)  { 
+    if (r == 0) {
+        return 0;
+    } else if (e == 0) {
+        return 1;
+    } else {
+		int64_t n = r;
+        while (--e > 0) {
+            n *= r;
+        }
+        return n;
+    }
+}
+
+static const uint8_t asciiDigits[] = { 
+    0x30u, 0x31u, 0x32u, 0x33u, 0x34u, 0x35u, 0x36u, 0x37u,
+    0x38u, 0x39u, 0x61u, 0x62u, 0x63u, 0x64u, 0x65u, 0x66u,
+    0x67u, 0x68u, 0x69u, 0x6au, 0x6bu, 0x6cu, 0x6du, 0x6eu,
+    0x6fu, 0x70u, 0x71u, 0x72u, 0x73u, 0x74u, 0x75u, 0x76u,
+    0x77u, 0x78u, 0x79u, 0x7au,  
+};
+
+static const UChar kUMinus = (UChar)0x002d;
+
+static const char kMinus = '-';
+
+static const uint8_t digitInfo[] = {
+        0,     0,     0,     0,     0,     0,     0,     0,
+        0,     0,     0,     0,     0,     0,     0,     0,
+        0,     0,     0,     0,     0,     0,     0,     0,
+        0,     0,     0,     0,     0,     0,     0,     0,
+        0,     0,     0,     0,     0,     0,     0,     0,
+        0,     0,     0,     0,     0,     0,     0,     0,
+    0x80u, 0x81u, 0x82u, 0x83u, 0x84u, 0x85u, 0x86u, 0x87u,
+    0x88u, 0x89u,     0,     0,     0,     0,     0,     0,
+        0, 0x8au, 0x8bu, 0x8cu, 0x8du, 0x8eu, 0x8fu, 0x90u,
+    0x91u, 0x92u, 0x93u, 0x94u, 0x95u, 0x96u, 0x97u, 0x98u,
+    0x99u, 0x9au, 0x9bu, 0x9cu, 0x9du, 0x9eu, 0x9fu, 0xa0u,
+    0xa1u, 0xa2u, 0xa3u,     0,     0,     0,     0,     0,
+        0, 0x8au, 0x8bu, 0x8cu, 0x8du, 0x8eu, 0x8fu, 0x90u,
+    0x91u, 0x92u, 0x93u, 0x94u, 0x95u, 0x96u, 0x97u, 0x98u,
+    0x99u, 0x9au, 0x9bu, 0x9cu, 0x9du, 0x9eu, 0x9fu, 0xa0u,
+    0xa1u, 0xa2u, 0xa3u,     0,     0,     0,     0,     0,
+};
+
+#ifdef RBNF_DEBUG
+int64_t util64_atoi(const char* str, uint32_t radix)
+{
+    if (radix > 36) {
+        radix = 36;
+    } else if (radix < 2) {
+        radix = 2;
+    }
+    int64_t lradix = radix;
+
+    int neg = 0;
+    if (*str == kMinus) {
+        ++str;
+        neg = 1;
+    }
+    int64_t result = 0;
+    uint8_t b;
+    while ((b = digitInfo[*str++]) && ((b &= 0x7f) < radix)) {
+        result *= lradix;
+        result += (int32_t)b;
+    }
+    if (neg) {
+        result = -result;
+    }
+    return result;
+}
+#endif
+
+int64_t util64_utoi(const UChar* str, uint32_t radix)
+{
+    if (radix > 36) {
+        radix = 36;
+    } else if (radix < 2) {
+        radix = 2;
+    }
+    int64_t lradix = radix;
+
+    int neg = 0;
+    if (*str == kUMinus) {
+        ++str;
+        neg = 1;
+    }
+    int64_t result = 0;
+    UChar c;
+    uint8_t b;
+    while (((c = *str++) < 0x0080) && (b = digitInfo[c]) && ((b &= 0x7f) < radix)) {
+        result *= lradix;
+        result += (int32_t)b;
+    }
+    if (neg) {
+        result = -result;
+    }
+    return result;
+}
+
+#ifdef RBNF_DEBUG
+uint32_t util64_toa(int64_t w, char* buf, uint32_t len, uint32_t radix, UBool raw)
+{    
+    if (radix > 36) {
+        radix = 36;
+    } else if (radix < 2) {
+        radix = 2;
+    }
+    int64_t base = radix;
+
+    char* p = buf;
+    if (len && (w < 0) && (radix == 10) && !raw) {
+        w = -w;
+        *p++ = kMinus;
+        --len;
+    } else if (len && (w == 0)) {
+		*p++ = (char)raw ? 0 : asciiDigits[0];
+		--len;
+    }
+
+    while (len && w != 0) {
+        int64_t n = w / base;
+        int64_t m = n * base;
+        int32_t d = (int32_t)(w-m);
+        *p++ = raw ? (char)d : asciiDigits[d];
+        w = n;
+        --len;
+    }
+    if (len) {
+        *p = 0; // null terminate if room for caller convenience
+    }
+
+    len = p - buf;
+    if (*buf == kMinus) {
+        ++buf;
+    }
+    while (--p > buf) {
+        char c = *p;
+        *p = *buf;
+        *buf = c;
+        ++buf;
+    }
+
+    return len;
+}
+#endif
+
+uint32_t util64_tou(int64_t w, UChar* buf, uint32_t len, uint32_t radix, UBool raw)
+{    
+    if (radix > 36) {
+        radix = 36;
+    } else if (radix < 2) {
+        radix = 2;
+    }
+    int64_t base = radix;
+
+    UChar* p = buf;
+    if (len && (w < 0) && (radix == 10) && !raw) {
+        w = -w;
+        *p++ = kUMinus;
+        --len;
+    } else if (len && (w == 0)) {
+		*p++ = (UChar)raw ? 0 : asciiDigits[0];
+		--len;
+	}
+
+	while (len && (w != 0)) {
+		int64_t n = w / base;
+		int64_t m = n * base;
+		int32_t d = (int32_t)(w-m);
+		*p++ = (UChar)(raw ? d : asciiDigits[d]);
+		w = n;
+		--len;
+	}
+    if (len) {
+        *p = 0; // null terminate if room for caller convenience
+    }
+
+    len = p - buf;
+    if (*buf == kUMinus) {
+        ++buf;
+    }
+    while (--p > buf) {
+        UChar c = *p;
+        *p = *buf;
+        *buf = c;
+        ++buf;
+    }
+
+    return len;
+}
+
+
 U_NAMESPACE_END
+
+/* U_HAVE_RBNF */
+#endif
+
