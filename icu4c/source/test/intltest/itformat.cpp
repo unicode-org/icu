@@ -35,15 +35,15 @@
 #include "dtfmttst.h"       // DateFormatTest
 #include "tmsgfmt.h"        // TestMessageFormat
 #include "dtfmrgts.h"       // DateFormatRegressionTest
-#include "msfmrgts.h"        // MessageFormatRegressionTest
-#include "miscdtfm.h"        // DateFormatMiscTests
+#include "msfmrgts.h"       // MessageFormatRegressionTest
+#include "miscdtfm.h"       // DateFormatMiscTests
 #include "nmfmtrt.h"        // NumberFormatRoundTripTest
 #include "numrgts.h"        // NumberFormatRegressionTest
-#include "dtfmtrtts.h"        // DateFormatRoundTripTest
-#include "pptest.h"            // ParsePositionTest
-#include "calregts.h"        // CalendarRegressionTest
+#include "dtfmtrtts.h"      // DateFormatRoundTripTest
+#include "pptest.h"         // ParsePositionTest
+#include "calregts.h"       // CalendarRegressionTest
 #include "tzregts.h"        // TimeZoneRegressionTest
-
+#include "usettest.h"       // UnicodeSetTest
 
 void IntlTestFormat::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
 {
@@ -296,6 +296,15 @@ void IntlTestFormat::runIndexedTest( int32_t index, bool_t exec, char* &name, ch
                 callTest( test, par );
             }
             break;
+
+        case 26:
+            name = "UnicodeSetTest";
+            if (exec) {
+                logln("UnicodeSetTest---"); logln();
+                UnicodeSetTest test;
+                callTest(test, par);
+            }
+            break;
         /*
         case 28: 
             name = "DateFormatSymbolsCAPI"; 
@@ -414,6 +423,7 @@ void IntlTestFormat::runIndexedTest( int32_t index, bool_t exec, char* &name, ch
             }
             break;
         */
+
         default: name = ""; break; //needed to end loop
     }
     if (exec) {

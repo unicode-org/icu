@@ -327,6 +327,10 @@ SOURCE=.\ucdtest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\usettest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\ustrtest.cpp
 # End Source File
 # End Group
@@ -568,6 +572,14 @@ SOURCE=.\tzregts.h
 # Begin Source File
 
 SOURCE=.\ucdtest.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\i18n\uniset.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\usettest.h
 # End Source File
 # Begin Source File
 
