@@ -394,10 +394,10 @@ void RegexTest::Basic() {
 //
 #if 0
     {
-        // REGEX_TESTLM("^a (?#xxx) (?#yyy) {3}c", "accc", FALSE, FALSE);
+        // REGEX_TESTLM("a\N{LATIN SMALL LETTER B}c", "abc", FALSE, FALSE);
         UParseError pe;
-        UErrorCode  status;
-        RegexPattern::compile("^a (?#xxx) (?#yyy) {3}c", UREGEX_COMMENTS, pe, status);
+        UErrorCode  status = U_ZERO_ERROR;
+        RegexPattern::compile("^(?:a?b?)*$", 0, pe, status);
         // REGEX_FIND("(?>(abc{2,4}?))(c*)", "<0>ab<1>cc</1><2>ccc</2></0>ddd");
         // REGEX_FIND("(X([abc=X]+)+X)|(y[abc=]+)", "=XX====================");
     }
@@ -1219,7 +1219,6 @@ void RegexTest::Extended() {
 //---------------------------------------------------------------------------
 void RegexTest::Errors() {
     // \escape sequences that aren't implemented yet.
-    REGEX_ERR("named chars \\N{GREEK CAPITAL LETTER ALPHA} not implementd", 1, 14, U_REGEX_UNIMPLEMENTED);
     REGEX_ERR("hex format \\x{abcd} not implemented", 1, 13, U_REGEX_UNIMPLEMENTED);
 
     // Missing close parentheses

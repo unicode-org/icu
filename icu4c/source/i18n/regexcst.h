@@ -33,7 +33,6 @@ enum Regex_PatternParseAction {
     doBackslashs,
     doOctal,
     doNGOpt,
-    doNamedChar,
     doBackslashw,
     doPossesiveStar,
     doMismatchedParenErr,
@@ -190,7 +189,7 @@ static const struct RegexTableEl gRuleParseStateTable[] = {
     , {doBackslashd, 100 /* d */, 14,0,  TRUE}     //  82 
     , {doBackslashD, 68 /* D */, 14,0,  TRUE}     //  83 
     , {doBackslashG, 71 /* G */, 2,0,  TRUE}     //  84 
-    , {doNamedChar, 78 /* N */, 14,0,  TRUE}     //  85 
+    , {doProperty, 78 /* N */, 14,0,  FALSE}     //  85 
     , {doProperty, 112 /* p */, 14,0,  FALSE}     //  86 
     , {doProperty, 80 /* P */, 14,0,  FALSE}     //  87 
     , {doEnterQuoteMode, 81 /* Q */, 2,0,  TRUE}     //  88 
