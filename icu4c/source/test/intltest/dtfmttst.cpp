@@ -160,9 +160,9 @@ DateFormatTest::TestTwoDigitYearDSTParse(void)
 {
     UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat* fullFmt = new SimpleDateFormat((UnicodeString)"EEE MMM dd HH:mm:ss.SSS zzz yyyy G", status);
-    SimpleDateFormat *fmt = new SimpleDateFormat((UnicodeString)"dd-MMM-yy h:mm:ss 'o''clock' a z", Locale::ENGLISH, status);
+    SimpleDateFormat *fmt = new SimpleDateFormat((UnicodeString)"dd-MMM-yy h:mm:ss 'o''clock' a z", Locale::getEnglish(), status);
     //DateFormat* fmt = DateFormat::createDateTimeInstance(DateFormat::MEDIUM, DateFormat::FULL, Locale::ENGLISH);
-    UnicodeString* s = new UnicodeString("03-Apr-04 2:20:47 o'clock AM PST");
+    UnicodeString* s = new UnicodeString("03-Apr-04 2:20:47 o'clock AM PST", "");
     int32_t hour = 2;
 
     UnicodeString str;
@@ -170,7 +170,8 @@ DateFormatTest::TestTwoDigitYearDSTParse(void)
     logln(*s + " P> " + ((DateFormat*)fullFmt)->format(d, str));
     int32_t y, m, day, hr, min, sec;
     dateToFields(d, y, m, day, hr, min, sec);
-    if (hr != hour) errln((UnicodeString)"FAIL: Should parse to hour " + hour);
+    if (hr != hour)
+        errln((UnicodeString)"FAIL: Should parse to hour " + hour);
 
     if (U_FAILURE(status))
         errln((UnicodeString)"FAIL: " + (int32_t)status);
@@ -595,7 +596,7 @@ void
 DateFormatTest::TestBadInput135()
 {
     UErrorCode status = U_ZERO_ERROR;
-    int32_t looks[] = {
+    DateFormat::EStyle looks[] = {
         DateFormat::SHORT, DateFormat::MEDIUM, DateFormat::LONG, DateFormat::FULL
     };
     int32_t looks_length = (int32_t)(sizeof(looks) / sizeof(looks[0]));
@@ -608,27 +609,29 @@ DateFormatTest::TestBadInput135()
     for (int32_t i = 0; i < strings_length;++i) {
         const char* text = strings[i];
         for (int32_t j = 0; j < looks_length;++j) {
-            int32_t dateLook = looks[j];
+            DateFormat::EStyle dateLook = looks[j];
             for (int32_t k = 0; k < looks_length;++k) {
-                int32_t timeLook = looks[k];
-                DateFormat *df = DateFormat::createDateTimeInstance((DateFormat::EStyle)dateLook, (DateFormat::EStyle)timeLook);
+                DateFormat::EStyle timeLook = looks[k];
+                DateFormat *df = DateFormat::createDateTimeInstance(dateLook, timeLook);
                 UnicodeString prefix = UnicodeString(text) + ", " + dateLook + "/" + timeLook + ": ";
                 //try {
                     UDate when = df->parse(text, status);
                     if (when == 0 && U_SUCCESS(status)) {
-                        errln(prefix + "SHOULD NOT HAPPEN: parse returned null.");
+                        errln(prefix + "SHOULD NOT HAPPEN: parse returned 0.");
                         continue;
                     }
                     if (U_SUCCESS(status))
                     {
-                        UnicodeString format; full->format(when, format);
+                        UnicodeString format;
+                        full->format(when, format);
                         logln(prefix + "OK: " + format);
                         if (0!=format.compareBetween(0, expected.length(), expected, 0, expected.length()))
-                            errln((UnicodeString)"FAIL: Expected " + expected);
+                            errln((UnicodeString)"FAIL: Expected " + expected + " got " + format);
                     }
                 //}
                 //catch(ParseException e) {
-                    else status = U_ZERO_ERROR;
+                    else
+                        status = U_ZERO_ERROR;
                 //}
                 //catch(StringIndexOutOfBoundsException e) {
                 //    errln(prefix + "SHOULD NOT HAPPEN: " + (int)status);
@@ -638,7 +641,8 @@ DateFormatTest::TestBadInput135()
         }
     }
     delete full;
-    if (U_FAILURE(status)) errln((UnicodeString)"FAIL: UErrorCode received during test: " + (int32_t)status);
+    if (U_FAILURE(status))
+        errln((UnicodeString)"FAIL: UErrorCode received during test: " + (int32_t)status);
 }
  
 const char* DateFormatTest::parseFormats[] = {
@@ -753,9 +757,9 @@ DateFormatTest::TestBadInput135a()
 void
 DateFormatTest::TestTwoDigitYear()
 {
-    DateFormat* fmt = DateFormat::createDateInstance(DateFormat::SHORT);
-    parse2DigitYear(*fmt, "6/5/17", date(117, Calendar::JUNE, 5));
-    parse2DigitYear(*fmt, "6/4/34", date(34, Calendar::JUNE, 4));
+    DateFormat* fmt = DateFormat::createDateInstance(DateFormat::SHORT, Locale::getUK());
+    parse2DigitYear(*fmt, "5/6/17", date(117, Calendar::JUNE, 5));
+    parse2DigitYear(*fmt, "4/6/34", date(34, Calendar::JUNE, 4));
     delete fmt;
 }
  
@@ -791,7 +795,7 @@ DateFormatTest::TestDateFormatZone061()
     DateFormat *formatter;
     date= 859248000000.0;
     logln((UnicodeString)"Date 1997/3/25 00:00 GMT: " + date);
-    formatter = new SimpleDateFormat((UnicodeString)"dd-MMM-yyyyy HH:mm", Locale::UK, status);
+    formatter = new SimpleDateFormat((UnicodeString)"dd-MMM-yyyyy HH:mm", Locale::getUK(), status);
     formatter->adoptTimeZone(TimeZone::createTimeZone("GMT"));
     UnicodeString temp; formatter->format(date, temp);
     logln((UnicodeString)"Formatted in GMT to: " + temp);
@@ -858,7 +862,7 @@ DateFormatTest::TestDateFormatZone146()
         int32_t DATA_length = (int32_t)(sizeof(DATA) / sizeof(DATA[0]));
 
         for (int32_t i=0; i<DATA_length; i+=3) {
-            DateFormat *fmt = new SimpleDateFormat(DATA[i+2], Locale::ENGLISH, status);
+            DateFormat *fmt = new SimpleDateFormat(DATA[i+2], Locale::getEnglish(), status);
             if(failure(status, "new SimpleDateFormat")) break;
             fmt->setCalendar(*greenwichcalendar);
             UnicodeString result;
@@ -889,9 +893,9 @@ DateFormatTest::TestLocaleDateFormat() // Bug 495
 {
     UDate testDate = date(97, Calendar::SEPTEMBER, 15);
     DateFormat *dfFrench = DateFormat::createDateTimeInstance(DateFormat::FULL, 
-        DateFormat::FULL, Locale::FRENCH);
+        DateFormat::FULL, Locale::getFrench());
     DateFormat *dfUS = DateFormat::createDateTimeInstance(DateFormat::FULL, 
-        DateFormat::FULL, Locale::US);
+        DateFormat::FULL, Locale::getUS());
     UnicodeString expectedFRENCH ( "lundi 15 septembre 1997 00 h 00 GMT-07:00" );
     //UnicodeString expectedUS ( "Monday, September 15, 1997 12:00:00 o'clock AM PDT" );
     UnicodeString expectedUS ( "Monday, September 15, 1997 12:00:00 AM PDT" );
@@ -922,14 +926,14 @@ void DateFormatTest::TestDateFormatCalendar() {
     UErrorCode ec = U_ZERO_ERROR;
 
     /* Create a formatter for date fields. */
-    date = DateFormat::createDateInstance(DateFormat::kShort, Locale::US);
+    date = DateFormat::createDateInstance(DateFormat::kShort, Locale::getUS());
     if (date == NULL) {
         errln("FAIL: createDateInstance failed");
         goto FAIL;
     }
 
     /* Create a formatter for time fields. */
-    time = DateFormat::createTimeInstance(DateFormat::kShort, Locale::US);
+    time = DateFormat::createTimeInstance(DateFormat::kShort, Locale::getUS());
     if (time == NULL) {
         errln("FAIL: createTimeInstance failed");
         goto FAIL;
@@ -937,14 +941,14 @@ void DateFormatTest::TestDateFormatCalendar() {
 
     /* Create a full format for output */
     full = DateFormat::createDateTimeInstance(DateFormat::kFull, DateFormat::kFull,
-                                              Locale::US);
+                                              Locale::getUS());
     if (full == NULL) {
         errln("FAIL: createInstance failed");
         goto FAIL;
     }
 
     /* Create a calendar */
-    cal = Calendar::createInstance(Locale::US, ec);
+    cal = Calendar::createInstance(Locale::getUS(), ec);
     if (cal == NULL || U_FAILURE(ec)) {
         errln((UnicodeString)"FAIL: Calendar::createInstance failed with " + 
               u_errorName(ec));
