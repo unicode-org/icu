@@ -31,9 +31,23 @@ enum {
 };
 
 enum {
+    MBCS_STAGE_2_BLOCK_SIZE=0x80, /* 128=64*2, 2 16-bit words per stage 3 block; 64=1<<6 for 6 bits in stage 2 */
+    MBCS_STAGE_2_BLOCK_SIZE_SHIFT=7, /* log2(MBCS_STAGE_2_BLOCK_SIZE) */
+    MBCS_STAGE_1_SIZE=0x440, /* 0x110000>>10, or 17*64 for one entry per 1k code points */
+
+    MBCS_STAGE_2_ALL_UNASSIGNED_INDEX=MBCS_STAGE_1_SIZE/MBCS_STAGE_2_MULTIPLIER,
+    MBCS_STAGE_2_FIRST_ASSIGNED=MBCS_STAGE_1_SIZE+MBCS_STAGE_2_BLOCK_SIZE,
+
     MBCS_MAX_STATE_COUNT=128,
     MBCS_MAX_FALLBACK_COUNT=1000
 };
+
+/*
+ * the maximum stage2Top is
+ * the stage 2 assigned-blocks base=MBCS_STAGE_2_FIRST_ASSIGNED=(stage 1 size plus one all-unassigned block)
+ * plus the maximum number of stage 2 blocks (=stage 1 size) times the block length (*MBCS_STAGE_2_BLOCK_SIZE, or <<MBCS_STAGE_2_BLOCK_SIZE_SHIFT)
+ */
+#define MBCS_MAX_STAGE_2_TOP (MBCS_STAGE_2_FIRST_ASSIGNED+((uint32_t)MBCS_STAGE_1_SIZE<<MBCS_STAGE_2_BLOCK_SIZE_SHIFT))
 
 typedef struct MBCSData {
     NewConverter newConverter;
@@ -48,7 +62,7 @@ typedef struct MBCSData {
     uint32_t countToUCodeUnits;
 
     /* fromUnicode */
-    uint16_t table[0x20440];
+    uint16_t table[MBCS_MAX_STAGE_2_TOP];
     uint8_t *fromUBytes;
     uint32_t stage2Top, stage3Top, maxCharLength;
 } MBCSData;
@@ -82,6 +96,8 @@ MBCSWrite(NewConverter *cnvData, const UConverterStaticData *staticData, UNewDat
 
 static void
 MBCSInit(MBCSData *mbcsData, uint8_t maxCharLength) {
+    int i;
+
     uprv_memset(mbcsData, 0, sizeof(MBCSData));
 
     mbcsData->newConverter.close=MBCSClose;
@@ -91,10 +107,17 @@ MBCSInit(MBCSData *mbcsData, uint8_t maxCharLength) {
     mbcsData->newConverter.finishMappings=MBCSPostprocess;
     mbcsData->newConverter.write=MBCSWrite;
 
-    mbcsData->header.version[0]=2;
+    mbcsData->header.version[0]=3;
     mbcsData->stateFlags[0]=MBCS_STATE_FLAG_DIRECT;
+    mbcsData->stage2Top=MBCS_STAGE_2_FIRST_ASSIGNED; /* after stage 1 and one all-unassigned stage 2 block */
+    mbcsData->stage3Top=16*maxCharLength; /* after one all-unassigned stage 3 block */
     mbcsData->maxCharLength=maxCharLength;
     mbcsData->header.flags=maxCharLength-1; /* outputType */
+
+    /* point all entries in stage 1 to the "all-unassigned" first block in stage 2 */
+    for(i=0; i<MBCS_STAGE_1_SIZE; ++i) {
+        mbcsData->table[i]=MBCS_STAGE_2_ALL_UNASSIGNED_INDEX;
+    }
 }
 
 NewConverter *
@@ -434,9 +457,8 @@ MBCSProcessStates(NewConverter *cnvData) {
         fprintf(stderr, "error: out of memory allocating %ldMB for target mappings\n", mbcsData->maxCharLength);
         return FALSE;
     }
+    /* initialize the all-unassigned first stage 3 block */
     uprv_memset(mbcsData->fromUBytes, 0, 16*mbcsData->maxCharLength);
-    mbcsData->stage2Top=0x80;
-    mbcsData->stage3Top=16*mbcsData->maxCharLength;
 
     return TRUE;
 }
@@ -658,36 +680,37 @@ MBCSAddFromUnicode(NewConverter *cnvData,
     uint32_t index, old;
 
     /*
-     * Walk down the triple-stage compact array and
+     * Walk down the triple-stage compact array ("trie") and
      * allocate parts as necessary.
-     * Note that stage 2 and 3 blocks 0 are reserved for all-unassigned mappings.
+     * Note that the first stage 2 and 3 blocks are reserved for all-unassigned mappings.
      * We assume that length<=maxCharLength and that c<=0x10ffff.
      */
 
     /* inspect stage 1 */
     index=c>>10;
-    if(mbcsData->table[index]==0) {
+    if(mbcsData->table[index]==MBCS_STAGE_2_ALL_UNASSIGNED_INDEX) {
         /* allocate another block in stage 2 */
-        if(mbcsData->stage2Top==2*0xffc0) {
+        if(mbcsData->stage2Top>=MBCS_MAX_STAGE_2_TOP) {
             fprintf(stderr, "error: too many code points at U+%04lx<->0x%02lx\n", c, b);
             return FALSE;
         }
         /*
-         * each block has 64*2 entries:
+         * each stage 2 block contains 64*2 16-bit words:
          * 6 code point bits 9..4 with 1 flags value and 1 stage 3 index
-         * stage 1 values are half of the indexes to the stage 2 blocks
-         * so that they fit into 16 bits;
-         * therefore, stage 1 values increase only by 64 per stage 2 block
+         *
+         * stage 1 entries contain a quarter of the beginning of the
+         * addressed stage 2 blocks; for details about this multiplier,
+         * see the comments at the beginning of ucnvmbcs.c
          */
-        mbcsData->table[index]=(uint16_t)(mbcsData->stage2Top/2);
-        mbcsData->stage2Top+=0x80;
+        mbcsData->table[index]=(uint16_t)(mbcsData->stage2Top/MBCS_STAGE_2_MULTIPLIER);
+        mbcsData->stage2Top+=MBCS_STAGE_2_BLOCK_SIZE;
     }
 
     /* inspect stage 2 */
-    index=0x440+2*((uint32_t)mbcsData->table[index]+((c>>4)&0x3f));
+    index=MBCS_STAGE_2_MULTIPLIER*(uint32_t)mbcsData->table[index]+((c>>3)&0x7e);
     if(mbcsData->table[index+1]==0) {
         /* allocate another block in stage 3 */
-        if(mbcsData->stage3Top+16*mbcsData->maxCharLength>=0x100000) {
+        if(mbcsData->stage3Top>=0x100000*mbcsData->maxCharLength) {
             fprintf(stderr, "error: too many code points at U+%04lx<->0x%02lx\n", c, b);
             return FALSE;
         }
@@ -794,6 +817,70 @@ MBCSTransformEUC(MBCSData *mbcsData) {
     return TRUE;
 }
 
+/*
+ * Compact stage 2 by overlapping adjacent stage 2 blocks as far
+ * as possible. Overlapping is done on unassigned head and tail
+ * parts of blocks in steps of MBCS_STAGE_2_MULTIPLIER.
+ * Stage 1 indexes need to be adjusted accordingly.
+ * This function is very similar to genprops/store.c/compactStage().
+ */
+static void
+MBCSCompactStage2(MBCSData *mbcsData) {
+    /* this array maps the ordinal number of a stage 2 block to its new stage 1 index */
+    static uint16_t map[MBCS_STAGE_1_SIZE];
+    uint16_t i, start, prevEnd, newStart;
+
+    /* enter the all-unassigned first stage 2 block into the map */
+    map[0]=MBCS_STAGE_2_ALL_UNASSIGNED_INDEX;
+
+    /* begin with the first block after the all-unassigned one */
+    start=newStart=MBCS_STAGE_2_FIRST_ASSIGNED;
+    while(start<mbcsData->stage2Top) {
+        prevEnd=(uint16_t)(newStart-1);
+
+        /* find the size of the overlap */
+        for(i=0; i<MBCS_STAGE_2_BLOCK_SIZE && mbcsData->table[start+i]==0 && mbcsData->table[prevEnd-i]==0; ++i) {}
+
+        /* overlap by i, adjust it to be a multiple of MBCS_STAGE_2_MULTIPLIER */
+        i&=~(MBCS_STAGE_2_MULTIPLIER-1);
+
+        if(i>0) {
+            map[(start-MBCS_STAGE_1_SIZE)>>MBCS_STAGE_2_BLOCK_SIZE_SHIFT]=(uint16_t)(newStart-i)/MBCS_STAGE_2_MULTIPLIER;
+
+            /* move the non-overlapping indexes to their new positions */
+            start+=i;
+            for(i=(uint16_t)(MBCS_STAGE_2_BLOCK_SIZE-i); i>0; --i) {
+                mbcsData->table[newStart++]=mbcsData->table[start++];
+            }
+        } else if(newStart<start) {
+            /* move the indexes to their new positions */
+            map[(start-MBCS_STAGE_1_SIZE)>>MBCS_STAGE_2_BLOCK_SIZE_SHIFT]=newStart/MBCS_STAGE_2_MULTIPLIER;
+            for(i=MBCS_STAGE_2_BLOCK_SIZE; i>0; --i) {
+                mbcsData->table[newStart++]=mbcsData->table[start++];
+            }
+        } else /* no overlap && newStart==start */ {
+            map[(start-MBCS_STAGE_1_SIZE)>>MBCS_STAGE_2_BLOCK_SIZE_SHIFT]=start/MBCS_STAGE_2_MULTIPLIER;
+            start=newStart+=MBCS_STAGE_2_BLOCK_SIZE;
+        }
+    }
+
+    /* adjust stage2Top */
+    if(VERBOSE && newStart<mbcsData->stage2Top) {
+        printf("compacting stage 2 from stage2Top=0x%lx to 0x%lx, saving %ld bytes\n",
+               mbcsData->stage2Top, newStart, (mbcsData->stage2Top-newStart)*2);
+    }
+    mbcsData->stage2Top=newStart;
+
+    /* now adjust stage 1 */
+    for(i=0; i<MBCS_STAGE_1_SIZE; ++i) {
+        /*
+         * map indexing: get stage 2 block ordinals as array indexes -
+         * multiply for the full index, then subtract the base and divide by the block size
+         */
+        mbcsData->table[i]=map[(mbcsData->table[i]*MBCS_STAGE_2_MULTIPLIER-MBCS_STAGE_1_SIZE)>>MBCS_STAGE_2_BLOCK_SIZE_SHIFT];
+    }
+}
+
 static void
 MBCSPostprocess(NewConverter *cnvData, const UConverterStaticData *staticData) {
     MBCSData *mbcsData=(MBCSData *)cnvData;
@@ -828,11 +915,27 @@ MBCSPostprocess(NewConverter *cnvData, const UConverterStaticData *staticData) {
     }
 
     MBCSTransformEUC(mbcsData);
+    MBCSCompactStage2(mbcsData);
 }
 
 static uint32_t
 MBCSWrite(NewConverter *cnvData, const UConverterStaticData *staticData, UNewDataMemory *pData) {
     MBCSData *mbcsData=(MBCSData *)cnvData;
+    int32_t stage1Top;
+
+    if(staticData->unicodeMask&UCNV_HAS_SUPPLEMENTARY) {
+        stage1Top=MBCS_STAGE_1_SIZE; /* 1088 */
+    } else {
+        int32_t i;
+
+        stage1Top=0x40; /* 64 */
+
+        /* adjust stage 1 entries to include a smaller stage 1 length */
+        for(i=0; i<0x40; ++i) {
+            mbcsData->table[i]-=(MBCS_STAGE_1_SIZE-0x40)/MBCS_STAGE_2_MULTIPLIER;
+        }
+    }
+
     /* fill the header */
     mbcsData->header.offsetToUCodeUnits=
         sizeof(_MBCSHeader)+
@@ -842,15 +945,17 @@ MBCSWrite(NewConverter *cnvData, const UConverterStaticData *staticData, UNewDat
         mbcsData->header.offsetToUCodeUnits+
         mbcsData->countToUCodeUnits*2;
     mbcsData->header.offsetFromUBytes=
-        mbcsData->header.offsetFromUTable+
-        (0x440+mbcsData->stage2Top)*2;
+        mbcsData->header.offsetFromUTable-
+        2*(MBCS_STAGE_1_SIZE-stage1Top)+
+        mbcsData->stage2Top*2;
 
     /* write the MBCS data */
     udata_writeBlock(pData, &mbcsData->header, sizeof(_MBCSHeader));
     udata_writeBlock(pData, mbcsData->stateTable, mbcsData->header.countStates*1024);
     udata_writeBlock(pData, mbcsData->toUFallbacks, mbcsData->header.countToUFallbacks*sizeof(_MBCSToUFallback));
     udata_writeBlock(pData, mbcsData->unicodeCodeUnits, mbcsData->countToUCodeUnits*2);
-    udata_writeBlock(pData, mbcsData->table, (0x440+mbcsData->stage2Top)*2);
+    udata_writeBlock(pData, mbcsData->table, stage1Top*2);
+    udata_writeBlock(pData, mbcsData->table+MBCS_STAGE_1_SIZE, (mbcsData->stage2Top-MBCS_STAGE_1_SIZE)*2);
     udata_writeBlock(pData, mbcsData->fromUBytes, mbcsData->stage3Top);
 
     /* return the number of bytes that should have been written */
