@@ -16,6 +16,7 @@
 #include "unicode/utypes.h"
 #include "unicode/ustream.h"
 #include "unicode/ucnv.h"
+#include "unicode/uchar.h"
 #include "ustr_imp.h"
 #include <string.h>
 
@@ -78,8 +79,7 @@ U_USTDIO_API STD_ISTREAM &
 operator>>(STD_ISTREAM& stream, UnicodeString& str)
 {
     /* ipfx should eat whitespace when ios::skipws is set */
-    char buffer[200];
-    UChar uBuffer[sizeof(buffer) * 2];
+    UChar uBuffer[16];
     UConverter *converter;
     UErrorCode errorCode = U_ZERO_ERROR;
 
@@ -91,37 +91,35 @@ operator>>(STD_ISTREAM& stream, UnicodeString& str)
         const UChar *uLimit = uBuffer + sizeof(uBuffer)/sizeof(*uBuffer);
         const char *s, *sLimit;
         char ch;
-        uint32_t idx;
-        UBool strDone = FALSE;
+        UBool intialWhitespace = TRUE;
 
-        /* stream.eatwhite() doesn't seem to be available. Do it manually.*/
+        /* We need to consume one byte at a time to see what is considered whitespace. */
         while (!stream.eof()) {
-            if (!isspace(ch = stream.get())) {
-                stream.putback(ch);
-                break;
+            ch = stream.get();
+            sLimit = &ch + 1;
+            errorCode = U_ZERO_ERROR;
+            us = uBuffer;
+            s = &ch;
+            ucnv_toUnicode(converter, &us, uLimit, &s, sLimit, 0, FALSE, &errorCode);
+            if(U_FAILURE(errorCode)) {
+                /* Something really bad happened */
+                return stream;
             }
-        }
-        do {
-            idx = 0;
-            while (!stream.eof() && idx < sizeof(buffer)) {
-                if (isspace(ch = stream.get())) {
-                    stream.putback(ch);
-                    strDone = TRUE;
-                    break;
+            if (us != uBuffer) {
+                /* Was the character consumed? */
+                if (u_isWhitespace(ch)) {
+                    if (!intialWhitespace) {
+                        stream.putback(ch);
+                        break;
+                    }
+                    /* else skip intialWhitespace */
                 }
                 else {
-                    buffer[idx++] = ch;
+                    str.append(uBuffer, (int32_t)(us - uBuffer));
+                    intialWhitespace = FALSE;
                 }
             }
-            s = buffer;
-            sLimit = buffer + idx;
-            do {
-                errorCode = U_ZERO_ERROR;
-                us = uBuffer;
-                ucnv_toUnicode(converter, &us, uLimit, &s, sLimit, 0, FALSE, &errorCode);
-                str.append(uBuffer, (int32_t)(us - uBuffer));
-            } while(errorCode == U_BUFFER_OVERFLOW_ERROR);
-        } while (!strDone);
+        }
         u_releaseDefaultConverter(converter);
     }
 
