@@ -45,10 +45,10 @@ U_CAPI UTextOffset U_EXPORT2
 utf8_appendCharSafeBody(uint8_t *s, UTextOffset i, UTextOffset length, UChar32 c);
 
 U_CAPI UChar32 U_EXPORT2
-utf8_prevCharSafeBody(const uint8_t *s, UTextOffset *pi, UChar32 c, bool_t strict);
+utf8_prevCharSafeBody(const uint8_t *s, UTextOffset start, UTextOffset *pi, UChar32 c, bool_t strict);
 
 U_CAPI UTextOffset U_EXPORT2
-utf8_back1SafeBody(const uint8_t *s, UTextOffset i);
+utf8_back1SafeBody(const uint8_t *s, UTextOffset start, UTextOffset i);
 
 /*
  * For the semantics of all of these macros, see utf16.h.
@@ -110,9 +110,9 @@ utf8_back1SafeBody(const uint8_t *s, UTextOffset i);
     UTF8_NEXT_CHAR_UNSAFE(s, __I, c); \
 }
 
-#define UTF8_GET_CHAR_SAFE(s, i, length, c, strict) { \
+#define UTF8_GET_CHAR_SAFE(s, start, i, length, c, strict) { \
     UTextOffset __I=(UTextOffset)(i); \
-    UTF8_SET_CHAR_START_SAFE(s, __I); \
+    UTF8_SET_CHAR_START_SAFE(s, start, __I); \
     UTF8_NEXT_CHAR_SAFE(s, __I, length, c, strict); \
 }
 
@@ -131,7 +131,7 @@ utf8_back1SafeBody(const uint8_t *s, UTextOffset i);
  */
 #define UTF8_NEXT_CHAR_UNSAFE(s, i, c) { \
     (c)=(s)[(i)++]; \
-    if((c)&0x80) { \
+    if((uint8_t)((c)-0xc0)<0x35) { \
         uint8_t __count=UTF8_COUNT_TRAIL_BYTES(c); \
         UTF8_MASK_LEAD_BYTE(c, __count); \
         switch(__count) { \
@@ -185,7 +185,7 @@ utf8_back1SafeBody(const uint8_t *s, UTextOffset i);
 
 #define UTF8_NEXT_CHAR_SAFE(s, i, length, c, strict) { \
     (c)=(s)[(i)++]; \
-    if((c)&0x80) { \
+    if(UTF8_IS_LEAD(c)) { \
         (c)=utf8_nextCharSafeBody(s, &(i), (UTextOffset)(length), c, strict); \
     } \
 }
@@ -199,17 +199,15 @@ utf8_back1SafeBody(const uint8_t *s, UTextOffset i);
 }
 
 #define UTF8_FWD_1_SAFE(s, i, length) { \
-    if((i)<(length)) { \
-        uint8_t __b=(s)[(i)++]; \
-        if(__b&0x80) { \
-            uint8_t __count=UTF8_COUNT_TRAIL_BYTES(__b); \
-            if((i)+__count>(length)) { \
-                __count=(length)-(i); \
-            } \
-            while(__count>0 && UTF8_IS_TRAIL((s)[i])) { \
-                ++(i); \
-                --__count; \
-            } \
+    uint8_t __b=(s)[(i)++]; \
+    if(UTF8_IS_LEAD(__b)) { \
+        uint8_t __count=UTF8_COUNT_TRAIL_BYTES(__b); \
+        if((i)+__count>(length)) { \
+            __count=(length)-(i); \
+        } \
+        while(__count>0 && UTF8_IS_TRAIL((s)[i])) { \
+            ++(i); \
+            --__count; \
         } \
     } \
 }
@@ -222,9 +220,9 @@ utf8_back1SafeBody(const uint8_t *s, UTextOffset i);
     } \
 }
 
-#define UTF8_SET_CHAR_START_SAFE(s, i) { \
-    if((s)[(i)]&0x80) { \
-        (i)=utf8_back1SafeBody(s, (UTextOffset)(i)); \
+#define UTF8_SET_CHAR_START_SAFE(s, start, i) { \
+    if(UTF8_IS_TRAIL((s)[(i)])) { \
+        (i)=utf8_back1SafeBody(s, start, (UTextOffset)(i)); \
     } \
 }
 
@@ -232,10 +230,10 @@ utf8_back1SafeBody(const uint8_t *s, UTextOffset i);
 
 #define UTF8_PREV_CHAR_UNSAFE(s, i, c) { \
     (c)=(s)[--(i)]; \
-    if((c)&0x80) { \
+    if(UTF8_IS_TRAIL(c)) { \
         uint8_t __b, __count=1, __shift=6; \
 \
-        /* c must be a trail byte */ \
+        /* c is a trail byte */ \
         (c)&=0x3f; \
         for(;;) { \
             __b=(s)[--(i)]; \
@@ -269,33 +267,35 @@ utf8_back1SafeBody(const uint8_t *s, UTextOffset i);
     UTF8_FWD_1_UNSAFE(s, i); \
 }
 
-#define UTF8_PREV_CHAR_SAFE(s, i, c, strict) { \
+#define UTF8_PREV_CHAR_SAFE(s, start, i, c, strict) { \
     (c)=(s)[--(i)]; \
-    if((c)&0x80) { \
-        (c)=utf8_prevCharSafeBody(s, &(i), c, strict); \
+    if(UTF8_IS_TRAIL((c))) { \
+        (c)=utf8_prevCharSafeBody(s, start, &(i), c, strict); \
     } \
 }
 
-#define UTF8_BACK_1_SAFE(s, i) { \
-    if((i)>0) { \
-        --(i); \
-        if((s)[(i)]&0x80) { \
-            (i)=utf8_back1SafeBody(s, (UTextOffset)(i)); \
-        } \
+#define UTF8_BACK_1_SAFE(s, start, i) { \
+    if(UTF8_IS_TRAIL((s)[--(i)])) { \
+        (i)=utf8_back1SafeBody(s, start, (UTextOffset)(i)); \
     } \
 }
 
-#define UTF8_BACK_N_SAFE(s, i, n) { \
+#define UTF8_BACK_N_SAFE(s, start, i, n) { \
     UTextOffset __N=(n); \
-    while(__N>0 && (i)>0) { \
-        UTF8_BACK_1_SAFE(s, i); \
+    while(__N>0 && (i)>(start)) { \
+        UTF8_BACK_1_SAFE(s, start, i); \
         --__N; \
     } \
 }
 
-#define UTF8_SET_CHAR_LIMIT_SAFE(s, i, length) { \
-    UTF8_BACK_1_SAFE(s, i); \
-    UTF8_FWD_1_SAFE(s, i, length); \
+#define UTF8_SET_CHAR_LIMIT_SAFE(s, start, i, length) { \
+    if((start)<(i) && (i)<(length)) { \
+        UTF8_BACK_1_SAFE(s, start, i); \
+        (i)+=1+UTF8_COUNT_TRAIL_BYTES((s)[i]); \
+        if((i)>(length)) { \
+            (i)=(length); \
+        } \
+    } \
 }
 
 #endif
