@@ -174,63 +174,59 @@ void CalendarData::initData(const char *locale, const char *type, UErrorCode& st
 }
 
 CalendarData::~CalendarData() {
-  ures_close(fFillin);
-  ures_close(fBundle);
-  ures_close(fFallback);
-  ures_close(fOtherFillin);
+    ures_close(fFillin);
+    ures_close(fBundle);
+    ures_close(fFallback);
+    ures_close(fOtherFillin);
 }
 
 UResourceBundle*
 CalendarData::getByKey(const char *key, UErrorCode& status) {
-  if(U_FAILURE(status)) {
-    return NULL;
-  }
+    if(U_FAILURE(status)) {
+        return NULL;
+    }
 
-  if(fBundle) {
-    fFillin = ures_getByKeyWithFallback(fBundle, key, fFillin, &status);
+    if(fBundle) {
+        fFillin = ures_getByKeyWithFallback(fBundle, key, fFillin, &status);
 #if defined (U_DEBUG_CALDATA)
-    fprintf(stderr, "%p: get %s -> %s - from MAIN %s\n",this, key, u_errorName(status), ures_getLocale(fFillin, &status));
+        fprintf(stderr, "%p: get %s -> %s - from MAIN %s\n",this, key, u_errorName(status), ures_getLocale(fFillin, &status));
 #endif
-  }
-  if(fFallback && (status == U_MISSING_RESOURCE_ERROR)) {
-    status = U_ZERO_ERROR; // retry with fallback (gregorian)
-    fFillin = ures_getByKeyWithFallback(fFallback, key, fFillin, &status);
+    }
+    if(fFallback && (status == U_MISSING_RESOURCE_ERROR)) {
+        status = U_ZERO_ERROR; // retry with fallback (gregorian)
+        fFillin = ures_getByKeyWithFallback(fFallback, key, fFillin, &status);
 #if defined (U_DEBUG_CALDATA)
-    fprintf(stderr, "%p: get %s -> %s - from FALLBACK %s\n",this, key, u_errorName(status), ures_getLocale(fFillin, &status));
+        fprintf(stderr, "%p: get %s -> %s - from FALLBACK %s\n",this, key, u_errorName(status), ures_getLocale(fFillin, &status));
 #endif
-  }
-  return fFillin;
-}
-
-ResourceBundle CalendarData::getBundleByKey(const char *key, UErrorCode &status) {
-  return ResourceBundle(getByKey(key,status), status);
+    }
+    return fFillin;
 }
 
 UResourceBundle* CalendarData::getByKey2(const char *key, const char *subKey, UErrorCode& status) {
-  if(U_FAILURE(status)) {
-    return NULL;
-  }
+    if(U_FAILURE(status)) {
+        return NULL;
+    }
 
-  if(fBundle) {
+    if(fBundle) {
 #if defined (U_DEBUG_CALDATA)
-    fprintf(stderr, "%p: //\n");
+        fprintf(stderr, "%p: //\n");
 #endif
-    fFillin = ures_getByKeyWithFallback(fBundle, key, fFillin, &status);
-    fOtherFillin = ures_getByKeyWithFallback(fFillin, U_FORMAT_KEY, fOtherFillin, &status);
-    fFillin = ures_getByKeyWithFallback(fOtherFillin, subKey, fFillin, &status);
+        fFillin = ures_getByKeyWithFallback(fBundle, key, fFillin, &status);
+        fOtherFillin = ures_getByKeyWithFallback(fFillin, U_FORMAT_KEY, fOtherFillin, &status);
+        fFillin = ures_getByKeyWithFallback(fOtherFillin, subKey, fFillin, &status);
 #if defined (U_DEBUG_CALDATA)
-    fprintf(stderr, "%p: get %s/format/%s -> %s - from MAIN %s\n", this, key, subKey, u_errorName(status), ures_getLocale(fFillin, &status));
+        fprintf(stderr, "%p: get %s/format/%s -> %s - from MAIN %s\n", this, key, subKey, u_errorName(status), ures_getLocale(fFillin, &status));
 #endif
-  }
-  if(fFallback && (status == U_MISSING_RESOURCE_ERROR)) {
-    status = U_ZERO_ERROR; // retry with fallback (gregorian)
-    fFillin = ures_getByKeyWithFallback(fFallback, key, fFillin, &status);
-    fOtherFillin = ures_getByKeyWithFallback(fFillin, U_FORMAT_KEY, fOtherFillin, &status);
-    fFillin = ures_getByKeyWithFallback(fOtherFillin, subKey, fFillin, &status);
+    }
+    if(fFallback && (status == U_MISSING_RESOURCE_ERROR)) {
+        status = U_ZERO_ERROR; // retry with fallback (gregorian)
+        fFillin = ures_getByKeyWithFallback(fFallback, key, fFillin, &status);
+        fOtherFillin = ures_getByKeyWithFallback(fFillin, U_FORMAT_KEY, fOtherFillin, &status);
+        fFillin = ures_getByKeyWithFallback(fOtherFillin, subKey, fFillin, &status);
 #if defined (U_DEBUG_CALDATA)
-    fprintf(stderr, "%p: get %s/format/%s -> %s - from FALLBACK %s\n",this, key, subKey, u_errorName(status), ures_getLocale(fFillin,&status));
+        fprintf(stderr, "%p: get %s/format/%s -> %s - from FALLBACK %s\n",this, key, subKey, u_errorName(status), ures_getLocale(fFillin,&status));
 #endif
-  }
+    }
 
 //// handling of 'default' keyword on failure: Commented out for 3.0.
 //   if((status == U_MISSING_RESOURCE_ERROR) && 
@@ -265,11 +261,7 @@ UResourceBundle* CalendarData::getByKey2(const char *key, const char *subKey, UE
 //     }
 //   }
 
-  return fFillin;
-}
-
-ResourceBundle CalendarData::getBundleByKey2(const char *key, const char *subKey, UErrorCode& status) {
-  return ResourceBundle(getByKey2(key, subKey, status), status);
+    return fFillin;
 }
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(CalendarData);

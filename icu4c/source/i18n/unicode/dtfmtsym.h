@@ -24,7 +24,7 @@
 
 #include "unicode/uobject.h"
 #include "unicode/locid.h"
-#include "unicode/resbund.h"
+#include "unicode/ures.h"
 
 U_NAMESPACE_BEGIN
 
@@ -412,7 +412,7 @@ private:
 
     DateFormatSymbols(); // default constructor not implemented
 
-    void initField(UnicodeString **field, int32_t& length, const ResourceBundle &data, UErrorCode &status);
+    void initField(UnicodeString **field, int32_t& length, const UResourceBundle *data, UErrorCode &status);
     void initField(UnicodeString **field, int32_t& length, const UChar *data, LastResortSize numStr, LastResortSize strLen, UErrorCode &status);
 
     /**
