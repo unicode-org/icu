@@ -17,6 +17,7 @@
 *   Its main function is to read a mapping table with the one- and two-byte
 *   mappings of GB 18030 and to then output a mapping table with all of the
 *   four-byte mappings for the BMP.
+*   Four-byte mappings that are included in the input are skipped in the output.
 *   When an "r" argument is specified, it will instead write a list of
 *   ranges of contiguous mappings where both Unicode code points and GB 18030
 *   four-byte sequences form contiguous blocks.
@@ -33,18 +34,16 @@
 #include <stdlib.h>
 #include <string.h>
 
-/*
- * In the printed standard, U+303e is mismapped; this sequence must be skipped.
- * Also, GB+fe5e needs to be added to appendix E, mapping to U+2e97, which removes its sequence, too.
- */
-static const unsigned char
-skip2e97Bytes[4]={ 0x81, 0x39, 0x81, 0x35 },
-skip303eBytes[4]={ 0x81, 0x39, 0xa6, 0x34 };
-
 /* array of flags for each Unicode BMP code point */
 static char
 flags[0x10000]={ 0 };
-/* flag values: 0: not assigned  1:one/two-byte sequence  2:four-byte sequence */
+
+/* flag values: 0: not assigned  1:from Unicode  2:to Unicode  4:four-byte sequence */
+#define UNASSIGNED  0
+#define FROMU       1
+#define TOU         2
+#define ROUNDTRIP   3
+#define FOURBYTE    4
 
 static void
 incFourGB18030(unsigned char bytes[4]) {
@@ -63,17 +62,6 @@ incFourGB18030(unsigned char bytes[4]) {
                 ++bytes[0];
             }
         }
-    }
-}
-
-static void
-incSkipFourGB18030(unsigned char bytes[4]) {
-    incFourGB18030(bytes);
-    if( 0==memcmp(bytes, skip2e97Bytes, 4) && flags[0x2e97]==1 ||
-        0==memcmp(bytes, skip303eBytes, 4) && flags[0x303e]==1
-    ) {
-        /* make sure to skip mismapped sequences if the two-byte data covers their Unicode code points */
-        incFourGB18030(bytes);
     }
 }
 
@@ -112,13 +100,18 @@ readRanges() {
             return 1;
         }
 
+        /* ignore ranges above the BMP */
+        if(c2>0xffff) {
+            c2=0xffff;
+        }
+
         /* set the flags for all code points in this range */
         while(c1<=c2) {
-            if(flags[c1]!=0) {
+            if(flags[c1]!=UNASSIGNED) {
                 fprintf(stderr, "error: range covers already-assigned U+%04lx\n", c1);
                 return 1;
             }
-            flags[c1++]=2;
+            flags[c1++]=ROUNDTRIP|FOURBYTE;
         }
     }
 
@@ -131,6 +124,7 @@ main(int argc, const char *argv[]) {
     char *end;
     unsigned long c, b;
     unsigned char bytes[4]={ 0x81, 0x30, 0x81, 0x30 };
+    char flag;
 
     /* parse the input file from stdin, in the format of gb18030markus2.txt */
     while(gets(line)!=NULL) {
@@ -150,8 +144,18 @@ main(int argc, const char *argv[]) {
 
         /* read Unicode code point */
         c=strtoul(line, &end, 16);
-        if(end==line || *end!=':' && *end!='>') {
-            fprintf(stderr, "error parsing code point from \"%s\"\n", line);
+        if(end==line) {
+            fprintf(stderr, "error: missing code point in \"%s\"\n", line);
+            return 1;
+        }
+        if(*end==':') {
+            flag=ROUNDTRIP;
+        } else if(*end=='>') {
+            flag=FROMU;
+        } else if(*end=='<') {
+            flag=TOU;
+        } else {
+            fprintf(stderr, "error: delimiter not one of :>< in \"%s\"\n", line);
             return 1;
         }
 
@@ -166,23 +170,28 @@ main(int argc, const char *argv[]) {
             fprintf(stderr, "error parsing byte sequence from \"%s\"\n", line);
             return 1;
         }
+        if(b>0xffff) {
+            flag|=FOURBYTE;
+        }
 
-        /* set the flag for the code point */
-        if(flags[c]!=0) {
-            fprintf(stderr, "error: duplicate assignment for U+%04lx\n", c);
+        /* set the flag for the code point, make sure the mapping from Unicode is not duplicate */
+        if((flags[c]&flag&FROMU)!=0) {
+            fprintf(stderr, "error: duplicate assignment for U+%04lx, old flags %u, new %s\n", c, flags[c], line);
             return 1;
         }
-        flags[c]= b<=0xffff ? 1 : 2;
+        flags[c]|=flag;
     }
 
     if(argc<=1) {
         /* generate all four-byte sequences that are not already in the input */
         for(c=0x81; c<=0xffff; ++c) {
-            if(flags[c]==0) {
+            if(flags[c]==UNASSIGNED) {
                 printf("%04lx:%02x%02x%02x%02x\n", c, bytes[0], bytes[1], bytes[2], bytes[3]);
-            }
-            if(flags[c]!=1) {
-                incSkipFourGB18030(bytes);
+                /* increment the sequence for the next code point */
+                incFourGB18030(bytes);
+            } else if(flags[c]&FOURBYTE) {
+                /* increment the four-byte sequence for each already-used four-byte sequence */
+                incFourGB18030(bytes);
             }
         }
     } else if(0==strcmp(argv[1], "r")) {
@@ -196,11 +205,11 @@ main(int argc, const char *argv[]) {
             memcpy(b1, bytes, 4);
 
             /* look for the first non-range code point */
-            for(c2=c1; c2<=0xffff && flags[c2]==0; ++c2) {
+            for(c2=c1; c2<=0xffff && flags[c2]==UNASSIGNED; ++c2) {
                 /* save this sequence to avoid decrementing it after this loop */
                 memcpy(b2, bytes, 4);
                 /* increment the sequence for the next code point */
-                incSkipFourGB18030(bytes);
+                incFourGB18030(bytes);
             }
             /* c2 is the first code point after the range; b2 are the bytes for the last code point in the range */
 
@@ -211,9 +220,10 @@ main(int argc, const char *argv[]) {
                 b2[0], b2[1], b2[2], b2[3]);
 
             /* skip all assigned Unicode BMP code points */
-            for(c1=c2; c1<=0xffff && flags[c1]!=0; ++c1) {
-                if(flags[c1]==2) {
-                    incSkipFourGB18030(bytes);
+            for(c1=c2; c1<=0xffff && flags[c1]!=UNASSIGNED; ++c1) {
+                if(flags[c1]&FOURBYTE) {
+                    /* increment the four-byte sequence for each already-used four-byte sequence */
+                    incFourGB18030(bytes);
                 }
             }
         }
