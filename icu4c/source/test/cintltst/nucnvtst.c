@@ -34,6 +34,7 @@ static void TestConverterTypesAndStarters(void);
 static void TestAmbiguous(void);
 static void TestSignatureDetection(void);
 static void TestUTF7(void);
+static void TestIMAP(void);
 static void TestUTF8(void);
 static void TestCESU8(void);
 static void TestUTF16(void);
@@ -145,7 +146,9 @@ TestNextUChar(UConverter* cnv, const char* source, const char* limit, const uint
      while(s<limit) {
         s0=s;
         c=ucnv_getNextUChar(cnv, &s, limit, &errorCode);
-        if(U_FAILURE(errorCode)) {
+        if(errorCode==U_INDEX_OUTOFBOUNDS_ERROR) {
+            break; /* no more significant input */
+        } else if(U_FAILURE(errorCode)) {
             log_err("%s ucnv_getNextUChar() failed: %s\n", message, u_errorName(errorCode));
             break;
         } else if((uint32_t)(s-s0)!=*r || c!=*(r+1)) {
@@ -210,6 +213,7 @@ void addTestNewConvert(TestNode** root)
    addTest(root, &TestAmbiguous, "tsconv/nucnvtst/TestAmbiguous");
    addTest(root, &TestSignatureDetection, "tsconv/nucnvtst/TestSignatureDetection");
    addTest(root, &TestUTF7, "tsconv/nucnvtst/TestUTF7");
+   addTest(root, &TestIMAP, "tsconv/nucnvtst/TestIMAP");
    addTest(root, &TestUTF8, "tsconv/nucnvtst/TestUTF8");
    addTest(root, &TestCESU8, "tsconv/nucnvtst/TestCESU8");
    addTest(root, &TestUTF16, "tsconv/nucnvtst/TestUTF16");
@@ -404,7 +408,7 @@ static ETestConvertResult testConvertFromU( const UChar *source, int sourceLen, 
         log_err("\n");
         log_err("Got  :     ");
         for(p=junkout;p<targ;p++) {
-          log_err("%d, ", junokout[p-junkout]);
+          log_err("%d,", junokout[p-junkout]);
         }
         log_err("\n");
         log_err("Expected:  ");
@@ -880,7 +884,7 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
             27, 29, 32
         };
         static const int32_t fromUnicodeOffsets[] = {
-            0, 1, 2, 3, 4, 5, 6, 7, 8, 8, 8, 8, 9, 9, 10,
+            0, 1, 2, 3, 4, 5, 6, 7, 8, 8, 8, 8, 8, 9, 10,
             11, 12, 12, 12, 13, 13, 13, 13, 14,
             15, 15,
             16, 16, 16, 17, 17, 17, 18, 18, 18
@@ -906,19 +910,95 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
             31, 33, 36
         };
         static const int32_t fromUnicodeOffsetsR[] = {
-            0, 1, 2, 3, 4, 5, 6, 7, 8, 8, 8, 8, 9, 9, 10, 10, 10, 10, 11,
+            0, 1, 2, 3, 4, 5, 6, 7, 8, 8, 8, 8, 8, 9, 10, 10, 10, 10, 10,
             11, 12, 12, 12, 13, 13, 13, 13, 14,
             15, 15,
             16, 16, 16, 17, 17, 17, 18, 18, 18
         };
 
-        	testConvertFromU(unicode, sizeof(unicode)/U_SIZEOF_UCHAR, utf7, sizeof(utf7), "UTF-7", fromUnicodeOffsets,FALSE);
+        testConvertFromU(unicode, sizeof(unicode)/U_SIZEOF_UCHAR, utf7, sizeof(utf7), "UTF-7", fromUnicodeOffsets,FALSE);
 
-        	testConvertToU(utf7, sizeof(utf7), unicode, sizeof(unicode)/U_SIZEOF_UCHAR, "UTF-7", toUnicodeOffsets,FALSE);
+        testConvertToU(utf7, sizeof(utf7), unicode, sizeof(unicode)/U_SIZEOF_UCHAR, "UTF-7", toUnicodeOffsets,FALSE);
 
-        	testConvertFromU(unicode, sizeof(unicode)/U_SIZEOF_UCHAR, utf7Restricted, sizeof(utf7Restricted), "UTF-7,version=1", fromUnicodeOffsetsR,FALSE);
+        testConvertFromU(unicode, sizeof(unicode)/U_SIZEOF_UCHAR, utf7Restricted, sizeof(utf7Restricted), "UTF-7,version=1", fromUnicodeOffsetsR,FALSE);
 
-        	testConvertToU(utf7Restricted, sizeof(utf7Restricted), unicode, sizeof(unicode)/U_SIZEOF_UCHAR, "UTF-7,version=1", toUnicodeOffsetsR,FALSE);
+        testConvertToU(utf7Restricted, sizeof(utf7Restricted), unicode, sizeof(unicode)/U_SIZEOF_UCHAR, "UTF-7,version=1", toUnicodeOffsetsR,FALSE);
+    }
+
+    /*
+     * IMAP-mailbox-name examples are mostly from http://www.imc.org/rfc2152,
+     * modified according to RFC 2060,
+     * and supplemented with the one example in RFC 2060 itself.
+     */
+    {
+        static const uint8_t imap[] = {
+            /*  Hi Mom -&Jjo--!
+                A&ImIDkQ-.
+                &-
+                &ZeVnLIqe-
+                \
+                ~peter
+                /mail
+                /&ZeVnLIqe-
+                /&U,BTFw-
+            */
+            0x48, 0x69, 0x20, 0x4d, 0x6f, 0x6d, 0x20, 0x2d, 0x26, 0x4a, 0x6a, 0x6f, 0x2d, 0x2d, 0x21,
+            0x41, 0x26, 0x49, 0x6d, 0x49, 0x44, 0x6b, 0x51, 0x2d, 0x2e,
+            0x26, 0x2d,
+            0x26, 0x5a, 0x65, 0x56, 0x6e, 0x4c, 0x49, 0x71, 0x65, 0x2d,
+            0x5c,
+            0x7e, 0x70, 0x65, 0x74, 0x65, 0x72,
+            0x2f, 0x6d, 0x61, 0x69, 0x6c,
+            0x2f, 0x26, 0x5a, 0x65, 0x56, 0x6e, 0x4c, 0x49, 0x71, 0x65, 0x2d,
+            0x2f, 0x26, 0x55, 0x2c, 0x42, 0x54, 0x46, 0x77, 0x2d
+        };
+        static const UChar unicode[] = {
+            /*  Hi Mom -<WHITE SMILING FACE>-!
+                A<NOT IDENTICAL TO><ALPHA>.
+                &
+                [Japanese word "nihongo"]
+                \
+                ~peter
+                /mail
+                /<65e5, 672c, 8a9e>
+                /<53f0, 5317>
+            */
+            0x48, 0x69, 0x20, 0x4d, 0x6f, 0x6d, 0x20, 0x2d, 0x263a, 0x2d, 0x21,
+            0x41, 0x2262, 0x0391, 0x2e,
+            0x26,
+            0x65e5, 0x672c, 0x8a9e,
+            0x5c,
+            0x7e, 0x70, 0x65, 0x74, 0x65, 0x72,
+            0x2f, 0x6d, 0x61, 0x69, 0x6c,
+            0x2f, 0x65e5, 0x672c, 0x8a9e,
+            0x2f, 0x53f0, 0x5317
+        };
+        static const int32_t toUnicodeOffsets[] = {
+            0, 1, 2, 3, 4, 5, 6, 7, 9, 13, 14,
+            15, 17, 19, 24,
+            25,
+            28, 30, 33,
+            37,
+            38, 39, 40, 41, 42, 43,
+            44, 45, 46, 47, 48,
+            49, 51, 53, 56,
+            60, 62, 64
+        };
+        static const int32_t fromUnicodeOffsets[] = {
+            0, 1, 2, 3, 4, 5, 6, 7, 8, 8, 8, 8, 8, 9, 10,
+            11, 12, 12, 12, 13, 13, 13, 13, 13, 14,
+            15, 15,
+            16, 16, 16, 17, 17, 17, 18, 18, 18, 18,
+            19,
+            20, 21, 22, 23, 24, 25,
+            26, 27, 28, 29, 30,
+            31, 32, 32, 32, 33, 33, 33, 34, 34, 34, 34,
+            35, 36, 36, 36, 37, 37, 37, 37, 37
+        };
+
+        testConvertFromU(unicode, sizeof(unicode)/U_SIZEOF_UCHAR, imap, sizeof(imap), "IMAP-mailbox-name", fromUnicodeOffsets,FALSE);
+
+        testConvertToU(imap, sizeof(imap), unicode, sizeof(unicode)/U_SIZEOF_UCHAR, "IMAP-mailbox-name", toUnicodeOffsets,FALSE);
     }
 
     /* Test UTF-8 bad data handling*/
@@ -1224,6 +1304,7 @@ static void TestConverterTypesAndStarters()
     TestConverterType("x-iscii-de", UCNV_ISCII);
     TestConverterType("ascii", UCNV_US_ASCII);
     TestConverterType("utf-7", UCNV_UTF7);
+    TestConverterType("IMAP-mailbox-name", UCNV_IMAP_MAILBOX);
     TestConverterType("bocu-1", UCNV_BOCU1);
 }
 
@@ -1591,6 +1672,50 @@ static TestUTF7() {
     cnvName = ucnv_getName(cnv, &errorCode);
     if (U_FAILURE(errorCode) || uprv_strcmp(cnvName, "UTF-7") != 0) {
         log_err("UTF-7 converter is called %s: %s\n", cnvName, u_errorName(errorCode));
+    }
+    ucnv_close(cnv);
+}
+
+void
+static TestIMAP() {
+    /* test input */
+    static const uint8_t in[]={
+        /* H - &Jjo- - ! &- &2AHcAQ- \ */
+        0x48,
+        0x2d,
+        0x26, 0x4a, 0x6a, 0x6f,
+        0x2d, 0x2d,
+        0x21,
+        0x26, 0x2d,
+        0x26, 0x32, 0x41, 0x48, 0x63, 0x41, 0x51, 0x2d
+    };
+
+    /* expected test results */
+    static const uint32_t results[]={
+        /* number of bytes read, code point */
+        1, 0x48,
+        1, 0x2d,
+        4, 0x263a, /* <WHITE SMILING FACE> */
+        2, 0x2d,
+        1, 0x21,
+        2, 0x26,
+        7, 0x10401
+    };
+
+    const char *cnvName;
+    const char *source=(const char *)in, *limit=(const char *)in+sizeof(in);
+    UErrorCode errorCode=U_ZERO_ERROR;
+    UConverter *cnv=ucnv_open("IMAP-mailbox-name", &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("Unable to open a IMAP-mailbox-name converter: %s\n", u_errorName(errorCode)); /* sholdn't be a data err */
+        return;
+    }
+    TestNextUChar(cnv, source, limit, results, "IMAP-mailbox-name");
+    /* Test the condition when source >= sourceLimit */
+    TestNextUCharError(cnv, source, source, U_INDEX_OUTOFBOUNDS_ERROR, "sourceLimit <= source");
+    cnvName = ucnv_getName(cnv, &errorCode);
+    if (U_FAILURE(errorCode) || uprv_strcmp(cnvName, "IMAP-mailbox-name") != 0) {
+        log_err("IMAP-mailbox-name converter is called %s: %s\n", cnvName, u_errorName(errorCode));
     }
     ucnv_close(cnv);
 }
@@ -2596,7 +2721,9 @@ TestGetNextUChar2022(UConverter* cnv, const char* source, const char* limit,
      while(s<limit) {
         s0=s;
         c=ucnv_getNextUChar(cnv, &s, limit, &errorCode);
-        if(U_FAILURE(errorCode)) {
+        if(errorCode==U_INDEX_OUTOFBOUNDS_ERROR) {
+            break; /* no more significant input */
+        } else if(U_FAILURE(errorCode)) {
             log_err("%s ucnv_getNextUChar() failed: %s\n", message, u_errorName(errorCode));
             break;
         } else {
@@ -3196,6 +3323,8 @@ TestRoundTrippingAllUTF(void){
         TestFullRoundtrip("UTF-7");
         log_verbose("Running exhaustive round trip test for UTF-7\n");
         TestFullRoundtrip("UTF-7,version=1");
+        log_verbose("Running exhaustive round trip test for IMAP-mailbox-name\n");
+        TestFullRoundtrip("IMAP-mailbox-name");
         log_verbose("Running exhaustive round trip test for GB18030\n");
         TestFullRoundtrip("GB18030");
     }
