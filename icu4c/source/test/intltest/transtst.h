@@ -21,6 +21,7 @@ class TransliteratorTest : public IntlTest {
 
 public:
     TransliteratorTest();
+    virtual ~TransliteratorTest() {}
 
 private:
     void runIndexedTest(int32_t index, UBool exec, const char* &name,
