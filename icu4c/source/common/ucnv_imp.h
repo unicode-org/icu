@@ -30,6 +30,14 @@
  */
 UConverter *ucnv_createConverter (const char *converterName, UErrorCode * err);
 
+/* Creates a converter from shared data 
+ */
+UConverter*
+ucnv_createConverterFromSharedData(UConverterSharedData *mySharedConverterData, const char *realName, const char *locale, uint32_t options, UErrorCode *err);
+
+UConverter* ucnv_createConverterFromPackage(const char *packageName, const char *converterName,  
+                                            UErrorCode *err);
+
 /* Stores the shared data in the SHARED_DATA_HASHTABLE
  * @param data The shared data
  */
