@@ -2871,6 +2871,53 @@ _MBCSIsLeadByte(UConverterSharedData *sharedData, char byte) {
     return (UBool)(sharedData->table->mbcs.stateTable[0][(uint8_t)byte]>=0);
 }
 
+U_CFUNC void
+_MBCSWriteSub(UConverterFromUnicodeArgs *pArgs,
+              int32_t offsetIndex,
+              UErrorCode *pErrorCode) {
+    UConverter *cnv=pArgs->converter;
+    char *p;
+    char buffer[4];
+
+    switch(cnv->sharedData->table->mbcs.outputType) {
+    case MBCS_OUTPUT_2_SISO:
+        p=buffer;
+
+        /* fromUnicodeStatus contains prevLength */
+        switch(cnv->subCharLen) {
+        case 1:
+            if(cnv->fromUnicodeStatus==2) {
+                /* DBCS mode and SBCS sub char: change to SBCS */
+                cnv->fromUnicodeStatus=1;
+                *p++=UCNV_SI;
+            }
+            *p++=cnv->subChar[0];
+            break;
+        case 2:
+            if(cnv->fromUnicodeStatus==1) {
+                /* SBCS mode and DBCS sub char: change to DBCS */
+                cnv->fromUnicodeStatus=2;
+                *p++=UCNV_SO;
+            }
+            *p++=cnv->subChar[0];
+            *p++=cnv->subChar[1];
+            break;
+        default:
+            *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+            return;
+        }
+        ucnv_cbFromUWriteBytes(pArgs,
+                               buffer, (int32_t)(p-buffer),
+                               offsetIndex, pErrorCode);
+        break;
+    default:
+        ucnv_cbFromUWriteBytes(pArgs,
+                               (const char *)cnv->subChar, cnv->subCharLen,
+                               offsetIndex, pErrorCode);
+        break;
+    }
+}
+
 static const UConverterImpl _MBCSImpl={
     UCNV_MBCS,
 
