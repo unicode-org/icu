@@ -225,6 +225,15 @@
 #define ULOC_UK             "en_GB"
 #define ULOC_US             "en_US"
 
+/*
+ * Useful constants for the size of locale IDs.
+ * @draft
+ */
+#define ULOC_LANG_CAPACITY 12
+#define ULOC_COUNTRY_CAPACITY 4
+#define ULOC_FULLNAME_CAPACITY 50
+
+
 /**
  * Gets ICU's default locale.  This pointer and/or the contents of the pointer may
  * become invalid if the uloc_setDefault() is called, so copy the contents of the
