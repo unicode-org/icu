@@ -9,8 +9,9 @@ es {
     Version { "3.0" }
     collations {
         standard {
-            Version { "1.0" }
-            Sequence { "& N < n\u0303<<< N\u0303" }
+            Version { "1.1" }
+            Sequence { "& N < n\u0303<<< N\u0303"
+                       "&A<<<\u00c6/E &a<<<\u00e6/e" }
         }
         traditional {
             Version { "1.0" }
