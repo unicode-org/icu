@@ -46,10 +46,13 @@ static void TestUnescape(void);
 static void TestUScriptCodeAPI(void);
 static void TestUScriptRunAPI(void);
 static void TestAdditionalProperties(void);
+static void TestNumericProperties(void);
 
 /* internal methods used */
 static int32_t MakeProp(char* str);
 static int32_t MakeDir(char* str);
+
+#define LENGTHOF(array) (sizeof(array)/sizeof((array)[0]))
 
 /* get the sign of an integer */
 #define _SIGN(value) ((value)==0 ? 0 : ((int32_t)(value)>>31)|1)
@@ -121,6 +124,7 @@ void addUnicodeTest(TestNode** root)
 {
     addTest(root, &TestUnicodeData, "tsutil/cucdtst/TestUnicodeData");
     addTest(root, &TestAdditionalProperties, "tsutil/cucdtst/TestAdditionalProperties");
+    addTest(root, &TestNumericProperties, "tsutil/cucdtst/TestNumericProperties");
     addTest(root, &TestUpperLower, "tsutil/cucdtst/TestUpperLower");
     addTest(root, &TestLetterNumber, "tsutil/cucdtst/TestLetterNumber");
     addTest(root, &TestMisc, "tsutil/cucdtst/TestMisc");
@@ -555,9 +559,11 @@ unicodeDataLineFn(void *context,
                   char *fields[][2], int32_t fieldCount,
                   UErrorCode *pErrorCode)
 {
+    char buffer[100];
     char *end;
     uint32_t value;
     UChar32 c;
+    int32_t i;
     int8_t type;
 
     /* get the character code, field 0 */
@@ -588,14 +594,25 @@ unicodeDataLineFn(void *context,
         log_err("error in UnicodeData.txt: combining class %lu out of range\n", value);
         return;
     }
-    if(value!=u_getCombiningClass(c)) {
+    if(value!=u_getCombiningClass(c) || value!=(uint32_t)u_getIntPropertyValue(c, UCHAR_CANONICAL_COMBINING_CLASS)) {
         log_err("error: u_getCombiningClass(U+%04lx)==%hu instead of %lu\n", c, u_getCombiningClass(c), value);
     }
 
     /* get BiDi category, field 4 */
     *fields[4][1]=0;
-    if(u_charDirection(c)!=MakeDir(fields[4][0])) {
+    i=MakeDir(fields[4][0]);
+    if(i!=u_charDirection(c) || i!=u_getIntPropertyValue(c, UCHAR_BIDI_CLASS)) {
         log_err("error: u_charDirection(U+%04lx)==%u instead of %u (%s)\n", c, u_charDirection(c), MakeDir(fields[4][0]), fields[4][0]);
+    }
+
+    /* get ISO Comment, field 11 */
+    *fields[11][1]=0;
+    i=u_getISOComment(c, buffer, sizeof(buffer), pErrorCode);
+    if(U_FAILURE(*pErrorCode) || 0!=uprv_strcmp(fields[11][0], buffer)) {
+        log_err("error: u_getISOComment(U+%04lx) wrong (%s): \"%s\" should be \"%s\"\n",
+            c, u_errorName(*pErrorCode),
+            U_FAILURE(*pErrorCode) ? buffer : "[error]",
+            fields[11][0]);
     }
 
     /* get uppercase mapping, field 12 */
@@ -663,6 +680,7 @@ enumTypeRange(const void *context, UChar32 start, UChar32 limit, UCharCategory t
 
     if(0!=uprv_strcmp((const char *)context, "a1")) {
         log_err("error: u_enumCharTypes() passes on an incorrect context pointer\n");
+        return FALSE;
     }
 
     count=sizeof(test)/sizeof(test[0]);
@@ -682,6 +700,25 @@ enumTypeRange(const void *context, UChar32 start, UChar32 limit, UCharCategory t
                 start, limit, (long)type);
         return FALSE;
     }
+
+    /*
+     * LineBreak.txt specifies:
+     *   #  - Assigned characters that are not listed explicitly are given the value
+     *   #    "AL".
+     *   #  - Unassigned characters are given the value "XX".
+     *
+     * PUA characters are listed explicitly with "XX".
+     * Verify that no assigned character has "XX".
+     */
+    if(type!=U_UNASSIGNED && type!=U_PRIVATE_USE_CHAR) {
+        while(start<limit) {
+            if(0==u_getIntPropertyValue(start, UCHAR_LINE_BREAK)) {
+                log_err("error UCHAR_LINE_BREAK(assigned U+%04lx)=XX\n", start);
+            }
+            ++start;
+        }
+    }
+
     return TRUE;
 }
 
@@ -732,8 +769,8 @@ static void TestUnicodeData()
     }
 #endif
 
-    if (ublock_getCode((UChar)0x0041) != UBLOCK_BASIC_LATIN) {
-        log_err("Unicode character script property failed! Expected : %i Got: %i \n", UBLOCK_BASIC_LATIN,ublock_getCode((UChar)0x0041));
+    if (ublock_getCode((UChar)0x0041) != UBLOCK_BASIC_LATIN || u_getIntPropertyValue(0x41, UCHAR_BLOCK)!=(int32_t)UBLOCK_BASIC_LATIN) {
+        log_err("ublock_getCode(U+0041) property failed! Expected : %i Got: %i \n", UBLOCK_BASIC_LATIN,ublock_getCode((UChar)0x0041));
     }
 
     errorCode=U_ZERO_ERROR;
@@ -1955,7 +1992,9 @@ static void TestUScriptCodeAPI(){
         while(i< MAX_ARRAY_SIZE){
             code = uscript_getScript(codepoints[i],&status);
             if(U_SUCCESS(status)){
-                if(code != expected[i]){
+                if( code != expected[i] ||
+                    code != (UScriptCode)u_getIntPropertyValue(codepoints[i], UCHAR_SCRIPT)
+                ) {
                     log_verbose("uscript_getScript for codepoint \\U%08X failed\n",codepoints[i]);
                     passed = FALSE;
                 }
@@ -2339,12 +2378,108 @@ TestAdditionalProperties() {
         { 0x0049, UCHAR_SOFT_DOTTED, FALSE },
 
         { 0xfa11, UCHAR_UNIFIED_IDEOGRAPH, TRUE },
-        { 0xfa12, UCHAR_UNIFIED_IDEOGRAPH, FALSE }
+        { 0xfa12, UCHAR_UNIFIED_IDEOGRAPH, FALSE },
+
+        /* enum/integer type properties */
+
+        /* UCHAR_BIDI_CLASS tested for assigned characters in TestUnicodeData() */
+#if 0
+        /* ### TODO test default Bidi classes for unassigned code points */
+        { 0x, UCHAR_BIDI_CLASS,  },
+        { 0x, UCHAR_BIDI_CLASS,  },
+        { 0x, UCHAR_BIDI_CLASS,  },
+#endif
+
+        { 0x02AF, UCHAR_BLOCK, UBLOCK_IPA_EXTENSIONS },
+        { 0x0C4E, UCHAR_BLOCK, UBLOCK_TELUGU },
+        { 0x155A, UCHAR_BLOCK, UBLOCK_UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS },
+        { 0x1717, UCHAR_BLOCK, UBLOCKS_TAGALOG },
+        { 0x1AFF, UCHAR_BLOCK, UBLOCK_INVALID_CODE },
+        { 0x3040, UCHAR_BLOCK, UBLOCK_HIRAGANA },
+        { 0x1D0FF, UCHAR_BLOCK, UBLOCK_BYZANTINE_MUSICAL_SYMBOLS },
+        { 0x10D0FF, UCHAR_BLOCK, UBLOCKS_SUPPLEMENTARY_PRIVATE_USE_AREA_B },
+        { 0xEFFFF, UCHAR_BLOCK, UBLOCK_INVALID_CODE },
+
+        /* UCHAR_CANONICAL_COMBINING_CLASS tested for assigned characters in TestUnicodeData() */
+        { 0xd7d7, UCHAR_CANONICAL_COMBINING_CLASS, 0 },
+
+        { 0x00A0, UCHAR_DECOMPOSITION_TYPE, U_DT_NOBREAK },
+        { 0x00A8, UCHAR_DECOMPOSITION_TYPE, U_DT_COMPAT },
+        { 0x00bf, UCHAR_DECOMPOSITION_TYPE, U_DT_NONE },
+        { 0x00c0, UCHAR_DECOMPOSITION_TYPE, U_DT_CANONICAL },
+        { 0x1E9B, UCHAR_DECOMPOSITION_TYPE, U_DT_CANONICAL },
+        { 0xBCDE, UCHAR_DECOMPOSITION_TYPE, U_DT_CANONICAL },
+        { 0xFB5D, UCHAR_DECOMPOSITION_TYPE, U_DT_MEDIAL },
+        { 0x1D736, UCHAR_DECOMPOSITION_TYPE, U_DT_FONT },
+        { 0xe0033, UCHAR_DECOMPOSITION_TYPE, U_DT_NONE },
+
+        { 0x0009, UCHAR_EAST_ASIAN_WIDTH, U_EA_NEUTRAL },
+        { 0x0020, UCHAR_EAST_ASIAN_WIDTH, U_EA_NARROW },
+        { 0x00B1, UCHAR_EAST_ASIAN_WIDTH, U_EA_AMBIGUOUS },
+        { 0x20A9, UCHAR_EAST_ASIAN_WIDTH, U_EA_HALFWIDTH },
+        { 0x2FFB, UCHAR_EAST_ASIAN_WIDTH, U_EA_WIDE },
+        { 0x3000, UCHAR_EAST_ASIAN_WIDTH, U_EA_FULLWIDTH },
+        { 0x35bb, UCHAR_EAST_ASIAN_WIDTH, U_EA_WIDE },
+        { 0x58bd, UCHAR_EAST_ASIAN_WIDTH, U_EA_WIDE },
+        { 0xD7A3, UCHAR_EAST_ASIAN_WIDTH, U_EA_WIDE },
+        { 0xEEEE, UCHAR_EAST_ASIAN_WIDTH, U_EA_AMBIGUOUS },
+        { 0x1D198, UCHAR_EAST_ASIAN_WIDTH, U_EA_NEUTRAL },
+        { 0x20000, UCHAR_EAST_ASIAN_WIDTH, U_EA_WIDE },
+        { 0x2F8C7, UCHAR_EAST_ASIAN_WIDTH, U_EA_WIDE },
+        { 0x3a5bd, UCHAR_EAST_ASIAN_WIDTH, U_EA_NEUTRAL },
+        { 0xFEEEE, UCHAR_EAST_ASIAN_WIDTH, U_EA_AMBIGUOUS },
+        { 0x10EEEE, UCHAR_EAST_ASIAN_WIDTH, U_EA_AMBIGUOUS },
+
+        /* UCHAR_GENERAL_CATEGORY tested for assigned characters in TestUnicodeData() */
+        { 0xd7d7, UCHAR_GENERAL_CATEGORY, 0 },
+
+        { 0x0444, UCHAR_JOINING_GROUP, U_JG_NO_JOINING_GROUP },
+        { 0x0639, UCHAR_JOINING_GROUP, U_JG_AIN },
+        { 0x072A, UCHAR_JOINING_GROUP, U_JG_DALATH_RISH },
+        { 0x0647, UCHAR_JOINING_GROUP, U_JG_HEH },
+        { 0x06C1, UCHAR_JOINING_GROUP, U_JG_HEH_GOAL },
+        { 0x06C3, UCHAR_JOINING_GROUP, U_JG_HAMZA_ON_HEH_GOAL },
+
+        { 0x200C, UCHAR_JOINING_TYPE, U_JT_NON_JOINING },
+        { 0x200D, UCHAR_JOINING_TYPE, U_JT_JOIN_CAUSING },
+        { 0x0639, UCHAR_JOINING_TYPE, U_JT_DUAL_JOINING },
+        { 0x0640, UCHAR_JOINING_TYPE, U_JT_JOIN_CAUSING },
+        { 0x06C3, UCHAR_JOINING_TYPE, U_JT_RIGHT_JOINING },
+        { 0x0300, UCHAR_JOINING_TYPE, U_JT_TRANSPARENT },
+        { 0x070F, UCHAR_JOINING_TYPE, U_JT_TRANSPARENT },
+        { 0xe0033, UCHAR_JOINING_TYPE, U_JT_TRANSPARENT },
+
+        /* TestUnicodeData() verifies that no assigned character has "XX" (unknown) */
+        { 0xe7e7, UCHAR_LINE_BREAK, U_LB_UNKNOWN },
+        { 0x10fffd, UCHAR_LINE_BREAK, U_LB_UNKNOWN },
+        { 0x0028, UCHAR_LINE_BREAK, U_LB_OPEN_PUNCTUATION },
+        { 0x232A, UCHAR_LINE_BREAK, U_LB_CLOSE_PUNCTUATION },
+        { 0x3401, UCHAR_LINE_BREAK, U_LB_IDEOGRAPHIC },
+        { 0x4e02, UCHAR_LINE_BREAK, U_LB_IDEOGRAPHIC },
+        { 0xac03, UCHAR_LINE_BREAK, U_LB_IDEOGRAPHIC },
+        { 0x20004, UCHAR_LINE_BREAK, U_LB_IDEOGRAPHIC },
+        { 0xf905, UCHAR_LINE_BREAK, U_LB_IDEOGRAPHIC },
+        { 0xdb7e, UCHAR_LINE_BREAK, U_LB_SURROGATE },
+        { 0xdbfd, UCHAR_LINE_BREAK, U_LB_SURROGATE },
+        { 0xdffc, UCHAR_LINE_BREAK, U_LB_SURROGATE },
+        { 0x2762, UCHAR_LINE_BREAK, U_LB_EXCLAMATION },
+        { 0x002F, UCHAR_LINE_BREAK, U_LB_BREAK_SYMBOLS },
+        { 0x1D49C, UCHAR_LINE_BREAK, U_LB_ALPHABETIC },
+        { 0x1731, UCHAR_LINE_BREAK, U_LB_ALPHABETIC },
+
+        /* UCHAR_NUMERIC_TYPE tested in TestNumericProperties() */
+
+        /* UCHAR_SCRIPT tested in TestUScriptCodeAPI() */
+
+        /* undefined UProperty values */
+        { 0x61, 0x4a7, 0 },
+        { 0x234bc, 0x15ed, 0 }
     };
 
     UVersionInfo version;
-    int32_t i, uVersion;
-    UBool result;
+    UChar32 c;
+    int32_t i, result, uVersion;
+    UProperty which;
 
     /* what is our Unicode version? */
     u_getUnicodeVersion(version);
@@ -2368,7 +2503,28 @@ TestAdditionalProperties() {
         }
     }
 
-    /* test u_hasBinaryProperty() */
+    if( u_getIntPropertyMinValue(UCHAR_DASH)!=0 ||
+        u_getIntPropertyMinValue(UCHAR_BIDI_CLASS)!=0 ||
+        u_getIntPropertyMinValue(UCHAR_BLOCK)!=(int32_t)UBLOCK_INVALID_CODE ||
+        u_getIntPropertyMinValue(UCHAR_SCRIPT)!=(int32_t)USCRIPT_INVALID_CODE ||
+        u_getIntPropertyMinValue(0x2345)!=0
+    ) {
+        log_err("error: u_getIntPropertyMinValue() wrong\n");
+    }
+
+    if( u_getIntPropertyMaxValue(UCHAR_DASH)!=1 ||
+        u_getIntPropertyMaxValue(UCHAR_ID_CONTINUE)!=1 ||
+        u_getIntPropertyMaxValue(UCHAR_BINARY_LIMIT-1)!=1 ||
+        u_getIntPropertyMaxValue(UCHAR_BIDI_CLASS)!=(int32_t)U_CHAR_DIRECTION_COUNT-1 ||
+        u_getIntPropertyMaxValue(UCHAR_BLOCK)!=(int32_t)UBLOCK_COUNT-1 ||
+        u_getIntPropertyMaxValue(UCHAR_LINE_BREAK)!=(int32_t)U_LB_COUNT-1 ||
+        u_getIntPropertyMaxValue(UCHAR_SCRIPT)!=(int32_t)USCRIPT_CODE_LIMIT-1 ||
+        u_getIntPropertyMaxValue(0x2345)!=0
+    ) {
+        log_err("error: u_getIntPropertyMaxValue() wrong\n");
+    }
+
+    /* test u_hasBinaryProperty() and u_getIntPropertyValue() */
     for(i=0; i<sizeof(props)/sizeof(props[0]); ++i) {
         if(props[i][0]<0) {
             /* Unicode version break */
@@ -2379,10 +2535,21 @@ TestAdditionalProperties() {
             }
         }
 
-        result=u_hasBinaryProperty((UChar32)props[i][0], (UProperty)props[i][1]);
-        if(result!=(UBool)props[i][2]) {
-            log_err("error: u_hasBinaryProperty(U+%04lx, %d)=%d is wrong (props[%d])\n",
-                    props[i][0], props[i][1], result, i);
+        c=(UChar32)props[i][0];
+        which=(UProperty)props[i][1];
+
+        if(which<UCHAR_INT_START) {
+            result=u_hasBinaryProperty(c, which);
+            if(result!=props[i][2]) {
+                log_err("error: u_hasBinaryProperty(U+%04lx, %d)=%d is wrong (props[%d])\n",
+                        c, which, result, i);
+            }
+        }
+
+        result=u_getIntPropertyValue(c, which);
+        if(result!=props[i][2]) {
+            log_err("error: u_getIntPropertyValue(U+%04lx, 0x1000+%d)=%d is wrong, should be %d (props[%d])\n",
+                    c, (int32_t)which-0x1000, result, props[i][2], i);
         }
 
         /* test separate functions, too */
@@ -2413,6 +2580,66 @@ TestAdditionalProperties() {
             break;
         default:
             break;
+        }
+    }
+}
+
+static void
+TestNumericProperties(void) {
+    /* see UnicodeData.txt, DerivedNumericValues.txt */
+    static const struct {
+        UChar32 c;
+        int32_t type;
+        double numValue;
+    } values[]={
+        { 0x0F33, U_NT_NUMERIC, -1./2. },
+        { 0x0C66, U_NT_DECIMAL, 0 },
+        { 0x2159, U_NT_NUMERIC, 1./6. },
+        { 0x00BD, U_NT_NUMERIC, 1./2. },
+        { 0x0031, U_NT_DECIMAL, 1. },
+        { 0x10320, U_NT_NUMERIC, 1. },
+        { 0x0F2B, U_NT_NUMERIC, 3./2. },
+        { 0x00B2, U_NT_DECIMAL, 2. },
+        { 0x1813, U_NT_DECIMAL, 3. },
+        { 0x2173, U_NT_NUMERIC, 4. },
+        { 0x278E, U_NT_DIGIT, 5. },
+        { 0x1D7F2, U_NT_DECIMAL, 6. },
+        { 0x247A, U_NT_DIGIT, 7. },
+        { 0x1372, U_NT_NUMERIC, 10. },
+        { 0x216B, U_NT_NUMERIC, 12. },
+        { 0x16EE, U_NT_NUMERIC, 17. },
+        { 0x249A, U_NT_NUMERIC, 19. },
+        { 0x303A, U_NT_NUMERIC, 30. },
+        { 0x32B2, U_NT_NUMERIC, 37. },
+        { 0x1375, U_NT_NUMERIC, 40. },
+        { 0x10323, U_NT_NUMERIC, 50. },
+        { 0x0BF1, U_NT_NUMERIC, 100. },
+        { 0x217E, U_NT_NUMERIC, 500. },
+        { 0x2180, U_NT_NUMERIC, 1000. },
+        { 0x2181, U_NT_NUMERIC, 5000. },
+        { 0x137C, U_NT_NUMERIC, 10000. },
+        { 0x61, U_NT_NONE, U_NO_NUMERIC_VALUE },
+        { 0x3000, U_NT_NONE, U_NO_NUMERIC_VALUE },
+        { 0xfffe, U_NT_NONE, U_NO_NUMERIC_VALUE },
+        { 0x10301, U_NT_NONE, U_NO_NUMERIC_VALUE },
+        { 0xe0033, U_NT_NONE, U_NO_NUMERIC_VALUE },
+        { 0x10ffff, U_NT_NONE, U_NO_NUMERIC_VALUE }
+    };
+
+    double nv;
+    UChar32 c;
+    int32_t i, type;
+
+    for(i=0; i<LENGTHOF(values); ++i) {
+        c=values[i].c;
+        type=u_getIntPropertyValue(c, UCHAR_NUMERIC_TYPE);
+        nv=u_getNumericValue(c);
+
+        if(type!=values[i].type) {
+            log_err("UCHAR_NUMERIC_TYPE(U+%04lx)=%d should be %d\n", type, values[i].type);
+        }
+        if(nv!=values[i].numValue) {
+            log_err("u_getNumericValue(U+%04lx)=%g should be %g\n", nv, values[i].numValue);
         }
     }
 }
