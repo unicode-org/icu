@@ -1651,7 +1651,7 @@ public class GenerateSidewaysView {
                     "Each value is listed under the field designator (in XML XPath format), " +
                     "followed by all the locales that use it. " +
                     "Locales are omitted if the value would be the same as the parent's. " +
-                    "The locales are listed in the format: ·aa· for searching. " +
+                    "The locales are listed in the format: \u00B7aa\u00B7 for searching. " +
                     "The value appears in red if it is the same as the root. </p>");
             out.println("<table>");
             return out;
@@ -1679,7 +1679,7 @@ public class GenerateSidewaysView {
             out.println("<p>The following are charts for the individual datatypes, " +
                     "that show a comparison across locales for different fields. " +
                     "For example, in the orientation chart, one can see that all locales " +
-                    "are left-to-right except ·ar· ·fa· ·he· ·ps· (and their children).</p>" +
+                    "are left-to-right except \u00B7ar\u00B7 \u00B7fa\u00B7 \u00B7he\u00B7 \u00B7ps\u00B7 (and their children).</p>" +
                     "<p>Note: these charts do not yet include collations</p>");
             out.println("<ul>");
             for(Iterator e = allTypes.iterator();e.hasNext();) {
@@ -1982,7 +1982,7 @@ public class GenerateSidewaysView {
                         .createXMLReader("org.apache.crimson.parser.XMLReaderImpl");
                 result.setFeature("http://xml.org/sax/features/validation", validating);
             } catch (SAXException e2) {
-                try { // Ælfred
+                try { // AElfred
                     result =  XMLReaderFactory
                             .createXMLReader("gnu.xml.aelfred2.XmlReader");
                     result.setFeature("http://xml.org/sax/features/validation", validating);

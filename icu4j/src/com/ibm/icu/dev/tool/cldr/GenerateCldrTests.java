@@ -101,7 +101,7 @@ public class GenerateCldrTests {
             //compareAvailable();
             //if (true) return;
             //System.out.println(createCaseClosure(new UnicodeSet("[a{bc}{def}{oss}]")));
-            //System.out.println(createCaseClosure(new UnicodeSet("[a-zß{aa}]")));
+            //System.out.println(createCaseClosure(new UnicodeSet("[a-z\u00c3\u0178{aa}]")));
             GenerateCldrTests t = new GenerateCldrTests();
             //t.generate(new ULocale("hu"), null);
             t.generate(options[MATCH].value);
