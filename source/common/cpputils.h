@@ -17,9 +17,6 @@
 #include "unicode/utypes.h"
 #include "cmemory.h"
 
-// forward declaration
-class UnicodeString;
-
 /*==========================================================================*/
 /* Array copy utility functions */
 /*==========================================================================*/
@@ -56,12 +53,5 @@ inline void
 uprv_arrayCopy(const UChar *src, int32_t srcStart,
         UChar *dst, int32_t dstStart, int32_t count)
 { uprv_memcpy(dst+dstStart, src+srcStart, (size_t)(count * sizeof(*src))); }
-
-/** Simple utility to fill a UChar array from a UnicodeString */
-U_CAPI int32_t U_EXPORT2
-uprv_fillOutputString(const UnicodeString &temp,
-                      UChar *dest, 
-                      int32_t destCapacity,
-                      UErrorCode *status);
 
 #endif /* _CPPUTILS */
