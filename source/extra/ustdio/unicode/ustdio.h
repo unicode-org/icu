@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1998-2003, International Business Machines
+*   Copyright (C) 1998-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -41,7 +41,8 @@
  * Make sure that #, blank and precision in the printf format specification
     works.
  * Make sure that * in the scanf format specification works.
- * Each UFILE takes up at least 2KB. This should be really reduced.
+ * Each UFILE takes up at least 2KB.
+    Look into adding setvbuf() for configurable buffers.
  * This library does buffering. The OS should do this for us already. Check on
     this, and remove it from this library, if this is the case. Double buffering
     wastes a lot of time and space.
@@ -166,6 +167,17 @@ u_finit(FILE        *f,
  */
 U_CAPI void U_EXPORT2
 u_fclose(UFILE *file);
+
+/**
+ * Tests if the UFILE is at the end of the file stream.
+ * @param f The UFILE from which to read.
+ * @return Returns TRUE after the first read operation that attempts to
+ * read past the end of the file. It returns FALSE if the current position is
+ * not end of file.
+ * @draft
+*/
+U_CAPI UBool U_EXPORT2
+u_feof(UFILE  *f);
 
 /**
  * Flush output of a UFILE. Implies a flush of
