@@ -323,6 +323,13 @@ typedef void* UClassID;
  */
 
 /**
+ * \def U_LAYOUTEX_API
+ * Set to export library symbols from inside the layout extensions library,
+ * and to import them from outside.
+ * @draft ICU 2.6
+ */
+
+/**
  * \def U_USTDIO_API
  * Set to export library symbols from inside the ustdio library,
  * and to import them from outside.
