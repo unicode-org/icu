@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2004/02/25 01:29:54 $
- * $Revision: 1.128 $
+ * $Date: 2004/02/26 00:47:23 $
+ * $Revision: 1.129 $
  *
  *****************************************************************************************
  */
@@ -1709,6 +1709,12 @@ public class TransliteratorTest extends TestFmwk {
 
                 t = Transliterator.getInstance("[:Ll:];a_to_A;NFD;A_to_b");
                 expect(t, "aAaA", "bAbA");
+
+                Transliterator[] u = t.getElements();
+                assertTrue("getElements().length", u.length == 3);
+                assertEquals("getElements()[0]", u[0].getID(), "a_to_A");
+                assertEquals("getElements()[1]", u[1].getID(), "NFD");
+                assertEquals("getElements()[2]", u[2].getID(), "A_to_b");
 
                 t = Transliterator.getInstance("a_to_A;NFD;A_to_b");
                 t.setFilter(new UnicodeSet("[:Ll:]"));
