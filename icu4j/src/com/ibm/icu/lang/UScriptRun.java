@@ -371,7 +371,7 @@ public final class UScriptRun
 				// if this character is a close paired character,
 				// pop it from the stack
 				if (pairIndex >= 0 && (pairIndex & 1) != 0 && parenSP >= 0) {
-					parenSP -= 1;
+                    parenStack[parenSP--] = null;
                     
                     if (parenSP < startSP) {
                         startSP = parenSP;
