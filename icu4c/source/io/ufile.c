@@ -27,6 +27,10 @@
 #include "cstring.h"
 #include "cmemory.h"
 
+#ifdef WIN32
+/* Windows likes to rename Unix-like functions */
+#define fileno _fileno
+#endif
 
 U_CAPI UFILE* U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_finit(FILE        *f,
@@ -40,21 +44,18 @@ u_finit(FILE        *f,
     }
 
     uprv_memset(result, 0, sizeof(UFILE));
+    result->fFileno = fileno(f);
 
 #ifdef WIN32
-    {
-        int filenum = _fileno(f);
-        if (0 <= filenum && filenum <= 2) {
-            /* stdin, stdout and stderr need to be special cased for Windows 98 */
-            result->fFile = &_iob[_fileno(f)];
-        }
-        else {
-            result->fFile = f;
-        }
+    if (0 <= result->fFileno && result->fFileno <= 2) {
+        /* stdin, stdout and stderr need to be special cased for Windows 98 */
+        result->fFile = &_iob[_fileno(f)];
     }
-#else
-    result->fFile = f;
+    else
 #endif
+    {
+        result->fFile = f;
+    }
 
     result->str.fBuffer = result->fUCBuffer;
     result->str.fPos    = result->fUCBuffer;
