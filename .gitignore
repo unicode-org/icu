@@ -27,6 +27,8 @@ icu4c/debian/icu.prerm
 icu4c/debian/libicu-dev
 icu4c/debian/libicu[0-9]*
 icu4c/debian/libicu[0-9]*.p*
+icu4c/debian/postinst
+icu4c/debian/prerm
 icu4c/debian/tmp
 icu4c/source/Makefile
 icu4c/source/README
