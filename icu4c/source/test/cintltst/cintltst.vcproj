@@ -439,6 +439,9 @@
 				RelativePath=".\cutiltst.c">
 			</File>
 			<File
+				RelativePath="hpmufn.c">
+			</File>
+			<File
 				RelativePath=".\mstrmtst.c">
 			</File>
 			<File
