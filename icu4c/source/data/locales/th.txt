@@ -627,4 +627,18 @@ th {
 
     // (ICU 2.6) International Calendar Data.  Note, THE FORMAT OF THIS DATA WILL CHANGE IN FUTURE RELEASES.
     Eras_buddhist:array { "\u0e1e.\u0e28." }
+
+    DateTimePatterns_buddhist { 
+        "H' \u0E19\u0E32\u0E2C\u0E34\u0E01\u0E32 'm' \u0E19\u0E32\u0E17\u0E35 'ss' \u0E27"
+        "\u0E34\u0E19\u0E32\u0E17\u0E35'",
+        "H' \u0E19\u0E32\u0E2C\u0E34\u0E01\u0E32 'm' \u0E19\u0E32\u0E17\u0E35'",
+        "H:mm:ss",
+        "H:mm",
+        "EEEE'\u0E17\u0E35\u0E48 'd MMMM G yyyy",
+        "d MMMM yyyy G",
+        "d MMM yyyy G",
+        "d/M/yyyy",
+        "{1}, {0}",
+    }
+
 }
