@@ -737,6 +737,17 @@ public final class UniversalTimeScale
         return universalTime.divide(units, BigDecimal.ROUND_DOWN).subtract(epochOffset);
     }
     
+    private static String minMaxFilter(long value)
+    {
+        if (value == Long.MIN_VALUE) {
+            return "U_INT64_MIN";
+        } else if (value == Long.MAX_VALUE) {
+            return "U_INT64_MAX";
+        }
+        
+        return "INT64_C(" + Long.toString(value) + ")";
+    }
+    
     private static int[][] epochDates = {
             {   1, Calendar.JANUARY,   1},
             {1970, Calendar.JANUARY,   1},
@@ -855,5 +866,45 @@ public final class UniversalTimeScale
         cal.setTimeInMillis(toLong(from(0x7FFFFFFF, UNIX_TIME), ICU4C_TIME));
         arguments[1] = "0x7FFFFFFF";
         System.out.println(fmt.format(arguments));
+        
+        System.out.println("\nC data:");
+        fmt = new MessageFormat("'{'{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}},");
+        
+        Object cargs[] = {null, null, null, null, null, null, null, null, null, null, null};
+        
+        for (int scale = 0; scale < MAX_SCALE; scale += 1) {
+            TimeScaleData data = getTimeScaleData(scale);
+            
+            if (data.units == ticks) {
+                cargs[0] = "ticks";
+            } else if (data.units == microseconds) {
+                cargs[0] = "microseconds";
+            } else if (data.units == milliseconds) {
+                cargs[0] = "milliseconds";
+            } else if (data.units == seconds) {
+                cargs[0] = "seconds";
+            } else if (data.units == minutes) {
+                cargs[0] = "minutes";
+            } else if (data.units == hours) {
+                cargs[0] = "hours";
+            } else if (data.units == days) {
+                cargs[0] = "days";
+            } else {
+                cargs[0] = "INT64_C(" + Long.toString(data.units) + ")";
+            }
+            
+            cargs[1]  = minMaxFilter(data.epochOffset);
+            cargs[2]  = minMaxFilter(data.fromMin);
+            cargs[3]  = minMaxFilter(data.fromMax);
+            cargs[4]  = minMaxFilter(data.toMin);
+            cargs[5]  = minMaxFilter(data.toMax);
+            cargs[6]  = minMaxFilter(data.epochOffsetP1);
+            cargs[7]  = minMaxFilter(data.epochOffsetM1);
+            cargs[8]  = minMaxFilter(data.unitsRound);
+            cargs[9]  = minMaxFilter(data.minRound);
+            cargs[10] = minMaxFilter(data.maxRound);
+            
+            System.out.println(fmt.format(cargs));
+        }
     }
 }
