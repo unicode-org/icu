@@ -562,6 +562,28 @@ public:
      */
     virtual void setMinimumFractionDigits(int32_t newValue);
 
+    /**
+     * Sets the currency used to display currency
+     * amounts.  This takes effect immediately, if this format is a
+     * currency format.  If this format is not a currency format, then
+     * the currency is used if and when this object becomes a
+     * currency format.
+     * @param theCurrency a 3-letter ISO code indicating new currency
+     * to use.  It need not be null-terminated.  May be the empty
+     * string or NULL to indicate no currency.
+     * @draft ICU 2.6
+     */
+    virtual void setCurrency(const UChar* theCurrency);
+
+    /**
+     * Gets the currency used to display currency
+     * amounts.  This may be an empty string for some subclasses.
+     * @return a 3-letter null-terminated ISO code indicating
+     * the currency in use, or a pointer to the empty string.
+     * @draft ICU 2.6
+     */
+    const UChar* getCurrency() const;
+
 public:
 
     /**
@@ -653,6 +675,9 @@ private:
     int32_t     fMaxFractionDigits;
     int32_t     fMinFractionDigits;
     UBool      fParseIntegerOnly;
+
+    // ISO currency code
+    UChar      currency[4];
 
 	friend class ICUNumberFormatFactory; // access to makeInstance, EStyles
 	friend class ICUNumberFormatService;

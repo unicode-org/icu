@@ -31,6 +31,7 @@
 #include "unicode/resbund.h"
 #include "unicode/dcfmtsym.h"
 #include "unicode/decimfmt.h"
+#include "unicode/ustring.h"
 #include "uhash.h"
 #include "iculserv.h"
 #include <float.h>
@@ -571,6 +572,21 @@ NumberFormat::setMinimumFractionDigits(int32_t newValue)
     fMinFractionDigits = uprv_max(0, uprv_min(newValue, fgMinIntegerDigits));
     if (fMaxFractionDigits < fMinFractionDigits)
         fMaxFractionDigits = fMinFractionDigits;
+}
+
+// -------------------------------------
+
+void NumberFormat::setCurrency(const UChar* theCurrency) {
+    if (theCurrency) {
+        u_strncpy(currency, theCurrency, 3);
+        currency[3] = 0;
+    } else {
+        currency[0] = 0;
+    }
+}
+
+const UChar* NumberFormat::getCurrency() const {
+    return currency;
 }
 
 // -------------------------------------
