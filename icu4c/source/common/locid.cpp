@@ -1148,7 +1148,7 @@ Locale::getLocaleCache(void)
     umtx_unlock(NULL);
 
     if (needInit) {
-        Locale *tLocaleCache = new Locale[eMAX_LOCALES];
+        Locale *tLocaleCache = new Locale[(int)eMAX_LOCALES];
         if (tLocaleCache == NULL) {
             return NULL;
         }
