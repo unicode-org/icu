@@ -439,13 +439,16 @@
 				RelativePath=".\cutiltst.c">
 			</File>
 			<File
-				RelativePath="hpmufn.c">
+				RelativePath=".\hpmufn.c">
 			</File>
 			<File
 				RelativePath=".\mstrmtst.c">
 			</File>
 			<File
 				RelativePath=".\putiltst.c">
+			</File>
+			<File
+				RelativePath=".\tracetst.c">
 			</File>
 		</Filter>
 		<Filter
