@@ -72,11 +72,27 @@ U_COMMON_API ostream &operator<<(ostream& stream, const UnicodeString& s);
 #endif
 
 /**
- * UnicodeString is a concrete implementation of the abstract class Replaceable.
- * It is a string class that stores Unicode characters directly and provides
- * similar functionality as the Java string class.
+ * UnicodeString is a string class that stores Unicode characters directly and provides
+ * similar functionality as the Java String class.
+ * It is a concrete implementation of the abstract class Replaceable (for transliteration).
  *
- * UnicodeString uses four storage models:
+ * <p>In ICU, strings are stored and used as UTF-16.
+ * This means that a string internally consists of 16-bit Unicode <i>code units</i>.<br>
+ * UTF-16 is a variable-length encoding: A Unicode character may be stored with either
+ * one code unit &mdash; which is the most common case &mdash; or with a matched pair of
+ * special code units ("surrogates").
+ * The data type for code units is UChar.<br>
+ * For single-character handling, a Unicode character code <i>point</i> is a scalar value
+ * in the range 0..0x10ffff. ICU uses the UChar32 type for code points.</p>
+ *
+ * <p>Indexes and offsets into and lengths of strings always count code units, not code points.
+ * This is the same as with multi-byte char* strings in traditional string handling.
+ * Operations on partial strings typically do not test for code point boundaries.
+ * If necessary, the user needs to take care of such boundaries by testing for the code unit
+ * values or by using functions like UnicodeString::getCharStart() and UnicodeString::getCharLimit()
+ * (or, in C, the equivalent macros UTF_SET_CHAR_START() and UTF_SET_CHAR_LIMIT(), see utf.h).</p>
+ *
+ * <p>UnicodeString uses four storage models:
  * <ol>
  * <li>Short strings are normally stored inside the UnicodeString object itself.
  *     The object has fields for the "bookkeeping" and a small UChar array.
@@ -108,7 +124,9 @@ U_COMMON_API ostream &operator<<(ostream& stream, const UnicodeString& s);
  *     When a UnicodeString with a writeable alias is assigned to another UnicodeString,
  *     then the contents is always copied. The destination string will not alias
  *     to the buffer that the source string aliases.</li>
- * </ol>
+ * </ol></p>
+ *
+ * @see Unicode
  */
 class U_COMMON_API UnicodeString : public Replaceable
 {
