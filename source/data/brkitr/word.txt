@@ -222,15 +222,22 @@ $Format+ $BackKatakanaEx;
 $Extend+;
 
 # rule 4
-$Format+ $ALetterEx;
-$Format+ $NumericEx;
-$Format+ $MidLetterEx;
-$Format+ $MidNumLetEx;
-$Format+ $MidNumEx;
-$Format+ $KatakanaEx;
+$Extend* $Format+ $ALetterEx;
+$Extend* $Format+ $NumericEx;
+$Extend* $Format+ $MidLetterEx;
+$Extend* $Format+ $MidNumLetEx;
+$Extend* $Format+ $MidNumEx;
+$Extend* $Format+ $KatakanaEx;
+
+$Extend+ $Format* $ALetterEx;
+$Extend+ $Format* $NumericEx;
+$Extend+ $Format* $MidLetterEx;
+$Extend+ $Format* $MidNumLetEx;
+$Extend+ $Format* $MidNumEx;
+$Extend+ $Format* $KatakanaEx;
 
 # rule 6
-($MidLetter | $MidNumLet) $Format* $ALetterEx;
+($MidLetterEx | $MidNumLetEx) $Format* $ALetterEx;
 
 # rule 11
-($MidNum | $MidNumLet) $Format* $NumericEx;
+($MidNumEx | $MidNumLetEx) $Format* $NumericEx;
