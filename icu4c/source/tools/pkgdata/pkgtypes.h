@@ -126,6 +126,7 @@ typedef struct UPKGOptions_
 /* defines for common file names */
 #define UDATA_CMN_PREFIX ""
 #define UDATA_CMN_SUFFIX ".dat"
+#define UDATA_CMN_INTERMEDIATE_SUFFIX "_dat"
 
 
 #endif

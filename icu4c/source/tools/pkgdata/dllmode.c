@@ -110,33 +110,6 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
     return;
   }
 
-#ifdef WIN32
-  sprintf(tmp, "# File to make:\nDLLTARGET=%s\n\n", o->outFiles->str);
-  T_FileStream_writeLine(makefile, tmp);
-
-  sprintf(tmp, "all: $(TARGETDIR)\$(DLLTARGET)\n\n");
-  T_FileStream_writeLine(makefile, tmp);
-
-  /* now, import the rules for making a common file.. */
-  pkg_mode_dll(o, makefile, status);
-  
-  if(U_FAILURE(*status)) {
-    fprintf(stderr, "# Dllmode: Error importing rules for 'common'.\n");
-    return;
-  }
-  
-  T_FileStream_writeLine(makefile, "ifneq ($(strip $(HPUX_JUNK_OBJ)),)\n"
-                                   "  HPUX_JUNK_OBJ=$(TEMP_DIR)/$(HPUX_JUNK_OBJ)\n"
-                                   "endif\n\n");
-
-
-  T_FileStream_writeLine(makefile, "CLEANFILES= $(CMNLIST) $(TARGET) $(TARGETDIR)\$(DLLTARGET)\n\nclean:\n\t-$(RMV) $(CLEANFILES) $(MAKEFILE)");
-  T_FileStream_writeLine(makefile, "\n\n");
-  
-  T_FileStream_writeLine(makefile, "install: $(TARGETDIR)\$(DLLTARGET)\n"
-                                   "\tCOPY $(TARGETDIR)\$(DLLTARGET) $(INSTALL)/$(DLLTARGET)\n\n");
-  
-#else
   /* begin writing makefile ========================= */
   
 
@@ -221,8 +194,6 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
   
   T_FileStream_writeLine(makefile, "install: $(TARGETDIR)/$(TARGET)\n"
                                    "\t$(INSTALL-S) $(TARGETDIR)/$(TARGET) $(INSTALLTO)/$(TARGET)\n\n");
-
-#endif /* NOT win32 */
 
 *status = U_ZERO_ERROR;
 
