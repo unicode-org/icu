@@ -402,6 +402,9 @@ void   RegexPattern::dumpOp(int32_t index) const {
     switch (type) {
     case URX_NOP:
     case URX_DOTANY:
+    case URX_DOTANY_ALL:
+    case URX_DOTANY_PL:
+    case URX_DOTANY_ALL_PL:
     case URX_FAIL:
     case URX_CARET:
     case URX_DOLLAR:
@@ -419,6 +422,7 @@ void   RegexPattern::dumpOp(int32_t index) const {
     case URX_STATE_SAVE:
     case URX_JMP:
     case URX_JMP_SAV:
+    case URX_JMP_SAV_X:
     case URX_BACKSLASH_B:
     case URX_BACKSLASH_D:
     case URX_BACKSLASH_Z:

@@ -74,7 +74,9 @@ enum {
      URX_JMP_SAV       = 15,   // Operand:  JMP destination location
      URX_BACKSLASH_B   = 16,   // Value field:  0:  \b    1:  \B
      URX_BACKSLASH_G   = 17, 
-     URX_UNUSED_1      = 18,   // Value field:  0:  \w    1:  \W
+     URX_JMP_SAV_X     = 18,   // JMP + Conditional Save
+                               //    First Operand:  Jmp location
+                               //    Second Operand: Data loc.  Save if data != 0.
      URX_BACKSLASH_X   = 19,
      URX_BACKSLASH_Z   = 20,   // \z   Unconditional end of line.
 
@@ -85,15 +87,20 @@ enum {
 
      URX_CTR_INIT      = 25,   // Counter Inits for {Interval} loops.
      URX_CTR_INIT_NG   = 26,   //   3 kinds, normal, non-greedy, and possesive.
-     URX_UNUSED_2      = 27,   //   These are 4 word opcodes.  See description.
+                               //   These are 4 word opcodes.  See description.
                                //    First Operand:  Data loc of counter variable
                                //    2nd   Operand:  Pat loc of the URX_CTR_LOOPx 
                                //                    at the end of the loop.
                                //    3rd   Operand:  Minimum count.
                                //    4th   Operand:  Max count, -1 for unbounded.
+
+     URX_DOTANY_PL     = 27,   // .+, match rest of the line.  Fail already at end.
+
      URX_CTR_LOOP      = 28,   // Loop Ops for {interval} loops.
      URX_CTR_LOOP_NG   = 29,   //   Also in three flavors.
-     URX_UNUSED_3      = 30,   //   Operand is loc of corresponding CTR_INIT.
+                               //   Operand is loc of corresponding CTR_INIT.
+
+     URX_DOTANY_ALL_PL = 30,   // .+, match rest of the Input.  Fail if already at end
 
      URX_RELOC_OPRND   = 31,   // Operand value in multi-operand ops that refers
                                //   back into compiled pattern code, and thus must
@@ -172,7 +179,7 @@ enum {
         "URX_JMP_SAV",         \
         "URX_BACKSLASH_B",     \
         "URX_BACKSLASH_G",     \
-        "URX_UNUSED_1",        \
+        "URX_JMP_SAV_X",       \
         "URX_BACKSLASH_X",     \
         "URX_BACKSLASH_Z",     \
         "URX_DOTANY_ALL",      \
