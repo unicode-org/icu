@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCollationData.java,v $ 
-* $Date: 2002/03/15 01:57:01 $ 
-* $Revision: 1.8 $
+* $Date: 2002/04/23 01:59:16 $ 
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
@@ -71,6 +71,10 @@ public class WriteCollationData implements UCD_Types {
             else if (arg.equalsIgnoreCase("writeNonspacingDifference")) writeNonspacingDifference();
             
             else if (arg.equalsIgnoreCase("WriteCharts")) WriteCharts.test(collator);
+            else if (arg.equalsIgnoreCase("normalizationChart")) WriteCharts.normalizationChart();
+            else if (arg.equalsIgnoreCase("caseChart")) WriteCharts.caseChart();
+            
+            
             else if (arg.equalsIgnoreCase("CheckHash")) GenOverlap.checkHash(collator);
             else if (arg.equalsIgnoreCase("generateRevision")) GenOverlap.generateRevision(collator);
             else if (arg.equalsIgnoreCase("listCyrillic")) GenOverlap.listCyrillic(collator);
@@ -257,7 +261,7 @@ public class WriteCollationData implements UCD_Types {
         for (char c = 0; c < 0xFFFF; ++c) {
             if ((c & 0xFFF) == 0) System.err.println(Utility.hex(c));
             if (0xAC00 <= c && c <= 0xD7A3) continue;
-            if (normKD.hasDecomposition(c)) {
+            if (normKD.normalizationDiffers(c)) {
                 ++count;
                 String decomp = normKD.normalize(c);
                 datasize += decomp.length();
@@ -285,7 +289,7 @@ public class WriteCollationData implements UCD_Types {
         for (char c = 0; c < 0xFFFF; ++c) {
             if ((c & 0xFFF) == 0) System.err.println(Utility.hex(c));
             if (0xAC00 <= c && c <= 0xD7A3) continue;
-            if (normD.hasDecomposition(c)) {
+            if (normD.normalizationDiffers(c)) {
                 ++count;
                 String decomp = normD.normalize(c);
                 datasize += decomp.length();
@@ -475,7 +479,7 @@ public class WriteCollationData implements UCD_Types {
         }
         log.println("<tr><th>Code</td><th>Sort Key</th><th>Decomposed Sort Key</th><th>Name</th></tr>");
         for (char ch = 0; ch < 0xFFFF; ++ch) {
-            if (!nfkd.hasDecomposition(ch)) continue;
+            if (!nfkd.normalizationDiffers(ch)) continue;
             if (ch > 0xAC00 && ch < 0xD7A3) continue; // skip most of Hangul
             String sortKey = collator.getSortKey(String.valueOf(ch), UCA.NON_IGNORABLE, decomposition);
             String decompSortKey = collator.getSortKey(nfkd.normalize(ch), UCA.NON_IGNORABLE, decomposition);

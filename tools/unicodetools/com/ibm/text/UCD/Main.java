@@ -5,35 +5,17 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Main.java,v $
-* $Date: 2002/03/20 00:21:42 $
-* $Revision: 1.10 $
+* $Date: 2002/04/23 01:59:14 $
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */
 
 package com.ibm.text.UCD;
 import com.ibm.text.utility.*;
-import java.util.Date;
 
 public final class Main implements UCD_Types {
     
-    static String ucdVersion = UCD.latestVersion;
-    static UCD ucd;
-    static Normalizer nfc;
-    static Normalizer nfd;
-    static Normalizer nfkc;
-    static Normalizer nfkd;
-    static Normalizer[] nf = new Normalizer[4];
-    
-    static void setUCD() {
-        ucd = UCD.make(Main.ucdVersion);
-        nfd = nf[NFD] = new Normalizer(Normalizer.NFD, Main.ucdVersion);
-        nfc = nf[NFC] = new Normalizer(Normalizer.NFC, Main.ucdVersion);
-        nfkd = nf[NFKD] = new Normalizer(Normalizer.NFKD, Main.ucdVersion);
-        nfkc = nf[NFKC] = new Normalizer(Normalizer.NFKC, Main.ucdVersion);
-        System.out.println("Loaded UCD" + ucd.getVersion() + " " + (new Date(Main.ucd.getDate())));
-    }
-
     static final String[] ALL_FILES = {
         "CaseFolding",
         "CompositionExclusions",
@@ -74,8 +56,9 @@ public final class Main implements UCD_Types {
                 VerifyUCD.CheckCaseFold();
                 VerifyUCD.checkAgainstUInfo();
 
-            } else if (arg.equalsIgnoreCase("build")) ConvertUCD.main(new String[]{ucdVersion});
-            else if (arg.equalsIgnoreCase("version")) ucdVersion = args[++i];
+            } else if (arg.equalsIgnoreCase("build")) ConvertUCD.main(new String[]{Default.ucdVersion});
+            else if (arg.equalsIgnoreCase("version")) Default.setUCD(args[++i]);
+            else if (arg.equalsIgnoreCase("statistics")) VerifyUCD.statistics();
             else if (arg.equalsIgnoreCase("testskippable")) NFSkippable.main(null);
             else if (arg.equalsIgnoreCase("diffIgnorable")) VerifyUCD.diffIgnorable();
             else if (arg.equalsIgnoreCase("generateXML")) VerifyUCD.generateXML();
@@ -105,6 +88,10 @@ public final class Main implements UCD_Types {
             else if (arg.equalsIgnoreCase("JavascriptProperties")) WriteJavaScriptInfo.assigned();
             else if (arg.equalsIgnoreCase("TestDirectoryIterator")) DirectoryIterator.test();
             else if (arg.equalsIgnoreCase("checkIdentical")) GenerateData.handleIdentical();
+            
+            //else if (arg.equalsIgnoreCase("NormalizationCharts")) ChartGenerator.writeNormalizationCharts();
+            
+            
             /*else if (arg.equalsIgnoreCase("writeNormalizerTestSuite"))
                 GenerateData.writeNormalizerTestSuite("NormalizationTest-3.1.1d1.txt");
                 */

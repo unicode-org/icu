@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteHTMLCollation.java,v $ 
-* $Date: 2002/03/15 01:57:01 $ 
-* $Revision: 1.5 $
+* $Date: 2002/04/23 01:59:16 $ 
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -19,7 +19,6 @@ import java.io.*;
 //import com.ibm.text.unicode.*;
 import com.ibm.text.UCD.*;
 import com.ibm.text.utility.*;
-import com.ibm.icu.text.Normalizer;
 
 public class WriteHTMLCollation implements UCD_Types {
     public static final String copyright = 
@@ -42,14 +41,21 @@ public class WriteHTMLCollation implements UCD_Types {
     static PrintWriter log;
     
     static UCD ucd;
+    static Normalizer nfc, nfd, nfkd, nfkc;
     
     public static void main(String args[]) throws IOException {
         
         checkImplicit();
         checkFixes();
         
+        String unicodeVersion = "";
+        
         System.out.println("Building UCA");
-        collator = new UCA(null, "");
+        collator = new UCA(null, unicodeVersion);
+        nfc = new Normalizer(NFC, unicodeVersion);
+        nfkc = new Normalizer(NFKC, unicodeVersion);
+        nfd = new Normalizer(NFD, unicodeVersion);
+        nfkd = new Normalizer(NFKD, unicodeVersion);
         
         System.out.println("Building UCD data (old)");
         //UInfo.init();
@@ -68,13 +74,13 @@ public class WriteHTMLCollation implements UCD_Types {
         */
         
         // DO FOLLOWING
-        writeFractionalUCA("FractionalUCA.txt");
+        writeConformance("CollationTest_NON_IGNORABLE.txt", UCA.NON_IGNORABLE);
+        writeConformance("CollationTest_SHIFTED.txt", UCA.SHIFTED);
        
         // SKIP BELOW
         if (true) return;
         
-        writeConformance("CollationTest_NON_IGNORABLE.txt", UCA.NON_IGNORABLE);
-        writeConformance("CollationTest_SHIFTED.txt", UCA.SHIFTED);
+        writeFractionalUCA("FractionalUCA.txt");
         writeRules(WITH_NAMES);
         writeRules(WITHOUT_NAMES);
         
@@ -99,15 +105,15 @@ public class WriteHTMLCollation implements UCD_Types {
     
     static public void writeCaseExceptions() {
         System.err.println("Writing Case Exceptions");
-        Normalizer NFKC = new Normalizer(Normalizer.NFKC);
+        //Normalizer NFKC = new Normalizer(Normalizer.NFKC);
         for (char a = 0; a < 0xFFFF; ++a) {
             if (!ucd.isRepresented(a)) continue;
             //if (0xA000 <= a && a <= 0xA48F) continue; // skip YI
 
             String b = Case.fold(a);
-            String c = NFKC.normalize(b);
+            String c = nfkc.normalize(b);
             String d = Case.fold(c);
-            String e = NFKC.normalize(d);
+            String e = nfkc.normalize(d);
             if (!e.equals(c)) {
                 System.out.println(Utility.hex(a) + "; " + Utility.hex(d, " ") + " # " + ucd.getName(a));
                 /*
@@ -125,7 +131,7 @@ public class WriteHTMLCollation implements UCD_Types {
                 */
             }
             String f = Case.fold(e);
-            String g = NFKC.normalize(f);
+            String g = nfkc.normalize(f);
             if (!f.equals(d) || !g.equals(e)) System.out.println("!!!!!!SKY IS FALLING!!!!!!");
         }
     }
@@ -269,7 +275,7 @@ public class WriteHTMLCollation implements UCD_Types {
     static void checkBadDecomps(int strength, boolean decomposition) {
         int oldStrength = collator.getStrength();
         collator.setStrength(strength);
-        Normalizer nfkd = new Normalizer(Normalizer.NFKD);
+        //Normalizer nfkd = new Normalizer(Normalizer.NFKD);
         if (strength == 1) {
             log.println("<h2>3. Primaries Incompatible with Decompositions</h2><table border='1'>");
         } else {
@@ -277,7 +283,7 @@ public class WriteHTMLCollation implements UCD_Types {
         }
         log.println("<tr><th>Code</td><th>Sort Key</th><th>Decomposed Sort Key</th><th>Name</th></tr>");
         for (char ch = 0; ch < 0xFFFF; ++ch) {
-            if (!nfkd.hasDecomposition(ch)) continue;
+            if (!nfkd.normalizationDiffers(ch)) continue;
             if (ch > 0xAC00 && ch < 0xD7A3) continue; // skip most of Hangul
             String sortKey = collator.getSortKey(String.valueOf(ch), UCA.NON_IGNORABLE, decomposition);
             String decompSortKey = collator.getSortKey(nfkd.normalize(ch), UCA.NON_IGNORABLE, decomposition);
@@ -431,11 +437,11 @@ public class WriteHTMLCollation implements UCD_Types {
                     log.println("compressed: " + comp);
                 }
                 log.println("Ken's     : " + kenStr);
-                String nfkd = NFKD.normalize(s);
-                log.println("NFKD      : " + ucd.getCodeAndName(nfkd));
-                String nfd = NFD.normalize(s);
-                if (!nfd.equals(nfkd)) {
-                    log.println("NFD       : " + ucd.getCodeAndName(nfd));
+                String nfkdstr = nfkd.normalize(s);
+                log.println("NFKD      : " + ucd.getCodeAndName(nfkdstr));
+                String nfdstr = nfd.normalize(s);
+                if (!nfdstr.equals(nfkdstr)) {
+                    log.println("NFD       : " + ucd.getCodeAndName(nfdstr));
                 }
                 //kenCLen = collator.getCEs(decomp, true, kenComp);
                 //log.println("decomp ce: " + collator.ceToString(kenComp, kenCLen));                   
@@ -456,7 +462,7 @@ public class WriteHTMLCollation implements UCD_Types {
     static final byte getDecompType(int cp) {
         byte result = ucd.getDecompositionType(cp);
         if (result == ucd.CANONICAL) {
-            String d = NFD.normalize((char)cp); // TODO
+            String d = nfd.normalize((char)cp); // TODO
             for (int i = 0; i < d.length(); ++i) {
                 byte t = ucd.getDecompositionType(d.charAt(i));
                 if (t > ucd.CANONICAL) return t;
@@ -517,7 +523,7 @@ public class WriteHTMLCollation implements UCD_Types {
         int type = getDecompType(s.charAt(0));
         char ch = s.charAt(0);
         
-        String decomp = NFKD.normalize(s);
+        String decomp = nfkd.normalize(s);
         int len = 0;
         int markLen = collator.getCEs(decomp, true, markCes);
         if (compress) markLen = kenCompress(markCes, markLen);
@@ -741,8 +747,8 @@ public class WriteHTMLCollation implements UCD_Types {
         return result.toString();
     }
     
-    static Normalizer NFKD = new Normalizer(Normalizer.NFKD);
-    static Normalizer NFD = new Normalizer(Normalizer.NFD);
+    //static Normalizer NFKD = new Normalizer(Normalizer.NFKD);
+    //static Normalizer NFD = new Normalizer(Normalizer.NFD);
     
     static int variableHigh = 0;
     static final int COMMON = 5;
@@ -1112,7 +1118,7 @@ public class WriteHTMLCollation implements UCD_Types {
         // b. toSmallKana(NFKD(x)) != x.
 
     static final boolean needsCaseBit(String x) {
-        String s = NFKD.normalize(x);
+        String s = nfkd.normalize(x);
         if (!ucd.getCase(s, FULL, LOWER).equals(s)) return true;
         if (!toSmallKana(s).equals(s)) return true;
         return false;
@@ -1616,8 +1622,8 @@ A4C6;YI RADICAL KE;So;0;ON;;;;;N;;;;;
     static final char MARK2 = '\u0002';
     //Normalizer normalizer = new Normalizer(Normalizer.NFC, true);
     
-    static Normalizer toC = new Normalizer(Normalizer.NFC);
-    static Normalizer toD = new Normalizer(Normalizer.NFD);
+    //static Normalizer toC = new Normalizer(Normalizer.NFC);
+    //static Normalizer toD = new Normalizer(Normalizer.NFD);
     static TreeMap MismatchedC = new TreeMap();
     static TreeMap MismatchedN = new TreeMap();
     static TreeMap MismatchedD = new TreeMap();
@@ -1631,7 +1637,7 @@ A4C6;YI RADICAL KE;So;0;ON;;;;;N;;;;;
     static void addString(String ch, byte option) {
         String colDbase = collator.getSortKey(ch, option, true);
         String colNbase = collator.getSortKey(ch, option, false);
-        String colCbase = collator.getSortKey(toC.normalize(ch), option, false);
+        String colCbase = collator.getSortKey(nfc.normalize(ch), option, false);
         if (!colNbase.equals(colCbase)) {
             /*System.out.println(Utility.hex(ch));
             System.out.println(printableKey(colNbase));
@@ -1790,7 +1796,7 @@ A4C6;YI RADICAL KE;So;0;ON;;;;;N;;;;;
     }
     
     static void showLine(int count, String ch, String keyD, String keyN) {
-        String decomp = toD.normalize(ch);
+        String decomp = nfd.normalize(ch);
         if (decomp.equals(ch)) decomp = ""; else decomp = "<br><" + Utility.hex(decomp, " ") + "> ";
         log.println("<tr><td>" + count + "</td><td>" 
             + Utility.hex(ch, " ")
@@ -1831,7 +1837,7 @@ A4C6;YI RADICAL KE;So;0;ON;;;;;N;;;;;
             String ch = (String)it.next();
             String MN = (String)MismatchedN.get(ch);
             String MC = (String)MismatchedC.get(ch);
-            String chInC = toC.normalize(ch);
+            String chInC = nfc.normalize(ch);
             out.el("tr");
               out.el("th").at("rowSpan",2).at("align","right").tx16(ch).tx(' ').tx(ucd.getName(ch));
                 out.el("br").cl().tx("NFC=").tx16(chInC).cl();
@@ -1859,7 +1865,7 @@ A4C6;YI RADICAL KE;So;0;ON;;;;;N;;;;;
    
     static void showDiff(boolean showName, boolean firstColumn, int line, Object chobj) {
         String ch = chobj.toString();
-        String decomp = toD.normalize(ch);
+        String decomp = nfd.normalize(ch);
         if (showName) {
             if (ch.equals(decomp)) {
                 log.println(//title + counter + " "

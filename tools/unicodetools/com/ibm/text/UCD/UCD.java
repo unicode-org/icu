@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD.java,v $
-* $Date: 2002/03/20 00:21:42 $
-* $Revision: 1.10 $
+* $Date: 2002/04/23 01:59:14 $
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */
@@ -31,7 +31,7 @@ public final class UCD implements UCD_Types {
     /**
      * Used for the default version.
      */
-    public static final String latestVersion = "3.1.1";
+    public static final String latestVersion = "3.2.0";
 
     /**
      * Create singleton instance for default (latest) version
@@ -672,6 +672,11 @@ public final class UCD implements UCD_Types {
     }
 
     public static String getScriptID_fromIndex(byte prop) {
+        return UCD_Names.SCRIPT[prop];
+    }
+
+    public static String getScriptID_fromIndex(byte prop, byte length) {
+    	if (length == SHORT) return UCD_Names.ABB_SCRIPT[prop];
         return UCD_Names.SCRIPT[prop];
     }
 
