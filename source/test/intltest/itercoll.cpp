@@ -4,7 +4,6 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
-#include "cmemory.h"
 #include "unicode/coll.h"
 #include "unicode/tblcoll.h"
 #include "unicode/unistr.h"
@@ -13,6 +12,7 @@
 #include "unicode/schriter.h"
 #include "unicode/chariter.h"
 #include "unicode/uchar.h"
+#include "cmemory.h"
 
 #define ARRAY_LENGTH(array) (sizeof array / sizeof array[0])
 

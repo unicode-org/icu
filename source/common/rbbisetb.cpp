@@ -30,9 +30,9 @@
 
 #include "unicode/uniset.h"
 #include "utrie.h"
-#include "cmemory.h"
 #include "uvector.h"
 #include "assert.h"
+#include "cmemory.h"
 #include <stdio.h>
 
 #include "rbbisetb.h"

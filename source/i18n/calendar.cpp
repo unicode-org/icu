@@ -24,10 +24,10 @@
 *******************************************************************************
 */
 
-#include "cpputils.h"
 #include "unicode/resbund.h"
 #include "unicode/gregocal.h"
 #include "unicode/calendar.h"
+#include "cpputils.h"
 
 U_NAMESPACE_BEGIN
 

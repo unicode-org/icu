@@ -18,9 +18,9 @@
 * 
 */
 
+#include "unicode/uchar.h"
 #include "ucol_cnt.h"
 #include "cmemory.h"
-#include "unicode/uchar.h"
 
 U_NAMESPACE_BEGIN
 

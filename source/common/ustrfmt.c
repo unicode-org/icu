@@ -5,10 +5,9 @@
 **********************************************************************
 */
 
-#include <stdio.h>
 #include "cstring.h"
-
 #include "ustrfmt.h"
+#include <stdio.h>
 
 U_CAPI double    U_EXPORT2
 uprv_strtod(const char* source, char** end)

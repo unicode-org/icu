@@ -8,11 +8,11 @@
 **********************************************************************
 */
 
-#include "toupptrn.h"
 #include "unicode/ustring.h"
+#include "unicode/uchar.h"
+#include "toupptrn.h"
 #include "ustr_imp.h"
 #include "cpputils.h"
-#include "unicode/uchar.h"
 
 U_NAMESPACE_BEGIN
 

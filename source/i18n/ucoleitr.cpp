@@ -15,8 +15,8 @@
 
 #include "unicode/ucoleitr.h"
 #include "unicode/ustring.h"
-#include "ucol_imp.h"
 #include "unicode/sortkey.h"
+#include "ucol_imp.h"
 #include "cmemory.h"
 
 U_NAMESPACE_USE

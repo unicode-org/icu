@@ -7,9 +7,9 @@
 *   02/04/2002  aliu        Creation.
 **********************************************************************
 */
-#include "funcrepl.h"
 #include "unicode/translit.h"
 #include "unicode/uniset.h"
+#include "funcrepl.h"
 
 static const UChar AMPERSAND = 38; // '&'
 static const UChar OPEN[]    = {40,32,0}; // "( "

@@ -21,8 +21,8 @@
 #include "unicode/ustring.h"
 #include "unicode/uchar.h"
  
-#include "cmemory.h"
 #include "ucol_tok.h"
+#include "cmemory.h"
 
 U_CDECL_BEGIN
 static int32_t U_EXPORT2 U_CALLCONV

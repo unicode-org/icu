@@ -8,12 +8,10 @@
 **********************************************************************
 */
 
-#include <stdio.h>
-
-#include "cstring.h"
-#include "uni2name.h"
 #include "unicode/unifilt.h"
 #include "unicode/uchar.h"
+#include "uni2name.h"
+#include "cstring.h"
 
 U_NAMESPACE_BEGIN
 

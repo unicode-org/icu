@@ -8,9 +8,9 @@
 **********************************************************************
 */
 
+#include "unicode/resbund.h"
 #include "brkdict.h"
 #include "cmemory.h"
-#include "unicode/resbund.h"
 
 U_NAMESPACE_BEGIN
 

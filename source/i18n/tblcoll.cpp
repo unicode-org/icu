@@ -54,12 +54,12 @@
 * 01/29/01     synwee      Modified into a C++ wrapper calling C APIs (ucol.h)
 */
 
-#include "ucol_imp.h"
-#include "uresimp.h"
 #include "unicode/tblcoll.h"
 #include "unicode/coleitr.h"
-#include "uhash.h"
 #include "unicode/resbund.h"
+#include "ucol_imp.h"
+#include "uresimp.h"
+#include "uhash.h"
 #include "cmemory.h"
 
 /* public RuleBasedCollator constructor ---------------------------------- */
