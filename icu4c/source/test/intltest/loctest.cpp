@@ -275,7 +275,7 @@ void LocaleTest::TestSimpleResourceInfo() {
     
     sprintf(temp2, "%x", testLocale.getLCID());
     if (UnicodeString(temp2) != dataTable[LCID][i])
-      errln((UnicodeString)"  LCID mismatch: " + (int32_t)testLocale.getLCID() + " versus "
+      errln((UnicodeString)"  LCID mismatch: " + temp2 + " versus "
         + dataTable[LCID][i]);
 
     if(U_FAILURE(err))
@@ -1376,7 +1376,7 @@ LocaleTest::Test4147552()
                                                 //"norsk (Norge,B)", 
                                                 ndn, 
                                                  //"norsk (Norge,NY)" 
-                                                 "norsk (Norge, Nynorsk)" 
+                                                 "norsk (Noreg, Nynorsk)" 
     };
 
     for (int32_t i = 0; i < 3; ++i) {
