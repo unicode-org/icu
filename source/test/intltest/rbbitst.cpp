@@ -20,6 +20,9 @@
 #include "unicode/utf16.h"
 #include "unicode/ucnv.h"
 #include "unicode/schriter.h"
+#include "unicode/uniset.h"
+#include "unicode/regex.h"        // TODO: make conditional on regexp being built.
+
 #include "intltest.h"
 #include "rbbitst.h"
 #include <string.h>
@@ -27,6 +30,7 @@
 #include "uvectr32.h"
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 
 
@@ -508,25 +512,25 @@ void RBBITest::TestThaiWordBreak() {
 // runIndexedTest
 //---------------------------------------------
 
-void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
+void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* params )
 {
     if (exec) logln("TestSuite RuleBasedBreakIterator: ");
     switch (index) {
 
         case 0: name = "TestExtended";
              if(exec) TestExtended();                          break;
-        case 1: name = "";
+        case 1: name = "extra";
              break;
-        case 2: name = "";
+        case 2: name = "extra";
              break;
-        case 3: name = "";
+        case 3: name = "extra";
              break;
-        case 4: name = "";
+        case 4: name = "extra";
             break;
-        case 5: name = "";
+        case 5: name = "extra";
             break;
-        case 6: name = "";
-            break;
+        case 6: name = "TestJapaneseLineBrea";
+            if(exec) TestJapaneseLineBreak();                 break;
         case 7: name = "TestStatusReturn";
             if(exec) TestStatusReturn();                       break;
 
@@ -552,8 +556,8 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
             if(exec) TestEndBehaviour();                       break;
         case 16: name = "TestBug4153072";
             if(exec) TestBug4153072();                         break;
-        case 17: name = "TestJapaneseLineBreak";
-             if(exec) TestJapaneseLineBreak();                 break;
+        case 17: name = "TestMonkey";
+             if(exec) TestMonkey(params);                      break;
 
 
         case 18: name = "TestThaiLineBreak";
@@ -564,18 +568,6 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
              if(exec) TestMaiyamok();                          break;
         case 21: name = "TestThaiWordBreak";
              if(exec) TestThaiWordBreak();                     break;
-
-
-//      case 7: name = "TestHindiCharacterWrapping()";
-//           if(exec) TestHindiCharacterWrapping();            break;
-//      case 8: name = "TestCustomRuleBasedWordIteration";
-//          if(exec) TestCustomRuleBasedWordIteration();       break;
-//      case 9: name = "TestAbbrRuleBasedWordIteration";
-//          if(exec) TestAbbrRuleBasedWordIteration();         break;
-//      case 10: name = "TestTeluguRuleBasedCharacterIteration";
-//          if(exec) TestTeluguRuleBasedCharacterIteration();  break;
-//      case 11: name = "TestCustomRuleBasedCharacterIteration";
-//          if(exec) TestCustomRuleBasedCharacterIteration();  break;
 
 
         default: name = ""; break; //needed to end loop
@@ -1951,5 +1943,347 @@ void RBBITest::TestLineBreakData() {
     delete bi;
             
 }
+
+
+//
+//  Monkey Test for Break Iteration
+//  Abstract interface class.   Concrete derived classes independently
+//    implement the break rules for different iterator types.
+//  
+//
+class RBBIMonkeyKind {
+public:
+    // Return a UVector of UnicodeSets, representing the character classes used
+    //   for this type of iterator.  
+    virtual  UVector  *charClasses() = 0;  
+
+    // Find the next break postion, starting from the prev break position, or from zero.
+    // Return -1 after reaching end of string.
+    virtual  int32_t   next(const UnicodeString &s, int32_t i) = 0;
+
+    virtual ~RBBIMonkeyKind() {};
+    UErrorCode       deferredStatus; 
+
+
+protected:
+    RBBIMonkeyKind() {};
+
+private:
+};
+
+//------------------------------------------------------------------------------------------
+//
+//   class RBBICharMonkey      Character (Grapheme Cluster) specific stuff.
+//
+//------------------------------------------------------------------------------------------
+class RBBICharMonkey: public RBBIMonkeyKind {
+public:
+    RBBICharMonkey();
+    virtual          ~RBBICharMonkey();
+    virtual  UVector *charClasses();  
+    virtual int32_t   next(const UnicodeString &s, int32_t i);
+private:
+    UVector   *fSets;
+
+    UnicodeSet  *fCRLFSet;
+    UnicodeSet  *fControlSet;
+    UnicodeSet  *fExtendSet;
+    UnicodeSet  *fHangulSet;
+    UnicodeSet  *fAnySet;
+
+    RegexMatcher  *fMatcher;
+};
+
+
+RBBICharMonkey::RBBICharMonkey() {
+    UErrorCode  status = U_ZERO_ERROR;
+
+    fMatcher = new RegexMatcher("\\X", 0, status);     // Pattern to match a grampheme cluster
+
+    fCRLFSet    = new UnicodeSet("[\\r\\n]", status);
+    fControlSet = new UnicodeSet("[[\\p{Zl}\\p{Zp}\\p{Cc}\\p{Cf}]-[\\n]-[\\r]]", status);
+    fExtendSet  = new UnicodeSet("[\\p{Grapheme_Extend}]", status);
+    fHangulSet  = new UnicodeSet(
+        "[\\p{Hangul_Syllable_Type=L}\\p{Hangul_Syllable_Type=L}\\p{Hangul_Syllable_Type=T}"
+         "\\p{Hangul_Syllable_Type=LV}\\p{Hangul_Syllable_Type=LVT}]", status);
+    fAnySet     = new UnicodeSet("[\\u0000-\\U0010ffff]", status);
+
+    fSets       = new UVector(status);
+    fSets->addElement(fCRLFSet,    status);
+    fSets->addElement(fControlSet, status);
+    fSets->addElement(fExtendSet,  status);
+    fSets->addElement(fHangulSet,  status);
+    fSets->addElement(fAnySet,     status);
+    if (U_FAILURE(status)) {
+        deferredStatus = status;
+    }
+};
+
+
+int32_t RBBICharMonkey::next(const UnicodeString &s, int32_t i) {
+    UErrorCode status = U_ZERO_ERROR;
+    int32_t  retVal = -1;
+
+    fMatcher->reset(s);
+    if (fMatcher->find(i, status)) {
+        retVal = fMatcher->end(status);
+    }
+    if (U_FAILURE(status)){
+        retVal = -1;
+    }
+    return retVal;
+}
+
+
+UVector  *RBBICharMonkey::charClasses() {
+    return fSets;
+}
+
+
+RBBICharMonkey::~RBBICharMonkey() {
+    delete fSets;
+    delete fCRLFSet;
+    delete fControlSet;
+    delete fExtendSet;
+    delete fHangulSet;
+    delete fAnySet;
+
+    delete fMatcher;
+}
+
+//
+//   TestMonkey
+//
+//     params
+//       seed=nnnnn        Random number starting seed.
+//                         Setting the seed allows errors to be reproduced.
+//       loop=nnn          Looping count.  Controls running time.
+//                         -1:  run forever.
+//                          0 or greater:  run length.
+//                            default = 100.
+//                            0 is minimum
+//
+//       type = char | work | line | sent | title
+//
+//       
+
+static int32_t  getIntParam(UnicodeString name, UnicodeString &params, int32_t defaultVal) {
+    int32_t val = defaultVal;
+    name.append(" *= *(-?\\d+)");
+    UErrorCode status = U_ZERO_ERROR;
+    RegexMatcher m(name, params, 0, status);
+    if (m.find()) {
+        // The param exists.  Convert the string to an int.
+        char valString[100];
+        int32_t paramLength = m.end(1, status) - m.start(1, status);
+        if (paramLength >= sizeof(valString)-1) {paramLength = sizeof(valString)-2;};
+        params.extract(m.start(1, status), paramLength, valString, sizeof(valString));
+        val = strtol(valString,  NULL, 10);
+
+        // Delete this parameter from the params string.
+        m.reset();
+        params = m.replaceFirst("", status);
+    } 
+    U_ASSERT(U_SUCCESS(status));
+    return val;
+}
+    
+void RBBITest::TestMonkey(char *params) {
+    UErrorCode     status    = U_ZERO_ERROR;
+    int32_t        loopCount = 100;
+    int32_t        seed      = 1;
+    UnicodeString  breakType = "all";
+    Locale         locale("en");
+
+
+    if (params) {
+        UnicodeString p(params);
+        loopCount = getIntParam("loop", p, 100);
+        seed      = getIntParam("seed", p, 1);
+
+        RegexMatcher m(" *type *= *(char|work|line|sent|title) *", p, 0, status);
+        if (m.find()) {
+            breakType = m.group(1, status);
+            m.reset();
+            m.replaceFirst("", status);
+        }
+
+        if (RegexMatcher("\\S", p, 0, status).find()) {
+            // Each option is stripped out of the option string as it is processed.
+            // All options have been checked.  The option string should have been completely emptied..
+            char buf[100];
+            p.extract(buf, sizeof(buf), NULL, status);
+            buf[sizeof(buf)-1] = 0;
+            errln("Unrecognized or extra parameter:  %s\n", buf);
+            return;
+        }
+
+    }
+
+    if (breakType == "char" || breakType == "all") {
+        RBBICharMonkey  m;
+        BreakIterator  *bi = BreakIterator::createCharacterInstance(locale, status);
+        RunMonkey(bi, m, seed, loopCount);
+        delete bi;
+    }
+
+
+}
+
+
+void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, uint32_t  seed, int32_t numIterations) {
+    const int32_t    TESTSTRINGLEN = 500;
+    UnicodeString    testText;
+    int32_t          numCharClasses;
+    UVector          *chClasses;
+    char             expectedBreaks[TESTSTRINGLEN*2 + 1];
+    char             forwardBreaks[TESTSTRINGLEN*2 + 1];
+    char             reverseBreaks[TESTSTRINGLEN*2+1];
+    int              i;
+    int              loopCount = 0;
+
+    srand( seed);
+
+    numCharClasses = mk.charClasses()->size();
+    chClasses      = mk.charClasses();
+
+    // Check for errors that occured during the construction of the MonkeyKind object.
+    //  Can't report them where they occured because errln() is a method coming from intlTest,
+    //  and is not visible outside of RBBITest :-(
+    if (U_FAILURE(mk.deferredStatus)) {
+        errln("status of \"%s\" in creation of RBBIMonkeyKind.", u_errorName(mk.deferredStatus));
+        return;
+    }
+
+    // Verify that the character classes all have at least one member.
+    for (i=0; i<numCharClasses; i++) {
+        UnicodeSet *s = (UnicodeSet *)chClasses->elementAti(i);
+        if (s == NULL || s->size() == 0) {
+            errln("Character Class #%d is null or of zero size.", i);
+            return;
+        }
+    }
+
+    numIterations *= 5;
+    while (loopCount <= numIterations || numIterations == -1) {
+        
+        // Populate a test string with data.
+        testText.truncate(0);
+        for (i=0; i<TESTSTRINGLEN; i++) {
+            int32_t  aClassNum = rand() % numCharClasses;
+            UnicodeSet *classSet = (UnicodeSet *)chClasses->elementAti(aClassNum);
+            int32_t   charIdx = rand() % classSet->size();
+            UChar32   c = classSet->charAt(charIdx);
+            assert(c >= 0);   // TODO:  dea; with sets containing strings.
+            testText.append(c);
+        }
+        
+        // Calculate the expected results for this test string.
+        memset(expectedBreaks, 0, sizeof(expectedBreaks));
+        expectedBreaks[0] = 1;
+        int32_t breakPos = 0;
+        for (;;) {
+            breakPos = mk.next(testText, breakPos);
+            if (breakPos == -1) {
+                break;
+            }
+            assert(breakPos <= testText.length());
+            expectedBreaks[breakPos] = 1;
+        }
+        
+        // Find the break positions using forward iteration
+        memset(forwardBreaks, 0, sizeof(expectedBreaks));
+        bi->setText(testText);
+        for (i=bi->first(); i != BreakIterator::DONE; i=bi->next()) {
+            if (i < 0 || i > testText.length()) {
+                errln("Out of range value returned by breakIterator::next()");
+                break;
+            }
+            forwardBreaks[i] = 1;
+        }
+        
+        // Find the break positions using reverse iteration
+        memset(reverseBreaks, 0, sizeof(expectedBreaks));
+        for (i=bi->last(); i != BreakIterator::DONE; i=bi->previous()) {
+            if (i < 0 || i > testText.length()) {
+                errln("Out of range value returned by breakIterator::next()");
+                break;
+            }
+            reverseBreaks[i] = 1;
+        }
+        
+        // Compare the expected and actual results.
+        for (i=0; i<=testText.length(); i++) {
+            UBool forwardError = forwardBreaks[i] != expectedBreaks[i];
+            UBool anyError     = forwardError || reverseBreaks[i] != expectedBreaks[i];
+            if (anyError) {
+                // Format a range of the test text that includes the failure as
+                //  a data item that can be included in the rbbi test data file.
+
+                // Start of the range is the last point where expected and actual results
+                //   both agreed that there was a break position.
+                int startContext = i;
+                for (;;) {
+                    if (startContext==0) { break; }
+                    startContext--;
+                    if (expectedBreaks[startContext] != 0) {break;}
+                }
+
+                // End of range is two expected breaks past the start position.
+                int endContext = i+1;
+                int ci;
+                for (ci=0; ci<2; ci++) {  // Number of items to include in error text.
+                    for (;;) {
+                        if (endContext >= testText.length()) {break;}
+                        if (expectedBreaks[endContext-1] != 0) { break;}
+                        endContext++;
+                    }
+                }
+                
+                // Format looks like   "<data><>\uabcd\uabcd<>\U0001abcd...</data>"
+                UnicodeString errorText = "<data>";
+                for (ci=startContext; ci<endContext;) {
+                    UnicodeString hexChars("0123456789abcdef");
+                    UChar32  c;
+                    int      bn;
+                    c = testText.char32At(ci);
+                    if (expectedBreaks[ci] != 0) {
+                        errorText.append("<>");
+                    }
+                    if (c < 0x10000) {
+                        errorText.append("\\u");
+                        for (bn=12; bn>=0; bn-=4) {
+                            errorText.append(hexChars.charAt((c>>bn)&0xf));
+                        }
+                    } else {
+                        errorText.append("\\U");
+                        for (bn=28; bn>=0; bn-=4) {
+                            errorText.append(hexChars.charAt((c>>bn)&0xf));
+                        }
+                    }
+                    ci = testText.moveIndex32(ci, 1);
+                }
+                if (expectedBreaks[ci] != 0) {
+                    errorText.append("<>");
+                }
+                errorText.append("</data>\n");
+
+                // Output the error
+                char  charErrorTxt[1000];
+                UErrorCode status = U_ZERO_ERROR;
+                errorText.extract(charErrorTxt, sizeof(charErrorTxt), NULL, status);
+                errln("ERROR.  %s. Direction = %s, Random seed = %d \n%s",
+                    (expectedBreaks[i]? "break expected but not found" : "break foun but not expected"),
+                    (forwardError?"forward":"reverse"), seed, charErrorTxt);
+                break;
+            }
+        }
+
+        loopCount++;
+        seed = rand();
+    }
+    
+}
+
 
 #endif /* #if !UCONFIG_NO_BREAK_ITERATION */
