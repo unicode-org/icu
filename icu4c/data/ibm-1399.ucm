@@ -39,9 +39,7 @@ CHARMAP
 <U000B> \x0B |0
 <U000C> \x0C |0
 <U000D> \x0D |0
-<U000E> \x0E |3
 <U000E> \x3F |2
-<U000F> \x0F |3
 <U000F> \x3F |2
 <U0010> \x10 |0
 <U0011> \x11 |0
@@ -21303,7 +21301,6 @@ CHARMAP
 <UFFEB> \x3F |2
 <UFFEC> \x3F |2
 <UFFED> \x3F |2
-<UFFEE> \x0E |1
 <UFFEE> \x3F |2
 <UFFFD> \xFE\xFE |2
 END CHARMAP
