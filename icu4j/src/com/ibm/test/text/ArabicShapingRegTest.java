@@ -7,13 +7,14 @@
 
 package com.ibm.test.text;
 
+import com.ibm.test.TestFmwk;
 import com.ibm.text.ArabicShaping;
 import com.ibm.text.ArabicShapingException;
 
 /**
  * Regression test for Arabic shaping.
  */
-public class ArabicShapingRegTest {
+public class ArabicShapingRegTest extends TestFmwk {
 
     /* constants copied from ArabicShaping for convenience */
 
@@ -316,7 +317,7 @@ public class ArabicShapingRegTest {
                        IllegalArgumentException.class),
     };
 
-    private static void runStandardTests() {
+    public void testStandard() {
         for (int i = 0; i < tests.length; ++i) {
             TestData test = tests[i];
 
@@ -353,13 +354,14 @@ public class ArabicShapingRegTest {
         }                    
     }
 
-    public static void reportTestFailure(int index, TestData test, ArabicShaping shaper, String result, Exception error) {
-        System.out.println("*** test failure ***");
-        System.out.println("index: " + index);
-        System.out.println("test: " + test);
-        System.out.println("shaper: " + shaper);
-        System.out.println("result: " + escapedString(result));
-        System.out.println("error: " + error);
+    public void reportTestFailure(int index, TestData test, ArabicShaping shaper, String result, Exception error) {
+        StringBuffer buf = new StringBuffer();
+        buf.append("*** test failure ***\n");
+        buf.append("index: " + index + "\n");
+        buf.append("test: " + test + "\n");
+        buf.append("shaper: " + shaper + "\n");
+        buf.append("result: " + escapedString(result) + "\n");
+        buf.append("error: " + error + "\n");
 
         if (result != null && test.result != null && !test.result.equals(result)) {
             for (int i = 0; i < Math.max(test.result.length(), result.length()); ++i) {
@@ -370,15 +372,16 @@ public class ArabicShapingRegTest {
                 char trg = i < test.result.length() ? test.result.charAt(i) : '\uffff';
                 char res = i < result.length() ? result.charAt(i) : '\uffff';
 
-                System.out.print("[" + temp + "] ");
-                System.out.print(escapedString("" + trg) + " ");
-                System.out.print(escapedString("" + res) + " ");
+                buf.append("[" + temp + "] ");
+                buf.append(escapedString("" + trg) + " ");
+                buf.append(escapedString("" + res) + " ");
                 if (trg != res) {
-                    System.out.print("***");
+                    buf.append("***");
                 }
-                System.out.println();
+                buf.append("\n");
             }
         }
+        err(buf.toString());
     }
 
     private static String escapedString(String str) {
@@ -400,12 +403,13 @@ public class ArabicShapingRegTest {
         return buf.toString();
     }
 
-    private static void runAPITests() {
-    }
-
     public static void main(String[] args) {
-        runStandardTests();
-        runAPITests();
+        try {
+            new ArabicShapingRegTest().run(args);
+        }
+        catch (Exception e) {
+            System.out.println(e);
+        }
     }
 }
 
