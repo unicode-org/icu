@@ -59,6 +59,7 @@
 #include "unicode/coleitr.h"
 #include "uhash.h"
 #include "unicode/resbund.h"
+#include "cmemory.h"
 
 #ifdef _DEBUG
   #include "unistrm.h"
@@ -485,8 +486,12 @@ CollationKey& RuleBasedCollator::getCollationKey(const UChar* source,
     
   if ((!source) || (sourceLen == 0))
     return sortkey.reset();
-    
-  uint8_t *result = new uint8_t[UCOL_MAX_BUFFER];
+
+  /* 
+  * have to use malloc, lowest denomination, since adopt can be used by 
+  * a c return value.
+  */
+  uint8_t *result = (uint8_t *)uprv_malloc(UCOL_MAX_BUFFER * sizeof(uint8_t));
   uint8_t resLen = ucol_getSortKey(ucollator, source, sourceLen, result,
                                    UCOL_MAX_BUFFER);
   sortkey.adopt(result, resLen);
@@ -649,7 +654,7 @@ RuleBasedCollator::RuleBasedCollator(UCollator *collator,
 
 RuleBasedCollator::RuleBasedCollator(const Locale& desiredLocale,
                                            UErrorCode& status) : 
-                                           dataIsOwned(FALSE)
+                                     dataIsOwned(FALSE), ucollator(0)
 {
   if (U_FAILURE(status))
     return;

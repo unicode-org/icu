@@ -131,7 +131,7 @@ CollationKey::reset()
 CollationKey&
 CollationKey::setToBogus()
 {
-    delete[] fBytes;
+    uprv_free(fBytes);
     fBytes = NULL;
 
     fCapacity = 0;
