@@ -1,6 +1,6 @@
 /***************************************************************************
 *
-*   Copyright (C) 2000-2002, International Business Machines
+*   Copyright (C) 2000-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ***************************************************************************************************************************************************
@@ -10,7 +10,7 @@
 
 #include "unicode/utypes.h"
 
-#if !UCONFIG_NO_TRANSLITERATION
+#if !UCONFIG_NO_TRANSLITERATION && defined(U_USE_UNICODE_FILTER_LOGIC_OBSOLETE_2_8)
 
 #include "unicode/translit.h"
 #include "unicode/unifilt.h"
