@@ -733,8 +733,8 @@ ibm-1164_P100-1999 { UTR22* }   ibm-1164 { IBM* } cpibm1164             # EBCDIC
 ibm-1364_P110-1997 { UTR22* }   ibm-1364 { IBM* } cp1364                # Korean Host Mixed
 ibm-1371_P100-1999 { UTR22* }   ibm-1371 { IBM* } cpibm1371             # Taiwan EBCDIC MIXED
 ibm-1388_P103-2001 { UTR22* }   ibm-1388 { IBM* } ibm-9580 { IBM }      # S-Ch DBCS-Host Data GBK EBCDIC_STATEFUL. Yes ibm-9580 is an alias.
-ibm-1390_P100-1999 { UTR22* }   ibm-1390 { IBM* } cpibm1390             # Japan EBCDIC MIXED
-ibm-1399_P100-1999 { UTR22* }   ibm-1399 { IBM* }                       # Host MBCS (Latin-Kanji)
+ibm-1390_P110-2003 { UTR22* }   ibm-1390 { IBM* } cpibm1390             # Japan EBCDIC MIXED (JIS X 0213)
+ibm-1399_P110-2003 { UTR22* }   ibm-1399 { IBM* }                       # Host MBCS (Latin-Kanji) (JIS X 0213)
 ibm-4899_P100-1998 { UTR22* }   ibm-4899 { IBM* } cpibm4899             # Old EBCDIC Hebrew
 ibm-4971_P100-1999 { UTR22* }   ibm-4971 { IBM* } cpibm4971             # EBCDIC Greek
 ibm-12712_P100-1998 { UTR22* }  ibm-12712 { IBM* } cpibm12712 ebcdic-he # EBCDIC Hebrew (new sheqel, control charaters update)
