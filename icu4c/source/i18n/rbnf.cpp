@@ -513,16 +513,22 @@ LocDataParser::nextString() {
 }
 
 void
-LocDataParser::parseError(const char* str) {
+LocDataParser::parseError(const char* /*str*/) {
     if (!data) {
         return;
     }
 
     const UChar* start = p - U_PARSE_CONTEXT_LEN - 1;
-    if (start < data) start = data;
-    for (UChar* x = p; --x >= start;) if (!*x) { start = x+1; break; }
+    if (start < data)
+        start = data;
+    for (UChar* x = p; --x >= start;)
+        if (!*x) {
+            start = x+1;
+            break;
+        }
     const UChar* limit = p + U_PARSE_CONTEXT_LEN - 1;
-    if (limit > e) limit = e;
+    if (limit > e)
+        limit = e;
     u_strncpy(pe.preContext, start, p-start);
     pe.preContext[p-start] = 0;
     u_strncpy(pe.postContext, p, limit-p);

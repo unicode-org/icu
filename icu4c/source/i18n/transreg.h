@@ -174,7 +174,6 @@ class TransliteratorRegistry : public UMemory {
      */
     Transliterator* get(const UnicodeString& ID,
                         TransliteratorAlias*& aliasReturn,
-                        UParseError& parseError,
                         UErrorCode& status);
 
     /**
@@ -195,7 +194,6 @@ class TransliteratorRegistry : public UMemory {
     Transliterator* reget(const UnicodeString& ID,
                           TransliteratorParser& parser,
                           TransliteratorAlias*& aliasReturn,
-                          UParseError& parseError,
                           UErrorCode& status);
 
     /**
@@ -402,7 +400,6 @@ class TransliteratorRegistry : public UMemory {
     Transliterator* instantiateEntry(const UnicodeString& ID,
                                      Entry *entry,
                                      TransliteratorAlias*& aliasReturn,
-                                     UParseError& parseError,
                                      UErrorCode& status);
 
     /**
