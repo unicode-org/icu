@@ -256,6 +256,14 @@ U_NAMESPACE_END
 #endif
 
 /**
+ * internal API, used by the canonical iterator
+ * @internal
+ */
+U_CAPI int32_t U_EXPORT2
+unorm_getDecomposition(UChar32 c, UBool compat,
+                       UChar *dest, int32_t destCapacity);
+
+/**
  * internal API, used by uprops.cpp
  * @internal
  */
