@@ -1087,16 +1087,35 @@ void RegexTest::API_Pattern() {
     REGEX_ASSERT(*pat1c == *pat1);
     REGEX_ASSERT(*pat1c != *pat2);
 
-
-    // TODO:  Actually do some matches with the cloned/copied/assigned patterns.
-
-
-
     delete pat1c;
     delete pat1a;
     delete pat1;
     delete pat2;
 
+
+    //
+    //   Verify that a matcher created from a cloned pattern works.
+    //     (Jitterbug 3423)
+    //
+#if 0
+    {
+        UErrorCode     status     = U_ZERO_ERROR;
+        RegexPattern  *pSource    = RegexPattern::compile("\\p{L}+", 0, status);
+        RegexPattern  *pClone     = pSource->clone();
+        delete         pSource;
+        RegexMatcher  *mFromClone = pClone->matcher(status);
+        REGEX_CHECK_STATUS;
+        UnicodeString s = "Hello World";
+        mFromClone->reset(s);
+        REGEX_ASSERT(mFromClone->find() == TRUE);
+        REGEX_ASSERT(mFromClone->group(status) == "Hello");
+        REGEX_ASSERT(mFromClone->find() == TRUE);
+        REGEX_ASSERT(mFromClone->group(status) == "World");
+        REGEX_ASSERT(mFromClone->find() == FALSE);
+        delete mFromClone;
+        delete pClone;
+    }
+#endif
 
     //
     //   matches convenience API
