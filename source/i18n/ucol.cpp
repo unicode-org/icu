@@ -1,4 +1,4 @@
-/*
+ /*
 *******************************************************************************
 *   Copyright (C) 1996-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
@@ -1239,7 +1239,7 @@ static void initImplicitConstants(int minPrimary, int maxPrimary,
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     };
-    if (minTrail < 0 || minTrailIn >= maxTrailIn || maxTrailIn > 0xFF) { 
+    if (minTrailIn < 0 || minTrailIn >= maxTrailIn || maxTrailIn > 0xFF) { 
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     };
@@ -7028,6 +7028,7 @@ ucol_setUpLatinOne(UCollator *coll, UErrorCode *status) {
         {
           if((CE & 0x00FFF000) != 0) {
             *status = U_UNSUPPORTED_ERROR;
+            coll->latinOneFailed = TRUE;
             return FALSE;
           }
 
@@ -7084,6 +7085,7 @@ ucol_setUpLatinOne(UCollator *coll, UErrorCode *status) {
               primShift = 24; secShift = 24; terShift = 24;
               if(contractionOffset == coll->latinOneTableLen) { // we need to reallocate
                 if(!ucol_resizeLatinOneTable(coll, 2*coll->latinOneTableLen, status)) {
+                  coll->latinOneFailed = TRUE;
                   return FALSE;
                 }
               }
@@ -7101,7 +7103,8 @@ ucol_setUpLatinOne(UCollator *coll, UErrorCode *status) {
   // compact table
   if(contractionOffset < coll->latinOneTableLen) {
     if(!ucol_resizeLatinOneTable(coll, contractionOffset, status)) {
-      return FALSE;
+        coll->latinOneFailed = TRUE;
+        return FALSE;
     }
   }
   return result;
