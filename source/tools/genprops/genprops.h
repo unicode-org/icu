@@ -41,10 +41,9 @@ typedef struct {
 /* character properties */
 typedef struct {
     uint32_t code, lowerCase, upperCase, titleCase, mirrorMapping;
-    int16_t decimalDigitValue, digitValue; /* -1: no value */
     int32_t numericValue; /* see numericType */
     uint32_t denominator; /* 0: no value */
-    uint8_t generalCategory, canonicalCombining, bidi, isMirrored, numericType;
+    uint8_t generalCategory, bidi, isMirrored, numericType;
     SpecialCasing *specialCasing;
     CaseFolding *caseFolding;
 } Props;
@@ -88,6 +87,12 @@ extern void
 generateData(const char *dataDir);
 
 /* props2.c */
+U_CFUNC void
+initAdditionalProperties();
+
+U_CFUNC void
+setMainProperties(uint32_t start, uint32_t limit, uint32_t value);
+
 U_CFUNC void
 generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pErrorCode);
 
