@@ -8,7 +8,7 @@ SHELL = @SHELL@
 VERSION = @VERSION@
 UNICODE_VERSION = @UNICODE_VERSION@
 
-ICUDATADIR=$(top_builddir)/data/
+ICUDATADIR=$(top_builddir)/../data/
 UNICODEDATADIR=$(top_srcdir)/../data/unidata
 
 ## Install directory information
@@ -61,7 +61,7 @@ LDFLAGS = @LDFLAGS@ \
 $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/common@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/tools/toolutil
 LIBS = $(LIBICU-UC)  @LIBS@ @LIB_M@  $(LIBICU-TOOLUTIL)
 
-OBJECTS = genprops.o
+OBJECTS = genprops.o store.o
 
 DEPS = $(OBJECTS:.o=.d)
 
