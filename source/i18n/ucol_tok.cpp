@@ -795,7 +795,7 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
 
           init_collIterate(src->UCA, src->source+charsOffset, 1, &s); 
 
-          baseCE = ucol_getNextCE(src->UCA, &s, status);
+          baseCE = ucol_getNextCE(src->UCA, &s, status) & 0xFFFFFF3F;
           baseContCE = ucol_getNextCE(src->UCA, &s, status);
           if(baseContCE == UCOL_NO_MORE_CES) {
             baseContCE = 0;
@@ -888,7 +888,7 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
             CE = ucol_getNextCE(src->UCA, &s, status);
             SecondCE = ucol_getNextCE(src->UCA, &s, status);
     
-            ListList[src->resultLen].baseCE = CE;
+            ListList[src->resultLen].baseCE = CE & 0xFFFFFF3F;
             if(isContinuation(SecondCE)) {
               ListList[src->resultLen].baseContCE = SecondCE;
             } else {
