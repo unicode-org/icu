@@ -14,9 +14,6 @@
 */
 /* C API TEST FOR MESSAGE FORMAT */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 #include "unicode/uloc.h"
 #include "unicode/utypes.h"
 #include "unicode/umsg.h"
