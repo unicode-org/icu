@@ -1,5 +1,5 @@
 # Blocks-4.1.0.txt
-# Date: 2004-12-03, 15:20 [KW]
+# Date: 2005-1-31, 16:50 [KW]
 #
 # Unicode Character Database
 # Copyright (c) 1991-2005 Unicode, Inc.
@@ -104,7 +104,7 @@
 2A00..2AFF; Supplemental Mathematical Operators
 2B00..2BFF; Miscellaneous Symbols and Arrows
 2C00..2C5F; Glagolitic
-2C80..2C8F; Coptic
+2C80..2CFF; Coptic
 2D00..2D2F; Georgian Supplement
 2D30..2D7F; Tifinagh
 2D80..2DDF; Ethiopic Extended
@@ -119,7 +119,7 @@
 3130..318F; Hangul Compatibility Jamo
 3190..319F; Kanbun
 31A0..31BF; Bopomofo Extended
-31C0..31EF; CJK Basic Strokes
+31C0..31EF; CJK Strokes
 31F0..31FF; Katakana Phonetic Extensions
 3200..32FF; Enclosed CJK Letters and Months
 3300..33FF; CJK Compatibility

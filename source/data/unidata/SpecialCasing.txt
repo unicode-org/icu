@@ -1,5 +1,5 @@
 # SpecialCasing-4.1.0.txt
-# Date: 2004-12-16, 03:10:45 GMT [MD]
+# Date: 2005-02-26, 02:42:51 GMT [MD]
 #
 # Special Casing Properties
 #
@@ -34,7 +34,8 @@
 # RFC 3066 (or its successor), and replacing '-' by '_'.
 #
 # A context for a character C is defined by Section 3.13 Default Case Operations,
-# on p. 89-90 of The Unicode Standard, Version 4.0, as amended by Unicode 4.0.1.
+# on p. 89-90 of The Unicode Standard, Version 4.0, as amended by Unicode 4.1.0,
+# as specified in http://www.unicode.org/versions/Unicode4.1.0/
 #
 # Parsers of this file must be prepared to deal with future additions to this format:
 #  * Additional contexts

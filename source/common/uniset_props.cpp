@@ -43,6 +43,8 @@
 #include "uassert.h"
 #include "hash.h"
 
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
+
 // initial storage. Must be >= 0
 // *** same as in uniset.cpp ! ***
 #define START_EXTRA 16
@@ -101,16 +103,15 @@ static const struct C99_Map {
     // MUST be in SORTED order
     { "alnum", u_isalnum, UPROPS_SRC_CHAR },
     { "blank", u_isblank, UPROPS_SRC_PROPSVEC },
-    { "cntrl", u_iscntrl, UPROPS_SRC_CHAR },
-    { "digit", u_isdigit, UPROPS_SRC_CHAR },
+    // new alias in Unicode 4.1 { "cntrl", u_iscntrl, UPROPS_SRC_CHAR },
+    // new alias in Unicode 4.1 { "digit", u_isdigit, UPROPS_SRC_CHAR },
     { "graph", u_isgraph, UPROPS_SRC_CHAR },
     { "print", u_isprint, UPROPS_SRC_CHAR },
-    { "punct", u_ispunct, UPROPS_SRC_CHAR },
-    { "space", u_isspace, UPROPS_SRC_CHAR },
+    // new alias in Unicode 4.1 { "punct", u_ispunct, UPROPS_SRC_CHAR },
+    // new alias in Unicode 4.1 { "space", u_isspace, UPROPS_SRC_CHAR },
     { "title", u_istitle, UPROPS_SRC_CHAR },
     { "xdigit", u_isxdigit, UPROPS_SRC_CHAR }
 };
-#define C99_COUNT (10)
 
 // TEMPORARY: Remove when deprecated category code constructor is removed.
 static const UChar CATEGORY_NAMES[] = {
@@ -1085,7 +1086,7 @@ UnicodeSet::applyPropertyAlias(const UnicodeString& prop,
                     // TODO: Remove the following special-case code when
                     // these four C99-compatibility properties are implemented
                     // as enums/names.
-                    for (int32_t i=0; i<C99_COUNT; ++i) {
+                    for (int32_t i=0; i<LENGTHOF(C99_DISPATCH); ++i) {
                         int32_t c = uprv_comparePropertyNames(pname, C99_DISPATCH[i].name);
                         if (c == 0) {
                             applyFilter(c99Filter, (void*) &C99_DISPATCH[i], C99_DISPATCH[i].src, ec);
