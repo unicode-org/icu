@@ -85,7 +85,7 @@ le_int32 MarkToMarkPositioningSubtable::process(GlyphIterator *glyphIterator, co
         fontInstance->getGlyphAdvance(mark2Glyph, pixels);
         fontInstance->pixelsToUnits(pixels, mark2Advance);
 
-        glyphIterator->adjustCurrGlyphPositionAdjustment(anchorDiffX - mark2Advance.fX, -anchorDiffY - mark2Advance.fY, -markAdvance.fX, -markAdvance.fY);
+        glyphIterator->adjustCurrGlyphPositionAdjustment(anchorDiffX - mark2Advance.fX, anchorDiffY - mark2Advance.fY, -markAdvance.fX, -markAdvance.fY);
     }
 
     return 1;
