@@ -654,8 +654,12 @@ void TestSortKey()
 {   
     uint8_t *sortk1 = NULL, *sortk2 = NULL, *sortk3 = NULL;
     uint8_t sortk2_compat[] = { 
-      /* 2.0 key */
-        0x19, 0x1B, 0x1D, 0x1F, 0x19, 0x01, 0x09, 0x01, 0x09, 0x01, 0x18, 0x01, 0x92, 0x93, 0x94, 0x95, 0x92, 0x00
+        /* 2.2 key */
+        0x1D, 0x1F, 0x21, 0x23, 0x1D, 0x01,
+        0x09, 0x01, 0x09, 0x01, 0x1F, 0x01,
+        0x92, 0x93, 0x94, 0x95, 0x92, 0x00
+        /* 2.0 key */
+        /*0x19, 0x1B, 0x1D, 0x1F, 0x19, 0x01, 0x09, 0x01, 0x09, 0x01, 0x18, 0x01, 0x92, 0x93, 0x94, 0x95, 0x92, 0x00*/
         /* 1.8.1 key.*/
         /*0x19, 0x1B, 0x1D, 0x1F, 0x19, 0x01, 0x0A, 0x01, 0x0A, 0x01, 0x92, 0x93, 0x94, 0x95, 0x92, 0x00*/
         /*this is a 1.8 sortkey */
@@ -955,7 +959,16 @@ void TestElemIter()
         log_err("Somehow ran out of memory stepping through the iterator2.: %s\n", myErrorName(status));
         return;
     }
+    /* this here, my friends, is either pure lunacy or something so obsolete that even it's mother
+     * doesn't care about it. Essentialy, this test complains if secondary values for 'I' and '_'
+     * are the same. According to the UCA, this is not true. Therefore, remove the test.
+     * Besides, if primary strengths for two code points are different, it doesn't matter one bit
+     * what is the relation between secondary or any other strengths.
+     * killed by weiv 06/11/2002.
+     */
+    /*
     doAssert( ((order1 & UCOL_SECONDARYMASK) != (order3 & UCOL_SECONDARYMASK)), "The secondary orders should be different");
+    */
     doAssert( (order1 != UCOL_NULLORDER), "Unexpected end of iterator reached");
 
     free(testString1);
