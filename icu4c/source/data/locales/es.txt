@@ -14,38 +14,73 @@ es {
     /* Duplicates from root commented out. */
     Countries { 
         AE { "Emiratos \u00C1rabes Unidos" }
-        AS { "Samoa Americana" }
+        AF { "Afganist\u00E1n" }
+        AG { "Antigua y Barbuda" }
+        AI { "Anguila" }
+        AN { "Antillas Neerlandesas" }
+        AQ { "Ant\u00E1rtica" }
         //AR { "Argentina" }
+        AS { "Samoa Americana" }
+        AZ { "Azerbaiy\u00E1n" }
+        BA { "Bosnia y Hercegovina" }
         BE { "B\u00E9lgica" }
         BH { "Bahr\u00E1in" }
+        BJ { "Ben\u00EDn" }
+        BM { "Bermudas" }
+        BN { "Brun\u00E9i" }
         //BO { "Bolivia" }
         BR { "Brasil" }
+        BT { "But\u00E1n" }
+        BV { "Isla Bouvet" }
         BZ { "Belice" }
+        BW { "Botsuana" }
         BY { "Bielorrusia" }
         CA { "Canad\u00E1" }
+        CC { "Islas Cocos (Keeling)" }
+        CD { "Rep\u00FAblica Democr\u00E1tica del Congo" }
+        CF { "Rep\u00FAblica Centroafricana" }
         CH { "Suiza" }
+        CI { "Costa de Marfil" }
+        CK { "Islas Cook" }
         //CL { "Chile" }
+        CM { "Camer\u00FAn" }
         //CO { "Colombia" }
         //CR { "Costa Rica" }
-        CZ { "Chequia" }
+        CV { "Cabo Verde" }
+        CX { "Isla de Christmas" }
+        CY { "Chipre" }
+        CZ { "Rep\u00FAblica Checa" }
+        //CZ { "Chequia" } // Old value
         DE { "Alemania" }
+        DJ { "Yibuti" }
         DK { "Dinamarca" }
         DO { "Rep\u00FAblica Dominicana" }
         DZ { "Argelia" }
         //EC { "Ecuador" }
         EG { "Egipto" }
+        EH { "S\u00E1hara Occidental" }
         ES { "Espa\u00F1a" }
         FI { "Finlandia" }
+        FJ { "Fidji" }
         FO { "Islas Feroe" }
         FR { "Francia" }
+        GA { "Gab\u00F3n" }
         GB { "Reino Unido" }
-        GL { "Groenlanida" }
+        GD { "Granada" }
+        GF { "Guayana Francesa" }
+        GL { "Groenlandia" }
+        GP { "Guadalupe" }
+        GQ { "Guinea Ecuatorial" }
         GR { "Grecia" }
+        GS { "Islas Georgia del Sur y Sandwich del Sur" }
         //GT { "Guatemala" }
+        //HK { "Hong Kong, Regi\u00F3n administrativa especial de China" }
         //HN { "Honduras" }
         HR { "Croacia" }
+        HT { "Hait\u00ED" }
         HU { "Hungr\u00EDa" }
         IE { "Irlanda" }
+        IO { "Territorios Brit\u00E1nicos del Oc\u00E9ano \u00CDndico" }
         IQ { "Irak" }
         IR { "Ir\u00E1n" }
         IS { "Islandia" }
@@ -53,16 +88,35 @@ es {
         JO { "Jordania" }
         JP { "Jap\u00F3n" }
         KE { "Kenia" }
+        KG { "Kirguizist\u00E1n" }
+        KH { "Camboya" }
+        KM { "Comores" }
+        KN { "San Crist\u00F3bal y Nieves" }
         KP { "Corea del Norte" }
+        //KR { "Corea, Rep\u00FAblica de " } // From translation center
         KR { "Corea del Sur" }
+        KY { "Islas Caim\u00E1n" }
+        KZ { "Kazajist\u00E1n" }
+        //LA { "Rep\u00FAblica Democr\u00E1tica Popular Lao" } // From translation center
         LB { "L\u00EDbano" }
         LT { "Lituania" }
         LU { "Luxemburgo" }
         LV { "Letonia" }
         MA { "Marruecos" }
+        MC { "M\u00F3naco" }
         MH { "Islas Marshall" }
+        ML { "Mal\u00ED" }
         MP { "Islas Marianas del Norte" }
+        MQ { "Martinica" }
+        //MR { "Mauritania" }
+        MU { "Mauricio" }
+        MV { "Maldivas" }
+        MW { "Malaui" }
         MX { "M\u00E9xico" }
+        MY { "Malasia" }
+        NC { "Nueva Caledonia" }
+        NE { "N\u00EDger" }
+        NF { "Isla Norfolk" }
         //NI { "Nicaragua" }
         NL { "Pa\u00EDses Bajos" }
         NO { "Noruega" }
@@ -70,34 +124,57 @@ es {
         OM { "Om\u00E1n" }
         PA { "Panam\u00E1" }
         PE { "Per\u00FA" }
-        PH { "Islas Filipinas" }
+        PF { "Polinesia Francesa" }
+        PG { "Pap\u00FAa-Nueva Guinea" }
+        //PH { "Islas Filipinas" }  // Original value
+        PH { "Filipinas" }
         PK { "Pakist\u00E1n" }
         PL { "Polonia" }
+        PM { "San Pedro y Miquel\u00F3n" }
         //PR { "Puerto Rico" }
+        PS { "Territorios Palestinos" }
         //PY { "Paraguay" }
         RO { "Rumania" }
         RU { "Rusia" }
+        //RU { "Federaci\u00F3n Rusa" } // From translation center
+        RW { "Ruanda" }
         SA { "Arabia Saud\u00ED" }
+        SB { "Islas Salom\u00F3n" }
         SD { "Sud\u00E1n" }
         SE { "Suecia" }
         SG { "Singapur" }
+        SH { "Santa Elena" } // From translation center
         SI { "Eslovenia" }
+        SJ { "Svalbard y Jan Mayen" }
         SK { "Eslovaquia" }
+        SL { "Sierra Leona" }
         SP { "Servia" }
+        ST { "Santo Tom\u00E9 y Pr\u00EDncipe" }
         //SV { "El Salvador" }
         SY { "Siria" }
+        SZ { "Suazilandia" }
+        TC { "Islas Turcas y Caicos" }
+        TF { "Territorios Australes Franceses" }
         TH { "Tailandia" }
+        TJ { "Tayikist\u00E1n" }
         TN { "T\u00FAnez" }
         TR { "Turqu\u00EDa" }
         TT { "Trinidad y Tabago" }
         TW { "Taiw\u00E1n" }
-        UA { "Ucraina" }
-        UM { "Islas Perif\u00E9ricas Menores de los Estados Unidos" }
+        UA { "Ucrania" }
+        UM { "Islas menores alejadas de Estados Unidos" }
+        //UM { "Islas Perif\u00E9ricas Menores de los Estados Unidos" } // Old value
         US { "Estados Unidos" }
         //UY { "Uruguay" }
+        UZ { "Uzbekist\u00E1n" }
         //VE { "Venezuela" }
+        VA { "Santa Sede (Ciudad del Vaticano)" }
+        VC { "San Vicente y las Granadinas" }
+        VG { "Islas V\u00EDrgenes Brit\u00E1nicas" }
         VI { "Islas V\u00EDrgenes de los Estados Unidos" }
+        WF { "Wallis y Futuna" }
         ZA { "Sud\u00E1frica" }
+        ZW { "Zimbabue" }
     }
     DateTimeElements:intvector { 
         2,
@@ -185,7 +262,8 @@ es {
         ky { "kirghiz" }
         la { "lat\u00EDn" }
         lt { "lituano" }
-        lv { "let\u00F3n" }
+        //lv { "let\u00F3n" } // Old value
+        lv { "letonio" }
         mk { "macedonio" }
         mn { "mongol" }
         mr { "marathi" }
