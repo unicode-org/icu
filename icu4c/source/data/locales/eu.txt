@@ -8,13 +8,13 @@
 eu {
     Version { "1.0" }
     DayAbbreviations {
-        "igandea",
-        "astelehena",
-        "asteartea",
-        "asteazkena",
-        "osteguna",
-        "ostirala",
-        "larunbata",
+        "ig",
+        "al",
+        "as",
+        "az",
+        "og",
+        "or",
+        "lr",
     }
     DayNames {
         "igandea",

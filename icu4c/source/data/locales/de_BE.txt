@@ -12,8 +12,8 @@ de_BE {
 //        "nachm",
 //    }
     CurrencyElements { 
-        "Fr",
-        "BEF ",
+        "\u20AC",
+        "EUR",
         ",",
     }
     DateTimePatterns { 
@@ -21,8 +21,8 @@ de_BE {
         "HH 'h' mm 'min' ss 's' z",
         "HH 'h' mm 'min' ss 's' z",
         "HH 'h' mm 'min' ss 's'",
-        "EEEE dd MMMM yyyy ",
-        "EEEE dd MMMM yyyy ",
+        "EEEE dd MMMM yyyy",
+        "EEEE dd MMMM yyyy",
         "EEEE dd MMMM yyyy",
         "dd MMMM yyyy",
         "{1} {0}",

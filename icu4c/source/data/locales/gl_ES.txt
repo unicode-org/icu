@@ -19,10 +19,10 @@ gl_ES {
         "#E0",
     }
     DateTimePatterns { 
-        "h:mm:ss a",
-        "h:mm:ss a",
-        "h:mm:ss a",
-        "h:mm a",
+        "HH:mm:ss z",
+        "HH:mm:ss z",
+        "HH:mm:ss",
+        "HH:mm",
         "EEEE dd MMMM yyyy",
         "dd MMMM yyyy",
         "MMM dd,yy",

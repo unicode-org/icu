@@ -14,10 +14,10 @@ bn_IN {
         ".",
     }
     DateTimePatterns { 
-        "hh:mm:ss aa z",
-        "hh:mm:ss z",
-        "hh:mm:ss z",
-        "hh:mm z",
+        "h:mm:ss a z",
+        "h:mm:ss a z",
+        "h:mm:ss a z",
+        "h:mm a",
         "EEEE dd MMM yyyy",
         "dd MMM yyyy",
         "dd MMM yyyy",

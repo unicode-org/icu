@@ -76,10 +76,10 @@ fi {
         4,
     }
     DateTimePatterns { 
-        "H:mm:ss z",
-        "H:mm:ss z",
-        "H:mm:ss",
-        "H:mm",
+        "HH:mm:ss z",
+        "HH:mm:ss z",
+        "HH:mm:ss",
+        "HH:mm",
         "d. MMMM'ta 'yyyy",
         "d. MMMM'ta 'yyyy",
         "d.M.yyyy",
