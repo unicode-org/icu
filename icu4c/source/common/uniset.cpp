@@ -1901,7 +1901,7 @@ void UnicodeSet::applyPattern(RuleCharacterIterator& chars,
         opts |= RuleCharacterIterator::SKIP_WHITESPACE;
     }
 
-    UnicodeString pat, buf;
+    UnicodeString patLocal, buf;
     UBool usePat = FALSE;
     UnicodeSetPointer scratch;
     RuleCharacterIterator::Pos backup;
@@ -1955,13 +1955,13 @@ void UnicodeSet::applyPattern(RuleCharacterIterator& chars,
                 } else {
                     // Handle opening '[' delimiter
                     mode = 1;
-                    pat.append((UChar) 0x5B /*'['*/);
+                    patLocal.append((UChar) 0x5B /*'['*/);
                     chars.getPos(backup); // prepare to backup
                     c = chars.next(opts, literal, ec); 
                     if (U_FAILURE(ec)) return;
                     if (c == 0x5E /*'^'*/ && !literal) {
                         invert = TRUE;
-                        pat.append((UChar) 0x5E /*'^'*/);
+                        patLocal.append((UChar) 0x5E /*'^'*/);
                         chars.getPos(backup); // prepare to backup
                         c = chars.next(opts, literal, ec);
                         if (U_FAILURE(ec)) return;
@@ -2004,13 +2004,13 @@ void UnicodeSet::applyPattern(RuleCharacterIterator& chars,
                     return;
                 }
                 add(lastChar, lastChar);
-                _appendToPat(pat, lastChar, FALSE);
+                _appendToPat(patLocal, lastChar, FALSE);
                 lastItem = 0;
                 op = 0;
             }
 
             if (op == 0x2D /*'-'*/ || op == 0x26 /*'&'*/) {
-                pat.append(op);
+                patLocal.append(op);
             }
 
             if (nested == 0) {
@@ -2023,15 +2023,15 @@ void UnicodeSet::applyPattern(RuleCharacterIterator& chars,
             }
             switch (setMode) {
             case 1:
-                nested->applyPattern(chars, symbols, pat, options, ec);
+                nested->applyPattern(chars, symbols, patLocal, options, ec);
                 break;
             case 2:
                 chars.skipIgnored(opts);
-                nested->applyPropertyPattern(chars, pat, ec);
+                nested->applyPropertyPattern(chars, patLocal, ec);
                 if (U_FAILURE(ec)) return;
                 break;
             case 3: // `nested' already parsed
-                nested->_toPattern(pat, FALSE);
+                nested->_toPattern(patLocal, FALSE);
                 break;
             }
 
@@ -2077,18 +2077,18 @@ void UnicodeSet::applyPattern(RuleCharacterIterator& chars,
             case 0x5D /*']'*/:
                 if (lastItem == 1) {
                     add(lastChar, lastChar);
-                    _appendToPat(pat, lastChar, FALSE);
+                    _appendToPat(patLocal, lastChar, FALSE);
                 }
                 // Treat final trailing '-' as a literal
                 if (op == 0x2D /*'-'*/) {
                     add(op, op);
-                    pat.append(op);
+                    patLocal.append(op);
                 } else if (op == 0x26 /*'&'*/) {
                     // syntaxError(chars, "Trailing '&'");
                     ec = U_MALFORMED_SET;
                     return;
                 }
-                pat.append((UChar) 0x5D /*']'*/);
+                patLocal.append((UChar) 0x5D /*']'*/);
                 mode = 2;
                 continue;
             case 0x2D /*'-'*/:
@@ -2102,7 +2102,7 @@ void UnicodeSet::applyPattern(RuleCharacterIterator& chars,
                         c = chars.next(opts, literal, ec);
                         if (U_FAILURE(ec)) return;
                         if (c == 0x5D /*']'*/ && !literal) {
-                            pat.append(HYPHEN_RIGHT_BRACE);
+                            patLocal.append(HYPHEN_RIGHT_BRACE);
                             mode = 2;
                             continue;
                         }
@@ -2131,7 +2131,7 @@ void UnicodeSet::applyPattern(RuleCharacterIterator& chars,
                 }
                 if (lastItem == 1) {
                     add(lastChar, lastChar);
-                    _appendToPat(pat, lastChar, FALSE);
+                    _appendToPat(patLocal, lastChar, FALSE);
                 }
                 lastItem = 0;
                 buf.truncate(0);
@@ -2156,9 +2156,9 @@ void UnicodeSet::applyPattern(RuleCharacterIterator& chars,
                 // we don't need to drop through to the further
                 // processing
                 add(buf);
-                pat.append((UChar) 0x7B /*'{'*/);
-                _appendToPat(pat, buf, FALSE);
-                pat.append((UChar) 0x7D /*'}'*/);
+                patLocal.append((UChar) 0x7B /*'{'*/);
+                _appendToPat(patLocal, buf, FALSE);
+                patLocal.append((UChar) 0x7D /*'}'*/);
                 continue;
             case SymbolTable::SYMBOL_REF:
                 //         symbols  nosymbols
@@ -2180,12 +2180,12 @@ void UnicodeSet::applyPattern(RuleCharacterIterator& chars,
                     if (anchor && op == 0) {
                         if (lastItem == 1) {
                             add(lastChar, lastChar);
-                            _appendToPat(pat, lastChar, FALSE);
+                            _appendToPat(patLocal, lastChar, FALSE);
                         }
                         add(U_ETHER);
                         usePat = TRUE;
-                        pat.append((UChar) SymbolTable::SYMBOL_REF);
-                        pat.append((UChar) 0x5D /*']'*/);
+                        patLocal.append((UChar) SymbolTable::SYMBOL_REF);
+                        patLocal.append((UChar) 0x5D /*']'*/);
                         mode = 2;
                         continue;
                     }
@@ -2217,14 +2217,14 @@ void UnicodeSet::applyPattern(RuleCharacterIterator& chars,
                     return;
                 }
                 add(lastChar, c);
-                _appendToPat(pat, lastChar, FALSE);
-                pat.append(op);
-                _appendToPat(pat, c, FALSE);
+                _appendToPat(patLocal, lastChar, FALSE);
+                patLocal.append(op);
+                _appendToPat(patLocal, c, FALSE);
                 lastItem = 0;
                 op = 0;
             } else {
                 add(lastChar, lastChar);
-                _appendToPat(pat, lastChar, FALSE);
+                _appendToPat(patLocal, lastChar, FALSE);
                 lastChar = c;
             }
             break;
@@ -2261,10 +2261,10 @@ void UnicodeSet::applyPattern(RuleCharacterIterator& chars,
         complement();
     }
 
-    // Use the rebuilt pattern (pat) only if necessary.  Prefer the
+    // Use the rebuilt pattern (patLocal) only if necessary.  Prefer the
     // generated pattern.
     if (usePat) {
-        rebuiltPat.append(pat);
+        rebuiltPat.append(patLocal);
     } else {
         _generatePattern(rebuiltPat, FALSE);
     }
@@ -3022,10 +3022,10 @@ void UnicodeSet::applyPropertyPattern(RuleCharacterIterator& chars,
                                       UnicodeString& rebuiltPat,
                                       UErrorCode& ec) {
     if (U_FAILURE(ec)) return;
-    UnicodeString pat;
-    chars.lookahead(pat);
+    UnicodeString pattern;
+    chars.lookahead(pattern);
     ParsePosition pos(0);
-    applyPropertyPattern(pat, pos, ec);
+    applyPropertyPattern(pattern, pos, ec);
     if (U_FAILURE(ec)) return;
     if (pos.getIndex() == 0) {
         // syntaxError(chars, "Invalid property pattern");
@@ -3033,7 +3033,7 @@ void UnicodeSet::applyPropertyPattern(RuleCharacterIterator& chars,
         return;
     }
     chars.jumpahead(pos.getIndex());
-    rebuiltPat.append(pat, 0, pos.getIndex());
+    rebuiltPat.append(pattern, 0, pos.getIndex());
 }
 
 //----------------------------------------------------------------
