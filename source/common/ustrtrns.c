@@ -228,7 +228,8 @@ u_strFromUTF8(UChar *dest,
     int32_t index = 0;
     int32_t reqLength = 0;
     uint8_t* pSrc = (uint8_t*) src;
-    
+    UBool isError;
+
     /* args check */
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)){
         return NULL;
@@ -248,10 +249,13 @@ u_strFromUTF8(UChar *dest,
         if(ch <=0x7f){
             *pDest++=(UChar)ch;
         }else{
-            ch=utf8_nextCharSafeBody(pSrc, &index, srcLength, ch, FALSE);
-            if(ch<=0xFFFF){
+            ch=utf8_nextCharSafeBody(pSrc, &index, srcLength, ch, FALSE, &isError);
+            if(isError){
+                *pErrorCode = U_INVALID_CHAR_FOUND;
+                return NULL;
+            }else if(ch<=0xFFFF){
                 *(pDest++)=(UChar)ch;
-            }else if(ch<=0x10ffff){
+            }else{
                 *(pDest++)=UTF16_LEAD(ch);
                 if(pDest<pDestLimit){
                     *(pDest++)=UTF16_TRAIL(ch);
@@ -259,9 +263,6 @@ u_strFromUTF8(UChar *dest,
                     reqLength++;
                     break;
                 }
-            }else{
-                *pErrorCode = U_INVALID_CHAR_FOUND;
-                return NULL;
             }
         }
     }
@@ -271,7 +272,11 @@ u_strFromUTF8(UChar *dest,
         if(ch <= 0x7f){
             reqLength++;
         }else{
-            ch=utf8_nextCharSafeBody(pSrc, &index, srcLength, ch, FALSE);
+            ch=utf8_nextCharSafeBody(pSrc, &index, srcLength, ch, FALSE, &isError);
+            if(isError){
+                *pErrorCode = U_INVALID_CHAR_FOUND;
+                return NULL;
+            }
             reqLength+=UTF_CHAR_LENGTH(ch);
         }
     }
