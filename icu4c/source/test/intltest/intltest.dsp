@@ -493,6 +493,10 @@ SOURCE=.\tztest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\ucaconf.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\ucdtest.cpp
 # End Source File
 # Begin Source File
@@ -858,6 +862,10 @@ SOURCE=.\tzregts.h
 # Begin Source File
 
 SOURCE=.\tztest.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucaconf.h
 # End Source File
 # Begin Source File
 
