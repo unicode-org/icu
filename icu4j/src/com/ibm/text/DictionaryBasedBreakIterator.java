@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/DictionaryBasedBreakIterator.java,v $ 
- * $Date: 2000/05/09 22:49:12 $ 
- * $Revision: 1.4 $
+ * $Date: 2000/05/12 01:30:35 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -462,6 +462,7 @@ switch (categoryFlags.length % 4) {
                 // re-sync "c" for the next go-round, and drop out of the loop if
                 // we've made it off the end of the range
                 c = text.current();
+                state = 0;
                 if (text.getIndex() >= endPos) {
                     break;
                 }
