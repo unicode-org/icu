@@ -701,7 +701,7 @@ uloc_getDisplayKeywordValue(   const char* locale,
  * displayable full name with
  * @param err error information if retrieving the displayable name failed
  * @return the actual buffer size needed for the displayable name.  If it's greater 
- * than variantCapacity, the returned displayable name will be truncated.  
+ * than maxResultSize, the returned displayable name will be truncated.  
  * @stable ICU 2.0
  */
 U_STABLE int32_t U_EXPORT2
