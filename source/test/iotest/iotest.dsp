@@ -82,9 +82,13 @@ LINK32=link.exe
 
 # Name "iotest - Win32 Release"
 # Name "iotest - Win32 Debug"
+# Begin Group "Source Files"
+
+# PROP Default_Filter "cpp;c;cxx"
 # Begin Source File
 
 SOURCE=.\iotest.cpp
 # End Source File
+# End Group
 # End Target
 # End Project
