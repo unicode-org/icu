@@ -8,6 +8,8 @@
 #include "layout/LETypes.h"
 #include "layout/LEFontInstance.h"
 
+#include "unicode/locid.h"
+
 #include "RunArrays.h"
 
 le_int32 RunArray::ensureCapacity()
@@ -81,6 +83,40 @@ const LEFontInstance *FontRuns::getFont(le_int32 run) const
     }
 
     return fFonts[run];
+}
+
+void LocaleRuns::init(le_int32 capacity)
+{
+    RunArray::init(capacity);
+    fLocales = LE_NEW_ARRAY(const Locale *, capacity);
+}
+
+void LocaleRuns::grow(le_int32 capacity)
+{
+    RunArray::grow(capacity);
+    fLocales = (const Locale **) LE_GROW_ARRAY(fLocales, capacity);
+}
+
+le_int32 LocaleRuns::add(const Locale *locale, le_int32 limit)
+{
+    le_int32 index = RunArray::add(limit);
+
+    if (index >= 0) {
+        Locale **locales = (Locale **) fLocales;
+
+        locales[index] = (Locale *) locale;
+    }
+
+    return index;
+}
+
+const Locale *LocaleRuns::getLocale(le_int32 run) const
+{
+    if (run < 0 || run >= getCount()) {
+        return NULL;
+    }
+
+    return fLocales[run];
 }
 
 void ValueRuns::init(le_int32 capacity)

@@ -163,7 +163,7 @@ Paragraph::Paragraph(const LEUnicode chars[], int32_t charCount, const FontRuns 
   : fParagraphLayout(NULL), fLineCount(0), fLinesMax(0), fLinesGrow(LINE_GROW), fLines(NULL),
     fLineHeight(-1), fAscent(-1), fWidth(-1), fHeight(-1)
 {
-    fParagraphLayout = new ParagraphLayout(chars, charCount, fontRuns, NULL, NULL, UBIDI_LTR, false);
+    fParagraphLayout = new ParagraphLayout(chars, charCount, fontRuns, NULL, NULL, NULL, UBIDI_LTR, false);
 
     le_int32 ascent  = fParagraphLayout->getAscent();
     le_int32 descent = fParagraphLayout->getDescent();

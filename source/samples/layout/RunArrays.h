@@ -12,13 +12,27 @@
 #include "layout/LETypes.h"
 #include "layout/LEFontInstance.h"
 
+#include "unicode/locid.h"
+
+/**
+ * The initial size of an array if it is unspecified.
+ *
+ * @draft ICU 2.6
+ */
 #define INITIAL_CAPACITY 16
+
+/**
+ * When an array needs to grow, it will double in size until
+ * it becomes this large, then it will grow by this amount.
+ *
+ * @draft ICU 2.6
+ */
 #define CAPACITY_GROW_LIMIT 128
 
 /**
  * The <code>RunArray</code> class is a base class for building classes
  * which represent data that is associated with runs of text. This class
- * maintains an array of limit indicies into the text, subclasses
+ * maintains an array of limit indices into the text, subclasses
  * provide one or more arrays of data.
  *
  * @draft ICU 2.6
@@ -30,7 +44,7 @@ public:
      * Construct a <code>RunArray</code> object from a pre-existing
      * array of limit indices.
      *
-     * @param limits is an array of limit indicies.
+     * @param limits is an array of limit indices.
      *
      * @param count is the number of entries in the limit array.
      *
@@ -40,9 +54,9 @@ public:
 
     /**
      * Construct an empty <code>RunArray</code> object. Clients can add limit
-     * indicies array using the <code>add</code> method.
+     * indices array using the <code>add</code> method.
      *
-     * @param initialCapacity is the initial size of the limit indicies array. If
+     * @param initialCapacity is the initial size of the limit indices array. If
      *        this value is zero, no array will be allocated.
      *
      * @see add
@@ -59,7 +73,7 @@ public:
     virtual ~RunArray();
 
     /**
-     * Get the number of entries in the limit indicies array.
+     * Get the number of entries in the limit indices array.
      *
      * @return the number of entries in the limit indices array.
      *
@@ -89,13 +103,13 @@ public:
     le_int32 getLimit(le_int32 run) const;
 
     /**
-     * Add a limit index to the limit indicies array and return the run index
+     * Add a limit index to the limit indices array and return the run index
      * where it was stored. If the array does not exist, it will be created by
      * calling the <code>init</code> method. If it is full, it will be grown by
      * calling the <code>grow</code> method.
      *
      * If the <code>RunArray</code> object was created with a client-supplied
-     * limit indicies array, this method will return a run index of -1.
+     * limit indices array, this method will return a run index of -1.
      *
      * Subclasses should not override this method. Rather they should provide
      * a new <code>add</code> method which takes a limit index along with whatever
@@ -116,10 +130,10 @@ public:
 
 protected:
     /**
-     * Create a data array with the given inital size. This method will be
-     * called by the <code>add</code> method if there is no limit indicies
+     * Create a data array with the given initial size. This method will be
+     * called by the <code>add</code> method if there is no limit indices
      * array. Subclasses which override this method must also call it from
-     * the overridding method to create the limit indicies array.
+     * the overriding method to create the limit indices array.
      *
      * @param capacity is the initial size of the data array.
      *
@@ -130,10 +144,10 @@ protected:
     virtual void init(le_int32 capacity);
 
     /**
-     * Grow a data array to the given inital size. This method will be
-     * called by the <code>add</code> method if the limit indicies
+     * Grow a data array to the given initial size. This method will be
+     * called by the <code>add</code> method if the limit indices
      * array is full. Subclasses which override this method must also call it from
-     * the overridding method to grow the limit indicies array.
+     * the overriding method to grow the limit indices array.
      *
      * @param capacity is the initial size of the data array.
      *
@@ -212,11 +226,11 @@ class FontRuns : public RunArray
 public:
     /**
      * Construct a <code>FontRuns</code> object from pre-existing arrays of fonts
-     * and limit indicies.
+     * and limit indices.
      *
      * @param fonts is the address of an array of pointers to <code>LEFontInstance</code> objects.
      *
-     * @param limits is the address of an array of limit indicies.
+     * @param limits is the address of an array of limit indices.
      *
      * @param count is the number of entries in the two arrays.
      *
@@ -226,9 +240,9 @@ public:
 
     /**
      * Construct an empty <code>FontRuns</code> object. Clients can add font and limit
-     * indicies arrays using the <code>add</code> method.
+     * indices arrays using the <code>add</code> method.
      *
-     * @param initialCapacity is the initial size of the font and limit indicies arrays. If
+     * @param initialCapacity is the initial size of the font and limit indices arrays. If
      *        this value is zero, no arrays will be allocated.
      *
      * @see add
@@ -249,7 +263,7 @@ public:
      * of text. Use <code>RunArray::getLimit(run)</code> to get the corresponding
      * limit index.
      *
-     * @param run is the index into the font and limit indicies arrays.
+     * @param run is the index into the font and limit indices arrays.
      *
      * @return the <code>LEFontInstance</code> associated with the given text run.
      *
@@ -266,11 +280,11 @@ public:
      * <code>RunArray::add(limit)</code> which will create or grow the arrays as needed.
      *
      * If the <code>FontRuns</code> object was created with a client-supplied
-     * font and limit indicies arrays, this method will return a run index of -1.
+     * font and limit indices arrays, this method will return a run index of -1.
      *
      * Subclasses should not override this method. Rather they should provide a new <code>add</code>
      * method which takes a font and a limit index along with whatever other data they implement.
-     * The new <code>add</code> method should first call this method to grow the font and limit indicies
+     * The new <code>add</code> method should first call this method to grow the font and limit indices
      * arrays, and use the returned run index to store data their own arrays.
      *
      * @param font is the address of the <code>LEFontInstance</code> to add
@@ -315,6 +329,119 @@ inline FontRuns::~FontRuns()
 }
 
 /**
+ * The <code>LocaleRuns</code> class associates pointers to <code>Locale</code>
+ * objects with runs of text.
+ *
+ * @draft ICU 2.6
+ */
+class LocaleRuns : public RunArray
+{
+public:
+    /**
+     * Construct a <code>LocaleRuns</code> object from pre-existing arrays of locales
+     * and limit indices.
+     *
+     * @param locales is the address of an array of pointers to <code>Locale</code> objects.
+     *
+     * @param limits is the address of an array of limit indices.
+     *
+     * @param count is the number of entries in the two arrays.
+     *
+     * @draft ICU 2.6
+     */
+    LocaleRuns(const Locale **locales, const le_int32 *limits, le_int32 count);
+
+    /**
+     * Construct an empty <code>LocaleRuns</code> object. Clients can add locale and limit
+     * indices arrays using the <code>add</code> method.
+     *
+     * @param initialCapacity is the initial size of the locale and limit indices arrays. If
+     *        this value is zero, no arrays will be allocated.
+     *
+     * @see add
+     *
+     * @draft ICU 2.6
+     */
+    LocaleRuns(le_int32 initialCapacity);
+
+    /**
+     * The destructor; virtual so that subclass destructors are invoked as well.
+     *
+     * @draft ICU 2.6
+     */
+    virtual ~LocaleRuns();
+
+    /**
+     * Get the <code>Locale</code> object assoicated with the given run
+     * of text. Use <code>RunArray::getLimit(run)</code> to get the corresponding
+     * limit index.
+     *
+     * @param run is the index into the font and limit indices arrays.
+     *
+     * @return the <code>Locale</code> associated with the given text run.
+     *
+     * @see RunArray::getLimit
+     *
+     * @draft ICU 2.6
+     */
+    const Locale *getLocale(le_int32 run) const;
+
+
+    /**
+     * Add a <code>Locale</code> and limit index pair to the data arrays and return
+     * the run index where the data was stored. This  method calls
+     * <code>RunArray::add(limit)</code> which will create or grow the arrays as needed.
+     *
+     * If the <code>LocaleRuns</code> object was created with a client-supplied
+     * locale and limit indices arrays, this method will return a run index of -1.
+     *
+     * Subclasses should not override this method. Rather they should provide a new <code>add</code>
+     * method which takes a locale and a limit index along with whatever other data they implement.
+     * The new <code>add</code> method should first call this method to grow the font and limit indices
+     * arrays, and use the returned run index to store data their own arrays.
+     *
+     * @param locale is the address of the <code>Locale</code> to add
+     *
+     * @param limit is the limit index to add
+     *
+     * @return the run index where the locale and limit index were stored, or -1 if the data cannot be stored.
+     *
+     * @draft ICU 2.6
+     */
+    le_int32 add(const Locale *locale, le_int32 limit);
+
+protected:
+    virtual void init(le_int32 capacity);
+    virtual void grow(le_int32 capacity);
+
+private:
+    const Locale **fLocales;
+};
+
+
+inline LocaleRuns::LocaleRuns(const Locale **locales, const le_int32 *limits, le_int32 count)
+    : RunArray(limits, count), fLocales(locales)
+{
+    // nothing else to do...
+}
+
+inline LocaleRuns::LocaleRuns(le_int32 initialCapacity)
+    : RunArray(initialCapacity), fLocales(NULL)
+{
+    if (initialCapacity > 0) {
+        fLocales = LE_NEW_ARRAY(const Locale *, initialCapacity);
+    }
+}
+
+inline LocaleRuns::~LocaleRuns()
+{
+    if (! fClientArrays) {
+        LE_DELETE_ARRAY(fLocales);
+        fLocales = NULL;
+    }
+}
+
+/**
  * The <code>ValueRuns</code> class associates integer values with runs of text.
  *
  * @draft ICU 2.6
@@ -324,11 +451,11 @@ class ValueRuns : public RunArray
 public:
     /**
      * Construct a <code>ValueRuns</code> object from pre-existing arrays of values
-     * and limit indicies.
+     * and limit indices.
      *
      * @param values is the address of an array of integer.
      *
-     * @param limits is the address of an array of limit indicies.
+     * @param limits is the address of an array of limit indices.
      *
      * @param count is the number of entries in the two arrays.
      *
@@ -338,9 +465,9 @@ public:
 
     /**
      * Construct an empty <code>ValueRuns</code> object. Clients can add value and limit
-     * indicies arrays using the <code>add</code> method.
+     * indices arrays using the <code>add</code> method.
      *
-     * @param initialCapacity is the initial size of the value and limit indicies arrays. If
+     * @param initialCapacity is the initial size of the value and limit indices arrays. If
      *        this value is zero, no arrays will be allocated.
      *
      * @see add
@@ -361,7 +488,7 @@ public:
      * of text. Use <code>RunArray::getLimit(run)</code> to get the corresponding
      * limit index.
      *
-     * @param run is the index into the font and limit indicies arrays.
+     * @param run is the index into the font and limit indices arrays.
      *
      * @return the integer value associated with the given text run.
      *
@@ -378,11 +505,11 @@ public:
      * <code>RunArray::add(limit)</code> which will create or grow the arrays as needed.
      *
      * If the <code>ValueRuns</code> object was created with a client-supplied
-     * font and limit indicies arrays, this method will return a run index of -1.
+     * font and limit indices arrays, this method will return a run index of -1.
      *
      * Subclasses should not override this method. Rather they should provide a new <code>add</code>
      * method which takes an integer value and a limit index along with whatever other data they implement.
-     * The new <code>add</code> method should first call this method to grow the font and limit indicies
+     * The new <code>add</code> method should first call this method to grow the font and limit indices
      * arrays, and use the returned run index to store data their own arrays.
      *
      * @param value is the integer value to add

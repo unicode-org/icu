@@ -23,21 +23,10 @@
  *
  * The <code>ParagraphLayout</code> object will analyze the text into runs of text in the
  * same font, script and direction, and will create a <code>LayoutEngine</code> object for each run.
- * The <code>LayoutEngine</code> will transform the characers into glyph codes in visual order.
+ * The <code>LayoutEngine</code> will transform the characters into glyph codes in visual order.
  *
  * Clients can use this to break a paragraph into lines, and to display the glyphs in each line.
  *
- */
-
-/*
- * NOTES:
- * * The documentation needs a *lot* of work...
- *
- * * Add some constructors which don't take all the arguments, so that clients don't have
- *   to fuss with the full-blown one if they're not doing anything tricky.
- * 
- * * Might want language (or maybe locale?) runs in the constructor so that language tags
- *   can be passed to the LayoutEngines.
  */
 class ParagraphLayout
 {
@@ -79,6 +68,10 @@ public:
      *        If this pointer in <code>NULL</code> the script runs will be determined using the
      *        Unicode code points.
      *
+     * @param localeRuns is a pointer to a <code>LocaleRuns</code> object representing locale runs.
+     *        The <code>Locale</code> objects are used to determind the language of the text. If this
+     *        pointer is <code>NULL</code> the default locale will be used for all of the text. 
+     *
      * @param paragraphLevel is the directionality of the paragraph, as in the UBiDi object.
      *
      * @param vertical is <code>true</code> if the paragraph should be set vertically.
@@ -94,6 +87,7 @@ public:
                     const FontRuns *fontRuns,
                     const ValueRuns *levelRuns,
                     const ValueRuns *scriptRuns,
+                    const LocaleRuns *localeRuns,
                     UBiDiLevel paragraphLevel, le_bool vertical);
 
     ~ParagraphLayout();
@@ -188,7 +182,7 @@ public:
      * be varied to support arbitrary paragraph shapes.
      *
      * @param width is the width of the line. If <code>width</code> is less than or equal
-     *              to zero, a <code>ParagraphLayout::Line</code> object represnting the
+     *              to zero, a <code>ParagraphLayout::Line</code> object representing the
      *              rest of the paragraph will be returned.
      *
      * @return a <code>ParagraphLayout::Line</code> object which represents the line. The caller
@@ -214,9 +208,13 @@ private:
 
     void computeScripts();
 
+    void computeLocales();
+
     void computeSubFonts(const FontRuns *fontRuns);
 
     void computeMetrics();
+
+    le_int32 getLanguageCode(const Locale *locale);
 
     le_int32 getCharRun(le_int32 charIndex);
 
@@ -228,13 +226,15 @@ private:
     const LEUnicode *fChars;
           le_int32   fCharCount;
 
-    const FontRuns  *fFontRuns;
-    const ValueRuns *fLevelRuns;
-    const ValueRuns *fScriptRuns;
+    const FontRuns   *fFontRuns;
+    const ValueRuns  *fLevelRuns;
+    const ValueRuns  *fScriptRuns;
+    const LocaleRuns *fLocaleRuns;
 
           le_bool fVertical;
           le_bool fClientLevels;
           le_bool fClientScripts;
+          le_bool fClientLocales;
 
           UBiDiLevel *fEmbeddingLevels;
 
@@ -263,8 +263,6 @@ private:
           le_int32       fLastVisualRun;
           float          fVisualRunLastX;
           float          fVisualRunLastY;
-
-    static le_bool fComplexTable[];
 };
 
 inline UBiDiLevel ParagraphLayout::getParagraphLevel()
@@ -396,7 +394,7 @@ inline le_int32 ParagraphLayout::Line::countRuns() const
  * a paragraph. A visual run is text which is in the same font, 
  * script, and direction. The text is represented by an array of
  * <code>LEGlyphIDs</code>, an array of (x, y) glyph positions and
- * a table which maps indicies into the glyph array to indicies into
+ * a table which maps indices into the glyph array to indices into
  * the original character array which was used to create the paragraph.
  *
  * These objects are only created by <code>ParagraphLayout::Line<code> objects,
@@ -471,7 +469,7 @@ public:
 
     /**
      * Get the glyph-to-character map for this visual run. This maps the indices into
-     * the glyph array to indicies into the character array used to create the paragraph.
+     * the glyph array to indices into the character array used to create the paragraph.
      *
      * @return the address of the character-to-glyph map for this visual run. The storage
      *         is owned by the <code>VisualRun</code> object and must not be deleted.
