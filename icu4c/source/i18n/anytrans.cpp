@@ -1,6 +1,6 @@
 /*
 *****************************************************************
-* Copyright (c) 2002-2004, International Business Machines Corporation
+* Copyright (c) 2002-2005, International Business Machines Corporation
 * and others.  All Rights Reserved.
 *****************************************************************
 * Date        Name        Description
@@ -20,6 +20,7 @@
 #include "tridpars.h"
 #include "hash.h"
 #include "putilimp.h"
+#include "uinvchar.h"
 
 //------------------------------------------------------------
 // Constants
@@ -304,10 +305,15 @@ static UScriptCode scriptNameToCode(const UnicodeString& name) {
     char buf[128];
     UScriptCode code;
     UErrorCode ec = U_ZERO_ERROR;
-
-    name.extract(0, 128, buf, 128, "");
-    if (uscript_getCode(buf, &code, 1, &ec) != 1 ||
-        U_FAILURE(ec)) {
+    int32_t nameLen = name.length();
+    UBool isInvariant = uprv_isInvariantUString(name.getBuffer(), nameLen);
+    
+    if (isInvariant) {
+        name.extract(0, nameLen, buf, sizeof(buf), US_INV);
+        buf[127] = 0;   // Make sure that we NULL terminate the string.
+    }
+    if (!isInvariant || uscript_getCode(buf, &code, 1, &ec) != 1 || U_FAILURE(ec))
+    {
         code = USCRIPT_INVALID_CODE;
     }
     return code;
