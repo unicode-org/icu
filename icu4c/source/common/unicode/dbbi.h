@@ -104,23 +104,28 @@ public:
     /**
      * Default constructor.  Creates an "empty" break iterator.
      * Such an iterator can subsequently be assigned to.
+     * @return the newly created DictionaryBaseBreakIterator.
      */
      DictionaryBasedBreakIterator();
 
      /**
       * Copy constructor.
+      * @param other The DictionaryBasedBreakIterator to be copied.
+      * @return the newly created DictionaryBasedBreakIterator.
       */
      DictionaryBasedBreakIterator(const DictionaryBasedBreakIterator &other);
 
     /**
-     * Assignment operator.  Sets this iterator to have the same behavior,
-     * and iterate over the same text, as the one passed in.
+     * Assignment operator. 
+     * @param that The object to be copied.
+     * @return the newly set DictionaryBasedBreakIterator.
      */
     DictionaryBasedBreakIterator& operator=(const DictionaryBasedBreakIterator& that);
 
     /**
      * Returns a newly-constructed RuleBasedBreakIterator with the same
      * behavior, and iterating over the same text, as this one.
+     * @return Returns a newly-constructed RuleBasedBreakIterator.
      */
     virtual BreakIterator* clone(void) const;
 
@@ -197,6 +202,19 @@ protected:
     //
     void init();
 
+    /**
+     * @param stackBuffer user allocated space for the new clone. If NULL new memory will be allocated. 
+     * If buffer is not large enough, new memory will be allocated.
+     * @param BufferSize reference to size of allocated space. 
+     * If BufferSize == 0, a sufficient size for use in cloning will 
+     * be returned ('pre-flighting')
+     * If BufferSize is not enough for a stack-based safe clone, 
+     * new memory will be allocated.
+     * @param status to indicate whether the operation went on smoothly or there were errors
+     *  An informational status value, U_SAFECLONE_ALLOCATED_ERROR, is used if any allocations were 
+     *  necessary.
+     * @return pointer to the new clone
+     */
     virtual BreakIterator *  createBufferClone(void *stackBuffer,
                                                int32_t &BufferSize,
                                                UErrorCode &status);
@@ -210,6 +228,9 @@ private:
      * range.  It stores all the boundary positions it discovers in
      * cachedBreakPositions so that we only have to do this work once
      * for each time we enter the range.
+     * @param startPos The start position of a range of text
+     * @param endPos The end position of a range of text
+     * @param status The error code status
      */
     void divideUpDictionaryRange(int32_t startPos, int32_t endPos, UErrorCode &status);
 

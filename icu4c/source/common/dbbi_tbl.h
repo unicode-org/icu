@@ -44,6 +44,10 @@ public:
     //=======================================================================
     // constructor
     //=======================================================================
+    /* @param dictionaryFilename The name of the dictionary file
+     * @param status The error code
+     * @return the newly created DictionaryBasedBreakIteratorTables
+     **/
     DictionaryBasedBreakIteratorTables(const char*       dictionaryFilename,
                                              UErrorCode& status);
 
@@ -74,6 +78,8 @@ private:
     /**
      * The copy constructor is declared private and not implemented.
      * THIS CLASS MAY NOT BE COPIED.
+     * @param that The DictionaryBasedBreakIteratorTables to be copied.
+     * @return the newly constructed DictionaryBasedBreakIteratorTables.
      */
     DictionaryBasedBreakIteratorTables(const DictionaryBasedBreakIteratorTables& that);
 
@@ -86,6 +92,8 @@ private:
      * The assignment operator is declared private and not implemented.
      * THIS CLASS MAY NOT BE COPIED.
      * Call addReference() and share an existing copy instead.
+     * @that The object to be copied
+     * @return the newly created  DictionaryBasedBreakIteratorTables.
      */
     DictionaryBasedBreakIteratorTables& operator=(
             const DictionaryBasedBreakIteratorTables& that);

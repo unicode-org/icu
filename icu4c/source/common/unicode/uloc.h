@@ -394,11 +394,15 @@ uloc_getLCID(const char* localeID);
 /**
  * Gets the language name suitable for display for the specified locale.
  *
- * @param localeID the locale to get the ISO langauge code with
+ * @param locale the locale to get the ISO langauge code with
+ * @param inLocale Specifies the locale to be used to display the name.  In other words,
+ *                 if the locale's language code is "en", passing Locale::getFrench() for
+ *                 inLocale would result in "Anglais", while passing Locale::getGerman()
+ *                 for inLocale would result in "Englisch".
  * @param language the displayable langauge code for localeID
  * @param languageCapacity the size of the language buffer to store the  
  * displayable language code with
- * @param err error information if retrieving the displayable language code failed
+ * @param status error information if retrieving the displayable language code failed
  * @return the actual buffer size needed for the displayable langauge code.  If it's greater 
  * than languageCapacity, the returned language code will be truncated.  
  * @stable
@@ -413,11 +417,15 @@ uloc_getDisplayLanguage(const char* locale,
 /**
  * Gets the country name suitable for display for the specified locale.
  *
- * @param localeID the locale to get the displayable country code with
+ * @param locale the locale to get the displayable country code with
+ * @param inLocale Specifies the locale to be used to display the name.  In other words,
+ *                 if the locale's language code is "en", passing Locale::getFrench() for
+ *                 inLocale would result in "Anglais", while passing Locale::getGerman()
+ *                 for inLocale would result in "Englisch".
  * @param country the displayable country code for localeID
  * @param languageCapacity the size of the coutry buffer to store the  
  * displayable country code with
- * @param err error information if retrieving the displayable country code failed
+ * @param status error information if retrieving the displayable country code failed
  * @return the actual buffer size needed for the displayable country code.  If it's greater 
  * than countryCapacity, the returned displayable country code will be truncated.  
  * @stable
@@ -433,11 +441,15 @@ uloc_getDisplayCountry(const char* locale,
 /**
  * Gets the variant code suitable for display for the specified locale.
  *
- * @param localeID the locale to get the displayable variant code with
+ * @param locale the locale to get the displayable variant code with
+ * @param inLocale Specifies the locale to be used to display the name.  In other words,
+ *                 if the locale's language code is "en", passing Locale::getFrench() for
+ *                 inLocale would result in "Anglais", while passing Locale::getGerman()
+ *                 for inLocale would result in "Englisch".
  * @param variant the displayable variant code for localeID
  * @param variantCapacity the size of the variant buffer to store the 
  * displayable variant code with
- * @param err error information if retrieving the displayable variant code failed
+ * @param status error information if retrieving the displayable variant code failed
  * @return the actual buffer size needed for the displayable variant code.  If it's greater 
  * than variantCapacity, the returned displayable variant code will be truncated.  
  * @stable
@@ -453,8 +465,12 @@ uloc_getDisplayVariant(const char* locale,
  * Gets the full name suitable for display for the specified locale.
  *
  * @param localeID the locale to get the displayable name with
- * @param variant the displayable name for localeID
- * @param variantCapacity the size of the name buffer to store the 
+ * @param inLocaleID Specifies the locale to be used to display the name.  In other words,
+ *                   if the locale's language code is "en", passing Locale::getFrench() for
+ *                   inLocale would result in "Anglais", while passing Locale::getGerman()
+ *                   for inLocale would result in "Englisch".
+ * @param result the displayable name for localeID
+ * @param maxResultSize the size of the name buffer to store the 
  * displayable full name with
  * @param err error information if retrieving the displayable name failed
  * @return the actual buffer size needed for the displayable name.  If it's greater 

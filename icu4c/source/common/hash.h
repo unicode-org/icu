@@ -28,6 +28,11 @@ class U_COMMON_API Hashtable : public UObject {
     UHashtable* hash;
 
 public:
+    /**
+     * Construct a hashtable
+     * @param ignoreKeyCase If true, keys are case insensitive.
+     * @param status Error code
+    */
     Hashtable(UBool ignoreKeyCase, UErrorCode& status);
 
     /**

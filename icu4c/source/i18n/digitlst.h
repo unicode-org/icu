@@ -66,17 +66,31 @@ public:
     DigitList();
     ~DigitList();
 
+    /* copy constructor
+     * @param DigitList The object to be copied.
+     * @return the newly created object. 
+     */
     DigitList(const DigitList&); // copy constructor
 
+    /* assignment operator
+     * @param DigitList The object to be copied.
+     * @return the newly created object.
+     */
     DigitList& operator=(const DigitList&);  // assignment operator
 
     /**
      * Return true if another object is semantically equal to this one.
+     * @param other The DigitList to be compared for equality
+     * @return true if another object is semantically equal to this one.
+     * return false otherwise.
      */
     UBool operator==(const DigitList& other) const;
 
     /**
      * Return true if another object is semantically unequal to this one.
+     * @param other The DigitList to  be compared for inequality
+     * @return true if another object is semantically unequal to this one.
+     * return false otherwise.
      */
     UBool operator!=(const DigitList& other) const { return !operator==(other); }
 
@@ -92,12 +106,14 @@ public:
     /**
      * Appends digits to the list. Ignores all digits beyond the first DBL_DIG,
      * since they are not significant for either longs or doubles.
+     * @param digit The digit to be appended.
      */
     inline void append(char digit);
 
     /**
      * Utility routine to get the value of the digit list
      * Returns 0.0 if zero length.
+     * @return the value of the digit list.
      */
     double getDouble(void);
 
@@ -105,12 +121,16 @@ public:
      * Utility routine to get the value of the digit list
      * Make sure that fitsIntoLong() is called before calling this function.
      * Returns 0 if zero length.
+     * @return the value of the digit list, return 0 if it is zero length
      */
     int32_t getLong(void);
 
     /**
      * Return true if the number represented by this object can fit into
      * a long.
+     * @param ignoreNegativeZero True if negative zero is ignored.
+     * @return true if the number represented by this object can fit into
+     * a long, return false otherwise.
      */
     UBool fitsIntoLong(UBool ignoreNegativeZero);
 
@@ -118,6 +138,9 @@ public:
      * Utility routine to set the value of the digit list from a double
      * Input must be non-negative, and must not be Inf, -Inf, or NaN.
      * The maximum fraction digits helps us round properly.
+     * @param source The value to be set
+     * @param maximunDigits The maximum number of digits to be shown
+     * @param fixedPoint True if the point is fixed
      */
     void set(double source, int32_t maximumDigits, UBool fixedPoint = TRUE);
 
@@ -125,11 +148,14 @@ public:
      * Utility routine to set the value of the digit list from a long.
      * If a non-zero maximumDigits is specified, no more than that number of
      * significant digits will be produced.
+     * @param source The value to be set
+     * @param maximunDigits The maximum number of digits to be shown
      */
     void set(int32_t source, int32_t maximumDigits = 0);
 
     /**
      * Return true if this is a representation of zero.
+     * @return true if this is a representation of zero.
      */
     UBool isZero(void) const;
 
@@ -143,14 +169,14 @@ public:
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     *
+     * @return a UClassID for the actual class.
      * @draft ICU 2.2
      */
     virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
-     *
+     * @returns a UClassID for this class.
      * @draft ICU 2.2
      */
     static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
@@ -196,6 +222,7 @@ private:
 
     /**
      * Initializes the buffer that records the mimimum long value.
+     * @param maximumDigits The maximum number of digits to be shown.
      */
     /*static void initializeLONG_MIN_REP(void);*/
 

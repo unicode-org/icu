@@ -20,7 +20,7 @@
 #include "unicode/utypes.h"
 
 /* These are the cleanup functions for various APIs. */
-
+/* @return true if cleanup complete successfully.*/
 U_CFUNC UBool unames_cleanup(void);
 
 U_CFUNC UBool unorm_cleanup(void);
@@ -34,6 +34,7 @@ U_CFUNC UBool uloc_cleanup(void);
 U_CFUNC UBool ustring_cleanup(void);
 
 /* @deprecated this functionality is going away */
+/* @return true if cleanup complete successfully*/
 U_CFUNC UBool UnicodeConverter_cleanup(void);
 
 U_CAPI UBool U_EXPORT2 ucnv_cleanup(void);

@@ -59,20 +59,28 @@ typedef void *UMTX;
 
 
 /* Lock a mutex. Pass in NULL if you want the (ick) Single Global
-   Mutex. */
+   Mutex. 
+ * @param mutex The given mutex to be locked
+ */
 U_CAPI void U_EXPORT2 umtx_lock   ( UMTX* mutex ); 
 
 /* Unlock a mutex. Pass in NULL if you want the single global
-   mutex. */
+   mutex. 
+ * @param mutex The given mutex to be unlocked
+ */
 U_CAPI void U_EXPORT2 umtx_unlock ( UMTX* mutex );
 
 /* Initialize a mutex. Use it this way:
-   umtx_init( &aMutex ); */
+   umtx_init( &aMutex ); 
+ * @param mutex The given mutex to be initialized
+ */
 U_CAPI void U_EXPORT2 umtx_init   ( UMTX* mutex );
 
 /* Destroy a mutex. This will free the resources of a mutex.
    Use it this way:
-   umtx_destroy( &aMutex ); */
+   umtx_destroy( &aMutex ); 
+ * @param mutex The given mutex to be destroyed
+ */
 U_CAPI void U_EXPORT2 umtx_destroy( UMTX *mutex );
 
 /* Is a mutex initialized? This function isn't normally needed

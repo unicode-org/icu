@@ -277,6 +277,13 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_openW(const wchar_t* path,
  * This path will be converted to char * using the default converter,
  * then ures_open() is called.
  *
+ * @param path  :  string containing the full path pointing to the directory
+ *                where the resources reside followed by the package name
+ * @param locale: specifies the locale for which we want to open the resource
+ *                if NULL, the default locale will be used. If strlen(locale) == 0
+ *                root locale will be used.
+ * @param status : fills in the outgoing error code.
+ * @return      a newly allocated resource bundle.
  * @stable
  */
 U_CAPI UResourceBundle* U_EXPORT2 ures_openU(const UChar* path, 
@@ -330,7 +337,7 @@ U_CAPI const char* U_EXPORT2 ures_getVersionNumber(const UResourceBundle*   reso
 /**
  * Return the version number associated with this ResourceBundle as a UVersionInfo array.
  *
- * @param resourceBundle The resource bundle for which the version is checked.
+ * @param resB The resource bundle for which the version is checked.
  * @param versionInfo A UVersionInfo array that is filled with the version number
  *                    as specified in the resource bundle or its parent.
  * @stable
@@ -353,6 +360,12 @@ ures_getLocale(const UResourceBundle* resourceBundle, UErrorCode* status);
  * TODO need to revisit usefulness of this function
  *      and usage model for fillIn parameters without knowing sizeof(UResourceBundle)
  * @internal
+ * @param r The resourcebundle to open
+ * @param path String containing the full path pointing to the directory
+ *             where the resources reside followed by the package name
+ * @param localeID specifies the locale for which we want to open the resource
+ * @param status The error code
+ * @return a newly allocated resource bundle or NULL if it doesn't exist.
  */
 U_CAPI void U_EXPORT2 
 ures_openFillIn(UResourceBundle *r, const char* path,
@@ -514,7 +527,7 @@ U_CAPI const UChar* U_EXPORT2 ures_getNextString(UResourceBundle *resourceBundle
 /**
  * Returns the resource in a given resource at the specified index. Features a fill-in parameter. 
  *
- * @param resourceBundle    a resource
+ * @param resB            a resource
  * @param indexR            an index to the wanted resource.
  * @param fillIn            if NULL a new UResourceBundle struct is allocated and must be deleted by the caller.
  *                          Alternatively, you can supply a struct to be filled by this function.

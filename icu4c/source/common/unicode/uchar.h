@@ -1017,6 +1017,8 @@ u_hasBinaryProperty(UChar32 c, UProperty which);
  * Check if a code point has the Alphabetic Unicode property.
  * Same as u_hasBinaryProperty(c, UCHAR_ALPHABETIC).
  * This is different from u_isalpha!
+ * @param c Code point to test
+ * @return true if the code point has the Alphabetic Unicode property, false otherwise
  *
  * @see UCHAR_ALPHABETIC
  * @see u_isalpha
@@ -1030,6 +1032,8 @@ u_isUAlphabetic(UChar32 c);
  * Check if a code point has the Lowercase Unicode property.
  * Same as u_hasBinaryProperty(c, UCHAR_LOWERCASE).
  * This is different from u_islower!
+ * @param c Code point to test
+ * @return true if the code point has the Lowercase Unicode property, false otherwise
  *
  * @see UCHAR_LOWERCASE
  * @see u_islower
@@ -1043,6 +1047,8 @@ u_isULowercase(UChar32 c);
  * Check if a code point has the Uppercase Unicode property.
  * Same as u_hasBinaryProperty(c, UCHAR_UPPERCASE).
  * This is different from u_isupper!
+ * @param c Code point to test
+ * @return true if the code point has the Uppercase Unicode property, false otherwise
  *
  * @see UCHAR_UPPERCASE
  * @see u_isupper
@@ -1056,6 +1062,8 @@ u_isUUppercase(UChar32 c);
  * Check if a code point has the White_Space Unicode property.
  * Same as u_hasBinaryProperty(c, UCHAR_WHITE_SPACE).
  * This is different from both u_isspace and u_isWhitespace!
+ * @param c Code point to test
+ * @return true if the code point has the White_Space Unicode property, false otherwise.
  *
  * @see UCHAR_WHITE_SPACE
  * @see u_isWhitespace
@@ -1075,7 +1083,7 @@ u_isUWhiteSpace(UChar32 c);
  * Determines whether the specified UChar is a lowercase character
  * according to UnicodeData.txt.
  *
- * @param ch    the character to be tested
+ * @param c    the character to be tested
  * @return  true if the character is lowercase; false otherwise.
  * @see UNICODE_VERSION
  * @see u_isupper
@@ -1090,7 +1098,7 @@ u_islower(UChar32 c);
  * Determines whether the specified character is an uppercase character
  * according to UnicodeData.txt.
  *
- * @param ch    the character to be tested
+ * @param c    the character to be tested
  * @return  true if the character is uppercase; false otherwise.
  * @see u_islower
  * @see u_istitle
@@ -1104,7 +1112,7 @@ u_isupper(UChar32 c);
  * Determines whether the specified character is a titlecase character
  * according to UnicodeData.txt.
  *
- * @param ch    the character to be tested
+ * @param c    the character to be tested
  * @return  true if the character is titlecase; false otherwise.
  * @see u_isupper
  * @see u_islower
@@ -1117,7 +1125,7 @@ u_istitle(UChar32 c);
 /**
  * Determines whether the specified character is a digit according to UnicodeData.txt.
  *
- * @param ch    the character to be tested
+ * @param c    the character to be tested
  * @return  true if the character is a digit; false otherwise.
  * @stable
  */
@@ -1128,7 +1136,7 @@ u_isdigit(UChar32 c);
  * Determines whether the specified character is an alphanumeric character
  * (letter or digit)according to UnicodeData.txt.
  *
- * @param ch    the character to be tested
+ * @param c    the character to be tested
  * @return  true if the character is a letter or a digit; false otherwise.
  * @stable
  */
@@ -1139,7 +1147,7 @@ u_isalnum(UChar32 c);
  * Determines whether the specified numeric value is actually a defined character
  * according to UnicodeData.txt.
  *
- * @param ch    the character to be tested
+ * @param c    the character to be tested
  * @return  true if the character has a defined Unicode meaning; false otherwise.
  *
  * @see u_isdigit
@@ -1157,7 +1165,7 @@ u_isdefined(UChar32 c);
  * Determines whether the specified character is a letter
  * according to UnicodeData.txt.
  *
- * @param ch    the character to be tested
+ * @param c    the character to be tested
  * @return  true if the character is a letter; false otherwise.
  *
  * @see u_isdigit
@@ -1170,7 +1178,7 @@ u_isalpha(UChar32 c);
 /**
  * Determines if the specified character is a space character or not.
  *
- * @param ch    the character to be tested
+ * @param c    the character to be tested
  * @return  true if the character is a space character; false otherwise.
  * @stable
  */
@@ -1217,7 +1225,7 @@ u_isWhitespace(UChar32 c);
  * - U_LINE_SEPARATOR (Zl)
  * - U_PARAGRAPH_SEPARATOR (Zp)
  *
- * @param ch    the character to be tested
+ * @param c   the character to be tested
  * @return  true if the Unicode character is a control character; false otherwise.
  *
  * @see u_isprint
@@ -1231,7 +1239,7 @@ u_iscntrl(UChar32 c);
  * Determines whether the specified character is a printable character according 
  * to UnicodeData.txt.
  *
- * @param ch    the character to be tested
+ * @param c   the character to be tested
  * @return  true if the Unicode character is a printable character; false otherwise.
  *
  * @see u_iscntrl
@@ -1244,7 +1252,7 @@ u_isprint(UChar32 c);
  * Determines whether the specified character is of the base form according 
  * to UnicodeData.txt.
  *
- * @param ch    the character to be tested
+ * @param c   the character to be tested
  * @return  true if the Unicode character is of the base form; false otherwise.
  *
  * @see u_isalpha
@@ -1260,6 +1268,9 @@ u_isbase(UChar32 c);
  * Returns the linguistic direction property of a character.
  * For example, 0x0041 (letter A) has the LEFT_TO_RIGHT directional 
  * property.
+ * @param c The character to be tested
+ * @return the linguistic direction property of a character.
+ * @see UCharDirection
  * @see UCharDirection
  * @stable
  */
@@ -1347,6 +1358,8 @@ u_charMirror(UChar32 c);
  * choseong filler character at the beginning of syllables that don't have an initial
  * consonant.  The results may be slightly off with Korean text following different
  * conventions.
+ * @param c The character to be tested
+ * @return a value indicating the display-cell width of the character when used in Asian text
  * @stable
  */
 U_CAPI uint16_t U_EXPORT2
@@ -1443,6 +1456,8 @@ u_charDigitValue(UChar32 c);
 /**
  * Returns the Unicode allocation block that contains the character.
  *
+ * @param ch The character to be tested
+ * @retrun the Unicode allocation block that contains the character
  * @see #UBlockCode
  * @draft ICU 2.0
  */
@@ -1703,7 +1718,7 @@ u_isJavaIDPart(UChar32 c);
  * For example, the case conversion for dot-less i and dotted I in Turkish,
  * or for final sigma in Greek.
  *
- * @param ch    the character to be converted
+ * @param c   the character to be converted
  * @return  the lowercase equivalent of the character, if any;
  *      otherwise the character itself.
  * @stable
@@ -1721,7 +1736,7 @@ u_tolower(UChar32 c);
  * For example, the case conversion for dot-less i and dotted I in Turkish,
  * or ess-zed (i.e., "sharp S") in German.
  *
- * @param ch    the character to be converted
+ * @param c   the character to be converted
  * @return  the uppercase equivalent of the character, if any;
  *      otherwise the character itself.
  * @stable
@@ -1738,7 +1753,7 @@ u_toupper(UChar32 c);
  * A character has a titlecase equivalent if and only if a titlecase mapping
  * is specified for the character in the UnicodeData.txt data.
  *
- * @param ch    the character to be converted
+ * @param c   the character to be converted
  * @return  the titlecase equivalent of the character, if any;
  *      otherwise the character itself.
  * @stable
