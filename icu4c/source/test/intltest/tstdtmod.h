@@ -103,7 +103,6 @@ public:
 
 private:
   UResourceBundle *getTestBundle(const char* bundleName, UErrorCode &status);
-  const char* loadTestData(UErrorCode& err);
 
 private:
   UResourceBundle *fModuleBundle;
