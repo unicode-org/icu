@@ -1072,7 +1072,7 @@ if test "${enable_strict+set}" = set; then
         fi
       
 else
-  ac_use_strict_options=yes
+  ac_use_strict_options=no
 fi
 
     echo "$ac_t""$ac_use_strict_options" 1>&6
