@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/BreakIterator.java,v $
- * $Date: 2004/01/08 22:26:54 $
- * $Revision: 1.26 $
+ * $Date: 2004/01/12 21:18:43 $
+ * $Revision: 1.27 $
  *
  *****************************************************************************************
  */
@@ -28,8 +28,8 @@ import com.ibm.icu.util.ULocale;
  *
  * We provide five built-in types of BreakIterator:
  * <ul><li>getTitleInstance() returns a BreakIterator that locates boundaries
- * between title breaks.</li>
- * <ul><li>getSentenceInstance() returns a BreakIterator that locates boundaries
+ * between title breaks.
+ * <li>getSentenceInstance() returns a BreakIterator that locates boundaries
  * between sentences.  This is useful for triple-click selection, for example.
  * <li>getWordInstance() returns a BreakIterator that locates boundaries between
  * words.  This is useful for double-click selection or "find whole words" searches.
