@@ -1811,6 +1811,14 @@ SOURCE=.\unicode\uidna.h
 
 !IF  "$(CFG)" == "common - Win32 Release"
 
+# Begin Custom Build
+InputPath=.\unicode\uidna.h
+
+"..\..\include\unicode\uidna.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
 !ELSEIF  "$(CFG)" == "common - Win32 Debug"
 
 # Begin Custom Build
@@ -1823,7 +1831,23 @@ InputPath=.\unicode\uidna.h
 
 !ELSEIF  "$(CFG)" == "common - Win64 Release"
 
+# Begin Custom Build
+InputPath=.\unicode\uidna.h
+
+"..\..\include\unicode\uidna.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
 !ELSEIF  "$(CFG)" == "common - Win64 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\uidna.h
+
+"..\..\include\unicode\uidna.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
 
 !ENDIF 
 
@@ -2762,6 +2786,14 @@ SOURCE=.\unicode\usprep.h
 
 !IF  "$(CFG)" == "common - Win32 Release"
 
+# Begin Custom Build
+InputPath=.\unicode\usprep.h
+
+"..\..\include\unicode\usprep.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
 !ELSEIF  "$(CFG)" == "common - Win32 Debug"
 
 # Begin Custom Build
@@ -2774,7 +2806,23 @@ InputPath=.\unicode\usprep.h
 
 !ELSEIF  "$(CFG)" == "common - Win64 Release"
 
+# Begin Custom Build
+InputPath=.\unicode\usprep.h
+
+"..\..\include\unicode\usprep.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
 !ELSEIF  "$(CFG)" == "common - Win64 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\usprep.h
+
+"..\..\include\unicode\usprep.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
 
 !ENDIF 
 
