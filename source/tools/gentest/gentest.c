@@ -5,7 +5,7 @@
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
-*   file name:  genprops.c
+*   file name:  gentest.c
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
@@ -43,7 +43,7 @@ static const UDataInfo dataInfo={
 };
 
 static void usage();
-static void createData();
+static void createData(const char*);
 static bool_t beVerbose=FALSE, haveCopyright=FALSE;
 
 int
