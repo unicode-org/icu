@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2002, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-hpux-acc,v 1.31 2002/07/31 22:01:38 srl Exp $
+## $Id: mh-hpux-acc,v 1.32 2003/05/30 19:11:22 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	:
@@ -15,8 +15,13 @@ SHAREDLIBCXXFLAGS = +z
 
 # Use Extended ANSI mode, which is useful for 64-bit numbers
 # +Olibcalls uses intrinsic functions for strlen and others
+# +W ignores some warnings
+#    495 The linkage directive is ignored for an object or function...
+#    740 Unsafe cast between pointers/references to incomplete classes...
+#    749 This operation is non-portable and potentially unsafe.
+#        (Ironically the solution to fix this warning is non-portable)
 CFLAGS += +Olibcalls -Ae +ESlit
-CXXFLAGS += +Olibcalls
+CXXFLAGS += +Olibcalls +W495 +W740 +W749
 
 ## Commands to compile
 COMPILE.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
