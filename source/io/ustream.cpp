@@ -57,7 +57,7 @@ operator<<(STD_OSTREAM& stream, const UnicodeString& str)
 
                 // write this chunk
                 if(s > buffer) {
-                    stream.write(buffer, s - buffer);
+                    stream.write(buffer, (int32_t)(s - buffer));
                 }
             } while(errorCode == U_BUFFER_OVERFLOW_ERROR);
             u_releaseDefaultConverter(converter);

@@ -306,7 +306,7 @@ u_file_write_flush(    const UChar     *chars,
     int32_t     numConverted = 0;
 
     if (!f->fFile) {
-        int32_t charsLeft = f->str.fLimit - f->str.fPos;
+        int32_t charsLeft = (int32_t)(f->str.fLimit - f->str.fPos);
         if (flush && charsLeft > count) {
             count++;
         }
@@ -421,7 +421,7 @@ ufile_fill_uchar_buffer(UFILE *f)
     if (f->fFileno == 0) {
         /* Special case. Read from stdin one line at a time. */
         char *retStr = fgets(charBuffer, ufmt_min(maxCPBytes, UFILE_CHARBUFFER_SIZE), f->fFile);
-        bytesRead = (retStr ? uprv_strlen(charBuffer) : 0);
+        bytesRead = (int32_t)(retStr ? uprv_strlen(charBuffer) : 0);
     }
     else {
         /* A normal file */

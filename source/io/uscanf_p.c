@@ -393,7 +393,7 @@ u_scanf_double_handler(UFILE        *input,
     ufile_fill_uchar_buffer(input);
 
     /* determine the size of the input's buffer */
-    len = input->str.fLimit - input->str.fPos;
+    len = (int32_t)(input->str.fLimit - input->str.fPos);
 
     /* truncate to the width, if specified */
     if(info->fWidth != -1)
@@ -447,7 +447,7 @@ u_scanf_scientific_handler(UFILE        *input,
     ufile_fill_uchar_buffer(input);
 
     /* determine the size of the input's buffer */
-    len = input->str.fLimit - input->str.fPos;
+    len = (int32_t)(input->str.fLimit - input->str.fPos);
 
     /* truncate to the width, if specified */
     if(info->fWidth != -1)
@@ -510,7 +510,7 @@ u_scanf_scidbl_handler(UFILE        *input,
     ufile_fill_uchar_buffer(input);
 
     /* determine the size of the input's buffer */
-    len = input->str.fLimit - input->str.fPos;
+    len = (int32_t)(input->str.fLimit - input->str.fPos);
 
     /* truncate to the width, if specified */
     if(info->fWidth != -1)
@@ -583,7 +583,7 @@ u_scanf_integer_handler(UFILE       *input,
     ufile_fill_uchar_buffer(input);
 
     /* determine the size of the input's buffer */
-    len = input->str.fLimit - input->str.fPos;
+    len = (int32_t)(input->str.fLimit - input->str.fPos);
 
     /* truncate to the width, if specified */
     if(info->fWidth != -1)
@@ -651,7 +651,7 @@ u_scanf_percent_handler(UFILE       *input,
     ufile_fill_uchar_buffer(input);
 
     /* determine the size of the input's buffer */
-    len = input->str.fLimit - input->str.fPos;
+    len = (int32_t)(input->str.fLimit - input->str.fPos);
 
     /* truncate to the width, if specified */
     if(info->fWidth != -1)
@@ -870,7 +870,7 @@ u_scanf_spellout_handler(UFILE          *input,
     ufile_fill_uchar_buffer(input);
 
     /* determine the size of the input's buffer */
-    len = input->str.fLimit - input->str.fPos;
+    len = (int32_t)(input->str.fLimit - input->str.fPos);
 
     /* truncate to the width, if specified */
     if(info->fWidth != -1)
@@ -921,7 +921,7 @@ u_scanf_hex_handler(UFILE       *input,
     ufile_fill_uchar_buffer(input);
 
     /* determine the size of the input's buffer */
-    len = input->str.fLimit - input->str.fPos;
+    len = (int32_t)(input->str.fLimit - input->str.fPos);
 
     /* truncate to the width, if specified */
     if(info->fWidth != -1)
@@ -976,7 +976,7 @@ u_scanf_octal_handler(UFILE         *input,
     ufile_fill_uchar_buffer(input);
 
     /* determine the size of the input's buffer */
-    len = input->str.fLimit - input->str.fPos;
+    len = (int32_t)(input->str.fLimit - input->str.fPos);
 
     /* truncate to the width, if specified */
     if(info->fWidth != -1)
@@ -1023,7 +1023,7 @@ u_scanf_pointer_handler(UFILE       *input,
     ufile_fill_uchar_buffer(input);
 
     /* determine the size of the input's buffer */
-    len = input->str.fLimit - input->str.fPos;
+    len = (int32_t)(input->str.fLimit - input->str.fPos);
 
     /* truncate to the width, if specified */
     if(info->fWidth != -1) {
