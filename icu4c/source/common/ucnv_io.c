@@ -36,6 +36,7 @@
 #include "cstring.h"
 #include "cmemory.h"
 #include "ucnv_io.h"
+#include "uenumimp.h"
 #include "ucln_cmn.h"
 
 /* Format of cnvalias.icu -----------------------------------------------------
@@ -141,6 +142,12 @@
  *    s 
  *      
  */
+
+typedef struct UAliasContext {
+    uint32_t stanardNum;
+    uint32_t convNum;
+    uint32_t listIdx;
+} UAliasContext;
 
 static const char DATA_NAME[] = "cnvalias";
 static const char DATA_TYPE[] = "icu";
@@ -290,7 +297,7 @@ ucnv_io_cleanup()
     converterListNum        = 0;
     tagListNum              = 0;
     aliasListNum            = 0;
-    untaggedConvArraySize  = 0;
+    untaggedConvArraySize   = 0;
     taggedAliasArraySize    = 0;
     taggedAliasListsSize    = 0;
     stringTableSize         = 0;
@@ -415,8 +422,123 @@ ucnv_io_getConverterName(const char *alias, UErrorCode *pErrorCode) {
         if (convNum < converterListNum) {
             return GET_STRING(converterList[convNum]);
         }
+        /* else converter not found */
     }
     return NULL;
+}
+
+static int32_t U_CALLCONV
+ucnv_io_countStandardAliases(UEnumeration *enumerator, UErrorCode *pErrorCode) {
+    int32_t value = -1;
+    if (!pErrorCode || U_FAILURE(*pErrorCode)) {
+        return -1;
+    }
+    if (enumerator) {
+        UAliasContext *myContext = (UAliasContext *)(enumerator->context);
+        uint32_t listOffset = taggedAliasArray[myContext->stanardNum*converterListNum + myContext->convNum];
+
+        if (listOffset) {
+            value = taggedAliasLists[listOffset];
+        }
+        else {
+            value = 0;
+        }
+    }
+    else {
+        *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
+    }
+    return value;
+}
+
+static const char* U_CALLCONV
+ucnv_io_nextStandardAliases(UEnumeration *enumerator,
+                            int32_t* resultLength,
+                            UErrorCode *pErrorCode)
+{
+    if (!pErrorCode || U_FAILURE(*pErrorCode)) {
+        return NULL;
+    }
+    if (enumerator) {
+        UAliasContext *myContext = (UAliasContext *)(enumerator->context);
+        uint32_t listOffset = taggedAliasArray[myContext->stanardNum*converterListNum + myContext->convNum];
+
+        if (listOffset) {
+            uint32_t listCount = taggedAliasLists[listOffset];
+            const uint16_t *currList = taggedAliasLists + listOffset + 1;
+
+            if (myContext->listIdx < listCount) {
+                return GET_STRING(currList[myContext->listIdx++]);
+            }
+        }
+        /* Either we accessed a zero length list, or we enumerated too far. */
+        *pErrorCode = U_INDEX_OUTOFBOUNDS_ERROR;
+    }
+    else {
+        *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
+    }
+    return NULL;
+}
+
+static void U_CALLCONV
+ucnv_io_resetStandardAliases(UEnumeration *enumerator, UErrorCode *pErrorCode) {
+    if (pErrorCode && U_SUCCESS(*pErrorCode)) {
+        if (enumerator) {
+            ((UAliasContext *)(enumerator->context))->listIdx = 0;
+        }
+        else {
+            *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        }
+    }
+}
+
+static void U_CALLCONV
+ucnv_io_closeUEnumeration(UEnumeration *enumerator) {
+    uprv_free(enumerator->context);
+    uprv_free(enumerator);
+}
+
+/* Enumerate the aliases for the specified converter and standard tag */
+static const UEnumeration gEnumAliases = {
+    NULL,
+    ucnv_io_closeUEnumeration,
+    ucnv_io_countStandardAliases,
+    NULL,
+    ucnv_io_nextStandardAliases,
+    ucnv_io_resetStandardAliases
+};
+
+U_CAPI UEnumeration *
+ucnv_openStandardNames(const char *convName,
+                            const char *standard,
+                            UErrorCode *pErrorCode)
+{
+    UEnumeration *myEnum = NULL;
+    if (haveAliasData(pErrorCode) && isAlias(convName, pErrorCode)) {
+        uint32_t convNum = findConverter(convName, pErrorCode);
+        uint32_t tagNum = getTagNumber(standard);
+        if (tagNum < (tagListNum - NUM_RESERVED_TAGS) && convNum < converterListNum) {
+            UAliasContext *myContext;
+
+            myEnum = uprv_malloc(sizeof(UEnumeration));
+            if (myEnum == NULL) {
+                *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
+                return NULL;
+            }
+            uprv_memcpy(myEnum, &gEnumAliases, sizeof(UEnumeration));
+            myContext = uprv_malloc(sizeof(UAliasContext));
+            if (myContext == NULL) {
+                *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
+                uprv_free(myEnum);
+                return NULL;
+            }
+            myEnum->context = myContext;
+            myContext->stanardNum = tagNum;
+            myContext->convNum = convNum;
+            myContext->listIdx = 0;
+        }
+        /* else converter or tag not found */
+    }
+    return myEnum;
 }
 
 U_CFUNC uint16_t
@@ -430,7 +552,9 @@ ucnv_io_countAliases(const char *alias, UErrorCode *pErrorCode) {
             if (listOffset) {
                 return taggedAliasLists[listOffset];
             }
+            /* else this shouldn't happen. internal program error */
         }
+        /* else converter not found */
     }
     return 0;
 }
@@ -453,7 +577,9 @@ ucnv_io_getAliases(const char *alias, uint16_t start, const char **aliases, UErr
                     aliases[currAlias] = GET_STRING(currList[currAlias]);
                 }
             }
+            /* else this shouldn't happen. internal program error */
         }
+        /* else converter not found */
     }
     return 0;
 }
@@ -476,7 +602,9 @@ ucnv_io_getAlias(const char *alias, uint16_t n, UErrorCode *pErrorCode) {
                 }
                 *pErrorCode = U_INDEX_OUTOFBOUNDS_ERROR;
             }
+            /* else this shouldn't happen. internal program error */
         }
+        /* else converter not found */
     }
     return NULL;
 }
@@ -503,7 +631,7 @@ ucnv_getStandard(uint16_t n, UErrorCode *pErrorCode) {
     return NULL;
 }
 
-U_CFUNC const char * U_EXPORT2
+U_CAPI const char * U_EXPORT2
 ucnv_getStandardName(const char *alias, const char *standard, UErrorCode *pErrorCode) {
     if (haveAliasData(pErrorCode) && isAlias(alias, pErrorCode)) {
         uint32_t idx;
@@ -562,11 +690,11 @@ void
 ucnv_io_flushAvailableConverterCache() {
     if (availableConverters) {
         umtx_lock(NULL);
+        availableConverterCount = 0;
         uprv_free((char **)availableConverters);
         availableConverters = NULL;
         umtx_unlock(NULL);
     }
-    availableConverterCount = 0;
 }
 
 static UBool haveAvailableConverterList(UErrorCode *pErrorCode) {

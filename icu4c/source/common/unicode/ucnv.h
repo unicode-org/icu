@@ -35,6 +35,7 @@ typedef struct UConverter UConverter;
 
 #include "unicode/utypes.h"
 #include "unicode/ucnv_err.h"
+#include "unicode/uenum.h"
 
 U_CDECL_BEGIN
 
@@ -1016,6 +1017,34 @@ ucnv_getAlias(const char *alias, uint16_t n, UErrorCode *pErrorCode);
  */
 U_CAPI void U_EXPORT2 
 ucnv_getAliases(const char *alias, const char **aliases, UErrorCode *pErrorCode);
+
+/**
+ * Return a new UEnumeration object for enumerating all the
+ * alias names for a given converter that are recognized by a standard.
+ * This method only enumerates the listed entries in the alias file.
+ * The convrtrs.txt file can be modified to change the results of
+ * this function.
+ * The first result in this list is the same result given by
+ * <code>ucnv_getStandardName</code>, which is the default alias for
+ * the specified standard name. The returned object must be closed with
+ * <code>uenum_close</code> when you are done with the object.
+ *
+ * @param convName original converter name
+ * @param standard name of the standard governing the names; MIME and IANA
+ *      are such standards
+ * @param pErrorCode The error code
+ * @return A UEnumeration object for getting all aliases that are recognized
+ *      by a standard. If any of the parameters are invalid, NULL
+ *      is returned.
+ * @see ucnv_getStandardName
+ * @see uenum_close
+ * @see uenum_next
+ */
+U_CAPI UEnumeration *
+ucnv_openStandardNames(const char *convName,
+                       const char *standard,
+                       UErrorCode *pErrorCode);
+
 
 /**
  * Gives the number of standards associated to converter names.
