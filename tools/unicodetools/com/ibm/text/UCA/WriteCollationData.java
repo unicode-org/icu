@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCollationData.java,v $ 
-* $Date: 2004/01/13 18:32:11 $ 
-* $Revision: 1.36 $
+* $Date: 2004/01/15 01:08:30 $ 
+* $Revision: 1.37 $
 *
 *******************************************************************************
 */
@@ -109,15 +109,15 @@ public class WriteCollationData implements UCD_Types, UCA_Types {
     
     static public void writeCaseExceptions() {
         System.err.println("Writing Case Exceptions");
-        Normalizer NFKC = new Normalizer(Normalizer.NFKC, UNICODE_VERSION);
+        //Normalizer NFKC = new Normalizer(Normalizer.NFKC, UNICODE_VERSION);
         for (char a = 0; a < 0xFFFF; ++a) {
             if (!ucd.isRepresented(a)) continue;
             //if (0xA000 <= a && a <= 0xA48F) continue; // skip YI
 
             String b = Case.fold(a);
-            String c = NFKC.normalize(b);
+            String c = Default.nfkc.normalize(b);
             String d = Case.fold(c);
-            String e = NFKC.normalize(d);
+            String e = Default.nfkc.normalize(d);
             if (!e.equals(c)) {
                 System.out.println(Utility.hex(a) + "; " + Utility.hex(d, " ") + " # " + ucd.getName(a));
                 /*
@@ -135,7 +135,7 @@ public class WriteCollationData implements UCD_Types, UCA_Types {
                 */
             }
             String f = Case.fold(e);
-            String g = NFKC.normalize(f);
+            String g = Default.nfkc.normalize(f);
             if (!f.equals(d) || !g.equals(e)) System.out.println("!!!!!!SKY IS FALLING!!!!!!");
         }
     }
@@ -187,8 +187,8 @@ public class WriteCollationData implements UCD_Types, UCA_Types {
     
     static public void writeJavascriptInfo() throws IOException {
         System.err.println("Writing Javascript data");
-        Normalizer normKD = new Normalizer(Normalizer.NFKD, UNICODE_VERSION);
-        Normalizer normD = new Normalizer(Normalizer.NFD, UNICODE_VERSION);
+        //Normalizer normKD = new Normalizer(Normalizer.NFKD, UNICODE_VERSION);
+        //Normalizer normD = new Normalizer(Normalizer.NFD, UNICODE_VERSION);
         //log = new PrintWriter(new FileOutputStream("Normalization_data.js"));
         log = Utility.openPrintWriter(UCA_GEN_DIR, "Normalization_data.js", Utility.LATIN1_WINDOWS);
         
@@ -204,9 +204,9 @@ public class WriteCollationData implements UCD_Types, UCA_Types {
         for (char c = 0; c < 0xFFFF; ++c) {
             if ((c & 0xFFF) == 0) System.err.println(Utility.hex(c));
             if (0xAC00 <= c && c <= 0xD7A3) continue;
-            if (!normKD.isNormalized(c)) {
+            if (!Default.nfkd.isNormalized(c)) {
                 ++count;
-                String decomp = normKD.normalize(c);
+                String decomp = Default.nfkd.normalize(c);
                 datasize += decomp.length();
                 if (max < decomp.length()) max = decomp.length();
                 if (decomp.length() > 7) ++over7;
@@ -232,9 +232,9 @@ public class WriteCollationData implements UCD_Types, UCA_Types {
         for (char c = 0; c < 0xFFFF; ++c) {
             if ((c & 0xFFF) == 0) System.err.println(Utility.hex(c));
             if (0xAC00 <= c && c <= 0xD7A3) continue;
-            if (!normD.isNormalized(c)) {
+            if (!Default.nfd.isNormalized(c)) {
                 ++count;
-                String decomp = normD.normalize(c);
+                String decomp = Default.nfd.normalize(c);
                 datasize += decomp.length();
                 if (max < decomp.length()) max = decomp.length();
                 csa.setElementAt(c, (short)count);
@@ -256,7 +256,7 @@ public class WriteCollationData implements UCD_Types, UCA_Types {
         
         for (char c = 0; c < 0xFFFF; ++c) {
             if ((c & 0xFFF) == 0) System.err.println(Utility.hex(c));
-            int canClass = normKD.getCanonicalClass(c);
+            int canClass = Default.nfkd.getCanonicalClass(c);
             if (canClass != 0) {
                 ++count;
                 
@@ -277,7 +277,7 @@ public class WriteCollationData implements UCD_Types, UCA_Types {
         
         /*
 
-        IntHashtable.IntEnumeration enum = normKD.getComposition();
+        IntHashtable.IntEnumeration enum = Default.nfkd.getComposition();
         while (enum.hasNext()) {
             int key = enum.next();
             char val = (char) enum.value();
@@ -530,8 +530,8 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
         }
         int oldStrength = collator.getStrength();
         collator.setStrength(strength);
-        Normalizer nfkd = new Normalizer(Normalizer.NFKD, UNICODE_VERSION);
-        Normalizer nfc = new Normalizer(Normalizer.NFC, UNICODE_VERSION);
+        //Normalizer nfkd = new Normalizer(Normalizer.NFKD, UNICODE_VERSION);
+        //Normalizer nfc = new Normalizer(Normalizer.NFC, UNICODE_VERSION);
         switch (strength) {
             case 1: log.println("<h2>3. Primaries Incompatible with Decompositions</h2>"); break;
             case 2: log.println("<h2>4. Secondaries Incompatible with Decompositions</h2>"); break;
@@ -550,12 +550,12 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
         
         for (int ch = 0; ch < 0x10FFFF; ++ch) {
         	if (!ucd_uca_base.isAllocated(ch)) continue;
-            if (nfkd.isNormalized(ch)) continue;
+            if (Default.nfkd.isNormalized(ch)) continue;
             if (ch > 0xAC00 && ch < 0xD7A3) continue; // skip most of Hangul
             if (alreadySeen.contains(ch)) continue;
             Utility.dot(ch);
             
-            String decomp = nfkd.normalize(ch);
+            String decomp = Default.nfkd.normalize(ch);
             if (ch != ' ' && decomp.charAt(0) == ' ') {
                 skipSet.add(ch);
                 continue; // skip wierd decomps
@@ -608,10 +608,10 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
     }
     
     static String remapSortKey(int cp, boolean decomposition) {
-        if (toD.isNormalized(cp)) return remapCanSortKey(cp, decomposition);
+        if (Default.nfd.isNormalized(cp)) return remapCanSortKey(cp, decomposition);
         
         // we know that it is not NFKD.
-        String canDecomp = toD.normalize(cp);
+        String canDecomp = Default.nfd.normalize(cp);
         String result = "";
         int ch;
         for (int j = 0; j < canDecomp.length(); j += UTF16.getCharCount(ch)) {
@@ -799,9 +799,9 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
                     log.println("compressed: " + comp);
                 }
                 log.println("Ken's     : " + kenStr);
-                String nfkd = NFKD.normalize(s);
+                String nfkd = Default.nfkd.normalize(s);
                 log.println("NFKD      : " + ucd.getCodeAndName(nfkd));
-                String nfd = NFD.normalize(s);
+                String nfd = Default.nfd.normalize(s);
                 if (!nfd.equals(nfkd)) {
                     log.println("NFD       : " + ucd.getCodeAndName(nfd));
                 }
@@ -824,7 +824,7 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
     static final byte getDecompType(int cp) {
         byte result = ucd.getDecompositionType(cp);
         if (result == ucd.CANONICAL) {
-            String d = NFD.normalize(cp); // TODO
+            String d = Default.nfd.normalize(cp); // TODO
             int cp1;
             for (int i = 0; i < d.length(); i += UTF16.getCharCount(cp1)) {
                 cp1 = UTF16.charAt(d, i);
@@ -887,7 +887,7 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
         byte type = getDecompType(UTF16.charAt(s, 0));
         char ch = s.charAt(0);
         
-        String decomp = NFKD.normalize(s);
+        String decomp = Default.nfkd.normalize(s);
         int len = 0;
         int markLen = collator.getCEs(decomp, true, markCes);
         if (compress) markLen = kenCompress(markCes, markLen);
@@ -957,7 +957,7 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
     	log.println("<h2>8. Checking against categories</h2>");
     	log.println("<p>These are not necessarily errors, but should be examined for <i>possible</i> errors</p>");
         log.println("<table border='1' cellspacing='0' cellpadding='2'>");
-        Normalizer nfd = new Normalizer(Normalizer.NFD, UNICODE_VERSION);
+        //Normalizer nfd = new Normalizer(Normalizer.NFD, UNICODE_VERSION);
         
         Set sorted = new TreeSet();
         
@@ -994,14 +994,14 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
     	log.println("<p>These are not necessarily errors, but should be examined for <i>possible</i> errors</p>");
         log.println("<table border='1' cellspacing='0' cellpadding='2'>");
         
-        UCA.UCAContents cc = collator.getContents(UCA.FIXED_CE, toD);
+        UCA.UCAContents cc = collator.getContents(UCA.FIXED_CE, Default.nfd);
         
         Map map = new TreeMap();
         
         while (true) {
             String s = cc.next();
             if (s == null) break;
-            if (!toD.isNormalized(s)) continue; // only unnormalized stuff
+            if (!Default.nfd.isNormalized(s)) continue; // only unnormalized stuff
             if (UTF16.countCodePoint(s) == 1) {
                 int cat = ucd.getCategory(UTF16.charAt(s,0));
                 if (cat == Cn || cat == Cc || cat == Cs) continue;
@@ -1033,7 +1033,7 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
     	log.println("<p>These are not necessarily errors, but should be examined for <i>possible</i> errors</p>");
         log.println("<table border='1' cellspacing='0' cellpadding='2'>");
         
-        UCA.UCAContents cc = collator.getContents(UCA.FIXED_CE, toD);
+        UCA.UCAContents cc = collator.getContents(UCA.FIXED_CE, Default.nfd);
         
         Map map = new TreeMap();
         Map tails = new TreeMap();
@@ -1045,7 +1045,7 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
             String s = cc.next();
             if (s == null) break;
             Utility.dot(counter++);
-            if (!toD.isNormalized(s)) continue; // only normalized stuff
+            if (!Default.nfd.isNormalized(s)) continue; // only normalized stuff
             CEList celist = collator.getCEList(s, true);
             map.put(celist, s);
         }
@@ -1212,11 +1212,11 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
                 
         diLog.write('\uFEFF');
 
-        Normalizer nfd = new Normalizer(Normalizer.NFD, UNICODE_VERSION);
+        //Normalizer nfd = new Normalizer(Normalizer.NFD, UNICODE_VERSION);
         
         int[] ces = new int[50];
         
-        UCA.UCAContents cc = collator.getContents(UCA.FIXED_CE, nfd);
+        UCA.UCAContents cc = collator.getContents(UCA.FIXED_CE, Default.nfd);
         int[] lenArray = new int[1];
         
         diLog.println("# Contractions");
@@ -1261,7 +1261,7 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
         
         //diLog = new PrintWriter(new FileOutputStream(UCA_GEN_DIR + "DisjointIgnorables.txt"));
         
-        Normalizer nfd = new Normalizer(Normalizer.NFD, UNICODE_VERSION);
+        //Normalizer nfd = new Normalizer(Normalizer.NFD, UNICODE_VERSION);
         
         int[] ces = new int[50];
         int[] secondariesZP = new int[400];
@@ -1287,7 +1287,7 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
             String s = String.valueOf(ch);
             int len = collator.getCEs(s, true, ces);
             */
-        UCA.UCAContents cc = collator.getContents(UCA.FIXED_CE, nfd);
+        UCA.UCAContents cc = collator.getContents(UCA.FIXED_CE, Default.nfd);
         int[] lenArray = new int[1];
         
         Set sortedCodes = new TreeSet();
@@ -1432,7 +1432,7 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
 
         //diLog = new PrintWriter(new FileOutputStream(UCA_GEN_DIR + "DisjointIgnorables.txt"));
         
-        Normalizer nfd = new Normalizer(Normalizer.NFD, UNICODE_VERSION);
+        //Normalizer nfd = new Normalizer(Normalizer.NFD, UNICODE_VERSION);
         
         int[] ces = new int[50];
         int[] secondariesZP = new int[400];
@@ -1458,7 +1458,7 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
             String s = String.valueOf(ch);
             int len = collator.getCEs(s, true, ces);
             */
-        UCA.UCAContents cc = collator.getContents(UCA.FIXED_CE, nfd);
+        UCA.UCAContents cc = collator.getContents(UCA.FIXED_CE, Default.nfd);
         int[] lenArray = new int[1];
         
         Set sortedCodes = new TreeSet();
@@ -1628,9 +1628,9 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
         }
     }
     
-    static Normalizer nfdNew = new Normalizer(Normalizer.NFD, "");
-    static Normalizer NFC = new Normalizer(Normalizer.NFC, "");
-    static Normalizer nfkdNew = new Normalizer(Normalizer.NFKD, "");
+    //static Normalizer nfdNew = new Normalizer(Normalizer.NFD, "");
+    //static Normalizer NFC = new Normalizer(Normalizer.NFC, "");
+    //static Normalizer nfkdNew = new Normalizer(Normalizer.NFKD, "");
     
     static int getFirstCELen(int[] ces, int len) {
         if (len < 2) return len;
@@ -1653,8 +1653,8 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
         //if (true) return;
         
         int[] ces = new int[50];
-        Normalizer nfd = new Normalizer(Normalizer.NFD, UNICODE_VERSION);
-        Normalizer nfkd = new Normalizer(Normalizer.NFKD, UNICODE_VERSION);
+        //Normalizer nfd = new Normalizer(Normalizer.NFD, UNICODE_VERSION);
+        //Normalizer nfkd = new Normalizer(Normalizer.NFKD, UNICODE_VERSION);
         
         if (false) {
         int len2 = collator.getCEs("\u2474", true, ces);
@@ -1671,7 +1671,7 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
         Map ordered = new TreeMap(cm);
         
         UCA.UCAContents cc = collator.getContents(UCA.FIXED_CE, 
-            SKIP_CANONICAL_DECOMPOSIBLES ? nfd : null);
+            SKIP_CANONICAL_DECOMPOSIBLES ? Default.nfd : null);
         int[] lenArray = new int[1];
         
         Set alreadyDone = new HashSet();
@@ -1737,7 +1737,7 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
         UnicodeSet composites = new UnicodeSet();
         for (int i = 0; i < 0x10FFFF; ++i) {
         	if (!ucd.isAllocated(i)) continue;
-        	if (nfd.isNormalized(i)) continue;
+        	if (Default.nfd.isNormalized(i)) continue;
         	composites.add(i);
         }
         UnicodeSet CJKcomposites = new UnicodeSet(CJK).retainAll(composites);
@@ -1774,9 +1774,9 @@ F900..FAFF; CJK Compatibility Ideographs
         System.out.println("Adding Kanji");
         for (int i = 0; i < 0x10FFFF; ++i) {
         	if (!ucd.isAllocated(i)) continue;
-        	if (nfkd.isNormalized(i)) continue;
+        	if (Default.nfkd.isNormalized(i)) continue;
         	Utility.dot(i);
-        	String decomp = nfkd.normalize(i);
+        	String decomp = Default.nfkd.normalize(i);
         	int cp;
         	for (int j = 0; j < decomp.length(); j += UTF16.getCharCount(cp)) {
         		cp = UTF16.charAt(decomp, j);
@@ -2438,7 +2438,7 @@ F900..FAFF; CJK Compatibility Ideographs
                     System.out.println("Fix Homeless! No back map for " + CEList.toString(ces[i])
                         + " from " + CEList.toString(ces, len));
                     System.out.println("\t" + ucd.getCodeAndName(chr)
-                        + " => " + ucd.getCodeAndName(nfkdNew.normalize(chr))
+                        + " => " + ucd.getCodeAndName(Default.nfkd.normalize(chr))
                     );
                     s = "[" + Utility.hex(ces[i]) + "]";
         	    } while (false); // exactly one time, just for breaking
@@ -2528,7 +2528,7 @@ F900..FAFF; CJK Compatibility Ideographs
                 "[[:whitespace:][:c:][:z:][[:ascii:]-[a-zA-Z0-9]]]");
             // needsQuoting.remove();
         }
-    	s = NFC.normalize(s);
+    	s = Default.nfc.normalize(s);
         quoteOperandBuffer.setLength(0);
         boolean noQuotes = true;
         boolean inQuote = false;
@@ -2618,8 +2618,8 @@ F900..FAFF; CJK Compatibility Ideographs
             || primary > oldJamo5 && primary <= oldJamo6;
     }
     
-    static Normalizer NFKD = new Normalizer(Normalizer.NFKD, UNICODE_VERSION);
-    static Normalizer NFD = new Normalizer(Normalizer.NFD, UNICODE_VERSION);
+    //static Normalizer NFKD = new Normalizer(Normalizer.NFKD, UNICODE_VERSION);
+    //static Normalizer NFD = new Normalizer(Normalizer.NFD, UNICODE_VERSION);
     
     static int variableHigh = 0;
     static final int COMMON = 5;
@@ -2760,7 +2760,7 @@ F900..FAFF; CJK Compatibility Ideographs
         for (int i = 0; i < 0x10FFFF; ++i) {
             if (!ucd.isNoncharacter(i)) {
                 if (!ucd.isAllocated(i)) continue;
-                if (NFD.isNormalized(i)) continue;
+                if (Default.nfd.isNormalized(i)) continue;
                 if (ucd.isHangulSyllable(i)) continue;
                 //if (collator.getCEType(i) >= UCA.FIXED_CE) continue;
             }
@@ -2795,7 +2795,7 @@ F900..FAFF; CJK Compatibility Ideographs
                 
                 
                 // Skip anything that is not FCD.
-                if (!NFD.isFCD(s)) continue;
+                if (!Default.nfd.isFCD(s)) continue;
                 
                 // We ONLY add if the sort key would be different
                 // Than what we would get if we didn't decompose!!
@@ -3462,59 +3462,13 @@ F900..FAFF; CJK Compatibility Ideographs
     }
     */
     
-/**
-    * Function used to: 
-    * a) collapse the 2 different Han ranges from UCA into one (in the right order), and
-    * b) bump any non-CJK characters by 10FFFF.
-    * The relevant blocks are:
-    * A:	4E00..9FFF; CJK Unified Ideographs
-	*		F900..FAFF; CJK Compatibility Ideographs
-	* B:	3400..4DBF; CJK Unified Ideographs Extension A
-	*		20000..XX;	CJK Unified Ideographs Extension B (and others later on)
-	* As long as
-	*	no new B characters are allocated between 4E00 and FAFF, and
-	*	no new A characters are outside of this range,
-	* (very high probability) this simple code will work.
-	* The reordered blocks are:
-	* Block1 is CJK
-	* Block2 is CJK_COMPAT_USED
-	* Block3 is CJK_A
-	* Any other CJK gets its normal code point
-	* Any non-CJK gets +10FFFF
-	* When we reorder Block1, we make sure that it is at the very start,
-	* so that it will use a 3-byte form.
-	*/
-static int swapCJK(int i) {
-    	
-	if (i >= CJK_BASE) {
-		if (i < CJK_LIMIT)				return i - CJK_BASE;
-			
-		if (i < CJK_COMPAT_USED_BASE)	return i + NON_CJK_OFFSET;
-    		
-		if (i < CJK_COMPAT_USED_LIMIT)	return i - CJK_COMPAT_USED_BASE
-												+ (CJK_LIMIT - CJK_BASE);
-		if (i < CJK_B_BASE)				return i + NON_CJK_OFFSET;
-    		
-		if (i < CJK_B_LIMIT)			return i; // non-BMP-CJK
-    		
-		return i + NON_CJK_OFFSET;	// non-CJK
-	}
-	if (i < CJK_A_BASE)					return i + NON_CJK_OFFSET;
-		
-	if (i < CJK_A_LIMIT)				return i - CJK_A_BASE
-												+ (CJK_LIMIT - CJK_BASE) 
-												+ (CJK_COMPAT_USED_LIMIT - CJK_COMPAT_USED_BASE);
-    return i + NON_CJK_OFFSET; // non-CJK
-}
-    
     // Fractional UCA Generation Constants
     
     static final int
         TOP = 0xA0,
         SPECIAL_BASE = 0xF0,
     
-    	NON_CJK_OFFSET = 0x110000,
-        BYTES_TO_AVOID = 3,
+    	BYTES_TO_AVOID = 3,
         OTHER_COUNT = 256 - BYTES_TO_AVOID,
         LAST_COUNT = OTHER_COUNT / 2,
         LAST_COUNT2 = OTHER_COUNT / 21, // room for intervening, without expanding to 5 bytes
@@ -3533,23 +3487,14 @@ static int swapCJK(int i) {
     // GET IMPLICIT PRIMARY WEIGHTS
     // Return value is left justified primary key
     
-    static int getImplicitPrimary(int cp) {
-
-        if (DEBUG) System.out.println("Incoming: " + Utility.hex(cp));
-        
-        cp = swapCJK(cp);
-        
-        if (DEBUG) System.out.println("CJK swapped: " + Utility.hex(cp));
-        
-        // we now have a range of numbers from 0 to 21FFFF.
-        
-        return getImplicitPrimaryFromSwapped(cp);
-    }
-        
     static Implicit implicit = new Implicit(IMPLICIT_BASE_BYTE, IMPLICIT_MAX_BYTE);
     
+    static int getImplicitPrimary(int cp) {
+        return implicit.getSwappedImplicit(cp);
+    }
+        
 	static int getImplicitPrimaryFromSwapped(int cp) {
-        return implicit.getImplicit(cp);
+        return implicit.getRawImplicit(cp);
     }
         
     
@@ -3563,7 +3508,7 @@ static int swapCJK(int i) {
     
     static void showImplicit2(String title, int cp) {
         System.out.println(title + ":\t" + Utility.hex(cp)
-        	+ " => " + Utility.hex(swapCJK(cp))
+        	+ " => " + Utility.hex(Implicit.swapCJK(cp))
         	+ " => " + Utility.hex(INT_MASK & getImplicitPrimary(cp)));
     }
     
@@ -3627,7 +3572,7 @@ static int swapCJK(int i) {
         		
         		// test swapping
         		
-        		int currSwap = swapCJK(i);
+        		int currSwap = Implicit.swapCJK(i);
         		if (currSwap < oldSwap) {
                 	throw new IllegalArgumentException(Utility.hex(i) + ": overlap: "
                 		+ Utility.hex(oldChar) + " (" + Utility.hex(oldSwap) + ")"
@@ -3686,7 +3631,7 @@ static int swapCJK(int i) {
         // b. toSmallKana(NFKD(x)) != x.
 
     static final boolean needsCaseBit(String x) {
-        String s = NFKD.normalize(x);
+        String s = Default.nfkd.normalize(x);
         if (!ucd.getCase(s, FULL, LOWER).equals(s)) return true;
         if (!toSmallKana(s).equals(s)) return true;
         return false;
@@ -4175,7 +4120,7 @@ static int swapCJK(int i) {
                 continue;
             }
             canIt.setSource(key);
-            String nfdKey = toD.normalize(key);
+            String nfdKey = Default.nfd.normalize(key);
             
             boolean first = true;
             while (true) {
@@ -4187,7 +4132,7 @@ static int swapCJK(int i) {
                 
                 
                 // Skip anything that is not FCD.
-                if (!NFD.isFCD(s)) continue;
+                if (!Default.nfd.isFCD(s)) continue;
                 
                 // We ONLY add if the sort key would be different
                 // Than what we would get if we didn't decompose!!
@@ -4235,11 +4180,11 @@ static int swapCJK(int i) {
             errorCount++;          
         }
         
-        Normalizer nfd = new Normalizer(Normalizer.NFD, UNICODE_VERSION);
+        //Normalizer nfd = new Normalizer(Normalizer.NFD, UNICODE_VERSION);
         
         int[] ces = new int[50];
         
-        UCA.UCAContents cc = collator.getContents(UCA.FIXED_CE, nfd);
+        UCA.UCAContents cc = collator.getContents(UCA.FIXED_CE, Default.nfd);
         int[] lenArray = new int[1];
         
         int minps = Integer.MAX_VALUE;
@@ -4275,7 +4220,7 @@ static int swapCJK(int i) {
             }
         }
         
-        cc = collator.getContents(UCA.FIXED_CE, nfd);
+        cc = collator.getContents(UCA.FIXED_CE, Default.nfd);
         log.println("<table border='1' cellspacing='0' cellpadding='2'>");
         int lastPrimary = 0;
         
@@ -4410,8 +4355,8 @@ A4C6;YI RADICAL KE;So;0;ON;;;;;N;;;;;
     static final char MARK2 = '\u0002';
     //Normalizer normalizer = new Normalizer(Normalizer.NFC, true);
     
-    static Normalizer toC = new Normalizer(Normalizer.NFC, UNICODE_VERSION);
-    static Normalizer toD = new Normalizer(Normalizer.NFD, UNICODE_VERSION);
+    //static Normalizer toC = new Normalizer(Normalizer.NFC, UNICODE_VERSION);
+    //static Normalizer toD = new Normalizer(Normalizer.NFD, UNICODE_VERSION);
     static TreeMap MismatchedC = new TreeMap();
     static TreeMap MismatchedN = new TreeMap();
     static TreeMap MismatchedD = new TreeMap();
@@ -4425,7 +4370,7 @@ A4C6;YI RADICAL KE;So;0;ON;;;;;N;;;;;
     static void addString(String ch, byte option) {
         String colDbase = collator.getSortKey(ch, option, true);
         String colNbase = collator.getSortKey(ch, option, false);
-        String colCbase = collator.getSortKey(toC.normalize(ch), option, false);
+        String colCbase = collator.getSortKey(Default.nfc.normalize(ch), option, false);
         if (!colNbase.equals(colCbase) || !colNbase.equals(colDbase) ) {
             /*System.out.println(Utility.hex(ch));
             System.out.println(printableKey(colNbase));
@@ -4595,7 +4540,7 @@ A4C6;YI RADICAL KE;So;0;ON;;;;;N;;;;;
     }
     
     static void showLine(int count, String ch, String keyD, String keyN) {
-        String decomp = toD.normalize(ch);
+        String decomp = Default.nfd.normalize(ch);
         if (decomp.equals(ch)) decomp = ""; else decomp = "<br><" + Utility.hex(decomp, " ") + "> ";
         log.println("<tr><td>" + count + "</td><td>" 
             + Utility.hex(ch, " ")
@@ -4631,8 +4576,8 @@ A4C6;YI RADICAL KE;So;0;ON;;;;;N;;;;;
             String MN = (String)MismatchedN.get(ch);
             String MC = (String)MismatchedC.get(ch);
             String MD = (String)MismatchedD.get(ch);
-            String chInC = toC.normalize(ch);
-            String chInD = toD.normalize(ch);
+            String chInC = Default.nfc.normalize(ch);
+            String chInD = Default.nfd.normalize(ch);
             
             log.println("<tr><td rowSpan='3' class='bottom'>" + Utility.replace(ucd.getName(ch), ", ", ",<br>")
                 + "</td><td>NFD</td><td>" + Utility.hex(chInD) 
@@ -4665,7 +4610,7 @@ A4C6;YI RADICAL KE;So;0;ON;;;;;N;;;;;
    
     static void showDiff(boolean showName, boolean firstColumn, int line, Object chobj) {
         String ch = chobj.toString();
-        String decomp = toD.normalize(ch);
+        String decomp = Default.nfd.normalize(ch);
         if (showName) {
             if (ch.equals(decomp)) {
                 log.println(//title + counter + " "
