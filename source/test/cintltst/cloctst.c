@@ -406,7 +406,7 @@ setUpDataTable();
         }
         sprintf(temp2, "%x", uloc_getLCID(testLocale));
         if (strcmp(temp2, rawData2[LCID][i]) != 0) {
-            log_data_err("LCID mismatch: %s versus %s\n", temp2 , rawData2[LCID][i]);
+            log_err("LCID mismatch: %s versus %s\n", temp2 , rawData2[LCID][i]);
         }
 
     }
@@ -1158,7 +1158,7 @@ TestKeyInRootRecursive(UResourceBundle *root, const char *rootName,
         errorCode = U_ZERO_ERROR;
         subBundle = ures_getNextResource(currentBundle, NULL, &errorCode);
         if (U_FAILURE(errorCode)) {
-            log_data_err("Can't open a resource for locale %s\n", locale);
+            log_err("Can't open a resource for locale %s\n", locale);
             continue;
         }
         subBundleKey = ures_getKey(subBundle);
@@ -1179,11 +1179,23 @@ TestKeyInRootRecursive(UResourceBundle *root, const char *rootName,
                         || (strcmp(subBundleKey, "TransliterateLATIN") != 0 /* Ignore these special cases */
                         && strcmp(subBundleKey, "BreakDictionaryData") != 0))
                     {
-                        log_data_err("Can't open a resource with key \"%s\" in \"%s\" from root for locale \"%s\" - %s\n",
-                                subBundleKey,
-                                ures_getKey(currentBundle),
-                                locale,
-                                u_errorName(errorCode));
+                        UBool isRoot = strcmp(rootName, "root") == 0;
+                        UBool isSpecial = FALSE;
+                        if (currentBundleKey) {
+                            isSpecial = strcmp(currentBundleKey, "Currencies") == 0
+                                || strcmp(currentBundleKey, "Languages") == 0
+                                || strcmp(currentBundleKey, "Countries") == 0;
+                        }
+
+                        if ((isRoot && !isSpecial)
+                            || (!isRoot && isSpecial))
+                        {
+                            log_err("Can't open a resource with key \"%s\" in \"%s\" from %s for locale \"%s\"\n",
+                                    subBundleKey,
+                                    ures_getKey(currentBundle),
+                                    rootName,
+                                    locale);
+                        }
                     }
                     ures_close(subBundle);
                     continue;
@@ -1585,7 +1597,7 @@ TestLocaleStructure(void) {
             if(U_SUCCESS(errorCode)) {
                 /* It's installed, but there is no data.
                    It's installed for the g18n white paper [grhoten] */
-                log_data_err("ERROR: Locale %-5s not installed, and it should be!\n",
+                log_err("ERROR: Locale %-5s not installed, and it should be!\n",
                     uloc_getAvailable(locIndex));
             } else {
                 log_err("%%%%%%% Unexpected error %d in %s %%%%%%%",
@@ -1858,7 +1870,7 @@ static void VerifyTranslation(void) {
             if(U_SUCCESS(errorCode)) {
                 /* It's installed, but there is no data.
                    It's installed for the g18n white paper [grhoten] */
-                log_data_err("ERROR: Locale %-5s not installed, and it should be!\n",
+                log_err("ERROR: Locale %-5s not installed, and it should be!\n",
                     uloc_getAvailable(locIndex));
             } else {
                 log_err("%%%%%%% Unexpected error %d in %s %%%%%%%",
