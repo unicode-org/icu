@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2003/02/19 00:18:46 $
- * $Revision: 1.121 $
+ * $Date: 2003/04/23 00:20:16 $
+ * $Revision: 1.122 $
  *
  *****************************************************************************************
  */
@@ -2825,6 +2825,19 @@ public class TransliteratorTest extends TestFmwk {
         }
     }
 
+    public void TestAlternateSyntax() {
+        // U+2206 == &
+        // U+2190 == <
+        // U+2192 == >
+        // U+2194 == <>
+        expect("a \u2192 x; b \u2190 y; c \u2194 z",
+               "abc",
+               "xbz");
+        expect("([:^ASCII:]) \u2192 \u2206Name($1);",
+               "<=\u2190; >=\u2192; <>=\u2194; &=\u2206",
+               "<=\\N{LEFTWARDS ARROW}; >=\\N{RIGHTWARDS ARROW}; <>=\\N{LEFT RIGHT ARROW}; &=\\N{INCREMENT}");
+    }
+    
     //======================================================================
     // These tests are not mirrored (yet) in icu4c at
     // source/test/intltest/transtst.cpp

@@ -183,6 +183,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(74,TestRuleWhitespace);
         TESTCASE(75,TestAllCodepoints);
         TESTCASE(76,TestBoilerplate);
+        TESTCASE(77,TestAlternateSyntax);
         default: name = ""; break;
     }
 }
@@ -3911,6 +3912,19 @@ void TransliteratorTest::TestBoilerplate() {
     TEST_TRANSLIT_ID("NFD", NormalizationTransliterator);
     TEST_TRANSLIT_ID("Latin-Greek", CompoundTransliterator);
     TEST_TRANSLIT_RULE("a>b;", RuleBasedTransliterator);
+}
+
+void TransliteratorTest::TestAlternateSyntax() {
+    // U+2206 == &
+    // U+2190 == <
+    // U+2192 == >
+    // U+2194 == <>
+    expect(CharsToUnicodeString("a \\u2192 x; b \\u2190 y; c \\u2194 z"),
+           "abc",
+           "xbz");
+    expect(CharsToUnicodeString("([:^ASCII:]) \\u2192 \\u2206Name($1);"),
+           CharsToUnicodeString("<=\\u2190; >=\\u2192; <>=\\u2194; &=\\u2206"),
+           "<=\\N{LEFTWARDS ARROW}; >=\\N{RIGHTWARDS ARROW}; <>=\\N{LEFT RIGHT ARROW}; &=\\N{INCREMENT}");
 }
 
 //======================================================================
