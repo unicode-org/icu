@@ -25,7 +25,6 @@ U_NAMESPACE_BEGIN
 
 #include "unicode/strenum.h"
 
-
 /*
  ******************************************************************
  */
@@ -107,37 +106,43 @@ class MapEnumeration : public UObject, public StringEnumeration
         return U_SUCCESS(status) ? _count : 0;
     }
 
-    const char* next(UErrorCode& status) {
-        const UnicodeString* us = snext(status);
-        if (us) {
-            int newlen;
-            for (newlen = us->extract((char*)_buffer, _buflen / sizeof(char), NULL, status);
-                 status == U_STRING_NOT_TERMINATED_WARNING || status == U_BUFFER_OVERFLOW_ERROR;
-                 resizeBuffer((newlen + 1) * sizeof(char)));
-      
-            if (U_SUCCESS(status)) {
-                ((char*)_buffer)[newlen] = 0;
-                return (const char*)_buffer;
-            }
+  const char* next(UErrorCode& status) {
+    const UnicodeString* us = snext(status);
+    if (us) {
+      int newlen;
+      for (newlen = us->extract((char*)_buffer, _buflen / sizeof(char), NULL, status);
+           status == U_STRING_NOT_TERMINATED_WARNING || status == U_BUFFER_OVERFLOW_ERROR;)
+        {
+          resizeBuffer((newlen + 1) * sizeof(char));
+          status = U_ZERO_ERROR;
         }
-        return NULL;
+      
+      if (U_SUCCESS(status)) {
+        ((char*)_buffer)[newlen] = 0;
+        return (const char*)_buffer;
+      }
     }
+    return NULL;
+  }
 
-    const UChar* unext(UErrorCode& status) {
-        const UnicodeString* us = snext(status);
-        if (us) {
-            int newlen;
-            for (newlen = us->extract((UChar*)_buffer, _buflen / sizeof(UChar), NULL, status);
-                 status == U_STRING_NOT_TERMINATED_WARNING || status == U_BUFFER_OVERFLOW_ERROR;
-                 resizeBuffer((newlen + 1) * sizeof(UChar)));
-      
-            if (U_SUCCESS(status)) {
-                ((UChar*)_buffer)[newlen] = 0;
-                return (const UChar*)_buffer;
-            }
+  const UChar* unext(UErrorCode& status) {
+    const UnicodeString* us = snext(status);
+    if (us) {
+      int newlen;
+      for (newlen = us->extract((UChar*)_buffer, _buflen / sizeof(UChar), NULL, status);
+           status == U_STRING_NOT_TERMINATED_WARNING || status == U_BUFFER_OVERFLOW_ERROR;)
+        {
+          resizeBuffer((newlen + 1) * sizeof(UChar));
+          status = U_ZERO_ERROR;
         }
-        return NULL;
+      
+      if (U_SUCCESS(status)) {
+        ((UChar*)_buffer)[newlen] = 0;
+        return (const UChar*)_buffer;
+      }
     }
+    return NULL;
+  }
 
     const UnicodeString* snext(UErrorCode& status) 
     {
@@ -614,6 +619,24 @@ ICUService::getKey(Key& key, UnicodeString* actualReturn, UErrorCode& status) co
   return getKey(key, actualReturn, NULL, status);
 }
 
+// make it possible to call reentrantly
+class XMutex : public UMemory {
+public:
+  inline XMutex(UMTX *mutex, UBool reentering) 
+    : fMutex(mutex)
+    , fActive(!reentering) 
+  {
+    if (fActive) umtx_lock(fMutex);
+  }
+  inline ~XMutex() {
+    if (fActive) umtx_unlock(fMutex);
+  }
+
+private:
+  UMTX  *fMutex;
+  UBool fActive;
+};
+
 UObject* 
 ICUService::getKey(Key& key, UnicodeString* actualReturn, const Factory* factory, UErrorCode& status) const 
 {
@@ -625,10 +648,6 @@ ICUService::getKey(Key& key, UnicodeString* actualReturn, const Factory* factory
     return handleDefault(key, actualReturn, status);
   }
 
-#ifdef DEBUG_SERVICE
-  fprintf(stderr, "Service: " + name + " key: " + key);
-#endif
-   
   ICUService* ncthis = (ICUService*)this; // cast away semantic const
 
   CacheEntry* result = NULL;
@@ -639,16 +658,15 @@ ICUService::getKey(Key& key, UnicodeString* actualReturn, const Factory* factory
     // ICU doesn't have monitors so we can't use rw locks, so 
     // we single-thread everything using this service, for now.
 	
-	// if factory is not null, we're calling from within the mutex,
-	// and since some unix machines don't have reentrant mutexes we
-	// need to make sure not to try to lock it again.
-	if (!factory) umtx_lock(&ncthis->lock);
+    // if factory is not null, we're calling from within the mutex,
+    // and since some unix machines don't have reentrant mutexes we
+    // need to make sure not to try to lock it again.
+    XMutex(&ncthis->lock, factory != NULL);
 
     if (serviceCache == NULL) {
       ncthis->serviceCache = new Hashtable(FALSE, status);
       if (U_FAILURE(status)) {
         delete serviceCache;
-		if (!factory) umtx_unlock(&ncthis->lock);
         return NULL;
       }
       serviceCache->setValueDeleter(cacheDeleter);
@@ -657,10 +675,6 @@ ICUService::getKey(Key& key, UnicodeString* actualReturn, const Factory* factory
     UnicodeString currentDescriptor;
     UVector* cacheDescriptorList = NULL;
     UBool putInCache = FALSE;
-
-#ifdef DEBUG_SERVICE
-    int32_t NDebug = 0;
-#endif
 
     int32_t startIndex = 0;
     int32_t limit = factories->size();
@@ -676,7 +690,6 @@ ICUService::getKey(Key& key, UnicodeString* actualReturn, const Factory* factory
       if (startIndex == 0) {
         // throw new InternalError("Factory " + factory + "not registered with service: " + this);
         status = U_ILLEGAL_ARGUMENT_ERROR;
-		if (!factory) umtx_unlock(&ncthis->lock);
         return NULL;
       }
       cacheResult = FALSE;
@@ -685,19 +698,9 @@ ICUService::getKey(Key& key, UnicodeString* actualReturn, const Factory* factory
     do {
       currentDescriptor.remove();
       key.currentDescriptor(currentDescriptor);
-#ifdef DEBUG_SERVICE
-      fprintf(stderr, name + "[" + NDebug++ + "] looking for: " + currentDescriptor);
-#endif
       result = (CacheEntry*)serviceCache->get(currentDescriptor);
       if (result != NULL) {
-#ifdef DEBUG_SERVICE
-        fprintf(stderr, name + " found with descriptor: " + currentDescriptor);
-#endif
         break;
-      } else {
-#ifdef DEBUG_SERVICE
-        fprintf(stderr, "did not find: " + currentDescriptor + " in cache");
-#endif
       }
 
       // first test of cache failed, so we'll have to update
@@ -709,13 +712,9 @@ ICUService::getKey(Key& key, UnicodeString* actualReturn, const Factory* factory
       int32_t index = startIndex;
       while (index < limit) {
         Factory* f = (Factory*)factories->elementAt(index++);
-#ifdef DEBUG_SERVICE
-        fprintf("trying factory[" + (index-1) + "] " + f.toString());
-#endif
         UObject* service = f->create(key, this, status);
         if (U_FAILURE(status)) {
           delete cacheDescriptorList;
-  		  if (!factory) umtx_unlock(&ncthis->lock);
           return NULL;
         }
         if (service != NULL) {
@@ -724,18 +723,10 @@ ICUService::getKey(Key& key, UnicodeString* actualReturn, const Factory* factory
             delete service;
             delete cacheDescriptorList;
             status = U_MEMORY_ALLOCATION_ERROR;
-		    if (!factory) umtx_unlock(&ncthis->lock);
             return NULL;
           }
 
-#ifdef DEBUG_SERVICE
-          fprintf(stderr, name + " factory supported: " + currentDescriptor + ", caching");
-#endif
           goto outerEnd;
-        } else {
-#ifdef DEBUG_SERVICE
-          fprintf(stderr, "factory did not support: " + currentDescriptor);
-#endif
         }
       }
 
@@ -747,7 +738,6 @@ ICUService::getKey(Key& key, UnicodeString* actualReturn, const Factory* factory
       if (cacheDescriptorList == NULL) {
         cacheDescriptorList = new UVector(uhash_deleteUnicodeString, NULL, 5, status);
         if (U_FAILURE(status)) {
-		  if (!factory) umtx_unlock(&ncthis->lock);
           return NULL;
         }
       }
@@ -755,14 +745,12 @@ ICUService::getKey(Key& key, UnicodeString* actualReturn, const Factory* factory
       if (idToCache == NULL || idToCache->isBogus()) {
         delete cacheDescriptorList;
         status = U_MEMORY_ALLOCATION_ERROR;
-		if (!factory) umtx_unlock(&ncthis->lock);
         return NULL;
       }
 
       cacheDescriptorList->addElement(idToCache, status);
       if (U_FAILURE(status)) {
         delete cacheDescriptorList;
-		if (!factory) umtx_unlock(&ncthis->lock);
         return NULL;
       }
     } while (key.fallback());
@@ -774,21 +762,16 @@ ICUService::getKey(Key& key, UnicodeString* actualReturn, const Factory* factory
         if (U_FAILURE(status)) {
           delete result;
           delete cacheDescriptorList;
-		  if (!factory) umtx_unlock(&ncthis->lock);
-		  return NULL;
+          return NULL;
         }
 
         if (cacheDescriptorList != NULL) {
           for (int32_t i = cacheDescriptorList->size(); --i >= 0;) {
             UnicodeString* desc = (UnicodeString*)cacheDescriptorList->elementAt(i);
-#ifdef DEBUG_SERVICE
-            fprintf(stderr, name + " adding descriptor: '" + desc + "' for actual: '" + result.actualDescriptor + "'");
-#endif
             serviceCache->put(*desc, result, status);
             if (U_FAILURE(status)) {
               delete result;
               delete cacheDescriptorList;
-		      if (!factory) umtx_unlock(&ncthis->lock);
               return NULL;
             }
 
@@ -814,23 +797,13 @@ ICUService::getKey(Key& key, UnicodeString* actualReturn, const Factory* factory
 
         if (actualReturn->isBogus()) {
           status = U_MEMORY_ALLOCATION_ERROR;
-		  if (!factory) umtx_unlock(&ncthis->lock);
           return NULL;
         }
       }
 
-#ifdef DEBUG_SERVICE
-      fprintf(stderr, "found in service: " + name);
-#endif
-	  if (!factory) umtx_unlock(&ncthis->lock);
       return cloneInstance(result->service);
     }
   }
-  if (!factory) umtx_unlock(&ncthis->lock);
-
-#ifdef DEBUG_SERVICE
-  fprintf(stderr, "not found in service: " + name);
-#endif
 
   return handleDefault(key, actualReturn, status);
 }
@@ -840,7 +813,6 @@ ICUService::handleDefault(const Key& key, UnicodeString* actualIDReturn, UErrorC
 {
   return NULL;
 }
-
   
 UVector& 
 ICUService::getVisibleIDs(UVector& result, UErrorCode& status) const {
