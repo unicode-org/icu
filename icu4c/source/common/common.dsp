@@ -167,6 +167,10 @@ SOURCE=.\chariter.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\cmemory.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\convert.cpp
 # End Source File
 # Begin Source File
