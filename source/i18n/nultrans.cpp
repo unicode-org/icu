@@ -20,7 +20,7 @@ int32_t NullTransliterator::transliterate(Replaceable&, int32_t,
     return limit;
 }
 
-void NullTransliterator::handleKeyboardTransliterate(Replaceable&,
-                                 int32_t offsets[3]) const {
+void NullTransliterator::handleTransliterate(Replaceable&,
+                                             int32_t offsets[3]) const {
     offsets[CURSOR] = offsets[LIMIT];
 }

@@ -52,6 +52,7 @@ CompoundTransliterator::CompoundTransliterator(const UnicodeString& ID,
                                   direction);
     }
     delete[] list;
+    computeMaximumContextLength();
 }
 
 /**
@@ -185,6 +186,7 @@ void CompoundTransliterator::adoptTransliterators(Transliterator* adoptedTransli
     freeTransliterators();
     trans = adoptedTransliterators;
     count = transCount;
+    computeMaximumContextLength();
 }
 
 /**
@@ -205,10 +207,10 @@ int32_t CompoundTransliterator::transliterate(Replaceable& text,
 }
 
 /**
- * Implements {@link Transliterator#handleKeyboardTransliterate}.
+ * Implements {@link Transliterator#handleTransliterate}.
  */
-void CompoundTransliterator::handleKeyboardTransliterate(Replaceable& text,
-                                                         int32_t index[3]) const {
+void CompoundTransliterator::handleTransliterate(Replaceable& text,
+                                                 int32_t index[3]) const {
     /* Call each transliterator with the same start value and
      * initial cursor index, but with the limit index as modified
      * by preceding transliterators.  The cursor index must be
@@ -302,7 +304,7 @@ void CompoundTransliterator::handleKeyboardTransliterate(Replaceable& text,
         index[CURSOR] = cursor; // Reset cursor
         index[LIMIT] = limit;
         
-        trans[i]->handleKeyboardTransliterate(text, index);
+        trans[i]->handleTransliterate(text, index);
         
         // Adjust overall limit for insertions/deletions
         globalLimit += index[LIMIT] - limit;
@@ -323,12 +325,10 @@ void CompoundTransliterator::handleKeyboardTransliterate(Replaceable& text,
 }
 
 /**
- * Returns the length of the longest context required by this transliterator.
+ * Sets the length of the longest context required by this transliterator.
  * This is <em>preceding</em> context.
- * @return maximum number of preceding context characters this
- * transliterator needs to examine
  */
-int32_t CompoundTransliterator::getMaximumContextLength(void) const {
+void CompoundTransliterator::computeMaximumContextLength(void) {
     int32_t max = 0;
     for (int32_t i=0; i<count; ++i) {
         int32_t len = trans[i]->getMaximumContextLength();
@@ -336,5 +336,5 @@ int32_t CompoundTransliterator::getMaximumContextLength(void) const {
             max = len;
         }
     }
-    return max;
+    setMaximumContextLength(max);
 }

@@ -53,10 +53,10 @@ public:
                                   int32_t start, int32_t limit) const;
 
     /**
-     * Implements {@link Transliterator#handleKeyboardTransliterate}.
+     * Implements {@link Transliterator#handleTransliterate}.
      */
-    virtual void handleKeyboardTransliterate(Replaceable& text,
-                                             int32_t offsets[3]) const;
+    virtual void handleTransliterate(Replaceable& text,
+                                     int32_t offsets[3]) const;
 };
 
 inline NullTransliterator::NullTransliterator() : Transliterator(_ID, 0) {}

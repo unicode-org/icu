@@ -98,13 +98,13 @@ class U_I18N_API UVector;
  * is 'h', the tau changes to a theta.  This is accomplished by
  * maintaining a cursor position (independent of the insertion point,
  * and invisible in the GUI) across calls to
- * <code>keyboardTransliterate()</code>.  Typically, the cursor will
+ * <code>transliterate()</code>.  Typically, the cursor will
  * be coincident with the insertion point, but in a case like the one
  * above, it will precede the insertion point.
  *
  * <p>Keyboard transliteration methods maintain a set of three indices
  * that are updated with each call to
- * <code>keyboardTransliterate()</code>, including the cursor, start,
+ * <code>transliterate()</code>, including the cursor, start,
  * and limit.  Since these indices are changed by the method, they are
  * passed in an <code>int[]</code> array. The <code>START</code> index
  * marks the beginning of the substring that the transliterator will
@@ -127,7 +127,7 @@ class U_I18N_API UVector;
  * for more characters to arrive.  When the client code knows that no
  * more characters are forthcoming, perhaps because the user has
  * performed some input termination operation, then it should call
- * <code>finishKeyboardTransliteration()</code> to complete any
+ * <code>finishTransliteration()</code> to complete any
  * pending transliterations.
  *
  * <p><b>Inverses</b>
@@ -208,13 +208,13 @@ class U_I18N_API UVector;
  *
  * <p><b>Subclassing</b>
  *
- * <p>Subclasses must implement the abstract
- * <code>transliterate()</code> method.  They should also override the
- * <code>transliterate()</code> method taking a <code>String</code>
- * and <code>StringBuffer</code> if the performance of these methods
- * can be improved over the performance obtained by the default
- * implementations in this class.  Subclasses must also implement
- * <code>handleKeyboardTransliterate()</code>.
+ * Subclasses must implement the abstract method
+ * <code>handleTransliterate()</code>.  <p>Subclasses should override
+ * the <code>transliterate()</code> method taking a
+ * <code>Replaceable</code> and the <code>transliterate()</code>
+ * method taking a <code>String</code> and <code>StringBuffer</code>
+ * if the performance of these methods can be improved over the
+ * performance obtained by the default implementations in this class.
  *
  * @author Alan Liu
  */
@@ -235,24 +235,24 @@ public:
 
     enum {
         /**
-         * In the <code>keyboardTransliterate()</code>
+         * In the <code>transliterate()</code>
          * <code>index[]</code> array, the beginning index, inclusive
-         * @see #keyboardTransliterate
+         * @see #transliterate
          */
         START = 0,
 
         /**
-         * In the <code>keyboardTransliterate()</code>
+         * In the <code>transliterate()</code>
          * <code>index[]</code> array, the ending index, exclusive
-         * @see #keyboardTransliterate
+         * @see #transliterate
          */
         LIMIT = 1,
 
         /**
-         * In the <code>keyboardTransliterate()</code>
+         * In the <code>transliterate()</code>
          * <code>index[]</code> array, the next character to be considered
          * for transliteration
-         * @see #keyboardTransliterate
+         * @see #transliterate
          */
         CURSOR = 2
     };
@@ -271,6 +271,8 @@ private:
      * <tt>null</tt> then no filtering is applied.
      */
     UnicodeFilter* filter;
+
+    int32_t maximumContextLength;
 
     /**
      * Dictionary of known transliterators.  Keys are <code>String</code>
@@ -442,7 +444,9 @@ public:
 
     /**
      * Transliterates a segment of a string, with optional filtering.
-     * Subclasses must override this abstract method.
+     * The default implementation simply calls <code>handleTransliterate</code>.
+     * Subclasses that can supply a more efficient implementation should
+     * override this method.
      *
      * @param text the string to be transliterated
      * @param start the beginning index, inclusive; <code>0 <= start
@@ -459,7 +463,7 @@ public:
      * <em>new-limit</em> is the return value.
      */
     virtual int32_t transliterate(Replaceable& text,
-                                  int32_t start, int32_t limit) const = 0;
+                                  int32_t start, int32_t limit) const;
 
     /**
      * Transliterates an entire string. Convenience method.
@@ -509,7 +513,7 @@ public:
      * method, there may be untransliterated text that is waiting for
      * more input to resolve an ambiguity.  In order to perform these
      * pending transliterations, clients should call {@link
-     * #finishKeyboardTransliteration} after the last call to this
+     * #finishTransliteration} after the last call to this
      * method has been made.
      * 
      * @param text the buffer holding transliterated and untransliterated text
@@ -536,74 +540,74 @@ public:
      * @see #START
      * @see #LIMIT
      * @see #CURSOR
-     * @see #handleKeyboardTransliterate
+     * @see #handleTransliterate
      * @exception IllegalArgumentException if <code>index[]</code>
      * is invalid
      */
-    virtual void keyboardTransliterate(Replaceable& text,
-                                       int32_t index[3],
-                                       const UnicodeString& insertion,
-                                       UErrorCode& status) const;
+    virtual void transliterate(Replaceable& text,
+                               int32_t index[3],
+                               const UnicodeString& insertion,
+                               UErrorCode& status) const;
 
     /**
      * Transliterates the portion of the text buffer that can be
      * transliterated unambiguosly after a new character has been
      * inserted, typically as a result of a keyboard event.  This is a
      * convenience method; see {@link
-     * #keyboardTransliterate(Replaceable, int[], String)} for details.
+     * #transliterate(Replaceable, int[], String)} for details.
      * @param text the buffer holding transliterated and
      * untransliterated text
      * @param index an array of three integers.  See {@link
-     * #keyboardTransliterate(Replaceable, int[], String)}.
+     * #transliterate(Replaceable, int[], String)}.
      * @param insertion text to be inserted and possibly
      * transliterated into the translation buffer at
      * <code>index[LIMIT]</code>.
-     * @see #keyboardTransliterate(Replaceable, int[], String)
+     * @see #transliterate(Replaceable, int[], String)
      */
-    virtual void keyboardTransliterate(Replaceable& text, int32_t index[3],
-                                       UChar insertion,
-                                       UErrorCode& status) const;
-
+    virtual void transliterate(Replaceable& text, int32_t index[3],
+                               UChar insertion,
+                               UErrorCode& status) const;
+    
     /**
      * Transliterates the portion of the text buffer that can be
      * transliterated unambiguosly.  This is a convenience method; see
-     * {@link #keyboardTransliterate(Replaceable, int[], String)} for
+     * {@link #transliterate(Replaceable, int[], String)} for
      * details.
      * @param text the buffer holding transliterated and
      * untransliterated text
      * @param index an array of three integers.  See {@link
-     * #keyboardTransliterate(Replaceable, int[], String)}.
-     * @see #keyboardTransliterate(Replaceable, int[], String)
+     * #transliterate(Replaceable, int[], String)}.
+     * @see #transliterate(Replaceable, int[], String)
      */
-    virtual void keyboardTransliterate(Replaceable& text, int32_t index[3],
-                                       UErrorCode& status) const;
+    virtual void transliterate(Replaceable& text, int32_t index[3],
+                               UErrorCode& status) const;
 
     /**
      * Finishes any pending transliterations that were waiting for
      * more characters.  Clients should call this method as the last
      * call after a sequence of one or more calls to
-     * <code>keyboardTransliterate()</code>.
+     * <code>transliterate()</code>.
      * @param text the buffer holding transliterated and
      * untransliterated text.
      * @param index the array of indices previously passed to {@link
-     * #keyboardTransliterate}
+     * #transliterate}
      */
-    virtual void finishKeyboardTransliteration(Replaceable& text,
-                                               int32_t index[3]) const;
+    virtual void finishTransliteration(Replaceable& text,
+                                       int32_t index[3]) const;
 
 private:
 
     /**
-     * This internal method does keyboard transliteration.  If the
+     * This internal method does incremental transliteration.  If the
      * 'insertion' is non-null then we append it to 'text' before
      * proceeding.  This method calls through to the pure virtual
-     * framework method handleKeyboardTransliterate() to do the actual
+     * framework method handleTransliterate() to do the actual
      * work.
      */
-    void _keyboardTransliterate(Replaceable& text,
-                                int32_t index[3],
-                                const UnicodeString* insertion,
-                                UErrorCode &status) const;
+    void _transliterate(Replaceable& text,
+                        int32_t index[3],
+                        const UnicodeString* insertion,
+                        UErrorCode &status) const;
 
 protected:
 
@@ -627,15 +631,15 @@ protected:
      * @param text the buffer holding transliterated and
      * untransliterated text
      * @param index an array of three integers.  See {@link
-     * #keyboardTransliterate(Replaceable, int[], String)}.
-     * @see #keyboardTransliterate
+     * #transliterate(Replaceable, int[], String)}.
+     * @see #transliterate
      */
-    virtual void handleKeyboardTransliterate(Replaceable& text,
-                                             int32_t index[3]) const = 0;
+    virtual void handleTransliterate(Replaceable& text,
+                                     int32_t index[3]) const = 0;
 
     // C++ requires this friend declaration so CompoundTransliterator
-    // can access handleKeyboardTransliterate.  Alternatively, we could
-    // make handleKeyboardTransliterate public.
+    // can access handleTransliterate.  Alternatively, we could
+    // make handleTransliterate public.
     friend class CompoundTransliterator;
 
 public:
@@ -652,7 +656,17 @@ public:
      * @return The maximum number of preceding context characters this
      * transliterator needs to examine
      */
-    virtual int32_t getMaximumContextLength(void) const;
+    int32_t getMaximumContextLength(void) const;
+
+protected:
+
+    /**
+     * Method for subclasses to use to set the maximum context length.
+     * @see #getMaximumContextLength
+     */
+    void setMaximumContextLength(int32_t maxContextLength);
+
+public:
 
     /**
      * Returns a programmatic identifier for this transliterator.
@@ -865,6 +879,14 @@ public:
      */
     static const UnicodeString& getAvailableID(int32_t index);
 
+protected:
+
+    /**
+     * Method for subclasses to use to obtain a character in the given
+     * string, with filtering.
+     */
+    UChar filteredCharAt(const Replaceable& text, int32_t i) const;
+
 private:
     /**
      * Comparison function for UVector.  Compares two UnicodeString
@@ -874,5 +896,9 @@ private:
 
     static void initializeCache(void);
 };
+
+inline int32_t Transliterator::getMaximumContextLength(void) const {
+    return maximumContextLength;
+}
 
 #endif
