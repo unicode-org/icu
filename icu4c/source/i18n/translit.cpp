@@ -24,6 +24,8 @@
 #include "unicode/nultrans.h"
 #include "unicode/putil.h"
 #include "unicode/cpdtrans.h"
+#include "unicode/jamohang.h"
+#include "unicode/hangjamo.h"
 
 /**
  * Dictionary of known transliterators.  Keys are <code>String</code>
@@ -893,6 +895,8 @@ void Transliterator::initializeCache(void) {
     status = U_ZERO_ERROR; // Reset status for following calls
     _registerInstance(new HexToUnicodeTransliterator(), status);
     _registerInstance(new UnicodeToHexTransliterator(), status);
+    _registerInstance(new JamoHangulTransliterator(), status);
+    _registerInstance(new HangulJamoTransliterator(), status);
     _registerInstance(new NullTransliterator(), status);
 
     cacheInitialized = TRUE;
