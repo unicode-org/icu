@@ -26,14 +26,16 @@ typedef struct  {
 } UColTokListHeader;
 
 struct UColToken {
-  UColToken* previous;
-  UColToken* next;
+  UChar debugSource;
+  UChar debugExpansion;
   uint32_t source;
   uint32_t expansion;
+  uint32_t expandNext;
   int32_t strength;
   int32_t polarity; /* 1 for <, <<, <<<, , ; and -1 for >, >>, >>> */
   UColTokListHeader *listHeader;
-  UBool expandNext;
+  UColToken* previous;
+  UColToken* next;
 };
 
 

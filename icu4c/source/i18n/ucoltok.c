@@ -142,6 +142,10 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
       UBool inChars = TRUE;
       UBool inQuote = FALSE;
 
+      newStrength = UCOL_TOK_UNSET; 
+      newCharsLen = 0; newExtensionsLen = 0;
+      charsOffset = 0; extensionOffset = 0;
+
       while (src->current < src->end) {
           UChar ch = *(src->current);
 
@@ -225,6 +229,9 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
                 charsOffset = src->current - src->source;
                 newCharsLen++;
               } else if (inChars) {
+                if(newCharsLen == 0) {
+                  charsOffset = src->current - src->source;
+                }
                 newCharsLen++;
               } else {
                 newExtensionsLen++;
@@ -284,6 +291,7 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
 
       /*  4 Lookup each [source,  expansion] in the CharsToToken map, and find a sourceToken */
       sourceToken = (UColToken *)uhash_get(uchars2tokens, &key);
+
       if(newStrength != UCOL_TOK_RESET) {
         if(lastToken == NULL) { /* this means that rules haven't started properly */
           *status = U_INVALID_FORMAT_ERROR;
@@ -295,6 +303,10 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
           sourceToken = (UColToken *)uprv_malloc(sizeof(UColToken));
           sourceToken->source = newCharsLen << 24 | charsOffset;
           sourceToken->expansion = newExtensionsLen << 24 | extensionOffset;
+
+          sourceToken->debugSource = *(src->source + charsOffset);
+          sourceToken->debugExpansion = *(src->source + extensionOffset);
+
           sourceToken->polarity = 1; /* TODO: this should also handle reverse */
           sourceToken->next = NULL;
           sourceToken->previous = NULL;
@@ -331,9 +343,8 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
             If "xy" doesn't occur earlier in the list or in the UCA, convert &xy * c * 
             d * ... into &x * c/y * d * ... 
           */
-          if(lastToken->expandNext == TRUE && sourceToken->expansion == 0) {
-            sourceToken->expansion = lastToken->source+0xFF000001;
-            /* same as -0x01000000+1 0r -0x00FFFFFF */
+          if(lastToken->expandNext != 0 && sourceToken->expansion == 0) {
+            sourceToken->expansion = lastToken->expandNext;
           }
 
 
@@ -371,17 +382,31 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
           }
         }
       } else {
+        uint32_t CE = UCOL_NOT_FOUND, SecondCE = UCOL_NOT_FOUND;
+        collIterate s;
+
       /*  5 If the relation is a reset: 
           If sourceToken is null 
             Create new list, create new sourceToken, make the baseCE from source, put 
             the sourceToken in ListHeader of the new list */
         if(sourceToken == NULL) {
-          uint32_t CE = UCOL_NOT_FOUND, SecondCE = UCOL_NOT_FOUND;
-          collIterate s;
+          if(newCharsLen > 1) {
+            key.source = 0x01000000 | charsOffset;
+            sourceToken = (UColToken *)uhash_get(uchars2tokens, &key);
+            if(sourceToken != NULL) {
+              lastToken = sourceToken;
+              continue;
+            }
+          }
           /* do the reset thing */
           sourceToken = (UColToken *)uprv_malloc(sizeof(UColToken));
           sourceToken->source = newCharsLen << 24 | charsOffset;
           sourceToken->expansion = newExtensionsLen << 24 | extensionOffset;
+          
+          sourceToken->debugSource = *(src->source + charsOffset);
+          sourceToken->debugExpansion = *(src->source + extensionOffset);
+
+
           sourceToken->polarity = 1; /* TODO: this should also handle reverse */
           sourceToken->strength = UCOL_TOK_RESET;
           sourceToken->next = NULL;
@@ -398,9 +423,11 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
                 earlier in the list. 
           */
           if(newCharsLen > 1) {
-            sourceToken->expandNext = TRUE;
+            sourceToken->expandNext = sourceToken->source+0xFF000001;
+            sourceToken->source = sourceToken->source & 0x01FFFFFF;
+            /* same as -0x01000000+1 0r -0x00FFFFFF */
           } else {
-            sourceToken->expandNext = FALSE;
+            sourceToken->expandNext = 0;
           }
 
  
