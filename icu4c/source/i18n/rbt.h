@@ -284,12 +284,13 @@ class TransliterationRuleData;
  * @internal Use transliterator factory methods instead since this class will be removed in that release.
  */
 class U_I18N_API RuleBasedTransliterator : public Transliterator {
-
+private:
     /**
      * The data object is immutable, so we can freely share it with
      * other instances of RBT, as long as we do NOT own this object.
+     *  TODO:  data is no longer immutable.  See bugs #1866, 2155
      */
-    TransliterationRuleData* data;
+    TransliterationRuleData* fData;
 
     /**
      * If true, we own the data object and must delete it.
