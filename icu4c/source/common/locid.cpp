@@ -560,8 +560,8 @@ Locale& Locale::init(const char* localeID, UBool canonicalize)
         // variant may contain @foo or .foo POSIX cruft; remove it
         separator = uprv_strchr(field[fieldIdx-1], '@');
         char* sep2 = uprv_strchr(field[fieldIdx-1], '.');
-        if (separator!=0 || sep2!=0) {
-            if (separator > sep2) {
+        if (separator!=NULL || sep2!=NULL) {
+            if (separator==NULL || (sep2!=NULL && separator > sep2)) {
                 separator = sep2;
             }
             fieldLen[fieldIdx-1] = separator - field[fieldIdx-1];
