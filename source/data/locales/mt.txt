@@ -1,0 +1,810 @@
+﻿// Copyright (c) 1998-2004 IBM, Inc. and others.
+//
+// Maltese locale.
+// Maintained by srl@monkey.sbay.org [See below for full credits]
+//
+// Search for 'Sources' below for source abbreviations
+
+// Note, this file is in UTF-8
+// Quick rundown on Maltese Unicode: 
+// --------------------------------- 
+// l            U
+// ċ = U+010B   Ċ = U+010A  'ch'    
+// ġ = U+0121   Ġ = U+0120  soft G
+// ħ = U+0127   Ħ = U+0126  voiced H [or 2nd letter of 'silent' għ]
+// ż = U+017c   Ż = U+017B  'dz'
+//
+// COMBINING MARKS:
+// There is no combining mark for the slash (h/)
+//  but, U+0307 is the DOT ABOVE needed for ż, ċ, and ġ (in collation rules)
+
+mt {
+    Version { "2.0" } // 2003-10-18 - first MSA 200:2003 compliant v
+    
+    calendar{
+        gregorian{     
+        
+          // illum is-Sibt, 01 ta'' Awissu, 1998 :)
+          
+            DateTimeElements:intvector {
+                1,       // Sunday (il-Hadd) is first day of calendar week
+                4        // four days minimal in first week for week numbering  [MSA 200:2003 4.5.5, referencing 8601?]
+                //       Monday is first day of workweek. [MSA 200:2003 4.5.5]
+            }
+            DateTimePatterns{
+                "HH:mm:ss z",   // needs to be 24 hour
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, d 'ta''' MMMM yyyy", // long day with weekday [MSA 200:2003 4.5.2]
+                "d 'ta''' MMMM yyyy", //
+                "dd MMM yyyy",
+                "dd/MM/yyyy",
+                "{1} {0}"
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Ħad",
+                        "Tne",
+                        "Tli",
+                        "Erb", 
+                        "Ħam",
+                        "Ġim",
+                        "Sib"
+                    }
+                    wide{
+                        "Il-Ħadd",
+                        "It-Tnejn",
+                        "It-Tlieta",
+                        "L-Erbgħa",
+                        "Il-Ħamis",
+                        "Il-Ġimgħa",
+                        "Is-Sibt"
+                    }
+                }
+            }
+            eras{
+                 "QK",  // "Qabel Kristu" 
+                 "WK"   // "Wara Kristu"
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Jan",
+                        "Fra",
+                        "Mar",
+                        "Apr",
+                        "Mej",
+                        "Ġun",
+                        "Lul",
+                        "Awi",
+                        "Set",
+                        "Ott",
+                        "Nov",
+                        "Diċ"
+                    }
+                    wide{
+                        Jannar,
+                        Frar,
+                        Marzu,
+                        April,
+                        Mejju,
+                        Ġunju,
+                        Lulju,
+                        Awissu,
+                        Settembru,
+                        Ottubru,
+                        Novembru,
+                        Diċembru
+                    }
+                }
+            }
+        }
+    }
+
+    // 'e' on left denotes formerly commented out dups of english
+    // Duplicate data has been commented out.
+    Countries {
+        Fallback{ "en"}
+  /*e*/ AD { "Andorra" } 	// Andorra
+        AE { "Emirati Għarab Maqgħuda" } 	// United Arab Emirates
+        AF { "Afganistan" } 	// Afghanistan
+        AI { "Angwilla" } 	// Anguilla
+        AL { "Albanija" } 	// Albania
+        AM { "Armenja" } 	// Armenia
+        AN { "Antilles Olandiżi" } 	// Netherlands Antilles
+  /*e*/ AO { "Angola" } 	// Angola
+        AR { "Arġentina" } 	// Argentina
+        AS { "Samoa Amerikana" } 	// American Samoa
+        AT { "Awstrija" } 	// Austria
+        AU { "Awstralja" } 	// Australia
+  /*e*/ AW { "Aruba" } 	// Aruba
+        AZ { "Ażerbajġan" } 	// Azerbaijan
+        BA { "Bożnija Ħerżegovina" } 	// Bosnia and Herzegovina
+  /*e*/ BB { "Barbados" } 	// Barbados
+        BD { "Bangladexx" } 	// Bangladesh
+        BE { "Belġju" } 	// Belgium
+  /*e*/ BF { "Burkina Faso" } 	// Burkina Faso
+        BG { "Bulgarija" } 	// Bulgaria
+        BH { "Baħrajn" } 	// Bahrain
+  /*e*/ BI { "Burundi" } 	// Burundi
+  /*e*/ BJ { "Benin" } 	// Benin
+  /*e*/ BM { "Bermuda" } 	// Bermuda
+        BN { "Brunej" } 	// Brunei
+        BO { "Bolivja" } 	// Bolivia
+        BR { "Brażil" } 	// Brazil
+        BS { "Baħamas" } 	// Bahamas
+        BT { "Butan" } 	// Bhutan
+  /*e*/ BW { "Botswana" } 	// Botswana
+        BY { "Bjelorussja" } 	// Belarus
+        BZ { "Beliże" } 	// Belize
+        CA { "Kanada" } 	// Canada
+        CF { "Repubblika Afrikana Ċentrali" } 	// Central African Republic
+        CG { "Kongo" } 	// Congo
+        CH { "Svizzera" } 	// Switzerland
+        CI { "Kosta ta' l-Avorju" } 	// Côte d'Ivoire
+        CL { "Ċili" } 	// Chile
+        CM { "Kamerun" } 	// Cameroon
+        CN { "Ċina" } 	// China
+        CO { "Kolumbja" } 	// Colombia
+        CR { "Kosta Rika" } 	// Costa Rica
+        CU { "Kuba" } 	// Cuba
+        CV { "Kape Verde" } 	// Cape Verde
+        CY { "Ċipru" } 	// Cyprus
+        CZ { "Repubblika Ċeka" } 	// Czech Republic
+        DE { "Ġermanja" } 	// Germany
+        DJ { "Ġibuti" } 	// Djibouti
+        DK { "Danimarka" } 	// Denmark
+        DM { "Dominika" } 	// Dominica
+        DO { "Republikka Domenikana" } 	// Dominican Republic
+        DZ { "Alġerija" } 	// Algeria
+        EC { "Ekwador" } 	// Ecuador
+        EE { "Estonja" } 	// Estonia
+        EG { "Eġittu" } 	// Egypt
+        EH { "Sahara tal-Punent" } 	// Western Sahara
+        ER { "Eritreja" } 	// Eritrea
+        ES { "Spanja" } 	// Spain
+        ET { "Etijopja" } 	// Ethiopia
+        FI { "Finlandja" } 	// Finland
+        FJ { "Fiġi" } 	// Fiji
+        FM { "Mikronesja" } 	// Micronesia
+        FO { "Gżejjer Faroe" } 	// Faroe Islands
+        FR { "Franza" } 	// France
+  /*e*/ GA { "Gabon" } 	// Gabon
+        GB { "Ingilterra" } 	// United Kingdom
+        GE { "Ġorġja" } 	// Georgia
+        GF { "Gujana Franċiża" } 	// French Guiana
+        GH { "Gana" } 	// Ghana
+        GL { "Grinlandja" } 	// Greenland
+        GM { "Gambja" } 	// Gambia
+        GN { "Gineja" } 	// Guinea
+        GP { "Gwadelupe" } 	// Guadeloupe
+        GQ { "Ginea Ekwatorjali" } 	// Equatorial Guinea
+        GR { "Greċja" } 	// Greece
+        GT { "Gwatemala" } 	// Guatemala
+        GU { "Gwam" } 	// Guam
+        GW { "Ginea-Bissaw" } 	// Guinea-Bissau
+        GY { "Gujana" } 	// Guyana
+        HK { "Ħong Kong S.A.R., Ċina" } 	// Hong Kong S.A.R., China
+        HN { "Ħonduras" } 	// Honduras
+        HR { "Kroazja" } 	// Croatia
+        HT { "Ħaiti" } 	// Haiti
+        HU { "Ungerija" } 	// Hungary
+        ID { "Indoneżja" } 	// Indonesia
+        IE { "Irlanda" } 	// Ireland
+        IL { "Iżrael" } 	// Israel
+        IN { "Indja" } 	// India
+  /*e*/ IQ { "Iraq" } 	// Iraq
+  /*e*/ IR { "Iran" } 	// Iran
+        IS { "Islanda" } 	// Iceland
+        IT { "Italja" } 	// Italy
+        JM { "Ġamajka" } 	// Jamaica
+        JO { "Ġordan" } 	// Jordan
+        JP { "Ġappun" } 	// Japan
+        KE { "Kenja" } 	// Kenya
+        KG { "Kirgistan" } 	// Kyrgyzstan
+        KH { "Kambodja" } 	// Cambodia
+  /*e*/ KI { "Kiribati" } 	// Kiribati
+        KM { "Komoros" } 	// Comoros
+        KP { "Koreja ta' Fuq" } 	// North Korea
+        KR { "Koreja t'Isfel" } 	// South Korea
+        KW { "Kuwajt" } 	// Kuwait
+        KZ { "Każakstan" } 	// Kazakhstan
+  /*e*/ LA { "Laos" } 	// Laos
+        LB { "Libanu" } 	// Lebanon
+  /*e*/ LI { "Liechtenstein" } 	// Liechtenstein
+  /*e*/ LK { "Sri Lanka" } 	// Sri Lanka
+        LR { "Liberja" } 	// Liberia
+        LS { "Lesoto" } 	// Lesotho
+        LT { "Litwanja" } 	// Lithuania
+        LU { "Lussemburgu" } 	// Luxembourg
+        LV { "Latvja" } 	// Latvia
+        LY { "Libja" } 	// Libya
+        MA { "Marokk" } 	// Morocco
+        MC { "Monako" } 	// Monaco
+        MD { "Maldova" } 	// Moldova
+        MG { "Madagaskar" } 	// Madagascar
+        MH { "Gżejjer ta' Marshall" } 	// Marshall Islands
+        MK { "Maċedonja" } 	// Macedonia
+  /*e*/ ML { "Mali" } 	// Mali
+        MM { "Mjanmar" } 	// Myanmar
+        MN { "Mongolja" } 	// Mongolia
+        MP { "Gżejjer Marjana ta' Fuq" } 	// Northern Mariana Islands
+        MQ { "Martinik" } 	// Martinique
+        MR { "Mawritanja" } 	// Mauritania
+  /*e*/ MS { "Montserrat" } 	// Montserrat
+  /*e*/ MT { "Malta" } 	// Malta [MSA 200:2003 4.13]
+        MU { "Mawrizju" } 	// Mauritius
+        MX { "Messiku" } 	// Mexico
+        MY { "Malasja" } 	// Malaysia
+        MZ { "Możambik" } 	// Mozambique
+        NA { "Namibja" } 	// Namibia
+  /*e*/ NC { "New Caledonia" } 	// New Caledonia
+        NE { "Niġer" } 	// Niger
+        NG { "Niġerja" } 	// Nigeria
+        NI { "Nikaragwa" } 	// Nicaragua
+        NL { "Olanda" } 	// Netherlands
+        NO { "Norveġja" } 	// Norway
+  /*e*/ NP { "Nepal" } 	// Nepal
+  /*e*/ NU { "Niue" } 	// Niue
+  /*e*/ NZ { "New Zealand" } 	// New Zealand
+  /*e*/ OM { "Oman" } 	// Oman
+  /*e*/ PA { "Panama" } 	// Panama
+  /*e*/ PE { "Peru" } 	// Peru
+        PF { "Polinesja Franċiża" } 	// French Polynesia
+        PG { "Papwa-Ginea Ġdida" } 	// Papua New Guinea
+        PH { "Filippini" } 	// Philippines
+  /*e*/ PK { "Pakistan" } 	// Pakistan
+        PL { "Polonja" } 	// Poland
+  /*e*/ PR { "Puerto Rico" } 	// Puerto Rico
+        PT { "Portugall" } 	// Portugal
+        PY { "Paragwaj" } 	// Paraguay
+  /*e*/ QA { "Qatar" } 	// Qatar
+        RO { "Rumanija" } 	// Romania
+        RU { "Russja" } 	// Russia
+  /*e*/ RW { "Rwanda" } 	// Rwanda
+        SA { "Għarabja Sawdita" } 	// Saudi Arabia
+  /*e*/ SC { "Seychelles" } 	// Seychelles
+  /*e*/ SD { "Sudan" } 	// Sudan
+        SE { "Żvezja" } 	// Sweden
+        SG { "Singapor" } 	// Singapore
+        SI { "Slovenja" } 	// Slovenia
+        SK { "Slovakkja" } 	// Slovakia
+  /*e*/ SL { "Sierra Leone" } 	// Sierra Leone
+  /*e*/ SN { "Senegal" } 	// Senegal
+        SO { "Somalja" } 	// Somalia
+        SP { "Serbja" } 	// Serbia
+        SR { "Surinam" } 	// Suriname
+  /*e*/ SV { "El Salvador" } 	// El Salvador
+        SY { "Sirja" } 	// Syria
+        SZ { "Sważiland" } 	// Swaziland
+        TD { "Ċad" } 	// Chad
+        TF { "Territorji Franċiżi ta' Nofsinhar" } 	// French Southern Territories
+  /*e*/ TG { "Togo" } 	// Togo
+        TH { "Tajlandja" } 	// Thailand
+        TJ { "Taġikistan" } 	// Tajikistan
+        TK { "Tokelaw" } 	// Tokelau
+  /*e*/ TM { "Turkmenistan" } 	// Turkmenistan
+        TN { "Tuneż" } 	// Tunisia
+  /*e*/ TO { "Tonga" } 	// Tonga
+        TL { "Timor tal-Lvant" } 	// East Timor
+        TR { "Turkija" } 	// Turkey
+        TT { "Trinidad u Tobago" } 	// Trinidad and Tobago
+        TW { "Tajwan" } 	// Taiwan
+        TZ { "Tanżanija" } 	// Tanzania
+        UA { "Ukraina" } 	// Ukraine
+  /*e*/ UG { "Uganda" } 	// Uganda
+        US { "Stati Uniti" } 	// United States
+        UY { "Urugwaj" } 	// Uruguay
+        UZ { "Użbekistan" } 	// Uzbekistan
+        VA { "Vatikan" } 	// Vatican   
+        VE { "Venezwela" } 	// Venezuela
+  /*e*/// VG { "British Virgin Islands" } 	// British Virgin Islands
+  /*e*/// VI { "U.S. Virgin Islands" } 	// U.S. Virgin Islands
+        VN { "Vjetnam" } 	// Vietnam
+        VU { "Vanwatu" } 	// Vanuatu
+        YE { "Jemen" } 	// Yemen
+        YT { "Majotte" } 	// Mayotte
+        YU { "Jugoslavja" } 	// Yugoslavia
+        ZA { "Afrika t'Isfel" } 	// South Africa
+        ZM { "Żambja" } 	// Zambia
+        ZW { "Żimbabwe" } 	// Zimbabwe
+
+    }
+    // Currency display names
+    Currencies {
+        MTL { "Lm", "Lira Maltija" }
+    }
+
+    // 'e' on left denotes formerly commented out dups of english
+    Languages {
+        Fallback{ "en"}
+        root    { "Għerq" } // the root locale
+//------------------------------------------------
+  /*e*/ aa	{ "Afar" }	// Afar
+        ab	{ "Abkażjan" }	// Abkhazian
+        ace	{ "Aċiniż" }	// Achinese
+        ach	{ "Akoli" }	// Acoli
+  /*e*/ ada	{ "Adangme" }	// Adangme
+  /*e*/ ae	{ "Avestan" }	// Avestan
+        af	{ "Afrikans" }	// Afrikaans
+        afa	{ "Afro-Asjatiku (Oħra)" }	// Afro-Asiatic (Other)
+        afh	{ "Afriħili" }	// Afrihili
+  ///*e*/ aka	{ "Akan" }	// Akan
+        akk	{ "Akkadjen" }	// Akkadien
+  /*e*/ ale	{ "Aleut" }	// Aleut
+        alg	{ "Lingwi Algonqwinjani" }	// Algonquian Languages
+        am	{ "Amħariku" }	// Amharic
+        ang	{ "Ingliż, Antik (ca.450-1100)" }	// English, Old (ca.450-1100)
+        apa	{ "Lingwi Apaċi" }	// Apache Languages
+        ar	{ "Għarbi" }	// Arabic
+        arc	{ "Aramajk" }	// Aramaic
+        arn	{ "Arawkanjan" }// Araucanian
+        arp	{ "Arapaħo" }	// Arapaho
+        art	{ "Artifiċjali (Oħra)" }	// Artificial (Other)
+  /*e*/ arw	{ "Arawak" }	// Arawak
+  /*e*/ as	{ "Assamese" }	// Assamese
+        ath	{ "Lingwi Atabaskani" }	// Athapaskan Languages
+        aus	{ "Lingwi Awstraljani" }// Australian Languages
+        av	{ "Avarik" }	// Avaric
+        awa	{ "Awadħi" }	// Awadhi
+        ay	{ "Ajmara" }	// Aymara
+        az	{ "Ażerbajġani" }	// Azerbaijani
+        ba	{ "Baxkir" }	// Bashkir
+  /*e*/ bad	{ "Banda" }	// Banda
+        bai	{ "Lingwi Bamileke" }	// Bamileke Languages
+        bal	{ "Baluċi" }	// Baluuchi
+        ban	{ "Baliniż" }	// Balinese
+  /*e*/ bas	{ "Basa" }	// Basa
+        bat	{ "Baltiku (Oħra)" }	// Baltic (Other)
+        be	{ "Belarussu" }	// Belarusian
+  /*e*/ bej	{ "Beja" }	// Beja
+  /*e*/ bem	{ "Bemba" }	// Bemba
+  /*e*/ ber	{ "Beber" }	// Beber
+        bg	{ "Bulgaru" }	// Bulgarian
+        bh	{ "Biħari" }	// Bihari
+        bho	{ "Bojpuri" }	// Bhojpuri
+  /*e*/ bi	{ "Bislama" }	// Bislama
+  /*e*/ bik	{ "Bikol" }	// Bikol
+  /*e*/ bin	{ "Bini" }	// Bini
+  /*e*/ bla	{ "Siksika" }	// Siksika
+  /*e*/ bm	{ "Bambara" }	// Bambara
+  /*e*/ bn	{ "Bengali" }	// Bengali
+  /*e*/ bnt	{ "Bantu" }	// Bantu
+        bo	{ "Tibetjan" }	// Tibetan
+  /*e*/ br	{ "Brenton" }	// Brenton
+  /*e*/ bra	{ "Braj" }	// Braj
+        bs	{ "Bosnijan" }	// Bosnian
+  /*e*/ btk	{ "Batak" }	// Batak
+        bua	{ "Burjat" }	// Buriat
+        bug	{ "Buginiż" }	// Buginese
+        ca	{ "Katalan" }	// Catalan
+        cad	{ "Kaddo" }	// Caddo
+        cai	{ "Amerika Ċentrali (Oħra)" }	// Central American Indian (Other)
+        car	{ "Karib" }	// Carib
+        cau	{ "Kawkasu (Oħra)" }	// Caucasian (Other) 
+        ce	{ "Ċeċen" }	// Chechen
+        ceb	{ "Sibwano" }	// Cebuano
+        cel	{ "Keltiku (Oħra)" }	// Celtic (Other)
+        ch	{ "Ċamorro" }	// Chamorro
+        chb	{ "Ċibċa" }	// Chibcha
+        chg	{ "Ċagataj" }	// Chagatai
+        chk	{ "Ċukese" }	// Chuukese
+  /*e*/ chm	{ "Mari" }	// Mari
+        chn	{ "Ġargon taċ-Ċinuk" }	// Chinook Jargon
+        cho	{ "Ċostaw" }	// Choctaw
+        chp	{ "Ċipewjan" }	// Chipewyan
+        chr	{ "Ċerokij" }	// Cherokee
+        chy	{ "Xajenn" }	// Cheyenne
+        cmc	{ "Lingwi Ċamiki" }	// Chamic Languages
+        co	{ "Korsiku" }	// Corsican
+        cop	{ "Koptiku" }	// Coptic
+        cpe	{ "Kreoli u Piġini, Bbażat fuq l-Ingliż (Oħra)" }	// Creoles and Pidgins, English-based (Other)
+        cpf	{ "Kreoli u Piġini, Bbażat fuq il-Franċiż (Oħra)" }	// Creoles and Pidgins, French-based (Other)
+        cr	{ "Krij" }	// Cree
+        crp	{ "Kreoli u Piġini (Oħra)" }	// Creoles and Pidgins (Other)
+        cs	{ "Ċek" }	// Czech
+        cu	{ "Slaviku tal-Knisja" }	// Church Slavic
+        cus	{ "Kuxtiku (Oħra)" }	// Cushitic (Other)
+        cv	{ "Ċuvax" }	// Chuvash
+        cy	{ "Welx" }	// Welsh
+        da	{ "Daniż" }	// Danish
+  /*e*/ dak	{ "Dakota" }	// Dakota
+        day	{ "Dajak" }	// Dayak
+        de	{ "Ġermaniż" }	// German
+        del	{ "Delawerjan" }	// Delaware
+        den	{ "Slav" }	// Slave
+  /*e*/ dgr	{ "Dogrib" }	// Dogrib
+  /*e*/ din	{ "Dinka" }	// Dinka
+        dv	{ "Diveħi" }	// Divehi
+  /*e*/ doi	{ "Dogri" }	// Dogri
+        dra	{ "Dravidjan (Oħra)" }	// Dravidian (Other)
+        dua	{ "Dwala" }	// Duala
+        dum	{ "Olandiż, Medjevali (ca. 1050-1350)" }	// Dutch, Middle (ca. 1050-1350)
+        dyu	{ "Djula" }	// Dyula
+        //dz	{ "Vutani" }	// Bhutani
+        dz	{ "Dżongka" }	// Dzongkha
+  /*e*/ efi	{ "Efik" }	// Efik
+        egy	{ "Eġizzjan (Antik)" }	// Egyptian (Ancient)
+  /*e*/ eka	{ "Ekajuk" }	// Ekajuk
+        el	{ "Grieg" }	// Greek
+        elx	{ "Elamit" }	// Elamite
+        en	{ "Ingliż" }	// English
+        enm	{ "Ingliż, Medjevali (1100-1500)" }	// English, Middle( 1100 -1500)
+  /*e*/ eo	{ "Esperanto" }	// Esperanto
+        es	{ "Spanjol" }	// Spanish
+        et	{ "Estonjan" }	// Estonian
+        eu	{ "Bask" }	// Basque
+  ///*e*/ ewe	{ "Ewe" }	// Ewe
+  /*e*/ ewo	{ "Ewondo" }	// Ewondo
+        fa	{ "Persjan" }	// Persian
+  /*e*/ fan	{ "Fang" }	// Fang
+  /*e*/ fat	{ "Fanti" }	// Fanti
+        ff	{ "Fulaħ" }	// Fulah
+        fi	{ "Finlandiż" }	// Finnish
+        fiu	{ "Finno - Ugrijan" }	// Finno - Ugrian
+        fj	{ "Fiġi" }	// Fiji
+        fo	{ "Fawriż" }	// Faeroese
+  /*e*/ fon	{ "Fon" }	// Fon
+        fr	{ "Franċiż" }	// French
+        frm	{ "Franċiż, Medjevali (ca. 1400-1600)" }	// French, Middle (ca.1400-1600)
+        fro	{ "Franċiż, Antik (842-ca. 1400)" }	// French, Old (842-ca.1400)
+        fur	{ "Frijuljan" }	// Friulian
+        fy	{ "Friżjan" }	// Frisian
+        ga	{ "Irlandiż" }	// Irish
+  /*e*/ gaa	{ "Ga" }	// Ga
+        gay	{ "Gajo" }	// Gayo
+        gba	{ "Gbaja" }	// Gbaya
+        gd	{ "Galliku Skoċċiż" }	// Scots Gaelic
+        gem	{ "Ġermaniku (Oħra)" }	// Germanic (Other)
+        gil	{ "Gilbertjan" }	// Gilbertese
+        gl	{ "Gallegjan" }	// Gallegan
+        //gla	{ "Galliku (Skoċċiż)" }	// Gaelic (Scots)
+        gmh	{ "Ġermaniku, Medjevali Pulit (ca. 1050-1500)" }	// German, Middle High (ca.1050-1500)
+        gn	{ "Gwarani" }	// Guarani
+        goh	{ "Ġermaniku, Antik Pulit (ca. 750-1050)" }	// German, Old High (ca.750-1050)
+  /*e*/ gon	{ "Gondi" }	// Gondi
+  /*e*/ gor	{ "Gorontalo" }	// Gorontalo
+        got	{ "Gotiku" }	// Gothic
+        grb	{ "Ġerbo" }	// Gerbo
+        grc	{ "Grieg, Antik (to 1453)" }	// Greek, Ancient (to 1453)
+        gu	{ "Guġarati" }	// Gujarati
+        gv	{ "Manks" }	// Manx
+        gwi	{ "Gwiċin" }	// Gwich'in
+        hai	{ "Ħajda" }	// Haida
+        ha	{ "Ħawsa" }	// Hausa
+        haw	{ "Ħawajjan" }	// Hawaiian
+        he	{ "Ebrajk" }	// Hebrew
+        hi	{ "Ħindi" }	// Hindi
+        him	{ "Ħimaċali" }	// Himachali
+        hit	{ "Ħittit" }	// Hittite
+        hmn	{ "Ħmong" }	// Hmong
+        ho	{ "Ħiri Motu" }	// Hiri Motu
+        hr	{ "Kroat" }	// Croatian
+        hu	{ "Ungeriż" }	// Hungarian
+        hup	{ "Ħupa" }	// Hupa
+        hy	{ "Armenjan" }	// Armenian
+        hz	{ "Ħerero" }	// Herero
+  /*e*/ ia	{ "Interlingua" }	// Interlingua
+  /*e*/ iba	{ "Iban" }	// Iban
+  ///*e*/ ibo	{ "Igbo" }	// Igbo
+        id	{ "Indoneżjan" }	// Indonesian
+  /*e*/ ie	{ "Interlingue" }	// Interlingue
+        ijo	{ "Iġo" }	// Ijo
+        ik	{ "Inupjak" }	// Inupiak
+  /*e*/ ilo	{ "Iloko" }	// Iloko
+        inc	{ "Indjan (Oħra)" }	// Indic (Other)
+        ine	{ "Indo-Ewropew" }	// Indo-European
+        ira	{ "Iranjan" }	// Iranian 
+        iro	{ "Lingwi Irogwjani" }	// Iroguoian Languages
+        is	{ "Iżlandiż" }	// Icelandic
+        it	{ "Taljan" }	// Italian
+  /*e*/ iu	{ "Inukitut" }	// Inukitut
+        ja	{ "Ġappuniż" }	// Japanese
+        jpr	{ "Lhudi-Persjan" }	// Judeo-Persian
+        jrb	{ "Lhudi-Għarbi" }	// Judeo-Arabic
+        jv	{ "Ġavaniż" }	// Javanese
+        ka	{ "Ġorġjan" }	// Georgian
+  /*e*/ kaa	{ "Kara-Kalpak" }	// Kara-Kalpak
+        kab	{ "Kabuljan" }	// Kabyle
+        kac	{ "Kaċin" }	// Kachin
+  /*e*/ kam	{ "Kamba" }	// Kamba
+  /*e*/ kar	{ "Karen" }	// Karen
+  ///*e*/ kau	{ "Kanuri" }	// Kanuri
+  /*e*/ kaw	{ "Kawi" }	// Kawi
+        kha	{ "Kasi" }	// Khasi
+        khi	{ "Kojsan" }	// Khoisan
+        kho	{ "Kotaniż" }	// Khotanese
+        ki	{ "Kikuju" }	// Kikuyu
+        kk	{ "Każak" }	// Kazakh
+        kl	{ "Kalallisut" }	// Kalaallisut
+        km	{ "Kmer" }	// Khmer
+  /*e*/ kmb	{ "Kimbundu" }	// Kimbundu
+  /*e*/ kn	{ "Kannada" }	// Kannada
+        ko	{ "Korejan" }	// Korean
+  /*e*/ kok	{ "Konkani" }	// Konkani
+  ///*e*/ kon	{ "Kongo" }	// Kongo
+        kos	{ "Kosrejan" }	// Kosrean
+  /*e*/ kpe	{ "Kpelle" }	// Kpelle
+  /*e*/ kro	{ "Kru" }	// Kru
+        kru	{ "Kurusk" }	// Kuruckh
+        ks	{ "Kaxmiri" }	// Kashmiri
+        ku	{ "Kurdiż" }	// Kurdish
+        kum	{ "Kumiku" }	// Kumyk
+        kut	{ "Kutenaj" }	// Kutenai
+  /*e*/ kv	{ "Komi" }	// Komi
+        kw	{ "Korniku" }	// Cornish
+        ky	{ "Kirgiż" }	// Kirghiz
+  /*e*/ la	{ "Latin" }	// Latin
+  /*e*/ lad	{ "Ladino" }	// Ladino
+        lah	{ "Landa" }	// Lahnda
+  /*e*/ lam	{ "Lamba" }	// Lamba
+        lb	{ "Letżburgiż" }	// Letzeburgesch
+        lez	{ "Leżgjan" }	// Lezghian
+        ln	{ "Lingaljan" }	// Lingala
+  /*e*/ lo	{ "Lao" }	// Lao
+  /*e*/ lol	{ "Mongo" }	// Mongo
+        loz	{ "Lożi" }	// Lozi
+        lt	{ "Litwanjan" }	// Lithuanian
+        lua	{ "Luba-Luluwa" }	// Luba-Lulua
+  ///*e*/ lub	{ "Luba-Katanga" }	// Luba-Katanga
+  ///*e*/ lug	{ "Ganda" }	// Ganda
+        lui	{ "Luwisinuż" }	// Luiseeno
+  /*e*/ lun	{ "Lunda" }	// Lunda
+        luo	{ "Luwa" }	// Lua
+        lus	{ "Luxaj" }	// Lushai
+        lv	{ "Latvjan (Lettix)" }	// Latvian (Lettish)
+        mad	{ "Maduriż" }	// Madurese
+        mag	{ "Magaħi" }	// Magahi
+        mai	{ "Majtili" }	// Maithili
+  /*e*/ mak	{ "Makasar" }	// Makasar
+        man	{ "Mandingwan" }	// Mandingue
+        map	{ "Awstronesjan" }	// Austronesian
+        mas	{ "Masaj" }	// Masai
+  /*e*/ mdr	{ "Mandar" }	// Mandar
+  /*e*/ men	{ "Mende" }	// Mende
+        mg	{ "Malagażi" }	// Malagasy
+        mga	{ "Irlandiż, Medjevali (900-1200)" }	// Irish, Middle (900-1200)
+        mh	{ "Marxall" }	// Marshall
+  /*e*/ mi	{ "Maori" }	// Maori
+        mic	{ "Mikmek" }	// Mic-Mac
+        min	{ "Minangkabaw" }	// Minangkabau
+        mis	{ "Lingwi Oħra" }	// Miscellaneous Languages
+        mk	{ "Maċedonjan" }	// Macedonian
+        mkh	{ "Mon-Kmer (Oħra)" }	// Mon-Khmer (Other)
+        ml	{ "Malajalam" }	// Malayalam
+        mn	{ "Mongoljan" }	// Mongolian
+        mnc	{ "Manċurjan" }	// Manchu
+  /*e*/ mni	{ "Manipuri" }	// Manipuri
+        mno	{ "Lingwi Manobo" }	// Manobo Languages
+        mo	{ "Moldavjan" }	// Moldavian
+        moh	{ "Moħak" }	// Mohawk
+  /*e*/ mos	{ "Mossi" }	// Mossi
+        mr	{ "Marati" }	// Marathi
+        ms	{ "Malajan" }	// Malay
+        mt	{ "Malti" }	// Maltese  [MSA 200:2003 4.13]
+        mul	{ "Lingwi Diversi" }	// Multiple Languages
+        mun	{ "Lingwi tal-Munda" }	// Munda Languages
+        mus	{ "Kriek" }	// Creek
+  /*e*/ mwr	{ "Marwari" }	// Marwari
+        my	{ "Burmiż" }	// Burmese
+        myn	{ "Majan" }	// Mayan
+        na	{ "Nawuru" }	// Nauru
+        nah	{ "Naħwatil" }	// Nahuatl
+        nai	{ "Indjan tal-Amerika ta' Fuq (Oħra)" }	// North American Indian (Other)
+        nb	{ "Bokmahal Norveġiż" }	// Norwegian Bokmål
+        nd	{ "Ndebele, ta' Fuq" }	// Ndebele, North
+        nds	{ "Ġermaniż Komuni; Sassonu Komuni" }	// Low German; Low Saxon
+        ne	{ "Nepaliż" }	// Nepali
+  /*e*/ new	{ "Newari" }	// Newari
+  /*e*/ ng	{ "Ndonga" }	// Ndonga
+        nia	{ "Nijas" }	// Nias
+        nic	{ "Niġerjan - Kordofanjan" }	// Niger - Kordofanian
+        niu	{ "Nijuwejan" }	// Niuean
+        nl	{ "Olandiż" }	// Dutch
+        nn	{ "Ninorsk Norveġiż" }	// Norwegian Nynorsk
+        no	{ "Norveġiż" }	// Norwegian
+        non	{ "Skandinav, Antik" }	// Norse, Old
+        nr	{ "Ndebele, t'Isfel" }	// Ndebele, South
+        nso	{ "Soto, ta' Fuq" }	// Sotho, Northern
+        nub	{ "Lingwi Nubjani" }	// Nubian Languages
+        nv	{ "Navaħo" }	// Navajo
+        ny	{ "Ċiċewa; Njanġa" }	// Chichewa; Nyanja
+        nym	{ "Njamweżi" }	// Nyamwezi
+        nyo	{ "Njoro" }	// Nyoro
+        nzi	{ "Nżima" }	// Nzima
+        oc	{ "Provenzal (wara 1500)" }	// Provençal; Occitan (post 1500)
+        oj	{ "Oġibwa" }	// Ojibwa
+  /*e*/ om	{ "Oromo (Afan)" }	// Oromo (Afan)
+        or	{ "Orija" }	// Oriya
+        os	{ "Ossettiku" }	// Ossetic
+        osa	{ "Osaġjan" }	// Osage
+        ota	{ "Tork (Imperu Ottoman)" }	// Turkish (Ottoman Empire)
+        oto	{ "Lingwi Otomjani" }	// Otomian Languages
+        pa	{ "Punġabi" }	// Punjabi
+        paa	{ "Papwan (Oħra)" }	// Papuan (Ohter)
+        pag	{ "Pangasinjan" }	// Pangasinan
+        pal	{ "Paħlavi" }	// Pahlavi
+        pam	{ "Pampamga" }	// pampamga?
+        pap	{ "Papjamento" }	// Papiamento
+        pau	{ "Palawjan" }	// Palauan
+        peo	{ "Persjan Antik (ca. 600-400 Q.K.)" }	// Persian Old (ca.600-400 B.C.)
+        phi	{ "Filippin (Oħra)" }	// Philippine (Other)
+        phn	{ "Feniċju" }	// Phoenician
+  /*e*/ pi	{ "Pali" }	// Pali
+        pl	{ "Pollakk" }	// Polish
+        pon	{ "Ponpejan" }	// Pohnpeian
+        pra	{ "Lingwi Prakriti" }	// Prakrit Languages
+        pro	{ "Provenzal, Antik (sa l-1500)" }	// Provençal, Old (to 1500)
+        ps	{ "Paxtun" }	// Pashto (Pushto)
+        pt	{ "Portugiż" }	// Portuguese
+        qu	{ "Keċwa" }	// Quechua
+        raj	{ "Raġastani" }	// Rajastani
+        rap	{ "Rapanwi" }	// Rapanui
+        rar	{ "Rarotongani" }	// Rarotongan
+        rm	{ "Reto-Romanz" }	// Rhaeto-Romance
+  /*e*/ rn	{ "Rundi" }	// Rundi
+        ro	{ "Rumen" }	// Romanian
+        roa	{ "Romanz (Oħra)" }	// Romance (Other)
+        rom	{ "Żingaru" }	// Romany
+        ru	{ "Russu" }	// Russian
+        rw	{ "Kinjarwanda" }// Kinyarwanda
+  /*e*/ sa	{ "Sanskrit" }	// Sanskrit
+  /*e*/ sad	{ "Sandawe" }	// Sandawe
+        sah	{ "Jakut" }	// Yakut
+        sai	{ "Indjan tal-Amerika t'Isfel (Oħra)" }	// South American Indian (Other)
+        sal	{ "Salixan" }	// Salishan
+  /*e*/ sam	{ "Samritan" }	// Samritan
+  /*e*/ sas	{ "Saska" }	// Saska
+  /*e*/ sat	{ "Santali" }	// Santali
+        sc	{ "Sardinjan" }	// Sardinian
+        sco	{ "Skoċċiż" }	// Scots
+        sd	{ "Sindi" }	// Sindhi
+        se	{ "Sami ta' Fuq" }// Northern Sami
+  /*e*/ sel	{ "Selkup" }	// Selkup
+        sem	{ "Semitiku" }	// Semitic
+  /*e*/ sg	{ "Sango" }	// Sango
+        sga	{ "Irlandiż, Antik (sa l-900)" }	// Irish, Old (to 900)
+        sgn	{ "Lingwa tas-Sinjali" }	// Sign Languages
+        sh	{ "Serbo-Kroat" }	// Serbo-Croatian
+        shn	{ "Xan" }	// Shan
+        si	{ "Sinħaliż" }	// Sinhalese
+  /*e*/ sid	{ "Sidamo" }	// Sidamo
+        sio	{ "Lingwi Suwjani" }	// Siouan Languages
+        sit	{ "Sino-Tibetjani (Oħra)" }	// Sino-Tibetan (Other)
+        sk	{ "Slovakk" }	// Slovak
+        sl	{ "Slav" }	// Slovenian
+        sm	{ "Samojan" }	// Samoan
+        sn	{ "Xona" }	// Shona
+  /*e*/ snk	{ "Soninke" }	// Soninke
+  /*e*/ so	{ "Somali" }	// Somali
+  /*e*/ sog	{ "Sogdien" }	// Sogdien
+        son	{ "Songaj" }	// Songhai
+        sq	{ "Albaniż" }	// Albanian
+        sr	{ "Serb" }	// Serbian
+  /*e*/ srr	{ "Serer" }	// Serer
+  /*e*/ ss	{ "Swati" }	// Swati
+        ssa	{ "Nilo-Saħaram" }	// Nilo-Saharam
+        st	{ "Soto, t'Isfel" }	// Sotho, Southern
+        su	{ "Sundaniż" }	// Sundanese
+  /*e*/ suk	{ "Sukuma" }	// Sukuma
+  /*e*/ sus	{ "Susu" }	// Susu
+        sux	{ "Sumerjan" }	// Sumerian
+        sv	{ "Svediż" }	// Swedish
+        sw	{ "Swaħili" }	// Swahili
+        syr	{ "Sirjan" }	// Syriac
+  /*e*/ ta	{ "Tamil" }	// Tamil
+        tai	{ "Tai (Oħra)" }	// Tai (Other)
+  /*e*/ te	{ "Telugu" }	// Telugu
+  /*e*/ tem	{ "Timne" }	// Timne
+  /*e*/ ter	{ "Tereno" }	// Tereno
+  /*e*/ tet	{ "Tetum" }	// Tetum
+        tg	{ "Taġik" }	// Tajik
+        th	{ "Tajlandiż" }	// Thai
+  /*e*/ tig	{ "Tigre" }	// Tigre
+        ti	{ "Tigrinja" }	// Tigrinya
+  /*e*/ tiv	{ "Tiv" }	// Tiv
+        tk	{ "Turkmeni" }	// Turkmen
+  /*e*/ tl	{ "Tagalog" }	// Tagalog
+  /*e*/ tli	{ "Tlingit" }	// Tlingit
+        tmh	{ "Tamaxek" }	// Tamashek
+        tn	{ "Zwana" }	// Tswana
+        tog	{ "Tonga (Njasa)" }	// Tonga (Nyasa)
+        to	{ "Tongan (Gżejjer ta' Tonga)" }	// Tongan (Tonga Islands)
+        tr	{ "Tork" }	// Turkish
+  /*e*/ ts	{ "Tsonga" }	// Tsonga
+        tsi	{ "Zimxjan" }	// Tsimshian
+  /*e*/ tt	{ "Tatar" }	// Tatar
+  /*e*/ tum	{ "Tumbuka" }	// Tumbuka
+        tut	{ "Altajk (Oħra)" }	// Altaic (Other)
+  /*e*/ tvl	{ "Tuvalu" }	// Tuvalu
+  /*e*/ tw	{ "Twi" }	// Twi
+        ty	{ "Taħitjan" }	// Tahitian
+        tyv	{ "Tuvinjan" }	// Tuvinian
+        ug	{ "Wigur" }	// Uighur
+        uga	{ "Ugaritiku" }	// Ugaritic
+        uk	{ "Ukranjan" }	// Ukrainian
+  /*e*/ umb	{ "Umbundu" }	// Umbundu
+        und	{ "Indeterminat" }	// Undetermined
+  /*e*/ ur	{ "Urdu" }	// Urdu
+        uz	{ "Użbek" }	// Uzbek
+  /*e*/ vai	{ "Vai" }	// Vai
+  ///*e*/ ven	{ "Venda" }	// Venda
+        vi	{ "Vjetnamiż" }	// Vietnamese
+  /*e*/ vo	{ "Volapuk" }	// Volapuk
+        vot	{ "Votik" }	// Votic
+        wak	{ "Lingwi Wakaxani" }	// Wakashan Languages
+  /*e*/ wal	{ "Walamo" }	// Walamo
+        war	{ "Waraj" }	// Waray
+        was	{ "Waxo" }	// Washo
+        wen	{ "Lingwi Sorbjani" }	// Sorbian Languages
+  /*e*/ wo	{ "Wolof" }	// Wolof
+        xh	{ "Ħoża" }	// Xhosa
+        yao	{ "Jao" }	// Yao
+        yap	{ "Japese" }	// Yapese
+        yi	{ "Jiddix" }	// Yiddish
+        yo	{ "Joruba" }	// Yoruba
+        ypk	{ "Lingwi Jupiċi" }	// Yupik Languages
+        za	{ "Żwang" }	// Zhuang
+        zap	{ "Żapotek" }	// Zapotec
+        zen	{ "Żenaga" }	// Zenaga
+        zh	{ "Ċiniż" }	// Chinese
+        znd	{ "Żande" }	// Zande
+        zu	{ "Żulu" }	// Zulu
+        zun	{ "Żuni" }      // Zuni
+    }
+
+
+
+
+
+//    NumberElements {    // Ex: 12,345.67 [MSA 200:2003 4.3 & 4.4]     (duplicated in root)
+//        ".",  // Decimal Separator
+//        ",",  // Grouping (thousands) separator
+//        ";",
+//        "%",
+//        "0",
+//        "#",
+//        "-",
+//        "E",
+//        "‰",
+//        "∞",
+//        "�"
+//    }
+
+
+//    Variants{
+//        PREEURO { "Qabel il-Euro" }
+//    }
+
+    LocaleScript{ 
+        "Latn",  // ISO 15924 Name 
+    }
+
+    ExemplarCharacters { "[[a-z \u00e0 \u00ec \u00f9 \u00e8 \u00f2 ċ ġ ħ {għ} ż]-[cy]]" } // [MSA 200:2003 4.10]
+
+
+// Time zone // [MSA 200:2003 4.5.5]
+    zoneStrings {
+        {
+            "Europe/Malta", 
+            "Ħin Ċentrali Ewropew", 
+            "CET", 
+            "Ħin Ċentrali Ewropew tas-Sajf",
+            "CEST",
+            "Valletta"
+        }
+    }
+
+    //TODO: (no format yet)
+    //* [MSA 200:2003 4.12]
+    //   measurement: metric
+    //   'full stop is writen after ordinals'
+
+    //* [MSA 200:2003 4.6]
+    //    YES:  'I' 'i' 'iva'
+    //   TRUE:  'V' 'v' 'veru'
+    //     NO:  'L' 'l' 'le'
+    //  FALSE:  'F' 'f' 'falz'
+}

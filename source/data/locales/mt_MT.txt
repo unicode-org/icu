@@ -1,0 +1,20 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1998-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+// Maltese, Malta locale
+// srl@monkey.sbay.org
+// Note: please see the 'mt.txt' file for more information.
+// ** Maltese Standardization Authority http://www.msa.org.mt - MSA 200:2003 "Maltese Data and Information Requirements on Information and Communication Technology" is now the normative document for this data file.  [MSA 200:2003]
+
+mt_MT {
+    Version { "2.1" } // October, 2003
+    NumberPatterns {
+        "#,##0.###;-#,##0.###",
+        "\u00A4#,##0.00;-\u00A4#,##0.00",  // [MSA 200:2003 4.4]
+        "#,##0%",
+        "#E0"
+    }
+}

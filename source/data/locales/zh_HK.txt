@@ -1,0 +1,80 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+zh_HK {
+    Version{ "2.0" }
+    Countries:alias { "zh_TW" }
+
+    ExemplarCharacters:alias { "zh_TW" }
+    Languages:alias { "zh_TW" }
+    NumberPatterns { 
+        "#,##0.###;-#,##0.###",
+        "\u00A4#,##0.00;(\u00A4#,##0.00)",
+        "#,##0%",
+        "#E0",
+    }
+    Types:alias { "zh_TW" }
+    Variants:alias { "zh_TW" }
+/*
+    zoneStrings { 
+        {
+            "CTT",
+            "Hong Kong Standard Time",
+            "HKST",
+            "Hong Kong Standard Time",
+            "HKST",
+            "Hong Kong",
+        }
+    }
+*/
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "ahh'\u6642'mm'\u5206'ss'\u79D2' z",
+                "ahh'\u6642'mm'\u5206'ss'\u79D2'",
+                "ahh:mm:ss",
+                "ah:mm",
+                "yyyy'\u5E74'MM'\u6708'dd'\u65E5' EEEE",
+                "yyyy'\u5E74'MM'\u6708'dd'\u65E5'",
+                "yyyy'\u5E74'M'\u6708'd'\u65E5'",
+                "yy'\u5E74'M'\u6708'd'\u65E5'",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "\u65E5",
+                        "\u4E00",
+                        "\u4E8C",
+                        "\u4E09",
+                        "\u56DB",
+                        "\u4E94",
+                        "\u516D",
+                    }
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "1\u6708",
+                        "2\u6708",
+                        "3\u6708",
+                        "4\u6708",
+                        "5\u6708",
+                        "6\u6708",
+                        "7\u6708",
+                        "8\u6708",
+                        "9\u6708",
+                        "10\u6708",
+                        "11\u6708",
+                        "12\u6708",
+                    }
+                }
+            }
+        }
+    }
+}
