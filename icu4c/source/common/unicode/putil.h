@@ -174,6 +174,7 @@ U_STABLE double  U_EXPORT2 uprv_log(double d);
  */
 U_STABLE double  U_EXPORT2 uprv_round(double x);
 
+#if 0
 /**
  * Returns the number of digits after the decimal point in a double number x.
  *
@@ -181,7 +182,8 @@ U_STABLE double  U_EXPORT2 uprv_round(double x);
  * @return the number of digits after the decimal point in a double number x.
  * @internal
  */
-U_STABLE int32_t  U_EXPORT2 uprv_digitsAfterDecimal(double x);
+/*U_STABLE int32_t  U_EXPORT2 uprv_digitsAfterDecimal(double x);*/
+#endif
 
 /**
  * Time zone utilities

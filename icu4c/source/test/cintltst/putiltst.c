@@ -112,6 +112,7 @@ static void TestPUtilAPI(void){
         log_err("ERROR: uprv_isInfinite failed.\n");
     }
 
+#if 0
     log_verbose("Testing the API uprv_digitsAfterDecimal()....\n");
     doAssert(uprv_digitsAfterDecimal(value1), 3, "uprv_digitsAfterDecimal() failed.");
     doAssert(uprv_digitsAfterDecimal(1.2345E2), 2, "uprv_digitsAfterDecimal(1.2345E2) failed.");
@@ -122,6 +123,7 @@ static void TestPUtilAPI(void){
     doAssert(uprv_digitsAfterDecimal(-0.021), 3, "uprv_digitsAfterDecimal(-0.021) failed.");
     doAssert(uprv_digitsAfterDecimal(23.0), 0, "uprv_digitsAfterDecimal(23.0) failed.");
     doAssert(uprv_digitsAfterDecimal(0.022223333321), 9, "uprv_digitsAfterDecimal(0.022223333321) failed.");
+#endif
 
 
     log_verbose("Testing the API u_versionToString().....\n");
