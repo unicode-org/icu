@@ -645,6 +645,8 @@ void TestConstruction1()
   char testdatapath[256];
   int32_t len1=0;
   int32_t len2=0;
+  UVersionInfo versionInfo;
+  char versionString[256];
 
   U_STRING_DECL(rootVal, "ROOT", 4);
   U_STRING_DECL(te_inVal, "TE_IN", 5);
@@ -683,6 +685,16 @@ void TestConstruction1()
   /* Test getVersionNumber*/
   log_verbose("Testing version number\n");
   log_verbose("for getVersionNumber :  %s\n", ures_getVersionNumber(test1));
+
+  log_verbose("Testing version \n");
+  ures_getVersion(test1, versionInfo);
+  u_versionToString(versionInfo, versionString);
+
+  log_verbose("for getVersion :  %s\n", versionString);
+
+  if(strcmp(versionString, ures_getVersionNumber(test1)) != 0) {
+      log_err("Versions differ: %s vs %s\n", versionString, ures_getVersionNumber(test1));
+  }
 
   ures_close(test1);
   ures_close(test2);
