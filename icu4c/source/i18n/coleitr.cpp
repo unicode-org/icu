@@ -317,7 +317,7 @@ void CollationElementIterator::setText(const UnicodeString& source,
   if (m_data_->iteratordata_.isWritable && 
       m_data_->iteratordata_.string != NULL)
     uprv_free(m_data_->iteratordata_.string);
-  init_collIterate(string, length, &m_data_->iteratordata_, TRUE);
+  init_collIterate(m_data_->collator_, string, length, &m_data_->iteratordata_, TRUE);
 }
 
 // Sets the source to the new character iterator.
@@ -352,7 +352,7 @@ void CollationElementIterator::setText(CharacterIterator& source,
   if (m_data_->iteratordata_.isWritable && 
       m_data_->iteratordata_.string != NULL)
     uprv_free(m_data_->iteratordata_.string);
-  init_collIterate(buffer, length, &m_data_->iteratordata_, TRUE);
+  init_collIterate(m_data_->collator_, buffer, length, &m_data_->iteratordata_, TRUE);
 }
 
 int32_t CollationElementIterator::strengthOrder(int32_t order) const

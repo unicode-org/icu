@@ -542,7 +542,7 @@ uint32_t ucol_getNextCE(const UCollator *coll, collIterate *collationSource, UEr
         //*(collationSource->CEpos) = order;                            /* prepare the buffer */
         order = getSpecialCE(coll, order, collationSource, status);       /* and try to get the special CE */
         if(order == UCOL_NOT_FOUND) {   /* We couldn't find a good CE in the tailoring */
-          order = ucol_getNextUCA(ch, collationSource, coll->image->jamoSpecial, status);
+          order = ucol_getNextUCA(ch, collationSource, status);
         }
       } 
       //collationSource->pos++; /* we're advancing to the next codepoint */
@@ -553,10 +553,66 @@ uint32_t ucol_getNextCE(const UCollator *coll, collIterate *collationSource, UEr
     return order; /* return the CE */
 }
 
+/* this should be connected to special Jamo handling */
+uint32_t ucol_getFirstCE(const UCollator *coll, UChar u, UErrorCode *status) {
+  collIterate colIt;
+  uint32_t order;
+  init_collIterate(coll, &u, 1, &colIt, FALSE);
+  order = ucol_getNextCE(coll, &colIt, status);
+  /*UCOL_GETNEXTCE(order, coll, colIt, status);*/
+  return order;
+}
+
+void getSpecialJamo(const UCollator *coll, uint32_t CE, uint32_t **buffer) {
+      for(;;) {
+        uint32_t tag = getCETag(CE);
+        if(tag == THAI_TAG || tag == EXPANSION_TAG) {
+          uint32_t i = 0;
+            uint32_t *CEOffset = (uint32_t *)coll->image+getExpansionOffset(CE); /* find the offset to expansion table */
+            uint32_t size = getExpansionCount(CE);
+            if(size != 0) { /* if there are less than 16 elements in expansion, we don't terminate */
+              for(i = 1; i<size; i++) {
+                 *(*buffer++) = *CEOffset++;
+              }
+            } else { /* else, we do */
+              while(*CEOffset != 0) {
+                *(*buffer++) = *CEOffset++;
+              }
+            }
+            break;
+        } else if(tag == CONTRACTION_TAG) {
+            const UChar *ContractionStart = (UChar *)coll->image+getContractOffset(CE);
+            *(*buffer++) = *(coll->contractionCEs + (ContractionStart- coll->contractionIndex));
+        }
+      }
+}
+
+void ucol_getJamoCEs(const UCollator *coll, UChar ch, uint32_t **buffer) {
+  uint32_t order;
+  if(ch <= 0xFF) {                                                 /* if it's Latin One, we'll try to fast track it */
+    order = coll->latinOneMapping[ch];                            /* by looking in up in an array */
+  } else {                                                        /* otherwise, */
+    order = ucmp32_get(coll->mapping, ch);                        /* we'll go for slightly slower trie */
+  }
+  if(order > UCOL_NOT_FOUND) {                                   /* if a CE is special */
+    getSpecialJamo(coll, order, buffer);       /* and try to get the special CE */
+  } else if(order == UCOL_NOT_FOUND) { /* consult the UCA */
+    if(ch <= 0xFF) {                                                 /* if it's Latin One, we'll try to fast track it */
+      order = UCA->latinOneMapping[ch];                            /* by looking in up in an array */
+    } else {                                                        /* otherwise, */
+      order = ucmp32_get(UCA->mapping, ch);                        /* we'll go for slightly slower trie */
+    }
+    if(order > UCOL_NOT_FOUND) {
+      getSpecialJamo(UCA, order, buffer);       /* and try to get the special CE */
+    }
+  } 
+  *(*buffer++) = order;
+}
+
 /* This function tries to get a CE from UCA, which should be always around  */
 /* UChar is passed in in order to speed things up                           */
 /* here is also the generation of implicit CEs                              */
-uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UBool jamoSpecial, UErrorCode *status) {
+uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *status) {
     uint32_t order;
     if(ch < 0xFF) {               /* so we'll try to find it in the UCA */
       order = UCA->latinOneMapping[ch];
@@ -600,7 +656,7 @@ uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UBool jamoSpeci
           T += TBase;
 
           // return the first CE, but first put the rest into the expansion buffer
-          if (!jamoSpecial) { // FAST PATH
+          if (!collationSource->coll->image->jamoSpecial) { // FAST PATH
             
             *(collationSource->CEpos++) = ucmp32_get(UCA->mapping, V);
             if (T != TBase) {
@@ -610,11 +666,16 @@ uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UBool jamoSpeci
             return ucmp32_get(UCA->mapping, L); // return first one
 
           } else { // Jamo is Special
-
+            ucol_getJamoCEs(collationSource->coll, L, &collationSource->CEpos);
+            ucol_getJamoCEs(collationSource->coll, V, &collationSource->CEpos);
+            if (T != TBase) {
+              ucol_getJamoCEs(collationSource->coll, T, &collationSource->CEpos);
+            }
+            return *(collationSource->toReturn++);
+/*
             // do recursive processing of L, V, and T with fetchCE (but T only if not equal to TBase!!)
             // Since fetchCE returns a CE, and (potentially) stuffs items into the ce buffer,
             // this is how it is done.
-/*
             int firstCE = fetchCE(L, ...);
             int* lastExpansion = expansionBufferEnd++; // set pointer, leave gap!
             *lastExpansion = fetchCE(V,...);
@@ -660,7 +721,7 @@ uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UBool jamoSpeci
 * of implicit CEs                              
 */
 uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource, 
-                         uint32_t length, UBool jamoSpecial, UErrorCode *status) 
+                         uint32_t length, UErrorCode *status) 
 {
   uint32_t order;
   if (ch < 0xFF) {
@@ -721,7 +782,7 @@ uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource,
       /* 
       return the first CE, but first put the rest into the expansion buffer
       */
-      if (!jamoSpecial) 
+      if (!collationSource->coll->image->jamoSpecial) 
       { 
         *(collationSource->CEpos ++) = ucmp32_get(UCA->mapping, L); 
         *(collationSource->CEpos ++) = ucmp32_get(UCA->mapping, V);
@@ -731,6 +792,13 @@ uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource,
         collationSource->toReturn = collationSource->CEpos - 1;
         return *(collationSource->toReturn);
       } else { 
+        ucol_getJamoCEs(collationSource->coll, L, &collationSource->CEpos);
+        ucol_getJamoCEs(collationSource->coll, V, &collationSource->CEpos);
+        if (T != TBase) {
+          ucol_getJamoCEs(collationSource->coll, T, &collationSource->CEpos);
+        }
+        collationSource->toReturn = collationSource->CEpos - 1;
+        return *(collationSource->toReturn);
         /* 
         synwee :TODO 
         Heh heh.... waiting for vladimir's code, me cut and paste
@@ -1382,7 +1450,7 @@ ucol_calcSortKey(const    UCollator    *coll,
     sortKeySize += ((compareSec?0:1) + (compareTer?0:1) + (doCase?1:0) + (compareQuad?0:1) + (compareIdent?1:0));
 
     collIterate s;
-    init_collIterate((UChar *)source, len, &s, FALSE);
+    init_collIterate(coll, (UChar *)source, len, &s, FALSE);
 
     /* If we need to normalize, we'll do it all at once at the beggining! */
     UColAttributeValue normMode = coll->normalizationMode;
@@ -1807,7 +1875,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
 
 
     collIterate s;
-    init_collIterate((UChar *)source, len, &s, FALSE);
+    init_collIterate(coll, (UChar *)source, len, &s, FALSE);
 
     /* If we need to normalize, we'll do it all at once at the beggining! */
     UColAttributeValue normMode = coll->normalizationMode;
@@ -2578,7 +2646,7 @@ ucol_strcoll(    const    UCollator    *coll,
     collIterate sColl, tColl;
 
     
-    init_collIterate(source, sourceLength, &sColl, FALSE);
+    init_collIterate(coll, source, sourceLength, &sColl, FALSE);
     if((coll->normalizationMode == UCOL_ON)
       /* && (unorm_quickCheck( sColl.string, sColl.len - sColl.string, UNORM_NFD, &status) != UNORM_YES)
       && (unorm_quickCheck( sColl.string, sColl.len - sColl.string, UNORM_NFC, &status) != UNORM_YES)) */
@@ -2609,10 +2677,10 @@ ucol_strcoll(    const    UCollator    *coll,
             }
             return result;
         }
-        init_collIterate(normSource, normSourceLength, &sColl, TRUE);
+        init_collIterate(coll, normSource, normSourceLength, &sColl, TRUE);
     }
 
-    init_collIterate(target, targetLength, &tColl, FALSE);
+    init_collIterate(coll, target, targetLength, &tColl, FALSE);
     if((coll->normalizationMode == UCOL_ON)
       /* && (unorm_quickCheck(tColl.string, tColl.len - tColl.string, UNORM_NFD, &status) != UNORM_YES)
       && (unorm_quickCheck(tColl.string, tColl.len - tColl.string, UNORM_NFC, &status) != UNORM_YES)) */
@@ -2631,7 +2699,7 @@ ucol_strcoll(    const    UCollator    *coll,
           uprv_free(normTargetP);
           return result;
       }
-      init_collIterate(normTarget, normTargetLength, &tColl, TRUE);
+      init_collIterate(coll, normTarget, normTargetLength, &tColl, TRUE);
     }
 
     if (U_FAILURE(status))
@@ -3066,7 +3134,7 @@ ucol_strcoll(    const    UCollator    *coll,
 }
 
 
-void init_incrementalContext(UCharForwardIterator *source, void *sourceContext, incrementalContext *s) {
+void init_incrementalContext(const UCollator *coll, UCharForwardIterator *source, void *sourceContext, incrementalContext *s) {
     s->len = s->stringP = s->stackString ;
     s->capacity = s->stackString+UCOL_MAX_BUFFER;
     s->CEpos = s->toReturn = s->CEs;
@@ -3075,6 +3143,7 @@ void init_incrementalContext(UCharForwardIterator *source, void *sourceContext, 
     s->currentChar = 0xFFFF;
     s->lastChar = 0xFFFF;
     s->panic = FALSE;
+    s->coll = coll;
 }
 
 /* This is the incremental function */
@@ -3084,8 +3153,8 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
 {
     incrementalContext sColl, tColl;
 
-    init_incrementalContext(source, sourceContext, &sColl);
-    init_incrementalContext(target, targetContext, &tColl);
+    init_incrementalContext(coll, source, sourceContext, &sColl);
+    init_incrementalContext(coll, target, targetContext, &tColl);
 
 #if 0 
     /* This is Andy's fast preparatory scan */
@@ -3664,7 +3733,7 @@ int32_t ucol_getIncrementalCE(const UCollator *coll, incrementalContext *ctx, UE
       if(order >= UCOL_NOT_FOUND) {                                   /* if a CE is special */
         order = ucol_getIncrementalSpecialCE(coll, order, ctx, status);       /* and try to get the special CE */
         if(order == UCOL_NOT_FOUND) {   /* We couldn't find a good CE in the tailoring */
-          order = ucol_getIncrementalUCA(ch, ctx, coll->image->jamoSpecial, status);
+          order = ucol_getIncrementalUCA(ch, ctx, status);
         }
       } 
     } 
@@ -3675,7 +3744,7 @@ int32_t ucol_getIncrementalCE(const UCollator *coll, incrementalContext *ctx, UE
 /* This function tries to get a CE from UCA, which should be always around  */
 /* UChar is passed in in order to speed things up                           */
 /* here is also the generation of implicit CEs                              */
-uint32_t ucol_getIncrementalUCA(UChar ch, incrementalContext *collationSource, UBool jamoSpecial, UErrorCode *status) {
+uint32_t ucol_getIncrementalUCA(UChar ch, incrementalContext *collationSource, UErrorCode *status) {
     uint32_t order;
     if(ch < 0xFF) {               /* so we'll try to find it in the UCA */
       order = UCA->latinOneMapping[ch];
@@ -3718,7 +3787,7 @@ uint32_t ucol_getIncrementalUCA(UChar ch, incrementalContext *collationSource, U
           T += TBase;
 
           // return the first CE, but first put the rest into the expansion buffer
-          if (!jamoSpecial) { // FAST PATH
+          if (!collationSource->coll->image->jamoSpecial) { // FAST PATH
             
             *(collationSource->CEpos++) = ucmp32_get(UCA->mapping, V);
             if (T != TBase) {
@@ -3728,11 +3797,18 @@ uint32_t ucol_getIncrementalUCA(UChar ch, incrementalContext *collationSource, U
             return ucmp32_get(UCA->mapping, L); // return first one
 
           } else { // Jamo is Special
+            ucol_getJamoCEs(collationSource->coll, L, &collationSource->CEpos);
+            ucol_getJamoCEs(collationSource->coll, V, &collationSource->CEpos);
+            if (T != TBase) {
+              ucol_getJamoCEs(collationSource->coll, T, &collationSource->CEpos);
+            }
+            return *(collationSource->toReturn++);
 
+/*
             // do recursive processing of L, V, and T with fetchCE (but T only if not equal to TBase!!)
             // Since fetchCE returns a CE, and (potentially) stuffs items into the ce buffer,
             // this is how it is done.
-/*
+
             int firstCE = fetchCE(L, ...);
             int* lastExpansion = expansionBufferEnd++; // set pointer, leave gap!
             *lastExpansion = fetchCE(V,...);

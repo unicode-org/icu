@@ -232,7 +232,12 @@ U_CFUNC void ucol_inv_getGapPositions(UColTokListHeader *lh) {
 }
 
 U_CFUNC uint32_t ucol_getNextGenerated(ucolCEGenerator *g) {
-  g->current += (1<<(32-(g->byteSize*8)));
+  if(g->noOfRanges > 0) {
+    g->current = ucol_nextWeight(g->ranges, &g->noOfRanges);
+  } else {
+    fprintf(stderr, "Will scream very loudly and die!\n");
+    exit(-1);
+  }
   if(g->current > g->fLow && g->current < g->fHigh) {
     g->current = g->fHigh;
   }
@@ -246,35 +251,17 @@ U_CFUNC uint32_t ucol_getSimpleCEGenerator(ucolCEGenerator *g, uint32_t low, uin
   uint32_t count = tok->toInsert;
   uint32_t lobytes = 0xFFFFFFFF, hibytes = 0xFFFFFFFF;
 
-  g->fHigh = fbHigh[strength];
-  g->fLow = fbLow[strength];
+  g->noOfRanges = ucol_allocWeights(low, high, count, g->ranges);
 
-  ucol_countBytes(low, lobytes);
-  ucol_countBytes(high, hibytes);
-
-  g->lowCount = high-low;
-  g->midCount = 0;
-  g->highCount = 0;
-
-  g->count = count + g->fHigh-g->fLow;
-
-  g->byteSize = 0xFFFFFFFF;
-  g->start = 0;
-  g->limit = 0;
-
-  if(g->lowCount >= g->count) {
-    g->byteSize = lobytes;
-    g->start = low;
-    g->limit = high;
-  } else if((g->lowCount)*254 > g->count) {
-    g->byteSize = lobytes+1;
-    g->start = low | (0x02 << (32-g->byteSize*8));
-    g->limit = high;
+  if(g->noOfRanges > 0) {
+    g->current = ucol_nextWeight(g->ranges, &g->noOfRanges);
+  } else {
+    fprintf(stderr, "Will scream very loudly and die!\n");
+    exit(-1);
   }
 
-  g->current = g->start;
-  g->fLow = g->fLow << 24;
-  g->fHigh = g->fHigh << 24;
+  g->fLow = fbHigh[strength] << 24;
+  g->fHigh = fbLow[strength]<< 24;
 
   if(g->current > g->fLow && g->current < g->fHigh) {
     g->current = g->fHigh;
@@ -314,129 +301,15 @@ U_CFUNC uint32_t ucol_getCEGenerator(ucolCEGenerator *g, uint32_t* lows, uint32_
     }
   }
 
+  g->noOfRanges = ucol_allocWeights(low, high, count, g->ranges);
 
-  g->firstLow = low + (1 << (32-lobytes*8));
-  g->lastHigh = high - (1 << (32-hibytes*8));
-
-  if(g->firstLow != g->lastHigh) {
-
-    if(lobytes > 1) {
-      g->firstMid = g->firstLow + (1 << (32-(lobytes-1)*8)) & (0xFFFFFF00 << (32-lobytes*8));
-      g->lastLow = g->firstMid - (1 << (32-lobytes*8));
-    } else if(lobytes < hibytes) {
-      g->lastLow = g->lastHigh - (1 << (32-(hibytes-1)*8)) & (0xFFFFFF00 << (32-hibytes*8));
-      g->firstMid = g->lastMid = 0;
-    } else {
-      g->lastLow = g->lastHigh;
-      g->firstMid = g->lastMid = 0;
-    }
-
-    if(hibytes > 1) {
-      g->lastMid = g->lastHigh - (1 << (32-(hibytes-1)*8)) & (0xFFFFFF00 << (32-hibytes*8));
-      g->firstHigh = g->lastMid + (1 << (32-(hibytes-1)*8)) + (0x02 << (32-(hibytes)*8));
-    } else if(lobytes > hibytes) {
-      g->firstHigh = g->firstLow + (1 << (32-(lobytes-1)*8)) & (0xFFFFFF00 << (32-lobytes*8));
-      g->firstMid = g->lastMid = 0;
-    } else {
-      g->firstHigh = g->firstLow;
-      g->firstMid = g->lastMid = 0;
-    }
-
-    ucol_countBytes(g->lastLow, g->lowByteCount);
-    ucol_countBytes(g->lastMid, g->midByteCount);
-    ucol_countBytes(g->lastHigh, g->highByteCount);
-
-    if(g->firstLow < low || g->lastLow > high || g->firstLow > g->lastLow) {
-      g->firstLow = g->lastLow = 0;
-      g->lowByteCount = 0xFFFF;
-    }
-    if(g->firstMid < low || g->lastMid > high || g->firstMid > g->lastMid) {
-      g->firstMid = g->lastMid = 0;
-      g->midByteCount = 0xFFFF;
-    }
-    if(g->firstHigh < low || g->lastHigh > high || g->firstHigh > g->lastHigh) {
-      g->firstHigh = g->lastHigh = 0;
-      g->highByteCount = 0xFFFF;
-    }
-
-
-    g->maxCount = g->lowCount = (g->lastLow - g->firstLow) >> (32-g->lowByteCount*8);
-    g->midCount = (g->lastMid - g->firstMid) >> (32-g->midByteCount*8);
-    if(g->midCount > g->maxCount) {
-      g->maxCount = g->midCount;
-    }
-    g->highCount = (g->lastHigh - g->firstHigh) >> (32-g->highByteCount*8);
-    if(g->highCount > g->maxCount) {
-      g->maxCount = g->highCount;
-    }
-
-    g->count = count;
-
-    g->byteSize = 0xFFFFFFFF;
-    g->start = 0;
-    g->limit = 0;
-
-    /* Let's get the best one now */
-    if(g->maxCount > g->count) {
-      if(g->lowCount > count+(g->fHigh - g->fLow) ) {
-        g->byteSize = g->lowByteCount;
-        g->start = g->firstLow;
-        g->limit = g->lastLow;
-      }
-
-      if(g->midCount > count+(g->fHigh - g->fLow)  && g->midByteCount < g->byteSize) {
-        g->byteSize = g->midByteCount;
-        g->start = g->firstMid;
-        g->limit = g->lastMid;
-      }
-
-      if(g->highCount > count+(g->fHigh - g->fLow)  && g->highByteCount < g->byteSize) {
-        g->byteSize = g->highByteCount;
-        g->start = g->firstHigh;
-        g->limit = g->lastHigh;
-      }
-    }
-
-    if(g->byteSize == 0xFFFFFFFF && g->maxCount*254 > g->count) { /* Still no solution */
-      if((g->lowCount)*254 > count+(g->fHigh - g->fLow) ) {
-        g->byteSize = g->lowByteCount+1;
-        g->start = g->firstLow | (0x02 << (32-g->byteSize*8));
-        g->limit = g->lastLow;
-      }
-
-      if((g->midCount)*254 > count+(g->fHigh - g->fLow) && g->midByteCount+1 < g->byteSize) {
-        g->byteSize = g->midByteCount+1;
-        g->start = g->firstMid | (0x02 << (32-g->byteSize*8));
-        g->limit = g->lastMid;
-      }
-
-      if((g->highCount)*254 > count+(g->fHigh - g->fLow) && g->highByteCount+1 < g->byteSize) {
-        g->byteSize = g->highByteCount+1;
-        g->start = g->firstHigh | (0x02 << (32-g->byteSize*8));
-        g->limit = g->lastHigh | (0xFF << (32-g->byteSize*8));
-      }
-    }
-    if(g->byteSize == 0xFFFFFFFF) { /* Still no solution, we need to see if we can do anything about it */
-#ifdef UCOL_DEBUG
-      fprintf(stderr, "Too many elements to fit! %08X in %08X, will try splitting\n", g->count, g->maxCount*254);
-#endif
-    }
-
-    g->current = g->start;
-  } else { /* only trivial space size 1 */
-    if(count == 1) {
-      g->byteSize = lobytes;
-      g->current = g->start = g->limit = g->firstLow;
-    } else if(count < 254) {
-      g->byteSize = lobytes+1;
-      g->current = g->start = g->firstLow | (0x02 << (32-g->byteSize*8));
-      g->limit = g->firstLow | (0xFF << (32-g->byteSize*8));
-    } else {
-      g->byteSize = lobytes+2;
-      g->current = g->start = g->firstLow | (0x0202 << (32-g->byteSize*8));
-      g->limit = g->firstLow | (0xFFFF << (32-g->byteSize*8));
-    }
+  if(g->noOfRanges > 0) {
+    g->current = ucol_nextWeight(g->ranges, &g->noOfRanges);
+  } else {
+    fprintf(stderr, "Will scream very loudly and die!\n");
+    exit(-1);
   }
+
   g->fLow = g->fLow << 24;
   g->fHigh = g->fHigh << 24;
 
@@ -624,12 +497,12 @@ U_CFUNC void ucol_initBuffers(UColTokListHeader *lh, UHashtable *tailored, UErro
       CEparts[0] = lh->gapsLo[fStrength*3];
       /*CEparts[1] = ucol_getCEGenerator(&Gens[1], lh->gapsLo[fStrength*3+1], lh->gapsHi[fStrength*3+1], tok, 1);*/
       CEparts[1] = ucol_getCEGenerator(&Gens[1], lh->gapsLo, lh->gapsHi, tok, fStrength, 1);
-      if(tok->next->strength == UCOL_TERTIARY) {
+/*      if(tok->next->strength == UCOL_TERTIARY) {*/
         CEparts[UCOL_TERTIARY] = ucol_getSimpleCEGenerator(&Gens[2], 0x03000000, 0xFF000000, tok->next, UCOL_TERTIARY);
-      } else {
+/*      } else {
         CEparts[UCOL_TERTIARY] = 0x03000000;
       }
-    
+*/    
       ucol_doCE(CEparts, tok, tailored, status);
       tok = tok->next;
 
@@ -639,11 +512,15 @@ U_CFUNC void ucol_initBuffers(UColTokListHeader *lh, UHashtable *tailored, UErro
           ucol_doCE(CEparts, tok, tailored, status);
         } else if(tok->strength == UCOL_SECONDARY) {
           CEparts[1] = ucol_getNextGenerated(&Gens[1]);
+/*
           if(tok->next->strength == UCOL_SECONDARY) {
             CEparts[UCOL_TERTIARY] = 0x03000000;
           } else {
+*/
             CEparts[UCOL_TERTIARY] = ucol_getSimpleCEGenerator(&Gens[2], 0x03000000, 0xFF000000, tok->next, UCOL_TERTIARY);
+/*
           }
+*/
           ucol_doCE(CEparts, tok, tailored, status);
         } else { /* Strength is identical */
           ucol_doCE(CEparts, tok, tailored, status);
@@ -757,14 +634,6 @@ U_CFUNC void ucol_initBuffers(UColTokListHeader *lh, UHashtable *tailored, UErro
   }
 }
 
-U_CFUNC uint32_t ucol_getFirstCE(const UCollator *coll, UChar u, UErrorCode *status) {
-  collIterate colIt;
-  uint32_t order;
-  init_collIterate(&u, 1, &colIt, FALSE);
-  order = ucol_getNextCE(coll, &colIt, status);
-  /*UCOL_GETNEXTCE(order, coll, colIt, status);*/
-  return order;
-}
 
 U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokListHeader *lh, UHashtable *tailored, UErrorCode *status) {
   UCAElements el;
@@ -790,7 +659,7 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
         uint32_t len = tok->expansion >> 24;
         uprv_memcpy(buff, (tok->expansion & 0x00FFFFFF) + src->source, len*sizeof(UChar));
         unorm_normalize(buff, len, UNORM_NFD, 0, source, 256, status);
-        init_collIterate(source, len, &s, FALSE);
+        init_collIterate(src->UCA, source, len, &s, FALSE);
 
         for(;;) {
           UCOL_GETNEXTCE(order, src->UCA, s, status);
@@ -930,7 +799,7 @@ uint32_t ucol_getDynamicCEs(UColTokenParser *src, tempUCATable *t, UChar *decomp
     CE = ucmp32_get(t->mapping, decomp[j]);
     if(CE == UCOL_NOT_FOUND || lastNotFound) { /* get it from the UCA */
       lastNotFound = FALSE;
-      init_collIterate(decomp+j, 1, &colIt, TRUE);
+      init_collIterate(src->UCA, decomp+j, 1, &colIt, TRUE);
       while(CE != UCOL_NO_MORE_CES) {
         CE = ucol_getNextCE(src->UCA, &colIt, status);
         if(CE != UCOL_NO_MORE_CES) {
@@ -1099,7 +968,7 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
         el.cPoints = el.uchars;
         el.cSize = 1;
         el.noOfCEs = 0;
-        init_collIterate(decomp, 1, &colIt, TRUE);
+        init_collIterate(src->UCA, decomp, 1, &colIt, TRUE);
         while(CE != UCOL_NO_MORE_CES) {
           CE = ucol_getNextCE(src->UCA, &colIt, status);
           /*UCOL_GETNEXTCE(CE, temp, colIt, status);*/

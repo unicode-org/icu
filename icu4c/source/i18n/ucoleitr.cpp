@@ -60,7 +60,7 @@ ucol_openElements(const UCollator  *coll,
 
   result->length_ = textLength;
   result->reset_   = TRUE;
-  init_collIterate(text, textLength, &result->iteratordata_, FALSE);
+  init_collIterate(coll, text, textLength, &result->iteratordata_, FALSE);
 
   return result;
 }
@@ -237,8 +237,8 @@ ucol_setText(      UCollationElements *elems,
   {
     uprv_free(elems->iteratordata_.string);
   }
-
-  init_collIterate(text, textLength, &elems->iteratordata_, FALSE);
+ 
+  init_collIterate(elems->collator_, text, textLength, &elems->iteratordata_, FALSE);
 
   elems->reset_   = TRUE;
 }

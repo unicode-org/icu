@@ -224,9 +224,9 @@ getWeightRanges(uint32_t lowerLimit, uint32_t upperLimit, WeightRange ranges[7])
 
     /* set the middle range */
     middle.length=1;
-    middle.count=((int32_t)(middle.end-middle.start)>>24)+1;
-
-    if(middle.count<=0) {
+    if(middle.end>=middle.start) {
+        middle.count=(int32_t)((middle.end-middle.start)>>24)+1;
+    } else {
         /* eliminate overlaps */
         uint32_t start, end;
 
