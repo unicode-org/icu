@@ -1180,7 +1180,7 @@ getCaseLocale(const char *locale) {
 /* Is case-ignorable? In Unicode 3.1.1, is {HYPHEN, SOFT HYPHEN, {Mn}} ? (Expected to change!) */
 static U_INLINE UBool
 isCaseIgnorable(UChar32 c, uint32_t category) {
-    return category==U_NON_SPACING_MARK || c==0x2010 || c==0xad;
+    return (UBool)(category==U_NON_SPACING_MARK || c==0x2010 || c==0xad);
 }
 
 /* Is followed by {case-ignorable}* {Ll, Lu, Lt}  ? */
@@ -1396,34 +1396,35 @@ u_internalToLower(UChar32 c, UCharIterator *iter,
                         (c==0xcc || c==0xcd || c==0x128))
                 ) {
                     /* lithuanian: add a dot above if there are more accents above (to always have the dot) */
+                    u=buffer;
                     buffer[1]=0x307;
                     switch(c) {
                     case 0x49:  /* LATIN CAPITAL LETTER I */
                         buffer[0]=0x69;
-                        result=2;
+                        length=2;
                         break;
                     case 0x4a:  /* LATIN CAPITAL LETTER J */
                         buffer[0]=0x6a;
-                        result=2;
+                        length=2;
                         break;
                     case 0x12e: /* LATIN CAPITAL LETTER I WITH OGONEK */
                         buffer[0]=0x12f;
-                        result=2;
+                        length=2;
                         break;
                     case 0xcc:  /* LATIN CAPITAL LETTER I WITH GRAVE */
                         buffer[0]=0x69;
                         buffer[2]=0x300;
-                        result=3;
+                        length=3;
                         break;
                     case 0xcd:  /* LATIN CAPITAL LETTER I WITH ACUTE */
                         buffer[0]=0x69;
                         buffer[2]=0x301;
-                        result=3;
+                        length=3;
                         break;
                     case 0x128: /* LATIN CAPITAL LETTER I WITH TILDE */
                         buffer[0]=0x69;
                         buffer[2]=0x303;
-                        result=3;
+                        length=3;
                         break;
                     default:
                         return 0; /* will not occur */
