@@ -398,7 +398,7 @@ public abstract class DateFormat extends Format {
      */
     public final static DateFormat getTimeInstance()
     {
-        return get(DEFAULT, 0, 1, Locale.getDefault());
+        return get(-1, DEFAULT, Locale.getDefault());
     }
 
     /**
@@ -410,7 +410,7 @@ public abstract class DateFormat extends Format {
      */
     public final static DateFormat getTimeInstance(int style)
     {
-        return get(style, 0, 1, Locale.getDefault());
+        return get(-1, style, Locale.getDefault());
     }
 
     /**
@@ -424,7 +424,7 @@ public abstract class DateFormat extends Format {
     public final static DateFormat getTimeInstance(int style,
                                                  Locale aLocale)
     {
-        return get(style, 0, 1, aLocale);
+        return get(-1, style, aLocale);
     }
 
     /**
@@ -434,7 +434,7 @@ public abstract class DateFormat extends Format {
      */
     public final static DateFormat getDateInstance()
     {
-        return get(0, DEFAULT, 2, Locale.getDefault());
+        return get(DEFAULT, -1, Locale.getDefault());
     }
 
     /**
@@ -446,7 +446,7 @@ public abstract class DateFormat extends Format {
      */
     public final static DateFormat getDateInstance(int style)
     {
-        return get(0, style, 2, Locale.getDefault());
+        return get(style, -1, Locale.getDefault());
     }
 
     /**
@@ -460,7 +460,7 @@ public abstract class DateFormat extends Format {
     public final static DateFormat getDateInstance(int style,
                                                  Locale aLocale)
     {
-        return get(0, style, 2, aLocale);
+        return get(style, -1, aLocale);
     }
 
     /**
@@ -470,7 +470,7 @@ public abstract class DateFormat extends Format {
      */
     public final static DateFormat getDateTimeInstance()
     {
-        return get(DEFAULT, DEFAULT, 3, Locale.getDefault());
+        return get(DEFAULT, DEFAULT, Locale.getDefault());
     }
 
     /**
@@ -485,7 +485,7 @@ public abstract class DateFormat extends Format {
     public final static DateFormat getDateTimeInstance(int dateStyle,
                                                        int timeStyle)
     {
-        return get(timeStyle, dateStyle, 3, Locale.getDefault());
+        return get(timeStyle, dateStyle, Locale.getDefault());
     }
 
     /**
@@ -499,7 +499,7 @@ public abstract class DateFormat extends Format {
     public final static DateFormat
         getDateTimeInstance(int dateStyle, int timeStyle, Locale aLocale)
     {
-        return get(timeStyle, dateStyle, 3, aLocale);
+        return get(timeStyle, dateStyle, aLocale);
     }
 
     /**
@@ -633,33 +633,21 @@ public abstract class DateFormat extends Format {
     /**
      * Creates a DateFormat with the given time and/or date style in the given
      * locale.
-     * @param timeStyle a value from 0 to 3 indicating the time format,
-     * ignored if flags is 2
      * @param dateStyle a value from 0 to 3 indicating the time format,
-     * ignored if flags is 1
-     * @param flags either 1 for a time format, 2 for a date format,
-     * or 3 for a date/time format
+     * or -1 to indicate no date
+     * @param timeStyle a value from 0 to 3 indicating the time format,
+     * or -1 to indicate no time
      * @param loc the locale for the format
      */
-    private static DateFormat get(int timeStyle, int dateStyle,
-                                  int flags, Locale loc) {
-        if ((flags & 1) != 0) {
-            if (timeStyle < 0 || timeStyle > 3) {
-                throw new IllegalArgumentException("Illegal time style " + timeStyle);
-            }
-        } else {
-            timeStyle = -1;
+    private static DateFormat get(int dateStyle, int timeStyle, Locale loc) {
+        if (timeStyle < -1 || timeStyle > 3) {
+            throw new IllegalArgumentException("Illegal time style " + timeStyle);
         }
-        if ((flags & 2) != 0) {
-            if (dateStyle < 0 || dateStyle > 3) {
-                throw new IllegalArgumentException("Illegal date style " + dateStyle);
-            }
-        } else {
-            dateStyle = -1;
+        if (dateStyle < -1 || dateStyle > 3) {
+            throw new IllegalArgumentException("Illegal date style " + dateStyle);
         }
         try {
             return new SimpleDateFormat(timeStyle, dateStyle, loc);
-
         } catch (MissingResourceException e) {
             return new SimpleDateFormat("M/d/yy h:mm a");
         }
@@ -737,7 +725,7 @@ public abstract class DateFormat extends Format {
      *
      * @see DateFormat#getDateTimeInstance
      */
-    static public DateFormat getDateTimeInstance(Calendar cal, int dateStyle,
+    static final public DateFormat getDateTimeInstance(Calendar cal, int dateStyle,
                                                  int timeStyle, Locale locale)
     {
         return cal.getDateTimeFormat(dateStyle, timeStyle, locale);
