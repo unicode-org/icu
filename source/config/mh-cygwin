@@ -7,6 +7,9 @@
 GEN_DEPS.c=	$(CC) -E -MM $(DEFS) $(CPPFLAGS)
 GEN_DEPS.cc=	$(CXX) -E -MM $(DEFS) $(CPPFLAGS)
 
+## Flags to create a static library
+STATICCPPFLAGS = -DU_STATIC_IMPLEMENTATION
+
 ## Flags for position independent code
 SHAREDLIBCFLAGS = 
 SHAREDLIBCXXFLAGS = 
@@ -30,7 +33,7 @@ LD_SONAME =
 ## Shared object suffix
 SO = dll
 ## Non-shared intermediate object suffix
-STATIC_O = o
+STATIC_O = ao
 #LIBICU = $(ICUPREFIX)
 
 # Change the stubnames so that poorly working FAT disks and installation programs can work.

@@ -9,6 +9,9 @@ GEN_DEPS.cc=	:
 #GEN_DEPS.c=	$(COMPILE.c) /E
 #GEN_DEPS.cc=	$(COMPILE.cc) /E
 
+## Flags to create a static library
+STATICCPPFLAGS = -DU_STATIC_IMPLEMENTATION
+
 ## Flags for position independent code
 SHAREDLIBCFLAGS = 
 SHAREDLIBCXXFLAGS = 
@@ -32,7 +35,7 @@ endif
 CFLAGS += /GF
 CXXFLAGS += /GF /GX
 CPPFLAGS+=/nologo
-DEFS+=/D"WIN32"
+DEFS+=-DWIN32
 LDFLAGS+=/nologo
 
 # Commands to compile
@@ -57,7 +60,7 @@ LD_SONAME = /IMPLIB:$(SO_TARGET:.dll=.lib)
 ## Shared object suffix
 SO = dll
 ## Non-shared intermediate object suffix
-STATIC_O = o
+STATIC_O = ao
 # OUTOPT is for creating a specific output name
 OUTOPT = /out:
 
