@@ -95,7 +95,6 @@
 
 #define SIGN 0x80000000L
 
-static char DEFAULT_CONVERTER_NAME[60] = "";
 static char tempString[10] = "";
 
 /* statics */
@@ -1356,27 +1355,24 @@ static char* u_bottomNBytesOfDouble(double* d, int n)
 
 const char* icu_getDefaultCodepage()
 {
-  /*Lazy evaluates DEFAULT_CONVERTER_NAME*/
-  if (DEFAULT_CONVERTER_NAME[0]) return DEFAULT_CONVERTER_NAME;
 #if defined(OS400)
   /* Currently TBD 
      in the future should use thread specific CP
   */
+  return NULL;
 #elif defined(OS390)
-  icu_strcpy(DEFAULT_CONVERTER_NAME, "ibm-1047");
+  return "ibm-1047";
 #elif defined(XP_MAC)
   /* TBD */
-#elif defined(WIN32) 
-  icu_strcpy(DEFAULT_CONVERTER_NAME, "cp");
-  icu_strcat(DEFAULT_CONVERTER_NAME, _itoa(GetACP(), tempString, 10));
+#elif defined(WIN32)
+  static char codepage[12]={ "cp" };
+  icu_strcpy(codepage+2, _itoa(GetACP(), tempString, 10));
+  return codepage;
 #elif defined(POSIX)
-  icu_strcpy(DEFAULT_CONVERTER_NAME, "LATIN_1");
-
-#else 
-  icu_strcpy(DEFAULT_CONVERTER_NAME, "LATIN_1");
+  return "LATIN_1");
+#else
+  return "LATIN_1";
 #endif
-  
-  return DEFAULT_CONVERTER_NAME;
 }
 
 #if U_CHARSET_FAMILY==U_EBCDIC_FAMILY
