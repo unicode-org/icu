@@ -684,9 +684,9 @@ U_CAPI int32_t U_EXPORT2 ucol_inv_getPrevCE(uint32_t CE, uint32_t contCE,
 
     hash = c;
     if (hash >= UCOL_UNSAFECP_TABLE_SIZE*8) {
-        if (hash >= 0xd800 && hash <= 0xf8ff) {
-            /*  Part of a surrogate, or in private use area.            */
-            /*   These are always considered unsafe.                    */
+      if(UTF_IS_TRAIL(c)) {
+            /*  Trail surrogate                     */
+            /*  These are always considered unsafe. */
             return TRUE;
         }
         hash = (hash & UCOL_UNSAFECP_TABLE_MASK) + 256;
