@@ -217,14 +217,13 @@ static int32_t convertFromPuny(  const UChar* src, int32_t srcLength,
                                  UErrorCode& status){
     char b1Stack[MAX_LABEL_BUFFER_SIZE];
     char* b1 = b1Stack;
-    int32_t b1Len = 0, b1Capacity = MAX_LABEL_BUFFER_SIZE;
     int32_t destLen =0;
 
     convertUCharsToASCII(src, b1,srcLength);
 
     uint32_t b2Stack[MAX_LABEL_BUFFER_SIZE];
     uint32_t* b2 = b2Stack;
-    int32_t b2Len =MAX_LABEL_BUFFER_SIZE , b2Capacity = MAX_LABEL_BUFFER_SIZE;
+    int32_t b2Len =MAX_LABEL_BUFFER_SIZE;
     unsigned char* caseFlags = (unsigned char*) uprv_malloc(srcLength * sizeof(unsigned char*));
     punycode_status error = punycode_decode(srcLength,b1,(uint32_t*)&b2Len,b2,caseFlags);
     status = getError(error);
@@ -671,8 +670,6 @@ idnaref_IDNToASCII(  const UChar* src, int32_t srcLength,
         return 0;
     }
 
-    UChar *start=NULL, *limit=NULL;
-
     int32_t reqLength = 0;
 //    UParseError parseError;
 
@@ -688,8 +685,8 @@ idnaref_IDNToASCII(  const UChar* src, int32_t srcLength,
     int32_t b1Capacity = MAX_LABEL_BUFFER_SIZE;
     
 	//get the options
-    UBool allowUnassigned   = (UBool)((options & IDNAREF_ALLOW_UNASSIGNED) != 0);
-    UBool useSTD3ASCIIRules = (UBool)((options & IDNAREF_USE_STD3_RULES) != 0);
+//    UBool allowUnassigned   = (UBool)((options & IDNAREF_ALLOW_UNASSIGNED) != 0);
+//    UBool useSTD3ASCIIRules = (UBool)((options & IDNAREF_USE_STD3_RULES) != 0);
     UBool done = FALSE;
 
     if(U_FAILURE(*status)){
@@ -825,8 +822,6 @@ idnaref_IDNToUnicode(  const UChar* src, int32_t srcLength,
         return 0;
     }
 
-    UChar *start=NULL, *limit=NULL;
-
     int32_t reqLength = 0;
     
     UBool done = FALSE;
@@ -843,8 +838,8 @@ idnaref_IDNToUnicode(  const UChar* src, int32_t srcLength,
     int32_t b1Capacity = MAX_LABEL_BUFFER_SIZE;
     
 	//get the options
-    UBool allowUnassigned   = (UBool)((options & IDNAREF_ALLOW_UNASSIGNED) != 0);
-    UBool useSTD3ASCIIRules = (UBool)((options & IDNAREF_USE_STD3_RULES) != 0);
+//    UBool allowUnassigned   = (UBool)((options & IDNAREF_ALLOW_UNASSIGNED) != 0);
+//    UBool useSTD3ASCIIRules = (UBool)((options & IDNAREF_USE_STD3_RULES) != 0);
     
 	if(U_FAILURE(*status)){
         goto CLEANUP;
