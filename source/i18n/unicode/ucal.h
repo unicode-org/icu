@@ -280,98 +280,142 @@ enum UCalendarAMPMs {
 typedef enum UCalendarAMPMs UCalendarAMPMs;
 
 /**
- * Create a UEnumeration over the recognized time zone IDs with the
- * given raw offset.
- * @param rawOffset the desired GMT offset, not including the effects
- * of daylight savings time
+ * Create an enumeration over all time zones.
+ *
+ * @param ec input/output error code
+ *
  * @return an enumeration object that the caller must dispose of using
- * uenum_close()
- * @draft ICU 2.4
+ * uenum_close(), or NULL upon failure. In case of failure *ec will
+ * indicate the error.
+ *
+ * @draft ICU 2.6
  */
 U_CAPI UEnumeration* U_EXPORT2
-ucal_openTimeZoneEnumeration(int32_t rawOffset,
-                             UErrorCode* status);
+ucal_openTimeZones(UErrorCode* ec);
 
 /**
-* Get an available TimeZone ID.
-* A Timezone ID is a string of the form "America/Los Angeles".
-* @param rawOffset The desired GMT offset
-* @param index The index of the desired TimeZone.
-* @param status A pointer to an UErrorCode to receive any errors
-* @return The requested TimeZone ID, or 0 if not found
-* @see ucal_countAvailableTZIDs
-* @obsolete ICU 2.8. Use ucal_openTimeZoneEnumeration instead since this API will be removed in that release.
-*/
-U_CAPI const UChar* U_EXPORT2 
-ucal_getAvailableTZIDs(        int32_t         rawOffset,
-                int32_t         index,
-                UErrorCode*     status);
+ * Create an enumeration over all time zones associated with the given
+ * country. Some zones are affiliated with no country (e.g., "UTC");
+ * these may also be retrieved, as a group.
+ *
+ * @param country the ISO 3166 two-letter country code, or NULL to
+ * retrieve zones not affiliated with any country
+ *
+ * @param ec input/output error code
+ *
+ * @return an enumeration object that the caller must dispose of using
+ * uenum_close(), or NULL upon failure. In case of failure *ec will
+ * indicate the error.
+ *
+ * @draft ICU 2.6
+ */
+U_CAPI UEnumeration* U_EXPORT2
+ucal_openCountryTimeZones(const char* country, UErrorCode* ec);
 
 /**
-* Determine how many TimeZones exist with a certain offset.
-* This function is most useful as determining the loop ending condition for
-* calls to \Ref{ucal_getAvailableTZIDs}.
-* @param rawOffset The desired GMT offset.
-* @return The number of TimeZones with rawOffset.
-* @see ucal_getAvailableTZIDs
-* @obsolete ICU 2.8.  Use ucal_openTimeZoneEnumeration instead since this API will be removed in that release.
-*/
-U_CAPI int32_t U_EXPORT2 
-ucal_countAvailableTZIDs(int32_t rawOffset);
+ * Return the default time zone. The default is determined initially
+ * by querying the host operating system. It may be changed with
+ * ucal_setDefaultTimeZone() or with the C++ TimeZone API.
+ *
+ * @param result a buffer to receive the result, or NULL
+ *
+ * @param resultLength the length of the result buffer
+ *
+ * @param ec input/output error code
+ *
+ * @return the result string length, not including the terminating
+ * null
+ *
+ * @draft ICU 2.6
+ */
+U_CAPI int32_t U_EXPORT2
+ucal_getDefaultTimeZone(UChar* result, int32_t resultCapacity, UErrorCode* ec);
 
 /**
-* Get the current date and time.
-* The value returned is represented as milliseconds from the epoch.
-* @return The current date and time.
-* @stable ICU 2.0
-*/
+ * Set the default time zone.
+ *
+ * @param zoneID null-terminated time zone ID
+ *
+ * @param ec input/output error code
+ *
+ * @draft ICU 2.6
+ */
+U_CAPI void U_EXPORT2
+ucal_setDefaultTimeZone(const UChar* zoneID, UErrorCode* ec);
+
+/**
+ * Return the amount of time in milliseconds that the clock is
+ * advanced during daylight savings time for the given time zone, or
+ * zero if the time zone does not observe daylight savings time.
+ *
+ * @param zoneID null-terminated time zone ID
+ *
+ * @param ec input/output error code
+ *
+ * @return the number of milliseconds the time is advanced with
+ * respect to standard time when the daylight savings rules are in
+ * effect. This is always a non-negative number, most commonly either
+ * 3,600,000 (one hour) or zero.
+ *
+ * @draft ICU 2.6
+ */
+U_CAPI int32_t U_EXPORT2
+ucal_getDSTSavings(const UChar* zoneID, UErrorCode* ec);
+
+/**
+ * Get the current date and time.
+ * The value returned is represented as milliseconds from the epoch.
+ * @return The current date and time.
+ * @stable ICU 2.0
+ */
 U_CAPI UDate U_EXPORT2 
 ucal_getNow(void);
 
 /**
-* Open a UCalendar.
-* A UCalendar may be used to convert a millisecond value to a year,
-* month, and day.
-* @param zoneID The desired TimeZone ID.  If 0, use the default time zone.
-* @param len The length of zoneID, or -1 if null-terminated.
-* @param locale The desired locale
-* @param type The type of UCalendar to open.
-* @param status A pointer to an UErrorCode to receive any errors
-* @return A pointer to a UCalendar, or 0 if an error occurred.
-* @stable ICU 2.0
-*/
+ * Open a UCalendar.
+ * A UCalendar may be used to convert a millisecond value to a year,
+ * month, and day.
+ * @param zoneID The desired TimeZone ID.  If 0, use the default time zone.
+ * @param len The length of zoneID, or -1 if null-terminated.
+ * @param locale The desired locale
+ * @param type The type of UCalendar to open.
+ * @param status A pointer to an UErrorCode to receive any errors
+ * @return A pointer to a UCalendar, or 0 if an error occurred.
+ * @stable ICU 2.0
+ */
 U_CAPI UCalendar* U_EXPORT2 
-ucal_open(    const    UChar*          zoneID,
-            int32_t        len,
-        const    char*           locale,
-            UCalendarType     type,
-            UErrorCode*    status);
+ucal_open(const UChar*   zoneID,
+          int32_t        len,
+          const char*    locale,
+          UCalendarType  type,
+          UErrorCode*    status);
 
 /**
-* Close a UCalendar.
-* Once closed, a UCalendar may no longer be used.
-* @param cal The UCalendar to close.
-* @stable ICU 2.0
-*/
+ * Close a UCalendar.
+ * Once closed, a UCalendar may no longer be used.
+ * @param cal The UCalendar to close.
+ * @stable ICU 2.0
+ */
 U_CAPI void U_EXPORT2 
 ucal_close(UCalendar *cal);
 
 /**
-* Set the TimeZone used by a UCalendar.
-* A UCalendar uses a timezone for converting from Greenwich time to local time.
-* @param cal The UCalendar to set.
-* @param zoneID The desired TimeZone ID.  If 0, use the default time zone.
-* @param len The length of zoneID, or -1 if null-terminated.
-* @param status A pointer to an UErrorCode to receive any errors.
-* @stable ICU 2.0
-*/
+ * Set the TimeZone used by a UCalendar.
+ * A UCalendar uses a timezone for converting from Greenwich time to local time.
+ * @param cal The UCalendar to set.
+ * @param zoneID The desired TimeZone ID.  If 0, use the default time zone.
+ * @param len The length of zoneID, or -1 if null-terminated.
+ * @param status A pointer to an UErrorCode to receive any errors.
+ * @stable ICU 2.0
+ */
 U_CAPI void U_EXPORT2 
-ucal_setTimeZone(        UCalendar*      cal,
-            const    UChar*        zoneID,
-                int32_t        len,
-                UErrorCode     *status);
+ucal_setTimeZone(UCalendar*    cal,
+                 const UChar*  zoneID,
+                 int32_t       len,
+                 UErrorCode*   status);
 
-/** Possible formats for a UCalendar's display name 
+/**
+ * Possible formats for a UCalendar's display name 
  * @stable ICU 2.0
  */
 enum UCalendarDisplayNameType {
@@ -389,39 +433,40 @@ enum UCalendarDisplayNameType {
 typedef enum UCalendarDisplayNameType UCalendarDisplayNameType;
 
 /**
-* Get the display name for a UCalendar's TimeZone.
-* A display name is suitable for presentation to a user.
-* @param cal          The UCalendar to query.
-* @param type         The desired display name format; one of UCAL_STANDARD, UCAL_SHORT_STANDARD,
-*                     UCAL_DST, UCAL_SHORT_DST
-* @param locale       The desired locale for the display name.
-* @param result       A pointer to a buffer to receive the formatted number.
-* @param resultLength The maximum size of result.
-* @param status       A pointer to an UErrorCode to receive any errors
-* @return             The total buffer size needed; if greater than resultLength, the output was truncated.
-* @stable ICU 2.0
-*/
+ * Get the display name for a UCalendar's TimeZone.
+ * A display name is suitable for presentation to a user.
+ * @param cal          The UCalendar to query.
+ * @param type         The desired display name format; one of UCAL_STANDARD, UCAL_SHORT_STANDARD,
+ *                     UCAL_DST, UCAL_SHORT_DST
+ * @param locale       The desired locale for the display name.
+ * @param result       A pointer to a buffer to receive the formatted number.
+ * @param resultLength The maximum size of result.
+ * @param status       A pointer to an UErrorCode to receive any errors
+ * @return             The total buffer size needed; if greater than resultLength, the output was truncated.
+ * @stable ICU 2.0
+ */
 U_CAPI int32_t U_EXPORT2 
-ucal_getTimeZoneDisplayName(    const     UCalendar*                 cal,
-                    UCalendarDisplayNameType     type,
-                const      char                     *locale,
-                    UChar*                  result,
-                    int32_t                 resultLength,
-                    UErrorCode*             status);
+ucal_getTimeZoneDisplayName(const UCalendar*          cal,
+                            UCalendarDisplayNameType  type,
+                            const char*               locale,
+                            UChar*                    result,
+                            int32_t                   resultLength,
+                            UErrorCode*               status);
 
 /**
-* Determine if a UCalendar is currently in daylight savings time.
-* Daylight savings time is not used in all parts of the world.
-* @param cal The UCalendar to query.
-* @param status A pointer to an UErrorCode to receive any errors
-* @return TRUE if cal is currently in daylight savings time, FALSE otherwise
-* @stable ICU 2.0
-*/
+ * Determine if a UCalendar is currently in daylight savings time.
+ * Daylight savings time is not used in all parts of the world.
+ * @param cal The UCalendar to query.
+ * @param status A pointer to an UErrorCode to receive any errors
+ * @return TRUE if cal is currently in daylight savings time, FALSE otherwise
+ * @stable ICU 2.0
+ */
 U_CAPI UBool U_EXPORT2 
-ucal_inDaylightTime(    const    UCalendar*      cal,
-                UErrorCode*     status );
+ucal_inDaylightTime(const UCalendar*  cal,
+                    UErrorCode*       status );
 
-/** Types of UCalendar attributes 
+/**
+ * Types of UCalendar attributes 
  * @stable ICU 2.0
  */
 enum UCalendarAttribute {
@@ -437,137 +482,137 @@ enum UCalendarAttribute {
 typedef enum UCalendarAttribute UCalendarAttribute;
 
 /**
-* Get a numeric attribute associated with a UCalendar.
-* Numeric attributes include the first day of the week, or the minimal numbers
-* of days in the first week of the month.
-* @param cal The UCalendar to query.
-* @param attr The desired attribute; one of UCAL_LENIENT, UCAL_FIRST_DAY_OF_WEEK,
-* or UCAL_MINIMAL_DAYS_IN_FIRST_WEEK
-* @return The value of attr.
-* @see ucal_setAttribute
-* @stable ICU 2.0
-*/
+ * Get a numeric attribute associated with a UCalendar.
+ * Numeric attributes include the first day of the week, or the minimal numbers
+ * of days in the first week of the month.
+ * @param cal The UCalendar to query.
+ * @param attr The desired attribute; one of UCAL_LENIENT, UCAL_FIRST_DAY_OF_WEEK,
+ * or UCAL_MINIMAL_DAYS_IN_FIRST_WEEK
+ * @return The value of attr.
+ * @see ucal_setAttribute
+ * @stable ICU 2.0
+ */
 U_CAPI int32_t U_EXPORT2 
-ucal_getAttribute(    const    UCalendar*              cal,
-                UCalendarAttribute      attr);
+ucal_getAttribute(const UCalendar*    cal,
+                  UCalendarAttribute  attr);
 
 /**
-* Set a numeric attribute associated with a UCalendar.
-* Numeric attributes include the first day of the week, or the minimal numbers
-* of days in the first week of the month.
-* @param cal The UCalendar to set.
-* @param attr The desired attribute; one of UCAL_LENIENT, UCAL_FIRST_DAY_OF_WEEK,
-* or UCAL_MINIMAL_DAYS_IN_FIRST_WEEK
-* @param newValue The new value of attr.
-* @see ucal_getAttribute
-* @stable ICU 2.0
-*/
+ * Set a numeric attribute associated with a UCalendar.
+ * Numeric attributes include the first day of the week, or the minimal numbers
+ * of days in the first week of the month.
+ * @param cal The UCalendar to set.
+ * @param attr The desired attribute; one of UCAL_LENIENT, UCAL_FIRST_DAY_OF_WEEK,
+ * or UCAL_MINIMAL_DAYS_IN_FIRST_WEEK
+ * @param newValue The new value of attr.
+ * @see ucal_getAttribute
+ * @stable ICU 2.0
+ */
 U_CAPI void U_EXPORT2 
-ucal_setAttribute(      UCalendar*              cal,
-            UCalendarAttribute      attr,
-            int32_t                 newValue);
+ucal_setAttribute(UCalendar*          cal,
+                  UCalendarAttribute  attr,
+                  int32_t             newValue);
 
 /**
-* Get a locale for which calendars are available.
-* A UCalendar in a locale returned by this function will contain the correct
-* day and month names for the locale.
-* @param index The index of the desired locale.
-* @return A locale for which calendars are available, or 0 if none.
-* @see ucal_countAvailable
-* @stable ICU 2.0
-*/
+ * Get a locale for which calendars are available.
+ * A UCalendar in a locale returned by this function will contain the correct
+ * day and month names for the locale.
+ * @param index The index of the desired locale.
+ * @return A locale for which calendars are available, or 0 if none.
+ * @see ucal_countAvailable
+ * @stable ICU 2.0
+ */
 U_CAPI const char* U_EXPORT2 
 ucal_getAvailable(int32_t index);
 
 /**
-* Determine how many locales have calendars available.
-* This function is most useful as determining the loop ending condition for
-* calls to \Ref{ucal_getAvailable}.
-* @return The number of locales for which calendars are available.
-* @see ucal_getAvailable
-* @stable ICU 2.0
-*/
+ * Determine how many locales have calendars available.
+ * This function is most useful as determining the loop ending condition for
+ * calls to \Ref{ucal_getAvailable}.
+ * @return The number of locales for which calendars are available.
+ * @see ucal_getAvailable
+ * @stable ICU 2.0
+ */
 U_CAPI int32_t U_EXPORT2 
 ucal_countAvailable(void);
 
 /**
-* Get a UCalendar's current time in millis.
-* The time is represented as milliseconds from the epoch.
-* @param cal The UCalendar to query.
-* @param status A pointer to an UErrorCode to receive any errors
-* @return The calendar's current time in millis.
-* @see ucal_setMillis
-* @see ucal_setDate
-* @see ucal_setDateTime
-* @stable ICU 2.0
-*/
+ * Get a UCalendar's current time in millis.
+ * The time is represented as milliseconds from the epoch.
+ * @param cal The UCalendar to query.
+ * @param status A pointer to an UErrorCode to receive any errors
+ * @return The calendar's current time in millis.
+ * @see ucal_setMillis
+ * @see ucal_setDate
+ * @see ucal_setDateTime
+ * @stable ICU 2.0
+ */
 U_CAPI UDate U_EXPORT2 
-ucal_getMillis(    const    UCalendar*      cal,
-            UErrorCode*     status);
+ucal_getMillis(const UCalendar*  cal,
+               UErrorCode*       status);
 
 /**
-* Set a UCalendar's current time in millis.
-* The time is represented as milliseconds from the epoch.
-* @param cal The UCalendar to set.
-* @param dateTime The desired date and time.
-* @param status A pointer to an UErrorCode to receive any errors
-* @see ucal_getMillis
-* @see ucal_setDate
-* @see ucal_setDateTime
-* @stable ICU 2.0
-*/
+ * Set a UCalendar's current time in millis.
+ * The time is represented as milliseconds from the epoch.
+ * @param cal The UCalendar to set.
+ * @param dateTime The desired date and time.
+ * @param status A pointer to an UErrorCode to receive any errors
+ * @see ucal_getMillis
+ * @see ucal_setDate
+ * @see ucal_setDateTime
+ * @stable ICU 2.0
+ */
 U_CAPI void U_EXPORT2 
-ucal_setMillis(        UCalendar*      cal,
-            UDate           dateTime,
-            UErrorCode*     status );
+ucal_setMillis(UCalendar*   cal,
+               UDate        dateTime,
+               UErrorCode*  status );
 
 /**
-* Set a UCalendar's current date.
-* The date is represented as a series of 32-bit integers.
-* @param cal The UCalendar to set.
-* @param year The desired year.
-* @param month The desired month; one of UCAL_JANUARY, UCAL_FEBRUARY, UCAL_MARCH, UCAL_APRIL, UCAL_MAY,
-* UCAL_JUNE, UCAL_JULY, UCAL_AUGUST, UCAL_SEPTEMBER, UCAL_OCTOBER, UCAL_NOVEMBER, UCAL_DECEMBER, UCAL_UNDECIMBER
-* @param date The desired day of the month.
-* @param status A pointer to an UErrorCode to receive any errors
-* @see ucal_getMillis
-* @see ucal_setMillis
-* @see ucal_setDateTime
-* @stable ICU 2.0
-*/
+ * Set a UCalendar's current date.
+ * The date is represented as a series of 32-bit integers.
+ * @param cal The UCalendar to set.
+ * @param year The desired year.
+ * @param month The desired month; one of UCAL_JANUARY, UCAL_FEBRUARY, UCAL_MARCH, UCAL_APRIL, UCAL_MAY,
+ * UCAL_JUNE, UCAL_JULY, UCAL_AUGUST, UCAL_SEPTEMBER, UCAL_OCTOBER, UCAL_NOVEMBER, UCAL_DECEMBER, UCAL_UNDECIMBER
+ * @param date The desired day of the month.
+ * @param status A pointer to an UErrorCode to receive any errors
+ * @see ucal_getMillis
+ * @see ucal_setMillis
+ * @see ucal_setDateTime
+ * @stable ICU 2.0
+ */
 U_CAPI void U_EXPORT2 
-ucal_setDate(        UCalendar*        cal,
-            int32_t            year,
-            int32_t            month,
-            int32_t            date,
-            UErrorCode        *status);
+ucal_setDate(UCalendar*   cal,
+             int32_t      year,
+             int32_t      month,
+             int32_t      date,
+             UErrorCode*  status);
 
 /**
-* Set a UCalendar's current date.
-* The date is represented as a series of 32-bit integers.
-* @param cal The UCalendar to set.
-* @param year The desired year.
-* @param month The desired month; one of UCAL_JANUARY, UCAL_FEBRUARY, UCAL_MARCH, UCAL_APRIL, UCAL_MAY,
-* UCAL_JUNE, UCAL_JULY, UCAL_AUGUST, UCAL_SEPTEMBER, UCAL_OCTOBER, UCAL_NOVEMBER, UCAL_DECEMBER, UCAL_UNDECIMBER
-* @param date The desired day of the month.
-* @param hour The desired hour of day.
-* @param minute The desired minute.
-* @param second The desirec second.
-* @param status A pointer to an UErrorCode to receive any errors
-* @see ucal_getMillis
-* @see ucal_setMillis
-* @see ucal_setDate
-* @stable ICU 2.0
-*/
+ * Set a UCalendar's current date.
+ * The date is represented as a series of 32-bit integers.
+ * @param cal The UCalendar to set.
+ * @param year The desired year.
+ * @param month The desired month; one of UCAL_JANUARY, UCAL_FEBRUARY, UCAL_MARCH, UCAL_APRIL, UCAL_MAY,
+ * UCAL_JUNE, UCAL_JULY, UCAL_AUGUST, UCAL_SEPTEMBER, UCAL_OCTOBER, UCAL_NOVEMBER, UCAL_DECEMBER, UCAL_UNDECIMBER
+ * @param date The desired day of the month.
+ * @param hour The desired hour of day.
+ * @param minute The desired minute.
+ * @param second The desirec second.
+ * @param status A pointer to an UErrorCode to receive any errors
+ * @see ucal_getMillis
+ * @see ucal_setMillis
+ * @see ucal_setDate
+ * @stable ICU 2.0
+ */
 U_CAPI void U_EXPORT2 
-ucal_setDateTime(    UCalendar*        cal,
-            int32_t            year,
-            int32_t            month,
-            int32_t            date,
-            int32_t            hour,
-            int32_t            minute,
-            int32_t            second,
-            UErrorCode        *status);
+ucal_setDateTime(UCalendar*   cal,
+                 int32_t      year,
+                 int32_t      month,
+                 int32_t      date,
+                 int32_t      hour,
+                 int32_t      minute,
+                 int32_t      second,
+                 UErrorCode*  status);
 
 /**
  * Returns TRUE if two UCalendars are equivalent.  Equivalent
@@ -579,143 +624,144 @@ ucal_setDateTime(    UCalendar*        cal,
  * @stable ICU 2.0
  */
 U_CAPI UBool U_EXPORT2 
-ucal_equivalentTo(const UCalendar*      cal1,
-                  const UCalendar*      cal2);
+ucal_equivalentTo(const UCalendar*  cal1,
+                  const UCalendar*  cal2);
 
 /**
-* Add a specified signed amount to a particular field in a UCalendar.
-* This can modify more significant fields in the calendar.
-* @param cal The UCalendar to which to add.
-* @param field The field to which to add the signed value; one of UCAL_ERA, UCAL_YEAR, UCAL_MONTH,
-* UCAL_WEEK_OF_YEAR, UCAL_WEEK_OF_MONTH, UCAL_DATE, UCAL_DAY_OF_YEAR, UCAL_DAY_OF_WEEK,
-* UCAL_DAY_OF_WEEK_IN_MONTH, UCAL_AM_PM, UCAL_HOUR, UCAL_HOUR_OF_DAY, UCAL_MINUTE, UCAL_SECOND,
-* UCAL_MILLISECOND, UCAL_ZONE_OFFSET, UCAL_DST_OFFSET.
-* @param amount The signed amount to add to field. If the amount causes the value
-* to exceed to maximum or minimum values for that field, other fields are modified
-* to preserve the magnitude of the change.
-* @param status A pointer to an UErrorCode to receive any errors
-* @see ucal_roll
-* @stable ICU 2.0
-*/
+ * Add a specified signed amount to a particular field in a UCalendar.
+ * This can modify more significant fields in the calendar.
+ * @param cal The UCalendar to which to add.
+ * @param field The field to which to add the signed value; one of UCAL_ERA, UCAL_YEAR, UCAL_MONTH,
+ * UCAL_WEEK_OF_YEAR, UCAL_WEEK_OF_MONTH, UCAL_DATE, UCAL_DAY_OF_YEAR, UCAL_DAY_OF_WEEK,
+ * UCAL_DAY_OF_WEEK_IN_MONTH, UCAL_AM_PM, UCAL_HOUR, UCAL_HOUR_OF_DAY, UCAL_MINUTE, UCAL_SECOND,
+ * UCAL_MILLISECOND, UCAL_ZONE_OFFSET, UCAL_DST_OFFSET.
+ * @param amount The signed amount to add to field. If the amount causes the value
+ * to exceed to maximum or minimum values for that field, other fields are modified
+ * to preserve the magnitude of the change.
+ * @param status A pointer to an UErrorCode to receive any errors
+ * @see ucal_roll
+ * @stable ICU 2.0
+ */
 U_CAPI void U_EXPORT2 
-ucal_add(    UCalendar*            cal,
-        UCalendarDateFields        field,
-        int32_t                amount,
-        UErrorCode*            status);
+ucal_add(UCalendar*           cal,
+         UCalendarDateFields  field,
+         int32_t              amount,
+         UErrorCode*          status);
 
 /**
-* Add a specified signed amount to a particular field in a UCalendar.
-* This will not modify more significant fields in the calendar.
-* @param cal The UCalendar to which to add.
-* @param field The field to which to add the signed value; one of UCAL_ERA, UCAL_YEAR, UCAL_MONTH,
-* UCAL_WEEK_OF_YEAR, UCAL_WEEK_OF_MONTH, UCAL_DATE, UCAL_DAY_OF_YEAR, UCAL_DAY_OF_WEEK,
-* UCAL_DAY_OF_WEEK_IN_MONTH, UCAL_AM_PM, UCAL_HOUR, UCAL_HOUR_OF_DAY, UCAL_MINUTE, UCAL_SECOND,
-* UCAL_MILLISECOND, UCAL_ZONE_OFFSET, UCAL_DST_OFFSET.
-* @param amount The signed amount to add to field. If the amount causes the value
-* to exceed to maximum or minimum values for that field, the field is pinned to a permissible
-* value.
-* @param status A pointer to an UErrorCode to receive any errors
-* @see ucal_add
-* @stable ICU 2.0
-*/
+ * Add a specified signed amount to a particular field in a UCalendar.
+ * This will not modify more significant fields in the calendar.
+ * @param cal The UCalendar to which to add.
+ * @param field The field to which to add the signed value; one of UCAL_ERA, UCAL_YEAR, UCAL_MONTH,
+ * UCAL_WEEK_OF_YEAR, UCAL_WEEK_OF_MONTH, UCAL_DATE, UCAL_DAY_OF_YEAR, UCAL_DAY_OF_WEEK,
+ * UCAL_DAY_OF_WEEK_IN_MONTH, UCAL_AM_PM, UCAL_HOUR, UCAL_HOUR_OF_DAY, UCAL_MINUTE, UCAL_SECOND,
+ * UCAL_MILLISECOND, UCAL_ZONE_OFFSET, UCAL_DST_OFFSET.
+ * @param amount The signed amount to add to field. If the amount causes the value
+ * to exceed to maximum or minimum values for that field, the field is pinned to a permissible
+ * value.
+ * @param status A pointer to an UErrorCode to receive any errors
+ * @see ucal_add
+ * @stable ICU 2.0
+ */
 U_CAPI void U_EXPORT2 
-ucal_roll(        UCalendar*        cal,
-            UCalendarDateFields     field,
-            int32_t            amount,
-            UErrorCode*        status);
+ucal_roll(UCalendar*           cal,
+          UCalendarDateFields  field,
+          int32_t              amount,
+          UErrorCode*          status);
 
 /**
-* Get the current value of a field from a UCalendar.
-* All fields are represented as 32-bit integers.
-* @param cal The UCalendar to query.
-* @param field The desired field; one of UCAL_ERA, UCAL_YEAR, UCAL_MONTH,
-* UCAL_WEEK_OF_YEAR, UCAL_WEEK_OF_MONTH, UCAL_DATE, UCAL_DAY_OF_YEAR, UCAL_DAY_OF_WEEK,
-* UCAL_DAY_OF_WEEK_IN_MONTH, UCAL_AM_PM, UCAL_HOUR, UCAL_HOUR_OF_DAY, UCAL_MINUTE, UCAL_SECOND,
-* UCAL_MILLISECOND, UCAL_ZONE_OFFSET, UCAL_DST_OFFSET.
-* @param status A pointer to an UErrorCode to receive any errors
-* @return The value of the desired field.
-* @see ucal_set
-* @see ucal_isSet
-* @see ucal_clearField
-* @see ucal_clear
-* @stable ICU 2.0
-*/
+ * Get the current value of a field from a UCalendar.
+ * All fields are represented as 32-bit integers.
+ * @param cal The UCalendar to query.
+ * @param field The desired field; one of UCAL_ERA, UCAL_YEAR, UCAL_MONTH,
+ * UCAL_WEEK_OF_YEAR, UCAL_WEEK_OF_MONTH, UCAL_DATE, UCAL_DAY_OF_YEAR, UCAL_DAY_OF_WEEK,
+ * UCAL_DAY_OF_WEEK_IN_MONTH, UCAL_AM_PM, UCAL_HOUR, UCAL_HOUR_OF_DAY, UCAL_MINUTE, UCAL_SECOND,
+ * UCAL_MILLISECOND, UCAL_ZONE_OFFSET, UCAL_DST_OFFSET.
+ * @param status A pointer to an UErrorCode to receive any errors
+ * @return The value of the desired field.
+ * @see ucal_set
+ * @see ucal_isSet
+ * @see ucal_clearField
+ * @see ucal_clear
+ * @stable ICU 2.0
+ */
 U_CAPI int32_t U_EXPORT2 
-ucal_get(    const    UCalendar*            cal,
-            UCalendarDateFields        field,
-            UErrorCode*            status );
+ucal_get(const UCalendar*     cal,
+         UCalendarDateFields  field,
+         UErrorCode*          status );
 
 /**
-* Set the value of a field in a UCalendar.
-* All fields are represented as 32-bit integers.
-* @param cal The UCalendar to set.
-* @param field The field to set; one of UCAL_ERA, UCAL_YEAR, UCAL_MONTH,
-* UCAL_WEEK_OF_YEAR, UCAL_WEEK_OF_MONTH, UCAL_DATE, UCAL_DAY_OF_YEAR, UCAL_DAY_OF_WEEK,
-* UCAL_DAY_OF_WEEK_IN_MONTH, UCAL_AM_PM, UCAL_HOUR, UCAL_HOUR_OF_DAY, UCAL_MINUTE, UCAL_SECOND,
-* UCAL_MILLISECOND, UCAL_ZONE_OFFSET, UCAL_DST_OFFSET.
-* @param value The desired value of field.
-* @see ucal_get
-* @see ucal_isSet
-* @see ucal_clearField
-* @see ucal_clear
-* @stable ICU 2.0
-*/
+ * Set the value of a field in a UCalendar.
+ * All fields are represented as 32-bit integers.
+ * @param cal The UCalendar to set.
+ * @param field The field to set; one of UCAL_ERA, UCAL_YEAR, UCAL_MONTH,
+ * UCAL_WEEK_OF_YEAR, UCAL_WEEK_OF_MONTH, UCAL_DATE, UCAL_DAY_OF_YEAR, UCAL_DAY_OF_WEEK,
+ * UCAL_DAY_OF_WEEK_IN_MONTH, UCAL_AM_PM, UCAL_HOUR, UCAL_HOUR_OF_DAY, UCAL_MINUTE, UCAL_SECOND,
+ * UCAL_MILLISECOND, UCAL_ZONE_OFFSET, UCAL_DST_OFFSET.
+ * @param value The desired value of field.
+ * @see ucal_get
+ * @see ucal_isSet
+ * @see ucal_clearField
+ * @see ucal_clear
+ * @stable ICU 2.0
+ */
 U_CAPI void U_EXPORT2 
-ucal_set(    UCalendar*            cal,
-        UCalendarDateFields        field,
-        int32_t                value);
+ucal_set(UCalendar*           cal,
+         UCalendarDateFields  field,
+         int32_t              value);
 
 /**
-* Determine if a field in a UCalendar is set.
-* All fields are represented as 32-bit integers.
-* @param cal The UCalendar to query.
-* @param field The desired field; one of UCAL_ERA, UCAL_YEAR, UCAL_MONTH,
-* UCAL_WEEK_OF_YEAR, UCAL_WEEK_OF_MONTH, UCAL_DATE, UCAL_DAY_OF_YEAR, UCAL_DAY_OF_WEEK,
-* UCAL_DAY_OF_WEEK_IN_MONTH, UCAL_AM_PM, UCAL_HOUR, UCAL_HOUR_OF_DAY, UCAL_MINUTE, UCAL_SECOND,
-* UCAL_MILLISECOND, UCAL_ZONE_OFFSET, UCAL_DST_OFFSET.
-* @return TRUE if field is set, FALSE otherwise.
-* @see ucal_get
-* @see ucal_set
-* @see ucal_clearField
-* @see ucal_clear
-* @stable ICU 2.0
-*/
+ * Determine if a field in a UCalendar is set.
+ * All fields are represented as 32-bit integers.
+ * @param cal The UCalendar to query.
+ * @param field The desired field; one of UCAL_ERA, UCAL_YEAR, UCAL_MONTH,
+ * UCAL_WEEK_OF_YEAR, UCAL_WEEK_OF_MONTH, UCAL_DATE, UCAL_DAY_OF_YEAR, UCAL_DAY_OF_WEEK,
+ * UCAL_DAY_OF_WEEK_IN_MONTH, UCAL_AM_PM, UCAL_HOUR, UCAL_HOUR_OF_DAY, UCAL_MINUTE, UCAL_SECOND,
+ * UCAL_MILLISECOND, UCAL_ZONE_OFFSET, UCAL_DST_OFFSET.
+ * @return TRUE if field is set, FALSE otherwise.
+ * @see ucal_get
+ * @see ucal_set
+ * @see ucal_clearField
+ * @see ucal_clear
+ * @stable ICU 2.0
+ */
 U_CAPI UBool U_EXPORT2 
-ucal_isSet(    const    UCalendar*        cal,
-            UCalendarDateFields    field);
+ucal_isSet(const UCalendar*     cal,
+           UCalendarDateFields  field);
 
 /**
-* Clear a field in a UCalendar.
-* All fields are represented as 32-bit integers.
-* @param cal The UCalendar containing the field to clear.
-* @param field The field to clear; one of UCAL_ERA, UCAL_YEAR, UCAL_MONTH,
-* UCAL_WEEK_OF_YEAR, UCAL_WEEK_OF_MONTH, UCAL_DATE, UCAL_DAY_OF_YEAR, UCAL_DAY_OF_WEEK,
-* UCAL_DAY_OF_WEEK_IN_MONTH, UCAL_AM_PM, UCAL_HOUR, UCAL_HOUR_OF_DAY, UCAL_MINUTE, UCAL_SECOND,
-* UCAL_MILLISECOND, UCAL_ZONE_OFFSET, UCAL_DST_OFFSET.
-* @see ucal_get
-* @see ucal_set
-* @see ucal_isSet
-* @see ucal_clear
-* @stable ICU 2.0
-*/
+ * Clear a field in a UCalendar.
+ * All fields are represented as 32-bit integers.
+ * @param cal The UCalendar containing the field to clear.
+ * @param field The field to clear; one of UCAL_ERA, UCAL_YEAR, UCAL_MONTH,
+ * UCAL_WEEK_OF_YEAR, UCAL_WEEK_OF_MONTH, UCAL_DATE, UCAL_DAY_OF_YEAR, UCAL_DAY_OF_WEEK,
+ * UCAL_DAY_OF_WEEK_IN_MONTH, UCAL_AM_PM, UCAL_HOUR, UCAL_HOUR_OF_DAY, UCAL_MINUTE, UCAL_SECOND,
+ * UCAL_MILLISECOND, UCAL_ZONE_OFFSET, UCAL_DST_OFFSET.
+ * @see ucal_get
+ * @see ucal_set
+ * @see ucal_isSet
+ * @see ucal_clear
+ * @stable ICU 2.0
+ */
 U_CAPI void U_EXPORT2 
-ucal_clearField(    UCalendar*        cal,
-            UCalendarDateFields     field);
+ucal_clearField(UCalendar*           cal,
+                UCalendarDateFields  field);
 
 /**
-* Clear all fields in a UCalendar.
-* All fields are represented as 32-bit integers.
-* @param cal The UCalendar to clear.
-* @see ucal_get
-* @see ucal_set
-* @see ucal_isSet
-* @see ucal_clearField
-* @stable ICU 2.0
-*/
+ * Clear all fields in a UCalendar.
+ * All fields are represented as 32-bit integers.
+ * @param cal The UCalendar to clear.
+ * @see ucal_get
+ * @see ucal_set
+ * @see ucal_isSet
+ * @see ucal_clearField
+ * @stable ICU 2.0
+ */
 U_CAPI void U_EXPORT2 
 ucal_clear(UCalendar* calendar);
 
-/** Possible limit values for a UCalendar 
+/**
+ * Possible limit values for a UCalendar 
  * @stable ICU 2.0
  */
 enum UCalendarLimitType {
@@ -737,24 +783,51 @@ enum UCalendarLimitType {
 typedef enum UCalendarLimitType UCalendarLimitType;
 
 /**
-* Determine a limit for a field in a UCalendar.
-* A limit is a maximum or minimum value for a field.
-* @param cal The UCalendar to query.
-* @param field The desired field; one of UCAL_ERA, UCAL_YEAR, UCAL_MONTH,
-* UCAL_WEEK_OF_YEAR, UCAL_WEEK_OF_MONTH, UCAL_DATE, UCAL_DAY_OF_YEAR, UCAL_DAY_OF_WEEK,
-* UCAL_DAY_OF_WEEK_IN_MONTH, UCAL_AM_PM, UCAL_HOUR, UCAL_HOUR_OF_DAY, UCAL_MINUTE, UCAL_SECOND,
-* UCAL_MILLISECOND, UCAL_ZONE_OFFSET, UCAL_DST_OFFSET.
-* @param type The desired critical point; one of UCAL_MINIMUM, UCAL_MAXIMUM, UCAL_GREATEST_MINIMUM,
-* UCAL_LEAST_MAXIMUM, UCAL_ACTUAL_MINIMUM, UCAL_ACTUAL_MAXIMUM
-* @param status A pointer to an UErrorCode to receive any errors.
-* @return The requested value.
-* @stable ICU 2.0
-*/
+ * Determine a limit for a field in a UCalendar.
+ * A limit is a maximum or minimum value for a field.
+ * @param cal The UCalendar to query.
+ * @param field The desired field; one of UCAL_ERA, UCAL_YEAR, UCAL_MONTH,
+ * UCAL_WEEK_OF_YEAR, UCAL_WEEK_OF_MONTH, UCAL_DATE, UCAL_DAY_OF_YEAR, UCAL_DAY_OF_WEEK,
+ * UCAL_DAY_OF_WEEK_IN_MONTH, UCAL_AM_PM, UCAL_HOUR, UCAL_HOUR_OF_DAY, UCAL_MINUTE, UCAL_SECOND,
+ * UCAL_MILLISECOND, UCAL_ZONE_OFFSET, UCAL_DST_OFFSET.
+ * @param type The desired critical point; one of UCAL_MINIMUM, UCAL_MAXIMUM, UCAL_GREATEST_MINIMUM,
+ * UCAL_LEAST_MAXIMUM, UCAL_ACTUAL_MINIMUM, UCAL_ACTUAL_MAXIMUM
+ * @param status A pointer to an UErrorCode to receive any errors.
+ * @return The requested value.
+ * @stable ICU 2.0
+ */
 U_CAPI int32_t U_EXPORT2 
-ucal_getLimit(    const    UCalendar*              cal,
-            UCalendarDateFields     field,
-            UCalendarLimitType      type,
-            UErrorCode        *status);
+ucal_getLimit(const UCalendar*     cal,
+              UCalendarDateFields  field,
+              UCalendarLimitType   type,
+              UErrorCode*          status);
+
+/**
+ * Get an available TimeZone ID.
+ * A Timezone ID is a string of the form "America/Los Angeles".
+ * @param rawOffset The desired GMT offset
+ * @param index The index of the desired TimeZone.
+ * @param status A pointer to an UErrorCode to receive any errors
+ * @return The requested TimeZone ID, or 0 if not found
+ * @see ucal_countAvailableTZIDs
+ * @obsolete ICU 2.8. Use ucal_openTimeZoneEnumeration instead since this API will be removed in that release.
+ */
+U_CAPI const UChar* U_EXPORT2 
+ucal_getAvailableTZIDs(int32_t      rawOffset,
+                       int32_t      index,
+                       UErrorCode*  status);
+
+/**
+ * Determine how many TimeZones exist with a certain offset.
+ * This function is most useful as determining the loop ending condition for
+ * calls to \Ref{ucal_getAvailableTZIDs}.
+ * @param rawOffset The desired GMT offset.
+ * @return The number of TimeZones with rawOffset.
+ * @see ucal_getAvailableTZIDs
+ * @obsolete ICU 2.8.  Use ucal_openTimeZoneEnumeration instead since this API will be removed in that release.
+ */
+U_CAPI int32_t U_EXPORT2 
+ucal_countAvailableTZIDs(int32_t rawOffset);
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
