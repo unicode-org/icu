@@ -22,6 +22,8 @@ ac_help="$ac_help
 ac_help="$ac_help
   --enable-static[=PKGS]  build static libraries [default=no]"
 ac_help="$ac_help
+  --enable-renaming       add a version suffix to symbols [default=yes]"
+ac_help="$ac_help
   --enable-rpath          use rpath when linking [default is only if necessary]"
 ac_help="$ac_help
   --enable-threads        build ICU with threads [default=yes]"
@@ -562,7 +564,6 @@ PACKAGE="icu"
 echo $ac_n "checking for ICU version numbers""... $ac_c" 1>&6
 echo "configure:564: checking for ICU version numbers" >&5
 
-
 geticuversion() {
     sed -n 's/^[ 	]*#[ 	]*define[ 	]*U_ICU_VERSION[ 	]*"\([^"]*\)".*/\1/p' "$@"
 }
@@ -580,12 +581,7 @@ LIB_VERSION_MAJOR=`echo $LIB_VERSION | sed 's/\..*//'`
 
 echo "$ac_t""release $VERSION, library $LIB_VERSION" 1>&6
 
-UNICODE_VERSION="3.1.1"
-
-
-thedatadir=`eval echo $datadir`
-
-thelibdir=`test "x$exec_prefix" = xNONE && exec_prefix="$prefix"; eval echo $libdir`
+UNICODE_VERSION="3.2"
 
 
 CPPFLAGS="${CPPFLAGS} -I."
@@ -1645,6 +1641,58 @@ else
   echo "$ac_t""no" 1>&6
 fi
 
+# Extract the first word of "ar", so it can be a program name with args.
+set dummy ar; ac_word=$2
+echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
+echo "configure:1765: checking for $ac_word" >&5
+if eval "test \"`echo '$''{'ac_cv_path_AR'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  case "$AR" in
+  /*)
+  ac_cv_path_AR="$AR" # Let the user override the test with a path.
+  ;;
+  ?:/*)			 
+  ac_cv_path_AR="$AR" # Let the user override the test with a dos path.
+  ;;
+  *)
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS=":"
+  ac_dummy="$PATH:/bin:/usr/bin:/usr/ccs/bin"
+  for ac_dir in $ac_dummy; do 
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
+      ac_cv_path_AR="$ac_dir/$ac_word"
+      break
+    fi
+  done
+  IFS="$ac_save_ifs"
+  test -z "$ac_cv_path_AR" && ac_cv_path_AR="echo archiver ar not found re-run configure ; false"
+  ;;
+esac
+fi
+AR="$ac_cv_path_AR"
+if test -n "$AR"; then
+  echo "$ac_t""$AR" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+
+echo $ac_n "checking whether to enable renaming of symbols""... $ac_c" 1>&6
+echo "configure:1800: checking whether to enable renaming of symbols" >&5
+enabled=yes
+U_DISABLE_RENAMING=0
+# Check whether --enable-renaming or --disable-renaming was given.
+if test "${enable_renaming+set}" = set; then
+  enableval="$enable_renaming"
+   case "${enableval}" in
+	     yes|"") enabled=yes ;;
+	     no) enabled=no; U_DISABLE_RENAMING=1 ;;
+	     *) ;;
+    esac
+fi
+
+echo "$ac_t""$enabled" 1>&6
 
 
 # Check whether --enable-rpath or --disable-rpath was given.
@@ -2729,6 +2777,62 @@ ac_compile='${CC-cc} -c $CFLAGS $CPPFLAGS conftest.$ac_ext 1>&5'
 ac_link='${CC-cc} -o conftest${ac_exeext} $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS 1>&5'
 cross_compiling=$ac_cv_prog_cc_cross
 
+echo $ac_n "checking for popen""... $ac_c" 1>&6
+echo "configure:2773: checking for popen" >&5
+if eval "test \"`echo '$''{'ac_cv_func_popen'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  cat > conftest.$ac_ext <<EOF
+#line 2778 "configure"
+#include "confdefs.h"
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char popen(); below.  */
+#include <assert.h>
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char popen();
+
+int main() {
+
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined (__stub_popen) || defined (__stub___popen)
+choke me
+#else
+popen();
+#endif
+
+; return 0; }
+EOF
+if { (eval echo configure:2801: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+  rm -rf conftest*
+  eval "ac_cv_func_popen=yes"
+else
+  echo "configure: failed program was:" >&5
+  cat conftest.$ac_ext >&5
+  rm -rf conftest*
+  eval "ac_cv_func_popen=no"
+fi
+rm -f conftest*
+fi
+
+if eval "test \"`echo '$ac_cv_func_'popen`\" = yes"; then
+  echo "$ac_t""yes" 1>&6
+  :
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+if test x$ac_cv_func_popen = xyes
+then
+     U_HAVE_POPEN=1
+else
+     U_HAVE_POPEN=0
+fi
+
+
 echo $ac_n "checking for tzset""... $ac_c" 1>&6
 echo "configure:2734: checking for tzset" >&5
 if eval "test \"`echo '$''{'ac_cv_func_tzset'+set}'`\" = set"; then
@@ -3559,11 +3663,31 @@ if test "${with_data_packaging+set}" = set; then
   case "${withval}" in
                 files|archive|library) datapackaging=$withval ;;
 		auto) datapackaging=$withval ;;
+		common) datapackaging=archive ;;
+		dll) datapackaging=library ;;
 		*) { echo "configure: error: bad value ${withval} for --with-iostream" 1>&2; exit 1; } ;;
 		esac
 else
   datapackaging=
 fi
+
+
+thesysconfdir=`eval echo $sysconfdir`
+
+thedatadir=`eval echo $datadir`
+
+thelibdir=`test "x$exec_prefix" = xNONE && exec_prefix="$prefix"; eval echo $libdir`
+
+case $datapackaging in
+    common)
+	pkgicudatadir=$datadir
+	thepkgicudatadir=$thedatadir
+	;;
+    *)
+	pkgicudatadir=$libdir
+	thepkgicudatadir=$thelibdir
+	;;
+esac
 
 
 
@@ -3631,6 +3755,15 @@ if test x"$msg" = x; then
     msg=none
 fi
 echo "$ac_t""$msg" 1>&6
+
+if test "$ICULIBSUFFIX" != ""
+then
+    U_HAVE_LIB_SUFFIX=1
+    ICULIBSUFFIXCNAME=`echo _$ICULIBSUFFIX | sed 's/[^A-Za-z0-9_]/_/g'`
+else
+    U_HAVE_LIB_SUFFIX=0
+fi
+
 
 
 # Check whether --enable-tests or --disable-tests was given.
@@ -3865,27 +3998,32 @@ ac_given_INSTALL="$INSTALL"
 
 trap 'del -f `echo "README icudefs.mk \
 		Makefile \
-		data/Makefile data/build/Makefile \
+		data/Makefile data/icupkg.inc \
 		common/Makefile config/Makefile.inc i18n/Makefile \
 		layout/Makefile \
-		extra/Makefile extra/ustdio/Makefile extra/uconv/Makefile extra/scrptrun/Makefile \
+		extra/Makefile extra/ustdio/Makefile \
+                extra/uconv/Makefile extra/scrptrun/Makefile
 		stubdata/Makefile \
 		tools/Makefile tools/ctestfw/Makefile tools/makeconv/Makefile \
 		tools/genrb/Makefile  \
 		tools/genuca/Makefile  \
-		tools/pkgdata/Makefile tools/pkgdata/icupkg.inc \
+		tools/pkgdata/Makefile \
 		tools/genccode/Makefile tools/gencmn/Makefile \
 		tools/gencnval/Makefile tools/gentz/Makefile \
-        tools/gennames/Makefile tools/toolutil/Makefile tools/gentest/Makefile \
+                tools/gennames/Makefile tools/toolutil/Makefile \
+                tools/gentest/Makefile \
 		tools/gennorm/Makefile \
 		tools/genprops/Makefile \
 		tools/dumpce/Makefile \
-		test/Makefile test/testdata/Makefile test/intltest/Makefile test/cintltst/Makefile \
+		test/Makefile test/testdata/Makefile test/intltest/Makefile \
+                test/cintltst/Makefile test/iotest/Makefile \
 		test/ieeetest/Makefile \
 		test/collperf/Makefile \
 		test/thaitest/Makefile \
 		test/letest/Makefile \
-		samples/Makefile samples/date/Makefile samples/cal/Makefile samples/layout/Makefile \
+		test/threadtest/Makefile \
+		samples/Makefile samples/date/Makefile \
+                samples/cal/Makefile samples/layout/Makefile \
 		common/unicode/platform.h common/icucfg.h" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
@@ -3923,8 +4061,6 @@ s%@VERSION@%$VERSION%g
 s%@LIB_VERSION@%$LIB_VERSION%g
 s%@LIB_VERSION_MAJOR@%$LIB_VERSION_MAJOR%g
 s%@UNICODE_VERSION@%$UNICODE_VERSION%g
-s%@thedatadir@%$thedatadir%g
-s%@thelibdir@%$thelibdir%g
 s%@CC@%$CC%g
 s%@CXX@%$CXX%g
 s%@INSTALL_PROGRAM@%$INSTALL_PROGRAM%g
@@ -3939,13 +4075,16 @@ s%@host_alias@%$host_alias%g
 s%@host_cpu@%$host_cpu%g
 s%@host_vendor@%$host_vendor%g
 s%@host_os@%$host_os%g
-s%@ENABLE_64BIT_LIBS@%$ENABLE_64BIT_LIBS%g
+s%@EXEEXT@%$EXEEXT%g
+s%@ARFLAGS@%$ARFLAGS%g
 s%@LIB_M@%$LIB_M%g
 s%@HPUX_CMA_TRUE@%$HPUX_CMA_TRUE%g
 s%@HPUX_CMA_FALSE@%$HPUX_CMA_FALSE%g
 s%@ENABLE_SHARED@%$ENABLE_SHARED%g
 s%@ENABLE_STATIC@%$ENABLE_STATIC%g
 s%@RANLIB@%$RANLIB%g
+s%@AR@%$AR%g
+s%@U_DISABLE_RENAMING@%$U_DISABLE_RENAMING%g
 s%@ENABLE_RPATH@%$ENABLE_RPATH%g
 s%@U_INLINE@%$U_INLINE%g
 s%@THREADS_TRUE@%$THREADS_TRUE%g
@@ -3957,8 +4096,6 @@ s%@U_HAVE_INTTYPES_H@%$U_HAVE_INTTYPES_H%g
 s%@CXXCPP@%$CXXCPP%g
 s%@U_IOSTREAM_SOURCE@%$U_IOSTREAM_SOURCE%g
 s%@U_IS_BIG_ENDIAN@%$U_IS_BIG_ENDIAN%g
-s%@U_HAVE_WCHAR_H@%$U_HAVE_WCHAR_H%g
-s%@U_HAVE_WCSCPY@%$U_HAVE_WCSCPY%g
 s%@U_HAVE_NL_LANGINFO@%$U_HAVE_NL_LANGINFO%g
 s%@U_HAVE_NL_LANGINFO_CODESET@%$U_HAVE_NL_LANGINFO_CODESET%g
 s%@U_NL_LANGINFO_CODESET@%$U_NL_LANGINFO_CODESET%g
@@ -3967,7 +4104,6 @@ s%@U_TZSET@%$U_TZSET%g
 s%@U_TZNAME@%$U_TZNAME%g
 s%@U_HAVE_TIMEZONE@%$U_HAVE_TIMEZONE%g
 s%@U_TIMEZONE@%$U_TIMEZONE%g
-s%@U_SIZEOF_WCHAR_T@%$U_SIZEOF_WCHAR_T%g
 s%@HAVE_INT8_T@%$HAVE_INT8_T%g
 s%@HAVE_UINT8_T@%$HAVE_UINT8_T%g
 s%@HAVE_INT16_T@%$HAVE_INT16_T%g
@@ -3976,6 +4112,9 @@ s%@HAVE_INT32_T@%$HAVE_INT32_T%g
 s%@HAVE_UINT32_T@%$HAVE_UINT32_T%g
 s%@HAVE_INT64_T@%$HAVE_INT64_T%g
 s%@HAVE_UINT64_T@%$HAVE_UINT64_T%g
+s%@U_HAVE_WCHAR_H@%$U_HAVE_WCHAR_H%g
+s%@U_HAVE_WCSCPY@%$U_HAVE_WCSCPY%g
+s%@U_SIZEOF_WCHAR_T@%$U_SIZEOF_WCHAR_T%g
 s%@ECHO_N@%$ECHO_N%g
 s%@ECHO_C@%$ECHO_C%g
 s%@EXTRAS_TRUE@%$EXTRAS_TRUE%g
@@ -3984,9 +4123,16 @@ s%@USTDIO_TRUE@%$USTDIO_TRUE%g
 s%@USTDIO_FALSE@%$USTDIO_FALSE%g
 s%@LAYOUT_TRUE@%$LAYOUT_TRUE%g
 s%@LAYOUT_FALSE@%$LAYOUT_FALSE%g
+s%@thesysconfdir@%$thesysconfdir%g
+s%@thedatadir@%$thedatadir%g
+s%@thelibdir@%$thelibdir%g
+s%@pkgicudatadir@%$pkgicudatadir%g
+s%@thepkgicudatadir@%$thepkgicudatadir%g
 s%@DATA_PACKAGING_CPPFLAGS@%$DATA_PACKAGING_CPPFLAGS%g
 s%@DATA_PACKAGING_MODE@%$DATA_PACKAGING_MODE%g
 s%@ICULIBSUFFIX@%$ICULIBSUFFIX%g
+s%@U_HAVE_LIB_SUFFIX@%$U_HAVE_LIB_SUFFIX%g
+s%@ICULIBSUFFIXCNAME@%$ICULIBSUFFIXCNAME%g
 s%@TESTS_TRUE@%$TESTS_TRUE%g
 s%@TESTS_FALSE@%$TESTS_FALSE%g
 s%@SAMPLES_TRUE@%$SAMPLES_TRUE%g
@@ -3996,6 +4142,7 @@ s%@platform@%$platform%g
 s%@platform_make_fragment_name@%$platform_make_fragment_name%g
 s%@platform_make_fragment@%$platform_make_fragment%g
 s%@ld_rpath_suf@%$ld_rpath_suf%g
+s%@AIX_SHLIB@%$AIX_SHLIB%g
 
 CEOF
 EOF
@@ -4039,27 +4186,32 @@ cat >> $CONFIG_STATUS <<EOF
 
 CONFIG_FILES=\${CONFIG_FILES-"README icudefs.mk \
 		Makefile \
-		data/Makefile data/build/Makefile \
+		data/Makefile data/icupkg.inc \
 		common/Makefile config/Makefile.inc i18n/Makefile \
 		layout/Makefile \
-		extra/Makefile extra/ustdio/Makefile extra/uconv/Makefile extra/scrptrun/Makefile \
+		extra/Makefile extra/ustdio/Makefile \
+                extra/uconv/Makefile extra/scrptrun/Makefile
 		stubdata/Makefile \
 		tools/Makefile tools/ctestfw/Makefile tools/makeconv/Makefile \
 		tools/genrb/Makefile  \
 		tools/genuca/Makefile  \
-		tools/pkgdata/Makefile tools/pkgdata/icupkg.inc \
+		tools/pkgdata/Makefile \
 		tools/genccode/Makefile tools/gencmn/Makefile \
 		tools/gencnval/Makefile tools/gentz/Makefile \
-        tools/gennames/Makefile tools/toolutil/Makefile tools/gentest/Makefile \
+                tools/gennames/Makefile tools/toolutil/Makefile \
+                tools/gentest/Makefile \
 		tools/gennorm/Makefile \
 		tools/genprops/Makefile \
 		tools/dumpce/Makefile \
-		test/Makefile test/testdata/Makefile test/intltest/Makefile test/cintltst/Makefile \
+		test/Makefile test/testdata/Makefile test/intltest/Makefile \
+                test/cintltst/Makefile test/iotest/Makefile \
 		test/ieeetest/Makefile \
 		test/collperf/Makefile \
 		test/thaitest/Makefile \
 		test/letest/Makefile \
-		samples/Makefile samples/date/Makefile samples/cal/Makefile samples/layout/Makefile \
+		test/threadtest/Makefile \
+		samples/Makefile samples/date/Makefile \
+                samples/cal/Makefile samples/layout/Makefile \
 		common/unicode/platform.h"}
 EOF
 cat >> $CONFIG_STATUS <<\EOF

@@ -2,6 +2,7 @@
 #
 # Authors:
 # Ami Fixler
+# Barry Novinger
 # Steven R. Loomis <srl@jtcsv.com>
 # George Rhoten
 #
@@ -14,6 +15,7 @@
 #binary_suffixes='ico ICO bmp BMP jpg JPG gif GIF brk BRK'
 #ICU specific binary files
 binary_suffixes='brk BRK bin BIN'
+data_files='icu/source/data/locales/* icu/source/data/mappings/* icu/source/data/misc/* icu/source/data/translit/* icu/source/data/unidata/* icu/source/test/testdata/*'
 
 usage()
 {
@@ -36,13 +38,13 @@ echo ""
 echo "Extracting from $1 ..."
 echo ""
 # extract everything as iso-8859-1 except these directories
-pax -C 819 -rcvf $1 icu/data/* icu/source/test/testdata/*
+pax -C 819 -rcvf $1 $data_files
 
 # extract files while converting them to EBCDIC
 echo ""
 echo "Extracting files which must be in ibm-37 ..."
 echo ""
-pax -C 37 -rvf $1 icu/data/* icu/source/test/testdata/*
+pax -C 37 -rvf $1 $data_files
 
 if [ $# -gt 1 ]; then 
   if [ $2 -eq strip ]; then
