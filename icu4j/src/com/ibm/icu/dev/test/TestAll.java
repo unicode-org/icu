@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestAll.java,v $ 
- * $Date: 2000/12/26 22:44:20 $ 
- * $Revision: 1.6 $
+ * $Date: 2001/02/28 20:35:07 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -66,7 +66,8 @@ public class TestAll extends TestFmwk {
             new com.ibm.test.translit.UnicodeFilterLogicTest(),
             new com.ibm.test.translit.CompoundTransliteratorTest(),
             new com.ibm.test.translit.UnicodeToHexTransliteratorTest(),
-            new com.ibm.test.translit.HexToUnicodeTransliteratorTest()
+            new com.ibm.test.translit.HexToUnicodeTransliteratorTest(),
+            new com.ibm.test.translit.JamoTest()
 
             });
 	}
