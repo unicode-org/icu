@@ -627,23 +627,19 @@ int32_t
 uprv_digitsAfterDecimal(double x)
 {
     char buffer[20];
-    int32_t numDigits;
-    char *p;
+    int32_t numDigits, bytesWritten;
+    char *p = buffer;
     int32_t ptPos, exponent;
-
-    /* negative numbers throw off the calculations*/
-    x = fabs(x);
 
     /* cheat and use the string-format routine to get a string representation*/
     /* (it handles mathematical inaccuracy better than we can), then find out */
     /* many characters are to the right of the decimal point */
-    sprintf(buffer, "%.9g", x);
-    p = uprv_strchr(buffer, '.');
-    if (p == 0)
-        return 0;
+    bytesWritten = sprintf(buffer, "%+.9g", x);
+    while (isdigit(*(++p))) {
+    }
 
-    ptPos = (int16_t)(p - buffer);
-    numDigits = (int16_t)(strlen(buffer) - ptPos - 1);
+    ptPos = (int32_t)(p - buffer);
+    numDigits = (int32_t)(bytesWritten - ptPos - 1);
 
     /* if the number's string representation is in scientific notation, find */
     /* the exponent and take it into account*/
@@ -651,8 +647,8 @@ uprv_digitsAfterDecimal(double x)
     p = uprv_strchr(buffer, 'e');
     if (p != 0) {
         int16_t expPos = (int16_t)(p - buffer);
-        numDigits -= strlen(buffer) - expPos;
-        exponent = (int16_t)(atoi(p + 1));
+        numDigits -= bytesWritten - expPos;
+        exponent = (int32_t)(atoi(p + 1));
     }
 
     /* the string representation may still have spurious decimal digits in it, */
@@ -664,6 +660,9 @@ uprv_digitsAfterDecimal(double x)
             --numDigits;
     }
     numDigits -= exponent;
+    if (numDigits < 0) {
+        return 0;
+    }
     return numDigits;
 }
 
