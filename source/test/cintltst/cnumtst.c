@@ -364,7 +364,7 @@ free(result);
      * For the next release, we need to fix this.
      * Then, remove the uprv_strcmp("1.5", ...) and this comment, and the include "cstring.h" at the beginning of this file.
      */
-    if(uprv_strcmp("1.5", U_ICU_VERSION) != 0 && u_strcmp(result, temp1) != 0) {
+    if(u_strcmp(result, temp1) != 0) {
         log_err("Formatting failed after setting symbols - got different result\n");
     }
 
