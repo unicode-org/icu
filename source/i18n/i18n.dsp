@@ -1556,6 +1556,14 @@ SOURCE=.\unicode\unimatch.h
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
 
+# Begin Custom Build
+InputPath=.\unicode\unimatch.h
+
+"..\..\include\unicode\unimatch.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy  unicode\unimatch.h  ..\..\include\unicode
+
+# End Custom Build
+
 !ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
 
 # Begin Custom Build
