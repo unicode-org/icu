@@ -141,20 +141,7 @@ static char *toCharString(const UChar* unichars)
             *temp ++ = (char)ch;
         }
         else {
-            char digit[5];
-            int  zerosize;
-            *temp = 0;
-            strcat(temp, "\\u");
-            temp = temp + 2;
-            sprintf(digit, "%x", ch);
-            zerosize = 4 - strlen(digit);
-            while (zerosize != 0) {
-                *temp ++ = '0';
-                zerosize --;
-            }
-            *temp = 0;
-            strcat(temp, digit);
-            temp = temp + strlen(digit);
+            sprintf(temp, "\\u%04x", ch);
         }
     }
     *temp = 0;

@@ -753,6 +753,7 @@ findSetMatch( UScriptCode *scriptCodes, int32_t scriptsLen,
               const char  *locale){
     USet *scripts[10]= {0};
     char pattern[256] = { '[', ':', 0x000 };
+    int32_t patternLen;
     UChar uPattern[256] = {0};
     UErrorCode status = U_ZERO_ERROR;
     int32_t i;
@@ -761,8 +762,9 @@ findSetMatch( UScriptCode *scriptCodes, int32_t scriptsLen,
     for(i = 0; i<scriptsLen; i++){
         strcat(pattern, uscript_getShortName(scriptCodes[i]));
         strcat(pattern, ":]");
-        u_charsToUChars(pattern, uPattern, strlen(pattern));
-        scripts[i] = uset_openPattern(uPattern, strlen(pattern), &status);
+        patternLen = (int32_t)strlen(pattern);
+        u_charsToUChars(pattern, uPattern, patternLen);
+        scripts[i] = uset_openPattern(uPattern, patternLen, &status);
         if(U_FAILURE(status)){
             log_err("Could not create set for patter %s. Error: %s\n", pattern, u_errorName(status));
             break;
