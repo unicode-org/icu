@@ -81,7 +81,7 @@ void   UCNV_FROM_U_CALLBACK_STOP (
                   int32_t length,
                   UChar32 codePoint,
                   UConverterCallbackReason reason,
-				  UErrorCode * err)
+                  UErrorCode * err)
 {
   /* the caller must have set the error code accordingly */
   return;
@@ -95,7 +95,7 @@ void   UCNV_TO_U_CALLBACK_STOP (
                    const char* codePoints,
                    int32_t length,
                    UConverterCallbackReason reason,
-			       UErrorCode * err)
+                   UErrorCode * err)
 {
   /* the caller must have set the error code accordingly */
   return;
@@ -108,7 +108,7 @@ void   UCNV_FROM_U_CALLBACK_SKIP (
                   int32_t length,
                   UChar32 codePoint,
                   UConverterCallbackReason reason,
-				  UErrorCode * err)
+                  UErrorCode * err)
 {
   if (reason <= UCNV_IRREGULAR)
   {
@@ -210,7 +210,7 @@ void   UCNV_FROM_U_CALLBACK_ESCAPE (
                          int32_t length,
                          UChar32 codePoint,
                          UConverterCallbackReason reason,
-						 UErrorCode * err)
+                         UErrorCode * err)
 {
 
   UChar valueString[VALUE_STRING_LENGTH];
@@ -240,11 +240,11 @@ void   UCNV_FROM_U_CALLBACK_ESCAPE (
   myConverter.fromUnicodeStatus = myFromUnicodeStatus;
   
   ucnv_setFromUCallBack (&myConverter,
-			 (UConverterFromUCallback) UCNV_FROM_U_CALLBACK_STOP,
+             (UConverterFromUCallback) UCNV_FROM_U_CALLBACK_STOP,
              NULL,  /* To Do for HSYS: context is null? */
              &original,
              &originalContext,
-			 &err2);
+             &err2);
   if (U_FAILURE (err2))
     {
       *err = err2;
@@ -269,14 +269,14 @@ void   UCNV_FROM_U_CALLBACK_ESCAPE (
 
   /*converts unicode escape sequence */
   ucnv_fromUnicode (&myConverter,
-		    &myTargetAlias,
-		    myTargetAlias + VALUE_STRING_LENGTH,
-		    &myValueSource,
-		    myValueSource + valueStringLength,
-		    NULL,
-		    TRUE,
-		    &err2);
-  
+            &myTargetAlias,
+            myTargetAlias + VALUE_STRING_LENGTH,
+            &myValueSource,
+            myValueSource + valueStringLength,
+            NULL,
+            TRUE,
+            &err2);
+
   if (U_FAILURE (err2))
     {
       UCNV_FROM_U_CALLBACK_SUBSTITUTE (
@@ -286,7 +286,7 @@ void   UCNV_FROM_U_CALLBACK_ESCAPE (
                        length,
                        codePoint,
                        reason,
-				       err);
+                       err);
       return;
     }
 
@@ -302,11 +302,11 @@ void   UCNV_FROM_U_CALLBACK_ESCAPE (
       *err = U_ZERO_ERROR;
 
       if (fromArgs->offsets)
-	{
-	  int j=0;
-	  for (j=0;j<valueStringLength;j++) fromArgs->offsets[j]=0;
-	  fromArgs->offsets += valueStringLength;
-	}
+        {
+          int j=0;
+          for (j=0;j<valueStringLength;j++) fromArgs->offsets[j]=0;
+          fromArgs->offsets += valueStringLength;
+        }
     }
   else
     {
@@ -317,15 +317,15 @@ void   UCNV_FROM_U_CALLBACK_ESCAPE (
        */
 
       if (fromArgs->offsets)
-	{
-	  int j=0;
-	  for (j=0;j<(fromArgs->targetLimit - fromArgs->target);j++) fromArgs->offsets[j]=0;
-	  fromArgs->offsets += (fromArgs->targetLimit - fromArgs->target);
-	}
+        {
+          int j=0;
+          for (j=0;j<(fromArgs->targetLimit - fromArgs->target);j++) fromArgs->offsets[j]=0;
+          fromArgs->offsets += (fromArgs->targetLimit - fromArgs->target);
+        }
       uprv_memcpy (fromArgs->target, myTarget, (fromArgs->targetLimit - fromArgs->target));
       uprv_memcpy (fromArgs->converter->charErrorBuffer + fromArgs->converter->charErrorBufferLength,
-		  myTarget + (fromArgs->targetLimit - fromArgs->target),
-		  valueStringLength - (fromArgs->targetLimit - fromArgs->target));
+          myTarget + (fromArgs->targetLimit - fromArgs->target),
+          valueStringLength - (fromArgs->targetLimit - fromArgs->target));
       fromArgs->converter->charErrorBufferLength += valueStringLength - (fromArgs->targetLimit - fromArgs->target);
       fromArgs->target += (fromArgs->targetLimit - fromArgs->target);
       *err = U_INDEX_OUTOFBOUNDS_ERROR;
@@ -342,12 +342,12 @@ void UCNV_TO_U_CALLBACK_SKIP (
                  const char* codeUnits,
                  int32_t length,
                  UConverterCallbackReason reason,
-			     UErrorCode * err)
+                 UErrorCode * err)
 {
-  if (reason <= UCNV_IRREGULAR)
-  {
-    *err = U_ZERO_ERROR;
-  }
+    if (reason <= UCNV_IRREGULAR)
+    {
+        *err = U_ZERO_ERROR;
+    }
 }
 
 void   UCNV_TO_U_CALLBACK_SUBSTITUTE (
@@ -356,34 +356,35 @@ void   UCNV_TO_U_CALLBACK_SUBSTITUTE (
                  const char* codeUnits,
                  int32_t length,
                  UConverterCallbackReason reason,
-			     UErrorCode * err)
+                 UErrorCode * err)
 {
-  if (reason > UCNV_IRREGULAR)
-  {
+    if (reason > UCNV_IRREGULAR)
+    {
+        return;
+    }
+
+    /* ### TODO:
+     * This should use the new ucnv_cbWrite...() functions instead of doing
+     * "tricks" as before we had a good callback API!
+     */
+
+    if ((toArgs->targetLimit - toArgs->target) >= 1)
+    {
+        *((toArgs->target)++) = 0xFFFD;
+        if (toArgs->offsets)
+        {
+            *((toArgs->offsets)++) = 0;
+        }
+        *err = U_ZERO_ERROR;
+    }
+    else
+    {
+        toArgs->converter->UCharErrorBuffer[toArgs->converter->UCharErrorBufferLength] = 0xFFFD;
+        toArgs->converter->UCharErrorBufferLength++;
+        *err = U_INDEX_OUTOFBOUNDS_ERROR;
+    }
+
     return;
-  }
-
-  /* ### TODO:
-   * This should use the new ucnv_cbWrite...() functions instead of doing
-   * "tricks" as before we had a good callback API!
-   */
-
-  if ((toArgs->targetLimit - toArgs->target) >= 1)
-    {
-      *toArgs->target = 0xFFFD;
-      (toArgs->target)++;
-      if (toArgs->offsets)  *(toArgs->offsets) = 0;
-      *err = U_ZERO_ERROR;
-    }
-  else
-    {
-      toArgs->converter->UCharErrorBuffer[toArgs->converter->UCharErrorBufferLength] = 0xFFFD;
-      toArgs->converter->UCharErrorBufferLength++;
-      *err = U_INDEX_OUTOFBOUNDS_ERROR;
-    }
-  
-  return;
-  
 }
 
 /*uses itou to get a unicode escape sequence of the offensive sequence,
@@ -395,12 +396,12 @@ void  UCNV_TO_U_CALLBACK_ESCAPE (
                  const char* codeUnits,
                  int32_t length,
                  UConverterCallbackReason reason,
-			     UErrorCode * err)
+                 UErrorCode * err)
 {
   UChar uniValueString[VALUE_STRING_LENGTH];
   int32_t valueStringLength = 0;
   int32_t i = 0;
-  
+
   if (reason > UCNV_IRREGULAR)
   {
     return;
@@ -419,7 +420,7 @@ void  UCNV_TO_U_CALLBACK_ESCAPE (
       itou (uniValueString + valueStringLength, (uint8_t) codeUnits[i++], 16, 2);
       valueStringLength += 2;
     }
-  
+
   if ((toArgs->targetLimit - toArgs->target) >= valueStringLength)
     {
       /*if we have enough space on the output buffer we just copy
@@ -427,9 +428,9 @@ void  UCNV_TO_U_CALLBACK_ESCAPE (
        */
       uprv_memcpy (toArgs->target, uniValueString, (sizeof (UChar)) * (valueStringLength));
       if (toArgs->offsets) 
-	{
-	  for (i = 0; i < valueStringLength; i++)  toArgs->offsets[i] = 0;
-	}
+        {
+          for (i = 0; i < valueStringLength; i++)  toArgs->offsets[i] = 0;
+        }
       toArgs->target += valueStringLength;
       
       *err = U_ZERO_ERROR;
@@ -443,18 +444,18 @@ void  UCNV_TO_U_CALLBACK_ESCAPE (
        */
       uprv_memcpy (toArgs->target, uniValueString, (sizeof (UChar)) * (toArgs->targetLimit - toArgs->target));
       if (toArgs->offsets) 
-	{
-	  for (i = 0; i < (toArgs->targetLimit - toArgs->target); i++)  toArgs->offsets[i] = 0;
-	}	    
+        {
+          for (i = 0; i < (toArgs->targetLimit - toArgs->target); i++)  toArgs->offsets[i] = 0;
+        }
       
       
       uprv_memcpy (toArgs->converter->UCharErrorBuffer,
-		  uniValueString + (toArgs->targetLimit - toArgs->target),
-		  (sizeof (UChar)) * (valueStringLength - (toArgs->targetLimit - toArgs->target)));
+          uniValueString + (toArgs->targetLimit - toArgs->target),
+          (sizeof (UChar)) * (valueStringLength - (toArgs->targetLimit - toArgs->target)));
       toArgs->converter->UCharErrorBufferLength += valueStringLength - (toArgs->targetLimit - toArgs->target);
       toArgs->target += (toArgs->targetLimit - toArgs->target);
       *err = U_INDEX_OUTOFBOUNDS_ERROR;
     }
-  
+
   return;
 }
