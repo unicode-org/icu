@@ -474,6 +474,8 @@ void Test714(void)
     UChar *result;
     const char* expect =  "7:25:43 AM";
     
+    ctest_setTimeZone(NULL, &status);
+
     fmt= udat_open(UDAT_MEDIUM,UDAT_NONE ,"en_US_CA", NULL, -1, NULL, 0, &status);
     if(U_FAILURE(status))
     {
@@ -495,6 +497,8 @@ void Test714(void)
     }
         
     udat_close(fmt);
+
+    ctest_resetTimeZone();
 }
 
 /*INTERNAL FUNCTION USED */
