@@ -55,6 +55,10 @@ INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 
+# Library suffix (to support different C++ compilers)
+
+ICULIBSUFFIX=@ICULIBSUFFIX@
+
 # Compiler and tools
 
 CC = @CC@
