@@ -55,7 +55,9 @@ static const UChar         CUSTOM_ID[] =
     0x43, 0x75, 0x73, 0x74, 0x6F, 0x6D, 0x00 /* "Custom" */
 };
 
+#ifdef ICU_TIMEZONE_USE_DEPRECATES
 const TimeZone*            TimeZone::GMT = getGMT();
+#endif
 
 // See header file for documentation of the following
 static const TZHeader *    DATA = 0;
@@ -75,7 +77,7 @@ static const TZEquivalencyGroup* lookupEquivalencyGroup(const UnicodeString& id)
 const TimeZone*
 TimeZone::getGMT(void)
 {
-    static const SimpleTimeZone SIMPLE_GMT(0, GMT_ID);
+    static const SimpleTimeZone SIMPLE_GMT(0, UnicodeString(GMT_ID, GMT_ID_LENGTH));
     return &SIMPLE_GMT;
 }
 
@@ -168,6 +170,13 @@ TimeZone::TimeZone()
 
 // -------------------------------------
 
+TimeZone::TimeZone(const UnicodeString &id)
+    :   fID(id)
+{
+}
+
+// -------------------------------------
+
 TimeZone::~TimeZone()
 {
 }
@@ -218,7 +227,7 @@ TimeZone::createTimeZone(const UnicodeString& ID)
         result = createCustomTimeZone(ID);
     }
     if (result == 0) {
-        result = GMT->clone();
+        result = getGMT()->clone();
     }
     return result;
 }
@@ -351,7 +360,7 @@ TimeZone::initDefault()
             // can only happen if the raw offset returned by
             // uprv_timezone() does not correspond to any system zone.
             if (fgDefaultZone == 0) {
-                fgDefaultZone = GMT->clone();
+                fgDefaultZone = getGMT()->clone();
             }
         }
     }
@@ -378,7 +387,7 @@ TimeZone::adoptDefault(TimeZone* zone)
 
         if (fgDefaultZone != NULL) {
             delete fgDefaultZone;
-		}
+        }
 
         fgDefaultZone = zone;
     }
