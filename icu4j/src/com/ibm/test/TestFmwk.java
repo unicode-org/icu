@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/Attic/TestFmwk.java,v $ 
- * $Date: 2000/07/13 21:34:32 $ 
- * $Revision: 1.13 $
+ * $Date: 2001/02/28 20:37:24 $ 
+ * $Revision: 1.14 $
  *
  *****************************************************************************************
  */
@@ -84,7 +84,7 @@ public class TestFmwk implements TestLog {
             } catch( IllegalAccessException e ) {
                 errln("Can't access test method " + testMethod.getName());
             } catch( InvocationTargetException e ) {
-                errln("Uncaught exception \""+e+"\"thrown in test method "
+                errln("Uncaught exception \""+e+"\" thrown in test method "
                         + testMethod.getName());
                 e.getTargetException().printStackTrace(this.params.log);
             }
