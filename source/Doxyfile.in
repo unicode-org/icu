@@ -76,7 +76,7 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 # configuration options related to the input files
 #---------------------------------------------------------------------------
-INPUT                  = ./common/unicode/platform.h @srcdir@/common/unicode @srcdir@/i18n/unicode @srcdir@/io/unicode @srcdir@/layout/unicode
+INPUT                  = ./common/unicode/platform.h @srcdir@/common/unicode @srcdir@/i18n/unicode @srcdir@/io/unicode @srcdir@/layout/LEFontInstance.h @srcdir@/layout/LEGlyphStorage.h @srcdir@/layout/LELanguages.h @srcdir@/layout/LEScripts.h @srcdir@/layout/LESwaps.h @srcdir@/layout/LETypes.h @srcdir@/layout/LayoutEngine.h @srcdir@/layoutex/layout
 FILE_PATTERNS          = *.h
 RECURSIVE              = NO
 EXCLUDE                = @srcdir@/common/unicode/urename.h
