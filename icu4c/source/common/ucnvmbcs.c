@@ -970,7 +970,7 @@ _MBCSLoad(UConverterSharedData *sharedData,
                     MBCS_ENTRY_FINAL_ACTION(entry)==MBCS_STATE_CHANGE_ONLY &&
                     MBCS_ENTRY_FINAL_STATE(entry)!=0
                 ) {
-                    mbcsTable->dbcsOnlyState=MBCS_ENTRY_FINAL_STATE(entry);
+                    mbcsTable->dbcsOnlyState=(uint8_t)MBCS_ENTRY_FINAL_STATE(entry);
 
                     mbcsTable->outputType=MBCS_OUTPUT_DBCS_ONLY;
                 }
