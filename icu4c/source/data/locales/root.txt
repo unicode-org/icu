@@ -1601,7 +1601,42 @@ root {
         "M/d/yyyy",
         "{1} {0}",
     }
-    
+
+    // Islamic calendar
+    Eras_islamic:array { 
+        "AH" // Anno Hijri
+    }
+
+    MonthAbbreviations_islamic {
+        "Muh",                   
+        "Saf",
+        "Rab I",
+        "Rab II",
+        "Jum I",
+        "Jum II",
+        "Raj",
+        "Sha",
+        "Ram",
+        "Sha",
+        "Dhu l-Q",
+        "Dhu l-H"
+      }   
+
+    MonthNames_islamic {
+        "Muharram",                   
+        "Safar",
+        "Rabi' I",
+        "Rabi' II",
+        "Jumada I",
+        "Jumada II",
+        "Rajab",
+        "Sha'ban",
+        "Ramadan",
+        "Shawwal",
+        "Dhu'l-Qi'dah",
+        "Dhu'l-Hijjah"
+      }   
+
     // the PaperSize units are in mm
     PaperSize:intvector{
         297, // height
