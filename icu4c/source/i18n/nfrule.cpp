@@ -1,7 +1,16 @@
 /*
-*******************************************************************************
-* Copyright (C) 1997-2001, International Business Machines Corporation and others. All Rights Reserved.
-*******************************************************************************
+******************************************************************************
+*   Copyright (C) 1997-2001, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+******************************************************************************
+*   file name:  nfrule.cpp
+*   encoding:   US-ASCII
+*   tab size:   8 (not used)
+*   indentation:4
+*
+* Modification history
+* Date        Name      Comments
+* 10/11/2001  Doug      Ported from ICU4J
 */
 
 #include "nfrule.h"
@@ -35,43 +44,43 @@ NFRule::~NFRule()
   delete sub2;
 }
 
-static UChar gLeftBracket = 0x005b;
-static UChar gRightBracket = 0x005d;
-static UChar gColon = 0x003a;
-static UChar gZero = 0x0030;
-static UChar gNine = 0x0039;
-static UChar gSpace = 0x0020;
-static UChar gSlash = 0x002f;
-static UChar gGreaterThan = 0x003e;
-static UChar gComma = 0x002c;
-static UChar gDot = 0x002e;
-static UChar gTick = 0x0027;
-static UChar gMinus = 0x002d;
-static UChar gSemicolon = 0x003b;
+static const UChar gLeftBracket = 0x005b;
+static const UChar gRightBracket = 0x005d;
+static const UChar gColon = 0x003a;
+static const UChar gZero = 0x0030;
+static const UChar gNine = 0x0039;
+static const UChar gSpace = 0x0020;
+static const UChar gSlash = 0x002f;
+static const UChar gGreaterThan = 0x003e;
+static const UChar gComma = 0x002c;
+static const UChar gDot = 0x002e;
+static const UChar gTick = 0x0027;
+static const UChar gMinus = 0x002d;
+static const UChar gSemicolon = 0x003b;
 
-static UnicodeString gMinusX("-x");
-static UnicodeString gXDotX("x.x");
-static UnicodeString gXDotZero("x.0");
-static UnicodeString gZeroDotX("0.x");
+static const UChar gMinusX[] =                  {0x2D, 0x78, 0};    /* "-x" */
+static const UChar gXDotX[] =                   {0x78, 0x2E, 0x78, 0}; /* "x.x" */
+static const UChar gXDotZero[] =                {0x78, 0x2E, 0x30, 0}; /* "x.0" */
+static const UChar gZeroDotX[] =                {0x30, 0x2E, 0x78, 0}; /* "0.x" */
 
-static UnicodeString gLessLess("<<");
-static UnicodeString gLessPercent("<%");
-static UnicodeString gLessHash("<#");
-static UnicodeString gLessZero("<0");
-static UnicodeString gGreaterGreater(">>");
-static UnicodeString gGreaterPercent(">%");
-static UnicodeString gGreaterHash(">#");
-static UnicodeString gGreaterZero(">0");
-static UnicodeString gEqualPercent("=%");
-static UnicodeString gEqualHash("=#");
-static UnicodeString gEqualZero("=0");
-static UnicodeString gEmptyString("");
-static UnicodeString gGreaterGreaterGreater(">>>");
+static const UChar gLessLess[] =                {0x3C, 0x3C, 0};    /* "<<" */
+static const UChar gLessPercent[] =             {0x3C, 0x25, 0};    /* "<%" */
+static const UChar gLessHash[] =                {0x3C, 0x23, 0};    /* "<#" */
+static const UChar gLessZero[] =                {0x3C, 0x30, 0};    /* "<0" */
+static const UChar gGreaterGreater[] =          {0x3E, 0x3E, 0};    /* ">>" */
+static const UChar gGreaterPercent[] =          {0x3E, 0x25, 0};    /* ">%" */
+static const UChar gGreaterHash[] =             {0x3E, 0x23, 0};    /* ">#" */
+static const UChar gGreaterZero[] =             {0x3E, 0x30, 0};    /* ">0" */
+static const UChar gEqualPercent[] =            {0x3D, 0x25, 0};    /* "=%" */
+static const UChar gEqualHash[] =               {0x3D, 0x23, 0};    /* "=#" */
+static const UChar gEqualZero[] =               {0x3D, 0x30, 0};    /* "=0" */
+static const UChar gEmptyString[] =             {0};                /* "" */
+static const UChar gGreaterGreaterGreater[] =   {0x3E, 0x3E, 0x3E, 0}; /* ">>>" */
 
-static const UnicodeString* tokenStrings[] = {
-	&gLessLess, &gLessPercent, &gLessHash, &gLessZero,
-	&gGreaterGreater, &gGreaterPercent,&gGreaterHash, &gGreaterZero,
-	&gEqualPercent, &gEqualHash, &gEqualZero, NULL
+static const UChar * const tokenStrings[] = {
+	gLessLess, gLessPercent, gLessHash, gLessZero,
+	gGreaterGreater, gGreaterPercent,gGreaterHash, gGreaterZero,
+	gEqualPercent, gEqualHash, gEqualZero, NULL
 };
 
 void 
@@ -82,262 +91,263 @@ NFRule::makeRules(UnicodeString& description,
                   NFRuleList& rules,
                   UErrorCode& status) 
 {
-  // we know we're making at least one rule, so go ahead and
-  // new it up and initialize its basevalue and divisor
-  // (this also strips the rule descriptor, if any, off the
-  // descripton string)
-  NFRule* rule1 = new NFRule(rbnf);
-  rule1->parseRuleDescriptor(description, status);
-	
-  // check the description to see whether there's text enclosed
-  // in brackets
-  int32_t brack1 = description.indexOf(gLeftBracket);
-  int32_t brack2 = description.indexOf(gRightBracket);
-	
-  // if the description doesn't contain a matched pair of brackets,
-  // or if it's of a type that doesn't recognize bracketed text,
-  // then leave the description alone, initialize the rule's
-  // rule text and substitutions, and return that rule
-  if (brack1 == -1 || brack2 == -1 || brack1 > brack2
-      || rule1->getType() == kProperFractionRule
-      || rule1->getType() == kNegativeNumberRule) {
-    rule1->ruleText = description;
-    rule1->extractSubstitutions(ruleSet, predecessor, rbnf, status);
-    rules.add(rule1);
-  } else {
-    // if the description does contain a matched pair of brackets,
-    // then it's really shorthand for two rules (with one exception)
-    NFRule* rule2 = NULL;
-    UnicodeString sbuf;
-		
-    // we'll actually only split the rule into two rules if its
-    // base value is an even multiple of its divisor (or it's one
-    // of the special rules)
-    if ((rule1->baseValue > 0
-         && (rule1->baseValue % llong_pow((int32_t)rule1->radix, (int32_t)rule1->exponent)) == 0)
-        || rule1->getType() == kImproperFractionRule
-        || rule1->getType() == kMasterRule) {
-			
-      // if it passes that test, new up the second rule.  If the
-      // rule set both rules will belong to is a fraction rule
-      // set, they both have the same base value; otherwise,
-      // increment the original rule's base value ("rule1" actually
-      // goes SECOND in the rule set's rule list)
-      rule2 = new NFRule(rbnf);
-      if (rule1->baseValue >= 0) {
-        rule2->baseValue = rule1->baseValue;
-        if (!ruleSet->isFractionRuleSet()) {
-          ++rule1->baseValue;
+    // we know we're making at least one rule, so go ahead and
+    // new it up and initialize its basevalue and divisor
+    // (this also strips the rule descriptor, if any, off the
+    // descripton string)
+    NFRule* rule1 = new NFRule(rbnf);
+    rule1->parseRuleDescriptor(description, status);
+
+    // check the description to see whether there's text enclosed
+    // in brackets
+    int32_t brack1 = description.indexOf(gLeftBracket);
+    int32_t brack2 = description.indexOf(gRightBracket);
+
+    // if the description doesn't contain a matched pair of brackets,
+    // or if it's of a type that doesn't recognize bracketed text,
+    // then leave the description alone, initialize the rule's
+    // rule text and substitutions, and return that rule
+    if (brack1 == -1 || brack2 == -1 || brack1 > brack2
+        || rule1->getType() == kProperFractionRule
+        || rule1->getType() == kNegativeNumberRule) {
+        rule1->ruleText = description;
+        rule1->extractSubstitutions(ruleSet, predecessor, rbnf, status);
+        rules.add(rule1);
+    } else {
+        // if the description does contain a matched pair of brackets,
+        // then it's really shorthand for two rules (with one exception)
+        NFRule* rule2 = NULL;
+        UnicodeString sbuf;
+
+        // we'll actually only split the rule into two rules if its
+        // base value is an even multiple of its divisor (or it's one
+        // of the special rules)
+        if ((rule1->baseValue > 0
+            && (rule1->baseValue % llong_pow((int32_t)rule1->radix, (int32_t)rule1->exponent)) == 0)
+            || rule1->getType() == kImproperFractionRule
+            || rule1->getType() == kMasterRule) {
+            
+            // if it passes that test, new up the second rule.  If the
+            // rule set both rules will belong to is a fraction rule
+            // set, they both have the same base value; otherwise,
+            // increment the original rule's base value ("rule1" actually
+            // goes SECOND in the rule set's rule list)
+            rule2 = new NFRule(rbnf);
+            if (rule1->baseValue >= 0) {
+                rule2->baseValue = rule1->baseValue;
+                if (!ruleSet->isFractionRuleSet()) {
+                    ++rule1->baseValue;
+                }
+            }
+
+            // if the description began with "x.x" and contains bracketed
+            // text, it describes both the improper fraction rule and
+            // the proper fraction rule
+            else if (rule1->getType() == kImproperFractionRule) {
+                rule2->setType(kProperFractionRule);
+            }
+
+            // if the description began with "x.0" and contains bracketed
+            // text, it describes both the master rule and the
+            // improper fraction rule
+            else if (rule1->getType() == kMasterRule) {
+                rule2->baseValue = rule1->baseValue;
+                rule1->setType(kImproperFractionRule);
+            }
+
+            // both rules have the same radix and exponent (i.e., the
+            // same divisor)
+            rule2->radix = rule1->radix;
+            rule2->exponent = rule1->exponent;
+
+            // rule2's rule text omits the stuff in brackets: initalize
+            // its rule text and substitutions accordingly
+            sbuf.append(description, 0, brack1);
+            if (brack2 + 1 < description.length()) {
+                sbuf.append(description, brack2 + 1, description.length() - brack2 - 1);
+            }
+            rule2->ruleText.setTo(sbuf);
+            rule2->extractSubstitutions(ruleSet, predecessor, rbnf, status);
         }
-      }
-			
-      // if the description began with "x.x" and contains bracketed
-      // text, it describes both the improper fraction rule and
-      // the proper fraction rule
-      else if (rule1->getType() == kImproperFractionRule) {
-        rule2->setType(kProperFractionRule);
-      }
-			
-      // if the description began with "x.0" and contains bracketed
-      // text, it describes both the master rule and the
-      // improper fraction rule
-      else if (rule1->getType() == kMasterRule) {
-        rule2->baseValue = rule1->baseValue;
-        rule1->setType(kImproperFractionRule);
-      }
-			
-      // both rules have the same radix and exponent (i.e., the
-      // same divisor)
-      rule2->radix = rule1->radix;
-      rule2->exponent = rule1->exponent;
-			
-      // rule2's rule text omits the stuff in brackets: initalize
-      // its rule text and substitutions accordingly
-      sbuf.append(description, 0, brack1);
-      if (brack2 + 1 < description.length()) {
-        sbuf.append(description, brack2 + 1, description.length() - brack2 - 1);
-      }
-      rule2->ruleText.setTo(sbuf);
-      rule2->extractSubstitutions(ruleSet, predecessor, rbnf, status);
+
+        // rule1's text includes the text in the brackets but omits
+        // the brackets themselves: initialize _its_ rule text and
+        // substitutions accordingly
+        sbuf.setTo(description, 0, brack1);
+        sbuf.append(description, brack1 + 1, brack2 - brack1 - 1);
+        if (brack2 + 1 < description.length()) {
+            sbuf.append(description, brack2 + 1, description.length() - brack2 - 1);
+        }
+        rule1->ruleText.setTo(sbuf);
+        rule1->extractSubstitutions(ruleSet, predecessor, rbnf, status);
+
+        // if we only have one rule, return it; if we have two, return
+        // a two-element array containing them (notice that rule2 goes
+        // BEFORE rule1 in the list: in all cases, rule2 OMITS the
+        // material in the brackets and rule1 INCLUDES the material
+        // in the brackets)
+        if (rule2 != NULL) {
+            rules.add(rule2);
+        }
+        rules.add(rule1);
     }
-		
-    // rule1's text includes the text in the brackets but omits
-    // the brackets themselves: initialize _its_ rule text and
-    // substitutions accordingly
-    sbuf.setTo(description, 0, brack1);
-    sbuf.append(description, brack1 + 1, brack2 - brack1 - 1);
-    if (brack2 + 1 < description.length()) {
-      sbuf.append(description, brack2 + 1, description.length() - brack2 - 1);
-    }
-    rule1->ruleText.setTo(sbuf);
-    rule1->extractSubstitutions(ruleSet, predecessor, rbnf, status);
-		
-    // if we only have one rule, return it; if we have two, return
-    // a two-element array containing them (notice that rule2 goes
-    // BEFORE rule1 in the list: in all cases, rule2 OMITS the
-    // material in the brackets and rule1 INCLUDES the material
-    // in the brackets)
-    if (rule2 != NULL) {
-      rules.add(rule2);
-    }
-    rules.add(rule1);
-  }
 }
 
 /**
-* This function parses the rule's rule descriptor (i.e., the base
-* value and/or other tokens that precede the rule's rule text
-* in the description) and sets the rule's base value, radix, and
-* exponent according to the descriptor.  (If the description doesn't
-* include a rule descriptor, then this function sets everything to
-* default values and the rule set sets the rule's real base value).
-* @param description The rule's description
-* @return If "description" included a rule descriptor, this is
-* "description" with the descriptor and any trailing whitespace
-* stripped off.  Otherwise; it's "descriptor" unchangd.
-*/
+ * This function parses the rule's rule descriptor (i.e., the base
+ * value and/or other tokens that precede the rule's rule text
+ * in the description) and sets the rule's base value, radix, and
+ * exponent according to the descriptor.  (If the description doesn't
+ * include a rule descriptor, then this function sets everything to
+ * default values and the rule set sets the rule's real base value).
+ * @param description The rule's description
+ * @return If "description" included a rule descriptor, this is
+ * "description" with the descriptor and any trailing whitespace
+ * stripped off.  Otherwise; it's "descriptor" unchangd.
+ */
 void 
 NFRule::parseRuleDescriptor(UnicodeString& description, UErrorCode& status)
 {
-  // the description consists of a rule descriptor and a rule body,
-  // separated by a colon.  The rule descriptor is optional.  If
-  // it's omitted, just set the base value to 0.
-  int32_t p = description.indexOf(gColon);
-  if (p == -1) {
-    setBaseValue((int32_t)0);
-  } else {
-    // copy the descriptor out into its own string and strip it,
-    // along with any trailing whitespace, out of the original
-    // description
-    UnicodeString descriptor;
-    descriptor.setTo(description, 0, p);
-		
-    ++p;
-    while (p < description.length() && u_isWhitespace(description.charAt(p)))
-      ++p;
-    description.removeBetween(0, p);
-		
-    // check first to see if the rule descriptor matches the token
-    // for one of the special rules.  If it does, set the base
-    // value to the correct identfier value
-    if (descriptor == gMinusX) {
-      setType(kNegativeNumberRule);
-    }
-    else if (descriptor == gXDotX) {
-      setType(kImproperFractionRule);
-    }
-    else if (descriptor == gZeroDotX) {
-      setType(kProperFractionRule);
-    }
-    else if (descriptor == gXDotZero) {
-      setType(kMasterRule);
-    }
-		
-    // if the rule descriptor begins with a digit, it's a descriptor
-    // for a normal rule
-    // since we don't have Long.parseLong, and this isn't much work anyway,
-    // just build up the value as we encounter the digits.
-    else if (descriptor.charAt(0) >= gZero && descriptor.charAt(0) <= gNine) {
-      llong val = (int32_t)0;
-      p = 0;
-      UChar c = gSpace;
-			
-      // begin parsing the descriptor: copy digits
-      // into "tempValue", skip periods, commas, and spaces,
-      // stop on a slash or > sign (or at the end of the string),
-      // and throw an exception on any other character
-	  llong ll_10 = (int32_t)10;
-      while (p < descriptor.length()) {
-        c = descriptor.charAt(p);
-        if (c >= gZero && c <= gNine) {
-          val = val * ll_10 + (int32_t)(c - gZero);
-        }
-        else if (c == gSlash || c == gGreaterThan) {
-          break;
-        }
-        else if (u_isWhitespace(c) || c == gComma || c == gDot) {
-        }
-        else {
-          // throw new IllegalArgumentException("Illegal character in rule descriptor");
-          status = U_PARSE_ERROR;
-          return;
-        }
+    // the description consists of a rule descriptor and a rule body,
+    // separated by a colon.  The rule descriptor is optional.  If
+    // it's omitted, just set the base value to 0.
+    int32_t p = description.indexOf(gColon);
+    if (p == -1) {
+        setBaseValue((int32_t)0);
+    } else {
+        // copy the descriptor out into its own string and strip it,
+        // along with any trailing whitespace, out of the original
+        // description
+        UnicodeString descriptor;
+        descriptor.setTo(description, 0, p);
+
         ++p;
-      }
-			
-      // we have the base value, so set it
-      setBaseValue(val);
-			
-      // if we stopped the previous loop on a slash, we're
-      // now parsing the rule's radix.  Again, accumulate digits
-      // in tempValue, skip punctuation, stop on a > mark, and
-      // throw an exception on anything else
-      if (c == '/') {
-        val = (int32_t)0;
-        ++p;
-		llong ll_10 = (int32_t)10;
-        while (p < descriptor.length()) {
-          c = descriptor.charAt(p);
-          if (c >= gZero && c <= gNine) {
-            val = val * ll_10 + (int32_t)(c - gZero);
-          }
-          else if (c == gGreaterThan) {
-            break;
-          }
-          else if (u_isWhitespace(c) || c == gComma || c == gDot) {
-          }
-          else {
-            // throw new IllegalArgumentException("Illegal character is rule descriptor");
-            status = U_PARSE_ERROR;
-            return;
-          }
-          ++p;
+        while (p < description.length() && u_isWhitespace(description.charAt(p))) {
+            ++p;
         }
-				
-				// tempValue now contain's the rule's radix.  Set it
-				// accordingly, and recalculate the rule's exponent
-        radix = (int16_t)llong_asInt(val);
-        if (radix == 0) {
-          // throw new IllegalArgumentException("Rule can't have radix of 0");
-          status = U_PARSE_ERROR;
+        description.removeBetween(0, p);
+
+        // check first to see if the rule descriptor matches the token
+        // for one of the special rules.  If it does, set the base
+        // value to the correct identfier value
+        if (descriptor == gMinusX) {
+            setType(kNegativeNumberRule);
         }
-				
-        exponent = expectedExponent();
-      }
-			
-      // if we stopped the previous loop on a > sign, then continue
-      // for as long as we still see > signs.  For each one,
-      // decrement the exponent (unless the exponent is already 0).
-      // If we see another character before reaching the end of
-      // the descriptor, that's also a syntax error.
-      if (c == gGreaterThan) {
-        while (p < descriptor.length()) {
-          c = descriptor.charAt(p);
-          if (c == gGreaterThan && exponent > 0) {
-            --exponent;
-          } else {
-            // throw new IllegalArgumentException("Illegal character in rule descriptor");
-            status = U_PARSE_ERROR;
-            return;
-          }
-          ++p;
+        else if (descriptor == gXDotX) {
+            setType(kImproperFractionRule);
         }
-      }
+        else if (descriptor == gZeroDotX) {
+            setType(kProperFractionRule);
+        }
+        else if (descriptor == gXDotZero) {
+            setType(kMasterRule);
+        }
+
+        // if the rule descriptor begins with a digit, it's a descriptor
+        // for a normal rule
+        // since we don't have Long.parseLong, and this isn't much work anyway,
+        // just build up the value as we encounter the digits.
+        else if (descriptor.charAt(0) >= gZero && descriptor.charAt(0) <= gNine) {
+            llong val = (int32_t)0;
+            p = 0;
+            UChar c = gSpace;
+
+            // begin parsing the descriptor: copy digits
+            // into "tempValue", skip periods, commas, and spaces,
+            // stop on a slash or > sign (or at the end of the string),
+            // and throw an exception on any other character
+            llong ll_10 = (int32_t)10;
+            while (p < descriptor.length()) {
+                c = descriptor.charAt(p);
+                if (c >= gZero && c <= gNine) {
+                    val = val * ll_10 + (int32_t)(c - gZero);
+                }
+                else if (c == gSlash || c == gGreaterThan) {
+                    break;
+                }
+                else if (u_isWhitespace(c) || c == gComma || c == gDot) {
+                }
+                else {
+                    // throw new IllegalArgumentException("Illegal character in rule descriptor");
+                    status = U_PARSE_ERROR;
+                    return;
+                }
+                ++p;
+            }
+
+            // we have the base value, so set it
+            setBaseValue(val);
+
+            // if we stopped the previous loop on a slash, we're
+            // now parsing the rule's radix.  Again, accumulate digits
+            // in tempValue, skip punctuation, stop on a > mark, and
+            // throw an exception on anything else
+            if (c == '/') {
+                val = (int32_t)0;
+                ++p;
+                llong ll_10 = (int32_t)10;
+                while (p < descriptor.length()) {
+                    c = descriptor.charAt(p);
+                    if (c >= gZero && c <= gNine) {
+                        val = val * ll_10 + (int32_t)(c - gZero);
+                    }
+                    else if (c == gGreaterThan) {
+                        break;
+                    }
+                    else if (u_isWhitespace(c) || c == gComma || c == gDot) {
+                    }
+                    else {
+                        // throw new IllegalArgumentException("Illegal character is rule descriptor");
+                        status = U_PARSE_ERROR;
+                        return;
+                    }
+                    ++p;
+                }
+
+                // tempValue now contain's the rule's radix.  Set it
+                // accordingly, and recalculate the rule's exponent
+                radix = (int16_t)llong_asInt(val);
+                if (radix == 0) {
+                    // throw new IllegalArgumentException("Rule can't have radix of 0");
+                    status = U_PARSE_ERROR;
+                }
+                
+                exponent = expectedExponent();
+            }
+
+            // if we stopped the previous loop on a > sign, then continue
+            // for as long as we still see > signs.  For each one,
+            // decrement the exponent (unless the exponent is already 0).
+            // If we see another character before reaching the end of
+            // the descriptor, that's also a syntax error.
+            if (c == gGreaterThan) {
+                while (p < descriptor.length()) {
+                    c = descriptor.charAt(p);
+                    if (c == gGreaterThan && exponent > 0) {
+                        --exponent;
+                    } else {
+                        // throw new IllegalArgumentException("Illegal character in rule descriptor");
+                        status = U_PARSE_ERROR;
+                        return;
+                    }
+                    ++p;
+                }
+            }
+        }
     }
-  }
-   
-  // finally, if the rule body begins with an apostrophe, strip it off
-  // (this is generally used to put whitespace at the beginning of
-  // a rule's rule text)
-  if (description.length() > 0 && description.charAt(0) == gTick) {
-    description.removeBetween(0, 1);
-  }
-   
-  // return the description with all the stuff we've just waded through
-  // stripped off the front.  It now contains just the rule body.
-  // return description;
+
+    // finally, if the rule body begins with an apostrophe, strip it off
+    // (this is generally used to put whitespace at the beginning of
+    // a rule's rule text)
+    if (description.length() > 0 && description.charAt(0) == gTick) {
+        description.removeBetween(0, 1);
+    }
+
+    // return the description with all the stuff we've just waded through
+    // stripped off the front.  It now contains just the rule body.
+    // return description;
 }
-	
+
 /**
 * Searches the rule's rule text for the substitution tokens,
 * creates the substitutions, and removes the substitution tokens
@@ -350,12 +360,12 @@ void
 NFRule::extractSubstitutions(const NFRuleSet* ruleSet,
                              const NFRule* predecessor,
                              const RuleBasedNumberFormat* rbnf,
-							 UErrorCode& status)
+                             UErrorCode& status)
 {
-	if (U_SUCCESS(status)) {
-	sub1 = extractSubstitution(ruleSet, predecessor, rbnf, status);
-	sub2 = extractSubstitution(ruleSet, predecessor, rbnf, status);
-	}
+    if (U_SUCCESS(status)) {
+        sub1 = extractSubstitution(ruleSet, predecessor, rbnf, status);
+        sub2 = extractSubstitution(ruleSet, predecessor, rbnf, status);
+    }
 }
 
 /**
@@ -374,94 +384,94 @@ NFSubstitution *
 NFRule::extractSubstitution(const NFRuleSet* ruleSet,
                             const NFRule* predecessor,
                             const RuleBasedNumberFormat* rbnf,
-							UErrorCode& status)
+                            UErrorCode& status)
 {
-  NFSubstitution* result = NULL;
-	
-  // search the rule's rule text for the first two characters of
-  // a substitution token
-  int32_t subStart = indexOfAny(tokenStrings);
-  int32_t subEnd = subStart;
-	
-  // if we didn't find one, create a null substitution positioned
-  // at the end of the rule text
-  if (subStart == -1) {
-    return NFSubstitution::makeSubstitution(ruleText.length(), this, predecessor,
-                                            ruleSet, rbnf, gEmptyString, status);
-  }
-	
-  // special-case the ">>>" token, since searching for the > at the
-  // end will actually find the > in the middle
-  if (ruleText.indexOf(gGreaterGreaterGreater) == subStart) {
-    subEnd = subStart + 2;
-		
-    // otherwise the substitution token ends with the same character
-    // it began with
-  } else {
-    subEnd = ruleText.indexOf(ruleText.charAt(subStart), subStart + 1);
-  }
-	
-  // if we don't find the end of the token (i.e., if we're on a single,
-  // unmatched token character), create a null substitution positioned
-  // at the end of the rule
-  if (subEnd == -1) {
-    return NFSubstitution::makeSubstitution(ruleText.length(), this, predecessor,
-                                            ruleSet, rbnf, gEmptyString, status);
-  }
-	
-  // if we get here, we have a real substitution token (or at least
-  // some text bounded by substitution token characters).  Use
-  // makeSubstitution() to create the right kind of substitution
-  UnicodeString subToken;
-  subToken.setTo(ruleText, subStart, subEnd + 1 - subStart);
-  result = NFSubstitution::makeSubstitution(subStart, this, predecessor, ruleSet,
-                                            rbnf, subToken, status);
-	
-  // remove the substitution from the rule text
-  ruleText.removeBetween(subStart, subEnd+1);
-	
-  return result;
+    NFSubstitution* result = NULL;
+
+    // search the rule's rule text for the first two characters of
+    // a substitution token
+    int32_t subStart = indexOfAny(tokenStrings);
+    int32_t subEnd = subStart;
+
+    // if we didn't find one, create a null substitution positioned
+    // at the end of the rule text
+    if (subStart == -1) {
+        return NFSubstitution::makeSubstitution(ruleText.length(), this, predecessor,
+            ruleSet, rbnf, gEmptyString, status);
+    }
+
+    // special-case the ">>>" token, since searching for the > at the
+    // end will actually find the > in the middle
+    if (ruleText.indexOf(gGreaterGreaterGreater) == subStart) {
+        subEnd = subStart + 2;
+        
+        // otherwise the substitution token ends with the same character
+        // it began with
+    } else {
+        subEnd = ruleText.indexOf(ruleText.charAt(subStart), subStart + 1);
+    }
+
+    // if we don't find the end of the token (i.e., if we're on a single,
+    // unmatched token character), create a null substitution positioned
+    // at the end of the rule
+    if (subEnd == -1) {
+        return NFSubstitution::makeSubstitution(ruleText.length(), this, predecessor,
+            ruleSet, rbnf, gEmptyString, status);
+    }
+
+    // if we get here, we have a real substitution token (or at least
+    // some text bounded by substitution token characters).  Use
+    // makeSubstitution() to create the right kind of substitution
+    UnicodeString subToken;
+    subToken.setTo(ruleText, subStart, subEnd + 1 - subStart);
+    result = NFSubstitution::makeSubstitution(subStart, this, predecessor, ruleSet,
+        rbnf, subToken, status);
+
+    // remove the substitution from the rule text
+    ruleText.removeBetween(subStart, subEnd+1);
+
+    return result;
 }
 
 /**
-* Sets the rule's base value, and causes the radix and exponent
-* to be recalculated.  This is used during construction when we
-* don't know the rule's base value until after it's been
-* constructed.  It should be used at any other time.
-* @param The new base value for the rule.
-*/
+ * Sets the rule's base value, and causes the radix and exponent
+ * to be recalculated.  This is used during construction when we
+ * don't know the rule's base value until after it's been
+ * constructed.  It should be used at any other time.
+ * @param The new base value for the rule.
+ */
 void 
 NFRule::setBaseValue(llong newBaseValue) 
 {
-  // set the base value
-  baseValue = newBaseValue;
-	
-  // if this isn't a special rule, recalculate the radix and exponent
-  // (the radix always defaults to 10; if it's supposed to be something
-  // else, it's cleaned up by the caller and the exponent is
-  // recalculated again-- the only function that does this is
-  // NFRule.parseRuleDescriptor() )
-  if (baseValue >= 1) {
-    radix = 10;
-    exponent = expectedExponent();
-		
-    // this function gets called on a fully-constructed rule whose
-    // description didn't specify a base value.  This means it
-    // has substitutions, and some substitutions hold on to copies
-    // of the rule's divisor.  Fix their copies of the divisor.
-    if (sub1 != NULL) {
-      sub1->setDivisor(radix, exponent);
+    // set the base value
+    baseValue = newBaseValue;
+
+    // if this isn't a special rule, recalculate the radix and exponent
+    // (the radix always defaults to 10; if it's supposed to be something
+    // else, it's cleaned up by the caller and the exponent is
+    // recalculated again-- the only function that does this is
+    // NFRule.parseRuleDescriptor() )
+    if (baseValue >= 1) {
+        radix = 10;
+        exponent = expectedExponent();
+
+        // this function gets called on a fully-constructed rule whose
+        // description didn't specify a base value.  This means it
+        // has substitutions, and some substitutions hold on to copies
+        // of the rule's divisor.  Fix their copies of the divisor.
+        if (sub1 != NULL) {
+            sub1->setDivisor(radix, exponent);
+        }
+        if (sub2 != NULL) {
+            sub2->setDivisor(radix, exponent);
+        }
+
+        // if this is a special rule, its radix and exponent are basically
+        // ignored.  Set them to "safe" default values
+    } else {
+        radix = 10;
+        exponent = 0;
     }
-    if (sub2 != NULL) {
-      sub2->setDivisor(radix, exponent);
-    }
-		
-    // if this is a special rule, its radix and exponent are basically
-    // ignored.  Set them to "safe" default values
-  } else {
-    radix = 10;
-    exponent = 0;
-  }
 }
 
 /**
@@ -472,22 +482,22 @@ NFRule::setBaseValue(llong newBaseValue)
 int16_t 
 NFRule::expectedExponent() const 
 {
-  // since the log of 0, or the log base 0 of something, causes an
-  // error, declare the exponent in these cases to be 0 (we also
-  // deal with the special-rule identifiers here)
-  if (radix == 0 || baseValue < 1) {
-    return 0;
-  }
-	
-  // we get rounding error in some cases-- for example, log 1000 / log 10
-  // gives us 1.9999999996 instead of 2.  The extra logic here is to take
-  // that into account
-  int16_t tempResult = (int16_t)(log(llong_asDouble(baseValue)) / log((double)radix));
-  llong temp = llong_pow(radix, tempResult + 1);
-  if (temp <= baseValue) {
-    tempResult += 1;
-  }
-  return tempResult;
+    // since the log of 0, or the log base 0 of something, causes an
+    // error, declare the exponent in these cases to be 0 (we also
+    // deal with the special-rule identifiers here)
+    if (radix == 0 || baseValue < 1) {
+        return 0;
+    }
+
+    // we get rounding error in some cases-- for example, log 1000 / log 10
+    // gives us 1.9999999996 instead of 2.  The extra logic here is to take
+    // that into account
+    int16_t tempResult = (int16_t)(log(llong_asDouble(baseValue)) / log((double)radix));
+    llong temp = llong_pow(radix, tempResult + 1);
+    if (temp <= baseValue) {
+        tempResult += 1;
+    }
+    return tempResult;
 }
 
 /**
@@ -500,16 +510,16 @@ NFRule::expectedExponent() const
  * "strings" is found in the rule's rule text, returns -1.
  */
 int32_t 
-NFRule::indexOfAny(const UnicodeString* strings[]) const
+NFRule::indexOfAny(const UChar* const strings[]) const
 {
-  int result = -1;
-  for (int i = 0; strings[i]; i++) {
-    int32_t pos = ruleText.indexOf(*strings[i]);
-    if (pos != -1 && (result == -1 || pos < result)) {
-      result = pos;
+    int result = -1;
+    for (int i = 0; strings[i]; i++) {
+        int32_t pos = ruleText.indexOf(*strings[i]);
+        if (pos != -1 && (result == -1 || pos < result)) {
+            result = pos;
+        }
     }
-  }
-  return result;
+    return result;
 }
 
 //-----------------------------------------------------------------------
@@ -524,33 +534,33 @@ NFRule::indexOfAny(const UnicodeString* strings[]) const
 UBool
 NFRule::operator==(const NFRule& rhs) const
 {
-  return baseValue == rhs.baseValue
-    && radix == rhs.radix
-    && exponent == rhs.exponent
-    && ruleText == rhs.ruleText
-    && *sub1 == *rhs.sub1
-    && *sub2 == *rhs.sub2;
+    return baseValue == rhs.baseValue
+        && radix == rhs.radix
+        && exponent == rhs.exponent
+        && ruleText == rhs.ruleText
+        && *sub1 == *rhs.sub1
+        && *sub2 == *rhs.sub2;
 }
 
 static void
 util_append_llong(UnicodeString& result, const llong& value) 
 {
-  llong n(value);
-
-  if (n < 0) {
-    result.append(gMinus);
-    n = -n;
-  }
-  if (n == 0) {
-    result.append(gZero);
-  } else {
-    llong ll_10((int32_t)10);
-    while (n != 0) {
-      llong nn = n / ll_10;
-      result.append((UChar)(gZero + llong_asInt(n - nn * ll_10)));
-      n = nn;
+    llong n(value);
+    
+    if (n < 0) {
+        result.append(gMinus);
+        n = -n;
     }
-  }
+    if (n == 0) {
+        result.append(gZero);
+    } else {
+        llong ll_10((int32_t)10);
+        while (n != 0) {
+            llong nn = n / ll_10;
+            result.append((UChar)(gZero + llong_asInt(n - nn * ll_10)));
+            n = nn;
+        }
+    }
 }
 
 /**
@@ -561,65 +571,64 @@ util_append_llong(UnicodeString& result, const llong& value)
 */
 static void util_append64(UnicodeString& result, const llong& n)
 {
-	UChar buffer[256];
-	int32_t len = u_lltoa(n, buffer, sizeof(buffer));
-	UnicodeString temp(buffer, len);
-	result.append(temp);
+    UChar buffer[256];
+    int32_t len = u_lltoa(n, buffer, sizeof(buffer));
+    UnicodeString temp(buffer, len);
+    result.append(temp);
 }
 
 void
 NFRule::appendRuleText(UnicodeString& result) const
 {
-  switch (getType()) {
-  case kNegativeNumberRule: result.append(gMinusX); break;
-  case kImproperFractionRule: result.append(gXDotX); break;
-  case kProperFractionRule: result.append(gZeroDotX); break;
-  case kMasterRule: result.append(gXDotZero); break;
-  default:
-		
-    // for a normal rule, write out its base value, and if the radix is
-    // something other than 10, write out the radix (with the preceding
-    // slash, of course).  Then calculate the expected exponent and if
-    // if isn't the same as the actual exponent, write an appropriate
-    // number of > signs.  Finally, terminate the whole thing with
-    // a colon.
-    util_append64(result, baseValue);
-    if (radix != 10) {
-      result.append(gSlash);
-      util_append64(result, radix);
+    switch (getType()) {
+    case kNegativeNumberRule: result.append(gMinusX); break;
+    case kImproperFractionRule: result.append(gXDotX); break;
+    case kProperFractionRule: result.append(gZeroDotX); break;
+    case kMasterRule: result.append(gXDotZero); break;
+    default:
+        // for a normal rule, write out its base value, and if the radix is
+        // something other than 10, write out the radix (with the preceding
+        // slash, of course).  Then calculate the expected exponent and if
+        // if isn't the same as the actual exponent, write an appropriate
+        // number of > signs.  Finally, terminate the whole thing with
+        // a colon.
+        util_append64(result, baseValue);
+        if (radix != 10) {
+            result.append(gSlash);
+            util_append64(result, radix);
+        }
+        int numCarets = expectedExponent() - exponent;
+        for (int i = 0; i < numCarets; i++) {
+            result.append(gGreaterThan);
+        }
+        break;
     }
-    int numCarets = expectedExponent() - exponent;
-    for (int i = 0; i < numCarets; i++) {
-      result.append(gGreaterThan);
-	}
-    break;
-  }
-  result.append(gColon);
-  result.append(gSpace);
-	
-  // if the rule text begins with a space, write an apostrophe
-  // (whitespace after the rule descriptor is ignored; the
-  // apostrophe is used to make the whitespace significant)
-  if (ruleText.startsWith(gSpace) && sub1->getPos() != 0) {
-    result.append(gTick);
-  }
-	
-  // now, write the rule's rule text, inserting appropriate
-  // substitution tokens in the appropriate places
-  UnicodeString ruleTextCopy;
-  ruleTextCopy.setTo(ruleText);
+    result.append(gColon);
+    result.append(gSpace);
 
-	UnicodeString temp;
-	sub2->toString(temp);
-	ruleTextCopy.insert(sub2->getPos(), temp);
-	sub1->toString(temp);
-	ruleTextCopy.insert(sub1->getPos(), temp);
+    // if the rule text begins with a space, write an apostrophe
+    // (whitespace after the rule descriptor is ignored; the
+    // apostrophe is used to make the whitespace significant)
+    if (ruleText.startsWith(gSpace) && sub1->getPos() != 0) {
+        result.append(gTick);
+    }
 
-	result.append(ruleTextCopy);
- 	
-  // and finally, top the whole thing off with a semicolon and
-  // return the result
-  result.append(gSemicolon);
+    // now, write the rule's rule text, inserting appropriate
+    // substitution tokens in the appropriate places
+    UnicodeString ruleTextCopy;
+    ruleTextCopy.setTo(ruleText);
+
+    UnicodeString temp;
+    sub2->toString(temp);
+    ruleTextCopy.insert(sub2->getPos(), temp);
+    sub1->toString(temp);
+    ruleTextCopy.insert(sub1->getPos(), temp);
+
+    result.append(ruleTextCopy);
+
+    // and finally, top the whole thing off with a semicolon and
+    // return the result
+    result.append(gSemicolon);
 }
 
 //-----------------------------------------------------------------------
@@ -638,14 +647,14 @@ NFRule::appendRuleText(UnicodeString& result) const
 void 
 NFRule::doFormat(llong number, UnicodeString& toInsertInto, int32_t pos) const
 {
-  // first, insert the rule's rule text into toInsertInto at the
-  // specified position, then insert the results of the substitutions
-  // into the right places in toInsertInto (notice we do the
-  // substitutions in reverse order so that the offsets don't get
-  // messed up)
-  toInsertInto.insert(pos, ruleText);
-  sub2->doSubstitution(number, toInsertInto, pos);
-  sub1->doSubstitution(number, toInsertInto, pos);
+    // first, insert the rule's rule text into toInsertInto at the
+    // specified position, then insert the results of the substitutions
+    // into the right places in toInsertInto (notice we do the
+    // substitutions in reverse order so that the offsets don't get
+    // messed up)
+    toInsertInto.insert(pos, ruleText);
+    sub2->doSubstitution(number, toInsertInto, pos);
+    sub1->doSubstitution(number, toInsertInto, pos);
 }
 
 /**
@@ -660,15 +669,15 @@ NFRule::doFormat(llong number, UnicodeString& toInsertInto, int32_t pos) const
 void 
 NFRule::doFormat(double number, UnicodeString& toInsertInto, int32_t pos) const
 {
-  // first, insert the rule's rule text into toInsertInto at the
-  // specified position, then insert the results of the substitutions
-  // into the right places in toInsertInto
-  // [again, we have two copies of this routine that do the same thing
-  // so that we don't sacrifice precision in a long by casting it
-  // to a double]
-  toInsertInto.insert(pos, ruleText);
-  sub2->doSubstitution(number, toInsertInto, pos);
-  sub1->doSubstitution(number, toInsertInto, pos);
+    // first, insert the rule's rule text into toInsertInto at the
+    // specified position, then insert the results of the substitutions
+    // into the right places in toInsertInto
+    // [again, we have two copies of this routine that do the same thing
+    // so that we don't sacrifice precision in a long by casting it
+    // to a double]
+    toInsertInto.insert(pos, ruleText);
+    sub2->doSubstitution(number, toInsertInto, pos);
+    sub1->doSubstitution(number, toInsertInto, pos);
 }
 
 /**
@@ -682,27 +691,27 @@ NFRule::doFormat(double number, UnicodeString& toInsertInto, int32_t pos) const
 UBool 
 NFRule::shouldRollBack(double number) const
 {
-  // we roll back if the rule contains a modulus substitution,
-  // the number being formatted is an even multiple of the rule's
-  // divisor, and the rule's base value is NOT an even multiple
-  // of its divisor
-  // In other words, if the original description had
-  //    100: << hundred[ >>];
-  // that expands into
-  //    100: << hundred;
-  //    101: << hundred >>;
-  // internally.  But when we're formatting 200, if we use the rule
-  // at 101, which would normally apply, we get "two hundred zero".
-  // To prevent this, we roll back and use the rule at 100 instead.
-  // This is the logic that makes this happen: the rule at 101 has
-  // a modulus substitution, its base value isn't an even multiple
-  // of 100, and the value we're trying to format _is_ an even
-  // multiple of 100.  This is called the "rollback rule."
-  if ((sub1->isModulusSubstitution()) || (sub2->isModulusSubstitution())) {
-    llong re = llong_pow(radix, exponent);
-    return java_fmod(number, llong_asDouble(re)) == 0 && (baseValue % re) != 0;
-  }
-  return FALSE;
+    // we roll back if the rule contains a modulus substitution,
+    // the number being formatted is an even multiple of the rule's
+    // divisor, and the rule's base value is NOT an even multiple
+    // of its divisor
+    // In other words, if the original description had
+    //    100: << hundred[ >>];
+    // that expands into
+    //    100: << hundred;
+    //    101: << hundred >>;
+    // internally.  But when we're formatting 200, if we use the rule
+    // at 101, which would normally apply, we get "two hundred zero".
+    // To prevent this, we roll back and use the rule at 100 instead.
+    // This is the logic that makes this happen: the rule at 101 has
+    // a modulus substitution, its base value isn't an even multiple
+    // of 100, and the value we're trying to format _is_ an even
+    // multiple of 100.  This is called the "rollback rule."
+    if ((sub1->isModulusSubstitution()) || (sub2->isModulusSubstitution())) {
+        llong re = llong_pow(radix, exponent);
+        return java_fmod(number, llong_asDouble(re)) == 0 && (baseValue % re) != 0;
+    }
+    return FALSE;
 }
 
 //-----------------------------------------------------------------------
@@ -745,172 +754,172 @@ NFRule::doParse(const UnicodeString& text,
                 double upperBound,
                 Formattable& resVal) const
 {
-  // internally we operate on a copy of the string being parsed
-  // (because we're going to change it) and use our own ParsePosition
-  ParsePosition pp;
-  UnicodeString workText(text);
-	
-  // check to see whether the text before the first substitution
-  // matches the text at the beginning of the string being
-  // parsed.  If it does, strip that off the front of workText;
-  // otherwise, dump out with a mismatch
-  UnicodeString prefix;
-  prefix.setTo(ruleText, 0, sub1->getPos());
-
+    // internally we operate on a copy of the string being parsed
+    // (because we're going to change it) and use our own ParsePosition
+    ParsePosition pp;
+    UnicodeString workText(text);
+    
+    // check to see whether the text before the first substitution
+    // matches the text at the beginning of the string being
+    // parsed.  If it does, strip that off the front of workText;
+    // otherwise, dump out with a mismatch
+    UnicodeString prefix;
+    prefix.setTo(ruleText, 0, sub1->getPos());
+    
 #ifdef RBNF_DEBUG
-  fprintf(stderr, "doParse %x ", this);
-  {
-    UnicodeString rt;
-    appendRuleText(rt);
-    dumpUS(stderr, rt);
-  }
-  
-  fprintf(stderr, " text: '", this);
-  dumpUS(stderr, text);
-  fprintf(stderr, "' prefix: '");
-  dumpUS(stderr, prefix);
-#endif
-  stripPrefix(workText, prefix, pp);
-  int32_t prefixLength = text.length() - workText.length();
-
-#ifdef RBNF_DEBUG
-  fprintf(stderr, "' pl: %d ppi: %d s1p: %d\n", prefixLength, pp.getIndex(), sub1->getPos());
-#endif
-
-  if (pp.getIndex() == 0 && sub1->getPos() != 0) {
-    // commented out because ParsePosition doesn't have error index in 1.1.x
-      // restored for ICU4C port
-    parsePosition.setErrorIndex(pp.getErrorIndex());
-    resVal.setLong(0);
-	return TRUE;
-  }
-	
-  // this is the fun part.  The basic guts of the rule-matching
-  // logic is matchToDelimiter(), which is called twice.  The first
-  // time it searches the input string for the rule text BETWEEN
-  // the substitutions and tries to match the intervening text
-  // in the input string with the first substitution.  If that
-  // succeeds, it then calls it again, this time to look for the
-  // rule text after the second substitution and to match the
-  // intervening input text against the second substitution.
-  //
-  // For example, say we have a rule that looks like this:
-  //    first << middle >> last;
-  // and input text that looks like this:
-  //    first one middle two last
-  // First we use stripPrefix() to match "first " in both places and
-  // strip it off the front, leaving
-  //    one middle two last
-  // Then we use matchToDelimiter() to match " middle " and try to
-  // match "one" against a substitution.  If it's successful, we now
-  // have
-  //    two last
-  // We use matchToDelimiter() a second time to match " last" and
-  // try to match "two" against a substitution.  If "two" matches
-  // the substitution, we have a successful parse.
-  //
-  // Since it's possible in many cases to find multiple instances
-  // of each of these pieces of rule text in the input string,
-  // we need to try all the possible combinations of these
-  // locations.  This prevents us from prematurely declaring a mismatch,
-  // and makes sure we match as much input text as we can.
-  int highWaterMark = 0;
-  double result = 0;
-  int start = 0;
-  double tempBaseValue = (baseValue <= 0) ? 0 : llong_asDouble(baseValue);
-	
-  UnicodeString temp;
-  do {
-    // our partial parse result starts out as this rule's base
-    // value.  If it finds a successful match, matchToDelimiter()
-    // will compose this in some way with what it gets back from
-    // the substitution, giving us a new partial parse result
-    pp.setIndex(0);
-		
-    temp.setTo(ruleText, sub1->getPos(), sub2->getPos() - sub1->getPos());
-    double partialResult = matchToDelimiter(workText, start, tempBaseValue,
-                                            temp, pp, sub1,
-                                            upperBound);
-		
-    // if we got a successful match (or were trying to match a
-    // null substitution), pp is now pointing at the first unmatched
-    // character.  Take note of that, and try matchToDelimiter()
-    // on the input text again
-    if (pp.getIndex() != 0 || sub1->isNullSubstitution()) {
-      start = pp.getIndex();
-			
-      UnicodeString workText2;
-      workText2.setTo(workText, pp.getIndex(), workText.length() - pp.getIndex());
-      ParsePosition pp2;
-			
-      // the second matchToDelimiter() will compose our previous
-      // partial result with whatever it gets back from its
-      // substitution if there's a successful match, giving us
-      // a real result
-      temp.setTo(ruleText, sub2->getPos(), ruleText.length() - sub2->getPos());
-      partialResult = matchToDelimiter(workText2, 0, partialResult,
-                                       temp, pp2, sub2,
-                                       upperBound);
-			
-      // if we got a successful match on this second
-      // matchToDelimiter() call, update the high-water mark
-      // and result (if necessary)
-      if (pp2.getIndex() != 0 || sub2->isNullSubstitution()) {
-        if (prefixLength + pp.getIndex() + pp2.getIndex() > highWaterMark) {
-          highWaterMark = prefixLength + pp.getIndex() + pp2.getIndex();
-          result = partialResult;
-        }
-      }
-      // commented out because ParsePosition doesn't have error index in 1.1.x
-      // restored for ICU4C port
-      else {
-        int32_t temp = pp2.getErrorIndex() + sub1->getPos() + pp.getIndex();
-        if (temp> parsePosition.getErrorIndex()) {
-          parsePosition.setErrorIndex(temp);
-        }
-      }
+    fprintf(stderr, "doParse %x ", this);
+    {
+        UnicodeString rt;
+        appendRuleText(rt);
+        dumpUS(stderr, rt);
     }
+    
+    fprintf(stderr, " text: '", this);
+    dumpUS(stderr, text);
+    fprintf(stderr, "' prefix: '");
+    dumpUS(stderr, prefix);
+#endif
+    stripPrefix(workText, prefix, pp);
+    int32_t prefixLength = text.length() - workText.length();
+    
+#ifdef RBNF_DEBUG
+    fprintf(stderr, "' pl: %d ppi: %d s1p: %d\n", prefixLength, pp.getIndex(), sub1->getPos());
+#endif
+    
+    if (pp.getIndex() == 0 && sub1->getPos() != 0) {
+        // commented out because ParsePosition doesn't have error index in 1.1.x
+        // restored for ICU4C port
+        parsePosition.setErrorIndex(pp.getErrorIndex());
+        resVal.setLong(0);
+        return TRUE;
+    }
+    
+    // this is the fun part.  The basic guts of the rule-matching
+    // logic is matchToDelimiter(), which is called twice.  The first
+    // time it searches the input string for the rule text BETWEEN
+    // the substitutions and tries to match the intervening text
+    // in the input string with the first substitution.  If that
+    // succeeds, it then calls it again, this time to look for the
+    // rule text after the second substitution and to match the
+    // intervening input text against the second substitution.
+    //
+    // For example, say we have a rule that looks like this:
+    //    first << middle >> last;
+    // and input text that looks like this:
+    //    first one middle two last
+    // First we use stripPrefix() to match "first " in both places and
+    // strip it off the front, leaving
+    //    one middle two last
+    // Then we use matchToDelimiter() to match " middle " and try to
+    // match "one" against a substitution.  If it's successful, we now
+    // have
+    //    two last
+    // We use matchToDelimiter() a second time to match " last" and
+    // try to match "two" against a substitution.  If "two" matches
+    // the substitution, we have a successful parse.
+    //
+    // Since it's possible in many cases to find multiple instances
+    // of each of these pieces of rule text in the input string,
+    // we need to try all the possible combinations of these
+    // locations.  This prevents us from prematurely declaring a mismatch,
+    // and makes sure we match as much input text as we can.
+    int highWaterMark = 0;
+    double result = 0;
+    int start = 0;
+    double tempBaseValue = (baseValue <= 0) ? 0 : llong_asDouble(baseValue);
+    
+    UnicodeString temp;
+    do {
+        // our partial parse result starts out as this rule's base
+        // value.  If it finds a successful match, matchToDelimiter()
+        // will compose this in some way with what it gets back from
+        // the substitution, giving us a new partial parse result
+        pp.setIndex(0);
+        
+        temp.setTo(ruleText, sub1->getPos(), sub2->getPos() - sub1->getPos());
+        double partialResult = matchToDelimiter(workText, start, tempBaseValue,
+            temp, pp, sub1,
+            upperBound);
+        
+        // if we got a successful match (or were trying to match a
+        // null substitution), pp is now pointing at the first unmatched
+        // character.  Take note of that, and try matchToDelimiter()
+        // on the input text again
+        if (pp.getIndex() != 0 || sub1->isNullSubstitution()) {
+            start = pp.getIndex();
+            
+            UnicodeString workText2;
+            workText2.setTo(workText, pp.getIndex(), workText.length() - pp.getIndex());
+            ParsePosition pp2;
+            
+            // the second matchToDelimiter() will compose our previous
+            // partial result with whatever it gets back from its
+            // substitution if there's a successful match, giving us
+            // a real result
+            temp.setTo(ruleText, sub2->getPos(), ruleText.length() - sub2->getPos());
+            partialResult = matchToDelimiter(workText2, 0, partialResult,
+                temp, pp2, sub2,
+                upperBound);
+            
+            // if we got a successful match on this second
+            // matchToDelimiter() call, update the high-water mark
+            // and result (if necessary)
+            if (pp2.getIndex() != 0 || sub2->isNullSubstitution()) {
+                if (prefixLength + pp.getIndex() + pp2.getIndex() > highWaterMark) {
+                    highWaterMark = prefixLength + pp.getIndex() + pp2.getIndex();
+                    result = partialResult;
+                }
+            }
+            // commented out because ParsePosition doesn't have error index in 1.1.x
+            // restored for ICU4C port
+            else {
+                int32_t temp = pp2.getErrorIndex() + sub1->getPos() + pp.getIndex();
+                if (temp> parsePosition.getErrorIndex()) {
+                    parsePosition.setErrorIndex(temp);
+                }
+            }
+        }
+        // commented out because ParsePosition doesn't have error index in 1.1.x
+        // restored for ICU4C port
+        else {
+            int32_t temp = sub1->getPos() + pp.getErrorIndex();
+            if (temp > parsePosition.getErrorIndex()) {
+                parsePosition.setErrorIndex(temp);
+            }
+        }
+        // keep trying to match things until the outer matchToDelimiter()
+        // call fails to make a match (each time, it picks up where it
+        // left off the previous time)
+    } while (sub1->getPos() != sub2->getPos() 
+        && pp.getIndex() > 0 
+        && pp.getIndex() < workText.length() 
+        && pp.getIndex() != start);
+    
+    // update the caller's ParsePosition with our high-water mark
+    // (i.e., it now points at the first character this function
+    // didn't match-- the ParsePosition is therefore unchanged if
+    // we didn't match anything)
+    parsePosition.setIndex(highWaterMark);
     // commented out because ParsePosition doesn't have error index in 1.1.x
     // restored for ICU4C port
-    else {
-      int32_t temp = sub1->getPos() + pp.getErrorIndex();
-      if (temp > parsePosition.getErrorIndex()) {
-        parsePosition.setErrorIndex(temp);
-      }
+    if (highWaterMark > 0) {
+        parsePosition.setErrorIndex(0);
     }
-    // keep trying to match things until the outer matchToDelimiter()
-    // call fails to make a match (each time, it picks up where it
-    // left off the previous time)
-  } while (sub1->getPos() != sub2->getPos() 
-           && pp.getIndex() > 0 
-           && pp.getIndex() < workText.length() 
-           && pp.getIndex() != start);
-	
-  // update the caller's ParsePosition with our high-water mark
-  // (i.e., it now points at the first character this function
-  // didn't match-- the ParsePosition is therefore unchanged if
-  // we didn't match anything)
-  parsePosition.setIndex(highWaterMark);
-  // commented out because ParsePosition doesn't have error index in 1.1.x
-  // restored for ICU4C port
-  if (highWaterMark > 0) {
-    parsePosition.setErrorIndex(0);
-  }
-	
-  // this is a hack for one unusual condition: Normally, whether this
-  // rule belong to a fraction rule set or not is handled by its
-  // substitutions.  But if that rule HAS NO substitutions, then
-  // we have to account for it here.  By definition, if the matching
-  // rule in a fraction rule set has no substitutions, its numerator
-  // is 1, and so the result is the reciprocal of its base value.
-  if (isFractionRule && 
-      highWaterMark > 0 && 
-      sub1->isNullSubstitution()) {
-    result = 1 / result;
-  }
-
-  resVal.setDouble(result);
-  return TRUE; // ??? do we need to worry if it is a long or a double?
+    
+    // this is a hack for one unusual condition: Normally, whether this
+    // rule belong to a fraction rule set or not is handled by its
+    // substitutions.  But if that rule HAS NO substitutions, then
+    // we have to account for it here.  By definition, if the matching
+    // rule in a fraction rule set has no substitutions, its numerator
+    // is 1, and so the result is the reciprocal of its base value.
+    if (isFractionRule && 
+        highWaterMark > 0 && 
+        sub1->isNullSubstitution()) {
+        result = 1 / result;
+    }
+    
+    resVal.setDouble(result);
+    return TRUE; // ??? do we need to worry if it is a long or a double?
 }
 
 /**
@@ -932,20 +941,20 @@ NFRule::doParse(const UnicodeString& text,
 void 
 NFRule::stripPrefix(UnicodeString& text, const UnicodeString& prefix, ParsePosition& pp) const
 {
-  // if the prefix text is empty, dump out without doing anything
-  if (prefix.length() != 0) {
-    // use prefixLength() to match the beginning of
-    // "text" against "prefix".  This function returns the
-    // number of characters from "text" that matched (or 0 if
-    // we didn't match the whole prefix)
-    int32_t pfl = prefixLength(text, prefix);
-    if (pfl != 0) {
-      // if we got a successful match, update the parse position
-      // and strip the prefix off of "text"
-      pp.setIndex(pp.getIndex() + pfl);
-      text.remove(0, pfl);
+    // if the prefix text is empty, dump out without doing anything
+    if (prefix.length() != 0) {
+        // use prefixLength() to match the beginning of
+        // "text" against "prefix".  This function returns the
+        // number of characters from "text" that matched (or 0 if
+        // we didn't match the whole prefix)
+        int32_t pfl = prefixLength(text, prefix);
+        if (pfl != 0) {
+            // if we got a successful match, update the parse position
+            // and strip the prefix off of "text"
+            pp.setIndex(pp.getIndex() + pfl);
+            text.remove(0, pfl);
+        }
     }
-  }
 }
 
 /**
@@ -986,91 +995,91 @@ NFRule::matchToDelimiter(const UnicodeString& text,
                          const NFSubstitution* sub, 
                          double upperBound) const 
 {
-  // if "delimiter" contains real (i.e., non-ignorable) text, search
-  // it for "delimiter" beginning at "start".  If that succeeds, then
-  // use "sub"'s doParse() method to match the text before the
-  // instance of "delimiter" we just found.
-  if (!allIgnorable(delimiter)) {
-    ParsePosition tempPP;
-    Formattable result;
-		
-    // use findText() to search for "delimiter".  It returns a two-
-    // element array: element 0 is the position of the match, and
-    // element 1 is the number of characters that matched
-    // "delimiter".
-    int32_t dLen;
-    int32_t dPos = findText(text, delimiter, startPos, &dLen);
-		
-    // if findText() succeeded, isolate the text preceding the
-    // match, and use "sub" to match that text
-    while (dPos >= 0) {
-      UnicodeString subText;
-      subText.setTo(text, 0, dPos);
-      if (subText.length() > 0) {
-        UBool success = sub->doParse(subText, tempPP, _baseValue, upperBound,
-                                  formatter->isLenient(), result);
-				
-    // if the substitution could match all the text up to
-	// where we found "delimiter", then this function has
-	// a successful match.  Bump the caller's parse position
-	// to point to the first character after the text
-	// that matches "delimiter", and return the result
-	// we got from parsing the substitution.
-        if (success && tempPP.getIndex() == dPos) {
-          pp.setIndex(dPos + dLen);
-          return result.getDouble();
+    // if "delimiter" contains real (i.e., non-ignorable) text, search
+    // it for "delimiter" beginning at "start".  If that succeeds, then
+    // use "sub"'s doParse() method to match the text before the
+    // instance of "delimiter" we just found.
+    if (!allIgnorable(delimiter)) {
+        ParsePosition tempPP;
+        Formattable result;
+        
+        // use findText() to search for "delimiter".  It returns a two-
+        // element array: element 0 is the position of the match, and
+        // element 1 is the number of characters that matched
+        // "delimiter".
+        int32_t dLen;
+        int32_t dPos = findText(text, delimiter, startPos, &dLen);
+        
+        // if findText() succeeded, isolate the text preceding the
+        // match, and use "sub" to match that text
+        while (dPos >= 0) {
+            UnicodeString subText;
+            subText.setTo(text, 0, dPos);
+            if (subText.length() > 0) {
+                UBool success = sub->doParse(subText, tempPP, _baseValue, upperBound,
+                    formatter->isLenient(), result);
+                
+                // if the substitution could match all the text up to
+                // where we found "delimiter", then this function has
+                // a successful match.  Bump the caller's parse position
+                // to point to the first character after the text
+                // that matches "delimiter", and return the result
+                // we got from parsing the substitution.
+                if (success && tempPP.getIndex() == dPos) {
+                    pp.setIndex(dPos + dLen);
+                    return result.getDouble();
+                }
+                // commented out because ParsePosition doesn't have error index in 1.1.x
+                // restored for ICU4C port
+                else {
+                    if (tempPP.getErrorIndex() > 0) {
+                        pp.setErrorIndex(tempPP.getErrorIndex());
+                    } else {
+                        pp.setErrorIndex(tempPP.getIndex());
+                    }
+                }
+            }
+            
+            // if we didn't match the substitution, search for another
+            // copy of "delimiter" in "text" and repeat the loop if
+            // we find it
+            tempPP.setIndex(0);
+            dPos = findText(text, delimiter, dPos + dLen, &dLen);
         }
-	// commented out because ParsePosition doesn't have error index in 1.1.x
-	// restored for ICU4C port
+        // if we make it here, this was an unsuccessful match, and we
+        // leave pp unchanged and return 0
+        pp.setIndex(0);
+        return 0;
+        
+        // if "delimiter" is empty, or consists only of ignorable characters
+        // (i.e., is semantically empty), thwe we obviously can't search
+        // for "delimiter".  Instead, just use "sub" to parse as much of
+        // "text" as possible.
+    } else {
+        ParsePosition tempPP;
+        Formattable result;
+        
+        // try to match the whole string against the substitution
+        UBool success = sub->doParse(text, tempPP, _baseValue, upperBound,
+            formatter->isLenient(), result);
+        if (success && (tempPP.getIndex() != 0 || sub->isNullSubstitution())) {
+            // if there's a successful match (or it's a null
+            // substitution), update pp to point to the first
+            // character we didn't match, and pass the result from
+            // sub.doParse() on through to the caller
+            pp.setIndex(tempPP.getIndex());
+            return result.getDouble();
+        }
+        // commented out because ParsePosition doesn't have error index in 1.1.x
+        // restored for ICU4C port
         else {
-          if (tempPP.getErrorIndex() > 0) {
             pp.setErrorIndex(tempPP.getErrorIndex());
-          } else {
-            pp.setErrorIndex(tempPP.getIndex());
-          }
         }
-      }
-			
-      // if we didn't match the substitution, search for another
-      // copy of "delimiter" in "text" and repeat the loop if
-      // we find it
-      tempPP.setIndex(0);
-      dPos = findText(text, delimiter, dPos + dLen, &dLen);
+        
+        // and if we get to here, then nothing matched, so we return
+        // 0 and leave pp alone
+        return 0;
     }
-    // if we make it here, this was an unsuccessful match, and we
-    // leave pp unchanged and return 0
-    pp.setIndex(0);
-    return 0;
-		
-    // if "delimiter" is empty, or consists only of ignorable characters
-    // (i.e., is semantically empty), thwe we obviously can't search
-    // for "delimiter".  Instead, just use "sub" to parse as much of
-    // "text" as possible.
-  } else {
-    ParsePosition tempPP;
-    Formattable result;
-		
-    // try to match the whole string against the substitution
-    UBool success = sub->doParse(text, tempPP, _baseValue, upperBound,
-                                 formatter->isLenient(), result);
-    if (success && (tempPP.getIndex() != 0 || sub->isNullSubstitution())) {
-      // if there's a successful match (or it's a null
-      // substitution), update pp to point to the first
-      // character we didn't match, and pass the result from
-      // sub.doParse() on through to the caller
-      pp.setIndex(tempPP.getIndex());
-      return result.getDouble();
-    }
-    // commented out because ParsePosition doesn't have error index in 1.1.x
-    // restored for ICU4C port
-    else {
-      pp.setErrorIndex(tempPP.getErrorIndex());
-    }
-		
-    // and if we get to here, then nothing matched, so we return
-    // 0 and leave pp alone
-    return 0;
-  }
 }
 
 /**
@@ -1090,133 +1099,133 @@ NFRule::matchToDelimiter(const UnicodeString& text,
 int32_t
 NFRule::prefixLength(const UnicodeString& str, const UnicodeString& prefix) const
 {
-  // if we're looking for an empty prefix, it obviously matches
-  // zero characters.  Just go ahead and return 0.
-  if (prefix.length() == 0) {
-    return 0;
-  }
-	
-  // go through all this grief if we're in lenient-parse mode
-  if (formatter->isLenient()) {
-    // get the formatter's collator and use it to create two
-    // collation element iterators, one over the target string
-    // and another over the prefix (right now, we'll throw an
-    // exception if the collator we get back from the formatter
-    // isn't a RuleBasedCollator, because RuleBasedCollator defines
-    // the CollationElementIteratoer protocol.  Hopefully, this
-    // will change someday.)
-    RuleBasedCollator* collator = (RuleBasedCollator*)formatter->getCollator();
-    CollationElementIterator* strIter = collator->createCollationElementIterator(str);
-    CollationElementIterator* prefixIter = collator->createCollationElementIterator(prefix);
-	
-	UErrorCode err = U_ZERO_ERROR;
-
-    // match collation elements between the strings
-    int32_t oStr = strIter->next(err);
-    int32_t oPrefix = prefixIter->next(err);
-		
-    while (oPrefix != CollationElementIterator::NULLORDER) {
-      // skip over ignorable characters in the target string
-      while (CollationElementIterator::primaryOrder(oStr) == 0 
-             && oStr != CollationElementIterator::NULLORDER) {
-        oStr = strIter->next(err);
-      }
-			
-      // skip over ignorable characters in the prefix
-      while (CollationElementIterator::primaryOrder(oPrefix) == 0 
-             && oPrefix != CollationElementIterator::NULLORDER) {
-        oPrefix = prefixIter->next(err);
-      }
-			
-      // if skipping over ignorables brought us to the end
-      // of the target string, we didn't match and return 0
-      if (oStr == CollationElementIterator::NULLORDER) {
-		  delete prefixIter;
-		  delete strIter;
+    // if we're looking for an empty prefix, it obviously matches
+    // zero characters.  Just go ahead and return 0.
+    if (prefix.length() == 0) {
         return 0;
-      }
-			
-      // if skipping over ignorables brought to the end of
-      // the prefix, we DID match: drop out of the loop
-      else if (oPrefix == CollationElementIterator::NULLORDER) {
-        break;
-      }
-			
-      // match collation elements from the two strings
-      // (considering only primary differences).  If we
-      // get a mismatch, dump out and return 0
-      if (CollationElementIterator::primaryOrder(oStr) 
-          != CollationElementIterator::primaryOrder(oPrefix)) {
-		  delete prefixIter;
-		  delete strIter;
+    }
+    
+    // go through all this grief if we're in lenient-parse mode
+    if (formatter->isLenient()) {
+        // get the formatter's collator and use it to create two
+        // collation element iterators, one over the target string
+        // and another over the prefix (right now, we'll throw an
+        // exception if the collator we get back from the formatter
+        // isn't a RuleBasedCollator, because RuleBasedCollator defines
+        // the CollationElementIteratoer protocol.  Hopefully, this
+        // will change someday.)
+        RuleBasedCollator* collator = (RuleBasedCollator*)formatter->getCollator();
+        CollationElementIterator* strIter = collator->createCollationElementIterator(str);
+        CollationElementIterator* prefixIter = collator->createCollationElementIterator(prefix);
+        
+        UErrorCode err = U_ZERO_ERROR;
+        
+        // match collation elements between the strings
+        int32_t oStr = strIter->next(err);
+        int32_t oPrefix = prefixIter->next(err);
+        
+        while (oPrefix != CollationElementIterator::NULLORDER) {
+            // skip over ignorable characters in the target string
+            while (CollationElementIterator::primaryOrder(oStr) == 0 
+                && oStr != CollationElementIterator::NULLORDER) {
+                oStr = strIter->next(err);
+            }
+            
+            // skip over ignorable characters in the prefix
+            while (CollationElementIterator::primaryOrder(oPrefix) == 0 
+                && oPrefix != CollationElementIterator::NULLORDER) {
+                oPrefix = prefixIter->next(err);
+            }
+            
+            // if skipping over ignorables brought us to the end
+            // of the target string, we didn't match and return 0
+            if (oStr == CollationElementIterator::NULLORDER) {
+                delete prefixIter;
+                delete strIter;
+                return 0;
+            }
+            
+            // if skipping over ignorables brought to the end of
+            // the prefix, we DID match: drop out of the loop
+            else if (oPrefix == CollationElementIterator::NULLORDER) {
+                break;
+            }
+            
+            // match collation elements from the two strings
+            // (considering only primary differences).  If we
+            // get a mismatch, dump out and return 0
+            if (CollationElementIterator::primaryOrder(oStr) 
+                != CollationElementIterator::primaryOrder(oPrefix)) {
+                delete prefixIter;
+                delete strIter;
+                return 0;
+                
+                // otherwise, advance to the next character in each string
+                // and loop (we drop out of the loop when we exhaust
+                // collation elements in the prefix)
+            } else {
+                oStr = strIter->next(err);
+                oPrefix = prefixIter->next(err);
+            }
+        }
+        
+        delete prefixIter;
+        delete strIter;
+        
+        //----------------------------------------------------------------
+        // JDK 1.2-specific API call
+        // return strIter.getOffset();
+        //----------------------------------------------------------------
+        // JDK 1.1 HACK (take out for 1.2-specific code)
+        
+        // if we make it to here, we have a successful match.  Now we
+        // have to find out HOW MANY characters from the target string
+        // matched the prefix (there isn't necessarily a one-to-one
+        // mapping between collation elements and characters).
+        // In JDK 1.2, there's a simple getOffset() call we can use.
+        // In JDK 1.1, on the other hand, we have to go through some
+        // ugly contortions.  First, use the collator to compare the
+        // same number of characters from the prefix and target string.
+        // If they're equal, we're done.
+        collator->setStrength(Collator::PRIMARY);
+        if (str.length() >= prefix.length()) {
+            UnicodeString temp;
+            temp.setTo(str, 0, prefix.length());
+            if (collator->equals(temp, prefix)) {
+                return prefix.length();
+            }
+        }
+        
+        // if they're not equal, then we have to compare successively
+        // larger and larger substrings of the target string until we
+        // get to one that matches the prefix.  At that point, we know
+        // how many characters matched the prefix, and we can return.
+        int32_t p = 1;
+        while (p <= str.length()) {
+            UnicodeString temp;
+            temp.setTo(str, 0, p);
+            if (collator->equals(temp, prefix)) {
+                return p;
+            } else {
+                ++p;
+            }
+        }
+        
+        // SHOULD NEVER GET HERE!!!
         return 0;
-				
-        // otherwise, advance to the next character in each string
-        // and loop (we drop out of the loop when we exhaust
-        // collation elements in the prefix)
-      } else {
-        oStr = strIter->next(err);
-        oPrefix = prefixIter->next(err);
-      }
-    }
-		
-	delete prefixIter;
-	delete strIter;
-
-    //----------------------------------------------------------------
-    // JDK 1.2-specific API call
-    // return strIter.getOffset();
-    //----------------------------------------------------------------
-    // JDK 1.1 HACK (take out for 1.2-specific code)
-		
-    // if we make it to here, we have a successful match.  Now we
-    // have to find out HOW MANY characters from the target string
-    // matched the prefix (there isn't necessarily a one-to-one
-    // mapping between collation elements and characters).
-    // In JDK 1.2, there's a simple getOffset() call we can use.
-    // In JDK 1.1, on the other hand, we have to go through some
-    // ugly contortions.  First, use the collator to compare the
-    // same number of characters from the prefix and target string.
-    // If they're equal, we're done.
-    collator->setStrength(Collator::PRIMARY);
-    if (str.length() >= prefix.length()) {
-      UnicodeString temp;
-      temp.setTo(str, 0, prefix.length());
-      if (collator->equals(temp, prefix)) {
-        return prefix.length();
-      }
-    }
-		
-    // if they're not equal, then we have to compare successively
-    // larger and larger substrings of the target string until we
-    // get to one that matches the prefix.  At that point, we know
-    // how many characters matched the prefix, and we can return.
-    int32_t p = 1;
-    while (p <= str.length()) {
-      UnicodeString temp;
-      temp.setTo(str, 0, p);
-      if (collator->equals(temp, prefix)) {
-        return p;
-      } else {
-        ++p;
-      }
-    }
-		
-    // SHOULD NEVER GET HERE!!!
-    return 0;
-    //----------------------------------------------------------------
-		
-    // If lenient parsing is turned off, forget all that crap above.
-    // Just use String.startsWith() and be done with it.
+        //----------------------------------------------------------------
+        
+        // If lenient parsing is turned off, forget all that crap above.
+        // Just use String.startsWith() and be done with it.
   } else {
-    if (str.startsWith(prefix)) {
-      return prefix.length();
-    } else {
-      return 0;
-    }
+      if (str.startsWith(prefix)) {
+          return prefix.length();
+      } else {
+          return 0;
+      }
   }
 }
-	
+
 /**
 * Searches a string for another string.  If lenient parsing is off,
 * this just calls indexOf().  If lenient parsing is on, this function
@@ -1238,100 +1247,100 @@ NFRule::findText(const UnicodeString& str,
                  int32_t startingAt,
                  int32_t* length) const
 {
-  // if lenient parsing is turned off, this is easy: just call
-  // String.indexOf() and we're done
-  if (!formatter->isLenient()) {
-    *length = key.length();
-    return str.indexOf(key, startingAt);
-		
-    // but if lenient parsing is turned ON, we've got some work
-    // ahead of us
-  } else {
-    //----------------------------------------------------------------
-    // JDK 1.1 HACK (take out of 1.2-specific code)
-		
-    // in JDK 1.2, CollationElementIterator provides us with an
-    // API to map between character offsets and collation elements
-    // and we can do this by marching through the string comparing
-    // collation elements.  We can't do that in JDK 1.1.  Insted,
-    // we have to go through this horrible slow mess:
-    int32_t p = startingAt;
-    int32_t keyLen = 0;
-		
-    // basically just isolate smaller and smaller substrings of
-    // the target string (each running to the end of the string,
-    // and with the first one running from startingAt to the end)
-    // and then use prefixLength() to see if the search key is at
-    // the beginning of each substring.  This is excruciatingly
-    // slow, but it will locate the key and tell use how long the
-    // matching text was.
-    UnicodeString temp;
-    while (p < str.length() && keyLen == 0) {
-      temp.setTo(str, p, str.length() - p);
-      keyLen = prefixLength(temp, key);
-      if (keyLen != 0) {
-        *length = keyLen;
-        return p;
-      }
-      ++p;
+    // if lenient parsing is turned off, this is easy: just call
+    // String.indexOf() and we're done
+    if (!formatter->isLenient()) {
+        *length = key.length();
+        return str.indexOf(key, startingAt);
+        
+        // but if lenient parsing is turned ON, we've got some work
+        // ahead of us
+    } else {
+        //----------------------------------------------------------------
+        // JDK 1.1 HACK (take out of 1.2-specific code)
+        
+        // in JDK 1.2, CollationElementIterator provides us with an
+        // API to map between character offsets and collation elements
+        // and we can do this by marching through the string comparing
+        // collation elements.  We can't do that in JDK 1.1.  Insted,
+        // we have to go through this horrible slow mess:
+        int32_t p = startingAt;
+        int32_t keyLen = 0;
+        
+        // basically just isolate smaller and smaller substrings of
+        // the target string (each running to the end of the string,
+        // and with the first one running from startingAt to the end)
+        // and then use prefixLength() to see if the search key is at
+        // the beginning of each substring.  This is excruciatingly
+        // slow, but it will locate the key and tell use how long the
+        // matching text was.
+        UnicodeString temp;
+        while (p < str.length() && keyLen == 0) {
+            temp.setTo(str, p, str.length() - p);
+            keyLen = prefixLength(temp, key);
+            if (keyLen != 0) {
+                *length = keyLen;
+                return p;
+            }
+            ++p;
+        }
+        // if we make it to here, we didn't find it.  Return -1 for the
+        // location.  The length should be ignored, but set it to 0,
+        // which should be "safe"
+        *length = 0;
+        return -1;
+        
+        //----------------------------------------------------------------
+        // JDK 1.2 version of this routine
+        //RuleBasedCollator collator = (RuleBasedCollator)formatter.getCollator();
+        //
+        //CollationElementIterator strIter = collator.getCollationElementIterator(str);
+        //CollationElementIterator keyIter = collator.getCollationElementIterator(key);
+        //
+        //int keyStart = -1;
+        //
+        //str.setOffset(startingAt);
+        //
+        //int oStr = strIter.next();
+        //int oKey = keyIter.next();
+        //while (oKey != CollationElementIterator.NULLORDER) {
+        //    while (oStr != CollationElementIterator.NULLORDER &&
+        //                CollationElementIterator.primaryOrder(oStr) == 0)
+        //        oStr = strIter.next();
+        //
+        //    while (oKey != CollationElementIterator.NULLORDER &&
+        //                CollationElementIterator.primaryOrder(oKey) == 0)
+        //        oKey = keyIter.next();
+        //
+        //    if (oStr == CollationElementIterator.NULLORDER) {
+        //        return new int[] { -1, 0 };
+        //    }
+        //
+        //    if (oKey == CollationElementIterator.NULLORDER) {
+        //        break;
+        //    }
+        //
+        //    if (CollationElementIterator.primaryOrder(oStr) ==
+        //            CollationElementIterator.primaryOrder(oKey)) {
+        //        keyStart = strIter.getOffset();
+        //        oStr = strIter.next();
+        //        oKey = keyIter.next();
+        //    } else {
+        //        if (keyStart != -1) {
+        //            keyStart = -1;
+        //            keyIter.reset();
+        //        } else {
+        //            oStr = strIter.next();
+        //        }
+        //    }
+        //}
+        //
+        //if (oKey == CollationElementIterator.NULLORDER) {
+        //    return new int[] { keyStart, strIter.getOffset() - keyStart };
+        //} else {
+        //    return new int[] { -1, 0 };
+        //}
     }
-    // if we make it to here, we didn't find it.  Return -1 for the
-    // location.  The length should be ignored, but set it to 0,
-    // which should be "safe"
-    *length = 0;
-    return -1;
-		
-    //----------------------------------------------------------------
-    // JDK 1.2 version of this routine
-    //RuleBasedCollator collator = (RuleBasedCollator)formatter.getCollator();
-    //
-    //CollationElementIterator strIter = collator.getCollationElementIterator(str);
-    //CollationElementIterator keyIter = collator.getCollationElementIterator(key);
-    //
-    //int keyStart = -1;
-    //
-    //str.setOffset(startingAt);
-    //
-    //int oStr = strIter.next();
-    //int oKey = keyIter.next();
-    //while (oKey != CollationElementIterator.NULLORDER) {
-    //    while (oStr != CollationElementIterator.NULLORDER &&
-    //                CollationElementIterator.primaryOrder(oStr) == 0)
-    //        oStr = strIter.next();
-    //
-    //    while (oKey != CollationElementIterator.NULLORDER &&
-    //                CollationElementIterator.primaryOrder(oKey) == 0)
-    //        oKey = keyIter.next();
-    //
-    //    if (oStr == CollationElementIterator.NULLORDER) {
-    //        return new int[] { -1, 0 };
-    //    }
-    //
-    //    if (oKey == CollationElementIterator.NULLORDER) {
-    //        break;
-    //    }
-    //
-    //    if (CollationElementIterator.primaryOrder(oStr) ==
-    //            CollationElementIterator.primaryOrder(oKey)) {
-    //        keyStart = strIter.getOffset();
-    //        oStr = strIter.next();
-    //        oKey = keyIter.next();
-    //    } else {
-    //        if (keyStart != -1) {
-    //            keyStart = -1;
-    //            keyIter.reset();
-    //        } else {
-    //            oStr = strIter.next();
-    //        }
-    //    }
-    //}
-    //
-    //if (oKey == CollationElementIterator.NULLORDER) {
-    //    return new int[] { keyStart, strIter.getOffset() - keyStart };
-    //} else {
-    //    return new int[] { -1, 0 };
-    //}
-  }
 }
 
 /**
@@ -1345,31 +1354,31 @@ NFRule::findText(const UnicodeString& str,
 UBool
 NFRule::allIgnorable(const UnicodeString& str) const
 {
-  // if the string is empty, we can just return true
-  if (str.length() == 0) {
-    return TRUE;
-  }
-	
-  // if lenient parsing is turned on, walk through the string with
-  // a collation element iterator and make sure each collation
-  // element is 0 (ignorable) at the primary level
-  if (formatter->isLenient()) {
-    RuleBasedCollator* collator = (RuleBasedCollator*)(formatter->getCollator());
-    CollationElementIterator* iter = collator->createCollationElementIterator(str);
-	
-	UErrorCode err = U_ZERO_ERROR;
-    int32_t o = iter->next(err);
-    while (o != CollationElementIterator::NULLORDER
-           && CollationElementIterator::primaryOrder(o) == 0) {
-      o = iter->next(err);
+    // if the string is empty, we can just return true
+    if (str.length() == 0) {
+        return TRUE;
     }
-
-	delete iter;
-    return o == CollationElementIterator::NULLORDER;
-  }
+    
+    // if lenient parsing is turned on, walk through the string with
+    // a collation element iterator and make sure each collation
+    // element is 0 (ignorable) at the primary level
+    if (formatter->isLenient()) {
+        RuleBasedCollator* collator = (RuleBasedCollator*)(formatter->getCollator());
+        CollationElementIterator* iter = collator->createCollationElementIterator(str);
+        
+        UErrorCode err = U_ZERO_ERROR;
+        int32_t o = iter->next(err);
+        while (o != CollationElementIterator::NULLORDER
+            && CollationElementIterator::primaryOrder(o) == 0) {
+            o = iter->next(err);
+        }
+        
+        delete iter;
+        return o == CollationElementIterator::NULLORDER;
+    }
     // if lenient parsing is turned off, there is no such thing as
     // an ignorable character: return true only if the string is empty
-  return FALSE;
+    return FALSE;
 }
 
 U_NAMESPACE_END

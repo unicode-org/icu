@@ -77,7 +77,7 @@ class NFRule {
     NFSubstitution* extractSubstitution(const NFRuleSet* ruleSet, const NFRule* predecessor, const RuleBasedNumberFormat* rbnf, UErrorCode& status);
     
     int16_t expectedExponent() const;
-    int32_t indexOfAny(const UnicodeString* strings[]) const;
+    int32_t indexOfAny(const UChar* const strings[]) const;
     double matchToDelimiter(const UnicodeString& text, int32_t startPos, double baseValue,
                             const UnicodeString& delimiter, ParsePosition& pp, const NFSubstitution* sub, 
 							double upperBound) const;
