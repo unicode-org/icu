@@ -278,7 +278,7 @@ uprv_openRuleWhiteSpaceSet(UErrorCode* ec);
  * @return 0 if no character names available.
  */
 U_CAPI int32_t U_EXPORT2
-uprv_getMaxCharNameLength();
+uprv_getMaxCharNameLength(void);
 
 #if 0
 /* 
