@@ -674,6 +674,7 @@ static void TestConvert()
         err=U_ZERO_ERROR;
         /*------*/
 
+#ifdef U_ENABLE_GENERIC_ISO_2022
         /*resetState  ucnv_reset()*/
         log_verbose("\n---Testing ucnv_reset()..\n");
         ucnv_reset(myConverter);
@@ -693,7 +694,8 @@ static void TestConvert()
              ucnv_close(cnv);
          
         }
-    
+#endif
+
         /*getDisplayName*/
         log_verbose("\n---Testing ucnv_getDisplayName()...\n");
         locale=CodePagesLocale[codepage_index];
@@ -1070,8 +1072,8 @@ static void TestAlias() {
     /* Predetermined aliases that we expect to map back to ISO_2022
      * and UTF-8.  UPDATE THIS DATA AS NECESSARY. */
     const char* ISO_2022_NAMES[] = 
-        {"ISO_2022", "iso-2022", "2022",
-         "cp2022", "iso2022", "iso_2022"};
+        {"ISO_2022,locale=ja,version=2", "ISO-2022-JP-2", "csISO2022JP2",
+         "Iso-2022jP2", "isO-2022_Jp_2", "iSo--2022,locale=ja,version=2"};
     int32_t ISO_2022_NAMES_LENGTH =
         sizeof(ISO_2022_NAMES) / sizeof(ISO_2022_NAMES[0]);
     const char *UTF8_NAMES[] =
@@ -1192,7 +1194,7 @@ static void TestAlias() {
           continue;
         }
         if (0 != strcmp(mapBack, ISO_2022_NAMES[0])) {
-            log_err("FAIL: \"%s\" -> \"%s\", expect ISO_2022\n",
+            log_err("FAIL: \"%s\" -> \"%s\", expect \"ISO_2022,locale=ja,version=2\"\n",
                     ISO_2022_NAMES[i], mapBack);
         }
     }
@@ -1586,7 +1588,7 @@ static void TestConvertSafeClone()
 
     /* one 'regular' & all the 'private stateful' converters */
     someConverters[0] = ucnv_open("ibm-1047", &err);
-    someConverters[1] = ucnv_open("ISO_2022", &err);
+    someConverters[1] = ucnv_open("ISO_2022,locale=zh,version=1", &err);
     someConverters[2] = ucnv_open("SCSU", &err);
     someConverters[3] = ucnv_open("HZ", &err);
     someConverters[4] = ucnv_open("lmbcs", &err);

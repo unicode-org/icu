@@ -47,7 +47,9 @@ static void TestLATIN1(void);
 static void TestSBCS(void);
 static void TestDBCS(void);
 static void TestMBCS(void);
+#ifdef U_ENABLE_GENERIC_ISO_2022
 static void TestISO_2022(void);
+#endif
 static void TestISO_2022_JP(void);
 static void TestISO_2022_JP_1(void);
 static void TestISO_2022_JP_2(void);
@@ -233,7 +235,9 @@ void addTestNewConvert(TestNode** root)
    addTest(root, &TestSBCS, "tsconv/nucnvtst/TestSBCS");
    addTest(root, &TestDBCS, "tsconv/nucnvtst/TestDBCS");
    addTest(root, &TestMBCS, "tsconv/nucnvtst/TestMBCS");
+#ifdef U_ENABLE_GENERIC_ISO_2022
    addTest(root, &TestISO_2022, "tsconv/nucnvtst/TestISO_2022");
+#endif
    addTest(root, &TestISO_2022_JP, "tsconv/nucnvtst/TestISO_2022_JP");
    addTest(root, &TestJIS, "tsconv/nucnvtst/TestJIS");
    addTest(root, &TestISO_2022_JP_1, "tsconv/nucnvtst/TestISO_2022_JP_1");
@@ -770,9 +774,11 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
 
 
     }
+#ifdef U_ENABLE_GENERIC_ISO_2022
     /*ISO-2022*/
     testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
         expectedISO2022, sizeof(expectedISO2022), "ISO_2022", toISO2022Offs,FALSE );
+#endif
     /*UTF16 LE*/
     testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
         expectedUTF16LE, sizeof(expectedUTF16LE), "utf-16le", toUTF16LEOffs,FALSE );
@@ -817,9 +823,11 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
     /*UTF-8*/
     testConvertToU(expectedUTF8, sizeof(expectedUTF8),
         sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "utf8", fmUTF8Offs,FALSE);
+#ifdef U_ENABLE_GENERIC_ISO_2022
     /*ISO-2022*/
     testConvertToU(expectedISO2022, sizeof(expectedISO2022),
         sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "ISO_2022", fmISO2022Offs,FALSE);
+#endif
     /*UTF16 LE*/
     testConvertToU(expectedUTF16LE, sizeof(expectedUTF16LE),
         sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "utf-16le", fmUTF16LEOffs,FALSE);
@@ -1294,7 +1302,9 @@ static void TestConverterTypesAndStarters()
     TestConverterType("UTF-16LE", UCNV_UTF16_LittleEndian);
     TestConverterType("UTF-32BE", UCNV_UTF32_BigEndian);
     TestConverterType("UTF-32LE", UCNV_UTF32_LittleEndian);
+#ifdef U_ENABLE_GENERIC_ISO_2022
     TestConverterType("iso-2022", UCNV_ISO_2022);
+#endif
     TestConverterType("hz", UCNV_HZ);
     TestConverterType("scsu", UCNV_SCSU);
     TestConverterType("x-iscii-de", UCNV_ISCII);
@@ -2502,6 +2512,8 @@ TestMBCS() {
 
 }
 
+#ifdef U_ENABLE_GENERIC_ISO_2022
+
 static void
 TestISO_2022() {
     /* test input */
@@ -2555,6 +2567,8 @@ TestISO_2022() {
     }
     ucnv_close(cnv);
 }
+
+#endif
 
 static void
 TestSmallTargetBuffer(const uint16_t* source, const UChar* sourceLimit,UConverter* cnv){
@@ -3103,7 +3117,7 @@ TestISO_2022_JP() {
     int32_t* myOff= offsets;
     cnv=ucnv_open("ISO_2022_JP_1", &errorCode);
     if(U_FAILURE(errorCode)) {
-        log_data_err("Unable to open a iso-2022 converter: %s\n", u_errorName(errorCode));
+        log_data_err("Unable to open an ISO_2022_JP_1 converter: %s\n", u_errorName(errorCode));
         return;
     }
 

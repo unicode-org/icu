@@ -40,6 +40,32 @@
 #include "cstring.h"
 #include "cmemory.h"
 
+#ifdef U_ENABLE_GENERIC_ISO_2022
+/*
+ * I am disabling the generic ISO-2022 converter after proposing to do so on
+ * the icu mailing list two days ago.
+ *
+ * Reasons:
+ * 1. It does not fully support the ISO-2022/ECMA-35 specification with all of
+ *    its designation sequences, single shifts with return to the previous state,
+ *    switch-with-no-return to UTF-16BE or similar, etc.
+ *    This is unlike the language-specific variants like ISO-2022-JP which
+ *    require a much smaller repertoire of ISO-2022 features.
+ *    These variants continue to be supported.
+ * 2. I believe that no one is really using the generic ISO-2022 converter
+ *    but rather always one of the language-specific variants.
+ *    Note that ICU's generic ISO-2022 converter has always output one escape
+ *    sequence followed by UTF-8 for the whole stream.
+ * 3. Switching between subcharsets is extremely slow, because each time
+ *    the previous converter is closed and a new one opened,
+ *    without any kind of caching, least-recently-used list, etc.
+ * 4. The code is currently buggy, and given the above it does not seem
+ *    reasonable to spend the time on maintenance.
+ *
+ * Markus Scherer 2003-dec-03
+ */
+#endif
+
 static const char UCNV_SS2[] = "\x1B\x4E";
 static const char UCNV_SS3[] = "\x1B\x4F";
 #define UCNV_SS2_LEN 2
@@ -121,7 +147,6 @@ typedef struct{
     ISO2022State toU2022State, fromU2022State;
     UConverter* myConverterArray[UCNV_2022_MAX_CONVERTERS];
     UBool isShiftAppended;
-    UBool isLocaleSpecified;
     uint32_t key;
     uint32_t version;
     char locale[3];
@@ -223,6 +248,25 @@ static const int8_t normalize_esq_chars_2022[256] = {
         ,0     ,0      ,0      ,0      ,0      ,0
 };
 
+#ifdef U_ENABLE_GENERIC_ISO_2022
+/*
+ * When the generic ISO-2022 converter is completely removed, not just disabled
+ * per #ifdef, then the following state table and the associated tables that are
+ * dimensioned with MAX_STATES_2022 should be trimmed.
+ *
+ * Especially, VALID_MAYBE_TERMINAL_2022 will not be used any more, and all of
+ * the associated escape sequences starting with ESC ( B should be removed.
+ * This includes the ones with key values 1097 and all of the ones above 1000000.
+ *
+ * For the latter, the tables can simply be truncated.
+ * For the former, since the tables must be kept parallel, it is probably best
+ * to simply duplicate an adjacent table cell, parallel in all tables.
+ *
+ * It may make sense to restructure the tables, especially by using small search
+ * tables for the variants instead of indexing them parallel to the table here.
+ */
+#endif
+
 #define MAX_STATES_2022 74
 static const int32_t escSeqStateTable_Key_2022[MAX_STATES_2022] = {
 /*   0           1           2           3           4           5           6           7           8           9           */
@@ -237,6 +281,7 @@ static const int32_t escSeqStateTable_Key_2022[MAX_STATES_2022] = {
     ,35947631   ,35947635   ,35947636   ,35947638
 };
 
+#ifdef U_ENABLE_GENERIC_ISO_2022
 
 static const char* const escSeqStateTable_Result_2022[MAX_STATES_2022] = {
  /*  0                      1                        2                      3                   4                   5                        6                      7                       8                       9    */
@@ -250,6 +295,8 @@ static const char* const escSeqStateTable_Result_2022[MAX_STATES_2022] = {
     ,"UTF16_PlatformEndian" ,"UTF16_PlatformEndian" ,"UTF16_PlatformEndian" ,NULL               ,"latin1"           ,"ibm-912"              ,"ibm-913"              ,"ibm-914"              ,"ibm-813"              ,"ibm-1089"
     ,"ibm-920"              ,"ibm-915"              ,"ibm-915"              ,"latin1"
 };
+
+#endif
 
 static const UCNV_TableStates_2022 escSeqStateTable_Value_2022[MAX_STATES_2022] = {
 /*          0                           1                         2                             3                           4                           5                               6                        7                          8                           9       */
@@ -266,7 +313,9 @@ static const UCNV_TableStates_2022 escSeqStateTable_Value_2022[MAX_STATES_2022] 
 
 /* Type def for refactoring changeState_2022 code*/
 typedef enum{
+#ifdef U_ENABLE_GENERIC_ISO_2022
     ISO_2022=0,
+#endif
     ISO_2022_JP=1,
     ISO_2022_KR=2,
     ISO_2022_CN=3
@@ -315,7 +364,6 @@ static void
 setInitialStateFromUnicodeJPCN(UConverter* converter,UConverterDataISO2022 *myConverterData){
     myConverterData->fromUnicodeCurrentState= ASCII;
     myConverterData->isShiftAppended=FALSE;
-    myConverterData->isLocaleSpecified=TRUE;
     myConverterData->currentType = ASCII1;
     converter->fromUnicodeStatus = FALSE;
 }
@@ -323,7 +371,6 @@ setInitialStateFromUnicodeJPCN(UConverter* converter,UConverterDataISO2022 *myCo
 static void 
 setInitialStateToUnicodeKR(UConverter* converter, UConverterDataISO2022 *myConverterData){
 
-    myConverterData->isLocaleSpecified=TRUE;
     converter->mode = UCNV_SI;
     myConverterData->currentConverter = myConverterData->fromUnicodeConverter;
 
@@ -342,7 +389,6 @@ setInitialStateFromUnicodeKR(UConverter* converter,UConverterDataISO2022 *myConv
         converter->charErrorBuffer[2] = 0x29;
         converter->charErrorBuffer[3] = 0x43;
     }
-    myConverterData->isLocaleSpecified=TRUE;
     myConverterData->isShiftAppended=FALSE;
 
 }
@@ -364,7 +410,6 @@ _ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t opti
         cnv->fromUnicodeStatus =FALSE;
         if(locale){
             uprv_strncpy(myLocale, locale, sizeof(myLocale));
-            myConverterData->isLocaleSpecified = TRUE;
         }
         myConverterData->version= 0;
         myConverterData->myConverterArray[0] =NULL;
@@ -448,6 +493,7 @@ _ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t opti
             }
         }
         else{
+#ifdef U_ENABLE_GENERIC_ISO_2022
             /* append the UTF-8 escape sequence */
             cnv->charErrorBufferLength = 3;
             cnv->charErrorBuffer[0] = 0x1b;
@@ -456,8 +502,11 @@ _ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t opti
 
             cnv->sharedData=(UConverterSharedData*)&_ISO2022Data;
             /* initialize the state variables */
-            myConverterData->isLocaleSpecified=FALSE;
             uprv_strcpy(myConverterData->name,"ISO_2022");
+#else
+            *errorCode = U_UNSUPPORTED_ERROR;
+            return;
+#endif
         }
 
         cnv->maxBytesPerUChar=cnv->sharedData->staticData->maxBytesPerChar;
@@ -500,7 +549,8 @@ _ISO2022Reset(UConverter *converter, UConverterResetChoice choice) {
     if(choice!=UCNV_RESET_TO_UNICODE) {
         uprv_memset(&myConverterData->fromU2022State, 0, sizeof(ISO2022State));
     }
-    if(! myConverterData->isLocaleSpecified){
+#ifdef U_ENABLE_GENERIC_ISO_2022
+    if(myConverterData->locale[0] == 0){
         if(choice<=UCNV_RESET_TO_UNICODE) {
             myConverterData->isFirstBuffer = TRUE;
             myConverterData->key = 0;
@@ -518,7 +568,9 @@ _ISO2022Reset(UConverter *converter, UConverterResetChoice choice) {
             converter->charErrorBuffer[2] = 0x42;
         }
     }
-    else {
+    else
+#endif
+    {
         /* reset the state variables */
         if(myConverterData->locale[0] == 'j' || myConverterData->locale[0] == 'c'){
             if(choice<=UCNV_RESET_TO_UNICODE) {
@@ -726,17 +778,20 @@ changeState_2022(UConverter* _this,
             goto DONE;
 
         case VALID_MAYBE_TERMINAL_2022:
+#ifdef U_ENABLE_GENERIC_ISO_2022
             /* ESC ( B is ambiguous only for ISO_2022 itself */
             if(var == ISO_2022) {
                 /* discard toUBytes[] for ESC ( B because this sequence is correct and complete */
                 _this->toULength = 0;
 
-                /* ### TODO need to indicate that ESC ( B was seen; if failure, then need to replay from source or from MBCS-style replay */
+                /* TODO need to indicate that ESC ( B was seen; if failure, then need to replay from source or from MBCS-style replay */
 
                 /* continue with the loop */
                 value = VALID_NON_TERMINAL_2022;
                 break;
-            } else {
+            } else
+#endif
+            {
                 /* not ISO_2022 itself, finish here */
                 value = VALID_TERMINAL_2022;
                 key = 0;
@@ -756,6 +811,7 @@ DONE:
         return;
     } else /* value == VALID_TERMINAL_2022 */ {
         switch(var){
+#ifdef U_ENABLE_GENERIC_ISO_2022
         case ISO_2022:
         {
             const char *chosenConverterName = escSeqStateTable_Result_2022[offset];
@@ -773,6 +829,7 @@ DONE:
             }
             break;
         }
+#endif
         case ISO_2022_JP:
             {
                  StateEnum tempState=nextStateToUnicodeJP[myData2022->version][offset];
@@ -1024,6 +1081,8 @@ MBCS_SINGLE_FROM_UCHAR32(UConverterSharedData* sharedData,
     *retval=(uint16_t) value;
 }
 
+#ifdef U_ENABLE_GENERIC_ISO_2022
+
 /**********************************************************************************
 *  ISO-2022 Converter
 *
@@ -1133,6 +1192,8 @@ T_UConverter_toUnicode_ISO_2022_OFFSETS_LOGIC(UConverterToUnicodeArgs* args,
         }
     }
 }
+
+#endif
 
 /*
  * To Unicode Callback helper function
@@ -2736,10 +2797,17 @@ static const UConverterImpl _ISO2022Impl={
     _ISO2022Close,
     _ISO2022Reset,
 
+#ifdef U_ENABLE_GENERIC_ISO_2022
     T_UConverter_toUnicode_ISO_2022_OFFSETS_LOGIC,
     T_UConverter_toUnicode_ISO_2022_OFFSETS_LOGIC,
     T_UConverter_fromUnicode_UTF8,
     T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC,
+#else
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+#endif
     NULL,
 
     NULL,
