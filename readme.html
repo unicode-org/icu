@@ -30,7 +30,7 @@
      <abbr title="International Components for Unicode">ICU</abbr> 2.8
     ReadMe</h1>
 
-    <p>Version: 2003-Oct-07<br>
+    <p>Version: 2003-Oct-13<br>
      Copyright &copy; 1997-2003 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -274,10 +274,10 @@
     <p>In the descriptions below, <strong><i>&lt;ICU&gt;</i></strong> is the
     full path name of the icu directory (the top level directory from the
     distribution archives) in your file system. You can also view the <a href=
-    "http://oss.software.ibm.com/icu/userguide/design.html">User's Guide</a> to
-    see which libraries you need for your software product. You need at least
-    the data (<code>[lib]icudt</code>) and the common (<code>[lib]icuuc</code>)
-    libraries in order to use ICU.</p>
+    "http://oss.software.ibm.com/icu/userguide/design.html">ICU Architectural
+    Design</a> section of the User's Guide to see which libraries you need for
+    your software product. You need at least the data (<code>[lib]icudt</code>)
+    and the common (<code>[lib]icuuc</code>) libraries in order to use ICU.</p>
 
     <table border="1" cellpadding="0" width="100%">
       <caption>
@@ -950,8 +950,8 @@
     <tt>"./configure"</tt>. Some of the more frequently used options to
     configure are --disable-64bit-libs to create 32-bit libraries, and --srcdir
     to do out of source builds (build the libraries in the current location).
-    HP-UX user's, please see this <a href="#ImportantNotesHPUX">note</a>
-    regarding multithreaded build issues with newer compilers.</p>
+    HP-UX user's, please see this <a href="#ImportantNotesHPUX">note
+    regarding multithreaded</a> build issues with newer compilers.</p>
 
     <p><a name="HowToTestWithoutGmake"><strong>Running The Tests From The
     Command Line NOTE:</strong></a> You may have to set certain variables if
@@ -1408,34 +1408,13 @@ del common/libicuuc.so
     <h3><a name="ImportantNotesCPlusPlus" href="#ImportantNotesCPlusPlus">Using
     ICU in a Multithreaded Environment</a></h3>
 
-    <p>If you are using ICU in a multithreaded application, there may be a
-    chance that the ICU global mutex is not initialized properly. Normally the
-    ICU global mutex is initialized during C++ static initialization, but there
-    are some compilers and linkers that do not properly perform C++ static
-    initialization in a library. Here are some of the cases when the global
-    mutex is not initialized:</p>
-
-    <ul>
-      <li>Static ICU libraries are used.</li>
-
-      <li>ICU is used on Mac OS X</li>
-
-      <li>ICU is used on HP-UX and the program's <code>main()</code> function
-      is not declared in a C++ file.</li>
-    </ul>
-
     <p>Upon the first usage of most ICU APIs, the global mutex will get
-    initialized, but you can use the <code>u_init()</code> function from
-    uclean.h to ensure that it is initialized. Without one of these function
-    calls from a single thread, the data caches inside ICU may get initialized
-    more than once, which may cause memory leaks and other problems. This
-    problem normally does not happen when C++ static initialization works
-    properly.</p>
-
-    <p>ICU does not use C++ static initialization for anything else, and
-    disabling threads in ICU will disable all C++ static initialization in ICU.
-    If you do not have a multithreaded application, you do not need to worry
-    about the global mutex.</p>
+    initialized properly, but you can use the <code>u_init()</code> function
+    from uclean.h to ensure that it is initialized properly. Without calling this
+    function from a single thread, the data caches inside ICU may get initialized
+    more than once from multiple threads, which may cause memory leaks and other
+    problems. There is no harm in calling <code>u_init()</code> in a single
+    threaded application.</p>
 
     <h4><a name="ImportantNotesHPUX" href="#ImportantNotesHPUX">Using ICU in a
     Multithreaded Environment on HP-UX</a></h4>
@@ -1443,12 +1422,11 @@ del common/libicuuc.so
     <p>If you are building ICU with a newer aCC compiler, or you are planning
     on using any RogueWave libraries, you will need to set special flags before
     building ICU. These flags are needed in order to make ICU thread safe and
-    to allow iostream to work properly. More information on these flags can be
-    found <a href=
-    "http://docs.hp.com/hpux/onlinedocs/dev/aCC/a_03_30/options.htm#option-mt">here</a>
-    and <a href=
-    "http://docs.hp.com/hpux/onlinedocs/dev/aCC/a_03_30/options.htm#optioncap-AA">
-    here</a>.</p>
+    to allow iostream to work properly. More information about the <a
+    href="http://docs.hp.com/hpux/onlinedocs/dev/aCC/a_03_30/options.htm#option-mt">-mt</a>
+    and <a
+    href="http://docs.hp.com/hpux/onlinedocs/dev/aCC/a_03_30/options.htm#optioncap-AA">-AA</a>
+    options can be found in the HP aCC documentation.</p>
 <pre>
 <samp>CFLAGS="-mt" CXXFLAGS="-mt -AA" LDFLAGS="-mt" ./runConfigureICU HP-UX11ACC</samp>
 </pre>
