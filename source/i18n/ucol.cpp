@@ -1019,13 +1019,16 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
   const UChar    *strend      = NULL;
   const UChar    *constart    = NULL;
         uint32_t size;
+        uint32_t firstCE      = UCOL_NOT_FOUND;
+        UChar    *firstUChar  = source->pos;
   for(;;)
   {
-    switch (getCETag(CE)) 
+    /* the only ces that loops are thai and contractions */
+    switch (getCETag(CE))  
     {
-    case NOT_FOUND_TAG:
+    case NOT_FOUND_TAG:  /* this tag always returns */
       return CE;
-    case SURROGATE_TAG:
+    case SURROGATE_TAG:  /* this tag always returns */
       /* pending surrogate discussion with Markus and Mark */
       return UCOL_NOT_FOUND;
     case THAI_TAG:
@@ -1087,10 +1090,21 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
         constart = UCharOffset = (UChar *)coll->image + getContractOffset(CE);
         strend = source->len;
 
+        if (firstCE == UCOL_NOT_FOUND) {
+          firstCE = *(coll->contractionCEs + 
+                      (UCharOffset - coll->contractionIndex));
+        }
+
         if ((uint32_t)(strend - source->pos) == length) { 
           /* this is the start of string */
           CE = *(coll->contractionCEs + 
                  (UCharOffset - coll->contractionIndex)); 
+          if (CE == UCOL_NOT_FOUND && firstCE != UCOL_NOT_FOUND) {
+            CE          = firstCE;
+            /* firstCE     = UCOL_NOT_FOUND;
+            source->pos = firstUChar; */
+          }
+
           break;
         }
 
@@ -1105,24 +1119,25 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
         }
         
         if (schar != tchar) {
-          /* 
-          we didn't find the correct codepoint. We can use either the first or 
-          the last CE 
-          */
-          /* testing if (tchar != 0xFFFF) */
           UCharOffset = constart; 
         } 
         else {
-          /* Move up one character */
           source->pos --;
         }
+
         CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex));
         if (!isContraction(CE)) {
+          if (CE == UCOL_NOT_FOUND) {
+            CE          = firstCE;
+            source->pos = firstUChar;
+          }
+          firstCE = UCOL_NOT_FOUND;
+          
           break;  
         }
       }
       break;
-    case EXPANSION_TAG:
+    case EXPANSION_TAG: /* this tag always returns */
       /* 
       This should handle expansion.
       NOTE: we can encounter both continuations and expansions in an expansion! 
@@ -1147,10 +1162,10 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
       }
       source->toReturn = source->CEpos - 1;
       return *(source->toReturn);
-    case CHARSET_TAG:
+    case CHARSET_TAG:  /* this tag always returns */
       /* probably after 1.8 */
       return UCOL_NOT_FOUND;
-    default:
+    default:           /* this tag always returns */
       *status = U_INTERNAL_PROGRAM_ERROR;
       CE=0;
       break;
