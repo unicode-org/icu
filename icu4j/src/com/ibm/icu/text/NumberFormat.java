@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NumberFormat.java,v $ 
- * $Date: 2000/05/26 21:38:55 $ 
- * $Revision: 1.7 $
+ * $Date: 2000/06/01 01:21:34 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -141,7 +141,7 @@ import java.io.ObjectOutputStream;
  *
  * see          DecimalFormat
  * see          java.text.ChoiceFormat
- * @version      $Revision: 1.7 $
+ * @version      $Revision: 1.8 $
  * @author       Mark Davis
  * @author       Helena Shih
  * @author       Alan Liu
@@ -585,6 +585,24 @@ public abstract class NumberFormat extends Format{
 
     // [NEW]
     protected static String getPattern(Locale forLocale, int choice) {
+
+        /* The following code takes care of a few cases where the
+         * resource data in the underlying JDK lags the new features
+         * we have added to ICU4J: scientific notation, rounding, and
+         * secondary grouping.
+         *
+         * We detect these cases here and return various hard-coded
+         * resource data.  This is the simplest solution for now, but
+         * it is not a good long-term mechanism.
+         * 
+         * We should replace this code with a data-driven mechanism
+         * that reads the bundle com.ibm.text.resources.LocaleElements
+         * and parses an exception table that overrides the standard
+         * data at java.text.resource.LocaleElements*.java.
+         * Alternatively, we should create our own copy of the
+         * resource data, and use that exclusively.
+         */
+
         // TEMPORARY, until we get scientific patterns into the main
         // resources:  Retrieve scientific patterns from our resources.
         if (choice == SCIENTIFICSTYLE) {
@@ -596,6 +614,11 @@ public abstract class NumberFormat extends Format{
         if (choice == CURRENCYSTYLE &&
             forLocale.getCountry().equals("CH")) {
             return "'Fr. '#,##0.05;'Fr.-'#,##0.05";
+        }
+        // TEMPORARY: Special case IN number format
+        if (choice == NUMBERSTYLE &&
+            forLocale.getCountry().equals("IN")) {
+            return "#,##,##0.###";
         }
         // Try the cache first
         String[] numberPatterns = (String[]) cachedLocaleData.get(forLocale);
@@ -609,20 +632,16 @@ public abstract class NumberFormat extends Format{
         return numberPatterns[choice];
     }
 
-    // [NEW] Temporary pending resource integration
     public static final String RESOURCE_BASE = "java.text.resources.LocaleElements";
-    // public static final String RESOURCE_BASE = "com.ibm.text.resources.LocaleElements";
     
-    // [NEW] Temporary pending resource integration
-    static ResourceBundle baseBundle = null;
-    
-    // [NEW] Temporary pending resource integration
-    public synchronized static final String[] getBaseStringArray(String name) {
-        if (baseBundle == null) {
-            baseBundle = ResourceBundle.getBundle(RESOURCE_BASE);
-        }
-        return baseBundle.getStringArray(name);
-    }
+//!    static ResourceBundle baseBundle = null;
+//!    
+//!    public synchronized static final String[] getBaseStringArray(String name) {
+//!        if (baseBundle == null) {
+//!            baseBundle = ResourceBundle.getBundle(RESOURCE_BASE);
+//!        }
+//!        return baseBundle.getStringArray(name);
+//!    }
 
     /**
      * First, read in the default serializable data.
