@@ -1,12 +1,12 @@
 /*
-*****************************************************************************************
+******************************************************************************
 *
-*   Copyright (C) 1997-1999, International Business Machines
+*   Copyright (C) 1997-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
-*****************************************************************************************
+******************************************************************************
 */
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 // File:     mutex.h
 //
 // Lightweight C++ wrapper for umtx_ C mutex functions
@@ -16,14 +16,14 @@
 // 06/04/97   helena         Updated setImplementation as per feedback from 5/21 drop.
 // 04/07/1999  srl               refocused as a thin wrapper
 //
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 #ifndef MUTEX_H
 #define MUTEX_H
 #include "unicode/utypes.h"
 
 #include "umutex.h"
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 // Code within this library which accesses protected data
 // should instantiate a Mutex object while doing so. You should make your own 
 // private mutex where possible.

@@ -1,10 +1,10 @@
 /*
-*******************************************************************************
+******************************************************************************
 *
-*   Copyright (C) 1996-1999, International Business Machines
+*   Copyright (C) 1996-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
-*******************************************************************************
+******************************************************************************
 *
 * File resbund.h
 *
@@ -19,19 +19,19 @@
 *                           from a specific file, without searching other files.
 *   2/11/97     aliu        Added UErrorCode return values to constructors.  Fixed
 *                           infinite loops in scanForFile and scanForLocale.
-*                           Modified getRawResourceData to not delete storage in
-*                           localeData and resourceData which it doesn't own.
+*                           Modified getRawResourceData to not delete storage
+*                           in localeData and resourceData which it doesn't own.
 *                           Added Mac compatibility #ifdefs for tellp() and
 *                           ios::nocreate.
 *   2/18/97     helena      Updated with 100% documentation coverage.
 *   3/13/97     aliu        Rewrote to load in entire resource bundle and store
 *                           it as a Hashtable of ResourceBundleData objects.
 *                           Added state table to govern parsing of files.
-*                           Modified to load locale index out of new file distinct
-*                           from default.txt.
-*   3/25/97     aliu        Modified to support 2-d arrays, needed for timezone data.
-*                           Added support for custom file suffixes.  Again, needed to
-*                           support timezone data.
+*                           Modified to load locale index out of new file
+*                           distinct from default.txt.
+*   3/25/97     aliu        Modified to support 2-d arrays, needed for timezone
+*                           data. Added support for custom file suffixes.  Again,
+*                           needed to support timezone data.
 *   4/7/97      aliu        Cleaned up.
 * 03/02/99      stephen     Removed dependency on FILE*.
 * 03/29/99      helena      Merged Bertrand and Stephen's changes.
@@ -40,7 +40,7 @@
 *                           Cleaned up.
 * 06/14/99      stephen     Removed methods taking a filename suffix.
 * 11/09/99      weiv        Added getLocale(), fRealLocale, removed fRealLocaleID
-*******************************************************************************
+******************************************************************************
 */
 
 #ifndef RESBUND_H

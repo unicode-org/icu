@@ -1,8 +1,8 @@
 /*
- **********************************************************************
- *   Copyright (C) 1998-1999, International Business Machines
+ ***************************************************************************
+ *   Copyright (C) 1998-2001, International Business Machines
  *   Corporation and others.  All Rights Reserved.
- **********************************************************************
+ ***************************************************************************
 *
 * File rbdata.cpp
 *
@@ -10,7 +10,7 @@
 *
 *   Date        Name        Description
 *   06/11/99    stephen     Creation. (Moved here from resbund.cpp)
-*******************************************************************************
+******************************************************************************
 */
 
 #include "rbdata.h"
@@ -19,7 +19,7 @@ UClassID StringList::fgClassID = 0; // Value is irrelevant
 UClassID String2dList::fgClassID = 0; // Value is irrelevant
 UClassID TaggedList::fgClassID = 0; // Value is irrelevant
 
-//-----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 
 StringList::StringList()
   : fCount(0), fStrings(0)

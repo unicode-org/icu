@@ -1,8 +1,8 @@
 /*
 *******************************************************************************
 *                                                                             *
-* Copyright (C) 1999, International Business Machines Corporation and others. *
-*                     All Rights Reserved.                                    *
+* Copyright (C) 1999-2001, International Business Machines Corporation        *
+*               and others. All Rights Reserved.                              *
 *                                                                             *
 *******************************************************************************
 *   file name:  uresdata.c

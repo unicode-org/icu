@@ -1,10 +1,10 @@
 /*
-********************************************************************************
+******************************************************************************
 *
-*   Copyright (C) 1997-1999, International Business Machines
+*   Copyright (C) 1997-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
-********************************************************************************
+******************************************************************************
 *
 * File DIGITLST.H
 *
@@ -18,7 +18,7 @@
 *   08/02/98    stephen     Added nearest/even rounding
 *   06/29/99    stephen     Made LONG_DIGITS a macro to satisfy SUN compiler
 *   07/09/99    stephen     Removed kMaxCount (unused, for HP compiler)
-*******************************************************************************
+******************************************************************************
 */
  
 #ifndef DIGITLST_H

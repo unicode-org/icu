@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999, International Business Machines
+*   Copyright (C) 1999-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -136,7 +136,7 @@ struct UConverter {
 
     void *fromUContext;
     void *toUContext;
-    UBool isCopyLocal;	 /* TRUE if created by safeClone with no allocation or ref count */
+    UBool isCopyLocal;   /* TRUE if created by safeClone with no allocation or ref count */
     UConverterSharedData *sharedData;   /* Pointer to the shared immutable part of the converter object */
 
     /*

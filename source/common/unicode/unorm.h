@@ -1,6 +1,7 @@
 /*
 *******************************************************************************
-* Copyright (c) {1996-2001}, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (c) 1996-2001, International Business Machines Corporation
+*               and others. All Rights Reserved.
 *******************************************************************************
 * File unorm.h
 *

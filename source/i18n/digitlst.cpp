@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-1999, International Business Machines
+*   Copyright (C) 1997-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -14,14 +14,14 @@
 *   03/27/97    helena      Updated to pass the simple test after code review.
 *   03/31/97    aliu        Moved isLONG_MIN to here, and fixed it.
 *   04/15/97    aliu        Changed MAX_COUNT to DBL_DIG.  Changed Digit to char.
-*                           Reworked representation by replacing fDecimalAt with
-*                           fExponent.
+*                           Reworked representation by replacing fDecimalAt
+*                           with fExponent.
 *   04/16/97    aliu        Rewrote set() and getDouble() to use sprintf/atof
 *                           to do digit conversion.
 *   09/09/97    aliu        Modified for exponential notation support.
-*    08/02/98    stephen        Added nearest/even rounding
+*   08/02/98    stephen     Added nearest/even rounding
 *                            Fixed bug in fitsIntoLong
-********************************************************************************
+******************************************************************************
 */
 
 #include "digitlst.h"
@@ -31,11 +31,11 @@
 #include <stdio.h>
 #include "unicode/putil.h"
 
-// *****************************************************************************
+// ***************************************************************************
 // class DigitList
 // This class handles the transcoding between numeric values and strings of
 //  characters.  Only handles as non-negative numbers.  
-// *****************************************************************************
+// ***************************************************************************
 
 const char DigitList::kZero = '0';
 

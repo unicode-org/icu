@@ -1,10 +1,10 @@
 /*  
-*******************************************************************************
+******************************************************************************
 *
-*   Copyright (C) 1999-2000, International Business Machines
+*   Copyright (C) 1999-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
-*******************************************************************************
+******************************************************************************
 *   file name:  ubidiln.c
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
@@ -551,7 +551,7 @@ reorderLine(UBiDi *pBiDi, UBiDiLevel minLevel, UBiDiLevel maxLevel) {
     Run *runs;
     UBiDiLevel *levels;
     UTextOffset firstRun, endRun, limitRun, runCount,
-	temp;
+    temp;
 
     /* nothing to do? */
     if(maxLevel<=(minLevel|1)) {

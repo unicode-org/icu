@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1997-1999, International Business Machines
+*   Copyright (C) 1997-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -154,22 +154,22 @@ typedef unsigned short uint16_t;
 /* Information about wchar support                                           */
 /*===========================================================================*/
 
-#define U_HAVE_WCHAR_H		@U_HAVE_WCHAR_H@
-#define U_SIZEOF_WCHAR_T	@U_SIZEOF_WCHAR_T@
+#define U_HAVE_WCHAR_H      @U_HAVE_WCHAR_H@
+#define U_SIZEOF_WCHAR_T    @U_SIZEOF_WCHAR_T@
 
-#define U_HAVE_WCSCPY		@U_HAVE_WCSCPY@
+#define U_HAVE_WCSCPY       @U_HAVE_WCSCPY@
 
 /*===========================================================================*/
 /* Information about POSIX support                                           */
 /*===========================================================================*/
 
-#define U_HAVE_NL_LANGINFO		@U_HAVE_NL_LANGINFO@
-#define U_HAVE_NL_LANGINFO_CODESET	@U_HAVE_NL_LANGINFO_CODESET@
-#define U_NL_LANGINFO_CODESET		@U_NL_LANGINFO_CODESET@
+#define U_HAVE_NL_LANGINFO          @U_HAVE_NL_LANGINFO@
+#define U_HAVE_NL_LANGINFO_CODESET  @U_HAVE_NL_LANGINFO_CODESET@
+#define U_NL_LANGINFO_CODESET       @U_NL_LANGINFO_CODESET@
 
-#define U_TZSET			@U_TZSET@
-#define U_TIMEZONE		@U_TIMEZONE@
-#define U_TZNAME		@U_TZNAME@
+#define U_TZSET     @U_TZSET@
+#define U_TIMEZONE  @U_TIMEZONE@
+#define U_TZNAME    @U_TZNAME@
 
 /*===========================================================================*/
 /* Symbol import-export control                                              */
@@ -183,5 +183,5 @@ typedef unsigned short uint16_t;
 /* Programs used by ICU code                                                 */
 /*===========================================================================*/
 
-#define U_MAKE	"@U_MAKE@"
+#define U_MAKE  "@U_MAKE@"
 

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999, International Business Machines
+*   Copyright (C) 1999-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
  *
@@ -100,14 +100,14 @@ typedef enum {
  * The structure for the fromUnicode callback function parameter.
  */
 typedef struct {
-	uint16_t size;
-	UBool flush;
-	UConverter *converter;
-	const UChar *source;
-	const UChar *sourceLimit;
-	char *target;
-	const char *targetLimit;
-	int32_t *offsets;  /* *offset = blah ; offset++; */
+    uint16_t size;
+    UBool flush;
+    UConverter *converter;
+    const UChar *source;
+    const UChar *sourceLimit;
+    char *target;
+    const char *targetLimit;
+    int32_t *offsets;  /* *offset = blah ; offset++; */
 } UConverterFromUnicodeArgs;
 
 
@@ -115,14 +115,14 @@ typedef struct {
  * The structure for the toUnicode callback function parameter.
  */
 typedef struct {
-	uint16_t size;
-	UBool flush;
-	UConverter *converter;
-	const char *source;
-	const char *sourceLimit;
-	UChar *target;
-	const UChar *targetLimit;
-	int32_t *offsets;
+    uint16_t size;
+    UBool flush;
+    UConverter *converter;
+    const char *source;
+    const char *sourceLimit;
+    UChar *target;
+    const UChar *targetLimit;
+    int32_t *offsets;
 } UConverterToUnicodeArgs;
 
 
@@ -139,7 +139,7 @@ U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_STOP (
                   int32_t length,
                   UChar32 codePoint,
                   UConverterCallbackReason reason,
-				  UErrorCode * err);
+                  UErrorCode * err);
 
 
 
@@ -156,7 +156,7 @@ U_CAPI void U_EXPORT2 UCNV_TO_U_CALLBACK_STOP (
                   const char* codeUnits,
                   int32_t length,
                   UConverterCallbackReason reason,
-				  UErrorCode * err);
+                  UErrorCode * err);
 
 /**
  * DO NOT CALL THIS FUNCTION DIRECTLY!
@@ -177,7 +177,7 @@ U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_SKIP (
                   int32_t length,
                   UChar32 codePoint,
                   UConverterCallbackReason reason,
-				  UErrorCode * err);
+                  UErrorCode * err);
 
 /**
  * DO NOT CALL THIS FUNCTION DIRECTLY!
@@ -200,7 +200,7 @@ U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_SUBSTITUTE (
                   int32_t length,
                   UChar32 codePoint,
                   UConverterCallbackReason reason,
-				  UErrorCode * err);
+                  UErrorCode * err);
 
 /**
  * DO NOT CALL THIS FUNCTION DIRECTLY!
@@ -249,7 +249,7 @@ U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_ESCAPE (
                   int32_t length,
                   UChar32 codePoint,
                   UConverterCallbackReason reason,
-				  UErrorCode * err);
+                  UErrorCode * err);
 
 
 /**
@@ -270,7 +270,7 @@ U_CAPI void U_EXPORT2 UCNV_TO_U_CALLBACK_SKIP (
                   const char* codeUnits,
                   int32_t length,
                   UConverterCallbackReason reason,
-				  UErrorCode * err);
+                  UErrorCode * err);
 
 /**
  * DO NOT CALL THIS FUNCTION DIRECTLY!
@@ -289,7 +289,7 @@ U_CAPI void U_EXPORT2 UCNV_TO_U_CALLBACK_SUBSTITUTE (
                   const char* codeUnits,
                   int32_t length,
                   UConverterCallbackReason reason,
-				  UErrorCode * err);
+                  UErrorCode * err);
 
 /**
  * DO NOT CALL THIS FUNCTION DIRECTLY!
@@ -305,7 +305,7 @@ U_CAPI void U_EXPORT2 UCNV_TO_U_CALLBACK_ESCAPE (
                   const char* codeUnits,
                   int32_t length,
                   UConverterCallbackReason reason,
-				  UErrorCode * err);
+                  UErrorCode * err);
 
 #endif
 

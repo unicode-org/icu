@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2000, International Business Machines
+*   Copyright (C) 1997-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -16,7 +16,7 @@
 *   04/06/99    stephen     changed setDefault() to realloc and copy
 *   06/14/99    stephen     Changed calls to ures_open for new params
 *   07/21/99    stephen     Modified setDefault() to propagate to C++
-******************************************************************************/
+*****************************************************************************/
 
 /*
    POSIX's locale format, from putil.c: [no spaces]
@@ -40,7 +40,7 @@
 
 /****************************************************************************
   Global variable and type definitions
-******************************************************************************/
+*****************************************************************************/
 
 /* UnicodeString stuff */
 typedef struct UnicodeString UnicodeString;

@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 2000, International Business Machines
+*   Copyright (C) 2000-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ucnvhz.c
@@ -56,7 +56,7 @@ static void _HZClose(UConverter *converter);
 U_CFUNC void _HZReset(UConverter *converter, UConverterResetChoice choice);
 
 U_CFUNC void _HZ_WriteSub(UConverterFromUnicodeArgs *args, int32_t offsetIndex, UErrorCode *err);
-U_CFUNC UConverter * _HZ_SafeClone(const UConverter 	*cnv, void *stackBuffer, int32_t *pBufferSize, UErrorCode *status);
+U_CFUNC UConverter * _HZ_SafeClone(const UConverter *cnv, void *stackBuffer, int32_t *pBufferSize, UErrorCode *status);
 
 U_CFUNC void UConverter_toUnicode_HZ_OFFSETS_LOGIC (UConverterToUnicodeArgs *args,
                                                             UErrorCode *err);
@@ -84,7 +84,7 @@ static UConverterImpl _HZImpl={
     NULL,
     NULL,
     _HZ_WriteSub,
-	_HZ_SafeClone
+    _HZ_SafeClone
 };
 
 const UConverterStaticData _HZStaticData={
@@ -287,8 +287,8 @@ U_CFUNC void UConverter_toUnicode_HZ_OFFSETS_LOGIC(UConverterToUnicodeArgs *args
                     continue;
                 }
                 else{
-                    tempBuf[0] =	(char) (args->converter->toUnicodeStatus+0x80) ;
-                    tempBuf[1] =	(char) (mySourceChar+0x80);
+                    tempBuf[0] = (char) (args->converter->toUnicodeStatus+0x80) ;
+                    tempBuf[1] = (char) (mySourceChar+0x80);
                     mySourceChar= (UChar)(((args->converter->toUnicodeStatus+0x80) << 8) | ((mySourceChar & 0x00ff)+0x80));
                     args->converter->toUnicodeStatus =0x00;
                     pBuf = &tempBuf[0];
@@ -339,12 +339,12 @@ SAVE_STATE:
 
                         args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = (char)(tempBuf[0]-0x80);
                         args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = (char)(tempBuf[1]-0x80);
-                        currentOffset=	mySource - args->source -2;
+                        currentOffset= mySource - args->source -2;
                     
                     }
                     else{
                         args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = (char)mySourceChar;
-                        currentOffset=	mySource - args->source -1;
+                        currentOffset= mySource - args->source -1;
                     }
                     args->offsets = args->offsets?args->offsets+(myTarget - args->target):0;
                     args->target = myTarget;
@@ -366,10 +366,10 @@ SAVE_STATE:
                         } 
                     }
                     args->converter->invalidCharLength=0;
-                    args->source  =	saveSource;
+                    args->source  = saveSource;
                     myTarget = args->target;
-                    args->target  =	saveTarget;
-                    args->offsets =	saveOffsets;
+                    args->target  = saveTarget;
+                    args->offsets = saveOffsets;
                     if(U_FAILURE(*err))
                         break;
                 }
@@ -654,38 +654,37 @@ _HZ_WriteSub(UConverterFromUnicodeArgs *args, int32_t offsetIndex, UErrorCode *e
 /* structure for SafeClone calculations */
 struct cloneStruct
 {
-	UConverter cnv;
-	UConverterDataHZ mydata;
+    UConverter cnv;
+    UConverterDataHZ mydata;
 };
 
 
 U_CFUNC UConverter * 
-_HZ_SafeClone(
-			const UConverter *cnv, 
-			void *stackBuffer, 
-			int32_t *pBufferSize, 
-			UErrorCode *status)
+_HZ_SafeClone(const UConverter *cnv, 
+              void *stackBuffer, 
+              int32_t *pBufferSize, 
+              UErrorCode *status)
 {
-	struct cloneStruct * localClone;
-	int32_t bufferSizeNeeded = sizeof(struct cloneStruct);
+    struct cloneStruct * localClone;
+    int32_t bufferSizeNeeded = sizeof(struct cloneStruct);
 
     if (U_FAILURE(*status)){
         return 0;
     }
-	
-	if (*pBufferSize == 0){ /* 'preflighting' request - set needed size into *pBufferSize */
-		*pBufferSize = 	bufferSizeNeeded;
-		return 0;
+
+    if (*pBufferSize == 0){ /* 'preflighting' request - set needed size into *pBufferSize */
+        *pBufferSize = bufferSizeNeeded;
+        return 0;
     }
 
     localClone = (struct cloneStruct *)stackBuffer;
     memcpy(&localClone->cnv, cnv, sizeof(UConverter));
-	localClone->cnv.isCopyLocal = TRUE;
-	
-	memcpy(&localClone->mydata, cnv->extraInfo, sizeof(UConverterDataHZ));
-	localClone->cnv.extraInfo = &localClone->mydata;
+    localClone->cnv.isCopyLocal = TRUE;
 
-	return &localClone->cnv;
+    memcpy(&localClone->mydata, cnv->extraInfo, sizeof(UConverterDataHZ));
+    localClone->cnv.extraInfo = &localClone->mydata;
+
+    return &localClone->cnv;
 }
 
 
