@@ -77,6 +77,16 @@
 						</dayWidth>
 					</dayContext>
 				</days>
+				<week>
+					<minDays count="1"/>
+					<firstDay day="sat"/>
+				</week>
+				<eras>
+					<eraAbbr>
+						<era type="1">ق.م.</era>
+						<era type="2">م.</era>
+					</eraAbbr>
+				</eras>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">

@@ -17,6 +17,10 @@
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
+				<week>
+					<minDays count="1"/>
+					<firstDay day="sun"/>
+				</week>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">

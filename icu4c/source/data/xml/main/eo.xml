@@ -436,8 +436,18 @@
 						</dayWidth>
 					</dayContext>
 				</days>
+				<week>
+					<minDays count="4"/>
+					<firstDay day="mon"/>
+				</week>
 				<am>atm</am>
 				<pm>ptm</pm>
+				<eras>
+					<eraAbbr>
+						<era type="1">aK</era>
+						<era type="2">pK</era>
+					</eraAbbr>
+				</eras>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">

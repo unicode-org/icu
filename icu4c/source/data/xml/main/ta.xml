@@ -380,6 +380,12 @@
 				</days>
 				<am>காலை</am>
 				<pm>மாலை</pm>
+				<eras>
+					<eraAbbr>
+						<era type="1">கிமு</era>
+						<era type="2">கிபி</era>
+					</eraAbbr>
+				</eras>
 			</calendar>
 		</calendars>
 		<timeZoneNames>

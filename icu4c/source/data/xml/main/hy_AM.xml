@@ -7,4 +7,16 @@
 		<language type="hy" /> 
 		<territory type="AM" /> 
 	</identity>
+	<dates>
+		<calendars>
+			<calendar type="gregorian">
+				<eras>
+					<eraAbbr>
+						<era type="1">Ք․Ա․</era>
+						<era type="2">Ք․Ե․</era>
+					</eraAbbr>
+				</eras>
+			</calendar>
+		</calendars>
+	</dates>
 </ldml>

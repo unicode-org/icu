@@ -203,6 +203,12 @@
 						</dayWidth>
 					</dayContext>
 				</days>
+				<eras>
+					<eraAbbr>
+						<era type="1">v.C.</era>
+						<era type="2">n.C.</era>
+					</eraAbbr>
+				</eras>
 			</calendar>
 		</calendars>
 	</dates>

@@ -17,17 +17,17 @@
 	<characters>
 		<exemplarCharacters>[[:Arab:]‌‍‏‎]</exemplarCharacters>
 	</characters>
-<numbers>
-	<currencies>
-		<currency type="PKR">
-			<displayName>PKR</displayName>
-			<symbol>Rs</symbol>
-		</currency>
-	</currencies>
-</numbers>
-<collations>
-	<collation type="standard" >
-		<settings normalization="on"  />
-	</collation  >
-</collations>
+	<numbers>
+		<currencies>
+			<currency type="PKR">
+				<displayName>PKR</displayName>
+				<symbol>Rs</symbol>
+			</currency>
+		</currencies>
+	</numbers>
+	<collations>
+		<collation type="standard" >
+			<settings normalization="on"  />
+		</collation  >
+	</collations>
 </ldml>

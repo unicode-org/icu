@@ -265,8 +265,18 @@
 						</dayWidth>
 					</dayContext>
 				</days>
+				<week>
+					<minDays count="1"/>
+					<firstDay day="mon"/>
+				</week>
 				<am>Առ․</am>
 				<pm>Եր․</pm>
+				<eras>
+					<eraAbbr>
+						<era type="1">Յ․Տ․</era>
+						<era type="2">Ն․Ք․</era>
+					</eraAbbr>
+				</eras>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">

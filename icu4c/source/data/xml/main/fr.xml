@@ -678,6 +678,12 @@
 						</dayWidth>
 					</dayContext>
 				</days>
+				<eras>
+					<eraAbbr>
+						<era type="1">av. J.-C.</era>
+						<era type="2">ap. J.-C.</era>
+					</eraAbbr>
+				</eras>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">

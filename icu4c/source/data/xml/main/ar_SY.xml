@@ -58,6 +58,10 @@
 						</dayWidth>
 					</dayContext>
 				</days>
+				<week>
+					<minDays count="1"/>
+					<firstDay day="thu"/>
+				</week>
 			</calendar>
 		</calendars>
 	</dates>
