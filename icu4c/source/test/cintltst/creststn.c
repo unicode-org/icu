@@ -567,8 +567,10 @@ static void TestNewTypes() {
         status = U_ZERO_ERROR;
         resB = ures_getByKey(theBundle,"CollationElements", resB,&status);
         str  = ures_getStringByKey(resB,"Sequence",&strLength,&status);
-        if(u_strcmp(my,str) != 0){
-            log_err("Did not get te expeted string for escaped \\u0075\n");
+        if(!str || U_FAILURE(status)) {
+            log_data_err("Could not load CollationElements from theBundle: %s\n", u_errorName(status));
+        } else if(u_strcmp(my,str) != 0){
+            log_err("Did not get the expected string for escaped \\u0075\n");
         }
         ures_close(resB);
     }
