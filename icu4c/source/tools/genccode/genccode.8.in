@@ -17,6 +17,12 @@
 .BI "\-d\fP, \fB\-\-destdir" " destination"
 ]
 [
+.BI "\-n\fP, \fB\-\-name" " name"
+]
+[
+.BI "\-e\fP, \fB\-\-entrypoint" " name"
+]
+[
 .IR filename " .\|.\|."
 ]
 .SH DESCRIPTION
@@ -45,6 +51,30 @@ Print help about usage and exit.
 Set the destination directory to
 .IR destination .
 The default destination directory is the current directory.
+.TP
+.BI "\-n\fP, \fB\-\-name" " name"
+Sets the data name to
+.I name
+instead of the default. This name is also used as the base name of the
+output. The default name is made of the
+.I icudt
+prefix, followed by a two-digit version number corresponding to
+the current version of the ICU release, and a single letter indicating
+the endianness of the data (the letter
+.I b
+indicated big endian data, and the letter
+.I l
+indicates little endian ones).
+.TP
+.BI "\-e\fP, \fB\-\-entrypoint" " name"
+Sets the data entry point (used for linking against the data in a
+shared library form) to
+.IR name .
+The default entry point name is made of the data (set by the
+.BI "\-n\fP, \fB\-\-name"
+option) followed by an underscore and the type of the data (set by the
+.BI "\-t\fP, \fB\-\-type"
+option).
 .SH VERSION
 @VERSION@
 .SH COPYRIGHT
