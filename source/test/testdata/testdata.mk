@@ -14,7 +14,7 @@ TESTDT=$(TESTPKG)_
 ALL : "$(TESTDATAOUT)\testdata.dat" 
 	@echo Test data is built.
 
-"$(TESTDATAOUT)\testdata.dat" : "$(TESTDATABLD)\casing.res" "$(TESTDATABLD)\conversion.res" "$(TESTDATABLD)\mc.res" "$(TESTDATABLD)\root.res" "$(TESTDATABLD)\te.res" "$(TESTDATABLD)\te_IN.res" "$(TESTDATABLD)\testaliases.res" "$(TESTDATABLD)\testtypes.res" "$(TESTDATABLD)\testempty.res" "$(TESTDATABLD)\$(TESTDT)iscii.res" "$(TESTDATABLD)\$(TESTDT)idna_rules.res" "$(TESTDATABLD)\DataDrivenCollationTest.res" $(TESTDATABLD)\$(TESTDT)test.icu "$(TESTDATABLD)\$(TESTDT)test1.cnv" "$(TESTDATABLD)\$(TESTDT)test3.cnv" "$(TESTDATABLD)\$(TESTDT)test4.cnv" "$(TESTDATABLD)\$(TESTDT)ibm9027.cnv"
+"$(TESTDATAOUT)\testdata.dat" : "$(TESTDATABLD)\casing.res" "$(TESTDATABLD)\conversion.res" "$(TESTDATABLD)\mc.res" "$(TESTDATABLD)\root.res" "$(TESTDATABLD)\te.res" "$(TESTDATABLD)\te_IN.res" "$(TESTDATABLD)\testaliases.res" "$(TESTDATABLD)\testtypes.res" "$(TESTDATABLD)\testempty.res" "$(TESTDATABLD)\$(TESTDT)iscii.res" "$(TESTDATABLD)\$(TESTDT)idna_rules.res" "$(TESTDATABLD)\DataDrivenCollationTest.res" $(TESTDATABLD)\$(TESTDT)test.icu "$(TESTDATABLD)\$(TESTDT)test1.cnv" "$(TESTDATABLD)\$(TESTDT)test3.cnv" "$(TESTDATABLD)\$(TESTDT)test4.cnv" "$(TESTDATABLD)\$(TESTDT)ibm9027.cnv" "$(TESTDATABLD)\$(TESTDT)nfscsi.spp" "$(TESTDATABLD)\$(TESTDT)nfscss.spp" "$(TESTDATABLD)\$(TESTDT)nfscis.spp" "$(TESTDATABLD)\$(TESTDT)nfsmxs.spp" "$(TESTDATABLD)\$(TESTDT)nfsmxp.spp"
 	@echo Building test data
 	@copy "$(TESTDATABLD)\$(TESTDT)te.res" "$(TESTDATAOUT)\$(TESTDT)nam.typ"
 	@"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -f -v -m common -c -p"$(TESTPKG)"  -O "$(PKGOPT)" -d "$(TESTDATAOUT)" -T "$(TESTDATABLD)" -s "$(TESTDATABLD)" <<
@@ -35,6 +35,11 @@ $(TESTDT)test3.cnv
 $(TESTDT)test4.cnv
 $(TESTDT)ibm9027.cnv
 $(TESTDT)idna_rules.res
+$(TESTDT)nfscsi.spp
+$(TESTDT)nfscss.spp
+$(TESTDT)nfscis.spp
+$(TESTDT)nfsmxs.spp
+$(TESTDT)nfsmxp.spp
 <<
 
 
@@ -57,6 +62,30 @@ $(TESTDT)idna_rules.res
 $(TESTDATABLD)\$(TESTDT)test.icu : {"$(ICUTOOLS)\gentest\$(CFG)"}gentest.exe
 	"$(ICUTOOLS)\gentest\$(CFG)\gentest" -d"$(TESTDATABLD)"
 
+# Targets for nfscsi.spp
+"$(TESTDATABLD)\$(TESTDT)nfscsi.spp" : {"$(ICUTOOLS)\gensprep\$(CFG)"}gensprep.exe "$(TESTDATA)\nfs4_cs_prep_ci.txt"
+	@echo Building nfscsi.spp
+	@"$(ICUTOOLS)\gensprep\$(CFG)\gensprep" -s "$(TESTDATA)" -d "$(TESTDATABLD)\\" -b nfscsi -p "$(TESTPKG)" -u 3.2.0 nfs4_cs_prep_ci.txt
+
+# Targets for nfscss.spp
+"$(TESTDATABLD)\$(TESTDT)nfscss.spp" : {"$(ICUTOOLS)\gensprep\$(CFG)"}gensprep.exe "$(TESTDATA)\nfs4_cs_prep_cs.txt"
+	@echo Building nfscss.spp
+	@"$(ICUTOOLS)\gensprep\$(CFG)\gensprep" -s "$(TESTDATA)" -d "$(TESTDATABLD)\\" -b nfscss -p "$(TESTPKG)" -u 3.2.0 nfs4_cs_prep_cs.txt
+
+# Targets for nfscis.spp
+"$(TESTDATABLD)\$(TESTDT)nfscis.spp" : {"$(ICUTOOLS)\gensprep\$(CFG)"}gensprep.exe "$(TESTDATA)\nfs4_cis_prep.txt"
+	@echo Building nfscis.spp
+	@"$(ICUTOOLS)\gensprep\$(CFG)\gensprep" -s "$(TESTDATA)" -d "$(TESTDATABLD)\\" -b nfscis -p "$(TESTPKG)" -u 3.2.0 -k -n "$(ICUTOOLS)\\..\\data\\unidata" nfs4_cis_prep.txt
+
+# Targets for nfsmxs.spp
+"$(TESTDATABLD)\$(TESTDT)nfsmxs.spp" : {"$(ICUTOOLS)\gensprep\$(CFG)"}gensprep.exe "$(TESTDATA)\nfs4_mixed_prep_s.txt"
+	@echo Building nfsmxs.spp
+	@"$(ICUTOOLS)\gensprep\$(CFG)\gensprep" -s "$(TESTDATA)" -d "$(TESTDATABLD)\\" -b nfsmxs -p "$(TESTPKG)" -u 3.2.0 -k -n "$(ICUTOOLS)\\..\\data\\unidata" nfs4_mixed_prep_s.txt
+
+# Targets for nfsmxp.spp
+"$(TESTDATABLD)\$(TESTDT)nfsmxp.spp" : {"$(ICUTOOLS)\gensprep\$(CFG)"}gensprep.exe "$(TESTDATA)\nfs4_mixed_prep_p.txt"
+	@echo Building nfsmxp.spp
+	@"$(ICUTOOLS)\gensprep\$(CFG)\gensprep" -s "$(TESTDATA)" -d "$(TESTDATABLD)\\" -b nfsmxp -p "$(TESTPKG)" -u 3.2.0 -k -n "$(ICUTOOLS)\\..\\data\\unidata" nfs4_mixed_prep_p.txt
 
 
 # Targets for test converter data
