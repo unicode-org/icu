@@ -56,6 +56,10 @@ typedef const void* URegistryKey;
  * The most commonly used subclass of <code>Calendar</code> is
  * <code>GregorianCalendar</code>. Other subclasses could represent
  * the various types of lunar calendars in use in many parts of the world.
+ * 
+ * <p>
+ * <b>NOTE</b>: (ICU 2.6) The subclass interface should be considered unstable
+ * - it WILL change.  
  *
  * <p>
  * Like other locale-sensitive classes, <code>Calendar</code> provides a
