@@ -25,6 +25,7 @@
 #include "filestrm.h"
 #include "toolutil.h"
 #include "unewdata.h"
+#include "uoptions.h"
 
 #define STRING_STORE_SIZE 100000
 #define MAX_FILE_COUNT 2000
@@ -73,6 +74,17 @@ compareFiles(const void *file1, const void *file2);
 
 /* -------------------------------------------------------------------------- */
 
+static UOption options[]={
+    UOPTION_HELP_H,
+    UOPTION_HELP_QUESTION_MARK,
+    UOPTION_VERBOSE,
+    UOPTION_COPYRIGHT,
+    UOPTION_DESTDIR,
+    { "comment", NULL, NULL, NULL, 'C', UOPT_REQUIRES_ARG, 0 },
+    { "name", NULL, NULL, NULL, 'n', UOPT_REQUIRES_ARG, 0 },
+    { "type", NULL, NULL, NULL, 't', UOPT_REQUIRES_ARG, 0 }
+};
+
 extern int
 main(int argc, char *argv[]) {
     static uint8_t buffer[4096];
@@ -84,20 +96,35 @@ main(int argc, char *argv[]) {
     UErrorCode errorCode=U_ZERO_ERROR;
     uint32_t i, fileOffset, basenameOffset, length;
 
-    if(argc<=1) {
+    /* preset then read command line options */
+    options[4].value=u_getDataDirectory();
+    options[6].value=COMMON_DATA_NAME;
+    options[7].value=DATA_TYPE;
+    argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
+
+    /* error handling, printing usage message */
+    if(argc<0) {
         fprintf(stderr,
-            "usage: %s maxsize [list-filename]\n"
+            "error in command line argument \"%s\"\n",
+            argv[-argc]);
+    } else if(argc<2) {
+        argc=-1;
+    }
+    if(argc<0 || options[0].doesOccur || options[1].doesOccur) {
+        fprintf(stderr,
+            "usage: %s [-options] maxsize [list-filename]\n"
             "\tread the list file (default: stdin) and \n"
-            "\tcreate " COMMON_DATA_NAME "." DATA_TYPE " from all the files listed but each not larger than maxsize\n",
+            "\tcreate a common data file from all the files listed but each not larger than maxsize\n"
+            "\toptions:\n"
+            "\t\t-h or -? or --help  this usage text\n"
+            "\t\t-v or --verbose     verbose output\n"
+            "\t\t-c or --copyright   include the ICU copyright notice\n"
+            "\t\t-C or --comment     include a comment string\n"
+            "\t\t-d or --destdir     destination directory, followed by the path\n"
+            "\t\t-n or --name        name of the destination file, defaults to " COMMON_DATA_NAME "\n"
+            "\t\t-t or --type        type of the destination file, defaults to " DATA_TYPE "\n",
             argv[0]);
-    }
-
-    if(argc<2) {
-        return U_ILLEGAL_ARGUMENT_ERROR;
-    }
-
-    if (!destdir) {
-        destdir = u_getDataDirectory();
+        return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
 
     maxSize=uprv_strtoul(argv[1], NULL, 0);
@@ -149,7 +176,10 @@ main(int argc, char *argv[]) {
     }
 
     /* create the output file */
-    out=udata_create(destdir, DATA_TYPE, COMMON_DATA_NAME, &dataInfo, U_COPYRIGHT_STRING, &errorCode);
+    out=udata_create(options[4].value, options[7].value, options[6].value,
+                     &dataInfo,
+                     options[3].doesOccur ? U_COPYRIGHT_STRING : options[5].value,
+                     &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "gencmn: unable to open output file - error %s\n", u_errorName(errorCode));
         exit(errorCode);
