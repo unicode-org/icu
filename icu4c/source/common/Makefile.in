@@ -7,16 +7,14 @@
 ## Makefile.in for ICU - icu.so
 ## Stephen F. Booth
 
-## Install directory information
+## Source directory information
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
 
 top_builddir = ..
 
+## All the flags and other definitions are included here.
 include $(top_builddir)/icudefs.mk
-
-## Platform-specific setup
-include @platform_make_fragment@
 
 ## Build directory information
 subdir = common
@@ -26,12 +24,8 @@ CLEANFILES = *~ $(DEPS)
 
 ## Target information
 
-ENABLE_STATIC = @ENABLE_STATIC@
-ENABLE_SHARED = @ENABLE_SHARED@
-
 ifneq ($(ENABLE_STATIC),)
 TARGET = $(LIBICU)uc$(ICULIBSUFFIX).a
-RANLIB = @RANLIB@
 endif
 
 ifneq ($(ENABLE_SHARED),)
@@ -51,31 +45,24 @@ DYNAMICCPPFLAGS = $(SHAREDLIBCPPFLAGS)
 DYNAMICCFLAGS = $(SHAREDLIBCFLAGS)
 DYNAMICCXXFLAGS = $(SHAREDLIBCXXFLAGS)
 
-DEFS = @DEFS@
-CPPFLAGS = @CPPFLAGS@ $(LIBCPPFLAGS) -I. -I$(srcdir) -DICU_DATA_DIR=\"$(ICUDATA_DIR)/\" -DUDATA_SO_SUFFIX=\".$(SO)\" -DU_COMMON_LIBNAME=\"$(FINAL_SO_TARGET)\"
-CFLAGS = @CFLAGS@
-CXXFLAGS = @CXXFLAGS@
-ENABLE_RPATH = @ENABLE_RPATH@
-ifeq ($(ENABLE_RPATH),YES)
-RPATHLDFLAGS = $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
-endif
-
-# todo:  need t make $(LIBICUDT) conditional on using dll-based data.
-LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
-LIBS = $(LIBICUDT) @LIBS@
+CPPFLAGS += $(LIBCPPFLAGS) -I. -I$(srcdir) -DICU_DATA_DIR=\"$(ICUDATA_DIR)/\" -DUDATA_SO_SUFFIX=\".$(SO)\" -DU_COMMON_LIBNAME=\"$(FINAL_SO_TARGET)\"
 
 # Data packaging options are set at configure time with --with-data-packaging.
 CPPFLAGS += @DATA_PACKAGING_CPPFLAGS@
+
+# todo:  need t make $(LIBICUDT) conditional on using dll-based data.
+LIBS = $(LIBICUDT) $(DEFAULT_LIBS)
 
 OBJECTS = putil.o locmap.o mutex.o umutex.o \
 udata.o ucmndata.o udatamem.o umapfile.o filestrm.o \
 uresbund.o uresdata.o resbund.o cwchar.o uloc.o locid.o uhash.o uhash_us.o \
 ucnv.o ucnv_bld.o ucnv_cb.o ucnv_cnv.o ucnv_err.o ucnv_io.o ucnvlat1.o \
-ucnv_utf.o ucnvmbcs.o ucnv2022.o ucnvhz.o ucnv_lmb.o ucnvscsu.o ucnvbocu.o ucnvisci.o \
+ucnv_utf.o ucnvmbcs.o ucnv2022.o ucnvhz.o ucnv_lmb.o ucnvscsu.o \
+ucnvbocu.o ucnvisci.o \
 unistr.o utf_impl.o ustring.o ustrcase.o cstring.o ustrfmt.o ustrtrns.o \
 normlzr.o unorm.o chariter.o schriter.o uchriter.o uiter.o \
-uchar.o uprops.o bidi.o ubidi.o ubidiwrt.o ubidiln.o ushape.o unames.o ucln_cmn.o \
-uscript.o umemstrm.o ucmp8.o uvector.o digitlst.o \
+uchar.o uprops.o bidi.o ubidi.o ubidiwrt.o ubidiln.o ushape.o unames.o \
+ucln_cmn.o uscript.o umemstrm.o ucmp8.o uvector.o digitlst.o \
 brkiter.o brkdict.o ubrk.o dbbi.o dbbi_tbl.o rbbi.o rbbi_tbl.o \
 unicode.o scsu.o convert.o utrie.o uset.o
 

@@ -11,9 +11,6 @@ top_builddir = ../..
 
 include $(top_builddir)/icudefs.mk
 
-## Platform-specific setup
-include @platform_make_fragment@
-
 ## Build directory information
 subdir = tools/pkgdata
 
@@ -31,15 +28,8 @@ CLEANFILES = *~ $(DEPS) $(RES_FILES) $(TEST_FILES) mkmap.tmp $(ALL_MAN_FILES)
 ## Target information
 TARGET = pkgdata
 
-DEFS = @DEFS@
-CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcdir)/../toolutil -DUDATA_SO_SUFFIX=\".$(SO)\"  -DSTATIC_O=\"$(STATIC_O)\"
-CFLAGS = @CFLAGS@
-CXXFLAGS = @CXXFLAGS@
-ifeq ($(ENABLE_RPATH),YES)
-RPATHLDFLAGS = $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
-endif
-LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
-LIBS = $(LIBICUTOOLUTIL) $(LIBICUUC) @LIBS@ @LIB_M@
+CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcdir)/../toolutil -DUDATA_SO_SUFFIX=\".$(SO)\" -DSTATIC_O=\"$(STATIC_O)\"
+LIBS = $(LIBICUTOOLUTIL) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
 
 OBJECTS = pkgdata.o pkgtypes.o gmake.o dllmode.o cmnmode.o filemode.o sttcmode.o
 
