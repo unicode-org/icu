@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Attic/UCharacter.java,v $ 
-* $Date: 2000/12/26 20:00:56 $ 
-* $Revision: 1.1 $
+* $Date: 2000/12/26 22:41:10 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -23,9 +23,12 @@ package com.ibm.icu.text;
 * ICU's gennames and genprops programs are used to compact the information from 
 * the above mentioned files before being used by this package. The binary 
 * result files are named unames.dat and uprops.dat. <br>
-* Both are jared with the package for release.<br>
+* Both are jared with the package for release, hence to use this class please
+* add the jar file name <code>ucharacter.jar</code> to your class path.<br>
+* E.g. In Windows <code>set CLASSPATH=%CLASSPATH%;$JAR_FILE_PATH/ucharacter.jar
+* </code><br>
 * For more information about the data file format, please refer to 
-* <a href=http://oss.software.ibm.com/icu4j/icu4jhtml/com/ibm/icu/text/readme.html>
+* <a href=http://oss.software.ibm.com/icu4j/icu4jhtml/com/ibm/icu/text/ReadMe.html>
 * Read Me</a>.<br>
 * Each code point used here in in terms of a 32 bit int. This is so as to 
 * handle supplementary code points which has 21 bit in size.<br>
