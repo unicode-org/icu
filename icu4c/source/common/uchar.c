@@ -323,6 +323,22 @@ u_isdigit(UChar32 c) {
     return (UBool)(GET_CATEGORY(props)==U_DECIMAL_DIGIT_NUMBER);
 }
 
+U_CAPI UBool U_EXPORT2
+u_isxdigit(UChar32 c) {
+    uint32_t props;
+
+    /* check ASCII and Fullwidth ASCII a-fA-F */
+    if(
+        (c<=0x66 && c>=0x41 && (c<=0x46 || c>=0x61)) ||
+        (c>=0xff21 && c<=0xff46 && (c<=0xff26 || c>=0xff41))
+    ) {
+        return TRUE;
+    }
+
+    GET_PROPS(c, props);
+    return (UBool)(GET_CATEGORY(props)==U_DECIMAL_DIGIT_NUMBER);
+}
+
 /* Checks if the Unicode character is a letter.*/
 U_CAPI UBool U_EXPORT2
 u_isalpha(UChar32 c) {
@@ -399,6 +415,16 @@ u_isWhitespace(UChar32 c) {
            );
 }
 
+U_CAPI UBool U_EXPORT2
+u_isblank(UChar32 c) {
+    if((uint32_t)c<=0x9f) {
+        return c==9 || c==0x20; /* TAB or SPACE */
+    } else {
+        /* White_Space but not LS (Zl) or PS (Zp) */
+        return u_isUWhiteSpace(c) && ((c&0xfffffffe)!=0x2028);
+    }
+}
+
 /* Checks if the Unicode character is printable.*/
 U_CAPI UBool U_EXPORT2
 u_isprint(UChar32 c) {
@@ -406,6 +432,23 @@ u_isprint(UChar32 c) {
     GET_PROPS(c, props);
     /* comparing ==0 returns FALSE for the categories mentioned */
     return (UBool)((CAT_MASK(props)&U_GC_C_MASK)==0);
+}
+
+U_CAPI UBool U_EXPORT2
+u_isgraph(UChar32 c) {
+    uint32_t props;
+    GET_PROPS(c, props);
+    /* comparing ==0 returns FALSE for the categories mentioned */
+    return (UBool)((CAT_MASK(props)&
+                    (U_GC_CC_MASK|U_GC_CF_MASK|U_GC_CS_MASK|U_GC_CN_MASK|U_GC_Z_MASK))
+                   ==0);
+}
+
+U_CAPI UBool U_EXPORT2
+u_ispunct(UChar32 c) {
+    uint32_t props;
+    GET_PROPS(c, props);
+    return (UBool)((CAT_MASK(props)&U_GC_P_MASK)!=0);
 }
 
 /* Checks if the Unicode character can start a Unicode identifier.*/
@@ -706,6 +749,10 @@ u_digit(UChar32 ch, int8_t radix) {
                 value=(int8_t)(ch-0x57);  /* ch - 'a' + 10 */
             } else if(ch>=0x41 && ch<=0x5A) {
                 value=(int8_t)(ch-0x37);  /* ch - 'A' + 10 */
+            } else if(ch>=0xFF41 && ch<=0xFF5A) {
+                value=(int8_t)(ch-0xFF37);  /* fullwidth ASCII a-z */
+            } else if(ch>=0xFF21 && ch<=0xFF3A) {
+                value=(int8_t)(ch-0xFF17);  /* fullwidth ASCII A-Z */
             }
         }
     } else {
