@@ -1,12 +1,12 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2003, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2004, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecimalFormat.java,v $ 
- * $Date: 2004/02/20 19:40:16 $ 
- * $Revision: 1.45 $
+ * $Date: 2004/03/24 18:35:58 $ 
+ * $Revision: 1.46 $
  *
  *****************************************************************************************
  */
@@ -141,54 +141,60 @@ import java.io.ObjectInputStream;
  *     <td><strong><font face=helvetica color=red>NEW</font></strong>
  *         '1' through '9' indicate rounding.
  *   <tr valign=top>
+ *     <td><code>@</code>
+ *     <td>Number
+ *     <td>No
+ *     <td><strong><font face=helvetica color=red>NEW</font></strong>
+ *         Significant digit
+ *   <tr valign=top bgcolor="#eeeeff">
  *     <td><code>#</code>
  *     <td>Number
  *     <td>Yes
  *     <td>Digit, zero shows as absent
- *   <tr valign=top bgcolor="#eeeeff">
+ *   <tr valign=top>
  *     <td><code>.</code>
  *     <td>Number
  *     <td>Yes
  *     <td>Decimal separator or monetary decimal separator
- *   <tr valign=top>
+ *   <tr valign=top bgcolor="#eeeeff">
  *     <td><code>-</code>
  *     <td>Number
  *     <td>Yes
  *     <td>Minus sign
- *   <tr valign=top bgcolor="#eeeeff">
+ *   <tr valign=top>
  *     <td><code>,</code>
  *     <td>Number
  *     <td>Yes
  *     <td>Grouping separator
- *   <tr valign=top>
+ *   <tr valign=top bgcolor="#eeeeff">
  *     <td><code>E</code>
  *     <td>Number
  *     <td>Yes
  *     <td>Separates mantissa and exponent in scientific notation.
  *         <em>Need not be quoted in prefix or suffix.</em>
- *   <tr valign=top bgcolor="#eeeeff">
+ *   <tr valign=top>
  *     <td><code>+</code>
  *     <td>Exponent
  *     <td>Yes
  *     <td><strong><font face=helvetica color=red>NEW</font></strong>
  *         Prefix positive exponents with localized plus sign.
  *         <em>Need not be quoted in prefix or suffix.</em>
- *   <tr valign=top>
+ *   <tr valign=top bgcolor="#eeeeff">
  *     <td><code>;</code>
  *     <td>Subpattern boundary
  *     <td>Yes
  *     <td>Separates positive and negative subpatterns
- *   <tr valign=top bgcolor="#eeeeff">
+ *   <tr valign=top>
  *     <td><code>%</code>
  *     <td>Prefix or suffix
  *     <td>Yes
  *     <td>Multiply by 100 and show as percentage
- *   <tr valign=top>
+ *   <tr valign=top bgcolor="#eeeeff">
  *     <td><code>&#92;u2030</code>
  *     <td>Prefix or suffix
  *     <td>Yes
  *     <td>Multiply by 1000 and show as per mille
- *   <tr valign=top bgcolor="#eeeeff">
+ *   <tr valign=top>
  *     <td><code>&#164;</code> (<code>&#92;u00A4</code>)
  *     <td>Prefix or suffix
  *     <td>No
@@ -196,7 +202,7 @@ import java.io.ObjectInputStream;
  *         doubled, replaced by international currency symbol.
  *         If present in a pattern, the monetary decimal separator
  *         is used instead of the decimal separator.
- *   <tr valign=top>
+ *   <tr valign=top bgcolor="#eeeeff">
  *     <td><code>'</code>
  *     <td>Prefix or suffix
  *     <td>No
@@ -204,7 +210,7 @@ import java.io.ObjectInputStream;
  *         for example, <code>"'#'#"</code> formats 123 to
  *         <code>"#123"</code>.  To create a single quote
  *         itself, use two in a row: <code>"# o''clock"</code>.
- *   <tr valign=top bgcolor="#eeeeff">
+ *   <tr valign=top>
  *     <td><code>*</code>
  *     <td>Prefix or suffix boundary
  *     <td>Yes
@@ -257,12 +263,13 @@ import java.io.ObjectInputStream;
  *
  * <pre>
  * pattern    := subpattern (';' subpattern)?
- * subpattern := prefix? number suffix?
- * number     := integer ('.' fraction)? exponent?
+ * subpattern := prefix? number exponent? suffix?
+ * number     := (integer ('.' fraction)?) | sigDigits
  * prefix     := '&#92;u0000'..'&#92;uFFFD' - specialCharacters
  * suffix     := '&#92;u0000'..'&#92;uFFFD' - specialCharacters
  * integer    := '#'* '0'* '0'
  * fraction   := '0'* '#'*
+ * sigDigits  := '#'* '@' '@'* '#'*
  * exponent   := 'E' '+'? '0'* '0'
  * padSpec    := '*' padChar
  * padChar    := '&#92;u0000'..'&#92;uFFFD' - quote
@@ -270,15 +277,19 @@ import java.io.ObjectInputStream;
  * Notation:
  *   X*       0 or more instances of X
  *   X?       0 or 1 instances of X
- *   X..Y     any character from X up to Y, inclusive
- *   S - T    characters in S, except those in T
+ *   X|Y      either X or Y
+ *   C..D     any character from C up to D, inclusive
+ *   S-T      characters in S, except those in T
  * </pre>
  * The first subpattern is for positive numbers. The second (optional)
  * subpattern is for negative numbers.
  * 
  * <p>Not indicated in the BNF syntax above:
- * <ul><li>The grouping separator ',' can occur inside the integer portion between the
- * most significant digit and the least significant digit.
+ *
+ * <ul><li>The grouping separator ',' can occur inside the integer and
+ * sigDigits elements, between any two pattern characters of that
+ * element, as long as the integer or sigDigits element is not
+ * followed by the exponent element.
  *
  * <li><font color=red face=helvetica><strong>NEW</strong></font>
  *     Two grouping intervals are recognized: That between the
@@ -319,9 +330,9 @@ import java.io.ObjectInputStream;
  * <h4>Formatting</h4>
  *
  * <p>Formatting is guided by several parameters, all of which can be
- * specified either using a pattern or using the API.
- *
- * <p>For <em>non-exponential</em> formatters:
+ * specified either using a pattern or using the API.  The following
+ * description applies to formats that do not use <a href="#sci">scientific
+ * notation</a> or <a href="#sigdig">significant digits</a>.
  *
  * <ul><li>If the number of actual integer digits exceeds the
  * <em>maximum integer digits</em>, then only the least significant
@@ -345,9 +356,9 @@ import java.io.ObjectInputStream;
  * digits is set to 4.
  *
  * <li>Trailing fractional zeros are not displayed if they occur
- * <em>j</em> positions after the decimal, where <em>j</em> is greater
- * than the minimum fraction digits. For example, 0.10005 is
- * formatted as "0.1" if the minimum fraction digits is 0 or 1.
+ * <em>j</em> positions after the decimal, where <em>j</em> is less
+ * than the maximum fraction digits. For example, 0.10004 is
+ * formatted as "0.1" if the maximum fraction digits is four or less.
  * </ul>
  * 
  * <p><strong>Special Values</strong>
@@ -362,7 +373,7 @@ import java.io.ObjectInputStream;
  * applied.  The infinity character is determined by the
  * {@link DecimalFormatSymbols} object.
  *
- * <h4>Scientific Notation</h4>
+ * <a name="sci"><h4>Scientific Notation</h4></a>
  *
  * <p>Numbers in scientific notation are expressed as the product of a mantissa
  * and a power of ten, for example, 1234 can be expressed as 1.234 x 10<sup>3</sup>. The
@@ -394,16 +405,88 @@ import java.io.ObjectInputStream;
  * notation</em>, in which the exponent is a multiple of three, e.g.,
  * "##0.###E0".  The number 12345 is formatted using "##0.####E0" as "12.345E3".
  *
- * <li>The number of significant digits is the sum of the <em>minimum
- * integer</em> and <em>maximum fraction</em> digits, and is unaffected by the
- * maximum integer digits.  If this sum is zero, then all significant digits are
- * shown.  The number of significant digits limits the total number of integer
- * and fraction digits that will be shown in the mantissa; it does not affect
- * parsing.  For example, 12345 formatted with "##0.##E0" is "12.3E3".
+ * <li>If significant digits are not being used, then the number of significant
+ * digits is the sum of the <em>minimum integer</em> and <em>maximum
+ * fraction</em> digits, and is unaffected by the maximum integer digits.  If
+ * this sum is zero, then all significant digits are shown.  The number of
+ * significant digits limits the total number of integer and fraction digits
+ * that will be shown in the mantissa; it does not affect parsing.  For example,
+ * 12345 formatted with "##0.##E0" is "12.3E3".
+ *
+ * <li>If significant digits are being used, then the number of significant
+ * digits is specified directly by the pattern. In this case, the number of
+ * integer digits is fixed at one, and there is no exponent grouping.
  *
  * <li>Exponential patterns may not contain grouping separators.
  * </ul>
  *
+ * <a name="sigdig"><h4>
+ * <strong><font face=helvetica color=red>NEW</font></strong>
+ * Significant Digits</h4></a>
+ *
+ * <p><code>DecimalFormat</code> supports significant digits patterns.
+ * Rather than specifying integer and fraction digit counts, these specify
+ * a minimum and maximum number of significant digits.  These are indicated
+ * by the <code>'@'</code> and <code>'#'</code> characters. Each formatter
+ * object is in one of two modes, in this regard. Either (a) it uses
+ * significant digits, or (b) it uses the integer and fraction digit
+ * counts.
+ *
+ * <ul>
+ * <li>In order to enable significant digits formatting, use a pattern
+ * containing the <code>'@'</code> pattern character.  Alternatively,
+ * call either {@link #setMinimumSignificantDigits} or {@link
+ * #setMaximumSignificantDigits}.
+ *
+ * <li>In order to disable significant digits formatting, use a
+ * pattern containing the <code>'0'</code> pattern
+ * character. Alternatively, call either {@link
+ * #setMinimumIntegerDigits} or {@link #setMaximumIntegerDigits}.
+ *
+ * <li>If a pattern uses significant digits, it may not contain
+ * the <code>'0'</code> character, nor may it include a fraction
+ * element.  Patterns such as <code>'@00'</code> or
+ * <code>'@.###'</code> are disallowed.
+ *
+ * <li>The minimum number of significant digits is the number of
+ * <code>'@'</code> characters.  The maximum number of significant
+ * digits is the number of <code>'@'</code> characters plus the number
+ * of <code>'#'</code> characters following on the right.  For
+ * example, the pattern <code>'@@@'</code> indicates exactly 3
+ * significant digits.  The pattern <code>'@##'</code> indicates from
+ * 1 to 3 significant digits.  Trailing zero digits are suppressed
+ * after the minimum number of significant digits have been shown.
+ * This is similar to the behavior of fraction digits.
+ *
+ * <li>Any number of <code>'#'</code> characters may be prepended to
+ * the left of the leftmost <code>'@'</code> character.  These have no
+ * effect on the minimum and maximum significant digits counts, but
+ * may be used to position grouping separators.  For example,
+ * <code>"#,#@#"</code> indicates a minimum of one significant digits,
+ * a maximum of two significant digits, and a grouping size of three.
+ *
+ * <li>The number of significant digits has no effect on parsing.
+ *
+ * <li>Significant digits may be used together with exponential notation. Such
+ * patterns are equivalent to a normal exponential pattern with a minimum and
+ * maximum integer digit count of one, a minimum fraction digit count of
+ * <code>getMinimumSignificantDigits() - 1</code>, and a maximum fraction digit
+ * count of <code>getMaximumSignificantDigits() - 1</code>. For example, the
+ * pattern <code>"@@###E0"</code> is equivalent to <code>"0.0###E0"</code>.
+ *
+ * <li>Significant digit counts are stored as negative values in the
+ * integer digit count fields. Thus, if significant digits are used,
+ * then {@link #getMinimumIntegerDigits} and {@link
+ * #getMaximumIntegerDigits} will return negative numbers. The
+ * converse is also true. If significant digits are not being used,
+ * then {@link #getMinimumSignificantDigits} and {@link
+ * #getMaximumSignificantDigits} will return non-positive numbers.
+ *
+ * <li>If signficant digits are in use, then the fraction digit counts
+ * are ignored.
+ *
+ * </ul>
+ * 
  * <h4>
  * <strong><font face=helvetica color=red>NEW</font></strong>
  * Padding</h4>
@@ -635,7 +718,8 @@ public class DecimalFormat extends NumberFormat {
         // At this point we are guaranteed a nonnegative finite
         // number.
         synchronized(digitList) {
-            digitList.set(number, precision(false), !useExponentialNotation);
+            digitList.set(number, precision(false),
+                          !useExponentialNotation && !useSignificantDigits());
             return subformat(result, fieldPosition, isNegative, false);
         }
     }
@@ -791,7 +875,8 @@ public class DecimalFormat extends NumberFormat {
         }
 
         synchronized(digitList) {
-            digitList.set(number, precision(false), !useExponentialNotation);
+            digitList.set(number, precision(false),
+                          !useExponentialNotation && !useSignificantDigits());
             return subformat(result, fieldPosition, number.signum() < 0, false);
         }        
     }
@@ -820,7 +905,8 @@ public class DecimalFormat extends NumberFormat {
         }
 
         synchronized(digitList) {
-            digitList.set(number, precision(false), !useExponentialNotation);
+            digitList.set(number, precision(false),
+                          !useExponentialNotation && !useSignificantDigits());
             return subformat(result, fieldPosition, number.signum() < 0, false);
         }        
     }
@@ -848,12 +934,18 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Return the number of digits to show.
+     * Return the number of fraction digits to display, or the total
+     * number of digits for significant digit formats and exponential
+     * formats.
      */
     private int precision(boolean isIntegral) {
-	return useExponentialNotation 
-	    ? getMinimumIntegerDigits() + getMaximumFractionDigits() 
-	    : (isIntegral ? 0 : getMaximumFractionDigits());
+        if (useSignificantDigits()) {
+            return getMaximumSignificantDigits();
+        } else if (useExponentialNotation) {
+            return getMinimumIntegerDigits() + getMaximumFractionDigits();
+        } else {
+            return isIntegral ? 0 : getMaximumFractionDigits();
+        }
     }
 
     /**
@@ -884,17 +976,9 @@ public class DecimalFormat extends NumberFormat {
         char decimal = isCurrencyFormat ?
             symbols.getMonetaryDecimalSeparator() :
             symbols.getDecimalSeparator();
+        boolean useSigDig = useSignificantDigits();
         int maxIntDig = getMaximumIntegerDigits();
         int minIntDig = getMinimumIntegerDigits();
-        if (useExponentialNotation && maxIntDig > MAX_SCIENTIFIC_INTEGER_DIGITS) {
-            maxIntDig = 1;
-	    if (maxIntDig < minIntDig) {
-		maxIntDig = minIntDig;
-	    }
-        }
-        if (useExponentialNotation && maxIntDig > minIntDig) {
-            minIntDig = 1;
-        }
 
         /* Per bug 4147706, DecimalFormat must respect the sign of numbers which
          * format as zero.  This allows sensible computations and preserves
@@ -919,6 +1003,23 @@ public class DecimalFormat extends NumberFormat {
                 fieldPosition.setBeginIndex(-1);
             }
 
+            int minFracDig = 0;
+            if (useSigDig) {
+                maxIntDig = minIntDig = 1;
+                minFracDig = getMinimumSignificantDigits() - 1;
+            } else {
+                minFracDig = getMinimumFractionDigits();
+                if (maxIntDig > MAX_SCIENTIFIC_INTEGER_DIGITS) {
+                    maxIntDig = 1;
+                    if (maxIntDig < minIntDig) {
+                        maxIntDig = minIntDig;
+                    }
+                }
+                if (maxIntDig > minIntDig) {
+                    minIntDig = 1;
+                }
+            }            
+
             // Minimum integer digits are handled in exponential format by
             // adjusting the exponent.  For example, 0.01234 with 3 minimum
             // integer digits is "123.4E-4".
@@ -940,7 +1041,7 @@ public class DecimalFormat extends NumberFormat {
             } else {
                 // No exponent increment is defined; use minimum integer digits.
                 // If none is specified, as in "#E0", generate 1 integer digit.
-                exponent -= (minIntDig > 0 || getMinimumFractionDigits() > 0)
+                exponent -= (minIntDig > 0 || minFracDig > 0)
                     ? minIntDig : 1;
             }
 
@@ -948,8 +1049,7 @@ public class DecimalFormat extends NumberFormat {
             // are more digits, up to the maximum number of digits.  We
             // place the decimal point after the "integer" digits, which
             // are the first (decimalAt - exponent) digits.
-            int minimumDigits = minIntDig
-                                + getMinimumFractionDigits();
+            int minimumDigits = minIntDig + minFracDig;
             // The number of integer digits is handled specially if the number
             // is zero, since then there may be no digits.
             int integerDigits = digitList.isZero() ? minIntDig :
@@ -1035,22 +1135,30 @@ public class DecimalFormat extends NumberFormat {
                 fieldPosition.setBeginIndex(result.length());
             }
 
+            int sigCount = 0;
+            int minSigDig = getMinimumSignificantDigits();
+            int maxSigDig = getMaximumSignificantDigits();
+            if (!useSigDig) {
+                maxSigDig = Integer.MAX_VALUE;
+            }
+
             // Output the integer portion.  Here 'count' is the total
             // number of integer digits we will display, including both
             // leading zeros required to satisfy getMinimumIntegerDigits,
             // and actual digits present in the number.
-            int count = minIntDig;
-            int digitIndex = 0; // Index into digitList.fDigits[]
-            if (digitList.decimalAt > 0 && count < digitList.decimalAt)
+            int count = useSigDig ?
+                Math.max(1, digitList.decimalAt) : minIntDig;
+            if (digitList.decimalAt > 0 && count < digitList.decimalAt) {
                 count = digitList.decimalAt;
+            }
 
             // Handle the case where getMaximumIntegerDigits() is smaller
             // than the real number of integer digits.  If this is so, we
             // output the least significant max integer digits.  For example,
             // the value 1997 printed with 2 max integer digits is just "97".
 
-            if (count > maxIntDig)
-            {
+            int digitIndex = 0; // Index into digitList.fDigits[]
+            if (count > maxIntDig && maxIntDig >= 0) {
                 count = maxIntDig;
                 digitIndex = digitList.decimalAt - count;
             }
@@ -1058,15 +1166,20 @@ public class DecimalFormat extends NumberFormat {
             int sizeBeforeIntegerPart = result.length();
             for (i=count-1; i>=0; --i)
             {
-                if (i < digitList.decimalAt && digitIndex < digitList.count)
-                {
+                if (i < digitList.decimalAt && digitIndex < digitList.count &&
+                    sigCount < maxSigDig) {
                     // Output a real digit
-                    result.append((char)(digitList.digits[digitIndex++] + zeroDelta));
+                    byte d = digitList.digits[digitIndex++];
+                    result.append((char)(d + zeroDelta));
+                    ++sigCount;
                 }
                 else
                 {
-                    // Output a leading zero
+                    // Output a zero (leading or trailing)
                     result.append(zero);
+                    if (sigCount > 0) {
+                        ++sigCount;
+                    }
                 }
 
                 // Output grouping separator if necessary.
@@ -1083,7 +1196,8 @@ public class DecimalFormat extends NumberFormat {
             // Determine whether or not there are any printable fractional
             // digits.  If we've used up the digits we know there aren't.
             boolean fractionPresent = (getMinimumFractionDigits() > 0) ||
-            (!isInteger && digitIndex < digitList.count);
+                (!isInteger && digitIndex < digitList.count) ||
+                sigCount < minSigDig;
 
             // If there is no fraction present, and we haven't printed any
             // integer digits, then print a zero.  Otherwise we won't print
@@ -1100,35 +1214,49 @@ public class DecimalFormat extends NumberFormat {
                 fieldPosition.setBeginIndex(result.length());
             }
 
-            for (i=0; i < getMaximumFractionDigits(); ++i)
-            {
-                // Here is where we escape from the loop.  We escape if we've output
-                // the maximum fraction digits (specified in the for expression above).
-                // We also stop when we've output the minimum digits and either:
-                // we have an integer, so there is no fractional stuff to display,
-                // or we're out of significant digits.
-                if (i >= getMinimumFractionDigits() &&
-                    (isInteger || digitIndex >= digitList.count))
+            count = useSigDig ? Integer.MAX_VALUE : getMaximumFractionDigits();
+            if (useSigDig && (sigCount == maxSigDig ||
+                              (sigCount >= minSigDig && digitIndex == digitList.count))) {
+            	count = 0;   
+            }
+            for (i=0; i < count; ++i) {
+                // Here is where we escape from the loop.  We escape
+                // if we've output the maximum fraction digits
+                // (specified in the for expression above).  We also
+                // stop when we've output the minimum digits and
+                // either: we have an integer, so there is no
+                // fractional stuff to display, or we're out of
+                // significant digits.
+                if (!useSigDig && i >= getMinimumFractionDigits() &&
+                    (isInteger || digitIndex >= digitList.count)) {
                     break;
+                }
 
-                // Output leading fractional zeros.  These are zeros that come after
-                // the decimal but before any significant digits.  These are only
-                // output if abs(number being formatted) < 1.0.
-                if (-1-i > (digitList.decimalAt-1))
-                {
+                // Output leading fractional zeros.  These are zeros
+                // that come after the decimal but before any
+                // significant digits.  These are only output if
+                // abs(number being formatted) < 1.0.
+                if (-1-i > (digitList.decimalAt-1)) {
                     result.append(zero);
                     continue;
                 }
 
                 // Output a digit, if we have any precision left, or a
                 // zero if we don't.  We don't want to output noise digits.
-                if (!isInteger && digitIndex < digitList.count)
-                {
+                if (!isInteger && digitIndex < digitList.count) {
                     result.append((char)(digitList.digits[digitIndex++] + zeroDelta));
-                }
-                else
-                {
+                } else {
                     result.append(zero);
+                }
+
+                // If we reach the maximum number of significant
+                // digits, or if we output all the real digits and
+                // reach the minimum, then we are done.
+                ++sigCount;
+                if (useSigDig &&
+                    (sigCount == maxSigDig ||
+                     (digitIndex == digitList.count && sigCount >= minSigDig))) {
+                    break;
                 }
             }
 
@@ -2732,6 +2860,11 @@ public class DecimalFormat extends NumberFormat {
         StringBuffer result = new StringBuffer();
         char zero = localized ? symbols.getZeroDigit() : PATTERN_ZERO_DIGIT;
         char digit = localized ? symbols.getDigit() : PATTERN_DIGIT;
+        char sigDigit = 0;
+        boolean useSigDig = useSignificantDigits();
+        if (useSigDig) {
+            sigDigit = localized ? symbols.getSignificantDigit() : PATTERN_SIGNIFICANT_DIGIT;
+        }
         char group = localized ? symbols.getGroupingSeparator()
                                : PATTERN_GROUPING_SEPARATOR;
         int i;
@@ -2765,43 +2898,62 @@ public class DecimalFormat extends NumberFormat {
             if (g > 0 && groupingSize2 > 0 && groupingSize2 != groupingSize) {
                 g += groupingSize2;
             }
-            int maxIntDig = getMaximumIntegerDigits();
-            if (useExponentialNotation) {
-                if (maxIntDig > MAX_SCIENTIFIC_INTEGER_DIGITS) {
-                    maxIntDig = 1;
-                }
+            int maxDig = 0, minDig = 0, maxSigDig = 0;
+            if (useSigDig) {
+                minDig = getMinimumSignificantDigits();
+                maxDig = maxSigDig = getMaximumSignificantDigits();
             } else {
-                maxIntDig = (Math.max(Math.max(g, getMinimumIntegerDigits()),
-                          roundingDecimalPos) + 1);
+                minDig = getMinimumIntegerDigits();
+                maxDig = getMaximumIntegerDigits();
             }
-            for (i = maxIntDig; i > 0; --i) {
-                if (!useExponentialNotation && i<maxIntDig &&
+            if (useExponentialNotation) {
+                if (maxDig > MAX_SCIENTIFIC_INTEGER_DIGITS) {
+                    maxDig = 1;
+                }
+            } else if (useSigDig) {
+                maxDig = Math.max(maxDig, g+1);
+            } else {
+                maxDig = Math.max(Math.max(g, getMinimumIntegerDigits()),
+                                  roundingDecimalPos) + 1;
+            }
+            for (i = maxDig; i > 0; --i) {
+                if (!useExponentialNotation && i<maxDig &&
                     isGroupingPosition(i)) {
                     result.append(group);
                 }
-                if (roundingDigits != null) {
-                    int pos = roundingDecimalPos - i;
-                    if (pos >= 0 && pos < roundingDigits.length()) {
-                        result.append((char) (roundingDigits.charAt(pos) - '0' + zero));
+                if (useSigDig) {
+                    //  #@,@###   (maxSigDig == 5, minSigDig == 2)
+                    //  65 4321   (1-based pos, count from the right)
+                    // Use # if pos > maxSigDig or 1 <= pos <= (maxSigDig - minSigDig)
+                    // Use @ if (maxSigDig - minSigDig) < pos <= maxSigDig
+                    result.append((maxSigDig >= i && i > (maxSigDig - minDig)) ? sigDigit : digit);
+                } else {
+                    if (roundingDigits != null) {
+                        int pos = roundingDecimalPos - i;
+                        if (pos >= 0 && pos < roundingDigits.length()) {
+                            result.append((char) (roundingDigits.charAt(pos) - '0' + zero));
+                            continue;
+                        }
+                    }
+                    result.append(i<=minDig ? zero : digit);
+                }
+            }
+            if (!useSigDig) {
+                if (getMaximumFractionDigits() > 0 || decimalSeparatorAlwaysShown) {
+                    result.append(localized ? symbols.getDecimalSeparator() :
+                                  PATTERN_DECIMAL_SEPARATOR);
+                }
+                int pos = roundingDecimalPos;
+                for (i = 0; i < getMaximumFractionDigits(); ++i) {
+                    if (roundingDigits != null &&
+                        pos < roundingDigits.length()) {
+                        result.append(pos < 0 ? zero :
+                                      (char) (roundingDigits.charAt(pos) - '0' + zero));
+                        ++pos;
                         continue;
                     }
+                    result.append(i<getMinimumFractionDigits() ? zero : digit);
                 }
-                result.append(i<=getMinimumIntegerDigits() ? zero : digit);
-            }
-            if (getMaximumFractionDigits() > 0 || decimalSeparatorAlwaysShown) {
-                result.append(localized ? symbols.getDecimalSeparator() :
-                              PATTERN_DECIMAL_SEPARATOR);
-            }
-            int pos = roundingDecimalPos;
-            for (i = 0; i < getMaximumFractionDigits(); ++i) {
-                if (roundingDigits != null &&
-                    pos < roundingDigits.length()) {
-                    result.append(pos < 0 ? zero :
-                                  (char) (roundingDigits.charAt(pos) - '0' + zero));
-                    ++pos;
-                    continue;
-                }
-                result.append(i<getMinimumFractionDigits() ? zero : digit);
             }
             if (useExponentialNotation) {
                 result.append(localized ? symbols.getExponentSeparator() :
@@ -2821,12 +2973,12 @@ public class DecimalFormat extends NumberFormat {
                        : negativePrefix.length() + negativeSuffix.length());
                 while (add > 0) {
                     result.insert(sub0Start, digit);
-                    ++maxIntDig;
+                    ++maxDig;
                     --add;
                     // Only add a grouping separator if we have at least
                     // 2 additional characters to be added, so we don't
                     // end up with ",###".
-                    if (add>1 && isGroupingPosition(maxIntDig)) {
+                    if (add>1 && isGroupingPosition(maxDig)) {
                         result.insert(sub0Start, group);
                         --add;                        
                     }
@@ -2905,12 +3057,13 @@ public class DecimalFormat extends NumberFormat {
      * Does the real work of applying a pattern.
      */
     private void applyPattern(String pattern, boolean localized) {
-        char zeroDigit         = PATTERN_ZERO_DIGIT;
+        char zeroDigit         = PATTERN_ZERO_DIGIT; // '0'
+        char sigDigit          = PATTERN_SIGNIFICANT_DIGIT; // '@'
         char groupingSeparator = PATTERN_GROUPING_SEPARATOR;
         char decimalSeparator  = PATTERN_DECIMAL_SEPARATOR;
         char percent           = PATTERN_PERCENT;
         char perMill           = PATTERN_PER_MILLE;
-        char digit             = PATTERN_DIGIT;
+        char digit             = PATTERN_DIGIT; // '#'
         char separator         = PATTERN_SEPARATOR;
         String exponent        = PATTERN_EXPONENT;
         char plus              = PATTERN_PLUS_SIGN;
@@ -2918,6 +3071,7 @@ public class DecimalFormat extends NumberFormat {
         char minus             = PATTERN_MINUS; //Bug 4212072 [Richard/GCL]
         if (localized) {
             zeroDigit         = symbols.getZeroDigit();
+            sigDigit          = symbols.getSignificantDigit();
             groupingSeparator = symbols.getGroupingSeparator();
             decimalSeparator  = symbols.getDecimalSeparator();
             percent           = symbols.getPercent();
@@ -2954,7 +3108,7 @@ public class DecimalFormat extends NumberFormat {
             StringBuffer suffix = new StringBuffer();
             int decimalPos = -1;
             int multiplier = 1;
-            int digitLeftCount = 0, zeroDigitCount = 0, digitRightCount = 0;
+            int digitLeftCount = 0, zeroDigitCount = 0, digitRightCount = 0, sigDigitCount = 0;
             byte groupingCount = -1;
             byte groupingCount2 = -1;
             int padPos = -1;
@@ -2985,7 +3139,7 @@ public class DecimalFormat extends NumberFormat {
                     // if any (should be in the zero digits).  If there is no
                     // decimal point, then there should be no right digits.
                     if (ch == digit) {
-                        if (zeroDigitCount > 0) {
+                        if (zeroDigitCount > 0 || sigDigitCount > 0) {
                             ++digitRightCount;
                         } else {
                             ++digitLeftCount;
@@ -2993,28 +3147,31 @@ public class DecimalFormat extends NumberFormat {
                         if (groupingCount >= 0 && decimalPos < 0) {
                             ++groupingCount;
                         }
-                    } else if (ch >= zeroDigit && ch <= nineDigit) {
+                    } else if ((ch >= zeroDigit && ch <= nineDigit) ||
+                               ch == sigDigit) {
                         if (digitRightCount > 0) {
-                            throw new IllegalArgumentException(
-                                   "Unexpected '0' in pattern \"" +
-                                   pattern + '"');
+                            patternError("Unexpected '" + ch + '\'', pattern);
                         }
-                        ++zeroDigitCount;
+                        if (ch == sigDigit) {
+                            ++sigDigitCount;
+                        } else {
+                            ++zeroDigitCount;
+                            if (ch != zeroDigit) {
+                                int p = digitLeftCount + zeroDigitCount
+                                    + digitRightCount;
+                                if (incrementPos >= 0) {
+                                    while (incrementPos < p) {
+                                        incrementVal *= 10;
+                                        ++incrementPos;
+                                    }
+                                } else {
+                                    incrementPos = p;
+                                }
+                                incrementVal += ch - zeroDigit;
+                            }
+                        }
                         if (groupingCount >= 0 && decimalPos < 0) {
                             ++groupingCount;
-                        }
-                        if (ch != zeroDigit) {
-                            int p = digitLeftCount + zeroDigitCount
-                                + digitRightCount;
-                            if (incrementPos >= 0) {
-                                while (incrementPos < p) {
-                                    incrementVal *= 10;
-                                    ++incrementPos;
-                                }
-                            } else {
-                                incrementPos = p;
-                            }
-                            incrementVal += ch - zeroDigit;
                         }
                     } else if (ch == groupingSeparator) {
                         /*Bug 4212072
@@ -3040,23 +3197,19 @@ public class DecimalFormat extends NumberFormat {
                                       affix = suffix;
                                       sub0Limit = pos--;
                                     }
-                                  continue;
+                                    continue;
                                 }
                             }
                         }
                         
                         if (decimalPos >= 0) {
-                            throw new IllegalArgumentException(
-                                    "Grouping separator after decimal in pattern \"" +
-                                    pattern + '"');
+                            patternError("Grouping separator after decimal", pattern);
                         }
                         groupingCount2 = groupingCount;
                         groupingCount = 0;
                     } else if (ch == decimalSeparator) {
                         if (decimalPos >= 0) {
-                            throw new IllegalArgumentException(
-                                    "Multiple decimal separators in pattern \"" +
-                                    pattern + '"');
+                            patternError("Multiple decimal separators", pattern);
                         }
                         // Intentionally incorporate the digitRightCount,
                         // even though it is illegal for this to be > 0
@@ -3065,42 +3218,41 @@ public class DecimalFormat extends NumberFormat {
                     } else {
                         if (pattern.regionMatches(pos, exponent, 0, exponent.length())) {
                             if (expDigits >= 0) {
-                                throw new IllegalArgumentException(
-                                        "Multiple exponential " +
-                                        "symbols in pattern \"" +
-                                        pattern + '"');
+                                patternError("Multiple exponential symbols", pattern);
                             }
                             if (groupingCount >= 0) {
-                                throw new IllegalArgumentException(
-                                        "Grouping separator in exponential " +
-                                        "pattern \"" +
-                                        pattern + '"');
+                                patternError("Grouping separator in exponential", pattern);
                             }
+                            pos += exponent.length();
                             // Check for positive prefix
-                            if ((pos+1) < pattern.length()
-                                && pattern.charAt(pos+1) == plus) {
+                            if (pos < pattern.length()
+                                && pattern.charAt(pos) == plus) {
                                 expSignAlways = true;
                                 ++pos;
                             }
                             // Use lookahead to parse out the exponential part of the
                             // pattern, then jump into suffix subpart.
                             expDigits = 0;
-                            while (++pos < pattern.length() &&
+                            while (pos < pattern.length() &&
                                    pattern.charAt(pos) == zeroDigit) {
                                 ++expDigits;
+                                ++pos;
                             }
                             
-                            if ((digitLeftCount + zeroDigitCount) < 1 ||
+                            // 1. Require at least one mantissa pattern digit
+                            // 2. Disallow "#+ @" in mantissa
+                            // 3. Require at least one exponent pattern digit
+                            if (((digitLeftCount + zeroDigitCount) < 1 &&
+                                 (sigDigitCount + digitRightCount) < 1) ||
+                                (sigDigitCount > 0 && digitLeftCount > 0) ||
                                 expDigits < 1) {
-                                throw new IllegalArgumentException(
-                                        "Malformed exponential " +
-                                        "pattern \"" + pattern + '"');
+                                patternError("Malformed exponential", pattern);
                             }
                         }
                         // Transition to suffix subpart
                         subpart = 2; // suffix subpart
                         affix = suffix;
-                        sub0Limit = pos--;
+                        sub0Limit = pos--; // backup: for() will increment
                         continue;
                     }
                     break;
@@ -3116,7 +3268,8 @@ public class DecimalFormat extends NumberFormat {
                     if (ch == digit ||
                         ch == groupingSeparator ||
                         ch == decimalSeparator ||
-                        (ch >= zeroDigit && ch <= nineDigit)) {
+                        (ch >= zeroDigit && ch <= nineDigit) ||
+                        ch == sigDigit) {
                         // Any of these characters implicitly begins the
                         // next subpart if we are in the prefix
                         if (subpart == 1) { // prefix subpart
@@ -3141,7 +3294,7 @@ public class DecimalFormat extends NumberFormat {
                             }
                             continue;
                         }
-                        throw new IllegalArgumentException("Unquoted special character");
+                        patternError("Unquoted special character '" + ch + '\'', pattern);
                     } else if (ch == CURRENCY_SIGN) {
                         // Use lookahead to determine if the currency sign is
                         // doubled or not.
@@ -3173,19 +3326,14 @@ public class DecimalFormat extends NumberFormat {
                         // Don't allow separators in the prefix, and don't allow
                         // separators in the second pattern (part == 1).
                         if (subpart == 1 || part == 1) {
-                            throw new IllegalArgumentException(
-                                    "Unquoted special character '" +
-                                    ch + "' in pattern \"" +
-                                    pattern + '"');
+                            patternError("Unquoted special character '" + ch + '\'', pattern);
                         }
                         sub2Limit = pos++;
                         break PARTLOOP; // Go to next part
                     } else if (ch == percent || ch == perMill) {
                         // Next handle characters which are appended directly.
                         if (multiplier != 1) {
-                            throw new IllegalArgumentException(
-                                    "Too many percent/permille characters "
-                                    + "in pattern \"" + pattern + '"');
+                            patternError("Too many percent/permille characters", pattern);
                         }
                         multiplier = (ch == percent) ? 100 : 1000;
                         // Convert to non-localized pattern
@@ -3197,12 +3345,10 @@ public class DecimalFormat extends NumberFormat {
                         // Fall through to append(ch)
                     } else if (ch == padEscape) {
                         if (padPos >= 0) {
-                            throw new IllegalArgumentException(
-                                    "Multiple pad specifiers");
+                            patternError("Multiple pad specifiers", pattern);
                         }
                         if ((pos+1) == pattern.length()) {
-                            throw new IllegalArgumentException(
-                                    "Invalid pad specifier");
+                            patternError("Invalid pad specifier", pattern);
                         }
                         padPos = pos++; // Advance past pad char
                         padChar = pattern.charAt(pos);
@@ -3235,7 +3381,7 @@ public class DecimalFormat extends NumberFormat {
             }
             
             if (subpart == 3 || subpart == 4) {
-                throw new IllegalArgumentException("Unterminated quote in " + pattern);
+                patternError("Unterminated quote", pattern);
             }
 
             if (sub0Limit == 0) {
@@ -3259,7 +3405,8 @@ public class DecimalFormat extends NumberFormat {
              * "#" to become "#0" when toPattern() is called (even though that's
              * what it really is, semantically).
              */
-            if (zeroDigitCount == 0 && digitLeftCount > 0 && decimalPos >= 0) {
+            if (zeroDigitCount == 0 && sigDigitCount == 0 &&
+                digitLeftCount > 0 && decimalPos >= 0) {
                 // Handle "###.###" and "###." and ".###"
                 int n = decimalPos;
                 if (n == 0) ++n; // Handle ".###"
@@ -3269,14 +3416,15 @@ public class DecimalFormat extends NumberFormat {
             }
 
             // Do syntax checking on the digits, decimal points, and quotes.
-            if ((decimalPos < 0 && digitRightCount > 0) ||
+            if ((decimalPos < 0 && digitRightCount > 0 && sigDigitCount == 0) ||
                 (decimalPos >= 0 &&
-                 (decimalPos < digitLeftCount ||
+                 (sigDigitCount > 0 ||
+                  decimalPos < digitLeftCount ||
                   decimalPos > (digitLeftCount + zeroDigitCount))) ||
                 groupingCount == 0 || groupingCount2 == 0 ||
+                (sigDigitCount > 0 && zeroDigitCount > 0) ||
                 subpart > 2) { // subpart > 2 == unmatched quote
-                throw new IllegalArgumentException("Malformed pattern \"" +
-                                                   pattern + '"');
+                patternError("Malformed pattern", pattern);
             }
 
             // Make sure pad is at legal position before or after affix.
@@ -3290,7 +3438,7 @@ public class DecimalFormat extends NumberFormat {
                 } else if (padPos+2 == sub2Limit) {
                     padPos = PAD_AFTER_SUFFIX;
                 } else {
-                    throw new IllegalArgumentException("Illegal pad position");
+                    patternError("Illegal pad position", pattern);
                 }
             }
 
@@ -3316,16 +3464,22 @@ public class DecimalFormat extends NumberFormat {
                 // decimalPos<0, then digitTotalCount == digitLeftCount +
                 // zeroDigitCount.
                 int effectiveDecimalPos = decimalPos >= 0 ? decimalPos : digitTotalCount;
-                setMinimumIntegerDigits(effectiveDecimalPos - digitLeftCount);
-                /*Upper limit on integer and fraction digits for a Java double
-                  [Richard/GCL]
-                */
-                setMaximumIntegerDigits(useExponentialNotation
-                        ? digitLeftCount + getMinimumIntegerDigits() : DOUBLE_INTEGER_DIGITS);
-                setMaximumFractionDigits(decimalPos >= 0
+                if (sigDigitCount > 0) {
+                    setMinimumSignificantDigits(sigDigitCount);
+                    setMaximumSignificantDigits(sigDigitCount + digitRightCount);
+                } else {
+                    int minInt = effectiveDecimalPos - digitLeftCount;
+                    setMinimumIntegerDigits(minInt);
+                    /*Upper limit on integer and fraction digits for a Java double
+                      [Richard/GCL]
+                    */
+                    setMaximumIntegerDigits(useExponentialNotation
+                        ? digitLeftCount + minInt : DOUBLE_INTEGER_DIGITS);
+                    setMaximumFractionDigits(decimalPos >= 0
                         ? (digitTotalCount - decimalPos) : 0);
-                setMinimumFractionDigits(decimalPos >= 0
+                    setMinimumFractionDigits(decimalPos >= 0
                         ? (digitLeftCount + zeroDigitCount - decimalPos) : 0);
+                }
                 setGroupingUsed(groupingCount > 0);
                 this.groupingSize = (groupingCount > 0) ? groupingCount : 0;
                 this.groupingSize2 = (groupingCount2 > 0 && groupingCount2 != groupingCount)
@@ -3406,6 +3560,10 @@ public class DecimalFormat extends NumberFormat {
         setLocale(null, null);
     }
 
+    private void patternError(String msg, String pattern) {
+        throw new IllegalArgumentException(msg + " in pattern \"" + pattern + '"');
+    }
+
     /*Rewrite the following 4 "set" methods
       Upper limit on integer and fraction digits for a Java double 
       [Richard/GCL]
@@ -3428,6 +3586,76 @@ public class DecimalFormat extends NumberFormat {
      */
     public void setMinimumIntegerDigits(int newValue) {
         super.setMinimumIntegerDigits(Math.min(newValue, DOUBLE_INTEGER_DIGITS));
+    }
+
+    /**
+     * Returns the minimum number of significant digits that will be
+     * displayed.
+     * @return the fewest significant digits that will be shown, or a
+     * non-positive value if significant digits are not in use
+     * @draft ICU 3.0
+     */
+    public int getMinimumSignificantDigits() {
+        return -getMinimumIntegerDigits();
+    }
+
+    /**
+     * Returns the maximum number of significant digits that will be
+     * displayed.
+     * @return the most significant digits that will be shown, or a
+     * non-positive value if significant digits are not in use
+     * @draft ICU 3.0
+     */
+    public int getMaximumSignificantDigits() {
+        return -getMaximumIntegerDigits();
+    }
+
+    /**
+     * Sets the minimum number of significant digits that will be
+     * displayed.  If <code>min</code> is less than one then it is set
+     * to one.  If the maximum significant digits count is less than
+     * <code>min</code>, then it is set to <code>min</code>.  If
+     * significant digits were not in use before this call, then the
+     * maximum significant digits count will be set to
+     * <code>min</code>.
+     * @param min the fewest significant digits to be shown 
+     * @draft ICU 3.0
+     */
+    public void setMinimumSignificantDigits(int min) {
+        if (min < 1) {
+            min = 1;   
+        }
+        // pin max sig dig to >= min; if unset, use min
+        int max = Math.max(getMaximumSignificantDigits(), min);
+        internalSetMinimumIntegerDigits(-min);
+        internalSetMaximumIntegerDigits(-max);
+    }
+
+    /**
+     * Sets the maximum number of significant digits that will be
+     * displayed.  If <code>max</code> is less than one then it is set
+     * to one.  If the minimum significant digits count is greater
+     * than <code>max</code>, then it is set to <code>max</code>.  If
+     * significant digits were not in use before this call, then the
+     * minimum significant digits count will be set to one.
+     * @param min the most significant digits to be shown 
+     * @draft ICU 3.0
+     */
+    public void setMaximumSignificantDigits(int max) {
+        if (max < 1) {
+            max = 1;
+        }
+        // pin min sig dig to 1..max; if unset, use 1
+        int min = Math.min(Math.max(getMinimumSignificantDigits(), 1), max);
+        internalSetMinimumIntegerDigits(-min);
+        internalSetMaximumIntegerDigits(-max);
+    }
+
+    /**
+     * Returns true if significant digits are in use.
+     */
+    private final boolean useSignificantDigits() {
+        return getMinimumIntegerDigits() < 0;
     }
 
     /**
@@ -3867,6 +4095,7 @@ public class DecimalFormat extends NumberFormat {
     private static final char       PATTERN_GROUPING_SEPARATOR = ',';
     private static final char       PATTERN_DECIMAL_SEPARATOR  = '.';
     private static final char       PATTERN_DIGIT              = '#';
+            static final char       PATTERN_SIGNIFICANT_DIGIT  = '@';
             static final String     PATTERN_EXPONENT           = "E"; // [NEW]
             static final char       PATTERN_PLUS_SIGN          = '+'; // [NEW]
 
