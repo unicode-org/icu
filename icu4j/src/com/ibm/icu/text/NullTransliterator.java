@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NullTransliterator.java,v $ 
- * $Date: 2000/06/28 20:49:54 $ 
- * $Revision: 1.8 $
+ * $Date: 2001/09/20 21:20:39 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -21,9 +21,10 @@ public class NullTransliterator extends Transliterator {
         "\u00A9 IBM Corporation 2000. All rights reserved.";
 
     /**
-     * Package accessible ID for this transliterator.
+     * Package accessible IDs for this transliterator.
      */
-    static String _ID = "Null";
+    static String SHORT_ID = "Null";
+    static String _ID      = "Any-Null";
 
     /**
      * Constructs a transliterator.

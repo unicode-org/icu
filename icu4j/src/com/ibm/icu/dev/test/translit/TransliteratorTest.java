@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $ 
- * $Date: 2001/09/19 17:44:09 $ 
- * $Revision: 1.43 $
+ * $Date: 2001/09/20 21:21:10 $ 
+ * $Revision: 1.44 $
  *
  *****************************************************************************************
  */
@@ -961,6 +961,26 @@ public class TransliteratorTest extends TestFmwk {
         }
     }
     
+    /**
+     * Test inverse of Greek-Latin; Title()
+     */
+    public void TestCompoundInverse() {
+        Transliterator t = Transliterator.getInstance
+            ("Greek-Latin; Title()", Transliterator.REVERSE);
+        if (t == null) {
+            errln("FAIL: createInstance");
+            return;
+        }
+        String exp = "(Title);Latin-Greek";
+        if (t.getID().equals(exp)) {
+            logln("Ok: inverse of \"Greek-Latin; Title()\" is \"" +
+                  t.getID());
+        } else {
+            errln("FAIL: inverse of \"Greek-Latin; Title()\" is \"" +
+                  t.getID() + "\", expected \"" + exp + "\"");
+        }
+    }
+
     //======================================================================
     // Support methods
     //======================================================================

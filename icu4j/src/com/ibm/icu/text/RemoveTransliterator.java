@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RemoveTransliterator.java,v $ 
- * $Date: 2001/04/04 18:06:53 $ 
- * $Revision: 1.1 $
+ * $Date: 2001/09/20 21:20:39 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -22,7 +22,7 @@ public class RemoveTransliterator extends Transliterator {
     /**
      * Package accessible ID for this transliterator.
      */
-    static String _ID = "Remove";
+    static String _ID = "Any-Remove";
 
     /**
      * Constructs a transliterator.
