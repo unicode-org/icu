@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_Oriya_InterIndic.txt
-// Date: Tue Nov 13 00:51:08 2001
+// Date: Tue Nov 20 21:43:02 2001
 //--------------------------------------------------------------------
 
 // Oriya_InterIndic

@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_InterIndic_Tamil.txt
-// Date: Tue Nov 13 00:51:08 2001
+// Date: Tue Nov 20 21:43:01 2001
 //--------------------------------------------------------------------
 
 // InterIndic_Tamil
@@ -69,6 +69,7 @@ translit_InterIndic_Tamil {
 "\ue025>\u0ba4;" // REMAP (indicExceptions.txt): \u0ba5>\u0ba4 = LETTER THA>LETTER TA
 "\ue026>\u0ba4;" // REMAP (indicExceptions.txt): \u0ba6>\u0ba4 = LETTER DA>LETTER TA
 "\ue027>\u0ba4;" // REMAP (indicExceptions.txt): \u0ba7>\u0ba4 = LETTER DHA>LETTER TA
+"\ue028\ue03c>\u0ba9;"
 "\ue028>\u0ba8;" // LETTER NA
 "\ue029>\u0ba9;" // LETTER NNNA
 "\ue02a>\u0baa;" // LETTER PA
@@ -77,9 +78,11 @@ translit_InterIndic_Tamil {
 "\ue02d>\u0baa;" // REMAP (indicExceptions.txt): \u0bad>\u0baa = LETTER BHA>LETTER PA
 "\ue02e>\u0bae;" // LETTER MA
 "\ue02f>\u0baf;" // LETTER YA
+"\ue030\ue03c>\u0bb1;"
 "\ue030>\u0bb0;" // LETTER RA
 "\ue031>\u0bb1;" // LETTER RRA
 "\ue032>\u0bb2;" // LETTER LA
+"\ue033\ue03c>\u0bb4"
 "\ue033>\u0bb3;" // LETTER LLA
 "\ue034>\u0bb4;" // LETTER LLLA
 "\ue035>\u0bb5;" // LETTER VA
@@ -108,7 +111,10 @@ translit_InterIndic_Tamil {
 "\ue04c>\u0bcc;" // VOWEL SIGN AU
 "\ue04d>\u0bcd;" // SIGN VIRAMA
 "\ue050>\u0b93\u0bae\u0bcd;" // REMAP (indicExceptions.txt): \u0bd0>\u0b93\u0bae\u0bcd = OM>LETTER OO.LETTER MA.SIGN VIRAMA
-
+"\ue051>;"
+"\ue052>;"
+"\ue053>;"
+"\ue054>;"
 "\ue055>;" // UNMAPPED InterIndic-Tamil: LENGTH MARK
 "\ue056>\u0bc8;" // REMAP (indicExceptions.txt): \u0bd6>\u0bc8 = AI LENGTH MARK>VOWEL SIGN AI
 "\ue057>\u0bd7;" // AU LENGTH MARK
@@ -147,6 +153,8 @@ translit_InterIndic_Tamil {
 
 
 "\ue080>;" // UNMAPPED InterIndic-Tamil: ISSHAR
+"\ue070>;"
+"\ue071>;"
 "\ue072>;"
 "\ue073>;"
 "\ue074>;"
