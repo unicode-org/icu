@@ -466,7 +466,6 @@ struct UCollator {
     UChar *rules;
     UChar zero;
     UDataInfo dataInfo;               /* Data info of UCA table */
-    uint8_t trVersion;                /* version info of tailoring rules*/
 };
 
 /* various internal functions */

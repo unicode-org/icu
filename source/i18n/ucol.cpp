@@ -300,7 +300,6 @@ ucol_open(    const    char         *loc,
   if(*status == U_MISSING_RESOURCE_ERROR) { /* if we don't find tailoring, we'll fallback to UCA */
     result = UCA;
     *status = U_USING_DEFAULT_ERROR;
-    result->trVersion=NULL;
     ures_close(binary);
   } else if(U_SUCCESS(*status)) { /* otherwise, we'll pick a collation data that exists */
     int32_t len = 0;
