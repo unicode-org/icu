@@ -19,6 +19,22 @@
 		</special>
 	</characters>
   <dates>
+    <calendars>
+     <calendar type="chinese" >
+       <special xmlns:icu="http://oss.software.ibm.com/icu/" >
+        <!--
+         IsLeapMonth {
+                "",
+                "*"
+           }
+         -->
+          <icu:isLeapMonth>
+            <icu:nonLeapSymbol></icu:nonLeapSymbol>
+            <icu:leapSymbol>*</icu:leapSymbol>
+          </icu:isLeapMonth>
+        </special>
+      </calendar>
+    </calendars>
     <timeZoneNames>
       <zone type="">
         <long>
