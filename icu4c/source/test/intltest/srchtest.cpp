@@ -2192,7 +2192,7 @@ int32_t TestSearch::handlePrev(int32_t start, UErrorCode &status)
 
 TestSearch & TestSearch::operator=(const TestSearch &that)
 {
-    this->operator =(that);
+	this->SearchIterator::operator=(that);
     m_offset_ = that.m_offset_;
     m_pattern_ = that.m_pattern_;
     return *this;
@@ -2205,11 +2205,11 @@ void StringSearchTest::TestSubclass()
     TestSearch search(text, NULL, pattern);
     TestSearch search2(search);
     int expected[] = {0, 4, 9};
-    UErrorCode status = U_ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR; 
     int i;
     StringCharacterIterator chariter(text);
 
-    search.setText(text, status);
+	search.setText(text, status);
     if (search.getText() != search2.getText()) {
         errln("Error setting text");
     }
