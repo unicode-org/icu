@@ -32,7 +32,7 @@ public:
   virtual int32_t getNextTestCase(UnicodeString * testCase, int32_t capacity, UErrorCode &status);
 private:
   UResourceBundle *getTestBundle(const char* bundleName);
-  const char* loadTestData(UErrorCode& err);
+  char* loadTestData(UErrorCode& err);
   UBool initSettingsAndCases(UErrorCode &status);
   int32_t fillSettingsArrays(UResourceBundle *res, const char **names, UnicodeString * values, int32_t capacity, UErrorCode &status);
 
@@ -47,6 +47,7 @@ private:
   UResourceBundle *fTestCases;
   UResourceBundle *fCurrentCase;
   UBool fDataTestValid;
+  char *tdpath;
 };
 
 #endif

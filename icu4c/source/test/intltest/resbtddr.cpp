@@ -7,11 +7,8 @@
 /* Created by weiv 05/09/2002 */
 
 #include "resbtddr.h"
+#include "cmemory.h"
 #include "cstring.h"
-
-// TODO: this is bad - be smarter, although if on level with IntlTest, it might be good
-static char* _testDataPath=NULL;
-
 
 ResBundTestDataDriver::ResBundTestDataDriver(const char* testName, UErrorCode &status)
 : TestDataDriver(testName),
@@ -24,7 +21,8 @@ ResBundTestDataDriver::ResBundTestDataDriver(const char* testName, UErrorCode &s
   fTestSettings(NULL),
   fCurrentSettings(NULL),
   fTestCases(NULL),
-  fCurrentCase(NULL)
+  fCurrentCase(NULL),
+  tdpath(NULL)
 {
   fNumberOfTests = 0;
   fDataTestValid = TRUE;
@@ -54,6 +52,7 @@ ResBundTestDataDriver::~ResBundTestDataDriver()
   ures_close(fCurrentSettings);
   ures_close(fTestCases);
   ures_close(fCurrentCase);
+  uprv_free(tdpath);
 }
 
 void 
@@ -186,11 +185,8 @@ ResBundTestDataDriver::getTestBundle(const char* bundleName)
     UErrorCode status = U_ZERO_ERROR;
     UResourceBundle *testBundle = NULL;
     const char* icu_data = (char*)loadTestData(status);
-    char testBundlePath[256] = {'\0'};
-    strcpy(testBundlePath, icu_data);
-    //strcat(testBundlePath, U_FILE_SEP_STRING".."U_FILE_SEP_STRING"build"U_FILE_SEP_STRING);
     if (testBundle == NULL) {
-        testBundle = ures_openDirect(testBundlePath, bundleName, &status);
+        testBundle = ures_openDirect(icu_data, bundleName, &status);
         if (status != U_ZERO_ERROR) {
             errln(UnicodeString("Failed: could not load test data from resourcebundle: ") + UnicodeString(bundleName));
             fDataTestValid = FALSE;
@@ -199,16 +195,15 @@ ResBundTestDataDriver::getTestBundle(const char* bundleName)
     return testBundle;
 }
 
-const char* 
+char* 
 ResBundTestDataDriver::loadTestData(UErrorCode& err){
     const char*      directory=NULL;
     UResourceBundle* test =NULL;
-    char* tdpath=NULL;
     const char* tdrelativepath = ".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
-    if( _testDataPath == NULL){
+    if( tdpath == NULL){
         directory= u_getDataDirectory();
     
-        tdpath = new char[(( strlen(directory) * strlen(tdrelativepath)) + 10)];//(char*) ctst_malloc(sizeof(char) *(( strlen(directory) * strlen(tdrelativepath)) + 10));
+        tdpath = (char*) uprv_malloc(sizeof(char) *(( strlen(directory) * strlen(tdrelativepath)) + 10));
 
 
         /* u_getDataDirectory shoul return \source\data ... set the
@@ -242,12 +237,10 @@ ResBundTestDataDriver::loadTestData(UErrorCode& err){
                 return "";
             }
             ures_close(test);
-            _testDataPath = tdpath;
-            return _testDataPath;
+            return tdpath;
         }
         ures_close(test);
-        _testDataPath = tdpath;
-        return _testDataPath;
+        return tdpath;
     }
-    return _testDataPath;
+    return tdpath;
 }

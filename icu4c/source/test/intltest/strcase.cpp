@@ -340,6 +340,7 @@ StringCaseTest::TestTitleCasing() {
               errln("error: TestTitleCasing() got a wrong result for test case from casing.res");
           }
       }
+      ubrk_close(iter);
     }
   }
   delete driver;
