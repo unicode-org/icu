@@ -1,6 +1,6 @@
 ## -*-makefile-*-
 ## Aix-specific setup (for xlC)
-## Copyright (c) 1999-2003, International Business Machines Corporation and
+## Copyright (c) 1999-2004, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
 ## Please note: AIX does NOT have library versioning per se (there is no 'SONAME' capability). 

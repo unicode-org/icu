@@ -1,5 +1,5 @@
 ## -*-makefile-*-
-## Copyright (c) 2003 IBM, Ken Foskey, and others. All rights reserved.
+## Copyright (c) 2003-2004 IBM, Ken Foskey, and others. All rights reserved.
 ##
 ## Aix-specific setup (for gcc)
 ##

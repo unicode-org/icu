@@ -1,4 +1,4 @@
-﻿// Copyright (c) 1998-2003 IBM, Inc. and others.
+﻿// Copyright (c) 1998-2004 IBM, Inc. and others.
 //
 // Maltese locale.
 // Maintained by srl@monkey.sbay.org [See below for full credits]
