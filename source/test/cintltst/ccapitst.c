@@ -162,6 +162,8 @@ static void TestConvert()
     UConverterToUCallback oldToUAction = NULL;
     const void* oldFromUContext = NULL;
     const void* oldToUContext = NULL;
+    UEnumeration *allNamesEnum = NULL;
+    int32_t allNamesCount = 0;
 
     /* Allocate memory */
     mytarget = (char*) malloc(MAX_FILE_LEN * sizeof(mytarget[0]));
@@ -179,12 +181,28 @@ static void TestConvert()
 
     /*Calling all the UnicodeConverterCPP API and checking functionality*/
 
+    log_verbose("Testing ucnv_openAllNames()...");
+    allNamesEnum = ucnv_openAllNames(&err);
+    if(U_FAILURE(err)) {
+        log_err("FAILURE! ucnv_openAllNames() -> %s\n", myErrorName(err));
+    }
+    else {
+        const char *string = NULL;
+        int32_t len = 0;
+        allNamesCount = uenum_count(allNamesEnum, &err);
+        while ((string = uenum_next(allNamesEnum, &len, &err))) {
+            log_verbose("read \"%s\", length %i\n", string, len);
+        }
+    }
+    uenum_close(allNamesEnum);
+    err = U_ZERO_ERROR;
+
     /*Tests ucnv_getAvailableName(), getAvialableCount()*/
 
     log_verbose("Testing ucnv_countAvailable()...");
 
     testLong1=ucnv_countAvailable();
-    log_info("Number of available Codepages: %d\n", testLong1);
+    log_info("Number of available Codepages: %d/%d\n", testLong1, allNamesCount);
 
     log_verbose("\n---Testing ucnv_getAvailableName..");  /*need to check this out */
 

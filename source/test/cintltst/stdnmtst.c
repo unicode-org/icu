@@ -22,6 +22,7 @@
 
 static void TestStandardName(void);
 static void TestStandardNames(void);
+static void TestCanonicalName(void);
 
 void addStandardNamesTest(TestNode** root);
 
@@ -31,6 +32,7 @@ addStandardNamesTest(TestNode** root)
 {
   addTest(root, &TestStandardName,  "stdnmtst/TestStandardName");
   addTest(root, &TestStandardNames, "stdnmtst/TestStandardNames");
+  addTest(root, &TestCanonicalName, "stdnmtst/TestCanonicalName");
 }
 
 static int dotestname(const char *name, const char *standard, const char *expected) {
@@ -61,7 +63,7 @@ static void TestStandardName()
 
     /* Iterate over all standards. */
 
-    for (i = 0, count = ucnv_countStandards(); i < count; ++i) {
+    for (i = 0, count = ucnv_countStandards(); i < count-1; ++i) {
         const char *standard;
 
         err = U_ZERO_ERROR;
@@ -76,7 +78,13 @@ static void TestStandardName()
         }
     }
     err = U_ZERO_ERROR;
-    if (ucnv_getStandard(i, &err)) {
+    /* "" must be last */
+    if (*ucnv_getStandard((uint16_t)(count-1), &err) != 0) {
+        log_err("FAIL: ucnv_getStandard(%d) should return ""\n", count-1);
+        res = 0;
+    }
+    err = U_ZERO_ERROR;
+    if (ucnv_getStandard(++i, &err)) {
         log_err("FAIL: ucnv_getStandard(%d) should return NULL\n", i);
         res = 0;
     }
@@ -99,6 +107,50 @@ static void TestStandardName()
         dotestname("LMBCS-1", "MIME", NULL))
     {
         log_verbose("PASS: getting IANA and MIME standard names works\n");
+    }
+}
+
+static int dotestconv(const char *name, const char *standard, const char *expected) {
+    int res = 1;
+
+    UErrorCode error;
+    const char *tag;
+
+    error = U_ZERO_ERROR;
+    tag = ucnv_getCanonicalName(name, standard, &error);
+    if (tag && !expected) {
+        log_err("FAIL: Unexpectedly found %s canonical name for %s, got %s\n", standard, name, tag);
+        res = 0;
+    } else if (!tag && expected) {
+        log_err("FAIL: could not find %s canonical name for %s\n", (standard ? "\"\"" : standard), name);
+        res = 0;
+    } else if (expected && (name == tag || uprv_strcmp(expected, tag))) {
+        log_err("FAIL: expected %s for %s canonical name for %s, got %s\n", expected, standard, name, tag);
+        res = 0;
+    }
+
+    return res;
+}
+
+static void TestCanonicalName()
+{
+    /* Test for some expected results. */
+
+    if (dotestconv("UTF-8", "IANA", "UTF-8") &&     /* default name */
+        dotestconv("UTF-8", "MIME", "UTF-8") &&     /* default name */
+        dotestconv("ibm-1208", "IBM", "UTF-8") &&   /* default name */
+        dotestconv("ibm-5305", "IBM", "UTF-8") &&   /* non-default name */
+        dotestconv("ibm-5305", "MIME", NULL) &&     /* mapping does not exist */
+        dotestconv("ascii", "MIME", NULL) &&        /* mapping does not exist */
+        dotestconv("ibm-1208", "IANA", NULL) &&     /* mapping does not exist */
+        dotestconv("ibm-5305", "IANA", NULL) &&     /* mapping does not exist */
+        dotestconv("cp1208", "", "UTF-8") &&        /* default name due to ordering */
+        dotestconv("cp65001", "", "UTF-8") &&        /* non-default name due to ordering */
+        dotestconv("ISO-2022", "MIME", "ISO_2022") &&/* default name */
+        dotestconv("crazy", "MIME", NULL) &&
+        dotestconv("ASCII", "crazy", NULL))
+    {
+        log_verbose("PASS: getting IANA and MIME canonical names works\n");
     }
 }
 
