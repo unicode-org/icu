@@ -137,7 +137,7 @@ uint8_t gByteLocaleCache[LOCALE_CACHE_SIZE];
 
 Locale *gLocaleCache = NULL;
 
-Locale::LocaleProxy::operator const class Locale&(void) const
+Locale::LocaleProxy::operator const Locale&(void) const
 {
     return Locale::getLocale(magicLocaleNumber);
 }
