@@ -492,6 +492,42 @@ typedef struct {
       uint8_t reserved[64];                 /* for future use */
 } UCATableHeader;
 
+
+/* This is the first structure in a state */
+/* it should be machine independent */
+typedef struct {
+  /* this structure is supposed to be readable on all the platforms.*/
+  /* first 2 fields hold the size of the structure in a platform independent way */
+  uint8_t sizeLo;
+  uint8_t sizeHi;
+  /* identifying the writing platform */
+  uint8_t isBigEndian;
+  /* see U_CHARSET_FAMILY values in utypes.h */
+  uint8_t charsetFamily;
+  /* version of ICU this state structure comes from */
+  uint8_t icuVersion[4];
+} UStatusStruct;
+
+/* This structure follows UStatusStruct */
+/* and contains data specific for the collators */
+/* Endianess needs to be decided before accessing this structure */
+/* However, it's size IS endianess independent */
+typedef struct {
+  /* size of this structure */
+  uint8_t sizeLo;
+  uint8_t sizeHi;
+  uint8_t reserved[2];
+  char charsetName[32];                 /* for charset CEs */
+  char locale[32];                      /* this is the resolved locale name*/
+  uint32_t variableTopValue;
+  UColAttributeValue frenchCollation;
+  UColAttributeValue alternateHandling; /* attribute for handling variable elements*/
+  UColAttributeValue caseFirst;         /* who goes first, lower case or uppercase */
+  UColAttributeValue caseLevel;         /* do we have an extra case level */
+  UColAttributeValue normalizationMode; /* attribute for normalization */
+  UColAttributeValue strength;          /* attribute for strength */
+} UColStatusStruct;
+
 #define UCOL_INV_SIZEMASK 0xFFF00000
 #define UCOL_INV_OFFSETMASK 0x000FFFFF
 #define UCOL_INV_SHIFTVALUE 20
