@@ -106,11 +106,12 @@ no {
 
     zoneStrings { 
         {
-                "Africa/Casablanca",
-                "GMT",
-                "GMT",
-                "GMT",
-                "GMT",
+                "Europe/Oslo",
+                "Central European Time",
+                "CET",
+                "Central European Time (DST)",
+                "CET",
+                "Oslo"
         }
     }
 }
