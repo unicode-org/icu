@@ -86,20 +86,17 @@ le_int32 MarkToLigaturePositioningSubtable::process(GlyphIterator *glyphIterator
     float anchorDiffX = ligatureAnchor.fX - markAnchor.fX;
     float anchorDiffY = ligatureAnchor.fY - markAnchor.fY;
 
-    if (glyphIterator->isRightToLeft()) {
-        float adjustX = markAdvance.fX + anchorDiffX;
+    glyphIterator->setCurrGlyphBaseOffset(ligatureIterator.getCurrStreamPosition());
 
-        glyphIterator->adjustCurrGlyphPositionAdjustment(anchorDiffX, -anchorDiffY, -adjustX, anchorDiffY);
+    if (glyphIterator->isRightToLeft()) {
+        glyphIterator->adjustCurrGlyphPositionAdjustment(anchorDiffX, anchorDiffY, -markAdvance.fX, -markAdvance.fY);
     } else {
         LEPoint ligatureAdvance;
 
         fontInstance->getGlyphAdvance(ligatureGlyph, pixels);
         fontInstance->pixelsToUnits(pixels, ligatureAdvance);
 
-        float adjustX = ligatureAdvance.fX - anchorDiffX;
-        float advAdjustX = adjustX - markAdvance.fX;
-
-        glyphIterator->adjustCurrGlyphPositionAdjustment(-adjustX, -anchorDiffY, advAdjustX, anchorDiffY);
+        glyphIterator->adjustCurrGlyphPositionAdjustment(anchorDiffX - ligatureAdvance.fX, -anchorDiffY - ligatureAdvance.fY, -markAdvance.fX, -markAdvance.fY);
     }
 
     return 1;

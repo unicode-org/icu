@@ -15,7 +15,7 @@
 #include "GlyphPositioningTables.h"
 #include "SinglePositioningSubtables.h"
 #include "PairPositioningSubtables.h"
-//#include "CursivePositioningSubtables.h"
+#include "CursiveAttachmentSubtables.h"
 #include "MarkToBasePosnSubtables.h"
 #include "MarkToLigaturePosnSubtables.h"
 #include "MarkToMarkPosnSubtables.h"
@@ -76,15 +76,13 @@ le_uint32 GlyphPositioningLookupProcessor::applySubtable(const LookupSubtable *l
         break;
     }
 
-#if 0
     case gpstCursive:
     {
-        const CursivePositioningSubtable *subtable = (const CursivePositioningSubtable *) lookupSubtable;
+        const CursiveAttachmentSubtable *subtable = (const CursiveAttachmentSubtable *) lookupSubtable;
 
         delta = subtable->process(glyphIterator, fontInstance);
         break;
     }
-#endif
 
     case gpstMarkToBase:
     {

@@ -35,16 +35,33 @@ public:
     le_bool isRightToLeft() const;
     le_bool ignoresMarks() const;
 
+    le_bool baselineIsLogicalEnd() const;
+    le_bool hasCursiveFirstExitPoint() const;
+    le_bool hasCursiveLastExitPoint() const;
+
     LEGlyphID getCurrGlyphID() const;
     le_int32  getCurrStreamPosition() const;
-    void   getCurrGlyphPositionAdjustment(GlyphPositionAdjustment& adjustment) const;
+    void   getCurrGlyphPositionAdjustment(GlyphPositionAdjustment &adjustment) const;
 
     le_int32  getMarkComponent(le_int32 markPosition) const;
+
+    void getCursiveLastExitPoint(LEPoint &exitPoint) const;
+    LEGlyphID getCursiveLastGlyphID() const;
+    float getCursiveBaselineAdjustment() const;
+    void getCursiveLastPositionAdjustment(GlyphPositionAdjustment &adjustment) const;
 
     void setCurrGlyphID(LEGlyphID glyphID);
     void setCurrStreamPosition(le_int32 position);
     void setCurrGlyphPositionAdjustment(const GlyphPositionAdjustment *adjustment);
+    void setCurrGlyphBaseOffset(le_int32 baseOffset);
     void adjustCurrGlyphPositionAdjustment(float xPlacmentAdjust, float yPlacementAdjust,
+                                           float xAdvanceAdjust, float yAdvanceAdjust);
+
+    void setCursiveFirstExitPoint();
+    void resetCursiveLastExitPoint();
+    void setCursiveLastExitPoint(LEPoint &exitPoint);
+    void setCursiveBaselineAdjustment(float adjustment);
+    void adjustCursiveLastGlyphPositionAdjustment(float xPlacmentAdjust, float yPlacementAdjust,
                                            float xAdvanceAdjust, float yAdvanceAdjust);
 
 private:
@@ -58,6 +75,10 @@ private:
     le_int32  position;
     le_int32  nextLimit;
     le_int32  prevLimit;
+    le_int32  cursiveFirstPosition;
+    le_int32  cursiveLastPosition;
+    float     cursiveBaselineAdjustment;
+    LEPoint   cursiveLastExitPoint;
     LEGlyphID *glyphs;
     GlyphPositionAdjustment *glyphPositionAdjustments;
     le_uint16 lookupFlags;
