@@ -1368,6 +1368,14 @@ static void TestCEs() {
 
         str = getCodePoints(line, codepoints);
 
+        /* these are 'fake' codepoints in the fractional UCA, and are used just 
+         * for positioning of indirect values. They should not go through this
+         * test.
+         */
+        if(*codepoints == 0xFDD0) {
+          continue;
+        }
+
         getCEs(str, ces, &status);
         if (U_FAILURE(status)) {
             log_err("Error in parsing collation elements in FractionalUCA.txt\n");
