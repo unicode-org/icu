@@ -2,7 +2,7 @@
 #define UCOL_CNTTABLE_H
 
 #include "uhash.h"
-#include "UCAData.h"
+#include "genuca.h"
 
 typedef struct {
 	ContractionTable **elements;

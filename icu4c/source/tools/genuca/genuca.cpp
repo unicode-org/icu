@@ -1,4 +1,4 @@
-#include "UCAData.h"
+#include "genuca.h"
 #include "cnttable.h"
 
 #include <stdlib.h>
