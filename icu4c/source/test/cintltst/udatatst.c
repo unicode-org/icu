@@ -653,7 +653,7 @@ void TestAppData()
   ures_close(icu);
   ures_close(app);
 
-  return;
+  free(testPath);
 }
 
 void TestICUDataName()
