@@ -27,12 +27,14 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define uprv_malloc(size) malloc(size)
-#define uprv_realloc(buffer, size) realloc(buffer, size)
-#define uprv_free(buffer) free(buffer)
-#define uprv_memcpy(dst, src, size) memcpy(dst, src, size)
-#define uprv_memmove(dst, src, size) memmove(dst, src, size)
-#define uprv_memset(buffer, mark, size) memset(buffer, mark, size)
-#define uprv_memcmp(buffer1, buffer2, size) memcmp(buffer1, buffer2,size)
+
+
+#define uprv_malloc(size) U_STANDARD_CPP_NAMESPACE malloc(size)
+#define uprv_realloc(buffer, size) U_STANDARD_CPP_NAMESPACE realloc(buffer, size)
+#define uprv_free(buffer) U_STANDARD_CPP_NAMESPACE free(buffer)
+#define uprv_memcpy(dst, src, size) U_STANDARD_CPP_NAMESPACE memcpy(dst, src, size)
+#define uprv_memmove(dst, src, size) U_STANDARD_CPP_NAMESPACE memmove(dst, src, size)
+#define uprv_memset(buffer, mark, size) U_STANDARD_CPP_NAMESPACE memset(buffer, mark, size)
+#define uprv_memcmp(buffer1, buffer2, size) U_STANDARD_CPP_NAMESPACE memcmp(buffer1, buffer2,size)
 
 #endif
