@@ -925,6 +925,49 @@ protected:
 
 private:
     static void initializeRegistry(void);
+
+#ifdef U_USE_DEPRECATED_TRANSLITERATOR_API
+public:
+    /**
+     * Returns a <code>Transliterator</code> object given its ID.
+     * The ID must be either a system transliterator ID or a ID registered
+     * using <code>registerInstance()</code>.
+     *
+     * @param ID a valid ID, as enumerated by <code>getAvailableIDs()</code>
+     * @return A <code>Transliterator</code> object with the given ID
+     * @exception IllegalArgumentException if the given ID is invalid.
+     * @see #registerInstance
+     * @see #getAvailableIDs
+     * @see #getID
+     * @deprecated Remove after Aug 2002 use factory mehod that takes UParseError
+     * and UErrorCode
+     */
+    inline Transliterator* createInstance(const UnicodeString& ID, 
+                                          UTransDirection dir=UTRANS_FORWARD,
+                                          UParseError* parseError=0);
+   /**
+     * Returns this transliterator's inverse.  See the class
+     * documentation for details.  This implementation simply inverts
+     * the two entities in the ID and attempts to retrieve the
+     * resulting transliterator.  That is, if <code>getID()</code>
+     * returns "A-B", then this method will return the result of
+     * <code>getInstance("B-A")</code>, or <code>null</code> if that
+     * call fails.
+     *
+     * <p>This method does not take filtering into account.  The
+     * returned transliterator will have no filter.
+     *
+     * <p>Subclasses with knowledge of their inverse may wish to
+     * override this method.
+     *
+     * @return a transliterator that is an inverse, not necessarily
+     * exact, of this transliterator, or <code>null</code> if no such
+     * transliterator is registered.
+     * @deprecated Remove after Aug 2002 use factory mehod that takes UErrorCode
+     */
+    inline Transliterator* createInverse() const;
+
+#endif
 };
 
 inline int32_t Transliterator::getMaximumContextLength(void) const {
@@ -935,4 +978,30 @@ inline void Transliterator::setID(const UnicodeString& id) {
     ID = id;
 }
 
+/**
+ * Definitions for deprecated API
+ * @deprecated Remove after Aug 2002
+ */
+#ifdef U_USE_DEPRECATED_TRANSLITERATOR_API
+
+inline Transliterator* Transliterator::createInstance(const UnicodeString& ID, 
+                                                      UTransDirection dir,
+                                                      UParseError* parseError){
+        UErrorCode status = U_ZERO_ERROR;
+        UParseError error;
+        if(parseError == NULL){
+            parseError = &error;
+        }
+        return Transliterator::createInstance(ID,dir,*parseError,status);
+    }
+
+inline Transliterator* Transliterator::createInverse() const{
+
+    UErrorCode status = U_ZERO_ERROR;
+    return createInverse(status);
+}
+
 #endif
+
+#endif
+
