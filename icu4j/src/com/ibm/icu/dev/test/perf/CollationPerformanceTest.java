@@ -1007,17 +1007,22 @@ public class CollationPerformanceTest {
         
         return true;
     }
-    
+
+    /**
+     * Invoke the runtime's garbage collection procedure repeatedly
+     * until the amount of free memory stabilizes to within 10%.
+     */    
     private void callGC() {
-    	Runtime rt = Runtime.getRuntime();
-    	long oldMem = rt.freeMemory();
-    	long delta;
-    	do {
-            rt.gc();
-            long newMem = rt.freeMemory();
-            delta = oldMem - newMem;
-            oldMem = newMem;
-        } while (delta > 500);
+        long last;
+        long free = 1;
+        Runtime runtime = Runtime.getRuntime();
+        do {
+            runtime.gc();
+            last = free;
+            free = runtime.freeMemory();
+        } while (((double)Math.abs(free - last)) / free > 0.1);
+        // Wait for the change in free memory to drop under 10%
+        // between successive calls.
     }
 
     private boolean needCRLF = false;
