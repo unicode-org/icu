@@ -18,7 +18,10 @@
 //
 //  Date        Name        Description
 //  2/13/97     aliu        Moved into TableCollation class.
-//  8/13/98        erm            Changed to machine generated, added Normalizer tables.
+//  8/13/98     erm         Changed to machine generated, added Normalizer tables.
+//  1/17/01     synwee      Removed the defination of RuleBasedCollator's 
+//                          DEFAULTRULES, since the data member is private and 
+//                          not used anywhere.
 //
 //===============================================================================
 
@@ -122,7 +125,7 @@ static const UChar defaultRulesArray[] =
     0x002C, 0x0153
 };
 
-UnicodeString RuleBasedCollator::DEFAULTRULES(defaultRulesArray, ARRAY_LENGTH(defaultRulesArray));
+// UnicodeString RuleBasedCollator::DEFAULTRULES(defaultRulesArray, ARRAY_LENGTH(defaultRulesArray));
 
 U_CAPI const UChar * U_EXPORT2 ucol_getDefaultRulesArray(uint32_t *size) {
 	*size = ARRAY_LENGTH(defaultRulesArray); 
