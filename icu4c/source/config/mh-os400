@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2001, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-os400,v 1.17 2002/01/25 06:28:45 yves-oss Exp $
+## $Id: mh-os400,v 1.18 2002/05/29 16:47:28 grhoten-oss Exp $
 
 GEN_DEPS.c=	$(CC1) -E -M $(DEFS) $(CPPFLAGS)
 GEN_DEPS.cc=	$(CXX1) -E -M $(DEFS) $(CPPFLAGS)
@@ -15,8 +15,8 @@ COMPILE.cc=	$(CXX) $(DEFS) -DOS400 -D_MULTI_THREADED $(CPPFLAGS) $(CXXFLAGS) -c 
 ## Commands to link
 ## We need to use the C++ linker, even when linking C programs, since
 ##  our libraries contain C++ code (C++ static init not called)
-LINK.c=		$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -qOPTION='*DUPPROC *DUPVAR'
-LINK.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -qOPTION='*DUPPROC *DUPVAR'
+LINK.c=		$(CXX) $(CXXFLAGS) $(LDFLAGS) -qOPTION='*DUPPROC *DUPVAR'
+LINK.cc=	$(CXX) $(CXXFLAGS) $(LDFLAGS) -qOPTION='*DUPPROC *DUPVAR'
 
 ## Commands to make a shared library
 SHLIB.c=   ld -v -qOPTION='*DUPPROC *DUPVAR'
