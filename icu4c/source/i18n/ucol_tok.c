@@ -438,7 +438,11 @@ const UChar *ucol_tok_parseNextToken(UColTokenParser *src,
               } else {
                 *status = U_INVALID_FORMAT_ERROR;
               }
+            } else if(variableTop == TRUE) {
+              src->current++;
+              goto EndOfLoop;
             }
+
             if(U_FAILURE(*status)) {
               return NULL;
             }
@@ -543,7 +547,7 @@ const UChar *ucol_tok_parseNextToken(UColTokenParser *src,
     return NULL;
   }
 
-  if (newCharsLen == 0 && top == FALSE) {
+  if (newCharsLen == 0 && top == FALSE && variableTop == FALSE) {
     *status = U_INVALID_FORMAT_ERROR;
     return NULL;
   }
@@ -600,12 +604,6 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
       UColToken *sourceToken = NULL;
       UColToken key;
 
-      /* if we had a variable top, we're gonna put it in */
-      if(variableTop == TRUE && src->opts->variableTopValue == src->UCA->options->variableTopValue) {
-        variableTop = FALSE;
-        src->opts->variableTopValue = *(src->source + charsOffset);
-      }
-
       key.source = newCharsLen << 24 | charsOffset;
       key.expansion = newExtensionsLen << 24 | extensionOffset;
 
@@ -616,6 +614,16 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
         if(lastToken == NULL) { /* this means that rules haven't started properly */
           *status = U_INVALID_FORMAT_ERROR;
           return 0;
+        }
+        /* if we had a variable top, we're gonna put it in */
+        if(variableTop == TRUE && src->opts->variableTopValue == src->UCA->options->variableTopValue) {
+          variableTop = FALSE;
+          if(key.source == 0) { /* we read just the variable top, take the last one */
+            src->opts->variableTopValue = *(src->source + (lastToken->source & 0x00FFFFFF));
+            continue;
+          } else { /* we read variable top after an element (or before), use that one */
+            src->opts->variableTopValue = *(src->source + charsOffset);
+          }
         }
       /*  6 Otherwise (when relation != reset) */
         if(sourceToken == NULL) {
@@ -724,6 +732,15 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
         uint32_t CE = UCOL_NOT_FOUND, SecondCE = UCOL_NOT_FOUND;
         collIterate s;
 
+        if(lastToken != NULL && lastToken->strength == UCOL_TOK_RESET) {
+          /* if the previous token was also a reset, */
+          /*this means that we have two consecutive resets */
+          /* and we want to remove the previous one if empty*/
+          if(ListList[src->resultLen-1].first[UCOL_TOK_POLARITY_POSITIVE] == NULL) {
+            src->resultLen--;
+          }
+        }
+
         if(newCharsLen > 1) {
           expandNext = ((newCharsLen-1)<<24) | (charsOffset + 1);
         } else {
@@ -776,6 +793,11 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
                 earlier in the list. 
           */
           if(top == FALSE) {
+            /* if we had a variable top, we're gonna put it in */
+            if(variableTop == TRUE && src->opts->variableTopValue == src->UCA->options->variableTopValue) {
+              variableTop = FALSE;
+              src->opts->variableTopValue = *(src->source + charsOffset);
+            }
             if(newCharsLen > 1) {
               sourceToken->source = 0x01000000 | charsOffset;
             } 
@@ -796,6 +818,10 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
               ListList[src->resultLen].baseContCE = 0;
             }
           } else { /* top == TRUE */
+            if(variableTop == TRUE && src->opts->variableTopValue == src->UCA->options->variableTopValue) {
+              variableTop = FALSE;
+              src->opts->variableTopValue = 0xFA30;
+            }
             top = FALSE;
             ListList[src->resultLen].baseCE = UCOL_RESET_TOP_VALUE;
             ListList[src->resultLen].baseContCE = 0;
@@ -822,6 +848,9 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
     }
   }
 
+  if(ListList[src->resultLen-1].first[UCOL_TOK_POLARITY_POSITIVE] == NULL) {
+    src->resultLen--;
+  }
   return src->resultLen;
 }
 
