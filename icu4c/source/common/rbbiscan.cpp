@@ -129,6 +129,12 @@ RBBIRuleScanner::RBBIRuleScanner(RBBIRuleBuilder *rb)
     fRuleSets[kRuleSet_name_char-128]       = new UnicodeSet(gRuleSet_name_char_pattern,       *rb->fStatus);
     fRuleSets[kRuleSet_name_start_char-128] = new UnicodeSet(gRuleSet_name_start_char_pattern, *rb->fStatus);
     fRuleSets[kRuleSet_digit_char-128]      = new UnicodeSet(gRuleSet_digit_char_pattern,      *rb->fStatus);
+    if (*rb->fStatus == U_ILLEGAL_ARGUMENT_ERROR) {
+        // This case happens if ICU's data is missing.  UnicodeSet tries to look up property
+        //   names from the init string, can't find them, and claims an illegal arguement.
+        //   Change the error so that the actual problem will be clearer to users.
+        *rb->fStatus = U_BRK_INIT_ERROR;
+    }
     if (U_FAILURE(*rb->fStatus)) {
         return;
     }

@@ -1827,6 +1827,7 @@ _uBrkErrorName[U_BRK_ERROR_LIMIT - U_BRK_ERROR_START] = {
     "U_BRK_MISMATCHED_PAREN",
     "U_BRK_NEW_LINE_IN_QUOTED_STRING",
     "U_BRK_UNDEFINED_VARIABLE",
+    "U_BRK_INIT_ERROR"
 };
 
 static const char * const
