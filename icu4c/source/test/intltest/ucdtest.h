@@ -42,6 +42,18 @@ public:
      * as well as characterDirection()
      **/
     void TestUnicodeData(void);
+	 /** 
+      * tests methods isSingle(), isLead(), and isTrail() 
+      **/
+    void TestCodeUnit(void);
+	 /**
+      * Tests for isSurrogate(), isUnicodeChar(), isError(), isValid() 
+	  **/
+    void TestCodePoint();
+	/**
+      * Tests for needMultipleChar(), charLength()
+	  **/
+    void TestCharLength();
 
 private:
     /**
