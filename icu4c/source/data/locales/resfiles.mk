@@ -102,7 +102,7 @@ ti.txt ti_ET.txt ti_ER.txt\
 tr.txt tr_TR.txt\
 uk.txt uk_UA.txt\
 vi.txt vi_VN.txt\
-zh.txt zh__PINYIN.txt zh_CN.txt zh_HK.txt zh_SG.txt zh_TW.txt zh_TW_STROKE.txt
+zh.txt zh__PINYIN.txt zh_CN.txt zh_HK.txt zh_MO.txt zh_SG.txt zh_TW.txt zh_TW_STROKE.txt
 
 TRANSLIT_SOURCE=translit_Any_Accents.txt\
 translit_Any_Publishing.txt\
