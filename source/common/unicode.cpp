@@ -34,10 +34,10 @@
 //****************************************************************************
 
 #include "unicode/utypes.h"
-#include "unicode/uchar.h"
-#include "unicode/unicode.h"
 
 #ifdef ICU_UNICODE_CLASS_USE_DEPRECATES
+#include "unicode/uchar.h"
+#include "unicode/unicode.h"
 U_NAMESPACE_BEGIN
 
 /*
