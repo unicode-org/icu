@@ -7,6 +7,14 @@
 //
 // Generated from the TEXTINCLUDE 2 resource.
 //
+/*
+*******************************************************************************
+*
+*   Copyright (C) 2002-2003, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+*******************************************************************************
+*/
 #include "afxres.h"
 
 /////////////////////////////////////////////////////////////////////////////
@@ -70,6 +78,14 @@ END
 
 2 TEXTINCLUDE DISCARDABLE 
 BEGIN
+    "/*\r\n"
+    "*******************************************************************************\r\n"
+    "*\r\n"
+    "*   Copyright (C) 2002-2003, International Business Machines\r\n"
+    "*   Corporation and others.  All Rights Reserved.\r\n"
+    "*\r\n"
+    "*******************************************************************************\r\n"
+    "*/\r\n"
     "#include ""afxres.h""\r\n"
     "\0"
 END
