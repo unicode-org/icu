@@ -183,9 +183,9 @@ MessageFormat::MessageFormat(const MessageFormat& that)
 : Format(that),
   fLocale(that.fLocale),
   fPattern(that.fPattern),
-  fOffsets(new int32_t[that.fCount]),
+  fOffsets((int32_t *)uprv_malloc(that.fCount * sizeof(int32_t))),
   fCount(that.fCount),
-  fArgumentNumbers(new int32_t[that.fCount]),
+  fArgumentNumbers((int32_t *)uprv_malloc(that.fCount * sizeof(int32_t))),
   fMaxOffset(that.fMaxOffset)
 {
     // Sets up the format instance array, offsets and argument numbers.
