@@ -28,7 +28,7 @@
 
 #include "unicode/numfmt.h"
 #include "unicode/locid.h"
-#include "unicode/resbund.h"
+#include "unicode/ures.h"
 #include "unicode/dcfmtsym.h"
 #include "unicode/decimfmt.h"
 #include "unicode/ustring.h"

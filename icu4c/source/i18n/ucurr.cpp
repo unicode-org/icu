@@ -11,7 +11,7 @@
 
 #include "unicode/ucurr.h"
 #include "unicode/locid.h"
-#include "unicode/resbund.h"
+#include "unicode/ures.h"
 #include "unicode/ustring.h"
 #include "unicode/choicfmt.h"
 #include "unicode/parsepos.h"

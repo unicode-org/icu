@@ -39,7 +39,7 @@ uprv_icuin_lib_dummy(int32_t i) {
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/format.h"
-#include "unicode/resbund.h"
+#include "unicode/ures.h"
 #include "cstring.h"
 #include "locbased.h"
 

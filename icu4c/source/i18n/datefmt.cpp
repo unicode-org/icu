@@ -21,7 +21,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-#include "unicode/resbund.h"
+#include "unicode/ures.h"
 #include "unicode/datefmt.h"
 #include "unicode/smpdtfmt.h"
 
