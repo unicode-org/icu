@@ -486,6 +486,7 @@ void   RegexPattern::dumpOp(int32_t index) const {
     case URX_END_CAPTURE:
     case URX_STATE_SAVE:
     case URX_JMP:
+    case URX_JMP_SAV:
     case URX_BACKSLASH_B:
     case URX_BACKSLASH_D:
     case URX_BACKSLASH_Z:
