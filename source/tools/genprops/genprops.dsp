@@ -109,6 +109,14 @@ SOURCE=.\genprops.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\props2.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\propsvec.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\store.c
 # End Source File
 # End Group
@@ -118,6 +126,10 @@ SOURCE=.\store.c
 # Begin Source File
 
 SOURCE=.\genprops.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\propsvec.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
