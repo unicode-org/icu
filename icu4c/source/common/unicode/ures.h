@@ -691,16 +691,17 @@ U_CAPI UEnumeration* U_EXPORT2
 ures_openAvailableLocales(const char *path, UErrorCode *status);
 
 /**
- * Returns a functionally equivalent locale (keywords and all) for the specified keyword.
+ * Returns a functionally equivalent locale (considering keywords) for the specified keyword.
  * @param result fillin for the equivalent locale
  * @param resultCapacity capacity of the fillin buffer
  * @param path path to the tree, or NULL for ICU data
- * @param resName top level resource to look at
- * @param keyword a particular keyword to consider
+ * @param resName top level resource. Example: "collations"
+ * @param keyword locale keyword. Example: "collation"
  * @param locid The requested locale
  * @param isAvailable If non-null, pointer to fillin parameter that indicates whether the 
  * requested locale was available. The locale is defined as 'available' if it physically 
  * exists within the specified tree.
+ * @param omitDefault if TRUE, omit keyword and value if default. 'de_DE@collation=standard' -> 'de_DE'
  * @param status error code
  * @return  the actual buffer size needed for the full locale.  If it's greater 
  * than resultCapacity, the returned full name will be truncated and an error code will be returned.
@@ -709,7 +710,7 @@ ures_openAvailableLocales(const char *path, UErrorCode *status);
 U_CAPI int32_t U_EXPORT2
 ures_getFunctionalEquivalent(char *result, int32_t resultCapacity, 
                              const char *path, const char *resName, const char *keyword, const char *locid,
-                             UBool *isAvailable, UErrorCode *status);
+                             UBool *isAvailable, UBool omitDefault, UErrorCode *status);
 
 /**
  * Given a tree path and keyword, return a string enumeration of all possible values for that keyword.
