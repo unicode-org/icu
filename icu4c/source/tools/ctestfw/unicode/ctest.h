@@ -57,12 +57,14 @@ typedef struct TestNode TestNode;
 /**
  * Count of errors from all tests. 
  * May be reset.
+ * @internal Internal APIs for testing purpose only
  */
 T_CTEST_EXPORT_API extern int ERROR_COUNT;
 
 /**
  * Set this to zero to disable log_verbose() messages.
  * Otherwise nonzero to see log_verbose() messages.
+ * @internal Internal APIs for testing purpose only
  *
  */
 T_CTEST_EXPORT_API extern int VERBOSITY;  
@@ -70,6 +72,7 @@ T_CTEST_EXPORT_API extern int VERBOSITY;
 /**
  * Set this to zero to disable log_verbose() messages.
  * Otherwise nonzero to see log_verbose() messages.
+ * @internal Internal APIs for testing purpose only
  *
  */
 T_CTEST_EXPORT_API extern int ERR_MSG; 
@@ -78,6 +81,7 @@ T_CTEST_EXPORT_API extern int ERR_MSG;
  * Show the names of all nodes.
  * 
  * @param root Subtree of tests.
+ * @internal Internal APIs for testing purpose only
  */
 T_CTEST_API void showTests ( const TestNode *root);
 
@@ -85,6 +89,7 @@ T_CTEST_API void showTests ( const TestNode *root);
  * Run a subtree of tests.
  * 
  * @param root Subtree of tests.
+ * @internal Internal APIs for testing purpose only
  */
 T_CTEST_API void runTests ( const TestNode* root);
 
@@ -98,6 +103,7 @@ T_CTEST_API void runTests ( const TestNode* root);
  * @param root Pointer to the root pointer.
  * @param test Pointer to 'void function(void)' for actual test.
  * @param path Path from root under which test will be placed. Ex. '/a/b/mytest'
+ * @internal Internal APIs for testing purpose only
  */
 T_CTEST_API void addTest ( TestNode** root,
            TestFunctionPtr test,
@@ -109,6 +115,7 @@ T_CTEST_API void addTest ( TestNode** root,
  * @param root Pointer to the root.
  * @param path Path relative to the root, Ex. '/a/b'
  * @return The subtest, or NULL on failure.
+ * @internal Internal APIs for testing purpose only
  */
 T_CTEST_API const TestNode* getTest (const TestNode* root,
                                      const char *path);
@@ -117,12 +124,14 @@ T_CTEST_API const TestNode* getTest (const TestNode* root,
 /**
  * Log an error message. (printf style)
  * @param pattern printf-style format string
+ * @internal Internal APIs for testing purpose only
  */
 T_CTEST_API void log_err(const char* pattern, ...);
 
 /**
  * Log an informational message. (printf style)
  * @param pattern printf-style format string
+ * @internal Internal APIs for testing purpose only
  */
 T_CTEST_API void log_info(const char* pattern, ...);
 
@@ -130,6 +139,7 @@ T_CTEST_API void log_info(const char* pattern, ...);
  * Log a verbose informational message. (printf style)
  * This message will only appear if the global VERBOSITY is nonzero
  * @param pattern printf-style format string
+ * @internal Internal APIs for testing purpose only
  */
 T_CTEST_API void log_verbose(const char* pattern, ...);
 
@@ -144,6 +154,7 @@ T_CTEST_API void log_verbose(const char* pattern, ...);
  * @param argv argument list from main (stdio.h)
  * @param argc argument list count from main (stdio.h)
  * @return positive for error count, 0 for success, negative for illegal argument
+ * @internal Internal APIs for testing purpose only
  */
 
 T_CTEST_API int processArgs(const TestNode* root,
