@@ -13,7 +13,6 @@
 *                         instead of calling the equivalent c++ api (coleitr.h)
 ******************************************************************************/
 
-#include <stdio.h>
 #include "unicode/ucoleitr.h"
 #include "unicode/ustring.h"
 #include "unicode/sortkey.h"
