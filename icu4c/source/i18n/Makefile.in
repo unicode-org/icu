@@ -1,0 +1,126 @@
+## Makefile.in for ICU - icu-i18n.so
+## Stephen F. Booth
+
+## Shell to use
+SHELL = @SHELL@
+
+## Install directory information
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+
+bindir = @bindir@
+sbindir = @sbindir@
+datadir = @datadir@
+libdir = @libdir@
+includedir = @includedir@
+
+pkgdatadir = $(datadir)/@PACKAGE@
+pkglibdir = $(libdir)/@PACKAGE@
+pkgincludedir = $(includedir)/@PACKAGE@
+
+## Install program information
+mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+
+INSTALL = @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_DATA = @INSTALL_DATA@
+
+## Compiler/tools information
+CC = @CC@
+CXX = @CXX@
+PACKAGE = @PACKAGE@
+VERSION = @VERSION@
+
+## Platform-specific setup
+@host_frag@
+
+## Build directory information
+top_builddir = ..
+subdir = i18n
+
+## Extra files to remove for 'make clean'
+CLEANFILES = *~
+
+## Target information
+TARGET = libicu-i18n.$(SO)
+
+DEFS = @DEFS@
+CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/common
+CFLAGS = @CFLAGS@
+CXXFLAGS = @CXXFLAGS@
+LDFLAGS = @LDFLAGS@ $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
+LIBS = @LIBS@ -L$(top_builddir)/common -licu-uc
+
+OBJECTS = brkiter.o calendar.o chbkdat.o choicfmt.o colcache.o		\
+coleitr.o coll.o colrules.o datefmt.o dcfmtsym.o decimfmt.o dtfmtsym.o	\
+fmtable.o format.o gregocal.o lnbkdat.o mergecol.o msgfmt.o numfmt.o	\
+ptnentry.o simpletz.o simtxbd.o smpdtfmt.o snbkdat.o sortkey.o		\
+tables.o tblcoll.o tcoldata.o timezone.o txtbdat.o txtbdry.o ubrk.o	\
+ucal.o ucol.o udat.o umsg.o unicdcm.o unum.o wdbkdat.o wdbktbl.o
+
+DEPS = $(OBJECTS:.o=.d)
+
+## Header files to install
+HEADERS= ucal.h unum.h udat.h umsg.h calendar.h choicfmt.h datefmt.h	\
+dcfmtsym.h decimfmt.h dtfmtsym.h fieldpos.h fmtable.h format.h		\
+gregocal.h msgfmt.h numfmt.h parsepos.h simpletz.h smpdtfmt.h		\
+timezone.h ucol.h coll.h tblcoll.h sortkey.h coleitr.h ubrk.h		\
+brkiter.h
+
+## List of phony targets
+.PHONY : all all-local install install-local clean clean-local	\
+distclean distclean-local install-library install-headers dist	\
+dist-local check check-local
+
+## Clear suffix list
+.SUFFIXES :
+
+## List of standard targets
+all: all-local
+install: install-local
+clean: clean-local
+distclean : distclean-local
+dist: dist-local
+check: check-local
+
+all-local: $(TARGET)
+
+install-local: install-headers install-library 
+
+install-library: all-local
+	$(mkinstalldirs) $(libdir)
+	$(INSTALL) $(TARGET) $(libdir)/$(TARGET)
+
+install-headers:
+	$(mkinstalldirs) $(includedir)
+	@list='$(HEADERS)'; for file in $$list; do \
+	 echo " $(INSTALL_DATA) $$file $(includedir)/$$file"; \
+	 $(INSTALL_DATA) $$file $(includedir)/$$file; \
+	done
+
+dist-local:
+
+clean-local:
+	test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
+	rm -f $(OBJECTS) $(TARGET)
+
+distclean-local: clean-local
+	rm -f Makefile $(DEPS)
+
+check-local:
+
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
+	cd $(top_builddir) \
+	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+$(TARGET) : $(OBJECTS)
+	$(SHLIB.cc) -o $@ $^ $(LIBS)
+
+ifneq ($(MAKECMDGOALS),distclean)
+-include $(DEPS)
+endif
+
+
+

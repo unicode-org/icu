@@ -1,0 +1,44 @@
+## Solaris-specific setup using Sun's workshop compilers
+
+## Commands to generate dependency files
+GEN_DEPS.c=	$(CC) -xM $(DEFS) $(CPPFLAGS)
+GEN_DEPS.cc=	$(CXX) -xM $(DEFS) $(CPPFLAGS)
+
+## Commands to compile
+COMPILE.c=	$(CC) -KPIC -mt $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
+COMPILE.cc=	$(CXX) -KPIC -mt $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c
+
+## Commands to link
+#LINK.c=		$(CC) -mt $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
+## For Sun Workshop, use CC to link to bring in C++ runtime
+LINK.c=		$(CXX) -mt $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+LINK.cc=	$(CXX) -mt $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+
+## Commands to make a shared library
+SHLIB.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -G
+SHLIB.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -G
+
+## Compiler switch to embed a runtime search path
+LD_RPATH=	-R
+LD_RPATH_PRE=	
+
+## Shared object suffix
+SO=		so
+
+## Compilation rules
+%.o : $(srcdir)/%.c
+	$(COMPILE.c) -o $@ $<
+
+%.o : $(srcdir)/%.cpp
+	$(COMPILE.cc) -o $@ $<
+
+## Dependency rules
+%.d : $(srcdir)/%.c
+	@echo "Generating dependency information for $<"
+	@$(GEN_DEPS.c) $< > $@
+
+%.d : $(srcdir)/%.cpp
+	@echo "Generating dependency information for $<"
+	@$(GEN_DEPS.cc) $< > $@
+
+## End Solaris-specific setup

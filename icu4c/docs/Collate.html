@@ -1,0 +1,212 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<title>International Classes for Unicode - Collation</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<h1>IBM's Classes for Unicode</h1>
+
+<h2>Collation Framework</h2>
+
+<hr>
+
+<h3><u>Contents</u></h3>
+
+<ul type="disc">
+  <li>What is collation?</li>
+  <li>The rule symbols and their usage</li>
+  <li>Interesting Examples</li>
+  <li>Implementation Details<ul type="circle">
+      <li>Building the Collation Table</li>
+      <li>Incremental Comparison Diagram</li>
+      <li>Generating a Collation Table</li>
+    </ul>
+  </li>
+  <li>Q and A</li>
+</ul>
+
+<h3><u>What is collation?</u></h3>
+
+<p>Collation framework performs locale-sensitive string comparison. The user of this class
+can use this class to build searching and sorting routines for natural language text,
+build table of contents for large documentation or create efficient index look up for
+database entries.<br>
+<br>
+The ICU Collator classes provides services to allow:
+
+<ul type="disc">
+  <li>Simple, data-driven, table based collation.</li>
+  <li>Easily customizble for your needs.</li>
+  <li>Merging different resources made possible.</li>
+  <li>Behind the scene transforming the ASCII data file into a binary file for efficiency.</li>
+  <li>Offering both incremental comparison for simple comparison and collation keys for batch
+    processes.</li>
+</ul>
+
+<p>There are 4 comparison levels in the Collator classes to allow different levels of
+difference to be considered significant: 
+
+<ul type="disc">
+  <li>Primary: a letter difference. For example, 'a' and 'b'.</li>
+  <li>Secondary: an accent difference. For example, 'ä' and 'å'.</li>
+  <li>Tertiary: a case difference. For example, 'a' and 'A'.</li>
+  <li>Identical: no difference. For example, 'a' and 'a'.</li>
+</ul>
+
+<h3><u>The rule symbols and their usage</u></h3>
+
+<p>A string is decomposed to be one or more collation elements when using with the
+collation classes. The collation rules specify the order of these collation elements. The
+collation table is composed of a list of collation rules, where each rule is of three
+forms:
+
+<ol type="1" start="1">
+  <li>&lt;modifier&gt;</li>
+  <li>&lt;relation&gt; &lt;text-argument&gt;</li>
+  <li>&lt;reset&gt; &lt;text-argument1&gt; &lt;relation&gt; &lt;text-argument2&gt;</li>
+</ol>
+
+<h4>&lt;modifier&gt;</h4>
+
+<ul type="disc">
+  <li>'@': French secondary, accent weights sorted backwards.</li>
+</ul>
+
+<h4>&lt;text-argument&gt;</h4>
+
+<p>A text-argument is any sequence of characters, excluding special characters (that is,
+common whitespace characters [0009-000D, 0020] and rule syntax characters [0021-002F,
+003A-0040, 005B-0060, 007B-007E]). If those characters are desired, you can put them in
+single quotes (e.g. ampersand =&gt; '&amp;'). Note that unquoted white space characters
+are ignored; e.g. &quot;b c&quot; is treated as &quot;bc&quot;.</p>
+
+<h4>&lt;relation&gt;</h4>
+
+<ul type="disc">
+  <li>'&lt;' : Greater, as a letter difference (primary)</li>
+  <li>';' : Greater, as an accent difference (secondary)</li>
+  <li>',' : Greater, as a case difference (tertiary)</li>
+  <li>'=' : Equal</li>
+</ul>
+
+<h4>&lt;reset&gt;</h4>
+
+<ul type="disc">
+  <li>'&amp;': Indicates that text-argument2 follows the position to where the reset
+    text-argument1 would be sorted.</li>
+</ul>
+
+<h3><u>Interesting Examples</u></h3>
+
+<p>The following is a list of interesting examples of the rules and some string comparison
+results using those rules. The comparison relation will be denoted as &quot;&lt;&quot; of
+primary difference of less than, &quot;&lt;&lt;&quot; of secondary difference of less
+than, &quot;&lt;&lt;&lt;&quot; of teriatry difference of less than and &quot;==&quot; of
+equal to relationships:
+
+<ul type="disc">
+  <li>Rule &quot; a, A &lt; b, B &lt; c, C &lt; ch, cH, Ch, CH &lt; d, D &lt; e, E&quot;: this
+    rule simply says, sorts letters 'a', 'b', 'c', 'd' and 'e' in that order with primary
+    weights. 'ch' is sorted as a significant letter between 'c' and 'd' with primary weights
+    and upper cased letters sorts after lower cased letters with tertiary weights. For
+    example, &quot;abc&quot; &lt;&lt;&lt; &quot;ABC&quot; and &quot;achb&quot; &lt;
+    &quot;adb&quot;.</li>
+  <li>Rule &quot; a, A &lt; b, B &lt; c, C &lt; d, D &lt; e, E &amp; AE; ä &quot;: this will
+    sort letters 'a', 'b', 'c', 'd' and 'e' in that order with primary weights. 'ä' will sort
+    as with a secondary less than to the sequence of 'A' following 'E'. For example,
+    &quot;aeb&quot; &lt;&lt; &quot;äb&quot; and &quot;acb&quot; &lt; &quot;äb&quot;.</li>
+  <li>Rule &quot;.... q, Q &amp; Question'-'mark = '?' ....&quot;: the rule shows how to sort
+    symbols to be equivalent to the corrsponding text. In this example, &quot;?&quot; ==
+    &quot;Question-mark&quot;. Note that the special symbols need to be quoted in the rule.</li>
+  <li>Rule &quot;.... &amp; aa ; a- &amp; ee ; e- &amp; ii ; i- &amp; oo ; o- &amp; uu ; u-
+    ....&quot;: this rule demonstrates how to specify prolonged vowels in Japanese. In this
+    case, &quot;aa&quot; is sorted as with a secondary less than to &quot;a-&quot;. For
+    example, &quot;baab&quot; &lt;&lt; &quot;ba-b&quot;.</li>
+</ul>
+
+<h3><u>Implementation Details</u></h3>
+
+<p>Three parts of the code will be carefully examined here:
+
+<ul type="disc">
+  <li>Building the collation rule table. (see mergecol.cpp, ptnentry.cpp and tblcoll.cpp)</li>
+  <li>Incremental comparison algorithm for simple string comparison.
+    (RuleBasedCollator.compare() in tblcoll.cpp)</li>
+  <li>Collation key generation and its format. (RuleBasedCollator.getCollationKey() in
+    tblcoll.cpp)</li>
+</ul>
+
+<h3><u>Building the Collation Table</u></h3>
+
+<p>The process of building a collation table is as following:
+
+<ul type="disc">
+  <li>Parse the rule text into a list of pattern entries. Each pattern has the content of
+    current core characters, extension character and the strength relation. (In ptnentry.cpp)</li>
+  <li>Inserts each entry at the correct position based on the &lt;reset&gt; arguements. (In
+    mergecol.cpp)</li>
+  <li>Build the compacted, highly efficient look-up table based on the list of pattern
+    entries. (In tblcoll.cpp)</li>
+</ul>
+
+<p>&nbsp;</p>
+
+<h3><u>Incremental Comparison Diagram</u></h3>
+
+<p>&nbsp;</p>
+
+<p><img src="collflow.gif" width="468" height="800"></p>
+
+<h3><u>Generating a Collation Key</u></h3>
+
+<p>The control flow of generating a collation key is as the following:
+
+<ol type="1" start="1">
+  <li>Retrieve the next collation element of the source string. Go to step 5 when reaches the
+    end of string.</li>
+  <li>Append the primary weight of element to the primary weight buffer.</li>
+  <li>Checks if it's necessary to process secondary weights. If so, append the secondary
+    weights to the secondary weight buffer. If the collator is marked to process French
+    secondary, reverse the order of all the secondary weights before encounters the next
+    primary weight.</li>
+  <li>Checks if it's necessary to process tertiary weights. If so, append the tertiary weights
+    to the tertiary weight buffer. </li>
+  <li>Concatenate the primary weight buffer, secondary weight buffer and tertiary weight
+    buffer and add a null delimiter among the weights. Return the concatenated buffer as the
+    collation key.</li>
+</ol>
+
+<h3><u>Q &amp; A</u></h3>
+
+<ol type="1" start="1">
+  <li>How do I customize the collation sequence?<br>
+    A: Using the RuleBasedCollator constructor, the user of the collation framework can then
+    create his/her own Collator with a customized rule.</li>
+  <li>Will the collation framwork support the surrogate and private use characters?<br>
+    A: It's part of our future work items.&nbsp; However, no firm schedule has been set for
+    this yet.</li>
+  <li>How does the French secondary turn-on affect the generation of collation key?<br>
+    A: In French, the secondary differences are sorted backwards so this will invoke the
+    collation key to reverse the secondary weights in the keys.</li>
+  <li>Is there any support for composing characters? If so, how does it work?<br>
+    A: Yes, it is based on the Normalizer interface.&nbsp; When a expanding character is
+    detected, the rule builder will construct collation entries for the precomposed version
+    internally to handle the composed characters correctly.</li>
+  <li>Is there any plan for performance improvement, for instance, contracting/expanding
+    character lookup?<br>
+    A: Yes, the performance enhancement is an ongoing work item.</li>
+</ol>
+
+<p>&nbsp;</p>
+
+<p><a href="../readme.html">ReadMe for </a><a href="../readme.html#API">IBM's
+International Classes for Unicode</a></p>
+
+<hr>
+</body>
+</html>

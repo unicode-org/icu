@@ -1,0 +1,45 @@
+en_BE {
+    CollationElements { "&u007F,' ','_',\u00AF,\u00AD,'-',',',';',':','!',\u00A1,'?'"
+        ",\u00BF,'/','.',\u00B4,'`',\u00AB,\u00BB,'(',')','[',']','{','}',\u00A7,\u00B6,"
+        "\u00A9,\u00AE,'@',\u00A4,\u00A2,'$',\u00A3,\u00A5,'*','\u005C','&','#','%','+',"
+        "\u00B1,\u00F7,\u00D7,'<','=','>',\u00AC,'^',\u00A8,'~',\u00B7,\u00B8,''','\u0022"
+        "','|',\u00A6,\u00B0,\u00B5<\u00A0&0;\u00BC;\u00BD;\u00BE&1,\u00B9&2,\u00B2&3,\u00B3"
+        "&A;\u00AA&O;\u00BA&O\u0337,\u00D8&O\u0337,\u00F8@" }
+    CurrencyElements {
+            "BF",
+            "BEF ",
+            ",",
+    }
+    DateTimePatterns {
+            "H' h 'mm' min 'ss' s 'z",
+            "H:mm:ss z",
+            "H:mm:ss",
+            "H:mm",
+            "EEEE dd MMMM yyyy",
+            "EEE dd MMM yyyy",
+            "dd MMM yyyy",
+            "dd/MM/yy",
+            "{1} {0}",
+    }
+    LocaleID { "0809" }
+    LocaleString { "en_BE" }
+    NumberElements {
+            ",",
+            ".",
+            ";",
+            "%",
+            "0",
+            "#",
+            "-",
+            "E",
+            "\u2030",
+            "\u221E",
+            "\uFFFD",
+    }
+    NumberPatterns {
+            "#,##0.###;-#,##0.###",
+            "#,##0.00 \u00a4;-#,##0.00 \u00a4",
+            "#,##0%",
+    }
+    ShortCountry { "BEL" }
+}

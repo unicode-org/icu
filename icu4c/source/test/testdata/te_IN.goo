@@ -1,0 +1,10 @@
+
+// This is a test file which inherits from te, te_IN.
+
+te_IN
+{
+    Version { 55 }
+    string_in_Default_te_te_IN { GOO }
+}
+
+//eof

@@ -1,0 +1,141 @@
+// ****************************************************************************
+// *                                                                          *
+// * COPYRIGHT:                                                               *
+// * (C) Copyright Taligent, Inc.,  1997                                      *
+// * (C) Copyright International Business Machines Corporation,  1997-99      *
+// * Licensed Material - Program-Property of IBM - All Rights Reserved.       *
+// * US Government Users Restricted Rights - Use, duplication, or disclosure  *
+// * restricted by GSA ADP Schedule Contract with IBM Corp.                   *
+// *                                                                          *
+// ****************************************************************************
+
+de {
+    Countries { 
+        DE { "Deutschland" }
+        AT { "\u00D6sterreich" }
+        US { "Vereinigte Staaten" }
+        DK { "D\u00E4nemark" }
+        GR { "Griechenland" }
+        ES { "Spanien" }
+        FI { "Finnland" }
+        IT { "Italien" }
+        CH { "Schweiz" }
+        BE { "Belgien" }
+        JP { "Japan" }
+        GB { "Vereinigtes K\u00F6nigreich" }
+        CA { "Kanada" }
+        NL { "Niederlande" }
+        NO { "Norwegen" }
+        PT { "Portugal" }
+        SE { "Schweden" }
+        TR { "T\u00FCrkei" }
+    }
+    DateTimeElements { 
+            "2",
+            "4",
+    }
+    DateTimePatterns { 
+            "H.mm' Uhr 'z",
+            "HH:mm:ss z",
+            "HH:mm:ss",
+            "HH:mm",
+            "EEEE, d. MMMM yyyy",
+            "d. MMMM yyyy",
+            "dd.MM.yyyy",
+            "dd.MM.yy",
+            "{1} {0}",
+    }
+    DayAbbreviations { 
+            "So",
+            "Mo",
+            "Di",
+            "Mi",
+            "Do",
+            "Fr",
+            "Sa",
+    }
+    DayNames { 
+            "Sonntag",
+            "Montag",
+            "Dienstag",
+            "Mittwoch",
+            "Donnerstag",
+            "Freitag",
+            "Samstag",
+    }
+    Eras { 
+            "v. Chr.",
+            "n. Chr.",
+    }
+    Languages { 
+        de { "Deutsch" }
+        en { "Englisch" }
+        da { "D\u00E4nisch" }
+        el { "Griechisch" }
+        es { "Spanisch" }
+        fi { "Finnisch" }
+        it { "Italienisch" }
+        ja { "Japanisch" }
+        nl { "Holl\u00E4ndisch" }
+        no { "Norwegisch" }
+        pt { "Portugiesisch" }
+        sv { "Schwedisch" }
+        tr { "T\u00FCrkisch" }
+    }
+    LocaleID { "0407" }
+    LocaleString { "de" }
+    MonthAbbreviations { 
+            "Jan",
+            "Feb",
+            "Mrz",
+            "Apr",
+            "Mai",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Okt",
+            "Nov",
+            "Dez",
+            "",
+    }
+    MonthNames { 
+            "Januar",
+            "Februar",
+            "M\u00E4rz",
+            "April",
+            "Mai",
+            "Juni",
+            "Juli",
+            "August",
+            "September",
+            "Oktober",
+            "November",
+            "Dezember",
+            "",
+    }
+    NumberElements { 
+            ",",
+            ".",
+            ";",
+            "%",
+            "0",
+            "#",
+            "-",
+            "E",
+            "\u2030",
+            "\u221E",
+            "\uFFFD",
+    }
+    ShortLanguage { "deu" }
+    localPatternChars { "GuMtkHmsSEDFwWahKz" }
+    zoneStrings { 
+        {
+                "Africa/Casablanca",
+                "GMT",
+                "GMT",
+                "GMT",
+                "GMT",
+        }
+    }
+}

@@ -1,0 +1,25 @@
+// ****************************************************************************
+// *                                                                          *
+// * COPYRIGHT:                                                               *
+// * (C) Copyright Taligent, Inc.,  1997                                      *
+// * (C) Copyright International Business Machines Corporation,  1997-99      *
+// * Licensed Material - Program-Property of IBM - All Rights Reserved.       *
+// * US Government Users Restricted Rights - Use, duplication, or disclosure  *
+// * restricted by GSA ADP Schedule Contract with IBM Corp.                   *
+// *                                                                          *
+// ****************************************************************************
+
+uk_UA {
+    CurrencyElements { 
+            "\u0433\u0440\u0432.",
+            "UAH",
+            ",",
+    }
+    LocaleString { "uk_UA" }
+    NumberPatterns { 
+            "#,##0.###;-#,##0.###",
+            "#,##0.## \u00A4;-#,##0.## \u00A4",
+            "#,##0%",
+    }
+    ShortCountry { "UKR" }
+}

@@ -1,0 +1,110 @@
+// ****************************************************************************
+// *                                                                          *
+// * COPYRIGHT:                                                               *
+// * (C) Copyright Taligent, Inc.,  1997                                      *
+// * (C) Copyright International Business Machines Corporation,  1997-99      *
+// * Licensed Material - Program-Property of IBM - All Rights Reserved.       *
+// * US Government Users Restricted Rights - Use, duplication, or disclosure  *
+// * restricted by GSA ADP Schedule Contract with IBM Corp.                   *
+// *                                                                          *
+// ****************************************************************************
+
+sh {
+    CollationElements { "& D < dz, Dz, dZ, DZ < \u0111, \u0110& L < lj, Lj, lJ, "
+        "LJ < \u0142, \u0141& N < nj, Nj, nJ, NJ& Z < \u017C, \u017B" }
+    Countries { 
+        YU { "Jugoslavija" }
+    }
+    DateTimePatterns { 
+            "HH.mm.ss z",
+            "HH.mm.ss z",
+            "H.mm.ss",
+            "H.mm",
+            "EEEE, yyyy, MMMM d",
+            "EEEE, yyyy, MMMM d",
+            "yyyy.M.d",
+            "yy.M.d",
+            "{1} {0}",
+    }
+    DayAbbreviations { 
+            "Ned",
+            "Pon",
+            "Uto",
+            "Sre",
+            "\u010Cet",
+            "Pet",
+            "Sub",
+    }
+    DayNames { 
+            "Nedelja",
+            "Ponedeljak",
+            "Utorak",
+            "Sreda",
+            "\u010Cetvrtak",
+            "Petak",
+            "Subota",
+    }
+    Eras { 
+            "p. n. e.",
+            "n. e.",
+    }
+    Languages { 
+        sh { "Srpski" }
+    }
+    LocaleID { "081a" }
+    LocaleString { "sh" }
+    MonthAbbreviations { 
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "Maj",
+            "Jun",
+            "Jul",
+            "Avg",
+            "Sep",
+            "Okt",
+            "Nov",
+            "Dec",
+            "",
+    }
+    MonthNames { 
+            "Januar",
+            "Februar",
+            "Mart",
+            "April",
+            "Maj",
+            "Juni",
+            "Juli",
+            "Avgust",
+            "Septembar",
+            "Oktobar",
+            "Novembar",
+            "Decembar",
+            "",
+    }
+    NumberElements { 
+            ",",
+            ".",
+            ";",
+            "%",
+            "0",
+            "#",
+            "-",
+            "E",
+            "\u2030",
+            "\u221E",
+            "\uFFFD",
+    }
+    ShortLanguage { "srp" }
+    localPatternChars { "GanjkHmsSEDFwWxhKz" }
+    zoneStrings { 
+        {
+                "Africa/Casablanca",
+                "GMT",
+                "GMT",
+                "GMT",
+                "GMT",
+        }
+    }
+}

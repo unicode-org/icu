@@ -1,0 +1,364 @@
+# name  = cp00878
+# title =
+<code_set_name>   "IBM-878"
+<char_name_mask>  "AXXXX"
+<mb_cur_max>      1
+<mb_cur_min>      1
+<uconv_class>     "SBCS"
+
+CHARMAP
+# Alternate mappings
+<U0001>   \x01      #           ctrl01
+<U0002>   \x02      #           ctrl02
+<U0003>   \x03      #           ctrl03
+<U0004>   \x04      #           ctrl04
+<U0005>   \x05      #           ctrl05
+<U0006>   \x06      #           ctrl06
+<U0007>   \x07      #           ctrl07
+<U0008>   \x08      #           ctrl08
+<U0009>   \x09      #           ctrl09
+<U000A>   \x0A      #           ctrl0a
+<U000B>   \x0B      #           ctrl0b
+<U000C>   \x0C      #           ctrl0c
+<U000D>   \x0D      #           ctrl0d
+<U000E>   \x0E      #           ctrl0e
+<U000F>   \x0F      #           ctrl0f
+<U0010>   \x10      #           ctrl10
+<U0011>   \x11      #           ctrl11
+<U0012>   \x12      #           ctrl12
+<U0013>   \x13      #           ctrl13
+<U0014>   \x14      #           ctrl14
+<U0015>   \x15      #           ctrl15
+<U0016>   \x16      #           ctrl16
+<U0017>   \x17      #           ctrl17
+<U0018>   \x18      #           ctrl18
+<U0019>   \x19      #           ctrl19
+<U001A>   \x7F      #           ctrl1a
+<U001B>   \x1B      #           ctrl1b
+<U001C>   \x1A      #           ctrl1c
+<U001D>   \x1D      #           ctrl1d
+<U001E>   \x1E      #           ctrl1e
+<U001F>   \x1F      #           ctrl1f
+<U007F>   \x1C      #           ctrl7f
+<U203E>   \xEE      # SA860000  radicalex
+<UFF01>   \x21      # SP020080  exclamwide
+<UFF02>   \x22      # SP040080  quotesinglewide
+<UFF03>   \x23      # SM010080  numbersignwide
+<UFF04>   \x24      # SC030080  dollarwide
+<UFF05>   \x25      # SM020080  percentwide
+<UFF06>   \x26      # SM030080  ampersandwide
+<UFF07>   \x27      # SP050080  apostrophewide
+<UFF08>   \x28      # SP060080  parenleftwide
+<UFF09>   \x29      # SP070080  parenrightwide
+<UFF0A>   \x2A      # SM040080  asteriskwide
+<UFF0B>   \x2B      # SA010080  pluswide
+<UFF0C>   \x2C      # SP080080  commawide
+<UFF0D>   \x2D      # SP100080  hyphenwide
+<UFF0E>   \x2E      # SP110080  periodwide
+<UFF0F>   \x2F      # SP120080  slashwide
+<UFF10>   \x30      # ND100080  zerowide
+<UFF11>   \x31      # ND010080  onewide
+<UFF12>   \x32      # ND020080  twowide
+<UFF13>   \x33      # ND030080  threewide
+<UFF14>   \x34      # ND040080  fourwide
+<UFF15>   \x35      # ND050080  fivewide
+<UFF16>   \x36      # ND060080  sixwide
+<UFF17>   \x37      # ND070080  sevenwide
+<UFF18>   \x38      # ND080080  eightwide
+<UFF19>   \x39      # ND090080  ninewide
+<UFF1A>   \x3A      # SP130080  colonwide
+<UFF1B>   \x3B      # SP140080  semicolonwide
+<UFF1C>   \x3C      # SA030080  lesswide
+<UFF1D>   \x3D      # SA040080  equalwide
+<UFF1E>   \x3E      # SA050080  greaterwide
+<UFF1F>   \x3F      # SP150080  questionwide
+<UFF20>   \x40      # SM050080  atwide
+<UFF21>   \x41      # LA020080  Awide
+<UFF22>   \x42      # LB020080  Bwide
+<UFF23>   \x43      # LC020080  Cwide
+<UFF24>   \x44      # LD020080  Dwide
+<UFF25>   \x45      # LE020080  Ewide
+<UFF26>   \x46      # LF020080  Fwide
+<UFF27>   \x47      # LG020080  Gwide
+<UFF28>   \x48      # LH020080  Hwide
+<UFF29>   \x49      # LI020080  Iwide
+<UFF2A>   \x4A      # LJ020080  Jwide
+<UFF2B>   \x4B      # LK020080  Kwide
+<UFF2C>   \x4C      # LL020080  Lwide
+<UFF2D>   \x4D      # LM020080  Mwide
+<UFF2E>   \x4E      # LN020080  Nwide
+<UFF2F>   \x4F      # LO020080  Owide
+<UFF30>   \x50      # LP020080  Pwide
+<UFF31>   \x51      # LQ020080  Qwide
+<UFF32>   \x52      # LR020080  Rwide
+<UFF33>   \x53      # LS020080  Swide
+<UFF34>   \x54      # LT020080  Twide
+<UFF35>   \x55      # LU020080  Uwide
+<UFF36>   \x56      # LV020080  Vwide
+<UFF37>   \x57      # LW020080  Wwide
+<UFF38>   \x58      # LX020080  Xwide
+<UFF39>   \x59      # LY020080  Ywide
+<UFF3A>   \x5A      # LZ020080  Zwide
+<UFF3B>   \x5B      # SM060080  bracketleftwide
+<UFF3C>   \x5C      # SM070080  backslashwide
+<UFF3D>   \x5D      # SM080080  bracketrightwide
+<UFF3E>   \x5E      # SD150080  circumflexwide
+<UFF3F>   \x5F      # SP090080  underscorewide
+<UFF40>   \x60      # SD130080  gravewide
+<UFF41>   \x61      # LA010080  awide
+<UFF42>   \x62      # LB010080  bwide
+<UFF43>   \x63      # LC010080  cwide
+<UFF44>   \x64      # LD010080  dwide
+<UFF45>   \x65      # LE010080  ewide
+<UFF46>   \x66      # LF010080  fwide
+<UFF47>   \x67      # LG010080  gwide
+<UFF48>   \x68      # LH010080  hwide
+<UFF49>   \x69      # LI010080  iwide
+<UFF4A>   \x6A      # LJ010080  jwide
+<UFF4B>   \x6B      # LK010080  kwide
+<UFF4C>   \x6C      # LL010080  lwide
+<UFF4D>   \x6D      # LM010080  mwide
+<UFF4E>   \x6E      # LN010080  nwide
+<UFF4F>   \x6F      # LO010080  owide
+<UFF50>   \x70      # LP010080  pwide
+<UFF51>   \x71      # LQ010080  qwide
+<UFF52>   \x72      # LR010080  rwide
+<UFF53>   \x73      # LS010080  swide
+<UFF54>   \x74      # LT010080  twide
+<UFF55>   \x75      # LU010080  uwide
+<UFF56>   \x76      # LV010080  vwide
+<UFF57>   \x77      # LW010080  wwide
+<UFF58>   \x78      # LX010080  xwide
+<UFF59>   \x79      # LY010080  ywide
+<UFF5A>   \x7A      # LZ010080  zwide
+<UFF5B>   \x7B      # SM110080  braceleftwide
+<UFF5C>   \x7C      # SM130080  barwide
+<UFF5D>   \x7D      # SM140080  bracerightwide
+<UFF5E>   \x7E      # SD190080  tildewide
+#
+# Primary mappings
+#
+<U0020>   \x20      # sp010000  space
+<U0021>   \x21      # sp020000  exclam
+<U0022>   \x22      # sp040000  quotedbl
+<U0023>   \x23      # sm010000  numbersign
+<U0024>   \x24      # sc030000  dollar
+<U0025>   \x25      # sm020000  percent
+<U0026>   \x26      # sm030000  ampersand
+<U0027>   \x27      # sp050000  quotesingle
+<U0028>   \x28      # sp060000  parenleft
+<U0029>   \x29      # sp070000  parenright
+<U002A>   \x2A      # sm040000  asterisk
+<U002B>   \x2B      # sa010000  plus
+<U002C>   \x2C      # sp080000  comma
+<U002D>   \x2D      # sp100000  hyphen
+<U002E>   \x2E      # sp110000  period
+<U002F>   \x2F      # sp120000  slash
+<U0030>   \x30      # nd100000  zero
+<U0031>   \x31      # nd010000  one
+<U0032>   \x32      # nd020000  two
+<U0033>   \x33      # nd030000  three
+<U0034>   \x34      # nd040000  four
+<U0035>   \x35      # nd050000  five
+<U0036>   \x36      # nd060000  six
+<U0037>   \x37      # nd070000  seven
+<U0038>   \x38      # nd080000  eight
+<U0039>   \x39      # nd090000  nine
+<U003A>   \x3A      # sp130000  colon
+<U003B>   \x3B      # sp140000  semicolon
+<U003C>   \x3C      # sa030000  less
+<U003D>   \x3D      # sa040000  equal
+<U003E>   \x3E      # sa050000  greater
+<U003F>   \x3F      # sp150000  question
+<U0040>   \x40      # sm050000  at
+<U0041>   \x41      # la020000  A
+<U0042>   \x42      # lb020000  B
+<U0043>   \x43      # lc020000  C
+<U0044>   \x44      # ld020000  D
+<U0045>   \x45      # le020000  E
+<U0046>   \x46      # lf020000  F
+<U0047>   \x47      # lg020000  G
+<U0048>   \x48      # lh020000  H
+<U0049>   \x49      # li020000  I
+<U004A>   \x4A      # lj020000  J
+<U004B>   \x4B      # lk020000  K
+<U004C>   \x4C      # ll020000  L
+<U004D>   \x4D      # lm020000  M
+<U004E>   \x4E      # ln020000  N
+<U004F>   \x4F      # lo020000  O
+<U0050>   \x50      # lp020000  P
+<U0051>   \x51      # lq020000  Q
+<U0052>   \x52      # lr020000  R
+<U0053>   \x53      # ls020000  S
+<U0054>   \x54      # lt020000  T
+<U0055>   \x55      # lu020000  U
+<U0056>   \x56      # lv020000  V
+<U0057>   \x57      # lw020000  W
+<U0058>   \x58      # lx020000  X
+<U0059>   \x59      # ly020000  Y
+<U005A>   \x5A      # lz020000  Z
+<U005B>   \x5B      # sm060000  bracketleft
+<U005C>   \x5C      # sm070000  backslash
+<U005D>   \x5D      # sm080000  bracketright
+<U005E>   \x5E      # sm090000  asciicircum
+<U005F>   \x5F      # sp090000  underscore
+<U0060>   \x60      # sd130000  grave
+<U0061>   \x61      # la010000  a
+<U0062>   \x62      # lb010000  b
+<U0063>   \x63      # lc010000  c
+<U0064>   \x64      # ld010000  d
+<U0065>   \x65      # le010000  e
+<U0066>   \x66      # lf010000  f
+<U0067>   \x67      # lg010000  g
+<U0068>   \x68      # lh010000  h
+<U0069>   \x69      # li010000  i
+<U006A>   \x6A      # lj010000  j
+<U006B>   \x6B      # lk010000  k
+<U006C>   \x6C      # ll010000  l
+<U006D>   \x6D      # lm010000  m
+<U006E>   \x6E      # ln010000  n
+<U006F>   \x6F      # lo010000  o
+<U0070>   \x70      # lp010000  p
+<U0071>   \x71      # lq010000  q
+<U0072>   \x72      # lr010000  r
+<U0073>   \x73      # ls010000  s
+<U0074>   \x74      # lt010000  t
+<U0075>   \x75      # lu010000  u
+<U0076>   \x76      # lv010000  v
+<U0077>   \x77      # lw010000  w
+<U0078>   \x78      # lx010000  x
+<U0079>   \x79      # ly010000  y
+<U007A>   \x7A      # lz010000  z
+<U007B>   \x7B      # sm110000  braceleft
+<U007C>   \x7C      # sm130000  bar
+<U007D>   \x7D      # sm140000  braceright
+<U007E>   \x7E      # sd190000  asciitilde
+<U2500>   \x80      # sf100000  boxh
+<U2502>   \x81      # sf110000  boxv
+<U250C>   \x82      # sf010000  boxtl
+<U2510>   \x83      # sf030000  boxtr
+<U2514>   \x84      # sf020000  boxbl
+<U2518>   \x85      # sf040000  boxbr
+<U251C>   \x86      # sf080000  boxml
+<U2524>   \x87      # sf090000  boxmr
+<U252C>   \x88      # sf060000  boxtc
+<U2534>   \x89      # sf070000  boxbc
+<U253C>   \x8A      # sf050000  boxmc
+<U2580>   \x8B      # sf600000  blocktop
+<U2584>   \x8C      # sf570000  blockbot
+<U2588>   \x8D      # sf610000  block
+<U258C>   \x8E      # sf580000  blockleft
+<U2590>   \x8F      # sf590000  blockright
+<U2591>   \x90      # sf140000  fill25
+<U2592>   \x91      # sf150000  fill50
+<U2593>   \x92      # sf160000  fill75
+<U2320>   \x93      # ss260000  integraltp
+<U25A0>   \x94      # sm470000  bullet
+<U2219>   \x95      # sa790000  dotmath
+<U221A>   \x96      # sa800000  radical
+<U2248>   \x97      # sa700000  approxequal
+<U2264>   \x98      # sa520000  lessequal
+<U2265>   \x99      # sa530000  greaterequal
+<U00A0>   \x9A      # sp300000  reqspace
+<U2321>   \x9B      # ss270000  integralbt
+<U00B0>   \x9C      # sm190000  degree
+<U00B2>   \x9D      # nd021000  twosuperior
+<U00B7>   \x9E      # sd630000  periodcentered
+<U00F7>   \x9F      # sa060000  divide
+<U2550>   \xA0      # sf430000  boxH
+<U2551>   \xA1      # sf240000  boxV
+<U2552>   \xA2      # sf510000  boxTl
+<U0451>   \xA3      # ke170000
+<U2553>   \xA4      # sf520000  boxtL
+<U2554>   \xA5      # sf390000  boxTL
+<U2555>   \xA6      # sf220000  boxTr
+<U2556>   \xA7      # sf210000  boxtR
+<U2557>   \xA8      # sf250000  boxTR
+<U2558>   \xA9      # sf500000  boxBl
+<U2559>   \xAA      # sf490000  boxbL
+<U255A>   \xAB      # sf380000  boxBL
+<U255B>   \xAC      # sf280000  boxBr
+<U255C>   \xAD      # sf270000  boxbR
+<U255D>   \xAE      # sf260000  boxBR
+<U255E>   \xAF      # sf360000  boxMl
+<U255F>   \xB0      # sf370000  boxmL
+<U2560>   \xB1      # sf420000  boxML
+<U2561>   \xB2      # sf190000  boxMr
+<U0401>   \xB3      # ke180000
+<U2562>   \xB4      # sf200000  boxmR
+<U2563>   \xB5      # sf230000  boxMR
+<U2564>   \xB6      # sf470000  boxTc
+<U2565>   \xB7      # sf480000  boxtC
+<U2566>   \xB8      # sf410000  boxTC
+<U2567>   \xB9      # sf450000  boxBc
+<U2568>   \xBA      # sf460000  boxbC
+<U2569>   \xBB      # sf400000  boxBC
+<U256A>   \xBC      # sf540000  boxMc
+<U256B>   \xBD      # sf530000  boxmC
+<U256C>   \xBE      # sf440000  boxMC
+<U00A9>   \xBF      # sm520000  copyright
+<U044E>   \xC0      # ku150000
+<U0430>   \xC1      # ka010000
+<U0431>   \xC2      # kb010000
+<U0446>   \xC3      # kc010000
+<U0434>   \xC4      # kd010000
+<U0435>   \xC5      # ke010000
+<U0444>   \xC6      # kf010000
+<U0433>   \xC7      # kg010000
+<U0445>   \xC8      # kh010000
+<U0438>   \xC9      # ki010000
+<U0439>   \xCA      # kj110000
+<U043A>   \xCB      # kk010000
+<U043B>   \xCC      # kl010000
+<U043C>   \xCD      # km010000
+<U043D>   \xCE      # kn010000
+<U043E>   \xCF      # ko010000
+<U043F>   \xD0      # kp010000
+<U044F>   \xD1      # ka150000
+<U0440>   \xD2      # kr010000
+<U0441>   \xD3      # ks010000
+<U0442>   \xD4      # kt010000
+<U0443>   \xD5      # ku010000
+<U0436>   \xD6      # kz210000
+<U0432>   \xD7      # kv010000
+<U044C>   \xD8      # kx110000
+<U044B>   \xD9      # ky010000
+<U0437>   \xDA      # kz010000
+<U0448>   \xDB      # ks210000
+<U044D>   \xDC      # ke130000
+<U0449>   \xDD      # ks150000
+<U0447>   \xDE      # kc210000
+<U044A>   \xDF      # ku210000
+<U042E>   \xE0      # ku160000
+<U0410>   \xE1      # ka020000
+<U0411>   \xE2      # kb020000
+<U0426>   \xE3      # kc020000
+<U0414>   \xE4      # kd020000
+<U0415>   \xE5      # ke020000
+<U0424>   \xE6      # kf020000
+<U0413>   \xE7      # kg020000
+<U0425>   \xE8      # kh020000
+<U0418>   \xE9      # ki020000
+<U0419>   \xEA      # kj120000
+<U041A>   \xEB      # kk020000
+<U041B>   \xEC      # kl020000
+<U041C>   \xED      # km020000
+<U041D>   \xEE      # kn020000
+<U041E>   \xEF      # ko020000
+<U041F>   \xF0      # kp020000
+<U042F>   \xF1      # ka160000
+<U0420>   \xF2      # kr020000
+<U0421>   \xF3      # ks020000
+<U0422>   \xF4      # kt020000
+<U0423>   \xF5      # ku020000
+<U0416>   \xF6      # kz220000
+<U0412>   \xF7      # kv020000
+<U042C>   \xF8      # kx120000
+<U042B>   \xF9      # ky020000
+<U0417>   \xFA      # kz020000
+<U0428>   \xFB      # ks220000
+<U042D>   \xFC      # ke140000
+<U0429>   \xFD      # ks160000
+<U0427>   \xFE      # kc220000
+<U042A>   \xFF      # ku220000
+END CHARMAP
