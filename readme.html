@@ -78,11 +78,10 @@
           <li><a href="#ImportantNotesCPlusPlus">Using ICU in a Multithreaded
           Environment</a></li>
 
-          <li><a href="#MakeICUSmaller">How to Make ICU Smaller</a></li>
-
           <li><a href="#CharStrings">char * strings in ICU</a></li>
 
-          <li><a href="#ImportantNotesDefaultCP">Using the Default Codepage</a></li>
+          <li><a href="#ImportantNotesDefaultCP">Using the Default
+          Codepage</a></li>
 
           <li><a href="#ImportantNotesWindows">Windows Platform</a></li>
 
@@ -234,54 +233,54 @@
 
     <h3>ICU code library size</h3>
 
-    <p>ICU code libraries can be made smaller by removing functionality. See <a
-    href="#MakeICUSmaller">How to Make ICU Smaller</a>.</p>
+    <p>ICU code libraries can be made smaller by removing functionality. See
+    the <a href=
+    "http://oss.software.ibm.com/icu/userguide/packaging.html">Packaging
+    ICU</a> section of the User's Guide.</p>
 
     <h3>Support for Unicode 4.0</h3>
 
     <p>Unicode properties and algorithms have been upgraded to <a href=
-    "http://www.unicode.org/versions/Unicode4.0.0/">
-    Unicode 4.0</a>, which includes the addition of 1226 new encoded
-    characters. The UCA (<a href="http://www.unicode.org/reports/tr10/">Unicode
-    Collation Algorithm</a>) table
-    is still at version 3.1.1, with Unicode 4-based canonical closure,
-    because UCA 4 is not available yet.
-    All Unicode properties (except for those in Unihan.txt) are now <a href=
-    "http://oss.software.ibm.com/icu/userguide/properties.html">
-    available via direct APIs, and most via UnicodeSet</a>.</p>
+    "http://www.unicode.org/versions/Unicode4.0.0/">Unicode 4.0</a>, which
+    includes the addition of 1226 new encoded characters. The UCA (<a href=
+    "http://www.unicode.org/reports/tr10/">Unicode Collation Algorithm</a>)
+    table is still at version 3.1.1, with Unicode 4-based canonical closure,
+    because UCA 4 is not available yet. All Unicode properties (except for
+    those in Unihan.txt) are now <a href=
+    "http://oss.software.ibm.com/icu/userguide/properties.html">available via
+    direct APIs, and most via UnicodeSet</a>.</p>
 
-    <p>Note that a Unicode update includes changes in algorithms.
-    For example, the default iterator for finding titlecasing positions has
-    changed from the titlecasing iterator to the word break iterator
-    according to the Unicode Standard.</p>
+    <p>Note that a Unicode update includes changes in algorithms. For example,
+    the default iterator for finding titlecasing positions has changed from the
+    titlecasing iterator to the word break iterator according to the Unicode
+    Standard.</p>
 
-    <p><a href="http://www.unicode.org/reports/tr15/#Corrigenda">Unicode 4 fixes 5 normalization bugs</a>,
-    which changes the decomposition and canonical equivalence of 5 characters.
-    ICU 2.6 normalization uses Unicode 4 data, therefore contains these bug fixes.</p>
+    <p><a href="http://www.unicode.org/reports/tr15/#Corrigenda">Unicode 4
+    fixes 5 normalization bugs</a>, which changes the decomposition and
+    canonical equivalence of 5 characters. ICU 2.6 normalization uses Unicode 4
+    data, therefore it contains these bug fixes.</p>
 
     <h3>Currency formatting</h3>
 
     <p>Formatting of currency values has been improved in ICU 2.6 by allowing
-    the specification of any currency with any language-specific formatter.
-    The currency itself can be chosen independently of the display language,
-    but an appropriately localized string will be displayed for the currency
-    symbol. The display symbol data is not fully fleshed out.
-    See the API references for ucurr.h and NumberFormat.
-    <code>icu/source/samples/numfmt/</code> is updated to illustrate this
-    feature.</p>
+    the specification of any currency with any language-specific formatter. The
+    currency itself can be chosen independently of the display language, but an
+    appropriately localized string will be displayed for the currency symbol.
+    The display symbol data is not fully fleshed out. See the API references
+    for ucurr.h and NumberFormat. <code>icu/source/samples/numfmt/</code> is
+    updated to illustrate this feature.</p>
 
     <h3>XML resource bundles</h3>
 
-    <p>The ICU team had developed a custom XML format that matched
-    the capabilities of the binary data structure of ICU .res files.
-    This format was not known to be used and not optimal for
-    translation/localization.
-    ICU 2.6 supports the standard XLIFF format for product localization by
-    providing tools to convert between .xlf and ICU .txt files.
-    See the User Guide
-    <a href="http://oss.software.ibm.com/icu/userguide/localizing.html">Localizing with ICU</a>
-    chapter for details.
-    The previous, ICU-specific XML format has been withdrawn.</p>
+    <p>The ICU team had developed a custom XML format that matched the
+    capabilities of the binary data structure of ICU .res files. This format
+    was not known to be used and not optimal for translation/localization. ICU
+    2.6 supports the standard XLIFF format for product localization by
+    providing tools to convert between .xlf and ICU .txt files. See the User
+    Guide <a href=
+    "http://oss.software.ibm.com/icu/userguide/localizing.html">Localizing with
+    ICU</a> chapter for details. The previous, ICU-specific XML format has been
+    withdrawn.</p>
 
     <h3>Flexible data loading</h3>
 
@@ -1012,8 +1011,9 @@
     CC,CXX, CFLAGS and CXXFLAGS environment variables, and type
     <tt>"./configure"</tt>. Some of the more frequently used options to
     configure are --disable-64bit-libs to create 32-bit libraries, and --srcdir
-    to do out of source builds (build the libraries in the current
-    location).</p>
+    to do out of source builds (build the libraries in the current location).
+    HP-UX user's, please see this <a href="#ImportantNotesHPUX">note</a>
+    regarding multithreaded build issues with newer compilers.</p>
 
     <p><a name="HowToTestWithoutGmake"><strong>Running The Tests From The
     Command Line NOTE:</strong></a> You may have to set certain variables if
@@ -1124,8 +1124,8 @@
         linker to run at the older level, thereby producing the desired
         binaries.</p>
 
-        <p>To set the compiler and LE environment to OS/390 2.10,
-        specify the following:</p>
+        <p>To set the compiler and LE environment to OS/390 2.10, specify the
+        following:</p>
 <pre>
 <samp>./runConfigureICU OS390V2R10</samp>
 </pre>
@@ -1227,7 +1227,7 @@ Data set name type  : PDS</samp>
     <h3><a name="HowToBuildOS400" href="#HowToBuildOS400">How To Build And
     Install On OS/400 (iSeries)</a></h3>
 
-    <p>ICU Reference Release 2.4 contains partial support for the iSeries
+    <p>ICU Reference Release 2.6 contains partial support for the iSeries
     platform. After building ICU and running the tests, you may notice that
     some of the formatting tests fail. The formating failures can be ignored
     for now. These failures are expected to be resolved in a future release of
@@ -1339,9 +1339,9 @@ system CRTLIB "LIB(<i>datalibraryname</i>)"
 gmake OUTPUTDIR=<i>datalibraryname</i>
 system CRTSRVPGM "SRVPGM(<i>libraryname</i>/LIBICUDATA)" "MODULE(<i>datalibraryname</i>/*ALL)"
                  "EXPORT(*ALL)" "TEXT('ICU 2.6 DATA')" "OPTION(*DUPPROC *DUPVAR)"
-ln -fs /qsys.lib/<i>libraryname</i>.lib/libicudata.srvpgm out/libicudata.o
+ln -fs /qsys.lib/<i>libraryname</i>.lib/libicudata.srvpgm out/libicudata.so
 cd ..
-del common/libicuuc.o
+del common/libicuuc.so
 </samp>
 </pre>
           </li>
@@ -1459,6 +1459,17 @@ del common/libicuuc.o
       </tr>
 
       <tr>
+        <td>Layout Extensions Engine</td>
+
+        <td>iculx<i>XY</i>.dll</td>
+
+        <td>libiculx.so.<i>XY</i>.<i>Z</i></td>
+
+        <td>Contains an optional engine for doing font layout that uses parts
+        of ICU.</td>
+      </tr>
+
+      <tr>
         <td>Unicode stdio Library</td>
 
         <td>icuio<i>XY</i>.dll</td>
@@ -1514,104 +1525,276 @@ del common/libicuuc.o
     If you do not have a multithreaded application, you do not need to worry
     about the global mutex.</p>
 
-    <h3><a name="MakeICUSmaller" href="#MakeICUSmaller">How to Make ICU
-    Smaller</a></h3>
+    <h4><a name="ImportantNotesHPUX" href="#ImportantNotesHPUX">Using ICU in a
+    Multithreaded Environment on HP-UX</a></h4>
 
-    <p>For some environments, ICU "is too large". There are two ways to remove
-    parts and make it smaller: Remove some of its library code modules from the
-    build (reducing functionality), or remove some of its data (possibly
-    reducing only codepage/locale/etc. coverage without sacrificing overall
-    functionality). For details about reducing the data size see the <a href=
-    "http://oss.software.ibm.com/icu/userguide/">User Guide</a> "ICU Data"
-    chapter.</p>
+    <p>If you are building ICU with a newer aCC compiler, or you are planning
+    on using any RogueWave libraries, you will need to set special flags before
+    building ICU. These flags are needed in order to make ICU thread safe and
+    to allow iostream to work properly. More information on these flags can be
+    found <a href=
+    "http://docs.hp.com/hpux/onlinedocs/dev/aCC/a_03_30/options.htm#option-mt">here</a>
+    and <a href=
+    "http://docs.hp.com/hpux/onlinedocs/dev/aCC/a_03_30/options.htm#optioncap-AA">
+    here</a>.</p>
+<pre>
+<samp>CFLAGS="-mt" CXXFLAGS="-mt -AA" LDFLAGS="-mt" ./runConfigureICU HP-UX11ACC</samp>
+</pre>
 
-    <p>The header file <code>source/common/unicode/uconfig.h</code> contains
-    source-code-level "switches" corresponding to <code>#if</code> directives
-    in the ICU source code. Setting one of the <code>UCONFIG_NO_...</code>
-    switches to 1 (by setting <code>CFLAGS/CPPFLAGS</code> or adding a
-    <code>#define</code> at the beginning of <code>uconfig.h</code>) turns off
-    the code associated with one of the ICU service modules. Setting one of the
-    <code>UCONFIG_ONLY_...</code> switches to 1 turns off all modules that are
-    not essential for the functioning of the associated "only" service. For the
-    current set of available switches see <code>uconfig.h</code> itself.</p>
-
-    <p>When a source code module is turned off, then the data-building
-    makefiles should be modified to not generate the data files that are used
-    with that module. Some of the data-generating genxyz tools rely on the
-    module itself to build its data; they will generate dummy data files to
-    satisfy the dependencies of the unmodified makefiles (to make these
-    switches easily testable). Other data files for which the tools do not rely
-    on the related library modules (e.g., mapping tables [<code>.cnv</code>]
-    and transliterator files [<code>.res</code>, from
-    <code>source/data/translit/</code>]) continue to be built unless the data
-    makefiles are modified. For further details on data building see the <a
-    href="http://oss.software.ibm.com/icu/userguide/">User Guide</a> "ICU Data"
-    chapter.</p>
-
-    <h3><a name="CharStrings" href="#CharStrings">char * strings in ICU</a></h3>
+    <h3><a name="CharStrings" href="#CharStrings">char * strings in
+    ICU</a></h3>
 
     <p>The C/C++ languages do not provide a portable way to specify Unicode
     code point or string literals other than with arrays of numeric constants.
     For convenience, ICU4C tends to use char * strings in places where only
-    "invariant characters" are used &mdash; a portable subset of the 7-bit ASCII
-    repertoire &mdash; so that locale IDs, charset names, resource bundle item keys
-    and similar can be easily specified as string literals in the source code.
-    The same types of strings are also stored as "invariant character" char *
-    strings in the ICU data files.</p>
+    "invariant characters" are used &mdash; a portable subset of the 7-bit
+    ASCII repertoire &mdash; so that locale IDs, charset names, resource bundle
+    item keys and similar can be easily specified as string literals in the
+    source code. The same types of strings are also stored as "invariant
+    character" char * strings in the ICU data files.</p>
 
     <p>ICU has hardcoded mapping tables in <code>source/common/putil.c</code>
     to convert invariant characters to and from Unicode without using a full
-    ICU converter.
-    These tables must match the encoding of string literals in the ICU code
-    as well as in the ICU data files.</p>
+    ICU converter. These tables must match the encoding of string literals in
+    the ICU code as well as in the ICU data files.</p>
 
-    <p><strong>Important: </strong>ICU assumes that at least the
-    invariant characters always have the same codes as is common on platforms
-    with the same charset family (ASCII vs. EBCDIC).
-    <em>ICU has not been tested on platforms where this is not the case.</em></p>
+    <p><strong>Important:</strong> ICU assumes that at least the invariant
+    characters always have the same codes as is common on platforms with the
+    same charset family (ASCII vs. EBCDIC). <em>ICU has not been tested on
+    platforms where this is not the case.</em></p>
 
-    <p>Some usage of char * strings in ICU assumes the system charset
-    instead of invariant characters;
-    such strings are only handled with the default converter.
-    See the following section.
-    (The system charset is usually a superset of the invariant characters.)</p>
+    <p>Some usage of char * strings in ICU assumes the system charset instead
+    of invariant characters; such strings are only handled with the default
+    converter. See the following section. (The system charset is usually a
+    superset of the invariant characters.)</p>
 
     <p>The following are the ASCII and EBCDIC code values for all of the
     invariant characters (see also unicode/utypes.h):</p>
 
     <table border="1">
-      <tr><th>Character(s)</th><th>ASCII</th><th>EBCDIC</th></tr>
-      <tr><td>a..i</td><td>61..69</td><td>81..89</td></tr>
-      <tr><td>j..r</td><td>6A..72</td><td>91..99</td></tr>
-      <tr><td>s..z</td><td>73..7A</td><td>A2..A9</td></tr>
+      <tr>
+        <th>Character(s)</th>
 
-      <tr><td>A..I</td><td>41..49</td><td>C1..C9</td></tr>
-      <tr><td>J..R</td><td>4A..52</td><td>D1..D9</td></tr>
-      <tr><td>S..Z</td><td>53..5A</td><td>E2..E9</td></tr>
+        <th>ASCII</th>
 
-      <tr><td>0..9</td><td>30..39</td><td>F0..F9</td></tr>
+        <th>EBCDIC</th>
+      </tr>
 
-      <tr><td>(space)</td><td>20</td><td>40</td></tr>
+      <tr>
+        <td>a..i</td>
 
-      <tr><td>"</td><td>22</td><td>7F</td></tr>
-      <tr><td>%</td><td>25</td><td>6C</td></tr>
-      <tr><td>&amp;</td><td>26</td><td>50</td></tr>
-      <tr><td>'</td><td>27</td><td>7D</td></tr>
-      <tr><td>(</td><td>28</td><td>4D</td></tr>
-      <tr><td>)</td><td>29</td><td>5D</td></tr>
-      <tr><td>*</td><td>2A</td><td>5C</td></tr>
-      <tr><td>+</td><td>2B</td><td>4E</td></tr>
-      <tr><td>,</td><td>2C</td><td>6B</td></tr>
-      <tr><td>-</td><td>2D</td><td>60</td></tr>
-      <tr><td>.</td><td>2E</td><td>4B</td></tr>
-      <tr><td>/</td><td>2F</td><td>61</td></tr>
-      <tr><td>:</td><td>3A</td><td>7A</td></tr>
-      <tr><td>;</td><td>3B</td><td>5E</td></tr>
-      <tr><td>&lt;</td><td>3C</td><td>4C</td></tr>
-      <tr><td>=</td><td>3D</td><td>7E</td></tr>
-      <tr><td>&gt;</td><td>3E</td><td>6E</td></tr>
-      <tr><td>?</td><td>3F</td><td>6F</td></tr>
-      <tr><td>_</td><td>5F</td><td>6D</td></tr>
+        <td>61..69</td>
+
+        <td>81..89</td>
+      </tr>
+
+      <tr>
+        <td>j..r</td>
+
+        <td>6A..72</td>
+
+        <td>91..99</td>
+      </tr>
+
+      <tr>
+        <td>s..z</td>
+
+        <td>73..7A</td>
+
+        <td>A2..A9</td>
+      </tr>
+
+      <tr>
+        <td>A..I</td>
+
+        <td>41..49</td>
+
+        <td>C1..C9</td>
+      </tr>
+
+      <tr>
+        <td>J..R</td>
+
+        <td>4A..52</td>
+
+        <td>D1..D9</td>
+      </tr>
+
+      <tr>
+        <td>S..Z</td>
+
+        <td>53..5A</td>
+
+        <td>E2..E9</td>
+      </tr>
+
+      <tr>
+        <td>0..9</td>
+
+        <td>30..39</td>
+
+        <td>F0..F9</td>
+      </tr>
+
+      <tr>
+        <td>(space)</td>
+
+        <td>20</td>
+
+        <td>40</td>
+      </tr>
+
+      <tr>
+        <td>"</td>
+
+        <td>22</td>
+
+        <td>7F</td>
+      </tr>
+
+      <tr>
+        <td>%</td>
+
+        <td>25</td>
+
+        <td>6C</td>
+      </tr>
+
+      <tr>
+        <td>&amp;</td>
+
+        <td>26</td>
+
+        <td>50</td>
+      </tr>
+
+      <tr>
+        <td>'</td>
+
+        <td>27</td>
+
+        <td>7D</td>
+      </tr>
+
+      <tr>
+        <td>(</td>
+
+        <td>28</td>
+
+        <td>4D</td>
+      </tr>
+
+      <tr>
+        <td>)</td>
+
+        <td>29</td>
+
+        <td>5D</td>
+      </tr>
+
+      <tr>
+        <td>*</td>
+
+        <td>2A</td>
+
+        <td>5C</td>
+      </tr>
+
+      <tr>
+        <td>+</td>
+
+        <td>2B</td>
+
+        <td>4E</td>
+      </tr>
+
+      <tr>
+        <td>,</td>
+
+        <td>2C</td>
+
+        <td>6B</td>
+      </tr>
+
+      <tr>
+        <td>-</td>
+
+        <td>2D</td>
+
+        <td>60</td>
+      </tr>
+
+      <tr>
+        <td>.</td>
+
+        <td>2E</td>
+
+        <td>4B</td>
+      </tr>
+
+      <tr>
+        <td>/</td>
+
+        <td>2F</td>
+
+        <td>61</td>
+      </tr>
+
+      <tr>
+        <td>:</td>
+
+        <td>3A</td>
+
+        <td>7A</td>
+      </tr>
+
+      <tr>
+        <td>;</td>
+
+        <td>3B</td>
+
+        <td>5E</td>
+      </tr>
+
+      <tr>
+        <td>&lt;</td>
+
+        <td>3C</td>
+
+        <td>4C</td>
+      </tr>
+
+      <tr>
+        <td>=</td>
+
+        <td>3D</td>
+
+        <td>7E</td>
+      </tr>
+
+      <tr>
+        <td>&gt;</td>
+
+        <td>3E</td>
+
+        <td>6E</td>
+      </tr>
+
+      <tr>
+        <td>?</td>
+
+        <td>3F</td>
+
+        <td>6F</td>
+      </tr>
+
+      <tr>
+        <td>_</td>
+
+        <td>5F</td>
+
+        <td>6D</td>
+      </tr>
     </table>
 
     <h3><a name="ImportantNotesDefaultCP" href="#ImportantNotesDefaultCP">Using
