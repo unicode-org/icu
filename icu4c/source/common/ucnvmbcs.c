@@ -1861,10 +1861,18 @@ _MBCSSimpleGetNextUChar(UConverterSharedData *sharedData,
         return 0xffff;
     }
 
+#if 0
+/*
+ * Code disabled 2002dec09 (ICU 2.4) because it is not currently used in ICU. markus
+ * TODO In future releases, verify that this function is never called for SBCS
+ * conversions, i.e., that sharedData->table->mbcs.countStates==1 is still true.
+ * Removal improves code coverage.
+ */
     /* use optimized function if possible */
     if(sharedData->table->mbcs.countStates==1) {
         return _MBCSSingleSimpleGetNextUChar(sharedData, (uint8_t)(*(*pSource)++), useFallback);
     }
+#endif
 
     stateTable=sharedData->table->mbcs.stateTable;
     unicodeCodeUnits=sharedData->table->mbcs.unicodeCodeUnits;
@@ -1962,6 +1970,11 @@ _MBCSSimpleGetNextUChar(UConverterSharedData *sharedData,
     return 0xffff;
 }
 
+#if 0
+/*
+ * Code disabled 2002dec09 (ICU 2.4) because it is not currently used in ICU. markus
+ * Removal improves code coverage.
+ */
 /**
  * This version of _MBCSSimpleGetNextUChar() is optimized for single-byte, single-state codepages.
  * It does not handle the EBCDIC swaplfnl option (set in UConverter).
@@ -2009,6 +2022,7 @@ _MBCSSingleSimpleGetNextUChar(UConverterSharedData *sharedData,
         return 0xffff;
     }
 }
+#endif
 
 /* MBCS-from-Unicode conversion functions ----------------------------------- */
 
