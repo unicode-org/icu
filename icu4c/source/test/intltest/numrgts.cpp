@@ -21,6 +21,74 @@
 #include "unicode/datefmt.h"
 #include "putilimp.h"
 
+class MyNumberFormatTest : public NumberFormat 
+{
+public:
+
+    virtual UClassID getDynamicClassID(void) const;
+  
+    virtual UnicodeString& format(    double            number, 
+                    UnicodeString&        toAppendTo, 
+                    FieldPosition&        pos,
+                    UErrorCode& status) const
+    {
+        return NumberFormat::format(number, toAppendTo, pos, status);
+    }
+
+    /* Just keep this here to make some of the compilers happy */
+    virtual UnicodeString& format(const Formattable& obj,
+                                  UnicodeString& toAppendTo,
+                                  FieldPosition& pos,
+                                  UErrorCode& status) const
+    {
+        return NumberFormat::format(obj, toAppendTo, pos, status);
+    }
+
+    /* Just use one of the format functions */
+    virtual UnicodeString& format(    double            /* number */, 
+                    UnicodeString&        toAppendTo, 
+                    FieldPosition&        /* pos */) const
+    {
+        toAppendTo = "";
+        return toAppendTo;
+    }
+  
+    /*
+    public Number parse(String text, ParsePosition parsePosition) 
+    { return new Integer(0); }
+    */
+  
+    /* Just use one of the parse functions */
+    virtual void parse(    const UnicodeString&    /* text */, 
+            Formattable&            result, 
+            ParsePosition&          /* parsePosition */) const
+    {
+        result.setLong((int32_t)0);
+    }
+  
+    virtual void parse(    const UnicodeString&    text, 
+            Formattable&            result, 
+            UErrorCode&            status) const 
+    {
+        NumberFormat::parse(text, result, status);
+    }
+    virtual Format* clone() const 
+    { return NULL; }
+
+    virtual UnicodeString& format(int32_t, 
+                UnicodeString& foo, 
+                FieldPosition&) const
+    { return foo.remove(); }
+
+    virtual UnicodeString& format(int64_t, 
+                UnicodeString& foo, 
+                FieldPosition&) const
+    { return foo.remove(); }
+
+    virtual void applyPattern(const UnicodeString&, UParseError&, UErrorCode&){
+    }
+};
+
 int32_t gMyNumberFormatTestClassID;
 UClassID MyNumberFormatTest::getDynamicClassID()  const
 {
