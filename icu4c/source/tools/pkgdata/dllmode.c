@@ -162,7 +162,7 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
     
     T_FileStream_writeLine(makefile,"build-objs: $(SOURCES) $(OBJECTS)\n\n$(OBJECTS): $(SOURCES)\n\n");
     
-#ifdef HPUX
+#ifdef U_HPUX
     T_FileStream_writeLine(makefile, "$(TARGETDIR)/$(FINAL_SO_TARGET): $(OBJECTS) $(HPUX_JUNK_OBJ) $(LISTFILES) $(DLL_DEPS)\n"
                                      "\t$(SHLIB.cc) -o $@ $(OBJECTS) $(HPUX_JUNK_OBJ) $(DLL_LDFLAGS)\n"
                                      "\t-ls -l $@\n\n");
@@ -236,7 +236,7 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
     T_FileStream_writeLine(makefile, "$(NAME).map:\n\techo \"{global: $(TOCSYM); local: *; };\" > $@\n\n");
 #endif
     
-#ifdef AIX
+#ifdef U_AIX
     T_FileStream_writeLine(makefile, "$(NAME).map:\n\techo \"$(TOCSYM)\" > $@\n\n");
 #endif
     

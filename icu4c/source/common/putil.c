@@ -40,10 +40,6 @@
 #    include<sys/types.h>
 #endif
 
-#ifdef __QNXNTO__
-#include <sys/neutrino.h>
-#endif
-
 #ifndef PTX
 
 /* Define _XOPEN_SOURCE for Solaris and friends. */
@@ -111,7 +107,7 @@
 #   include <TextUtils.h>
 #elif defined(OS390)
 #include "unicode/ucnv.h"   /* Needed for UCNV_SWAP_LFNL_OPTION_STRING */
-#elif defined(AIX)
+#elif defined(U_AIX)
 /*
 #   include <sys/ldr.h>
 */
@@ -120,13 +116,16 @@
 #   include <dlfcn.h>
 #   include <link.h>
 */
-#elif defined(HPUX)
+#elif defined(U_HPUX)
 /*
 #   include <dl.h>
 */
 #elif defined(U_DARWIN)
 #include <sys/file.h>
 #include <sys/param.h>
+#elif defined(U_QNX)
+#include <sys/neutrino.h>
+#endif
 #endif
 
 /* Define the extension for data files, again... */
@@ -1191,7 +1190,7 @@ uprv_timezone()
 /* Note that U_TZNAME does *not* have to be tzname, but if it is,
    some platforms need to have it declared here. */ 
 
-#if defined(IRIX) || defined(U_DARWIN) /* For SGI or Mac OS X.  */
+#if defined(U_IRIX) || defined(U_DARWIN) /* For SGI or Mac OS X.  */
 extern char *tzname[]; /* RS6000 and others reject char **tzname.  */
 #elif defined(U_CYGWIN)
 extern U_IMPORT char *_tzname[2]; 

@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2003, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.202 2003/12/13 00:10:45 grhoten-oss Exp $
+dnl $Id: configure.in,v 1.203 2003/12/14 18:06:32 grhoten-oss Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -827,8 +827,8 @@ case "${host}" in
 	*-*-solaris*) 	platform=U_SOLARIS ;;
 	*-*-linux*) 	platform=U_LINUX ;;
 	*-*-*bsd*) 	platform=U_BSD ;;
-	*-*-aix*) 	platform=AIX ;;
-	*-*-hpux*) 	platform=HPUX ;;
+	*-*-aix*) 	platform=U_AIX ;;
+	*-*-hpux*) 	platform=U_HPUX ;;
 	*-apple-darwin*|*-apple-rhapsody*)	platform=U_DARWIN ;;
 	*-*-cygwin*|*-*-mingw*)	platform=U_CYGWIN ;;
 	*-*ibm-openedition*|*-*-os390*)	platform=OS390
@@ -838,7 +838,7 @@ case "${host}" in
 	*-*-nto*)	platform=U_QNX ;;
 	*-dec-osf*) 	platform=U_OSF ;;
 	*-*-beos)		platform=U_BEOS ;;
-	*-*-irix*)		platform=IRIX ;;
+	*-*-irix*)		platform=U_IRIX ;;
 	*-ncr-*)		platform=U_MPRAS ;;
 	*-sequent-*)	platform=PTX ;;
 	*) 		platform=U_UNKNOWN_PLATFORM ;;

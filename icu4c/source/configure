@@ -3935,8 +3935,8 @@ case "${host}" in
 	*-*-solaris*) 	platform=U_SOLARIS ;;
 	*-*-linux*) 	platform=U_LINUX ;;
 	*-*-*bsd*) 	platform=U_BSD ;;
-	*-*-aix*) 	platform=AIX ;;
-	*-*-hpux*) 	platform=HPUX ;;
+	*-*-aix*) 	platform=U_AIX ;;
+	*-*-hpux*) 	platform=U_HPUX ;;
 	*-apple-darwin*|*-apple-rhapsody*)	platform=U_DARWIN ;;
 	*-*-cygwin*|*-*-mingw*)	platform=U_CYGWIN ;;
 	*-*ibm-openedition*|*-*-os390*)	platform=OS390
@@ -3946,7 +3946,7 @@ case "${host}" in
 	*-*-nto*)	platform=U_QNX ;;
 	*-dec-osf*) 	platform=U_OSF ;;
 	*-*-beos)		platform=U_BEOS ;;
-	*-*-irix*)		platform=IRIX ;;
+	*-*-irix*)		platform=U_IRIX ;;
 	*-ncr-*)		platform=U_MPRAS ;;
 	*-sequent-*)	platform=PTX ;;
 	*) 		platform=U_UNKNOWN_PLATFORM ;;
