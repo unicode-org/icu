@@ -36,7 +36,7 @@ ac_help="$ac_help
 ac_help="$ac_help
 "
 ac_help="$ac_help
-  --with-library-suffix=suffix tag a suffix to the library names [default=]"
+  --with-library-suffix=suffix    tag a suffix to the library names [default=]"
 ac_help="$ac_help
   --enable-tests          build ICU tests [default=yes]"
 ac_help="$ac_help
