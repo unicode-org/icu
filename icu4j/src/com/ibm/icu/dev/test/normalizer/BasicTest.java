@@ -5,19 +5,19 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/normalizer/BasicTest.java,v $
- * $Date: 2002/11/15 21:04:20 $
- * $Revision: 1.20 $
+ * $Date: 2002/11/22 00:21:51 $
+ * $Revision: 1.21 $
  *
  *****************************************************************************************
  */
 
 package com.ibm.icu.dev.test.normalizer;
+import java.text.StringCharacterIterator;
 import com.ibm.icu.dev.test.*;
 import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
 import com.ibm.icu.impl.*;
 import com.ibm.icu.impl.Utility;
-import java.text.StringCharacterIterator;
 import java.util.Random;
 
 public class BasicTest extends TestFmwk {

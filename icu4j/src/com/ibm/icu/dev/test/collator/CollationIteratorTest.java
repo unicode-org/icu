@@ -17,12 +17,13 @@
 
 package com.ibm.icu.dev.test.collator;
 
+import java.util.Locale;
+import java.util.Arrays;
+import java.text.CharacterIterator;
+import java.text.StringCharacterIterator;
 import com.ibm.icu.dev.test.*;
 import com.ibm.icu.text.*;
 import com.ibm.icu.lang.UCharacter;
-import java.util.Locale;
-import java.text.CharacterIterator;
-import java.util.Arrays;
 
 public class CollationIteratorTest extends TestFmwk {
     

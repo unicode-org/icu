@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/BreakTransliterator.java,v $ 
- * $Date: 2002/10/31 22:36:49 $ 
- * $Revision: 1.2 $
+ * $Date: 2002/11/22 00:29:00 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -15,7 +15,6 @@ package com.ibm.icu.text;
 //import com.ibm.icu.lang.*;
 import com.ibm.icu.lang.UCharacter;
 import java.util.Locale;
-import java.text.StringCharacterIterator;
 import java.text.CharacterIterator;
 //import java.util.*;
 //import java.util.ArrayList;

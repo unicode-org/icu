@@ -17,10 +17,11 @@
  
 package com.ibm.icu.dev.test.collator;
 
-import com.ibm.icu.dev.test.*;
-import com.ibm.icu.text.*;
 import java.util.Locale;
 import java.text.CharacterIterator;
+import java.text.StringCharacterIterator;
+import com.ibm.icu.dev.test.*;
+import com.ibm.icu.text.*;
 
 public class CollationAPITest extends TestFmwk {
     public static void main(String[] args) throws Exception {

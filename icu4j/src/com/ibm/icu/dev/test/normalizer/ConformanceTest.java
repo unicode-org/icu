@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/normalizer/ConformanceTest.java,v $ 
- * $Date: 2002/07/25 21:22:54 $ 
- * $Revision: 1.10 $
+ * $Date: 2002/11/22 00:23:19 $ 
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */
@@ -14,6 +14,7 @@
 package com.ibm.icu.dev.test.normalizer;
 
 import com.ibm.icu.dev.test.TestUtil;
+import java.text.StringCharacterIterator;
 import java.io.*;
 import com.ibm.icu.dev.test.*;
 import com.ibm.icu.text.*;

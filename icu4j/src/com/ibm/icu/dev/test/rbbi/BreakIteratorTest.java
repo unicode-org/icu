@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/rbbi/BreakIteratorTest.java,v $
- * $Date: 2002/03/01 18:57:19 $
- * $Revision: 1.9 $
+ * $Date: 2002/11/22 00:24:31 $
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -15,7 +15,7 @@ package com.ibm.icu.dev.test.rbbi;
 import com.ibm.icu.dev.test.*;
 import com.ibm.icu.text.BreakIterator;
 import java.text.CharacterIterator;
-import com.ibm.icu.text.StringCharacterIterator;
+import java.text.StringCharacterIterator;
 import java.util.Locale;
 import java.util.Vector;
 import java.util.Enumeration;
