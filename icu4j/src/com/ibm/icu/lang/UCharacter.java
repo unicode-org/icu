@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2001/11/25 23:12:22 $ 
-* $Revision: 1.18 $
+* $Date: 2001/12/03 20:59:00 $ 
+* $Revision: 1.19 $
 *
 *******************************************************************************
 */
@@ -1103,13 +1103,14 @@ public final class UCharacter
         
         while (offset < size)
         {
-            int ch = UTF16.charAt(str, offset);
+            int ch     = UTF16.charAt(str, offset);
+            int chsize = UTF16.getCharCount(ch);
             int props = PROPERTY_DB_.getProperty(ch);
             if (!UCharacterPropertyDB.isExceptionIndicator(props)) 
             {
                 if (UCharacterPropertyDB.getPropType(props) == 
                     UCharacterCategory.LOWERCASE_LETTER) {
-                ch -= UCharacterPropertyDB.getSignedValue(props);
+                    ch -= UCharacterPropertyDB.getSignedValue(props);
                 }
                 UTF16.append(result, ch);
             }
@@ -1124,12 +1125,13 @@ public final class UCharacter
                 else {
                     if (PROPERTY_DB_.hasExceptionValue(index, 
                                          UCharacterPropertyDB.EXC_UPPERCASE_)) {
-                        UTF16.append(result, PROPERTY_DB_.getException(index, 
-                                         UCharacterPropertyDB.EXC_UPPERCASE_));
+                        ch = PROPERTY_DB_.getException(index, 
+                                         UCharacterPropertyDB.EXC_UPPERCASE_);
                     }
+                    UTF16.append(result, ch);
                 }
             }
-            offset += UTF16.getCharCount(ch);
+            offset += chsize;
         }
         return result.toString();
     }
@@ -1149,6 +1151,7 @@ public final class UCharacter
         StringBuffer result = new StringBuffer(length);
         while (offset < length) {
             int ch = UTF16.charAt(str, offset);
+            int chsize = UTF16.getCharCount(ch);
             int props = PROPERTY_DB_.getProperty(ch);
             if (!UCharacterPropertyDB.isExceptionIndicator(props)) {
                 int type = UCharacterPropertyDB.getPropType(props);
@@ -1168,12 +1171,13 @@ public final class UCharacter
                 else {
                     if (PROPERTY_DB_.hasExceptionValue(index, 
                                        UCharacterPropertyDB.EXC_LOWERCASE_)) {
-                        UTF16.append(result, PROPERTY_DB_.getException(index, 
-                                         UCharacterPropertyDB.EXC_LOWERCASE_));
+                        ch = PROPERTY_DB_.getException(index, 
+                                         UCharacterPropertyDB.EXC_LOWERCASE_);
                     }
+                    UTF16.append(result, ch);
                 }
             }
-            offset += UTF16.getCharCount(ch);
+            offset += chsize;
         }
         return result.toString();
     }
