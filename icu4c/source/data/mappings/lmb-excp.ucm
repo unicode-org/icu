@@ -17,6 +17,8 @@
 <mb_cur_min>                  1
 <uconv_class>                 "MBCS"
 <subchar>                      \x3F
+<icu:state>                   1-2:1, 6:1
+<icu:state>                   1-7f
 #
 CHARMAP
 #
