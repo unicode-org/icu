@@ -83,7 +83,7 @@ char *scriptNames[] =
       "USCRIPT_HEBREW",      /* Hebr */
       "USCRIPT_HIRAGANA",    /* Hira */
       "USCRIPT_KANNADA",     /* Knda */
-      "USCRIPT_KATAKANA",    /* Kata */
+      "USCRIPT_KATAKANA",    /* Kana */
       "USCRIPT_KHMER",       /* Khmr */
       "USCRIPT_LAO",         /* Laoo */
       "USCRIPT_LATIN",       /* Latn (Latf, Latg) */
@@ -103,6 +103,10 @@ char *scriptNames[] =
       "USCRIPT_TIBETAN",     /* Tibt */
       "USCRIPT_UCAS",        /* Cans */
       "USCRIPT_YI",          /* Yiii */
+      "USCRIPT_TAGALOG",     /* Tglg */
+      "USCRIPT_HANUNOO",     /* Hano */
+      "USCRIPT_BUHID",       /* Buhd */
+      "USCRIPT_TAGBANWA"     /* Tagb */
 };
 
 UChar devaText[] =
