@@ -1,0 +1,175 @@
+<!-- 
+/*
+*******************************************************************************
+* Copyright (C) 1997-2001, International Business Machines Corporation and    *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*
+* $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $ 
+* $Date: 2001/06/07 01:13:19 $ 
+* $Revision: 1.33 $
+*
+*******************************************************************************
+* This is the ant build file for ICU4J.  See readme.html for more information.
+*/
+-->
+
+<project name="ICU4J" default="core" basedir=".">
+
+  <target name="init">
+    <tstamp/>
+    <property name="src.dir" value="src"/>
+    <property name="doc.dir" value="doc"/>
+    <property name="build.dir" value="classes"/>
+    <property name="obsolete.dir" value="build"/>
+    <property name="jar.file" value="icu4j.jar"/>
+    <property name="zipbin.file" value="../icu4jbin${DSTAMP}.zip"/>
+    <property name="zip.file" value="../icu4j${DSTAMP}.zip"/>
+    <property name="classpath" value="${build.dir}"/>
+    <property name="build.compiler" value="classic"/>
+    <property name="richedit.dist.dir" value="richeditDist"/>
+    <property name="richedit.cont.dir" value="richedit"/>
+    <property name="richedit.archive.dir" value="${richedit.dist.dir}/${richedit.cont.dir}"/>
+    <property name="richedit.jar.file" value="${richedit.archive.dir}/richedit.jar"/>
+    <property name="richedit.doc.dir" value="${richedit.archive.dir}/doc"/>
+    <property name="richedit.zip.file" value="${richedit.dist.dir}/richedit.zip"/>
+    <property name="richedit.manifest" value="${richedit.dist.dir}/manifest.stub"/>
+  </target>
+
+  <target name="all" depends="core,tests,tools,demos,jar,docs"/>
+  
+  <target name="core" depends="init,coreData">
+    <mkdir dir="${build.dir}"/>
+    <copy file="${src.dir}/com/ibm/text/resources/thai_dict"
+           todir="${build.dir}/com/ibm/text/resources/"/>
+    <javac includes="com/ibm/util/**/*.java,com/ibm/text/**/*.java,com/ibm/math/**/*.java,com/ibm/richtext/**/*.java"
+           excludes="**/CVS/**/*"
+           srcdir="${src.dir}"
+    	   destdir="${build.dir}" 
+    	   classpath="${classpath}"
+           debug="on" deprecation="off" target="1.2"/>
+  </target>
+  
+  <target name="tests" depends="core,testData">
+    <javac includes="com/ibm/test/**/*.java,com/ibm/icu/test/**/*.java"
+           excludes="**/CVS/**/*"
+    	   srcdir="${src.dir}"
+    	   destdir="${build.dir}" 
+    	   classpath="${classpath}"
+           debug="on" deprecation="off" target="1.2"/>
+  </target>
+  
+  <target name="demos" depends="core,testData">
+    <javac includes="com/ibm/demo/**/*.java"
+           excludes="**/CVS/**/*"
+    	   srcdir="${src.dir}"
+    	   destdir="${build.dir}" 
+    	   classpath="${classpath}"
+           debug="on" deprecation="off" target="1.2"/>
+  </target>
+  
+  <target name="tools" depends="core">
+    <javac includes="com/ibm/tools/**/*.java"
+           excludes="**/CVS/**/*"
+    	   srcdir="${src.dir}"
+    	   destdir="${build.dir}" 
+    	   classpath="${classpath}"
+           debug="on" deprecation="off" target="1.2"/>
+  </target>
+  
+  <target name="docs" depends="core">
+    <mkdir dir="${doc.dir}"/>
+    <javadoc packagenames="com.ibm.util,com.ibm.text,com.ibm.math,com.ibm.richtext.awtui,com.ibm.richtext.swingui,com.ibm.richtext.textpanel,com.ibm.richtext.styledtext,com.ibm.textlayout.attributes,com.ibm.richtext.print"
+              sourcepath="${src.dir}"
+    		  destdir="${doc.dir}"
+    		  nodeprecatedlist="true"
+			  windowtitle="icu4j"
+			  doctitle="icu4j"
+			  encoding="iso-8859-1"
+			  docencoding="iso-8859-1"
+			  bottom="&lt;font size=-1>Copyright (c) 1998-2000 IBM Corporation and others.&lt;/font>"
+    		  />    		  
+  </target>
+
+  <target name ="coreData" depends="init">
+    <copy todir="${build.dir}/com/ibm/text/resources">
+      <fileset dir="${src.dir}/com/ibm/text/resources"
+               includes="Transliterator_*.txt"/>
+    </copy>
+    <copy todir="${build.dir}/com/ibm/text">
+      <fileset dir="${src.dir}/com/ibm/text"
+               includes="unames.dat,uprops.dat"/>
+    </copy>
+  </target>
+
+  <target name ="testData" depends="init">
+    <copy file="${src.dir}/com/ibm/data/misc/english.dict"
+    	   todir="${build.dir}/com/ibm/data/misc/"/>
+  </target>
+  
+  <target name="jar" depends="core">
+    <jar jarfile="${jar.file}"
+         includes="com/ibm/util/**/*,com/ibm/text/**/*,com/ibm/math/**/*,com/ibm/richtext/**/*"
+         basedir="${build.dir}"/>
+  </target>
+
+  <target name="richeditJar" depends="core">
+    <jar jarfile="${richedit.jar.file}"
+         includes="com/ibm/richtext/**/*,com/ibm/textlayout/**/*"
+         basedir="${build.dir}"
+         manifest="${richedit.manifest}"/>
+  </target>
+
+    <!-- 
+        Note:  I used to use -linkoffline http://java.sun.com/products/jdk/1.2/docs/api/ C:\jdk1.2.2\docs\api
+        This links to core docs on Sun's site - a very nice feature.  But it requires the 1.2 docs to be
+        on the build machine at a known location.
+    -->
+  <target name="richeditDocs" depends="core">
+    <mkdir dir="${richedit.doc.dir}"/>
+    <javadoc  packagenames="com.ibm.richtext.awtui,com.ibm.richtext.swingui,com.ibm.richtext.textpanel,com.ibm.richtext.styledtext,com.ibm.textlayout.attributes,com.ibm.richtext.print"
+              sourcepath="${src.dir}"
+    		  destdir="${richedit.doc.dir}"
+    		  nodeprecatedlist="true"
+			  windowtitle="RichEdit Control"
+			  doctitle="RichEdit Control"
+			  encoding="iso-8859-1"
+			  docencoding="iso-8859-1"
+			  bottom="&lt;font size=-1>Copyright (c) 1998-2000 IBM Corporation and others.&lt;/font>"
+    		  />    		  
+  </target>
+
+  <target name="richeditZip" depends="richeditJar,richeditDocs">
+    <!--Create a zip archive of the richedit jar and readme -->
+    <zip zipfile="${richedit.zip.file}"
+         basedir="${richedit.dist.dir}"
+         includes="${richedit.cont.dir}/**/*"/>
+  </target>
+  
+  <target name="zipbin" depends="docs,jar">
+    <!--Create a zip archive of the source, docs, and jar file for
+    distribution.  The zip file will be created in the directory above
+    the root ICU4J directory.-->
+    <zip zipfile="${zipbin.file}"
+         basedir="."
+         excludes="${richedit.dist.dir},test_*,${src.dir}/data/unicode/*-*.txt,${obsolete.dir}/**,**/*~,${src.dir}/**/*.class,${build.dir}/**,**/CVS/**/*"/>
+  </target>
+
+  <target name="zip" depends="init">
+    <!--Create a zip archive of just the source for distribution.  The
+    zip file will be created in the directory above the root ICU4J
+    directory. The exclude pattern ${src.dir}/data/unicode/*-*.txt
+    eliminates old archive copies like SpecialCasing-2.txt and
+    UnicodeData-2.1.8.txt -->
+    <zip zipfile="${zip.file}"
+         basedir="."
+         excludes="${richedit.dist.dir},test_*,${src.dir}/data/unicode/*-*.txt,${obsolete.dir}/**,**/*~,${src.dir}/**/*.class,${build.dir}/**,**/CVS/**/*,${doc.dir}/**,${jar.file}"/>
+  </target>
+
+  <target name="clean" depends="init">
+    <delete dir="${build.dir}"/>
+    <delete dir="${doc.dir}"/>
+    <delete  file="${jar.file}"/>
+  </target>
+
+</project>
