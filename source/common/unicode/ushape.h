@@ -150,8 +150,13 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
 /** Letter shaping option: replace "shaped" letter characters by abstract ones. */
 #define U_SHAPE_LETTERS_UNSHAPE                 0x10
 
-/** Not a valid option value. */
-#define U_SHAPE_LETTERS_RESERVED                0x18
+/**
+ * Letter shaping option: replace abstract letter characters by "shaped" ones.
+ * The only difference with U_SHAPE_LETTERS_SHAPE is that Tashkeel letters
+ * are always "shaped" into the isolated form instead of the medial form
+ * (selecting code points from the Arabic Presentation Forms-B block).
+ */
+#define U_SHAPE_LETTERS_SHAPE_TASHKEEL_ISOLATED 0x18
 
 /** Bit mask for letter shaping options. */
 #define U_SHAPE_LETTERS_MASK                    0x18
