@@ -17,6 +17,14 @@ include @platform_make_fragment@
 ## Build directory information
 subdir = tools/gencmn
 
+##
+
+SECTION = 8
+
+MANX_FILES = $(TARGET).$(SECTION) $(DECMN).$(SECTION)
+
+ALL_MAN_FILES = $(MANX_FILES)
+
 ## Extra files to remove for 'make clean'
 CLEANFILES = *~ mkmap.tmp $(DEPS) $(RES_FILES) $(TEST_FILES) $(DECMN_DEP)
 
@@ -52,7 +60,7 @@ DECMN_DEP = $(DECMN_OBJ:.o=.d)
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local		\
 distclean distclean-local dist dist-local check	\
-check-local
+check-local install-man install-manx
 
 ## Clear suffix list
 .SUFFIXES :
@@ -65,9 +73,9 @@ distclean : distclean-local
 dist: dist-local
 check: all check-local
 
-all-local: $(TARGET) $(RES_FILES) $(TRANSLIT_RES) $(TEST_FILES) $(DECMN)
+all-local: $(TARGET) $(RES_FILES) $(TRANSLIT_RES) $(TEST_FILES) $(DECMN) $(ALL_MAN_FILES)
 
-install-local: all-local
+install-local: all-local install-man
 	$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
 	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
 	$(INSTALL) $(DECMN) $(DESTDIR)$(sbindir)/$(DECMN)
@@ -92,6 +100,16 @@ $(TARGET) : $(OBJECTS)
 
 $(DECMN) : $(DECMN_OBJ)
 	$(LINK) -o $@ $^ $(LIBS) 
+
+# man page
+install-man: install-manx
+install-manx: $(MANX_FILES)
+	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man$(SECTION)
+	$(INSTALL_DATA) $? $(DESTDIR)$(mandir)/man$(SECTION)
+
+%.$(SECTION): $(srcdir)/%.$(SECTION).in
+	cd $(top_builddir) \
+	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 ifeq (,$(MAKECMDGOALS))
 -include $(DEPS)

@@ -14,7 +14,7 @@ Description: International Components for Unicode (development files)
  ICU is a C++ and C library that provides robust and full-featured Unicode
  support. This package contains the development files for ICU.
  
-Package: libicu18
+Package: libicu20
 Section: libs
 Architecture: any
 Depends: ${shlibs:Depends}
