@@ -79,6 +79,11 @@
 #   include <dl.h>
 #endif
 
+#ifdef OS30 
+#define _SHR_TIMEZONE 
+#define _SHR_TZNAME
+#define _SHR_DAYLIGHT
+#endif 
 
 /* floating point implementations ------------------------------------------- */
 
@@ -201,8 +206,8 @@ uprv_isNaN(double number)
   uint32_t lowBits  = *(uint32_t*)u_bottomNBytesOfDouble(&number,
                            sizeof(uint32_t));
 
-  return ((highBits & 0x7F000000L) == 0x7F000000L) &&
-    (((highBits & 0x000FFFFFL) != 0) || (lowBits != 0));
+  return ((highBits & 0x7F080000L) == 0x7F080000L) &&
+    (lowBits == 0x00000000L);
 #endif
   return number != number;
 #endif
@@ -234,6 +239,14 @@ uprv_isInfinite(double number)
   /* If your platform doesn't support IEEE 754 but *does* have an infinity*/
   /* value, you'll need to replace this default implementation with what's*/
   /* correct for your platform.*/
+#ifdef OS390
+  uint32_t highBits = *(uint32_t*)u_topNBytesOfDouble(&number,
+                              sizeof(uint32_t));
+  uint32_t lowBits  = *(uint32_t*)u_bottomNBytesOfDouble(&number,
+                             sizeof(uint32_t));
+
+return ((highBits  & ~SIGN) == 0x70FF0000L) && (lowBits == 0x00000000L);
+#endif 
   return number == (2.0 * number);
 #endif
 }
@@ -241,7 +254,7 @@ uprv_isInfinite(double number)
 bool_t   
 uprv_isPositiveInfinity(double number)
 {
-#ifdef IEEE_754
+#if defined(IEEE_754) || defined(OS390)
   return (number > 0 && uprv_isInfinite(number));
 #else
   return uprv_isInfinite(number);
@@ -251,15 +264,13 @@ uprv_isPositiveInfinity(double number)
 bool_t   
 uprv_isNegativeInfinity(double number)
 {
-#ifdef IEEE_754
+#if defined(IEEE_754) || defined(OS390)
   return (number < 0 && uprv_isInfinite(number));
 #else
-#ifdef OS390
   uint32_t highBits = *(uint32_t*)u_topNBytesOfDouble(&number,
                             sizeof(uint32_t));
   return((highBits & SIGN) && uprv_isInfinite(number));
-#endif
-  return uprv_isInfinite(number);
+
 #endif
 }
 
@@ -291,7 +302,7 @@ uprv_getNaN()
 double 
 uprv_getInfinity()
 {
-#ifdef IEEE_754  
+#if defined(IEEE_754  ) || defined(OS390)
   if (!fgInfInitialized)
     {
       int i;
@@ -1001,6 +1012,9 @@ u_getDataDirectory(void) {
 /* 		puts(__environ[i]); */
 /* 	    } */
 #       endif
+#ifdef OS390BATCH
+  path = "DD:ICUDATA";
+#endif
 
 #       ifdef WIN32
             /* next, try to read the path from the registry */
