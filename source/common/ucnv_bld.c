@@ -327,13 +327,22 @@ parseConverterOptions(const char *inName,
             } else {
                 /* ignore any other options until we define some */
                 for(;;) {
-                    c=*inName;
-                    if(c!=0) {
-                        ++inName;
-                        if(c==UCNV_OPTION_SEP_CHAR) {
-                            break;
+                    if(uprv_strncmp(inName, "version=", 8)==0) {
+                        /*copy the version option value*/
+                        inName+=8;
+                        c=*inName;
+                        if(c!=0){
+                            ++inName;
+                            if(c!=UCNV_OPTION_SEP_CHAR){
+                                *pFlags = c;
+                            }
+                            else{
+                                break;
+                            }
                         }
-                    } else {
+                       
+                    }
+                    else {
                         return;
                     }
                 }
@@ -357,7 +366,7 @@ UConverter *
   UConverter *myUConverter = NULL;
   UConverterSharedData *mySharedConverterData = NULL;
   UErrorCode internalErrorCode = U_ZERO_ERROR;
-
+  uint32_t version=0;
   if (U_FAILURE (*err))
     return NULL;
 
@@ -373,7 +382,7 @@ UConverter *
     /* the default converter name is already canonical */
   } else {
     /* separate the converter name from the options */
-    parseConverterOptions(converterName, cnvName, locale, NULL);
+    parseConverterOptions(converterName, cnvName, locale,&version);
 
     /* get the canonical converter name */
     realName = ucnv_io_getConverterName(cnvName, &internalErrorCode);
@@ -388,7 +397,7 @@ UConverter *
 
   /* separate the converter name from the options */
   if(realName != cnvName) {
-    parseConverterOptions(realName, cnvName, locale, NULL);
+    parseConverterOptions(realName, cnvName, locale,&version);
     realName = cnvName;
   }
 
@@ -446,7 +455,7 @@ UConverter *
   uprv_memcpy (myUConverter->subChar, myUConverter->sharedData->staticData->subChar, myUConverter->subCharLen);
 
   if(myUConverter != NULL && myUConverter->sharedData->impl->open != NULL) {
-    myUConverter->sharedData->impl->open(myUConverter, realName, locale, err);
+    myUConverter->sharedData->impl->open(myUConverter, realName, locale,&version, err);
     if(U_FAILURE(*err)) {
       ucnv_close(myUConverter);
       return NULL;
