@@ -13,6 +13,8 @@
 #include "rbt_rule.h"
 #include "unicode/rep.h"
 
+char RuleBasedTransliterator::fgClassID = 0; // Value is irrelevant
+
 void RuleBasedTransliterator::_construct(const UnicodeString& rules,
                                          UTransDirection direction,
                                          UErrorCode& status,
@@ -139,4 +141,9 @@ RuleBasedTransliterator::handleTransliterate(Replaceable& text, UTransPosition& 
             ++loopCount;
         }
     }
+}
+
+UnicodeString& RuleBasedTransliterator::toRules(UnicodeString& rulesSource,
+                                                UBool escapeUnprintable) const {
+    return data->ruleSet.toRules(rulesSource, *data, escapeUnprintable);
 }
