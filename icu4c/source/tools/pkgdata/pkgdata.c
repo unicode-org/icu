@@ -315,7 +315,7 @@ static int executeMakefile(const UPKGOptions *o)
 {
   char cmd[1024];
   /*char pwd[1024];*/
-  char *make;
+  const char *make;
   int rc;
     
   make = getenv("MAKE");
