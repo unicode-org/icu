@@ -1013,16 +1013,21 @@ u_internalStrToLower(UChar *dest, int32_t destCapacity,
                     } else if(c==0x3a3) {
                         /* greek capital sigma maps depending on whether the following character is a letter (L*) */
                         /* get the following character and check its general category */
-                        i=srcIndex;
-                        UTF_NEXT_CHAR(src, i, srcLength, c);
-                        if( /* is letter: is L* (Lu, Ll, Lt, Lm, or Lo) */
-                            (1UL<<GET_CATEGORY(GET_PROPS_UNSAFE(c)))&
-                            (1UL<<U_UPPERCASE_LETTER|1UL<<U_LOWERCASE_LETTER|1UL<<U_TITLECASE_LETTER|1UL<<U_MODIFIER_LETTER|1UL<<U_OTHER_LETTER)
-                        ) {
-                            /* NONFINAL: the following is a letter */
-                            buffer[0]=0x3c3; /* greek small sigma */
+                        if(srcIndex<srcLength) {
+                            i=srcIndex;
+                            UTF_NEXT_CHAR(src, i, srcLength, c);
+                            if( /* is letter: is L* (Lu, Ll, Lt, Lm, or Lo) */
+                                (1UL<<GET_CATEGORY(GET_PROPS_UNSAFE(c)))&
+                                (1UL<<U_UPPERCASE_LETTER|1UL<<U_LOWERCASE_LETTER|1UL<<U_TITLECASE_LETTER|1UL<<U_MODIFIER_LETTER|1UL<<U_OTHER_LETTER)
+                            ) {
+                                /* NONFINAL: the following is a letter */
+                                buffer[0]=0x3c3; /* greek small sigma */
+                            } else {
+                                /* FINAL: the following is not a letter */
+                                buffer[0]=0x3c2; /* greek small final sigma */
+                            }
                         } else {
-                            /* FINAL: the following is not a letter */
+                            /* FINAL: this is the last character in the string */
                             buffer[0]=0x3c2; /* greek small final sigma */
                         }
                         i=1;
