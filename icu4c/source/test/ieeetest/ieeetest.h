@@ -18,7 +18,6 @@
 #ifndef _IEEETEST
 #define _IEEETEST
 
-int main(int argc, char **argv);
 void usage(const char *execName);
 
 // Very simple class for testing IEEE compliance
