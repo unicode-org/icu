@@ -538,7 +538,6 @@ Transliterator* Transliterator::createInverse(void) const {
  *
  * @param ID a valid ID, as enumerated by <code>getAvailableIDs()</code>
  * @return A <code>Transliterator</code> object with the given ID
- * @exception IllegalArgumentException if the given ID is invalid.
  * @see #registerInstance
  * @see #getAvailableIDs
  * @see #getID
@@ -546,21 +545,27 @@ Transliterator* Transliterator::createInverse(void) const {
 Transliterator* Transliterator::createInstance(const UnicodeString& ID,
                                                Transliterator::Direction dir,
                                                ParseError* parseError) {
-    if (ID.indexOf(ID_DELIM) >= 0) {
-        return new CompoundTransliterator(ID, dir, 0);
-    }
     Transliterator* t = 0;
-    if (dir == REVERSE) {
-        int32_t i = ID.indexOf(ID_SEP);
-        if (i >= 0) {
-            UnicodeString inverseID, right;
-            ID.extractBetween(i+1, ID.length(), inverseID);
-            ID.extractBetween(0, i, right);
-            inverseID.append(ID_SEP).append(right);
-            t = _createInstance(inverseID, parseError);
+    if (ID.indexOf(ID_DELIM) >= 0) {
+        UErrorCode status = U_ZERO_ERROR;
+        t = new CompoundTransliterator(ID, dir, 0, status);
+        if (U_FAILURE(status)) {
+            delete t;
+            t = 0;
         }
     } else {
-        t = _createInstance(ID, parseError);
+        if (dir == REVERSE) {
+            int32_t i = ID.indexOf(ID_SEP);
+            if (i >= 0) {
+                UnicodeString inverseID, right;
+                ID.extractBetween(i+1, ID.length(), inverseID);
+                ID.extractBetween(0, i, right);
+                inverseID.append(ID_SEP).append(right);
+                t = _createInstance(inverseID, parseError);
+            }
+        } else {
+            t = _createInstance(ID, parseError);
+        }
     }
     return t;
 }
