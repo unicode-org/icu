@@ -34,6 +34,7 @@
 
 #include "unicode/umachine.h"
 #include "unicode/utf.h"
+#include "unicode/uversion.h"
 
 /*!
  * \file
@@ -95,38 +96,6 @@
 #ifndef U_CHARSET_FAMILY
 #   define U_CHARSET_FAMILY 0
 #endif
-
-/*===========================================================================*/
-/* Related version information                                               */
-/*===========================================================================*/
-
-/** The current ICU major version as an integer. */
-#define U_ICU_VERSION_MAJOR_NUM 1
-
-/** The current ICU minor version as an integer. */
-#define U_ICU_VERSION_MINOR_NUM 8
-
-/** The current ICU patchlevel version as an integer. */
-#define U_ICU_VERSION_PATCHLEVEL_NUM 1
-
-/** The current ICU library version as a dotted-decimal string. The patchlevel
-    only appears in this string if it non-zero. */
-#define U_ICU_VERSION "1.8.1"
-
-/** The current ICU library major/minor version as a string without dots, for library name suffixes. */
-#define U_ICU_VERSION_SHORT "18"
-
-/** An ICU version consists of up to 4 numbers from 0..255. */
-#define U_MAX_VERSION_LENGTH 4
-
-/** In a string, ICU version fields are delimited by dots. */
-#define U_VERSION_DELIMITER '.'
-
-/** The maximum length of an ICU version string. */
-#define U_MAX_VERSION_STRING_LENGTH 20
-
-/** The binary form of a version on ICU APIs is an array of 4 uint8_t. */
-typedef uint8_t UVersionInfo[U_MAX_VERSION_LENGTH];
 
 /*===========================================================================*/
 /* ICUDATA naming scheme                                                     */
