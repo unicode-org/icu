@@ -57,6 +57,18 @@ necessary, however time spent inside the mutex is then minimized. </p>
 <p>Developers implementing the Mutex are not required to provide reentrant-safe
 implementations. </p>
 
+<h3>Using collators in multi-threaded environment</h3>
+
+<p>Instances of Collator class are meant to be used on per thread basis. Although it is
+possible to have multiple threads access one Collator there is no guarante that such a
+construct will work, especially if number of threads grows over 10. There are no
+limitations on number of threads if each thread creates its own separate instance of
+Collator class.</p>
+
+<p>Test results have shown that case with 50 threads accessing 1 collator fails with a
+crash after 20 threads are reached. However, a test with 50 threads creating separate
+instances works well.</p>
+
 <h3>Implementations</h3>
 
 <p>On Win32 platforms, a reentrant mutex is most naturally implemented on top of a
