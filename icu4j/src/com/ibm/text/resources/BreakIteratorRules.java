@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/resources/Attic/BreakIteratorRules.java,v $ 
- * $Date: 2000/09/26 21:47:31 $ 
- * $Revision: 1.3 $
+ * $Date: 2000/09/26 22:46:50 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -89,7 +89,7 @@ public class BreakIteratorRules extends ListResourceBundle {
             + "devaJoin=({devaVirama}[{zwj}{zwnj}]?);"
             
             // a syllable with at least one consonant
-            + "({devaCN}?{devaJoin})*{devaCN}({devaJoin}|{devaMatra}?{devaModifier}*);"
+            + "({devaCN}{devaJoin})*{devaCN}({devaJoin}|{devaMatra}?{devaModifier}*);"
             
             // a syllable without consonants
             + "{devaVowel}{devaModifier}*;"
