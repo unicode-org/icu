@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/bnf/Attic/BigNumberFormatTest.java,v $ 
- * $Date: 2000/12/04 19:53:07 $ 
- * $Revision: 1.8 $
+ * $Date: 2000/12/06 00:01:27 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -55,9 +55,13 @@ public class BigNumberFormatTest extends TestFmwk {
         f.setSecondaryGroupingSize(4);
         expect(f, new Long(123456789), "12,3456,789");
         expectPat(f, "#,####,###");
-        expect(NumberFormat.getInstance(new Locale("hi", "IN")),
-               new Long(1876543210),
-               "1,87,65,43,210");
+
+        // On Sun JDK 1.2-1.3, the hi_IN locale uses '0' for a zero digit,
+        // but on IBM JDK 1.2-1.3, the locale uses U+0966.
+        f = (DecimalFormat) NumberFormat.getInstance(new Locale("hi", "IN"));
+        String str = transmute("1,87,65,43,210",
+                               f.getDecimalFormatSymbols().getZeroDigit());
+        expect(f, new Long(1876543210), str);
     }
 
     private void expectPad(DecimalFormat fmt, String pat, int pos) {
@@ -360,6 +364,22 @@ public class BigNumberFormatTest extends TestFmwk {
                   pat + " = " +
                   showNumber(saw) + ", expected " + showNumber(exp));
         }
+    }
+
+    /**
+     * Given a string composed of [0-9] and other chars, convert the
+     * [0-9] chars to be offsets 0..9 from 'zero'.
+     */
+    private static String transmute(String str, char zero) {
+        StringBuffer buf = new StringBuffer();
+        for (int i=0; i<str.length(); ++i) {
+            char c = str.charAt(i);
+            if (c >= '0' && c <= '9') {
+                c = (char) (c - '0' + zero);
+            }
+            buf.append(c);
+        }
+        return buf.toString();
     }
 
     public void Test4161100() {
