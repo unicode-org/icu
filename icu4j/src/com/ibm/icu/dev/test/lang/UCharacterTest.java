@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $ 
-* $Date: 2002/02/19 04:10:24 $ 
-* $Revision: 1.24 $
+* $Date: 2002/02/19 04:21:46 $ 
+* $Revision: 1.25 $
 *
 *******************************************************************************
 */
@@ -438,7 +438,7 @@ public final class UCharacterTest extends TestFmwk
       "L   R   EN  ES  ET  AN  CS  B   S   WS  ON  LRE LRO AL  RLE RLO PDF NSM BN  ";
       
     // default unicode data file name
-    final String UNICODE_DATA_FILE = "src//data//unicode//UnicodeData.txt";
+    final String UNICODE_DATA_FILE = "src//com//ibm//icu//dev//data//unicode//UnicodeData.txt";
     
     // unicode data file path system name
     final String UNICODE_DATA_SYSTEM_NAME = "UnicodeData";
