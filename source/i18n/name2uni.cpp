@@ -10,10 +10,9 @@
 
 #include "unicode/name2uni.h"
 #include "unicode/unifilt.h"
-#include "unicode/unicode.h"
-#include "unicode/convert.h"
+#include "unicode/uchar.h"
 
-const char* NameUnicodeTransliterator::_ID = "Name-Any";
+const char NameUnicodeTransliterator::_ID[] = "Name-Any";
 
 // As of Unicode 3.0.0, the longest name is 83 characters long.
 #define LONGEST_NAME 83
@@ -95,8 +94,6 @@ void NameUnicodeTransliterator::handleTransliterate(Replaceable& text, UTransPos
 
     UnicodeString str;
 
-    UnicodeConverter converter; // default converter
-
     for (; cursor < limit; ++cursor) {
         UChar c = text.charAt(cursor);
 
@@ -114,7 +111,7 @@ void NameUnicodeTransliterator::handleTransliterate(Replaceable& text, UTransPos
             // to a single space.  If closeDelimiter is found, exit
             // the loop.  If any other character is found, exit the
             // loop.  If the limit is found, exit the loop.
-            if (Unicode::isWhitespace(c)) {
+            if (u_isWhitespace(c)) {
                 // Ignore leading whitespace
                 if (ibuf != 0 && buf[ibuf-1] != (UChar)0x0020) {
                     buf[ibuf++] = (UChar)0x0020 /* */;
@@ -135,11 +132,7 @@ void NameUnicodeTransliterator::handleTransliterate(Replaceable& text, UTransPos
                 UErrorCode status = U_ZERO_ERROR;
 
                 // Convert UChar to char
-                char *out = cbuf;
-                const UChar *in = buf;
-                converter.fromUnicode(out, cbuf+sizeof(cbuf),
-                                      in, buf+ibuf, NULL, TRUE, status);
-                *out = 0;
+                u_UCharsToChars(buf, cbuf, ibuf+1);
 
                 UChar32 ch = u_charFromName(U_UNICODE_CHAR_NAME, cbuf, &status);
                 if (ch != (UChar32) 0xFFFF && U_SUCCESS(status)) {

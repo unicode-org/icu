@@ -136,12 +136,20 @@ const char* rawData[27][7] = {
 #define test_dumpLocale(l) { UnicodeString s(l.getName(),""); logln(#l + UnicodeString(" = ") + s); }
 
 LocaleTest::LocaleTest()
+: dataTable(NULL)
 {
     setUpDataTable();
 }
 
 LocaleTest::~LocaleTest()
 {
+    if (dataTable != 0) {
+        for (int32_t i = 0; i < 27; i++) {
+            delete []dataTable[i];
+        }
+        delete []dataTable;
+        dataTable = 0;
+    }
 }
 
 #define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break;
@@ -696,8 +704,6 @@ void LocaleTest::doTestDisplayNames(Locale& inLocale,
 //---------------------------------------------------
 // table of valid data
 //---------------------------------------------------
-
-UnicodeString** LocaleTest::dataTable = 0;
 
 
 UChar greekDisplayLanguage[] = { 0x03b5, 0x03bb, 0x03bb, 0x03b7, 0x03bd, 0x03b9, 0x03ba, 0x03ac, 0 };

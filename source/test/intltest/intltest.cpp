@@ -1058,6 +1058,8 @@ main(int argc, char* argv[])
        This is done in the wrong order on purpose.
        Normally this should happen first */
     CalendarTimeZoneTest::cleanup();
+    delete _testDirectory;
+    _testDirectory = 0;
 
     fprintf(stdout, "\n--------------------------------------\n");
     if (major.getErrors() == 0) {
