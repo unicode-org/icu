@@ -47,21 +47,6 @@ struct u_printf_spec_info {
 };
 typedef struct u_printf_spec_info u_printf_spec_info;
 
-/**
- * A u_printf info function.
- * A u_printf info is reponsible for reporting to u_printf how many
- * arguments are required for the <TT>u_printf_spec_info</TT> <TT>info</TT>,
- * and what their types are.
- * @param info A pointer to a <TT>u_print_info</TT> struct containing
- * information on the format specification.
- * @param argtypes The array to receive the types of arguments specified
- * by <TT>info</TT>.
- * @param n The number of available slots in the array <TT>argtypes</TT>
- * @return The number of arguments required by <TT>info</TT>.
- */
-typedef int32_t (*u_printf_info) (const u_printf_spec_info     *info,
-                  int32_t             *argtypes,
-                  int32_t             n);
 
 /**
  * A u_printf handler function.  
@@ -77,19 +62,6 @@ typedef int32_t (*u_printf_handler) (UFILE             *stream,
                      const u_printf_spec_info     *info,
                      const ufmt_args            *args);
 
-/**
- * Register a uprintf handler function with uprintf.
- * @param spec The format specififier handled by the handler <TT>func</TT>.
- * @param info A pointer to the <TT>uprintf_info</TT> function used
- * to determine how many arguments are required for <TT>spec</TT>, and
- * what their types are.
- * @param handler A pointer to the <TT>uprintf_handler</TT> function.
- * @return 0 if successful
- */
-int32_t
-u_printf_register_handler(UChar            spec, 
-              u_printf_info     info,
-              u_printf_handler     handler);
 
 #endif
 

@@ -32,12 +32,252 @@
 
 #include <string.h>
 #include <stdlib.h>
-#include <float.h>
-#include <limits.h>
 
-static u_scanf_handler g_u_scanf_handlers     [256];
-static u_scanf_info       g_u_scanf_infos     [256];
-static UBool        g_u_scanf_inited    = FALSE;
+/* --- Prototypes ---------------------------- */
+
+int32_t 
+u_scanf_simple_percent_handler(UFILE            *stream,
+                   const u_scanf_spec_info     *info,
+                   ufmt_args             *args,
+                   const UChar        *fmt,
+                   int32_t            *consumed);
+
+int32_t
+u_scanf_ustring_handler(UFILE             *stream,
+            const u_scanf_spec_info *info,
+            ufmt_args        *args,
+            const UChar        *fmt,
+            int32_t            *consumed);
+
+int32_t
+u_scanf_count_handler(UFILE             *stream,
+              const u_scanf_spec_info     *info,
+              ufmt_args        *args,
+              const UChar        *fmt,
+              int32_t            *consumed);
+
+int32_t
+u_scanf_integer_handler(UFILE             *stream,
+            const u_scanf_spec_info *info,
+            ufmt_args        *args,
+            const UChar        *fmt,
+            int32_t            *consumed);
+
+int32_t
+u_scanf_uinteger_handler(UFILE             *stream,
+            const u_scanf_spec_info *info,
+            ufmt_args        *args,
+            const UChar        *fmt,
+            int32_t            *consumed);
+
+int32_t
+u_scanf_double_handler(UFILE             *stream,
+               const u_scanf_spec_info     *info,
+               ufmt_args        *args,
+               const UChar        *fmt,
+               int32_t            *consumed);
+
+int32_t
+u_scanf_scientific_handler(UFILE             *stream,
+               const u_scanf_spec_info     *info,
+               ufmt_args           *args,
+               const UChar            *fmt,
+               int32_t            *consumed);
+
+int32_t
+u_scanf_scidbl_handler(UFILE             *stream,
+               const u_scanf_spec_info     *info,
+               ufmt_args        *args,
+               const UChar        *fmt,
+               int32_t            *consumed);
+
+int32_t
+u_scanf_currency_handler(UFILE                 *stream,
+             const u_scanf_spec_info     *info,
+             ufmt_args            *args,
+             const UChar            *fmt,
+             int32_t            *consumed);
+
+int32_t
+u_scanf_percent_handler(UFILE             *stream,
+            const u_scanf_spec_info *info,
+            ufmt_args        *args,
+            const UChar        *fmt,
+            int32_t            *consumed);
+
+int32_t
+u_scanf_date_handler(UFILE             *stream,
+             const u_scanf_spec_info     *info,
+             ufmt_args        *args,
+             const UChar        *fmt,
+             int32_t            *consumed);
+
+int32_t
+u_scanf_time_handler(UFILE             *stream,
+             const u_scanf_spec_info     *info,
+             ufmt_args        *args,
+             const UChar        *fmt,
+             int32_t            *consumed);
+
+int32_t
+u_scanf_char_handler(UFILE             *stream,
+             const u_scanf_spec_info     *info,
+             ufmt_args        *args,
+             const UChar        *fmt,
+             int32_t            *consumed);
+
+int32_t
+u_scanf_uchar_handler(UFILE             *stream,
+              const u_scanf_spec_info     *info,
+              ufmt_args        *args,
+              const UChar        *fmt,
+              int32_t            *consumed);
+
+int32_t
+u_scanf_spellout_handler(UFILE                 *stream,
+             const u_scanf_spec_info     *info,
+             ufmt_args             *args,
+             const UChar            *fmt,
+             int32_t            *consumed);
+
+int32_t
+u_scanf_hex_handler(UFILE             *stream,
+            const u_scanf_spec_info     *info,
+            ufmt_args            *args,
+            const UChar            *fmt,
+            int32_t            *consumed);
+
+int32_t
+u_scanf_octal_handler(UFILE             *stream,
+              const u_scanf_spec_info     *info,
+              ufmt_args         *args,
+              const UChar        *fmt,
+              int32_t            *consumed);
+
+int32_t
+u_scanf_pointer_handler(UFILE             *stream,
+            const u_scanf_spec_info *info,
+            ufmt_args        *args,
+            const UChar        *fmt,
+            int32_t            *consumed);
+
+int32_t
+u_scanf_string_handler(UFILE             *stream,
+               const u_scanf_spec_info     *info,
+               ufmt_args             *args,
+               const UChar        *fmt,
+               int32_t            *consumed);
+
+int32_t
+u_scanf_scanset_handler(UFILE             *stream,
+            const u_scanf_spec_info *info,
+            ufmt_args        *args,
+            const UChar        *fmt,
+            int32_t            *consumed);
+
+/* ANSI style formatting */
+/* Use US-ASCII characters only for formatting */
+
+/* % */
+#define UFMT_SIMPLE_PERCENT {ufmt_simple_percent, u_scanf_simple_percent_handler}
+/* s */
+#define UFMT_STRING         {ufmt_string, u_scanf_string_handler}
+/* c */
+#define UFMT_CHAR           {ufmt_string, u_scanf_char_handler}
+/* d, i */
+#define UFMT_INT            {ufmt_int, u_scanf_integer_handler}
+/* u */
+#define UFMT_UINT           {ufmt_int, u_scanf_uinteger_handler}
+/* o */
+#define UFMT_OCTAL          {ufmt_int, u_scanf_octal_handler}
+/* x, X */
+#define UFMT_HEX            {ufmt_int, u_scanf_hex_handler}
+/* f */
+#define UFMT_DOUBLE         {ufmt_double, u_scanf_double_handler}
+/* e, E */
+#define UFMT_SCIENTIFIC     {ufmt_double, u_scanf_scientific_handler}
+/* g, G */
+#define UFMT_SCIDBL         {ufmt_double, u_scanf_scidbl_handler}
+/* n */
+#define UFMT_COUNT          {ufmt_count, u_scanf_count_handler}
+/* [ */
+#define UFMT_SCANSET        {ufmt_string, u_scanf_scanset_handler} /* TODO: Is this also suppose to be ufmt_ustring */
+
+/* non-ANSI extensions */
+/* Use US-ASCII characters only for formatting */
+
+/* p */
+#define UFMT_POINTER        {ufmt_pointer, u_scanf_pointer_handler}
+/* D */
+#define UFMT_DATE           {ufmt_date, u_scanf_date_handler}
+/* T */
+#define UFMT_TIME           {ufmt_date, u_scanf_time_handler}
+/* V */
+#define UFMT_SPELLOUT       {ufmt_double, u_scanf_spellout_handler}
+/* P */
+#define UFMT_PERCENT        {ufmt_double, u_scanf_percent_handler}
+/* M */
+#define UFMT_CURRENCY       {ufmt_double, u_scanf_currency_handler}
+/* K */
+#define UFMT_UCHAR          {ufmt_uchar, u_scanf_uchar_handler}
+/* U */
+#define UFMT_USTRING        {ufmt_ustring, u_scanf_ustring_handler}
+
+
+#define UFMT_EMPTY {ufmt_empty, NULL}
+
+struct u_scanf_info {
+    enum ufmt_type_info info;
+    u_scanf_handler handler;
+};
+typedef struct u_scanf_info u_scanf_info;
+
+/* Use US-ASCII characters only for formatting. Most codepages have
+ characters 20-7F from Unicode. Using any other codepage specific
+ characters will make it very difficult to format the string on
+ non-Unicode machines */
+static const u_scanf_info g_u_scanf_infos[108] = {
+/* 0x20 */
+    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
+    UFMT_EMPTY,         UFMT_SIMPLE_PERCENT,UFMT_EMPTY,         UFMT_EMPTY,
+    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
+    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
+
+/* 0x30 */
+    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
+    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
+    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
+    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
+
+/* 0x40 */
+    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
+    UFMT_DATE,          UFMT_SCIENTIFIC,    UFMT_EMPTY,         UFMT_SCIDBL,
+    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_UCHAR,
+    UFMT_EMPTY,         UFMT_CURRENCY,      UFMT_EMPTY,         UFMT_EMPTY,
+
+/* 0x50 */
+    UFMT_PERCENT,       UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
+    UFMT_TIME,          UFMT_USTRING,       UFMT_SPELLOUT,      UFMT_EMPTY,
+    UFMT_HEX,           UFMT_EMPTY,         UFMT_EMPTY,         UFMT_SCANSET,
+    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
+
+/* 0x60 */
+    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_CHAR,
+    UFMT_INT,           UFMT_SCIENTIFIC,    UFMT_DOUBLE,        UFMT_SCIDBL,
+    UFMT_EMPTY,         UFMT_INT,           UFMT_EMPTY,         UFMT_EMPTY,
+    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_COUNT,         UFMT_OCTAL,
+
+/* 0x70 */
+    UFMT_POINTER,       UFMT_EMPTY,         UFMT_EMPTY,         UFMT_STRING,
+    UFMT_EMPTY,         UFMT_UINT,          UFMT_EMPTY,         UFMT_EMPTY,
+    UFMT_HEX,           UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
+    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
+};
+
+#define USCANF_NUM_FMT_HANDLERS sizeof(g_u_scanf_infos)
+
+/* We do not use handlers for 0-0x1f */
+#define USCANF_BASE_FMT_HANDLERS 0x20
 
 int32_t 
 u_fscanf(    UFILE        *f,
@@ -94,23 +334,6 @@ u_vfscanf(    UFILE        *f,
 }
 
 int32_t
-u_scanf_register_handler (UChar            spec, 
-              u_scanf_info         info,
-              u_scanf_handler     handler)
-{
-  /* lock the cache */
-  umtx_lock(0);
-
-  /* add to our list of function pointers */
-  g_u_scanf_infos[ (unsigned char) spec ]     = info;
-  g_u_scanf_handlers[ (unsigned char) spec ]     = handler;
-
-  /* unlock the cache */
-  umtx_unlock(0);
-  return 0;
-}
-
-int32_t
 u_scanf_skip_leading_ws(UFILE     *stream,
             UChar     pad)
 {
@@ -129,15 +352,6 @@ u_scanf_skip_leading_ws(UFILE     *stream,
 }
 
 int32_t 
-u_scanf_simple_percent_info(const u_scanf_spec_info    *info,
-                int32_t             *argtypes,
-                int32_t             n)
-{
-  /* we don't need any arguments */
-  return 0;
-}
-
-int32_t 
 u_scanf_simple_percent_handler(UFILE            *stream,
                    const u_scanf_spec_info     *info,
                    ufmt_args             *args,
@@ -149,20 +363,6 @@ u_scanf_simple_percent_handler(UFILE            *stream,
     return -1;
   else
     return 0;
-}
-
-int32_t 
-u_scanf_string_info(const u_scanf_spec_info     *info,
-            int32_t             *argtypes,
-            int32_t             n)
-{
-  /* handle error */
-  if(n < 1)
-    return 0;
-
-  /* we need 1 argument of type string */
-  argtypes[0] = ufmt_string;
-  return 1;
 }
 
 int32_t
@@ -194,7 +394,7 @@ u_scanf_string_handler(UFILE             *stream,
     return -1;
 
   /* since there is no real limit, just use a reasonable value */
-  limit = alias + 2048;
+  limit = alias + 2048; /* TODO: Specify a real limit! */
 
   while( ((c = u_fgetc(stream)) != 0xFFFF) && 
      (c != info->fPadChar && ! ufmt_isws(c)) &&
@@ -225,20 +425,6 @@ u_scanf_string_handler(UFILE             *stream,
   ucnv_close(conv);
 
   /* we converted 1 arg */
-  return 1;
-}
-
-int32_t 
-u_scanf_ustring_info(const u_scanf_spec_info     *info,
-             int32_t             *argtypes,
-             int32_t             n)
-{
-  /* handle error */
-  if(n < 1)
-    return 0;
-
-  /* we need 1 argument of type ustring */
-  argtypes[0] = ufmt_ustring;
   return 1;
 }
 
@@ -282,21 +468,6 @@ u_scanf_ustring_handler(UFILE             *stream,
   return 1;
 }
 
-
-int32_t 
-u_scanf_count_info(const u_scanf_spec_info     *info,
-           int32_t             *argtypes,
-           int32_t             n)
-{
-  /* handle error */
-  if(n < 1)
-    return 0;
-
-  /* we need 1 argument of type count */
-  argtypes[0] = ufmt_count;
-  return 1;
-}
-
 int32_t
 u_scanf_count_handler(UFILE             *stream,
               const u_scanf_spec_info     *info,
@@ -312,20 +483,6 @@ u_scanf_count_handler(UFILE             *stream,
 
   /* we converted 0 args */
   return 0;
-}
-
-int32_t 
-u_scanf_integer_info(const u_scanf_spec_info     *info,
-             int32_t             *argtypes,
-             int32_t             n)
-{
-  /* handle error */
-  if(n < 1)
-    return 0;
-
-  /* we need 1 argument of type int */
-  argtypes[0] = ufmt_int;
-  return 1;
 }
 
 int32_t
@@ -367,9 +524,9 @@ u_scanf_integer_handler(UFILE             *stream,
 
   /* mask off any necessary bits */
   if(info->fIsShort)
-    *num &= SHRT_MAX;
+    *num &= UINT16_MAX;
   else if(! info->fIsLong || ! info->fIsLongLong)
-    *num &= INT_MAX;
+    *num &= UINT32_MAX;
 
   /* update the stream's position to reflect consumed data */
   stream->fUCPos += parsePos;
@@ -378,18 +535,25 @@ u_scanf_integer_handler(UFILE             *stream,
   return 1;
 }
 
-int32_t 
-u_scanf_double_info(const u_scanf_spec_info     *info,
-            int32_t             *argtypes,
-            int32_t             n)
+int32_t
+u_scanf_uinteger_handler(UFILE             *stream,
+            const u_scanf_spec_info *info,
+            ufmt_args        *args,
+            const UChar        *fmt,
+            int32_t            *consumed)
 {
-  /* handle error */
-  if(n < 1)
-    return 0;
+    ufmt_args uint_args;
+    int32_t converted_args;
+    uint32_t            *num         = (uint32_t*) (args[0].ptrValue);
+    double currDouble;
 
-  /* we need 1 argument of type double */
-  argtypes[0] = ufmt_double;
-  return 1;
+    memcpy(&uint_args, args, sizeof(ufmt_args));
+    uint_args.ptrValue = &currDouble;
+    converted_args = u_scanf_double_handler(stream, info, &uint_args, fmt, consumed);
+
+    *num = (uint32_t)currDouble;
+
+    return converted_args;
 }
 
 int32_t
@@ -440,20 +604,6 @@ u_scanf_double_handler(UFILE             *stream,
   return 1;
 }
 
-int32_t 
-u_scanf_scientific_info(const u_scanf_spec_info     *info,
-            int32_t             *argtypes,
-            int32_t             n)
-{
-  /* handle error */
-  if(n < 1)
-    return 0;
-
-  /* we need 1 argument of type double */
-  argtypes[0] = ufmt_double;
-  return 1;
-}
-
 int32_t
 u_scanf_scientific_handler(UFILE             *stream,
                const u_scanf_spec_info     *info,
@@ -499,20 +649,6 @@ u_scanf_scientific_handler(UFILE             *stream,
   stream->fUCPos += parsePos;
   
   /* we converted 1 arg */
-  return 1;
-}
-
-int32_t 
-u_scanf_scidbl_info(const u_scanf_spec_info     *info,
-            int32_t             *argtypes,
-            int32_t             n)
-{
-  /* handle error */
-  if(n < 1)
-    return 0;
-
-  /* we need 1 argument of type double */
-  argtypes[0] = ufmt_double;
   return 1;
 }
 
@@ -586,20 +722,6 @@ u_scanf_scidbl_handler(UFILE             *stream,
   return 1;
 }
 
-int32_t 
-u_scanf_currency_info(const u_scanf_spec_info     *info,
-              int32_t             *argtypes,
-              int32_t             n)
-{
-  /* handle error */
-  if(n < 1)
-    return 0;
-
-  /* we need 1 argument of type double */
-  argtypes[0] = ufmt_double;
-  return 1;
-}
-
 int32_t
 u_scanf_currency_handler(UFILE                 *stream,
              const u_scanf_spec_info     *info,
@@ -645,20 +767,6 @@ u_scanf_currency_handler(UFILE                 *stream,
   stream->fUCPos += parsePos;
   
   /* we converted 1 arg */
-  return 1;
-}
-
-int32_t 
-u_scanf_percent_info(const u_scanf_spec_info     *info,
-             int32_t             *argtypes,
-             int32_t             n)
-{
-  /* handle error */
-  if(n < 1)
-    return 0;
-
-  /* we need 1 argument of type double */
-  argtypes[0] = ufmt_double;
   return 1;
 }
 
@@ -710,20 +818,6 @@ u_scanf_percent_handler(UFILE             *stream,
   return 1;
 }
 
-int32_t 
-u_scanf_date_info(const u_scanf_spec_info     *info,
-          int32_t             *argtypes,
-          int32_t             n)
-{
-  /* handle error */
-  if(n < 1)
-    return 0;
-
-  /* we need 1 argument of type Date */
-  argtypes[0] = ufmt_date;
-  return 1;
-}
-
 int32_t
 u_scanf_date_handler(UFILE             *stream,
              const u_scanf_spec_info     *info,
@@ -765,20 +859,6 @@ u_scanf_date_handler(UFILE             *stream,
   stream->fUCPos += parsePos;
   
   /* we converted 1 arg */
-  return 1;
-}
-
-int32_t 
-u_scanf_time_info(const u_scanf_spec_info     *info,
-          int32_t             *argtypes,
-          int32_t             n)
-{
-  /* handle error */
-  if(n < 1)
-    return 0;
-
-  /* we need 1 argument of type Date */
-  argtypes[0] = ufmt_date;
   return 1;
 }
 
@@ -826,20 +906,6 @@ u_scanf_time_handler(UFILE             *stream,
   return 1;
 }
 
-int32_t 
-u_scanf_char_info(const u_scanf_spec_info     *info,
-          int32_t             *argtypes,
-          int32_t             n)
-{
-  /* handle error */
-  if(n < 1)
-    return 0;
-
-  /* we need 1 argument of type char */
-  argtypes[0] = ufmt_char;
-  return 1;
-}
-
 int32_t
 u_scanf_char_handler(UFILE             *stream,
              const u_scanf_spec_info     *info,
@@ -873,20 +939,6 @@ u_scanf_char_handler(UFILE             *stream,
   return 1;
 }
 
-int32_t 
-u_scanf_uchar_info(const u_scanf_spec_info     *info,
-           int32_t             *argtypes,
-           int32_t             n)
-{
-  /* handle error */
-  if(n < 1)
-    return 0;
-
-  /* we need 1 argument of type uchar */
-  argtypes[0] = ufmt_uchar;
-  return 1;
-}
-
 int32_t
 u_scanf_uchar_handler(UFILE             *stream,
               const u_scanf_spec_info     *info,
@@ -908,20 +960,6 @@ u_scanf_uchar_handler(UFILE             *stream,
     return -1;
 
   /* we converted 1 arg */
-  return 1;
-}
-
-int32_t 
-u_scanf_spellout_info(const u_scanf_spec_info     *info,
-              int32_t             *argtypes,
-              int32_t             n)
-{
-  /* handle error */
-  if(n < 1)
-    return 0;
-
-  /* we need 1 argument of type double */
-  argtypes[0] = ufmt_double;
   return 1;
 }
 
@@ -973,20 +1011,6 @@ u_scanf_spellout_handler(UFILE                 *stream,
   return 1;
 }
 
-int32_t 
-u_scanf_hex_info(const u_scanf_spec_info     *info,
-         int32_t             *argtypes,
-         int32_t             n)
-{
-  /* handle error */
-  if(n < 1)
-    return 0;
-
-  /* we need 1 argument of type int */
-  argtypes[0] = ufmt_int;
-  return 1;
-}
-
 int32_t
 u_scanf_hex_handler(UFILE             *stream,
             const u_scanf_spec_info     *info,
@@ -1028,25 +1052,11 @@ u_scanf_hex_handler(UFILE             *stream,
 
   /* mask off any necessary bits */
   if(info->fIsShort)
-    *num &= SHRT_MAX;
+    *num &= UINT16_MAX;
   else if(! info->fIsLong || ! info->fIsLongLong)
-    *num &= INT_MAX;
+    *num &= UINT32_MAX;
 
   /* we converted 1 arg */
-  return 1;
-}
-
-int32_t 
-u_scanf_octal_info(const u_scanf_spec_info    *info,
-           int32_t             *argtypes,
-           int32_t             n)
-{
-  /* handle error */
-  if(n < 1)
-    return 0;
-  
-  /* we need 1 argument of type int */
-  argtypes[0] = ufmt_int;
   return 1;
 }
 
@@ -1082,25 +1092,11 @@ u_scanf_octal_handler(UFILE             *stream,
 
   /* mask off any necessary bits */
   if(info->fIsShort)
-    *num &= SHRT_MAX;
+    *num &= UINT16_MAX;
   else if(! info->fIsLong || ! info->fIsLongLong)
-    *num &= INT_MAX;
+    *num &= UINT32_MAX;
 
   /* we converted 1 arg */
-  return 1;
-}
-
-int32_t 
-u_scanf_pointer_info(const u_scanf_spec_info     *info,
-             int32_t             *argtypes,
-             int32_t             n)
-{
-  /* handle error */
-  if(n < 1)
-    return 0;
-
-  /* we need 1 argument of type void* */
-  argtypes[0] = ufmt_pointer;
   return 1;
 }
 
@@ -1135,20 +1131,6 @@ u_scanf_pointer_handler(UFILE             *stream,
   stream->fUCPos += len;
 
   /* we converted 1 arg */
-  return 1;
-}
-
-int32_t 
-u_scanf_scanset_info(const u_scanf_spec_info     *info,
-             int32_t             *argtypes,
-             int32_t             n)
-{
-  /* handle error */
-  if(n < 1)
-    return 0;
-
-  /* we need 1 argument of type char* */
-  argtypes[0] = ufmt_string;
   return 1;
 }
 
@@ -1233,139 +1215,7 @@ u_scanf_scanset_handler(UFILE             *stream,
   return 1;
 }
 
-void
-u_scanf_init(void)
-{
-  int32_t i;
-  /*Mutex *lock;*/
-  
-  /* if we're already inited, do nothing */
-  if(g_u_scanf_inited)
-    return;
 
-  /* lock the cache */
-  umtx_lock(0);
-
-  /* if we're already inited, do nothing */
-  if(g_u_scanf_inited) {
-    umtx_unlock(0);
-    return;
-  }
-
-  /* initialize all handlers and infos to 0 */
-  for(i = 0; i < 256; ++i) {
-    g_u_scanf_infos[i]         = 0;
-    g_u_scanf_handlers[i]     = 0;
-  }
-
-  /* register the handlers for standard specifiers */
-  /* don't use u_scanf_register_handler to avoid mutex creation */
-
-  /* handle '%' */
-  g_u_scanf_infos[ 0x0025 ]     = u_scanf_simple_percent_info;
-  g_u_scanf_handlers[ 0x0025 ]     = u_scanf_simple_percent_handler;
-
-  /* handle 's' */
-  g_u_scanf_infos[ 0x0073 ]     = u_scanf_string_info;
-  g_u_scanf_handlers[ 0x0073 ]     = u_scanf_string_handler;
-
-  /* handle 'U' */
-  g_u_scanf_infos[ 0x0055 ]     = u_scanf_ustring_info;
-  g_u_scanf_handlers[ 0x0055 ]     = u_scanf_ustring_handler;
-
-  /* handle 'n' */
-  g_u_scanf_infos[ 0x006E ]     = u_scanf_count_info;
-  g_u_scanf_handlers[ 0x006E ]     = u_scanf_count_handler;
-
-  /* handle 'd' */
-  g_u_scanf_infos[ 0x0064 ]     = u_scanf_integer_info;
-  g_u_scanf_handlers[ 0x0064 ]     = u_scanf_integer_handler;
-
-  /* handle 'i' */
-  g_u_scanf_infos[ 0x0069 ]     = u_scanf_integer_info;
-  g_u_scanf_handlers[ 0x0069 ]     = u_scanf_integer_handler;
-
-  /* handle 'u' */
-  g_u_scanf_infos[ 0x0075 ]     = u_scanf_integer_info;
-  g_u_scanf_handlers[ 0x0075 ]     = u_scanf_integer_handler;
-
-  /* handle 'f' */
-  g_u_scanf_infos[ 0x0066 ]     = u_scanf_double_info;
-  g_u_scanf_handlers[ 0x0066 ]     = u_scanf_double_handler;
-
-  /* handle 'e' */
-  g_u_scanf_infos[ 0x0065 ]     = u_scanf_scientific_info;
-  g_u_scanf_handlers[ 0x0065 ]     = u_scanf_scientific_handler;
-
-  /* handle 'E' */
-  g_u_scanf_infos[ 0x0045 ]     = u_scanf_scientific_info;
-  g_u_scanf_handlers[ 0x0045 ]     = u_scanf_scientific_handler;
-
-  /* handle 'g' */
-  g_u_scanf_infos[ 0x0067 ]     = u_scanf_scidbl_info;
-  g_u_scanf_handlers[ 0x0067 ]     = u_scanf_scidbl_handler;
-
-  /* handle 'G' */
-  g_u_scanf_infos[ 0x0047 ]     = u_scanf_scidbl_info;
-  g_u_scanf_handlers[ 0x0047 ]     = u_scanf_scidbl_handler;
-
-  /* handle 'M' */
-  g_u_scanf_infos[ 0x004D ]     = u_scanf_currency_info;
-  g_u_scanf_handlers[ 0x004D ]     = u_scanf_currency_handler;
-
-  /* handle 'P' */
-  g_u_scanf_infos[ 0x0050 ]     = u_scanf_percent_info;
-  g_u_scanf_handlers[ 0x0050 ]     = u_scanf_percent_handler;
-
-  /* handle 'D' */
-  g_u_scanf_infos[ 0x0044 ]     = u_scanf_date_info;
-  g_u_scanf_handlers[ 0x0044 ]     = u_scanf_date_handler;
-
-  /* handle 'T' */
-  g_u_scanf_infos[ 0x0054 ]     = u_scanf_time_info;
-  g_u_scanf_handlers[ 0x0054 ]     = u_scanf_time_handler;
-
-  /* handle 'c' */
-  g_u_scanf_infos[ 0x0063 ]     = u_scanf_char_info;
-  g_u_scanf_handlers[ 0x0063 ]     = u_scanf_char_handler;
-
-  /* handle 'K' */
-  g_u_scanf_infos[ 0x004B ]     = u_scanf_uchar_info;
-  g_u_scanf_handlers[ 0x004B ]     = u_scanf_uchar_handler;
-
-  /* handle 'V' */
-  g_u_scanf_infos[ 0x0056 ]     = u_scanf_spellout_info;
-  g_u_scanf_handlers[ 0x0056 ]     = u_scanf_spellout_handler;
-
-  /* handle 'x' */
-  g_u_scanf_infos[ 0x0078 ]     = u_scanf_hex_info;
-  g_u_scanf_handlers[ 0x0078 ]     = u_scanf_hex_handler;
-
-  /* handle 'X' */
-  g_u_scanf_infos[ 0x0058 ]     = u_scanf_hex_info;
-  g_u_scanf_handlers[ 0x0058 ]     = u_scanf_hex_handler;
-
-  /* handle 'o' */
-  g_u_scanf_infos[ 0x006F ]     = u_scanf_octal_info;
-  g_u_scanf_handlers[ 0x006F ]     = u_scanf_octal_handler;
-
-  /* handle 'p' */
-  g_u_scanf_infos[ 0x0070 ]     = u_scanf_pointer_info;
-  g_u_scanf_handlers[ 0x0070 ]     = u_scanf_pointer_handler;
-
-  /* handle '[' */
-  g_u_scanf_infos[ 0x005B ]     = u_scanf_scanset_info;
-  g_u_scanf_handlers[ 0x005B ]     = u_scanf_scanset_handler;
-
-  /* we're finished */
-  g_u_scanf_inited = TRUE;
-
-  /* unlock the cache */
-  umtx_unlock(0);
-}
-
-
-#define U_SCANF_MAX_ARGS 32
 #define UP_PERCENT 0x0025
 
 int32_t 
@@ -1376,20 +1226,12 @@ u_vfscanf_u(    UFILE        *f,
   u_scanf_spec         spec;
   const UChar         *alias;
   int32_t         count, converted, temp;
+  uint16_t      handlerNum;
 
-  int32_t         num_args_wanted;
-  int32_t         ufmt_types     [U_SCANF_MAX_ARGS];
-  ufmt_args       args         [U_SCANF_MAX_ARGS];
+  ufmt_args       args;  
 
-  u_scanf_info    info;
+  enum ufmt_type_info    info;
   u_scanf_handler handler;
-
-  int32_t         cur_arg;
-
-
-  /* init our function tables */
-  if(! g_u_scanf_inited)
-    u_scanf_init();
 
   /* alias the pattern */
   alias = patternSpecification;
@@ -1419,94 +1261,80 @@ u_vfscanf_u(    UFILE        *f,
     if(spec.fSkipArg)
       va_arg(ap, int);
 
-    /* query the info function for argument information */
-    info = g_u_scanf_infos[ (unsigned char) spec.fInfo.fSpec ];
-    if(info != 0) { 
-      num_args_wanted = (*info)(&spec.fInfo, 
-                ufmt_types,
-                U_SCANF_MAX_ARGS);
+    handlerNum = (uint16_t)(spec.fInfo.fSpec - USCANF_BASE_FMT_HANDLERS);
+    if (handlerNum < USCANF_NUM_FMT_HANDLERS) {
+      /* query the info function for argument information */
+      info = g_u_scanf_infos[ handlerNum ].info;
+      if(info > ufmt_simple_percent) { 
+          switch(info) {
+
+          case ufmt_count:
+            args.intValue = va_arg(ap, int);
+            /* set the spec's width to the # of items converted */
+            spec.fInfo.fWidth = converted;
+            break;
+
+          case ufmt_char:
+          case ufmt_uchar:
+          case ufmt_int:
+            args.ptrValue = va_arg(ap, int*);
+            break;
+
+          case ufmt_wchar:
+            args.ptrValue = va_arg(ap, wchar_t*);
+            break;
+
+          case ufmt_string:
+            args.ptrValue = va_arg(ap, char*);
+            break;
+
+          case ufmt_wstring:
+            args.ptrValue = va_arg(ap, wchar_t*);
+            break;
+
+          case ufmt_pointer:
+            args.ptrValue = va_arg(ap, void*);
+            break;
+
+          case ufmt_float:
+            args.ptrValue = va_arg(ap, float*);
+            break;
+
+          case ufmt_double:
+            args.ptrValue = va_arg(ap, double*);
+            break;
+
+          case ufmt_date:
+            args.ptrValue = va_arg(ap, UDate*);
+            break;
+
+          case ufmt_ustring:
+            args.ptrValue = va_arg(ap, UChar*);
+            break;
+          }
+        }
+        /* call the handler function */
+        handler = g_u_scanf_infos[ handlerNum ].handler;
+        if(handler != 0) {
+
+          /* reset count */
+          count = 0;
+
+          temp = (*handler)(f, &spec.fInfo, &args, alias, &count);
+
+          /* if the handler encountered an error condition, break */
+          if(temp == -1)
+            break;
+
+          /* add to the # of items converted */
+          converted += temp;
+
+          /* update the pointer in pattern */
+          alias += count;
+        }
+        /* else do nothing */
     }
-    else
-      num_args_wanted = 0;
-
-    /* fill in the requested arguments */
-    for(cur_arg = 0; 
-    cur_arg < num_args_wanted && cur_arg < U_SCANF_MAX_ARGS; 
-    ++cur_arg) {
-
-      switch(ufmt_types[cur_arg]) {
-
-      case ufmt_count:
-        args[cur_arg].intValue = va_arg(ap, int);
-        /* set the spec's width to the # of items converted */
-        spec.fInfo.fWidth = converted;
-        break;
-
-      case ufmt_int:
-        args[cur_arg].ptrValue = va_arg(ap, int*);
-        break;
-
-      case ufmt_char:
-        args[cur_arg].ptrValue = va_arg(ap, int*);
-        break;
-
-      case ufmt_wchar:
-        args[cur_arg].ptrValue = va_arg(ap, wchar_t*);
-        break;
-
-      case ufmt_string:
-        args[cur_arg].ptrValue = va_arg(ap, char*);
-        break;
-
-      case ufmt_wstring:
-        args[cur_arg].ptrValue = va_arg(ap, wchar_t*);
-        break;
-
-      case ufmt_pointer:
-        args[cur_arg].ptrValue = va_arg(ap, void*);
-        break;
-
-      case ufmt_float:
-        args[cur_arg].ptrValue = va_arg(ap, float*);
-        break;
-
-      case ufmt_double:
-        args[cur_arg].ptrValue = va_arg(ap, double*);
-        break;
-
-      case ufmt_date:
-        args[cur_arg].ptrValue = va_arg(ap, UDate*);
-        break;
-
-      case ufmt_ustring:
-        args[cur_arg].ptrValue = va_arg(ap, UChar*);
-        break;
-
-      case ufmt_uchar:
-        args[cur_arg].ptrValue = va_arg(ap, int*);
-        break;
-      }
-    }
-
-    /* call the handler function */
-    handler = g_u_scanf_handlers[ (unsigned char) spec.fInfo.fSpec ];
-    if(handler != 0) {
-
-      /* reset count */
-      count = 0;
-
-      temp = (*handler)(f, &spec.fInfo, args, alias, &count);
-
-      /* if the handler encountered an error condition, break */
-      if(temp == -1)
-        break;
-
-      /* add to the # of items converted */
-      converted += temp;
-
-      /* update the pointer in pattern */
-      alias += count;
-    }
+    /* else do nothing */
 
     /* just ignore unknown tags */
 

@@ -40,22 +40,6 @@ struct u_scanf_spec_info {
 typedef struct u_scanf_spec_info u_scanf_spec_info;
 
 /**
- * A u_scanf info function.
- * A u_scanf info is reponsible for reporting to u_scanf how many
- * arguments are required for the <TT>u_scanf_spec_info</TT> <TT>info</TT>,
- * and what their types are.
- * @param info A pointer to a <TT>uscan_info</TT> struct containing
- * information on the format specification.
- * @param argtypes The array to receive the types of arguments specified
- * by <TT>info</TT>.
- * @param n The number of available slots in the array <TT>argtypes</TT>
- * @return The number of arguments required by <TT>info</TT>.
- */
-typedef int32_t (*u_scanf_info) (const u_scanf_spec_info     *info,
-                int32_t             *argtypes,
-                int32_t             n);
-
-/**
  * A u_scanf handler function.  
  * A u_scanf handler is responsible for handling a single u_scanf 
  * format specification, for example 'd' or 's'.
@@ -76,19 +60,6 @@ typedef int32_t (*u_scanf_handler) (UFILE            *stream,
                    const UChar            *fmt,
                    int32_t            *consumed);
 
-/**
- * Register a u_scanf handler function with u_scanf.
- * @param spec The format specififier handled by the handler <TT>func</TT>.
- * @param nfo A pointer to the <TT>u_scanf_info</TT> function used
- * to determine how many arguments are required for <TT>spec</TT>, and
- * what their types are.
- * @param handler A pointer to the <TT>u_scanf_handler</TT> function.
- * @return 0 if successful
- */
-int32_t
-u_scanf_register_handler (UChar            spec, 
-             u_scanf_info         info,
-             u_scanf_handler     handler);
 
 #endif
 
