@@ -2086,27 +2086,27 @@ public:
   //========================================
 
   /* size() -> length()
-   * @deprecated */
+   * @deprecated Remove after 2000-dec-31. Use length() instead. */
   inline int32_t size(void) const;
 
   // parameters reordered for consistency
-   /* @deprecated */
+   /* @deprecated To be removed in first release in 2001. Use the other versions of this function */
   inline UnicodeString& findAndReplace(const UnicodeString& oldText,
                 const UnicodeString& newText,
                 UTextOffset start,
                 int32_t length);
 
-   /* @deprecated */
+   /* @deprecated Remove after 2000-dec-31. There is no replacement. */
   inline void* operator new(size_t size);
-   /* @deprecated */
+   /* @deprecated Remove after 2000-dec-31. There is no replacement. */
   inline void* operator new(size_t size, void *location);
-   /* @deprecated */
+   /* @deprecated Remove after 2000-dec-31. There is no replacement. */
   inline void operator delete(void *location);
 
   //========================================
   // Non-public API - will be removed!
   //========================================
-  /* @deprecated */
+  /* @deprecated Remove after 2000-dec-31. There is no public replacement. */
   const UChar* getUChars() const;
 };
 
