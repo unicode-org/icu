@@ -6,14 +6,14 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/UnicodePropertySource.java,v $
- * $Date: 2003/11/21 01:03:39 $
- * $Revision: 1.1 $
+ * $Date: 2003/11/21 19:10:43 $
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.dev.test.util;
 
-import java.util.regex.*;
+//import java.util.regex.*;
 import java.util.Set;
 import java.util.Locale;
 import java.util.Map;
@@ -85,6 +85,7 @@ public abstract class UnicodePropertySource implements Cloneable {
         return result;
     }
 
+    /*
     public UnicodeSet getPropertySet(String propertyValue, UnicodeSet result){
         if (result == null) result = new UnicodeSet();
         matchIterator.reset();
@@ -111,6 +112,7 @@ public abstract class UnicodePropertySource implements Cloneable {
         }
         return result;
     }
+    */
     
     public int getNameChoice() {
         return nameChoice;

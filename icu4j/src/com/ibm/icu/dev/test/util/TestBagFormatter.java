@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/TestBagFormatter.java,v $
- * $Date: 2003/11/21 01:03:39 $
- * $Revision: 1.1 $
+ * $Date: 2003/11/21 19:10:43 $
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -26,7 +26,7 @@ import java.util.Set;
 import java.util.Iterator;
 import java.util.TreeSet;
 import java.util.Locale;
-import java.util.regex.*;
+//import java.util.regex.*;
 
 import com.ibm.icu.text.*;
 
@@ -75,7 +75,7 @@ public class TestBagFormatter {
             System.out.println(bf.showSetNames("[:numeric_type=numeric:]", us));
             
             if (true) return;
-            showNames("Name", ".*MARK.*");
+            //showNames("Name", ".*MARK.*");
             //showNames("NFD", "a.+");
             //showNames("NFD", false);
             //showNames("Lowercase_Mapping", false);
@@ -192,7 +192,7 @@ public class TestBagFormatter {
         System.out.println("in*: " + fromHTML.transliterate(fii));
         System.out.println("IN*: " + fromHTML.transliterate(fii.toUpperCase()));
     }
-    
+    /*
     static void showNames(String propAlias, boolean matches) {
         BagFormatter bf = new BagFormatter();
         UnicodeSet stuff;
@@ -210,4 +210,5 @@ public class TestBagFormatter {
             .getPropertySet(Pattern.compile(pattern).matcher(""), null);
         System.out.println(bf.showSetNames(propAlias + "with " + pattern, stuff));
     }
+    */
 }
