@@ -3,13 +3,13 @@
 // Tamil locale.  Based on Hindi locale
 
 ta_IN {
-    Version { "1.1" }
+    Version { "1.2" }
     LocaleID { "449" }
     ShortCountry { IND }
 
     CurrencyElements {
         "$",
-        INR,  // Rs. ? No.
+        "INR",  // Rs. ? No.
         "."
     }
     LocaleString { "ta_IN" }
