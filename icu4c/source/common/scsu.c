@@ -16,8 +16,6 @@
 *******************************************************************************
 */
 
-#include <limits.h>
-
 #include "unicode/scsu.h"
 
 #include "cmemory.h"

@@ -11,8 +11,6 @@
 #include "unicode/simpletz.h"
 #include "unicode/smpdtfmt.h"
 
-#include <limits.h>
-
 // *****************************************************************************
 // class TimeZoneRegressionTest
 // *****************************************************************************
