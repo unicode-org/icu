@@ -55,8 +55,8 @@ Do not display any message during execution.
 Set the destination directory to
 .IR destination .
 The default destination directory is specified by the environment variable
-.BR ICU_DATA
-or is the location set when ICU was built if 
+.BR ICU_DATA ,
+or the location set when ICU was built if 
 .B ICU_DATA
 is not set.
 .TP
