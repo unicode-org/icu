@@ -48,7 +48,7 @@ public class CollationFinnishTest extends TestFmwk {
         1,
         -1,
         // test primary > 4
-        0,
+        1,
     };
 
     private Collator myCollation = null;

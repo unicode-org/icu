@@ -232,10 +232,10 @@ public class CollationEnglishTest extends TestFmwk{
 
     private static char[][] testMore = {
         {0x0061 /* 'a' */, 0x0065 /* 'e' */},
-        {0x0061 /* 'a' */, 0x0066 /* 'f' */},
         { 0x00E6},
         { 0x00C6},
-        {0x006F /* 'o' */, 0x0065 /* 'e' */},
+        {0x0061 /* 'a' */, 0x0066 /* 'f' */},
+		{0x006F /* 'o' */, 0x0065 /* 'e' */},
         { 0x0153},
         { 0x0152},
         {0x006F /* 'o' */, 0x0066 /* 'f' */},
