@@ -619,23 +619,6 @@ makeProps(Props *p) {
         (uint32_t)p->numericType<<NUMERIC_TYPE_SHIFT |
         (uint32_t)value<<VALUE_SHIFT;
 
-    if(beVerbose && p->code<=0x9f) {
-        if(p->code==0) {
-            printf("static uint32_t staticProps32Table[0xa0]={\n");
-        }
-        if(x&EXCEPTION_BIT) {
-            /* ### TODO: do something more intelligent if there is an exception */
-            printf("    /* 0x%02lx */ 0x%lx, /* has exception */\n",
-                (unsigned long)p->code, (unsigned long)x&~EXCEPTION_BIT);
-        } else {
-            printf("    /* 0x%02lx */ 0x%lx,\n",
-                (unsigned long)p->code, (unsigned long)x);
-        }
-        if(p->code==0x9f) {
-            printf("};\n");
-        }
-    }
-
     return x;
 
     /*
