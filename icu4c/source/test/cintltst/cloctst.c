@@ -2175,6 +2175,8 @@ static void TestGetLocale(void) {
 #endif
 
     /* === umsg === */
+#if 0
+    /* commented out by weiv 01/12/2005. umsg_getLocaleByType is to be removed */
 #if !UCONFIG_NO_FORMATTING
     {
         UMessageFormat *obj;
@@ -2212,6 +2214,7 @@ static void TestGetLocale(void) {
         }
         umsg_close(obj);
     }
+#endif
 #endif
 
     /* === ubrk === */
