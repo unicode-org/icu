@@ -43,13 +43,13 @@
 // For time zones that have no names, use strings GMT+minutes and
 // GMT-minutes. For instance, in France the time zone is GMT+60.
 // Also accepted are GMT+H:MM or GMT-H:MM.
-const UnicodeString     SimpleDateFormat::fgGmt("GMT");
-const UnicodeString     SimpleDateFormat::fgGmtPlus("GMT+");
-const UnicodeString     SimpleDateFormat::fgGmtMinus("GMT-");
+const UnicodeString     SimpleDateFormat::fgGmt("GMT", "");
+const UnicodeString     SimpleDateFormat::fgGmtPlus("GMT+", "");
+const UnicodeString     SimpleDateFormat::fgGmtMinus("GMT-", "");
 
 // This is a pattern-of-last-resort used when we can't load a usable pattern out
 // of a resource.
-const UnicodeString     SimpleDateFormat::fgDefaultPattern("yyMMdd hh:mm a");
+const UnicodeString     SimpleDateFormat::fgDefaultPattern("yyMMdd hh:mm a", "");
 
 /**
  * These are the tags we expect to see in normal resource bundle files associated
