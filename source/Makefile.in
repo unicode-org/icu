@@ -63,8 +63,8 @@ CLEANFILES = *~
 DOCDIRS = common i18n
 SUBDIRS = common i18n $(EXTRA) tools $(TEST) $(SAMPLE)
 
-## Extra files to install
-EXTRA_DATA = convrtrs.txt UnicodeData-$(UNICODE_VERSION).txt
+## Extra files to install [nothing at present]
+EXTRA_DATA =
 
 ## List of phony targets
 .PHONY : all all-local all-recursive install install-local install-udata install-udata-files install-udata-dlls		\
@@ -108,7 +108,7 @@ install-local:
 	  echo $(INSTALL_DATA) $(top_srcdir)/../data/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/$$file; \
 	  $(INSTALL_DATA) $(top_srcdir)/../data/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/$$file || exit; \
 	done
-	$(INSTALL_DATA) $(top_builddir)/config/Makefile $(DESTDIR)$(pkgdatadir)/Makefile.inc
+	$(INSTALL_DATA) $(top_builddir)/config/Makefile.inc $(DESTDIR)$(pkgdatadir)/Makefile.inc
 	$(INSTALL_SCRIPT) $(top_srcdir)/mkinstalldirs $(DESTDIR)$(sbindir)/mkinstalldirs
 
 ## Generate HTML documentation
