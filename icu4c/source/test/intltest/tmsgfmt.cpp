@@ -29,7 +29,31 @@
 #include "unicode/choicfmt.h"
 #include "unicode/gregocal.h"
 
-
+void
+TestMessageFormat::runIndexedTest(int32_t index, UBool exec,
+                                  const char* &name, char* /*par*/) {
+    switch (index) {
+        TESTCASE(0,testBug1);
+        TESTCASE(1,testBug2);
+        TESTCASE(2,sample);
+        TESTCASE(3,PatternTest);
+        TESTCASE(4,testStaticFormat);
+        TESTCASE(5,testSimpleFormat);
+        TESTCASE(6,testMsgFormatChoice);
+        TESTCASE(7,testCopyConstructor);
+        TESTCASE(8,testAssignment);
+        TESTCASE(9,testClone);
+        TESTCASE(10,testEquals);
+        TESTCASE(11,testNotEquals);
+        TESTCASE(12,testSetLocale);
+        TESTCASE(13,testFormat);
+        TESTCASE(14,testParse);
+        TESTCASE(15,testAdopt);
+        TESTCASE(16,testCopyConstructor2);
+        TESTCASE(17,TestUnlimitedArgsAndSubformats);
+        default: name = ""; break;
+    }
+}
 
 void TestMessageFormat::testBug3()
 {
@@ -1017,7 +1041,7 @@ void TestMessageFormat::testAdopt()
 // which is probably why it didn't show up in the regular test for the copy constructor.)
 // For this reason, the test isn't changed even though it contains function calls whose results are
 // not tested and had no problems. Actually, the test failed by *crashing*.
-static void testCopyConstructor2()
+static void _testCopyConstructor2()
 {
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString formatStr("Hello World on {0,date,full}", "");
@@ -1054,33 +1078,61 @@ static void testCopyConstructor2()
     delete fmt4;
 }
 
+void TestMessageFormat::testCopyConstructor2() {
+    _testCopyConstructor2();
+}
 
-void TestMessageFormat::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
-{
-    if (exec) logln("TestSuite MessageFormat");
+/**
+ * Verify that MessageFormat accomodates more than 10 arguments and
+ * more than 10 subformats.
+ */
+void TestMessageFormat::TestUnlimitedArgsAndSubformats() {
+    UErrorCode ec = U_ZERO_ERROR;
+    const UnicodeString pattern =
+        "On {0,date} (aka {0,date,short}, aka {0,date,long}) "
+        "at {0,time} (aka {0,time,short}, aka {0,time,long}) "
+        "there were {1,number} werjes "
+        "(a {3,number,percent} increase over {2,number}) "
+        "despite the {4}''s efforts "
+        "and to delight of {5}, {6}, {7}, {8}, {9}, and {10} {11}.";
+    MessageFormat msg(pattern, ec);
+    if (U_FAILURE(ec)) {
+        errln("FAIL: constructor failed");
+        return;
+    }
 
-    switch (index) {
-        case 0:  name = "testBug1";             if (exec) testBug1(); break;
-        case 1:  name = "testBug2";             if (exec) testBug2(); break;
-        case 2:  name = "sample";               if (exec) sample(); break;
-        case 3:  name = "PatternTest";          if (exec) PatternTest(); break;
-        case 4:  name = "testStaticFormat";     if (exec) testStaticFormat(/* par */); break;
-        case 5:  name = "testSimpleFormat";     if (exec) testSimpleFormat(/* par */); break;
-        case 6:  name = "testMsgFormatChoice";  if (exec) testMsgFormatChoice(/* par */); break;
+    const Formattable ARGS[] = {
+        Formattable(UDate(1e13), Formattable::kIsDate),
+        Formattable((int32_t)1303),
+        Formattable((int32_t)1202),
+        Formattable(1303.0/1202 - 1),
+        Formattable("Glimmung"),
+        Formattable("the printers"),
+        Formattable("Nick"),
+        Formattable("his father"),
+        Formattable("his mother"),
+        Formattable("the spiddles"),
+        Formattable("of course"),
+        Formattable("Horace"),
+    };
+    const int32_t ARGS_LENGTH = sizeof(ARGS) / sizeof(ARGS[0]);
+    Formattable ARGS_OBJ(ARGS, ARGS_LENGTH);
 
-        case 7:  name = "testCopyConstructor";  if (exec) testCopyConstructor(); break;
-        case 8:  name = "testAssignment";       if (exec) testAssignment(); break;
-        case 9:  name = "testClone";            if (exec) testClone(); break;
-        case 10: name = "testEquals";           if (exec) testEquals(); break;
-        case 11: name = "testNotEquals";        if (exec) testNotEquals(); break;
-        case 12: name = "testSetLocale";        if (exec) testSetLocale(); break;
-        case 13: name = "testFormat";           if (exec) testFormat(); break;
-        case 14: name = "testParse";            if (exec) testParse(); break;
-        case 15: name = "testAdopt";            if (exec) testAdopt(); break;
-        case 16: name = "testCopyConstructor2"; if (exec) testCopyConstructor2(); break;
-
-
-        default: name = ""; break; //needed to end loop
+    UnicodeString expected =
+        "On Nov 20, 2286 (aka 11/20/86, aka November 20, 2286) "
+        "at 9:46:40 AM (aka 9:46 AM, aka 9:46:40 AM PST) "
+        "there were 1,303 werjes "
+        "(a 8% increase over 1,202) "
+        "despite the Glimmung's efforts "
+        "and to delight of the printers, Nick, his father, "
+        "his mother, the spiddles, and of course Horace.";
+    UnicodeString result;
+    msg.format(ARGS_OBJ, result, ec);
+    if (result == expected) {
+        logln(result);
+    } else {
+        errln((UnicodeString)"FAIL: Got " + result +
+              ", expected " + expected);
     }
 }
 
