@@ -663,7 +663,7 @@ void loadMBCSTableFromFile(FileStream* convFile, UConverter_1_4* myConverter, UE
      so that we know how to transition */
   if (myConverter->subCharLen > 1)
     {
-      myConverter->sharedData->table->mbcs.starters[myConverter->subChar[0]] = TRUE;
+      myConverter->sharedData->table->mbcs.starters[(uint8_t)(myConverter->subChar[0])] = TRUE;
     }
   return;
 }
@@ -694,7 +694,7 @@ void loadEBCDIC_STATEFULTableFromFile(FileStream* convFile, UConverter_1_4* myCo
   
   myFromUnicode = ucmp16_open((uint16_t)replacementChar);
   myToUnicode = ucmp16_open((int16_t)0xFFFD);  
-  
+
   while (T_FileStream_readLine(convFile, storageLine, UCNV_MAX_LINE_TEXT))
     {
       removeComments(storageLine);
@@ -725,12 +725,6 @@ void loadEBCDIC_STATEFULTableFromFile(FileStream* convFile, UConverter_1_4* myCo
   myConverter->sharedData->referenceCounter = 1;
   myConverter->sharedData->table = myUConverterTable;
 
-  /* if the default subCharLen is > 1 we need to insert it in the data structure
-     so that we know how to transition */
-  if (myConverter->subCharLen > 1)
-    {
-      myConverter->sharedData->table->mbcs.starters[myConverter->subChar[0]] = TRUE;
-    }
   return;
 }
 
