@@ -14,21 +14,7 @@ CFG=Debug
 !MESSAGE No configuration specified. Defaulting to common - Win32 Debug.
 !ENDIF
 
-#Let's see if user has given us a path to ICU
-#This could be found according to the path to makefile, but for now it is this way
-!IF "$(ICUP)"==""
-!ERROR Can't find path!
-!ELSE
-ICUDATA=$(ICUP)\data
-ICD=$(ICUDATA)^\
-ICU_DATA=$(ICUDATA)\
-DATA_PATH=$(ICUP)\data^\
-TEST=..\source\test\testdata^\
-TESTDATA=$(ICUP)\source\test\testdata
-ICUTOOLS=$(ICUP)\source\tools
-!ENDIF
-
-#Here we test if configuration is given
+#Here we test if a valid configuration is given
 !IF "$(CFG)" != "Release" && "$(CFG)" != "release" && "$(CFG)" != "Debug" && "$(CFG)" != "debug"
 !MESSAGE Invalid configuration "$(CFG)" specified.
 !MESSAGE You can specify a configuration when running NMAKE
@@ -43,6 +29,31 @@ ICUTOOLS=$(ICUP)\source\tools
 !MESSAGE
 !ERROR An invalid configuration is specified.
 !ENDIF
+
+#Let's see if user has given us a path to ICU
+#This could be found according to the path to makefile, but for now it is this way
+!IF "$(ICUP)"==""
+!ERROR Can't find path!
+!ENDIF
+ICUDATA=$(ICUP)\data
+TESTDATA=$(ICUP)\source\test\testdata
+
+#If ICU_DATA is not set, we want to output stuff in binary directory
+!IF "$(ICU_DATA)" == ""
+DLL_OUTPUT=$(ICUP)\bin\$(CFG)
+TESTDATAOUT=$(TESTDATA)
+#TESTDATAOUT=$(DLL_OUTPUT)
+!MESSAGE ICU_DATA is not set! icudata.dll will go to $(DLL_OUTPUT)
+!ELSE
+DLL_OUTPUT=$(ICUDATA)
+TESTDATAOUT=$(TESTDATA)
+!ENDIF
+
+
+ICD=$(ICUDATA)^\
+DATA_PATH=$(ICUP)\data^\
+TEST=..\source\test\testdata^\
+ICUTOOLS=$(ICUP)\source\tools
 
 # We have to prepare params for pkgdata - to help it find the tools
 !IF "$(CFG)" == "Debug" || "$(CFG)" == "debug"
@@ -94,15 +105,15 @@ RB_FILES = $(GENRB_SOURCE:.txt=.res)
 TRANSLIT_FILES = $(TRANSLIT_SOURCE:.txt=.res)
 
 # This target should build all the data files
-ALL : GODATA  test.dat base_test.dat test_dat.dll base_test_dat.dll base_dat.dll $(TESTDATA)\testdata.dll icudata.dll GOBACK #icudata.dat 
+ALL : GODATA  test.dat base_test.dat test_dat.dll base_test_dat.dll base_dat.dll $(TESTDATAOUT)\testdata.dll $(DLL_OUTPUT)\icudata.dll GOBACK #icudata.dat 
 	@echo All targets are up to date
 
 BRK_FILES = $(ICUDATA)\sent.brk $(ICUDATA)\char.brk $(ICUDATA)\line.brk $(ICUDATA)\word.brk $(ICUDATA)\line_th.brk $(ICUDATA)\word_th.brk
 
 #invoke pkgdata
-icudata.dll :  $(CNV_FILES) $(BRK_FILES) uprops.dat unames.dat cnvalias.dat tz.dat $(RB_FILES) $(TRANSLIT_FILES)
+$(DLL_OUTPUT)\icudata.dll :  $(CNV_FILES) $(BRK_FILES) uprops.dat unames.dat cnvalias.dat tz.dat $(RB_FILES) $(TRANSLIT_FILES)
 	@echo Building icu data
- 	@$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata -v -m dll -c -p icudata -O $(PKGOPT) -d $(ICUDATA) -s $(ICUDATA) <<
+ 	@$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata -v -m dll -c -p icudata -O $(PKGOPT) -d $(DLL_OUTPUT) -s $(ICUDATA) <<
 uprops.dat
 unames.dat
 cnvalias.dat
@@ -117,9 +128,9 @@ $(BRK_FILES:.brk =.brk
 )
 <<
 
-$(TESTDATA)\testdata.dll :  $(TESTDATA)\root.res $(TESTDATA)\te.res $(TESTDATA)\te_IN.res $(TESTDATA)\testtypes.res
+$(TESTDATAOUT)\testdata.dll :  $(TESTDATA)\root.res $(TESTDATA)\te.res $(TESTDATA)\te_IN.res $(TESTDATA)\testtypes.res
 	@echo Building test data
- 	@$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata -v -m dll -c -p testdata -O $(PKGOPT) -d $(TESTDATA) -s $(TESTDATA) <<
+ 	@$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata -v -m dll -c -p testdata -O $(PKGOPT) -d $(TESTDATAOUT) -s $(TESTDATA) <<
 root.res
 te.res
 te_IN.res
