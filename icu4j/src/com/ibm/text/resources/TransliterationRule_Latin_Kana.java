@@ -1,3 +1,15 @@
+/*
+ *******************************************************************************
+ * Copyright (C) 1996-2000, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ *
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/resources/Attic/TransliterationRule_Latin_Kana.java,v $ 
+ * $Date: 2000/03/10 04:07:31 $ 
+ * $Revision: 1.2 $
+ *
+ *****************************************************************************************
+ */
 package com.ibm.text.resources;
 
 import java.util.ListResourceBundle;
@@ -12,7 +24,7 @@ public class TransliterationRule_Latin_Kana extends ListResourceBundle {
             // Uppercase Latin to katakana
 
             { "Rule", ""
-                //# $Revision: 1.1 $
+                //# $Revision: 1.2 $
                 // Transliteration rules for Japanese Hiragana and Katakana to
                 // romaji
                 // lower case roman generates hiragana.

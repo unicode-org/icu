@@ -1,3 +1,15 @@
+/*
+ *******************************************************************************
+ * Copyright (C) 1996-2000, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ *
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliterationRuleSet.java,v $ 
+ * $Date: 2000/03/10 04:07:24 $ 
+ * $Revision: 1.9 $
+ *
+ *****************************************************************************************
+ */
 package com.ibm.text;
 
 import java.util.*;
@@ -15,9 +27,12 @@ import java.util.*;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.8 $ $Date: 2000/02/03 18:11:19 $
+ * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.9 $ $Date: 2000/03/10 04:07:24 $
  *
  * $Log: TransliterationRuleSet.java,v $
+ * Revision 1.9  2000/03/10 04:07:24  johnf
+ * Copyright update
+ *
  * Revision 1.8  2000/02/03 18:11:19  Alan
  * Use array rather than hashtable for char-to-set map
  *

@@ -1,14 +1,14 @@
 /*
- * (C) IBM Corp. 1997-1998.  All Rights Reserved.
+ *******************************************************************************
+ * Copyright (C) 1996-2000, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
  *
- * The program is provided "as is" without any warranty express or
- * implied, including the warranty of non-infringement and the implied
- * warranties of merchantibility and fitness for a particular purpose.
- * IBM will not be liable for any damages suffered by you as a result
- * of using the Program. In no event will IBM be liable for any
- * special, indirect or consequential damages or lost profits even if
- * IBM has been advised of the possibility of their occurrence. IBM
- * will not be liable for any third party claims against you.
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NFRule.java,v $ 
+ * $Date: 2000/03/10 04:07:21 $ 
+ * $Revision: 1.2 $
+ *
+ *****************************************************************************************
  */
 package com.ibm.text;
 
@@ -18,7 +18,7 @@ import java.text.*;
  * A class represnting a single rule in a RuleBasedNumberFormat.  A rule
  * inserts its text into the result string and then passes control to its
  * substitutions, which do the same thing.
- * $RCSfile: NFRule.java,v $ $Revision: 1.1 $ $Date: 2000/02/10 06:25:51 $
+ * $RCSfile: NFRule.java,v $ $Revision: 1.2 $ $Date: 2000/03/10 04:07:21 $
  */
 final class NFRule {
     //-----------------------------------------------------------------------

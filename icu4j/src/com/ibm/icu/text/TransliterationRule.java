@@ -1,3 +1,15 @@
+/*
+ *******************************************************************************
+ * Copyright (C) 1996-2000, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ *
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliterationRule.java,v $ 
+ * $Date: 2000/03/10 04:07:24 $ 
+ * $Revision: 1.14 $
+ *
+ *****************************************************************************************
+ */
 package com.ibm.text;
 
 import com.ibm.util.Utility;
@@ -21,9 +33,12 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.13 $ $Date: 2000/02/10 07:36:25 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.14 $ $Date: 2000/03/10 04:07:24 $
  *
  * $Log: TransliterationRule.java,v $
+ * Revision 1.14  2000/03/10 04:07:24  johnf
+ * Copyright update
+ *
  * Revision 1.13  2000/02/10 07:36:25  johnf
  * fixed imports for com.ibm.util.Utility
  *

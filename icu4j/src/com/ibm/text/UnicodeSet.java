@@ -1,3 +1,15 @@
+/*
+ *******************************************************************************
+ * Copyright (C) 1996-2000, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ *
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UnicodeSet.java,v $ 
+ * $Date: 2000/03/10 04:07:25 $ 
+ * $Revision: 1.16 $
+ *
+ *****************************************************************************************
+ */
 package com.ibm.text;
 
 import java.text.*;
@@ -229,7 +241,7 @@ import java.text.*;
  * *Unsupported by Java (and hence unsupported by UnicodeSet).
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.15 $ $Date: 2000/03/09 00:37:19 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.16 $ $Date: 2000/03/10 04:07:25 $
  */
 public class UnicodeSet implements UnicodeFilter {
     /**

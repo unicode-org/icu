@@ -1,3 +1,15 @@
+/*
+ *******************************************************************************
+ * Copyright (C) 1996-2000, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ *
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $ 
+ * $Date: 2000/03/10 04:07:24 $ 
+ * $Revision: 1.14 $
+ *
+ *****************************************************************************************
+ */
 package com.ibm.text;
 
 import java.util.*;
@@ -198,7 +210,7 @@ import java.text.MessageFormat;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.13 $ $Date: 2000/02/18 00:29:08 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.14 $ $Date: 2000/03/10 04:07:24 $
  */
 public abstract class Transliterator {
     /**
