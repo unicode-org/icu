@@ -86,17 +86,54 @@ UConverterDataISO2022;
 
 /* ISO-2022 ----------------------------------------------------------------- */
 
+/*Forward declaration */
 U_CFUNC void T_UConverter_fromUnicode_UTF8 (UConverterFromUnicodeArgs * args,
 				    UErrorCode * err);
 
-U_CFUNC void T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC (UConverterFromUnicodeArgs * converter,
+U_CFUNC void T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
+				    UErrorCode * err);
+
+
+/* Protos */
+
+
+U_CFUNC void T_UConverter_fromUnicode_ISO_2022(UConverterFromUnicodeArgs * args,
+				    UErrorCode * err);
+
+U_CFUNC void T_UConverter_fromUnicode_ISO_2022_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
+				    UErrorCode * err);
+
+U_CFUNC UChar32 T_UConverter_getNextUChar_ISO_2022 (UConverterToUnicodeArgs * args,
 				    UErrorCode * err);
 
 U_CFUNC void T_UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* args, 
 												  UErrorCode* err);
+
 U_CFUNC void UConverter_fromUnicode_ISO_2022_KR(UConverterFromUnicodeArgs* args, 
 												  UErrorCode* err);
-U_CFUNC void UConverter_toUnicode_ISO_2022_KR(UConverterToUnicodeArgs* args, UErrorCode* err);
+
+U_CFUNC void UConverter_toUnicode_ISO_2022_KR(UConverterToUnicodeArgs* args, 
+                                              UErrorCode* err);
+
+U_CFUNC void UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args, 
+                                                              UErrorCode* err);
+
+U_CFUNC void T_UConverter_fromUnicode_EBCDIC_STATEFUL(UConverterFromUnicodeArgs * args,
+				    UErrorCode * err);
+
+U_CFUNC void T_UConverter_fromUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
+				    UErrorCode * err);
+
+U_CFUNC void T_UConverter_toUnicode_EBCDIC_STATEFUL(UConverterToUnicodeArgs * args,
+				    UErrorCode * err);
+
+U_CFUNC void T_UConverter_toUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverterToUnicodeArgs * args,
+				    UErrorCode * err);
+
+
+U_CFUNC UChar32 T_UConverter_getNextUChar_EBCDIC_STATEFUL (UConverterToUnicodeArgs * args,
+				    UErrorCode * err);
+
 
 #define ESC_2022 0x1B /*ESC*/
 
@@ -181,45 +218,47 @@ int8_t normalize_esq_chars_2022[256] = {
 int32_t escSeqStateTable_Key_2022[MAX_STATES_2022] = {
 /*		0			1			2			3			4			5			6			7			8			9			*/
 
-         1			,34			,36			,39			,55		    ,57,1093		,1096		,1097		,1098		,1099   
-		,1100		,1101		,1102		,1103		,1104		,1105		,1106		,1109		,1154		,1157		
-		,1160		,1161		,1176       ,1254		,1257		,1768		,1773		,35105		,36933		,36936		
-        ,36937		,36938		,36939		,36940		,36942		,36943		,36944		,36945		,36946		,36947		
-        ,36948		,37642      ,40133		,40136		,40138		,40139		,40140		,40141		,1123363    ,35947624	
-        ,35947625   ,35947626   ,35947627   ,35947629   ,35947630	,35947631   ,35947635   ,35947636   ,35947638};
+         1			,34			,36			,39			,55		    ,57         ,1093		,1096		,1097		,1098		
+        ,1099       ,1100		,1101		,1102		,1103		,1104		,1105		,1106		,1109		,1154		
+        ,1157		,1160		,1161		,1176       ,1254		,1257		,1768		,1773		,35105		,36933		
+        ,36936		,36937		,36938		,36939		,36940		,36942		,36943		,36944		,36945		,36946		
+        ,36947		,36948		,37642      ,40133		,40136		,40138		,40139		,40140		,40141		,1123363    
+        ,35947624	,35947625   ,35947626   ,35947627   ,35947629   ,35947630	,35947631   ,35947635   ,35947636   ,35947638};
 
 
 const char* escSeqStateTable_Result_2022[MAX_STATES_2022] = {
-/*		0		 1			 2						3						4						5						6		            	7			                8			9			*/
+/*		0		 1			 2				3						4						5						6		            	7			                8			            9			*/
 
-     NULL		,NULL		,NULL					,NULL					,NULL				    ,NULL,"latin1"				,"latin1"               ,"latin1"	            ,"ibm-865"  ,"ibm-865"    
-	,"ibm-865"	,"ibm-865"	,"ibm-865"				,"ibm-865"				,"ibm-895"				,"JISX-201"				,"latin1"               ,"latin1"	            ,NULL		,"ibm-955"    
-	,"GB2312"	,"JISX-208"	,NULL                   ,NULL					,"UTF8"					,"ISO-8859-1"			,"ISO-8859-7"			,NULL		            ,"ibm-955"  ,"bm-367"   
-    ,"ibm-952"  ,"ibm-949"	,"JISX-212"				,"ibm-1383"				,"ibm-952"				,"ibm-964"				,"ibm-964"				,"ibm-964"              ,"ibm-964"  ,"ibm-964"     
-    ,"ibm-964"  ,"ibm-949"  ,"UTF16_PlatformEndian" ,"UTF16_PlatformEndian" ,"UTF16_PlatformEndian"	,"UTF16_PlatformEndian"	,"UTF16_PlatformEndian"	,"UTF16_PlatformEndian"	,NULL		,"latin1"               
-    ,"ibm-912"  ,"ibm-913"  ,"ibm-914"				,"ibm-813"				,"ibm-1089"             ,"ibm-920"	            ,"ibm-915"				,"ibm-915"				,"latin1"};
+     NULL		,NULL		,NULL			,NULL					,NULL				    ,NULL                   ,"latin1"				,"latin1"               ,"latin1"	            ,"ibm-865"  
+    ,"ibm-865"  ,"ibm-865"	,"ibm-865"	    ,"ibm-865"				,"ibm-865"				,"ibm-895"				,"JISX-201"				,"latin1"               ,"latin1"	            ,NULL		
+    ,"ibm-955"  ,"GB2312"	,"JISX-208"	    ,NULL                   ,NULL					,"UTF8"					,"ISO-8859-1"			,"ISO-8859-7"			,NULL		            ,"ibm-955"  
+    ,"bm-367"   ,"ibm-952"  ,"ibm-949"	    ,"JISX-212"				,"ibm-1383"				,"ibm-952"				,"ibm-964"				,"ibm-964"				,"ibm-964"              ,"ibm-964"  
+    ,"ibm-964"  ,"ibm-964"  ,"ibm-949"      ,"UTF16_PlatformEndian" ,"UTF16_PlatformEndian" ,"UTF16_PlatformEndian"	,"UTF16_PlatformEndian"	,"UTF16_PlatformEndian"	,"UTF16_PlatformEndian"	,NULL		
+    ,"latin1"   ,"ibm-912"  ,"ibm-913"      ,"ibm-914"				,"ibm-813"				,"ibm-1089"             ,"ibm-920"	            ,"ibm-915"				,"ibm-915"				,"latin1"};
 
 
 UCNV_TableStates_2022 escSeqStateTable_Value_2022[MAX_STATES_2022] = {
 /*			0								1							2							3						4								5								6						7							8							9			*/
 	
-         VALID_NON_TERMINAL_2022	,VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022	,VALID_NON_TERMINAL_2022	,VALID_SS2_SEQUENCE,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_MAYBE_TERMINAL_2022	,VALID_TERMINAL_2022		,VALID_TERMINAL_2022    
-		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_NON_TERMINAL_2022    ,VALID_TERMINAL_2022    
-		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022    ,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_NON_TERMINAL_2022    ,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		
+         VALID_NON_TERMINAL_2022	,VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022	,VALID_NON_TERMINAL_2022	,VALID_SS2_SEQUENCE         ,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_MAYBE_TERMINAL_2022	,VALID_TERMINAL_2022		
+        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_NON_TERMINAL_2022    
+        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022    ,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_NON_TERMINAL_2022    ,VALID_TERMINAL_2022		
         ,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		
-        ,VALID_TERMINAL_2022		,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_NON_TERMINAL_2022    ,VALID_TERMINAL_2022		
-        ,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022};
+        ,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_NON_TERMINAL_2022    
+        ,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022};
 
 
 
 /*for 2022 looks ahead in the stream
  *to determine the longest possible convertible
- *data stream*/
+ *data stream
+ */
 static const char* getEndOfBuffer_2022(const char* source,
                                        const char* sourceLimit,
                                        UBool flush); 
 /*runs through a state machine to determine the escape sequence - codepage correspondance
- *changes the pointer pointed to be _this->extraInfo*/
+ *changes the pointer pointed to be _this->extraInfo
+ */
 static  void changeState_2022(UConverter* _this,
                              const char** source, 
                              const char* sourceLimit,
@@ -229,6 +268,14 @@ static  void changeState_2022(UConverter* _this,
 UCNV_TableStates_2022 getKey_2022(char source,
                                   int32_t* key,
                                   int32_t* offset);
+/* gets targetUniChar value from an
+ * MBCS converter
+ */
+void getUniCharFromUnicodeMBCS(UConverter* cnv, UErrorCode* err, UChar* sourceChar, 
+                               UChar32 *value ,UConverterCallbackReason *reason, 
+                               int32_t* length);
+
+    
 
 static void
 _ISO2022Open(UConverter *cnv, const char *name, const char *locale, UErrorCode *errorCode) {
@@ -318,7 +365,7 @@ _ISO2022Close(UConverter *converter) {
         uprv_free (converter->extraInfo);
     }
 }
-/*** ??? why are we going to UTF-8??*/
+
 static void
 _ISO2022Reset(UConverter *converter) {
     if(!((UConverterDataISO2022 *) (converter->extraInfo))->currentLocale){
@@ -368,6 +415,9 @@ U_CFUNC void T_UConverter_fromUnicode_ISO_2022_OFFSETS_LOGIC(UConverterFromUnico
 	if(locale && uprv_stricmp(locale,"jp")==0){
 		T_UConverter_fromUnicode_ISO_2022_JP(args,err);
     }
+    else if(locale && uprv_stricmp(locale,"kr")==0){
+        UConverter_fromUnicode_ISO_2022_KR(args,err);
+    }
 	else{
       T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC(args, err);
       {
@@ -385,15 +435,15 @@ U_CFUNC void T_UConverter_fromUnicode_ISO_2022_OFFSETS_LOGIC(UConverterFromUnico
 /*************************** BEGIN ****************************/
 
 /************************************** IMPORTANT **************************************************
- * The T_fromUnicode_ISO2022_JP converter doesnot use ucnv_fromUnicode() functions for SBCS and DBCS, 
- * instead the values are obtained directly by accessing the sharedData structs through ucmp8_getU() 
- * and ucmp16_getU() macros to increase speed, reduce the overhead of function call and make it 
+ * The T_fromUnicode_ISO2022_JP converter doesnot use ucnv_fromUnicode() functions for SBCS,DBCS and
+ * MBCS instead the values are obtained directly by accessing the sharedData structs through ucmp8_getU() 
+ * ucmp16_getU() macros,and for MBCS by emulating the Markus's code to increase speed, reduce the overhead of function call and make it 
  * efficient.The converter iterates over each Unicode codepoint to obtain the equivalent codepoints 
  * from the codepages supported. Since the source buffer is processed one char at a time it would 
  * make sense to reduce the extra processing a canned converter would do as far as possible.
  *
  * If the implementation of these macros or structure of sharedData struct change in the future, make 
- * sure that ISO-2022-JP is also changed. 
+ * sure that ISO-2022 is also changed. 
  ***************************************************************************************************
  */
 
@@ -490,18 +540,18 @@ U_CFUNC void T_UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* arg
 	unsigned char *myTarget = (unsigned char *) args->target;
 	
 	char *uBuf =(char*) malloc(sizeof(char) * 4);
-	char *targetChar;
-	char *targetLimit; 
+	/*char *targetChar;
+	char *targetLimit; */
 	
 	const UChar *saveSource;
 	char *saveTarget;
 	int32_t *saveOffsets ;
-	const UChar* mySourceLimit;
+/*	const UChar* mySourceLimit;*/
 	int32_t myTargetLength = args->targetLimit - args->target;
 	int32_t mySourceLength = args->sourceLimit - args->source;
 	int32_t mySourceIndex = 0;
 	int32_t myTargetIndex = 0;
-
+    int32_t length  =0;
 	CompactShortArray *myFromUnicodeDBCS = NULL;
 	CompactShortArray *myFromUnicodeDBCSFallback = NULL;
 	CompactByteArray  *myFromUnicodeSBCS = NULL;
@@ -657,43 +707,21 @@ U_CFUNC void T_UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* arg
 
 					case MBCS:
 						
-						sourceCharPtr =&mySourceChar;
-						mySourceLimit= sourceCharPtr+1;
-						targetChar =uBuf;
-						targetLimit = uBuf+4;
-
-						ucnv_fromUnicode(myConverterData->fromUnicodeConverter,
-										&targetChar,targetLimit,
-										&sourceCharPtr,
-										mySourceLimit,args->offsets,args->flush,err);
-						if(U_FAILURE(*err)){
+                        
+                        getUniCharFromUnicodeMBCS(myConverterData->fromUnicodeConverter,err, 
+                                                  &mySourceChar, 
+                                                  &targetUniChar,&reason, &length);
+            
+                       if(U_FAILURE(*err)){
 							targetUniChar = missingCharMarker;
 							*err =U_ZERO_ERROR;
-						}else{
-							/*convert to targetUniChar*/						
-							uint8_t len=(uint8_t)(targetChar-uBuf);
-							targetChar=uBuf;
-							targetUniChar=0;
-					
-							/* the below switch structure is not required since IS2022-JP-2
-							 * supports only DBCS char sets. Reverse engineered from DBCS code.
-							 * the cases fall through without break
-							 */
-							switch(len){
-								case 4:
-									targetUniChar+=(UChar32)((uint8_t)(*targetChar++))<<24;
-								case 3:
-									targetUniChar+=(UChar32)((uint8_t)(*targetChar++))<<16;
-								case 2:
-									targetUniChar+=(UChar32)((uint8_t)(*targetChar++))<<8;
-								case 1:
-									targetUniChar+=(uint8_t)(*targetChar);
-								default:
-									break;
-							}
-
-						}
-
+                       } 
+                        /* only DBCS or SBCS characters are expected*/
+                       else if(length > 2){
+                            reason =UCNV_ILLEGAL;
+                            *err =U_INVALID_CHAR_FOUND;
+                            goto CALLBACK;
+                        }
 						break;
 
 					case LATIN1:
@@ -930,11 +958,11 @@ UCNV_TableStates_2022 getKey_2022(char c,
 	int32_t oldmid=0;
 
 	if (*key == 0){
-		togo = (int8_t)normalize_esq_chars_2022[c];
+		togo = (int8_t)normalize_esq_chars_2022[(int)c];
 	}
 	else{
 		togo <<= 5;
-		togo += (int8_t)normalize_esq_chars_2022[c];
+		togo += (int8_t)normalize_esq_chars_2022[(int)c];
 	}
 
 	while (hi != low)  /*binary search*/{
@@ -1049,7 +1077,15 @@ void changeState_2022(UConverter* _this,
 								goto DONE;
 							};
 							break;
-      
+
+                        /* Not expected. Added to make the gcc happy */
+                        case VALID_SS2_SEQUENCE:
+                            {
+                                (*source)++;
+                                key = 0;
+                                goto DONE;
+                            }
+  
 						case VALID_NON_TERMINAL_2022: 
 
 						case VALID_MAYBE_TERMINAL_2022:
@@ -1370,6 +1406,132 @@ U_CFUNC void T_UConverter_toUnicode_ISO_2022_OFFSETS_LOGIC(UConverterToUnicodeAr
  *  ii) There are only 2 shifting sequences SO to shift into double byte mode
  *      and SI to shift into single byte mode   
  */
+ const char* getEndOfBuffer_2022_KR(UConverterToUnicodeArgs* args, UErrorCode* err);
+
+void getUniCharFromUnicodeMBCS(UConverter* cnv, UErrorCode* err, UChar* sourceChar, UChar32 *value ,UConverterCallbackReason *reason, int32_t* length){
+    
+    uint32_t i;
+    UChar c = *sourceChar;
+    const uint16_t *table=cnv->sharedData->table->mbcs.fromUnicodeTable;
+    const uint8_t *bytes=cnv->sharedData->table->mbcs.fromUnicodeBytes;
+    uint8_t outputType=cnv->sharedData->table->mbcs.outputType;
+    
+    i=0x440+2*((uint32_t)table[c>>10]+((c>>4)&0x3f));
+
+    /* is this code point assigned, or do we use fallbacks? */
+    if((table[i++]&(1<<(c&0xf)))!=0 || cnv->useFallback) {
+        const uint8_t *p;
+
+        /* get the bytes and the length for the output */
+        switch(outputType) {
+        case MBCS_OUTPUT_1:
+            p=bytes+(16*(uint32_t)table[i]+(c&0xf));
+            *value=*p;
+            *length=1;
+            break;
+        case MBCS_OUTPUT_2:
+            p=bytes+(16*(uint32_t)table[i]+(c&0xf))*2;
+#           if U_IS_BIG_ENDIAN
+                *value=*(uint16_t *)p;
+#           else
+                *value=((uint32_t)*p<<8)|p[1];
+#           endif
+            if(*value<=0xff) {
+                *length=1;
+            } else {
+                *length=2;
+            }
+            break;
+        case MBCS_OUTPUT_3:
+            p=bytes+(16*(uint32_t)table[i]+(c&0xf))*3;
+            *value=((uint32_t)*p<<16)|((uint32_t)p[1]<<8)|p[2];
+            if(*value<=0xff) {
+                *length=1;
+            } else if(*value<=0xffff) {
+                *length=2;
+            } else {
+                *length=3;
+            }
+            break;
+        case MBCS_OUTPUT_4:
+            p=bytes+(16*(uint32_t)table[i]+(c&0xf))*4;
+#           if U_IS_BIG_ENDIAN
+                *value=*(uint32_t *)p;
+#           else
+                *value=((uint32_t)*p<<24)|((uint32_t)p[1]<<16)|((uint32_t)p[2]<<8)|p[3];
+#           endif
+            if(*value<=0xff) {
+                *length=1;
+            } else if(*value<=0xffff) {
+                *length=2;
+            } else if(*value<=0xffffff) {
+                *length=3;
+            } else {
+                *length=4;
+            }
+            break;
+        case MBCS_OUTPUT_3_EUC:
+            p=bytes+(16*(uint32_t)table[i]+(c&0xf))*2;
+#           if U_IS_BIG_ENDIAN
+                *value=*(uint16_t *)p;
+#           else
+                *value=((uint32_t)*p<<8)|p[1];
+#           endif
+            /* EUC 16-bit fixed-length representation */
+            if(*value<=0xff) {
+                *length=1;
+            } else if((*value&0x8000)==0) {
+                *value|=0x8e8000;
+                *length=3;
+            } else if((*value&0x80)==0) {
+                *value|=0x8f0080;
+                *length=3;
+            } else {
+                *length=2;
+            }
+            break;
+        case MBCS_OUTPUT_4_EUC:
+            p=bytes+(16*(uint32_t)table[i]+(c&0xf))*3;
+            *value=((uint32_t)*p<<16)|((uint32_t)p[1]<<8)|p[2];
+            /* EUC 16-bit fixed-length representation applied to the first two bytes */
+            if(*value<=0xff) {
+                *length=1;
+            } else if(*value<=0xffff) {
+                *length=2;
+            } else if((*value&0x800000)==0) {
+                *value|=0x8e800000;
+                *length=4;
+            } else if((*value&0x8000)==0) {
+                *value|=0x8f008000;
+                *length=4;
+            } else {
+                *length=3;
+            }
+            break;
+        default:
+            /* must not occur */
+            *value=0;
+            *length=0;
+            break;
+        }
+
+        /* is the codepage value really an "unassigned" indicator? */
+        if(*value==0 && c!=0 && (table[i-1]&(1<<(c&0xf)))==0) {
+           
+            *reason=UCNV_UNASSIGNED;
+            *err=U_INVALID_CHAR_FOUND;
+            return;
+        }
+    } else {
+        /* callback(unassigned) */
+        *reason=UCNV_UNASSIGNED;
+        *err=U_INVALID_CHAR_FOUND;
+        return;
+    }   
+}
+
+
+
 
 U_CFUNC void UConverter_fromUnicode_ISO_2022_KR(UConverterFromUnicodeArgs* args, UErrorCode* err){
 
@@ -1379,20 +1541,16 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR(UConverterFromUnicodeArgs* args,
     int32_t myTargetIndex = 0;
     int32_t targetLength = args->targetLimit - args->target;
     int32_t sourceLength = args->sourceLimit - args->source;
-    UChar* mySourceLimit;
-    CompactShortArray *myFromUnicode = NULL;
+    int32_t length=0;
     UChar32 targetUniChar = 0x0000;
-    UChar mySourceChar = 0x0000;
+    UChar mySourceChar = 0x0000,c=0x0000;
     UBool isTargetUCharDBCS = (UBool)args->converter->fromUnicodeStatus;
     UBool oldIsTargetUCharDBCS = isTargetUCharDBCS;
     UConverterDataISO2022 *myConverterData=(UConverterDataISO2022*)args->converter->extraInfo;
     UConverterCallbackReason reason;
-    
-	char *uBuf =(char*) malloc(sizeof(char) * 4);
-	char *targetChar;
-	char *targetLimit; 
-	uint8_t len;
-    UChar *sourceCharPtr=NULL;
+
+
+    UConverter* cnv =myConverterData->fromUnicodeConverter;
     isTargetUCharDBCS	= (UBool) args->converter->fromUnicodeStatus;
     
     /*writing the char to the output stream */
@@ -1402,7 +1560,7 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR(UConverterFromUnicodeArgs* args,
 
         if (myTargetIndex < targetLength){
         
-            mySourceChar = (UChar) args->source[mySourceIndex++];
+            c=mySourceChar = (UChar) args->source[mySourceIndex++];
 
             /*Handle surrogates */
             if(UTF_IS_LEAD(mySourceChar)){
@@ -1455,40 +1613,19 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR(UConverterFromUnicodeArgs* args,
 				    }
 			    }
 		    }
-        
+
+            getUniCharFromUnicodeMBCS(cnv,err, &mySourceChar, &targetUniChar,&reason, &length);
             
-            sourceCharPtr =&mySourceChar;
-		    mySourceLimit= sourceCharPtr+1;
-		    targetChar =uBuf;
-		    targetLimit = uBuf+4;
-
-      
-            ucnv_fromUnicode(myConverterData->fromUnicodeConverter,
-									    &targetChar,targetLimit,
-									    &sourceCharPtr,
-									    mySourceLimit,args->offsets,args->flush,err);
-            if(U_SUCCESS(*err)){
-                len=(uint8_t)(targetChar-uBuf);
-                targetChar=uBuf;
-                targetUniChar=0;
-                switch(len){
-			        case 4:
-				        targetUniChar+=(UChar32)((uint8_t)(*targetChar++))<<24;
-			        case 3:
-				        targetUniChar+=(UChar32)((uint8_t)(*targetChar++))<<16;
-			        case 2:
-				        targetUniChar+=(UChar32)((uint8_t)(*targetChar++))<<8;
-			        case 1:
-				        targetUniChar+=(uint8_t)(*targetChar);
-			        default:
-				        break;
-		        }
+            if(*err>0){
+                goto CALLBACK;
             }
-            else{
-                targetUniChar=missingCharMarker;
+            /* only DBCS or SBCS characters are expected*/
+            if(length > 2){
+                reason =UCNV_ILLEGAL;
+                *err =U_INVALID_CHAR_FOUND;
+                goto CALLBACK;
             }
 
-      
             oldIsTargetUCharDBCS = isTargetUCharDBCS;
             isTargetUCharDBCS = (UBool)(targetUniChar>0x00FF);
 
@@ -1590,8 +1727,6 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnic
     int32_t myTargetIndex = 0;
     int32_t targetLength = args->targetLimit - args->target;
     int32_t sourceLength = args->sourceLimit - args->source;
-    UChar* mySourceLimit;
-    CompactShortArray *myFromUnicode = NULL;
     UChar32 targetUniChar = 0x0000;
     UChar mySourceChar = 0x0000;
     UBool isTargetUCharDBCS = (UBool)args->converter->fromUnicodeStatus;
@@ -1600,10 +1735,9 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnic
     UConverterCallbackReason reason;
     
 	char *uBuf =(char*) malloc(sizeof(char) * 4);
-	char *targetChar;
-	char *targetLimit; 
-	uint8_t len;
+    int32_t length =0;
     UChar *sourceCharPtr=NULL;
+    UConverter* cnv =myConverterData->fromUnicodeConverter;
     isTargetUCharDBCS	= (UBool) args->converter->fromUnicodeStatus;
     
     /*writing the char to the output stream */
@@ -1668,37 +1802,17 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnic
 		    }
         
             
-            sourceCharPtr =&mySourceChar;
-		    mySourceLimit= sourceCharPtr+1;
-		    targetChar =uBuf;
-		    targetLimit = uBuf+4;
-
-      
-            ucnv_fromUnicode(myConverterData->fromUnicodeConverter,
-									    &targetChar,targetLimit,
-									    &sourceCharPtr,
-									    mySourceLimit,args->offsets,args->flush,err);
-            if(U_SUCCESS(*err)){
-                len=(uint8_t)(targetChar-uBuf);
-                targetChar=uBuf;
-                targetUniChar=0;
-                switch(len){
-			        case 4:
-				        targetUniChar+=(UChar32)((uint8_t)(*targetChar++))<<24;
-			        case 3:
-				        targetUniChar+=(UChar32)((uint8_t)(*targetChar++))<<16;
-			        case 2:
-				        targetUniChar+=(UChar32)((uint8_t)(*targetChar++))<<8;
-			        case 1:
-				        targetUniChar+=(uint8_t)(*targetChar);
-			        default:
-				        break;
-		        }
+            getUniCharFromUnicodeMBCS(cnv,err, &mySourceChar, &targetUniChar,&reason, &length);
+            
+            if(*err>0){
+                goto CALLBACK;
             }
-            else{
-                targetUniChar=missingCharMarker;
+            /* only DBCS or SBCS characters are expected*/
+            if(length > 2){
+                reason =UCNV_ILLEGAL;
+                *err =U_INVALID_CHAR_FOUND;
+                goto CALLBACK;
             }
-
       
             oldIsTargetUCharDBCS = isTargetUCharDBCS;
             isTargetUCharDBCS = (UBool)(targetUniChar>0x00FF);
@@ -1822,8 +1936,6 @@ const char* getEndOfBuffer_2022_KR(UConverterToUnicodeArgs* args, UErrorCode* er
 						   args->flush,
 						   err);
                     }
-		
-                   /* validateKREscape(args);*/
                     if(U_FAILURE(*err))
                         return mySource;
                     else
