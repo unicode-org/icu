@@ -1603,7 +1603,6 @@ static void TestComposeDecompose(void) {
     */
 
     ucol_close(coll);
-    coll = NULL;
 
     log_verbose("Testing locales, number of cases = %i\n", noCases);
     iter = ucol_openElements(coll, t[u]->NFD, u_strlen(t[u]->NFD), &status);
