@@ -238,19 +238,7 @@ protected:
      * @internal
      */
     virtual le_int32 characterProcessing(const LEUnicode /*chars*/[], le_int32 offset, le_int32 count, le_int32 max, le_bool /*rightToLeft*/,
-            LEUnicode *&/*outChars*/, le_int32 *&/*charIndices*/, const LETag **&/*featureTags*/, LEErrorCode &success) /*= 0;*/
-    {
-        if (LE_FAILURE(success)) {
-            return 0;
-        }
-
-        if (offset < 0 || count < 0 || max < 0 || offset >= max || offset + count > max) {
-            success = LE_ILLEGAL_ARGUMENT_ERROR;
-            return 0;
-        }
-
-        return count;
-    };
+            LEUnicode *&/*outChars*/, le_int32 *&/*charIndices*/, const LETag **&/*featureTags*/, LEErrorCode &success);
 
     /**
      * This method does character to glyph mapping, and applies the GSUB table. The
@@ -310,17 +298,7 @@ protected:
      * @internal
      */
     virtual le_int32 glyphPostProcessing(LEGlyphID tempGlyphs[], le_int32 tempCharIndices[], le_int32 tempGlyphCount,
-                    LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success)
-    {
-        if (LE_FAILURE(success)) {
-            return 0;
-        }
-
-        glyphs = tempGlyphs;
-        charIndices = tempCharIndices;
-
-        return tempGlyphCount;
-    };
+                    LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success);
 
     /**
      * This method applies the characterProcessing, glyphProcessing and glyphPostProcessing
