@@ -17,7 +17,7 @@
 
 #include "buddhcal.h"
 #include "unicode/gregocal.h"
-
+#include <float.h>
 
 U_NAMESPACE_BEGIN
 
@@ -146,9 +146,100 @@ void BuddhistCalendar::timeToFields(UDate theTime, UBool quick, UErrorCode& stat
   internalSet(UCAL_YEAR, year);
 }
 
+void BuddhistCalendar::add(UCalendarDateFields field, int32_t amount, UErrorCode& status)
+{
+    if (U_FAILURE(status)) 
+        return;
+
+    if (amount == 0) 
+        return;   // Do nothing!
+    
+    if(field == UCAL_YEAR /* || field == UCAL_YEAR_WOY */) {
+        int32_t year = internalGet(field);
+        int32_t era = internalGetEra();
+
+        year += amount;
+        
+        set(field,year);
+        pinDayOfMonth();
+    } else {
+      GregorianCalendar::add(field,amount,status);
+    }
+}
+
+
+
+// default century
+const UDate     BuddhistCalendar::fgSystemDefaultCentury        = DBL_MIN;
+const int32_t   BuddhistCalendar::fgSystemDefaultCenturyYear    = -1;
+
+UDate           BuddhistCalendar::fgSystemDefaultCenturyStart       = DBL_MIN;
+int32_t         BuddhistCalendar::fgSystemDefaultCenturyStartYear   = -1;
+
+
 UBool BuddhistCalendar::haveDefaultCentury() const
 {
-  return FALSE;
+  return TRUE;
+}
+
+UDate BuddhistCalendar::defaultCenturyStart() const
+{
+  return internalGetDefaultCenturyStart();
+}
+
+int32_t BuddhistCalendar::defaultCenturyStartYear() const
+{
+  return internalGetDefaultCenturyStartYear();
+}
+
+UDate
+BuddhistCalendar::internalGetDefaultCenturyStart() const
+{
+  // lazy-evaluate systemDefaultCenturyStart
+  if (fgSystemDefaultCenturyStart == fgSystemDefaultCentury)
+    initializeSystemDefaultCentury();
+  
+  // use defaultCenturyStart unless it's the flag value;
+  // then use systemDefaultCenturyStart
+  
+  return fgSystemDefaultCenturyStart;
+}
+
+int32_t
+BuddhistCalendar::internalGetDefaultCenturyStartYear() const
+{
+    // lazy-evaluate systemDefaultCenturyStartYear
+  if (fgSystemDefaultCenturyStart == fgSystemDefaultCentury)
+        initializeSystemDefaultCentury();
+
+    // use defaultCenturyStart unless it's the flag value;
+    // then use systemDefaultCenturyStartYear
+
+    return    fgSystemDefaultCenturyStartYear;
+}
+
+void
+BuddhistCalendar::initializeSystemDefaultCentury()
+{
+  // initialize systemDefaultCentury and systemDefaultCenturyYear based
+  // on the current time.  They'll be set to 80 years before
+  // the current time.
+  // No point in locking as it should be idempotent.
+  if (fgSystemDefaultCenturyStart == fgSystemDefaultCentury)
+  {
+    UErrorCode status = U_ZERO_ERROR;
+    Calendar *calendar = new BuddhistCalendar(Locale("th_TH_TRADITIONAL"),status);
+    if (calendar != NULL && U_SUCCESS(status))
+    {
+      calendar->setTime(Calendar::getNow(), status);
+      calendar->add(UCAL_YEAR, -80, status);
+      fgSystemDefaultCenturyStart = calendar->getTime(status);
+      fgSystemDefaultCenturyStartYear = calendar->get(UCAL_YEAR, status);
+      delete calendar;
+    }
+    // We have no recourse upon failure unless we want to propagate the failure
+    // out.
+  }
 }
 
 
