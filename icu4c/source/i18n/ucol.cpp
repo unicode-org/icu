@@ -104,9 +104,13 @@ inline void  IInit_collIterate(const UCollator *collator, const UChar *sourceStr
                               int32_t sourceLen, collIterate *s) {
     (s)->string = (s)->pos = (UChar *)(sourceString);
     (s)->flags = 0;
-    (s)->endp = (UChar *)sourceString+sourceLen;
     if (sourceLen >= 0) {
         s->flags |= UCOL_ITER_HASLEN;
+        (s)->endp = (UChar *)sourceString+sourceLen;
+    }
+    else {
+        /* change to enable easier checking for end of string for fcdpositon */
+        (s)->endp = NULL;
     }
     (s)->CEpos = (s)->toReturn = (s)->CEs;
     (s)->writableBuffer = (s)->stackWritableBuffer;
@@ -737,13 +741,13 @@ inline UBool collIterFCD(collIterate *collationSource) {
     
     collationSource->fcdPosition = srcP + count;
 
-    if (codepoint == 0 && (collationSource->flags & UCOL_ITER_HASLEN)==0) {
+    // if (codepoint == 0 && (collationSource->flags & UCOL_ITER_HASLEN)==0) {
         /* 
         We checked the string's trailing null, which would advance 
         fcdPosition past the null. back it up to point to the null.
         */
-        collationSource->fcdPosition--;
-    }
+        /*collationSource->fcdPosition--;
+    }*/
     
     return needNormalize;
 }
@@ -1671,8 +1675,10 @@ inline UChar getNextNormalizedChar(collIterate *data)
 {
     UChar  nextch;
     UChar  ch;
+    UBool  innormbuf = data->flags & UCOL_ITER_INNORMBUF;
     if ((data->flags & (UCOL_ITER_NORM | UCOL_ITER_INNORMBUF)) == 0 ||
-        ((data->flags & UCOL_ITER_INNORMBUF) && *data->pos != 0)) {
+        (innormbuf && *data->pos != 0) ||
+        (!innormbuf && data->pos < data->fcdPosition)) {
         /* 
         if no normalization and not in buffer.
         if next character is in normalized buffer, no further normalization
@@ -1688,7 +1694,7 @@ inline UChar getNextNormalizedChar(collIterate *data)
         }
     }
     else {
-        if (data->flags & UCOL_ITER_INNORMBUF) {
+        if (innormbuf) {
             /* 
             in writable buffer, at this point fcdPosition can not be 
             pointing to the end of the data string. see contracting tag.
@@ -1728,7 +1734,7 @@ inline UChar getNextNormalizedChar(collIterate *data)
         }
     }
     
-    if (data->flags & UCOL_ITER_INNORMBUF) {
+    if (innormbuf) {
         /* 
         no normalization is to be done hence only one character will be 
         appended to the buffer.
@@ -1797,10 +1803,17 @@ uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, U
         const UChar *ContractionStart = UCharOffset = (UChar *)coll->image+getContractOffset(CE);
 
         if (((source->flags & UCOL_ITER_HASLEN) && source->pos>=source->endp) 
-            || ((source->flags & UCOL_ITER_INNORMBUF) && *source->pos == 0 &&
-                source->fcdPosition >= source->endp)) {
-                                           /* this is the end of string.  (Null terminated handled later,
-                                            when the null doesn't match the contraction sequence.)     */
+            /* end of string in null terminated string */
+            || (source->endp == NULL && !(source->flags & UCOL_ITER_INNORMBUF) 
+                && *source->pos == 0) || 
+            ((source->flags & UCOL_ITER_INNORMBUF) && *source->pos == 0 &&
+            /* null-terminated string check for fcdposition at end of string */
+                ((source->endp == NULL && *(source->fcdPosition) == 0) ||
+            /* haslen check for fcdposition at end of string */
+                 (source->endp != NULL && 
+                 source->fcdPosition >= source->endp)))) {
+            /* this is the end of string.  (Null terminated handled later,
+               when the null doesn't match the contraction sequence.)     */
           {
             CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex)); /* So we'll pick whatever we have at the point... */
             if (CE == UCOL_NOT_FOUND) {
@@ -2020,8 +2033,9 @@ inline UChar getPrevNormalizedChar(collIterate *data)
     UChar  prevch;
     UChar  ch;
     UChar *start;
+    UBool  innormbuf = data->flags & UCOL_ITER_INNORMBUF;
     if ((data->flags & (UCOL_ITER_NORM | UCOL_ITER_INNORMBUF)) == 0 || 
-        ((data->flags & UCOL_ITER_INNORMBUF) && *(data->pos - 1) != 0)) {
+        (innormbuf && *(data->pos - 1) != 0)) {
         /* 
         if no normalization.
         if previous character is in normalized buffer, no further normalization
@@ -2076,7 +2090,7 @@ inline UChar getPrevNormalizedChar(collIterate *data)
         data->fcdPosition ++;
     }
     
-    if (data->flags & UCOL_ITER_INNORMBUF) {
+    if (innormbuf) {
     /* 
     no normalization is to be done hence only one character will be 
     appended to the buffer.
