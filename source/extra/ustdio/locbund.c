@@ -32,7 +32,7 @@ u_locbund_new(const char *loc)
   if(result == 0)
     return 0;
 
-  len = (loc == 0 ? strlen(uloc_getDefault()) : strlen(loc));
+  len = (int32_t)(loc == 0 ? strlen(uloc_getDefault()) : strlen(loc));
   result->fLocale = (char*) uprv_malloc(len + 1);
   if(result->fLocale == 0) {
     uprv_free(result);

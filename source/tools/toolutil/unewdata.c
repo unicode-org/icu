@@ -188,7 +188,7 @@ U_CAPI void U_EXPORT2
 udata_writeString(UNewDataMemory *pData, const char *s, int32_t length) {
     if(pData!=NULL && pData->file!=NULL) {
         if(length==-1) {
-            length=uprv_strlen(s);
+            length=(int32_t)uprv_strlen(s);
         }
         if(length>0) {
             T_FileStream_write(pData->file, s, length);

@@ -290,14 +290,16 @@ static void TestBreakIteratorSafeClone(void)
         {
             log_err("FAIL: Iterator can't be cloned with run-time size\n");
         }
-        if (brk) ubrk_close(brk);
+        if (brk)
+            ubrk_close(brk);
         /* size one byte too small - should allocate & let us know */
         --bufferSize;
         if (0 == (brk = ubrk_safeClone(someIterators[i], 0, &bufferSize, &status)) || status != U_SAFECLONE_ALLOCATED_ERROR)
         {
             log_err("FAIL: Cloned Iterator failed to deal correctly with too-small buffer size\n");
         }
-        if (brk) ubrk_close(brk);
+        if (brk)
+            ubrk_close(brk);
         status = U_ZERO_ERROR;
         bufferSize = U_BRK_SAFECLONE_BUFFERSIZE;
 
@@ -306,14 +308,15 @@ static void TestBreakIteratorSafeClone(void)
         {
             log_err("FAIL: Cloned Iterator failed to deal correctly with null buffer pointer\n");
         }
-        if (brk) ubrk_close(brk);
+        if (brk)
+            ubrk_close(brk);
         status = U_ZERO_ERROR;
 
         /* Mis-aligned buffer pointer. */
         {
             char  stackBuf[U_BRK_SAFECLONE_BUFFERSIZE+sizeof(void *)];
             void  *p;
-            int    offset;
+            int32_t offset;
 
             brk = ubrk_safeClone(someIterators[i], &stackBuf[1], &bufferSize, &status);
             if (U_FAILURE(status) || brk == 0) {
@@ -322,14 +325,15 @@ static void TestBreakIteratorSafeClone(void)
             if (status == U_SAFECLONE_ALLOCATED_ERROR) {
                 log_err("FAIL: Cloned Iterator allocated when using a mis-aligned buffer.\n");
             }
-            offset = (char *)&p-(char*)brk;
+            offset = (int32_t)((char *)&p-(char*)brk);
             if (offset < 0) {
                 offset = -offset;
             }
             if (offset % sizeof(void *) != 0) {
                 log_err("FAIL: Cloned Iterator failed to align correctly with misaligned buffer pointer\n");
             }
-            if (brk) ubrk_close(brk);
+            if (brk)
+                ubrk_close(brk);
         }
 
 

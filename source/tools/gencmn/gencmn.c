@@ -411,7 +411,7 @@ addFile(const char *filename, UBool sourceTOC, UBool verbose) {
         FileStream *file;
 
         /* store the pathname */
-        length=uprv_strlen(filename)+1;
+        length = (uint32_t)(uprv_strlen(filename) + 1);
         s=allocString(length);
         uprv_memcpy(s, filename, length);
         files[fileCount].pathname=s;
@@ -419,7 +419,7 @@ addFile(const char *filename, UBool sourceTOC, UBool verbose) {
         /* get the basename */
         s=(char *)findBasename(s);
         files[fileCount].basename=s;
-        length=uprv_strlen(s)+1;
+        length = (uint32_t)(uprv_strlen(s) + 1);
         files[fileCount].basenameLength=length;
         basenameTotal+=length;
 
@@ -451,7 +451,7 @@ addFile(const char *filename, UBool sourceTOC, UBool verbose) {
 
         /* get and store the basename */
         filename=findBasename(filename);
-        length=uprv_strlen(filename)+1;
+        length = (uint32_t)(uprv_strlen(filename) + 1);
         s=allocString(length);
         uprv_memcpy(s, filename, length);
         files[fileCount].basename=s;
