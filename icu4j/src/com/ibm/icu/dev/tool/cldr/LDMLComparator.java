@@ -983,7 +983,7 @@ public class LDMLComparator {
                      parentNodeName = grandParentNodeName+ "\u200b_" + parentNodeName;
                  }
                  if(grandParentNodeName.equals("monthContext")|| grandParentNodeName.equals("dayContext") || 
-                         grandParentNodeName.equals("dateFormatLength") || grandParentNodeName.equals("timeFormatLegth") || 
+                         grandParentNodeName.equals("dateFormatLength") || grandParentNodeName.equals("timeFormatLength") || 
                          grandParentNodeName.equals("dateTimeFormatLength")){
                     
                      Node calendar = grandParentNode.getParentNode().getParentNode();
