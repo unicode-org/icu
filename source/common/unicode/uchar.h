@@ -631,9 +631,13 @@ enum UBlockCode {
     U_SCRIPT_COUNT=88,
 
     /** */
-    UBLOCK_NO_SCRIPT=UBLOCK_COUNT
+    UBLOCK_NO_SCRIPT=UBLOCK_COUNT,
+    
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_NO_SCRIPT = UBLOCK_COUNT
 
 };
+
 typedef enum UBlockCode UBlockCode;
 
 /**
