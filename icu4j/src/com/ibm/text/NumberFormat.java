@@ -1,6 +1,6 @@
 /*
 
- * $RCSfile: NumberFormat.java,v $ $Revision: 1.2 $ $Date: 2000/02/16 19:04:30 $
+ * $RCSfile: NumberFormat.java,v $ $Revision: 1.3 $ $Date: 2000/03/01 23:48:11 $
 
  *
 
@@ -288,7 +288,7 @@ import java.io.ObjectOutputStream;
 
  * see          java.text.ChoiceFormat
 
- * @version      $Revision: 1.2 $
+ * @version      $Revision: 1.3 $
 
  * @author       Mark Davis
 
@@ -360,11 +360,12 @@ public abstract class NumberFormat extends Format{
 
             return format((java.math.BigDecimal) number, toAppendTo, pos);
 
-        } else if (number instanceof com.ibm.math.BigDecimal) {
+// This has been removed pending addition of com.ibm.math package to ICU4J
+/*        } else if (number instanceof com.ibm.math.BigDecimal) {
 
             return format((com.ibm.math.BigDecimal) number, toAppendTo, pos);
 
-        } else if (number instanceof Number) {
+*/        } else if (number instanceof Number) {
 
             return format(((Number)number).doubleValue(), toAppendTo, pos);
 
@@ -462,13 +463,13 @@ public abstract class NumberFormat extends Format{
 
 
 
-    /**
+    /* this has been removed pending addition of com.ibm.math packge to ICU4J
 
      * <strong><font face=helvetica color=red>NEW</font></strong>
 
      * Convenience method to format a BigDecimal.
 
-     */
+     *
 
     public final String format(com.ibm.math.BigDecimal number) {
 
@@ -476,7 +477,7 @@ public abstract class NumberFormat extends Format{
 
                       new FieldPosition(0)).toString();
 
-    }
+    } */
 
 
 
@@ -544,19 +545,19 @@ public abstract class NumberFormat extends Format{
 
 
 
-    /**
+    /* This has been removed pending addition of com.ibm.math package to ICU4J
 
      * <strong><font face=helvetica color=red>NEW</font></strong>
 
      * Format a BigDecimal.
 
-     */
+     *
 
     public abstract StringBuffer format(com.ibm.math.BigDecimal number,
 
                                         StringBuffer toAppendTo,
 
-                                        FieldPosition pos);
+                                        FieldPosition pos); */
 
    
 

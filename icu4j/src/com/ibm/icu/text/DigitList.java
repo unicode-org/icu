@@ -1,5 +1,5 @@
 /*
- * $RCSfile: DigitList.java,v $ $Revision: 1.1 $ $Date: 2000/02/10 06:25:50 $
+ * $RCSfile: DigitList.java,v $ $Revision: 1.2 $ $Date: 2000/03/01 23:48:11 $
  *
  * (C) Copyright IBM Corp. 1998.  All Rights Reserved.
  *
@@ -594,7 +594,8 @@ final class DigitList implements Cloneable {
         setBigDecimalDigits(source.toString(), maximumDigits, fixedPoint);
     }
 
-    /**
+    //This has been removed pending addition of com.ibm.math package to ICU4J
+    /*
      * Set the digit list to a representation of the given BigDecimal value.
      * [bnf]
      * @param source Value to be converted
@@ -603,11 +604,12 @@ final class DigitList implements Cloneable {
      * in source, the representation will be rounded.  Ignored if <= 0.
      * @param fixedPoint If true, then maximumDigits is the maximum
      * fractional digits to be converted.  If false, total digits.
-     */
+     *
     public final void set(com.ibm.math.BigDecimal source,
                           int maximumDigits, boolean fixedPoint) {
         setBigDecimalDigits(source.toString(), maximumDigits, fixedPoint);
     }
+    */
 
     /**
      * equality test between two digit lists.
