@@ -55,7 +55,7 @@ class Hashtable;
  * '+' indicates a supported property.
  *
  * @author Alan Liu
- * @version $RCSfile: upropset.h,v $ $Revision: 1.4 $ $Date: 2002/04/01 22:32:09 $
+ * @internal
  */
 class UnicodePropertySet {
 
