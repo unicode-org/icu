@@ -21,7 +21,8 @@ U_NAMESPACE_BEGIN
 
 const UChar EMPTY[] = { 0 }; // empty string: ""
 
-const char StringReplacer::fgClassID=0;
+UnicodeReplacer::~UnicodeReplacer() {}
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(StringReplacer)
 
 /**
  * Construct a StringReplacer that sets the emits the given output
