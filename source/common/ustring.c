@@ -407,7 +407,7 @@ static int8_t _digit16(UChar c) {
 /* Parse a single escape sequence.  Although this method deals in
  * UChars, it does not use C++ or UnicodeString.  This allows it to
  * be used from C contexts. */
-U_CAPI int32_t U_EXPORT2
+U_CAPI UChar32 U_EXPORT2
 u_unescapeAt(UNESCAPE_CHAR_AT charAt,
              int32_t *offset,
              int32_t length,
@@ -515,15 +515,8 @@ static void _appendUChars(UChar *dest, int32_t destCapacity,
 U_CAPI int32_t U_EXPORT2
 u_unescape(const char *src, UChar *dest, int32_t destCapacity) {
     const char *segment = src;
-    UChar *destStart = dest;
-    UChar *destLimit;
+    int32_t i = 0;
     char c;
-
-    if (dest == NULL) {
-        destCapacity = 0;
-    }
-
-    destLimit = dest + destCapacity;
 
     while ((c=*src) != 0) {
         /* '\\' intentionally written as compiler-specific
@@ -533,9 +526,9 @@ u_unescape(const char *src, UChar *dest, int32_t destCapacity) {
             int32_t lenParsed = 0;
             UChar32 c32;
             if (src != segment) {
-                _appendUChars(dest, destLimit - dest,
+                _appendUChars(dest + i, destCapacity - i,
                               segment, src - segment);
-                dest += src - segment;
+                i += src - segment;
             }
             ++src; /* advance past '\\' */
             c32 = u_unescapeAt(_charPtr_charAt, &lenParsed, uprv_strlen(src), (void*)src);
@@ -543,28 +536,29 @@ u_unescape(const char *src, UChar *dest, int32_t destCapacity) {
                 goto err;
             }
             src += lenParsed; /* advance past escape seq. */
-            if (destStart != NULL) {
-                *dest = (UChar) c32;
+            if (dest != NULL && UTF_CHAR_LENGTH(c32) <= (destCapacity - i)) {
+                UTF_APPEND_CHAR_UNSAFE(dest, i, c32);
+            } else {
+                i += UTF_CHAR_LENGTH(c32);
             }
-            dest++;
             segment = src;
         } else {
             ++src;
         }
     }
     if (src != segment) {
-        _appendUChars(dest, destLimit - dest,
+        _appendUChars(dest + i, destCapacity - i,
                       segment, src - segment);
-        dest += src - segment;
+        i += src - segment;
     }
-    if (dest < destLimit) {
-        *dest = 0;
+    if (i < destCapacity) {
+        dest[i] = 0;
     }
-    return dest - destStart + 1; /* add 1 for zero term */
+    return i + 1; /* add 1 for zero term */
 
  err:
-    if (destStart != NULL && destCapacity > 0) {
-        *destStart = 0;
+    if (dest != NULL && destCapacity > 0) {
+        *dest = 0;
     }
     return 0;
 }
