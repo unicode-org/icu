@@ -650,12 +650,14 @@ UBool IntlTest::runTestLoop( char* testname, char* par )
     UBool  run_this_test;
     int32_t    lastErrorCount;
     UBool  rval = FALSE;
+    UBool   lastTestFailed;
     
     IntlTest* saveTest = gTest;
     gTest = this;
     do {
         this->runIndexedTest( index, FALSE, name );
-        if (!name || (name[0] == 0)) break;
+        if (!name || (name[0] == 0))
+            break;
         if (!testname) {
             run_this_test = TRUE;
         }else{
@@ -669,6 +671,7 @@ UBool IntlTest::runTestLoop( char* testname, char* par )
             char msg[256];
             if (lastErrorCount == errorCount) {
                 sprintf( msg, "---OK:   %s", name );
+                lastTestFailed = FALSE;
             }else{
                 sprintf( msg, "---ERRORS (%li) in %s", (errorCount-lastErrorCount), name );
 
@@ -677,11 +680,16 @@ UBool IntlTest::runTestLoop( char* testname, char* par )
                 }
                 errorList += name;
                 errorList += "\n";
+                lastTestFailed = TRUE;
             }
             LL_indentlevel -= 3;
-            LL_message( "", TRUE); 
+            if (lastTestFailed) {
+                LL_message( "", TRUE); 
+            }
             LL_message( msg, TRUE); 
-            LL_message( "", TRUE);
+            if (lastTestFailed) {
+                LL_message( "", TRUE); 
+            }
             LL_indentlevel += 3;
         }
         index++;
