@@ -32,10 +32,6 @@ UVector::UVector(int32_t initialCapacity, UErrorCode &status) :
     deleter(0),
     comparer(0)
 {
-    // Fix bogus initialCapacity values; avoid malloc(0)
-    if (initialCapacity < 1) {
-        initialCapacity = 1;
-    }
     _init(initialCapacity, status);
 }
 
@@ -60,6 +56,10 @@ UVector::UVector(UObjectDeleter d, UKeyComparator c, int32_t initialCapacity, UE
 }
 
 void UVector::_init(int32_t initialCapacity, UErrorCode &status) {
+    // Fix bogus initialCapacity values; avoid malloc(0)
+    if (initialCapacity < 1) {
+        initialCapacity = DEFUALT_CAPACITY;
+    }
     elements = (UHashTok *)uprv_malloc(sizeof(UHashTok)*initialCapacity);
     if (elements == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
