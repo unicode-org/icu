@@ -32,7 +32,7 @@
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: cpdtrans.h,v $ $Revision: 1.11 $ $Date: 2000/09/25 22:03:05 $
+ * @version $RCSfile: cpdtrans.h,v $ $Revision: 1.12 $ $Date: 2000/12/09 02:37:40 $
  * @draft
  */
 class U_I18N_API CompoundTransliterator : public Transliterator {
@@ -55,6 +55,8 @@ public:
      * transliterators have at least two components.
      * @param transliterators array of <code>Transliterator</code>
      * objects
+     * @param transliteratorCount The number of
+     * <code>Transliterator</code> objects in transliterators.
      * @param filter the filter.  Any character for which
      * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
      * altered by this transliterator.  If <tt>filter</tt> is
@@ -62,7 +64,7 @@ public:
      * @draft
      */
     CompoundTransliterator(Transliterator* const transliterators[],
-                           int32_t count,
+                           int32_t transliteratorCount,
                            UnicodeFilter* adoptedFilter = 0);
 
     /**
@@ -172,7 +174,7 @@ private:
      */
     UnicodeString* split(const UnicodeString& s,
                          UChar divider,
-                         int32_t* count);
+                         int32_t* countPtr);
 
     void freeTransliterators(void);
 
