@@ -96,6 +96,14 @@ UnicodeStringTest::TestBasicManipulation()
         errln((UnicodeString)"append or length failed for UChar32, expected 2, got " + test3.length());
 	}
 
+    // test some UChar32 overloads
+    if( test3.setTo((UChar32)0x10330).length() != 2 ||
+        test3.insert(0, (UChar32)0x20100).length() != 4 ||
+        test3.replace(2, 2, (UChar32)0xe0061).length() != 4 ||
+        (test3 = (UChar32)0x14001).length() != 2
+    ) {
+        errln((UnicodeString)"simple UChar32 overloads for replace, insert, setTo or = failed");
+    }
 }
 
 void
