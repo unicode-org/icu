@@ -86,6 +86,17 @@ uprv_ebcdictolower(char c);
 U_CAPI char* U_EXPORT2
 uprv_strdup(const char *src);
 
+/**
+ * uprv_malloc n+1 bytes, and copy n bytes from src into the new string.
+ * Terminate with a null at offset n.   If n is -1, works like uprv_strdup
+ * @param src
+ * @param n length of the input string, not including null.
+ * @return new string (owned by caller, use uprv_free to free).
+ * @internal
+ */
+U_CAPI char* U_EXPORT2
+uprv_strndup(const char *src, int32_t n);
+
 U_CAPI char* U_EXPORT2
 T_CString_toLowerCase(char* str);
 
