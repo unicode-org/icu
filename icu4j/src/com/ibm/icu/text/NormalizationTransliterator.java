@@ -13,7 +13,7 @@ import java.util.*;
 
 /*
  * @author Alan Liu
- * @version $RCSfile: NormalizationTransliterator.java,v $ $Revision: 1.5 $ $Date: 2001/10/17 17:43:03 $
+ * @version $RCSfile: NormalizationTransliterator.java,v $ $Revision: 1.6 $ $Date: 2001/10/31 20:19:00 $
  */
 public class NormalizationTransliterator extends Transliterator {
 
@@ -26,6 +26,15 @@ public class NormalizationTransliterator extends Transliterator {
      * Normalization options for this transliterator.
      */
     private int options;
+
+    /**
+     * The set of "unsafe start" characters.  These are characters
+     * with cc==0 but which may interact with previous characters.  We
+     * effectively consider these to be cc!=0, for our purposes.
+     *
+     * From http://www.macchiato.com/utc/NFUnsafeStart-3.1.1dX.txt
+     */
+    static final UnicodeSet UNSAFE_START = new UnicodeSet("[\u09BE\u09D7\u0B3E\u0B56\u0B57\u0BBE\u0BD7\u0CC2\u0CD5-\u0CD6\u0D3E\u0D57\u0DCF\u0DDF\u0F73\u0F75\u0F81\u102E\u1161-\u1175\u11A8-\u11C2\u3133\u3135-\u3136\u313A-\u313F\u314F-\u3163\uFF9E-\uFF9F\uFFA3\uFFA5-\uFFA6\uFFAA-\uFFAF\uFFC2-\uFFC7\uFFCA-\uFFCF\uFFD2-\uFFD7\uFFDA-\uFFDC]", false);
 
     /**
      * System registration hook.
@@ -128,10 +137,18 @@ public class NormalizationTransliterator extends Transliterator {
                 }
             }
 
+            // A standard backup consists of finding the last
+            // character with cc==0 and passing everything from the
+            // start up to (but not including) that character to
+            // normalizer.  We use the UNSAFE_START set to detect
+            // characters with cc==0 that we want to treat as if they
+            // have cc!=0 (see above).
             if (doStandardBackup) {
                 --limit;
+                char c;
                 while (limit > start &&
-                       UCharacter.getCombiningClass(text.charAt(limit)) != 0) {
+                       (UCharacter.getCombiningClass(c=text.charAt(limit)) != 0 ||
+                        UNSAFE_START.contains(c))) {
                     --limit;
                 }
             }
