@@ -41,6 +41,10 @@
     static void TestBinaryCollationData(void);
 
     static void TestNewTypes(void);
+
+    static void TestAPI(void);
+
+    static void TestErrorConditions(void);
    
     
     
