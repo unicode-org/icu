@@ -326,10 +326,10 @@ static struct ErrorCases{
 
 static struct ConformanceTestCases
    {
-     char *comment;
-     char *in;
-     char *out;
-     char *profile;
+     const char *comment;
+     const char *in;
+     const char *out;
+     const char *profile;
      int32_t flags;
      UErrorCode expectedStatus;
    }
@@ -411,10 +411,10 @@ static struct ConformanceTestCases
        "\xE2\xBF\xB5", NULL, "Nameprep", UIDNA_DEFAULT,
        U_IDNA_PROHIBITED_CODEPOINT_FOUND_ERROR
      },
-    {
+     {
        "Display property character U+0341",
        "\xCD\x81", "\xCD\x81", "Nameprep",
-	   UIDNA_DEFAULT, U_ZERO_ERROR
+       UIDNA_DEFAULT, U_ZERO_ERROR
 
      },
 
@@ -452,16 +452,16 @@ static struct ConformanceTestCases
      {
        "Bidi: RandALCat character U+FB38 and LCat characters",
        "foo\xEF\xB9\xB6""bar", "foo \xd9\x8e""bar",
-	   UIDNA_DEFAULT, U_ZERO_ERROR
+       UIDNA_DEFAULT, U_ZERO_ERROR
      },
      { "Bidi: RandALCat without trailing RandALCat U+0627 U+0031",
        "\xD8\xA7\x31", NULL, "Nameprep", UIDNA_DEFAULT,
        U_IDNA_CHECK_BIDI_ERROR
-	 },
+     },
      {
        "Bidi: RandALCat character U+0627 U+0031 U+0628",
        "\xD8\xA7\x31\xD8\xA8", "\xD8\xA7\x31\xD8\xA8",
-	   UIDNA_DEFAULT, U_ZERO_ERROR
+       UIDNA_DEFAULT, U_ZERO_ERROR
      },
      {
        "Unassigned code point U+E0002",
@@ -487,7 +487,7 @@ static struct ConformanceTestCases
        UIDNA_DEFAULT, U_ZERO_ERROR
      },
 */
-   };
+};
 
 
 
@@ -649,7 +649,7 @@ void TestIDNA::testToASCII(const char* testName, TestFunc func){
     int32_t i;
     UChar buf[MAX_DEST_SIZE];
 
-    for(i=0;i< (sizeof(unicodeIn)/sizeof(unicodeIn[0])); i++){
+    for(i=0;i< (int32_t)(sizeof(unicodeIn)/sizeof(unicodeIn[0])); i++){
         u_charsToUChars(asciiIn[i],buf, uprv_strlen(asciiIn[i])+1);
         testAPI(unicodeIn[i], buf,testName, FALSE,U_ZERO_ERROR, TRUE, TRUE, func);
         
@@ -661,7 +661,7 @@ void TestIDNA::testToUnicode(const char* testName, TestFunc func){
     int32_t i;
     UChar buf[MAX_DEST_SIZE];
     
-    for(i=0;i< (sizeof(asciiIn)/sizeof(asciiIn[0])); i++){
+    for(i=0;i< (int32_t)(sizeof(asciiIn)/sizeof(asciiIn[0])); i++){
         u_charsToUChars(asciiIn[i],buf, uprv_strlen(asciiIn[i])+1);
         testAPI(buf,unicodeIn[i],testName,FALSE,U_ZERO_ERROR, TRUE, TRUE, func);
     }
@@ -675,7 +675,7 @@ void TestIDNA::testIDNToUnicode(const char* testName, TestFunc func){
     UErrorCode status = U_ZERO_ERROR;
     int32_t bufLen = 0;
     UParseError parseError;
-    for(i=0;i< (sizeof(domainNames)/sizeof(domainNames[0])); i++){
+    for(i=0;i< (int32_t)(sizeof(domainNames)/sizeof(domainNames[0])); i++){
         bufLen = uprv_strlen(domainNames[i]);
         bufLen = u_unescape(domainNames[i],buf, bufLen+1);
         func(buf,bufLen,expected,MAX_DEST_SIZE, UIDNA_ALLOW_UNASSIGNED, &parseError,&status);
@@ -701,7 +701,7 @@ void TestIDNA::testIDNToASCII(const char* testName, TestFunc func){
     UErrorCode status = U_ZERO_ERROR;
     int32_t bufLen = 0;
     UParseError parseError; 
-    for(i=0;i< (sizeof(domainNames)/sizeof(domainNames[0])); i++){
+    for(i=0;i< (int32_t)(sizeof(domainNames)/sizeof(domainNames[0])); i++){
         bufLen = uprv_strlen(domainNames[i]);
         bufLen = u_unescape(domainNames[i],buf, bufLen+1);
         func(buf,bufLen,expected,MAX_DEST_SIZE, UIDNA_ALLOW_UNASSIGNED, &parseError,&status);
@@ -746,7 +746,7 @@ void TestIDNA::testCompare(const char* testName, CompareFunc func){
     ascii1.append(com);
     ascii1.append((UChar)0x0000);
 
-    for(i=0;i< (sizeof(unicodeIn)/sizeof(unicodeIn[0])); i++){
+    for(i=0;i< (int32_t)(sizeof(unicodeIn)/sizeof(unicodeIn[0])); i++){
 
         u_charsToUChars(asciiIn[i],buf+4, uprv_strlen(asciiIn[i])+1);
         u_strcat(buf,com);
@@ -859,7 +859,7 @@ void TestIDNA::testErrorCases(const char* toASCIIName, TestFunc toASCII,
                     const char* IDNToUnicodeName, TestFunc IDNToUnicode){
     UChar buf[MAX_DEST_SIZE];
     int32_t bufLen=0;
-    for(int32_t i=0;i< sizeof(errorCases)/sizeof(errorCases[0]);i++){
+    for(int32_t i=0;i< (int32_t)(sizeof(errorCases)/sizeof(errorCases[0]));i++){
         ErrorCases errorCase = errorCases[i];
         bufLen = uprv_strlen(errorCase.ascii);
         u_charsToUChars(errorCase.ascii,buf, bufLen+1);
@@ -891,10 +891,10 @@ void TestIDNA::testConformance(const char* toASCIIName, TestFunc toASCII,
     int32_t srcLen=0;
     UChar expected[MAX_DEST_SIZE];
     int32_t expectedLen = 0;
-    for(int32_t i=0;i< sizeof(conformanceTestCases)/sizeof(conformanceTestCases[0]);i++){
-        char* utf8Chars1 = conformanceTestCases[i].in;
+    for(int32_t i=0;i< (int32_t)(sizeof(conformanceTestCases)/sizeof(conformanceTestCases[0]));i++){
+        const char* utf8Chars1 = conformanceTestCases[i].in;
         int32_t utf8Chars1Len = strlen(utf8Chars1);
-        char* utf8Chars2 = conformanceTestCases[i].out;
+        const char* utf8Chars2 = conformanceTestCases[i].out;
         int32_t utf8Chars2Len = (utf8Chars2 == NULL) ? 0 : strlen(utf8Chars2);
 
         UErrorCode status = U_ZERO_ERROR;
@@ -1100,11 +1100,11 @@ void TestIDNA::testChaining(const char* toASCIIName, TestFunc toASCII,
     int32_t i;
     UChar buf[MAX_DEST_SIZE];
     
-    for(i=0;i< (sizeof(asciiIn)/sizeof(asciiIn[0])); i++){
+    for(i=0;i< (int32_t)(sizeof(asciiIn)/sizeof(asciiIn[0])); i++){
         u_charsToUChars(asciiIn[i],buf, uprv_strlen(asciiIn[i])+1);
         testChaining(buf,5,toUnicodeName, FALSE, FALSE, toUnicode);
     }
-    for(i=0;i< (sizeof(unicodeIn)/sizeof(unicodeIn[0])); i++){
+    for(i=0;i< (int32_t)(sizeof(unicodeIn)/sizeof(unicodeIn[0])); i++){
         testChaining(unicodeIn[i], 5,toASCIIName, FALSE, TRUE, toASCII);
     }
 }
@@ -1138,7 +1138,7 @@ void TestIDNA::testRootLabelSeparator(const char* testName, CompareFunc func,
     ascii1.append(com);
     ascii1.append((UChar)0x0000);
 
-    for(i=0;i< (sizeof(unicodeIn)/sizeof(unicodeIn[0])); i++){
+    for(i=0;i< (int32_t)(sizeof(unicodeIn)/sizeof(unicodeIn[0])); i++){
 
         u_charsToUChars(asciiIn[i],buf+4, uprv_strlen(asciiIn[i])+1);
         u_strcat(buf,com);
@@ -1257,15 +1257,6 @@ randul()
     for (uint32_t i=0; i<sizeof(l); ++i)
         ((char*)&l)[i] = (char)((rand() & 0x0FF0) >> 4);
     return l;
-}
-
-/**
- * Return a random double x where 0.0 <= x < 1.0.
- */
-static double
-randd()
-{
-    return (double)(randul() / ULONG_MAX);
 }
 
 /**
