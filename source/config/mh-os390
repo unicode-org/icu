@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-os390,v 1.21 2000/10/16 18:05:34 yves Exp $
+## $Id: mh-os390,v 1.22 2001/02/21 01:11:00 grhoten Exp $
 
 ###################################################################
 #                    IMPORTANT NOTE                               #
@@ -36,6 +36,7 @@ else
 DEFS390=        -D_OPEN_THREADS -D_XOPEN_SOURCE_EXTENDED -D_SHR_TZNAME -D_SHR_TIMEZONE
 endif
 ARFLAGS=        -cr
+OS390DATA=      1
 
 
 ## Commands to generate dependency files
