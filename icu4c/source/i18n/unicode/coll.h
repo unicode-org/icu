@@ -331,6 +331,9 @@ public:
   /**
   * Does the same thing as compare but limits the comparison to a specified 
   * length
+  *
+  *
+  *
   * <p>Example of use:
   * <pre>
   * \code
