@@ -171,12 +171,12 @@ static void TestOpenInverse(){
            "Fullwidth-Halfwidth",
            "Greek-Latin" ,
            "Latin-Greek", 
-           "Arabic-Latin",
-           "Latin-Arabic",
-           "Kana-Latin",
-           "Latin-Kana",
-           "Hebrew-Latin",
-           "Latin-Hebrew",
+           //"Arabic-Latin", // Removed in 2.0
+           //"Latin-Arabic", // Removed in 2.0
+           "Katakana-Latin",
+           "Latin-Katakana",
+           //"Hebrew-Latin", // Removed in 2.0
+           //"Latin-Hebrew", // Removed in 2.0
            "Cyrillic-Latin", 
            "Latin-Cyrillic", 
            "Devanagari-Latin", 
@@ -186,6 +186,7 @@ static void TestOpenInverse(){
          };
      
     for(i=0; i<sizeof(TransID)/sizeof(TransID[0]); i=i+2){
+        status = U_ZERO_ERROR;
         t1=utrans_open(TransID[i], UTRANS_FORWARD,NULL,0,NULL, &status);
         if(t1 == NULL || U_FAILURE(status)){
             log_err("FAIL: in instantiation for id=%s\n", TransID[i]);
@@ -219,7 +220,7 @@ static void TestClone(){
         log_err("FAIL: construction\n");
         return;
     }
-    t2=utrans_open("Latin-Hebrew", UTRANS_FORWARD, NULL,0,NULL,&status);
+    t2=utrans_open("Latin-Greek", UTRANS_FORWARD, NULL,0,NULL,&status);
     if(U_FAILURE(status)){
         log_err("FAIL: construction\n");
         utrans_close(t1);
