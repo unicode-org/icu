@@ -158,8 +158,9 @@ public class LDMLUtilities {
         }
         return source;
     }
-    private static final String ALT = "alt";
-    
+    private static final String ALT      = "alt";
+    private static final String KEY      = "key";
+    private static final String REGISTRY = "registry";
     public static void appendXPathAttribute(Node node, StringBuffer xpath){
         boolean terminate = false;
     	String val = getAttributeValue(node, TYPE);
@@ -172,6 +173,20 @@ public class LDMLUtilities {
         val = getAttributeValue(node, ALT);
         if(val!=null){
             xpath.append("and @alt='");
+            xpath.append(val);
+            xpath.append("'");
+            terminate = true;
+        }
+        val = getAttributeValue(node, KEY);
+        if(val!=null){
+            xpath.append("and @key='");
+            xpath.append(val);
+            xpath.append("'");
+            terminate = true;
+        }
+        val = getAttributeValue(node, REGISTRY);
+        if(val!=null){
+            xpath.append("and @registry='");
             xpath.append(val);
             xpath.append("'");
             terminate = true;
@@ -228,7 +243,7 @@ public class LDMLUtilities {
             int len = nl.getLength();
             //TODO watch for attribute "alt"
             if(len>1){
-              throw new IllegalArgumentException("The XPATH returned more than 1 node!. Check XPAHT: "+xpath);   
+              throw new IllegalArgumentException("The XPATH returned more than 1 node!. Check XPATH: "+xpath);   
             }
             if(len==0){
                 return null;
