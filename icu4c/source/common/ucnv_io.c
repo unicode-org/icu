@@ -341,18 +341,36 @@ static uint32_t getTagNumber(const char *tagname) {
 
 /* @see ucnv_compareNames */
 U_CFUNC char * U_EXPORT2
-ucnv_io_stripForCompare(char *dst, const char *name) {
+ucnv_io_stripASCIIForCompare(char *dst, const char *name) {
     char c1 = *name;
     char *dstItr = dst;
 
     while (c1) {
         /* Ignore delimiters '-', '_', and ' ' */
-        while ((c1 = *name) == '-' || c1 == '_' || c1 == ' ') {
+        while ((c1 = *name) == 0x2d || c1 == 0x5f || c1 == 0x20) {
             ++name;
         }
 
         /* lowercase for case-insensitive comparison */
-        *(dstItr++) = uprv_tolower(c1);
+        *(dstItr++) = uprv_asciitolower(c1);
+        ++name;
+    }
+    return dst;
+}
+
+U_CFUNC char * U_EXPORT2
+ucnv_io_stripEBCDICForCompare(char *dst, const char *name) {
+    char c1 = *name;
+    char *dstItr = dst;
+
+    while (c1) {
+        /* Ignore delimiters '-', '_', and ' ' */
+        while ((c1 = *name) == 0x60 || c1 == 0x6d || c1 == 0x40) {
+            ++name;
+        }
+
+        /* lowercase for case-insensitive comparison */
+        *(dstItr++) = uprv_ebcdictolower(c1);
         ++name;
     }
     return dst;

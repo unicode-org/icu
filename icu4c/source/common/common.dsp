@@ -3318,6 +3318,14 @@ SOURCE=.\punycode.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\udataswp.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\udataswp.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\uidna.cpp
 # End Source File
 # Begin Source File

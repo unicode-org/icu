@@ -58,6 +58,17 @@ uprv_toupper(char c) {
     return c;
 }
 
+
+#if 0
+/*
+ * Commented out because cstring.h defines uprv_tolower() to be
+ * the same as either uprv_asciitolower() or uprv_ebcdictolower()
+ * to reduce the amount of code to cover with tests.
+ *
+ * Note that this uprv_tolower() definition is likely to work for most
+ * charset families, not just ASCII and EBCDIC, because its #else branch
+ * is written generically.
+ */
 U_CAPI char U_EXPORT2
 uprv_tolower(char c) {
 #if U_CHARSET_FAMILY==U_EBCDIC_FAMILY
@@ -69,6 +80,23 @@ uprv_tolower(char c) {
         c=(char)(c+('a'-'A'));
     }
 #endif
+    return c;
+}
+#endif
+
+U_CAPI char U_EXPORT2
+uprv_asciitolower(char c) {
+    if(0x41<=c && c<=0x5a) {
+        c=(char)(c+0x20);
+    }
+    return c;
+}
+
+U_CAPI char U_EXPORT2
+uprv_ebcdictolower(char c) {
+    if((0xc1<=c && c<=0xc9) || (0xd1<=c && c<=0xd9) || (0xe2<=c && c<=0xe9)) {
+        c=(char)(c-0x40);
+    }
     return c;
 }
 
