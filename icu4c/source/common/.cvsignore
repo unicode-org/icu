@@ -1,0 +1,6 @@
+*.d
+libicu-*.*
+Debug
+Release
+Makefile
+icucfg.h

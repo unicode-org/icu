@@ -1,7 +1,6 @@
-tmp
 Debug
 Release
 Makefile
 *.d
 *.pdb
-gencnval
+date

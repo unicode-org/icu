@@ -1,7 +1,5 @@
-tmp
+*.d
+intltest
 Debug
 Release
 Makefile
-*.d
-*.pdb
-gencnval

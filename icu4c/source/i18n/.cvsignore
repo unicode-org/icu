@@ -1,7 +1,5 @@
-tmp
+*.d
+libicu-*.*
 Debug
 Release
 Makefile
-*.d
-*.pdb
-gencnval
