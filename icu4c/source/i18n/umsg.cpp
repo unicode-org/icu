@@ -277,13 +277,13 @@ umsg_setLocale(UMessageFormat *fmt, const char* locale)
 }
 
 U_CAPI const char*  U_EXPORT2
-umsg_getLocale(UMessageFormat *fmt)
+umsg_getLocale(const UMessageFormat *fmt)
 {
     //check arguments
     if(fmt==NULL){
         return "";
     }
-    return ((MessageFormat*)fmt)->getLocale().getName();
+    return ((const MessageFormat*)fmt)->getLocale().getName();
 }
 
 U_CAPI void  U_EXPORT2
@@ -314,7 +314,7 @@ umsg_applyPattern(UMessageFormat *fmt,
 }
 
 U_CAPI int32_t  U_EXPORT2
-umsg_toPattern(UMessageFormat *fmt,
+umsg_toPattern(const UMessageFormat *fmt,
                UChar* result, 
                int32_t resultLength,
                UErrorCode* status)
@@ -335,12 +335,12 @@ umsg_toPattern(UMessageFormat *fmt,
         // otherwise, alias the destination buffer
         res.setTo(result, 0, resultLength);
     }
-    ((MessageFormat*)fmt)->toPattern(res);
+    ((const MessageFormat*)fmt)->toPattern(res);
     return res.extract(result, resultLength, *status);
 }
 
 U_CAPI int32_t
-umsg_format(    UMessageFormat *fmt,
+umsg_format(    const UMessageFormat *fmt,
                 UChar          *result,
                 int32_t        resultLength,
                 UErrorCode     *status,
@@ -383,7 +383,7 @@ MessageFormatAdapter::getArgTypeList(const MessageFormat& m,
 U_NAMESPACE_END
 
 U_CAPI int32_t U_EXPORT2
-umsg_vformat(   UMessageFormat *fmt,
+umsg_vformat(   const UMessageFormat *fmt,
                 UChar          *result,
                 int32_t        resultLength,
                 va_list        ap,
@@ -401,7 +401,7 @@ umsg_vformat(   UMessageFormat *fmt,
 
     int32_t count =0;
     const Formattable::Type* argTypes =
-        MessageFormatAdapter::getArgTypeList(*(MessageFormat*)fmt, count);
+        MessageFormatAdapter::getArgTypeList(*(const MessageFormat*)fmt, count);
     // Allocate at least one element.  Allocating an array of length
     // zero causes problems on some platforms (e.g. Win32).
     Formattable* args = new Formattable[count ? count : 1];
@@ -459,7 +459,7 @@ umsg_vformat(   UMessageFormat *fmt,
     FieldPosition fieldPosition(0);
     
     /* format the message */
-    ((MessageFormat*)fmt)->format(args,count,resultStr,fieldPosition,*status);
+    ((const MessageFormat*)fmt)->format(args,count,resultStr,fieldPosition,*status);
 
     delete[] args;
 
@@ -471,7 +471,7 @@ umsg_vformat(   UMessageFormat *fmt,
 }
 
 U_CAPI void
-umsg_parse( UMessageFormat *fmt,
+umsg_parse( const UMessageFormat *fmt,
             const UChar    *source,
             int32_t        sourceLength,
             int32_t        *count,
@@ -493,7 +493,7 @@ umsg_parse( UMessageFormat *fmt,
 }
 
 U_CAPI void U_EXPORT2
-umsg_vparse(UMessageFormat *fmt,
+umsg_vparse(const UMessageFormat *fmt,
             const UChar    *source,
             int32_t        sourceLength,
             int32_t        *count,
@@ -514,7 +514,7 @@ umsg_vparse(UMessageFormat *fmt,
     }
 
     UnicodeString srcString(source,sourceLength);
-    Formattable *args = ((MessageFormat*)fmt)->parse(source,*count,*status);
+    Formattable *args = ((const MessageFormat*)fmt)->parse(source,*count,*status);
     UDate *aDate;
     double *aDouble;
     UChar *aString;

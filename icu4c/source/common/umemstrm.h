@@ -45,12 +45,12 @@ U_CAPI UMemoryStream * U_EXPORT2 uprv_mstrm_openNew(int32_t size);
 U_CAPI UMemoryStream * U_EXPORT2 uprv_mstrm_openBuffer(const uint8_t *buffer, int32_t len);
 U_CAPI void U_EXPORT2 uprv_mstrm_close(UMemoryStream *MS);
 U_CAPI UBool U_EXPORT2 uprv_mstrm_setError(UMemoryStream *MS);
-U_CAPI UBool U_EXPORT2 uprv_mstrm_error(UMemoryStream *MS);
-U_CAPI UBool U_EXPORT2 uprv_mstrm_eof(UMemoryStream *MS);
+U_CAPI UBool U_EXPORT2 uprv_mstrm_error(const UMemoryStream *MS);
+U_CAPI UBool U_EXPORT2 uprv_mstrm_eof(const UMemoryStream *MS);
 U_CAPI int32_t U_EXPORT2 uprv_mstrm_read(UMemoryStream *MS, void* addr, int32_t len);
 U_CAPI int32_t U_EXPORT2 uprv_mstrm_write(UMemoryStream *MS, const void *buffer, int32_t len);
-U_CAPI const uint8_t * U_EXPORT2 uprv_mstrm_getBuffer(UMemoryStream *MS, int32_t *len);
-U_CAPI const uint8_t * U_EXPORT2 uprv_mstrm_getCurrentBuffer(UMemoryStream *MS, int32_t *len);
+U_CAPI const uint8_t * U_EXPORT2 uprv_mstrm_getBuffer(const UMemoryStream *MS, int32_t *len);
+U_CAPI const uint8_t * U_EXPORT2 uprv_mstrm_getCurrentBuffer(const UMemoryStream *MS, int32_t *len);
 U_CAPI int32_t U_EXPORT2 uprv_mstrm_skip(UMemoryStream *MS, int32_t len);
 U_CAPI int32_t U_EXPORT2 uprv_mstrm_jump(UMemoryStream *MS, const uint8_t *where);
 

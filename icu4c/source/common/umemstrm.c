@@ -74,11 +74,11 @@ U_CAPI UBool U_EXPORT2 uprv_mstrm_setError(UMemoryStream *MS){
     return MS->fError;
 }
 
-U_CAPI UBool U_EXPORT2 uprv_mstrm_error(UMemoryStream *MS){
+U_CAPI UBool U_EXPORT2 uprv_mstrm_error(const UMemoryStream *MS){
     return MS->fError;
 }
 
-U_CAPI UBool U_EXPORT2 uprv_mstrm_eof(UMemoryStream *MS){
+U_CAPI UBool U_EXPORT2 uprv_mstrm_eof(const UMemoryStream *MS){
     return MS->fEof;
 }
 
@@ -124,7 +124,7 @@ U_CAPI int32_t U_EXPORT2 uprv_mstrm_write(UMemoryStream *MS, const void *buffer,
     }
 }
 
-U_CAPI const uint8_t * U_EXPORT2 uprv_mstrm_getBuffer(UMemoryStream *MS, int32_t *len){
+U_CAPI const uint8_t * U_EXPORT2 uprv_mstrm_getBuffer(const UMemoryStream *MS, int32_t *len){
     if(MS->fError == FALSE) {
         *len = MS->fPos;
         return MS->fStart;
@@ -134,7 +134,7 @@ U_CAPI const uint8_t * U_EXPORT2 uprv_mstrm_getBuffer(UMemoryStream *MS, int32_t
     }
 }
 
-U_CAPI const uint8_t * U_EXPORT2 uprv_mstrm_getCurrentBuffer(UMemoryStream *MS, int32_t *len){
+U_CAPI const uint8_t * U_EXPORT2 uprv_mstrm_getCurrentBuffer(const UMemoryStream *MS, int32_t *len){
     if(MS->fError == FALSE) {
         *len = MS->fPos-MS->fReadPos;
         return MS->fStart+MS->fReadPos;

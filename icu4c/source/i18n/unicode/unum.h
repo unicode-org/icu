@@ -751,7 +751,7 @@ typedef enum UNumberFormatSymbol {
 * @stable ICU 2.0
 */
 U_CAPI int32_t U_EXPORT2
-unum_getSymbol(UNumberFormat *fmt,
+unum_getSymbol(const UNumberFormat *fmt,
                UNumberFormatSymbol symbol,
                UChar *buffer,
                int32_t size,

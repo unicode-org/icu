@@ -666,7 +666,7 @@ unum_toPattern(    const    UNumberFormat*          fmt,
 
 // TODO: first parameter should be const!
 U_CAPI int32_t U_EXPORT2
-unum_getSymbol(UNumberFormat *fmt,
+unum_getSymbol(const UNumberFormat *fmt,
                UNumberFormatSymbol symbol,
                UChar *buffer,
                int32_t size,
