@@ -248,6 +248,14 @@ icu4c/source/tools/genbrk/Debug
 icu4c/source/tools/genbrk/Makefile
 icu4c/source/tools/genbrk/Release
 icu4c/source/tools/genbrk/genbrk
+icu4c/source/tools/gencase/*.d
+icu4c/source/tools/gencase/*.o
+icu4c/source/tools/gencase/*.pdb
+icu4c/source/tools/gencase/Debug
+icu4c/source/tools/gencase/Makefile
+icu4c/source/tools/gencase/Release
+icu4c/source/tools/gencase/gencase
+icu4c/source/tools/gencase/gencase.[0-9]
 icu4c/source/tools/genccode/*.d
 icu4c/source/tools/genccode/*.o
 icu4c/source/tools/genccode/*.pdb
