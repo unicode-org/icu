@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2001-2003, International Business Machines Corporation and
+ * Copyright (c) 2001-2004, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -35,6 +35,8 @@
 #include "unicode/parseerr.h"
 #include "unicode/ucnv.h"
 #include "uparse.h"
+
+#define LEN(a) (sizeof(a)/sizeof(a[0]))
 
 #define MAX_TOKEN_LEN 16
 
@@ -4257,51 +4259,155 @@ static void TestImplicitGeneration(void) {
     ucol_close(coll);
 }
 
+/**
+ * Iterate through the given iterator, checking to see that all the strings
+ * in the expected array are present.
+ * @param expected array of strings we expect to see, or NULL
+ * @param expectedCount number of elements of expected, or 0
+ */
+static int32_t checkUEnumeration(const char* msg,
+                                 UEnumeration* iter,
+                                 const char** expected,
+                                 int32_t expectedCount) {
+    UErrorCode ec = U_ZERO_ERROR;
+    int32_t i = 0, n, j, bit;
+    int32_t seenMask = 0;
+
+    U_ASSERT(expectedCount >= 0 && expectedCount < 31); /* [sic] 31 not 32 */
+    n = uenum_count(iter, &ec);
+    if (!assertSuccess("count", &ec)) return -1;
+    log_verbose("%s = [", msg);
+    for (;; ++i) {
+        const char* s = uenum_next(iter, NULL, &ec);
+        if (!assertSuccess("snext", &ec) || s == NULL) break;
+        if (i != 0) log_verbose(",");
+        log_verbose("%s", s);
+        /* check expected list */
+        for (j=0, bit=1; j<expectedCount; ++j, bit<<=1) {
+            if ((seenMask&bit) == 0 &&
+                uprv_strcmp(s, expected[j]) == 0) {
+                seenMask |= bit;
+                break;
+            }
+        }
+    }
+    log_verbose("] (%d)\n", i);
+    assertTrue("count verified", i==n);
+    /* did we see all expected strings? */
+    for (j=0, bit=1; j<expectedCount; ++j, bit<<=1) {
+        if ((seenMask&bit)!=0) {
+            log_verbose("Ok: \"%s\" seen\n", expected[j]);
+        } else {
+            log_err("FAIL: \"%s\" not seen\n", expected[j]);
+        }
+    }
+    return n;
+}
+
+/**
+ * Test new API added for separate collation tree.
+ */
+static void TestSeparateTrees(void) {
+    UErrorCode ec = U_ZERO_ERROR;
+    UEnumeration *e = NULL;
+    int32_t n = -1;
+    UBool isAvailable;
+    char loc[256];
+
+    static const char* AVAIL[] = { "en", "de" };
+
+    static const char* KW[] = { "collation" };
+
+    static const char* KWVAL[] = { "phonebook", "stroke" };
+
+    e = ucol_openAvailableLocales(&ec);
+    assertSuccess("ucol_openAvailableLocales", &ec);
+    assertTrue("ucol_openAvailableLocales!=0", e!=0);
+    n = checkUEnumeration("ucol_openAvailableLocales", e, AVAIL, LEN(AVAIL));
+    /* Don't need to check n because we check list */
+    uenum_close(e);
+
+    e = ucol_getKeywords(&ec);
+    assertSuccess("ucol_getKeywords", &ec);
+    assertTrue("ucol_getKeywords!=0", e!=0);
+    n = checkUEnumeration("ucol_getKeywords", e, KW, LEN(KW));
+    /* Don't need to check n because we check list */
+    uenum_close(e);
+
+    e = ucol_getKeywordValues(KW[0], &ec);
+    assertSuccess("ucol_getKeywordValues", &ec);
+    assertTrue("ucol_getKeywordValues!=0", e!=0);
+    n = checkUEnumeration("ucol_getKeywordValues", e, KWVAL, LEN(KWVAL));
+    /* Don't need to check n because we check list */
+    uenum_close(e);
+
+    /*
+U_DRAFT int32_t U_EXPORT2
+ucol_getFunctionalEquivalent(char* result, int32_t resultCapacity,
+                             const char* locale, UBool* isAvailable,
+                             UErrorCode* status);
+}
+*/
+    n = ucol_getFunctionalEquivalent(loc, sizeof(loc), "fr",
+                                     &isAvailable, &ec);
+    assertSuccess("getFunctionalEquivalent", &ec);
+    assertEquals("getFunctionalEquivalent(fr)", "fr", loc);
+    assertTrue("getFunctionalEquivalent(fr).isAvailable==TRUE",
+               isAvailable == TRUE);
+    
+    n = ucol_getFunctionalEquivalent(loc, sizeof(loc), "fr_FR",
+                                     &isAvailable, &ec);
+    assertSuccess("getFunctionalEquivalent", &ec);
+    assertEquals("getFunctionalEquivalent(fr_FR)", "fr", loc);
+    assertTrue("getFunctionalEquivalent(fr_FR).isAvailable==FALSE",
+               isAvailable == FALSE);
+}
+
 #define TEST(x) addTest(root, &x, "tscoll/cmsccoll/" # x)
 
 void addMiscCollTest(TestNode** root)
 {
-    addTest(root, &TestRuleOptions, "tscoll/cmsccoll/TestRuleOptions");
-    addTest(root, &TestBeforePrefixFailure, "tscoll/cmsccoll/TestBeforePrefixFailure");
-    addTest(root, &TestContractionClosure, "tscoll/cmsccoll/TestContractionClosure");
-    addTest(root, &TestPrefixCompose, "tscoll/cmsccoll/TestPrefixCompose");
-    addTest(root, &TestStrCollIdenticalPrefix, "tscoll/cmsccoll/TestStrCollIdenticalPrefix");
-    addTest(root, &TestPrefix, "tscoll/cmsccoll/TestPrefix");
-    addTest(root, &TestNewJapanese, "tscoll/cmsccoll/TestNewJapanese"); 
-    /*addTest(root, &TestLimitations, "tscoll/cmsccoll/TestLimitations");*/
-    addTest(root, &TestNonChars, "tscoll/cmsccoll/TestNonChars");
-    addTest(root, &TestExtremeCompression, "tscoll/cmsccoll/TestExtremeCompression");
-    addTest(root, &TestSurrogates, "tscoll/cmsccoll/TestSurrogates");
-    addTest(root, &TestVariableTopSetting, "tscoll/cmsccoll/TestVariableTopSetting");
-    addTest(root, &TestBocsuCoverage, "tscoll/cmsccoll/TestBocsuCoverage");
-    addTest(root, &TestCyrillicTailoring, "tscoll/cmsccoll/TestCyrillicTailoring");
-    addTest(root, &TestCase, "tscoll/cmsccoll/TestCase");
-    addTest(root, &IncompleteCntTest, "tscoll/cmsccoll/IncompleteCntTest");
-    addTest(root, &BlackBirdTest, "tscoll/cmsccoll/BlackBirdTest");
-    addTest(root, &FunkyATest, "tscoll/cmsccoll/FunkyATest");
-    addTest(root, &BillFairmanTest, "tscoll/cmsccoll/BillFairmanTest");
-    addTest(root, &RamsRulesTest, "tscoll/cmsccoll/RamsRulesTest");
-    addTest(root, &IsTailoredTest, "tscoll/cmsccoll/IsTailoredTest");
-    addTest(root, &TestCollations, "tscoll/cmsccoll/TestCollations");
-    addTest(root, &TestChMove, "tscoll/cmsccoll/TestChMove");
-    addTest(root, &TestImplicitTailoring, "tscoll/cmsccoll/TestImplicitTailoring");
-    addTest(root, &TestFCDProblem, "tscoll/cmsccoll/TestFCDProblem");
-    addTest(root, &TestEmptyRule, "tscoll/cmsccoll/TestEmptyRule");
-    addTest(root, &TestJ784, "tscoll/cmsccoll/TestJ784");
-    addTest(root, &TestJ815, "tscoll/cmsccoll/TestJ815");
-    /*addTest(root, &TestJ831, "tscoll/cmsccoll/TestJ831");*/ /* we changed lv locale */
-    addTest(root, &TestBefore, "tscoll/cmsccoll/TestBefore");
-    addTest(root, &TestRedundantRules, "tscoll/cmsccoll/TestRedundantRules");
-    addTest(root, &TestExpansionSyntax, "tscoll/cmsccoll/TestExpansionSyntax");
-    addTest(root, &TestHangulTailoring, "tscoll/cmsccoll/TestHangulTailoring");
-    addTest(root, &TestUCARules, "tscoll/cmsccoll/TestUCARules");
-    addTest(root, &TestIncrementalNormalize, "tscoll/cmsccoll/TestIncrementalNormalize");
-    addTest(root, &TestComposeDecompose, "tscoll/cmsccoll/TestComposeDecompose");
-    addTest(root, &TestCompressOverlap, "tscoll/cmsccoll/TestCompressOverlap");
-    addTest(root, &TestContraction, "tscoll/cmsccoll/TestContraction");
-    addTest(root, &TestExpansion, "tscoll/cmsccoll/TestExpansion");
-    /*addTest(root, &PrintMarkDavis, "tscoll/cmsccoll/PrintMarkDavis");*/ /* this test doesn't test - just prints sortkeys */
-    /*addTest(root, &TestGetCaseBit, "tscoll/cmsccoll/TestGetCaseBit");*/ /*this one requires internal things to be exported */
+    TEST(TestRuleOptions);
+    TEST(TestBeforePrefixFailure);
+    TEST(TestContractionClosure);
+    TEST(TestPrefixCompose);
+    TEST(TestStrCollIdenticalPrefix);
+    TEST(TestPrefix);
+    TEST(TestNewJapanese); 
+    /*TEST(TestLimitations);*/
+    TEST(TestNonChars);
+    TEST(TestExtremeCompression);
+    TEST(TestSurrogates);
+    TEST(TestVariableTopSetting);
+    TEST(TestBocsuCoverage);
+    TEST(TestCyrillicTailoring);
+    TEST(TestCase);
+    TEST(IncompleteCntTest);
+    TEST(BlackBirdTest);
+    TEST(FunkyATest);
+    TEST(BillFairmanTest);
+    TEST(RamsRulesTest);
+    TEST(IsTailoredTest);
+    TEST(TestCollations);
+    TEST(TestChMove);
+    TEST(TestImplicitTailoring);
+    TEST(TestFCDProblem);
+    TEST(TestEmptyRule);
+    TEST(TestJ784);
+    TEST(TestJ815);
+    /*TEST(TestJ831);*/ /* we changed lv locale */
+    TEST(TestBefore);
+    TEST(TestRedundantRules);
+    TEST(TestExpansionSyntax);
+    TEST(TestHangulTailoring);
+    TEST(TestUCARules);
+    TEST(TestIncrementalNormalize);
+    TEST(TestComposeDecompose);
+    TEST(TestCompressOverlap);
+    TEST(TestContraction);
+    TEST(TestExpansion);
+    /*TEST(PrintMarkDavis);*/ /* this test doesn't test - just prints sortkeys */
+    /*TEST(TestGetCaseBit);*/ /*this one requires internal things to be exported */
     TEST(TestOptimize);
     TEST(TestSuppressContractions);
     TEST(Alexis2);
@@ -4315,6 +4421,7 @@ void addMiscCollTest(TestNode** root)
     TEST(TestTibetanConformance);
     TEST(TestPinyinProblem);
     TEST(TestImplicitGeneration);
+    TEST(TestSeparateTrees);
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
