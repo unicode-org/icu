@@ -191,7 +191,7 @@ U_CFUNC UChar32 UConverter_getNextUChar_ISO_2022_CN (UConverterToUnicodeArgs * a
 
 typedef enum 
 {
-    INVALID_2022 = -1, /*Doesn't correspond to a valid iso 2022 escape sequence*/
+        INVALID_2022 = -1, /*Doesn't correspond to a valid iso 2022 escape sequence*/
         VALID_NON_TERMINAL_2022 = 0, /*so far corresponds to a valid iso 2022 escape sequence*/
         VALID_TERMINAL_2022 = 1, /*corresponds to a valid iso 2022 escape sequence*/
         VALID_MAYBE_TERMINAL_2022 = 2, /*so far matches one iso 2022 escape sequence, but by adding more characters might match another escape sequence*/
@@ -299,7 +299,7 @@ const char* escSeqStateTable_Result_2022[MAX_STATES_2022] = {
 UCNV_TableStates_2022 escSeqStateTable_Value_2022[MAX_STATES_2022] = {
     /*          0                           1                         2                             3                           4                           5                               6                        7                          8                           9       */
     
-        VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022     ,VALID_NON_TERMINAL_2022    ,VALID_SS2_SEQUENCE         ,VALID_SS2_SEQUENCE         ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_MAYBE_TERMINAL_2022  
+         VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022     ,VALID_NON_TERMINAL_2022    ,VALID_SS2_SEQUENCE        ,VALID_SS3_SEQUENCE         ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_MAYBE_TERMINAL_2022  
         ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        
         ,VALID_NON_TERMINAL_2022    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        
         ,VALID_TERMINAL_2022        ,VALID_NON_TERMINAL_2022    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        
@@ -319,7 +319,7 @@ static const char* getEndOfBuffer_2022(const char** source,
                                        const char* sourceLimit,
                                        UBool flush); 
 /* Type def for refactoring changeState_2022 code*/
-typedef enum{
+typedef enum{               
     ISO_2022=0,
     ISO_2022_JP=1,
     ISO_2022_CN=2
@@ -1143,7 +1143,7 @@ static StateEnum nextStateArray[3][8]= {
     {JISX201,INVALID_STATE,INVALID_STATE,JISX208,JISX212,ASCII,INVALID_STATE,INVALID_STATE},
     {ISO8859_1,ISO8859_7,JISX201,JISX208,JISX212,GB2312,KSC5601,ASCII}
 };
-static  char* escSeqChars[8] ={
+static  const char* escSeqChars[8] ={
     "\x1B\x28\x42",         /* <ESC>(B  ASCII       */
     "\x1B\x2E\x41",         /* <ESC>.A  ISO-8859-1  */
     "\x1B\x2E\x46",         /* <ESC>.F  ISO-8859-7  */
@@ -2069,7 +2069,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP(UConverterToUnicodeArgs *args,
                     changeState_2022(args->converter,&(mySource), 
                         args->sourceLimit, args->flush,ISO_2022_JP,&plane, err);
                     if(U_FAILURE(*err)){
-                        goto SAVE_STATE;
+                        return;
                     }
                     continue;
             }
@@ -2150,7 +2150,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP(UConverterToUnicodeArgs *args,
                 
                 case INVALID_STATE:
                     *err = U_ILLEGAL_ESCAPE_SEQUENCE;
-                    goto SAVE_STATE;
+                    return;
                 
                 default :
                     break;
@@ -2305,7 +2305,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeA
                         args->sourceLimit, args->flush,ISO_2022_JP,&plane, err);
 
                     if(U_FAILURE(*err)){
-                        goto SAVE_STATE;
+                        return;
                     }
                     continue;
             }
@@ -2385,7 +2385,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeA
                 
                 case INVALID_STATE:
                     *err = U_ILLEGAL_ESCAPE_SEQUENCE;
-                    goto SAVE_STATE;
+                    return;
                 default:
                     /* For non-valid state MBCS and others */
                     break;
@@ -2502,7 +2502,7 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR(UConverterFromUnicodeArgs* args,
     int32_t targetLength = args->targetLimit - args->target;
     int32_t sourceLength = args->sourceLimit - args->source;
     int32_t length=0;
-    UChar32 targetUniChar = 0x0000;
+    uint32_t targetUniChar = 0x0000;
     UChar32 mySourceChar = 0x0000;
     UBool isTargetUCharDBCS = (UBool)args->converter->fromUnicodeStatus;
     UBool oldIsTargetUCharDBCS = isTargetUCharDBCS;
@@ -2695,7 +2695,7 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnic
     int32_t myTargetIndex = 0;
     int32_t targetLength = args->targetLimit - args->target;
     int32_t sourceLength = args->sourceLimit - args->source;
-    UChar32 targetUniChar = 0x0000;
+    uint32_t targetUniChar = 0x0000;
     UChar32 mySourceChar = 0x0000;
     UBool isTargetUCharDBCS = (UBool)args->converter->fromUnicodeStatus;
     UBool oldIsTargetUCharDBCS = isTargetUCharDBCS;
@@ -4066,98 +4066,111 @@ static void changeState_2022(UConverter* _this,
         
         value = getKey_2022(**source,(int32_t *) &key, &offset);
         switch (value){
-        case VALID_NON_TERMINAL_2022 : 
-            break;
+            case VALID_NON_TERMINAL_2022 : 
+                break;
             
-        case VALID_TERMINAL_2022:
-            {
-                (*source)++;
-                chosenConverterName = escSeqStateTable_Result_2022[offset];
-                key = 0;
-                goto DONE;
-            };
-            break;
-            
-        case INVALID_2022:
-            {
-                myData2022->key = 0;
-                *err = U_ILLEGAL_ESCAPE_SEQUENCE;
-                return;
-            }
-        case VALID_SS2_SEQUENCE:
-            {
-                (*source)++;
-                key = 0;
-                goto DONE;
-            }
-            
-        case VALID_MAYBE_TERMINAL_2022:
-            {
-                const char* mySource = (*source+1);
-                int32_t myKey = key;
-                UCNV_TableStates_2022 myValue = value;
-                int32_t myOffset=0;
-                if(*mySource==ESC_2022){
-                    while ((mySource < sourceLimit) && 
-                        ((myValue == VALID_MAYBE_TERMINAL_2022)||(myValue == VALID_NON_TERMINAL_2022))){
-                        myValue = getKey_2022(*(mySource++), &myKey, &myOffset);
-                    }
-                }
-                else{
+            case VALID_TERMINAL_2022:
+                {
                     (*source)++;
-                    myValue=(UCNV_TableStates_2022) 1;
-                    myOffset = 7;
+                    chosenConverterName = escSeqStateTable_Result_2022[offset];
+                    key = 0;
+                    goto DONE;
+                };
+                break;
+            
+            case INVALID_2022:
+                {
+                    myData2022->key = 0;
+                    *err = U_ILLEGAL_ESCAPE_SEQUENCE;
+                    return;
                 }
-                
-                switch (myValue){
-                case INVALID_2022:
-                    {
-                        /*Backs off*/
-                        chosenConverterName = escSeqStateTable_Result_2022[offset];
-                        value = VALID_TERMINAL_2022;
-                        goto DONE;
-                    };
-                    break;
-                    
-                case VALID_TERMINAL_2022:
-                    {
-                        /*uses longer escape sequence*/
-                        chosenConverterName = escSeqStateTable_Result_2022[myOffset];
-                        key = 0;
-                        value = VALID_TERMINAL_2022;
-                        goto DONE;
-                    };
-                    break;
-                    
-                    /* Not expected. Added to make the gcc happy */
-                case VALID_SS2_SEQUENCE:
-                    {
-                        (*source)++;
-                        key = 0;
-                        goto DONE;
+            case VALID_SS2_SEQUENCE:
+                {
+                    (*source)++;
+                    key = 0;
+                    goto DONE;
+                }
+            case VALID_SS3_SEQUENCE:
+                {
+                    (*source)++;
+                    key = 0;
+                    goto DONE;
+                }
+            
+            case VALID_MAYBE_TERMINAL_2022:
+                {
+                    const char* mySource = (*source+1);
+                    int32_t myKey = key;
+                    UCNV_TableStates_2022 myValue = value;
+                    int32_t myOffset=0;
+                    if(*mySource==ESC_2022){
+                        while ((mySource < sourceLimit) && 
+                            ((myValue == VALID_MAYBE_TERMINAL_2022)||(myValue == VALID_NON_TERMINAL_2022))){
+                            myValue = getKey_2022(*(mySource++), &myKey, &myOffset);
+                        }
                     }
+                    else{
+                        (*source)++;
+                        myValue=(UCNV_TableStates_2022) 1;
+                        myOffset = 7;
+                    }
+                
+                    switch (myValue){
+                        case INVALID_2022:
+                            {
+                                /*Backs off*/
+                                chosenConverterName = escSeqStateTable_Result_2022[offset];
+                                value = VALID_TERMINAL_2022;
+                                goto DONE;
+                            };
+                            break;
                     
-                case VALID_NON_TERMINAL_2022: 
+                        case VALID_TERMINAL_2022:
+                            {
+                                /*uses longer escape sequence*/
+                                chosenConverterName = escSeqStateTable_Result_2022[myOffset];
+                                key = 0;
+                                value = VALID_TERMINAL_2022;
+                                goto DONE;
+                            };
+                            break;
                     
-                case VALID_MAYBE_TERMINAL_2022:
-                    {
-                        if (flush){
-                            /*Backs off*/
-                            chosenConverterName = escSeqStateTable_Result_2022[offset];
-                            value = VALID_TERMINAL_2022;
-                            key = 0;
-                            goto DONE;
-                        }
-                        else{
-                            key = myKey;
-                            value = VALID_NON_TERMINAL_2022;
-                        }
+                        /* Not expected. Added to make the gcc happy */
+                        case VALID_SS2_SEQUENCE:
+                            {
+                                (*source)++;
+                                key = 0;
+                                goto DONE;
+                            }
+                        /* Not expected. Added to make the gcc happy */
+                        case VALID_SS3_SEQUENCE:
+                            {
+                                (*source)++;
+                                key = 0;
+                                goto DONE;
+                            }
+                    
+                        case VALID_NON_TERMINAL_2022: 
+                    
+                        case VALID_MAYBE_TERMINAL_2022:
+                            {
+                                if (flush){
+                                    /*Backs off*/
+                                    chosenConverterName = escSeqStateTable_Result_2022[offset];
+                                    value = VALID_TERMINAL_2022;
+                                    key = 0;
+                                    goto DONE;
+                                }
+                                else{
+                                    key = myKey;
+                                    value = VALID_NON_TERMINAL_2022;
+                                }
+                            };
+                            break;
                     };
                     break;
                 };
                 break;
-            };
-            break;
         }
     }while (++(*source) < sourceLimit);
     
@@ -4343,7 +4356,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN(UConverterToUnicodeArgs *args,
                         myData->currentType=ASCII1;
                     }
                     if(U_FAILURE(*err)){
-                        goto SAVE_STATE;
+                            return;
                     }
                     continue;
             }
@@ -4407,13 +4420,10 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN(UConverterToUnicodeArgs *args,
                             &pBuf,tempLimit,args->converter->useFallback);
                     }
                     break;
-                
-                case LATIN1:
+                /* for LATIN1 and SBCS which are not expected */
+                default:
                     break;
-                
-                case INVALID_STATE:
-                    *err = U_ILLEGAL_ESCAPE_SEQUENCE;
-                    goto SAVE_STATE;
+
             }
             if(targetUniChar < 0xfffe){
                 *(myTarget++)=(UChar)targetUniChar;
@@ -4586,7 +4596,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeA
                     myData->currentType=ASCII;
                 }
                 if(U_FAILURE(*err)){
-                    goto SAVE_STATE;
+                    return;
                 }
                 continue;
             
@@ -4651,13 +4661,9 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeA
                         &pBuf,tempLimit,args->converter->useFallback);
                 }
                 break;
-                
-            case LATIN1:
+            /* for LATIN1 and SBCS which are not expected */    
+            default:
                 break;
-            
-            case INVALID_STATE:
-                    *err = U_ILLEGAL_ESCAPE_SEQUENCE;
-                    goto SAVE_STATE;
             }
             if(targetUniChar < 0xfffe){
                 if(myData->currentType == ASCII1){
