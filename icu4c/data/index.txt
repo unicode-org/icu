@@ -66,6 +66,7 @@ index {
         en_US,
         en_ZA,
         en_ZW,
+        en_US_POSIX,
         el,
         el_GR,
         el_GR_EURO,
