@@ -14,13 +14,13 @@ ms_BN{
         "%",
         "0",
         "#",
-        "+",
         "-",
         "E",
         "\u2030",
         "\u221E",
         "\uFFFD",
-        ","
+        ",",
+        "+",
     }
     DateTimePatterns{
         "h:mm:ss aa",
