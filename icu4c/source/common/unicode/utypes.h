@@ -87,7 +87,7 @@
 /*===========================================================================*/
 /* Related version information                                               */
 /*===========================================================================*/
-#define U_ICU_VERSION "1.4.2"
+#define U_ICU_VERSION "1.5d01"
 
 #define U_MAX_VERSION_LENGTH 4
 #define U_VERSION_DELIMITER '.'
