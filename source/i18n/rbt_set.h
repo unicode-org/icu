@@ -9,6 +9,7 @@
 #define RBT_SET_H
 
 #include "uvector.h"
+#include "unicode/utrans.h"
 
 class Replaceable;
 class TransliterationRule;
@@ -110,8 +111,7 @@ public:
      * @return the matching rule, or null if none found.
      */
     virtual TransliterationRule* findMatch(const Replaceable& text,
-                                           int32_t start, int32_t limit,
-                                           int32_t cursor,
+                                           const UTransPosition& pos,
                                            const TransliterationRuleData& data,
                                            const UnicodeFilter* filter) const;
     
@@ -143,8 +143,7 @@ public:
      * does not have enough text yet to unambiguously match a rule.
      */
     virtual TransliterationRule* findIncrementalMatch(const Replaceable& text,
-                                              int32_t start,
-                                              int32_t limit, int32_t cursor,
+                                              const UTransPosition& pos,
                                               const TransliterationRuleData& data,
                                               UBool& isPartial,
                                               const UnicodeFilter* filter) const;

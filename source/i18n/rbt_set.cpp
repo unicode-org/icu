@@ -203,16 +203,15 @@ void TransliterationRuleSet::freeze(const TransliterationRuleData& data,
  */
 TransliterationRule*
 TransliterationRuleSet::findMatch(const Replaceable& text,
-                                  int32_t start, int32_t limit,
-                                  int32_t cursor,
+                                  const UTransPosition& pos,
                                   const TransliterationRuleData& data,
                                   const UnicodeFilter* filter) const {
     /* We only need to check our indexed bin of the rule table,
      * based on the low byte of the first key character.
      */
-    int16_t x = text.charAt(cursor) & 0xFF;
+    int16_t x = text.charAt(pos.start) & 0xFF;
     for (int32_t i=index[x]; i<index[x+1]; ++i) {
-        if (rules[i]->matches(text, start, limit, cursor, data, filter)) {
+        if (rules[i]->matches(text, pos, data, filter)) {
             return rules[i];
         }
     }
@@ -248,8 +247,7 @@ TransliterationRuleSet::findMatch(const Replaceable& text,
  */
 TransliterationRule*
 TransliterationRuleSet::findIncrementalMatch(const Replaceable& text,
-                                             int32_t start,
-                                             int32_t limit, int32_t cursor,
+                                             const UTransPosition& pos,
                                              const TransliterationRuleData& data,
                                              UBool& isPartial,
                                              const UnicodeFilter* filter) const {
@@ -258,10 +256,9 @@ TransliterationRuleSet::findIncrementalMatch(const Replaceable& text,
      * based on the low byte of the first key character.
      */
     isPartial = FALSE;
-    int16_t x = text.charAt(cursor) & 0xFF;
+    int16_t x = text.charAt(pos.start) & 0xFF;
     for (int32_t i=index[x]; i<index[x+1]; ++i) {
-        int32_t match = rules[i]->getMatchDegree(text, start, limit, cursor,
-                                                 data, filter);
+        int32_t match = rules[i]->getMatchDegree(text, pos, data, filter);
         switch (match) {
         case TransliterationRule::FULL_MATCH:
             return rules[i];
