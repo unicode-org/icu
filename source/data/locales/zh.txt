@@ -6763,11 +6763,8 @@ zh {
     Types{
         collation{
             pinyin      { "\u62FC\u97F3\u987a\u5e8f" }
-            stroke      { "\u7b14\u5212\u987a\u5e8f" }   // Simplified Chinese name.
+            stroke      { "\u7b14\u5212\u987a\u5e8f" }  // Simplified Chinese name.
             traditional { "\u4f20\u7edf\u5386\u6cd5" }  // Spanish traditional sorting
-        }
-        calendar{
-            traditional { "\u4f20\u7edf\u5386\u6cd5" }
         }
     }
     Variants{

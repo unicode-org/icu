@@ -1,6 +1,6 @@
-﻿// ***************************************************************************
+// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2003, International Business Machines
+// *   Copyright (C) 1997-2004, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
@@ -12,19 +12,19 @@ sv {
         "em",
     }
     collations {
-      standard { 
-        Version { "2.0" }
-        Sequence {
-            "&D<<đ<<<Đ<<ð<<<Ð"
-            "&t<<<þ/h"
-            "&T<<<Þ/H"
-            "&v<<<w"
-            "&V<<<W"
-            "&Y<<ü<<<Ü<<ű<<<Ű"
-            "&[before 1]ʒ<å<<<Å<ä<<<Ä<<æ<<<Æ<<ę<<<Ę"
-            "<ö<<<Ö<<ø<<<Ø<<ő<<<Ő<<œ<<<Œ<<ô<<<Ô"
+        standard { 
+            Version { "2.0" }
+            Sequence {
+                "&D<<\u0111<<<\u0110<<\u00F0<<<\u00D0"
+                "&t<<<\u00FE/h"
+                "&T<<<\u00DE/H"
+                "&v<<<w"
+                "&V<<<W"
+                "&Y<<u\u0308<<<U\u0308<<u\u030B<<<U\u030B"
+                "&[before 1]\u0292<\u00E5<<<\u00C5<\u00E4<<<\u00C4<<\u00E6<<<\u00C6<<e\u0328<<<E\u0328"
+                "<\u00F6<<<\u00D6<<\u00F8<<<\u00D8<<\u0151<<<\u0150<<\u0153<<<\u0152<<\u00F4<<<\u00D4"
+            }
         }
-      }
     }
     Countries { 
         Fallback{ "en"}
@@ -720,8 +720,8 @@ sv {
     LocaleScript{ 
         "Latn",  // ISO 15924 Name 
     }
-    ExemplarCharacters { "[a-z \u00e4 \u00f6 \u00e5 \u00e1 \u00e9 \u00eb \u00fc]" }
-    
+    ExemplarCharacters { "[a-z\u00e4\u00f6\u00e5\u00e1\u00e9\u00eb\u00fc]" }
+
     //------------------------------------------------------------
     // Rule Based Number Format Support
     //------------------------------------------------------------
@@ -815,9 +815,6 @@ sv {
     Types{
         collation{
             traditional { "Traditionell Sortera" }
-        }
-        calendar{
-            traditional { "Traditionell Kalendar" }
         }
     }
     Variants{
