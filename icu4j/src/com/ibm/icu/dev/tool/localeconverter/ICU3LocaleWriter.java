@@ -127,7 +127,7 @@ public class ICU3LocaleWriter extends LocaleWriter {
         println(" }");
     }
     protected void write(Object[][] o){
-        String key = null;
+        //String key = null;
         println(":table {");
         indent();
         for(int i=0; i< o.length;i++){
