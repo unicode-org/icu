@@ -842,7 +842,7 @@ static void TestInt64Format() {
       }
     }
 
-    unum_formatInt64(fmt, INT64_MIN, result, 512, NULL, &status);
+    unum_formatInt64(fmt, U_INT64_MIN, result, 512, NULL, &status);
     if (U_FAILURE(status)) {
       log_err("error in unum_format(): %s\n", myErrorName(status));
     } else {
@@ -860,7 +860,7 @@ static void TestInt64Format() {
       val64 = unum_parseInt64(fmt, result, u_strlen(result), &parsepos, &status);
       if (U_FAILURE(status)) {
         log_err("parseInt64 returned error: %s\n", myErrorName(status));
-      } else if (val64 != INT64_MIN) {
+      } else if (val64 != U_INT64_MIN) {
         log_err("parseInt64 returned incorrect value, got: %ld\n", val64);
       }
 
