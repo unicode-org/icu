@@ -1198,6 +1198,8 @@ en {
         "#,##0%",
         "#E0",
     }
+    // TODO: This list may be incomplete. Finish it once a formal list appears.
+    // http://www.evertype.com/standards/iso15924/
     Scripts {
         Arab { "Arabic" }
         Armn { "Armenian" }
@@ -1224,7 +1226,7 @@ en {
         Hant { "Traditional Han" } // Not a formal part of ISO-15924 yet
         Hebr { "Hebrew" }
         Hira { "Hiragana" }
-        Ital { "Old_italic" }
+        Ital { "Old Italic" }
         Kana { "Katakana" }
         Khmr { "Khmer" }
         Knda { "Kannada" }
@@ -1238,8 +1240,8 @@ en {
         Ogam { "Ogham" }
         Orya { "Oriya" }
         Osma { "Osmanya" }
-        Qaac { "Coptic" }
-        Qaai { "Inherited" }
+        Qaac { "Coptic" } // Coptic is not a formal part of ISO-15924 yet
+        Qaai { "Inherited" } // PUA
         Runr { "Runic" }
         Shaw { "Shavian" }
         Sinh { "Sinhala" }
@@ -1254,20 +1256,20 @@ en {
         Tibt { "Tibetan" }
         Ugar { "Ugaritic" }
         Yiii { "Yi" }
-        Zyyy { "Common" }
+        Zyyy { "Common" } // This may need to become "undetermined script"
     }
 
     //------------------------------------------------------------
     // Rule Based Number Format Support
     //------------------------------------------------------------
 
-//         * Spellout rules for U.S. English.  This rule set has two variants:
-//         * %simplified is a set of rules showing the simple method of spelling
-//         * out numbers in English: 289 is formatted as "two hundred eighty-nine".
-//         * %default uses a more complicated algorithm to format
-//         * numbers in a more natural way: 289 is formatted as "two hundred AND
-//         * eighty-nine" and commas are inserted between the thousands groups for
-//         * values above 100,000.
+     // * Spellout rules for U.S. English.  This rule set has two variants:
+     // * %simplified is a set of rules showing the simple method of spelling
+     // * out numbers in English: 289 is formatted as "two hundred eighty-nine".
+     // * %default uses a more complicated algorithm to format
+     // * numbers in a more natural way: 289 is formatted as "two hundred AND
+     // * eighty-nine" and commas are inserted between the thousands groups for
+     // * values above 100,000.
 
      SpelloutRules {
         // This rule set shows the normal simple formatting rules for English
