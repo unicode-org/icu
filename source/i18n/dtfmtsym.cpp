@@ -106,19 +106,19 @@ static const UChar gLastResortZoneStrings[5][4] =
  * These are the tags we expect to see in normal resource bundle files associated
  * with a locale.
  */
-const char *DateFormatSymbols::fgErasTag="Eras";
-const char *DateFormatSymbols::fgMonthNamesTag="MonthNames";
-const char *DateFormatSymbols::fgMonthAbbreviationsTag="MonthAbbreviations";
-const char *DateFormatSymbols::fgDayNamesTag="DayNames";
-const char *DateFormatSymbols::fgDayAbbreviationsTag="DayAbbreviations";
-const char *DateFormatSymbols::fgAmPmMarkersTag="AmPmMarkers";
+const char DateFormatSymbols::fgErasTag[]="Eras";
+const char DateFormatSymbols::fgMonthNamesTag[]="MonthNames";
+const char DateFormatSymbols::fgMonthAbbreviationsTag[]="MonthAbbreviations";
+const char DateFormatSymbols::fgDayNamesTag[]="DayNames";
+const char DateFormatSymbols::fgDayAbbreviationsTag[]="DayAbbreviations";
+const char DateFormatSymbols::fgAmPmMarkersTag[]="AmPmMarkers";
 
 /**
  * These are the tags we expect to see in time zone data resource bundle files
  * associated with a locale.
  */
-const char *DateFormatSymbols::fgZoneStringsTag="zoneStrings";
-const char *DateFormatSymbols::fgLocalPatternCharsTag="localPatternChars";
+const char DateFormatSymbols::fgZoneStringsTag[]="zoneStrings";
+const char DateFormatSymbols::fgLocalPatternCharsTag[]="localPatternChars";
 
 //------------------------------------------------------
 

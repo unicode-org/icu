@@ -38,7 +38,7 @@
 #define RIGHT_CURLY_BRACE ((UChar)0x007D)
 
 // -------------------------------------
-char MessageFormat::fgClassID = 0; // Value is irrelevant
+const char MessageFormat::fgClassID = 0; // Value is irrelevant
 
 //---------------------------------------
 // static data

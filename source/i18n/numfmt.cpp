@@ -33,7 +33,7 @@
 // class NumberFormat
 // *****************************************************************************
  
-char NumberFormat::fgClassID = 0; // Value is irrelevant
+const char NumberFormat::fgClassID = 0; // Value is irrelevant
 
 // If the maximum base 10 exponent were 4, then the largest number would 
 // be 99,999 which has 5 digits.
@@ -56,7 +56,7 @@ static const UChar gLastResortPercentPat[] = {
 static const UChar gLastResortScientificPat[] = {
     0x23, 0x45, 0x30, 0 /* "#E0" */
 };
-const UChar *NumberFormat::fgLastResortNumberPatterns[] =
+const UChar * const NumberFormat::fgLastResortNumberPatterns[] =
 {
     gLastResortDecimalPat,
     gLastResortCurrencyPat,

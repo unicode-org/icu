@@ -33,7 +33,7 @@
 // class ChoiceFormat
 // *****************************************************************************
 
-char        ChoiceFormat::fgClassID = 0; // Value is irrelevant
+const char        ChoiceFormat::fgClassID = 0; // Value is irrelevant
 
 //UMTX ChoiceFormat::fgMutex = NULL; // lock for fgNumberFormat
 

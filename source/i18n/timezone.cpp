@@ -45,7 +45,7 @@
 #include "ucln_in.h"
 
 // static initialization
-char                       TimeZone::fgClassID = 0; // Value is irrelevant
+const char                 TimeZone::fgClassID = 0; // Value is irrelevant
 
 TimeZone*                  DEFAULT_ZONE = NULL;
 

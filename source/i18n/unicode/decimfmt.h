@@ -960,7 +960,7 @@ public:
      * locale resource bundles.
      * @stable
      */
-    static const char *fgNumberPatterns;
+    static const char fgNumberPatterns[];
 
 public:
 

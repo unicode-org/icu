@@ -484,9 +484,9 @@ public:
     virtual UClassID getDynamicClassID(void) const { return getStaticClassID(); }
 
 private:
-    static char fgClassID;
+    static const char fgClassID;
 
-    static const char *fgDateTimePatternsTag;   // resource bundle tag for default date and time patterns
+    static const char fgDateTimePatternsTag[];   // resource bundle tag for default date and time patterns
 
     static const UChar fgDefaultPattern[];    // date/time pattern of last resort
 

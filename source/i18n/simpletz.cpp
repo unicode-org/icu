@@ -25,7 +25,7 @@
 #include "unicode/gregocal.h"
 #include "tzdat.h"
 
-char SimpleTimeZone::fgClassID = 0; // Value is irrelevant
+const char SimpleTimeZone::fgClassID = 0; // Value is irrelevant
 
 // WARNING: assumes that no rule is measured from the end of February,
 // since we don't handle leap years. Could handle assuming always

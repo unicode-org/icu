@@ -1066,7 +1066,7 @@ private:
     /**
      * The resource tag for the resource where the week-count data is stored.
      */
-    static const char* kDateTimeElements;
+    static const char kDateTimeElements[];
 };
 
 // -------------------------------------

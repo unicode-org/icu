@@ -482,6 +482,9 @@ private:
     void initialize();
 
     UnicodeString fSymbols[kFormatSymbolCount];
+
+    static const char fgNumberElements[];
+    static const char fgCurrencyElements[];
 };
 
 
