@@ -724,6 +724,9 @@ parse(FileStream *f, const char *cp, const char *inputDir,
                 goto finish;
             }
             bundle_setlocale(bundle, token.fChars, status);
+
+/* trying to get rid of collation elements in other 'root' bundles */
+#if 0
             if(didInitRoot == FALSE) {
                 U_STRING_INIT(rootName, "root", 4);
                 didInitRoot = TRUE;
@@ -757,6 +760,7 @@ parse(FileStream *f, const char *cp, const char *inputDir,
                 }
                 uprv_free(rules);
             }
+#endif
             if(U_FAILURE(*status)) {
                 goto finish;
             }
