@@ -580,6 +580,9 @@ TrieTest() {
 
 #if 1
 void
+addTrieTest(TestNode** root);
+
+void
 addTrieTest(TestNode** root) {
     addTest(root, &TrieTest, "tsutil/TrieTest");
 }
