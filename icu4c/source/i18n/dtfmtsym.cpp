@@ -28,7 +28,7 @@
 
 // generic date-format pattern symbols.  For their meanings, see class docs
 // for SimpleDateFormat
-UnicodeString DateFormatSymbols::fgPatternChars = UnicodeString("GyMdkHmsSEDFwWahKzYe", "");
+UnicodeString DateFormatSymbols::fgPatternChars = UNICODE_STRING("GyMdkHmsSEDFwWahKzYe", 20);
 
 //------------------------------------------------------
 // Strings of last resort.  These are only used if we have no resource
@@ -42,28 +42,28 @@ UnicodeString DateFormatSymbols::fgPatternChars = UnicodeString("GyMdkHmsSEDFwWa
 // These are the month names and abbreviations of last resort.
 const UnicodeString DateFormatSymbols::fgLastResortMonthNames[] =
 {
-    UnicodeString("01", ""), UnicodeString("02", ""), UnicodeString("03", ""), UnicodeString("04", ""),
-    UnicodeString("05", ""), UnicodeString("06", ""), UnicodeString("07", ""), UnicodeString("08", ""),
-    UnicodeString("09", ""), UnicodeString("10", ""), UnicodeString("11", ""), UnicodeString("12", ""),
-    UnicodeString("13", "")
+    UNICODE_STRING("01", 2), UNICODE_STRING("02", 2), UNICODE_STRING("03", 2), UNICODE_STRING("04", 2),
+    UNICODE_STRING("05", 2), UNICODE_STRING("06", 2), UNICODE_STRING("07", 2), UNICODE_STRING("08", 2),
+    UNICODE_STRING("09", 2), UNICODE_STRING("10", 2), UNICODE_STRING("11", 2), UNICODE_STRING("12", 2),
+    UNICODE_STRING("13", 2)
 };
 
 // These are the weekday names and abbreviations of last resort.
 const UnicodeString DateFormatSymbols::fgLastResortDayNames[] =
 {
-    UnicodeString(), UnicodeString("1", ""), UnicodeString("2", ""), UnicodeString("3", ""),
-    UnicodeString("4", ""), UnicodeString("5", ""), UnicodeString("6", ""), UnicodeString("7", "")
+    UnicodeString(), UNICODE_STRING("1", 1), UNICODE_STRING("2", 1), UNICODE_STRING("3", 1),
+    UNICODE_STRING("4", 1), UNICODE_STRING("5", 1), UNICODE_STRING("6", 1), UNICODE_STRING("7", 1)
 };
 
 // These are the am/pm and BC/AD markers of last resort.
 const UnicodeString DateFormatSymbols::fgLastResortAmPmMarkers[] =
 {
-    UnicodeString("AM", ""), UnicodeString("PM", "")
+    UNICODE_STRING("AM", 2), UNICODE_STRING("PM", 2)
 };
 
 const UnicodeString DateFormatSymbols::fgLastResortEras[] =
 {
-    UnicodeString("BC", ""), UnicodeString("AD", "")
+    UNICODE_STRING("BC", 2), UNICODE_STRING("AD", 2)
 };
 
 // These are the zone strings of last resort.
@@ -71,7 +71,7 @@ UnicodeString** DateFormatSymbols::fgLastResortZoneStringsH = 0;
 
 const UnicodeString DateFormatSymbols::fgLastResortZoneStrings[] =
 {
-    UnicodeString("GMT", ""), UnicodeString("GMT", ""), UnicodeString("GMT", ""), UnicodeString("GMT", ""), UnicodeString("GMT", "")
+    UNICODE_STRING("GMT", 3), UNICODE_STRING("GMT", 3), UNICODE_STRING("GMT", 3), UNICODE_STRING("GMT", 3), UNICODE_STRING("GMT", 3)
 };
 
 //------------------------------------------------------
@@ -470,14 +470,14 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, bool
     // {sfb} fixed to handle 1-based weekdays
     UnicodeString *lWeekdays = (UnicodeString*)resource.getStringArray(SimpleDateFormat::fgDayNamesTag, fWeekdaysCount, status);
     fWeekdays = new UnicodeString [8];
-    fWeekdays[0] = UnicodeString("");
+    fWeekdays[0] = UnicodeString();
     icu_arrayCopy(lWeekdays, 0, fWeekdays, 1, 7);
     setIsOwned(kWeekdays, TRUE);
     //fWeekdays       = (UnicodeString*)resource.getStringArray(SimpleDateFormat::fgDayNamesTag, fWeekdaysCount, status);
 
     UnicodeString *lSWeekdays = (UnicodeString*)resource.getStringArray(SimpleDateFormat::fgDayAbbreviationsTag, fShortWeekdaysCount, status);
     fShortWeekdays = new UnicodeString [8];
-    fShortWeekdays[0] = UnicodeString("");
+    fShortWeekdays[0] = UnicodeString();
     icu_arrayCopy(lSWeekdays, 0, fShortWeekdays, 1, 7);
     setIsOwned(kShortWeekdays, TRUE);
     //fShortWeekdays  = (UnicodeString*)resource.getStringArray(SimpleDateFormat::fgDayAbbreviationsTag, fShortWeekdaysCount, status);

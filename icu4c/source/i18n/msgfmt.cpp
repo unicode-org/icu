@@ -665,26 +665,26 @@ MessageFormat::format(const Formattable* arguments,
     result += buffer;
     return result;
 }
- 
+
 // MessageFormat Type List  Number, Date, Time or Choice
 const UnicodeString MessageFormat::fgTypeList[] = {
-    UnicodeString(), UnicodeString(), UnicodeString("number", ""), UnicodeString(),
-    UnicodeString("date", ""), UnicodeString(), UnicodeString("time", ""), UnicodeString(),
-    UnicodeString("choice", "")
+    UnicodeString(), UnicodeString(), UNICODE_STRING("number", 6), UnicodeString(),
+    UNICODE_STRING("date", 4), UnicodeString(), UNICODE_STRING("time", 4), UnicodeString(),
+    UNICODE_STRING("choice", 6)
 };
  
 // NumberFormat modifier list, default, currency, percent or integer
 const UnicodeString MessageFormat::fgModifierList[] = {
-    UnicodeString(), UnicodeString(), UnicodeString("currency", ""), UnicodeString(),
-    UnicodeString("percent", ""), UnicodeString(), UnicodeString("integer", ""), UnicodeString(),
+    UnicodeString(), UnicodeString(), UNICODE_STRING("currency", 8), UnicodeString(),
+    UNICODE_STRING("percent", 7), UnicodeString(), UNICODE_STRING("integer", 7), UnicodeString(),
     UnicodeString()
 };
  
 // DateFormat modifier list, default, short, medium, long or full
 const UnicodeString MessageFormat::fgDateModifierList[] = {
-    UnicodeString(), UnicodeString(), UnicodeString("short", ""), UnicodeString(),
-    UnicodeString("medium", ""), UnicodeString(), UnicodeString("long", ""), UnicodeString(),
-    UnicodeString("full", "")
+    UnicodeString(), UnicodeString(), UNICODE_STRING("short", 5), UnicodeString(),
+    UNICODE_STRING("medium", 6), UnicodeString(), UNICODE_STRING("long", 4), UnicodeString(),
+    UNICODE_STRING("full", 4)
 };
  
 const int32_t MessageFormat::fgListLength= 9;
