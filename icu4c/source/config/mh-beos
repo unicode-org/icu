@@ -3,7 +3,7 @@
 ## Copyright (c) 2003-2003, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-beos,v 1.1 2003/06/23 03:03:09 grhoten-oss Exp $
+## $Id: mh-beos,v 1.2 2003/08/08 23:53:43 grhoten-oss Exp $
 ## Original author: Andrew Bachmann
 
 ## Commands to generate dependency files
@@ -71,8 +71,6 @@ STATIC_O = ao
 %.o: $(srcdir)/%.cpp
 	$(COMPILE.cc) $(DYNAMICCPPFLAGS) $(DYNAMICCXXFLAGS) -o $@ $<
 
-../data/%.o: ../data/%.c
-	$(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCFLAGS) -o $@ $<
 
 ## Dependency rules
 %.d: $(srcdir)/%.c
