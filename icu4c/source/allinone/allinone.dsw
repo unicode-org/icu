@@ -21,12 +21,6 @@ Package=<4>
     Project_Dep_Name ctestfw
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name decmn
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name derb
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name genccode
     End Project Dependency
     Begin Project Dependency
@@ -63,9 +57,6 @@ Package=<4>
     Project_Dep_Name intltest
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name layout
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name makeconv
     End Project Dependency
     Begin Project Dependency
@@ -81,16 +72,10 @@ Package=<4>
     Project_Dep_Name toolutil
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name uconv
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name io
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name genbrk
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name layoutex
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name gensprep
@@ -157,42 +142,6 @@ Package=<4>
 {{{
     Begin Project Dependency
     Project_Dep_Name common
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "decmn"=..\tools\gencmn\decmn.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name common
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name toolutil
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "derb"=..\TOOLS\GENRB\derb.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name common
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name stubdata
     End Project Dependency
 }}}
 
@@ -555,42 +504,6 @@ Package=<4>
 
 ###############################################################################
 
-Project: "layout"=..\layout\layout.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name common
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "layoutex"=..\layoutex\layoutex.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name common
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name i18n
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name layout
-    End Project Dependency
-}}}
-
-###############################################################################
-
 Project: "makeconv"=..\tools\makeconv\makeconv.dsp - Package Owner=<4>
 
 Package=<5>
@@ -721,30 +634,6 @@ Package=<4>
 {{{
     Begin Project Dependency
     Project_Dep_Name common
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "uconv"=..\extra\uconv\uconv.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name common
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name genrb
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name i18n
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name pkgdata
     End Project Dependency
 }}}
 
