@@ -74,6 +74,8 @@ RegexPattern &RegexPattern::operator = (const RegexPattern &other) {
     fInitialStringIdx = other.fInitialStringIdx;
     fInitialStringLen = other.fInitialStringLen;
     fInitialChars     = new UnicodeSet(*other.fInitialChars);
+    fInitialChars8    = new Regex8BitSet;
+    uprv_memcpy(fInitialChars8, other.fInitialChars8, sizeof(Regex8BitSet));
     fInitialChar      = other.fInitialChar;
 
     //  Copy the pattern.  It's just values, nothing deep to copy.
@@ -97,6 +99,10 @@ RegexPattern &RegexPattern::operator = (const RegexPattern &other) {
         }
         fSets->addElement(newSet, fDeferredStatus);
     }
+
+    int32_t numSets = other.fSets->size();
+    fSets8 = new Regex8BitSet[numSets];
+    uprv_memcpy(fSets8, other.fSets8, numSets*sizeof(Regex8BitSet));  // TODO: give Regex8BitSet some constructors
     return *this;
 }
 
@@ -119,16 +125,20 @@ void RegexPattern::init() {
     fInitialStringIdx = 0;
     fInitialStringLen = 0;
     fInitialChars     = NULL;
+    fInitialChars8    = NULL;
     fInitialChar      = 0;
+    fSets8            = NULL;
     
     fCompiledPat      = new UVector32(fDeferredStatus);
     fGroupMap         = new UVector32(fDeferredStatus);
     fSets             = new UVector(fDeferredStatus);
     fInitialChars     = new UnicodeSet;
+    fInitialChars8    = new Regex8BitSet;
     if (U_FAILURE(fDeferredStatus)) {
         return;
     }
-    if (fCompiledPat == NULL || fGroupMap == NULL || fSets == NULL || fInitialChars == NULL) {
+    if (fCompiledPat == NULL  || fGroupMap == NULL || fSets == NULL ||
+        fInitialChars == NULL || fInitialChars8 == NULL) {
         fDeferredStatus = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
@@ -160,6 +170,10 @@ void RegexPattern::zap() {
     fGroupMap = NULL;
     delete fInitialChars;
     fInitialChars = NULL;
+    delete fInitialChars8;
+    fInitialChars8 = NULL;
+    delete[] fSets8;
+    fSets8 = NULL;
 }
 
 
@@ -481,6 +495,7 @@ void   RegexPattern::dumpOp(int32_t index) const {
         break;
 
     case URX_STATIC_SETREF:
+    case URX_STAT_SETREF_N:
         {
             UnicodeString s;
             if (val & URX_NEG_SET) {
