@@ -1,5 +1,5 @@
 #**********************************************************************
-#* Copyright (C) 1999-2000, International Business Machines Corporation
+#* Copyright (C) 1999-2001, International Business Machines Corporation
 #* and others.  All Rights Reserved.
 #**********************************************************************
 # nmake file for creating data files on win32
