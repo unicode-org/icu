@@ -20,6 +20,7 @@
 #include "unicode/ustdio.h"
 #include "unicode/putil.h"
 #include "cmemory.h"
+#include "cstring.h"
 #include "ufile.h"
 #include "ufmt_cmn.h"
 #include "unicode/ucnv.h"
@@ -396,13 +397,16 @@ ufile_fill_uchar_buffer(UFILE *f)
         return;
     }
 
-    /* shift the buffer if it isn't empty */
     str = &f->str;
     dataSize = (int32_t)(str->fLimit - str->fPos);
+    if (f->fFileno == 0 && dataSize > 0) {
+        /* Don't read from stdin too many times. There is still some data. */
+        return;
+    }
+
+    /* shift the buffer if it isn't empty */
     if(dataSize != 0) {
-        memmove(f->fUCBuffer,
-            str->fPos,
-            dataSize * sizeof(UChar));
+        uprv_memmove(f->fUCBuffer, str->fPos, dataSize * sizeof(UChar));
     }
 
 
@@ -414,10 +418,18 @@ ufile_fill_uchar_buffer(UFILE *f)
     maxCPBytes = availLength / (f->fConverter!=NULL?(2*ucnv_getMinCharSize(f->fConverter)):1);
 
     /* Read in the data to convert */
-    bytesRead = (int32_t)fread(charBuffer,
-        sizeof(char),
-        ufmt_min(maxCPBytes, UFILE_CHARBUFFER_SIZE),
-        f->fFile);
+    if (f->fFileno == 0) {
+        /* Special case. Read from stdin one line at a time. */
+        char *retStr = fgets(charBuffer, ufmt_min(maxCPBytes, UFILE_CHARBUFFER_SIZE), f->fFile);
+        bytesRead = (retStr ? uprv_strlen(charBuffer) : 0);
+    }
+    else {
+        /* A normal file */
+        bytesRead = (int32_t)fread(charBuffer,
+            sizeof(char),
+            ufmt_min(maxCPBytes, UFILE_CHARBUFFER_SIZE),
+            f->fFile);
+    }
 
     /* Set up conversion parameters */
     status      = U_ZERO_ERROR;
@@ -555,7 +567,9 @@ ufile_getch(UFILE *f, UChar *ch)
     }
     else if (f) {
         /* otherwise, fill the buffer and return the next character */
-        ufile_fill_uchar_buffer(f);
+        if(f->str.fPos >= f->str.fLimit) {
+            ufile_fill_uchar_buffer(f);
+        }
         if(f->str.fPos < f->str.fLimit) {
             *ch = *(f->str.fPos)++;
             isValidChar = TRUE;

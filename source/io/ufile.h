@@ -68,6 +68,8 @@ struct UFILE {
     UChar       fUCBuffer[UFILE_UCHARBUFFER_SIZE];/* buffer used for toUnicode */
 
     UBool       fOwnFile;       /* TRUE if fFile should be closed */
+
+    int32_t     fFileno;        /* File number. Useful to determine if it's stdin. */
 };
 
 /**

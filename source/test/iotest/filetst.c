@@ -23,8 +23,8 @@
 const char STANDARD_TEST_FILE[] = "iotest-c.txt";
 
 
-static void TestFileFromICU(UFILE *myFile) {
 #if !UCONFIG_NO_FORMATTING
+static void TestFileFromICU(UFILE *myFile) {
     int32_t n[1];
     float myFloat = -1234.0;
     int32_t newValuePtr[1];
@@ -317,6 +317,30 @@ static void TestFile(void) {
     TestFileFromICU(u_finit(standardFile, NULL, NULL));
     fclose(standardFile);
 */
+}
+#endif
+
+static void StdinBuffering(void) {
+#if 0
+    UChar buff[255];
+    int32_t num = 0;
+    UFILE *uStdIn = NULL;
+    UFILE *uStdOut = NULL;
+    uStdIn = u_finit(stdin, NULL, NULL);
+    uStdOut = u_finit(stdout, NULL, NULL);
+    if (uStdIn == NULL)
+        return;
+
+    buff[0] = 0x40;
+    buff[1] = 0;
+    u_fgets(buff, sizeof(buff)/sizeof(buff[0]), uStdIn);
+    u_fprintf(uStdOut, "%S\n", buff);
+    u_fscanf(uStdIn, "%d", &num);
+    u_fprintf(uStdOut, "%d\n", num);
+    u_fscanf(uStdIn, "%d", &num);
+    u_fprintf(uStdOut, "%d\n", num);
+#else
+    log_verbose("Test disabled because it requires user interaction");
 #endif
 }
 
@@ -1415,6 +1439,7 @@ addFileTest(TestNode** root) {
 #if !UCONFIG_NO_FORMATTING
     addTest(root, &TestFile, "file/TestFile");
 #endif
+    addTest(root, &StdinBuffering, "file/StdinBuffering");
     addTest(root, &TestfgetsBuffers, "file/TestfgetsBuffers");
     addTest(root, &TestfgetsLineCount, "file/TestfgetsLineCount");
     addTest(root, &TestfgetsNewLineHandling, "file/TestfgetsNewLineHandling");
