@@ -1644,7 +1644,6 @@ root {
         }
         calendar{
             Fallback{ "" }
-            traditional { "TRADITIONAL" }
             japanese    { "JAPANESE"  }
             buddhist    { "BUDDHIST"  }
             islamic     { "ISLAMIC"   }
