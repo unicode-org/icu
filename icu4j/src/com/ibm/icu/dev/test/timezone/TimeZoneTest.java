@@ -853,6 +853,9 @@ public class TimeZoneTest extends TestFmwk
         // see JDKTimeZone for the reason for this code
         errln(e.getMessage());
         dst_java = 3600000;
+    } catch (SecurityException e) {
+        warnln(e.getMessage());
+        return;
     }
     
     com.ibm.icu.util.TimeZone tz_icu = com.ibm.icu.util.TimeZone.getTimeZone(tzName);

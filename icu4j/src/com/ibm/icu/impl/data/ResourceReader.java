@@ -81,6 +81,28 @@ public class ResourceReader {
     }
 
     /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+     public ResourceReader(InputStream is, String resourceName) {
+         this.root = null;
+         this.resourceName = resourceName;
+         this.encoding = null;
+
+         this.lineNo = -1;
+         try {
+             InputStreamReader isr = (encoding == null) 
+                 ? new InputStreamReader(is)
+                 : new InputStreamReader(is, encoding);
+
+             this.reader = new BufferedReader(isr);
+             this.lineNo= 0;
+         }
+         catch (UnsupportedEncodingException e) {
+         }
+     }
+
+    /**
      * Construct a reader object for the text file of the given name
      * in the given class's package, using the default encoding.
      * @param resourceName the name of the text file located in the

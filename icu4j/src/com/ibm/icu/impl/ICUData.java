@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
+import java.util.MissingResourceException;
 
 /**
  * Provides access to ICU data files as InputStreams.  Implements security checking.
@@ -22,7 +23,7 @@ public final class ICUData {
      * Return a URL to the ICU resource names resourceName.  The
      * resource name should either be an absolute path, or a path relative to
      * com.ibm.icu.impl (e.g., most likely it is 'data/foo').  If required
-     * is true, throw an InternalError instead of returning a null result.
+     * is true, throw an MissingResourceException instead of returning a null result.
      */
     public static boolean exists(final String resourceName) {
         URL i = null;
@@ -40,6 +41,7 @@ public final class ICUData {
         
     private static InputStream getStream(final Class root, final String resourceName, boolean required) {
         InputStream i = null;
+        
         if (System.getSecurityManager() != null) {
             i = (InputStream)AccessController.doPrivileged(new PrivilegedAction() {
                     public Object run() {
@@ -49,8 +51,9 @@ public final class ICUData {
         } else {
             i = root.getResourceAsStream(resourceName);
         }
+
         if (i == null && required) {
-            throw new InternalError("could not locate data " + resourceName+ " " + root.getPackage().getName());
+            throw new MissingResourceException("could not locate data", root.getPackage().getName(), resourceName);
         }
         return i;
     }
@@ -67,7 +70,7 @@ public final class ICUData {
             i = loader.getResourceAsStream(resourceName);
         }
         if (i == null && required) {
-            throw new InternalError("could not locate data " + resourceName+ " " + loader.toString());
+            throw new MissingResourceException("could not locate data", loader.toString(), resourceName);
         }
         return i;
     }

@@ -34,11 +34,11 @@ public final class ICUResourceBundleTest extends TestFmwk {
     public void TestGetResources(){
         try{
             ClassLoader loader = getClass().getClassLoader();
-            Enumeration enum = loader.getResources("META-INF");
-            for(;enum.hasMoreElements();){
+            Enumeration en = loader.getResources("META-INF");
+            for(;en.hasMoreElements();){
                 //URL url = loader.getResource("LocaleElements_en.class");
                 //File file = new File(url.getPath());
-                URL url = (URL)enum.nextElement();
+                URL url = (URL)en.nextElement();
                 File file = new File(url.getPath());
                 File[] files = file.listFiles();
                 if(files!=null){
@@ -47,6 +47,8 @@ public final class ICUResourceBundleTest extends TestFmwk {
                     }
                 }
             }
+        }catch(SecurityException ex) {
+            warnln("could not load resource data");
         }catch(Exception ex){
             errln("Unexpected exception: "+ ex.getMessage());
         }
@@ -81,9 +83,14 @@ public final class ICUResourceBundleTest extends TestFmwk {
     public void TestJB3879(){
         // this tests tests loading of root bundle when a resource bundle
         // for the default locale is requested
-        ICUResourceBundle bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata", ULocale.getDefault());
-        if(bundle==null){
-            errln("could not create the resource bundle");
+        try {
+            ICUResourceBundle bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata", ULocale.getDefault());
+            if(bundle==null){
+                errln("could not create the resource bundle");
+            }
+        }
+        catch (MissingResourceException ex) {
+            warnln("could not load test data: " + ex.getMessage());
         }
     }
     public void TestOpen(){
@@ -150,7 +157,14 @@ public final class ICUResourceBundleTest extends TestFmwk {
     }
 
     public void TestBasicTypes(){
-        ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata", "testtypes");
+        ICUResourceBundle bundle = null;
+        try {
+            bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata", "testtypes");
+        }
+        catch (MissingResourceException e) {
+            warnln("could not load test data: " + e.getMessage());
+            return;
+        }
         {
             String expected = "abc\u0000def";
             ICUResourceBundle sub = bundle.get("zerotest");
@@ -329,7 +343,15 @@ public final class ICUResourceBundleTest extends TestFmwk {
           new TestCase  ( "1ooooooo11o11oo1o", 65970 ),
           new TestCase  ( "1ooooooo111oo1111", 65999 )
         };
-        ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","testtable32");
+        ICUResourceBundle bundle = null;
+        try {
+            bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","testtable32");
+        }
+        catch (MissingResourceException ex) {
+            warnln("could not load resource data: " + ex.getMessage());
+            return;
+        }
+
         if(bundle.getType()!= ICUResourceBundle.TABLE){
             errln("Could not get the correct type for bundle testtable32");
         }
@@ -405,7 +427,11 @@ public final class ICUResourceBundleTest extends TestFmwk {
     public void TestAliases(){
        String simpleAlias   = "Open";
 
-        ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","testaliases");
+       ICUResourceBundle rb = (ICUResourceBundle)ICUResourceBundle.createBundle("com/ibm/icu/dev/data/testdata","testaliases", ICUResourceBundleTest.class.getClassLoader());
+       if (rb == null) {
+           warnln("could not load testaliases data");
+           return;
+       }
         ICUResourceBundle sub = rb.get("simplealias");
         String s1 = sub.getString("simplealias");
         if(s1.equals(simpleAlias)){
@@ -562,6 +588,9 @@ public final class ICUResourceBundleTest extends TestFmwk {
         }catch(IllegalArgumentException ex){
             logln("got expected exception for circular references");
         }
+        catch (MissingResourceException ex) {
+            warnln("could not load resource data: " + ex.getMessage());
+        }
     }
 
     public void TestGetWithFallback(){
@@ -580,6 +609,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
         String key = null;
         try{
             bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_COLLATION_BASE_NAME,ULocale.canonicalize("de__PHONEBOOK"));
+
             if(!bundle.getULocale().equals("de")){
                 errln("did not get the expected bundle");
             }

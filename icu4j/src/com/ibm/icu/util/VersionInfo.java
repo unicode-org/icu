@@ -256,6 +256,7 @@ public final class VersionInfo
 
     /**
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static VersionInfo javaVersion() {
     if (javaVersion == null) {

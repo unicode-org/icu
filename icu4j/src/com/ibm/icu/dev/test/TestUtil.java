@@ -62,8 +62,8 @@ public final class TestUtil {
                 IOException ex =
                     new IOException("data resource '" + name + "' not found");
                 //initCause API was introduced in JDK 1.4
-                //ex.initCause(t);
-                t.printStackTrace();
+                ex.initCause(t);
+                //t.printStackTrace();
                 throw ex;
             }
         }
@@ -74,7 +74,7 @@ public final class TestUtil {
      * Return a buffered reader on the data file at path 'name' rooted at the data path.
      */
     public static final BufferedReader getDataReader(String name, String charset) throws IOException {
-        InputStream is = getDataStream(name);;
+        InputStream is = getDataStream(name);
         InputStreamReader isr =
             charset == null
                 ? new InputStreamReader(is)
