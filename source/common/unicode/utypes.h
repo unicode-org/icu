@@ -430,7 +430,7 @@ enum UErrorCode {
     U_UNQUOTED_SPECIAL,
     U_UNTERMINATED_QUOTE,
     U_RULE_MASK_ERROR,
-    U_PARSE_ERROR_LIMIT,              /**< end of Transliterator specific parse Errors */
+    U_PARSE_ERROR_LIMIT,                /**< end of Transliterator specific parse Errors */
 
     /* 
      * the error code range 0x10100 0x10200 are reserved for formatting API parsing error
@@ -449,7 +449,7 @@ enum UErrorCode {
     U_UNSUPPORTED_ATTRIBUTE,
     U_FMT_PARSE_ERROR_LIMIT,
    
-    U_ERROR_LIMIT                       /**< This must always be the last value to indicate the limit for UErrorCode (last error code +1) */
+    U_ERROR_LIMIT=U_FMT_PARSE_ERROR_LIMIT /**< This must always be the last value to indicate the limit for UErrorCode (last error code +1) */
 };
 
 #ifndef XP_CPLUSPLUS
