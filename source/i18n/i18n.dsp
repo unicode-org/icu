@@ -370,6 +370,10 @@ SOURCE=.\usearch.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\usetiter.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\util.cpp
 # End Source File
 # Begin Source File
@@ -1671,6 +1675,33 @@ InputPath=.\unicode\usearch.h
 
 "..\..\include\unicode\usearch.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy    unicode\usearch.h    ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\usetiter.h
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\usetiter.h
+
+"..\..\include\unicode\usetiter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    unicode\usetiter.h    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\usetiter.h
+
+"..\..\include\unicode\usetiter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    unicode\usetiter.h    ..\..\include\unicode
 
 # End Custom Build
 
