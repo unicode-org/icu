@@ -36,7 +36,7 @@ $notBelow = [^\p{ccc=0}\p{ccc=below}] ;
 
 # Since the only accents we care about that could cause problems are free-standing accents below, we use instead:
 $freeStandingBelow = [\u0325  ];
-$hAccent =  [   ̄     ̣]
+$hAccent =  [   ̄     ̣];
 $notHAccent0 = [^$freeStandingBelow$hAccent];
 $notHAccent1 = $freeStandingBelow [^$hAccent];
 
