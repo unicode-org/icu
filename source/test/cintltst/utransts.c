@@ -181,8 +181,8 @@ static void TestOpenInverse(){
            "Latin-Cyrillic", 
            "Devanagari-Latin", 
            "Latin-Devanagari", 
-           "Unicode-Hex",
-           "Hex-Unicode"
+           "Any-Hex",
+           "Hex-Any"
          };
      
     for(i=0; i<sizeof(TransID)/sizeof(TransID[0]); i=i+2){
@@ -374,7 +374,7 @@ static void TestFilter() {
     int32_t DATA_length = sizeof(DATA) / sizeof(DATA[0]);
     int32_t i;
 
-    UTransliterator* hex = utrans_open("Unicode-Hex", UTRANS_FORWARD, &status);
+    UTransliterator* hex = utrans_open("Any-Hex", UTRANS_FORWARD, &status);
 
     if (hex == 0 || U_FAILURE(status)) {
         log_err("FAIL: utrans_open(Unicode-Hex) failed, error=%s\n",
