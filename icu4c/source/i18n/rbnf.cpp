@@ -45,7 +45,9 @@ static const UChar gSemiPercent[] =
 #define kHalfMaxDouble (double)(1 << kSomeNumberOfBitsDiv2)
 #define kMaxDouble (kHalfMaxDouble * kHalfMaxDouble)
 
-const char RuleBasedNumberFormat::fgClassID = 0;
+U_NAMESPACE_BEGIN
+
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(RuleBasedNumberFormat)
 
 RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description, const Locale& alocale, UParseError& perror, UErrorCode& status)
   : ruleSets(NULL)
@@ -729,6 +731,8 @@ RuleBasedNumberFormat::getDecimalFormatSymbols() const
     }
     return decimalFormatSymbols;
 }
+
+U_NAMESPACE_END
 
 /* U_HAVE_RBNF */
 #endif

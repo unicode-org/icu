@@ -100,7 +100,7 @@ public:
      * string accordingly without checking if the index is pointing to a 
      * valid starting point to begin searching. 
      * @param position within the text to be set. If position is less
-     * 			than or greater than the text range for searching, 
+     *             than or greater than the text range for searching, 
      *          an U_INDEX_OUTOFBOUNDS_ERROR will be returned
      * @param status for errors if it occurs
      * @stable ICU 2.0
@@ -307,7 +307,7 @@ public:
      * <tt>USEARCH_DONE</tt> will be returned and the iterator will be 
      * adjusted to the index USEARCH_DONE
      * @param  position where search if to start from. If position is less
-     * 			than or greater than the text range for searching, 
+     *             than or greater than the text range for searching, 
      *          an U_INDEX_OUTOFBOUNDS_ERROR will be returned
      * @param  status for errors if it occurs
      * @return The character index of the first match following 
@@ -341,7 +341,7 @@ public:
      * <tt>USEARCH_DONE</tt> will be returned and the iterator will be 
      * adjusted to the index USEARCH_DONE
      * @param  position where search is to start from. If position is less
-     * 			than or greater than the text range for searching, 
+     *             than or greater than the text range for searching, 
      *          an U_INDEX_OUTOFBOUNDS_ERROR will be returned
      * @param  status for errors if it occurs
      * @return The character index of the first match preceding 
@@ -440,7 +440,7 @@ protected:
      *                is <tt>NULL</tt>, no break detection is attempted.  
      * @see #handleNext
      * @see #handlePrev
-	 * @stable ICU 2.0
+     * @stable ICU 2.0
      */
     SearchIterator(const UnicodeString &text, 
                          BreakIterator *breakiter = NULL);
@@ -462,7 +462,7 @@ protected:
      *                is <tt>NULL</tt>, no break detection is attempted.
      * @see #handleNext
      * @see #handlePrev
-	 * @stable ICU 2.0
+     * @stable ICU 2.0
      */
     SearchIterator(CharacterIterator &text, BreakIterator *breakiter = NULL);
 
@@ -472,7 +472,7 @@ protected:
      * Assignment operator. Sets this iterator to have the same behavior,
      * and iterate over the same text, as the one passed in.
      * @param that instance to be copied.
-	 * @stable ICU 2.0
+     * @stable ICU 2.0
      */
     SearchIterator & operator=(const SearchIterator &that);
 
@@ -493,7 +493,7 @@ protected:
      * @return index at which the match starts, else if match is not found 
      *         USEARCH_DONE is returned
      * @see #setMatchLength
-	 * @stable ICU 2.0
+     * @stable ICU 2.0
      */
     virtual int32_t handleNext(int32_t position, UErrorCode &status) 
                                                                          = 0;
@@ -515,7 +515,7 @@ protected:
      * @return index at which the match starts, else if match is not found 
      *         USEARCH_DONE is returned
      * @see #setMatchLength
-	 * @stable ICU 2.0
+     * @stable ICU 2.0
      */
      virtual int32_t handlePrev(int32_t position, UErrorCode &status) 
                                                                          = 0;
@@ -528,7 +528,7 @@ protected:
      * @param length length of the matched text.
      * @see #handleNext
      * @see #handlePrev
-	 * @stable ICU 2.0
+     * @stable ICU 2.0
      */
     virtual void setMatchLength(int32_t length);
 
@@ -540,7 +540,7 @@ protected:
      * @param position start offset of the matched text.
      * @see #handleNext
      * @see #handlePrev
-	 * @stable ICU 2.0
+     * @stable ICU 2.0
      */
     virtual void setMatchStart(int32_t position);
 

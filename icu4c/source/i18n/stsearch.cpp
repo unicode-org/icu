@@ -17,7 +17,7 @@
 
 U_NAMESPACE_BEGIN
 
-const char StringSearch::fgClassID=0;
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(StringSearch)
 
 // public constructors and destructors -----------------------------------
 
@@ -395,14 +395,14 @@ int32_t StringSearch::handleNext(int32_t position, UErrorCode &status)
                                                   m_search_->matchedLength))
 #endif
                 ) {
-					if (m_search_->matchedIndex == USEARCH_DONE) {
-						ucol_setOffset(m_strsrch_->textIter, 
-							           m_search_->textLength, &status);
-					}
-					else {
-						ucol_setOffset(m_strsrch_->textIter, 
-							           m_search_->matchedIndex, &status);
-					}
+                    if (m_search_->matchedIndex == USEARCH_DONE) {
+                        ucol_setOffset(m_strsrch_->textIter, 
+                                       m_search_->textLength, &status);
+                    }
+                    else {
+                        ucol_setOffset(m_strsrch_->textIter, 
+                                       m_search_->matchedIndex, &status);
+                    }
                     return m_search_->matchedIndex;
                 }
             }

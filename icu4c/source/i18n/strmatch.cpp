@@ -19,7 +19,7 @@ U_NAMESPACE_BEGIN
 
 const UChar EMPTY[] = { 0 }; // empty string: ""
 
-const char StringMatcher::fgClassID=0;
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(StringMatcher)
 
 StringMatcher::StringMatcher(const UnicodeString& theString,
                              int32_t start,
@@ -193,13 +193,13 @@ UBool StringMatcher::matchesIndexValue(uint8_t v) const {
 void StringMatcher::addMatchSetTo(UnicodeSet& toUnionTo) const {
     UChar32 ch;
     for (int32_t i=0; i<pattern.length(); i+=UTF_CHAR_LENGTH(ch)) {
-	ch = pattern.char32At(i);
-	const UnicodeMatcher* matcher = data->lookupMatcher(ch);
-	if (matcher == NULL) {
-	    toUnionTo.add(ch);
-	} else {
-	    matcher->addMatchSetTo(toUnionTo);
-	}
+        ch = pattern.char32At(i);
+        const UnicodeMatcher* matcher = data->lookupMatcher(ch);
+        if (matcher == NULL) {
+            toUnionTo.add(ch);
+        } else {
+            matcher->addMatchSetTo(toUnionTo);
+        }
     }
 }
 

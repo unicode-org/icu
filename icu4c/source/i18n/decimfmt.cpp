@@ -77,24 +77,29 @@ static void debugout(UnicodeString s) {
 // class DecimalFormat
 // *****************************************************************************
 
-const char DecimalFormat::fgClassID = 0; // Value is irrelevant
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(DecimalFormat)
 
 // Constants for characters used in programmatic (unlocalized) patterns.
-const UChar DecimalFormat::kPatternZeroDigit           = 0x0030 /*'0'*/;
-const UChar DecimalFormat::kPatternGroupingSeparator   = 0x002C /*','*/;
-const UChar DecimalFormat::kPatternDecimalSeparator    = 0x002E /*'.'*/;
-const UChar DecimalFormat::kPatternPerMill             = 0x2030;
-const UChar DecimalFormat::kPatternPercent             = 0x0025 /*'%'*/;
-const UChar DecimalFormat::kPatternDigit               = 0x0023 /*'#'*/;
-const UChar DecimalFormat::kPatternSeparator           = 0x003B /*';'*/;
-const UChar DecimalFormat::kPatternExponent            = 0x0045 /*'E'*/;
-const UChar DecimalFormat::kPatternPlus                = 0x002B /*'+'*/;
-const UChar DecimalFormat::kPatternMinus               = 0x002D /*'-'*/;
-const UChar DecimalFormat::kPatternPadEscape           = 0x002A /*'*'*/;
-const UChar DecimalFormat::kCurrencySign               = 0x00A4;
-const UChar DecimalFormat::kQuote                      = 0x0027 /*'\''*/;
-
-//const int8_t DecimalFormat::fgMaxDigit                  = 9;
+#define kPatternZeroDigit            ((UChar)0x0030) /*'0'*/
+#define kPatternGroupingSeparator    ((UChar)0x002C) /*','*/
+#define kPatternDecimalSeparator     ((UChar)0x002E) /*'.'*/
+#define kPatternPerMill              ((UChar)0x2030)
+#define kPatternPercent              ((UChar)0x0025) /*'%'*/
+#define kPatternDigit                ((UChar)0x0023) /*'#'*/
+#define kPatternSeparator            ((UChar)0x003B) /*';'*/
+#define kPatternExponent             ((UChar)0x0045) /*'E'*/
+#define kPatternPlus                 ((UChar)0x002B) /*'+'*/
+#define kPatternMinus                ((UChar)0x002D) /*'-'*/
+#define kPatternPadEscape            ((UChar)0x002A) /*'*'*/
+#define kQuote                       ((UChar)0x0027) /*'\''*/
+/**
+ * The CURRENCY_SIGN is the standard Unicode symbol for currency.  It
+ * is used in patterns and substitued with either the currency symbol,
+ * or if it is doubled, with the international currency symbol.  If the
+ * CURRENCY_SIGN is seen in a pattern, then the decimal separator is
+ * replaced with the monetary decimal separator.
+ */
+#define kCurrencySign               ((UChar)0x00A4)
 
 const int32_t DecimalFormat::kDoubleIntegerDigits  = 309;
 const int32_t DecimalFormat::kDoubleFractionDigits = 340;
@@ -105,7 +110,7 @@ const int32_t DecimalFormat::kDoubleFractionDigits = 340;
  */
 const char DecimalFormat::fgNumberPatterns[]="NumberPatterns";
 
-static const UChar kDefaultPad = 0x0020; /* */
+#define kDefaultPad ((UChar)0x0020) /* */
 
 //------------------------------------------------------------------------------
 // Constructs a DecimalFormat instance in the default locale.

@@ -588,7 +588,7 @@ void   RegexPattern::dump() const {
 
 
 
-const char RegexPattern::fgClassID = 0;
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(RegexPattern)
 
 //----------------------------------------------------------------------------------
 //

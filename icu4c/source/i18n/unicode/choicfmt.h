@@ -642,7 +642,7 @@ public:
      * @return          The class ID for all objects of this class.
      * @stable ICU 2.0
      */
-    static inline UClassID getStaticClassID(void);
+    static UClassID getStaticClassID(void);
 
 private:
     // static cache management (thread-safe)
@@ -665,13 +665,6 @@ private:
      * @return the converted string.
      */
     static UnicodeString& dtos(double value, UnicodeString& string);
-
-    //static UMTX fgMutex;
-    //static NumberFormat* fgNumberFormat;
-    static const char fgClassID;
-
-    static const UChar fgPositiveInfinity[];
-    static const UChar fgNegativeInfinity[];
 
     ChoiceFormat(); // default constructor not implemented
 
@@ -734,18 +727,6 @@ private:
     int32_t         fCount;
 };
  
-inline UClassID
-ChoiceFormat::getStaticClassID(void)
-{
-    return (UClassID)&fgClassID;
-}
-
-inline UClassID 
-ChoiceFormat::getDynamicClassID() const
-{ 
-    return ChoiceFormat::getStaticClassID(); 
-}
-
 inline UnicodeString&
 ChoiceFormat::format(const Formattable& obj,
                      UnicodeString& appendTo,

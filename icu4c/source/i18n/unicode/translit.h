@@ -325,7 +325,7 @@ protected:
      * @draft ICU 2.4
      */
     Transliterator& operator=(const Transliterator&);
-    
+
     /**
      * Create a transliterator from a basic ID.  This is an ID
      * containing only the forward direction source, target, and
@@ -541,7 +541,7 @@ protected:
      * incremental and non-incremental transliteration.  Let
      * <code>originalStart</code> refer to the value of
      * <code>pos.start</code> upon entry.
-     * 
+     *
      * <ul>
      *  <li>If <code>incremental</code> is false, then this method
      *  should transliterate all characters between
@@ -561,7 +561,7 @@ protected:
      *  transliterator and characters [<code>pos.start</code>,
      *  <code>pos.limit</code>) are unchanged.</li>
      * </ul>
-     * 
+     *
      * <p>Implementations of this method should also obey the
      * following invariants:</p>
      *
@@ -584,13 +584,13 @@ protected:
      *  <li>Text before <code>pos.contextStart</code> and text after
      *  <code> pos.contextLimit</code> should be ignored.</li>
      * </ul>
-     *    
+     *
      * <p>Subclasses may safely assume that all characters in
      * [<code>pos.start</code>, <code>pos.limit</code>) are filtered.
      * In other words, the filter has already been applied by the time
      * this method is called.  See
      * <code>filteredTransliterate()</code>.
-     *    
+     *
      * <p>This method is <b>not</b> for public consumption.  Calling
      * this method directly will transliterate
      * [<code>pos.start</code>, <code>pos.limit</code>) without
@@ -598,19 +598,19 @@ protected:
      * transliterate()</code> instead of this method. Subclass code
      * should call <code>filteredTransliterate()</code> instead of
      * this method.<p>
-     * 
+     *
      * @param text the buffer holding transliterated and
      * untransliterated text
-     * 
+     *
      * @param pos the indices indicating the start, limit, context
      * start, and context limit of the text.
-     * 
+     *
      * @param incremental if true, assume more text may be inserted at
      * <code>pos.limit</code> and act accordingly.  Otherwise,
      * transliterate all text between <code>pos.start</code> and
      * <code>pos.limit</code> and move <code>pos.start</code> up to
      * <code>pos.limit</code>.
-     * 
+     *
      * @see #transliterate
      * @draft ICU 2.4
      */
@@ -644,7 +644,7 @@ private:
      * public API methods eventually call this method with a rollback argument
      * of TRUE.  Other entities may call this method but rollback should be
      * FALSE.
-     * 
+     *
      * <p>If this transliterator has a filter, break up the input text into runs
      * of unfiltered characters.  Pass each run to
      * <subclass>.handleTransliterate().
@@ -808,7 +808,7 @@ public:
      *
      * @param ID a valid ID, as enumerated by <code>getAvailableIDs()</code>
      * @param dir        either FORWARD or REVERSE.
-     * @param parseError Struct to recieve information on position 
+     * @param parseError Struct to recieve information on position
      *                   of error if an error is encountered
      * @param status     Output param to filled in with a success or an error.
      * @return A <code>Transliterator</code> object with the given ID
@@ -845,7 +845,7 @@ public:
      * @param ID            the id for the transliterator.
      * @param rules         rules, separated by ';'
      * @param dir           either FORWARD or REVERSE.
-     * @param parseError    Struct to recieve information on position 
+     * @param parseError    Struct to recieve information on position
      *                      of error if an error is encountered
      * @param status        Output param set to success/failure code.
      * @stable ICU 2.0
@@ -1034,7 +1034,7 @@ public:
      * Return the number of IDs currently registered with the system.
      * To retrieve the actual IDs, call getAvailableID(i) with
      * i from 0 to countAvailableIDs() - 1.
-     * @return the number of IDs currently registered with the system. 
+     * @return the number of IDs currently registered with the system.
      * @stable ICU 2.0
      */
     static int32_t countAvailableIDs(void);
@@ -1057,7 +1057,7 @@ public:
      * @stable ICU 2.0
      */
     static int32_t countAvailableSources(void);
-    
+
     /**
      * Return a registered source specifier.
      * @param index which specifier to return, from 0 to n-1, where
@@ -1069,7 +1069,7 @@ public:
      */
     static UnicodeString& getAvailableSource(int32_t index,
                                              UnicodeString& result);
-    
+
     /**
      * Return the number of registered target specifiers for a given
      * source specifier.
@@ -1079,7 +1079,7 @@ public:
      * @stable ICU 2.0
      */
     static int32_t countAvailableTargets(const UnicodeString& source);
-    
+
     /**
      * Return a registered target specifier for a given source.
      * @param index which specifier to return, from 0 to n-1, where
@@ -1094,7 +1094,7 @@ public:
     static UnicodeString& getAvailableTarget(int32_t index,
                                              const UnicodeString& source,
                                              UnicodeString& result);
-    
+
     /**
      * Return the number of registered variant specifiers for a given
      * source-target pair.
@@ -1104,7 +1104,7 @@ public:
      */
     static int32_t countAvailableVariants(const UnicodeString& source,
                                           const UnicodeString& target);
-    
+
     /**
      * Return a registered variant specifier for a given source-target
      * pair.
@@ -1130,43 +1130,43 @@ protected:
      * @internal
      */
     static int32_t _countAvailableSources(void);
-    
+
     /**
      * Non-mutexed internal method
      * @internal
      */
     static UnicodeString& _getAvailableSource(int32_t index,
-					      UnicodeString& result);
-    
+                                              UnicodeString& result);
+
     /**
      * Non-mutexed internal method
      * @internal
      */
     static int32_t _countAvailableTargets(const UnicodeString& source);
-    
+
     /**
      * Non-mutexed internal method
      * @internal
      */
     static UnicodeString& _getAvailableTarget(int32_t index,
-					      const UnicodeString& source,
-					      UnicodeString& result);
-    
+                                              const UnicodeString& source,
+                                              UnicodeString& result);
+
     /**
      * Non-mutexed internal method
      * @internal
      */
     static int32_t _countAvailableVariants(const UnicodeString& source,
-					   const UnicodeString& target);
-    
+                                           const UnicodeString& target);
+
     /**
      * Non-mutexed internal method
      * @internal
      */
     static UnicodeString& _getAvailableVariant(int32_t index,
-					       const UnicodeString& source,
-					       const UnicodeString& target,
-					       UnicodeString& result);
+                                               const UnicodeString& source,
+                                               const UnicodeString& target,
+                                               UnicodeString& result);
 
 protected:
 
@@ -1181,32 +1181,14 @@ protected:
 public:
 
     /**
-     * Return the class ID for this class.  This is useful only for
-     * comparing to a return value from getDynamicClassID().  For example:
-     * <pre>
-     * .      Base* polymorphic_pointer = createPolymorphicObject();
-     * .      if (polymorphic_pointer->getDynamicClassID() ==
-     * .          Derived::getStaticClassID()) ...
-     * </pre>
-     * @return          The class ID for all objects of this class.
-     * @stable ICU 2.0
-     */
-    static inline UClassID getStaticClassID(void);
-
-    /**
      * Returns a unique class ID <b>polymorphically</b>.  This method
      * is to implement a simple version of RTTI, since not all C++
      * compilers support genuine RTTI.  Polymorphic operator==() and
      * clone() methods call this method.
-     * 
+     *
      * <p>Concrete subclasses of Transliterator that wish clients to
      * be able to identify them should implement getDynamicClassID()
      * and also a static method and data member:
-     * 
-     * <pre>
-     * static UClassID getStaticClassID() { return (UClassID)&fgClassID; }
-     * static char fgClassID;
-     * </pre>
      *
      * Subclasses that do not implement this method will have a
      * dynamic class ID of Transliterator::getStatisClassID().
@@ -1219,21 +1201,9 @@ public:
     virtual UClassID getDynamicClassID(void) const = 0;
 
 private:
-
-    /**
-     * Class identifier for subclasses of Transliterator that do not
-     * define their class (anonymous subclasses).
-     */
-    static const char fgClassID;
-
-private:
     static UBool initializeRegistry(void);
 
 };
-
-inline UClassID
-Transliterator::getStaticClassID(void)
-{ return (UClassID)&fgClassID; }
 
 inline int32_t Transliterator::getMaximumContextLength(void) const {
     return maximumContextLength;

@@ -48,16 +48,19 @@
 
 U_NAMESPACE_BEGIN
 
+/**
+ * Last-resort string to use for "GMT" when constructing time zone strings.
+ */
 // For time zones that have no names, use strings GMT+minutes and
 // GMT-minutes. For instance, in France the time zone is GMT+60.
 // Also accepted are GMT+H:MM or GMT-H:MM.
-const UChar SimpleDateFormat::fgGmt[]      = {0x0047, 0x004D, 0x0054, 0x0000};         // "GMT"
-const UChar SimpleDateFormat::fgGmtPlus[]  = {0x0047, 0x004D, 0x0054, 0x002B, 0x0000}; // "GMT+"
-const UChar SimpleDateFormat::fgGmtMinus[] = {0x0047, 0x004D, 0x0054, 0x002D, 0x0000}; // "GMT-"
+static const UChar gGmt[]      = {0x0047, 0x004D, 0x0054, 0x0000};         // "GMT"
+static const UChar gGmtPlus[]  = {0x0047, 0x004D, 0x0054, 0x002B, 0x0000}; // "GMT+"
+static const UChar gGmtMinus[] = {0x0047, 0x004D, 0x0054, 0x002D, 0x0000}; // "GMT-"
 
 // This is a pattern-of-last-resort used when we can't load a usable pattern out
 // of a resource.
-const UChar SimpleDateFormat::fgDefaultPattern[] =
+static const UChar gDefaultPattern[] =
 {
     0x79, 0x79, 0x79, 0x79, 0x4D, 0x4D, 0x64, 0x64, 0x20, 0x68, 0x68, 0x3A, 0x6D, 0x6D, 0x20, 0x61, 0
 };  /* "yyyyMMdd hh:mm a" */
@@ -71,9 +74,9 @@ static const UChar SUPPRESS_NEGATIVE_PREFIX[] = {0xAB00, 0};
  * These are the tags we expect to see in normal resource bundle files associated
  * with a locale.
  */
-const char SimpleDateFormat::fgDateTimePatternsTag[]="DateTimePatterns";
+static const char gDateTimePatternsTag[]="DateTimePatterns";
 
-const char      SimpleDateFormat::fgClassID = 0; // Value is irrelevant
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(SimpleDateFormat)
 
 /**
  * This value of defaultCenturyStart indicates that the system default is to be
@@ -179,7 +182,7 @@ SimpleDateFormat::SimpleDateFormat(EStyle timeStyle,
  */
 SimpleDateFormat::SimpleDateFormat(const Locale& locale,
                                    UErrorCode& status)
-:   fPattern(fgDefaultPattern),
+:   fPattern(gDefaultPattern),
     fLocale(locale),
     fSymbols(NULL)
 {
@@ -281,7 +284,7 @@ void SimpleDateFormat::construct(EStyle timeStyle,
     initializeCalendar(NULL, locale, status);
 
     // use Date Format Symbols' helper function to do the actual load.
-    ResourceBundle dateTimePatterns = DateFormatSymbols::getData(resources, fgDateTimePatternsTag, fCalendar?fCalendar->getType():NULL,  status);
+    ResourceBundle dateTimePatterns = DateFormatSymbols::getData(resources, gDateTimePatternsTag, fCalendar?fCalendar->getType():NULL,  status);
     if (U_FAILURE(status)) return;
 
     if (dateTimePatterns.getSize() <= kDateTime)
@@ -667,11 +670,11 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
                     cal.get(UCAL_DST_OFFSET, status);
 
             if (value < 0) {
-                appendTo += fgGmtMinus;
+                appendTo += gGmtMinus;
                 value = -value; // suppress the '-' sign for text display.
             }
             else
-                appendTo += fgGmtPlus;
+                appendTo += gGmtPlus;
             
             zeroPaddingNumber(appendTo, (int32_t)(value/U_MILLIS_PER_HOUR), 2, 2);
             appendTo += (UChar)0x003A /*':'*/;
@@ -1224,7 +1227,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         // characters of GMT+/-HH:MM etc.
 
         UnicodeString lcaseText(text);
-        UnicodeString lcaseGMT(fgGmt);
+        UnicodeString lcaseGMT(gGmt);
         int32_t sign = 0;
         int32_t offset;
         int32_t gmtLen = lcaseGMT.length();

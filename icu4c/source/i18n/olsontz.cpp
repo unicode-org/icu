@@ -24,7 +24,7 @@ U_NAMESPACE_BEGIN
 
 static const int32_t ZEROS[] = {0,0};
 
-const char OlsonTimeZone::fgClassID = 0; // Value is irrelevant
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(OlsonTimeZone)
 
 //----------------------------------------------------------------------
 // Support methods

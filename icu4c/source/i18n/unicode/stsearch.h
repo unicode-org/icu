@@ -291,7 +291,7 @@ public:
      * string accordingly without checking if the index is pointing to a 
      * valid starting point to begin searching. 
      * @param position within the text to be set. If position is less
-     * 			than or greater than the text range for searching, 
+     *          than or greater than the text range for searching, 
      *          an U_INDEX_OUTOFBOUNDS_ERROR will be returned
      * @param status for errors if it occurs
      * @stable ICU 2.0
@@ -341,8 +341,8 @@ public:
      * Gets the collator used for the language rules.
      * <p>
      * Caller may modify but <b>must not</b> delete the <tt>RuleBasedCollator</tt>!
-	 * Modifications to this collator will affect the original collator passed in to 
-	 * the <tt>StringSearch>/tt> constructor or to setCollator, if any.
+     * Modifications to this collator will affect the original collator passed in to 
+     * the <tt>StringSearch>/tt> constructor or to setCollator, if any.
      * @return collator used for string search
      * @stable ICU 2.0
      */
@@ -405,14 +405,14 @@ public:
      *
      * @draft ICU 2.2
      */
-    virtual inline UClassID getDynamicClassID() const;
+    virtual UClassID getDynamicClassID() const;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
      * @draft ICU 2.2
      */
-    static inline UClassID getStaticClassID();
+    static UClassID getStaticClassID();
 
 protected:
 
@@ -492,20 +492,7 @@ private :
     */
     UStringSearch     *m_strsrch_;
 
-    /**
-     * The address of this static class variable serves as this class's ID
-     * for ICU "poor man's RTTI".
-     */
-    static const char fgClassID;
 };
-
-inline UClassID
-StringSearch::getStaticClassID()
-{ return (UClassID)&fgClassID; }
-
-inline UClassID
-StringSearch::getDynamicClassID() const
-{ return StringSearch::getStaticClassID(); }
 
 U_NAMESPACE_END
 

@@ -126,7 +126,7 @@ static const int32_t DEFAULT_INITIAL_CAPACITY = 10;
 U_NAMESPACE_BEGIN
 
 // -------------------------------------
-const char MessageFormat::fgClassID = 0; // Value is irrelevant
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(MessageFormat)
 
 //--------------------------------------------------------------------
 

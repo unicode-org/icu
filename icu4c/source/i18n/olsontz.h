@@ -61,7 +61,7 @@ class U_I18N_API OlsonTimeZone: public TimeZone {
     /**
      * TimeZone API.
      */
-    static inline UClassID getStaticClassID();
+    static UClassID getStaticClassID();
 
     /**
      * TimeZone API.
@@ -176,7 +176,6 @@ class U_I18N_API OlsonTimeZone: public TimeZone {
      */
     SimpleTimeZone *finalZone; // owned, may be NULL
 
-    static const char fgClassID;    
 };
 
 inline int32_t
@@ -193,16 +192,6 @@ OlsonTimeZone::rawOffset(int16_t index) const {
 inline int32_t
 OlsonTimeZone::dstOffset(int16_t index) const {
     return typeOffsets[(index << 1) + 1];
-}
-
-inline UClassID
-OlsonTimeZone::getStaticClassID() {
-    return (UClassID)&fgClassID;
-}
-
-inline UClassID
-OlsonTimeZone::getDynamicClassID() const {
-    return OlsonTimeZone::getStaticClassID();
 }
 
 U_NAMESPACE_END

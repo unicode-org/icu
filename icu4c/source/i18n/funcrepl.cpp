@@ -22,7 +22,7 @@ static const UChar CLOSE[]   = {32,41,0}; // " )"
 
 U_NAMESPACE_BEGIN
 
-const char FunctionReplacer::fgClassID=0;
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(FunctionReplacer)
 
 /**
  * Construct a replacer that takes the output of the given

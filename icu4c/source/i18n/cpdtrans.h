@@ -188,14 +188,14 @@ public:
      *
      * @draft ICU 2.2
      */
-    virtual inline UClassID getDynamicClassID() const;
+    virtual UClassID getDynamicClassID() const;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
      * @draft ICU 2.2
      */
-    static inline UClassID getStaticClassID();
+    static UClassID getStaticClassID();
 
 private:
 
@@ -243,21 +243,7 @@ private:
     void freeTransliterators(void);
 
     void computeMaximumContextLength(void);
-
-    /**
-     * The address of this static class variable serves as this class's ID
-     * for ICU "poor man's RTTI".
-     */
-    static const char fgClassID;
 };
-
-inline UClassID
-CompoundTransliterator::getStaticClassID()
-{ return (UClassID)&fgClassID; }
-
-inline UClassID
-CompoundTransliterator::getDynamicClassID() const
-{ return CompoundTransliterator::getStaticClassID(); }
 
 U_NAMESPACE_END
 
