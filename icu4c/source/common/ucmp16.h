@@ -66,7 +66,7 @@
  * @see                CompactIntArray
  * @see                CompactCharArray
  * @see                CompactStringArray
- * @version            $Revision: 1.6 $ 8/25/98
+ * @version            $Revision: 1.7 $ 8/25/98
  * @author             Helena Shih
  */
 
@@ -150,7 +150,7 @@ U_CAPI  bool_t U_EXPORT2 ucmp16_isBogus(const CompactShortArray* array);
   * @param value the new mapped value
   */
 U_CAPI  void U_EXPORT2 ucmp16_set(CompactShortArray *array,
-				UChar index,
+				UChar idx,
 				int16_t value);
 
 

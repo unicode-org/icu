@@ -823,7 +823,7 @@ void TestJitterbug255()
 {
     const char testBytes[] = { (char)0x95, (char)0xcf, (char)0x8a, 
                                (char)0xb7, (char)0x0d, (char)0x0a, 0x0000 };
-    char *testBuffer = (char*)testBytes, *testEnd = (char*)testBytes+strlen(testBytes)+1;
+    const char *testBuffer = testBytes, *testEnd = testBytes+strlen(testBytes)+1;
     UErrorCode status = U_ZERO_ERROR;
     UChar32 result;
     UConverter *cnv = 0;

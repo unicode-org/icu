@@ -159,7 +159,7 @@ _ISO2022Reset(UConverter *converter) {
     }
 }
 
-void T_UConverter_fromUnicode_ISO_2022(UConverter* _this,
+static void T_UConverter_fromUnicode_ISO_2022(UConverter* _this,
                                        char** target,
                                        const char* targetLimit,
                                        const UChar** source,
@@ -180,7 +180,7 @@ void T_UConverter_fromUnicode_ISO_2022(UConverter* _this,
 }
 
 
-void T_UConverter_fromUnicode_ISO_2022_OFFSETS_LOGIC(UConverter* _this,
+static void T_UConverter_fromUnicode_ISO_2022_OFFSETS_LOGIC(UConverter* _this,
                                                      char** target,
                                                      const char* targetLimit,
                                                      const UChar** source,
@@ -471,7 +471,7 @@ const char* getEndOfBuffer_2022(const char* source,
                   
   
 
-void T_UConverter_toUnicode_ISO_2022(UConverter* _this,
+static void T_UConverter_toUnicode_ISO_2022(UConverter* _this,
                                      UChar** target,
                                      const UChar* targetLimit,
                                      const char** source,
@@ -544,7 +544,7 @@ void T_UConverter_toUnicode_ISO_2022(UConverter* _this,
   return;
 }
 
-void T_UConverter_toUnicode_ISO_2022_OFFSETS_LOGIC(UConverter* _this,
+static void T_UConverter_toUnicode_ISO_2022_OFFSETS_LOGIC(UConverter* _this,
                                                    UChar** target,
                                                    const UChar* targetLimit,
                                                    const char** source,
@@ -625,7 +625,7 @@ void T_UConverter_toUnicode_ISO_2022_OFFSETS_LOGIC(UConverter* _this,
   return;
 }
 
-UChar32 T_UConverter_getNextUChar_ISO_2022(UConverter* converter,
+static UChar32 T_UConverter_getNextUChar_ISO_2022(UConverter* converter,
                                      const char** source,
                                      const char* sourceLimit,
                                      UErrorCode* err)
@@ -687,11 +687,11 @@ static const UConverterImpl _ISO2022Impl={
     NULL
 };
 
-extern const UConverterSharedData _ISO2022Data={
+const UConverterSharedData _ISO2022Data={
     sizeof(UConverterSharedData), ~((uint32_t) 0),
     NULL, NULL, &_ISO2022Impl, "ISO_2022",
     2022, UCNV_IBM, UCNV_ISO_2022, 1, 4,
-    { 0, 1, 0x1a, 0, 0, 0 }
+    { 0, 1, { 0x1a, 0, 0, 0 } }
 };
 
 /* EBCDICStateful ----------------------------------------------------------- */
@@ -1293,7 +1293,7 @@ static const UConverterImpl _EBCDICStatefulImpl={
     NULL
 };
 
-extern const UConverterSharedData _EBCDICStatefulData={
+const UConverterSharedData _EBCDICStatefulData={
     sizeof(UConverterSharedData), 1,
     NULL, NULL, &_EBCDICStatefulImpl, "EBCDICStateful",
     0, UCNV_IBM, UCNV_EBCDIC_STATEFUL, 1, 1,

@@ -658,7 +658,7 @@ private:
     bool_t                  fLoaded[kDataCount];
     UErrorCode              fDataStatus[kDataCount]; // Returns the appropriate error code for each data table.
     bool_t                  fIsDataOwned;
-	Locale					fRealLocale;
+    Locale		    fRealLocale;
     LocaleFallbackIterator* fLocaleIterator;
     char*                   fVersionID;
 };

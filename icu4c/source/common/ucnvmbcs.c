@@ -43,7 +43,7 @@ _MBCSUnload(UConverterSharedData *sharedData) {
 	uprv_free (sharedData->table);
 }
 
-void T_UConverter_toUnicode_MBCS (UConverter * _this,
+static void T_UConverter_toUnicode_MBCS (UConverter * _this,
                                UChar ** target,
                                const UChar * targetLimit,
                                const char **source,
@@ -163,7 +163,7 @@ void T_UConverter_toUnicode_MBCS (UConverter * _this,
   return;
 }
 
-void T_UConverter_toUnicode_MBCS_OFFSETS_LOGIC (UConverter * _this,
+static void T_UConverter_toUnicode_MBCS_OFFSETS_LOGIC (UConverter * _this,
                                                 UChar ** target,
                                                 const UChar * targetLimit,
                                                 const char **source,
@@ -181,11 +181,8 @@ void T_UConverter_toUnicode_MBCS_OFFSETS_LOGIC (UConverter * _this,
   CompactShortArray *myToUnicode = NULL;
   UChar targetUniChar = 0x0000;
   UChar mySourceChar = 0x0000;
-  UChar oldMySourceChar;
+  UChar oldMySourceChar = 0x0000;
   bool_t *myStarters = NULL;
-  int32_t* originalOffsets = offsets;
-
-
 
   myToUnicode = _this->sharedData->table->mbcs.toUnicode;
   myStarters = _this->sharedData->table->mbcs.starters;
@@ -299,7 +296,7 @@ void T_UConverter_toUnicode_MBCS_OFFSETS_LOGIC (UConverter * _this,
   return;
 }
 
-void   T_UConverter_fromUnicode_MBCS (UConverter * _this,
+static void   T_UConverter_fromUnicode_MBCS (UConverter * _this,
                                       char **target,
                                       const char *targetLimit,
                                       const UChar ** source,
@@ -317,7 +314,6 @@ void   T_UConverter_fromUnicode_MBCS (UConverter * _this,
   int32_t sourceLength = sourceLimit - mySource;
   CompactShortArray *myFromUnicode = NULL;
   UChar targetUniChar = 0x0000;
-  int8_t targetUniCharByteNum = 0;
   UChar mySourceChar = 0x0000;
 
   myFromUnicode = _this->sharedData->table->mbcs.fromUnicode;
@@ -389,7 +385,7 @@ void   T_UConverter_fromUnicode_MBCS (UConverter * _this,
   return;
 }
 
-void   T_UConverter_fromUnicode_MBCS_OFFSETS_LOGIC (UConverter * _this,
+static void   T_UConverter_fromUnicode_MBCS_OFFSETS_LOGIC (UConverter * _this,
                                                     char **target,
                                                     const char *targetLimit,
                                                     const UChar ** source,
@@ -407,13 +403,9 @@ void   T_UConverter_fromUnicode_MBCS_OFFSETS_LOGIC (UConverter * _this,
   int32_t sourceLength = sourceLimit - mySource;
   CompactShortArray *myFromUnicode = NULL;
   UChar targetUniChar = 0x0000;
-  int8_t targetUniCharByteNum = 0;
   UChar mySourceChar = 0x0000;
-  int32_t* originalOffsets = offsets;
 
   myFromUnicode = _this->sharedData->table->mbcs.fromUnicode;
-
-  
 
   /*writing the char to the output stream */
   while (mySourceIndex < sourceLength)
@@ -451,7 +443,6 @@ void   T_UConverter_fromUnicode_MBCS_OFFSETS_LOGIC (UConverter * _this,
           else
             {
               int32_t currentOffset = mySourceIndex -1;
-              int32_t* offsetsAnchor = offsets;
               
               *err = U_INVALID_CHAR_FOUND;
               _this->invalidUCharBuffer[0] = (UChar) mySourceChar;
@@ -488,7 +479,7 @@ void   T_UConverter_fromUnicode_MBCS_OFFSETS_LOGIC (UConverter * _this,
   return;
 }
 
-UChar32 T_UConverter_getNextUChar_MBCS(UConverter* converter,
+static UChar32 T_UConverter_getNextUChar_MBCS(UConverter* converter,
                                                const char** source,
                                                const char* sourceLimit,
                                                UErrorCode* err)
@@ -556,7 +547,7 @@ UChar32 T_UConverter_getNextUChar_MBCS(UConverter* converter,
     }
 } 
 
-void
+static void
 _MBCSGetStarters(const UConverter* converter, bool_t starters[256], UErrorCode *pErrorCode) {
     /* fills in the starters boolean array */
     uprv_memcpy(starters, converter->sharedData->table->mbcs.starters, 256*sizeof(bool_t));
@@ -581,9 +572,9 @@ static const UConverterImpl _MBCSImpl={
     _MBCSGetStarters
 };
 
-extern const UConverterSharedData _MBCSData={
+const UConverterSharedData _MBCSData={
     sizeof(UConverterSharedData), 1,
     NULL, NULL, &_MBCSImpl, "MBCS",
     0, UCNV_IBM, UCNV_MBCS, 1, 1,
-    { 0, 1, 0, 0, 0, 0 }
+    { 0, 1, { 0, 0, 0, 0 } }
 };

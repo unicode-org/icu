@@ -605,7 +605,7 @@ U_CAPI int32_t U_EXPORT2 ucnv_flushCache (void);
  * @stable
  */
 U_CAPI
-  const char * U_EXPORT2 ucnv_getAvailableName (int32_t index);
+  const char * U_EXPORT2 ucnv_getAvailableName (int32_t idx);
 
 /**
  * returns the number of available converters.
@@ -636,7 +636,7 @@ ucnv_countAliases(const char *alias, UErrorCode *pErrorCode);
  * @stable
  */
 U_CAPI const char *
-ucnv_getAlias(const char *alias, uint16_t index, UErrorCode *pErrorCode);
+ucnv_getAlias(const char *alias, uint16_t idx, UErrorCode *pErrorCode);
 
 /**
  * Fill-up the list of alias names for the given alias

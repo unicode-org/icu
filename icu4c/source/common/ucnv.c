@@ -155,7 +155,6 @@ int32_t  ucnv_flushCache ()
       /*deletes only if reference counter == 0 */
       if (mySharedData->referenceCounter == 0)
         {
-          UErrorCode err = U_ZERO_ERROR;
           tableDeletedNum++;
 
           uhash_removeElement(SHARED_DATA_HASHTABLE, e);
@@ -169,11 +168,11 @@ int32_t  ucnv_flushCache ()
 
 /*returns a single Name from the list, will return NULL if out of bounds
  */
-const char*  ucnv_getAvailableName (int32_t index)
+const char*  ucnv_getAvailableName (int32_t idx)
 {
-  if (0 <= index && index <= 0xffff) {
+  if (0 <= idx && idx <= 0xffff) {
     UErrorCode err = U_ZERO_ERROR;
-    const char *name = ucnv_io_getAvailableConverter((uint16_t)index, &err);
+    const char *name = ucnv_io_getAvailableConverter((uint16_t)idx, &err);
     if (U_SUCCESS(err)) {
       return name;
     }
@@ -195,8 +194,8 @@ ucnv_countAliases(const char *alias, UErrorCode *pErrorCode) {
 
 
 U_CAPI const char *
-ucnv_getAlias(const char *alias, uint16_t index, UErrorCode *pErrorCode) {
-    return ucnv_io_getAlias(alias, index, pErrorCode);
+ucnv_getAlias(const char *alias, uint16_t idx, UErrorCode *pErrorCode) {
+    return ucnv_io_getAlias(alias, idx, pErrorCode);
 }
 
 U_CAPI void
@@ -236,8 +235,6 @@ void   ucnv_setSubstChars (UConverter * converter,
 			   int8_t len,
 			   UErrorCode * err)
 {
-  uint8_t x = 0;
-
   if (U_FAILURE (*err))
     return;
 
@@ -949,7 +946,6 @@ int32_t  ucnv_convert(const char *toConverterName,
 {
   const char *mySource = source;
   const char *mySource_limit = source + sourceSize;
-  int32_t mySourceLength = 0;
   UConverter *inConverter;
   UConverter *outConverter;
   char *myTarget = target;
@@ -1096,18 +1092,18 @@ void ucnv_fixFileSeparator(const UConverter *cnv,
                            int32_t sourceLength)
 {
     int32_t i = 0;
-    int32_t index = 0;
+    int32_t idx = 0;
     if ((source == NULL) || (cnv == NULL))
     {
         return;
     }
-    if ((index = ucnv_getAmbiguousCCSID(cnv)) != -1)
+    if ((idx = ucnv_getAmbiguousCCSID(cnv)) != -1)
     {
         for (i = 0; i < sourceLength; i++) 
         {
-            if (source[i] == UCNV_AMBIGUOUSCONVERTERS[index].mismapped)
+            if (source[i] == UCNV_AMBIGUOUSCONVERTERS[idx].mismapped)
             {
-                source[i] = UCNV_AMBIGUOUSCONVERTERS[index].replacement;
+                source[i] = UCNV_AMBIGUOUSCONVERTERS[idx].replacement;
             }
         }
     }

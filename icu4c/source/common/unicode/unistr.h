@@ -2713,7 +2713,7 @@ UnicodeString::operator new(size_t size)
 { return ::operator new(size); }
 
 inline void* 
-UnicodeString::operator new(size_t size, 
+UnicodeString::operator new(size_t, 
               void *location)
 { return location; }
 

@@ -285,12 +285,12 @@ ResourceBundle::ResourceBundle( const UnicodeString&    path,
 ResourceBundle::ResourceBundle( const UnicodeString&    path,
                                 const UnicodeString&    localeName,
                                 UErrorCode&              status)
-  :   fPath(path, UnicodeString(kDefaultSuffix,"")),
-	  fRealLocale(localeName),
+  :   fgCache(fgUserCache),
+      fgVisitedFiles(fgUserVisitedFiles),
+      fPath(path, UnicodeString(kDefaultSuffix,"")),
       fIsDataOwned(TRUE),
-      fVersionID(0),
-      fgCache(fgUserCache),
-      fgVisitedFiles(fgUserVisitedFiles)
+      fRealLocale(localeName),
+      fVersionID(0)
 {
   status = U_ZERO_ERROR;
   
@@ -318,10 +318,10 @@ ResourceBundle::ResourceBundle( const UnicodeString&    path,
 }
 
 void
-ResourceBundle::saveCollationHashtable(const UnicodeString& localeName,
+ResourceBundle::saveCollationHashtable(const UnicodeString&,
 				       UHashtable* hashtable,
 				       void* context,
-				       ResourceBundleCache* fgCache)
+				       ResourceBundleCache*)
 {
   ResourceBundle* bundle = (ResourceBundle*)context;
   for(int32_t i = 0; i < kDataCount; ++i) {
@@ -1114,7 +1114,6 @@ ResourceBundle::addToCache(const UnicodeString& localeName,
 {
   PathInfo *c = (PathInfo*)context;
   UnicodeString keyName(c->makeHashkey(localeName));
-  UErrorCode err = U_ZERO_ERROR;
   Mutex lock;
   if (fgCache->get(keyName) == 0) {
       fgCache->put(keyName, hashtable);

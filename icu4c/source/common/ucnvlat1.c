@@ -21,7 +21,7 @@
 
 /* ISO 8859-1 --------------------------------------------------------------- */
 
-void  T_UConverter_toUnicode_LATIN_1 (UConverter * _this,
+static void  T_UConverter_toUnicode_LATIN_1 (UConverter * _this,
                                       UChar ** target,
                                       const UChar * targetLimit,
                                       const char **source,
@@ -59,7 +59,7 @@ void  T_UConverter_toUnicode_LATIN_1 (UConverter * _this,
   return;
 }
 
-void   T_UConverter_fromUnicode_LATIN_1 (UConverter * _this,
+static void   T_UConverter_fromUnicode_LATIN_1 (UConverter * _this,
                                          char **target,
                                          const char *targetLimit,
                                          const UChar ** source,
@@ -121,7 +121,7 @@ void   T_UConverter_fromUnicode_LATIN_1 (UConverter * _this,
   return;
 }
 
-UChar32 T_UConverter_getNextUChar_LATIN_1(UConverter* converter,
+static UChar32 T_UConverter_getNextUChar_LATIN_1(UConverter* converter,
                                                   const char** source,
                                                   const char* sourceLimit,
                                                   UErrorCode* err)
@@ -160,9 +160,9 @@ static const UConverterImpl _Latin1Impl={
     NULL
 };
 
-extern const UConverterSharedData _Latin1Data={
+const UConverterSharedData _Latin1Data={
     sizeof(UConverterSharedData), ~((uint32_t) 0),
     NULL, NULL, &_Latin1Impl, "LATIN_1",
     819, UCNV_IBM, UCNV_LATIN_1, 1, 1,
-    { 0, 1, 0x1a, 0, 0, 0 }
+    { 0, 1, { 0x1a, 0, 0, 0 } }
 };
