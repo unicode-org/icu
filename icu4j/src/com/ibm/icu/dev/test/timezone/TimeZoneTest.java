@@ -279,7 +279,8 @@ public class TimeZoneTest extends TestFmwk
         String name = zone.getDisplayName(Locale.ENGLISH);
         logln("PST->" + name);
         if (!name.equals("Pacific Standard Time"))
-            errln("Fail: Expected \"Pacific Standard Time\"");
+            errln("Fail: Expected \"Pacific Standard Time\", got " + name +
+                  " for " + zone);
 
         //*****************************************************************
         // THE FOLLOWING LINES MUST BE UPDATED IF THE LOCALE DATA CHANGES
