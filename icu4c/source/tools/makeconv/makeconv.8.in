@@ -6,7 +6,7 @@
 .\"
 .\" Manual page by Yves Arrouye <yves@realnames.com>.
 .\"
-.TH MAKECONV 8 "11 October 2000" "ICU @VERSION@"
+.TH MAKECONV 8 "12 October 2000" "ICU MANPAGE" "ICU @VERSION@ Manual"
 .SH NAME
 .B makeconv
 \- compile a converter table
@@ -77,15 +77,6 @@ Set the destination directory to
 .IR destination .
 The default destination directory is specified by the environment variable
 .BR ICU_DATA .
-.SH ENVIRONMENT
-.TP 10
-.B ICU_DATA
-Specifies the directory containing ICU data. Defaults to
-.BR @thedatadir@/icu/@VERSION@/ .
-Some tools in ICU depend on the presence of the trailing slash. It is thus
-important to make sure that it is present if
-.B ICU_DATA
-is set.
 .SH CAVEATS
 If an existing converter table is changed and recompiled using
 .BR makeconv ,
@@ -96,6 +87,15 @@ an archive or a library with
 then the archive or library must be rebuilt with the new binary file.
 A standalone binary converter file will not take precedence over a
 packaged one.
+.SH ENVIRONMENT
+.TP 10
+.B ICU_DATA
+Specifies the directory containing ICU data. Defaults to
+.BR @thedatadir@/icu/@VERSION@/ .
+Some tools in ICU depend on the presence of the trailing slash. It is thus
+important to make sure that it is present if
+.B ICU_DATA
+is set.
 .SH VERSION
 @VERSION@
 .SH COPYRIGHT
