@@ -7,16 +7,6 @@
 
 en_ZW {
     Version { "2.0" }
-    NumberPatterns {
-        "#,##0.###;-#,##0.###",
-        "\u00a4#,##0.00;-\u00a4#,##0.00",
-        "#,##0%",
-        "#E0",
-    }
-    Currencies{
-        ZWD { "Z$",  "Zimbabwean Dollar"      } // 04/18/1980- Zimbabwean Dollar
-        USD { "US$",     "USD" } // US Dollar
-    }
     calendar{
         gregorian{
             DateTimePatterns{
@@ -31,5 +21,14 @@ en_ZW {
                 "{1} {0}",
             }
         }
+    }
+    Currencies{
+        ZWD { "Z$",  "Zimbabwean Dollar"      } // 04/18/1980- Zimbabwean Dollar
+    }
+    NumberPatterns {
+        "#,##0.###;-#,##0.###",
+        "\u00a4#,##0.00;-\u00a4#,##0.00",
+        "#,##0%",
+        "#E0",
     }
 }
