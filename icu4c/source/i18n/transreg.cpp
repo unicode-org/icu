@@ -28,6 +28,7 @@
 #include "tridpars.h"
 #include "charstr.h"
 #include "uassert.h"
+#include "servloc.h"
 
 // Enable the following symbol to add debugging code that tracks the
 // allocation, deletion, and use of Entry objects.  BoundsChecker has
@@ -198,23 +199,29 @@ class Spec : public UMemory {
     Spec &operator=(const Spec &other); // forbid copying of this class
 };
 
-Spec::Spec(const UnicodeString& theSpec) : top(theSpec) {
+Spec::Spec(const UnicodeString& theSpec)
+: top(theSpec),
+  res(0)
+{
     UErrorCode status = U_ZERO_ERROR;
-    CharString topch(top);
-    Locale toploc(topch);
-    res = new ResourceBundle(U_ICUDATA_TRANSLIT, toploc, status);
-    /* test for NULL */
-    if (res == 0) {
-        return;
-    }
-    if (U_FAILURE(status) || status == U_USING_DEFAULT_WARNING) {
-        delete res;
-        res = 0;
+    CharString topch(theSpec);
+    Locale topLoc("");
+    LocaleUtility::initLocaleFromName(theSpec, topLoc);
+    if (!topLoc.isBogus()) {
+        res = new ResourceBundle(U_ICUDATA_TRANSLIT, topLoc, status);
+        /* test for NULL */
+        if (res == 0) {
+            return;
+        }
+        if (U_FAILURE(status) || status == U_USING_DEFAULT_WARNING) {
+            delete res;
+            res = 0;
+        }
     }
 
     // Canonicalize script name -or- do locale->script mapping
     status = U_ZERO_ERROR;
-    const int32_t capacity = 10;
+    static const int32_t capacity = 10;
     UScriptCode script[capacity]={USCRIPT_INVALID_CODE};
     int32_t num = uscript_getCode(topch,script,capacity, &status);
     if (num > 0 && script[0] != USCRIPT_INVALID_CODE) {
@@ -222,13 +229,12 @@ Spec::Spec(const UnicodeString& theSpec) : top(theSpec) {
     }
 
     // Canonicalize top
-    char buf[256];
     if (res != 0) {
         // Canonicalize locale name
-        status = U_ZERO_ERROR;
-        uloc_getName(topch, buf, sizeof(buf), &status);
-        if (U_SUCCESS(status) && status != U_STRING_NOT_TERMINATED_WARNING) {
-            top = UnicodeString(buf, "");
+        UnicodeString locStr;
+        LocaleUtility::initNameFromLocale(topLoc, locStr);
+        if (!locStr.isBogus()) {
+            top = locStr;
         }
     } else if (scriptName.length() != 0) {
         // We are a script; use canonical name
@@ -997,7 +1003,8 @@ Entry* TransliteratorRegistry::findInBundle(const Spec& specToOpen,
             continue;
         }
         
-        if (specToOpen.get() != subres.getLocale().getName()) {
+        s.truncate(0);
+        if (specToOpen.get() != LocaleUtility::initNameFromLocale(subres.getLocale(), s)) {
             continue;
         }
         
