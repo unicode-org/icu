@@ -28,6 +28,8 @@
 #include "crestst.h"
 #include "unicode/ctest.h"
 
+#include "ucol_imp.h" /* collation */
+
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
 static void TestOpenDirect(void);
@@ -100,6 +102,8 @@ void addResourceBundleTest(TestNode** root)
     addTest(root, &TestFileStream, "tsutil/crestst/TestFileStream");
     addTest(root, &TestGetSize, "tsutil/crestst/TestGetSize");
     addTest(root, &TestGetLocaleByType, "tsutil/crestst/TestGetLocaleByType");
+    addTest(root, &TestGetKeywordValues, "tsutil/crestst/TestGetKeywordValues");
+    addTest(root, &TestGetFunctionalEquivalent, "tsutil/crestst/TestGetFunctionalEquivalent");
 }
 
 
@@ -919,5 +923,102 @@ static void TestGetLocaleByType(void) {
         ures_close(rb);
     }
     ures_close(res);
+}
+
+static void TestGetKeywordValues(void) {
+  UEnumeration *kwVals;
+  UBool foundStandard = FALSE;
+  UErrorCode status = U_ZERO_ERROR;
+  const char *kw;
+  kwVals = ures_getKeywordValues( U_ICUDATA_COLL, "collations", &status);
+
+  log_verbose("Testing getting collation keyword values:\n");
+  
+  while(kw=uenum_next(kwVals, NULL, &status)) {
+    log_verbose("  %s\n", kw);
+    if(!strcmp(kw,"standard")) {
+      if(foundStandard == FALSE) {
+        foundStandard = TRUE;
+      } else {
+        log_err("'standard' was found twice in the keyword list.\n");
+      }
+    }
+  }
+  if(foundStandard == FALSE) {
+    log_err("'standard' was not found in the keyword list.\n");
+  }
+  uenum_close(kwVals);
+}
+
+static void TestGetFunctionalEquivalent(void) {
+  int32_t i;
+  static const char *testCases[] = {
+        //              avail   locale          equiv  
+        "f",    "de_US_CALIFORNIA",            "de",
+        "t",    "zh_TW@collation=stroke",      "zh@collation=stroke",
+        "f",    "de_CN@collation=pinyin",      "de",
+        "f",    "de_CN@calendar=japanese",     "de",
+        "t",    "de@calendar=japanese",        "de",
+        "t",    "zh_TW@collation=standard",    "zh@collation=standard",
+        "t",    "zh_TW@collation=traditional", "zh@collation=traditional",
+        "f",    "zh_CN@collation=standard",    "zh",
+        "f",    "zh_CN@collation=traditional", "zh@collation=traditional",
+        "t",    "zh@collation=standard",       "zh",
+        "t",    "zh@collation=traditional",    "zh@collation=traditional",
+        "f",    "hi_IN@collation=direct",      "hi@collation=direct",
+        "t",    "hi@collation=standard",      "hi",
+        "t",    "hi@collation=direct",      "hi@collation=direct",
+        "f",    "hi_AU@collation=direct;currency=CHF;calendar=buddhist",   "hi@collation=direct",
+        "f",    "hi_AU@collation=standard;currency=CHF;calendar=buddhist",   "hi",
+        NULL
+  };
+  
+  for(i=0;testCases[i];i+=3) {
+    UBool expectAvail = (testCases[i][0]=='t')?TRUE:FALSE;
+    UBool gotAvail;
+    const char *inLocale = testCases[i+1];
+    const char *expectLocale = testCases[i+2];
+    char equivLocale[256];
+    int32_t len;
+    UErrorCode status = U_ZERO_ERROR;
+    log_verbose("%d:   %c      %s\texpect %s\n",i/3,  expectAvail?'t':'f', inLocale, expectLocale);
+    len = ures_getFunctionalEquivalent(equivLocale, 255, U_ICUDATA_COLL,
+                                 "collations", "collation", inLocale, 
+                                 &gotAvail, &status);
+    if(U_FAILURE(status) || (len <= 0)) {
+      log_err("FAIL: got len %d, err %s  on #%d: %c\t%s\t%s\n",  
+            len, u_errorName(status),
+            i/3,expectAvail?'t':'f', inLocale, expectLocale);
+    } else {
+      log_verbose("got:  %c   %s\n", expectAvail?'t':'f',equivLocale);
+      
+      if((gotAvail != expectAvail) || strcmp(equivLocale, expectLocale)) {
+      log_err("FAIL: got avail=%c, loc=%s but  expected #%d: %c\t%s\t-> loc=%s\n",  
+            gotAvail?'t':'f', equivLocale,
+            i/3,
+            expectAvail?'t':'f', inLocale, expectLocale);
+
+      }
+    }
+  }
+
+  log_verbose("Testing error conditions:\n");
+  {
+    char equivLocale[256] = "???";
+    int32_t len;
+    UErrorCode status = U_ZERO_ERROR;
+    UBool gotAvail = FALSE;
+
+    len = ures_getFunctionalEquivalent(equivLocale, 255, U_ICUDATA_COLL,
+                                       "calendar", "calendar", "ar_EG@calendar=islamic", 
+                                       &gotAvail, &status);
+
+    if(status == U_MISSING_RESOURCE_ERROR) {
+      log_verbose("PASS: Got expected U_MISSING_RESOURCE_ERROR\n");
+    } else {
+      log_err("ures_getFunctionalEquivalent  returned locale %s, avail %c, err %s, but expected U_MISSING_RESOURCE_ERROR \n",
+              equivLocale, gotAvail?'t':'f', u_errorName(status));
+    }
+  }
 }
 
