@@ -11,16 +11,24 @@
 <mb_cur_max>        4
 <mb_cur_min>        1
 <uconv_class>       "MBCS"
+
+# both subchars are single-byters, which does not make sense
+# but works - adding subchar1 for tests but don't want to
+# change old tests for a new subchar -- markus 20031028
 <subchar>           \xff
-<icu:state>         0, 1:1, 5-9, ff
+<subchar1>          \xe1
+<icu:state>         0, 1:1, 5-9, e1, ff
 <icu:state>         2:2
 <icu:state>         3:3
-<icu:state>         a-f.p
+<icu:state>         a-f.p, ff
 
 CHARMAP
 
 # fromUnicode result is zero byte from other than U+0000
 <U20ac>     \x00 |0
+
+# fallback from non-zero to zero possible with extension table
+<U20ad>     \x00 |1
 
 # nothing special
 <U0005>     \x05 |0
@@ -41,5 +49,8 @@ CHARMAP
 <U34567>    \x01\x02\x03\x0d |3
 <U000e>     \x01\x02\x03\x0e |3
 #unassigned \x01\x02\x03\x0f
+
+# <subchar1> non-mapping
+<U50005>    \xe1 |2
 
 END CHARMAP

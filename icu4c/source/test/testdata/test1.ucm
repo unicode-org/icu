@@ -6,7 +6,6 @@
 # test1.ucm
 #
 # Test file for MBCS conversion with single-byte codepage data.
-# Also contains extension mappings (m:n).
 
 <code_set_name>     "test1"
 <mb_cur_max>        1
@@ -19,6 +18,7 @@ CHARMAP
 
 # fromUnicode result is zero byte from other than U+0000
 <U20ac>     \x00 |0
+<U20ad>     \x00 |1
 
 # nothing special
 <U0005>     \x05 |0
