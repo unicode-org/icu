@@ -53,7 +53,7 @@
 /*********** HZ Converter Protos ***********/
 static void _HZOpen(UConverter *cnv, const char *name, const char *locale, uint32_t options,UErrorCode *errorCode);
 static void _HZClose(UConverter *converter);
-static void _HZReset(UConverter *converter, UConverterResetChoice choice);
+U_CFUNC void _HZReset(UConverter *converter, UConverterResetChoice choice);
 
 U_CFUNC void _HZ_WriteSub(UConverterFromUnicodeArgs *args, int32_t offsetIndex, UErrorCode *err);
 U_CFUNC UConverter * _HZ_SafeClone(const UConverter 	*cnv, void *stackBuffer, int32_t *pBufferSize, UErrorCode *status);
@@ -150,7 +150,8 @@ static void _HZClose(UConverter *cnv){
      uprv_free(cnv->extraInfo);
 
 }
-static void _HZReset(UConverter *cnv, UConverterResetChoice choice){
+
+U_CFUNC void _HZReset(UConverter *cnv, UConverterResetChoice choice){
     if(choice<=UCNV_RESET_TO_UNICODE) {
         cnv->toUnicodeStatus = 0;
         cnv->mode=0;
