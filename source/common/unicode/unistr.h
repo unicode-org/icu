@@ -23,8 +23,6 @@
 
 #include "unicode/utypes.h"
 #include "unicode/rep.h"
-/*#include "unicode/uchar.h"*/
-
 
 struct UConverter;          // unicode/ucnv.h
 
@@ -36,6 +34,7 @@ class UnicodeConverter;     // unicode/convert.h
 class StringCharacterIterator;
 class SearchIterator;
 class StringSearch;
+class BreakIterator;        // unicode/brkiter.h
 
 /* The <iostream> include has been moved to unicode/ustream.h */
 
@@ -2194,6 +2193,55 @@ public:
   UnicodeString& toLower(const Locale& locale);
 
   /**
+   * Titlecase this string, convenience function using the default locale.
+   *
+   * Casing is locale-dependent and context-sensitive.
+   * Titlecasing uses a break iterator to find the first characters of words
+   * that are to be titlecased. It titlecases those characters and lowercases
+   * all others.
+   *
+   * The titlecase break iterator can be provided to customize for arbitrary
+   * styles, using rules and dictionaries beyond the standard iterators.
+   * It may be more efficient to always provide an iterator to avoid
+   * opening and closing one for each string.
+   * The standard titlecase iterator for the root locale implements the
+   * algorithm of Unicode TR 21.
+   *
+   * @param titleIter A break iterator to find the first characters of words
+   *                  that are to be titlecased.
+   *                  If none is provided (0), then a standard titlecase
+   *                  break iterator is opened.
+   * @return A reference to this.
+   * @draft ICU 2.1
+   */
+  UnicodeString &toTitle(BreakIterator *titleIter);
+
+  /**
+   * Titlecase this string.
+   *
+   * Casing is locale-dependent and context-sensitive.
+   * Titlecasing uses a break iterator to find the first characters of words
+   * that are to be titlecased. It titlecases those characters and lowercases
+   * all others.
+   *
+   * The titlecase break iterator can be provided to customize for arbitrary
+   * styles, using rules and dictionaries beyond the standard iterators.
+   * It may be more efficient to always provide an iterator to avoid
+   * opening and closing one for each string.
+   * The standard titlecase iterator for the root locale implements the
+   * algorithm of Unicode TR 21.
+   *
+   * @param titleIter A break iterator to find the first characters of words
+   *                  that are to be titlecased.
+   *                  If none is provided (0), then a standard titlecase
+   *                  break iterator is opened.
+   * @param locale    The locale to consider.
+   * @return A reference to this.
+   * @draft ICU 2.1
+   */
+  UnicodeString &toTitle(BreakIterator *titleIter, const Locale &locale);
+
+  /**
    * Case-fold the characters in this string.
    * Case-folding is locale-independent and not context-sensitive,
    * but there is an option for whether to include or exclude mappings for dotted I
@@ -2731,7 +2779,8 @@ private:
 
   // common function for case mappings
   UnicodeString &
-  caseMap(const Locale& locale,
+  caseMap(BreakIterator *titleIter,
+          const Locale& locale,
           uint32_t options,
           int32_t toWhichCase);
 
