@@ -73,6 +73,7 @@ static void TestConv(const uint16_t in[],
                      int byteArrLen);
 static void TestRoundTrippingAllUTF(void);
 static void TestCoverageMBCS(void);
+static void TestJitterbug2346(void);
 
 void addTestNewConvert(TestNode** root);
 
@@ -246,6 +247,7 @@ void addTestNewConvert(TestNode** root)
    addTest(root, &TestJitterbug1293, "tsconv/nucnvtst/TestJitterbug1293");
    addTest(root, &TestCoverageMBCS, "tsconv/nucnvtst/TestCoverageMBCS");
    addTest(root, &TestRoundTrippingAllUTF, "tsconv/nucnvtst/TestRoundTrippingAllUTF");
+   addTest(root, &TestJitterbug2346, "tsconv/nucnvtst/TestJitterbug2346");
 
 }
 
@@ -3375,6 +3377,53 @@ TestSCSU() {
     TestConv(germanUTF16,(sizeof(germanUTF16)/2),"SCSU","german",(char *)germanSCSU,sizeof(germanSCSU));
     TestConv(russianUTF16,(sizeof(russianUTF16)/2), "SCSU","russian",(char *)russianSCSU,sizeof(russianSCSU));
     TestConv(monkeyIn,(sizeof(monkeyIn)/2),"SCSU","monkey",NULL,0);
+}
+static void TestJitterbug2346(){
+    char source[] = { 0x1b,0x24,0x42,0x3d,0x45,0x1b,0x28,0x4a,0x0d,0x0a,
+                      0x1b,0x24,0x42,0x3d,0x45,0x1b,0x28,0x4a,0x0d,0x0a};
+    uint16_t expected[] = {0x91CD,0x000D,0x000A,0x91CD,0x000D,0x000A};    
+    
+    UChar uTarget[500]={'\0'};
+    UChar* utarget=uTarget;
+    UChar* utargetLimit=uTarget+sizeof(uTarget)/2;
+
+    char cTarget[500]={'\0'};
+    char* ctarget=cTarget;
+    char* ctargetLimit=cTarget+sizeof(cTarget);
+    const char* csource=source;
+    UChar* temp = expected;
+    UErrorCode err=U_ZERO_ERROR;
+
+    UConverter* conv =ucnv_open("ISO_2022_JP",&err);
+    if(U_FAILURE(err)) {
+        log_data_err("Unable to open a iso-2022 converter: %s\n", u_errorName(err));
+        return;
+    }
+    ucnv_toUnicode(conv,&utarget,utargetLimit,&csource,csource+sizeof(source),NULL,TRUE,&err);
+    if(U_FAILURE(err)) {
+        log_err("ISO_2022_JP to Unicode conversion failed: %s\n", u_errorName(err));
+        return;
+    }
+    utargetLimit=utarget;
+    utarget = uTarget;
+    while(utarget<utargetLimit){
+        if(*temp!=*utarget){
+
+            log_err("Expected : \\u%04X \t Got: \\u%04X\n",*utarget,(int)*temp) ;
+        }
+        utarget++;
+        temp++;
+    }
+    ucnv_fromUnicode(conv,&ctarget,ctargetLimit,(const UChar**)&utarget,utargetLimit,NULL,TRUE,&err);
+    if(U_FAILURE(err)) {
+        log_err("ISO_2022_JP from Unicode conversion failed: %s\n", u_errorName(err));
+        return;
+    }
+    ctargetLimit=ctarget;
+    ctarget =cTarget;
+    ucnv_close(conv);
+
+
 }
 static void
 TestISO_2022_JP_1() {
