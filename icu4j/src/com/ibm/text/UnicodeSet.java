@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UnicodeSet.java,v $
- * $Date: 2000/05/24 22:20:45 $
- * $Revision: 1.24 $
+ * $Date: 2000/05/24 22:29:51 $
+ * $Revision: 1.25 $
  *
  *****************************************************************************************
  */
@@ -241,7 +241,7 @@ import java.text.*;
  * *Unsupported by Java (and hence unsupported by UnicodeSet).
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.24 $ $Date: 2000/05/24 22:20:45 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.25 $ $Date: 2000/05/24 22:29:51 $
  */
 public class UnicodeSet implements UnicodeFilter {
 
@@ -330,6 +330,13 @@ public class UnicodeSet implements UnicodeFilter {
         set(other);
     }
 
+    /**
+     * Constructs a set containing the given range. If <code>end >
+     * start</code> then an empty set is created.
+     *
+     * @param start first character, inclusive, of range
+     * @param end last character, inclusive, of range
+     */
     public UnicodeSet(char start, char end) {
         this();
         xor(start, end);
@@ -365,19 +372,13 @@ public class UnicodeSet implements UnicodeFilter {
      * @param pattern a string specifying what characters are in the set
      * @param pos on input, the position in pattern at which to start parsing.
      * On output, the position after the last character parsed.
-     * @param varNameToChar a mapping from variable names (String) to characters
-     * (Character).  May be null.  If varCharToSet is non-null, then names may
-     * map to either single characters or sets, depending on whether a mapping
-     * exists in varCharToSet.  If varCharToSet is null then all names map to
-     * single characters.
-     * @param varCharToSet a mapping from characters (Character objects from
-     * varNameToChar) to UnicodeSet objects.  May be null.  Is only used if
-     * varNameToChar is also non-null.
+     * @param symbols a symbol table mapping variables to char[] arrays
+     * and chars to UnicodeSets
      * @exception java.lang.IllegalArgumentException if the pattern
      * contains a syntax error.
      */
     public UnicodeSet(String pattern, ParsePosition pos, SymbolTable symbols) {
-        applyPattern(pattern, pos, symbols);
+        set(parse(pattern, pos, symbols, true));
     }
 
     /**
@@ -396,12 +397,12 @@ public class UnicodeSet implements UnicodeFilter {
     }
 
     /**
-     * Make this object represent the range <code>start - end</code>
+     * Make this object represent the range <code>start - end</code>.
      * If <code>end > start</code> then this object is set to an
      * an empty range.
      *
      * @param start first character in the set, inclusive
-     * @param end last character in the set, inclusive
+     * @rparam end last character in the set, inclusive
      */
     public void set(char start, char end) {
         clear();
@@ -457,48 +458,6 @@ public class UnicodeSet implements UnicodeFilter {
             throw new IllegalArgumentException("Parse of \"" + pattern +
                                                "\" failed at " + i);
         }
-    }
-
-    /**
-     * Modifies this set to represent the set specified by the given pattern.
-     * @param pattern a string specifying what characters are in the set
-     * @param pos on input, the position in pattern at which to start parsing.
-     * On output, the position after the last character parsed.
-     * @param varNameToChar a mapping from variable names (String) to characters
-     * (Character).  May be null.  If varCharToSet is non-null, then names may
-     * map to either single characters or sets, depending on whether a mapping
-     * exists in varCharToSet.  If varCharToSet is null then all names map to
-     * single characters.
-     * @param varCharToSet a mapping from characters (Character objects from
-     * varNameToChar) to UnicodeSet objects.  May be null.  Is only used if
-     * varNameToChar is also non-null.
-     * @exception java.lang.IllegalArgumentException if the pattern
-     * contains a syntax error.
-     */
-    private void applyPattern(String pattern, ParsePosition pos, SymbolTable symbols) {
-        set(parse(pattern, pos, symbols, true));
-    }
-
-    /**
-     * Modifies this set to represent the set specified by the given pattern.
-     * @param pattern a string specifying what characters are in the set
-     * @param pos on input, the position in pattern at which to start parsing.
-     * On output, the position after the last character parsed.
-     * @param varNameToChar a mapping from variable names (String) to characters
-     * (Character).  May be null.  If varCharToSet is non-null, then names may
-     * map to either single characters or sets, depending on whether a mapping
-     * exists in varCharToSet.  If varCharToSet is null then all names map to
-     * single characters.
-     * @param varCharToSet a mapping from characters (Character objects from
-     * varNameToChar) to UnicodeSet objects.  May be null.  Is only used if
-     * varNameToChar is also non-null.
-     * @exception java.lang.IllegalArgumentException if the pattern
-     * contains a syntax error.
-     */
-    private void applyPattern(String pattern,
-                              ParsePosition pos, SymbolTable symbols,
-                              boolean ignoreWhitespace) {
-        set(parse(pattern, pos, symbols, ignoreWhitespace));
     }
 
     /**
