@@ -3457,17 +3457,17 @@ static void TestMergeSortKeys() {
 [top] guaranteed to be above all implicit CEs, for now and in the future (in 1.8) 
 */
 
-void TestRuleOptions() {
+static void TestRuleOptions() {
   static struct {
     const char *rules;
     const char *data[50];
     const uint32_t len;
   } tests[] = {  
     { "&[last variable]<z"
-"&[last primary ignorable]<x"
-"&[last secondary ignorable]<<y"
-"&[last tertiary ignorable]<<<w"
-"&[top]<u",
+      "&[last primary ignorable]<x"
+      "&[last secondary ignorable]<<y"
+      "&[last tertiary ignorable]<<<w"
+      "&[top]<u",
       {"\\ufffb",  "w", "y", "\\u20e3", "x", "\\u137c", "z", "u"}, 7 },
   };
   uint32_t i;
