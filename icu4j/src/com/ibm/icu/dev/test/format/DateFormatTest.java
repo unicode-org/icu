@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/DateFormatTest.java,v $ 
- * $Date: 2003/10/02 20:50:58 $ 
- * $Revision: 1.19 $
+ * $Date: 2003/10/13 17:14:46 $ 
+ * $Revision: 1.20 $
  *
  *****************************************************************************************
  */
@@ -888,6 +888,24 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         };
 
         expectParse(DATA, new Locale("en", "", ""));
+    }
+
+    public void TestInvalidPattern() {
+        Exception e = null;
+        SimpleDateFormat f = null;
+        String out = null;
+        try {
+            f = new SimpleDateFormat("Yesterday");
+            out = f.format(new Date(0));
+        } catch (IllegalArgumentException e1) {
+            e = e1;
+        }
+        if (e != null) {
+            logln("Ok: Received " + e.getMessage());
+        } else {
+            errln("FAIL: Expected exception, got " + f.toPattern() +
+                  "; " + out);
+        }
     }
 
     public void TestCoverage() {
