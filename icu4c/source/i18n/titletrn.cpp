@@ -16,7 +16,7 @@
 #include "unicode/uniset.h"
 #include "unicode/ustring.h"
 #include "titletrn.h"
-#include "mutex.h"
+#include "umutex.h"
 #include "ucln_in.h"
 #include "ustr_imp.h"
 #include "cpputils.h"
@@ -31,19 +31,16 @@ const char TitlecaseTransliterator::fgClassID=0;
 const char TitlecaseTransliterator::_ID[] = "Any-Title";
 
 /**
- * Mutex for statics IN THIS FILE
- */
-static UMTX MUTEX = 0;
-
-/**
  * The set of characters we skip.  These are neither cased nor
- * non-cased, to us; we copy them verbatim.
+ * non-cased, to us; we copy them verbatim.  INVARIANT: Either SKIP
+ * and CASED are both NULL, or neither is NULL.
  */
 static UnicodeSet* SKIP = NULL;
 
 /**
- * The set of characters that cause the next non-SKIP character
- * to be lowercased.
+ * The set of characters that cause the next non-SKIP character to be
+ * lowercased.  INVARIANT: Either SKIP and CASED are both NULL, or
+ * neither is NULL.
  */
 static UnicodeSet* CASED = NULL;
 
@@ -55,6 +52,30 @@ TitlecaseTransliterator::TitlecaseTransliterator(const Locale& theLoc) :
     buffer = (UChar *)uprv_malloc(u_getMaxCaseExpansion()*sizeof(buffer[0]));
     // Need to look back 2 characters in the case of "can't"
     setMaximumContextLength(2);
+
+    umtx_lock(NULL);
+    UBool f = (SKIP == NULL);
+    umtx_unlock(NULL);
+
+    if (f) {
+        UErrorCode ec = U_ZERO_ERROR;
+        UnicodeSet* skip =
+            new UnicodeSet(UNICODE_STRING_SIMPLE("[\\u00AD \\u2019 \\' [:Mn:] [:Me:] [:Cf:] [:Lm:] [:Sk:]]"), ec);
+        UnicodeSet* cased =
+            new UnicodeSet(UNICODE_STRING_SIMPLE("[[:Lu:] [:Ll:] [:Lt:]]"), ec);
+        if (skip != NULL && cased != NULL && U_SUCCESS(ec)) {
+            umtx_lock(NULL);
+            if (SKIP == NULL) {
+                SKIP = skip;
+                CASED = cased;
+                skip = cased = NULL;
+            }
+            umtx_unlock(NULL);
+        }
+        delete skip;
+        delete cased;
+        ucln_i18n_registerCleanup();
+    }
 }
 
 /**
@@ -101,13 +122,7 @@ void TitlecaseTransliterator::handleTransliterate(
                                   Replaceable& text, UTransPosition& offsets,
                                   UBool isIncremental) const {
     if (SKIP == NULL) {
-        Mutex lock(&MUTEX);
-        if (SKIP == NULL) {
-            UErrorCode ec = U_ZERO_ERROR;
-            SKIP = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\u00AD \\u2019 \\' [:Mn:] [:Me:] [:Cf:] [:Lm:] [:Sk:]]"), ec);
-            CASED = new UnicodeSet(UNICODE_STRING_SIMPLE("[[:Lu:] [:Ll:] [:Lt:]]"), ec);
-            ucln_i18n_registerCleanup();
-        }
+        return;
     }
 
     // Our mode; we are either converting letter toTitle or
@@ -187,7 +202,6 @@ void TitlecaseTransliterator::cleanup() {
     if (SKIP != NULL) {
         delete SKIP; SKIP = NULL;
         delete CASED; CASED = NULL;
-        umtx_destroy(&MUTEX);
     }
 }
 
