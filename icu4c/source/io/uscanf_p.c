@@ -724,7 +724,12 @@ u_scanf_string_handler(UFILE        *input,
             /* put the character from the input onto the target */
             source = &c;
             /* Since we do this one character at a time, do it this way. */
-            limit = alias + ucnv_getMaxCharSize(conv);
+            if (info->fWidth > 0) {
+                limit = alias + info->fWidth - count;
+            }
+            else {
+                limit = alias + ucnv_getMaxCharSize(conv);
+            }
 
             /* convert the character to the default codepage */
             ucnv_fromUnicode(conv, &alias, limit, &source, source + 1,
