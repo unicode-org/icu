@@ -44,6 +44,8 @@ BreakDictionary::readDictionaryFile(FileStream* in)
     int32_t l;
     int32_t version;
 
+	int i;
+
     // read in the version number (right now we just ignore it)
     T_FileStream_read(in, &version, 4);
 
@@ -53,7 +55,7 @@ BreakDictionary::readDictionaryFile(FileStream* in)
     SWAP32(l);
     uint16_t* temp = new uint16_t[l];
     T_FileStream_read(in, temp, l * sizeof (int16_t) );
-    for (int i = 0; i < l; i++) {
+    for (i = 0; i < l; i++) {
         SWAP16(temp[i]);
     }
     T_FileStream_read(in, &l, 4);
