@@ -1924,21 +1924,6 @@ uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource,
   return order; /* return the CE */
 }
 
-/* 
-* This function tries to get a maximum expansion count from UCA, 
-* @param order last collation element to look for in expansion sequence
-* @param status error status
-* @return maximum size of the expansion sequences ending with the collation 
-*         element or 1 if collation element does not occur at the end of any 
-*         expansion sequence
-*/
-uint8_t ucol_getMaxExpansionUCA(uint32_t order) 
-{
-  uint8_t result;
-  UCOL_GETCOLLATORMAXEXPANSION(UCA, order, result);
-  return result;
-}
-
 /* This function handles the special CEs like contractions, expansions, surrogates, Thai */
 /* It is called by both getNextCE and getNextUCA                                         */
 uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, UErrorCode *status) {
