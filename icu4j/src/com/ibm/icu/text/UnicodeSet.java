@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2002/07/26 21:12:36 $
- * $Revision: 1.70 $
+ * $Date: 2002/07/29 19:36:07 $
+ * $Revision: 1.71 $
  *
  *****************************************************************************************
  */
@@ -210,7 +210,7 @@ import java.util.Iterator;
  * </table>
  * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.70 $ $Date: 2002/07/26 21:12:36 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.71 $ $Date: 2002/07/29 19:36:07 $
  */
 public class UnicodeSet extends UnicodeFilter {
 
@@ -1237,10 +1237,11 @@ public class UnicodeSet extends UnicodeFilter {
         if (end < MIN_VALUE || end > MAX_VALUE) {
             throw new IllegalArgumentException("Invalid code point U+" + Utility.hex(end, 6));
         }
-        int i = -1;
-        while (true) {
-            if (start < list[++i]) break;
-        }
+        //int i = -1;
+        //while (true) {
+        //    if (start < list[++i]) break;
+        //}
+        int i = findCodePoint(start);
         return ((i & 1) != 0 && end < list[i]);
     }
 
