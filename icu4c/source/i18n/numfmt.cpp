@@ -862,26 +862,31 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
             // Here we assume that the locale passed in is in the canonical
             // form, e.g: pt_PT_@currency=PTE not pt_PT_PREEURO
             if(style==kCurrencyStyle){
-                char buf[20]={0};
-                int32_t bufCap = 20;
+                char buf[8]={0};
+                int32_t bufCap = 8;
                 const char* locName = desiredLocale.getName();
                 bufCap = uloc_getKeywordValue(locName, "currency", buf, bufCap, &status);
                 if(U_SUCCESS(status) && bufCap > 0) {
                     /* An explicit currency was requested */
-                    ResourceBundle currencies(resource.getWithFallback("Currencies", status));
-                    ResourceBundle currency(currencies.getWithFallback(buf,status));
-                    if(U_SUCCESS(status) && currency.getSize()>2){
-                        ResourceBundle elements = currency.get(2, status);
-                        UnicodeString currPattern = elements.getStringEx((int32_t)0, status);
-                        UnicodeString decimalSep = elements.getStringEx((int32_t)1, status);
-                        UnicodeString groupingSep = elements.getStringEx((int32_t)2, status);
-                        if(U_SUCCESS(status)){
+                    UErrorCode localStatus = U_ZERO_ERROR;
+                    ResourceBundle currencies(resource.getWithFallback("Currencies", localStatus));
+                    ResourceBundle currency(currencies.getWithFallback(buf,localStatus));
+                    if(U_SUCCESS(localStatus) && currency.getSize()>2) {
+                        ResourceBundle elements = currency.get(2, localStatus);
+                        UnicodeString currPattern = elements.getStringEx((int32_t)0, localStatus);
+                        UnicodeString decimalSep = elements.getStringEx((int32_t)1, localStatus);
+                        UnicodeString groupingSep = elements.getStringEx((int32_t)2, localStatus);
+                        if(U_SUCCESS(localStatus)){
                             symbolsToAdopt->setSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol, groupingSep);
                             symbolsToAdopt->setSymbol(DecimalFormatSymbols::kMonetarySeparatorSymbol, decimalSep);
                             pattern = currPattern;
                         }
+                        if (status == U_ZERO_ERROR) {
+                            status = localStatus;
+                        }
                     }
                     /* else An explicit currency was requested and is unknown or locale data is malformed. */
+                    /* ucurr_* API will get the correct value later on. */
                 }
             }
             if (U_FAILURE(status)) {

@@ -1167,12 +1167,25 @@ static void test_fmt(UNumberFormat* fmt, UBool isDecimal) {
 static void TestNonExistentCurrency() {
     UNumberFormat *format;
     UErrorCode status = U_ZERO_ERROR;
+    UChar currencySymbol[8];
+    static const UChar QQQ[] = {0x51, 0x51, 0x51, 0};
 
-    /* Get a non-existent currency and make sure it fails correctly */
+    /* Get a non-existent currency and make sure it returns the correct currency code. */
     format = unum_open(UNUM_CURRENCY, NULL, 0, "th_TH@currency=QQQ", NULL, &status);
-    if (format != NULL || status != U_MISSING_RESOURCE_ERROR) {
+    if (format == NULL || U_FAILURE(status)) {
         log_err("unum_open did not return expected result for non-existent requested currency: '%s'\n", u_errorName(status));
     }
+    else {
+        unum_getSymbol(format,
+                UNUM_CURRENCY_SYMBOL,
+                currencySymbol,
+                sizeof(currencySymbol)/sizeof(currencySymbol[0]),
+                &status);
+        if (u_strcmp(currencySymbol, QQQ) != 0) {
+            log_err("unum_open set the currency to QQQ\n");
+        }
+    }
+    unum_close(format);
 }
 
 static void TestRBNFFormat() {
