@@ -51,7 +51,7 @@ U_CFUNC const char *locale_get_default(void);
 static const char _kLocaleID[]       = "LocaleID";
 static const char _kLanguages[]      = "Languages";
 static const char _kCountries[]      = "Countries";
-static const char _kIndexLocaleName[] = "index";
+static const char _kIndexLocaleName[] = "res_index";
 static const char _kIndexTag[]       = "InstalledLocales";
 
 #if 0
