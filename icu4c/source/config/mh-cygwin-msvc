@@ -169,7 +169,7 @@ PKGDATA_VERSIONING = -r $(SO_TARGET_VERSION_MAJOR)
 
 ## Versioned import library names. The library names are versioned,
 ## but the import libraries do not need versioning.
-IMPORT_LIB = $(LIBDIR)/$(LIBICU)$(TARGET_STUBNAME)$(ICULIBSUFFIX)$(IMPORT_LIB_EXT)
+IMPORT_LIB = $(basename $(SO_TARGET))$(IMPORT_LIB_EXT)
 MIDDLE_IMPORT_LIB = $(IMPORT_LIB)
 FINAL_IMPORT_LIB = $(MIDDLE_IMPORT_LIB)
 
