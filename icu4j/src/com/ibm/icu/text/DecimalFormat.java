@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecimalFormat.java,v $ 
- * $Date: 2001/10/25 06:25:23 $ 
- * $Revision: 1.11 $
+ * $Date: 2001/10/26 06:28:00 $ 
+ * $Revision: 1.12 $
  *
  *****************************************************************************************
  */
@@ -1894,10 +1894,26 @@ public class DecimalFormat extends NumberFormat {
         if (obj == null) return false;
         if (!super.equals(obj)) return false; // super does class check
         DecimalFormat other = (DecimalFormat) obj;
-        return (positivePrefix.equals(other.positivePrefix)
-            && positiveSuffix.equals(other.positiveSuffix)
-            && negativePrefix.equals(other.negativePrefix)
-            && negativeSuffix.equals(other.negativeSuffix)
+        /* Add the comparison of the four new added fields ,they are
+         * posPrefixPattern, posSuffixPattern, negPrefixPattern, negSuffixPattern.
+         * [Richard/GCL]
+         */
+        return (((posPrefixPattern == other.posPrefixPattern &&
+                 positivePrefix.equals(other.positivePrefix))
+                || (posPrefixPattern != null &&
+                    posPrefixPattern.equals(other.posPrefixPattern)))
+            && ((posSuffixPattern == other.posSuffixPattern &&
+                 positiveSuffix.equals(other.positiveSuffix))
+                || (posSuffixPattern != null &&
+                    posSuffixPattern.equals(other.posSuffixPattern)))
+            && ((negPrefixPattern == other.negPrefixPattern &&
+                 negativePrefix.equals(other.negativePrefix))
+                || (negPrefixPattern != null &&
+                    negPrefixPattern.equals(other.negPrefixPattern)))
+            && ((negSuffixPattern == other.negSuffixPattern &&
+                 negativeSuffix.equals(other.negativeSuffix))
+                || (negSuffixPattern != null &&
+                    negSuffixPattern.equals(other.negSuffixPattern)))
             && multiplier == other.multiplier
             && groupingSize == other.groupingSize
             && groupingSize2 == other.groupingSize2
@@ -2073,8 +2089,11 @@ public class DecimalFormat extends NumberFormat {
             if (padPos == PAD_BEFORE_PREFIX) {
                 result.append(padSpec);
             }
+            /* Use original symbols read from java.text.resources in pattern
+             * eg. use "\u00A4" instead of "$" in Locale.US [Richard/GCL]
+             */
             appendAffix(result,
-                        (part==0 ? positivePrefix : negativePrefix),
+                        (part==0 ? posPrefixPattern : negPrefixPattern),
                         localized);
             if (padPos == PAD_AFTER_PREFIX) {
                 result.append(padSpec);
@@ -2149,7 +2168,10 @@ public class DecimalFormat extends NumberFormat {
                 result.append(padSpec);
             }
             if (part == 0) {
-                appendAffix(result, positiveSuffix, localized);
+                /* Use original symbols read from java.text.resources in pattern
+                 * eg. use "\u00A4" instead of "$" in Locale.US [Richard/GCL]
+                 */
+                appendAffix(result, posSuffixPattern, localized);
                 if (padPos == PAD_AFTER_SUFFIX) {
                     result.append(padSpec);
                 }
@@ -2161,7 +2183,7 @@ public class DecimalFormat extends NumberFormat {
                                   PATTERN_SEPARATOR);
                 }
             } else {
-                appendAffix(result, negativeSuffix, localized);
+                appendAffix(result, negSuffixPattern, localized);
                 if (padPos == PAD_AFTER_SUFFIX) {
                     result.append(padSpec);
                 }
