@@ -1,25 +1,50 @@
-//Do not edit with Microsoft Developer Studio because it will modify this
-//script in the wrong way.
+// Do not edit with Microsoft Developer Studio Resource Editor.
+//   It will permanently substitute version numbers that are intended to be
+//   picked up by the pre-processor during each build.
 // Copyright (c) 2001-2003 International Business Machines
 // Corporation and others. All Rights Reserved.
 //
+#include "../common/msvcres.h"
+
 #define APSTUDIO_READONLY_SYMBOLS
 /////////////////////////////////////////////////////////////////////////////
 //
 // Generated from the TEXTINCLUDE 2 resource.
 //
-#include "winresrc.h"
-
+#include <winresrc.h>
 /////////////////////////////////////////////////////////////////////////////
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-//
+// 
 
 LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 #pragma code_page(1252)
 
-#include "unicode\uversion.h"
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "../common/msvcres.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include <winresrc.h>\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -55,7 +80,6 @@ BEGIN
 #else
             VALUE "OriginalFilename", "icule" U_ICU_VERSION_SHORT ".dll\0")
 #endif
-
             VALUE "PrivateBuild", "\0"
             VALUE "ProductName", "International Components for Unicode\0"
             VALUE "ProductVersion", CommaVersionString(U_ICU_VERSION_MAJOR_NUM, U_ICU_VERSION_MINOR_NUM, U_ICU_VERSION_PATCHLEVEL_NUM, 0)
@@ -69,4 +93,16 @@ BEGIN
 END
 
 /////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
 
