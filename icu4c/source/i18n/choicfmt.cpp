@@ -697,16 +697,6 @@ ChoiceFormat::clone() const
     return aCopy;
 }
 
-// -------------------------------------
-
-#ifdef ICU_NEXTDOUBLE_USE_DEPRECATES
-double 
-ChoiceFormat::nextDouble( double d, UBool positive )
-{
-    return uprv_nextDouble( d, positive );
-}
-#endif /* ICU_NEXTDOUBLE_USE_DEPRECATES */
-
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

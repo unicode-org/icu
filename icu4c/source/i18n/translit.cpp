@@ -12,15 +12,8 @@
 
 #if !UCONFIG_NO_TRANSLITERATION
 
-/* These APIs are becoming private */
-#define ICU_COMPOUNDTRANSLITERATOR_USE_DEPRECATES 1
-#define ICU_NULLTRANSLITERATOR_USE_DEPRECATES 1
-#define ICU_RULEBASEDTRANSLITERATOR_USE_DEPRECATES 1
-
 #include "unicode/putil.h"
 #include "unicode/translit.h"
-#include "unicode/cpdtrans.h"
-#include "unicode/nultrans.h"
 #include "unicode/locid.h"
 #include "unicode/msgfmt.h"
 #include "unicode/rep.h"
@@ -29,8 +22,11 @@
 #include "unicode/unifltlg.h"
 #include "unicode/uniset.h"
 #include "unicode/uscript.h"
+#include "cpdtrans.h"
+#include "nultrans.h"
 #include "rbt_data.h"
 #include "rbt_pars.h"
+#include "rbt.h"
 #include "transreg.h"
 #include "name2uni.h"
 #include "nortrans.h"

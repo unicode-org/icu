@@ -19,10 +19,10 @@
 #include "unhxtrts.h"
 #include "unicode/utypes.h"
 #include "unicode/translit.h"
-#include "unicode/unitohex.h"
 #include "unicode/unifilt.h"
 #include "unicode/uchar.h"
 #include "intltest.h"
+#include "unitohex.h"
 /*converts a Unicodestring to integer*/
 static int32_t getInt(UnicodeString str)
 {

@@ -31,7 +31,7 @@
  * transliteration services.  Transliteration services are implemented
  * as C++ classes.  The comments and documentation in this header
  * assume the reader is familiar with the C++ headers translit.h and
- * rbt.h and associated documentation.
+ * associated documentation.
  *
  * A significant but incomplete subset of the C++ transliteration
  * services are available to C code through this header.  In order to

@@ -15,11 +15,8 @@
 
 #if !UCONFIG_NO_TRANSLITERATION
 
-/* These APIs are becoming private */
-#define ICU_HEXTOUNICODETRANSLITERATOR_USE_DEPRECATES 1
-
 #include "unicode/translit.h"
-#include "unicode/hextouni.h"
+#include "hextouni.h"
 #include "intltest.h"
 
 /**

@@ -13,7 +13,7 @@
 #if !UCONFIG_NO_TRANSLITERATION
 
 #include "unicode/translit.h"
-#include "unicode/rbt.h"
+#include "rbt.h"
 #include "unicode/uniset.h"
 #include "unicode/uchar.h"
 #include "unicode/normlzr.h"

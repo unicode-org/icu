@@ -398,16 +398,6 @@ SimpleTimeZone::setEndRule(int32_t month, int32_t dayOfMonth, int32_t dayOfWeek,
 }
 
 // -------------------------------------
-#ifdef ICU_TIMEZONE_USE_DEPRECATES
-// deprecated version
-int32_t
-SimpleTimeZone::getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
-                          uint8_t dayOfWeek, int32_t millis) const
-{
-    UErrorCode status = U_ZERO_ERROR;
-    return getOffset(era, year, month, day, dayOfWeek, millis, status);
-}
-#endif
 
 int32_t
 SimpleTimeZone::getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,

@@ -12,13 +12,10 @@
 
 #if !UCONFIG_NO_TRANSLITERATION
 
-/* These APIs are becoming private */
-#define ICU_COMPOUNDTRANSLITERATOR_USE_DEPRECATES 1
-
-#include "unicode/cpdtrans.h"
 #include "unicode/unifilt.h"
 #include "unicode/unifltlg.h"
 #include "unicode/uniset.h"
+#include "cpdtrans.h"
 #include "uvector.h"
 #include "tridpars.h"
 #include "cmemory.h"

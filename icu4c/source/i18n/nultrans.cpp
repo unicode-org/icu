@@ -12,10 +12,7 @@
 
 #if !UCONFIG_NO_TRANSLITERATION
 
-/* These APIs are becoming private */
-#define ICU_NULLTRANSLITERATOR_USE_DEPRECATES 1
-
-#include "unicode/nultrans.h"
+#include "nultrans.h"
 
 U_NAMESPACE_BEGIN
 

@@ -60,10 +60,6 @@ static const UChar         CUSTOM_ID[] =
     0x43, 0x75, 0x73, 0x74, 0x6F, 0x6D, 0x00 /* "Custom" */
 };
 
-#ifdef ICU_TIMEZONE_USE_DEPRECATES
-const TimeZone*            TimeZone::GMT = getGMT();
-#endif
-
 // See header file for documentation of the following
 static const TZHeader *    DATA = NULL;
 static const uint32_t*     INDEX_BY_ID = 0;

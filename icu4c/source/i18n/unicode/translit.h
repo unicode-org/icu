@@ -769,19 +769,6 @@ public:
      */
     UnicodeFilter* orphanFilter(void);
 
-#ifdef U_USE_DEPRECATED_TRANSLITERATOR_API
-    /**
-     * Changes the filter used by this transliterator.  If the filter
-     * is set to <tt>null</tt> then no filtering will occur.
-     *
-     * <p>Callers must take care if a transliterator is in use by
-     * multiple threads.  The filter should not be changed by one
-     * thread while another thread may be transliterating.
-     *
-     * @obsolete ICU 2.4. This method will be made non-virtual in that release.
-     */
-    virtual void adoptFilter(UnicodeFilter* adoptedFilter);
-#else
     /**
      * Changes the filter used by this transliterator.  If the filter
      * is set to <tt>null</tt> then no filtering will occur.
@@ -793,7 +780,6 @@ public:
      * @stable ICU 2.0
      */
     void adoptFilter(UnicodeFilter* adoptedFilter);
-#endif
 
     /**
      * Returns this transliterator's inverse.  See the class
@@ -1138,7 +1124,7 @@ public:
                                               const UnicodeString& target,
                                               UnicodeString& result);
 
- protected:
+protected:
 
     /**
      * Non-mutexed internal method
@@ -1182,7 +1168,18 @@ public:
 					       const UnicodeString& source,
 					       const UnicodeString& target,
 					       UnicodeString& result);
- public:
+
+protected:
+
+    /**
+     * Set the ID of this transliterators.  Subclasses shouldn't do
+     * this, unless the underlying script behavior has changed.
+     * @param id the new id t to be set.
+     * @draft ICU 2.4
+     */
+    void setID(const UnicodeString& id);
+
+public:
 
     /**
      * Return the class ID for this class.  This is useful only for
@@ -1230,79 +1227,9 @@ private:
      */
     static const char fgClassID;
 
-protected:
-
-    /**
-     * Set the ID of this transliterators.  Subclasses shouldn't do
-     * this, unless the underlying script behavior has changed.
-     * @param id the new id t to be set.
-     * @draft ICU 2.4
-     */
-    void setID(const UnicodeString& id);
-
 private:
     static void initializeRegistry(void);
 
-#ifdef U_USE_DEPRECATED_TRANSLITERATOR_API
-
-public:
-    /**
-     * Returns a <code>Transliterator</code> object given its ID.
-     * The ID must be either a system transliterator ID or a ID registered
-     * using <code>registerInstance()</code>.
-     *
-     * @param ID a valid ID, as enumerated by <code>getAvailableIDs()</code>
-     * @param dir           either FORWARD or REVERSE.
-     * @param parseError    Struct to recieve information on position
-     * @return A <code>Transliterator</code> object with the given ID
-     * @exception IllegalArgumentException if the given ID is invalid.
-     * @see #registerInstance
-     * @see #getAvailableIDs
-     * @see #getID
-     * @obsolete ICU 2.4. Use the factory method that takes UParseError and UErrorCode instead since this API will be removed in that release.
-     */
-    inline Transliterator* createInstance(const UnicodeString& ID, 
-                                          UTransDirection dir=UTRANS_FORWARD,
-                                          UParseError* parseError=0);
-   /**
-     * Returns this transliterator's inverse.  See the class
-     * documentation for details.  This implementation simply inverts
-     * the two entities in the ID and attempts to retrieve the
-     * resulting transliterator.  That is, if <code>getID()</code>
-     * returns "A-B", then this method will return the result of
-     * <code>createInstance("B-A")</code>, or <code>null</code> if that
-     * call fails.
-     *
-     * <p>This method does not take filtering into account.  The
-     * returned transliterator will have no filter.
-     *
-     * <p>Subclasses with knowledge of their inverse may wish to
-     * override this method.
-     *
-     * @return a transliterator that is an inverse, not necessarily
-     * exact, of this transliterator, or <code>null</code> if no such
-     * transliterator is registered.
-     * @obsolete ICU 2.4. Use the factory method that takes UErrorCode instead since this API will be removed in that release.
-     */
-    inline Transliterator* createInverse() const;
-
-protected:
-    /**
-     * Method for subclasses to use to obtain a character in the given
-     * string, with filtering.  If the character at the given offset
-     * is excluded by this transliterator's filter, then U+FFFE is returned.
-     *
-     * <p><b>Note:</b> Most subclasses that implement
-     * handleTransliterator() will <em>not</em> want to use this
-     * method, since characters they see are already filtered.  Only
-     * subclasses with special requirements, such as those overriding
-     * filteredTransliterate(), should need this method.
-     *
-     * @obsolete ICU 2.4. No need to call this since the new architecture provides filtering at the top level.
-     */
-    UChar filteredCharAt(const Replaceable& text, int32_t i) const;
-
-#endif
 };
 
 inline UClassID
@@ -1328,31 +1255,6 @@ inline Transliterator::Token Transliterator::pointerToken(void* p) {
     t.pointer = p;
     return t;
 }
-
-/**
- * Definitions for obsolete API
- * TODO: Remove after Aug 2002
- */
-#ifdef U_USE_DEPRECATED_TRANSLITERATOR_API
-
-inline Transliterator* Transliterator::createInstance(const UnicodeString& ID, 
-                                                      UTransDirection dir,
-                                                      UParseError* parseError){
-        UErrorCode status = U_ZERO_ERROR;
-        UParseError error;
-        if(parseError == NULL){
-            parseError = &error;
-        }
-        return Transliterator::createInstance(ID,dir,*parseError,status);
-    }
-
-inline Transliterator* Transliterator::createInverse() const{
-
-    UErrorCode status = U_ZERO_ERROR;
-    return createInverse(status);
-}
-
-#endif
 
 U_NAMESPACE_END
 
