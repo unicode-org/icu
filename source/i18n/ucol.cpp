@@ -981,7 +981,7 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
         } 
         UChar *sourceCopy = source->string;
         UChar *targetCopy = source->writableBuffer;
-        while (sourceCopy <= strend) {
+        while (sourceCopy < strend) {
             if (UCOL_ISTHAIPREVOWEL(*sourceCopy) &&      
             /* This is the combination that needs to be swapped */
                 UCOL_ISTHAIBASECONSONANT(*(sourceCopy + 1))) {
