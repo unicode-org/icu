@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $ 
-* $Date: 2002/07/08 23:52:13 $ 
-* $Revision: 1.38 $
+* $Date: 2002/07/16 00:34:29 $ 
+* $Revision: 1.39 $
 *
 *******************************************************************************
 */
@@ -16,6 +16,7 @@ package com.ibm.icu.dev.test.lang;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.lang.UCharacterCategory;
 import com.ibm.icu.lang.UCharacterDirection;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.text.UTF16;
@@ -554,12 +555,6 @@ public final class UCharacterTest extends TestFmwk
     	{
       		e.printStackTrace();
     	}
-    
-    	if (UCharacter.getDirection(0x10001) != 
-                                  UCharacterDirection.BOUNDARY_NEUTRAL) {
-  			errln("FAIL 0x10001 expected direction " + 
-          UCharacterDirection.toString(UCharacterDirection.BOUNDARY_NEUTRAL));
-    	}
   	}
   
   
@@ -937,6 +932,23 @@ public final class UCharacterTest extends TestFmwk
   	{
       	int limit     = 0;
       	int prevtype  = -1;
+        int test[][]={{0x41, UCharacterCategory.UPPERCASE_LETTER},
+                        {0x308, UCharacterCategory.NON_SPACING_MARK},
+                        {0xfffe, UCharacterCategory.GENERAL_OTHER_TYPES},
+                        {0xe0041, UCharacterCategory.FORMAT},
+                        {0xeffff, UCharacterCategory.UNASSIGNED}};
+
+        // default Bidi classes for unassigned code points 
+        int defaultBidi[][]={{ 0x0590, UCharacterDirection.LEFT_TO_RIGHT },
+            { 0x0600, UCharacterDirection.RIGHT_TO_LEFT },
+            { 0x07C0, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },
+            { 0xFB1D, UCharacterDirection.LEFT_TO_RIGHT },
+            { 0xFB50, UCharacterDirection.RIGHT_TO_LEFT },
+            { 0xFE00, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },
+            { 0xFE70, UCharacterDirection.LEFT_TO_RIGHT },
+            { 0xFF00, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },
+            { 0x110000, UCharacterDirection.LEFT_TO_RIGHT }};
+    
       	RangeValueIterator iterator = UCharacter.getTypeIterator();
       	RangeValueIterator.Element result = new RangeValueIterator.Element();
       	while (iterator.next(result)) {
@@ -959,6 +971,70 @@ public final class UCharacterTest extends TestFmwk
                         	temptype + " not " + result.value);
               	}
           	}
+            
+            for (int i = 0; i < test.length; ++ i) {
+                if (result.start <= test[i][0] && test[i][0] < result.limit) {
+                    if (result.value != test[i][1]) {
+                        errln("error: getTypes() has range [" 
+                              + Integer.toHexString(result.start) + ", " 
+                              + Integer.toHexString(result.limit) 
+                              + "] with type " + result.value 
+                              + " instead of [" 
+                              + Integer.toHexString(test[i][0]) + ", " 
+                              + Integer.toHexString(test[i][1]));
+                    }
+                }
+            }
+        
+            // LineBreak.txt specifies:
+            //   #  - Assigned characters that are not listed explicitly are given the value
+            //   #    "AL".
+            //   #  - Unassigned characters are given the value "XX".
+            //
+            // PUA characters are listed explicitly with "XX".
+            // Verify that no assigned character has "XX".
+            /* synwee this is not ported to java yet
+             * if (result.value != UCharacterCategory.UNASSIGNED 
+                && result.value != UCharacterCategory.PRIVATE_USE) {
+                int c = result.start;
+                while (c < result.limit) {
+                    if (0 == u_getIntPropertyValue(c, UCHAR_LINE_BREAK)) {
+                        log_err("error UCHAR_LINE_BREAK(assigned U+%04lx)=XX\n", c);
+                    }
+                    ++c;
+                }
+            }
+            */
+        
+            /*
+             * Verify default Bidi classes.
+             * See table 3-7 "Bidirectional Character Types" in UAX #9.
+             * http://www.unicode.org/reports/tr9/
+             */
+            if (result.value == UCharacterCategory.UNASSIGNED 
+                && result.value == UCharacterCategory.PRIVATE_USE) {
+                int c = result.start;
+                for (int i = 0; i < defaultBidi.length && c < result.limit; 
+                     ++ i) {
+                    if (c < defaultBidi[i][0]) {
+                        while (c < result.limit && c < defaultBidi[i][0]) {
+                            System.out.println(UCharacter.getDirection(c));
+                            if (UCharacter.getDirection(c) 
+                                != defaultBidi[i][1] 
+                                /* synwee this is not ported yet ||
+                                u_getIntPropertyValue(c, UCHAR_BIDI_CLASS) 
+                                != defaultBidi[i][1] */
+                            ) {
+                                errln("error: getDirection(unassigned/PUA "
+                                      + Integer.toHexString(c) 
+                                      + ") should be " 
+                                      + defaultBidi[i][1]);
+                            }
+                            ++ c;
+                        }
+                    }
+                }
+            }
       	}
       
       	iterator.reset();
