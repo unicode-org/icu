@@ -1,4 +1,6 @@
 ## Makefile.in for ICU - tools/makeconv
+## Copyright (c) 2001, International Business Machines Corporation and
+## others. All Rights Reserved.
 ## Stephen F. Booth
 
 ## Source directory information

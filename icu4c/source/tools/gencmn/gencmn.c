@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999, International Business Machines
+*   Copyright (C) 1999-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -363,7 +363,7 @@ main(int argc, char* argv[]) {
             sprintf(buffer, ",\n        { \"%s\", %s%s }", files[i].basename, symPrefix, files[i].pathname);
             T_FileStream_writeLine(out, buffer);
         }
-      
+
         T_FileStream_writeLine(out, "\n    }\n};\n");
         T_FileStream_close(out);
     }

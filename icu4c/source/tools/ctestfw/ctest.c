@@ -1,7 +1,7 @@
-/*  
+/*
 *****************************************************************************************
 *
-*   Copyright (C) 1996-1999, International Business Machines
+*   Copyright (C) 1996-2000, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *****************************************************************************************
@@ -13,7 +13,7 @@
 #include <stdarg.h>
 
 /* NOTES:
-   3/20/1999 srl - strncpy called w/o setting nulls at the end 
+   3/20/1999 srl - strncpy called w/o setting nulls at the end
  */
 
 #define MAXTESTNAME 128
@@ -47,7 +47,7 @@ static void getNextLevel( const char* name,
               int* nameLen,
               const char** nextName );
 
-static void iterateTestsWithLevel( const TestNode *root, int len, 
+static void iterateTestsWithLevel( const TestNode *root, int len,
                    const TestNode** list,
                    TestMode mode);
 /* If we need to make the framework multi-thread safe
@@ -78,7 +78,7 @@ static void getNextLevel( const char* name,
 {
   /* Get the next component of the name */
   *nextName = strchr(name, TEST_SEPARATOR);
-  
+
   if( *nextName != 0 )
     {
       char n[255];
@@ -88,20 +88,20 @@ static void getNextLevel( const char* name,
       n[*nameLen] = 0;
       /*      printf("->%s-< [%d] -> [%s]\n", name, *nameLen, *nextName);*/
     }
-  else    *nameLen = strlen(name);  
+  else    *nameLen = strlen(name);
 }
 
 static TestNode *createTestNode( )
 {
   TestNode *newNode;
-  
+
   newNode = (TestNode*)malloc ( sizeof ( TestNode ) );
-  
+
   newNode->name[0]  = '\0';
   newNode->test = NULL;
   newNode->sibling = NULL;
-  newNode->child = NULL;    
-  
+  newNode->child = NULL;
+
   return  newNode;
 }
 
@@ -211,7 +211,7 @@ static TestNode *addTestNode ( TestNode *root, const char *name )
 }
 
 static void iterateTestsWithLevel ( const TestNode* root,
-                 int len, 
+                 int len,
                  const TestNode** list,
                  TestMode mode)
 {
@@ -235,7 +235,7 @@ static void iterateTestsWithLevel ( const TestNode* root,
     strcat(pathToFunction, list[i]->name);
 
     INDENT_LEVEL = len;
-    if ( (mode == RUNTESTS) && (root->test != NULL)) 
+    if ( (mode == RUNTESTS) && (root->test != NULL))
     {
         int myERROR_COUNT = ERROR_COUNT;
         root->test();
@@ -288,7 +288,7 @@ void runTests ( const TestNode *root )
     if (root == NULL)
         log_err("TEST CAN'T BE FOUND!\n");
 
-    ERRONEOUS_FUNCTION_COUNT = ERROR_COUNT = 0;  
+    ERRONEOUS_FUNCTION_COUNT = ERROR_COUNT = 0;
     iterateTestsWithLevel ( root, 0, aList, RUNTESTS );
 
     /*print out result summary*/
@@ -299,7 +299,7 @@ void runTests ( const TestNode *root )
         for (i=0;i < ERRONEOUS_FUNCTION_COUNT; i++)
             log_info("[%s]\n",ERROR_LOG[i]);
     }
-    else 
+    else
     {
         log_info("\n[All tests passed successfully...]\n");
     }

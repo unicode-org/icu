@@ -1,6 +1,6 @@
 /*
  *
- *   Copyright (C) 1998-1999, International Business Machines
+ *   Copyright (C) 1998-2000, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  * @version	1.0 06/19/98
@@ -92,12 +92,12 @@ const int16_t tagValues[] =
 	/* Pi */ (int16_t)INITIAL_PUNCTUATION,
 	/* Pf */ (int16_t)FINAL_PUNCTUATION
 	};
-int 
-MakeProp(char* str) 
+int
+MakeProp(char* str)
 {
 	int result = 0;
 	char* matchPosition;
-	
+
 	matchPosition = strstr(tagStrings, str);
 	if (matchPosition == 0) fprintf(stderr, "unrecognized type letter %s", str);
 	else result = ((matchPosition - tagStrings) / 2);
@@ -153,15 +153,15 @@ getArray(FILE *input)
                 }
 				sscanf(bufferPtr, "%X", &otherunicode);
                 // the Unicode char has a equivalent uppercase
-                if ((typeResult == LOWERCASE_LETTER) && (0 <= otherunicode && otherunicode < 65536)) { 
+                if ((typeResult == LOWERCASE_LETTER) && (0 <= otherunicode && otherunicode < 65536)) {
                     set = TRUE;
-                } 
+                }
                 if ((typeResult == UPPERCASE_LETTER) && !set) {
                     bufferPtr++;
 			    	sscanf(bufferPtr, "%X", &otherunicode);
-                    if (0 <= otherunicode && otherunicode < 65536) { 
+                    if (0 <= otherunicode && otherunicode < 65536) {
                         set = TRUE;
-                    } 
+                    }
                 }
 				if ((set == TRUE) && (ucmp16_get(ulxfrmArray, (UChar)unicode) == (int16_t)0xffff))
 					ucmp16_set(ulxfrmArray, (UChar)unicode, (int16_t)otherunicode);
@@ -178,7 +178,7 @@ getArray(FILE *input)
 	return ulxfrmArray;
 }
 
-void 
+void
 writeArrays()
 {
 	const int16_t* values = ucmp16_getArray(ulxfrmArray);

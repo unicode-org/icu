@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999, International Business Machines
+*   Copyright (C) 1999-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -66,7 +66,7 @@ typedef struct {
 
 static char stringStore[STRING_STORE_SIZE];
 static StringBlock stringBlock = { stringStore, 0, STRING_STORE_SIZE };
- 
+
 typedef struct {
     const char *alias;
     uint16_t converter;
@@ -328,7 +328,7 @@ parseLine(const char *line) {
                 ++pos;
             }
         } while (line[pos] && line[pos] != '}' && line[pos] != '#');
-        
+
         if (line[pos] == '}') {
             ++pos;
         } else {

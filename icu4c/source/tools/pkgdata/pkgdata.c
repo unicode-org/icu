@@ -1,6 +1,6 @@
 /******************************************************************************
 *
-*   Copyright (C) 2000, International Business Machines
+*   Copyright (C) 2000-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -13,7 +13,7 @@
 *   created by: Steven \u24C7 Loomis
 *
 *   This program packages the ICU data into different forms
-*   (DLL, common data, etc.) 
+*   (DLL, common data, etc.)
 */
 
 #include <stdio.h>
@@ -53,7 +53,7 @@ static struct
   const char *name;
   UPKGMODE   *fcn;
   const char *desc;
-} modes[] = 
+} modes[] =
 {
   { "files", pkg_mode_files, "Uses raw data files (no effect). Installation copies all files to the target location." },
 #ifdef WIN32
@@ -68,16 +68,16 @@ static struct
 };
 
 static UOption options[]={
-/*00*/    UOPTION_DEF( "name",    'p', UOPT_REQUIRES_ARG),       
+/*00*/    UOPTION_DEF( "name",    'p', UOPT_REQUIRES_ARG),
 /*01*/    UOPTION_DEF( "bldopt",  'O', UOPT_REQUIRES_ARG), /* on Win32 it is release or debug */
 /*02*/    UOPTION_DEF( "mode",    'm', UOPT_REQUIRES_ARG),
 /*03*/    UOPTION_HELP_H,                                   /* -h */
 /*04*/    UOPTION_HELP_QUESTION_MARK,                       /* -? */
 /*05*/    UOPTION_VERBOSE,                                  /* -v */
 /*06*/    UOPTION_COPYRIGHT,                                /* -c */
-/*07*/    UOPTION_DEF( "comment", 'C', UOPT_REQUIRES_ARG),  
+/*07*/    UOPTION_DEF( "comment", 'C', UOPT_REQUIRES_ARG),
 /*08*/    UOPTION_DESTDIR,                                  /* -d */
-/*09*/    UOPTION_DEF( "clean",   'k', UOPT_NO_ARG),    
+/*09*/    UOPTION_DEF( "clean",   'k', UOPT_NO_ARG),
 /*10*/    UOPTION_DEF( "nooutput",'n', UOPT_NO_ARG),
 /*11*/    UOPTION_DEF( "rebuild", 'F', UOPT_NO_ARG),
 /*12*/    UOPTION_DEF( "tempdir", 'T', UOPT_REQUIRES_ARG),
@@ -124,9 +124,9 @@ main(int argc, char* argv[]) {
 
   /* read command line options */
   argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
-  
+
   /* error handling, printing usage message */
-  /* I've decided to simply print an error and quit. This tool has too 
+  /* I've decided to simply print an error and quit. This tool has too
      many options to just display them all of the time. */
 
   if(options[3].doesOccur || options[4].doesOccur) {
@@ -147,7 +147,7 @@ main(int argc, char* argv[]) {
       fprintf(stderr, "Run '%s --help' for help.\n", progname);
       return 1;
     }
-    
+
     if(argc == 1) {
       fprintf(stderr,
               "No input files specified.\n"
@@ -162,7 +162,7 @@ main(int argc, char* argv[]) {
             "\tProduce packaged ICU data from the given list(s) of files.\n"
             "\t'-' by itself means to read from stdin.\n",
             progname);
-    
+
     fprintf(stderr, "\n options:\n");
     for(i=0;i<(sizeof(options)/sizeof(options[0]));i++) {
       fprintf(stderr, "%-5s -%c or --%-10s  %s\n",
@@ -240,7 +240,7 @@ main(int argc, char* argv[]) {
   o.clean     = options[9].doesOccur;
   o.nooutput  = options[10].doesOccur;
   o.rebuild   = options[11].doesOccur;
-  
+
   if( options[12].doesOccur ) {
     o.tmpDir    = options[12].value;
   } else {
@@ -307,7 +307,7 @@ main(int argc, char* argv[]) {
   T_FileStream_close(out);
 
   if(U_FAILURE(status)) {
-    fprintf(stderr, "Error creating makefile [%s]: %s\n", o.mode, 
+    fprintf(stderr, "Error creating makefile [%s]: %s\n", o.mode,
             u_errorName(status));
     return 1;
   }
@@ -315,7 +315,7 @@ main(int argc, char* argv[]) {
   if(o.nooutput == TRUE) {
     return 0; /* nothing to do. */
   }
-  
+
   return executeMakefile(&o);
 }
 
@@ -326,7 +326,7 @@ static int executeMakefile(const UPKGOptions *o)
   /*char pwd[1024];*/
   const char *make;
   int rc;
-    
+
   make = getenv("MAKE");
 
   if(!make || !make[0]) {
@@ -367,7 +367,7 @@ static int executeMakefile(const UPKGOptions *o)
   }
 
   rc = system(cmd);
-    
+
   if(rc < 0) {
     fprintf(stderr, "# Failed, rc=%d\n", rc);
   }
@@ -378,26 +378,26 @@ static int executeMakefile(const UPKGOptions *o)
 static void loadLists(UPKGOptions *o, UErrorCode *status)
 {
   CharList   *l, *tail = NULL, *tail2 = NULL;
-  FileStream *in; 
+  FileStream *in;
   char        line[2048];
   char        tmp[1024];
   const char* baseName;
   char       *s;
-  
+
   for(l = o->fileListFiles; l; l = l->next) {
     if(o->verbose) {
       fprintf(stdout, "# Reading %s..\n", l->str);
     }
-    
+
     /* TODO: stdin */
     in = T_FileStream_open(l->str, "r");
-    
+
     if(!in) {
       fprintf(stderr, "Error opening <%s>.\n", l->str);
       *status = U_FILE_ACCESS_ERROR;
       return;
     }
-    
+
     while(T_FileStream_readLine(in, line, sizeof(line))!=NULL) {
       /* remove trailing newline characters */
       s=line;
@@ -411,7 +411,7 @@ static void loadLists(UPKGOptions *o, UErrorCode *status)
       if((*line == 0) || (*line == '#')) {
         continue; /* comment or empty line */
       }
-      
+
       /* add the file */
       s = (char*)getLongPathname(line);
 
@@ -425,10 +425,10 @@ static void loadLists(UPKGOptions *o, UErrorCode *status)
           uprv_strcpy(tmp, o->srcDir);
           uprv_strcat(tmp, o->srcDir[uprv_strlen(o->srcDir)-1]==U_FILE_SEP_CHAR?"":U_FILE_SEP_STRING);
           uprv_strcat(tmp, s);
-          o->filePaths = pkg_appendToList(o->filePaths, &tail2, uprv_strdup(tmp)); 
+          o->filePaths = pkg_appendToList(o->filePaths, &tail2, uprv_strdup(tmp));
       }
     }
-    
+
     T_FileStream_close(in);
   }
 }

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-1999, International Business Machines
+*   Copyright (C) 1998-2000, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -37,7 +37,7 @@ enum ETokenType
   tok_start_array,          /* :Array */
   tok_start_intvector,      /* :IntVector */
   tok_start_reserved,       /* :Reserved - treat like a string */
-  
+
   tok_EOF,                  /* End of the file has been reached successfully */
   tok_error,                /* An error, such an unterminated quoted string */
   tok_token_type_count = 12 /* Number of "real" token types */

@@ -1,6 +1,6 @@
 /******************************************************************************
 *
-*   Copyright (C) 2000, International Business Machines
+*   Copyright (C) 2000-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -45,7 +45,7 @@ install: all
       $(INSTALL_DATA) $(TARGETS) $(instdir)
 
 
-==Note:==  
+==Note:==
   The only items in the first '$(INSTALL_DATA)' are files NOT already in the out dir!
 
 
@@ -70,7 +70,7 @@ void pkg_mode_files(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
 
   fprintf(stderr, " ####### Warning! Files mode is still experimental. -srl\n");
 
-  
+
   /* Dont' copy files already in tmp */
   for(infiles = o->filePaths;infiles;infiles = infiles->next)
   {
@@ -79,7 +79,7 @@ void pkg_mode_files(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
     uprv_strcpy(tmp, o->tmpDir);
     uprv_strcat(tmp, U_FILE_SEP_STRING);
     uprv_strcat(tmp, baseName);
-    
+
     o->outFiles = pkg_appendToList(o->outFiles, &tail, uprv_strdup(tmp));
 
     if(strcmp(tmp, infiles->str) == 0)
@@ -93,21 +93,21 @@ void pkg_mode_files(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
     uprv_strcat(tmp2, U_FILE_SEP_STRING);
     uprv_strcat(tmp2, U_FILE_SEP_STRING);
     uprv_strcat(tmp2, baseName);
-    
+
     if(strcmp(tmp2, infiles->str) == 0)
     {
       /* fprintf(stderr, "### NOT copying: %s\n", tmp2);  */
       /*  no copy needed.. */
       continue;
     }
-    
+
     /* left hand side: target path, target name */
     copyFilesLeft = pkg_appendToList(copyFilesLeft, &copyFilesLeftTail, uprv_strdup(tmp));
 
     fprintf(stderr, "##### COPY %s\n", tmp2);
     /* rhs:  source path */
     copyFilesRight = pkg_appendToList(copyFilesRight, &copyFilesRightTail, uprv_strdup(infiles->str));
-    
+
   }
 
   if(o->nooutput || o->verbose) {
@@ -118,7 +118,7 @@ void pkg_mode_files(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
     }
     printf("\n");
   }
-  
+
   if(o->nooutput) {
     *status = U_ZERO_ERROR;
     return;
@@ -129,7 +129,7 @@ void pkg_mode_files(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
   pkg_writeCharListWrap(makefile, copyFilesLeft, " ", " \\\n",1);
   T_FileStream_writeLine(makefile, "\n");
 
-  
+
   T_FileStream_writeLine(makefile, "all: $(TARGETDIR)/$(NAME)\n\n");
   T_FileStream_writeLine(makefile, "$(TARGETDIR)/$(NAME):\n");
   T_FileStream_writeLine(makefile, "\t@-$(RMV) $(TARGETDIR)/$(NAME)\n");
@@ -137,13 +137,13 @@ void pkg_mode_files(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
   /* commands for the make rule */
   tail = NULL;
   copyCommands =  pkg_appendToList(copyCommands, &tail, uprv_strdup("$(INSTALL_DATA) $? $(TARGETDIR)"));
-  
+
   if(copyFilesRight != NULL)
   {
 
     pkg_mak_writeStanza(makefile, o, "$(COPIEDDEST)", copyFilesRight,
                         copyCommands);
-    
+
     T_FileStream_writeLine(makefile, "clean:\n\t-$(RMV) $(COPIEDDEST) $(MAKEFILE)");
     T_FileStream_writeLine(makefile, "\n\n");
 
@@ -152,7 +152,7 @@ void pkg_mode_files(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
   {
     T_FileStream_writeLine(makefile, "clean:\n\n");
   }
-    
+
   sprintf(tmp, "install: $(COPIEDDEST)\n"
           "\t$(INSTALL_DATA) $(DATAFILEPATHS) $(INSTALLTO)\n\n");
 

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-1999, International Business Machines
+*   Copyright (C) 1998-2000, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -28,7 +28,7 @@
 /* Protos */
 static void write_ustring(FileStream *rb, const UChar *data);
 static void write_string(FileStream *rb, const char *data);
-static void write_strlist(FileStream *rb, const char *name, 
+static void write_strlist(FileStream *rb, const char *name,
 			  const struct SStringList *list);
 static void write_strlist2d(FileStream *rb, const char *name,
 			    const struct SStringList2d *list);
@@ -52,7 +52,7 @@ static const UChar gCollationElementsTag [] = {
 
 /* Write a null-terminated UChar array */
 static void
-write_ustring(FileStream *rb, 
+write_ustring(FileStream *rb,
 	      const UChar *data)
 {
   int32_t len;
@@ -79,7 +79,7 @@ write_string(FileStream *rb,
 
 /* Write a string list */
 static void
-write_strlist(FileStream *rb, 
+write_strlist(FileStream *rb,
 	      const char *name,
 	      const struct SStringList *list)
 {
@@ -101,7 +101,7 @@ write_strlist(FileStream *rb,
 }
 
 /* Write a 2-d string list */
-static void 
+static void
 write_strlist2d(FileStream *rb,
 		const char *name,
 		const struct SStringList2d *list)
@@ -134,8 +134,8 @@ write_strlist2d(FileStream *rb,
 }
 
 /* Write a tagged list */
-static void 
-write_taglist(FileStream *rb, 
+static void
+write_taglist(FileStream *rb,
 	      const char *name,
 	      const struct STaggedList *list)
 {
@@ -168,8 +168,8 @@ write_taglist(FileStream *rb,
 
 /* Write a parsed SRBItemList to a file */
 void
-rb_write(FileStream *f, 
-	 struct SRBItemList *data, 
+rb_write(FileStream *f,
+	 struct SRBItemList *data,
 	 UErrorCode *status)
 {
 //  int32_t i;
@@ -225,6 +225,6 @@ rb_write(FileStream *f,
 
  finish:
   ;
-  
+
   /* clean up */
 }

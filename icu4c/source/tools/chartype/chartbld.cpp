@@ -1,6 +1,6 @@
 /*
  *
- *   Copyright (C) 1996-1999, International Business Machines
+ *   Copyright (C) 1996-2001, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  * @version	1.0 12/12/96
@@ -62,12 +62,12 @@ const int16_t CharTypeBuilder::tagValues[] =
 	const UChar CharTypeBuilder:: LAST_CHAR_CODE_IN_FILE = 0xFFFD;
 
 CompactByteArray* CharTypeBuilder::charTypeArray = 0;
-int 
-CharTypeBuilder::MakeProp(char* str) 
+int
+CharTypeBuilder::MakeProp(char* str)
 {
 	int result = 0;
 	char* matchPosition;
-	
+
 	matchPosition = strstr(tagStrings, str);
 	if (matchPosition == 0) fprintf(stderr, "unrecognized type letter %s\n", str);
 	else result = ((matchPosition - tagStrings) / 2);
@@ -119,7 +119,7 @@ CharTypeBuilder::getByteArray(FILE* input)
 	return charTypeArray;
 }
 
-void 
+void
 CharTypeBuilder::writeByteArrays()
 {
 	const int8_t* values = ucmp8_getArray(charTypeArray);
