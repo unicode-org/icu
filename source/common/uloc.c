@@ -1295,19 +1295,13 @@ uloc_countAvailable()
 
 UBool uloc_cleanup(void) {
     char ** temp;
-    int32_t localeCount;
-    int32_t i;
 
     if (_installedLocales) {
         temp = _installedLocales;
         _installedLocales = NULL;
 
-        localeCount = _installedLocalesCount;
         _installedLocalesCount = 0;
 
-        for (i = 0; i < localeCount; i++) {
-            uprv_free(temp[i]);
-        }
         uprv_free(temp);
     }
     return TRUE;
@@ -1318,10 +1312,8 @@ static void _lazyEvaluate_installedLocales()
     UResourceBundle *index = NULL;
     UResourceBundle installed;
     UErrorCode status = U_ZERO_ERROR;
-    const UChar *lname;
     char ** temp;
     int32_t i = 0;
-    int32_t len = 0;
     int32_t localeCount;
     
     ures_initStackObject(&installed);
@@ -1334,13 +1326,9 @@ static void _lazyEvaluate_installedLocales()
 
         ures_resetIterator(&installed);
         while(ures_hasNext(&installed)) {
-            lname = ures_getNextString(&installed, &len, NULL, &status);
-            temp[i] = (char*) uprv_malloc(sizeof(char) * (len + 1));
-            
-            u_UCharsToChars(lname, temp[i], len);
-            temp[i][len] = 0; /* Terminate the string */
-            i++;
+            ures_getNextString(&installed, NULL, &temp[i++], &status);
         }
+        temp[i] = NULL;
 
         umtx_lock(NULL);
         if (_installedLocales == NULL)
@@ -1348,9 +1336,6 @@ static void _lazyEvaluate_installedLocales()
             _installedLocales = temp;
             _installedLocalesCount = localeCount;
         } else {
-            for (i = 0; i < localeCount; i++) {
-                uprv_free(temp[i]);
-            }
             uprv_free(temp);
         }
         umtx_unlock(NULL);
