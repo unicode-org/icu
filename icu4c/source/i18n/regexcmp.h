@@ -154,6 +154,12 @@ private:
 
     int32_t                       fMatcherDataEnd;   // Location Counter for allocation of data
                                                      //   to be used by the matcher at match time.
+
+    int32_t                       fBackRefMax;       // Number of the largest capture group with a
+                                                     //   back reference.  Capture groups can be forward-
+                                                     //   referenced, so we can't flag an error on
+                                                     //   a too-big back ref number until the end of the
+                                                     //   pattern is reached.
 };
 
 U_NAMESPACE_END

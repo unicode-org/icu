@@ -119,6 +119,8 @@ open-paren-extended:
     's'                  n  paren-flag                              doMatchMode
     'm'                  n  paren-flag                              doMatchMode
     '-'                  n  paren-flag                              doMatchMode
+    '('                  n  errorDeath                              doConditionalExpr
+    '{'                  n  errorDeath                              doPerlInline
     default                 errorDeath                              doBadOpenParenType
     
 open-paren-lookbehind:
@@ -230,8 +232,9 @@ backslash:
    'Z'                   n  term                                    doBackslashZ
    'z'                   n  term                                    doBackslashz
    '0'                   n  expr-quant                              doOctal
-   digit_char	            expr-quant                              doBackRef         #  Will scan multiple digits
-   default               n  expr-quant		                        doLiteralChar     #  Escaped literal char.		       
+   digit_char	         n  expr-quant                              doBackRef         #  Will scan multiple digits
+   eof                      errorDeath                              doEscapeError
+   default               n  expr-quant		                    doLiteralChar     #  Escaped literal char.		       
 
     
     
