@@ -203,7 +203,74 @@ Checks LetterLike Symbols which were previously a source of confusion
         }
     }
     log_verbose("done testing upper Lower\n");
+	
+	log_verbose("testing u_istitle\n");
+	{
+		UChar expected[] = {
+						0x1F88,
+						0x1F89,
+						0x1F8A,
+						0x1F8B,
+						0x1F8C,
+						0x1F8D,
+						0x1F8E,
+						0x1F8F,
+						0x1F88,
+						0x1F89,
+						0x1F8A,
+						0x1F8B,
+						0x1F8C,
+						0x1F8D,
+						0x1F8E,
+						0x1F8F,
+						0x1F98,
+						0x1F99,
+						0x1F9A,
+						0x1F9B,
+						0x1F9C,
+						0x1F9D,
+						0x1F9E,
+						0x1F9F,
+						0x1F98,
+						0x1F99,
+						0x1F9A,
+						0x1F9B,
+						0x1F9C,
+						0x1F9D,
+						0x1F9E,
+						0x1F9F,
+						0x1FA8,
+						0x1FA9,
+						0x1FAA,
+						0x1FAB,
+						0x1FAC,
+						0x1FAD,
+						0x1FAE,
+						0x1FAF,
+						0x1FA8,
+						0x1FA9,
+						0x1FAA,
+						0x1FAB,
+						0x1FAC,
+						0x1FAD,
+						0x1FAE,
+						0x1FAF,
+						0x1FBC,
+						0x1FBC,
+						0x1FCC,
+						0x1FCC,
+						0x1FFC,
+						0x1FFC,
+				};
+		int32_t num = sizeof(expected)/sizeof(expected[0]);
+		int32_t i=0;
+		for(;i<num;i++){
+			if(!u_istitle(expected[i])){
+				log_err("u_istitle failed for 0x%4X. Expected TRUE, got FALSE\n",expected[i]);
+			}
+		}
 
+	}
 }
 
 
@@ -428,6 +495,15 @@ static void TestMisc()
     if(mask!=(U_CHAR_CATEGORY_COUNT<32 ? U_MASK(U_CHAR_CATEGORY_COUNT)-1: 0xffffffff)) {
         log_err("error: problems with U_GC_Y_MASK constants\n");
     }
+	{
+		UChar32 digit[10]={ 0x0030,0x0031,0x0032,0x0033,0x0034,0x0035,0x0036,0x0037,0x0038,0x0039 };
+		int32_t i=0;
+		for(i=0;i<10;i++){
+			if(digit[i]!=u_forDigit(i,10)){
+				log_err("u_forDigit failed for %i. Expected: 0x%4X Got: 0x%4X\n",i,digit[i],u_forDigit(i,10));
+			}
+		}
+	}
 }
 
 /* Tests for isControl(u_iscntrl()) and isPrintable(u_isprint()) */
@@ -2372,3 +2448,4 @@ TestPropertyValues(void) {
         }
     }
 }
+

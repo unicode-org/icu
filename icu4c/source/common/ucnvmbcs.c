@@ -3390,6 +3390,17 @@ _MBCSFromUChar32(UConverterSharedData *sharedData,
     }
 }
 
+
+#if 0
+/** 
+ * ################################################################
+ * # 
+ * # This function has been moved to ucnv2022.c for inlining.
+ * # This implementation is here only for documentation purposes
+ * #
+ * ################################################################
+ */
+
 /**
  * This version of _MBCSFromUChar32() is optimized for single-byte codepages.
  * It does not handle the EBCDIC swaplfnl option (set in UConverter).
@@ -3420,6 +3431,7 @@ _MBCSSingleFromUChar32(UConverterSharedData *sharedData,
         return -1;
     }
 }
+#endif
 
 /* miscellaneous ------------------------------------------------------------ */
 

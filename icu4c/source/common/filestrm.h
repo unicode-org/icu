@@ -34,9 +34,10 @@ typedef struct _FileStream FileStream;
 U_CAPI FileStream* U_EXPORT2
 T_FileStream_open(const char* filename, const char* mode);
 
+/*
 U_CAPI FileStream* U_EXPORT2
 T_FileStream_wopen(const wchar_t* filename, const wchar_t* mode);
-
+*/
 U_CAPI void U_EXPORT2
 T_FileStream_close(FileStream* fileStream);
 
@@ -97,6 +98,8 @@ T_FileStream_stdout(void);
 U_CAPI FileStream* U_EXPORT2
 T_FileStream_stderr(void);
 
+U_CAPI UBool U_EXPORT2
+T_FileStream_remove(const char* fileName);
 #endif /* _FILESTRM*/
 
 

@@ -68,7 +68,10 @@ void CanonicalIteratorTest::TestExhaustive() {
     CanonicalIterator it("", status);
     UChar32 i = 0;
     UnicodeString s, decomp, comp;
-    
+	// Test static and dynamic class IDs
+    if(it.getDynamicClassID() != CanonicalIterator::getStaticClassID()){
+		errln("CanonicalIterator::getStaticClassId ! = CanonicalIterator.getDynamicClassID");
+	}
     for (i = 0; i < 0x10FFFF; quick?i+=0x10:++i) {
         //for (i = 0xae00; i < 0xaf00; ++i) {
         

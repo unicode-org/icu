@@ -187,7 +187,7 @@ void NewResourceBundleTest::runIndexedTest( int32_t index, UBool exec, const cha
     case 1: name = "TestConstruction"; if (exec) TestConstruction(); break;
     case 2: name = "TestIteration"; if (exec) TestIteration(); break;
     case 3: name = "TestOtherAPI";  if(exec) TestOtherAPI(); break;
-
+    case 4: name = "TestNewTypes";  if(exec) TestNewTypes(); break;
         default: name = ""; break; //needed to end loop
     }
 }
@@ -961,6 +961,154 @@ NewResourceBundleTest::record_fail()
 {
   err();
   ++fail;
+}
+
+
+void
+NewResourceBundleTest::TestNewTypes() {
+    char action[256];
+    const char* testdatapath;
+    UErrorCode status = U_ZERO_ERROR;
+    uint8_t *binResult = NULL;
+    int32_t len = 0;
+    int32_t i = 0;
+    int32_t intResult = 0;
+    uint32_t uintResult = 0;
+    UChar expected[] = { 'a','b','c','\0','d','e','f' };
+    const char* expect ="tab:\t cr:\r ff:\f newline:\n backslash:\\\\ quote=\\\' doubleQuote=\\\" singlequoutes=''";
+    UChar uExpect[200];
+
+    testdatapath=loadTestData(status);
+
+    if(U_FAILURE(status))
+    {
+        logln("Could not load testdata.dat %s \n",u_errorName(status));
+        return;
+    }
+
+    ResourceBundle theBundle(testdatapath, "testtypes", status);
+	ResourceBundle bundle(testdatapath, Locale("te_IN"),status);
+
+    UnicodeString emptyStr = theBundle.getStringEx("emptystring", status);
+    if(!emptyStr.length()==0) {
+      logln("Empty string returned invalid value\n");
+    }
+
+    CONFIRM_UErrorCode(status, U_ZERO_ERROR);
+
+    /* This test reads the string "abc\u0000def" from the bundle   */
+    /* if everything is working correctly, the size of this string */
+    /* should be 7. Everything else is a wrong answer, esp. 3 and 6*/
+
+    strcpy(action, "getting and testing of string with embeded zero");
+    ResourceBundle res = theBundle.get("zerotest", status);
+    CONFIRM_UErrorCode(status, U_ZERO_ERROR);
+    CONFIRM_EQ(res.getType(), RES_STRING);
+    UnicodeString zeroString=res.getString(status);
+    if(U_SUCCESS(status)){
+        CONFIRM_UErrorCode(status, U_ZERO_ERROR);
+        CONFIRM_EQ(len, 7);
+        CONFIRM_NE(len, 3);
+    }
+    for(i=0;i<len;i++){
+        if(zeroString[i]!= expected[i]){
+            logln("Output didnot match Expected: \\u%4X Got: \\u%4X", expected[i], zeroString[i]);
+        }
+    }
+
+    strcpy(action, "getting and testing of binary type");
+    res = theBundle.get("binarytest", status);
+    CONFIRM_UErrorCode(status, U_ZERO_ERROR);
+    CONFIRM_EQ(res.getType(), RES_BINARY);
+    binResult=(uint8_t*)res.getBinary(len, status);
+    if(U_SUCCESS(status)){
+        CONFIRM_UErrorCode(status, U_ZERO_ERROR);
+        CONFIRM_EQ(len, 15);
+        for(i = 0; i<15; i++) {
+            CONFIRM_EQ(binResult[i], i);
+        }
+    }
+
+    strcpy(action, "getting and testing of imported binary type");
+    res = theBundle.get("importtest",status);
+    CONFIRM_UErrorCode(status, U_ZERO_ERROR);
+    CONFIRM_EQ(res.getType(), RES_BINARY);
+    binResult=(uint8_t*)res.getBinary(len, status);
+    if(U_SUCCESS(status)){
+        CONFIRM_UErrorCode(status, U_ZERO_ERROR);
+        CONFIRM_EQ(len, 15);
+        for(i = 0; i<15; i++) {
+            CONFIRM_EQ(binResult[i], i);
+        }
+    }
+
+    strcpy(action, "getting and testing of integer types");
+    res = theBundle.get("one",  status);
+    CONFIRM_UErrorCode(status, U_ZERO_ERROR);
+    CONFIRM_EQ(res.getType(), RES_INT);
+    intResult=res.getInt(status);
+    uintResult = res.getUInt(status);
+    if(U_SUCCESS(status)){
+        CONFIRM_UErrorCode(status, U_ZERO_ERROR);
+        CONFIRM_EQ(uintResult, (uint32_t)intResult);
+        CONFIRM_EQ(intResult, 1);
+    }
+
+    strcpy(action, "getting minusone");
+    res = theBundle.get((const char*)"minusone", status);
+    CONFIRM_UErrorCode(status, U_ZERO_ERROR);
+    CONFIRM_EQ(res.getType(), RES_INT);
+    intResult=res.getInt(status);
+    uintResult = res.getUInt(status);
+    if(U_SUCCESS(status)){
+        CONFIRM_UErrorCode(status, U_ZERO_ERROR);
+        CONFIRM_EQ(uintResult, 0x0FFFFFFF); /* a 28 bit integer */
+        CONFIRM_EQ(intResult, -1);
+        CONFIRM_NE(uintResult, (uint32_t)intResult);
+    }
+
+    strcpy(action, "getting plusone");
+    res = theBundle.get("plusone",status);
+    CONFIRM_UErrorCode(status, U_ZERO_ERROR);
+    CONFIRM_EQ(res.getType(), RES_INT);
+    intResult=res.getInt(status);
+    uintResult = res.getUInt(status);
+    if(U_SUCCESS(status)){
+        CONFIRM_UErrorCode(status, U_ZERO_ERROR);
+        CONFIRM_EQ(uintResult, (uint32_t)intResult);
+        CONFIRM_EQ(intResult, 1);
+    }
+
+    res = theBundle.get("onehundredtwentythree",status);
+    CONFIRM_UErrorCode(status, U_ZERO_ERROR);
+    CONFIRM_EQ(res.getType(), RES_INT);
+    intResult=res.getInt(status);
+    if(U_SUCCESS(status)){
+        CONFIRM_UErrorCode(status, U_ZERO_ERROR);
+        CONFIRM_EQ(intResult, 123);
+    }
+
+    /* this tests if escapes are preserved or not */
+    {
+        UnicodeString str = theBundle.getStringEx("testescape",status);
+        CONFIRM_UErrorCode(status, U_ZERO_ERROR);
+        if(U_SUCCESS(status)){
+            if(str.compare(uExpect)!=0){
+                errln("Did not get the expected string for testescape\n");
+            }
+        }
+    }
+    /* test for jitterbug#1435 */
+    {
+        UnicodeString str = theBundle.getStringEx("test_underscores",status);
+        expect ="test message ....";
+        CONFIRM_UErrorCode(status, U_ZERO_ERROR);
+        if(str.compare(uExpect)!=0){
+            errln("Did not get the expected string for test_underscores.\n");
+        }
+    }
+
+
 }
 //eof
 
