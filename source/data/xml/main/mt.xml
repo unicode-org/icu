@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://www.unicode.org/cldr/dtd/1.1/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " http://www.unicode.org/cldr/dtd/1.1/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.1/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="2.0"/>
+		<version number="1.1"/>
 		<generation date="2004-05-27" />
 		<language type="mt" /> 
 	</identity>
@@ -730,11 +725,6 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[[a-z à ì ù è ò ċ ġ ħ {għ} ż]-[cy]]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Latn</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
 		<calendars>
@@ -880,86 +870,4 @@
 			</currency>
 		</currencies>
 	</numbers>
-	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-		<icu:ruleBasedNumberFormats>
-			<icu:ruleBasedNumberFormat type="spellout">
-%simplified:
--x: minus &gt;&gt;;
-x.x: &lt;&lt; punt &gt;&gt;;
-żero; wieħed; tnejn; tlieta; erbgħa; ħamsa; sitta; sebgħa; tmienja; disgħa;
-għaxra; ħdax; tnax; tlettax; erbatax; ħmistax; sittax;
-    sbatax; tmintax; dsatax;
-20: [&gt;&gt; u ]għoxrin;
-30: [&gt;&gt; u ]tletin;
-40: [&gt;&gt; u ]erbgħin;
-50: [&gt;&gt; u ]ħamsin;
-60: [&gt;&gt; u ]sittin;
-70: [&gt;&gt; u ]sebgħin;
-80: [&gt;&gt; u ]tmenin;
-90: [&gt;&gt; u ]disgħin;
-100: mija[ u &gt;&gt;];
-200: mitejn[ u &gt;&gt;];
-1000: &lt;&lt; elf[ u &gt;&gt;];
-2000: &lt;&lt; elfejn[ u &gt;&gt;];
-3000: tliet elef [ u &gt;&gt;];
-1,000,000: &lt;&lt; miljun[ u &gt;&gt;];
-1,000,000,000: &lt;&lt; biljun[ &gt;&gt;];
-1,000,000,000,000: &lt;&lt; triljun[ &gt;&gt;];
-1,000,000,000,000,000: =#,##0=;
-%default:
--x: minus &gt;&gt;;
-x.x: &lt;&lt; punt &gt;&gt;;
-=%simplified=;
-100: mija[ &gt;%%and&gt;];
-200: mitejn[ &gt;%%and&gt;];
-300: tlett mija[ &gt;%%and&gt;];
-400: erbgħa mija[ &gt;%%and&gt;];
-500: ħames mija[ &gt;%%and&gt;];
-600: sitt mija[ &gt;%%and&gt;];
-700: sebgħa mija[ &gt;%%and&gt;];
-800: tmin mija[ &gt;%%and&gt;];
-900: disgħa mija[ &gt;%%and&gt;];
-1000: &lt;&lt; elf[ &gt;%%and&gt;];
-100,000&gt;&gt;: &lt;&lt; thousand[&gt;%%commas&gt;];
-1,000,000: &lt;&lt; million[&gt;%%commas&gt;];
-1,000,000,000: &lt;&lt; billion[&gt;%%commas&gt;];
-1,000,000,000,000: &lt;&lt; trillion[&gt;%%commas&gt;];
-1,000,000,000,000,000: =#,##0=;
-%%and:
-u =%default=;
-100: =%default=;
-%%commas:
-' and =%default=;
-100: , =%default=;
-1000: , &lt;%default&lt; thousand, &gt;%default&gt;;
-1,000,000: , =%default=;%%lenient-parse:
-&amp;<cp hex="0000" /> &lt;&lt; ' ' &lt;&lt; ',' &lt;&lt; '-'; 
-
-			</icu:ruleBasedNumberFormat>
-			<icu:ruleBasedNumberFormat type="duration">
-%with-words:
-0 sekondi; 1 sekonda; =0= sekondi;
-60/60: &lt;%%min&lt;[, &gt;&gt;];
-3600/60: &lt;%%hr&lt;[, &gt;&gt;&gt;];
-%%min:
-0 minuti; 1 minuta; =0= minuti;
-%%hr:
-0 siegħat; 1 siegħa; =0= siegħat;
-%in-numerals:
-=0= sek.;
-60: =%%min-sec=;
-3600: =%%hr-min-sec=;
-%%min-sec:
-0: :=00=;
-60/60: &lt;0&lt;&gt;&gt;;
-%%hr-min-sec:
-0: :=00=;
-60/60: &lt;00&lt;&gt;&gt;;
-3600/60: &lt;#,##0&lt;:&gt;&gt;&gt;;
-%%lenient-parse:
-&amp; ':' = '.' = ' ' = '-';
-
-			</icu:ruleBasedNumberFormat>
-		</icu:ruleBasedNumberFormats>
-	</special>
 </ldml>
