@@ -54,11 +54,11 @@ public class ULocaleTest extends TestFmwk {
         // };
 
         checkService("en_US_BROOKLYN", new ServiceFacade() {
-                public Object create(Locale req) {
+                public Object create(ULocale req) {
                     return Calendar.getInstance(req);
                 }
                 // }, null, new Registrar() {
-                //     public Object register(Locale loc, Object prototype) {
+                //     public Object register(ULocale loc, Object prototype) {
                 //         CFactory f = new CFactory(loc, (Calendar) prototype);
                 //         return Calendar.register(f, loc);
                 //     }
@@ -70,12 +70,12 @@ public class ULocaleTest extends TestFmwk {
 
     public void TestCurrency() {
         checkService("zh_TW_TAIPEI", new ServiceFacade() {
-                public Object create(Locale req) {
+                public Object create(ULocale req) {
                     return Currency.getInstance(req);
                 }
             }, null, new Registrar() {
-                    public Object register(Locale loc, Object prototype) {
-                        return Currency.registerInstance((Currency) prototype, ULocale.forLocale(loc));
+                    public Object register(ULocale loc, Object prototype) {
+                        return Currency.registerInstance((Currency) prototype, loc);
                     }
                     public boolean unregister(Object key) {
                         return Currency.unregister(key);
@@ -85,11 +85,11 @@ public class ULocaleTest extends TestFmwk {
 
     public void TestBreakIterator() {
         checkService("hi_IN_BHOPAL", new ServiceFacade() {
-                public Object create(Locale req) {
+                public Object create(ULocale req) {
                     return BreakIterator.getWordInstance(req);
                 }
             }, null, new Registrar() {
-                    public Object register(Locale loc, Object prototype) {
+                    public Object register(ULocale loc, Object prototype) {
                         return BreakIterator.registerInstance(
                                                               (BreakIterator) prototype,
                                                               loc, BreakIterator.KIND_WORD);
@@ -102,11 +102,11 @@ public class ULocaleTest extends TestFmwk {
 
     public void TestCollator() {
         checkService("ja_JP_YOKOHAMA", new ServiceFacade() {
-                public Object create(Locale req) {
+                public Object create(ULocale req) {
                     return Collator.getInstance(req);
                 }
             }, null, new Registrar() {
-                    public Object register(Locale loc, Object prototype) {
+                    public Object register(ULocale loc, Object prototype) {
                         return Collator.registerInstance((Collator) prototype, loc);
                     }
                     public boolean unregister(Object key) {
@@ -117,7 +117,7 @@ public class ULocaleTest extends TestFmwk {
 
     public void TestDateFormat() {
         checkService("de_CH_ZURICH", new ServiceFacade() {
-                public Object create(Locale req) {
+                public Object create(ULocale req) {
                     return DateFormat.getDateInstance(DateFormat.DEFAULT, req);
                 }
             }, new Subobject() {
@@ -130,20 +130,20 @@ public class ULocaleTest extends TestFmwk {
     public void TestNumberFormat() {
         class NFactory extends SimpleNumberFormatFactory {
             NumberFormat proto;
-            Locale locale;
-            public NFactory(Locale loc, NumberFormat fmt) {
+            ULocale locale;
+            public NFactory(ULocale loc, NumberFormat fmt) {
                 super(loc);
                 this.locale = loc;
                 this.proto = fmt;
             }
-            public NumberFormat createFormat(Locale loc, int formatType) {
+            public NumberFormat createFormat(ULocale loc, int formatType) {
                 return (NumberFormat) (locale.equals(loc) ?
                                        proto.clone() : null);
             }
         };
 
         checkService("fr_FR_NICE", new ServiceFacade() {
-                public Object create(Locale req) {
+                public Object create(ULocale req) {
                     return NumberFormat.getInstance(req);
                 }
             }, new Subobject() {
@@ -151,7 +151,7 @@ public class ULocaleTest extends TestFmwk {
                         return ((DecimalFormat) parent).getDecimalFormatSymbols();
                     }
                 }, new Registrar() {
-                        public Object register(Locale loc, Object prototype) {
+                        public Object register(ULocale loc, Object prototype) {
                             NFactory f = new NFactory(loc, (NumberFormat) prototype);
                             return NumberFormat.registerFactory(f);
                         }
@@ -248,7 +248,7 @@ public class ULocaleTest extends TestFmwk {
      * object, given a requested locale.
      */
     interface ServiceFacade {
-        Object create(Locale requestedLocale);
+        Object create(ULocale requestedLocale);
     }
 
     /**
@@ -264,7 +264,7 @@ public class ULocaleTest extends TestFmwk {
      * and unregister a service object prototype.
      */
     interface Registrar {
-        Object register(Locale loc, Object prototype);
+        Object register(ULocale loc, Object prototype);
         boolean unregister(Object key);
     }
 
@@ -334,7 +334,7 @@ public class ULocaleTest extends TestFmwk {
      */
     void checkService(String requestedLocale, ServiceFacade svc,
                       Subobject sub, Registrar reg) {
-        Locale req = LocaleUtility.getLocaleFromName(requestedLocale);
+        ULocale req = new ULocale(requestedLocale);
         Object obj = svc.create(req);
         checkObject(requestedLocale, obj, "gt", "ge");
         if (sub != null) {

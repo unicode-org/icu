@@ -306,8 +306,7 @@ public class SimpleDateFormat extends DateFormat {
      * Construct a SimpleDateFormat using the given pattern and locale.
      * <b>Note:</b> Not all locales support SimpleDateFormat; for full
      * generality, use the factory methods in the DateFormat class.
-     * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.0
      */
     public SimpleDateFormat(String pattern, Locale loc)
     {
@@ -318,7 +317,8 @@ public class SimpleDateFormat extends DateFormat {
      * Construct a SimpleDateFormat using the given pattern and locale.
      * <b>Note:</b> Not all locales support SimpleDateFormat; for full
      * generality, use the factory methods in the DateFormat class.
-     * @stable ICU 2.0
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public SimpleDateFormat(String pattern, ULocale loc)
     {
@@ -447,8 +447,8 @@ public class SimpleDateFormat extends DateFormat {
         // If this is not contained in the locale zone strings, then the zone
         // will be formatted using generic GMT+/-H:MM nomenclature.
         calendar = Calendar.getInstance(TimeZone.getDefault(), loc);
-	// TODO: convert to use ULocale APIs when we get to the text package
-        numberFormat = NumberFormat.getInstance(loc.toLocale());
+        // TODO: convert to use ULocale APIs when we get to the text package
+        numberFormat = NumberFormat.getInstance(loc);
         numberFormat.setGroupingUsed(false);
         ///CLOVER:OFF
         // difficult to test for case where NumberFormat.getInstance does not 

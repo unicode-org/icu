@@ -11,6 +11,7 @@ import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.UtilityExtensions;
 import com.ibm.icu.util.CaseInsensitiveString;
+import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.impl.UCharacterProperty;
 
@@ -360,7 +361,7 @@ public abstract class Transliterator {
         /**
          * Constructs a Position object that is a copy of another.
          * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public Position(Position pos) {
             set(pos);
@@ -397,7 +398,7 @@ public abstract class Transliterator {
         /**
          * Returns a string representation of this Position.
          * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+         * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public String toString() {
             return "[cs=" + contextStart
@@ -1190,7 +1191,7 @@ public abstract class Transliterator {
      * @stable ICU 2.0
      */
     public final static String getDisplayName(String ID) {
-        return getDisplayName(ID, Locale.getDefault());
+        return getDisplayName(ID, ULocale.getDefault());
     }
 
     /**
@@ -1213,6 +1214,30 @@ public abstract class Transliterator {
      * @stable ICU 2.0
      */
     public static String getDisplayName(String id, Locale inLocale) {
+        return getDisplayName(id, ULocale.forLocale(inLocale));
+    }
+
+    /**
+     * Returns a name for this transliterator that is appropriate for
+     * display to the user in the given locale.  This name is taken
+     * from the locale resource data in the standard manner of the
+     * <code>java.text</code> package.
+     *
+     * <p>If no localized names exist in the system resource bundles,
+     * a name is synthesized using a localized
+     * <code>MessageFormat</code> pattern from the resource data.  The
+     * arguments to this pattern are an integer followed by one or two
+     * strings.  The integer is the number of strings, either 1 or 2.
+     * The strings are formed by splitting the ID for this
+     * transliterator at the first '-'.  If there is no '-', then the
+     * entire ID forms the only string.
+     * @param inLocale the ULocale in which the display name should be
+     * localized.
+     * @see java.text.MessageFormat
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static String getDisplayName(String id, ULocale inLocale) {
 
         // Resource bundle containing display name keys and the
         // RB_RULE_BASED_IDS array.
@@ -1220,7 +1245,8 @@ public abstract class Transliterator {
         //If we ever integrate this with the Sun JDK, the resource bundle
         // root will change to sun.text.resources.LocaleElements
 
-        ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,inLocale);
+        ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.
+            getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, inLocale);
 
         // Normalize the ID
         String stv[] = TransliteratorIDParser.IDtoSTV(id);

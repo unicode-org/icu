@@ -14,9 +14,9 @@ import com.ibm.icu.util.UResourceBundle;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
+import java.text.ChoiceFormat;
 import java.util.Hashtable;
 import java.util.Locale;
-import java.text.ChoiceFormat;
 
 /**
  * This class represents the set of symbols (such as the decimal separator, the
@@ -56,6 +56,16 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
      */
     public DecimalFormatSymbols( Locale locale ) {
         initialize( ULocale.forLocale(locale) );
+    }
+
+    /**
+     * Create a DecimalFormatSymbols object for the given locale.
+     * @param locale the locale
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public DecimalFormatSymbols( ULocale locale ) {
+        initialize( locale );
     }
 
     /**
@@ -498,7 +508,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
      */
     private void initialize( ULocale locale ) {
         this.locale = locale.toLocale();
-	this.ulocale = locale;
+        this.ulocale = locale;
 
         /* try the cache first */
         String[][] data = (String[][]) cachedLocaleData.get(locale);
@@ -506,7 +516,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
         if (data == null) {  /* cache miss */
             data = new String[1][];
             ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.
-		getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
+                getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
             data[0] = rb.getStringArray("NumberElements");
             /* update cache */
             cachedLocaleData.put(locale, data);
@@ -514,7 +524,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
         numberElements = data[0];
         
         ICUResourceBundle r = (ICUResourceBundle)UResourceBundle.
-	    getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
+            getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
         
         // TODO: Determine actual and valid locale correctly.
         ULocale uloc = r.getULocale();
@@ -588,8 +598,8 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     private void readObject(ObjectInputStream stream)
         throws IOException, ClassNotFoundException {
 
-	// TODO: it looks to me {dlf} that the serialization code was never updated
-	// to handle the actual/valid ulocale fields.
+        // TODO: it looks to me {dlf} that the serialization code was never updated
+        // to handle the actual/valid ulocale fields.
 
         stream.defaultReadObject();
         ///CLOVER:OFF
@@ -618,10 +628,10 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
             // expensive and doesn't seem worth it.
             locale = Locale.getDefault();
         }
-	if (serialVersionOnStream < 4) {
-	    // use same default behavior as for versions with no Locale
-	    ulocale = ULocale.forLocale(locale);
-	}
+        if (serialVersionOnStream < 4) {
+            // use same default behavior as for versions with no Locale
+            ulocale = ULocale.forLocale(locale);
+        }
         serialVersionOnStream = currentSerialVersion;
     }
 
@@ -779,6 +789,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * The requested ULocale.  We keep the old locale for serialization compatibility.
+     * @since IDU 3.2
      */
     private ULocale ulocale;
 

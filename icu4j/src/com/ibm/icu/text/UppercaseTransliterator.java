@@ -5,8 +5,9 @@
  *******************************************************************************
  */
 package com.ibm.icu.text;
-import java.util.*;
+
 import com.ibm.icu.impl.UCharacterProperty;
+import com.ibm.icu.util.ULocale;
 
 /**
  * A transliterator that performs locale-sensitive toUpper()
@@ -26,17 +27,17 @@ class UppercaseTransliterator extends Transliterator {
     static void register() {
         Transliterator.registerFactory(_ID, new Transliterator.Factory() {
             public Transliterator getInstance(String ID) {
-                return new UppercaseTransliterator(Locale.US);
+                return new UppercaseTransliterator(ULocale.US);
             }
         });
     }
 
-    private Locale loc;
+    private ULocale loc;
 
     /**
      * Constructs a transliterator.
      */
-    public UppercaseTransliterator(Locale loc) {
+    public UppercaseTransliterator(ULocale loc) {
         super(_ID, null);
         this.loc = loc;
     }

@@ -700,8 +700,8 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     }
 
     public void TestRegistration() {
-        final Locale SRC_LOC = Locale.FRANCE;
-        final Locale SWAP_LOC = Locale.US;
+        final ULocale SRC_LOC = ULocale.FRANCE;
+        final ULocale SWAP_LOC = ULocale.US;
 
         class TestFactory extends SimpleNumberFormatFactory {
             NumberFormat currencyStyle;
@@ -711,7 +711,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 currencyStyle = NumberFormat.getIntegerInstance(SWAP_LOC);
             }
 
-            public NumberFormat createFormat(Locale loc, int formatType) {
+            public NumberFormat createFormat(ULocale loc, int formatType) {
                 if (formatType == FORMAT_CURRENCY) {
                     return currencyStyle;
                 }

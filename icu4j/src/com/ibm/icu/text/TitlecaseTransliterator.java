@@ -4,9 +4,9 @@
  *
  */
 package com.ibm.icu.text;
-import java.util.*;
 
 import com.ibm.icu.impl.UCharacterProperty;
+import com.ibm.icu.util.ULocale;
 
 /**
  * A transliterator that converts all letters (as defined by
@@ -18,7 +18,7 @@ import com.ibm.icu.impl.UCharacterProperty;
 class TitlecaseTransliterator extends Transliterator {
 
     static final String _ID = "Any-Title";
-    private Locale loc;
+    private ULocale loc;
 
     /**
      * The set of characters we skip.  These are neither cased nor
@@ -47,7 +47,7 @@ class TitlecaseTransliterator extends Transliterator {
     static void register() {
         Transliterator.registerFactory(_ID, new Transliterator.Factory() {
             public Transliterator getInstance(String ID) {
-                return new TitlecaseTransliterator(Locale.US);
+                return new TitlecaseTransliterator(ULocale.US);
             }
         });
 
@@ -57,7 +57,7 @@ class TitlecaseTransliterator extends Transliterator {
    /**
      * Constructs a transliterator.
      */
-    public TitlecaseTransliterator(Locale loc) {
+    public TitlecaseTransliterator(ULocale loc) {
         super(_ID, null);
         this.loc = loc;
         // Need to look back 2 characters in the case of "can't"

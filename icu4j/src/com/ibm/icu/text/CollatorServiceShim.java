@@ -42,7 +42,7 @@ final class CollatorServiceShim extends Collator.ServiceShim {
         }
     }
 
-    Object registerInstance(Collator collator, Locale locale) {
+    Object registerInstance(Collator collator, ULocale locale) {
         return service.registerObject(collator, locale);
     }
 
@@ -58,13 +58,13 @@ final class CollatorServiceShim extends Collator.ServiceShim {
                 this.delegate = f;
             }
 
-            public Object handleCreate(Locale loc, int kind, ICUService service) {
+            public Object handleCreate(ULocale loc, int kind, ICUService service) {
                 Object coll = delegate.createCollator(loc);
                 return coll;
             }
                 
-            public String getDisplayName(String id, Locale displayLocale) {
-                Locale objectLocale = LocaleUtility.getLocaleFromName(id);
+            public String getDisplayName(String id, ULocale displayLocale) {
+                ULocale objectLocale = new ULocale(id);
                 return delegate.getDisplayName(objectLocale, displayLocale);
             }
 
@@ -95,8 +95,8 @@ final class CollatorServiceShim extends Collator.ServiceShim {
         return service.getAvailableULocales();
     }
 
-    String getDisplayName(Locale objectLocale, Locale displayLocale) {
-        String id = LocaleUtility.canonicalLocaleString(objectLocale);
+    String getDisplayName(ULocale objectLocale, ULocale displayLocale) {
+        String id = objectLocale.getName();
         return service.getDisplayName(id, displayLocale);
     }
 

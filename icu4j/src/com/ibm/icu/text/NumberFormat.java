@@ -439,7 +439,7 @@ public abstract class NumberFormat extends UFormat {
      */
     //Bug 4408066 [Richard/GCL]
     public final static NumberFormat getInstance() {
-        return getInstance(Locale.getDefault(), NUMBERSTYLE);
+        return getInstance(ULocale.getDefault(), NUMBERSTYLE);
     }
 
     /**
@@ -450,6 +450,18 @@ public abstract class NumberFormat extends UFormat {
      * @stable ICU 2.0
      */
     public static NumberFormat getInstance(Locale inLocale) {
+        return getInstance(ULocale.forLocale(inLocale), NUMBERSTYLE);
+    }
+
+    /**
+     * Returns the default number format for the specified locale.
+     * The default format is one of the styles provided by the other
+     * factory methods: getNumberInstance, getCurrencyInstance or getPercentInstance.
+     * Exactly which one is locale-dependent.
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static NumberFormat getInstance(ULocale inLocale) {
         return getInstance(inLocale, NUMBERSTYLE);
     }
 
@@ -458,7 +470,7 @@ public abstract class NumberFormat extends UFormat {
      * @stable ICU 2.0
      */
     public final static NumberFormat getNumberInstance() {
-        return getInstance(Locale.getDefault(), NUMBERSTYLE);
+        return getInstance(ULocale.getDefault(), NUMBERSTYLE);
     }
 
     /**
@@ -466,6 +478,15 @@ public abstract class NumberFormat extends UFormat {
      * @stable ICU 2.0
      */
     public static NumberFormat getNumberInstance(Locale inLocale) {
+        return getInstance(ULocale.forLocale(inLocale), NUMBERSTYLE);
+    }
+
+    /**
+     * Returns a general-purpose number format for the specified locale.
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static NumberFormat getNumberInstance(ULocale inLocale) {
         return getInstance(inLocale, NUMBERSTYLE);
     }
 
@@ -482,7 +503,7 @@ public abstract class NumberFormat extends UFormat {
      */
     //Bug 4408066 [Richard/GCL]
     public final static NumberFormat getIntegerInstance() {
-        return getInstance(Locale.getDefault(), INTEGERSTYLE);
+        return getInstance(ULocale.getDefault(), INTEGERSTYLE);
     }
 
     /**
@@ -499,6 +520,23 @@ public abstract class NumberFormat extends UFormat {
      */
     //Bug 4408066 [Richard/GCL]
     public static NumberFormat getIntegerInstance(Locale inLocale) {
+        return getInstance(ULocale.forLocale(inLocale), INTEGERSTYLE);
+    }
+
+    /**
+     * Returns an integer number format for the specified locale. The
+     * returned number format is configured to round floating point numbers
+     * to the nearest integer using IEEE half-even rounding (see {@link 
+     * com.ibm.icu.math.BigDecimal#ROUND_HALF_EVEN ROUND_HALF_EVEN}) for formatting,
+     * and to parse only the integer part of an input string (see {@link
+     * #isParseIntegerOnly isParseIntegerOnly}).
+     *
+     * @param inLocale the locale for which a number format is needed
+     * @return a number format for integer values
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static NumberFormat getIntegerInstance(ULocale inLocale) {
         return getInstance(inLocale, INTEGERSTYLE);
     }
 
@@ -508,7 +546,7 @@ public abstract class NumberFormat extends UFormat {
      * @stable ICU 2.0
      */
     public final static NumberFormat getCurrencyInstance() {
-        return getInstance(Locale.getDefault(), CURRENCYSTYLE);
+        return getInstance(ULocale.getDefault(), CURRENCYSTYLE);
     }
 
     /**
@@ -517,6 +555,16 @@ public abstract class NumberFormat extends UFormat {
      * @stable ICU 2.0
      */
     public static NumberFormat getCurrencyInstance(Locale inLocale) {
+        return getInstance(ULocale.forLocale(inLocale), CURRENCYSTYLE);
+    }
+
+    /**
+     * Returns a currency format for the specified locale.
+     * @return a number format for currency
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static NumberFormat getCurrencyInstance(ULocale inLocale) {
         return getInstance(inLocale, CURRENCYSTYLE);
     }
 
@@ -526,7 +574,7 @@ public abstract class NumberFormat extends UFormat {
      * @stable ICU 2.0
      */
     public final static NumberFormat getPercentInstance() {
-        return getInstance(Locale.getDefault(), PERCENTSTYLE);
+        return getInstance(ULocale.getDefault(), PERCENTSTYLE);
     }
 
     /**
@@ -535,6 +583,16 @@ public abstract class NumberFormat extends UFormat {
      * @stable ICU 2.0
      */
     public static NumberFormat getPercentInstance(Locale inLocale) {
+        return getInstance(ULocale.forLocale(inLocale), PERCENTSTYLE);
+    }
+
+    /**
+     * Returns a percentage format for the specified locale.
+     * @return a number format for percents
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static NumberFormat getPercentInstance(ULocale inLocale) {
         return getInstance(inLocale, PERCENTSTYLE);
     }
 
@@ -545,7 +603,7 @@ public abstract class NumberFormat extends UFormat {
      * @stable ICU 2.0
      */
     public final static NumberFormat getScientificInstance() {
-        return getInstance(Locale.getDefault(), SCIENTIFICSTYLE);
+        return getInstance(ULocale.getDefault(), SCIENTIFICSTYLE);
     }
 
     /**
@@ -555,6 +613,17 @@ public abstract class NumberFormat extends UFormat {
      * @stable ICU 2.0
      */
     public static NumberFormat getScientificInstance(Locale inLocale) {
+        return getInstance(ULocale.forLocale(inLocale), SCIENTIFICSTYLE);
+    }
+
+    /**
+     * <strong><font face=helvetica color=red>NEW</font></strong>
+     * Returns a scientific format for the specified locale.
+     * @return a scientific number format
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static NumberFormat getScientificInstance(ULocale inLocale) {
         return getInstance(inLocale, SCIENTIFICSTYLE);
     }
 
@@ -572,35 +641,35 @@ public abstract class NumberFormat extends UFormat {
         /**
          * Value passed to format requesting a default number format.
          * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+         * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final int FORMAT_NUMBER = NUMBERSTYLE;
 
         /**
          * Value passed to format requesting a currency format.
          * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+         * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final int FORMAT_CURRENCY = CURRENCYSTYLE;
 
         /**
          * Value passed to format requesting a percent format.
          * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+         * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final int FORMAT_PERCENT = PERCENTSTYLE;
 
         /**
          * Value passed to format requesting a scientific format.
          * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+         * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final int FORMAT_SCIENTIFIC = SCIENTIFICSTYLE;
 
         /**
          * Value passed to format requesting an integer format.
          * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+         * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final int FORMAT_INTEGER = INTEGERSTYLE;
 
@@ -610,7 +679,7 @@ public abstract class NumberFormat extends UFormat {
          * be listed by getAvailableLocales.  This value must not change.
          * @return true if the factory is visible.
          * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+         * @deprecated This is a draft API and might change in a future release of ICU.
          */
         ///CLOVER:OFF
         public boolean visible() {
@@ -623,7 +692,7 @@ public abstract class NumberFormat extends UFormat {
          * supported by this factory.
          * @return the supported locale names.
          * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+         * @deprecated This is a draft API and might change in a future release of ICU.
          */
          public abstract Set getSupportedLocaleNames();
 
@@ -636,13 +705,13 @@ public abstract class NumberFormat extends UFormat {
          * @param formatType the type of format
          * @return the NumberFormat, or null.
          * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+         * @deprecated This is a draft API and might change in a future release of ICU.
          */
-        public abstract NumberFormat createFormat(Locale loc, int formatType);
+        public abstract NumberFormat createFormat(ULocale loc, int formatType);
 
         /**
          * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+         * @deprecated This is a draft API and might change in a future release of ICU.
          */
         protected NumberFormatFactory() {
         }
@@ -659,24 +728,24 @@ public abstract class NumberFormat extends UFormat {
 
         /**
          * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+         * @deprecated This is a draft API and might change in a future release of ICU.
          */
-        public SimpleNumberFormatFactory(Locale locale) {
+        public SimpleNumberFormatFactory(ULocale locale) {
             this(locale, true);
         }
         
         /**
          * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+         * @deprecated This is a draft API and might change in a future release of ICU.
          */
-        public SimpleNumberFormatFactory(Locale locale, boolean visible) {
-            localeNames = Collections.singleton(LocaleUtility.canonicalLocaleString(locale));
+        public SimpleNumberFormatFactory(ULocale locale, boolean visible) {
+            localeNames = Collections.singleton(locale.getBaseName());
             this.visible = visible;
         }
 
         /**
          * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+         * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public final boolean visible() {
             return visible;
@@ -684,7 +753,7 @@ public abstract class NumberFormat extends UFormat {
 
         /**
          * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+         * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public final Set getSupportedLocaleNames() {
             return localeNames;
@@ -694,9 +763,10 @@ public abstract class NumberFormat extends UFormat {
     // shim so we can build without service code
     static abstract class NumberFormatShim {
         abstract Locale[] getAvailableLocales();
+        abstract ULocale[] getAvailableULocales();
         abstract Object registerFactory(NumberFormatFactory f);
         abstract boolean unregister(Object k);
-        abstract NumberFormat createInstance(Locale l, int k);
+        abstract NumberFormat createInstance(ULocale l, int k);
     }
 
     private static NumberFormatShim shim;
@@ -730,6 +800,19 @@ public abstract class NumberFormat extends UFormat {
             return ICUResourceBundle.getAvailableLocales(ICUResourceBundle.ICU_BASE_NAME);
         }
         return getShim().getAvailableLocales();
+    }
+
+    /**
+     * Get the list of Locales for which NumberFormats are available.
+     * @return the available locales
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static ULocale[] getAvailableULocales() {
+        if (shim == null) {
+            return ICUResourceBundle.getAvailableULocales(ICUResourceBundle.ICU_BASE_NAME);
+        }
+        return getShim().getAvailableULocales();
     }
 
     /**
@@ -1000,8 +1083,10 @@ public abstract class NumberFormat extends UFormat {
         Currency c = getCurrency();
         if (c == null) {
             ULocale uloc = getLocale(ULocale.VALID_LOCALE);
-            Locale loc = uloc != null ? uloc.toLocale() : Locale.getDefault();
-            c = Currency.getInstance(loc);
+            if (uloc == null) {
+                uloc = ULocale.getDefault();
+            }
+            c = Currency.getInstance(uloc);
         }
         return c;
     }
@@ -1009,7 +1094,7 @@ public abstract class NumberFormat extends UFormat {
     // =======================privates===============================
 
     // Hook for service
-    private static NumberFormat getInstance(Locale desiredLocale, int choice) {
+    private static NumberFormat getInstance(ULocale desiredLocale, int choice) {
 //          if (shim == null) {
 //              return createInstance(desiredLocale, choice);
 //          } else {
@@ -1020,8 +1105,7 @@ public abstract class NumberFormat extends UFormat {
     }
 
     // [NEW]
-    static NumberFormat createInstance(Locale desiredLocale,
-                                            int choice) {
+    static NumberFormat createInstance(ULocale desiredLocale, int choice) {
         String pattern = getPattern(desiredLocale, choice);
         DecimalFormatSymbols symbols = new DecimalFormatSymbols(desiredLocale);
         DecimalFormat format = new DecimalFormat(pattern, symbols);
@@ -1054,8 +1138,21 @@ public abstract class NumberFormat extends UFormat {
      * @param choice the pattern format.
      * @return the pattern
      * @stable ICU 2.2
+     * @deprecated subclassers should override getPattern(ULocale, int) instead of this method.
      */
     protected static String getPattern(Locale forLocale, int choice) {
+        return getPattern(ULocale.forLocale(forLocale), choice);
+    }
+
+    /**
+     * Returns the pattern for the provided locale and choice.
+     * @param forLocale the locale of the data.
+     * @param choice the pattern format.
+     * @return the pattern
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    protected static String getPattern(ULocale forLocale, int choice) {
 
         /* The following code takes care of a few cases where the
          * resource data in the underlying JDK lags the new features
@@ -1093,11 +1190,12 @@ public abstract class NumberFormat extends UFormat {
         //    return "#,##,##0.###";
         //}
 
-                // {dlf}
-                ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,forLocale);
-                String[] numberPatterns = rb.getStringArray("NumberPatterns");
+        // {dlf}
+        ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.
+            getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, forLocale);
+        String[] numberPatterns = rb.getStringArray("NumberPatterns");
 
-                /* {dlf}
+        /* {dlf}
         // Try the cache first
         String[] numberPatterns = (String[]) cachedLocaleData.get(forLocale);
         if (numberPatterns == null) {
@@ -1107,7 +1205,7 @@ public abstract class NumberFormat extends UFormat {
             // Update the cache
             cachedLocaleData.put(forLocale, numberPatterns); 
         }
-                */
+        */
 
         /*Bug 4408066
          Add codes for the new method getIntegerInstance() [Richard/GCL]

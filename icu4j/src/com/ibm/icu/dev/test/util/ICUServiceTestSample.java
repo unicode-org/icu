@@ -10,6 +10,7 @@ import com.ibm.icu.impl.ICULocaleService;
 import com.ibm.icu.impl.ICUService;
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.text.Collator;
+import com.ibm.icu.util.ULocale;
 
 import java.util.EventListener;
 import java.util.Iterator;
@@ -21,18 +22,18 @@ import java.util.SortedMap;
 
 public class ICUServiceTestSample {
     static public void main(String[] args) {
-    HelloServiceClient client = new HelloServiceClient();
+        HelloServiceClient client = new HelloServiceClient();
 
-    Thread t = new HelloUpdateThread();
-    t.start();
-    try {
-        t.join();
-    }
-    catch (InterruptedException e) {
-    }
-    System.out.println("done");
-     if(client==null){
-     }
+        Thread t = new HelloUpdateThread();
+        t.start();
+        try {
+            t.join();
+        }
+        catch (InterruptedException e) {
+        }
+        System.out.println("done");
+        if(client==null){
+        }
     }
 
     /**
@@ -41,68 +42,68 @@ public class ICUServiceTestSample {
      */
     static class HelloServiceClient implements HelloService.HelloServiceListener {
 
-    HelloServiceClient() {
-        HelloService.addListener(this);
-        display();
-    }
+        HelloServiceClient() {
+            HelloService.addListener(this);
+            display();
+        }
 
 
-    /**
-     * This will be called in the notification thread of
-     * ICUNotifier.  ICUNotifier could spawn a (non-daemon) thread
-     * for each listener, so that impolite listeners wouldn't hold
-     * up notification, but right now it doesn't.  Instead, all
-     * notifications are delivered on the notification thread.
-     * Since that's a daemon thread, a notification might not
-     * complete before main terminates.  
-     */
-    public void helloServiceChanged() {
-        display();
-    }
+        /**
+         * This will be called in the notification thread of
+         * ICUNotifier.  ICUNotifier could spawn a (non-daemon) thread
+         * for each listener, so that impolite listeners wouldn't hold
+         * up notification, but right now it doesn't.  Instead, all
+         * notifications are delivered on the notification thread.
+         * Since that's a daemon thread, a notification might not
+         * complete before main terminates.  
+         */
+        public void helloServiceChanged() {
+            display();
+        }
 
-    private void display() {
-        Map names = HelloService.getDisplayNames(Locale.US);
-        System.out.println("displaying " + names.size() + " names.");
-        Iterator iter = names.entrySet().iterator();
-        while (iter.hasNext()) {
-        Entry entry = (Entry)iter.next();
-        String displayName = (String)entry.getKey();
-        HelloService service = HelloService.get((String)entry.getValue());
-        System.out.println(displayName + " says " + service.hello());
-        try {
-            Thread.sleep(50);
+        private void display() {
+            Map names = HelloService.getDisplayNames(ULocale.US);
+            System.out.println("displaying " + names.size() + " names.");
+            Iterator iter = names.entrySet().iterator();
+            while (iter.hasNext()) {
+                Entry entry = (Entry)iter.next();
+                String displayName = (String)entry.getKey();
+                HelloService service = HelloService.get((String)entry.getValue());
+                System.out.println(displayName + " says " + service.hello());
+                try {
+                    Thread.sleep(50);
+                }
+                catch (InterruptedException e) {
+                }
+            }
+            System.out.println("----");
         }
-        catch (InterruptedException e) {
-        }
-        }
-        System.out.println("----");
-    }
     }
 
     /**
      * A thread to update the service.
      */
     static class HelloUpdateThread extends Thread {
-    String[][] updates = {
-        { "Hey", "en_US_INFORMAL" },
-        { "Hallo", "de_DE_INFORMAL" },
-        { "Yo!", "en_US_CALIFORNIA_INFORMAL" },
-        { "Chi Fanle Ma?", "zh__INFORMAL" },
-        { "Munch munch... Burger?", "en" },
-        { "Sniff", "fr" },
-        { "TongZhi! MaoZeDong SiXiang Wan Sui!", "zh_CN" },
-        { "Bier? Ja!", "de" },
-    };
-    public void run() {
-        for (int i = 0; i < updates.length; ++i) {
-        try {
-            Thread.sleep(500);
+        String[][] updates = {
+            { "Hey", "en_US_INFORMAL" },
+            { "Hallo", "de_DE_INFORMAL" },
+            { "Yo!", "en_US_CALIFORNIA_INFORMAL" },
+            { "Chi Fanle Ma?", "zh__INFORMAL" },
+            { "Munch munch... Burger?", "en" },
+            { "Sniff", "fr" },
+            { "TongZhi! MaoZeDong SiXiang Wan Sui!", "zh_CN" },
+            { "Bier? Ja!", "de" },
+        };
+        public void run() {
+            for (int i = 0; i < updates.length; ++i) {
+                try {
+                    Thread.sleep(500);
+                }
+                catch (InterruptedException e) {
+                }
+                HelloService.register(updates[i][0], new ULocale(updates[i][1]));
+            }
         }
-        catch (InterruptedException e) {
-        }
-        HelloService.register(updates[i][0], LocaleUtility.getLocaleFromName(updates[i][1]));
-        }
-    }
     }
 
     /**
@@ -133,20 +134,20 @@ public class ICUServiceTestSample {
          */
         private static ICUService registry() {
             if (registry == null) {
-            initRegistry();
+                initRegistry();
             }
             return registry;
         }
     
         private static void initRegistry() {
             registry = new ICULocaleService() {
-                protected boolean acceptsListener(EventListener l) {
-                return true; // we already verify in our wrapper APIs
-                }
-                protected void notifyListener(EventListener l) {
-                ((HelloServiceListener)l).helloServiceChanged();
-                }
-            };
+                    protected boolean acceptsListener(EventListener l) {
+                        return true; // we already verify in our wrapper APIs
+                    }
+                    protected void notifyListener(EventListener l) {
+                        ((HelloServiceListener)l).helloServiceChanged();
+                    }
+                };
     
             // initialize
             doRegister("Hello", "en");
@@ -189,29 +190,29 @@ public class ICUServiceTestSample {
             return registry().getVisibleIDs();
         }
     
-        public static Map getDisplayNames(Locale locale) {
-            return getDisplayNames(registry(),locale);
+        public static Map getDisplayNames(ULocale locale) {
+            return getDisplayNames(registry(), locale);
         }
     
         /**
          * Register a new hello string for this locale.
          */
-        public static void register(String helloString, Locale locale) {
+        public static void register(String helloString, ULocale locale) {
             if (helloString == null || locale == null) {
-            throw new NullPointerException();
+                throw new NullPointerException();
             }
-            doRegister(helloString, LocaleUtility.canonicalLocaleString(locale.toString()));
+            doRegister(helloString, locale.toString());
         }
     
         private static void doRegister(String hello, String id) {
             registry().registerObject(new HelloService(hello), id);
         }
         /**
-         * Convenience override of getDisplayNames(Locale, Comparator, String) that
+         * Convenience override of getDisplayNames(ULocale, Comparator, String) that
          * uses the default collator for the locale as the comparator to
          * sort the display names, and null for the matchID.
          */
-        public static SortedMap getDisplayNames(ICUService service, Locale locale) {
+        public static SortedMap getDisplayNames(ICUService service, ULocale locale) {
             Collator col = Collator.getInstance(locale);
             return service.getDisplayNames(locale, col, null);
         }
