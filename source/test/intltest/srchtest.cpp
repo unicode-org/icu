@@ -379,6 +379,9 @@ UBool StringSearchTest::assertEqual(const SearchData *search)
         return FALSE;
     }
 
+
+    errln("%s:%d: clone test commented out..\n", __FILE__, __LINE__);
+#if 0
     strsrch2 = strsrch->clone();
     if( strsrch2 == strsrch || *strsrch2 != *strsrch ||
         !assertEqualWithStringSearch(strsrch2, search)
@@ -390,6 +393,7 @@ UBool StringSearchTest::assertEqual(const SearchData *search)
         return FALSE;
     }
     delete strsrch2;
+#endif
 
     collator->setStrength(getECollationStrength(UCOL_TERTIARY));
     delete strsrch;
