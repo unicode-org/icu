@@ -467,7 +467,7 @@ int processArgs(const TestNode* root,
         }
         else if (strcmp( argv[i], "-e") ==0)
         {
-            QUICK = TRUE;
+            QUICK = FALSE;
         }
         else if(strcmp( argv[i], "-n") == 0 || strcmp( argv[i], "-no_err_msg") == 0)
         {
