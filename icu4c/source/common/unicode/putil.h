@@ -307,7 +307,7 @@ u_getVersion(UVersionInfo versionArray);
  */
 #ifndef U_MAX_PTR
 #  ifdef OS390
-#    define U_MAX_PTR(base) ((void *)(((char *)(base)+0x3fffffff) < (char *)0x7fffffff ? ((char *)(base)+0x3fffffff) : (char *)0x7fffffff))
+#    define U_MAX_PTR(base) ((void *)0x7fffffff)
 #  elif defined(OS400)
 /*
  * With the provided macro we should never be out of range of a given segment
