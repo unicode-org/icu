@@ -6,7 +6,7 @@
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/XLIFF2ICUConverter.java,v $ 
 * $Date: 2003/05/19 
-* $Revision: 1.6 $
+* $Revision: 1.7 $
 *
 ******************************************************************************
 */
@@ -159,8 +159,8 @@ public final class XLIFF2ICUConverter {
             "-s or --sourcedir    source directory for files followed by path, default is current directory.\n" +
             "-d or --destdir      destination directory, followed by the path, default is current directory.\n" +
             "-h or -? or --help   this usage text.\n"+
-            "-t or --target-only  only generate the target language txt file.\n" +
-            "example: XLIFF2ICUConverter -t <optional argument> -s xxx -d yyy myResources.xlf");
+            "-t or --target-only  only generate the target language txt file, followed by optional output file name.\n" +
+            "example: com.ibm.icu.dev.tool.localeconverter.XLIFF2ICUConverter -t <optional argument> -s xxx -d yyy myResources.xlf");
         System.exit(-1);
     }
     
