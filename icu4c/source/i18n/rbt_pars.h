@@ -40,7 +40,7 @@ class TransliteratorParser {
      * Pointer to user structure in which to return parse error information.
      * May be NULL.
      */
-    UParseError* parseError;
+    UParseError& parseError;
 
     /**
      * Temporary symbol table used during parsing.
@@ -83,7 +83,8 @@ public:
     static TransliterationRuleData*
         parse(const UnicodeString& rules,
               UTransDirection direction,
-              UParseError* parseError = 0);
+              UParseError& parseError,
+              UErrorCode& ec);
 
     /**
      * Parse a given set of rules.  Return up to three pieces of
@@ -104,7 +105,7 @@ public:
                       TransliterationRuleData*& ruleDataResult,
                       UnicodeString& idBlockResult,
                       int32_t& idSplitPointResult,
-                      UParseError* parseError,
+                      UParseError& parseError,
                       UErrorCode& ec);
 
 private:
@@ -116,7 +117,7 @@ private:
      */
     TransliteratorParser(const UnicodeString& rules,
                               UTransDirection direction,
-                              UParseError* parseError = 0);
+                              UParseError& parseError);
 
     /**
      * Destructor.

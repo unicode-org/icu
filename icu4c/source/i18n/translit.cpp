@@ -636,8 +636,9 @@ void Transliterator::adoptFilter(UnicodeFilter* filterToAdopt) {
  * transliterator is registered.
  * @see #registerInstance
  */
-Transliterator* Transliterator::createInverse(void) const {
-    return Transliterator::createInstance(ID, UTRANS_REVERSE);
+Transliterator* Transliterator::createInverse(UErrorCode& status) const {
+    UParseError parseError;
+    return Transliterator::createInstance(ID, UTRANS_REVERSE,parseError,status);
 }
 
 /**
@@ -653,8 +654,15 @@ Transliterator* Transliterator::createInverse(void) const {
  */
 Transliterator* Transliterator::createInstance(const UnicodeString& ID,
                                                UTransDirection dir,
-                                               UParseError* parseError) {
-    UErrorCode status = U_ZERO_ERROR;
+                                               UParseError& parseError,
+                                               UErrorCode& status) {
+    return createInstance(ID, dir, -1, NULL, parseError, status);
+}
+
+Transliterator* Transliterator::createInstance(const UnicodeString& ID,
+                                               UTransDirection dir,
+                                               UErrorCode& status) {
+    UParseError parseError;
     return createInstance(ID, dir, -1, NULL, parseError, status);
 }
 
@@ -671,7 +679,7 @@ Transliterator* Transliterator::createInstance(const UnicodeString& ID,
                                                UTransDirection dir,
                                                int32_t idSplitPoint,
                                                Transliterator *adoptedSplitTrans,
-                                               UParseError* parseError,
+                                               UParseError& parseError,
                                                UErrorCode& status) {
     if (U_FAILURE(status)) {
         return 0;
@@ -714,11 +722,11 @@ Transliterator* Transliterator::createInstance(const UnicodeString& ID,
 Transliterator* Transliterator::createFromRules(const UnicodeString& ID,
                                                 const UnicodeString& rules,
                                                 UTransDirection dir,
-                                                UParseError* parseError) {
+                                                UParseError& parseError,
+                                                UErrorCode& status) {
     UnicodeString idBlock;
     int32_t idSplitPoint = -1;
     TransliterationRuleData *data = 0;
-    UErrorCode status = U_ZERO_ERROR;
 
     TransliteratorParser::parse(rules, dir, data,
                                 idBlock, idSplitPoint,
@@ -743,7 +751,7 @@ Transliterator* Transliterator::createFromRules(const UnicodeString& ID,
     } else {
         if (data == 0) {
             // idBlock, no data -- this is an alias
-            Transliterator *t = createInstance(idBlock, dir, parseError);
+            Transliterator *t = createInstance(idBlock, dir, parseError,status);
             if (t != 0) {
                 t->setID(ID);
             }
@@ -754,7 +762,7 @@ Transliterator* Transliterator::createFromRules(const UnicodeString& ID,
             UnicodeString id("_", "");
             Transliterator *t = new RuleBasedTransliterator(id, data, TRUE); // TRUE == adopt data object
             t = new CompoundTransliterator(ID, idBlock, idSplitPoint,
-                                           t, status);
+                                           t,parseError,status);
             if (U_FAILURE(status)) {
                 delete t;
                 t = 0;
@@ -798,7 +806,7 @@ void Transliterator::parseCompoundID(const UnicodeString& id,
                                      Transliterator *adoptedSplitTrans,
                                      UVector& result,
                                      int32_t& splitTransIndex,
-                                     UParseError* parseError,
+                                     UParseError& parseError,
                                      UErrorCode& status) {
     if (U_FAILURE(status)) {
         return;
@@ -819,7 +827,13 @@ void Transliterator::parseCompoundID(const UnicodeString& id,
         int32_t p = pos;
         UBool sawDelimiter; // We ignore this
         Transliterator *t =
-            parseID(id, regenID, p, sawDelimiter, dir, parseError, TRUE);
+            parseID(id, regenID, p, sawDelimiter, dir, parseError, TRUE,status);
+        
+        if(U_FAILURE(status)){
+            delete t;
+            break;
+        }
+
         if (p == pos || (p < id.length() && !sawDelimiter)) {
             delete t;
             status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -885,8 +899,9 @@ Transliterator* Transliterator::parseID(const UnicodeString& ID,
                                         int32_t& pos,
                                         UBool& sawDelimiter,
                                         UTransDirection dir,
-                                        UParseError* parseError,
-                                        UBool create) {
+                                        UParseError& parseError,
+                                        UBool create,
+                                        UErrorCode& status) {
     int32_t limit, preDelimLimit,
         revStart, revLimit,
         idStart, idLimit,
@@ -1016,17 +1031,17 @@ Transliterator* Transliterator::parseID(const UnicodeString& ID,
 
     else {
         // Create the actual transliterator from the registry
-        if (parseError != 0) {
-            parseError->line = parseError->offset = 0;
-            parseError->preContext[0] = parseError->postContext[0] = 0;
-        }
+        //if (parseError != 0) {
+            parseError.line = parseError.offset = 0;
+            parseError.preContext[0] = parseError.postContext[0] = 0;
+        //}
         if (registry == 0) {
             initializeRegistry();
         }
         {
             Mutex lock(&registryMutex);
             str.truncate(0);
-            t = registry->get(id, str, parseError);
+            t = registry->get(id, str, parseError,status);
             // Need to enclose this in a block to prevent deadlock when
             // instantiating aliases (below).
         }
@@ -1034,7 +1049,7 @@ Transliterator* Transliterator::parseID(const UnicodeString& ID,
         if (str.length() != 0) {
             // assert(t==0);
             // Instantiate an alias
-            t = createInstance(str, UTRANS_FORWARD, parseError);
+            t = createInstance(str, UTRANS_FORWARD, parseError,status);
         }
 
         if (t == 0) {

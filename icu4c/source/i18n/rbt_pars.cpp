@@ -769,7 +769,8 @@ int32_t* RuleHalf::createSegments(UErrorCode& status) const {
 TransliterationRuleData*
 TransliteratorParser::parse(const UnicodeString& rules,
                             UTransDirection direction,
-                            UParseError* parseError) {
+                            UParseError& parseError,
+                            UErrorCode& ec) {
     TransliteratorParser parser(rules, direction, parseError);
     UnicodeString idBlock;
     int32_t idSplitPoint, count;
@@ -777,6 +778,7 @@ TransliteratorParser::parse(const UnicodeString& rules,
     if (U_FAILURE(parser.status) || idBlock.length() != 0) {
         delete parser.data;
         parser.data = 0;
+        ec = parser.status;
     }
     return parser.data;
 }
@@ -800,7 +802,7 @@ void TransliteratorParser::parse(const UnicodeString& rules,
                                  TransliterationRuleData*& ruleDataResult,
                                  UnicodeString& idBlockResult,
                                  int32_t& idSplitPointResult,
-                                 UParseError* parseError,
+                                 UParseError& parseError,
                                  UErrorCode& ec) {
     if (U_FAILURE(ec)) {
         ruleDataResult = 0;
@@ -822,12 +824,14 @@ void TransliteratorParser::parse(const UnicodeString& rules,
  * @exception IllegalArgumentException if there is a syntax error in the
  * rules
  */
+
+/* Ram: Reordered member initializers to match declaration order and make GCC happy */
 TransliteratorParser::TransliteratorParser(
                                      const UnicodeString& theRules,
                                      UTransDirection theDirection,
-                                     UParseError* theParseError)
+                                     UParseError& theParseError)
  :  
-    rules(theRules), direction(theDirection), variablesVector(status), data(0), parseError(theParseError)
+    rules(theRules), direction(theDirection),data(0),parseError(theParseError), variablesVector(status) 
 {
     parseData = new ParseData(0, &variablesVector);
     if (parseData == NULL) {
@@ -857,11 +861,11 @@ void TransliteratorParser::parseRules(UnicodeString& idBlockResult,
     ruleCount = 0;
 
     // Clear error struct
-    if (parseError != 0) {
+    //if (parseError != 0) {
         //parseError->code = parseError->line = 0;
-        parseError->offset = 0;
-        parseError->preContext[0] = parseError->postContext[0] = (UChar)0;
-    }
+        parseError.offset = 0;
+        parseError.preContext[0] = parseError.postContext[0] = (UChar)0;
+    //}
 
     delete data;
     data = new TransliterationRuleData(status);
@@ -918,11 +922,12 @@ void TransliteratorParser::parseRules(UnicodeString& idBlockResult,
             int32_t p = pos;
             UBool sawDelim;
             UnicodeString regenID;
-            Transliterator::parseID(rules, regenID, p, sawDelim, direction, NULL, FALSE);
-            if (p == pos || !sawDelim) {
+            Transliterator::parseID(rules, regenID, p, sawDelim, direction,parseError, FALSE,status);
+            //if (p == pos || !sawDelim) {
                 // Invalid ::id
-                status = U_ILLEGAL_ARGUMENT_ERROR;
-            } else {
+                //status = U_ILLEGAL_ARGUMENT_ERROR;
+            //else {
+            if(p != pos || sawDelim) {
                 if (mode == 1) {
                     mode = 2;
                     idSplitPointResult = idBlockResult.length();
@@ -942,8 +947,10 @@ void TransliteratorParser::parseRules(UnicodeString& idBlockResult,
                 if (mode == 2) {
                     // ::id in illegal position (because a rule
                     // occurred after the ::id footer block)
-                    status = U_ILLEGAL_ARGUMENT_ERROR;
+                    syntaxError(U_ILLEGAL_ARGUMENT_ERROR,rules,pos);
                 }
+            }else{
+                syntaxError(status,rules,pos);
             }
             mode = 1;
         }
@@ -964,7 +971,7 @@ void TransliteratorParser::parseRules(UnicodeString& idBlockResult,
 
     // Index the rules
     if (U_SUCCESS(status)) {
-        data->ruleSet.freeze(status);
+        data->ruleSet.freeze(parseError,status);
         if (idSplitPointResult < 0) {
             idSplitPointResult = idBlockResult.length();
         }
@@ -1049,7 +1056,6 @@ int32_t TransliteratorParser::parseRule(int32_t pos, int32_t limit) {
         // We allow anything on the right, including an empty string.
         UnicodeString* value = new UnicodeString(right->text);
         data->variableNames->put(undefinedVariableName, value, status);
-
         ++variableLimit;
         return pos;
     }
@@ -1057,7 +1063,7 @@ int32_t TransliteratorParser::parseRule(int32_t pos, int32_t limit) {
     // If this is not a variable definition rule, we shouldn't have
     // any undefined variable names.
     if (undefinedVariableName.length() != 0) {
-        syntaxError(// "Undefined variable $" + undefinedVariableName,
+        return syntaxError(// "Undefined variable $" + undefinedVariableName,
                     U_UNDEFINED_VARIABLE,
                     rule, start);
     }
@@ -1150,9 +1156,9 @@ int32_t TransliteratorParser::parseRule(int32_t pos, int32_t limit) {
  */
 int32_t TransliteratorParser::syntaxError(UErrorCode parseErrorCode,
                                                const UnicodeString& rule,
-                                               int32_t start) {
-    if (parseError != 0) {
-        parseError->line = 0; // We don't return a line #
+                                               int32_t pos) {
+   // if (parseError != 0) {
+   /*     parseError->line = 0; // We don't return a line #
         parseError->offset = start; // Character offset from rule start
         int32_t end = quotedIndexOf(rule, start, rule.length(), END_OF_RULE);
         if (end < 0) {
@@ -1165,9 +1171,30 @@ int32_t TransliteratorParser::syntaxError(UErrorCode parseErrorCode,
         rule.extract(start, len, parseError->preContext); // Current rule
         parseError->preContext[len] = 0;
         parseError->postContext[0] = 0;
-    }
+   */
+        parseError.offset = pos;
+        parseError.line = 0 ; /* we are not using line numbers */
+    
+        // for pre-context
+        int32_t start = (pos <=U_PARSE_CONTEXT_LEN)? 0 : (pos - (U_PARSE_CONTEXT_LEN-1));
+        int32_t stop  = pos;
+    
+        rule.extract(start,stop-start,parseError.preContext);
+        //null terminate the buffer
+        parseError.preContext[stop-start] = 0;
+    
+        //for post-context
+        start = pos+1;
+        stop  = ((pos+U_PARSE_CONTEXT_LEN)<= rule.length() )? (pos+(U_PARSE_CONTEXT_LEN-1)) : 
+                                                                rule.length();
+
+        rule.extract(start,stop-start,parseError.postContext);
+        //null terminate the buffer
+        parseError.postContext[stop-start]= 0;
+   // }
     status = (UErrorCode)parseErrorCode;
-    return start;
+    return pos;
+
 }
 
 /**

@@ -17,8 +17,8 @@
 
 const UChar TransliterationRule::ETHER = 0xFFFF;
 
-static const UChar APOSTROPHE = 0x0027; // '
-static const UChar BACKSLASH  = 0x005C; // \
+static const UChar APOSTROPHE = 0x0027; // '\''
+static const UChar BACKSLASH  = 0x005C; // '\' 
 
 // To process segments we need to allocate arrays of integers.  We use
 // stack storage as long as the segment count is <= MAX_STATIC_SEGS.
@@ -136,14 +136,16 @@ TransliterationRule::TransliterationRule(const UnicodeString& input,
 /**
  * Copy constructor.
  */
+
+/* Ram: Reordered member initializers to match declaration order and make GCC happy */
 TransliterationRule::TransliterationRule(TransliterationRule& other) :
     pattern(other.pattern),
     output(other.output),
+    firstKeySeg(other.firstKeySeg),
     anteContextLength(other.anteContextLength),
     keyLength(other.keyLength),
     cursorPos(other.cursorPos),
     flags(other.flags),
-    firstKeySeg(other.firstKeySeg),
     data(other.data) {
 
     segments = 0;
