@@ -12,6 +12,7 @@
 #ifndef _REGEXIMP_H
 #define _REGEXIMP_H
 
+U_NAMESPACE_BEGIN
 
 //
 //  debugging support.  Enable one or more of the #defines immediately following
@@ -50,7 +51,7 @@
 //                   of the entries.
 //
 enum {
-     URX_RESERVED_OP   = 0,
+     URX_RESERVED_OP   = 0,    // For multi-operand ops, most non-first words.
      URX_BACKTRACK     = 1,
      URX_END           = 2,
      URX_ONECHAR       = 3,    // Value field is the 21 bit unicode char to match
@@ -77,13 +78,24 @@ enum {
      URX_DOTANY_ALL    = 21,   // ., in the . matches any mode.
      URX_BACKSLASH_D   = 22,   // Value field:  0:  \d    1:  \D
      URX_CARET         = 23,   // Value field:  1:  multi-line mode.
-     URX_DOLLAR        = 24   // Also for \Z
+     URX_DOLLAR        = 24,  // Also for \Z
+
+     URX_CTR_INIT      = 25,   // Counter Inits for {Interval} loops.
+     URX_CTR_INIT_NG   = 26,   //   3 kinds, normal, non-greedy, and possesive.
+     URX_CTR_INIT_P    = 27,   //   These are 4 word opcodes.  See description.
+     URX_CTR_LOOP      = 28,   // Loop Ops for {interval} loops.
+     URX_CTR_LOOP_NG   = 29,   //   Also in three flavors.
+     URX_CTR_LOOP_P    = 30,
+
+     URX_RELOC_OPRND   = 31,   // Operand value in multi-operand ops that refers
+                               //   back into compiled pattern code, and thus must
+                               //   be relocated when inserting/deleting ops in code.
 };
 
 // Keep this list of opcode names in sync with the above enum
 //   Used for debug printing only.
 #define URX_OPCODE_NAMES       \
-        "URX_RESERVED_OP",     \
+        "               ",     \
         "URX_BACKTRACK",       \
         "END",                 \
         "ONECHAR",             \
@@ -107,7 +119,14 @@ enum {
         "URX_DOTANY_ALL",      \
         "URX_BACKSLASH_D",     \
         "URX_CARET",           \
-        "URX_DOLLAR"
+        "URX_DOLLAR",          \
+        "CTR_INIT",            \
+        "CTR_INIT_NG",         \
+        "CTR_INIT_P",          \
+        "CTR_LOOP",            \
+        "CTR_LOOP_NG",         \
+        "CTR_LOOP_P",          \
+        "RELOC_OPRND"
 
 //
 //  Convenience macros for assembling and disassembling a compiled operation.
@@ -132,5 +151,18 @@ enum {
                                          //   membership test.
 };
 
+
+//
+//  Match Engine State Stack Frame Layout.
+//
+struct REStackFrame {
+    int32_t            fInputIdx;        // Position of next character in the input string
+    int32_t            fPatIdx;          // Position of next Op in the compiled pattern
+    int32_t            fExtra[2];        // Extra state, for capture group start/ends
+                                         //   atomic parentheses, repeat counts, etc.
+                                         //   Locations assigned at pattern compile time.
+};
+
+U_NAMESPACE_END
 #endif
 

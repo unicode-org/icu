@@ -48,6 +48,7 @@ class RegexMatcher;
 class UVector;
 class UVector32;
 class UnicodeSet;
+struct REStackFrame;
 
 
 /**
@@ -312,7 +313,12 @@ private:
                                    //  split(), to avoid having to
                                    //  make new ones on each call.
 
-    int32_t         fNumCaptureGroups;
+    int32_t         fFrameSize;    // Size of a state stack frame in the 
+                                   //   execution engine.
+
+    UVector32       *fGroupMap;     // Map from capture group number to position of
+                                   //   the group's variables in the matcher stack frame.
+
     int32_t         fMaxCaptureDigits;
 
     UnicodeSet    **fStaticSets;  // Ptr to static (shared) sets for predefined
@@ -658,9 +664,12 @@ private:
     //  MatchAt   This is the internal interface to the match engine itself.
     //            Match status comes back in matcher member variables.
     //
-    void         MatchAt(int32_t startIdx, UErrorCode &status);   
-    inline  void backTrack(int32_t &inputIdx, int32_t &patIdx);
-    UBool        isWordBoundary(int32_t pos);         // perform the \b test
+    void                 MatchAt(int32_t startIdx, UErrorCode &status);   
+    inline void          backTrack(int32_t &inputIdx, int32_t &patIdx);
+    UBool                isWordBoundary(int32_t pos);         // perform the \b test
+    REStackFrame        *resetStack();
+    inline REStackFrame *StateSave(REStackFrame *fp, int32_t savePatIdx, 
+                                   int32_t frameSize, UErrorCode &status);
 
 
     const RegexPattern  *fPattern;
@@ -672,14 +681,11 @@ private:
     int32_t              fMatchStart;      // Position of the start of the most recent match
     int32_t              fMatchEnd;        // First position after the end of the most recent match
     int32_t              fLastMatchEnd;    // First position after the end of the previous match.
-    UVector32           *fBackTrackStack;
-    UVector32           *fCaptureStarts;
-    UVector32           *fCaptureEnds;
 
-    // Cache the capture vector data pointers, for faster access.
-    int32_t             *fCapStarts;
-    int32_t             *fCapEnds;
-    int32_t              fCaptureStateSize;
+    UVector32           *fStack;
+    REStackFrame        *fFrame;           // After finding a match, the last active stack
+                                           //   frame, which will contain the capture group results.
+                                           //   NOT valid while match engine is running.
 
     /**
      * The address of this static class variable serves as this class's ID

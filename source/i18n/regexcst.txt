@@ -64,15 +64,15 @@ start:
 #  term.  At a position where we can accept the start most items in a pattern.
 #
 term:
-    quoted               n expr-quant     		                    doLiteralChar
-    rule_char            n expr-quant     		                    doLiteralChar
+    quoted               n expr-quant     	                    doLiteralChar
+    rule_char            n expr-quant     	                    doLiteralChar
     '['                  n expr-quant                               doScanUnicodeSet
     '('                  n open-paren                     
     '.'                  n expr-quant                               doDotAny
     '^'                  n term                                     doCaret
     '$'                  n term                                     doDollar
     '\'                  n backslash
-    eof		               term                                     doPatFinish
+    eof	                   term                                     doPatFinish
     default                errorDeath                               doRuleError
     
 
@@ -85,7 +85,7 @@ expr-quant:
     '*'                  n  quant-star                       
     '+'                  n  quant-plus                              
     '?'                  n  quant-opt     
-    '{'                  n  interval-open
+    '{'                  n  interval-open                          doIntervalInit
     default                 expr-cont 
     
     
@@ -182,14 +182,28 @@ quant-opt:
 
 #
 #   Interval         scanning a '{', the opening delimiter for an interval specification
-#                                   {number} or {min, max}
+#                                   {number} or {min, max} or {min, }
 #
 interval-open:
-    white_space          n  interval-open
-    default                 errorDeath                              doNotImplementedError
+    white_space          n  interval-open                                  # TODO:  is white space allowed here in non-free mode?
+    digit_char              interval-lower                          
+    default                 errorDeath                              doIntervalError
     
+interval-lower:
+    digit_char           n  interval-lower                          doIntevalLowerDigit
+    ','			         n  interval-upper
+    '}'                  n  interval-type                           doIntervalSame             # {n}
+    default                 errorDeath                              doIntervalError
+
+interval-upper:
+    digit_char           n  interval-upper                          doIntervalUpperDigit
+    '}'                  n  interval-type
+    default                 errorDeath                              doIntervalError
     
-    
+interval-type:
+    '?'                  n  expr-cont                               doNGInterval                # {n,m}?
+    '+'                  n  expr-cont                               doPossesiveInterval         # {n,m}+
+    default                 expr-cont                               doInterval                  # {m,n}
     
     
 #

@@ -368,8 +368,8 @@ void RegexTest::Basic() {
 //
 #if 0
     {
-    //REGEX_TESTLM("X(.+)+X", "nomatch", TRUE,  TRUE);
-    REGEX_FIND("(X([abc=X]+)+X)|(y[abc=]+)", "=XX====================");
+    REGEX_TESTLM("A{3}BC", "AAABC", TRUE, TRUE);
+    // REGEX_FIND("(X([abc=X]+)+X)|(y[abc=]+)", "=XX====================");
     }
     exit(1);
 #endif
@@ -1195,6 +1195,34 @@ void RegexTest::Extended() {
     REGEX_FIND("AB\\.C\\eD\\u0666E", "<0>AB.C\\u001BD\\u0666E</0>F");
 
 
+    // {min,max} iteration qualifier
+    REGEX_TESTLM("A{3}BC", "AAABC", TRUE, TRUE);
+
+    REGEX_FIND("(ABC){2,3}AB", "no matchAB");
+    REGEX_FIND("(ABC){2,3}AB", "ABCAB");
+    REGEX_FIND("(ABC){2,3}AB", "<0>ABC<1>ABC</1>AB</0>");
+    REGEX_FIND("(ABC){2,3}AB", "<0>ABCABC<1>ABC</1>AB</0>");
+    REGEX_FIND("(ABC){2,3}AB", "<0>ABCABC<1>ABC</1>AB</0>CAB");
+
+    REGEX_FIND("(ABC){2}AB", "ABCAB");
+    REGEX_FIND("(ABC){2}AB", "<0>ABC<1>ABC</1>AB</0>");
+    REGEX_FIND("(ABC){2}AB", "<0>ABC<1>ABC</1>AB</0>CAB");
+    REGEX_FIND("(ABC){2}AB", "<0>ABC<1>ABC</1>AB</0>CABCAB");
+
+    REGEX_FIND("(ABC){2,}AB", "ABCAB");
+    REGEX_FIND("(ABC){2,}AB", "<0>ABC<1>ABC</1>AB</0>");
+    REGEX_FIND("(ABC){2,}AB", "<0>ABCABC<1>ABC</1>AB</0>");
+    REGEX_FIND("(ABC){2,}AB", "<0>ABCABCABC<1>ABC</1>AB</0>");
+
+    REGEX_FIND("X{0,0}ABC", "<0>ABC</0>");
+    REGEX_FIND("X{0,1}ABC", "<0>ABC</0>");
+
+    REGEX_FIND("(?:Hello(!{1,3}) there){1}", "Hello there");
+    REGEX_FIND("(?:Hello(!{1,3}) there){1}", "<0>Hello<1>!</1> there</0>");
+    REGEX_FIND("(?:Hello(!{1,3}) there){1}", "<0>Hello<1>!!</1> there</0>");
+    REGEX_FIND("(?:Hello(!{1,3}) there){1}", "<0>Hello<1>!!!</1> there</0>");
+    REGEX_FIND("(?:Hello(!{1,3}) there){1}", "Hello!!!! there");
+
 }
 
 
@@ -1233,9 +1261,6 @@ void RegexTest::Errors() {
 
     // Atomic Grouping
     REGEX_ERR("abc(?>xyz)", 1, 6, U_REGEX_UNIMPLEMENTED);
-
-    // {Numeric Quantifiers}
-    REGEX_ERR("abc{4}", 1, 5, U_REGEX_UNIMPLEMENTED);
 
     // Possessive Quantifiers
     REGEX_ERR("abc++d", 1, 5, U_REGEX_UNIMPLEMENTED);

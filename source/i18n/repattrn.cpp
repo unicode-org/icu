@@ -66,7 +66,6 @@ RegexPattern &RegexPattern::operator = (const RegexPattern &other) {
     fFlags            = other.fFlags;
     fLiteralText      = other.fLiteralText;
     fBadState         = other.fBadState;
-    fNumCaptureGroups = other.fNumCaptureGroups;
     fMaxCaptureDigits = other.fMaxCaptureDigits;
     fStaticSets       = other.fStaticSets;    
     if (fBadState) {
@@ -74,11 +73,10 @@ RegexPattern &RegexPattern::operator = (const RegexPattern &other) {
     }
 
     //  Copy the pattern.  It's just values, nothing deep to copy.
-    int        i;
+    //  TODO:  something with status
     UErrorCode status = U_ZERO_ERROR;
-    for (i=0; i<other.fCompiledPat->size(); i++) {
-        fCompiledPat->addElement(other.fCompiledPat->elementAti(i), status);
-    }
+    fCompiledPat->assign(*other.fCompiledPat, status);
+    fGroupMap->assign(*other.fGroupMap, status);
 
     // Note:  do not copy fMatcher.  It'll be created on first use if the
     //        destination needs one. 
@@ -87,6 +85,7 @@ RegexPattern &RegexPattern::operator = (const RegexPattern &other) {
     //    Could be made more efficient if the sets were reference counted and shared,
     //    but I doubt that pattern copying will be particularly common. 
     //    Note:  init() already added an empty element zero to fSets
+    int32_t i;
     for (i=1; i<other.fSets->size(); i++) {
         UnicodeSet *sourceSet = (UnicodeSet *)other.fSets->elementAt(i);
         UnicodeSet *newSet    = new UnicodeSet(*sourceSet);
@@ -112,14 +111,15 @@ RegexPattern &RegexPattern::operator = (const RegexPattern &other) {
 void RegexPattern::init() {
     fFlags            = 0;
     fBadState         = FALSE;
-    fNumCaptureGroups = 0;
     fMaxCaptureDigits = 1;     // TODO:  calculate for real.
     fStaticSets       = NULL;
     fMatcher          = NULL;
+    fFrameSize        = 0;
     
     UErrorCode status=U_ZERO_ERROR;
     // Init of a completely new RegexPattern.
     fCompiledPat = new UVector32(status);
+    fGroupMap    = new UVector32(status);
     fSets        = new UVector(status);
     if (U_FAILURE(status) || fCompiledPat == NULL || fSets == NULL) {
         fBadState = TRUE;
@@ -151,6 +151,8 @@ void RegexPattern::zap() {
     }
     delete fSets;
     fSets = NULL;
+    delete fGroupMap;
+    fGroupMap = NULL;
 }
 
 
@@ -367,6 +369,7 @@ int32_t  RegexPattern::split(const UnicodeString &input,
     // Loop through the input text, searching for the delimiter pattern
     //
     int i;
+    int32_t numCaptureGroups = fGroupMap->size();
     for (i=0; ; i++) {
         if (i==destCapacity-1) {
             // There is only one output string left.
@@ -384,7 +387,7 @@ int32_t  RegexPattern::split(const UnicodeString &input,
             // If the delimiter pattern has capturing parentheses, the captured
             //  text goes out into the next n destination strings.
             int32_t groupNum;
-            for (groupNum=1; groupNum<=this->fNumCaptureGroups; groupNum++) {
+            for (groupNum=1; groupNum<=numCaptureGroups; groupNum++) {
                 if (i==destCapacity-1) {
                     break;
                 }
@@ -446,6 +449,7 @@ void   RegexPattern::dumpOp(int32_t index) const {
         // Types with no operand field of interest.
         break;
         
+    case URX_RESERVED_OP:
     case URX_START_CAPTURE:
     case URX_END_CAPTURE:
     case URX_STATE_SAVE:
@@ -457,6 +461,14 @@ void   RegexPattern::dumpOp(int32_t index) const {
     case URX_CARET:
     case URX_DOLLAR:
     case URX_STRING_LEN:
+    case URX_CTR_INIT:
+    case URX_CTR_INIT_NG:
+    case URX_CTR_INIT_P:
+    case URX_CTR_LOOP:
+    case URX_CTR_LOOP_NG:
+    case URX_CTR_LOOP_P:
+    case URX_RELOC_OPRND:
+
         // types with an integer operand field.
         REGEX_DUMP_DEBUG_PRINTF("%d", val);
         break;

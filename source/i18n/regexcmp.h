@@ -81,8 +81,12 @@ private:
                                                      //  there is space to add an opcode there.
     void        compileSet(UnicodeSet *theSet);      // Generate the compiled pattern for
                                                      //   a reference to a UnicodeSet.
+    void        compileInterval(int32_t InitOp,       // Generate the code for a {min,max} quantifier.
+                               int32_t LoopOp);
     void        literalChar();                       // Compile a literal char
     void        fixLiterals(UBool split=FALSE);      // Fix literal strings.
+    void        insertOp(int32_t where);             // Open up a slot for a new op in the
+                                                     //   generated code at the specified location.
 
 
     UErrorCode                    *fStatus;
@@ -121,9 +125,9 @@ private:
 
     int32_t                       fPatternLength;    // Length of the input pattern string.
 
-    UStack                        fParenStack;       // parentheses stack.  Each frame consists of
+    UVector32                     fParenStack;       // parentheses stack.  Each frame consists of
                                                      //   the positions of compiled pattern operations
-                                                     //   needing fixup, followed by negative vallue.  The  
+                                                     //   needing fixup, followed by negative value.  The  
                                                      //   first entry in each frame is the position of the
                                                      //   spot reserved for use when a quantifier
                                                      //   needs to add a SAVE at the start of a (block)
@@ -140,6 +144,16 @@ private:
                                                      //   location after the most recently processed
                                                      //   parenthesized block.
 
+    int32_t                       fIntervalLow;      // {lower, upper} interval quantifier values.
+    int32_t                       fIntervalUpper;    // Placed here temporarily, when pattern is
+                                                     //   initially scanned.  Each new interval
+                                                     //   encountered overwrites these values.
+
+                                                     //   -1 for the upper interval value means none
+                                                     //   was specified (unlimited occurences.)
+
+    int32_t                       fMatcherDataEnd;   // Location Counter for allocation of data
+                                                     //   to be used by the matcher at match time.
 };
 
 U_NAMESPACE_END
