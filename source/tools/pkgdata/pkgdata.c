@@ -48,7 +48,8 @@ static struct
 } modes[] = 
 {
 #ifdef WIN32
-  { "win",    pkg_mode_windows,    "Generates one common data file and one shared library, <package>.dll"},
+  { "dll",    pkg_mode_windows,    "Generates one common data file and one shared library, <package>.dll"},
+  { "common", pkg_mode_windows,    "Generates just the common file, <package>.dat"}
 #else /*#ifdef WIN32*/
 #ifdef UDATA_SO_SUFFIX
   { "dll",    pkg_mode_dll,    "Generates one shared library, <package>" UDATA_SO_SUFFIX },
