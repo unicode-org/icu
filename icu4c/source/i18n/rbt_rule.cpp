@@ -432,12 +432,19 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
             m = U_PARTIAL_MATCH;
             goto exit;
         }
-        if (oText == pos.limit && oPattern < keyLength) {
-            // We're still in the pattern key but we're entering the
-            // post context.
-            m = U_MISMATCH;
-            goto exit;
-        }
+
+        // It might seem that we could do a check like this here:
+        //!if (oText == pos.limit && oPattern < keyLength) {
+        //!    // We're still in the pattern key but we're entering the
+        //!    // post context.
+        // but this won't work if the end of the key is a
+        // zero-length matcher, followed by post context: {a b?} c
+        // Instead, what we do is proceed with matching as usual
+        // so zero-length matchers can work, but restrict the
+        // limit to either pos.limit or pos.contextLimit,
+        // depending on whether we're in the key or in the post
+        // context.
+
         while (oPattern == nextSegPos) {
             segPos[iSeg] = oText;
             nextSegPos = segments[FIRST_SEG_POS_INDEX+(++iSeg)] - anteContextLength;
@@ -445,13 +452,18 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
         if (oPattern == keyLength) {
             keyLimit = oText;
         }
+
+        // Restrict the key to match up to pos.limit; the post-context
+        // can match up to pos.contextLimit.
+        int32_t matchLimit = (oPattern < keyLength) ? pos.limit : pos.contextLimit;
+        
         UChar keyChar = pattern.charAt(anteContextLength + oPattern++);
         const UnicodeMatcher* matcher = data->lookup(keyChar);
         if (matcher == 0) {
             // Don't need the oText < pos.contextLimit check if
             // incremental is TRUE (because it's done above); do need
             // it otherwise.
-            if (oText < pos.contextLimit &&
+            if (oText < matchLimit &&
                 keyChar == text.charAt(oText)) {
                 ++oText;
             } else {
@@ -459,11 +471,21 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
                 goto exit;
             }
         } else {
-            m = matcher->matches(text, oText, pos.contextLimit, incremental);
+            m = matcher->matches(text, oText, matchLimit, incremental);
             if (m != U_MATCH) {
                 goto exit;
             }
         }
+
+        // This check rendered superfluous by above use of
+        // matchLimit, but kept around for documentation.
+        //!if (oText > pos.limit && oPattern < keyLength) {
+        //!    // We're still in the pattern key but we've entering the
+        //!    // post context.  We must do this check _after_ doing the
+        //!    // match in case we have zero-length matchers like /a?/
+        //!    // at the end of the key.
+        //!    return UnicodeMatcher.U_MISMATCH;
+        //!}
     }
     while (oPattern == nextSegPos) {
         segPos[iSeg] = oText;
