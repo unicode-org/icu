@@ -1,5 +1,5 @@
 ######################################################################
-# Copyright (c) 2003, International Business Machines
+# Copyright (c) 2004, International Business Machines
 # Corporation and others.  All Rights Reserved.
 ######################################################################
 # Author: Alan Liu
@@ -20,6 +20,11 @@
 # ================================================
 # Enumerated Non-Binary Properties
 # ================================================
+
+# lccc(c)=ccc(NFD(c)[0])
+# tccc(c)=ccc(NFD(c)[last])
+lccc; Lead_Canonical_Combining_Class
+tccc; Trail_Canonical_Combining_Class
 
 # ================================================
 # Bitmask Properties
