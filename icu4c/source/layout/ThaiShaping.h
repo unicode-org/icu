@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved
  *
  */
 
@@ -77,7 +77,8 @@ private:
     static const le_uint8 classTable[];
     static const StateTransition thaiStateTable[][classCount];
 
-    static StateTransition getTransition(le_uint8 state, le_uint8 currClass);
+    inline static StateTransition getTransition(le_uint8 state, le_uint8 currClass);
+
     static le_uint8 doTransition(StateTransition transition, LEUnicode currChar, le_int32 inputIndex, le_uint8 glyphSet,
         LEUnicode errorChar, LEUnicode *outputBuffer, LEGlyphStorage &glyphStorage, le_int32 &outputIndex);
 

@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 1998-2004, International Business Machines
+ *   Copyright (C) 1998-2005, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -125,10 +125,7 @@ public:
      *
      * @draft ICU 3.0
      */
-    le_int32 getGlyphCount() const
-    {
-        return fGlyphCount;
-    };
+    inline le_int32 getGlyphCount() const;
 
     /**
      * This method copies the glyph array into a caller supplied array.
@@ -304,7 +301,7 @@ public:
      *
      * @draft ICU 3.0
      */
-    LEGlyphID &operator[](le_int32 glyphIndex) const;
+    inline LEGlyphID &operator[](le_int32 glyphIndex) const;
 
     /**
      * Call this method to replace a single glyph in the glyph array
@@ -487,6 +484,11 @@ public:
      */
     static UClassID getStaticClassID();
 };
+
+inline le_int32 LEGlyphStorage::getGlyphCount() const
+{
+    return fGlyphCount;
+}
 
 inline LEGlyphID &LEGlyphStorage::operator[](le_int32 glyphIndex) const
 {
