@@ -2940,12 +2940,12 @@ unorm_previous(UCharIterator *src,
                UBool doNormalize, UBool *pNeededToNormalize,
                UErrorCode *pErrorCode) {
     UChar stackBuffer[100];
-    UChar *buffer;
-    IsPrevBoundaryFn *isPreviousBoundary;
-    uint32_t mask;
-    int32_t startIndex, bufferLength, bufferCapacity, destLength;
-    int32_t c, c2;
-    UChar minC;
+    UChar *buffer=NULL;
+    IsPrevBoundaryFn *isPreviousBoundary=NULL;
+    uint32_t mask=0;
+    int32_t startIndex=0, bufferLength=0, bufferCapacity=0, destLength=0;
+    int32_t c=0, c2=0;
+    UChar minC=0;
 
     /* check argument values */
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
@@ -3031,7 +3031,7 @@ unorm_previous(UCharIterator *src,
             if(pNeededToNormalize!=0 && U_SUCCESS(*pErrorCode)) {
                 *pNeededToNormalize=
                     (UBool)(destLength!=bufferLength ||
-                            0!=uprv_memcmp(dest, buffer, destLength*U_SIZEOF_UCHAR));
+                            0!=uprv_memcmp(dest, buffer+startIndex, destLength*U_SIZEOF_UCHAR));
             }
         } else {
             /* just copy the source characters */
