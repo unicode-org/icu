@@ -13,9 +13,21 @@
 #include "unicode/coll.h"
 #include "unicode/strenum.h"
 #include "hash.h"
+#include "uassert.h"
 
 #include "ucol_imp.h" // internal api needed to test ucollator equality
 #include "cstring.h" // internal api used to compare locale strings
+
+void CollationServiceTest::runIndexedTest(int32_t index, UBool exec, const char* &name, char* /*par */)
+{
+    if (exec) logln("TestSuite CollationServiceTest: ");
+    switch (index) {
+        TESTCASE(0, TestRegister);
+        TESTCASE(1, TestRegisterFactory);
+        TESTCASE(2, TestSeparateTree);
+    default: name = ""; break;
+    }
+}
 
 void CollationServiceTest::TestRegister() 
 {
@@ -320,6 +332,7 @@ char TestFactory::gClassID = 0;
 
 void CollationServiceTest::TestRegisterFactory(void) 
 {
+    int32_t n1, n2, n3;
     Locale fu_FU("fu", "FU", "");
     Locale fu_FU_FOO("fu", "FU", "FOO");
     
@@ -369,7 +382,13 @@ void CollationServiceTest::TestRegisterFactory(void)
     Collator* fucol = Collator::createInstance(fu_FU, status);
     
     {
+        n1 = checkAvailable("before registerFactory");
+
         URegistryKey key = Collator::registerFactory(factory, status);
+
+        n2 = checkAvailable("after registerFactory");
+        assertTrue("count after > count before", n2 > n1);
+
         Collator* ncol = Collator::createInstance(Locale::getUS(), status);
         if (*frcol != *ncol) {
             errln("frcoll for en_US failed");
@@ -429,21 +448,98 @@ void CollationServiceTest::TestRegisterFactory(void)
         if (*fucol != *ncol) {
             errln("collator after unregister does not match original fu_FU");
         }
-	delete ncol;
+        delete ncol;
+
+        n3 = checkAvailable("after unregister");
+        assertTrue("count after unregister == count before register", n3 == n1);
     }
     
     delete fucol;
     delete uscol;
 }
 
-void CollationServiceTest::runIndexedTest(int32_t index, UBool exec, const char* &name, char* /*par */)
-{
-    if (exec) logln("TestSuite CollationServiceTest: ");
-    switch (index) {
-        TESTCASE(0, TestRegister);
-        TESTCASE(1, TestRegisterFactory);
-    default: name = ""; break;
+/**
+ * Iterate through the given iterator, checking to see that all the strings
+ * in the expected array are present.
+ * @param expected array of strings we expect to see, or NULL
+ * @param expectedCount number of elements of expected, or 0
+ */
+int32_t CollationServiceTest::checkStringEnumeration(const char* msg,
+                                                     StringEnumeration& iter,
+                                                     const char** expected,
+                                                     int32_t expectedCount) {
+    UErrorCode ec = U_ZERO_ERROR;
+    U_ASSERT(expectedCount >= 0 && expectedCount < 31); // [sic] 31 not 32
+    int32_t i = 0, n = iter.count(ec);
+    assertSuccess("count", ec);
+    UnicodeString buf;
+    int32_t seenMask = 0;
+    for (;; ++i) {
+        const UnicodeString* s = iter.snext(ec);
+        if (!assertSuccess("snext", ec) || s == NULL) break;
+        if (i != 0) buf.append(", ");
+        buf.append(*s);
+        // check expected list
+        for (int32_t j=0, bit=1; j<expectedCount; ++j, bit<<=1) {
+            if ((seenMask&bit)==0) {
+                UnicodeString exp(expected[j], (char*)NULL);
+                if (*s == exp) {
+                    seenMask |= bit;
+                    logln((UnicodeString)"Ok: \"" + exp + "\" seen");
+                }
+            }
+        }
     }
+    // can't get pesky operator+(const US&, foo) to cooperate; use toString
+    logln(UnicodeString() + msg + " = [" + buf + "] (" + toString(i) + ")");
+    assertTrue("count verified", i==n);
+    // did we see all expected strings?
+    if (((1<<expectedCount)-1) != seenMask) {
+        for (int32_t j=0, bit=1; j<expectedCount; ++j, bit<<=1) {
+            if ((seenMask&bit)==0) {
+                errln((UnicodeString)"FAIL: \"" + expected[j] + "\" not seen");
+            }
+        }
+    }
+    return n;
+}
+
+/**
+ * Check the integrity of the results of Collator::getAvailableLocales().
+ * Return the number of items returned.
+ */
+int32_t CollationServiceTest::checkAvailable(const char* msg) {
+    StringEnumeration *iter = Collator::getAvailableLocales();
+    if (!assertTrue("getAvailableLocales != NULL", iter!=NULL)) return -1;
+    int32_t n = checkStringEnumeration(msg, *iter, NULL, 0);
+    delete iter;
+    return n;
+}
+
+static const char* KW[] = {
+    "collation"
+};
+static const int32_t KW_COUNT = sizeof(KW)/sizeof(KW[0]);
+
+static const char* KWVAL[] = {
+    "phonebook",
+    "stroke"
+};
+static const int32_t KWVAL_COUNT = sizeof(KWVAL)/sizeof(KWVAL[0]);
+
+void CollationServiceTest::TestSeparateTree() {
+    UErrorCode ec = U_ZERO_ERROR;
+    StringEnumeration *iter = Collator::getKeywords(ec);
+    if (!assertTrue("getKeywords != NULL", iter!=NULL)) return;
+    if (!assertSuccess("getKeywords", ec)) return;
+    checkStringEnumeration("getKeywords", *iter, KW, KW_COUNT);
+    delete iter;
+    
+    iter = Collator::getKeywordValues(KW[0], ec);
+    if (!assertTrue("getKeywordValues != NULL", iter!=NULL)) return;
+    if (!assertSuccess("getKeywordValues", ec)) return;
+    checkStringEnumeration("getKeywordValues", *iter, KWVAL, KWVAL_COUNT);
+    delete iter;
 }
 
 #endif
