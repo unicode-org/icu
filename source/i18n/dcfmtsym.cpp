@@ -37,7 +37,7 @@ const char *DecimalFormatSymbols::fgCurrencyElements="CurrencyElements";
 
 // Because the C-compiler doesn't parse \u escape sequences, we encode the
 // \u last resort strings as UChar arrays.
-const UChar DecimalFormatSymbols::fgLastResortPerMill[]      = { 0x2030, 0 };
+const UChar DecimalFormatSymbols::fgLastResortPermill[]      = { 0x2030, 0 };
 const UChar DecimalFormatSymbols::fgLastResortInfinity[]     = { 0x221E, 0 };
 const UChar DecimalFormatSymbols::fgLastResortNaN[]          = { 0xFFFD, 0 };
 const UChar DecimalFormatSymbols::fgLastResortCurrency[]     = { 0x00A4, 0 };
@@ -53,7 +53,7 @@ const UnicodeString DecimalFormatSymbols::fgLastResortNumberElements[] =
     UNICODE_STRING("#", 1),    // pattern digit
     UNICODE_STRING("-", 1),    // minus sign
     UNICODE_STRING("E", 1),    // exponential
-    DecimalFormatSymbols::fgLastResortPerMill,  // per mill
+    DecimalFormatSymbols::fgLastResortPermill,  // per mill
     DecimalFormatSymbols::fgLastResortInfinity, // infinite
     DecimalFormatSymbols::fgLastResortNaN       // NaN
 };
@@ -90,24 +90,11 @@ DecimalFormatSymbols::~DecimalFormatSymbols()
 // -------------------------------------
 // copy constructor
 
-DecimalFormatSymbols::DecimalFormatSymbols(const DecimalFormatSymbols &source)
-    :   fZeroDigit(source.fZeroDigit),
-        fGroupingSeparator(source.fGroupingSeparator),
-        fDecimalSeparator(source.fDecimalSeparator),
-        fPercent(source.fPercent),
-        fPerMill(source.fPerMill),
-        fDigit(source.fDigit),
-        fPlusSign(source.fPlusSign),
-        fMinusSign(source.fMinusSign),
-        fExponential(source.fExponential),
-        fPatternSeparator(source.fPatternSeparator),
-        fInfinity(source.fInfinity),
-        fNaN(source.fNaN),
-        fCurrencySymbol(source.fCurrencySymbol),
-        fIntlCurrencySymbol(source.fIntlCurrencySymbol),
-        fMonetarySeparator(source.fMonetarySeparator),
-        fPadEscape(source.fPadEscape)
-{
+DecimalFormatSymbols::DecimalFormatSymbols(const DecimalFormatSymbols &source) {
+    int i;
+    for(i = 0; i < (int)ENumberFormatSymbol::kCount; ++i) {
+        fSymbols[(ENumberFormatSymbol)i] = source.fSymbols[(ENumberFormatSymbol)i];
+    }
 }
 
 // -------------------------------------
@@ -118,22 +105,10 @@ DecimalFormatSymbols::operator=(const DecimalFormatSymbols& rhs)
 {
     if (this != &rhs)
     {
-        fZeroDigit = rhs.fZeroDigit;
-        fGroupingSeparator = rhs.fGroupingSeparator;
-        fDecimalSeparator = rhs.fDecimalSeparator;
-        fPercent = rhs.fPercent;
-        fPerMill = rhs.fPerMill;
-        fDigit = rhs.fDigit;
-        fPlusSign = rhs.fPlusSign;
-        fMinusSign = rhs.fMinusSign;
-        fExponential = rhs.fExponential;
-        fPatternSeparator = rhs.fPatternSeparator;
-        fInfinity = rhs.fInfinity;
-        fNaN = rhs.fNaN;
-        fCurrencySymbol = rhs.fCurrencySymbol;
-        fIntlCurrencySymbol = rhs.fIntlCurrencySymbol;
-        fMonetarySeparator = rhs.fMonetarySeparator;
-        fPadEscape = rhs.fPadEscape;
+        int i;
+        for(i = 0; i < (int)ENumberFormatSymbol::kCount; ++i) {
+            fSymbols[(ENumberFormatSymbol)i] = rhs.fSymbols[(ENumberFormatSymbol)i];
+        }
     }
     return *this;
 }
@@ -143,25 +118,17 @@ DecimalFormatSymbols::operator=(const DecimalFormatSymbols& rhs)
 UBool
 DecimalFormatSymbols::operator==(const DecimalFormatSymbols& that) const
 {
-    if (this == &that) return TRUE;
+    if (this == &that) {
+        return TRUE;
+    }
 
-    return (fZeroDigit == that.fZeroDigit &&
-        fGroupingSeparator == that.fGroupingSeparator &&
-        fDecimalSeparator == that.fDecimalSeparator &&
-        fPercent == that.fPercent &&
-        fPerMill == that.fPerMill &&
-        fDigit == that.fDigit &&
-        fPlusSign == that.fPlusSign &&
-        fMinusSign == that.fMinusSign &&
-        fExponential == that.fExponential &&
-        fPatternSeparator == that.fPatternSeparator &&
-        fInfinity == that.fInfinity &&
-        fNaN == that.fNaN &&
-        fCurrencySymbol == that.fCurrencySymbol &&
-        fIntlCurrencySymbol == that.fIntlCurrencySymbol &&
-        fMonetarySeparator == that.fMonetarySeparator &&
-        fPadEscape == that.fPadEscape
-        );
+    int i;
+    for(i = 0; i < (int)ENumberFormatSymbol::kCount; ++i) {
+        if(fSymbols[(ENumberFormatSymbol)i] != that.fSymbols[(ENumberFormatSymbol)i]) {
+            return FALSE;
+        }
+    }
+    return TRUE;
 }
  
 // -------------------------------------
@@ -221,29 +188,30 @@ DecimalFormatSymbols::initialize(const Locale& locale, UErrorCode& status,
 void
 DecimalFormatSymbols::initialize(const UnicodeString* numberElements, const UnicodeString* currencyElements)
 {
-    fDecimalSeparator  = numberElements[0][(UTextOffset)0];
-    fGroupingSeparator = numberElements[1][(UTextOffset)0];
-    fPatternSeparator  = numberElements[2][(UTextOffset)0];
-    fPercent           = numberElements[3][(UTextOffset)0];
-    fZeroDigit         = numberElements[4][(UTextOffset)0];
-    fDigit             = numberElements[5][(UTextOffset)0];
-    fPlusSign          = 0x002B; // '+' Hard coded for now; get from resource later
-    fMinusSign         = numberElements[6][(UTextOffset)0];
-    fExponential       = numberElements[7][(UTextOffset)0];
-    fPerMill           = numberElements[8][(UTextOffset)0];
-    fInfinity          = numberElements[9];
-    fNaN               = numberElements[10];
-    fCurrencySymbol     = currencyElements[0];
-    fIntlCurrencySymbol = currencyElements[1];
-    fPadEscape         = 0x002A; // '*' Hard coded for now; get from resource later
+    fSymbols[ENumberFormatSymbol::kDecimalSeparator] = numberElements[0];
+    fSymbols[ENumberFormatSymbol::kGroupingSeparator] = numberElements[1];
+    fSymbols[ENumberFormatSymbol::kPatternSeparator] = numberElements[2];
+    fSymbols[ENumberFormatSymbol::kPercent] = numberElements[3];
+    fSymbols[ENumberFormatSymbol::kZeroDigit] = numberElements[4];
+    fSymbols[ENumberFormatSymbol::kDigit] = numberElements[5];
+    fSymbols[ENumberFormatSymbol::kMinusSign] = numberElements[6];
+    fSymbols[ENumberFormatSymbol::kPlusSign] = (UChar)0x002b; // '+' Hard coded for now; get from resource later
+    fSymbols[ENumberFormatSymbol::kCurrency] = currencyElements[0];
+    fSymbols[ENumberFormatSymbol::kIntlCurrency] = currencyElements[1];
 
     // if the resource data specified the empty string as the monetary decimal
     // separator, that means we should just use the regular separator as the
     // monetary separator
-    if(currencyElements[2].length() == 0)
-        fMonetarySeparator = fDecimalSeparator;
-    else
-        fMonetarySeparator = currencyElements[2][(UTextOffset)0];
+    fSymbols[ENumberFormatSymbol::kMonetarySeparator] =
+        currencyElements[2].length() > 0 ?
+            currencyElements[2] :
+            fSymbols[ENumberFormatSymbol::kDecimalSeparator];
+
+    fSymbols[ENumberFormatSymbol::kExponential] = numberElements[7];
+    fSymbols[ENumberFormatSymbol::kPermill] = numberElements[8];
+    fSymbols[ENumberFormatSymbol::kPadEscape] = (UChar)0x002a; // '*' Hard coded for now; get from resource later
+    fSymbols[ENumberFormatSymbol::kInfinity] = numberElements[9];
+    fSymbols[ENumberFormatSymbol::kNaN] = numberElements[10];
 }
 
 //eof

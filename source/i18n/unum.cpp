@@ -598,3 +598,48 @@ unum_setSymbols(            UNumberFormat*          fmt,
 
   ((DecimalFormat*)fmt)->adoptDecimalFormatSymbols(syms);
 }
+
+U_CAPI int32_t U_EXPORT2
+unum_getSymbol(UNumberFormat *fmt,
+               UNumberFormatSymbol symbol,
+               UChar *buffer,
+               int32_t size,
+               UErrorCode *status) {
+  if(status==NULL || U_FAILURE(*status)) {
+    return 0;
+  }
+
+  if(fmt==NULL || (uint16_t)symbol>=UNUM_FORMAT_SYMBOL_COUNT) {
+    *status=U_ILLEGAL_ARGUMENT_ERROR;
+    return 0;
+  }
+
+  UnicodeString s=((DecimalFormat *)fmt)->getDecimalFormatSymbols()->getSymbol((DecimalFormatSymbols::ENumberFormatSymbol)symbol);
+  int32_t length=s.length();
+  if(buffer!=NULL && length<size-1) {
+    s.extract(0, length, buffer);
+    buffer[length]=0;
+  }
+  return length;
+}
+
+U_CAPI void U_EXPORT2
+unum_setSymbol(UNumberFormat *fmt,
+               UNumberFormatSymbol symbol,
+               const UChar *value,
+               int32_t length,
+               UErrorCode *status) {
+  if(status==NULL || U_FAILURE(*status)) {
+    return;
+  }
+
+  if(fmt==NULL || (uint16_t)symbol>=UNUM_FORMAT_SYMBOL_COUNT || value==NULL || length<-1) {
+    *status=U_ILLEGAL_ARGUMENT_ERROR;
+    return;
+  }
+
+  DecimalFormatSymbols symbols(*((DecimalFormat *)fmt)->getDecimalFormatSymbols());
+  symbols.setSymbol((DecimalFormatSymbols::ENumberFormatSymbol)symbol,
+        length>=0 ? UnicodeString(value, length) : UnicodeString(value));
+  ((DecimalFormat *)fmt)->setDecimalFormatSymbols(symbols);
+}

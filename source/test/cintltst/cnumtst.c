@@ -41,6 +41,7 @@ void TestNumberFormat()
     
     UChar prefix[5];
     UChar suffix[5];
+    UChar symbol[20];
     int32_t resultlength;
     int32_t resultlengthneeded;
     int32_t parsepos;
@@ -51,6 +52,7 @@ void TestNumberFormat()
     UFieldPosition pos1;
     UFieldPosition pos2;
     int32_t numlocales;
+    int32_t i;
 
     UNumberFormatAttribute attr;
     UNumberFormatSymbols symbols1, symbols2;
@@ -335,12 +337,38 @@ free(result);
     {
         log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status));
     }
-    
+    if(u_strcmp(result, temp1) != 0) {
+        log_err("Formatting failed after setting symbols - got different result\n");
+    }
+
     /*----------- */
     
 free(result);
 free(temp1);    
-    
+
+    /* Testing unum_get/setSymbol() */
+    for(i = 0; i < UNUM_FORMAT_SYMBOL_COUNT; ++i) {
+        symbol[0] = (UChar)(0x41 + i);
+        symbol[1] = (UChar)(0x61 + i);
+        unum_setSymbol(cur_frpattern, i, symbol, 2, &status);
+        if(U_FAILURE(status)) {
+            log_err("Error from unum_setSymbol(%d): %s\n", i, myErrorName(status));
+            return;
+        }
+    }
+
+    for(i = 0; i < UNUM_FORMAT_SYMBOL_COUNT; ++i) {
+        resultlength = unum_getSymbol(cur_frpattern, i, symbol, sizeof(symbol)/U_SIZEOF_UCHAR, &status);
+        if(U_FAILURE(status)) {
+            log_err("Error from unum_getSymbol(%d): %s\n", i, myErrorName(status));
+            return;
+        }
+        if(resultlength != 2 || symbol[0] != 0x41 + i || symbol[1] != 0x61 + i) {
+            log_err("Failure in unum_getSymbol(%d): got unexpected symbol\n", i);
+        }
+    }
+
+
     /* Testing unum_getTextAttribute() and unum_setTextAttribute()*/
     log_verbose("\nTesting getting and setting text attributes\n");
     resultlength=5;
