@@ -1,0 +1,57 @@
+## -*-makefile-*-
+## HP/UX-specific setup using aCC
+## Copyright (c) 1999-2000, International Business Machines Corporation and
+## others. All Rights Reserved.
+
+## Commands to generate dependency files
+GEN_DEPS.c=	:
+GEN_DEPS.cc= 	:
+
+## Commands to compile
+COMPILE.c=	$(CC)  +z -Ae $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
+COMPILE.cc=	$(CXX) +z $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c
+
+## Commands to link
+## For aCC, use the C++ linker so that __shlinit gets defined
+#LINK.c=		$(CC) +z -Ae $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
+LINK.c=		$(CXX) +z $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
+LINK.cc=	$(CXX) +z $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+
+## Commands to make a shared library
+#SHLIB.c=	$(LD) $(LDFLAGS) -b
+SHLIB.c=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -b
+SHLIB.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -b
+
+## Compiler switch to embed a runtime search path
+LD_RPATH=	-Wl,+b,
+LD_RPATH_PRE= 	
+
+## Shared object suffix
+SO=		sl
+
+## Link commands to link to ICU libs
+LIBICU-UC= 	-L$(top_builddir)/common -licu-uc
+LIBICU-I18N= 	-L$(top_builddir)/i18n -licu-i18n
+LIBCTESTFW= 	-L$(top_builddir)/tools/ctestfw -lctestfw
+LIBICU-TOOLUTIL=-L$(top_builddir)/tools/toolutil -licu-toolutil
+
+## Compilation rules
+%.o : $(srcdir)/%.c
+	$(COMPILE.c) -o $@ $<
+
+%.o : $(srcdir)/%.cpp
+	$(COMPILE.cc) -o $@ $<
+
+../data/%.o : ../data/%.c
+	$(COMPILE.c) -o $@ $<
+
+## Dependency rules
+%.d : $(srcdir)/%.c
+	@echo "Generating dependency information for $<"
+	@$(GEN_DEPS.c) $< > $@
+
+%.d : $(srcdir)/%.cpp
+	@echo "Generating dependency information for $<"
+	@$(GEN_DEPS.cc) $< > $@
+
+## End HP/UX-specific setup

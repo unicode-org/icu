@@ -1,0 +1,44 @@
+// *******************************************************************************
+// *
+// *   Copyright (C) 1997-2000, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// *******************************************************************************
+
+de_CH {
+    CurrencyElements { 
+            "SFr.",
+            "CHF",
+            ".",
+    }
+    LocaleID { "0807" }
+    LocaleString { "de_CH" }
+    NumberElements { 
+            ".",
+            "'",
+            ";",
+            "%",
+            "0",
+            "#",
+            "-",
+            "E",
+            "\u2030",
+            "\u221E",
+            "\uFFFD",
+    }
+    NumberPatterns { 
+            "#,##0.###;-#,##0.###",
+            "\u00A4 #,##0.00;\u00A4-#,##0.00",
+            "#,##0%",
+    }
+    ShortCountry { "CHE" }
+    zoneStrings { 
+        {
+                "Africa/Casablanca",
+                "GMT",
+                "GMT",
+                "GMT",
+                "GMT",
+        }
+    }
+}
