@@ -138,7 +138,7 @@ inline uint16_t getFCD(const UChar   *str, int32_t *offset,
 * @return the modified collation element
 */
 static
-inline uint32_t getCE(const UStringSearch *strsrch, uint32_t sourcece)
+inline int32_t getCE(const UStringSearch *strsrch, uint32_t sourcece)
 {
     // note for tertiary we can't use the collator->tertiaryMask, that
     // is a preprocessed mask that takes into account case options. since
@@ -199,22 +199,22 @@ inline void * allocateMemory(uint32_t size, UErrorCode *status)
 * @return new destination array, destination if there was no new allocation
 */
 static
-inline uint32_t * addTouint32_tArray(uint32_t   *destination,       
-                                     uint32_t    offset, 
-                                     uint32_t   *destinationlength, 
-                                     uint32_t    value,
-                                     uint32_t    increments, 
-                                     UErrorCode *status) 
+inline int32_t * addTouint32_tArray(int32_t    *destination,       
+                                    uint32_t    offset, 
+                                    uint32_t   *destinationlength, 
+                                    uint32_t    value,
+                                    uint32_t    increments, 
+                                    UErrorCode *status) 
 {
     uint32_t newlength = *destinationlength;
     if (offset + 1 == newlength) {
         newlength += increments;
-        uint32_t *temp = (uint32_t *)allocateMemory(
-                                         sizeof(uint32_t) * newlength, status);
+        int32_t *temp = (int32_t *)allocateMemory(
+                                         sizeof(int32_t) * newlength, status);
         if (U_FAILURE(*status)) {
             return NULL;
         }
-        uprv_memcpy(temp, destination, sizeof(uint32_t) * offset);
+        uprv_memcpy(temp, destination, sizeof(int32_t) * offset);
         *destinationlength = newlength;
         destination        = temp;
     }
@@ -240,7 +240,7 @@ inline uint16_t initializePatternCETable(UStringSearch *strsrch,
 {
     UPattern *pattern            = &(strsrch->pattern);
     uint32_t  cetablesize        = INITIAL_ARRAY_SIZE_;
-    uint32_t *cetable            = pattern->CEBuffer;
+    int32_t  *cetable            = pattern->CEBuffer;
     uint32_t  patternlength      = pattern->textLength;
     UCollationElements *coleiter = strsrch->utilIter;
             
@@ -264,13 +264,13 @@ inline uint16_t initializePatternCETable(UStringSearch *strsrch,
         
     uint16_t  offset      = 0;
     uint16_t  result      = 0;
-    uint32_t  ce;
+    int32_t   ce;
 
     while ((ce = ucol_next(coleiter, status)) != UCOL_NULLORDER &&
            U_SUCCESS(*status)) {
         uint32_t newce = getCE(strsrch, ce);
         if (newce) {
-            uint32_t *temp = addTouint32_tArray(cetable, offset, &cetablesize, 
+            int32_t *temp = addTouint32_tArray(cetable, offset, &cetablesize, 
                                   newce,
                                   patternlength - ucol_getOffset(coleiter) + 1, 
                                   status);
@@ -332,7 +332,7 @@ inline int16_t initializePattern(UStringSearch *strsrch, UErrorCode *status)
 */
 static
 inline void setShiftTable(int16_t   shift[], int16_t backshift[], 
-                          uint32_t *cetable, int32_t cesize, 
+                          int32_t  *cetable, int32_t cesize, 
                           int16_t   expansionsize,
                           int16_t   defaultforward,
                           int16_t   defaultbackward)
@@ -452,7 +452,7 @@ inline UBool isBreakUnit(const UStringSearch *strsrch, int32_t start,
             ucol_setText(coleiter, text, end - start, &status);
             for (int32_t count = 0; count < strsrch->pattern.CELength;
                  count ++) {
-                uint32_t ce = getCE(strsrch, ucol_next(coleiter, &status));
+                int32_t ce = getCE(strsrch, ucol_next(coleiter, &status));
                 if (ce == UCOL_IGNORABLE) {
                     count --;
                     continue;
@@ -461,7 +461,7 @@ inline UBool isBreakUnit(const UStringSearch *strsrch, int32_t start,
                     return FALSE;
                 }
             }
-            uint32_t nextce = ucol_next(coleiter, &status);
+            int32_t nextce = ucol_next(coleiter, &status);
             while (ucol_getOffset(coleiter) == (end - start)
                    && getCE(strsrch, nextce) == UCOL_IGNORABLE) {
                 nextce = ucol_next(coleiter, &status);
@@ -550,7 +550,7 @@ inline int32_t getNextUStringSearchBaseOffset(UStringSearch *strsrch,
 static
 inline int32_t shiftForward(UStringSearch *strsrch,
                                 int32_t    textoffset,
-                                uint32_t       ce,
+                                int32_t       ce,
                                 int32_t        patternceindex)
 {
     UPattern *pattern = &(strsrch->pattern);
@@ -743,10 +743,10 @@ UBool hasAccentsBeforeMatch(const UStringSearch *strsrch, int32_t start,
         UErrorCode          status    = U_ZERO_ERROR;
         // we have been iterating forwards previously
         uint32_t            ignorable = TRUE;
-        uint32_t            firstce   = strsrch->pattern.CE[0];
+        int32_t             firstce   = strsrch->pattern.CE[0];
 
         setColEIterOffset(coleiter, start);
-        uint32_t ce  = getCE(strsrch, ucol_next(coleiter, &status));
+        int32_t ce  = getCE(strsrch, ucol_next(coleiter, &status));
         if (U_FAILURE(status)) {
             return TRUE;
         }
@@ -825,7 +825,7 @@ UBool hasAccentsAfterMatch(const UStringSearch *strsrch, int32_t start,
               int32_t      textlength = strsrch->search->textLength;
         UTF_BACK_1(text, 0, temp);
         if (getFCD(text, &temp, textlength) & LAST_BYTE_MASK_) {
-            uint32_t            firstce  = strsrch->pattern.CE[0];
+            int32_t             firstce  = strsrch->pattern.CE[0];
             UCollationElements *coleiter = strsrch->textIter;
             UErrorCode          status   = U_ZERO_ERROR;
             setColEIterOffset(coleiter, start);
@@ -846,7 +846,7 @@ UBool hasAccentsAfterMatch(const UStringSearch *strsrch, int32_t start,
                 }
                 count ++;
             }
-            uint32_t ce = getCE(strsrch, ucol_next(coleiter, &status));
+            int32_t ce = getCE(strsrch, ucol_next(coleiter, &status));
             if (U_FAILURE(status)) {
                 return TRUE;
             }
@@ -1025,11 +1025,11 @@ UBool checkNextExactContractionMatch(UStringSearch *strsrch,
             expansion --;
         }
 
-        uint32_t *patternce       = strsrch->pattern.CE;
+        int32_t  *patternce       = strsrch->pattern.CE;
         int32_t   patterncelength = strsrch->pattern.CELength;
         int32_t   count           = 0;
         while (count < patterncelength) {
-            uint32_t ce = getCE(strsrch, ucol_next(coleiter, status));
+            int32_t ce = getCE(strsrch, ucol_next(coleiter, status));
             if (ce == UCOL_IGNORABLE) {
                 continue;
             }
@@ -1224,10 +1224,10 @@ inline UBool checkCollationMatch(const UStringSearch      *strsrch,
                                        UCollationElements *coleiter)
 {
     int         patternceindex = strsrch->pattern.CELength;
-    uint32_t   *patternce      = strsrch->pattern.CE;
+    int32_t    *patternce      = strsrch->pattern.CE;
     UErrorCode  status = U_ZERO_ERROR;
     while (patternceindex > 0) {
-        uint32_t ce = getCE(strsrch, ucol_next(coleiter, &status));
+        int32_t ce = getCE(strsrch, ucol_next(coleiter, &status));
         if (ce == UCOL_IGNORABLE) {
             continue;
         }
@@ -1423,13 +1423,13 @@ int32_t doNextCanonicalSuffixMatch(UStringSearch *strsrch,
     ucol_setText(coleiter, safetext, safetextlength, status);
     // status checked in loop below
 
-    uint32_t *ce        = strsrch->pattern.CE;
-    uint32_t  celength  = strsrch->pattern.CELength;
+    int32_t  *ce        = strsrch->pattern.CE;
+    int32_t   celength  = strsrch->pattern.CELength;
     int       ceindex   = celength - 1;
     UBool     isSafe    = TRUE; // indication flag for position in safe zone
     
     while (ceindex >= 0) {
-        uint32_t textce = ucol_previous(coleiter, status);
+        int32_t textce = ucol_previous(coleiter, status);
         if (U_FAILURE(*status)) {
             if (isSafe) {
                 cleanUpSafeText(strsrch, safetext, safebuffer);
@@ -1663,12 +1663,12 @@ UBool checkNextCanonicalContractionMatch(UStringSearch *strsrch,
             expansion --;
         }
 
-        uint32_t *patternce       = strsrch->pattern.CE;
+        int32_t  *patternce       = strsrch->pattern.CE;
         int32_t   patterncelength = strsrch->pattern.CELength;
         int32_t   count           = 0;
         int32_t   textlength      = strsrch->search->textLength;
         while (count < patterncelength) {
-            uint32_t ce = getCE(strsrch, ucol_next(coleiter, status));
+            int32_t ce = getCE(strsrch, ucol_next(coleiter, status));
             // status checked below, note that if status is a failure
             // ucol_next returns UCOL_NULLORDER
             if (ce == UCOL_IGNORABLE) {
@@ -1683,7 +1683,7 @@ UBool checkNextCanonicalContractionMatch(UStringSearch *strsrch,
                 // accents may have extra starting ces, this occurs when a 
                 // pure accent pattern is matched without rearrangement
                 // text \u0325\u0300 and looking for \u0300
-                uint32_t expected = patternce[0]; 
+                int32_t expected = patternce[0]; 
                 if (getFCD(text, start, textlength) & LAST_BYTE_MASK_) {
                     ce = getCE(strsrch, ucol_next(coleiter, status));
                     while (U_SUCCESS(*status) && ce != expected && 
@@ -1781,7 +1781,7 @@ inline UBool checkNextCanonicalMatch(UStringSearch *strsrch,
 static
 inline int32_t reverseShift(UStringSearch *strsrch,
                                 int32_t    textoffset,
-                                uint32_t       ce,
+                                int32_t       ce,
                                 int32_t        patternceindex)
 {         
     if (strsrch->search->isOverlap) {
@@ -1861,11 +1861,11 @@ UBool checkPreviousExactContractionMatch(UStringSearch *strsrch,
             expansion --;
         }
 
-        uint32_t *patternce       = strsrch->pattern.CE;
+        int32_t  *patternce       = strsrch->pattern.CE;
         int32_t   patterncelength = strsrch->pattern.CELength;
         int32_t   count           = patterncelength;
         while (count > 0) {
-            uint32_t ce = getCE(strsrch, ucol_previous(coleiter, status));
+            int32_t ce = getCE(strsrch, ucol_previous(coleiter, status));
             // status checked below, note that if status is a failure
             // ucol_previous returns UCOL_NULLORDER
             if (ce == UCOL_IGNORABLE) {
@@ -2080,14 +2080,14 @@ int32_t doPreviousCanonicalPrefixMatch(UStringSearch *strsrch,
     ucol_setText(coleiter, safetext, safetextlength, status);
     // status checked in loop below
     
-    uint32_t *ce           = strsrch->pattern.CE;
+    int32_t  *ce           = strsrch->pattern.CE;
     int32_t   celength     = strsrch->pattern.CELength;
     int       ceindex      = 0;
     UBool     isSafe       = TRUE; // safe zone indication flag for position
     int32_t   prefixlength = u_strlen(strsrch->canonicalPrefixAccents);
     
     while (ceindex < celength) {
-        uint32_t textce = ucol_next(coleiter, status);
+        int32_t textce = ucol_next(coleiter, status);
         if (U_FAILURE(*status)) {
             if (isSafe) {
                 cleanUpSafeText(strsrch, safetext, safebuffer);
@@ -2295,11 +2295,11 @@ UBool checkPreviousCanonicalContractionMatch(UStringSearch *strsrch,
             expansion --;
         }
 
-        uint32_t *patternce       = strsrch->pattern.CE;
+        int32_t  *patternce       = strsrch->pattern.CE;
         int32_t   patterncelength = strsrch->pattern.CELength;
         int32_t   count           = patterncelength;
         while (count > 0) {
-            uint32_t ce = getCE(strsrch, ucol_previous(coleiter, status));
+            int32_t ce = getCE(strsrch, ucol_previous(coleiter, status));
             // status checked below, note that if status is a failure
             // ucol_previous returns UCOL_NULLORDER
             if (ce == UCOL_IGNORABLE) {
@@ -2314,7 +2314,7 @@ UBool checkPreviousCanonicalContractionMatch(UStringSearch *strsrch,
                 ce != patternce[patterncelength - 1]) {
                 // accents may have extra starting ces, this occurs when a 
                 // pure accent pattern is matched without rearrangement
-                uint32_t    expected = patternce[patterncelength - 1];
+                int32_t    expected = patternce[patterncelength - 1];
                 UTF_BACK_1(text, 0, *end);
                 if (getFCD(text, end, textlength) & LAST_BYTE_MASK_) {
                     ce = getCE(strsrch, ucol_previous(coleiter, status));
@@ -3150,7 +3150,7 @@ UBool usearch_handleNextExact(UStringSearch *strsrch, UErrorCode *status)
 
     UCollationElements *coleiter        = strsrch->textIter;
     int32_t             textlength      = strsrch->search->textLength;
-    uint32_t           *patternce       = strsrch->pattern.CE;
+    int32_t            *patternce       = strsrch->pattern.CE;
     int32_t             patterncelength = strsrch->pattern.CELength;
     int32_t             textoffset      = ucol_getOffset(coleiter);
 
@@ -3162,9 +3162,9 @@ UBool usearch_handleNextExact(UStringSearch *strsrch, UErrorCode *status)
     while (textoffset <= textlength)
     {
         uint32_t    patternceindex = patterncelength - 1;
-        uint32_t    targetce;
+        int32_t     targetce;
         UBool       found          = FALSE;
-        uint32_t    lastce         = UCOL_NULLORDER;
+        int32_t    lastce          = UCOL_NULLORDER;
 
         setColEIterOffset(coleiter, textoffset);
 
@@ -3244,7 +3244,7 @@ UBool usearch_handleNextCanonical(UStringSearch *strsrch, UErrorCode *status)
 
     UCollationElements *coleiter        = strsrch->textIter;
     int32_t             textlength      = strsrch->search->textLength;
-    uint32_t           *patternce       = strsrch->pattern.CE;
+    int32_t            *patternce       = strsrch->pattern.CE;
     int32_t             patterncelength = strsrch->pattern.CELength;
     int32_t             textoffset      = ucol_getOffset(coleiter);
     UBool               hasPatternAccents = 
@@ -3258,9 +3258,9 @@ UBool usearch_handleNextCanonical(UStringSearch *strsrch, UErrorCode *status)
     while (textoffset <= textlength)
     {
         int32_t     patternceindex = patterncelength - 1;
-        uint32_t    targetce;
+        int32_t     targetce;
         UBool       found          = FALSE;
-        uint32_t    lastce         = UCOL_NULLORDER;
+        int32_t     lastce         = UCOL_NULLORDER;
 
         setColEIterOffset(coleiter, textoffset);
 
@@ -3341,9 +3341,9 @@ UBool usearch_handlePreviousExact(UStringSearch *strsrch, UErrorCode *status)
     }
 
     UCollationElements *coleiter        = strsrch->textIter;
-    uint32_t           *patternce       = strsrch->pattern.CE;
+    int32_t            *patternce       = strsrch->pattern.CE;
     int32_t             patterncelength = strsrch->pattern.CELength;
-    int32_t         textoffset      = ucol_getOffset(coleiter);
+    int32_t             textoffset      = ucol_getOffset(coleiter);
 
     // shifting it check for setting offset
     // if setOffset is called previously or there was no previous match, we
@@ -3358,9 +3358,9 @@ UBool usearch_handlePreviousExact(UStringSearch *strsrch, UErrorCode *status)
     while (textoffset >= 0)
     {
         int32_t     patternceindex = 1;
-        uint32_t    targetce;
+        int32_t     targetce;
         UBool       found          = FALSE;
-        uint32_t    firstce        = UCOL_NULLORDER;
+        int32_t     firstce        = UCOL_NULLORDER;
 
         // if status is a failure, ucol_setOffset does nothing
         setColEIterOffset(coleiter, textoffset);
@@ -3438,9 +3438,9 @@ UBool usearch_handlePreviousCanonical(UStringSearch *strsrch,
     }
 
     UCollationElements *coleiter        = strsrch->textIter;
-    uint32_t           *patternce       = strsrch->pattern.CE;
+    int32_t            *patternce       = strsrch->pattern.CE;
     int32_t             patterncelength = strsrch->pattern.CELength;
-    int32_t         textoffset      = ucol_getOffset(coleiter);
+    int32_t             textoffset      = ucol_getOffset(coleiter);
     UBool               hasPatternAccents = 
        strsrch->pattern.hasSuffixAccents || strsrch->pattern.hasPrefixAccents;
           
@@ -3459,9 +3459,9 @@ UBool usearch_handlePreviousCanonical(UStringSearch *strsrch,
     while (textoffset >= 0)
     {
         int32_t     patternceindex = 1;
-        uint32_t    targetce;
+        int32_t     targetce;
         UBool       found          = FALSE;
-        uint32_t    firstce        = UCOL_NULLORDER;
+        int32_t     firstce        = UCOL_NULLORDER;
 
         setColEIterOffset(coleiter, textoffset);
         while (TRUE) {
