@@ -73,11 +73,11 @@ le_bool InsertionList::applyInsertions(InsertionCallback *callback)
 {
 	for (InsertionRecord *rec = head; rec != NULL; rec = rec->next) {
 		if (callback->applyInsertion(rec->position, rec->count, rec->glyphs)) {
-			return true;
+			return TRUE;
 		}
 	}
 
-	return false;
+	return FALSE;
 }
 
 GlyphIterator::GlyphIterator(LEGlyphID *&theGlyphs, GlyphPositionAdjustment *theGlyphPositionAdjustments, le_int32 *&theCharIndices, le_int32 theGlyphCount,
@@ -86,7 +86,7 @@ GlyphIterator::GlyphIterator(LEGlyphID *&theGlyphs, GlyphPositionAdjustment *the
   : direction(1), position(-1), nextLimit(theGlyphCount), prevLimit(-1),
     cursiveFirstPosition(-1), cursiveLastPosition(-1), cursiveBaselineAdjustment(0),
     glyphsRef(&theGlyphs), glyphs(theGlyphs), glyphPositionAdjustments(theGlyphPositionAdjustments),
-	charIndicesRef(&theCharIndices), charIndices(theCharIndices), glyphCount(theGlyphCount), insertionList(NULL), ownInsertionList(true), srcIndex(-1), destIndex(-1),
+	charIndicesRef(&theCharIndices), charIndices(theCharIndices), glyphCount(theGlyphCount), insertionList(NULL), ownInsertionList(TRUE), srcIndex(-1), destIndex(-1),
 	lookupFlags(theLookupFlags), featureTag(theFeatureTag), glyphTagsRef(&theGlyphTags), glyphTags(theGlyphTags),
     glyphClassDefinitionTable(NULL),
     markAttachClassDefinitionTable(NULL)
@@ -125,7 +125,7 @@ GlyphIterator::GlyphIterator(GlyphIterator &that)
     charIndices = that.charIndices;
     glyphCount = that.glyphCount;
     insertionList = that.insertionList;
-    ownInsertionList = false;
+    ownInsertionList = FALSE;
     srcIndex = that.srcIndex;
     destIndex = that.destIndex;
     lookupFlags = that.lookupFlags;
@@ -153,7 +153,7 @@ GlyphIterator::GlyphIterator(GlyphIterator &that, LETag newFeatureTag)
 	charIndices = that.charIndices;
 	glyphCount = that.glyphCount;
 	insertionList = that.insertionList;
-	ownInsertionList = false;
+	ownInsertionList = FALSE;
 	srcIndex = that.srcIndex;
 	destIndex = that.destIndex;
     lookupFlags = that.lookupFlags;
@@ -182,7 +182,7 @@ GlyphIterator::GlyphIterator(GlyphIterator &that, le_uint16 newLookupFlags)
 	charIndices = that.charIndices;
 	glyphCount = that.glyphCount;
 	insertionList = that.insertionList;
-	ownInsertionList = false;
+	ownInsertionList = FALSE;
 	srcIndex = that.srcIndex;
 	destIndex = that.destIndex;
     lookupFlags = newLookupFlags;
@@ -283,7 +283,7 @@ le_bool GlyphIterator::applyInsertion(le_int32 atPosition, le_int32 count, LEGly
 	// just got replaced by the insertion
 	srcIndex -= 1;
 
-	return false;
+	return FALSE;
 }
 
 le_int32 GlyphIterator::getCurrStreamPosition() const
@@ -561,7 +561,7 @@ le_bool GlyphIterator::filterGlyph(le_uint32 index) const
     le_int32 glyphClass = gcdNoGlyphClass;
 
     if (LE_GET_GLYPH(glyphID) >= 0xFFFE) {
-        return true;
+        return TRUE;
     }
 
     if (glyphClassDefinitionTable != NULL) {
@@ -571,7 +571,7 @@ le_bool GlyphIterator::filterGlyph(le_uint32 index) const
     switch (glyphClass)
     {
     case gcdNoGlyphClass:
-        return false;
+        return FALSE;
 
     case gcdSimpleGlyph:
         return (lookupFlags & lfIgnoreBaseGlyphs) != 0;
@@ -582,7 +582,7 @@ le_bool GlyphIterator::filterGlyph(le_uint32 index) const
     case gcdMarkGlyph:
     {
         if ((lookupFlags & lfIgnoreMarks) != 0) {
-            return true;
+            return TRUE;
         }
 
         le_uint16 markAttachType = (lookupFlags & lfMarkAttachTypeMask) >> lfMarkAttachTypeShift;
@@ -591,14 +591,14 @@ le_bool GlyphIterator::filterGlyph(le_uint32 index) const
             return markAttachClassDefinitionTable->getGlyphClass(glyphID) != markAttachType;
         }
 
-        return false;
+        return FALSE;
     }
 
     case gcdComponentGlyph:
         return (lookupFlags & lfIgnoreBaseGlyphs) != 0;
 
     default:
-        return false;
+        return FALSE;
     }
 }
 
@@ -608,7 +608,7 @@ const LETag defaultTag = 0xFFFFFFFF;
 le_bool GlyphIterator::hasFeatureTag() const
 {
     if (featureTag == defaultTag || featureTag == emptyTag) {
-        return true;
+        return TRUE;
     }
 
     if (glyphTags != NULL) {
@@ -616,12 +616,12 @@ le_bool GlyphIterator::hasFeatureTag() const
 
         for (le_int32 tag = 0; tagList[tag] != emptyTag; tag += 1) {
             if (tagList[tag] == featureTag) {
-                return true;
+                return TRUE;
             }
         }
     }
 
-    return false;
+    return FALSE;
 }
 
 le_bool GlyphIterator::findFeatureTag()
@@ -629,11 +629,11 @@ le_bool GlyphIterator::findFeatureTag()
     while (nextInternal()) {
         if (hasFeatureTag()) {
             prevInternal();
-            return true;
+            return TRUE;
         }
     }
 
-    return false;
+    return FALSE;
 }
 
 

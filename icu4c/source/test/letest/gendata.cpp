@@ -255,10 +255,10 @@ LEUnicode thaiSample[] =
 le_int32 thaiSampleLength = ARRAY_LENGTH(thaiSample);
 
 TestInput testInputs[] = {
-    {"raghu.ttf",             devaText,   devaTextLength,   devaScriptCode, false},
-    {"CODE2000.TTF",             arabText,   arabTextLength,   arabScriptCode, true},
-    {"LucidaSansRegular.ttf", arabText,   arabTextLength,   arabScriptCode, true},
-    {"Thonburi.ttf",          thaiSample, thaiSampleLength, thaiScriptCode, false}
+    {"raghu.ttf",             devaText,   devaTextLength,   devaScriptCode, FALSE},
+    {"CODE2000.TTF",             arabText,   arabTextLength,   arabScriptCode, TRUE},
+    {"LucidaSansRegular.ttf", arabText,   arabTextLength,   arabScriptCode, TRUE},
+    {"Thonburi.ttf",          thaiSample, thaiSampleLength, thaiScriptCode, FALSE}
 };
 
 #define TEST_COUNT ARRAY_LENGTH(testInputs)
@@ -409,7 +409,7 @@ int main(int argc, char *argv[])
     for (test = 0; test < testCount; test += 1) {
         fprintf(outputFile, "    {\"%s\", inputText%d, %d, %sScriptCode, %s},\n",
             testInputs[test].fontName, test, testInputs[test].textLength, getShortName(testInputs[test].scriptCode),
-            testInputs[test].rightToLeft? "true" : "false");
+            testInputs[test].rightToLeft? "TRUE" : "FALSE");
     }
 
     fprintf(outputFile, "};\n\nle_int32 testCount = ARRAY_LENGTH(testInputs);\n\n");

@@ -97,7 +97,7 @@ public:
      * @param startOffset - the starting offset of the characters to process
      * @param endOffset - the ending offset of the characters to process
      * @param max - the number of characters in the input context
-     * @param rightToLeft - true if the characers are in a right to left directional run
+     * @param rightToLeft - TRUE if the characers are in a right to left directional run
      * @param x - the initial X position
      * @param y - the initial Y position
      * @param success - output parameter set to an error code if the operation fails
@@ -125,7 +125,7 @@ public:
      * @param str - the input character context
      * @param startOffset - the starting offset of the characters to process
      * @param endOffset - the ending offset of the characters to process
-     * @param rightToLeft - true if the characers are in a right to left directional run
+     * @param rightToLeft - TRUE if the characers are in a right to left directional run
      * @param x - the initial X position
      * @param y - the initial Y position
      * @param success - output parameter set to an error code if the operation fails
@@ -296,7 +296,7 @@ inline int32_t ICULayoutEngine::layoutChars(const UChar chars[],
                                       startOffset,
                                       endOffset - startOffset,
                                       maxOffset,
-                                      rightToLeft != 0,
+                                      rightToLeft,
                                       x, y,
                                       (LEErrorCode &) success);
 }
@@ -314,7 +314,7 @@ inline int32_t ICULayoutEngine::layoutString(const UnicodeString &str,
                                       startOffset,
                                       endOffset - startOffset,
                                       str.length(),
-                                      rightToLeft != 0,
+                                      rightToLeft,
                                       x, y,
                                       (LEErrorCode &) success);
 }

@@ -163,7 +163,7 @@ protected:
      * @param offset - the offset of the first character to process
      * @param count - the number of characters to process
      * @param max - the number of characters in the context.
-     * @param rightToLeft - true if the text is in a right to left directional run
+     * @param rightToLeft - TRUE if the text is in a right to left directional run
      *
      * Output parameters:
      * @param glyphs - the glyph index array
@@ -207,7 +207,7 @@ protected:
      * @param chars - the input character context
      * @param offset - the offset of the first character to process
      * @param count - the number of characters to process
-     * @param reverse - true if the glyphs in the glyph array have been reordered
+     * @param reverse - TRUE if the glyphs in the glyph array have been reordered
      * @param glyphs - the input glyph array
      * @param glyphCount - the number of glyphs
      * @param positions - the position array, will be updated as needed
@@ -249,8 +249,8 @@ protected:
      * @param chars - the input character context
      * @param offset - the offset of the first character to be mapped
      * @param count - the number of characters to be mapped
-     * @param reverse - if true, the output will be in reverse order
-     * @param mirror - if true, do character mirroring
+     * @param reverse - if TRUE, the output will be in reverse order
+     * @param mirror - if TRUE, do character mirroring
      *
      * Output parameters:
      * @param glyphs - the glyph array
@@ -269,7 +269,7 @@ protected:
      * 
      * @param glyphs - the glyph array
      * @param glyphCount - the number of glyphs
-     * @param reverse - true if the glyph array has been reordered
+     * @param reverse - TRUE if the glyph array has been reordered
      * @param markFilter - used to identify mark glyphs
      * @param positions - the glyph position array - updated as required
      * @param success - output parameter set to an error code if the operation fails
@@ -300,7 +300,7 @@ public:
      * @param offset - the offset of the first character to process
      * @param count - the number of characters to process
      * @param max - the number of characters in the input context
-     * @param rightToLeft - true if the characers are in a right to left directional run
+     * @param rightToLeft - TRUE if the characers are in a right to left directional run
      * @param x - the initial X position
      * @param y - the initial Y position
      * @param success - output parameter set to an error code if the operation fails
