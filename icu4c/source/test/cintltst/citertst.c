@@ -1391,6 +1391,12 @@ static void TestCEs() {
             if (ce == 0xFFFFFFFF) {
                 ce = 0;
             }
+            /* we now unconditionally reorder Thai/Lao prevowels, so this
+             * test would fail if we don't skip here.
+             */
+            if(UCOL_ISTHAIPREVOWEL(*codepoints) && ce == 0 && count == 0) {
+              continue;
+            }
             if (ce != ces[count] || U_FAILURE(status)) {
                 log_err("Collation elements in FractionalUCA.txt and iterators do not match!\n");
                 break;

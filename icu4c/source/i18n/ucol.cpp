@@ -1624,7 +1624,8 @@ inline uint32_t ucol_IGetPrevCE(const UCollator *coll, collIterate *data,
             }
             else {
                 if ((data->flags & UCOL_ITER_INNORMBUF) == 0 &&
-                    UCOL_ISTHAIBASECONSONANT(ch) && data->pos > data->string &&
+                    /*UCOL_ISTHAIBASECONSONANT(ch) &&*/   // This is from the old specs - we now rearrange unconditionally
+                    data->pos > data->string &&
                     UCOL_ISTHAIPREVOWEL(*(data->pos -1)))
                 {
                     result = UCOL_THAI;
@@ -2093,6 +2094,7 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
   collIterateState entryState;
   backupState(source, &entryState);
   UChar32 cp = ch;
+
   //UChar *entryPos = source->pos;
   for (;;) {
     // This loop will repeat only in the case of contractions, and only when a contraction
@@ -2135,9 +2137,9 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
       break;
     case THAI_TAG:
       /* Thai/Lao reordering */
-        if  (((source->flags) & UCOL_ITER_INNORMBUF) ||     /* Already Swapped     ||                 */
-            source->endp == source->pos              ||     /* At end of string.  No swap possible || */
-            UCOL_ISTHAIBASECONSONANT(*(source->pos)) == 0)  /* next char not Thai base cons.          */
+        if  (((source->flags) & UCOL_ITER_INNORMBUF)      /* Already Swapped     ||                 */
+            || source->endp == source->pos                /* At end of string.  No swap possible || */
+            /*|| UCOL_ISTHAIBASECONSONANT(*(source->pos)) == 0*/)  /* next char not Thai base cons.*/ // This is from the old specs - we now rearrange unconditionally
         {
             // Treat Thai as a length one expansion */
             CEOffset = (uint32_t *)coll->image+getExpansionOffset(CE); /* find the offset to expansion table */
@@ -2800,7 +2802,7 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
       if  ((source->flags & UCOL_ITER_INNORMBUF) || /* Already Swapped || */
             source->string == source->pos        || /* At start of string.|| */
             /* previous char not Thai prevowel */
-            UCOL_ISTHAIBASECONSONANT(*(source->pos)) == FALSE ||
+            /*UCOL_ISTHAIBASECONSONANT(*(source->pos)) == FALSE ||*/ // This is from the old specs - we now rearrange unconditionally
             UCOL_ISTHAIPREVOWEL(*(source->pos - 1)) == FALSE)
       {
           /* Treat Thai as a length one expansion */
