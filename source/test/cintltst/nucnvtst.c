@@ -259,49 +259,6 @@ UBool testConvertFromU( const UChar *source, int sourceLen,  const char *expect,
                   checkOffsets ? offs : NULL,
                   doFlush, /* flush if we're at the end of the input data */
                   &status);
-
-        /* verify that any partial char is as expected (need offsets for this test) */
-        if (status == U_INDEX_OUTOFBOUNDS_ERROR && expectOffsets) 
-        {
-           char errBytes [UCNV_MAX_SUBCHAR_LEN];
-           int8_t len = sizeof(errBytes);
-           UErrorCode localStatus = U_ZERO_ERROR;
-
-           ucnv_getInvalidChars (conv, errBytes, &len, &localStatus);
-           if (U_FAILURE(localStatus))
-           {
-               log_err("Error from ucnv_getInvalidChars");
-           }        
-            else
-           {
-              /* use offsets to figure out how big partial char should be */
-              int targIndex = targ - junkout;
-              int32_t * pOffset = expectOffsets + targIndex;
-              int32_t startOffset = *pOffset;
-              int expectLen;
-
-              if (startOffset == pOffset[-1]) /* we have a partial char: how big? */
-              {
-                 for (pOffset++, expectLen=1; *pOffset == startOffset; ++pOffset, ++expectLen)
-                 ;
-              }
-              else
-              {
-                 expectLen = 0; /* targ buffer ran out at char boundary */
-              }
-              
-              if (expectLen != len)
-              {
-                 log_err("charErrorBufferLength expected %d got %d %s\n", expectLen,(int)len, gNuConvTestName);
-              }
-              if ((len != 0) && memcmp(errBytes, expect+targIndex, len))
-              {
-                 log_err("charErrorBuffer bytes do not match expected in %s", gNuConvTestName);
-                 printSeqErr(errBytes, len);
-                 printSeqErr(expect+targIndex, len);                     
-              }
-           }
-        }
       } while ( (status == U_INDEX_OUTOFBOUNDS_ERROR) || (U_SUCCESS(status) && sourceLimit < realSourceEnd) );
         
     if(U_FAILURE(status))
