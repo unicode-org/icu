@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2005/03/04 02:50:26 $
-* $Revision: 1.47 $
+* $Date: 2005/03/30 17:19:32 $
+* $Revision: 1.48 $
 *
 *******************************************************************************
 */
@@ -1021,7 +1021,12 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
     }
 
     public static String getMostRecentUnicodeDataFile(String filename, String version, 
-      boolean acceptLatest, boolean show) throws IOException {
+    	      boolean acceptLatest, boolean show) throws IOException {
+    	return getMostRecentUnicodeDataFile(filename, version, acceptLatest, show, ".txt");
+    }
+    
+    public static String getMostRecentUnicodeDataFile(String filename, String version, 
+      boolean acceptLatest, boolean show, String fileType) throws IOException {
         // get all the files in the directory
 
         int compValue = acceptLatest ? 0 : 1;
@@ -1030,7 +1035,7 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
 
             String directoryName = UCD_Types.UCD_DIR + File.separator + searchPath[i] + "-Update" + File.separator;
             if (show) System.out.println("Trying: '" + directoryName + "', '" + filename + "'");
-            String result = searchDirectory(new File(directoryName), filename, show);
+            String result = searchDirectory(new File(directoryName), filename, show, fileType);
             if (result != null) return result;
             
         }
@@ -1048,16 +1053,20 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
     }
     
     public static String searchDirectory(File directory, String filename, boolean show) throws IOException {
+    	return searchDirectory(directory, filename, show, ".txt");
+    }
+    
+    public static String searchDirectory(File directory, String filename, boolean show, String fileType) throws IOException {
         Iterator it = getDirectoryContentsLastFirst(directory).iterator();
         while (it.hasNext()) {
             String fn = (String) it.next();
             File foo = new File(directory + File.separator + fn);
             // System.out.println("\tChecking: '" + foo.getCanonicalPath() + "'");
             if (foo.isDirectory()) {
-                String attempt = searchDirectory(foo, filename, show);
+                String attempt = searchDirectory(foo, filename, show, fileType);
                 if (attempt != null) return attempt;
             }
-            if (fn.endsWith(".txt") && fn.startsWith(filename)) {
+            if (fn.endsWith(fileType) && fn.startsWith(filename)) {
                 if (show) System.out.println("\tFound: '" + fn + "'");
                 return foo.getCanonicalPath();
             }

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/TestData.java,v $
-* $Date: 2005/03/26 05:40:05 $
-* $Revision: 1.19 $
+* $Date: 2005/03/30 17:19:32 $
+* $Revision: 1.20 $
 *
 *******************************************************************************
 */
@@ -148,54 +148,58 @@ public class TestData implements UCD_Types {
 			log.close();
 		}
 	}
+	Matcher m;
 	
 	static class GenStringPrep {
 		UnicodeSet[] coreChars = new UnicodeSet[100];
 		UnicodeSet decomposable = new UnicodeSet();
-		UnicodeSet pattern = new UnicodeSet();
+		
 		ToolUnicodePropertySource ups = ToolUnicodePropertySource.make("");
 		//UnicodeSet id_continue = ups.getSet("ID_Continue=true");
-		UnicodeSet xid_continue = ups.getSet("XID_Continue=true");
+		UnicodeSet wordChars = ups.getSet("name=.*MODIFIER LETTER.*", new RegexMatcher())
+		.retainAll(ups.getSet("gc=Sk"))
+		.addAll(new UnicodeSet("[\u0027 \u002D \u002E \u003A \u00B7 \u058A \u05F3" +
+		" \u05F4 \u200C \u200D \u2010 \u2019 \u2027 \u30A0]"));
+		
+		UnicodeSet patternProp = ups.getSet("Pattern_Syntax=true").removeAll(wordChars);
+		
+		UnicodeSet not_xid_continue = ups.getSet("XID_Continue=true").complement().removeAll(wordChars);
+		
 		//UnicodeSet[] decompChars = new UnicodeSet[100];
 		UCD ucd = Default.ucd();
 
-		Collator uca = Collator.getInstance(ULocale.ENGLISH);
+		Collator uca0 = Collator.getInstance(ULocale.ENGLISH);
 		{
-			uca.setStrength(Collator.IDENTICAL);
+			uca0.setStrength(Collator.IDENTICAL);
 		}
+		GenerateHanTransliterator.MultiComparator uca 
+			= new GenerateHanTransliterator.MultiComparator(new Comparator[] {
+					uca0, new UTF16.StringComparator()});
 
 		UnicodeSet bidiR = new UnicodeSet(
 				"[[:Bidi_Class=AL:][:Bidi_Class=R:]]");
 
 		UnicodeSet bidiL = new UnicodeSet("[:Bidi_Class=l:]");
 		UnicodeSet hasUpper = new UnicodeSet();
-
+		BagFormatter bf = new BagFormatter();
+		UnicodeSet inIDN = new UnicodeSet();
 
 		void genStringPrep() throws IOException {
-			//BagFormatter bf = new BagFormatter();
-			//System.out.println(bf.showSetDifferences("ID_Continue", id_continue, "XID_Continue", xid_continue));
-			StringBuffer inbuffer = new StringBuffer();
-			StringBuffer intermediate, outbuffer;
+			bf.setShowLiteral(BagFormatter.toHTMLControl);
+			//bf.setValueSource(UnicodeLabel.NULL);
+			if (false) {
+				
+				System.out.println("word chars: " + bf.showSetNames(wordChars));
+				System.out.println("pat: " + bf.showSetNames(patternProp));
+				System.out.println("xid: " + bf.showSetNames(not_xid_continue));
+			}
 			for (int cp = 0; cp <= 0x10FFFF; ++cp) {
 				Utility.dot(cp);
+				int cat = Default.ucd().getCategory(cp);
+				if (cat == UCD.Cn || cat == UCD.Co || cat == UCD.Cs) continue;
 				if (!Default.nfd().isNormalized(cp)) decomposable.add(cp);
-				inbuffer.setLength(0);
-				UTF16.append(inbuffer, cp);
-				try {
-					intermediate = IDNA.convertToASCII(inbuffer,
-							IDNA.USE_STD3_RULES);
-					if (intermediate.length() == 0)
-						continue;
-					outbuffer = IDNA.convertToUnicode(intermediate,
-							IDNA.USE_STD3_RULES);
-				} catch (StringPrepParseException e) {
-					continue;
-				} catch (Exception e) {
-					System.out.println("Failure at: " + Utility.hex(cp));
-					continue;
-				}
-				if (!TestData.equals(inbuffer, outbuffer))
-					continue;
+				int idnaType = getIDNAType(cp);
+				idnaTypeSet[idnaType].add(cp);
 				int script = ucd.getScript(cp);
 				if (coreChars[script] == null)
 					coreChars[script] = new UnicodeSet();
@@ -208,8 +212,12 @@ public class TestData implements UCD_Types {
 			}
 			
 			Utility.fixDot();
-			PrintWriter out = BagFormatter.openUTF8Writer(GEN_DIR,
-					"idn-chars.html");
+			PrintWriter htmlOut = BagFormatter.openUTF8Writer(GEN_DIR, "idn-chars.html");
+			PrintWriter textOut = BagFormatter.openUTF8Writer(GEN_DIR, "idn-chars.txt");
+			textOut.println('\uFEFF');
+			textOut.println("For documentation, see idn-chars.html");
+			Utility.appendFile("./com/ibm/text/UCD/idn-charsHeader.html", Utility.UTF8_WINDOWS, htmlOut);
+			/*
 			out
 					.println("<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
 			out.println("<title>IDN Characters</title><style>");
@@ -217,44 +225,87 @@ public class TestData implements UCD_Types {
 			out.println(".script       { font-size: 150%; background-color: #CCCCCC }");
 			out.println(".Atomic       { background-color: #CCCCFF }");
 			out.println(".Atomic-no-uppercase       { background-color: #CCFFCC }");
-			out.println(".Non-ID       { background-color: #FFCCCC }");
+			out.println(".Non-XID       { background-color: #FFCCCC }");
 			out.println(".Decomposable       { background-color: #FFFFCC }");
+			out.println(".Pattern_Syntax       { background-color: #FFCCFF }");
+			
 			out.println("th           { text-align: left }");
 			out.println("-->");
 			out.println("</style></head><body><table>");
+			*/
+			htmlOut.println("<table border='1' cellpadding='2' cellspacing='0' style='border-collapse: collapse'>");
 
 			for (int scriptCode = 0; scriptCode < coreChars.length; ++scriptCode) {
 				if (scriptCode == COMMON_SCRIPT
 						|| scriptCode == INHERITED_SCRIPT)
 					continue;
-				showCodes(out, scriptCode);
+				showCodes(htmlOut, textOut, scriptCode);
 			}
-			showCodes(out, COMMON_SCRIPT);
-			showCodes(out, INHERITED_SCRIPT);
-			out.println("</table></body></html>");
-			out.close();
+			showCodes(htmlOut, textOut, COMMON_SCRIPT);
+			showCodes(htmlOut, textOut, INHERITED_SCRIPT);
+			htmlOut.println("</table></body></html>");
+			htmlOut.close();
 		}
 		
+		UnicodeSet idnaTypeSet[] = new UnicodeSet[IDNA_TYPE_LIMIT];
+		{
+			for (int i = 0; i < idnaTypeSet.length; ++i) idnaTypeSet[i] = new UnicodeSet();
+		}
+		static final int OK = 0, DELETED = 1, ILLEGAL = 2, REMAPPED = 3, IDNA_TYPE_LIMIT = 4;
+		/**
+		 * 
+		 */
+		private int getIDNAType(int cp) {
+			inbuffer.setLength(0);
+			UTF16.append(inbuffer, cp);
+			try {
+				intermediate = IDNA.convertToASCII(inbuffer,
+						IDNA.DEFAULT); // USE_STD3_RULES
+				if (intermediate.length() == 0)
+					return DELETED;
+				outbuffer = IDNA.convertToUnicode(intermediate,
+						IDNA.USE_STD3_RULES);
+			} catch (StringPrepParseException e) {
+				return ILLEGAL;
+			} catch (Exception e) {
+				System.out.println("Failure at: " + Utility.hex(cp));
+				return ILLEGAL;
+			}
+			if (!TestData.equals(inbuffer, outbuffer))
+				return REMAPPED;
+			return OK;
+		}
+		StringBuffer inbuffer = new StringBuffer();
+		StringBuffer intermediate, outbuffer;
+
 		UnicodeSet lowercase = new UnicodeSet("[:Lowercase:]");
 
 		/**
-		 * @param out
+		 * @param htmlOut
+		 * @param textOut TODO
+		 * @param scriptCode
 		 * @param ucd
 		 * @param coreChars
 		 * @param decompChars
-		 * @param scriptCode
 		 */
-		private void showCodes(PrintWriter out, int scriptCode) {
+		private void showCodes(PrintWriter htmlOut, PrintWriter textOut, int scriptCode) {
 			if (coreChars[scriptCode] == null) return;
 			System.out.println(ucd.getScriptID_fromIndex((byte) scriptCode));
 			String script = Default.ucd().getScriptID_fromIndex((byte) scriptCode);
-			out.println();
-			out.println("<tr><th class='script'>Script: " + script + "</th></tr>");
+			htmlOut.println();
+			htmlOut.println("<tr><th class='script'>Script: " + script + "</th></tr>");
+			textOut.println();
+			textOut.println("#*** Script: " + script + " ***");
 			UnicodeSet core = new UnicodeSet(coreChars[scriptCode]);
-			UnicodeSet decomp = new UnicodeSet(core).retainAll(decomposable);
-			core.removeAll(decomp);
-			UnicodeSet non_id = new UnicodeSet(core).removeAll(xid_continue);
-			core.removeAll(non_id);
+			
+			UnicodeSet deleted = extract(idnaTypeSet[DELETED], core);
+			UnicodeSet illegal = extract(idnaTypeSet[ILLEGAL], core);
+			UnicodeSet remapped = extract(idnaTypeSet[REMAPPED], core);
+			
+			UnicodeSet decomp = extract(decomposable, core);
+			UnicodeSet pattern = extract(patternProp, core);
+			UnicodeSet non_id = extract(not_xid_continue, core);
+			
 			UnicodeSet otherCore = new UnicodeSet(core).removeAll(hasUpper);
 			core.removeAll(otherCore);
 			if (core.size() == 0) {
@@ -262,58 +313,81 @@ public class TestData implements UCD_Types {
 				core = otherCore;
 				otherCore = temp;
 			}
-			printlnSet(out, "Atomic", core, scriptCode);
-			if (otherCore.size() != 0) printlnSet(out, "Atomic-no-uppercase", otherCore, scriptCode);
-			if (non_id.size() != 0) printlnSet(out, "Non-ID", non_id, scriptCode);
-			if (decomp.size() != 0) printlnSet(out, "Decomposable", decomp, scriptCode);
+			
+			if (core.size() != 0) printlnSet(htmlOut, textOut, script, "Atomic", core, scriptCode);
+			if (otherCore.size() != 0) printlnSet(htmlOut, textOut, script, "Atomic-no-uppercase", otherCore, scriptCode);
+			if (pattern.size() != 0) printlnSet(htmlOut, textOut, script, "Pattern_Syntax", pattern, scriptCode);
+			if (non_id.size() != 0) printlnSet(htmlOut, textOut, script, "Non-XID", non_id, scriptCode);
+			if (decomp.size() != 0) printlnSet(htmlOut, textOut, script, "Decomposable", decomp, scriptCode);
+
+			if (remapped.size() != 0) printlnSet(htmlOut, textOut, script, "IDN-Remapped", remapped, scriptCode);
+			if (deleted.size() != 0) printlnSet(htmlOut, textOut, script, "IDN-Deleted", deleted, scriptCode);
+			if (illegal.size() != 0) printlnSet(htmlOut, textOut, script, "IDN-Illegal", illegal, scriptCode);
 		}
 
 		/**
-		 * @param out
-		 * @param unicodeset
-		 * @param uca
-		 * @param scriptCode
+		 * 
 		 */
-		private  void printlnSet(PrintWriter out, String title,
-				UnicodeSet unicodeset, int scriptCode) {
+		private UnicodeSet extract(UnicodeSet other, UnicodeSet core) {
+			UnicodeSet decomp = new UnicodeSet(core).retainAll(other);
+			core.removeAll(decomp);
+			return decomp;
+		}
+
+		/**
+		 * @param htmlOut
+		 * @param textOut TODO
+		 * @param script TODO
+		 * @param unicodeset
+		 * @param scriptCode
+		 * @param uca
+		 */
+		private  void printlnSet(PrintWriter htmlOut, PrintWriter textOut,
+				String script, String title, UnicodeSet unicodeset, int scriptCode) {
 			if (unicodeset == null)
 				return;
 			int size = unicodeset.size();
 			String dir = unicodeset.containsSome(bidiR)
 					&& unicodeset.containsNone(bidiL) ? " dir='rtl'" : "";
-			out.println("<tr><th class='" + title + "'>" + title + " ("
+			htmlOut.println("<tr><th class='" + title + "'>" + title + " ("
 					+ nf.format(size) + ")</th></tr>");
-			out.print("<tr><td class='" + title + "'" + dir + ">");
+			htmlOut.print("<tr><td class='" + title + "'" + dir + ">");
+			textOut.println();
+			textOut.println("# " + title);
+			bf.setValueSource(script + " ; " + title);
 			UnicodeSetIterator usi = new UnicodeSetIterator();
 			if (scriptCode == HAN_SCRIPT || scriptCode == HANGUL_SCRIPT) {
 				usi.reset(unicodeset);
 				while (usi.nextRange()) {
 					if (usi.codepoint == usi.codepointEnd) {
-						out.print(formatCode(UTF16
+						htmlOut.print(formatCode(UTF16
 								.valueOf(usi.codepoint)));
 					} else {
-						out.print(formatCode(UTF16
+						htmlOut.print(formatCode(UTF16
 								.valueOf(usi.codepoint))
 								+ ".. "
 								+ formatCode(UTF16
 										.valueOf(usi.codepointEnd)));
 					}
 				}
+				bf.showSetNames(textOut, unicodeset);
 			} else {
 				Set reordered = new TreeSet(uca);
 				usi.reset(unicodeset);
 				while (usi.next()) {
-					boolean foo = reordered.add(usi.getString());
+					String x = usi.getString();
+					boolean foo = reordered.add(x);
 					if (!foo)
 						throw new IllegalArgumentException("Collision with "
-								+ Default.ucd().getCodeAndName(usi.getString()));
+								+ Default.ucd().getCodeAndName(x));
 				}
 				for (Iterator it = reordered.iterator(); it.hasNext();) {
-					out.print(formatCode((String) it
-							.next()));
+					Object key = it.next();
+					htmlOut.print(formatCode((String)key));
 				}
+				bf.showSetNames(textOut, reordered);
 			}
-			out.println("</td></tr>");
+			htmlOut.println("</td></tr>");
 		}
 
 		/**
@@ -324,7 +398,7 @@ public class TestData implements UCD_Types {
 			int cat = ucd.getCategory(UTF16.charAt(string,0));
 			return "<span title='" + ucd.getCodeAndName(string) + "'>"
 			+ (cat == Me || cat == Mn ? "\u00A0" : "") //\u25cc
-			+ BagFormatter.toHTML.transliterate(string)
+			+ BagFormatter.toHTMLControl.transliterate(string)
 			+ " </span>";
 		}
 	}

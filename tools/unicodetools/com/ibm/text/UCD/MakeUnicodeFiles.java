@@ -34,6 +34,10 @@ import com.ibm.icu.text.SymbolTable;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeMatcher;
 import com.ibm.icu.text.UnicodeSet;
+import com.ibm.text.UCD.GenerateBreakTest.GenerateGraphemeBreakTest;
+import com.ibm.text.UCD.GenerateBreakTest.GenerateLineBreakTest;
+import com.ibm.text.UCD.GenerateBreakTest.GenerateSentenceBreakTest;
+import com.ibm.text.UCD.GenerateBreakTest.GenerateWordBreakTest;
 import com.ibm.text.UCD.MakeUnicodeFiles.Format.PrintStyle;
 import com.ibm.text.utility.UnicodeDataFile;
 import com.ibm.text.utility.Utility;
@@ -511,6 +515,14 @@ public class MakeUnicodeFiles {
             GenerateCaseFolding.generateSpecialCasing(false);
         } else if (filename.equals("StandardizedVariants")) {
             GenerateStandardizedVariants.generate();
+        } else if (filename.equals("GraphemeBreakTest")) {
+            new GenerateGraphemeBreakTest(Default.ucd()).run();
+        } else if (filename.equals("WordBreakTest")) {
+            new GenerateWordBreakTest(Default.ucd()).run();
+        } else if (filename.equals("LineBreakTest")) {
+            new GenerateLineBreakTest(Default.ucd()).run();
+        } else if (filename.equals("SentenceBreakTest")) {
+           new GenerateSentenceBreakTest(Default.ucd()).run();
         } else {
             generatePropertyFile(filename);
         }

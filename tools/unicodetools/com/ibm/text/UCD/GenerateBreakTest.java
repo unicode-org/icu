@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateBreakTest.java,v $
-* $Date: 2004/04/17 18:21:39 $
-* $Revision: 1.12 $
+* $Date: 2005/03/30 17:19:32 $
+* $Revision: 1.13 $
 *
 *******************************************************************************
 */
@@ -17,6 +17,7 @@ import java.util.*;
 import java.io.*;
 
 import com.ibm.text.utility.*;
+import com.ibm.icu.dev.test.util.UnicodeProperty;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 
@@ -30,6 +31,7 @@ abstract public class GenerateBreakTest implements UCD_Types {
     
     OldUnicodeMap sampleMap = null;
     OldUnicodeMap map = new OldUnicodeMap();
+    UnicodeProperty prop;
    
     // ====================== Main ===========================
     
@@ -46,6 +48,34 @@ abstract public class GenerateBreakTest implements UCD_Types {
         this.ucd = ucd;
         nfd = new Normalizer(Normalizer.NFD, ucd.getVersion());
         nfkd = new Normalizer(Normalizer.NFKD, ucd.getVersion());
+        	/*
+        public void fillMap(String propName) {
+        	List list = y.getAvailableValues();
+        	for (Iterator it = list.iterator(); it.hasNext();) {
+        		String label = (String) it.next();
+        		map.add(label, y.getSet(label));
+        	}
+        }
+        */
+    }
+    
+	ToolUnicodePropertySource unicodePropertySource = ToolUnicodePropertySource.make("");
+
+	Set labels = new HashSet();
+    
+    int addToMap(String label) {
+    	labels.add(label);
+    	UnicodeSet s = prop.getSet(label);
+    	if (s == null || s.size() == 0) throw new IllegalArgumentException("Bad value: " + prop.getName() + ", " + label);
+    	return map.add(label, s);
+    }
+
+    int addToMapLast(String label) {
+    	int result = addToMap(label);
+    	Set values = new HashSet(prop.getAvailableValues());
+    	if (!values.equals(labels)) throw new IllegalArgumentException("Missing Property Values: " + prop.getName()
+    			+ ": " + values.removeAll(labels));
+		return result;
     }
 
     // COMMON STUFF for Hangul
@@ -280,24 +310,30 @@ abstract public class GenerateBreakTest implements UCD_Types {
         //printLine(out, samples[LB_ZW], "", samples[LB_CL]);
         //printLine(out, samples[LB_ZW], " ", samples[LB_CL]);
 
-        PrintWriter out = Utility.openPrintWriter("TR29\\" 
+        UnicodeDataFile fc = UnicodeDataFile.openHTMLAndWriteHeader("auxiliary\\", fileName + "BreakTest");
+        PrintWriter out = fc.out;
+
+/*        PrintWriter out = Utility.openPrintWriter("auxiliary\\" 
             + fileName + "BreakTest-"
             + ucd.getVersion()
             + ".html", Utility.UTF8_WINDOWS);
+*/        
+        out.println("<!doctype HTML PUBLIC '-//W3C//DTD HTML 4.0 Transitional//EN' 'http://www.w3.org/TR/REC-html40/loose.dtd'>");
         out.println("<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
         out.println("<title>" + fileName + " Break Chart</title>");
-        out.println("<style>");
+        out.println("<style type='text/css'>");
         out.println("td, th { vertical-align: top }");
         out.println("</style></head>");
 
 
         out.println("<body bgcolor='#FFFFFF'>");
         out.println("<h2>" + fileName + " Break Chart</h2>");
-        out.println("<p><b>Unicode Version:</b> " + ucd.getVersion() + "; <b>Date:</b> " + ucd.getDate() + "</p>");
+        out.println("<p><b>Unicode Version:</b> " + ucd.getVersion() + "</p>");
+        out.println("<p><b>Date:</b> " + Default.getDate() + "</p>");
         generateTable(out);
         
 
-        if (sampleMap != null) {
+        if (false) {
             out.println("<h3>Character Type Breakdown</h3>");
             out.println("<table border='1' cellspacing='0' width='100%'>");
             for (int i = 0; i < sampleMap.size(); ++i) {
@@ -308,7 +344,7 @@ abstract public class GenerateBreakTest implements UCD_Types {
             out.println("</table>");
         }
 
-        out.close();
+        fc.close();
         
         generateTest(false);
         
@@ -318,14 +354,18 @@ abstract public class GenerateBreakTest implements UCD_Types {
         String[] testCase = new String[50];
         // do main test
 
-        PrintWriter out = Utility.openPrintWriter("TR29\\" + fileName + "BreakTest" 
+        UnicodeDataFile fc = UnicodeDataFile.openAndWriteHeader("auxiliary\\", fileName + "BreakTest" 
+                + (shortVersion ? "_SHORT" : ""));
+        PrintWriter out = fc.out;
+/*        PrintWriter out = Utility.openPrintWriter("TR29\\" + fileName + "BreakTest" 
             + (shortVersion ? "_SHORT" : "")
             + "-" + ucd.getVersion()
             + ".txt", Utility.UTF8_WINDOWS);
+*/        
         int counter = 0;
 
+        out.println("#");
         out.println("# Default " + fileName + " Break Test");
-        out.println("# Generated: " + ucd.getDate() + ", MED");
         out.println("#");
         out.println("# Format:");
         out.println("# <string> (# <comment>)? ");
@@ -361,7 +401,7 @@ abstract public class GenerateBreakTest implements UCD_Types {
             printLine(out, extraSingleSamples[ii], true, false);
         }
         out.println("# Lines: " + counter);
-        out.close();
+        fc.close();
     }
 
     public void sampleDescription(PrintWriter out) {}
@@ -461,7 +501,7 @@ abstract public class GenerateBreakTest implements UCD_Types {
             if (after == null) continue;
 
             String h = getTypeID(after);
-            types += "<th " + width + " title='" + getInfo(after) + "'><a class='lbclass' href='#" + h + "'>" + h + "</th>";
+            types += "<th " + width + " class='lbclass' title='" + getInfo(after) + "'>" + h + "</th>";
             
             
             //codes += "<th " + width + " title='" + getInfo(after) + "'>" + Utility.hex(after) + "</th>";
@@ -480,8 +520,7 @@ abstract public class GenerateBreakTest implements UCD_Types {
             if (before == null) continue;
 
             String h = getTypeID(before);
-            String line = "<tr><th title='" + ucd.getCodeAndName(before) + "'><a class='lbclass' href='#" + h + "'>" 
-                + h + "</th>";
+            String line = "<tr><th class='lbclass' title='" + ucd.getCodeAndName(before) + "'>" + h + "</th>";
 
             for (int type2 = 0; type2 < tableLimit; ++type2) {
                 
@@ -555,7 +594,7 @@ abstract public class GenerateBreakTest implements UCD_Types {
         String status;
         if (html) {
             status = hasBreak ? " style='border-right: 1px solid blue'" : "";
-            string.append("<span title='" + getRule() + "'><span" + status + ">&nbsp;</span>&nbsp;<span>");
+            string.append("<span title='" + getRule() + "'><span" + status + ">&nbsp;</span>&nbsp;</span>");
         } else {
             status = hasBreak ? BREAK : NOBREAK;
             string.append(status);
@@ -574,7 +613,7 @@ abstract public class GenerateBreakTest implements UCD_Types {
                     + "'>"
                     + Utility.quoteXML(Utility.getDisplay(cp), true)
                     + "</span>");
-                string.append("<span title='" + getRule() + "'><span" + status + ">&nbsp;</span>&nbsp;<span>");
+                string.append("<span title='" + getRule() + "'><span" + status + ">&nbsp;</span>&nbsp;</span>");
             } else {
                 if (string.length() > 0) {
                     string.append(' ');
@@ -743,28 +782,23 @@ abstract public class GenerateBreakTest implements UCD_Types {
 
         GenerateGraphemeBreakTest(UCD ucd) {
             super(ucd);
-            fileName = "GraphemeCluster";
+            fileName = "Grapheme";
             sampleMap = map;
         }
 
-        
+        Object foo = prop = unicodePropertySource.getProperty("Grapheme_Cluster_Break");
+
         final int
-            CR =    map.add("CR",    new UnicodeSet(0xD, 0xD)),
-            LF =    map.add("LF",    new UnicodeSet(0xA, 0xA)),
-            Control = map.add("Control", 
-                        getSet(ucd, CATEGORY, Cc)
-                .addAll(getSet(ucd, CATEGORY, Cf))
-                .addAll(getSet(ucd, CATEGORY, Zp))
-                .addAll(getSet(ucd, CATEGORY, Zl))
-                .removeAll(map.getSetFromIndex(CR))
-                .removeAll(map.getSetFromIndex(LF))),
-            Extend = map.add("Extend", getSet(ucd, DERIVED, GraphemeExtend)),
-            L =     map.add("L",     getSet(ucd, HANGUL_SYLLABLE_TYPE, UCD_Types.L)),
-            V =     map.add("V",     getSet(ucd, HANGUL_SYLLABLE_TYPE, UCD_Types.V)),
-            T =     map.add("T",     getSet(ucd, HANGUL_SYLLABLE_TYPE, UCD_Types.T)),
-            LV =    map.add("LV",    getSet(ucd, HANGUL_SYLLABLE_TYPE, UCD_Types.LV)),
-            LVT =   map.add("LVT",   getSet(ucd, HANGUL_SYLLABLE_TYPE, UCD_Types.LVT)),
-            Other = map.add("Other", new UnicodeSet(0,0x10FFFF), false, false);            
+            CR =    addToMap("CR"),
+            LF =    addToMap("LF"),
+            Control = addToMap("Control"),
+            Extend = addToMap("Extend"),
+            L =     addToMap("L"),
+            V =     addToMap("V"),
+            T =     addToMap("T"),
+            LV =    addToMap("LV"),
+            LVT =   addToMap("LVT"),
+            Other = addToMapLast("Other");            
                 
         // stuff that subclasses need to override
         public String getTypeID(int cp) {
@@ -860,35 +894,23 @@ abstract public class GenerateBreakTest implements UCD_Types {
 
         }
         
+        Object foo = prop = unicodePropertySource.getProperty("Word_Break");
+
         //static String LENGTH = "[\u30FC\uFF70]";
         //static String HALFWIDTH_KATAKANA = "[\uFF66-\uFF9F]";
         //static String KATAKANA_ITERATION = "[\u30FD\u30FE]";
         //static String HIRAGANA_ITERATION = "[\u309D\u309E]";
         
         final int
-            Format =    map.add("Format",    getSet(ucd, CATEGORY, Cf).remove(0x00AD)),
-            Katakana =    map.add("Katakana",    getSet(ucd, SCRIPT, KATAKANA_SCRIPT)
-                .addAll(new UnicodeSet("[\u30FC\uFF70\uFF9E\uFF9F]"))
-                //.addAll(new UnicodeSet(HALFWIDTH_KATAKANA))
-                //.addAll(new UnicodeSet(KATAKANA_ITERATION))
-                ),
-            ALetter = map.add("ALetter", 
-                        getSet(ucd, DERIVED, PropAlphabetic)
-                .add(0x05F3, 0x05F3)
-                .removeAll(map.getSetFromIndex(Katakana))
-                .removeAll(getSet(ucd, BINARY_PROPERTIES, Ideographic))
-                .removeAll(getSet(ucd, SCRIPT, THAI_SCRIPT))
-                .removeAll(getSet(ucd, SCRIPT, LAO_SCRIPT))
-                .removeAll(getSet(ucd, SCRIPT, HIRAGANA_SCRIPT))
-                ),
-            MidLetter = map.add("MidLetter", 
-                new UnicodeSet("[\\u0027\\u00AD\\u00B7\\u05f4\\u05F4\\u2019\\u2027]")),
-            MidNumLet =     map.add("MidNumLet",
-                new UnicodeSet("[\\u002E\\u003A]")),
-            MidNum =     map.add("MidNum",     getSet(ucd, LINE_BREAK, LB_IN)
-                .removeAll(map.getSetFromIndex(MidNumLet))),
-            Numeric =     map.add("Numeric",     getSet(ucd, LINE_BREAK, LB_NU)),
-            Other = map.add("Other", new UnicodeSet(0,0x10FFFF), false, false);      
+            Format =    addToMap("Format"),
+            Katakana =    addToMap("Katakana"),
+            ALetter = addToMap("ALetter"),
+            MidLetter = addToMap("MidLetter"),
+            //MidNumLet =     addToMap("MidNumLet"),
+            MidNum =     addToMap("MidNum"),
+            Numeric =     addToMap("Numeric"),
+            ExtendNumLet =     addToMap("ExtendNumLet"),
+            Other = addToMapLast("Other");      
 
         // stuff that subclasses need to override
         public String getTypeID(int cp) {
@@ -948,11 +970,11 @@ abstract public class GenerateBreakTest implements UCD_Types {
 
             // Don’t break letters across certain punctuation
 
-            setRule("6: ALetter × (MidLetter | MidNumLet) ALetter");
-            if (before == ALetter && (after == MidLetter || after == MidNumLet) && after2 == ALetter) return false;
+            setRule("6: ALetter × MidLetter ALetter");
+            if (before == ALetter && after == MidLetter && after2 == ALetter) return false;
 
             setRule("7: ALetter (MidLetter | MidNumLet) × ALetter");
-            if (before2 == ALetter && (before == MidLetter || before == MidNumLet) && after == ALetter) return false;
+            if (before2 == ALetter && before == MidLetter && after == ALetter) return false;
 
             // Don’t break within sequences of digits, or digits adjacent to letters.
 
@@ -968,15 +990,22 @@ abstract public class GenerateBreakTest implements UCD_Types {
 
             // Don’t break within sequences like: '-3.2'
             setRule("11: Numeric (MidNum | MidNumLet) × Numeric");
-            if (before2 == Numeric && (before == MidNum || before == MidNumLet) && after == Numeric) return false;
+            if (before2 == Numeric && before == MidNum && after == Numeric) return false;
 
             setRule("12: Numeric × (MidNum | MidNumLet) Numeric");
-            if (before == Numeric && (after == MidNum || after == MidNumLet) && after2 == Numeric) return false;
+            if (before == Numeric && after == MidNum && after2 == Numeric) return false;
 
             // Don't break between Katakana
 
             setRule("13: Katakana × Katakana");
             if (before == Katakana && after == Katakana) return false;
+            
+            // Do not break from extenders
+            setRule("13a: (ALetter | Numeric | Katakana | ExtendNumLet)  	×  	ExtendNumLet");
+            if ((before == ALetter || before == Numeric || before == Katakana || before == ExtendNumLet) && after == ExtendNumLet) return false;
+
+            setRule("13b: ExtendNumLet 	× 	(ALetter | Numeric | Katakana)");
+            if (before == ExtendNumLet && (after == ALetter || after == Numeric || after == Katakana)) return false;
 
             // Otherwise break always.
             setRule("14: Any ÷ Any");
@@ -1344,7 +1373,7 @@ abstract public class GenerateBreakTest implements UCD_Types {
             setRule("9: OP SP* ×");
             if (lastNonSpace == LB_OP) return false;
 
-            // LB 10  Don’t break within ‘”[’, , even with intervening spaces.
+            // LB 10  Don’t break within ‘�?[’, , even with intervening spaces.
             // QU SP* × OP
             setRule("10: QU SP* × OP");
             if (lastNonSpace == LB_QU && after == LB_OP) return false;
@@ -1377,7 +1406,7 @@ abstract public class GenerateBreakTest implements UCD_Types {
             setRule("13: × GL ; GL ×");
             if (after == LB_GL || before == LB_GL) return false;
 
-            // LB 14  Don’t break before or after ‘”’
+            // LB 14  Don’t break before or after ‘�?’
             setRule("14: × QU ; QU ×");
             if (before == LB_QU || after == LB_QU) return false;
 
@@ -1450,7 +1479,7 @@ abstract public class GenerateBreakTest implements UCD_Types {
             if (before == LB_HY) return true;
             if (after == LB_BB) return true;
 
-            // LB 19  Don’t break between alphabetics (“at”)
+            // LB 19  Don’t break between alphabetics (“at�?)
             // AL × AL
 
             setRule("19: AL × AL");
@@ -1515,36 +1544,20 @@ abstract public class GenerateBreakTest implements UCD_Types {
 
         }
 
+        Object foo = prop = unicodePropertySource.getProperty("Sentence_Break");
 
         final int
-            Sep =    map.add("Sep",    new UnicodeSet("[\\u000A\\u000D\\u0085\\u2028\\u2029]")),
-            Format =    map.add("Format",    getSet(ucd, CATEGORY, Cf)),
-            Sp = map.add("Sp", getSet(ucd, BINARY_PROPERTIES, White_space)
-                .removeAll(map.getSetFromIndex(Sep))),
-            Lower = map.add("Lower", getSet(ucd, DERIVED, PropLowercase)),
-            Upper = map.add("Upper", getSet(ucd, CATEGORY, Lt)
-                .addAll(getSet(ucd, DERIVED, PropUppercase))),
-            OLetter = map.add("OLetter", 
-                        getSet(ucd, DERIVED, PropAlphabetic)
-                .add(0x05F3, 0x05F3)
-                .removeAll(map.getSetFromIndex(Lower))
-                .removeAll(map.getSetFromIndex(Upper))
-                ),
-            Numeric =     map.add("Numeric",     getSet(ucd, LINE_BREAK, LB_NU)),
-            ATerm =     map.add("ATerm", new UnicodeSet(0x002E,0x002E)),
-            Term =    map.add("Term", new UnicodeSet(
-                "[\\u0021\\u003F\\u0589\\u061F\\u06D4\\u0700\\u0701\\u0702\\u0964\\u1362\\u1367"
-                + "\\u1368\\u104A\\u104B\\u166E\\u1803\\u1809\\u203C\\u203D\\u2047\\u2048\\u2049"
-                + "\\u3002\\uFE52\\uFE57\\uFF01\\uFF0E\\uFF1F\\uFF61]")),
-            Close =     map.add("Close",     
-                getSet(ucd, CATEGORY, Po)
-                .addAll(getSet(ucd, CATEGORY, Pe))
-                .addAll(getSet(ucd, LINE_BREAK, LB_QU))
-                .removeAll(map.getSetFromIndex(ATerm))
-                .removeAll(map.getSetFromIndex(Term))
-                .remove(0x05F3)
-                ),
-            Other = map.add("Other", new UnicodeSet(0,0x10FFFF), false, false);            
+            Sep =    addToMap("Sep"),
+            Format =    addToMap("Format"),
+            Sp = addToMap("Sp"),
+            Lower = addToMap("Lower"),
+            Upper = addToMap("Upper"),
+            OLetter = addToMap("OLetter"),
+            Numeric =     addToMap("Numeric"),
+            ATerm =     addToMap("ATerm"),
+            STerm =    addToMap("STerm"),
+            Close =     addToMap("Close"),
+            Other = addToMapLast("Other");            
                 
         // stuff that subclasses need to override
         public String getTypeID(int cp) {
@@ -1726,8 +1739,8 @@ abstract public class GenerateBreakTest implements UCD_Types {
                 }
                 if (t == ATerm) {
                     lookAfter = ATerm;
-                } else if (t == Term) {
-                    lookAfter = Term;
+                } else if (t == STerm) {
+                    lookAfter = STerm;
                 }
                 break;
             }
@@ -1776,7 +1789,7 @@ abstract public class GenerateBreakTest implements UCD_Types {
                         setRule("9: ( Term | ATerm ) Close* × ( Close | Sp | Sep )");
                         return false;
                     }
-                    if (lookAfter == Term) break;
+                    if (lookAfter == STerm) break;
                 }
                     
                 // at this point, we have an ATerm. All other conditions are ok, but we need to verify 6
