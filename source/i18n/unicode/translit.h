@@ -555,40 +555,46 @@ protected:
     /**
      * Abstract method that concrete subclasses define to implement
      * keyboard transliteration.  This method should transliterate all
-     * characters between <code>index.cursor</code> and
-     * <code>index.limit</code> that can be unambiguously
+     * characters between <code>pos.start</code> and
+     * <code>pos.contextLimit</code> that can be unambiguously
      * transliterated, regardless of future insertions of text at
-     * <code>index.limit</code>.  <code>index.cursor</code> should
+     * <code>pos.contextLimit</code>.  <code>pos.start</code> should
      * be advanced past committed characters (those that will not
      * change in future calls to this method).
-     * <code>index.limit</code> should be updated to reflect text
+     * <code>pos.contextLimit</code> should be updated to reflect text
      * replacements that shorten or lengthen the text between
-     * <code>index.cursor</code> and <code>index.limit</code>.  Upon
-     * return, neither <code>index.cursor</code> nor
-     * <code>index.limit</code> should be less than the initial value
-     * of <code>index.cursor</code>.  <code>index.start</code>
+     * <code>pos.start</code> and <code>pos.contextLimit</code>.  Upon
+     * return, neither <code>pos.start</code> nor
+     * <code>pos.contextLimit</code> should be less than the initial value
+     * of <code>pos.start</code>.  <code>pos.contextStart</code>
      * should <em>not</em> be changed.
      *
      * <p>Subclasses may safely assume that all characters in
-     * [index.start, index.limit) are unfiltered.  In other words, the
+     * [pos.start, pos.limit) are unfiltered.  In other words, the
      * filter has already been applied by the time this method is
      * called.  See filteredTransliterate().
      *
      * <p>This method is <b>not</b> for public consumption.  Calling
-     * this method directly will transliterate [index.start,
-     * index.limit) without applying the filter.  End user code that
+     * this method directly will transliterate [pos.start,
+     * pos.limit) without applying the filter.  End user code that
      * wants to call this method should be calling transliterate().
      * Subclass code that wants to call this method should probably be
      * calling filteredTransliterate().
-     * 
+     *
+     * <p>If incremental is true, then upon return pos.start may be
+     * less than pos.limit, if some characters are unprocessed.  If
+     * incremental is false, then pos.start should be equal to pos.limit.
+     *
      * @param text the buffer holding transliterated and
      * untransliterated text
-     * @param index an array of three integers.  See {@link
-     * #transliterate(Replaceable, int[], String)}.
+     * @param pos the start and limit of the text, the position
+     * of the cursor, and the start and limit of transliteration.
+     * @param incremental if true, assume more text may be coming after
+     * pos.contextLimit.  Otherwise, assume the text is complete.
      * @see #transliterate
-     */
+     */ 
     virtual void handleTransliterate(Replaceable& text,
-                                     UTransPosition& index,
+                                     UTransPosition& pos,
                                      UBool incremental) const = 0;
 
     /**
