@@ -28,6 +28,7 @@ case "${host}" in
 	*CC)     icu_cv_host_frag=$srcdir/config/mh-hpux-cc ;;
 	esac;;
 *-*-os390*)	icu_cv_host_frag=$srcdir/config/mh-os390 ;;
+*-*-os400*)	icu_cv_host_frag=$srcdir/config/mh-os400 ;;
 *) 		icu_cv_host_frag=$srcdir/config/mh-unknown ;;
 esac
 		]
