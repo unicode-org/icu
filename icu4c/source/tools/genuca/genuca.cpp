@@ -579,7 +579,7 @@ write_uca_table(const char *filename,
     /*TODO:The fractional rules version should be taken from FractionalUCA.txt*/
     myD->version[1] = UCA_TAILORING_RULES_VERSION;
 
-    tempUCATable *t = uprv_uca_initTempTable(myD, status);
+    tempUCATable *t = uprv_uca_initTempTable(myD, NULL, status);
 
     /*
     elements = uhash_open(uhash_hashLong, uhash_compareLong, &status);

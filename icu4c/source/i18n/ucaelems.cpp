@@ -84,9 +84,10 @@ int32_t uprv_uca_addExpansion(ExpansionTable *expansions, uint32_t value, UError
     return(expansions->position++);
 }
 
-tempUCATable * uprv_uca_initTempTable(UCATableHeader *image, UErrorCode *status) {
+tempUCATable * uprv_uca_initTempTable(UCATableHeader *image, const UCollator *UCA, UErrorCode *status) {
   tempUCATable *t = (tempUCATable *)uprv_malloc(sizeof(tempUCATable));
   t->image = image;
+  t->UCA = UCA;
   t->expansions = (ExpansionTable *)uprv_malloc(sizeof(ExpansionTable));
   uprv_memset(t->expansions, 0, sizeof(ExpansionTable));
   t->mapping = ucmp32_open(UCOL_NOT_FOUND);

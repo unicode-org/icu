@@ -63,9 +63,10 @@ typedef struct {
   UCATableHeader    *image;
   MaxExpansionTable *maxExpansions;
   uint8_t           *unsafeCP;
+  const UCollator         *UCA;
 } tempUCATable; 
 
-U_CAPI tempUCATable * U_EXPORT2 uprv_uca_initTempTable(UCATableHeader *image, UErrorCode *status);
+U_CAPI tempUCATable * U_EXPORT2 uprv_uca_initTempTable(UCATableHeader *image, const UCollator *UCA, UErrorCode *status);
 U_CAPI void U_EXPORT2 uprv_uca_closeTempTable(tempUCATable *t);
 U_CAPI uint32_t U_EXPORT2 uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode *status);
 U_CAPI UCATableHeader U_EXPORT2 *uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status);
