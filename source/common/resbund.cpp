@@ -54,13 +54,13 @@
 #include "unistrm.h"
 #include "filestrm.h"
 #include "cstring.h"
-#include "uhash.h"
 #include "uresimp.h"
-
-#include <string.h>
 
 #include "cmemory.h"
 
+#ifdef ICU_RESBUND_USE_DEPRECATES
+#include "uhash.h"
+#endif
 
 /*-----------------------------------------------------------------------------
  * Implementation Notes
@@ -193,7 +193,9 @@ ResourceBundle::ResourceBundle( const UnicodeString&    path,
 }
 
 ResourceBundle::ResourceBundle(UErrorCode &err) {
+#ifdef ICU_RESBUND_USE_DEPRECATES
   fItemCache = 0;
+#endif
   resource = ures_open(0, Locale::getDefault().getName(), &err);
   if(U_SUCCESS(err)) {
     fRealLocale = Locale(ures_getRealLocale(resource, &err));
@@ -218,7 +220,9 @@ ResourceBundle::ResourceBundle( const UnicodeString&    path,
                                 UErrorCode&              status)
   :   fRealLocale(localeName)
 {
+#ifdef ICU_RESBUND_USE_DEPRECATES
     fItemCache = 0;
+#endif
     int32_t patlen = path.length();
 
     if(patlen > 0) {
@@ -245,27 +249,31 @@ ResourceBundle::ResourceBundle(const wchar_t* path,
 ResourceBundle::ResourceBundle(const ResourceBundle &other) {
     UErrorCode status = U_ZERO_ERROR;
 
-        if(other.resource->fIsTopLevel == TRUE) {
+    if(other.resource->fIsTopLevel == TRUE) {
         constructForLocale(ures_getPath(other.resource), Locale(ures_getName(other.resource)), status);
-            } else {
-              resource = 0;
-              fItemCache = 0;
-                resource = copyResb(0, other.resource, &status);
-            }
+    } else {
+#ifdef ICU_RESBUND_USE_DEPRECATES
+        fItemCache = 0;
+#endif
+        resource = copyResb(0, other.resource, &status);
+    }
 }
 
 ResourceBundle::ResourceBundle(UResourceBundle *res, UErrorCode& err) {
-    resource = 0;
+#ifdef ICU_RESBUND_USE_DEPRECATES
     fItemCache = 0;
+#endif
     resource = copyResb(0, res, &err);
 }
 
 ResourceBundle::ResourceBundle( const char* path, const Locale& locale, UErrorCode& err) {
-  fItemCache = 0;
-  resource = ures_open(path, locale.getName(), &err);
-  if(U_SUCCESS(err)) {
-      fRealLocale = Locale(ures_getRealLocale(resource, &err));
-  }
+#ifdef ICU_RESBUND_USE_DEPRECATES
+    fItemCache = 0;
+#endif
+    resource = ures_open(path, locale.getName(), &err);
+    if(U_SUCCESS(err)) {
+        fRealLocale = Locale(ures_getRealLocale(resource, &err));
+    }
 }
 
 
@@ -275,11 +283,12 @@ ResourceBundle& ResourceBundle::operator=(const ResourceBundle& other)
     if(this == &other) {
         return *this;
     }
-
+#ifdef ICU_RESBUND_USE_DEPRECATES
     if(fItemCache != 0) {
         uhash_close(fItemCache);
         fItemCache = 0;
     }
+#endif
     if(resource != 0) {
         ures_close(resource);
         resource = 0;
@@ -295,9 +304,11 @@ ResourceBundle& ResourceBundle::operator=(const ResourceBundle& other)
 
 ResourceBundle::~ResourceBundle()
 {
+#ifdef ICU_RESBUND_USE_DEPRECATES
     if(fItemCache != 0) {
         uhash_close(fItemCache);
     }
+#endif
     if(resource != 0) {
         ures_close(resource);
     }
@@ -308,12 +319,14 @@ ResourceBundle::deleteValue(void *value) {
     delete (ResourceBundleData *)value;
 }
 
+#ifdef ICU_RESBUND_USE_DEPRECATES
 void ResourceBundle::initItemCache(UErrorCode& error) {
     if(fItemCache == 0) {
         fItemCache = uhash_open(uhash_hashChars, uhash_compareChars, &error);
         uhash_setValueDeleter(fItemCache, deleteValue);
     }
 }
+#endif
 
 void 
 ResourceBundle::constructForLocale(const UnicodeString& path,
@@ -321,9 +334,11 @@ ResourceBundle::constructForLocale(const UnicodeString& path,
                                    UErrorCode& error)
 {
     char name[128];
-    fItemCache = 0;
     int32_t patlen = path.length();
 
+#ifdef ICU_RESBUND_USE_DEPRECATES
+    fItemCache = 0;
+#endif
 
     if(patlen > 0) {
         path.extract(0, patlen, name);
@@ -342,7 +357,9 @@ ResourceBundle::constructForLocale(const wchar_t* path,
                                    const Locale& locale,
                                    UErrorCode& error)
 {
+#ifdef ICU_RESBUND_USE_DEPRECATES
     fItemCache = 0;
+#endif
 
     if(path != 0) {
         resource = ures_openW(path, locale.getName(), &error);
@@ -452,6 +469,7 @@ const Locale &ResourceBundle::getLocale(void) const
         return fRealLocale;
 }
 
+#ifdef ICU_RESBUND_USE_DEPRECATES
 // Start deprecated API
 const UnicodeString*
 ResourceBundle::getString(  const char              *resourceTag,
@@ -715,12 +733,7 @@ ResourceBundle::getTaggedArray( const char             *resourceTag,
         return;
     }
 }
+#endif
 
 //eof
-
-
-
-
-
-
 

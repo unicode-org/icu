@@ -211,7 +211,7 @@ public:
     * needed.
     * @stable
     */
-                                Locale(); 
+    Locale(); 
 
     /**
      * Construct a locale from language, country, variant.
@@ -222,10 +222,11 @@ public:
      *                 description. (optional)
      * @draft
      */
-                                Locale( const   char * language,
-                                        const   char * country  = 0, 
-                                        const   char * variant  = 0);
-#ifndef ICU_LOCID_NO_DEPRECATES
+    Locale( const   char * language,
+            const   char * country  = 0, 
+            const   char * variant  = 0);
+
+#ifdef ICU_LOCID_USE_DEPRECATES
     /**
      * Construct a locale from language, country, variant.
      *
@@ -235,9 +236,9 @@ public:
      *                 description. (optional)
      * @deprecated Remove in the first release of 2001.
      */
-                                Locale( const   UnicodeString&  language, 
-                                        const   UnicodeString&  country , 
-                                        const   UnicodeString&  variant );
+    Locale( const   UnicodeString&  language, 
+            const   UnicodeString&  country , 
+            const   UnicodeString&  variant );
 
      /**
      * Construct a locale from language, country.
@@ -246,34 +247,34 @@ public:
      * @param country  Uppercase two-letter ISO-3166 code. (optional)
      * @deprecated Remove in the first release of 2001.
      */
-               Locale( const   UnicodeString&  language, 
-                                        const   UnicodeString&  country );
-                
+    Locale( const   UnicodeString&  language, 
+                            const   UnicodeString&  country );
+
     /**
      * Construct a locale from language.
      *
      * @param language Lowercase two-letter ISO-639 code.
      * @deprecated Remove in the first release of 2001.
      */
-                Locale( const   UnicodeString&  language);
+    Locale( const   UnicodeString&  language);
 
 
-#endif /* ICU_LOCID_NO_DEPRECATES */
+#endif /* ICU_LOCID_USE_DEPRECATES */
     /**
      * Initializes a Locale object from another Locale object.
      *
      * @param other The Locale object being copied in.
      * @stable
      */
-                                Locale(const    Locale& other);
+    Locale(const    Locale& other);
 
 
     /**
      * Destructor
      * @stable
      */
-                                ~Locale() ;
-                  
+    ~Locale() ;
+
     /**
      * Replaces the entire contents of *this with the specified value.
      *
@@ -281,7 +282,7 @@ public:
      * @return      *this
      * @stable
      */
-    Locale&                     operator=(const Locale& other);
+    Locale& operator=(const Locale& other);
 
     /**
      * Checks if two locale keys are the same.
@@ -290,7 +291,7 @@ public:
      * @return      True if the two locale keys are the same, false otherwise.
      * @stable
      */
-                UBool          operator==(const    Locale&     other) const;   
+    UBool   operator==(const    Locale&     other) const;
 
     /**
      * Checks if two locale keys are not the same.
@@ -300,7 +301,7 @@ public:
      *              otherwise.
      * @stable
      */
-                UBool          operator!=(const    Locale&     other) const;
+    UBool   operator!=(const    Locale&     other) const;
 
     /**
      * Common methods of getting the current default Locale. Used for the
@@ -316,7 +317,7 @@ public:
      * @system
      * @stable
      */
-    static  Locale&             getDefault(void);
+    static  Locale& getDefault(void);
 
     /**
      * Sets the default. Normally set once at the beginning of applet or
@@ -326,7 +327,7 @@ public:
      * @system
      * @stable
      */
-    static      void            setDefault(const    Locale&     newLocale,
+    static  void    setDefault(const    Locale&     newLocale,
                                                     UErrorCode&  success);
 
     
@@ -347,19 +348,21 @@ public:
      * @return      An alias to the code
      * @draft
      */
-                const char *  getLanguage( ) const;
+    const char *  getLanguage( ) const;
+
     /**
      * Returns the locale's two-letter ISO-3166 country code.
      * @return      An alias to the code
      * @draft
      */
-                const char *   getCountry( ) const;
+    const char *  getCountry( ) const;
+
     /**
      * Returns the locale's variant code.
      * @return      An alias to the code
      * @draft
      */
-                const char *  getVariant( ) const;
+    const char *  getVariant( ) const;
 
     /**
      * Returns the programmatic name of the entire locale, with the language,
@@ -368,7 +371,7 @@ public:
      * "de__POSIX", "fr__MAC", "__MAC", "_MT", "_FR_EURO"
      * @return      A pointer to "name".
      */
-                const char * getName() const;
+    const char * getName() const;
 
     /**
      * returns the locale's three-letter language code, as specified
@@ -376,16 +379,16 @@ public:
      * @return      An alias to the code, or NULL
      * @draft
      */
-                const char * getISO3Language() const;
+    const char * getISO3Language() const;
 
     /**
      * Fills in "name" with the locale's three-letter ISO-3166 country code.
      * @return      An alias to the code, or NULL
      * @draft
      */
-                const char * getISO3Country() const;
+    const char * getISO3Country() const;
 
-#ifndef ICU_LOCID_NO_DEPRECATES
+#ifdef ICU_LOCID_USE_DEPRECATES
 /* begin deprecated versions */
 
     /**
@@ -441,8 +444,8 @@ public:
      */
                 UnicodeString&  getISO3Country( UnicodeString&  name, UErrorCode& status) const;
 
-/* END deprecated [ ICU_LOCID_NO_DEPRECATES ] */
-#endif /* ICU_LOCID_NO_DEPRECATES */
+/* END deprecated [ ICU_LOCID_USE_DEPRECATES ] */
+#endif /* ICU_LOCID_USE_DEPRECATES */
     /**
      * Returns the Windows LCID value corresponding to this locale.
      * This value is stored in the resource data for the locale as a one-to-four-digit
@@ -450,7 +453,7 @@ public:
      * there is no Windows LCID value that corresponds to this locale, returns 0.
      * @stable
      */
-                uint32_t        getLCID(void) const;
+    uint32_t        getLCID(void) const;
 
     /**
      * Fills in "dispLang" with the name of this locale's language in a format suitable for
@@ -461,7 +464,7 @@ public:
      * @return          A reference to "dispLang".
      * @stable
      */
-                UnicodeString&  getDisplayLanguage(UnicodeString&   dispLang) const;
+    UnicodeString&  getDisplayLanguage(UnicodeString&   dispLang) const;
 
     /**
      * Fills in "dispLang" with the name of this locale's language in a format suitable for
@@ -476,8 +479,9 @@ public:
      * @return          A reference to "dispLang".
      * @stable
      */
-                UnicodeString&  getDisplayLanguage( const   Locale&         inLocale,
-                                                            UnicodeString&  dispLang) const;
+    UnicodeString&  getDisplayLanguage( const   Locale&         inLocale,
+                                                UnicodeString&  dispLang) const;
+
     /**
      * Fills in "dispCountry" with the name of this locale's country in a format suitable
      * for user display in the default locale.  For example, if the locale's country code
@@ -487,7 +491,8 @@ public:
      * @return              A reference to "dispCountry".
      * @stable
      */
-                UnicodeString&  getDisplayCountry(          UnicodeString& dispCountry) const;
+    UnicodeString&  getDisplayCountry(          UnicodeString& dispCountry) const;
+
     /**
      * Fills in "dispCountry" with the name of this locale's country in a format suitable
      * for user display in the locale specified by "inLocale".  For example, if the locale's
@@ -502,8 +507,8 @@ public:
      * @return              A reference to "dispCountry".
      * @stable
      */
-                UnicodeString&  getDisplayCountry(  const   Locale&         inLocale,
-                                                            UnicodeString&  dispCountry) const;
+    UnicodeString&  getDisplayCountry(  const   Locale&         inLocale,
+                                                UnicodeString&  dispCountry) const;
 
     /**
      * Fills in "dispVar" with the name of this locale's variant code in a format suitable
@@ -512,7 +517,8 @@ public:
      * @return          A reference to "dispVar".
      * @stable
      */
-                UnicodeString&  getDisplayVariant(      UnicodeString& dispVar) const;
+    UnicodeString&  getDisplayVariant(      UnicodeString& dispVar) const;
+
     /**
      * Fills in "dispVar" with the name of this locale's variant code in a format
      * suitable for user display in the locale specified by "inLocale".
@@ -521,8 +527,9 @@ public:
      * @return          A reference to "dispVar".
      * @stable
      */
-                UnicodeString&  getDisplayVariant(  const   Locale&         inLocale,
-                                                            UnicodeString&  dispVar) const;
+    UnicodeString&  getDisplayVariant(  const   Locale&         inLocale,
+                                                UnicodeString&  dispVar) const;
+
     /**
      * Fills in "name" with the name of this locale in a format suitable for user display 
      * in the default locale.  This function uses getDisplayLanguage(), getDisplayCountry(),
@@ -534,7 +541,8 @@ public:
      * @return      A reference to "name".
      * @stable
      */
-                UnicodeString&  getDisplayName(         UnicodeString&  name) const;
+    UnicodeString&  getDisplayName(         UnicodeString&  name) const;
+
     /**
      * Fills in "name" with the name of this locale in a format suitable for user display 
      * in the locale specfied by "inLocale".  This function uses getDisplayLanguage(),
@@ -547,13 +555,14 @@ public:
      * @return          A reference to "name".
      * @stable
      */
-                UnicodeString&  getDisplayName( const   Locale&         inLocale,
-                                                        UnicodeString&  name) const;
+    UnicodeString&  getDisplayName( const   Locale&         inLocale,
+                                            UnicodeString&  name) const;
+
     /**
      * Generates a hash code for the locale.
      * @stable
      */
-                int32_t         hashCode(void) const;
+    int32_t         hashCode(void) const;
 
     /**
      * Returns a list of all installed locales.
@@ -586,7 +595,7 @@ public:
     static const char* const*  getISOLanguages();
 
 
-#ifndef ICU_LOCID_NO_DEPRECATES
+#ifdef ICU_LOCID_USE_DEPRECATES
     /**
      * Returns a list of all 2-letter country codes defined in ISO 3166.
      * Can be used to create Locales.
@@ -629,8 +638,8 @@ protected: /* only protected for testing purposes. DO NOT USE. */
      * @return A pointer to an array of UnicodeString objects. The caller does NOT
      *  get ownership of this list, and must NOT delete it.
      */
-    static const UnicodeString* getLanguagesForCountry(    const UnicodeString& country, 
-                                                        int32_t& count);
+    static const UnicodeString* getLanguagesForCountry(const UnicodeString& country, 
+                                                       int32_t& count);
 
 
 private:
@@ -641,8 +650,8 @@ private:
      * @param cLocaleID The new locale name.
      */
     Locale& init(const char* cLocaleID);
-    
-    
+
+
     char language[ULOC_LANG_CAPACITY];
     char country[ULOC_COUNTRY_CAPACITY];
     char* variant;
