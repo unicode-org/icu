@@ -282,7 +282,7 @@ public:
     // NOTE: stringArg cannot go inside the union because
     // it has a copy constructor
     UnicodeString stringArg; // For RULES_*, ALIAS, COMPOUND_RBT
-    int32_t intArg; // For COMPOUND_RBT
+    int32_t intArg; // For COMPOUND_RBT, LOCALE_RULES
     UnicodeSet* compoundFilter; // For COMPOUND_RBT
     union {
         Transliterator* prototype; // For PROTOTYPE
@@ -730,11 +730,9 @@ Entry* TransliteratorRegistry::findInStaticStore(const Spec& src,
                                                  const UnicodeString& variant) {
     Entry* entry = 0;
     if (src.isLocale()) {
-        entry = findInBundle(src, trg, variant,
-                             "TransliterateTo");
+        entry = findInBundle(src, trg, variant, UTRANS_FORWARD);
     } else if (trg.isLocale()) {
-        entry = findInBundle(trg, src, variant,
-                             "TransliterateFrom");
+        entry = findInBundle(trg, src, variant, UTRANS_REVERSE);
     }
 
     // If we found an entry, store it in the Hashtable for next
@@ -745,6 +743,13 @@ Entry* TransliteratorRegistry::findInStaticStore(const Spec& src,
 
     return entry;
 }
+
+// As of 2.0, resource bundle keys cannot contain '_'
+static const UChar TRANSLITERATE_TO[] = {84,114,97,110,115,108,105,116,101,114,97,116,101,84,111,0}; // "TransliterateTo"
+
+static const UChar TRANSLITERATE_FROM[] = {84,114,97,110,115,108,105,116,101,114,97,116,101,70,114,111,109,0}; // "TransliterateFrom"
+
+static const UChar TRANSLITERATE[] = {84,114,97,110,115,108,105,116,101,114,97,116,101,0}; // "Transliterate"
 
 /**
  * Attempt to find an entry in a single resource bundle.  This is
@@ -759,52 +764,78 @@ Entry* TransliteratorRegistry::findInStaticStore(const Spec& src,
 Entry* TransliteratorRegistry::findInBundle(const Spec& specToOpen,
                                             const Spec& specToFind,
                                             const UnicodeString& variant,
-                                            const char* tagPrefix) {
-
-    UnicodeString utag(tagPrefix);
-    utag.append(LOCALE_SEP).append(specToFind.get());
-    CharString tag(utag);
-
-    UErrorCode status = U_ZERO_ERROR;
-    ResourceBundle subres(specToOpen.getBundle().get(tag, status));
-    if (U_FAILURE(status) ||
-        status == U_USING_DEFAULT_ERROR) {
-        return 0;
-    }
-
-    if (specToOpen.get() != subres.getLocale().getName()) {
-        return 0;
-    }
-
+                                            UTransDirection direction) {
+    UnicodeString utag;
     UnicodeString resStr;
-    if (variant.length() != 0) {
-        CharString var(variant);
-        status = U_ZERO_ERROR;
-        UnicodeString resStr = subres.getStringEx(var, status);
-        if (U_FAILURE(status)) {
-            return 0;
+	int32_t pass;
+
+    for (pass=0; pass<2; ++pass) {
+        utag.truncate(0);
+        // First try either TransliteratorTo_xxx or
+        // TransliterateFrom_xxx, then try the bidirectional
+        // Transliterate_xxx.  This precedence order is arbitrary
+        // but must be consistent and documented.
+        if (pass == 0) {
+            utag.append(direction == UTRANS_FORWARD ?
+                        TRANSLITERATE_TO : TRANSLITERATE_FROM);
+        } else {
+            utag.append(TRANSLITERATE);
+        }
+        UnicodeString s(specToFind.get());
+        utag.append(s.toUpper());
+        CharString tag(utag);
+        
+        UErrorCode status = U_ZERO_ERROR;
+        ResourceBundle subres(specToOpen.getBundle().get(tag, status));
+        if (U_FAILURE(status) ||
+            status == U_USING_DEFAULT_ERROR) {
+            continue;
+        }
+        
+        if (specToOpen.get() != subres.getLocale().getName()) {
+            continue;
+        }
+        
+        if (variant.length() != 0) {
+            CharString var(variant);
+            status = U_ZERO_ERROR;
+            resStr = subres.getStringEx(var, status);
+            if (U_SUCCESS(status)) {
+                // Exit loop successfully
+                break;
+            }
+        }
+        
+        else {
+            // Variant is empty, which means match the first variant listed.
+            status = U_ZERO_ERROR;
+            resStr = subres.getStringEx(1, status);
+            if (U_SUCCESS(status)) {
+                // Exit loop successfully
+                break;
+            }
         }
     }
 
-    else {
-        // Variant is empty, which means match the first variant listed.
-        status = U_ZERO_ERROR;
-        ResourceBundle subsub(subres.getNext(status));
-        if (U_FAILURE(status)) {
-            return 0;
-        }
-        resStr = subsub.getNextString(status);
-        if (U_FAILURE(status)) {
-            return 0;
-        }
+    if (pass==2) {
+        // Failed
+        return NULL;
     }
 
     // We have succeeded in loading a string from the locale
     // resources.  Create a new registry entry to hold it and return it.
     Entry *entry = new Entry();
     if (entry != 0) {
+        // The direction is always forward for the
+        // TransliterateTo_xxx and TransliterateFrom_xxx
+        // items; those are unidirectional forward rules.
+        // For the bidirectional Transliterate_xxx items,
+        // the direction is the value passed in to this
+        // function.
+        int32_t dir = (pass == 0) ? UTRANS_FORWARD : direction;
         entry->entryType = Entry::LOCALE_RULES;
         entry->stringArg = resStr;
+        entry->intArg = dir;
     }
 
     return entry;
@@ -926,31 +957,37 @@ Transliterator* TransliteratorRegistry::instantiateEntry(const UnicodeString& ID
             return 0;
         }
 
-        // At this point entry type must be either RULES_FORWARD or
-        // RULES_REVERSE.  We process the rule data into a
-        // TransliteratorRuleData object, and possibly also into an
-        // ::id header and/or footer.  Then we modify the registry with
-        // the parsed data and retry.
-        UBool isReverse = (entry->entryType == Entry::RULES_REVERSE);
-
-        // We use the file name, taken from another resource bundle
-        // 2-d array at static init time, as a locale language.  We're
-        // just using the locale mechanism to map through to a file
-        // name; this in no way represents an actual locale.
-        CharString ch(entry->stringArg);
-        UResourceBundle *bundle = ures_openDirect(0, ch, &status);
-        UnicodeString rules = ures_getUnicodeStringByKey(bundle, RB_RULE, &status);
-        ures_close(bundle);
-
-        // If the status indicates a failure, then we don't have any
-        // rules -- there is probably an installation error.  The list
-        // in the root locale should correspond to all the installed
-        // transliterators; if it lists something that's not
-        // installed, we'll get an error from ResourceBundle.
-
         TransliteratorParser parser;
-        parser.parse(rules, isReverse ? UTRANS_REVERSE : UTRANS_FORWARD,
-                     parseError, status);
+
+        if (entry->entryType == Entry::LOCALE_RULES) {
+            parser.parse(entry->stringArg, (UTransDirection) entry->intArg,
+                         parseError, status);
+        } else {
+            // At this point entry type must be either RULES_FORWARD or
+            // RULES_REVERSE.  We process the rule data into a
+            // TransliteratorRuleData object, and possibly also into an
+            // ::id header and/or footer.  Then we modify the registry with
+            // the parsed data and retry.
+            UBool isReverse = (entry->entryType == Entry::RULES_REVERSE);
+            
+            // We use the file name, taken from another resource bundle
+            // 2-d array at static init time, as a locale language.  We're
+            // just using the locale mechanism to map through to a file
+            // name; this in no way represents an actual locale.
+            CharString ch(entry->stringArg);
+            UResourceBundle *bundle = ures_openDirect(0, ch, &status);
+            UnicodeString rules = ures_getUnicodeStringByKey(bundle, RB_RULE, &status);
+            ures_close(bundle);
+            
+            // If the status indicates a failure, then we don't have any
+            // rules -- there is probably an installation error.  The list
+            // in the root locale should correspond to all the installed
+            // transliterators; if it lists something that's not
+            // installed, we'll get an error from ResourceBundle.
+            
+            parser.parse(rules, isReverse ? UTRANS_REVERSE : UTRANS_FORWARD,
+                         parseError, status);
+        }
 
         if (U_FAILURE(status)) {
             // We have a failure of some kind.  Remove the ID from the

@@ -272,9 +272,9 @@ class TransliteratorRegistry {
                              const UnicodeString& variant);
 
     static Entry* findInBundle(const Spec& specToOpen,
-                                    const Spec& specToFind,
-                                    const UnicodeString& variant,
-                                    const char* tagPrefix);
+                               const Spec& specToFind,
+                               const UnicodeString& variant,
+                               UTransDirection direction);
 
     void registerEntry(const UnicodeString& source,
                        const UnicodeString& target,
