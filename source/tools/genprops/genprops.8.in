@@ -70,6 +70,13 @@ Print help about usage and exit.
 .BR \-v\fP, \fB\-\-verbose
 Display extra informative messages during execution.
 .TP
+.BI "\-u\fP, \fB\-\-unicode" " version"
+Specify which
+.I version
+of Unicode the Unicode Character Database refers to.
+Defaults to
+.BR 3.0.0 .
+.TP
 .BI "\-c\fP, \fB\-\-copyright"
 Include a copyright notice into the binary data.
 .TP
