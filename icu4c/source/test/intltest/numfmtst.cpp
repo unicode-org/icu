@@ -314,8 +314,10 @@ NumberFormatTest::TestExponential(void)
             ParsePosition pos(0);
             Formattable af;
             fmt.parse(s, af, pos);
-            if (af.getType() == Formattable::kLong) {
-                int32_t a = af.getLong();
+            if (af.getType() == Formattable::kLong ||
+                af.getType() == Formattable::kInt64) {
+                UErrorCode status = U_ZERO_ERROR;
+                int32_t a = af.getLong(&status);
                 if (pos.getIndex() == s.length())
                 {
                     logln((UnicodeString)"  -parse-> " + a);
@@ -399,7 +401,7 @@ NumberFormatTest::TestInt64() {
 		expect(fmt, (Formattable)(int64_t)2147483647, "2.147483647E9");
 		expect(fmt, (Formattable)((int64_t)-2147483647-1), "-2.147483648E9");
 		expect(fmt, (Formattable)(int64_t)U_INT64_MAX, "9.223372036854775807E18");
-		expect(fmt, (Formattable)((int64_t)U_INT64_MIN), "-9.223372036854775808E18");
+		expect(fmt, (Formattable)(int64_t)U_INT64_MIN, "-9.223372036854775808E18");
 	}
 
 	// also test digitlist
@@ -1473,17 +1475,27 @@ void NumberFormatTest::TestAdoptDecimalFormatSymbols(void) {
 //----------------------------------------------------------------------
 
 UBool NumberFormatTest::equalValue(const Formattable& a, const Formattable& b) {
+    if (a.getType() == b.getType()) {
+        return a == b;
+    }
+
     if (a.getType() == Formattable::kLong) {
-        if (b.getType() == Formattable::kLong) {
+        if (b.getType() == Formattable::kInt64) {
             return a.getLong() == b.getLong();
         } else if (b.getType() == Formattable::kDouble) {
-            return (double) a.getLong() == b.getDouble();
+            return (double) a.getLong() == b.getDouble(); // TODO check use of double instead of long 
         }
     } else if (a.getType() == Formattable::kDouble) {
         if (b.getType() == Formattable::kLong) {
             return a.getDouble() == (double) b.getLong();
+        } else if (b.getType() == Formattable::kInt64) {
+            return a.getDouble() == (double)b.getInt64();
+        }
+    } else if (a.getType() == Formattable::kInt64) {
+        if (b.getType() == Formattable::kLong) {
+                return a.getInt64() == (int64_t)b.getLong();
         } else if (b.getType() == Formattable::kDouble) {
-            return a.getDouble() == b.getDouble();
+            return a.getInt64() == (int64_t)b.getDouble();
         }
     }
     return FALSE;
