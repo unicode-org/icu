@@ -1874,7 +1874,7 @@ compareArrays(const char *keyName,
 static void
 compareConsistentCountryInfo(const char *fromLocale, const char *toLocale) {
     UErrorCode errorCode = U_ZERO_ERROR;
-    UResourceBundle *fromDateTimeElements, *toDateTimeElements;
+    UResourceBundle *fromDateTimeElements, *toDateTimeElements, *fromWeekendData, *toWeekendData;
     UResourceBundle *fromArray, *toArray;
     UResourceBundle *fromLocaleBund = ures_open(NULL, fromLocale, &errorCode);
     UResourceBundle *toLocaleBund = ures_open(NULL, toLocale, &errorCode);
@@ -1887,15 +1887,23 @@ compareConsistentCountryInfo(const char *fromLocale, const char *toLocale) {
     fromCalendar = ures_getByKey(fromLocaleBund, "calendar", NULL, &errorCode);
     fromGregorian = ures_getByKeyWithFallback(fromCalendar, "gregorian", NULL, &errorCode);
     fromDateTimeElements = ures_getByKeyWithFallback(fromGregorian, "DateTimeElements", NULL, &errorCode);
-
+ 
     toCalendar = ures_getByKey(toLocaleBund, "calendar", NULL, &errorCode);
     toGregorian = ures_getByKeyWithFallback(toCalendar, "gregorian", NULL, &errorCode);
     toDateTimeElements = ures_getByKeyWithFallback(toGregorian, "DateTimeElements", NULL, &errorCode);
-
+    
     if(U_FAILURE(errorCode)){
         log_err("Did not get DateTimeElements from the bundle %s or %s\n", fromLocale, toLocale);
         return;
     }
+
+    fromWeekendData = ures_getByKeyWithFallback(fromGregorian, "weekend", NULL, &errorCode); 
+    toWeekendData = ures_getByKeyWithFallback(toGregorian, "weekend", NULL, &errorCode);
+    if(U_FAILURE(errorCode)){
+        log_err("Did not get weekend data from the bundle %s or %s\n", fromLocale, toLocale);
+        return;
+    }
+
     ures_close(fromCalendar);
     ures_close(toCalendar);
     ures_close(fromGregorian);
@@ -1926,6 +1934,32 @@ compareConsistentCountryInfo(const char *fromLocale, const char *toLocale) {
     }
     ures_close(fromDateTimeElements);
     ures_close(toDateTimeElements);
+    /* test for weekend data */
+    {
+        int32_t fromSize;
+        int32_t toSize;
+        int32_t idx;
+        const int32_t *fromBundleArr = ures_getIntVector(fromWeekendData, &fromSize, &errorCode);
+        const int32_t *toBundleArr = ures_getIntVector(toWeekendData, &toSize, &errorCode);
+
+        if (fromSize > toSize) {
+            fromSize = toSize;
+            log_err("Arrays are different size with key \"weekend\" data from \"%s\" to \"%s\"\n",
+                    fromLocale,
+                    toLocale);
+        }
+
+        for (idx = 0; idx < fromSize; idx++) {
+            if (fromBundleArr[idx] != toBundleArr[idx]) {
+                log_err("Difference with key \"weekend\" data at index %d from \"%s\" to \"%s\"\n",
+                        idx,
+                        fromLocale,
+                        toLocale);
+            }
+        }
+    }
+    ures_close(fromWeekendData);
+    ures_close(toWeekendData);
 
     fromArray = ures_getByKey(fromLocaleBund, "CurrencyElements", NULL, &errorCode);
     toArray = ures_getByKey(toLocaleBund, "CurrencyElements", NULL, &errorCode);
