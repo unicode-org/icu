@@ -1,0 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<title>ErrorCode</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<h1><font size="5">Error Handling (UErrorCode)</font></h1>
+
+<p><font size="5">Justification:</font> 
+
+<ul>
+  <li><font size="4">No dependency on C++ exceptions</font><br>
+    <font size="4">-- Not all C++ compilers handle exceptions</font> <br>
+    <font size="4">-- Exceptions not supported in C</font> </li>
+  <li><font size="4">Allows multithreading</font></li>
+</ul>
+
+<p><font size="5">Usage:</font> 
+
+<ul>
+  <li><font size="4">Caller allocates the error code</font><br>
+    <font size="3">-- on stack, local variable, input parameter</font> </li>
+  <li><font size="4">Caller sets error code to ZERO_ERROR when allocated</font></li>
+  <li><font size="4">Pass error code by reference to each function</font></li>
+  <li><font size="4">Functions that can signal an error</font><br>
+    <font size="3">-- Check error code on entry</font> <br>
+    <font size="3">-- Return immediately if not ZERO_ERROR</font> <br>
+    <font size="3">-- Pass same error code through to called functions</font> </li>
+  <li><font size="4">When error code is not ZERO_ERROR</font><br>
+    <font size="3">-- Attempt to cleanup allocated storage</font> <br>
+    <font size="3">-- Return</font></li>
+</ul>
+
+<p><a href="codeConv.html"><font size="3">code conventions</font></a> </p>
+
+<p>&nbsp; </p>
+</body>
+</html>
