@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/data/TestDataElements_testaliases.java,v $
-* $Date: 2003/06/03 18:49:27 $
-* $Revision: 1.6 $
+* $Date: 2003/10/07 17:24:18 $
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -19,20 +19,29 @@ public class TestDataElements_testaliases extends ICUListResourceBundle {
     public TestDataElements_testaliases  () {
           super.contents = data;
     }
-    private static Object[][] data = new Object[][] { 
+    static final Object[][] data = new Object[][] { 
                 {
                     "CollationElements",
                     new ICUListResourceBundle.Alias("/ICUDATA/uk"),
                 },
-
+// Circular aliases test moved to TestCircularAliases
+//               {
+//                   "aaa",
+//                    new ICUListResourceBundle.Alias("testaliases/aab"),
+//                },
+//                {
+//                    "aab",
+//                    new ICUListResourceBundle.Alias("testaliases/aaa"),
+//                },
                 {
                     "anotheralias",
                     new ICUListResourceBundle.Alias("/ICUDATA/uk/CollationElements"),
                 },
-                {
-                    "nonexisting",
-                    new ICUListResourceBundle.Alias("/ICUDATA/uk"),
-                },
+// Moved to TestNonExisting
+//                {
+//                    "nonexisting",
+//                    new ICUListResourceBundle.Alias("/ICUDATA/uk"),
+//                },
                 {
                     "referencingalias",
                     new ICUListResourceBundle.Alias("testaliases/anotheralias/Sequence"),
@@ -40,6 +49,37 @@ public class TestDataElements_testaliases extends ICUListResourceBundle {
                 {
                     "simplealias",
                     new ICUListResourceBundle.Alias("testtypes/menu/file/open"),
+                },
+                {
+                    "testGetStringByIndexAliasing",
+                    new Object[]{
+                        new ICUListResourceBundle.Alias("/ICUDATA/en/zoneStrings/0/0"),
+                        new ICUListResourceBundle.Alias("/ICUDATA/en/zoneStrings/0/1"),
+                        new ICUListResourceBundle.Alias("/ICUDATA/en/zoneStrings/0/4"),
+                        new ICUListResourceBundle.Alias("/ICUDATA/en/zoneStrings/0/5"),
+
+                    },
+                },
+                {
+                    "testGetStringByKeyAliasing",
+                    new Object[][]{
+                        {
+                            "KeyAlias0PST",
+                            new ICUListResourceBundle.Alias("/ICUDATA/en/zoneStrings/0/0"),
+                        },
+                        {
+                            "KeyAlias1PacificStandardTime",
+                            new ICUListResourceBundle.Alias("/ICUDATA/en/zoneStrings/0/1"),
+                        },
+                        {
+                            "KeyAlias2PDT",
+                            new ICUListResourceBundle.Alias("/ICUDATA/en/zoneStrings/0/4"),
+                        },
+                        {
+                            "KeyAlias3LosAngeles",
+                            new ICUListResourceBundle.Alias("/ICUDATA/en/zoneStrings/0/5"),
+                        },
+                    },
                 },
                 {
                     "zoneStrings",

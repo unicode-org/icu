@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/ICUListResourceBundle.java,v $
- * $Date: 2003/06/03 18:49:32 $
- * $Revision: 1.11 $
+ * $Date: 2003/10/07 17:24:18 $
+ * $Revision: 1.12 $
  *
  *******************************************************************************
  */
@@ -58,7 +58,7 @@ public class ICUListResourceBundle extends ListResourceBundle {
         if (realContents == null) {
             realContents = contents;
             for (int i = 0; i < contents.length; ++i) {
-                Object newValue = getRedirectedResource((String)contents[i][0],contents[i][1]);
+                Object newValue = getRedirectedResource((String)contents[i][0],contents[i][1], -1);
                 if (newValue != null) {
                     if (realContents == contents) {
                          realContents = (Object[][])contents.clone();
@@ -75,7 +75,7 @@ public class ICUListResourceBundle extends ListResourceBundle {
      * Return null if value is already in existing contents array, otherwise fetch the
      * real value and return it.
      */
-    private Object getRedirectedResource(String key, Object value) {
+    private Object getRedirectedResource(String key, Object value, int index) {
 
         if (value instanceof Object[][]) {
             Object[][] aValue = (Object[][])value;
@@ -83,16 +83,24 @@ public class ICUListResourceBundle extends ListResourceBundle {
             while(i < aValue.length){
                 int j=0;
                 while(j < aValue[i].length){
-                    aValue[i][j] = getRedirectedResource((String)aValue[i][0],aValue[i][j]);
+                    aValue[i][j] = getRedirectedResource((String)aValue[i][0],aValue[i][j], i);
                     j++;
                 }
                 i++;
             }
+        }else if (value instanceof Object[]){
+            Object[] aValue = (Object[]) value;
+            int i=0;
+            while( i < aValue.length){
+                aValue[i] = getRedirectedResource(key,aValue[i], i);
+                i++;
+            }
         }else if(value instanceof Alias){
+        
             String cName = this.getClass().getName();
             visited.clear();
             visited.put(cName+key,"");
-            return ((Alias)value).getResource(cName,key,visited);
+            return ((Alias)value).getResource(cName,key,index, visited);
         }else if(value instanceof RedirectedResource){
             return ((RedirectedResource)value).getResource(this);
         }
@@ -268,7 +276,7 @@ public class ICUListResourceBundle extends ListResourceBundle {
         private String pathToResource;
 
 
-        private Object getResource(String className,String parentKey, Hashtable visited){
+        private Object getResource(String className, String parentKey, int index, Hashtable visited){
             String packageName=null,bundleName=null, locale=null, keyPath=null;
 
             if(pathToResource.indexOf(RES_PATH_SEP_CHAR)==0){
@@ -306,13 +314,13 @@ public class ICUListResourceBundle extends ListResourceBundle {
                 }
 
             }
-
             ResourceBundle bundle = null;
             // getResourceBundle guarantees that the CLASSPATH will be searched
             // for loading the resource with name <bundleName>_<localeName>.class
             bundle = ICULocaleData.getResourceBundle(packageName,bundleName,locale);
-
-            return findResource(bundle,className,keyPath, visited);
+            
+            return findResource(bundle, className, parentKey, index, keyPath, visited);
+        
         }
 
 
@@ -347,7 +355,7 @@ public class ICUListResourceBundle extends ListResourceBundle {
             }
             return null;
         }
-        private Object findResource(Object o , String[] keys, int start){
+        private Object findResource(Object o , String[] keys, int start, int index){
             Object obj = o;
             if( start < keys.length && keys[start] !=null){
                 if(obj instanceof Object[][]){
@@ -356,37 +364,49 @@ public class ICUListResourceBundle extends ListResourceBundle {
                     obj = ((Object[])obj)[getIndex(keys[start])];
                 }
                 if(start+1 < keys.length && keys[start+1] !=null){
-                    obj = findResource(obj,keys,start+1);
+                    obj = findResource(obj,keys,start+1, index);
+                }
+            }else{
+                //try to find the corresponding index resource
+                if(index>=0){
+                    if(obj instanceof Object[][]){
+                        obj = findResource((Object[][])obj,Integer.toString(index));
+                    }else if(obj instanceof Object[]){
+                        obj = ((Object[])obj)[index];
+                    }
                 }
             }
             return obj;
         }
-        private Object findResource(ResourceBundle bundle,String className,String key, Hashtable visited){
-            if(key==null){
-                return ((ICUListResourceBundle)bundle).getContents();
-            }
-            if(visited.get(className+key)!=null){
-                throw new MissingResourceException("Circular Aliases in bundle.",bundle.getClass().getName(),key);
-            }
+        private Object findResource(ResourceBundle bundle, String className, String requestedKey, int index, String aliasKey, Hashtable visited){
 
-            visited.put(className+key,"");
+            if(aliasKey != null && visited.get(className+aliasKey)!=null){
+                throw new MissingResourceException("Circular Aliases in bundle.",bundle.getClass().getName(),requestedKey);
+            }
+            if(aliasKey==null){
+                // currently we do an implicit key lookup
+                // return ((ICUListResourceBundle)bundle).getContents();
+                aliasKey = requestedKey;
+            }
+            
+            visited.put(className+requestedKey,"");
 
-            String[] keys = split(key,RES_PATH_SEP_CHAR);
+            String[] keys = split(aliasKey,RES_PATH_SEP_CHAR);
             Object o =null;
             if(keys.length>0){
                 o = bundle.getObject(keys[0]);
-                o = findResource(o,keys,1);
+                o = findResource(o, keys, 1, index);
             }
-            o=resolveAliases(o,className,key,visited);
+            o=resolveAliases(o,className,aliasKey,visited);
             return o;
         }
         private  Object resolveAliases(Object o,String className,String key, Hashtable visited){
             if(o instanceof Object[][]){
-                o = resolveAliases((Object[][])o,className,key,visited);
+                o = resolveAliases((Object[][])o,className,key, visited);
             }else if(o instanceof Object[]){
-                 o = resolveAliases((Object[])o,className,key,visited);
+                 o = resolveAliases((Object[])o,className,key, visited);
             }else if(o instanceof Alias){
-                return ((Alias)o).getResource(className,key,visited);
+                return ((Alias)o).getResource(className,key, -1, visited);
             }
             return o;
         }
