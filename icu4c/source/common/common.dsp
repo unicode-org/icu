@@ -1391,6 +1391,53 @@ InputPath=.\unicode\schriter.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\unicode\strenum.h
+
+!IF  "$(CFG)" == "common - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\strenum.h
+
+"..\..\include\unicode\strenum.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "common - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\strenum.h
+
+"..\..\include\unicode\strenum.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "common - Win64 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\strenum.h
+
+"..\..\include\unicode\strenum.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "common - Win64 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\strenum.h
+
+"..\..\include\unicode\strenum.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\symtable.h
 # End Source File
 # Begin Source File
