@@ -15,7 +15,7 @@ CollationEnglishTest::CollationEnglishTest()
 : myCollation(0)
 {
     UErrorCode status = U_ZERO_ERROR;
-    myCollation = Collator::createInstance(Locale::ENGLISH, status);
+    myCollation = Collator::createInstance(Locale::getEnglish(), status);
 }
 
 CollationEnglishTest::~CollationEnglishTest()

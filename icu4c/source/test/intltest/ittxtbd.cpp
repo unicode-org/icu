@@ -672,7 +672,7 @@ void IntlTestTextBoundary::TestLineIteration()
 void IntlTestTextBoundary::TestLineInvariants()
 {
     UErrorCode status = U_ZERO_ERROR;
-    BreakIterator *e = BreakIterator::createLineInstance(Locale::US, status);
+    BreakIterator *e = BreakIterator::createLineInstance(Locale::getUS(), status);
     if (U_FAILURE(status))
     {
         errln("Failed to create the BreakIterator for default locale in TestLineInvariants.\n");
@@ -1035,7 +1035,7 @@ void IntlTestTextBoundary::TestJapaneseLineBreak()
         // ":;\\u309b\\u309c\\u3005\\u309d\\u309e\\u30fd\\u30fe\\u2019\\u201d\\u00b0\\u2032\\u2033\\u2034"
         ":;\\u309b\\u309c\\u3005\\u309d\\u309e\\u30fd\\u00b0\\u2032\\u2033\\u2034"
         "\\u2030\\u2031\\u2103\\u2109\\u00a2\\u0300\\u0301\\u0302");
-    BreakIterator *iter = BreakIterator::createLineInstance(Locale::JAPAN, status);
+    BreakIterator *iter = BreakIterator::createLineInstance(Locale::getJapan(), status);
 
     int32_t i;
     if (U_FAILURE(status))

@@ -22,7 +22,7 @@ void IntlTestDecimalFormatAPI::runIndexedTest( int32_t index, UBool exec, const 
                 if (exec) {
                     logln((UnicodeString)"DecimalFormat API test---"); logln((UnicodeString)"");
                     UErrorCode status = U_ZERO_ERROR;
-                    Locale::setDefault(Locale::ENGLISH, status);
+                    Locale::setDefault(Locale::getEnglish(), status);
                     if(U_FAILURE(status)) {
                         errln((UnicodeString)"ERROR: Could not set default locale, test may not give correct results");
                     }
@@ -65,7 +65,7 @@ void IntlTestDecimalFormatAPI::testAPI(/*char *par*/)
     }
 
     status = U_ZERO_ERROR;
-    DecimalFormatSymbols *symbols = new DecimalFormatSymbols(Locale::FRENCH, status);
+    DecimalFormatSymbols *symbols = new DecimalFormatSymbols(Locale::getFrench(), status);
     if(U_FAILURE(status)) {
         errln((UnicodeString)"ERROR: Could not create DecimalFormatSymbols (French)");
     }

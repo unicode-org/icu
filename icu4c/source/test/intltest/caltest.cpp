@@ -326,11 +326,11 @@ CalendarTest::TestGenericAPI()
         }
     }
 
-    cal = Calendar::createInstance(TimeZone::createDefault(), Locale::ENGLISH, status);
+    cal = Calendar::createInstance(TimeZone::createDefault(), Locale::getEnglish(), status);
     if (failure(status, "Calendar::createInstance")) return;
     delete cal;
 
-    cal = Calendar::createInstance(*zone, Locale::ENGLISH, status);
+    cal = Calendar::createInstance(*zone, Locale::getEnglish(), status);
     if (failure(status, "Calendar::createInstance")) return;
     delete cal;
 
@@ -338,14 +338,14 @@ CalendarTest::TestGenericAPI()
     if (failure(status, "new GregorianCalendar")) return;
     delete gc;
 
-    gc = new GregorianCalendar(Locale::ENGLISH, status);
+    gc = new GregorianCalendar(Locale::getEnglish(), status);
     if (failure(status, "new GregorianCalendar")) return;
     delete gc;
 
-    gc = new GregorianCalendar(Locale::ENGLISH, status);
+    gc = new GregorianCalendar(Locale::getEnglish(), status);
     delete gc;
 
-    gc = new GregorianCalendar(*zone, Locale::ENGLISH, status);
+    gc = new GregorianCalendar(*zone, Locale::getEnglish(), status);
     if (failure(status, "new GregorianCalendar")) return;
     delete gc;
 
@@ -362,7 +362,7 @@ CalendarTest::TestGenericAPI()
     if (gc->getTime(status) != date(98, 10, 14, 21, 43, 55) || U_FAILURE(status))
         errln("FAIL: new GregorianCalendar(ymdhms) failed");
 
-    GregorianCalendar gc2(Locale::ENGLISH, status);
+    GregorianCalendar gc2(Locale::getEnglish(), status);
     if (failure(status, "new GregorianCalendar")) return;
     gc2 = *gc;
     if (gc2 != *gc || !(gc2 == *gc)) errln("FAIL: GregorianCalendar assignment/operator==/operator!= failed");

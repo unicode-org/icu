@@ -67,7 +67,7 @@ void RBBIAPITest::TestCloneEquals()
     //    source and dest iterator produce the same next() after assignment.
     //    deleting one doesn't disable the other.
     logln("Testing assignment");
-    RuleBasedBreakIterator *bix = (RuleBasedBreakIterator *)BreakIterator::createLineInstance(Locale::ENGLISH, status);
+    RuleBasedBreakIterator *bix = (RuleBasedBreakIterator *)BreakIterator::createLineInstance(Locale::getEnglish(), status);
     if(U_FAILURE(status)){
         errln((UnicodeString)"FAIL : in construction");
         return;

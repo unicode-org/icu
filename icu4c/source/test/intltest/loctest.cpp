@@ -1051,7 +1051,7 @@ LocaleTest::TestSimpleDisplayNames()
     for (int32_t i = 0; i < 6; i++) {
         UnicodeString test;
         Locale l(languageCodes[i], "", "");
-        l.getDisplayLanguage(Locale::US, test);
+        l.getDisplayLanguage(Locale::getUS(), test);
         if (test != languageNames[i])
             errln("Got wrong display name for " + UnicodeString(languageCodes[i]) + ": Expected \"" +
                   languageNames[i] + "\", got \"" + test + "\".");

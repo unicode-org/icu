@@ -3178,10 +3178,10 @@ void TransliteratorTest::TestSpecialCases(void) {
             Normalizer::normalize(source, UNORM_NFKC, 0, target, ec);
         } else if (0==id.caseCompare("Lower", U_FOLD_CASE_DEFAULT)) {
             target = source;
-            target.toLower(Locale::US);
+            target.toLower(Locale::getUS());
         } else if (0==id.caseCompare("Upper", U_FOLD_CASE_DEFAULT)) {
             target = source;
-            target.toUpper(Locale::US);
+            target.toUpper(Locale::getUS());
         }
         if (U_FAILURE(ec)) {
             errln((UnicodeString)"FAIL: Internal error normalizing " + source);
