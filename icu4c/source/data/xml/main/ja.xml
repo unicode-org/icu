@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://www.unicode.org/cldr/dtd/1.1/ldml.dtd" 
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.1/ldml.dtd" 
 [
       <!ENTITY % icu SYSTEM " http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldmlICU.dtd"> 
 %icu;
@@ -20,9 +20,4 @@
 			</icu:scripts>
 		</special>
 	</characters>
-  <special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-    <icu:boundaries>
-      <icu:word icu:class="RuleBased" icu:append="true" icu:import="word_ja"/>
-    </icu:boundaries>
-  </special>
 </ldml>
