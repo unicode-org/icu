@@ -12,14 +12,9 @@
 #include "unicode/tblcoll.h"
 #include "unicode/coleitr.h"
 #include "unicode/ustring.h"
-
-/*===============================================
-=================================================
-    ---> MOVE SOMEWHERE ELSE !!! <---
-=================================================
-===============================================*/
 #include "unicode/normlzr.h"
 #include "cpputils.h"
+
 U_CAPI int32_t
 u_normalize(const UChar*            source,
         int32_t                 sourceLength, 
@@ -399,4 +394,11 @@ ucol_setOffset(    UCollationElements    *elems,
   if(U_FAILURE(*status)) return;
   
   ((CollationElementIterator*)elems)->setOffset(offset, *status);
+}
+
+U_CAPI void 
+ucol_getVersion(const UCollator* coll, 
+                UVersionInfo versionInfo) 
+{
+    ((Collator*)coll)->getVersion(versionInfo);
 }

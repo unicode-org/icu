@@ -186,11 +186,6 @@ enum UCollationStrength {
 } ;
 typedef enum UCollationStrength UCollationStrength;
 
-/*===============================================
-=================================================
-    ---> MOVE SOMEWHERE ELSE !!! <---
-=================================================
-===============================================*/
 /**
  * @name Unicode normalization API
  *
@@ -743,5 +738,13 @@ U_CAPI void
 ucol_setOffset(    UCollationElements    *elems,
         UTextOffset        offset,
         UErrorCode        *status);
+
+/**
+ * Gets the version information for a Collator. 
+ * @param info the version # information, the result will be filled in
+ * @stable
+ */
+U_CAPI void U_EXPORT2
+ucol_getVersion(const UCollator* coll, UVersionInfo info);
 
 #endif
