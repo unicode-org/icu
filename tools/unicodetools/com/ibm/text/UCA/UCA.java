@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/UCA.java,v $ 
-* $Date: 2002/06/04 01:58:56 $ 
-* $Revision: 1.13 $
+* $Date: 2002/06/15 02:47:12 $ 
+* $Revision: 1.14 $
 *
 *******************************************************************************
 */
@@ -24,6 +24,7 @@ import com.ibm.text.UCD.Normalizer;
 import com.ibm.text.UCD.UCD;
 import com.ibm.text.utility.*;
 import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeSet;
 
 //import com.ibm.text.CollationData.*;
 
@@ -62,7 +63,7 @@ This is because of shared
 characters between scripts with different directions, like French with Arabic or Greek.
 */
 
-final public class UCA implements Comparator {
+final public class UCA implements Comparator, UCA_Types {
     public static final String copyright = 
       "Copyright (C) 2000, IBM Corp. and others. All Rights Reserved.";
       
@@ -85,19 +86,13 @@ final public class UCA implements Comparator {
     // base directory will change depending on the installation
     public static final String BASE_DIR = "c:\\DATA\\";
     
-    /** Enum for alternate handling */
-    public static final byte SHIFTED = 0, ZEROED = 1, NON_IGNORABLE = 2, SHIFTED_TRIMMED = 3, LAST = 3;
-    
-    /**
-     * Used to terminate a list of CEs
-     */
-    public static final int TERMINATOR = 0xFFFFFFFF;   // CE that marks end of string
-         
     
 // =============================================================
 // Test Settings
 // =============================================================
     static final boolean DEBUG = false;
+    static final boolean DEBUG_SHOW_LINE = false;
+    
     static final boolean SHOW_STATS = true;
     
     static final boolean SHOW_CE = false;
@@ -109,6 +104,7 @@ final public class UCA implements Comparator {
     static final boolean RECORDING_CHARS = true;
     
     private UCD ucd;
+    private UCA_Data ucaData;
     
 // =============================================================
 // Main Methods
@@ -121,11 +117,7 @@ final public class UCA implements Comparator {
      */
     public UCA(BufferedReader source, String unicodeVersion) throws java.io.IOException {
         fullData = source == null;
-
-        // clear some tables
-        for (int i = 0; i < collationElements.length; ++i) {
-            collationElements[i] = UNSUPPORTED;
-        }
+        
         // load the normalizer
         if (toD == null) {
             toD = new Normalizer(Normalizer.NFD, unicodeVersion);
@@ -133,6 +125,8 @@ final public class UCA implements Comparator {
         
         ucd = UCD.make(unicodeVersion);
         ucdVersion = ucd.getVersion();
+        
+        ucaData = new UCA_Data(toD, ucd);
         
         // either get the full sources, or just a demo set
         if (fullData) {
@@ -234,7 +228,7 @@ final public class UCA implements Comparator {
             }
             if (SHOW_CE) {
                 if (debugList.length() != 0) debugList.append("/");
-                debugList.append(ceToString(ce));
+                debugList.append(CEList.toString(ce));
             }
             
             // add weights
@@ -419,6 +413,35 @@ final public class UCA implements Comparator {
      * @param decomposition true for UCA, false where the text is guaranteed to be
      * normalization form C with no combining marks of class 0.
      * @param output array for output. Must be large enough on entry. When done, is terminated with TERMINATOR.
+     */
+    public void getCEs(String sourceString, boolean decomposition, IntStack output) {
+        decompositionBuffer.setLength(0);
+        if (decomposition) {
+            toD.normalize(sourceString, decompositionBuffer);
+        } else {
+            decompositionBuffer.append(sourceString);
+        }
+        rearrangeBuffer = EMPTY;            // clear the rearrange buffer (thai)
+        index = 0;
+
+        // process CEs, building weight strings
+        while (true) {
+            //fixQuaternatiesPosition = quaternaries.length();
+            int ce = getCE();
+            if (ce == 0) continue;
+            if (ce == TERMINATOR) break;
+            output.push(ce);
+        }
+    }
+    
+    
+    /**
+     * Returns a list of CEs for a unicode character at a position.
+     * @param sourceString string to make a sort key for.
+     * @param offset position in string
+     * @param decomposition true for UCA, false where the text is guaranteed to be
+     * normalization form C with no combining marks of class 0.
+     * @param output array for output. Must be large enough on entry. When done, is terminated with TERMINATOR.
      * @return count of CEs
      */
     public int getCEs(String sourceString, boolean decomposition, int[] output) {
@@ -478,14 +501,6 @@ final public class UCA implements Comparator {
     }
      
     /**
-     * CE Type
-     */
-    static final byte NORMAL_CE = 0, CONTRACTING_CE = 1, EXPANDING_CE = 2, 
-        CJK_CE = 3, CJK_AB_CE = 4, HANGUL_CE = 5, UNSUPPORTED_CE = 7,
-        FIXED_CE = 3;
-        // SURROGATE_CE = 6, 
-   
-    /**
      * Returns the char associated with a FIXED value
      */
     /*public char charFromFixed(int ce) {
@@ -497,28 +512,7 @@ final public class UCA implements Comparator {
      * Return the type of the CE
      */
     public byte getCEType(int ch) {
-        
-        if (ch > 0xFFFF) ch = UTF16.getLeadSurrogate(ch); // first if expands
-        
-        int ce = collationElements[ch];
-        if ((ce & EXCEPTION_CE_MASK) != EXCEPTION_CE_MASK) return NORMAL_CE;
-        if (ce == UNSUPPORTED) {
-            
-            // Special check for Han, Hangul
-            if (isHangul(ch)) return HANGUL_CE;
-            
-            if (isCJK(ch)) return CJK_CE;
-            if (isCJK_AB(ch)) return CJK_AB_CE;
-                        
-            // special check for unsupported surrogate pair, 20 1/8 bits
-            //if (0xD800 <= ch && ch <= 0xDFFF) {
-            //    return SURROGATE_CE;
-            //}
-            return UNSUPPORTED_CE;
-        }
-            
-        if (ce == CONTRACTING) return CONTRACTING_CE;
-        return EXPANDING_CE;
+        return ucaData.getCEType(ch);
     }
 
     /**
@@ -605,18 +599,10 @@ final public class UCA implements Comparator {
     }
     
     /**
-     * Produces a human-readable string for a collation element
-     */
-    static public String ceToString(int ce) {
-        return "[" + Utility.hex(getPrimary(ce)) + "." 
-          + Utility.hex(getSecondary(ce)) + "."
-          + Utility.hex(getTertiary(ce)) + "]";
-    }
-    
-    /**
      * Produces a human-readable string for a collation element.
      * value is terminated by -1!
      */
+     /*
     static public String ceToString(int[] ces, int len) {
         StringBuffer result = new StringBuffer();
         for (int i = 0; i < len; ++i) {
@@ -624,11 +610,13 @@ final public class UCA implements Comparator {
         }
         return result.toString();
     }
+    &/
     
     /**
      * Produces a human-readable string for a collation element.
      * value is terminated by -1!
      */
+     /*
     static public String ceToString(int[] ces) {
         StringBuffer result = new StringBuffer();
         for (int i = 0; ; ++i) {
@@ -637,7 +625,7 @@ final public class UCA implements Comparator {
         }
         return result.toString();
     }
-    
+    */
     
     static boolean isImplicitLeadCE(int ce) {
     	return isImplicitLeadPrimary(getPrimary(ce));
@@ -670,10 +658,10 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
      * and to get the second part use (x & 0xFFFF)
      */
     
-    static void CodepointToImplicit(int cp, int[] output) {
+    void CodepointToImplicit(int cp, int[] output) {
 		int base = UNSUPPORTED_OTHER_BASE;
-        if (isCJK(cp)) base = UNSUPPORTED_CJK_BASE;
-        else if (isCJK_AB(cp)) base = UNSUPPORTED_CJK_AB_BASE;
+        if (ucd.isCJK_BASE(cp)) base = UNSUPPORTED_CJK_BASE;
+        else if (ucd.isCJK_AB(cp)) base = UNSUPPORTED_CJK_AB_BASE;
         output[0] = base + (cp >>> 15);
         output[1] = (cp & 0x7FFF) | 0x8000;
     }
@@ -768,6 +756,9 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
 // Privates
 // =============================================================
     
+    
+    IntStack expandingStack = new IntStack(10);
+    
     /**
      * Array used to reorder surrogates to top of 16-bit range, and others down.
      * Adds 2000 to D800..DFFF, making them F800..FFFF
@@ -848,76 +839,12 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
 // =============================================================
 
     /**
-     * Used to composed Hangul and Han characters
-     */
-     
-    static final int NEUTRAL_SECONDARY = 0x20;
-    static final int NEUTRAL_TERTIARY = 0x02;
-    
-    /**
      * Temporary buffer used in getSortKey for the decomposed string
      */
     private StringBuffer decompositionBuffer = new StringBuffer();
     
-    /**
-     * The collation element data is stored a couple of different structures.
-     * First is collationElements, which generally contains the 32-bit CE corresponding
-     * to the data. It is directly indexed by character code.<br>
-     * For brevity in the implementation, we just use a flat array.
-     * A real implementation would use a multi-stage table, as described in TUS Section 5.
-     * table of simple collation elements, indexed by char.<br>
-     * Exceptional cases: expanding, contracting, unsupported are handled as described below.
-     */
-    private int[] collationElements = new int[65536];
-    
-    /**
-     * A special bit combination in a CE is used to reserve exception cases. This has the effect
-     * of removing a small number of the primary key values out of the 65536 possible.
-     */
-    private static final int EXCEPTION_CE_MASK = 0xF8000000;
-    
-       
-    /**
-     * Any unsupported characters (those not in the UCA data tables) 
-     * are marked with a exception bit combination
-     * so that they can be treated specially.<br>
-     * There are at least 34 values, so that we can use a range for surrogates
-     * However, we do add to the first weight if we have surrogate pairs!
-     */
-    private static final int UNSUPPORTED_CJK_BASE = 0xFF40;
-    private static final int UNSUPPORTED_CJK_AB_BASE = 0xFF80;
-    private static final int UNSUPPORTED_OTHER_BASE = 0xFFC0;
-    
-    private static final int UNSUPPORTED_BASE = UNSUPPORTED_CJK_BASE;
-    private static final int UNSUPPORTED_LIMIT = UNSUPPORTED_OTHER_BASE + 0x40;
-    
-    private static final int UNSUPPORTED = makeKey(UNSUPPORTED_BASE, NEUTRAL_SECONDARY, NEUTRAL_TERTIARY);
-    
     // was 0xFFC20101;
     
-    /**
-     * Contracting characters are marked with a exception bit combination 
-     * in the collationElement table.
-     * This means that they are the first character of a contraction, and need
-     * to be looked up (with following characters) in the contractingTable.<br>
-     * This isn't a MASK since there is exactly one value.
-     */
-    private static final int CONTRACTING = 0xFA310000;
-
-    /**
-     * Expanding characters are marked with a exception bit combination
-     * in the collationElement table.
-     * This means that they map to more than one CE, which is looked up in
-     * the expansionTable by index. See EXCEPTION_INDEX_MASK
-     */
-    private static final int EXPANDING_MASK = 0xFA300000; // marks expanding range start
-    
-    /**
-     * This mask is used to get the index from an EXPANDING exception.
-     * The contracting characters can also make use of this in a future optimization.
-     */
-    static final int EXCEPTION_INDEX_MASK = 0x0000FFFF;
- 
     /**
      * We take advantage of the variables being in a closed range to save a bit per CE.
      * The low and high values are initially set to be at the opposite ends of the range,
@@ -931,27 +858,18 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
     private int variableLowCE;  // used for testing against
     private int variableHighCE; // used for testing against
     
-    /**
-     * Although a single character can expand into multiple CEs, we don't want to burden
-     * the normal case with the storage. So, they get a special value in the collationElements
-     * array. This value has a distinct primary weight, followed by an index into a separate
-     * table called expandingTable. All of the CEs in that table, up to a TERMINATOR value
-     * will be used for the expansion. The implementation is as a stack; this just makes it
-     * easy to generate.
-     */
-    private IntStack expandingTable = new IntStack(3600); // initial number is from compKeys
-        
-    /**
-     * For now, this is just a simple mapping of strings to collation elements.
-     * The implementation depends on the contracting characters being "completed",
-     * so that it can be efficiently determined when to stop looking.
-     */
-    private Hashtable contractingTable = new Hashtable();
+    /*
     
-    /**
-     *  Special char value that means failed or terminated
-     */
-    private static final char NOT_A_CHAR = '\uFFFF';
+    private void fixSurrogateContraction(char ch) {
+        //if (DEBUGCHAR) System.out.println(Utility.hex(ch) + ": " + line.substring(0, position[0]) + "|" + line.substring(position[0]));            
+        if (ch == NOT_A_CHAR || !UTF16.isLeadSurrogate(ch)) return;
+        String chs = String.valueOf(ch);
+        Object probe = contractingTable.get(chs);
+        if (probe != null) return;
+        contractingTable.put(chs, new Integer(UNSUPPORTED));
+    }
+    
+    */
     
     /**
      * Marks whether we are using the full data set, or an abbreviated version for
@@ -965,11 +883,6 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
 // Made part of the object to avoid reallocating each time.
 // =============================================================
 
-    /**
-     * Stack for expanding characters
-     */
-    private IntStack expandingStack = new IntStack(100);
-    
     /**
      * Temporary buffers used in getSortKey to store weights
      * these are NOT strings of Unicode characters--they are
@@ -990,8 +903,6 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
      * Temporary with requested decomposition
      */
     boolean storedDecomposition;
-    int hangulHackBottom;
-    int hangulHackTop;
     
     /**
      * Used for supporting Thai rearrangement
@@ -1015,7 +926,7 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
      * (normalized) character code.
      */
     private int getCE() {
-        if (!expandingStack.isEmpty()) return expandingStack.pop();
+        if (!expandingStack.isEmpty()) return expandingStack.popFront();
         char ch;
         
         // Fetch next character. Handle rearrangement for Thai, etc.
@@ -1037,190 +948,56 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
             }
         }
         
-        int ce = collationElements[ch];
-        
-        // Hangul tailoring hack
-        //if (!storedDecomposition && hangulHackBottom <= ce && ce < hangulHackTop) return fixJamo(ch, ce);   // hard coded fix!!
-
-        // if the CE is not exceptional (unsupported, contracting, expanding) we are done.
-        if ((ce & EXCEPTION_CE_MASK) != EXCEPTION_CE_MASK) return ce;
-        
-        if (ce == UNSUPPORTED) {
-            int bigChar = ch;
+        index = ucaData.get(ch, decompositionBuffer, index, expandingStack);
+        int ce = expandingStack.popFront(); // pop first (guaranteed to exist!)
+        if (ce == UNSUPPORTED_FLAG) {
+            return handleUnsupported(ch);
+        }
+        return ce;
+    }
+    
+    private int handleUnsupported(char ch) {
+        int bigChar = ch;
             
-            // Special check for Hangul
-            if (isHangul(bigChar)) {
-                // MUST DECOMPOSE!!
-                hangulBuffer = new StringBuffer();
-                decomposeHangul(bigChar, hangulBuffer);
-                return getCE();
-                // RECURSIVE!!!
-            }
+        // Special check for Hangul
+        if (ucd.isHangulSyllable(bigChar)) {
+            // MUST DECOMPOSE!!
+            hangulBuffer = new StringBuffer();
+            decomposeHangul(bigChar, hangulBuffer);
+            return getCE();
+            // RECURSIVE!!!
+        }
+        
+        // special check and fix for unsupported surrogate pair, 20 1/8 bits
+        if (0xD800 <= bigChar && bigChar <= 0xDFFF) {
+            // ignore unmatched surrogates (e.g. return zero)
+            if (bigChar >= 0xDC00 || index >= decompositionBuffer.length()) return 0; // unmatched
+            int ch2 = decompositionBuffer.charAt(index);
+            if (ch2 < 0xDC00 || 0xDFFF < ch2) return 0;  // unmatched
+            index++; // skip next char
+            bigChar = 0x10000 + ((ch - 0xD800) << 10) + (ch2 - 0xDC00); // extract value
+        }
+
                         
-            if (ucd.isNoncharacter(bigChar)) { // illegal code value, ignore!!
-                return 0;
-            }
+        if (ucd.isNoncharacter(bigChar)) { // illegal code value, ignore!!
+            return 0;
+        }
             
-            // special check and fix for unsupported surrogate pair, 20 1/8 bits
-            if (0xD800 <= bigChar && bigChar <= 0xDFFF) {
-                // ignore unmatched surrogates (e.g. return zero)
-                if (bigChar >= 0xDC00 || index >= decompositionBuffer.length()) return 0; // unmatched
-                int ch2 = decompositionBuffer.charAt(index);
-                if (ch2 < 0xDC00 || 0xDFFF < ch2) return 0;  // unmatched
-                index++; // skip next char
-                bigChar = 0x10000 + ((ch - 0xD800) << 10) + (ch2 - 0xDC00); // extract value
-            }
-
-			// find the implicit values; returned in 0 and 1
-			int[] implicit = new int[2];
-			CodepointToImplicit(bigChar, implicit);
+		// find the implicit values; returned in 0 and 1
+		int[] implicit = new int[2];
+		CodepointToImplicit(bigChar, implicit);
 			
-            // Now compose the two keys
-            // first push BBBB, which is #1
+        // Now compose the two keys
+            
+        // push BBBB
                         
-            expandingStack.push(makeKey(implicit[1], NEUTRAL_SECONDARY, NEUTRAL_TERTIARY));
+        expandingStack.push(makeKey(implicit[1], NEUTRAL_SECONDARY, NEUTRAL_TERTIARY));
+        
+        // return AAAA
             
-            // now return AAAA, which is #0
-            
-            return makeKey(implicit[0], NEUTRAL_SECONDARY, NEUTRAL_TERTIARY);
+        return makeKey(implicit[0], NEUTRAL_SECONDARY, NEUTRAL_TERTIARY);
+        
 
-        }
-        if (ce == CONTRACTING) {
-            // Contracting is probably the most interesting (read "tricky") part
-            // of the algorithm.
-            // First get longest substring that is in the contracting table.
-            // For simplicity, we use a hash table for contracting.
-            // There are much better optimizations, 
-            // but they take a more complicated build algorithm than we want to show here.
-            // NOTE: We are guaranteed that the character itself is in the contracting table because
-            // of the build process.
-            String probe = String.valueOf(ch);
-            Object value = contractingTable.get(probe);
-            if (value == null) throw new IllegalArgumentException("Missing value for " + Utility.hex(ch));
-            
-            // We loop, trying to add successive characters to the longest substring.
-            while (index < decompositionBuffer.length()) {
-                char ch2 = decompositionBuffer.charAt(index);
-                
-                // see whether the current string plus the next char are in
-                // the contracting table.
-                String newProbe = probe + ch2;
-                Object newValue = contractingTable.get(newProbe);
-                if (newValue == null) break;    // stop if not in table.
-                
-                // We succeeded--so update our new values, and set index
-                // and quaternary to indicate that we swallowed another character.
-                probe = newProbe;
-                value = newValue;
-                index++;
-            }
-            
-            // Now, see if we can add any combining marks
-            short lastCan = 0;
-            for (int i = index; i < decompositionBuffer.length(); ++i) {
-                // We only take certain characters. They have to be accents,
-                // and they have to not be blocked.
-                // Unlike above, if we don't find a match (and it was an accent!)
-                // then we don't stop, we continue looping.
-                char ch2 = decompositionBuffer.charAt(i);
-                short can = toD.getCanonicalClass(ch2);
-                if (can == 0) break;            // stop with any zero (non-accent)
-                if (can == lastCan) continue;   // blocked if same class as last
-                lastCan = can;                  // remember for next time
-                
-                // Now see if we can successfully add it onto our string
-                // and find it in the contracting table.
-                String newProbe = probe + ch2;
-                Object newValue = contractingTable.get(newProbe);
-                if (newValue == null) continue;
-
-                // We succeeded--so update our new values, remove the char, and update
-                // quaternary to indicate that we swallowed another character.
-                probe = newProbe;
-                value = newValue;
-                decompositionBuffer.setCharAt(i,'\u0000');  // zero char
-            }
-            
-            // we are all done, and can extract the CE from the last value set.
-            ce = ((Integer)value).intValue();
-            // if the CE is not exceptional (unsupported expanding) we are done.
-            // BTW we will never have a contracting CE at this point.
-            if ((ce & EXCEPTION_CE_MASK) != EXCEPTION_CE_MASK) return ce;
-            // otherwise fall through to expansion
-        }
-        // expanding, so copy list of items onto stack
-        int index = ce & EXCEPTION_INDEX_MASK; // get index
-        // copy onto stack from index until reach TERMINATOR
-        while (true) {
-            ce = expandingTable.get(index++);
-            if (ce == TERMINATOR) break;
-            expandingStack.push(ce);
-        }
-        return expandingStack.pop(); // pop last (guaranteed to exist!)
-    }
-    
-    // Neither Mapped nor Composite CJK: [\u3400-\u4DB5\u4E00-\u9FA5\U00020000-\U0002A6D6]
-    
-    public static boolean isCJK(int cp) {
-        return (CJK_BASE <= cp && cp < CJK_LIMIT 
-        || cp == 0xFA0E	// compat characters that don't decompose.
-        || cp == 0xFA0F
-        || cp == 0xFA11
-        || cp == 0xFA13
-        || cp == 0xFA14
-        || cp == 0xFA1F
-        || cp == 0xFA21
-        || cp == 0xFA23
-        || cp == 0xFA24
-        || cp == 0xFA27
-        || cp == 0xFA28
-        || cp == 0xFA29
-        || cp == 0xFA2E
-        || cp == 0xFA2F
-        );
-    }
-    
-    public static final int 
-    	CJK_BASE = 0x4E00,
-    	CJK_LIMIT = 0x9FFF+1,
-    	CJK_COMPAT_USED_BASE = 0xFA0E,
-    	CJK_COMPAT_USED_LIMIT = 0xFA2F+1,
-    	CJK_A_BASE = 0x3400,
-    	CJK_A_LIMIT = 0x4DBF+1,
-    	CJK_B_BASE = 0x20000,
-    	CJK_B_LIMIT = 0x2A6DF+1;
-    
-    public static final boolean isCJK_AB(int bigChar) {
-        return (CJK_A_BASE <= bigChar && bigChar < CJK_A_LIMIT
-             || CJK_B_BASE <= bigChar && bigChar < CJK_B_LIMIT);
-    }
-/*
-2E80..2EFF; CJK Radicals Supplement
-2F00..2FDF; Kangxi Radicals
-
-3400..4DBF; CJK Unified Ideographs Extension A
-4E00..9FFF; CJK Unified Ideographs
-F900..FAFF; CJK Compatibility Ideographs
-
-20000..2A6DF; CJK Unified Ideographs Extension B
-2F800..2FA1F; CJK Compatibility Ideographs Supplement
-
-Compat:
-# F900..FA0D     [270] CJK COMPATIBILITY IDEOGRAPH-F900..CJK COMPATIBILITY IDEOGRAPH-FA0D
-# FA10                 CJK COMPATIBILITY IDEOGRAPH-FA10
-# FA12                 CJK COMPATIBILITY IDEOGRAPH-FA12
-# FA15..FA1E      [10] CJK COMPATIBILITY IDEOGRAPH-FA15..CJK COMPATIBILITY IDEOGRAPH-FA1E
-# FA20                 CJK COMPATIBILITY IDEOGRAPH-FA20
-# FA22                 CJK COMPATIBILITY IDEOGRAPH-FA22
-# FA25..FA26       [2] CJK COMPATIBILITY IDEOGRAPH-FA25..CJK COMPATIBILITY IDEOGRAPH-FA26
-# FA2A..FA2D       [4] CJK COMPATIBILITY IDEOGRAPH-FA2A..CJK COMPATIBILITY IDEOGRAPH-FA2D
-# FA30..FA6A      [59] CJK COMPATIBILITY IDEOGRAPH-FA30..CJK COMPATIBILITY IDEOGRAPH-FA6A
-# 2F800..2FA1D   [542] CJK COMPATIBILITY IDEOGRAPH-2F800..CJK COMPATIBILITY IDEOGRAPH-2FA1D
-
-*/
-    
-    private final boolean isHangul(int bigChar) {
-        return (0xAC00 <= bigChar && bigChar <= 0xD7A3);
     }
     
     /**
@@ -1287,12 +1064,12 @@ Compat:
      */
     private int count1 = 0, count2 = 0, count3 = 0, max2 = 0, max3 = 0;
     private int oldKey1 = -1, oldKey2 = -1, oldKey3 = -1;
-    Map multiTable = new TreeMap();
-    BitSet found = new BitSet();
+    UnicodeSet found = new UnicodeSet();
     
-    public Hashtable getContracting() {
+    /*public Hashtable getContracting() {
         return new Hashtable(multiTable);
     }
+    */
     
     public UCAContents getContents(byte ceLimit, Normalizer skipDecomps) {
         return new UCAContents(ceLimit, skipDecomps, ucdVersion);
@@ -1317,6 +1094,16 @@ Compat:
             this.ceLimit = ceLimit;
             this.nfd = new Normalizer(Normalizer.NFD, unicodeVersion);
             this.skipDecomps = skipDecomps;
+            
+            // FIX SAMPLES
+            if (SAMPLE_RANGES[0][0] == 0) {
+                for (int i = 0; ; ++i) { // add first unallocated character
+                    if (!ucd.isAssigned(i)) {
+                        SAMPLE_RANGES[0][0] = i;
+                        break;
+                    }
+                }
+            }
         }
         
         /**
@@ -1334,7 +1121,9 @@ Compat:
             
             // normal case
             while (current++ < 0x10FFFF) {
-
+                if (current == 0x406) {
+                    System.out.println("DEBUG");
+                }
                 //char ch = (char)current;
                 byte type = getCEType(current);
                 if (type >= ceLimit || type == CONTRACTING_CE) continue;
@@ -1349,15 +1138,18 @@ Compat:
             }
             
             // contractions
-            if (enum == null) enum = multiTable.keySet().iterator();
-            if (enum.hasNext()) {
+            if (enum == null) enum = ucaData.getContractions();
+            while (enum.hasNext()) {
                 result = (String)enum.next();
+                if (result.length() == 1 && UTF16.isLeadSurrogate(result.charAt(0))) {
+                    //System.out.println("Skipping " + ucd.getCodeAndName(result));
+                    continue; // try again
+                }
                 return result;
             }
             
             // extra samples
             if (currentRange < SAMPLE_RANGES.length) {
-            	System.out.println("*");
                 try {
                     result = UTF16.valueOf(itemInRange);
                 } catch (RuntimeException e) {
@@ -1372,10 +1164,11 @@ Compat:
                         endOfRange = SAMPLE_RANGES[currentRange].length > 1
                             ? SAMPLE_RANGES[currentRange][1]
                             : startOfRange;
-                        skip = ((endOfRange - startOfRange) / 513);
+                        //skip = ((endOfRange - startOfRange) / 3);
                     }
-                } else if (itemInRange > startOfRange + 9 && itemInRange < endOfRange - 9 - skip) {
-                    itemInRange += skip;
+                } else if (itemInRange > startOfRange + 5 && itemInRange < endOfRange - 5 /* - skip*/) {
+                    //itemInRange += skip;
+                    itemInRange = endOfRange - 5;
                 }
             }
             
@@ -1410,14 +1203,16 @@ Compat:
     }
     
     static final int[][] SAMPLE_RANGES = {
-                {0x10000},
-                {0x10FFFF},
-                {0x0220},
+                {0}, // LEAVE EMPTY--Turns into first unassigned character
                 {0xFFF0}, 
                 {0xD800},
                 {0xDFFF},
                 {0xFFFE},
                 {0xFFFF},
+                {0x10000},
+                {0xC0000},
+                {0xD0000},
+                {0x10FFFF},
                 {0x10FFFE},
                 {0x10FFFF},
                 {0x3400, 0x4DB5},
@@ -1426,7 +1221,7 @@ Compat:
                 {0xA000, 0xA48C},
                 {0xE000, 0xF8FF},
                 {0x20000, 0x2A6D6},
-                {0xE0000, 0xE00FF},
+                {0xE0000, 0xE007E},
                 {0xF0000, 0xF00FD},
                 {0xFFF00, 0xFFFFD},
                 {0x100000, 0x1000FD},
@@ -1438,7 +1233,7 @@ Compat:
      * Values will override any previous mappings.
      */
     private void addCollationElements(BufferedReader in) throws java.io.IOException {
-        IntStack tempStack = new IntStack(100); // used for reversal
+        IntStack tempStack = new IntStack(100);
         StringBuffer multiChars = new StringBuffer(); // used for contracting chars
         String inputLine = "";
         boolean[] wasImplicitLeadPrimary = new boolean[1];
@@ -1448,6 +1243,10 @@ Compat:
             if (inputLine == null) break;       // means file is done
             String line = cleanLine(inputLine); // remove comments, extra whitespace
             if (line.length() == 0) continue;   // skip empty lines
+            
+            if (DEBUG_SHOW_LINE) {
+                System.out.println("Processing: " + inputLine);
+            } 
 
             position[0] = 0;                    // start at front of line
             if (line.startsWith("@version")) {
@@ -1464,29 +1263,21 @@ Compat:
             }
             
             // collect characters
-            char value = getChar(line, position);
-            fixSurrogateContraction(value);
-            char value2 = getChar(line, position);
             multiChars.setLength(0);            // clear buffer
-            if (value2 != NOT_A_CHAR) {
-                fixSurrogateContraction(value2);
-                multiChars.append(value);       // append until we get terminator
+            
+            char value = getChar(line, position);
+            multiChars.append(value);
+            
+            //fixSurrogateContraction(value);
+            char value2 = getChar(line, position);
+            // append until we get terminator
+            while (value2 != NOT_A_CHAR) {
                 multiChars.append(value2);
-                while (true) {
-                    value2 = getChar(line, position);
-                    if (value2 == NOT_A_CHAR) break;
-                    fixSurrogateContraction(value2);
-                    multiChars.append(value2);
-                }
+                value2 = getChar(line, position);
             }
+
             if (RECORDING_CHARS) {
-                if (multiChars.length() > 1) {
-                    multiTable.put(multiChars.toString(), "");
-                }
-                found.set(value);
-                for (int i = 1; i < multiChars.length(); ++i) {
-                    found.set(multiChars.charAt(i));
-                }
+                found.addAll(multiChars.toString());
             }
             if (!fullData && RECORDING_DATA) {
                 if (value == 0 || value == '\t' || value == '\n' || value == '\r'
@@ -1522,141 +1313,69 @@ Compat:
                     }
                 }
             }
-            if (ce2 != TERMINATOR) { // have expanding character!
-                // put list into the expanding table
-                // use a temporary stack to get them in reverse order
-                tempStack.push(ce);
-                tempStack.push(ce2);
-                // set collationElement to exception value, plus index
-                ce = EXPANDING_MASK | expandingTable.getTop();
-                while (true) {
-                    ce2 = getCEFromLine(value, line, position, record, wasImplicitLeadPrimary);
-                    if (ce2 == TERMINATOR) break;
-                    tempStack.push(ce2);
-                } 
-                // push onto expanding table, now in reverse order
-                while (!tempStack.isEmpty()) expandingTable.push(tempStack.pop());
-                expandingTable.push(TERMINATOR);
-            }
             
-            //if (value == 0xd801) System.out.print("DEBUG: " + line);
-            	
-            // assign CE(s) to char(s)
-            if (multiChars.length() > 0) {
-                contractingTable.put(multiChars.toString(), new Integer(ce));
-                if (collationElements[value] == UNSUPPORTED) {
-                    collationElements[value] = CONTRACTING; // mark special
-                } else if (collationElements[value] != CONTRACTING) {
-                    // move old value to contracting table!
-                    contractingTable.put(String.valueOf(value), new Integer(collationElements[value]));
-                    collationElements[value] = CONTRACTING; // signal we must look up in table
-                }
-            } else if (collationElements[value] == CONTRACTING) {
-                // must add old value to contracting table!
-                contractingTable.put(String.valueOf(value), new Integer(ce));
-            } else {
-                collationElements[value] = ce; // normal
-            }
-        //} catch (Exception e) {
-          //  throw new IllegalArgumentException("Malformed line: " + inputLine + "\n " 
-            //  + e.getClass().getName() + ": " + e.getMessage());
+            tempStack.clear();
+            tempStack.push(ce);
+            
+            while (ce2 != TERMINATOR) {
+                tempStack.push(ce2);
+                ce2 = getCEFromLine(value, line, position, record, wasImplicitLeadPrimary);
+                if (ce2 == TERMINATOR) break;
+            } 
+            
+            ucaData.add(multiChars, tempStack);
+            
         } catch (RuntimeException e) {
             System.out.println("Error on line: " + inputLine);
             throw e;
         }
     }
     
-    private void fixSurrogateContraction(char ch) {
-        //if (DEBUGCHAR) System.out.println(Utility.hex(ch) + ": " + line.substring(0, position[0]) + "|" + line.substring(position[0]));            
-        if (ch == NOT_A_CHAR || !UTF16.isLeadSurrogate(ch)) return;
-        String chs = String.valueOf(ch);
-        Object probe = contractingTable.get(chs);
-        if (probe != null) return;
-        contractingTable.put(chs, new Integer(0));
-    }
-    
+    /*
     private void concat(int[] ces1, int[] ces2) {
         
     }
-    
-    private void add(String source, int[] ces, int ceLen) {
-        
-        int ce;
-        if (ceLen < 1) {
-            throw new IllegalArgumentException("CE too short: " + ceLen);
-        } else if (ceLen == 1) {
-            ce = ces[0];
-        } else {
-            ce = EXPANDING_MASK | expandingTable.getTop();
-            for (int i = 0; i < ceLen; ++i) {
-                expandingTable.push(ces[i]);
-            }
-        }
-        
-        // assign CE(s) to char(s)
-        int value = source.charAt(0);
-        //if (value == 0x10000) System.out.print("DEBUG2: " + source);
-            	        
-        if (source.length() > 0) {
-            contractingTable.put(source.toString(), new Integer(ce));
-            if (collationElements[value] == UNSUPPORTED) {
-                collationElements[value] = CONTRACTING; // mark special
-            } else if (collationElements[value] != CONTRACTING) {
-                // move old value to contracting table!
-                contractingTable.put(String.valueOf(value), new Integer(collationElements[value]));
-                collationElements[value] = CONTRACTING; // signal we must look up in table
-            }
-        } else if (collationElements[value] == CONTRACTING) {
-            // must add old value to contracting table!
-            contractingTable.put(source, new Integer(ce));
-        } else {
-            collationElements[source.charAt(0)] = ce; // normal
-        }
-    }
+    */
     
     /**
      * Checks the internal tables corresponding to the UCA data.
      */
     private void cleanup() {
         
-        // at this point, we have to guarantee that the contractingTable is CLOSED
-        // e.g. if a substring of length n is in the table, then the first n-1 characters
-        // are also!!
+        ucaData.checkConsistency();
+
+        Map missingStrings = new HashMap();
+        Map tempMap = new HashMap();
         
-        
-/*
-0FB2 0F71 ; [.124E.0020.0002.0FB2][.125F.0020.0002.0F71] # TIBETAN SUBJOINED LETTER RA + TIBETAN VOWEL SIGN AA
-0FB3 0F71 ; [.1250.0020.0002.0FB3][.125F.0020.0002.0F71] # TIBETAN SUBJOINED LETTER LA + TIBETAN VOWEL SIGN AA
-        int[] temp1 = int[20];
-        int[] temp2 = int[20];
-        int[] temp3 = int[20];
-        getCEs("\u0fb2", true, temp1);
-        getCEs("\u0fb3", true, temp2);
-        getCEs("\u0f71", true, temp3);
-        add("\u0FB2\u0F71", concat(temp1, temp3));
-*/
-        
-        Hashtable missingStrings = new Hashtable();
-        
-        int[] temp1 = new int[20];
-        Enumeration enum = contractingTable.keys();
-        while (enum.hasMoreElements()) {
-            String sequence = (String)enum.nextElement();
+        Iterator enum = ucaData.getContractions();
+        while (enum.hasNext()) {
+            String sequence = (String)enum.next();
             //System.out.println("Contraction: " + Utility.hex(sequence));
             for (int i = sequence.length()-1; i > 0; --i) {
                 String shorter = sequence.substring(0,i);
-                Object probe = contractingTable.get(shorter);
-                if (probe == null) {
-                    int len = getCEs(shorter, true, temp1);
-                    if (false) System.out.println("WARNING: CLOSING: " + UCD.make().getCodeAndName(shorter) + " => " + ceToString(temp1, len));
-                    add(shorter, temp1, len);
+                if (!ucaData.contractionTableContains(shorter)) {
+                    IntStack tempStack = new IntStack(1);
+                    getCEs(shorter, true, tempStack);
+                    if (false) System.out.println("WARNING: CLOSING: " + ucd.getCodeAndName(shorter)
+                        + " => " + CEList.toString(tempStack));
+                    tempMap.put(shorter, tempStack);
                     // missingStrings.put(shorter,"");
                     // collationElements[sequence.charAt(0)] = UNSUPPORTED; // nuke all bad values
                 }
             }
         }
         
-        enum = missingStrings.keys();
+        // now add them. We couldn't before because we were iterating over it.
+        
+        enum = tempMap.keySet().iterator();
+        while (enum.hasNext()) {
+            String shorter = (String) enum.next();
+            IntStack tempStack = (IntStack) tempMap.get(shorter);
+            ucaData.add(shorter, tempStack);
+        }
+        
+        
+        enum = missingStrings.keySet().iterator();
         if (missingStrings.size() != 0) {
             /**
             while (enum.hasMoreElements()) {
@@ -1666,26 +1385,30 @@ Compat:
             }
             */
             String errorMessage = "";
-            while (enum.hasMoreElements()) {
-                String missing = (String)enum.nextElement();
+            while (enum.hasNext()) {
+                String missing = (String)enum.next();
                 if (errorMessage.length() != 0) errorMessage += ", ";
                 errorMessage += "\"" + missing + "\"";
             }
             throw new IllegalArgumentException("Contracting table not closed! Missing " + errorMessage);
         }
-        
+
         //fixlater;
         variableLowCE = variableLow << 16;
         variableHighCE = (variableHigh << 16) | 0xFFFF; // turn on bottom bits
         
-        hangulHackBottom = collationElements[0x1100] & 0xFFFF0000; // remove secondaries & tertiaries
-        hangulHackTop = collationElements[0x11F9] | 0xFFFF; // bump up secondaries and tertiaries
-        if (SHOW_STATS) System.out.println("\tHangul Hack: " + Utility.hex(hangulHackBottom) + ", " + Utility.hex(hangulHackTop));
+        //int hangulHackBottom;
+        //int hangulHackTop;
+        
+        //hangulHackBottom = collationElements[0x1100] & 0xFFFF0000; // remove secondaries & tertiaries
+        //hangulHackTop = collationElements[0x11F9] | 0xFFFF; // bump up secondaries and tertiaries
+        //if (SHOW_STATS) System.out.println("\tHangul Hack: " + Utility.hex(hangulHackBottom) + ", " + Utility.hex(hangulHackTop));
         
         // show some statistics
         if (SHOW_STATS) System.out.println("\tcount1: " + count1);
         if (SHOW_STATS) System.out.println("\tcount2: " + max2);
         if (SHOW_STATS) System.out.println("\tcount3: " + max3);
+        if (SHOW_STATS) System.out.println("\tcontractions: " + ucaData.getContractionCount());
         
         if (SHOW_STATS) System.out.println("\tMIN1/MAX1: " + Utility.hex(MIN1) + "/" + Utility.hex(MAX1));
         if (SHOW_STATS) System.out.println("\tMIN2/MAX2: " + Utility.hex(MIN2) + "/" + Utility.hex(MAX2));
@@ -1912,7 +1635,7 @@ Compat:
     /**
      * Used for checking data file integrity
      */
-    private Hashtable uniqueTable = new Hashtable();
+    private Map uniqueTable = new HashMap();
     
     /**
      * Used for checking data file integrity

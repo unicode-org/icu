@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/VerifyUCD.java,v $
-* $Date: 2002/06/13 21:14:05 $
-* $Revision: 1.15 $
+* $Date: 2002/06/15 02:47:12 $
+* $Revision: 1.16 $
 *
 *******************************************************************************
 */
@@ -27,6 +27,27 @@ import com.ibm.text.utility.*;
 import java.text.NumberFormat;
 
 public class VerifyUCD implements UCD_Types {
+    
+    static void oneTime() {
+        Default.setUCD();
+        int[] testSet = {0x10000, 'a', 0xE0000, '\u0221'}; // 10000
+        for (int i = 0; i < testSet.length; ++i) {
+            int item = testSet[i];
+            System.out.println(Default.ucd.getCode(item));
+            
+            boolean ass = Default.ucd.isAssigned(item);
+            System.out.println(ass ? " assigned" : " unassigned");
+            ass = Default.ucd.isAllocated(item);
+            System.out.println(ass ? " allocated" : " unallocated");
+            
+            String name = Default.ucd.getName(item, SHORT);
+            System.out.println(" " + name);
+            name = Default.ucd.getName(item);
+            System.out.println(" " + name);
+            
+            System.out.println();
+       }
+    }
 	
 	static final byte NC = UNUSED_CATEGORY;
     

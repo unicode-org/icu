@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Types.java,v $
-* $Date: 2002/05/29 02:01:00 $
-* $Revision: 1.12 $
+* $Date: 2002/06/15 02:47:13 $
+* $Revision: 1.13 $
 *
 *******************************************************************************
 */
@@ -21,8 +21,17 @@ public interface UCD_Types {
     public static final String UCD_DIR = BASE_DIR + "UCD\\";
     public static final String BIN_DIR = BASE_DIR + "BIN\\";
     public static final String GEN_DIR = BASE_DIR + "GEN\\";
-
-
+    
+    public static final int 
+    	CJK_BASE = 0x4E00,
+    	CJK_LIMIT = 0x9FFF+1,
+    	CJK_COMPAT_USED_BASE = 0xFA0E,
+    	CJK_COMPAT_USED_LIMIT = 0xFA2F+1,
+    	CJK_A_BASE = 0x3400,
+    	CJK_A_LIMIT = 0x4DBF+1,
+    	CJK_B_BASE = 0x20000,
+    	CJK_B_LIMIT = 0x2A6DF+1;
+    
     static final byte BINARY_FORMAT = 6; // bumped if binary format of UCD changes
     
     // Unicode Property Types
