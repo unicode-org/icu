@@ -238,7 +238,7 @@ init() {
     uprv_memset(auxTrie, 0, sizeof(UNewTrie));
 
     /* initialize the two tries */
-    if(NULL==utrie_open(normTrie, NULL, 30000, 0, FALSE)) {
+    if(NULL==utrie_open(normTrie, NULL, 30000, 0, 0, FALSE)) {
         fprintf(stderr, "error: failed to initialize tries\n");
         exit(U_MEMORY_ALLOCATION_ERROR);
     }

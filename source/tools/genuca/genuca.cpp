@@ -782,7 +782,7 @@ write_uca_table(const char *filename,
     opts->hiraganaQ = UCOL_OFF; /* attribute for JIS X 4061, used only in Japanese */
     myD->jamoSpecial = FALSE;
 
-    tempUCATable *t = uprv_uca_initTempTable(myD, opts, NULL, IMPLICIT_TAG, status);
+    tempUCATable *t = uprv_uca_initTempTable(myD, opts, NULL, IMPLICIT_TAG, LEAD_SURROGATE_TAG, status);
     if(U_FAILURE(*status))
     {
         fprintf(stderr, "Failed to init UCA temp table: %s\n", u_errorName(*status));
@@ -816,7 +816,7 @@ struct {
       {0x2F800, 0x2FA1D, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24)  },  //7 CJK_IMPLICIT_TAG,   /* 0x2F800-0x2FA1D*/
 #endif
       {0xAC00, 0xD7B0, UCOL_SPECIAL_FLAG | (HANGUL_SYLLABLE_TAG << 24) },  //0 HANGUL_SYLLABLE_TAG,/* AC00-D7AF*/
-      {0xD800, 0xDC00, UCOL_SPECIAL_FLAG | (LEAD_SURROGATE_TAG << 24)  },  //1 LEAD_SURROGATE_TAG,  /* D800-DBFF*/
+      //{0xD800, 0xDC00, UCOL_SPECIAL_FLAG | (LEAD_SURROGATE_TAG << 24)  },  //1 LEAD_SURROGATE_TAG,  /* D800-DBFF*/
       {0xDC00, 0xE000, UCOL_SPECIAL_FLAG | (TRAIL_SURROGATE_TAG << 24) },  //2 TRAIL_SURROGATE DC00-DFFF
       // Now directly handled in the collation code by the swapCJK function. 
       //{0x3400, 0x4DB6, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24)    },  //3 CJK_IMPLICIT_TAG,   /* 0x3400-0x4DB5*/
@@ -883,7 +883,9 @@ struct {
       fprintf(stderr, "UCA version not specified. Cannot create data file!\n");
       return -1;
     }
-
+    {
+        uint32_t trieWord = utrie_get32(t->mapping, 0xDC01, NULL);
+    }
 
     if (VERBOSE) {
         fprintf(stdout, "\nLines read: %i\n", line);
@@ -1000,7 +1002,9 @@ int main(int argc, char* argv[]) {
             argv[0], u_getDataDirectory());
         return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
-
+    {
+        UChar32 tch = U16_GET_SUPPLEMENTARY(0xD801, 0xDC25);
+    }
     if(options[3].doesOccur) {
       fprintf(stdout, "genuca version %hu.%hu, ICU tool to read UCA text data and create UCA data tables for collation.\n",
 #if UCONFIG_NO_COLLATION
