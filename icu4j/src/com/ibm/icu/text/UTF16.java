@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UTF16.java,v $ 
-* $Date: 2004/03/11 07:23:29 $ 
-* $Revision: 1.35 $
+* $Date: 2004/03/11 16:51:51 $ 
+* $Revision: 1.36 $
 *
 *******************************************************************************
 */
@@ -2299,16 +2299,20 @@ public final class UTF16
     }
     
     /**
-     * Cover JDK 1.5 API.  Create String from an array of codePoints.
+     * Cover JDK 1.5 API.  Create a String from an array of codePoints.
      * @param codePoints the code array
      * @param offset     the start of the text in the code point array
      * @param count      the number of code points
      * @return a String representing the code points between offset and count
      * @throws IllegalArgumentException if an invalid code point is encountered
-     * @throws  IndexOutOfBoundsException  if the offset or count are out of bounds.
+     * @throws IndexOutOfBoundsException  if the offset or count are out of bounds.
+     * @draft ICU 3.0
      */
     public static String newString(int[] codePoints, int offset, int count) {
-        char[] chars = new char[codePoints.length];
+	if (count < 0) {
+	    throw new IllegalArgumentException();
+	}
+        char[] chars = new char[count];
         int w = 0;
         for (int r = offset, e = offset + count; r < e; ++r) {
             int cp = codePoints[r];
