@@ -36,9 +36,29 @@
  *                                                                                  *
  *----------------------------------------------------------------------------------*/
 typedef struct {
-    const char *entryName;
+    const char       *entryName;
     const DataHeader *pHeader;
 } PointerTOCEntry;
+
+
+typedef struct  {
+    uint32_t          count;
+    uint32_t          reserved;
+    PointerTOCEntry   entry[2];   // Actual size is from count.
+}  PointerTOC;
+
+
+
+typedef struct {
+    int32_t           nameOffset;
+    int32_t           dataOffset;
+}  OffsetTOCEntry;
+
+
+typedef struct {
+    uint32_t          count;
+    OffsetTOCEntry    entry[2];    // Acutal size of array is from count.
+}  OffsetTOC;
 
 
 /*----------------------------------------------------------------------------------*
@@ -47,8 +67,12 @@ typedef struct {
  *                                                                                  *
  *----------------------------------------------------------------------------------*/
 static uint32_t offsetTOCEntryCount(const UDataMemory *pData) {
-    uint32_t count = *(const uint32_t *)pData->toc;
-    return count;
+    int32_t          retVal=0;
+    const OffsetTOC *toc = (OffsetTOC *)pData->toc;
+    if (toc != NULL) {
+        retVal = toc->count;
+    } 
+    return retVal;
 }
 
 
@@ -57,32 +81,32 @@ offsetTOCLookupFn(const UDataMemory *pData,
                   const char *tocEntryName,
                   UErrorCode *pErrorCode) {
 
-    if(pData->toc!=NULL) {
+    const OffsetTOC  *toc = (OffsetTOC *)pData->toc;
+    if(toc!=NULL) {
         const char *base=(const char *)pData->toc;
-        uint32_t *toc=(uint32_t *)pData->toc;
         uint32_t start, limit, number;
 
         /* perform a binary search for the data in the common data's table of contents */
         start=0;
-        limit=*toc++;   /* number of names in this table of contents */
+        limit=toc->count;         /* number of names in this table of contents */
         if (limit == 0) {         /* Stub common data library used during build is empty. */
             return NULL;
         }
         while(start<limit-1) {
             number=(start+limit)/2;
-            if(uprv_strcmp(tocEntryName, base+toc[2*number])<0) {
+            if(uprv_strcmp(tocEntryName, &base[toc->entry[number].nameOffset])<0) {
                 limit=number;
             } else {
                 start=number;
             }
         }
 
-        if(uprv_strcmp(tocEntryName, base+toc[2*start])==0) {
+        if(uprv_strcmp(tocEntryName, &base[toc->entry[start].nameOffset])==0) {
             /* found it */
 #ifdef UDATA_DEBUG
       fprintf(stderr, "Found: %p\n",(base+toc[2*start+1]));
 #endif
-            return (const DataHeader *)(base+toc[2*start+1]);
+            return (const DataHeader *)&base[toc->entry[start].dataOffset];
         } else {
 #ifdef UDATA_DEBUG
       fprintf(stderr, "Not found.\n");
@@ -100,63 +124,46 @@ offsetTOCLookupFn(const UDataMemory *pData,
 
 
 static uint32_t pointerTOCEntryCount(const UDataMemory *pData) {
-    uint32_t count = *(const uint32_t *)pData->toc;
-    return count;
+    const PointerTOC *toc = (PointerTOC *)pData->toc;
+    if (toc != NULL) {
+        return toc->count;
+    } else {
+        return 0;
+    }
 }
 
 
 static const DataHeader *pointerTOCLookupFn(const UDataMemory *pData,
-                   const char *tocEntryName,
+                   const char *name,
                    UErrorCode *pErrorCode) {
-#ifdef UDATA_DEBUG
-  fprintf(stderr, "ptrTOC[%p] looking for %s/%s\n",
-      pData,
-      tocEntryName,dllEntryName);
-#endif
     if(pData->toc!=NULL) {
-        const PointerTOCEntry *toc=(const PointerTOCEntry *)((const uint32_t *)pData->toc+2);
+        const PointerTOC *toc = (PointerTOC *)pData->toc;
         uint32_t start, limit, number;
 
         /* perform a binary search for the data in the common data's table of contents */
         start=0;
-        limit=*(const uint32_t *)pData->toc; /* number of names in this table of contents */
+        limit=toc->count;   
 
-#ifdef UDATA_DEBUG
-        fprintf(stderr, "  # of ents: %d\n", limit);
-        fflush(stderr);
-#endif
-
-        if (limit == 0) {         /* Stub common data library used during build is empty. */
+        if (limit == 0) {       /* Stub common data library used during build is empty. */
             return NULL;
         }
 
         while(start<limit-1) {
             number=(start+limit)/2;
-            if(uprv_strcmp(tocEntryName, toc[number].entryName)<0) {
+            if(uprv_strcmp(name, toc->entry[number].entryName)<0) {
                 limit=number;
             } else {
                 start=number;
             }
         }
 
-        if(uprv_strcmp(tocEntryName, toc[start].entryName)==0) {
+        if(uprv_strcmp(name, toc->entry[start].entryName)==0) {
             /* found it */
-#ifdef UDATA_DEBUG
-            fprintf(stderr, "FOUND: %p\n",
-                UDataMemory_normalizeDataPointer(toc[start].pHeader));
-#endif
-
-            return UDataMemory_normalizeDataPointer(toc[start].pHeader);
+            return UDataMemory_normalizeDataPointer(toc->entry[start].pHeader);
         } else {
-#ifdef UDATA_DEBUG
-            fprintf(stderr, "NOT found\n");
-#endif
             return NULL;
         }
     } else {
-#ifdef UDATA_DEBUG
-        fprintf(stderr, "Returning header\n");
-#endif
         return pData->pHeader;
     }
 }
