@@ -7,7 +7,6 @@
 * Date        Name      Comments
 * 02/16/2001  synwee    Added internal method getPrevSpecialCE 
 */
-
 #include "ucolimp.h"
 #include "ucoltok.h"
 
@@ -1068,12 +1067,13 @@ uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *sta
           T += TBase;
 
           // return the first CE, but first put the rest into the expansion buffer
-
           if (!collationSource->JamoSpecial) { // FAST PATH
+            
             *(collationSource->CEpos++) = ucmp32_get(UCA->mapping, V);
             if (T != TBase) {
                 *(collationSource->CEpos++) = ucmp32_get(UCA->mapping, T);
             }
+            
             return ucmp32_get(UCA->mapping, L); // return first one
 
           } else { // Jamo is Special
@@ -1103,6 +1103,7 @@ uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *sta
           }
           /* This is a code point minus 0x10000, that's what algorithm requires */
           order = 0xE0010303 | (cp & 0xFFE00) << 8;
+
           *(collationSource->CEpos++) = 0x80200080 | (cp & 0x001FF) << 22;
         } else {
           return 0; /* completely ignorable */
@@ -1144,7 +1145,7 @@ uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource,
     We have to check if ch is possibly a first surrogate - then we need to 
     take the next code unit and make a bigger CE 
     */
-    UChar nextChar;
+    UChar prevChar;
     const int 
       SBase = 0xAC00, LBase = 0x1100, VBase = 0x1161, TBase = 0x11A7,
       LCount = 19, VCount = 21, TCount = 28,
@@ -1184,11 +1185,13 @@ uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource,
       */
       if (!collationSource->JamoSpecial) 
       { 
+        *(collationSource->CEpos ++) = ucmp32_get(UCA->mapping, L); 
         *(collationSource->CEpos ++) = ucmp32_get(UCA->mapping, V);
         if (T != TBase)
-          *(collationSource->CEpos++) = ucmp32_get(UCA->mapping, T);
-        /* return first one */
-        return ucmp32_get(UCA->mapping, L); 
+          *(collationSource->CEpos ++) = ucmp32_get(UCA->mapping, T);
+        
+        collationSource->toReturn = collationSource->CEpos - 1;
+        return *(collationSource->toReturn);
       } else { 
         /* 
         Jamo is Special
@@ -1213,28 +1216,23 @@ uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource,
 
     if (UTF_IS_SECOND_SURROGATE(ch)) 
     {
-      if ((collationSource->len - collationSource->pos != length) &&
-                  (UTF_IS_FIRST_SURROGATE(nextChar = *collationSource->pos))) 
+      UChar *temp = collationSource->pos;
+      if (((collationSource->string < temp) ||
+          (collationSource->writableBuffer < temp)) &&
+          (UTF_IS_FIRST_SURROGATE(prevChar = *(collationSource->pos - 1)))) 
       {
-        uint32_t cp = ((ch << 10UL) + nextChar - ((0xd800 << 10UL) + 0xdc00));
-        if (collationSource->pos != collationSource->writableBuffer)
-          collationSource->pos --;
-        else
-        {
-          collationSource->pos = collationSource->string + 
-           (length - (collationSource->len - collationSource->writableBuffer));
-          collationSource->len = collationSource->string + length;
-          collationSource->isThai = TRUE;
-        }
+        uint32_t cp = ((prevChar << 10UL) + ch - ((0xd800 << 10UL) + 0xdc00));
+        collationSource->pos --;
         if ((cp & 0xFFFE) == 0xFFFE || (0xD800 <= cp && cp <= 0xDC00))
           return 0;  /* illegal code value, use completely ignoreable! */
         
         /* 
         This is a code point minus 0x10000, that's what algorithm requires 
         */
-        order = 0xE0010303 | (cp & 0xFFE00) << 8;
-        *(collationSource->CEpos ++) = 0x80200080 | (cp & 0x001FF) << 22;
-        collationSource->toReturn ++;
+        *(collationSource->CEpos ++) = 0xE0010303 | (cp & 0xFFE00) << 8;
+        order = 0x80200080 | (cp & 0x001FF) << 22;
+        collationSource->toReturn = collationSource->CEpos;
+        *(collationSource->CEpos ++) = order;
       } 
       else
         return 0; /* completely ignorable */
@@ -1246,9 +1244,11 @@ uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource,
         return 0; /* completely ignorable */
       
       /* Make up an artifical CE from code point as per UCA */
-      order = 0xD08003C3 | (ch & 0xF000) << 12 | (ch & 0x0FE0) << 11;
-      *(collationSource->CEpos ++) = 0x04000080 | (ch & 0x001F) << 27;
-      collationSource->toReturn ++;
+      *(collationSource->CEpos ++) = 0xD08003C3 | (ch & 0xF000) << 12 | 
+                                     (ch & 0x0FE0) << 11;
+      collationSource->toReturn = collationSource->CEpos;
+      order = 0x04000080 | (ch & 0x001F) << 27;
+      *(collationSource->CEpos ++) = order;
     }
   }
   return order; /* return the CE */
@@ -1397,12 +1397,7 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
       if (source->isThai == TRUE) 
       { /* if we encountered Thai prevowel & the string is not yet touched */
         source->isThai = FALSE;
-        /*
-        sigh... to cater for getNextCE, we'll have to modify and store the 
-        whole string instead of a substring as in getSpecialCE
-        */
-        UCharOffset = source->pos;
-        strend =  source->len;
+        strend =  source->pos;
         size = strend - source->string;
         if (size > UCOL_WRITABLE_BUFFER_SIZE) 
         {
@@ -1417,22 +1412,21 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
         } 
         UChar *sourceCopy = source->string;
         UChar *targetCopy = source->writableBuffer;
-        while (sourceCopy < strend)
+        while (sourceCopy <= strend)
         {
 	        if (UCOL_ISTHAIPREVOWEL(*sourceCopy) &&      
             /* This is the combination that needs to be swapped */
 		        UCOL_ISTHAIBASECONSONANT(*(sourceCopy + 1))) 
           {
-		        *(targetCopy) = *(sourceCopy + count + 1);
-		        *(targetCopy+1) = *(sourceCopy + count);
-		        targetCopy+=2;
-		        sourceCopy+=2;
+		        *(targetCopy)     = *(sourceCopy + 1);
+		        *(targetCopy + 1) = *(sourceCopy);
+		        targetCopy += 2;
+		        sourceCopy += 2;
 	        } 
           else
-		        *(targetCopy++) = *(sourceCopy++);
+		        *(targetCopy ++) = *(sourceCopy ++);
         }
-        source->pos   = source->writableBuffer + 
-                                               (UCharOffset - source->string);
+        source->pos   = targetCopy;
         source->len   = targetCopy;
         source->CEpos = source->toReturn = source->CEs;
         CE = UCOL_IGNORABLE;
@@ -1470,32 +1464,22 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
         */
         UCharOffset += *UCharOffset; 
 
-        schar = *source->pos;
+        schar = *(source->pos - 1);
         while (schar > (tchar = *UCharOffset)) 
           UCharOffset ++;
         
         if (schar != tchar) 
-        { 
+        {
           /* 
           we didn't find the correct codepoint. We can use either the first or 
           the last CE 
           */
-          if (tchar != 0xFFFF)
-            UCharOffset = constart; 
+          /* testing if (tchar != 0xFFFF) */
+          UCharOffset = constart; 
         } 
         else
-        {
           /* Move up one character */
-          if (source->pos != source->writableBuffer)
-            source->pos --;
-          else
-          {
-            source->pos = source->string + 
-                          (length - (source->len - source->writableBuffer));
-            source->len = source->string + length;
-            source->isThai = TRUE;
-          }
-        }
+          source->pos --;
         CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex));
         if (!isContraction(CE))
           break;  
@@ -1521,7 +1505,7 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
         while (*CEOffset != 0) 
           *(source->CEpos ++) = *CEOffset ++;
       source->toReturn = source->CEpos - 1;
-      return *(source->toReturn --);
+      return *(source->toReturn);
     case CHARSET_TAG:
       /* probably after 1.8 */
       return UCOL_NOT_FOUND;
