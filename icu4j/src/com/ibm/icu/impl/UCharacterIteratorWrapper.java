@@ -24,16 +24,10 @@ public class UCharacterIteratorWrapper implements CharacterIterator{
     
     public UCharacterIteratorWrapper(UCharacterIterator iter){
         this.iterator = iter;
-        this.currentIndex = 0;
-        this.length = iter.getLength();
-        //UCharacterIterator always iterates from 0 - length
-        this.beginIndex = 0;
     }
     
     private UCharacterIterator iterator;
-    private int currentIndex;
-    private int length;
-    private int beginIndex;
+
 
     /**
      * Sets the position to getBeginIndex() and returns the character at that
@@ -42,7 +36,8 @@ public class UCharacterIteratorWrapper implements CharacterIterator{
      * @see #getBeginIndex()
      */
     public char first(){
-        iterator.setIndex(beginIndex);
+    	//UCharacterIterator always iterates from 0 to length
+        iterator.setToStart();
         return (char)iterator.current();
     }
 
@@ -53,8 +48,8 @@ public class UCharacterIteratorWrapper implements CharacterIterator{
      * @see #getEndIndex()
      */
     public char last(){
-        iterator.setIndex(length-1);
-        return (char)iterator.current();
+        iterator.setToLimit();
+        return (char)iterator.previous();
     }
 
     /**
@@ -64,7 +59,6 @@ public class UCharacterIteratorWrapper implements CharacterIterator{
      * @see #getIndex()
      */
     public char current(){
-        iterator.setIndex(currentIndex);
         return (char) iterator.current();
     }
 
@@ -78,7 +72,7 @@ public class UCharacterIteratorWrapper implements CharacterIterator{
      */
     public char next(){
         //pre-increment
-        iterator.setIndex(++currentIndex);
+        iterator.next();
         return (char) iterator.current();
     }
 
@@ -91,8 +85,7 @@ public class UCharacterIteratorWrapper implements CharacterIterator{
      */
     public char previous(){
         //pre-decrement
-        iterator.setIndex(--currentIndex);
-        return (char) iterator.current();
+        return (char) iterator.previous();
     }
 
     /**
@@ -104,7 +97,7 @@ public class UCharacterIteratorWrapper implements CharacterIterator{
      * @return the character at the specified position or DONE if the specified position is equal to getEndIndex()
      */
     public char setIndex(int position){
-        currentIndex=position;
+        iterator.setIndex(position);
         return (char) iterator.current();
     }
 
@@ -113,7 +106,8 @@ public class UCharacterIteratorWrapper implements CharacterIterator{
      * @return the index at which the text begins.
      */
     public int getBeginIndex(){
-        return beginIndex;
+    	//UCharacterIterator always starts from 0
+        return 0;
     }
 
     /**
@@ -122,7 +116,7 @@ public class UCharacterIteratorWrapper implements CharacterIterator{
      * @return the index after the last character in the text
      */
     public int getEndIndex(){
-        return length;
+        return iterator.getLength();
     }
 
     /**
@@ -130,7 +124,7 @@ public class UCharacterIteratorWrapper implements CharacterIterator{
      * @return the current index.
      */
     public int getIndex(){
-        return currentIndex;
+        return iterator.getIndex();
     }
 
     /**

@@ -24,27 +24,18 @@ public class CharacterIteratorWrapper extends UCharacterIterator {
     
     private CharacterIterator iterator;
     
-    /**
-     * length
-     */
-    private int length;
     
     public CharacterIteratorWrapper(CharacterIterator iter){
         if(iter==null){
             throw new IllegalArgumentException();
         }
-        iterator     = iter;
-        length       = iter.getEndIndex() - iter.getBeginIndex();    
+        iterator     = iter;   
     }
 
     /**
      * @see UCharacterIterator#current()
      */
     public int current() {
-	/*	if (currentIndex < length) {
-		    return iterator.setIndex(beginIndex + currentIndex);
-		}
-    */
         int c = iterator.current();
         if(c==iterator.DONE){
 		  return DONE;
@@ -56,14 +47,13 @@ public class CharacterIteratorWrapper extends UCharacterIterator {
      * @see UCharacterIterator#getLength()
      */
     public int getLength() {
-	    return length;
+	    return (iterator.getEndIndex() - iterator.getBeginIndex());
     }
 
     /**
      * @see UCharacterIterator#getIndex()
      */
     public int getIndex() {
-	    //return currentIndex;
         return iterator.getIndex();
     }
 
@@ -71,11 +61,6 @@ public class CharacterIteratorWrapper extends UCharacterIterator {
      * @see UCharacterIterator#next()
      */
     public int next() {
-		/*if(currentIndex < length){
-		    return iterator.setIndex(beginIndex + currentIndex++);
-		}
-        return DONE;
-        */
         int i = iterator.current();
         iterator.next();
         if(i==iterator.DONE){  
@@ -88,11 +73,6 @@ public class CharacterIteratorWrapper extends UCharacterIterator {
      * @see UCharacterIterator#previous()
      */
     public int previous() {
-	    /*if(currentIndex>0){
-	        return iterator.setIndex(beginIndex + --currentIndex);
-	    }
-        return DONE;
-        */
         int i = iterator.previous();
         if(i==iterator.DONE){
             return DONE;
@@ -104,11 +84,6 @@ public class CharacterIteratorWrapper extends UCharacterIterator {
      * @see UCharacterIterator#setIndex(int)
      */
     public void setIndex(int index) {
-		/*if (index < 0 || index > length) {
-		    throw new IndexOutOfBoundsException();
-		}
-		currentIndex = index;
-        */
         try{
             iterator.setIndex(index);
         }catch(IllegalArgumentException e){
@@ -120,13 +95,14 @@ public class CharacterIteratorWrapper extends UCharacterIterator {
      * @see UCharacterIterator#setToLimit()
      */
     public void setToLimit() {
-		iterator.setIndex(length);
+		iterator.setIndex(iterator.getEndIndex());
     }
 
     /**
      * @see UCharacterIterator#getText(char[])
      */
     public int getText(char[] fillIn, int offset){
+    	int length =iterator.getEndIndex() - iterator.getBeginIndex(); 
         int currentIndex = iterator.getIndex();
         if(offset < 0 || offset + length > fillIn.length){
             throw new IndexOutOfBoundsException(Integer.toString(length));
@@ -157,8 +133,9 @@ public class CharacterIteratorWrapper extends UCharacterIterator {
     /**
      * @see UCharacterIterator#moveIndex()
      */
-    public int moveIndex(int index){
-        int idx = iterator.getIndex()+index;
+    public int moveIndex(int delta){
+    	int length = iterator.getEndIndex() - iterator.getBeginIndex(); 
+        int idx = iterator.getIndex()+delta;
         
         if(idx < 0) {
 	        idx = 0;

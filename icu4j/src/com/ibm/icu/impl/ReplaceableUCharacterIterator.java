@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/ReplaceableUCharacterIterator.java,v $ 
- * $Date: 2002/07/31 03:04:28 $ 
- * $Revision: 1.3 $
+ * $Date: 2002/10/11 23:43:20 $ 
+ * $Revision: 1.4 $
  *
  *******************************************************************************
  */
@@ -40,7 +40,6 @@ public class ReplaceableUCharacterIterator extends UCharacterIterator {
         }
         this.replaceable  = replaceable;
         this.currentIndex = 0;
-        this.length       = replaceable.length();
     }
     
     /**
@@ -53,7 +52,6 @@ public class ReplaceableUCharacterIterator extends UCharacterIterator {
         }
         this.replaceable  = new ReplaceableString(str);
         this.currentIndex = 0;
-        this.length       = replaceable.length();
     }
     
     /**
@@ -66,7 +64,6 @@ public class ReplaceableUCharacterIterator extends UCharacterIterator {
         }
         this.replaceable  = new ReplaceableString(buf);
         this.currentIndex = 0;
-        this.length       = replaceable.length();
     }
     
     // public methods ----------------------------------------------------------
@@ -89,7 +86,7 @@ public class ReplaceableUCharacterIterator extends UCharacterIterator {
      * @return current UTF16 character
      */
     public int current(){
-        if (currentIndex < length) {
+        if (currentIndex < replaceable.length()) {
             return replaceable.charAt(currentIndex);
         }
         return DONE;
@@ -129,7 +126,7 @@ public class ReplaceableUCharacterIterator extends UCharacterIterator {
      * @return length of the text
      */
     public int getLength(){
-        return length;
+        return replaceable.length();
     }
     
     /**
@@ -149,7 +146,7 @@ public class ReplaceableUCharacterIterator extends UCharacterIterator {
      *         end of the text range.
      */
     public int next(){
-        if (currentIndex < length) {
+        if (currentIndex < replaceable.length()) {
             return replaceable.charAt(currentIndex++);
         }
         return DONE;
@@ -182,13 +179,14 @@ public class ReplaceableUCharacterIterator extends UCharacterIterator {
      *         currentIndex is equal to the end of the text.
      */
     public void setIndex(int currentIndex) throws IndexOutOfBoundsException{
-        if (currentIndex < 0 || currentIndex > length) {
+        if (currentIndex < 0 || currentIndex > replaceable.length()) {
             throw new IndexOutOfBoundsException();
         }
         this.currentIndex = currentIndex;
     }
     
     public int getText(char[] fillIn, int offset){
+    	int length = replaceable.length();
         if(offset < 0 || offset + length > fillIn.length){
             throw new IndexOutOfBoundsException(Integer.toString(length));
         }
@@ -206,8 +204,5 @@ public class ReplaceableUCharacterIterator extends UCharacterIterator {
      * Current currentIndex
      */
     private int currentIndex;
-    /**
-     * Replaceable text length
-     */
-    private int length;
+
 }
