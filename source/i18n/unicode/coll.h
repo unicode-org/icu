@@ -99,7 +99,7 @@ class CollationKey;
 * <p>
 * The following example shows how to compare two strings using the 
 * <code>Collator</code> for the default locale.
-* <blockquote>
+* \htmlonly<blockquote>\endhtmlonly
 * <pre>
 * \code
 * // Compare two strings in the default locale
@@ -111,7 +111,7 @@ class CollationKey;
 *   cout << "abc is greater than or equal to ABC" << endl;
 * \endcode
 * </pre>
-* </blockquote>
+* \htmlonly</blockquote>\endhtmlonly
 * <p>
 * You can set a <code>Collator</code>'s <em>strength</em> property to 
 * determine the level of difference considered significant in comparisons. 
@@ -122,7 +122,7 @@ class CollationKey;
 * secondary differences, "e" and "E" are tertiary differences and "e" and "e" 
 * are identical. The following shows how both case and accents could be 
 * ignored for US English.
-* <blockquote>
+* \htmlonly<blockquote>\endhtmlonly
 * <pre>
 * \code
 * //Get the Collator for US English and set its strength to PRIMARY 
@@ -136,7 +136,7 @@ class CollationKey;
 * endl;
 * \endcode
 * </pre>
-* </blockquote>
+* \htmlonly</blockquote>\endhtmlonly
 * <p>
 * For comparing strings exactly once, the <code>compare</code> method 
 * provides the best performance. When sorting a list of strings however, it 

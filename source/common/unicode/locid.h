@@ -55,13 +55,13 @@
  * <P>
  * You create a <code>Locale</code> object using the constructor in
  * this class:
- * <blockquote>
+ * \htmlonly<blockquote>\endhtmlonly
  * <pre>
  * .      Locale( const   char*  language, 
  * .              const   char*  country, 
  * .              const   char*  variant);
  * </pre>
- * </blockquote>
+ * \htmlonly</blockquote>\endhtmlonly
  * The first argument to the constructors is a valid <STRONG>ISO
  * Language Code.</STRONG> These codes are the lower-case two-letter
  * codes as defined by ISO-639.
@@ -103,11 +103,11 @@
  * that you can use to create <code>Locale</code> objects for commonly used
  * locales. For example, the following refers to a <code>Locale</code> object
  * for the United States:
- * <blockquote>
+ * \htmlonly<blockquote>\endhtmlonly
  * <pre>
  *       Locale::getUS()
  * </pre>
- * </blockquote>
+ * \htmlonly</blockquote>\endhtmlonly
  *
  * <P>
  * Once you've created a <code>Locale</code> you can query it for information about
@@ -130,7 +130,7 @@
  * for creating a default object of that type. For example, the
  * <code>NumberFormat</code> class provides these three convenience methods
  * for creating a default <code>NumberFormat</code> object:
- * <blockquote>
+ * \htmlonly<blockquote>\endhtmlonly
  * <pre>
  *     UErrorCode success = U_ZERO_ERROR;
  *     Locale myLocale;
@@ -140,16 +140,16 @@
  *     nf = NumberFormat::createCurrencyInstance( success );  delete nf;
  *     nf = NumberFormat::createPercentInstance( success );   delete nf;
  * </pre>
- * </blockquote>
+ * \htmlonly</blockquote>\endhtmlonly
  * Each of these methods has two variants; one with an explicit locale
  * and one without; the latter using the default locale.
- * <blockquote>
+ * \htmlonly<blockquote>\endhtmlonly
  * <pre>
  *     nf = NumberFormat::createInstance( myLocale, success );          delete nf;
  *     nf = NumberFormat::createCurrencyInstance( myLocale, success );  delete nf;
  *     nf = NumberFormat::createPercentInstance( myLocale, success );   delete nf;
  * </pre>
- * </blockquote>
+ * \htmlonly</blockquote>\endhtmlonly
  * A <code>Locale</code> is the mechanism for identifying the kind of object
  * (<code>NumberFormat</code>) that you would like to get. The locale is
  * <STRONG>just</STRONG> a mechanism for identifying objects,
@@ -163,7 +163,7 @@
  * For example, you can create a menu of all the collation objects
  * suitable for a given language. Such classes implement these
  * three class methods:
- * <blockquote>
+ * \htmlonly<blockquote>\endhtmlonly
  * <pre>
  *       static Locale* getAvailableLocales(int32_t& numLocales)
  *       static UnicodeString& getDisplayName(const Locale&  objectLocale,
@@ -172,7 +172,7 @@
  *       static UnicodeString& getDisplayName(const Locale&  objectLocale,
  *                                            UnicodeString& displayName)
  * </pre>
- * </blockquote>
+ * \htmlonly</blockquote>\endhtmlonly
  *
  * @stable ICU 2.0
  * @see ResourceBundle

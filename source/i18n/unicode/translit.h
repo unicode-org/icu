@@ -69,8 +69,8 @@ class TransliteratorIDParser;
  * transliteration.  For example, given a string <code>input</code>
  * and a transliterator <code>t</code>, the call
  *
- * <blockquote><code>String result = t.transliterate(input);
- * </code></blockquote>
+ * \htmlonly<blockquote>\endhtmlonly<code>String result = t.transliterate(input);
+ * </code>\htmlonly</blockquote>\endhtmlonly
  *
  * will transliterate it and return the result.  Other methods allow
  * the client to specify a substring to be transliterated and to use
@@ -92,20 +92,20 @@ class TransliteratorIDParser;
  *
  * <p>Consider the simple <code>RuleBasedTransliterator</code>:
  *
- * <blockquote><code>
+ * \htmlonly<blockquote>\endhtmlonly<code>
  * th&gt;{theta}<br>
  * t&gt;{tau}
- * </code></blockquote>
+ * </code>\htmlonly</blockquote>\endhtmlonly
  *
  * When the user types 't', nothing will happen, since the
  * transliterator is waiting to see if the next character is 'h'.  To
  * remedy this, we introduce the notion of a cursor, marked by a '|'
  * in the output string:
  *
- * <blockquote><code>
+ * \htmlonly<blockquote>\endhtmlonly<code>
  * t&gt;|{tau}<br>
  * {tau}h&gt;{theta}
- * </code></blockquote>
+ * </code>\htmlonly</blockquote>\endhtmlonly
  *
  * Now when the user types 't', tau appears, and if the next character
  * is 'h', the tau changes to a theta.  This is accomplished by
@@ -164,13 +164,13 @@ class TransliteratorIDParser;
  * to 'B', and <b>BA</b>, which transliterates 'B' to 'A'.  It might
  * seem that these are exact inverses, since
  *
- * <blockquote>"A" x <b>AB</b> -> "B"<br>
- * "B" x <b>BA</b> -> "A"</blockquote>
+ * \htmlonly<blockquote>\endhtmlonly"A" x <b>AB</b> -> "B"<br>
+ * "B" x <b>BA</b> -> "A"\htmlonly</blockquote>\endhtmlonly
  *
  * where 'x' represents transliteration.  However,
  *
- * <blockquote>"ABCD" x <b>AB</b> -> "BBCD"<br>
- * "BBCD" x <b>BA</b> -> "AACD"</blockquote>
+ * \htmlonly<blockquote>\endhtmlonly"ABCD" x <b>AB</b> -> "BBCD"<br>
+ * "BBCD" x <b>BA</b> -> "AACD"\htmlonly</blockquote>\endhtmlonly
  *
  * so <b>AB</b> composed with <b>BA</b> is not the
  * identity. Nonetheless, <b>BA</b> may be usefully considered to be

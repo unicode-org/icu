@@ -68,7 +68,7 @@ class RuleCharacterIterator;
  * similar to that employed by version 8 regular expression character
  * classes.  Here are some simple examples:
  *
- * <blockquote>
+ * \htmlonly<blockquote>\endhtmlonly
  *   <table>
  *     <tr align="top">
  *       <td nowrap valign="top" align="left"><code>[]</code></td>
@@ -99,7 +99,7 @@ class RuleCharacterIterator;
  *       <td valign="top">All characters in the general category Uppercase Letter</td>
  *     </tr>
  *   </table>
- * </blockquote>
+ * \htmlonly</blockquote>\endhtmlonly
  * 
  * Any character may be preceded by a backslash in order to remove any special
  * meaning.  White space characters, as defined by UCharacter.isWhitespace(), are
@@ -168,7 +168,7 @@ class RuleCharacterIterator;
  *
  * <p><b>Formal syntax</b></p>
  *
- * <blockquote>
+ * \htmlonly<blockquote>\endhtmlonly
  *   <table>
  *     <tr align="top">
  *       <td nowrap valign="top" align="right"><code>pattern :=&nbsp; </code></td>
@@ -250,7 +250,7 @@ class RuleCharacterIterator;
  *       </td>
  *     </tr>
  *   </table>
- * </blockquote>
+ * \htmlonly</blockquote>\endhtmlonly
  *
  * @author Alan Liu
  * @stable ICU 2.0

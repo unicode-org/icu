@@ -36,7 +36,7 @@
  * <code>UCalendar</code> whose time fields have been initialized
  * with the current date and time. We need to specify the type of
  * calendar to be opened and the  timezoneId.
- * <blockquote>
+ * \htmlonly<blockquote>\endhtmlonly
  * <pre>
  * \code
  * UCalendar *caldef;
@@ -47,7 +47,7 @@
  * caldef=ucal_open(tzID, u_strlen(tzID), NULL, UCAL_TRADITIONAL, &status);
  * \endcode
  * </pre>
- * </blockquote>
+ * \htmlonly</blockquote>\endhtmlonly
  *
  * <p>
  * A <code>UCalendar</code> object can produce all the time field values
@@ -74,7 +74,7 @@
  * combinations of fields.  The most recent combination, as determined by the
  * most recently set single field, will be used.
  *
- * <blockquote>
+ * \htmlonly<blockquote>\endhtmlonly
  * <pre>
  * \code
  * UCAL_MONTH + UCAL_DAY_OF_MONTH
@@ -84,18 +84,18 @@
  * UCAL_DAY_OF_WEEK + UCAL_WEEK_OF_YEAR
  * \endcode
  * </pre>
- * </blockquote>
+ * \htmlonly</blockquote>\endhtmlonly
  *
  * For the time of day:
  *
- * <blockquote>
+ * \htmlonly<blockquote>\endhtmlonly
  * <pre>
  * \code
  * UCAL_HOUR_OF_DAY
  * UCAL_AM_PM + UCAL_HOUR
  * \endcode
  * </pre>
- * </blockquote>
+ * \htmlonly</blockquote>\endhtmlonly
  *
  * <p>
  * <strong>Note:</strong> for some non-Gregorian calendars, different
