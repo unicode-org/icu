@@ -1,6 +1,6 @@
  /*
  *******************************************************************************
- * Copyright (C) 1996-2003, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2004, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -2798,6 +2798,30 @@ public final class NormalizerImpl {
         set.add(HANGUL_BASE+HANGUL_COUNT); /* add Hangul+1 to continue with other properties */
         return set; // for chaining
     }
+
+    /**
+     * Internal API, used in UCharacter.getIntPropertyValue().
+     * @internal
+     * @param c code point
+     * @param modeValue numeric value compatible with Mode
+     * @return numeric value compatible with QuickCheck
+     */
+    public static final int quickCheck(int c, int modeValue) {
+        final int qcMask[/*UNORM_MODE_COUNT*/]={
+            0, 0, QC_NFD, QC_NFKD, QC_NFC, QC_NFKC
+        };
+
+        int norm32=(int)getNorm32(c)&qcMask[modeValue];
+
+        if(norm32==0) {
+            return 1; // YES
+        } else if((norm32&QC_ANY_NO)!=0) {
+            return 0; // NO
+        } else /* _NORM_QC_ANY_MAYBE */ {
+            return 2; // MAYBE;
+        }
+    }
+
     /**
 	 * Internal API, used by collation code.
 	 * Get access to the internal FCD trie table to be able to perform
