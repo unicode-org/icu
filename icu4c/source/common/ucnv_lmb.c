@@ -1211,11 +1211,11 @@ _LMBCSToUnicodeWithOffsets(UConverterToUnicodeArgs*    args,
    {
       saveSource = args->source; /* beginning of current code point */
 
-      if (args->converter->invalidCharLength) /* reassemble char from previous call */
+      if (args->converter->toULength) /* reassemble char from previous call */
       {
         char LMBCS [ULMBCS_CHARSIZE_MAX];
         const char *pLMBCS = LMBCS, *saveSourceLimit; 
-        size_t size_old = args->converter->invalidCharLength;
+        size_t size_old = args->converter->toULength;
 
          /* limit from source is either reminder of temp buffer, or user limit on source */
         size_t size_new_maybe_1 = sizeof(LMBCS) - size_old;
@@ -1223,7 +1223,7 @@ _LMBCSToUnicodeWithOffsets(UConverterToUnicodeArgs*    args,
         size_t size_new = (size_new_maybe_1 < size_new_maybe_2) ? size_new_maybe_1 : size_new_maybe_2;
          
       
-        uprv_memcpy(LMBCS, args->converter->invalidCharBuffer, size_old);
+        uprv_memcpy(LMBCS, args->converter->toUBytes, size_old);
         uprv_memcpy(LMBCS + size_old, args->source, size_new);
         saveSourceLimit = args->sourceLimit;
         args->source = pLMBCS;
@@ -1234,12 +1234,12 @@ _LMBCSToUnicodeWithOffsets(UConverterToUnicodeArgs*    args,
         args->sourceLimit = saveSourceLimit;
         args->source += (pLMBCS - LMBCS - size_old);
 
-        if (*err == U_TRUNCATED_CHAR_FOUND && !args->flush)
+        if (*err == U_TRUNCATED_CHAR_FOUND)
         {
             /* evil special case: source buffers so small a char spans more than 2 buffers */
             int8_t savebytes = (int8_t)(size_old+size_new);
-            args->converter->invalidCharLength = savebytes;
-            uprv_memcpy(args->converter->invalidCharBuffer, LMBCS, savebytes);
+            args->converter->toULength = savebytes;
+            uprv_memcpy(args->converter->toUBytes, LMBCS, savebytes);
             args->source = args->sourceLimit;
             *err = U_ZERO_ERROR;
             return;
@@ -1247,7 +1247,7 @@ _LMBCSToUnicodeWithOffsets(UConverterToUnicodeArgs*    args,
          else
          {
             /* clear the partial-char marker */
-            args->converter->invalidCharLength = 0;
+            args->converter->toULength = 0;
          }
       }
       else
@@ -1313,11 +1313,10 @@ _LMBCSToUnicodeWithOffsets(UConverterToUnicodeArgs*    args,
    if (*err == U_TRUNCATED_CHAR_FOUND) 
    {
          args->source = args->sourceLimit;
-         if (!args->flush )
          {
             int8_t savebytes = (int8_t)(args->sourceLimit - saveSource);
-            args->converter->invalidCharLength = (int8_t)savebytes;
-            uprv_memcpy(args->converter->invalidCharBuffer, saveSource, savebytes);
+            args->converter->toULength = (int8_t)savebytes;
+            uprv_memcpy(args->converter->toUBytes, saveSource, savebytes);
             *err = U_ZERO_ERROR;
          }
    }

@@ -356,7 +356,7 @@ setInitialStateToUnicodeKR(UConverter* converter,UConverterDataISO2022 *myConver
 static void 
 setInitialStateFromUnicodeKR(UConverter* converter,UConverterDataISO2022 *myConverterData);
 
-/*************** Converter implemenations ******************/
+/*************** Converter implementations ******************/
 static const UConverterImpl _ISO2022Impl={
     UCNV_ISO_2022,
 
@@ -1020,6 +1020,12 @@ T_UConverter_toUnicode_ISO_2022(UConverterToUnicodeArgs *args,
             saveThis = args->converter;
             args->offsets = NULL;
             args->converter = myData->currentConverter;
+            /*
+             * ### TODO this does not maintain overflow and error buffers between
+             * the sub-converter and this one;
+             * idea: just copy those parts of the sub-UConverter into the 2022 UConverter
+             * after ucnv_toUnicode()
+             */
             ucnv_toUnicode(args->converter,
                 &args->target,
                 args->targetLimit,
@@ -1079,10 +1085,6 @@ T_UConverter_toUnicode_ISO_2022(UConverterToUnicodeArgs *args,
     }
 
     myData->isFirstBuffer=FALSE;
-    if( (args->source == args->sourceLimit) && args->flush){
-        _ISO2022Reset(args->converter,UCNV_RESET_FROM_UNICODE);
-    }
-    
 }   
 
 static void 
@@ -1186,9 +1188,6 @@ T_UConverter_toUnicode_ISO_2022_OFFSETS_LOGIC(UConverterToUnicodeArgs* args,
                err);
         myOffset += args->source - sourceStart;
 
-    }
-    if( (args->source == args->sourceLimit) && args->flush){
-        _ISO2022Reset(args->converter,UCNV_RESET_TO_UNICODE);
     }
 }
 
@@ -1758,20 +1757,6 @@ getTrail:
 
     }/* end while(mySourceIndex<mySourceLength) */
 
-
-    /*If at the end of conversion we are still carrying state information
-     *flush is TRUE, we can deduce that the input stream is truncated
-     */
-    if (args->converter->fromUSurrogateLead !=0 && (source == sourceLimit) && args->flush){
-        *err = U_TRUNCATED_CHAR_FOUND;
-    }
-    /* Reset the state of converter if we consumed 
-     * the source and flush is true
-     */
-    if( (source == sourceLimit) && args->flush){
-        setInitialStateFromUnicodeJPCN(args->converter,converterData);
-    }
-
     /*save the state and return */
     args->source = source;
     args->target = (char*)target;
@@ -2009,19 +1994,6 @@ CALLBACK:
             break;
         }
     }
-    if((args->flush==TRUE)
-        && (mySource == mySourceLimit) 
-        && ( *toUnicodeStatus!=0x00)){
-
-        *err = U_TRUNCATED_CHAR_FOUND;
-        *toUnicodeStatus= 0x00;
-    }
-    /* Reset the state of converter if we consumed 
-     * the source and flush is true
-     */
-    if( (mySource == mySourceLimit) && args->flush){
-        setInitialStateToUnicodeJPCN(args->converter,myData);
-    }
     args->target = myTarget;
     args->source = mySource;
 }
@@ -2223,20 +2195,6 @@ getTrail:
 
     }/* end while(mySourceIndex<mySourceLength) */
 
-
-    /*If at the end of conversion we are still carrying state information
-     *flush is TRUE, we can deduce that the input stream is truncated
-     */
-    if (args->converter->fromUSurrogateLead !=0 && (source == sourceLimit) && args->flush){
-        *err = U_TRUNCATED_CHAR_FOUND;
-    }
-    /* Reset the state of converter if we consumed 
-     * the source and flush is true
-     */
-    if( (source == sourceLimit) && args->flush){
-        setInitialStateFromUnicodeKR(args->converter,converterData);
-    }
-
     /*save the state and return */
     args->source = source;
     args->target = (char*)target;
@@ -2403,19 +2361,6 @@ UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
             *err =U_BUFFER_OVERFLOW_ERROR;
             break;
         }
-    }
-    if((args->flush==TRUE)
-        && (mySource == mySourceLimit) 
-        && ( args->converter->toUnicodeStatus !=0x00)){
-
-        *err = U_TRUNCATED_CHAR_FOUND;
-        args->converter->toUnicodeStatus = 0x00;
-    }
-    /* Reset the state of converter if we consumed 
-     * the source and flush is true
-     */
-    if( (mySource == mySourceLimit) && args->flush){
-        setInitialStateToUnicodeKR(args->converter,myData);
     }
     args->target = myTarget;
     args->source = mySource;
@@ -2833,20 +2778,6 @@ callback:
 
     }/* end while(mySourceIndex<mySourceLength) */
 
-
-    /*If at the end of conversion we are still carrying state information
-     *flush is TRUE, we can deduce that the input stream is truncated
-     */
-    if (args->converter->fromUSurrogateLead !=0 && (source == sourceLimit) && args->flush){
-        *err = U_TRUNCATED_CHAR_FOUND;
-    }
-    /* Reset the state of converter if we consumed 
-     * the source and flush is true
-     */
-    if( (source == sourceLimit) && args->flush){
-        setInitialStateFromUnicodeJPCN(args->converter,converterData);
-    }
-
     /*save the state and return */
     args->source = source;
     args->target = (char*)target;
@@ -3233,19 +3164,6 @@ UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
             *err =U_BUFFER_OVERFLOW_ERROR;
             break;
         }
-    }
-    if((args->flush==TRUE)
-        && (mySource == mySourceLimit) 
-        && ( args->converter->toUnicodeStatus !=0x00)){
-
-        *err = U_TRUNCATED_CHAR_FOUND;
-        args->converter->toUnicodeStatus = 0x00;
-    }
-    /* Reset the state of converter if we consumed 
-     * the source and flush is true
-     */
-    if( (mySource == mySourceLimit) && args->flush){
-        setInitialStateToUnicodeJPCN(args->converter,myData);
     }
     args->target = myTarget;
     args->source = mySource;

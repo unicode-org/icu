@@ -1053,21 +1053,6 @@ getTrail:
 
     }/* end while(mySourceIndex<mySourceLength) */
 
-
-    /*If at the end of conversion we are still carrying state information
-     *flush is TRUE, we can deduce that the input stream is truncated
-     */
-    if (args->converter->fromUSurrogateLead !=0 && (source == sourceLimit) && args->flush){
-        *err = U_TRUNCATED_CHAR_FOUND;
-    }
-    /* Reset the state of converter if we consumed 
-     * the source and flush is true
-     */
-    if( (source == sourceLimit) && args->flush){
-       /*reset converter*/
-        _ISCIIReset(args->converter,UCNV_RESET_FROM_UNICODE);
-    }
-
     /*save the state and return */
     args->source = source;
     args->target = (char*)target;
@@ -1396,26 +1381,30 @@ CALLBACK:
             break;
         }
     }
-    if((args->flush==TRUE)
-            && (source == sourceLimit) 
-            && data->contextCharToUnicode != NO_CHAR_MARKER){
-        /* if we have ATR in context it is an error */
-        if(data->contextCharToUnicode==ATR || data->contextCharToUnicode==EXT || *toUnicodeStatus == missingCharMarker){
-            *err = U_TRUNCATED_CHAR_FOUND;
+
+    if(args->flush && source == sourceLimit) {
+        /* end of the input stream */
+        UConverter *cnv = args->converter;
+
+        if(*contextCharToUnicode==ATR || *contextCharToUnicode==EXT || *contextCharToUnicode==ISCII_INV){
+            /* set toUBytes[] */
+            cnv->toUBytes[0] = (uint8_t)*contextCharToUnicode;
+            cnv->toULength = 1;
+
+            /* avoid looping on truncated sequences */
+            *contextCharToUnicode = NO_CHAR_MARKER;
         }else{
-            WRITE_TO_TARGET_TO_U(args,source,target,args->offsets,(source - args->source -1),
-                            *toUnicodeStatus,data->currentDeltaToUnicode,err);
-           *toUnicodeStatus = missingCharMarker;
+            cnv->toULength = 0;
         }
 
+        if(*toUnicodeStatus != missingCharMarker) {
+            /* output a remaining target character */
+            WRITE_TO_TARGET_TO_U(args,source,target,args->offsets,(source - args->source -1),
+                            *toUnicodeStatus,data->currentDeltaToUnicode,err);
+            *toUnicodeStatus = missingCharMarker;
+        }
     }
-    /* Reset the state of converter if we consumed 
-     * the source and flush is true
-     */
-    if( (source == sourceLimit) && args->flush){
-        /*reset converter*/
-        _ISCIIReset(args->converter,UCNV_RESET_TO_UNICODE);
-    }
+
     args->target = target;
     args->source = source;
 }

@@ -128,20 +128,10 @@ morebytes:
             }
             else
             {
-                if (args->flush)
-                {
-                    if (U_SUCCESS(*err))
-                    {
-                        *err = U_TRUNCATED_CHAR_FOUND;
-                        args->converter->toUnicodeStatus = MAXIMUM_UCS4;
-                    }
-                }
-                else
-                {   /* stores a partially calculated target*/
-                    /* + 1 to make 0 a valid character */
-                    args->converter->toUnicodeStatus = ch + 1;
-                    args->converter->toULength = (int8_t) i;
-                }
+                /* stores a partially calculated target*/
+                /* + 1 to make 0 a valid character */
+                args->converter->toUnicodeStatus = ch + 1;
+                args->converter->toULength = (int8_t) i;
                 goto donefornow;
             }
         }
@@ -237,20 +227,10 @@ morebytes:
             }
             else
             {
-                if (args->flush)
-                {
-                    if (U_SUCCESS(*err))
-                    {
-                        *err = U_TRUNCATED_CHAR_FOUND;
-                        args->converter->toUnicodeStatus = MAXIMUM_UCS4;
-                    }
-                }
-                else
-                {   /* stores a partially calculated target*/
-                    /* + 1 to make 0 a valid character */
-                    args->converter->toUnicodeStatus = ch + 1;
-                    args->converter->toULength = (int8_t) i;
-                }
+                /* stores a partially calculated target*/
+                /* + 1 to make 0 a valid character */
+                args->converter->toUnicodeStatus = ch + 1;
+                args->converter->toULength = (int8_t) i;
                 goto donefornow;
             }
         }
@@ -331,10 +311,10 @@ T_UConverter_fromUnicode_UTF32_BE(UConverterFromUnicodeArgs * args,
 
     temp[0] = 0;
 
-    if (args->converter->fromUnicodeStatus)
+    if (args->converter->fromUSurrogateLead)
     {
-        ch = args->converter->fromUnicodeStatus;
-        args->converter->fromUnicodeStatus = 0;
+        ch = args->converter->fromUSurrogateLead;
+        args->converter->fromUSurrogateLead = 0;
         goto lowsurogate;
     }
 
@@ -354,12 +334,22 @@ lowsurogate:
                     mySource++;
                 }
             }
+#if 0
+            /*
+             * ### TODO the old code used to convert unpaired surrogates in the middle
+             * of a stream but not at the end
+             * figure out which way to go definitely when discussing
+             * Jitterbug 1838 - forbid converting surrogate code points in UTF-16/32
+             *
+             * for now (j2449), unpaired surrogates are always converted
+             */
             else if (!args->flush)
             {
                 /* ran out of source */
-                args->converter->fromUnicodeStatus = ch;
+                args->converter->fromUSurrogateLead = (UChar)ch;
                 break;
             }
+#endif
         }
 
         /* We cannot get any larger than 10FFFF because we are coming from UTF-16 */
@@ -406,10 +396,10 @@ T_UConverter_fromUnicode_UTF32_BE_OFFSET_LOGIC(UConverterFromUnicodeArgs * args,
 
     temp[0] = 0;
 
-    if (args->converter->fromUnicodeStatus)
+    if (args->converter->fromUSurrogateLead)
     {
-        ch = args->converter->fromUnicodeStatus;
-        args->converter->fromUnicodeStatus = 0;
+        ch = args->converter->fromUSurrogateLead;
+        args->converter->fromUSurrogateLead = 0;
         goto lowsurogate;
     }
 
@@ -429,12 +419,14 @@ lowsurogate:
                     mySource++;
                 }
             }
+#if 0
             else if (!args->flush)
             {
                 /* ran out of source */
-                args->converter->fromUnicodeStatus = ch;
+                args->converter->fromUSurrogateLead = (UChar)ch;
                 break;
             }
+#endif
         }
 
         /* We cannot get any larger than 10FFFF because we are coming from UTF-16 */
@@ -613,20 +605,10 @@ morebytes:
             }
             else
             {
-                if (args->flush)
-                {
-                    if (U_SUCCESS(*err))
-                    {
-                        *err = U_TRUNCATED_CHAR_FOUND;
-                        args->converter->toUnicodeStatus = 0;
-                    }
-                }
-                else
-                {   /* stores a partially calculated target*/
-                    /* + 1 to make 0 a valid character */
-                    args->converter->toUnicodeStatus = ch + 1;
-                    args->converter->toULength = (int8_t) i;
-                }
+                /* stores a partially calculated target*/
+                /* + 1 to make 0 a valid character */
+                args->converter->toUnicodeStatus = ch + 1;
+                args->converter->toULength = (int8_t) i;
                 goto donefornow;
             }
         }
@@ -724,20 +706,10 @@ morebytes:
             }
             else
             {
-                if (args->flush)
-                {
-                    if (U_SUCCESS(*err))
-                    {
-                        *err = U_TRUNCATED_CHAR_FOUND;
-                        args->converter->toUnicodeStatus = 0;
-                    }
-                }
-                else
-                {   /* stores a partially calculated target*/
-                    /* + 1 to make 0 a valid character */
-                    args->converter->toUnicodeStatus = ch + 1;
-                    args->converter->toULength = (int8_t) i;
-                }
+                /* stores a partially calculated target*/
+                /* + 1 to make 0 a valid character */
+                args->converter->toUnicodeStatus = ch + 1;
+                args->converter->toULength = (int8_t) i;
                 goto donefornow;
             }
         }
@@ -818,10 +790,10 @@ T_UConverter_fromUnicode_UTF32_LE(UConverterFromUnicodeArgs * args,
 
     temp[3] = 0;
 
-    if (args->converter->fromUnicodeStatus)
+    if (args->converter->fromUSurrogateLead)
     {
-        ch = args->converter->fromUnicodeStatus;
-        args->converter->fromUnicodeStatus = 0;
+        ch = args->converter->fromUSurrogateLead;
+        args->converter->fromUSurrogateLead = 0;
         goto lowsurogate;
     }
 
@@ -841,12 +813,14 @@ lowsurogate:
                     mySource++;
                 }
             }
+#if 0
             else if (!args->flush)
             {
                 /* ran out of source */
-                args->converter->fromUnicodeStatus = ch;
+                args->converter->fromUSurrogateLead = (UChar)ch;
                 break;
             }
+#endif
         }
 
         /* We cannot get any larger than 10FFFF because we are coming from UTF-16 */
@@ -893,10 +867,10 @@ T_UConverter_fromUnicode_UTF32_LE_OFFSET_LOGIC(UConverterFromUnicodeArgs * args,
 
     temp[3] = 0;
 
-    if (args->converter->fromUnicodeStatus)
+    if (args->converter->fromUSurrogateLead)
     {
-        ch = args->converter->fromUnicodeStatus;
-        args->converter->fromUnicodeStatus = 0;
+        ch = args->converter->fromUSurrogateLead;
+        args->converter->fromUSurrogateLead = 0;
         goto lowsurogate;
     }
 
@@ -916,12 +890,14 @@ lowsurogate:
                     mySource++;
                 }
             }
+#if 0
             else if (!args->flush)
             {
                 /* ran out of source */
-                args->converter->fromUnicodeStatus = ch;
+                args->converter->fromUSurrogateLead = (UChar)ch;
                 break;
             }
+#endif
         }
 
         /* We cannot get any larger than 10FFFF because we are coming from UTF-16 */
@@ -1253,12 +1229,12 @@ _UTF32ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
             T_UConverter_toUnicode_UTF32_BE(pArgs, pErrorCode);
             pArgs->source=source;
             pArgs->sourceLimit=sourceLimit;
+            state=8;
             break;
         }
-        cnv->mode=0; /* reset */
-    } else {
-        cnv->mode=state;
     }
+
+    cnv->mode=state;
 }
 
 static UChar32
@@ -1270,7 +1246,7 @@ _UTF32GetNextUChar(UConverterToUnicodeArgs *pArgs,
     case 9:
         return T_UConverter_getNextUChar_UTF32_LE(pArgs, pErrorCode);
     default:
-        return ucnv_getNextUCharFromToUImpl(pArgs, _UTF32ToUnicodeWithOffsets, FALSE, pErrorCode);
+        return UCNV_GET_NEXT_UCHAR_USE_TO_U;
     }
 }
 

@@ -768,7 +768,6 @@ ucnv_createConverterFromSharedData(UConverter *myUConverter,
     myUConverter->isExtraLocal = FALSE;
     myUConverter->sharedData = mySharedConverterData;
     myUConverter->options = options;
-    myUConverter->mode = UCNV_SI;
     myUConverter->fromCharErrorBehaviour = (UConverterToUCallback) UCNV_TO_U_CALLBACK_SUBSTITUTE;
     myUConverter->fromUCharErrorBehaviour = (UConverterFromUCallback) UCNV_FROM_U_CALLBACK_SUBSTITUTE;
     myUConverter->toUnicodeStatus = myUConverter->sharedData->toUnicodeStatus;

@@ -778,21 +778,6 @@ _MBCSUnload(UConverterSharedData *sharedData) {
 }
 
 static void
-_MBCSReset(UConverter *cnv, UConverterResetChoice choice) {
-    if(choice<=UCNV_RESET_TO_UNICODE) {
-        /* toUnicode */
-        cnv->toUnicodeStatus=0;     /* offset */
-        cnv->mode=0;                /* state */
-        cnv->toULength=0;           /* byteIndex */
-    }
-    if(choice!=UCNV_RESET_TO_UNICODE) {
-        /* fromUnicode */
-        cnv->fromUSurrogateLead=0;
-        cnv->fromUnicodeStatus=1;   /* prevLength */
-    }
-}
-
-static void
 _MBCSOpen(UConverter *cnv,
           const char *name,
           const char *locale,
@@ -822,7 +807,21 @@ _MBCSOpen(UConverter *cnv,
         }
     }
 
-    _MBCSReset(cnv, UCNV_RESET_BOTH);
+#if 0
+    /*
+     * documentation of UConverter fields used for status
+     * all of these fields are (re)set to 0 by ucnv_bld.c and ucnv_reset()
+     */
+
+    /* toUnicode */
+    cnv->toUnicodeStatus=0;     /* offset */
+    cnv->mode=0;                /* state */
+    cnv->toULength=0;           /* byteIndex */
+
+    /* fromUnicode */
+    cnv->fromUSurrogateLead=0;
+    cnv->fromUnicodeStatus=1;   /* prevLength */
+#endif
 }
 
 static const char *
@@ -1151,21 +1150,10 @@ callback:
         }
     }
 
-    if(pArgs->flush && source>=sourceLimit) {
-        /* reset the state for the next conversion */
-        if(byteIndex>0 && U_SUCCESS(*pErrorCode)) {
-            /* a character byte sequence remains incomplete */
-            *pErrorCode=U_TRUNCATED_CHAR_FOUND;
-        }
-        cnv->toUnicodeStatus=0;
-        cnv->mode=0;
-        cnv->toULength=0;
-    } else {
-        /* set the converter state back into UConverter */
-        cnv->toUnicodeStatus=offset;
-        cnv->mode=state;
-        cnv->toULength=byteIndex;
-    }
+    /* set the converter state back into UConverter */
+    cnv->toUnicodeStatus=offset;
+    cnv->mode=state;
+    cnv->toULength=byteIndex;
 
     /* write back the updated pointers */
     pArgs->source=(const char *)source;
@@ -1622,7 +1610,7 @@ _MBCSGetNextUChar(UConverterToUnicodeArgs *pArgs,
          * with the rare case of a codepage that maps single surrogates
          * without adding the complexity to this already complicated function here.
          */
-        return ucnv_getNextUCharFromToUImpl(pArgs, _MBCSToUnicodeWithOffsets, TRUE, pErrorCode);
+        return UCNV_GET_NEXT_UCHAR_USE_TO_U;
     } else if(cnv->sharedData->table->mbcs.countStates==1) {
         return _MBCSSingleGetNextUChar(pArgs, pErrorCode);
     }
@@ -2335,7 +2323,7 @@ getTrail:
                 cnv->fromUnicodeStatus=prevLength; /* save the old state */
                 value=MBCS_VALUE_2_FROM_STAGE_2(bytes, stage2Entry, c);
                 if(value<=0xff) {
-                    if(prevLength==1) {
+                    if(prevLength<=1) {
                         length=1;
                     } else {
                         /* change from double-byte mode to single-byte */
@@ -2611,36 +2599,34 @@ callback:
         }
     }
 
-    if(pArgs->flush && source>=sourceLimit && U_SUCCESS(*pErrorCode)) {
-        /* end of input stream */
-        if(c!=0) {
-            /* a Unicode code point remains incomplete (only a first surrogate) */
-            *pErrorCode=U_TRUNCATED_CHAR_FOUND;
-            /* the following may change with Jitterbug 2449: would prepare for callback instead of resetting */
-            c=0;
-            prevLength=1;
-        } else if(outputType==MBCS_OUTPUT_2_SISO && prevLength==2) {
-            /* EBCDIC_STATEFUL ending with DBCS: emit an SI to return the output stream to SBCS */
-            if(targetCapacity>0) {
-                *target++=(uint8_t)UCNV_SI;
-                if(offsets!=NULL) {
-                    /* set the last source character's index (sourceIndex points at sourceLimit now) */
-                    *offsets++=prevSourceIndex;
-                }
-            } else {
-                /* target is full */
-                cnv->charErrorBuffer[0]=(char)UCNV_SI;
-                cnv->charErrorBufferLength=1;
-                *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+    /*
+     * the end of the input stream and detection of truncated input
+     * are handled by the framework, but for EBCDIC_STATEFUL conversion
+     * we need to emit an SI at the very end
+     *
+     * conditions:
+     *   successful
+     *   EBCDIC_STATEFUL in DBCS mode
+     *   end of input and no truncated input
+     */
+    if( U_SUCCESS(*pErrorCode) &&
+        outputType==MBCS_OUTPUT_2_SISO && prevLength==2 &&
+        pArgs->flush && source>=sourceLimit && c==0
+    ) {
+        /* EBCDIC_STATEFUL ending with DBCS: emit an SI to return the output stream to SBCS */
+        if(targetCapacity>0) {
+            *target++=(uint8_t)UCNV_SI;
+            if(offsets!=NULL) {
+                /* set the last source character's index (sourceIndex points at sourceLimit now) */
+                *offsets++=prevSourceIndex;
             }
-            prevLength=1; /* we switched into SBCS */
+        } else {
+            /* target is full */
+            cnv->charErrorBuffer[0]=(char)UCNV_SI;
+            cnv->charErrorBufferLength=1;
+            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
         }
-
-        /* reset the state for the next conversion */
-        if(U_SUCCESS(*pErrorCode)) {
-            c=0;
-            prevLength=1;
-        }
+        prevLength=1; /* we switched into SBCS */
     }
 
     /* set the converter state back into UConverter */
@@ -2892,19 +2878,9 @@ callback:
         }
     }
 
-    if(pArgs->flush && source>=sourceLimit) {
-        /* reset the state for the next conversion */
-        if(c!=0 && U_SUCCESS(*pErrorCode)) {
-            /* a Unicode code point remains incomplete (only a first surrogate) */
-            *pErrorCode=U_TRUNCATED_CHAR_FOUND;
-        }
-        cnv->fromUSurrogateLead=0;
-        cnv->fromUnicodeStatus=1;
-    } else {
-        /* set the converter state back into UConverter */
-        cnv->fromUSurrogateLead=(UChar)c;
-        cnv->fromUnicodeStatus=prevLength;
-    }
+    /* set the converter state back into UConverter */
+    cnv->fromUSurrogateLead=(UChar)c;
+    cnv->fromUnicodeStatus=prevLength;
 
     /* write back the updated pointers */
     pArgs->source=source;
@@ -3106,17 +3082,8 @@ callback:
         }
     }
 
-    if(pArgs->flush && source>=sourceLimit) {
-        /* reset the state for the next conversion */
-        if(c!=0 && U_SUCCESS(*pErrorCode)) {
-            /* a Unicode code point remains incomplete (only a first surrogate) */
-            *pErrorCode=U_TRUNCATED_CHAR_FOUND;
-        }
-        cnv->fromUSurrogateLead=0;
-    } else {
-        /* set the converter state back into UConverter */
-        cnv->fromUSurrogateLead=(UChar)c;
-    }
+    /* set the converter state back into UConverter */
+    cnv->fromUSurrogateLead=(UChar)c;
 
     /* write back the updated pointers */
     pArgs->source=source;
@@ -3389,17 +3356,8 @@ getTrail:
         }
     }
 
-    if(pArgs->flush && source>=sourceLimit) {
-        /* reset the state for the next conversion */
-        if(c!=0 && U_SUCCESS(*pErrorCode)) {
-            /* a Unicode code point remains incomplete (only a first surrogate) */
-            *pErrorCode=U_TRUNCATED_CHAR_FOUND;
-        }
-        cnv->fromUSurrogateLead=0;
-    } else {
-        /* set the converter state back into UConverter */
-        cnv->fromUSurrogateLead=(UChar)c;
-    }
+    /* set the converter state back into UConverter */
+    cnv->fromUSurrogateLead=(UChar)c;
 
     /* write back the updated pointers */
     pArgs->source=source;
@@ -3643,7 +3601,7 @@ _MBCSWriteSub(UConverterFromUnicodeArgs *pArgs,
             *p++=subchar[0];
             break;
         case 2:
-            if(cnv->fromUnicodeStatus==1) {
+            if(cnv->fromUnicodeStatus<=1) {
                 /* SBCS mode and DBCS sub char: change to DBCS */
                 cnv->fromUnicodeStatus=2;
                 *p++=UCNV_SO;
@@ -3688,7 +3646,7 @@ static const UConverterImpl _MBCSImpl={
 
     _MBCSOpen,
     NULL,
-    _MBCSReset,
+    NULL,
 
     _MBCSToUnicodeWithOffsets,
     _MBCSToUnicodeWithOffsets,
