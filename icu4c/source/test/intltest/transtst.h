@@ -339,6 +339,9 @@ private:
     void TestRuleWhitespace(void);
 
     void TestAllCodepoints(void);
+
+    void TestBoilerplate(void);
+
     //======================================================================
     // Support methods
     //======================================================================
