@@ -44,12 +44,16 @@ private:
     float fPointSize;
 
 	const SFNTDirectory *fDirectory;
+    le_uint16 fDirPower;
+    le_uint16 fDirExtra;
 
 	CMAPMapper *fCMAPMapper;
 
 	const HMTXTable *fHMTXTable;
 	le_uint16 fNumGlyphs;
 	le_uint16 fNumLongHorMetrics;
+
+    static le_int8 highBit(le_int32 value);
 
 	const DirectoryEntry *findTable(LETag tag) const;
 	const void *readTable(LETag tag, le_uint32 *length) const;

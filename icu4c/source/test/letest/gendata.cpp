@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 1999-2000, International Business Machines
+ *   Copyright (C) 1999-2002, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -41,7 +41,7 @@ char *header =
     "/*\n"
     " *******************************************************************************\n"
     " *\n"
-    " *   Copyright (C) 1999-2000, International Business Machines\n"
+    " *   Copyright (C) 1999-2002, International Business Machines\n"
     " *   Corporation and others.  All Rights Reserved.\n"
     " *\n"
     " *   WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT\n"
@@ -248,7 +248,7 @@ UChar thaiSample[] =
 int32_t thaiSampleLength = ARRAY_LENGTH(thaiSample);
 
 TestInput testInputs[] = {
-    {"Devamt.ttf",            devaText,   devaTextLength,   USCRIPT_DEVANAGARI, false},
+    {"raghu.ttf",             devaText,   devaTextLength,   USCRIPT_DEVANAGARI, false},
     {"Times.TTF",             arabText,   arabTextLength,   USCRIPT_ARABIC,     true},
     {"LucidaSansRegular.ttf", arabText,   arabTextLength,   USCRIPT_ARABIC,     true},
     {"Thonburi.ttf",          thaiSample, thaiSampleLength, USCRIPT_THAI,       false}
