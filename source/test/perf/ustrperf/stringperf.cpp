@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (C) 2002-2004 IBM, Inc.   All Rights Reserved.
+ * Copyright (C) 2002 IBM, Inc.   All Rights Reserved.
  *
  ********************************************************************/
 /*****************************************************************************
@@ -16,34 +16,38 @@
 /** 
  * This program tests UnicodeString performance.
  * APIs tested: UnicodeString
- * ICU4C 
- * Windows 2000/XP
+ * ICU4C  
+ * Windows 2000/XP, Linux
  */
 
 #include "stringperf.h"
-#include "uoptions.h"
 
 
 int main(int argc, const char *argv[])
 {
     UErrorCode status = U_ZERO_ERROR;
 
-	bCatenatePrealloc=true;
-	if (bCatenatePrealloc) {
-		int to_alloc = LOOPS * MAXNUMLINES * (MAXSRCLEN + catenate_STRLEN);
-		catICU = new UnicodeString(to_alloc,'a',0);
-
-		catStd = new stlstring();
-		catStd -> reserve(LOOPS * MAXNUMLINES * (MAXSRCLEN + catenate_STRLEN));
-	} else {
-		catICU = new UnicodeString();
-		catStd = new stlstring();
-	}
+	bCatenatePrealloc=TRUE;
 
     StringPerformanceTest test(argc, argv, status);
 	if (U_FAILURE(status)){
         return status;
     }
+	
+	int loops = LOOPS;
+	if (bCatenatePrealloc) {
+		int to_alloc = loops * MAXNUMLINES * (MAXSRCLEN + catenate_STRLEN);
+		catICU = new UnicodeString(to_alloc,'a',0);
+		//catICU = new UnicodeString();
+
+		catStd = new stlstring();
+		catStd -> reserve(loops * MAXNUMLINES * (MAXSRCLEN + catenate_STRLEN));
+		//catStd -> reserve(110000000);
+	} else {
+		catICU = new UnicodeString();
+		catStd = new stlstring();
+	}
+
     if (test.run() == FALSE){
         fprintf(stderr, "FAILED: Tests could not be run please check the "
 			            "arguments.\n");
@@ -66,7 +70,7 @@ StringPerformanceTest::StringPerformanceTest(int32_t argc, const char *argv[],
 	int32_t len =0;
 
 	if (status== U_ILLEGAL_ARGUMENT_ERROR){
-       fprintf(stderr,gUsageString, "stringperf");
+       //fprintf(stderr,gUsageString, "stringperf");
        return;
     }
     if (U_FAILURE(status)){
