@@ -1789,7 +1789,7 @@ TestMirroring() {
     set=uset_openPattern(mirroredPattern, 17, &errorCode);
 
 	if (U_FAILURE(errorCode)) {
-		log_err("uset_openPattern(mirroredPattern, 17, &errorCode) failed!");
+		log_data_err("uset_openPattern(mirroredPattern, 17, &errorCode) failed!");
 	} else {
 		for(i=0; 0==uset_getItem(set, i, &start, &end, NULL, 0, &errorCode); ++i) {
 			do {
