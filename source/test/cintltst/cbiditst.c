@@ -212,8 +212,32 @@ static void TestReorder(){
             "RBBAYAD  \\u200E\\u0633  \\u0627\\u0644\\u0633\\u0628\\u062A\\u200E  7  YAD",
             "\\u0627\\u0644\\u0633\\u0628\\u062AOLLEH",
     };
-
-
+    char* visualOrder3[]={
+            ")\\u062F.\\u0625.\\u200F(DDA)\\u062F\\u0625(LED",
+            ")\\u0623\\u064A\\u0627\\u0631(DDA )\\u0645\\u0627\\u064A\\u0648(LED",
+            "\\u0644.\\u0644.)\\u0644)\\u0644.\\u200F(\\u0644\\u0644)DDA(LED",
+            "\\u0631.\\u064A.) \\u0631.\\u064A.\\u200F(\\u0631\\u064A)DDA(LED",
+            "RBBAYAD \\u0627\\u0644\\u0627\\u062B\\u0646\\u064A\\u0646   \\u0646  2 YAD",
+            "RBBAYAD \\u0627\\u0644\\u062B\\u0644\\u0627\\u062B\\u0627\\u0621   \\u062B  3 YAD",
+            "RBBAYAD \\u0627\\u0644\\u0623\\u0631\\u0628\\u0639\\u0627\\u0621     \\u0631 4 YAD",
+            "RBBAYAD  \\u0627\\u0644\\u062E\\u0645\\u064A\\u0633   \\u062E  5 YAD",
+            "RBBAYAD    \\u0627\\u0644\\u062C\\u0645\\u0639\\u0629     \\u062C",
+            "RBBAYAD  \\u0627\\u0644\\u0633\\u0628\\u062A   \\u0633  7 YAD",
+            "\\u0627\\u0644\\u0633\\u0628\\u062AOLLEH"
+    };
+    char* visualOrder4[]={
+            "DEL(ADD(\\u0625\\u062F(.\\u0625.\\u062F)",
+            "DEL( (\\u0648\\u064A\\u0627\\u0645ADD(\\u0631\\u0627\\u064A\\u0623)",
+            "DEL(ADD(\\u0644\\u0644(.\\u0644(\\u0644(.\\u0644.\\u0644",
+            "DEL(ADD(\\u064A\\u0631(.\\u064A.\\u0631 (.\\u064A.\\u0631",
+            "DAY 2  \\u0646   \\u0646\\u064A\\u0646\\u062B\\u0627\\u0644\\u0627 DAYABBR",
+            "DAY 3  \\u062B   \\u0621\\u0627\\u062B\\u0627\\u0644\\u062B\\u0644\\u0627 DAYABBR",
+            "DAY 4 \\u0631     \\u0621\\u0627\\u0639\\u0628\\u0631\\u0623\\u0644\\u0627 DAYABBR",
+            "DAY 5  \\u062E   \\u0633\\u064A\\u0645\\u062E\\u0644\\u0627  DAYABBR",
+            "DAY 6 \\u062C     \\u0629\\u0639\\u0645\\u062C\\u0644\\u0627    DAYABBR",
+            "DAY 7  \\u0633   \\u062A\\u0628\\u0633\\u0644\\u0627  DAYABBR ",
+            "HELLO\\u062A\\u0628\\u0633\\u0644\\u0627"
+    };
     UErrorCode ec = U_ZERO_ERROR;
     UBiDi* bidi = ubidi_open();
     int i=0;
@@ -231,6 +255,15 @@ static void TestReorder(){
             log_err("ubidi_setPara(tests[%d], paraLevel %d) failed with errorCode %s\n",
                     i, UBIDI_DEFAULT_LTR, u_errorName(ec));
         }
+        /* try pre-flighting */
+        destSize = ubidi_writeReordered(bidi,dest,0,UBIDI_DO_MIRRORING,&ec);
+        if(ec!=U_BUFFER_OVERFLOW_ERROR){
+            log_err("Pre-flighting did not give expected error: Expected: U_BUFFER_OVERFLOW_ERROR. Got: %s \n",u_errorName(ec));
+        }else if(destSize!=srcSize){
+            log_err("Pre-flighting did not give expected size: Expected: %d. Got: %d \n",srcSize,destSize);
+        }else{
+            ec= U_ZERO_ERROR;
+        }
         destSize=ubidi_writeReordered(bidi,dest,destSize,UBIDI_DO_MIRRORING,&ec);
         chars = aescstrdup(dest,-1);
         if(destSize!=srcSize){
@@ -243,6 +276,7 @@ static void TestReorder(){
         uprv_free(src);
         uprv_free(dest);
     }
+    
     for(i=0;i<(sizeof(logicalOrder)/sizeof(logicalOrder[0]));i++){
         int32_t srcSize = uprv_strlen(logicalOrder[i]);
         UChar* src = (UChar*) uprv_malloc(sizeof(UChar)*srcSize );
@@ -256,6 +290,15 @@ static void TestReorder(){
         if(U_FAILURE(ec)){
             log_err("ubidi_setPara(tests[%d], paraLevel %d) failed with errorCode %s\n",
                     i, UBIDI_DEFAULT_LTR, u_errorName(ec));
+        }
+        /* try pre-flighting */
+        destSize = ubidi_writeReordered(bidi,dest,0,UBIDI_DO_MIRRORING+UBIDI_OUTPUT_REVERSE,&ec);
+        if(ec!=U_BUFFER_OVERFLOW_ERROR){
+            log_err("Pre-flighting did not give expected error: Expected: U_BUFFER_OVERFLOW_ERROR. Got: %s \n",u_errorName(ec));
+        }else if(destSize!=srcSize){
+            log_err("Pre-flighting did not give expected size: Expected: %d. Got: %d \n",srcSize,destSize);
+        }else{
+            ec= U_ZERO_ERROR;
         }
         destSize=ubidi_writeReordered(bidi,dest,destSize,UBIDI_DO_MIRRORING+UBIDI_OUTPUT_REVERSE,&ec);
         chars = aescstrdup(dest,destSize);
@@ -270,6 +313,7 @@ static void TestReorder(){
         uprv_free(src);
         uprv_free(dest);
     }
+
     for(i=0;i<(sizeof(logicalOrder)/sizeof(logicalOrder[0]));i++){
         int32_t srcSize = uprv_strlen(logicalOrder[i]);
         UChar* src = (UChar*) uprv_malloc(sizeof(UChar)*srcSize );
@@ -279,11 +323,19 @@ static void TestReorder(){
         ec = U_ZERO_ERROR;
         u_unescape(logicalOrder[i],src,srcSize);
         srcSize=u_strlen(src);
-        ubidi_setPara(bidi,src,srcSize,UBIDI_DEFAULT_LTR ,NULL,&ec);
         ubidi_setInverse(bidi,TRUE);
+        ubidi_setPara(bidi,src,srcSize,UBIDI_DEFAULT_LTR ,NULL,&ec);
+
         if(U_FAILURE(ec)){
             log_err("ubidi_setPara(tests[%d], paraLevel %d) failed with errorCode %s\n",
                     i, UBIDI_DEFAULT_LTR, u_errorName(ec));
+        }
+                /* try pre-flighting */
+        destSize = ubidi_writeReordered(bidi,dest,0,UBIDI_INSERT_LRM_FOR_NUMERIC+UBIDI_OUTPUT_REVERSE,&ec);
+        if(ec!=U_BUFFER_OVERFLOW_ERROR){
+            log_err("Pre-flighting did not give expected error: Expected: U_BUFFER_OVERFLOW_ERROR. Got: %s \n",u_errorName(ec));
+        }else{
+            ec= U_ZERO_ERROR;
         }
         destSize=ubidi_writeReordered(bidi,dest,destSize,UBIDI_INSERT_LRM_FOR_NUMERIC+UBIDI_OUTPUT_REVERSE,&ec);
         chars = aescstrdup(dest,destSize);
@@ -295,6 +347,82 @@ static void TestReorder(){
             log_err("ubidi_writeReordered() did not give expected results for UBIDI_INSERT_LRM_FOR_NUMERIC+UBIDI_OUTPUT_REVERSE. Expected: %s Got: %s At Index: %d\n",visualOrder[i],chars,i);
 
             
+        }
+        
+        uprv_free(src);
+        uprv_free(dest);
+    }
+        /* Max Explicit level */
+    for(i=0;i<(sizeof(logicalOrder)/sizeof(logicalOrder[0]));i++){
+        int32_t srcSize = uprv_strlen(logicalOrder[i]);
+        UChar* src = (UChar*) uprv_malloc(sizeof(UChar)*srcSize );
+        UChar* dest = (UChar*) uprv_malloc(sizeof(UChar)*srcSize);
+        char* chars=NULL;
+        UBiDiLevel levels[UBIDI_MAX_EXPLICIT_LEVEL]={1,2,3,4,5,6,7,8,9,10};
+        int32_t destSize = srcSize;
+        ec = U_ZERO_ERROR;
+        u_unescape(logicalOrder[i],src,srcSize);
+        srcSize=u_strlen(src);
+        ubidi_setPara(bidi,src,srcSize,UBIDI_DEFAULT_LTR,levels,&ec);
+        if(U_FAILURE(ec)){
+            log_err("ubidi_setPara(tests[%d], paraLevel %d) failed with errorCode %s\n",
+                    i, UBIDI_MAX_EXPLICIT_LEVEL, u_errorName(ec));
+        }
+                /* try pre-flighting */
+        destSize = ubidi_writeReordered(bidi,dest,0,UBIDI_OUTPUT_REVERSE,&ec);
+        if(ec!=U_BUFFER_OVERFLOW_ERROR){
+            log_err("Pre-flighting did not give expected error: Expected: U_BUFFER_OVERFLOW_ERROR. Got: %s \n",u_errorName(ec));
+        }else if(destSize!=srcSize){
+            log_err("Pre-flighting did not give expected size: Expected: %d. Got: %d \n",srcSize,destSize);
+        }else{
+            ec= U_ZERO_ERROR;
+        }
+        destSize=ubidi_writeReordered(bidi,dest,destSize,UBIDI_OUTPUT_REVERSE,&ec);
+        chars = aescstrdup(dest,destSize);
+
+        if(destSize!=srcSize){
+            log_err("ubidi_writeReordered() destSize and srcSize do not match. Dest Size = %d Source Size = %d\n",destSize,srcSize );
+        }else if(uprv_strncmp(visualOrder3[i],chars,destSize)!=0){
+            log_err("ubidi_writeReordered() did not give expected results for UBIDI_OUTPUT_REVERSE. Expected: %s Got: %s At Index: %d\n",visualOrder[i],chars,i);
+
+            
+        }
+        
+        uprv_free(src);
+        uprv_free(dest);
+    }
+    for(i=0;i<(sizeof(logicalOrder)/sizeof(logicalOrder[0]));i++){
+        int32_t srcSize = uprv_strlen(logicalOrder[i]);
+        UChar* src = (UChar*) uprv_malloc(sizeof(UChar)*srcSize );
+        UChar* dest = (UChar*) uprv_malloc(sizeof(UChar)*srcSize);
+        char* chars=NULL;
+        UBiDiLevel levels[UBIDI_MAX_EXPLICIT_LEVEL]={1,2,3,4,5,6,7,8,9,10};
+        int32_t destSize = srcSize;
+        ec = U_ZERO_ERROR;
+        u_unescape(logicalOrder[i],src,srcSize);
+        srcSize=u_strlen(src);
+        ubidi_setPara(bidi,src,srcSize,UBIDI_DEFAULT_LTR,levels,&ec);
+        if(U_FAILURE(ec)){
+            log_err("ubidi_setPara(tests[%d], paraLevel %d) failed with errorCode %s\n",
+                    i, UBIDI_MAX_EXPLICIT_LEVEL, u_errorName(ec));
+        }
+        
+        /* try pre-flighting */
+        destSize = ubidi_writeReordered(bidi,dest,0,UBIDI_DO_MIRRORING+UBIDI_REMOVE_BIDI_CONTROLS,&ec);
+        if(ec!=U_BUFFER_OVERFLOW_ERROR){
+            log_err("Pre-flighting did not give expected error: Expected: U_BUFFER_OVERFLOW_ERROR. Got: %s \n",u_errorName(ec));
+        /*}else if(destSize!=srcSize){
+            log_err("Pre-flighting did not give expected size: Expected: %d. Got: %d \n",srcSize,destSize);*/
+        }else{
+            ec= U_ZERO_ERROR;
+        }
+        destSize=ubidi_writeReordered(bidi,dest,destSize,UBIDI_DO_MIRRORING+UBIDI_REMOVE_BIDI_CONTROLS,&ec);
+        chars = aescstrdup(dest,destSize);
+
+        /*if(destSize!=srcSize){
+            log_err("ubidi_writeReordered() destSize and srcSize do not match. Dest Size = %d Source Size = %d\n",destSize,srcSize );
+        }else*/ if(uprv_strncmp(visualOrder4[i],chars,destSize)!=0){
+            log_err("ubidi_writeReordered() did not give expected results for UBIDI_DO_MIRRORING+UBIDI_REMOVE_BIDI_CONTROLS. Expected: %s Got: %s At Index: %d\n",visualOrder[i],chars,i);
         }
         
         uprv_free(src);
