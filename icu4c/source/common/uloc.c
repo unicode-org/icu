@@ -503,7 +503,7 @@ static const CanonicalizationMap CANONICALIZE_MAP[] = {
     { "uz_UZ_CYRL",     "uz_Cyrl_UZ", NULL, NULL }, /* .NET name */
     { "uz_UZ_LATN",     "uz_Latn_UZ", NULL, NULL }, /* .NET name */
     { "zh_CHS",         "zh_Hans", NULL, NULL }, /* .NET name */
-    { "zh_CHT",         "zh_TW", NULL, NULL }, /* .NET name TODO: This should be zh_Hant once the locale structure is fixed. */
+    { "zh_CHT",         "zh_Hant", NULL, NULL }, /* .NET name TODO: This should be zh_Hant once the locale structure is fixed. */
     { "zh_GAN",         "zh__GAN", NULL, NULL }, /* registered name */
     { "zh_GUOYU",       "zh", NULL, NULL }, /* registered name */
     { "zh_HAKKA",       "zh__HAKKA", NULL, NULL }, /* registered name */
@@ -513,7 +513,7 @@ static const CanonicalizationMap CANONICALIZE_MAP[] = {
     { "zh_XIANG",       "zh__XIANG", NULL, NULL }, /* registered name */
     { "zh_YUE",         "zh__YUE", NULL, NULL }, /* registered name */
     { "th_TH_TRADITIONAL", "th_TH", "calendar", "buddhist" },
-    { "zh_TW_STROKE",   "zh_TW", "collation", "stroke" },
+    { "zh_TW_STROKE",   "zh_Hant_TW", "collation", "stroke" },
     { "zh__PINYIN",     "zh", "collation", "pinyin" }
 };
 

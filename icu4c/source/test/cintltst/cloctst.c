@@ -18,6 +18,7 @@
 #include <string.h>
 #include "cintltst.h"
 #include "cstring.h"
+#include "uparse.h"
 
 #include "unicode/putil.h"
 #include "unicode/ubrk.h"
@@ -36,6 +37,7 @@
 
 static void TestNullDefault(void);
 static void TestNonexistentLanguageExemplars(void);
+
 void PrintDataTable();
 
 /*---------------------------------------------------
@@ -1714,7 +1716,7 @@ static void TestCanonicalization(void)
         { "hi__DIRECT", "hi__DIRECT", "hi@collation=direct" },
         { "ja_JP_TRADITIONAL", "ja_JP_TRADITIONAL", "ja_JP@calendar=japanese" },
         { "th_TH_TRADITIONAL", "th_TH_TRADITIONAL", "th_TH@calendar=buddhist" },
-        { "zh_TW_STROKE", "zh_TW_STROKE", "zh_TW@collation=stroke" },
+        { "zh_TW_STROKE", "zh_TW_STROKE", "zh_Hant_TW@collation=stroke" },
         { "zh__PINYIN", "zh__PINYIN", "zh@collation=pinyin" },
         { "zh@collation=pinyin", "zh@collation=pinyin", "zh@collation=pinyin" },
         { "zh_CN@collation=pinyin", "zh_CN@collation=pinyin", "zh_CN@collation=pinyin" },
@@ -1733,7 +1735,7 @@ static void TestCanonicalization(void)
         { "uz-UZ-Cyrl", "uz_UZ_CYRL", "uz_Cyrl_UZ" }, /* .NET name */
         { "uz-UZ-Latn", "uz_UZ_LATN", "uz_Latn_UZ" }, /* .NET name */
         { "zh-CHS", "zh_CHS", "zh_Hans" }, /* .NET name */
-        { "zh-CHT", "zh_CHT", "zh_TW" }, /* .NET name This may change back to zh_Hant */
+        { "zh-CHT", "zh_CHT", "zh_Hant" }, /* .NET name This may change back to zh_Hant */
 
         /* posix behavior that used to be performed by getName */
         { "mr.utf8", "mr.utf8", "mr" },
@@ -2112,7 +2114,7 @@ static void TestGetLocale(void) {
                         NULL, 0,
                         NULL, 0, &ec);
         if (U_FAILURE(ec)) {
-            log_err("udat_open failed\n");
+            log_err("udat_open failed.Error %s\n", u_errorName(ec));
             return;
         }
         valid = udat_getLocaleByType(obj, ULOC_VALID_LOCALE, &ec);
@@ -2228,7 +2230,7 @@ static void TestGetLocale(void) {
                         0,
                         &ec);
         if (U_FAILURE(ec)) {
-            log_err("ubrk_open failed\n");
+            log_err("ubrk_open failed. Error: %s \n", u_errorName(ec));
             return;
         }
         valid = ubrk_getLocaleByType(obj, ULOC_VALID_LOCALE, &ec);
