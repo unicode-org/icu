@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/test/text/Attic/UCharacterTest.java,v $ 
-* $Date: 2001/06/26 22:44:11 $ 
-* $Revision: 1.11 $
+* $Date: 2001/07/03 16:33:27 $ 
+* $Revision: 1.12 $
 *
 *******************************************************************************
 */
@@ -557,7 +557,7 @@ public final class UCharacterTest extends TestFmwk
     {
       // modern Unicode character name
       str = UCharacter.getName(c[i]);
-      if (!str.equalsIgnoreCase(name[i]))
+      if (!str.equals(name[i]))
       {
         errln("FAIL \\u" + hex(c[i]) + " expected name " +
               name[i]);
@@ -567,7 +567,7 @@ public final class UCharacterTest extends TestFmwk
       // 1.0 Unicode character name
       str = UCharacter.getName1_0(c[i]);
       if ((str == null && oldname[i].length() > 0) || 
-          (str != null && !str.equalsIgnoreCase(oldname[i])))
+          (str != null && !str.equals(oldname[i])))
       {
         errln("FAIL \\u" + hex(c[i]) + " expected 1.0 name " +
               oldname[i]);
