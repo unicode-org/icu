@@ -717,6 +717,8 @@
             destdir="${build.dir}"
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
+        <copy file="${src.dir}/com/ibm/icu/dev/test/format/NumberFormatTestCases.txt"
+            todir="${build.dir}/com/ibm/icu/dev/test/format"/>
     </target>
 
     <!--
