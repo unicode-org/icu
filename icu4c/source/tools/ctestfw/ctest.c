@@ -137,7 +137,9 @@ static TestNode *createTestNode( )
     return  newNode;
 }
 
-void cleanUpTestTree(TestNode *tn) {
+void T_CTEST_EXPORT2
+cleanUpTestTree(TestNode *tn)
+{
     if(tn->child != NULL) {
         cleanUpTestTree(tn->child);
     }
@@ -149,9 +151,10 @@ void cleanUpTestTree(TestNode *tn) {
 }
 
 
-void addTest ( TestNode** root,
-              TestFunctionPtr test,
-              const char* name )
+void T_CTEST_EXPORT2
+addTest(TestNode** root,
+        TestFunctionPtr test,
+        const char* name )
 {
     TestNode *newNode;
 
@@ -300,7 +303,8 @@ static void iterateTestsWithLevel ( const TestNode* root,
 
 
 
-void showTests ( const TestNode *root )
+void T_CTEST_EXPORT2
+showTests ( const TestNode *root )
 {
     /* make up one for them */
     const TestNode *aList[MAXTESTS];
@@ -312,7 +316,8 @@ void showTests ( const TestNode *root )
 
 }
 
-void runTests ( const TestNode *root )
+void T_CTEST_EXPORT2
+runTests ( const TestNode *root )
 {
     int i;
     const TestNode *aList[MAXTESTS];
@@ -349,7 +354,8 @@ void runTests ( const TestNode *root )
     }
 }
 
-const char* getTestName(void)
+const char* T_CTEST_EXPORT2
+getTestName(void)
 {
   if(currentTest != NULL) {
     return currentTest->name;
@@ -358,7 +364,8 @@ const char* getTestName(void)
   }
 }
 
-const TestNode* getTest(const TestNode* root, const char* name)
+const TestNode* T_CTEST_EXPORT2
+getTest(const TestNode* root, const char* name)
 {
     const char* nextName;
     TestNode *nextNode;
@@ -429,7 +436,8 @@ static void vlog_err(const char *prefix, const char *pattern, va_list ap)
     va_end(ap);
 }
 
-void vlog_info(const char *prefix, const char *pattern, va_list ap)
+void T_CTEST_EXPORT2
+vlog_info(const char *prefix, const char *pattern, va_list ap)
 {
     fprintf(stdout, "%-*s", INDENT_LEVEL," " );
     if(prefix) {
@@ -454,7 +462,8 @@ static void vlog_verbose(const char *prefix, const char *pattern, va_list ap)
     va_end(ap);
 }
 
-void log_err(const char* pattern, ...)
+void T_CTEST_EXPORT2
+log_err(const char* pattern, ...)
 {
     va_list ap;
     if(strchr(pattern, '\n') != NULL) {
@@ -468,7 +477,8 @@ void log_err(const char* pattern, ...)
     vlog_err(NULL, pattern, ap);
 }
 
-void log_info(const char* pattern, ...)
+void T_CTEST_EXPORT2
+log_info(const char* pattern, ...)
 {
     va_list ap;
 
@@ -476,7 +486,8 @@ void log_info(const char* pattern, ...)
     vlog_info(NULL, pattern, ap);
 }
 
-void log_verbose(const char* pattern, ...)
+void T_CTEST_EXPORT2
+log_verbose(const char* pattern, ...)
 {
     va_list ap;
 
@@ -485,7 +496,8 @@ void log_verbose(const char* pattern, ...)
 }
 
 
-void log_data_err(const char* pattern, ...)
+void T_CTEST_EXPORT2
+log_data_err(const char* pattern, ...)
 {
   va_list ap;
   va_start(ap, pattern);
@@ -504,7 +516,8 @@ void log_data_err(const char* pattern, ...)
 }
 
 
-int processArgs(const TestNode* root,
+int T_CTEST_EXPORT2
+processArgs(const TestNode* root,
              int argc,
              const char* const argv[])
 {
