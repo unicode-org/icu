@@ -147,8 +147,6 @@ binary-indep: build install
 	    install -m 644 $(srcdir)/data/$$d/*.* \
 	        debian/icu-data/$(datasrcdir)/$$d; \
 	done
-	cd debian/icu-data/$(datasrcdir)/mappings && \
-	    $(RM) convrtrs.txt && ln -s /etc/icu/convrtrs.txt .
 
 # Build architecture-dependent files here.
 binary-arch: build install
