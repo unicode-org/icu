@@ -26,6 +26,8 @@
 #include "unicode/ustring.h"
 #include "ustr_imp.h"
 
+#include <stdio.h>
+
 U_CAPI const char * U_EXPORT2
 u_skipWhitespace(const char *s) {
     while(*s==' ' || *s=='\t') {
