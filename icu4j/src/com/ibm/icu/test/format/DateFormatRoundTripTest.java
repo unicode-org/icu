@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/test/format/Attic/DateFormatRoundTripTest.java,v $ 
- * $Date: 2001/10/19 11:43:37 $ 
- * $Revision: 1.1 $
+ * $Date: 2001/11/06 11:07:16 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -42,8 +42,6 @@ public class DateFormatRoundTripTest extends com.ibm.test.TestFmwk {
         new DateFormatRoundTripTest().run(args);
     }
     
-    //The Case fail randomly, I will recreate the case soon. [Richard/GCL]
-    /*
     public void TestDateFormatRoundTrip() {
         dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss.SSS zzz yyyy G");
         getFieldCal = Calendar.getInstance();
@@ -72,7 +70,7 @@ public class DateFormatRoundTripTest extends com.ibm.test.TestFmwk {
                 _test(avail[i]);
             }
         }
-    }*/
+    }
     
     public String styleName(int s) {
         switch (s) {
@@ -221,66 +219,33 @@ public class DateFormatRoundTripTest extends com.ibm.test.TestFmwk {
                 // Date usually matches in 2.  Exceptions handled below.
                 int maxDmatch = 2;
                 int maxSmatch = 1;
-                if (dmatch > maxDmatch) {
-                    // Time-only pattern with zone information and a starting date in PST.
-                    if (timeOnly && hasZone && (fmt.getTimeZone().inDaylightTime(d[0]))) {
-                        maxDmatch = 3;
-                        maxSmatch = 2;
-                    }
-                    if ((pat.indexOf("yyyy") == -1)) {
-                        maxDmatch = 3;
-                        maxSmatch = 2;
-                    }
-                    if (!hasEra && getField(d[0], Calendar.ERA) == GregorianCalendar.BC) {
-                        maxDmatch = 3;
-                        maxSmatch = 2;
-                    }
-                }
-    
-                // String usually matches in 1.  Exceptions are checked for here.
-                if (smatch > maxSmatch) { // Don't compute unless necessary
-                    // Starts in BC, with no era in pattern
-                    if (!hasEra && getField(d[0], Calendar.ERA) == GregorianCalendar.BC)
-                        maxSmatch = 2;
-                    // Starts in DST, no year in pattern
-                    else
-                        if (fmt.getTimeZone().inDaylightTime(d[0]) && pat.indexOf("yyyy") == -1)
-                            maxSmatch = 2;
-                    // Two digit year with zone and year change and zone in pattern
-                    else
-                        if (hasZone
-                            && fmt.getTimeZone().inDaylightTime(d[0])
-                                != fmt.getTimeZone().inDaylightTime(d[dmatch])
-                            && getField(d[0], Calendar.YEAR) != getField(d[dmatch], Calendar.YEAR)
-                            && pat.indexOf("y") != -1
-                            && pat.indexOf("yyyy") == -1)
-                            maxSmatch = 2;
-                    else 
-                        if ((fmt.getTimeZone().inDaylightTime(d[0])) && (pat.indexOf("z") != -1)) {
-                            maxSmatch = 2;
-                        }
-                    else 
-                        if ((pat.indexOf("yyyy") == -1)) {
-                            maxSmatch = 2;
-                        }
-                }
-    
                 if (dmatch > maxDmatch || smatch > maxSmatch) {
-                    logln("date = " + d[0] + "getTime = " + d[0].getTime());
-                    logln(" Date " + dmatch + "  String " + smatch);
-                    logln("dmatch: " + dmatch + " maxD: " + maxDmatch+ " smatch:" + smatch
-                            + " maxS:" + maxSmatch); 
-                    errln("Pattern: " + pat + " failed to match");
-    
+                    //If the Date is BC
+                    if (!timeOnly && !hasEra && getField(d[0], Calendar.ERA) == GregorianCalendar.BC) {
+                        maxDmatch = 3;
+                        maxSmatch = 2;
+                    }
+                    if (hasZone && (fmt.getTimeZone().inDaylightTime(d[0]) || fmt.getTimeZone().inDaylightTime(d[1]) )) {
+                        maxSmatch = 2;
+                        if (timeOnly) {
+                            maxDmatch = 3;
+                        }
+                    }
+                }
+                    
+                if (dmatch > maxDmatch || smatch > maxSmatch) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("EEEE, MMMM d, yyyy HH:mm:ss, z G", Locale.US);                    
+                    logln("Date = " + sdf.format(d[0]) + "; ms = " + d[0].getTime());
+                    logln("Dmatch: " + dmatch + " maxD: " + maxDmatch + " Smatch:" + smatch + " maxS:" + maxSmatch);
+                    errln("Pattern: " + pat + " failed to match" + "; ms = " + d[0].getTime());
                     for (int j = 0; j <= loop && j < DEPTH; ++j) {
                         StringBuffer temp = new StringBuffer("");
                         FieldPosition pos = new FieldPosition(0);
-                        logln((j > 0 ? " P> " : "    ")+ dateFormat.format(d[j], temp, pos)
-                                + " F> "+ s[j]+ (j > 0 && d[j] /*.getTime()*/ == d[j - 1] /*.getTime()*/ ? " d==" : "")
-                                + (j > 0 && s[j] == s[j - 1] ? " s==" : "")); 
+                        logln((j > 0 ? " P> " : "    ") + dateFormat.format(d[j], temp, pos) 
+                            + " F> " + s[j] + (j > 0 && d[j].getTime() == d[j - 1].getTime() ? " d==" : "")
+                            + (j > 0 && s[j].equals(s[j - 1]) ? " s==" : ""));
                     }
                 }
-    
             }
         } catch (ParseException e) {
             errln("Exception: " + e.getMessage());
