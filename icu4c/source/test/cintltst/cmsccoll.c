@@ -1313,6 +1313,8 @@ static void IsTailoredTest( ) {
 static void genericOrderingTest(UCollator *coll, const char *s[], uint32_t size) {
   UChar t1[256] = {0};
   UChar t2[256] = {0};
+  UCollationElements *iter;
+  UErrorCode status = U_ZERO_ERROR;
 
   uint32_t i = 0, j = 0;
   log_verbose("testing sequence:\n");
@@ -1320,13 +1322,23 @@ static void genericOrderingTest(UCollator *coll, const char *s[], uint32_t size)
     log_verbose("%s\n", s[i]);
   }
 
+  iter = ucol_openElements(coll, t1, u_strlen(t1), &status);
+  if (U_FAILURE(status)) {
+    log_err("Creation of iterator failed\n");
+  }
   for(i = 0; i < size-1; i++) {
     for(j = i+1; j < size; j++) {
       u_unescape(s[i], t1, 256);
       u_unescape(s[j], t2, 256);
       doTest(coll, t1, t2, UCOL_LESS);
+      /* synwee : added collation element iterator test */
+      ucol_setText(iter, t1, u_strlen(t1), &status);
+      backAndForth(iter);
+      ucol_setText(iter, t2, u_strlen(t2), &status);
+      backAndForth(iter);
     }
   }
+  ucol_closeElements(iter);
 }
 
 static void genericLocaleStarter(const char *locale, const char *s[], uint32_t size) {

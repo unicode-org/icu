@@ -556,10 +556,21 @@ uint32_t uprv_uca_addContraction(tempUCATable *t, uint32_t CE,
     if(cpsize<element->cSize) { // This is a real contraction, if there are other characters after the first
       uint32_t j = 0;
       for (j=1; j<element->cSize; j++) {   /* First add contraction chars to unsafe CP hash table */
+        // Unless it is a trail surrogate, which is handled algoritmically and 
+        // shouldn't take up space in the table.
+        if(!(UTF_IS_TRAIL(element->cPoints[j]))) {
           unsafeCPSet(t->unsafeCP, element->cPoints[j]);
+        }
       }
       // Add the last char of the contraction to the contraction-end hash table.
-      ContrEndCPSet(t->contrEndCP, element->cPoints[element->cSize -1]);
+      // unless it is a trail surrogate, which is handled algorithmically and 
+      // shouldn't be in the table
+      if(!(UTF_IS_TRAIL(element->cPoints[element->cSize -1]))) {
+        ContrEndCPSet(t->contrEndCP, element->cPoints[element->cSize -1]);
+      }
+
+      // If there are any Jamos in the contraction, we should turn on special 
+      // processing for Jamos
       if(UCOL_ISJAMO(element->cPoints[0])) {
         t->image->jamoSpecial = TRUE;
       }

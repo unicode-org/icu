@@ -1518,16 +1518,17 @@ static void TestCEBufferOverflow()
         log_err("Rule based collator not created for testing ce buffer overflow\n");
     }
     
-    /* 0xE0E0 is a private character hence deemed unsafe by the heuristic
+    /* 0xDCDC is a trail surrogate hence deemed unsafe by the heuristic
     test. this will cause an overflow in getPrev */
     str[0] = 0x0041;    /* 'A' */
-    uprv_memset(str + 1, 0xE0, sizeof(UChar) * UCOL_EXPAND_CE_BUFFER_SIZE);
+    /*uprv_memset(str + 1, 0xE0, sizeof(UChar) * UCOL_EXPAND_CE_BUFFER_SIZE);*/
+    uprv_memset(str + 1, 0xDC, sizeof(UChar) * UCOL_EXPAND_CE_BUFFER_SIZE);
     str[UCOL_EXPAND_CE_BUFFER_SIZE] = 0x0042;   /* 'B' */
     iter = ucol_openElements(coll, str, UCOL_EXPAND_CE_BUFFER_SIZE + 1, 
                              &status);
     if (ucol_previous(iter, &status) != UCOL_NULLORDER ||
         status != U_BUFFER_OVERFLOW_ERROR) {
-        log_err("CE buffer expected to overflow with long string of private characters\n");
+        log_err("CE buffer expected to overflow with long string of trail surrogates\n");
     }
     ucol_closeElements(iter);
     ucol_close(coll);
