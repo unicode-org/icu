@@ -693,7 +693,40 @@ typedef enum UConverterUnicodeSet {
     UCNV_SET_COUNT
 } UConverterUnicodeSet;
 
-/** ### TODO @draft ICU 2.6 */
+/**
+ * Returns the set of Unicode code points that can be converted by an ICU converter.
+ *
+ * The current implementation returns only one kind of set (UCNV_ROUNDTRIP_SET):
+ * The set of all Unicode code points that can be roundtrip-converted
+ * (converted without any data loss) with the converter.
+ * This set will not include code points that have fallback mappings
+ * or are only the result of reverse fallback mappings.
+ * See UTR #22 "Character Mapping Markup Language"
+ * at http://www.unicode.org/reports/tr22/
+ *
+ * This is useful for example for
+ * - checking that a string or document can be roundtrip-converted with a converter,
+ *   without/before actually performing the conversion
+ * - testing if a converter can be used for text for typical text for a certain locale,
+ *   by comparing its roundtrip set with the set of ExemplarCharacters from
+ *   ICU's locale data or other sources
+ *
+ * In the future, there may be more UConverterUnicodeSet choices to select
+ * sets with different properties.
+ *
+ * @param cnv The converter for which a set is requested.
+ * @param set A valid USet; it will be cleared by the function before
+ *            the converter's specific set is filled into the USet.
+ * @param which A UConverterUnicodeSet selector;
+ *              currently UCNV_ROUNDTRIP_SET is the only supported value.
+ * @param pErrorCode ICU error code in/out parameter.
+ *                   Must fulfill U_SUCCESS before the function call.
+ *
+ * @see UConverterUnicodeSet
+ * @see uset_open
+ * @see uset_close
+ * @draft ICU 2.6
+ */
 U_CAPI void U_EXPORT2
 ucnv_getUnicodeSet(const UConverter *cnv,
                    USet *set,
