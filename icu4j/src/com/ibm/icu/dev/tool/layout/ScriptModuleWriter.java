@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/layout/ScriptModuleWriter.java,v $
- * $Date: 2003/01/14 19:05:23 $
- * $Revision: 1.1 $
+ * $Date: 2003/04/15 01:23:49 $
+ * $Revision: 1.2 $
  *
  *******************************************************************************
  */
@@ -14,42 +14,72 @@ package com.ibm.icu.dev.tool.layout;
 
 public class ScriptModuleWriter extends ModuleWriter
 {
-    public ScriptModuleWriter(ScriptData scriptData)
+    public ScriptModuleWriter(ScriptData scriptData, LanguageData languageData)
     {
-        super(scriptData);
+        super(scriptData, languageData);
     }
+
+	public void writeScriptHeader(String fileName)
+	{
+	    int minScript = scriptData.getMinScript();
+	    int maxScript = scriptData.getMaxScript();
+	    
+	    openFile(fileName);
+	    writeHeader();
+	    output.println(scriptPreamble);
+	    
+	    for (int script = minScript; script <= maxScript; script += 1) {
+	        output.print("    ");
+	        output.print(scriptData.getScriptTag(script));
+	        output.print("ScriptCode = ");
+	        
+	        if (script < 10) {
+	            output.print(" ");
+	        }
+	        
+	        output.print(script);
+	        output.println(",");
+	    }
+	    
+	    output.println();
+	    output.print("    scriptCodeCount = ");
+	    output.println(maxScript - minScript + 1);
+	    
+	    output.println(postamble);
+	    closeFile();
+	}
     
-    public void writeScriptHeader(String fileName)
+    public void writeLanguageHeader(String fileName)
     {
-        int minScript = scriptData.getMinScript();
-        int maxScript = scriptData.getMaxScript();
+        int minLanguage = languageData.getMinLanguage();
+        int maxLanguage = languageData.getMaxLanguage();
         
         openFile(fileName);
         writeHeader();
-        output.println(preamble);
+        output.println(languagePreamble);
         
-        for (int script = minScript; script <= maxScript; script += 1) {
+        for (int language = minLanguage; language <= maxLanguage; language += 1) {
             output.print("    ");
-            output.print(scriptData.getScriptTag(script));
-            output.print("ScriptCode = ");
+            output.print(languageData.getLanguageTagLabel(language).toLowerCase());
+            output.print("LanguageCode = ");
             
-            if (script < 10) {
+            if (language < 10) {
                 output.print(" ");
             }
             
-            output.print(script);
+            output.print(language);
             output.println(",");
         }
         
         output.println();
-        output.print("    scriptCodeCount = ");
-        output.println(maxScript - minScript + 1);
+        output.print("    languageCodeCount = ");
+        output.println(maxLanguage - minLanguage + 1);
         
         output.println(postamble);
         closeFile();
     }
     
-    private static final String preamble = 
+    private static final String scriptPreamble = 
     "#ifndef __LESCRIPTS_H\n" + 
     "#define __LESCRIPTS_H\n" +
     "\n" +
@@ -59,9 +89,26 @@ public class ScriptModuleWriter extends ModuleWriter
     " * Constants for Unicode script values, generated using\n" +
     " * ICU4J's <code>UScript</code> class.\n" +
     " *\n" +
-    " * @draft ICU 2.4\n" +
+    " * @draft ICU 2.6\n" +
     " */\n" +
+    "\n" +
     "enum ScriptCodes {";
+    
+    private static final String languagePreamble = 
+    "#ifndef __LELANGUAGES_H\n" + 
+    "#define __LELANGUAGES_H\n" +
+    "\n" +
+    "U_NAMESPACE_BEGIN\n" +
+    "\n" +
+    "/**\n" +
+    " * A provisional list of language codes. For now,\n" +
+    " * this is just a list of languages which the LayoutEngine\n" +
+    " * supports.\n" +
+    " *\n" +
+    " * @draft ICU 2.6\n" +
+    " */\n" +
+    "\n" +
+    "enum LanguageCodes {";
     
     private static final String postamble =
     "};\n" +

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/layout/ModuleWriter.java,v $
- * $Date: 2003/01/14 19:05:23 $
- * $Revision: 1.1 $
+ * $Date: 2003/04/15 01:23:49 $
+ * $Revision: 1.2 $
  *
  *******************************************************************************
  */
@@ -18,9 +18,10 @@ import java.io.IOException;
 
 public class ModuleWriter
 {
-    public ModuleWriter(ScriptData theScriptData)
+    public ModuleWriter(ScriptData theScriptData, LanguageData theLanguageData)
     {
         scriptData = theScriptData;
+        languageData = theLanguageData;
         output = null;
     }
 
@@ -59,17 +60,18 @@ public class ModuleWriter
     }
 
     protected ScriptData scriptData;
+    protected LanguageData languageData;
     protected PrintStream output;
     
     protected static final String moduleHeader = 
     "/*\n" +
-    " * %W% %E%\n" +
     " *\n" +
     " * (C) Copyright IBM Corp. 1998 - 2003. All Rights Reserved.\n" +
     " *\n" +
     " * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS\n" +
     " * YOU REALLY KNOW WHAT YOU'RE DOING.\n" +
     " *\n" +
+    " * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/layout/ModuleWriter.java,v $ $Date: 2003/04/15 01:23:49 $ $Revision: 1.2 $\n" +
     " */\n" +
     "\n";
 }
