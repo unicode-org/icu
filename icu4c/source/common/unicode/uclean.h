@@ -33,6 +33,10 @@
  *  application must guarantee that the first call to u_init() happen
  *  without contention, in a single thread only.
  *  <p>
+ *  If <code>u_setMemoryFunctions()</code> or 
+ *  <code>u_setMutexFunctions</code> are needed (uncommon), they must be
+ *  called _before_ <code>u_init()</code>.
+ *  <p>
  *  Extra, repeated, or otherwise unneeded calls to u_init() do no harm,
  *  other than taking a small amount of time.
  *
@@ -85,5 +89,39 @@ u_init(UErrorCode *status);
  */
 U_CAPI void U_EXPORT2 
 u_cleanup(void);
+
+
+/**
+  * An opaque type that represents an ICU mutex.
+  * @draft ICU 2.8
+  * @system
+  */
+typedef void *UMTX;
+
+typedef void U_CALLCONV UMtxInit   (void *context, UMTX *mutex, UErrorCode*pError);
+typedef void U_CALLCONV UMtxDestroy(void *context, UMTX *mutex);
+typedef void U_CALLCONV UMtxLock   (void *context, UMTX *mutex);
+typedef void U_CALLCONV UMtxUnlock (void *context, UMTX *mutex);
+
+U_CAPI void U_EXPORT2 
+u_setMutexFunctions(void *context, UMtxInit *i, UMtxDestroy *d, UMtxLock *l, UMtxUnlock *u,
+                    UErrorCode *status);
+
+
+typedef void U_CALLCONV UMtxAtomicInc (void *context, UMTX *mutex);
+typedef void U_CALLCONV UMtxAtomicDec (void *context, UMTX *mutex);
+
+U_CAPI void U_EXPORT2 
+u_setAtomicIncDecFunctions(void *context, UMtxAtomicInc *inc, UMtxAtomicDec *dec,
+                    UErrorCode *status);
+
+
+typedef void *U_CALLCONV UMemAlloc  (void *context, size_t size);
+typedef void *U_CALLCONV UMemRealloc(void *context, void *mem, size_t size);
+typedef void  U_CALLCONV UMemFree   (void *context, void *mem);
+
+U_CAPI void U_EXPORT2 
+u_setMemoryFunctions(void *context, UMemAlloc *a, UMemRealloc *r, UMemFree *f, 
+                    UErrorCode *status);
 
 #endif

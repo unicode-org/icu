@@ -20,7 +20,7 @@
 #include "unicode/ustring.h"
 #include "cstring.h"
 #include "filestrm.h"
-#include "cmemory.h"
+#include <stdlib.h>
 
 #define RESTEST_HEAP_CHECK 0
 
@@ -517,7 +517,7 @@ static void TestFileStream(void){
     int32_t c1=0;
     UErrorCode status = U_ZERO_ERROR;
     const char* testdatapath = loadTestData(&status);
-    char* fileName = (char*) uprv_malloc(uprv_strlen(testdatapath) +10);
+    char* fileName = (char*) malloc(uprv_strlen(testdatapath) +10);
     FileStream* stream = NULL;
     /* these should not be closed */
     FileStream* pStdin  = T_FileStream_stdin();
@@ -526,7 +526,7 @@ static void TestFileStream(void){
 
     const char* testline = "This is a test line";
     int32_t bufLen =uprv_strlen(testline)+10;
-    char* buf = (char*) uprv_malloc(bufLen);
+    char* buf = (char*) malloc(bufLen);
     int32_t retLen = 0;
 
     if(pStdin==NULL){
@@ -629,7 +629,7 @@ static void TestFileStream(void){
     }
 
 
-    uprv_free(fileName);
-    uprv_free(buf);
+    free(fileName);
+    free(buf);
 
 }

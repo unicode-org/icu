@@ -530,6 +530,10 @@ SOURCE=.\cutiltst.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\hpmufn.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\mstrmtst.c
 # End Source File
 # Begin Source File

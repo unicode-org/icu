@@ -19,12 +19,8 @@
 #define UMUTEX_H
 
 #include "unicode/utypes.h"
+#include "unicode/uclean.h"  
 
-/**
- * Mutex data type.
- * @internal
- */
-typedef void *UMTX;
 
 /* APP_NO_THREADS is an old symbol. We'll honour it if present. */
 #ifdef APP_NO_THREADS
@@ -37,36 +33,34 @@ typedef void *UMTX;
 #endif
 
 /*
- * Code within this library which accesses protected data should
- * instantiate a Mutex object while doing so.  Notice that there is
- * only one coarse-grained lock which applies to this entire library,
- * so keep locking short and sweet.
+ * Code within ICU that accesses shared static or global data should
+ * instantiate a Mutex object while doing so.  The unnamed global mutex
+ * is used throughout ICU, so keep locking short and sweet.
  *
  * For example:
  *
  * void Function(int arg1, int arg2)
  * {
- *   static Object* foo; // Shared read-write object
- *   Mutex mutex;
+ *   static Object* foo;     // Shared read-write object
+ *   umtx_lock(NULL);        // Lock the ICU global mutex
  *   foo->Method();
- *   // When 'mutex' goes out of scope and gets destroyed here
- *   // the lock is released
+ *   umtx_unlock(NULL);
  * }
  *
- * Note: Do NOT use the form 'Mutex mutex();' as that merely
- * forward-declares a function returning a Mutex. This is a common
- * mistake which silently slips through the compiler!!  */
+ * an alternative C++ mutex API is defined in the file common/mutex.h
+ */
 
-
-/* Lock a mutex. Pass in NULL if you want the (ick) Single Global
-   Mutex. 
- * @param mutex The given mutex to be locked
+/* Lock a mutex. 
+ * @param mutex The given mutex to be locked.  Pass NULL to specify
+ *              the global ICU mutex.  Recursive locks are an error
+ *              and may cause a deadlock on some platforms.
  */
 U_CAPI void U_EXPORT2 umtx_lock   ( UMTX* mutex ); 
 
 /* Unlock a mutex. Pass in NULL if you want the single global
    mutex. 
- * @param mutex The given mutex to be unlocked
+ * @param mutex The given mutex to be unlocked.  Pass NULL to specify
+ *              the global ICU mutex.
  */
 U_CAPI void U_EXPORT2 umtx_unlock ( UMTX* mutex );
 
@@ -85,14 +79,17 @@ U_CAPI void U_EXPORT2 umtx_init   ( UMTX* mutex );
  */
 U_CAPI void U_EXPORT2 umtx_destroy( UMTX *mutex );
 
-/* Is a mutex initialized? 
-   Use it this way:
-      umtx_isInitialized( &aMutex ); 
-   This function is not normally needed.  It is more efficient to 
-   unconditionally call umtx_init(&aMutex) than it is to check first. 
+/* Test whether an ICU mutex is initialized. 
+ * This function is intended for use from test programs only,
+ * there should be no need for it from normal code.
+ * If there is any question about whether a mutex has been initialized,
+ *  simply initialize it again with umtx_init(), which will have
+ *  no effect if the mutex is already initialized.
  * @param mutex The given mutex to be tested
 */
 U_CAPI UBool U_EXPORT2 umtx_isInitialized( UMTX *mutex );
+
+
 
 /*
  * Atomic Increment and Decrement of an int32_t value.
