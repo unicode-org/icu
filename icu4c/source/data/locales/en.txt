@@ -617,7 +617,7 @@ en {
         TJS { "TJS", "Somoni" } // TAJIKISTAN (TJ)
         TMM { "TMM", "Manat" } // TURKMENISTAN (TM)
         TND { "TND", "Tunisian Dinar" } // TUNISIA (TN)
-        TOP { "T$", "Pa´anga" } // TONGA (TO)
+        TOP { "T$", "Pa\u00b4anga" } // TONGA (TO)
         TRL { "TL", "Turkish Lira" } // TURKEY (TR)
         TTD { "TT$", "Trinidad and Tobago Dollar" } // TRINIDAD AND TOBAGO (TT)
         TWD { "NT$", "New Taiwan Dollar" } // TAIWAN, PROVINCE OF CHINA (TW)
