@@ -872,7 +872,23 @@ InputPath=.\unicode\parseerr.h
 
 !ELSEIF  "$(CFG)" == "common - Win64 Release"
 
+# Begin Custom Build
+InputPath=.\unicode\parseerr.h
+
+"..\..\include\unicode\parseerr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
 !ELSEIF  "$(CFG)" == "common - Win64 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\parseerr.h
+
+"..\..\include\unicode\parseerr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
 
 !ENDIF 
 
