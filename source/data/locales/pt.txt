@@ -9,6 +9,7 @@
 // The pt_PT locale should be used when Portugal Portuguese is needed.
 pt {
     Version { "2.0" }
+
     Countries {
         Fallback{ "en"}
         //AD { "Andorra" }
@@ -463,12 +464,18 @@ pt {
         "sexta-feira",
         "s\u00E1bado",
     }
-    ExemplarCharacters { "[a-z \u00e3 \u00f5 \u00e7 \u00e1 \u00e9 \u00ed \u00f3 \u00fa \u00e0 \u00e2 \u00ea \u00f4 \u00fc \u00f2]" }
+    ExemplarCharacters { "[a-z\u00e3\u00f5\u00e7\u00e1\u00e9\u00ed\u00f3\u00fa\u00e0\u00e2\u00ea\u00f4\u00fc\u00f2]" }
+    LocaleScript{
+        "Latn",  // ISO 15924 Name 
+    }
     Languages { 
-        Fallback{ "en"}
+        Fallback{ "en" }
+
+        af { "afric\u00E2ner" }
+        am { "am\u00E1rico" }
         ar { "ar\u00E1bico" }
         az { "azerbaij\u00E3o" }
-        ba { "basco" }
+        // ??? ba { "basco" }
         be { "bielo-russo" }
         bg { "b\u00FAlgaro" }
         bn { "bengala" }
@@ -478,47 +485,70 @@ pt {
         de { "alem\u00E3o" }
         el { "grego" }
         en { "ingl\u00EAs" }
+        eo { "esperanto" }
         es { "espanhol" }
         et { "estoniano" }
+        eu { "basco" }
         fa { "farsi" }
         fi { "finland\u00EAs" }
+        fo { "faroense" }
         fr { "franc\u00EAs" }
+        ga { "irland\u00EAs" }
+        gl { "galego" }
         gu { "guzarate" }
+        gv { "manx" }
+        haw { "havaiano" }
         //he { "hebreu" } // Old value
         he { "hebraico" }
+        hi { "hindi" }
         hr { "croata" }
         hu { "h\u00FAngaro" }
+        hy { "arm\u00EAnio" }
         id { "indon\u00E9sio" }
+        is { "island\u00EAs" }
         it { "italiano" }
+        iu { "inuktitut" }
         ja { "japon\u00EAs" }
         ka { "georgiano" }
+        kl { "kalaallisut" }
         km { "cmer" }
         kn { "canad\u00E1" }
         ko { "coreano" }
         ku { "curdo" }
+        kw { "c\u00F3rnico" }
         la { "latino" }
         lt { "lituano" }
         lv { "latviano" }
         mk { "maced\u00F4nio" }
         mr { "marati" }
+        mt { "malt\u00EAs" }
         my { "birman\u00EAs" }
+        nb { "bokm\u00E5l noruegu\u00EAs" }
         nl { "holand\u00EAs" }
+        nn { "nynorsk noruegu\u00EAs" }
         no { "noruegu\u00EAs" }
+        om { "oromo" }
         pl { "polon\u00EAs" }
         pt { "portugu\u00EAs" }
         ro { "romeno" }
         ru { "russo" }
+        sh { "servo-croata" }
         sk { "eslovaco" }
         sl { "eslov\u00EAnio" }
+        so { "somali" }
         sq { "alban\u00EAs" }
         sr { "s\u00E9rvio" }
         sv { "sueco" }
+        sw { "sua\u00EDli" }
+        ta { "t\u00E2mil" }
         te { "t\u00E9lugu" }
         th { "tailand\u00EAs" }
+        ti { "tigr\u00EDnia" }
         tk { "tagalo" }
         tr { "turco" }
         uk { "ucraniano" }
         uz { "usbeque" }
+        vi { "vietnamita" }
         zh { "chin\u00EAs" }
     }
     MonthAbbreviations { 
@@ -597,6 +627,13 @@ pt {
         "2,000,000,000: << bilh\u00F5es[>>];\n"     
         "1,000,000,000,000: =#,##0=;" 
     }
+    Types{
+        TRADITIONAL { "Tradicional" }
+    }
+    Variants{
+        PREEURO { "Pr\u00e9-Euro" }
+        REVISED { "Revisado" }
+    }
     zoneStrings { 
         {
             "Africa/Casablanca",
@@ -605,8 +642,5 @@ pt {
             "GMT",
             "GMT",
         }
-    }
-    LocaleScript{
-        "Latn",  // ISO 15924 Name 
     }
 }
