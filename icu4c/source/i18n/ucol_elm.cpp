@@ -38,12 +38,40 @@ void uprv_uca_reverseElement(ExpansionTable *expansions, UCAElements *el) {
         el->cPoints[el->cSize-i-1] = temp;
     }
 
+#if 0
+    /* Syn Wee does not need reversed expansions at all */
     if(el->noOfCEs>1) { /* this is an expansion that needs to be reversed and added - also, we need to change the mapValue */
+    uint32_t buffer[256];
+#if 0
+      /* this is with continuations preserved */
+      tempCE = el->CEs[0];
+      i = 1;
+      while(i<el->noOfCEs) {
+        if(!isContinuation(el->CEs[i])) {
+          buffer[el->noOfCEs-i] = tempCE;
+        } else { /* it is continuation*/
+          buffer[el->noOfCEs-i] = el->CEs[i];
+          buffer[el->noOfCEs-i-1] = tempCE;
+          i++;
+        }
+        if(i<el->noOfCEs) {
+          tempCE = el->CEs[i];
+          i++;
+        }
+      }
+      if(i==el->noOfCEs) {
+        buffer[0] = tempCE;
+      }
+      uprv_memcpy(el->CEs, buffer, el->noOfCEs*sizeof(uint32_t));
+#endif
+#if 0
+      /* this is simple reversal */
       for(i = 0; i<el->noOfCEs/2; i++) {
           tempCE = el->CEs[i];
           el->CEs[i] = el->CEs[el->noOfCEs-i-1];
           el->CEs[el->noOfCEs-i-1] = tempCE;
       }
+#endif
       expansion = UCOL_SPECIAL_FLAG | (EXPANSION_TAG<<UCOL_TAG_SHIFT) 
         | ((uprv_uca_addExpansion(expansions, el->CEs[0], &status)+(paddedsize(sizeof(UCATableHeader))>>2))<<4)
         & 0xFFFFF0;
@@ -58,6 +86,7 @@ void uprv_uca_reverseElement(ExpansionTable *expansions, UCAElements *el) {
       }
       el->mapCE = expansion;
     }
+#endif
 }
 
 int32_t uprv_uca_addExpansion(ExpansionTable *expansions, uint32_t value, UErrorCode *status) {
