@@ -1,11 +1,9 @@
-/*
-**********************************************************************
-*   Copyright (C) 1996-1999, International Business Machines
+opyright (C) 1996-1999, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
-*  FILE NAME: DOCMAIN.h 
-*  
+*  FILE NAME: DOCMAIN.h
+*
 *   Date          Name        Description
 *   12/11/2000    Ram	      Creation.
 */
@@ -15,7 +13,6 @@
 /*! \mainpage
  *
  * \section Usage
- * <hr>
  * <h2> API Reference Usage </h2>
  *
  * <h3> C++ Programmers:</h3>
@@ -28,7 +25,7 @@
  * then detailed member descriptions.
  *
  * <h4>C Programmers: </h4>
- * Use <a href="files.html">File List</a> or <a href="globals.html"> File Members</a>
+ * Use <a href="#Module">Module List</a> or <a href="globals.html"> File Members</a>
  * to find a list of all the functions and constants.
  * For example, to find BreakIterator functions you would click on
  * <a href="files.html"> File List</a>,
@@ -40,23 +37,23 @@
  *
  *
  * <hr>
- * <h5> Architechture </h5>
+ * <h5> Architecture  (User Guide)</h5>
  * <ul>
  *    <li>
  *       <b><a href="http://oss.software.ibm.com/icu/userguide/index.html"> Introduction </a></b>
  *    <li>
  *       <b><a href="http://oss.software.ibm.com/icu/userguide/i18n.html"> Internationalization </a></b>
- *    <li> 
+ *    <li>
  *       <b><a href="http://oss.software.ibm.com/icu/userguide/design.html"> Locale Model </a></b>
  *    <li>
  *       <b><a href="http://oss.software.ibm.com/icu/userguide/design.html"> Multithreading</a></b>
  *    <li>
- *       <b><a href="http://oss.software.ibm.com/icu/userguide/conversion.html"> Conversion </a></b> 
- *    <li> 
- *       <b><a href="http://oss.software.ibm.com/icu/userguide/design.html"> Error Handling  </a></b>  
- * </ul>  
+ *       <b><a href="http://oss.software.ibm.com/icu/userguide/conversion.html"> Conversion </a></b>
+ *    <li>
+ *       <b><a href="http://oss.software.ibm.com/icu/userguide/design.html"> Error Handling  </a></b>
+ * </ul>
  * <hr>
- * <h6> File List </h6>
+ * <h6> <a name="Module">Module List</h6>
  * <center>
  * <table BORDER COLS=3 WIDTH="50%" >
  * <tr>
@@ -68,12 +65,7 @@
  * <td> Basic types, constants and enumerations </td>
  * \htmlonly
  * <td colspan=2><a class="el" href="utypes_h.html"> utypes.h</a> </td>
- * \endhtmlonly 
- * </tr>
- * <tr>
- * <td>Bidirectional Algorithm</td>
- * <td>ubidi.h</td>
- * <td>BiDi</td>
+ * \endhtmlonly
  * </tr>
  * <tr>
  * <td>String and Character Iteration</td>
@@ -86,14 +78,9 @@
  * <td>UnicodeConverter</td>
  * </tr>
  * <tr>
- * <td>locale</td>
+ * <td>Locales </td>
  * <td>uloc.h</a></td>
  * <td>Locale</td>
- * </tr>
- * <tr>
- * <td>Normalization</td>
- * <td>unorm.h</td>
- * <td>Normalizer</td>
  * </tr>
  * <tr>
  * <td>Resource Bundles</td>
@@ -101,22 +88,12 @@
  * <td>ResourceBundle</td>
  * </tr>
  * <tr>
- * <td>Compression. Deprecated</td>
- * <td>scsu.h</td>
- * <td>N.A</td>
+ * <td>Date and Time Formatting</td>
+ * <td>udat.h</td>
+ * <td>DateFormat</td>
  * </tr>
  * <tr>
- * <td>Arabic Shaping</td>
- * <td>ushape.h</td>
- * <td>N.A</td>
- * </tr>
- * <tr>
- * <td>Break Iteration</td>
- * <td>ubrk.h</td>
- * <td>BreakIterator</td>
- * </tr>
- * <tr>
- * <td>calendar</td>
+ * <td>Calendars</td>
  * <td>ucal.h</td>
  * <td>Calendar</td>
  * </tr>
@@ -129,23 +106,45 @@
  * <td>Number Formatting</td>
  * <td>umsg.h</td>
  * <td>NumberFormat</td>
- * </tr> 
+ * </tr>
  * <tr>
- * <td>Date Formatting</td>
- * <td>udat.h</td>
- * <td>DateFormat</td>
+ * <td>Normalization</td>
+ * <td>unorm.h</td>
+ * <td>Normalizer</td>
  * </tr>
  * <tr>
  * <td>Transliteration</td>
  * <td>utrans.h</td>
  * <td>Transliterator
- *   </td>
+ * </td>
  * </tr>
  * <tr>
- * <td>Collation</td>
+ * <td>Bidirectional Algorithm</td>
+ * <td>ubidi.h</td>
+ * <td>BiDi</td>
+ * </tr>
+ * <tr>
+ * <tr>
+ * <td>Collation and Searching</td>
  * <td>ucol.h</td>
  * <td>Collator</td>
  * </tr>
+ * <tr>
+ * <td>Text boundary analysis (Break Iteration)</td>
+ * <td>ubrk.h</td>
+ * <td>BreakIterator</td>
+ * </tr>
+ * <tr>
+ * <td>Compression. (Deprecated)</td>
+ * <td>scsu.h</td>
+ * <td>N.A</td>
+ * </tr>
+ * <tr>
+ * <td>Arabic Shaping</td>
+ * <td>ushape.h</td>
+ * <td>N.A</td>
+ * </tr>
  * </table>
- * </center> 
+ * </center>
  */
+
