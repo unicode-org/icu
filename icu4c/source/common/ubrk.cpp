@@ -265,4 +265,13 @@ ubrk_getRuleStatus(UBreakIterator *bi)
     return ((RuleBasedBreakIterator *)bi)->getRuleStatus();
 }
 
+U_CAPI const char* U_EXPORT2
+ubrk_getLocaleByType(const UBreakIterator *bi, 
+                     ULocDataLocaleType type, 
+                     UErrorCode* status)
+{
+  return (((BreakIterator *)bi)->getLocale(type, *status)).getName();
+}
+
+
 #endif /* #if !UCONFIG_NO_BREAK_ITERATION */

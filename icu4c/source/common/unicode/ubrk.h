@@ -7,6 +7,7 @@
 #define UBRK_H
 
 #include "unicode/utypes.h"
+#include "unicode/uloc.h"
 
 /**
  * A text-break iterator.
@@ -518,6 +519,19 @@ ubrk_isBoundary(UBreakIterator *bi, int32_t offset);
  */
 U_CAPI  int32_t U_EXPORT2
 ubrk_getRuleStatus(UBreakIterator *bi);
+
+/**
+ * Return the locale of the break iterator. You can choose between the valid and
+ * the actual locale.
+ * @param bi break iterator
+ * @param type locale type (valid or actual)
+ * @param status error code
+ * @return locale string
+ * @draft ICU 2.8
+ */
+U_CAPI const char* U_EXPORT2
+ubrk_getLocaleByType(const UBreakIterator *bi, ULocDataLocaleType type, UErrorCode* status);
+
 
 #endif /* #if !UCONFIG_NO_BREAK_ITERATION */
 

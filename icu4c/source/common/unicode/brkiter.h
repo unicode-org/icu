@@ -562,6 +562,13 @@ public:
      */
     static StringEnumeration* getAvailableLocales(void);
 
+    /**
+     * Returns the locale for this break iterator. Two flavors are available: valid and 
+     * actual locale. 
+     * @draft ICU 2.8
+     */
+    virtual Locale getLocale(ULocDataLocaleType type, UErrorCode& status) const;
+
  private:
     static BreakIterator* makeCharacterInstance(const Locale& loc, UErrorCode& status);
     static BreakIterator* makeWordInstance(const Locale& loc, UErrorCode& status);
@@ -582,6 +589,9 @@ protected:
     UBool fBufferClone;
     /** @internal */
     BreakIterator (const BreakIterator &other) : UObject(other), fBufferClone(FALSE) {}
+    /** @internal */
+    Locale actualLocale;
+    Locale validLocale;
 private:
     /**
      * The assignment operator has no real implementation.
