@@ -173,7 +173,6 @@ RuleBasedBreakIterator::operator=(const RuleBasedBreakIterator& that) {
 //-----------------------------------------------------------------------------
 UBool RuleBasedBreakIterator::fTrace = FALSE;
 void RuleBasedBreakIterator::init() {
-    static UBool debugInitDone = FALSE;
 
     fText                = NULL;
     fData                = NULL;
@@ -182,15 +181,16 @@ void RuleBasedBreakIterator::init() {
     fLastBreakTagValid   = TRUE;
     fDictionaryCharCount = 0;
 
-    if (debugInitDone == FALSE) {
 #ifdef RBBI_DEBUG
+    static UBool debugInitDone = FALSE;
+    if (debugInitDone == FALSE) {
         char *debugEnv = getenv("U_RBBIDEBUG");
         if (debugEnv && uprv_strstr(debugEnv, "trace")) {
             fTrace = TRUE;
         }
-#endif
         debugInitDone = TRUE;
     }
+#endif
 }
 
 
