@@ -110,6 +110,8 @@ void TransliteratorAPITest::TestgetID() {
 
 		 delete t1;
 		 delete t2;
+         delete t3;
+         delete t4;
 		 delete t5;
 		 
 

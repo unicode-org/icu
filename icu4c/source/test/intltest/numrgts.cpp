@@ -208,6 +208,7 @@ void NumberFormatRegressionTest::Test4087245 (void)
         errln("Test for bug 4087245 failed");
 
     delete df;
+    delete symbols;
 }
 
 /* @bug 4087535
@@ -253,6 +254,7 @@ void NumberFormatRegressionTest::Test4088503 (void)
     /*} catch (Exception foo) {
         errln("Test for bug 4088503 failed.");
     }*/
+    delete df;
 
 }
 /* @bug 4066646
@@ -586,6 +588,7 @@ void NumberFormatRegressionTest::Test4095713 (void)
     logln(UnicodeString("") + d1);
     if (d2.getDouble() != d1)
         errln(UnicodeString("Bug 4095713 test failed, new double value : ") + d2.getDouble());
+    delete df;
 }
 
 /* @bug 4092561
@@ -1087,6 +1090,7 @@ void NumberFormatRegressionTest::Test4101481(void)
     failure(status, "new DecimalFormat");
     if (sdf->getMinimumIntegerDigits() != 1)
         errln("Minimum integer digits : " + sdf->getMinimumIntegerDigits());
+    delete sdf;
 }
 /* @bug 4052223 (API addition request A27)
  * Tests ParsePosition.setErrorPosition() and ParsePosition.getErrorPosition().
@@ -1586,6 +1590,7 @@ void NumberFormatRegressionTest::Test4140009(void)
     s = f->format(-123.456, s, pos);
     if (s != UnicodeString("-123.456"))
         errln("Fail: Format empty pattern x -123.456 => " + s);
+    delete f;
 }
 
 /**
@@ -1889,6 +1894,7 @@ void NumberFormatRegressionTest::Test4170798(void) {
         || n.getLong() != 0) {
         errln(UnicodeString("FAIL: parse(\"-0.0\") returns ") + toString(n));
     }
+    delete nf;
 }
 
 /**

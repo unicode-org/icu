@@ -73,8 +73,10 @@ void RBBIAPITest::TestCloneEquals()
          bi2clone->getText() != bi2->getText()   || 
           *bi2clone == *bi1clone )
           errln((UnicodeString)"ERROR: RBBI's clone() method failed");
-
-	  delete bi1;
+      
+      delete bi1clone;
+      delete bi2clone;
+      delete bi1;
 	  delete bi3;
 	  delete bi2;
 	  delete biequal;
@@ -87,6 +89,8 @@ void RBBIAPITest::TestgetRules()
     RuleBasedBreakIterator* bi2=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createWordInstance(Locale::getDefault(), status);
 	if(U_FAILURE(status)){
 		errln((UnicodeString)"FAIL: in construction");
+        delete bi1;
+	    delete bi2;
 		return;
 	}
     
@@ -108,7 +112,7 @@ void RBBIAPITest::TestgetRules()
      
 	 delete bi1;
 	 delete bi2;
-    
+     delete bi3;
 }
 void RBBIAPITest::TestHashCode()
 {
@@ -118,6 +122,9 @@ void RBBIAPITest::TestHashCode()
      RuleBasedBreakIterator* bi2     = (RuleBasedBreakIterator*)RuleBasedBreakIterator::createWordInstance(Locale::getDefault(), status);
      if(U_FAILURE(status)){
 		 errln((UnicodeString)"FAIL : in construction");
+	     delete bi1;
+	     delete bi2;
+	     delete bi3;
 		 return;
 	 }
    
@@ -138,7 +145,9 @@ void RBBIAPITest::TestHashCode()
      if(bi1->hashCode() == bi2->hashCode() ||  bi2->hashCode() == bi3->hashCode() ||
          bi1clone->hashCode() == bi2clone->hashCode() || bi1clone->hashCode() == bi2->hashCode())
          errln((UnicodeString)"ERROR: different objects have same hasecodes");
-	 
+
+     delete bi1clone;
+	 delete bi2clone; 
 	 delete bi1;
 	 delete bi2;
 	 delete bi3;
@@ -159,6 +168,7 @@ void RBBIAPITest::TestGetSetAdoptText()
 
 
     CharacterIterator* text1= new StringCharacterIterator(str1);
+    CharacterIterator* text1Clone = text1->clone();
     CharacterIterator* text2= new StringCharacterIterator(str2);
     
     wordIter1->setText(str1);
@@ -174,7 +184,7 @@ void RBBIAPITest::TestGetSetAdoptText()
         errln((UnicodeString)"ERROR:2 setText did not reset the iteration position to the beginning of the text, it is" + wordIter1->current() + (UnicodeString)"\n");
     
     
-	charIter1->adoptText(text1);
+	charIter1->adoptText(text1Clone);
     if( wordIter1->getText() == charIter1->getText() || 
         wordIter1->getText() != *text2 ||  charIter1->getText() != *text1 )
         errln((UnicodeString)"ERROR:2 error is getText or setText()");
@@ -188,8 +198,9 @@ void RBBIAPITest::TestGetSetAdoptText()
 	    errln((UnicodeString)"ERROR:2 error in adoptText ");
 
 
-     delete wordIter1;
-		
+    delete wordIter1;
+    delete charIter1;
+    delete rb;		
 
  }   
 void RBBIAPITest::TestFirstNextFollowing()

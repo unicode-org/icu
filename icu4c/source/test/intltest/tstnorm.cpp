@@ -158,6 +158,8 @@ void BasicNormalizerTest::TestPrevious()
   for (i = 0; i < ARRAY_LENGTH(canonTests); i++) {
     backAndForth(norm, canonTests[i][0]);
   }
+
+  delete norm;
 }
 
 void BasicNormalizerTest::TestDecomp() 
@@ -166,6 +168,7 @@ void BasicNormalizerTest::TestDecomp()
   iterateTest(norm, canonTests, ARRAY_LENGTH(canonTests), 1);
   
   staticTest(Normalizer::DECOMP, 0, canonTests, ARRAY_LENGTH(canonTests), 1);
+  delete norm;
 }
 
 void BasicNormalizerTest::TestCompatDecomp() 
@@ -175,6 +178,7 @@ void BasicNormalizerTest::TestCompatDecomp()
   
   staticTest(Normalizer::DECOMP_COMPAT, 0, 
          compatTests, ARRAY_LENGTH(compatTests), 1);
+  delete norm;
 }
 
 void BasicNormalizerTest::TestCanonCompose() 
@@ -184,6 +188,7 @@ void BasicNormalizerTest::TestCanonCompose()
   
   staticTest(Normalizer::COMPOSE, 0, canonTests,
          ARRAY_LENGTH(canonTests), 2);
+  delete norm;
 }
 
 void BasicNormalizerTest::TestCompatCompose() 
@@ -193,6 +198,7 @@ void BasicNormalizerTest::TestCompatCompose()
   
   staticTest(Normalizer::COMPOSE_COMPAT, 0, 
          compatTests, ARRAY_LENGTH(compatTests), 2);
+  delete norm;
 }
 
 
@@ -223,6 +229,7 @@ void BasicNormalizerTest::TestHangulCompose()
   for (int i = 0; i < ARRAY_LENGTH(hangulCanon); i++) {
     backAndForth(norm, hangulCanon[i][0]);
   }
+  delete norm;
 }
 
 void BasicNormalizerTest::TestHangulDecomp() 
@@ -246,6 +253,7 @@ void BasicNormalizerTest::TestHangulDecomp()
   for (int i = 0; i < ARRAY_LENGTH(hangulCanon); i++) {
     backAndForth(norm, hangulCanon[i][0]);
   }
+  delete norm;
 }
 
 

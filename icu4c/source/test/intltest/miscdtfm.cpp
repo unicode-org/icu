@@ -48,7 +48,7 @@ DateFormatMiscTests::failure(UErrorCode status, const char* msg)
 }
 
 /*
- * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.9 $ $Date: 2000/05/18 22:08:31 $
+ * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.10 $ $Date: 2000/06/29 19:42:17 $
  *
  * @bug 4097450
  */
@@ -140,7 +140,7 @@ DateFormatMiscTests::test4097450()
 }
 
 /*
- * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.9 $ $Date: 2000/05/18 22:08:31 $
+ * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.10 $ $Date: 2000/06/29 19:42:17 $
  *
  * @bug 4099975
  */
@@ -239,5 +239,6 @@ DateFormatMiscTests::test4117335()
         errln("*** Should have been " + jstShort);
         //throw new Exception("Error in short TZ name");
     }
+    delete symbols;
 
 }

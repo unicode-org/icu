@@ -276,6 +276,8 @@ void DateFormatRoundTripTest::test(DateFormat *fmt, UBool timeOnly)
                           (j > 0 && s[j] == s[j-1]?" s==":""));
                 }
             }
+            delete d;
+            delete[] s;
         }
     /*}
     catch (ParseException e) {

@@ -1033,6 +1033,10 @@ static void testCopyConstructor2()
     result = fmt2->format( &fargs, 1, resultStr, fp, status );
     result = fmt3->format( &fargs, 1, resultStr, fp, status );
     result = fmt4->format( &fargs, 1, resultStr, fp, status );
+    delete fmt1;
+    delete fmt2;
+    delete fmt3;
+    delete fmt4;
 }
 
 

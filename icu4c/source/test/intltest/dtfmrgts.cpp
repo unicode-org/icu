@@ -384,6 +384,7 @@ void DateFormatRegressionTest::Test4061287(void)
     //} catch (ParseException e) {ok=TRUE;}
     if(!ok) 
         errln("Fail: Lenient not working");
+    delete df;
 }
 
 /**
@@ -445,7 +446,11 @@ void DateFormatRegressionTest::Test4065240(void)
     TimeZone::setDefault(*saveZone);
     //}
 
+    delete shortdate;
+    delete fulldate;
     delete saveZone;
+    delete curLocale;
+    delete bundle;
 }
 
 /*
@@ -536,6 +541,7 @@ void DateFormatRegressionTest::Test4073003(void)
         errln("Fail: " + e);
         e.printStackTrace();
     }*/
+        delete fmt;
 }
 
 /**
@@ -802,6 +808,8 @@ void DateFormatRegressionTest::Test4104522(void)
     dt = sdf->parse(text, pp);
     logln(" text: \"" + text + "\"" +
           " date: " + dt);
+
+    delete sdf;
 }
 
 /**
@@ -970,6 +978,7 @@ void DateFormatRegressionTest::Test4151706(void)
     /*} catch (Exception e) {
         errln("Fail: " + e);
     }*/
+    delete fmt;
 }
 
 /**
