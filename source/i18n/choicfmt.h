@@ -4,6 +4,7 @@
 * COPYRIGHT:                                                                   *
 *   (C) Copyright Taligent, Inc.,  1997                                        *
 *   (C) Copyright International Business Machines Corporation,  1997-1999      *
+*   Copyright (C) 1999 Alan Liu and others. All rights reserved.               *
 *   Licensed Material - Program-Property of IBM - All Rights Reserved.         *
 *   US Government Users Restricted Rights - Use, duplication, or disclosure    *
 *   restricted by GSA ADP Schedule Contract with IBM Corp.                     *
@@ -261,6 +262,25 @@ public:
                                   FieldPosition& pos, 
                                   UErrorCode& status) const;
 
+    /**
+     * Redeclared Format method.
+     */
+    UnicodeString& format(const Formattable& obj,
+                          UnicodeString& result,
+                          UErrorCode& status) const;
+
+    /**
+     * Redeclared NumberFormat method.
+     */
+    UnicodeString& format(  double number,
+                            UnicodeString& output) const;
+
+    /**
+     * Redeclared NumberFormat method.
+     */
+    UnicodeString& format(  int32_t number,
+                            UnicodeString& output) const;
+
    /**
     * Return a long if possible (e.g. within range LONG_MAX,
     * LONG_MAX], and with no decimals), otherwise a double.  If
@@ -383,6 +403,25 @@ inline double ChoiceFormat::nextDouble( double d )
 inline double ChoiceFormat::previousDouble( double d )
 {
     return ChoiceFormat::nextDouble( d, FALSE );
+}
+
+inline UnicodeString&
+ChoiceFormat::format(const Formattable& obj,
+                     UnicodeString& result,
+                     UErrorCode& status) const {
+    return Format::format(obj, result, status);
+}
+
+inline UnicodeString&
+ChoiceFormat::format(double number,
+                     UnicodeString& output) const {
+    return NumberFormat::format(number, output);
+}
+
+inline UnicodeString&
+ChoiceFormat::format(int32_t number,
+                     UnicodeString& output) const {
+    return NumberFormat::format(number, output);
 }
 
 #endif // _CHOICFMT
