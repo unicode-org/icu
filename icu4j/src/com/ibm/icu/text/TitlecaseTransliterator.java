@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TitlecaseTransliterator.java,v $ 
- * $Date: 2002/03/15 22:48:07 $ 
- * $Revision: 1.14 $
+ * $Date: 2002/04/02 23:59:59 $ 
+ * $Revision: 1.15 $
  */
 package com.ibm.icu.text;
 import java.util.*;
@@ -104,7 +104,7 @@ class TitlecaseTransliterator extends Transliterator {
         
         while (textPos < limit) {
         	original.setIndex(textPos);
-            cp = original.currentCodepoint();
+            cp = original.currentCodePoint();
             oldLen = UTF16.getCharCount(cp);
             
             if (!SKIP.contains(cp)) {

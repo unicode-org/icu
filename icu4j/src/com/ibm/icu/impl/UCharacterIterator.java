@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Attic/UCharacterIterator.java,v $ 
- * $Date: 2002/03/15 22:48:07 $ 
- * $Revision: 1.3 $
+ * $Date: 2002/04/03 00:00:00 $ 
+ * $Revision: 1.4 $
  *
  *******************************************************************************
  */
@@ -97,7 +97,7 @@ public final class UCharacterIterator implements CharacterIterator
      * Returns the current codepoint
      * @return current codepoint
      */
-    public int currentCodepoint()
+    public int currentCodePoint()
     {
         if (m_index_ >= 0 && m_index_ < m_length_) {
             return m_replaceable_.char32At(m_index_);
@@ -167,7 +167,7 @@ public final class UCharacterIterator implements CharacterIterator
      */
     public char next()
     {
-        if (m_index_ < m_length_ - 1) {
+        if (m_index_ < m_length_) {
         	char result = m_replaceable_.charAt(m_index_);
             m_index_ ++;
             return result;
@@ -188,20 +188,23 @@ public final class UCharacterIterator implements CharacterIterator
 	 * @return next codepoint in text or DONE_CODEPOINT if the new index is off the 
 	 *         end of the text range.
 	 */	
-	public int nextCodepoint()
+	public int nextCodePoint()
 	{
-		if (m_index_ < m_length_ - 1) {
-			int ch = m_replaceable_.charAt(m_index_);
+		if (m_index_ < m_length_) {
+			char ch = m_replaceable_.charAt(m_index_);
 			m_index_ ++;
 			if (ch >= UTF16.LEAD_SURROGATE_MIN_VALUE &&
-			    ch <= UTF16.LEAD_SURROGATE_MAX_VALUE) {
-			    ch = m_replaceable_.charAt(m_index_);
-			    if (ch >= UTF16.TRAIL_SURROGATE_MIN_VALUE &&
-			    	ch <= UTF16.TRAIL_SURROGATE_MAX_VALUE) {
+			    ch <= UTF16.LEAD_SURROGATE_MAX_VALUE &&
+			    m_index_ < m_length_) {
+			    char trail = m_replaceable_.charAt(m_index_);
+			    if (trail >= UTF16.TRAIL_SURROGATE_MIN_VALUE &&
+			    	trail <= UTF16.TRAIL_SURROGATE_MAX_VALUE) {
 			    	m_index_ ++;
+			    	return UCharacterProperty.getRawSupplementary(ch, 
+			    	                                              trail);
 				}
 			}
-			return currentCodepoint();
+			return ch;
         }
         return DONE_CODEPOINT;
 	}
@@ -235,20 +238,23 @@ public final class UCharacterIterator implements CharacterIterator
 	 * @return previous codepoint in text or DONE_CODEPOINT if the new index is 
 	 *         off the start of the text range.
      */
-    public int previousCodepoint()
+    public int previousCodePoint()
     {
         if (m_index_ > 0) {
             m_index_ --;
-            int ch = m_replaceable_.charAt(m_index_);
+            char ch = m_replaceable_.charAt(m_index_);
 			if (ch >= UTF16.TRAIL_SURROGATE_MIN_VALUE &&
-			    ch <= UTF16.TRAIL_SURROGATE_MAX_VALUE) {
-			    ch = m_replaceable_.charAt(m_index_);
-			    if (ch >= UTF16.LEAD_SURROGATE_MIN_VALUE &&
-			    	ch <= UTF16.LEAD_SURROGATE_MAX_VALUE) {
+			    ch <= UTF16.TRAIL_SURROGATE_MAX_VALUE &&
+			    m_index_ > 0) {
+			    char lead = m_replaceable_.charAt(m_index_);
+			    if (lead >= UTF16.LEAD_SURROGATE_MIN_VALUE &&
+			    	lead <= UTF16.LEAD_SURROGATE_MAX_VALUE) {
 			    	m_index_ --;
+			    	return UCharacterProperty.getRawSupplementary(ch, 
+			    	                                              lead);
 				}
 			}
-   			return currentCodepoint();
+   			return ch;
         }
         return DONE_CODEPOINT;
     }
@@ -266,7 +272,7 @@ public final class UCharacterIterator implements CharacterIterator
 	public char setIndex(int index)
 	{
 		int length = m_replaceable_.length();
-		if (index < 0 || index >= length) {
+		if (index < 0 || index > length) {
 			throw new IllegalArgumentException("Index index out of bounds");
 		}
 		m_index_ = index;

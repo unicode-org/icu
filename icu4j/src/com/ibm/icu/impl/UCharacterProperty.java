@@ -6,8 +6,8 @@
 *
 * $Source: 
 *         /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterPropertyDB.java $ 
-* $Date: 2002/03/15 22:48:07 $ 
-* $Revision: 1.6 $
+* $Date: 2002/04/03 00:00:00 $ 
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -946,7 +946,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
         
         while (strIndex < limit) { 
         	ucharIter.setIndex(strIndex);
-	        int ch = ucharIter.currentCodepoint();
+	        int ch = ucharIter.currentCodePoint();
 	        
 	        toLowerCase(locale, ch, ucharIter, result);
 	        strIndex ++;
@@ -1127,7 +1127,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
         
         while (strIndex < limit) { 
         	ucharIter.setIndex(strIndex);
-	        int ch = ucharIter.currentCodepoint();
+	        int ch = ucharIter.currentCodePoint();
 	        
 	        toUpperOrTitleCase(locale, ch, ucharIter, true, result);
 	        strIndex ++;
@@ -1538,7 +1538,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
     * @param char32 code point
     * @return the size of the codepoint
     */
-    private static int setCodepoint(char[] target, int char32)
+    private static int setCodePoint(char[] target, int char32)
     {
         // Write the UTF-16 values
         if (char32 >= UTF16.SUPPLEMENTARY_MIN_VALUE) {
@@ -1575,7 +1575,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
     {
     	uchariter.setIndex(offset);
     	
-    	int ch = uchariter.previousCodepoint();
+    	int ch = uchariter.previousCodePoint();
     	
         while (ch != UCharacterIterator.DONE_CODEPOINT) {
             if (ch == LATIN_SMALL_LETTER_I_ || ch == LATIN_SMALL_LETTER_J_ || 
@@ -1591,7 +1591,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
                 // intervening cc == 230
                 return false; 
             }
-            ch = uchariter.previousCodepoint();
+            ch = uchariter.previousCodePoint();
         }
 
         return false; // not preceded by TYPE_i
@@ -1610,7 +1610,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
     {
     	uchariter.setIndex(offset);
     	
-    	int ch = uchariter.previousCodepoint();
+    	int ch = uchariter.previousCodePoint();
     	
         while (ch != UCharacterIterator.DONE_CODEPOINT) {
             if (ch == LATIN_CAPITAL_LETTER_I_) {
@@ -1623,25 +1623,27 @@ public final class UCharacterProperty implements Trie.DataManipulate
                 // intervening cc == 230
                 return false; 
             }
- 			ch = uchariter.previousCodepoint();           
+ 			ch = uchariter.previousCodePoint();           
         }
 
         return false; // not preceded by I
     }
     
     /** 
-    * Determines if offset is not followed by a sequence consisting of
-    * an ignorable sequence and then a cased letter {Ll, Lu, Lt}.
+    * Determines if codepoint at offset is not followed by a sequence 
+    * consisting of an ignorable sequence and then a cased letter 
+    * {Ll, Lu, Lt}.
     * @param uchariter String iterator to determine
-    * @param offset offset in string to check
-    * @return false if any character after index in src is a cased letter
+    * @param offset codepoint offset in string to check
+    * @return false if any character after offset in src is a cased letter
     * @see SpecialCasing.txt
     */
     private boolean isCFINAL(UCharacterIterator uchariter, int offset) 
     {
     	// iterator should have been determined to be not null by caller
         uchariter.setIndex(offset);
-    	int ch = uchariter.nextCodepoint();
+    	uchariter.nextCodePoint(); // rid of current codepoint
+        int ch = uchariter.nextCodePoint(); // start checking
     	
     	while (ch != UCharacterIterator.DONE_CODEPOINT) {
             int cat = getType(ch);
@@ -1653,17 +1655,17 @@ public final class UCharacterProperty implements Trie.DataManipulate
             if (!isIgnorable(ch, cat)) {
                 return true; // not ignorable
             }
-            ch = uchariter.nextCodepoint();
+            ch = uchariter.nextCodePoint();
         }
 
         return true;
     }
 
     /**
-    * Determines if offset is not preceded by a sequence consisting of a cased 
-    * letter {Ll, Lu, Lt} and an ignorable sequence. 
+    * Determines if codepoint at offset is not preceded by a sequence 
+    * consisting of a cased letter {Ll, Lu, Lt} and an ignorable sequence. 
     * @param uchariter string iterator to determine
-    * @param offset offset in string to check
+    * @param offset codepoint offset in string to check
     * @return true if any character before index in src is a cased letter
     * @see SpecialCasing.txt
     */
@@ -1671,7 +1673,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
                                          int offset) 
     {
     	uchariter.setIndex(offset);
-    	int ch = uchariter.previousCodepoint();
+    	int ch = uchariter.previousCodePoint();
     	
         while (ch != UCharacterIterator.DONE_CODEPOINT) {
             int cat = getType(ch);
@@ -1683,17 +1685,17 @@ public final class UCharacterProperty implements Trie.DataManipulate
             if (!isIgnorable(ch, cat)) {
                 return false; // not ignorable
             }
-			ch = uchariter.previousCodepoint();
+			ch = uchariter.previousCodePoint();
         }
 
         return false; 
     }
 
     /** 
-    * Determines if a string at offset is followed by one or more characters 
-    * of combining class = 230.
-    * @param chariter text iterator to be determined
-    * @param offset offset in string to check
+    * Determines if a codepoint at offset in string is followed by one or 
+    * more characters of combining class = 230.
+    * @param uchariter text iterator to be determined
+    * @param offset codepoint offset in string to check
     * @return true if a string at offset is followed by one or more characters 
     *         of combining class = 230.
     * @see SpecialCasing.txt
@@ -1702,7 +1704,8 @@ public final class UCharacterProperty implements Trie.DataManipulate
                                                  int offset) 
     {
         uchariter.setIndex(offset);
-        int ch = uchariter.nextCodepoint();
+        uchariter.nextCodePoint(); // rid of current codepoint
+        int ch = uchariter.nextCodePoint(); // start checking
         
         while (ch != UCharacterIterator.DONE_CODEPOINT) {
             int cc = NormalizerImpl.getCombiningClass(ch);
@@ -1712,17 +1715,17 @@ public final class UCharacterProperty implements Trie.DataManipulate
             if (cc == 0) {
                 return false; // next base character, no more cc==230 following
             }
-            ch = uchariter.nextCodepoint();
+            ch = uchariter.nextCodePoint();
         }
 
         return false; // no more cc == 230 following
     }
 
     /** 
-    * Determines if a string at offset is followed by a dot above 
-    * with no characters of combining class == 230 in between 
+    * Determines if a codepoint at offset in string is followed by a dot 
+    * above with no characters of combining class == 230 in between 
     * @param uchariter text iterator to be determined
-    * @param offset offset in string to check
+    * @param offset codepoint offset of the character in string to check
     * @return true if a string at offset is followed by oa dot above 
     *         with no characters of combining class == 230 in between
     * @see SpecialCasing.txt
@@ -1731,7 +1734,8 @@ public final class UCharacterProperty implements Trie.DataManipulate
                                                 int offset) 
     {
         uchariter.setIndex(offset);
-        int ch = uchariter.nextCodepoint();
+        uchariter.nextCodePoint(); // rid off current character
+        int ch = uchariter.nextCodePoint(); // start checking
         
         while (ch != UCharacterIterator.DONE_CODEPOINT) {
             if (ch == COMBINING_DOT_ABOVE_) {
@@ -1741,7 +1745,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
             if (cc == 0 || cc == COMBINING_MARK_ABOVE_CLASS_) {
                 return false; // next base character or cc==230 in between
             }
-            ch = uchariter.nextCodepoint();
+            ch = uchariter.nextCodePoint();
         }
 
         return false; // no dot above following
@@ -1758,7 +1762,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
     private static boolean isIgnorable(int ch, int cat) 
     {
         return cat == UCharacterCategory.NON_SPACING_MARK || ch == HYPHEN_ || 
-                      ch == SOFT_HYPHEN_;
+               ch == SOFT_HYPHEN_;
     }
       
     /**
