@@ -26,6 +26,11 @@ class IntlTestRBNF : public IntlTest {
   virtual void TestAPI();
 
   /**
+   * Perform a simple spot check on the FractionalRuleSet logic
+   */
+  virtual void TestFractionalRuleSet();
+
+  /**
    * Perform a simple spot check on the English spellout rules
    */
   virtual void TestEnglishSpellout();
