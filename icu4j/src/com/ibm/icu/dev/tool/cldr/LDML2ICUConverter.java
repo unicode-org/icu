@@ -223,7 +223,7 @@ public class LDML2ICUConverter {
         if(lang!=null){
             ICUResourceWriter.ResourceTable table = new ICUResourceWriter.ResourceTable();
             ICUResourceWriter.ResourceString str = new ICUResourceWriter.ResourceString();
-            str.name = "%%ALIAS";
+            str.name = "\"%%ALIAS\"";
             if(lang.indexOf("_")<0){
                 table.name = lang;
                 String c = ULocale.getCountry(locName);
@@ -270,7 +270,7 @@ public class LDML2ICUConverter {
         deprecatedMap.put("he", "iw");
         deprecatedMap.put("id", "in");
         deprecatedMap.put("jv", "jw");
-        deprecatedMap.put("no", "no_NO_NY");
+        deprecatedMap.put("nn", "no_NO_NY");
         deprecatedMap.put("sr", "sh");
         deprecatedMap.put("yi", "ji");
         
@@ -298,11 +298,13 @@ public class LDML2ICUConverter {
             ICUResourceWriter.Resource res = null;
             if(name.equals(LDMLConstants.ALIAS)){
                 ICUResourceWriter.ResourceString str = new ICUResourceWriter.ResourceString();
-                str.name = "%%ALIAS";
+                str.name = "\"%%ALIAS\"";
                 str.val  = LDMLUtilities.getAttributeValue(node, LDMLConstants.SOURCE);
                 res = str;
+                table.first = current = null;
             }else if(name.equals(LDMLConstants.IDENTITY)){
             	table = (ICUResourceWriter.ResourceTable) parseIdentity(node, xpath);
+                current = findLast(table.first);
                 continue;
             }else if(name.equals(LDMLConstants.LDML) || name.equals(LDMLConstants.SPECIAL)/*
                                                                * IGNORE SPECIALS
