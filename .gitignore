@@ -158,6 +158,7 @@ icu4c/source/tools/pkgdata/*.pdb
 icu4c/source/tools/pkgdata/Debug
 icu4c/source/tools/pkgdata/Makefile
 icu4c/source/tools/pkgdata/Release
+icu4c/source/tools/pkgdata/icupkg.inc
 icu4c/source/tools/pkgdata/pkgdata
 icu4c/source/tools/pkgdata/tmp
 icu4c/source/tools/rbdump/*.d

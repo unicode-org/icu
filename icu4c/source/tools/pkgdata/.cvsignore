@@ -5,3 +5,4 @@ Makefile
 *.d
 *.pdb
 pkgdata
+icupkg.inc
