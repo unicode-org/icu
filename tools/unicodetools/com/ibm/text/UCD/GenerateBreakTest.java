@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateBreakTest.java,v $
-* $Date: 2003/04/01 02:52:00 $
-* $Revision: 1.4 $
+* $Date: 2003/04/02 05:16:44 $
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -286,7 +286,7 @@ abstract public class GenerateBreakTest implements UCD_Types {
         out.println("</style></head>");
 
 
-        out.println("<body bgcolor='#FFFFFF'><h2>Sample Break Table</h2>");
+        out.println("<body bgcolor='#FFFFFF'><h2>" + fileName + " Break Chart</h2>");
         out.println("<p>Version: " + Default.ucd.getVersion() + "</p>");
 
 
@@ -375,6 +375,14 @@ abstract public class GenerateBreakTest implements UCD_Types {
     abstract public boolean isBreak(String source, int offset, boolean recommended);
 
     abstract public byte getType (int cp, boolean recommended);
+    
+    public int mapType(int input) {
+        return input;
+    }
+    
+    public boolean highlightTableEntry(int x, int y, String s) {
+        return false;
+    }
 
     abstract public String getTypeID(int s, boolean recommended);
 
@@ -468,7 +476,9 @@ abstract public class GenerateBreakTest implements UCD_Types {
             if (after == null) continue;
 
             String h = getTypeID(after, recommended);
-            types += "<th " + width + " title='" + getInfo(after) + "'>" + h + "</th>";
+            types += "<th " + width + " title='" + getInfo(after) + "'><a class='lbclass' href='#" + h + "'>" + h + "</th>";
+            
+            
             //codes += "<th " + width + " title='" + getInfo(after) + "'>" + Utility.hex(after) + "</th>";
         }
 
@@ -481,16 +491,21 @@ abstract public class GenerateBreakTest implements UCD_Types {
             String before = samples[type];
             if (before == null) continue;
 
-            String line = "<tr><th title='" + Default.ucd.getCodeAndName(before) + "'>" 
-                + getTypeID(before, recommended) + "</th>";
+            String h = getTypeID(before, recommended);
+            String line = "<tr><th title='" + Default.ucd.getCodeAndName(before) + "'><a class='lbclass' href='#" + h + "'>" 
+                + h + "</th>";
 
             for (int type2 = 0; type2 < tableLimit; ++type2) {
+                
                 String after = samples[type2];
                 if (after == null) continue;
 
                 String t = getTableEntry(before, after, recommended, rule);
                 String background = "";
                 String t2 = getTableEntry(before, after, !recommended, rule2);
+                if (highlightTableEntry(type, type2, t)) {
+                    background = " bgcolor='#FFFF00'";
+                }
                 if (!t.equals(t2)) {
                     if (t.equals(NOBREAK)) {
                         background = " bgcolor='#CCFFFF'";
@@ -585,7 +600,7 @@ abstract public class GenerateBreakTest implements UCD_Types {
             byte lb2 = getType(i, true);
             if (lb == lb2 && skipType(lb)) continue;
 
-            int combined = (lb << 7) + lb2;
+            int combined = (mapType(lb) << 7) + mapType(lb2);
             if (!bitset.get(combined)) {
                 bitset.set(combined);
                 list.put(new Integer(combined), UTF16.valueOf(i));
@@ -947,9 +962,11 @@ abstract public class GenerateBreakTest implements UCD_Types {
 
     static class GenerateLineBreakTest extends GenerateBreakTest {
         // all the other items are supplied in UCD_TYPES
-        static byte LB_L = LB_LIMIT + hL, LB_V = LB_LIMIT + hV, LB_T = LB_LIMIT + hT,
+        
+        /*static byte LB_L = LB_LIMIT + hL, LB_V = LB_LIMIT + hV, LB_T = LB_LIMIT + hT,
             LB_LV = LB_LIMIT + hLV, LB_LVT = LB_LIMIT + hLVT, LB_SUP = LB_LIMIT + hLIMIT,
             LB2_LIMIT = (byte)(LB_SUP + 1);
+        */    
 
         /*
         private byte[] AsmusOrderToMyOrder = {
@@ -968,15 +985,58 @@ abstract public class GenerateBreakTest implements UCD_Types {
             for (byte i = 0; i < AsmusOrderToMyOrder.length; ++i) {
                 MyOrderToAsmusOrder[AsmusOrderToMyOrder[i]] = i;
             }
-            */
+        */
+            
+        static GenerateGraphemeBreakTest grapheme = new GenerateGraphemeBreakTest();
+        static Context context = new Context();
+
+        static final UnicodeMap map = new UnicodeMap();
+        static {
+            //System.out.println("Adding Linebreak");
+            for (int i = 0; i <= 0x10FFFF; ++i) {
+                map.put(i, Default.ucd.getLineBreak(i));
+            }
+            for (int i = 0; i < LB_LIMIT; ++i) {
+                map.setLabel(i, Default.ucd.getLineBreakID_fromIndex((byte)i, SHORT));
+            }
+            //System.out.println(map.getSetFromIndex(LB_CL));
+            //System.out.println("Done adding Linebreak");
+        }
+        
         {
+            sampleMap = map;
             fileName = "Line";
             extraSingleSamples = new String[] {"can't", "can\u2019t", "ab\u00ADby", "-3" };
+        }
+        
+        public int mapType(int input) {
+            int old = input;
+            switch (input) {
+                case LB_BA: input = 16; break;
+                case LB_BB: input = 17; break;
+                case LB_B2: input = 18; break;
+                case LB_ZW: input = 19; break;
+                case LB_CM: input = 20; break;
+                case LB_WJ: input = 21; break;
+                
+                case LB_SP: input = 22; break;
+                case LB_BK: input = 23; break;
+                case LB_NL: input = 24; break;
+                case LB_CR: input = 25; break;
+                case LB_LF: input = 26; break;
+                
+                case LB_CB: input = 27; break;
+                case LB_SA: input = 28; break;
+                case LB_AI: input = 29; break;
+                case LB_SG: input = 30; break;
+            }
+            //if (old != input) System.out.println(old + " => " + input);
+            return input;
         }
 
 
         public boolean recommendedDiffers() {
-            return true;
+            return false;
         }
 
         public void sampleDescription(PrintWriter out) {
@@ -1006,29 +1066,35 @@ abstract public class GenerateBreakTest implements UCD_Types {
 
         // stuff that subclasses need to override
         boolean skipType(int type) {
-            return type == LB_AI || type == LB_SA || type == LB_SG || type == LB_XX;
+            return type == LB_AI || type == LB_SA || type == LB_SG || type == LB_XX
+                || type == LB_CB || type == LB_CR || type == LB_BK || type == LB_LF
+                || type == LB_NL || type == LB_SP;
         }
 
         // stuff that subclasses need to override
         public String getTypeID(int cp, boolean recommended) {
+            /*
             byte result = getType(cp, recommended);
             if (result == LB_SUP) return "SUP";
             if (result >= LB_LIMIT) return hNames[result - LB_LIMIT];
-            return Default.ucd.getLineBreakID_fromIndex(result); // AsmusOrderToMyOrder[result]);
+            */
+            // return Default.ucd.getLineBreakID_fromIndex(cp); // AsmusOrderToMyOrder[result]);
+            return Default.ucd.getLineBreakID(cp); // AsmusOrderToMyOrder[result]);
         }
 
         // stuff that subclasses need to override
         public byte getType(int cp, boolean recommended) {
-            if (cp > 0xFFFF) return LB_SUP;
+            /*if (cp > 0xFFFF) return LB_SUP;
             byte result = getHangulType(cp);
             if (result != hNot) return (byte)(result + LB_LIMIT);
+            */
             // return MyOrderToAsmusOrder[Default.ucd.getLineBreak(cp)];
             return Default.ucd.getLineBreak(cp);
         }
 
         public String getTableEntry(String before, String after, boolean recommended, String[] ruleOut) {
-            String t = "_";
-            boolean spaceBreak = isBreak(before + " " + after, before.length() + 1, recommended);
+            String t = "_"; // break
+            boolean spaceBreak = isBreak(before + " " + after, before.length()+1, recommended);
             String spaceRule = rule;
 
             boolean spaceBreak2 = isBreak(before + " " + after, before.length(), recommended);
@@ -1039,19 +1105,51 @@ abstract public class GenerateBreakTest implements UCD_Types {
 
             if (!normalBreak) {
                 if (!spaceBreak && !spaceBreak2) {
-                    t = "^";
-                    rule = spaceRule.equals(normalRule) ? normalRule : spaceRule + "/" + normalRule;
-                    if (!spaceRule2.equals(normalRule) && !spaceRule2.equals(spaceRule)) {
-                        rule += "/" + spaceRule2;
-                    }
+                    t = "^"; // don't break, even with intervening spaces
                 } else {
-                    t = "%";
-                    rule = normalRule;
+                    t = "%"; // don't break, but break with intervening spaces
+                }
+                rule = normalRule;
+                if (!spaceRule2.equals(normalRule)) {
+                    rule += " [" + spaceRule2 + "]";
+                }
+                if (!spaceRule.equals(normalRule) && !spaceRule.equals(spaceRule2)) {
+                    rule += " {" + spaceRule + "}";
                 }
             }
             ruleOut[0] = rule;
             return t;
         }
+        
+        public boolean highlightTableEntry(int x, int y, String s) {
+            try {
+                return !oldLineBreak[x][y].equals(s);
+            } catch (Exception e) {}
+            return true;
+        }
+
+        String[][] oldLineBreak = {
+{"^",	"^",	"^",	"^",	"^",	"^",	"^",	"^",	"^",	"^",	"^",	"^",	"^",	"^",	"^",	"^",	"^",	"^",	"^",	"%"},
+{"_",	"^",	"%",	"%",	"^",	"^",	"^",	"^",	" ",	"%",	"_",	"_",	"_",	"_",	"%",	"%",	"_",	"_",	"^",	"%"},
+{"^",	"^",	"%",	"%",	"%",	"^",	"^",	"^",	"%",	"%",	"%",	"%",	"%",	"%",	"%",	"%",	"%",	"%",	"^",	"%"},
+{"%",	"^",	"%",	"%",	"%",	"^",	"^",	"^",	"%",	"%",	"%",	"%",	"%",	"%",	"%",	"%",	"%",	"%",	"^",	"%"},
+{"_",	"^",	"%",	"%",	"%",	"^",	"^",	"^",	"_",	"_",	"_",	"_",	"_",	"_",	"%",	"%",	"_",	"_",	"^",	"%"},
+{"_",	"^",	"%",	"%",	"%",	"^",	"^",	"^",	"_",	"_",	"_",	"_",	"_",	"_",	"%",	"%",	"_",	"_",	"^",	"%"},
+{"_",	"^",	"%",	"%",	"%",	"^",	"^",	"^",	"_",	"_",	"%",	"_",	"_",	"_",	"%",	"%",	"_",	"_",	"^",	"%"},
+{"_",	"^",	"%",	"%",	"%",	"^",	"^",	"^",	"_",	"_",	"%",	"_",	"_",	"_",	"%",	"%",	"_",	"_",	"^",	"%"},
+{"%",	"^",	"%",	"%",	"%",	"^",	"^",	"^",	"_",	"_",	"%",	"%",	"%",	"_",	"%",	"%",	"_",	"_",	"^",	"%"},
+{"_",	"^",	"%",	"%",	"%",	"^",	"^",	"^",	"_",	"_",	"_",	"_",	"_",	"_",	"%",	"%",	"_",	"_",	"^",	"%"},
+{"_",	"^",	"%",	"%",	"%",	"^",	"^",	"^",	"_",	"%",	"%",	"%",	"_",	"%",	"%",	"%",	"_",	"_",	"^",	"%"},
+{"_",	"^",	"%",	"%",	"%",	"^",	"^",	"^",	"_",	"_",	"%",	"%",	"_",	"%",	"%",	"%",	"_",	"_",	"^",	"%"},
+{"_",	"^",	"%",	"%",	"%",	"^",	"^",	"^",	"_",	"%",	"_",	"_",	"_",	"%",	"%",	"%",	"_",	"_",	"^",	"%"},
+{"_",	"^",	"%",	"%",	"%",	"^",	"^",	"^",	"_",	"_",	"_",	"_",	"_",	"%",	"%",	"%",	"_",	"_",	"^",	"%"},
+{"_",	"^",	"%",	"%",	"%",	"^",	"^",	"^",	"_",	"_",	"_",	"_",	"_",	"_",	"%",	"%",	"_",	"_",	"^",	"%"},
+{"_",	"^",	"%",	"%",	"%",	"^",	"^",	"^",	"_",	"_",	"_",	"_",	"_",	"_",	"%",	"%",	"_",	"_",	"^",	"%"},
+{"%",	"^",	"%",	"%",	"%",	"^",	"^",	"^",	"%",	"%",	"%",	"%",	"%",	"%",	"%",	"%",	"%",	"%",	"^",	"%"},
+{"_",	"^",	"%",	"%",	"%",	"^",	"^",	"^",	"_",	"_",	"_",	"_",	"_",	"_",	"%",	"%",	"_",	"^",	"^",	"%"},
+{"_",	"_",	"_",	"_",	"_",	"_",	"_",	"_",	"_",	"_",	"_",	"_",	"_",	"_",	"_",	"_",	"_",	"_",	"^",	"%"},
+{"_",	"^",	"%",	"%",	"%",	"^",	"^",	"^",	"_",	"_",	"%",	"%",	"_",	"%",	"%",	"%",	"_",	"_",	"^",	"%"}
+        };
 
 
         public byte getResolvedType (int cp, boolean recommended) {
@@ -1078,6 +1176,7 @@ abstract public class GenerateBreakTest implements UCD_Types {
         // WARNING: as a side effect, sets "rule"
 
         public boolean isBreak(String source, int offset, boolean recommended) {
+            recommended = true; // don't care about old stuff
 
             // LB 1  Assign a line break category to each character of the input.
             // Resolve AI, CB, SA, SG, XX into other line break classes depending on criteria outside this algorithm.
@@ -1085,54 +1184,71 @@ abstract public class GenerateBreakTest implements UCD_Types {
 
             // LB 2a  Never break at the start of text
 
-            rule="2a";
+            rule="2a: × sot";
             if (offset <= 0) return false;
 
             // LB 2b  Always break at the end of text
 
-            rule="2b";
+            rule="2b: ! eot";
             if (offset >= source.length()) return true;
 
 
             // UTF-16: never break in the middle of a code point
-            if (!onCodepointBoundary(source, offset)) return false;
+            
+            // now get the base character before and after, and their types
+
+            getGraphemeBases(source, offset, recommended, -1, context);
+
+            byte before = context.tBefore;
+            byte after = context.tAfter;
+            byte before2 = context.tBefore2;
+            byte after2 = context.tAfter2;
+            
+            
+            //if (!onCodepointBoundary(source, offset)) return false;
 
 
             // now get the character before and after, and their types
 
 
-            int cpBefore = UTF16.charAt(source, offset-1);
-            int cpAfter = UTF16.charAt(source, offset);
+            //int cpBefore = UTF16.charAt(source, offset-1);
+            //int cpAfter = UTF16.charAt(source, offset);
 
-            byte before = getResolvedType(cpBefore, recommended);
-            byte after = getResolvedType(cpAfter, recommended);
+            //byte before = getResolvedType(cpBefore, recommended);
+            //byte after = getResolvedType(cpAfter, recommended);
 
 
-            rule="3a";
+            rule="3a: CR × LF ; ( BK | CR | LF | NL ) !";
+            
             // Always break after hard line breaks (but never between CR and LF).
             // CR ^ LF
             if (before == LB_CR && after == LB_LF) return false;
             if (before == LB_BK || before == LB_LF || before == LB_CR) return true;
 
             //LB 3b  Don’t break before hard line breaks.
-            rule="3b";
+            rule="3b: × ( BK | CR | LF )";
             if (after == LB_BK || after == LB_LF | after == LB_CR) return false;
 
             // LB 4  Don’t break before spaces or zero-width space.
             // × SP
             // × ZW
 
-            rule="4";
+            rule="4: × ( SP | ZW )";
             if (after == LB_SP || after == LB_ZW) return false;
 
             // LB 5 Break after zero-width space.
             // ZW ÷
-            rule="5";
+            rule="5: ZW ÷";
             if (before == LB_ZW) return true;
 
             // LB 6  Don’t break graphemes (before combining marks, around virama or on sequences of conjoining Jamos.
-            rule="6";
+            rule="6: GC -> FB ; X CM -> X";
+            //rule="3: GC -> FB; 4: X Format* -> X";
+            if (!grapheme.isBreak( source,  offset,  recommended)) return false;
             if (after == LB_CM) return false;
+
+            
+            /*
 
             if (before == LB_L && (after == LB_L || after == LB_V || after == LB_LV || after == LB_LVT)) return false;
 
@@ -1140,6 +1256,7 @@ abstract public class GenerateBreakTest implements UCD_Types {
 
             if ((before == LB_LVT || before == LB_T) && (after == LB_T)) return false;
 
+            */
             boolean setBase = false;
             if (before == LB_CM) {
                 setBase = true;
@@ -1150,23 +1267,25 @@ abstract public class GenerateBreakTest implements UCD_Types {
                     before = getResolvedType(UTF16.charAt(source, backOffset), recommended);
                 }
             }
-
+            
+            
             // LB 7  In all of the following rules, if a space is the base character for a combining mark,
             // the space is changed to type ID. In other words, break before SP CM* in the same cases as
             // one would break before an ID.
-            rule="7";
+            rule="7: SP CM* -> ID";
             if (setBase && before == LB_SP) before = LB_ID;
+            if (after == LB_SP && after2 == LB_CM) after = LB_ID;
 
             // LB 8  Don’t break before ‘]’ or ‘!’ or ‘;’ or ‘/’,  even after spaces.
             // × CL, × EX, × IS, × SY
-            rule="8";
+            rule="8: × ( CL | EX | IS | SY )";
             if (after == LB_CL || after == LB_EX || after == LB_SY | after == LB_IS) return false;
 
 
             // find the last non-space character; we will need it
             byte lastNonSpace = before;
             if (lastNonSpace == LB_SP) {
-                int backOffset = findLastNon(source, offset, LB_CM, recommended);
+                int backOffset = findLastNon(source, offset, LB_SP, recommended);
                 if (backOffset >= 0) {
                     lastNonSpace = getResolvedType(UTF16.charAt(source, backOffset), recommended);
                 }
@@ -1174,108 +1293,78 @@ abstract public class GenerateBreakTest implements UCD_Types {
 
             // LB 9  Don’t break after ‘[’, even after spaces.
             // OP SP* ×
-            rule="9";
+            rule="9: OP SP* ×";
             if (lastNonSpace == LB_OP) return false;
 
             // LB 10  Don’t break within ‘”[’, , even with intervening spaces.
             // QU SP* × OP
-            rule="10";
+            rule="10: QU SP* × OP";
             if (lastNonSpace == LB_QU && after == LB_OP) return false;
 
             // LB 11  Don’t break within ‘]h’, even with intervening spaces.
             // CL SP* × NS
-            rule="11";
+            rule="11: CL SP* × NS";
             if (lastNonSpace == LB_CL && after == LB_NS) return false;
 
             // LB 11a  Don’t break within ‘——’, even with intervening spaces.
             // B2 × B2
-            rule="11a";
+            rule="11a: B2 × B2";
             if (lastNonSpace == LB_B2 && after == LB_B2) return false;
 
 
-            if (recommended) {
-                // LB 13  Don’t break before or after NBSP or WORD JOINER
-                // × GL
-                // GL ×
+            // LB 13  Don’t break before or after NBSP or WORD JOINER
+            // × GL
+            // GL ×
 
-                rule="11b";
-                if (after == LB_GL || before == LB_GL) return false;
-            }
+            rule="11b: × WJ ; WJ ×";
+            if (after == LB_WJ || before == LB_WJ) return false;
 
             // [Note: by this time, all of the "X" in the table are accounted for. We can safely break after spaces.]
 
-            rule="12";
+            rule="12: SP ÷";
             // LB 12  Break after spaces
             // SP ÷
 
             if (before == LB_SP) return true;
 
-            if (!recommended) {
-                // LB 13  Don’t break before or after NBSP or WORD JOINER
-                // × GL
-                // GL ×
+            // LB 13  Don’t break before or after NBSP or WORD JOINER
+            rule="13: × GL ; GL ×";
+            if (after == LB_GL || before == LB_GL) return false;
 
-                rule="13";
-                if (after == LB_GL || before == LB_GL) return false;
-            }
-
-            rule="14";
+            rule="14: × QU ; QU ×";
             // LB 14  Don’t break before or after ‘”’
-            // × QU
-            // QU ×
             if (before == LB_QU || after == LB_QU) return false;
+
+            // LB 14a  Break before and after CB
+            rule = "14a: ÷ CB ; CB ÷";
+            if (before == LB_CB || after == LB_CB) return true;
 
             // LB 15  Don’t break before hyphen-minus, other hyphens, fixed-width spaces,
             // small kana and other non- starters,  or after acute accents:
-            // × BA
-            // × HY
-            // × NS
-            // BB ×
 
-            if (recommended) {
-            // LB 14a  Break before and after CB
-            // CB ÷
-            // ÷ CB
-                if (before == LB_CB || after == LB_CB) return true;
-
-            }
-
-            rule="15";
+            rule="15: × ( BA | HY | NS ) ; BB ×";
             if (after == LB_NS) return false;
             if (after == LB_HY) return false;
             if (after == LB_BA) return false;
             if (before == LB_BB) return false;
 
-            if (!recommended) {
-                // LB 15b  Break after hyphen-minus, and before acute accents:
-                // HY ÷
-                // ÷ BB
 
-                rule="15b";
-                if (before == LB_HY) return true;
-                if (after == LB_BB) return true;
-            }
+            //rule="15a: HY × NU"; // NEW
+            //if (before == LB_HY && after == LB_NU) return false;
 
             // LB 16  Don’t break between two ellipses, or between letters or numbers and ellipsis:
-            // AL × IN
-            // ID × IN
-            // IN × IN
-            // NU × IN
             // Examples: ’9...’, ‘a...’, ‘H...’
-            rule="16";
+            rule="16: ( AL | ID | IN | NU ) × IN";
             if ((before == LB_NU || before == LB_AL || before == LB_ID) && after == LB_IN) return false;
             if (before == LB_IN && after == LB_IN) return false;
 
             // Don't break alphanumerics.
             // LB 17  Don’t break within ‘a9’, ‘3a’, or ‘H%’
-            // ID × PO
-            // AL × NU
-            // NU × AL
             // Numbers are of the form PR ? ( OP | HY ) ? NU (NU | IS) * CL ?  PO ?
             // Examples:   $(12.35)    2,1234    (12)¢    12.54¢
             // This is approximated with the following rules. (Some cases already handled above,
             // like ‘9,’, ‘[9’.)
-            rule="17";
+            rule="17: ID × PO ; AL × NU; NU × AL";
             if (before == LB_ID && after == LB_PO) return false;
             if (before == LB_AL && after == LB_NU) return false;
             if (before == LB_NU && after == LB_AL) return false;
@@ -1294,12 +1383,13 @@ abstract public class GenerateBreakTest implements UCD_Types {
             // SY × NU
             // Example pairs: ‘$9’, ‘$[’, ‘$-‘, ‘-9’, ‘/9’, ‘99’, ‘,9’,  ‘9%’ ‘]%’
 
-            rule="18";
+            rule="18: CL × PO ; NU × PO ; ( IS | NU | HY | PR | SY ) × NU ; PR × ( AL | HY | ID | OP )";
             if (before == LB_CL && after == LB_PO) return false;
-            if (before == LB_HY && after == LB_NU) return false;
             if (before == LB_IS && after == LB_NU) return false;
             if (before == LB_NU && after == LB_NU) return false;
             if (before == LB_NU && after == LB_PO) return false;
+            
+            if (before == LB_HY && after == LB_NU) return false;
 
             if (before == LB_PR && after == LB_AL) return false;
             if (before == LB_PR && after == LB_HY) return false;
@@ -1309,27 +1399,22 @@ abstract public class GenerateBreakTest implements UCD_Types {
 
             if (before == LB_SY && after == LB_NU) return false;
 
-            if (recommended) {
-                // LB 15b  Break after hyphen-minus, and before acute accents:
-                // HY ÷
-                // ÷ BB
-
-                rule="18b";
-                if (before == LB_HY) return true;
-                if (after == LB_BB) return true;
-            }
+            // LB 15b  Break after hyphen-minus, and before acute accents:
+            rule="18b: HY ÷ ; ÷ BB";
+            if (before == LB_HY) return true;
+            if (after == LB_BB) return true;
 
             // LB 19  Don’t break between alphabetics (“at”)
             // AL × AL
 
-            rule="19";
+            rule="19: AL × AL";
             if (before == LB_AL && after == LB_AL) return false;
 
             // LB 20  Break everywhere else
             // ALL ÷
             // ÷ ALL
 
-            rule="20";
+            rule="20: ALL ÷ ; ÷ ALL";
             return true;
         }
     }
@@ -1384,7 +1469,13 @@ abstract public class GenerateBreakTest implements UCD_Types {
             return (byte) map.getIndex(cp);
         }
 
-        
+        /*LB_XX = 0, LB_OP = 1, LB_CL = 2, LB_QU = 3, LB_GL = 4, LB_NS = 5, LB_EX = 6, LB_SY = 7,
+        LB_IS = 8, LB_PR = 9, LB_PO = 10, LB_NU = 11, LB_AL = 12, LB_ID = 13, LB_IN = 14, LB_HY = 15,
+        LB_CM = 16, LB_BB = 17, LB_BA = 18, LB_SP = 19, LB_BK = 20, LB_CR = 21, LB_LF = 22, LB_CB = 23,
+        LB_SA = 24, LB_AI = 25, LB_B2 = 26, LB_SG = 27, LB_ZW = 28,
+        LB_NL = 29,
+        LB_WJ = 30,
+        */
         /*
         static final byte Format = 0, Sep = 1, Sp = 2, OLetter = 3, Lower = 4, Upper = 5,
             Numeric = 6, Close = 7, ATerm = 8, Term = 9, Other = 10,
