@@ -36,7 +36,7 @@ Description: International Components for Unicode (libraries)
 Package: icu
 Section: libs
 Architecture: any
-Depends: libicu${major} (>= ${Source-Version})
+Depends: libicu${major} (>= ${Source-Version}), make
 Recommends: icu-locales
 Description: International Components for Unicode (locale data)
  ICU is a C++ and C library that provides robust and full-featured Unicode
