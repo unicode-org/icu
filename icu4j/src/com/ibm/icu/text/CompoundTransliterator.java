@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CompoundTransliterator.java,v $ 
- * $Date: 2001/09/28 20:28:09 $ 
- * $Revision: 1.15 $
+ * $Date: 2001/10/10 20:26:27 $ 
+ * $Revision: 1.16 $
  *
  *****************************************************************************************
  */
@@ -35,7 +35,7 @@ import java.util.Vector;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.15 $ $Date: 2001/09/28 20:28:09 $
+ * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.16 $ $Date: 2001/10/10 20:26:27 $
  */
 public class CompoundTransliterator extends Transliterator {
 
@@ -167,13 +167,18 @@ public class CompoundTransliterator extends Transliterator {
 
         Vector list = new Vector();
         int[] splitTransIndex = new int[1];
+        UnicodeSet[] compoundFilter = new UnicodeSet[1];
         StringBuffer regenID = new StringBuffer();
         Transliterator.parseCompoundID(id, regenID, direction,
                                        idSplitPoint, splitTrans,
-                                       list, splitTransIndex);
+                                       list, splitTransIndex, compoundFilter);
         compoundRBTIndex = splitTransIndex[0];
 
         init(list, direction, fixReverseID);
+
+        if (compoundFilter[0] != null) {
+            setFilter(compoundFilter[0]);
+        }
     }
 
     /**
