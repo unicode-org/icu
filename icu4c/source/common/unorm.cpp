@@ -316,7 +316,7 @@ _getPrevCC(const UChar *start, const UChar *&p) {
  * returns the trailing combining class
  */
 static uint8_t
-_mergeOrdered(const UChar *start, UChar *p, const UChar *limit) {
+_mergeOrdered(const UChar *start, const UChar *p, const UChar *limit) {
     const UChar *pBack, *pPreBack;
     UChar *pSplit, *q;
     UChar c, c2;
@@ -332,8 +332,8 @@ _mergeOrdered(const UChar *start, UChar *p, const UChar *limit) {
     }
 
     while(p<limit) {
-        pSplit=p;
-        cc=_getNextCC((const UChar*)p, limit, c, c2);
+        pSplit=(UChar *)p;
+        cc=_getNextCC(p, limit, c, c2);
         if(cc==0) {
             /* does not bubble back */
             trailCC=0;
@@ -368,7 +368,7 @@ _mergeOrdered(const UChar *start, UChar *p, const UChar *limit) {
                  */
 
                 /* move the code units in between up */
-                q=p;
+                q=(UChar *)p;
                 do {
                     *--q=*--pSplit;
                 } while(pBack!=pSplit);
