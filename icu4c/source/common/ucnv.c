@@ -2385,12 +2385,12 @@ ucnv_detectUnicodeSignature( const char* source,
 }
 
  U_DRAFT int32_t U_EXPORT2
- ucnv_fromUInputHeld(const UConverter* cnv, UErrorCode* status){
+ ucnv_fromUCountPending(const UConverter* cnv, UErrorCode* status){
     
-    if(status== NULL||U_FAILURE(*status)){
+    if(status == NULL || U_FAILURE(*status)){
         return -1;
     }
-    if(cnv==NULL){
+    if(cnv == NULL){
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return -1;
     }
@@ -2409,12 +2409,12 @@ ucnv_detectUnicodeSignature( const char* source,
  }
 
 U_DRAFT int32_t U_EXPORT2
-ucnv_toUInputHeld(const UConverter* cnv, UErrorCode* status){
+ucnv_toUCountPending(const UConverter* cnv, UErrorCode* status){
 
-    if(status== NULL||U_FAILURE(*status)){
+    if(status == NULL || U_FAILURE(*status)){
         return -1;
     }
-    if(cnv==NULL){
+    if(cnv == NULL){
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return -1;
     }
