@@ -461,7 +461,7 @@ struct SResource *string_open(struct SRBRoot *bundle, char *tag, UChar *value, i
     }
 
     uprv_memcpy(res->u.fString.fChars, value, sizeof(UChar) * (len + 1));
-    res->fSize = sizeof(int32_t) + sizeof(UChar) * (len);
+    res->fSize = sizeof(int32_t) + sizeof(UChar) * (len+1);
 
     return res;
 }
