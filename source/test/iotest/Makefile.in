@@ -17,7 +17,7 @@ subdir = test/iotest
 CLEANFILES = *~ $(DEPS)
 
 ## Target information
-TARGET = iotest
+TARGET = iotest$(EXEEXT)
 
 CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n \
 -I$(top_srcdir)/tools/ctestfw -I$(top_srcdir)/extra/ustdio
@@ -65,7 +65,7 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 $(TARGET) : $(OBJECTS)
-	$(LINK.cc) -o $@ $^ $(LIBS)
+	$(LINK.cc) $(OUTOPT)$@ $^ $(LIBS)
 
 ifeq (,$(MAKECMDGOALS))
 -include $(DEPS)
