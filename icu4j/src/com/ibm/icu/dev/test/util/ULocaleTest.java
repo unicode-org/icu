@@ -24,6 +24,11 @@ import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.ULocale;
 import java.lang.reflect.*;
 import java.util.Locale;
+import java.io.*;
+import java.util.Date;
+import java.util.MissingResourceException;
+import java.util.Iterator;
+import java.util.Hashtable;
 
 public class ULocaleTest extends TestFmwk {
 
@@ -927,4 +932,169 @@ public class ULocaleTest extends TestFmwk {
         }
         return true;
     }
+
+    public void TestCoverage() {
+        {
+            //Cover displayXXX
+            int i, j;
+            String localeID="zh_CN";
+            String name, language, script, country, variant;
+            logln("Covering APIs with signature displayXXX(String, String)");
+            for (i = 0; i < LOCALE_SIZE; i++) {
+                //localeID String
+                String testLocale=(rawData2[NAME][i]);
+                
+                logln("Testing "+ testLocale+".....");        
+                name = ULocale.getDisplayName(localeID, testLocale);
+                language = ULocale.getDisplayLanguage(localeID, testLocale);
+                script = ULocale.getDisplayScript(localeID, testLocale);
+                country = ULocale.getDisplayCountry(localeID, testLocale);
+                variant = ULocale.getDisplayVariant(localeID, testLocale);
+
+                if (!checkName(name, language, script, country, variant)) {
+                    break;
+                } 
+            }
+            
+            logln("Covering APIs with signature displayXXX(String, ULocale)\n");
+            for (j = 0; j < LOCALE_SIZE; j++) {
+                String testLocale=(rawData2[NAME][j]);
+                ULocale loc = new ULocale(testLocale);
+                
+                logln("Testing "+ testLocale+".....");        
+                name = ULocale.getDisplayName(localeID, loc);
+                language = ULocale.getDisplayLanguage(localeID, loc);
+                script = ULocale.getDisplayScript(localeID, loc);
+                country = ULocale.getDisplayCountry(localeID, loc);
+                variant = ULocale.getDisplayVariant(localeID, loc);
+
+                if (!checkName(name, language, script, country, variant)) {
+                    break;
+                } 
+            }            
+        }   
+    }
+    
+    public void TestDisplayKeyword() {
+        //prepare testing data
+        initHashtable();
+        String[] Data={"en_US@collation=direct;calendar=islamic-civil", 
+                        "zh_Hans@collation=pinyin;calendar=chinese", 
+                        "foo_Bar_BAZ@collation=traditional;calendar=buddhist"};
+        
+        for (int i = 0; i < Data.length; i++) {
+            String localeID = Data[i];
+            logln("");
+            logln("Testing locale " + localeID + " ...");
+            ULocale loc = new ULocale(localeID);
+            
+            Iterator it = loc.getKeywords();
+            Iterator it2 = ULocale.getKeywords(localeID);
+            //it and it2 are not equal here. No way to verify their equivalence yet.
+            while(it.hasNext()) {
+                String key = (String)it.next();
+                
+                //To verify display of Keyword
+                // display the above key in English
+                String s0 = ULocale.getDisplayKeyword(key); //display in default locale
+                String s1 = ULocale.getDisplayKeyword(key, ULocale.US);
+                String s2 = ULocale.getDisplayKeyword(key, "en_US");
+                if (!s1.equals(s2)) {
+                    errln ("FAIL: one of getDisplaykeyword methods failed.");
+                }
+                if (!s1.equals(h[0].get(key))) {
+                    errln("FAIL: Locale " + localeID + " getDisplayKeyword for key: " + key + 
+                          " in English expected \"" + h[0].get(key) + "\" seen \"" + s1 + "\" instead");
+                } else {
+                    logln("OK: getDisplayKeyword for key: " + key + " in English got " + s1);
+                }
+                
+                // display the key in S-Chinese
+                s1 = ULocale.getDisplayKeyword(key, ULocale.CHINA);
+                s2 = ULocale.getDisplayKeyword(key, "zh_Hans");
+                if (!s1.equals(s2)) {
+                    errln ("FAIL: one of getDisplaykeyword methods failed.");
+                }
+                if (!s1.equals(h[1].get(key))) {
+                    errln("FAIL: Locale " + localeID + " getDisplayKeyword for key: " + key + 
+                          " in Chinese expected \"" + h[1].get(key) + "\" seen \"" + s1 + "\" instead");
+                } else {
+                    logln("OK: getDisplayKeyword for key: " + key + " in Chinese got " + s1);
+                }
+                
+                //To verify display of Keyword values
+                String type = loc.getKeywordValue(key);
+                // display type in English
+                String ss0 = loc.getDisplayKeywordValue(key);
+                String ss1 = loc.getDisplayKeywordValue(key, ULocale.US);
+                String ss2 = ULocale.getDisplayKeywordValue(localeID, key, "en_US");
+                String ss3 = ULocale.getDisplayKeywordValue(localeID, key, ULocale.US);
+                if (!ss1.equals(ss2) || !ss1.equals(ss3)) {
+                    errln ("FAIL: one of getDisplaykeywordValue methods failed.");
+                }
+                if (!ss1.equals(h[0].get(type))) {
+                    errln("FAIL: Locale " + localeID + " getDisplayKeywordValue for key: " + key + 
+                          " in English expected \"" + h[0].get(type) + "\" seen \"" + ss1 + "\" instead");
+                } else {
+                    logln("OK: getDisplayKeywordValue for key: " + key + " in English got " + ss1);                    
+                }
+                
+                // display type in Chinese
+                ss0 = loc.getDisplayKeywordValue(key);
+                ss1 = loc.getDisplayKeywordValue(key, ULocale.CHINA);
+                ss2 = ULocale.getDisplayKeywordValue(localeID, key, "zh_Hans");
+                ss3 = ULocale.getDisplayKeywordValue(localeID, key, ULocale.CHINA);
+                if (!ss1.equals(ss2) || !ss1.equals(ss3)) {
+                    errln ("FAIL: one of getDisplaykeywordValue methods failed.");
+                }
+                if (!ss1.equals(h[1].get(type))) {
+                    errln("FAIL: Locale " + localeID + " getDisplayKeywordValue for key: " + key + 
+                          " in Chinese expected \"" + h[1].get(type) + "\" seen \"" + ss1 + "\" instead");
+                } else {
+                    logln("OK: getDisplayKeywordValue for key: " + key + " in Chinese got " + ss1);                    
+                }                   
+            }
+        }
+    }
+    private void initHashtable() {
+        h[0] = new Hashtable();
+        h[1] = new Hashtable();
+        
+        //display in English
+        h[0].put("collation", "Collation");
+        h[0].put("calendar", "Calendar");
+        h[0].put("currency", "Currency");
+        h[0].put("phonebook", "Phonebook Order");
+        h[0].put("pinyin", "Pinyin Order");
+        h[0].put("traditional", "Traditional");
+        h[0].put("stroke", "Stroke Order");
+        h[0].put("direct", "Direct Order");
+        h[0].put("japanese", "Japanese Calendar");
+        h[0].put("buddhist", "Buddhist Calendar");
+        h[0].put("islamic", "Islamic Calendar");
+        h[0].put("islamic-civil", "Islamic-Civil Calendar" );
+        h[0].put("hebrew", "Hebrew Calendar");
+        h[0].put("chinese", "Chinese Calendar");
+        h[0].put("gregorian", "Gregorian Calendar" );
+        
+        //display in S-Chinese
+        h[1].put("collation", "\u5BF9\u7167");
+        h[1].put("calendar", "\u65E5\u5386");
+        h[1].put("currency", "\u8D27\u5E01");
+        h[1].put("direct", "\u987A\u5E8F");
+        h[1].put("phonebook", "\u7535\u8BDD\u7C3F\u987A\u5E8F");
+        h[1].put("pinyin", "\u62FC\u97F3\u987a\u5e8f");
+        h[1].put("stroke", "\u7B14\u5212\u987A\u5E8F");
+        h[1].put("traditional", "\u4F20\u7EDF\u5386\u6CD5");
+        h[1].put("japanese", "\u65E5\u672C\u65E5\u5386");
+        h[1].put("buddhist", "\u4F5B\u6559\u65E5\u5386");
+        h[1].put("islamic", "\u4F0A\u65AF\u5170\u65E5\u5386");
+        h[1].put("islamic-civil", "\u4F0A\u65AF\u5170\u5E0C\u5409\u6765\u5386");
+        h[1].put("hebrew", "\u5E0C\u4F2F\u6765\u65E5\u5386");
+        h[1].put("chinese", "\u519C\u5386");
+        h[1].put("gregorian", "\u516C\u5386"); 
+    }
+    
+    //Hashtables for storing expected display of keys/types of locale in English and Chinese
+    private static Hashtable[] h = new Hashtable[2];
 }

@@ -21,6 +21,9 @@ import java.util.Locale;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.text.NumberFormat;
+import com.ibm.icu.text.DateFormat;
+import com.ibm.icu.text.UFormat;
+import com.ibm.icu.util.ULocale;
 
 public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
 
@@ -367,6 +370,31 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
+    public void TestHashCode() 
+    {
+        ULocale save = ULocale.getDefault();
+        ULocale.setDefault(ULocale.US);
+        
+        MessageFormat x = new MessageFormat("There are {0} files on {1}");
+        MessageFormat z = new MessageFormat("There are {0} files on {1}");
+        MessageFormat y = null;
+        y = (MessageFormat)x.clone();
+        if (x.hashCode() != y.hashCode()) 
+            errln("FAIL: identical objects have different hashcodes");
+        if (x.hashCode() != z.hashCode()) 
+            errln("FAIL: identical objects have different hashcodes");
+        
+        y.setLocale(ULocale.FRENCH);
+        if (x.hashCode() == y.hashCode()) 
+            errln("FAIL: different objects have same hashcodes. Locale ignored");
+            
+        z.applyPattern("There are {0} files on {1} the disk");
+        if (x.hashCode() == z.hashCode()) 
+            errln("FAIL: different objects have same hashcodes. Pattern ignored");
+            
+        ULocale.setDefault(save);
+    }
+    
     public void TestSetLocale()
     {
         Object arguments[] = {
@@ -414,6 +442,22 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
             result,
             pos);
         assertEquals("format", compareStrGer, result.toString());
+        
+        //Cover getULocale()
+        logln("Testing set/get ULocale ...");
+        msg.setLocale(ULocale.ENGLISH);
+        assertEquals("getULocale", ULocale.ENGLISH, msg.getULocale());
+
+        msg.setLocale(ULocale.GERMAN);
+        assertEquals("getULocale", ULocale.GERMAN, msg.getULocale());
+
+        msg.applyPattern(formatStr);
+        result.setLength(0);
+        result = msg.format(
+            arguments,
+            result,
+            pos);
+        assertEquals("format", compareStrGer, result.toString());        
     }
 
     public void TestFormat()
@@ -791,4 +835,76 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
+    
+    public void TestSetGetFormats() 
+    {
+        Object arguments[] = {
+            new Double(456.83),
+            new Date(871068000000L),
+            "deposit"
+            };
+
+        StringBuffer result = new StringBuffer();
+
+        String formatStr = "At <time> on {1,date}, you made a {2} of {0,number,currency}.";
+        // original expected format result
+        String compareStr = "At <time> on Aug 8, 1997, you made a deposit of $456.83.";
+        // the date being German-style, but the currency being English-style
+        String compareStr2 = "At <time> on 08.08.1997, you made a deposit of ";
+        compareStr2 += '\u00a4';
+        compareStr2 += "456.83.";
+        // both date and currency formats are German-style
+        String compareStr3 = "At <time> on 08.08.1997, you made a deposit of ";
+        compareStr3 += '\u00a4';
+        compareStr3 += " 456,83.";
+                
+        MessageFormat msg = new MessageFormat(formatStr, ULocale.US);
+        result.setLength(0);
+        FieldPosition pos = new FieldPosition(0);
+        result = msg.format(
+            arguments,
+            result,
+            pos);
+        assertEquals("format", compareStr, result.toString());
+        
+        // constructs a Format array with a English-style Currency formatter
+        //                            and a German-style Date formatter
+        //      might not meaningful, just for testing setFormatsByArgIndex
+        Format[] fmts = new Format[] {
+            NumberFormat.getCurrencyInstance(ULocale.ENGLISH),
+            DateFormat.getDateInstance(DateFormat.DEFAULT, ULocale.GERMAN)
+            };
+        msg.setFormatsByArgumentIndex(fmts);
+        result.setLength(0);
+        pos = new FieldPosition(0);
+        result = msg.format(
+            arguments,
+            result,
+            pos);
+        assertEquals("format", compareStr2, result.toString());
+        
+        // Construct a German-style Currency formatter, replace the corresponding one
+        // Thus both formatters should format objects with German-style
+        Format newFmt = NumberFormat.getCurrencyInstance(ULocale.GERMAN);
+        msg.setFormatByArgumentIndex(0, newFmt);
+        result.setLength(0);
+        pos = new FieldPosition(0);
+        result = msg.format(
+            arguments,
+            result,
+            pos);
+        assertEquals("format", compareStr3, result.toString());      
+        
+        // verify getFormatsByArgumentIndex
+        //   you should got three formats by that
+        //          - DecimalFormat     locale: de
+        //          - SimpleDateFormat  locale: de
+        //          - null
+        Format[] fmts2 = msg.getFormatsByArgumentIndex();
+        assertEquals("1st subformmater: Format Class", "com.ibm.icu.text.DecimalFormat", fmts2[0].getClass().getName());
+        assertEquals("1st subformmater: its Locale", ULocale.GERMAN, ((UFormat)fmts2[0]).getLocale(ULocale.VALID_LOCALE));
+        assertEquals("2nd subformatter: Format Class", "com.ibm.icu.text.SimpleDateFormat", fmts2[1].getClass().getName());
+        assertEquals("2nd subformmater: its Locale", ULocale.GERMAN, ((UFormat)fmts2[1]).getLocale(ULocale.VALID_LOCALE));
+        assertTrue("The third subFormatter is null", null == fmts2[2]);
+    }    
 }
