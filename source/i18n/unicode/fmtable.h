@@ -432,8 +432,7 @@ private:
      */
     static Formattable* createArrayCopy(const Formattable* array, int32_t count);
 
-    static UnicodeString* gBogus;
-    static UnicodeString* getBogus();
+    UnicodeString* getBogus() const;
 
     // Note: For now, we do not handle unsigned long and unsigned
     // double types.  Smaller unsigned types, such as unsigned
@@ -445,12 +444,13 @@ private:
         UDate           fDate;
         struct
         {
-          Formattable*  fArray;
-          int32_t       fCount;
+            Formattable*  fArray;
+            int32_t       fCount;
         }               fArrayAndCount;
     }                   fValue;
 
     Type                fType;
+    UnicodeString       fBogus; // Bogus string when it's needed.
 };
 
 inline Formattable*
