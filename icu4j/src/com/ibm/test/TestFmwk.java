@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/Attic/TestFmwk.java,v $ 
- * $Date: 2001/11/28 22:51:46 $ 
- * $Revision: 1.23 $
+ * $Date: 2001/11/29 07:21:23 $ 
+ * $Revision: 1.24 $
  *
  *****************************************************************************************
  */
@@ -275,7 +275,16 @@ public class TestFmwk implements TestLog {
                 ": [-verbose] [-nothrow] [-prompt] [test names]");
 
         System.out.println("test names:");
-        Enumeration methodNames = testMethods.keys();
+        Enumeration methodNames = new SortedEnumeration(testMethods.keys(),
+            new Comparator() {
+                public int compare(Object a, Object b) {
+                    return ((String)a).compareToIgnoreCase(
+                           ((String)b));
+                }
+                public boolean equals(Object o) {
+                    return false;
+                }
+            });
         while( methodNames.hasMoreElements() ) {
             System.out.println("\t" + methodNames.nextElement() );
         }
