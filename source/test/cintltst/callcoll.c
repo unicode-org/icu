@@ -711,7 +711,7 @@ static void TestSurrogates(void)
     rlen = u_unescape(str, rules, len);
     
     enCollation = ucol_open("en_US", &status);
-    myCollation = ucol_openRules(rules, rlen - 1, UCOL_OFF, 
+    myCollation = ucol_openRules(rules, rlen, UCOL_OFF, 
                                  UCOL_TERTIARY,NULL, &status);
     if (U_FAILURE(status)) {
         log_err("ERROR: in creation of rule based collator :%s\n", 

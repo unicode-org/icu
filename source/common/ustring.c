@@ -1159,7 +1159,7 @@ u_unescape(const char *src, UChar *dest, int32_t destCapacity) {
     if (dest != NULL && i < destCapacity) {
         dest[i] = 0;
     }
-    return i + 1; /* add 1 for zero term */
+    return i;
 
  err:
     if (dest != NULL && destCapacity > 0) {
