@@ -20,6 +20,9 @@ THREADSCPPFLAGS = -D_REENTRANT
 LD_RPATH=	
 LD_RPATH_PRE = -Wl,-rpath,
 
+## These are the library specific LDFLAGS
+LDFLAGSICUDT=-nodefaultlibs -nostdlib
+
 ## Compiler switch to embed a library name
 # The initial tab in the next line is to prevent icu-config from reading it.
 	LD_SONAME = -Wl,-soname -Wl,$(notdir $(MIDDLE_SO_TARGET))
