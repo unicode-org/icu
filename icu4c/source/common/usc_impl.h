@@ -18,17 +18,6 @@
 #include "unicode/utypes.h"
 #include "unicode/uscript.h"
 
-/** 
- * Gets the script code associated with the given codepoint.
- * Returns USCRIPT_MALAYALAM given 0x0D02 
- * @param codepoint UChar32 codepoint
- * @param err the error status code.
- * @return The UScriptCode 
- * @draft ICU 2.0
- */
-U_CAPI UScriptCode  U_EXPORT2 
-uscript_getScript(UChar32 codepoint, UErrorCode *err);
-
 /**
  * <code>UScriptRun</code> is used to find runs of characters in
  * the same script. It implements a simple iterator over an array
