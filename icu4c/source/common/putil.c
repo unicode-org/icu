@@ -36,7 +36,6 @@
 
 
 /* include standard headers */
-#include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -119,6 +118,13 @@ static char* u_bottomNBytesOfDouble(double* d, int n);
 #ifdef POSIX
 #include <langinfo.h>
 #endif
+
+#if defined(POSIX) && defined(LINUX)
+#define __USE_POSIX
+#define __USE_XOPEN
+#include <time.h>
+#endif
+
 /*---------------------------------------------------------------------------
   Universal Implementations
   These are designed to work on all platforms.  Try these, and if they don't
@@ -658,7 +664,7 @@ int32_t
 uprv_timezone()
 {
 #if defined(POSIX) && !defined(RHAPSODY)
-#ifdef OS390
+#if defined(OS390)
   return _timezone;
 #else
   return timezone;
