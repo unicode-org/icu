@@ -1012,10 +1012,9 @@ public class CollationMiscTest extends TestFmwk {
         }
     }
     
+    /* superseded by TestBeforePinyin, since Chinese collation rules have changed */
+    /*
     public void TestJ784() {
-        warnln("TestJ784 Commented out. Vladimir to port the changes");
-        
-        /*
         String[] data = {
             "A", "\u0101", "\u00e1", "\u01ce", "\u00e0",
             "E", "\u0113", "\u00e9", "\u011b", "\u00e8",
@@ -1025,9 +1024,9 @@ public class CollationMiscTest extends TestFmwk {
             "\u00fc", "\u01d6", "\u01d8", "\u01da", "\u01dc"
         };
         genericLocaleStarter(new Locale("zh", ""), data);
-        */
     }
-
+    */
+    
     public void TestJ815() {
         String data[] = {
             "aa",
@@ -2031,4 +2030,65 @@ public class CollationMiscTest extends TestFmwk {
             logln("End");
         }
     }
+
+	/* supercedes TestJ784 */
+	public void TestBeforePinyin() {
+	    String rules = 
+	        "&[before 2]A << \u0101  <<< \u0100 << \u00E1 <<< \u00C1 << \u01CE <<< \u01CD << \u00E0 <<< \u00C0" +
+	        "&[before 2]e << \u0113 <<< \u0112 << \u00E9 <<< \u00C9 << \u011B <<< \u011A << \u00E8 <<< \u00C8" +
+	        "&[before 2] i << \u012B <<< \u012A << \u00ED <<< \u00CD << \u01D0 <<< \u01CF << \u00EC <<< \u00CC" +
+	        "&[before 2] o << \u014D <<< \u014C << \u00F3 <<< \u00D3 << \u01D2 <<< \u01D1 << \u00F2 <<< \u00D2" +
+	        "&[before 2]u << \u016B <<< \u016A << \u00FA <<< \u00DA << \u01D4 <<< \u01D3 << \u00F9 <<< \u00D9" +
+	        "&U << \u01D6 <<< \u01D5 << \u01D8 <<< \u01D7 << \u01DA <<< \u01D9 << \u01DC <<< \u01DB << \u00FC";
+	
+	    String test[] = {
+	        "l\u0101",
+	        "la",
+	        "l\u0101n",
+	        "lan ",
+	        "l\u0113",
+	        "le",
+	        "l\u0113n",
+	        "len"
+	    };
+	
+	    String test2[] = {
+	        "x\u0101",
+	        "x\u0100",
+	        "X\u0101",
+	        "X\u0100",
+	        "x\u00E1",
+	        "x\u00C1",
+	        "X\u00E1",
+	        "X\u00C1",
+	        "x\u01CE",
+	        "x\u01CD",
+	        "X\u01CE",
+	        "X\u01CD",
+	        "x\u00E0",
+	        "x\u00C0",
+	        "X\u00E0",
+	        "X\u00C0",
+	        "xa",
+	        "xA",
+	        "Xa",
+	        "XA",
+	        "x\u0101x",
+	        "x\u0100x",
+	        "x\u00E1x",
+	        "x\u00C1x",
+	        "x\u01CEx",
+	        "x\u01CDx",
+	        "x\u00E0x",
+	        "x\u00C0x",
+	        "xax",
+	        "xAx"
+	    };
+	    /* TODO: port builder fixes to before */
+	    /*genericRulesStarter(rules, test);*/
+	    genericLocaleStarter(new Locale("zh"), test);
+	    /*genericRulesStarter(rules, test2);*/
+	    genericLocaleStarter(new Locale("zh"), test2);
+	}
+
 }
