@@ -36,7 +36,7 @@ class U_COMMON_API ResourceBundleCache  // Not really external; just making the 
   ~ResourceBundleCache();
   UHashtable* hashTable;
  private:
-  static void deleteValue(void* value);
+  static void U_CALLCONV deleteValue(void* value);
 };
 
 /**

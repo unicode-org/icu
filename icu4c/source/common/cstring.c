@@ -18,7 +18,8 @@
 *
 *   Date        Name        Description
 *   6/18/98     hshih       Created
-*    09/08/98    stephen        Added include for ctype, for Mac Port
+*   09/08/98    stephen     Added include for ctype, for Mac Port
+*   11/15/99    helena      Integrated S/390 IEEE changes. 
 *****************************************************************************************
 */
 
@@ -31,15 +32,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
-
-char T_CString_toffst(char a) 
-{
-    if (a>0x39) return 0x37;
-    else return 0x30;
-}
-
-
-#define T_CString_itosOffset(a) a<=9?(0x30+a):(0x30+a+7)
+#include "putil.h"
 
 char*
 T_CString_toLowerCase(char* str)
@@ -97,24 +90,9 @@ void T_CString_integerToString(char* buffer, int32_t i, int32_t radix)
 int32_t
 T_CString_stringToInteger(const char *integerString, int32_t radix)
 {
-    
-  /*    int32_t     integer = 0;
-    int8_t      sign = (integerString[0]=='-')?(1):0;
-    uint32_t    i   = sign;
-    int8_t digit;*/
     char *end;
     return strtoul(integerString, &end, radix);
-      /*    for (;integerString[i];i++)
-    {
-        digit = toupper(integerString[i]) - T_CString_toffst((char)toupper(integerString[i]));
-        if ((digit<0)||(digit>=radix))  {
-            return 0;
-        }
-        integer = integer*radix + digit;
-    }
-    
-    if (sign) return (-1)*integer;
-    else return integer;*/
+
 }
     
 

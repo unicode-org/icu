@@ -85,7 +85,7 @@ public:
   virtual UClassID getDynamicClassID(void) const;
   static UClassID getStaticClassID(void);
 
-  static void deleteValue(void* value);
+  static void U_CALLCONV deleteValue(void* value);
 
   static UClassID  fgClassID;
   UHashtable      *fHashtableValues;

@@ -20,6 +20,7 @@
 *   08/24/98    stephen     Added longBitsFromDouble
 *   03/02/99    stephen     Removed openFile().  Added AS400 support.
 *   04/15/99    stephen     Converted to C
+*   11/15/99    helena      Integrated S/390 changes for IEEE support.
 *******************************************************************************
 */
 
@@ -61,6 +62,18 @@ U_CAPI int32_t  U_EXPORT2 icu_max(int32_t x, int32_t y);
 U_CAPI int32_t  U_EXPORT2 icu_min(int32_t x, int32_t y);
 U_CAPI double   U_EXPORT2 icu_trunc(double d);
 U_CAPI void     U_EXPORT2 icu_longBitsFromDouble(double d, int32_t *hi, uint32_t *lo);
+#if U_IS_BIG_ENDIAN
+#   define icu_isNegative(number) (*((signed char *)&(number))<0)
+#else
+#   define icu_isNegative(number) (*((signed char *)&(number)+sizeof(number)-1)<0)
+#endif
+
+/* Conversion from a digit to the character with radix base from 2-19 */
+#ifndef OS390
+#define T_CString_itosOffset(a) a<=9?(0x30+a):(0x30+a+7)
+#else
+#define T_CString_itosOffset(a) a<=9?(0xF0+a):(0xC1+a-10)  /* C1 is EBCDIC 'A' */
+#endif
 
 /*
  * Return the floor of the log base 10 of a given double.

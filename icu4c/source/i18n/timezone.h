@@ -442,7 +442,7 @@ private:
     /**
      * Delete function for fgHashtable.
      */
-    static void             deleteTimeZone(void*);
+    static void U_CALLCONV  deleteTimeZone(void*);
 
     static int32_t          fTimezoneCount;
     static UHashtable*       fgHashtable; // hash table of objects in kSystemTimeZones,

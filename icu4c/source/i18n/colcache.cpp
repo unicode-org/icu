@@ -42,7 +42,7 @@
 // CollationCache implementation
 //--------------------------------------------------------------------------------
 
-static void deleteTCD(void* TCD)
+static void U_CALLCONV deleteTCD(void* TCD)
 {
   delete (TableCollationData*)TCD;
 }
