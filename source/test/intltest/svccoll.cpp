@@ -34,24 +34,24 @@ void CollationServiceTest::TestRegister()
 	// ensure original collator's params not touched
 	Locale loc = frcol->getLocale(ULOC_REQUESTED_LOCALE, status);
 	if (loc != FR) {
-		errln((const UnicodeString&)"fr collator's requested locale changed to " + loc.getName());
+		errln(UnicodeString("fr collator's requested locale changed to ") + loc.getName());
 	}
 	loc = frcol->getLocale(ULOC_VALID_LOCALE, status);
 	if (loc != FR) {
-		errln((const UnicodeString&)"fr collator's valid locale changed to " + loc.getName());
+		errln(UnicodeString("fr collator's valid locale changed to ") + loc.getName());
 	}
 
 	loc = ncol->getLocale(ULOC_REQUESTED_LOCALE, status);
 	if (loc != US_FOO) {
-		errln((const UnicodeString&)"requested locale for en_US_FOO is not en_US_FOO but " + loc.getName());
+		errln(UnicodeString("requested locale for en_US_FOO is not en_US_FOO but ") + loc.getName());
 	}
 	loc = ncol->getLocale(ULOC_VALID_LOCALE, status);
 	if (loc != US) {
-		errln((const UnicodeString&)"valid locale for en_US_FOO is not en_US but " + loc.getName());
+		errln(UnicodeString("valid locale for en_US_FOO is not en_US but ") + loc.getName());
 	}
 	loc = ncol->getLocale(ULOC_ACTUAL_LOCALE, status);
 	if (loc != US) {
-		errln((const UnicodeString&)"actual locale for en_US_FOO is not en_US but " + loc.getName());
+		errln(UnicodeString("actual locale for en_US_FOO is not en_US but ") + loc.getName());
 	}
     delete ncol; ncol = NULL;
 
@@ -101,12 +101,12 @@ void CollationServiceTest::TestRegister()
     UnicodeString displayName;
     Collator::getDisplayName(fu_FU, displayName);
     if (displayName != "fu (FU, FOO)") {
-      errln((const UnicodeString&)"found " + displayName + " for fu_FU");
+      errln(UnicodeString("found ") + displayName + " for fu_FU");
     }
 
     Collator::getDisplayName(fu_FU, fu_FU, displayName);
     if (displayName != "fu (FU, FOO)") {
-      errln((const UnicodeString&)"found " + displayName + " for fu_FU");
+      errln(UnicodeString("found ") + displayName + " for fu_FU");
     }
 
     if (!Collator::unregister(key, status)) {
@@ -308,11 +308,11 @@ void CollationServiceTest::TestRegisterFactory(void)
 
 	Locale loc = ncol->getLocale(ULOC_REQUESTED_LOCALE, status);
 	if (loc != fu_FU_FOO) {
-		errln((const UnicodeString&)"requested locale for fu_FU_FOO is not fu_FU_FOO but " + loc.getName());
+		errln(UnicodeString("requested locale for fu_FU_FOO is not fu_FU_FOO but ") + loc.getName());
 	}
 	loc = ncol->getLocale(ULOC_VALID_LOCALE, status);
 	if (loc != fu_FU) {
-		errln((const UnicodeString&)"valid locale for fu_FU_FOO is not fu_FU but " + loc.getName());
+		errln(UnicodeString("valid locale for fu_FU_FOO is not fu_FU but ") + loc.getName());
 	}
     delete ncol; ncol = NULL;
 
@@ -336,12 +336,12 @@ void CollationServiceTest::TestRegisterFactory(void)
     UnicodeString name;
     Collator::getDisplayName(fu_FU, name);
     if (name != "little bunny Foo Foo") {
-      errln((const UnicodeString&)"found " + name + " for fu_FU");
+      errln(UnicodeString("found ") + name + " for fu_FU");
     }
 
     Collator::getDisplayName(fu_FU, fu_FU_FOO, name);
     if (name != "zee leetel bunny Foo-Foo") {
-      errln((const UnicodeString&)"found " + name + " for fu_FU in fu_FU_FOO");
+      errln(UnicodeString("found ") + name + " for fu_FU in fu_FU_FOO");
     }
 
     if (!Collator::unregister(key, status)) {
