@@ -1,0 +1,47 @@
+//*******************************************************************************
+//*
+//*   Copyright (C) 2001-2003, International Business Machines
+//*   Corporation and others.  All Rights Reserved.
+//*
+//*   Generated from - Universal Locales for Linux Project
+//*******************************************************************************
+
+ar_IN {
+    Version{ "1.0" }
+    CurrencyElements { 
+            "\u20A8",
+            "INR ",
+            ".",
+    }
+    DateTimePatterns { 
+            "hh:mm:ss aa z",
+            "hh:mm:ss  z",
+            "hh:mm:ss  z",
+            "hh:mm:ss  z",
+            "EEEE dd MMMM yyyy",
+            "EEEE dd MMMM yyyy",
+            "EEEE dd MMMM yyyy",
+            "EEEE dd MMMM yyyy",
+            "{1} {0}",
+    }
+    NumberElements { 
+            ".",
+            ",",
+            ";",
+            "%",
+            "0",
+            "#",
+            "-",
+            "E",
+            "\u2030",
+            "\u221E",
+            "\uFFFD",
+    }
+    NumberPatterns { 
+            "#,##0.###;-#,##0.###",
+            "\u00A4 #,##0.00;-\u00A4 #,##0.00",
+            "#,##0%",
+    }
+    LocaleString { "ar_IN" }
+    ShortCountry { "IND" }
+}

@@ -1,0 +1,45 @@
+//*******************************************************************************
+//*
+//*   Copyright (C) 2001-2003, International Business Machines
+//*   Corporation and others.  All Rights Reserved.
+//*
+//*   Generated from - Universal Locales for Linux Project
+//*******************************************************************************
+
+bn_IN {
+   Version{ "1.0" }
+    CurrencyElements { 
+            "\u099F\u09BE\u0995\u09BE",
+            "INR ",
+            ".",
+    }
+    DateTimePatterns { 
+            "hh:mm:ss aa z",
+            "hh:mm:ss  z",
+            "hh:mm:ss  z",
+            "hh:mm:ss  z",
+            "EEEE dd MMM yyyy",
+            "EEEE dd MMM yyyy",
+            "EEEE dd MMM yyyy",
+            "EEEE dd MMM yyyy",
+            "{1} {0}",
+    }
+    NumberElements { 
+            ".",
+            ",",
+            ";",
+            "%",
+            "0",
+            "#",
+            "-",
+            "E",
+            "\u2030",
+            "\u221E",
+            "\uFFFD",
+    }
+    NumberPatterns { 
+            "#,##0.###;-#,##0.###",
+            "\u00A4 #,#0.00;-\u00A4 #,#0.00",
+            "#,##0%",
+    }
+}

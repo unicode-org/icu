@@ -1,0 +1,60 @@
+//*******************************************************************************
+//*
+//*   Copyright (C) 2001-2003, International Business Machines
+//*   Corporation and others.  All Rights Reserved.
+//*   Generated from Universal Locales for Linux Project
+//*******************************************************************************
+
+ms{
+   Version{ "1.0" }
+    DayAbbreviations { 
+            "Aha",
+            "Isn",
+            "Sei",
+            "Rab",
+            "Kha",
+            "Jum",
+            "Sab",
+    }
+    DayNames { 
+            "Ahad",
+            "Isnin",
+            "Selasa",
+            "Rahu",
+            "Khamis",
+            "Jumaat",
+            "Sabtu",
+    }
+    MonthAbbreviations { 
+            "Jan",
+            "Feb",
+            "Mac",
+            "Apr",
+            "Mei",
+            "Jun",
+            "Jul",
+            "Ogos",
+            "Sep",
+            "Okt",
+            "Nov",
+            "Dis",
+            "",
+    }
+    MonthNames { 
+            "Januari",
+            "Februari",
+            "Mac",
+            "April",
+            "Mei",
+            "Jun",
+            "Julai",
+            "Ogos",
+            "September",
+            "Oktober",
+            "November",
+            "Disember",
+            "",
+    }
+    LocaleID {"3e"}
+    LocaleString{ "ms" }
+}
