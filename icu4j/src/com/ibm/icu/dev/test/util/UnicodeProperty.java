@@ -807,6 +807,38 @@ public abstract class UnicodeProperty extends UnicodeLabel {
         if (!gotOne) return source; // avoid string creation
         return skeletonBuffer.toString();
     }
+    
+    // get the name skeleton
+    public static String toNameSkeleton(String source) {
+        if (source == null) return null;
+        StringBuffer result = new StringBuffer();
+        // remove spaces, medial '-'
+        // we can do this with char, since no surrogates are involved
+        for (int i = 0; i < source.length(); ++i) {
+            char ch = source.charAt(i);
+            if (('0' <= ch && ch <= '9') || ('A' <= ch && ch <= 'Z') || ch == '<' || ch == '>') {
+            	result.append(ch);
+            } else if (ch == ' ') {
+                // don't copy ever
+            } else if (ch == '-') {
+            	// only copy non-medials AND trailing O-E
+                if (0 == i 
+                    || i == source.length() - 1
+                    || source.charAt(i-1) == ' '
+                    || source.charAt(i+1) == ' '
+                    || (i == source.length() - 2
+                        && source.charAt(i-1) == 'O'
+                        && source.charAt(i+1) == 'E')) {
+                	System.out.println("****** EXCEPTION " + source);
+                    result.append(ch);
+                }
+                // otherwise don't copy                
+            } else {
+            	throw new IllegalArgumentException("Illegal Name Char: U+" + Utility.hex(ch) + ", " + ch);
+            }
+        }
+        return result.toString();
+    }
 
     /**
      * These routines use the Java functions, because they only need to act on ASCII

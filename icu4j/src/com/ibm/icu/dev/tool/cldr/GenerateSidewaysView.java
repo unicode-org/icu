@@ -10,6 +10,7 @@ package com.ibm.icu.dev.tool.cldr;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -31,9 +32,15 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.DefaultHandler;
+import org.xml.sax.helpers.XMLReaderFactory;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.ext.LexicalHandler;
+import org.xml.sax.XMLReader;
 
 import com.ibm.icu.dev.test.util.BagFormatter;
 import com.ibm.icu.dev.tool.UOption;
@@ -79,6 +86,7 @@ import com.ibm.icu.util.UResourceBundle;
     private static String timeZoneAliasDir = null;
     
     public static void main(String[] args) throws SAXException, IOException {
+        
         UOption.parseArgs(args, options);
 
         Matcher skipper = Pattern.compile(options[SKIP].value).matcher("");
@@ -142,7 +150,18 @@ import com.ibm.icu.util.UResourceBundle;
     static MapComparator valueOrdering = new MapComparator();
         
     OrderedMap data = new OrderedMap();
-    SAXParser SAX;
+    MyContentHandler DEFAULT_HANDLER = new MyContentHandler();
+    XMLReader xmlReader;
+    {
+        try { 
+        	xmlReader = XMLReaderFactory.createXMLReader();
+
+         } catch (SAXException e) {
+         	System.err.println(e.getMessage());
+         	throw new IllegalArgumentException("can't start XML Reader");
+         }
+    }
+    /*SAXParser SAX;
     {
         try {
             SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -153,6 +172,7 @@ import com.ibm.icu.util.UResourceBundle;
             throw new IllegalArgumentException("can't start");
         }
     }
+    */
     
     static PrintWriter log;
     
@@ -207,10 +227,14 @@ import com.ibm.icu.util.UResourceBundle;
     }
     
     String filename;
-    
+        
     private GenerateSidewaysView(String filename) throws SAXException, IOException {
         //System.out.println("Creating " + filename);
         this.filename = filename;
+
+        xmlReader.setContentHandler(DEFAULT_HANDLER);
+        xmlReader.setProperty("http://xml.org/sax/properties/lexical-handler",DEFAULT_HANDLER);
+
         readFrom(options[SOURCEDIR].value, filename);
         String current = filename;
         while (true) {
@@ -268,13 +292,20 @@ import com.ibm.icu.util.UResourceBundle;
 
     public void readFrom(String dir, String filename) throws SAXException, IOException {
         File f = new File(dir + filename + ".xml");
-        SAX.parse(f, DEFAULT_HANDLER);
+        xmlReader.parse(new InputSource(new FileInputStream(f)));
+        //SAX.parse(f, DEFAULT_HANDLER);
     }
     
     public String toString() {
         StringBuffer buffer = new StringBuffer();
         buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n"
         + "<!DOCTYPE ldml SYSTEM \"http://www.unicode.org/cldr/dtd/1.2/alpha/ldml.dtd\">\r\n");
+        
+        if (startComment != null) {
+            buffer.append("\r\n<!-- ");
+            buffer.append(startComment);
+            buffer.append("\r\n-->");
+        }
         ElementChain empty = new ElementChain();
         ElementChain old = empty;
         for (Iterator it = data.iterator(); it.hasNext();) {
@@ -445,6 +476,7 @@ import com.ibm.icu.util.UResourceBundle;
     
     static class ElementChain implements Comparable {
         List contexts;
+        String comment;
         
         ElementChain() {
             contexts = new ArrayList();
@@ -492,6 +524,11 @@ import com.ibm.icu.util.UResourceBundle;
                 Element e = (Element) contexts.get(i);
                 if (path) buffer.append("/" + e.toString(path));
                 else buffer.append(e.toString(path));
+            }
+            if (comment != null) {
+            	buffer.append("\r\n<!-- ");
+                buffer.append(comment);
+                buffer.append("\r\n-->");
             }
             return buffer.toString();
         }
@@ -565,6 +602,14 @@ import com.ibm.icu.util.UResourceBundle;
             }
             return false;
         }
+
+		/**
+		 * @param comment
+		 */
+		public void addComment(String comment) {
+            if (this.comment == null) this.comment = comment;
+            else this.comment += "\r\n" + comment;
+		}
     }
     
     static int compareInt(int a, int b) {
@@ -721,10 +766,31 @@ import com.ibm.icu.util.UResourceBundle;
         public Iterator iterator() {
             return list.iterator();
         }
+        public int size() {
+        	return list.size();
+        }
+        public Object get(int index) {
+        	return list.get(index);
+        }
     }
     
-    void putData(ElementChain stack, String associatedData) {
-        data.put(new ElementChain(stack), associatedData);
+    ElementChain putData(ElementChain stack, String associatedData) {
+        ElementChain result = new ElementChain(stack);
+        data.put(result, associatedData);
+        return result;
+    }
+    
+    String startComment;
+    
+    void addComment(String comment) {
+        int count = data.size();
+        if (count == 0) {
+            if (startComment == null) startComment = comment;
+            else startComment += "\r\n" + comment;
+            return;
+        }
+        ElementChain ec = (ElementChain) data.get(count-1);
+    	ec.addComment(comment);
     }
     
     static SidewaysView sidewaysView = new SidewaysView();
@@ -851,13 +917,14 @@ import com.ibm.icu.util.UResourceBundle;
         }
     }
     
-
-    DefaultHandler DEFAULT_HANDLER = new DefaultHandler() {
+    class MyContentHandler implements ContentHandler, LexicalHandler {
         static final boolean DEBUG = false;
+        static final boolean DEBUG2 = false;
         
         ElementChain contextStack = new ElementChain();
         String lastChars = "";
         boolean justPopped = false;
+        int commentStack = 0;
         
         public void startElement(
             String uri,
@@ -908,7 +975,7 @@ import com.ibm.icu.util.UResourceBundle;
         
         public void notationDecl (String name, String publicId, String systemId)
         throws SAXException {
-            System.out.println("notationDecl: " + name
+            if (DEBUG2) System.out.println("notationDecl: " + name
             + ", " + publicId
             + ", " + systemId
             );
@@ -916,25 +983,72 @@ import com.ibm.icu.util.UResourceBundle;
 
         public void processingInstruction (String target, String data)
         throws SAXException {
-            System.out.println("processingInstruction: " + target + ", " + data);
+            if (DEBUG2) System.out.println("processingInstruction: " + target + ", " + data);
         }
         
         public void skippedEntity (String name)
         throws SAXException
         {
-            System.out.println("skippedEntity: " + name
+            if (DEBUG2) System.out.println("skippedEntity: " + name
             );
         }
 
         public void unparsedEntityDecl (String name, String publicId,
-                        String systemId, String notationName)
-        throws SAXException {
-            System.out.println("unparsedEntityDecl: " + name
+                        String systemId, String notationName) {
+            if (DEBUG2) System.out.println("unparsedEntityDecl: " + name
             + ", " + publicId
             + ", " + systemId
             + ", " + notationName
             );
         }
-
+		public void setDocumentLocator(Locator locator) {
+            if (DEBUG2) System.out.println("setDocumentLocator Locator " + locator);
+		}
+		public void startDocument() throws SAXException {
+            if (DEBUG2) System.out.println("startDocument");
+		}
+		public void endDocument() throws SAXException {
+            if (DEBUG2) System.out.println("endDocument");
+		}
+		public void startPrefixMapping(String prefix, String uri) throws SAXException {
+            if (DEBUG2) System.out.println("startPrefixMapping prefix: " + prefix + 
+                    ", uri: " + uri);
+		}
+		public void endPrefixMapping(String prefix) throws SAXException {
+            if (DEBUG2) System.out.println("endPrefixMapping prefix: " + prefix);
+		}
+		public void ignorableWhitespace(char[] ch, int start, int length) throws SAXException {
+            if (DEBUG2) System.out.println("ignorableWhitespace length: " + length);
+		}
+		public void startDTD(String name, String publicId, String systemId) throws SAXException {
+            if (DEBUG2) System.out.println("startDTD name: " + name
+                    + ", publicId: " + publicId
+                    + ", systemId: " + systemId         
+            );
+            commentStack++;
+		}
+		public void endDTD() throws SAXException {
+            if (DEBUG2) System.out.println("endDTD");
+            commentStack--;
+		}
+		public void startEntity(String name) throws SAXException {
+            if (DEBUG2) System.out.println("startEntity name: " + name);
+		}
+		public void endEntity(String name) throws SAXException {
+            if (DEBUG2) System.out.println("endEntity name: " + name);
+		}
+		public void startCDATA() throws SAXException {
+            if (DEBUG2) System.out.println("startCDATA");
+		}
+		public void endCDATA() throws SAXException {
+            if (DEBUG2) System.out.println("endCDATA");
+		}
+		public void comment(char[] ch, int start, int length) throws SAXException {
+            if (commentStack == 0) return;
+            String comment = new String(ch, start,length);
+            addComment(comment);
+            if (DEBUG2) System.out.println("comment: " + comment);
+		}
     };
 }
+ 
