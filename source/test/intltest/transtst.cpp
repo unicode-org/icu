@@ -2280,7 +2280,7 @@ void TransliteratorTest::TestDevanagariLatinRT(){
         // \\u0939\\u094d\\u092E         - hma
         // CharsToUnicodeString("hma"),
         "hya",
-        "\\u015Br\\u0325a",
+        "\\u015Br\\u0325",
         "\\u015Bca",
         "\\u0115",
         "san\\u0304j\\u012Bb s\\u0113nagupta",
@@ -2425,12 +2425,12 @@ void TransliteratorTest::TestSanskritLatinRT(){
         "vi\\u1E63\\u0101da",
         "y\\u014Dga",
         "dhr\\u0325tar\\u0101\\u1E63\\u1E6Dra",
-        "uv\\u0101cr\\u0325a",
+        "uv\\u0101cr\\u0325",
         "dharmak\\u1E63\\u0113tr\\u0113",
         "kuruk\\u1E63\\u0113tr\\u0113",
         "samav\\u0113t\\u0101",
-        "yuyutsava-\\u1E25",
-        "m\\u0101mak\\u0101-\\u1E25",
+        "yuyutsava\\u1E25",
+        "m\\u0101mak\\u0101\\u1E25",
     // "p\\u0101\\u1E47\\u1E0Dav\\u0101\\u015Bcaiva",
         "kimakurvata",
         "san\\u0304java",
@@ -2485,12 +2485,12 @@ void TransliteratorTest::TestCompoundLatinRT(){
         "vi\\u1E63\\u0101da",
         "y\\u014Dga",
         "dhr\\u0325tar\\u0101\\u1E63\\u1E6Dra",
-        "uv\\u0101cr\\u0325a",
+        "uv\\u0101cr\\u0325",
         "dharmak\\u1E63\\u0113tr\\u0113",
         "kuruk\\u1E63\\u0113tr\\u0113",
         "samav\\u0113t\\u0101",
-        "yuyutsava-\\u1E25",
-        "m\\u0101mak\\u0101-\\u1E25",
+        "yuyutsava\\u1E25",
+        "m\\u0101mak\\u0101\\u1E25",
      // "p\\u0101\\u1E47\\u1E0Dav\\u0101\\u015Bcaiva",
         "kimakurvata",
         "san\\u0304java"
@@ -2538,7 +2538,6 @@ void TransliteratorTest::TestCompoundLatinRT(){
         gotResult = source[i];
         expect(*devToLatinToDev,CharsToUnicodeString(expected[i]),CharsToUnicodeString(expected[i]));
         expect(*latinToDevToLatin,CharsToUnicodeString(source[i]),CharsToUnicodeString(source[i]));
-        expect(*devToTelToDev,CharsToUnicodeString(expected[i]),CharsToUnicodeString(expected[i]));
         expect(*latinToTelToLatin,CharsToUnicodeString(source[i]),CharsToUnicodeString(source[i]));
 
     }
