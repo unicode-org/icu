@@ -9,12 +9,6 @@
 #include "mutex.h"
 #include "umutex.h"
 
-U_NAMESPACE_BEGIN
-
-const char Mutex::fgClassID=0;
-
-U_NAMESPACE_END
-
 /* Initialize the global mutex only when we can use it. */
 #if (ICU_USE_THREADS == 1)
 
