@@ -56,7 +56,9 @@ static const UDataInfo ucaDataInfo={
     /* 03/26/2002 bumped up version since format has changed */
     /* 09/16/2002 bumped up version since we went from UColAttributeValue */
     /*            to int32_t in UColOptionSet */
-    {2, 1, 0, 0},                 /* formatVersion                */
+    /* 05/13/2003 This one also updated since we added UCA and UCD versions */
+    /*            to header */
+    {2, 2, 0, 0},                 /* formatVersion                */
     {3, 0, 0, 0}                  /* dataVersion = Unicode Version*/
 };
 
@@ -72,7 +74,7 @@ static const UDataInfo invUcaDataInfo={
 
     {0x49, 0x6E, 0x76, 0x43},     /* dataFormat="InvC"            */
     /* 03/26/2002 bumped up version since format has changed */
-    /* 04/29/2003 2.1 format - we have added UCA & UCD versions to header */
+    /* 04/29/2003 2.1 format - we have added UCA version to header */
     {2, 1, 0, 0},                 /* formatVersion                */
     {3, 0, 0, 0}                  /* dataVersion = Unicode Version*/
 };
