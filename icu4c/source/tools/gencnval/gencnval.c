@@ -215,7 +215,7 @@ main(int argc, const char *argv[]) {
     }
 
     /* determine the length of tables for the data offset of the strings */
-    tagOffset = 2 + 4 * aliasCount + 2 + 4 * converterCount;
+    tagOffset = (uint16_t)(2 + 4 * aliasCount + 2 + 4 * converterCount);
     stringOffset = (uint16_t)(tagOffset + 2 + (2 * tagCount) * converterCount + tagBlock.top);
 
     /* write the table of aliases */
@@ -289,7 +289,7 @@ parseLine(const char *line) {
     limit=pos;
 
     /* store the converter name */
-    length=limit-start;
+    length=(uint16_t)(limit-start);
     converter=allocString(&stringBlock, length+1);
     uprv_memcpy(converter, line+start, length);
     converter[length]=0;
@@ -356,7 +356,7 @@ parseLine(const char *line) {
         limit=pos;
 
         /* store the alias name */
-        length=limit-start;
+        length=(uint16_t)(limit-start);
         alias=allocString(&stringBlock, length+1);
         uprv_memcpy(alias, line+start, length);
         alias[length]=0;
@@ -433,7 +433,8 @@ getTagNumber(const char *tag, uint16_t tagLen) {
 
     /* add the tag to the tag table */
     tags[tagCount].tag = atag;
-    uprv_memset(&tags[tagCount].aliases, 0, sizeof(tags[tagCount].aliases));
+    /* Set the array of pointers to NULL */
+    uprv_memset((void *)&tags[tagCount].aliases, 0, sizeof(tags[tagCount].aliases));
 
     return tagCount++;
 }
