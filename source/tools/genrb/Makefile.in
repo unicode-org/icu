@@ -1,0 +1,155 @@
+## Makefile.in for ICU - tools/genrb
+## Copyright (c) 1999, International Business Machines Corporation and
+## others. All Rights Reserved.
+
+## Shell to use
+SHELL = @SHELL@
+
+## Install directory information
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+
+bindir = @bindir@
+sbindir = @sbindir@
+datadir = @datadir@
+libdir = @libdir@
+includedir = @includedir@
+
+pkgdatadir = $(datadir)/@PACKAGE@
+pkglibdir = $(libdir)/@PACKAGE@
+pkgincludedir = $(includedir)/@PACKAGE@
+
+## Install program information
+mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+
+INSTALL = @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_DATA = @INSTALL_DATA@
+
+## Compiler/tools information
+CC = @CC@
+CXX = @CXX@
+PACKAGE = @PACKAGE@
+VERSION = @VERSION@
+
+## Platform-specific setup
+@host_frag@
+
+## Build directory information
+top_builddir = ../..
+subdir = tools/genrb
+
+## Extra files to remove for 'make clean'
+CLEANFILES = *~
+
+## Target information
+TARGET = genrb
+
+DEFS = @DEFS@
+CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/extra/ustdio -I$(srcdir)/../toolutil
+CFLAGS = @CFLAGS@
+CXXFLAGS = @CXXFLAGS@
+LDFLAGS = @LDFLAGS@ \
+$(LD_RPATH)$(LD_RPATH_PRE)$(libdir)@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/common@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/i18n@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/tools/toolutil@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/extra/ustdio
+LIBS = $(LIBICU-UC) $(LIBICU-I18N) @LIBS@ @LIB_M@  $(LIBICU-TOOLUTIL) $(LIBUSTDIO)
+
+##OBJECTS = error.o genrb.o ustr.o parse.o read.o write.o list.o	\
+##rblist.o  util.o
+OBJECTS = error.o genrb.o parse.o read.o reslist.o ustr.o util.o
+
+DEPS = $(OBJECTS:.o=.d)
+
+include $(srcdir)/genrbfiles.mk
+-include $(srcdir)/reslocal.mk
+
+## List of resource bundles to build
+TXT_SOURCE = $(GENRB_SOURCE) $(TRANSLIT_SOURCE)
+
+TXT_FILES = $(TXT_SOURCE:%=$(top_srcdir)/../data/%)
+RES_FILES = $(TXT_FILES:$(top_srcdir)/../data/%.txt=@DATABUILDDIR@/%.res)
+#TRANSLIT_FILES = $(TRANSLIT_SOURCE:%=$(top_srcdir)/../data/translit/%)
+#TRANSLIT_RES = $(TRANSLIT_SOURCE:%.txt=@DATABUILDDIR@/translit/%.res)
+TEST_FILES = @DATABUILDDIR@/../source/test/testdata/root.res \
+@DATABUILDDIR@/../source/test/testdata/te.res \
+@DATABUILDDIR@/../source/test/testdata/te_IN.res
+
+## List of phony targets
+.PHONY : all all-local install install-local clean clean-local		\
+distclean distclean-local dist dist-local check	\
+check-local
+
+## Clear suffix list
+.SUFFIXES :
+
+## List of standard targets
+all: all-local
+install: install-local
+clean: clean-local
+distclean : distclean-local
+dist: dist-local
+check: check-local
+
+all-local: $(TARGET) $(RES_FILES) $(TRANSLIT_RES) $(TEST_FILES)
+
+install-local: all-local
+	$(mkinstalldirs) $(DESTDIR)$(sbindir)
+	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
+	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)/$(VERSION)
+	@list='$(notdir $(RES_FILES))'; for file in $$list; do \
+		echo $(INSTALL_DATA) @DATABUILDDIR@/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/$$file; \
+		$(INSTALL_DATA) @DATABUILDDIR@/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/$$file; \
+	done
+	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)/$(VERSION)/translit
+	@list='$(notdir $(TRANSLIT_RES))'; for file in $$list; do \
+		echo $(INSTALL_DATA) @DATABUILDDIR@/translit/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/translit/$$file; \
+		$(INSTALL_DATA) @DATABUILDDIR@/translit/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/translit/$$file; \
+	done
+
+dist-local:
+
+clean-local: 
+	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
+	$(RMV) $(TARGET) $(OBJECTS)
+
+distclean-local: clean-local
+	$(RMV) Makefile $(DEPS) $(RES_FILES) $(TRANSLIT_RES) $(TEST_FILES)
+
+check-local:
+
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
+	cd $(top_builddir) \
+	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+$(TARGET) : $(OBJECTS)
+	$(LINK.c) -o $@ $^ $(LIBS) 
+
+## Rule to build a compiled res file.
+## Note the order of the next three rules here is important!
+
+@DATABUILDDIR@/../source/test/testdata/%.res : $(top_srcdir)/test/testdata/%.txt
+	@echo "Creating testdata resource file for $<"
+	@ICU_DATA=@DATABUILDDIR@ ./genrb -d@DATABUILDDIR@/../source/test/testdata/ $<
+
+#@DATABUILDDIR@/translit/%.res : $(top_srcdir)/../data/translit/%.txt
+#	@echo "Creating translit resource file for $<"
+#	@ICU_DATA=@DATABUILDDIR@ ./genrb -d@DATABUILDDIR@/translit/ $<
+
+@DATABUILDDIR@/%.res : $(top_srcdir)/../data/%.txt
+	@echo "Creating compiled resource file for $<"
+	@ICU_DATA=@DATABUILDDIR@ ./genrb -d@DATABUILDDIR@/ $<
+
+
+# the 'mv' will always fail if you are building in the source dir
+
+all-local:
+install-local:
+
+ifeq (,$(MAKECMDGOALS))
+-include $(DEPS)
+else
+ifneq ($(patsubst %clean,,$(MAKECMDGOALS)),)
+-include $(DEPS)
+endif
+endif
