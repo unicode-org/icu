@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $ 
-* $Date: 2001/10/23 17:08:13 $ 
-* $Revision: 1.16 $
+* $Date: 2001/11/06 00:02:13 $ 
+* $Revision: 1.17 $
 *
 *******************************************************************************
 */
@@ -17,11 +17,14 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileNotFoundException;
 import java.util.Locale;
+import java.io.File;
+import java.util.Vector;
 import com.ibm.test.TestFmwk;
 import com.ibm.text.UCharacter;
 import com.ibm.text.UCharacterCategory;
 import com.ibm.text.UCharacterDirection;
 import com.ibm.text.UTF16;
+import com.ibm.util.Utility;
 
 /**
 * Testing class for UCharacter
@@ -417,9 +420,10 @@ public final class UCharacterTest extends TestFmwk
   /**
   * Tests for the character types, direction.<br>
   * This method reads in UnicodeData.txt file for testing purposes. A default 
-  * path is provided relative to the class path, however if the user could 
-  * set a system property to change the path.<br>
-  * e.g. java -DUnicodeData="anyfile.dat" com.ibm.test.text.UCharacterTest
+  * path is provided relative to the src path, however the user could 
+  * set a system property to change the directory path.<br>
+  * e.g. java -DUnicodeData="data_directory_path" 
+  * com.ibm.test.text.UCharacterTest
   */
   public void TestUnicodeData()
   {
@@ -438,9 +442,19 @@ public final class UCharacterTest extends TestFmwk
     // unicode data file path system name
     final String UNICODE_DATA_SYSTEM_NAME = "UnicodeData";
     String s = System.getProperty(UNICODE_DATA_SYSTEM_NAME);
-    if (s == null)
+    if (s == null) {
     // assuming runtime directory is on the same level as the source
       s = System.getProperty("user.dir") + "//..//" + UNICODE_DATA_FILE;
+    }
+    else {
+      StringBuffer tempfilename = new StringBuffer(s);
+      if (tempfilename.charAt(tempfilename.length() - 1) != 
+          File.pathSeparatorChar) {
+        tempfilename.append(File.separatorChar);
+      }
+      tempfilename.append("UnicodeData.txt");
+      s = tempfilename.toString();
+    }
     
     final int LASTUNICODECHAR = 0xFFFD;
     int ch = 0,
@@ -448,11 +462,11 @@ public final class UCharacterTest extends TestFmwk
         type = 0,
         dir = 0;
 	
-	  try
-	  {
+	try
+	{
 	    // reading in the UnicodeData file
-	    FileReader fr = new FileReader(s);
-	    BufferedReader input = new BufferedReader(fr);
+	  FileReader fr = new FileReader(s);
+	  BufferedReader input = new BufferedReader(fr);
 	    
       while (ch != LASTUNICODECHAR)
       {
@@ -463,8 +477,7 @@ public final class UCharacterTest extends TestFmwk
         index = s.indexOf(';', 5);
         String t = s.substring(index + 1, index + 3);
         index += 4;
-        byte cc = (byte)(Integer.parseInt(s.substring(index, 
-                                                      s.indexOf(';', index))));
+        int cc = Integer.parseInt(s.substring(index, s.indexOf(';', index)));
         index = s.indexOf(';', index);
         String d = s.substring(index + 1, s.indexOf(';', index + 1));
         
@@ -521,7 +534,7 @@ public final class UCharacterTest extends TestFmwk
     {
       errln("FAIL UnicodeData.txt not found\n" +
             "Configure the system setting UnicodeData to the right path\n" +
-            "e.g. java -DUnicodeData=\"anyfile.dat\" " +
+            "e.g. java -DUnicodeData=\"data_dir_path\" " +
             "com.ibm.icu.test.text.UCharacterTest");
     }
     catch (Exception e)
@@ -538,6 +551,7 @@ public final class UCharacterTest extends TestFmwk
   /**
   * Test for the character names
   */
+  /*
   public void TestNames()
   {
     int c[] = {0x0061, 0x0284, 0x3401, 0x7fed, 0xac00, 0xd7a3, 0xff08, 0xffe5,
@@ -734,7 +748,201 @@ public final class UCharacterTest extends TestFmwk
     }
     */
   }
-
+  
+  /**
+  * Tests for case mapping in the file SpecialCasing.txt
+  * This method reads in SpecialCasing.txt file for testing purposes. 
+  * A default path is provided relative to the src path, however the user 
+  * could set a system property to change the directory path.<br>
+  * e.g. java -DUnicodeData="data_dir_path" com.ibm.test.text.UCharacterTest
+  */
+  public void TestSpecialCasing()
+  {
+    // default unicode data file name
+    final String SPECIALCASING_FILE = "src//data//unicode//SpecialCasing.txt";
+    
+    // unicode data file path system name
+    final String UNICODE_DATA_SYSTEM_NAME = "UnicodeData";
+    String s = System.getProperty(UNICODE_DATA_SYSTEM_NAME);
+    if (s == null) {
+    // assuming runtime directory is on the same level as the source
+      s = System.getProperty("user.dir") + "//..//" + SPECIALCASING_FILE;
+    }
+    else {
+      StringBuffer tempfilename = new StringBuffer(s);
+      if (tempfilename.charAt(tempfilename.length() - 1) != 
+          File.pathSeparatorChar) {
+        tempfilename.append(File.separatorChar);
+      }
+      tempfilename.append("SpecialCasing.txt");
+      s = tempfilename.toString();
+    }
+    
+    try
+	{
+	  // reading in the SpecialCasing file
+	  FileReader fr = new FileReader(s);
+	  BufferedReader input = new BufferedReader(fr);
+	    
+      while (true)
+      {
+        s = input.readLine();
+        if (s == null) {
+            break;
+        }
+        if (s.length() == 0 || s.charAt(0) == '#') {
+            continue;
+        }
+        String chstr[] = getUnicodeStrings(s);
+        if (chstr.length == 5) {
+            StringBuffer strbuffer   = new StringBuffer(chstr[0]);
+            StringBuffer lowerbuffer = new StringBuffer(chstr[1]); 
+            StringBuffer upperbuffer = new StringBuffer(chstr[3]); 
+            
+            if (chstr[4].indexOf("AFTER_i NOT_MORE_ABOVE") != -1) {
+                strbuffer.insert(0, 'i');
+                lowerbuffer.insert(0, strbuffer);
+                upperbuffer.insert(0, (char)(0x130));
+            } 
+            else {
+                if (chstr[4].indexOf("MORE_ABOVE") != -1) {
+                    strbuffer.append((char)0x300);
+                    lowerbuffer.append((char)0x300);
+                    upperbuffer.append((char)0x300);
+                }
+                if (chstr[4].indexOf("AFTER_i") != -1) {
+                    strbuffer.insert(0, 'i');
+                    lowerbuffer.insert(0, 'i');
+                    upperbuffer.insert(0, 'I');
+                }
+                if (chstr[4].indexOf("FINAL_SIGMA") != -1) {
+                    strbuffer.insert(0, 'c');
+                    lowerbuffer.insert(0, 'c');
+                    upperbuffer.insert(0, 'C');
+                }
+            }
+            if (UCharacter.isLowerCase(chstr[4].charAt(0))) {
+                Locale locale = new Locale(chstr[4].substring(0, 2), "");
+                if (!UCharacter.toLowerCase(locale, 
+                        strbuffer.toString()).equals(lowerbuffer.toString())) {
+                    errln(s);
+                    errln("Fail: toLowerCase for locale " + locale + 
+                        ", character " + Utility.escape(strbuffer.toString()) +
+                        ", expected " + Utility.escape(lowerbuffer.toString()) 
+                        + " but resulted in " + 
+                        Utility.escape(UCharacter.toLowerCase(locale, 
+                                                      strbuffer.toString())));
+                }
+                if (!UCharacter.toUpperCase(locale, 
+                       strbuffer.toString()).equals(upperbuffer.toString())) {
+                    errln(s);
+                    errln("Fail: toUpperCase for locale " + locale + 
+                        ", character " + Utility.escape(strbuffer.toString()) 
+                        + ", expected "
+                        + Utility.escape(upperbuffer.toString()) + 
+                        " but resulted in " + 
+                        Utility.escape(UCharacter.toUpperCase(locale, 
+                                                      strbuffer.toString())));
+                }
+            }
+            else {
+                if (!UCharacter.toLowerCase(strbuffer.toString()).equals(
+                                                    lowerbuffer.toString())) {
+                    errln(s);
+                    errln("Fail: toLowerCase for character " + 
+                          Utility.escape(strbuffer.toString()) + ", expected " 
+                          + Utility.escape(lowerbuffer.toString()) 
+                          + " but resulted in " + 
+                          Utility.escape(UCharacter.toLowerCase( 
+                                                      strbuffer.toString())));
+                }
+                if (!UCharacter.toUpperCase(strbuffer.toString()).equals(
+                                                    upperbuffer.toString())) {
+                    errln(s);
+                    errln("Fail: toUpperCase for character " + 
+                          Utility.escape(strbuffer.toString()) + ", expected "
+                          + Utility.escape(upperbuffer.toString()) + 
+                          " but resulted in " + 
+                          Utility.escape(UCharacter.toUpperCase( 
+                                                      strbuffer.toString())));
+                }
+            }
+        }
+        else {
+            if (!UCharacter.toLowerCase(chstr[0]).equals(chstr[1])) {
+                errln(s);
+                errln("Fail: toLowerCase for character " + 
+                      Utility.escape(chstr[0]) + ", expected "
+                      + Utility.escape(chstr[1]) + " but resulted in " + 
+                      Utility.escape(UCharacter.toLowerCase(chstr[0])));
+            }
+            if (!UCharacter.toUpperCase(chstr[0]).equals(chstr[3])) {
+                errln(s);
+                errln("Fail: toUpperCase for character " + 
+                      Utility.escape(chstr[0]) + ", expected "
+                      + Utility.escape(chstr[3]) + " but resulted in " + 
+                      Utility.escape(UCharacter.toUpperCase(chstr[0])));
+            }
+        }
+      }
+      input.close();
+    }
+    catch (FileNotFoundException e)
+    {
+      errln("FAIL SpecialCasing.txt not found\n" +
+            "Configure the system setting UnicodeData to the right path\n" +
+            "e.g. java -DUnicodeData=\"data_dir_path\" " +
+            "com.ibm.icu.test.text.UCharacterTest");
+    }
+    catch (Exception e)
+    {
+      e.printStackTrace();
+    }
+  }
+  
+  /**
+  * Converting the hex numbers represented between ';' to Unicode strings
+  * @param str string to break up into Unicode strings
+  * @return array of Unicode strings ending with a null
+  */
+  private String[] getUnicodeStrings(String str)
+  {
+    Vector v = new Vector(10);
+    int end = str.indexOf("; ");
+    int start = 0;
+    while (end != -1) {
+        StringBuffer buffer = new StringBuffer(10);
+        int tempstart = start;
+        int tempend   = str.indexOf(' ', tempstart);
+        while (tempend != -1 && tempend < end) {
+           buffer.append((char)Integer.parseInt(str.substring(tempstart, 
+                                                              tempend), 16));
+           tempstart = tempend + 1;
+           tempend   = str.indexOf(' ', tempstart);
+        }
+        String s = str.substring(tempstart, end);
+        try {
+            if (s.length() != 0) {
+                buffer.append((char)Integer.parseInt(s, 16));
+            }
+        } catch (NumberFormatException e) {
+            buffer.append(s);
+        }
+        start = end + 2;
+        end   = str.indexOf("; ", start);
+        v.addElement(buffer.toString());
+    }
+    String s = str.substring(start);
+    if (s.charAt(0) != '#') {
+        v.addElement(s);
+    }
+    int size = v.size();
+    String result[] = new String[size];
+    for (int i = 0; i < size; i ++) {
+        result[i] = (String)v.elementAt(i);
+    }
+    return result;
+  }
  
   public static void main(String[] arg)
   {
