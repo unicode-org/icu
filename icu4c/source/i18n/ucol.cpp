@@ -1857,6 +1857,8 @@ inline uint32_t getDiscontiguos(const UCollator *coll, collIterate *source,
                  null character, note fcd does not always point to a base
                  character after the discontiguos change */
                  u_getCombiningClass(*(source->pos)) == 0) {
+            //constart = (UChar *)coll->image + getContractOffset(CE);
+            constart = tempconstart;
             break;
         }
 
