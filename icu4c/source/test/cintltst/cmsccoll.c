@@ -4387,8 +4387,8 @@ ucol_getFunctionalEquivalent(char* result, int32_t resultCapacity,
                                      &isAvailable, &ec);
     assertSuccess("getFunctionalEquivalent", &ec);
     assertEquals("getFunctionalEquivalent(fr_FR)", "fr", loc);
-    assertTrue("getFunctionalEquivalent(fr_FR).isAvailable==FALSE",
-               isAvailable == FALSE);
+    assertTrue("getFunctionalEquivalent(fr_FR).isAvailable==TRUE",
+               isAvailable == TRUE);
 }
 
 /* supercedes TestJ784 */
