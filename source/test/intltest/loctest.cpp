@@ -396,8 +396,8 @@ LocaleTest::TestDisplayNames()
 
     /* test that the default locale has a display name for its own language */
     UnicodeString s;
-    Locale().getDisplayName(Locale(), s);
-    if(s.length()<=3) {
+    Locale().getDisplayLanguage(Locale(), s);
+    if(s.length()<=3 && s.charAt(0)<=0x7f) {
         /* check <=3 to reject getting the language code as a display name */
         errln("unable to get a display string for the language of the default locale\n");
     }
