@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $ 
- * $Date: 2001/02/16 22:34:30 $ 
- * $Revision: 1.25 $
+ * $Date: 2001/03/01 22:55:08 $ 
+ * $Revision: 1.26 $
  *
  *****************************************************************************************
  */
@@ -239,7 +239,7 @@ import com.ibm.text.resources.ResourceReader;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.25 $ $Date: 2001/02/16 22:34:30 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.26 $ $Date: 2001/03/01 22:55:08 $
  */
 public abstract class Transliterator {
     /**
@@ -346,76 +346,37 @@ public abstract class Transliterator {
     private int maximumContextLength = 0;
 
     /**
-     * Dictionary of known transliterators.  Keys are <code>String</code>
+     * Cache of system transliterators.  Keys are <code>String</code>
      * names, values are one of the following:
      *
-     * <ul><li><code>Transliterator</code> objects
+     * <ul><li><code>String</code> objects.  These represent
+     * RuleBasedTransliterators that have not been loaded yet, or
+     * aliases.  The first character determines the type: 'f'
+     * indicates a FORWARD RBT, with the rest of the string giving the
+     * resource name and encoding, separated by a colon.  'r' is
+     * similar, but indicates a REVERSE RBT.  'a' indicates an alias,
+     * with the rest of the string giving the ID to create.
      *
      * <li><code>Class</code> objects.  Such objects must represent
      * subclasses of <code>Transliterator</code>, and must satisfy the
-     * constraints described in <code>registerClass()</code>
+     * constraints described in <code>registerClass()</code>.
      *
-     * <li><code>RULE_BASED_PLACEHOLDER</code>, in which case the ID
-     * will have its first '-' removed and be appended to
-     * RB_RULE_BASED_PREFIX to form a resource bundle name from which
-     * the RB_RULE key is looked up to obtain the rule.
-     *
-     * <li><code>REVERSE_RULE_BASED_PLACEHOLDER</code>.  Like
-     * <code>RULE_BASED_PLACEHOLDER</code>, except the entity names in
-     * the ID are reversed, and the argument
-     * RuleBasedTransliterator.REVERSE is pased to the
-     * RuleBasedTransliterator constructor.
+     * <li><code>RuleBasedTransliterator.Data</code> objects.  These
+     * are built in-memory transliterator data cores that are wrapped
+     * thinly to create RuleBasedTransliterator objects.  When an RBT
+     * is created, its Data core is cached and shared among future
+     * instances of the same ID.
      * </ul>
      */
     private static Hashtable cache;
 
     /**
-     * Identical to 'cache', but only contains components for composed
-     * transliterators.  All keys are of the form "Foo~Bar" (vs.
-     * "Foo-Bar" and "Foo" for 'cache').  The factory method for
-     * transliterators refers to 'cache' first, then to
-     * 'composedCache'.
+     * Identical to 'cache' but contains internal transliterators.
+     * These are not enumerated by getAvailableIDs().
      */
-    private static Hashtable composedCache;
-
-    /**
-     * The graph of links for components for composed transliterators.
-     * composedGraph.get(x) returns a String[] array, each of which is
-     * a node that x is connected to.  For example, if we had the
-     * component transliterators "Foo~Bar", "Foo~Baz", "Bar~Zee",
-     * "Bar~Cue", and "Baz~Ark", the graph would look like:
-     *
-     * composedGraph.get("Foo") => { "Bar", "Baz" }
-     * composedGraph.get("Bar") => { "Zee", "Cue" }
-     * composedGraph.get("Baz") => { "Ark" }
-     *
-     * From this we could construct "Foo-Zee", "Foo-Cue", and
-     * "Foo-Ark".  Each of these would be a compound transliterator,
-     * e.g., "Foo-Zee" == "Foo~Bar;Bar~Zee".
-     */
-    private static Hashtable composedGraph;
+    private static Hashtable internalCache;
 
     private static Hashtable displayNameCache;
-
-    /**
-     * Internal object used to stand for instances of
-     * <code>RuleBasedTransliterator</code> that have not been
-     * constructed yet in the <code>cache</code>.  When a
-     * <code>getInstance()</code> call retrieves this object, it is
-     * replaced by the actual <code>RuleBasedTransliterator</code>.
-     * This allows <code>Transliterator</code> to delay instantiation
-     * of such transliterators until they are needed.
-     */
-    private static final Object RULE_BASED_PLACEHOLDER = new Object();
-
-    /**
-     * Internal object used to stand for instances of
-     * <code>RuleBasedTransliterator</code> that have not been
-     * constructed yet in the <code>cache</code>.  These instances are
-     * constructed with an argument
-     * <code>RuleBasedTransliterator.REVERSE</code>.
-     */
-    private static final Object REVERSE_RULE_BASED_PLACEHOLDER = new Object();
 
     /**
      * Prefix for resource bundle key for the display name for a
@@ -440,14 +401,6 @@ public abstract class Transliterator {
     private static final String RB_DISPLAY_NAME_PATTERN = "TransliteratorNamePattern";
 
     /**
-     * Resource bundle key for the list of RuleBasedTransliterator IDs.
-     * The resource bundle value should be a String[] with each element
-     * being a valid ID.  The ID will be appended to RB_RULE_BASED_PREFIX
-     * to obtain the class name in which the RB_RULE key will be sought.
-     */
-    private static final String RB_RULE_BASED_IDS = "RuleBasedTransliteratorIDs";
-
-    /**
      * Resource bundle containing display name keys and the
      * RB_RULE_BASED_IDS array.
      *
@@ -456,31 +409,6 @@ public abstract class Transliterator {
      */
     private static final String RB_LOCALE_ELEMENTS =
         "com.ibm.text.resources.LocaleElements";
-
-    /**
-     * Prefix for resource bundle containing RuleBasedTransliterator
-     * RB_RULE string.  The ID is munged to remove the first '-' then appended
-     * to this String to obtain the class name.
-     */
-    private static final String RB_RULE_BASED_PREFIX =
-        "com.ibm.text.resources.TransliterationRule_";
-
-	private static final char RB_RULE_BASED_SEPARATOR = '_';
-
-    /**
-     * Resource bundle key for the RuleBasedTransliterator rule.
-     */
-    private static final String RB_RULE = "Rule";
-
-    /**
-     * Prefix string to identify UTF8 RuleBasedTransliterator resource.
-     */
-    private static final String RBT_UTF8_PREFIX = "Transliterator_";
-
-    /**
-     * Suffix string to identify UTF8 RuleBasedTransliterator resource.
-     */
-    private static final String RBT_UTF8_SUFFIX = ".utf8.txt";
 
     private static final String COPYRIGHT =
         "\u00A9 IBM Corporation 1999. All rights reserved.";
@@ -921,12 +849,11 @@ public abstract class Transliterator {
      */
     private static Transliterator internalGetInstance(String ID) {
         RuleBasedTransliterator.Data data = null;
-
         Object obj = cache.get(ID);
         if (obj == null) {
-            obj = composedCache.get(ID);
+            obj = internalCache.get(ID);
         }
-
+        
         if (obj != null) {
             if (obj instanceof RuleBasedTransliterator.Data) {
                 data = (RuleBasedTransliterator.Data) obj;
@@ -936,157 +863,90 @@ public abstract class Transliterator {
                     return (Transliterator) ((Class) obj).newInstance();
                 } catch (InstantiationException e) {
                 } catch (IllegalAccessException e2) {}
-            } else {
-                synchronized (cache) {
-                    boolean isReverse = (obj == REVERSE_RULE_BASED_PLACEHOLDER);
-                    boolean isComposed = false;
-                    String resourceName = ID;
-                    int i = ID.indexOf('-');
-                    if (i < 0) {
-                        i = ID.indexOf('~');
-                        if (i > 0) {
-                            isComposed = true;
-                        }
-                    }
-                    if (i > 0) {
-                        String IDLeft  = ID.substring(0, i);
-                        String IDRight = ID.substring(i+1);
-                        resourceName = isReverse ? (IDRight + RB_RULE_BASED_SEPARATOR + IDLeft)
-                                                 : (IDLeft + RB_RULE_BASED_SEPARATOR + IDRight);
-                    }
-
-                    ResourceReader r = null;
-                    try {
-                        r = new ResourceReader(RBT_UTF8_PREFIX + resourceName + RBT_UTF8_SUFFIX,
-                                               "UTF8");
-                    } catch (UnsupportedEncodingException e) {
-                        // This should never happen; UTF8 is always supported
-                    } catch (IllegalArgumentException e2) {
-                        // Can't load UTF8 file
-                    }
-                    
-                    if (r != null) {
-                        data = RuleBasedTransliterator.parse(r,
-                                                             isReverse
-                                                             ? RuleBasedTransliterator.REVERSE
-                                                             : RuleBasedTransliterator.FORWARD);
-                        
-                        if (isComposed) {
-                            composedCache.put(ID, data);
-                        } else {
-                            cache.put(ID, data);
-                        }
-                        // Fall through to construct transliterator from Data object.
-                    } else {
-                        // Unable to load the UTF8 file; try the resource
-                        // bundles.  Eventually, when we phase support for this
-                        // out, we can delete this clause.  Leave it in for now.
+            } else if (obj instanceof String) {
+                String spec = (String) obj;
+                if (spec.charAt(0) == 'a') {
+                    // alias
+                    Transliterator t = getInstance(spec.substring(1));
+                    t.ID = ID;
+                    return t;
+                } else {
+                    synchronized (cache) {
+                        // file, either forward or reverse
+                        int dir = (spec.charAt(0) == 'f') ? FORWARD:REVERSE;
+                        int colon = spec.indexOf(':', 1);
+                        String resourceName = spec.substring(1, colon);
+                        String encoding = spec.substring(colon+1);
+                        ResourceReader r = null;
                         try {
-                            ResourceBundle resource = ResourceBundle.getBundle(RB_RULE_BASED_PREFIX +
-                                                                               resourceName);
-                            
-                            // We allow the resource bundle to contain either an array
-                            // of rules, or a single rule string.
-                            String[] ruleArray;
-                            try {
-                                ruleArray = resource.getStringArray(RB_RULE);
-                            } catch (Exception e) {
-                                // This is a ClassCastException under JDK 1.1.8
-                                ruleArray = new String[] { resource.getString(RB_RULE) };
-                            }
-                            
-                            data = RuleBasedTransliterator.parse(ruleArray,
-                                                                 isReverse
-                                                                 ? RuleBasedTransliterator.REVERSE
-                                                                 : RuleBasedTransliterator.FORWARD);
-                            
-                            if (isComposed) {
-                                composedCache.put(ID, data);
-                            } else {
-                                cache.put(ID, data);
-                            }
+                            r = new ResourceReader(resourceName, encoding);
+                        } catch (UnsupportedEncodingException e) {
+                            // This should never happen; UTF8 is always supported
+                        } catch (IllegalArgumentException e2) {
+                            // Can't load UTF8 file
+                        }
+                        
+                        if (r != null) {
+                            data = RuleBasedTransliterator.parse(r, dir);
+                            cache.put(ID, data);
                             // Fall through to construct transliterator from Data object.
-                        } catch (MissingResourceException e) {}
+                        }
                     }
                 }
+            } else {
+                throw new RuntimeException("Bogus cache object");
             }
 
             if (data != null) {
                 return new RuleBasedTransliterator(ID, data, null);
             }
-
-        } else {
-            // If we didn't find anything in the main cache, then look
-            // for a composed transliterator.
-
-            int i = ID.indexOf('-');
-            if (i > 0) {
-                String left  = ID.substring(0, i);
-                String right = ID.substring(i+1);
-                Vector path = new Vector();
-                // Exclude composed paths of length 2; these result when we
-                // try to directly instantiate a composed transliterator component.
-                if (findComposedPath(left, right, path) && path.size() > 2) {
-                    Transliterator[] components = new Transliterator[path.size()-1];
-                    for (int j=0; j<path.size()-1; ++j) {
-                        String id = (String) path.elementAt(j) + "~" +
-                            path.elementAt(j+1);
-                        components[j] = internalGetInstance(id);
-                        if (components[j] == null) {
-                            return null;
-                        }
-                    }
-                    Transliterator t = new CompoundTransliterator(components);
-                    t.ID = ID; // Make getID() return correct ID
-                    return t;
-                }
-            }            
         }
 
         return null;
     }
 
-    /**
-     * Find a path through the composed transliterator graph.  This
-     * will not necessarily be the only path, or the shortest path.
-     * This is a simple recursive algorithm.
-     * 
-     * <p><code>composedGraph</code> is the links table.
-     * composedGraph.get(x) should return a String[] array, each of
-     * which is a node that x is connected to.
-     * @param start the starting node
-     * @param end the ending node
-     * @param path the result vector; should be empty on entry.  Upon
-     * success, it will contain successive nodes on the path from
-     * start to end, including start and end.  If false is returned,
-     * then path is unchanged.
-     * @return true if a path from start to end is found
-     */
-    private static boolean findComposedPath(String start, String end,
-                                            Vector path) {
-        path.addElement(start);
-        // composedGraph lists all links emanating from a node
-        String[] links = (String[]) composedGraph.get(start);
-        if (links != null) {
-            for (int i=0; i<links.length; ++i) {
-                if (links[i].equals(end)) {
-                    path.addElement(end);
-                    return true;
-                }
-            }
-            for (int i=0; i<links.length; ++i) {
-                // Avoid cycles: ignore links already on our path
-                if (path.indexOf(links[i]) >= 0) {
-                    continue;
-                }
-                if (findComposedPath(links[i], end, path)) {
-                    return true;
-                }
-            }
-        }
-        path.removeElementAt(path.size() - 1);    
-        return false;
-    }
+// Currently unused, but may be of use in the future.
+//    /**
+//     * Find a path through the composed transliterator graph.  This
+//     * will not necessarily be the only path, or the shortest path.
+//     * This is a simple recursive algorithm.
+//     * 
+//     * <p><code>composedGraph</code> is the links table.
+//     * composedGraph.get(x) should return a String[] array, each of
+//     * which is a node that x is connected to.
+//     * @param start the starting node
+//     * @param end the ending node
+//     * @param path the result vector; should be empty on entry.  Upon
+//     * success, it will contain successive nodes on the path from
+//     * start to end, including start and end.  If false is returned,
+//     * then path is unchanged.
+//     * @return true if a path from start to end is found
+//     */
+//    private static boolean findComposedPath(String start, String end,
+//                                            Vector path) {
+//        path.addElement(start);
+//        // composedGraph lists all links emanating from a node
+//        String[] links = (String[]) composedGraph.get(start);
+//        if (links != null) {
+//            for (int i=0; i<links.length; ++i) {
+//                if (links[i].equals(end)) {
+//                    path.addElement(end);
+//                    return true;
+//                }
+//            }
+//            for (int i=0; i<links.length; ++i) {
+//                // Avoid cycles: ignore links already on our path
+//                if (path.indexOf(links[i]) >= 0) {
+//                    continue;
+//                }
+//                if (findComposedPath(links[i], end, path)) {
+//                    return true;
+//                }
+//            }
+//        }
+//        path.removeElementAt(path.size() - 1);    
+//        return false;
+//    }
 
     /**
      * Registers a subclass of <code>Transliterator</code> with the
@@ -1149,47 +1009,62 @@ public abstract class Transliterator {
     }
 
     static {
-        ResourceBundle bundle = ResourceBundle.getBundle(RB_LOCALE_ELEMENTS);
-        
-        try {
-            String[] ruleBasedIDs = bundle.getStringArray(RB_RULE_BASED_IDS);
-            
-            cache = new Hashtable();
-            composedCache = new Hashtable();
-            composedGraph = new Hashtable();
-            displayNameCache = new Hashtable();
-            
-            for (int i=0; i<ruleBasedIDs.length; ++i) {
-                String ID = ruleBasedIDs[i];
-                int composedMark = ID.indexOf('~');
-                if (composedMark > 0) {
-                    String left = ID.substring(0, composedMark);
-                    String right = ID.substring(composedMark+1);
-                    String[] links = (String[]) composedGraph.get(left);
-                    if (links == null) {
-                        links = new String[] { right };
-                    } else {
-                        // We assume that most links are 1-1.  When
-                        // this assumption becomes false consider a
-                        // more efficient build procedure.
-                        String[] s = new String[links.length + 1];
-                        System.arraycopy(links, 0, s, 0, links.length);
-                        s[links.length] = right;
-                        links = s;
-                    }
-                    composedGraph.put(left, links);
-                    composedCache.put(ID, RULE_BASED_PLACEHOLDER);
+        // The display name cache starts out empty
+        displayNameCache = new Hashtable();
 
-                } else {
-                    boolean isReverse = (ID.charAt(0) == '*');
-                    if (isReverse) {
-                        ID = ID.substring(1);
-                    }
-                    cache.put(ID, isReverse ? REVERSE_RULE_BASED_PLACEHOLDER
-                                            : RULE_BASED_PLACEHOLDER);
-                }
+        // Read the index file and construct the cache/internalCache.
+        // Each line of the index file is either blank, a '#' comment,
+        // or a colon-delimited line.  In the latter case the first
+        // field is the ID being defined.  The second field is one of
+        // three strings: "file", "internal", or "alias".  Remaining
+        // fields vary according the value fo the second field.  See
+        // the index file itself for further documentation.
+        cache = new Hashtable();
+        internalCache = new Hashtable();
+        ResourceReader r = new ResourceReader("Transliterator_index.txt");
+        for (;;) {
+            String line = null;
+            try {
+                line = r.readLine();
+            } catch (java.io.IOException e) {}
+            if (line == null) {
+                break;
             }
-        } catch (MissingResourceException e) {}
+            // Skip over whitespace
+            int pos = 0;
+            while (pos < line.length() &&
+                   Character.isWhitespace(line.charAt(pos))) {
+                ++pos;
+            }
+            // Ignore blank lines and comments
+            if (pos == line.length() || line.charAt(pos) == '#') {
+                continue;
+            }
+            // Parse colon-delimited line
+            int colon = line.indexOf(':', pos);
+            String ID = line.substring(pos, colon);
+            pos = colon+1;
+            colon = line.indexOf(':', pos);
+            String type = line.substring(pos, colon);
+            pos = colon+1;
+
+            if (type.equals("file") || type.equals("internal")) {
+                // Rest of line is <resource>:<encoding>:<direction>
+                colon = line.indexOf(':', pos);
+                colon = line.indexOf(':', colon+1); // skip over 1 colon
+                String fileNameAndEncoding = line.substring(pos, colon);
+                pos = colon+1;
+                boolean isForward = line.substring(pos).equals("FORWARD");
+                Hashtable h = type.equals("internal") ? internalCache:cache;
+                h.put(ID, (isForward ? "f" : "r") + fileNameAndEncoding);
+            } else if (type.equals("alias")) {
+                // Rest of line is the <getInstanceArg>
+                cache.put(ID, "a" + line.substring(pos));
+            } else {
+                // Unknown type
+                throw new RuntimeException("Can't parse line: " + line);
+            }
+        }
 
         // Register non-rule-based transliterators
         registerClass(HangulJamoTransliterator._ID,
