@@ -18,6 +18,7 @@
 //
 //  8/18/97     helena      Added internal API documentation.
 // 08/03/98        erm            Synched with 1.2 version CollationElementIterator.java
+// 12/10/99      aliu          Ported Thai collation support from Java.
 //===============================================================================
 
 #ifndef COLEITR_H
@@ -28,9 +29,7 @@
 #include "tblcoll.h"
 #include "chariter.h"
 
-
 class Normalizer;
-class VectorOfInt;
 class VectorOfPToContractElement;
 
 /**
@@ -266,14 +265,42 @@ private:
      */
             int32_t             prevContractChar(   UChar     ch,
                                                     UErrorCode&  status);
+    
+    inline static bool_t isThaiPreVowel(UChar ch);
+                 
+    inline static bool_t isThaiBaseConsonant(UChar ch);
+                 
+    VectorOfInt* makeReorderedBuffer(UChar colFirst,
+                                     int32_t lastValue,
+                                     VectorOfInt* lastExpansion,
+                                     bool_t forward, UErrorCode& status);
 
     friend  class   RuleBasedCollator;
     static  const   int32_t         UNMAPPEDCHARVALUE;
 
             Normalizer*            text;       // owning 
 
-            VectorOfInt*        bufferAlias;
-            int32_t             swapOrder;  // for unmapped characters
+            VectorOfInt*        bufferAlias; // not owned
+
+    /**
+     * ownBuffer wants to be a subobject, not a pointer, but that
+     * means exposing the internal class VectorOfInt by #including the
+     * internal header "tables.h" -- not allowed!  ownBuffer is a
+     * fixed-size 2-element vector that is used to handle Thai
+     * collation; bufferAlias points to ownBuffer in some situations.
+     * [j159 - aliu]
+     */
+            VectorOfInt*        ownBuffer;
+
+    /**
+     * reorderBuffer is created on demand, so it doesn't want to be
+     * a subobject -- pointer is fine.  It is created and bufferAlias
+     * is set to it under certain conditions.  Once created, it is
+     * reused for the life of this object.  Because of the implementation
+     * of VectorOfInt, it grows monotonically.  [j159 - aliu]
+     */
+            VectorOfInt*        reorderBuffer;
+
             int32_t             expIndex;
             UnicodeString       key;
     const   RuleBasedCollator*  orderAlias;
@@ -323,6 +350,21 @@ inline bool_t
 CollationElementIterator::isIgnorable(int32_t order)
 {
     return (primaryOrder(order) == 0);
+}
+
+/**
+ * Determine if a character is a Thai vowel (which sorts after
+ * its base consonant).
+ */
+inline bool_t CollationElementIterator::isThaiPreVowel(UChar ch) {
+    return (ch >= (UChar)0x0E40) && (ch <= (UChar)0X0E44);
+}
+
+/**
+ * Determine if a character is a Thai base consonant
+ */
+inline bool_t CollationElementIterator::isThaiBaseConsonant(UChar ch) {
+    return (ch >= (UChar)0x0E01) && (ch <= (UChar)0x0E2E);
 }
 
 #endif

@@ -35,6 +35,7 @@
 #include "itercoll.h"
 //#include "capicoll.h"   // CollationCAPITest
 #include "tstnorm.h"
+#include "thcoll.h"
 
 void IntlTestCollator::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
 {
@@ -254,6 +255,15 @@ void IntlTestCollator::runIndexedTest( int32_t index, bool_t exec, char* &name, 
         if (exec) {
             logln("BasicNormalizerTest---"); logln("");
             BasicNormalizerTest test;
+            callTest( test, par );
+        }
+        break;
+
+    case 16:
+        name = "CollationThaiTest"; 
+        if (exec) {
+            logln("CollationThaiTest---"); logln("");
+            CollationThaiTest test;
             callTest( test, par );
         }
         break;
