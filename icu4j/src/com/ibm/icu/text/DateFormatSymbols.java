@@ -408,14 +408,24 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * Useful constant for defining timezone offsets.
      */
     static final int millisPerHour = 60*60*1000;
-
+    /**
+     * 
+     * @param desiredLocale
+     * @param type
+     * @draft ICU 3.0
+     */
 
     protected void initializeData(ULocale desiredLocale, String type)
     {
         CalendarData calData = new CalendarData(desiredLocale, type);
         initializeData(desiredLocale, calData);
     }
-    
+    /**
+     * 
+     * @param desiredLocale
+     * @param calData
+     * @draft ICU 3.0
+     */
     protected void initializeData(ULocale desiredLocale, CalendarData calData)
     {
 
