@@ -866,13 +866,13 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
 }
 
 static const char* localesToTest[] = {
-/*"ar", */"bg", "ca", "cs", "da",
-"el", "en_BE", /*"en_US_POSIX", */
+"ar", "bg", "ca", "cs", "da",
+"el", "en_BE", "en_US_POSIX", 
 "es", "et", "fi", "fr", "hi", 
 "hr", "hu", "is", "iw", "ja", 
 "ko", "lt", "lv", "mk", "mt", 
 "nb", "nn", "nn_NO", "pl", "ro", 
-"ru", /*"sh",*/ "sk", "sl", "sq", 
+"ru", /*"sh",*/ "sk", "sl", "sq", /* sh test is turned off until we do closure in contractions */
 "sr", "sv", "th", "tr", "uk", 
 "vi", "zh", "zh_TW"
 };
