@@ -66,7 +66,7 @@ public:
     void TestConformance();
     static NamePrepTransform* getInstance(UErrorCode& status);
     static NamePrepTransform* prep;
-    ~TestIDNA();
+    virtual ~TestIDNA();
 
 private:
     void testToASCII(const char* testName, TestFunc func);
