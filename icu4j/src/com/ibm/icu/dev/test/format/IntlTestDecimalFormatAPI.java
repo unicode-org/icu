@@ -1,7 +1,7 @@
 /*****************************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/IntlTestDecimalFormatAPI.java,v $ 
- * $Date: 2003/02/21 01:49:23 $ 
- * $Revision: 1.4 $
+ * $Date: 2003/05/29 17:52:28 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  **/
@@ -55,31 +55,40 @@ public class IntlTestDecimalFormatAPI extends com.ibm.icu.dev.test.TestFmwk
     public void testJB1871()
     {
         // problem 2
-        DecimalFormat dec = new DecimalFormat(",##0.0000");
-        double roundinginc = 0.0001;
         double number = 8.88885;
         String expected = "8.8889";
         
+        String pat = ",##0.0000";
+        DecimalFormat dec = new DecimalFormat(pat);
         dec.setRoundingMode(BigDecimal.ROUND_HALF_UP);
+        double roundinginc = 0.0001;
         dec.setRoundingIncrement(roundinginc);
-        if (!dec.format(number).equals(expected)) {
-            errln("Error formating " + number + ", expected " + expected);
+        String str = dec.format(number);
+        if (!str.equals(expected)) {
+            errln("Fail: " + number + " x \"" + pat + "\" = \"" +
+                  str + "\", expected \"" + expected + "\"");
         }   
-        
-        dec = new DecimalFormat(",##0.0001");
+
+        pat = ",##0.0001";
+        dec = new DecimalFormat(pat);
         dec.setRoundingMode(BigDecimal.ROUND_HALF_UP);
-        if (!dec.format(number).equals(expected)) {
-            errln("Error formating " + number + ", expected " + expected);
+        str = dec.format(number);
+        if (!str.equals(expected)) {
+            errln("Fail: " + number + " x \"" + pat + "\" = \"" +
+                  str + "\", expected \"" + expected + "\"");
         }  
         
         // testing 20 decimal places
-        dec = new DecimalFormat(",##0.00000000000000000001");
+        pat = ",##0.00000000000000000001";
+        dec = new DecimalFormat(pat);
         BigDecimal bignumber = new BigDecimal("8.888888888888888888885");
         expected = "8.88888888888888888889";
         
         dec.setRoundingMode(BigDecimal.ROUND_HALF_UP);
-        if (!dec.format(bignumber).equals(expected)) {
-            errln("Error formating " + bignumber + ", expected " + expected);
+        str = dec.format(bignumber); 
+        if (!str.equals(expected)) {
+            errln("Fail: " + bignumber + " x \"" + pat + "\" = \"" +
+                  str + "\", expected \"" + expected + "\"");
         }   
         
     }
