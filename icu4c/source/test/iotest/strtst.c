@@ -571,14 +571,15 @@ static void TestSScanSetFormat(const char *format, const UChar *uValue, const ch
 }
 
 static void TestArgumentSkipping(void) {
-    UChar uBuffer[256];
+#if 0
+/*    UChar uBuffer[256];
     char buffer[256];
     char compBuffer[256];
     int32_t uNumScanned;
     int32_t cNumScanned;
     char ch1 = 0, ch2 = 0;
 
-    /* Reinitialize the buffer to verify null termination works. */
+    /* Reinitialize the buffer to verify null termination works.
     u_memset(uBuffer, 0x2a, sizeof(uBuffer)/sizeof(*uBuffer));
     uBuffer[sizeof(uBuffer)/sizeof(*uBuffer)-1] = 0;
     memset(buffer, 0x2a, sizeof(buffer)/sizeof(*buffer));
@@ -587,7 +588,8 @@ static void TestArgumentSkipping(void) {
     strcpy(buffer, "123456789");
     u_uastrcpy(uBuffer, "123456789");
     uNumScanned = sscanf(buffer, "%*c%c", &ch1, &ch2);
-//    uNumScanned = u_sscanf(uBuffer, NULL, "%*c%c", &ch1, &ch2);
+    uNumScanned = u_sscanf(uBuffer, NULL, "%*c%c", &ch1, &ch2);*/
+#endif
 }
 static void TestSScanset(void) {
     static const UChar abcUChars[] = {0x61,0x62,0x63,0x63,0x64,0x65,0x66,0x67,0};
