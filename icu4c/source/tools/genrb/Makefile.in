@@ -75,7 +75,7 @@ all-local: $(TARGET) $(MAN_FILES)
 
 install-local: all-local install-man
 	$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
-	$(SHELL) $(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
+	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
 
 <dist-local:
 
@@ -101,7 +101,7 @@ $(TARGET) : $(OBJECTS)
 # man page
 install-man: $(MAN_FILES)
 	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man$(SECTION)
-	$(SHELL) $(INSTALL_DATA) $< $(DESTDIR)$(mandir)/man$(SECTION)
+	$(INSTALL_DATA) $< $(DESTDIR)$(mandir)/man$(SECTION)
 
 $(TARGET).$(SECTION): $(srcdir)/$(TARGET).$(SECTION).in
 	cd $(top_builddir) \
