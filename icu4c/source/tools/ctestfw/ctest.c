@@ -42,6 +42,7 @@ typedef enum { RUNTESTS, SHOWTESTS } TestMode;
 
 static char ERROR_LOG[MAX_TEST_LOG][MAXTESTNAME];
 
+/* Local prototypes */
 static TestNode* addTestNode( TestNode *root, const char *name );
 
 static TestNode* createTestNode();
@@ -57,20 +58,33 @@ static void getNextLevel( const char* name,
 static void iterateTestsWithLevel( const TestNode *root, int len,
                    const TestNode** list,
                    TestMode mode);
-/* If we need to make the framework multi-thread safe
-   we need to pass around the following 3 vars
-*/
 
 static void help ( const char *argv0 );
 
+/**
+ * Do the work of logging an error. Doesn't increase the error count.
+ *
+ * @prefix optional prefix prepended to message, or NULL.
+ * @param pattern printf style pattern
+ * @param ap vprintf style arg list
+ */
+static void vlog_err(const char *prefix, const char *pattern, va_list ap);
+static void vlog_info(const char *prefix, const char *pattern, va_list ap);
+static void vlog_verbose(const char *prefix, const char *pattern, va_list ap);
+
+/* If we need to make the framework multi-thread safe
+   we need to pass around the following vars
+*/
 static int ERRONEOUS_FUNCTION_COUNT = 0;
 static int ERROR_COUNT = 0; /* Count of errors from all tests. */
+static int DATA_ERROR_COUNT = 0; /* count of data related errors or warnings */
 static int INDENT_LEVEL = 0;
 int REPEAT_TESTS_INIT = 0; /* Was REPEAT_TESTS initialized? */
 int REPEAT_TESTS = 1; /* Number of times to run the test */
 int VERBOSITY = 0; /* be No-verbose by default */
 int ERR_MSG =1; /* error messages will be displayed by default*/
 int QUICK = 1;  /* Skip some of the slower tests? */
+int WARN_ON_MISSING_DATA = 0; /* Reduce data errs to warnings? */
 /*-------------------------------------------*/
 
 /* strncmp that also makes sure there's a \0 at s2[0] */
@@ -319,9 +333,18 @@ void runTests ( const TestNode *root )
     }
     else
     {
-        log_info("\n[All tests passed successfully...]\n");
+      log_info("\n[All tests passed successfully...]\n");
     }
 
+    if(DATA_ERROR_COUNT) {
+      if(WARN_ON_MISSING_DATA==0) {
+        log_info("\t*Note* some errors are data-loading related. If the data used is not the "
+                 "\tstock ICU data (i.e some have been added or removed), consider using"
+                 "\tthe '-w' option to turn these errors into warnings.\n");
+      } else {
+        log_info("\t*WARNING* some data-loading errors were ignored by the -w option.\n");
+      }
+    }
 }
 
 const char* getTestName(void)
@@ -390,6 +413,45 @@ const TestNode* getTest(const TestNode* root, const char* name)
     }
 }
 
+void vlog_err(const char *prefix, const char *pattern, va_list ap)
+{
+    if( ERR_MSG == FALSE){
+        return;
+    }
+    fprintf(stderr, "%-*s", INDENT_LEVEL," " );
+    if(prefix) {
+      fputs(prefix, stderr);
+    }
+    vfprintf(stderr, pattern, ap);
+    fflush(stderr);
+    va_end(ap);
+}
+
+void vlog_info(const char *prefix, const char *pattern, va_list ap)
+{
+    fprintf(stdout, "%-*s", INDENT_LEVEL," " );
+    if(prefix) {
+      fputs(prefix, stderr);
+    }
+    vfprintf(stdout, pattern, ap);
+    fflush(stdout);
+    va_end(ap);
+}
+
+void vlog_verbose(const char *prefix, const char *pattern, va_list ap)
+{
+    if ( VERBOSITY == FALSE )
+        return;
+
+    fprintf(stdout, "%-*s", INDENT_LEVEL," " );
+    if(prefix) {
+      fputs(prefix, stderr);
+    }
+    vfprintf(stdout, pattern, ap);
+    fflush(stdout);
+    va_end(ap);
+}
+
 void log_err(const char* pattern, ...)
 {
     va_list ap;
@@ -400,14 +462,8 @@ void log_err(const char* pattern, ...)
          */
         ++ERROR_COUNT;
     }
-    if( ERR_MSG == FALSE){
-        return;
-    }
     va_start(ap, pattern);
-    fprintf(stderr, "%-*s", INDENT_LEVEL," " );
-    vfprintf(stderr, pattern, ap);
-    fflush(stderr);
-    va_end(ap);
+    vlog_err(NULL, pattern, ap);
 }
 
 void log_info(const char* pattern, ...)
@@ -415,26 +471,35 @@ void log_info(const char* pattern, ...)
     va_list ap;
 
     va_start(ap, pattern);
-    fprintf(stdout, "%-*s", INDENT_LEVEL," " );
-    vfprintf(stdout, pattern, ap);
-    fflush(stdout);
-    va_end(ap);
+    vlog_info(NULL, pattern, ap);
 }
 
 void log_verbose(const char* pattern, ...)
 {
     va_list ap;
 
-    if ( VERBOSITY == FALSE )
-        return;
-
     va_start(ap, pattern);
-    fprintf(stdout, "%-*s", INDENT_LEVEL," " );
-    vfprintf(stdout, pattern, ap);
-    fflush(stdout);
-    va_end(ap);
+    vlog_verbose(NULL, pattern, ap);
 }
 
+
+void log_data_err(const char* pattern, ...)
+{
+  va_list ap;
+  va_start(ap, pattern);
+
+  ++DATA_ERROR_COUNT; /* for informational message at the end */
+
+  if(WARN_ON_MISSING_DATA == 0) {
+    /* Fatal error. */
+    if(strchr(pattern, '\n') != NULL) {
+        ++ERROR_COUNT;
+    }
+    vlog_err(NULL, pattern, ap); /* no need for prefix in default case */
+  } else {
+    vlog_info("[Data] ", pattern, ap); 
+  }
+}
 
 
 int processArgs(const TestNode* root,
@@ -493,6 +558,10 @@ int processArgs(const TestNode* root,
         {
             QUICK = FALSE;
         }
+        else if (strcmp( argv[i], "-w") ==0)
+        {
+            WARN_ON_MISSING_DATA = TRUE;
+        }
         else if(strcmp( argv[i], "-n") == 0 || strcmp( argv[i], "-no_err_msg") == 0)
         {
             ERR_MSG = FALSE;
@@ -550,6 +619,8 @@ static void help ( const char *argv0 )
     printf("    -v To turn ON verbosity(same as -verbose)\n");
     printf("    -h To print this message\n");
     printf("    -n To turn OFF printing error messages\n");
+    printf("    -w Don't fail on data-loading errs, just warn. Useful if\n"
+           "        user has reduced/changed the common set of ICU data \n");
     printf("    -no_err_msg (same as -n) \n");
     printf("    -r repeat tests after calling u_cleanup \n");
     printf("    -[/subtest] To run a subtest \n");

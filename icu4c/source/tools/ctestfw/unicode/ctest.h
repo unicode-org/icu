@@ -88,6 +88,16 @@ T_CTEST_EXPORT_API extern int ERR_MSG;
 T_CTEST_EXPORT_API extern int QUICK;
 
 /**
+ * Set this to nonzero to warn (not error) on missing data. 
+ * Otherwise, zero will cause an error to be propagated when data is not available.
+ * Affects the behavior of log_dataerr.
+ *
+ * @see log_data_err
+ * @internal Internal APIs for testing purpose only
+ */
+T_CTEST_EXPORT_API extern int WARN_ON_MISSING_DATA;
+
+/**
  * Show the names of all nodes.
  *
  * @param root Subtree of tests.
@@ -154,6 +164,15 @@ T_CTEST_API void log_info(const char* pattern, ...);
  * @internal Internal APIs for testing purpose only
  */
 T_CTEST_API void log_verbose(const char* pattern, ...);
+
+/**
+ * Log an error message concerning missing data. (printf style)
+ * If WARN_ON_MISSING_DATA is nonzero, this will case a log_info (warning) to be
+ * printed, but if it is zero this will produce an error (log_err).
+ * @param pattern printf-style format string
+ * @internal Internal APIs for testing purpose only
+ */
+T_CTEST_API void log_data_err(const char *pattern, ...);
 
 /**
  * Processes the command line arguments.
