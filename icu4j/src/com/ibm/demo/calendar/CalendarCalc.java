@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/demo/calendar/Attic/CalendarCalc.java,v $ 
- * $Date: 2000/03/31 18:49:02 $ 
- * $Revision: 1.5 $
+ * $Date: 2000/04/26 18:40:15 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -246,8 +246,10 @@ class CalendarCalcFrame extends Frame
         {
             // Make the locale popup menus
             localeMenu= new Choice();
-
+            Locale defaultLocale = Locale.getDefault();
+            int bestMatch = -1, thisMatch = -1;
             int selectMe = 0;
+            
             for (int i = 0; i < locales.length; i++) {
                 if (i > 0 && locales[i].getLanguage().equals(locales[i-1].getLanguage()) ||
                     i < locales.length - 1 &&
@@ -257,10 +259,15 @@ class CalendarCalcFrame extends Frame
                 } else {
                     localeMenu.addItem( locales[i].getDisplayLanguage());
                 }
-                if (locales[i].getLanguage().equals(Locale.getDefault().getLanguage())) {
+                
+                thisMatch = DemoUtility.compareLocales(locales[i], defaultLocale);
+                
+                if (thisMatch >= bestMatch) {
+                    bestMatch = thisMatch;
                     selectMe = i;
                 }
             }
+            
             localeMenu.setBackground(DemoUtility.choiceColor);
             localeMenu.select(selectMe);
 

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/demo/calendar/Attic/CalendarFrame.java,v $ 
- * $Date: 2000/03/31 18:49:02 $ 
- * $Revision: 1.5 $
+ * $Date: 2000/04/26 18:40:15 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -167,7 +167,10 @@ class CalendarFrame extends Frame
         Panel displayPanel = new Panel();
         {
             displayMenu = new Choice();
-            int selectMe = 1;
+            Locale defaultLocale = Locale.getDefault();
+            int bestMatch = -1, thisMatch = -1;
+            int selectMe = 0;
+            
             for (int i = 0; i < locales.length; i++) {
                 if (i > 0 &&
                         locales[i].getLanguage().equals(locales[i-1].getLanguage()) ||
@@ -179,10 +182,14 @@ class CalendarFrame extends Frame
                     displayMenu.addItem( locales[i].getDisplayLanguage());
                 }
 
-                if (locales[i].getLanguage().equals(Locale.getDefault().getLanguage())) {
+                thisMatch = DemoUtility.compareLocales(locales[i], defaultLocale);
+                
+                if (thisMatch >= bestMatch) {
+                    bestMatch = thisMatch;
                     selectMe = i;
                 }
             }
+            
             displayMenu.setBackground(DemoUtility.choiceColor);
             displayMenu.select(selectMe);
 

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/impl/DemoUtility.java,v $ 
- * $Date: 2000/03/10 03:47:42 $ 
- * $Revision: 1.2 $
+ * $Date: 2000/04/26 18:40:15 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -90,6 +90,32 @@ public class DemoUtility
         if (foo.equals(newText)) return;
         area.setText(newText);
     }
+    
+    /**
+     * Compares two locals. Return value is negative
+     * if they're different, and more positive the more
+     * fields that match.
+     */
+     
+    public static int compareLocales(Locale l1, Locale l2)
+    {
+        int result = -1;
+        
+        if (l1.getLanguage().equals(l2.getLanguage())) {
+            result += 1;
+            
+            if (l1.getCountry().equals(l2.getCountry())) {
+                result += 1;
+                
+                if (l1.getVariant().equals(l2.getVariant())) {
+                    result += 1;
+                }
+            }
+        }
+        
+        return result;
+    }
+    
     /**
      * Get the G7 locale list for demos.
      */
