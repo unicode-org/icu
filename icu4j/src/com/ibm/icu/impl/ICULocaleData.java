@@ -4,18 +4,10 @@
 
 package com.ibm.icu.impl;
 
-import java.io.InputStream;
-import java.io.IOException;
-import java.net.JarURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-import java.util.jar.JarFile;
+
 
 /**
  * Provides information about and access to resource bundles in the
@@ -134,6 +126,49 @@ public class ICULocaleData {
 	return null;
     }
 
+    /**
+     * Get a resource bundle from the lookup chain.
+     */
+    public static ResourceBundle getResourceBundle(String[] packages, String bundleName, String localeName) {
+	    Locale locale = LocaleUtility.getLocaleFromName(localeName);
+        if (locale == null) {
+	        locale = Locale.getDefault();
+	    }
+	    for (int i = 0; i < packages.length; ++i) {
+	        try {
+		        String path = packages[i] + "." + bundleName;
+		        if (debug) System.out.println("calling instantiateBundle: " + path + "_" + locale);
+		        ResourceBundle rb = instantiateBundle(path, locale);
+		        return rb;
+	        } 
+	        catch (MissingResourceException e) {
+	           if (debug) System.out.println(bundleName + "_" + locale + " not found in " + packages[i]);
+	        }
+	    }
+	    return null;
+    }
+
+    /**
+     * Get a resource bundle from the lookup chain.
+     */
+    public static ResourceBundle getResourceBundle(String packageName, String bundleName, String localeName) {
+        Locale locale = LocaleUtility.getLocaleFromName(localeName);
+        if (locale == null) {
+            locale = Locale.getDefault();
+        }
+        
+        try {
+            String path = packageName + "." + bundleName;
+            if (debug) System.out.println("calling instantiateBundle: " + path + "_" + locale);
+            ResourceBundle rb = instantiateBundle(path, locale);
+            return rb;
+        } 
+        catch (MissingResourceException e) {
+           if (debug) System.out.println(bundleName + "_" + locale + " not found in " + packageName);
+        }
+       
+        return null;
+    }    
     /**
      * Get a resource bundle from the resource bundle path.  Unlike getResourceBundle, this
      * returns an 'unparented' bundle that exactly matches the bundle name and locale name.
