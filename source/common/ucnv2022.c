@@ -152,9 +152,6 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP(UConverterToUnicodeArgs* args,
 U_CFUNC void UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeArgs* args, 
                                                             UErrorCode* err);
 
-U_CFUNC UChar32 UConverter_getNextUChar_ISO_2022_JP (UConverterToUnicodeArgs * args,
-                                                     UErrorCode * err);
-
 /***************** ISO-2022-KR ********************************/
 U_CFUNC void UConverter_fromUnicode_ISO_2022_KR(UConverterFromUnicodeArgs* args, 
                                                 UErrorCode* err);
@@ -168,9 +165,6 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_KR(UConverterToUnicodeArgs* args,
 U_CFUNC void UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterToUnicodeArgs* args, 
                                                             UErrorCode* err);
 
-U_CFUNC UChar32 UConverter_getNextUChar_ISO_2022_KR (UConverterToUnicodeArgs * args,
-                                                     UErrorCode * err);
-
 /***************** ISO-2022-CN ********************************/
 U_CFUNC void UConverter_fromUnicode_ISO_2022_CN(UConverterFromUnicodeArgs* args, 
                                                 UErrorCode* err);
@@ -183,9 +177,6 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN(UConverterToUnicodeArgs* args,
 
 U_CFUNC void UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeArgs* args, 
                                                             UErrorCode* err);
-
-U_CFUNC UChar32 UConverter_getNextUChar_ISO_2022_CN (UConverterToUnicodeArgs * args,
-                                                     UErrorCode * err);
 
 #define ESC_2022 0x1B /*ESC*/
 
@@ -416,7 +407,7 @@ static const UConverterImpl _ISO2022JPImpl={
     UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC,
     UConverter_fromUnicode_ISO_2022_JP,
     UConverter_fromUnicode_ISO_2022_JP_OFFSETS_LOGIC,
-    UConverter_getNextUChar_ISO_2022_JP,
+    NULL,
     
     NULL,
     _ISO2022getName
@@ -447,7 +438,7 @@ static const UConverterImpl _ISO2022KRImpl={
     UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC,
     UConverter_fromUnicode_ISO_2022_KR,
     UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC,
-    UConverter_getNextUChar_ISO_2022_KR,
+    NULL,
     
     NULL,
     _ISO2022getName
@@ -479,7 +470,7 @@ static const UConverterImpl _ISO2022CNImpl={
     UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC,
     UConverter_fromUnicode_ISO_2022_CN,
     UConverter_fromUnicode_ISO_2022_CN_OFFSETS_LOGIC,
-    UConverter_getNextUChar_ISO_2022_CN,
+    NULL,
     
     NULL,
     _ISO2022getName
@@ -1899,43 +1890,6 @@ static void concatChar(UConverterFromUnicodeArgs* args, int32_t *targetIndex, in
 
 /*************** to unicode *******************/
 
-/*
-* This is a simple, interim implementation of GetNextUChar()
-* that allows to concentrate on testing one single implementation
-* of the ToUnicode conversion before it gets copied to
-* multiple version that are then optimized for their needs
-* (with vs. without offsets and getNextUChar).
-*/
-
-U_CFUNC UChar32
-UConverter_getNextUChar_ISO_2022_JP(UConverterToUnicodeArgs *pArgs,
-                                    UErrorCode *pErrorCode) {
-    UChar buffer[UTF_MAX_CHAR_LENGTH];
-    const char *realLimit=pArgs->sourceLimit;
-    
-    pArgs->target=buffer;
-    pArgs->targetLimit=buffer+UTF_MAX_CHAR_LENGTH;
-    
-    while(pArgs->source<realLimit) {
-        /* feed in one byte at a time to make sure to get only one character out */
-        pArgs->sourceLimit=pArgs->source+1;
-        pArgs->flush= (UBool)(pArgs->sourceLimit==realLimit);
-        UConverter_toUnicode_ISO_2022_JP(pArgs, pErrorCode);
-        if(U_FAILURE(*pErrorCode) && *pErrorCode!=U_BUFFER_OVERFLOW_ERROR) {
-            return 0xffff;
-        } else if(pArgs->target!=buffer) {
-            if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
-                *pErrorCode=U_ZERO_ERROR;
-            }
-            return ucnv_getUChar32KeepOverflow(pArgs->converter, buffer, pArgs->target-buffer);
-        }
-    }
-    
-    /* no output because of empty input or only state changes and skipping callbacks */
-    *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
-    return 0xffff;
-}
-
 /****************************************************************************
  * Recognized escape sequences are
  * <ESC>(B  ASCII      
@@ -3241,43 +3195,6 @@ END_LOOP:
 
     args->target = myTarget;
     args->source = mySource;
-}
-
-/*
-* This is a simple, interim implementation of GetNextUChar()
-* that allows to concentrate on testing one single implementation
-* of the ToUnicode conversion before it gets copied to
-* multiple version that are then optimized for their needs
-* (with vs. without offsets and getNextUChar).
-*/
-
-U_CFUNC UChar32
-UConverter_getNextUChar_ISO_2022_KR(UConverterToUnicodeArgs *pArgs,
-                                    UErrorCode *pErrorCode) {
-    UChar buffer[UTF_MAX_CHAR_LENGTH];
-    const char *realLimit=pArgs->sourceLimit;
-    
-    pArgs->target=buffer;
-    pArgs->targetLimit=buffer+UTF_MAX_CHAR_LENGTH;
-    
-    while(pArgs->source<realLimit) {
-        /* feed in one byte at a time to make sure to get only one character out */
-        pArgs->sourceLimit=pArgs->source+1;
-        pArgs->flush= (UBool)(pArgs->sourceLimit==realLimit);
-        UConverter_toUnicode_ISO_2022_KR(pArgs, pErrorCode);
-        if(U_FAILURE(*pErrorCode) && *pErrorCode!=U_BUFFER_OVERFLOW_ERROR) {
-            return 0xffff;
-        } else if(pArgs->target!=buffer) {
-            if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
-                *pErrorCode=U_ZERO_ERROR;
-            }
-            return ucnv_getUChar32KeepOverflow(pArgs->converter, buffer, pArgs->target-buffer);
-        }
-    }
-    
-    /* no output because of empty input or only state changes and skipping callbacks */
-    *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
-    return 0xffff;
 }
 
 /*************************** END ISO2022-KR *********************************/
@@ -4778,41 +4695,4 @@ END_LOOP:
 
     args->target = myTarget;
     args->source = mySource;
-}
-
-/*
-* This is a simple, interim implementation of GetNextUChar()
-* that allows to concentrate on testing one single implementation
-* of the ToUnicode conversion before it gets copied to
-* multiple version that are then optimized for their needs
-* (with vs. without offsets and getNextUChar).
-*/
-
-U_CFUNC UChar32
-UConverter_getNextUChar_ISO_2022_CN(UConverterToUnicodeArgs *pArgs,
-                                    UErrorCode *pErrorCode) {
-    UChar buffer[UTF_MAX_CHAR_LENGTH];
-    const char *realLimit=pArgs->sourceLimit;
-    
-    pArgs->target=buffer;
-    pArgs->targetLimit=buffer+UTF_MAX_CHAR_LENGTH;
-    
-    while(pArgs->source<realLimit) {
-        /* feed in one byte at a time to make sure to get only one character out */
-        pArgs->sourceLimit=pArgs->source+1;
-        pArgs->flush= (UBool)(pArgs->sourceLimit==realLimit);
-        UConverter_toUnicode_ISO_2022_CN(pArgs, pErrorCode);
-        if(U_FAILURE(*pErrorCode) && *pErrorCode!=U_BUFFER_OVERFLOW_ERROR) {
-            return 0xffff;
-        } else if(pArgs->target!=buffer) {
-            if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
-                *pErrorCode=U_ZERO_ERROR;
-            }
-            return ucnv_getUChar32KeepOverflow(pArgs->converter, buffer, pArgs->target-buffer);
-        }
-    }
-    
-    /* no output because of empty input or only state changes and skipping callbacks */
-    *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
-    return 0xffff;
 }
