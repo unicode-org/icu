@@ -6,6 +6,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/dcfmtsym.h"
+#include "unicode/decimfmt.h"
 #include "unicode/unum.h"
 #include "tsdcfmsy.h"
 
@@ -149,5 +150,34 @@ void IntlTestDecimalFormatSymbols::testSymbols(char *par)
                   UnicodeString((UChar32)(0x10330 + i)));
         }
     }
+   
+   
+    DecimalFormatSymbols sym(Locale::US, status);
 
+    UnicodeString customDecSeperator("S");
+    Verify(34.5, (UnicodeString)"00.00", sym, (UnicodeString)"34.50");
+    sym.setSymbol((DecimalFormatSymbols::ENumberFormatSymbol)0, customDecSeperator);
+    Verify(34.5, (UnicodeString)"00.00", sym, (UnicodeString)"34S50");
+    sym.setSymbol((DecimalFormatSymbols::ENumberFormatSymbol)3, (UnicodeString)"P");
+    Verify(34.5, (UnicodeString)"00 %", sym, (UnicodeString)"3450 P");
+    sym.setSymbol((DecimalFormatSymbols::ENumberFormatSymbol)8, (UnicodeString)"D");
+    Verify(34.5, CharsToUnicodeString("\\u00a4##.##"), sym, (UnicodeString)"D34.5");
+    sym.setSymbol((DecimalFormatSymbols::ENumberFormatSymbol)1, (UnicodeString)"|");
+    Verify(3456.5, (UnicodeString)"0,000.##", sym, (UnicodeString)"3|456S5");
+    
+}
+void IntlTestDecimalFormatSymbols::Verify(double value, UnicodeString& pattern, DecimalFormatSymbols sym, UnicodeString& expected){
+    UErrorCode status = U_ZERO_ERROR;
+    DecimalFormat *df = new DecimalFormat(pattern, sym, status);
+    if(U_FAILURE(status)){
+        errln("ERROR: construction of decimal format failed");
+    }
+    UnicodeString buffer;
+    FieldPosition pos(FieldPosition::DONT_CARE);
+    buffer = df->format(value, buffer, pos);
+    if(buffer != expected){
+        errln((UnicodeString)"ERROR: format failed after setSymbols()\n Expected" + 
+            expected + ", Got " + buffer);
+    }
+    delete df;
 }
