@@ -1591,6 +1591,20 @@ public:
   /**
    * Set the text in the UnicodeString object to the characters
    * in <TT>srcText</TT> in the range 
+   * [<TT>srcStart</TT>, <TT>srcText.length()</TT>).
+   * <TT>srcText</TT> is not modified.
+   * @param srcText the source for the new characters
+   * @param srcStart the offset into <TT>srcText</TT> where new characters
+   * will be obtained
+   * @return a reference to this
+   * @draft ICU2.2
+   */
+  inline UnicodeString& setTo(const UnicodeString& srcText, 
+               int32_t srcStart);
+
+  /**
+   * Set the text in the UnicodeString object to the characters
+   * in <TT>srcText</TT> in the range 
    * [<TT>srcStart</TT>, <TT>srcStart + srcLength</TT>).
    * <TT>srcText</TT> is not modified.
    * @param srcText the source for the new characters
@@ -2600,6 +2614,23 @@ public:
    * @stable
    */
   UnicodeString(const UnicodeString& that);
+
+  /**
+   * 'Substring' constructor from tail of source string.
+   * @param src The UnicodeString object to copy.
+   * @param srcStart The offset into <tt>src</tt> at which to start copying.
+   * @draft ICU2.2
+   */
+  UnicodeString(const UnicodeString& src, int32_t srcStart);
+
+  /**
+   * 'Substring' constructor from subrange of source string.
+   * @param src The UnicodeString object to copy.
+   * @param srcStart The offset into <tt>src</tt> at which to start copying.
+   * @param srcLength The number of characters from <tt>src</tt> to copy.
+   * @draft ICU2.2
+   */
+  UnicodeString(const UnicodeString& src, int32_t srcStart, int32_t srcLength);
 
   /** Destructor. 
    * @stable
@@ -3632,6 +3663,11 @@ UnicodeString::setTo(const UnicodeString& srcText,
              int32_t srcStart, 
              int32_t srcLength)
 { return doReplace(0, fLength, srcText, srcStart, srcLength); }
+
+inline UnicodeString& 
+UnicodeString::setTo(const UnicodeString& srcText, 
+             int32_t srcStart)
+{ return doReplace(0, fLength, srcText, srcStart, srcText.fLength - srcStart); }
 
 inline UnicodeString& 
 UnicodeString::setTo(const UnicodeString& srcText)

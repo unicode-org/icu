@@ -321,6 +321,29 @@ UnicodeString::UnicodeString(const UnicodeString& that)
   *this = that;
 }
 
+UnicodeString::UnicodeString(const UnicodeString& that,
+							 int32_t srcStart)
+  : Replaceable(),
+    fLength(0),
+    fCapacity(US_STACKBUF_SIZE),
+    fArray(fStackBuffer),
+    fFlags(kShortString)
+{
+  setTo(that, srcStart);
+}
+
+UnicodeString::UnicodeString(const UnicodeString& that,
+							 int32_t srcStart,
+							 int32_t srcLength)
+  : Replaceable(),
+    fLength(0),
+    fCapacity(US_STACKBUF_SIZE),
+    fArray(fStackBuffer),
+    fFlags(kShortString)
+{
+  setTo(that, srcStart, srcLength);
+}
+
 //========================================
 // array allocation
 //========================================
