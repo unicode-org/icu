@@ -25,6 +25,34 @@ TransliterationRuleData::TransliterationRuleData(UErrorCode& status) :
     setVariablesLength = 0;
 }
 
+TransliterationRuleData::TransliterationRuleData(const TransliterationRuleData& other) :
+    ruleSet(other.ruleSet, other),
+    setVariablesBase(other.setVariablesBase),
+    setVariablesLength(other.setVariablesLength),
+    segmentBase(other.segmentBase) {
+
+    UErrorCode status = U_ZERO_ERROR;
+    variableNames = new Hashtable(status);
+    if (U_SUCCESS(status)) {
+        variableNames->setValueDeleter(uhash_deleteUnicodeString);
+        int32_t pos = -1;
+        const UHashElement *e;
+        while ((e = other.variableNames->nextElement(pos)) != 0) {
+            UnicodeString* value =
+                new UnicodeString(*(const UnicodeString*)e->value);
+            variableNames->put(*(UnicodeString*)e->key, value, status);
+        }
+    }
+
+    setVariables = 0;
+    if (other.setVariables != 0) {
+        setVariables = new UnicodeSet*[setVariablesLength];
+        for (int32_t i=0; i<setVariablesLength; ++i) {
+            setVariables[i] = new UnicodeSet(*other.setVariables[i]);
+        }
+    }    
+}
+
 TransliterationRuleData::~TransliterationRuleData() {
     delete variableNames;
     if (setVariables != 0) {

@@ -10,6 +10,7 @@
 #include "rbt_set.h"
 #include "rbt_rule.h"
 #include "unicode/unistr.h"
+#include "cmemory.h"
 
 /* Note: There was an old implementation that indexed by first letter of
  * key.  Problem with this is that key may not have a meaningful first
@@ -32,6 +33,23 @@ TransliterationRuleSet::TransliterationRuleSet() {
     maxContextLength = 0;
     ruleVector = new UVector();
     rules = NULL;
+}
+
+/**
+ * Copy constructor.  We assume that the ruleset being copied
+ * has already been frozen.
+ */
+TransliterationRuleSet::TransliterationRuleSet(const TransliterationRuleSet& other,
+                                               const TransliterationRuleData& data) :
+    ruleVector(0),
+    maxContextLength(other.maxContextLength) {
+
+    uprv_memcpy(index, other.index, sizeof(index));
+    int32_t len = index[256]; // see freeze()
+    rules = new TransliterationRule*[len];
+    for (int32_t i=0; i<len; ++i) {
+        rules[i] = new TransliterationRule(*other.rules[i], data);
+    }
 }
 
 /**
