@@ -7,7 +7,7 @@
 #include "unicode/utypes.h"
 #include "unicode/decimfmt.h"
 #include "tsnmfmt.h"
-
+#include <float.h>
 
 static const char * formattableTypeName(Formattable::Type t)
 {
@@ -87,6 +87,54 @@ IntlTestNumberFormat::testLocale(/* char* par, */const Locale& locale, const Uni
     testFormat(/* par */);
 }
 
+double IntlTestNumberFormat::randDouble()
+{
+    // Assume 8-bit (or larger) rand values.  Also assume
+    // that the system rand() function is very poor, which it always is.
+    // Call srand(currentTime) in intltest to make it truly random.
+    double d;
+    uint32_t i;
+    char* poke = (char*)&d;
+    do {
+        for (i=0; i < sizeof(double); ++i)
+        {
+            poke[i] = (char)(rand() & 0xFF);
+        }
+    } while (uprv_isNaN(d) || uprv_isInfinite(d)
+        || !((-DBL_MAX < d && d < DBL_MAX) || (d < -DBL_MIN && DBL_MIN < d)));
+
+    return d;
+}
+
+/*
+ * Return a random uint32_t
+ **/
+uint32_t IntlTestNumberFormat::randLong()
+{
+    // Assume 8-bit (or larger) rand values.  Also assume
+    // that the system rand() function is very poor, which it always is.
+    // Call srand(currentTime) in intltest to make it truly random.
+    uint32_t d;
+    uint32_t i;
+    char* poke = (char*)&d;
+    for (i=0; i < sizeof(uint32_t); ++i)
+    {
+        poke[i] = (char)(rand() & 0xFF);
+    }
+    return d;
+}
+
+
+/* Make sure that we don't get something too large and multiply into infinity. */
+double IntlTestNumberFormat::getSafeDouble(double smallerThanMax) {
+    double it;
+    do {
+        it = randDouble();
+    } while (-DBL_MAX/smallerThanMax > it || it > DBL_MAX/smallerThanMax);
+    it *= smallerThanMax/10.0;
+    return it;
+}
+
 void
 IntlTestNumberFormat::testFormat(/* char* par */)
 {
@@ -112,7 +160,7 @@ IntlTestNumberFormat::testFormat(/* char* par */)
     DecimalFormat *s = (DecimalFormat*)fFormat;
     logln((UnicodeString)"  Pattern " + s->toPattern(str));
 
-#ifdef OS390
+#if defined(OS390) || defined(OS400)
     tryIt(-2.02147304840132e-68);
     tryIt(3.88057859588817e-68); // Test rounding when only some digits are shown because exponent is close to -maxfrac
     tryIt(-2.64651110485945e+65); // Overflows to +INF when shown as a percent
@@ -182,19 +230,22 @@ IntlTestNumberFormat::testFormat(/* char* par */)
         tryIt(d);
     }
 
-    double it = randDouble() * 10000;
+    double it = getSafeDouble(100000.0);
+
     tryIt(0.0);
     tryIt(it);
     tryIt((int32_t)0);
-    tryIt((int32_t)uprv_floor(it));
+    tryIt(uprv_floor(it));
+    tryIt((int32_t)randLong());
 
     // try again
-    it = randDouble() * 10;
+    it = getSafeDouble(100.0);
     tryIt(it);
-    tryIt((int32_t)uprv_floor(it));
+    tryIt(uprv_floor(it));
+    tryIt((int32_t)randLong());
 
     // try again with very large numbers
-    it = randDouble() * 10000000000.0;
+    it = getSafeDouble(100000000000.0);
     tryIt(it);
 
     // try again with very large numbers

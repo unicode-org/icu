@@ -108,7 +108,7 @@ NumberFormatRoundTripTest::start()
 void 
 NumberFormatRoundTripTest::test(NumberFormat *fmt)
 {
-#if IEEE_754
+#if IEEE_754 && !defined(OS400)
     test(fmt, uprv_getNaN());
     test(fmt, uprv_getInfinity());
     test(fmt, -uprv_getInfinity());
@@ -129,11 +129,11 @@ NumberFormatRoundTripTest::test(NumberFormat *fmt)
         test(fmt, uprv_floor((randomDouble(10000))));
         test(fmt, randomDouble(1e50));
         test(fmt, randomDouble(1e-50));
-#ifndef OS390
+#if !defined(OS390) && !defined(OS400)
         test(fmt, randomDouble(1e100));
 #elif IEEE_754
-        test(fmt, randomDouble(1e75));    /*OS390*/
-#endif /* OS390 */
+        test(fmt, randomDouble(1e75));    /*OS390 and OS400*/
+#endif /* OS390 and OS400 */
         // {sfb} When formatting with a percent instance, numbers very close to
         // DBL_MAX will fail the round trip.  This is because:
         // 1) Format the double into a string --> INF% (since 100 * double > DBL_MAX)
@@ -146,7 +146,7 @@ NumberFormatRoundTripTest::test(NumberFormat *fmt)
         //if(fmt->getMultipler() == 1)
         if(fmt->getDynamicClassID() == DecimalFormat::getStaticClassID())
         {
-#ifndef OS390
+#if !defined(OS390) && !defined(OS400)
             test(fmt, randomDouble(1e308) / ((DecimalFormat*)fmt)->getMultiplier());
 #elif IEEE_754
             test(fmt, randomDouble(1e75) / ((DecimalFormat*)fmt)->getMultiplier());   
@@ -155,22 +155,22 @@ NumberFormatRoundTripTest::test(NumberFormat *fmt)
 #endif
         }
 
-#if defined XP_MAC || defined __alpha__ || defined OS400 || defined U_OSF
+#if defined XP_MAC || defined __alpha__ || defined U_OSF
 // These machines don't support denormalized doubles,
 // so the low-end range doesn't match Windows
         test(fmt, randomDouble(1e-292));
-#elif defined(OS390)
+#elif defined(OS390) || defined(OS400)
 #   if IEEE_754
-        test(fmt, randomDouble(1e-78));  /*OS390*/
+        test(fmt, randomDouble(1e-78));  /*OS390 and OS400*/
 #   endif
 #else
         test(fmt, randomDouble(1e-323));
-#endif /* OS390 */
-#ifndef OS390
+#endif /* OS390 and OS400*/
+#if !defined(OS390) && !defined(OS400)
         test(fmt, randomDouble(1e-100));
 #elif IEEE_754
-        test(fmt, randomDouble(1e-78));  /*OS390*/
-#endif /* OS390 */
+        test(fmt, randomDouble(1e-78));  /*OS390 and OS400*/
+#endif /* OS390 and OS400*/
     }
 }
 
