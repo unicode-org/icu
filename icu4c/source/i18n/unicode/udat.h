@@ -32,16 +32,16 @@
  * use one of the static factory methods:
  * <pre>
  * \code
- *     UErrorCode status;
- *     UChar *myString;
- *     int32_t myStrlen=0;
- *     UDateFormat* dfmt = udat_open(UCAL_DEFAULT, UCAL_DEFAULT, NULL, "PST", &status);
- *     myStrlen = udat_format(dfmt, myDate, NULL, myStrlen, NULL, &status);
- *     if(status==U_BUFFER_OVERFLOW_ERROR){
- * 		   status=U_ZERO_ERROR;
- * 		   myString=(UChar*)malloc(sizeof(UChar) * (myStrlen+1) );
- * 		   udat_format(dfmt, myDate, myString, myStrlen+1, NULL, &status);
- *     }
+ *  UErrorCode status = U_ZERO_ERROR;
+ *  UChar *myString;
+ *  int32_t myStrlen = 0;
+ *  UDateFormat* dfmt = udat_open(UCAL_DEFAULT, UCAL_DEFAULT, NULL, "PST", &status);
+ *  myStrlen = udat_format(dfmt, myDate, NULL, myStrlen, NULL, &status);
+ *  if (status==U_BUFFER_OVERFLOW_ERROR){
+ *      status=U_ZERO_ERROR;
+ *      myString=(UChar*)malloc(sizeof(UChar) * (myStrlen+1) );
+ *      udat_format(dfmt, myDate, myString, myStrlen+1, NULL, &status);
+ *  }
  * \endcode
  * </pre>
  * If you are formatting multiple numbers, it is more efficient to get the
@@ -49,20 +49,45 @@
  * information about the local language and country conventions multiple times.
  * <pre>
  * \code
- *     int32_t i, myStrlen=0;
- *     UChar* myString;
- *     UDate myDateArr[] = { 0.0, 100000000.0, 2000000000.0 }; // test values
- *     UDateFormat* df = udat_open(UCAL_DEFAULT, UCAL_DEFAULT, NULL, "GMT", &status);
- *     for (i = 0; i < 3; ++i) {
- * 		myStrlen = udat_format(df, myDate, NULL, myStrlen, &pos, &status);
- * 		if(status==U_BUFFER_OVERFLOW_ERROR){
- * 			status=U_ZERO_ERROR;
- * 			myString=(UChar*)malloc(sizeof(UChar) * (myStrlen+1) );
- * 			udat_format(df, myDate, myString, myStrlen+1, &pos, &status);
- * 		}
- * 		printf("%s \n", austrdup(myString) ); //austrdup( a function used to convert UChar* to char*)
- * 		free(myString);
- *     }
+ *  UErrorCode status = U_ZERO_ERROR;
+ *  int32_t i, myStrlen = 0;
+ *  UChar* myString;
+ *  char buffer[1024];
+ *  UDate myDateArr[] = { 0.0, 100000000.0, 2000000000.0 }; // test values
+ *  UDateFormat* df = udat_open(UCAL_DEFAULT, UCAL_DEFAULT, NULL, "GMT", &status);
+ *  for (i = 0; i < 3; i++) {
+ *      myStrlen = udat_format(df, myDateArr[i], NULL, myStrlen, NULL, &status);
+ *      if(status == U_BUFFER_OVERFLOW_ERROR){
+ *          status = U_ZERO_ERROR;
+ *          myString = (UChar*)malloc(sizeof(UChar) * (myStrlen+1) );
+ *          udat_format(df, myDateArr[i], myString, myStrlen+1, NULL, &status);
+ *          printf("%s\n", u_austrcpy(buffer, myString) );
+ *          free(myString);
+ *      }
+ *  }
+ * \endcode
+ * </pre>
+ * To get specific fields of a date, you can use UFieldPosition to
+ * get specific fields.
+ * <pre>
+ * \code
+ *  UErrorCode status = U_ZERO_ERROR;
+ *  UFieldPosition pos;
+ *  UChar *myString;
+ *  int32_t myStrlen = 0;
+ *  char buffer[1024];
+ *
+ *  pos.field = 1;  // Same as the DateFormat::EField enum
+ *  UDateFormat* dfmt = udat_open(UCAL_DEFAULT, UCAL_DEFAULT, NULL, "PST", &status);
+ *  myStrlen = udat_format(dfmt, myDate, NULL, myStrlen, &pos, &status);
+ *  if (status==U_BUFFER_OVERFLOW_ERROR){
+ *      status=U_ZERO_ERROR;
+ *      myString=(UChar*)malloc(sizeof(UChar) * (myStrlen+1) );
+ *      udat_format(dfmt, myDate, myString, myStrlen+1, &pos, &status);
+ *  }
+ *  printf("date format: %s\n", u_austrcpy(buffer, myString));
+ *  buffer[pos.endIndex] = 0;   // NULL terminate the string.
+ *  printf("UFieldPosition position equals %s\n", &buffer[pos.beginIndex]);
  * \endcode
  * </pre>
  * To format a date for a different Locale, specify it in the call to
@@ -75,9 +100,9 @@
  * You can use a DateFormat API udat_parse() to parse.
  * <pre>
  * \code
- *        UErrorCode status = U_ZERO_ERROR;
- *        int32_t parsepos=0;
- *        UDate myDate = udat_parse(df, myString, u_strlen(myString), &parsepos, &status);
+ *  UErrorCode status = U_ZERO_ERROR;
+ *  int32_t parsepos=0;
+ *  UDate myDate = udat_parse(df, myString, u_strlen(myString), &parsepos, &status);
  * \endcode
  * </pre>
  *  You can pass in different options for the arguments for date and time style
@@ -131,10 +156,10 @@ typedef enum UDateFormatStyle UDateFormatStyle;
      * Open a new UDateFormat for formatting and parsing dates and times.
      * A UDateFormat may be used to format dates in calls to \Ref{udat_format},
      * and to parse dates in calls to \Ref{udat_parse}.
-     * @param timeStyle The style used to format times; one of UDAT_FULL_STYLE, UDAT_LONG_STYLE,
-     * UDAT_MEDIUM_STYLE, UDAT_SHORT_STYLE, or UDAT_DEFAULT_STYLE
-     * @param dateStyle The style used to format dates; one of UDAT_FULL_STYLE, UDAT_LONG_STYLE,
-     * UDAT_MEDIUM_STYLE, UDAT_SHORT_STYLE, or UDAT_DEFAULT_STYLE
+     * @param timeStyle The style used to format times; one of UDAT_FULL, UDAT_LONG,
+     * UDAT_MEDIUM, UDAT_SHORT, or UDAT_DEFAULT
+     * @param dateStyle The style used to format dates; one of UDAT_FULL, UDAT_LONG,
+     * UDAT_MEDIUM, UDAT_SHORT, or UDAT_DEFAULT
      * @param locale The locale specifying the formatting conventions
      * @param tzID A timezone ID specifying the timezone to use.  If 0, use
      * the default timezone.
@@ -149,8 +174,8 @@ U_CAPI UDateFormat*
 udat_open(UDateFormatStyle  timeStyle,
           UDateFormatStyle  dateStyle,
           const char        *locale,
-	  const UChar       *tzID,
-	  int32_t           tzIDLength,
+          const UChar       *tzID,
+          int32_t           tzIDLength,
           UErrorCode        *status);
 
 /**

@@ -43,9 +43,10 @@ class TimeZone;
  * methods:
  * <pre>
  * \code
- *     DateFormat* dfmt = DateFormat::createDateInstance();
- *     UnicodeString myString;
- *     myString = dfmt->format( myDate, myString );
+ *      DateFormat* dfmt = DateFormat::createDateInstance();
+ *      UDate myDate = Calendar::getNow();
+ *      UnicodeString myString;
+ *      myString = dfmt->format( myDate, myString );
  * \endcode
  * </pre>
  * If you are formatting multiple numbers, it is more efficient to get the
@@ -53,28 +54,40 @@ class TimeZone;
  * information about the local language and country conventions multiple times.
  * <pre>
  * \code
- *     DateFormat* df = DateFormat::createDateInstance();
- *     UnicodeString myString;
- *     UDate myDateArr[] = { 0.0, 100000000.0, 2000000000.0 }; // test values
- *     for (int32_t i = 0; i < 3; ++i) {
- *         myString.remove();
- *         cout << df->format( myDateArr[i], myString ) << endl;
- *     }
+ *      DateFormat* df = DateFormat::createDateInstance();
+ *      UnicodeString myString;
+ *      UDate myDateArr[] = { 0.0, 100000000.0, 2000000000.0 }; // test values
+ *      for (int32_t i = 0; i < 3; ++i) {
+ *          myString.remove();
+ *          cout << df->format( myDateArr[i], myString ) << endl;
+ *      }
+ * \endcode
+ * </pre>
+ * To get specific fields of a date, you can use UFieldPosition to
+ * get specific fields.
+ * <pre>
+ * \code
+ *      DateFormat* dfmt = DateFormat::createDateInstance();
+ *      FieldPosition pos(DateFormat::YEAR_FIELD);
+ *      UnicodeString myString;
+ *      myString = dfmt->format( myDate, myString );
+ *      cout << myString << endl;
+ *      cout << pos.getBeginIndex() << "," << pos. getEndIndex() << endl;
  * \endcode
  * </pre>
  * To format a date for a different Locale, specify it in the call to
- * getDateInstance().
+ * createDateInstance().
  * <pre>
  * \code
- *        DateFormat* df =
- *           DateFormat::createDateInstance( DateFormat::SHORT, Locale::FRANCE);
+ *       DateFormat* df =
+ *           DateFormat::createDateInstance( DateFormat::SHORT, Locale::getFrance());
  * \endcode
  * </pre>
  * You can use a DateFormat to parse also.
  * <pre>
  * \code
- *        UErrorCode status = U_ZERO_ERROR;
- *        UDate myDate = df->parse(myString, status);
+ *       UErrorCode status = U_ZERO_ERROR;
+ *       UDate myDate = df->parse(myString, status);
  * \endcode
  * </pre>
  * Use createDateInstance() to produce the normal date format for that country.
