@@ -23,7 +23,7 @@ U_NAMESPACE_BEGIN
 // machine dependent value, need to move
 //#define __u_IntBits 32
 
-class llong {
+static class llong {
 private:
     uint32_t lo;
     int32_t hi;
@@ -81,10 +81,10 @@ public:
     llong& operator<<=(int32_t shift) {
         shift &= 63; // like java spec
         if (shift < 32) {
-            hi = (signed)(hi << shift | lo >> (32 - shift)); // no sign extension on lo since unsigned
+            hi = (int32_t)(hi << shift | lo >> (32 - shift)); // no sign extension on lo since unsigned
             lo <<= shift;
         } else {
-            hi = (signed)(lo << (shift - 32));
+            hi = (int32_t)(lo << (shift - 32));
             lo = 0;
         }
         return *this;
@@ -99,7 +99,7 @@ public:
             lo |= (hi << (32 - shift)); 
             hi = hi >> shift; // note sign extension
         } else {
-            lo = (unsigned)(hi >> (shift - 32)); // note sign extension
+            lo = (uint32_t)(hi >> (shift - 32)); // note sign extension
             hi = hi < 0 ? -1 : 0;
         }
         return *this; 
@@ -133,20 +133,20 @@ public:
     // no logical ops since we can't enforce order of evaluation, not much use anyway?
 
     // comparison
-    friend UBool operator==(const llong& lhs, const llong& rhs);
-    friend UBool operator!=(const llong& lhs, const llong& rhs);
-    friend UBool operator> (const llong& lhs, const llong& rhs);
-    friend UBool operator< (const llong& lhs, const llong& rhs);
-    friend UBool operator>=(const llong& lhs, const llong& rhs);
-    friend UBool operator<=(const llong& lhs, const llong& rhs);
+    inline UBool operator==(const llong& rhs) const;
+    inline UBool operator!=(const llong& rhs) const;
+    inline UBool operator> (const llong& rhs) const;
+    inline UBool operator< (const llong& rhs) const;
+    inline UBool operator>=(const llong& rhs) const;
+    inline UBool operator<=(const llong& rhs) const;
 
     // overload comparison to native int to avoid conversion to llong for common comparisons
-    friend UBool operator==(const llong& lhs, const int32_t rhs);
-    friend UBool operator!=(const llong& lhs, const int32_t rhs);
-    friend UBool operator> (const llong& lhs, const int32_t rhs);
-    friend UBool operator< (const llong& lhs, const int32_t rhs);
-    friend UBool operator>=(const llong& lhs, const int32_t rhs);
-    friend UBool operator<=(const llong& lhs, const int32_t rhs);
+    inline UBool operator==(const int32_t rhs) const;
+    inline UBool operator!=(const int32_t rhs) const;
+    inline UBool operator> (const int32_t rhs) const;
+    inline UBool operator< (const int32_t rhs) const;
+    inline UBool operator>=(const int32_t rhs) const;
+    inline UBool operator<=(const int32_t rhs) const;
 
     // unsigned comparison
     friend UBool ugt(const llong& lhs, const llong& rhs);
@@ -167,20 +167,21 @@ public:
 
     // addition and subtraction
     llong& operator-=(const llong& rhs) { hi -= rhs.hi; if (lo < rhs.lo) --hi; lo -= rhs.lo; return *this; }
-    friend llong operator-(const llong& lhs, const llong& rhs);
+    inline llong operator-(const llong& rhs) const { return llong(lo < rhs.lo ? hi - rhs.hi - 1 : hi - rhs.hi, lo - rhs.lo); }
 
-    llong& operator+=(const llong& rhs) { return *this -= -rhs; }
-    friend llong operator+(const llong& lhs, const llong& rhs);
+    inline llong& operator+=(const llong& rhs) { return *this -= -rhs; }
+    inline llong operator+(const llong& rhs) const { return *this - -rhs; }
 
     // pluttification and fizzen'
     llong& operator*=(const llong& rhs);
-    friend llong operator*(const llong& lhs, const llong& rhs);
+    inline llong operator*(const llong& rhs) const { llong r(*this); r *= rhs; return r; }
 
     llong& operator/=(const llong& rhs);
-    friend llong operator/(const llong& lhs, const llong& rhs);
+    inline llong operator/(const llong& rhs) const { llong r(*this); r /= rhs; return r; }
 
     llong& operator%=(const llong& rhs) { return operator-=((*this / rhs) * rhs); }
-    friend llong operator%(const llong& lhs, const llong& rhs);
+    inline llong operator%(const llong& rhs) const { llong r(*this); r %= rhs; return
+r; }
 
     // power function, positive integral powers only
     friend llong llong_pow(const llong& lhs, uint32_t n);
@@ -210,9 +211,9 @@ private:
         if (shift < 32) {
             lo >>= shift;
             lo |= (hi << (32 - shift));
-            hi = (signed)(((unsigned)hi) >> shift);
+            hi = (int32_t)(((unsigned)hi) >> shift);
         } else {
-            lo = (unsigned)(((unsigned)hi) >> (shift - 32));
+            lo = (uint32_t)(((unsigned)hi) >> (shift - 32));
             hi = 0;
         }
         return *this;
@@ -230,23 +231,23 @@ inline llong operator& (const llong& lhs, const uint32_t rhs) { return llong(0, 
 inline llong operator| (const llong& lhs, const uint32_t rhs) { return llong(lhs.hi, lhs.lo | rhs); }
 inline llong operator^ (const llong& lhs, const uint32_t rhs) { return llong(lhs.hi, lhs.lo ^ rhs); }
 
-inline UBool operator==(const llong& lhs, const llong& rhs) { return lhs.lo == rhs.lo && lhs.hi == rhs.hi; }
-inline UBool operator!=(const llong& lhs, const llong& rhs) { return lhs.lo != rhs.lo || lhs.hi != rhs.hi; }
-inline UBool operator> (const llong& lhs, const llong& rhs) { return lhs.hi == rhs.hi ? lhs.lo > rhs.lo : lhs.hi > rhs.hi; }
-inline UBool operator< (const llong& lhs, const llong& rhs) { return lhs.hi == rhs.hi ? lhs.lo < rhs.lo : lhs.hi < rhs.hi; }
-inline UBool operator>=(const llong& lhs, const llong& rhs) { return lhs.hi == rhs.hi ? lhs.lo >= rhs.lo : lhs.hi >= rhs.hi; }
-inline UBool operator<=(const llong& lhs, const llong& rhs) { return lhs.hi == rhs.hi ? lhs.lo <= rhs.lo : lhs.hi <= rhs.hi; }
+inline UBool llong::operator==(const llong& rhs) const { return lo == rhs.lo && hi == rhs.hi; }
+inline UBool llong::operator!=(const llong& rhs) const { return lo != rhs.lo || hi != rhs.hi; }
+inline UBool llong::operator> (const llong& rhs) const { return hi == rhs.hi ? lo > rhs.lo : hi > rhs.hi; }
+inline UBool llong::operator< (const llong& rhs) const { return hi == rhs.hi ? lo < rhs.lo : hi < rhs.hi; }
+inline UBool llong::operator>=(const llong& rhs) const { return hi == rhs.hi ? lo >= rhs.lo : hi >= rhs.hi; }
+inline UBool llong::operator<=(const llong& rhs) const { return hi == rhs.hi ? lo <= rhs.lo : hi <= rhs.hi; }
 
-inline UBool operator==(const llong& lhs, const int32_t rhs) { return lhs.lo == (unsigned)rhs && lhs.hi == (rhs < 0 ? -1 : 0); }
-inline UBool operator!=(const llong& lhs, const int32_t rhs) { return lhs.lo != (unsigned)rhs || lhs.hi != (rhs < 0 ? -1 : 0); }
-inline UBool operator> (const llong& lhs, const int32_t rhs) { return rhs < 0 ? (lhs.hi == -1 ? lhs.lo > (unsigned)rhs : lhs.hi > -1)
-                                                                              : (lhs.hi ==  0 ? lhs.lo > (unsigned)rhs : lhs.hi >  0); }
-inline UBool operator< (const llong& lhs, const int32_t rhs) { return rhs < 0 ? (lhs.hi == -1 ? lhs.lo < (unsigned)rhs : lhs.hi < -1)
-                                                                              : (lhs.hi ==  0 ? lhs.lo < (unsigned)rhs : lhs.hi <  0); }
-inline UBool operator>=(const llong& lhs, const int32_t rhs) { return rhs < 0 ? (lhs.hi == -1 ? lhs.lo >= (unsigned)rhs : lhs.hi > -1)
-                                                                              : (lhs.hi ==  0 ? lhs.lo >= (unsigned)rhs : lhs.hi >  0); }
-inline UBool operator<=(const llong& lhs, const int32_t rhs) { return rhs < 0 ? (lhs.hi == -1 ? lhs.lo <= (unsigned)rhs : lhs.hi < -1)
-                                                                              : (lhs.hi ==  0 ? lhs.lo <= (unsigned)rhs : lhs.hi <  0); }
+inline UBool llong::operator==(const int32_t rhs) const { return lo == (unsigned)rhs && hi == (rhs < 0 ? -1 : 0); }
+inline UBool llong::operator!=(const int32_t rhs) const { return lo != (unsigned)rhs || hi != (rhs < 0 ? -1 : 0); }
+inline UBool llong::operator> (const int32_t rhs) const { return rhs < 0 ? (hi == -1 ? lo > (unsigned)rhs : hi > -1)
+                                                                              : (hi ==  0 ? lo > (unsigned)rhs : hi >  0); }
+inline UBool llong::operator< (const int32_t rhs) const { return rhs < 0 ? (hi == -1 ? lo < (unsigned)rhs : hi < -1)
+                                                                              : (hi ==  0 ? lo < (unsigned)rhs : hi <  0); }
+inline UBool llong::operator>=(const int32_t rhs) const { return rhs < 0 ? (hi == -1 ? lo >= (unsigned)rhs : hi > -1)
+                                                                              : (hi ==  0 ? lo >= (unsigned)rhs : hi >  0); }
+inline UBool llong::operator<=(const int32_t rhs) const { return rhs < 0 ? (hi == -1 ? lo <= (unsigned)rhs : hi < -1)
+                                                                              : (hi ==  0 ? lo <= (unsigned)rhs : hi <  0); }
 
 inline UBool ugt(const llong& lhs, const llong& rhs) { return lhs.hi == rhs.hi ? lhs.lo > rhs.lo : (unsigned)lhs.hi > (unsigned)rhs.hi; }
 inline UBool ult(const llong& lhs, const llong& rhs) { return lhs.hi == rhs.hi ? lhs.lo < rhs.lo : (unsigned)lhs.hi < (unsigned)rhs.hi; }
@@ -254,13 +255,6 @@ inline UBool uge(const llong& lhs, const llong& rhs) { return lhs.hi == rhs.hi ?
 inline UBool ule(const llong& lhs, const llong& rhs) { return lhs.hi == rhs.hi ? lhs.lo <= rhs.lo : (unsigned)lhs.hi <= (unsigned)rhs.hi; }
 
 inline llong ushr(const llong& lhs, int32_t shift) { llong r(lhs); r.ushr(shift); return r; }
-
-inline llong operator-(const llong& lhs, const llong& rhs) { return llong(lhs.lo < rhs.lo ? lhs.hi - rhs.hi - 1 : lhs.hi - rhs.hi, lhs.lo - rhs.lo); }
-inline llong operator+(const llong& lhs, const llong& rhs) { return lhs - -rhs; }
-
-inline llong operator*(const llong& lhs, const llong& rhs) { llong r(lhs); r *= rhs; return r; }
-inline llong operator/(const llong& lhs, const llong& rhs) { llong r(lhs); r /= rhs; return r; }
-inline llong operator%(const llong& lhs, const llong& rhs) { llong r(lhs); r %= rhs; return r; }
 
 inline int32_t  llong_asInt(const llong& lhs) { return (int32_t)(lhs.lo | (lhs.hi < 0 ? 0x80000000 : 0)); }
 inline uint32_t llong_asUInt(const llong& lhs) { return lhs.lo; }
