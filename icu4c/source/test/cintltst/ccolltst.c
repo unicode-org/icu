@@ -93,6 +93,18 @@ void reportCResult( const UChar source[], const UChar target[],
 
     
     }
+
+    if (keyResult != compareResult)
+    {
+    
+        appendCompareResult(keyResult, sResult);
+        appendCompareResult(compareResult, sExpect);
+
+        log_err("difference between sortkey and compare result for (%s , %s) Keys: %s compare %s\n", austrdup(source), austrdup(target), 
+            austrdup(sResult), austrdup(sExpect) );
+
+    
+    }
     free(sExpect);
     free(sResult);
 }
