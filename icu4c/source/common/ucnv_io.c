@@ -219,6 +219,37 @@ isAcceptable(void *context,
         pInfo->formatVersion[0]==3);
 }
 
+static UBool U_CALLCONV ucnv_io_cleanup(void)
+{
+    if (gAliasData) {
+        udata_close(gAliasData);
+        gAliasData = NULL;
+    }
+
+    ucnv_io_flushAvailableConverterCache();
+
+    gConverterListSize       = 0;
+    gTagListSize             = 0;
+    gAliasListSize           = 0;
+    gUntaggedConvArraySize   = 0;
+    gTaggedAliasArraySize    = 0;
+    gTaggedAliasListsSize    = 0;
+    gStringTableSize         = 0;
+
+    gConverterList = NULL;
+    gTagList = NULL;
+    gAliasList = NULL;
+    gUntaggedConvArray = NULL;
+    gTaggedAliasArray = NULL;
+    gTaggedAliasLists = NULL;
+    gStringTable = NULL;
+
+    gDefaultConverterName = NULL;
+    gDefaultConverterNameBuffer[0] = 0;
+
+    return TRUE;                   /* Everything was cleaned up */
+}
+
 static UBool
 haveAliasData(UErrorCode *pErrorCode) {
     int haveData;
@@ -292,6 +323,7 @@ haveAliasData(UErrorCode *pErrorCode) {
             currOffset += reservedSize1;
             gStringTable = table + currOffset;
 
+            ucln_common_registerCleanup(UCLN_COMMON_UCNV_IO, ucnv_io_cleanup);
         }
         umtx_unlock(NULL);
 
@@ -315,39 +347,6 @@ isAlias(const char *alias, UErrorCode *pErrorCode) {
         return TRUE;
     }
 }
-
-UBool 
-ucnv_io_cleanup()
-{
-    if (gAliasData) {
-        udata_close(gAliasData);
-        gAliasData = NULL;
-    }
-
-    ucnv_io_flushAvailableConverterCache();
-
-    gConverterListSize       = 0;
-    gTagListSize             = 0;
-    gAliasListSize           = 0;
-    gUntaggedConvArraySize   = 0;
-    gTaggedAliasArraySize    = 0;
-    gTaggedAliasListsSize    = 0;
-    gStringTableSize         = 0;
-
-    gConverterList = NULL;
-    gTagList = NULL;
-    gAliasList = NULL;
-    gUntaggedConvArray = NULL;
-    gTaggedAliasArray = NULL;
-    gTaggedAliasLists = NULL;
-    gStringTable = NULL;
-
-    gDefaultConverterName = NULL;
-    gDefaultConverterNameBuffer[0] = 0;
-
-    return TRUE;                   /* Everything was cleaned up */
-}
-
 
 static uint32_t getTagNumber(const char *tagname) {
     if (gTagList) {
@@ -889,6 +888,7 @@ static UBool haveAvailableConverterList(UErrorCode *pErrorCode) {
         if (gAvailableConverters == NULL) {
             gAvailableConverters = localConverterList;
             gAvailableConverterCount = localConverterCount;
+            /* haveData should have already registered the cleanup function */
         }
         else {
             uprv_free((char **)localConverterList);
@@ -1045,6 +1045,7 @@ ucnv_io_getDefaultConverterName() {
         gDefaultConverterNameBuffer[length]=0;
         gDefaultConverterName = gDefaultConverterNameBuffer;
         name = gDefaultConverterName;
+        ucln_common_registerCleanup(UCLN_COMMON_UCNV_IO, ucnv_io_cleanup);
         umtx_unlock(NULL);
 
         /* The close may make the current name go away. */

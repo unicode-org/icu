@@ -44,9 +44,6 @@ ucase_close(UCaseProps *csp);
 U_CAPI UCaseProps * U_EXPORT2
 ucase_getSingleton(UErrorCode *pErrorCode);
 
-U_CFUNC void
-ucase_cleanup();
-
 
 U_CAPI int32_t U_EXPORT2
 ucase_swap(const UDataSwapper *ds,

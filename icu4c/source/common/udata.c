@@ -78,8 +78,8 @@ static UDataMemory *gStubICUData   = NULL;    /* If gCommonICUData does get upda
 static UHashtable  *gCommonDataCache = NULL;  /* Global hash table of opened ICU data files.  */
 
 
-UBool
-udata_cleanup()
+static UBool U_CALLCONV
+udata_cleanup(void)
 {
     if (gCommonDataCache) {             /* Delete the cache of user data mappings.  */
         uhash_close(gCommonDataCache);  /*   Table owns the contents, and will delete them. */
@@ -128,6 +128,7 @@ setCommonICUData(UDataMemory *pData,     /*  The new common data.  Belongs to ca
     if (gCommonICUData==oldData) {
         gStubICUData   = gCommonICUData;   /* remember the old Common Data, so it can be cleaned up. */
         gCommonICUData = newCommonData;
+        ucln_common_registerCleanup(UCLN_COMMON_UDATA, udata_cleanup);
     }
     else {
         if  (warn==TRUE) {
@@ -222,6 +223,7 @@ static UHashtable *udata_getHashTable() {
     if (gCommonDataCache == NULL) {
         gCommonDataCache = tHT;
         tHT = NULL;
+        ucln_common_registerCleanup(UCLN_COMMON_UDATA, udata_cleanup);
     }
     umtx_unlock(NULL);
     if (tHT != NULL) {

@@ -2660,6 +2660,20 @@ uloc_getDisplayKeywordValue(   const char* locale,
 
 /* ### Get available **************************************************/
 
+static UBool U_CALLCONV uloc_cleanup(void) {
+    char ** temp;
+
+    if (_installedLocales) {
+        temp = _installedLocales;
+        _installedLocales = NULL;
+
+        _installedLocalesCount = 0;
+
+        uprv_free(temp);
+    }
+    return TRUE;
+}
+
 static void _load_installedLocales()
 {
     UBool   localesLoaded;
@@ -2696,6 +2710,7 @@ static void _load_installedLocales()
                 _installedLocales = temp;
                 _installedLocalesCount = localeCount;
                 temp = NULL;
+                ucln_common_registerCleanup(UCLN_COMMON_ULOC, uloc_cleanup);
             } 
             umtx_unlock(NULL);
 
@@ -2722,20 +2737,6 @@ uloc_countAvailable()
 {
     _load_installedLocales();
     return _installedLocalesCount;
-}
-
-UBool uloc_cleanup(void) {
-    char ** temp;
-
-    if (_installedLocales) {
-        temp = _installedLocales;
-        _installedLocales = NULL;
-
-        _installedLocalesCount = 0;
-
-        uprv_free(temp);
-    }
-    return TRUE;
 }
 
 /**

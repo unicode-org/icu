@@ -138,29 +138,6 @@ static const ResourceData *getFallbackData(const UResourceBundle* resBundle, con
     }
 }
 
-/** INTERNAL: Initializes the cache for resources */
-static void initCache(UErrorCode *status) {
-  UBool makeCache = FALSE;
-  umtx_lock(&resbMutex);
-  makeCache = (cache ==  NULL);
-  umtx_unlock(&resbMutex);
-  if(makeCache) {
-      UHashtable *newCache = uhash_open(hashEntry, compareEntries, status);
-      if (U_FAILURE(*status)) {
-          return;
-      }
-      umtx_lock(&resbMutex);
-      if(cache == NULL) {
-          cache = newCache;
-          newCache = NULL;
-      }
-      umtx_unlock(&resbMutex);
-      if(newCache != NULL) {
-          uhash_close(newCache);
-      }
-  }
-}
-
 /* Works just like ucnv_flushCache() */
 /* TODO: figure out why fCountExisting may not go to zero. Do not make this function public yet. */
 static int32_t ures_flushCache()
@@ -214,7 +191,7 @@ static int32_t ures_flushCache()
     return rbDeletedNum;
 }
 
-UBool ures_cleanup(void)
+static UBool U_CALLCONV ures_cleanup(void)
 {
     if (cache != NULL) {
         ures_flushCache();
@@ -229,6 +206,29 @@ UBool ures_cleanup(void)
     return (cache == NULL);
 }
 
+/** INTERNAL: Initializes the cache for resources */
+static void initCache(UErrorCode *status) {
+    UBool makeCache = FALSE;
+    umtx_lock(&resbMutex);
+    makeCache = (cache ==  NULL);
+    umtx_unlock(&resbMutex);
+    if(makeCache) {
+        UHashtable *newCache = uhash_open(hashEntry, compareEntries, status);
+        if (U_FAILURE(*status)) {
+            return;
+        }
+        umtx_lock(&resbMutex);
+        if(cache == NULL) {
+            cache = newCache;
+            newCache = NULL;
+            ucln_common_registerCleanup(UCLN_COMMON_URES, ures_cleanup);
+        }
+        umtx_unlock(&resbMutex);
+        if(newCache != NULL) {
+            uhash_close(newCache);
+        }
+    }
+}
 
 /** INTERNAL: sets the name (locale) of the resource bundle to given name */
 

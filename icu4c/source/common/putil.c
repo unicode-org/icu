@@ -1249,7 +1249,7 @@ static char *gDataDirectory = NULL;
  static char *gCorrectedPOSIXLocale = NULL; /* Heap allocated */
 #endif
 
-UBool putil_cleanup(void)
+static UBool U_CALLCONV putil_cleanup(void)
 {
     if (gDataDirectory) {
         uprv_free(gDataDirectory);
@@ -1295,6 +1295,7 @@ u_setDataDirectory(const char *directory) {
         uprv_free(gDataDirectory);
     }
     gDataDirectory = newDataDir;
+    ucln_common_registerCleanup(UCLN_COMMON_PUTIL, putil_cleanup);
     umtx_unlock(NULL);
 }
 
@@ -1692,6 +1693,7 @@ The leftmost codepage (.xxx) wins.
 
     if (gCorrectedPOSIXLocale == NULL) {
         gCorrectedPOSIXLocale = correctedPOSIXLocale;
+        ucln_common_registerCleanup(UCLN_COMMON_PUTIL, putil_cleanup);
         correctedPOSIXLocale = NULL;
     }
 
