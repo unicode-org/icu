@@ -291,10 +291,16 @@ DecimalFormat::construct(UErrorCode&             status,
         return;
     }
 
-    if (symbolsToAdopt == NULL) {
-        setCurrencyForLocale(uloc_getDefault(), status);
+    if (pattern->indexOf((UChar)kCurrencySign) >= 0) {
+        // If it looks like we are going to use a currency pattern
+        // then do the time consuming lookup.
+        if (symbolsToAdopt == NULL) {
+            setCurrencyForLocale(uloc_getDefault(), status);
+        } else {
+            setCurrencyForSymbols();
+        }
     } else {
-        setCurrencyForSymbols();
+        setCurrency(NULL);
     }
 
     applyPattern(*pattern, FALSE /*not localized*/,parseErr, status);
