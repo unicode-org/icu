@@ -78,6 +78,7 @@ public final class UScript {
         "BOPOMOFO",             /* BOPOMOFO   */
         "CANADIAN-ABORIGINAL",  /* UCAS       */
         "CHEROKEE",             /* CHEROKEE   */
+        "COMMON",               /* COMMON     */
         "CYRILLIC",             /* CYRILLIC   */
         "DESERET",              /* DESERET    */
         "DEVANAGARI",           /* DEVANAGARI */
@@ -177,6 +178,7 @@ public final class UScript {
          BOPOMOFO   ,
          UCAS       ,
          CHEROKEE   ,
+         COMMON     ,
          CYRILLIC   ,
          DESERET    ,
          DEVANAGARI ,
