@@ -107,14 +107,14 @@ U_NAMESPACE_BEGIN
  * later with setIndexOnly().
  *
  * @author Laura Werner, Mark Davis, Markus Scherer
- * @stable
+ * @stable ICU 2.0
  */
 class U_COMMON_API Normalizer : public UObject {
 public:
   /**
    * If DONE is returned from an iteration function that returns a code point,
    * then there are no more normalization results available.
-   * @stable
+   * @stable ICU 2.0
    */
   enum {
       DONE=0xffff
@@ -130,7 +130,7 @@ public:
    *              will start at the beginning of the string.
    *
    * @param mode  The normalization mode.
-   * @stable
+   * @stable ICU 2.0
    */
   Normalizer(const UnicodeString& str, UNormalizationMode mode);
     
@@ -143,7 +143,7 @@ public:
    *
    * @param length Length of the string, or -1 if NUL-terminated.
    * @param mode  The normalization mode.
-   * @stable
+   * @stable ICU 2.0
    */
   Normalizer(const UChar* str, int32_t length, UNormalizationMode mode);
 
@@ -155,20 +155,20 @@ public:
    *              will start at the beginning of the string.
    *
    * @param mode  The normalization mode.
-   * @stable
+   * @stable ICU 2.0
    */
   Normalizer(const CharacterIterator& iter, UNormalizationMode mode);
 
   /**
    * Copy constructor.
    * @param copy The object to be copied.
-   * @stable
+   * @stable ICU 2.0
    */
   Normalizer(const Normalizer& copy);
 
   /**
    * Destructor
-   * @stable
+   * @stable ICU 2.0
    */
   ~Normalizer();
 
@@ -192,7 +192,7 @@ public:
    * @param options   the optional features to be enabled (0 for no options)
    * @param result    The normalized string (on output).
    * @param status    The error code.
-   * @stable
+   * @stable ICU 2.0
    */
   static void normalize(const UnicodeString& source,
                         UNormalizationMode mode, int32_t options,
@@ -218,7 +218,7 @@ public:
    * @param options   the optional features to be enabled (0 for no options)
    * @param result    The composed string (on output).
    * @param status    The error code.
-   * @stable
+   * @stable ICU 2.0
    */
   static void compose(const UnicodeString& source,
                       UBool compat, int32_t options,
@@ -245,7 +245,7 @@ public:
    * @param options   the optional features to be enabled (0 for no options)
    * @param result    The decomposed string (on output).
    * @param status    The error code.
-   * @stable
+   * @stable ICU 2.0
    */
   static void decompose(const UnicodeString& source,
                         UBool compat, int32_t options,
@@ -270,7 +270,7 @@ public:
    * @return UNORM_YES, UNORM_NO or UNORM_MAYBE
    *
    * @see isNormalized
-   * @stable
+   * @stable ICU 2.0
    */
   static inline UNormalizationCheckResult
   quickCheck(const UnicodeString &source, UNormalizationMode mode, UErrorCode &status);
@@ -410,7 +410,7 @@ public:
    * The getIndex() is not changed.
    *
    * @return the current normalized code point
-   * @stable
+   * @stable ICU 2.0
    */
   UChar32              current(void);
 
@@ -420,7 +420,7 @@ public:
    * (Post-increment semantics.)
    *
    * @return the first normalized code point
-   * @stable
+   * @stable ICU 2.0
    */
   UChar32              first(void);
 
@@ -430,7 +430,7 @@ public:
    * (Pre-decrement semantics.)
    *
    * @return the last normalized code point
-   * @stable
+   * @stable ICU 2.0
    */
   UChar32              last(void);
 
@@ -440,7 +440,7 @@ public:
    * If the end of the text has already been reached, {@link #DONE} is returned.
    *
    * @return the next normalized code point
-   * @stable
+   * @stable ICU 2.0
    */
   UChar32              next(void);
 
@@ -450,7 +450,7 @@ public:
    * If the beginning of the text has already been reached, {@link #DONE} is returned.
    *
    * @return the previous normalized code point
-   * @stable
+   * @stable ICU 2.0
    */
   UChar32              previous(void);
 
@@ -484,14 +484,14 @@ public:
    * specified here.
    *
    * @param index the desired index in the input text.
-   * @stable
+   * @stable ICU 2.0
    */
   void                 setIndexOnly(int32_t index);
 
   /**
    * Reset the index to the beginning of the text.
    * This is equivalent to setIndexOnly(startIndex)).
-   * @stable
+   * @stable ICU 2.0
    */
   void                reset(void);
 
@@ -507,7 +507,7 @@ public:
    * was returned from with previous().
    *
    * @return the current index in the input text
-   * @stable
+   * @stable ICU 2.0
    */
   int32_t            getIndex(void) const;
 
@@ -517,7 +517,7 @@ public:
    * over which this <code>Normalizer</code> is iterating.
    *
    * @return the smallest index in the input text where the Normalizer operates
-   * @stable
+   * @stable ICU 2.0
    */
   int32_t            startIndex(void) const;
 
@@ -529,7 +529,7 @@ public:
    * before this index.
    *
    * @return the first index in the input text where the Normalizer does not operate
-   * @stable
+   * @stable ICU 2.0
    */
   int32_t            endIndex(void) const;
 
@@ -539,7 +539,7 @@ public:
    *
    * @param that a Normalizer object to compare this one to
    * @return comparison result
-   * @stable
+   * @stable ICU 2.0
    */
   UBool        operator==(const Normalizer& that) const;
 
@@ -549,7 +549,7 @@ public:
    *
    * @param that a Normalizer object to compare this one to
    * @return comparison result
-   * @stable
+   * @stable ICU 2.0
    */
   inline UBool        operator!=(const Normalizer& that) const;
 
@@ -557,7 +557,7 @@ public:
    * Returns a pointer to a new Normalizer that is a clone of this one.
    * The caller is responsible for deleting the new clone.
    * @return a pointer to a new Normalizer 
-   * @stable
+   * @stable ICU 2.0
    */
   Normalizer*        clone(void) const;
 
@@ -565,7 +565,7 @@ public:
    * Generates a hash code for this iterator.
    *
    * @return the hash code
-   * @stable
+   * @stable ICU 2.0
    */
   int32_t                hashCode(void) const;
 
@@ -586,7 +586,7 @@ public:
    * <p>
    * @param newMode the new mode for this <code>Normalizer</code>.
    * @see #getUMode
-   * @stable
+   * @stable ICU 2.0
    */
   void setMode(UNormalizationMode newMode);
 
@@ -598,7 +598,7 @@ public:
    *
    * @return the mode for this <code>Normalizer</code>
    * @see #setMode
-   * @stable
+   * @stable ICU 2.0
    */
   UNormalizationMode getUMode(void) const;
 
@@ -616,7 +616,7 @@ public:
    *                  turn the option(s) on and <code>FALSE</code> to turn it/them off.
    *
    * @see #getOption
-   * @stable
+   * @stable ICU 2.0
    */
   void setOption(int32_t option, 
          UBool value);
@@ -629,7 +629,7 @@ public:
    * @param option the option(s) that are to be checked
    * @return TRUE if any of the option(s) are set
    * @see #setOption
-   * @stable
+   * @stable ICU 2.0
    */
   UBool getOption(int32_t option) const;
 
@@ -639,7 +639,7 @@ public:
    *
    * @param newText a string that replaces the current input text
    * @param status a UErrorCode
-   * @stable
+   * @stable ICU 2.0
    */
   void setText(const UnicodeString& newText, 
            UErrorCode &status);
@@ -650,7 +650,7 @@ public:
    *
    * @param newText a CharacterIterator object that replaces the current input text
    * @param status a UErrorCode
-   * @stable
+   * @stable ICU 2.0
    */
   void setText(const CharacterIterator& newText, 
            UErrorCode &status);
@@ -662,7 +662,7 @@ public:
    * @param newText a string that replaces the current input text
    * @param length the length of the string, or -1 if NUL-terminated
    * @param status a UErrorCode
-   * @stable
+   * @stable ICU 2.0
    */
   void setText(const UChar* newText,
                     int32_t length,
@@ -671,7 +671,7 @@ public:
    * Copies the input text into the UnicodeString argument.
    *
    * @param result Receives a copy of the text under iteration.
-   * @stable
+   * @stable ICU 2.0
    */
   void            getText(UnicodeString&  result);
 

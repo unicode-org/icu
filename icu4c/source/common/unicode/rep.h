@@ -62,14 +62,14 @@ class UnicodeString;
  * </ul>
  * If this is not the behavior, the subclass should document any differences.
  * @author Alan Liu
- * @stable
+ * @stable ICU 2.0
  */
 class U_COMMON_API Replaceable : public UObject {
 
 public:
     /**
      * Destructor.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual ~Replaceable();
 
@@ -135,7 +135,7 @@ public:
      * <= length()</code>.
      * @param text the text to replace characters <code>start</code>
      * to <code>limit - 1</code> 
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void handleReplaceBetween(int32_t start,
                                       int32_t limit,
@@ -163,7 +163,7 @@ public:
      * <code>start..limit-1</code> will be copied to <code>dest</code>.
      * Implementations of this method may assume that <code>dest <= start ||
      * dest >= limit</code>.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void copy(int32_t start, int32_t limit, int32_t dest) = 0;
 

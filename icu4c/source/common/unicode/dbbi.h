@@ -111,7 +111,7 @@ public:
 
     /**
      * Destructor
-     * @stable
+     * @stable ICU 2.0
      */
     virtual ~DictionaryBasedBreakIterator();
 
@@ -119,7 +119,7 @@ public:
      * Default constructor.  Creates an "empty" break iterator.
      * Such an iterator can subsequently be assigned to.
      * @return the newly created DictionaryBaseBreakIterator.
-     * @stable
+     * @stable ICU 2.0
      */
      DictionaryBasedBreakIterator();
 
@@ -127,7 +127,7 @@ public:
       * Copy constructor.
       * @param other The DictionaryBasedBreakIterator to be copied.
       * @return the newly created DictionaryBasedBreakIterator.
-      * @stable
+      * @stable ICU 2.0
       */
      DictionaryBasedBreakIterator(const DictionaryBasedBreakIterator &other);
 
@@ -135,7 +135,7 @@ public:
      * Assignment operator. 
      * @param that The object to be copied.
      * @return the newly set DictionaryBasedBreakIterator.
-     * @stable
+     * @stable ICU 2.0
      */
     DictionaryBasedBreakIterator& operator=(const DictionaryBasedBreakIterator& that);
 
@@ -143,7 +143,7 @@ public:
      * Returns a newly-constructed RuleBasedBreakIterator with the same
      * behavior, and iterating over the same text, as this one.
      * @return Returns a newly-constructed RuleBasedBreakIterator.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual BreakIterator* clone(void) const;
 
@@ -153,7 +153,7 @@ public:
     /**
      * Advances the iterator backwards, to the last boundary preceding this one.
      * @return The position of the last boundary position preceding this one.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual int32_t previous(void);
 
@@ -162,7 +162,7 @@ public:
      * the specified position.
      * @offset The position from which to begin searching for a break position.
      * @return The position of the first break after the current position.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual int32_t following(int32_t offset);
 
@@ -171,7 +171,7 @@ public:
      * specified position.
      * @offset The position to begin searching for a break from.
      * @return The position of the last boundary before the starting position.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual int32_t preceding(int32_t offset);
 
@@ -184,7 +184,7 @@ public:
      * @return          The class ID for this object. All objects of a
      *                  given class have the same class ID.  Objects of
      *                  other classes have different class IDs.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UClassID getDynamicClassID(void) const;
 
@@ -197,7 +197,7 @@ public:
      *          Derived::getStaticClassID()) ...
      *
      * @return          The class ID for all objects of this class.
-     * @stable
+     * @stable ICU 2.0
      */
     static UClassID getStaticClassID(void);
 

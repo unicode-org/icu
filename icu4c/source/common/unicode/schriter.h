@@ -33,7 +33,7 @@ U_NAMESPACE_BEGIN
  * compare equal).
  * @see CharacterIterator
  * @see ForwardCharacterIterator
- * @stable
+ * @stable ICU 2.0
  */
 class U_COMMON_API StringCharacterIterator : public UCharCharacterIterator {
 public:
@@ -42,7 +42,7 @@ public:
    * The UnicodeString object is copied.
    * The iteration range is the whole string, and the starting position is 0.
    * @param textStr The unicode string used to create an iterator
-   * @stable
+   * @stable ICU 2.0
    */
   StringCharacterIterator(const UnicodeString& textStr);
 
@@ -53,7 +53,7 @@ public:
    * iteration range, the behavior of this object is undefined.  
    * @textStr The unicode string used to create an iterator 
    * @textPos The starting position of the iteration
-   * @stable
+   * @stable ICU 2.0
    */
   StringCharacterIterator(const UnicodeString&    textStr,
               int32_t              textPos);
@@ -72,7 +72,7 @@ public:
    * @param textBegin  The begin position of the iteration range
    * @param textEnd    The end position of the iteration range
    * @param textPos    The starting position of the iteration
-   * @stable
+   * @stable ICU 2.0
    */
   StringCharacterIterator(const UnicodeString&    textStr,
               int32_t              textBegin,
@@ -85,13 +85,13 @@ public:
    * same as "that"'s current position.  
    * The UnicodeString object in "that" is copied.
    * @param that The StringCharacterIterator to be copied
-   * @stable
+   * @stable ICU 2.0
    */
   StringCharacterIterator(const StringCharacterIterator&  that);
 
   /**
    * Destructor.  
-   * @stable
+   * @stable ICU 2.0
    */
   virtual ~StringCharacterIterator();
 
@@ -101,7 +101,7 @@ public:
    * character within that string as "that" does.
    * @param that The object to be copied.
    * @return the newly created object.  
-   * @stable
+   * @stable ICU 2.0
    */
   StringCharacterIterator&
   operator=(const StringCharacterIterator&    that);
@@ -112,7 +112,7 @@ public:
    * @param that The ForwardCharacterIterator to be compared for equality
    * @return true if the iterators iterate over the same range of the
    * same string and are pointing at the same character.  
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UBool          operator==(const ForwardCharacterIterator& that) const;
 
@@ -121,14 +121,14 @@ public:
    * character in the same range of the same string as this one.  The
    * caller must delete the new iterator. 
    * @return the newly cloned object. 
-   * @stable
+   * @stable ICU 2.0
    */
   virtual CharacterIterator* clone(void) const;
                                 
   /**
    * Sets the iterator to iterate over the provided string.
    * @param newText The string to be iterated over
-   * @stable
+   * @stable ICU 2.0
    */
   void setText(const UnicodeString& newText);
 
@@ -137,14 +137,14 @@ public:
    * referred to by "result".  Even if this iterator iterates across
    * only a part of this string, the whole string is copied.
    * @param result Receives a copy of the text under iteration.  
-   * @stable
+   * @stable ICU 2.0
    */
   virtual void            getText(UnicodeString& result);
 
   /**
    * Return a class ID for this object (not really public) 
    * @return a class ID for this object.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UClassID         getDynamicClassID(void) const 
     { return getStaticClassID(); }
@@ -152,7 +152,7 @@ public:
   /**
    * Return a class ID for this class (not really public) 
    * @return a class ID for this class
-   * @stable
+   * @stable ICU 2.0
    */
   static UClassID          getStaticClassID(void) 
     { return (UClassID)(&fgClassID); }
@@ -163,7 +163,7 @@ protected:
    * Sets the iterator to iterate over the provided string.
    * @param newText The string to be iterated over
    * @param newTextLength The length of the String
-   * @stable
+   * @stable ICU 2.0
    */
   void setText(const UChar* newText, int32_t newTextLength);
         

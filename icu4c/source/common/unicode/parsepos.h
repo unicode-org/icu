@@ -43,7 +43,7 @@ class U_COMMON_API ParsePosition : public UObject {
 public:
     /**
      * Default constructor, the index starts with 0 as default.
-     * @stable
+     * @stable ICU 2.0
      */
     ParsePosition()
         : UObject()
@@ -52,7 +52,7 @@ public:
     /**
      * Create a new ParsePosition with the given initial index.
      * @param newIndex the new text offset.
-     * @stable
+     * @stable ICU 2.0
      */
     ParsePosition(int32_t newIndex)
         : UObject()
@@ -61,7 +61,7 @@ public:
     /**
      * Copy constructor
      * @param copy the object to be copied from.
-     * @stable
+     * @stable ICU 2.0
      */
     ParsePosition(const ParsePosition& copy)
         : UObject(copy)
@@ -69,27 +69,27 @@ public:
 
     /**
      * Destructor
-     * @stable
+     * @stable ICU 2.0
      */
     ~ParsePosition() {}
 
     /**
      * Assignment operator
-     * @stable
+     * @stable ICU 2.0
      */
     ParsePosition&      operator=(const ParsePosition& copy);
 
     /**
      * Equality operator.
      * @return TRUE if the two parse positions are equal, FALSE otherwise.
-     * @stable
+     * @stable ICU 2.0
      */
     UBool              operator==(const ParsePosition& that) const;
 
     /**
      * Equality operator.
      * @return TRUE if the two parse positions are not equal, FALSE otherwise.
-     * @stable
+     * @stable ICU 2.0
      */
     UBool              operator!=(const ParsePosition& that) const;
 
@@ -98,14 +98,14 @@ public:
      * is the index of the character at which parsing will begin; on output, it
      * is the index of the character following the last character parsed.
      * @return the current index.
-     * @stable
+     * @stable ICU 2.0
      */
     int32_t getIndex(void) const;
 
     /**
      * Set the current parse position.
      * @param index the new index.
-     * @stable
+     * @stable ICU 2.0
      */
     void setIndex(int32_t index);
 
@@ -114,14 +114,14 @@ public:
      * should set this before returning an error code from their
      * parseObject method.  The default value is -1 if this is not
      * set.
-     * @stable
+     * @stable ICU 2.0
      */
     void setErrorIndex(int32_t ei);
 
     /**
      * Retrieve the index at which an error occurred, or -1 if the
      * error index has not been set.
-     * @stable
+     * @stable ICU 2.0
      */
     int32_t getErrorIndex(void) const;
 

@@ -94,7 +94,7 @@
  *         If an error occured, then no output was written, or it may be
  *         incomplete. If <code>U_BUFFER_OVERFLOW_ERROR</code> is set, then
  *         the return value indicates the necessary destination buffer size.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2
 u_shapeArabic(const UChar *source, int32_t sourceLength,
@@ -104,28 +104,28 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
 
 /**
  * Memory option: allow the result to have a different length than the source.
- * @stable
+ * @stable ICU 2.0
  */
 #define U_SHAPE_LENGTH_GROW_SHRINK              0
 
 /**
  * Memory option: the result must have the same length as the source.
  * If more room is necessary, then try to consume spaces next to modified characters.
- * @stable
+ * @stable ICU 2.0
  */
 #define U_SHAPE_LENGTH_FIXED_SPACES_NEAR        1
 
 /**
  * Memory option: the result must have the same length as the source.
  * If more room is necessary, then try to consume spaces at the end of the text.
- * @stable
+ * @stable ICU 2.0
  */
 #define U_SHAPE_LENGTH_FIXED_SPACES_AT_END      2
 
 /**
  * Memory option: the result must have the same length as the source.
  * If more room is necessary, then try to consume spaces at the beginning of the text.
- * @stable
+ * @stable ICU 2.0
  */
 #define U_SHAPE_LENGTH_FIXED_SPACES_AT_BEGINNING 3
 
@@ -140,7 +140,7 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
  * Direction indicator:
  * the source is in visual LTR order,
  * the leftmost displayed character stored first.
- * @stable
+ * @stable ICU 2.0
  */
 #define U_SHAPE_TEXT_DIRECTION_VISUAL_LTR       4
 
@@ -162,7 +162,7 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
  * The only difference with U_SHAPE_LETTERS_SHAPE is that Tashkeel letters
  * are always "shaped" into the isolated form instead of the medial form
  * (selecting code points from the Arabic Presentation Forms-B block).
- * @stable
+ * @stable ICU 2.0
  */
 #define U_SHAPE_LETTERS_SHAPE_TASHKEEL_ISOLATED 0x18
 
@@ -176,14 +176,14 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
 /**
  * Digit shaping option:
  * Replace European digits (U+0030...) by Arabic-Indic digits.
- * @stable
+ * @stable ICU 2.0
  */
 #define U_SHAPE_DIGITS_EN2AN                    0x20
 
 /**
  * Digit shaping option:
  * Replace Arabic-Indic digits by European digits (U+0030...).
- * @stable
+ * @stable ICU 2.0
  */
 #define U_SHAPE_DIGITS_AN2EN                    0x40
 
@@ -196,7 +196,7 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
  * For the first characters, the preceding strongly directional character
  * (initial state) is assumed to be not an Arabic letter
  * (it is <code>U_LEFT_TO_RIGHT</code> [L] or <code>U_RIGHT_TO_LEFT</code> [R]).
- * @stable
+ * @stable ICU 2.0
  */
 #define U_SHAPE_DIGITS_ALEN2AN_INIT_LR          0x60
 
@@ -208,7 +208,7 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
  * The direction of "preceding" depends on the direction indicator option.
  * For the first characters, the preceding strongly directional character
  * (initial state) is assumed to be an Arabic letter.
- * @stable
+ * @stable ICU 2.0
  */
 #define U_SHAPE_DIGITS_ALEN2AN_INIT_AL          0x80
 

@@ -37,7 +37,7 @@ U_CDECL_BEGIN
  * Call u_getUnicodeVersion to get the actual Unicode version of the data.
  *
  * @see u_getUnicodeVersion
- * @stable
+ * @stable ICU 2.0
  */
 #define U_UNICODE_VERSION "3.2"
 
@@ -342,7 +342,7 @@ typedef enum UProperty {
 /**
  * Data for enumerated Unicode general category types.
  * See http://www.unicode.org/Public/UNIDATA/UnicodeData.html .
- * @stable
+ * @stable ICU 2.0
  */
 typedef enum UCharCategory
 {
@@ -491,7 +491,7 @@ typedef enum UCharCategory
 
 /**
  * This specifies the language directional property of a character set.
- * @stable
+ * @stable ICU 2.0
  */
 typedef enum UCharDirection { 
     /** See note !!.  Comments of the form "EN" are read by genpname. */
@@ -541,7 +541,7 @@ typedef enum UCharDirection {
 /**
  * Constants for Unicode blocks, generated from Unicode Data file Blocks.txt
  * These are the same values as Unicode::EUnicodeScript
- * @stable
+ * @stable ICU 2.0
  */
 enum UBlockCode {
     /** @stable */
@@ -567,7 +567,7 @@ enum UBlockCode {
     
     /**
      * Unicode 3.2 renames this block to "Greek and Coptic".
-     * @stable
+     * @stable ICU 2.0
      */
     UBLOCK_GREEK =8, /*[0370]*/
 
@@ -675,7 +675,7 @@ enum UBlockCode {
     
     /**
      * Unicode 3.2 renames this block to "Combining Diacritical Marks for Symbols".
-     * @stable
+     * @stable ICU 2.0
      */
     UBLOCK_COMBINING_MARKS_FOR_SYMBOLS =43, /*[20D0]*/
     
@@ -788,7 +788,7 @@ enum UBlockCode {
      * Unicode 3.2 renames the block for the BMP PUA to "Private Use Area" and
      * adds separate blocks for the supplementary PUAs.
      *
-     * @stable
+     * @stable ICU 2.0
      */
     UBLOCK_PRIVATE_USE = 78,
     /**
@@ -798,7 +798,7 @@ enum UBlockCode {
      * Unicode 3.2 renames the block for the BMP PUA to "Private Use Area" and
      * adds separate blocks for the supplementary PUAs.
      *
-     * @stable
+     * @stable ICU 2.0
      */
     UBLOCK_PRIVATE_USE_AREA =UBLOCK_PRIVATE_USE, /*[E000]*/
 
@@ -1122,7 +1122,7 @@ typedef enum UEastAsianWidth {
  * Unicode code point a unique name.
  *
  * @see u_charName
- * @stable
+ * @stable ICU 2.0
  */
 typedef enum UCharNameChoice {
     U_UNICODE_CHAR_NAME,
@@ -1529,7 +1529,7 @@ u_getNumericValue(UChar32 c);
  * @see u_isupper
  * @see u_istitle
  * @see u_islower
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UBool U_EXPORT2
 u_islower(UChar32 c);
@@ -1543,7 +1543,7 @@ u_islower(UChar32 c);
  * @see u_islower
  * @see u_istitle
  * @see u_tolower
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UBool U_EXPORT2
 u_isupper(UChar32 c);
@@ -1557,7 +1557,7 @@ u_isupper(UChar32 c);
  * @see u_isupper
  * @see u_islower
  * @see u_totitle
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UBool U_EXPORT2
 u_istitle(UChar32 c);
@@ -1567,7 +1567,7 @@ u_istitle(UChar32 c);
  *
  * @param c    the character to be tested
  * @return  true if the character is a digit; false otherwise.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UBool U_EXPORT2
 u_isdigit(UChar32 c);
@@ -1578,7 +1578,7 @@ u_isdigit(UChar32 c);
  *
  * @param c    the character to be tested
  * @return  true if the character is a letter or a digit; false otherwise.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UBool U_EXPORT2
 u_isalnum(UChar32 c);
@@ -1596,7 +1596,7 @@ u_isalnum(UChar32 c);
  * @see u_isupper
  * @see u_islower
  * @see u_istitle
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UBool U_EXPORT2
 u_isdefined(UChar32 c);
@@ -1610,7 +1610,7 @@ u_isdefined(UChar32 c);
  *
  * @see u_isdigit
  * @see u_isalnum
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UBool U_EXPORT2
 u_isalpha(UChar32 c);
@@ -1620,7 +1620,7 @@ u_isalpha(UChar32 c);
  *
  * @param c    the character to be tested
  * @return  true if the character is a space character; false otherwise.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UBool U_EXPORT2
 u_isspace(UChar32 c);
@@ -1651,7 +1651,7 @@ u_isspace(UChar32 c);
  * @return  true if the character is an ICU whitespace character;
  *          false otherwise.
  * @see     #u_isspace
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UBool U_EXPORT2
 u_isWhitespace(UChar32 c);
@@ -1669,7 +1669,7 @@ u_isWhitespace(UChar32 c);
  * @return  true if the Unicode character is a control character; false otherwise.
  *
  * @see u_isprint
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UBool U_EXPORT2
 u_iscntrl(UChar32 c);
@@ -1683,7 +1683,7 @@ u_iscntrl(UChar32 c);
  * @return  true if the Unicode character is a printable character; false otherwise.
  *
  * @see u_iscntrl
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UBool U_EXPORT2
 u_isprint(UChar32 c);
@@ -1697,7 +1697,7 @@ u_isprint(UChar32 c);
  *
  * @see u_isalpha
  * @see u_isdigit
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UBool U_EXPORT2
 u_isbase(UChar32 c);
@@ -1712,7 +1712,7 @@ u_isbase(UChar32 c);
  * @return the linguistic direction property of a character.
  * @see UCharDirection
  * @see UCharDirection
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UCharDirection U_EXPORT2
 u_charDirection(UChar32 c);
@@ -1725,7 +1725,7 @@ u_charDirection(UChar32 c);
  *
  * @param c the character (code point, Unicode scalar value) to be tested
  * @return TRUE if the character has the "mirrored" property
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UBool U_EXPORT2
 u_isMirrored(UChar32 c);
@@ -1744,7 +1744,7 @@ u_isMirrored(UChar32 c);
  * @return another Unicode code point that may serve as a mirror-image
  *         substitute, or c itself if there is no such mapping or c
  *         does not have the "mirrored" property
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UChar32 U_EXPORT2
 u_charMirror(UChar32 c);
@@ -1818,7 +1818,7 @@ u_charCellWidth(UChar32 c);
  * @param c            the character to be tested
  * @return a value of type int, the character category.
  * @see UCharCategory
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int8_t U_EXPORT2
 u_charType(UChar32 c);
@@ -1882,7 +1882,7 @@ u_enumCharTypes(UCharEnumTypeRange *enumRange, const void *context);
  *
  * @param c the code point of the character
  * @return the combining class of the character
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI uint8_t U_EXPORT2
 u_getCombiningClass(UChar32 c);
@@ -1893,7 +1893,7 @@ u_getCombiningClass(UChar32 c);
  * @param c the decimal digit character for which to get the numeric value
  * @return the numeric value of c in decimal radix.  This method returns
  * -1 if c is not a valid digit character.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2
 u_charDigitValue(UChar32 c);
@@ -1904,7 +1904,7 @@ u_charDigitValue(UChar32 c);
  * @param ch The character to be tested
  * @return the Unicode allocation block that contains the character
  * @see #UBlockCode
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UBlockCode U_EXPORT2
 ublock_getCode(UChar32    ch);
@@ -1939,7 +1939,7 @@ ublock_getCode(UChar32    ch);
  * @see UCharNameChoice
  * @see u_charFromName
  * @see u_enumCharNames
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2
 u_charName(UChar32 code, UCharNameChoice nameChoice,
@@ -2181,7 +2181,7 @@ u_getPropertyValueEnum(UProperty property,
  *          FALSE otherwise.
  * @see     u_isalpha
  * @see     u_isIDPart
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UBool U_EXPORT2
 u_isIDStart(UChar32 c);
@@ -2208,7 +2208,7 @@ u_isIDStart(UChar32 c);
  *          FALSE otherwise.
  * @see     u_isIDIgnorable
  * @see     u_isIDStart
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UBool U_EXPORT2
 u_isIDPart(UChar32 c);
@@ -2235,7 +2235,7 @@ u_isIDPart(UChar32 c);
  * @return  TRUE if the character may be part of a Unicode identifier;
  *          FALSE otherwise.
  * @see     u_isIDPart
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UBool U_EXPORT2
 u_isIDIgnorable(UChar32 c);
@@ -2258,7 +2258,7 @@ u_isIDIgnorable(UChar32 c);
  * @see     u_isJavaIDPart
  * @see     u_isalpha
  * @see     u_isIDStart
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UBool U_EXPORT2
 u_isJavaIDStart(UChar32 c);
@@ -2289,7 +2289,7 @@ u_isJavaIDStart(UChar32 c);
  * @see     u_isalpha
  * @see     u_isdigit
  * @see     u_isIDPart
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UBool U_EXPORT2
 u_isJavaIDPart(UChar32 c);
@@ -2314,7 +2314,7 @@ u_isJavaIDPart(UChar32 c);
  * @param c   the character to be converted
  * @return  the lowercase equivalent of the character, if any;
  *      otherwise the character itself.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UChar32 U_EXPORT2
 u_tolower(UChar32 c);
@@ -2332,7 +2332,7 @@ u_tolower(UChar32 c);
  * @param c   the character to be converted
  * @return  the uppercase equivalent of the character, if any;
  *      otherwise the character itself.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UChar32 U_EXPORT2
 u_toupper(UChar32 c);
@@ -2349,7 +2349,7 @@ u_toupper(UChar32 c);
  * @param c   the character to be converted
  * @return  the titlecase equivalent of the character, if any;
  *      otherwise the character itself.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UChar32 U_EXPORT2
 u_totitle(UChar32 c);
@@ -2371,7 +2371,7 @@ u_totitle(UChar32 c);
  * are to be excluded for default mappings and
  * included for the Turkic-specific mappings.
  *
- * @stable
+ * @stable ICU 2.0
  */
 #define U_FOLD_CASE_EXCLUDE_SPECIAL_I 1
 
@@ -2386,7 +2386,7 @@ u_totitle(UChar32 c);
  * @param options Either U_FOLD_CASE_DEFAULT or U_FOLD_CASE_EXCLUDE_SPECIAL_I
  * @return      the case folding equivalent of the character, if any;
  *              otherwise the character itself.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UChar32 U_EXPORT2
 u_foldCase(UChar32 c, uint32_t options);
@@ -2424,7 +2424,7 @@ u_foldCase(UChar32 c, uint32_t options);
  * @see     u_forDigit
  * @see     u_charDigitValue
  * @see     u_isdigit
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2
 u_digit(UChar32 ch, int8_t radix);
@@ -2453,7 +2453,7 @@ u_digit(UChar32 ch, int8_t radix);
  * @see     u_digit
  * @see     u_charDigitValue
  * @see     u_isdigit
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UChar32 U_EXPORT2
 u_forDigit(int32_t digit, int8_t radix);
@@ -2480,7 +2480,7 @@ u_charAge(UChar32 c, UVersionInfo versionArray);
  * for the Unicode standard that is currently used by ICU.  For example, release "1.3.31.2" 
  * is then represented as 0x01031F02.
  * @param versionArray the version # information, the result will be filled in
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2
 u_getUnicodeVersion(UVersionInfo info);

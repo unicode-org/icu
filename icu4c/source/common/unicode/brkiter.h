@@ -200,7 +200,7 @@ class U_COMMON_API BreakIterator : public UObject {
 public:
     /**
      *  destructor
-     *  @stable
+     *  @stable ICU 2.0
      */
     virtual ~BreakIterator();
 
@@ -215,7 +215,7 @@ public:
      * BreakIterator, as the argument.  Text is considered the same if
      * it contains the same characters, it need not be the same
      * object, and styles are not considered.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UBool operator==(const BreakIterator&) const = 0;
 
@@ -223,21 +223,21 @@ public:
      * Returns the complement of the result of operator==
      * @param ths The BreakIterator to be compared for inequality
      * @return the complement of the result of operator==
-     * @stable
+     * @stable ICU 2.0
      */
     UBool operator!=(const BreakIterator& rhs) const { return !operator==(rhs); }
 
     /**
      * Return a polymorphic copy of this object.  This is an abstract
      * method which subclasses implement.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual BreakIterator* clone(void) const = 0;
 
     /**
      * Return a polymorphic class ID for this object. Different subclasses
      * will return distinct unequal values.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UClassID getDynamicClassID(void) const = 0;
 
@@ -245,7 +245,7 @@ public:
      * Return a CharacterIterator over the text being analyzed.
      * Changing the state of the returned iterator can have undefined consequences
      * on the operation of the break iterator.  If you need to change it, clone it first.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual const CharacterIterator& getText(void) const = 0;
 
@@ -253,7 +253,7 @@ public:
      * Change the text over which this operates. The text boundary is
      * reset to the start.
      * @param text The UnicodeString used to change the text.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void  setText(const UnicodeString &text) = 0;
 
@@ -261,26 +261,26 @@ public:
      * Change the text over which this operates. The text boundary is
      * reset to the start.
      * @param it The CharacterIterator used to change the text.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void  adoptText(CharacterIterator* it) = 0;
 
     /**
      * DONE is returned by previous() and next() after all valid
      * boundaries have been returned.
-     * @stable
+     * @stable ICU 2.0
      */
     static const int32_t DONE;
 
     /**
      * Return the index of the first character in the text being scanned.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual int32_t first(void) = 0;
 
     /**
      * Return the index immediately BEYOND the last character in the text being scanned.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual int32_t last(void) = 0;
 
@@ -288,7 +288,7 @@ public:
      * Return the boundary preceding the current boundary.
      * @return The character index of the previous text boundary or DONE if all
      * boundaries have been returned.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual int32_t previous(void) = 0;
 
@@ -296,14 +296,14 @@ public:
      * Return the boundary following the current boundary.
      * @return The character index of the next text boundary or DONE if all
      * boundaries have been returned.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual int32_t next(void) = 0;
 
     /**
      * Return character index of the current interator position within the text.
      * @return The boundary most recently returned.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual int32_t current(void) const = 0;
 
@@ -313,7 +313,7 @@ public:
      * the value BreakIterator.DONE
      * @param offset the offset to begin scanning.
      * @return The first boundary after the specified offset.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual int32_t following(int32_t offset) = 0;
 
@@ -323,7 +323,7 @@ public:
      * the value BreakIterator.DONE
      * @param offset the offset to begin scanning.
      * @return The first boundary before the specified offset.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual int32_t preceding(int32_t offset) = 0;
 
@@ -333,7 +333,7 @@ public:
      * to the first boundary position at or following the specified offset.
      * @param offset the offset to check.
      * @return True if "offset" is a boundary position.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UBool isBoundary(int32_t offset) = 0;
 
@@ -344,7 +344,7 @@ public:
      * and positive values move to later boundaries.
      * @return The index of the nth boundary from the current position, or
      * DONE if there are fewer than |n| boundaries in the specfied direction.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual int32_t next(int32_t n) = 0;
 
@@ -365,7 +365,7 @@ public:
      * used; neither the requested locale nor any of its fall back locales
      * could be found.
      * The caller owns the returned object and is responsible for deleting it.
-     * @stable
+     * @stable ICU 2.0
      */
     static BreakIterator* createWordInstance(const Locale& where,
                                                    UErrorCode& status);
@@ -389,7 +389,7 @@ public:
      * used; neither the requested locale nor any of its fall back locales
      * could be found.
      * The caller owns the returned object and is responsible for deleting it.
-     * @stable
+     * @stable ICU 2.0
      */
     static BreakIterator* createLineInstance(const Locale& where,
                                                    UErrorCode& status);
@@ -411,7 +411,7 @@ public:
      * used; neither the requested locale nor any of its fall back locales
      * could be found.
      * The caller owns the returned object and is responsible for deleting it.
-     * @stable
+     * @stable ICU 2.0
      */
     static BreakIterator* createCharacterInstance(const Locale& where,
                                                         UErrorCode& status);
@@ -432,7 +432,7 @@ public:
      * used; neither the requested locale nor any of its fall back locales
      * could be found.
      * The caller owns the returned object and is responsible for deleting it.
-     * @stable
+     * @stable ICU 2.0
      */
     static BreakIterator* createSentenceInstance(const Locale& where,
                                                        UErrorCode& status);
@@ -464,7 +464,7 @@ public:
      * call.</p>
      * @param count the output parameter of number of elements in the locale list
      * @return available locales
-     * @stable
+     * @stable ICU 2.0
      */
     static const Locale* getAvailableLocales(int32_t& count);
 
@@ -475,7 +475,7 @@ public:
      * @param name the fill-in parameter of the return value
      * Uses best match.
      * @return user-displayable name
-     * @stable
+     * @stable ICU 2.0
      */
     static UnicodeString& getDisplayName(const Locale& objectLocale,
                                          const Locale& displayLocale,
@@ -487,7 +487,7 @@ public:
      * @param objectLocale must be from getMatchingLocales
      * @param name the fill-in parameter of the return value
      * @return user-displayable name
-     * @stable
+     * @stable ICU 2.0
      */
     static UnicodeString& getDisplayName(const Locale& objectLocale,
                                          UnicodeString& name);
@@ -507,7 +507,7 @@ public:
      *  necessary.
      * @return pointer to the new clone
      *
-     * @stable
+     * @stable ICU 2.0
      */
     virtual BreakIterator *  createBufferClone(void *stackBuffer,
                                                int32_t &BufferSize,
@@ -517,7 +517,7 @@ public:
      *   Determine whether the BreakIterator was created in user memory by
      *   createBufferClone(), and thus should not be deleted.  Such objects
      *   must be closed by an explicit call to the destructor (not delete).
-     *  @stable
+     *  @stable ICU 2.0
      */
     inline UBool isBufferClone(void);
 

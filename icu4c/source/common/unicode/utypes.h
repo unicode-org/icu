@@ -519,25 +519,25 @@ typedef enum UErrorCode {
 #ifdef XP_CPLUSPLUS
     /**
      * Does the error code indicate success?
-     * @stable
+     * @stable ICU 2.0
      */
     static
     inline UBool U_SUCCESS(UErrorCode code) { return (UBool)(code<=U_ZERO_ERROR); }
     /**
      * Does the error code indicate a failure?
-     * @stable
+     * @stable ICU 2.0
      */
     static
     inline UBool U_FAILURE(UErrorCode code) { return (UBool)(code>U_ZERO_ERROR); }
 #else
     /**
      * Does the error code indicate success?
-     * @stable
+     * @stable ICU 2.0
      */
 #   define U_SUCCESS(x) ((x)<=U_ZERO_ERROR)
     /**
      * Does the error code indicate a failure?
-     * @stable
+     * @stable ICU 2.0
      */
 #   define U_FAILURE(x) ((x)>U_ZERO_ERROR)
 #endif
