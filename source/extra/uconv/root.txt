@@ -1,6 +1,6 @@
 ﻿// -*- Coding: utf-8; -*-  [all uconv resource files]
 // Copyright (c) 2000 IBM, Inc. and Others.
-// $Revision: 1.13 $
+// $Revision: 1.14 $
 //
 // Root translation file for uconv messages.
 // So you want to translate this file??? Great!
@@ -30,7 +30,7 @@ root
 
   lcUsageWord { "usage" }
   ucUsageWord { "Usage" }
-  usage { "{0}: {1} [ -h, -?, --help ] [ -l, --list | --list-code code | --default-code | -L, --list-transliterators ] [ --canon ] [ -x transliterator ] -f, --from-code code -t, --to-code code [ file ]\n" }
+  usage { "{0}: {1} [ -h, -?, --help ] [ -l, --list | --list-code code | --default-code | -L, --list-transliterators ] [ --canon ] [ -x transliterator ] [ -c ] [ -i ] -f, --from-code code -t, --to-code code [ file ]\n" }
 
   help {  "Options:  -h, --help                    print this message\n"
 	  "          -l, --list                    list all available encodings\n"
@@ -39,6 +39,8 @@ root
 	  "          -L, --list-transliterators    list all available transliterators\n"
           "          --canon                       print list in cnvrtrs.txt(5) format\n"
 	  "          -x transliterator             run everything through transliterator\n" 
+	  "          -c                            omit invalid characters from the output\n"
+	  "          -i                            ignore invalid sequences from the input\n"
 	  "          -f, --from-code code          set the original encoding\n"
 	  "          -t, --to-code code            set the destination encoding\n" 
 }
@@ -54,6 +56,8 @@ root
   cantOpenToCodeset { "Couldn''t open to encoding {0}: {1}\n" } // 0: set, 1: err
 
   cantOpenTranslit { "Couldn''t open transliteror {0}: {1}\n" } // 0: set, 1: err
+
+  cantSetCallback { "Couldn''t set transcoding callback: {0}\n" } // 0: err
 
   cantOpenInputF  { "Couldn''t open input file {0}: {1}.\n" } // 0: file, 1: strerror [OS error string]
 
