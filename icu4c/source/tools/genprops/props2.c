@@ -641,7 +641,7 @@ lineBreakLineFn(void *context,
         exit(U_PARSE_ERROR);
     }
 
-    if(!upvec_setValue(pv, start, limit, 2, (uint32_t)i<<UPROPS_LB_SHIFT, UPROPS_LB_MASK, pErrorCode)) {
+    if(!upvec_setValue(pv, start, limit, 0, (uint32_t)i<<UPROPS_LB_SHIFT, UPROPS_LB_MASK, pErrorCode)) {
         fprintf(stderr, "genprops error: unable to set line break code: %s\n", u_errorName(*pErrorCode));
         exit(*pErrorCode);
     }
