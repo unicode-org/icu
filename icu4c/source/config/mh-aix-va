@@ -3,15 +3,17 @@
 ## Copyright (c) 1999-2002, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-aix-va,v 1.24 2002/05/13 23:50:12 grhoten-oss Exp $
+## $Id: mh-aix-va,v 1.25 2002/07/29 21:33:32 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -E -M $(DEFS) $(CPPFLAGS)
 GEN_DEPS.cc=	$(CXX) -E -M $(DEFS) $(CPPFLAGS)
 
-# Make the strings readonly. This helps in the common data library
-CFLAGS += -qroconst
-CXXFLAGS += -qroconst
+# -qroconst make the strings readonly, which is usually the default.
+#           This helps in the data library,
+# -qproto assumes all functions are prototyped (for optimization)
+CFLAGS += -qproto -qroconst
+CXXFLAGS += -qproto -qroconst
 
 LDFLAGS += -brtl -bh:5
 
