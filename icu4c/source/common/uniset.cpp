@@ -170,7 +170,7 @@ static int8_t U_CALLCONV compareUnicodeString(UHashTok t1, UHashTok t2) {
  */
 UnicodeSet::UnicodeSet() :
     len(1), capacity(1 + START_EXTRA), bufferCapacity(0),
-    buffer(0)
+    list(0), buffer(0), strings(0)
 {
     list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
     if(list!=NULL){
@@ -189,7 +189,7 @@ UnicodeSet::UnicodeSet() :
  */
 UnicodeSet::UnicodeSet(UChar32 start, UChar32 end) :
     len(1), capacity(1 + START_EXTRA), bufferCapacity(0),
-    buffer(0)
+    list(0), buffer(0), strings(0)
 {
     list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
     if(list!=NULL){
@@ -209,7 +209,7 @@ UnicodeSet::UnicodeSet(UChar32 start, UChar32 end) :
 UnicodeSet::UnicodeSet(const UnicodeString& pattern,
                        UErrorCode& status) :
     len(0), capacity(START_EXTRA), bufferCapacity(0),
-    buffer(0)
+    list(0), buffer(0), strings(0)
 {   
     if(U_SUCCESS(status)){
         list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
@@ -229,7 +229,7 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
                        const SymbolTable& symbols,
                        UErrorCode& status) :
     len(0), capacity(START_EXTRA), bufferCapacity(0),
-    buffer(0)
+    list(0), buffer(0), strings(0)
 {
     if(U_SUCCESS(status)){
         list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
@@ -248,7 +248,7 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
 UnicodeSet::UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
                        UErrorCode& status) :
     len(0), capacity(START_EXTRA), bufferCapacity(0),
-    buffer(0)
+    list(0), buffer(0), strings(0)
 {
     if(U_SUCCESS(status)){
         list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
@@ -270,8 +270,8 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
  * @deprecated To be removed after 2002-DEC-31
  */
 UnicodeSet::UnicodeSet(int8_t category, UErrorCode& status) :
-    len(0), capacity(START_EXTRA), bufferCapacity(0), list(0),
-    buffer(0), strings(0)
+    len(0), capacity(START_EXTRA), bufferCapacity(0),
+    list(0), buffer(0), strings(0)
 {
     static const UChar OPEN[] = { 91, 58, 0 }; // "[:"
     static const UChar CLOSE[]= { 58, 93, 0 }; // ":]"
@@ -300,8 +300,8 @@ UnicodeSet::UnicodeSet(int8_t category, UErrorCode& status) :
  */
 UnicodeSet::UnicodeSet(const UnicodeSet& o) :
     UnicodeFilter(o),
-    capacity(o.len + GROW_EXTRA), bufferCapacity(0),
-    buffer(0)
+    len(0), capacity(o.len + GROW_EXTRA), bufferCapacity(0),
+    list(0), buffer(0), strings(0)
 {
     list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
     if(list!=NULL){
