@@ -844,7 +844,7 @@ Locale::getChinese(void)
 const Locale &
 Locale::getSimplifiedChinese(void)
 {
-    return getLocale(eCHINESE);
+    return getLocale(eCHINA);
 }
 
 const Locale &
@@ -887,13 +887,13 @@ Locale::getKorea(void)
 const Locale &
 Locale::getChina(void)
 {
-    return getLocale(eCHINESE);
+    return getLocale(eCHINA);
 }
 
 const Locale &
 Locale::getPRC(void)
 {
-    return getLocale(eCHINESE);
+    return getLocale(eCHINA);
 }
 
 const Locale &
@@ -923,7 +923,7 @@ Locale::getCanada(void)
 const Locale &
 Locale::getCanadaFrench(void)
 {
-    return getLocale(eFRENCH);
+    return getLocale(eCANADA_FRENCH);
 }
 
 const Locale &
