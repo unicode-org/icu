@@ -123,8 +123,8 @@
     if((uint32_t)(c)<=0xffff) { \
         (s)[(i)++]=(uint16_t)(c); \
     } else { \
-        (s)[(i)++]=(uint16_t)((c)>>10)+0xd7c0; \
-        (s)[(i)++]=(uint16_t)(c)&0x3ff|0xdc00; \
+        (s)[(i)++]=(uint16_t)(((c)>>10)+0xd7c0); \
+        (s)[(i)++]=(uint16_t)((c)&0x3ff|0xdc00); \
     } \
 }
 
