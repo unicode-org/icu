@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * Copyright (c) 1997-2004, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -1671,6 +1671,23 @@ initExpectedSkippables(UnicodeSet skipSets[UNORM_MODE_COUNT]) {
         "D6A8-\\U0001D7C9\\U0001D7CE-\\U0001D7FF\\U0002F800-\\U0002FA1D]", ""), errorCode);
 }
 
+// USetAdder implementation
+// Does not use uset.h to reduce code dependencies
+static void U_CALLCONV
+_set_add(USet *set, UChar32 c) {
+    ((UnicodeSet *)set)->add(c);
+}
+
+static void U_CALLCONV
+_set_addRange(USet *set, UChar32 start, UChar32 end) {
+    ((UnicodeSet *)set)->add(start, end);
+}
+
+static void U_CALLCONV
+_set_addString(USet *set, const UChar *str, int32_t length) {
+    ((UnicodeSet *)set)->add(UnicodeString((UBool)(length<0), str, length));
+}
+
 void
 BasicNormalizerTest::TestSkippable() {
     UnicodeSet starts, diff, skipSets[UNORM_MODE_COUNT], expectSets[UNORM_MODE_COUNT];
@@ -1682,7 +1699,13 @@ BasicNormalizerTest::TestSkippable() {
 
     /* build NF*Skippable sets from runtime data */
     status=U_ZERO_ERROR;
-    unorm_addPropertyStarts((USet *)&starts, &status);
+    USetAdder sa = {
+        (USet *)&starts,
+        _set_add,
+        _set_addRange,
+        _set_addString
+    };
+    unorm_addPropertyStarts(&sa, &status);
     if(U_FAILURE(status)) {
         errln("unable to load normalization data for unorm_addPropertyStarts(() - %s\n", u_errorName(status));
         return;
