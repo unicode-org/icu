@@ -1,14 +1,13 @@
-﻿
 // *******************************************************************************
 // *
-// *   Copyright (C) 1997-2000, International Business Machines
+// *   Copyright (C) 1997-2001, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
 // *******************************************************************************
 
-gv{ 
-   Version { "x0.0" }
-    DayAbbreviations { 
+gv {
+    Version { "x0.0" }
+    DayAbbreviations {
             "Jed",
             "Jel",
             "Jem",
@@ -17,7 +16,7 @@ gv{
             "Jeh",
             "Jes",
     }
-    DayNames { 
+    DayNames {
             "Jedoonee",
             "Jelhein",
             "Jemayrt",
@@ -26,7 +25,7 @@ gv{
             "Jeheiney",
             "Jesarn",
     }
-    MonthAbbreviations { 
+    MonthAbbreviations {
             "J-guer",
             "T-arree",
             "Mayrnt",
@@ -41,7 +40,7 @@ gv{
             "M.Nollick",
             "",
     }
-    MonthNames { 
+    MonthNames {
             "Jerrey-geuree",
             "Toshiaght-arree",
             "Mayrnt",
@@ -56,7 +55,7 @@ gv{
             "Mee ny Nollick",
             "",
     }
-    NumberElements { 
+    NumberElements {
             ".",
             ",",
             ";",
@@ -65,9 +64,9 @@ gv{
             "#",
             "-",
             "E",
-            "‰",
-            "∞",
-            "�",
+            "\u2030",
+            "\u221e",
+            "\ufffd",
     }
             // /**************** Info Below is needed ****************/
             // CollationElements{}
