@@ -519,21 +519,24 @@ LocDataParser::parseError(const char* /*str*/) {
     }
 
     const UChar* start = p - U_PARSE_CONTEXT_LEN - 1;
-    if (start < data)
+    if (start < data) {
         start = data;
-    for (UChar* x = p; --x >= start;)
+    }
+    for (UChar* x = p; --x >= start;) {
         if (!*x) {
             start = x+1;
             break;
         }
+    }
     const UChar* limit = p + U_PARSE_CONTEXT_LEN - 1;
-    if (limit > e)
+    if (limit > e) {
         limit = e;
-    u_strncpy(pe.preContext, start, p-start);
+    }
+    u_strncpy(pe.preContext, start, (int32_t)(p-start));
     pe.preContext[p-start] = 0;
-    u_strncpy(pe.postContext, p, limit-p);
+    u_strncpy(pe.postContext, p, (int32_t)(limit-p));
     pe.postContext[limit-p] = 0;
-    pe.offset = p - data;
+    pe.offset = (int32_t)(p - data);
     
 #ifdef DEBUG
     fprintf(stderr, "%s at or near character %d: ", str, p-data);
