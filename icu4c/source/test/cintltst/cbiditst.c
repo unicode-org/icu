@@ -618,9 +618,117 @@ doArabicShapingTest() {
     }
 
     /* test noop */
+    errorCode=U_ZERO_ERROR;
+    length=u_shapeArabic(source, LENGTHOF(source),
+                         dest, LENGTHOF(dest),
+                         0,
+                         &errorCode);
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(source) || uprv_memcmp(dest, source, length*U_SIZEOF_UCHAR)!=0) {
+        log_err("failure in u_shapeArabic(noop)\n");
+    }
+
+    errorCode=U_ZERO_ERROR;
+    length=u_shapeArabic(source, 0,
+                         dest, LENGTHOF(dest),
+                         U_SHAPE_DIGITS_EN2AN|U_SHAPE_DIGIT_TYPE_AN,
+                         &errorCode);
+    if(U_FAILURE(errorCode) || length!=0) {
+        log_err("failure in u_shapeArabic(en2an, sourceLength=0), returned %d/%s\n", u_errorName(errorCode), LENGTHOF(source));
+    }
+
+    /* preflight digit shaping */
+    errorCode=U_ZERO_ERROR;
+    length=u_shapeArabic(source, LENGTHOF(source),
+                         NULL, 0,
+                         U_SHAPE_DIGITS_EN2AN|U_SHAPE_DIGIT_TYPE_AN,
+                         &errorCode);
+    if(errorCode!=U_BUFFER_OVERFLOW_ERROR || length!=LENGTHOF(source)) {
+        log_err("failure in u_shapeArabic(en2an preflighting), returned %d/%s instead of %d/U_BUFFER_OVERFLOW_ERROR\n",
+                length, u_errorName(errorCode), LENGTHOF(source));
+    }
+
     /* test illegal arguments */
+    errorCode=U_ZERO_ERROR;
+    length=u_shapeArabic(NULL, LENGTHOF(source),
+                         dest, LENGTHOF(dest),
+                         U_SHAPE_DIGITS_EN2AN|U_SHAPE_DIGIT_TYPE_AN,
+                         &errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("failure in u_shapeArabic(source=NULL), returned %s instead of U_ILLEGAL_ARGUMENT_ERROR\n", u_errorName(errorCode));
+    }
+
+    errorCode=U_ZERO_ERROR;
+    length=u_shapeArabic(source, -2,
+                         dest, LENGTHOF(dest),
+                         U_SHAPE_DIGITS_EN2AN|U_SHAPE_DIGIT_TYPE_AN,
+                         &errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("failure in u_shapeArabic(sourceLength=-2), returned %s instead of U_ILLEGAL_ARGUMENT_ERROR\n", u_errorName(errorCode));
+    }
+
+    errorCode=U_ZERO_ERROR;
+    length=u_shapeArabic(source, LENGTHOF(source),
+                         NULL, LENGTHOF(dest),
+                         U_SHAPE_DIGITS_EN2AN|U_SHAPE_DIGIT_TYPE_AN,
+                         &errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("failure in u_shapeArabic(dest=NULL), returned %s instead of U_ILLEGAL_ARGUMENT_ERROR\n", u_errorName(errorCode));
+    }
+
+    errorCode=U_ZERO_ERROR;
+    length=u_shapeArabic(source, LENGTHOF(source),
+                         dest, -1,
+                         U_SHAPE_DIGITS_EN2AN|U_SHAPE_DIGIT_TYPE_AN,
+                         &errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("failure in u_shapeArabic(destSize=-1), returned %s instead of U_ILLEGAL_ARGUMENT_ERROR\n", u_errorName(errorCode));
+    }
+
+    errorCode=U_ZERO_ERROR;
+    length=u_shapeArabic(source, LENGTHOF(source),
+                         dest, LENGTHOF(dest),
+                         U_SHAPE_LENGTH_RESERVED|U_SHAPE_DIGITS_EN2AN|U_SHAPE_DIGIT_TYPE_AN,
+                         &errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("failure in u_shapeArabic(U_SHAPE_LENGTH_RESERVED), returned %s instead of U_ILLEGAL_ARGUMENT_ERROR\n", u_errorName(errorCode));
+    }
+
+    errorCode=U_ZERO_ERROR;
+    length=u_shapeArabic(source, LENGTHOF(source),
+                         dest, LENGTHOF(dest),
+                         U_SHAPE_LETTERS_RESERVED|U_SHAPE_DIGITS_EN2AN|U_SHAPE_DIGIT_TYPE_AN,
+                         &errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("failure in u_shapeArabic(U_SHAPE_LETTERS_RESERVED), returned %s instead of U_ILLEGAL_ARGUMENT_ERROR\n", u_errorName(errorCode));
+    }
+
+    errorCode=U_ZERO_ERROR;
+    length=u_shapeArabic(source, LENGTHOF(source),
+                         dest, LENGTHOF(dest),
+                         U_SHAPE_DIGITS_RESERVED|U_SHAPE_DIGIT_TYPE_AN,
+                         &errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("failure in u_shapeArabic(U_SHAPE_DIGITS_RESERVED), returned %s instead of U_ILLEGAL_ARGUMENT_ERROR\n", u_errorName(errorCode));
+    }
+
+    errorCode=U_ZERO_ERROR;
+    length=u_shapeArabic(source, LENGTHOF(source),
+                         dest, LENGTHOF(dest),
+                         U_SHAPE_DIGITS_EN2AN|U_SHAPE_DIGIT_TYPE_RESERVED,
+                         &errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("failure in u_shapeArabic(U_SHAPE_DIGIT_TYPE_RESERVED), returned %s instead of U_ILLEGAL_ARGUMENT_ERROR\n", u_errorName(errorCode));
+    }
+
     /* test that letter shaping sets "unsupported" */
-    /* ### to be done */
+    errorCode=U_ZERO_ERROR;
+    length=u_shapeArabic(source, LENGTHOF(source),
+                         dest, LENGTHOF(dest),
+                         U_SHAPE_LETTERS_SHAPE,
+                         &errorCode);
+    if(errorCode!=U_UNSUPPORTED_ERROR) {
+        log_err("u_shapeArabic(shape letters) does not return U_UNSUPPORTED_ERROR but %s\n", u_errorName(errorCode));
+    }
 }
 
 /* helpers ------------------------------------------------------------------ */
