@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Normalizer.java,v $ 
- * $Date: 2001/04/02 19:21:21 $ 
- * $Revision: 1.11 $
+ * $Date: 2001/11/01 00:16:01 $ 
+ * $Revision: 1.12 $
  *
  *****************************************************************************************
  */
@@ -1503,6 +1503,8 @@ public final class Normalizer {
      * @param result the string to fix.
      */
     private static void fixCanonical(StringBuffer result) {
+        if (result.length() == 0) return; // don't bother with empty strings!
+        
         int i = result.length() - 1;
         int currentType = getClass(result.charAt(i));
         int lastType;
