@@ -342,6 +342,11 @@ ucnv_extInitialMatchToU(UConverter *cnv, const int32_t *cx,
                         UBool flush,
                         UErrorCode *pErrorCode);
 
+U_CFUNC UChar32
+ucnv_extSimpleMatchToU(const int32_t *cx,
+                       const char *source, int32_t length,
+                       UBool useFallback);
+
 U_CFUNC void
 ucnv_extContinueMatchToU(UConverter *cnv,
                          UConverterToUnicodeArgs *pArgs, int32_t srcIndex,
@@ -360,8 +365,7 @@ ucnv_extInitialMatchFromU(UConverter *cnv, const int32_t *cx,
 U_CFUNC int32_t
 ucnv_extSimpleMatchFromU(const int32_t *cx,
                          UChar32 cp, uint32_t *pValue,
-                         UBool useFallback,
-                         UErrorCode *pErrorCode);
+                         UBool useFallback);
 
 U_CFUNC void
 ucnv_extContinueMatchFromU(UConverter *cnv,

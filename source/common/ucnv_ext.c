@@ -26,12 +26,6 @@
 #include "ucnv_ext.h"
 #include "cmemory.h"
 
-/*
- * ### TODO: probably need pointer to baseTableSharedData
- * and also copy the base table's pointers for the base table arrays etc.
- * into this sharedData
- */
-
 /* to Unicode --------------------------------------------------------------- */
 
 /*
@@ -331,25 +325,24 @@ ucnv_extInitialMatchToU(UConverter *cnv, const int32_t *cx,
     }
 }
 
-#if 0
-/* ### TODO */
-
 U_CFUNC UChar32
 ucnv_extSimpleMatchToU(const int32_t *cx,
-                       UChar32 cp,
-                       UBool useFallback,
-                       UErrorCode *pErrorCode) {
+                       const char *source, int32_t length,
+                       UBool useFallback) {
     uint32_t value;
     int32_t match;
 
+    if(length<=0) {
+        return 0xffff;
+    }
+
     /* try to match */
     match=ucnv_extMatchToU(cx, -1,
-                           cp,
-                           NULL, 0,
+                           source, length,
                            NULL, 0,
                            &value,
                            useFallback, TRUE);
-    if(match>0) {
+    if(match==length) {
         /* write result for simple, single-character conversion */
         if(UCNV_EXT_TO_U_IS_CODE_POINT(value)) {
             return UCNV_EXT_TO_U_GET_CODE_POINT(value);
@@ -359,13 +352,12 @@ ucnv_extSimpleMatchToU(const int32_t *cx,
     /*
      * return no match because
      * - match>0 && value points to string: simple conversion cannot handle multiple code points
+     * - match>0 && match!=length: not all input consumed, forbidden for this function
      * - match==0: no match found in the first place
      * - match<0: partial match, not supported for simple conversion (and flush==TRUE)
      */
-    return 0;
+    return 0xfffe;
 }
-
-#endif
 
 /*
  * continue partial match with new input
@@ -800,14 +792,10 @@ ucnv_extInitialMatchFromU(UConverter *cnv, const int32_t *cx,
     }
 }
 
-#if 0
-/* ### TODO */
-
 U_CFUNC int32_t
 ucnv_extSimpleMatchFromU(const int32_t *cx,
                          UChar32 cp, uint32_t *pValue,
-                         UBool useFallback,
-                         UErrorCode *pErrorCode) {
+                         UBool useFallback) {
     uint32_t value;
     int32_t match;
 
@@ -828,6 +816,7 @@ ucnv_extSimpleMatchFromU(const int32_t *cx,
         if(length<=UCNV_EXT_FROM_U_MAX_DIRECT_LENGTH) {
             *pValue=value;
             return length;
+#if 0 /* not currently used */
         } else if(length==4) {
             /* de-serialize a 4-byte result */
             const uint8_t *result=UCNV_EXT_ARRAY(cx, UCNV_EXT_FROM_U_BYTES_INDEX, uint8_t)+value;
@@ -837,6 +826,7 @@ ucnv_extSimpleMatchFromU(const int32_t *cx,
                 ((uint32_t)result[2]<<8)|
                 result[3];
             return 4;
+#endif
         }
     }
 
@@ -849,8 +839,6 @@ ucnv_extSimpleMatchFromU(const int32_t *cx,
      */
     return 0;
 }
-
-#endif
 
 /*
  * continue partial match with new input, requires cnv->preFromUFirstCP>=0
