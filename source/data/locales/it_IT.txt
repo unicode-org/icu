@@ -19,5 +19,5 @@ it_IT {
 //        "#,##0%",
 //    }
 //    ShortCountry { "ITA" }
-    LocaleID { "0410" }
+    LocaleID:int { 0x0410 }
 }

@@ -33,7 +33,7 @@ de_CH {
         "CHF",
         ".",
     }
-    LocaleID { "0807" }
+    LocaleID:int { 0x0807 }
 //    LocaleString { "de_CH" }
     NumberElements { 
         ".",

@@ -72,16 +72,16 @@ id {
         "#,##0%",
         "#E0",
     }
-    LocaleID{ "21"}
+    LocaleID:int { 0x21 }
 //    LocaleScript{ 
 //        "Latn",  // ISO 15924 Name 
 //    }
-            // /**************** Info Below is needed ****************/
-            // CollationElements{}
-            // Countries{}
-            // Eras{}
-            // Languages{}
-            // ShortLanguage { }
-            // localPatternChars{}
-            //
+    // /**************** Info Below is needed ****************/
+    // CollationElements{}
+    // Countries{}
+    // Eras{}
+    // Languages{}
+    // ShortLanguage { }
+    // localPatternChars{}
+    //
 }

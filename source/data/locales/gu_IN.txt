@@ -6,8 +6,8 @@
 // ***************************************************************************
 
 gu_IN {
-    Version { "x0.2" }
-    LocaleID { "0447" }
+    Version { "x0.3" }
+    LocaleID:int { 0x0447 }
     //ShortCountry { IND }
     CurrencyElements {
         "\u0AB0\u0AC1",

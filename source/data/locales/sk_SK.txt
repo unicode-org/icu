@@ -20,5 +20,5 @@ sk_SK {
         "#E0",
     }
 //    ShortCountry { "SVK" }
-    LocaleID { "041b" }
+    LocaleID:int { 0x041b }
 }

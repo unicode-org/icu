@@ -20,5 +20,5 @@ he_IL {
         "#E0",
     }
 //    ShortCountry { "ISR" }
-    LocaleID { "040d" }
+    LocaleID:int { 0x040d }
 }

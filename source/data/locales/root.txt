@@ -1123,7 +1123,7 @@ root {
         zu  { "Zulu" }
         zun { "Zuni" }
     }
-    LocaleID { "0000" }
+    LocaleID:int { 0x0000 }
 //    LocaleString { "en" }
     MonthAbbreviations { 
         "Jan",

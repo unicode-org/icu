@@ -36,7 +36,7 @@ en_CA {
 //    Languages { 
 //        en { "English" }
 //    }
-    LocaleID { "1009" }
+    LocaleID:int { 0x1009 }
 //    LocaleString { "en_CA" }
 //    ShortCountry { "CAN" }
 

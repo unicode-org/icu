@@ -1462,7 +1462,7 @@ TestKeyInRootRecursive(UResourceBundle *root, UResourceBundle *currentBundle, co
             /* Here is one of the recursive parts */
             TestKeyInRootRecursive(subRootBundle, subBundle, locale);
         }
-        else if (ures_getType(subBundle) == RES_BINARY) {
+        else if (ures_getType(subBundle) == RES_BINARY || ures_getType(subBundle) == RES_INT) {
             /* Can't do anything to check it */
             /* We'll assume it's all correct */
             log_verbose("Skipping key \"%s\" in \"%s\" for locale \"%s\"\n",
@@ -1495,17 +1495,16 @@ testLCID(UResourceBundle *currentBundle,
     char lcidStringC[64] = {0};
     int32_t lcidStringLen = 0;
     const UChar *lcidString = NULL;
+    UResourceBundle *localeID = ures_getByKey(currentBundle, "LocaleID", NULL, &status);
 
-    lcidString = ures_getStringByKey(currentBundle, "LocaleID", &lcidStringLen, &status);
+    expectedLCID = ures_getInt(localeID, &status);
+    ures_close(localeID);
 
     if (U_FAILURE(status)) {
         log_err("ERROR:   %s does not have a LocaleID (%s)\n",
             localeName, u_errorName(status));
         return;
     }
-
-    u_UCharsToChars(lcidString, lcidStringC, lcidStringLen + 1);
-    expectedLCID = uprv_strtoul(lcidStringC, NULL, 16);
 
     lcid = T_convertToLCID(localeName, &status);
     if (U_FAILURE(status)) {

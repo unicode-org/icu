@@ -8,7 +8,7 @@
 
 kok_IN {
     Version { "1.1.1" }
-    LocaleID { "0457" }
+    LocaleID:int { 0x0457 }
 //    ShortCountry { IND }
 
     CurrencyElements {

@@ -198,7 +198,7 @@ th {
     Languages { 
         th { "\u0E44\u0E17\u0E22" }
     }
-    LocaleID { "1e" }
+    LocaleID:int { 0x1e }
 //    LocaleString { "th" }
     MonthAbbreviations { 
         "\u0E21.\u0E04.",
@@ -240,9 +240,9 @@ th {
             "Bangkok",
         }
     }
-//    LocaleScript{ 
-//                "Thai", // Script Name  
-//    }
+    LocaleScript{ 
+        "Thai", // Script Name  
+    }
 
     //------------------------------------------------------------
     // Rule Based Number Format Support

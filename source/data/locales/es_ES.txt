@@ -33,5 +33,5 @@ es_ES {
         "#E0",
     }
 //    ShortCountry { "ESP" }
-    LocaleID { "0c0a" }
+    LocaleID:int { 0x0c0a }
 }

@@ -44,5 +44,5 @@ bn_IN {
         "#E0",
     }
 //    LocaleString { "bn_IN" }
-    LocaleID { "0445" }
+    LocaleID:int { 0x0445 }
 }

@@ -14,5 +14,5 @@ es__TRADITIONAL {
             "&l < ll <<< Ll <<< LL"
         }
     }
-    LocaleID { "040a" }
+    LocaleID:int { 0x040a }
 }

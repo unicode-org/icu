@@ -7,7 +7,7 @@
 
 pa_IN {
     Version { "x0.2" }
-    LocaleID{ "0446"}
+    LocaleID:int { 0x0446 }
 //    ShortCountry { IND }
 
     CurrencyElements {

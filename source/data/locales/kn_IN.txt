@@ -7,7 +7,7 @@
 
 kn_IN {
     Version { "x0.2" }
-    LocaleID{ "044B"}
+    LocaleID:int { 0x044B }
 //    ShortCountry { IND }
 
     CurrencyElements {

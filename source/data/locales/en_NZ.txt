@@ -36,7 +36,7 @@ en_NZ {
 //    Languages { 
 //        en { "English" }
 //    }
-    LocaleID { "1409" }
+    LocaleID:int { 0x1409 }
 //    LocaleString { "en_NZ" }
 //    ShortCountry { "NZL" }
 }

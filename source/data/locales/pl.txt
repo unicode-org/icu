@@ -61,7 +61,7 @@ pl {
     Languages { 
         pl { "polski" }
     }
-    LocaleID { "15" }
+    LocaleID:int { 0x15 }
 //    LocaleString { "pl" }
     MonthAbbreviations { 
         "sty",

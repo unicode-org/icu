@@ -59,8 +59,8 @@ bn {
         "\u09A1\u09BF\u09B8\u09C7\u09AE\u09CD\u09AC\u09B0",
     }
     //LocaleString { "bn" }
-    LocaleID { "45" }
+    LocaleID:int { 0x45 }
     LocaleScript:array{
-            "Beng"
+        "Beng"
     }
 }

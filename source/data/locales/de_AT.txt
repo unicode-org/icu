@@ -27,7 +27,7 @@ de_AT {
         "dd.MM.yy",
         "{1} {0}",
     }
-    LocaleID { "0c07" }
+    LocaleID:int { 0x0c07 }
 //    LocaleString { "de_AT" }
     MonthAbbreviations { 
         "J\u00E4n",

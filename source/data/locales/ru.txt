@@ -247,7 +247,7 @@ ru {
         za { "\u0417\u0443\u0430\u043d\u0433" }
         zu { "\u0417\u0443\u043b\u0443\u0441\u0441\u043a\u0438\u0439" }
     }
-    LocaleID { "19" }
+    LocaleID:int { 0x19 }
 //    LocaleString { "ru" }
     MonthAbbreviations { 
         "\u044F\u043D\u0432",

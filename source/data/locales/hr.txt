@@ -52,7 +52,7 @@ hr {
     Languages { 
         hr { "hrvatski" }
     }
-    LocaleID { "1a" }
+    LocaleID:int { 0x1a }
 //    LocaleString { "hr" }
     MonthAbbreviations { 
         "sij",

@@ -20,5 +20,5 @@ pt_PT {
         "#E0",
     }
 //    ShortCountry { "PRT" }
-    LocaleID { "0816" }
+    LocaleID:int { 0x0816 }
 }

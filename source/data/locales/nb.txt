@@ -54,7 +54,7 @@ nb {
         nn { "nynorsk" }
         no { "norsk" }
     }
-    LocaleID { "14" }
+    LocaleID:int { 0x14 }
 //    LocaleString { "nb" }
     MonthAbbreviations {
 	    "jan",

@@ -14,7 +14,7 @@ ar_KW {
     }
 //    LocaleString { "ar_KW" }
 //    ShortCountry { "KWT" }
-    LocaleID { "3401" }
+    LocaleID:int { 0x3401 }
     NumberPatterns { 
         "#,##0.###;#,##0.###-",
         "\u00A4 #,##0.000;\u00A4 #,##0.000-",

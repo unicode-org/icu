@@ -30,5 +30,5 @@ fa_IR {
         "#,##0%",
         "#E0",
     }
-    LocaleID{ "0429"}
+    LocaleID:int { 0x0429 }
 }

@@ -44,7 +44,7 @@ sw {
     Languages { 
         sw  { "Kiswahili" }
     }
-    LocaleID { "0041" }
+    LocaleID:int { 0x0041 }
 //    LocaleString { "sw" }
     MonthAbbreviations { 
         "Jan",

@@ -35,7 +35,7 @@ en_ZA {
 //    Languages { 
 //        en { "English" }
 //    }
-    LocaleID { "1c09" }
+    LocaleID:int { 0x1c09 }
 //    LocaleString { "en_ZA" }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",

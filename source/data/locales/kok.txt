@@ -6,8 +6,8 @@
 // ***************************************************************************
 
 kok {
-    LocaleID { "57" }
     Version { "1.0" }
+    LocaleID:int { 0x57 }
 //    ShortLanguage { kok }
     Languages {
         root { "\u0915\u094b\u0902\u0915\u0923\u0940" }  /* Konkani translation? */

@@ -20,5 +20,5 @@ pl_PL {
         "#E0",
     }
 //    ShortCountry { "POL" }
-    LocaleID { "0415" }
+    LocaleID:int { 0x0415 }
 }

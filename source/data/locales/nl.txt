@@ -47,7 +47,7 @@ nl {
     Languages { 
         nl { "Nederlands" }
     }
-    LocaleID { "13" }
+    LocaleID:int { 0x13 }
 //    LocaleString { "nl" }
     MonthAbbreviations { 
         "jan",

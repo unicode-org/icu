@@ -14,5 +14,5 @@ ar_EG {
     }
 //    LocaleString { "ar_EG" }
 //    ShortCountry { "EGY" }
-    LocaleID { "0c01" }
+    LocaleID:int { 0x0c01 }
 }

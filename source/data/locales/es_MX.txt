@@ -23,7 +23,7 @@ es_MX {
         "d/MM/yy",
         "{1} {0}",
     }
-    LocaleID { "080a" }
+    LocaleID:int { 0x080a }
 //    LocaleString { "es_MX" }
 //    NumberElements { 
 //        ".",

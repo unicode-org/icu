@@ -20,5 +20,5 @@ tr_TR {
         "#E0",
     }
 //    ShortCountry { "TUR" }
-    LocaleID { "041f" }
+    LocaleID:int { 0x041f }
 }
