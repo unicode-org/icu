@@ -1138,6 +1138,81 @@ compactToUnicode2(MBCSData *mbcsData) {
     uprv_free(oldStateTable);
 }
 
+/*
+ * recursive sub-function of compactToUnicodeHelper()
+ * returns:
+ * >0 number of bytes that are used in unicodeCodeUnits[] that could be saved,
+ *    if all sequences from this state are unassigned, returns the 
+ * <0 there are assignments in unicodeCodeUnits[]
+ * 0  no use of unicodeCodeUnits[]
+ */
+static int32_t
+findUnassigned(MBCSData *mbcsData, int32_t state, int32_t offset, uint32_t b) {
+    int32_t i, entry, savings, localSavings, belowSavings;
+    UBool haveAssigned;
+
+    localSavings=belowSavings=0;
+    haveAssigned=FALSE;
+    for(i=0; i<256; ++i) {
+        entry=mbcsData->stateTable[state][i];
+        if(entry>=0) {
+            savings=findUnassigned(mbcsData, entry&0x7f, offset+(entry>>7), (b<<8)|(uint32_t)i);
+            if(savings<0) {
+                haveAssigned=TRUE;
+            } else if(savings>0) {
+                printf("    all-unassigned sequences from prefix 0x%02lx state %ld use %ld bytes\n", (b<<8)|(uint32_t)i, state, savings);
+                belowSavings+=savings;
+            }
+        } else if(!haveAssigned) {
+            switch((uint32_t)entry>>27U) {
+            case 16|MBCS_STATE_VALID_16:
+                entry=offset+((uint16_t)entry>>7);
+                if(mbcsData->unicodeCodeUnits[entry]==0xfffe && findFallback(mbcsData, entry)<0) {
+                    localSavings+=2;
+                } else {
+                    haveAssigned=TRUE;
+                }
+                break;
+            case 16|MBCS_STATE_VALID_16_PAIR:
+                entry=offset+((uint16_t)entry>>7);
+                if(mbcsData->unicodeCodeUnits[entry]==0xfffe && findFallback(mbcsData, entry)<0) {
+                    localSavings+=4;
+                } else {
+                    haveAssigned=TRUE;
+                }
+                break;
+            default:
+                break;
+            }
+        }
+    }
+    if(haveAssigned) {
+        return -1;
+    } else {
+        return localSavings+belowSavings;
+    }
+}
+
+/* helper function for finding compaction opportunities */
+static void
+compactToUnicodeHelper(MBCSData *mbcsData) {
+    int32_t state, savings;
+
+    if(!VERBOSE) {
+        return;
+    }
+
+    /* for each initial state */
+    for(state=0; state<(int)mbcsData->header.countStates; ++state) {
+        if((mbcsData->stateFlags[state]&0xf)==MBCS_STATE_FLAG_DIRECT) {
+            savings=findUnassigned(mbcsData, state, 0, 0);
+            if(savings>0) {
+                printf("    all-unassigned sequences from initial state %ld use %ld bytes\n", state, savings);
+            }
+        }
+    }
+}
+
 static UBool
 transformEUC(MBCSData *mbcsData) {
     uint8_t *p, *q;
@@ -1288,7 +1363,7 @@ MBCSPostprocess(NewConverter *cnvData, const UConverterStaticData *staticData) {
     if(mbcsData->maxCharLength==2) {
         compactToUnicode2(mbcsData);
     } else if(mbcsData->maxCharLength>2) {
-        /* ### helper function for finding compaction opportunities */
+        compactToUnicodeHelper(mbcsData);
     }
 
     /* sort toUFallbacks */
