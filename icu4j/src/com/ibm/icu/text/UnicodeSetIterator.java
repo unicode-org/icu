@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSetIterator.java,v $ 
- * $Date: 2002/03/14 23:14:23 $ 
- * $Revision: 1.6 $
+ * $Date: 2002/03/19 00:11:52 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -59,7 +59,7 @@ public final class UnicodeSetIterator {
      */
     public boolean next() {
         if (nextElement <= endElement) {
-        	codepoint = nextElement++;
+        	codepoint = codepointEnd = nextElement++;
             return true;
         }
         if (range < endRange) {
@@ -69,7 +69,7 @@ public final class UnicodeSetIterator {
         	if (abbreviated && (endElement > startElement + 50)) {
             	endElement = startElement + 50;
         	}
-        	codepoint = nextElement++;
+        	codepoint = codepointEnd = nextElement++;
         	return true;
         }
         
