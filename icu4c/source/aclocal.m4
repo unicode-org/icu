@@ -44,7 +44,7 @@ alpha*-*-linux-gnu)
 	*aCC)    icu_cv_host_frag=mh-hpux-acc ;;
 	*CC)     icu_cv_host_frag=mh-hpux-cc ;;
 	esac;;
-*-*-os390*)	icu_cv_host_frag=mh-os390 ;;
+*-*ibm-openedition*|*-*-os390*)	icu_cv_host_frag=mh-os390 ;;
 *-*-os400*)	icu_cv_host_frag=mh-os400 ;;
 *-apple-rhapsody*)	icu_cv_host_frag=mh-darwin ;;
 *-apple-darwin*)	icu_cv_host_frag=mh-darwin ;;
