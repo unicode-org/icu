@@ -96,6 +96,7 @@ typedef struct{
     UBool isFirstBuffer;
     StateEnum toUnicodeCurrentState;
     StateEnum fromUnicodeCurrentState;
+    Cnv2022Type currentType;
     int plane;
     uint8_t escSeq2022[10];
     UConverter* myConverterArray[9];
@@ -1901,7 +1902,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP(UConverterToUnicodeArgs *args,
                /* if there are no escape sequences in the first buffer then they
                 * are assumed to be ASCII according to RFC-1554
                 */    
-                myData->toUnicodeCurrentState = ASCII1;
+                myData->toUnicodeCurrentState = ASCII;
              }
             
             switch(mySourceChar){
@@ -1909,14 +1910,14 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP(UConverterToUnicodeArgs *args,
                     if(args->converter->toUnicodeStatus != 0x00){
                         goto SAVE_STATE;
                     }
-                     myData->toUnicodeCurrentState = ASCII1; 
+                     myData->toUnicodeCurrentState = ASCII; 
                     break;
                 
                 case 0x0D:
                     if(args->converter->toUnicodeStatus != 0x00){
                         goto SAVE_STATE;
                     }
-                     myData->toUnicodeCurrentState = ASCII1;
+                     myData->toUnicodeCurrentState = ASCII;
 
                     break;
                                 
@@ -1924,7 +1925,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP(UConverterToUnicodeArgs *args,
                     if(args->converter->toUnicodeStatus != 0x00){
                         goto SAVE_STATE;
                     }
-                    myData->toUnicodeCurrentState = ASCII1;
+                    myData->toUnicodeCurrentState = ASCII;
 
                     break;
                             
@@ -1964,6 +1965,10 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP(UConverterToUnicodeArgs *args,
                         myToUnicodeSBCS = myData->currentConverter->sharedData->table->sbcs.toUnicode;
                         myToUnicodeFallbackSBCS = myData->currentConverter->sharedData->table->sbcs.toUnicodeFallback;
                         targetUniChar = myToUnicodeSBCS[(unsigned char) mySourceChar];
+                        /* There are no fallbacks in ISO_8859_1, ISO_8859_7,JISX201 so we can
+                         * safely ignore the codepaths below
+                         */
+                        /*
                         if(targetUniChar> 0xfffe){
                             if(UCNV_TO_U_USE_FALLBACK(args->converter) && 
                                 (myData->currentConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
@@ -1971,6 +1976,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP(UConverterToUnicodeArgs *args,
                                 targetUniChar = myToUnicodeFallbackSBCS[(unsigned char) mySource[mySourceIndex-1]];
                             }
                         }
+                        */
                         
                     }
                     else{
@@ -1993,6 +1999,10 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP(UConverterToUnicodeArgs *args,
                         args->converter->toUnicodeStatus =0x00;
                     
                         targetUniChar = ucmp16_getu(myToUnicodeDBCS,mySourceChar);
+                        /* There are no fallbacks in JISX208,JISX212, KSC5601,GB2312 so we can
+                         * safely ignore the codepaths below
+                         */
+                        /*
                         if(targetUniChar> 0xfffe){
                             if(UCNV_TO_U_USE_FALLBACK(args->converter) && 
                                 (myData->currentConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
@@ -2000,6 +2010,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP(UConverterToUnicodeArgs *args,
                                 targetUniChar = (UChar) ucmp16_getu(myToUnicodeFallbackDBCS, mySourceChar);
                             }
                         }
+                        */
                     }
                 
                     break;
@@ -2127,7 +2138,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeA
                /* if there are no escape sequences in the first buffer then they
                 * are assumed to be ASCII according to RFC-1554
                 */    
-                myData->toUnicodeCurrentState = ASCII1;
+                myData->toUnicodeCurrentState = ASCII;
              }
             
             switch(mySourceChar){
@@ -2135,14 +2146,14 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeA
                     if(args->converter->toUnicodeStatus != 0x00){
                         goto SAVE_STATE;
                     }
-                     myData->toUnicodeCurrentState = ASCII1; 
+                     myData->toUnicodeCurrentState = ASCII; 
                     break;
                 
                 case 0x0D:
                     if(args->converter->toUnicodeStatus != 0x00){
                         goto SAVE_STATE;
                     }
-                    myData->toUnicodeCurrentState = ASCII1;
+                    myData->toUnicodeCurrentState = ASCII;
 
                     break;
 
@@ -2150,7 +2161,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeA
                     if(args->converter->toUnicodeStatus != 0x00){
                         goto SAVE_STATE;
                     }
-                    myData->toUnicodeCurrentState = ASCII1; 
+                    myData->toUnicodeCurrentState = ASCII; 
                     break;
                             
                 default:
@@ -2190,14 +2201,18 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeA
                         myToUnicodeSBCS = myData->currentConverter->sharedData->table->sbcs.toUnicode;
                         myToUnicodeFallbackSBCS = myData->currentConverter->sharedData->table->sbcs.toUnicodeFallback;
                         targetUniChar = myToUnicodeSBCS[(unsigned char) mySourceChar];
+                        /* There are no fallbacks in ISO_8859_1, ISO_8859_7,JISX201 so we can
+                         * safely ignore the codepaths below
+                         */
+                        /*
                         if(targetUniChar> 0xfffe){
                             if(UCNV_TO_U_USE_FALLBACK(args->converter) && 
-                                (myData->currentConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
+                                (myData->currentConverter->sharedData->staticData->hasToUnicodeFallback == TRUE)){
                             
                                 targetUniChar = myToUnicodeFallbackSBCS[(unsigned char) mySource[mySourceIndex-1]];
                             }
                         }
-                        
+                        */
                     }
                     else{
                         goto SAVE_STATE;
@@ -2219,13 +2234,18 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeA
                         args->converter->toUnicodeStatus =0x00;
                     
                         targetUniChar = ucmp16_getu(myToUnicodeDBCS,mySourceChar);
+                        /* There are no fallbacks in JISX208,JISX212, KSC5601,GB2312 so we can
+                         * safely ignore the codepaths below
+                         */
+                        /*
                         if(targetUniChar> 0xfffe){
                             if(UCNV_TO_U_USE_FALLBACK(args->converter) && 
                                 (myData->currentConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
                             
                                 targetUniChar = (UChar) ucmp16_getu(myToUnicodeFallbackDBCS, mySourceChar);
                             }
-                        }
+                        } 
+                        */
                     }
                 
                     break;
@@ -2777,10 +2797,10 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_KR(UConverterToUnicodeArgs *args,
             switch(mySourceChar){
             
                 case UCNV_SI:
-                    myData->toUnicodeCurrentState = SBCS;
+                    myData->currentType = SBCS;
                     continue;
                 case UCNV_SO:
-                    myData->toUnicodeCurrentState =DBCS;
+                    myData->currentType = DBCS;
                     /*consume the source */
                     continue;
                        
@@ -2810,7 +2830,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_KR(UConverterToUnicodeArgs *args,
                 }
             }
              
-            if(myData->toUnicodeCurrentState==DBCS){
+            if(myData->currentType==DBCS){
                 if(args->converter->toUnicodeStatus == 0x00){
                     args->converter->toUnicodeStatus = (UChar) mySourceChar;
                     continue;
@@ -2858,7 +2878,7 @@ SAVE_STATE:
                         reason = UCNV_ILLEGAL;
                         *err = U_ILLEGAL_CHAR_FOUND;
                     }
-                    if(myData->toUnicodeCurrentState== DBCS){
+                    if(myData->currentType== DBCS){
                 
                         args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = (char)(tempBuf[0]-0x80);
                         args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = (char)(tempBuf[1]-0x80);    
@@ -2943,10 +2963,10 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterToUnicodeA
             switch(mySourceChar){
             
                 case UCNV_SI:
-                    myData->toUnicodeCurrentState = SBCS;
+                    myData->currentType = SBCS;
                     continue;
                 case UCNV_SO:
-                    myData->toUnicodeCurrentState =DBCS;
+                    myData->currentType =DBCS;
                     /*consume the source */
                     continue;
                        
@@ -2980,7 +3000,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterToUnicodeA
                 }
             }
              
-            if(myData->toUnicodeCurrentState==DBCS){
+            if(myData->currentType==DBCS){
                 if(args->converter->toUnicodeStatus == 0x00){
                     args->converter->toUnicodeStatus = (UChar) mySourceChar;
                     continue;
@@ -3010,7 +3030,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterToUnicodeA
 
             }
             if(targetUniChar < 0xfffe){
-                 if(myData->toUnicodeCurrentState==DBCS){
+                 if(myData->currentType==DBCS){
                     args->offsets[myTarget - args->target]= mySource - args->source - 2;
                 }
                 else{
@@ -3037,7 +3057,7 @@ SAVE_STATE:
                         reason = UCNV_ILLEGAL;
                         *err = U_ILLEGAL_CHAR_FOUND;
                     }
-                    if(myData->toUnicodeCurrentState== DBCS){
+                    if(myData->currentType== DBCS){
 
                         args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = (char)(tempBuf[0]-0x80);
                         args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = (char)(tempBuf[1]-0x80);
@@ -4074,6 +4094,9 @@ DONE:
                         *err= (tempState==INVALID_STATE)?U_ILLEGAL_ESCAPE_SEQUENCE :U_ZERO_ERROR;
                     }
                     break;
+                default:
+                    myUConverter=NULL;
+                    *err = U_ILLEGAL_ESCAPE_SEQUENCE;
             }
             
         }
@@ -4133,7 +4156,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN(UConverterToUnicodeArgs *args,
                 * are assumed to be ASCII according to RFC-1922
                 */
                     
-                    myData->toUnicodeCurrentState = ASCII1;
+                    myData->currentType = ASCII1;
                     myData->plane=plane = 0;
              }
             
@@ -4142,7 +4165,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN(UConverterToUnicodeArgs *args,
                     if(args->converter->toUnicodeStatus != 0x00){
                         goto SAVE_STATE;
                     }
-                    myData->toUnicodeCurrentState = ASCII1;
+                    myData->currentType = ASCII1;
                     myData->plane=plane = 0;
                     break;
                 
@@ -4150,7 +4173,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN(UConverterToUnicodeArgs *args,
                     if(args->converter->toUnicodeStatus != 0x00){
                         goto SAVE_STATE;
                     }
-                    myData->toUnicodeCurrentState = ASCII1;
+                    myData->currentType = ASCII1;
                     myData->plane=plane = 0;
                     break;
                 
@@ -4158,7 +4181,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN(UConverterToUnicodeArgs *args,
                     if(args->converter->toUnicodeStatus != 0x00){
                         goto SAVE_STATE;
                     }
-                    myData->toUnicodeCurrentState = ASCII1;
+                    myData->currentType = ASCII1;
                     myData->plane=plane = 0;
                     continue;
                 
@@ -4167,7 +4190,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN(UConverterToUnicodeArgs *args,
                         goto SAVE_STATE;
                     }
                 
-                    myData->toUnicodeCurrentState = (plane>0) ? MBCS: DBCS;
+                    myData->currentType = (plane>0) ? MBCS: DBCS;
                     continue;
                             
                 default:
@@ -4187,13 +4210,13 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN(UConverterToUnicodeArgs *args,
                 
                     myData->plane=plane;
                     if(plane>0){
-                        myData->toUnicodeCurrentState = MBCS;
+                        myData->currentType = MBCS;
                     }
                     else if(myData->currentConverter &&  
                                 uprv_stricmp("latin_1", 
                                 myData->currentConverter->sharedData->staticData->name)==0){
                     
-                        myData->toUnicodeCurrentState=ASCII1;
+                        myData->currentType=ASCII1;
                     }
                     if(U_FAILURE(*err)){
                         goto SAVE_STATE;
@@ -4201,7 +4224,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN(UConverterToUnicodeArgs *args,
                     continue;
             }
             
-            switch(myData->toUnicodeCurrentState){
+            switch(myData->currentType){
                 
                 case ASCII1:
                 
@@ -4287,7 +4310,7 @@ SAVE_STATE:
                         reason = UCNV_ILLEGAL;
                         *err = U_ILLEGAL_CHAR_FOUND;
                     }
-                    switch(myData->toUnicodeCurrentState){
+                    switch(myData->currentType){
                         case ASCII1:
                             args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = (char)mySourceChar;
                             break;
@@ -4385,7 +4408,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeA
                 if(args->converter->toUnicodeStatus != 0x00){
                     goto SAVE_STATE;
                 }
-                myData->toUnicodeCurrentState = ASCII1;
+                myData->currentType = ASCII;
                 myData->plane=plane = 0;
                 break;
                 
@@ -4393,7 +4416,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeA
                 if(args->converter->toUnicodeStatus != 0x00){
                     goto SAVE_STATE;
                 }
-                myData->toUnicodeCurrentState = ASCII1;
+                myData->currentType = ASCII;
                 myData->plane=plane = 0;
                 break;
                 
@@ -4401,7 +4424,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeA
                 if(args->converter->toUnicodeStatus != 0x00){
                     goto SAVE_STATE;
                 }
-                myData->toUnicodeCurrentState = ASCII1;
+                myData->currentType = ASCII;
                 myData->plane=plane = 0;
                 continue;
                 
@@ -4410,7 +4433,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeA
                     goto SAVE_STATE;
                 }
                 
-                myData->toUnicodeCurrentState = (plane>0) ? MBCS: DBCS;
+                myData->currentType = (plane>0) ? MBCS: DBCS;
                 continue;
                 
             default:
@@ -4430,13 +4453,13 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeA
                 
                 myData->plane=plane;
                 if(plane>0){
-                    myData->toUnicodeCurrentState = MBCS;
+                    myData->currentType = MBCS;
                 }
                 else if(myData->currentConverter &&  
                             uprv_stricmp("latin_1", 
                             myData->currentConverter->sharedData->staticData->name)==0){
                     
-                    myData->toUnicodeCurrentState=ASCII1;
+                    myData->currentType=ASCII;
                 }
                 if(U_FAILURE(*err)){
                     goto SAVE_STATE;
@@ -4445,7 +4468,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeA
             
             }
             
-            switch(myData->toUnicodeCurrentState){
+            switch(myData->currentType){
                 
             case ASCII1:
                 
@@ -4513,7 +4536,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeA
                     goto SAVE_STATE;
             }
             if(targetUniChar < 0xfffe){
-                if(myData->toUnicodeCurrentState == ASCII1){
+                if(myData->currentType == ASCII1){
                     args->offsets[myTarget - args->target]= mySource - args->source - 1;
                 }
                 else{
@@ -4532,7 +4555,7 @@ SAVE_STATE:
                     int32_t My_i = myTarget - args->target;
                     
                     
-                    switch(myData->toUnicodeCurrentState){
+                    switch(myData->currentType){
                         case ASCII1:
                             currentOffset= mySource - args->source -1;
                             args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = (char)mySourceChar;
