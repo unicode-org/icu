@@ -315,7 +315,7 @@ RECURSIVE              = NO
 # The EXCLUDE tag can be used to specify files and/or directories that should 
 # excluded from the INPUT source files. This way you can easily exclude a 
 # subdirectory from a directory tree whose root is specified with the INPUT tag. 
-EXCLUDE                = idnexport.h nameprep_id.h stuffthatbites.h vrsn.h
+EXCLUDE                = @srcdir@/common/unicode/urename.h
 
 # If the value of the INPUT tag contains directories, you can use the 
 # EXCLUDE_PATTERNS tag to specify one or more wildcard patterns to exclude 
