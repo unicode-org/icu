@@ -23,6 +23,15 @@
 #include "sfnt.h"
 #include "cmaps.h"
 
+#define TABLE_CACHE_INIT 5
+#define TABLE_CACHE_GROW 5
+
+struct TableCacheEntry
+{
+    LETag tag;
+    void *table;
+};
+
 enum PFIErrorCode {
     PFI_NO_ERROR = 0,
 
@@ -47,6 +56,10 @@ private:
     le_uint16 fDirPower;
     le_uint16 fDirExtra;
 
+    TableCacheEntry *fTableCache;
+    le_int32 fTableCacheCurr;
+    le_int32 fTableCacheSize;
+
 	CMAPMapper *fCMAPMapper;
 
 	const HMTXTable *fHMTXTable;
@@ -54,6 +67,9 @@ private:
 	le_uint16 fNumLongHorMetrics;
 
     static le_int8 highBit(le_int32 value);
+
+    PFIErrorCode PortableFontInstance::initFontTableCache();
+    void PortableFontInstance::flushFontTableCache();
 
 	const DirectoryEntry *findTable(LETag tag) const;
 	const void *readTable(LETag tag, le_uint32 *length) const;
@@ -66,12 +82,7 @@ public:
 
     virtual ~PortableFontInstance();
 
-    virtual const void *getFontTable(LETag tableTag) const
-    {
-		le_uint32 length;
-
-        return readTable(tableTag, &length);
-    };
+    virtual const void *getFontTable(LETag tableTag) const;
 
     virtual le_bool canDisplay(LEUnicode32 ch) const
     {
