@@ -247,6 +247,39 @@ void addAllCollTest(TestNode** root)
 
    }
 
+static UCollationResult compareUsingPartials(UCollator *coll, const UChar source[], int32_t sLen, const UChar target[], int32_t tLen, int32_t pieceSize, UErrorCode *status) {
+  int32_t partialSKResult = 0;
+  uint8_t sBuf[512], tBuf[512];
+  UCharIterator sIter, tIter;
+  uint32_t sState[2], tState[2];
+  int32_t sSize = pieceSize, tSize = pieceSize;
+  int32_t i = 0;
+  *status = U_ZERO_ERROR;
+  sState[0] = 0; sState[1] = 0;
+  tState[0] = 0; tState[1] = 0;
+  while(sSize == pieceSize && tSize == pieceSize && partialSKResult == 0) {
+    uiter_setString(&sIter, source, sLen);
+    uiter_setString(&tIter, target, tLen);
+    sSize = ucol_nextSortKeyPart(coll, &sIter, sState, sBuf, pieceSize, status);
+    tSize = ucol_nextSortKeyPart(coll, &tIter, tState, tBuf, pieceSize, status);
+    
+    if(sState[0] != 0 || tState[0] != 0) {
+      log_verbose("State != 0 : %08X %08X\n", sState[0], tState[0]);
+    }
+    log_verbose("%i ", i++);
+    
+    partialSKResult = memcmp(sBuf, tBuf, pieceSize);
+  }
+
+  if(partialSKResult < 0) {
+      return UCOL_LESS;
+  } else if(partialSKResult > 0) {
+    return UCOL_GREATER;
+  } else {
+    return UCOL_EQUAL;
+  }
+}
+
 static void doTestVariant(UCollator* myCollation, const UChar source[], const UChar target[], UCollationResult result)
 {
     int32_t sortklen1, sortklen2, sortklenmax, sortklenmin;
@@ -260,14 +293,16 @@ static void doTestVariant(UCollator* myCollation, const UChar source[], const UC
     UErrorCode status = U_ZERO_ERROR;
     UColAttributeValue norm = ucol_getAttribute(myCollation, UCOL_NORMALIZATION_MODE, &status);
 
-    if(0) {
-      UCharIterator sIter, tIter;
-      uiter_setString(&sIter, source, sLen);
-      uiter_setString(&tIter, target, tLen);
-      compareResultIter = ucol_strcollIter(myCollation, &sIter, &tIter, &status);
+    UCharIterator sIter, tIter;
+    uiter_setString(&sIter, source, sLen);
+    uiter_setString(&tIter, target, tLen);
+    compareResultIter = ucol_strcollIter(myCollation, &sIter, &tIter, &status);
+    if(compareResultIter != result) {
+      log_err("different results in iterative comparison for UTF-16 encoded strings. %s, %s\n", aescstrdup(source,-1), aescstrdup(target,-1));
     }
+
     /* convert the strings to UTF-8 and do try comparing with char iterator */
-    if(0) { /*!QUICK*/
+    if(QUICK <= 0) { /*!QUICK*/
       char utf8Source[256], utf8Target[256];
       int32_t utf8SourceLen = 0, utf8TargetLen = 0;
       u_strToUTF8(utf8Source, 256, &utf8SourceLen, source, sLen, &status);
@@ -305,38 +340,37 @@ static void doTestVariant(UCollator* myCollation, const UChar source[], const UC
     }
 
     /* testing the partial sortkeys */
-    if(0) { /*!QUICK*/
-      int32_t pieceSize = 1;
-      uint8_t sBuf[1], tBuf[1];
-      UCharIterator sIter, tIter;
-      uint32_t sState[2], tState[2];
-      int32_t sSize = pieceSize, tSize = pieceSize;
-      int32_t partialSKResult = 0;
-      status = U_ZERO_ERROR;
-      sState[0] = 0; sState[1] = 0;
-      tState[0] = 0; tState[1] = 0;
-      while(sSize == pieceSize && tSize == pieceSize && partialSKResult == 0) {
-        uiter_setString(&sIter, source, sLen);
-        uiter_setString(&tIter, target, tLen);
-        sSize = ucol_nextSortKeyPart(myCollation, &sIter, sState, sBuf, pieceSize, &status);
-        tSize = ucol_nextSortKeyPart(myCollation, &tIter, tState, tBuf, pieceSize, &status);
-        partialSKResult = memcmp(sBuf, tBuf, pieceSize);
+    if(1) { /*!QUICK*/
+      int32_t i = 0;
+      int32_t partialSizes[] = { 3, 1, 2, 4, 8, 20, 80 }; /* just size 3 in the quick mode */
+      int32_t partialSizesSize = 1;
+      if(QUICK <= 0) {
+        partialSizesSize = 7;
       }
+      log_verbose("partial sortkey test piecesize=");
+      for(i = 0; i < partialSizesSize; i++) {
+        UCollationResult partialSKResult = result, partialNormalizedSKResult = result;
+        log_verbose("%i ", partialSizes[i]);
 
-      if(partialSKResult < 0) {
-          partialSKResult=UCOL_LESS;
+        partialSKResult = compareUsingPartials(myCollation, source, sLen, target, tLen, partialSizes[i], &status);
+        if(partialSKResult != result) {
+          log_err("Partial sortkey comparison returned wrong result: %s, %s (size %i)\n", 
+            aescstrdup(source,-1), aescstrdup(target,-1), partialSizes[i]);
+        }
+
+        if(QUICK <= 0 && norm != UCOL_ON) {
+          log_verbose("N ");
+          ucol_setAttribute(myCollation, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
+          partialNormalizedSKResult = compareUsingPartials(myCollation, source, sLen, target, tLen, partialSizes[i], &status);
+          ucol_setAttribute(myCollation, UCOL_NORMALIZATION_MODE, norm, &status);
+          if(partialSKResult != partialNormalizedSKResult) {
+            log_err("Partial sortkey comparison gets different result when normalization is on: %s, %s (size %i)\n", 
+              aescstrdup(source,-1), aescstrdup(target,-1), partialSizes[i]);
+          }
+        }
       }
-      else if(partialSKResult > 0) {
-          partialSKResult= UCOL_GREATER;
-      }
-      if(partialSKResult != result) {
-        log_err("Partial sortkey comparison returned wrong result: %s, %s\n", aescstrdup(source,-1), aescstrdup(target,-1));
-      }
+      log_verbose("\n");
     }
-
-
-
-
 
     
     compareResult  = ucol_strcoll(myCollation, source, sLen, target, tLen);
