@@ -114,8 +114,6 @@ public class LDMLNodesAdder {
             OutputStreamWriter writer = new
             OutputStreamWriter(new FileOutputStream(destfile),"UTF-8");
             PrintWriter pw = new PrintWriter(writer);
-            pw.print(xmlheader);
-            pw.print(doctype);
             LDMLUtilities.printDOMTree(maindoc,pw);
             writer.flush(); 
          }catch( Exception e){ 
@@ -123,8 +121,8 @@ public class LDMLNodesAdder {
              //System.exit(-1);
          }
     }
-    private static final String xmlheader = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n";
-    private static final String doctype   = "<!DOCTYPE ldml SYSTEM \"http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd\">\n";
+   // private static final String xmlheader = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n";
+    //private static final String doctype   = "<!DOCTYPE ldml SYSTEM \"http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd\">\n";
     
     private void mergeNodes(Document maindoc, Document extractdoc, String[] args, int argc ){
         for(int i=0; i< argc; i++){
