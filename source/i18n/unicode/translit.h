@@ -910,6 +910,13 @@ protected:
      * Method for subclasses to use to obtain a character in the given
      * string, with filtering.  If the character at the given offset
      * is excluded by this transliterator's filter, then U+FFFE is returned.
+     *
+     * <p><b>Note:</b> Most subclasses that implement
+     * handleTransliterator() will <em>not</em> want to use this
+     * method, since characters they see are already filtered.  Only
+     * subclasses with special requirements, such as those overriding
+     * filteredTransliterate(), should need this method.
+     *
      * @deprecated the new architecture provides filtering at the top
      * level.  This method will be removed Dec 31 2001.
      */
