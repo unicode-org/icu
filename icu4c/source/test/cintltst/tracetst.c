@@ -41,9 +41,9 @@ if (!(expr)) { \
 
 /*
  *  test_format.   Helper function for checking the results of a formatting
- *                 operation.  Compares the actual results in buf parameter
- *                 with the expected results.
- *
+ *                 operation.  Executes the format op and compares actual 
+ *                 results with the expected results.
+ *                 
  *       params:   format:  the format to be applied.
  *                 bufCap   buffer size to pass to formatter.
  *                 indent:  indent value to give to formatter
@@ -113,12 +113,14 @@ static void TestTraceAPI() {
     UTraceExit    *originalTExitFunc;
     UTraceData    *originalTDataFunc;
     const void    *originalTContext;
+    int32_t        originalLevel;
 
     /*
      * Save the original tracing state so that we can restore it after the test.
      */
     utrace_getFunctions(&originalTContext, &originalTEntryFunc, &originalTExitFunc,
                         &originalTDataFunc);
+    originalLevel = utrace_getLevel();
 
 
     /* verify that set/get of tracing functions returns what was set.  */
@@ -204,7 +206,9 @@ static void TestTraceAPI() {
     }
 
 
-
+    /*  Restore the trace function settings to their original values. */
+    utrace_setFunctions(originalTContext, originalTEntryFunc, originalTExitFunc, originalTDataFunc);
+    utrace_setLevel(originalLevel);
 }
 
 
