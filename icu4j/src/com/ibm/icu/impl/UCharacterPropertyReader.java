@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/UCharacterPropertyReader.java,v $ 
-* $Date: 2002/10/03 23:42:02 $ 
-* $Revision: 1.7 $
+* $Date: 2002/10/09 23:53:24 $ 
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -34,8 +34,17 @@ import com.ibm.icu.util.VersionInfo;
 * @draft 2.1
 */
 
-final class UCharacterPropertyReader
+final class UCharacterPropertyReader implements ICUBinary.Authenticate
 {
+    // public methods ----------------------------------------------------
+    
+    public boolean isDataVersionAcceptable(byte version[])
+    {
+        return version[0] == DATA_FORMAT_VERSION_[0] 
+               && version[2] == DATA_FORMAT_VERSION_[2] 
+               && version[3] == DATA_FORMAT_VERSION_[3];
+    }
+    
     // protected constructor ---------------------------------------------
     
     /**
@@ -48,7 +57,7 @@ final class UCharacterPropertyReader
                                                         throws IOException
     {
         m_unicodeVersion_ = ICUBinary.readHeader(inputStream, DATA_FORMAT_ID_, 
-                                                 DATA_FORMAT_VERSION_);
+                                                 this);
         m_dataInputStream_ = new DataInputStream(inputStream);
     }
     

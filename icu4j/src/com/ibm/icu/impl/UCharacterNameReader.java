@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/UCharacterNameReader.java,v $ 
-* $Date: 2002/09/19 21:19:04 $ 
-* $Revision: 1.1 $
+* $Date: 2002/10/09 23:53:24 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -16,7 +16,6 @@ import java.io.InputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.Arrays;
-import com.ibm.icu.impl.ICUBinary;
 
 /**
 * <p>Internal reader class for ICU data file uname.dat containing 
@@ -35,8 +34,15 @@ import com.ibm.icu.impl.ICUBinary;
 * @draft 2.1
 */
 
-final class UCharacterNameReader
+final class UCharacterNameReader implements ICUBinary.Authenticate
 {      
+    // public methods ----------------------------------------------------
+    
+    public boolean isDataVersionAcceptable(byte version[])
+    {
+        return version[0] == DATA_FORMAT_VERSION_[0];
+    }
+    
     // protected constructor ---------------------------------------------
     
     /**
@@ -48,8 +54,7 @@ final class UCharacterNameReader
     protected UCharacterNameReader(InputStream inputStream) 
                                                         throws IOException
     {
-        ICUBinary.readHeader(inputStream, DATA_FORMAT_ID_, 
-                             DATA_FORMAT_VERSION_);
+        ICUBinary.readHeader(inputStream, DATA_FORMAT_ID_, this);
         m_dataInputStream_ = new DataInputStream(inputStream);
     }
   
