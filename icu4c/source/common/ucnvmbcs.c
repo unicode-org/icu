@@ -277,65 +277,33 @@
 
 /* prototypes --------------------------------------------------------------- */
 
-U_CFUNC void
-_MBCSLoad(UConverterSharedData *sharedData,
-          const uint8_t *raw,
-          UErrorCode *pErrorCode);
-
-U_CFUNC void
-_MBCSReset(UConverter *cnv, UConverterResetChoice choice);
-
-U_CFUNC void
-_MBCSOpen(UConverter *cnv,
-          const char *name,
-          const char *locale,
-          uint32_t options,
-          UErrorCode *pErrorCode);
-
-U_CFUNC void
-_MBCSToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
-                          UErrorCode *pErrorCode);
-
-U_CFUNC void
+static void
 _MBCSSingleToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                                 UErrorCode *pErrorCode);
 
-U_CFUNC void
+static void
 _MBCSSingleToBMPWithOffsets(UConverterToUnicodeArgs *pArgs,
                             UErrorCode *pErrorCode);
 
-U_CFUNC UChar32
+static UChar32
 _MBCSGetNextUChar(UConverterToUnicodeArgs *pArgs,
                   UErrorCode *pErrorCode);
 
-U_CFUNC UChar32
+static UChar32
 _MBCSSingleGetNextUChar(UConverterToUnicodeArgs *pArgs,
                         UErrorCode *pErrorCode);
 
-U_CFUNC UChar32
-_MBCSSingleSimpleGetNextUChar(UConverterSharedData *sharedData,
-                              uint8_t b, UBool useFallback);
-
-U_CFUNC void
-_MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
-                            UErrorCode *pErrorCode);
-
-U_CFUNC void
+static void
 _MBCSDoubleFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                                   UErrorCode *pErrorCode);
 
-U_CFUNC void
+static void
 _MBCSSingleFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                                   UErrorCode *pErrorCode);
 
-U_CFUNC void
+static void
 _MBCSSingleFromBMPWithOffsets(UConverterFromUnicodeArgs *pArgs,
                               UErrorCode *pErrorCode);
-
-U_CFUNC void
-_MBCSWriteSub(UConverterFromUnicodeArgs *pArgs,
-              int32_t offsetIndex,
-              UErrorCode *pErrorCode);
 
 static void
 fromUCallback(UConverter *cnv,
@@ -386,7 +354,7 @@ gb18030Ranges[13][4]={
 
 /* MBCS setup functions ----------------------------------------------------- */
 
-U_CFUNC void
+static void
 _MBCSLoad(UConverterSharedData *sharedData,
           const uint8_t *raw,
           UErrorCode *pErrorCode) {
@@ -440,7 +408,7 @@ _MBCSLoad(UConverterSharedData *sharedData,
     }
 }
 
-U_CFUNC void
+static void
 _MBCSReset(UConverter *cnv, UConverterResetChoice choice) {
     if(choice<=UCNV_RESET_TO_UNICODE) {
         /* toUnicode */
@@ -455,7 +423,7 @@ _MBCSReset(UConverter *cnv, UConverterResetChoice choice) {
     }
 }
 
-U_CFUNC void
+static void
 _MBCSOpen(UConverter *cnv,
           const char *name,
           const char *locale,
@@ -804,7 +772,7 @@ callback:
 }
 
 /* This version of _MBCSToUnicodeWithOffsets() is optimized for single-byte, single-state codepages. */
-U_CFUNC void
+static void
 _MBCSSingleToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                                 UErrorCode *pErrorCode) {
     UConverter *cnv;
@@ -982,7 +950,7 @@ callback:
  * In addition to single-byte optimizations, the offset calculations
  * become much easier.
  */
-U_CFUNC void
+static void
 _MBCSSingleToBMPWithOffsets(UConverterToUnicodeArgs *pArgs,
                             UErrorCode *pErrorCode) {
     UConverter *cnv;
@@ -1215,7 +1183,7 @@ unrolled:
     pArgs->offsets=offsets;
 }
 
-U_CFUNC UChar32
+static UChar32
 _MBCSGetNextUChar(UConverterToUnicodeArgs *pArgs,
                   UErrorCode *pErrorCode) {
     UChar buffer[UTF_MAX_CHAR_LENGTH];
@@ -1445,7 +1413,7 @@ finish:
  * This version of _MBCSGetNextUChar() is optimized for single-byte, single-state codepages.
  * We still need a conversion loop in case a skipping callback is called.
  */
-U_CFUNC UChar32
+static UChar32
 _MBCSSingleGetNextUChar(UConverterToUnicodeArgs *pArgs,
                         UErrorCode *pErrorCode) {
     UChar buffer[UTF_MAX_CHAR_LENGTH];
@@ -2217,7 +2185,7 @@ callback:
 }
 
 /* This version of _MBCSFromUnicodeWithOffsets() is optimized for double-byte codepages. */
-U_CFUNC void
+static void
 _MBCSDoubleFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                                   UErrorCode *pErrorCode) {
     UConverter *cnv;
@@ -2472,7 +2440,7 @@ callback:
 }
 
 /* This version of _MBCSFromUnicodeWithOffsets() is optimized for single-byte codepages. */
-U_CFUNC void
+static void
 _MBCSSingleFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                                   UErrorCode *pErrorCode) {
     UConverter *cnv;
@@ -2685,7 +2653,7 @@ callback:
  * In addition to single-byte/state optimizations, the offset calculations
  * become much easier.
  */
-U_CFUNC void
+static void
 _MBCSSingleFromBMPWithOffsets(UConverterFromUnicodeArgs *pArgs,
                               UErrorCode *pErrorCode) {
     UConverter *cnv;
@@ -3139,7 +3107,7 @@ _MBCSIsLeadByte(UConverterSharedData *sharedData, char byte) {
     return (UBool)MBCS_ENTRY_IS_TRANSITION(sharedData->table->mbcs.stateTable[0][(uint8_t)byte]);
 }
 
-U_CFUNC void
+static void
 _MBCSWriteSub(UConverterFromUnicodeArgs *pArgs,
               int32_t offsetIndex,
               UErrorCode *pErrorCode) {
