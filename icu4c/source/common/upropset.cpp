@@ -524,7 +524,11 @@ const UnicodeSet& UnicodePropertySet::getScriptSet(UScriptCode script,
                                                    UErrorCode &status)
 {
     if (SCRIPT_CACHE[script].isEmpty()) {
-        initSetFromFilter(SCRIPT_CACHE[script], _scriptFilter, &script, status);
+        umtx_lock(&PROPSET_MUTEX);
+        if (SCRIPT_CACHE[script].isEmpty()) {
+            initSetFromFilter(SCRIPT_CACHE[script], _scriptFilter, &script, status);
+        }
+        umtx_unlock(&PROPSET_MUTEX);
     }
     return SCRIPT_CACHE[script];
 }
