@@ -607,7 +607,7 @@ public:
    * Options do not change the basic composition or decomposition operation
    * that is being performed, but they control whether
    * certain optional portions of the operation are done.
-   * Currently the only available option is deprecated.
+   * Currently the only available option is obsolete.
    *
    * It is possible to specify multiple options that are all turned on or off.
    *
@@ -690,7 +690,7 @@ public:
   static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
 
   //-------------------------------------------------------------------------
-  // Deprecated APIs
+  // Obsolete APIs
   //-------------------------------------------------------------------------
 
 #ifdef ICU_NORMALIZER_USE_DEPRECATES
