@@ -82,7 +82,8 @@ static UOption options[]={
     /*14*/    UOPTION_SOURCEDIR ,
     /*15*/    UOPTION_DEF( "entrypoint", 'e', UOPT_REQUIRES_ARG),
     /*16*/    UOPTION_DEF( "revision", 'r', UOPT_REQUIRES_ARG),
-    /*17*/    UOPTION_DEF( 0, 'M', UOPT_REQUIRES_ARG)
+    /*17*/    UOPTION_DEF( 0, 'M', UOPT_REQUIRES_ARG),
+    /*18*/    UOPTION_DEF( "force-prefix", 'f', UOPT_NO_ARG)
 };
 
 const char options_help[][160]={
@@ -107,7 +108,8 @@ const char options_help[][160]={
     "Specify a custom source directory",
     "Specify a custom entrypoint name (default: short name)",
     "Specify a version when packaging in DLL or static mode",
-    "Pass the next argument to make(1)"
+    "Pass the next argument to make(1)",
+    "Add package to all file names if not present"
 };
 
 const char  *progname = "PKGDATA";
@@ -432,161 +434,143 @@ static int executeMakefile(const UPKGOptions *o)
 
 static void loadLists(UPKGOptions *o, UErrorCode *status)
 {
-    CharList   *l, *tail = NULL, *tail2 = NULL;
-    FileStream *in;
-    char        line[16384];
-	char		*linePtr, *lineNext;
-	const uint32_t   lineMax = 16300;
-    char        tmp[1024], tmp2[1024];
-	char        pkgPrefix[1024];
-	int32_t     pkgPrefixLen;
-    const char* baseName;
-    char       *s;
-	int32_t		ln;
-
-	strcpy(pkgPrefix, o->shortName);
-	strcat(pkgPrefix, "_");
-	pkgPrefixLen=uprv_strlen(pkgPrefix);
-    for(l = o->fileListFiles; l; l = l->next) {
-        if(o->verbose) {
-            fprintf(stdout, "# Reading %s..\n", l->str);
-        }
-        /* TODO: stdin */
-        in = T_FileStream_open(l->str, "r");
-
-        if(!in) {
-            fprintf(stderr, "Error opening <%s>.\n", l->str);
-            *status = U_FILE_ACCESS_ERROR;
-            return;
-        }
-	
-		ln = 0;
-
-        while(T_FileStream_readLine(in, line, sizeof(line))!=NULL) {
-			ln++;
-			if(uprv_strlen(line)>lineMax)
-			{
-				fprintf(stderr, "%s:%d - line too long (over %d chars)\n", l->str, ln, lineMax);
-				exit(1);
-			}
-            /* remove trailing newline characters */
-            s=line;
-            while(*s!=0) {
-                if(*s=='\r' || *s=='\n') {
-                    *s=0;
-                    break;
-                }
-                ++s;
-            }
-            if((*line == 0) || (*line == '#')) {
-                continue; /* comment or empty line */
-            }
-
-			/* Now, process the line */
-			linePtr = line;
-			lineNext = NULL;
-			
-			while(linePtr && *linePtr)
-			{
-				while(*linePtr == ' ')
-				{
-					linePtr++;
-				}
-
-				/* Find the next */
-				if(linePtr[0] == '"')
-				{
-					lineNext = uprv_strchr(linePtr+1, '"');
-					if(lineNext == NULL)
-					{
-						fprintf(stderr, "%s:%d - missing trailing double quote (\")\n",
-								l->str, ln);
-						exit(1);
-					}
-					else
-					{
-						lineNext++;
-						if(*lineNext)
-						{
-								if(*lineNext != ' ')
-								{
-									fprintf(stderr, "%s:%d - malformed quoted line at position %d, expected ' ' got '%c'\n",
-										l->str, ln,  lineNext-line, (*lineNext)?*lineNext:'0');
-									exit(1);
-								}
-
-								*lineNext = 0;
-								lineNext++;
-						}
-					}
-				}
-				else
-				{
-					lineNext = uprv_strchr(linePtr, ' ');
-					if(lineNext)
-					{
-						*lineNext = 0; /* terminate at space */
-						lineNext++;
-					}
-				}
-
-	            /* add the file */
-		        s = (char*)getLongPathname(linePtr);
-
-			    baseName = findBasename(s);
-
-
-				if(s != baseName) { /* s was something 'long' with a path */
-
-                     if(!uprv_strncmp(pkgPrefix, baseName, pkgPrefixLen))
-                     {      
-                         /* paths already have the prefix */
-    	 				 o->files = pkg_appendToList(o->files, &tail, uprv_strdup(baseName));
-	    				 o->filePaths = pkg_appendToList(o->filePaths, &tail2, uprv_strdup(s));
-                     } else {
-                         /* path don't have the prefix, add package prefix to short and longname */
-                         uprv_strcpy(tmp, pkgPrefix);
-                         uprv_strcpy(tmp+pkgPrefixLen, baseName);
-
-                         uprv_strncpy(tmp2, s, uprv_strlen(s)-uprv_strlen(baseName));  /* should be:   dirpath only, ending in sep */
-                         tmp2[uprv_strlen(s)-uprv_strlen(baseName)]=0;
-                         uprv_strcat(tmp2, pkgPrefix);
-                         uprv_strcat(tmp2, baseName);
-
-    	 				 o->files = pkg_appendToList(o->files, &tail, uprv_strdup(tmp));
-	    				 o->filePaths = pkg_appendToList(o->filePaths, &tail2, uprv_strdup(tmp2));
-                     }
-				} else { /* s was just a basename, we want to prepend source dir*/
-					/* check for prefix of package */
-					uprv_strcpy(tmp, o->srcDir);
-					uprv_strcat(tmp, o->srcDir[uprv_strlen(o->srcDir)-1]==U_FILE_SEP_CHAR?"":U_FILE_SEP_STRING);
-
-					if(strncmp(pkgPrefix,s, pkgPrefixLen))
-					{
-						/* didn't have the prefix - add it */
-						uprv_strcat(tmp, pkgPrefix);
-						
-						/* make up a new basename */
-						uprv_strcpy(tmp2, pkgPrefix);
-						uprv_strcat(tmp2, s);
-						o->files = pkg_appendToList(o->files, &tail, uprv_strdup(tmp2));
-					}
-					else
-					{
-						o->files = pkg_appendToList(o->files, &tail, uprv_strdup(baseName));
-					}
-
-					uprv_strcat(tmp, s);
-
-					o->filePaths = pkg_appendToList(o->filePaths, &tail2, uprv_strdup(tmp));
-				}
-
-				linePtr = lineNext;
-			}
-		}
-
-        T_FileStream_close(in);
+  CharList   *l, *tail = NULL, *tail2 = NULL;
+  FileStream *in;
+  char        line[16384];
+  char       *linePtr, *lineNext;
+  const uint32_t   lineMax = 16300;
+  char        tmp[1024], tmp2[1024];
+  char        pkgPrefix[1024];
+  int32_t     pkgPrefixLen;
+  const char *baseName;
+  char       *s;
+  int32_t     ln;
+  UBool       fixPrefix;
+  
+  
+  fixPrefix = options[18].doesOccur;
+  
+  strcpy(pkgPrefix, o->shortName);
+  strcat(pkgPrefix, "_");
+  pkgPrefixLen=uprv_strlen(pkgPrefix);
+  for(l = o->fileListFiles; l; l = l->next) {
+    if(o->verbose) {
+      fprintf(stdout, "# Reading %s..\n", l->str);
     }
+    /* TODO: stdin */
+    in = T_FileStream_open(l->str, "r");
+
+    if(!in) {
+      fprintf(stderr, "Error opening <%s>.\n", l->str);
+      *status = U_FILE_ACCESS_ERROR;
+      return;
+    }
+
+    ln = 0;
+
+    while(T_FileStream_readLine(in, line, sizeof(line))!=NULL) {
+      ln++;
+      if(uprv_strlen(line)>lineMax) {
+        fprintf(stderr, "%s:%d - line too long (over %d chars)\n", l->str, ln, lineMax);
+        exit(1);
+      }
+      /* remove trailing newline characters */
+      s=line;
+      while(*s!=0) {
+        if(*s=='\r' || *s=='\n') {
+          *s=0;
+          break;
+        }
+        ++s;
+      }
+      if((*line == 0) || (*line == '#')) {
+        continue; /* comment or empty line */
+      }
+
+      /* Now, process the line */
+      linePtr = line;
+      lineNext = NULL;
+
+      while(linePtr && *linePtr) {
+        while(*linePtr == ' ') {
+          linePtr++;
+        }
+        /* Find the next */
+        if(linePtr[0] == '"')
+          {
+            lineNext = uprv_strchr(linePtr+1, '"');
+            if(lineNext == NULL) {
+              fprintf(stderr, "%s:%d - missing trailing double quote (\")\n",
+                      l->str, ln);
+              exit(1);
+            } else {
+              lineNext++;
+              if(*lineNext) {
+                if(*lineNext != ' ') {
+                  fprintf(stderr, "%s:%d - malformed quoted line at position %d, expected ' ' got '%c'\n",
+                          l->str, ln,  lineNext-line, (*lineNext)?*lineNext:'0');
+                  exit(1);
+                }
+                *lineNext = 0;
+                lineNext++;
+              }
+            }
+          } else {
+            lineNext = uprv_strchr(linePtr, ' ');
+            if(lineNext) {
+              *lineNext = 0; /* terminate at space */
+              lineNext++;
+            }
+          }
+
+        /* add the file */
+        s = (char*)getLongPathname(linePtr);
+
+        baseName = findBasename(s);
+                    
+        if(s != baseName) {
+          /* s was something 'long' with a path */
+          if(fixPrefix && uprv_strncmp(pkgPrefix, baseName, pkgPrefixLen)) {
+            /* path don't have the prefix, add package prefix to short and longname */
+            uprv_strcpy(tmp, pkgPrefix);
+            uprv_strcpy(tmp+pkgPrefixLen, baseName);
+                          
+            uprv_strncpy(tmp2, s, uprv_strlen(s)-uprv_strlen(baseName));  /* should be:   dirpath only, ending in sep */
+            tmp2[uprv_strlen(s)-uprv_strlen(baseName)]=0;
+            uprv_strcat(tmp2, pkgPrefix);
+            uprv_strcat(tmp2, baseName);
+                          
+            o->files = pkg_appendToList(o->files, &tail, uprv_strdup(tmp));
+            o->filePaths = pkg_appendToList(o->filePaths, &tail2, uprv_strdup(tmp2));
+          } else {
+            /* paths already have the prefix */
+            o->files = pkg_appendToList(o->files, &tail, uprv_strdup(baseName));
+            o->filePaths = pkg_appendToList(o->filePaths, &tail2, uprv_strdup(s));
+          }
+
+        } else { /* s was just a basename, we want to prepend source dir*/
+          /* check for prefix of package */
+          uprv_strcpy(tmp, o->srcDir);
+          uprv_strcat(tmp, o->srcDir[uprv_strlen(o->srcDir)-1]==U_FILE_SEP_CHAR?"":U_FILE_SEP_STRING);
+
+          if(fixPrefix && strncmp(pkgPrefix,s, pkgPrefixLen)) {
+            /* didn't have the prefix - add it */
+            uprv_strcat(tmp, pkgPrefix);
+            /* make up a new basename */
+            uprv_strcpy(tmp2, pkgPrefix);
+            uprv_strcat(tmp2, s);
+            o->files = pkg_appendToList(o->files, &tail, uprv_strdup(tmp2));
+          } else {
+            o->files = pkg_appendToList(o->files, &tail, uprv_strdup(baseName));
+          }
+          uprv_strcat(tmp, s);
+          o->filePaths = pkg_appendToList(o->filePaths, &tail2, uprv_strdup(tmp));
+        }
+        linePtr = lineNext;
+      }
+    }
+    T_FileStream_close(in);
+  }
 }
 
 /* Try calling icu-config directly to get information */
