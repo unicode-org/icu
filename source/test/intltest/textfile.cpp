@@ -101,12 +101,13 @@ UBool TextFile::readLine(UnicodeString& line, UErrorCode& ec) {
         if (!setBuffer(n++, c, ec)) return FALSE;
     }
     if (!setBuffer(n++, 0, ec)) return FALSE;
-    line = UnicodeString(buffer, encoding);
-    if (line[0] == 0xFEFF) {
-        /* Remove any UTF BOMs */
-        line.replaceBetween(0,1,"");
+    UnicodeString str(buffer, encoding);
+    // Remove BOM in first line, if present
+    if (lineNo == 0 && str[0] == 0xFEFF) {
+        str.remove(0, 1);
     }
     ++lineNo;
+    line = str.unescape();
     return TRUE;
 }
 
