@@ -15,6 +15,8 @@
 *    09/02/98    stephen        Added getOffset(monthLen)
 *                            Changed getOffset() to take UErrorCode
 *    07/09/99    stephen     Removed millisPerHour (unused, for HP compiler)
+*   12/02/99    aliu        Added TimeMode and constructor and setStart/EndRule
+*                           methods that take TimeMode. Added to docs.
 ********************************************************************************
 */
 
@@ -37,11 +39,26 @@
  * @see      Calendar
  * @see      GregorianCalendar
  * @see      TimeZone
- * @version  1.24 10/30/97
  * @author   David Goldsmith, Mark Davis, Chen-Lieh Huang, Alan Liu
  */
 class U_I18N_API SimpleTimeZone: public TimeZone {
 public:
+
+    /**
+     * TimeMode is used, together with a millisecond offset after
+     * midnight, to specify a rule transition time.  Most rules
+     * transition at a local wall time, that is, according to the
+     * current time in effect, either standard, or DST.  However, some
+     * rules transition at local standard time, and some at a specific
+     * UTC time.  Although it might seem that all times could be
+     * converted to wall time, thus eliminating the need for this
+     * parameter, this is not the case.
+     */
+    enum TimeMode {
+        WALL_TIME = 0,
+        STANDARD_TIME,
+        UTC_TIME
+    };
 
     /**
      * Copy constructor
@@ -104,6 +121,8 @@ public:
      *                        for a complete explanation.
      * @param startTime       The daylight savings starting time, expressed as the
      *                        number of milliseconds after midnight.
+     * @param startTimeMode   Whether the start time is local wall time, local
+     *                        standard time, or UTC time. Default is local wall time.
      * @param endMonth        The daylight savings ending month. Month is
      *                        0-based. eg, 0 for January.
      * @param endDay          The daylight savings ending day-of-week-in-month.
@@ -112,6 +131,10 @@ public:
      *                        for a complete explanation.
      * @param endTime         The daylight savings ending time, expressed as the
      *                        number of milliseconds after midnight.
+     * @param endTimeMode     Whether the end time is local wall time, local
+     *                        standard time, or UTC time. Default is local wall time.
+     * @param dstSavings      The number of milliseconds added to standard time
+     *                        to get DST time. Default is one hour.
      * @param status          An UErrorCode to receive the status.
      */
     SimpleTimeZone(int32_t rawOffset, const UnicodeString& ID,
@@ -126,6 +149,13 @@ public:
         int8_t startDayOfWeek, int32_t startTime,
         int8_t endMonth, int8_t endDayOfWeekInMonth,
         int8_t endDayOfWeek, int32_t endTime,
+        int32_t dstSavings, UErrorCode& status);
+
+    SimpleTimeZone(int32_t rawOffset, const UnicodeString& ID,
+        int8_t startMonth, int8_t startDayOfWeekInMonth,
+        int8_t startDayOfWeek, int32_t startTime, TimeMode startTimeMode,
+        int8_t endMonth, int8_t endDayOfWeekInMonth,
+        int8_t endDayOfWeek, int32_t endTime, TimeMode endTimeMode,
         int32_t dstSavings, UErrorCode& status);
 
     /**
@@ -174,10 +204,15 @@ public:
      * the member description for an example.
      * @param time the daylight savings starting time. Please see the member
      * description for an example.
+     * @param mode whether the time is local wall time, local standard time,
+     * or UTC time. Default is local wall time.
      * @param status An UErrorCode
      */
     void setStartRule(int32_t month, int32_t dayOfWeekInMonth, int32_t dayOfWeek,
-                             int32_t time, UErrorCode& status);
+                      int32_t time, UErrorCode& status);
+
+    void setStartRule(int32_t month, int32_t dayOfWeekInMonth, int32_t dayOfWeek,
+                      int32_t time, TimeMode mode, UErrorCode& status);
 
     /**
      * Sets the DST start rule to a fixed date within a month.
@@ -187,10 +222,15 @@ public:
      * @param time          The time of that day (number of millis after midnight)
      *                      when DST takes effect in local wall time, which is
      *                      standard time in this case.
+     * @param mode whether the time is local wall time, local standard time,
+     * or UTC time. Default is local wall time.
      * @param status An UErrorCode
      */
     void setStartRule(int32_t month, int32_t dayOfMonth, int32_t time, 
-                        UErrorCode& status);
+                      UErrorCode& status);
+
+    void setStartRule(int32_t month, int32_t dayOfMonth, int32_t time, 
+                      TimeMode mode, UErrorCode& status);
 
     /**
      * Sets the DST start rule to a weekday before or after a give date within
@@ -202,13 +242,18 @@ public:
      * @param time          The time of that day (number of millis after midnight)
      *                      when DST takes effect in local wall time, which is
      *                      standard time in this case.
+     * @param mode whether the time is local wall time, local standard time,
+     * or UTC time. Default is local wall time.
      * @param after         If true, this rule selects the first dayOfWeek on
      *                      or after dayOfMonth.  If false, this rule selects
      *                      the last dayOfWeek on or before dayOfMonth.
      * @param status An UErrorCode
      */
     void setStartRule(int32_t month, int32_t dayOfMonth, int32_t dayOfWeek, 
-                        int32_t time, bool_t after, UErrorCode& status);
+                      int32_t time, bool_t after, UErrorCode& status);
+
+    void setStartRule(int32_t month, int32_t dayOfMonth, int32_t dayOfWeek, 
+                      int32_t time, TimeMode mode, bool_t after, UErrorCode& status);
 
     /**
      * Sets the daylight savings ending rule. For example, in the U.S., Daylight
@@ -229,10 +274,15 @@ public:
      * for a complete explanation.
      * @param time the daylight savings ending time. Please see the member
      * description for an example.
+     * @param mode whether the time is local wall time, local standard time,
+     * or UTC time. Default is local wall time.
      * @param status An UErrorCode
      */
     void setEndRule(int32_t month, int32_t dayOfWeekInMonth, int32_t dayOfWeek,
-                           int32_t time, UErrorCode& status);
+                    int32_t time, UErrorCode& status);
+
+    void setEndRule(int32_t month, int32_t dayOfWeekInMonth, int32_t dayOfWeek,
+                    int32_t time, TimeMode mode, UErrorCode& status);
 
     /**
      * Sets the DST end rule to a fixed date within a month.
@@ -242,9 +292,14 @@ public:
      * @param time          The time of that day (number of millis after midnight)
      *                      when DST ends in local wall time, which is daylight
      *                      time in this case.
+     * @param mode whether the time is local wall time, local standard time,
+     * or UTC time. Default is local wall time.
      * @param status An UErrorCode
      */
     void setEndRule(int32_t month, int32_t dayOfMonth, int32_t time, UErrorCode& status);
+
+    void setEndRule(int32_t month, int32_t dayOfMonth, int32_t time,
+                    TimeMode mode, UErrorCode& status);
 
     /**
      * Sets the DST end rule to a weekday before or after a give date within
@@ -256,13 +311,18 @@ public:
      * @param time          The time of that day (number of millis after midnight)
      *                      when DST ends in local wall time, which is daylight
      *                      time in this case.
+     * @param mode whether the time is local wall time, local standard time,
+     * or UTC time. Default is local wall time.
      * @param after         If true, this rule selects the first dayOfWeek on
      *                      or after dayOfMonth.  If false, this rule selects
      *                      the last dayOfWeek on or before dayOfMonth.
      * @param status An UErrorCode
      */
     void setEndRule(int32_t month, int32_t dayOfMonth, int32_t dayOfWeek, 
-                        int32_t time, bool_t after, UErrorCode& status);
+                    int32_t time, bool_t after, UErrorCode& status);
+
+    void setEndRule(int32_t month, int32_t dayOfMonth, int32_t dayOfWeek, 
+                    int32_t time, TimeMode mode, bool_t after, UErrorCode& status);
 
     /**
      * Returns the TimeZone's adjusted GMT offset (i.e., the number of milliseconds to add
@@ -299,11 +359,17 @@ public:
      * @param dayOfWeek the day-of-week of the given date.
      * @param milliseconds the millis in day in <em>standard</em> local time.
      * @param monthLength the length of the given month in days.
+     * @param prevMonthLength length of the previous month in days.
      * @return the offset to add *to* GMT to get local time.
      */
     virtual int32_t getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
                            uint8_t dayOfWeek, int32_t milliseconds, 
                            int32_t monthLength, UErrorCode& status) const;
+
+    virtual int32_t getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
+                              uint8_t dayOfWeek, int32_t milliseconds, 
+                              int32_t monthLength, int32_t prevMonthLength,
+                              UErrorCode& status) const;
 
     /**
      * Returns the TimeZone's raw GMT offset (i.e., the number of milliseconds to add
@@ -410,6 +476,16 @@ private:
     };
 
     /**
+     * Internal construction method.
+     */
+    void construct(int32_t rawOffset, const UnicodeString& ID,
+                   int8_t startMonth, int8_t startDay, int8_t startDayOfWeek,
+                   int32_t startTime, TimeMode startTimeMode,
+                   int8_t endMonth, int8_t endDay, int8_t endDayOfWeek,
+                   int32_t endTime, TimeMode endTimeMode,
+                   int32_t dstSavings, UErrorCode& status);
+
+    /**
      * Compare a given date in the year to a rule. Return 1, 0, or -1, depending
      * on whether the date is after, equal to, or before the rule date. The
      * millis are compared directly against the ruleMillis, so any
@@ -418,10 +494,11 @@ private:
      * @return  1 if the date is after the rule date, -1 if the date is before
      *          the rule date, or 0 if the date is equal to the rule date.
      */
-    static int32_t compareToRule(int32_t month, int32_t monthLen, int32_t dayOfMonth,
-                                     int32_t dayOfWeek, int32_t millis,
-                                     EMode ruleMode, int32_t ruleMonth, int32_t ruleDayOfWeek,
-                                     int32_t ruleDay, int32_t ruleMillis);
+    static int32_t compareToRule(int8_t month, int8_t monthLen, int8_t prevMonthLen,
+                                 int8_t dayOfMonth,
+                                 int8_t dayOfWeek, int32_t millis, int32_t millisDelta,
+                                 EMode ruleMode, int8_t ruleMonth, int8_t ruleDayOfWeek,
+                                 int8_t ruleDay, int32_t ruleMillis);
 
     /**
      * Given a set of encoded rules in startDay and startDayOfMonth, decode
@@ -444,14 +521,15 @@ private:
 
     static char     fgClassID;
 
-    int32_t startMonth, startDay, startDayOfWeek;   // the month, day, DOW, and time DST starts
+    int8_t startMonth, startDay, startDayOfWeek;   // the month, day, DOW, and time DST starts
     int32_t startTime;
-    int32_t endMonth, endDay, endDayOfWeek; // the month, day, DOW, and time DST ends
+    TimeMode startTimeMode, endTimeMode; // Mode for startTime, endTime; see TimeMode
+    int8_t endMonth, endDay, endDayOfWeek; // the month, day, DOW, and time DST ends
     int32_t endTime;
     int32_t startYear;  // the year these DST rules took effect
     int32_t rawOffset;  // the TimeZone's raw GMT offset
     bool_t useDaylight; // flag indicating whether this TimeZone uses DST
-    static const int32_t staticMonthLength[12]; // lengths of the months
+    static const int8_t staticMonthLength[12]; // lengths of the months
     EMode startMode, endMode;   // flags indicating what kind of rules the DST rules are
 
     /**
@@ -460,5 +538,39 @@ private:
      */
     int32_t dstSavings;
 };
+
+inline void SimpleTimeZone::setStartRule(int32_t month, int32_t dayOfWeekInMonth,
+                                         int32_t dayOfWeek,
+                                         int32_t time, UErrorCode& status) {
+    setStartRule(month, dayOfWeekInMonth, dayOfWeek, time, WALL_TIME, status);
+}
+
+inline void SimpleTimeZone::setStartRule(int32_t month, int32_t dayOfMonth,
+                                         int32_t time, 
+                                         UErrorCode& status) {
+    setStartRule(month, dayOfMonth, time, WALL_TIME, status);
+}
+
+inline void SimpleTimeZone::setStartRule(int32_t month, int32_t dayOfMonth,
+                                         int32_t dayOfWeek, 
+                                         int32_t time, bool_t after, UErrorCode& status) {
+    setStartRule(month, dayOfMonth, dayOfWeek, time, WALL_TIME, after, status);
+}
+
+inline void SimpleTimeZone::setEndRule(int32_t month, int32_t dayOfWeekInMonth,
+                                       int32_t dayOfWeek,
+                                       int32_t time, UErrorCode& status) {
+    setEndRule(month, dayOfWeekInMonth, dayOfWeek, time, WALL_TIME, status);
+}
+
+inline void SimpleTimeZone::setEndRule(int32_t month, int32_t dayOfMonth,
+                                       int32_t time, UErrorCode& status) {
+    setEndRule(month, dayOfMonth, time, WALL_TIME, status);
+}
+
+inline void SimpleTimeZone::setEndRule(int32_t month, int32_t dayOfMonth, int32_t dayOfWeek, 
+                                       int32_t time, bool_t after, UErrorCode& status) {
+    setEndRule(month, dayOfMonth, dayOfWeek, time, WALL_TIME, after, status);
+}
 
 #endif // _SIMPLETZ
