@@ -1,4 +1,4 @@
-#include "cnttable.h"
+#include "ucol_cnt.h"
 #include "cmemory.h"
 
 void uprv_growTable(ContractionTable *tbl, UErrorCode *status) {

@@ -26,7 +26,7 @@
 
 // #include "unicode/sortkey.h"
 #include "unicode/coleitr.h"
-#include "ucolimp.h"
+#include "ucol_imp.h"
 #include "cmemory.h"
 
 // #include "unicode/chariter.h"
