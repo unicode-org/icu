@@ -110,7 +110,7 @@ COL_FILES = $(GENCOL_SOURCE:.txt=.col)
 
 
 # This target should build all the data files
-ALL : GODATA $(RB_FILES) $(CNV_FILES) $(COL_FILES) icudata.dll icudata.dat GOBACK
+ALL : GODATA $(RB_FILES) $(CNV_FILES) $(COL_FILES) icudata.dll test.dat test_dat.dll icudata.dat GOBACK
 	@echo All targets are up to date
 
 BRK_FILES = $(ICUDATA)\sent.brk $(ICUDATA)\char.brk $(ICUDATA)\line.brk $(ICUDATA)\word.brk $(ICUDATA)\line_th.brk $(ICUDATA)\word_th.brk
@@ -126,6 +126,36 @@ icudata.dll : $(LINK32_OBJS) $(CNV_FILES)
 	@$(LINK32) @<<
 $(LINK32_FLAGS) $(LINK32_OBJS)
 <<
+
+LINK32_TEST_FLAGS = /out:"$(ICUDATA)/test_dat.dll" /DLL /NOENTRY 
+
+# Targets for test.dat 
+test.dat : 
+	@echo Creating data file for test
+	@set ICU_DATA=$(ICUDATA)
+	@$(ICUTOOLS)\gentest\$(CFG)\gentest 
+test_dat.c : test.dat
+	@echo Creating C source file for test data
+        @set ICU_DATA=$(ICUDATA)
+	@$(ICUTOOLS)\genccode\$(CFG)\genccode $(ICUDATA)\$?
+test_dat.obj : test_dat.c
+        @echo creating the obj file for test data
+	@cd $(ICUDATA)
+	@$(CPP) @<<
+$(CPP_FLAGS) $(ICUDATA)\$?
+<<
+
+
+
+# According to the read files, we will generate C files
+# target for DLL
+test_dat.dll : test_dat.obj test.dat
+	@echo Creating DLL file
+	@cd $(ICUDATA)
+	@$(LINK32) @<<
+$(LINK32_TEST_FLAGS) test_dat.obj
+<<
+
 
 $(ICUDATA)\sent.brk : $(ICUDATA)\sentLE.brk
     copy $(ICUDATA)\sentLE.brk $(ICUDATA)\sent.brk
@@ -201,6 +231,7 @@ CLEAN :
 	-@erase "word.brk"
 	-@erase "line_th.brk"
 	-@erase "word_th.brk"
+	-@erase "test*.*"
 	@cd $(TEST)
 	-@erase "*.res"
 	@cd $(ICUTOOLS)
@@ -277,3 +308,6 @@ unames.dat cnvalias.dat tz.dat : {$(ICUTOOLS)\genccode\$(CFG)}genccode.exe
 $(GENRB_SOURCE) $(GENCOL_SOURCE) : {$(ICUTOOLS)\genrb\$(CFG)}genrb.exe
 
 $(UCM_SOURCE) : {$(ICUTOOLS)\makeconv\$(CFG)}makeconv.exe {$(ICUTOOLS)\genccode\$(CFG)}genccode.exe
+
+test.dat : {$(ICUTOOLS)\gentest\$(CFG)}gentest.exe
+

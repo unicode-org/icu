@@ -60,13 +60,13 @@ VERSION = @VERSION@
 
 
 SUBDIRS = ctestfw toolutil makeconv genrb gencol rbdump \
-genccode gennames gencmn gencnval gentz
+genccode gennames gencmn gencnval gentz gentest
 
 ## List of phony targets
 .PHONY : all all-local all-recursive install install-local install-everything install-files install-dlls build-data build-cmnfile build-dll		\
 install-recursive clean clean-local clean-recursive distclean		\
 distclean-local distclean-recursive dist dist-local dist-recursive	\
-check check-local check-recursive
+check check-local check-recursive build-testdll
 
 ## Clear suffix list
 .SUFFIXES :
@@ -138,6 +138,14 @@ OBJDATAFILES=$(SRCDATAFILES:%.c=%.o)
 COMMONFILE=$(OBJDATADIR)/icudata.dat
 COMMONDLL=$(OBJDATADIR)/libicudata.$(SO)
 
+#the files for creating the test data
+TESTDATAFILE=test.dat
+TESTDATAD=$(TESTDATAFILE:%=$(SRCDATADIR)/%)
+TESTDATAFILEC=$(TESTDATAD:.dat=_dat.c)
+OBJTESTFILE=$(TESTDATAFILEC:%.c=%.o)
+TESTDATADLL=$(SRCDATADIR)/libtest_dat.$(SO)
+
+
 # the files to be installed -- the COMMON ones + any stragglers
 UDATA_FILES=icudata.dat
 UDATA_DLLS=libicudata.$(SO)
@@ -147,7 +155,7 @@ UDATA_DLLS=libicudata.$(SO)
 @USE_MAPPED_TRUE@build-local: build-data build-cmnfile
 
 # the case where '--enable-mapped=no'  (DEFAULT)
-@USE_MAPPED_FALSE@build-local: build-data build-dll
+@USE_MAPPED_FALSE@build-local: build-data build-dll build-testdll
 ###
 
 # check for any other generated data here
@@ -174,6 +182,8 @@ $(COMMONFILE):	$(DATAFILES)
 
 build-dll: $(COMMONDLL)
 
+build-testdll: $(TESTDATADLL)
+
 %_dat.c: %.dat
 	(cd genccode ; ./genccode ../$< )
 
@@ -188,6 +198,10 @@ build-dll: $(COMMONDLL)
 #	-$(STRIP) $@
 
 $(COMMONDLL): $(OBJDATAFILES)
+	$(SHLIB.c) -o $@ $^
+	-ls -l $@
+
+$(TESTDATADLL) : $(OBJTESTFILE) $(HPUX_JUNK_OBJ)
 	$(SHLIB.c) -o $@ $^
 	-ls -l $@
 
