@@ -748,7 +748,7 @@ u_getFC_NFKC_Closure(UChar32 c, UChar *dest, int32_t destCapacity, UErrorCode *p
         }
         return u_terminateUChars(dest, destCapacity, length, pErrorCode);
     } else {
-        return 0;
+        return u_terminateUChars(dest, destCapacity, 0, pErrorCode);
     }
 }
 
