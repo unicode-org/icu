@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UGenPropReader.java,v $ 
-* $Date: 2001/03/07 02:52:05 $ 
-* $Revision: 1.2 $
+* $Date: 2001/03/17 01:36:32 $ 
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -66,7 +66,7 @@ final class UGenPropReader extends UGenReader
   private static final byte DATA_FORMAT_ID_[] = {(byte)0x55, (byte)0x50, 
                                                  (byte)0x72, (byte)0x6F};
   private static final byte DATA_FORMAT_VERSION_[] = 
-                                  {(byte)0x1, (byte)0x2, (byte)0x0, (byte)0x0};
+                                  {(byte)0x1, (byte)0x3, (byte)0x0, (byte)0x0};
                                   
   /**
   * Corrupted error string

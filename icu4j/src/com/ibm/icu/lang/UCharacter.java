@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2001/03/07 02:52:05 $ 
-* $Revision: 1.2 $
+* $Date: 2001/03/17 01:36:32 $ 
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -322,7 +322,11 @@ public final class UCharacter
   */
   private static final char GREEK_SMALL_LETTER_RHO_ = 0x3c2;
   
-    
+  /**
+  * ISO control character first range upper limit 0x0 - 0x1F
+  */
+  private static final int ISO_CONTROL_FIRST_RANGE_MAX_ = 0x1F;
+  
   // constructor ====================================================
   
   /**
@@ -921,29 +925,6 @@ public final class UCharacter
   }
 
   /**
-  * Determines whether the specified code point is a control character or not.
-  * <br>
-  * A code point is considered a control character if it is of either type 
-  * <ul>
-  * <li> Cc control character
-  * <li> Cf Format character
-  * <li> Zl line seperator 
-  * <li> Zp paragraph seperator
-  * </ul>
-  * @param ch the code point to be determined if it is a control character
-  * @return true if the code point is a control character
-  */
-  public static boolean isControl(int ch)
-  {
-    int cat = getType(ch);
-    // if props == 0, it will just fall through and return false
-    return cat == UCharacterCategory.CONTROL || 
-           cat == UCharacterCategory.FORMAT || 
-           cat == UCharacterCategory.LINE_SEPARATOR || 
-           cat == UCharacterCategory.PARAGRAPH_SEPARATOR;
-  }
-
-  /**
   * Determines whether the specified code point is a printable character 
   * according to the Unicode standard.
   * @param ch code point to be determined if it is printable
@@ -951,31 +932,17 @@ public final class UCharacter
   */
   public static boolean isPrintable(int ch)
   {
+    if (isISOControl(ch)) {
+      return false;
+    }
     int cat = getType(ch);
     // if props == 0, it will just fall through and return false
-    return cat == UCharacterCategory.DECIMAL_DIGIT_NUMBER || 
-           cat == UCharacterCategory.OTHER_NUMBER ||
-           cat == UCharacterCategory.LETTER_NUMBER || 
-           cat == UCharacterCategory.UPPERCASE_LETTER || 
-           cat == UCharacterCategory.LOWERCASE_LETTER || 
-           cat == UCharacterCategory.TITLECASE_LETTER ||
-           cat == UCharacterCategory.MODIFIER_LETTER || 
-           cat == UCharacterCategory.OTHER_LETTER ||
-           cat == UCharacterCategory.NON_SPACING_MARK || 
-           cat == UCharacterCategory.ENCLOSING_MARK ||
-           cat == UCharacterCategory.COMBINING_SPACING_MARK || 
-           cat == UCharacterCategory.SPACE_SEPARATOR ||
-           cat == UCharacterCategory.LINE_SEPARATOR || 
-           cat == UCharacterCategory.PARAGRAPH_SEPARATOR ||
-           cat == UCharacterCategory.DASH_PUNCTUATION || 
-           cat == UCharacterCategory.START_PUNCTUATION ||
-           cat == UCharacterCategory.END_PUNCTUATION || 
-           cat == UCharacterCategory.CONNECTOR_PUNCTUATION ||
-           cat == UCharacterCategory.OTHER_PUNCTUATION || 
-           cat == UCharacterCategory.MATH_SYMBOL ||
-           cat == UCharacterCategory.CURRENCY_SYMBOL || 
-           cat == UCharacterCategory.MODIFIER_SYMBOL ||
-           cat == UCharacterCategory.OTHER_SYMBOL;
+    return (cat != UCharacterCategory.UNASSIGNED && 
+        cat != UCharacterCategory.CONTROL && 
+        cat != UCharacterCategory.FORMAT &&
+        cat != UCharacterCategory.PRIVATE_USE &&
+        cat != UCharacterCategory.SURROGATE &&
+        cat != UCharacterCategory.GENERAL_OTHER_TYPES);
   }
 
   /**
