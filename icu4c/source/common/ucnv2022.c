@@ -590,7 +590,7 @@ static void _ISO2022Open(UConverter *cnv, const char *name, const char *locale,u
             myConverterData->version=0;
             
         }
-        else if((myLocale[0]=='z' && myLocale[1]=='h') || (myLocale[0]=='c'&& myLocale[1]=='n') && 
+        else if(((myLocale[0]=='z' && myLocale[1]=='h') || (myLocale[0]=='c'&& myLocale[1]=='n'))&& 
             (myLocale[2]=='_' || myLocale[2]=='\0')){
             
             /* open the required converters and cache them */
@@ -1168,9 +1168,6 @@ static  const int32_t escSeqCharsLen[MAX_VALID_CP_JP] ={
     sizeof(escSeqChars[7]),
 };
 
-/*
-static void concatString(UConverterFromUnicodeArgs* args, int32_t *targetIndex, int32_t *targetLength,
-                         const UChar32* strToAppend,UErrorCode* err,int32_t *sourceIndex);
 
 /*
 * The iteration over various code pages works this way:
@@ -1201,7 +1198,7 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterFromUnic
     const char* escSeq = NULL;
     int len =0; /*length of escSeq chars*/
     UConverterCallbackReason reason;
-    unsigned char tempBuf[2] = {'\0'};
+    
 
     /* state variables*/
     StateEnum* currentState       = &converterData->fromUnicodeCurrentState;
@@ -1929,7 +1926,6 @@ getTrail:
                         }
                     }
                     isTargetUCharDBCS=(UBool)args->converter->fromUnicodeStatus;
-                    //myConverterData->isShiftAppended =FALSE;
                     args->source = saveSource;
                     args->target = saveTarget;
                     args->offsets = saveOffsets;
@@ -1982,8 +1978,6 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterToUnicodeA
     const char *mySource = ( char *) args->source;
     UChar *myTarget = args->target;
     char *tempLimit = &tempBuf[2]+1; 
-    int32_t mySourceIndex = 0;
-    int32_t myTargetIndex = 0;
     const char *mySourceLimit = args->sourceLimit;
     UChar32 targetUniChar = 0x0000;
     UChar mySourceChar = 0x0000;
@@ -2089,8 +2083,7 @@ SAVE_STATE:
                     int32_t saveIndex = myTarget - args->target;
                     UConverterCallbackReason reason;
                     int32_t currentOffset ;
-                    int32_t My_i = myTarget - args->target;
-                    
+                 
                     if(targetUniChar == 0xfffe){
                         reason = UCNV_UNASSIGNED;
                         *err = U_INVALID_CHAR_FOUND;
