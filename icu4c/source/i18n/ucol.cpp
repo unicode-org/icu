@@ -2046,35 +2046,49 @@ uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, U
           break;
         }
 
-        UCharOffset++; /* skip the backward offset, see above */
+        uint8_t maxCC = *(UCharOffset)&0xFF; /*get the discontiguos stuff */ /* skip the backward offset, see above */
+        uint8_t allSame = *(UCharOffset++)>>8;
 
         schar = getNextNormalizedChar(source);
         while(schar > (tchar = *UCharOffset)) { /* since the contraction codepoints should be ordered, we skip all that are smaller */
           UCharOffset++;
         }
         if (schar != tchar) {
-            UChar tempchar = 0;
-            if (u_getCombiningClass(schar) != 0 &&
-                source->pos != source->endp &&
-                (*source->pos != 0 ||
-                    ((source->flags & UCOL_ITER_INNORMBUF) &&
-                    source->fcdPosition != NULL &&
-                    source->fcdPosition != source->endp &&
-                    *source->fcdPosition != 0))) {
-                /* find the next character if schar is not a base character
-                and we are not yet at the end of the string */
-                tempchar = getNextNormalizedChar(source);
-                source->pos --;
+          if(maxCC == 0 || schar < 0x0300) { /* only base chars in contraction, so bail out */
+            source->pos --;
+            /* Spit out the last char of the string, wasn't tasty enough */
+            CE = *(coll->contractionCEs +
+                 (ContractionStart - coll->contractionIndex));
+          } else { /* try to go to discontiguos */
+            uint8_t sCC = u_getCombiningClass(schar);
+            if(sCC == 0 || sCC>maxCC || (allSame != 0 && sCC == maxCC)) {
+              source->pos --;
+              /* Spit out the last char of the string, wasn't tasty enough */
+              CE = *(coll->contractionCEs +
+                   (ContractionStart - coll->contractionIndex));
+            } else {
+              UChar tempchar = 0;
+              if (source->pos != source->endp &&
+                  (*source->pos != 0 ||
+                      ((source->flags & UCOL_ITER_INNORMBUF) &&
+                      source->fcdPosition != NULL &&
+                      source->fcdPosition != source->endp &&
+                      *source->fcdPosition != 0))) {
+                  /* find the next character if schar is not a base character
+                  and we are not yet at the end of the string */
+                  tempchar = getNextNormalizedChar(source);
+                  source->pos --;
+              }
+              if (tempchar == 0 || u_getCombiningClass(tempchar) == 0) {
+                  source->pos --;
+                  /* Spit out the last char of the string, wasn't tasty enough */
+                  CE = *(coll->contractionCEs +
+                       (ContractionStart - coll->contractionIndex));
+              } else {
+                  CE = getDiscontiguos(coll, source, ContractionStart);
+              }
             }
-            if (tempchar == 0 || u_getCombiningClass(tempchar) == 0) {
-                source->pos --;
-                /* Spit out the last char of the string, wasn't tasty enough */
-                CE = *(coll->contractionCEs +
-                     (ContractionStart - coll->contractionIndex));
-            }
-            else {
-                CE = getDiscontiguos(coll, source, ContractionStart);
-            }
+          }
         }
         else {
             CE = *(coll->contractionCEs +
