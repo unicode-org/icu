@@ -402,6 +402,24 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
             2,
 
         };
+        /* ISCII */
+        UChar iscii_inputText[]={ 0x0041, 0x3712/*unassigned*/, 0x0042, };
+        const uint8_t to_iscii[]={  
+            0x41,   
+            0x42, 
+        };
+        int32_t from_isciiOffs [] ={ 
+            0,2,
+
+        };
+        /*ISCII*/
+        UChar iscii_inputText1[]={0x0044, 0x3712/*unassigned*/,0x43,0xd800/*illegal*/,0x0042, };
+        const uint8_t to_iscii1[]={ 
+            0x44,   
+            0x43, 
+
+        };
+        int32_t from_isciiOffs1 [] ={0,2};
 
         if(!testConvertFromUnicode(inputTest, sizeof(inputTest)/sizeof(inputTest[0]),
                 toIBM943, sizeof(toIBM943), "ibm-943",
@@ -473,7 +491,16 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
                 UCNV_FROM_U_CALLBACK_SKIP, from_SCSUOffs, NULL, 0 ))
             log_err("u-> SCSU with skip did not match.\n");
 
-
+        /*ISCII*/
+        if(!testConvertFromUnicode(iscii_inputText, sizeof(iscii_inputText)/sizeof(iscii_inputText[0]),
+                to_iscii, sizeof(to_iscii), "ISCII,version=0",
+                UCNV_FROM_U_CALLBACK_SKIP, from_isciiOffs, NULL, 0 ))
+            log_err("u-> iscii with skip did not match.\n"); 
+        /*with context*/
+        if(!testConvertFromUnicodeWithContext(iscii_inputText1, sizeof(iscii_inputText1)/sizeof(iscii_inputText1[0]),
+                to_iscii1, sizeof(to_iscii1), "ISCII,version=0",
+                UCNV_FROM_U_CALLBACK_SKIP, from_isciiOffs1, NULL, 0,UCNV_SKIP_STOP_ON_ILLEGAL,U_ILLEGAL_CHAR_FOUND ))
+            log_err("u-> iscii with skip & UCNV_SKIP_STOP_ON_ILLEGAL did not match.\n");
       
     }
 
@@ -622,6 +649,28 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
 
         int32_t from_hzOffs [] ={0,3,7,11,18,  };
 
+        /*ISCII*/
+        const uint8_t sampleTxt_iscii[]={ 
+            0x41,   
+            0xa1,   
+            0x80,    /*unassigned*/ 
+            0x26,   
+            0x30,
+            0xa2, 
+            0x8E,/*unassigned*/ 
+            0x42,
+        };
+        UChar isciitoUnicode[]={  
+            0x41,
+            0x0901,
+            0x26,
+            0x30,
+            0x0902, 
+            0x42,
+            };
+
+        int32_t from_isciiOffs [] ={0,1,3,4,5,7 };
+
         /*LMBCS*/
         const uint8_t sampleTxtLMBCS[]={ 0x12, 0xc9, 0x50, 
             0x12, 0x92, 0xa0, /*unassigned*/
@@ -669,6 +718,11 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
                  hztoUnicode, sizeof(hztoUnicode)/sizeof(hztoUnicode[0]),"HZ",
                 UCNV_TO_U_CALLBACK_SKIP, from_hzOffs , NULL, 0))
             log_err("HZ->u with skip did not match.\n");
+        
+        if(!testConvertToUnicode(sampleTxt_iscii, sizeof(sampleTxt_iscii),
+                 isciitoUnicode, sizeof(isciitoUnicode)/sizeof(isciitoUnicode[0]),"ISCII,version=0",
+                UCNV_TO_U_CALLBACK_SKIP, from_isciiOffs , NULL, 0))
+            log_err("iscii->u with skip did not match.\n");
 
         if(/* broken for icu 1.6 and 1.6.0.1, do not test */uprv_strcmp("1.7", U_ICU_VERSION) != 0 && !testConvertToUnicode(sampleTxtLMBCS, sizeof(sampleTxtLMBCS),
                 LMBCSToUnicode, sizeof(LMBCSToUnicode)/sizeof(LMBCSToUnicode[0]),"LMBCS-1",
@@ -807,6 +861,14 @@ static void TestStop(int32_t inputsize, int32_t outputsize)
             1,1,1,1,
         };
 
+        /*ISCII*/
+        UChar iscii_inputText[]={ 0x0041, 0x3712, 0x0042, };
+        const uint8_t to_iscii[]={  
+            0x41,   
+        };
+        int32_t from_isciiOffs [] ={ 
+            0,           
+        };
 
         if(!testConvertFromUnicode(inputTest, sizeof(inputTest)/sizeof(inputTest[0]),
                 toIBM943, sizeof(toIBM943), "ibm-943",
@@ -846,7 +908,12 @@ static void TestStop(int32_t inputsize, int32_t outputsize)
         if(!testConvertFromUnicode(hz_inputText, sizeof(hz_inputText)/sizeof(hz_inputText[0]),
                 to_hz, sizeof(to_hz), "HZ",
                 UCNV_FROM_U_CALLBACK_STOP, from_hzOffs, NULL, 0 ))
-            log_err("u-> HZ with stop did not match.\n");  
+            log_err("u-> HZ with stop did not match.\n");\
+                
+        if(!testConvertFromUnicode(iscii_inputText, sizeof(iscii_inputText)/sizeof(iscii_inputText[0]),
+                to_iscii, sizeof(to_iscii), "ISCII,version=0",
+                UCNV_FROM_U_CALLBACK_STOP, from_isciiOffs, NULL, 0 ))
+            log_err("u-> iscii with stop did not match.\n"); 
 
 
     }
@@ -1527,6 +1594,53 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
             8,
         };
 
+                /*ISCII*/
+        UChar iscii_inputText2[]={ 0x0041, 0x0901,0xD84D, 0xDC56/*unassigned*/,0x0902, 0x0042,0xD84D, 0xDC56/*unassigned*/,0x43 };
+        const uint8_t to_iscii2[]={  
+            0x41,   
+            0xef,   0x42,   0xa1,    
+            0x25,   0x55,   0x44,   0x38,   0x34,   0x44,   
+            0x25,   0x55,   0x44,   0x43,   0x35,   0x36,  
+            0xa2, 
+            0x42, 
+            0x25,   0x55,   0x44,   0x38,   0x34,   0x44,   
+            0x25,   0x55,   0x44,   0x43,   0x35,   0x36,  
+            0x43
+        };
+        int32_t from_isciiOffs2 [] ={ 
+            0,
+            1,1,1,
+            2,2,2,2,2,2,
+            2,2,2,2,2,2,
+            4,
+            5,
+            6,6,6,6,6,6,
+            6,6,6,6,6,6,
+            8,
+        };
+
+        UChar iscii_inputText[]={ 0x0041, 0x0901,0x3712/*unassigned*/,0x0902, 0x0042,0x3712/*unassigned*/,0x43 };
+        const uint8_t to_iscii[]={   
+            0x41,   
+            0xef,   0x42,   0xa1,   
+            0x25,   0x55,   0x33,   0x37,   0x31,   0x32,  /*unassigned*/ 
+            0xa2,
+            0x42, 
+            0x25,   0x55,   0x33,   0x37,   0x31,   0x32,  /*unassigned*/ 
+            0x43
+        };
+     
+
+        int32_t from_isciiOffs [] ={ 
+            0,
+            1,1,1,
+            2,2,2,2,2,2,
+            3,
+            4,
+            5,5,5,5,5,5,
+            6,
+        };
+
         if(!testConvertFromUnicode(inputTest, sizeof(inputTest)/sizeof(inputTest[0]),
                 toIBM943, sizeof(toIBM943), "ibm-943",
                 UCNV_FROM_U_CALLBACK_ESCAPE, offset, NULL, 0 ))
@@ -1702,6 +1816,16 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
                 to_hz2, sizeof(to_hz2), "HZ",
                 UCNV_FROM_U_CALLBACK_ESCAPE, from_hzOffs2, NULL, 0 ))
             log_err("u-> hz with subst with value did not match.\n");
+
+        if(!testConvertFromUnicode(iscii_inputText, sizeof(iscii_inputText)/sizeof(iscii_inputText[0]),
+                to_iscii, sizeof(to_iscii), "ISCII,version=0",
+                UCNV_FROM_U_CALLBACK_ESCAPE, from_isciiOffs, NULL, 0 ))
+            log_err("u-> iscii with subst with value did not match.\n");
+        
+        if(!testConvertFromUnicode(iscii_inputText2, sizeof(iscii_inputText2)/sizeof(iscii_inputText2[0]),
+                to_iscii2, sizeof(to_iscii2), "ISCII,version=0",
+                UCNV_FROM_U_CALLBACK_ESCAPE, from_isciiOffs2, NULL, 0 ))
+            log_err("u-> iscii2 with subst with value did not match.\n");
     }
 
 
@@ -1797,6 +1921,29 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
 
         int32_t from_hzOffs [] ={0,3,5,5,5,5,5,5,5,5,7,11,14,14,14,14,14,14,14,14,18,  };
 
+       
+        /*hz*/
+        const uint8_t sampleTxt_iscii[]={ 
+            0x41,   
+            0x30,   
+            0x8E, /*unassigned*/ 
+            0xa3,
+            0x42, 
+            0x8E,/*unassigned*/ 
+            0x42,
+        };
+        UChar isciitoUnicode[]={  
+            0x41,
+            0x30,
+            0x25,  0x58,  0x38, 0x45,
+            0x0903, 
+            0x42,
+            0x25,  0x58,  0x38, 0x45,
+            0x42,};
+
+        int32_t from_isciiOffs [] ={0,1,2,2,2,2,3,4,5,5,5,5,6  };
+
+
         /*LMBCS*/
         const uint8_t sampleTxtLMBCS[]={ 0x12, 0xc9, 0x50, 
             0x12, 0x92, 0xa0, /*unassigned*/
@@ -1843,8 +1990,12 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
          if(!testConvertToUnicode(sampleTxt_hz, sizeof(sampleTxt_hz),
                  hztoUnicode, sizeof(hztoUnicode)/sizeof(hztoUnicode[0]),"HZ",
                 UCNV_TO_U_CALLBACK_ESCAPE, from_hzOffs, NULL, 0))
-            log_err("iso-2022-kr->u with substitute with value did not match.\n");
+            log_err("hz->u with substitute with value did not match.\n");
 
+         if(!testConvertToUnicode(sampleTxt_iscii, sizeof(sampleTxt_iscii),
+                 isciitoUnicode, sizeof(isciitoUnicode)/sizeof(isciitoUnicode[0]),"ISCII,version=0",
+                UCNV_TO_U_CALLBACK_ESCAPE, from_isciiOffs, NULL, 0))
+            log_err("ISCII ->u with substitute with value did not match.\n");
         /*got to confirm this*/
         if(/* broken for icu 1.6.0.1, do not test */uprv_strcmp("1.7", U_ICU_VERSION) != 0 && !testConvertToUnicode(sampleTxtLMBCS, sizeof(sampleTxtLMBCS),
                 LMBCSToUnicode, sizeof(LMBCSToUnicode)/sizeof(LMBCSToUnicode[0]),"LMBCS",

@@ -1084,7 +1084,7 @@ static void TestAlias() {
 
 static void TestConvertSafeClone()
 {
-#define CLONETEST_CONVERTER_COUNT 5
+#define CLONETEST_CONVERTER_COUNT 6
 
     char charBuffer [10];
     char *pCharBuffer;
@@ -1108,6 +1108,7 @@ static void TestConvertSafeClone()
     someConverters[2] = ucnv_open("SCSU", &err);
     someConverters[3] = ucnv_open("HZ", &err);
     someConverters[4] = ucnv_open("lmbcs", &err);
+    someConverters[5] = ucnv_open("ISCII,version=0",&err);
 
     /* Check the various error & informational states: */
 
