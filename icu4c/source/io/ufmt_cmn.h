@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1998-2003, International Business Machines
+*   Copyright (C) 1998-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -105,6 +105,17 @@ ufmt_64tou(UChar     *buffer,
       int32_t    minDigits);
 
 /**
+ * It's like ufmt_64tou, but with a pointer.
+ * This functions avoids size constraints of 64-bit types.
+ * Pointers can be at 32-128 bits in size.
+ */
+void 
+ufmt_ptou(UChar    *buffer, 
+          int32_t   *len,
+          void      *value, 
+          UBool     uselower);
+
+/**
  * Convert a UChar* in a specified radix to a long.
  * @param buffer The target buffer
  * @param len On input, the size of <TT>buffer</TT>.  On output,
@@ -143,7 +154,4 @@ ufmt_unicodeToDefaultCP(const UChar *s,
             int32_t len);
 
 #endif
-
-
-
 
