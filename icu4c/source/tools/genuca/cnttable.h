@@ -1,3 +1,26 @@
+/*
+*******************************************************************************
+*
+*   Copyright (C) 2000-2001, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+*******************************************************************************
+*   file name:  genuca.cpp
+*   encoding:   US-ASCII
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   This program reads the Franctional UCA table and generates
+*   internal format for UCA table as well as inverse UCA table.
+*   It then writes binary files containing the data: ucadata.dat 
+*   & invuca.dat
+*
+*   Change history:
+*
+*   02/08/2001  Vladimir Weinstein      Created this program
+*   02/23/2001  grhoten                 Made it into a tool
+*/
+
 #ifndef UCOL_CNTTABLE_H
 #define UCOL_CNTTABLE_H
 
@@ -5,7 +28,7 @@
 #include "genuca.h"
 
 typedef struct {
-	ContractionTable **elements;
+    ContractionTable **elements;
     CompactIntArray *mapping;
     UChar *codePoints;
     uint32_t *CEs;
@@ -30,6 +53,6 @@ uint32_t uprv_cnttab_changeLastCE(CntTable *table, uint32_t element, uint32_t va
 
 uint32_t uprv_cnttab_findCP(CntTable *table, uint32_t element, UChar codePoint, UBool forward, UErrorCode *status);
 
-uint32_t uprv_cnttab_getCE(CntTable *table, uint32_t element, uint32_t position, UBool forward, UErrorCode *status);
+uint32_t uprv_cnttab_getCE(CntTable *table, uint32_t element, int32_t position, UBool forward, UErrorCode *status);
 
 #endif

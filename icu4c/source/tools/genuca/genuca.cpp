@@ -10,13 +10,15 @@
 *   tab size:   8 (not used)
 *   indentation:4
 *
-*   created at the end of XX century
-*   created by: Vladimir Weinstein
-*
 *   This program reads the Franctional UCA table and generates
 *   internal format for UCA table as well as inverse UCA table.
 *   It then writes binary files containing the data: ucadata.dat 
 *   & invuca.dat
+*
+*   Change history:
+*
+*   02/08/2001  Vladimir Weinstein      Created this program
+*   02/23/2001  grhoten                 Made it into a tool
 */
 
 #include "genuca.h"
@@ -42,18 +44,19 @@ UCAElements le;
  */
 UBool VERBOSE = FALSE;
 
+/*
 void deleteElement(void *element) {
     UCAElements *el = (UCAElements *)element;
-/*
     int32_t i = 0;
     for(i = 0; i < el->noOfCEs; i++) {
         free(el->primary[i]);
         free(el->secondary[i]);
         free(el->tertiary[i]);
     }
-*/
-    //free(el);
+
+    free(el);
 }
+*/
 
 int32_t readElement(char **from, char *to, char separator, UErrorCode *status) {
     if(U_FAILURE(*status)) {
@@ -145,15 +148,13 @@ uint32_t processContraction(UCAElements *element, uint32_t existingCE, UBool for
     if(U_FAILURE(*status)) {
         return UCOL_NOT_FOUND;
     }
-    int32_t i = 0;
-    UBool gotContractionOffset = FALSE;
     int32_t firstContractionOffset = 0;
     int32_t contractionOffset = 0;
     uint32_t contractionElement = UCOL_NOT_FOUND;
 
     /* end of recursion */
     if(element->cSize == 1) {
-      return element->mapCE;
+        return element->mapCE;
     }
 
     /* this recursion currently feeds on the only element we have... We will have to copy it in order to accomodate */
@@ -162,40 +163,40 @@ uint32_t processContraction(UCAElements *element, uint32_t existingCE, UBool for
     /* we encountered either an empty space or a non-contraction element */
     /* this means we are constructing a new contraction sequence */
     if(existingCE == UCOL_NOT_FOUND || !isContraction(existingCE)) { 
-      /* if it wasn't contraction, we wouldn't end up here*/
-      firstContractionOffset = uprv_cnttab_addContraction(contractions, -1, 0, existingCE, forward, status);
-      if(forward == FALSE) {
-          uprv_cnttab_addContraction(contractions, firstContractionOffset, 0, existingCE, TRUE, status);
-          uprv_cnttab_addContraction(contractions, firstContractionOffset, 0xFFFF, existingCE, TRUE, status);
-      } 
+        /* if it wasn't contraction, we wouldn't end up here*/
+        firstContractionOffset = uprv_cnttab_addContraction(contractions, UINT32_MAX, 0, existingCE, forward, status);
+        if(forward == FALSE) {
+            uprv_cnttab_addContraction(contractions, firstContractionOffset, 0, existingCE, TRUE, status);
+            uprv_cnttab_addContraction(contractions, firstContractionOffset, 0xFFFF, existingCE, TRUE, status);
+        } 
 
-      UChar toAdd = element->cPoints[1];
-      element->cPoints++;
-      element->cSize--;
-      uint32_t newCE = processContraction(element, UCOL_NOT_FOUND, forward, status);
-      element->cPoints--;
-      element->cSize++;
-      contractionOffset = uprv_cnttab_addContraction(contractions, firstContractionOffset, toAdd, newCE, forward, status);
-      contractionOffset = uprv_cnttab_addContraction(contractions, firstContractionOffset, 0xFFFF, existingCE, forward, status);
-      contractionElement =  constructContractCE(firstContractionOffset);
-      return contractionElement;
-    } else { /* we are adding to existing contraction */
-      /* there were already some elements in the table, so we need to add a new contraction */
-      /* Two things can happen here: either the codepoint is already in the table, or it is not */
-      uint32_t position = uprv_cnttab_findCP(contractions, existingCE, *(element->cPoints+1), forward, status);
-      element->cPoints++;
-      element->cSize--;
-      if(position != 0) {       /* if it is we just continue down the chain */
-        uint32_t eCE = uprv_cnttab_getCE(contractions, existingCE, position, forward, status);
-        uint32_t newCE = processContraction(element, eCE, forward, status);
-        uprv_cnttab_setContraction(contractions, existingCE, position, *(element->cPoints), newCE, forward, status);
-      } else {                  /* if it isn't, we will have to create a new sequence */
+        UChar toAdd = element->cPoints[1];
+        element->cPoints++;
+        element->cSize--;
         uint32_t newCE = processContraction(element, UCOL_NOT_FOUND, forward, status);
-        uprv_cnttab_insertContraction(contractions, existingCE, *(element->cPoints), newCE, forward, status);
-      }
-      element->cPoints--;
-      element->cSize++;
-      return existingCE;
+        element->cPoints--;
+        element->cSize++;
+        contractionOffset = uprv_cnttab_addContraction(contractions, firstContractionOffset, toAdd, newCE, forward, status);
+        contractionOffset = uprv_cnttab_addContraction(contractions, firstContractionOffset, 0xFFFF, existingCE, forward, status);
+        contractionElement =  constructContractCE(firstContractionOffset);
+        return contractionElement;
+    } else { /* we are adding to existing contraction */
+        /* there were already some elements in the table, so we need to add a new contraction */
+        /* Two things can happen here: either the codepoint is already in the table, or it is not */
+        uint32_t position = uprv_cnttab_findCP(contractions, existingCE, *(element->cPoints+1), forward, status);
+        element->cPoints++;
+        element->cSize--;
+        if(position != 0) {       /* if it is we just continue down the chain */
+            uint32_t eCE = uprv_cnttab_getCE(contractions, existingCE, position, forward, status);
+            uint32_t newCE = processContraction(element, eCE, forward, status);
+            uprv_cnttab_setContraction(contractions, existingCE, position, *(element->cPoints), newCE, forward, status);
+        } else {                  /* if it isn't, we will have to create a new sequence */
+            uint32_t newCE = processContraction(element, UCOL_NOT_FOUND, forward, status);
+            uprv_cnttab_insertContraction(contractions, existingCE, *(element->cPoints), newCE, forward, status);
+        }
+        element->cPoints--;
+        element->cSize++;
+        return existingCE;
     }
 }
 
@@ -238,40 +239,40 @@ uint32_t contSize = 0;
 
 void addNewInverse(UCAElements *element, UErrorCode *status) {
 
-  if(VERBOSE && isContinuation(element->CEs[1])) {
-    fprintf(stdout, "+");
-  }
-  inversePos++;
-  inverseTable[inversePos][0] = element->CEs[0];
-  if(element->noOfCEs > 1 && isContinuation(element->CEs[1])) {
-    inverseTable[inversePos][1] = element->CEs[1];
-  }
-  if(element->cSize < 2) {
-    inverseTable[inversePos][2] = element->cPoints[0];
-  } else { /* add a new store of cruft */
-    inverseTable[inversePos][2] = ((element->cSize+1) << UCOL_INV_SHIFTVALUE) | sContPos;
-    memcpy(stringContinue+sContPos, element->cPoints, element->cSize*sizeof(UChar));
-    sContPos += element->cSize+1;
-  }
+    if(VERBOSE && isContinuation(element->CEs[1])) {
+        fprintf(stdout, "+");
+    }
+    inversePos++;
+    inverseTable[inversePos][0] = element->CEs[0];
+    if(element->noOfCEs > 1 && isContinuation(element->CEs[1])) {
+        inverseTable[inversePos][1] = element->CEs[1];
+    }
+    if(element->cSize < 2) {
+        inverseTable[inversePos][2] = element->cPoints[0];
+    } else { /* add a new store of cruft */
+        inverseTable[inversePos][2] = ((element->cSize+1) << UCOL_INV_SHIFTVALUE) | sContPos;
+        memcpy(stringContinue+sContPos, element->cPoints, element->cSize*sizeof(UChar));
+        sContPos += element->cSize+1;
+    }
 }
 
 void addToExistingInverse(UCAElements *element, uint32_t position, UErrorCode *status) {
 
-      if((inverseTable[position][2] & UCOL_INV_SIZEMASK) == 0) { /* single element, have to make new extension place and put both guys there */
-        stringContinue[sContPos] = inverseTable[position][2];
+    if((inverseTable[position][2] & UCOL_INV_SIZEMASK) == 0) { /* single element, have to make new extension place and put both guys there */
+        stringContinue[sContPos] = (UChar)inverseTable[position][2];
         inverseTable[position][2] = ((element->cSize+3) << UCOL_INV_SHIFTVALUE) | sContPos;
         sContPos++;
         stringContinue[sContPos++] = 0xFFFF;
         memcpy(stringContinue+sContPos, element->cPoints, element->cSize*sizeof(UChar));
         sContPos += element->cSize;
         stringContinue[sContPos++] = 0xFFFE;
-      } else { /* adding to the already existing continuing table */
+    } else { /* adding to the already existing continuing table */
         uint32_t contIndex = inverseTable[position][2] & UCOL_INV_OFFSETMASK;
         uint32_t contSize = (inverseTable[position][2] & UCOL_INV_SIZEMASK) >> UCOL_INV_SHIFTVALUE;
 
         if(contIndex+contSize < sContPos) {
-          /*fprintf(stderr, ".", sContPos, contIndex+contSize);*/
-          memcpy(stringContinue+contIndex+contSize+element->cSize+1, stringContinue+contIndex+contSize, (element->cSize+1)*sizeof(UChar));
+            /*fprintf(stderr, ".", sContPos, contIndex+contSize);*/
+            memcpy(stringContinue+contIndex+contSize+element->cSize+1, stringContinue+contIndex+contSize, (element->cSize+1)*sizeof(UChar));
         }
 
         stringContinue[contIndex+contSize-1] = 0xFFFF;
@@ -280,67 +281,67 @@ void addToExistingInverse(UCAElements *element, uint32_t position, UErrorCode *s
         stringContinue[contIndex+contSize+element->cSize] = 0xFFFE;
 
         inverseTable[position][2] = ((contSize+element->cSize+1) << UCOL_INV_SHIFTVALUE) | contIndex;
-      }
+    }
 }
 
 uint32_t addToInverse(UCAElements *element, UErrorCode *status) {
 
-  if(inverseTable[inversePos][0] > element->CEs[0]) {
-    uint32_t position = inversePos;
-    while(inverseTable[--position][0] > element->CEs[0])
-    addToExistingInverse(element, position, status);
-  } else if(inverseTable[inversePos][0] == element->CEs[0]) {
-    if(element->noOfCEs > 1 && isContinuation(element->CEs[1]) 
-      && inverseTable[inversePos][1] != element->CEs[1]) {
-      /* also, we should do long primaries here */
-      addNewInverse(element, status);
+    if(inverseTable[inversePos][0] > element->CEs[0]) {
+        uint32_t position = inversePos;
+        while(inverseTable[--position][0] > element->CEs[0])
+            addToExistingInverse(element, position, status);
+    } else if(inverseTable[inversePos][0] == element->CEs[0]) {
+        if(element->noOfCEs > 1 && isContinuation(element->CEs[1]) 
+          && inverseTable[inversePos][1] != element->CEs[1]) {
+            /* also, we should do long primaries here */
+            addNewInverse(element, status);
+        } else {
+            addToExistingInverse(element, inversePos, status);
+        } 
     } else {
-      addToExistingInverse(element, inversePos, status);
-    } 
-  } else {
-    addNewInverse(element, status);
-  }
-  return inversePos;
+        addNewInverse(element, status);
+    }
+    return inversePos;
 }
 
 InverseTableHeader *assembleInverseTable(UErrorCode *status)
 {
-  uint32_t i = 0;
-  InverseTableHeader *result = NULL;
-  uint32_t headerByteSize = paddedsize(sizeof(InverseTableHeader));
-  uint32_t inverseTableByteSize = (inversePos+2)*sizeof(uint32_t)*3;
-  uint32_t contsByteSize = sContPos * sizeof(UChar);
+    InverseTableHeader *result = NULL;
+    uint32_t headerByteSize = paddedsize(sizeof(InverseTableHeader));
+    uint32_t inverseTableByteSize = (inversePos+2)*sizeof(uint32_t)*3;
+    uint32_t contsByteSize = sContPos * sizeof(UChar);
 
-  result = (InverseTableHeader *)malloc(headerByteSize + inverseTableByteSize + contsByteSize);
-  if(result != NULL) {
-    result->byteSize = headerByteSize + inverseTableByteSize + contsByteSize;
+    result = (InverseTableHeader *)malloc(headerByteSize + inverseTableByteSize + contsByteSize);
+    if(result != NULL) {
+        result->byteSize = headerByteSize + inverseTableByteSize + contsByteSize;
 
-    inversePos++;
-    inverseTable[inversePos][0] = 0xFFFFFFFF;
-    inverseTable[inversePos][1] = 0xFFFFFFFF;
-    inverseTable[inversePos][2] = 0x0000FFFF;
-    inversePos++;
+        inversePos++;
+        inverseTable[inversePos][0] = 0xFFFFFFFF;
+        inverseTable[inversePos][1] = 0xFFFFFFFF;
+        inverseTable[inversePos][2] = 0x0000FFFF;
+        inversePos++;
 
-    result->tableSize = inversePos;
-    result->contsSize = sContPos;
+        result->tableSize = inversePos;
+        result->contsSize = sContPos;
 
-    result->table = headerByteSize;
-    result->conts = headerByteSize + inverseTableByteSize;
+        result->table = headerByteSize;
+        result->conts = headerByteSize + inverseTableByteSize;
 
-    memcpy((uint8_t *)result + result->table, inverseTable, inverseTableByteSize);
-    memcpy((uint8_t *)result + result->conts, stringContinue, contsByteSize);
+        memcpy((uint8_t *)result + result->table, inverseTable, inverseTableByteSize);
+        memcpy((uint8_t *)result + result->conts, stringContinue, contsByteSize);
 
-  } else {
-    *status = U_MEMORY_ALLOCATION_ERROR;
-    return NULL;
-  }
+    } else {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
 
-  return result; 
+    return result; 
 }
 
 
 void writeOutInverseData(InverseTableHeader *data,
                   const char *outputDir,
+                  const char *copyright,
                   UErrorCode *status)
 {
     UNewDataMemory *pData;
@@ -348,7 +349,7 @@ void writeOutInverseData(InverseTableHeader *data,
     long dataLength;
 
     pData=udata_create(outputDir, INVC_DATA_TYPE, INVC_DATA_NAME, &invDataInfo,
-                       U_COPYRIGHT_STRING, status);
+                       copyright, status);
 
     if(U_FAILURE(*status)) {
         fprintf(stderr, "Error: unable to create data memory, error %d\n", *status);
@@ -356,7 +357,9 @@ void writeOutInverseData(InverseTableHeader *data,
     }
 
     /* write the data to the file */
-    fprintf(stdout, "Writing out inverse UCA table\n");
+    fprintf(stdout, "Writing out inverse UCA table: %s%s.%s\n", outputDir,
+                                                                INVC_DATA_NAME,
+                                                                INVC_DATA_TYPE);
     udata_writeBlock(pData, data, data->byteSize);
 
     /* finish up */
@@ -371,71 +374,70 @@ void writeOutInverseData(InverseTableHeader *data,
 /* This adds a read element, while testing for existence */
 uint32_t addAnElement(UCAElements *element, UErrorCode *status) {
 
-  uint32_t i = 1, expansion = 0;
+    int32_t i = 1, expansion = 0;
 
-  if(U_FAILURE(*status)) {
-      return 0xFFFF;
-  }
-  if(element->noOfCEs == 1) {
-    if(element->isThai == FALSE) {
-      element->mapCE = element->CEs[0];
-    } else { /* add thai - totally bad here */
-      expansion = UCOL_SPECIAL_FLAG | (THAI_TAG<<UCOL_TAG_SHIFT) 
-        | ((addExpansion(element->CEs[0], status)+(paddedsize(sizeof(UCATableHeader))>>2))<<4) 
-        | 0x1;
-      element->mapCE = expansion;
+    if(U_FAILURE(*status)) {
+        return 0xFFFF;
     }
-  } else {     
-    expansion = UCOL_SPECIAL_FLAG | (EXPANSION_TAG<<UCOL_TAG_SHIFT) 
-      | ((addExpansion(element->CEs[0], status)+(paddedsize(sizeof(UCATableHeader))>>2))<<4)
-      & 0xFFFFF0;
-
-    for(i = 1; i<element->noOfCEs; i++) {
-      addExpansion(element->CEs[i], status);
-    }
-    if(element->noOfCEs <= 0xF) {
-      expansion |= element->noOfCEs;
-    } else {
-      addExpansion(0, status);
-    }
-    element->mapCE = expansion;
-  }
-
-  uint32_t CE = ucmp32_get(mapping, element->cPoints[0]);
-
-  if(element->cSize > 1) { /* we're adding a contraction */
-    /* and we need to deal with it */
-    /* we could aready have something in table - or we might not */
-    /* The fact is that we want to add or modify an existing contraction */
-    /* and add it backwards then */
-    uint32_t result = processContraction(element, CE, TRUE, status);
-    if(CE == UCOL_NOT_FOUND || !isContraction(CE)) {
-      ucmp32_set(mapping, element->cPoints[0], result);
-    }
-    /* add the reverse order */
-    reverseElement(element);
-    CE = ucmp32_get(mapping, element->cPoints[0]);
-    result = processContraction(element, CE, FALSE, status);
-    if(CE == UCOL_NOT_FOUND || !isContraction(CE)) {
-      ucmp32_set(mapping, element->cPoints[0], result);
-    }
-  } else { /* easy case, */
-    if( CE != UCOL_NOT_FOUND) {
-        if(isContraction(CE)) { /* adding a non contraction element (thai, expansion, single) to already existing contraction */
-            uprv_cnttab_setContraction(contractions, CE, 0, 0, element->mapCE, TRUE, status);
-            /* This loop has to change the CE at the end of contraction REDO!*/
-            uprv_cnttab_changeLastCE(contractions, CE, element->mapCE, TRUE, status);
-        } else {
-          fprintf(stderr, "Fatal error - trying to overwrite already existing data for codepoint %04X\n", element->cPoints[0]);
-          *status = U_ILLEGAL_ARGUMENT_ERROR;
+    if(element->noOfCEs == 1) {
+        if(element->isThai == FALSE) {
+            element->mapCE = element->CEs[0];
+        } else { /* add thai - totally bad here */
+            expansion = UCOL_SPECIAL_FLAG | (THAI_TAG<<UCOL_TAG_SHIFT) 
+                | ((addExpansion(element->CEs[0], status)+(paddedsize(sizeof(UCATableHeader))>>2))<<4) 
+                | 0x1;
+            element->mapCE = expansion;
         }
-    } else {
-      ucmp32_set(mapping, element->cPoints[0], element->mapCE);
+    } else {     
+        expansion = UCOL_SPECIAL_FLAG | (EXPANSION_TAG<<UCOL_TAG_SHIFT) 
+        | ((addExpansion(element->CEs[0], status)+(paddedsize(sizeof(UCATableHeader))>>2))<<4)
+        & 0xFFFFF0;
+
+        for(i = 1; i<element->noOfCEs; i++) {
+            addExpansion(element->CEs[i], status);
+        }
+        if(element->noOfCEs <= 0xF) {
+            expansion |= element->noOfCEs;
+        } else {
+            addExpansion(0, status);
+        }
+        element->mapCE = expansion;
     }
-  }
 
+    uint32_t CE = ucmp32_get(mapping, element->cPoints[0]);
 
-  return CE;
+    if(element->cSize > 1) { /* we're adding a contraction */
+        /* and we need to deal with it */
+        /* we could aready have something in table - or we might not */
+        /* The fact is that we want to add or modify an existing contraction */
+        /* and add it backwards then */
+        uint32_t result = processContraction(element, CE, TRUE, status);
+        if(CE == UCOL_NOT_FOUND || !isContraction(CE)) {
+            ucmp32_set(mapping, element->cPoints[0], result);
+        }
+        /* add the reverse order */
+        reverseElement(element);
+        CE = ucmp32_get(mapping, element->cPoints[0]);
+        result = processContraction(element, CE, FALSE, status);
+        if(CE == UCOL_NOT_FOUND || !isContraction(CE)) {
+            ucmp32_set(mapping, element->cPoints[0], result);
+        }
+    } else { /* easy case, */
+        if( CE != UCOL_NOT_FOUND) {
+            if(isContraction(CE)) { /* adding a non contraction element (thai, expansion, single) to already existing contraction */
+                uprv_cnttab_setContraction(contractions, CE, 0, 0, element->mapCE, TRUE, status);
+                /* This loop has to change the CE at the end of contraction REDO!*/
+                uprv_cnttab_changeLastCE(contractions, CE, element->mapCE, TRUE, status);
+            } else {
+                fprintf(stderr, "Fatal error - trying to overwrite already existing data for codepoint %04X\n", element->cPoints[0]);
+                *status = U_ILLEGAL_ARGUMENT_ERROR;
+            }
+        } else {
+            ucmp32_set(mapping, element->cPoints[0], element->mapCE);
+        }
+    }
+
+    return CE;
 }
 
 int32_t hex2num(char hex) {
@@ -472,7 +474,7 @@ UCATableHeader *assembleTable(UChar variableTopValue, UErrorCode *status) {
     uint32_t tableOffset = 0;
     uint8_t *dataStart;
 
-    int32_t toAllocate = paddedsize(sizeof(UCATableHeader))+paddedsize(expansions.position*sizeof(uint32_t))+paddedsize(mappingSize)+paddedsize(contractionsSize*(sizeof(UChar)+sizeof(uint32_t))+paddedsize(0x100*sizeof(uint32_t)));
+    uint32_t toAllocate = paddedsize(sizeof(UCATableHeader))+paddedsize(expansions.position*sizeof(uint32_t))+paddedsize(mappingSize)+paddedsize(contractionsSize*(sizeof(UChar)+sizeof(uint32_t))+paddedsize(0x100*sizeof(uint32_t)));
 
     dataStart = (uint8_t *)malloc(toAllocate);
     UCATableHeader *myData = (UCATableHeader *)dataStart;
@@ -539,12 +541,6 @@ UCATableHeader *assembleTable(UChar variableTopValue, UErrorCode *status) {
     const uint8_t *mapPosition = (uint8_t*)myData+myData->mappingPosition;
     myData->mapping = ucmp32_openFromData(&mapPosition, status);
     return myData;
-}
-
-void processFile(FILE *data, UErrorCode *status) {
-    if(U_FAILURE(*status)) {
-        return;
-    }
 }
 
 UCAElements *readAnElement(FILE *data, UErrorCode *status) {
@@ -739,7 +735,6 @@ UCAElements *readAnElement(FILE *data, UErrorCode *status) {
     }
 
     return element;
-
 }
 
 void reverseElement(UCAElements *el) {
@@ -754,31 +749,30 @@ void reverseElement(UCAElements *el) {
     uint32_t tempCE = 0, expansion = 0;
     UErrorCode status = U_ZERO_ERROR;
     if(el->noOfCEs>1) { /* this is an expansion that needs to be reversed and added - also, we need to change the mapValue */
-      for(i = 0; i<el->noOfCEs/2; i++) {
-          tempCE = el->CEs[i];
-          el->CEs[i] = el->CEs[el->noOfCEs-i-1];
-          el->CEs[el->noOfCEs-i-1] = tempCE;
-      }
-      expansion = UCOL_SPECIAL_FLAG | (EXPANSION_TAG<<UCOL_TAG_SHIFT) 
-        | ((addExpansion(el->CEs[0], &status)+(paddedsize(sizeof(UCATableHeader))>>2))<<4)
-        & 0xFFFFF0;
+        for(i = 0; i<el->noOfCEs/2; i++) {
+            tempCE = el->CEs[i];
+            el->CEs[i] = el->CEs[el->noOfCEs-i-1];
+            el->CEs[el->noOfCEs-i-1] = tempCE;
+        }
+        expansion = UCOL_SPECIAL_FLAG | (EXPANSION_TAG<<UCOL_TAG_SHIFT) 
+            | ((addExpansion(el->CEs[0], &status)+(paddedsize(sizeof(UCATableHeader))>>2))<<4)
+            & 0xFFFFF0;
 
-      for(i = 1; i<el->noOfCEs; i++) {
-        addExpansion(el->CEs[i], &status);
-      }
-      if(el->noOfCEs <= 0xF) {
-        expansion |= el->noOfCEs;
-      } else {
-        addExpansion(0, &status);
-      }
-      el->mapCE = expansion;
+        for(i = 1; i<el->noOfCEs; i++) {
+            addExpansion(el->CEs[i], &status);
+        }
+        if(el->noOfCEs <= 0xF) {
+            expansion |= el->noOfCEs;
+        } else {
+            addExpansion(0, &status);
+        }
+        el->mapCE = expansion;
     }
-
-
 }
 
 void writeOutData(UCATableHeader *data,
                   const char *outputDir,
+                  const char *copyright,
                   UErrorCode *status)
 {
     if(U_FAILURE(*status)) {
@@ -786,11 +780,11 @@ void writeOutData(UCATableHeader *data,
     }
 
     UNewDataMemory *pData;
-    
+
     long dataLength;
 
     pData=udata_create(outputDir, UCA_DATA_TYPE, UCA_DATA_NAME, &dataInfo,
-                       U_COPYRIGHT_STRING, status);
+                       copyright, status);
 
     if(U_FAILURE(*status)) {
         fprintf(stderr, "Error: unable to create data memory, error %d\n", *status);
@@ -798,7 +792,9 @@ void writeOutData(UCATableHeader *data,
     }
 
     /* write the data to the file */
-    fprintf(stdout, "Writing out UCA table\n");
+    fprintf(stdout, "Writing out UCA table: %s%s.%s\n", outputDir,
+                                                        UCA_DATA_NAME,
+                                                        UCA_DATA_TYPE);
     udata_writeBlock(pData, data, data->size);
 
     /* finish up */
@@ -812,12 +808,11 @@ void writeOutData(UCATableHeader *data,
 static int32_t
 write_uca_table(const char *filename,
                 const char *outputDir,
-                UBool includeCopyright,
+                const char *copyright,
                 UErrorCode *status)
 {
     FILE *data = fopen(filename, "r");
-    //FILE *data = fopen("uca30codepointsort.txt", "r");
-    int32_t i = 0, j = 0, k = 0, line = 0, thai = 0;
+    int32_t line = 0;
     int32_t sizesPrim[35], sizesSec[35], sizesTer[35];
     int32_t terValue[0xffff], secValue[0xffff];
     int32_t sizeBreakDown[35][35][35];
@@ -894,8 +889,8 @@ write_uca_table(const char *filename,
 
             /* we're first adding to inverse, because addAnElement will reverse the order */
             /* of code points and stuff... we don't want that to happen */
-            uint32_t invResult = addToInverse(element, status);
-            uint32_t result = addAnElement(element, status);
+            addToInverse(element, status);
+            addAnElement(element, status);
             //deleteElement(element);
         }
     }
@@ -938,10 +933,10 @@ write_uca_table(const char *filename,
 */
     /* test */
     UCATableHeader *myData = assembleTable(variableTopValue, status);  
-    writeOutData(myData, outputDir, status);
+    writeOutData(myData, outputDir, copyright, status);
 
     InverseTableHeader *inverse = assembleInverseTable(status);
-    writeOutInverseData(inverse, outputDir, status);
+    writeOutInverseData(inverse, outputDir, copyright, status);
 /*
     uint32_t *itab = (uint32_t *)((uint8_t *)inverse + inverse->table);
     UChar *conts = (UChar *)((uint8_t *)inverse + inverse->conts);
@@ -974,7 +969,7 @@ write_uca_table(const char *filename,
     free(inverse);
     fclose(data);
 
-	return 0;
+    return 0;
 }
 
 static UOption options[]={
@@ -992,9 +987,9 @@ int main(int argc, char* argv[]) {
     UErrorCode status = U_ZERO_ERROR;
     const char* destdir = NULL;
     const char* srcDir = NULL;
-    UBool haveCopyright;
     char filename[300];
     char *basename = NULL;
+    const char *copyright = NULL;
 
 #ifdef XP_MAC_CONSOLE
     argc = ccommand((char***)&argv);
@@ -1037,10 +1032,13 @@ int main(int argc, char* argv[]) {
     }
 
     /* get the options values */
-    haveCopyright = options[2].doesOccur;
     destdir = options[4].value;
     srcDir = options[5].value;
     VERBOSE = options[6].doesOccur;
+
+    if (options[2].doesOccur) {
+        copyright = U_COPYRIGHT_STRING;
+    }
 
     if(argc < 0) {
 
@@ -1058,7 +1056,7 @@ int main(int argc, char* argv[]) {
       uprv_strcpy(filename, getLongPathname(*argv));
     }
 
-    return write_uca_table(filename, destdir, haveCopyright, &status);
+    return write_uca_table(filename, destdir, copyright, &status);
 }
 
 /*

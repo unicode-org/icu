@@ -1,3 +1,26 @@
+/*
+*******************************************************************************
+*
+*   Copyright (C) 2000-2001, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+*******************************************************************************
+*   file name:  genuca.cpp
+*   encoding:   US-ASCII
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   This program reads the Franctional UCA table and generates
+*   internal format for UCA table as well as inverse UCA table.
+*   It then writes binary files containing the data: ucadata.dat 
+*   & invuca.dat
+*
+*   Change history:
+*
+*   02/08/2001  Vladimir Weinstein      Created this program
+*   02/23/2001  grhoten                 Made it into a tool
+*/
+
 #include "tblprint.h"
 
 char *formatElementString(uint32_t CE, char *buffer) {
@@ -148,7 +171,7 @@ void printOutTable(UCATableHeader *myData, UErrorCode *status) {
                     UBool printedCont = FALSE;
                     uint32_t oldCE;
                     *primb = *secb = *terb = *temp = 0;
-                    size = CE&0xF;
+                    size = (uint8_t)(CE&0xF);
                     address = ((uint32_t*)myData+((CE&0x00FFFFF0)>>4));
                     CE = *(address++);
                     fprintf(stdout, "%c; ", (UCOL_TERTIARYORDER(CE)&0x80)>>7?'L':'S');
