@@ -16,7 +16,7 @@
 #include "unicode/unistr.h"
 #include "unicode/ucnv.h"
 
-class U_COMMON_API UnicodeConverterCPP
+class U_COMMON_API UnicodeConverter
 {
  private:
   /*Internal Data representation of the Converter*/
@@ -37,7 +37,7 @@ class U_COMMON_API UnicodeConverterCPP
  * @return An object Handle if successful or a NULL if the creation failed
  * @stable
  */
- UnicodeConverterCPP();
+ UnicodeConverter();
 
 /**
  * Creates Unicode Conversion Object by specifying the codepage name.  The name
@@ -49,7 +49,7 @@ class U_COMMON_API UnicodeConverterCPP
  * @return An object Handle if successful or a NULL if the creation failed
  * @stable
  */
- UnicodeConverterCPP(const char*             name,
+ UnicodeConverter(const char*             name,
              UErrorCode&              err);
 
  /**
@@ -63,7 +63,7 @@ class U_COMMON_API UnicodeConverterCPP
   *@return the created Unicode converter object
   * @stable
   */
- UnicodeConverterCPP(const UnicodeString&    name,
+ UnicodeConverter(const UnicodeString&    name,
              UErrorCode&              err);
 
  /**
@@ -75,11 +75,11 @@ class U_COMMON_API UnicodeConverterCPP
   * @return An object Handle if successful or a NULL if failed
   * @stable
   */
- UnicodeConverterCPP(int32_t                      codepageNumber,
+ UnicodeConverter(int32_t                      codepageNumber,
              UConverterPlatform  platform,
              UErrorCode&                   err);
 
- ~UnicodeConverterCPP();
+ ~UnicodeConverter();
 
 
  /**
@@ -343,10 +343,10 @@ void getDisplayName(const Locale&   displayLocale,
 UConverterPlatform  getCodepagePlatform(UErrorCode& err) const;
 
 
- UnicodeConverterCPP&   operator=(const UnicodeConverterCPP& that);
- UBool              operator==(const UnicodeConverterCPP& that) const;
- UBool              operator!=(const UnicodeConverterCPP& that) const;
- UnicodeConverterCPP(const UnicodeConverterCPP&  that);
+ UnicodeConverter&   operator=(const UnicodeConverter& that);
+ UBool              operator==(const UnicodeConverter& that) const;
+ UBool              operator!=(const UnicodeConverter& that) const;
+ UnicodeConverter(const UnicodeConverter&  that);
 
 /**
  * Returns the available names. Lazy evaluated, Library owns the storage
@@ -386,4 +386,7 @@ void fixFileSeparator(UnicodeString& source) const;
 UBool isAmbiguous(void) const;
 
 };
+
+typedef UnicodeConverter UnicodeConverterCPP;	/* Backwards compatibility. */
+
 #endif
