@@ -630,7 +630,7 @@ BasicNormalizerTest::TestPreviousNext() {
     // movement vector
     // - for previous(), 0 for current(), + for next()
     // not const so that we can terminate it below for the error message
-    static char *moves="0+0+0--0-0-+++0--+++++++0--------";
+    static const char *moves="0+0+0--0-0-+++0--+++++++0--------";
 
     // iterators
     Normalizer iter(src, sizeof(src)/U_SIZEOF_UCHAR, Normalizer::DECOMP);
@@ -644,7 +644,7 @@ BasicNormalizerTest::TestPreviousNext() {
 
     // move around and compare the iteration code points with
     // the expected ones
-    char *move=moves;
+    const char *move=moves;
     while((m=*move++)!=0) {
         if(m=='-') {
             c1=iter.previous();
