@@ -970,10 +970,10 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
         || ((isContraction(CE)) &&
         (uprv_cnttab_getCE(t->contractions, CE, 0, TRUE, status) == UCOL_NOT_FOUND))
         ) {
-        decomp[0] = u;
-        el.uchars[0] = u;
+        decomp[0] = (UChar)u;
+        el.uchars[0] = (UChar)u;
         el.cPoints = el.uchars;
-        el.codepoint = u;
+        el.codepoint = (UChar)u;
         el.cSize = 1;
         el.noOfCEs = 0;
         init_collIterate(decomp, 1, &colIt, TRUE);
@@ -996,12 +996,12 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
 
   /* produce canonical & compatibility closure */
     for(u = 0; u < 0x10000; u++) {
-      if((noOfDec = uprv_ucol_decompose (u, decomp)) > 1) {
+      if((noOfDec = uprv_ucol_decompose ((UChar)u, decomp)) > 1) {
         for(i = 0; i<noOfDec; i++) {
           if((CE = ucmp32_get(t->mapping, decomp[i])) != UCOL_NOT_FOUND) {
-            el.uchars[0] = u;
+            el.uchars[0] = (UChar)u;
             el.cPoints = el.uchars;
-            el.codepoint = u;
+            el.codepoint = (UChar)u;
             el.cSize = 1;
             el.noOfCEs = 0;
             init_collIterate(decomp, noOfDec, &colIt, TRUE);
@@ -1224,8 +1224,8 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UEr
     result->alternateHandlingisDefault = TRUE;
 
     uint32_t variableMaxCE = ucmp32_get(result->mapping, result->variableTopValue);
-    result->variableMax1 = (variableMaxCE & 0xFF000000) >> 24;
-    result->variableMax2 = (variableMaxCE & 0x00FF0000) >> 16;
+    result->variableMax1 = (uint8_t)((variableMaxCE & 0xFF000000) >> 24);
+    result->variableMax2 = (uint8_t)((variableMaxCE & 0x00FF0000) >> 16);
 
     result->scriptOrder = NULL;
 
@@ -1703,7 +1703,7 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
   const UChar    *strend      = NULL;
   const UChar    *constart    = NULL;
         uint32_t size;
-  while (TRUE)
+  for(;;)
   {
     switch (getCETag(CE)) 
     {
@@ -1763,7 +1763,7 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
       break;
     case CONTRACTION_TAG:
       /* This should handle contractions */
-      while (TRUE)
+      for(;;)
       {
         /* 
         First we position ourselves at the begining of contraction sequence 
@@ -1925,9 +1925,9 @@ U_CFUNC uint8_t *ucol_getSortKeyWithAllocation(const UCollator *coll,
 /* or if we run out of space while making a sortkey and want to return ASAP                                   */
 int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t currentSize, UColAttributeValue strength, int32_t len) {
     UErrorCode status = U_ZERO_ERROR;
-    uint8_t compareSec   = (strength >= UCOL_SECONDARY)?0:0xFF;
-    uint8_t compareTer   = (strength >= UCOL_TERTIARY)?0:0xFF;
-    uint8_t compareQuad  = (strength >= UCOL_QUATERNARY)?0:0xFF;
+    uint8_t compareSec   = (uint8_t)((strength >= UCOL_SECONDARY)?0:0xFF);
+    uint8_t compareTer   = (uint8_t)((strength >= UCOL_TERTIARY)?0:0xFF);
+    uint8_t compareQuad  = (uint8_t)((strength >= UCOL_QUATERNARY)?0:0xFF);
     UBool  compareIdent = (strength == UCOL_IDENTICAL);
     UBool  doCase = (coll->caseLevel == UCOL_ON);
     UBool  shifted = (coll->alternateHandling == UCOL_SHIFTED) && (compareQuad == 0);
@@ -1935,8 +1935,8 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
 
     uint8_t variableMax1 = coll->variableMax1;
     uint8_t variableMax2 = coll->variableMax2;
-    uint8_t UCOL_COMMON_BOT4 = variableMax1+1;
-    uint8_t UCOL_BOT_COUNT4 = 0xFF - UCOL_COMMON_BOT4;
+    uint8_t UCOL_COMMON_BOT4 = (uint8_t)(variableMax1+1);
+    uint8_t UCOL_BOT_COUNT4 = (uint8_t)(0xFF - UCOL_COMMON_BOT4);
 
     int32_t order = UCOL_NO_MORE_CES;
     uint8_t primary1 = 0;
@@ -1968,10 +1968,10 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
 
 
           //tertiary = (order & UCOL_TERTIARYORDERMASK);
-          tertiary = (order & 0x3f); /* this is temporary - removing case bit */         
-          secondary = (order >>= 8) & 0xFF;
-          primary2 = (order >>= 8) & 0xFF;;
-          primary1 = order >>= 8;
+          tertiary = (uint8_t)((order & 0x3f)); /* TODO: need case bit here! this is temporary - removing case bit */         
+          secondary = (uint8_t)((order >>= 8) & 0xFF);
+          primary2 = (uint8_t)((order >>= 8) & 0xFF);
+          primary1 = (uint8_t)(order >>= 8);
 
 
           if(shifted && ((notIsContinuation && primary1 <= variableMax1 && primary1 > 0 
@@ -2074,6 +2074,7 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
             if((*(ident) & 0xFF)<0x02) {
                 currentSize++;
             }
+            ident++;
         }
 
     }
@@ -2122,14 +2123,14 @@ ucol_calcSortKey(const    UCollator    *coll,
 
     uint8_t variableMax1 = coll->variableMax1;
     uint8_t variableMax2 = coll->variableMax2;
-    uint8_t UCOL_COMMON_BOT4 = variableMax1+1;
-    uint8_t UCOL_BOT_COUNT4 = 0xFF - UCOL_COMMON_BOT4;
+    uint8_t UCOL_COMMON_BOT4 = (uint8_t)(variableMax1+1);
+    uint8_t UCOL_BOT_COUNT4 = (uint8_t)(0xFF - UCOL_COMMON_BOT4);
 
     UColAttributeValue strength = coll->strength;
 
-    uint8_t compareSec   = (strength >= UCOL_SECONDARY)?0:0xFF;
-    uint8_t compareTer   = (strength >= UCOL_TERTIARY)?0:0xFF;
-    uint8_t compareQuad  = (strength >= UCOL_QUATERNARY)?0:0xFF;
+    uint8_t compareSec   = (uint8_t)((strength >= UCOL_SECONDARY)?0:0xFF);
+    uint8_t compareTer   = (uint8_t)((strength >= UCOL_TERTIARY)?0:0xFF);
+    uint8_t compareQuad  = (uint8_t)((strength >= UCOL_QUATERNARY)?0:0xFF);
     UBool  compareIdent = (strength == UCOL_IDENTICAL);
     UBool  doCase = (coll->caseLevel == UCOL_ON);
     UBool  isFrenchSec = (coll->frenchCollation == UCOL_ON) && (compareSec == 0);
@@ -2220,10 +2221,10 @@ ucol_calcSortKey(const    UCollator    *coll,
             caseBit = ((tertiary & 0x40) != 0);
 
             //tertiary = (order & UCOL_TERTIARYORDERMASK);
-            tertiary = (order & 0x3f); /* this is temporary - removing case bit */         
-            secondary = (order >>= 8) & 0xFF;
-            primary2 = (order >>= 8) & 0xFF;;
-            primary1 = order >>= 8;
+            tertiary = (uint8_t)((order & 0x3f)); /* TODO: need case bit here this is temporary - removing case bit */         
+            secondary = (uint8_t)((order >>= 8) & 0xFF);
+            primary2 = (uint8_t)((order >>= 8) & 0xFF);
+            primary1 = (uint8_t)(order >>= 8);
 
             if(notIsContinuation) {
               /* it appears tht something should be done with the case bit */
@@ -2251,10 +2252,10 @@ ucol_calcSortKey(const    UCollator    *coll,
               || (!notIsContinuation && wasShifted))) { 
               if(count4 > 0) {
 				while (count4 >= UCOL_BOT_COUNT4) {
-				  *quads++ = UCOL_COMMON_BOT4 + UCOL_BOT_COUNT4;
+				  *quads++ = (uint8_t)(UCOL_COMMON_BOT4 + UCOL_BOT_COUNT4);
 				  count4 -= UCOL_BOT_COUNT4;
 				}
-				*quads++ = UCOL_COMMON_BOT4 + count4;
+				*quads++ = (uint8_t)(UCOL_COMMON_BOT4 + count4);
                 count4 = 0;
               }
               /* We are dealing with a variable and we're treating them as shifted */
@@ -2290,13 +2291,13 @@ ucol_calcSortKey(const    UCollator    *coll,
 						*secondaries++ = UCOL_COMMON_TOP2 - UCOL_TOP_COUNT2;
 						count2 -= UCOL_TOP_COUNT2;
 					  }
-					  *secondaries++ = UCOL_COMMON_TOP2 - count2;
+					  *secondaries++ = (uint8_t)(UCOL_COMMON_TOP2 - count2);
 					} else {
 					  while (count2 >= UCOL_BOT_COUNT2) {
 						*secondaries++ = UCOL_COMMON_BOT2 + UCOL_BOT_COUNT2;
 						count2 -= UCOL_BOT_COUNT2;
 					  }
-					  *secondaries++ = UCOL_COMMON_BOT2 + count2;
+					  *secondaries++ = (uint8_t)(UCOL_COMMON_BOT2 + count2);
 					}
 					count2 = 0;
 				  }
@@ -2345,13 +2346,13 @@ ucol_calcSortKey(const    UCollator    *coll,
 						*tertiaries++ = UCOL_COMMON_TOP3 - UCOL_TOP_COUNT3;
   						count3 -= UCOL_TOP_COUNT3;
 					  }
-					  *tertiaries++ = UCOL_COMMON_TOP3 - count3;
+					  *tertiaries++ = (uint8_t)(UCOL_COMMON_TOP3 - count3);
 					} else {
 					  while (count3 >= UCOL_BOT_COUNT3) {
 						*tertiaries++ = UCOL_COMMON_BOT3 + UCOL_BOT_COUNT3;
 						count3 -= UCOL_BOT_COUNT3;
 					  }
-					  *tertiaries++ = UCOL_COMMON_BOT3 + count3;
+					  *tertiaries++ = (uint8_t)(UCOL_COMMON_BOT3 + count3);
 					}
 					count3 = 0;
 				  }
@@ -2409,7 +2410,7 @@ ucol_calcSortKey(const    UCollator    *coll,
 		    *secondaries++ = UCOL_COMMON_BOT2 + UCOL_BOT_COUNT2;
 		    count2 -= UCOL_BOT_COUNT2;
 		  }
-		  *secondaries++ = UCOL_COMMON_BOT2 + count2;
+		  *secondaries++ = (uint8_t)(UCOL_COMMON_BOT2 + count2);
 		}
         uint32_t secsize = secondaries-secStart;
         sortKeySize += secsize;
@@ -2446,7 +2447,7 @@ ucol_calcSortKey(const    UCollator    *coll,
 			*tertiaries++ = UCOL_COMMON_BOT3 + UCOL_BOT_COUNT3;
 			count3 -= UCOL_BOT_COUNT3;
 		  }
-		  *tertiaries++ = UCOL_COMMON_BOT3 + count3;
+		  *tertiaries++ = (uint8_t)(UCOL_COMMON_BOT3 + count3);
 		}
         *(primaries++) = UCOL_LEVELTERMINATOR;
         uint32_t tersize = tertiaries - terStart;
@@ -2457,10 +2458,10 @@ ucol_calcSortKey(const    UCollator    *coll,
         if(compareQuad == 0) {
             if(count4 > 0) {
 			  while (count4 >= UCOL_BOT_COUNT4) {
-			    *quads++ = UCOL_COMMON_BOT4 + UCOL_BOT_COUNT4;
+			    *quads++ = (uint8_t)(UCOL_COMMON_BOT4 + UCOL_BOT_COUNT4);
 			    count4 -= UCOL_BOT_COUNT4;
 			  }
-			  *quads++ = UCOL_COMMON_BOT4 + count4;
+			  *quads++ = (uint8_t)(UCOL_COMMON_BOT4 + count4);
             }
             *(primaries++) = UCOL_LEVELTERMINATOR;
             uint32_t quadsize = quads - quadStart;
@@ -2478,22 +2479,22 @@ ucol_calcSortKey(const    UCollator    *coll,
             *(primaries++) = UCOL_LEVELTERMINATOR;
             if(sortKeySize <= resultLength) {
 		        while(ident < s.len) {
-                    idByte = (*(ident) >> 8) + utf16fixup[*(ident) >> 11];
+                    idByte = (uint8_t)((*(ident) >> 8) + utf16fixup[*(ident) >> 11]);
                     if(idByte < 0x02) {
                         if(sortKeySize < resultLength) {
                             *(primaries++) = 0x01;
                             sortKeySize++;
-                            *(primaries++) = idByte + 1;
+                            *(primaries++) = (uint8_t)(idByte + 1);
                         }
                     } else {
                         *(primaries++) = idByte;
                     }
-                    idByte = (*(ident) & 0xFF);
+                    idByte = (uint8_t)((*(ident) & 0xFF));
                     if(idByte < 0x02) {
                         if(sortKeySize < resultLength) {
                             *(primaries++) = 0x01;
                             sortKeySize++;
-                            *(primaries++) = idByte + 1;
+                            *(primaries++) = (uint8_t)(idByte + 1);
                         }
                     } else {
                         *(primaries++) = idByte;
@@ -2503,11 +2504,11 @@ ucol_calcSortKey(const    UCollator    *coll,
               }
             } else {
 		        while(ident < s.len) {
-                    idByte = (*(ident) >> 8) + utf16fixup[*(ident) >> 11];
+                    idByte = (uint8_t)((*(ident) >> 8) + utf16fixup[*(ident) >> 11]);
                     if(idByte < 0x02) {
                         sortKeySize++;
                     }
-                    idByte = (*(ident) & 0xFF);
+                    idByte = (uint8_t)((*(ident) & 0xFF));
                     if(idByte < 0x02) {
                         sortKeySize++;
                     }
@@ -2645,10 +2646,10 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
             ce = order;
             notIsContinuation = !isContinuation(ce);
 
-            tertiary = (order & 0x3f); /* this is temporary - removing case bit */         
-            secondary = (order >>= 8) & 0xFF;
-            primary2 = (order >>= 8) & 0xFF;;
-            primary1 = order >>= 8;
+            tertiary = (uint8_t)((order & 0x3f)); /* TODO need case bit here this is temporary - removing case bit */         
+            secondary = (uint8_t)((order >>= 8) & 0xFF);
+            primary2 = (uint8_t)((order >>= 8) & 0xFF);
+            primary1 = (uint8_t)(order >>= 8);
 
             /* In the code below, every increase in any of buffers is followed by the increase to  */
             /* sortKeySize - this might look tedious, but it is needed so that we can find out if  */
@@ -2675,13 +2676,13 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
 					*secondaries++ = UCOL_COMMON_TOP2 - UCOL_TOP_COUNT2;
 					count2 -= UCOL_TOP_COUNT2;
 				  }
-				  *secondaries++ = UCOL_COMMON_TOP2 - count2;
+				  *secondaries++ = (uint8_t)(UCOL_COMMON_TOP2 - count2);
 				} else {
 				  while (count2 >= UCOL_BOT_COUNT2) {
 					*secondaries++ = UCOL_COMMON_BOT2 + UCOL_BOT_COUNT2;
 					count2 -= UCOL_BOT_COUNT2;
 				  }
-				  *secondaries++ = UCOL_COMMON_BOT2 + count2;
+				  *secondaries++ = (uint8_t)(UCOL_COMMON_BOT2 + count2);
 				}
 				count2 = 0;
 			  }
@@ -2703,13 +2704,13 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
 					*tertiaries++ = UCOL_COMMON_TOP3 - UCOL_TOP_COUNT3;
   					count3 -= UCOL_TOP_COUNT3;
 				  }
-				  *tertiaries++ = UCOL_COMMON_TOP3 - count3;
+				  *tertiaries++ = (uint8_t)(UCOL_COMMON_TOP3 - count3);
 				} else {
 				  while (count3 >= UCOL_BOT_COUNT3) {
 					*tertiaries++ = UCOL_COMMON_BOT3 + UCOL_BOT_COUNT3;
 					count3 -= UCOL_BOT_COUNT3;
 				  }
-				  *tertiaries++ = UCOL_COMMON_BOT3 + count3;
+				  *tertiaries++ = (uint8_t)(UCOL_COMMON_BOT3 + count3);
 				}
 				count3 = 0;
 			  }
@@ -2757,7 +2758,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
 		  *secondaries++ = UCOL_COMMON_BOT2 + UCOL_BOT_COUNT2;
 		  count2 -= UCOL_BOT_COUNT2;
 		}
-		*secondaries++ = UCOL_COMMON_BOT2 + count2;
+		*secondaries++ = (uint8_t)(UCOL_COMMON_BOT2 + count2);
 	  }
       uint32_t secsize = secondaries-secStart;
       sortKeySize += secsize;
@@ -2771,7 +2772,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
 		  *tertiaries++ = UCOL_COMMON_BOT3 + UCOL_BOT_COUNT3;
 		  count3 -= UCOL_BOT_COUNT3;
 		}
-		*tertiaries++ = UCOL_COMMON_BOT3 + count3;
+		*tertiaries++ = (uint8_t)(UCOL_COMMON_BOT3 + count3);
 	  }
       *(primaries++) = UCOL_LEVELTERMINATOR;
       uint32_t tersize = tertiaries - terStart;
@@ -3164,10 +3165,10 @@ ucol_getVersion(const UCollator* coll,
     uint8_t csVersion = 0;
 
     /* combine the version info */
-    uint16_t cmbVersion = (rtVersion<<11) | (bdVersion<<6) | (csVersion);
+    uint16_t cmbVersion = (uint16_t)((rtVersion<<11) | (bdVersion<<6) | (csVersion));
 
     /* Tailoring rules */
-    versionInfo[0] = cmbVersion>>8;
+    versionInfo[0] = (uint8_t)(cmbVersion>>8);
     versionInfo[1] = (uint8_t)cmbVersion;
     versionInfo[2] = coll->dataInfo.dataVersion[1];
     versionInfo[3] = UCA->dataInfo.dataVersion[1];
