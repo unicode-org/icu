@@ -978,9 +978,20 @@ static void TestAPI() {
 
     /*Test ures_openU */
 
+    ures_close(ures_openU(NULL, "root", &status));
+    if(U_FAILURE(status)){
+        log_err("ERROR: ures_openU() failed path = NULL with %s\n", myErrorName(status));
+    }
+
+    status = U_ILLEGAL_ARGUMENT_ERROR;
+    if(ures_openU(NULL, "root", &status) != NULL){
+        log_err("ERROR: ures_openU() worked with error status with %s\n", myErrorName(status));
+    }
+
+    status = U_ZERO_ERROR;
     teRes=ures_openU(utestdatapath, "te", &status);
     if(U_FAILURE(status)){
-        log_err("ERROR: ures_openU() failed path =%s with %s", austrdup(utestdatapath), myErrorName(status));
+        log_err("ERROR: ures_openU() failed path =%s with %s\n", austrdup(utestdatapath), myErrorName(status));
         return;
     }
     /*Test ures_getLocale() */
@@ -1127,7 +1138,7 @@ static void TestErrorConditions(){
     status=U_ZERO_ERROR;
     teRes=ures_openU(utestdatapath, "te", &status);
     if(U_FAILURE(status)){
-        log_err("ERROR: ures_openU() failed path =%s with %s", austrdup(utestdatapath), myErrorName(status));
+        log_err("ERROR: ures_openU() failed path =%s with %s\n", austrdup(utestdatapath), myErrorName(status));
         return;
     }
     status=U_ILLEGAL_ARGUMENT_ERROR;
