@@ -28,7 +28,7 @@
 #include "unormimp.h"
 #include "cmemory.h"
 #include "unicode/unistr.h"
-#include "unicode/caniter.h"
+#include "caniter.h"
 
 U_NAMESPACE_BEGIN
 
