@@ -8,7 +8,7 @@ import java.util.Hashtable;
  */
  
 public class IntHashtable {
-    static final String copyright = "Copyright © 1998-1999 Unicode, Inc.";
+    static final String copyright = "Copyright (C) 1998-1999 Unicode, Inc.";
     
     public IntHashtable (int defaultValue) {
         this.defaultValue = defaultValue;
