@@ -154,7 +154,7 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
   T_FileStream_writeLine(makefile, "# 'TOCOBJ' contains C Table of Contents objects [if any]\n");
 
   sprintf(tmp, "$(TEMP_DIR)/%s_dat.c: $(CMNLIST)\n"
-                         "\t$(INVOKE) $(GENCMN) -n %s -S -d $(TEMP_DIR) 0 $(CMNLIST)\n\n", o->shortName, o->shortName);
+                         "\t$(INVOKE) $(GENCMN) -e %s -n %s -S -d $(TEMP_DIR) 0 $(CMNLIST)\n\n", o->shortName, o->entryName, o->shortName);
   T_FileStream_writeLine(makefile, tmp);
   sprintf(tmp, "TOCOBJ= %s_dat%s \n\n", o->shortName,OBJ_SUFFIX);
   T_FileStream_writeLine(makefile, tmp);
