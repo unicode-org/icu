@@ -209,9 +209,21 @@ void TestProperty()
     ucol_getRules(col, &tempLength);
     doAssert( tempLength != 0, "getRules() result incorrect" );
     log_verbose("getRules tests end.\n");
-
+    {
+        UChar buffer[200000] ={'\0'};
+        int32_t bufLen = 200000;
+        log_verbose("ucol_getRulesEx() testing ...\n");
+        tempLength = ucol_getRulesEx(col,UCOL_TAILORING_ONLY,buffer,bufLen );
+        doAssert( tempLength == 0, "getRulesEx() result incorrect" );
+        log_verbose("getRules tests end.\n");
+        
+        log_verbose("ucol_getRulesEx() testing ...\n");
+        tempLength=ucol_getRulesEx(col,UCOL_FULL_RULES,buffer,bufLen );
+        doAssert( tempLength != 0, "getRulesEx() result incorrect" );
+        log_verbose("getRules tests end.\n");
+    }
     ucol_close(col);
-
+    
     log_verbose("open an collator for french locale");
     col = ucol_open("fr_FR", &status);
     if (U_FAILURE(status)) {
