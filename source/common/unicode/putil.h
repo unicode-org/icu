@@ -276,8 +276,8 @@ u_getVersion(UVersionInfo versionArray);
 #   define U_UPPER_ORDINAL(x) ((x)-'A')
 #elif U_CHARSET_FAMILY==U_EBCDIC_FAMILY
 #   define U_UPPER_ORDINAL(x) (((x) < 'J') ? ((x)-'A') : \
-                               (((x) < 'S') ? ((x)-'J'+9) : \
-                               (((x)-'S'+18))
+                              (((x) < 'S') ? ((x)-'J'+9) : \
+                               ((x)-'S'+18)))
 #else
 #   error Unknown charset family!
 #endif
