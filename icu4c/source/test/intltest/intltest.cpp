@@ -766,7 +766,7 @@ void IntlTest::LL_message( UnicodeString message, UBool newline )
     };
     UnicodeString indent(FALSE, indentUChars, 1 + LL_indentlevel);
 
-    char buffer[1000];
+    char buffer[10000];
     int32_t length;
 
     // stream out the indentation string first if necessary
