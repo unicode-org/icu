@@ -1,0 +1,26 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+// Initial data contributed by Maurice (bauhahnm at clara.net)
+
+
+km_KH {
+    Version { "x0.1" }
+    calendar{
+        gregorian{
+            DateTimeElements:intvector {
+                2,
+                1,
+            }
+        }
+    }
+    NumberPatterns {
+        "#,##0.###;-#,##0.###",
+        "#,##0.00 \u00A4;-#,##0.00 \u00A4",
+        "#,##0%",
+        "#E0",
+    }
+}
