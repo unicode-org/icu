@@ -463,7 +463,7 @@ u_memset(UChar *dest, UChar c, int32_t count);
  * @stable
  */
 U_CAPI int32_t U_EXPORT2
-u_memcmp(UChar *buf1, UChar *buf2, int32_t count);
+u_memcmp(const UChar *buf1, const UChar *buf2, int32_t count);
 
 /**
  * Compare two Unicode strings in code point order.
@@ -494,7 +494,7 @@ u_memcmpCodePointOrder(const UChar *s1, const UChar *s2, int32_t count);
  * @stable
  */
 U_CAPI UChar* U_EXPORT2
-u_memchr(UChar *src, UChar ch, int32_t count);
+u_memchr(const UChar *src, UChar ch, int32_t count);
 
 /**
  * Search for a UChar32 within a Unicode string until <TT>count</TT>
@@ -509,7 +509,7 @@ u_memchr(UChar *src, UChar ch, int32_t count);
  * @stable
  */
 U_CAPI UChar* U_EXPORT2
-u_memchr32(UChar *src, UChar32 ch, int32_t count);
+u_memchr32(const UChar *src, UChar32 ch, int32_t count);
 
 /**
  * Unicode String literals in C.
