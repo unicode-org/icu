@@ -249,6 +249,8 @@ static UResourceDataEntry *init_entry(const char *localeID, const char *path, UE
             *status = U_USING_FALLBACK_ERROR;
             r->fBogus = U_USING_FALLBACK_ERROR;
         } else { /* if we have a regular entry */
+            /* We might be able to do this a wee bit more efficiently (we could check whether the aliased data) */
+            /* is already in the cache), but it's good the way it is */
             /* handle the alias by trying to get out the %%Alias tag.*/
             /* We'll try to get alias string from the bundle */
             Resource aliasres = res_getResource(&(r->fData), "%%ALIAS");
@@ -263,6 +265,7 @@ static UResourceDataEntry *init_entry(const char *localeID, const char *path, UE
                     *status = U_USING_FALLBACK_ERROR;
                     r->fBogus = U_USING_FALLBACK_ERROR;
                 }
+                setEntryName(r, aliasName, status);
             }
         }
 
@@ -282,10 +285,6 @@ static UResourceDataEntry *init_entry(const char *localeID, const char *path, UE
                 r = oldR;
                 r->fCountExisting++;
             }
-        }
-
-        if(isAlias == TRUE) {
-          setEntryName(r, aliasName, status);
         }
 
     }
