@@ -530,6 +530,9 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
     // our starting position goes into this array as a break position).
     // This array becomes the cache of break positions used by next()
     // and previous(), so this is where we actually refresh the cache.
+    if (cachedBreakPositions != NULL) {
+        delete []cachedBreakPositions;
+    }
     cachedBreakPositions = new int32_t[currentBreakPositions.size() + 1];
     numCachedBreakPositions = currentBreakPositions.size() + 1;
     cachedBreakPositions[0] = startPos;
