@@ -251,9 +251,10 @@ class U_COMMON_API ICUServiceFactory : public UObject {
     /**
      * <p>Return, in result, the display name of the id in the provided locale.
      * This is an id, not a descriptor.  If the id is 
-     * not visible or not defined by the factory, sets result to bogus.  If the
+     * not visible, sets result to bogus.  If the
      * incoming result is bogus, it remains bogus.  Result is returned as a
-     * convenience.</p>
+     * convenience.  Results are not defined if id is not one supported by this
+         * factory.</p>
      *
      * @param id a visible id supported by this factory.
      * @param locale the locale for which to generate the corresponding localized display name.

@@ -55,6 +55,8 @@ ICUResourceBundleFactory::handleCreate(const Locale& loc, int32_t /* kind */, co
     if (U_SUCCESS(status)) {
         // _bundleName is a package name
         // and should only contain invariant characters
+                // ??? is it always true that the max length of the bundle name is 19?
+                // who made this change? -- dlf
         char pkg[20];
         int32_t length;
         length=_bundleName.extract(0, INT32_MAX, pkg, (int32_t)sizeof(pkg), US_INV);
