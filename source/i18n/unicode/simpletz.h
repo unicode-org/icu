@@ -450,11 +450,15 @@ public:
      * Returns true if the given date is within the period when daylight savings time
      * is in effect; false otherwise.  If the TimeZone doesn't observe daylight savings
      * time, this functions always returns false.
+     * This method is wasteful since it creates a new GregorianCalendar and
+     * deletes it each time it is called. This is a deprecated method
+     * and provided only for Java compatibility.
+     *
      * @param date The date to test.
      * @param status  An UErrorCode to receive the status.
      * @return true if the given date is in Daylight Savings Time;
      * false otherwise.
-     * @stable
+     * @deprecated since ICU 2.4. Use Calendar::inDaylightTime() instead.
      */
     virtual UBool inDaylightTime(UDate date, UErrorCode& status) const;
 
