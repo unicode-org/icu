@@ -1197,7 +1197,7 @@ static void TestConvertSafeClone()
                         &err);
 
         pConstCharBuffer = charBuffer;
-        if (uniBuffer [0] != ucnv_getNextUChar(someClonedConverters[index], &pConstCharBuffer, charBufferLimit, &err))
+        if (uniBuffer [0] != ucnv_getNextUChar(someClonedConverters[index], &pConstCharBuffer, pCharBuffer, &err))
         {
             log_err("FAIL: Cloned converter failed to do conversion\n");
         }
