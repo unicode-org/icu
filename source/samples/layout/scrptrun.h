@@ -24,6 +24,12 @@ struct ScriptRecord
     UScriptCode scriptCode;
 };
 
+struct ParenStackEntry
+{
+    int32_t pairIndex;
+    UScriptCode scriptCode;
+};
+
 class ScriptRun
 {
 public:
@@ -59,8 +65,16 @@ private:
     int32_t scriptEnd;
     UScriptCode scriptCode;
 
-    UScriptCode parenStack[128];
+    ParenStackEntry parenStack[128];
     int32_t parenSP;
+
+    static int8_t highBit(int32_t value);
+    static int32_t getPairIndex(UChar32 ch);
+
+    static UChar32 pairedChars[];
+    static const int32_t pairedCharCount;
+    static const int32_t pairedCharPower;
+    static const int32_t pairedCharExtra;
 };
 
 inline ScriptRun::ScriptRun()
