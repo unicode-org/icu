@@ -89,6 +89,9 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name ustdio
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name genbrk
+    End Project Dependency
 }}}
 
 ###############################################################################
@@ -189,24 +192,6 @@ Package=<4>
 
 ###############################################################################
 
-Project: "genbrk"=..\tools\genbrk\genbrk.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name common
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name toolutil
-    End Project Dependency
-}}}
-
-###############################################################################
-
 Project: "derb"=..\TOOLS\GENRB\derb.dsp - Package Owner=<4>
 
 Package=<5>
@@ -220,6 +205,24 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name stubdata
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "genbrk"=..\tools\genbrk\genbrk.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name common
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name toolutil
     End Project Dependency
 }}}
 
@@ -556,6 +559,9 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name toolutil
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name genbrk
     End Project Dependency
 }}}
 
