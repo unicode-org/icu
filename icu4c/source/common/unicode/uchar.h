@@ -294,6 +294,9 @@ typedef enum UProperty {
     /** Enumerated property Script.
         Same as uscript_getScript, returns UScriptCode values. @draft ICU 2.2 */
     UCHAR_SCRIPT,
+    /** Enumerated property Hangul_Syllable_Type, new in Unicode 4.
+        Returns UHangulSyllableType values. @draft ICU 2.6 */
+    UCHAR_HANGUL_SYLLABLE_TYPE,
     /** One more than the last constant for enumerated/integer Unicode properties. @draft ICU 2.2 */
     UCHAR_INT_LIMIT,
 
@@ -1229,6 +1232,22 @@ typedef enum UNumericType {
     U_NT_NUMERIC,           /*[nu]*/
     U_NT_COUNT
 } UNumericType;
+
+/**
+ * Hangul Syllable Type constants.
+ *
+ * @see UCHAR_HANGUL_SYLLABLE_TYPE
+ * @draft ICU 2.6
+ */
+typedef enum UHangulSyllableType {
+    U_HST_NOT_APPLICABLE,   /*[NA]*/ /*See note !!*/
+    U_HST_LEADING_JAMO,     /*[L]*/
+    U_HST_VOWEL_JAMO,       /*[V]*/
+    U_HST_TRAILING_JAMO,    /*[T]*/
+    U_HST_LV_SYLLABLE,      /*[LV]*/
+    U_HST_LVT_SYLLABLE,     /*[LVT]*/
+    U_HST_COUNT
+} UHangulSyllableType;
 
 /**
  * Check a binary Unicode property for a code point.
