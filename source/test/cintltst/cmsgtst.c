@@ -57,12 +57,14 @@ static void InitStrings( void )
         return;
 
     for (i=0; i < cnt_testCases; i++ ) {
-        testCasePatterns[i]=(UChar*)malloc(sizeof(UChar) * (strlen(txt_testCasePatterns[i]) + 1));
-        u_uastrcpy(testCasePatterns[i], txt_testCasePatterns[i] );
+        uint32_t strSize = strlen(txt_testCasePatterns[i]) + 1;
+        testCasePatterns[i]=(UChar*)malloc(sizeof(UChar) * strSize);
+        u_uastrncpy(testCasePatterns[i], txt_testCasePatterns[i], strSize);
     }
     for (i=0; i < cnt_testCases; i++ ) {
-        testResultStrings[i] = (UChar*)malloc(sizeof(UChar) * (strlen(txt_testResultStrings[i]) + 1));
-        u_uastrcpy(testResultStrings[i], txt_testResultStrings[i] );
+        uint32_t strSize = strlen(txt_testResultStrings[i]) + 1;
+        testResultStrings[i] = (UChar*)malloc(sizeof(UChar) * strSize);
+        u_uastrncpy(testResultStrings[i], txt_testResultStrings[i], strSize);
     }
 
     strings_initialized = TRUE;
@@ -92,7 +94,7 @@ static void MessageFormatTest( void )
     UErrorCode status = U_ZERO_ERROR;
     UDate d1=1000000000.0;
     str=(UChar*)malloc(sizeof(UChar) * 7);
-    u_uastrcpy(str, "MyDisk");
+    u_uastrncpy(str, "MyDisk", 7);
     resultlength=1;
     result=(UChar*)malloc(sizeof(UChar) * 1);
     log_verbose("Testing u_formatMessage90\n");
@@ -122,6 +124,7 @@ static void MessageFormatTest( void )
         }
     }
     free(result);
+    result = NULL;
     free(str);
     {
 
@@ -223,6 +226,7 @@ static void MessageFormatTest( void )
                 log_err("FAIL: Expected U_BUFFER_OVERFLOW error while preflighting got: %s for testCasePatterns[%d]",u_errorName(ec),i);
             }
         }
+        umsg_close(formatter);
     }
     FreeStrings();
 }
@@ -414,6 +418,7 @@ static void TestNewFormatAndParseAPI(void)
                 austrdup(myDateFormat(def1,d)), austrdup(myDateFormat(def1,d1)) );
         }
     }
+    umsg_close(fmt);
     udat_close(def1);
     ucal_close(cal);
 
@@ -866,7 +871,7 @@ static void TestJ904(void) {
                              string, 1/7.0,
                              789.0+1000*(56+60*(34+60*12)));
 
-    u_austrcpy(cresult, result);
+    u_austrncpy(cresult, result, sizeof(cresult));
 
     /* This test passes if it DOESN'T CRASH.  However, we test the
      * output anyway.  If the string doesn't match in the date part,
@@ -893,7 +898,7 @@ static void OpenMessageFormatTest(void)
     int32_t length=0;
     UErrorCode status = U_ZERO_ERROR;
 
-    u_uastrcpy(pattern, PAT);
+    u_uastrncpy(pattern, PAT, sizeof(pattern)/sizeof(pattern[0]));
 
     /* Test umsg_open                   */
     f1 = umsg_open(pattern,length,NULL,NULL,&status);
