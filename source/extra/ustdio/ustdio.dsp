@@ -207,10 +207,6 @@ SOURCE=.\sprintf.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\sscanf.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\ufile.h
 # End Source File
 # Begin Source File

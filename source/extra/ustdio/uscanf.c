@@ -294,28 +294,28 @@ u_scanf_double_handler(UFILE             *input,
     ufile_fill_uchar_buffer(input);
 
     /* determine the size of the input's buffer */
-    len = input->fUCLimit - input->fUCPos;
+    len = input->str.fLimit - input->str.fPos;
 
     /* truncate to the width, if specified */
     if(info->fWidth != -1)
         len = ufmt_min(len, info->fWidth);
 
     /* get the formatter */
-    format = u_locbund_getNumberFormat(&input->fBundle, UNUM_DECIMAL);
+    format = u_locbund_getNumberFormat(&input->str.fBundle, UNUM_DECIMAL);
 
     /* handle error */
     if(format == 0)
         return 0;
 
     /* parse the number */
-    *num = unum_parseDouble(format, input->fUCPos, len, &parsePos, &status);
+    *num = unum_parseDouble(format, input->str.fPos, len, &parsePos, &status);
 
     /* mask off any necessary bits */
     /*  if(! info->fIsLong_double)
     num &= DBL_MAX;*/
 
     /* update the input's position to reflect consumed data */
-    input->fUCPos += parsePos;
+    input->str.fPos += parsePos;
 
     /* we converted 1 arg */
     return 1;
@@ -342,28 +342,28 @@ u_scanf_scientific_handler(UFILE             *input,
     ufile_fill_uchar_buffer(input);
 
     /* determine the size of the input's buffer */
-    len = input->fUCLimit - input->fUCPos;
+    len = input->str.fLimit - input->str.fPos;
 
     /* truncate to the width, if specified */
     if(info->fWidth != -1)
         len = ufmt_min(len, info->fWidth);
 
     /* get the formatter */
-    format = u_locbund_getNumberFormat(&input->fBundle, UNUM_SCIENTIFIC);
+    format = u_locbund_getNumberFormat(&input->str.fBundle, UNUM_SCIENTIFIC);
 
     /* handle error */
     if(format == 0)
         return 0;
 
     /* parse the number */
-    *num = unum_parseDouble(format, input->fUCPos, len, &parsePos, &status);
+    *num = unum_parseDouble(format, input->str.fPos, len, &parsePos, &status);
 
     /* mask off any necessary bits */
     /*  if(! info->fIsLong_double)
     num &= DBL_MAX;*/
 
     /* update the input's position to reflect consumed data */
-    input->fUCPos += parsePos;
+    input->str.fPos += parsePos;
 
     /* we converted 1 arg */
     return 1;
@@ -399,15 +399,15 @@ u_scanf_scidbl_handler(UFILE             *input,
     ufile_fill_uchar_buffer(input);
 
     /* determine the size of the input's buffer */
-    len = input->fUCLimit - input->fUCPos;
+    len = input->str.fLimit - input->str.fPos;
 
     /* truncate to the width, if specified */
     if(info->fWidth != -1)
         len = ufmt_min(len, info->fWidth);
 
     /* get the formatters */
-    scientificFormat = u_locbund_getNumberFormat(&input->fBundle, UNUM_SCIENTIFIC);
-    genericFormat = u_locbund_getNumberFormat(&input->fBundle, UNUM_DECIMAL);
+    scientificFormat = u_locbund_getNumberFormat(&input->str.fBundle, UNUM_SCIENTIFIC);
+    genericFormat = u_locbund_getNumberFormat(&input->str.fBundle, UNUM_DECIMAL);
 
     /* handle error */
     if(scientificFormat == 0 || genericFormat == 0)
@@ -415,10 +415,10 @@ u_scanf_scidbl_handler(UFILE             *input,
 
     /* parse the number using each format*/
 
-    scientificResult = unum_parseDouble(scientificFormat, input->fUCPos, len,
+    scientificResult = unum_parseDouble(scientificFormat, input->str.fPos, len,
         &scientificParsePos, &scientificStatus);
 
-    genericResult = unum_parseDouble(genericFormat, input->fUCPos, len,
+    genericResult = unum_parseDouble(genericFormat, input->str.fPos, len,
         &genericParsePos, &genericStatus);
 
     /* determine which parse made it farther */
@@ -426,13 +426,13 @@ u_scanf_scidbl_handler(UFILE             *input,
         /* stash the result in num */
         *num = scientificResult;
         /* update the input's position to reflect consumed data */
-        input->fUCPos += scientificParsePos;
+        input->str.fPos += scientificParsePos;
     }
     else {
         /* stash the result in num */
         *num = genericResult;
         /* update the input's position to reflect consumed data */
-        input->fUCPos += genericParsePos;
+        input->str.fPos += genericParsePos;
     }
 
     /* mask off any necessary bits */
@@ -466,21 +466,21 @@ u_scanf_integer_handler(UFILE             *input,
     ufile_fill_uchar_buffer(input);
 
     /* determine the size of the input's buffer */
-    len = input->fUCLimit - input->fUCPos;
+    len = input->str.fLimit - input->str.fPos;
 
     /* truncate to the width, if specified */
     if(info->fWidth != -1)
         len = ufmt_min(len, info->fWidth);
 
     /* get the formatter */
-    format = u_locbund_getNumberFormat(&input->fBundle, UNUM_DECIMAL);
+    format = u_locbund_getNumberFormat(&input->str.fBundle, UNUM_DECIMAL);
 
     /* handle error */
     if(format == 0)
         return 0;
 
     /* parse the number */
-    result = unum_parseInt64(format, input->fUCPos, len, &parsePos, &status);
+    result = unum_parseInt64(format, input->str.fPos, len, &parsePos, &status);
 
     /* mask off any necessary bits */
     if (info->fIsShort)
@@ -491,7 +491,7 @@ u_scanf_integer_handler(UFILE             *input,
         *(int32_t*)num = (int32_t)(UINT32_MAX & result);
 
     /* update the input's position to reflect consumed data */
-    input->fUCPos += parsePos;
+    input->str.fPos += parsePos;
 
     /* we converted 1 arg */
     return 1;
@@ -538,28 +538,28 @@ u_scanf_percent_handler(UFILE             *input,
     ufile_fill_uchar_buffer(input);
 
     /* determine the size of the input's buffer */
-    len = input->fUCLimit - input->fUCPos;
+    len = input->str.fLimit - input->str.fPos;
 
     /* truncate to the width, if specified */
     if(info->fWidth != -1)
         len = ufmt_min(len, info->fWidth);
 
     /* get the formatter */
-    format = u_locbund_getNumberFormat(&input->fBundle, UNUM_PERCENT);
+    format = u_locbund_getNumberFormat(&input->str.fBundle, UNUM_PERCENT);
 
     /* handle error */
     if(format == 0)
         return 0;
 
     /* parse the number */
-    *num = unum_parseDouble(format, input->fUCPos, len, &parsePos, &status);
+    *num = unum_parseDouble(format, input->str.fPos, len, &parsePos, &status);
 
     /* mask off any necessary bits */
     /*  if(! info->fIsLong_double)
     num &= DBL_MAX;*/
 
     /* update the input's position to reflect consumed data */
-    input->fUCPos += parsePos;
+    input->str.fPos += parsePos;
 
     /* we converted 1 arg */
     return 1;
@@ -643,28 +643,28 @@ u_scanf_spellout_handler(UFILE                 *input,
     ufile_fill_uchar_buffer(input);
 
     /* determine the size of the input's buffer */
-    len = input->fUCLimit - input->fUCPos;
+    len = input->str.fLimit - input->str.fPos;
 
     /* truncate to the width, if specified */
     if(info->fWidth != -1)
         len = ufmt_min(len, info->fWidth);
 
     /* get the formatter */
-    format = u_locbund_getNumberFormat(&input->fBundle, UNUM_SPELLOUT);
+    format = u_locbund_getNumberFormat(&input->str.fBundle, UNUM_SPELLOUT);
 
     /* handle error */
     if(format == 0)
         return 0;
 
     /* parse the number */
-    *num = unum_parseDouble(format, input->fUCPos, len, &parsePos, &status);
+    *num = unum_parseDouble(format, input->str.fPos, len, &parsePos, &status);
 
     /* mask off any necessary bits */
     /*  if(! info->fIsLong_double)
     num &= DBL_MAX;*/
 
     /* update the input's position to reflect consumed data */
-    input->fUCPos += parsePos;
+    input->str.fPos += parsePos;
 
     /* we converted 1 arg */
     return 1;
@@ -688,26 +688,26 @@ u_scanf_hex_handler(UFILE             *input,
     ufile_fill_uchar_buffer(input);
 
     /* determine the size of the input's buffer */
-    len = input->fUCLimit - input->fUCPos;
+    len = input->str.fLimit - input->str.fPos;
 
     /* truncate to the width, if specified */
     if(info->fWidth != -1)
         len = ufmt_min(len, info->fWidth);
 
     /* check for alternate form */
-    if( *(input->fUCPos) == 0x0030 &&
-        (*(input->fUCPos + 1) == 0x0078 || *(input->fUCPos + 1) == 0x0058) ) {
+    if( *(input->str.fPos) == 0x0030 &&
+        (*(input->str.fPos + 1) == 0x0078 || *(input->str.fPos + 1) == 0x0058) ) {
 
         /* skip the '0' and 'x' or 'X' if present */
-        input->fUCPos += 2;
+        input->str.fPos += 2;
         len -= 2;
     }
 
     /* parse the number */
-    result = ufmt_uto64(input->fUCPos, &len, 16);
+    result = ufmt_uto64(input->str.fPos, &len, 16);
 
     /* update the input's position to reflect consumed data */
-    input->fUCPos += len;
+    input->str.fPos += len;
 
     /* mask off any necessary bits */
     if (info->fIsShort)
@@ -739,17 +739,17 @@ u_scanf_octal_handler(UFILE             *input,
     ufile_fill_uchar_buffer(input);
 
     /* determine the size of the input's buffer */
-    len = input->fUCLimit - input->fUCPos;
+    len = input->str.fLimit - input->str.fPos;
 
     /* truncate to the width, if specified */
     if(info->fWidth != -1)
         len = ufmt_min(len, info->fWidth);
 
     /* parse the number */
-    result = ufmt_uto64(input->fUCPos, &len, 8);
+    result = ufmt_uto64(input->str.fPos, &len, 8);
 
     /* update the input's position to reflect consumed data */
-    input->fUCPos += len;
+    input->str.fPos += len;
 
     /* mask off any necessary bits */
     if (info->fIsShort)
@@ -781,17 +781,17 @@ u_scanf_pointer_handler(UFILE             *input,
     ufile_fill_uchar_buffer(input);
 
     /* determine the size of the input's buffer */
-    len = input->fUCLimit - input->fUCPos;
+    len = input->str.fLimit - input->str.fPos;
 
     /* truncate to the width, if specified */
     if(info->fWidth != -1)
         len = ufmt_min(len, info->fWidth);
 
     /* parse the pointer - cast to void** to assign to *p */
-    *(void**)p = (void*) ufmt_uto64(input->fUCPos, &len, 16);
+    *(void**)p = (void*) ufmt_uto64(input->str.fPos, &len, 16);
 
     /* update the input's position to reflect consumed data */
-    input->fUCPos += len;
+    input->str.fPos += len;
 
     /* we converted 1 arg */
     return 1;
@@ -822,7 +822,7 @@ u_scanf_scanset_handler(UFILE             *input,
     fmt--;
 
     /* determine the size of the input's buffer */
-    len = input->fUCLimit - input->fUCPos;
+    len = input->str.fLimit - input->str.fPos;
 
     /* truncate to the width, if specified */
     if(info->fWidth != -1)

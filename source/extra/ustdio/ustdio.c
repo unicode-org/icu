@@ -305,14 +305,14 @@ u_file_write_flush(    const UChar     *chars,
                    UBool         flush)
 {
     /* Set up conversion parameters */
-    UErrorCode         status       = U_ZERO_ERROR;
-    const UChar        *mySource    = chars;
-    const UChar        *sourceAlias = chars;
-    const UChar        *mySourceEnd;
-    char            *myTarget   = f->fCharBuffer;
-    int32_t        bufferSize   = UFILE_CHARBUFFER_SIZE;
-    int32_t        written      = 0;
-    int32_t        numConverted = 0;
+    UErrorCode  status       = U_ZERO_ERROR;
+    const UChar *mySource    = chars;
+    const UChar *sourceAlias = chars;
+    const UChar *mySourceEnd;
+    char        charBuffer[UFILE_CHARBUFFER_SIZE];
+    char        *myTarget   = charBuffer;
+    int32_t     written      = 0;
+    int32_t     numConverted = 0;
 
     if (count < 0) {
         count = u_strlen(chars);
@@ -336,7 +336,7 @@ u_file_write_flush(    const UChar     *chars,
         if(f->fConverter != NULL) { /* We have a valid converter */
             ucnv_fromUnicode(f->fConverter,
                 &myTarget,
-                f->fCharBuffer + bufferSize,
+                charBuffer + UFILE_CHARBUFFER_SIZE,
                 &mySource,
                 mySourceEnd,
                 NULL,
@@ -346,18 +346,18 @@ u_file_write_flush(    const UChar     *chars,
             u_UCharsToChars(mySource, myTarget, count);
             myTarget += count;
         }
-        numConverted = (int32_t)(myTarget - f->fCharBuffer);
+        numConverted = (int32_t)(myTarget - charBuffer);
 
         if (numConverted > 0) {
             /* write the converted bytes */
-            fwrite(f->fCharBuffer,
+            fwrite(charBuffer,
                 sizeof(char),
                 numConverted,
                 f->fFile);
 
             written     += numConverted;
         }
-        myTarget     = f->fCharBuffer;
+        myTarget     = charBuffer;
     }
     while(status == U_BUFFER_OVERFLOW_ERROR);
 
@@ -378,22 +378,24 @@ u_file_write(    const UChar     *chars,
 void
 ufile_fill_uchar_buffer(UFILE *f)
 {
-    UErrorCode         status;
-    const char        *mySource;
-    const char        *mySourceEnd;
-    UChar            *myTarget;
-    int32_t        bufferSize;
-    int32_t        maxCPBytes;
-    int32_t        bytesRead;
-    int32_t        availLength;
-    int32_t        dataSize;
-
+    UErrorCode  status;
+    const char  *mySource;
+    const char  *mySourceEnd;
+    UChar       *myTarget;
+    int32_t     bufferSize;
+    int32_t     maxCPBytes;
+    int32_t     bytesRead;
+    int32_t     availLength;
+    int32_t     dataSize;
+    char        charBuffer[UFILE_CHARBUFFER_SIZE];
+    u_localized_string *str;
 
     /* shift the buffer if it isn't empty */
-    dataSize = (int32_t)(f->fUCLimit - f->fUCPos);
+    str = &f->str;
+    dataSize = (int32_t)(str->fLimit - str->fPos);
     if(dataSize != 0) {
         memmove(f->fUCBuffer,
-            f->fUCPos,
+            str->fPos,
             dataSize * sizeof(UChar));
     }
 
@@ -406,15 +408,15 @@ ufile_fill_uchar_buffer(UFILE *f)
     maxCPBytes = availLength / (f->fConverter!=NULL?(2*ucnv_getMinCharSize(f->fConverter)):1);
 
     /* Read in the data to convert */
-    bytesRead = (int32_t)fread(f->fCharBuffer,
+    bytesRead = (int32_t)fread(charBuffer,
         sizeof(char),
         ufmt_min(maxCPBytes, UFILE_CHARBUFFER_SIZE),
         f->fFile);
 
     /* Set up conversion parameters */
     status      = U_ZERO_ERROR;
-    mySource    = f->fCharBuffer;
-    mySourceEnd = f->fCharBuffer + bytesRead;
+    mySource    = charBuffer;
+    mySourceEnd = charBuffer + bytesRead;
     myTarget    = f->fUCBuffer + dataSize;
     bufferSize  = UFILE_UCHARBUFFER_SIZE;
 
@@ -435,8 +437,8 @@ ufile_fill_uchar_buffer(UFILE *f)
     }
 
     /* update the pointers into our array */
-    f->fUCPos    = f->fUCBuffer;
-    f->fUCLimit     = myTarget;
+    str->fPos    = str->fBuffer;
+    str->fLimit  = myTarget;
 }
 
 U_CAPI UChar* U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
@@ -447,9 +449,10 @@ u_fgets(UChar        *s,
     int32_t dataSize;
     int32_t count;
     UChar *alias;
-    UChar *limit;
+    const UChar *limit;
     UChar *sItr;
     UChar currDelim = 0;
+    u_localized_string *str;
 
     if (n <= 0) {
         /* Caller screwed up. We need to write the null terminatior. */
@@ -457,7 +460,8 @@ u_fgets(UChar        *s,
     }
 
     /* fill the buffer if needed */
-    if (f->fUCPos >= f->fUCLimit) {
+    str = &f->str;
+    if (str->fPos >= str->fLimit) {
         ufile_fill_uchar_buffer(f);
     }
 
@@ -465,7 +469,7 @@ u_fgets(UChar        *s,
     --n;
 
     /* determine the amount of data in the buffer */
-    dataSize = (int32_t)(f->fUCLimit - f->fUCPos);
+    dataSize = (int32_t)(str->fLimit - str->fPos);
 
     /* if 0 characters were left, return 0 */
     if (dataSize == 0)
@@ -476,11 +480,11 @@ u_fgets(UChar        *s,
     sItr = s;
     currDelim = 0;
     while (dataSize > 0 && count < n) {
-        alias = f->fUCPos;
+        alias = str->fPos;
 
         /* Find how much to copy */
         if (dataSize < n) {
-            limit = f->fUCLimit;
+            limit = str->fLimit;
         }
         else {
             limit = alias + n;
@@ -511,10 +515,10 @@ u_fgets(UChar        *s,
         }
 
         /* update the current buffer position */
-        f->fUCPos = alias;
+        str->fPos = alias;
 
         /* if we found a delimiter */
-        if (alias < f->fUCLimit && !currDelim) {
+        if (alias < str->fLimit && !currDelim) {
 
             /* break out */
             break;
@@ -524,7 +528,7 @@ u_fgets(UChar        *s,
         ufile_fill_uchar_buffer(f);
 
         /* determine the amount of data in the buffer */
-        dataSize = (int32_t)(f->fUCLimit - f->fUCPos);
+        dataSize = (int32_t)(str->fLimit - str->fPos);
     }
 
     /* add the terminator and return s */
@@ -536,13 +540,13 @@ U_CAPI UChar U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 *
 u_fgetc(UFILE        *f)
 {
     /* if we have an available character in the buffer, return it */
-    if(f->fUCPos < f->fUCLimit)
-        return *(f->fUCPos)++;
+    if(f->str.fPos < f->str.fLimit)
+        return *(f->str.fPos)++;
     /* otherwise, fill the buffer and return the next character */
     else {
         ufile_fill_uchar_buffer(f);
-        if(f->fUCPos < f->fUCLimit) {
-            return *(f->fUCPos)++;
+        if(f->str.fPos < f->str.fLimit) {
+            return *(f->str.fPos)++;
         }
         else {
             return U_EOF;
@@ -555,23 +559,25 @@ U_CAPI UChar32 U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001
 u_fgetcx(UFILE        *f)
 {
     UChar32 c32;
+    u_localized_string *str;
 
     /* Fill the buffer if it is empty */
-    if (f->fUCPos + 1 >= f->fUCLimit) {
+    str = &f->str;
+    if (str->fPos + 1 >= str->fLimit) {
         ufile_fill_uchar_buffer(f);
     }
 
     /* Get the next character in the buffer */
-    if (f->fUCPos < f->fUCLimit) {
-        c32 = *(f->fUCPos)++;
+    if (str->fPos < str->fLimit) {
+        c32 = *(str->fPos)++;
     }
     else {
         c32 = U_EOF;
     }
 
     if (U_IS_LEAD(c32)) {
-        if (f->fUCPos < f->fUCLimit) {
-            UChar c16 = *(f->fUCPos)++;
+        if (str->fPos < str->fLimit) {
+            UChar c16 = *(str->fPos)++;
             c32 = U16_GET_SUPPLEMENTARY(c32, c16);
         }
         else {
@@ -586,9 +592,13 @@ U_CAPI UChar32 U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001
 u_fungetc(UChar32        ch,
     UFILE        *f)
 {
+    u_localized_string *str;
+
+    str = &f->str;
+
     /* if we're at the beginning of the buffer, sorry! */
-    if (f->fUCPos == f->fUCBuffer
-        || (U_IS_LEAD(ch) && (f->fUCPos - 1) == f->fUCBuffer))
+    if (str->fPos == str->fBuffer
+        || (U_IS_LEAD(ch) && (str->fPos - 1) == str->fBuffer))
     {
         ch = U_EOF;
     }
@@ -597,11 +607,11 @@ u_fungetc(UChar32        ch,
         /* TODO: Maybe we shouldn't be writing to the buffer and just verify the contents */
         if (U_IS_LEAD(ch)) {
             /* Remember, put them back on in the reverse order. */
-            *--(f->fUCPos) = U16_TRAIL(ch);
-            *--(f->fUCPos) = U16_LEAD(ch);
+            *--(str->fPos) = U16_TRAIL(ch);
+            *--(str->fPos) = U16_LEAD(ch);
         }
         else {
-            *--(f->fUCPos) = (UChar)ch;
+            *--(str->fPos) = (UChar)ch;
         }
     }
     return ch;
@@ -614,19 +624,21 @@ u_file_read(    UChar        *chars,
 {
     int32_t dataSize;
     int32_t read;
+    u_localized_string *str;
 
     /* fill the buffer */
     ufile_fill_uchar_buffer(f);
 
     /* determine the amount of data in the buffer */
-    dataSize = (int32_t)(f->fUCLimit - f->fUCPos);
+    str = &f->str;
+    dataSize = (int32_t)(str->fLimit - str->fPos);
 
     /* if the buffer contains the amount requested, just copy */
     if(dataSize > count) {
-        memcpy(chars, f->fUCPos, count * sizeof(UChar));
+        memcpy(chars, str->fPos, count * sizeof(UChar));
 
         /* update the current buffer position */
-        f->fUCPos += count;
+        str->fPos += count;
 
         /* return # of chars read */
         return count;
@@ -637,16 +649,16 @@ u_file_read(    UChar        *chars,
     do {
 
         /* determine the amount of data in the buffer */
-        dataSize = (int32_t)(f->fUCLimit - f->fUCPos);
+        dataSize = (int32_t)(str->fLimit - str->fPos);
 
         /* copy the current data in the buffer */
-        memcpy(chars + read, f->fUCPos, dataSize * sizeof(UChar));
+        memcpy(chars + read, str->fPos, dataSize * sizeof(UChar));
 
         /* update number of items read */
         read += dataSize;
 
         /* update the current buffer position */
-        f->fUCPos += dataSize;
+        str->fPos += dataSize;
 
         /* refill the buffer */
         ufile_fill_uchar_buffer(f);

@@ -35,37 +35,39 @@
 #if !UCONFIG_NO_TRANSLITERATION
 
 typedef struct {
-  UChar  *buffer;             /* Beginning of buffer */
-  int32_t capacity;           /* Capacity of buffer */
-  int32_t pos;                /* Beginning of untranslitted data */
-  int32_t length;             /* Length *from beginning of buffer* of untranslitted data */
-  UTransliterator *translit;
+    UChar  *buffer;             /* Beginning of buffer */
+    int32_t capacity;           /* Capacity of buffer */
+    int32_t pos;                /* Beginning of untranslitted data */
+    int32_t length;             /* Length *from beginning of buffer* of untranslitted data */
+    UTransliterator *translit;
 } UFILETranslitBuffer;
 
 #endif
 
-struct UFILE {
-  FILE            *fFile;        /* the actual fs interface */
-  UBool        fOwnFile;    /* TRUE if fFile should be closed */
+typedef struct u_localized_string {
+    UChar       *fBuffer;       /* Place to write the string */
+    UChar       *fPos;          /* current pos in fUCBuffer */
+    const UChar *fLimit;        /* data limit in fUCBuffer */
 
 #if !UCONFIG_NO_FORMATTING
-  ULocaleBundle        fBundle;     /* formatters */
+    ULocaleBundle  fBundle; /* formatters */
 #endif
+} u_localized_string;
 
-  UConverter        *fConverter;     /* for codeset conversion */
-
-                      /* buffer used for fromUnicode */
-  char            fCharBuffer     [UFILE_CHARBUFFER_SIZE];
-
-                      /* buffer used for toUnicode */
-  UChar            fUCBuffer     [UFILE_UCHARBUFFER_SIZE];
-
-  UChar            *fUCLimit;     /* data limit in fUCBuffer */
-  UChar         *fUCPos;     /* current pos in fUCBuffer */
-
+struct UFILE {
 #if !UCONFIG_NO_TRANSLITERATION
-  UFILETranslitBuffer *fTranslit;
+    UFILETranslitBuffer *fTranslit;
 #endif
+
+    FILE        *fFile;         /* the actual filesystem interface */
+
+    UConverter  *fConverter;    /* for codeset conversion */
+
+    u_localized_string str;     /* struct to handle strings for number formatting */
+
+    UChar       fUCBuffer[UFILE_UCHARBUFFER_SIZE];/* buffer used for toUnicode */
+
+    UBool       fOwnFile;       /* TRUE if fFile should be closed */
 };
 
 /**
