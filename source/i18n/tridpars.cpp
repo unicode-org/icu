@@ -645,6 +645,7 @@ void TransliteratorIDParser::registerSpecialInverse(const UnicodeString& target,
         bidirectional = FALSE;
     }
 
+    umtx_init(&LOCK);
     Mutex lock(&LOCK);
 
     UErrorCode ec = U_ZERO_ERROR;
@@ -837,6 +838,7 @@ TransliteratorIDParser::specsToSpecialInverse(const Specs& specs) {
 
     UnicodeString* inverseTarget;
 
+    umtx_init(&LOCK);
     umtx_lock(&LOCK);
     inverseTarget = (UnicodeString*) SPECIAL_INVERSES->get(specs.target);
     umtx_unlock(&LOCK);
@@ -886,6 +888,7 @@ void TransliteratorIDParser::init() {
     Hashtable* special_inverses = new Hashtable(TRUE);
     special_inverses->setValueDeleter(uhash_deleteUnicodeString);
 
+    umtx_init(&LOCK);
     umtx_lock(&LOCK);
     if (SPECIAL_INVERSES == NULL) {
         SPECIAL_INVERSES = special_inverses;

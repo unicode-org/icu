@@ -445,10 +445,13 @@ getService(void)
 NumberFormat*
 NumberFormat::createInstance(const Locale& loc, EStyles kind, UErrorCode& status)
 {
-  if (gService != NULL) {
-    return (NumberFormat*)gService->get(loc, kind, status);
-  } else {
-    return makeInstance(loc, kind, status);
+    umtx_lock(NULL);
+    UBool haveService = gService != NULL;
+    umtx_unlock(NULL);
+    if (haveService) {
+        return (NumberFormat*)gService->get(loc, kind, status);
+    } else {
+        return makeInstance(loc, kind, status);
   }
 }
 
@@ -471,13 +474,16 @@ NumberFormat::registerFactory(NumberFormatFactory* toAdopt, UErrorCode& status)
 UBool 
 NumberFormat::unregister(URegistryKey key, UErrorCode& status)
 {
-  if (U_SUCCESS(status)) {
-    if (gService != NULL) {
-      return gService->unregister(key, status);
+    if (U_SUCCESS(status)) {
+        umtx_lock(NULL);
+        UBool haveService = gService != NULL;
+        umtx_unlock(NULL);
+        if (haveService) {
+            return gService->unregister(key, status);
+        }
+        status = U_ILLEGAL_ARGUMENT_ERROR;
     }
-    status = U_ILLEGAL_ARGUMENT_ERROR;
-  }
-  return FALSE;
+    return FALSE;
 }
 
 // -------------------------------------
