@@ -42,10 +42,10 @@ th {
            "<< \u0E4D"  // U+0E4D  THAI CHARACTER NIKHAHIT
 
            // make punctuation and  Paiyannoi...Khomut secondary ignorable. This will make them sort after the same
-	   // strings that don't contain them.
+           // strings that don't contain them.
 
            "& [last secondary ignorable]"
-	   "<<< ' '"    // Space
+           "<<< ' '"    // Space
            "<<< '-'"    // Hyphen
            "<<< '.'"    // Full stop
            "<<< '...'"  // Ellipsis
