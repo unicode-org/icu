@@ -225,6 +225,7 @@ static UBool loadZoneData() {
  * Must be called OUTSIDE mutex.
  */
 static inline UBool haveZoneData() {
+    umtx_init(&LOCK);   /* This is here to prevent race conditions. */
     umtx_lock(&LOCK);
     UBool f = (UDATA_MEMORY != 0);
     umtx_unlock(&LOCK);
@@ -236,6 +237,7 @@ static inline UBool haveZoneData() {
 const TimeZone*
 TimeZone::getGMT(void)
 {
+    umtx_init(&LOCK);   /* This is here to prevent race conditions. */
     Mutex lock(&LOCK);
     // Initialize _GMT independently of other static data; it should
     // be valid even if we can't load the time zone UDataMemory.
@@ -464,6 +466,7 @@ TimeZone::initDefault()
 TimeZone*
 TimeZone::createDefault()
 {
+    umtx_init(&LOCK);   /* This is here to prevent race conditions. */
     umtx_lock(&LOCK);
     UBool f = (DEFAULT_ZONE != 0);
     umtx_unlock(&LOCK);
@@ -484,6 +487,7 @@ TimeZone::adoptDefault(TimeZone* zone)
     {
         TimeZone* old = NULL;
 
+        umtx_init(&LOCK);   /* This is here to prevent race conditions. */
         umtx_lock(&LOCK);
         old = DEFAULT_ZONE;
         DEFAULT_ZONE = zone;

@@ -154,7 +154,7 @@ static const char DATA_TYPE[] = "cnv";
 /*                by open converters.                                                  */
 /*                Not thread safe.                                                     */
 /*                Not supported  API.  Marked U_CAPI only for use by test programs.    */
-U_CAPI UBool U_EXPORT2 ucnv_cleanup(void) {
+U_CFUNC UBool U_EXPORT2 ucnv_cleanup(void) {
     if (SHARED_DATA_HASHTABLE != NULL) {
         ucnv_flushCache();
         if (SHARED_DATA_HASHTABLE != NULL && uhash_count(SHARED_DATA_HASHTABLE) == 0) {
@@ -167,6 +167,10 @@ U_CAPI UBool U_EXPORT2 ucnv_cleanup(void) {
                                             /*  if the hash table still exists.  The mutex  */
                                             /*  will lazily re-init  itself if needed.      */
     return (SHARED_DATA_HASHTABLE == NULL);
+}
+
+U_CFUNC void ucnv_init(UErrorCode *status) {
+    umtx_init(&cnvCacheMutex);
 }
 
 static UBool U_CALLCONV
