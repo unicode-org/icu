@@ -22,16 +22,15 @@
 *                         supplementary code points, etc.
 */
 
+#include "unicode/utypes.h"
+#include "unicode/ustring.h"
+#include "unicode/udata.h"
+#include "unicode/uiter.h"
+#include "unicode/unorm.h"
 #include "cmemory.h"
 #include "ustr_imp.h"
 #include "umutex.h"
 #include "unormimp.h"
-
-#include "unicode/utypes.h"
-#include "unicode/ustring.h"
-#include "unicode/chariter.h"
-#include "unicode/udata.h"
-#include "unicode/unorm.h"
 
 /*
  * This new implementation of the normalization code loads its data from
@@ -2248,7 +2247,7 @@ unorm_normalize(const UChar *src, int32_t srcLength,
 
     return unorm_internalNormalize(dest, destCapacity,
                                    src, srcLength,
-                                   mode, (UBool)((option&UNORM_IGNORE_HANGUL)!=0),
+                                   mode, (UBool)((option&(UNORM_IGNORE_HANGUL|1))!=0),
                                    pErrorCode);
 }
 
@@ -2383,11 +2382,12 @@ _findPreviousIterationBoundary(UCharIterator &src,
 }
 
 U_CAPI int32_t U_EXPORT2
-unorm_previousNormalize(UChar *dest, int32_t destCapacity,
-                        UCharIterator *src,
-                        UNormalizationMode mode, UBool ignoreHangul,
-                        UErrorCode *pErrorCode) {
-    UChar stackBuffer[40];
+unorm_previous(UCharIterator *src,
+               UChar *dest, int32_t destCapacity,
+               UNormalizationMode mode, int32_t options,
+               UBool doNormalize, UBool *pNeededToNormalize,
+               UErrorCode *pErrorCode) {
+    UChar stackBuffer[100];
     UChar *buffer;
     IsPrevBoundaryFn *isPreviousBoundary;
     uint32_t mask;
@@ -2396,6 +2396,10 @@ unorm_previousNormalize(UChar *dest, int32_t destCapacity,
 
     if(!_haveData(*pErrorCode)) {
         return 0;
+    }
+
+    if(pNeededToNormalize!=NULL) {
+        *pNeededToNormalize=FALSE;
     }
 
     switch(mode) {
@@ -2458,10 +2462,23 @@ unorm_previousNormalize(UChar *dest, int32_t destCapacity,
                                                 startIndex,
                                                 pErrorCode);
     if(bufferLength>0) {
-        destLength=unorm_internalNormalize(dest, destCapacity,
-                                           buffer+startIndex, bufferLength,
-                                           mode, ignoreHangul,
-                                           pErrorCode);
+        if(doNormalize) {
+            destLength=unorm_internalNormalize(dest, destCapacity,
+                                               buffer+startIndex, bufferLength,
+                                               mode, (UBool)((options&(UNORM_IGNORE_HANGUL|1))!=0),
+                                               pErrorCode);
+            if(pNeededToNormalize!=0 && U_SUCCESS(*pErrorCode)) {
+                *pNeededToNormalize=
+                    (UBool)(destLength!=bufferLength ||
+                            0!=uprv_memcmp(dest, buffer, destLength*U_SIZEOF_UCHAR));
+            }
+        } else {
+            /* just copy the source characters */
+            if(destCapacity>0) {
+                uprv_memcpy(buffer+startIndex, dest, uprv_min(bufferLength, destCapacity)*U_SIZEOF_UCHAR);
+            }
+            destLength=u_terminateUChars(dest, destCapacity, bufferLength, pErrorCode);
+        }
     } else {
         destLength=0;
     }
@@ -2603,11 +2620,12 @@ _findNextIterationBoundary(UCharIterator &src,
 }
 
 U_CAPI int32_t U_EXPORT2
-unorm_nextNormalize(UChar *dest, int32_t destCapacity,
-                    UCharIterator *src,
-                    UNormalizationMode mode, UBool ignoreHangul,
-                    UErrorCode *pErrorCode) {
-    UChar stackBuffer[40];
+unorm_next(UCharIterator *src,
+           UChar *dest, int32_t destCapacity,
+           UNormalizationMode mode, int32_t options,
+           UBool doNormalize, UBool *pNeededToNormalize,
+           UErrorCode *pErrorCode) {
+    UChar stackBuffer[100];
     UChar *buffer;
     IsNextBoundaryFn *isNextBoundary;
     uint32_t mask;
@@ -2616,6 +2634,10 @@ unorm_nextNormalize(UChar *dest, int32_t destCapacity,
 
     if(!_haveData(*pErrorCode)) {
         return 0;
+    }
+
+    if(pNeededToNormalize!=NULL) {
+        *pNeededToNormalize=FALSE;
     }
 
     switch(mode) {
@@ -2677,10 +2699,23 @@ unorm_nextNormalize(UChar *dest, int32_t destCapacity,
                                             buffer, bufferCapacity,
                                             pErrorCode);
     if(bufferLength>0) {
-        destLength=unorm_internalNormalize(dest, destCapacity,
-                                           buffer, bufferLength,
-                                           mode, ignoreHangul,
-                                           pErrorCode);
+        if(doNormalize) {
+            destLength=unorm_internalNormalize(dest, destCapacity,
+                                               buffer, bufferLength,
+                                               mode, (UBool)((options&(UNORM_IGNORE_HANGUL|1))!=0),
+                                               pErrorCode);
+            if(pNeededToNormalize!=0 && U_SUCCESS(*pErrorCode)) {
+                *pNeededToNormalize=
+                    (UBool)(destLength!=bufferLength ||
+                            0!=uprv_memcmp(dest, buffer, destLength*U_SIZEOF_UCHAR));
+            }
+        } else {
+            /* just copy the source characters */
+            if(destCapacity>0) {
+                uprv_memcpy(dest, buffer, uprv_min(bufferLength, destCapacity)*U_SIZEOF_UCHAR);
+            }
+            destLength=u_terminateUChars(dest, destCapacity, bufferLength, pErrorCode);
+        }
     } else {
         destLength=0;
     }
