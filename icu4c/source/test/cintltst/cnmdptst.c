@@ -28,7 +28,7 @@
 #define CHECK(status,str) if (U_FAILURE(status)) { log_err("FAIL: %s\n", str); return; }
 
 void addNumFrDepTest(TestNode** root);
-static void TestCurrencyPreEuro();
+static void TestCurrencyPreEuro(void);
 
 void addNumFrDepTest(TestNode** root)
 {

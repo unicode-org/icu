@@ -24,8 +24,8 @@
 
 static void TestNextUChar(UConverter* cnv, const char* source, const char* limit, const uint32_t results[], const char* message);
 static void TestNextUCharError(UConverter* cnv, const char* source, const char* limit, UErrorCode expected, const char* message);
-static void TestJitterbug981();
-static void TestJitterbug1293();
+static void TestJitterbug981(void);
+static void TestJitterbug1293(void);
 static void TestNewConvertWithBufferSizes(int32_t osize, int32_t isize) ;
 static void TestConverterTypesAndStarters(void);
 static void TestAmbiguous(void);

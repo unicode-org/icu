@@ -1071,7 +1071,7 @@ static void TestObsoleteNames(void)
         { "ji", "yid", "ji", "", "" },
         { "jw", "jaw", "jw", "", "" },
         { "sh", "srp", "sh", "", "" },
-        { "",0,0,0,0,0 }
+        { "", "", "", "", "" }
     };
     
     for(i=0;tests[i].locale[0];i++)
