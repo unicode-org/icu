@@ -4,6 +4,7 @@
 * COPYRIGHT:                                                                   *
 *   (C) Copyright Taligent, Inc.,  1997                                        *
 *   (C) Copyright International Business Machines Corporation,  1997-1998      *
+*   Copyright (C) 1999 Alan Liu and others. All rights reserved.               *
 *   Licensed Material - Program-Property of IBM - All Rights Reserved.         *
 *   US Government Users Restricted Rights - Use, duplication, or disclosure    *
 *   restricted by GSA ADP Schedule Contract with IBM Corp.                     *
@@ -32,6 +33,7 @@
 *    07/28/98    stephen        Sync up with JDK 1.2
 *    09/14/98    stephen        Changed type of kOneDay, kOneWeek to double.
 *                            Fixed bug in roll() 
+*   10/15/99    aliu        Fixed j31, incorrect WEEK_OF_YEAR computation.
 ********************************************************************************
 */
 
@@ -467,8 +469,7 @@ GregorianCalendar::timeToFields(UDate theTime, bool_t quick, UErrorCode& status)
     // fall into the last week of the previous year; days at the end of
     // the year may fall into the first week of the next year.
     int32_t relDow = (dayOfWeek + 7 - getFirstDayOfWeek()) % 7; // 0..6
-    int32_t relDowJan1 = (dayOfWeek - dayOfYear + 1 - getFirstDayOfWeek()) % 7; // -6..6
-    if (relDowJan1 < 0) relDowJan1 += 7; // 0..6
+    int32_t relDowJan1 = (dayOfWeek - dayOfYear + 701 - getFirstDayOfWeek()) % 7; // 0..6
     int32_t woy = (dayOfYear - 1 + relDowJan1) / 7; // 0..53
     if ((7 - relDowJan1) >= getMinimalDaysInFirstWeek()) {
         ++woy;
@@ -485,11 +486,7 @@ GregorianCalendar::timeToFields(UDate theTime, bool_t quick, UErrorCode& status)
     else if (woy == 0) {
         // We are the last week of the previous year.
         int32_t prevDoy = dayOfYear + yearLength(rawYear - 1);
-        int32_t prevDow = (dayOfWeek + 6) % 7; // 0..6; This is actually DOW-1 % 7
-        // The following line is unnecessary because weekNumber() will
-        // do any needed normalization internally.
-        //   if (prevDow == 0) prevDow = 7; // 1..7
-        woy = weekNumber(prevDoy, prevDow);
+        woy = weekNumber(prevDoy, dayOfWeek);
     }
     internalSet(WEEK_OF_YEAR, woy);
 

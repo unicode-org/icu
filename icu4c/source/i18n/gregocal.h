@@ -4,6 +4,7 @@
 * COPYRIGHT:                                                                   *
 *   (C) Copyright Taligent, Inc.,  1997                                        *
 *   (C) Copyright International Business Machines Corporation,  1997-1999      *
+*   Copyright (C) 1999 Alan Liu and others. All rights reserved.               *
 *   Licensed Material - Program-Property of IBM - All Rights Reserved.         *
 *   US Government Users Restricted Rights - Use, duplication, or disclosure    *
 *   restricted by GSA ADP Schedule Contract with IBM Corp.                     *
@@ -20,6 +21,8 @@
 *    09/04/98    stephen        Re-sync with JDK 8/31 putback
 *    09/14/98    stephen        Changed type of kOneDay, kOneWeek to double.
 *                            Fixed bug in roll() 
+*   10/15/99    aliu        Fixed j31, incorrect WEEK_OF_YEAR computation.
+*                           Added documentation of WEEK_OF_YEAR computation.
 ********************************************************************************
 */
          
@@ -43,8 +46,25 @@
  * avoid confusion, this Calendar always uses January 1. A manual adjustment may be made
  * if desired for dates that are prior to the Gregorian changeover and which fall
  * between January 1 and March 24.
- * <P>
- * Example for using GregorianCalendar:
+ *
+ * <p>Values calculated for the <code>WEEK_OF_YEAR</code> field range from 1 to
+ * 53.  Week 1 for a year is the first week that contains at least
+ * <code>getMinimalDaysInFirstWeek()</code> days from that year.  It thus
+ * depends on the values of <code>getMinimalDaysInFirstWeek()</code>,
+ * <code>getFirstDayOfWeek()</code>, and the day of the week of January 1.
+ * Weeks between week 1 of one year and week 1 of the following year are
+ * numbered sequentially from 2 to 52 or 53 (as needed).
+ *
+ * <p>For example, January 1, 1998 was a Thursday.  If
+ * <code>getFirstDayOfWeek()</code> is <code>MONDAY</code> and
+ * <code>getMinimalDaysInFirstWeek()</code> is 4 (these are the values
+ * reflecting ISO 8601 and many national standards), then week 1 of 1998 starts
+ * on December 29, 1997, and ends on January 4, 1998.  If, however,
+ * <code>getFirstDayOfWeek()</code> is <code>SUNDAY</code>, then week 1 of 1998
+ * starts on January 4, 1998, and ends on January 10, 1998; the first three days
+ * of 1998 then are part of week 53 of 1997.
+ *
+ * <p>Example for using GregorianCalendar:
  * <pre>
  * .    // get the supported ids for GMT-08:00 (Pacific Standard Time)
  * .    int32_t idsCount;
