@@ -56,6 +56,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
 
         CASE(16,TestDigitListAPI);
         CASE(17,TestWhiteSpaceParsing);
+        CASE(18,TestComplexCurrency);
 
         default: name = ""; break;
     }
@@ -644,6 +645,27 @@ void NumberFormatTest::TestWhiteSpaceParsing(void) {
     expect(fmt, "a   b1234c   ", n);
 }
 
+/**
+ * Test currencies whose display name is a ChoiceFormat.
+ */
+void NumberFormatTest::TestComplexCurrency() {
+    UErrorCode ec = U_ZERO_ERROR;
+    Locale loc("en", "IN", "");
+    NumberFormat* fmt = NumberFormat::createCurrencyInstance(loc, ec);
+    if (U_SUCCESS(ec)) {
+        expect2(*fmt, 1.0, "Re1.00");
+        // Use .00392625 because that's 2^-8.  Any value less than 0.005 is fine.
+        expect(*fmt, 1.00390625, "Re1.00"); // tricky
+        expect2(*fmt, 12345678.0, "Rs1,23,45,678.00");
+        expect2(*fmt, 0.5, "Rs0.50");
+        expect2(*fmt, -1.0, "-Re1.00");
+        expect2(*fmt, -10.0, "-Rs10.00");
+    } else {
+        errln("FAIL: getCurrencyInstance(en_IN)");
+    }
+    delete fmt;
+}
+    
 // -------------------------------------
  
 void
