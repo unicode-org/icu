@@ -133,14 +133,20 @@ u_getVersion(UVersionInfo versionArray);
 
 /** Collation runtime version (sort key generator, strcoll). */
 /** If the version is different, sortkeys for the same string could be different */
-#define UCOL_RUNTIME_VERSION 2
+/** version 2 was in ICU 1.8.1. changed is: compression intervals, French secondary */
+/** compression, generating quad level always when strength is quad or more */
+#define UCOL_RUNTIME_VERSION 3
 
 /** Builder code version. When this is different, same tailoring might result */
 /** in assigning different collation elements to code points                  */
-#define UCOL_BUILDER_VERSION 2
+/** version 2 was in ICU 1.8.1. added support for prefixes, tweaked canonical */
+/** closure. However, the tailorings should probably get same CEs assigned    */
+#define UCOL_BUILDER_VERSION 3
 
 /* This is the version of FractionalUCA.txt tailoring rules*/
-#define UCOL_FRACTIONAL_UCA_VERSION 1
+/* Version 1 was in ICU 1.8.1. Version two contains canonical closure for */
+/* supplementary code points */
+#define UCOL_FRACTIONAL_UCA_VERSION 2
 
 /** This is the version of the tailorings */
 #define UCOL_TAILORINGS_VERSION 1
