@@ -6,10 +6,10 @@
  *  ucnv_cb.c:
  *  External APIs for the ICU's codeset conversion library
  *  Helena Shih
- * 
+ *
  * Modification History:
  *
- *   Date        Name        Description 
+ *   Date        Name        Description
  *   7/28/2000   srl         Implementation
  */
 
@@ -35,50 +35,50 @@ ucnv_cbFromUWriteBytes (UConverterFromUnicodeArgs *args,
                        int32_t offsetIndex,
                        UErrorCode * err)
 {
-  int32_t togo;
-  int8_t toerr;
-  int32_t i;
+    int32_t togo;
+    int8_t toerr;
+    int32_t i;
 
-  if((args->targetLimit - args->target) >= length) /* If the buffer fits.. */
-  {
-    uprv_memcpy(args->target, source, length);
-    args->target += length;
-    if(args->offsets) /* set all the offsets to the same # */
+    if((args->targetLimit - args->target) >= length) /* If the buffer fits.. */
     {
-      for(i=0;i<length;i++)
-      {
-        *(args->offsets++) = offsetIndex;
-      }
+        uprv_memcpy(args->target, source, length);
+        args->target += length;
+        if(args->offsets) /* set all the offsets to the same # */
+        {
+            for(i=0;i<length;i++)
+            {
+                *(args->offsets++) = offsetIndex;
+            }
+        }
     }
-  }
-  else
-  {
-    togo = args->targetLimit - args->target;
-
-    uprv_memcpy(args->target, source, togo);
-    args->target += togo;
-    
-    if(args->offsets)
+    else
     {
-      for(i=0;i<togo;i++)
-      {
-        *(args->offsets++) = offsetIndex;
-      }
+        togo = (int32_t)(args->targetLimit - args->target);
+
+        uprv_memcpy(args->target, source, togo);
+        args->target += togo;
+
+        if(args->offsets)
+        {
+            for(i=0;i<togo;i++)
+            {
+                *(args->offsets++) = offsetIndex;
+            }
+        }
+
+        /* Now, copy the remainder into the errbuff */
+        source += togo;
+        toerr = (int8_t)(length - togo);
+
+        uprv_memcpy(args->converter->charErrorBuffer +
+            args->converter->charErrorBufferLength,
+            source,
+            toerr * sizeof(source[0]));
+        args->converter->charErrorBufferLength += toerr;
+
+        *err = U_BUFFER_OVERFLOW_ERROR;
+
     }
-
-    /* Now, copy the remainder into the errbuff */
-    source += togo;
-    toerr = (int8_t)(length - togo);
-    
-    uprv_memcpy(args->converter->charErrorBuffer + 
-                args->converter->charErrorBufferLength, 
-                source,
-                toerr * sizeof(source[0]));
-    args->converter->charErrorBufferLength += toerr;
-
-    *err = U_BUFFER_OVERFLOW_ERROR;
-
-  }
 }
 
 U_CAPI void  U_EXPORT2
@@ -88,118 +88,119 @@ ucnv_cbFromUWriteUChars(UConverterFromUnicodeArgs *args,
                              int32_t offsetIndex,
                              UErrorCode * err)
 {
-  /*
-    This is a fun one.  Recursion can occur - we're basically going to 
-    just retry shoving data through the same converter. Note, if you got 
-    here through some kind of invalid sequence, you maybe should emit a 
+    /*
+    This is a fun one.  Recursion can occur - we're basically going to
+    just retry shoving data through the same converter. Note, if you got
+    here through some kind of invalid sequence, you maybe should emit a
     reset sequence of some kind and/or call ucnv_reset().  Since this
     IS an actual conversion, take care that you've changed the callback
     or the data, or you'll get an infinite loop.
-    
+
     Please set the err value to something reasonable before calling
     into this.
-  */
+    */
 
-  char *oldTarget;
+    char *oldTarget;
 
-  if(U_FAILURE(*err))
-  {
-    return;
-  }
-
-  oldTarget = args->target;
-
-  ucnv_fromUnicode(args->converter,
-                   &args->target,
-                   args->targetLimit,
-                   source,
-                   sourceLimit,
-                   NULL, /* no offsets */
-                   FALSE, /* no flush */
-                   err);
-
-  if(args->offsets) 
-  {
-    while (args->target != oldTarget)  /* if it moved at all.. */
+    if(U_FAILURE(*err))
     {
-      *(args->offsets)++ = offsetIndex;
-      oldTarget++;
+        return;
     }
-  }
 
-  /* Note, if you did something like used a Stop subcallback, things would get interesting.  
-     In fact, here's where we want to return the partially consumed in-source! 
-  */
-  if(*err == U_BUFFER_OVERFLOW_ERROR)
-         /* && (*source < sourceLimit && args->target >= args->targetLimit) 
-                    -- S. Hrcek */
-  {
+    oldTarget = args->target;
+
+    ucnv_fromUnicode(args->converter,
+        &args->target,
+        args->targetLimit,
+        source,
+        sourceLimit,
+        NULL, /* no offsets */
+        FALSE, /* no flush */
+        err);
+
+    if(args->offsets)
+    {
+        while (args->target != oldTarget)  /* if it moved at all.. */
+        {
+            *(args->offsets)++ = offsetIndex;
+            oldTarget++;
+        }
+    }
+
+    /*
+    Note, if you did something like used a Stop subcallback, things would get interesting.
+    In fact, here's where we want to return the partially consumed in-source!
+    */
+    if(*err == U_BUFFER_OVERFLOW_ERROR)
+    /* && (*source < sourceLimit && args->target >= args->targetLimit)
+    -- S. Hrcek */
+    {
     /* Overflowed the target.  Now, we'll write into the charErrorBuffer.
-       It's a fixed size. If we overflow it... Hmm */
-    char *newTarget;
-    const char *newTargetLimit;
-    UErrorCode err2 = U_ZERO_ERROR;
+        It's a fixed size. If we overflow it... Hmm */
+        char *newTarget;
+        const char *newTargetLimit;
+        UErrorCode err2 = U_ZERO_ERROR;
 
-    int8_t errBuffLen;
+        int8_t errBuffLen;
 
-    errBuffLen  = args->converter->charErrorBufferLength;
+        errBuffLen  = args->converter->charErrorBufferLength;
 
-    /* start the new target at the first free slot in the errbuff.. */
-    newTarget = (char *)(args->converter->charErrorBuffer + errBuffLen);
-      
-    newTargetLimit = (char *)(args->converter->charErrorBuffer +
-      sizeof(args->converter->charErrorBuffer));
+        /* start the new target at the first free slot in the errbuff.. */
+        newTarget = (char *)(args->converter->charErrorBuffer + errBuffLen);
 
-    if(newTarget >= newTargetLimit) 
-    {
-      *err = U_INTERNAL_PROGRAM_ERROR;
-      return;
-    }
+        newTargetLimit = (char *)(args->converter->charErrorBuffer +
+            sizeof(args->converter->charErrorBuffer));
 
-    /* We're going to tell the converter that the errbuff len is empty.
+        if(newTarget >= newTargetLimit)
+        {
+            *err = U_INTERNAL_PROGRAM_ERROR;
+            return;
+        }
+
+       /* We're going to tell the converter that the errbuff len is empty.
        This prevents the existing errbuff from being 'flushed' out onto
-       itself.  If the errbuff is needed by the converter this time, 
+       itself.  If the errbuff is needed by the converter this time,
        we're hosed - we're out of space! */
 
-    args->converter->charErrorBufferLength = 0;
-    
-    ucnv_fromUnicode(args->converter,
-                     &newTarget, 
-                     newTargetLimit,
-                     source,
-                     sourceLimit,
-                     NULL,
-                     FALSE,
-                     &err2);
+       args->converter->charErrorBufferLength = 0;
 
-    /* We can go ahead and overwrite the  length here. We know just how
+       ucnv_fromUnicode(args->converter,
+                        &newTarget,
+                        newTargetLimit,
+                        source,
+                        sourceLimit,
+                        NULL,
+                        FALSE,
+                        &err2);
+
+       /* We can go ahead and overwrite the  length here. We know just how
        to recalculate it. */
 
-    args->converter->charErrorBufferLength = (int8_t)(
-      newTarget - (char*)args->converter->charErrorBuffer);
+       args->converter->charErrorBufferLength = (int8_t)(
+           newTarget - (char*)args->converter->charErrorBuffer);
 
-    if((newTarget >= newTargetLimit) || (err2 == U_BUFFER_OVERFLOW_ERROR))
-    {
-      /* now we're REALLY in trouble.
-         Internal program error - callback oughtn't to have written this much
-         data!
-      */
-      *err = U_INTERNAL_PROGRAM_ERROR;
-      return;
-    }
-    else
-    {
-      /* sub errs could be invalid/truncated/illegal chars or w/e.
-         These might want to be passed on up.. But the problem is, we already
-         need to pass U_BUFFER_OVERFLOW_ERROR. That has to override these 
-         other errs.. */
+       if((newTarget >= newTargetLimit) || (err2 == U_BUFFER_OVERFLOW_ERROR))
+       {
+           /* now we're REALLY in trouble.
+           Internal program error - callback shouldn't have written this much
+           data!
+           */
+           *err = U_INTERNAL_PROGRAM_ERROR;
+           return;
+       }
+       else
+       {
+           /* sub errs could be invalid/truncated/illegal chars or w/e.
+           These might want to be passed on up.. But the problem is, we already
+           need to pass U_BUFFER_OVERFLOW_ERROR. That has to override these
+           other errs.. */
 
-      /*
-          if(U_FAILURE(err2))
-                ??
-      */
+           /*
+           if(U_FAILURE(err2))
+           ??
+           */
+       }
     }
-  }
 }
 
 U_CAPI void  U_EXPORT2
@@ -231,55 +232,55 @@ ucnv_cbToUWriteUChars (UConverterToUnicodeArgs *args,
                             int32_t offsetIndex,
                             UErrorCode * err)
 {
-  int32_t togo;
-  int8_t toerr;
-  int32_t i;
-  
-  if(U_FAILURE(*err))
-  {
-    return;
-  }
+    int32_t togo;
+    int8_t toerr;
+    int32_t i;
 
-
-  if((args->targetLimit - args->target) >= length) /* If the buffer fits.. */
-  {
-    uprv_memcpy(args->target, source, length * sizeof(args->target[0]) );
-    args->target += length;
-    if(args->offsets) /* set all the offsets to the same # */
+    if(U_FAILURE(*err))
     {
-      for(i=0;i<length;i++)
-      {
-        *(args->offsets++) = offsetIndex;
-      }
-    }
-  }
-  else
-  {
-    togo = args->targetLimit - args->target;
-
-    uprv_memcpy(args->target, source, togo * sizeof(args->target[0])  );
-    args->target += togo;
-    
-    if(args->offsets) 
-    {
-      for(i=0;i<togo;i++)
-      {
-        *(args->offsets++) = offsetIndex;
-      }
+        return;
     }
 
-    /* Now, copy the remainder into the errbuff */
-    source += togo;
-    toerr = (int8_t)(length - togo);
-    
-    uprv_memcpy(args->converter->UCharErrorBuffer + 
-                args->converter->UCharErrorBufferLength, 
-                source,
-                toerr * sizeof(source[0]));
-    args->converter->UCharErrorBufferLength += toerr;
 
-    *err = U_BUFFER_OVERFLOW_ERROR;
-  }
+    if((args->targetLimit - args->target) >= length) /* If the buffer fits.. */
+    {
+        uprv_memcpy(args->target, source, length * sizeof(args->target[0]) );
+        args->target += length;
+        if(args->offsets) /* set all the offsets to the same # */
+        {
+            for(i=0;i<length;i++)
+            {
+                *(args->offsets++) = offsetIndex;
+            }
+        }
+    }
+    else
+    {
+        togo = (int32_t)(args->targetLimit - args->target);
+
+        uprv_memcpy(args->target, source, togo * sizeof(args->target[0])  );
+        args->target += togo;
+
+        if(args->offsets)
+        {
+            for(i=0;i<togo;i++)
+            {
+                *(args->offsets++) = offsetIndex;
+            }
+        }
+
+        /* Now, copy the remainder into the errbuff */
+        source += togo;
+        toerr = (int8_t)(length - togo);
+
+        uprv_memcpy(args->converter->UCharErrorBuffer +
+                    args->converter->UCharErrorBufferLength,
+                    source,
+                    toerr * sizeof(source[0]));
+        args->converter->UCharErrorBufferLength += toerr;
+
+        *err = U_BUFFER_OVERFLOW_ERROR;
+    }
 }
 
 U_CAPI void  U_EXPORT2
@@ -287,12 +288,12 @@ ucnv_cbToUWriteSub (UConverterToUnicodeArgs *args,
                          int32_t offsetIndex,
                        UErrorCode * err)
 {
-  static const UChar kSubstituteChar1 = 0x1A, kSubstituteChar = 0xFFFD;
+    static const UChar kSubstituteChar1 = 0x1A, kSubstituteChar = 0xFFFD;
 
-  /* could optimize this case, just one uchar */
-  if(args->converter->invalidCharLength == 1 && args->converter->subChar1 != 0) {
-    ucnv_cbToUWriteUChars(args, &kSubstituteChar1, 1, offsetIndex, err);
-  } else {
-    ucnv_cbToUWriteUChars(args, &kSubstituteChar, 1, offsetIndex, err);
-  }
+    /* could optimize this case, just one uchar */
+    if(args->converter->invalidCharLength == 1 && args->converter->subChar1 != 0) {
+        ucnv_cbToUWriteUChars(args, &kSubstituteChar1, 1, offsetIndex, err);
+    } else {
+        ucnv_cbToUWriteUChars(args, &kSubstituteChar, 1, offsetIndex, err);
+    }
 }

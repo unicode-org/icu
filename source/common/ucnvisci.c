@@ -133,7 +133,7 @@ _ISCIIOpen(UConverter *cnv, const char *name,const char *locale,uint32_t options
     cnv->extraInfo = uprv_malloc (sizeof (UConverterDataISCII));
 
     if(cnv->extraInfo != NULL) {
-        int len=0;
+        int32_t len=0;
         UConverterDataISCII *converterData=(UConverterDataISCII *) cnv->extraInfo;
         converterData->contextCharToUnicode=NO_CHAR_MARKER;
         cnv->toUnicodeStatus = missingCharMarker;
@@ -150,7 +150,7 @@ _ISCIIOpen(UConverter *cnv, const char *name,const char *locale,uint32_t options
             
             converterData->isFirstBuffer=TRUE;
             uprv_strcpy(converterData->name,"ISCII,version=");
-            len = uprv_strlen(converterData->name);
+            len = (int32_t)uprv_strlen(converterData->name);
             converterData->name[len]= (char)((options & UCNV_OPTIONS_VERSION_MASK) + '0');
             converterData->name[len+1]=0;
         }else{
@@ -757,17 +757,17 @@ static const uint16_t nuktaSpecialCases[][2]={
         if(targetByteUnit <= 0xFF){                                                             \
             *(target)++ = (uint8_t)(targetByteUnit);                                            \
             if(offsets){                                                                        \
-                *(offsets++) = source - args->source-1;                                         \
+                *(offsets++) = (int32_t)(source - args->source-1);                              \
             }                                                                                   \
         }else{                                                                                  \
             *(target)++ = (uint8_t)(targetByteUnit>>8);                                         \
             if(offsets){                                                                        \
-                *(offsets++) = source - args->source-1;                                         \
+                *(offsets++) = (int32_t)(source - args->source-1);                              \
             }                                                                                   \
             if(target < targetLimit){                                                           \
                 *(target)++ = (uint8_t)  targetByteUnit;                                        \
                 if(offsets){                                                                    \
-                    *(offsets++) = source - args->source-1;                                     \
+                    *(offsets++) = (int32_t)(source - args->source-1);                          \
                 }                                                                               \
             }else{                                                                              \
                 args->converter->charErrorBuffer[args->converter->charErrorBufferLength++] =    \
@@ -986,7 +986,7 @@ getTrail:
                 char* saveTarget =NULL;
                 int32_t* saveOffsets =NULL;
                 int currentOffset =0;
-                int saveIndex =0;
+                int32_t saveIndex =0;
 
                 args->converter->invalidUCharLength = 0;
 
@@ -1022,7 +1022,7 @@ getTrail:
                               reason, 
                               err);
 
-                saveIndex = args->target - (char*)target;
+                saveIndex = (int32_t)(args->target - (char*)target);
                 if(args->offsets){
                     args->offsets = saveOffsets;
                     while(saveIndex-->0){
@@ -1093,7 +1093,7 @@ static const int32_t lookupTable[][2]={
     if(target<args->targetLimit){                                                        \
         *(target)++ = (UChar)targetUniChar;                                              \
         if(offsets){                                                                     \
-            *(offsets)++ = offset;                                                       \
+            *(offsets)++ = (int32_t)(offset);                                            \
         }                                                                                \
     }else{                                                                               \
         args->converter->UCharErrorBuffer[args->converter->UCharErrorBufferLength++] =   \
@@ -1318,13 +1318,11 @@ CALLBACK:
                     const char *saveSource = args->source;
                     UChar *saveTarget = args->target;
                     int32_t *saveOffsets = NULL;
-                    int32_t currentOffset;
-                    int32_t saveIndex = target - args->target;
+                    int32_t currentOffset = (int32_t)(source - args->source -1);
+                    int32_t saveIndex = (int32_t)(target - args->target);
 
                     args->converter->invalidCharLength=0;
 
-                    currentOffset= source - args->source -1;
-                                       
                     args->converter->invalidCharBuffer[args->converter->invalidCharLength++] =
                         (char) sourceChar;
 
