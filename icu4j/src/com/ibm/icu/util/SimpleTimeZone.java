@@ -1,5 +1,5 @@
 /*
-*   Copyright (C) 1996-2002, International Business Machines
+*   Copyright (C) 1996-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 */
 
@@ -736,8 +736,7 @@ public class SimpleTimeZone extends TimeZone {
         if (this == other) return true;
         if (!(other instanceof SimpleTimeZone)) return false;
         SimpleTimeZone that = (SimpleTimeZone) other;
-        return rawOffset == that.rawOffset &&
-            useDaylight == that.useDaylight &&
+        return super.hasSameRules(other) &&
             (!useDaylight
              // Only check rules if using DST
              || (dstSavings == that.dstSavings &&
