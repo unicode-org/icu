@@ -145,8 +145,8 @@ public class TestUScript extends TestFmwk{
         final String[] expectedNames={
               
             /* test names */
-            "CYRILLIC","DESERET","DEVANAGARI","ETHIOPIC","GEORGIAN", 
-            "GOTHIC",  "GREEK",  "GUJARATI", 
+            "Cyrillic","Deseret","Devanagari","Ethiopic","Georgian", 
+            "Gothic",  "Greek",  "Gujarati", 
         };
         int i =0;
 
@@ -178,7 +178,7 @@ public class TestUScript extends TestFmwk{
         final String[] expectedAbbr={
               /* test abbr */
             "Hani", "Hang","Hebr","Hira",
-            "Knda","Kana","Khmr","Lao",
+            "Knda","Kana","Khmr","Laoo",
             "Latn",
             "Mlym", "Mong",
         };
