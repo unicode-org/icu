@@ -1273,25 +1273,44 @@ public final class UTF16
     public static int moveCodePointOffset(String source, int offset16, 
                                           int shift32)
     {
+        int result = offset16;
         int size = source.length();
-        if (offset16 < 0 || shift32 + offset16 > size) {
+        int count;
+        char ch;
+        if (offset16<0 || offset16>size) {
             throw new StringIndexOutOfBoundsException(offset16);
         }
-        char ch;
-        int result = offset16;
-        int count = shift32;
-        while (result < size && count > 0)
+        if (shift32 > 0 ) {
+            if (shift32 + offset16 > size) {
+                throw new StringIndexOutOfBoundsException(offset16);
+            }
+            count = shift32;
+            while (result < size && count > 0)
             {
                 ch = source.charAt(result);
                 if (isLeadSurrogate(ch) && ((result + 1) < size) && 
-                    isTrailSurrogate(source.charAt(result + 1))) {
+                        isTrailSurrogate(source.charAt(result + 1))) {
                     result ++;
                 }
-                
                 count --;
                 result ++;
             }
-        if (count != 0) {
+        } else {
+            if (offset16 + shift32 < 0) {
+                throw new StringIndexOutOfBoundsException(offset16);                
+            }
+            for (count=-shift32; count>0; count--) {
+                result--;
+                if (result<0) {
+                    break;
+                }
+                ch = source.charAt(result);
+                if (isTrailSurrogate(ch) && result>0 && isLeadSurrogate(source.charAt(result-1))) {
+                    result--;
+                }
+            }
+        }
+        if (count != 0)  {
             throw new StringIndexOutOfBoundsException(shift32);
         }
         return result;
@@ -1310,28 +1329,47 @@ public final class UTF16
     public static int moveCodePointOffset(StringBuffer source, int offset16, 
                                           int shift32)
     {
+    	int result = offset16;
         int size = source.length();
-        if (offset16 < 0 || shift32 + offset16 > size) {
+        int count;
+        char ch;
+        if (offset16<0 || offset16>size) {
             throw new StringIndexOutOfBoundsException(offset16);
         }
-        char ch;
-        int result = offset16;
-        int count = shift32;
-        while (result < size && count > 0)
-            {
-                ch = source.charAt(result);
-                if (isLeadSurrogate(ch) && ((result + 1) < size) && 
-                    isTrailSurrogate(source.charAt(result + 1))) {
-                    result ++;
-                }
-                
-                count --;
-                result ++;
+    	if (shift32 > 0 ) {
+    		if (shift32 + offset16 > size) {
+    			throw new StringIndexOutOfBoundsException(offset16);
+    		}
+    		count = shift32;
+    		while (result < size && count > 0)
+    		{
+    			ch = source.charAt(result);
+    			if (isLeadSurrogate(ch) && ((result + 1) < size) && 
+    					isTrailSurrogate(source.charAt(result + 1))) {
+    				result ++;
+    			}
+    			count --;
+    			result ++;
+    		}
+     	} else {
+            if (offset16 + shift32 < 0) {
+                throw new StringIndexOutOfBoundsException(offset16);            	
             }
-        if (count != 0) {
+            for (count=-shift32; count>0; count--) {
+                result--;
+                if (result<0) {
+                    break;
+                }
+            	ch = source.charAt(result);
+                if (isTrailSurrogate(ch) && result>0 && isLeadSurrogate(source.charAt(result-1))) {
+                    result--;
+                }
+            }
+    	}
+        if (count != 0)  {
             throw new StringIndexOutOfBoundsException(shift32);
         }
-        return result;
+    	return result;
     }
 
     /**
@@ -1343,34 +1381,61 @@ public final class UTF16
      * @param shift32 number of codepoints to shift
      * @return new shifted offset16 relative to start
      * @exception IndexOutOfBoundsException if the new offset16 is out of 
-     *            bounds with respect to the subarray.
+     *            bounds with respect to the subarray or the subarray bounds
+     *            are out of range.
      * @stable ICU 2.1
      */
     public static int moveCodePointOffset(char source[], int start, int limit, 
                                           int offset16, int shift32)
     {
-        offset16 += start;
-        if (shift32 + offset16 > limit) {
+        int         size = source.length;
+        int         count;
+        char        ch;
+        int         result = offset16 + start;
+        if (start<0 || limit<start) {
+            throw new StringIndexOutOfBoundsException(start);
+        }
+        if (limit>size) {
+            throw new StringIndexOutOfBoundsException(limit);
+        }
+        if (offset16<0 || result>limit) {
             throw new StringIndexOutOfBoundsException(offset16);
         }
-        char ch;
-        int result = offset16;
-        int count = shift32;
-        while (result < limit && count > 0)
+        if (shift32 > 0 ) {
+            if (shift32 + result > size) {
+                throw new StringIndexOutOfBoundsException(result);
+            }
+            count = shift32;
+            while (result < limit && count > 0)
             {
                 ch = source[result];
-                if (isLeadSurrogate(ch) && ((result + 1) < limit) && 
-                    isTrailSurrogate(source[result + 1])) {
+                if (isLeadSurrogate(ch) && (result+1 < limit) && 
+                        isTrailSurrogate(source[result+1])) {
                     result ++;
                 }
-                
                 count --;
                 result ++;
             }
-        if (count != 0) {
+        } else {
+            if (result + shift32 < start) {
+                throw new StringIndexOutOfBoundsException(result);                
+            }
+            for (count=-shift32; count>0; count--) {
+                result--;
+                if (result<start) {
+                    break;
+                }
+                ch = source[result];
+                if (isTrailSurrogate(ch) && result>start && isLeadSurrogate(source[result-1])) {
+                    result--;
+                }
+            }
+        }
+        if (count != 0)  {
             throw new StringIndexOutOfBoundsException(shift32);
         }
-        return result - start;
+        result -= start;
+        return result;
     }
       
     /**
