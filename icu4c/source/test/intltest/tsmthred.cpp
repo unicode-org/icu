@@ -1068,6 +1068,7 @@ void MultithreadTest::TestCollators()
     u_memcpy(lines[lineNum].buff, bufferU, buflen);
     lineNum++;
   }
+  fclose(testFile);
 
 
   
