@@ -36,7 +36,7 @@
 #if 0
 /* debugging for converters */
 # include <stdio.h>
-void UCNV_DEBUG_LOG(char *what, char *who, void *p, int l)
+void UCNV_DEBUG_LOG(const char *what, const char *who, const void *p, int l)
 {
     static FILE *f = NULL;
     if(f==NULL)
@@ -63,7 +63,7 @@ void UCNV_DEBUG_LOG(char *what, char *who, void *p, int l)
 
 
 /* dump the contents of a converter */
-static void UCNV_DEBUG_CNV(UConverter *c, int line)
+static void UCNV_DEBUG_CNV(const UConverter *c, int line)
 {
     UErrorCode err = U_ZERO_ERROR;
     fprintf(stderr, "%p\t:%d\t", c, line);
