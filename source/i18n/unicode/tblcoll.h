@@ -589,9 +589,6 @@ private:
   // Collator ONLY needs access to RuleBasedCollator(const Locale&, UErrorCode&)
   friend class Collator;
         
-  // TableCollationData ONLY needs access to UNMAPPED
-  friend class TableCollationData;
-
 // This is just temporary, for prototyping.
   friend int32_t ucol_getNextCE(const UCollator *coll, collIterate *source, UErrorCode *status);
   friend int32_t ucol_getSortKey(const    UCollator    *coll, const    UChar        *source,
