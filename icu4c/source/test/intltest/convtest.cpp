@@ -749,6 +749,7 @@ ConversionTest::ToUnicodeCase(ConversionCase &cc, UConverterToUCallback callback
     int32_t resultOffsets[200];
     UChar result[200];
     int32_t resultLength;
+    UBool ok;
 
     static const struct {
         int32_t step;
@@ -768,7 +769,8 @@ ConversionTest::ToUnicodeCase(ConversionCase &cc, UConverterToUCallback callback
     };
     int32_t i, step;
 
-    for(i=0; i<LENGTHOF(steps); ++i) {
+    ok=TRUE;
+    for(i=0; i<LENGTHOF(steps) && ok; ++i) {
         step=steps[i].step;
         if(step<0 && !cc.finalFlush) {
             // skip ucnv_getNextUChar() if !finalFlush because
@@ -784,19 +786,53 @@ ConversionTest::ToUnicodeCase(ConversionCase &cc, UConverterToUCallback callback
                                 result, LENGTHOF(result),
                                 step==0 ? resultOffsets : NULL,
                                 step, &errorCode);
-        if(!checkToUnicode(
+        ok=checkToUnicode(
                 cc, cnv, steps[i].name,
                 result, resultLength,
                 cc.offsets!=NULL ? resultOffsets : NULL,
-                errorCode)
-        ) {
-            return FALSE;
-        }
+                errorCode);
         if(U_FAILURE(errorCode) || !cc.finalFlush) {
             // reset if an error occurred or we did not flush
             // otherwise do nothing to make sure that flushing resets
             ucnv_resetToUnicode(cnv);
         }
+    }
+
+    // not a real loop, just a convenience for breaking out of the block
+    while(ok && cc.finalFlush) {
+        // test ucnv_toUChars()
+        memset(result, 0, sizeof(result));
+
+        errorCode=U_ZERO_ERROR;
+        resultLength=ucnv_toUChars(cnv,
+                        result, LENGTHOF(result),
+                        (const char *)cc.bytes, cc.bytesLength,
+                        &errorCode);
+        ok=checkToUnicode(
+                cc, cnv, "toUChars",
+                result, resultLength,
+                NULL,
+                errorCode);
+        if(!ok) {
+            break;
+        }
+
+        // test preflighting
+        // keep the correct result for simple checking
+        errorCode=U_ZERO_ERROR;
+        resultLength=ucnv_toUChars(cnv,
+                        NULL, 0,
+                        (const char *)cc.bytes, cc.bytesLength,
+                        &errorCode);
+        if(errorCode==U_STRING_NOT_TERMINATED_WARNING || errorCode==U_BUFFER_OVERFLOW_ERROR) {
+            errorCode=U_ZERO_ERROR;
+        }
+        ok=checkToUnicode(
+                cc, cnv, "preflight toUChars",
+                result, resultLength,
+                NULL,
+                errorCode);
+        break;
     }
 
     ucnv_close(cnv);
@@ -1019,6 +1055,7 @@ ConversionTest::FromUnicodeCase(ConversionCase &cc, UConverterFromUCallback call
     int32_t resultOffsets[200];
     char result[200];
     int32_t resultLength;
+    UBool ok;
 
     static const struct {
         int32_t step;
@@ -1031,7 +1068,8 @@ ConversionTest::FromUnicodeCase(ConversionCase &cc, UConverterFromUCallback call
     };
     int32_t i, step;
 
-    for(i=0; i<LENGTHOF(steps); ++i) {
+    ok=TRUE;
+    for(i=0; i<LENGTHOF(steps) && ok; ++i) {
         step=steps[i].step;
         if(step!=0) {
             // bulk test is first, then offsets are not checked any more
@@ -1042,19 +1080,53 @@ ConversionTest::FromUnicodeCase(ConversionCase &cc, UConverterFromUCallback call
                                 result, LENGTHOF(result),
                                 step==0 ? resultOffsets : NULL,
                                 step, &errorCode);
-        if(!checkFromUnicode(
+        ok=checkFromUnicode(
                 cc, cnv, steps[i].name,
                 (uint8_t *)result, resultLength,
                 cc.offsets!=NULL ? resultOffsets : NULL,
-                errorCode)
-        ) {
-            return FALSE;
-        }
+                errorCode);
         if(U_FAILURE(errorCode) || !cc.finalFlush) {
             // reset if an error occurred or we did not flush
             // otherwise do nothing to make sure that flushing resets
             ucnv_resetFromUnicode(cnv);
         }
+    }
+
+    // not a real loop, just a convenience for breaking out of the block
+    while(ok && cc.finalFlush) {
+        // test ucnv_fromUChars()
+        memset(result, 0, sizeof(result));
+
+        errorCode=U_ZERO_ERROR;
+        resultLength=ucnv_fromUChars(cnv,
+                        result, LENGTHOF(result),
+                        cc.unicode, cc.unicodeLength,
+                        &errorCode);
+        ok=checkFromUnicode(
+                cc, cnv, "fromUChars",
+                (uint8_t *)result, resultLength,
+                NULL,
+                errorCode);
+        if(!ok) {
+            break;
+        }
+
+        // test preflighting
+        // keep the correct result for simple checking
+        errorCode=U_ZERO_ERROR;
+        resultLength=ucnv_fromUChars(cnv,
+                        NULL, 0,
+                        cc.unicode, cc.unicodeLength,
+                        &errorCode);
+        if(errorCode==U_STRING_NOT_TERMINATED_WARNING || errorCode==U_BUFFER_OVERFLOW_ERROR) {
+            errorCode=U_ZERO_ERROR;
+        }
+        ok=checkFromUnicode(
+                cc, cnv, "preflight fromUChars",
+                (uint8_t *)result, resultLength,
+                NULL,
+                errorCode);
+        break;
     }
 
     ucnv_close(cnv);
