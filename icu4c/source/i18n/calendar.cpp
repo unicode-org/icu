@@ -1235,6 +1235,13 @@ void Calendar::handleComputeFields(int32_t /* julianDay */, UErrorCode &/* statu
   internalSet(UCAL_YEAR, eyear);
 }
 // -------------------------------------
+
+
+void Calendar::roll(EDateFields field, int32_t amount, UErrorCode& status) 
+{
+  roll((UCalendarDateFields)field, amount, status);
+}
+
 void Calendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode& status)
 {
   if (amount == 0) {
@@ -2971,6 +2978,10 @@ Calendar::getLocaleInternal(ULocDataLocaleType type, UErrorCode &status) const
 }
 
 U_NAMESPACE_END
+
+// INTERNAL - for cleanup
+// clean up the astronomical data & cache
+U_CFUNC UBool calendar_islamic_cleanup(void);
 
 U_CFUNC UBool calendar_cleanup(void) {
   calendar_islamic_cleanup();

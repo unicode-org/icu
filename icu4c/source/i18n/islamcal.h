@@ -372,7 +372,6 @@ class U_I18N_API IslamicCalendar : public Calendar {
 
  private:
   IslamicCalendar(); // default constructor not implemented
-  static const char fgClassID; 
 
   // Default century.
  protected:
@@ -450,34 +449,7 @@ class U_I18N_API IslamicCalendar : public Calendar {
    * before the current time.
    */
   static void  initializeSystemDefaultCentury(void);
-
- public:
-  // deprecates
-  /**
-   * (Overrides Calendar) Rolls up or down by the given amount in the specified field.
-   * For more information, see the documentation for Calendar::roll().
-   *
-   * @param field   The time field.
-   * @param amount  Indicates amount to roll.
-   * @param status  Output param set to success/failure code on exit. If any value
-   *                previously set in the time field is invalid, this will be set to
-   *                an error status.
-   * @deprecated ICU 2.6 Use roll(UCalendarDateFields field, int32_t amount, UErrorCode& status) instead. (here for subclass compat)
-   */
-  virtual void roll(EDateFields field, int32_t amount, UErrorCode& status);
 };
-
-inline UClassID
-IslamicCalendar::getStaticClassID(void)
-{ return (UClassID)&fgClassID; }
-
-inline UClassID
-IslamicCalendar::getDynamicClassID(void) const
-{ return IslamicCalendar::getStaticClassID(); }
-
-// INTERNAL - for cleanup
-// clean up the astronomical data & cache
-U_CFUNC UBool calendar_islamic_cleanup(void);
 
 #endif
 #endif
