@@ -38,6 +38,7 @@ TRNSSRCDIR=$(SRCDATADIR)/translit
 BRKSRCDIR=$(SRCDATADIR)/brkitr
 MISCSRCDIR=$(SRCDATADIR)/misc
 UCMSRCDIR=$(SRCDATADIR)/mappings
+COMINCDIR=$(top_srcdir)/common/unicode
 SRCLISTDEPS=Makefile $(srcdir)/Makefile.in $(LOCSRCDIR)/resfiles.mk $(TRNSSRCDIR)/trnsfiles.mk
 
 # relative lib links from pkgdata are the same as for tmp
@@ -122,7 +123,7 @@ package390: $(BUILDDIR)/icudata390.lst $(BUILDDIR)/icudata.lst ./icupkg.inc
 ##### Define all the data files. the build rule that depends on them is below.
 
 ## DAT files - Misc. data files.
-DAT_FILES_SHORT=uprops.icu unames.icu unorm.icu cnvalias.icu tz.icu ucadata.icu invuca.icu 
+DAT_FILES_SHORT=uprops.icu pnames.icu unames.icu unorm.icu cnvalias.icu tz.icu ucadata.icu invuca.icu 
 DAT_FILES=$(DAT_FILES_SHORT:%=$(BUILDDIR)/$(ICUDT)%)
 
 ## BRK files
@@ -190,8 +191,12 @@ build-dir:
 # DAT FILES
 
 # uprops.icu
-$(BUILDDIR)/$(ICUDT)uprops.icu: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/BidiMirroring.txt $(TOOLDIR)/genprops/genprops$(EXEEXT)
+$(BUILDDIR)/$(ICUDT)uprops.icu: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/BidiMirroring.txt $(TOOLDIR)/genprops/genprops$(EXEEXT) $(BUILDDIR)/$(ICUDT)pnames.icu
 	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genprops/genprops -s $(UNICODEDATADIR) -d $(BUILDDIR) -u $(UNICODE_VERSION)
+
+# pnames.icu
+$(BUILDDIR)/$(ICUDT)pnames.icu: $(UNICODEDATADIR)/PropertyAliases.txt $(UNICODEDATADIR)/PropertyValueAliases.txt $(UNICODEDATADIR)/Blocks.txt $(COMINCDIR)/uscript.h $(COMINCDIR)/uchar.h $(TOOLDIR)/genpname/genpname$(EXEEXT)
+	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genpname/genpname -d $(BUILDDIR)
 
 # unorm.icu
 $(BUILDDIR)/$(ICUDT)unorm.icu: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/DerivedNormalizationProps.txt $(UNICODEDATADIR)/BidiMirroring.txt $(TOOLDIR)/gennorm/gennorm$(EXEEXT)
@@ -265,7 +270,7 @@ icupkg.inc: $(srcdir)/icupkg.inc.in  $(top_builddir)/config.status
 ###########
 ########### 390 (z/OS) support
 UCMFILES390=ebcdic-xml-us.ucm ibm-37.ucm ibm-1047.ucm ibm-4909.ucm
-ALLFILES390=uprops.icu unorm.icu cnvalias.icu $(UCMFILES390:.ucm=.cnv)
+ALLFILES390=uprops.icu pnames.icu unorm.icu cnvalias.icu $(UCMFILES390:.ucm=.cnv)
 
 $(BUILDDIR)/icudata390.lst:  $(SRCLISTDEPS)
 	@echo "generating $@ (list of 390 data files)"
