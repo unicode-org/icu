@@ -44,7 +44,7 @@ static int dotestname(const char *name, const char *standard, const char *expect
     if (!tag && expected) {
         log_err("FAIL: could not find %s standard name for %s\n", standard, name);
         res = 0;
-    } else if (expected && (name == expected || uprv_stricmp(expected, tag))) {
+    } else if (expected && (name == tag || uprv_strcmp(expected, tag))) {
         log_err("FAIL: expected %s for %s standard name for %s, got %s\n", expected, standard, name, tag);
         res = 0;
     }
@@ -87,9 +87,11 @@ static void TestStandardName()
 
     /* Test for some expected results. */
 
-    if (dotestname("ibm-1208", "MIME", "utf-8") &&
+    if (dotestname("ibm-1208", "MIME", "UTF-8") &&
         /*dotestname("cp1252", "MIME", "windows-1252") &&*/
-        dotestname("ascii", "MIME", "us-ascii") &&
+        dotestname("ascii", "MIME", "US-ASCII") &&
+        dotestname("ISO_2022", "MIME", "ISO-2022") &&
+        dotestname("ISO-2022", "MIME", "ISO-2022") &&
         dotestname("ascii", "IANA", "ANSI_X3.4-1968") &&
         dotestname("cp850", "IANA", "IBM850") &&
         dotestname("crazy", "MIME", NULL) &&
@@ -200,6 +202,10 @@ static void TestStandardNames()
         "US-ASCII"
     };
 
+    static const char *iso2022MIME[] = {
+        "ISO-2022",
+    };
+
     doTestNames("ASCII", "IANA", asciiIANA, ARRAY_SIZE(asciiIANA));
     doTestNames("US-ASCII", "IANA", asciiIANA, ARRAY_SIZE(asciiIANA));
     doTestNames("ASCII", "MIME", asciiMIME, ARRAY_SIZE(asciiMIME));
@@ -209,6 +215,9 @@ static void TestStandardNames()
     doTestNames("crazy", "MIME", asciiMIME, -1);
 
     doTestNames("LMBCS-1", "MIME", asciiMIME, 0);
+
+    doTestNames("ISO_2022", "MIME", iso2022MIME, ARRAY_SIZE(iso2022MIME));
+    doTestNames("ISO-2022", "MIME", iso2022MIME, ARRAY_SIZE(iso2022MIME));
 
     log_verbose(" Testing unext()\n");
     doTestUCharNames("ASCII", "IANA", asciiIANA, ARRAY_SIZE(asciiIANA));
