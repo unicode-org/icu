@@ -1276,6 +1276,10 @@ parse(UCHARBUF *buf, const char *currentInputDir, UErrorCode *status)
         {
             *status=U_ZERO_ERROR;
         }
+        else
+        {
+            error(line, "parse error, did not find open-brace '{' or colon ':', stopped with %s", u_errorName(*status));
+        }
     }
     /* The above is added by Jing/GCL */
 
