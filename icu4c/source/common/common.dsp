@@ -231,6 +231,10 @@ SOURCE=.\ucmp8.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\ucmpe32.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\ucnv.c
 # ADD CPP /Za
 # End Source File
@@ -832,6 +836,10 @@ SOURCE=.\ucmp32.h
 # Begin Source File
 
 SOURCE=.\ucmp8.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucmpe32.h
 # End Source File
 # Begin Source File
 
