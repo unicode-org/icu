@@ -84,7 +84,7 @@ ibm-949                 KS_C_5601-1987 iso-ir-149 KS_C_5601-1989 csKSC56011987 k
 ibm-1370                Big5 csBig5 big-5 x-big5 cp950                # Taiwan Big-5 (w/ euro update)
 ibm-950                 # Taiwan Big-5 
 ibm-1386                gb_2312-80 iso-ir-58 csISO58GB231280 gb2312-80 gbk chinese gb ibm1386 gb2312  gb2312-1980 cp936 zh_cn # Chinese GBK removed
-#ibm-954                euc-jp eucJP ibm-eucJP eucjis extended_unix_code_packed_format_for_japanese cseuckdfmtjapanese x-euc-jp x-eucjp  # Japan EUC Why is this one commented!!!
+ibm-954                 euc-jp eucJP ibm-eucJP eucjis extended_unix_code_packed_format_for_japanese cseuckdfmtjapanese x-euc-jp x-eucjp  # Japan EUC
 ibm-970                 euc-kr euckr ibm-eucKR csEUCKR                       # Korean EUC
 #ibm-964                euc-tw euctw ibm-eucTW cns11643              # Taiwan EUC
 #ibm-1361                cp949 ksc korean                              # Korean KSC
