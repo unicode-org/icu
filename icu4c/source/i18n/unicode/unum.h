@@ -168,7 +168,7 @@ typedef enum UNumberFormatPadPosition {
 * @return A pointer to a UNumberFormat to use for formatting numbers, or 0 if
 * an error occurred.
 * @see unum_open
-* @draft ICU 2.0
+* @stable
 */
 U_CAPI UNumberFormat* U_EXPORT2 
 unum_open(  UNumberFormatStyle    style,
