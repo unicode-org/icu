@@ -24,7 +24,68 @@
 #include "cmemory.h"
 #include "ucol_tok.h"
 
-U_NAMESPACE_BEGIN
+static
+int32_t uhash_hashTokens(const UHashTok k) {
+  int32_t hash = 0;
+  //uint32_t key = (uint32_t)k.integer;
+  UColToken *key = (UColToken *)k.pointer;
+  if (key != 0) {
+      //int32_t len = (key & 0xFF000000)>>24;
+      int32_t len = (key->source & 0xFF000000)>>24;
+      int32_t inc = ((len - 32) / 32) + 1;
+
+      //const UChar *p = (key & 0x00FFFFFF) + rulesToParse;
+      const UChar *p = (key->source & 0x00FFFFFF) + key->rulesToParse;
+      const UChar *limit = p + len;    
+
+      while (p<limit) {
+          hash = (hash * 37) + *p;
+          p += inc;
+      }
+  }
+  return hash;
+}
+
+static
+UBool uhash_compareTokens(const UHashTok key1, const UHashTok key2) {
+    //uint32_t p1 = (uint32_t) key1.integer;
+    //uint32_t p2 = (uint32_t) key2.integer;
+    UColToken *p1 = (UColToken *)key1.pointer;
+    UColToken *p2 = (UColToken *)key2.pointer;
+    const UChar *s1 = (p1->source & 0x00FFFFFF) + p1->rulesToParse;
+    const UChar *s2 = (p2->source & 0x00FFFFFF) + p2->rulesToParse;
+    uint32_t s1L = ((p1->source & 0xFF000000) >> 24);
+    uint32_t s2L = ((p2->source & 0xFF000000) >> 24);
+    const UChar *end = s1+s1L-1;
+
+    if (p1 == p2) {
+        return TRUE;
+    }
+    if (p1->source == 0 || p2->source == 0) {
+        return FALSE;
+    }
+    if(s1L != s2L) {
+      return FALSE;
+    }
+    if(p1->source == p2->source) {
+      return TRUE;
+    }
+    while((s1 < end) && *s1 == *s2) {
+      ++s1;
+      ++s2;
+    }
+    if(*s1 == *s2) {
+      return TRUE;
+    } else {
+      return FALSE;
+    }
+}
+
+static
+void deleteToken(void *token) {
+    UColToken *tok = (UColToken *)token;
+    uprv_free(tok);
+}
 
 void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint32_t rulesLength, UCollator *UCA, UErrorCode *status) {
   uint32_t nSize = 0;
@@ -65,11 +126,11 @@ void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint
   src->resultLen = 0;
 }
 
-inline void 
-syntaxError(   const UChar* rules, 
-               int32_t pos,
-               int32_t rulesLen,
-               UParseError* parseError){
+static inline 
+void syntaxError(const UChar* rules, 
+                 int32_t pos,
+                 int32_t rulesLen,
+                 UParseError* parseError) {
     parseError->offset = pos;
     parseError->line = 0 ; /* we are not using line numbers */
     
@@ -91,8 +152,8 @@ syntaxError(   const UChar* rules,
     parseError->postContext[stop-start]= 0;
 }
 
-void 
-ucol_uprv_tok_setOptionInImage(UColOptionSet *opts, UColAttribute attrib, UColAttributeValue value) {
+static
+void ucol_uprv_tok_setOptionInImage(UColOptionSet *opts, UColAttribute attrib, UColAttributeValue value) {
   switch(attrib) {
   case UCOL_HIRAGANA_QUATERNARY_MODE:
     opts->hiraganaQ = value;
@@ -211,8 +272,8 @@ static const ucolTokOption rulesOptions[UTOK_OPTION_COUNT] = {
  {option_11,  7, NULL, 0, UCOL_ATTRIBUTE_COUNT}  /*"charset"        */
 };
 
-int32_t  
-u_strncmpNoCase(const UChar     *s1, 
+static
+int32_t u_strncmpNoCase(const UChar     *s1, 
      const UChar     *s2, 
      int32_t     n) 
 {
@@ -230,6 +291,7 @@ u_strncmpNoCase(const UChar     *s1,
     return 0;
 }
 
+static
 uint8_t ucol_uprv_tok_readAndSetOption(UColOptionSet *opts, const UChar* start, const UChar *end, UErrorCode *status) {
   uint32_t i = 0;
   int32_t j=0;
@@ -652,6 +714,7 @@ const UChar *ucol_tok_parseNextToken(UColTokenParser *src,
   return src->current;
 }
 
+static
 inline UColToken *getVirginBefore(UColTokenParser *src, UColToken *sourceToken, uint32_t strength, uint32_t *charsOffset, uint32_t *newCharsLen, UErrorCode *status) {
   if(U_FAILURE(*status)) {
     return NULL;
@@ -1097,65 +1160,3 @@ void ucol_tok_closeTokenList(UColTokenParser *src) {
   }
 }
 
-int32_t
-uhash_hashTokens(const UHashTok k) {
-  int32_t hash = 0;
-  //uint32_t key = (uint32_t)k.integer;
-  UColToken *key = (UColToken *)k.pointer;
-  if (key != 0) {
-      //int32_t len = (key & 0xFF000000)>>24;
-      int32_t len = (key->source & 0xFF000000)>>24;
-      int32_t inc = ((len - 32) / 32) + 1;
-
-      //const UChar *p = (key & 0x00FFFFFF) + rulesToParse;
-      const UChar *p = (key->source & 0x00FFFFFF) + key->rulesToParse;
-      const UChar *limit = p + len;    
-
-      while (p<limit) {
-          hash = (hash * 37) + *p;
-          p += inc;
-      }
-  }
-  return hash;
-}
-
-UBool uhash_compareTokens(const UHashTok key1, const UHashTok key2) {
-    //uint32_t p1 = (uint32_t) key1.integer;
-    //uint32_t p2 = (uint32_t) key2.integer;
-    UColToken *p1 = (UColToken *)key1.pointer;
-    UColToken *p2 = (UColToken *)key2.pointer;
-    const UChar *s1 = (p1->source & 0x00FFFFFF) + p1->rulesToParse;
-    const UChar *s2 = (p2->source & 0x00FFFFFF) + p2->rulesToParse;
-    uint32_t s1L = ((p1->source & 0xFF000000) >> 24);
-    uint32_t s2L = ((p2->source & 0xFF000000) >> 24);
-    const UChar *end = s1+s1L-1;
-
-    if (p1 == p2) {
-        return TRUE;
-    }
-    if (p1->source == 0 || p2->source == 0) {
-        return FALSE;
-    }
-    if(s1L != s2L) {
-      return FALSE;
-    }
-    if(p1->source == p2->source) {
-      return TRUE;
-    }
-    while((s1 < end) && *s1 == *s2) {
-      ++s1;
-      ++s2;
-    }
-    if(*s1 == *s2) {
-      return TRUE;
-    } else {
-      return FALSE;
-    }
-}
-
-void deleteToken(void *token) {
-    UColToken *tok = (UColToken *)token;
-    uprv_free(tok);
-}
-
-U_NAMESPACE_END

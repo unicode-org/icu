@@ -144,7 +144,8 @@ U_CAPI int32_t U_EXPORT2 ucol_inv_getPrevCE(uint32_t CE, uint32_t contCE,
   return iCE;
 }
 
-int32_t ucol_inv_getPrevious(UColTokListHeader *lh, uint32_t strength) {
+static
+inline int32_t ucol_inv_getPrevious(UColTokListHeader *lh, uint32_t strength) {
 
   uint32_t CE = lh->baseCE;
   uint32_t SecondCE = lh->baseContCE; 
@@ -175,7 +176,8 @@ int32_t ucol_inv_getPrevious(UColTokListHeader *lh, uint32_t strength) {
   return iCE;
 }
 
-int32_t ucol_inv_getNext(UColTokListHeader *lh, uint32_t strength) {
+static
+inline int32_t ucol_inv_getNext(UColTokListHeader *lh, uint32_t strength) {
   uint32_t CE = lh->baseCE;
   uint32_t SecondCE = lh->baseContCE; 
 

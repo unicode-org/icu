@@ -30,6 +30,7 @@ static const uint16_t *FCD_ = NULL;
 * @param strength collation strength
 * @return collation element mask
 */
+static
 inline uint32_t getMask(UCollationStrength strength) 
 {
     switch (strength) 
@@ -49,6 +50,7 @@ inline uint32_t getMask(UCollationStrength strength)
 * @param ce collation element
 * @return collapsed version of the collation element
 */
+static
 inline int hash(uint32_t ce) 
 {
     // the old value UCOL_PRIMARYORDER(ce) % MAX_TABLE_SIZE_ does not work
@@ -62,6 +64,7 @@ inline int hash(uint32_t ce)
 * Initializing the fcd tables
 * @param status error status if any
 */
+static
 inline void initializeFCD(UErrorCode *status) 
 {
     if (FCD_ == NULL) {
@@ -79,6 +82,7 @@ inline void initializeFCD(UErrorCode *status)
 * @param strlength length of the argument string
 * @return fcd value
 */
+static
 inline uint16_t getFCD(const UChar   *str, UTextOffset *offset, 
                              int32_t  strlength)
 {
@@ -108,6 +112,7 @@ inline uint16_t getFCD(const UChar   *str, UTextOffset *offset,
 * @param sourcece 
 * @return the modified collation element
 */
+static
 inline uint32_t getCE(const UStringSearch *strsrch, uint32_t sourcece)
 {
     // note for tertiary we can't use the collator->tertiaryMask, that
@@ -140,6 +145,7 @@ inline uint32_t getCE(const UStringSearch *strsrch, uint32_t sourcece)
 * @param status error status if any
 * @return newly allocated array, NULL otherwise
 */
+static
 inline void * allocateMemory(uint32_t size, UErrorCode *status) 
 {
     uint32_t *result = (uint32_t *)uprv_malloc(size);
@@ -161,6 +167,7 @@ inline void * allocateMemory(uint32_t size, UErrorCode *status)
 * @param status error status if any
 * @return new destination array, destination if there was no new allocation
 */
+static
 inline uint32_t * addTouint32_tArray(uint32_t   *destination,       
                                      uint32_t    offset, 
                                      uint32_t   *destinationlength, 
@@ -198,6 +205,7 @@ inline uint32_t * addTouint32_tArray(uint32_t   *destination,
 * @param status error status if any
 * @return total number of expansions 
 */
+static
 inline uint16_t initializePatternCETable(UStringSearch *strsrch, 
                                          UErrorCode    *status)
 {
@@ -267,6 +275,7 @@ inline uint16_t initializePatternCETable(UStringSearch *strsrch,
 * @param status        for errors if it occurs
 * @return expansionsize the total expansion size of the pattern
 */ 
+static
 inline int16_t initializePattern(UStringSearch *strsrch, UErrorCode *status) 
 {
          UPattern   *pattern     = &(strsrch->pattern);
@@ -295,6 +304,7 @@ inline int16_t initializePattern(UStringSearch *strsrch, UErrorCode *status)
 * @param defaultforward the default forward value
 * @param defaultbackward the default backward value
 */
+static
 inline void setShiftTable(int16_t   shift[], int16_t backshift[], 
                           uint32_t *cetable, int32_t cesize, 
                           int16_t   expansionsize,
@@ -357,6 +367,7 @@ inline void setShiftTable(int16_t   shift[], int16_t backshift[],
 * @param strsrch UStringSearch data storage
 * @param status  for errors if it occurs
 */ 
+static
 inline void initialize(UStringSearch *strsrch, UErrorCode *status) 
 {
     int16_t expandlength  = initializePattern(strsrch, status);   
@@ -383,6 +394,7 @@ inline void initialize(UStringSearch *strsrch, UErrorCode *status)
 * @param start target text start offset
 * @param end target text end offset
 */
+static
 inline UBool isBreakUnit(const UStringSearch *strsrch, UTextOffset start, 
                                UTextOffset    end)
 {
@@ -417,6 +429,7 @@ inline UBool isBreakUnit(const UStringSearch *strsrch, UTextOffset start,
 * @return the next base character or the current offset
 *         if the current character is contains a base character.
 */
+static
 inline UTextOffset getNextBaseOffset(const UChar       *text, 
                                            UTextOffset  textoffset,
                                            int32_t      textlength)
@@ -446,6 +459,7 @@ inline UTextOffset getNextBaseOffset(const UChar       *text,
 * @return start index of the next base character or the current offset
 *         if the current character is contains a base character.
 */
+static
 inline UTextOffset getNextUStringSearchBaseOffset(UStringSearch *strsrch, 
                                                   UTextOffset    textoffset)
 {
@@ -474,6 +488,7 @@ inline UTextOffset getNextUStringSearchBaseOffset(UStringSearch *strsrch,
 * @param status error if any
 * @return final offset
 */
+static
 inline UTextOffset shiftForward(UStringSearch *strsrch,
                                 UTextOffset    textoffset,
                                 uint32_t       ce,
@@ -524,6 +539,7 @@ inline UTextOffset shiftForward(UStringSearch *strsrch,
 * @param strsrch string search data
 * @param status error status if any
 */
+static
 inline void setMatchNotFound(UStringSearch *strsrch, UErrorCode *status) 
 {
     strsrch->search->matchedIndex = USEARCH_DONE;
@@ -547,6 +563,7 @@ inline void setMatchNotFound(UStringSearch *strsrch, UErrorCode *status)
 * @param textlength length of text string
 * @return offset to the next safe character
 */
+static
 inline UTextOffset getNextSafeOffset(const UCollator   *collator, 
                                      const UChar       *text,
                                            UTextOffset  textoffset,
@@ -784,6 +801,7 @@ UBool hasAccentsAfterMatch(const UStringSearch *strsrch, UTextOffset start,
 * @param textlength of the text string
 * @return TRUE if offset is out of bounds, FALSE otherwise
 */
+static
 inline UBool isOutOfBounds(int32_t textlength, UTextOffset offset)
 {
     return offset < 0 || offset > textlength;
@@ -796,6 +814,7 @@ inline UBool isOutOfBounds(int32_t textlength, UTextOffset offset)
 * @param end offset of possible match
 * @return TRUE if identical match is found
 */
+static
 inline UBool checkIdentical(const UStringSearch *strsrch, UTextOffset start, 
                                   UTextOffset    end) 
 {
@@ -819,6 +838,7 @@ inline UBool checkIdentical(const UStringSearch *strsrch, UTextOffset start,
 * @param end new match end index
 * @return TRUE if the the match is repeated, FALSE otherwise
 */
+static
 inline UBool checkRepeatedMatch(UStringSearch *strsrch,
                                 UTextOffset    start,
                                 UTextOffset    end)
@@ -851,6 +871,7 @@ inline UBool checkRepeatedMatch(UStringSearch *strsrch,
 * @param forwards flag TRUE if we are moving in th forwards direction
 * @return current offset 
 */
+static
 inline UTextOffset getColElemIterOffset(const UCollationElements *coleiter,
                                               UBool               forwards)
 {
@@ -948,6 +969,7 @@ UBool checkNextExactContractionMatch(UStringSearch *strsrch,
 * @param status error status if any
 * @return TRUE if the match is valid, FALSE otherwise
 */
+static
 inline UBool checkNextExactMatch(UStringSearch *strsrch, 
                                  UTextOffset   *textoffset, UErrorCode *status)
 {
@@ -988,6 +1010,7 @@ inline UBool checkNextExactMatch(UStringSearch *strsrch,
 * @return the offset of the next character after the base character or the first 
 *         composed character with accents
 */
+static
 inline UTextOffset getPreviousBaseOffset(const UChar       *text, 
                                                UTextOffset  textoffset)
 {
@@ -1017,6 +1040,7 @@ inline UTextOffset getPreviousBaseOffset(const UChar       *text,
 * @param accents array of accents in nfd terminated by a 0.
 * @param accentsindex array of indexes of the accents that are not blocked
 */
+static
 inline int getUnblockedAccentIndex(UChar *accents, UTextOffset *accentsindex)
 {
     UTextOffset index     = 0;
@@ -1051,6 +1075,7 @@ inline int getUnblockedAccentIndex(UChar *accents, UTextOffset *accentsindex)
 * @param status error status if any
 * @return new destination array, destination if there was no new allocation
 */
+static
 inline UChar * addToUCharArray(      UChar      *destination,  
                                      int32_t    *destinationlength, 
                                const UChar      *source1, 
@@ -1098,6 +1123,7 @@ inline UChar * addToUCharArray(      UChar      *destination,
 * @param coleiter collation element iterator
 * @return TRUE if a match if found, false otherwise
 */
+static
 inline UBool checkCollationMatch(const UStringSearch      *strsrch, 
                                        UCollationElements *coleiter)
 {
@@ -1216,6 +1242,7 @@ UTextOffset doNextCanonicalPrefixMatch(UStringSearch *strsrch,
 * @param textlength length of text string
 * @return offset to the previous safe character
 */
+static
 inline uint32_t getPreviousSafeOffset(const UCollator   *collator, 
                                       const UChar       *text,
                                             UTextOffset  textoffset)
@@ -1238,6 +1265,7 @@ inline uint32_t getPreviousSafeOffset(const UCollator   *collator,
 * @param safebuffer safe text buffer
 * @param coleiter collation element iterator for safe text
 */
+static
 inline void cleanUpSafeText(const UStringSearch *strsrch, UChar *safetext,
                                   UChar         *safebuffer)
 {
@@ -1451,6 +1479,7 @@ UBool doNextCanonicalMatch(UStringSearch *strsrch,
 * @return the offset of the next character after this base character or itself
 *         if it is a composed character with accents
 */
+static
 inline UTextOffset getPreviousUStringSearchBaseOffset(UStringSearch *strsrch, 
                                                       UTextOffset textoffset)
 {
@@ -1623,6 +1652,7 @@ inline UBool checkNextCanonicalMatch(UStringSearch *strsrch,
 * @param status error if any
 * @return final offset
 */
+static
 inline UTextOffset reverseShift(UStringSearch *strsrch,
                                 UTextOffset    textoffset,
                                 uint32_t       ce,
@@ -2165,6 +2195,7 @@ UBool checkPreviousCanonicalContractionMatch(UStringSearch *strsrch,
 * @param status error status if any
 * @return TRUE if the match is valid, FALSE otherwise
 */
+static
 inline UBool checkPreviousCanonicalMatch(UStringSearch *strsrch, 
                                          UTextOffset   *textoffset, 
                                          UErrorCode    *status)
