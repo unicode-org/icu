@@ -281,7 +281,7 @@ ubrk_swap(const UDataSwapper *ds, const void *inData, int32_t length, void *outD
            pInfo->dataFormat[1]==0x72 &&
            pInfo->dataFormat[2]==0x6b &&
            pInfo->dataFormat[3]==0x20 &&
-           pInfo->formatVersion[0]==2  )) {
+           pInfo->formatVersion[0]==3  )) {
         udata_printError(ds, "ubrk_swap(): data format %02x.%02x.%02x.%02x (format version %02x) is not recognized\n",
                          pInfo->dataFormat[0], pInfo->dataFormat[1],
                          pInfo->dataFormat[2], pInfo->dataFormat[3],
@@ -304,9 +304,9 @@ ubrk_swap(const UDataSwapper *ds, const void *inData, int32_t length, void *outD
     //
     const uint8_t  *inBytes =(const uint8_t *)inData+headerSize;
     RBBIDataHeader *rbbiDH = (RBBIDataHeader *)inBytes;
-    if (rbbiDH->fMagic   != 0xb1a0 ||
-        rbbiDH->fVersion != 1      ||
-        rbbiDH->fLength  <  sizeof(RBBIDataHeader)) 
+    if (ds->readUInt32(rbbiDH->fMagic)   != 0xb1a0 ||
+        ds->readUInt32(rbbiDH->fVersion) != 1      ||
+        ds->readUInt32(rbbiDH->fLength)  <  sizeof(RBBIDataHeader)) 
     {
         udata_printError(ds, "ubrk_swap(): RBBI Data header is invalid.\n");
         *status=U_UNSUPPORTED_ERROR;
@@ -316,7 +316,7 @@ ubrk_swap(const UDataSwapper *ds, const void *inData, int32_t length, void *outD
     //
     // Prefight operation?  Just return the size
     //
-    int32_t totalSize = headerSize + rbbiDH->fLength;
+    int32_t totalSize = headerSize + ds->readUInt32(rbbiDH->fLength);
     if (length < 0) {
         return totalSize;
     }
@@ -326,7 +326,7 @@ ubrk_swap(const UDataSwapper *ds, const void *inData, int32_t length, void *outD
     //
     if (length > 0) {
         length -= headerSize;
-        if ((uint32_t)length < rbbiDH->fLength) {
+        if ((uint32_t)length < ds->readUInt32(rbbiDH->fLength)) {
             udata_printError(ds, "ubrk_swap(): too few bytes (%d after ICU Data header) for break data.\n",
                              length);
             *status=U_INDEX_OUTOFBOUNDS_ERROR;
@@ -334,40 +334,64 @@ ubrk_swap(const UDataSwapper *ds, const void *inData, int32_t length, void *outD
         }
     }
 
+
     //
     // Swap the Data.  Do the data itself first, then the RBBI Data Header, because
     //                 we need to reference the header to locate the data, and an
     //                 inplace swap of the header leaves it unusable.
     //
-    char *outBytes = (char *)outData + headerSize;
+    uint8_t *outBytes = (uint8_t *)outData + headerSize;
+    int32_t   tableStartOffset;
+    int32_t   tableLength;
 
-    // Note:  there's no point doing a byte copy from the input to the output in
-    //        advance of swapping.  100% of the RBBI data requires swapping.
+    //
+    // If not swapping in place, zero out the output buffer before starting.
+    //    Individual tables and other data items within are aligned to 8 byte boundaries
+    //    when originally created.  Any unused space between items needs to be zero.
+    //
+    if (inBytes != outBytes) {
+       uprv_memset(outBytes, 0, length);
+    }
 
     // Forward state table.  Two int32_t vars at the start, then all int16_ts.
-    ds->swapArray32(ds, inBytes+rbbiDH->fFTable, 8, 
-                        outBytes+rbbiDH->fFTable, status);
-    ds->swapArray16(ds, inBytes+rbbiDH->fFTable+8, rbbiDH->fFTableLen-8,
-                        outBytes+rbbiDH->fFTable+8, status);
+    tableStartOffset = ds->readUInt32(rbbiDH->fFTable);
+    tableLength      = ds->readUInt32(rbbiDH->fFTableLen);
+    ds->swapArray32(ds, inBytes+tableStartOffset, 8, 
+                        outBytes+tableStartOffset, status);
+    ds->swapArray16(ds, inBytes+tableStartOffset+8, tableLength-8,
+                        outBytes+tableStartOffset+8, status);
     
     // Reverse state table.  Same layout as forward table, above.
-    ds->swapArray32(ds, inBytes+rbbiDH->fRTable,   8,                    outBytes, status);
-    ds->swapArray16(ds, inBytes+rbbiDH->fRTable+8, rbbiDH->fRTableLen-8, outBytes, status);
+    tableStartOffset = ds->readUInt32(rbbiDH->fRTable);
+    tableLength      = ds->readUInt32(rbbiDH->fRTableLen);
+    ds->swapArray32(ds, inBytes+tableStartOffset, 8, 
+                        outBytes+tableStartOffset, status);
+    ds->swapArray16(ds, inBytes+tableStartOffset+8, tableLength-8,
+                        outBytes+tableStartOffset+8, status);
 
     // Safe Forward state table.  Same layout as forward table, above.
-    ds->swapArray32(ds, inBytes+rbbiDH->fSFTable,   8,                     outBytes, status);
-    ds->swapArray16(ds, inBytes+rbbiDH->fSFTable+8, rbbiDH->fSFTableLen-8, outBytes, status);
+    tableStartOffset = ds->readUInt32(rbbiDH->fSFTable);
+    tableLength      = ds->readUInt32(rbbiDH->fSFTableLen);
+    ds->swapArray32(ds, inBytes+tableStartOffset, 8, 
+                        outBytes+tableStartOffset, status);
+    ds->swapArray16(ds, inBytes+tableStartOffset+8, tableLength-8,
+                        outBytes+tableStartOffset+8, status);
 
     // Safe Reverse state table.  Same layout as forward table, above.
-    ds->swapArray32(ds, inBytes+rbbiDH->fSRTable,   8,                     outBytes, status);
-    ds->swapArray16(ds, inBytes+rbbiDH->fSRTable+8, rbbiDH->fSRTableLen-8, outBytes, status);
+    tableStartOffset = ds->readUInt32(rbbiDH->fSRTable);
+    tableLength      = ds->readUInt32(rbbiDH->fSRTableLen);
+    ds->swapArray32(ds, inBytes+tableStartOffset, 8, 
+                        outBytes+tableStartOffset, status);
+    ds->swapArray16(ds, inBytes+tableStartOffset+8, tableLength-8,
+                        outBytes+tableStartOffset+8, status);
 
     // Trie table for character categories
-    utrie_swap(ds, inBytes+rbbiDH->fTrie, rbbiDH->fTrieLen, outBytes+rbbiDH->fTrie, status);
+    utrie_swap(ds, inBytes+ds->readUInt32(rbbiDH->fTrie), ds->readUInt32(rbbiDH->fTrieLen),
+                            outBytes+ds->readUInt32(rbbiDH->fTrie), status);
 
     // Source Rules Text.  It's UChar data
-    ds->swapArray16(ds, inBytes+rbbiDH->fRuleSource, rbbiDH->fRuleSourceLen,
-                    outBytes+rbbiDH->fRuleSource, status);
+    ds->swapArray16(ds, inBytes+ds->readUInt32(rbbiDH->fRuleSource), ds->readUInt32(rbbiDH->fRuleSourceLen),
+                        outBytes+ds->readUInt32(rbbiDH->fRuleSource), status);
 
     // And, last, the header.  All 32 bit values.
     ds->swapArray32(ds, inBytes,  sizeof(RBBIDataHeader), outBytes, status);
