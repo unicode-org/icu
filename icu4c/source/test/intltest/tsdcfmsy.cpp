@@ -5,10 +5,9 @@
  ********************************************************************/
 
 #include "unicode/utypes.h"
-#include "tsdcfmsy.h"
-
 #include "unicode/dcfmtsym.h"
-
+#include "unicode/unum.h"
+#include "tsdcfmsy.h"
 
 void IntlTestDecimalFormatSymbols::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
@@ -131,4 +130,24 @@ void IntlTestDecimalFormatSymbols::testSymbols(char *par)
     if(en != fr || foo != bar) {
         errln("ERROR: Copy Constructor or Assignment failed");
     }
+
+    // test get/setSymbol()
+    if(UNUM_FORMAT_SYMBOL_COUNT != DecimalFormatSymbols::ENumberFormatSymbol::kCount) {
+        errln("unum.h and decimfmt.h have inconsistent numbers of format symbols!");
+        return;
+    }
+
+    int i;
+    for(i = 0; i < (int)DecimalFormatSymbols::ENumberFormatSymbol::kCount; ++i) {
+        foo.setSymbol((DecimalFormatSymbols::ENumberFormatSymbol)i, UnicodeString((UChar32)(0x10330 + i)));
+    }
+    for(i = 0; i < (int)DecimalFormatSymbols::ENumberFormatSymbol::kCount; ++i) {
+        if(foo.getSymbol((DecimalFormatSymbols::ENumberFormatSymbol)i) != UnicodeString((UChar32)(0x10330 + i))) {
+            errln("get/setSymbol did not roundtrip, got " +
+                  foo.getSymbol((DecimalFormatSymbols::ENumberFormatSymbol)i) +
+                  ", expected " +
+                  UnicodeString((UChar32)(0x10330 + i)));
+        }
+    }
+
 }

@@ -512,7 +512,7 @@ unum_toPattern(    const    UNumberFormat*          fmt,
 #define UNFSYMBOLSMAXSIZE 10
 
 /** The UNumberFormatSymbols struct 
- * @draft
+ * @deprecated remove after 2000-dec-31
  */
 struct UNumberFormatSymbols{
   /** The decimal separator */
@@ -557,7 +557,7 @@ typedef struct UNumberFormatSymbols UNumberFormatSymbols;
 * @param fmt The formatter to query.
 * @param syms A pointer to a UNumberFormatSymbols to receive the symbols associated with fmt.
 * @see unum_setSymbols
-* @stable
+* @deprecated remove after 2000-dec-31
 */
 U_CAPI void
 unum_getSymbols(    const    UNumberFormat            *fmt,
@@ -571,11 +571,93 @@ unum_getSymbols(    const    UNumberFormat            *fmt,
 * @param symbolsToSet The UNumberFormatSymbols to associate with fmt.
 * @param status A pointer to an UErrorCode to receive any errors.
 * @see unum_getSymbols
-* @stable
+* @deprecated remove after 2000-dec-31
 */
 U_CAPI void
 unum_setSymbols(    UNumberFormat*          fmt,
             const   UNumberFormatSymbols*   symbolsToSet,
             UErrorCode                *status);
+
+/**
+ * Constants for specifying a number format symbol.
+ * @draft
+ */
+enum UNumberFormatSymbol {
+  /** The decimal separator */
+  UNUM_DECIMAL_SEPARATOR_SYMBOL,
+  /** The grouping separator */
+  UNUM_GROUPING_SEPARATOR_SYMBOL,
+  /** The pattern separator */
+  UNUM_PATTERN_SEPARATOR_SYMBOL,
+  /** The percent sign */
+  UNUM_PERCENT_SYMBOL,
+  /** Zero*/
+  UNUM_ZERO_DIGIT_SYMBOL,
+  /** Character representing a digit in the pattern */
+  UNUM_DIGIT_SYMBOL,
+  /** The minus sign */
+  UNUM_MINUS_SIGN_SYMBOL,
+  /** The plus sign */
+  UNUM_PLUS_SIGN_SYMBOL,
+  /** The currency symbol */
+  UNUM_CURRENCY_SYMBOL,
+  /** The international currency symbol */
+  UNUM_INTL_CURRENCY_SYMBOL,
+  /** The monetary separator */
+  UNUM_MONETARY_SEPARATOR_SYMBOL,
+  /** The exponential symbol */
+  UNUM_EXPONENTIAL_SYMBOL,
+  /** Per mill symbol */
+  UNUM_PERMILL_SYMBOL,
+  /** Escape padding character */
+  UNUM_PAD_ESCAPE_SYMBOL,
+  /** Infinity symbol */
+  UNUM_INFINITY_SYMBOL,
+  /** Nan symbol */
+  UNUM_NAN_SYMBOL,
+  /** count symbol constants */
+  UNUM_FORMAT_SYMBOL_COUNT
+};
+typedef enum UNumberFormatSymbol UNumberFormatSymbol;
+
+/**
+* Get a symbol associated with a UNumberFormat.
+* A UNumberFormat uses symbols to represent the special locale-dependent 
+* characters in a number, for example the percent sign.
+* @param fmt The formatter to query.
+* @param symbol The UNumberFormatSymbol constant for the symbol to get
+* @param buffer The string buffer that will receive the symbol string;
+*               if it is NULL, then only the length of the symbol is returned
+* @param size The size of the string buffer
+* @return The length of the symbol; the buffer is not modified if
+*         <code>length&gt;=size</code>
+* @see unum_setSymbol
+* @draft
+*/
+U_CAPI int32_t U_EXPORT2
+unum_getSymbol(UNumberFormat *fmt,
+               UNumberFormatSymbol symbol,
+               UChar *buffer,
+               int32_t size,
+               UErrorCode *status);
+
+/**
+* Set a symbol associated with a UNumberFormat.
+* A UNumberFormat uses symbols to represent the special locale-dependent 
+* characters in a number, for example the percent sign.
+* @param fmt The formatter to set.
+* @param symbol The UNumberFormatSymbol constant for the symbol to set
+* @param value The string to set the symbol to
+* @param length The length of the string, or -1 for a zero-terminated string
+* @param status A pointer to an UErrorCode to receive any errors.
+* @see unum_getSymbol
+* @draft
+*/
+U_CAPI void U_EXPORT2
+unum_setSymbol(UNumberFormat *fmt,
+               UNumberFormatSymbol symbol,
+               const UChar *value,
+               int32_t length,
+               UErrorCode *status);
 
 #endif
