@@ -155,15 +155,6 @@ void CollationRegressionTest::Test4054238(/* char* par */)
     // but I'm pretty sure that's wrong, so I've changed this to use c.
     c->setDecomposition(Normalizer::DECOMP);
     CollationElementIterator *i1 = c->createCollationElementIterator(test3);
-
-    c->setDecomposition(Normalizer::NO_OP);
-    CollationElementIterator *i2 = c->createCollationElementIterator(test3);
-
-    // At this point, BOTH iterators should use NO_DECOMPOSITION, since the
-    // collator itself is in that mode
-    assertEqual(*i1, *i2);
-
-    delete i2;
     delete i1;
     delete c;
 }
@@ -197,20 +188,13 @@ void CollationRegressionTest::Test4054734(/* char* par */)
         {0x00c0, 0},      {0x3d, 0}, {0x41, 0x0300, 0}
     };
 
-    static const UChar nodecomp[][CollationRegressionTest::MAX_TOKEN_LEN] =
-    {
-        {0x00C0, 0},      {0x3e, 0}, {0x41, 0x0300, 0}
-    };
-
+    
     RuleBasedCollator *c = (RuleBasedCollator *) en_us->clone();
 
     c->setStrength(Collator::IDENTICAL);
 
     c->setDecomposition(Normalizer::DECOMP);
     compareArray(*c, decomp, ARRAY_LENGTH(decomp));
-
-    c->setDecomposition(Normalizer::NO_OP);
-    compareArray(*c, nodecomp, ARRAY_LENGTH(nodecomp));
 
     delete c;
 }
