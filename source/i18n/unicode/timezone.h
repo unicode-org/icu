@@ -159,7 +159,7 @@ public:
      *                   specified, NULL is returned.
      * @stable
      */
-    static const UnicodeString** const createAvailableIDs(int32_t rawOffset, int32_t& numIDs);
+    static const UnicodeString** createAvailableIDs(int32_t rawOffset, int32_t& numIDs);
 
     /**
      * Returns a list of time zone IDs associated with the given
@@ -179,7 +179,7 @@ public:
      * country.  If there is no timezone that matches the country
      * specified, NULL is returned.
      */
-    static const UnicodeString** const createAvailableIDs(const char* country,
+    static const UnicodeString** createAvailableIDs(const char* country,
                                                           int32_t& numIDs);
 
     /**
@@ -193,7 +193,7 @@ public:
      *                supported by the TimeZone class.
      * @stable
      */
-    static const UnicodeString** const createAvailableIDs(int32_t& numIDs);
+    static const UnicodeString** createAvailableIDs(int32_t& numIDs);
 
     /**
      * Returns the number of IDs in the equivalency group that
