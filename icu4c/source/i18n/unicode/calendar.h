@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1997-2004, International Business Machines
+*   Copyright (C) 1997-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -1895,17 +1895,6 @@ private:
      *                leniency, this will be set to an error status.
      */
     void updateTime(UErrorCode& status);
-
-    /**
-     * The resource tag for the resource where the week-count data is stored.
-     */
-    static const char kDateTimeElements[];
-
-    /**
-     * The resource tag where the default calendar is stored.
-     */
-    static const char kDefaultCalendar[];
-
 
     /**
      * The Gregorian year, as computed by computeGregorianFields() and
