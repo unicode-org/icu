@@ -28,79 +28,30 @@
 #include "jahatrts.h"
 #include "hajatrts.h"
 #include "ufltlgts.h"
+#include "transrt.h"
+
+#define CASE(id,test) case id:                                \
+                          name = #test;                       \
+                          if (exec) {                         \
+                              logln(#test "---"); logln("");  \
+                              test t;                         \
+                              callTest(t, par);               \
+                          }                                   \
+                          break
 
 void IntlTestTransliterator::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     if (exec) logln("TestSuite Transliterator");
     switch (index) {
-        case 0:
-            name = "TransliteratorTest"; 
-            if (exec) {
-                logln("TransliteratorTest--"); logln("");
-                TransliteratorTest test;
-                callTest( test, par );
-            }
-            break;
-
-        case 1:
-            name = "TransliteratorAPITest"; 
-            if (exec) {
-                logln("TransliteratorAPITest---"); logln("");
-                TransliteratorAPITest test;
-                callTest( test, par );
-			}
-            break;
-	    case 2:
-            name = "CompoundTransliteratorTest"; 
-            if (exec) {
-                logln("CompoundTransliteratorTest---"); logln("");
-                CompoundTransliteratorTest test;
-                callTest( test, par );
-			}
-            break;
-		case 3:
-            name = "UniToHexTransliteratorTest"; 
-            if (exec) {
-                logln("UnicodeToHexadecimalTransliteratorTest---"); logln("");
-                UniToHexTransliteratorTest test;
-                callTest( test, par );
-			}
-            break;
-		case 4:
-            name = "HexToUniTransliteratorTest"; 
-            if (exec) {
-                logln("HexadecimalToUnicodeTransliteratorTest---"); logln("");
-                HexToUniTransliteratorTest test;
-                callTest( test, par );
-			}
-            break;
-		case 5:
-            name = "JamoToHangTransliteratorTest"; 
-            if (exec) {
-                logln("JamoToHangulTransliteratorTest---"); logln("");
-                JamoToHangTransliteratorTest test;
-                callTest( test, par );
-			}
-            break;
-		case 6:
-            name = "HangToJamoTransliteratorTest"; 
-            if (exec) {
-                logln("HangulToJamoTransliteratorTest---"); logln("");
-                HangToJamoTransliteratorTest test;
-                callTest( test, par );
-			}
-            break;
-		case 7:
-            name = "UnicodeFilterLogicTest"; 
-            if (exec) {
-                logln("UnicodeFilterLogicTest---"); logln("");
-                UnicodeFilterLogicTest test;
-                callTest( test, par );
-			}
-            break;
-
-
+        CASE(0, TransliteratorTest);
+        CASE(1, TransliteratorAPITest);
+        CASE(2, CompoundTransliteratorTest);
+        CASE(3, UniToHexTransliteratorTest);
+        CASE(4, HexToUniTransliteratorTest);
+        CASE(5, JamoToHangTransliteratorTest);
+        CASE(6, HangToJamoTransliteratorTest);
+        CASE(7, UnicodeFilterLogicTest);
+        CASE(8, TransliteratorRoundTripTest);
 		default: name=""; break;		
 	}
 }
-
