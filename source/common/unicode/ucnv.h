@@ -18,7 +18,7 @@
 
 /**
  * \file
- * \brief Description of character conversion C API
+ * \brief C API: Character conversion 
  *
  * <h2>Character Conversion C API </h2>
  *

@@ -25,7 +25,7 @@
 
 /**
  * \file
- * \brief Description of basic types and constants for UTF C API
+ * \brief Basic types and constants for UTF 
  * 
  * <h2> Basic types and constants for UTF </h2>
  *   This file defines basic types and constants for utf.h to be

@@ -14,7 +14,7 @@
 
 /**
  * \file
- * \brief Description of Unicode Normalization C API
+ * \brief C API: Unicode Normalization 
  *
  * <h2>  Unicode normalization API </h2>
  *

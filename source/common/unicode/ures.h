@@ -27,9 +27,9 @@
 
 /**
  * \file
- * \brief Description of ResourceBundle C API
+ * \brief C API: Resource Bundle 
  *
- * <h2>ResourceBundle C API</h2>
+ * <h2>C API: Resource Bundle</h2>
  *
  * C API representing a collection of resource information pertaining to a given
  * locale. A resource bundle provides a way of accessing locale- specific information in
