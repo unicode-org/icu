@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Attic/UnicodeProperty.java,v $ 
-* $Date: 2002/02/28 23:47:22 $ 
-* $Revision: 1.1 $
+* $Date: 2002/03/02 02:04:06 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -14,6 +14,7 @@
 package com.ibm.icu.impl;
 
 import java.util.Locale;
+import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.lang.UCharacterCategory;
 
 /**
@@ -468,13 +469,12 @@ public final class UnicodeProperty
      * @param str string to map 
      * @param start start index of the substring to map
      * @param limit one index pass the last character to map
-     * @return lower casing string
+     * @param result string buffer to store lower case string
      */
-    public static String toLowerCase(Locale locale, String str, int start, 
-                                     int limit) {
+    public static void toLowerCase(Locale locale, String str, int start, 
+                                   int limit, StringBuffer result) {
         UCharacterIterator ucharIter = new UCharacterIterator(str);
         int                strIndex  = start;
-        StringBuffer       result    = new StringBuffer(limit - start);
         
         while (strIndex < limit) { 
         	ucharIter.setIndex(strIndex);
@@ -486,7 +486,6 @@ public final class UnicodeProperty
 	        	strIndex ++;
 	        }
         }
-        return result.toString();
     }
     
     /**
@@ -675,6 +674,50 @@ public final class UnicodeProperty
         return result.toString();
     }
     
+    /**
+    * <p>Gets the titlecase version of the argument string.</p>
+    * <p>Position for titlecasing is determined by the argument break 
+    * iterator, hence the user can customized his break iterator for 
+    * a specialized titlecasing. In this case only the forward iteration 
+    * needs to be implemented.
+    * If the break iterator passed in is null, the default Unicode algorithm
+    * will be used to determine the titlecase positions.
+    * </p>
+    * <p>Only positions returned by the break iterator will be title cased,
+    * character in between the positions will all be in lower case.</p>
+    * <p>Casing is dependent on the default locale and context-sensitive</p>
+    * @param str source string to be performed on
+    * @param breakiter break iterator to determine the positions in which
+    *        the character should be title cased.
+    * @return lowercase version of the argument string
+    */
+ 	public static String toTitleCase(Locale locale, String str, 
+ 	                                 BreakIterator breakiter)
+ 	{
+ 		UCharacterIterator ucharIter = new UCharacterIterator(str);
+		int                length    = str.length();
+        StringBuffer       result    = new StringBuffer();
+        
+        breakiter.setText(str);
+        
+        int                index     = breakiter.first();
+       	// titlecasing loop
+	    while (index != BreakIterator.DONE && index < length) {
+	    	// titlecase the character at the found index
+	        int ch = charAt(str, index);
+	        ucharIter.setIndex(index);
+	        index += getCharCount(ch);
+        	int size = toUpperOrTitleCase(locale, ch, ucharIter, false, result);
+        	int next = breakiter.next();
+        	if (index != BreakIterator.DONE && index < next) {
+	        	// lowercase [prev..index]
+        		toLowerCase(locale, str, index, next, result);
+            }
+            index = next;
+        }
+        return result.toString();
+ 	}
+ 	    
     // private data members --------------------------------------------------
  
  	/**

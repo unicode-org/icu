@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2002/02/28 23:55:16 $ 
-* $Revision: 1.26 $
+* $Date: 2002/03/02 02:04:09 $ 
+* $Revision: 1.27 $
 *
 *******************************************************************************
 */
@@ -19,7 +19,6 @@ import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.impl.Utility; 
 import com.ibm.icu.util.RangeValueIterator;
 import com.ibm.icu.text.BreakIterator;
-import com.ibm.icu.text.RuleBasedBreakIterator;
 
 /**
 * <p>
@@ -1071,17 +1070,7 @@ public final class UCharacter
     */
     public static String toTitleCase(String str, BreakIterator breakiter)
     {
-        if (breakiter == null) {
-            String rules = "$cased=[[:Lu:][:Lt:][:Ll:]];" +  
-                           "$case_ignorable=[[:Mn:][:Me:][:Cf:][:Lm:][:Sk:]" 
-                                            + " \\u0027\u00AD\u2019];" +
-                           "$not_cased=[^$cased$case_ignorable];" +
-                           "[$not_cased$case_ignorable]*/" + 
-                           "$cased[$cased$case_ignorable]*$not_cased*;";
-            breakiter = new RuleBasedBreakIterator(rules);
-        }
-        
-        return str;
+        return toTitleCase(Locale.getDefault(), str, breakiter);
     }
       
     /**
@@ -1105,7 +1094,10 @@ public final class UCharacter
     */
     public static String toLowerCase(Locale locale, String str)
     {
-        return UnicodeProperty.toLowerCase(locale, str, 0, str.length());
+    	int length = str.length();
+    	StringBuffer result = new StringBuffer(length);
+        UnicodeProperty.toLowerCase(locale, str, 0, length, result);
+        return result.toString();
     }
     
     /**
@@ -1129,7 +1121,10 @@ public final class UCharacter
     public static String toTitleCase(Locale locale, String str, 
                                      BreakIterator breakiter)
     {
-        return str;
+        if (breakiter == null) {
+            breakiter = BreakIterator.getWordInstance(locale);
+        }
+        return UnicodeProperty.toTitleCase(locale, str, breakiter);
     }
     
     /**
