@@ -9,6 +9,7 @@
 */
 
 #include "util.h"
+#include "unicode/uchar.h"
 
 // Define UChar constants using hex for EBCDIC compatibility
 // Used #define to reduce private static exports and memory access time.

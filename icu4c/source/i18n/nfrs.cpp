@@ -16,7 +16,11 @@
 #include "nfrs.h"
 #include "nfrule.h"
 #include "nfrlist.h"
+#include "unicode/uchar.h"
+
+#ifdef RBNF_DEBUG
 #include "cmemory.h"
+#endif
 
 U_NAMESPACE_BEGIN
 

@@ -1749,6 +1749,10 @@ SOURCE=.\usrchimp.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\util.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\unicode\utrans.h
 
 !IF  "$(CFG)" == "i18n - Win32 Release"

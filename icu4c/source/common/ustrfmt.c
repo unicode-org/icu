@@ -5,6 +5,9 @@
 **********************************************************************
 */
 
+#include <stdio.h>
+#include "cstring.h"
+
 #include "ustrfmt.h"
 
 U_CAPI double    U_EXPORT2

@@ -18,6 +18,7 @@
 #include "unicode/rbnf.h"
 #include "unicode/tblcoll.h"
 #include "unicode/coleitr.h"
+#include "unicode/uchar.h"
 #include "nfrs.h"
 #include "nfrlist.h"
 #include "nfsubs.h"

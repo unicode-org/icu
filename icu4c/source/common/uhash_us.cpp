@@ -14,6 +14,7 @@
 #include "hash.h"
 #include "uvector.h"
 #include "unicode/unistr.h"
+#include "unicode/uchar.h"
 
 /********************************************************************
  * PUBLIC UnicodeString support functions for UHashtable

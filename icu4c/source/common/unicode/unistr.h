@@ -23,7 +23,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/rep.h"
-#include "unicode/uchar.h"
+/*#include "unicode/uchar.h"*/
 
 
 struct UConverter;          // unicode/ucnv.h
@@ -2183,7 +2183,7 @@ public:
    * @return A reference to this.
    * @draft ICU 1.8
    */
-  UnicodeString &foldCase(uint32_t options=U_FOLD_CASE_DEFAULT);
+  UnicodeString &foldCase(uint32_t options=0 /*U_FOLD_CASE_DEFAULT*/);
 
   //========================================
   // Access to the internal buffer
