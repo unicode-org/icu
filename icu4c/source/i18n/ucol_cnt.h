@@ -59,7 +59,7 @@ U_CAPI CntTable* U_EXPORT2
 /*uprv_cnttab_open(CompactEIntArray *mapping, UErrorCode *status);*/
 uprv_cnttab_open(UNewTrie *mapping, UErrorCode *status);
 U_CAPI CntTable* U_EXPORT2 
-uprv_cnttab_clone(CntTable *table);
+uprv_cnttab_clone(CntTable *table, UErrorCode *status);
 U_CAPI void U_EXPORT2 
 uprv_cnttab_close(CntTable *table);
 
