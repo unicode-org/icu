@@ -22,21 +22,130 @@ That directory is determined sequentially by
         is loaded from: if it is loaded from <code>/some/path/lib/libicu-uc.so</code>, then
         the path will be <code>/some/path/lib/../share/icu/1.3.1/</code>
         where <code>"1.3.1"</code> is an example for the version of the ICU library that
-        is trying to locate the data directory</li>
+        is trying to locate the data directory;<br>
+        on Windows, if <code>icuuc.dll</code> is in <code>d:\some\path</code>, then
+        the path will be <code>d:\some\path\..\..\data\</code>.</li>
     <li>relative to the path where <code>icuuc.dll</code> or <code>libicu-uc.so</code> or similar
         is found by searching the <code>PATH</code> or <code>LIBPATH</code>
         as appropriate; the relative path is determined as above</li>
-    <li>hardcoded to <code>(system drive)/share/icu/1.3.1/</code>,
+    <li>hardcoded to <code>(system drive)/share/icu/1.3.1/</code>;
+        on Windows, it will effectively be <code>(system drive)\data\</code>,
         where <code>(system drive)</code> is empty or a path to the system drive, like
         <code>"D:\"</code> on Windows or OS/2</li>
 </ul></p>
 
-<p>When ICU data is loaded using the <code>udata</code> API functions, then
-there is a defined sequence of file locations and entry point names that are
-used to locate the data. See the description in <code>icu/source/common/udata.h</code> for
-details. Note that the exact data finding depends on the implementation
-of this API and may differ by platform and by build configuration.
+
+<h2>Common data, single files, extensibility, and search sequence</h2>
+
+<p>ICU data consists of several hundred pieces of data like converter mapping tables,
+locale resource bundles, break iterator and collation rules and dictionaries, and so on.
+During the build process, they are compiled into binary, memory-mappable files with
+a general structure conforming to the recommendations below.</p>
+
+<p>For performance and ease of installation, all of these elements are then typically
+combined into one single, common data file with a Table of Contents listing all of its elements.
+This data file can be in one of four formats:
+<ol>
+    <li>A binary, memory-mappable file with the same general structure and a Table
+        of Contents with offsets to the data elements that are copied into this
+        common file.</li>
+    <li>A shared library (DLL) that contains one entry point with exactly the same
+        structure as the above file.</li>
+    <li>A shared library (DLL) that contains one entry point to a small structure
+        with a Table of contents with pointers to the other data elements that have
+        been linked into the same library. The pointers are resolved by the linker
+        and/or loader. Each data element may or may not also be exported with its
+        own entry point.</li>
+    <li>A shared library (DLL) that contains an entry point per data element but
+        no explicit Table of Contents data structure. Instead, the list of entry
+        points with the system API to get an address for an entry point serves
+        implicitly as the Table of Contents mechanism.</li>
+</ol></p>
+
+<p>Data is loaded using the <code>udata</code> API functions
+by first looking in the common data file. If no common file is loaded
+yet, then it is loaded as a shared library, then as a memory-mappable file.
+This allows to add separate data files that get loaded if no data element with the same
+name is found in the common file. The entire process of finding and loading a data
+element on most platforms amounts to the following:
+<ol>
+    <li>Load or use the common data file as follows:</li>
+    <ol>
+        <li>Use previously loaded, cached common data. This may have been set by
+            <code>udata_setCommonData()</code>.</li>
+        <li>Attempt to load the common data from a shared library (DLL);
+            locate the shared library first in the folder
+            <code>u_getDataDirectory()</code>, then without a folder specification.</li>
+        <li>Attempt to load the common data by memory-mapping a common data file
+            with a Table of Contents structure;
+            locate the file first in the folder
+            <code>u_getDataDirectory()</code>, then without a folder specification.</li>
+    </ol>
+    <li>If there is a common data file, then try to find the data element in its
+        Table of Contents according to the format of the common file.</li>
+    <li>If the data is not found in the common data, then attempt to load it directly
+        by memory-mapping it as a separate file;
+        locate the file first in the folder
+        <code>u_getDataDirectory()</code>, then without a folder specification.</li>
+</ol>
+This process ends as soon as the data is found.</p>
+
+<p>If the data is not ICU's data itself, but application data like application-specific
+resource bundles, then the process is almost the same, except for
+<ul>
+    <li>The path is specified in the <code>udata_open()</code> or
+        <code>udata_openChoice()</code> call; for ICU data,
+        this path is specified to <code>NULL</code>, which is internally replaced by
+        <code>u_getDataDirectory()</code>.</li>
+    <li>Currently, non-ICU common data files are not cached.
+        There is a <a href="http://oss.software.ibm.com/developerworks/opensource/icu/bugs?findid=398">jitterbug</a>
+        open for this restriction.
+        This is a performance issue, not one of functionality.</li>
+</ul></p>
+
+<p>For more details, see <code>icu/source/common/udata.h</code>.
+Note that the exact data finding depends on the implementation
+of this API and may differ by platform.
 See also <code>icu/source/common/udata.c</code> for implementation details.</p>
+
+
+<h2>Setting the ICU data pointer</h2>
+
+<p>An application that uses ICU may choose to find and load the ICU data itself
+and provide the ICU library with a pointer to it. This may be useful in very
+restricted environments, when <code>getenv()</code>, <code>LIBPATH</code> and many
+system services may be unavailable. It also makes it possible for an application
+to have installation settings only for itself, without special installation
+for ICU, since ICU would then not rely on its own settings and capabilities.<br>
+The common data can be in any of the formats with explicit Table of Contents described above;
+a shared library without a Table of Contents (with only entry-point-based lookup)
+cannot be used.
+For details, see in <code>udata.h</code> the function <code>udata_setCommonData()</code>.</p>
+
+
+<h2>Porting the ICU data loading to more platforms - help wanted</h2>
+
+<p>The data loading as described above is complete for Windows (Win32) and
+a number of POSIX-style platforms. On platforms that do not support dynamic loading
+of shared libraries (DLLs), only memory-mapping is used.<br>
+Note that shared libraries can be easier to find because of the system support for them,
+while memory-mappable files are more portable.</p>
+
+<p>Where memory-mapping is not available, ICU uses simple file access with
+<code>fopen()</code> and <code>fread()</code> etc. instead, which is much less efficient:<br>
+Loading a shared library or memory-mapping a file typically results in
+shared, demand-paged, virtually memory, while simple file access results in
+reading the entire file into each ICU-using process's memory.</p>
+
+<p>Similarly, the fastest way to build a shared library (DLL) is to build the
+common, memory-mappable file and to turn it into a .obj (.o) file directly
+to feed it into the linker. This is currently only done on Windows.</p>
+
+<p>For best performance, ICU needs to have efficient mechanisms for finding
+and loading its and its applications' data. Right now, this means that <em>we are
+looking for more implementations of the platform-specific functions</em> to
+load shared libraries and to memory-map files. At build time, it is also desirable
+to build .o files directly from raw data on more platforms.</p>
 
 
 <h2>Binary Data File Formats</h2>
@@ -55,10 +164,13 @@ Here are some points to consider:</p>
         if you use <code>unewdata.h/.c</code>
         to write the data.
         To be exact, <code>unewdata</code> writes the data 16-aligned,
-        and it is 16-aligned in memory-mapped files. However, the build
-        process forced us to insert a <code>double</code> before the
+        and it is 16-aligned in memory-mapped files. However, the process
+        of building shared libraries (DLLs) on non-Windows platforms
+        forced us to insert a <code>double</code> before the
         binary data to get any alignment, thus only 8-aligning
-        (<code>sizeof(double)==8</code> on most machines) the data.</li>
+        (<code>sizeof(double)==8</code> on most machines) the data.
+        This is not an issue if the data is loaded from memory-mapped files
+        directly instead of from shared libraries (DLLs).</li>
     <li>Write explicitly sized values: explicitly 32 bits with an
         <code>int32_t</code>, not using an ambiguous <code>int</code>.</li>
     <li>Align all values according to their data type size:
@@ -74,12 +186,14 @@ Here are some points to consider:</p>
         may differ among platforms.</li>
     <li>Avoid boolean (<code>bool_t</code>, <code>bool</code>) values
         and use explictly sized integer values instead
-        because the size of the boolean type may vary.</li>
+        because the size of the boolean type may vary.<br>
+        Note: the new (ICU 1.5) type definition of <code>UBool</code> is
+        portable. It is always defined to be an <code>int8_t</code>.</li>
     <li>Write offsets to sub-structures at the beginning of the data
         so that those sub-structures can be accessed directly without
         parsing the data that precedes them.</li>
     <li>If data needs to be read linearly, then precede it with its length
-        rather than terminating it with a sentinel value.</li>
+        rather than (or in addition to) terminating it with a sentinel value.</li>
     <li>When writing <code>char[]</code> strings, write only "invariant"
         characters - avoid anything that is not common among all ASCII-
         or EBCDIC-based encodings. This avoids incompatibilities and
@@ -89,7 +203,9 @@ Here are some points to consider:</p>
         may change.<br>
         (The term "invariant characters" is from
         <a href="http://www.unicode.org/unicode/reports/tr16/">
-        Unicode Technical Report 16 (UTF-EBCDIC)</a>.)</li>
+        Unicode Technical Report 16 (UTF-EBCDIC)</a>.)<br>
+        At runtime, "invariant character" strings are efficiently converted
+        into Unicode using <code>u_charsToUChars()</code>.</li>
 </ul>
 
 
