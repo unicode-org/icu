@@ -126,36 +126,36 @@ public abstract class DateFormat extends UFormat {
     protected NumberFormat numberFormat;
 
     /**
-     * Useful constant for ERA field alignment.
-     * Used in FieldPosition of date/time formatting.
+     * FieldPosition selector for 'G' field alignment,
+     * corresponding to the {@link Calendar.ERA} field.
      * @stable ICU 2.0
      */
     public final static int ERA_FIELD = 0;
 
     /**
-     * Useful constant for YEAR field alignment.
-     * Used in FieldPosition of date/time formatting.
+     * FieldPosition selector for 'y' field alignment,
+     * corresponding to the {@link Calendar.YEAR} field.
      * @stable ICU 2.0
      */
     public final static int YEAR_FIELD = 1;
 
     /**
-     * Useful constant for MONTH field alignment.
-     * Used in FieldPosition of date/time formatting.
+     * FieldPosition selector for 'M' field alignment,
+     * corresponding to the {@link Calendar.MONTH} field.
      * @stable ICU 2.0
      */
     public final static int MONTH_FIELD = 2;
 
     /**
-     * Useful constant for DATE field alignment.
-     * Used in FieldPosition of date/time formatting.
+     * FieldPosition selector for 'd' field alignment,
+     * corresponding to the {@link Calendar.DATE} field.
      * @stable ICU 2.0
      */
     public final static int DATE_FIELD = 3;
 
     /**
-     * Useful constant for one-based HOUR_OF_DAY field alignment.
-     * Used in FieldPosition of date/time formatting.
+     * FieldPosition selector for 'k' field alignment,
+     * corresponding to the {@link Calendar.HOUR_OF_DAY} field.
      * HOUR_OF_DAY1_FIELD is used for the one-based 24-hour clock.
      * For example, 23:59 + 01:00 results in 24:59.
      * @stable ICU 2.0
@@ -163,8 +163,8 @@ public abstract class DateFormat extends UFormat {
     public final static int HOUR_OF_DAY1_FIELD = 4;
 
     /**
-     * Useful constant for zero-based HOUR_OF_DAY field alignment.
-     * Used in FieldPosition of date/time formatting.
+     * FieldPosition selector for 'H' field alignment,
+     * corresponding to the {@link Calendar.HOUR_OF_DAY} field.
      * HOUR_OF_DAY0_FIELD is used for the zero-based 24-hour clock.
      * For example, 23:59 + 01:00 results in 00:59.
      * @stable ICU 2.0
@@ -172,71 +172,71 @@ public abstract class DateFormat extends UFormat {
     public final static int HOUR_OF_DAY0_FIELD = 5;
 
     /**
-     * Useful constant for MINUTE field alignment.
-     * Used in FieldPosition of date/time formatting.
+     * FieldPosition selector for 'm' field alignment,
+     * corresponding to the {@link Calendar.MINUTE} field.
      * @stable ICU 2.0
      */
     public final static int MINUTE_FIELD = 6;
 
     /**
-     * Useful constant for SECOND field alignment.
-     * Used in FieldPosition of date/time formatting.
+     * FieldPosition selector for 's' field alignment,
+     * corresponding to the {@link Calendar.SECOND} field.
      * @stable ICU 2.0
      */
     public final static int SECOND_FIELD = 7;
 
     /**
-     * Useful constant for MILLISECOND field alignment.
-     * Used in FieldPosition of date/time formatting.
+     * FieldPosition selector for 'S' field alignment,
+     * corresponding to the {@link Calendar.MILLISECOND} field.
      * @stable ICU 2.0
      */
     public final static int MILLISECOND_FIELD = 8;
 
     /**
-     * Useful constant for DAY_OF_WEEK field alignment.
-     * Used in FieldPosition of date/time formatting.
+     * FieldPosition selector for 'E' field alignment,
+     * corresponding to the {@link Calendar.DAY_OF_WEEK} field.
      * @stable ICU 2.0
      */
     public final static int DAY_OF_WEEK_FIELD = 9;
 
     /**
-     * Useful constant for DAY_OF_YEAR field alignment.
-     * Used in FieldPosition of date/time formatting.
+     * FieldPosition selector for 'D' field alignment,
+     * corresponding to the {@link Calendar.DAY_OF_YEAR} field.
      * @stable ICU 2.0
      */
     public final static int DAY_OF_YEAR_FIELD = 10;
 
     /**
-     * Useful constant for DAY_OF_WEEK_IN_MONTH field alignment.
-     * Used in FieldPosition of date/time formatting.
+     * FieldPosition selector for 'F' field alignment,
+     * corresponding to the {@link Calendar.DAY_OF_WEEK_IN_MONTH} field.
      * @stable ICU 2.0
      */
     public final static int DAY_OF_WEEK_IN_MONTH_FIELD = 11;
 
     /**
-     * Useful constant for WEEK_OF_YEAR field alignment.
-     * Used in FieldPosition of date/time formatting.
+     * FieldPosition selector for 'w' field alignment,
+     * corresponding to the {@link Calendar.WEEK_OF_YEAR} field.
      * @stable ICU 2.0
      */
     public final static int WEEK_OF_YEAR_FIELD = 12;
 
     /**
-     * Useful constant for WEEK_OF_MONTH field alignment.
-     * Used in FieldPosition of date/time formatting.
+     * FieldPosition selector for 'W' field alignment,
+     * corresponding to the {@link Calendar.WEEK_OF_MONTH} field.
      * @stable ICU 2.0
      */
     public final static int WEEK_OF_MONTH_FIELD = 13;
 
     /**
-     * Useful constant for AM_PM field alignment.
-     * Used in FieldPosition of date/time formatting.
+     * FieldPosition selector for 'a' field alignment,
+     * corresponding to the {@link Calendar.AM_PM} field.
      * @stable ICU 2.0
      */
     public final static int AM_PM_FIELD = 14;
 
     /**
-     * Useful constant for one-based HOUR field alignment.
-     * Used in FieldPosition of date/time formatting.
+     * FieldPosition selector for 'h' field alignment,
+     * corresponding to the {@link Calendar.HOUR} field.
      * HOUR1_FIELD is used for the one-based 12-hour clock.
      * For example, 11:30 PM + 1 hour results in 12:30 AM.
      * @stable ICU 2.0
@@ -244,8 +244,8 @@ public abstract class DateFormat extends UFormat {
     public final static int HOUR1_FIELD = 15;
 
     /**
-     * Useful constant for zero-based HOUR field alignment.
-     * Used in FieldPosition of date/time formatting.
+     * FieldPosition selector for 'K' field alignment,
+     * corresponding to the {@link Calendar.HOUR} field.
      * HOUR0_FIELD is used for the zero-based 12-hour clock.
      * For example, 11:30 PM + 1 hour results in 00:30 AM.
      * @stable ICU 2.0
@@ -253,11 +253,62 @@ public abstract class DateFormat extends UFormat {
     public final static int HOUR0_FIELD = 16;
 
     /**
-     * Useful constant for TIMEZONE field alignment.
-     * Used in FieldPosition of date/time formatting.
+     * FieldPosition selector for 'z' field alignment,
+     * corresponding to the {@link Calendar.ZONE_OFFSET} and
+     * {@link Calendar.DST_OFFSET} fields.
      * @stable ICU 2.0
      */
     public final static int TIMEZONE_FIELD = 17;
+
+    /**
+     * FieldPosition selector for 'Y' field alignment,
+     * corresponding to the {@link Calendar.YEAR_WOY} field.
+     * @draft ICU 3.0
+     */
+    public final static int YEAR_WOY_FIELD = 18;
+
+    /**
+     * FieldPosition selector for 'e' field alignment,
+     * corresponding to the {@link Calendar.DOW_LOCAL} field.
+     * @draft ICU 3.0
+     */
+    public final static int DOW_LOCAL_FIELD = 19;
+
+    /**
+     * FieldPosition selector for 'u' field alignment,
+     * corresponding to the {@link Calendar.EXTENDED_YEAR} field.
+     * @draft ICU 3.0
+     */
+    public final static int EXTENDED_YEAR_FIELD = 20;
+
+    /**
+     * FieldPosition selector for 'g' field alignment,
+     * corresponding to the {@link Calendar.JULIAN_DAY} field.
+     * @draft ICU 3.0
+     */
+    public final static int JULIAN_DAY_FIELD = 21;
+
+    /**
+     * FieldPosition selector for 'A' field alignment,
+     * corresponding to the {@link Calendar.MILLISECONDS_IN_DAY} field.
+     * @draft ICU 3.0
+     */
+    public final static int MILLISECONDS_IN_DAY_FIELD = 22;
+
+    /**
+     * FieldPosition selector for 'Z' field alignment,
+     * corresponding to the {@link Calendar.ZONE_OFFSET} and
+     * {@link Calendar.DST_OFFSET} fields.
+     * @draft ICU 3.0
+     */
+    public final static int TIMEZONE_RFC_FIELD = 23;
+
+    /**
+     * Number of FieldPosition selectors for DateFormat.
+     * Valid selectors range from 0 to FIELD_COUNT-1.
+     * @draft ICU 3.0
+     */
+    public final static int FIELD_COUNT = 24; // must == DateFormatSymbols.patternChars.length()
 
     // Proclaim serial compatibility with 1.1 FCS
     private static final long serialVersionUID = 7218322306649953788L;
