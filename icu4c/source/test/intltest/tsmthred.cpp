@@ -22,7 +22,7 @@
 #define POSIX 1
 #endif
 
-#if defined(POSIX) || defined(U_SOLARIS) || defined(AIX) || defined(HPUX)
+#if defined(POSIX) || defined(U_SOLARIS) || defined(U_AIX) || defined(U_HPUX)
 
 #define HAVE_IMP
 
@@ -207,7 +207,7 @@ SimpleThread::sleep(int32_t millis)
 #endif
 
 
-#if defined(POSIX)||defined(U_SOLARIS)||defined(AIX)||defined(HPUX)
+#if defined(POSIX)||defined(U_SOLARIS)||defined(U_AIX)||defined(U_HPUX)
 #define HAVE_IMP
 
 struct PosixThreadImplementation
@@ -261,7 +261,7 @@ void SimpleThread::sleep(int32_t millis)
 
 #ifdef HPUX_CMA
     cma_sleep(millis/100);
-#elif defined(HPUX) || defined(OS390)
+#elif defined(U_HPUX) || defined(OS390)
     millis *= 1000;
     while(millis >= 1000000) {
         usleep(999999);
