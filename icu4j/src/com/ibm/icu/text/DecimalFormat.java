@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecimalFormat.java,v $ 
- * $Date: 2003/06/03 18:49:34 $ 
- * $Revision: 1.33 $
+ * $Date: 2003/06/05 23:05:17 $ 
+ * $Revision: 1.34 $
  *
  *****************************************************************************************
  */
@@ -2510,7 +2510,7 @@ public class DecimalFormat extends NumberFormat {
         } else {
             affix = isNegative ? negativeSuffix : positiveSuffix;
         }
-        buf.append(affix);
+        buf.append(affix.toString());
         return affix.length();
     }
 
