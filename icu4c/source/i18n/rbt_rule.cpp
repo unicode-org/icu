@@ -355,15 +355,10 @@ UBool TransliterationRule::masks(const TransliterationRule& r2) const {
  * @param cursor position at which to translate next, representing offset
  * into text.  This value must be between <code>start</code> and
  * <code>limit</code>.
- * @param filter the filter.  Any character for which
- * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
- * altered by this transliterator.  If <tt>filter</tt> is
- * <tt>null</tt> then no filtering is applied.
  */
 UBool TransliterationRule::matches(const Replaceable& text,
                                    const UTransPosition& pos,
-                                   const TransliterationRuleData& data,
-                                   const UnicodeFilter* filter) const {
+                                   const TransliterationRuleData& data) const {
     // Match anteContext, key, and postContext
     int32_t cursor = pos.start - anteContextLength;
     // Quick length check; this is a performance win for long rules.
@@ -374,7 +369,7 @@ UBool TransliterationRule::matches(const Replaceable& text,
     }
     for (int32_t i=0; i<pattern.length(); ++i, ++cursor) {
         if (!charMatches(pattern.charAt(i), text, cursor, pos,
-                         data, filter)) {
+                         data)) {
             return FALSE;
         }
     }
@@ -396,10 +391,6 @@ UBool TransliterationRule::matches(const Replaceable& text,
  * @param cursor position at which to translate next, representing offset
  * into text.  This value must be between <code>start</code> and
  * <code>limit</code>.
- * @param filter the filter.  Any character for which
- * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
- * altered by this transliterator.  If <tt>filter</tt> is
- * <tt>null</tt> then no filtering is applied.
  * @return one of <code>MISMATCH</code>, <code>PARTIAL_MATCH</code>, or
  * <code>FULL_MATCH</code>.
  * @see #MISMATCH
@@ -408,9 +399,8 @@ UBool TransliterationRule::matches(const Replaceable& text,
  */
 int32_t TransliterationRule::getMatchDegree(const Replaceable& text,
                                             const UTransPosition& pos,
-                                            const TransliterationRuleData& data,
-                                            const UnicodeFilter* filter) const {
-    int len = getRegionMatchLength(text, pos, data, filter);
+                                            const TransliterationRuleData& data) const {
+    int len = getRegionMatchLength(text, pos, data);
     return len < anteContextLength ? MISMATCH :
         (len < pattern.length() ? PARTIAL_MATCH : FULL_MATCH);
 }
@@ -429,18 +419,13 @@ int32_t TransliterationRule::getMatchDegree(const Replaceable& text,
  * <code>limit</code>.
  * @param data a dictionary of variables mapping <code>Character</code>
  * to <code>UnicodeSet</code>
- * @param filter the filter.  Any character for which
- * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
- * altered by this transliterator.  If <tt>filter</tt> is
- * <tt>null</tt> then no filtering is applied.
  * @return -1 if there is a mismatch, 0 if the text is not long enough to
  * match any characters, otherwise the number of characters of text that
  * match this rule.
  */
 int32_t TransliterationRule::getRegionMatchLength(const Replaceable& text,
                                           const UTransPosition& pos,
-                                          const TransliterationRuleData& data,
-                                          const UnicodeFilter* filter) const {
+                                          const TransliterationRuleData& data) const {
     int32_t cursor = pos.start - anteContextLength;
     // Quick length check; this is a performance win for long rules.
     // Widen by one to allow anchor matching.
@@ -450,7 +435,7 @@ int32_t TransliterationRule::getRegionMatchLength(const Replaceable& text,
     int32_t i;
     for (i=0; i<pattern.length() && cursor<pos.contextLimit; ++i, ++cursor) {
         if (!charMatches(pattern.charAt(i), text, cursor, pos,
-                         data, filter)) {
+                         data)) {
             return -1;
         }
     }
@@ -466,22 +451,16 @@ int32_t TransliterationRule::getRegionMatchLength(const Replaceable& text,
  * @param textChar a character in the text being transliterated
  * @param data a dictionary of variables mapping <code>Character</code>
  * to <code>UnicodeSet</code>
- * @param filter the filter.  Any character for which
- * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
- * altered by this transliterator.  If <tt>filter</tt> is
- * <tt>null</tt> then no filtering is applied.
  */
 UBool TransliterationRule::charMatches(UChar keyChar, const Replaceable& text,
                                        int32_t index,
                                        const UTransPosition& pos,
-                                       const TransliterationRuleData& data,
-                                       const UnicodeFilter* filter) const {
+                                       const TransliterationRuleData& data) const {
     const UnicodeSet* set = 0;
     UChar textChar = (index >= pos.contextStart && index < pos.contextLimit)
             ? text.charAt(index) : ETHER;
-    return (filter == 0 || filter->contains(textChar)) &&
-        (((set = data.lookupSet(keyChar)) == 0) ?
-         keyChar == textChar : set->contains(textChar));
+    return ((set = data.lookupSet(keyChar)) == 0) ?
+            keyChar == textChar : set->contains(textChar);
 }
 
 /**

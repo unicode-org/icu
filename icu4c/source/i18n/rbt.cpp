@@ -125,10 +125,8 @@ RuleBasedTransliterator::handleTransliterate(Replaceable& text, UTransPosition& 
 
     while (index.start < index.limit && loopCount <= loopLimit) {
         TransliterationRule* r = isIncremental ?
-            data->ruleSet.findIncrementalMatch(text, index, *data, isPartial,
-                                               getFilter()) :
-            data->ruleSet.findMatch(text, index, *data,
-                                    getFilter());
+            data->ruleSet.findIncrementalMatch(text, index, *data, isPartial) :
+            data->ruleSet.findMatch(text, index, *data);
 
         /* If we match a rule then apply it by replacing the key
          * with the rule output and repositioning the cursor
