@@ -331,6 +331,7 @@ public class LDML2ICUConverter {
         keyNameMap.put("paperSize", "PaperSize");
         keyNameMap.put("measurementSystem", "MeasurementSystem");
         keyNameMap.put("fractions", "CurrencyData");
+        keyNameMap.put("icu:breakDictionaryData", "BreakDictionaryData");
         
         //TODO: "FX",  "RO",  "TP",  "ZR",   /* obsolete country codes */      
     }
@@ -667,7 +668,7 @@ public class LDML2ICUConverter {
                 if(table.comment == null) {
                     table.comment = "";
                 }
-                ICUResourceWriter.Resource res = parseSpecials(specialsDoc);
+                ICUResourceWriter.Resource res = parseSpecialsDocucment(specialsDoc);
                 table.comment = table.comment + " ICU <specials> source: " + specialsDir + File.separator + locName + ".xml";
                 if(res!=null){
                     if(current == null){
@@ -3054,21 +3055,69 @@ public class LDML2ICUConverter {
          }
          return rules;
     }
+    private static final String ICU_BOUNDARIES  = "icu:boundaries";
+    private static final String ICU_BDD         = "icu:breakDictionaryData";
+    private static final String ICU_GRAPHEME    = "icu:grapheme";
+    private static final String ICU_WORD        = "icu:word";
+    private static final String ICU_SENTENCE    = "icu:sentence";
+    private static final String ICU_LINE        = "icu:line";
+    private static final String ICU_TITLE       = "icu:title";
+    private static final String ICU_CLASS       = "icu:class";
+    private static final String ICU_IMPORT      = "icu:import";
+    private static final String ICU_APPEND      = "icu:append";
     
+    private ICUResourceWriter.Resource parseBoundaries(Node root, StringBuffer xpath){
+        ICUResourceWriter.ResourceTable table = new ICUResourceWriter.ResourceTable();
+        int savedLength = xpath.length();
+        getXPath(root,xpath);
+        ICUResourceWriter.Resource current = null;
+        String name = root.getNodeName();
+        table.name = name.substring(name.indexOf(':')+1, name.length());
+//      we dont care if special elements are marked draft or not!
+        
+        for(Node node=root.getFirstChild(); node!=null; node=node.getNextSibling()){
+            if(node.getNodeType()!=Node.ELEMENT_NODE){
+                continue;
+            }
+            name = node.getNodeName();
+            ICUResourceWriter.Resource res = null;
+            if(name.equals(ICU_GRAPHEME )|| name.equals(ICU_WORD) || 
+                    name.equals(ICU_LINE) || name.equals(ICU_SENTENCE) || 
+                    name.equals(ICU_TITLE)){
+               ICUResourceWriter.ResourceString str = new ICUResourceWriter.ResourceString();
+               str.name = name.substring(name.indexOf(':')+1, name.length());
+               str.val = LDMLUtilities.getAttributeValue(node, ICU_IMPORT);
+               if(str.val!=null){ 
+                   res = str;
+               }
+           }else{
+               System.err.println("Encountered unknown element: "+name);
+               System.exit(-1);
+           }
+            if(res!=null){
+                if(current == null){
+                    table.first = res;
+                    current = findLast(res);
+                }else{
+                    current.next = res;
+                    current = findLast(res);
+                }
+                res = null;
+            }
+            xpath.delete(savedLength,xpath.length());   
+        }
+        if(table.first!=null){
+            return table;
+        }
+        return null;
+    }
     private ICUResourceWriter.Resource parseSpecialElements(Node root, StringBuffer xpath){
         ICUResourceWriter.Resource current = null, first = null;
         int savedLength = xpath.length();
         getXPath(root,xpath);
         
-        // if the whole list is marked draft
-        // then donot output it.
-
-        if(isDraft(root, xpath)&& !writeDraft){
-            return null;
-        }
-        if(isAlternate(root)){
-            return null;
-        }
+        // we dont care if special elements are marked draft or not!
+        
         for(Node node=root.getFirstChild(); node!=null; node=node.getNextSibling()){
             if(node.getNodeType()!=Node.ELEMENT_NODE){
                 continue;
@@ -3078,6 +3127,15 @@ public class LDML2ICUConverter {
             if(name.equals(ICU_SCRIPTS)){
                  res = parseArray(node, xpath);
                  res.name = LOCALE_SCRIPT;
+            }else if(name.equals(ICU_BOUNDARIES)){
+                res = parseBoundaries(node,xpath);
+            }else if(name.equals(ICU_BDD)){
+                ICUResourceWriter.ResourceString str = new ICUResourceWriter.ResourceString();
+                str.name = (String) keyNameMap.get(name);
+                str.val = LDMLUtilities.getAttributeValue(node, ICU_IMPORT);
+                if(str.val!=null){ 
+                    res = str;
+                }
             }else{
                 System.err.println("Encountered unknown element: "+name);
                 System.exit(-1);
@@ -3097,25 +3155,44 @@ public class LDML2ICUConverter {
         return first;
    
     }
-    private ICUResourceWriter.Resource parseSpecials(Node root){
+    private ICUResourceWriter.Resource parseSpecialsDocucment(Node root){
         
         ICUResourceWriter.Resource current = null, first = null;
         StringBuffer xpath = new StringBuffer();
         xpath.append("//ldml");
         int savedLength = xpath.length();
-        for(Node node=root.getFirstChild(); node!=null; node=node.getNextSibling()){
+        Node ldml = null;
+        for(ldml=root.getFirstChild(); ldml!=null; ldml=ldml.getNextSibling()){
+            if(ldml.getNodeType()!=Node.ELEMENT_NODE){
+                continue;
+            }
+            String name = ldml.getNodeName();
+            if(name.equals(LDMLConstants.LDML) ){
+                if(LDMLUtilities.isNodeDraft(ldml) && writeDraft==false){
+                    System.err.println("WARNING: The LDML file "+sourceDir+File.separator+locName+".xml is marked draft! Not producing ICU file. ");
+                    System.exit(-1);
+                }
+                break;
+            }
+        }
+        
+        if(ldml == null) {
+            throw new RuntimeException("ERROR: no <ldml> node found in parseBundle()");
+        }
+        
+        for(Node node=ldml.getFirstChild(); node!=null; node=node.getNextSibling()){
             if(node.getNodeType()!=Node.ELEMENT_NODE){
                 continue;
             }
             String name = node.getNodeName();
             ICUResourceWriter.Resource res = null;
             if(name.equals(LDMLConstants.IDENTITY)){
-                //
+                //TODO: add code to check the identity of specials doc is equal to identity of
+                // main document
+                 
                 continue;
-            }else if(name.equals(LDMLConstants.LDML) || name.equals(LDMLConstants.SPECIAL)){
-                //ignore specials for now!
-                node=node.getFirstChild();
-                continue;
+            }else if(name.equals(LDMLConstants.SPECIAL)){
+                 res = parseSpecialElements(node,xpath);
             }else if(name.equals(LDMLConstants.CHARACTERS)){
                 res = parseCharacters(node, xpath);
             }else if(name.equals(LDMLConstants.COLLATIONS)){
