@@ -92,11 +92,17 @@ RANLIB = @RANLIB@
 
 # Various flags for the tools
 
-DEFS = -I. @DEFS@
+# DEFS is for common macro definitions
+DEFS = @DEFS@
+# CFLAGS is for C only flags
 CFLAGS = @CFLAGS@
-CPPFLAGS = @CPPFLAGS@
+# CXXFLAGS is for C++ only flags
 CXXFLAGS = @CXXFLAGS@
+# CPPFLAGS is for C Pre-Processor flags
+CPPFLAGS = -I. @CPPFLAGS@
+# DEFAULT_LIBS are the default libraries to link against
 DEFAULT_LIBS = @LIBS@
+# LIB_M is for linking against the math library
 LIB_M = @LIB_M@
 
 ENABLE_RPATH = @ENABLE_RPATH@
@@ -115,16 +121,16 @@ ECHO_N = @ECHO_N@
 ECHO_C = @ECHO_C@
 
 # Commands to compile
-COMPILE.c=    $(CC) $(CPPFLAGS) $(CFLAGS) $(DEFS) -c
-COMPILE.cc=   $(CXX) $(CPPFLAGS) $(CXXFLAGS) $(DEFS) -c
+COMPILE.c=    $(CC) $(CPPFLAGS) $(DEFS) $(CFLAGS) -c
+COMPILE.cc=   $(CXX) $(CPPFLAGS) $(DEFS) $(CXXFLAGS) -c
 
 # Commands to link
-LINK.c=       $(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
-LINK.cc=      $(CXX) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+LINK.c=       $(CC) $(CFLAGS) $(LDFLAGS)
+LINK.cc=      $(CXX) $(CXXFLAGS) $(LDFLAGS)
 
 # Commands to make a shared library
-SHLIB.c=      $(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -shared
-SHLIB.cc=     $(CXX) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -shared
+SHLIB.c=      $(CC) $(CFLAGS) $(LDFLAGS) -shared
+SHLIB.cc=     $(CXX) $(CXXFLAGS) $(LDFLAGS) -shared
 
 # Environment variable to set a runtime search path
 LDLIBRARYPATH_ENVVAR = LD_LIBRARY_PATH
@@ -148,7 +154,7 @@ INSTALL-L = $(INSTALL_DATA)
 LIBICUDT=       -L$(top_builddir)/data/out -L$(top_builddir)/stubdata -l$(ICUPREFIX)data$(ICULIBSUFFIX)
 LIBICUUC=       -L$(top_builddir)/common -l$(ICUPREFIX)uc$(ICULIBSUFFIX) $(LIBICUDT)
 LIBICUI18N=     -L$(top_builddir)/i18n -l$(ICUPREFIX)i18n$(ICULIBSUFFIX)
-LIBICULE=       -L$(top_builddir)/layout -l$(ICUPREFIX)le$(ICULIBSSUFFIX)
+LIBICULE=       -L$(top_builddir)/layout -l$(ICUPREFIX)le$(ICULIBSUFFIX)
 LIBCTESTFW=     -L$(top_builddir)/tools/ctestfw -l$(ICUPREFIX)ctestfw$(ICULIBSUFFIX)
 LIBICUTOOLUTIL= -L$(top_builddir)/tools/toolutil -l$(ICUPREFIX)toolutil$(ICULIBSUFFIX)
 LIBUSTDIO=      -L$(top_builddir)/extra/ustdio -lustdio$(ICULIBSUFFIX)

@@ -19,10 +19,9 @@ CLEANFILES = *~ $(DEPS)
 ## Target information
 TARGET = iotest
 
-DEFS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n \
--I$(top_srcdir)/tools/ctestfw -I$(top_srcdir)/tools/toolutil \
--I$(top_srcdir)/extra/ustdio
-LIBS = $(LIBCTESTFW) $(LIBICUI18N) $(LIBICUUC) $(LIBICUTOOLUTIL) $(LIBUSTDIO) $(DEFAULT_LIBS) $(LIB_M)
+CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n \
+-I$(top_srcdir)/tools/ctestfw -I$(top_srcdir)/extra/ustdio
+LIBS = $(LIBCTESTFW) $(LIBICUI18N) $(LIBICUUC) $(LIBUSTDIO) $(DEFAULT_LIBS) $(LIB_M)
 
 OBJECTS = iotest.o
 

@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-alpha-osf,v 1.2 2002/01/04 23:48:42 yves-oss Exp $
+## $Id: mh-alpha-osf,v 1.3 2002/05/13 23:50:12 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 #GEN_DEPS.c=	$(CC) $(DEFS) $(CPPFLAGS) -MD -c -msg_quiet
@@ -18,18 +18,21 @@ SHAREDLIBCPPFLAGS =
 LIBCPPFLAGS = -D_REENTRANT
 THREADSCPPFLAGS = -D_REENTRANT
 
+# Use int for int32_t
+DEFS += -D_LP64
+
+# The tests need complete IEEE floating point support
+CFLAGS += -ieee
+CXXFLAGS += -ieee
+
 ## Commands to compile
-COMPILE.c=	$(CC) -D_LP64 $(DEFS) $(CPPFLAGS) $(CFLAGS)  -c -ieee 
-COMPILE.cc=	$(CXX) -D_LP64 $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c -D__USE_STD_IOSTREAM -ieee 
+COMPILE.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
+COMPILE.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c -D__USE_STD_IOSTREAM
 
 
 ## Commands to link
-LINK.c=		$(CC) -D_LP64 -call_shared $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) 
-LINK.cc=	$(CXX) -D_LP64 -call_shared $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) 
-
-## Commands to make a shared library
-SHLIB.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -shared 
-SHLIB.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -shared  
+LINK.c=		$(CC) -call_shared $(CFLAGS) $(LDFLAGS) 
+LINK.cc=	$(CXX) -call_shared $(CXXFLAGS) $(LDFLAGS) 
 
 ## Compiler switch to embed a runtime search path
 LD_RPATH=	$(LD_RPATH)$(LD_RPATH_PRE)path1	

@@ -39,8 +39,7 @@ DYNAMICCPPFLAGS = $(SHAREDLIBCPPFLAGS)
 DYNAMICCFLAGS = $(SHAREDLIBCFLAGS)
 DYNAMICCXXFLAGS = $(SHAREDLIBCXXFLAGS)
 
-CPPFLAGS += $(LIBCPPFLAGS)
-DEFS += -I$(top_builddir)/common -I$(top_srcdir)/common 
+CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common $(LIBCPPFLAGS)
 
 OBJECTS = stubdata.o
 

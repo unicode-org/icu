@@ -32,8 +32,8 @@ endif
 BUILDDIR := $(shell pwd)/../..
 
 # we define ICU_UNICODE_VERSION so we can test it
-DEFS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/tools/ctestfw -I$(top_srcdir)/tools/toolutil \
- -DICU_UNICODE_VERSION=\"$(UNICODE_VERSION)\" -DICU_VERSION=\"@VERSION@\" -DICUDATA_NAME=\"$(ICUDATA_PLATFORM_NAME)\" -DU_TOPSRCDIR=\"$(top_srcdir)/\" -DU_TOPBUILDDIR=\"$(BUILDDIR)\"
+CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/tools/ctestfw -I$(top_srcdir)/tools/toolutil
+DEFS += -DICU_UNICODE_VERSION=\"$(UNICODE_VERSION)\" -DICU_VERSION=\"@VERSION@\" -DICUDATA_NAME=\"$(ICUDATA_PLATFORM_NAME)\" -DU_TOPSRCDIR=\"$(top_srcdir)/\" -DU_TOPBUILDDIR=\"$(BUILDDIR)\"
 LIBS = $(LIBCTESTFW) $(LIBICUI18N) $(LIBICUUC) $(LIBICUTOOLUTIL) $(DEFAULT_LIBS) $(LIB_M)
 
 OBJECTS = callcoll.o calltest.o capitst.o cbiapts.o cbkittst.o \

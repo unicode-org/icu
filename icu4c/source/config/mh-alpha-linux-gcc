@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-alpha-linux-gcc,v 1.5 2002/01/04 23:48:42 yves-oss Exp $
+## $Id: mh-alpha-linux-gcc,v 1.6 2002/05/13 23:50:12 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -E -MM $(DEFS) $(CPPFLAGS)
@@ -18,13 +18,9 @@ SHAREDLIBCPPFLAGS = -DPIC
 LIBCPPFLAGS = -D_REENTRANT
 THREADSCPPFLAGS = -D_REENTRANT
 
-## Commands to compile
-COMPILE.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) -c -mieee
-COMPILE.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c -mieee
-
-## Commands to make a shared library
-SHLIB.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -shared
-SHLIB.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -shared
+# The tests need complete IEEE floating point support
+CFLAGS += -mieee
+CXXFLAGS += -mieee
 
 ## Compiler switch to embed a runtime search path
 LD_RPATH=	
