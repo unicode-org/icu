@@ -44,7 +44,7 @@ ja_JP_JIS {
           "=\u308a|\u30fc=\u3090|\u30fc"
           "=\u304d\u3099|\u30fc=\u3057\u3099|\u30fc=\u3061\u3099|\u30fc"
           "=\u3072\u3099|\u30fc=\u3090\u3099\u30fc"
-          "=\u3072\u309a\u30fc"
+          "=\u3072\u309a|\u30fc"
 
         "&[before 3]\u30a5"
         "<<<\u30a5|\u30fc=\u30a6|\u30fc=\u30af|\u30fc=\u30b9|\u30fc"
@@ -58,7 +58,7 @@ ja_JP_JIS {
           "=\u3080|\u30fc=\u3085|\u30fc=\u3086|\u30fc=\u308b|\u30fc"
           "=\u304f\u3099|\u30fc=\u3059\u3099|\u30fc=\u3064\u3099|\u30fc"
           "=\u3075\u3099|\u30fc=\u3046\u3099|\u30fc"
-          "=\u3075\u309a\u30fc"
+          "=\u3075\u309a|\u30fc"
 
         "&[before 3]\u30a7"
         "<<<\u30a7|\u30fc=\u30a8|\u30fc=\u30b1|\u30fc=\u30f6|\u30fc"
@@ -1068,64 +1068,68 @@ ja_JP_JIS {
         "&'\u25cb'=\uffee" // HALFWIDTH WHITE CIRCLE
 
         // Make Hiragana, Katakana & compatibility forms equal on the first three levels
-        "&\u30A1=\u3041=\uff67" // SMALL A
-        "&\u30A2=\u3042=\uff71" // A
-        "&\u30A3=\u3043=\uff68" // SMALL I
-        "&\u30A4=\u3044=\uff72" // I
-        "&\u30A5=\u3045=\uff69" // SMALL U
-        "&\u30A6=\u3046=\uff73" // U
-        "&\u30A7=\u3047=\uff6a" // SMALL E
-        "&\u30A8=\u3048=\uff74" // E
-        "&\u30A9=\u3049=\uff6b" // SMALL O
-        "&\u30AA=\u304A=\uff75" // O
-        "&\u30AB=\u304B=\uff76" // KA
-        "&\u30AD=\u304D=\uff77" // KI
-        "&\u30AF=\u304F=\uff78" // KU
-        "&\u30B1=\u3051=\uff79" // KE
-        "&\u30B3=\u3053=\uff7a" // KO
-        "&\u30B5=\u3055=\uff7b" // SA
-        "&\u30B7=\u3057=\uff7c" // SI
-        "&\u30B9=\u3059=\uff7d" // SU
-        "&\u30BB=\u305B=\uff7e" // SE
-        "&\u30BD=\u305D=\uff7f" // SO
-        "&\u30BF=\u305F=\uff80" // TA
-        "&\u30C1=\u3061=\uff81" // TI
-        "&\u30C3=\u3063=\uff6f" // SMALL TU
-        "&\u30C4=\u3064=\uff82" // TU
-        "&\u30C6=\u3066=\uff83" // TE
-        "&\u30C8=\u3068=\uff84" // TO
-        "&\u30CA=\u306A=\uff85" // NA
-        "&\u30CB=\u306B=\uff86" // NI
-        "&\u30CC=\u306C=\uff87" // NU
-        "&\u30CD=\u306D=\uff88" // NE
-        "&\u30CE=\u306E=\uff89" // NO
-        "&\u30CF=\u306F=\uff8a" // HA
-        "&\u30D2=\u3072=\uff8b" // HI
-        "&\u30D5=\u3075=\uff8c" // HU
-        "&\u30D8=\u3078=\uff8d" // HE
-        "&\u30DB=\u307B=\uff8e" // HO
-        "&\u30DE=\u307E=\uff8f" // MA
-        "&\u30DF=\u307F=\uff90" // MI
-        "&\u30E0=\u3080=\uff91" // MU
-        "&\u30E1=\u3081=\uff92" // ME
-        "&\u30E2=\u3082=\uff93" // MO
-        "&\u30E3=\u3083=\uff6c" // SMALL YA
-        "&\u30E4=\u3084=\uff94" // YA
-        "&\u30E5=\u3085=\uff6d" // SMALL YU
-        "&\u30E6=\u3086=\uff95" // YU
-        "&\u30E7=\u3087=\uff6e" // SMALL YO
-        "&\u30E8=\u3088=\uff96" // YO
-        "&\u30E9=\u3089=\uff97" // RA
-        "&\u30EA=\u308A=\uff98" // RI
-        "&\u30EB=\u308B=\uff99" // RU
-        "&\u30EC=\u308C=\uff9a" // RE
-        "&\u30ED=\u308D=\uff9b" // RO
-        "&\u30EE=\u308E"        // SMALL WA
-        "&\u30EF=\u308F=\uff9c" // WA
-        "&\u30F0=\u3090"        // WI
-        "&\u30F1=\u3091"        // WE
-        "&\u30F2=\u3092=\uff66" // WO
-        "&\u30F3=\u3093=\uff9d" // N
+        // The first column is used to pull Katakana out of UCA, so that we get it the first
+        // time we look for it.
+        "&\u30A1=\u30A1=\u3041=\uff67" // SMALL A
+        "&\u30A2=\u30A2=\u3042=\uff71" // A
+        "&\u30A3=\u30A3=\u3043=\uff68" // SMALL I
+        "&\u30A4=\u30A4=\u3044=\uff72" // I
+        "&\u30A5=\u30A5=\u3045=\uff69" // SMALL U
+        "&\u30A6=\u30A6=\u3046=\uff73" // U
+        "&\u30A7=\u30A7=\u3047=\uff6a" // SMALL E
+        "&\u30A8=\u30A8=\u3048=\uff74" // E
+        "&\u30A9=\u30A9=\u3049=\uff6b" // SMALL O
+        "&\u30AA=\u30AA=\u304A=\uff75" // O
+        "&\u30AB=\u30AB=\u304B=\uff76" // KA
+        "&\u30AD=\u30AD=\u304D=\uff77" // KI
+        "&\u30AF=\u30AF=\u304F=\uff78" // KU
+        "&\u30B1=\u30B1=\u3051=\uff79" // KE
+        "&\u30B3=\u30B3=\u3053=\uff7a" // KO
+        "&\u30B5=\u30B5=\u3055=\uff7b" // SA
+        "&\u30B7=\u30B7=\u3057=\uff7c" // SI
+        "&\u30B9=\u30B9=\u3059=\uff7d" // SU
+        "&\u30BB=\u30BB=\u305B=\uff7e" // SE
+        "&\u30BD=\u30BD=\u305D=\uff7f" // SO
+        "&\u30BF=\u30BF=\u305F=\uff80" // TA
+        "&\u30C1=\u30C1=\u3061=\uff81" // TI
+        "&\u30C3=\u30C3=\u3063=\uff6f" // SMALL TU
+        "&\u30C4=\u30C4=\u3064=\uff82" // TU
+        "&\u30C6=\u30C6=\u3066=\uff83" // TE
+        "&\u30C8=\u30C8=\u3068=\uff84" // TO
+        "&\u30CA=\u30CA=\u306A=\uff85" // NA
+        "&\u30CB=\u30CB=\u306B=\uff86" // NI
+        "&\u30CC=\u30CC=\u306C=\uff87" // NU
+        "&\u30CD=\u30CD=\u306D=\uff88" // NE
+        "&\u30CE=\u30CE=\u306E=\uff89" // NO
+        "&\u30CF=\u30CF=\u306F=\uff8a" // HA
+        "&\u30D2=\u30D2=\u3072=\uff8b" // HI
+        "&\u30D5=\u30D5=\u3075=\uff8c" // HU
+        "&\u30D8=\u30D8=\u3078=\uff8d" // HE
+        "&\u30DB=\u30DB=\u307B=\uff8e" // HO
+        "&\u30DE=\u30DE=\u307E=\uff8f" // MA
+        "&\u30DF=\u30DF=\u307F=\uff90" // MI
+        "&\u30E0=\u30E0=\u3080=\uff91" // MU
+        "&\u30E1=\u30E1=\u3081=\uff92" // ME
+        "&\u30E2=\u30E2=\u3082=\uff93" // MO
+        "&\u30E3=\u30E3=\u3083=\uff6c" // SMALL YA
+        "&\u30E4=\u30E4=\u3084=\uff94" // YA
+        "&\u30E5=\u30E5=\u3085=\uff6d" // SMALL YU
+        "&\u30E6=\u30E6=\u3086=\uff95" // YU
+        "&\u30E7=\u30E7=\u3087=\uff6e" // SMALL YO
+        "&\u30E8=\u30E8=\u3088=\uff96" // YO
+        "&\u30E9=\u30E9=\u3089=\uff97" // RA
+        "&\u30EA=\u30EA=\u308A=\uff98" // RI
+        "&\u30EB=\u30EB=\u308B=\uff99" // RU
+        "&\u30EC=\u30EC=\u308C=\uff9a" // RE
+        "&\u30ED=\u30ED=\u308D=\uff9b" // RO
+        "&\u30EE=\u30EE=\u308E"        // SMALL WA
+        "&\u30EF=\u30EF=\u308F=\uff9c" // WA
+        "&\u30F0=\u30F0=\u3090"        // WI
+        "&\u30F1=\u30F1=\u3091"        // WE
+        "&\u30F2=\u30F2=\u3092=\uff66" // WO
+        "&\u30F3=\u30F3=\u3093=\uff9d" // N
+        "&\u30F5=\u30F5"               // SMALL KA
+        "&\u30F6=\u30F6"               // SMALL KE
 
 		}
 	}
