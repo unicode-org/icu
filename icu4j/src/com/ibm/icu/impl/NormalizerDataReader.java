@@ -5,14 +5,15 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/NormalizerDataReader.java,v $
- * $Date: 2002/03/28 01:50:59 $
- * $Revision: 1.3 $
+ * $Date: 2002/06/20 01:18:07 $
+ * $Revision: 1.4 $
  *******************************************************************************
  */
  
 package com.ibm.icu.impl;
 import java.io.*;
-import com.ibm.icu.impl.ICUDebug;	
+import com.ibm.icu.impl.ICUDebug;
+import com.ibm.icu.util.VersionInfo;	
 /**
  * @version 	1.0
  * @author		Ram Viswanadha
@@ -288,8 +289,8 @@ final class NormalizerDataReader {
                                         throws IOException{
         if(debug) System.out.println("Bytes in inputStream " + inputStream.available());
         
-        ICUBinary.readHeader(inputStream, DATA_FORMAT_ID_, 
-                             DATA_FORMAT_VERSION_, UNICODE_VERSION_);
+        ICUBinary.readHeader(inputStream, DATA_FORMAT_ID, 
+                             DATA_FORMAT_VERSION, UNICODE_VERSION);
         
         if(debug) System.out.println("Bytes left in inputStream " +inputStream.available());
         
@@ -299,61 +300,63 @@ final class NormalizerDataReader {
     }
     
     // protected methods -------------------------------------------------
-      
+    
+    protected int[] readIndexes(int length)throws IOException{
+        int[] indexes = new int[length];
+        //Read the indexes
+        for (int i = 0; i <length ; i++) {
+             indexes[i] = dataInputStream.readInt();
+        }
+        return indexes;
+    } 
     /**
     * <p>Reads uprops.dat, parse it into blocks of data to be stored in
     * NormalizerImpl.</P
-    * @param impl NormalizerImpl instance
+    * @param normBytes
+    * @param fcdBytes
+    * @param auxBytes
+    * @param extraData
+    * @param combiningTable
+    * @param canonStartSets
     * @exception thrown when data reading fails
     * @draft 2.1
     */
-    protected void read(NormalizerImpl impl) 
-    		throws IOException{
-	 
-	 	//Read the indexes
-	 	int[] indexes = new int[NormalizerImpl.INDEX_TOP];
-        for (int i = 0; i <indexes.length ; i++) {
-             indexes[i] = dataInputStream.readInt();
-        }
-	
- 	
-	 	//Read the bytes that make up the normTrie
-	 	byte[] normBytes = new byte[indexes[NormalizerImpl.INDEX_TRIE_SIZE]];
+    protected void read(byte[] normBytes, byte[] fcdBytes, byte[] auxBytes,
+                        char[] extraData, char[] combiningTable, 
+                        Object[] canonStartSets) 
+                        throws IOException{
+
+	 	//Read the bytes that make up the normTrie 	
 	 	dataInputStream.read(normBytes);
-	 	ByteArrayInputStream normTrieStream= new ByteArrayInputStream(normBytes);
+        
+	 	//normTrieStream= new ByteArrayInputStream(normBytes);
 
 	 	//Read the extra data
-	 	int extraDataTop = indexes[NormalizerImpl.INDEX_CHAR_COUNT];
-	 	char[] extraData = new char[extraDataTop];
-	 	for(int i=0;i<extraDataTop;i++){
+	 	for(int i=0;i<extraData.length;i++){
 	 		extraData[i]=dataInputStream.readChar();
 	 	}
 	 	
 	 	//Read the combining class table
-	 	int combiningTableTop = indexes[NormalizerImpl.INDEX_COMBINE_DATA_COUNT];
-	 	char[] combiningTable = new char[combiningTableTop];
-	 	for(int i=0; i<combiningTableTop; i++){
+	 	for(int i=0; i<combiningTable.length; i++){
 	 		combiningTable[i]=dataInputStream.readChar();
 	 	}
 	 	
 	 	//Read the fcdTrie
-	 	byte[] fcdBytes = new byte[indexes[NormalizerImpl.INDEX_FCD_TRIE_SIZE]];
 	 	dataInputStream.read(fcdBytes);
-	 	ByteArrayInputStream fcdTrieStream= new ByteArrayInputStream(fcdBytes);
 	 	
 	 	
-	 	//Read the AuxTrie
-	 	byte[] auxBytes = new byte[indexes[NormalizerImpl.INDEX_AUX_TRIE_SIZE]];
+	 	//Read the AuxTrie	 	
         dataInputStream.read(auxBytes);
-	 	ByteArrayInputStream auxTrieStream= new ByteArrayInputStream(auxBytes);
 		
 		//Read the canonical start sets
-		Object[] canonStartSets=new Object[NormalizerImpl.CANON_SET_MAX_CANON_SETS];
 		int[] canonStartSetsIndexes = new int[NormalizerImpl.SET_INDEX_TOP];
-		for(int i=0; i<canonStartSetsIndexes.length; i++){
+		
+        for(int i=0; i<canonStartSetsIndexes.length; i++){
 	 		canonStartSetsIndexes[i]=dataInputStream.readChar();
 	 	}
-		char[] startSets = new char[canonStartSetsIndexes[NormalizerImpl.SET_INDEX_CANON_SETS_LENGTH]-NormalizerImpl.SET_INDEX_TOP];
+		
+        char[] startSets = new char[canonStartSetsIndexes[NormalizerImpl.SET_INDEX_CANON_SETS_LENGTH]-NormalizerImpl.SET_INDEX_TOP];
+        
         for(int i=0; i<startSets.length; i++){
 	 		startSets[i]=dataInputStream.readChar();
 	 	}
@@ -369,20 +372,11 @@ final class NormalizerDataReader {
 	 	canonStartSets[NormalizerImpl.CANON_SET_START_SETS_INDEX] = startSets;
 	 	canonStartSets[NormalizerImpl.CANON_SET_BMP_TABLE_INDEX	] = bmpTable;
 	 	canonStartSets[NormalizerImpl.CANON_SET_SUPP_TABLE_INDEX] = suppTable;	 	
- 	 	 	
-	 	//Now set the tries 
-	 	impl.normTrieImpl.normTrie  	= new IntTrie( normTrieStream,impl.normTrieImpl	);
-	 	impl.fcdTrieImpl.fcdTrie   		= new CharTrie(fcdTrieStream,impl.fcdTrieImpl	);
-	 	impl.auxTrieImpl.auxTrie		= new CharTrie( auxTrieStream, impl.auxTrieImpl	);
-	 	impl.indexes   					= indexes;
-	 	impl.extraData 					= extraData;
-	 	impl.combiningTable 			= combiningTable;
-	 	impl.isDataLoaded				= true;	
-	 	impl.canonStartSets				= canonStartSets;
-	 	impl.isFormatVersion_2_1		= DATA_FORMAT_VERSION_[0]>2 || (DATA_FORMAT_VERSION_[0]==2 && DATA_FORMAT_VERSION_[1]>=1);
-	 	
     }
-
+    
+    public byte[] getDataFormatVersion(){
+        return DATA_FORMAT_VERSION;
+    }
     // private data members -------------------------------------------------
       
 
@@ -396,13 +390,13 @@ final class NormalizerDataReader {
     * No guarantees are made if a older version is used
     * see store.c of gennorm for more information and values
     */
-    private static final byte DATA_FORMAT_ID_[] = {(byte)0x4E, (byte)0x6F, 
+    private static final byte DATA_FORMAT_ID[] = {(byte)0x4E, (byte)0x6F, 
                                                     (byte)0x72, (byte)0x6D};
-    private static final byte DATA_FORMAT_VERSION_[] = {(byte)0x2, (byte)0x1, 
+    private static final byte DATA_FORMAT_VERSION[] = {(byte)0x2, (byte)0x1, 
                                                         (byte)0x5, (byte)0x2};
 	//TODO: Set the version info after the VersionInfo class is ported
-    private static final byte UNICODE_VERSION_[] = {(byte)0x3, (byte)0x1, 
-                                                    (byte)0x1, (byte)0x0};  
-    private static final String UNICODE_VERSION_STRING_ = "3.1.1.0";	
+    private static final byte UNICODE_VERSION[] = {(byte)0x3, (byte)0x2, 
+                                                    (byte)0x0, (byte)0x0};  
+    private static final String UNICODE_VERSION_STRING = "3.2.0.0";	
 	
 }

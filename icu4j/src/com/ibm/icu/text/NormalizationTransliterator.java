@@ -14,7 +14,7 @@ import com.ibm.icu.lang.*;
 
 /**
  * @author Alan Liu
- * @version $RCSfile: NormalizationTransliterator.java,v $ $Revision: 1.17 $ $Date: 2002/02/25 22:43:58 $
+ * @version $RCSfile: NormalizationTransliterator.java,v $ $Revision: 1.18 $ $Date: 2002/06/20 01:21:18 $
  */
 final class NormalizationTransliterator extends Transliterator {
     
@@ -57,25 +57,25 @@ final class NormalizationTransliterator extends Transliterator {
         Transliterator.registerFactory("Any-NFC", new Transliterator.Factory() {
             public Transliterator getInstance(String ID) {
                 return NormalizationTransliterator.
-                    getInstance(Normalizer.COMPOSE);
+                    getInstance(Normalizer.NFC);
             }
         });
         Transliterator.registerFactory("Any-NFD", new Transliterator.Factory() {
             public Transliterator getInstance(String ID) {
                 return NormalizationTransliterator.
-                    getInstance(Normalizer.DECOMP);
+                    getInstance(Normalizer.NFD);
             }
         });
         Transliterator.registerFactory("Any-NFKC", new Transliterator.Factory() {
             public Transliterator getInstance(String ID) {
                 return NormalizationTransliterator.
-                    getInstance(Normalizer.COMPOSE_COMPAT);
+                    getInstance(Normalizer.NFKC);
             }
         });
         Transliterator.registerFactory("Any-NFKD", new Transliterator.Factory() {
             public Transliterator getInstance(String ID) {
                 return NormalizationTransliterator.
-                    getInstance(Normalizer.DECOMP_COMPAT);
+                    getInstance(Normalizer.NFKD);
             }
         });
         Transliterator.registerSpecialInverse("NFC", "NFD", true);
@@ -89,7 +89,21 @@ final class NormalizationTransliterator extends Transliterator {
                                                           int opt) {
         StringBuffer id = new StringBuffer("NF");
         int choice = 0;
-        if (m.compat()) {
+        if(m==Normalizer.NFC){
+            id.append("C");
+            choice |= C;
+        }else if(m==Normalizer.NFKC){
+            id.append("KC");
+            choice |= KC;
+        }else if(m==Normalizer.NFD){
+            id.append("D");
+            choice |= D;
+        }else if(m==Normalizer.NFKD){
+            id.append("KD");
+            choice |= KD;
+        }
+        
+        /*if (m.compat()) {
             id.append('K');
             choice |= KD;
         }
@@ -98,7 +112,7 @@ final class NormalizationTransliterator extends Transliterator {
             choice |= C;
         } else {
             id.append('D');
-        }
+        }*/
         return new NormalizationTransliterator(id.toString(), m, choice, opt);
     }
 
@@ -185,7 +199,7 @@ final class NormalizationTransliterator extends Transliterator {
         }
         text.getChars(lastSafe, limit, buffer, 0);
         String input = new String(buffer, 0, len); // TODO: fix normalizer to take char[]
-        String output = Normalizer.normalize(input, mode, options);
+        String output = Normalizer.normalize(input, mode);
         
         // verify OK, if specified
         if (verify != null) {

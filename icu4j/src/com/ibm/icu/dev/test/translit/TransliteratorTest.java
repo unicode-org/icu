@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2002/06/12 17:37:10 $
- * $Revision: 1.106 $
+ * $Date: 2002/06/20 01:16:48 $
+ * $Revision: 1.107 $
  *
  *****************************************************************************************
  */
@@ -2313,10 +2313,10 @@ public class TransliteratorTest extends TestFmwk {
             // Automatic generation of targets, to make it simpler to add test cases (and more fail-safe)
             
             if (testCases[i].length > 2)    target = testCases[i][2];
-            else if (id.equalsIgnoreCase("NFD"))    target = com.ibm.icu.text.Normalizer.normalize(source, com.ibm.icu.text.Normalizer.DECOMP,0);
-            else if (id.equalsIgnoreCase("NFC"))    target = com.ibm.icu.text.Normalizer.normalize(source, com.ibm.icu.text.Normalizer.COMPOSE,0);
-            else if (id.equalsIgnoreCase("NFKD"))   target = com.ibm.icu.text.Normalizer.normalize(source, com.ibm.icu.text.Normalizer.DECOMP_COMPAT,0);
-            else if (id.equalsIgnoreCase("NFKC"))   target = com.ibm.icu.text.Normalizer.normalize(source, com.ibm.icu.text.Normalizer.COMPOSE_COMPAT,0);
+            else if (id.equalsIgnoreCase("NFD"))    target = com.ibm.icu.text.Normalizer.normalize(source, com.ibm.icu.text.Normalizer.NFD);
+            else if (id.equalsIgnoreCase("NFC"))    target = com.ibm.icu.text.Normalizer.normalize(source, com.ibm.icu.text.Normalizer.NFC);
+            else if (id.equalsIgnoreCase("NFKD"))   target = com.ibm.icu.text.Normalizer.normalize(source, com.ibm.icu.text.Normalizer.NFKD);
+            else if (id.equalsIgnoreCase("NFKC"))   target = com.ibm.icu.text.Normalizer.normalize(source, com.ibm.icu.text.Normalizer.NFKC);
             else if (id.equalsIgnoreCase("Lower"))  target = UCharacter.toLowerCase(Locale.US, source);
             else if (id.equalsIgnoreCase("Upper"))  target = UCharacter.toUpperCase(Locale.US, source);
 

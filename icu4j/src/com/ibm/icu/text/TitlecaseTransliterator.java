@@ -3,13 +3,13 @@
  * others. All Rights Reserved.
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TitlecaseTransliterator.java,v $ 
- * $Date: 2002/04/02 23:59:59 $ 
- * $Revision: 1.15 $
+ * $Date: 2002/06/20 01:21:18 $ 
+ * $Revision: 1.16 $
  */
 package com.ibm.icu.text;
 import java.util.*;
 import com.ibm.icu.impl.UCharacterProperty;
-import com.ibm.icu.impl.UCharacterIterator;
+import com.ibm.icu.impl.UnicodeCharacterIterator;
 
 /**
  * A transliterator that converts all letters (as defined by
@@ -92,7 +92,7 @@ class TitlecaseTransliterator extends Transliterator {
         // get string for context
         // TODO: add convenience method to do this, since we do it all over
         
-        UCharacterIterator original = new UCharacterIterator(text);
+        UnicodeCharacterIterator original = new UnicodeCharacterIterator(text);
         
         // Walk through original string
         // If there is a case change, modify corresponding position in replaceable

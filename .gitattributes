@@ -32,7 +32,6 @@ icu4j/src/com/ibm/icu/dev/data/ThaiWordFreq.xls -text
 icu4j/src/com/ibm/icu/dev/data/holidays_jp.ucs -text svneol=native#application/octet-stream
 icu4j/src/com/ibm/icu/dev/data/rbbi/english.dict -text svneol=native#application/octet-stream
 icu4j/src/com/ibm/icu/dev/data/thai6.ucs -text
-icu4j/src/com/ibm/icu/dev/data/unicode/Draft-TestSuite.txt -text svneol=unset#application/octet-stream
 icu4j/src/com/ibm/icu/dev/demo/calendar/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/demo/holiday/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/demo/impl/package.html svneol=native#text/html

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/WriteCharts.java,v $
- * $Date: 2002/03/13 19:52:34 $
- * $Revision: 1.14 $
+ * $Date: 2002/06/20 01:16:48 $
+ * $Revision: 1.15 $
  *
  *****************************************************************************************
  */
@@ -198,7 +198,7 @@ public class WriteCharts {
                     group |= 16;
                 }
                     
-                map.put(group + UCharacter.toLowerCase(Normalizer.normalize(ss, Normalizer.DECOMP_COMPAT, 0))
+                map.put(group + UCharacter.toLowerCase(Normalizer.normalize(ss, Normalizer.NFKD))
                         + "\u0000" + ss, 
                     "<td class='s'>" + ss + "<br><tt>" + hex(ss)
                         + "</tt></td><td class='t'>" + ts + "<br><tt>" + hex(ts)
@@ -262,7 +262,7 @@ public class WriteCharts {
                     group |= 16;
                 }
                     
-                map.put(group + UCharacter.toLowerCase(Normalizer.normalize(ts, Normalizer.DECOMP_COMPAT, 0)) + ts, 
+                map.put(group + UCharacter.toLowerCase(Normalizer.normalize(ts, Normalizer.NFKD)) + ts, 
                     "<td class='s'>-</td><td class='t'>" + ts + "<br><tt>" + hex(ts)
                     + "</tt></td><td class='r'>"
                     + rt + "<br><tt>" + hex(rt) + "</tt></td>");

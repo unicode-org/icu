@@ -5,12 +5,14 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/ComposedCharIter.java,v $ 
- * $Date: 2002/02/16 03:06:05 $ 
- * $Revision: 1.3 $
+ * $Date: 2002/06/20 01:21:18 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.text;
+import com.ibm.icu.impl.NormalizerImpl;
+import com.ibm.icu.impl.Utility;
 
 /**
  * <tt>ComposedCharIter</tt> is an iterator class that returns all
@@ -51,6 +53,7 @@ package com.ibm.icu.text;
  * <tt>ComposedCharIter</tt> is currently based on version 2.1.8 of the
  * <a href="http://www.unicode.org" target="unicode">Unicode Standard</a>.
  * It will be updated as later versions of Unicode are released.
+ * @deprecated
  */
 public final class ComposedCharIter {
     
@@ -59,7 +62,7 @@ public final class ComposedCharIter {
      * {@link #next} returns this value when there are no more composed characters
      * over which to iterate.
      */
-    public static final char DONE = Normalizer.DONE;
+    public static final  char DONE = (char) Normalizer.DONE;
     
     /**
      * Construct a new <tt>ComposedCharIter</tt>.  The iterator will return
@@ -67,8 +70,8 @@ public final class ComposedCharIter {
      * Hangul characters.
      */
     public ComposedCharIter() {
-        minDecomp = DecompData.MAX_COMPAT;
-        hangul = false;
+        compat = false;
+        options =0;
     }
     
     
@@ -86,10 +89,8 @@ public final class ComposedCharIter {
      *                  Jamo decompositions.
      */
     public ComposedCharIter(boolean compat, int options) {
-        // Compatibility explosions have lower indices; skip them if necessary
-        minDecomp = compat ? 0 : DecompData.MAX_COMPAT;
-        
-        hangul = (options & Normalizer.IGNORE_HANGUL) == 0;
+        this.compat = compat;
+        this.options = options;
     }
     
     /**
@@ -97,10 +98,10 @@ public final class ComposedCharIter {
      * by {@link #next}.
      */
     public boolean hasNext() {
-        if (nextChar == DONE)  {
+        if (nextChar == Normalizer.DONE)  {
             findNextChar();
         }
-        return nextChar != DONE;
+        return nextChar != Normalizer.DONE;
     }
     
     /**
@@ -111,12 +112,12 @@ public final class ComposedCharIter {
      * to <tt>next</tt> will return {@link #DONE}.
      */
     public char next() {
-        if (nextChar == DONE)  {
+        if (nextChar == Normalizer.DONE)  {
             findNextChar();
         }
         curChar = nextChar;
-        nextChar = DONE;
-        return curChar;
+        nextChar = Normalizer.DONE;
+        return (char) curChar;
     }
     
     /**
@@ -126,42 +127,38 @@ public final class ComposedCharIter {
      * affected by the settings of the options passed to the constructor.
      */
     public String decomposition() {
-        StringBuffer result = new StringBuffer();
-        
-        int pos = (char)(DecompData.offsets.elementAt(curChar) & DecompData.DECOMP_MASK);
-        
-        if (pos > minDecomp) {
-            Normalizer.doAppend(DecompData.contents, pos, result);
-            
-            
-        } else if (hangul && curChar >= HANGUL_BASE && curChar < HANGUL_LIMIT) {
-            Normalizer.hangulToJamo(curChar, result, minDecomp);
-        } else {
-            result.append(curChar);
-        }
-        return result.toString();
+        // the decomposition buffer contains the decomposition of 
+        // current char so just return it
+        return new String(decompBuf,0, bufLen);
     }
     
     private void findNextChar() {
-        if (curChar != DONE) {
-            char ch = curChar;
-            while (++ch < 0xFFFF) {
-                int offset = DecompData.offsets.elementAt(ch) & DecompData.DECOMP_MASK;
-                if (offset > minDecomp
-                    || (hangul && ch >= HANGUL_BASE && ch < HANGUL_LIMIT) ) {
-                    nextChar = ch;
+        int c=curChar+1;
+        for(;;){
+           if(c < 0xFFFF){
+	           bufLen = NormalizerImpl.getDecomposition(c,compat,
+                                                        decompBuf,0,
+	                                                    decompBuf.length);
+	           if(bufLen>0){
+                    // the curChar can be decomposed... so it is a composed char
+	                // cache the result     
                     break;
-                }
-            }
+	           }
+	           c++;
+           }else{
+	           c=Normalizer.DONE;
+	           break;
+           }
         }
+        nextChar=c;  
     }
     
-    private final int minDecomp;
-    private final boolean hangul;
+    private int options;
+    private boolean compat;
+    private char[] decompBuf = new char[100];
+    private int bufLen=0;
+    private int curChar = 0;
+    private int nextChar = Normalizer.DONE;
     
-    private char curChar = 0;
-    private char nextChar = Normalizer.DONE;
-    
-    private static final char HANGUL_BASE = Normalizer.HANGUL_BASE;
-    private static final char HANGUL_LIMIT = Normalizer.HANGUL_LIMIT;
+
 };

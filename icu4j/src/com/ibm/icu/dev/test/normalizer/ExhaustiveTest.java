@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/normalizer/Attic/ExhaustiveTest.java,v $ 
- * $Date: 2002/03/01 18:48:01 $ 
- * $Revision: 1.10 $
+ * $Date: 2002/06/20 01:16:24 $ 
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */
@@ -15,46 +15,38 @@ package com.ibm.icu.dev.test.normalizer;
 import com.ibm.icu.dev.test.*;
 import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
-import com.ibm.icu.dev.tool.normalizer.UInfo;
+import com.ibm.icu.impl.NormalizerImpl;
 
 public class ExhaustiveTest extends TestFmwk
 {
-    private UInfo info;
-	
+ 	
     public static void main(String[] args) throws Exception
     {
-    	UInfo tempInfo = null;
-        String[] tempArgs = new String[args.length];
+    	String[] tempArgs = new String[args.length];
         int count = 0;
 
         // Allow the test to be pointed at a specific version of the Unicode database
-        for (int i = 0; i < args.length; i++)
-        {
-            if (args[i].equals("-data")) {
-                tempInfo = new UInfo(args[++i], args[++i]);
-            } else {
-                tempArgs[count++] = args[i];
-            }
-        }
+        //for (int i = 0; i < args.length; i++)
+        //{
+        //    if (args[i].equals("-data")) {
+        //        tempInfo = new UInfo(args[++i], args[++i]);
+        //    } else {
+        //        tempArgs[count++] = args[i];
+        //    }
+        //}
 
         args = new String[count];
         System.arraycopy(tempArgs, 0, args, 0, count);
 
 
-        if (tempInfo == null) {
-            tempInfo = new UInfo();
-	    }
-        new ExhaustiveTest(tempInfo).run(args);
+
+        new ExhaustiveTest().run(args);
     }
     
     public ExhaustiveTest() {
-    	this.info = new UInfo();
     }
 
-    public ExhaustiveTest(UInfo info) {
-    	this.info = info;
-    }
-
+ 
 
     /**
      * Run through all of the characters returned by a composed-char iterator
@@ -89,7 +81,7 @@ public class ExhaustiveTest extends TestFmwk
             // make sense
             String chString   = new StringBuffer().append(ch).toString();
             String iterDecomp = iter.decomposition();
-            String normDecomp = Normalizer.decompose(chString, compat, 0);
+            String normDecomp = Normalizer.decompose(chString, compat);
 
             if (iterDecomp.equals(chString)) {
                 errln("ERROR: " + hex(ch) + " has identical decomp");
@@ -106,7 +98,7 @@ public class ExhaustiveTest extends TestFmwk
     {
         for (char x = ++start; x < limit; x++) {
             String xString   = new StringBuffer().append(x).toString();
-            String decomp = Normalizer.decompose(xString, compat, options);
+            String decomp = Normalizer.decompose(xString, compat);
             if (!decomp.equals(xString)) {
                 errln("ERROR: " + hex(x) + " has decomposition (" + hex(decomp) + ")"
                     + " but was not returned by iterator");
@@ -124,26 +116,31 @@ public class ExhaustiveTest extends TestFmwk
             char ch = iter.next();
 
             String chStr = new StringBuffer().append(ch).toString();
-            String decomp = Normalizer.decompose(chStr, compat, options);
-            String comp = Normalizer.compose(decomp, compat, options);
+            String decomp = Normalizer.decompose(chStr, compat);
+            String comp = Normalizer.compose(decomp, compat);
 
-            short cClass = info.getCanonicalClass(decomp.charAt(0));
+            int cClass = UCharacter.getCombiningClass(decomp.charAt(0));
             cClass = 0;
 
-            if (info.isExcludedComposition(ch)) {
-                logln("Skipped excluded char " + hex(ch) + " (" + info.getName(ch,true) + ")" );
+            if (NormalizerImpl.isFullCompositionExclusion(ch)) {
+                logln("Skipped excluded char " + hex(ch) + " (" + UCharacter.getName(ch) + ")" );
                 continue;
             }
 
             // Avoid disparaged characters
-            if (info.getDecomposition(ch).length() == 4) continue;
+            if (getDecomposition(ch,compat).length() == 4) continue;
 
             if (!comp.equals(chStr)) {
                 errln("ERROR: Round trip invalid: " + hex(chStr) + " --> " + hex(decomp)
                     + " --> " + hex(comp));
 
-                errln("  char decomp is '" + info.getDecomposition(ch) + "'");
+                errln("  char decomp is '" + getDecomposition(ch,compat) + "'");
             }
         }
+    }
+    private String getDecomposition(char ch, boolean compat){
+        char[] dest = new char[10];   
+        int length = NormalizerImpl.getDecomposition(ch,compat,dest,0,dest.length);   
+        return new String(dest,0,length);
     }
 }

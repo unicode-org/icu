@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Utility.java,v $
- * $Date: 2002/02/25 22:43:57 $
- * $Revision: 1.23 $
+ * $Date: 2002/06/20 01:18:09 $
+ * $Revision: 1.24 $
  *
  *****************************************************************************************
  */
@@ -91,6 +91,25 @@ public final class Utility {
         return true;
     }
 
+    /**
+     * Convenience utility to compare two Object[]s
+     * Ought to be in System.
+     * @param len the length to compare.
+     * The start indices and start+len must be valid.
+     */
+    public final static boolean arrayRegionMatches(char[] source, int sourceStart,
+                                            char[] target, int targetStart,
+                                            int len)
+    {
+        int sourceEnd = sourceStart + len;
+        int delta = targetStart - sourceStart;
+        for (int i = sourceStart; i < sourceEnd; i++) {
+            if (source[i]!=target[i + delta])
+            return false;
+        }
+        return true;
+    }
+    
     /**
      * Convenience utility to compare two int[]s.
      * @param len the length to compare.

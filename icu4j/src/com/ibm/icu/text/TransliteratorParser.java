@@ -4,8 +4,8 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliteratorParser.java,v $
-* $Date: 2002/04/17 16:46:11 $
-* $Revision: 1.21 $
+* $Date: 2002/06/20 01:21:18 $
+* $Revision: 1.22 $
 **********************************************************************
 */
 package com.ibm.icu.text;
@@ -1334,13 +1334,13 @@ class TransliteratorParser {
 
         p = Utility.parsePattern(rule, pos, limit, "~nfd rules~;", null);
         if (p >= 0) {
-            pragmaNormalizeRules(Normalizer.DECOMP);
+            pragmaNormalizeRules(Normalizer.NFD);
             return p;
         }
 
         p = Utility.parsePattern(rule, pos, limit, "~nfc rules~;", null);
         if (p >= 0) {
-            pragmaNormalizeRules(Normalizer.COMPOSE);
+            pragmaNormalizeRules(Normalizer.NFC);
             return p;
         }
 

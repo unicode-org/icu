@@ -5,335 +5,399 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Attic/UCharacterIterator.java,v $ 
- * $Date: 2002/05/14 16:48:49 $ 
- * $Revision: 1.5 $
+ * $Date: 2002/06/20 01:18:09 $ 
+ * $Revision: 1.6 $
  *
  *******************************************************************************
  */
 package com.ibm.icu.impl;
 
 import com.ibm.icu.text.Replaceable;
-import com.ibm.icu.text.ReplaceableString;
+import com.ibm.icu.text.StringCharacterIterator;
 import com.ibm.icu.text.UTF16;
+
 import java.text.CharacterIterator;
+import com.ibm.icu.impl.UCharArrayIterator;
 
 /**
- * Internal class that iterates through a com.ibm.text.Replacable text object 
- * to return either Unicode characters.
- * @author synwee
- * @version release 2.1, February 2002
+ * DLF- Docs mostly need 1) much more description of iteration behavior,
+ * especially at endpoints and with empty or single character strings,
+ * and 2) need to describe the other major difference with Java
+ * CharacterIterator, which is that this also returns code points as
+ * well as code units.  
+ *
+ * Don't understand why setIndex and moveIndex have different exception behavior.
+ * I expect they shouldn't.
  */
-public final class UCharacterIterator implements CharacterIterator
-{
-	// public data members -----------------------------------------------------
-	
-	/**
-	 * Indicator that we have reached the ends of the UTF16 text when returning
-	 * 16 bit character.
-	 */
-	public static final int DONE = 0xFFFF;
-	/**
-	 * Indicator that we have reached the ends of the UTF16 text when returning
-	 * codepoints.
-	 */
-	public static final int DONE_CODEPOINT = -1;
-	
-	// public constructor ------------------------------------------------------
-	
-	/**
-	 * Public constructor.
-	 * By default the iteration range will be from 0 to the end of the text.
-	 * @param replacable text which the iterator will be based on
-	 */
-	public UCharacterIterator(Replaceable replaceable)
-	{
-		m_replaceable_  = replaceable;
-		m_index_        = 0;
-		m_start_        = 0;
-		m_limit_        = replaceable.length();
-	}
-	
-	/**
-	 * Public constructor
-	 * By default the iteration range will be from 0 to the end of the text.
-	 * @param str text which the iterator will be based on
-	 */
-	public UCharacterIterator(String str)
-	{
-		m_replaceable_  = new ReplaceableString(str);
-		m_index_        = 0;
-		m_start_        = 0;
-		m_limit_        = m_replaceable_.length();
-	}
-	
-	/**
-     * Constructs an iterator over the given range of the given string.
-     * @param  text  text to be iterated over
-     * @param  start offset of the first character to iterate
-     * @param  limit offset of the character following the last character to
-     * 					iterate
-     */
-    public UCharacterIterator(String str, int start, int limit) 
-    {
-    	m_replaceable_  = new ReplaceableString(str);
-		m_start_        = start;
-		m_limit_        = limit;
-		m_index_        = m_start_;
-    }   
+
+/**
+ * Abstract class that defines an API for iteration on text objects.This is an 
+ * interface for forward and backward iteration and random access into a text 
+ * object. Forward iteration is done with post-increment and backward iteration 
+ * is done with pre-decrement semantics, while the 
+ * <code>java.text.CharacterIterator</code> interface methods provided forward 
+ * iteration with "pre-increment" and backward iteration with pre-decrement 
+ * semantics. This API is more efficient for forward iteration over code points.
+ * @author Ram
+ * @version release 2.2, May 2002
+ */
+public abstract class UCharacterIterator 
+                      implements Cloneable,UForwardCharacterIterator {
+
+    
+    // static final methods ----------------------------------------------------
     
     /**
-     * Constructs an iterator over the given range of the given replaceable 
-     * string.
-     * @param  text  text to be iterated over
-     * @param  start offset of the first character to iterate
-     * @param  limit offset of the character following the last character to
-     * 					iterate
+     * Returns a <code>UCharacterIterator</code> object given a 
+     * <code>Replaceable</code> object.
+     * @param source a valid source as a <code>Replaceable</code> object
+     * @return UCharacterIterator object
+     * @exception IllegalArgumentException if the argument is null
      */
-    public UCharacterIterator(Replaceable replaceable, int start, int limit) 
-    {
-    	m_replaceable_  = replaceable;
-		m_start_        = start;
-		m_limit_        = limit;
-		m_index_        = m_start_;
-    }   
-	
-	// public methods ----------------------------------------------------------
-	
-	/**
-     * Creates a copy of this iterator.
-     * Cloning will not duplicate a new Replaceable object.
-     * @return copy of this iterator
-     */
-    public Object clone()
-    {
-        try {
-            return super.clone();
-        }
-        catch (CloneNotSupportedException e) {
-            throw new InternalError(
-            "Cloning by the super class java.text.CharacterIterator is not " +
-            "supported");
-        }
-    }
-    
-	/**
-     * Returns the current UTF16 character.
-     * @return current UTF16 character
-     */
-    public char current()
-    {
-        if (m_index_ >= m_start_ && m_index_ < m_limit_) {
-            return m_replaceable_.charAt(m_index_);
-        }
-        return DONE;
+    public static final UCharacterIterator getInstance(Replaceable source){
+        return new ReplaceableCharacterIterator(source);
     }
     
     /**
-     * Returns the current codepoint
-     * @return current codepoint
+     * Returns a <code>UCharacterIterator</code> object given a 
+     * source string.
+     * @param source a string
+     * @return UCharacterIterator object
+     * @exception IllegalArgumentException if the argument is null
      */
-    public int currentCodePoint()
-    {
-        if (m_index_ >= m_start_ && m_index_ < m_limit_) {
-            return m_replaceable_.char32At(m_index_);
-        }
-        return DONE_CODEPOINT;
+    public static final UCharacterIterator getInstance(String source){
+        return new ReplaceableCharacterIterator(source);
     }
     
     /**
-     * Gets the first UTF16 character in text.
-     * @return the first UTF16 in text.
+     * Returns a <code>UCharacterIterator</code> object given a 
+     * source character array.
+     * @param source an array of UTF-16 code units
+     * @return UCharacterIterator object
+     * @exception IllegalArgumentException if the argument is null
      */
-    public char first()
-    {
-        m_index_ = m_start_;
-        return current();
+    public static final UCharacterIterator getInstance(char[] source){
+        return getInstance(source,0,source.length);
     }
     
     /**
-     * Returns the start of the text to iterate.
-     * @return by default this method will return 0, unless a range for 
-     * iteration had been specified during construction.
+     * Returns a <code>UCharacterIterator</code> object given a 
+     * source character array.
+     * @param source an array of UTF-16 code units
+     * @return UCharacterIterator object
+     * @exception IllegalArgumentException if the argument is null
      */
-    public int getBeginIndex()
-    {
-        return m_start_;
+    public static final UCharacterIterator getInstance(char[] source, int start, int limit){
+        return new UCharArrayIterator(source,start,limit);
+    }
+    /**
+     * Returns a <code>UCharacterIterator</code> object given a 
+     * source StringBuffer.
+     * @param source an string buffer of UTF-16 code units
+     * @return UCharacterIterator object
+     * @exception IllegalArgumentException if the argument is null
+     */
+    public static final UCharacterIterator getInstance(StringBuffer source){
+        return new ReplaceableCharacterIterator(source);
     }
 
     /**
-     * Returns the limit offset of the text to iterate
-     * @return by default this method returns the length of the text, unless a 
-     * range for iteration had been specified during construction.
-     */
-    public int getEndIndex()
-    {
-        return m_limit_;
+     * Returns a <code>UCharacterIterator</code> object given a 
+     * CharacterIterator.
+     * @param source a valid CharacterIterator object.
+     * @return UCharacterIterator object
+     * @exception IllegalArgumentException if the argument is null
+     */    
+    public static final UCharacterIterator getInstance(CharacterIterator source){
+        return new ICUCharacterIterator(source);
     }
+       
+    // public methods ----------------------------------------------------------
+    /**
+     * Returns a <code>java.text.CharacterIterator</code> object for
+     * the underlying text of this iterator.  The returned iterator is
+     * independent of this iterator.
+     * @return java.text.CharacterIterator object 
+     */
+    public CharacterIterator getCharacterIterator(){
+        return new StringCharacterIterator(this.getText());
+    }    
+   
+    /**
+     * Returns the code unit at the current index.  If index is out
+     * of range, returns DONE.  Index is not changed.
+     * @return current code unit
+     */
+    public abstract int current();
+    
+    /**
+     * Returns the codepoint at the current index.
+     * If the current index is invalid, DONE is returned.
+     * If the current index points to a lead surrogate, and there is a following
+     * trail surrogate, then the code point is returned.  Otherwise, the code
+     * unit at index is returned.  Index is not changed. 
+     * @return current codepoint
+     */
+    public int currentCodePoint(){
+        int ch = current();
+        if(UTF16.isLeadSurrogate((char)ch)){
+            // advance the index to get the
+            // next code point
+            next();
+            // due to post increment semantics
+            // current() after next() actually
+            // returns the char we want
+            int ch2 = current();
+            // current should never change
+            // the current index so back off
+            previous();
+            
+            if(UTF16.isTrailSurrogate((char)ch2)){
+                // we found a surrogate pair 
+                // return the codepoint
+                return UCharacterProperty.getRawSupplementary(
+                                                          (char)ch,(char)ch2
+                                                             );
+            }
+        }
+        return ch;
+    }
+    
+    /**
+     * Returns the length of the text
+     * @return length of the text
+     */
+    public abstract int getLength();
+
     
     /**
      * Gets the current index in text.
      * @return current index in text.
      */
-    public int getIndex()
-    {
-        return m_index_;
+    public abstract int getIndex();
+
+
+    /**
+     * Returns the UTF16 code unit at index, and increments to the next
+     * code unit (post-increment semantics).  If index is out of
+     * range, DONE is returned, and the iterator is reset to the limit
+     * of the text.
+     * @return the next UTF16 code unit, or DONE if the index is at the limit
+     *         of the text.  
+     */
+    public abstract int next();
+
+    /**
+     * Returns the code point at index, and increments to the next code
+     * point (post-increment semantics).  If index does not point to a
+     * valid surrogate pair, the behavior is the same as
+     * <code>next()<code>.  Otherwise the iterator is incremented past
+     * the surrogate pair, and the code point represented by the pair
+     * is returned.
+     * @return the next codepoint in text, or DONE if the index is at
+     *         the limit of the text.  
+     */
+    public int nextCodePoint(){
+        int ch1 = next();
+        if(UTF16.isLeadSurrogate((char)ch1)){
+            int ch2 = next();
+            if(UTF16.isTrailSurrogate((char)ch2)){
+                return UCharacterProperty.getRawSupplementary((char)ch1,
+                                                              (char)ch2);
+            }else{
+                // unmatched surrogate so back out
+                previous();
+            }
+        }
+        return ch1;
+    }
+
+    /**
+     * Decrement to the position of the previous code unit in the
+     * text, and return it (pre-decrement semantics).  If the
+     * resulting index is less than 0, the index is reset to 0 and
+     * DONE is returned.
+     * @return the previous code unit in the text, or DONE if the new
+     *         index is before the start of the text.  
+     */
+    public abstract int previous();
+
+    
+    /**
+     * Retreat to the start of the previous code point in the text,
+     * and return it (pre-decrement semantics).  If the index is not
+     * preceeded by a valid surrogate pair, the behavior is the same
+     * as <code>previous()</code>.  Otherwise the iterator is
+     * decremented to the start of the surrogate pair, and the code
+     * point represented by the pair is returned.
+     * @return the previous code point in the text, or DONE if the new
+     *         index is before the start of the text.  
+     */
+    public int previousCodePoint(){
+        int ch1 = previous();
+        if(UTF16.isTrailSurrogate((char)ch1)){
+            int ch2 = previous();
+            if(UTF16.isLeadSurrogate((char)ch2)){
+                return UCharacterProperty.getRawSupplementary((char)ch2,
+                                                              (char)ch1);
+            }else{
+                //unmatched trail surrogate so back out
+                next();
+            }   
+        }
+        return ch1;
+    }
+
+    /**
+     * Sets the index to the specified index in the text.
+     * @param index the index within the text. 
+     * @exception IndexOutOfBoundsException is thrown if an invalid index is 
+     *            supplied
+     */
+    public abstract void setIndex(int index);
+
+    /**
+     * Sets the current index to the limit.
+     */
+    public void setToLimit() {
+	    setIndex(getLength());
     }
     
     /**
-     * Gets the last UTF16 iterateable character from the text and shifts the 
-     * index to the end of the text accordingly.
-     * @return the last UTF16 iterateable character
+     * Sets the current index to the start.
      */
-    public char last()
-    {
-        if (m_limit_ != m_start_) {
-            m_index_ = m_limit_ - 1;
-            return m_replaceable_.charAt(m_index_);
-        } 
-		m_index_ = m_limit_;
-        return DONE;
+    public void setToStart() {
+	    setIndex(0);
     }
-    
-	/**
-     * Returns next UTF16 character and increments the iterator's index by 1. 
-	 * If the resulting index is greater or equal to the iteration limit, the 
-	 * index is reset to the text iteration limit and a value of DONE_CODEPOINT is 
-	 * returned. 
-	 * @return next UTF16 character in text or DONE if the new index is off the 
-	 *         end of the text iteration limit.
-     */
-    public char next()
-    {
-        if (m_index_ < m_limit_) {
-        	char result = m_replaceable_.charAt(m_index_);
-            m_index_ ++;
-            return result;
-        }
-        return DONE;
-    }
-
-	/**
-	 * Returns next codepoint after current index and increments the iterator's 
-	 * index by a number depending on the returned codepoint. 
-	 * This assumes the text is stored as 16-bit code units
-     * with surrogate pairs intermixed. If the index of a leading or trailing 
-     * code unit of a surrogate pair is given, return the code point after the 
-     * surrogate pair.
-	 * If the resulting index is greater or equal to the text iterateable limit,
-	 * the current index is reset to the text iterateable limit and a value of 
-	 * DONE_CODEPOINT is returned. 
-	 * @return next codepoint in text or DONE_CODEPOINT if the new index is off the 
-	 *         end of the text iterateable limit.
-	 */	
-	public int nextCodePoint()
-	{
-		if (m_index_ < m_limit_) {
-			char ch = m_replaceable_.charAt(m_index_);
-			m_index_ ++;
-			if (ch >= UTF16.LEAD_SURROGATE_MIN_VALUE &&
-			    ch <= UTF16.LEAD_SURROGATE_MAX_VALUE &&
-			    m_index_ < m_limit_) {
-			    char trail = m_replaceable_.charAt(m_index_);
-			    if (trail >= UTF16.TRAIL_SURROGATE_MIN_VALUE &&
-			    	trail <= UTF16.TRAIL_SURROGATE_MAX_VALUE) {
-			    	m_index_ ++;
-			    	return UCharacterProperty.getRawSupplementary(ch, 
-			    	                                              trail);
-				}
-			}
-			return ch;
-        }
-        return DONE_CODEPOINT;
-	}
 
     /**
-     * Returns previous UTF16 character and decrements the iterator's index by 
-     * 1. 
-	 * If the resulting index is less than the text iterateable limit, the 
-	 * index is reset to the start of the text iteration and a value of 
-	 * DONE_CODEPOINT is returned. 
-	 * @return next UTF16 character in text or DONE if the new index is off the 
-	 *         start of the text iteration range.
+     * Fills the buffer with the underlying text storage of the iterator
+     * If the buffer capacity is not enough a exception is thrown. The capacity
+     * of the fill in buffer should at least be equal to length of text in the 
+     * iterator obtained by calling <code>getLength()</code).
+     * <b>Usage:</b>
+     * 
+     * <code>
+     * <pre>
+     *         UChacterIterator iter = new UCharacterIterator.getInstance(text);
+     *         char[] buf = new char[iter.getLength()];
+     *         iter.getText(buf);
+     *         
+     *         OR
+     *         char[] buf= new char[1];
+     *         int len = 0;
+     *         for(;;){
+     *             try{
+     *                 len = iter.getText(buf);
+     *                 break;
+     *             }catch(IndexOutOfBoundsException e){
+     *                 buf = new char[iter.getLength()];
+     *             }
+     *         }
+     * </pre>
+     * </code>
+     *             
+     * @param fillIn an array of chars to fill with the underlying UTF-16 code 
+     *         units.
+     * @param offset the position within the array to start putting the data.
+     * @return the number of code units added to fillIn, as a convenience
+     * @exception IndexOutOfBounds exception if there is not enough
+     *            room after offset in the array, or if offset < 0.  
      */
-    public char previous()
-    {
-        if (m_index_ > m_start_) {
-            m_index_ --;
-            return m_replaceable_.charAt(m_index_);
-        }
-        return DONE;
-    }
-    
-    /**
-     * Returns previous codepoint before current index and decrements the 
-     * iterator's index by a number depending on the returned codepoint. 
-	 * This assumes the text is stored as 16-bit code units
-     * with surrogate pairs intermixed. If the index of a leading or trailing 
-     * code unit of a surrogate pair is given, return the code point before the 
-     * surrogate pair.
-	 * If the resulting index is less than the text iterateable range, the 
-	 * current index is reset to the start of the range and a value of 
-	 * DONE_CODEPOINT is returned. 
-	 * @return previous codepoint in text or DONE_CODEPOINT if the new index is 
-	 *         off the start of the text iteration range.
-     */
-    public int previousCodePoint()
-    {
-        if (m_index_ > m_start_) {
-            m_index_ --;
-            char ch = m_replaceable_.charAt(m_index_);
-			if (ch >= UTF16.TRAIL_SURROGATE_MIN_VALUE &&
-			    ch <= UTF16.TRAIL_SURROGATE_MAX_VALUE &&
-			    m_index_ > m_start_) {
-			    char lead = m_replaceable_.charAt(m_index_);
-			    if (lead >= UTF16.LEAD_SURROGATE_MIN_VALUE &&
-			    	lead <= UTF16.LEAD_SURROGATE_MAX_VALUE) {
-			    	m_index_ --;
-			    	return UCharacterProperty.getRawSupplementary(ch, 
-			    	                                              lead);
-				}
-			}
-   			return ch;
-        }
-        return DONE_CODEPOINT;
-    }
-
-	/**
-	 * <p>Sets the index to the specified index in the text and returns that 
-	 * single UTF16 character at index. 
-	 * This assumes the text is stored as 16-bit code units.</p>
-	 * @param index the index within the text. 
-	 * @exception IllegalArgumentException is thrown if an invalid index is 
-	 *            supplied. i.e. index is out of bounds.
-	 * @return the character at the specified index or DONE if the specified 
-	 *         index is equal to the limit of the text iteration range.
-	 */
-	public char setIndex(int index)
-	{
-		if (index < m_start_ || index > m_limit_) {
-			throw new IllegalArgumentException("Index index out of bounds");
+    public int getText(char[] fillIn, int offset) {
+		int len = getLength();
+		if (offset < 0 || offset + len > fillIn.length) {
+		    throw new IndexOutOfBoundsException(Integer.toString(offset));
 		}
-		m_index_ = index;
-		return current();
-	}
-	
-	// private data members ----------------------------------------------------
-	
-	/**
-	 * Replacable object
-	 */
-	private Replaceable m_replaceable_;
-	/**
-	 * Current index
-	 */
-	private int m_index_;
-	/**
-	 * Start offset of iterateable range, by default this is 0
-	 */
-	private int m_start_;
-	/**
-	 * Limit offset of iterateable range, by default this is the length of the
-	 * string
-	 */
-	private int m_limit_;
+		int index = getIndex();
+		setToStart();
+		int ch;
+		while ((ch = next())!= DONE) {
+		    fillIn[offset++] = (char)ch;
+		}
+		setIndex(index);
+		return len;
+    }
+
+    /**
+     * Convenience override for <code>getText(char[], int)>/code> that provides
+     * an offset of 0.
+     * @param fillIn an array of chars to fill with the underlying UTF-16 code 
+     *         units.
+     * @return the number of code units added to fillIn, as a convenience
+     * @exception IndexOutOfBounds exception if there is not enough
+     *            room in the array.  
+     */
+    public final int getText(char[] fillIn) {
+		return getText(fillIn, 0);
+    }
+         
+    /**
+     * Convenience method for returning the underlying text storage as as string
+     * @return the underlying text storage in the iterator as a string
+     */
+    public String getText() {
+		char[] text = new char[getLength()];
+		getText(text);
+		return new String(text);
+    }
+       
+    /**
+     * Moves the current position by the number of code units
+     * specified, either forward or backward depending on the sign
+     * of delta (positive or negative respectively).  If the resulting
+     * index would be less than zero, the index is set to zero, and if
+     * the resulting index would be greater than limit, the index is
+     * set to limit.
+     *
+     * @param delta the number of code units to move the current
+     *              index.
+     * @return the new index.
+     * @exception IndexOutOfBoundsException is thrown if an invalid index is 
+     *            supplied  
+     * 
+     */
+    public int moveIndex(int delta) {
+		int x = Math.max(0, Math.min(getIndex() + delta, getLength()));
+		setIndex(x);
+		return x;
+    }
+
+    /**
+     * Moves the current position by the number of code points
+     * specified, either forward or backward depending on the sign of
+     * delta (positive or negative respectively). If the current index
+     * is at a trail surrogate then the first adjustment is by code
+     * unit, and the remaining adjustments are by code points.  If the
+     * resulting index would be less than zero, the index is set to
+     * zero, and if the resulting index would be greater than limit,
+     * the index is set to limit.
+     * @param delta the number of code units to move the current index.
+     * @return the new index  
+     * @exception IndexOutOfBoundsException is thrown if an invalid delta is 
+     *            supplied
+     */
+    public int moveCodePointIndex(int delta){
+        if(delta>0){
+            while(delta-->0 && nextCodePoint() != DONE);
+        }else{
+	        while(delta++<0 && previousCodePoint() != DONE);
+        }
+        if(delta!=0){
+            throw new IndexOutOfBoundsException();
+        }
+          
+        return getIndex();
+    }
+
+    /**
+     * Creates a copy of this iterator, independent from other iterators.
+     * If it is not possible to clone the iterator, returns null.
+     * @return copy of this iterator
+     */
+    public Object clone() throws CloneNotSupportedException{
+	    return super.clone();
+    }   
+    
 }
+

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/normalizer/TestCanonicalIterator.java,v $ 
- * $Date: 2002/03/19 00:18:44 $ 
- * $Revision: 1.7 $
+ * $Date: 2002/06/20 01:16:24 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -39,6 +39,7 @@ public class TestCanonicalIterator extends TestFmwk {
         {"x\u0307\u0327", "x\u0307\u0327, x\u0327\u0307, \u1E8B\u0327"},
     };
     
+     
     public void TestExhaustive() {
     	int counter = 0;
     	int mixedCounter = 0;
@@ -63,8 +64,8 @@ public class TestCanonicalIterator extends TestFmwk {
     		if ((++counter % 5000) == 0) logln("Testing " + Utility.hex(i,0));
     		
     		String s = UTF16.valueOf(i) + "\u0345";
-    		String decomp = Normalizer.decompose(s, false, 0);
-    		String comp = Normalizer.compose(s, false, 0);
+    		String decomp = Normalizer.decompose(s, false);
+    		String comp = Normalizer.compose(s, false);
     		// skip characters that don't have either decomp.
     		// need quick test for this!
     		if (s.equals(decomp) && s.equals(comp)) continue;
@@ -170,14 +171,17 @@ public class TestCanonicalIterator extends TestFmwk {
     }
     
     public void TestBasic() {
-        // check build
-        UnicodeSet ss = CanonicalIterator.getSafeStart();
-        logln("Safe Start: " + ss.toPattern(true));
-        ss = CanonicalIterator.getStarts('a');
-        expectEqual("Characters with 'a' at the start of their decomposition: ", "", CanonicalIterator.getStarts('a'),
-        	new UnicodeSet("[\u00E0-\u00E5\u0101\u0103\u0105\u01CE\u01DF\u01E1\u01FB"
-        	+ "\u0201\u0203\u0227\u1E01\u1EA1\u1EA3\u1EA5\u1EA7\u1EA9\u1EAB\u1EAD\u1EAF\u1EB1\u1EB3\u1EB5\u1EB7]")
-        		);
+//      This is not interesting anymore as the data is already built 
+//      beforehand
+
+//        check build
+//        UnicodeSet ss = CanonicalIterator.getSafeStart();
+//        logln("Safe Start: " + ss.toPattern(true));
+//        ss = CanonicalIterator.getStarts('a');
+//        expectEqual("Characters with 'a' at the start of their decomposition: ", "", CanonicalIterator.getStarts('a'),
+//        	new UnicodeSet("[\u00E0-\u00E5\u0101\u0103\u0105\u01CE\u01DF\u01E1\u01FB"
+//        	+ "\u0201\u0203\u0227\u1E01\u1EA1\u1EA3\u1EA5\u1EA7\u1EA9\u1EAB\u1EAD\u1EAF\u1EB1\u1EB3\u1EB5\u1EB7]")
+//        		);
         
         // check permute
         // NOTE: we use a TreeSet below to sort the output, which is not guaranteed to be sorted!

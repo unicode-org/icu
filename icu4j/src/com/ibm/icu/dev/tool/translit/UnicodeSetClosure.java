@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/translit/UnicodeSetClosure.java,v $
- * $Date: 2002/02/25 22:43:59 $
- * $Revision: 1.6 $
+ * $Date: 2002/06/20 01:17:39 $
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -95,7 +95,7 @@ public class UnicodeSetClosure {
     }
     
     static final Normalizer.Mode[] testModes = {
-        Normalizer.NO_OP, Normalizer.DECOMP, Normalizer.COMPOSE, Normalizer.DECOMP_COMPAT, Normalizer.COMPOSE_COMPAT};
+        Normalizer.NONE, Normalizer.NFD, Normalizer.NFC, Normalizer.NFKD, Normalizer.NFKC};
     static final String[] modeNames = {
         "NoNF", "NFD", "NFC", "NFKD", "NFKC"};
         
@@ -197,7 +197,7 @@ public class UnicodeSetClosure {
             String source = UTF16.valueOf(cp);
             String result = source;
             if (lowerFirst) result = UCharacter.toLowerCase(Locale.US, result);
-            result = Normalizer.normalize(result, mode, 0);
+            result = Normalizer.normalize(result, mode);
             if (lowerFirst) result = UCharacter.toLowerCase(Locale.US, result);
             if (result.equals(source)) return null;
             return result;

@@ -32,17 +32,17 @@ public class TransliteratorUtility {
             // transliterators.
             for (Enumeration e = Transliterator.getAvailableIDs(); e.hasMoreElements(); ) {
                 String ID = (String) e.nextElement();
-                showSourceSet(ID, Normalizer.NO_OP, false);
+                showSourceSet(ID, Normalizer.NONE, false);
             }
         } else {
             // Usage: ID [NFKD | NFD] [lower]
-            Normalizer.Mode m = Normalizer.NO_OP;
+            Normalizer.Mode m = Normalizer.NONE;
             boolean lowerFirst = false;
             if (args.length >= 2) {
                 if (args[1].equalsIgnoreCase("NFD")) {
-                    m = Normalizer.DECOMP;
+                    m = Normalizer.NFD;
                 } else if (args[1].equalsIgnoreCase("NFKD")) {
-                    m = Normalizer.DECOMP_COMPAT;
+                    m = Normalizer.NFKD;
                 } else {
                     usage();
                 }
@@ -87,7 +87,7 @@ public class TransliteratorUtility {
     
     static void showSourceSetAux(Transliterator t, Normalizer.Mode m, boolean lowerFirst, boolean forward) throws IOException {
         UnicodeSet sourceSet = t.getSourceSet();
-        if (m != Normalizer.NO_OP || lowerFirst) {
+        if (m != Normalizer.NONE || lowerFirst) {
             UnicodeSetClosure.close(sourceSet, m, lowerFirst);
         }
         System.out.println(t.getID() + ": " +
