@@ -2363,7 +2363,7 @@ private:
                             UBool forceClone = FALSE);
 
   // GrowBuffer function for string case mapping
-  static U_CALLCONV UBool
+  static UBool U_CALLCONV
   growBuffer(void *context,
              UChar **buffer, int32_t *pCapacity, int32_t reqCapacity,
              int32_t length);
