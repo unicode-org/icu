@@ -307,6 +307,7 @@ public:
      */
     static Collator* createInstance(const Locale& loc, UErrorCode& err);
 
+#ifdef U_USE_COLLATION_OBSOLETE_2_6
     /**
      * Create a Collator with a specific version.
      * This is the same as createInstance(loc, err) except that getVersion() of
@@ -331,6 +332,7 @@ public:
      * @obsolete ICU 2.6
      */
     static Collator *createInstance(const Locale &loc, UVersionInfo version, UErrorCode &err);
+#endif
 
     /**
      * The comparison function compares the character data stored in two
