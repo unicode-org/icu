@@ -187,16 +187,15 @@ isQuickCheckAcceptable(void *context,
 }
 
 static UBool
-loadQuickCheckData() {
+loadQuickCheckData(UErrorCode *error) {
     /* load quickcheck data from file if necessary */
-    if (!isQuickCheckLoaded) {
-        UErrorCode error = U_ZERO_ERROR;
+    if (!isQuickCheckLoaded && U_SUCCESS(*error)) {
         UDataMemory *data;
 
         /* open the data outside the mutex block */
         data = udata_openChoice(NULL, DATA_TYPE, QCHK_DATA_NAME, 
-                                isQuickCheckAcceptable, NULL, &error);
-        if (U_FAILURE(error)) {
+                                isQuickCheckAcceptable, NULL, error);
+        if (U_FAILURE(*error)) {
             return isQuickCheckLoaded = FALSE;
         }
 
@@ -261,8 +260,8 @@ unorm_quickCheck(const UChar             *source,
   const UChar                *psource;
   const UChar                *pend             = 0;
 
-  if (!loadQuickCheckData() || U_FAILURE(*status)) {
-    return UNORM_MAYBE;
+  if (!loadQuickCheckData(status) || U_FAILURE(*status)) {
+      return UNORM_MAYBE;
   }
 
   min = QCHK_MIN_VALUES_[mode];
@@ -410,16 +409,15 @@ isFCDCheckAcceptable(void *context,
 }
 
 static UBool
-loadFCDCheckData() {
+loadFCDCheckData(UErrorCode *error) {
     /* load fcdcheck data from file if necessary */
-    if (!isFCDCheckLoaded) {
-        UErrorCode error = U_ZERO_ERROR;
+    if (!isFCDCheckLoaded && U_SUCCESS(*error)) {
         UDataMemory *data;
 
         /* open the data outside the mutex block */
         data = udata_openChoice(NULL, DATA_TYPE, FCHK_DATA_NAME, 
-                                isFCDCheckAcceptable, NULL, &error);
-        if (U_FAILURE(error)) {
+                                isFCDCheckAcceptable, NULL, error);
+        if (U_FAILURE(*error)) {
             return isFCDCheckLoaded = FALSE;
         }
 
@@ -471,7 +469,7 @@ checkFCD(const UChar* source, int32_t sourcelength, UErrorCode* status)
         uint8_t  oldfcdtrail = 0;
         uint16_t fcd = 0;
   
-  if (!loadFCDCheckData() || U_FAILURE(*status)) {
+  if (!loadFCDCheckData(status) || U_FAILURE(*status)) {
     return FALSE;
         }
 
