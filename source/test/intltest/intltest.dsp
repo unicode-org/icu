@@ -374,6 +374,10 @@ SOURCE=.\regcoll.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\regextst.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\reptest.cpp
 # End Source File
 # Begin Source File
@@ -744,6 +748,10 @@ SOURCE=.\rbbitst.h
 # Begin Source File
 
 SOURCE=.\regcoll.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\regextst.h
 # End Source File
 # Begin Source File
 
