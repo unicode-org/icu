@@ -367,15 +367,42 @@ static UResourceDataEntry *init_entry(const char *localeID, const char *path, UE
 }
 
 /* INTERNAL: */
+static UResourceDataEntry *findFirstExisting(const char* path, char* name, UBool *isRoot, UBool *hasChopped, UBool *isDefault, UErrorCode* status) {
+  UResourceDataEntry *r = NULL;
+  UBool hasRealData = FALSE;
+  const char *defaultLoc = uloc_getDefault();
+  UErrorCode intStatus = U_ZERO_ERROR;
+  *hasChopped = TRUE; /* we're starting with a fresh name */
+
+  while(*hasChopped && !hasRealData) {
+    r = init_entry(name, path, &intStatus);
+    *isDefault = (UBool)(uprv_strncmp(name, defaultLoc, uprv_strlen(name)) == 0);
+    hasRealData = (UBool)(r->fBogus == U_ZERO_ERROR);
+    if(!hasRealData) {
+      entryCloseInt(r);
+      r = NULL;
+      *status = U_USING_FALLBACK_ERROR;
+    } else {
+      uprv_strcpy(name, r->fName); /* this is needed for supporting aliases */
+    }
+
+    *isRoot = (UBool)(uprv_strcmp(name, kRootLocaleName) == 0);
+
+    /*Fallback data stuff*/
+    *hasChopped = chopLocale(name);
+  }
+  return r;
+}
+
 static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UErrorCode* status) {
-    UErrorCode initstatus = U_ZERO_ERROR;
+    UErrorCode intStatus = U_ZERO_ERROR;
     UResourceDataEntry *r = NULL;
     UResourceDataEntry *t1 = NULL;
     UResourceDataEntry *t2 = NULL;
     UBool isDefault = FALSE;
     UBool isRoot = FALSE;
     UBool hasRealData = FALSE;
-    UBool hasChopped = FALSE;
+    UBool hasChopped = TRUE;
     char name[96];
 
     if(U_FAILURE(*status)) {
@@ -384,73 +411,79 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
 
     initCache(status);
 
+    uprv_strcpy(name, localeID);
+
     umtx_lock(&resbMutex);
-    r = init_entry(localeID, path, &initstatus);
-    uprv_strcpy(name, r->fName);
-    isDefault = (UBool)(uprv_strncmp(name, uloc_getDefault(), uprv_strlen(name)) == 0);
-    hasRealData = (UBool)(r->fBogus == U_ZERO_ERROR);
+    { /* umtx_lock */
+      /* We're going to skip all the locales that do not have any data */
+      r = findFirstExisting(path, name, &isRoot, &hasChopped, &isDefault, &intStatus);
 
-    isRoot = (UBool)(uprv_strcmp(name, kRootLocaleName) == 0);
-
-    /*Fallback data stuff*/
-    hasChopped = chopLocale(name);
-    t1 = r;
-
-    while (hasChopped && !isRoot && t1->fParent == NULL) {
-        /* insert regular parents */
-        t2 = init_entry(name, r->fPath, status);
-        hasRealData = (UBool)((t2->fBogus == U_ZERO_ERROR) | hasRealData);
-        t1->fParent = t2;
-        t1 = t2;
-        hasChopped = chopLocale(name);
-    }
-
-    if(!hasRealData && !isDefault && !isRoot && t1->fParent == NULL) {
-        /* insert default locale */
-        uprv_strcpy(name, uloc_getDefault());
-        t2 = init_entry(name, r->fPath, status);
-        hasRealData = (UBool)((t2->fBogus == U_ZERO_ERROR) | hasRealData);
-        r->fBogus = U_USING_DEFAULT_ERROR;
-        isDefault = TRUE;
-        t1->fParent = t2;
-        t1 = t2;
-        hasChopped = chopLocale(name);
-        while (hasChopped && t1->fParent == NULL) {
-            /* insert chopped defaults */
+      if(r != NULL) { /* if there is one real locale, we can look for parents. */
+        t1 = r;
+        hasRealData = TRUE;
+        while (hasChopped && !isRoot && t1->fParent == NULL) {
+            /* insert regular parents */
             t2 = init_entry(name, r->fPath, status);
-            hasRealData = (UBool)((t2->fBogus == U_ZERO_ERROR) | hasRealData);
             t1->fParent = t2;
             t1 = t2;
             hasChopped = chopLocale(name);
         }
-    }
+      }
 
-    if(!isRoot && uprv_strcmp(t1->fName, kRootLocaleName) != 0 && t1->fParent == NULL) {
-        /* insert root locale */
-        t2 = init_entry(kRootLocaleName, r->fPath, status);
-        if(!hasRealData) {
-          r->fBogus = U_USING_DEFAULT_ERROR;
+      /* we could have reached this point without having any real data */
+      /* if that is the case, we need to chain in the default locale   */
+      if(r==NULL && !isDefault && !isRoot /*&& t1->fParent == NULL*/) {
+          /* insert default locale */
+          uprv_strcpy(name, uloc_getDefault());
+          r = findFirstExisting(path, name, &isRoot, &hasChopped, &isDefault, &intStatus);
+          intStatus = U_USING_DEFAULT_ERROR;
+          if(r != NULL) { /* the default locale exists */
+            t1 = r;
+            hasRealData = TRUE;
+            isDefault = TRUE;
+            while (hasChopped && t1->fParent == NULL) {
+                /* insert chopped defaults */
+                t2 = init_entry(name, r->fPath, status);
+                t1->fParent = t2;
+                t1 = t2;
+                hasChopped = chopLocale(name);
+            }
+          } 
+      }
+
+      /* we could still have r == NULL at this point - maybe even default locale is not */
+      /* present */
+      if(r == NULL) {
+        uprv_strcpy(name, kRootLocaleName);
+        r = findFirstExisting(path, name, &isRoot, &hasChopped, &isDefault, &intStatus);
+        if(r != NULL) {
+          t1 = r;
+          intStatus = U_USING_DEFAULT_ERROR;
+          hasRealData = TRUE;
+        } else { /* we don't even have the root locale */
+          *status = U_MISSING_RESOURCE_ERROR;
         }
-        hasRealData = (UBool)((t2->fBogus == U_ZERO_ERROR) | hasRealData);
-        t1->fParent = t2;
-        t1 = t2;
-    }
+      } else if(!isRoot && uprv_strcmp(t1->fName, kRootLocaleName) != 0 && t1->fParent == NULL) {
+          /* insert root locale */
+          t2 = init_entry(kRootLocaleName, r->fPath, status);
+          if(!hasRealData) {
+            r->fBogus = U_USING_DEFAULT_ERROR;
+          }
+          hasRealData = (UBool)((t2->fBogus == U_ZERO_ERROR) | hasRealData);
+          t1->fParent = t2;
+          t1 = t2;
+      }
 
-    while(!isRoot && t1->fParent != NULL) {
-        t1->fParent->fCountExisting++;
-        t1 = t1->fParent;
-        hasRealData = (UBool)((t1->fBogus == U_ZERO_ERROR) | hasRealData);
-    }
-
-    if(!hasRealData) {
-        entryCloseInt(r);
-        *status = U_MISSING_RESOURCE_ERROR;
-    }
-
+      while(r != NULL && !isRoot && t1->fParent != NULL) {
+          t1->fParent->fCountExisting++;
+          t1 = t1->fParent;
+          hasRealData = (UBool)((t1->fBogus == U_ZERO_ERROR) | hasRealData);
+      }
+    } /* umtx_lock */
     umtx_unlock(&resbMutex);
 
     if(U_SUCCESS(*status)) {
-      *status = r->fBogus;
+      *status = intStatus;
       return r;
     } else {
       return NULL;
@@ -948,26 +981,17 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByKey(const UResourceBundle *resB, c
  *  INTERNAL: Get the name of the first real locale (not placeholder) 
  *  that has resource bundle data.
  */
-U_CFUNC const char* ures_getRealLocale(const UResourceBundle* resourceBundle, UErrorCode* status)
+U_CAPI const char* ures_getLocale(const UResourceBundle* resourceBundle, UErrorCode* status)
 {
-    const UResourceDataEntry *resB = resourceBundle->fData;
     if (status==NULL || U_FAILURE(*status)) {
         return NULL;
     }
     if (!resourceBundle) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
-    }
-
-    while(resB->fBogus != U_ZERO_ERROR && resB->fParent != NULL) {
-        resB = resB->fParent;
-    }
-    if(resB->fBogus == U_ZERO_ERROR) {
-        return resB->fName;
     } else {
-        *status = U_INTERNAL_PROGRAM_ERROR;
+      return resourceBundle->fData->fName;
     }
-    return NULL;
 }
 
 static void entryCloseInt(UResourceDataEntry *resB) {
@@ -1162,7 +1186,7 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_openU(const UChar* myPath,
 
 /**
  *  Opens a resource bundle without "canonicalizing" the locale name. No fallback will be performed 
- *  or sought.
+ *  or sought. However, alias substitution will happen!
  */
 U_CFUNC UResourceBundle* ures_openDirect(const char* path, const char* localeID, UErrorCode* status) {
     UResourceBundle *r;
@@ -1186,7 +1210,9 @@ U_CFUNC UResourceBundle* ures_openDirect(const char* path, const char* localeID,
         uprv_free(r);
         return NULL;
     }
-    if(r->fData->fBogus != U_ZERO_ERROR) {
+    if(*status != U_ZERO_ERROR /*r->fData->fBogus != U_ZERO_ERROR*/) {
+      /* we didn't find one we were looking for - so openDirect */
+      /* should fail */
         entryClose(r->fData);
         uprv_free(r);
         *status = U_MISSING_RESOURCE_ERROR;
@@ -1312,24 +1338,5 @@ U_CAPI void U_EXPORT2 ures_getVersion(const UResourceBundle* resB, UVersionInfo 
 
     u_versionFromString(versionInfo, ures_getVersionNumber(resB));
 }
-
-/**
- *  API: get the nominal name of resource bundle locale,
- *  regardless of wether resource bundle really exists 
- *  or not.
- */
-U_CAPI const char* ures_getLocale(const UResourceBundle* resourceBundle, UErrorCode* status)
-{
-        if (status==NULL || U_FAILURE(*status)) {
-                return NULL;
-        }
-  if (!resourceBundle)
-    {
-      *status = U_ILLEGAL_ARGUMENT_ERROR;
-      return NULL;
-    }
-  return ures_getName(resourceBundle);
-}
-
 
 /* eof */
