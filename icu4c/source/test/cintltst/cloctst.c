@@ -213,6 +213,7 @@ void addLocaleTest(TestNode** root)
     TESTCASE(TestDisplayKeywordValues);
     TESTCASE(TestGetBaseName);
     TESTCASE(TestGetLocale);
+    TESTCASE(TestDisplayNameWarning);
 }
 
 
@@ -2023,6 +2024,20 @@ static void TestGetBaseName(void) {
         }
     }
 
+}
+
+
+/* Jitterbug 4115 */
+static void TestDisplayNameWarning(void) {
+    UChar name[256];
+    int32_t size;
+    UErrorCode status = U_ZERO_ERROR;
+    
+    size = uloc_getDisplayLanguage("qqq", "kl", name, sizeof(name)/sizeof(name[0]), &status);
+    if (status != U_USING_DEFAULT_WARNING) {
+        log_err("For language \"qqq\" in locale \"kl\", expecting U_USING_DEFAULT_WARNING, but got %s\n",
+            u_errorName(status));
+    }
 }
 
 

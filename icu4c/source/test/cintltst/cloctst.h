@@ -72,6 +72,9 @@ static  void TestDisplayNames(void);
 
  /* Test getting keyword values */
  static void TestKeywordVariantParsing(void);
+ 
+ /* Test warning for no data in getDisplay* */
+ static void TestDisplayNameWarning(void);
 
 /**
  * routine to perform subtests, used by TestDisplayNames
