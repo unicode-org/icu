@@ -389,6 +389,7 @@ else
     #
     #    This array is used for producing debugging output from the rule parser.
     #
+    print "#ifndef RBBI_DEBUG\n";
     print "static const char * const RBBIRuleStateNames[] = {";
     for ($state=0; $state<$num_states; $state++) {
         if ($stateNames[$state] ne "") {
@@ -397,7 +398,8 @@ else
             print "    0,\n";
         }
     }
-    print "    0};\n\n";
+    print "    0};\n";
+    print "#endif\n\n";
 
     print "U_NAMESPACE_END\n";
     print "#endif\n";
