@@ -21,28 +21,29 @@
 #include "ucnv_cnv.h"
 #include "unicode/ustring.h"
 #include "unicode/ucnv_cb.h"
-#include  <stdio.h>
 
-#define NUKTA 0x093c
-#define HALANT 0x094d    
-#define ZWNJ 0x200c
-#define ZWJ 0x200d
-#define INVALID_CHAR 0xffff   
 #define UCNV_OPTIONS_VERSION_MASK 0xf
-#define ATR 0xEF
-#define EXT 0xF0
-#define DANDA   0x0964
-#define DOUBLE_DANDA 0x0965
-#define ISCII_NUKTA  0xE9
-#define ISCII_HALANT 0xE8
-#define ISCII_DANDA  0xEA
-#define ISCII_INV    0xD9
-#define INDIC_BLOCK_BEGIN 0x0900
-#define INDIC_BLOCK_END 0x0D70 
-#define INDIC_RANGE 0x0470 /* INDIC_BLOCK_END - INDIC_BLOCK_BEGIN */
-#define VOCALLIC_RR 0x0931
-#define LF 0x0A
-
+#define NUKTA               0x093c
+#define HALANT              0x094d    
+#define ZWNJ                0x200c /* Zero Width Non Joiner */
+#define ZWJ                 0x200d /* Zero width Joiner */
+#define INVALID_CHAR        0xffff   
+#define ATR                 0xEF   /* Attribute code */
+#define EXT                 0xF0   /* Extension code */
+#define DANDA               0x0964
+#define DOUBLE_DANDA        0x0965
+#define ISCII_NUKTA         0xE9
+#define ISCII_HALANT        0xE8
+#define ISCII_DANDA         0xEA
+#define ISCII_INV           0xD9
+#define INDIC_BLOCK_BEGIN   0x0900
+#define INDIC_BLOCK_END     0x0D70 
+#define INDIC_RANGE         0x0470 /* INDIC_BLOCK_END - INDIC_BLOCK_BEGIN */
+#define VOCALLIC_RR         0x0931
+#define LF                  0x0A
+#define ASCII_END           0x9f
+#define NO_CHAR_MARKER      0xFFFE
+#define TELUGU_DELTA        DELTA * TELUGU
 /* TODO: 
  * Add getName() function.
  */
@@ -79,7 +80,7 @@ typedef enum  {
     DELTA=0x80
 }UniLang;
 
-#define KANNADA_DELTA 0x380
+
 /**
  * Enumeration for switching code pages if <ATX>+<one of below values>
  * is encountered
@@ -111,7 +112,7 @@ typedef enum{
     GJR_MASK =0x20,
     ORI_MASK =0x10,
     BNG_MASK =0x08,
-    TLG_MASK =0x04,
+    KND_MASK =0x04,
     MLM_MASK =0x02,
     TML_MASK =0x01,
     ZERO     =0x00
@@ -181,16 +182,16 @@ typedef struct{
     UBool isFirstBuffer;            
 }UConverterDataISCII; 
 
-uint16_t lookupInitialData[][3]={
-    { DEVANAGARI,DEV_MASK,DEV },
-    { BENGALI,BNG_MASK,BNG },
-    { GURMUKHI,PNJ_MASK,PNJ },
-    { GUJARATI,GJR_MASK,GJR },
-    { ORIYA,ORI_MASK,ORI },
-    { TAMIL,TML_MASK,TML },
-    { TELUGU,TLG_MASK,TLG },
-    { KANNADA,TLG_MASK,KND },
-    { MALAYALAM,MLM_MASK,MLM }
+static const uint16_t lookupInitialData[][3]={
+    { DEVANAGARI, DEV_MASK,  DEV },
+    { BENGALI,    BNG_MASK,  BNG },
+    { GURMUKHI,   PNJ_MASK,  PNJ },
+    { GUJARATI,   GJR_MASK,  GJR },
+    { ORIYA,      ORI_MASK,  ORI },
+    { TAMIL,      TML_MASK,  TML },
+    { TELUGU,     KND_MASK,  TLG },
+    { KANNADA,    KND_MASK,  KND },
+    { MALAYALAM,  MLM_MASK,  MLM }
 };
     
 static void 
@@ -199,7 +200,7 @@ _ISCIIOpen(UConverter *cnv, const char *name,const char *locale,uint32_t options
 
     if(cnv->extraInfo != NULL) {
         UConverterDataISCII *converterData=(UConverterDataISCII *) cnv->extraInfo;
-        converterData->contextCharToUnicode=0x0000;
+        converterData->contextCharToUnicode=NO_CHAR_MARKER;
         converterData->contextCharFromUnicode=0x0000;
         /* check if the version requested is supported */
         if((options & UCNV_OPTIONS_VERSION_MASK) < 9){
@@ -213,6 +214,7 @@ _ISCIIOpen(UConverter *cnv, const char *name,const char *locale,uint32_t options
             
             converterData->isFirstBuffer=TRUE;
         }else{
+            uprv_free(cnv->extraInfo);
             *errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         }
 
@@ -222,7 +224,9 @@ _ISCIIOpen(UConverter *cnv, const char *name,const char *locale,uint32_t options
 }
 static void 
 _ISCIIClose(UConverter *cnv){
-     uprv_free(cnv->extraInfo);
+    if(cnv->extraInfo){
+        uprv_free(cnv->extraInfo);
+    }
 }
 
 U_CFUNC void 
@@ -233,7 +237,7 @@ _ISCIIReset(UConverter *cnv, UConverterResetChoice choice){
         cnv->mode=0;
         data->currentDeltaToUnicode=data->defDeltaToUnicode;
         data->currentMaskToUnicode = data->defMaskToUnicode;
-        data->contextCharToUnicode=0x00;
+        data->contextCharToUnicode=NO_CHAR_MARKER;
     }
     if(choice!=UCNV_RESET_TO_UNICODE) {
         cnv->fromUSurrogateLead=0x0000; 
@@ -262,87 +266,87 @@ _ISCIIReset(UConverter *cnv, UConverterResetChoice choice){
  * and combine and use 1 bit to represent these languages.
  */
 
-uint8_t validityTable[256] = {
+static const uint8_t validityTable[256] = {
 /* This state table is tool generated please donot edit unless you know exactly what you are doing */
 /*ISCII:Valid:Unicode */
 /*0xa0 : 0x00: 0x900  */ ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
 /*0xa1 : 0xb8: 0x901  */ DEV_MASK + ZERO     + GJR_MASK + ORI_MASK + BNG_MASK + ZERO     + ZERO     + ZERO     ,
-/*0xa2 : 0xfe: 0x902  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + ZERO     ,
-/*0xa3 : 0xbf: 0x903  */ DEV_MASK + ZERO     + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
+/*0xa2 : 0xfe: 0x902  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + ZERO     ,
+/*0xa3 : 0xbf: 0x903  */ DEV_MASK + ZERO     + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
 /*0x00 : 0x00: 0x904  */ ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
-/*0xa4 : 0xff: 0x905  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xa5 : 0xff: 0x906  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xa6 : 0xff: 0x907  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xa7 : 0xff: 0x908  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xa8 : 0xff: 0x909  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xa9 : 0xff: 0x90a  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xaa : 0xfe: 0x90b  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + ZERO     ,
-/*0x00 : 0x00: 0x90c  */ DEV_MASK + ZERO     + ZERO     + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + ZERO     ,
+/*0xa4 : 0xff: 0x905  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xa5 : 0xff: 0x906  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xa6 : 0xff: 0x907  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xa7 : 0xff: 0x908  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xa8 : 0xff: 0x909  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xa9 : 0xff: 0x90a  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xaa : 0xfe: 0x90b  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + ZERO     ,
+/*0x00 : 0x00: 0x90c  */ DEV_MASK + ZERO     + ZERO     + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + ZERO     ,
 /*0xae : 0x80: 0x90d  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
-/*0xab : 0x87: 0x90e  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xac : 0xff: 0x90f  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xad : 0xff: 0x910  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
+/*0xab : 0x87: 0x90e  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xac : 0xff: 0x90f  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xad : 0xff: 0x910  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
 /*0xb2 : 0x80: 0x911  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
-/*0xaf : 0x87: 0x912  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xb0 : 0xff: 0x913  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xb1 : 0xff: 0x914  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xb3 : 0xff: 0x915  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xb4 : 0xfe: 0x916  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + ZERO     ,
-/*0xb5 : 0xfe: 0x917  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + ZERO     ,
-/*0xb6 : 0xfe: 0x918  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + ZERO     ,
-/*0xb7 : 0xff: 0x919  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xb8 : 0xff: 0x91a  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xb9 : 0xfe: 0x91b  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + ZERO     ,
-/*0xba : 0xff: 0x91c  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xbb : 0xfe: 0x91d  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + ZERO     ,
-/*0xbc : 0xff: 0x91e  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xbd : 0xff: 0x91f  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xbe : 0xfe: 0x920  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + ZERO     ,
-/*0xbf : 0xfe: 0x921  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + ZERO     ,
-/*0xc0 : 0xfe: 0x922  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + ZERO     ,
-/*0xc1 : 0xff: 0x923  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xc2 : 0xff: 0x924  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xc3 : 0xfe: 0x925  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + ZERO     ,
-/*0xc4 : 0xfe: 0x926  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + ZERO     ,
-/*0xc5 : 0xfe: 0x927  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + ZERO     ,
-/*0xc6 : 0xff: 0x928  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
+/*0xaf : 0x87: 0x912  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xb0 : 0xff: 0x913  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xb1 : 0xff: 0x914  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xb3 : 0xff: 0x915  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xb4 : 0xfe: 0x916  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + ZERO     ,
+/*0xb5 : 0xfe: 0x917  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + ZERO     ,
+/*0xb6 : 0xfe: 0x918  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + ZERO     ,
+/*0xb7 : 0xff: 0x919  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xb8 : 0xff: 0x91a  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xb9 : 0xfe: 0x91b  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + ZERO     ,
+/*0xba : 0xff: 0x91c  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xbb : 0xfe: 0x91d  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + ZERO     ,
+/*0xbc : 0xff: 0x91e  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xbd : 0xff: 0x91f  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xbe : 0xfe: 0x920  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + ZERO     ,
+/*0xbf : 0xfe: 0x921  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + ZERO     ,
+/*0xc0 : 0xfe: 0x922  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + ZERO     ,
+/*0xc1 : 0xff: 0x923  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xc2 : 0xff: 0x924  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xc3 : 0xfe: 0x925  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + ZERO     ,
+/*0xc4 : 0xfe: 0x926  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + ZERO     ,
+/*0xc5 : 0xfe: 0x927  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + ZERO     ,
+/*0xc6 : 0xff: 0x928  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
 /*0xc7 : 0x81: 0x929  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + TML_MASK ,
-/*0xc8 : 0xff: 0x92a  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xc9 : 0xfe: 0x92b  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + ZERO     ,
-/*0xca : 0xfe: 0x92c  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + ZERO     ,
-/*0xcb : 0xfe: 0x92d  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + ZERO     ,
-/*0xcc : 0xfe: 0x92e  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + ZERO     ,
-/*0xcd : 0xff: 0x92f  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xcf : 0xff: 0x930  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xd0 : 0x87: 0x931  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xd1 : 0xff: 0x932  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xd2 : 0xb7: 0x933  */ DEV_MASK + ZERO     + GJR_MASK + ORI_MASK + ZERO     + TLG_MASK + MLM_MASK + TML_MASK ,
+/*0xc8 : 0xff: 0x92a  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xc9 : 0xfe: 0x92b  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + ZERO     ,
+/*0xca : 0xfe: 0x92c  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + ZERO     ,
+/*0xcb : 0xfe: 0x92d  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + ZERO     ,
+/*0xcc : 0xfe: 0x92e  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + ZERO     ,
+/*0xcd : 0xff: 0x92f  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xcf : 0xff: 0x930  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xd0 : 0x87: 0x931  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + MLM_MASK + TML_MASK ,
+/*0xd1 : 0xff: 0x932  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xd2 : 0xb7: 0x933  */ DEV_MASK + ZERO     + GJR_MASK + ORI_MASK + ZERO     + KND_MASK + MLM_MASK + TML_MASK ,
 /*0xd3 : 0x83: 0x934  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + MLM_MASK + TML_MASK ,
-/*0xd4 : 0xff: 0x935  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xd5 : 0xfe: 0x936  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + ZERO     ,
-/*0xd6 : 0xbf: 0x937  */ DEV_MASK + ZERO     + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xd7 : 0xff: 0x938  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xd8 : 0xff: 0x939  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
+/*0xd4 : 0xff: 0x935  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xd5 : 0xfe: 0x936  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + ZERO     ,
+/*0xd6 : 0xbf: 0x937  */ DEV_MASK + ZERO     + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xd7 : 0xff: 0x938  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xd8 : 0xff: 0x939  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
 /*0x00 : 0x00: 0x93A  */ ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
 /*0x00 : 0x00: 0x93B  */ ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
 /*0xe9 : 0xda: 0x93c  */ DEV_MASK + PNJ_MASK + ZERO     + ORI_MASK + BNG_MASK + ZERO     + MLM_MASK + ZERO     ,
 /*0x00 : 0x00: 0x93d  */ ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
-/*0xda : 0xff: 0x93e  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xdb : 0xff: 0x93f  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xdc : 0xff: 0x940  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xdd : 0xff: 0x941  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xde : 0xff: 0x942  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xdf : 0xbe: 0x943  */ DEV_MASK + ZERO     + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + ZERO     ,
+/*0xda : 0xff: 0x93e  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xdb : 0xff: 0x93f  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xdc : 0xff: 0x940  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xdd : 0xff: 0x941  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xde : 0xff: 0x942  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xdf : 0xbe: 0x943  */ DEV_MASK + ZERO     + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + ZERO     ,
 /*0x00 : 0x00: 0x944  */ ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
 /*0xe3 : 0x80: 0x945  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
-/*0xe0 : 0x87: 0x946  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xe1 : 0xff: 0x947  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xe2 : 0xff: 0x948  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
+/*0xe0 : 0x87: 0x946  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xe1 : 0xff: 0x947  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xe2 : 0xff: 0x948  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
 /*0xe7 : 0x80: 0x949  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
-/*0xe4 : 0x87: 0x94a  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xe5 : 0xff: 0x94b  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xe6 : 0xff: 0x94c  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xe8 : 0xff: 0x94d  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
+/*0xe4 : 0x87: 0x94a  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xe5 : 0xff: 0x94b  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xe6 : 0xff: 0x94c  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xe8 : 0xff: 0x94d  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
 /*0xec : 0x00: 0x94e  */ ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
 /*0xed : 0x00: 0x94f  */ ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
 /*0x00 : 0x00: 0x950  */ DEV_MASK + ZERO     + GJR_MASK + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
@@ -350,8 +354,8 @@ uint8_t validityTable[256] = {
 /*0x00 : 0x00: 0x952  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
 /*0x00 : 0x00: 0x953  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
 /*0x00 : 0x00: 0x954  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
-/*0x00 : 0x00: 0x955  */ ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + TLG_MASK + ZERO     + ZERO     ,
-/*0x00 : 0x00: 0x956  */ ZERO     + ZERO     + ZERO     + ORI_MASK + ZERO     + TLG_MASK + ZERO     + ZERO     ,
+/*0x00 : 0x00: 0x955  */ ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + KND_MASK + ZERO     + ZERO     ,
+/*0x00 : 0x00: 0x956  */ ZERO     + ZERO     + ZERO     + ORI_MASK + ZERO     + KND_MASK + ZERO     + ZERO     ,
 /*0x00 : 0x00: 0x957  */ ZERO     + ZERO     + ZERO     + ORI_MASK + ZERO     + ZERO     + MLM_MASK + ZERO     ,
 /*0x00 : 0x00: 0x958  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
 /*0x00 : 0x00: 0x959  */ DEV_MASK + PNJ_MASK + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
@@ -361,26 +365,26 @@ uint8_t validityTable[256] = {
 /*0x00 : 0x00: 0x95d  */ DEV_MASK + ZERO     + ZERO     + ORI_MASK + BNG_MASK + ZERO     + ZERO     + ZERO     ,
 /*0x00 : 0x00: 0x95e  */ DEV_MASK + PNJ_MASK + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
 /*0xce : 0x98: 0x95f  */ DEV_MASK + ZERO     + ZERO     + ORI_MASK + BNG_MASK + ZERO     + ZERO     + ZERO     ,
-/*0x00 : 0x00: 0x960  */ DEV_MASK + ZERO     + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + ZERO     ,
-/*0x00 : 0x00: 0x961  */ DEV_MASK + ZERO     + ZERO     + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + ZERO     ,
+/*0x00 : 0x00: 0x960  */ DEV_MASK + ZERO     + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + ZERO     ,
+/*0x00 : 0x00: 0x961  */ DEV_MASK + ZERO     + ZERO     + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + ZERO     ,
 /*0x00 : 0x00: 0x962  */ DEV_MASK + ZERO     + ZERO     + ZERO     + BNG_MASK + ZERO     + ZERO     + ZERO     ,
 /*0x00 : 0x00: 0x963  */ DEV_MASK + ZERO     + ZERO     + ZERO     + BNG_MASK + ZERO     + ZERO     + ZERO     ,
 /*0xea : 0xf8: 0x964  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + ZERO     + ZERO     + ZERO     ,
 /*0xeaea : 0x00: 0x965*/ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + ZERO     + ZERO     + ZERO     ,
-/*0xf1 : 0xff: 0x966  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xf2 : 0xff: 0x967  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xf3 : 0xff: 0x968  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xf4 : 0xff: 0x969  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xf5 : 0xff: 0x96a  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xf6 : 0xff: 0x96b  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xf7 : 0xff: 0x96c  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xf8 : 0xff: 0x96d  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xf9 : 0xff: 0x96e  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
-/*0xfa : 0xff: 0x96f  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + TLG_MASK + MLM_MASK + TML_MASK ,
+/*0xf1 : 0xff: 0x966  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xf2 : 0xff: 0x967  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xf3 : 0xff: 0x968  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xf4 : 0xff: 0x969  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xf5 : 0xff: 0x96a  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xf6 : 0xff: 0x96b  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xf7 : 0xff: 0x96c  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xf8 : 0xff: 0x96d  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xf9 : 0xff: 0x96e  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
+/*0xfa : 0xff: 0x96f  */ DEV_MASK + PNJ_MASK + GJR_MASK + ORI_MASK + BNG_MASK + KND_MASK + MLM_MASK + TML_MASK ,
 /*0x00 : 0x00: 0x970  */ DEV_MASK + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     + ZERO     ,
 };
 
-uint16_t fromUnicodeTable[128]={   
+static const uint16_t fromUnicodeTable[128]={   
     0x00a0 ,/* 0x0900 */ 
     0x00a1 ,/* 0x0901 */ 
     0x00a2 ,/* 0x0902 */ 
@@ -496,7 +500,7 @@ uint16_t fromUnicodeTable[128]={
     0xFFFF ,/* 0x0970 */ 
   
 };
-uint16_t toUnicodeTable[256]={
+static const uint16_t toUnicodeTable[256]={
     0x0000,/* 0x00 */
     0x0001,/* 0x01 */
     0x0002,/* 0x02 */
@@ -625,38 +629,38 @@ uint16_t toUnicodeTable[256]={
     0x007d,/* 0x7d */
     0x007e,/* 0x7e */
     0x007f,/* 0x7f */
-    0xFFFF,/* 0x80 */
-    0xFFFF,/* 0x81 */
-    0xFFFF,/* 0x82 */
-    0xFFFF,/* 0x83 */
-    0xFFFF,/* 0x84 */
-    0xFFFF,/* 0x85 */
-    0xFFFF,/* 0x86 */
-    0xFFFF,/* 0x87 */
-    0xFFFF,/* 0x88 */
-    0xFFFF,/* 0x89 */
-    0xFFFF,/* 0x8a */
-    0xFFFF,/* 0x8b */
-    0xFFFF,/* 0x8c */
-    0xFFFF,/* 0x8d */
-    0xFFFF,/* 0x8e */
-    0xFFFF,/* 0x8f */
-    0xFFFF,/* 0x90 */
-    0xFFFF,/* 0x91 */
-    0xFFFF,/* 0x92 */
-    0xFFFF,/* 0x93 */
-    0xFFFF,/* 0x94 */
-    0xFFFF,/* 0x95 */
-    0xFFFF,/* 0x96 */
-    0xFFFF,/* 0x97 */
-    0xFFFF,/* 0x98 */
-    0xFFFF,/* 0x99 */
-    0xFFFF,/* 0x9a */
-    0xFFFF,/* 0x9b */
-    0xFFFF,/* 0x9c */
-    0xFFFF,/* 0x9d */
-    0xFFFF,/* 0x9e */
-    0xFFFF,/* 0x9f */
+    0x0080,/* 0x80 */
+    0x0081,/* 0x81 */
+    0x0082,/* 0x82 */
+    0x0083,/* 0x83 */
+    0x0084,/* 0x84 */
+    0x0085,/* 0x85 */
+    0x0086,/* 0x86 */
+    0x0087,/* 0x87 */
+    0x0088,/* 0x88 */
+    0x0089,/* 0x89 */
+    0x008a,/* 0x8a */
+    0x008b,/* 0x8b */
+    0x008c,/* 0x8c */
+    0x008d,/* 0x8d */
+    0x008e,/* 0x8e */
+    0x008f,/* 0x8f */
+    0x0090,/* 0x90 */
+    0x0091,/* 0x91 */
+    0x0092,/* 0x92 */
+    0x0093,/* 0x93 */
+    0x0094,/* 0x94 */
+    0x0095,/* 0x95 */
+    0x0096,/* 0x96 */
+    0x0097,/* 0x97 */
+    0x0098,/* 0x98 */
+    0x0099,/* 0x99 */
+    0x009a,/* 0x9a */
+    0x009b,/* 0x9b */
+    0x009c,/* 0x9c */
+    0x009d,/* 0x9d */
+    0x009e,/* 0x9e */
+    0x009f,/* 0x9f */
     0x0900,/* 0xa0 */
     0x0901,/* 0xa1 */
     0x0902,/* 0xa2 */
@@ -755,7 +759,7 @@ uint16_t toUnicodeTable[256]={
     0xFFFF,/* 0xff */
 };
 
-uint16_t nuktaSpecialCases[][2]={
+static const uint16_t nuktaSpecialCases[][2]={
     { 14 /*length of array*/   , 0      },
     { 0xA6 , 0x090c },
     { 0xA1 , 0x0950 },
@@ -772,34 +776,39 @@ uint16_t nuktaSpecialCases[][2]={
     { 0xDC , 0x0963 }, 
 };
 
-#define U_WRITE_TO_TARGET(args,offsets,source,target,targetLimit,targetByteUnit,err){       \
-      /* write the targetUniChar  to target */                                              \
-    if(target <targetLimit){                                                                \
-        if(targetByteUnit & 0xFF00){                                                        \
-            *(target)++ = (uint8_t)(targetByteUnit>>8);                                     \
-            if(offsets){                                                                    \
-                *(offsets++) = source - args->source-1;                                     \
-            }                                                                               \
-        }                                                                                   \
-        if(target < targetLimit){                                                           \
-            *(target)++ = (uint8_t)  targetByteUnit;                                        \
-            if(offsets){                                                                    \
-                *(offsets++) = source - args->source-1;                                     \
-            }                                                                               \
-        }else{                                                                              \
-            args->converter->charErrorBuffer[args->converter->charErrorBufferLength++] =    \
-                        (uint8_t) (targetByteUnit);                                         \
-            *err = U_BUFFER_OVERFLOW_ERROR;                                                 \
-        }                                                                                   \
-    }else{                                                                                  \
-        if(targetByteUnit & 0xFF00){                                                        \
-            args->converter->charErrorBuffer[args->converter->charErrorBufferLength++] =    \
-                        (uint8_t) (targetByteUnit >>8);                                     \
-        }                                                                                   \
-        args->converter->charErrorBuffer[args->converter->charErrorBufferLength++] =        \
-                        (uint8_t) (targetByteUnit);                                         \
-        *err = U_BUFFER_OVERFLOW_ERROR;                                                     \
-    }                                                                                       \
+#define U_WRITE_TO_TARGET(args,offsets,source,target,targetLimit,targetByteUnit,err){           \
+      /* write the targetUniChar  to target */                                                  \
+    if(target <targetLimit){                                                                    \
+        if(targetByteUnit <= 0xFF){                                                             \
+            *(target)++ = (uint8_t)(targetByteUnit);                                            \
+            if(offsets){                                                                        \
+                *(offsets++) = source - args->source-1;                                         \
+            }                                                                                   \
+        }else{                                                                                  \
+            *(target)++ = (uint8_t)(targetByteUnit>>8);                                         \
+            if(offsets){                                                                        \
+                *(offsets++) = source - args->source-1;                                         \
+            }                                                                                   \
+            if(target < targetLimit){                                                           \
+                *(target)++ = (uint8_t)  targetByteUnit;                                        \
+                if(offsets){                                                                    \
+                    *(offsets++) = source - args->source-1;                                     \
+                }                                                                               \
+            }else{                                                                              \
+                args->converter->charErrorBuffer[args->converter->charErrorBufferLength++] =    \
+                            (uint8_t) (targetByteUnit);                                         \
+                *err = U_BUFFER_OVERFLOW_ERROR;                                                 \
+            }                                                                                   \
+        }                                                                                       \
+    }else{                                                                                      \
+        if(targetByteUnit & 0xFF00){                                                            \
+            args->converter->charErrorBuffer[args->converter->charErrorBufferLength++] =        \
+                        (uint8_t) (targetByteUnit >>8);                                         \
+        }                                                                                       \
+        args->converter->charErrorBuffer[args->converter->charErrorBufferLength++] =            \
+                        (uint8_t) (targetByteUnit);                                             \
+        *err = U_BUFFER_OVERFLOW_ERROR;                                                         \
+    }                                                                                           \
 }          
 
 /* Rules:
@@ -825,10 +834,7 @@ UConverter_fromUnicode_ISCII_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
     uint16_t range = 0;
     uint16_t newDelta=0;
     UBool deltaChanged = FALSE;
-    /*Arguments Check*/
-    if (U_FAILURE(*err)){ 
-        return;
-    }
+
     if ((args->converter == NULL) || (args->targetLimit < args->target) || (args->sourceLimit < args->source)){
         *err = U_ILLEGAL_ARGUMENT_ERROR;
         return;
@@ -848,8 +854,8 @@ UConverter_fromUnicode_ISCII_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
 
         sourceChar = *source++;
 
-        /*check if input is in ASCII RANGE*/
-        if (sourceChar <= 0x007f) {
+        /*check if input is in ASCII and C0 control codes range*/
+        if (sourceChar <= ASCII_END) {
             U_WRITE_TO_TARGET(args,offsets,source,target,targetLimit,sourceChar,err);
             if(U_FAILURE(*err)){
                 break;
@@ -889,7 +895,7 @@ UConverter_fromUnicode_ISCII_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
             break;
        default:
             /* is the sourceChar in the INDIC_RANGE? */
-            if(INDIC_BLOCK_END-sourceChar <= INDIC_RANGE){
+            if((uint16_t)(INDIC_BLOCK_END-sourceChar) <= INDIC_RANGE){
                 /* find out to which block the souceChar belongs*/ 
                 range =(uint16_t)((sourceChar-INDIC_BLOCK_BEGIN)/DELTA);
                 newDelta =(uint16_t)(range*DELTA);
@@ -909,16 +915,13 @@ UConverter_fromUnicode_ISCII_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
                 targetByteUnit=fromUnicodeTable[(uint8_t)sourceChar];
                             
                 /* is the code point valid in current script? */
-                /*valid = validityTable[(uint8_t)sourceChar] & converterData->maskFromUnicode;*/
                 if((validityTable[(uint8_t)sourceChar] & converterData->currentMaskFromUnicode)==0){
-                    targetByteUnit = missingCharMarker;
+                    /* Vocallic RR is assigne in ISCII Telugu and Unicode */
+                    if(converterData->currentDeltaFromUnicode!=(TELUGU_DELTA) && sourceChar!=VOCALLIC_RR){
+                        targetByteUnit=missingCharMarker;
+                    }
                 }
-
-                /* Vocallic RR is not available in ISCII Kannada */
-                if(converterData->currentDeltaFromUnicode==(KANNADA_DELTA) && sourceChar==VOCALLIC_RR){
-                    targetByteUnit=missingCharMarker;
-                }
-            
+           
                 if(deltaChanged){
                     /* we are in a script block which is different than 
                      * previous sourceChar's script block write ATR and language codes 
@@ -935,7 +938,8 @@ UConverter_fromUnicode_ISCII_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
                     }
                 }
             }
-
+            /* reset context char */
+            converterData->contextCharFromUnicode = 0x00;
             break;
         }
 
@@ -971,6 +975,7 @@ getTrail:
                             sourceChar=UTF16_GET_PAIR_VALUE(args->converter->fromUSurrogateLead, trail);
                             args->converter->fromUSurrogateLead=0x00;
                             reason =UCNV_UNASSIGNED;
+                            *err =U_INVALID_CHAR_FOUND;
                             /* convert this surrogate code point */
                             /* exit this condition tree */
                         } else {
@@ -1076,19 +1081,20 @@ getTrail:
     args->target = (char*)target;
 }
 
-int32_t lookupTable[][2]={
-    ZERO,ZERO,      /*DEFALT*/
-    ZERO, ZERO,     /*ROMAN*/
-    DEVANAGARI, DEV_MASK,
-    BENGALI, BNG_MASK,
-    TAMIL, TML_MASK,
-    TELUGU, TLG_MASK,
-    BENGALI, BNG_MASK,
-    ORIYA, ORI_MASK,
-    KANNADA, TLG_MASK,
-    GUJARATI, GJR,
-    GURMUKHI, PNJ,
+static const int32_t lookupTable[][2]={
+    { ZERO,       ZERO     },     /*DEFALT*/
+    { ZERO,       ZERO     },     /*ROMAN*/
+    { DEVANAGARI, DEV_MASK },
+    { BENGALI,    BNG_MASK },
+    { TAMIL,      TML_MASK },
+    { TELUGU,     KND_MASK },
+    { BENGALI,    BNG_MASK },
+    { ORIYA,      ORI_MASK },
+    { KANNADA,    KND_MASK },
+    { GUJARATI,   GJR_MASK },
+    { GURMUKHI,   PNJ_MASK },
 };
+
 #define WRITE_TO_TARGET_ToU(args,source,target,offsets,offset,targetUniChar,err){       \
     /* now write the targetUniChar */                                                   \
     if(target<args->targetLimit){                                                       \
@@ -1103,15 +1109,16 @@ int32_t lookupTable[][2]={
     }                                                                                   \
 }
 
-#define NO_CHAR_MARKER 0xFFFE
-
 #define GET_MAPPING(sourceChar,targetUniChar,data){                                     \
-    int valid=0;                                                                        \
     targetUniChar = toUnicodeTable[(sourceChar)] ;                                      \
     /* is the code point valid in current script? */                                    \
-    valid = validityTable[(uint8_t)targetUniChar] & data->currentMaskToUnicode;         \
-    if(valid==0){                                                                       \
-        targetUniChar= missingCharMarker;                                               \
+    if(sourceChar>= ASCII_END &&                                                        \
+            (validityTable[(uint8_t)targetUniChar] & data->currentMaskToUnicode)==0){   \
+        /* Vocallic RR is assigne in ISCII Telugu and Unicode */                        \
+        if(data->currentDeltaToUnicode!=(TELUGU_DELTA) &&                               \
+                    targetUniChar!=VOCALLIC_RR){                                        \
+            targetUniChar=missingCharMarker;                                            \
+        }                                                                               \
     }                                                                                   \
 }
 
@@ -1124,11 +1131,6 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
     uint32_t targetUniChar = 0x0000;
     uint32_t sourceChar = 0x0000;
     UConverterDataISCII* data;
-
-    /*Arguments Check*/
-    if (U_FAILURE(*err)){ 
-        return;
-    }
 
     if ((args->converter == NULL) || (target < args->target) || (source < args->source)){
         *err = U_ILLEGAL_ARGUMENT_ERROR;
@@ -1144,7 +1146,7 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
         if(target < args->targetLimit){
             sourceChar = (unsigned char)*(source)++;
 
-            if(sourceChar!=ATR && data->contextCharToUnicode  == 0x0000){
+            if(sourceChar!=ATR && data->contextCharToUnicode  == NO_CHAR_MARKER){
                 /* get the mapping */
                 GET_MAPPING(sourceChar, targetUniChar,data);
                 if(targetUniChar==missingCharMarker){
@@ -1160,13 +1162,14 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
              * state to the Indic Script specified by sourceChar
              */
             if(data->contextCharToUnicode==ATR){
-                if(PNJ-sourceChar<=PNJ-DEV){
+                /* check if the sourceChar is supported script range*/
+                if((uint8_t)(PNJ-sourceChar)<=PNJ-DEV){
                     data->currentDeltaToUnicode = 
                         (uint16_t)(lookupTable[sourceChar & 0x0F][0] * DELTA);
                     data->currentMaskToUnicode = 
                         lookupTable[sourceChar & 0x0F][1] ;
                 }
-                else if( sourceChar==RMN || sourceChar==DEF){
+                else if(sourceChar==DEF){
                     /* switch back to default */
                     data->currentDeltaToUnicode = data->defDeltaToUnicode;
                     data->currentMaskToUnicode = data->defMaskToUnicode;
@@ -1174,7 +1177,7 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                     /* these are display codes consume and continue */
                 }
                 /* reset */
-                data->contextCharToUnicode=0x0000;              
+                data->contextCharToUnicode=NO_CHAR_MARKER;              
                 continue;
             }
 
@@ -1183,9 +1186,9 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                 /* if there is a mapping in contextCharToUnicode write it
                  * to target 
                  */
-                if(data->contextCharToUnicode !=0x000){
+                if(data->contextCharToUnicode !=NO_CHAR_MARKER){
                     /* add the delta of Indic blocks */
-                    if(data->contextCharToUnicode>0x7f &&
+                    if(data->contextCharToUnicode>ASCII_END &&
                        data->contextCharToUnicode != ZWNJ &&
                        data->contextCharToUnicode != ZWNJ &&
                        data->contextCharToUnicode != DANDA &&
@@ -1222,7 +1225,6 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
             case ISCII_NUKTA:
                 /* handle soft halant */
                 if(data->contextCharToUnicode == HALANT){
-                    GET_MAPPING(data->contextCharToUnicode,targetUniChar,data);
                     targetUniChar = ZWJ;
                     break;
                 }else{
@@ -1261,9 +1263,9 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
              * since that case has been handled at the begining.
              * so write the char to target
              */
-            if(data->contextCharToUnicode !=NO_CHAR_MARKER ){
+            if(data->contextCharToUnicode != NO_CHAR_MARKER ){
                 /* add offset to current Indic Block */
-                if(data->contextCharToUnicode>0x7f &&
+                if(data->contextCharToUnicode>ASCII_END &&
                        data->contextCharToUnicode != ZWNJ &&
                        data->contextCharToUnicode != ZWNJ &&
                        data->contextCharToUnicode != DANDA &&
@@ -1275,7 +1277,7 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                                 data->contextCharToUnicode,err);
             }
             /* reset contextCharToUnicode */
-            data->contextCharToUnicode = 0x0000;
+            data->contextCharToUnicode = NO_CHAR_MARKER;
             if(targetUniChar != missingCharMarker ){
                 /* now write the targetUniChar */
                 data->contextCharToUnicode = (UChar) targetUniChar;
@@ -1291,7 +1293,7 @@ CALLBACK:
 
                     currentOffset= source - args->source -1;
                     
-                    if(data->contextCharToUnicode != 0x0000){
+                    if(data->contextCharToUnicode < NO_CHAR_MARKER){
                         args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = 
                             (char) data->contextCharToUnicode;
                     }
@@ -1351,7 +1353,7 @@ CALLBACK:
             *err = U_TRUNCATED_CHAR_FOUND;
         }else{
             /* add offset to current Indic Block */
-            if(data->contextCharToUnicode>0x7f &&
+            if(data->contextCharToUnicode>ASCII_END &&
                    data->contextCharToUnicode != ZWNJ &&
                    data->contextCharToUnicode != ZWNJ &&
                    data->contextCharToUnicode != DANDA &&
@@ -1402,10 +1404,10 @@ _ISCII_SafeClone(const UConverter *cnv,
     }
 
     localClone = (struct cloneStruct *)stackBuffer;
-    memcpy(&localClone->cnv, cnv, sizeof(UConverter));
+    uprv_memcpy(&localClone->cnv, cnv, sizeof(UConverter));
     localClone->cnv.isCopyLocal = TRUE;
 
-    memcpy(&localClone->mydata, cnv->extraInfo, sizeof(UConverterDataISCII));
+    uprv_memcpy(&localClone->mydata, cnv->extraInfo, sizeof(UConverterDataISCII));
     localClone->cnv.extraInfo = &localClone->mydata;
 
     return &localClone->cnv;
