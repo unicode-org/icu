@@ -109,8 +109,9 @@
 /** The current ICU patchlevel version as an integer. */
 #define U_ICU_VERSION_PATCHLEVEL_NUM 1
 
-/** The current ICU library version as a dotted-decimal string. */
-#define U_ICU_VERSION "1.8"
+/** The current ICU library version as a dotted-decimal string. The patchlevel
+    only appears in this string if it non-zero. */
+#define U_ICU_VERSION "1.8.1"
 
 /** The current ICU library major/minor version as a string without dots, for library name suffixes. */
 #define U_ICU_VERSION_SHORT "18"
