@@ -1,3 +1,9 @@
+icu (2.1-1) unstable; urgency=low
+
+  * Update to ICU version 2.1. (This comment is generated.)
+
+ -- Yves Arrouye <yves@debian.org>  Tue, 19 Mar 2002 18:40:16 -0800
+
 icu (2.0-2.1pre20020318-1) unstable; urgency=low
 
   * Use the library number in the development package too.
