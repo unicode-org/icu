@@ -108,7 +108,7 @@ public class TestUScript extends TestFmwk {
 
         final String[] testNames={
             /* test locale */
-            "en", "en_US", "sr", "ta","  ___    ---ta" , "te_IN",
+            "en", "en_US", "sr", "ta", "gu", "te_IN", 
             "hi", "he", "ar",
             /* test abbr */
             "Hani", "Hang","Hebr","Hira",
@@ -124,12 +124,12 @@ public class TestUScript extends TestFmwk {
             "oriya",     "runic",     "sinhala", "syriac","tamil",
             "telugu",    "thaana",    "thai",    "tibetan",
             /* test the bounds*/
-            "ucas", "arabic","Yi","Zyyy"
+            "Cans", "arabic","Yi","Zyyy"
         };
         final int[] expected ={
             /* locales should return */
             UScript.LATIN, UScript.LATIN,
-            UScript.CYRILLIC, UScript.TAMIL, UScript.TAMIL,
+            UScript.CYRILLIC, UScript.TAMIL, UScript.GUJARATI,
             UScript.TELUGU,UScript.DEVANAGARI,
             UScript.HEBREW, UScript.ARABIC,
             /* abbr should return */
@@ -145,7 +145,7 @@ public class TestUScript extends TestFmwk {
             UScript.ORIYA, UScript.RUNIC, UScript.SINHALA, UScript.SYRIAC, UScript.TAMIL,
             UScript.TELUGU, UScript.THAANA, UScript.THAI, UScript.TIBETAN,
             /* bounds */
-            UScript.UCAS, UScript.ARABIC, UScript.YI, UScript.COMMON
+            UScript.CANADIAN_ABORIGINAL, UScript.ARABIC, UScript.YI, UScript.COMMON
         };
         int i =0;
         int numErrors =0;
