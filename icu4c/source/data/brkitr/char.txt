@@ -29,10 +29,10 @@ $T   = [:Hangul_Syllable_Type = T:];
 $LV  = [:Hangul_Syllable_Type = LV:];
 $LVT = [:Hangul_Syllable_Type = LVT:];
 
-$HungulSyllable = $L+ | ($L* ($LV? $V+ | $LV | $LVT) $T*) | $T+;
+$HangulSyllable = $L+ | ($L* ($LV? $V+ | $LV | $LVT) $T*) | $T+;
 
 $CR $LF;
-([^$Control] | $HungulSyllable) $Extend*;
+([^$Control] | $HangulSyllable) $Extend*;
 .;
 
 
