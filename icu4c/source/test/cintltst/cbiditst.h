@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2001, International Business Machines Corporation and
+ * Copyright (c) 1997-2004, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*   file name:  cbiditst.h
@@ -58,7 +58,7 @@ enum {
 extern const char *
 dirPropNames[dirPropCount];
 
-extern const UChar
+extern UChar
 charFromDirProp[dirPropCount];
 
 typedef struct {
