@@ -108,7 +108,7 @@ void RBBIDataWrapper::init(const RBBIDataHeader *data, UErrorCode &status) {
     fRefCount = 1;
 
     /// todo: maybe add this formally to the builder
-    UnicodeString hardbreak("!!lookAheadHardBreak");
+    UnicodeString hardbreak = UNICODE_STRING_SIMPLE("!!lookAheadHardBreak");
     if (fRuleString.indexOf(hardbreak) >= 0) {
         fLookAheadHardBreak = TRUE;
     }
@@ -256,6 +256,8 @@ void  RBBIDataWrapper::printData() {
 #endif
 }
 
+U_NAMESPACE_END
+
 //-----------------------------------------------------------------------------
 //
 //  ubrk_swap   -  byte swap and char encoding swap of RBBI data
@@ -373,7 +375,5 @@ ubrk_swap(const UDataSwapper *ds, const void *inData, int32_t length, void *outD
     return totalSize;
 }
 
-
-U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_BREAK_ITERATION */
