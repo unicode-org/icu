@@ -1148,17 +1148,24 @@ ucnv_getInvalidChars (const UConverter * converter,
 			  int8_t * len,
 			  UErrorCode * err)
 {
-   if (!err) return;
-   if (!len || !errBytes || !converter)
-   {
-      *err = U_ILLEGAL_ARGUMENT_ERROR;
-   }
-   if (*len < converter->charErrorBufferLength)
-   {
-      *err = U_INDEX_OUTOFBOUNDS_ERROR;
-   }
-   *len = converter->charErrorBufferLength;
-   uprv_memcpy (errBytes, converter->charErrorBuffer, *len);
+    if (err == NULL || U_FAILURE(*err))
+    {
+        return;
+    }
+    if (len == NULL || errBytes == NULL || converter == NULL)
+    {
+        *err = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+    if (*len < converter->charErrorBufferLength)
+    {
+        *err = U_INDEX_OUTOFBOUNDS_ERROR;
+        return;
+    }
+    if ((*len = converter->charErrorBufferLength) > 0)
+    {
+        uprv_memcpy (errBytes, converter->charErrorBuffer, *len);
+    }
 }
 
 
@@ -1168,15 +1175,22 @@ ucnv_getInvalidUChars (const UConverter * converter,
 			   int8_t * len,
 			   UErrorCode * err)
 {
-   if (!err) return;
-   if (!len || !errChars || !converter)
-   {
-      *err = U_ILLEGAL_ARGUMENT_ERROR;
-   }
-   if (*len < converter->UCharErrorBufferLength)
-   {
-      *err = U_INDEX_OUTOFBOUNDS_ERROR;
-   }
-   *len = converter->UCharErrorBufferLength;
-   uprv_memcpy (errChars, converter->UCharErrorBuffer, sizeof(UChar) * (*len));
+    if (err == NULL || U_FAILURE(*err))
+    {
+        return;
+    }
+    if (len == NULL || errChars == NULL || converter == NULL)
+    {
+        *err = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+    if (*len < converter->UCharErrorBufferLength)
+    {
+        *err = U_INDEX_OUTOFBOUNDS_ERROR;
+        return;
+    }
+    if ((*len = converter->UCharErrorBufferLength) > 0)
+    {
+        uprv_memcpy (errChars, converter->UCharErrorBuffer, sizeof(UChar) * (*len));
+    }
 }
