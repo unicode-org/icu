@@ -12,6 +12,10 @@ rem toolversion: Debug or Release
 set toolversion=Release
 if not "%2"=="" set toolversion=%2
 
+nmake /f makedata.mak icup=%1 cfg=%2
+
+goto :end
+
 rem setup mkhelper to read ucmfiles.mk and ucmlocal.mk
 set conv=mkhelper\%toolversion%\mkhelper -n UCM_SOURCE -n UCM_SOURCE_LOCAL makeconv\ucmfiles.mk makeconv\ucmlocal.mk
 
