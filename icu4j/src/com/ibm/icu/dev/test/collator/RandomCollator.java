@@ -24,6 +24,7 @@ import com.ibm.icu.text.*;
 
 import java.text.ParseException;
 import java.io.*;
+import java.util.Date;
 import java.util.Random;
 
 public class RandomCollator extends TestFmwk {
@@ -46,6 +47,12 @@ public class RandomCollator extends TestFmwk {
     public Shower LOG = new Shower();
        
     public void TestRandom() throws IOException {
+        int year 
+        = java.util.Calendar.getInstance().get(java.util.Calendar.YEAR);
+        if (year < 2004) {
+            System.out.println("\nTestRandom skipped for 2003");
+            return;
+        }
         String fileName;
         PrintWriter pw = BagFormatter.openUTF8Writer("", "RandomCollationTestLog.txt", BagFormatter.CONSOLE);
         TestCollator tc = new TestCollator(chars);
