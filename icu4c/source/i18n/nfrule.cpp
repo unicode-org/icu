@@ -15,6 +15,8 @@
 
 #include "nfrule.h"
 
+#if U_HAVE_RBNF
+
 #include "unicode/rbnf.h"
 #include "unicode/tblcoll.h"
 #include "unicode/coleitr.h"
@@ -124,7 +126,7 @@ NFRule::makeRules(UnicodeString& description,
         // base value is an even multiple of its divisor (or it's one
         // of the special rules)
         if ((rule1->baseValue > 0
-            && (rule1->baseValue % ((llong)rule1->radix).pow((int32_t)rule1->exponent)) == 0)
+            && (rule1->baseValue % util64_pow(rule1->radix, rule1->exponent)) == 0)
             || rule1->getType() == kImproperFractionRule
             || rule1->getType() == kMasterRule) {
 
@@ -249,7 +251,7 @@ NFRule::parseRuleDescriptor(UnicodeString& description, UErrorCode& status)
         // since we don't have Long.parseLong, and this isn't much work anyway,
         // just build up the value as we encounter the digits.
         else if (descriptor.charAt(0) >= gZero && descriptor.charAt(0) <= gNine) {
-            llong val = (int32_t)0;
+            int64_t val = 0;
             p = 0;
             UChar c = gSpace;
 
@@ -257,7 +259,7 @@ NFRule::parseRuleDescriptor(UnicodeString& description, UErrorCode& status)
             // into "tempValue", skip periods, commas, and spaces,
             // stop on a slash or > sign (or at the end of the string),
             // and throw an exception on any other character
-            llong ll_10 = (int32_t)10;
+            int64_t ll_10 = 10;
             while (p < descriptor.length()) {
                 c = descriptor.charAt(p);
                 if (c >= gZero && c <= gNine) {
@@ -284,9 +286,9 @@ NFRule::parseRuleDescriptor(UnicodeString& description, UErrorCode& status)
             // in tempValue, skip punctuation, stop on a > mark, and
             // throw an exception on anything else
             if (c == gSlash) {
-                val = (int32_t)0;
+                val = 0;
                 ++p;
-                llong ll_10 = (int32_t)10;
+                int64_t ll_10 = 10;
                 while (p < descriptor.length()) {
                     c = descriptor.charAt(p);
                     if (c >= gZero && c <= gNine) {
@@ -307,7 +309,7 @@ NFRule::parseRuleDescriptor(UnicodeString& description, UErrorCode& status)
 
                 // tempValue now contain's the rule's radix.  Set it
                 // accordingly, and recalculate the rule's exponent
-                radix = (int16_t)val.asInt();
+                radix = (int16_t)val;
                 if (radix == 0) {
                     // throw new IllegalArgumentException("Rule can't have radix of 0");
                     status = U_PARSE_ERROR;
@@ -442,7 +444,7 @@ NFRule::extractSubstitution(const NFRuleSet* ruleSet,
  * @param The new base value for the rule.
  */
 void
-NFRule::setBaseValue(llong newBaseValue)
+NFRule::setBaseValue(int64_t newBaseValue)
 {
     // set the base value
     baseValue = newBaseValue;
@@ -493,8 +495,8 @@ NFRule::expectedExponent() const
     // we get rounding error in some cases-- for example, log 1000 / log 10
     // gives us 1.9999999996 instead of 2.  The extra logic here is to take
     // that into account
-    int16_t tempResult = (int16_t)(uprv_log(baseValue.asDouble()) / uprv_log((double)radix));
-    llong temp = ((llong)radix).pow(tempResult + 1);
+    int16_t tempResult = (int16_t)(uprv_log((double)baseValue) / uprv_log((double)radix));
+    int64_t temp = util64_pow(radix, tempResult + 1);
     if (temp <= baseValue) {
         tempResult += 1;
     }
@@ -543,39 +545,16 @@ NFRule::operator==(const NFRule& rhs) const
         && *sub2 == *rhs.sub2;
 }
 
-/*
-static void
-util_append_llong(UnicodeString& result, const llong& value)
-{
-    llong n(value);
-
-    if (n < 0) {
-        result.append(gMinus);
-        n = -n;
-    }
-    if (n == 0) {
-        result.append(gZero);
-    } else {
-        llong ll_10((int32_t)10);
-        while (n != 0) {
-            llong nn = n / ll_10;
-            result.append((UChar)(gZero + llong_asInt(n - nn * ll_10)));
-            n = nn;
-        }
-    }
-}
-*/
-
 /**
 * Returns a textual representation of the rule.  This won't
 * necessarily be the same as the description that this rule
 * was created with, but it will produce the same result.
 * @return A textual description of the rule
 */
-static void util_append64(UnicodeString& result, const llong& n)
+static void util_append64(UnicodeString& result, int64_t n)
 {
     UChar buffer[256];
-    int32_t len = n.lltou(buffer, sizeof(buffer));
+    int32_t len = util64_tou(n, buffer, sizeof(buffer));
     UnicodeString temp(buffer, len);
     result.append(temp);
 }
@@ -648,7 +627,7 @@ NFRule::appendRuleText(UnicodeString& result) const
 * should be inserted
 */
 void
-NFRule::doFormat(const llong &number, UnicodeString& toInsertInto, int32_t pos) const
+NFRule::doFormat(int64_t number, UnicodeString& toInsertInto, int32_t pos) const
 {
     // first, insert the rule's rule text into toInsertInto at the
     // specified position, then insert the results of the substitutions
@@ -711,8 +690,8 @@ NFRule::shouldRollBack(double number) const
     // of 100, and the value we're trying to format _is_ an even
     // multiple of 100.  This is called the "rollback rule."
     if ((sub1->isModulusSubstitution()) || (sub2->isModulusSubstitution())) {
-        llong re = ((llong)radix).pow(exponent);
-        return uprv_fmod(number, re.asDouble()) == 0 && (baseValue % re) != 0;
+        int64_t re = util64_pow(radix, exponent);
+        return uprv_fmod(number, (double)re) == 0 && (baseValue % re) != 0;
     }
     return FALSE;
 }
@@ -831,7 +810,7 @@ NFRule::doParse(const UnicodeString& text,
     int highWaterMark = 0;
     double result = 0;
     int start = 0;
-    double tempBaseValue = (baseValue <= 0) ? 0 : baseValue.asDouble();
+    double tempBaseValue = (double)(baseValue <= 0 ? 0 : baseValue);
 
     UnicodeString temp;
     do {
@@ -1422,5 +1401,8 @@ NFRule::allIgnorable(const UnicodeString& str) const
 }
 
 U_NAMESPACE_END
+
+/* U_HAVE_RBNF */
+#endif
 
 

@@ -16,12 +16,14 @@
 #ifndef NFRS_H
 #define NFRS_H
 
+#include "unicode/rbnf.h"
+
+#if U_HAVE_RBNF
+
 #include "unicode/utypes.h"
 #include "unicode/umisc.h"
 
-#include "unicode/rbnf.h"
 #include "nfrlist.h"
-#include "llong.h"
 
 U_NAMESPACE_BEGIN
 
@@ -42,7 +44,7 @@ class NFRuleSet {
   void  getName(UnicodeString& result) const { result.setTo(name); }
   UBool isNamed(const UnicodeString& _name) const { return this->name == _name; }
 
-  void  format(llong number, UnicodeString& toAppendTo, int32_t pos) const;
+  void  format(int64_t number, UnicodeString& toAppendTo, int32_t pos) const;
   void  format(double number, UnicodeString& toAppendTo, int32_t pos) const;
 
   UBool parse(const UnicodeString& text, ParsePosition& pos, double upperBound, Formattable& result) const;
@@ -50,7 +52,7 @@ class NFRuleSet {
   void appendRules(UnicodeString& result) const; // toString
 
  private:
-  NFRule * findNormalRule(llong number) const;
+  NFRule * findNormalRule(int64_t number) const;
   NFRule * findDoubleRule(double number) const;
   NFRule * findFractionRuleSetRule(double number) const;
 
@@ -63,7 +65,27 @@ class NFRuleSet {
   UBool fIsPublic;
 };
 
+// utilities from old llong.h
+// convert mantissa portion of double to int64
+int64_t util64_fromDouble(double d);
+
+// raise radix to the power exponent, only non-negative exponents
+int64_t util64_pow(int32_t radix, uint32_t exponent);
+
+// convert n to digit string in buffer, return length of string
+uint32_t util64_tou(int64_t n, UChar* buffer, uint32_t buflen, uint32_t radix = 10, UBool raw = FALSE);
+int64_t util64_utoi(const UChar* str, uint32_t radix = 10);
+
+#ifdef RBNF_DEBUG
+uint32_t util64_toa(int64_t n, char* buffer, uint32_t buflen, uint32_t radix = 10, UBool raw = FALSE);
+int64_t util64_atoi(const char* str, uint32_t radix);
+#endif
+
+
 U_NAMESPACE_END
+
+/* U_HAVE_RBNF */
+#endif
 
 // NFRS_H
 #endif

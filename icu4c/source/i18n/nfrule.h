@@ -7,10 +7,12 @@
 #ifndef NFRULE_H
 #define NFRULE_H
 
+#include "unicode/rbnf.h"
+
+#if U_HAVE_RBNF
+
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
-
-#include "llong.h"
 
 U_NAMESPACE_BEGIN
 
@@ -48,15 +50,15 @@ public:
     UBool operator==(const NFRule& rhs) const;
     UBool operator!=(const NFRule& rhs) const { return !operator==(rhs); }
 
-    ERuleType getType() const { return (ERuleType)(baseValue <= 0 ? baseValue.asInt() : kOtherRule); }
+    ERuleType getType() const { return (ERuleType)(baseValue <= 0 ? baseValue : kOtherRule); }
     void setType(ERuleType ruleType) { baseValue = (int32_t)ruleType; }
 
-    llong getBaseValue() const { return baseValue; }
-    void setBaseValue(llong value);
+    int64_t getBaseValue() const { return baseValue; }
+    void setBaseValue(int64_t value);
 
     double getDivisor() const { return uprv_pow(radix, exponent); }
 
-    void doFormat(const llong &number, UnicodeString& toAppendTo, int32_t pos) const;
+    void doFormat(int64_t number, UnicodeString& toAppendTo, int32_t pos) const;
     void doFormat(double  number, UnicodeString& toAppendTo, int32_t pos) const;
 
     UBool doParse(const UnicodeString& text, 
@@ -87,7 +89,7 @@ private:
                      int32_t startingAt, int32_t* resultCount) const;
 
 private:
-    llong baseValue;
+    int64_t baseValue;
     int16_t radix;
     int16_t exponent;
     UnicodeString ruleText;
@@ -98,5 +100,9 @@ private:
 
 U_NAMESPACE_END
 
+/* U_HAVE_RBNF */
+#endif
+
 // NFRULE_H
 #endif
+
