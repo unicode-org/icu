@@ -37,6 +37,8 @@ TransliteratorTest::runIndexedTest(int32_t index, bool_t exec,
         CASE(7,TestCompoundKana)
         CASE(8,TestCompoundHex)
         CASE(9,TestFiltering)
+        CASE(10,TestInlineSet)
+        CASE(11,TestPatternQuoting)
         default: name = ""; break;
     }
 }
@@ -91,7 +93,7 @@ void TransliteratorTest::TestSimpleRules(void) {
      * [exz]|d   no match, copy d to transliterated buffer
      * [exzd]|   done
      */
-    expect(UnicodeString("ab>x|y\n") +
+    expect(UnicodeString("ab>x|y;") +
            "yc>z",
            "eabcd", "exzd");        /* Another set of rules:
      *    1. ab>x|yzacw
@@ -105,9 +107,9 @@ void TransliteratorTest::TestSimpleRules(void) {
      * [xyq|cw]    Rule 4
      * [xyqn]|     Done
      */
-    expect(UnicodeString("ab>x|yzacw\n") +
-           "za>q\n" +
-           "qc>r\n" +
+    expect(UnicodeString("ab>x|yzacw;") +
+           "za>q;" +
+           "qc>r;" +
            "cw>n",
            "ab", "xyqn");
 
@@ -116,20 +118,39 @@ void TransliteratorTest::TestSimpleRules(void) {
     UErrorCode status = U_ZERO_ERROR;
     RuleBasedTransliterator t(
         "<ID>",
-        UnicodeString("dummy=").append((UChar)0xE100) + "\n" +
-        "vowel=[aeiouAEIOU]\n" +
-        "lu=[:Lu:]\n" +
-        "{vowel}[{lu}>!\n" +
-        "{vowel}>&\n" +
-        "!]{lu}>^\n" +
-        "{lu}>*\n" +
-        "a>ERROR",
+        UnicodeString("dummy=").append((UChar)0xE100) + ";" +
+        "          vowel = [aeiouAEIOU];" +
+        "             lu = [:Lu:];" +
+
+        " {vowel} ({lu}) > ! ;" +
+        " {vowel}        > & ;" +
+        "        !) {lu} > ^ ;" +
+        "           {lu} > * ;" +
+        "              a > ERROR",
         status);
     if (U_FAILURE(status)) {
         errln("FAIL: RBT constructor failed");
         return;
     }
     expect(t, "abcdefgABCDEFGU", "&bcd&fg!^**!^*&");
+}
+
+/**
+ * Test inline set syntax and set variable syntax.
+ */
+void TransliteratorTest::TestInlineSet(void) {
+    expect("[:Ll:] (x) > y; [:Ll:] > z;", "aAbxq", "zAyzz");
+    expect("a[0-9]b > qrs", "1a7b9", "1qrs9");
+    
+    expect((UnicodeString)
+           "digit = [0-9];" +
+           "alpha = [a-zA-Z];" +
+           "alphanumeric = [{digit}{alpha}];" + // ***
+           "special = [^{alphanumeric}];" +     // ***
+           "{alphanumeric} > -;" +
+           "{special} > *;",
+           
+           "thx-1138", "---*----");
 }
 
 /**
@@ -142,21 +163,21 @@ void TransliteratorTest::TestSimpleRules(void) {
  */
 void TransliteratorTest::TestRuleBasedInverse(void) {
     UnicodeString RULES =
-        UnicodeString("abc>zyx\n") +
-        "ab>yz\n" +
-        "bc>zx\n" +
-        "ca>xy\n" +
-        "a>x\n" +
-        "b>y\n" +
-        "c>z\n" +
+        UnicodeString("abc>zyx;") +
+        "ab>yz;" +
+        "bc>zx;" +
+        "ca>xy;" +
+        "a>x;" +
+        "b>y;" +
+        "c>z;" +
 
-        "abc<zyx\n" +
-        "ab<yz\n" +
-        "bc<zx\n" +
-        "ca<xy\n" +
-        "a<x\n" +
-        "b<y\n" +
-        "c<z\n" +
+        "abc<zyx;" +
+        "ab<yz;" +
+        "bc<zx;" +
+        "ca<xy;" +
+        "a<x;" +
+        "b<y;" +
+        "c<z;" +
 
         "";
 
@@ -191,10 +212,10 @@ void TransliteratorTest::TestRuleBasedInverse(void) {
 void TransliteratorTest::TestKeyboard(void) {
     UErrorCode status = U_ZERO_ERROR;
     RuleBasedTransliterator t("<ID>", 
-                              UnicodeString("psch>Y\n")
-                              +"ps>y\n"
-                              +"ch>x\n"
-                              +"a>A\n",
+                              UnicodeString("psch>Y;")
+                              +"ps>y;"
+                              +"ch>x;"
+                              +"a>A;",
                               status);
     if (U_FAILURE(status)) {
         errln("FAIL: RBT constructor failed");
@@ -220,10 +241,10 @@ void TransliteratorTest::TestKeyboard(void) {
 void TransliteratorTest::TestKeyboard2(void) {
     UErrorCode status = U_ZERO_ERROR;
     RuleBasedTransliterator t("<ID>", 
-                              UnicodeString("ych>Y\n")
-                              +"ps>|y\n"
-                              +"ch>x\n"
-                              +"a>A\n",
+                              UnicodeString("ych>Y;")
+                              +"ps>|y;"
+                              +"ch>x;"
+                              +"a>A;",
                               status);
     if (U_FAILURE(status)) {
         errln("FAIL: RBT constructor failed");
@@ -253,8 +274,8 @@ void TransliteratorTest::TestKeyboard3(void) {
     // We want th>z but t>y.  Furthermore, during keyboard
     // transliteration we want t>y then yh>z if t, then h are
     // typed.
-    UnicodeString RULES("t>|y\n"
-                        "yh>z\n");
+    UnicodeString RULES("t>|y;"
+                        "yh>z;");
 
     const char* DATA[] = {
         // Column 1: characters to add to buffer (as if typed)
@@ -432,6 +453,30 @@ void TransliteratorTest::TestFiltering(void) {
         logln(UnicodeString("FAIL: \"") + out + "\", wanted \"" + exp + "\"");
     }
     delete hex;
+}
+
+/**
+ * Test pattern quoting and escape mechanisms.
+ */
+void TransliteratorTest::TestPatternQuoting(void) {
+    // Array of 3n items
+    // Each item is <rules>, <input>, <expected output>
+    const UnicodeString DATA[] = {
+        UnicodeString(UChar(0x4E01)) + ">'[male adult]'",
+        UnicodeString(UChar(0x4E01)),
+        "[male adult]"
+    };
+
+    for (int i=0; i<3; i+=3) {
+        logln(UnicodeString("Pattern: ") + escape(DATA[i]));
+        UErrorCode status = U_ZERO_ERROR;
+        RuleBasedTransliterator t("<ID>", DATA[i], status);
+        if (U_FAILURE(status)) {
+            errln("RBT constructor failed");
+        } else {
+            expect(t, DATA[i+1], DATA[i+2]);
+        }
+    }
 }
 
 //======================================================================

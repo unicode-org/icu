@@ -31,6 +31,10 @@ class TransliteratorTest : public IntlTest {
     
     void TestSimpleRules(void);
 
+    void TestInlineSet(void);
+
+    void TestPatternQuoting(void);
+
     /**
      * Create some inverses and confirm that they work.  We have to be
      * careful how we do this, since the inverses will not be true
