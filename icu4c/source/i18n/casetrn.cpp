@@ -26,6 +26,57 @@
 #include "ucase.h"
 #include "cpputils.h"
 
+/* case context iterator using a Replaceable */
+U_CFUNC UChar32 U_CALLCONV
+utrans_rep_caseContextIterator(void *context, int8_t dir)
+{
+    UCaseContext *csc=(UCaseContext *)context;
+    Replaceable *rep=(Replaceable *)csc->p;
+    UChar32 c;
+
+    if(dir<0) {
+        /* reset for backward iteration */
+        csc->index=csc->cpStart;
+        csc->dir=dir;
+    } else if(dir>0) {
+        /* reset for forward iteration */
+        csc->index=csc->cpLimit;
+        csc->dir=dir;
+    } else {
+        /* continue current iteration direction */
+        dir=csc->dir;
+    }
+
+    // automatically adjust start and limit if the Replaceable disagrees
+    // with the original values
+    if(dir<0) {
+        if(csc->start<csc->index) {
+            c=rep->char32At(csc->index-1);
+            if(c<0) {
+                csc->start=csc->index;
+            } else {
+                csc->index-=U16_LENGTH(c);
+                return c;
+            }
+        }
+    } else {
+        // detect, and store in csc->b1, if we hit the limit
+        if(csc->index<csc->limit) {
+            c=rep->char32At(csc->index);
+            if(c<0) {
+                csc->limit=csc->index;
+                csc->b1=TRUE;
+            } else {
+                csc->index+=U16_LENGTH(c);
+                return c;
+            }
+        } else {
+            csc->b1=TRUE;
+        }
+    }
+    return U_SENTINEL;
+}
+
 U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(CaseMapTransliterator)
@@ -80,57 +131,6 @@ CaseMapTransliterator& CaseMapTransliterator::operator=(const CaseMapTranslitera
  */
 Transliterator* CaseMapTransliterator::clone(void) const {
     return new CaseMapTransliterator(*this);
-}
-
-/* case context iterator using a Replaceable */
-U_CFUNC UChar32 U_CALLCONV
-utrans_rep_caseContextIterator(void *context, int8_t dir)
-{
-    UCaseContext *csc=(UCaseContext *)context;
-    Replaceable *rep=(Replaceable *)csc->p;
-    UChar32 c;
-
-    if(dir<0) {
-        /* reset for backward iteration */
-        csc->index=csc->cpStart;
-        csc->dir=dir;
-    } else if(dir>0) {
-        /* reset for forward iteration */
-        csc->index=csc->cpLimit;
-        csc->dir=dir;
-    } else {
-        /* continue current iteration direction */
-        dir=csc->dir;
-    }
-
-    // automatically adjust start and limit if the Replaceable disagrees
-    // with the original values
-    if(dir<0) {
-        if(csc->start<csc->index) {
-            c=rep->char32At(csc->index-1);
-            if(c<0) {
-                csc->start=csc->index;
-            } else {
-                csc->index-=U16_LENGTH(c);
-                return c;
-            }
-        }
-    } else {
-        // detect, and store in csc->b1, if we hit the limit
-        if(csc->index<csc->limit) {
-            c=rep->char32At(csc->index);
-            if(c<0) {
-                csc->limit=csc->index;
-                csc->b1=TRUE;
-            } else {
-                csc->index+=U16_LENGTH(c);
-                return c;
-            }
-        } else {
-            csc->b1=TRUE;
-        }
-    }
-    return U_SENTINEL;
 }
 
 /**
