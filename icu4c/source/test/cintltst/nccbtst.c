@@ -597,6 +597,63 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
         }
     }
 
+    log_verbose("Testing fromUnicode for CESU-8 with UCNV_TO_U_CALLBACK_SKIP\n");
+    {
+        const uint8_t sampleText[]={
+            0x61,                               /* 'a' */
+            0xc4, 0xb5,                         /* U+0135 */
+            0xed, 0x80, 0xa0,                   /* Hangul U+d020 */
+            0xed, 0xa0, 0x81, 0xed, 0xb0, 0x81, /* surrogate pair for U+10401 */
+            0xee, 0x80, 0x80,                   /* PUA U+e000 */
+            0xed, 0xb0, 0x81,                   /* unpaired trail surrogate U+dc01 */
+            0x62,                               /* 'b' */
+            0xed, 0xa0, 0x81,                   /* unpaired lead surrogate U+d801 */
+            0xd0, 0x80                          /* U+0400 */
+        };
+        UChar expected[]={
+            0x0061,
+            0x0135,
+            0xd020,
+            0xd801, 0xdc01,
+            0xe000,
+            0xdc01,
+            0x0062,
+            0xd801,
+            0x0400
+        };
+        int32_t offsets[]={
+            0,
+            1, 1,
+            2, 2, 2,
+            3, 3, 3, 4, 4, 4,
+            5, 5, 5,
+            6, 6, 6,
+            7,
+            8, 8, 8,
+            9, 9
+        };
+
+        /* CESU-8 fromUnicode never calls callbacks, so this only tests conversion and offsets behavior */
+
+        /* without offsets */
+        if(!testConvertFromUnicode(expected, ARRAY_LENGTH(expected),
+                                 sampleText, sizeof(sampleText),
+                                 "CESU-8",
+                                 UCNV_FROM_U_CALLBACK_SKIP, NULL, NULL, 0)
+        ) {
+            log_err("u->CESU-8 with skip did not match.\n");
+        }
+
+        /* with offsets */
+        if(!testConvertFromUnicode(expected, ARRAY_LENGTH(expected),
+                                 sampleText, sizeof(sampleText),
+                                 "CESU-8",
+                                 UCNV_FROM_U_CALLBACK_SKIP, offsets, NULL, 0)
+        ) {
+            log_err("u->CESU-8 with skip did not match.\n");
+        }
+    }
+
     /*to Unicode*/
     log_verbose("Testing toUnicode with UCNV_TO_U_CALLBACK_SKIP  \n");
 
@@ -938,6 +995,67 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
                                  UCNV_TO_U_CALLBACK_SKIP, offsets, NULL, 0)
         ) {
             log_err("BOCU-1->u with skip did not match.\n");
+        }
+    }
+
+    log_verbose("Testing toUnicode for CESU-8 with UCNV_TO_U_CALLBACK_SKIP\n");
+    {
+        const uint8_t sampleText[]={
+            0x61,                               /* 0  'a' */
+            0xc0, 0x80,                         /* 1  non-shortest form */
+            0xc4, 0xb5,                         /* 3  U+0135 */
+            0xed, 0x80, 0xa0,                   /* 5  Hangul U+d020 */
+            0xed, 0xa0, 0x81, 0xed, 0xb0, 0x81, /* 8  surrogate pair for U+10401 */
+            0xee, 0x80, 0x80,                   /* 14 PUA U+e000 */
+            0xed, 0xb0, 0x81,                   /* 17 unpaired trail surrogate U+dc01 */
+            0xf0, 0x90, 0x80, 0x80,             /* 20 illegal 4-byte form for U+10000 */
+            0x62,                               /* 24 'b' */
+            0xed, 0xa0, 0x81,                   /* 25 unpaired lead surrogate U+d801 */
+            0xed, 0xa0,                         /* 28 incomplete sequence */
+            0xd0, 0x80                          /* 30 U+0400 */
+        };
+        UChar expected[]={
+            0x0061,
+            /* skip */
+            0x0135,
+            0xd020,
+            0xd801, 0xdc01,
+            0xe000,
+            0xdc01,
+            /* skip */
+            0x0062,
+            0xd801,
+            0x0400
+        };
+        int32_t offsets[]={
+            0,
+            /* skip 1, */
+            3,
+            5,
+            8, 11,
+            14,
+            17,
+            /* skip 20, 20, */
+            24,
+            25,
+            /* skip 28 */
+            30
+        };
+
+        /* without offsets */
+        if(!testConvertToUnicode(sampleText, sizeof(sampleText),
+                                 expected, ARRAY_LENGTH(expected), "CESU-8",
+                                 UCNV_TO_U_CALLBACK_SKIP, NULL, NULL, 0)
+        ) {
+            log_err("CESU-8->u with skip did not match.\n");
+        }
+
+        /* with offsets */
+        if(!testConvertToUnicode(sampleText, sizeof(sampleText),
+                                 expected, ARRAY_LENGTH(expected), "CESU-8",
+                                 UCNV_TO_U_CALLBACK_SKIP, offsets, NULL, 0)
+        ) {
+            log_err("CESU-8->u with skip did not match.\n");
         }
     }
 }
