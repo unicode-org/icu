@@ -406,13 +406,13 @@ doInverseBiDiTest() {
         return;
     }
 
-    log_info("inverse BiDi: testInverseBiDi(L) with %u test cases ---\n", LENGTHOF(testCases));
+    log_verbose("inverse BiDi: testInverseBiDi(L) with %u test cases ---\n", LENGTHOF(testCases));
     for(i=0; i<LENGTHOF(testCases); ++i) {
         errorCode=U_ZERO_ERROR;
         testInverseBiDi(pBiDi, testCases[i].s, testCases[i].length, 0, &errorCode);
     }
 
-    log_info("inverse BiDi: testInverseBiDi(R) with %u test cases ---\n", LENGTHOF(testCases));
+    log_verbose("inverse BiDi: testInverseBiDi(R) with %u test cases ---\n", LENGTHOF(testCases));
     for(i=0; i<LENGTHOF(testCases); ++i) {
         errorCode=U_ZERO_ERROR;
         testInverseBiDi(pBiDi, testCases[i].s, testCases[i].length, 1, &errorCode);
@@ -445,7 +445,7 @@ testManyInverseBiDi(UBiDi *pBiDi, UBiDiLevel direction) {
     int i, j, k;
     UErrorCode errorCode;
 
-    log_info("inverse BiDi: testManyInverseBiDi(%c) - test permutations of text snippets ---\n", direction==0 ? 'L' : 'R');
+    log_verbose("inverse BiDi: testManyInverseBiDi(%c) - test permutations of text snippets ---\n", direction==0 ? 'L' : 'R');
     for(i=0; i<COUNT_REPEAT_SEGMENTS; ++i) {
         text[0]=repeatSegments[i][0];
         text[1]=repeatSegments[i][1];
