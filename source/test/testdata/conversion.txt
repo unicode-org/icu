@@ -36,13 +36,90 @@ conversion {
 
       "fallbacks: per-direction boolean, currently only for fromUnicode; see Jitterbug 2401\n"
 
-      "errorCode: (empty)==zero | invalid | illegal | truncated\n"
+      "errorCode: (empty)==zero | invalid | illegal | truncated | illesc | unsuppesc\n"
     }
   }
   TestData {
     toUnicode {
       Headers { "charset", "bytes", "unicode", "offsets", "flush", "fallbacks", "errorCode", "callback", "invalidChars" }
       Cases {
+        // truncated, partial escape sequence
+        {
+          "ISO_2022,locale=zh,version=1",
+          :bin{ 1b }, "", :intvector{},
+          :int{1}, :int{1}, "truncated", ".", :bin{ 1b }
+        }
+        {
+          "ISO_2022,locale=zh,version=1",
+          :bin{ 1b24 }, "", :intvector{},
+          :int{1}, :int{1}, "truncated", ".", :bin{ 1b24 }
+        }
+        {
+          "ISO_2022,locale=zh,version=1",
+          :bin{ 1b2429 }, "", :intvector{},
+          :int{1}, :int{1}, "truncated", ".", :bin{ 1b2429 }
+        }
+        // complete escape sequence but nothing else
+        {
+          "ISO_2022,locale=zh,version=1",
+          :bin{ 1b242941 }, "", :intvector{},
+          :int{1}, :int{1}, "", ".", :bin{""}
+        }
+        {
+          "ISO_2022,locale=zh,version=1",
+          :bin{ 1b2429410e }, "", :intvector{},
+          :int{1}, :int{1}, "", ".", :bin{""}
+        }
+        // escape plus ASCII character
+        {
+          "ISO_2022,locale=zh,version=1",
+          :bin{ 1b24294141 }, "\x41", :intvector{ 4 },
+          :int{1}, :int{1}, "", ".", :bin{""}
+        }
+        // escape plus incomplete DBCS character
+        {
+          "ISO_2022,locale=zh,version=1",
+          :bin{ 1b2429410e41 }, "", :intvector{},
+          :int{1}, :int{1}, "truncated", ".", :bin{ 41 }
+        }
+        // all complete with DBCS character
+        {
+          "ISO_2022,locale=zh,version=1",
+          :bin{ 1b2429410e4141 }, "\u4eae", :intvector{ 5 },
+          :int{1}, :int{1}, "", ".", :bin{""}
+        }
+        // ISO-2022-CN-EXT with all subcharsets and shifts and with supplementary code points
+        {
+          "ISO-2022-CN-EXT",
+          :bin{ 1b2429411b242a480e41411b2429457e7c1b4e70341b242b4d1b2429477c341b4f664c2421 },
+          "\u4eae\u9f82\u56cd\u56cc\U0002a6d6\x30",
+          :intvector{ 9, 15, 19, 29, 33, 33, 35 },
+          :int{1}, :int{1}, "", ".", :bin{""}
+        }
+
+        // illegal and unsupported escape sequences
+        // SS2 without designator: illegal
+        {
+          "ISO-2022-CN-EXT",
+          :bin{ 411b4e2121 }, "\x41", :intvector{ 0 },
+          :int{1}, :int{1}, "illesc", ".", :bin{ 1b4e }
+        }
+        // G3 designator: recognized, but not supported for -CN (only for -CN-EXT)
+        {
+          "ISO-2022-CN",
+          :bin{ 411b242b491b4f2121 }, "\x41", :intvector{ 0 },
+          :int{1}, :int{1}, "unsuppesc", ".", :bin{ 1b242b49 }
+        }
+
+        // ISO-2022 SBCS
+        {
+          "ISO_2022",
+          :bin{ 0008090a0d1a1c1f203f415c7d7e7f },
+          "\x00\x08\t\n\r\x1a\x1c\x1f ?A\\}~\x7f",
+          :intvector{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 },
+          :int{1}, :int{1}, "", ".", :bin{""}
+        }
+
         // DBCS-only extensions
         {
           "ibm-970",
@@ -177,6 +254,15 @@ conversion {
     fromUnicode {
       Headers { "charset", "unicode", "bytes", "offsets", "flush", "fallbacks", "errorCode", "callback", "invalidUChars" }
       Cases {
+        // ISO-2022-CN-EXT with all subcharsets and shifts and with supplementary code points
+        {
+          "ISO-2022-CN-EXT",
+          "\u4eae\u9f82\u56cd\u56cc\U0002a6d6\x30",
+          :bin{       1b2429410e41411b2429457e7c1b242a481b4e70341b2429477c341b242b4d1b4f664c0f30 },
+          :intvector{ 0,0,0,0,0,0,0,1,1,1,1,1,1,2,2,2,2,2,2,2,2,3,3,3,3,3,3,4,4,4,4,4,4,4,4,6,6 },
+          :int{1}, :int{1}, "", ".", ""
+        }
+
         // windows-936 vs. ibm-1386
         {
           "ibm-1386",
