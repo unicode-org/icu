@@ -346,19 +346,22 @@ res_findResource(const ResourceData *pResData, Resource r, const char** path) {
       *path += keyLen;
     }
 
+    /* if the resource is a table */
     /* try the key based access */
-    t2 = _res_findTableItemN(pResData->pRoot, t1, pathP, keyLen);
-    if(t2 == RES_BOGUS) { 
-      /* if we fail to get the resource by key, maybe we got an index */
-      indexR = uprv_strtol(pathP, &closeIndex, 10);
-      if(closeIndex != pathP) {
-        if(type == RES_TABLE) {
+    if(type == RES_TABLE) {
+      t2 = _res_findTableItemN(pResData->pRoot, t1, pathP, keyLen);
+      if(t2 == RES_BOGUS) { 
+        /* if we fail to get the resource by key, maybe we got an index */
+        indexR = uprv_strtol(pathP, &closeIndex, 10);
+        if(closeIndex != pathP) {
           /* if we indeed have an index, try to get the item by index */
           t2 = _res_getTableItem(pResData->pRoot, t1, (uint16_t)indexR);
-        } else { /* if(type == RES_ARRAY) { */
-          t2 = _res_getArrayItem(pResData->pRoot, t1, indexR);
-        } 
+        }
       }
+    } else if(type == RES_ARRAY) {
+      t2 = _res_getArrayItem(pResData->pRoot, t1, indexR);
+    } else { /* can't do much here, except setting t2 to bogus */
+      t2 = RES_BOGUS;
     }
     t1 = t2;
     type = RES_GET_TYPE(t1);
