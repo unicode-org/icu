@@ -245,32 +245,6 @@ ucol_open(    const    char         *loc,
         UErrorCode      *status);
 
 /**
- * Open a UCollator with a specific version.
- * This is the same as ucol_open() except that ucol_getVersion() of
- * the returned object is guaranteed to be the same as the version
- * parameter.
- * This is designed to be used to open the same collator for a given
- * locale even when ICU is updated.
- * The same locale and version guarantees the same sort keys and
- * comparison results.
- *
- * @param loc The locale ID for which to open a collator.
- * @param version The requested collator version.
- * @param status A pointer to a UErrorCode,
- *               must not indicate a failure before calling this function.
- * @return A pointer to a UCollator, or NULL if an error occurred
- *         or a collator with the requested version is not available.
- *
- * @see ucol_open
- * @see ucol_getVersion
- * @draft ICU 1.8
- */
-U_CAPI UCollator * U_EXPORT2
-ucol_openVersion(const char *loc,
-                 UVersionInfo version,
-                 UErrorCode *status);
-
-/**
  * Open a UCollator for comparing strings.
  * The UCollator may be used in calls to \Ref{ucol_strcoll}.
  * @param rules A string describing the collation rules.
@@ -515,7 +489,31 @@ U_CAPI void U_EXPORT2
 ucol_getVersion(const UCollator* coll, UVersionInfo info);
 
 
-/* Following are the new APIs for 1.7. They are all draft and most are not even implemented */
+/** 
+ * Merge two sort keys. The levels are merged with their corresponding counterparts
+ * (primaries with primaries, secondaries with secondaries etc.). Between the values
+ * from the same level a separator is inserted.
+ * example (uncompressed): 
+ * 191B1D 01 050505 01 910505 00 and 1F2123 01 050505 01 910505 00
+ * will be merged as 
+ * 191B1D 02 1F212301 050505 02 050505 01 910505 02 910505 00
+ * This allows for concatenating of first and last names for sorting, among other things.
+ * If the destination buffer is not big enough, the results are undefined.
+ * @param src1 pointer to the first sortkey
+ * @param src1Length length of the first sortkey
+ * @param src2 pointer to the second sortkey
+ * @param src2Length length of the second sortkey
+ * @param dest buffer to hold the result
+ * @param destCapacity size of the buffer for the result
+ * @return size of the result. If the buffer is big enough size is always
+ *         src1Length+src2Length-1
+ * @draft ICU 2.0
+ */
+U_CAPI
+int32_t
+ucol_mergeSortkeys(const uint8_t *src1, int32_t src1Length,
+                   const uint8_t *src2, int32_t src2Length,
+                   uint8_t *dest, int32_t destCapacity);
 
 /**
  * Universal attribute setter
@@ -523,7 +521,7 @@ ucol_getVersion(const UCollator* coll, UVersionInfo info);
  * @param attr attribute type 
  * @param value attribute value
  * @param status to indicate whether the operation went on smoothly or there were errors
- * @draft
+ * @draft ICU 1.8
  */
 U_CAPI void ucol_setAttribute(UCollator *coll, UColAttribute attr, UColAttributeValue value, UErrorCode *status);
 
@@ -533,7 +531,7 @@ U_CAPI void ucol_setAttribute(UCollator *coll, UColAttribute attr, UColAttribute
  * @param attr attribute type
  * @return attribute value
  * @param status to indicate whether the operation went on smoothly or there were errors
- * @draft
+ * @draft ICU 1.8
  */
 U_CAPI UColAttributeValue ucol_getAttribute(const UCollator *coll, UColAttribute attr, UErrorCode *status);
 
@@ -546,7 +544,7 @@ U_CAPI UColAttributeValue ucol_getAttribute(const UCollator *coll, UColAttribute
  *    U_CE_NOT_FOUND_ERROR if more than one character was passed and there is no such a contraction<br>
  *    U_PRIMARY_TOO_LONG_ERROR if the primary for the variable top has more than two bytes
  * @return a 32 bit value containing the value of the variable top in upper 16 bits. Lower 16 bits are undefined
- * @draft
+ * @draft ICU 2.0
  */
 U_CAPI uint32_t ucol_setVariableTop(UCollator *coll, const UChar *varTop, int32_t len, UErrorCode *status);
 
@@ -555,7 +553,7 @@ U_CAPI uint32_t ucol_setVariableTop(UCollator *coll, const UChar *varTop, int32_
  * Lower 16 bits are undefined and should be ignored.
  * @param coll collator which variable top needs to be retrieved
  * @param status error code (not changed by function). If error code is set, the return value is undefined.
- * @draft
+ * @draft ICU 2.0
  */
 U_CAPI uint32_t ucol_getVariableTop(const UCollator *coll, UErrorCode *status);
 
@@ -565,7 +563,7 @@ U_CAPI uint32_t ucol_getVariableTop(const UCollator *coll, UErrorCode *status);
  * @param coll collator which variable top needs to be changed
  * @param varTop CE value, as returned by ucol_setVariableTop or ucol)getVariableTop
  * @param status error code (not changed by function)
- * @draft
+ * @draft ICU 2.0
  */
 U_CAPI void ucol_restoreVariableTop(UCollator *coll, const uint32_t varTop, UErrorCode *status);
 
@@ -584,10 +582,8 @@ U_CAPI void ucol_restoreVariableTop(UCollator *coll, const uint32_t varTop, UErr
  * @param status to indicate whether the operation went on smoothly or there were errors
     An informational status value, U_SAFECLONE_ALLOCATED_ERROR, is used if any allocations were necessary.
  * @return pointer to the new clone
- * @draft API 1.8 freeze
+ * @draft ICU 1.8
  */
-
-
 U_CAPI UCollator * ucol_safeClone(
           const UCollator     *coll,
           void                *stackBuffer,
@@ -604,14 +600,42 @@ U_CAPI UCollator * ucol_safeClone(
  * @param delta one of 	UCOL_TAILORING_ONLY, UCOL_FULL_RULES. 
  * @param buffer buffer to store the result in. If NULL, you'll get no rules.
  * @param bufferLen lenght of buffer to store rules in. If less then needed you'll get only the part that fits in.
+ * @draft ICU 1.8
  */
 U_CAPI int32_t ucol_getRulesEx(const UCollator *coll, UColRuleOption delta, UChar *buffer, int32_t bufferLen);
 
-/* This is the C API wrapper for CollationIterator that got booted out from here, including just for */
-/* include backward compatibility */
-#include "unicode/ucoleitr.h"
 
 /********************************* Deprecated API ********************************/
+/* This is the C API wrapper for CollationIterator that got booted out from here, including just for */
+/* include backward compatibility */
+/* @deprecated remove after nov-2002 */
+#include "unicode/ucoleitr.h"
+
+/**
+ * Open a UCollator with a specific version.
+ * This is the same as ucol_open() except that ucol_getVersion() of
+ * the returned object is guaranteed to be the same as the version
+ * parameter.
+ * This is designed to be used to open the same collator for a given
+ * locale even when ICU is updated.
+ * The same locale and version guarantees the same sort keys and
+ * comparison results.
+ *
+ * @param loc The locale ID for which to open a collator.
+ * @param version The requested collator version.
+ * @param status A pointer to a UErrorCode,
+ *               must not indicate a failure before calling this function.
+ * @return A pointer to a UCollator, or NULL if an error occurred
+ *         or a collator with the requested version is not available.
+ *
+ * @see ucol_open
+ * @see ucol_getVersion
+ * @deprecated to be removed by nov-2002. Use support for running multiple versions of ICU
+ */
+U_CAPI UCollator * U_EXPORT2
+ucol_openVersion(const char *loc,
+                 UVersionInfo version,
+                 UErrorCode *status);
 
 /**
  * Get the normalization mode used in a UCollator.
