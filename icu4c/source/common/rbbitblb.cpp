@@ -317,7 +317,6 @@ void RBBITableBuilder::calcFollowPos(RBBINode *n) {
 }
 
 
-
 //-----------------------------------------------------------------------------
 //
 //   calcChainedFollowPos.    Modify the previously calculated followPos sets
@@ -351,6 +350,8 @@ void RBBITableBuilder::calcChainedFollowPos(RBBINode *fTree) {
     //
     int32_t  endNodeIx;
     int32_t  startNodeIx;
+    UVector  endingNodes(*fStatus);
+
     for (endNodeIx=0; endNodeIx<leafNodes.size(); endNodeIx++) {
         RBBINode *tNode   = (RBBINode *)leafNodes.elementAt(endNodeIx);
         RBBINode *endNode = NULL;
@@ -369,6 +370,37 @@ void RBBITableBuilder::calcChainedFollowPos(RBBINode *fTree) {
         }
 
         // We've got a node that can end a match.
+        // TODO:   endingNodes.addElement(endNode, *fStatus);
+
+        // Line Break Specific hack.  Does this end val correspond to the $CM char class?
+        //          And is it part of a rule of this form:  $XX $CM*
+        //          If so, we want to chain to rules beginning with $XX, not with $CM.
+        //                 We still chain from the CM node, but the criteria for choosing
+        //                 the nodes to chain to is different.
+        // TODO:  Add rule syntax for this behavior, get specifics out of here and
+        //        into the rule file.
+        UChar32 c = this->fRB->fSetBuilder->getFirstChar(endNode->fVal);
+        U_ASSERT(c != -1);
+        RBBINode  *parent      = NULL;
+        RBBINode  *grandParent = NULL;
+        ULineBreak cLBProp = (ULineBreak)u_getIntPropertyValue(c, UCHAR_LINE_BREAK);
+        if (cLBProp != U_LB_COMBINING_MARK) {
+            goto neverMind;
+        }
+        parent = endNode->fParent;
+        if (parent->fType != RBBINode::opStar) {
+            goto neverMind;
+        }
+        grandParent = parent->fParent;
+        if (grandParent->fType != RBBINode::opCat || grandParent->fRightChild != parent) {
+            goto neverMind;
+        }
+
+
+        // TODO:  grab nodes from grandParent->leftChild->endPos; add to endingNodes
+
+
+neverMind:
         // Now iterate over the nodes that can start a match, looking for ones
         //   with the same char class as our ending node.
         RBBINode *startNode;

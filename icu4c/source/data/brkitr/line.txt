@@ -96,10 +96,13 @@ $LB5NonBreaks = [[$LB3NonBreaks] - [$ZW]];
 #                                   $SP $CM needs to behave like $ID.
 #                                   X   $CM needs to behave like X, where X is not $SP.
 #                                   $CM not covered by the above needs to behave like $AL
-[$LB5NonBreaks] $CM*;    #  Stick together any combining sequences that don't match other rules.
+[$LB5NonBreaks] $CM+;    #  Stick together any combining sequences that don't match other rules.
 
 # LB 8     
-$LB5NonBreaks [$CL  $EX $IS $SY];
+[$LB5NonBreaks] $CL;
+[$LB5NonBreaks] $EX;
+[$LB5NonBreaks] $IS;
+[$LB5NonBreaks] $SY;
 
 # LB 9
 $OPcm $SP* .?;         
@@ -138,20 +141,21 @@ $LB14NonBreaks ($BAcm | $HYcm | $NScm);
 $BBcm [^$CB];
 
 # LB 16
-($ALcm | $IDcm | $INcm | $NUcm) $INcm*;
+($ALcm | $IDcm | $SP $CM+ | $INcm | $NUcm) $INcm;
 
 # $LB 17
-$IDcm $POcm;
+($IDcm | SP CM+) $POcm;
 $ALcm+ $NUcm;       # includes $LB19
 $NUcm $ALcm+;
 
 
 # LB 18
 $PRcm? ($OPcm | $HYcm)? $NUcm ($NUcm | $IScm)* $CLcm? $POcm?;
+#$PRcm? ($OPcm | $HYcm)? $NUcm ($NUcm | $IScm)* $CLcm?;
 
 # LB 19
+#$CM* $ALcm+;
 $ALcm+;
-
 
 #
 #  Reverse Rules.

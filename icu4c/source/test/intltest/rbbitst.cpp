@@ -2535,16 +2535,16 @@ void RBBILineMonkey::rule67Adjust(int32_t pos, UChar32 *posChar, int32_t *nextPo
                                           //  contains the logic to locate Hangul syllables.
     }
     
-    // LB 7b  Keep combining sequences together.  
-    if (hangultype == U_HST_NOT_APPLICABLE) {
-        //  advance over any CM class chars
-        for (;;) {
-            *nextChar = fText->char32At(nPos);
-            if (!fCM->contains(*nextChar)) {
-                break;
-            }
-            nPos = fText->moveIndex32(nPos, 1);
+    // LB 7b  Keep combining sequences together.
+    //  advance over any CM class chars.  (Line Break CM class is different from
+    //    grapheme cluster CM, so we need to do this even for HangulSyllables.
+    //    Line Break may eat additional stuff as combining, beyond what graphem cluster did.
+    for (;;) {
+        *nextChar = fText->char32At(nPos);
+        if (!fCM->contains(*nextChar)) {
+            break;
         }
+        nPos = fText->moveIndex32(nPos, 1);
     }
     
     
@@ -2663,10 +2663,13 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
         }
 
         // LB 8  Don't break before closings.
-        if (fCL->contains(thisChar) ||
-            fEX->contains(thisChar) ||
-            fIS->contains(thisChar) ||
-            fSY->contains(thisChar))    {
+        //       NU x CL  and NU x IS are not matched here so that they will
+        //       fall into LB 17 and the more general number regular expression.
+        //
+        if (!fNU->contains(prevChar) && fCL->contains(thisChar) ||
+                                        fEX->contains(thisChar) ||
+            !fNU->contains(prevChar) && fIS->contains(thisChar) ||
+                                        fSY->contains(thisChar))    {
             continue;
         }
 
