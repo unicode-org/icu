@@ -633,6 +633,7 @@
 #define ucol_setStrength ucol_setStrength_3_0
 #define ucol_setText ucol_setText_3_0
 #define ucol_setVariableTop ucol_setVariableTop_3_0
+#define ucol_shortStringToIdentifier ucol_shortStringToIdentifier_3_0
 #define ucol_sortKeyToString ucol_sortKeyToString_3_0
 #define ucol_strcoll ucol_strcoll_3_0
 #define ucol_strcollIter ucol_strcollIter_3_0
@@ -714,7 +715,6 @@
 #define ufmt_digitvalue ufmt_digitvalue_3_0
 #define ufmt_isdigit ufmt_isdigit_3_0
 #define ufmt_ptou ufmt_ptou_3_0
-#define ufmt_unicodeToDefaultCP ufmt_unicodeToDefaultCP_3_0
 #define ufmt_uto64 ufmt_uto64_3_0
 #define uhash_close uhash_close_3_0
 #define uhash_compareCaselessUnicodeString uhash_compareCaselessUnicodeString_3_0
@@ -743,6 +743,7 @@
 #define uhash_iput uhash_iput_3_0
 #define uhash_iputi uhash_iputi_3_0
 #define uhash_iremove uhash_iremove_3_0
+#define uhash_iremovei uhash_iremovei_3_0
 #define uhash_nextElement uhash_nextElement_3_0
 #define uhash_open uhash_open_3_0
 #define uhash_openSize uhash_openSize_3_0
@@ -1109,6 +1110,7 @@
 #define uset_complement uset_complement_3_0
 #define uset_contains uset_contains_3_0
 #define uset_containsAll uset_containsAll_3_0
+#define uset_containsNone uset_containsNone_3_0
 #define uset_containsRange uset_containsRange_3_0
 #define uset_containsString uset_containsString_3_0
 #define uset_equals uset_equals_3_0
