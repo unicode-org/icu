@@ -17,13 +17,16 @@
 
 #include "unicode/utypes.h"
 #include "unicode/ucnv.h"
+#include "unicode/ucnv_err.h"
 #include "filestrm.h"
 #include "cmemory.h"
 #include "unicode/ustring.h"
 #include "ucbuf.h"
+#include <stdio.h>
 
 #define MAX_IN_BUF 1000
 #define MAX_U_BUF 1500
+#define CONTEXT_LEN 15
 
 static UBool ucbuf_autodetect_nrw(FileStream* in, const char** cp,int* numRead){
     /* initial 0xa5 bytes: make sure that if we read <4 bytes we don't misdetect something */
@@ -94,7 +97,7 @@ ucbuf_fillucbuf( UCHARBUF* buf,UErrorCode* err){
     char  cbuf[MAX_IN_BUF] = {'\0'};
     int numRead=0;
     int offset=0;
-
+    const char* sourceLimit =NULL;
     pTarget = buf->buffer;
     /* check if we arrived here without exhausting the buffer*/
     if(buf->currentPos<buf->bufLimit){
@@ -113,16 +116,96 @@ ucbuf_fillucbuf( UCHARBUF* buf,UErrorCode* err){
     target=pTarget;
     /* convert the bytes */
     if(buf->conv){
+        /* set the callback to stop */
+        UConverterToUCallback toUOldAction ;
+        void* toUOldContext;
+        void* toUNewContext=NULL;        
+        ucnv_setToUCallBack(buf->conv,
+           UCNV_TO_U_CALLBACK_STOP,
+           toUNewContext,
+           &toUOldAction,
+           (const void**)&toUOldContext,
+           err);
         /* since state is saved in the converter we add offset to source*/
         target = pTarget+offset;
         source = cbuf;
+        sourceLimit = source + numRead;
         ucnv_toUnicode(buf->conv,&target,target+(MAX_U_BUF-offset),
                         &source,source+numRead,NULL,
                         (UBool)(buf->remaining==0),err);
-        numRead= target-pTarget;
+        
         if(U_FAILURE(*err)){
-            return NULL;
+            char context[CONTEXT_LEN];
+            char preContext[CONTEXT_LEN];
+            char postContext[CONTEXT_LEN];
+            int8_t len = CONTEXT_LEN;
+            int32_t start=0;
+            int32_t stop =0;
+            int32_t pos =0;
+
+            printf("###WARNING: Encountered error condition while converting input stream to target encoding: %s\n",u_errorName(*err));
+
+            *err = U_ZERO_ERROR;
+
+            /* now get the context chars */
+            ucnv_getInvalidChars(buf->conv,context,&len,err);
+            context[len]= 0 ; /* null terminate the buffer */
+            
+            pos = source-cbuf-len;
+
+            /* for pre-context */
+            start = (pos <=CONTEXT_LEN)? 0 : (pos - (CONTEXT_LEN-1));
+            stop  = pos-len;
+    
+            memcpy(preContext,cbuf+start,stop-start);
+            /* null terminate the buffer */
+            preContext[stop-start] = 0;
+    
+            /* for post-context */
+            start = pos+len;
+            stop  = ((pos+CONTEXT_LEN)<= (sourceLimit-cbuf) )? (pos+(CONTEXT_LEN-1)) : (sourceLimit-cbuf);
+
+            memcpy(postContext,source,stop-start);
+            /* null terminate the buffer */
+            postContext[stop-start] = 0;
+            /* print out the context */
+            printf("\tPre-context: %s\n",preContext);
+            printf("\tContext: %s\n",context);
+            printf("\tPost-context: %s\n", postContext);
+            
+            /* set the call back to substiture 
+             * and restart conversion
+             */
+            ucnv_setToUCallBack(buf->conv,
+               UCNV_TO_U_CALLBACK_SUBSTITUTE,
+               toUNewContext,
+               &toUOldAction,
+               (const void**)&toUOldContext,
+               err);
+
+            /* reset source and target start positions */
+            target = pTarget+offset;
+            source = cbuf;
+            
+            /* re convert */
+            ucnv_toUnicode(buf->conv,&target,target+(MAX_U_BUF-offset),
+                            &source,sourceLimit,NULL,
+                            (UBool)(buf->remaining==0),err);
+        
         }
+        numRead= target-pTarget;
+
+
+#if DEBUG
+        {
+            int i;
+            target = pTarget;
+            for(i=0;i<numRead;i++){
+              /*  printf("%c", (char)(*target++));*/
+            }
+        }
+#endif
+
     }else{
         u_charsToUChars(cbuf,target+offset,numRead);
         numRead=((buf->remaining>MAX_IN_BUF)? MAX_IN_BUF:numRead+offset);
@@ -218,17 +301,25 @@ ucbuf_getcx(UCHARBUF* buf,UErrorCode* err) {
 
 /* open a UCHARBUF */
 U_CAPI UCHARBUF* U_EXPORT2
-ucbuf_open(FileStream* in, UErrorCode* err){
+ucbuf_open(FileStream* in,const char* cp, UErrorCode* err){
 
     UCHARBUF* buf =(UCHARBUF*) uprv_malloc(sizeof(UCHARBUF));
-    const char *cp;
     int numRead =0;
     if(U_FAILURE(*err)){
         return NULL;
     }
     if(buf){
         buf->in=in;
-        ucbuf_autodetect_nrw(in,&cp,&numRead);
+        buf->conv=NULL;
+        if(cp){
+            if(*cp=='\0'){
+                if(ucbuf_autodetect_nrw(in,&cp,&numRead)){
+                    buf->conv=ucnv_open(cp,err);
+                }
+            }else{
+                buf->conv=ucnv_open(cp,err);
+            }
+        }
         buf->remaining=T_FileStream_size(in)-numRead;
         buf->buffer=(UChar*) uprv_malloc(sizeof(UChar)* MAX_U_BUF);
 		if (buf->buffer == NULL) {
@@ -237,11 +328,6 @@ ucbuf_open(FileStream* in, UErrorCode* err){
 		}
         buf->currentPos=buf->buffer;
         buf->bufLimit=buf->buffer;
-        if(*cp!='\0'){
-            buf->conv=ucnv_open(cp,err);
-        }else{
-            buf->conv=NULL;
-        }
         if(U_FAILURE(*err)){
             fprintf(stderr, "Could not open codepage [%s]: %s\n", cp, u_errorName(*err));
             return NULL;
@@ -258,7 +344,7 @@ ucbuf_open(FileStream* in, UErrorCode* err){
  * begining of buffer and the uchar to unget
  * is from the previous buffer. Need to implement
  * system to take care of that situation.
- */
+ */ 
 U_CAPI void U_EXPORT2
 ucbuf_ungetc(UChar32 c,UCHARBUF* buf){
     /* decrement currentPos pointer

@@ -196,13 +196,15 @@ endif
 
 ####################################################    RES
 # RES FILES
-$(TESTOBJDATADIR)/%.res: $(TESTSRCDATADIR)/%.txt $(TOOLDIR)/genrb/genrb
+$(TESTOBJDATADIR)/%.res: TEST_ENC_DATA $(TESTSRCDATADIR)/%.txt $(TOOLDIR)/genrb/genrb
 	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/genrb/genrb -q -s $(TESTSRCDATADIR) -d $(TESTOBJDATADIR) $(<F)
+
 
 %.res: $(SRCDATADIR)/%.txt $(TOOLDIR)/genrb/genrb ucadata.dat uprops.dat unorm.dat
 	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/genrb/genrb -s $(SRCDATADIR) -d . $(<F)
 
-
+TEST_ENC_DATA:
+    @ICU_DATA=. $(INVOKE) $(TOOLDIR)/genrb/genrb -s $(SRCDATADIR) -d . -eISO_2022_JP $(TESTSRCDATADIR)/ja_data.txt
 ###################################################################
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
