@@ -2912,10 +2912,17 @@ static void TestVariableTopSetting(void) {
   UChar first[256] = { 0 };
   UChar second[256] = { 0 };
   UParseError parseError;
+  int32_t myQ = QUICK;
 
   src.opts = &opts;
 
-  if(QUICK) { /* QUICK */ /* there is a goofy thing that fails in exhaustive mode, so this is kind of TODO */
+  if(QUICK <= 0) {
+    QUICK = 1;
+  }
+
+  /* this test will fail when normalization is turned on */
+  /* therefore we always turn off exhaustive mode for it */
+  if(1) { /* QUICK > 0*/ 
     log_verbose("Slide variable top over UCARules\n");
     rulesLen = ucol_getRulesEx(coll, UCOL_FULL_RULES, rulesCopy, 0);
     rulesCopy = (UChar *)malloc((rulesLen+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
@@ -3023,6 +3030,8 @@ static void TestVariableTopSetting(void) {
     }
     status = U_ZERO_ERROR;
   }
+
+  QUICK = myQ;
 
   log_verbose("Testing setting variable top to contractions\n");
   {
@@ -3870,7 +3879,7 @@ void addMiscCollTest(TestNode** root)
     addTest(root, &TestExtremeCompression, "tscoll/cmsccoll/TestExtremeCompression");
     addTest(root, &TestSurrogates, "tscoll/cmsccoll/TestSurrogates");
     /* TODO: Something is very wrong with this one. FIX IT! */
-    /*addTest(root, &TestVariableTopSetting, "tscoll/cmsccoll/TestVariableTopSetting");*/
+    addTest(root, &TestVariableTopSetting, "tscoll/cmsccoll/TestVariableTopSetting");
     addTest(root, &TestBocsuCoverage, "tscoll/cmsccoll/TestBocsuCoverage");
     addTest(root, &TestCyrillicTailoring, "tscoll/cmsccoll/TestCyrillicTailoring");
     addTest(root, &TestCase, "tscoll/cmsccoll/TestCase");
