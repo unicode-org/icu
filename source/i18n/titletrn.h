@@ -11,6 +11,7 @@
 #define TITLETRN_H
 
 #include "unicode/translit.h"
+#include "unicode/locid.h"
 
 U_NAMESPACE_BEGIN
 
@@ -33,7 +34,7 @@ class U_I18N_API TitlecaseTransliterator : public Transliterator {
     /**
      * Constructs a transliterator.
      */
-    TitlecaseTransliterator(UnicodeFilter* adoptedFilter = 0);
+    TitlecaseTransliterator(const Locale& loc = Locale::getDefault());
 
     /**
      * Destructor.
@@ -70,6 +71,9 @@ class U_I18N_API TitlecaseTransliterator : public Transliterator {
      * CALL.
      */
     static void cleanup();
+ private:
+    Locale loc;
+    UChar* buffer;
 };
 
 U_NAMESPACE_END

@@ -20,15 +20,14 @@ U_NAMESPACE_BEGIN
  * case mapping.
  * @author Alan Liu
  */
-class U_I18N_API UppercaseTransliterator : public TransformTransliterator {
+class U_I18N_API UppercaseTransliterator : public Transliterator {
 
  public:
 
     /**
      * Constructs a transliterator.
      */
-    UppercaseTransliterator(const Locale& loc = Locale::getDefault(),
-                             UnicodeFilter* adoptedFilter = 0);
+    UppercaseTransliterator(const Locale& loc = Locale::getDefault());
 
     /**
      * Destructor.
@@ -52,20 +51,18 @@ class U_I18N_API UppercaseTransliterator : public TransformTransliterator {
 
  protected:
 
-    /**
-     * TransformTransliterator framework method.
-     */
-    virtual UBool hasTransform(UChar32 c) const;
 
     /**
-     * TransformTransliterator framework method.
+     * Implements {@link Transliterator#handleTransliterate}.
      */
-    virtual void transform(UnicodeString& s) const;
+    virtual void handleTransliterate(Replaceable& text,
+                                     UTransPosition& offsets, 
+                                     UBool isIncremental) const;
 
  private:
 
     Locale loc;
-
+    UChar* buffer;
     static const char _ID[];
 };
 
