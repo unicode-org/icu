@@ -1799,7 +1799,7 @@ enumCharNamesFn(void *context,
 
     ++*pCount;
     for(i=0; i<sizeof(names)/sizeof(names[0]); ++i) {
-        if(code==names[i].code) {
+        if(code==(UChar32)names[i].code) {
             switch (nameChoice) {
                 case U_EXTENDED_CHAR_NAME:
                     if(0!=strcmp(name, names[i].extName)) {
@@ -1903,7 +1903,7 @@ TestCharNames() {
                 log_err("u_charFromName(%s) error %s\n", names[i].name, u_errorName(errorCode));
                 return;
             }
-            if(c!=names[i].code) {
+            if(c!=(UChar32)names[i].code) {
                 log_err("u_charFromName(%s) gets 0x%lx instead of 0x%lx\n", names[i].name, c, names[i].code);
             }
         }
@@ -1925,7 +1925,7 @@ TestCharNames() {
                 log_err("u_charFromName(%s - 1.0) error %s\n", names[i].oldName, u_errorName(errorCode));
                 return;
             }
-            if(c!=names[i].code) {
+            if(c!=(UChar32)names[i].code) {
                 log_err("u_charFromName(%s - 1.0) gets 0x%lx instead of 0x%lx\n", names[i].oldName, c, names[i].code);
             }
         }
