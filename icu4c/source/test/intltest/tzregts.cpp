@@ -658,7 +658,7 @@ TimeZoneRegressionTest::Test4154525()
     
     int32_t DATA [] = {
         1, GOOD,
-        0, GOOD,
+        0, BAD,
         -1, BAD,
         60*60*1000, GOOD,
         INT32_MIN, BAD,
@@ -855,16 +855,19 @@ TimeZoneRegressionTest::Test4162593()
  */
 void TimeZoneRegressionTest::TestJ186() {
     UErrorCode status = U_ZERO_ERROR;
+    // NOTE: Setting the DST savings to zero is illegal, so we
+    // are limited in the testing we can do here.  This is why
+    // lines marked //~ are commented out.
     SimpleTimeZone z(0, "ID");
-    z.setDSTSavings(0, status); // Must do this!
+    //~z.setDSTSavings(0, status); // Must do this!
     z.setStartRule(Calendar::FEBRUARY, 1, Calendar::SUNDAY, 0, status);
     failure(status, "setStartRule()");
     if (z.useDaylightTime()) {
         errln("Fail: useDaylightTime true with start rule only");
     }
-    if (z.getDSTSavings() != 0) {
-        errln("Fail: dst savings != 0 with start rule only");
-    }
+    //~if (z.getDSTSavings() != 0) {
+    //~    errln("Fail: dst savings != 0 with start rule only");
+    //~}
     z.setEndRule(Calendar::MARCH, -1, Calendar::SUNDAY, 0, status);
     failure(status, "setStartRule()");
     if (!z.useDaylightTime()) {
