@@ -35,6 +35,7 @@
 #include "unicode/unistr.h"
 #include "unicode/locid.h"
 #include "filestrm.h"
+#include "umemstrm.h"
 
 //=============================================================================
 
@@ -91,6 +92,12 @@ public:
      */
             void                streamIn(FileStream* is);
             void                streamOut(FileStream* os) const;
+
+    /**
+     * For internal use only - streaming to memory
+     */
+            void                streamIn(UMemoryStream* is);
+            void                streamOut(UMemoryStream* os) const;
 
         /**
          * Checks if this object is valid.
