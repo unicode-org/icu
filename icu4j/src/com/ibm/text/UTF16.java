@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UTF16.java,v $ 
-* $Date: 2001/09/26 17:59:23 $ 
-* $Revision: 1.9 $
+* $Date: 2001/11/06 00:13:23 $ 
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
@@ -384,7 +384,8 @@ public final class UTF16
   * @param offset32 UTF-32 offset to the start of the character.
   * @return a single UTF32 value
   * @exception IndexOutOfBoundsException if offset16 is out of bounds.
-  * @deprecated to be removed after the year 2002
+  * @deprecated to be removed after the year 2002, replaced by 
+  *      TF16.charAt(source, UTF16.findOffsetFromCodePoint(source, offset32));
   */
   public static int charAtCodePointOffset(String source, int offset32) 
   {
@@ -553,7 +554,8 @@ public final class UTF16
   * bounds(java.lang.String, int)</a> for information on the choice of the 
   * boundary values.
   * @exception IndexOutOfBoundsException if offset16 is out of bounds.
-  * @deprecated will be removed after end of year 2002
+  * @deprecated will be removed after end of year 2002, replaced by
+  *     UTF16.bounds(source, UTF16.findOffsetFromCodePoint(source, offset32));
   */
   public static int boundsAtCodePointOffset(String source, int offset32) 
   {
@@ -1123,7 +1125,10 @@ public final class UTF16
   * @param offset32 UTF32 position to insert into
   * @exception IndexOutOfBoundsException if offset32 is out of bounds.
   * @param char32 code point
-  * @deprecated to be removed after the year 2002
+  * @deprecated to be removed after the year 2002,
+  * UTF16.setCharAt(target, 
+  *                 findOffsetFromCodePoint(target.toString(), offset32), 
+  *                                         char32);
   */
   public static void setCharAtCodePointOffset(StringBuffer target, 
                                               int offset32, int char32)
