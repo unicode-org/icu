@@ -15,7 +15,18 @@ testtypes
     onehundredtwentythree:int { 123 } //
     one:int { 1 } // number one
     importtest:import { "importtest.bin" }
-    // integerarray:intarray { 1, 2, 3, 4, 5, 6, 7 } // This will be done in the future
+    integerarray:intvector { 1, 2, 3, -3, 4, 5, 6, 7 } // an array of 32-bit integers
+    minusone:int {-1}  // number -1
+    
+    // Empties
+    emptyexplicitstring:string { "" }
+    emptystring { "" }
+    emptyintv:intvector { }
+    emptybin:bin { "" }
+    emptyint:int { "" }
+    emptytable:table { }
+    emptyarray:array { }
+    
 }
 
 //eof
