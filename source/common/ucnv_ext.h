@@ -21,6 +21,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/ucnv.h"
+#include "ucnv_cnv.h"
 
 /*
  * See icuhtml/design/conversion/conversion_extensions.html
