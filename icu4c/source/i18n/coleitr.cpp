@@ -318,7 +318,7 @@ CollationElementIterator::next(UErrorCode& status)
     }
 
     // Gets the next character from the string using decomposition iterator.
-    UChar ch = text->current();
+    UChar32 ch = text->current();
     text->next();
 
     if (U_FAILURE(status))
@@ -355,10 +355,10 @@ CollationElementIterator::next(UErrorCode& status)
         }
         
         if (isThaiPreVowel(ch)) {
-            UChar consonant = text->next();
+            UChar32 consonant = text->next();
             if (isThaiBaseConsonant(consonant)) {
                 
-                bufferAlias = makeReorderedBuffer(consonant, value, bufferAlias,
+                bufferAlias = makeReorderedBuffer((UChar)consonant, value, bufferAlias,
                                                   TRUE, status);
                 
             }
@@ -402,7 +402,7 @@ CollationElementIterator::previous(UErrorCode& status)
         bufferAlias = NULL;
     }
 
-    UChar ch = text->previous();
+    UChar32 ch = text->previous();
 
     if (ch == Normalizer::DONE)
     {
@@ -429,9 +429,9 @@ CollationElementIterator::previous(UErrorCode& status)
 
         if (isThaiBaseConsonant(ch)) {
 
-            UChar vowel = text->previous();
+            UChar32 vowel = text->previous();
             if (isThaiPreVowel(vowel)) {
-                bufferAlias = makeReorderedBuffer(vowel, value, bufferAlias,
+                bufferAlias = makeReorderedBuffer((UChar)vowel, value, bufferAlias,
                                                   FALSE, status);
             }
             else {
@@ -500,11 +500,11 @@ CollationElementIterator::setOffset(UTextOffset newOffset,
  * if the end of string is reached.
  */
 int32_t
-CollationElementIterator::nextContractChar(UChar ch,
+CollationElementIterator::nextContractChar(UChar32 ch,
                                            UErrorCode& status)
 {
     // First get the ordering of this single character
-    VectorOfPToContractElement *list = orderAlias->getContractValues(ch);
+    VectorOfPToContractElement *list = orderAlias->getContractValues((UChar)ch);
     EntryPair *pair = (EntryPair *)list->at(0);
     int32_t order = pair->value;
 
@@ -544,11 +544,11 @@ CollationElementIterator::nextContractChar(UChar ch,
  * @return the next contracting character's ordering.  Returns NULLORDER
  * if the end of string is reached.
  */
-int32_t CollationElementIterator::prevContractChar(UChar ch,
+int32_t CollationElementIterator::prevContractChar(UChar32 ch,
                                                    UErrorCode &status)
 {
     // First get the ordering of this single character
-    VectorOfPToContractElement *list = orderAlias->getContractValues(ch);
+    VectorOfPToContractElement *list = orderAlias->getContractValues((UChar)ch);
     EntryPair *pair = (EntryPair *)list->at(0);
     int32_t order = pair->value;
 
