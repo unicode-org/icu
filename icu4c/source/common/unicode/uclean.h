@@ -52,7 +52,7 @@
  * <strong>Use this function with great care!</strong>
  * </p>
  *
- * @draft ICU 2.0
+ * @stable
  */
 U_CAPI void U_EXPORT2 
 u_cleanup(void);
