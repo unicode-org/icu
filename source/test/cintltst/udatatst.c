@@ -44,6 +44,7 @@
 #include "uresdata.h"
 #include "ucnv_io.h"
 #include "uprops.h"
+#include "ucase.h"
 #include "ucol_swp.h"
 #include "ucnv_bld.h"
 #include "unormimp.h"
@@ -1083,7 +1084,8 @@ static const struct {
 #if !UCONFIG_NO_NORMALIZATION
     {"unorm",                    "icu", unorm_swap},
 #endif
-    {"uprops",                   "icu", uprops_swap}
+    {"uprops",                   "icu", uprops_swap},
+    {"ucase",                    "icu", ucase_swap}
 };
 
 #define SWAP_BUFFER_SIZE 1000000

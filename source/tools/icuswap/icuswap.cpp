@@ -40,6 +40,7 @@
 #include "uresdata.h"
 #include "ucnv_io.h"
 #include "uprops.h"
+#include "ucase.h"
 #include "ucol_swp.h"
 #include "ucnv_bld.h"
 #include "unormimp.h"
@@ -307,6 +308,10 @@ static const struct {
 #endif
     /* insert data formats here, descending by expected frequency of occurrence */
     { { 0x55, 0x50, 0x72, 0x6f }, uprops_swap },        /* dataFormat="UPro" */
+
+    { { UCASE_FMT_0, UCASE_FMT_1, UCASE_FMT_2, UCASE_FMT_3 },
+                                  ucase_swap },         /* dataFormat="cAsE" */
+
 #if !UCONFIG_NO_NORMALIZATION
     { { 0x4e, 0x6f, 0x72, 0x6d }, unorm_swap },         /* dataFormat="Norm" */
 #endif
