@@ -381,12 +381,7 @@ int32_t u_strncmpNoCase(const UChar     *s1,
 }
 
 static
-uint8_t ucol_uprv_tok_readAndSetOption(UColTokenParser *src, const UChar *end, UErrorCode *status) {
-  const UChar* start = src->current;
-  uint32_t i = 0;
-  int32_t j=0;
-  UBool foundOption = FALSE;
-  const UChar *optionArg = NULL;
+void ucol_uprv_tok_initData() {
   if(!didInit) {
     U_STRING_INIT(suboption_00, "non-ignorable", 13);
     U_STRING_INIT(suboption_01, "shifted",        7);
@@ -427,6 +422,86 @@ uint8_t ucol_uprv_tok_readAndSetOption(UColTokenParser *src, const UChar *end, U
     U_STRING_INIT(option_15, "first",          5);
     U_STRING_INIT(option_16, "last",           4);
   }
+}
+
+const UChar *
+ucol_tok_getNextArgument(const UChar *start, const UChar *end, 
+                               UColAttribute *attrib, UColAttributeValue *value, 
+                               UErrorCode *status) {
+  uint32_t i = 0;
+  int32_t j=0;
+  UBool foundOption = FALSE;
+  const UChar *optionArg = NULL;
+
+  ucol_uprv_tok_initData();
+
+  while(u_isWhitespace(*start)) { /* eat whitespace */
+    start++;
+  }
+  if(start == end) {
+    return NULL;
+  }
+  /* skip opening '[' */
+  if(*start == 0x005b) {
+    start++;
+  } else {
+    *status = U_ILLEGAL_ARGUMENT_ERROR; // no opening '['
+    return NULL;
+  }
+
+  while(i < UTOK_OPTION_COUNT) {
+    if(u_strncmpNoCase(start, rulesOptions[i].optionName, rulesOptions[i].optionLen) == 0) {
+      foundOption = TRUE;
+      if(end - start > rulesOptions[i].optionLen) {
+        optionArg = start+rulesOptions[i].optionLen+1; /* start of the options, skip space */
+        while(u_isWhitespace(*optionArg)) { /* eat whitespace */
+          optionArg++;
+        }
+      }     
+      break;
+    }
+    i++;
+  }
+
+  if(!foundOption) {
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
+    return NULL;
+  }
+
+  if(optionArg) {
+    for(j = 0; j<rulesOptions[i].subSize; j++) {
+      if(u_strncmpNoCase(optionArg, rulesOptions[i].subopts[j].subName, rulesOptions[i].subopts[j].subLen) == 0) {
+        //ucol_uprv_tok_setOptionInImage(src->opts, rulesOptions[i].attr, rulesOptions[i].subopts[j].attrVal);
+        *attrib = rulesOptions[i].attr;
+        *value = rulesOptions[i].subopts[j].attrVal;
+        optionArg += rulesOptions[i].subopts[j].subLen;
+        while(u_isWhitespace(*optionArg)) { /* eat whitespace */
+          optionArg++;
+        }
+        if(*optionArg == 0x005d) {
+          optionArg++;
+          return optionArg;
+        } else {
+          *status = U_ILLEGAL_ARGUMENT_ERROR;
+          return NULL;
+        }
+      }
+    }
+  }
+  *status = U_ILLEGAL_ARGUMENT_ERROR;
+  return NULL;
+}
+
+static
+uint8_t ucol_uprv_tok_readAndSetOption(UColTokenParser *src, const UChar *end, UErrorCode *status) {
+  const UChar* start = src->current;
+  uint32_t i = 0;
+  int32_t j=0;
+  UBool foundOption = FALSE;
+  const UChar *optionArg = NULL;
+
+  ucol_uprv_tok_initData();
+
   start++; /*skip opening '['*/
   while(i < UTOK_OPTION_COUNT) {
     if(u_strncmpNoCase(start, rulesOptions[i].optionName, rulesOptions[i].optionLen) == 0) {

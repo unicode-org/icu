@@ -152,6 +152,13 @@ U_CAPI const UChar* U_EXPORT2 ucol_tok_parseNextToken(UColTokenParser *src,
                         UParseError *parseError,
                         UErrorCode *status);
 
+U_CAPI const UChar * U_EXPORT2
+ucol_tok_getNextArgument(const UChar *start, const UChar *end, 
+                               UColAttribute *attrib, UColAttributeValue *value, 
+                               UErrorCode *status);
+
+
+
 
 #endif
 
