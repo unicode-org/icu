@@ -252,6 +252,7 @@ static UDataMemory *udata_cacheDataItem(const char *path, UDataMemory *item, UEr
     int32_t           nameLen;
     UHashtable       *htable;
     UDataMemory      *oldValue = NULL;
+    UErrorCode        subErr = U_ZERO_ERROR;
 
     if (U_FAILURE(*pErr)) {
         return NULL;
@@ -286,22 +287,23 @@ static UDataMemory *udata_cacheDataItem(const char *path, UDataMemory *item, UEr
     umtx_lock(NULL);
     oldValue = uhash_get(htable, path);
     if (oldValue != NULL) {
-        *pErr = U_USING_DEFAULT_WARNING; }
+        subErr = U_USING_DEFAULT_WARNING; }
     else {
         uhash_put(
             htable,
             newElement->name,               /* Key   */
             newElement,                     /* Value */
-            pErr);
+            &subErr);
     }
     umtx_unlock(NULL);
 
 #ifdef UDATA_DEBUG
-    fprintf(stderr, "Cache: [%s] <<< %p : %s\n", newElement->name, 
-            newElement->item, u_errorName(*pErr));
+    fprintf(stderr, "Cache: [%s] <<< %p : %s. vFunc=%p\n", newElement->name, 
+    newElement->item, u_errorName(subErr), newElement->item->vFuncs);
 #endif
 
-    if (*pErr == U_USING_DEFAULT_WARNING || U_FAILURE(*pErr)) {
+    if (subErr == U_USING_DEFAULT_WARNING || U_FAILURE(subErr)) {
+        *pErr = subErr; /* copy sub err unto fillin ONLY if something happens. */
         uprv_free(newElement->name);
         uprv_free(newElement->item);
         uprv_free(newElement);
@@ -1027,7 +1029,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
     tocEntrySuffix = tocEntryName.s+tocEntrySuffixIndex; /* suffix starts here */
 
 #ifdef UDATA_DEBUG
-    fprintf(stderr, " tocEntryName = %s\n", tocEntryName->s);
+    fprintf(stderr, " tocEntryName = %s\n", tocEntryName.s);
 #endif    
 
 
