@@ -147,7 +147,7 @@ dist-local:
 
 clean-local: clean-pkgdata
 	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
-	$(RMV) $(SRCDATAFILES)
+	test -z "$(SRCDATAFILES)" || $(RMV) $(SRCDATAFILES)
 	$(RMV) $(DATAFILES)
 	$(RMV) icupkg.inc
 	-@if [ -f $(TMPDATADIR)/$(ICUDATA_NAME)_dll.mak ]; then \
