@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCharts.java,v $
-* $Date: 2003/08/22 16:51:21 $
-* $Revision: 1.17 $
+* $Date: 2004/02/06 18:32:03 $
+* $Revision: 1.18 $
 *
 *******************************************************************************
 */
@@ -175,37 +175,54 @@ public class WriteCharts implements UCD_Types {
 
             String classname = primaryCount > 1 ? XCLASSNAME[strength] : CLASSNAME[strength];
 
-            String name = Default.ucd.getName(s);
+            String outline = showCell2(sortKey, s, script, classname);
 
-
-            if (s.equals("\u1eaf")) {
-            	System.out.println("debug");
-            }
-
-            String comp = Default.nfc.normalize(s);
-
-            String outline = breaker + classname
-                + " title='"
-                + (script != UNSUPPORTED
-                    ? Utility.quoteXML(name, true) + ": "
-                    : "")
-                + UCA.toString(sortKey) + "'>"
-                + Utility.quoteXML(comp, true)
-                + "<br><tt>"
-                + Utility.hex(s)
-                //+ "<br>" + script
-                + "</tt></td>"
-                + (script == UNSUPPORTED
-                    ? "<td class='name'><tt>" + Utility.quoteXML(name, true) + "</td>"
-                    : "")
-                ;
-
-            output.println(outline);
+            output.println(breaker + outline);
             ++columnCount;
         }
 
         closeFile(output);
         closeIndexFile(indexFile, "<br>UCA: " + uca.getDataVersion(), COLLATION);
+    }
+
+    private static String showCell2(
+        String sortKey,
+        String s,
+        byte script,
+        String classname) {
+        String name = Default.ucd.getName(s);
+        
+        
+        if (s.equals("\u1eaf")) {
+        	System.out.println("debug");
+        }
+        
+        String comp = Default.nfc.normalize(s);
+        int cat = Default.ucd.getCategory(UTF16.charAt(comp,0));
+        if (cat == Mn || cat == Mc || cat == Me) {
+            comp = '\u25CC' + comp;
+            if (s.equals("\u0300")) {
+                System.out.println(Default.ucd.getCodeAndName(comp));
+            } 
+        } 
+        // TODO: merge with showCell
+        
+        String outline = classname
+            + " title='"
+            + (script != UNSUPPORTED
+                ? Utility.quoteXML(name, true) + ": "
+                : "")
+            + UCA.toString(sortKey) + "'>"
+            + Utility.quoteXML(comp, true)
+            + "<br><tt>"
+            + Utility.hex(s)
+            //+ "<br>" + script
+            + "</tt></td>"
+            + (script == UNSUPPORTED
+                ? "<td class='name'><tt>" + Utility.quoteXML(name, true) + "</td>"
+                : "")
+            ;
+        return outline;
     }
 
     static public void normalizationChart() throws IOException {
@@ -642,9 +659,20 @@ public class WriteCharts implements UCD_Types {
         closeIndexFile(indexFile, "", CASE);
     }
 
-    static void showCell(PrintWriter output, String s, String prefix, String extra, boolean skipName) {
+    static void showCell(PrintWriter output, String s, 
+      String prefix, String extra, boolean skipName) {
+        if (s.equals("\u0300")) {
+            System.out.println();
+        }
         String name = Default.ucd.getName(s);
         String comp = Default.nfc.normalize(s);
+        int cat = Default.ucd.getCategory(UTF16.charAt(comp,0));
+        if (cat == Mn || cat == Mc || cat == Me) {
+            comp = '\u25CC' + comp;
+            if (s.equals("\u0300")) {
+                System.out.println(Default.ucd.getCodeAndName(comp));
+            } 
+        } 
 
         String outline = prefix
             + (skipName ? "" : " title='" + Utility.quoteXML(name, true) + "'")

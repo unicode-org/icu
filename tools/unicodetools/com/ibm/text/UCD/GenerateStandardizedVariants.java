@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateStandardizedVariants.java,v $
-* $Date: 2003/03/12 16:01:26 $
-* $Revision: 1.2 $
+* $Date: 2004/02/06 18:30:21 $
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -53,7 +53,7 @@ public final class GenerateStandardizedVariants implements UCD_Types {
         String[] codes = new String[2];
         String[] shapes = new String[4];
         
-        BufferedReader in = Utility.openUnicodeFile("StandardizedVariants", Default.ucdVersion, true, Utility.LATIN1);
+        BufferedReader in = Utility.openUnicodeFile("StandardizedVariants", Default.getUcdVersion(), true, Utility.LATIN1);
         while (true) {
             String line = Utility.readDataLine(in);
             if (line == null) break;

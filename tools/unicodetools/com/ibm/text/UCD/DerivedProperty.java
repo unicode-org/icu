@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/DerivedProperty.java,v $
-* $Date: 2003/07/21 15:50:06 $
-* $Revision: 1.22 $
+* $Date: 2004/02/06 18:30:22 $
+* $Revision: 1.23 $
 *
 *******************************************************************************
 */
@@ -31,11 +31,11 @@ public final class DerivedProperty implements UCD_Types {
     
     // ADD CONSTANT to UCD_TYPES
     
-    static public UnicodeProperty make(int derivedPropertyID) {
+    static public UCDProperty make(int derivedPropertyID) {
         return make(derivedPropertyID, Default.ucd);
     }
     
-    static public UnicodeProperty make(int derivedPropertyID, UCD ucd) {
+    static public UCDProperty make(int derivedPropertyID, UCD ucd) {
         if (derivedPropertyID < 0 || derivedPropertyID >= DERIVED_PROPERTY_LIMIT) return null;
         DerivedProperty dp = getCached(ucd);
         return dp.dprops[derivedPropertyID];
@@ -96,14 +96,14 @@ public final class DerivedProperty implements UCD_Types {
         return dprops[propNumber].getValue(int cp);
     }
     */
-    private UnicodeProperty[] dprops = new UnicodeProperty[50];
+    private UCDProperty[] dprops = new UCDProperty[50];
 
     static final String[] CaseNames = {
                 "Uppercase", 
                 "Lowercase", 
                 "Mixedcase"};
     
-    class ExDProp extends UnicodeProperty {
+    class ExDProp extends UCDProperty {
         Normalizer nfx;
         ExDProp(int i) {
             type = DERIVED_NORMALIZATION;
@@ -124,7 +124,7 @@ public final class DerivedProperty implements UCD_Types {
         }
     };
     
-    class NF_UnsafeStartProp extends UnicodeProperty {
+    class NF_UnsafeStartProp extends UCDProperty {
         Normalizer nfx;
         //int prop;
         
@@ -180,7 +180,7 @@ public final class DerivedProperty implements UCD_Types {
     */
     
     
-    class NFC_Prop extends UnicodeProperty {
+    class NFC_Prop extends UCDProperty {
         BitSet bitset;
         boolean filter = false;
         boolean keepNonZero = true;
@@ -224,7 +224,7 @@ public final class DerivedProperty implements UCD_Types {
         };
     };
     
-    class GenDProp extends UnicodeProperty {
+    class GenDProp extends UCDProperty {
         Normalizer nfx;
         Normalizer nfComp = null;
         
@@ -281,7 +281,7 @@ public final class DerivedProperty implements UCD_Types {
         public boolean hasValue(int cp) { return getValue(cp).length() != 0; }
     };
     
-    class CaseDProp extends UnicodeProperty {
+    class CaseDProp extends UCDProperty {
         byte val;
         CaseDProp (int i) {
             type = DERIVED_CORE;
@@ -301,7 +301,7 @@ public final class DerivedProperty implements UCD_Types {
         }
     };
     
-    class QuickDProp extends UnicodeProperty {
+    class QuickDProp extends UCDProperty {
         String NO;
         String MAYBE;
         Normalizer nfx;
@@ -357,7 +357,7 @@ public final class DerivedProperty implements UCD_Types {
             dprops[i] = new NF_UnsafeStartProp(i-NFD_UnsafeStart);
         }
         
-        dprops[ID_Start] = new UnicodeProperty() {
+        dprops[ID_Start] = new UCDProperty() {
             {
                 type = DERIVED_CORE;
                 name = "ID_Start";
@@ -371,7 +371,7 @@ public final class DerivedProperty implements UCD_Types {
             }
         };
         
-        dprops[ID_Continue_NO_Cf] = new UnicodeProperty() {
+        dprops[ID_Continue_NO_Cf] = new UCDProperty() {
             {
                 name = "ID_Continue";
                 type = DERIVED_CORE;
@@ -441,7 +441,7 @@ public final class DerivedProperty implements UCD_Types {
             if (status != 0) XID_Continue_Set.add(cp);
         }
         
-        dprops[Mod_ID_Start] = new UnicodeProperty() {
+        dprops[Mod_ID_Start] = new UCDProperty() {
             {
                 type = DERIVED_CORE;
                 name = "XID_Start";
@@ -457,7 +457,7 @@ public final class DerivedProperty implements UCD_Types {
             }
         };
         
-        dprops[Mod_ID_Continue_NO_Cf] = new UnicodeProperty() {
+        dprops[Mod_ID_Continue_NO_Cf] = new UCDProperty() {
             {
                 type = DERIVED_CORE;
                 name = "XID_Continue";
@@ -474,7 +474,7 @@ public final class DerivedProperty implements UCD_Types {
             }
         };
         
-        dprops[PropMath] = new UnicodeProperty() {
+        dprops[PropMath] = new UCDProperty() {
             {
                 type = DERIVED_CORE;
                 name = "Math";
@@ -490,7 +490,7 @@ public final class DerivedProperty implements UCD_Types {
             }
         };
         
-        dprops[PropAlphabetic] = new UnicodeProperty() {
+        dprops[PropAlphabetic] = new UCDProperty() {
             {
                 type = DERIVED_CORE;
                name = "Alphabetic";
@@ -506,7 +506,7 @@ public final class DerivedProperty implements UCD_Types {
             }
         };
         
-        dprops[PropLowercase] = new UnicodeProperty() {
+        dprops[PropLowercase] = new UCDProperty() {
             {
                 type = DERIVED_CORE;
                 name = "Lowercase";
@@ -522,7 +522,7 @@ public final class DerivedProperty implements UCD_Types {
             }
         };
         
-        dprops[PropUppercase] = new UnicodeProperty() {
+        dprops[PropUppercase] = new UCDProperty() {
             {
                 type = DERIVED_CORE;
                 name = "Uppercase";
@@ -549,7 +549,7 @@ including all characters whose canonical decomposition consists of a single char
 file by including all characters whose canonical decomposition consists of a sequence
 of characters, the first of which has a non-zero combining class.
 */
-        dprops[FullCompExclusion] = new UnicodeProperty() {
+        dprops[FullCompExclusion] = new UCDProperty() {
             {
                 type = DERIVED_NORMALIZATION;
                 name = "Full_Composition_Exclusion";
@@ -577,7 +577,7 @@ of characters, the first of which has a non-zero combining class.
 			*/
         };
         
-        dprops[FullCompInclusion] = new UnicodeProperty() {
+        dprops[FullCompInclusion] = new UCDProperty() {
             {
                 isStandard = false;
                 type = DERIVED_NORMALIZATION;
@@ -598,7 +598,7 @@ of characters, the first of which has a non-zero combining class.
             }
         };
         
-        dprops[FC_NFKC_Closure] = new UnicodeProperty() {
+        dprops[FC_NFKC_Closure] = new UCDProperty() {
             {
                 type = DERIVED_NORMALIZATION;
                 setValueType(STRING_PROP);
@@ -621,7 +621,7 @@ of characters, the first of which has a non-zero combining class.
             public boolean hasValue(int cp) { return getValue(cp).length() != 0; }
         };
         
-        dprops[FC_NFC_Closure] = new UnicodeProperty() {
+        dprops[FC_NFC_Closure] = new UCDProperty() {
             {
                 type = DERIVED_NORMALIZATION;
                 isStandard = false;
@@ -649,33 +649,47 @@ of characters, the first of which has a non-zero combining class.
             dprops[i] = new QuickDProp(i - QuickNFD);
         }        
         
-        dprops[DefaultIgnorable] = new UnicodeProperty() {
+        dprops[DefaultIgnorable] = new UCDProperty() {
             {
                 type = DERIVED_CORE;
                 name = "Default_Ignorable_Code_Point";
                 hasUnassigned = true;
                 shortName = "DI";
-                header = header = "# Derived Property: " + name
-                    + "\r\n#  Generated from (Other_Default_Ignorable_Code_Point + Variation_Selector"
-                    + "\r\n#    + Noncharacter_Code_Point + Cf + Cc + Cs) - White_Space"
-                    //+ "\r\n#    - U+0600..U+0603 - U+06DD - U+070F"
-               ;
+                header = null;
+
             }
+            public String getHeader() {
+                if (ucdData.getCompositeVersion() > 0x040000) return "# Derived Property: " + name
+                   + "\r\n#  Generated from (Other_Default_Ignorable_Code_Point + Variation_Selector"
+                   + "\r\n#    + Noncharacter_Code_Point + Cf + Cc + Cs) - White_Space"
+                   + "\r\n#    -  U+FFF9..U+FFFB// INTERLINEAR ANNOTATION characters";
+                   //+ "\r\n#    - U+0600..U+0603 - U+06DD - U+070F"
+               return  "# Derived Property: " + name
+                + "\r\n#  Generated from (Other_Default_Ignorable_Code_Point + Cf + Cc + Cs) - White_Space";
+            }
+
             public boolean hasValue(int cp) {
                 if (ucdData.getBinaryProperty(cp, White_space)) return false;
+                if (ucdData.getBinaryProperty(cp, Other_Default_Ignorable_Code_Point)) return true;
+                
+                if (ucdData.getCompositeVersion() > 0x040000 && cp >= 0xFFF9 && cp <= 0xFFFB) return false;
+
+                byte cat = ucdData.getCategory(cp);
+                if (cat == Cf || cat == Cs || cat == Cc) return true;
+
+                if (ucdData.getCompositeVersion() <= 0x040000) return false;
+                
+                //if (cp >= 0xFFF9 && cp <= 0xFFFB) return false;
             	//if (0x2060 <= cp && cp <= 0x206F || 0xFFF0 <= cp && cp <= 0xFFFB || 0xE0000 <= cp && cp <= 0xE0FFF) return true;
             	//if (0x0600 <= cp && cp <= 0x0603 || 0x06DD == cp || 0x070F == cp) return false;
             	
-                if (ucdData.getBinaryProperty(cp, Other_Default_Ignorable_Code_Point)) return true;
                 if (ucdData.getBinaryProperty(cp, Variation_Selector)) return true;
                 if (ucdData.getBinaryProperty(cp, Noncharacter_Code_Point)) return true;
-                byte cat = ucdData.getCategory(cp);
-                if (cat == Cf || cat == Cs || cat == Cc) return true;
                 return false;
             }
         };
 
-        dprops[Case_Sensitive] = new UnicodeProperty() {
+        dprops[Case_Sensitive] = new UCDProperty() {
             {
                 type = DERIVED_CORE;
                 isStandard = false;
@@ -763,7 +777,7 @@ of characters, the first of which has a non-zero combining class.
             }
         };
 
-        dprops[Other_Case_Ignorable] = new UnicodeProperty() {
+        dprops[Other_Case_Ignorable] = new UCDProperty() {
             {
                 name = "Other_Case_Ignorable";
                 shortName = "OCI";
@@ -785,7 +799,7 @@ of characters, the first of which has a non-zero combining class.
             }
         };
         
-        dprops[Type_i] = new UnicodeProperty() {
+        dprops[Type_i] = new UCDProperty() {
             {
                 type = DERIVED_CORE;
                 isStandard = false;
@@ -819,7 +833,7 @@ of characters, the first of which has a non-zero combining class.
             }
         };
         
-        dprops[Case_Ignorable] = new UnicodeProperty() {
+        dprops[Case_Ignorable] = new UCDProperty() {
             {
                 name = "Case_Ignorable";
                 isStandard = false;
@@ -842,7 +856,7 @@ of characters, the first of which has a non-zero combining class.
 # GraphemeBase := 
 
 */
-        dprops[GraphemeExtend] = new UnicodeProperty() {
+        dprops[GraphemeExtend] = new UCDProperty() {
             {
                 type = DERIVED_CORE;
                 name = "Grapheme_Extend";
@@ -865,7 +879,7 @@ of characters, the first of which has a non-zero combining class.
             }
         };
 
-        dprops[GraphemeBase] = new UnicodeProperty() {
+        dprops[GraphemeBase] = new UCDProperty() {
             {
                 type = DERIVED_CORE;
                 name = "Grapheme_Base";
@@ -888,7 +902,7 @@ of characters, the first of which has a non-zero combining class.
         };
         
         for (int i = 0; i < dprops.length; ++i) {
-            UnicodeProperty up = dprops[i];
+            UCDProperty up = dprops[i];
             if (up == null) continue;
             if (up.getValueType() != BINARY_PROP) continue;
             up.setValue(NUMBER, "1");

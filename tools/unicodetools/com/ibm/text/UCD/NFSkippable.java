@@ -6,7 +6,7 @@ import com.ibm.text.utility.*;
 import java.io.PrintWriter;
 
 
-public final class NFSkippable extends UnicodeProperty {
+public final class NFSkippable extends UCDProperty {
     
     static final boolean DEBUG = false;
     
@@ -200,7 +200,7 @@ public final class NFSkippable extends UnicodeProperty {
         out.println();
         
         for (int mode = NFD_UnsafeStart; mode <= NFKC_UnsafeStart; ++mode) {
-            UnicodeProperty up = DerivedProperty.make(mode, Default.ucd);
+            UCDProperty up = DerivedProperty.make(mode, Default.ucd);
             generateSet(out, "UNSAFE[" + Normalizer.getName((byte)(mode-NFD_UnsafeStart)) + "]", up);
         }
         
@@ -212,7 +212,7 @@ public final class NFSkippable extends UnicodeProperty {
         out.close();
     }
     
-    static void generateSet(PrintWriter out, String label, UnicodeProperty up) {
+    static void generateSet(PrintWriter out, String label, UCDProperty up) {
         System.out.println("Generating: " + up.getName(NORMAL));
         UnicodeSet result = new UnicodeSet();
         for (int cp = 0; cp <= limit; ++cp) {

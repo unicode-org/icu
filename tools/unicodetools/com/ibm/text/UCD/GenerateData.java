@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateData.java,v $
-* $Date: 2003/08/20 03:46:41 $
-* $Revision: 1.30 $
+* $Date: 2004/02/06 18:30:21 $
+* $Revision: 1.31 $
 *
 *******************************************************************************
 */
@@ -186,7 +186,7 @@ public class GenerateData implements UCD_Types {
         
         doHeader(fileName + getFileSuffix(false), output, headerChoice);
         for (int i = 0; i < DERIVED_PROPERTY_LIMIT; ++i) {
-            UnicodeProperty up = DerivedProperty.make(i, Default.ucd);
+            UCDProperty up = DerivedProperty.make(i, Default.ucd);
             if (up == null) continue;
             boolean keepGoing = true;
             if (!up.isStandard()) keepGoing = false;
@@ -409,7 +409,7 @@ public class GenerateData implements UCD_Types {
                 //System.out.println("debug");
             }
             
-            UnicodeProperty up = UnifiedBinaryProperty.make(i, Default.ucd);
+            UCDProperty up = UnifiedBinaryProperty.make(i, Default.ucd);
             if (up == null) continue;
             if (!up.isStandard()) continue;
             
@@ -745,7 +745,7 @@ public class GenerateData implements UCD_Types {
         doHeader(file + getFileSuffix(false), output, headerChoice);
         int last = -1;
         for (int i = startEnum; i < endEnum; ++i) {
-            UnicodeProperty up = UnifiedBinaryProperty.make(i, Default.ucd);
+            UCDProperty up = UnifiedBinaryProperty.make(i, Default.ucd);
             if (up == null) continue;
             if (up.skipInDerivedListing()) continue;
             
@@ -1082,7 +1082,7 @@ public class GenerateData implements UCD_Types {
             	
             	log.println();
             	log.println("Cummulative differences");
-            	UnicodeProperty up = DerivedProperty.make(prop, Default.ucd);
+            	UCDProperty up = DerivedProperty.make(prop, Default.ucd);
             	UnicodeSet newProp = up.getSet();
             	Utility.showSetNames(log, "", cummulative.removeAll(newProp), false, false, Default.ucd);
             }

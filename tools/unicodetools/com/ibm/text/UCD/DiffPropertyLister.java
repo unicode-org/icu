@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/DiffPropertyLister.java,v $
-* $Date: 2003/02/25 23:38:23 $
-* $Revision: 1.8 $
+* $Date: 2004/02/06 18:30:22 $
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
@@ -56,8 +56,8 @@ class DiffPropertyLister extends PropertyLister {
     }
     */
 
-	UnicodeProperty newProp = null;
-	UnicodeProperty oldProp = null;
+	UCDProperty newProp = null;
+	UCDProperty oldProp = null;
 	String value = "";
 	
     public String optionalComment(int cp) {

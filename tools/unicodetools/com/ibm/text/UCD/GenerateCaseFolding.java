@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateCaseFolding.java,v $
-* $Date: 2003/02/25 23:38:23 $
-* $Revision: 1.13 $
+* $Date: 2004/02/06 18:30:22 $
+* $Revision: 1.14 $
 *
 *******************************************************************************
 */
@@ -613,7 +613,7 @@ public class GenerateCaseFolding implements UCD_Types {
                 case 4: skipLine = true; break;
                 case 5: out.println("# No corresponding uppercase precomposed character"); break;
                 case 6: Utility.appendFile("SpecialCasingIota.txt", Utility.UTF8, out); break;
-                case 7: out.println("# Some characters with YPOGEGRAMMENI are also have no corresponding titlecases"); break;
+                case 7: out.println("# Some characters with YPOGEGRAMMENI also have no corresponding titlecases"); break;
                 case 8: skipLine = true; break;
                 }
                 if (!skipLine) out.println();

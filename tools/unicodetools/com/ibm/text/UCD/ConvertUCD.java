@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/ConvertUCD.java,v $
-* $Date: 2003/07/21 15:50:06 $
-* $Revision: 1.12 $
+* $Date: 2004/02/06 18:30:23 $
+* $Revision: 1.13 $
 *
 *******************************************************************************
 */
@@ -27,12 +27,14 @@ import java.io.*;
 public final class ConvertUCD implements UCD_Types {
     public static final boolean SHOW = false;
     public static final boolean DEBUG = false;
+    static final boolean SHOW_SAMPLE = false;
 
-    public static int major;
-    public static int minor;
-    public static int update;
 
-    static String version;
+    int major;
+    int minor;
+    int update;
+
+    String version;
 
     // varies by version
     /*
@@ -79,6 +81,47 @@ public final class ConvertUCD implements UCD_Types {
          /*
         //*/
     };
+    static HashMap isHex = new HashMap();
+    static HashMap defaults = new HashMap();
+
+    static {
+        for (int j = 0; j < labelList.length; ++j) {
+            String[] labels = labelList[j];
+
+            for (int i = 1; i < labels.length; ++i) {
+                boolean hex = false;
+                String def = null;
+                //char appendChar = '\u0000';
+
+                // pull off "*": hex interpretation
+                if (labels[i].charAt(0) == '*') { // HEX value
+                    hex = true;
+                    labels[i] = labels[i].substring(1);
+                }
+
+                /*
+                // pull off "$": append duplicates
+                if (labels[i].charAt(0) == '$') { // HEX value
+                    appendChar = labels[i].charAt(1);
+                    labels[i] = labels[i].substring(2);
+                }
+
+                // pull off default values
+                int pos = labels[i].indexOf('-');
+                if (pos >= 0) {
+                    def = labels[i].substring(pos+1);
+                    labels[i] = labels[i].substring(0,pos);
+                }
+                */
+                // store results
+                // we do this after all processing, so that the label is clean!!
+
+                if (hex) isHex.put(labels[i], "");
+                //if (appendChar != 0) appendDuplicates.put(labels[i], String.valueOf(appendChar));
+                defaults.put(labels[i], def);
+            }
+        }
+    }
     /*
     static String[][] labelList31 = {
         // Labels for the incoming files. Labels MUST match field order in file.
@@ -212,15 +255,10 @@ public final class ConvertUCD implements UCD_Types {
 
         try {
             for (int i = 0; i < args.length; ++i) {
-                version = args[i];
+                String version = args[i];
                 if (version.length() == 0) version = UCD.latestVersion;
-                String[] parts = new String[3];
-                Utility.split(version, '.', parts);
-                major = Integer.parseInt(parts[0]);
-                minor = Integer.parseInt(parts[1]);
-                update = Integer.parseInt(parts[2]);
 
-                toJava();
+                new ConvertUCD().toJava(version);
             }
         } finally {
             log.close();
@@ -242,7 +280,13 @@ public final class ConvertUCD implements UCD_Types {
     }
     */
 
-    static void toJava() throws Exception {
+    void toJava(String version) throws Exception {
+        this.version = version;
+        String[] parts = new String[3];
+        Utility.split(version, '.', parts);
+        major = Integer.parseInt(parts[0]);
+        minor = Integer.parseInt(parts[1]);
+        update = Integer.parseInt(parts[2]);
         System.out.println("Building " + version);
         // Blocks is special
         // Unihan is special
@@ -264,9 +308,12 @@ public final class ConvertUCD implements UCD_Types {
         UData ud;
         ud = getEntry(0x5e);
         System.out.println("SPOT-CHECK: 5e: " + ud);
-        
+
         ud = getEntry(0x130);
         System.out.println("SPOT-CHECK: 130: " + ud);
+        
+        ud = getEntry(0x1f6);
+        System.out.println("SPOT-CHECK: 1f6: " + ud);
         
         ud = getEntry(0x2A6D6);
         System.out.println("SPOT-CHECK: 2A6D6: " + ud);
@@ -285,51 +332,10 @@ public final class ConvertUCD implements UCD_Types {
      *  "OMIT" is special -- means don't record
      */
 
-    static HashMap isHex = new HashMap();
-    static HashMap defaults = new HashMap();
 
-    static {
-        for (int j = 0; j < labelList.length; ++j) {
-            String[] labels = labelList[j];
+    List blockData = new LinkedList();
 
-            for (int i = 1; i < labels.length; ++i) {
-                boolean hex = false;
-                String def = null;
-                //char appendChar = '\u0000';
-
-                // pull off "*": hex interpretation
-                if (labels[i].charAt(0) == '*') { // HEX value
-                    hex = true;
-                    labels[i] = labels[i].substring(1);
-                }
-
-                /*
-                // pull off "$": append duplicates
-                if (labels[i].charAt(0) == '$') { // HEX value
-                    appendChar = labels[i].charAt(1);
-                    labels[i] = labels[i].substring(2);
-                }
-
-                // pull off default values
-                int pos = labels[i].indexOf('-');
-                if (pos >= 0) {
-                    def = labels[i].substring(pos+1);
-                    labels[i] = labels[i].substring(0,pos);
-                }
-                */
-                // store results
-                // we do this after all processing, so that the label is clean!!
-
-                if (hex) isHex.put(labels[i], "");
-                //if (appendChar != 0) appendDuplicates.put(labels[i], String.valueOf(appendChar));
-                defaults.put(labels[i], def);
-            }
-        }
-    }
-
-    static List blockData = new LinkedList();
-
-    static void readBlocks() throws Exception {
+    void readBlocks() throws Exception {
         System.out.println("Reading 'Blocks'");
         BufferedReader input = Utility.openUnicodeFile(blocksname, version, true, Utility.LATIN1);
         String line = "";
@@ -363,9 +369,9 @@ public final class ConvertUCD implements UCD_Types {
         }
     }
 
-    static Set properties = new TreeSet();
+    Set properties = new TreeSet();
 
-    static void readSemi(String[] labels) throws Exception {
+    void readSemi(String[] labels) throws Exception {
         System.out.println();
         System.out.println("Reading '" + labels[0] + "'");
         if (major < 3 || (major == 3 && minor < 1)) {
@@ -554,8 +560,9 @@ public final class ConvertUCD implements UCD_Types {
             System.out.println(";");
     }
 
-    static Map charData = new TreeMap();
+    Map charData = new TreeMap();
 
+    /*
     static void writeXML() throws IOException {
         System.out.println("Writing 'UCD-Main.xml'");
         BufferedWriter output = new BufferedWriter(
@@ -604,7 +611,7 @@ public final class ConvertUCD implements UCD_Types {
                     String value = Utility.quoteXML((String) data.get(label));
                     output.write(" " + label + "='" + value + "'");
                 }
-                */
+                *//*
                 output.write("/>\r\n");
             }
 
@@ -615,8 +622,9 @@ public final class ConvertUCD implements UCD_Types {
             output.close();
         }
     }
-
-    static void writeJavaData() throws IOException {
+    */
+    
+    void writeJavaData() throws IOException {
         Iterator it = charData.keySet().iterator();
         int codePoint = -1;
         System.out.println("Writing " + dataFilePrefix + version);
@@ -665,13 +673,13 @@ public final class ConvertUCD implements UCD_Types {
         }
     }
 
-    static String[] xsSplit = new String[40];
+    //static String[] xsSplit = new String[40];
 
     // Cache a little bit for speed
-    static int getEntryCodePoint = -1;
-    static UData getEntryUData = null;
+    int getEntryCodePoint = -1;
+    UData getEntryUData = null;
 
-    static UData getEntryIfExists(int cp) {
+    UData getEntryIfExists(int cp) {
         if (cp == getEntryCodePoint) return getEntryUData;
         Integer cc = new Integer(cp);
         UData charEntry = (UData) charData.get(cc);
@@ -683,7 +691,7 @@ public final class ConvertUCD implements UCD_Types {
 
     /* Get entry in table for cc
      */
-    static UData getEntry(int cp) {
+    UData getEntry(int cp) {
         if (cp == getEntryCodePoint) return getEntryUData;
         Integer cc = new Integer(cp);
         UData charEntry = (UData) charData.get(cc);
@@ -699,12 +707,12 @@ public final class ConvertUCD implements UCD_Types {
     /** Adds the character data. Signals duplicates with an exception
      */
 
-    static void setBinaryProperty(int cp, int binProp) {
+    void setBinaryProperty(int cp, int binProp) {
         UData charEntry = getEntry(cp);
         charEntry.binaryProperties |= (1L << binProp);
     }
 
-    static void appendCharProperties(int cp, String key) {
+    void appendCharProperties(int cp, String key) {
         int ind;
         //if (true || NEWPROPS) {
             ind = Utility.lookup(key, UCD_Names.BP, true);
@@ -716,14 +724,12 @@ public final class ConvertUCD implements UCD_Types {
         setBinaryProperty(cp, ind);
     }
 
-    static Set jtSet = new TreeSet();
-    static Set jgSet = new TreeSet();
+    Set jtSet = new TreeSet();
+    Set jgSet = new TreeSet();
     
-    static final boolean SHOW_SAMPLE = false;
-
     /** Adds the character data. Signals duplicates with an exception
      */
-    static void addCharData(int cp, String key, String value) {
+    void addCharData(int cp, String key, String value) {
         //if (cp < 10) System.out.println("A: " + Utility.hex(cp) + ", " + key + ", " + Utility.quoteJavaString(value));
         UData charEntry = getEntry(cp);
         //if (cp < 10) System.out.println("   " + charEntry);
@@ -794,7 +800,7 @@ public final class ConvertUCD implements UCD_Types {
         
     }
 
-    static public void setField(UData uData, String fieldName, String fieldValue) {
+    public void setField(UData uData, String fieldName, String fieldValue) {
         try {
             if (fieldName.equals("n")) {
                 uData.name = fieldValue;

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/VerifyUCD.java,v $
-* $Date: 2003/07/21 15:50:05 $
-* $Revision: 1.22 $
+* $Date: 2004/02/06 18:30:18 $
+* $Revision: 1.23 $
 *
 *******************************************************************************
 */
@@ -441,7 +441,7 @@ can help you narrow these down.
         checkNF_AndCase("\u0130", true);
         checkNF_AndCase("\u0131", true);
         
-        UnicodeProperty softdot = null;
+        UCDProperty softdot = null;
         CanonicalIterator cit = new CanonicalIterator("a");
         UnicodeSet badChars = new UnicodeSet();
         
@@ -489,9 +489,9 @@ can help you narrow these down.
     }
     
     static void checkIdentical(String ubpName1, String ubpName2) {
-        UnicodeProperty prop1 = UnifiedBinaryProperty.make(ubpName1, Default.ucd);
+        UCDProperty prop1 = UnifiedBinaryProperty.make(ubpName1, Default.ucd);
         UnicodeSet set1 = prop1.getSet();
-        UnicodeProperty prop2 = UnifiedBinaryProperty.make(ubpName2, Default.ucd);
+        UCDProperty prop2 = UnifiedBinaryProperty.make(ubpName2, Default.ucd);
         UnicodeSet set2 = prop2.getSet();
         UnicodeSet set1minus2 = new UnicodeSet(set1);
         set1minus2.removeAll(set2);
@@ -986,8 +986,8 @@ can help you narrow these down.
         System.out.println("NameChar:");
         System.out.println("\t" + NameChar.toPattern(true));
         
-        UnicodeProperty IDstart = DerivedProperty.make(Mod_ID_Start, Default.ucd);
-        UnicodeProperty IDcontinue = DerivedProperty.make(Mod_ID_Continue_NO_Cf, Default.ucd);
+        UCDProperty IDstart = DerivedProperty.make(Mod_ID_Start, Default.ucd);
+        UCDProperty IDcontinue = DerivedProperty.make(Mod_ID_Continue_NO_Cf, Default.ucd);
         
         UnicodeSet IDContinueMinusNameChar = new UnicodeSet();
         UnicodeSet IDStartMinusNameChar = new UnicodeSet();

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/MyPropertyLister.java,v $
-* $Date: 2003/07/21 15:50:06 $
-* $Revision: 1.10 $
+* $Date: 2004/02/06 18:30:20 $
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */
@@ -24,7 +24,7 @@ final class MyPropertyLister extends PropertyLister {
     
     private boolean isDefaultValue = false;
     
-    private UnicodeProperty up;
+    private UCDProperty up;
 
     public MyPropertyLister(UCD ucd, int propMask, PrintWriter output) {
         this.propMask = propMask;

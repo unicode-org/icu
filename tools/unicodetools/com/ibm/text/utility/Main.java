@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Main.java,v $
-* $Date: 2003/07/07 15:58:56 $
-* $Revision: 1.2 $
+* $Date: 2004/02/06 18:29:39 $
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -50,7 +50,7 @@ public class Main {
     static public void main (String[] args) {
 		for (int i = 0; i < args.length; ++i) {
  			String arg = args[i];
- 			if (arg.equalsIgnoreCase("probe")) Probe.test("da");
+ 			//if (arg.equalsIgnoreCase("probe")) Probe.test("da");
 		}
 		if (true) return;
 

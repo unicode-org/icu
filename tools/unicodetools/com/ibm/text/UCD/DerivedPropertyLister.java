@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/DerivedPropertyLister.java,v $
-* $Date: 2003/07/21 15:50:06 $
-* $Revision: 1.11 $
+* $Date: 2004/02/06 18:30:22 $
+* $Revision: 1.12 $
 *
 *******************************************************************************
 */
@@ -24,7 +24,7 @@ final class DerivedPropertyLister extends PropertyLister {
 
     //private int propMask;
     //private DerivedProperty dprop;
-    private UnicodeProperty uprop;
+    private UCDProperty uprop;
     int width;
     boolean varies;
 

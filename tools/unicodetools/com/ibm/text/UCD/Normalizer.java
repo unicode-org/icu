@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Normalizer.java,v $
-* $Date: 2003/02/25 23:38:22 $
-* $Revision: 1.14 $
+* $Date: 2004/02/06 18:30:20 $
+* $Revision: 1.15 $
 *
 *******************************************************************************
 */
@@ -288,6 +288,9 @@ public final class Normalizer implements UCD_Types {
         return this.composition ? data.isLeading(cp) : false;
     }
 
+    public int getComposition(int first, int second) {
+        return data.getPairwiseComposition(first, second);
+    }
 
     // ======================================
     //                  PRIVATES
@@ -518,6 +521,9 @@ Problem: differs: true, call: false U+1FED GREEK DIALYTIKA AND VARIA
             // we know we decompose all CANONICAL, plus > CANONICAL if compat is TRUE.
             if (dt == CANONICAL || dt > CANONICAL && compat) {
                 String s = ucd.getDecompositionMapping(cp);
+                if (s.equals(UTF16.valueOf(cp))) {
+                    System.out.println("fix");
+                }
                 for (int i = 0; i < s.length(); i += UTF16.getCharCount(cp)) {
                     cp = UTF16.charAt(s, i);
                     getRecursiveDecomposition(cp, buffer, compat);

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateLineBreakTest.java,v $
-* $Date: 2002/08/04 21:38:45 $
-* $Revision: 1.2 $
+* $Date: 2004/02/06 18:30:21 $
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -626,9 +626,9 @@ public class GenerateLineBreakTest implements UCD_Types {
 
         static final String[] Names = {"CR", "LF", "CTL", "Extend", "Link", "CGJ", "Base", "LetterBase", "Other" };
         
-        static UnicodeProperty extendProp = UnifiedBinaryProperty.make(DERIVED | GraphemeExtend);
-        static UnicodeProperty baseProp = UnifiedBinaryProperty.make(DERIVED | GraphemeBase);
-        static UnicodeProperty linkProp = UnifiedBinaryProperty.make(BINARY_PROPERTIES | GraphemeLink);
+        static UCDProperty extendProp = UnifiedBinaryProperty.make(DERIVED | GraphemeExtend);
+        static UCDProperty baseProp = UnifiedBinaryProperty.make(DERIVED | GraphemeBase);
+        static UCDProperty linkProp = UnifiedBinaryProperty.make(BINARY_PROPERTIES | GraphemeLink);
 
         {
             fileName = "Word";
