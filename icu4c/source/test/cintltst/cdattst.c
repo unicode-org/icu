@@ -535,7 +535,7 @@ uprv_free(pattern);
 /**
  * Test DateFormat(Calendar) API
  */
-void TestDateFormatCalendar() {
+static void TestDateFormatCalendar() {
     UDateFormat *date=0, *time=0, *full=0;
     UCalendar *cal=0;
     UChar buf[256];
