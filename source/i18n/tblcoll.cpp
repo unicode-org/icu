@@ -317,6 +317,79 @@ NormalizerIterator::reset(void)
 }
 
 //================ Some inline definitions of implementation functions........ ========
+/**
+ * A clone of CollationElementIterator::makeReorderedBuffer, trimmed down
+ * to only handle forward.
+ */
+inline VectorOfInt*
+RuleBasedCollator::makeReorderedBuffer(NormalizerIterator* cursor,
+                                       UChar colFirst,
+                                       int32_t lastValue,
+                                       VectorOfInt* lastExpansion) const {
+    VectorOfInt* result;
+
+    int32_t firstValue = ucmp32_get(data->mapping, colFirst);
+    if (firstValue >= CONTRACTCHARINDEX) {
+        UErrorCode status = U_ZERO_ERROR;
+        firstValue = nextContractChar(cursor, colFirst, status);
+    }
+
+    VectorOfInt* firstExpansion = NULL;
+    if (firstValue >= EXPANDCHARINDEX) {
+        firstExpansion = getExpandValueList(firstValue);
+    }
+
+    if (firstExpansion == NULL && lastExpansion == NULL) {
+        cursor->ownBuffer.at(0) = firstValue;
+        cursor->ownBuffer.at(1) = lastValue;
+        result = &cursor->ownBuffer;
+    }
+    else {
+        int32_t firstLength = firstExpansion==NULL? 1 : firstExpansion->size();
+        int32_t lastLength = lastExpansion==NULL? 1 : lastExpansion->size();
+        if (cursor->reorderBuffer == NULL) {
+            cursor->reorderBuffer = new VectorOfInt(firstLength+lastLength);
+        }
+        // reorderdBuffer gets reused for the life of this object.
+        // Since its internal buffer only grows, there is a danger
+        // that it will get really, really big, and never shrink.  If
+        // this is actually happening, insert code here to check for
+        // the condition.  Something along the lines of:
+        //! else if (reorderBuffer->size() >= 256 &&
+        //!          (firstLength+lastLength) < 16) {
+        //!     delete reorderBuffer;
+        //!     reorderBuffer = new VectorOfInt(firstLength+lastLength);
+        //! }
+        // The specific numeric values need to be determined
+        // empirically. [aliu]
+        result = cursor->reorderBuffer;
+
+        if (firstExpansion == NULL) {
+            result->atPut(0, firstValue);
+        }
+        else {
+            // System.arraycopy(firstExpansion, 0, result, 0, firstLength);
+            *result = *firstExpansion;
+        }
+
+        if (lastExpansion == NULL) {
+            result->atPut(firstLength, lastValue);
+        }
+        else {
+            // System.arraycopy(lastExpansion, 0, result, firstLength, lastLength);
+            for (int32_t i=0; i<lastLength; ++i) {
+                result->atPut(firstLength + i, lastExpansion->at(i));
+            }
+        }
+        result->setSize(firstLength+lastLength);
+    }
+
+    return result;
+}
+
+
+
+
 
 inline int32_t
 RuleBasedCollator::strengthOrder(int32_t value) const
@@ -409,76 +482,6 @@ RuleBasedCollator::getStrengthOrder(NormalizerIterator* cursor,
     }
 
     return strengthOrder(value);
-}
-
-/**
- * A clone of CollationElementIterator::makeReorderedBuffer, trimmed down
- * to only handle forward.
- */
-inline VectorOfInt*
-RuleBasedCollator::makeReorderedBuffer(NormalizerIterator* cursor,
-                                       UChar colFirst,
-                                       int32_t lastValue,
-                                       VectorOfInt* lastExpansion) const {
-    VectorOfInt* result;
-
-    int32_t firstValue = ucmp32_get(data->mapping, colFirst);
-    if (firstValue >= CONTRACTCHARINDEX) {
-        UErrorCode status = U_ZERO_ERROR;
-        firstValue = nextContractChar(cursor, colFirst, status);
-    }
-
-    VectorOfInt* firstExpansion = NULL;
-    if (firstValue >= EXPANDCHARINDEX) {
-        firstExpansion = getExpandValueList(firstValue);
-    }
-
-    if (firstExpansion == NULL && lastExpansion == NULL) {
-        cursor->ownBuffer.at(0) = firstValue;
-        cursor->ownBuffer.at(1) = lastValue;
-        result = &cursor->ownBuffer;
-    }
-    else {
-        int32_t firstLength = firstExpansion==NULL? 1 : firstExpansion->size();
-        int32_t lastLength = lastExpansion==NULL? 1 : lastExpansion->size();
-        if (cursor->reorderBuffer == NULL) {
-            cursor->reorderBuffer = new VectorOfInt(firstLength+lastLength);
-        }
-        // reorderdBuffer gets reused for the life of this object.
-        // Since its internal buffer only grows, there is a danger
-        // that it will get really, really big, and never shrink.  If
-        // this is actually happening, insert code here to check for
-        // the condition.  Something along the lines of:
-        //! else if (reorderBuffer->size() >= 256 &&
-        //!          (firstLength+lastLength) < 16) {
-        //!     delete reorderBuffer;
-        //!     reorderBuffer = new VectorOfInt(firstLength+lastLength);
-        //! }
-        // The specific numeric values need to be determined
-        // empirically. [aliu]
-        result = cursor->reorderBuffer;
-
-        if (firstExpansion == NULL) {
-            result->atPut(0, firstValue);
-        }
-        else {
-            // System.arraycopy(firstExpansion, 0, result, 0, firstLength);
-            *result = *firstExpansion;
-        }
-
-        if (lastExpansion == NULL) {
-            result->atPut(firstLength, lastValue);
-        }
-        else {
-            // System.arraycopy(lastExpansion, 0, result, firstLength, lastLength);
-            for (int32_t i=0; i<lastLength; ++i) {
-                result->atPut(firstLength + i, lastExpansion->at(i));
-            }
-        }
-        result->setSize(firstLength+lastLength);
-    }
-
-    return result;
 }
 
 // ==================== End inlines ============================================
