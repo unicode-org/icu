@@ -965,12 +965,12 @@ void DateFormatRegressionTest::Test4151631(void)
  */
 void DateFormatRegressionTest::Test4151706(void) 
 {
+    UnicodeString dateString("Thursday, 31-Dec-98 23:00:00 GMT");
     UErrorCode status = U_ZERO_ERROR;
-    SimpleDateFormat *fmt =
-        new SimpleDateFormat(UnicodeString("EEEE, dd-MMM-yy HH:mm:ss z"), Locale::US, status);
+    SimpleDateFormat fmt(UnicodeString("EEEE, dd-MMM-yy HH:mm:ss z"), Locale::US, status);
     failure(status, "new SimpleDateFormat");
     //try {
-        UDate d = fmt->parse("Thursday, 31-Dec-98 23:00:00 GMT", status);
+        UDate d = fmt.parse(dateString, status);
         failure(status, "fmt->parse");
        // {sfb} what about next two lines?
         //if (d.getTime() != Date.UTC(1998-1900, Calendar.DECEMBER, 31, 23, 0, 0))
@@ -978,7 +978,9 @@ void DateFormatRegressionTest::Test4151706(void)
     /*} catch (Exception e) {
         errln("Fail: " + e);
     }*/
-    delete fmt;
+    UnicodeString temp;
+    FieldPosition pos(0);
+    logln(dateString + " -> " + fmt.format(d, temp, pos));
 }
 
 /**
