@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2003, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-hpux-acc,v 1.35 2003/12/04 22:04:51 grhoten-oss Exp $
+## $Id: mh-hpux-acc,v 1.36 2003/12/11 18:40:38 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	:
@@ -12,6 +12,11 @@ GEN_DEPS.cc= 	:
 ## Flags for position independent code
 SHAREDLIBCFLAGS = +z
 SHAREDLIBCXXFLAGS = +z
+
+## Additional flags when building libraries with threads
+## We use this instead of -mt, which isn't available in all versions of aCC
+## Our tools won't compile with -D_POSIX_C_SOURCE=199506L
+THREADSCPPFLAGS = -D_REENTRANT -D_THREAD_SAFE
 
 # Use Extended ANSI mode, which is useful for 64-bit numbers
 # +Olibcalls uses intrinsic functions for strlen and others
