@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/TransliteratorTest.java,v $
- * $Date: 2001/11/29 01:00:29 $
- * $Revision: 1.83 $
+ * $Date: 2001/11/29 07:49:53 $
+ * $Revision: 1.84 $
  *
  *****************************************************************************************
  */
@@ -2397,6 +2397,10 @@ public class TransliteratorTest extends TestFmwk {
                 label = "interm" + i + ":  ";
             }
             logln("    " + label + results[i], pass, false);
+        }
+
+        if (!pass) {
+            logln(  "    expected: " + expectedResult, pass, false);
         }
 
         return pass;
