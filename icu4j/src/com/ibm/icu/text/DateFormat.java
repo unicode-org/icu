@@ -188,9 +188,15 @@ public abstract class DateFormat extends UFormat {
     /**
      * FieldPosition selector for 'S' field alignment,
      * corresponding to the {@link Calendar.MILLISECOND} field.
-     * @stable ICU 2.0
+     * @draft ICU 3.0
      */
-    public final static int MILLISECOND_FIELD = 8;
+    public final static int FRACTIONAL_SECOND_FIELD = 8;
+
+    /**
+     * Alias for FRACTIONAL_SECOND_FIELD.
+     * @deprecated ICU 3.0 use FRACTIONAL_SECOND_FIELD.
+     */
+    public final static int MILLISECOND_FIELD = FRACTIONAL_SECOND_FIELD;
 
     /**
      * FieldPosition selector for 'E' field alignment,
