@@ -16,6 +16,7 @@
 *   06/29/2000  helena      Major rewrite of the callback APIs.
 *   07/20/2000  george      Change the coding style to conform to the coding guidelines,
 *                           and a few miscellaneous bug fixes.
+*   11/15/2000  george      Added UTF-32
 */
 
 #include "cmemory.h"
@@ -34,7 +35,7 @@
  */
 /*static const uint32_t REPLACEMENT_CHARACTER = 0x0000FFFD;*/
 static const uint32_t MAXIMUM_UCS2 = 0x0000FFFF;
-static const uint32_t MAXIMUM_UTF16 = 0x0010FFFF;
+static const uint32_t MAXIMUM_UTF = 0x0010FFFF;
 static const uint32_t MAXIMUM_UCS4 = 0x7FFFFFFF;
 static const int8_t HALF_SHIFT = 10;
 static const uint32_t HALF_BASE = 0x0010000;
@@ -73,7 +74,8 @@ static const int8_t bytesFromUTF8[256] = {
  *
  * @returns true when callback fails
  */
-UBool T_UConverter_toUnicode_InvalidChar_Callback(UConverterToUnicodeArgs * args,
+static UBool
+T_UConverter_toUnicode_InvalidChar_Callback(UConverterToUnicodeArgs * args,
                                                   UErrorCode *err)
 {
     UConverter *converter = args->converter;
@@ -99,7 +101,8 @@ UBool T_UConverter_toUnicode_InvalidChar_Callback(UConverterToUnicodeArgs * args
     return (UBool)U_FAILURE(*err);
 }
 
-UBool T_UConverter_toUnicode_InvalidChar_OffsetCallback(UConverterToUnicodeArgs * args,
+static UBool
+T_UConverter_toUnicode_InvalidChar_OffsetCallback(UConverterToUnicodeArgs * args,
                                                         int32_t currentOffset,
                                                         UErrorCode *err)
 {
@@ -195,7 +198,7 @@ morebytes:
             /* Remove the acummulated high bits */
             ch -= offsetsFromUTF8[inBytes];
 
-            if (i == inBytes && ch <= MAXIMUM_UTF16)
+            if (i == inBytes && ch <= MAXIMUM_UTF)
             {
                 /* Normal valid byte when the loop has not prematurely terminated (i < inBytes) */
                 if (ch <= MAXIMUM_UCS2) 
@@ -345,7 +348,7 @@ morebytes:
             /* Remove the acummulated high bits */
             ch -= offsetsFromUTF8[inBytes];
 
-            if (i == inBytes && ch <= MAXIMUM_UTF16)
+            if (i == inBytes && ch <= MAXIMUM_UTF)
             {
                 /* Normal valid byte when the loop has not prematurely terminated (i < inBytes) */
                 if (ch <= MAXIMUM_UCS2) 
@@ -1030,7 +1033,7 @@ U_CFUNC void  T_UConverter_toUnicode_UTF16_LE (UConverterToUnicodeArgs * args,
     args->source += mySourceIndex;
 }
 
-U_CFUNC void   T_UConverter_fromUnicode_UTF16_LE (UConverterFromUnicodeArgs * args,
+U_CFUNC void T_UConverter_fromUnicode_UTF16_LE (UConverterFromUnicodeArgs * args,
                                           UErrorCode * err)
 {
     const UChar *mySource = args->source;
@@ -1155,5 +1158,472 @@ const UConverterStaticData _UTF16LEStaticData={
 const UConverterSharedData _UTF16LEData={
     sizeof(UConverterSharedData), ~((uint32_t) 0),
     NULL, NULL, &_UTF16LEStaticData, FALSE, &_UTF16LEImpl, 
+    0
+};
+
+/* UTF-32BE ----------------------------------------------------------------- */
+
+void T_UConverter_toUnicode_UTF32_BE(UConverterToUnicodeArgs * args,
+                                     UErrorCode * err)
+{
+    const unsigned char *mySource = (unsigned char *) args->source;
+    UChar *myTarget = args->target;
+    const unsigned char *sourceLimit = (unsigned char *) args->sourceLimit;
+    const UChar *targetLimit = args->targetLimit;
+    unsigned char *toUBytes = args->converter->toUBytes;
+    uint32_t ch, i;
+
+    /* UTF-8 returns here for only non-offset, this needs to change.*/
+    if (args->converter->toUnicodeStatus && myTarget < targetLimit)
+    {
+        i = args->converter->toULength;       /* restore # of bytes consumed */
+
+        ch = args->converter->toUnicodeStatus - 1;/*Stores the previously calculated ch from a previous call*/
+        args->converter->toUnicodeStatus = 0;
+        goto morebytes;
+    }
+
+    while (mySource < sourceLimit && myTarget < targetLimit)
+    {
+        i = 0;
+        ch = 0;
+morebytes:
+        while (i < sizeof(uint32_t))
+        {
+            if (mySource < sourceLimit)
+            {
+                ch = (ch << 8) | (uint8_t)(*mySource);
+                toUBytes[i++] = (char) *(mySource++);
+            }
+            else
+            {
+                if (args->flush)
+                {
+                    if (U_SUCCESS(*err))
+                    {
+                        *err = U_TRUNCATED_CHAR_FOUND;
+                        args->converter->toUnicodeStatus = MAXIMUM_UCS4;
+                    }
+                }
+                else
+                {   /* stores a partially calculated target*/
+                    /* + 1 to make 0 a valid character */
+                    args->converter->toUnicodeStatus = ch + 1;
+                    args->converter->toULength = (int8_t) i;
+                }
+                goto donefornow;
+            }
+        }
+
+        if (ch <= MAXIMUM_UTF)
+        {
+            /* Normal valid byte when the loop has not prematurely terminated (i < inBytes) */
+            if (ch <= MAXIMUM_UCS2) 
+            {
+                /* fits in 16 bits */
+                *(myTarget++) = (UChar) ch;
+            }
+            else
+            {
+                /* write out the surrogates */
+                ch -= HALF_BASE;
+                *(myTarget++) = (UChar) ((ch >> HALF_SHIFT) + SURROGATE_HIGH_START);
+                ch = (ch & HALF_MASK) + SURROGATE_LOW_START;
+                if (myTarget < targetLimit)
+                {
+                    *(myTarget++) = (UChar)ch;
+                }
+                else
+                {
+                    /* Put in overflow buffer (not handled here) */
+                    args->converter->UCharErrorBuffer[0] = (UChar) ch;
+                    args->converter->UCharErrorBufferLength = 1;
+                    *err = U_BUFFER_OVERFLOW_ERROR;
+                    break;
+                }
+            }
+        }
+        else
+        {
+            args->source = (const char *) mySource;
+            args->target = myTarget;
+            args->converter->invalidCharLength = (int8_t)i;
+            if (T_UConverter_toUnicode_InvalidChar_Callback(args, err))
+            {
+                /* Stop if the error wasn't handled */
+                break;
+            }
+            args->converter->invalidCharLength = 0;
+            mySource = (unsigned char *) args->source;
+            myTarget = args->target;
+        }
+    }
+
+donefornow:
+    if (mySource < sourceLimit && myTarget >= targetLimit && U_SUCCESS(*err))
+    {
+        /* End of target buffer */
+        *err = U_BUFFER_OVERFLOW_ERROR;
+    }
+
+    args->target = myTarget;
+    args->source = (const char *) mySource;
+}
+
+void T_UConverter_fromUnicode_UTF32_BE(UConverterFromUnicodeArgs * args,
+                                       UErrorCode * err)
+{
+    const UChar *mySource = args->source;
+    unsigned char *myTarget = (unsigned char *) args->target;
+    const UChar *sourceLimit = args->sourceLimit;
+    const unsigned char *targetLimit = (unsigned char *) args->targetLimit;
+    UChar32 ch, ch2;
+    unsigned int indexToWrite;
+    unsigned char temp[sizeof(uint32_t)];
+
+    temp[0] = 0;
+
+    if (args->converter->fromUnicodeStatus)
+    {
+        ch = args->converter->fromUnicodeStatus;
+        args->converter->fromUnicodeStatus = 0;
+        goto lowsurogate;
+    }
+
+    while (mySource < sourceLimit && myTarget < targetLimit)
+    {
+        ch = *(mySource++);
+
+        if (SURROGATE_HIGH_START <= ch && ch < SURROGATE_LOW_START)
+        {
+lowsurogate:
+            if (mySource < sourceLimit)
+            {
+                ch2 = *mySource;
+                if (SURROGATE_LOW_START <= ch2 && ch2 <= SURROGATE_LOW_END)
+                {
+                    ch = ((ch - SURROGATE_HIGH_START) << HALF_SHIFT) + ch2 + SURROGATE_LOW_BASE;
+                    mySource++;
+                }
+            }
+            else if (!args->flush)
+            {
+                // ran out of source
+                args->converter->fromUnicodeStatus = ch;
+                break;
+            }
+        }
+
+        /* We cannot get any larger than 10FFFF because we are coming from UTF-16 */
+        /* Todo: Can the & part be left off implicitly? Does it really save time? */
+        temp[1] = (uint8_t) (ch >> 16 & 0x1F);
+        temp[2] = (uint8_t) (ch >> 8 & 0xFF);
+        temp[3] = (uint8_t) (ch & 0xFF);
+
+        for (indexToWrite = 0; indexToWrite <= sizeof(uint32_t) - 1; indexToWrite++)
+        {
+            if (myTarget < targetLimit)
+            {
+                *(myTarget++) = temp[indexToWrite];
+            }
+            else
+            {
+                args->converter->charErrorBuffer[args->converter->charErrorBufferLength++] = temp[indexToWrite];
+                *err = U_BUFFER_OVERFLOW_ERROR; /* Todo: is this needed because of ending if */
+            }
+        }
+    }
+
+    if (mySource < sourceLimit && myTarget >= targetLimit && U_SUCCESS(*err))
+    {
+        *err = U_BUFFER_OVERFLOW_ERROR;
+    }
+
+    args->target = (char *) myTarget;
+    args->source = mySource;
+}
+
+/*
+UChar32 T_UConverter_getNextUChar_UTF32_BE(UConverterToUnicodeArgs* args,
+                                                   UErrorCode* err)
+{
+    *err = U_UNSUPPORTED_ERROR;
+    return 0;
+}
+*/
+static const UConverterImpl _UTF32BEImpl = {
+    UCNV_UTF32_BigEndian,
+
+    NULL,
+    NULL,
+
+    NULL,
+    NULL,
+    NULL,
+
+    T_UConverter_toUnicode_UTF32_BE,
+    NULL,
+//    T_UConverter_toUnicode_UTF32_BE_OFFSETS_LOGIC,
+    T_UConverter_fromUnicode_UTF32_BE,
+    NULL,
+//    T_UConverter_fromUnicode_UTF32_BE_OFFSETS_LOGIC,
+    NULL,
+//    T_UConverter_getNextUChar_UTF32_BE,
+
+    NULL
+};
+
+/** Todo: These numbers are probably in correct. */
+const UConverterStaticData _UTF32BEStaticData = {
+  sizeof(UConverterStaticData),
+"UTF32_BigEndian",
+    1200, UCNV_IBM, UCNV_UTF32_BigEndian, 4, 4,
+    { 0, 0, 0xff, 0xfd }, 4, FALSE, FALSE,
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
+};
+
+
+const UConverterSharedData _UTF32BEData = {
+    sizeof(UConverterSharedData), ~((uint32_t) 0),
+    NULL, NULL, &_UTF32BEStaticData, FALSE, &_UTF32BEImpl, 
+    0
+};
+
+/* UTF-32LE ---------------------------------------------------------- */
+
+void T_UConverter_toUnicode_UTF32_LE(UConverterToUnicodeArgs * args,
+                                      UErrorCode * err)
+{
+    const unsigned char *mySource = (unsigned char *) args->source;
+    UChar *myTarget = args->target;
+    const unsigned char *sourceLimit = (unsigned char *) args->sourceLimit;
+    const UChar *targetLimit = args->targetLimit;
+    unsigned char *toUBytes = args->converter->toUBytes;
+    uint32_t ch, i;
+
+    /* UTF-8 returns here for only non-offset, this needs to change.*/
+    if (args->converter->toUnicodeStatus && myTarget < targetLimit)
+    {
+        i = args->converter->toULength;       /* restore # of bytes consumed */
+
+        ch = args->converter->toUnicodeStatus;/*Stores the previously calculated ch from a previous call*/
+        if (ch == -1)
+            ch = 0;
+        args->converter->toUnicodeStatus = 0;
+        goto morebytes;
+    }
+
+    while (mySource < sourceLimit && myTarget < targetLimit)
+    {
+        i = 0;
+        ch = 0;
+morebytes:
+        while (i < sizeof(uint32_t))
+        {
+            if (mySource < sourceLimit)
+            {
+                ch |= ((uint8_t)(*mySource)) << (i * 8);
+                toUBytes[i++] = (char) *(mySource++);
+            }
+            else
+            {
+                if (args->flush)
+                {
+                    if (U_SUCCESS(*err))
+                    {
+                        *err = U_TRUNCATED_CHAR_FOUND;
+                        args->converter->toUnicodeStatus = 0;
+                    }
+                }
+                else
+                {    /* stores a partially calculated target*/
+                    if (ch == 0)
+                    {
+                        args->converter->toUnicodeStatus = -1;
+                    }
+                    else 
+                    {
+                        args->converter->toUnicodeStatus = ch;
+                    }
+                    args->converter->toULength = (int8_t) i;
+                }
+                goto donefornow;
+            }
+        }
+
+        if (ch <= MAXIMUM_UTF)
+        {
+            /* Normal valid byte when the loop has not prematurely terminated (i < inBytes) */
+            if (ch <= MAXIMUM_UCS2) 
+            {
+                /* fits in 16 bits */
+                *(myTarget++) = (UChar) ch;
+            }
+            else
+            {
+                /* write out the surrogates */
+                ch -= HALF_BASE;
+                *(myTarget++) = (UChar) ((ch >> HALF_SHIFT) + SURROGATE_HIGH_START);
+                ch = (ch & HALF_MASK) + SURROGATE_LOW_START;
+                if (myTarget < targetLimit)
+                {
+                    *(myTarget++) = (UChar)ch;
+                }
+                else
+                {
+                    /* Put in overflow buffer (not handled here) */
+                    args->converter->UCharErrorBuffer[0] = (UChar) ch;
+                    args->converter->UCharErrorBufferLength = 1;
+                    *err = U_BUFFER_OVERFLOW_ERROR;
+                    break;
+                }
+            }
+        }
+        else
+        {
+            args->source = (const char *) mySource;
+            args->target = myTarget;
+            args->converter->invalidCharLength = (int8_t)i;
+            if (T_UConverter_toUnicode_InvalidChar_Callback(args, err))
+            {
+                /* Stop if the error wasn't handled */
+                break;
+            }
+            args->converter->invalidCharLength = 0;
+            mySource = (unsigned char *) args->source;
+            myTarget = args->target;
+        }
+    }
+
+donefornow:
+    if (mySource < sourceLimit && myTarget >= targetLimit && U_SUCCESS(*err))
+    {
+        /* End of target buffer */
+        *err = U_BUFFER_OVERFLOW_ERROR;
+    }
+
+    args->target = myTarget;
+    args->source = (const char *) mySource;
+//    *err = U_UNSUPPORTED_ERROR;
+}
+
+void  T_UConverter_fromUnicode_UTF32_LE(UConverterFromUnicodeArgs * args,
+                                         UErrorCode * err)
+{
+    const UChar *mySource = args->source;
+    unsigned char *myTarget = (unsigned char *) args->target;
+    const UChar *sourceLimit = args->sourceLimit;
+    const unsigned char *targetLimit = (unsigned char *) args->targetLimit;
+    UChar32 ch, ch2;
+    unsigned int indexToWrite;
+    unsigned char temp[sizeof(uint32_t)];
+
+    temp[3] = 0;
+
+    if (args->converter->fromUnicodeStatus)
+    {
+        ch = args->converter->fromUnicodeStatus;
+        args->converter->fromUnicodeStatus = 0;
+        goto lowsurogate;
+    }
+
+    while (mySource < sourceLimit && myTarget < targetLimit)
+    {
+        ch = *(mySource++);
+
+        if (SURROGATE_HIGH_START <= ch && ch < SURROGATE_LOW_START)
+        {
+lowsurogate:
+            if (mySource < sourceLimit)
+            {
+                ch2 = *mySource;
+                if (SURROGATE_LOW_START <= ch2 && ch2 <= SURROGATE_LOW_END)
+                {
+                    ch = ((ch - SURROGATE_HIGH_START) << HALF_SHIFT) + ch2 + SURROGATE_LOW_BASE;
+                    mySource++;
+                }
+            }
+            else if (!args->flush)
+            {
+                // ran out of source
+                args->converter->fromUnicodeStatus = ch;
+                break;
+            }
+        }
+
+        /* We cannot get any larger than 10FFFF because we are coming from UTF-16 */
+        /* Todo: Can the & part be left off implicitly? Does it really save time? */
+        temp[2] = (uint8_t) (ch >> 16 & 0x1F);
+        temp[1] = (uint8_t) (ch >> 8 & 0xFF);
+        temp[0] = (uint8_t) (ch & 0xFF);
+
+        for (indexToWrite = 0; indexToWrite <= sizeof(uint32_t) - 1; indexToWrite++)
+        {
+            if (myTarget < targetLimit)
+            {
+                *(myTarget++) = temp[indexToWrite];
+            }
+            else
+            {
+                args->converter->charErrorBuffer[args->converter->charErrorBufferLength++] = temp[indexToWrite];
+                *err = U_BUFFER_OVERFLOW_ERROR; /* Todo: is this needed because of ending if */
+            }
+        }
+    }
+
+    if (mySource < sourceLimit && myTarget >= targetLimit && U_SUCCESS(*err))
+    {
+        *err = U_BUFFER_OVERFLOW_ERROR;
+    }
+
+    args->target = (char *) myTarget;
+    args->source = mySource;
+//    *err = U_UNSUPPORTED_ERROR;
+}
+
+/*
+UChar32 T_UConverter_getNextUChar_UTF32_LE(UConverterToUnicodeArgs* args,
+                                                   UErrorCode* err)
+{
+    *err = U_UNSUPPORTED_ERROR;
+    return 0;
+}
+*/
+
+static const UConverterImpl _UTF32LEImpl = {
+    UCNV_UTF32_LittleEndian,
+
+    NULL,
+    NULL,
+
+    NULL,
+    NULL,
+    NULL,
+
+    T_UConverter_toUnicode_UTF32_LE,
+    NULL,
+//    T_UConverter_toUnicode_UTF32_LE_OFFSETS_LOGIC,
+    T_UConverter_fromUnicode_UTF32_LE,
+    NULL,
+//    T_UConverter_fromUnicode_UTF32_LE_OFFSETS_LOGIC,
+    NULL,
+//    T_UConverter_getNextUChar_UTF32_LE,
+
+    NULL
+};
+
+/** Todo: These numbers are probably in correct. */
+const UConverterStaticData _UTF32LEStaticData = {
+  sizeof(UConverterStaticData),
+"UTF32_LittleEndian",
+    1200, UCNV_IBM, UCNV_UTF32_BigEndian, 4, 4,
+    { 0xfd, 0xff, 0, 0 }, 4, FALSE, FALSE,
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
+};
+
+
+const UConverterSharedData _UTF32LEData = {
+    sizeof(UConverterSharedData), ~((uint32_t) 0),
+    NULL, NULL, &_UTF32LEStaticData, FALSE, &_UTF32LEImpl, 
     0
 };
