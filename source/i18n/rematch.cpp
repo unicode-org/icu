@@ -35,7 +35,7 @@ U_NAMESPACE_BEGIN
 //-----------------------------------------------------------------------------
 RegexMatcher::RegexMatcher(const RegexPattern *pat)  { 
     fPattern           = pat;
-    fPatternOwned      = FALSE;
+    fPatternOwned      = NULL;
     fInput             = NULL;
     fTraceDebug        = FALSE;
     fDeferredStatus    = U_ZERO_ERROR;
@@ -45,7 +45,7 @@ RegexMatcher::RegexMatcher(const RegexPattern *pat)  {
         fDeferredStatus = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
-    if (pat->fDataSize > sizeof(fSmallData)/sizeof(int32_t)) {
+    if (pat->fDataSize > (int32_t)(sizeof(fSmallData)/sizeof(int32_t))) {
         fData = (int32_t *)uprv_malloc(pat->fDataSize * sizeof(int32_t)); 
     }
     if (fStack == NULL || fData == NULL) {
@@ -60,8 +60,8 @@ RegexMatcher::RegexMatcher(const RegexPattern *pat)  {
 RegexMatcher::RegexMatcher(const UnicodeString &regexp, const UnicodeString &input,
                            uint32_t flags, UErrorCode &status) {
     UParseError    pe;
-    fPattern           = RegexPattern::compile(regexp, flags, pe, status);
-    fPatternOwned      = TRUE;
+    fPatternOwned      = RegexPattern::compile(regexp, flags, pe, status);
+    fPattern           = fPatternOwned;
     fTraceDebug        = FALSE;
     fDeferredStatus    = U_ZERO_ERROR;
     fStack             = new UVector32(status); 
@@ -69,7 +69,7 @@ RegexMatcher::RegexMatcher(const UnicodeString &regexp, const UnicodeString &inp
     if (U_FAILURE(status)) {
         return;
     }
-    if (fPattern->fDataSize > sizeof(fSmallData)/sizeof(int32_t)) {
+    if (fPattern->fDataSize > (int32_t)(sizeof(fSmallData)/sizeof(int32_t))) {
         fData = (int32_t *)uprv_malloc(fPattern->fDataSize * sizeof(int32_t)); 
     }
     if (fStack == NULL || fData == NULL) {
@@ -82,17 +82,17 @@ RegexMatcher::RegexMatcher(const UnicodeString &regexp, const UnicodeString &inp
 RegexMatcher::RegexMatcher(const UnicodeString &regexp, 
                            uint32_t flags, UErrorCode &status) {
     UParseError    pe;
-    fPatternOwned      = TRUE;
     fTraceDebug        = FALSE;
     fDeferredStatus    = U_ZERO_ERROR;
     fStack             = new UVector32(status); 
     fData              = fSmallData;
-    fPattern           = RegexPattern::compile(regexp, flags, pe, status);
+    fPatternOwned      = RegexPattern::compile(regexp, flags, pe, status);
+    fPattern           = fPatternOwned;
     if (U_FAILURE(status)) {
         return;
     }
 
-    if (fPattern->fDataSize > sizeof(fSmallData)/sizeof(int32_t)) {
+    if (fPattern->fDataSize > (int32_t)(sizeof(fSmallData)/sizeof(int32_t))) {
         fData = (int32_t *)uprv_malloc(fPattern->fDataSize * sizeof(int32_t)); 
     }
     if (fStack == NULL || fData == NULL) {
@@ -110,7 +110,8 @@ RegexMatcher::~RegexMatcher() {
         fData = NULL;
     }
     if (fPatternOwned) {
-        delete fPattern;
+        delete fPatternOwned;
+        fPatternOwned = NULL;
         fPattern = NULL;
     }
 }
@@ -2098,7 +2099,7 @@ breakFromLoop:
         if (fTraceDebug) {
             REGEX_RUN_DEBUG_PRINTF("Match.  start=%d   end=%d\n\n", fMatchStart, fMatchEnd);
         }
-        }
+    }
     else
     {
         if (fTraceDebug) {
