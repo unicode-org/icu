@@ -1841,9 +1841,7 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR(UConverterFromUnicodeArgs* args,
     UBool oldIsTargetUCharDBCS = isTargetUCharDBCS;
     UConverterDataISO2022 *myConverterData=(UConverterDataISO2022*)args->converter->extraInfo;
     UConverterCallbackReason reason;
-    int plane=0 /*dummy variable*/;
 
-    UConverter* cnv =myConverterData->fromUnicodeConverter;
     isTargetUCharDBCS   = (UBool) args->converter->fromUnicodeStatus;
     
     /*writing the char to the output stream */
@@ -2026,10 +2024,8 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnic
     UBool oldIsTargetUCharDBCS = isTargetUCharDBCS;
     UConverterDataISO2022 *myConverterData=(UConverterDataISO2022*)args->converter->extraInfo;
     UConverterCallbackReason reason;
-    int plane=0; /*dummy variable <rant>  could not use default arguments ....arrrgh </rant>*/
-
     int32_t length =0;
-    UConverter* cnv =myConverterData->fromUnicodeConverter;
+
     isTargetUCharDBCS   = (UBool) args->converter->fromUnicodeStatus;
     
     /*writing the char to the output stream */
@@ -3017,8 +3013,7 @@ static void changeState_2022_CN(UConverter* _this,
 
 U_CFUNC void UConverter_toUnicode_ISO_2022_CN(UConverterToUnicodeArgs *args,
                                      UErrorCode* err){
-    char tempBuf[2];
-    int32_t length=0;
+    char tempBuf[3];
     int plane=0;
     char* pBuf;
     const char *mySource = ( char *) args->source;
@@ -3026,10 +3021,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN(UConverterToUnicodeArgs *args,
     char *tempLimit = &tempBuf[2]+1; 
     int32_t mySourceIndex = 0;
     int32_t myTargetIndex = 0;
-    int32_t targetLength = args->targetLimit - myTarget;
-    int32_t sourceLength = args->sourceLimit - (char *) mySource;
     const char *mySourceLimit = args->sourceLimit;
-    int32_t mySourceLength=0;
     UChar32 targetUniChar = 0x0000;
     UChar mySourceChar = 0x0000;
     UConverterDataISO2022* myData=(UConverterDataISO2022*)(args->converter->extraInfo);
@@ -3166,10 +3158,10 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN(UConverterToUnicodeArgs *args,
                         continue;
                     }
                     else{
-                      tempBuf[0] = (char) 0x80+plane;
-                      tempBuf[1] = (char) args->converter->toUnicodeStatus;
-                      tempBuf[2] = (char) mySourceChar;
-                      args->converter->toUnicodeStatus = 0x00;
+                      tempBuf[0] = (char)( 0x80+plane);
+                      tempBuf[1] = (char) (args->converter->toUnicodeStatus);
+                      tempBuf[2] = (char) (mySourceChar);
+                      args->converter->toUnicodeStatus = 0;
                       myData->shiftValid2Bytes =FALSE;
                       pBuf = &tempBuf[0];
                       tempLimit = &tempBuf[2]+1;
@@ -3242,25 +3234,20 @@ SAVE_STATE:
 
 U_CFUNC void UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                                      UErrorCode* err){
-    char tempBuf[2];
-    int32_t length=0;
+    char tempBuf[3];
     int plane=0;
     char* pBuf;
     const char *mySource = ( char *) args->source;
     UChar *myTarget = args->target;
-    char *tempLimit = &tempBuf[2]+1; 
+    char *tempLimit = &tempBuf[3]; 
     int32_t mySourceIndex = 0;
     int32_t myTargetIndex = 0;
-    int32_t targetLength = args->targetLimit - myTarget;
-    int32_t sourceLength = args->sourceLimit - (char *) mySource;
     const char *mySourceLimit = args->sourceLimit;
-    int32_t mySourceLength=0;
     UChar32 targetUniChar = 0x0000;
     UChar mySourceChar = 0x0000;
     UConverterDataISO2022* myData=(UConverterDataISO2022*)(args->converter->extraInfo);
     CompactShortArray *myToUnicodeDBCS=NULL, *myToUnicodeFallbackDBCS = NULL; 
    
-
     /*Arguments Check*/
     if (U_FAILURE(*err)) 
         return;
@@ -3391,9 +3378,9 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeA
                         continue;
                     }
                     else{
-                      tempBuf[0] = (char) 0x80+plane;
-                      tempBuf[1] = (char) args->converter->toUnicodeStatus;
-                      tempBuf[2] = (char) mySourceChar;
+                      tempBuf[0] = (char) (0x80+plane);
+                      tempBuf[1] = (char) (args->converter->toUnicodeStatus);
+                      tempBuf[2] = (char) (mySourceChar);
                       args->converter->toUnicodeStatus = 0x00;
                       myData->shiftValid2Bytes =FALSE;
                       pBuf = &tempBuf[0];
