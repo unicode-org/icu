@@ -344,8 +344,12 @@ void TestIDNA::testAPI(const UChar* src, const UChar* expected, const char* test
     }  
 
     status = U_ZERO_ERROR;
+    int32_t tSrcLen = u_strlen(src);
+    UChar* tSrc = (UChar*) uprv_malloc( U_SIZEOF_UCHAR * tSrcLen );
+    uprv_memcpy(tSrc,src,tSrcLen * U_SIZEOF_UCHAR);
+
     // test source with lengthand return value of number of UChars required
-    destLen = func(src, u_strlen(src),dest,0,options, &parseError, &status);
+    destLen = func(tSrc, tSrcLen, dest,0,options, &parseError, &status);
     if(status == U_BUFFER_OVERFLOW_ERROR){
         status = U_ZERO_ERROR; // reset error code
         if(destLen+1 < MAX_DEST_SIZE){
@@ -365,7 +369,8 @@ void TestIDNA::testAPI(const UChar* src, const UChar* expected, const char* test
     } 
 
     status = U_ZERO_ERROR;
-    destLen = func(src,u_strlen(src),dest,0,options | UIDNA_ALLOW_UNASSIGNED, &parseError, &status);
+
+    destLen = func(tSrc,tSrcLen,dest,0,options | UIDNA_ALLOW_UNASSIGNED, &parseError, &status);
 
     if(status == U_BUFFER_OVERFLOW_ERROR){
         status = U_ZERO_ERROR; // reset error code
@@ -384,6 +389,8 @@ void TestIDNA::testAPI(const UChar* src, const UChar* expected, const char* test
     if(status != expectedStatus && expectedStatus != U_IDNA_UNASSIGNED_CODEPOINT_FOUND_ERROR){
         errln( "Did not get the expected error for %s with source length and options set. Expected: %s Got: %s\n",testName, u_errorName(expectedStatus), u_errorName(status));
     }
+
+    uprv_free(tSrc);
 }
 
 void TestIDNA::testCompare(const UChar* s1, int32_t s1Len,
