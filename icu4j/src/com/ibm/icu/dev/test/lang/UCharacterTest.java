@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $ 
-* $Date: 2000/12/26 20:01:08 $ 
-* $Revision: 1.1 $
+* $Date: 2001/01/12 00:53:34 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -403,7 +403,11 @@ public final class UCharacterTest extends TestFmwk
   }
   
   /**
-  * Tests for the character types, direction
+  * Tests for the character types, direction.<br>
+  * This method reads in UnicodeData.txt file for testing purposes. A default 
+  * path is provided relative to the class path, however if the user could 
+  * set a system property to change the path.<br>
+  * e.g. java -DUnicodeData="anyfile.dat" com.ibm.icu.test.text.UCharacterTest
   */
   public void TestCatDir()
   {
@@ -416,10 +420,14 @@ public final class UCharacterTest extends TestFmwk
     final String DIR = 
       "L   R   EN  ES  ET  AN  CS  B   S   WS  ON  LRE LRO AL  RLE RLO PDF NSM BN  ";
       
-    StringBuffer file = new StringBuffer("UnicodeData-");
-    file.append(UCharacter.getUnicodeVersion());
-    file.append(".txt");
-    String s;
+    // default unicode data file name
+    final String UNICODE_DATA_FILE = "data//unicode//UnicodeData.txt";
+    
+    // unicode data file path system name
+    final String UNICODE_DATA_SYSTEM_NAME = "UnicodeData";
+    String s = System.getProperty(UNICODE_DATA_SYSTEM_NAME);
+    if (s == null)
+      s = UNICODE_DATA_FILE;
     
     final int LASTUNICODECHAR = 0xFFFD;
     int ch = 0,
@@ -430,7 +438,7 @@ public final class UCharacterTest extends TestFmwk
 	  try
 	  {
 	    // reading in the UnicodeData file
-	    FileReader fr = new FileReader(file.toString());
+	    FileReader fr = new FileReader(s);
 	    BufferedReader input = new BufferedReader(fr);
 	    
       while (ch != LASTUNICODECHAR)
