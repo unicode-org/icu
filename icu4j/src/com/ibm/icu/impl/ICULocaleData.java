@@ -213,10 +213,10 @@ public class ICULocaleData {
                     }
                     bx.icuLocale = locale;
                     b = bx;
-                    System.out.println("iculistresourcebundle: " + name + " is " + b);
+//                      System.out.println("iculistresourcebundle: " + name + " is " + b);
                 } else {
                     b = ResourceBundle.getBundle(name.substring(0, i), locale);
-                    System.out.println("resourcebundle: " + name + " is " + b);
+//                      System.out.println("resourcebundle: " + name + " is " + b);
                 }    
                 addToCache(name, b);
             }
