@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteHTMLCollation.java,v $ 
-* $Date: 2002/04/23 01:59:16 $ 
-* $Revision: 1.6 $
+* $Date: 2002/05/31 01:41:03 $ 
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -283,7 +283,7 @@ public class WriteHTMLCollation implements UCD_Types {
         }
         log.println("<tr><th>Code</td><th>Sort Key</th><th>Decomposed Sort Key</th><th>Name</th></tr>");
         for (char ch = 0; ch < 0xFFFF; ++ch) {
-            if (!nfkd.normalizationDiffers(ch)) continue;
+            if (nfkd.isNormalized(ch)) continue;
             if (ch > 0xAC00 && ch < 0xD7A3) continue; // skip most of Hangul
             String sortKey = collator.getSortKey(String.valueOf(ch), UCA.NON_IGNORABLE, decomposition);
             String decompSortKey = collator.getSortKey(nfkd.normalize(ch), UCA.NON_IGNORABLE, decomposition);

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/DerivedProperty.java,v $
-* $Date: 2002/04/23 01:59:13 $
-* $Revision: 1.13 $
+* $Date: 2002/05/31 01:41:04 $
+* $Revision: 1.14 $
 *
 *******************************************************************************
 */
@@ -281,7 +281,7 @@ public final class DerivedProperty implements UCD_Types {
         }
                 
         public String getValue(int cp, byte style) { 
-            if (nfx.normalizationDiffers(cp)) return NO;
+            if (!nfx.isNormalized(cp)) return NO;
             else if (nfx.isTrailing(cp)) return MAYBE;
             else return "";
         }
@@ -598,7 +598,7 @@ of characters, the first of which has a non-zero combining class.
             }
             boolean hasValue(int cp) {
                 if (hasSoftDot(cp)) return true;
-                if (!Default.nfkd.normalizationDiffers(cp)) return false;
+                if (Default.nfkd.isNormalized(cp)) return false;
                 String decomp = Default.nfd.normalize(cp);
                 boolean ok = false;
                 for (int i = decomp.length()-1; i >= 0; --i) {
@@ -700,7 +700,7 @@ of characters, the first of which has a non-zero combining class.
         
        // if (true) throw new IllegalArgumentException("FIX Default.nf[2]");
         
-        if (!Default.nf[NFKD].normalizationDiffers(cp)) return Lo;
+        if (Default.nf[NFKD].isNormalized(cp)) return Lo;
 
         String norm = Default.nf[NFKD].normalize(cp);
         int cp2;

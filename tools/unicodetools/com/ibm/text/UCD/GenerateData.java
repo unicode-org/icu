@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateData.java,v $
-* $Date: 2002/05/29 02:01:00 $
-* $Revision: 1.18 $
+* $Date: 2002/05/31 01:41:04 $
+* $Revision: 1.19 $
 *
 *******************************************************************************
 */
@@ -1232,7 +1232,7 @@ public class GenerateData implements UCD_Types {
             Utility.dot(i);
             if (!Default.ucd.isRepresented(i)) continue;
             
-            if (!Default.nfd.normalizationDiffers(i)) {
+            if (Default.nfd.isNormalized(i)) {
                 if (Default.ucd.getScript(i) == LATIN_SCRIPT) {
                     int cp = i;
                     String hex = "u" + Utility.hex(cp, 4);
@@ -1358,7 +1358,7 @@ public class GenerateData implements UCD_Types {
         for (int i = 0; i < 0x10FFFF; ++i) {
             if ((i & 0xFFF) == 0) System.out.println("# " + i);
             if (!Default.ucd.isAssigned(i)) continue;
-            if (!Default.nfd.normalizationDiffers(i)) continue;
+            if (Default.nfd.isNormalized(i)) continue;
             String decomp = Default.nfd.normalize(i);
             int cp;
             for (int j = 0; j < decomp.length(); j += UTF16.getCharCount(cp)) {

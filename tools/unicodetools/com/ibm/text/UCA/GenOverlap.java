@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/GenOverlap.java,v $ 
-* $Date: 2002/04/23 01:59:14 $ 
-* $Revision: 1.8 $
+* $Date: 2002/05/31 01:41:03 $ 
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
@@ -375,7 +375,7 @@ public class GenOverlap implements UCD_Types {
                     System.out.println("debug");
                 }
                 boolean mashLast = false;
-                if (nfkd.normalizationDiffers(cp)) {
+                if (!nfkd.isNormalized(cp)) {
                     String decomp = nfkd.normalize(cp);
                     String canon = nfd.normalize(cp);
                     len = collator.getCEs(decomp, true, ces);
@@ -578,7 +578,7 @@ public class GenOverlap implements UCD_Types {
             
             if (UTF16.countCodePoint(s) != 1) continue; // skip ligatures
             int cp = UTF16.charAt(s, 0);
-            if (nfkd.normalizationDiffers(cp)) continue;
+            if (!nfkd.isNormalized(cp)) continue;
             
             int script = ucd.getScript(cp);
             int len = lenArray[0];
@@ -607,7 +607,7 @@ public class GenOverlap implements UCD_Types {
                 
             Utility.dot(counter++);
             if (!ucd.isAllocated(cp)) continue;
-            if (nfkd.normalizationDiffers(cp)) continue;
+            if (!nfkd.isNormalized(cp)) continue;
             if (ucd.getCategory(cp) == Lu) continue; // don't count case
             
             String scp = UTF16.valueOf(cp);

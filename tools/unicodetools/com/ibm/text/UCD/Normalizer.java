@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Normalizer.java,v $
-* $Date: 2002/03/20 00:21:42 $
-* $Revision: 1.8 $
+* $Date: 2002/05/31 01:41:03 $
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
@@ -205,8 +205,8 @@ public final class Normalizer implements UCD_Types {
     * normalizer.
     * @param   ch      the source character
     */
-    public boolean normalizationDiffers(int ch) {
-        return data.normalizationDiffers(ch, composition, compatibility);
+    public boolean isNormalized(int ch) {
+        return !data.normalizationDiffers(ch, composition, compatibility);
     }
 
     /**

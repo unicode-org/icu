@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/UCA.java,v $ 
-* $Date: 2002/04/23 01:59:14 $ 
-* $Revision: 1.10 $
+* $Date: 2002/05/31 01:41:03 $ 
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */
@@ -108,6 +108,8 @@ final public class UCA implements Comparator {
     static final boolean RECORDING_DATA = false;
     static final boolean RECORDING_CHARS = true;
     
+    private UCD ucd;
+    
 // =============================================================
 // Main Methods
 // =============================================================
@@ -129,7 +131,8 @@ final public class UCA implements Comparator {
             toD = new Normalizer(Normalizer.NFD, unicodeVersion);
         }
         
-        ucdVersion = UCD.make(unicodeVersion).getVersion();
+        ucd = UCD.make(unicodeVersion);
+        ucdVersion = ucd.getVersion();
         
         // either get the full sources, or just a demo set
         if (fullData) {
@@ -478,7 +481,9 @@ final public class UCA implements Comparator {
      * CE Type
      */
     static final byte NORMAL_CE = 0, CONTRACTING_CE = 1, EXPANDING_CE = 2, 
-        FIXED_CE = 3, HANGUL_CE = 5, SURROGATE_CE = 6, UNSUPPORTED_CE = 7;
+        CJK_CE = 3, CJK_AB_CE = 4, HANGUL_CE = 5, UNSUPPORTED_CE = 7,
+        FIXED_CE = 3;
+        // SURROGATE_CE = 6, 
    
     /**
      * Returns the char associated with a FIXED value
@@ -502,12 +507,13 @@ final public class UCA implements Comparator {
             // Special check for Han, Hangul
             if (isHangul(ch)) return HANGUL_CE;
             
-            if (isFixed(ch)) return FIXED_CE;
+            if (isCJK(ch)) return CJK_CE;
+            if (isCJK_AB(ch)) return CJK_AB_CE;
                         
             // special check for unsupported surrogate pair, 20 1/8 bits
-            if (0xD800 <= ch && ch <= 0xDFFF) {
-                return SURROGATE_CE;
-            }
+            //if (0xD800 <= ch && ch <= 0xDFFF) {
+            //    return SURROGATE_CE;
+            //}
             return UNSUPPORTED_CE;
         }
             
@@ -630,6 +636,12 @@ final public class UCA implements Comparator {
             result.append(ceToString(ces[i]));
         }
         return result.toString();
+    }
+    
+    
+    static boolean isImplicitCE(int ce) {
+    	int primary = getPrimary(ce);
+    	return primary >= UNSUPPORTED_BASE && primary <= UNSUPPORTED_TOP;
     }
     
     /**
@@ -790,9 +802,9 @@ final public class UCA implements Comparator {
     
     /**
      * A special bit combination in a CE is used to reserve exception cases. This has the effect
-     * of removing 32 primary key values out of the 65536 possible.
+     * of removing a small number of the primary key values out of the 65536 possible.
      */
-    static final int EXCEPTION_CE_MASK = 0xFF000000;
+    static final int EXCEPTION_CE_MASK = 0xF8000000;
     
     /**
      * Used to composed Hangul and Han characters
@@ -808,8 +820,13 @@ final public class UCA implements Comparator {
      * There are at least 34 values, so that we can use a range for surrogates
      * However, we do add to the first weight if we have surrogate pairs!
      */
-    public static final int UNSUPPORTED_BASE = 0xFF40;
-    public static final int UNSUPPORTED_TOP = 0xFFFF;
+    public static final int UNSUPPORTED_CJK_BASE = 0xFF40;
+    public static final int UNSUPPORTED_CJK_AB_BASE = 0xFF80;
+    public static final int UNSUPPORTED_OTHER_BASE = 0xFFC0;
+    
+    public static final int UNSUPPORTED_BASE = UNSUPPORTED_CJK_BASE;
+    public static final int UNSUPPORTED_TOP = UNSUPPORTED_OTHER_BASE + 0x40;
+    
     static final int UNSUPPORTED = makeKey(UNSUPPORTED_BASE, NEUTRAL_SECONDARY, NEUTRAL_TERTIARY);
     
     // was 0xFFC20101;
@@ -821,7 +838,7 @@ final public class UCA implements Comparator {
      * to be looked up (with following characters) in the contractingTable.<br>
      * This isn't a MASK since there is exactly one value.
      */
-    static final int CONTRACTING = 0xFF310000;
+    static final int CONTRACTING = 0xFA310000;
 
     /**
      * Expanding characters are marked with a exception bit combination
@@ -829,7 +846,7 @@ final public class UCA implements Comparator {
      * This means that they map to more than one CE, which is looked up in
      * the expansionTable by index. See EXCEPTION_INDEX_MASK
      */
-    static final int EXPANDING_MASK = 0xFF300000; // marks expanding range start
+    static final int EXPANDING_MASK = 0xFA300000; // marks expanding range start
     
     /**
      * This mask is used to get the index from an EXPANDING exception.
@@ -976,12 +993,11 @@ final public class UCA implements Comparator {
                 // RECURSIVE!!!
             }
                         
-            // Special check for Han, YI
-            if (isFixed(bigChar)) {
-                return makeKey(bigChar, NEUTRAL_SECONDARY, NEUTRAL_TERTIARY);
+            if (ucd.isNoncharacter(bigChar)) { // illegal code value, ignore!!
+                return 0;
             }
-                        
-            // special check for unsupported surrogate pair, 20 1/8 bits
+            
+            // special check and fix for unsupported surrogate pair, 20 1/8 bits
             if (0xD800 <= bigChar && bigChar <= 0xDFFF) {
                 // ignore unmatched surrogates (e.g. return zero)
                 if (bigChar >= 0xDC00 || index >= decompositionBuffer.length()) return 0; // unmatched
@@ -990,25 +1006,38 @@ final public class UCA implements Comparator {
                 index++; // skip next char
                 bigChar = 0x10000 + ((ch - 0xD800) << 10) + (ch2 - 0xDC00); // extract value
             }
-
-            if ((bigChar & 0xFFFE) == 0xFFFE) { // illegal code value, ignore!!
-                return 0;
-            }
             
-            // The result is 2 CEs. One is UNSUPPORTED + top bits, and the other
-            // is a primary that is the next fifteen bits
-            // This has the effect of putting all unsupported characters at the end,
-            // in code order.
-                    // add bottom 5 bits to UNSUPPORTED, and push rest
-                    //return UNSUPPORTED + (bigChar & 0xFFFF0000);    // top bits added
-            expandingStack.push(makeKey((bigChar & 0x7FFF) | 0x8000, 0, 0)); // primary = bottom 15 bits plus turn bottom bit on.
-            // secondary and tertiary are both zero
-            return makeKey(UNSUPPORTED_BASE + (bigChar >>> 15), NEUTRAL_SECONDARY, NEUTRAL_TERTIARY); // top 34 values plus UNSUPPORTED
-            /*
-            expandingStack.push(((bigChar & 0x7FFF) << 16) | 0x10000000); // primary = bottom 15 bits plus turn bottom bit on.
-            // secondary and tertiary are both zero
-            return UNSUPPORTED + ((bigChar << 1) & 0xFFFF0000); // top 34 values plus UNSUPPORTED
-            */
+
+/*
+The formula from the UCA:
+
+BASE:
+
+FB40 CJK Ideograph 
+FB80 CJK Ideograph Extension A/B 
+FBC0 Any other code point 
+
+AAAA = BASE + (CP >> 15);
+BBBB = (CP & 0x7FFF) | 0x8000;The mapping given to CP is then given by:
+
+CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
+*/		
+			// divide the three cases
+			
+			int base = UNSUPPORTED_OTHER_BASE;
+            if (isCJK(bigChar)) base = UNSUPPORTED_CJK_BASE;
+            else if (isCJK_AB(bigChar)) base = UNSUPPORTED_CJK_AB_BASE;
+            
+            // Now compose the two keys
+            // first push BBBB
+                        
+            // HACK: expandingStack.push(makeKey((bigChar & 0x7FFF) | 0x8000, 0, 0));
+            expandingStack.push(makeKey((bigChar & 0x7FFF) | 0x8000, NEUTRAL_SECONDARY, NEUTRAL_TERTIARY));
+            
+            // now return AAAA
+            
+            return makeKey(base + (bigChar >>> 15), NEUTRAL_SECONDARY, NEUTRAL_TERTIARY);
+
         }
         if (ce == CONTRACTING) {
             // Contracting is probably the most interesting (read "tricky") part
@@ -1084,12 +1113,18 @@ final public class UCA implements Comparator {
         return expandingStack.pop(); // pop last (guaranteed to exist!)
     }
     
-    public final boolean isFixed(int bigChar) {
-        return (0x3400 <= bigChar && bigChar <= 0x4DB5
-             || 0x4E00 <= bigChar && bigChar <= 0x9FA5
-             // || 0xA000 <= bigChar && bigChar <= 0xA48F
-             );
+    public final boolean isCJK(int bigChar) {
+        return (0x4E00 <= bigChar && bigChar <= 0x9FFF);
     }
+    public final boolean isCJK_AB(int bigChar) {
+        return (0x3400 <= bigChar && bigChar <= 0x4DBF
+             || 0x20000 <= bigChar && bigChar <= 0x2A6DF);
+    }
+/*
+3400..4DBF; CJK Unified Ideographs Extension A
+4E00..9FFF; CJK Unified Ideographs
+20000..2A6DF; CJK Unified Ideographs Extension B
+*/
     
     private final boolean isHangul(int bigChar) {
         return (0xAC00 <= bigChar && bigChar <= 0xD7A3);
@@ -1176,7 +1211,7 @@ final public class UCA implements Comparator {
         Normalizer nfd = skipDecomps;
         Iterator enum = null;
         byte ceLimit;
-        int currentRange = Integer.MAX_VALUE; // set to ZERO to enable
+        int currentRange = SAMPLE_RANGES.length; // set to ZERO to enable
         int startOfRange = SAMPLE_RANGES[0][0];
         int endOfRange = startOfRange;
         int itemInRange = startOfRange;
@@ -1206,13 +1241,16 @@ final public class UCA implements Comparator {
             
             // normal case
             while (current++ < 0x10FFFF) {
+
                 //char ch = (char)current;
                 byte type = getCEType(current);
+                if (type >= ceLimit || type == CONTRACTING_CE) continue;
                 
-                if (!nfd.normalizationDiffers(current) || type == HANGUL_CE) {
-                    if (type >= ceLimit) continue;
-                    if (skipDecomps != null && skipDecomps.normalizationDiffers(current)) continue;
-                }
+                //if (nfd.isNormalized(current) || type == HANGUL_CE) {
+                //}
+                
+                if (skipDecomps != null && !skipDecomps.isNormalized(current)) continue; // CHECK THIS
+                
                 result = UTF16.valueOf(current);
                 return result;
             }
@@ -1226,6 +1264,7 @@ final public class UCA implements Comparator {
             
             // extra samples
             if (currentRange < SAMPLE_RANGES.length) {
+            	System.out.println("*");
                 try {
                     result = UTF16.valueOf(itemInRange);
                 } catch (RuntimeException e) {
@@ -1274,6 +1313,7 @@ final public class UCA implements Comparator {
             result.second = s;
             return true;
         }
+        
     }
     
     static final int[][] SAMPLE_RANGES = {
@@ -1299,7 +1339,7 @@ final public class UCA implements Comparator {
                 {0x100000, 0x1000FD},
                 {0x10FF00, 0x10FFFD},
     };
-                
+	                
     /**
      * Adds the collation elements from a file (or other stream) in the UCA format.
      * Values will override any previous mappings.
@@ -1366,7 +1406,7 @@ final public class UCA implements Comparator {
             boolean record = true;
             /* if (multiChars.length() > 0) record = false;
             else */
-            if (toD.normalizationDiffers(value)) record = false;
+            if (!toD.isNormalized(value)) record = false;
             
             // collect CEs
             if (value == 0x2F00) {
@@ -1402,6 +1442,8 @@ final public class UCA implements Comparator {
                 expandingTable.push(TERMINATOR);
             }
             
+            //if (value == 0xd801) System.out.print("DEBUG: " + line);
+            	
             // assign CE(s) to char(s)
             if (multiChars.length() > 0) {
                 contractingTable.put(multiChars.toString(), new Integer(ce));
@@ -1455,8 +1497,9 @@ final public class UCA implements Comparator {
         }
         
         // assign CE(s) to char(s)
-        
         int value = source.charAt(0);
+        //if (value == 0x10000) System.out.print("DEBUG2: " + source);
+            	        
         if (source.length() > 0) {
             contractingTable.put(source.toString(), new Integer(ce));
             if (collationElements[value] == UNSUPPORTED) {
@@ -1772,7 +1815,7 @@ final public class UCA implements Comparator {
      * Used for checking data file integrity
      */
     private void checkUnique(char value, int result, int fourth, String line) {
-        if (toD.normalizationDiffers(value)) return; // don't check decomposables.
+        if (!toD.isNormalized(value)) return; // don't check decomposables.
         Object ceObj = new Long(((long)result << 16) | fourth);
         Object probe = uniqueTable.get(ceObj);
         if (probe != null) {

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Main.java,v $
-* $Date: 2002/05/29 02:01:00 $
-* $Revision: 1.12 $
+* $Date: 2002/05/31 01:41:04 $
+* $Revision: 1.13 $
 *
 *******************************************************************************
 */
@@ -119,10 +119,12 @@ public final class Main implements UCD_Types {
 
             if (arg.equalsIgnoreCase("All")) {
                 // Append all args at end
+                /*
                 String[] temp = new String[args.length + ALL_FILES.length];
                 System.arraycopy(args, 0, temp, 0, args.length);
                 System.arraycopy(ALL_FILES, 0, temp, args.length, ALL_FILES.length);
-                args = temp;
+                */
+                args = Utility.append(args, ALL_FILES);
                 expanding = true;
 
             // EXTRACTED PROPERTIES

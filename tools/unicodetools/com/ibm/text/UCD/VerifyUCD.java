@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/VerifyUCD.java,v $
-* $Date: 2002/05/29 02:01:00 $
-* $Revision: 1.13 $
+* $Date: 2002/05/31 01:41:03 $
+* $Revision: 1.14 $
 *
 *******************************************************************************
 */
@@ -273,7 +273,7 @@ public class VerifyUCD implements UCD_Types {
     }
     
     public static boolean checkNormalizer(Normalizer x, int cp) {
-    	boolean result = x.normalizationDiffers(cp);
+    	boolean result = !x.isNormalized(cp);
     	if (false) {
     		String s = x.normalize(cp);
     		boolean sResult = !s.equals(UTF16.valueOf(cp));
@@ -291,7 +291,7 @@ public class VerifyUCD implements UCD_Types {
             Utility.dot(cp);
             if (!Default.ucd.isAllocated(cp)) continue;
             
-            if (!Default.nfd.normalizationDiffers(cp)) continue;
+            if (Default.nfd.isNormalized(cp)) continue;
             
             String decomp = Default.nfd.normalize(cp);
             String comp = Default.nfc.normalize(cp);
@@ -979,12 +979,12 @@ can help you narrow these down.
             if (cp == 0x3131) {
                 System.out.println("Debug: " + idnProhibited
                     + ", " + idnUnassigned
-                    + ", " + Default.nfkd.normalizationDiffers(cp)
+                    + ", " + !Default.nfkd.isNormalized(cp)
                     + ", " + Default.ucd.getCodeAndName(Default.nfkc.normalize(cp))
                     + ", " + Default.ucd.getCodeAndName(Default.nfc.normalize(cp)));
             } 
             
-            if (!idnProhibited && ! idnUnassigned && Default.nfkd.normalizationDiffers(cp)) {
+            if (!idnProhibited && ! idnUnassigned && !Default.nfkd.isNormalized(cp)) {
                 String kc = Default.nfkc.normalize(cp);
                 String c = Default.nfc.normalize(cp);
                 if (kc.equals(c)) continue;
@@ -1415,7 +1415,7 @@ E0020-E007F; [TAGGING CHARACTERS]
                 Utility.dot(cp);
                 if (!Default.ucd.isAssigned(cp)) continue;
                 if (Default.ucd.isPUA(cp)) continue;
-                if (!normalizationDiffers(cp, j)) continue;
+                if (isNormalized(cp, j)) continue;
 
                 if (cp == 0xFDFB || cp == 0x0140) {
                     System.out.println("debug point");
@@ -1478,9 +1478,9 @@ E0020-E007F; [TAGGING CHARACTERS]
         return Default.ucd.getCase(s, FULL, FOLD);
     }
 
-    static boolean normalizationDiffers(int cp, int j) {
-        if (j < 4) return Default.nf[j].normalizationDiffers(cp);
-        return true;
+    static boolean isNormalized(int cp, int j) {
+        if (j < 4) return !Default.nf[j].isNormalized(cp);
+        return false;
     }
 
     private static final String[] NAMES = {"Default.nfd", "NFC", "NFKD", "NFKC", "Fold"};
@@ -1489,7 +1489,7 @@ E0020-E007F; [TAGGING CHARACTERS]
         for (int j = 0; j < 4; ++j) {
             Normalizer nfx = Default.nf[j];
             System.out.println();
-            System.out.println("Testing normalizationDiffers for " + NAMES[j]);
+            System.out.println("Testing isNormalized for " + NAMES[j]);
             System.out.println();
             for (int i = 0; i < 0x10FFFF; ++i) {
                 Utility.dot(i);
@@ -1497,7 +1497,7 @@ E0020-E007F; [TAGGING CHARACTERS]
                 if (Default.ucd.isPUA(i)) continue;
                 String s = nfx.normalize(i);
                 boolean differs = !s.equals(UTF32.valueOf32(i));
-                boolean call = nfx.normalizationDiffers(i);
+                boolean call = !nfx.isNormalized(i);
                 if (differs != call) {
                     Utility.fixDot();
                     System.out.println("Problem: differs: " + differs
@@ -1597,7 +1597,7 @@ E0020-E007F; [TAGGING CHARACTERS]
     
     static public void verifyNormalizationStability2(String version) {
         
-        Default.nfd.normalizationDiffers(0x10300);
+        // Default.nfd.normalizationDiffers(0x10300);
         
         UCD older = UCD.make(version); // Default.ucd.getPreviousVersion();
         
@@ -1640,7 +1640,7 @@ E0020-E007F; [TAGGING CHARACTERS]
             } else {
             	// not in older version. 
             	// (1) If there is a decomp, and it is composed of all OLD characters, then it must NOT compose
-            	if (Default.nfd.normalizationDiffers(i)) {
+            	if (!Default.nfd.isNormalized(i)) {
             		String decomp = Default.nfd.normalize(i);
             		if (noneHaveCategory(decomp, Cn, older)) {
             			String recomp = Default.nfc.normalize(decomp);

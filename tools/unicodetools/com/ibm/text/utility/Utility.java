@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2002/04/24 02:38:52 $
-* $Revision: 1.15 $
+* $Date: 2002/05/31 01:41:04 $
+* $Revision: 1.16 $
 *
 *******************************************************************************
 */
@@ -22,6 +22,13 @@ import com.ibm.text.UCD.*;
 public final class Utility {    // COMMON UTILITIES
 
     static final boolean UTF8 = true; // TODO -- make argument
+    
+    public static String[] append(String[] array1, String[] array2) {
+        String[] temp = new String[array1.length + array2.length];
+        System.arraycopy(array1, 0, temp, 0, array1.length);
+        System.arraycopy(array2, 0, temp, array1.length, array2.length);
+        return temp;
+    }
 
     public static String getName(int i, String[] names) {
         try {
