@@ -36,12 +36,12 @@ void CanonicalIteratorTest::runIndexedTest(int32_t index, UBool exec,
 
 /**
  * Convert Java-style strings with \u Unicode escapes into UnicodeString objects
- */
 static UnicodeString str(const char *input)
 {
     UnicodeString str(input, ""); // Invariant conversion
     return str.unescape();
 }
+ */
 
 
 CanonicalIteratorTest::CanonicalIteratorTest() :
@@ -61,7 +61,6 @@ CanonicalIteratorTest::~CanonicalIteratorTest()
 
 void CanonicalIteratorTest::TestExhaustive() {
     UErrorCode status = U_ZERO_ERROR;
-    int counter = 0;
     CanonicalIterator it("", status);
     UChar32 i = 0;
     UnicodeString s, decomp, comp;
@@ -159,7 +158,6 @@ void CanonicalIteratorTest::TestBasic() {
         //logln("Results for: " + name.transliterate(testArray[i]));
         UnicodeString testStr = CharsToUnicodeString(testArray[i][0]);
         it.setSource(testStr, status);
-        int counter = 0;
         set->removeAll();
         while (TRUE) {
             //UnicodeString *result = new UnicodeString(it.next());
