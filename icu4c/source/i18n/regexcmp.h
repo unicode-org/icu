@@ -65,8 +65,6 @@ public:
 
     void        nextChar(RegexPatternChar &c);      // Get the next char from the input stream.
 
-    UBool       push(const RegexPatternChar &c);    // Push (unget) one character.
-                                                    //   Only a single character may be pushed.
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
@@ -88,6 +86,7 @@ private:
     void        error(UErrorCode e);                   // error reporting convenience function.
 
     UChar32     nextCharLL();
+    UChar32     peekCharLL();
     UnicodeSet  *scanSet();
     void        handleCloseParen();
     int32_t     blockTopLoc();                       // Locate a position in the compiled pattern
@@ -99,6 +98,9 @@ private:
     RegexPattern                  *fRXPat;
     UParseError                   *fParseErr;
 
+    //
+    //  Data associated with low level character scanning
+    //
     int32_t                       fScanIndex;        // Index of current character being processed
                                                      //   in the rule input string.
     int32_t                       fNextIndex;        // Index of the next character, which
@@ -109,6 +111,8 @@ private:
     int                           fCharNum;          // Char position within the line.
     UChar32                       fLastChar;         // Previous char, needed to count CR-LF
                                                      //   as a single line, not two.
+    UChar32                       fPeekChar;         // Saved char, if we've scanned ahead.
+
 
     RegexPatternChar              fC;                // Current char for parse state machine
                                                      //   processing.
