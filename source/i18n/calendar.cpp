@@ -661,7 +661,11 @@ Calendar::isLenient() const
 void
 Calendar::setFirstDayOfWeek(UCalendarDaysOfWeek value)
 {
-    fFirstDayOfWeek = value;
+    if (fFirstDayOfWeek != value &&
+        value >= UCAL_SUNDAY && value <= SATURDAY) {
+        fFirstDayOfWeek = value;
+        fAreFieldsSet = FALSE;
+    }
 }
 
 // -------------------------------------
@@ -677,7 +681,18 @@ Calendar::getFirstDayOfWeek() const
 void
 Calendar::setMinimalDaysInFirstWeek(uint8_t value)
 {
-    fMinimalDaysInFirstWeek = value;
+    // Values less than 1 have the same effect as 1; values greater
+    // than 7 have the same effect as 7. However, we normalize values
+    // so operator== and so forth work.
+    if (value < 1) {
+        value = 1;
+    } else if (value > 7) {
+        value = 7;
+    }
+    if (fMinimalDaysInFirstWeek != value) {
+        fMinimalDaysInFirstWeek = value;
+        fAreFieldsSet = FALSE;
+    }
 }
 
 // -------------------------------------
