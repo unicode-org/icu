@@ -64,7 +64,7 @@ uchar.o uprops.o propname.o ubidi.o ubidiwrt.o ubidiln.o ushape.o unames.o \
 ucln_cmn.o uscript.o usc_impl.o umemstrm.o ucmp8.o uvector.o uvectr32.o digitlst.o \
 brkiter.o brkdict.o ubrk.o dbbi.o dbbi_tbl.o \
 rbbi.o rbbidata.o rbbinode.o rbbirb.o rbbiscan.o rbbisetb.o rbbistbl.o rbbitblb.o \
-convert.o utrie.o uset.o cmemory.o caniter.o \
+utrie.o uset.o cmemory.o caniter.o \
 unifilt.o unifunct.o uniset.o usetiter.o util.o uenum.o \
 icuserv.o iculserv.o icunotif.o ustrenum.o
 
