@@ -48,11 +48,11 @@ public:
      * Constructor
      */
     EntryPair();
-    EntryPair(const UChar *name, int32_t nameLen, int32_t aValue, UBool aFwd = TRUE);
+    EntryPair(const UChar *name, int32_t nameLength, int32_t aValue, UBool aFwd = TRUE);
     ~EntryPair();
     
     inline UBool equalTo(const UChar *aName, int32_t aLen);
-	inline const UnicodeString& getEntryName();
+    inline const UnicodeString& getEntryName();
 
     int32_t value;                  // Collation order
     UBool fwd;                        // true if this pair is for the forward direction
@@ -1047,8 +1047,8 @@ EntryPair::EntryPair()
 }
 
 inline
-EntryPair::EntryPair(const UChar *name, int32_t nameLen, int32_t aValue, UBool aFwd)
-  : nameChars(name), nameLen(nameLen), value(aValue), fwd(aFwd), storage(NULL)
+EntryPair::EntryPair(const UChar *name, int32_t nameLength, int32_t aValue, UBool aFwd)
+  : nameChars(name), nameLen(nameLength), value(aValue), fwd(aFwd), storage(NULL)
 {
 }
 
@@ -1057,23 +1057,23 @@ EntryPair::~EntryPair()
 {
     if(storage) {
         delete(storage);
-		storage = NULL;
+        storage = NULL;
     }
 }
 
 inline UBool EntryPair::equalTo(const UChar *aName, int32_t aLen)   
 {
-        return( (aLen==nameLen)?!(u_strncmp(aName,nameChars,aLen)):0 );
+    return( (aLen==nameLen)?!(u_strncmp(aName,nameChars,aLen)):0 );
 }
 
 inline const UnicodeString& 
 EntryPair::getEntryName()
 {
-	if(storage != NULL) {
-		return *storage;
-	} else {
-		return *(storage = new UnicodeString(nameChars, nameLen));
-	}
+    if(storage != NULL) {
+        return *storage;
+    } else {
+        return *(storage = new UnicodeString(nameChars, nameLen));
+    }
 }
 //=======================================================================================
 // METHODS ON VectorOfInt
