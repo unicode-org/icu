@@ -164,8 +164,8 @@ void IntlTestDecimalFormatAPI::testAPI(char *par)
 
     const DecimalFormatSymbols *syms = pat.getDecimalFormatSymbols();
     DecimalFormatSymbols *newSyms = new DecimalFormatSymbols(*syms);
-    def.adoptDecimalFormatSymbols(newSyms); 
     def.setDecimalFormatSymbols(*newSyms);
+    def.adoptDecimalFormatSymbols(newSyms); // don't use newSyms after this
     if( *(pat.getDecimalFormatSymbols()) != *(def.getDecimalFormatSymbols())) {
         errln((UnicodeString)"ERROR: adopt or set DecimalFormatSymbols() failed");
     }
