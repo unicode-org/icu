@@ -231,7 +231,7 @@ void addAllCollTest(TestNode** root)
     addTest(root, &TestSurrogates, "tscoll/callcoll/TestSurrogates");      
 }
 
-void doTestVariant(UCollator* myCollation, const UChar source[], const UChar target[], UCollationResult result)
+static void doTestVariant(UCollator* myCollation, const UChar source[], const UChar target[], UCollationResult result)
 {
     int32_t sortklen1, sortklen2, sortklenmax, sortklenmin;
     int temp=0, gSortklen1=0,gSortklen2=0;

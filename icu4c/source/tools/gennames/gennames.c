@@ -605,7 +605,7 @@ compress() {
 
 static void
 compressLines() {
-    Line *line;
+    Line *line=NULL;
     uint32_t i=0, inLine, outLine=0xffffffff /* (uint32_t)(-1) */,
              groupMSB=0xffff, lineCount2;
     int16_t groupTop=0;
@@ -657,7 +657,7 @@ compressLines() {
     }
 
     /* finish and store the last group */
-    if(groupMSB!=0xffff) {
+    if(line && groupMSB!=0xffff) {
         /* finish the current group with empty lines */
         while((++outLine&GROUP_MASK)!=0) {
             appendLineLength(0);
