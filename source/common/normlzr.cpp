@@ -299,7 +299,7 @@ Normalizer::compose(const UnicodeString& source,
                  && baseIndex == ComposeData::INITIAL_JAMO_INDEX) {
             // If the last character was an initial jamo, we can combine it with this
             // one to create a Hangul character.
-            uint16_t l = (uint16_t)(result[basePos] - JAMO_LBASE);
+            uint16_t l = (uint16_t)(result[basePos] - (UChar)JAMO_LBASE);
             uint16_t v = (uint16_t)(ch - JAMO_VBASE);
             result[basePos] = (UChar)(HANGUL_BASE + (l*JAMO_VCOUNT + v) * JAMO_TCOUNT);
     
@@ -454,7 +454,7 @@ UChar Normalizer::nextCompose()
                  && baseIndex == ComposeData::INITIAL_JAMO_INDEX) {
             // If the last character was an initial jamo, we can combine it with this
             // one to create a Hangul character.
-            uint16_t l = (uint16_t)(buffer[basePos] - JAMO_LBASE);
+            uint16_t l = (uint16_t)(buffer[basePos] - (UChar)JAMO_LBASE);
             uint16_t v = (uint16_t)(ch - JAMO_VBASE);
             buffer[basePos] = (UChar)(HANGUL_BASE + (l*JAMO_VCOUNT + v) * JAMO_TCOUNT);
             
@@ -1281,7 +1281,7 @@ void Normalizer::jamoToHangul(UnicodeString& buffer, UTextOffset start) {
         UChar ch = buffer[in];
 
         if ((l = (int16_t)(ch - JAMO_LBASE)) >= 0 && l < JAMO_LCOUNT
-            && (v = (int16_t)(buffer[in+1] - JAMO_VBASE)) >= 0 && v < JAMO_VCOUNT) {
+            && (v = (int16_t)(buffer[in+1] - (UChar)JAMO_VBASE)) >= 0 && v < JAMO_VCOUNT) {
             //
             // We've found a pair of Jamo characters to compose.
             // Snarf the Jamo vowel and see if there's also a trailing char
