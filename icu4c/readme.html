@@ -1304,7 +1304,7 @@ mv Makefile.hide Makefile
 system CRTLIB "LIB(<i>datalibraryname</i>)"
 gmake OUTPUTDIR=<i>datalibraryname</i>
 system CRTSRVPGM "SRVPGM(<i>libraryname</i>/LIBICUDATA)" "MODULE(<i>datalibraryname</i>/*ALL)"
-                 "EXPORT(*ALL)" "TEXT('ICU 2.4 DATA')" "OPTION(*DUPPROC *DUPVAR)"
+                 "EXPORT(*ALL)" "TEXT('ICU 2.6 DATA')" "OPTION(*DUPPROC *DUPVAR)"
 ln -fs /qsys.lib/<i>libraryname</i>.lib/libicudata.srvpgm out/libicudata.o
 cd ..
 del common/libicuuc.o
