@@ -4,7 +4,7 @@
 // *   Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
-// Data contributed by Michael Everson from evertype.com
+// Initial data contributed by Michael Everson from evertype.com
 
 
 cy{
@@ -26,6 +26,12 @@ cy{
         "Dydd Iau",
         "Dydd Gwener",
         "Dydd Sadwrn",
+    }
+    Countries {
+        GB { "Prydain Fawr" }
+    }
+    Languages {
+        cy { "Cymraeg" }
     }
     MonthAbbreviations { 
         "Ion",
@@ -61,10 +67,9 @@ cy{
     ExemplarCharacters { "[a-z âäáàêëéèîïíìôöóòûüúùŵẅẃẁŷÿýỳ]" }
     // /**************** Info Below is needed ****************/
     // collations{}
-    // Countries{}
     // Eras{}
-    // Languages{}
-    // ShortLanguage { }
+    // AmPmMarkers{}
+    // Currencies{}
     // localPatternChars{}
     //
 }
