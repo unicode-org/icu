@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.82 2000/10/16 18:31:29 yves Exp $
+dnl $Id: configure.in,v 1.83 2000/10/17 16:31:36 yves Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -329,7 +329,8 @@ AC_SUBST(U_HAVE_WCHAR_H)
 AC_SUBST(U_HAVE_WCSCPY)
 
 dnl Do various POSIX related checks
-U_NL_LANGINFO_CODESET=0
+U_HAVE_NL_LANGINFO_CODESET=0
+U_NL_LANGINFO_CODESET=-1
 AC_CHECK_FUNC(nl_langinfo,[U_HAVE_NL_LANGINFO=1],[U_HAVE_NL_LANGINFO=0])
 AC_SUBST(U_HAVE_NL_LANGINFO)
 if test $U_HAVE_NL_LANGINFO -eq 1; then
@@ -339,7 +340,7 @@ if test $U_HAVE_NL_LANGINFO -eq 1; then
   for a in CODESET _NL_CTYPE_CODESET_NAME; do
   AC_TRY_LINK([#include <langinfo.h>],[nl_langinfo($a);],[ac_cv_nl_langinfo_codeset="$a"; break])]
   done)
-  if test x$ac_cv_nl_langinfo_codeset != unknown
+  if test x$ac_cv_nl_langinfo_codeset != xunknown
   then
       U_HAVE_NL_LANGINFO_CODESET=1
       U_NL_LANGINFO_CODESET=$ac_cv_nl_langinfo_codeset
