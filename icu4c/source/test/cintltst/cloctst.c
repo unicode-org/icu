@@ -663,6 +663,22 @@ setUpDataTable();
         }
 
         maxresultsize=0;
+        maxresultsize=uloc_getDisplayScript(testLocale, displayLocale, NULL, maxresultsize, &status);
+        if(status==U_BUFFER_OVERFLOW_ERROR)
+        {
+            status=U_ZERO_ERROR;
+            testScript=(UChar*)malloc(sizeof(UChar) * (maxresultsize+1));
+            uloc_getDisplayScript(testLocale, displayLocale, testScript, maxresultsize + 1, &status);
+        }
+        else
+        {
+            testScript=&_NUL;
+        }
+        if(U_FAILURE(status)){
+            log_err("Error in getDisplayScript()  %s\n", myErrorName(status));
+        }
+
+        maxresultsize=0;
         maxresultsize=uloc_getDisplayCountry(testLocale, displayLocale, NULL, maxresultsize, &status);
         if(status==U_BUFFER_OVERFLOW_ERROR)
         {
@@ -714,12 +730,16 @@ setUpDataTable();
         if(u_strlen(expectedLang)== 0)
             expectedLang=dataTable[DLANG_EN][i];
 
+        expectedScript=dataTable[compareIndex + 1][i];
+        if(u_strlen(expectedScript)== 0)
+            expectedScript=dataTable[DSCRIPT_EN][i];
+
         expectedCtry=dataTable[compareIndex + 2][i];
         if(u_strlen(expectedCtry)== 0)
             expectedCtry=dataTable[DCTRY_EN][i];
 
         expectedVar=dataTable[compareIndex + 3][i];
-        if(u_strlen(expectedCtry)== 0)
+        if(u_strlen(expectedVar)== 0)
             expectedVar=dataTable[DVAR_EN][i];
 
         expectedName=dataTable[compareIndex + 4][i];
@@ -728,6 +748,10 @@ setUpDataTable();
 
         if (0 !=u_strcmp(testLang,expectedLang))  {
             log_data_err(" Display Language mismatch: got %s expected %s displayLocale=%s\n", austrdup(testLang), austrdup(expectedLang), displayLocale);
+        }
+
+        if (0 != u_strcmp(testScript,expectedScript))   {
+            log_data_err(" Display Script mismatch: got %s expected %s displayLocale=%s\n", austrdup(testScript), austrdup(expectedScript), displayLocale);
         }
 
         if (0 != u_strcmp(testCtry,expectedCtry))   {
@@ -747,6 +771,9 @@ setUpDataTable();
         }
         if(testLang!=&_NUL) {
             free(testLang);
+        }
+        if(testScript!=&_NUL) {
+            free(testScript);
         }
         if(testCtry!=&_NUL) {
             free(testCtry);
