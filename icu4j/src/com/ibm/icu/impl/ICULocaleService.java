@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/ICULocaleService.java,v $
- * $Date: 2002/10/04 19:41:02 $
- * $Revision: 1.9 $
+ * $Date: 2002/10/05 01:07:02 $
+ * $Revision: 1.10 $
  *
  *******************************************************************************
  */
@@ -71,7 +71,7 @@ public class ICULocaleService extends ICUService {
      * Convenience override for callers using locales.  This uses
      * createKey(Locale.toString(), kind) to create a key, calls getKey, and then
      * if actualReturn is not null, returns the actualResult from
-     * getKey into a Locale.  
+     * getKey (stripping any prefix) into a Locale.  
      */
     public Object get(Locale locale, int kind, Locale[] actualReturn) {
         Key key = createKey(locale.toString(), kind);
@@ -82,6 +82,10 @@ public class ICULocaleService extends ICUService {
         String[] temp = new String[1];
         Object result = getKey(key, temp);
         if (result != null) {
+            int n = temp[0].indexOf("/");
+            if (n >= 0) {
+                temp[0] = temp[0].substring(n+1);
+            }
             actualReturn[0] = LocaleUtility.getLocaleFromName(temp[0]);
         }
         return result;
@@ -372,23 +376,24 @@ public class ICULocaleService extends ICUService {
         protected boolean handlesKey(Key key) {
             String id = key.currentID();
             Set supported = getSupportedIDs();
+            return supported.contains(id);
+            /*
+             * coverage not supported
+
             if (supported.contains(id)) {
                 return true;
             }
             if ((coverage & 0x2) != 0) { 
-                // System.out.println("factory: " + this + " id: " + id);
                 Iterator iter = supported.iterator();
                 while (iter.hasNext()) {
                     String s = (String)iter.next();
-                    //System.out.println("  testing: " + s);
                     if (LocaleUtility.isFallbackOf(s, id)) {
-                        //System.out.println("  found!");
                         return true;
                     }
                 }
             }
-            // System.out.println(" failed");
             return false;
+            */
         }
 
         /**
@@ -407,6 +412,8 @@ public class ICULocaleService extends ICUService {
             Iterator iter = cache.iterator();
             while (iter.hasNext()) {
                 String id = (String)iter.next();
+                /*
+                 * Coverage not supported
                 if (covers) {
                     int idlen = id.length();
                     Iterator miter = result.keySet().iterator();
@@ -424,6 +431,7 @@ public class ICULocaleService extends ICUService {
                         }
                     }
                 }
+                */
                 if (!visible) {
                     result.remove(id);
                 } else {
@@ -449,9 +457,11 @@ public class ICULocaleService extends ICUService {
          * Utility method used by create(Key, ICUService).  Subclasses can implement
          * this instead of create.
          */
+        ///CLOVER:OFF
         protected Object handleCreate(Locale loc, int kind, ICUService service) {
             return null;
         }
+        ///CLOVER:ON
 
         /**
          * Return the set of ids that this factory supports (visible or 

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/ICUService.java,v $
- * $Date: 2002/10/04 19:41:02 $
- * $Revision: 1.10 $
+ * $Date: 2002/10/05 01:07:02 $
+ * $Revision: 1.11 $
  *
  *******************************************************************************
  */
@@ -219,7 +219,7 @@ public class ICUService extends ICUNotifier {
          * passing itself as the factory to get the object that
          * the service would have created prior to the factory's
          * registration with the service.  This might change the
-         * key so any information required from the key should
+         * key, so any information required from the key should
          * be extracted before making such a callback.
 	 */
         public Object create(Key key, ICUService service);
@@ -231,12 +231,7 @@ public class ICUService extends ICUNotifier {
          * factory has to determine which IDs it will permit to be
          * available, and of those, which it will provide localized
          * display names for.  In most cases this reflects the IDs that
-         * the factory directly supports.  A factory might, however,
-         * 'cover' existing IDs already in result (for example, variant
-         * locales) and support them itself.  In this case it needs to
-         * remap those IDs to itself if it wishes to provide the
-         * display names for them, or remove those IDs from result
-         * if it wishes them to be invisible.
+         * the factory directly supports.
          */
 	public void updateVisibleIDs(Map result);
 
@@ -376,7 +371,7 @@ public class ICUService extends ICUNotifier {
     }
 
     
-    /* package */ Object getKey(Key key, String[] actualReturn, Factory factory) {
+    public Object getKey(Key key, String[] actualReturn, Factory factory) {
 	if (factories.size() == 0) {
 	    return handleDefault(key, actualReturn);
 	}

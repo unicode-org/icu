@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/ICUServiceTest.java,v $
- * $Date: 2002/10/04 19:41:02 $
- * $Revision: 1.7 $
+ * $Date: 2002/10/05 01:07:02 $
+ * $Revision: 1.8 $
  *
  *******************************************************************************
  */
@@ -169,12 +169,16 @@ public class ICUServiceTest extends TestFmwk
 			return LocaleUtility.getLocaleFromName(key.currentID());
 		    }
 
+                    ///CLOVER:OFF
 		    public void updateVisibleIDs(Map result) {
 		    }
+                    ///CLOVER:ON
 
+                    ///CLOVER:OFF
 		    public String getDisplayName(String id, Locale l) {
 			return null;
 		    }
+                    ///CLOVER:ON
 		};
 	    service.registerFactory(factory);
 
@@ -254,7 +258,7 @@ public class ICUServiceTest extends TestFmwk
 	// this time, we have seven display names
         // Rad dude's surfer gal 'replaces' later's surfer gal
 	{
-	    Map dids = service.getDisplayNames(LocaleUtility.getLocaleFromName("es"));
+	    Map dids = service.getDisplayNames();
 	    Iterator iter = dids.entrySet().iterator();
 	    int count = 0;
 	    while (iter.hasNext()) {
@@ -299,6 +303,8 @@ public class ICUServiceTest extends TestFmwk
 	    } else {
 		errln("32) service could not find entry for " + id);
 	    }
+
+            confirmBoolean("34) is default ", !service.isDefault());
 	}
 
         /*
@@ -345,6 +351,8 @@ public class ICUServiceTest extends TestFmwk
 
 	// list all of the resources 
 	{
+            logln("all visible ids: " + service.getVisibleIDs());
+            /*
 	    Set xids = service.getVisibleIDs();
 	    StringBuffer buf = new StringBuffer("{");
 	    boolean notfirst = false;
@@ -360,11 +368,13 @@ public class ICUServiceTest extends TestFmwk
 	    }
 	    buf.append("}");
 	    logln(buf.toString());
+            */
 	}
 
 	// get all the display names of these resources
 	// this should be fast since the display names were cached.
 	{
+            logln("service display names for de_DE");
 	    Map names = service.getDisplayNames(LocaleUtility.getLocaleFromName("de_DE"));
 	    StringBuffer buf = new StringBuffer("{");
 	    Iterator iter = names.entrySet().iterator();
@@ -378,17 +388,26 @@ public class ICUServiceTest extends TestFmwk
 	    logln(buf.toString());
 	}
 
-	service.registerFactory(new CalifornioLanguageFactory());
+        CalifornioLanguageFactory califactory = new CalifornioLanguageFactory();
+        service.registerFactory(califactory);
 	// get all the display names of these resources
 	{
-	    Map names = service.getDisplayNames(LocaleUtility.getLocaleFromName("en_US_CA_SURFER"));
+            logln("californio language factory");
 	    StringBuffer buf = new StringBuffer("{");
-	    Iterator iter = names.entrySet().iterator();
-	    while (iter.hasNext()) {
-		Entry e = (Entry)iter.next();
-		String name = (String)e.getKey();
-		String id = (String)e.getValue();
-		buf.append("\n   " + name + " --> " + id);
+            String[] idNames = {
+                califactory.californio, califactory.valley, califactory.surfer, califactory.geek
+            };
+            for (int i = 0; i < idNames.length; ++i) {
+                String idName = idNames[i];
+                buf.append("\n  --- " + idName + " ---");
+                Map names = service.getDisplayNames(LocaleUtility.getLocaleFromName(idName));
+                Iterator iter = names.entrySet().iterator();
+                while (iter.hasNext()) {
+                    Entry e = (Entry)iter.next();
+                    String name = (String)e.getKey();
+                    String id = (String)e.getValue();
+                    buf.append("\n    " + name + " --> " + id);
+                }
 	    }
 	    buf.append("\n}");
 	    logln(buf.toString());
@@ -397,6 +416,7 @@ public class ICUServiceTest extends TestFmwk
 	// test notification
 	// simple registration
 	{
+            logln("simple registration notification");
 	    ICULocaleService ls = new ICULocaleService();
 	    ServiceListener l1 = new ServiceListener() {
 		    private int n;
@@ -460,25 +480,15 @@ public class ICUServiceTest extends TestFmwk
 	}
     }
 
-    
     static class TestLocaleKeyFactory extends LocaleKeyFactory {
 	protected final Set ids;
 	protected final String factoryID;
-
-	public TestLocaleKeyFactory(String[] ids) {
-	    this(ids, "");
-	}
 
 	public TestLocaleKeyFactory(String[] ids, String factoryID) {
             super(VISIBLE, factoryID);
 
 	    this.ids = Collections.unmodifiableSet(new HashSet(Arrays.asList(ids)));
-
-	    if (factoryID == null || factoryID.length() == 0) {
-		this.factoryID = "";
-	    } else {
-		this.factoryID = factoryID + ": ";
-	    }
+            this.factoryID = factoryID + ": ";
 	}
     
 	protected Object handleCreate(Locale loc, int kind, ICUService service) {
@@ -541,11 +551,11 @@ public class ICUServiceTest extends TestFmwk
     */
 
     static class CalifornioLanguageFactory extends ICUResourceBundleFactory {
-	private static String californio = "en_US_CA";
-	private static String valley = californio + "_VALLEY";
-	private static String surfer = californio + "_SURFER";
-	private static String geek = californio + "_GEEK";
-        private static Set supportedIDs;
+	public static String californio = "en_US_CA";
+	public static String valley = californio + "_VALLEY";
+	public static String surfer = californio + "_SURFER";
+	public static String geek = californio + "_GEEK";
+        public static Set supportedIDs;
         static {
             HashSet result = new HashSet();
             result.addAll(ICULocaleData.getAvailableLocaleNameSet());
@@ -594,15 +604,64 @@ public class ICUServiceTest extends TestFmwk
     }
 
     public void TestLocale() {
-	ICULocaleService service = new ICULocaleService();
+	ICULocaleService service = new ICULocaleService("test locale");
 	service.registerObject("root", "");
 	service.registerObject("german", "de");
-	service.registerObject("german_Germany", "de_DE");
+	service.registerObject("german_Germany", Locale.GERMANY);
 	service.registerObject("japanese", "ja");
-	service.registerObject("japanese_Japan", "ja_JP");
+	service.registerObject("japanese_Japan", Locale.JAPAN);
 
 	Object target = service.get("de_US");
 	confirmEqual("test de_US", "german", target);
+
+        Locale de = LocaleUtility.getLocaleFromName("de");
+        Locale de_US = LocaleUtility.getLocaleFromName("de_US");
+
+        target = service.get(de_US);
+	confirmEqual("test de_US 2", "german", target);
+
+        target = service.get(de_US, LocaleKey.KIND_ANY);
+	confirmEqual("test de_US 3", "german", target);
+
+        target = service.get(de_US, 1234);
+	confirmEqual("test de_US 4", "german", target);
+
+        Locale[] actualReturn = new Locale[1];
+        target = service.get(de_US, actualReturn);
+        confirmEqual("test de_US 5", "german", target);
+        confirmEqual("test de_US 6", actualReturn[0], de);
+
+        actualReturn[0] = null;
+        target = service.get(de_US, LocaleKey.KIND_ANY, actualReturn);
+        confirmEqual("test de_US 7", actualReturn[0], de);
+
+        actualReturn[0] = null;
+        target = service.get(de_US, 1234, actualReturn);
+	confirmEqual("test de_US 8", "german", target);
+        confirmEqual("test de_US 9", actualReturn[0], de);
+
+        service.registerObject("one/de_US", de_US, 1);
+        service.registerObject("two/de_US", de_US, 2);
+
+        target = service.get(de_US, 1);
+        confirmEqual("test de_US kind 1", "one/de_US", target);
+        
+        target = service.get(de_US, 2);
+        confirmEqual("test de_US kind 2", "two/de_US", target);
+        
+        target = service.get(de_US);
+        confirmEqual("test de_US kind 3", "german", target);
+
+        LocaleKey lkey = LocaleKey.createWithCanonicalFallback("en", null, 1234);
+        logln("lkey prefix: " + lkey.prefix());
+        logln("lkey descriptor: " + lkey.currentDescriptor());
+        logln("lkey current locale: " + lkey.currentLocale());
+
+        lkey.fallback();
+        logln("lkey descriptor 2: " + lkey.currentDescriptor());
+
+        lkey.fallback();
+        logln("lkey descriptor 3: " + lkey.currentDescriptor());
 
 	target = service.get("za_PPP");
 	confirmEqual("test zappp", "root", target);
@@ -625,6 +684,57 @@ public class ICUServiceTest extends TestFmwk
 
 	target = service.get("za_PPP");
 	confirmEqual("test with en locale", "root", target);
+
+        Locale[] locales = service.getAvailableLocales();
+        confirmIdentical("test available locales", locales.length, 6);
+        logln("locales: ");
+        for (int i = 0; i < locales.length; ++i) {
+            log("\n  [" + i + "] " + locales[i]);
+        }
+        logln(" ");
+
+        service.registerFactory(new ICUResourceBundleFactory());
+        target = service.get(Locale.JAPAN);
+
+        {
+            int n = 0;
+            List factories = service.factories();
+            Iterator iter = factories.iterator();
+            while (iter.hasNext()) {
+                logln("[" + n++ + "] " + iter.next());
+            }
+        }
+    }
+
+    public void TestWrapFactory() {
+        final String greeting = "Hello There";
+        final String greetingID = "greeting";
+
+        ICUService service = new ICUService("wrap");
+        service.registerObject(greeting, greetingID);
+
+        logln("test one: " + service.get(greetingID));
+
+        class WrapFactory implements Factory {
+            public Object create(Key key, ICUService service) {
+                if (key.currentID().equals(greetingID)) {
+                    Object previous = service.getKey(key, null, this);
+                    return "A different greeting: \"" + previous + "\"";
+                }
+                return null;
+            }
+
+            public void updateVisibleIDs(Map result) {
+                result.put("greeting", this);
+            }
+
+            public String getDisplayName(String id, Locale locale) {
+                return "wrap '" + id + "'";
+            }
+        }
+        service.registerFactory(new WrapFactory());
+
+        confirmEqual("wrap test: ", service.get(greetingID), "A different greeting: \"" + greeting + "\"");
     }
 
     public void errln(String msg) {
@@ -730,13 +840,20 @@ public class ICUServiceTest extends TestFmwk
 	    logln("OK: " + e.getMessage());
 	}
 
+        // ICULocaleService
+
 	// LocaleKey
+        
 	// LocaleKey lkey = LocaleKey.create("en_US", "ja_JP");
 	// lkey = LocaleKey.create(null, null);
 	LocaleKey lkey = LocaleKey.createWithCanonicalFallback("en_US", "ja_JP");
+        logln("lkey: " + lkey);
+
+        lkey = LocaleKey.createWithCanonicalFallback(null, null);
 
 	// LocaleKeyFactory 
 	LocaleKeyFactory lkf = new LKFSubclass(false);
+        logln("lkf: " + lkf);
 	logln("obj: " + lkf.create(lkey, null));
 	logln(lkf.getDisplayName("foo", null));
 	logln(lkf.getDisplayName("bar", null));
@@ -794,13 +911,9 @@ public class ICUServiceTest extends TestFmwk
     }
 
     static class MyListener implements EventListener {
-	public void heyMan() {
-	}
     }
 
     static class WrongListener implements EventListener {
-	public void sayWhat() {
-	}
     }
 
     static class ICUNSubclass extends ICUNotifier {
@@ -808,18 +921,16 @@ public class ICUServiceTest extends TestFmwk
 	    return l instanceof MyListener;
 	}
 
+        // not used, just needed to implement abstract base
+        ///CLOVER:OFF
 	public void notifyListener(EventListener l) {
-	    ((MyListener)l).heyMan();
 	}
+        ///CLOVER:ON
     }
 
     static class LKFSubclass extends LocaleKeyFactory {
 	LKFSubclass(boolean visible) {
 	    super(visible ? VISIBLE : INVISIBLE);
-	}
-
-	public Object handleCreate(Key key, ICUService service) {
-	    return null;
 	}
 
 	protected Set getSupportedIDs() {
