@@ -83,25 +83,26 @@ void NormalizerConformanceTest::TestConformance(void) {
     // UnicodeSet for all code points that are not mentioned in NormalizationTest.txt
     UnicodeSet other(0, 0x10ffff);
 
-    for (int32_t count = 1;;++count) {
+    int32_t count;
+    for (count = 1;;++count) {
         if (T_FileStream_eof(input)) {
             break;
         }
         T_FileStream_readLine(input, lineBuf, (int32_t)sizeof(lineBuf));
         if (lineBuf[0] == 0 || lineBuf[0] == 10 || lineBuf[0] == 13) continue;
-        
+
         // Expect 5 columns of this format:
         // 1E0C;1E0C;0044 0323;1E0C;0044 0323; # <comments>
-        
+
         // Parse out the comment.
         if (lineBuf[0] == '#') continue;
-        
+
         // Read separator lines starting with '@'
         if (lineBuf[0] == '@') {
             logln(lineBuf);
             continue;
         }
-        
+
         // Parse out the fields
         if (!hexsplit(lineBuf, ';', fields, FIELD_COUNT)) {
             errln((UnicodeString)"Unable to parse line " + count);
