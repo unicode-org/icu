@@ -4,6 +4,13 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
+/***********************************************************************
+* Modification history
+* Date        Name        Description
+* 02/14/2001  synwee      Added attributes in TestTertiary and 
+*                         TestSecondary
+***********************************************************************/
+
 #ifndef _COLL
 #include "unicode/coll.h"
 #endif
@@ -182,11 +189,17 @@ void CollationFrenchTest::doTest( UnicodeString source, UnicodeString target, Co
 void CollationFrenchTest::TestTertiary(/* char* par */)
 {
     int32_t i = 0;
+    UErrorCode status = U_ZERO_ERROR;
     myCollation->setStrength(Collator::TERTIARY);
-    for (i = 0; i < 12 ; i++)
-    {
-        doTest(testSourceCases[i], testTargetCases[i], results[i]);
-    }
+    myCollation->setAttribute(UCOL_FRENCH_COLLATION, UCOL_ON, status);
+    myCollation->setAttribute(UCOL_ALTERNATE_HANDLING, UCOL_SHIFTED, status);
+    if (U_FAILURE(status))
+      errln("Error setting attribute in French collator");
+    else
+      for (i = 0; i < 12 ; i++)
+      {
+          doTest(testSourceCases[i], testTargetCases[i], results[i]);
+      }
 }
 
 void CollationFrenchTest::TestSecondary(/* char* par */)
@@ -195,19 +208,26 @@ void CollationFrenchTest::TestSecondary(/* char* par */)
     int32_t i = 0;
     int32_t j;
     Collator::EComparisonResult expected;
-    const int32_t testAcuteSize = sizeof(testAcute) / sizeof(testAcute[0]);
-    for (i = 0; i < testAcuteSize; i++)
+    UErrorCode status = U_ZERO_ERROR;
+    myCollation->setAttribute(UCOL_FRENCH_COLLATION, UCOL_ON, status);
+    if (U_FAILURE(status))
+      errln("Error setting attribute in French collator");
+    else
     {
-        for (j = 0; j < testAcuteSize; j++)
-        {
-            if (i <  j)
-                expected = Collator::LESS;
-            else if (i == j)
-                expected = Collator::EQUAL;
-            else // (i >  j)
-                expected = Collator::GREATER;
-            doTest(testAcute[i], testAcute[j], expected );
-        }
+      const int32_t testAcuteSize = sizeof(testAcute) / sizeof(testAcute[0]);
+      for (i = 0; i < testAcuteSize; i++)
+      {
+          for (j = 0; j < testAcuteSize; j++)
+          {
+              if (i <  j)
+                  expected = Collator::LESS;
+              else if (i == j)
+                  expected = Collator::EQUAL;
+              else // (i >  j)
+                  expected = Collator::GREATER;
+              doTest(testAcute[i], testAcute[j], expected );
+          }
+      }
     }
 }
 

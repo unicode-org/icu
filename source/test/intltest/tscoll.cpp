@@ -8,6 +8,13 @@
  * IntlTestCollator is the medium level test class for everything in the directory "collate".
  */
 
+/***********************************************************************
+* Modification history
+* Date        Name        Description
+* 02/14/2001  synwee      Compare with cintltst and commented away tests 
+*                         that are not run.
+***********************************************************************/
+
 #include "unicode/utypes.h"
 #include "tscoll.h"
 
@@ -111,10 +118,13 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
         if (exec)
         {
             logln("CollationFinnishtest---");
-            logln("");
+            logln("Temporary removed");
 
+            /* 
+            synwee TODO
             CollationFinnishTest test;
-            callTest( test, par );
+            callTest( test, par ); 
+            */
         }
         break;
 
@@ -124,7 +134,7 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
         if (exec)
         {
             logln("CollationKanatest---");
-            logln("");
+            logln("Temporary removed");
 
             CollationKanaTest test;
             callTest( test, par );
@@ -150,10 +160,13 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
         if (exec)
         {
             logln("CollationDummyTest---");
-            logln("");
+            logln("Temporary removed");
 
+            /* 
+            synwee TODO
             CollationDummyTest test;
             callTest( test, par );
+            */
         }
         break;
 
@@ -163,10 +176,13 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
         if (exec)
         {
             logln("G7CollationTest---");
-            logln("");
+            logln("Temporary removed");
 
+            /* 
+            synwee TODO
             G7CollationTest test;
             callTest( test, par );
+            */
         }
         break;
 
@@ -176,10 +192,13 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
         if (exec)
         {
             logln("CollationMonkeyTest---");
-            logln("");
+            logln("Temporary removed");
 
+            /* 
+            synwee TODO
             CollationMonkeyTest test;
             callTest( test, par );
+            */
         }
         break;
 
@@ -202,10 +221,13 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
         if (exec)
         {
             logln("CollationRegressionTest---");
-            logln("");
+            logln("Temporary removed");
 
+            /*
+            synwee TODO
             CollationRegressionTest test;
             callTest( test, par );
+            */
         }
         break;
 
@@ -228,10 +250,13 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
         if (exec)
         {
             logln("CollationIteratorTest---");
-            logln("");
+            logln("Temporary removed");
 
+            /* 
+            synwee TODO
             CollationIteratorTest test;
             callTest( test, par );
+            */
         }
         break;
 
@@ -247,7 +272,8 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
     case 16: */
         name = "BasicNormalizerTest"; 
         if (exec) {
-            logln("BasicNormalizerTest---"); logln("");
+            logln("BasicNormalizerTest---"); 
+            logln("");
             BasicNormalizerTest test;
             callTest( test, par );
         }
@@ -265,9 +291,14 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
     case 17:
         name = "CollationThaiTest"; 
         if (exec) {
-            logln("CollationThaiTest---"); logln("");
+            logln("CollationThaiTest---"); 
+            logln("Temporary removed");
+
+            /*
+            synwee TODO
             CollationThaiTest test;
             callTest( test, par );
+            */
         }
         break;
 
