@@ -2398,6 +2398,7 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
         uint32_t size;
 /*        uint32_t firstCE      = UCOL_NOT_FOUND;*/
         UChar    buffer[UCOL_MAX_BUFFER];
+        uint32_t *endCEBuffer;
         UChar   *strbuffer;
 
   for(;;)
@@ -2505,8 +2506,16 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
         temp.flags &= ~UCOL_ITER_NORM;
 
         CE = ucol_IGetNextCE(coll, &temp, status);
+        endCEBuffer = source->CEs + UCOL_EXPAND_CE_BUFFER_SIZE;
         while (CE != UCOL_NO_MORE_CES) {
             *(source->CEpos ++) = CE;
+            if (source->CEpos == endCEBuffer) {
+                /* ran out of CE space, bail.
+                there's no guarantee of the right character position after 
+                this bail*/
+                *status = U_BUFFER_OVERFLOW_ERROR;
+                return UCOL_NULLORDER;
+            }
             CE = ucol_IGetNextCE(coll, &temp, status);
         }
         freeHeapWritableBuffer(&temp);
