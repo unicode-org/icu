@@ -183,7 +183,7 @@ u_strstr(const UChar *s, const UChar *substring);
  * @return A pointer to the first occurrence of <code>substring</code> in <code>s</code>,
  *         or <code>s</code> itself if the <code>substring</code> is empty,
  *         or <code>NULL</code> if <code>substring</code> is not in <code>s</code>.
- * @stable
+ * @draft ICU 2.4
  *
  * @see u_strstr
  * @see u_strFindLast
@@ -245,7 +245,7 @@ u_strchr32(const UChar *s, UChar32 c);
  * @return A pointer to the last occurrence of <code>substring</code> in <code>s</code>,
  *         or <code>s</code> itself if the <code>substring</code> is empty,
  *         or <code>NULL</code> if <code>substring</code> is not in <code>s</code>.
- * @stable
+ * @draft ICU 2.4
  *
  * @see u_strstr
  * @see u_strFindFirst
@@ -270,7 +270,7 @@ u_strrstr(const UChar *s, const UChar *substring);
  * @return A pointer to the last occurrence of <code>substring</code> in <code>s</code>,
  *         or <code>s</code> itself if the <code>substring</code> is empty,
  *         or <code>NULL</code> if <code>substring</code> is not in <code>s</code>.
- * @stable
+ * @draft ICU 2.4
  *
  * @see u_strstr
  * @see u_strFindLast
@@ -288,7 +288,7 @@ u_strFindLast(const UChar *s, int32_t length, const UChar *substring, int32_t su
  * @param c The BMP code point to find.
  * @return A pointer to the last occurrence of <code>c</code> in <code>s</code>
  *         or <code>NULL</code> if <code>c</code> is not in <code>s</code>.
- * @stable
+ * @draft ICU 2.4
  *
  * @see u_strrchr32
  * @see u_memrchr
@@ -308,7 +308,7 @@ u_strrchr(const UChar *s, UChar c);
  * @param c The code point to find.
  * @return A pointer to the last occurrence of <code>c</code> in <code>s</code>
  *         or <code>NULL</code> if <code>c</code> is not in <code>s</code>.
- * @stable
+ * @draft ICU 2.4
  *
  * @see u_strrchr
  * @see u_memchr32
@@ -799,7 +799,7 @@ u_memchr32(const UChar *s, UChar32 c, int32_t count);
  * @param count The length of the string.
  * @return A pointer to the last occurrence of <code>c</code> in <code>s</code>
  *         or <code>NULL</code> if <code>c</code> is not in <code>s</code>.
- * @stable
+ * @draft ICU 2.4
  *
  * @see u_strrchr
  * @see u_memrchr32
@@ -819,7 +819,7 @@ u_memrchr(const UChar *s, UChar c, int32_t count);
  * @param count The length of the string.
  * @return A pointer to the last occurrence of <code>c</code> in <code>s</code>
  *         or <code>NULL</code> if <code>c</code> is not in <code>s</code>.
- * @stable
+ * @draft ICU 2.4
  *
  * @see u_strrchr32
  * @see u_memrchr
