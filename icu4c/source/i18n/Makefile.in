@@ -59,20 +59,18 @@ endif
 LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
 LIBS = $(LIBICUUC) @LIBS@
 
-OBJECTS = bocsu.o brkiter.o calendar.o choicfmt.o \
-coleitr.o coll.o cpdtrans.o datefmt.o dcfmtsym.o decimfmt.o \
-dtfmtsym.o fmtable.o format.o gregocal.o hextouni.o \
-msgfmt.o numfmt.o rbt.o rbt_data.o rbt_pars.o \
-rbt_rule.o rbt_set.o simpletz.o smpdtfmt.o \
-sortkey.o tblcoll.o timezone.o translit.o \
-ubrk.o ucal.o \
-ucol.o ucol_bld.o ucol_elm.o ucol_cnt.o ucol_tok.o ucol_wgt.o ucoleitr.o \
-udat.o umsg.o \
-unifltlg.o unirange.o uniset.o unitohex.o unum.o \
-dbbi.o dbbi_tbl.o rbbi.o rbbi_tbl.o brkdict.o nultrans.o jamohang.o hangjamo.o \
-remtrans.o utrans.o \
-titletrn.o tolowtrn.o toupptrn.o xformtrn.o name2uni.o uni2name.o nortrans.o \
-unifilt.o quant.o strmatch.o transreg.o usearch.o search.o stsearch.o
+OBJECTS = ucln_in.o brkiter.o brkdict.o ubrk.o \
+fmtable.o format.o msgfmt.o umsg.o numfmt.o unum.o decimfmt.o dcfmtsym.o \
+choicfmt.o datefmt.o smpdtfmt.o dtfmtsym.o udat.o \
+ucal.o calendar.o gregocal.o timezone.o simpletz.o \
+sortkey.o bocsu.o coleitr.o coll.o ucoleitr.o \
+ucol.o ucol_bld.o ucol_cnt.o ucol_elm.o ucol_tok.o ucol_wgt.o tblcoll.o \
+strmatch.o usearch.o search.o stsearch.o \
+uniset.o unifltlg.o unirange.o translit.o utrans.o \
+cpdtrans.o hextouni.o rbt.o rbt_data.o rbt_pars.o rbt_rule.o rbt_set.o \
+dbbi.o dbbi_tbl.o rbbi.o rbbi_tbl.o nultrans.o \
+jamohang.o hangjamo.o remtrans.o titletrn.o tolowtrn.o toupptrn.o xformtrn.o \
+name2uni.o uni2name.o unitohex.o nortrans.o unifilt.o quant.o transreg.o 
 
 
 STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
