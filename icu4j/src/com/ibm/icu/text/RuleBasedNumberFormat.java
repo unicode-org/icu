@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2003, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2004, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -485,7 +485,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * Puts a copyright in the .class file
      */
     private static final String copyrightNotice
-        = "Copyright \u00a91997-1998 IBM Corp.  All rights reserved.";
+        = "Copyright \u00a91997-2004 IBM Corp.  All rights reserved.";
 
     /**
      * Selector code that tells the constructor to create a spellout formatter
@@ -549,7 +549,18 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * If the description specifies lenient-parse rules, they're stored here until
      * the collator is created.
      */
-    private String lenientParseRules = null;
+    private String lenientParseRules;
+
+    /**
+     * If the description specifies post-process rules, they're stored here until
+     * post-processing is required.
+     */
+    private String postProcessRules;
+
+    /**
+     * Post processor lazily constructed from the postProcessRules.
+     */
+    private RBNFPostProcessor postProcessor;
 
     //-----------------------------------------------------------------------
     // constructors
@@ -603,8 +614,8 @@ public class RuleBasedNumberFormat extends NumberFormat {
 
         // load up the resource bundle containing the description
         // from the specified locale
-	//        ResourceBundle bundle = ICULocaleData.getResourceBundle("NumberFormatRules", locale);
-        ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME, locale);
+        //        ResourceBundle bundle = ICULocaleData.getResourceBundle("NumberFormatRules", locale);
+        ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(locale);
 
         // TODO: determine correct actual/valid locale.  Note ambiguity
         // here -- do actual/valid refer to pattern, DecimalFormatSymbols,
@@ -617,17 +628,17 @@ public class RuleBasedNumberFormat extends NumberFormat {
         // pick a description from the resource bundle based on the
         // kind of formatter the user asked for
         switch (format) {
-            case SPELLOUT:
-                description = bundle.getString("SpelloutRules");
-                break;
+        case SPELLOUT:
+            description = bundle.getString("SpelloutRules");
+            break;
 
-            case ORDINAL:
-                description = bundle.getString("OrdinalRules");
-                break;
+        case ORDINAL:
+            description = bundle.getString("OrdinalRules");
+            break;
 
-            case DURATION:
-                description = bundle.getString("DurationRules");
-                break;
+        case DURATION:
+            description = bundle.getString("DurationRules");
+            break;
         }
 
         // construct the formatter based on the description
@@ -720,7 +731,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * @param out The stream to write to.
      */
     private void writeObject(java.io.ObjectOutputStream out)
-                    throws java.io.IOException {
+        throws java.io.IOException {
         // we just write the textual description to the stream, so we
         // have an implementation-independent streaming format
         out.writeUTF(this.toString());
@@ -731,7 +742,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * @param in The stream to read from.
      */
     private void readObject(java.io.ObjectInputStream in)
-                    throws java.io.IOException {
+        throws java.io.IOException {
 
         // read the description in from the stream
         String description = in.readUTF();
@@ -938,10 +949,10 @@ public class RuleBasedNumberFormat extends NumberFormat {
                 result = tempResult;
                 highWaterMark.setIndex(workingPos.getIndex());
             }
-// commented out because this API on ParsePosition doesn't exist in 1.1.x
-//            if (workingPos.getErrorIndex() > highWaterMark.getErrorIndex()) {
-//                highWaterMark.setErrorIndex(workingPos.getErrorIndex());
-//            }
+            // commented out because this API on ParsePosition doesn't exist in 1.1.x
+            //            if (workingPos.getErrorIndex() > highWaterMark.getErrorIndex()) {
+            //                highWaterMark.setErrorIndex(workingPos.getErrorIndex());
+            //            }
 
             // if we manage to use up all the characters in the string,
             // we don't have to try any more rule sets
@@ -957,10 +968,10 @@ public class RuleBasedNumberFormat extends NumberFormat {
         // add the high water mark to our original parse position and
         // return the result
         parsePosition.setIndex(parsePosition.getIndex() + highWaterMark.getIndex());
-// commented out because this API on ParsePosition doesn't exist in 1.1.x
-//        if (highWaterMark.getIndex() == 0) {
-//            parsePosition.setErrorIndex(parsePosition.getIndex() + highWaterMark.getErrorIndex());
-//        }
+        // commented out because this API on ParsePosition doesn't exist in 1.1.x
+        //        if (highWaterMark.getIndex() == 0) {
+        //            parsePosition.setErrorIndex(parsePosition.getIndex() + highWaterMark.getErrorIndex());
+        //        }
         return result;
     }
 
@@ -1041,10 +1052,10 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * @draft ICU 3.0
      */
     public String getDefaultRuleSetName() {
-	if (defaultRuleSet != null && defaultRuleSet.isPublic()) {
-	    return defaultRuleSet.getName();
-	}
-	return "";
+        if (defaultRuleSet != null && defaultRuleSet.isPublic()) {
+            return defaultRuleSet.getName();
+        }
+        return "";
     }
     
     //-----------------------------------------------------------------------
@@ -1116,6 +1127,49 @@ public class RuleBasedNumberFormat extends NumberFormat {
     //-----------------------------------------------------------------------
 
     /**
+     * This extracts the special information from the rule sets before the
+     * main parsing starts.  Extra whitespace must have already been removed
+     * from the description.  If found, the special information is removed from the
+     * description and returned, otherwise the description is unchanged and null
+     * is returned.  Note: the trailing semicolon at the end of the special
+     * rules is stripped.
+     * @param description the rbnf description with extra whitespace removed
+     * @param specialName the name of the special rule text to extract
+     * @return the special rule text, or null if the rule was not found
+     */
+    private String extractSpecial(StringBuffer description, String specialName) {
+        String result = null;
+        int lp = description.indexOf(specialName);
+        if (lp != -1) {
+            // we've got to make sure we're not in the middle of a rule
+            // (where specialName would actually get treated as
+            // rule text)
+            if (lp == 0 || description.charAt(lp - 1) == ';') {
+                // locate the beginning and end of the actual special
+                // rules (there may be whitespace between the name and
+                // the first token in the description)
+                int lpEnd = description.indexOf(";%", lp);
+
+                if (lpEnd == -1) {
+                    lpEnd = description.length() - 1; // later we add 1 back to get the '%'
+                }
+                int lpStart = lp + specialName.length();
+                while (lpStart < lpEnd && 
+                       UCharacterProperty.isRuleWhiteSpace(description.charAt(lpStart))) {
+                    ++lpStart;
+                }
+
+                // copy out the special rules
+                result = description.substring(lpStart, lpEnd);
+
+                // remove the special rule from the description
+                description.delete(lp, lpEnd+1); // delete the semicolon but not the '%'
+            }
+        }
+        return result;
+    }
+
+    /**
      * This function parses the description and uses it to build all of
      * internal data structures that the formatter uses to do formatting
      * @param description The description of the formatter's desired behavior.
@@ -1130,48 +1184,21 @@ public class RuleBasedNumberFormat extends NumberFormat {
         // description).  This allows us to look for rule-set boundaries
         // by searching for ";%" without having to worry about whitespace
         // between the ; and the %
-        description = stripWhitespace(description);
+        StringBuffer descBuf = stripWhitespace(description);
 
         // check to see if there's a set of lenient-parse rules.  If there
         // is, pull them out into our temporary holding place for them,
         // and delete them from the description before the real desciption-
         // parsing code sees them
-        int lp = description.indexOf("%%lenient-parse:");
-        if (lp != -1) {
-            // we've got to make sure we're not in the middle of a rule
-            // (where "%%lenient-parse" would actually get treated as
-            // rule text)
-            if (lp == 0 || description.charAt(lp - 1) == ';') {
-                // locate the beginning and end of the actual collation
-                // rules (there may be whitespace between the name and
-                // the first token in the description)
-                int lpEnd = description.indexOf(";%", lp);
 
-                if (lpEnd == -1) {
-                    lpEnd = description.length() - 1;
-                }
-                int lpStart = lp + "%%lenient-parse:".length();
-                while (UCharacterProperty.isRuleWhiteSpace(description.charAt(lpStart))) {
-                    ++lpStart;
-                }
-
-                // copy out the lenient-parse rules and delete them
-                // from the description
-                lenientParseRules = description.substring(lpStart, lpEnd);
-
-                StringBuffer temp = new StringBuffer(description.substring(0, lp));
-                if (lpEnd + 1 < description.length()) {
-                    temp.append(description.substring(lpEnd + 1));
-                }
-                description = temp.toString();
-            }
-        }
+        lenientParseRules = extractSpecial(descBuf, "%%lenient-parse:");
+        postProcessRules = extractSpecial(descBuf, "%%post-process:");
 
         // pre-flight parsing the description and count the number of
         // rule sets (";%" marks the end of one rule set and the beginning
         // of the next)
         int numRuleSets = 0;
-        for (int p = description.indexOf(";%"); p != -1; p = description.indexOf(";%", p)) {
+        for (int p = descBuf.indexOf(";%"); p != -1; p = descBuf.indexOf(";%", p)) {
             ++numRuleSets;
             ++p;
         }
@@ -1191,13 +1218,13 @@ public class RuleBasedNumberFormat extends NumberFormat {
 
         int curRuleSet = 0;
         int start = 0;
-        for (int p = description.indexOf(";%"); p != -1; p = description.indexOf(";%", start)) {
-            ruleSetDescriptions[curRuleSet] = description.substring(start, p + 1);
+        for (int p = descBuf.indexOf(";%"); p != -1; p = descBuf.indexOf(";%", start)) {
+            ruleSetDescriptions[curRuleSet] = descBuf.substring(start, p + 1);
             ruleSets[curRuleSet] = new NFRuleSet(ruleSetDescriptions, curRuleSet);
             ++curRuleSet;
             start = p + 1;
         }
-        ruleSetDescriptions[curRuleSet] = description.substring(start);
+        ruleSetDescriptions[curRuleSet] = descBuf.substring(start);
         ruleSets[curRuleSet] = new NFRuleSet(ruleSetDescriptions, curRuleSet);
 
         // now we can take note of the formatter's default rule set, which
@@ -1223,7 +1250,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * @return The description with all the whitespace that follows semicolons
      * taken out.
      */
-    private String stripWhitespace(String description) {
+    private StringBuffer stripWhitespace(String description) {
         // since we don't have a method that deletes characters (why?!!)
         // create a new StringBuffer to copy the text into
         StringBuffer result = new StringBuffer();
@@ -1266,7 +1293,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
                 start = -1;
             }
         }
-        return result.toString();
+        return result;
     }
 
     /**
@@ -1301,7 +1328,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * @param ruleSet The rule set to use to format the number
      * @return The text that resulted from formatting the number
      */
-    protected String format(double number, NFRuleSet ruleSet) {
+    private String format(double number, NFRuleSet ruleSet) {
         // all API format() routines that take a double vector through
         // here.  Create an empty string buffer where the result will
         // be built, and pass it to the rule set (along with an insertion
@@ -1309,6 +1336,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
         // for formatting
         StringBuffer result = new StringBuffer();
         ruleSet.format(number, result, 0);
+        postProcess(result, ruleSet);
         return result.toString();
     }
 
@@ -1320,8 +1348,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * @param ruleSet The rule set to use to format the number
      * @return The text that resulted from formatting the number
      */
-    // temporary for development only
-    protected String format(long number, NFRuleSet ruleSet) {
+    private String format(long number, NFRuleSet ruleSet) {
         // all API format() routines that take a double vector through
         // here.  We have these two identical functions-- one taking a
         // double and one taking a long-- the couple digits of precision
@@ -1334,7 +1361,35 @@ public class RuleBasedNumberFormat extends NumberFormat {
         // for formatting
         StringBuffer result = new StringBuffer();
         ruleSet.format(number, result, 0);
+        postProcess(result, ruleSet);
         return result.toString();
+    }
+
+    protected void postProcess(StringBuffer result, NFRuleSet ruleSet) {
+        if (postProcessRules != null) {
+            if (postProcessor == null) {
+                int ix = postProcessRules.indexOf(";");
+                if (ix == -1) {
+                    ix = postProcessRules.length();
+                }
+                String ppClassName = postProcessRules.substring(0, ix).trim();
+                try {
+                    Class cls = Class.forName(ppClassName);
+                    postProcessor = (RBNFPostProcessor)cls.newInstance();
+                    postProcessor.init(this, postProcessRules);
+                }
+                catch (Exception e) {
+                    // if debug, print it out
+                    System.out.println("could not locate " + ppClassName + ", error " + 
+                                       e.getClass().getName() + ", " + e.getMessage());
+                    postProcessor = null;
+                    postProcessRules = null; // don't try again
+                    return;
+                }
+            }
+
+            postProcessor.process(result, ruleSet);
+        }
     }
 
     /**
@@ -1352,4 +1407,3 @@ public class RuleBasedNumberFormat extends NumberFormat {
         throw new IllegalArgumentException("No rule set named " + name);
     }
 }
-
