@@ -25,8 +25,9 @@ public: // package
     //test routine used by TestCalendarLimit
     virtual void test(UDate millis, Calendar *cal, DateFormat *fmt);
 
-    static double nextDouble(double a);
-    static double previousDouble(double a);
+    // bug 986c: deprecate nextDouble/previousDouble
+    //static double nextDouble(double a);
+    //static double previousDouble(double a);
     static UBool withinErr(double a, double b, double err);
 
 public:
