@@ -36,7 +36,7 @@ void printSeq(const uint8_t* a, int len)
     int i=0;
     log_verbose("\n{");
     while (i<len)
-        log_verbose("%02X, ", a[i++]);
+        log_verbose("0x%02X, ", a[i++]);
     log_verbose("}\n");
 }
 void printUSeq(const UChar* a, int len)
@@ -44,7 +44,7 @@ void printUSeq(const UChar* a, int len)
     int i=0;
     log_verbose("{");
     while (i<len)
-        log_verbose("  %4x, ", a[i++]);
+        log_verbose("  0x%04x, ", a[i++]);
     log_verbose("}\n");
 }
 
@@ -53,7 +53,7 @@ void printSeqErr(const uint8_t* a, int len)
     int i=0;
     fprintf(stderr, "{");
     while (i<len)
-        fprintf(stderr, "  %2x, ", a[i++]);
+        fprintf(stderr, "  0x%02x, ", a[i++]);
     fprintf(stderr, "}\n");
 }
 void printUSeqErr(const UChar* a, int len)
@@ -61,7 +61,7 @@ void printUSeqErr(const UChar* a, int len)
     int i=0;
     fprintf(stderr, "{");
     while (i<len)
-        fprintf(stderr, "%4x, ", a[i++]);
+        fprintf(stderr, "0x%04x, ", a[i++]);
     fprintf(stderr,"}\n");
 }
 void setNuConvTestName(const char *codepage, const char *direction)
@@ -1270,7 +1270,7 @@ UBool testConvertToUnicode( const uint8_t *source, int sourcelen, const UChar *e
         }
 
         log_verbose(junk);
-
+        printUSeq(expect, expectlen);
         if ( checkOffsets )
         {
             log_verbose("\nOffsets:");
@@ -1295,10 +1295,10 @@ UBool testConvertToUnicode( const uint8_t *source, int sourcelen, const UChar *e
                 log_err("  %2d,", expectOffsets[i]);
             log_err("\nGot output:       ");
             for(i=0; i<(targ-junkout); i++)
-                log_err("%4x,", junkout[i]);
+                log_err("0x%04x,", junkout[i]);
             log_err("\nFrom source:      ");
             for(i=0; i<(src-source); i++)
-                log_err("  %2x,", (unsigned char)source[i]);
+                log_err("  0x%02x,", (unsigned char)source[i]);
             log_err("\n");
         }
     }

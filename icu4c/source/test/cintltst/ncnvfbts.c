@@ -37,14 +37,14 @@ void printSeq(const unsigned char* a, int len)
 {
     int i=0;
     log_verbose("{");
-    while (i<len) log_verbose("%2x ", a[i++]);
+    while (i<len) log_verbose("0x%02x ", a[i++]);
     log_verbose("}\n");
 }
 void printUSeq(const UChar* a, int len)
 {
     int i=0;
     log_verbose("{U+");
-    while (i<len) log_verbose("%04x ", a[i++]);
+    while (i<len) log_verbose("0x%04x ", a[i++]);
     log_verbose("}\n");
 }
 
@@ -52,14 +52,14 @@ void printSeqErr(const unsigned char* a, int len)
 {
     int i=0;
     fprintf(stderr, "{");
-    while (i<len)  fprintf(stderr, "%2x ", a[i++]);
+    while (i<len)  fprintf(stderr, "0x%02x ", a[i++]);
     fprintf(stderr, "}\n");
 }
 void printUSeqErr(const UChar* a, int len)
 {
     int i=0;
     fprintf(stderr, "{U+");
-    while (i<len) fprintf(stderr, "%04x ", a[i++]);
+    while (i<len) fprintf(stderr, "0x%04x ", a[i++]);
     fprintf(stderr,"}\n");
 }
 void TestConverterFallBack(void)
@@ -382,7 +382,7 @@ UBool testConvertToUnicode( const uint8_t *source, int sourcelen, const UChar *e
         }
 
         log_verbose(junk);
-
+        printUSeq(expect, expectlen);
         if ( checkOffsets )
         {
             log_verbose("\nOffsets:");
@@ -407,10 +407,10 @@ UBool testConvertToUnicode( const uint8_t *source, int sourcelen, const UChar *e
                 log_err("%d,", expectOffsets[i]);
             log_err("");
             for(i=0; i<(targ-junkout); i++)
-                log_err("%4X,", junkout[i]);
+                log_err("0x%04X,", junkout[i]);
             log_err("");
             for(i=0; i<(src-source); i++)
-                log_err("%4X,", (unsigned char)source[i]);
+                log_err("0x%04X,", (unsigned char)source[i]);
         }
     }
 
