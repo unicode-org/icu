@@ -263,8 +263,8 @@ void AbbreviatedUnicodeSetIterator::reset(UnicodeSet& newSet, UBool abb) {
     abbreviated = abb;
 }
 
-void AbbreviatedUnicodeSetIterator::loadRange(int32_t range) {
-    UnicodeSetIterator::loadRange(range);
+void AbbreviatedUnicodeSetIterator::loadRange(int32_t myRange) {
+    UnicodeSetIterator::loadRange(myRange);
     if (abbreviated && (endElement > nextElement + 50)) {
         endElement = nextElement + 50;
     }
@@ -1354,7 +1354,7 @@ static const char * const interIndicArray[] = {
 };
 
 void TransliteratorRoundTripTest::TestDebug(const char* name,const char fromSet[],
-                                            const char* toSet,const char* exclusions,UBool quick){
+                                            const char* toSet,const char* exclusions){
 
     RTTest test(name);
     Legal *legal = new LegalIndic();
