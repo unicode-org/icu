@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $ 
- * $Date: 2001/03/30 23:23:27 $ 
- * $Revision: 1.29 $
+ * $Date: 2001/03/30 23:33:20 $ 
+ * $Revision: 1.30 $
  *
  *****************************************************************************************
  */
@@ -692,6 +692,21 @@ public class TransliteratorTest extends TestFmwk {
         ID = "Unicode-Hex[aeiou];Hex-Unicode[^5]";
         expect(Transliterator.getInstance(ID), "quizzical",
                "q\\u0075izzical");
+    }
+
+    /**
+     * Test IDs of inverses of compound transliterators. (J20)
+     */
+    public void TestCompoundInverseID() {
+        String ID = "Latin-Jamo;Jamo-Hangul";
+        Transliterator t = Transliterator.getInstance(ID);
+        Transliterator u = t.getInverse();
+        String exp = "Hangul-Jamo;Jamo-Latin";
+        String got = u.getID();
+        if (!got.equals(exp)) {
+            errln("FAIL: Inverse of " + ID + " is " + got +
+                  ", expected " + exp);
+        }
     }
 
     /**
