@@ -47,6 +47,7 @@
 #include "cntabcol.h"
 #include "lcukocol.h"
 #include "ucaconf.h"
+#include "svccoll.h"
 
 void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
@@ -308,6 +309,15 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
       if (exec) {
         logln("UCAConformanceTest---"); logln("");
         UCAConformanceTest test;
+        callTest( test, par );
+      }
+      break;
+
+    case 21:
+      name = "CollationServiceTest";
+      if (exec) {
+        logln("CollationServiceTest---"); logln("");
+        CollationServiceTest test;
         callTest( test, par );
       }
       break;

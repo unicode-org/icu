@@ -261,7 +261,13 @@ protected:
      */
     virtual UObject* handleCreate(const Locale& loc, int32_t kind, const ICUService* service, UErrorCode& status) const;
 
-    /**
+   /**
+     * Return true if this id is one the factory supports (visible or 
+     * otherwise).
+     */
+ 	virtual UBool isSupportedID(const UnicodeString& id, UErrorCode& status) const;
+
+   /**
      * Return the set of ids that this factory supports (visible or 
      * otherwise).  This can be called often and might need to be
      * cached if it is expensive to create.
@@ -325,6 +331,13 @@ class U_COMMON_API SimpleLocaleKeyFactory : public LocaleKeyFactory {
      * on the coverage rule for this factory.
      */
     void updateVisibleIDs(Hashtable& result, UErrorCode& status) const;
+
+ protected:
+	/**
+     * Return true if this id is equal to the locale name.
+     */
+ 	virtual UBool isSupportedID(const UnicodeString& id, UErrorCode& status) const;
+
 
  public:
     /**
