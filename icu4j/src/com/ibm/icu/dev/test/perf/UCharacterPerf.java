@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/perf/UCharacterPerf.java,v $
- * $Date: 2002/10/30 01:32:45 $
- * $Revision: 1.1 $
+ * $Date: 2002/10/30 17:58:26 $
+ * $Revision: 1.2 $
  *
  *******************************************************************************
  */
@@ -36,11 +36,11 @@ public final class UCharacterPerf extends PerfTest
     
     protected void setup(String[] args) {
         // We only take one argument, the pattern
-        if (args.length < 1) {
-            MIN_ = Character.MIN_VALUE;
-            MAX_ = Character.MAX_VALUE;
+        MIN_ = Character.MIN_VALUE;
+        MAX_ = Character.MAX_VALUE;
+        if (args.length >= 1) {
+        	MIN_ = Integer.parseInt(args[0], 16);
         }
-        MIN_ = Integer.parseInt(args[0], 16);
         if (args.length >= 2) {
             MAX_ = Integer.parseInt(args[1], 16);
         }
@@ -56,7 +56,7 @@ public final class UCharacterPerf extends PerfTest
             }
 
             public long getOperationsPerIteration() {
-                return MAX_;
+                return MAX_ - MIN_ + 1;
             }
         };
     }
@@ -71,7 +71,7 @@ public final class UCharacterPerf extends PerfTest
             }
 
             public long getOperationsPerIteration() {
-                return MAX_;
+                return MAX_ - MIN_ + 1;
             }
         };
     }
@@ -86,7 +86,7 @@ public final class UCharacterPerf extends PerfTest
             }
 
             public long getOperationsPerIteration() {
-                return MAX_;
+                return MAX_ - MIN_ + 1;
             }
         };
     }
@@ -101,7 +101,7 @@ public final class UCharacterPerf extends PerfTest
             }
 
             public long getOperationsPerIteration() {
-                return MAX_;
+                return MAX_ - MIN_ + 1;
             }
         };
     }
@@ -116,7 +116,7 @@ public final class UCharacterPerf extends PerfTest
             }
 
             public long getOperationsPerIteration() {
-                return MAX_;
+                return MAX_ - MIN_ + 1;
             }
         };
     }   
@@ -131,7 +131,7 @@ public final class UCharacterPerf extends PerfTest
             }
 
             public long getOperationsPerIteration() {
-                return MAX_;
+                return MAX_ - MIN_ + 1;
             }
         };
     }
@@ -146,7 +146,7 @@ public final class UCharacterPerf extends PerfTest
             }
 
             public long getOperationsPerIteration() {
-                return MAX_;
+                return MAX_ - MIN_ + 1;
             }
         };
     }    
@@ -161,7 +161,7 @@ public final class UCharacterPerf extends PerfTest
             }
 
             public long getOperationsPerIteration() {
-                return MAX_;
+                return MAX_ - MIN_ + 1;
             }
         };
     }    
@@ -176,7 +176,7 @@ public final class UCharacterPerf extends PerfTest
             }
 
             public long getOperationsPerIteration() {
-                return MAX_;
+                return MAX_ - MIN_ + 1;
             }
         };
     }    
@@ -191,7 +191,7 @@ public final class UCharacterPerf extends PerfTest
             }
 
             public long getOperationsPerIteration() {
-                return MAX_;
+                return MAX_ - MIN_ + 1;
             }
         };
     }
@@ -206,7 +206,7 @@ public final class UCharacterPerf extends PerfTest
             }
 
             public long getOperationsPerIteration() {
-                return MAX_;
+                return MAX_ - MIN_ + 1;
             }
         };
     }    
@@ -221,7 +221,7 @@ public final class UCharacterPerf extends PerfTest
             }
 
             public long getOperationsPerIteration() {
-                return MAX_;
+                return MAX_ - MIN_ + 1;
             }
         };
     }
@@ -236,7 +236,7 @@ public final class UCharacterPerf extends PerfTest
             }
 
             public long getOperationsPerIteration() {
-                return MAX_;
+                return MAX_ - MIN_ + 1;
             }
         };
     }
@@ -251,7 +251,7 @@ public final class UCharacterPerf extends PerfTest
             }
 
             public long getOperationsPerIteration() {
-                return MAX_;
+                return MAX_ - MIN_ + 1;
             }
         };
     }
@@ -266,7 +266,7 @@ public final class UCharacterPerf extends PerfTest
             }
 
             public long getOperationsPerIteration() {
-                return MAX_;
+                return MAX_ - MIN_ + 1;
             }
         };
     }
@@ -281,7 +281,7 @@ public final class UCharacterPerf extends PerfTest
             }
 
             public long getOperationsPerIteration() {
-                return MAX_;
+                return MAX_ - MIN_ + 1;
             }
         };
     }
@@ -296,7 +296,7 @@ public final class UCharacterPerf extends PerfTest
             }
 
             public long getOperationsPerIteration() {
-                return MAX_;
+                return MAX_ - MIN_ + 1;
             }
         };
     }
@@ -311,7 +311,7 @@ public final class UCharacterPerf extends PerfTest
             }
 
             public long getOperationsPerIteration() {
-                return MAX_;
+                return MAX_ - MIN_ + 1;
             }
         };
     }
@@ -326,7 +326,7 @@ public final class UCharacterPerf extends PerfTest
             }
 
             public long getOperationsPerIteration() {
-                return MAX_;
+                return MAX_ - MIN_ + 1;
             }
         };
     }    
@@ -341,7 +341,7 @@ public final class UCharacterPerf extends PerfTest
             }
 
             public long getOperationsPerIteration() {
-                return MAX_;
+                return MAX_ - MIN_ + 1;
             }
         };
     }    
@@ -356,7 +356,7 @@ public final class UCharacterPerf extends PerfTest
             }
 
             public long getOperationsPerIteration() {
-                return MAX_;
+                return MAX_ - MIN_ + 1;
             }
         };
     } 
@@ -371,7 +371,7 @@ public final class UCharacterPerf extends PerfTest
             }
 
             public long getOperationsPerIteration() {
-                return MAX_;
+                return MAX_ - MIN_ + 1;
             }
         };
     }  
@@ -386,7 +386,7 @@ public final class UCharacterPerf extends PerfTest
             }
 
             public long getOperationsPerIteration() {
-                return MAX_;
+                return MAX_ - MIN_ + 1;
             }
         };
     }
@@ -401,7 +401,7 @@ public final class UCharacterPerf extends PerfTest
             }
 
             public long getOperationsPerIteration() {
-                return MAX_;
+                return MAX_ - MIN_ + 1;
             }
         };
     }    
@@ -416,7 +416,7 @@ public final class UCharacterPerf extends PerfTest
             }
 
             public long getOperationsPerIteration() {
-                return MAX_;
+                return MAX_ - MIN_ + 1;
             }
         };
     } 
@@ -431,7 +431,7 @@ public final class UCharacterPerf extends PerfTest
             }
 
             public long getOperationsPerIteration() {
-                return MAX_;
+                return MAX_ - MIN_ + 1;
             }
         };
     } 
@@ -446,7 +446,7 @@ public final class UCharacterPerf extends PerfTest
             }
 
             public long getOperationsPerIteration() {
-                return MAX_;
+                return MAX_ - MIN_ + 1;
             }
         };
     } 
@@ -461,7 +461,7 @@ public final class UCharacterPerf extends PerfTest
             }
 
             public long getOperationsPerIteration() {
-                return MAX_;
+                return MAX_ - MIN_ + 1;
             }
         };
     } 
@@ -476,7 +476,7 @@ public final class UCharacterPerf extends PerfTest
             }
 
             public long getOperationsPerIteration() {
-                return MAX_;
+                return MAX_ - MIN_ + 1;
             }
         };
     }
@@ -491,7 +491,7 @@ public final class UCharacterPerf extends PerfTest
             }
 
             public long getOperationsPerIteration() {
-                return MAX_;
+                return MAX_ - MIN_ + 1;
             }
         };
     }    
@@ -506,7 +506,7 @@ public final class UCharacterPerf extends PerfTest
             }
 
             public long getOperationsPerIteration() {
-                return MAX_;
+                return MAX_ - MIN_ + 1;
             }
         };
     }
@@ -521,7 +521,7 @@ public final class UCharacterPerf extends PerfTest
             }
 
             public long getOperationsPerIteration() {
-                return MAX_;
+                return MAX_ - MIN_ + 1;
             }
         };
     }
