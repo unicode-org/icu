@@ -110,13 +110,13 @@
  */
 #define UCNV_ESCAPE_ICU       NULL
 /**
- * FROM_U_CALLBACK_ESCAPE context option to escape the code unit according to JAVA (\uXXXX)
+ * FROM_U_CALLBACK_ESCAPE context option to escape the code unit according to JAVA (\\uXXXX)
  * @stable ICU 2.0
  */
 #define UCNV_ESCAPE_JAVA      "J"
 /**
- * FROM_U_CALLBACK_ESCAPE context option to escape the code unit according to C (\uXXXX \UXXXXXXXX)
- * TO_U_CALLBACK_ESCAPE option to escape the character value accoding to C (\xXXXX)
+ * FROM_U_CALLBACK_ESCAPE context option to escape the code unit according to C (\\uXXXX \\UXXXXXXXX)
+ * TO_U_CALLBACK_ESCAPE option to escape the character value accoding to C (\\xXXXX)
  * @stable ICU 2.0
  */
 #define UCNV_ESCAPE_C         "C"
@@ -148,15 +148,15 @@ typedef enum {
     UCNV_UNASSIGNED = 0,  /**< The code point is unassigned.
                              The error code U_INVALID_CHAR_FOUND will be set. */
     UCNV_ILLEGAL = 1,     /**< The code point is illegal. For example, 
-                             \x81\x2E is illegal in SJIS because \x2E
-                             is not a valid trail byte for the \x81 
+                             \\x81\\x2E is illegal in SJIS because \\x2E
+                             is not a valid trail byte for the \\x81 
                              lead byte.
                              Also, starting with Unicode 3.0.1, non-shortest byte sequences
-                             in UTF-8 (like \xC1\xA1 instead of \x61 for U+0061)
+                             in UTF-8 (like \\xC1\\xA1 instead of \\x61 for U+0061)
                              are also illegal, not just irregular.
                              The error code U_ILLEGAL_CHAR_FOUND will be set. */
     UCNV_IRREGULAR = 2,   /**< The codepoint is not a regular sequence in 
-                             the encoding. For example, \xED\xA0\x80..\xED\xBF\xBF
+                             the encoding. For example, \\xED\\xA0\\x80..\\xED\\xBF\\xBF
                              are irregular UTF-8 byte sequences for single surrogate
                              code points.
                              The error code U_INVALID_CHAR_FOUND will be set. */
@@ -327,17 +327,17 @@ U_STABLE void U_EXPORT2 UCNV_FROM_U_CALLBACK_SUBSTITUTE (
  *          Note that  codeUnit(32bit int eg: unit of a surrogate pair) is represented as
  *          %UD84D%UDC56</li>
  *        <li>UCNV_ESCAPE_JAVA: Substitues the  ILLEGAL SEQUENCE with the hexadecimal 
- *          representation in the format  \uXXXX, e.g. "\uFFFE\u00AC\uC8FE"). 
+ *          representation in the format  \\uXXXX, e.g. "\\uFFFE\\u00AC\\uC8FE"). 
  *          In the Event the converter doesn't support the characters {\,u}[A-F][0-9], 
  *          it will  substitute  the illegal sequence with the substitution characters.
  *          Note that  codeUnit(32bit int eg: unit of a surrogate pair) is represented as
- *          \uD84D\uDC56</li>
+ *          \\uD84D\\uDC56</li>
  *        <li>UCNV_ESCAPE_C: Substitues the  ILLEGAL SEQUENCE with the hexadecimal 
- *          representation in the format  \uXXXX, e.g. "\uFFFE\u00AC\uC8FE"). 
+ *          representation in the format  \\uXXXX, e.g. "\\uFFFE\\u00AC\\uC8FE"). 
  *          In the Event the converter doesn't support the characters {\,u,U}[A-F][0-9], 
  *          it will  substitute  the illegal sequence with the substitution characters.
  *          Note that  codeUnit(32bit int eg: unit of a surrogate pair) is represented as
- *          \U00023456</li>
+ *          \\U00023456</li>
  *        <li>UCNV_ESCAPE_XML_DEC: Substitues the  ILLEGAL SEQUENCE with the decimal 
  *          representation in the format  &amp;#DDDDDDDD;, e.g. "&amp;#65534;&amp;#172;&amp;#51454;"). 
  *          In the Event the converter doesn't support the characters {&amp;,#}[0-9], 

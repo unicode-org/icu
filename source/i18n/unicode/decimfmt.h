@@ -189,17 +189,17 @@ class ChoiceFormat;
  *     <td>Yes
  *     <td>Separates positive and negative subpatterns
  *   <tr valign=top>
- *     <td><code>%</code>
+ *     <td><code>\%</code>
  *     <td>Prefix or suffix
  *     <td>Yes
  *     <td>Multiply by 100 and show as percentage
  *   <tr valign=top bgcolor="#eeeeff">
- *     <td><code>\u2030</code>
+ *     <td><code>\\u2030</code>
  *     <td>Prefix or suffix
  *     <td>Yes
  *     <td>Multiply by 1000 and show as per mille
  *   <tr valign=top>
- *     <td><code>\htmlonly&curren;\endhtmlonly</code> (<code>\u00A4</code>)
+ *     <td><code>\htmlonly&curren;\endhtmlonly</code> (<code>\\u00A4</code>)
  *     <td>Prefix or suffix
  *     <td>No
  *     <td>Currency sign, replaced by currency symbol.  If
@@ -266,14 +266,14 @@ class ChoiceFormat;
  * pattern    := subpattern (';' subpattern)?
  * subpattern := prefix? number exponent? suffix?
  * number     := (integer ('.' fraction)?) | sigDigits
- * prefix     := '\u0000'..'\uFFFD' - specialCharacters
- * suffix     := '\u0000'..'\uFFFD' - specialCharacters
+ * prefix     := '\\u0000'..'\\uFFFD' - specialCharacters
+ * suffix     := '\\u0000'..'\\uFFFD' - specialCharacters
  * integer    := '#'* '0'* '0'
  * fraction   := '0'* '#'*
  * sigDigits  := '#'* '@' '@'* '#'*
  * exponent   := 'E' '+'? '0'* '0'
  * padSpec    := '*' padChar
- * padChar    := '\u0000'..'\uFFFD' - quote
+ * padChar    := '\\u0000'..'\\uFFFD' - quote
  * &nbsp;
  * Notation:
  *   X*       0 or more instances of X
@@ -361,12 +361,12 @@ class ChoiceFormat;
  * <p><strong>Special Values</strong>
  *
  * <p><code>NaN</code> is represented as a single character, typically
- * <code>\uFFFD</code>.  This character is determined by the
+ * <code>\\uFFFD</code>.  This character is determined by the
  * DecimalFormatSymbols object.  This is the only value for which
  * the prefixes and suffixes are not used.
  *
  * <p>Infinity is represented as a single character, typically
- * <code>\u221E</code>, with the positive or negative prefixes and suffixes
+ * <code>\\u221E</code>, with the positive or negative prefixes and suffixes
  * applied.  The infinity character is determined by the
  * DecimalFormatSymbols object.
  *
@@ -444,25 +444,25 @@ class ChoiceFormat;
  *     <td align=left>Number
  *     <td align=left>Output of format()
  *   <tr valign=top>
- *     <td><code>@@@</code>
+ *     <td><code>\@\@\@</code>
  *     <td>3
  *     <td>3
  *     <td>12345
  *     <td><code>12300</code>
  *   <tr valign=top bgcolor="#eeeeff">
- *     <td><code>@@@</code>
+ *     <td><code>\@\@\@</code>
  *     <td>3
  *     <td>3
  *     <td>0.12345
  *     <td><code>0.123</code>
  *   <tr valign=top>
- *     <td><code>@@##</code>
+ *     <td><code>\@\@##</code>
  *     <td>2
  *     <td>4
  *     <td>3.14159
  *     <td><code>3.142</code>
  *   <tr valign=top bgcolor="#eeeeff">
- *     <td><code>@@##</code>
+ *     <td><code>\@\@##</code>
  *     <td>2
  *     <td>4
  *     <td>1.23004
@@ -1046,7 +1046,7 @@ public:
      * Get the multiplier for use in percent, permill, etc.
      * For a percentage, set the suffixes to have "%" and the multiplier to be 100.
      * (For Arabic, use arabic percent symbol).
-     * For a permill, set the suffixes to have "\u2031" and the multiplier to be 1000.
+     * For a permill, set the suffixes to have "\\u2031" and the multiplier to be 1000.
      *
      * @return    the multiplier for use in percent, permill, etc.
      * Examples: with 100, 1.23 -> "123", and "123" -> 1.23
@@ -1058,7 +1058,7 @@ public:
      * Set the multiplier for use in percent, permill, etc.
      * For a percentage, set the suffixes to have "%" and the multiplier to be 100.
      * (For Arabic, use arabic percent symbol).
-     * For a permill, set the suffixes to have "\u2031" and the multiplier to be 1000.
+     * For a permill, set the suffixes to have "\\u2031" and the multiplier to be 1000.
      *
      * @param newValue    the new value of the multiplier for use in percent, permill, etc.
      * Examples: with 100, 1.23 -> "123", and "123" -> 1.23
@@ -1859,6 +1859,7 @@ protected:
      * this number, it wouldn't make sense anyway, and this is just to make sure
      * that someone turning on scientific mode with default settings doesn't
      * end up with lots of zeroes.
+     * @draft ICU 2.8
      */
 	static const int32_t  kMaxScientificIntegerDigits;
 };

@@ -86,7 +86,7 @@ class RuleCharacterIterator;
  *       point order</td>
  *     </tr>
  *     <tr>
- *       <td nowrap valign="top" align="left"><code>[\u4E01]</code></td>
+ *       <td nowrap valign="top" align="left"><code>[\\u4E01]</code></td>
  *       <td valign="top">The character U+4E01</td>
  *     </tr>
  *     <tr>
@@ -95,7 +95,7 @@ class RuleCharacterIterator;
  *       &quot;ac&quot;</td>
  *     </tr>
  *     <tr>
- *       <td nowrap valign="top" align="left"><code>[\p{Lu}]</code></td>
+ *       <td nowrap valign="top" align="left"><code>[\\p{Lu}]</code></td>
  *       <td valign="top">All characters in the general category Uppercase Letter</td>
  *     </tr>
  *   </table>
@@ -107,7 +107,7 @@ class RuleCharacterIterator;
  *
  * <p>Property patterns specify a set of characters having a certain
  * property as defined by the Unicode standard.  Both the POSIX-like
- * "[:Lu:]" and the Perl-like syntax "\p{Lu}" are recognized.  For a
+ * "[:Lu:]" and the Perl-like syntax "\\p{Lu}" are recognized.  For a
  * complete list of supported property patterns, see the User's Guide
  * for UnicodeSet at
  * <a href="http://oss.software.ibm.com/icu/userguide/unicodeSet.html">
@@ -119,7 +119,7 @@ class RuleCharacterIterator;
  * Unicode property sets.  When elements are concatenated, they
  * specify their union.  To complement a set, place a '^' immediately
  * after the opening '['.  Property patterns are inverted by modifying
- * their delimiters; "[:^foo]" and "\P{foo}".  In any other location,
+ * their delimiters; "[:^foo]" and "\\P{foo}".  In any other location,
  * '^' has no special meaning.
  *
  * <p>Ranges are indicated by placing two a '-' between two
@@ -134,11 +134,11 @@ class RuleCharacterIterator;
  *
  * <p>Sets may be intersected using the '&' operator or the asymmetric
  * set difference may be taken using the '-' operator, for example,
- * "[[:L:]&[\u0000-\u0FFF]]" indicates the set of all Unicode letters
+ * "[[:L:]&[\\u0000-\\u0FFF]]" indicates the set of all Unicode letters
  * with values less than 4096.  Operators ('&' and '|') have equal
  * precedence and bind left-to-right.  Thus
- * "[[:L:]-[a-z]-[\u0100-\u01FF]]" is equivalent to
- * "[[[:L:]-[a-z]]-[\u0100-\u01FF]]".  This only really matters for
+ * "[[:L:]-[a-z]-[\\u0100-\\u01FF]]" is equivalent to
+ * "[[[:L:]-[a-z]]-[\\u0100-\\u01FF]]".  This only really matters for
  * difference; intersection is commutative.
  *
  * <table>
@@ -155,11 +155,11 @@ class RuleCharacterIterator;
  * <tr valign=top><td nowrap><code>[[<em>pat1</em>]-[<em>pat2</em>]]</code>
  * <td>The asymmetric difference of sets specified by <em>pat1</em> and
  * <em>pat2</em>
- * <tr valign=top><td nowrap><code>[:Lu:] or \p{Lu}</code>
+ * <tr valign=top><td nowrap><code>[:Lu:] or \\p{Lu}</code>
  * <td>The set of characters having the specified
  * Unicode property; in
  * this case, Unicode uppercase letters
- * <tr valign=top><td nowrap><code>[:^Lu:] or \P{Lu}</code>
+ * <tr valign=top><td nowrap><code>[:^Lu:] or \\P{Lu}</code>
  * <td>The set of characters <em>not</em> having the given
  * Unicode property
  * </table>
@@ -200,7 +200,7 @@ class RuleCharacterIterator;
  *       <td nowrap valign="top" align="right"><code>char :=&nbsp; </code></td>
  *       <td valign="top"><em>any character that is not</em><code> special<br>
  *       | ('\' </code><em>any character</em><code>)<br>
- *       | ('\u' hex hex hex hex)<br>
+ *       | ('\\u' hex hex hex hex)<br>
  *       </code></td>
  *     </tr>
  *     <tr align="top">
@@ -531,8 +531,8 @@ public:
      * @param result the string to receive the rules.  Previous
      * contents will be deleted.
      * @param escapeUnprintable if TRUE then convert unprintable
-     * character to their hex escape representations, \uxxxx or
-     * \Uxxxxxxxx.  Unprintable characters are those other than
+     * character to their hex escape representations, \\uxxxx or
+     * \\Uxxxxxxxx.  Unprintable characters are those other than
      * U+000A, U+0020..U+007E.
      * @stable ICU 2.0
      */
@@ -576,8 +576,8 @@ public:
      * property alias, or a special ID.  Special IDs are matched loosely and
      * correspond to the following sets:
      *
-     * "ANY" = [\u0000-\U0010FFFF],
-     * "ASCII" = [\u0000-\u007F].
+     * "ANY" = [\\u0000-\\U0010FFFF],
+     * "ASCII" = [\\u0000-\\u007F].
      *
      * @param value a value alias, either short or long.  The name is matched
      * loosely.  See PropertyValueAliases.txt for names and a description of
@@ -1054,7 +1054,7 @@ public:
      * 2. For each string 'e' in the resulting set, if e !=
      * foldCase(e), 'e' will be removed.
      *
-     * Example: [aq\u00DF{Bc}{bC}{Fi}] => [aAqQ\u00DF\uFB01{ss}{bc}{fi}]
+     * Example: [aq\\u00DF{Bc}{bC}{Fi}] => [aAqQ\\u00DF\\uFB01{ss}{bc}{fi}]
      *
      * (Here foldCase(x) refers to the operation u_strFoldCase, and a
      * == b denotes that the contents are the same, not pointer
@@ -1244,8 +1244,8 @@ private:
 
     /**
      * Return true if the given position, in the given pattern, appears
-     * to be the start of a property set pattern [:foo:], \p{foo}, or
-     * \P{foo}, or \N{name}.
+     * to be the start of a property set pattern [:foo:], \\p{foo}, or
+     * \\P{foo}, or \\N{name}.
      */
     static UBool resemblesPropertyPattern(const UnicodeString& pattern,
                                           int32_t pos);
@@ -1264,11 +1264,11 @@ private:
      * Recognized syntax:
      *
      * [:foo:] [:^foo:] - white space not allowed within "[:" or ":]"
-     * \p{foo} \P{foo}  - white space not allowed within "\p" or "\P"
-     * \N{name}         - white space not allowed within "\N"
+     * \\p{foo} \\P{foo}  - white space not allowed within "\\p" or "\\P"
+     * \\N{name}         - white space not allowed within "\\N"
      *
      * Other than the above restrictions, white space is ignored.  Case
-     * is ignored except in "\p" and "\P" and "\N".  In 'name' leading
+     * is ignored except in "\\p" and "\\P" and "\\N".  In 'name' leading
      * and trailing space is deleted, and internal runs of whitespace
      * are collapsed to a single space.
      *
@@ -1283,7 +1283,7 @@ private:
      * @param ppos on entry, the position at which to begin parsing.
      * This should be one of the locations marked '^':
      *
-     *   [:blah:]     \p{blah}     \P{blah}     \N{name}
+     *   [:blah:]     \\p{blah}     \\P{blah}     \\N{name}
      *   ^       %    ^       %    ^       %    ^       %
      *
      * On return, the position after the last character parsed, that is,

@@ -10,6 +10,13 @@
 
 #include "unicode/utypes.h"
 
+/**
+ * \def U_HAVE_RBNF
+ * This will be 0 if RBNF support is not included in ICU
+ * and 1 if it is.
+ *
+ * @stable ICU 2.4
+ */
 #if defined(U_INT64_T_UNAVAILABLE) || UCONFIG_NO_FORMATTING
 #define U_HAVE_RBNF 0
 #else
@@ -26,7 +33,11 @@ U_NAMESPACE_BEGIN
 
 class NFRuleSet;
 
-/** Tags for the predefined rulesets. */
+/**
+ * Tags for the predefined rulesets.
+ *
+ * @stable ICU 2.2
+ */
 enum URBNFRuleSetTag {
     URBNF_SPELLOUT,
     URBNF_ORDINAL,

@@ -619,6 +619,7 @@ protected:
      * where YEAR, EXTENDED_YEAR are not set.
      * The Gregorian implementation assumes a yearWoy in gregorian format, according to the current era.
      * @return the extended year, UCAL_EXTENDED_YEAR
+     * @internal
      */
     virtual int32_t handleGetExtendedYearFromWeekFields(int32_t yearWoy, int32_t woy);
 

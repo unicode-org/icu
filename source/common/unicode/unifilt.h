@@ -20,6 +20,7 @@ U_NAMESPACE_BEGIN
  * characters outside the range contextStart..contextLimit-1.  This
  * allows explicit matching by rules and UnicodeSets of text outside a
  * defined range.
+ * @draft ICU 3.0
  */
 #define U_ETHER ((UChar)0xFFFF)
 

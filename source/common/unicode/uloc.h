@@ -181,9 +181,9 @@
  * <P>
  * Concerning POSIX/RFC1766 Locale IDs, 
  *  the getLanguage/getCountry/getVariant/getName functions do understand
- * the POSIX type form of  language_COUNTRY.ENCODING@VARIANT
+ * the POSIX type form of  language_COUNTRY.ENCODING\@VARIANT
  * and if there is not an ICU-stype variant, uloc_getVariant() for example
- * will return the one listed after the @at sign. As well, the hyphen
+ * will return the one listed after the \@at sign. As well, the hyphen
  * "-" is recognized as a country/variant separator similarly to RFC1766.
  * So for example, "en-us" will be interpreted as en_US.  
  * As a result, uloc_getName() is far from a no-op, and will have the
@@ -192,7 +192,7 @@
  * Applications should call uloc_getName() at the point where a locale ID
  * is coming from an external source (user entry, OS, web browser)
  * and pass the resulting string to other ICU functions.  For example,
- * don't use de-de@EURO as an argument to resourcebundle.
+ * don't use de-de\@EURO as an argument to resourcebundle.
  *
  * @see UResourceBundle
  */
@@ -617,7 +617,7 @@ uloc_getDisplayVariant(const char* locale,
 
 /**
  * Gets the keyword name suitable for display for the specified locale.
- * E.g: for the locale string de_DE@collation=PHONEBOOK, this API gets the display 
+ * E.g: for the locale string de_DE\@collation=PHONEBOOK, this API gets the display 
  * string for the keyword collation. 
  * Usage:
  * <code>
@@ -663,7 +663,7 @@ uloc_getDisplayKeyword(const char* keyword,
                        UErrorCode* status);
 /**
  * Gets the value of the keyword suitable for display for the specified locale.
- * E.g: for the locale string de_DE@collation=PHONEBOOK, this API gets the display 
+ * E.g: for the locale string de_DE\@collation=PHONEBOOK, this API gets the display 
  * string for PHONEBOOK, in the display locale, when "collation" is specified as the keyword.
  *
  * @param locale            The locale to get the displayable variant code with. NULL may be used to specify the default.
@@ -786,7 +786,7 @@ uloc_getParent(const char*    localeID,
  * and if the components were in 'POSIX' format they are changed to
  * ICU format.  It does NOT map aliased names in any way.
  * See the top of this header file.
- * This API strips off the keyword part, so "de_DE@collation=phonebook" 
+ * This API strips off the keyword part, so "de_DE\@collation=phonebook" 
  * will become "de_DE". 
  * This API supports preflighting.
  *
