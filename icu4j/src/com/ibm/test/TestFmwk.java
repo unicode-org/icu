@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/Attic/TestFmwk.java,v $ 
- * $Date: 2001/11/28 17:41:09 $ 
- * $Revision: 1.21 $
+ * $Date: 2001/11/28 17:59:56 $ 
+ * $Revision: 1.22 $
  *
  *****************************************************************************************
  */
@@ -19,7 +19,8 @@ import java.util.Vector;
 import java.util.Comparator;
 import java.io.*;
 import java.text.*;
-
+import com.ibm.text.UTF16;
+import com.ibm.util.Utility;
 
 
 /**
@@ -312,8 +313,7 @@ public class TestFmwk implements TestLog {
 
     private static class ASCIIWriter extends PrintWriter {
         private Writer w;
-        private final char[] buffer = "\\u0000".toCharArray();
-        static final char[] digits = "0123456789abcdef".toCharArray();
+        private StringBuffer buffer = new StringBuffer();
 
         public ASCIIWriter(Writer w, boolean autoFlush) {
             super(w, autoFlush);
@@ -323,47 +323,30 @@ public class TestFmwk implements TestLog {
             super(os, autoFlush);
         }
 
-        private static final boolean isPrintable(int c) {
-            return (c >= '\u0020' && c <= '\u007e') || c == '\t' || c == '\r' || c == '\n';
-        }
-
-        private final void writePrintable(int c) {
-            buffer[2] = digits[(c >> 12) & 0x0f];
-            buffer[3] = digits[(c >>  8) & 0x0f];
-            buffer[4] = digits[(c >>  4) & 0x0f];
-            buffer[5] = digits[ c        & 0x0f];
-            super.write(buffer, 0, buffer.length);
-        }
-
         public void write(int c) {
             synchronized(lock) {
-                if (isPrintable(c)) {
-                    super.write(c);
+                buffer.setLength(0);
+                if (c!=13 && Utility.escapeUnprintable(buffer, c)) {
+                    super.write(buffer.toString());
                 } else {
-                    writePrintable(c);
+                    super.write(c);
                 }
             }
         }
         
         public void write(char[] buf, int off, int len) {
             synchronized (lock) {
-                int i = off;
-                int s = -1;
-                for (int e = off + len; i < e; ++i) {
-                    if (!isPrintable(buf[i])) {
-                        if (s != -1) {
-                            super.write(buf, s, i-s);
-                            s = -1;
-                        }
-                        writePrintable(buf[i]);
+                buffer.setLength(0);
+                int limit = off + len;
+                while (off < limit) {
+                    int c = UTF16.charAt(buf, 0, buf.length, off);
+                    off += UTF16.getCharCount(c);
+                    if (c!=13 && Utility.escapeUnprintable(buffer, c)) {
+                        super.write(buffer.toString());
+                        buffer.setLength(0);
                     } else {
-                        if (s == -1) {
-                            s = i;
-                        }
+                        super.write(c);
                     }
-                }
-                if (s != -1) {
-                    super.write(buf, s, i-s);
                 }
             }
         }
