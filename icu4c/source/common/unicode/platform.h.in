@@ -91,8 +91,14 @@
 #define U_HAVE_NAMESPACE @U_HAVE_NAMESPACE@
 #endif
 
-/* Determines the endianness of the platform */
+/* Determines the endianness of the platform
+   It's done this way in case multiple architectures are being built at once.
+   For example, Mac OS supports fat binaries, which can be both PPC and x86 based. */
+#if defined(BYTE_ORDER) && defined(BIG_ENDIAN)
+#define U_IS_BIG_ENDIAN (BYTE_ORDER == BIG_ENDIAN)
+#else
 #define U_IS_BIG_ENDIAN @U_IS_BIG_ENDIAN@
+#endif
 
 /* 1 or 0 to enable or disable threads.  If undefined, default is: enable threads. */
 #define ICU_USE_THREADS @ICU_USE_THREADS@
