@@ -1133,16 +1133,6 @@ doOpenChoice(const char *path, const char *type, const char *name,
         }
       } else {
         treeChar = uprv_strchr(path, U_TREE_SEPARATOR);
-#if (U_FILE_SEP_CHAR != U_TREE_SEPARATOR)
-	if(treeChar == NULL) {
-	  treeChar = uprv_strchr(path, U_FILE_SEP_CHAR);
-	}
-#endif
-#if (U_FILE_ALT_SEP_CHAR != U_TREE_SEPARATOR)
-	if(treeChar == NULL) {
-	  treeChar = uprv_strchr(path, U_FILE_ALT_SEP_CHAR);
-	}
-#endif
         if(treeChar) { 
           TinyString_append(&treeName, treeChar+1); /* following '/' */
           TinyString_appendn(&pkgName, path, treeChar-path);
@@ -1167,7 +1157,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
     tocEntrySuffixIndex = tocEntryName.length;
 
     if(treeName.s[0]) {
-      TinyString_append(&tocEntryName, U_TREE_SEPARATOR_STRING);
+      TinyString_append(&tocEntryName, U_TREE_ENTRY_SEP_STRING);
       TinyString_append(&tocEntryName, treeName.s);
 
       TinyString_append(&tocEntryPath, U_FILE_SEP_STRING);
@@ -1175,7 +1165,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
     }
 
     TinyString_append(&oldIndFileName, "_");
-    TinyString_append(&tocEntryName, U_TREE_SEPARATOR_STRING);
+    TinyString_append(&tocEntryName, U_TREE_ENTRY_SEP_STRING);
     TinyString_append(&tocEntryPath, U_FILE_SEP_STRING);
     TinyString_append(&oldIndFileName, name);
     TinyString_append(&tocEntryName, name);

@@ -495,7 +495,7 @@ addFile(const char *filename, UBool sourceTOC, UBool verbose) {
           length = (uint32_t)(uprv_strlen(filename) + 1 + uprv_strlen(options[6].value) + 1);
           s=allocString(length);
           uprv_strcpy(s, options[6].value);
-          uprv_strcat(s, U_TREE_SEPARATOR_STRING);
+          uprv_strcat(s, U_TREE_ENTRY_SEP_STRING);
           uprv_strcat(s, filename);
         } else {
           /* compatibility mode */
@@ -551,7 +551,7 @@ addFile(const char *filename, UBool sourceTOC, UBool verbose) {
           length = (uint32_t)(uprv_strlen(filename) + 1 + uprv_strlen(options[6].value) + 1);
           s=allocString(length);
           uprv_strcpy(s, options[6].value);
-          uprv_strcat(s, U_TREE_SEPARATOR_STRING);
+          uprv_strcat(s, U_TREE_ENTRY_SEP_STRING);
           uprv_strcat(s, filename);
         } else {
           length = (uint32_t)(uprv_strlen(filename) + 1);
@@ -612,14 +612,24 @@ pathToFullPath(const char *path) {
   uprv_strcat(fullPath, path);
   
   if(!embed) {
-    if(U_FILE_SEP_CHAR != U_TREE_SEPARATOR) {
-      /* replace tree separator (such as '/') with file sep char (such as ':' or '\\') */
-      for(;fullPath[n];n++) {
-        if(fullPath[n] == U_TREE_SEPARATOR) {
-          fullPath[n] = U_FILE_SEP_CHAR;
-        }
+#if (U_FILE_ALT_SEP_CHAR != U_TREE_ENTRY_SEP_CHAR)
+#if (U_FILE_ALT_SEP_CHAR != U_FILE_SEP_CHAR)
+    /* replace tree separator (such as '/') with file sep char (such as ':' or '\\') */
+    for(;fullPath[n];n++) {
+      if(fullPath[n] == U_FILE_ALT_SEP_CHAR) {
+        fullPath[n] = U_FILE_SEP_CHAR;
       }
     }
+#endif
+#endif
+#if (U_FILE_SEP_CHAR != U_TREE_ENTRY_SEP_CHAR)
+    /* replace tree separator (such as '/') with file sep char (such as ':' or '\\') */
+    for(;fullPath[n];n++) {
+      if(fullPath[n] == U_TREE_ENTRY_SEP_CHAR)
+        fullPath[n] = U_FILE_SEP_CHAR;
+      }
+    }
+#endif
   }
   return fullPath;
 }
@@ -634,15 +644,15 @@ static void
 fixDirToTreePath(char *s)
 {
   char *t;
-#if (U_FILE_SEP_CHAR != U_TREE_SEPARATOR)
+#if (U_FILE_SEP_CHAR != U_TREE_ENTRY_SEP_CHAR)
   for(t=s;t=uprv_strchr(t,U_FILE_SEP_CHAR);) {
-    *t = U_TREE_SEPARATOR;
+    *t = U_TREE_ENTRY_SEP_CHAR;
   }
 #endif
 #if (U_FILE_ALT_SEP_CHAR != U_FILE_SEP_CHAR)
-#if (U_FILE_ALT_SEP_CHAR != U_TREE_SEPARATOR)
+#if (U_FILE_ALT_SEP_CHAR != U_TREE_ENTRY_SEP_CHAR)
   for(t=s;t=uprv_strchr(t,U_FILE_ALT_SEP_CHAR);) {
-    *t = U_TREE_SEPARATOR;
+    *t = U_TREE_ENTRY_SEP_CHAR;
   }
 #endif
 #endif

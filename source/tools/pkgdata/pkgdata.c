@@ -584,7 +584,7 @@ static void loadLists(UPKGOptions *o, UErrorCode *status)
               const char *theBase = findBasename(s);
               if(uprv_strstr(theBase, ".crs")) {
                 uprv_strcpy(tmp, "coll");
-                uprv_strcat(tmp, U_TREE_SEPARATOR_STRING);
+                uprv_strcat(tmp, U_TREE_ENTRY_SEP_STRING);
                 uprv_strcat(tmp, theBase);
                 uprv_strcpy(tmp+uprv_strlen(tmp)-uprv_strlen(".crs"),".res");
                 o->files = pkg_appendToList(o->files, &tail, uprv_strdup(tmp));
