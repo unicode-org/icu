@@ -13,23 +13,45 @@
 
 U_NAMESPACE_BEGIN
 
-UVector::UVector(UErrorCode &status, int32_t initialCapacity) :
+#define DEFUALT_CAPACITY 8
+
+UVector::UVector(UErrorCode &status) :
     count(0),
     capacity(0),
     elements(0),
     deleter(0),
-    comparer(0) {
+    comparer(0)
+{
+    _init(DEFUALT_CAPACITY, status);
+}
 
+UVector::UVector(int32_t initialCapacity, UErrorCode &status) :
+    count(0),
+    capacity(0),
+    elements(0),
+    deleter(0),
+    comparer(0)
+{
     _init(initialCapacity, status);
 }
 
-UVector::UVector(UObjectDeleter d, UKeyComparator c, UErrorCode &status, int32_t initialCapacity) :
+UVector::UVector(UObjectDeleter d, UKeyComparator c, UErrorCode &status) :
     count(0),
     capacity(0),
     elements(0),
     deleter(d),
-    comparer(c) {
-   
+    comparer(c)
+{
+    _init(DEFUALT_CAPACITY, status);
+}
+
+UVector::UVector(UObjectDeleter d, UKeyComparator c, int32_t initialCapacity, UErrorCode &status) :
+    count(0),
+    capacity(0),
+    elements(0),
+    deleter(d),
+    comparer(c)
+{
     _init(initialCapacity, status);
 }
 
@@ -237,12 +259,24 @@ void* UVector::orphanElementAt(int32_t index) {
     return e;
 }
 
-UStack::UStack(UErrorCode &status, int32_t initialCapacity) :
-    UVector(status, initialCapacity) {
+UStack::UStack(UErrorCode &status) :
+    UVector(status)
+{
 }
 
-UStack::UStack(UObjectDeleter d, UKeyComparator c, UErrorCode &status, int32_t initialCapacity) :
-    UVector(d, c, status, initialCapacity) {
+UStack::UStack(int32_t initialCapacity, UErrorCode &status) :
+    UVector(initialCapacity, status)
+{
+}
+
+UStack::UStack(UObjectDeleter d, UKeyComparator c, UErrorCode &status) :
+    UVector(d, c, status)
+{
+}
+
+UStack::UStack(UObjectDeleter d, UKeyComparator c, int32_t initialCapacity, UErrorCode &status) :
+    UVector(d, c, initialCapacity, status)
+{
 }
 
 void* UStack::pop(void) {
