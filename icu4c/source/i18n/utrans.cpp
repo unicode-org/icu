@@ -39,8 +39,8 @@ class ReplaceableGlue : public Replaceable {
 
 public:
 
-    ReplaceableGlue(UReplaceable *rep,
-                    UReplaceableCallbacks *func);
+    ReplaceableGlue(UReplaceable *replaceable,
+                    UReplaceableCallbacks *funcCallback);
 
     virtual ~ReplaceableGlue();
 
@@ -58,10 +58,10 @@ public:
 };
 
 
-ReplaceableGlue::ReplaceableGlue(UReplaceable *rep,
-                                 UReplaceableCallbacks *func) {
-    this->rep = rep;
-    this->func = func;
+ReplaceableGlue::ReplaceableGlue(UReplaceable *replaceable,
+                                 UReplaceableCallbacks *funcCallback) {
+    this->rep = replaceable;
+    this->func = funcCallback;
     buf = 0;
     bufLen = 0;
 }
