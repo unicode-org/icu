@@ -24,6 +24,8 @@
 #include "ucnv_bld.h"
 #include "uset_imp.h"
 
+#if !UCONFIG_NO_CONVERSION
+
 U_CAPI void U_EXPORT2
 ucnv_getUnicodeSet(const UConverter *cnv,
                    USet *setFillIn,
@@ -60,3 +62,5 @@ ucnv_getUnicodeSet(const UConverter *cnv,
         cnv->sharedData->impl->getUnicodeSet(cnv, &sa, whichSet, pErrorCode);
     }
 }
+
+#endif
