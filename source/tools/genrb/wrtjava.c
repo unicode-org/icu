@@ -549,10 +549,10 @@ bin_write_java( struct SResource *res, UErrorCode *status) {
             FileStream* datFile = NULL;
             if(uprv_strcmp(srBundle->fKeys+res->fKey,"BreakDictionaryData")==0){
                 uprv_strcat(fileName,"BreakDictionaryData");
-                ext = ".bin";
+                ext = ".brk";
             }else{
                 uprv_strcat(fileName,"CollationElements");
-                ext=".res";
+                ext=".col";
             }
             if(uprv_strcmp(srBundle->fLocale,"root")!=0){
                 uprv_strcat(fileName,"_");
