@@ -368,7 +368,7 @@ void TestMessageFormat::testStaticFormat(/* char* par */)
         return;
     }
 
-    static const UnicodeString expected(
+    const UnicodeString expected(
             "At 12:20:00 PM on Aug 8, 1997, there was a disturbance in the Force on planet 7.", "");
     if (result != expected) {
         errln("TestMessageFormat::testStaticFormat failed on test");
