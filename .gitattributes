@@ -48,21 +48,7 @@ README text !eol
 *.spp -text
 *.tri2 -text
 
-icu4c/source/data/brkitr/charBE.brk -text
-icu4c/source/data/brkitr/charLE.brk -text
-icu4c/source/data/brkitr/lineBE.brk -text
-icu4c/source/data/brkitr/lineLE.brk -text
-icu4c/source/data/brkitr/line_thBE.brk -text
-icu4c/source/data/brkitr/line_thLE.brk -text
-icu4c/source/data/brkitr/sentBE.brk -text
-icu4c/source/data/brkitr/sentLE.brk -text
 icu4c/source/data/brkitr/thaidict.brk -text
-icu4c/source/data/brkitr/titleBE.brk -text
-icu4c/source/data/brkitr/titleLE.brk -text
-icu4c/source/data/brkitr/wordBE.brk -text
-icu4c/source/data/brkitr/wordLE.brk -text
-icu4c/source/data/brkitr/word_thBE.brk -text
-icu4c/source/data/brkitr/word_thLE.brk -text
 icu4c/source/data/unidata/UCARules.txt -text
 icu4c/source/samples/ucnv/data02.bin -text
 icu4c/source/test/testdata/importtest.bin -text
