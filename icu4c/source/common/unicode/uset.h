@@ -135,6 +135,8 @@ uset_openPattern(const UChar* pattern, int32_t patternLength,
  * @param pattern a string specifying what characters are in the set
  * @param patternLength the length of the pattern, or -1 if null
  * terminated
+ * @param options bitmask for options to apply to the pattern.
+ * Valid options are USET_IGNORE_SPACE and USET_CASE_INSENSITIVE.
  * @param ec the error code
  * @draft ICU 2.4
  */
