@@ -155,6 +155,10 @@ my %NAME_MAP = (
      Han_Pinyin             => $JAVA_ONLY,
      Kanji_English          => $JAVA_ONLY,
      Kanji_OnRomaji         => $JAVA_ONLY,
+     
+     Latin_NumericPinyin    => "Latn_NPinyn",
+     Tone_Digit             => "Tone_Digit",
+     Han_Spacedhan          => "Hani_SpHan",
      );
 
 my ($x,$x,$x,$x,$x,$THIS_YEAR) = localtime();
@@ -259,7 +263,7 @@ END
         
     while (<JAVA_INDEX>) {
         # ignore CVS keyword substitutions
-        next if /[$](Source|Revision|Date)/;
+        next if /\$(Source|Revision|Date)/;
 
         # we have printed out the copyright info ... ignore one in Java version
         next if /Copyright/ ;
@@ -371,7 +375,7 @@ sub file {
     while (<IN>) {
         my $raw = $_;
         # ignore CVS keyword substitutions
-        next if /[$](Source|Revision|Date)/;
+        next if /\$(Source|Revision|Date)/;
 
         # we have printed out the copyright info ... ignore one in Java version
         next if /Copyright/ ;
