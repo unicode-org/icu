@@ -1223,19 +1223,19 @@ void TimeZoneTest::TestHistorical() {
     } DATA[] = {
         // Add transition points (before/after) as desired to test historical
         // behavior.
-        "America/Los_Angeles", 638963999, -8*H, // Sun Apr 01 01:59:59 GMT-08:00 1990
-        "America/Los_Angeles", 638964000, -7*H, // Sun Apr 01 03:00:00 GMT-07:00 1990
-        "America/Los_Angeles", 657104399, -7*H, // Sun Oct 28 01:59:59 GMT-07:00 1990
-        "America/Los_Angeles", 657104400, -8*H, // Sun Oct 28 01:00:00 GMT-08:00 1990
-        "America/Goose_Bay", -116445601, -4*H, // Sun Apr 24 01:59:59 GMT-04:00 1966
-        "America/Goose_Bay", -116445600, -3*H, // Sun Apr 24 03:00:00 GMT-03:00 1966
-        "America/Goose_Bay", -100119601, -3*H, // Sun Oct 30 01:59:59 GMT-03:00 1966
-        "America/Goose_Bay", -100119600, -4*H, // Sun Oct 30 01:00:00 GMT-04:00 1966
-        "America/Goose_Bay", -84391201, -4*H, // Sun Apr 30 01:59:59 GMT-04:00 1967
-        "America/Goose_Bay", -84391200, -3*H, // Sun Apr 30 03:00:00 GMT-03:00 1967
-        "America/Goose_Bay", -68670001, -3*H, // Sun Oct 29 01:59:59 GMT-03:00 1967
-        "America/Goose_Bay", -68670000, -4*H, // Sun Oct 29 01:00:00 GMT-04:00 1967
-        0, 0, 0
+        {"America/Los_Angeles", 638963999, -8*H}, // Sun Apr 01 01:59:59 GMT-08:00 1990
+        {"America/Los_Angeles", 638964000, -7*H}, // Sun Apr 01 03:00:00 GMT-07:00 1990
+        {"America/Los_Angeles", 657104399, -7*H}, // Sun Oct 28 01:59:59 GMT-07:00 1990
+        {"America/Los_Angeles", 657104400, -8*H}, // Sun Oct 28 01:00:00 GMT-08:00 1990
+        {"America/Goose_Bay", -116445601, -4*H}, // Sun Apr 24 01:59:59 GMT-04:00 1966
+        {"America/Goose_Bay", -116445600, -3*H}, // Sun Apr 24 03:00:00 GMT-03:00 1966
+        {"America/Goose_Bay", -100119601, -3*H}, // Sun Oct 30 01:59:59 GMT-03:00 1966
+        {"America/Goose_Bay", -100119600, -4*H}, // Sun Oct 30 01:00:00 GMT-04:00 1966
+        {"America/Goose_Bay", -84391201, -4*H}, // Sun Apr 30 01:59:59 GMT-04:00 1967
+        {"America/Goose_Bay", -84391200, -3*H}, // Sun Apr 30 03:00:00 GMT-03:00 1967
+        {"America/Goose_Bay", -68670001, -3*H}, // Sun Oct 29 01:59:59 GMT-03:00 1967
+        {"America/Goose_Bay", -68670000, -4*H}, // Sun Oct 29 01:00:00 GMT-04:00 1967
+        {0, 0, 0}
     };
     
     for (int32_t i=0; DATA[i].id!=0; ++i) {
