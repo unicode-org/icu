@@ -5,8 +5,8 @@
  ********************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu/source/test/intltest/canittst.cpp,v $ 
- * $Date: 2002/03/19 07:18:06 $ 
- * $Revision: 1.1 $
+ * $Date: 2002/03/19 07:52:44 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  * @author Mark E. Davis
@@ -142,8 +142,9 @@ void CanonicalIteratorTest::TestBasic() {
 
     Hashtable *permutations = new Hashtable(FALSE, status);
     permutations->setValueDeleter(uhash_deleteUnicodeString);
+    UnicodeString toPermute("ABC");
 
-    CanonicalIterator::permute(UnicodeString("ABC"), FALSE, permutations, status);
+    CanonicalIterator::permute(toPermute, FALSE, permutations, status);
 
     logln("testing permutation");
   
