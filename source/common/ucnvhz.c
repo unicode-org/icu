@@ -168,7 +168,7 @@ static void _HZReset(UConverter *cnv){
 U_CFUNC void UConverter_toUnicode_HZ(UConverterToUnicodeArgs *args,
                                               UErrorCode* err){
     char tempBuf[3];
-    char* pBuf;
+    const char* pBuf;
     const char *mySource = ( char *) args->source;
     UChar *myTarget = args->target;
     char *tempLimit = &tempBuf[2]+1; 
@@ -239,14 +239,23 @@ U_CFUNC void UConverter_toUnicode_HZ(UConverterToUnicodeArgs *args,
                 case UCNV_CLOSE_BRACE:
                     if(args->converter->mode == UCNV_TILDE){
                         args->converter->mode=0;
-                         myData->isStateDBCS = FALSE;
+                        myData->isStateDBCS = FALSE;
                         continue;
                     }
                     else{
                         break;
                     }
                 
-                default: /*not expected*/
+                default: 
+                    /* if the first byte is equal to TILDE and the trail byte
+                     * is not a valid byte then it is an error condition
+                     */
+                    if(args->converter->mode == UCNV_TILDE){
+                        args->converter->mode=0;
+                        mySourceChar= (UChar)(((UCNV_TILDE+0x80) << 8) | ((mySourceChar & 0x00ff)+0x80));
+                        goto SAVE_STATE;
+                    }
+                    
                     break;
 
             }
@@ -339,8 +348,7 @@ SAVE_STATE:
 U_CFUNC void UConverter_toUnicode_HZ_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                                                             UErrorCode* err){
     char tempBuf[3];
-
-    char* pBuf;
+    const char* pBuf;
     const char *mySource = ( char *) args->source;
     UChar *myTarget = args->target;
     char *tempLimit = &tempBuf[3]; 
@@ -418,7 +426,16 @@ U_CFUNC void UConverter_toUnicode_HZ_OFFSETS_LOGIC(UConverterToUnicodeArgs *args
                         break;
                     }
                 
-                default: /*not expected*/
+                default:
+                     /* if the first byte is equal to TILDE and the trail byte
+                     * is not a valid byte then it is an error condition
+                     */
+                    if(args->converter->mode == UCNV_TILDE){
+                        args->converter->mode=0;
+                        mySourceChar= (UChar)(((UCNV_TILDE+0x80) << 8) | ((mySourceChar & 0x00ff)+0x80));
+                        goto SAVE_STATE;
+                    }
+                    
                     break;
 
             }
@@ -641,7 +658,6 @@ U_CFUNC void UConverter_fromUnicode_HZ(UConverterFromUnicodeArgs *args, UErrorCo
             oldIsTargetUCharDBCS = isTargetUCharDBCS;
             if(mySourceChar == 0x7E){
                 concatEscape(args, &myTargetIndex, &targetLength,"\x7E\x7E",err,2);
-                TEST_ERROR_CONDITION(args,myTargetIndex, mySourceIndex,	isTargetUCharDBCS,myConverterData, err);
                 continue;
             }
             else{
@@ -656,6 +672,7 @@ U_CFUNC void UConverter_fromUnicode_HZ(UConverterFromUnicodeArgs *args, UErrorCo
                 *err =U_INVALID_CHAR_FOUND;
                 goto CALLBACK;
             }
+            /* DB haracters with high bit set to 1 are expected */
             if(((targetUniChar & 0x8080) != 0x8080)&& length==2){
                 reason =UCNV_ILLEGAL;
                 *err =U_INVALID_CHAR_FOUND;
@@ -671,13 +688,11 @@ U_CFUNC void UConverter_fromUnicode_HZ(UConverterFromUnicodeArgs *args, UErrorCo
                     if(!isTargetUCharDBCS){
                         concatEscape(args, &myTargetIndex, &targetLength, SB_ESCAPE,err, 2);
                         myConverterData->isEscapeAppended =isEscapeAppended =TRUE;
-            
-                        TEST_ERROR_CONDITION(args,myTargetIndex, mySourceIndex,	isTargetUCharDBCS,myConverterData, err);
                     }
                     else{ /* Shifting from a single byte to double byte mode*/
                         concatEscape(args, &myTargetIndex, &targetLength, DB_ESCAPE,err, 2);
                         myConverterData->isEscapeAppended =isEscapeAppended =TRUE;
-                        TEST_ERROR_CONDITION(args,myTargetIndex, mySourceIndex,	isTargetUCharDBCS,myConverterData, err);
+                        
                     }
                 }
             
