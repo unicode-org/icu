@@ -174,13 +174,17 @@ static void freeUString(void* ustr) {
     uprv_free(ustr);
 }
 
-static int32_t hashUString(const void* ustr) {
-    return uhash_hashUChars(((struct UString*)ustr)->fChars);
+static int32_t hashUString(const UHashKey ustr) {
+    UHashKey key;
+    key.pointer = ((struct UString*)ustr.pointer)->fChars;
+    return uhash_hashUChars(key);
 }
 
-static UBool compareUString(const void* ustr1, const void* ustr2) {
-    return uhash_compareUChars(((struct UString*)ustr1)->fChars,
-                               ((struct UString*)ustr2)->fChars);
+static UBool compareUString(const UHashKey ustr1, const UHashKey ustr2) {
+    UHashKey key1, key2;
+    key1.pointer = ((struct UString*)ustr1.pointer)->fChars;
+    key2.pointer = ((struct UString*)ustr2.pointer)->fChars;
+    return uhash_compareUChars(key1, key2);
 }
 
 static char *getModificationData(UCHARBUF* buf, UErrorCode *status) {
