@@ -125,7 +125,7 @@ public final class CanonicalIterator {
 
         int i = UTF16.findOffsetFromCodePoint(source, 1);
 
-        for (; i < source.length(); i += UTF16.getCharCount(i)) {
+        for (; i < source.length(); i += UTF16.getCharCount(cp)) {
             cp = UTF16.charAt(source, i);
             if (NormalizerImpl.isCanonSafeStart(cp)) {
                 list.add(source.substring(start, i)); // add up to i
