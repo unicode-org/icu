@@ -810,15 +810,50 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
 
             fp = (REStackFrame *)fStack->popFrame(frameSize);
 
-            // TODO:  support for multi-line mode.
             break;
 
 
-        case URX_CARET:                    //  ^, test for start of line
+         case URX_DOLLAR_M:                //  $, test for End of line in multi-line mode
+             {
+                 if (fp->fInputIdx >= inputLen) {
+                     // We really are at the end of input.  Success.
+                     break;
+                 }
+                 // If we are positioned just before a new-line , succeed.
+                 // It makes no difference where the new-line is within the input.
+                 UChar32 c = inputBuf[fp->fInputIdx];
+                 if (c == 0x0a || c==0x0d || c==0x0c || c==0x85 ||c==0x2028 || c==0x2029) {
+                     break;                         // At new-line at end of input. Success
+                 }
+                 // not at a new line.  Fail.
+                 fp = (REStackFrame *)fStack->popFrame(frameSize);
+             }
+             break;
+
+
+       case URX_CARET:                    //  ^, test for start of line
             if (fp->fInputIdx != 0) {
                 fp = (REStackFrame *)fStack->popFrame(frameSize);
-            }                              // TODO:  support for multi-line mode.
+            }           
             break;
+
+
+       case URX_CARET_M:                   //  ^, test for start of line in mulit-line mode
+           {
+               if (fp->fInputIdx == 0) {
+                   // We are at the start input.  Success.
+                   break;
+               }
+               // Check the character just before the current pos.
+               UChar  c = inputBuf[fp->fInputIdx - 1]; 
+               if (c == 0x0a || c==0x0d || c==0x0c || c==0x85 ||c==0x2028 || c==0x2029) {
+                   //  It's a new-line.  ^ is true.  Success.
+                   break;                        
+               }
+               // Not at the start of a line.  Fail.
+               fp = (REStackFrame *)fStack->popFrame(frameSize);
+           }             
+           break;
 
 
         case URX_BACKSLASH_A:          // Test for start of input
@@ -966,10 +1001,10 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
 
         case URX_DOTANY:
             {
-                // . matches anything
+                // . matches anything, but stops at end-of-line.
                 if (fp->fInputIdx >= inputLen) {
                     // At end of input.  Match failed.  Backtrack out.
-                        fp = (REStackFrame *)fStack->popFrame(frameSize);
+                    fp = (REStackFrame *)fStack->popFrame(frameSize);
                     break;
                 }
                 // There is input left.  Advance over one char, unless we've hit end-of-line
@@ -988,20 +1023,20 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
         case URX_DOTANY_ALL:
             {
                 // ., in dot-matches-all (including new lines) mode
-                // . matches anything
                 if (fp->fInputIdx >= inputLen) {
                     // At end of input.  Match failed.  Backtrack out.
                     fp = (REStackFrame *)fStack->popFrame(frameSize);
                     break;
                 }
-                // There is input left.  Advance over one char, unless we've hit end-of-line
-                UChar32 c = fInput->char32At(fp->fInputIdx);
-                fp->fInputIdx = fInput->moveIndex32(fp->fInputIdx, 1);
-                if (c == 0x0a || c==0x0d || c==0x0c || c==0x85 ||c==0x2028 || c==0x2029) {
+                // There is input left.  Advance over one char, except if we are
+                //   at a cr/lf, advance over both of them.
+                UChar32 c; 
+                U16_NEXT(inputBuf, fp->fInputIdx, inputLen, c);
+                if (c==0x0d) {
                     // In the case of a CR/LF, we need to advance over both.
-                    UChar32 nextc = fInput->char32At(fp->fInputIdx);
-                    if (c == 0x0d && nextc == 0x0a) {
-                        fp->fInputIdx = fInput->moveIndex32(fp->fInputIdx, 1);
+                    UChar nextc = inputBuf[fp->fInputIdx];
+                    if (nextc == 0x0a) {
+                        fp->fInputIdx++;
                     }
                 }
             }

@@ -117,9 +117,11 @@ enum {
                                //   First Operand:  Index of start of string in string literals
                                //   Second Operand (next word in compiled code):
                                //     the length of the string.
-     URX_BACKREF_I     = 41    // Case insensitive back reference.
+     URX_BACKREF_I     = 41,   // Case insensitive back reference.
                                //   Parameter is the index of the
                                //   capture group variables in the state stack frame.
+     URX_DOLLAR_M      = 42,   // $ in multi-line mode.
+     URX_CARET_M       = 43    // ^ in multi-line mode.
 };           
 
 // Keep this list of opcode names in sync with the above enum
@@ -166,7 +168,9 @@ enum {
         "LA_END",              \
         "ONECHAR_I",           \
         "STRING_I",            \
-        "BACKREF_I"
+        "BACKREF_I",           \
+        "DOLLAR_M",            \
+        "CARET_M"
 
 //
 //  Convenience macros for assembling and disassembling a compiled operation.
