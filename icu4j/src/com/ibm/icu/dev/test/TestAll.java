@@ -5,14 +5,15 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestAll.java,v $ 
- * $Date: 2002/11/06 19:50:39 $ 
- * $Revision: 1.42 $
+ * $Date: 2002/11/25 22:11:47 $ 
+ * $Revision: 1.43 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.dev.test;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.bigdec.DiagBigDecimal;
+import java.util.TimeZone;
 
 /**
  * Top level test used to run all other tests as a batch.
@@ -21,6 +22,7 @@ import com.ibm.icu.dev.test.bigdec.DiagBigDecimal;
 public class TestAll extends TestFmwk {
 
     public static void main(String[] args) throws Exception {
+        TimeZone.setDefault(TimeZone.getTimeZone("PST"));
         new TestAll().run(args);
     }
 
