@@ -18,17 +18,16 @@
 #include "unicode/ustring.h"
 #include "unicode/normlzr.h"
 #include "unicode/unorm.h"
+#include "unicode/udata.h"
+
 #include "cpputils.h"
 #include "cstring.h"
+#include "ucmp32.h"
+#include "umutex.h"
 
 #include <stdio.h>
 
-#include "ucmp32.h"
-#include "tcoldata.h"
-#include "tables.h"
 
-#include "unicode/udata.h"
-#include "umutex.h"
 
 static UCollator* UCA = NULL;
 static const InverseTableHeader* invUCA = NULL;
@@ -122,13 +121,13 @@ int32_t ucol_inv_findCE(uint32_t CE, uint32_t SecondCE) {
   }
 }
 
-static uint32_t strengthMask[3] = {
+static uint32_t strengthMask[UCOL_CE_STRENGTH_LIMIT] = {
   0xFFFF0000,
   0xFFFFFF00,
   0xFFFFFFFF
 };
 
-static uint32_t strengthShift[3] = {
+static uint32_t strengthShift[UCOL_CE_STRENGTH_LIMIT] = {
   16,
   8,
   0
@@ -223,19 +222,23 @@ U_CFUNC void ucol_inv_getGapPositions(UColTokListHeader *lh) {
   }
 
   for(;;) {
-    if((lh->pos[tokStrength] = ucol_inv_getNext(lh, tokStrength)) >= 0) {
-      lh->fStrToken[tokStrength] = tok;
-    } else {
-      /* Error */
-      fprintf(stderr, "Error! couldn't find the CE!\n");
+    if(tokStrength < UCOL_CE_STRENGTH_LIMIT) {
+      if((lh->pos[tokStrength] = ucol_inv_getNext(lh, tokStrength)) >= 0) {
+        lh->fStrToken[tokStrength] = tok;
+      } else {
+        /* Error */
+        fprintf(stderr, "Error! couldn't find the CE!\n");
+      }
     }
 
     while(tok != NULL && tok->strength >= tokStrength) {
-      lh->lStrToken[tokStrength] = tok;
+      if(tokStrength < UCOL_CE_STRENGTH_LIMIT) {
+        lh->lStrToken[tokStrength] = tok;
+      }
       tok = tok->next;
     }
 
-    if(tokStrength < 2) {
+    if(tokStrength < UCOL_CE_STRENGTH_LIMIT-1) {
       /* check if previous interval is the same and merge the intervals if it is so */
       if(lh->pos[tokStrength] == lh->pos[tokStrength+1]) {
         lh->fStrToken[tokStrength] = lh->fStrToken[tokStrength+1];
@@ -311,6 +314,7 @@ ucol_open(    const    char         *loc,
    u_versionFromString(trVInfo,tVer );
    result->trVersion=(uint8_t)trVInfo[0]; 
   }
+  ures_close(resB);
   ures_close(binary);
 
   return result;
@@ -457,16 +461,16 @@ U_CFUNC void ucol_doCE(uint32_t *CEparts, UColToken *tok) {
 }
 
 U_CFUNC void ucol_initBuffers(UColTokListHeader *lh, bufs *b, UErrorCode *status) {
-  ucolCEGenerator Gens[3];
 
-  uint32_t CEparts[0x10];
+  ucolCEGenerator Gens[UCOL_CE_STRENGTH_LIMIT];
+  uint32_t CEparts[UCOL_CE_STRENGTH_LIMIT];
 
   uint32_t i = 0;
 
   UColToken *tok = lh->last[UCOL_TOK_POLARITY_POSITIVE];
-  uint32_t t[3];
+  uint32_t t[UCOL_STRENGTH_LIMIT];
 
-  for(i=0; i<0x10; i++) {
+  for(i=0; i<UCOL_STRENGTH_LIMIT; i++) {
     t[i] = 0;
   }
 
@@ -513,13 +517,29 @@ U_CFUNC void ucol_initBuffers(UColTokListHeader *lh, bufs *b, UErrorCode *status
     fprintf(stderr, "gapsHi[%i] [%08X %08X %08X]\n", j, lh->gapsHi[j*3], lh->gapsHi[j*3+1], lh->gapsHi[j*3+2]);
   }
 
+
+  /* I strongly believe that this code can be refactored and simplified. */
+  /* have to do CE generation now, so let this soak a little bit */
+
   tok = lh->first[UCOL_TOK_POLARITY_POSITIVE];
   uint32_t fStrength = tok->strength;
 
   /* Treat starting identicals */
   /* &0 = nula = zero */
+  if(tok != NULL && fStrength == UCOL_IDENTICAL) {
+    CEparts[0] = (lh->baseCE & UCOL_PRIMARYMASK) | (lh->baseContCE & UCOL_PRIMARYMASK) >> 16;
+    CEparts[1] = (lh->baseCE & UCOL_SECONDARYMASK) << 16 | (lh->baseContCE & UCOL_SECONDARYMASK) << 8;
+    CEparts[2] = (UCOL_TERTIARYORDER(lh->baseCE)) << 24 | (UCOL_TERTIARYORDER(lh->baseContCE)) << 16;
 
-  if(tok != NULL && fStrength == 2) { /* starting with tertiary */
+    while(tok != NULL && tok->strength == UCOL_IDENTICAL) {
+      ucol_doCE(CEparts, tok);
+      tok = tok->next;
+    }
+
+  }
+
+  if(tok != NULL && tok->strength == UCOL_TERTIARY) { /* starting with tertiary */
+    fStrength = tok->strength;
     if(lh->pos[fStrength] == -1) {
       while(lh->pos[fStrength] == -1 && fStrength > 0) {
         fStrength--;
@@ -529,26 +549,23 @@ U_CFUNC void ucol_initBuffers(UColTokListHeader *lh, bufs *b, UErrorCode *status
         exit(-1);
       }
     }
-
     CEparts[0] = lh->gapsLo[fStrength*3];
     CEparts[1] = lh->gapsLo[fStrength*3+1];
-    CEparts[2] = ucol_getCEGenerator(&Gens[2], lh->gapsLo[fStrength*3+2], lh->gapsHi[fStrength*3+2], tok->toInsert);
-    
-    ucol_doCE(CEparts, tok);
+    CEparts[2] = ucol_getCEGenerator(&Gens[2], lh->gapsLo[fStrength*3+2], lh->gapsHi[fStrength*3+2], tok->toInsert); 
 
-    while(tok != NULL && tok->strength == 2) {
+    while(tok != NULL && tok->strength >= UCOL_TERTIARY) {
+      ucol_doCE(CEparts, tok);
       tok = tok->next;
-    /* Treat identicals in starting tertiaries*/
-    /* &0, <funny_tertiary_different_zero> = FunnyZero */
 
-      if(tok->strength == 2) {
+      /* Treat identicals in starting tertiaries by NOT changing the tertiary value */
+      if(tok != NULL && tok->strength == UCOL_TERTIARY) {
         CEparts[2] = ucol_getNextGenerated(&Gens[2]);
-        ucol_doCE(CEparts, tok);
       }
     }     
+
   }
 
-  if(tok != NULL && tok->strength == 1) { /* secondaries */
+  if(tok != NULL && tok->strength == UCOL_SECONDARY) { /* secondaries */
     fStrength = tok->strength;
     if(lh->pos[1] == -1) {
       fStrength = 0;
@@ -563,7 +580,7 @@ U_CFUNC void ucol_initBuffers(UColTokListHeader *lh, bufs *b, UErrorCode *status
 
       CEparts[0] = lh->gapsLo[fStrength*3];
       CEparts[1] = ucol_getCEGenerator(&Gens[1], lh->gapsLo[fStrength*3+1], lh->gapsHi[fStrength*3+1], tok->toInsert);
-      if(tok->next->strength == 2) {
+      if(tok->next->strength == UCOL_TERTIARY) {
         CEparts[2] = ucol_getCEGenerator(&Gens[2], 0x02000000, 0xFF000000, tok->next->toInsert);
       } else {
         CEparts[2] = 0x03000000;
@@ -573,30 +590,34 @@ U_CFUNC void ucol_initBuffers(UColTokListHeader *lh, bufs *b, UErrorCode *status
       tok = tok->next;
 
       while(tok->next != NULL && tok->next->strength > 0) {
-        if(tok->strength == 2) {
+        if(tok->strength == UCOL_TERTIARY) {
           CEparts[2] = ucol_getNextGenerated(&Gens[2]);
           ucol_doCE(CEparts, tok);
-        } else if(tok->strength == 1) {
+        } else if(tok->strength == UCOL_SECONDARY) {
           CEparts[1] = ucol_getNextGenerated(&Gens[1]);
-          if(tok->next->strength == 2) {
-            CEparts[2] = ucol_getCEGenerator(&Gens[2], 0x02000000, 0xFF000000, tok->next->toInsert);
-          } else {
+          if(tok->next->strength == UCOL_SECONDARY) {
             CEparts[2] = 0x03000000;
+          } else {
+            CEparts[2] = ucol_getCEGenerator(&Gens[2], 0x02000000, 0xFF000000, tok->next->toInsert);
           }
+          ucol_doCE(CEparts, tok);
+        } else { /* Strength is identical */
           ucol_doCE(CEparts, tok);
         }
         tok = tok->next;
       }
 
-      if(tok->strength == 2) {
+      /* This is the last token in rule */
+      if(tok->strength == UCOL_TERTIARY) {
         CEparts[2] = ucol_getNextGenerated(&Gens[2]);
-      } else if(tok->strength == 1) {
+      } else if(tok->strength == UCOL_SECONDARY) {
         CEparts[1] = ucol_getNextGenerated(&Gens[1]);
         CEparts[2] = 0x03000000;
       }
+      /* if the strength is identical, it will just repeat the last CE value */
       ucol_doCE(CEparts, tok);
       tok = tok->next;
-    } else {
+    } else { /* only one secondary at the end of the rule fragment */
       CEparts[0] = lh->gapsLo[fStrength*3];
       CEparts[1] = lh->gapsLo[fStrength*3+1];
       CEparts[2] = lh->gapsLo[fStrength*3+2];
@@ -612,18 +633,21 @@ U_CFUNC void ucol_initBuffers(UColTokListHeader *lh, bufs *b, UErrorCode *status
         exit(-1);
     }
 
+    /* what if the next token is identical??? */
+    /* How should the things be set up */
+
     if(tok->next != NULL) {
       CEparts[0] = ucol_getCEGenerator(&Gens[0], lh->gapsLo[0], lh->gapsHi[0], tok->toInsert);
-      if(tok->next->strength == 0) {
+      if(tok->next->strength == UCOL_PRIMARY) {
         CEparts[1] = 0x03000000;
         CEparts[2] = 0x03000000;
-      } else {
-        if(tok->next->strength == 1) {
+      } else { /* Secondaries will also be generated */
+        CEparts[1] = ucol_getCEGenerator(&Gens[1], 0x02000000, 0xFF000000, tok->next->toInsert);
+        if(tok->next->strength == UCOL_SECONDARY) {
           CEparts[2] = 0x03000000;
         } else {
           CEparts[2] = ucol_getCEGenerator(&Gens[2], 0x02000000, 0xFF000000, tok->next->toInsert);
         }
-        CEparts[1] = ucol_getCEGenerator(&Gens[1], 0x02000000, 0xFF000000, tok->next->toInsert);
       }
 
       ucol_doCE(CEparts, tok);
@@ -663,20 +687,21 @@ U_CFUNC void ucol_initBuffers(UColTokListHeader *lh, bufs *b, UErrorCode *status
         }
         tok = tok->next;
       }
-
-      if(tok->strength == 2) {
+      
+      /* OK, there are no next tokens, we just have to wrap up with the last one */
+      if(tok->strength == UCOL_TERTIARY) {
         CEparts[2] = ucol_getNextGenerated(&Gens[2]);
-      } else if(tok->strength == 1) {
+      } else if(tok->strength == UCOL_SECONDARY) {
         CEparts[1] = ucol_getNextGenerated(&Gens[1]);
         CEparts[2] = 0x03000000;
-      } else {
+      } else if(tok->strength == UCOL_PRIMARY) {
         CEparts[0] = ucol_getNextGenerated(&Gens[0]);
         CEparts[1] = 0x03000000;
         CEparts[2] = 0x03000000;
-      }
+      } /* else it is identical and do nothing */
       ucol_doCE(CEparts, tok);
 
-    } else {
+    } else { /* there is only one primary in this sequence and it ends with it */
       CEparts[0] = lh->gapsLo[0];
       CEparts[1] = lh->gapsLo[1];
       CEparts[2] = lh->gapsLo[2];
@@ -736,9 +761,6 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, uint32_t *resL
     /* tertiary                         */
     /* We stuff the initial value in the buffers, and increase the appropriate buffer */
     /* According to strength                                                          */
-    /* Inital value depends on both base and next CE. First we decide which one is    */
-    /* longer (in term of non zero bytes). If it's baseCE, we add 1 to it, if it's nextCE, */
-    /* we subtract 1 from it  */
     ucol_initBuffers(&src->lh[i], &b, status);
 
   }
