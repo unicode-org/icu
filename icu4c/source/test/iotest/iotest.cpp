@@ -195,6 +195,8 @@ static void DataDrivenPrintf(void) {
     DataDrivenLogger logger;
     UChar uBuffer[2048];
     char cBuffer[2048];
+    char cFormat[sizeof(cBuffer)];
+    char cExpected[sizeof(cBuffer)];
     UnicodeString tempStr;
     UChar format[2048];
     //char locale[ULOC_FULLNAME_CAPACITY];
@@ -263,9 +265,11 @@ static void DataDrivenPrintf(void) {
                 }
                 if (u_strcmp(uBuffer, expectedResult) != 0) {
                     u_austrncpy(cBuffer, uBuffer, sizeof(cBuffer));
+                    u_austrncpy(cFormat, format, sizeof(cFormat));
+                    u_austrncpy(cExpected, expectedResult, sizeof(cExpected));
                     cBuffer[sizeof(cBuffer)-1] = 0;
-                    log_err("FAILURE test case %d - Got: %s\n",
-                            i, cBuffer);
+                    log_err("FAILURE test case %d \"%s\" - Got: \"%s\" Expected: \"%s\"\n",
+                            i, cFormat, cBuffer, cExpected);
                 }
                 if (uBuffer[uBufferLenReturned-1] == 0
                     || uBuffer[uBufferLenReturned] != 0
