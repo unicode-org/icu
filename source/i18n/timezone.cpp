@@ -131,7 +131,7 @@ void TimeZone::loadZoneData() {
 /**
  * udata callback to verify the zone data.
  */
-bool_t
+bool_t U_CALLCONV
 TimeZone::isDataAcceptable(void *context,
                            const char *type, const char *name,
                            UDataInfo *pInfo) {
@@ -139,10 +139,10 @@ TimeZone::isDataAcceptable(void *context,
         pInfo->size >= sizeof(UDataInfo) &&
         pInfo->isBigEndian == U_IS_BIG_ENDIAN &&
         pInfo->charsetFamily == U_CHARSET_FAMILY &&
-        pInfo->dataFormat[0] == TZ_SIG[0] &&
-        pInfo->dataFormat[1] == TZ_SIG[1] &&
-        pInfo->dataFormat[2] == TZ_SIG[2] &&
-        pInfo->dataFormat[3] == TZ_SIG[3] &&
+        pInfo->dataFormat[0] == 0x7a && // see TZ_SIG, must be numeric literals to be portable
+        pInfo->dataFormat[1] == 0x6f && // (this is not a string, it just looks like one for debugging)
+        pInfo->dataFormat[2] == 0x6e &&
+        pInfo->dataFormat[3] == 0x65 &&
         pInfo->formatVersion[0] == TZ_FORMAT_VERSION;
 }
 

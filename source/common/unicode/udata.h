@@ -19,6 +19,8 @@
 
 #include "unicode/utypes.h"
 
+U_CDECL_BEGIN
+
 /**
  * Information about data memory.
  * This structure may grow in the future, indicated by the
@@ -208,5 +210,7 @@ udata_getMemory(UDataMemory *pData);
  */
 U_CAPI void U_EXPORT2
 udata_getInfo(UDataMemory *pData, UDataInfo *pInfo);
+
+U_CDECL_END
 
 #endif
