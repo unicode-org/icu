@@ -280,7 +280,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 			ofn.nMaxFileTitle     = MAX_PATH;
 			ofn.lpstrInitialDir   = NULL;
 			ofn.lpstrTitle        = NULL;
-			ofn.Flags             = OFN_HIDEREADONLY | OFN_CREATEPROMPT;
+			ofn.Flags             = OFN_HIDEREADONLY | OFN_PATHMUSTEXIST;
 			ofn.nFileOffset       = 0;
 			ofn.nFileExtension    = 0;
 			ofn.lpstrDefExt       = "txt";
