@@ -474,7 +474,7 @@ UnicodeString* CanonicalIterator::getEquivalents(const UnicodeString &segment, i
     //String[] finalResult = new String[result.size()];
     UnicodeString *finalResult = NULL;
     int32_t resultCount;
-    if(resultCount = result->count()) {
+    if((resultCount = result->count())) {
       finalResult = new UnicodeString[resultCount];
     } else {
       status = U_ILLEGAL_ARGUMENT_ERROR;
