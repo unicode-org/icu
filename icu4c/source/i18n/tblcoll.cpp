@@ -73,9 +73,6 @@ const uint32_t tblcoll_STACK_BUFFER_LENGTH_ = 1024;
 */
 #define STACK_BUFFER_LENGTH_ 1024
 
-/* forward declarations ----------------------------------------------------- */
-
-U_CAPI UChar forwardCharIteratorGlue(void *iterator);
 
 /* RuleBasedCollator declaration ----------------------------------------- */
 
@@ -574,14 +571,6 @@ Collator* RuleBasedCollator::safeClone(void)
   return result;
 }
 
-Collator::EComparisonResult RuleBasedCollator::compare(
-                                              ForwardCharacterIterator &source,
-                                              ForwardCharacterIterator &target)
-{
-  return getEComparisonResult(
-    ucol_strcollinc(ucollator, forwardCharIteratorGlue, &source,
-                    forwardCharIteratorGlue, &target));
-}
 
 int32_t RuleBasedCollator::getSortKey(const UnicodeString& source,
                                          uint8_t *result, int32_t resultLength)
@@ -790,13 +779,3 @@ const char* RuleBasedCollator::kFilenameSuffix = ".col";
 char  RuleBasedCollator::fgClassID = 0;
 
 /* other methods not belonging to any classes ------------------------------- */
-
-U_CAPI UChar forwardCharIteratorGlue(void *iterator)
-{
-  ForwardCharacterIterator *iter = ((ForwardCharacterIterator *)iterator);
-  UChar result = iter->nextPostInc();
-  if (result == ForwardCharacterIterator::DONE)
-    return 0xFFFF;
-  else
-    return result;
-}

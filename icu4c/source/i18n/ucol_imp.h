@@ -149,22 +149,6 @@ struct UCollationElements
         UBool              isWritable;
 };
 
-struct incrementalContext {
-    UCharForwardIterator *source;
-    void *sourceContext;
-    UChar currentChar;
-    UChar lastChar;
-    UChar stackString[UCOL_MAX_BUFFER]; /* Original string */
-    UChar *stringP; /* This is position in the string */
-    UChar *len;   /* Original string length */
-    UChar *capacity; /* This is capacity */
-    uint32_t *toReturn; /* This is the CE from CEs buffer that should be returned */
-    uint32_t *CEpos; /* This is the position to which we have stored processed CEs */
-    uint32_t CEs[UCOL_EXPAND_CE_BUFFER_SIZE]; /* This is where we store CEs */
-    UBool panic; /* can't handle it any more - we have to call the cavalry */
-    const UCollator *coll;
-};
-
 
 #define UCOL_LEVELTERMINATOR 1
 
@@ -302,9 +286,6 @@ U_CAPI uint32_t U_EXPORT2 ucol_getPrevCE(const UCollator *coll,
                                          UErrorCode *status);
 uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *status);
 uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource, UErrorCode *status);
-
-void incctx_cleanUpContext(incrementalContext *ctx);
-UChar incctx_appendChar(incrementalContext *ctx, UChar c);
 
 /* function used by C++ getCollationKey to prevent restarting the calculation */
 U_CFUNC uint8_t *ucol_getSortKeyWithAllocation(const UCollator *coll,
@@ -602,19 +583,13 @@ struct UCollator {
 };
 
 /* various internal functions */
-void init_incrementalContext(UCollator *coll, UCharForwardIterator *source, void *sourceContext, incrementalContext *s);
 int32_t ucol_getIncrementalCE(const UCollator *coll, incrementalContext *ctx, UErrorCode *status);
-void incctx_cleanUpContext(incrementalContext *ctx);
-UChar incctx_appendChar(incrementalContext *ctx, UChar c);
-UCollationResult alternateIncrementalProcessing(const UCollator *coll, incrementalContext *srcCtx, incrementalContext *trgCtx);
 void ucol_initUCA(UErrorCode *status);
 
 UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UErrorCode *status);
 void ucol_setOptionsFromHeader(UCollator* result, UColOptionSet * opts, UErrorCode *status);
 void ucol_putOptionsToHeader(UCollator* result, UColOptionSet * opts, UErrorCode *status);
 
-uint32_t ucol_getIncrementalUCA(UChar ch, incrementalContext *collationSource, UErrorCode *status);
-int32_t ucol_getIncrementalSpecialCE(const UCollator *coll, uint32_t CE, incrementalContext *ctx, UErrorCode *status);
 void ucol_updateInternalState(UCollator *coll);
 
 U_CAPI uint32_t U_EXPORT2 ucol_getFirstCE(const UCollator *coll, UChar u, UErrorCode *status);
