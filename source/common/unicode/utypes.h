@@ -155,7 +155,9 @@
 /**
  * \def U_CALLCONV
  * Work around the OS390 compiler issue, to be removed when the compiler
- * updates come out.
+ * updates come out. This should only be used in C++ files that define
+ * private (non-exported) C functions. When the C function must be public,
+ * you must use the U_CAPI, U_CFUNC or U_CDECL_BEGIN/END definitions.
  */
 #if defined(OS390) && defined(XP_CPLUSPLUS)
 #    define U_CALLCONV __cdecl
