@@ -60,11 +60,12 @@ void UCAConformanceTest::runIndexedTest( int32_t index, UBool exec, const char* 
     }
 }
 
+static const int BUFFER_SIZE_ = 330000;
+static UChar buffer[BUFFER_SIZE_];
+
 void UCAConformanceTest::initRbUCA() 
 {
   if(!rbUCA) {
-    const int BUFFER_SIZE_ = 330000;
-    UChar       buffer[BUFFER_SIZE_];
     UChar      *ucarules = buffer;
     int32_t size = ucol_getRulesEx(UCA, UCOL_FULL_RULES, ucarules, 
                                    BUFFER_SIZE_);
