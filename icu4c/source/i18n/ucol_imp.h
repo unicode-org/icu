@@ -31,6 +31,36 @@
 #include "unicode/ures.h"
 #include "unicode/udata.h"
 
+/* UDataInfo for UCA mapping table */
+static const UDataInfo ucaDataInfo={
+    sizeof(UDataInfo),
+    0,
+
+    U_IS_BIG_ENDIAN,
+    U_CHARSET_FAMILY,
+    sizeof(UChar),
+    0,
+
+    {0x55, 0x43, 0x6f, 0x6c},     /* dataFormat="UCol"            */
+    {1, 1, 0, 0},                 /* formatVersion                */
+    {3, 0, 0, 0}                  /* dataVersion = Unicode Version*/
+};
+
+/* UDataInfo for inverse UCA table */
+static const UDataInfo invUcaDataInfo={
+    sizeof(UDataInfo),
+    0,
+
+    U_IS_BIG_ENDIAN,
+    U_CHARSET_FAMILY,
+    sizeof(UChar),
+    0,
+
+    {0x49, 0x6E, 0x76, 0x43},     /* dataFormat="InvC"            */
+    {1, 1, 0, 0},                 /* formatVersion                */
+    {3, 0, 0, 0}                  /* dataVersion = Unicode Version*/
+};
+
 /* This is the size of the stack allocated buffer for sortkey generation and similar operations */
 /* if it is too small, heap allocation will occur.*/
 /* you can change this value if you need memory - it will affect the performance, though, since we're going to malloc */
