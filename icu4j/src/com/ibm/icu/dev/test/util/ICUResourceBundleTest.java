@@ -648,7 +648,8 @@ public final class ICUResourceBundleTest extends TestFmwk {
             logln("'standard' was found as a collation keyword.");
         }
     }
-    public void TestCountryInfo(){
+
+    public void TestLocaleDisplayNames() {
         ULocale[] locales = ULocale.getAvailableLocales();
         for (int i = 0; i < locales.length; ++i) {
             if (!hasLocalizedCountryFor(ULocale.ENGLISH, locales[i])){
