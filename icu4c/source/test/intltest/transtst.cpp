@@ -158,6 +158,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(68,TestInvalidBackRef);
         TESTCASE(69,TestMulticharStringSet);
         TESTCASE(70,TestUserFunction);
+        TESTCASE(71,TestAnyX);
 
         default: name = ""; break;
     }
@@ -3546,6 +3547,27 @@ void TransliteratorTest::TestUserFunction() {
     for (i=0; i<4; ++i) {
         _TUFUnreg(i);
     }
+}
+
+/**
+ * Test the Any-X transliterators.
+ */
+void TransliteratorTest::TestAnyX(void) {
+    UParseError parseError;
+    UErrorCode status = U_ZERO_ERROR;
+    Transliterator* anyLatin =
+        Transliterator::createInstance("Any-Latin", UTRANS_FORWARD, parseError, status);
+    if (anyLatin==0) {
+        errln("FAIL: createInstance returned NULL");
+        delete anyLatin;
+        return;
+    }
+
+    expect(*anyLatin,
+           CharsToUnicodeString("greek:\\u03B1\\u03B2\\u03BA\\u0391\\u0392\\u039A hiragana:\\u3042\\u3076\\u304F cyrillic:\\u0430\\u0431\\u0446"),
+           CharsToUnicodeString("greek:abkABK hiragana:abuku cyrillic:abc"));
+
+    delete anyLatin;
 }
 
 //======================================================================
