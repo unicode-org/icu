@@ -234,6 +234,7 @@ char* u_austrcpy(char *s1,
                   s1,
                   MAX_STRLEN,
                   ucs2,
+                  -1,
                   &err);
     releaseDefaultConverter(cnv);
     s1[len] = 0;
