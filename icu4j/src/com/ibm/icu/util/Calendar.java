@@ -1309,6 +1309,14 @@ public abstract class Calendar implements Serializable, Cloneable {
     private transient boolean       areAllFieldsSet;
 
     /**
+     * True if all fields have been virtually set, but have not yet been
+     * computed.  This occurs only in setTimeInMillis().  A calendar set
+     * to this state will compute all fields from the time if it becomes
+     * necessary, but otherwise will delay such computation.
+     */
+    private transient boolean areFieldsVirtuallySet;
+
+    /**
      * True if this calendar allows out-of-range field values during computation
      * of <code>time</code> from <code>fields[]</code>.
      * @see #setLenient
@@ -1757,10 +1765,8 @@ public abstract class Calendar implements Serializable, Cloneable {
             millis = MIN_MILLIS;
         }
         time = millis;
-        isTimeSet = true;
-        computeFields();
-        areFieldsSet = true;
-        areAllFieldsSet = true;
+        areFieldsSet = areAllFieldsSet = false;
+        isTimeSet = areFieldsVirtuallySet = true;
     }
 
     /**
@@ -1809,10 +1815,12 @@ public abstract class Calendar implements Serializable, Cloneable {
      */
     public final void set(int field, int value)
     {
-            isTimeSet = false;
+        if (areFieldsVirtuallySet) {
+            computeFields();
+        }
         fields[field] = value;
         stamp[field] = nextStamp++;
-        areFieldsSet = false;
+        isTimeSet = areFieldsSet = areFieldsVirtuallySet = false;
     }
 
     /**
@@ -1886,9 +1894,7 @@ public abstract class Calendar implements Serializable, Cloneable {
         for (int i=0; i<fields.length; ++i) {
             fields[i] = stamp[i] = 0; // UNSET == 0
         }
-        areFieldsSet = false;
-        areAllFieldsSet = false;
-        isTimeSet = false;
+        isTimeSet = areFieldsSet = areAllFieldsSet = areFieldsVirtuallySet = false;
     }
 
     /**
@@ -1898,11 +1904,12 @@ public abstract class Calendar implements Serializable, Cloneable {
      */
     public final void clear(int field)
     {
+        if (areFieldsVirtuallySet) {
+            computeFields();
+        }
         fields[field] = 0;
         stamp[field] = UNSET;
-        areFieldsSet = false;
-        areAllFieldsSet = false;
-        isTimeSet = false;
+        isTimeSet = areFieldsSet = areAllFieldsSet = areFieldsVirtuallySet = false;
     }
 
     /**
@@ -1912,7 +1919,7 @@ public abstract class Calendar implements Serializable, Cloneable {
      */
     public final boolean isSet(int field)
     {
-        return stamp[field] != UNSET;
+        return areFieldsVirtuallySet ? true : (stamp[field] != UNSET);
     }
 
     /**
@@ -3724,6 +3731,7 @@ public abstract class Calendar implements Serializable, Cloneable {
         // in a newly-created object), we need to fill in the fields. [LIU]
         if (isLenient() || !areAllFieldsSet) areFieldsSet = false;
         isTimeSet = true;
+        areFieldsVirtuallySet = false;
     }
 
     /**
