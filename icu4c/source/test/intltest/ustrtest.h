@@ -52,10 +52,6 @@ public:
      **/
     void TestFindAndReplace(void);
     /**
-     * Test method numDisplayCells
-     **/
-    void TestCellWidth(void);
-    /**
      * Test method reverse
      **/
     void TestReverse(void);

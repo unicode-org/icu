@@ -28,7 +28,7 @@ U_NAMESPACE_BEGIN
  * applyPattern() for details.
  *
  * @author Alan Liu
- * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
+ * @internal Use transliterator factory methods instead since this class will be removed in that release.
  */
 class U_I18N_API HexToUnicodeTransliterator : public Transliterator {
 
@@ -78,14 +78,14 @@ public:
      * Constructs a transliterator that recognizes the standard
      * prefixes "&#92;u", "&#92;U", "u+", and "U+", each with no
      * suffix.
-     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
+     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     HexToUnicodeTransliterator(UnicodeFilter* adoptedFilter = 0);
 
     /**
      * Constructs a custom transliterator with the given pattern.
      * @see #applyPattern
-     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
+     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     HexToUnicodeTransliterator(const UnicodeString& pattern,
                                UErrorCode& status);
@@ -94,7 +94,7 @@ public:
      * Constructs a custom transliterator with the given pattern
      * and filter.
      * @see #applyPattern
-     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
+     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     HexToUnicodeTransliterator(const UnicodeString& pattern,
                                UnicodeFilter* adoptedFilter,
@@ -102,25 +102,25 @@ public:
 
     /**
      * Destructor.
-     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
+     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     virtual ~HexToUnicodeTransliterator();
 
     /**
      * Copy constructor.
-     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
+     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     HexToUnicodeTransliterator(const HexToUnicodeTransliterator&);
 
     /**
      * Assignment operator.
-     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
+     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     HexToUnicodeTransliterator& operator=(const HexToUnicodeTransliterator&);
 
     /**
      * Transliterator API.
-     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
+     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     Transliterator* clone(void) const;
 
@@ -149,19 +149,19 @@ public:
      * suffix-char := [^special-char] | '\\' special-char
      * special-char := ';' | '0' | '#' | '\\'
      * </pre>
-     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
+     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     void applyPattern(const UnicodeString& thePattern, UErrorCode& status);
 
     /**
      * Return this transliterator's pattern.
-     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
+     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     const UnicodeString& toPattern(void) const;
 
     /**
      * Implements {@link Transliterator#handleTransliterate}.
-     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
+     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     virtual void handleTransliterate(Replaceable& text, UTransPosition& offset,
                                      UBool isIncremental) const;

@@ -368,6 +368,7 @@ public:
      */
     virtual UnicodeString& toPattern(UnicodeString &pattern) const;
 
+#ifdef U_USE_CHOICE_FORMAT_DEPRECATES
     /**
      * Set the choices to be used in formatting.  The arrays are adopted and
      * should not be deleted by the caller.
@@ -399,7 +400,8 @@ public:
                               UBool* closuresToAdopt,
                               UnicodeString* formatsToAdopt,
                               int32_t count);
-    
+#endif
+
     /**
      * Set the choices to be used in formatting.
      *

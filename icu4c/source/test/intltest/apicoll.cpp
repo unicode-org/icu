@@ -149,15 +149,6 @@ CollationAPITest::TestProperty(/* char* par */)
     doAssert((col->getStrength() != Collator::PRIMARY), "collation object's strength is primary difference");
     doAssert((col->getStrength() == Collator::SECONDARY), "collation object has the wrong strength");
 
-#ifdef ICU_NORMALIZER_USE_DEPRECATES
-/* The replacement API is tested in TestAttribute() */
-    logln("testing Collator::setDecomposition() method ...");
-    col->setDecomposition(Normalizer::NO_OP);
-    doAssert((col->getDecomposition() != Normalizer::DECOMP), "collation object's strength is secondary difference");
-    doAssert((col->getDecomposition() != Normalizer::DECOMP_COMPAT), "collation object's strength is primary difference");
-    doAssert((col->getDecomposition() == Normalizer::NO_OP), "collation object has the wrong strength");
-#endif
-
     UnicodeString name;
 
     logln("Get display name for the US English collation in German : ");
@@ -381,23 +372,6 @@ CollationAPITest::TestDecomposition() {
     return;
   }
 
-#ifdef ICU_NORMALIZER_USE_DEPRECATES
-  /* there is no reason to have canonical decomposition in en_US OR default locale */
-  if (vi_VN->getDecomposition() != Normalizer::DECOMP)
-  {
-    errln("ERROR: vi_VN collation did not have cannonical decomposition for normalization!\n");
-  }
-
-  if (el_GR->getDecomposition() != Normalizer::DECOMP)
-  {
-    errln("ERROR: el_GR collation did not have cannonical decomposition for normalization!\n");
-  }
-
-  if (en_US->getDecomposition() != Normalizer::NO_OP)
-  {
-    errln("ERROR: en_US collation had cannonical decomposition for normalization!\n");
-  }
-#else
   /* there is no reason to have canonical decomposition in en_US OR default locale */
   if (vi_VN->getAttribute(UCOL_NORMALIZATION_MODE, status) != UCOL_ON)
   {
@@ -413,7 +387,6 @@ CollationAPITest::TestDecomposition() {
   {
     errln("ERROR: en_US collation had cannonical decomposition for normalization!\n");
   }
-#endif
 
   delete en_US;
   delete el_GR;
@@ -572,12 +545,10 @@ CollationAPITest::TestCollationKey(/* char* par */)
     doAssert(sortkEmpty.compareTo(sortkEmpty) == Collator::EQUAL, "Result should be (empty key) == (empty key)");
 
     int32_t    cnt1, cnt2, cnt3, cnt4;
-    uint8_t* byteArray1 = 0;
 
-    byteArray1 = sortk1.toByteArray(cnt1);
-    uint8_t* byteArray2 = 0;
+    const uint8_t* byteArray1 = sortk1.getByteArray(cnt1);
+    const uint8_t* byteArray2 = sortk2.getByteArray(cnt2);
 
-    byteArray2 = sortk2.toByteArray(cnt2);
     /*
     this is a bad test since it is dependent on the version of uca data,
     which changes
@@ -616,9 +587,7 @@ CollationAPITest::TestCollationKey(/* char* par */)
     doAssert(sortk2 == sortk7, "sortk2 == sortk7 Failed.");
     doAssert(sortk1 != sortk7, "sortk1 != sortk7 Failed.");
 
-    uprv_free(byteArray1);
     byteArray1 = 0;
-    uprv_free(byteArray2);
     byteArray2 = 0;
 
     sortk3 = sortk1;
@@ -1988,12 +1957,10 @@ void CollationAPITest::TestSubclass()
 	UErrorCode status = U_ZERO_ERROR;
 	col1.getCollationKey(abc, key, status);
 	int32_t length = 0;
-	char *bytearray = (char *)key.toByteArray(length);
-    UnicodeString keyarray(bytearray, length, NULL, status);
+    UnicodeString keyarray((const char *)key.getByteArray(length), length, NULL, status);
     if (abc != keyarray) {
         errln("TestCollator collationkey API is returning wrong values");
     }
-    uprv_free(bytearray);
 
 	UnicodeSet expectedset(0, 0x10FFFF);
 	UnicodeSet *defaultset = col1.getTailoredSet(status);

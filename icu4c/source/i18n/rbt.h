@@ -281,7 +281,7 @@ class TransliterationRuleData;
  * rule <em>masks</em> the second rule. </p>
  * 
  * @author Alan Liu
- * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
+ * @internal Use transliterator factory methods instead since this class will be removed in that release.
  */
 class U_I18N_API RuleBasedTransliterator : public Transliterator {
 
@@ -303,7 +303,7 @@ public:
      * @param rules rules, separated by ';'
      * @param direction either FORWARD or REVERSE.
      * @exception IllegalArgumentException if rules are malformed.
-     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
+     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     RuleBasedTransliterator(const UnicodeString& id,
                             const UnicodeString& rules,
@@ -317,7 +317,7 @@ public:
      * @param rules rules, separated by ';'
      * @param direction either FORWARD or REVERSE.
      * @exception IllegalArgumentException if rules are malformed.
-     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
+     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     RuleBasedTransliterator(const UnicodeString& id,
                             const UnicodeString& rules,
@@ -327,7 +327,7 @@ public:
 
     /**
      * Covenience constructor with no filter.
-     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
+     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     RuleBasedTransliterator(const UnicodeString& id,
                             const UnicodeString& rules,
@@ -336,7 +336,7 @@ public:
 
     /**
      * Covenience constructor with no filter and FORWARD direction.
-     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
+     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     RuleBasedTransliterator(const UnicodeString& id,
                             const UnicodeString& rules,
@@ -344,7 +344,7 @@ public:
 
     /**
      * Covenience constructor with FORWARD direction.
-     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
+     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     RuleBasedTransliterator(const UnicodeString& id,
                             const UnicodeString& rules,
@@ -380,7 +380,7 @@ public:
 
     /**
      * Copy constructor.
-     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
+     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     RuleBasedTransliterator(const RuleBasedTransliterator&);
 
@@ -388,14 +388,14 @@ public:
 
     /**
      * Implement Transliterator API.
-     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
+     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     Transliterator* clone(void) const;
 
  protected:
     /**
      * Implements {@link Transliterator#handleTransliterate}.
-     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
+     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     virtual void handleTransliterate(Replaceable& text, UTransPosition& offsets,
                                      UBool isIncremental) const;
@@ -411,7 +411,7 @@ public:
      * character to their hex escape representations, \uxxxx or
      * \Uxxxxxxxx.  Unprintable characters are those other than
      * U+000A, U+0020..U+007E.
-     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
+     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     virtual UnicodeString& toRules(UnicodeString& result,
                                    UBool escapeUnprintable) const;
@@ -437,7 +437,7 @@ public:
      * .          Derived::getStaticClassID()) ...
      * </pre>
      * @return          The class ID for all objects of this class.
-     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
+     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
 

@@ -79,6 +79,7 @@ TestChoiceFormat::TestSimpleExample( void )
     }
     delete formequal; 
     
+#ifdef U_USE_CHOICE_FORMAT_DEPRECATES
     //Testing adoptChoices() 
     double *limitsToAdopt = (double *)uprv_malloc(7 * sizeof(double));
     UnicodeString *monthNamesToAdopt = new UnicodeString[7];
@@ -90,6 +91,7 @@ TestChoiceFormat::TestSimpleExample( void )
     if(!(*formnew == *form)){
         errln("ERROR: ==Operator or adoptChoices failed\n");
     }
+#endif
 
     delete formnew; 
       
@@ -350,6 +352,7 @@ TestChoiceFormat::TestComplexExample( void )
         it_errln("***  ChoiceFormat contructor( newPattern, status) or toPattern result!");
     }
 
+#ifdef U_USE_CHOICE_FORMAT_DEPRECATES
     double* d_a = (double *)uprv_malloc(2 * sizeof(double));
     if (!d_a) { it_errln("*** allocation error."); return; }
     d_a[0] = 1.0; d_a[1] = 2.0;
@@ -366,6 +369,7 @@ TestChoiceFormat::TestComplexExample( void )
     }else{
         it_errln("***  ChoiceFormat adoptChoices result!");
     }
+#endif
 
     double d_a2[] = { 3.0, 4.0 };
     UnicodeString s_a2[] = { "third", "forth" };
