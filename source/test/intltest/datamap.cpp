@@ -107,7 +107,7 @@ const UnicodeString RBDataMap::getString(const char* key, UErrorCode &status) co
 }
 
 
-const int32_t RBDataMap::getInt(const char* key, UErrorCode &status) const
+int32_t RBDataMap::getInt(const char* key, UErrorCode &status) const
 {
   int32_t result = 0;
   UnicodeString r = this->getString(key, status);
