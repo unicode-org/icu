@@ -347,10 +347,10 @@ CollationElementIterator::next(UErrorCode& status)
         bufferAlias = ownBuffer;
     }
     else {
-        if (value >= RuleBasedCollator.CONTRACTCHARINDEX) {
+        if (value >= RuleBasedCollator::CONTRACTCHARINDEX) {
             value = nextContractChar(ch, status);
         }
-        if (value >= RuleBasedCollator.EXPANDCHARINDEX) {
+        if (value >= RuleBasedCollator::EXPANDCHARINDEX) {
             bufferAlias = orderAlias->getExpandValueList(value);
         }
         
