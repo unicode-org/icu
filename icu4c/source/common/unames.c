@@ -50,6 +50,13 @@ typedef struct {
     uint32_t tokenStringOffset, groupsOffset, groupStringOffset, algNamesOffset;
 } UCharNames;
 
+typedef struct {
+    const char *otherName;
+    UChar32 code;
+} FindName;
+
+#define DO_FIND_NAME (findNameDummy)
+
 static UDataMemory *uCharNamesData=NULL;
 static UCharNames *uCharNames=NULL;
 
@@ -83,6 +90,11 @@ expandName(UCharNames *names,
            char *buffer, uint16_t bufferLength);
 
 static UBool
+compareName(UCharNames *names,
+            const uint8_t *name, uint16_t nameLength, UCharNameChoice nameChoice,
+            const char *otherName);
+
+static UBool
 enumGroupNames(UCharNames *names, Group *group,
                UChar32 start, UChar32 end,
                UEnumCharNamesFn *fn, void *context,
@@ -111,6 +123,14 @@ enumAlgNames(AlgorithmicRange *range,
              UChar32 start, UChar32 limit,
              UEnumCharNamesFn *fn, void *context,
              UCharNameChoice nameChoice);
+
+static UChar32
+findAlgName(AlgorithmicRange *range, UCharNameChoice nameChoice, const char *otherName);
+
+static UBool
+findNameDummy(void *context,
+              UChar32 code, UCharNameChoice nameChoice,
+              const char *name, UTextOffset length);
 
 /* public API --------------------------------------------------------------- */
 
@@ -154,11 +174,16 @@ u_charName(UChar32 code, UCharNameChoice nameChoice,
     return getName(uCharNames, (uint32_t)code, nameChoice, buffer, (uint16_t)bufferLength);
 }
 
-/* ### TBD */
 U_CAPI UChar32 U_EXPORT2
 u_charFromName(UCharNameChoice nameChoice,
                const char *name,
                UErrorCode *pErrorCode) {
+    FindName findName;
+    AlgorithmicRange *algRange;
+    uint32_t *p;
+    uint32_t i;
+    UChar32 c;
+
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return 0xffff;
     }
@@ -172,8 +197,23 @@ u_charFromName(UCharNameChoice nameChoice,
         return 0xffff;
     }
 
-    *pErrorCode=U_UNSUPPORTED_ERROR;
-    return 0xffff;
+    /* try algorithmic names first */
+    p=(uint32_t *)((uint8_t *)uCharNames+uCharNames->algNamesOffset);
+    i=*p;
+    algRange=(AlgorithmicRange *)(p+1);
+    while(i>0) {
+        if((c=findAlgName(algRange, nameChoice, name))!=0xffff) {
+            return c;
+        }
+        algRange=(AlgorithmicRange *)((uint8_t *)algRange+algRange->size);
+        --i;
+    }
+
+    /* normal character name */
+    findName.otherName=name;
+    findName.code=0xffff;
+    enumNames(uCharNames, 0, 0x110000, DO_FIND_NAME, &findName, nameChoice);
+    return findName.code;
 }
 
 U_CAPI void U_EXPORT2
@@ -424,6 +464,10 @@ expandGroupName(UCharNames *names, Group *group,
     ++(bufferPos); \
 }
 
+/*
+ * Important: expandName() and compareName() are almost the same -
+ * apply fixes to both.
+ */
 static uint16_t
 expandName(UCharNames *names,
            const uint8_t *name, uint16_t nameLength, UCharNameChoice nameChoice,
@@ -501,28 +545,128 @@ expandName(UCharNames *names,
     return bufferPos;
 }
 
+/*
+ * compareName() is almost the same as expandName() except that it compares
+ * the currently expanded name to an input name.
+ * It returns the match/no match result as soon as possible.
+ */
+static UBool
+compareName(UCharNames *names,
+            const uint8_t *name, uint16_t nameLength, UCharNameChoice nameChoice,
+            const char *otherName) {
+    uint16_t *tokens=(uint16_t *)names+8;
+    uint16_t token, tokenCount=*tokens++;
+    uint8_t *tokenStrings=(uint8_t *)names+names->tokenStringOffset;
+    uint8_t c;
+
+    if(nameChoice!=U_UNICODE_CHAR_NAME) {
+        /*
+         * skip the modern name if it is not requested _and_
+         * if the semicolon byte value is a character, not a token number
+         */
+        if((uint8_t)';'>=tokenCount || tokens[(uint8_t)';']==(uint16_t)(-1)) {
+            while(nameLength>0) {
+                --nameLength;
+                if(*name++==';') {
+                    break;
+                }
+            }
+        } else {
+            /*
+             * the semicolon byte value is a token number, therefore
+             * only modern names are stored in unames.dat and there is no
+             * such requested Unicode 1.0 name here
+             */
+            nameLength=0;
+        }
+    }
+
+    /* compare each letter directly, and compare a token word per token */
+    while(nameLength>0) {
+        --nameLength;
+        c=*name++;
+
+        if(c>=tokenCount) {
+            if(c!=';') {
+                /* implicit letter */
+                if((char)c!=*otherName++) {
+                    return FALSE;
+                }
+            } else {
+                /* finished */
+                break;
+            }
+        } else {
+            token=tokens[c];
+            if(token==(uint16_t)(-2)) {
+                /* this is a lead byte for a double-byte token */
+                token=tokens[c<<8|*name++];
+                --nameLength;
+            }
+            if(token==(uint16_t)(-1)) {
+                if(c!=';') {
+                    /* explicit letter */
+                    if((char)c!=*otherName++) {
+                        return FALSE;
+                    }
+                } else {
+                    /* finished */
+                    break;
+                }
+            } else {
+                /* write token word */
+                uint8_t *tokenString=tokenStrings+token;
+                while((c=*tokenString++)!=0) {
+                    if((char)c!=*otherName++) {
+                        return FALSE;
+                    }
+                }
+            }
+        }
+    }
+
+    /* complete match? */
+    return (UBool)(*otherName==0);
+}
+
+/*
+ * enumGroupNames() enumerates all the names in a 32-group
+ * and either calls the enumerator function or finds a given input name.
+ */
 static UBool
 enumGroupNames(UCharNames *names, Group *group,
                UChar32 start, UChar32 end,
                UEnumCharNamesFn *fn, void *context,
                UCharNameChoice nameChoice) {
     uint16_t offsets[LINES_PER_GROUP+2], lengths[LINES_PER_GROUP+2];
-    char buffer[200];
     const uint8_t *s=(uint8_t *)names+names->groupStringOffset+
                                     (group->offsetHigh<<16|group->offsetLow);
-    uint16_t length;
 
     s=expandGroupLengths(s, offsets, lengths);
-    while(start<=end) {
-        length=expandName(names, s+offsets[start&GROUP_MASK], lengths[start&GROUP_MASK], nameChoice,
-                          buffer, sizeof(buffer));
-        /* here, we assume that the buffer is large enough */
-        if(length>0) {
-            if(!fn(context, start, nameChoice, buffer, length)) {
+    if(fn!=DO_FIND_NAME) {
+        char buffer[200];
+        uint16_t length;
+
+        while(start<=end) {
+            length=expandName(names, s+offsets[start&GROUP_MASK], lengths[start&GROUP_MASK], nameChoice,
+                              buffer, sizeof(buffer));
+            /* here, we assume that the buffer is large enough */
+            if(length>0) {
+                if(!fn(context, start, nameChoice, buffer, length)) {
+                    return FALSE;
+                }
+            }
+            ++start;
+        }
+    } else {
+        const char *otherName=((FindName *)context)->otherName;
+        while(start<=end) {
+            if(compareName(names, s+offsets[start&GROUP_MASK], lengths[start&GROUP_MASK], nameChoice, otherName)) {
+                ((FindName *)context)->code=start;
                 return FALSE;
             }
+            ++start;
         }
-        ++start;
     }
     return TRUE;
 }
@@ -582,6 +726,11 @@ enumNames(UCharNames *names,
     return TRUE;
 }
 
+/*
+ * Important:
+ * Parts of findAlgName() are almost the same as some of getAlgName().
+ * Fixes must be applied to both.
+ */
 static uint16_t
 getAlgName(AlgorithmicRange *range, uint32_t code, UCharNameChoice nameChoice,
         char *buffer, uint16_t bufferLength) {
@@ -741,6 +890,10 @@ writeFactorSuffix(const uint16_t *factors, uint16_t count,
     return bufferPos;
 }
 
+/*
+ * Important: enumAlgNames() and findAlgName() are almost the same.
+ * Any fix must be applied to both.
+ */
 static UBool
 enumAlgNames(AlgorithmicRange *range,
              UChar32 start, UChar32 limit,
@@ -753,7 +906,6 @@ enumAlgNames(AlgorithmicRange *range,
         return TRUE;
     }
 
-    /* enumerate the rest of the names in this range */
     switch(range->type) {
     case 0: {
         char *s, *end;
@@ -876,4 +1028,138 @@ enumAlgNames(AlgorithmicRange *range,
     }
 
     return TRUE;
+}
+
+/*
+ * findAlgName() is almost the same as enumAlgNames() except that it
+ * returns the code point for a name if it fits into the range.
+ * It returns 0xffff otherwise.
+ */
+static UChar32
+findAlgName(AlgorithmicRange *range, UCharNameChoice nameChoice, const char *otherName) {
+    UChar32 code;
+
+    if(nameChoice!=U_UNICODE_CHAR_NAME) {
+        return 0xffff;
+    }
+
+    switch(range->type) {
+    case 0: {
+        /* name = prefix hex-digits */
+        const char *s=(const char *)(range+1);
+        char c;
+
+        uint16_t i, count;
+
+        /* compare prefix */
+        while((c=*s++)!=0) {
+            if((char)c!=*otherName++) {
+                return 0xffff;
+            }
+        }
+
+        /* read hexadecimal code point value */
+        count=range->variant;
+        code=0;
+        for(i=0; i<count; ++i) {
+            c=*otherName++;
+            if('0'<=c && c<='9') {
+                code=(code<<4)|(c-'0');
+            } else if('A'<=c && c<='F') {
+                code=(code<<4)|(c-'A'+10);
+            } else {
+                return 0xffff;
+            }
+        }
+
+        /* does it fit into the range? */
+        if(*otherName==0 && range->start<=(uint32_t)code && (uint32_t)code<=range->end) {
+            return code;
+        }
+        break;
+    }
+    case 1: {
+        char buffer[64];
+        uint16_t indexes[8];
+        const char *elementBases[8], *elements[8];
+        const uint16_t *factors=(const uint16_t *)(range+1);
+        uint16_t count=range->variant;
+        const char *s=(const char *)(factors+count), *t;
+        UChar32 start, limit;
+        uint16_t i, index;
+
+        char c;
+
+        /* name = prefix factorized-elements */
+
+        /* compare prefix */
+        while((c=*s++)!=0) {
+            if((char)c!=*otherName++) {
+                return 0xffff;
+            }
+        }
+
+        start=(UChar32)range->start;
+        limit=(UChar32)(range->end+1);
+
+        /* initialize the suffix elements for enumeration; indexes should all be set to 0 */
+        writeFactorSuffix(factors, count, s, 0,
+                          indexes, elementBases, elements, buffer, sizeof(buffer));
+
+        /* compare the first suffix */
+        if(0==uprv_strcmp(otherName, buffer)) {
+            return start;
+        }
+
+        /* enumerate and compare the rest of the suffixes */
+        while(++start<limit) {
+            /* increment the indexes in lexical order bound by the factors */
+            i=count;
+            do {
+                index=indexes[--i]+1;
+                if(index<factors[i]) {
+                    /* skip one index and its element string */
+                    indexes[i]=index;
+                    s=elements[i];
+                    while(*s++!=0) {}
+                    elements[i]=s;
+                    break;
+                } else {
+                    /* reset this index to 0 and its element string to the first one */
+                    indexes[i]=0;
+                    elements[i]=elementBases[i];
+                }
+            } while(1);
+
+            /* to make matters a little easier, just compare all elements of the suffix */
+            t=otherName;
+            for(i=0; i<count; ++i) {
+                s=elements[i];
+                while((c=*s++)!=0) {
+                    if(c!=*t++) {
+                        s=""; /* does not match */
+                        i=99;
+                    }
+                }
+            }
+            if(i<99 && *t==0) {
+                return start;
+            }
+        }
+        break;
+    }
+    default:
+        /* undefined type */
+        break;
+    }
+
+    return 0xffff;
+}
+
+/* this is a dummy function that is used as a "find not enumerate" flag */
+static UBool
+findNameDummy(void *context,
+              UChar32 code, UCharNameChoice nameChoice,
+              const char *name, UTextOffset length) {
+    return FALSE;
 }
