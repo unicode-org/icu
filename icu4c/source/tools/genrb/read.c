@@ -30,7 +30,9 @@
 #define SPACE        0x0020
 #define COLON        0x003A
 #define BADBOM       0xFFFE
-
+#define CR           0x000D
+#define LF           0x000A
+               
 static int32_t lineCount;
 
 /* Protos */
@@ -121,6 +123,8 @@ static enum ETokenType getStringToken(UCHARBUF* buf,
     UChar    *pTarget   = target;
     int      len=0;
     UBool    isFollowingCharEscaped=FALSE;
+    UBool    isNLUnescaped = FALSE;
+    UChar32  prevC;
 
     /* We are guaranteed on entry that initialChar is not a whitespace
        character. If we are at the EOF, or have some other problem, it
@@ -176,6 +180,9 @@ static enum ETokenType getStringToken(UCHARBUF* buf,
                     if (c == U_ERR) {
                         return TOK_ERROR;
                     }
+                    if(c == CR || c == LF){
+                        isNLUnescaped = TRUE;
+                    }
                 }               
 
                 if(c==ESCAPE && !isFollowingCharEscaped){
@@ -186,11 +193,18 @@ static enum ETokenType getStringToken(UCHARBUF* buf,
                     ustr_uscat(token, pTarget,len, status);
                     isFollowingCharEscaped = FALSE;
                     len=0;
+                    if(c == CR || c == LF){
+                        if(isNLUnescaped == FALSE && prevC!=CR){
+                            lineCount++;
+                        }
+                        isNLUnescaped = FALSE;
+                    }
                 }
                 
                 if (U_FAILURE(*status)) {
                     return TOK_ERROR;
                 }
+                prevC = c;
             }
         } else {
             if (token->fLength > 0) {
@@ -233,7 +247,7 @@ static enum ETokenType getStringToken(UCHARBUF* buf,
             pTarget = target;
             ustr_uscat(token, pTarget,len, status);
             len=0;
-
+            
             if (U_FAILURE(*status)) {
                 return TOK_ERROR;
             }
