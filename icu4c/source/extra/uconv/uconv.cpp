@@ -21,6 +21,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include <unicode/utypes.h>
 #include <unicode/ucnv.h>
 #include <unicode/unistr.h>
 #include <unicode/translit.h>
@@ -35,6 +36,10 @@
 #include <string.h>
 #include <io.h>
 #include <fcntl.h>
+#endif
+
+#ifdef UCONVMSG_STATIC
+# include "uconvmsg.h"
 #endif
 
 #define DEFAULT_BUFSZ   4096
@@ -55,6 +60,17 @@ static void initMsg(const char *pname) {
         UErrorCode err = U_ZERO_ERROR;
 
         ps = 1;
+
+        /* Set up our static data - if any */
+#ifdef UCONVMSG_STATIC
+        udata_install_uconvmsg(&err);
+        if (U_FAILURE(err)) {
+          fprintf(stderr, "%s: warning, problem installing our static resource bundle data uconvmsg: %s - trying anyways.\n",
+                  pname, u_errorName(err));
+          err = U_ZERO_ERROR; /* It may still fail */
+        }
+#endif
+
 
         /* Get messages. */
 
