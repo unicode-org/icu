@@ -37,6 +37,8 @@ U_CFUNC UBool ustring_cleanup(void);
 
 U_CFUNC UBool breakiterator_cleanup(void);
 
+U_CFUNC UBool ustrprep_cleanup(void);
+
 #ifdef ICU_UNICODECONVERTER_USE_DEPRECATES
 /* Obsolete: The UnicodeConverter is obsolete and going away. */
 /* @return true if cleanup complete successfully*/

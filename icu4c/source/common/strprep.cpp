@@ -36,7 +36,7 @@ static UErrorCode dataErrorCode =U_ZERO_ERROR;
 static const char* DATA_NAME = "uidna";
 static const char* DATA_TYPE = "icu";
 
-U_CFUNC UBool U_EXPORT2
+U_CFUNC UBool
 ustrprep_cleanup() {
     if(idnData!=NULL) {
         udata_close(idnData);
