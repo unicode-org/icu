@@ -80,7 +80,7 @@ class ICUCollatorFactory : public ICUResourceBundleFactory {
 };
 
 UObject*
-ICUCollatorFactory::create(const ICUServiceKey& key, const ICUService* service, UErrorCode& status) const {
+ICUCollatorFactory::create(const ICUServiceKey& key, const ICUService* /* service */, UErrorCode& status) const {
     if (handlesKey(key, status)) {
         const LocaleKey& lkey = (const LocaleKey&)key;
         Locale loc;
@@ -111,6 +111,9 @@ class ICUCollatorService : public ICULocaleService {
 
     virtual UObject* handleDefault(const ICUServiceKey& key, UnicodeString* actualID, UErrorCode& status) const {
         LocaleKey& lkey = (LocaleKey&)key;
+		if (actualID) {
+			lkey.canonicalID(*actualID);
+		}
         Locale loc;
         lkey.canonicalLocale(loc);
         return Collator::makeInstance(loc, status);
@@ -405,7 +408,7 @@ int32_t Collator::getBound(const uint8_t       *source,
 }
 
 void
-Collator::setLocales(const Locale& requestedLocale, const Locale& validLocale) {
+Collator::setLocales(const Locale& /* requestedLocale */, const Locale& /* validLocale */) {
 }
 
 // -------------------------------------
@@ -473,7 +476,7 @@ public:
 };
 
 UObject* 
-CFactory::create(const ICUServiceKey& key, const ICUService* service, UErrorCode& status) const
+CFactory::create(const ICUServiceKey& key, const ICUService* /* service */, UErrorCode& status) const
 {
     if (handlesKey(key, status)) {
         const LocaleKey& lkey = (const LocaleKey&)key;
