@@ -362,37 +362,39 @@ ucol_openVersion(const char *loc,
 U_CAPI void U_EXPORT2
 ucol_close(UCollator *coll)
 {
-  /* Here, it would be advisable to close: */
-  /* - UData for UCA (unless we stuff it in the root resb */
-  /* Again, do we need additional housekeeping... HMMM! */
-  if(coll->freeOnClose == FALSE){
-    return; /* for safeClone, if freeOnClose is FALSE,
-            don't free the other instance data */
-  }
-  if(coll->freeOptionsOnClose != FALSE) {
-    if(coll->options != NULL) {
-      uprv_free(coll->options);
+  if(coll != NULL) {
+    /* Here, it would be advisable to close: */
+    /* - UData for UCA (unless we stuff it in the root resb */
+    /* Again, do we need additional housekeeping... HMMM! */
+    if(coll->freeOnClose == FALSE){
+      return; /* for safeClone, if freeOnClose is FALSE,
+              don't free the other instance data */
     }
+    if(coll->freeOptionsOnClose != FALSE) {
+      if(coll->options != NULL) {
+        uprv_free(coll->options);
+      }
+    }
+    if(coll->mapping != NULL) {
+        /*ucmpe32_close(coll->mapping);*/
+      uprv_free(coll->mapping);
+    }
+    if(coll->rules != NULL && coll->freeRulesOnClose) {
+      uprv_free((UChar *)coll->rules);
+    }
+    if(coll->rb != NULL) { /* pointing to read-only memory */
+      ures_close(coll->rb);
+    } else if(coll->hasRealData == TRUE) {
+      uprv_free((UCATableHeader *)coll->image);
+    }
+    if(coll->binary != NULL) {
+      ures_close(coll->binary);
+    }
+    if(coll->requestedLocale != NULL) {
+      uprv_free(coll->requestedLocale);
+    }
+    uprv_free(coll);
   }
-  if(coll->mapping != NULL) {
-      /*ucmpe32_close(coll->mapping);*/
-    uprv_free(coll->mapping);
-  }
-  if(coll->rules != NULL && coll->freeRulesOnClose) {
-    uprv_free((UChar *)coll->rules);
-  }
-  if(coll->rb != NULL) { /* pointing to read-only memory */
-    ures_close(coll->rb);
-  } else if(coll->hasRealData == TRUE) {
-    uprv_free((UCATableHeader *)coll->image);
-  }
-  if(coll->binary != NULL) {
-    ures_close(coll->binary);
-  }
-  if(coll->requestedLocale != NULL) {
-    uprv_free(coll->requestedLocale);
-  }
-  uprv_free(coll);
 }
 
 U_CAPI UCollator* U_EXPORT2
@@ -446,7 +448,7 @@ ucol_openRules( const UChar        *rules,
   ucol_initUCA(status);
 
   if(U_FAILURE(*status)){
-    return 0;
+    return NULL;
   }
 
   ucol_tok_initTokenList(&src, rules, rulesLength, UCA, status);
@@ -484,7 +486,7 @@ ucol_openRules( const UChar        *rules,
     /* test for NULL */
     if (opts == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
+        goto cleanup;
     }
     uprv_memcpy(opts, src.opts, sizeof(UColOptionSet));
     ucol_setOptionsFromHeader(result, opts, status);
@@ -495,30 +497,32 @@ ucol_openRules( const UChar        *rules,
   if(U_SUCCESS(*status)) {
     UChar *newRules;
     result->dataInfo.dataVersion[0] = UCOL_BUILDER_VERSION;
-    newRules = (UChar *)uprv_malloc((rulesLength+1)*U_SIZEOF_UCHAR);
-    /* test for NULL */
-    if (newRules == NULL) {
-        *status = U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
-    }
     if(rulesLength > 0) {
+      newRules = (UChar *)uprv_malloc((rulesLength+1)*U_SIZEOF_UCHAR);
+      /* test for NULL */
+      if (newRules == NULL) {
+          *status = U_MEMORY_ALLOCATION_ERROR;
+          goto cleanup;
+      }
       uprv_memcpy(newRules, rules, rulesLength*U_SIZEOF_UCHAR);
+      newRules[rulesLength]=0;
+      result->rules = newRules;
+      result->rulesLength = rulesLength;
+      result->freeRulesOnClose = TRUE;
     }
-    newRules[rulesLength]=0;
-    result->rules = newRules;
-    result->rulesLength = rulesLength;
-    result->freeRulesOnClose = TRUE;
     result->rb = NULL;
     result->binary = NULL;
     result->requestedLocale = NULL;
     ucol_setAttribute(result, UCOL_STRENGTH, strength, status);
     ucol_setAttribute(result, UCOL_NORMALIZATION_MODE, norm, status);
   } else {
-    if(table != NULL) {
-      uprv_free(table);
-    }
+cleanup:
     if(result != NULL) {
       ucol_close(result);
+    } else {
+      if(table != NULL) {
+        uprv_free(table);
+      }
     }
     result = NULL;
   }
@@ -1369,6 +1373,9 @@ void collPrevIterNormalize(collIterate *data)
             freeHeapWritableBuffer(data);
             data->writableBuffer = (UChar *)uprv_malloc((normLen + 1) *
                                                         sizeof(UChar));
+            if(data->writableBuffer == NULL) { // something is wrong here, return
+              return;
+            }
             data->flags |= UCOL_ITER_ALLOCATED;
             /* to handle the zero termination */
             data->writableBufSize = normLen + 1;
@@ -1704,16 +1711,18 @@ inline UChar * insertBufferEnd(collIterate *data, UChar *pNull, UChar ch)
     */
     size += incsize;
     newbuffer = (UChar *)uprv_malloc(sizeof(UChar) * size);
-    uprv_memcpy(newbuffer, data->writableBuffer,
-                data->writableBufSize * sizeof(UChar));
+    if(newbuffer != NULL) { // something wrong, but no status
+      uprv_memcpy(newbuffer, data->writableBuffer,
+                  data->writableBufSize * sizeof(UChar));
 
-    freeHeapWritableBuffer(data);
-    data->writableBufSize = size;
-    data->writableBuffer  = newbuffer;
+      freeHeapWritableBuffer(data);
+      data->writableBufSize = size;
+      data->writableBuffer  = newbuffer;
 
-    newbuffer        = newbuffer + data->writableBufSize;
-    *newbuffer       = ch;
-    *(newbuffer + 1) = 0;
+      newbuffer        = newbuffer + data->writableBufSize;
+      *newbuffer       = ch;
+      *(newbuffer + 1) = 0;
+    }
     return newbuffer;
 }
 
@@ -1744,12 +1753,14 @@ inline UChar * insertBufferEnd(collIterate *data, UChar *pNull, UChar *str,
     giving extra space since it is likely that more characters will be added.
     */
     newbuffer = (UChar *)uprv_malloc(sizeof(UChar) * (size + length + 1));
-    uprv_memcpy(newbuffer, data->writableBuffer, size * sizeof(UChar));
-    uprv_memcpy(newbuffer + size, str, length * sizeof(UChar));
+    if(newbuffer != NULL) {
+      uprv_memcpy(newbuffer, data->writableBuffer, size * sizeof(UChar));
+      uprv_memcpy(newbuffer + size, str, length * sizeof(UChar));
 
-    freeHeapWritableBuffer(data);
-    data->writableBufSize = size + length + 1;
-    data->writableBuffer  = newbuffer;
+      freeHeapWritableBuffer(data);
+      data->writableBufSize = size + length + 1;
+      data->writableBuffer  = newbuffer;
+    }
 
     return newbuffer;
 }
@@ -1792,11 +1803,13 @@ inline void normalizeNextContraction(collIterate *data)
     if (buffersize <= normLen + strsize) {
         uint32_t  size = strsize + normLen + 1;
         UChar    *temp = (UChar *)uprv_malloc(size * sizeof(UChar));
-        uprv_memcpy(temp, buffer, sizeof(UChar) * strsize);
-        freeHeapWritableBuffer(data);
-        data->writableBuffer = temp;
-        data->writableBufSize = size;
-        data->flags |= UCOL_ITER_ALLOCATED;
+        if(temp != NULL) {
+          uprv_memcpy(temp, buffer, sizeof(UChar) * strsize);
+          freeHeapWritableBuffer(data);
+          data->writableBuffer = temp;
+          data->writableBufSize = size;
+          data->flags |= UCOL_ITER_ALLOCATED;
+        }
     }
 
     status            = U_ZERO_ERROR;
@@ -1950,6 +1963,9 @@ inline void setDiscontiguosAttribute(collIterate *source, UChar *buffer,
         freeHeapWritableBuffer(source);
         source->writableBuffer =
                      (UChar *)uprv_malloc((length + 1) * sizeof(UChar));
+        if(source->writableBuffer == NULL) {
+          return;
+        }
         source->writableBufSize = length;
     }
 
@@ -2574,6 +2590,9 @@ inline UChar * insertBufferFront(collIterate *data, UChar *pNull, UChar ch)
     */
     size += incsize;
     newbuffer = (UChar *)uprv_malloc(sizeof(UChar) * size);
+    if(newbuffer == NULL) {
+      return NULL;
+    }
     end = newbuffer + incsize;
     uprv_memcpy(end, data->writableBuffer,
                 data->writableBufSize * sizeof(UChar));
@@ -2638,12 +2657,14 @@ inline void normalizePrevContraction(collIterate *data)
     if (nulltermsize <= normLen) {
         uint32_t  size = buffersize - nulltermsize + normLen + 1;
         UChar    *temp = (UChar *)uprv_malloc(size * sizeof(UChar));
-        nulltermsize   = normLen + 1;
-        uprv_memcpy(temp + normLen, buffer,
-                    sizeof(UChar) * (buffersize - nulltermsize));
-        freeHeapWritableBuffer(data);
-        data->writableBuffer = temp;
-        data->writableBufSize = size;
+        if(temp != NULL) {
+          nulltermsize   = normLen + 1;
+          uprv_memcpy(temp + normLen, buffer,
+                      sizeof(UChar) * (buffersize - nulltermsize));
+          freeHeapWritableBuffer(data);
+          data->writableBuffer = temp;
+          data->writableBufSize = size;
+        }
     }
 
     status = U_ZERO_ERROR;
@@ -3524,6 +3545,10 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
                     fSecs = (uint8_t *)uprv_malloc(2*fSecsLen);
                   } else {
                     fSecs = (uint8_t *)uprv_realloc(fSecs, 2*fSecsLen);
+                  }
+                  if(fSecs == NULL) {
+                    status = U_MEMORY_ALLOCATION_ERROR;
+                    return -1;
                   }
                   fSecsMaxLen *= 2;
                 }
@@ -5343,13 +5368,15 @@ void ucol_CEBuf_Expand(ucol_CEBuf *b, collIterate *ci) {
     oldSize = b->pos - b->buf;
     newSize = oldSize * 2;
     newBuf = (uint32_t *)uprv_malloc(newSize * sizeof(uint32_t));
-    uprv_memcpy(newBuf, b->buf, oldSize * sizeof(uint32_t));
-    if (b->buf != b->localArray) {
-        uprv_free(b->buf);
+    if(newBuf != NULL) {
+      uprv_memcpy(newBuf, b->buf, oldSize * sizeof(uint32_t));
+      if (b->buf != b->localArray) {
+          uprv_free(b->buf);
+      }
+      b->buf = newBuf;
+      b->endp = b->buf + newSize;
+      b->pos  = b->buf + oldSize;
     }
-    b->buf = newBuf;
-    b->endp = b->buf + newSize;
-    b->pos  = b->buf + oldSize;
 }
 
 static
@@ -5376,13 +5403,17 @@ static UCollationResult ucol_compareUsingSortKeys(const    UCollator    *coll,
     sourceKeyLen = ucol_getSortKey(coll, source, sourceLength, sourceKeyP, sourceKeyLen);
     if(sourceKeyLen > UCOL_MAX_BUFFER) {
         sourceKeyP = (uint8_t*)uprv_malloc(sourceKeyLen*sizeof(uint8_t));
-        sourceKeyLen = ucol_getSortKey(coll, source, sourceLength, sourceKeyP, sourceKeyLen);
+        if(sourceKeyP != NULL) {
+          sourceKeyLen = ucol_getSortKey(coll, source, sourceLength, sourceKeyP, sourceKeyLen);
+        }
     }
 
     targetKeyLen = ucol_getSortKey(coll, target, targetLength, targetKeyP, targetKeyLen);
     if(targetKeyLen > UCOL_MAX_BUFFER) {
         targetKeyP = (uint8_t*)uprv_malloc(targetKeyLen*sizeof(uint8_t));
-        targetKeyLen = ucol_getSortKey(coll, target, targetLength, targetKeyP, targetKeyLen);
+        if(targetKeyP != NULL) {
+          targetKeyLen = ucol_getSortKey(coll, target, targetLength, targetKeyP, targetKeyLen);
+        }
     }
 
     int32_t result = uprv_strcmp((const char*)sourceKeyP, (const char*)targetKeyP);
