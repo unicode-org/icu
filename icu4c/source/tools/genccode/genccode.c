@@ -167,13 +167,15 @@ writeCCode(const char *filename, const char *destdir) {
         }
     }
 
+    /* Function renaming shouldn't be done in data */
     sprintf(buffer,
-        "#include \"unicode/utypes.h\"\n"
+        "#define U_DISABLE_RENAMING 1\n"
+        "#include \"unicode/umachine.h\"\n"
         "U_CDECL_BEGIN\n"
         "const struct {\n"
         "    double bogus;\n"
         "    uint8_t bytes[%ld]; \n"
-        "} %s%s={ 0, {\n",
+        "} %s%s={ 0.0, {\n",
         (long)T_FileStream_size(in), symPrefix, entry);
     T_FileStream_writeLine(out, buffer);
 

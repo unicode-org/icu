@@ -729,11 +729,11 @@ void RuleHalf::removeContext() {
  * Return true if this half looks like valid output, that is, does not
  * contain quantifiers or other special input-only elements.
  */
-UBool RuleHalf::isValidOutput(TransliteratorParser& parser) {
+UBool RuleHalf::isValidOutput(TransliteratorParser& transParser) {
     for (int32_t i=0; i<text.length(); ) {
         UChar32 c = text.char32At(i);
         i += UTF_CHAR_LENGTH(c);
-        if (!parser.parseData->isReplacer(c)) {
+        if (!transParser.parseData->isReplacer(c)) {
             return FALSE;
         }
     }
@@ -744,11 +744,11 @@ UBool RuleHalf::isValidOutput(TransliteratorParser& parser) {
  * Return true if this half looks like valid input, that is, does not
  * contain functions or other special output-only elements.
  */
-UBool RuleHalf::isValidInput(TransliteratorParser& parser) {
+UBool RuleHalf::isValidInput(TransliteratorParser& transParser) {
     for (int32_t i=0; i<text.length(); ) {
         UChar32 c = text.char32At(i);
         i += UTF_CHAR_LENGTH(c);
-        if (!parser.parseData->isMatcher(c)) {
+        if (!transParser.parseData->isMatcher(c)) {
             return FALSE;
         }
     }
