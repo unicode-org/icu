@@ -8,6 +8,9 @@
 #define UDAT_H
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/ucal.h"
 #include "unicode/unum.h"
 /**
@@ -539,4 +542,7 @@ udat_setSymbols(    UDateFormat             *format,
 #endif
 #endif
 /********************* End **********************************************/
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
+
 #endif

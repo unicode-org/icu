@@ -10,6 +10,10 @@
 #ifndef RBT_H
 #define RBT_H
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_TRANSLITERATION
+
 #include "unicode/translit.h"
 
 #ifdef ICU_RULEBASEDTRANSLITERATOR_USE_DEPRECATES
@@ -560,5 +564,7 @@ inline RuleBasedTransliterator::RuleBasedTransliterator(
 
 U_NAMESPACE_END
 #endif /* ICU_RULEBASEDTRANSLITERATOR_USE_DEPRECATES */
+
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */
 
 #endif

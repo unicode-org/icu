@@ -11,6 +11,10 @@
 #ifndef STRREPL_H
 #define STRREPL_H
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_TRANSLITERATION
+
 #include "unicode/unifunct.h"
 #include "unicode/unirepl.h"
 #include "unicode/unistr.h"
@@ -159,6 +163,8 @@ class StringReplacer : public UnicodeFunctor, public UnicodeReplacer {
 };
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */
 
 #endif
 

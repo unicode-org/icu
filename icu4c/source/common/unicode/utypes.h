@@ -36,6 +36,7 @@
 #include "unicode/umachine.h"
 #include "unicode/utf.h"
 #include "unicode/uversion.h"
+#include "unicode/uconfig.h"
 
 /*!
  * \file

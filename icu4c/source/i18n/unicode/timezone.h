@@ -27,6 +27,9 @@
 #define TIMEZONE_H
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/uobject.h"
 #include "unicode/unistr.h"
 
@@ -592,6 +595,8 @@ TimeZone::setID(const UnicodeString& ID)
     fID = ID;
 }
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif //_TIMEZONE
 //eof

@@ -18,6 +18,10 @@
 // This file was generated from the java source file BreakIterator.java
 // *****************************************************************************
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_BREAK_ITERATION
+
 #include "unicode/dbbi.h"
 #include "unicode/brkiter.h"
 #include "unicode/udata.h"
@@ -264,5 +268,7 @@ BreakIterator::~BreakIterator()
 }
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_BREAK_ITERATION */
 
 //eof

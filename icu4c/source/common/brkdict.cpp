@@ -8,6 +8,10 @@
 **********************************************************************
 */
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_BREAK_ITERATION
+
 #include "unicode/resbund.h"
 #include "brkdict.h"
 #include "cmemory.h"
@@ -236,3 +240,4 @@ BreakDictionary::internalAt(int32_t row, int32_t col) const
 
 U_NAMESPACE_END
 
+#endif /* #if !UCONFIG_NO_BREAK_ITERATION */

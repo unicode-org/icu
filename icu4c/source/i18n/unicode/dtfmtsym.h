@@ -19,6 +19,9 @@
 #define DTFMTSYM_H
  
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/uobject.h"
 #include "unicode/locid.h"
 #include "unicode/resbund.h"
@@ -460,6 +463,8 @@ private:
 };
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif // _DTFMTSYM
 //eof

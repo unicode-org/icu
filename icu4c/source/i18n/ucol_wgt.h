@@ -17,6 +17,10 @@
 #ifndef UCOL_WGT_H
 #define UCOL_WGT_H
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #include "ucol_imp.h"
 
 /* definitions for CE weights */
@@ -62,5 +66,7 @@ ucol_allocWeights(uint32_t lowerLimit, uint32_t upperLimit,
  */
 U_CFUNC uint32_t
 ucol_nextWeight(WeightRange ranges[], int32_t *pRangeCount);
+
+#endif /* #if !UCONFIG_NO_COLLATION */
 
 #endif

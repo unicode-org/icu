@@ -9,6 +9,9 @@
 */
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_TRANSLITERATION
+
 #include "unicode/uobject.h"
 #include "unicode/parseerr.h"
 #include "unicode/parsepos.h"
@@ -1557,3 +1560,5 @@ Transliterator* TransliteratorParser::createBasicInstance(const UnicodeString& i
 }
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */

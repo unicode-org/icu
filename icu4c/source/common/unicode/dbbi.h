@@ -13,6 +13,8 @@
 
 #include "unicode/rbbi.h"
 
+#if !UCONFIG_NO_BREAK_ITERATION
+
 U_NAMESPACE_BEGIN
 
 /* forward declaration */
@@ -252,5 +254,7 @@ inline UClassID DictionaryBasedBreakIterator::getStaticClassID(void) {
 }
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_BREAK_ITERATION */
 
 #endif

@@ -9,6 +9,9 @@
 #define RBT_SET_H
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_TRANSLITERATION
+
 #include "unicode/uobject.h"
 #include "unicode/utrans.h"
 #include "uvector.h"
@@ -172,4 +175,7 @@ private:
 };
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */
+
 #endif

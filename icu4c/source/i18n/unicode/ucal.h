@@ -7,6 +7,9 @@
 #define UCAL_H
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 /**
  * \file
  * \brief C API: Calendar
@@ -739,5 +742,7 @@ ucal_getLimit(    const    UCalendar*              cal,
             UCalendarDateFields     field,
             UCalendarLimitType      type,
             UErrorCode        *status);
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif

@@ -9,6 +9,9 @@
 */
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_TRANSLITERATION
+
 #include "unicode/uobject.h"
 #include "unicode/nultrans.h"
 #include "unicode/uscript.h"
@@ -384,5 +387,7 @@ void AnyTransliterator::registerIDs() {
 }
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */
 
 //eof

@@ -8,6 +8,10 @@
 **********************************************************************
 */
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_BREAK_ITERATION
+
 #include "unicode/unistr.h"
 #include "unicode/uniset.h"
 #include "unicode/uchar.h"
@@ -263,3 +267,5 @@ void RBBISymbolTable::print() const {
 
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_BREAK_ITERATION */

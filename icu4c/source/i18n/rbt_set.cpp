@@ -7,6 +7,11 @@
 *   11/17/99    aliu        Creation.
 **********************************************************************
 */
+
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_TRANSLITERATION
+
 #include "unicode/unistr.h"
 #include "unicode/uniset.h"
 #include "rbt_set.h"
@@ -446,3 +451,5 @@ UnicodeSet& TransliterationRuleSet::getSourceTargetSet(UnicodeSet& result,
 }
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */

@@ -19,6 +19,10 @@
 // This file was generated from the java source file Format.java
 // *****************************************************************************
  
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/format.h"
 
 // *****************************************************************************
@@ -107,5 +111,7 @@ Format::operator==(const Format& /*that*/) const
 //---------------------------------------
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 //eof

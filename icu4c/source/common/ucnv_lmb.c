@@ -24,6 +24,9 @@
 */
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_LEGACY_CONVERSION
+
 #include "cmemory.h"
 #include "unicode/ucnv_err.h"
 #include "ucnv_bld.h"
@@ -1344,6 +1347,4 @@ DECLARE_LMBCS_DATA(17)
 DECLARE_LMBCS_DATA(18)
 DECLARE_LMBCS_DATA(19)
 
-
-
-
+#endif /* #if !UCONFIG_NO_LEGACY_CONVERSION */

@@ -1134,6 +1134,8 @@ UnicodeString::toUpper(const Locale &locale) {
   return caseMap(0, locale, 0, TO_UPPER);
 }
 
+#if !UCONFIG_NO_BREAK_ITERATION
+
 UnicodeString &
 UnicodeString::toTitle(BreakIterator *titleIter) {
   return caseMap(titleIter, Locale::getDefault(), 0, TO_TITLE);
@@ -1143,6 +1145,8 @@ UnicodeString &
 UnicodeString::toTitle(BreakIterator *titleIter, const Locale &locale) {
   return caseMap(titleIter, locale, 0, TO_TITLE);
 }
+
+#endif
 
 UnicodeString &
 UnicodeString::foldCase(uint32_t options) {
@@ -1182,9 +1186,11 @@ UnicodeString::caseMap(BreakIterator *titleIter,
     return *this;
   }
 
+  UErrorCode errorCode;
+
+#if !UCONFIG_NO_BREAK_ITERATION
   // set up the titlecasing break iterator
   UBreakIterator *cTitleIter = 0;
-  UErrorCode errorCode;
 
   if(toWhichCase == TO_TITLE) {
     if(titleIter != 0) {
@@ -1201,6 +1207,7 @@ UnicodeString::caseMap(BreakIterator *titleIter,
       }
     }
   }
+#endif
 
   // Case-map, and if the result is too long, then reallocate and repeat.
   do {
@@ -1216,11 +1223,13 @@ UnicodeString::caseMap(BreakIterator *titleIter,
                                      oldArray, oldLength,
                                      locale.getName(),
                                      &errorCode);
+#if !UCONFIG_NO_BREAK_ITERATION
     } else if(toWhichCase==TO_TITLE) {
       fLength = u_internalStrToTitle(fArray, fCapacity,
                                      oldArray, oldLength,
                                      cTitleIter, locale.getName(),
                                      &errorCode);
+#endif
     } else {
       fLength = u_internalStrFoldCase(fArray, fCapacity,
                                       oldArray, oldLength,
@@ -1229,9 +1238,11 @@ UnicodeString::caseMap(BreakIterator *titleIter,
     }
   } while(errorCode==U_BUFFER_OVERFLOW_ERROR && cloneArrayIfNeeded(fLength, fLength, FALSE));
 
+#if !UCONFIG_NO_BREAK_ITERATION
   if(cTitleIter != 0 && titleIter == 0) {
     ubrk_close(cTitleIter);
   }
+#endif
 
   if (bufferToDelete) {
     uprv_free(bufferToDelete);

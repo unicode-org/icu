@@ -8,6 +8,10 @@
 **********************************************************************
 */
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_TRANSLITERATION
+
 /* These APIs are becoming private */
 #define ICU_COMPOUNDTRANSLITERATOR_USE_DEPRECATES 1
 
@@ -552,5 +556,7 @@ void CompoundTransliterator::computeMaximumContextLength(void) {
 }
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */
 
 /* eof */

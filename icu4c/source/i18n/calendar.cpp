@@ -24,6 +24,10 @@
 *******************************************************************************
 */
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/resbund.h"
 #include "unicode/gregocal.h"
 #include "unicode/calendar.h"
@@ -848,5 +852,7 @@ Calendar::updateTime(UErrorCode& status)
 }
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 //eof

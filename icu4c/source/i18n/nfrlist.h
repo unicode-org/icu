@@ -16,7 +16,10 @@
 #ifndef NFRLIST_H
 #define NFRLIST_H
 
-#include "unicode/utypes.h"
+#include "unicode/rbnf.h"
+
+#if U_HAVE_RBNF
+
 #include "unicode/uobject.h"
 #include "nfrule.h"
 
@@ -96,6 +99,9 @@ private:
 };
 
 U_NAMESPACE_END
+
+/* U_HAVE_RBNF */
+#endif
 
 // NFRLIST_H
 #endif

@@ -10,6 +10,10 @@
 #ifndef UNI2NAME_H
 #define UNI2NAME_H
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_TRANSLITERATION
+
 #include "unicode/translit.h"
 
 U_NAMESPACE_BEGIN
@@ -89,5 +93,7 @@ class U_I18N_API UnicodeNameTransliterator : public Transliterator {
 };
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */
 
 #endif

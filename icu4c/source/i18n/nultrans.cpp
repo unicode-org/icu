@@ -8,6 +8,10 @@
 **********************************************************************
 */
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_TRANSLITERATION
+
 /* These APIs are becoming private */
 #define ICU_NULLTRANSLITERATOR_USE_DEPRECATES 1
 
@@ -34,3 +38,4 @@ void NullTransliterator::handleTransliterate(Replaceable& /*text*/, UTransPositi
 
 U_NAMESPACE_END
 
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */

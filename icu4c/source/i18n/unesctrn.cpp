@@ -8,6 +8,10 @@
 **********************************************************************
 */
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_TRANSLITERATION
+
 #include "unicode/uchar.h"
 #include "unesctrn.h"
 #include "util.h"
@@ -277,5 +281,7 @@ void UnescapeTransliterator::handleTransliterate(Replaceable& text, UTransPositi
 }
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */
 
 //eof

@@ -8,6 +8,10 @@
 **********************************************************************
 */
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_TRANSLITERATION
+
 /* These APIs are becoming private */
 #define ICU_UNICODETOHEXTRANSLITERATOR_USE_DEPRECATES 1
 
@@ -268,3 +272,4 @@ void UnicodeToHexTransliterator::handleTransliterate(Replaceable& text, UTransPo
 
 U_NAMESPACE_END
 
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */

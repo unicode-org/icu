@@ -37,6 +37,10 @@
 * 01/29/01     synwee      Modified into a C++ wrapper calling C APIs (ucol.h)
 */
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #include "unicode/coll.h"
 #include "unicode/tblcoll.h"
 #include "cmemory.h"
@@ -223,5 +227,7 @@ int32_t Collator::getBound(const uint8_t       *source,
 /*const UVersionInfo Collator::fVersion = {1, 1, 0, 0};*/
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_COLLATION */
 
 /* eof */

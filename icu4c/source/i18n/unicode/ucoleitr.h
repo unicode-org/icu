@@ -16,6 +16,10 @@
 #ifndef UCOLEITR_H
 #define UCOLEITR_H
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 /**  
  * This indicates an error has occured during processing or if no more CEs is 
  * to be returned.
@@ -229,5 +233,7 @@ U_CAPI void U_EXPORT2
 ucol_setOffset(UCollationElements *elems,
                int32_t        offset,
                UErrorCode         *status);
+
+#endif /* #if !UCONFIG_NO_COLLATION */
 
 #endif

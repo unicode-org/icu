@@ -9,6 +9,9 @@
 //    RBBI engine.
 //
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_BREAK_ITERATION
 
 #include "unicode/brkiter.h"
 #include "unicode/rbbi.h"
@@ -243,3 +246,5 @@ RBBIRuleBuilder::createRuleBasedBreakIterator( const UnicodeString    &rules,
 }
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_BREAK_ITERATION */

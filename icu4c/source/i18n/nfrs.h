@@ -16,7 +16,6 @@
 #ifndef NFRS_H
 #define NFRS_H
 
-#include "unicode/utypes.h"
 #include "unicode/uobject.h"
 #include "unicode/rbnf.h"
 

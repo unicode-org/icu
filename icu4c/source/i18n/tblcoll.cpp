@@ -54,6 +54,10 @@
 * 01/29/01     synwee      Modified into a C++ wrapper calling C APIs (ucol.h)
 */
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #include "unicode/tblcoll.h"
 #include "unicode/coleitr.h"
 #include "unicode/resbund.h"
@@ -692,3 +696,5 @@ const char RuleBasedCollator::kFilenameSuffix[] = ".col";
 const char  RuleBasedCollator::fgClassID = 0;
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_COLLATION */

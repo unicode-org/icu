@@ -21,8 +21,11 @@
 #ifndef UCOL_UCAELEMS_H
 #define UCOL_UCAELEMS_H
 
-#include "ucol_cnt.h"
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
+#include "ucol_cnt.h"
 #include "ucol_imp.h"
 
 #ifdef UCOL_DEBUG
@@ -101,5 +104,7 @@ uprv_uca_canonicalClosure(tempUCATable *t, UErrorCode *status);
 #define headersize (paddedsize(sizeof(UCATableHeader))+paddedsize(sizeof(UColOptionSet)))
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_COLLATION */
 
 #endif

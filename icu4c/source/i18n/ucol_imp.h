@@ -26,6 +26,10 @@
 #ifndef UCOL_IMP_H
 #define UCOL_IMP_H
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #include "unicode/ucol.h"
 /*#include "ucmpe32.h"*/
 #include "utrie.h"
@@ -840,6 +844,8 @@ static inline UBool ucol_unsafeCP(UChar c, const UCollator *coll) {
 }
 #endif /* XP_CPLUSPLUS */
 
+
+#endif /* #if !UCONFIG_NO_COLLATION */
 
 #endif
 

@@ -12,6 +12,9 @@
 #define UTRANS_H
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_TRANSLITERATION
+
 #include "unicode/urep.h"
 #include "unicode/parseerr.h"
 
@@ -501,5 +504,7 @@ utrans_transIncrementalUChars(const UTransliterator* trans,
 #endif
 #endif
 /********************* End **********************************************/
+
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */
 
 #endif

@@ -5,8 +5,11 @@
 *******************************************************************************
 */
 
-#include "unicode/ucal.h"
+#include "unicode/utypes.h"
 
+#if !UCONFIG_NO_FORMATTING
+
+#include "unicode/ucal.h"
 #include "unicode/uloc.h"
 #include "unicode/calendar.h"
 #include "unicode/timezone.h"
@@ -392,3 +395,5 @@ ucal_getLimit(    const    UCalendar*              cal,
   }
   return -1;
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

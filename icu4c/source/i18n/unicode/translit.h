@@ -9,6 +9,9 @@
 #define TRANSLIT_H
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_TRANSLITERATION
+
 #include "unicode/uobject.h"
 #include "unicode/unistr.h"
 #include "unicode/parseerr.h"
@@ -1327,5 +1330,6 @@ inline Transliterator* Transliterator::createInverse() const{
 
 U_NAMESPACE_END
 
-#endif
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */
 
+#endif

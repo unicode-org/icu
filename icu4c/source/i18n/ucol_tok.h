@@ -21,6 +21,10 @@
 #ifndef UCOL_TOKENS_H
 #define UCOL_TOKENS_H
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #include "ucol_imp.h"
 #include "uhash.h"
 #include "unicode/parseerr.h"
@@ -158,12 +162,6 @@ ucol_tok_getNextArgument(const UChar *start, const UChar *end,
                                UColAttribute *attrib, UColAttributeValue *value, 
                                UErrorCode *status);
 
-
-
+#endif /* #if !UCONFIG_NO_COLLATION */
 
 #endif
-
-
-
-
-

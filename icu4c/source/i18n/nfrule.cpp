@@ -1016,7 +1016,12 @@ NFRule::matchToDelimiter(const UnicodeString& text,
             subText.setTo(text, 0, dPos);
             if (subText.length() > 0) {
                 UBool success = sub->doParse(subText, tempPP, _baseValue, upperBound,
-                    formatter->isLenient(), result);
+#if UCONFIG_NO_COLLATION
+                    FALSE,
+#else
+                    formatter->isLenient(),
+#endif
+                    result);
 
                 // if the substitution could match all the text up to
                 // where we found "delimiter", then this function has
@@ -1060,7 +1065,12 @@ NFRule::matchToDelimiter(const UnicodeString& text,
 
         // try to match the whole string against the substitution
         UBool success = sub->doParse(text, tempPP, _baseValue, upperBound,
-            formatter->isLenient(), result);
+#if UCONFIG_NO_COLLATION
+            FALSE,
+#else
+            formatter->isLenient(),
+#endif
+            result);
         if (success && (tempPP.getIndex() != 0 || sub->isNullSubstitution())) {
             // if there's a successful match (or it's a null
             // substitution), update pp to point to the first
@@ -1104,6 +1114,7 @@ NFRule::prefixLength(const UnicodeString& str, const UnicodeString& prefix) cons
         return 0;
     }
 
+#if !UCONFIG_NO_COLLATION
     // go through all this grief if we're in lenient-parse mode
     if (formatter->isLenient()) {
         // get the formatter's collator and use it to create two
@@ -1251,7 +1262,9 @@ NFRule::prefixLength(const UnicodeString& str, const UnicodeString& prefix) cons
 
         // If lenient parsing is turned off, forget all that crap above.
         // Just use String.startsWith() and be done with it.
-  } else {
+  } else
+#endif
+  {
       if (str.startsWith(prefix)) {
           return prefix.length();
       } else {
@@ -1281,6 +1294,7 @@ NFRule::findText(const UnicodeString& str,
                  int32_t startingAt,
                  int32_t* length) const
 {
+#if !UCONFIG_NO_COLLATION
     // if lenient parsing is turned off, this is easy: just call
     // String.indexOf() and we're done
     if (!formatter->isLenient()) {
@@ -1289,7 +1303,9 @@ NFRule::findText(const UnicodeString& str,
 
         // but if lenient parsing is turned ON, we've got some work
         // ahead of us
-    } else {
+    } else
+#endif
+    {
         //----------------------------------------------------------------
         // JDK 1.1 HACK (take out of 1.2-specific code)
 
@@ -1393,6 +1409,7 @@ NFRule::allIgnorable(const UnicodeString& str) const
         return TRUE;
     }
 
+#if !UCONFIG_NO_COLLATION
     // if lenient parsing is turned on, walk through the string with
     // a collation element iterator and make sure each collation
     // element is 0 (ignorable) at the primary level
@@ -1410,6 +1427,8 @@ NFRule::allIgnorable(const UnicodeString& str) const
         delete iter;
         return o == CollationElementIterator::NULLORDER;
     }
+#endif
+
     // if lenient parsing is turned off, there is no such thing as
     // an ignorable character: return true only if the string is empty
     return FALSE;

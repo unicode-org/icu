@@ -37,6 +37,10 @@
 ********************************************************************************
 */
  
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/decimfmt.h"
 #include "unicode/ucurr.h"
 #include "unicode/ustring.h"
@@ -3033,5 +3037,7 @@ const UChar* DecimalFormat::getCurrency() const {
 }
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 //eof

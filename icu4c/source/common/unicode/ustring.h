@@ -840,6 +840,8 @@ u_strToLower(UChar *dest, int32_t destCapacity,
              const char *locale,
              UErrorCode *pErrorCode);
 
+#if !UCONFIG_NO_BREAK_ITERATION
+
 /**
  * Titlecase a string.
  * Casing is locale-dependent and context-sensitive.
@@ -884,6 +886,8 @@ u_strToTitle(UChar *dest, int32_t destCapacity,
              UBreakIterator *titleIter,
              const char *locale,
              UErrorCode *pErrorCode);
+
+#endif
 
 /**
  * Case-fold the characters in a string.

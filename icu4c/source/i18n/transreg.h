@@ -11,6 +11,9 @@
 #define _TRANSREG_H
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_TRANSLITERATION
+
 #include "unicode/uobject.h"
 #include "unicode/translit.h"
 #include "hash.h"
@@ -398,6 +401,8 @@ class TransliteratorRegistry : public UObject {
 };
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */
 
 #endif
 //eof

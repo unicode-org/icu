@@ -24,6 +24,10 @@
 *                        private constructor and no calls are made to it
 */
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #include "unicode/coleitr.h"
 #include "unicode/ustring.h"
 #include "ucol_imp.h"
@@ -485,5 +489,7 @@ const CollationElementIterator& CollationElementIterator::operator=(
 }
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_COLLATION */
 
 /* eof */

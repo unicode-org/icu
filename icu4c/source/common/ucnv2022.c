@@ -27,6 +27,9 @@
 */
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_LEGACY_CONVERSION
+
 #include "unicode/ucnv.h"
 #include "unicode/ucnv_err.h"
 #include "unicode/ucnv_cb.h"
@@ -3395,4 +3398,4 @@ _ISO_2022_SafeClone(
     return &localClone->cnv;
 }
 
-
+#endif /* #if !UCONFIG_NO_LEGACY_CONVERSION */

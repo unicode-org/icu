@@ -9,6 +9,9 @@
 #define UCOL_H
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #include "unicode/unorm.h"
 #include "unicode/parseerr.h"
 #include "unicode/uloc.h"
@@ -790,5 +793,7 @@ ucol_setNormalization(  UCollator        *coll,
 
 #endif
 /********************************* End *******************************************/
+
+#endif /* #if !UCONFIG_NO_COLLATION */
 
 #endif

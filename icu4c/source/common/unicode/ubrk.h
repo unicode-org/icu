@@ -7,6 +7,18 @@
 #define UBRK_H
 
 #include "unicode/utypes.h"
+
+/**
+ * A text-break iterator.
+ *  For usage in C programs.
+ */
+#ifndef UBRK_TYPEDEF_UBREAK_ITERATOR
+#   define UBRK_TYPEDEF_UBREAK_ITERATOR
+    typedef void UBreakIterator;
+#endif
+
+#if !UCONFIG_NO_BREAK_ITERATION
+
 #include "unicode/parseerr.h"
 
 /**
@@ -165,15 +177,6 @@
  * \endcode
  * </pre>
  */
-
-/**
- * A text-break iterator.
- *  For usage in C programs.
- */
-#ifndef UBRK_TYPEDEF_UBREAK_ITERATOR
-#   define UBRK_TYPEDEF_UBREAK_ITERATOR
-    typedef void UBreakIterator;
-#endif
 
 /** The possible types of text boundaries. */
 typedef enum UBreakIteratorType {
@@ -453,5 +456,6 @@ ubrk_isBoundary(UBreakIterator *bi, int32_t offset);
 U_CAPI  int32_t U_EXPORT2
 ubrk_getRuleStatus(UBreakIterator *bi);
 
+#endif /* #if !UCONFIG_NO_BREAK_ITERATION */
 
 #endif

@@ -16,6 +16,10 @@
 //
 //////////////////////////////////////////////////////////////
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_TRANSLITERATION
+
 #include "unicode/unifltlg.h"
 #include "unicode/unifilt.h"
 
@@ -181,3 +185,4 @@ UnicodeFilter* UnicodeFilterLogic::createOr(const UnicodeFilter* f,
 
 U_NAMESPACE_END
 
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */

@@ -23,6 +23,10 @@
 *   03/07/2001  synwee     merged UCA's maxexpansion and tailoring's
 */
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #include "unicode/uchar.h"
 #include "unicode/unistr.h"
 #include "unicode/ucoleitr.h"
@@ -1541,3 +1545,5 @@ uprv_uca_canonicalClosure(tempUCATable *t, UErrorCode *status)
 }
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_COLLATION */
