@@ -4,7 +4,7 @@
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
 */
-// $Revision: 1.9 $
+// $Revision: 1.10 $
 //
 // Provides functionality for mapping between
 // LCID and Posix IDs.
@@ -321,7 +321,8 @@ IGlobalLocales::initializeMapRegions()
     }
   }
 
-  delete newPosixIDmap; // If it wasn't assigned. Don't delete these 40 inside a mutex.
+  if (newPosixIDmap)
+    delete []newPosixIDmap; // If it wasn't assigned. Don't delete these 40 inside a mutex.
 }
 
 //////////////////////////////////////
