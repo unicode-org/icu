@@ -123,7 +123,7 @@ RBBIRuleScanner::RBBIRuleScanner(RBBIRuleBuilder *rb)
     //            and the time to build these few sets should be small compared to a
     //            full break iterator build.
     fRuleSets[kRuleSet_rule_char-128]       = new UnicodeSet(gRuleSet_rule_char_pattern,       *rb->fStatus);
-    fRuleSets[kRuleSet_white_space-128]     = new UnicodeSet(UnicodePropertySet::getRuleWhiteSpaceSet());
+    fRuleSets[kRuleSet_white_space-128]     = new UnicodeSet(UnicodePropertySet::getRuleWhiteSpaceSet(*rb->fStatus));
     fRuleSets[kRuleSet_name_char-128]       = new UnicodeSet(gRuleSet_name_char_pattern,       *rb->fStatus);
     fRuleSets[kRuleSet_name_start_char-128] = new UnicodeSet(gRuleSet_name_start_char_pattern, *rb->fStatus);
     fRuleSets[kRuleSet_digit_char-128]      = new UnicodeSet(gRuleSet_digit_char_pattern,      *rb->fStatus);

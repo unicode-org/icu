@@ -1691,7 +1691,7 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
              */
             if (UnicodePropertySet::resemblesPattern(pattern, i-1)) {
                 ParsePosition pp(i-1);
-                UnicodeSet *s = UnicodePropertySet::createFromPattern(pattern, pp);
+                UnicodeSet *s = UnicodePropertySet::createFromPattern(pattern, pp, status);
                 if (s == NULL) {
                     // assert(pp.getIndex() == i-1);
                     //throw new IllegalArgumentException("Invalid property pattern " +
