@@ -98,6 +98,8 @@ te
         ", O\u0308 & S < s\u0327 , S\u0327 & U < u\u0308 , U\u0308 " }
       }
     }
+    aliasClient:alias {"//aliasDestination"}
+    aliasDestination {"tedest"}
 }
 
 //eof
