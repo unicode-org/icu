@@ -1632,7 +1632,7 @@ static void TestUScriptCodeAPI(){
             USCRIPT_UCAS, USCRIPT_ARABIC,
             /* bogus names should return invalid code */
             USCRIPT_INVALID_CODE, USCRIPT_INVALID_CODE, USCRIPT_INVALID_CODE,
-            USCRIPT_YI, USCRIPT_YI,
+            USCRIPT_COMMON, USCRIPT_YI,
         };
 
         UErrorCode err = U_ZERO_ERROR;
@@ -1827,6 +1827,24 @@ static void TestUScriptCodeAPI(){
 		    log_err("\\U001D169 is not contained in USCRIPT_INHERITED");
 	    }
     }
+    {
+        uint32_t i = 0;
+        UScriptCode code= USCRIPT_INVALID_CODE;
+	    UErrorCode  status = U_ZERO_ERROR;
+        int32_t err = 0;
+        for(;i<=0x10ffff;i++){
+            code =  uscript_getScript(i,&status);
+            if(code == USCRIPT_INVALID_CODE){
+                err++;
+                log_verbose("uscript_getScript for codepoint \\U%08X failed.\n", i);
+            }
+        }
+        if(err>0){
+            log_err("uscript_getScript failed for %d codepoints\n", err);
+        }
+    }
+                
+
  }
 
 /* ### TODO: move this into uchar.h */
