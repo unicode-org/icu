@@ -1560,10 +1560,38 @@ TestKeyInRootRecursive(UResourceBundle *root, const char *rootName,
                         subBundleKey,
                         ures_getKey(currentBundle),
                         locale);
-            } else if (strcmp(subBundleKey, "localPatternChars") == 0 && len != 20) {
-                log_err("key \"%s\" has the wrong number of characters in locale \"%s\"\n",
-                        subBundleKey,
-                        locale);
+            } else if (strcmp(subBundleKey, "localPatternChars") == 0) {
+                /* Check well-formedness of localPatternChars.  First, the
+                 * length must match the number of fields defined by
+                 * DateFormat.  Second, each character in the string must
+                 * be in the set [A-Za-z].  Finally, each character must be
+                 * unique.
+                 */
+                int32_t i,j;
+                if (len != UDAT_FIELD_COUNT) {
+                    log_err("key \"%s\" has the wrong number of characters in locale \"%s\"\n",
+                            subBundleKey,
+                            locale);
+                }
+                /* Check char validity. */
+                for (i=0; i<len; ++i) {
+                    if (!((string[i] >= 65/*'A'*/ && string[i] <= 90/*'Z'*/) ||
+                          (string[i] >= 97/*'a'*/ && string[i] <= 122/*'z'*/))) {
+                        log_err("key \"%s\" has illegal character '%c' in locale \"%s\"\n",
+                                subBundleKey,
+                                (char) string[i],
+                                locale);
+                    }
+                    /* Do O(n^2) check for duplicate chars. */
+                    for (j=0; j<i; ++j) {
+                        if (string[j] == string[i]) {
+                            log_err("key \"%s\" has duplicate character '%c' in locale \"%s\"\n",
+                                    subBundleKey,
+                                    (char) string[i],
+                                    locale);
+                        }
+                    }
+                }
             }
             /* No fallback was done. Check for duplicate data */
             /* The ures_* API does not do fallback of sub-resource bundles,
