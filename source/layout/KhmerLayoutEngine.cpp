@@ -1,7 +1,7 @@
 
 /*
  *
- * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved 
+ * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved 
  *
  * This file is a modification of the ICU file IndicLayoutEngine.cpp
  * by Jens Herden and Javier Sola for Khmer language 

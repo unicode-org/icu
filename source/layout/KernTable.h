@@ -1,7 +1,7 @@
 /*
  * @(#)KernTable.h	1.1 04/10/13
  *
- * (C) Copyright IBM Corp. 2004 - All Rights Reserved
+ * (C) Copyright IBM Corp. 2004-2005 - All Rights Reserved
  *
  */
 

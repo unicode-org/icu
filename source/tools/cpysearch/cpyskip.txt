@@ -1,4 +1,4 @@
-# Copyright (c) 2004 International Business Machines 
+# Copyright (c) 2004-2005 International Business Machines 
 # Corporation and others. All Rights Reserved.
 # ICU4C files that don't need an IBM copyright
 as_is/os400/configure
@@ -42,8 +42,11 @@ source/samples/ucnv/data01.txt
 source/samples/ufortune/resources/res-file-list.txt
 source/test/testdata/CollationTest_NON_IGNORABLE_STUB.txt
 source/test/testdata/CollationTest_SHIFTED_STUB.txt
+source/test/testdata/GraphemeClusterBreakTest.txt
 source/test/testdata/re_tests.txt
 source/test/testdata/riwords.txt
+source/test/testdata/SentenceBreakTest.txt
+source/test/testdata/WordBreakTest.txt
 source/test/thaitest/space.txt
 source/test/unalignedtest/unaligned.c
 source/tools/gendraft/DeprecatedApi.txt

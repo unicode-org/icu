@@ -1,4 +1,4 @@
-Copyright (c) 2002, International Business Machines Corporation and others. All Rights Reserved.
+Copyright (c) 2002-2005, International Business Machines Corporation and others. All Rights Reserved.
 break: Boundary Analysis
 
 This sample demonstrates

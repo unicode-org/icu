@@ -1,4 +1,4 @@
-Copyright (c) 2002, International Business Machines Corporation and others. All Rights Reserved.
+Copyright (c) 2002-2005, International Business Machines Corporation and others. All Rights Reserved.
 strsrch: a sample program which finds the occurrences of a pattern string in a source string, using user-defined collation rules.
 
 This sample demonstrates
