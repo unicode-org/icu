@@ -26,10 +26,12 @@
 #include "cintltst.h"
 #include "putilimp.h"
 #include "uparse.h"
+#include "ucase.h"
 #include "uprops.h"
 #include "uset_imp.h"
 #include "usc_impl.h"
 #include "unormimp.h"
+#include "udatamem.h" /* for testing ucase_openBinary() */
 #include "cucdapi.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
@@ -55,6 +57,7 @@ static void TestNumericProperties(void);
 static void TestPropertyNames(void);
 static void TestPropertyValues(void);
 static void TestConsistency(void);
+static void TestUCase(void);
 
 /* internal methods used */
 static int32_t MakeProp(char* str);
@@ -143,6 +146,7 @@ void addUnicodeTest(TestNode** root)
     addTest(root, &TestPropertyNames, "tsutil/cucdtst/TestPropertyNames");
     addTest(root, &TestPropertyValues, "tsutil/cucdtst/TestPropertyValues");
     addTest(root, &TestConsistency, "tsutil/cucdtst/TestConsistency");
+    addTest(root, &TestUCase, "tsutil/cucdtst/TestUCase");
 }
 
 /*==================================================== */
@@ -2806,4 +2810,35 @@ TestConsistency() {
     uset_close(set2);
 
 #endif
+}
+
+/* API coverage for ucase.c */
+static void TestUCase() {
+    UDataMemory *pData;
+    UCaseProps *csp;
+    UErrorCode errorCode;
+
+    /* coverage for ucase_openBinary() */
+    errorCode=U_ZERO_ERROR;
+    pData=udata_open(NULL, UCASE_DATA_TYPE, UCASE_DATA_NAME, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_data_err("unable to open " UCASE_DATA_NAME "." UCASE_DATA_TYPE ": %s\n",
+                    u_errorName(errorCode));
+        return;
+    }
+
+    csp=ucase_openBinary((const uint8_t *)pData->pHeader, -1, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("ucase_openBinary() fails for the contents of " UCASE_DATA_NAME "." UCASE_DATA_TYPE ": %s\n",
+                u_errorName(errorCode));
+        udata_close(pData);
+        return;
+    }
+
+    if(UCASE_LOWER!=ucase_getType(csp, 0xdf)) { /* verify islower(sharp s) */
+        log_err("ucase_openBinary() does not seem to return working UCaseProps\n");
+    }
+
+    ucase_close(csp);
+    udata_close(pData);
 }
