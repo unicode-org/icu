@@ -146,9 +146,10 @@ main(int argc, char* argv[]) {
 
   if(argc<0 || needsHelp  ) {
     fprintf(stderr,
-            "usage: %s [-options] [-] [ filename1 filename2 ... ] \n"
+            "usage: %s [-options] [-] [packageFile] \n"
             "\tProduce packaged ICU data from the given list(s) of files.\n"
-            "\t'-' by itself means to read from stdin.\n",
+            "\t'-' by itself means to read from stdin.\n"
+            "\tpackageFile is a text file containing the list of files to package.\n",
             progname);
 
     fprintf(stderr, "\n options:\n");
