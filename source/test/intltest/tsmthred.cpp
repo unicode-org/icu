@@ -348,7 +348,10 @@ class TestThreadsThread : public SimpleThread
 {
 public:
     TestThreadsThread(char* whatToChange) { fWhatToChange = whatToChange; }
-    virtual void run() { SimpleThread::sleep(1000); *fWhatToChange = '*'; }
+    virtual void run() { SimpleThread::sleep(1000); 
+                         Mutex m;
+                         *fWhatToChange = '*'; 
+    }
 private:
     char *fWhatToChange;
 };
@@ -662,6 +665,8 @@ void formatErrorMessage(UErrorCode &realStatus, const UnicodeString& pattern, co
     delete fmt;
 };
 
+static    UMTX ftMutex;
+
 class FormatThreadTest : public ThreadWithStatus
 {
 public:
@@ -675,9 +680,9 @@ public:
         fOffset = fgOffset;
     }
 
+
     virtual void run()
     {
-      UMTX myMutex = 0;
         // Keep this data here to avoid static initialization.
         FormatThreadTestData kNumberFormatTestData[] = 
         {
@@ -708,7 +713,7 @@ public:
 
         if(U_FAILURE(status))
         {
-            Mutex m(&myMutex);
+            Mutex m(&ftMutex);
             error("Error on NumberFormat::createInstance()");
             return;
         }
@@ -718,7 +723,7 @@ public:
         if(U_FAILURE(status))
         {
             {
-                Mutex m(&myMutex);
+                Mutex m(&ftMutex);
                 error("Error on NumberFormat::createPercentInstance()");
             }
             delete formatter;
@@ -727,6 +732,7 @@ public:
 
         for(iteration = 0;!getError() && iteration<kFormatThreadIterations;iteration++)
         {
+
             int32_t whichLine = (iteration + fOffset)%kNumberFormatTestDataLength;
 
             UnicodeString  output;
@@ -735,7 +741,7 @@ public:
 
             if(0 != output.compare(kNumberFormatTestData[whichLine].string))
             {
-                Mutex m(&myMutex);
+                Mutex m(&ftMutex);
                 error("format().. expected " + kNumberFormatTestData[whichLine].string + " got " + output);
                 continue; // will break
             }
@@ -748,7 +754,7 @@ public:
 
             if(0 != output.compare(kPercentFormatTestData[whichLine].string))
             {
-                Mutex m(&myMutex);
+                Mutex m(&ftMutex);
                 error("percent format().. \n" + showDifference(kPercentFormatTestData[whichLine].string,output));
                 continue;
             }
@@ -799,14 +805,14 @@ public:
             {
                UnicodeString tmp;
                errorToString(status,tmp);
-               Mutex m(&myMutex);
+               Mutex m(&ftMutex);
                error("Failure on message format, pattern=" + patternToCheck +", error = " + tmp);
                continue;
             }
 
             if(result != expected)
             {
-                Mutex m(&myMutex);
+                Mutex m(&ftMutex);
                 error("PatternFormat: \n" + showDifference(expected,result));
                 continue;
             }
@@ -814,7 +820,7 @@ public:
 
         delete formatter;
         delete percentFormatter;
-        Mutex m(&myMutex);
+        Mutex m(&ftMutex);
         done();
     }
 
@@ -826,6 +832,7 @@ private:
 
 void MultithreadTest::TestThreadedIntl()
 {
+    umtx_init(&ftMutex);
 
     FormatThreadTest tests[kFormatThreadThreads];
  
@@ -838,7 +845,8 @@ void MultithreadTest::TestThreadedIntl()
         }
     }
 
-    for(int32_t patience = kFormatThreadPatience;patience > 0; patience --)
+    int32_t patience;
+    for(patience = kFormatThreadPatience;patience > 0; patience --)
     {
         logln("Waiting...");
 
@@ -847,9 +855,9 @@ void MultithreadTest::TestThreadedIntl()
         int32_t completed =0;
 
         for(i=0;i<kFormatThreadThreads;i++) {
-            umtx_lock(NULL);
+            umtx_lock(&ftMutex);
             UBool threadIsDone = tests[i].getDone();
-            umtx_unlock(NULL);
+            umtx_unlock(&ftMutex);
             if(threadIsDone)
             {
                 completed++;
@@ -875,12 +883,17 @@ void MultithreadTest::TestThreadedIntl()
                 errln("There were errors.");
             }
 
-            return;
+            break;
         }
 
         SimpleThread::sleep(900);
     }
-    errln("patience exceeded. ");
+
+    if (patience <= 0) {
+        errln("patience exceeded. ");
+    }
+    umtx_destroy(&ftMutex);
+    return;
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
