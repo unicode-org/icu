@@ -10,9 +10,9 @@
 
 <body bgcolor="#FFFFFF" link="#0000FF" vlink="#800080">
 
-<h2>ReadMe: IBM's International Classes For Unicode</h2>
+<h2>ReadMe: IBM Classes For Unicode</h2>
 
-<p>Version: 11/22/1999 <br>
+<p>Version: 12/28/2000<br>
 </p>
 
 <hr>
@@ -30,10 +30,10 @@ Reserved.</p>
 
 <ul>
   <li><a href="#introduction">Introduction</a></li>
-  <li><a href="#WhatContain">What the International Classes for Unicode Contain</a></li>
+  <li><a href="#WhatContain">What the IBM Classes for Unicode Contain</a></li>
   <li><a href="#API">API overview</a></li>
   <li><a href="#PlatformDependencies">Platform Dependencies</a></li>
-  <li><a href="#ImportantNotes">Important Notes regarding Win32</a></li>
+  <li><a href="#ImportantNotes">Important Installation Notes</a></li>
   <li><a href="#HowToInstall">How to Install/Build</a></li>
   <li><a href="#datahandling">How ICU handles data</a></li>
   <li><a href="#CharsetConvert">Character Set Conversion Information</a></li>
@@ -46,9 +46,9 @@ Reserved.</p>
 <h3><a NAME="introduction"></a><u>Introduction</u></h3>
 
 <p>Today's software market is a global one in which it is desirable to develop and
-maintain one application that supports a wide variety of national languages. IBM's
-International Classes for Unicode provides the following tools to help you write language
-independent applications: 
+maintain one application that supports a wide variety of national languages. IBM Classes
+for Unicode provides the following tools to help you write language independent
+applications: 
 
 <ul>
   <li>UnicodeString supporting the Unicode 3.0 standard</li>
@@ -63,9 +63,9 @@ independent applications:
   <li>Changing simple data files rather than modifying program code easily localizes
     applications written using these tools</li>
   <li>Over 150 locales supported. Visit <a
-    href="http://www10.software.ibm.com/developerworks/opensource/icu/localeexplorer">LocaleExplore
-    (http://www10.software.ibm.com/developerworks/opensource/icu/localeexplorer)</a> site for
-    a demonstration and a full list of supported locales or <a href="docs/supp_loc.html">click
+    href="http://oss.software.ibm.com/developerworks/opensource/icu/localeexplorer">LocaleExplore
+    (http://oss.software.ibm.com/developerworks/opensource/icu/localeexplorer)</a> site for a
+    demonstration and a full list of supported locales or <a href="docs/supp_loc.html">click
     here for a table of supported locales</a>.</li>
 </ul>
 
@@ -86,13 +86,59 @@ to fixing any bugs, and will also use your feedback to help plan future releases
   <p>&nbsp;</p>
 </blockquote>
 
-<h3><a NAME="WhatContain"></a><u>What the International Classes For Unicode Contain</u></h3>
+<h3><a NAME="WhatContain"></a><u>What the IBM Classes For Unicode Contain</u></h3>
 
-<p>All files are contained in <b>icu-XXXXXX.zip.</b> <br>
-Please unzip this file.&nbsp; It will re-construct the source directory. Please be sure to
-do &quot;<strong>unzip -a icu-XXXXXX.zip -d drive:\directory</strong>&quot; or use WinZip
-on Win32 platforms. &nbsp; This will convert the line feed/carriage return characters
-correctly on windows. &nbsp; </p>
+<p>There are two ways to download the ICU releases,
+
+<ul>
+  <li><strong>Official Release Snapshot:<br>
+    </strong>If you want to use ICU (as opposed to developing it), your best bet is to
+    download an official, packaged ICU version of the ICU source code.&nbsp; These versions
+    are tested more thoroughly than day-to-day development builds of the system, and they are
+    packaged in zip and tar files for convenient download.&nbsp; These packaged files can be
+    found at <a
+    href="http://oss.software.ibm.com/developerworks/opensource/icu/project/download/index.html">http://oss.software.ibm.com/developerworks/opensource/icu/project/download/index.html</a>.<br>
+    If packaged snapshot is named <b>ICUXXXXXX.zip </b>, XXXXXX is the release version number.<br>
+    Please unzip this file.&nbsp; It will re-construct the source directory. </li>
+  <li><strong>CVS Source Repository:<br>
+    </strong>If you are interested in developing features, patches, or bug fixes for ICU, you
+    should probably be working with the latest version of the ICU source code. You will need
+    to check the code out of our CVS repository to ensure that you have the most recent
+    version of all of the files. There are several ways to do this:<ul>
+      <li>WebCVS:<br>
+        If you want to browse the code and only make occasional downloads, you may want to use
+        WebCVS. It provides a convenient, web-based interface for browsing and downloading the
+        latest version of the ICU source code and documentation. You can also view each file's
+        revision history, display the differences between individual revisions, determine which
+        revisions were part of which official release, and so on. </li>
+      <li>WinCVS:<br>
+        If you will be doing serious work on ICU, you should probably install a CVS client on your
+        own machine so that you can do batch operations without going through the WebCVS
+        interface. On Windows, we suggest the WinCVS client. The following is the example
+        instruction on how to download ICU via WinCVS: <br>
+        1.Install the WinCVS client, which you can download from the WinCVS home page. <br>
+        2.In the WinCVS preferences, specify your CVSRoot to be
+        &quot;:pserver:anoncvs@oss.software.ibm.com:/usr/cvs/icu&quot;<br>
+        with the password &quot;anoncvs&quot;. To enter the CVSRoot value, select
+        &quot;Preferences&quot; from the &quot;Cvs Admin&quot; pull-down menu.
+        &nbsp;&nbsp; Authentication should be set to &quot;'passwd' file on the cvs server&quot;. <br>
+        3.To &quot;extract&quot; the most recent version of ICU, select &quot;Checkout
+        module&quot; from the &quot;Cvs Admin&quot; menu. Specify &quot;icu&quot; for the module
+        name. </li>
+      <li>CVS command line:<br>
+        You can also check out the repository anonymously on UNIX using the following commands,
+        after first setting your CVSROOT to point to the ICU repository: <br>
+        <br>
+        export CVSROOT=:pserver:anoncvs@oss.software.ibm.com:/usr/cvs/icu<br>
+        cvs login CVS password: anoncvs<br>
+        cvs checkout icu<br>
+        cvs logout</li>
+    </ul>
+  </li>
+</ul>
+
+<p>For more details on how to download ICU directly from the web site, please also see <a
+href="http://oss.software.ibm.com/developerworks/opensource/icu/project/download/index.html">http:/oss.software.ibm.com/developerworks/opensource/icu/project/download/index.html</a></p>
 
 <p>Below, <b>$Root</b> is the placement of the icu directory in your file system, like
 &quot;drive:\...\icu&quot; in your environment. &quot;drive:\...&quot; stands for any
@@ -105,7 +151,7 @@ drive and any directory on that drive that you chose to install icu into.</p>
 <table BORDER="1">
   <tr>
     <td>readme.html (this file)</td>
-    <td>describes the IBM's International Classes for Unicode</td>
+    <td>describes the IBM Classes for Unicode</td>
   </tr>
   <tr>
     <td>license.html</td>
@@ -191,8 +237,8 @@ drive and any directory on that drive that you chose to install icu into.</p>
   </tr>
 </table>
 
-<p><b>The following diagram shows the main directory structure of the IBM's International
-Classes for Unicode:</b> </p>
+<p><b>The following diagram shows the main directory structure of the IBM Classes for
+Unicode:</b> </p>
 
 <pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; icu-NNNN
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |
@@ -212,7 +258,7 @@ Classes for Unicode:</b> </p>
 
 <h3><a NAME="API"></a><u>API Overview</u></h3>
 
-<p>In the International Classes for Unicode, there are two categories: 
+<p>In the IBM Classes for Unicode, there are two categories: 
 
 <ul>
   <li>Low-level Unicode/Resource Attributes: (<strong>icuuc</strong> library)<ul>
@@ -224,12 +270,13 @@ Classes for Unicode:</b> </p>
       <li><a href="docs/boundCL.html">Text Boundary Classes</a></li>
       <li><a href="docs/collateCL.html">Collation Classes</a></li>
       <li><a href="docs/formatCL.html">Formatting Classes</a></li>
+      <li>Transliterator Classes</li>
     </ul>
   </li>
 </ul>
 
-<p>See IBM's<a href="docs/codeConv.html"> International Classes for Unicode Code
-Conventions</a> for a discussion of code conventions common to all library classes. </p>
+<p>See IBM<a href="docs/codeConv.html"> Classes for Unicode Code Conventions</a> for a
+discussion of code conventions common to all library classes. </p>
 
 <p>See also <a href="html/aindex.html">html/aindex.html</a> for an alphabetical index, and
 <a href="html/HIERjava.html">html/HIERjava.html</a> for a hierarchical index to detailed
@@ -273,12 +320,13 @@ API documentation. <br>
 
 <ul>
   <li><u>mutex.h and mutex.cpp</u>: Code for doing synchronization in multithreaded
-    applications. If you wish to use IBM's International Classes for Unicode in a
-    multithreaded application, you must provide a synchronization primitive that the classes
-    can use to protect their global data against simultaneous modifications. See <a
-    href="docs/mutex.html">docs\mutex.html</a> for more information.</li>
+    applications. If you wish to use IBM Classes for Unicode in a multithreaded application,
+    you must provide a synchronization primitive that the classes can use to protect their
+    global data against simultaneous modifications. See <a href="docs/mutex.html">docs\mutex.html</a>
+    for more information.</li>
   <ul>
-    <li>We supply sample implementations for WinNT, Win95, Sun, Linux and for AIX on an RS/6000.</li>
+    <li>We supply sample implementations for WinNT, Win95, Win98, Sun/Solaris, RedHat/Linux,
+      HP-UX and for AIX on an RS/6000.</li>
     <li>If you are changing the platform-dependent files, ptypes.h and putil.h may also be
       interesting, but shouldn't have to be changed. If you think any other files than the ones
       mentioned above have platform dependencies, please contact us.</li>
@@ -287,19 +335,20 @@ API documentation. <br>
   </ul>
 </ul>
 
-<h3><a NAME="ImportantNotes"></a><b><u>Important Notes Regarding Win32</u></b></h3>
+<h3><a NAME="ImportantNotes"></a><b><u>Important Installation Notes </u></b></h3>
+
+<p><strong>Win32 Platform</strong></p>
 
 <p>If you are building on the Win32 platform, it is important that you understand a few
 build details: </p>
 
-<p><u>DLL directories and the PATH setting:</u> As delivered, the IBM's International
-Classes for Unicode build as several DLLs. These DLLs are placed in the directories
-&quot;icu\bin\Debug&quot; and &quot;icu\bin\Release&quot;.&nbsp; You must add either of
-these directories to the PATH environment variable in your system, or any executables you
-build will not be able to access IBM's International Classes for Unicode libraries.
-Alternatively, you can copy the DLL files into a directory already in your PATH, but we do
-not recommend this -- you can wind up with multiple copies of the DLL, and wind up using
-the wrong one. </p>
+<p><u>DLL directories and the PATH setting:</u> As delivered, the IBM Classes for Unicode
+build as several DLLs. These DLLs are placed in the directories &quot;icu\bin\Debug&quot;
+and &quot;icu\bin\Release&quot;.&nbsp; You must add either of these directories to the
+PATH environment variable in your system, or any executables you build will not be able to
+access IBM Classes for Unicode libraries. Alternatively, you can copy the DLL files into a
+directory already in your PATH, but we do not recommend this -- you can wind up with
+multiple copies of the DLL, and wind up using the wrong one. </p>
 
 <p><u>To change your PATH:</u>&nbsp; Do this under NT by using the System control panel.
 Pick the &quot;Environment&quot; tab, select the variable PATH in the lower box.&nbsp; In
@@ -310,15 +359,46 @@ end of the path string.&nbsp; If there is nothing there, just type in
 <p><u>Link with Runtime libraries:</u> All the DLLs link with the C runtime library
 &quot;Debug Multithreaded DLL&quot; or &quot;Multithreaded DLL.&quot; (This is changed
 through the Project Settings dialog, on the C/C++ tab, under Code Generation.) It is
-important that any executable or other DLL you build which uses the IBM's International
-Classes for Unicode DLLs links with these runtime libraries as well. If you do not do
-this, you will seemingly get memory errors when you run the executable. <br>
-&nbsp; <br>
+important that any executable or other DLL you build which uses the IBM Classes for
+Unicode DLLs links with these runtime libraries as well. If you do not do this, you will
+seemingly get memory errors when you run the executable. <br>
 &nbsp; </p>
+
+<p><strong>OS/390 Platform</strong></p>
+
+<p>If you are building on the OS/390 Unix System Servives Platform, it is important that
+you understand a<br>
+few details. <br>
+<br>
+The gnu utilities gmake and gzip/gunzip are needed and can be obtained for OS/390 from<br>
+www.mks.com. Search for os/390, register, and follow download directions. <br>
+<br>
+DLL directories and the LIBPATH setting: The ICU dlls libicu-i18n and libicu-uc.dll should
+be added<br>
+to the LIBPATH environment variable concatenation.<br>
+<br>
+OS/390 supports both native hexadecimal floating point and, with Version 2.6 and later,
+IEEE binary<br>
+floating point. This is a compile time option. Applications built with IEEE should use ICU
+dlls which are<br>
+built with IEEE (and vice versa). The environment variable IEEE390=1 will cause the OS/390
+version<br>
+of ICU to be built with IEEE floating point. The default is native hexadecimal floating
+point. <br>
+<br>
+The makedep executable is shipped with ICU for use with the OS/390 ICU build process. The
+PATH<br>
+environment variable should be updated to contain the location of this executable prior to
+build.<br>
+Alternatively, makedep may be moved into an existing PATH directory.<br>
+<br>
+When running the test suite, the TZ environment variable should be set to export
+TZ=&quot;PST8PDT&quot; so<br>
+that timezone comparisons are correct.</p>
 
 <h3><a NAME="HowToInstall"></a><u>How to Install/Build on Win NT</u></h3>
 
-<p>Building IBM's International Classes for Unicode requires: 
+<p>Building IBM Classes for Unicode requires: 
 
 <ul>
   <li>Microsoft NT 3.51 or above</li>
@@ -339,10 +419,10 @@ this, you will seemingly get memory errors when you run the executable. <br>
   <li>Start Microsoft Visual C++ 6.0.</li>
   <li>Choose &quot;File&quot; menu and select &quot;Open WorkSpace&quot;.</li>
   <li>In the file chooser, choose icu\source\allinone\allinone.dsw. Open this workspace.</li>
-  <li>This workspace includes all the IBM's International Classes for Unicode libraries,
-    necessary tools as well as intltest and cintltest test suite projects.</li>
+  <li>This workspace includes all the IBM Classes for Unicode libraries, necessary tools as
+    well as intltest and cintltest test suite projects.</li>
   <li>Set the active Project. Choose &quot;Project&quot; menu and select &quot;Set active
-    project&quot;. In the submenu, select &quot;intltest&quot;.</li>
+    project&quot;. In the submenu, select &quot;all&quot; workspace.</li>
   <li>Set the active configuration (&quot;Win32 Debug&quot; or &quot;Win32 Release&quot;) and
     make sure this matches your PATH setting as described in the previous chapter. (See note
     below.)</li>
@@ -350,17 +430,15 @@ this, you will seemingly get memory errors when you run the executable. <br>
     the Debug and Release configurations at the same time, choose &quot;Build&quot; menu and
     select &quot;Batch Build...&quot; instead (and mark all configurations as checked), then
     click the button named &quot;Rebuild All&quot;.</li>
-  <li>Repeat steps 7-9 for makeconv (set active project to &quot;makeconv&quot;), genrb
-    (&quot;genrb&quot;) and gencol (&quot;gencol&quot;) tools.</li>
-  <li>From the icu\tools directory Run the makedata.bat script to data files in binary format.
-    The script requires two arguments, where first is path to the icu directory and the second
-    is either &quot;Release&quot; or &quot;Debug&quot; reflecting the type of build.</li>
+  <li>The &quot;all&quot; workspace will build all the test programs as well as the tools for
+    generating binary locale data files.&nbsp; The &quot;makedata&quot; project will be run
+    automatically to convert the locale data files from text format into icudata.dll.</li>
   <li>Save the value of the <strong>TZ</strong> environment variable and then set it to <strong>PST8PDT</strong>.&nbsp;
   </li>
   <li>Reopen the &quot;allinone&quot; project file and run the &quot;intltest&quot; test.
     &nbsp; Reset the <strong>TZ</strong> value.</li>
-  <li>To run the C test suite, set &quot;cintltst&quot; as the active project, repeat steps 8,
-    9 and then run the &quot;cintltst&quot; test..</li>
+  <li>To run the C test suite, set &quot;cintltst&quot; as the active project, repeat steps 11
+    and then run the &quot;cintltst&quot; test..</li>
   <li>Build and run as outlined above.</li>
 </ol>
 <b>
@@ -383,11 +461,10 @@ this, you will seemingly get memory errors when you run the executable. <br>
 respective directory. They have to be built in the following order: <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1. common <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2. i18n <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3. makeconv<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 4. genrb<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 5. gencol<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 6. ctestfw <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 7. intltest and cintltst, if you want to run
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3. makedata (which invokes makeconv, genrb,
+gencol, genccode etc.)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 4. ctestfw <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 5. intltest and cintltst, if you want to run
 the test suite. <br>
 Regarding the test suite, please read the directions in <a href="docs/intltest.html">docs/intltest.html</a>
 and <a href="docs/cintltst.html">docs/cintltst.html</a> </p>
@@ -395,17 +472,19 @@ and <a href="docs/cintltst.html">docs/cintltst.html</a> </p>
 <h3>How to Install/Build on Unix</h3>
 
 <p>There is a set of Makefiles for Unix which supports Linux w/gcc, Solaris w/gcc and
-Workshop CC. and AIX w/xlc. </p>
+Workshop CC, AIX w/xlc and OS/390 with C++.</p>
 
-<p>Building IBM's International Classes for Unicode on Unix requires: </p>
+<p>Building IBM Classes for Unicode on Unix requires: </p>
 
 <p>A UNIX C++ compiler, (gcc, cc, xlc_r, etc...) installed on the target machine. A recent
-version of GNU make (3.7+). </p>
+version of GNU make (3.7+).&nbsp;&nbsp; OS/390 gnu utilities for both make (gmake) and zip
+(gzip/gunzip) can be found at the MKS web site at <a href="http://www.mks.com">http://www.mks.com</a>.
+&nbsp; Please do a search on &quot;os/390&quot;.</p>
 
 <p>The steps are: 
 
 <ol>
-  <li>Unzip the icu-XXXX.zip file with the &quot;-a&quot; option.</li>
+  <li>Unzip the icuXXXX.tar (or icuXXXX.tgz) file.</li>
   <li>Before running the test programs or samples, please set the environment variable <strong>ICU_DATA</strong>,
     the full pathname of the data directory, to indicate where the locale data files and
     conversion mapping tables are.&nbsp; If this variable is not set, the default user data
@@ -417,7 +496,11 @@ version of GNU make (3.7+). </p>
     href="docs/build_env.htm">table</a> or provided <a href="source/runConfigureICU">script</a>.</li>
   <li>Type &quot;./configure&quot; or type &quot;./configure --help&quot; to print the
     avialable options.</li>
-  <li>Type &quot;make&quot; to compile the libraries and all the data files.</li>
+  <li>Type &quot;make&quot; to compile the libraries and all the data files.&nbsp; On OS/390,
+    both IEEE binary and native hexadecimal floating point calculations are supported.
+    &nbsp; The default is to build with native floating point support.&nbsp; Please set the
+    environment variable IEEE390=1 if you would like to make the ICU DLLs with IEEE floating
+    point support.</li>
   <li>Optionally, type &quot;make check&quot; to verify the test suite.</li>
   <li>Type &quot;Make install&quot; to install.</li>
 </ol>
@@ -429,8 +512,10 @@ respective directory. They have to be built in the following order: <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3. makeconv <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 4. genrb<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 5. gencol<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 6. ctestfw <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 7. intltest and cintltst, if you want to run
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 6. gentz<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 7. genccode<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 8. ctestfw <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 9. intltest and cintltst, if you want to run
 the test suite. <br>
 Regarding the test suite, please read the directions in <a href="docs/intltest.html">docs/intltest.html</a>
 and <a href="docs/cintltst.html">docs/cintltst.html</a> </p>
@@ -441,7 +526,7 @@ and <a href="docs/cintltst.html">docs/cintltst.html</a> </p>
 
 <h3><u>How to add a locale data file</u></h3>
 
-<p>To add locale data files to IBM's International Classes for Unicode do the following: </p>
+<p>To add locale data files to IBM Classes for Unicode do the following: </p>
 
 <blockquote>
   <p>1. Create a file containing the key-value pairs which value you are overriding from the
@@ -467,11 +552,8 @@ and <a href="docs/cintltst.html">docs/cintltst.html</a> </p>
 <blockquote>
   <p>3. Add the name of that file (without the &quot;.txt&quot; extension) as a single line
   in &quot;index.txt&quot; file in the default locale directory (icu/data/).</p>
-  <p>4. Run the genrb tool to convert the file into binary format.&nbsp; Under the command
-  prompt, type:</p>
-  <blockquote>
-    <p><font face="Courier New">&gt; genrb \Full Path\fr_BF.txt</font></p>
-  </blockquote>
+  <p>4. Regenerate the data DLL file.&nbsp; Please see &quot;<a href="#HowToInstall">How to
+  Install</a>&quot; section for more details on how to verify the ICU release.</p>
 </blockquote>
 
 <p><a NAME="addrbdatatoapp"></a></p>
@@ -532,20 +614,20 @@ re-run the gencol tool.</p>
 
 <p>The charset conversion library provides ways to convert simple text strings (e.g.,
 char*) such as ISO 8859-1 to and from Unicode. The objective is to provide clean, simple,
-reliable, portable and adaptable data structures and algorithms to support the IBM's
-International Classes for Unicode's character codeset Conversion APIs. The conversion data
-in the library originated from the NLTC lab in IBM. The IBM character set conversion
-tables are publicly available in the published IBM document called &quot;CHARACTER DATA
-REPRESENTATION ARCHITECTURE - REFERENCE AND REGISTRY&quot;. The character set conversion
-library includes single-byte, double-byte and some UCS encodings to and from Unicode. This
-document can be ordered through Mechanicsberg and it comes with 2 CD ROMs which have
-machine readable conversion tables on them. The license agreement is included in IBM's
-International Classes for Unicode agreement. </p>
+reliable, portable and adaptable data structures and algorithms to support the IBM Classes
+for Unicode's character codeset Conversion APIs. The conversion data in the library
+originated from the NLTC lab in IBM. The IBM character set conversion tables are publicly
+available in the published IBM document called &quot;CHARACTER DATA REPRESENTATION
+ARCHITECTURE - REFERENCE AND REGISTRY&quot;. The character set conversion library includes
+single-byte, double-byte and some UCS encodings to and from Unicode. This document can be
+ordered through Mechanicsberg and it comes with 2 CD ROMs which have machine readable
+conversion tables on them. The license agreement is included in IBM Classes for Unicode
+agreement. </p>
 
 <p>Click <a href="data/convrtrs.txt">here</a> to view converters implemented in ICU. To
 see converters in action, please visit <a
-href="http://www10.software.ibm.com/developerworks/opensource/icu/localeexplorer/?converter&amp;"><font
-COLOR="#000000" size="3">http://www10.software.ibm.com/developerworks/opensource/icu/localeexplorer/?converter&amp;</font></a></p>
+href="http://oss.software.ibm.com/developerworks/opensource/icu/localeexplorer/?converter&amp;"><font
+COLOR="#000000" size="3">http://oss.software.ibm.com/developerworks/opensource/icu/localeexplorer/?converter&amp;</font></a></p>
 
 <p>To order the document in the US you can call 1-800-879-2755 and request document number
 SC09-2190-00. The cost of this publication is $75.00 US not including tax. </p>
@@ -739,10 +821,9 @@ int32_t get2dArrayElement(int32_t rowIndex,&nbsp;
 </blockquote>
 
 <h3><a NAME="WhereToFindMore"></a><u>Where to Find More Information</u></h3>
-<a href="http://www.ibm.com/java/tools/international-classes/">
 
-<p>http://www.ibm.com/java/tools/international-classes/</a> is a pointer to general
-information about the International Classes For Unicode. </p>
+<p><a href="http://www.ibm.com/java/tools/international-classes/">http://www.ibm.com/java/tools/international-classes/</a>
+is a pointer to general information about the IBM Classes For Unicode. </p>
 
 <p><a href="docs/udata.html">docs\udata.html</a> is a raw draft of ICU data handling.</p>
 
