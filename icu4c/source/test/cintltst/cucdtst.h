@@ -18,8 +18,8 @@
 #define _CUNDTST
 
 
-U_CFUNC void setUpDataTable(void);
-U_CFUNC void cleanUpDataTable(void);
+static void setUpDataTable(void);
+static void cleanUpDataTable(void);
 
 static void TestUpperLower(void);
 static void TestLetterNumber(void);
