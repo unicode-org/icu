@@ -56,7 +56,7 @@ typedef enum {
   BREAK_WORD,
   BREAK_LINE,
   BREAK_SENTENCE,
-  BREAK_TITLE,
+  BREAK_TITLE
 } UBreakType;
   
 /**
