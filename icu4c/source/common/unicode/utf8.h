@@ -214,7 +214,7 @@ utf8_back1SafeBody(const uint8_t *s, UTextOffset start, UTextOffset i);
     if(UTF8_IS_LEAD(__b)) { \
         uint8_t __count=UTF8_COUNT_TRAIL_BYTES(__b); \
         if((i)+__count>(length)) { \
-            __count=(length)-(i); \
+            __count=(uint8_t)((length)-(i)); \
         } \
         while(__count>0 && UTF8_IS_TRAIL((s)[i])) { \
             ++(i); \
