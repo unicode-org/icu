@@ -19,6 +19,7 @@
 #include "unicode/hextouni.h"
 #include "unicode/unifilt.h"
 #include "intltest.h"
+#include "cmemory.h"
 #include <string.h>
 #include <stdio.h>
 /*converts a Unicodestring to integer*/
@@ -243,7 +244,7 @@ void HexToUniTransliteratorTest::TestSimpleTransliterate(){
 	}
 	UnicodeString source("He\\U+006C\\U+006C\\U+006F");
 	UnicodeString rsource(source);
-	Transliterator::Position index(1, source.length(),2);
+	UTransPosition index={1, source.length(),2,source.length()};
 	UnicodeString expected("Hello");
 	trans1->handleTransliterate(rsource, index, FALSE);
 	expectAux(trans1->getID() + ":handleTransliterator ", source + "-->" + rsource, rsource==expected, expected);
@@ -295,13 +296,15 @@ void HexToUniTransliteratorTest::expectTranslit(const HexToUnicodeTransliterator
 												const UnicodeString& expectedResult){
     
 
-	Transliterator::Position index(start, limit, cursor);
+	UTransPosition _index={start, limit, cursor, limit};
+    UTransPosition index;
+    uprv_memcpy(&index, &_index, sizeof(index));
    	UnicodeString rsource(source);
 	t.handleTransliterate(rsource, index, FALSE);
 	expectAux(t.getID() + ":handleTransliterator(increment=FALSE) "+ message, source + "-->" + rsource, rsource==expectedResult, expectedResult);
     
 	UnicodeString rsource2(source);
-	index=Transliterator::Position(start, limit, cursor);
+    uprv_memcpy(&index, &_index, sizeof(index));
 	t.handleTransliterate(rsource2, index, TRUE);
 	expectAux(t.getID() + ":handleTransliterator(increment=TRUE) "+ message, source + "-->" + rsource2, rsource2==expectedResult, expectedResult);
    
@@ -309,13 +312,13 @@ void HexToUniTransliteratorTest::expectTranslit(const HexToUnicodeTransliterator
 	HexToUnicodeTransliterator *copy=new HexToUnicodeTransliterator(t);
 	rsource2.remove();
 	rsource2.append(source);
-	index=Transliterator::Position(start, limit, cursor);
+    uprv_memcpy(&index, &_index, sizeof(index));
 	copy->handleTransliterate(rsource2, index, FALSE);
 	expectAux(t.getID() + "COPY:handleTransliterator(increment=FALSE) "+ message, source + "-->" + rsource2, rsource2==expectedResult, expectedResult);
     
 	rsource2.remove();
 	rsource2.append(source);
-	index=Transliterator::Position(start, limit, cursor);
+    uprv_memcpy(&index, &_index, sizeof(index));
 	copy->handleTransliterate(rsource2, index, TRUE);
 	expectAux(t.getID() + "COPY:handleTransliterator(increment=TRUE) "+ message, source + "-->" + rsource2, rsource2==expectedResult, expectedResult);
     delete copy;
@@ -324,13 +327,13 @@ void HexToUniTransliteratorTest::expectTranslit(const HexToUnicodeTransliterator
 	HexToUnicodeTransliterator *clone=(HexToUnicodeTransliterator*)t.clone();
 	rsource2.remove();
 	rsource2.append(source);
-	index=Transliterator::Position(start, limit, cursor);
+    uprv_memcpy(&index, &_index, sizeof(index));
 	clone->handleTransliterate(rsource2, index, FALSE);
 	expectAux(t.getID() + "CLONE:handleTransliterator(increment=FALSE) "+ message, source + "-->" + rsource2, rsource2==expectedResult, expectedResult);
     
 	rsource2.remove();
 	rsource2.append(source);
-	index=Transliterator::Position(start, limit, cursor);
+    uprv_memcpy(&index, &_index, sizeof(index));
 	clone->handleTransliterate(rsource2, index, TRUE);
 	expectAux(t.getID() + "CLONE:handleTransliterator(increment=TRUE) "+ message, source + "-->" + rsource2, rsource2==expectedResult, expectedResult);
    
@@ -338,13 +341,13 @@ void HexToUniTransliteratorTest::expectTranslit(const HexToUnicodeTransliterator
 	HexToUnicodeTransliterator equal=t;
 	rsource2.remove();
 	rsource2.append(source);
-	index=Transliterator::Position(start, limit, cursor);
+    uprv_memcpy(&index, &_index, sizeof(index));
 	equal.handleTransliterate(rsource2, index, FALSE);
 	expectAux(t.getID() + "=OPERATOR:handleTransliterator(increment=FALSE) "+ message, source + "-->" + rsource2, rsource2==expectedResult, expectedResult);
     
 	rsource2.remove();
 	rsource2.append(source);
-	index=Transliterator::Position(start, limit, cursor);
+    uprv_memcpy(&index, &_index, sizeof(index));
 	equal.handleTransliterate(rsource2, index, TRUE);
 	expectAux(t.getID() + "=OPERATOR:handleTransliterator(increment=TRUE) "+ message, source + "-->" + rsource2, rsource2==expectedResult, expectedResult);
    
@@ -393,7 +396,7 @@ void HexToUniTransliteratorTest::expect(const HexToUnicodeTransliterator& t,
 	// Test handleTransliterate (incremental) transliteration -- 
     rsource.remove();
 	rsource.append(source);
-    Transliterator::Position index(0,source.length(),0);
+    UTransPosition index={0,source.length(),0,source.length()};
 	t.handleTransliterate(rsource, index, TRUE);
 	expectAux(t.getID() + ":handleTransliterate " + message, source + "->" + rsource, rsource==expectedResult, expectedResult);
 

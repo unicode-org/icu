@@ -19,6 +19,7 @@
 #include "unicode/translit.h"
 #include "unicode/cpdtrans.h"
 #include "intltest.h"
+#include "cmemory.h"
 #include <string.h>
 #include <stdio.h>
 
@@ -301,12 +302,13 @@ void CompoundTransliteratorTest::TestTransliterate(){
 	}else {
 		UnicodeString s("abcabc");
 		expect(*ct1, s, s);
-		Transliterator::Position index(0, 0);
+		UTransPosition index = { 0, 0, 0, 0 };
 		UnicodeString rsource2(s);
 		UnicodeString expectedResult=s;
 		ct1->handleTransliterate(rsource2, index, FALSE);
 		expectAux(ct1->getID() + ":String, index(0,0,0), incremental=FALSE", rsource2 + "->" + rsource2, rsource2==expectedResult, expectedResult);
-		index=Transliterator::Position(1,3,2);
+		UTransPosition _index = {1,3,2,3};
+        uprv_memcpy(&index, &_index, sizeof(index));
 		UnicodeString rsource3(s);
 		ct1->handleTransliterate(rsource3, index, TRUE); 
 		expectAux(ct1->getID() + ":String, index(1,2,3), incremental=TRUE", rsource3 + "->" + rsource3, rsource3==expectedResult, expectedResult);
@@ -354,7 +356,7 @@ void CompoundTransliteratorTest::expect(const CompoundTransliterator& t,
 	// Test handleTransliterate (incremental) transliteration -- 
     rsource.remove();
 	rsource.append(source);
-    Transliterator::Position index(0,source.length(),0);
+    UTransPosition index={0,source.length(),0,source.length()};
 	t.handleTransliterate(rsource, index, TRUE);
 	expectAux(t.getID() + ":handleTransliterate ", source + "->" + rsource, rsource==expectedResult, expectedResult);
 
