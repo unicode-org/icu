@@ -223,7 +223,7 @@ ures_openDirect(const char* path,
 *@param status: fills in the outgoing error code.
 *@see ures_close
 *@return : a newly allocated resource bundle.
-*@deprecate remove after Aug 2002
+*@deprecated remove after Aug 2002
 */
 U_CAPI UResourceBundle* U_EXPORT2 
 ures_openW(const wchar_t* path, 
