@@ -118,6 +118,7 @@ main(int argc, char *argv[]) {
     }
 
     init();
+    initStore();
     parseDB(in);
     repeatProps();
     compactProps();
