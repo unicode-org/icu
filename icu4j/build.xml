@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $ 
-* $Date: 2001/07/18 01:35:59 $ 
-* $Revision: 1.35 $
+* $Date: 2001/10/19 20:53:54 $ 
+* $Revision: 1.36 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -47,16 +47,16 @@
            srcdir="${src.dir}"
     	   destdir="${build.dir}" 
     	   classpath="${classpath}"
-           debug="on" deprecation="off" target="1.2"/>
+           debug="on" deprecation="off"/>
   </target>
   
   <target name="tests" depends="core,testData">
     <javac includes="com/ibm/test/**/*.java,com/ibm/icu/test/**/*.java"
-           excludes="**/CVS/**/*"
+           excludes="**/CVS/**/*,com/ibm/icu/test/format/DateFormatRegressionTestJ.java"
     	   srcdir="${src.dir}"
     	   destdir="${build.dir}" 
     	   classpath="${classpath}"
-           debug="on" deprecation="off" target="1.2"/>
+           debug="on" deprecation="off"/>
   </target>
   
   <target name="demos" depends="core,testData">
@@ -65,7 +65,7 @@
     	   srcdir="${src.dir}"
     	   destdir="${build.dir}" 
     	   classpath="${classpath}"
-           debug="on" deprecation="off" target="1.2"/>
+           debug="on" deprecation="off"/>
   </target>
   
   <target name="tools" depends="core">
@@ -74,7 +74,7 @@
     	   srcdir="${src.dir}"
     	   destdir="${build.dir}" 
     	   classpath="${classpath}"
-           debug="on" deprecation="off" target="1.2"/>
+           debug="on" deprecation="off"/>
   </target>
   
   <target name="docs" depends="core">
