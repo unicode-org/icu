@@ -53,7 +53,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386
-# ADD LINK32 ..\..\lib\release\icuuc.lib /nologo /dll /machine:I386 /out:"..\..\bin\Release/icui18n.dll"
+# ADD LINK32 ..\..\lib\release\icuuc.lib /nologo /base:"0x4a900000" /dll /machine:I386 /out:"..\..\bin\Release/icui18n.dll"
 
 !ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
 
@@ -79,7 +79,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 ..\..\lib\debug\icuuc.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /out:"..\..\bin\Debug/icui18n.dll" /pdbtype:sept
+# ADD LINK32 ..\..\lib\debug\icuuc.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /base:"0x4a900000" /dll /debug /machine:I386 /out:"..\..\bin\Debug/icui18n.dll" /pdbtype:sept
 
 !ENDIF 
 
