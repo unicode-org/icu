@@ -530,7 +530,7 @@ internalGetDX(int32_t options, UErrorCode &errorCode) {
             return internalGetDXCJKCompat(errorCode);
         }
         if(options==UNORM_DX_A_UMLAUT) {
-            return internalGetDXCJKCompat(errorCode);
+            return internalGetDXAUmlaut(errorCode);
         }
 
         /* build a set from multiple subsets */
