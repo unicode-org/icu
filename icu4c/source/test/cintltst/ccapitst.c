@@ -687,7 +687,7 @@ void TestConvert()
         log_verbose("To UCallBack ok\n");
     
     log_verbose("\n---Testing setTo UCallBack Roundtrip...\n");
-    ucnv_setToUCallBack(myConverter,MIA2, NULL, &oldToUAction, &oldToUContext, &err);
+    ucnv_setToUCallBack(myConverter,MIA2, MIA2Context, &oldToUAction, &oldToUContext, &err);
     if (U_FAILURE(err) || oldToUAction != otherCharAction(MIA2) || oldToUContext != &BOM) 
     { log_err("FAILURE! %s\n", myErrorName(err));  }
     
