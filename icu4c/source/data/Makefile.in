@@ -126,7 +126,7 @@ cleanpackage:
 
 ## Install ICU data. Make a convenience link 'icudata' library if it's a library mode.
 install-local:  build/icudata.lst $(top_builddir)/tools/pkgdata/icupkg.inc install-convrtrstxt $(OS390INSTALL)
-	$(MKINSTALLDIRS) $(TMPDATADIR) $(DESTDIR)$(libdir)
+	$(MKINSTALLDIRS) $(TMPDATADIR) $(DESTDIR)$(ICUPKGDATA_DIR)
 	cd build ; $(INVOKE) $(PKGDATA) -m $(PKGDATA_MODE) -e $(ICUDATA_BASENAME_VERSION) -T . -s . -p $(ICUDATA_NAME) icudata.lst -I $(DESTDIR)$(ICUPKGDATA_DIR)
 ifeq ($(strip $(PKGDATA_MODE)),dll)
 		cd $(DESTDIR)$(ICUPKGDATA_DIR); $(RM) libicudata.$(SO) && ln -s $(LIB_ICUDATA_NAME).$(SO) libicudata.$(SO)
