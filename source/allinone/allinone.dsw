@@ -512,6 +512,12 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name genuca
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name genfchk
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name genqchk
+    End Project Dependency
 }}}
 
 ###############################################################################
