@@ -184,11 +184,8 @@ fr {
 // http://www.egt.ie/standards/iso3166/iso3166-1-fr.html
 
     }
-    LocaleScript{ 
-                "Latin", // Script Name  
+    LocaleScript{  
                 "Latn",  // ISO 15924 Name 
-                "Latf",  // ISO 15924 Name 
-                "Latg",  // ISO 15924 Name 
     }
 
     //------------------------------------------------------------

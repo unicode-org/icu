@@ -250,7 +250,6 @@ ta {
 		Sequence { "[normalization on]" }
 	}
     LocaleScript{ 
-                "Tamil", // Script Name  
                 "Taml"   // ISO 15924 Name 
     }
 
