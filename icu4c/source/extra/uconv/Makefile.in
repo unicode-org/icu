@@ -56,7 +56,8 @@ LIBS = $(LIBICUI18N) $(LIBICUUC) @LIBS@ @LIB_M@
 ifeq ($(UCONVMSG_STATIC),YES)
 LIBS += -L$(MSGNAME) -l$(MSGNAME)
 CPPFLAGS += -DUCONVMSG_STATIC=$(MSGNAME)
-UCONVMSG_LIB=$(RESDIR)/lib$(MSGNAME).a
+UCONVMSG_LIB = $(RESDIR)/lib$(MSGNAME).a
+
 PKGMODE = static
 else
 PKGMODE = dll
@@ -75,6 +76,10 @@ distclean resclean distclean-local dist dist-local check check-local resfiles pa
 
 ## List of standard targets
 all: all-local
+
+spam:
+	echo ucml = $(UCONVMSG_LIB)
+
 install: install-local
 clean: clean-local
 distclean : distclean-local
@@ -111,7 +116,7 @@ pkgdata.inc: $(srcdir)/pkgdata.inc.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
-$(TARGET) : $(OBJECTS) $(UCONVMSG_LIB)
+$(TARGET) : $(OBJECTS) $(UCONVMSG_LIB) $(UCONVMSG_LIB)  $(UCONVMSG_LIB)
 	$(LINK.cc) -o $@ $^ $(LIBS) $(LDFLAGS)
 
 resfiles: $(RESFILES) package-resfiles
