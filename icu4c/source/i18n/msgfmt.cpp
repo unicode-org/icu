@@ -175,7 +175,8 @@ MessageFormat::MessageFormat(const UnicodeString& pattern,
   subformatCapacity(0),
   argTypes(NULL),
   argTypeCount(0),
-  argTypeCapacity(0)
+  argTypeCapacity(0),
+  formatAliases(NULL)
 {
     if (!allocateSubformats(DEFAULT_INITIAL_CAPACITY) ||
         !allocateArgTypes(DEFAULT_INITIAL_CAPACITY)) {
@@ -194,7 +195,8 @@ MessageFormat::MessageFormat(const UnicodeString& pattern,
   subformatCapacity(0),
   argTypes(NULL),
   argTypeCount(0),
-  argTypeCapacity(0)
+  argTypeCapacity(0),
+  formatAliases(NULL)
 {
     if (!allocateSubformats(DEFAULT_INITIAL_CAPACITY) ||
         !allocateArgTypes(DEFAULT_INITIAL_CAPACITY)) {
@@ -214,7 +216,8 @@ MessageFormat::MessageFormat(const UnicodeString& pattern,
   subformatCapacity(0),
   argTypes(NULL),
   argTypeCount(0),
-  argTypeCapacity(0)
+  argTypeCapacity(0),
+  formatAliases(NULL)
 {
     if (!allocateSubformats(DEFAULT_INITIAL_CAPACITY) ||
         !allocateArgTypes(DEFAULT_INITIAL_CAPACITY)) {
@@ -222,6 +225,19 @@ MessageFormat::MessageFormat(const UnicodeString& pattern,
         return;
     }
     applyPattern(pattern, parseError, success);
+}
+
+MessageFormat::MessageFormat(const MessageFormat& that)
+: Format(that),
+  subformats(NULL),
+  subformatCount(0),
+  subformatCapacity(0),
+  argTypes(NULL),
+  argTypeCount(0),
+  argTypeCapacity(0),
+  formatAliases(NULL)
+{
+    *this = that;
 }
 
 MessageFormat::~MessageFormat()
@@ -233,6 +249,8 @@ MessageFormat::~MessageFormat()
     uprv_free(argTypes);
     argTypes = NULL;
     argTypeCount = argTypeCapacity = 0;
+
+    uprv_free(formatAliases);
 }
 
 //--------------------------------------------------------------------
@@ -304,21 +322,6 @@ UBool MessageFormat::allocateArgTypes(int32_t capacity) {
         argTypeCapacity = capacity;
     }
     return TRUE;
-}
-
-// -------------------------------------
-// copy constructor
-
-MessageFormat::MessageFormat(const MessageFormat& that)
-: Format(that),
-  subformats(NULL),
-  subformatCount(0),
-  subformatCapacity(0),
-  argTypes(NULL),
-  argTypeCount(0),
-  argTypeCapacity(0)
-{
-    *this = that;
 }
 
 // -------------------------------------
@@ -446,8 +449,9 @@ MessageFormat::applyPattern(const UnicodeString& pattern,
     // During parsing, the plain text is accumulated into segments[0].
     // Segments 1..3 are used to parse each subpattern.  Each time a
     // subpattern is parsed, it creates a format object that is stored
-    // in the fFormats array, together with an offset.  The offset is
-    // into the plain text stored in segments[0].
+    // in the subformats array, together with an offset and argument
+    // number.  The offset into the plain text stored in
+    // segments[0].
 
     // Quotes in segment 0 are handled normally.  They are removed.
     // Quotes may not occur in segments 1 or 2.
@@ -798,15 +802,35 @@ MessageFormat::setFormat(int32_t n, const Format& newFormat) {
 const Format**
 MessageFormat::getFormats(int32_t& cnt) const
 {
-    // For backwards compatibility only!  To be obsolete as of ICU 3.0.
+    // This old API returns an array (which we hold) of Format*
+    // pointers.  The array is valid up to the next call to any
+    // method on this object.  We construct and resize an array
+    // on demand that contains aliases to the subformats[i].format
+    // pointers.
+    MessageFormat* t = (MessageFormat*) this;
+    cnt = 0;
+    if (formatAliases == NULL) {
+        t->formatAliasesCapacity = (subformatCount<10) ? 10 : subformatCount;
+        Format** a = (Format**)
+            uprv_malloc(sizeof(Format*) * formatAliasesCapacity);
+        if (a == NULL) {
+            return NULL;
+        }
+        t->formatAliases = a;        
+    } else if (subformatCount > formatAliasesCapacity) {
+        Format** a = (Format**)
+            uprv_realloc(formatAliases, sizeof(Format*) * subformatCount);
+        if (a == NULL) {
+            return NULL;
+        }
+        t->formatAliases = a;
+        t->formatAliasesCapacity = subformatCount;
+    }
+    for (int32_t i=0; i<subformatCount; ++i) {
+        t->formatAliases[i] = subformats[i].format;
+    }
     cnt = subformatCount;
-    if (cnt > 10) {
-        cnt = 10;
-    }
-    for (int32_t i=0; i<cnt; ++i) {
-        ((MessageFormat*)this)->fFormats[i] = subformats[i].format;
-    }
-    return (const Format**)fFormats;
+    return (const Format**)formatAliases;
 }
  
 // -------------------------------------
@@ -1184,7 +1208,7 @@ MessageFormat::makeFormat(int32_t formatNumber,
             fmt = DateFormat::createTimeInstance(style, fLocale);
         }
 
-        if (style < 0 &&
+        if (styleID < 0 &&
             fmt != NULL &&
             fmt->getDynamicClassID() == SimpleDateFormat::getStaticClassID()) {
             ((SimpleDateFormat*)fmt)->applyPattern(segments[3]);
