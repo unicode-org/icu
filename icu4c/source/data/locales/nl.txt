@@ -492,16 +492,13 @@ nl {
         "1,000,000,000,000,000: =#,##0="
     }
     Keys{
-       calendar { "Kalender" }
-       collation { "Soorten" }
-       currency {"Muntsoort"}
+        calendar { "Kalender" }
+        collation { "Soorten" }
+        currency {"Muntsoort"}
     }
     Types{
-        calendar{
+        collation {
            traditional { "Traditioneel Soorten" }
-        }
-        collation{
-           traditional { "Traditioneel Kalendar" }
         }
     }
     Variants{

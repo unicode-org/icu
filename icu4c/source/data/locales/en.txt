@@ -1497,7 +1497,7 @@ en {
             direct      { "Direct Order"    }
         }
         calendar{
-            traditional   { "Traditional Calendar" }
+            //traditional   { "Traditional Calendar" }
             japanese      { "Japanese Calendar"  }
             buddhist      { "Buddhist Calendar"  }
             islamic       { "Islamic Calendar"   }
