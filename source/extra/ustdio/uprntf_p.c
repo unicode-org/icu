@@ -533,10 +533,14 @@ u_printf_pointer_handler(const u_printf_stream_handler  *handler,
                          const u_printf_spec_info       *info,
                          const ufmt_args                *args)
 {
-    int64_t         num        = args[0].int64Value;
+    uint64_t        num = (uint64_t)args[0].ptrValue;
     UChar           result[UPRINTF_BUFFER_SIZE];
     int32_t         len        = UPRINTF_BUFFER_SIZE;
 
+
+    if (sizeof(void*)==sizeof(int32_t)) {
+        num &= UINT32_MAX;
+    }
 
     /* format the pointer in hex */
     ufmt_64tou(result, &len, num, 16, TRUE, info->fPrecision);
