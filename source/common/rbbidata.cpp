@@ -107,6 +107,15 @@ void RBBIDataWrapper::init(const RBBIDataHeader *data, UErrorCode &status) {
 
     fRefCount = 1;
 
+    /// todo: maybe add this formally to the builder
+    UnicodeString hardbreak("!!lookAheadHardBreak");
+    if (fRuleString.indexOf(hardbreak) >= 0) {
+        fLookAheadHardBreak = TRUE;
+    }
+    else {
+        fLookAheadHardBreak = FALSE;
+    }
+
 #ifdef RBBI_DEBUG
     char *debugEnv = getenv("U_RBBIDEBUG");
     if (debugEnv && uprv_strstr(debugEnv, "data")) {this->printData();}
