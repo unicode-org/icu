@@ -5,26 +5,11 @@
  ********************************************************************/
 
 
-#ifndef _COLL
 #include "unicode/coll.h"
-#endif
-
-#ifndef _TBLCOLL
 #include "unicode/tblcoll.h"
-#endif
-
-#ifndef _UNISTR
 #include "unicode/unistr.h"
-#endif
-
-#ifndef _SORTKEY
 #include "unicode/sortkey.h"
-#endif
-
-#ifndef _ENCOLL
 #include "encoll.h"
-#endif
-
 #include "sfwdchit.h"
 
 CollationEnglishTest::CollationEnglishTest()
@@ -293,7 +278,7 @@ void CollationEnglishTest::TestTertiary(/* char* par */)
 
     //test more interesting cases
     Collator::EComparisonResult expected;
-    const int32_t testMoreSize = sizeof(testMore) / sizeof(testMore[0]);
+    const int32_t testMoreSize = (int32_t)(sizeof(testMore) / sizeof(testMore[0]));
     for (i = 0; i < testMoreSize; i++)
     {
         for (j = 0; j < testMoreSize; j++)
@@ -332,7 +317,7 @@ void CollationEnglishTest::TestSecondary(/* char* par */)
     //test acute and grave ordering (compare to french collation)
     int32_t j;
     Collator::EComparisonResult expected;
-    const int32_t testAcuteSize = sizeof(testAcute) / sizeof(testAcute[0]);
+    const int32_t testAcuteSize = (int32_t)(sizeof(testAcute) / sizeof(testAcute[0]));
     for (i = 0; i < testAcuteSize; i++)
     {
         for (j = 0; j < testAcuteSize; j++)

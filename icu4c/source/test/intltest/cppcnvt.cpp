@@ -460,7 +460,7 @@ void ConvertTest::TestConvert()
 
 
         /*Reads in the file*/
-        while(!feof(ucs_file_in)&&(i+=fread(ucs_file_buffer+i, sizeof(UChar), 1, ucs_file_in)))
+        while(!feof(ucs_file_in)&&(i+=fread(ucs_file_buffer+i, (unsigned int)sizeof(UChar), 1, ucs_file_in)))
         {
             myUChar = ucs_file_buffer[i-1];
             
@@ -685,7 +685,7 @@ void ConvertTest::TestAmbiguous()
         return;
     }
     /* convert target from SJIS to Unicode */
-    sjis_cnv->toUnicodeString(sjisResult, target, strlen(target), status);
+    sjis_cnv->toUnicodeString(sjisResult, target, (int32_t)uprv_strlen(target), status);
     if (U_FAILURE(status))
     {
         errln("Failed to convert the SJIS string.\n");
@@ -695,7 +695,7 @@ void ConvertTest::TestAmbiguous()
     }
 
     /* convert target from Latin-1 to Unicode */
-    ascii_cnv->toUnicodeString(asciiResult, target, strlen(target), status);
+    ascii_cnv->toUnicodeString(asciiResult, target, (int32_t)uprv_strlen(target), status);
     if (U_FAILURE(status))
     {
         errln("Failed to convert the Latin-1 string.\n");
