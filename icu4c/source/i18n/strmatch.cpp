@@ -9,6 +9,7 @@
 #include "strmatch.h"
 #include "rbt_data.h"
 #include "util.h"
+#include "unicode/uniset.h"
 
 U_NAMESPACE_BEGIN
 
@@ -181,6 +182,22 @@ UBool StringMatcher::matchesIndexValue(uint8_t v) const {
 }
 
 /**
+ * Implement UnicodeMatcher
+ */
+void StringMatcher::addMatchSetTo(UnicodeSet& toUnionTo) const {
+    UChar32 ch;
+    for (int32_t i=0; i<pattern.length(); i+=UTF_CHAR_LENGTH(ch)) {
+	ch = pattern.char32At(i);
+	const UnicodeMatcher* matcher = data->lookupMatcher(ch);
+	if (matcher == NULL) {
+	    toUnionTo.add(ch);
+	} else {
+	    matcher->addMatchSetTo(toUnionTo);
+	}
+    }
+}
+
+/**
  * UnicodeReplacer API
  */
 int32_t StringMatcher::replace(Replaceable& text,
@@ -224,6 +241,19 @@ UnicodeString& StringMatcher::toReplacerPattern(UnicodeString& rule,
  */
  void StringMatcher::resetMatch() {
     matchStart = matchLimit = -1;
+}
+
+/**
+ * Union the set of all characters that may output by this object
+ * into the given set.
+ * @param toUnionTo the set into which to union the output characters
+ */
+void StringMatcher::addReplacementSetTo(UnicodeSet& toUnionTo) const {
+    // The output of this replacer varies; it is the source text between
+    // matchStart and matchLimit.  Since this varies depending on the
+    // input text, we can't compute it here.  We can either do nothing
+    // or we can add ALL characters to the set.  It's probably more useful
+    // to do nothing.
 }
 
 /**

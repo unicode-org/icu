@@ -536,6 +536,15 @@ public:
                              const UnicodeString& s);
     
  public:
+
+    /**
+     * Implementation of UnicodeMatcher API.  Union the set of all
+     * characters that may be matched by this object into the given
+     * set.
+     * @param toUnionTo the set into which to union the source characters
+     */
+    void addMatchSetTo(UnicodeSet& toUnionTo) const;
+
     /**
      * Returns the index of the given character within this set, where
      * the set is ordered by ascending code point.  If the character

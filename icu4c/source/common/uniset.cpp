@@ -901,6 +901,13 @@ int32_t UnicodeSet::matchRest(const Replaceable& text,
 }
 
 /**
+ * Implement of UnicodeMatcher
+ */
+void UnicodeSet::addMatchSetTo(UnicodeSet& toUnionTo) const {
+    toUnionTo.addAll(*this);
+}
+
+/**
  * Returns the index of the given character within this set, where
  * the set is ordered by ascending code point.  If the character
  * is not in this set, return -1.  The inverse of this method is

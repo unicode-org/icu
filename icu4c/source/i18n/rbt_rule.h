@@ -268,6 +268,19 @@ public:
      */
     virtual UnicodeString& toRule(UnicodeString& pat,
                                   UBool escapeUnprintable) const;
+
+    /**
+     * Union the set of all characters that may be modified by this rule
+     * into the given set.
+     */
+    void addSourceSetTo(UnicodeSet& toUnionTo) const;
+
+    /**
+     * Union the set of all characters that may be emitted by this rule
+     * into the given set.
+     */
+    void addTargetSetTo(UnicodeSet& toUnionTo) const;
+
  private:
 
     friend class StringMatcher;

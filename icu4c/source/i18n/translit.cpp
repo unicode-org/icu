@@ -1057,6 +1057,36 @@ UnicodeString& Transliterator::toRules(UnicodeString& rulesSource,
     return rulesSource;
 }
 
+UnicodeSet& Transliterator::getSourceSet(UnicodeSet& result) const {
+    handleGetSourceSet(result);
+    if (filter != NULL) {
+	UnicodeSet* filterSet;
+	UBool deleteFilterSet = FALSE;
+	// Most, but not all filters will be UnicodeSets.  Optimize for
+	// the high-runner case.
+	if (filter->getDynamicClassID() == UnicodeSet::getStaticClassID()) {
+	    filterSet = (UnicodeSet*) filter;
+	} else {
+	    filterSet = new UnicodeSet();
+	    deleteFilterSet = TRUE;
+	    filter->addMatchSetTo(*filterSet);
+	}
+	result.retainAll(*filterSet);
+	if (deleteFilterSet) {
+	    delete filterSet;
+	}
+    }
+    return result;
+}
+
+void Transliterator::handleGetSourceSet(UnicodeSet& result) const {
+    result.clear();
+}
+
+UnicodeSet& Transliterator::getTargetSet(UnicodeSet& result) const {
+    return result.clear();
+}
+
 // For public consumption
 void Transliterator::registerFactory(const UnicodeString& id,
                                      Transliterator::Factory factory,

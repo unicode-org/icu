@@ -159,6 +159,24 @@ public:
     virtual UnicodeString& toRules(UnicodeString& result,
                                    UBool escapeUnprintable) const;
 
+ protected:
+    /**
+     * Implement Transliterator framework
+     */
+    virtual void handleGetSourceSet(UnicodeSet& result) const;
+
+ public:
+    /**
+     * Override Transliterator framework
+     */
+    virtual UnicodeSet& getTargetSet(UnicodeSet& result) const;
+
+// handleTransliterate should be protected, but was declared public before ICU 2.2.
+// We do not have a separate deprecation date for this method since the entire class
+// will become internal after 2002-sep-30.
+#ifndef U_USE_DEPRECATED_TRANSLITERATOR_API
+ protected:
+#endif
     /**
      * Implements {@link Transliterator#handleTransliterate}.
      * @deprecated To be removed after 2002-sep-30.
