@@ -289,9 +289,9 @@ ucadata.dat: "$(ICUDATA)\unidata\FractionalUCA.txt" "$(ICUTOOLS)\genuca\$(CFG)\g
 
 invuca.dat: ucadata.dat
 
-{"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe : ucadata.dat qchk.dat
+{"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe : ucadata.dat qchk.dat fchk.dat
 
-ucadata.dat : uprops.dat qchk.dat
+ucadata.dat : uprops.dat qchk.dat fchk.dat
 
 # Dependencies on the tools
 convrtrs.txt : {"$(ICUTOOLS)\gencnval\$(CFG)"}gencnval.exe
