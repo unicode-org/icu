@@ -1,5 +1,5 @@
 #
-# @(#)$RCSfile: makefile,v $ $Revision: 1.7 $ $Date: 2000/02/23 21:59:12 $
+# @(#)$RCSfile: makefile,v $ $Revision: 1.8 $ $Date: 2000/02/26 21:55:44 $
 # 
 
 TOPDIR=		..
@@ -35,7 +35,7 @@ demos: classes demosinternal
 
 
 toolsinternal: FORCE
-	cd com\ibm\test && $(MAKE) classes && cd ..\..\..
+	cd com\ibm\tools && $(MAKE) classes && cd ..\..\..
 
 testsinternal: FORCE
 	cd com\ibm\test && $(MAKE) classes && cd ..\..\..
