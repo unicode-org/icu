@@ -37,8 +37,6 @@
 
 U_NAMESPACE_BEGIN
 
-const char       RegexCompile::fgClassID=0;
-
 //----------------------------------------------------------------------------------------
 //
 // Unicode Sets for each of the character classes needed for parsing a regex pattern.
@@ -1129,8 +1127,12 @@ void        RegexCompile::compileSet(UnicodeSet *theSet)
     }
 
     switch (setSize) {
-    case 0:      // Set of no elements.   Always fails to match.  
-        fRXPat->fCompiledPat->addElement(URX_BUILD(URX_BACKTRACK, 0), *fStatus);
+    case 0:      
+        {
+            // Set of no elements.   Always fails to match.  
+            fRXPat->fCompiledPat->addElement(URX_BUILD(URX_BACKTRACK, 0), *fStatus);
+            delete theSet;
+        }
         break;
         
     case 1:

@@ -1050,6 +1050,8 @@ void RegexTest::API_Pattern() {
     REGEX_ASSERT(pat1->getDynamicClassID() != m->getDynamicClassID());
     REGEX_ASSERT(m->getDynamicClassID() == RegexMatcher::getStaticClassID());
     REGEX_ASSERT(m->getDynamicClassID() != NULL);
+    delete m;
+    delete pat1;
 
 }
 
