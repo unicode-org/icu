@@ -1189,6 +1189,7 @@ TestISO_2022() {
     UConverter *cnv=ucnv_open("iso-2022", &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("Unable to open a iso-2022 converter: %s\n", u_errorName(errorCode));
+        return;
     }
     TestNextUChar(cnv, source, limit, results, "iso-2022");
 
