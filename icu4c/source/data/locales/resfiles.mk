@@ -36,7 +36,7 @@ de.txt de_AT.txt de_AT_EURO.txt de_CH.txt\
 de_DE.txt de_DE_EURO.txt de_LU.txt de_LU_EURO.txt\
 el.txt el_GR.txt\
 en.txt en_AU.txt en_BE.txt en_BW.txt en_CA.txt en_GB.txt\
-en_IE.txt en_IE_EURO.txt en_MT.txt en_NZ.txt en_SG.txt\
+en_IE.txt en_IE_EURO.txt en_NZ.txt en_SG.txt\
 en_US.txt en_ZA.txt en_ZW.txt\
 eo.txt\
 es.txt es_AR.txt es_BO.txt es_CL.txt es_CO.txt\
