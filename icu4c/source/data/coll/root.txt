@@ -10,7 +10,7 @@
  *  ICU <specials> source: ../../../locale/icu/collation/root.xml
  */
 root{
-    "%%UCARULES":include{"../unidata/UCARules.txt"}
+    "%%UCARULES":process(uca_rules){"../unidata/UCARules.txt"}
     Version{"1.2"}
     collations{
         default{"standard"}

@@ -52,85 +52,85 @@ root{
 
         Fullwidth-Halfwidth {
             file {
-                    resource:include{"Fullwidth_Halfwidth.txt"}
+                    resource:process(transliterator){"Fullwidth_Halfwidth.txt"}
                     direction{"FORWARD"}
              }
         }
         Halfwidth-Fullwidth {
             file {
-                    resource:include{"Fullwidth_Halfwidth.txt"}
+                    resource:process(transliterator){"Fullwidth_Halfwidth.txt"}
                     direction{"REVERSE"}
              }
         }
 
         Latin-Cyrillic {
             file {
-                    resource:include{"Cyrillic_Latin.txt"}
+                    resource:process(transliterator){"Cyrillic_Latin.txt"}
                     direction{"REVERSE"}
              }
         }
         Cyrillic-Latin {
             file {
-                    resource:include{"Cyrillic_Latin.txt"}
+                    resource:process(transliterator){"Cyrillic_Latin.txt"}
                     direction{"FORWARD"}
              }
         }
 
         Latin-Hebrew {
             file {
-                    resource:include{"Hebrew_Latin.txt"}
+                    resource:process(transliterator){"Hebrew_Latin.txt"}
                     direction{"REVERSE"}
              }
         }
         Hebrew-Latin {
             file {
-                    resource:include{"Hebrew_Latin.txt"}
+                    resource:process(transliterator){"Hebrew_Latin.txt"}
                     direction{"FORWARD"}
              }
         }
 
         Latin-Arabic {
             file {
-                    resource:include{"Arabic_Latin.txt"}
+                    resource:process(transliterator){"Arabic_Latin.txt"}
                     direction{"REVERSE"}
              }
         }
         Arabic-Latin {
             file {
-                    resource:include{"Arabic_Latin.txt"}
+                    resource:process(transliterator){"Arabic_Latin.txt"}
                     direction{"FORWARD"}
              }
         }
 
         Tone-Digit {
             internal {
-                    resource:include{"Tone_Digit.txt"}
+                    resource:process(transliterator){"Tone_Digit.txt"}
                     direction{"FORWARD"}
              }
         }
         Digit-Tone {
             internal {
-                    resource:include{"Tone_Digit.txt"}
+                    resource:process(transliterator){"Tone_Digit.txt"}
                     direction{"REVERSE"}
              }
         }
 
         Latin-NumericPinyin {
             file {
-                    resource:include{"Latin_NumericPinyin.txt"}
+                    resource:process(transliterator){"Latin_NumericPinyin.txt"}
                     direction{"FORWARD"}
              }
         }
         NumericPinyin-Latin {
             file {
-                    resource:include{"Latin_NumericPinyin.txt"}
+                    resource:process(transliterator){"Latin_NumericPinyin.txt"}
                     direction{"REVERSE"}
              }
         }
 
         Han-Spacedhan {
             internal {
-                    resource:include{"Han_Spacedhan.txt"}
+                    resource:process(transliterator){"Han_Spacedhan.txt"}
                     direction{"FORWARD"}
              }
         }
@@ -140,7 +140,7 @@ root{
 
         Han-Latin {
             file {
-                    resource:include{"Han_Latin.txt"}
+                    resource:process(transliterator){"Han_Latin.txt"}
                     direction{"FORWARD"}
              }
         }
@@ -158,52 +158,52 @@ root{
 
         Latin-Greek {
             file {
-                    resource:include{"Greek_Latin.txt"}
+                    resource:process(transliterator){"Greek_Latin.txt"}
                     direction{"REVERSE"}
              }
         }
         Greek-Latin {
             file {
-                    resource:include{"Greek_Latin.txt"}
+                    resource:process(transliterator){"Greek_Latin.txt"}
                     direction{"FORWARD"}
              }
         }
 
         Latin-Greek/UNGEGN {
             file {
-                    resource:include{"Greek_Latin_UNGEGN.txt"}
+                    resource:process(transliterator){"Greek_Latin_UNGEGN.txt"}
                     direction{"REVERSE"}
              }
         }
         Greek-Latin/UNGEGN {
             file {
-                    resource:include{"Greek_Latin_UNGEGN.txt"}
+                    resource:process(transliterator){"Greek_Latin_UNGEGN.txt"}
                     direction{"FORWARD"}
              }
         }
 
         Latin-Katakana {
             file {
-                    resource:include{"Latin_Katakana.txt"}
+                    resource:process(transliterator){"Latin_Katakana.txt"}
                     direction{"FORWARD"}
              }
         }
         Katakana-Latin {
             file {
-                    resource:include{"Latin_Katakana.txt"}
+                    resource:process(transliterator){"Latin_Katakana.txt"}
                     direction{"REVERSE"}
              }
         }
 
         Latin-Hiragana {
             file {
-                    resource:include{"Hiragana_Latin.txt"}
+                    resource:process(transliterator){"Hiragana_Latin.txt"}
                     direction{"REVERSE"}
              }
         }
         Hiragana-Latin {
             file {
-                    resource:include{"Hiragana_Latin.txt"}
+                    resource:process(transliterator){"Hiragana_Latin.txt"}
                     direction{"FORWARD"}
              }
         }
@@ -212,33 +212,33 @@ root{
 
         Thai-ThaiSemi {
             internal {
-                    resource:include{"Thai_ThaiSemi.txt"}
+                    resource:process(transliterator){"Thai_ThaiSemi.txt"}
                     direction{"FORWARD"}
              }
         }
 
         Thai-ThaiLogical {
             internal {
-                    resource:include{"Thai_ThaiLogical.txt"}
+                    resource:process(transliterator){"Thai_ThaiLogical.txt"}
                     direction{"FORWARD"}
              }
         }
         ThaiLogical-Thai {
             internal {
-                    resource:include{"Thai_ThaiLogical.txt"}
+                    resource:process(transliterator){"Thai_ThaiLogical.txt"}
                     direction{"REVERSE"}
              }
         }
 
         ThaiLogical-Latin {
             internal {
-                    resource:include{"ThaiLogical_Latin.txt"}
+                    resource:process(transliterator){"ThaiLogical_Latin.txt"}
                     direction{"FORWARD"}
              }
         }
         Latin-ThaiLogical {
             internal {
-                    resource:include{"ThaiLogical_Latin.txt"}
+                    resource:process(transliterator){"ThaiLogical_Latin.txt"}
                     direction{"REVERSE"}
              }
         }
@@ -258,39 +258,39 @@ root{
 
         Hiragana-Katakana {
             file {
-                    resource:include{"Hiragana_Katakana.txt"}
+                    resource:process(transliterator){"Hiragana_Katakana.txt"}
                     direction{"FORWARD"}
              }
         }
         Katakana-Hiragana {
             file {
-                    resource:include{"Hiragana_Katakana.txt"}
+                    resource:process(transliterator){"Hiragana_Katakana.txt"}
                     direction{"REVERSE"}
              }
         }
 
         Any-Accents {
             file {
-                    resource:include{"Any_Accents.txt"}
+                    resource:process(transliterator){"Any_Accents.txt"}
                     direction{"FORWARD"}
              }
         }
         Accents-Any {
             file {
-                    resource:include{"Any_Accents.txt"}
+                    resource:process(transliterator){"Any_Accents.txt"}
                     direction{"REVERSE"}
              }
         }
 
         Any-Publishing {
             file {
-                    resource:include{"Any_Publishing.txt"}
+                    resource:process(transliterator){"Any_Publishing.txt"}
                     direction{"FORWARD"}
              }
         }
         Publishing-Any {
             file {
-                    resource:include{"Any_Publishing.txt"}
+                    resource:process(transliterator){"Any_Publishing.txt"}
                     direction{"REVERSE"}
              }
         }
@@ -301,13 +301,13 @@ root{
 
         LowerLatin-Jamo {
             internal {
-                    resource:include{"Latin_Jamo.txt"}
+                    resource:process(transliterator){"Latin_Jamo.txt"}
                     direction{"FORWARD"}
              }
         }
         Jamo-LowerLatin {
             internal {
-                    resource:include{"Latin_Jamo.txt"}
+                    resource:process(transliterator){"Latin_Jamo.txt"}
                     direction{"REVERSE"}
              }
         }
@@ -327,122 +327,122 @@ root{
 // Inter-Indic composed rules
         Latin-InterIndic {
             internal {
-                    resource:include{"Latin_InterIndic.txt"}
+                    resource:process(transliterator){"Latin_InterIndic.txt"}
                     direction{"FORWARD"}
              }
         }
         Devanagari-InterIndic {
             internal {
-                    resource:include{"Devanagari_InterIndic.txt"}
+                    resource:process(transliterator){"Devanagari_InterIndic.txt"}
                     direction{"FORWARD"}
              }
         }
         Bengali-InterIndic {
             internal {
-                    resource:include{"Bengali_InterIndic.txt"}
+                    resource:process(transliterator){"Bengali_InterIndic.txt"}
                     direction{"FORWARD"}
              }
         }
         Gurmukhi-InterIndic {
             internal {
-                    resource:include{"Gurmukhi_InterIndic.txt"}
+                    resource:process(transliterator){"Gurmukhi_InterIndic.txt"}
                     direction{"FORWARD"}
              }
         }
         Gujarati-InterIndic {
             internal {
-                    resource:include{"Gujarati_InterIndic.txt"}
+                    resource:process(transliterator){"Gujarati_InterIndic.txt"}
                     direction{"FORWARD"}
              }
         }
         Oriya-InterIndic {
             internal {
-                    resource:include{"Oriya_InterIndic.txt"}
+                    resource:process(transliterator){"Oriya_InterIndic.txt"}
                     direction{"FORWARD"}
              }
         }
         Tamil-InterIndic {
             internal {
-                    resource:include{"Tamil_InterIndic.txt"}
+                    resource:process(transliterator){"Tamil_InterIndic.txt"}
                     direction{"FORWARD"}
              }
         }
         Telugu-InterIndic {
             internal {
-                    resource:include{"Telugu_InterIndic.txt"}
+                    resource:process(transliterator){"Telugu_InterIndic.txt"}
                     direction{"FORWARD"}
              }
         }
         Kannada-InterIndic {
             internal {
-                    resource:include{"Kannada_InterIndic.txt"}
+                    resource:process(transliterator){"Kannada_InterIndic.txt"}
                     direction{"FORWARD"}
              }
         }
         Malayalam-InterIndic {
             internal {
-                    resource:include{"Malayalam_InterIndic.txt"}
+                    resource:process(transliterator){"Malayalam_InterIndic.txt"}
                     direction{"FORWARD"}
              }
         }
 
         InterIndic-Latin {
             internal {
-                    resource:include{"InterIndic_Latin.txt"}
+                    resource:process(transliterator){"InterIndic_Latin.txt"}
                     direction{"FORWARD"}
              }
         }
         InterIndic-Devanagari {
             internal {
-                    resource:include{"InterIndic_Devanagari.txt"}
+                    resource:process(transliterator){"InterIndic_Devanagari.txt"}
                     direction{"FORWARD"}
              }
         }
         InterIndic-Bengali {
             internal {
-                    resource:include{"InterIndic_Bengali.txt"}
+                    resource:process(transliterator){"InterIndic_Bengali.txt"}
                     direction{"FORWARD"}
              }
         }
         InterIndic-Gurmukhi {
             internal {
-                    resource:include{"InterIndic_Gurmukhi.txt"}
+                    resource:process(transliterator){"InterIndic_Gurmukhi.txt"}
                     direction{"FORWARD"}
              }
         }
         InterIndic-Gujarati {
             internal {
-                    resource:include{"InterIndic_Gujarati.txt"}
+                    resource:process(transliterator){"InterIndic_Gujarati.txt"}
                     direction{"FORWARD"}
              }
         }
         InterIndic-Oriya {
             internal {
-                    resource:include{"InterIndic_Oriya.txt"}
+                    resource:process(transliterator){"InterIndic_Oriya.txt"}
                     direction{"FORWARD"}
              }
         }
         InterIndic-Tamil {
             internal {
-                    resource:include{"InterIndic_Tamil.txt"}
+                    resource:process(transliterator){"InterIndic_Tamil.txt"}
                     direction{"FORWARD"}
              }
         }
         InterIndic-Telugu {
             internal {
-                    resource:include{"InterIndic_Telugu.txt"}
+                    resource:process(transliterator){"InterIndic_Telugu.txt"}
                     direction{"FORWARD"}
              }
         }
         InterIndic-Kannada {
             internal {
-                    resource:include{"InterIndic_Kannada.txt"}
+                    resource:process(transliterator){"InterIndic_Kannada.txt"}
                     direction{"FORWARD"}
              }
         }
         InterIndic-Malayalam {
             internal {
-                    resource:include{"InterIndic_Malayalam.txt"}
+                    resource:process(transliterator){"InterIndic_Malayalam.txt"}
                     direction{"FORWARD"}
              }
         }
@@ -733,25 +733,25 @@ root{
           # Comment these out; they are only for testing
           Latin-Han/definition{
              file {
-                    resource:include{"Han_Latin_Definition.txt"}
+                    resource:process(transliterator){"Han_Latin_Definition.txt"}
                     direction{"REVERSE"}
              }
           }
           Han-Latin/definition{
              file {
-                    resource:include{"Han_Latin_Definition.txt"}
+                    resource:process(transliterator){"Han_Latin_Definition.txt"}
                     direction{"FORWARD"}
              }
           }
           Latin-Han/EDICT{
              file {
-                    resource:include{"Han_Latin_EDICT.txt"}
+                    resource:process(transliterator){"Han_Latin_EDICT.txt"}
                     direction{"REVERSE"}
              }
           }
           Han-Latin/EDICT{
              file {
-                    resource:include{"Han_Latin_EDICT.txt"}
+                    resource:process(transliterator){"Han_Latin_EDICT.txt"}
                     direction{"FORWARD"}
              }
           }
