@@ -394,7 +394,7 @@ enum UErrorCode {
     U_MEMORY_ALLOCATION_ERROR =  7,     /**< Memory allocation error */
     U_INDEX_OUTOFBOUNDS_ERROR =  8,
     U_PARSE_ERROR             =  9,     /**< Equivalent to Java ParseException */
-    U_INVALID_CHAR_FOUND      = 10,     /**< In the Character conversion routines: Invalid character or sequence was encountered */
+    U_INVALID_CHAR_FOUND      = 10,     /**< In the Character conversion routines: Invalid character or sequence was encountered. In other APIs: Invalid character or code point name. */
     U_TRUNCATED_CHAR_FOUND    = 11,     /**< In the Character conversion routines: More bytes are required to complete the conversion successfully */
     U_ILLEGAL_CHAR_FOUND      = 12,     /**< In codeset conversion: a sequence that does NOT belong in the codepage has been encountered */
     U_INVALID_TABLE_FORMAT    = 13,     /**< Conversion table file found, but corrupted */
