@@ -491,7 +491,7 @@ static const CanonicalizationMap CANONICALIZE_MAP[] = {
     { "hi__DIRECT",     "hi", "collation", "direct" },
     { "it_IT_PREEURO",  "it_IT", "currency", "ITL" },
     { "ja_JP_TRADITIONAL", "ja_JP", "calendar", "japanese" },
-	{ "nb_NO_NY",       "nn_NO", NULL, NULL }, 	/* "markus said this was ok" :-) */
+    { "nb_NO_NY",       "nn_NO", NULL, NULL },  /* "markus said this was ok" :-) */
     { "nl_BE_PREEURO",  "nl_BE", "currency", "BEF" },
     { "nl_NL_PREEURO",  "nl_NL", "currency", "NLG" },
     { "pt_PT_PREEURO",  "pt_PT", "currency", "PTE" },
@@ -2122,6 +2122,12 @@ _res_getTableStringWithFallback(const char *path, const char *locale,
 
             /* continue the fallback lookup with the parent locale ID */
             locale=localeBuffer;
+
+            /* adjust error code as we fall back */
+            if (uprv_strlen(locale) == 0)   /* Falling back to root locale? */
+                  *pErrorCode = U_USING_DEFAULT_WARNING;
+            else if (*pErrorCode != U_USING_DEFAULT_WARNING)
+                  *pErrorCode = U_USING_FALLBACK_WARNING;
         }
         /* done with the locale string - ready to close table and rb */
         ures_close(&table);
@@ -2611,9 +2617,9 @@ uloc_getDisplayKeywordValue(   const char* locale,
         UResourceBundle *currencies = ures_getByKey(bundle, _kCurrencies, NULL, status);
         UResourceBundle *currency   = ures_getByKeyWithFallback(currencies, keywordValue, NULL, status);
         
-		dispName = ures_getStringByIndex(currency, UCURRENCY_DISPLAY_NAME_INDEX, &dispNameLen, status);
+        dispName = ures_getStringByIndex(currency, UCURRENCY_DISPLAY_NAME_INDEX, &dispNameLen, status);
         
-		/*close the bundles */
+        /*close the bundles */
         ures_close(currency);
         ures_close(currencies);
         ures_close(bundle);
