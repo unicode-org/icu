@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/holiday/HolidayCalendarDemo.java,v $ 
- * $Date: 2002/02/16 03:04:55 $ 
- * $Revision: 1.8 $
+ * $Date: 2002/02/19 04:10:23 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -31,6 +31,7 @@ import java.util.Vector;
 import java.util.Date;
 
 import com.ibm.icu.util.*;
+import com.ibm.icu.dev.demo.impl.*;
 
 /**
  * CalendarDemo demonstrates how Calendar works.

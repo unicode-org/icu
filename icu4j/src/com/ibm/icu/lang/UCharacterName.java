@@ -6,8 +6,8 @@
 *
 * $Source: 
 *     /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterName.java $ 
-* $Date: 2002/02/16 03:05:57 $ 
-* $Revision: 1.8 $
+* $Date: 2002/02/19 04:10:25 $ 
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
@@ -575,7 +575,7 @@ final class UCharacterName
     /**
     * Default name of the name datafile
     */
-    private static final String NAME_FILE_NAME_ = "resources/unames.dat";
+    private static final String NAME_FILE_NAME_ = "../impl/data/unames.dat";
       
     /**
     * Default buffer size of datafile

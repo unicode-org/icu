@@ -5,12 +5,12 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/impl/DemoTextBox.java,v $ 
- * $Date: 2002/02/16 03:04:56 $ 
- * $Revision: 1.3 $
+ * $Date: 2002/02/19 04:10:23 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
-package com.ibm.icu.dev.demo;
+package com.ibm.icu.dev.demo.impl;
 
 
 import java.text.BreakIterator;

@@ -18,7 +18,7 @@ public class ConformanceTest extends TestFmwk {
     Normalizer normalizer;
 
     static final String TEST_SUITE_FILE =
-        "src/data/unicode/Draft-TestSuite.txt";
+        "src/com/ibm/icu/dev/data/unicode/Draft-TestSuite.txt";
 
     public static void main(String[] args) throws Exception {
         new ConformanceTest().run(args);

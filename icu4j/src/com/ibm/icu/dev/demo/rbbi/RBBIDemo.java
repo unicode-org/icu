@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/rbbi/RBBIDemo.java,v $ 
- * $Date: 2002/02/16 03:04:58 $ 
- * $Revision: 1.5 $
+ * $Date: 2002/02/19 04:10:23 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -23,7 +23,7 @@ import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 import javax.swing.BorderFactory;
 import java.util.*;
-
+import com.ibm.icu.dev.demo.impl.*;
 import com.ibm.icu.text.BreakIterator;
 
 public class RBBIDemo extends DemoApplet

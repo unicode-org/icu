@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DateFormatSymbols.java,v $
- * $Date: 2002/02/16 03:06:06 $
- * $Revision: 1.9 $
+ * $Date: 2002/02/19 04:10:25 $
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -802,11 +802,11 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         String fullName = calendarClass.getName();
         int lastDot = fullName.lastIndexOf('.');
         String className = fullName.substring(lastDot+1);
-
+		String subPackageName= fullName.substring(0,fullName.substring(0,lastDot).lastIndexOf('.')+1);
         // The name of the ResourceBundle itself is the calendar's fully-qualified
         // name, with ".resources" inserted in the package and "Symbols" appended.
         // E.g., "my.pkg.MyCalendar" -> "my.pkg.resources.MyCalendarSymbols"
-        String bundleName = fullName.substring(0, lastDot+1) + "resources."
+        String bundleName = subPackageName + "impl.data."
                                 + className + "Symbols";
 
         ResourceBundle result = null;
