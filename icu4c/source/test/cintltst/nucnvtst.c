@@ -41,8 +41,11 @@ void TestDBCS(void);
 void TestMBCS(void);
 void TestISO_2022(void);
 void TestISO_2022_JP(void);
+void TestISO_2022_JP_1(void);
+void TestISO_2022_JP_2(void);
 void TestISO_2022_KR(void);
 void TestISO_2022_CN(void);
+void TestISO_2022_CN_EXT(void);
 void TestHZ(void);
 void TestISO_2022_JP_Next(void);
 void TestEBCDIC_STATEFUL(void);
@@ -170,8 +173,11 @@ void addTestNewConvert(TestNode** root)
    addTest(root, &TestMBCS, "tsconv/nucnvtst/TestMBCS");
    addTest(root, &TestISO_2022, "tsconv/nucnvtst/TestISO_2022");
    addTest(root, &TestISO_2022_JP, "tsconv/nucnvtst/TestISO_2022_JP");
+   addTest(root, &TestISO_2022_JP_1, "tsconv/nucnvtst/TestISO_2022_JP_1");
+   addTest(root, &TestISO_2022_JP_2, "tsconv/nucnvtst/TestISO_2022_JP_2");
    addTest(root, &TestISO_2022_KR, "tsconv/nucnvtst/TestISO_2022_KR");
    addTest(root, &TestISO_2022_CN, "tsconv/nucnvtst/TestISO_2022_CN");
+   addTest(root, &TestISO_2022_CN_EXT, "tsconv/nucnvtst/TestISO_2022_CN_EXT");
    addTest(root, &TestHZ, "tsconv/nucnvtst/TestHZ");
    addTest(root, &TestISO_2022_JP_Next, "tsconv/nucnvtst/TestISO_2022_JP_Next");
    addTest(root, &TestEBCDIC_STATEFUL, "tsconv/nucnvtst/TestEBCDIC_STATEFUL");
@@ -1336,53 +1342,57 @@ TestSmallTargetBuffer(const uint16_t* source, const UChar* sourceLimit,UConverte
 	UChar *uBuf,*test;
     int32_t uBufSize = 120;
     int len=0;
+    int i=5;
     UErrorCode errorCode=U_ZERO_ERROR;
 	uBuf =  (UChar*)malloc(uBufSize * sizeof(UChar)*5);
 	cBuf =(char*)malloc(uBufSize * sizeof(char) * 10);
-	uSource = (UChar*) source;
-	uSourceLimit=(const UChar*)sourceLimit;
-	cTarget = cBuf;
-    uTarget = uBuf;
-	cSource = cBuf;
-    cTargetLimit = cBuf;
-    uTargetLimit = uBuf;
 
+    for(;--i>0; ){
+        uSource = (UChar*) source;
+	    uSourceLimit=(const UChar*)sourceLimit;
+	    cTarget = cBuf;
+        uTarget = uBuf;
+	    cSource = cBuf;
+        cTargetLimit = cBuf;
+        uTargetLimit = uBuf;
 
-    do{
-       
-	    cTargetLimit = cTargetLimit+ 1;
-	    ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&uSource,uSourceLimit,NULL,FALSE, &errorCode);
-        if(errorCode==U_BUFFER_OVERFLOW_ERROR){
-           errorCode=U_ZERO_ERROR;
-            continue;
-        }
+        do{
+   
+	        cTargetLimit = cTargetLimit+ i;
+	        ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&uSource,uSourceLimit,NULL,FALSE, &errorCode);
+            if(errorCode==U_BUFFER_OVERFLOW_ERROR){
+               errorCode=U_ZERO_ERROR;
+                continue;
+            }
 
-	    if(U_FAILURE(errorCode)){
-            log_err("ucnv_toUnicode conversion failed reason %s\n", u_errorName(errorCode));
-            return;
-        }
-
-    }while (uSource<uSourceLimit);
-
-    cSourceLimit =cTarget;
-    do{
-        uTargetLimit=uTargetLimit+1;
-         ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,NULL,FALSE,&errorCode);
-        if(errorCode==U_BUFFER_OVERFLOW_ERROR){
-           errorCode=U_ZERO_ERROR;
-            continue;
-        }
-        if(U_FAILURE(errorCode)){
-               log_err("ucnv_toUnicode conversion failed reason %s\n", u_errorName(errorCode));
+	        if(U_FAILURE(errorCode)){
+                log_err("ucnv_toUnicode conversion failed reason %s\n", u_errorName(errorCode));
                 return;
+            }
+
+        }while (uSource<uSourceLimit);
+
+        cSourceLimit =cTarget;
+        do{
+            uTargetLimit=uTargetLimit+i;
+             ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,NULL,FALSE,&errorCode);
+            if(errorCode==U_BUFFER_OVERFLOW_ERROR){
+               errorCode=U_ZERO_ERROR;
+                continue;
+            }
+            if(U_FAILURE(errorCode)){
+                   log_err("ucnv_toUnicode conversion failed reason %s\n", u_errorName(errorCode));
+                    return;
+            }
+        }while(cSource<cSourceLimit);
+
+        uSource = source;
+        test =uBuf;
+        for(len=0;len<(int)(source - sourceLimit);len++){
+   		    if(uBuf[len]!=uSource[len]){
+			    log_err("Expected : \\u%04X \t Got: \\u%04X\n",uSource[len],(int)uBuf[len]) ;
+		    }
         }
-    }while(cSource<cSourceLimit);
-    uSource = source;
-    test =uBuf;
-    for(len;len<(int)(source - sourceLimit);len++){
-   		if(uBuf[len]!=uSource[len]){
-			log_err("Expected : \\u%04X \t Got: \\u%04X\n",uSource[len],(int)uBuf[len]) ;
-		}
     }
     free(uBuf);
 	free(cBuf);
@@ -1400,54 +1410,59 @@ void TestSmallSourceBuffer(const uint16_t* source, const UChar* sourceLimit,UCon
 	UChar *uBuf,*test;
     int32_t uBufSize = 120;
     int len=0;
+    int i=5;
     const UChar *temp = sourceLimit;
     UErrorCode errorCode=U_ZERO_ERROR;
 	uBuf =  (UChar*)malloc(uBufSize * sizeof(UChar)*5);
 	cBuf =(char*)malloc(uBufSize * sizeof(char) * 10);
-	uSource = (UChar*) source;
-	cTarget = cBuf;
-    uTarget = uBuf;
-	cSource = cBuf;
-    cTargetLimit = cBuf;
-    uTargetLimit = uBuf+uBufSize*5;
-    cTargetLimit = cTargetLimit+uBufSize*10;
-    uSourceLimit=uSource;
-    do{
+   
+
+    for(;--i>0;){
+	    uSource = (UChar*) source;
+	    cTarget = cBuf;
+        uTarget = uBuf;
+	    cSource = cBuf;
+        cTargetLimit = cBuf;
+        uTargetLimit = uBuf+uBufSize*5;
+        cTargetLimit = cTargetLimit+uBufSize*10;
+        uSourceLimit=uSource;
+        do{
        
-        uSourceLimit = uSourceLimit+1;
-	    ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&uSource,uSourceLimit,NULL,FALSE, &errorCode);
-        if(errorCode==U_BUFFER_OVERFLOW_ERROR){
-           errorCode=U_ZERO_ERROR;
-            continue;
-        }
+            uSourceLimit = uSourceLimit+1;
+	        ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&uSource,uSourceLimit,NULL,FALSE, &errorCode);
+            if(errorCode==U_BUFFER_OVERFLOW_ERROR){
+               errorCode=U_ZERO_ERROR;
+                continue;
+            }
 
-	    if(U_FAILURE(errorCode)){
-            log_err("ucnv_toUnicode conversion failed reason %s\n", u_errorName(errorCode));
-            return;
-        }
-
-    }while (uSource<temp);
-
-    cSourceLimit =cBuf;
-    do{
-        cSourceLimit =cSourceLimit+1;
-        ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,NULL,FALSE,&errorCode);
-        if(errorCode==U_BUFFER_OVERFLOW_ERROR){
-           errorCode=U_ZERO_ERROR;
-            continue;
-        }
-        if(U_FAILURE(errorCode)){
-               log_err("ucnv_toUnicode conversion failed reason %s\n", u_errorName(errorCode));
+	        if(U_FAILURE(errorCode)){
+                log_err("ucnv_toUnicode conversion failed reason %s\n", u_errorName(errorCode));
                 return;
-        }
-    }while(cSource<cTarget);
+            }
 
-    uSource = source;
-    test =uBuf;
-    for(len;len<(int)(source - sourceLimit);len++){
-   		if(uBuf[len]!=uSource[len]){
-			log_err("Expected : \\u%04X \t Got: \\u%04X\n",uSource[len],(int)uBuf[len]) ;
-		}
+        }while (uSource<temp);
+
+        cSourceLimit =cBuf;
+        do{
+            cSourceLimit =cSourceLimit+1;
+            ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,NULL,FALSE,&errorCode);
+            if(errorCode==U_BUFFER_OVERFLOW_ERROR){
+               errorCode=U_ZERO_ERROR;
+                continue;
+            }
+            if(U_FAILURE(errorCode)){
+                   log_err("ucnv_toUnicode conversion failed reason %s\n", u_errorName(errorCode));
+                    return;
+            }
+        }while(cSource<cTarget);
+
+        uSource = source;
+        test =uBuf;
+        for(len;len<(int)(source - sourceLimit);len++){
+   		    if(uBuf[len]!=uSource[len]){
+			    log_err("Expected : \\u%04X \t Got: \\u%04X\n",uSource[len],(int)uBuf[len]) ;
+		    }
+        }
     }
     free(uBuf);
 	free(cBuf);
@@ -1526,10 +1541,166 @@ TestHZ() {
 	free(cBuf);
 }
 
-
-
 void
 TestISO_2022_JP() {
+    /* test input */
+    static const uint16_t in[]={  
+        0x3000, 0x3001, 0x3002, 0x0020, 0xFF0E, 0x30FB, 0xFF1A, 0xFF1B, 0x000D, 0x000A,
+        0x0043, 0x0044, 0x0045, 0x0046, 0x0047, 0x0048, 0x0049, 0x004A, 0x000D, 0x000A, 
+        0xFF1F, 0xFF01, 0x309B, 0x309C, 0x00B4, 0xFF40, 0x00A8, 0xFF3E, 0x000D, 0x000A,
+        0x004B, 0x004C, 0x004D, 0x004E, 0x004F, 0x0050, 0x0051, 0x0052, 0x000D, 0x000A,
+        0xFFE3, 0xFF3F, 0x30FD, 0x30FE, 0x309D, 0x309E, 0x3003, 0x4EDD, 0x000D, 0x000A, 
+        0x3005, 0x3006, 0x3007, 0x30FC, 0x2015, 0x2010, 0xFF0F, 0x005C, 0x000D, 0x000A, 
+        0x301C, 0x2016, 0xFF5C, 0x2026, 0x2025, 0x2018, 0x2019, 0x201C, 0x000D, 0x000A, 
+        0x201D, 0xFF08, 0xFF09, 0x3014, 0xFF75, 0xFF76, 0xFF77, 0xFF78, 0x000D, 0x000A,
+        0xFF79, 0xFF7A, 0xFF7B, 0xFF7C, 0xFF7D, 0xFF7E, 0xFF7F, 0xFF80, 0x000D, 0x000A,
+        0x0053, 0x0054, 0x0055, 0x0056, 0x0057, 0x0058, 0x0059, 0x005A, 0x000D, 0x000A,
+        0xFF81, 0xFF82, 0xFF83, 0xFF84, 0xFF85, 0xFF86, 0xFF87, 0xFF88, 0x000D, 0x000A,
+        0x0053, 0x0054, 0x0055, 0x0056, 0x0057, 0x0058, 0x0059, 0x005A, 0x000D, 0x000A,
+        0xFF89, 0xFF8A, 0xFF8B, 0x0020, 0xFF8D, 0xFF8E, 0xFF8F, 0xFF90, 0x000D, 0x000A,
+        0xFF91, 0xFF92, 0xFF93, 0xFF94, 0xFF95, 0xFF96, 0xFF97, 0xFF98, 0x000D, 0x000A
+      };
+	const UChar* uSource;
+	const UChar* uSourceLimit;
+	const char* cSource;
+	const char* cSourceLimit;
+	UChar *uTargetLimit =NULL;
+	UChar *uTarget;
+	char *cTarget;
+	const char *cTargetLimit;
+	char *cBuf; 
+	UChar *uBuf,*test;
+    int32_t uBufSize = 120;
+    UErrorCode errorCode=U_ZERO_ERROR;
+    UConverter *cnv;
+
+    cnv=ucnv_open("ISO_2022,locale=jp,version=0", &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("Unable to open a iso-2022 converter: %s\n", u_errorName(errorCode));
+        return;
+    }
+
+	uBuf =  (UChar*)malloc(uBufSize * sizeof(UChar)*5);
+	cBuf =(char*)malloc(uBufSize * sizeof(char) * 5);
+	uSource = (const UChar*)&in[0];
+	uSourceLimit=(const UChar*)&in[sizeof(in)/2];
+	cTarget = cBuf;
+	cTargetLimit = cBuf +uBufSize*5;
+	uTarget = uBuf;
+	uTargetLimit = uBuf+ uBufSize*5;
+	ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&uSource,uSourceLimit,NULL,TRUE, &errorCode);
+    if(U_FAILURE(errorCode)){
+        log_err("ucnv_fromUnicode conversion failed reason %s\n", u_errorName(errorCode));
+        return;
+    }
+    cSource = cBuf;
+	cSourceLimit =cTarget;
+	test =uBuf;
+	ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,NULL,TRUE,&errorCode);
+	if(U_FAILURE(errorCode)){
+        log_err("ucnv_toUnicode conversion failed reason %s\n", u_errorName(errorCode));
+        return;
+    }
+    uSource = (const UChar*)&in[0];
+	while(uSource<uSourceLimit){
+		if(*test!=*uSource){
+  
+			log_err("Expected : \\u%04X \t Got: \\u%04X\n",*uSource,(int)*test) ;
+		}
+		*uSource++;
+		*test++;
+	}
+    TestSmallTargetBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv,"iso-2022,locale=jp");
+    TestSmallSourceBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv,"iso-2022,locale=jp");
+	ucnv_close(cnv);
+	free(uBuf);
+	free(cBuf);
+}
+void
+TestISO_2022_JP_1() {
+    /* test input */
+    static const uint16_t in[]={
+        0x3000, 0x3001, 0x3002, 0x0020, 0xFF0E, 0x30FB, 0xFF1A, 0xFF1B, 0x000D, 0x000A,
+        0x0043, 0x0044, 0x0045, 0x0046, 0x0047, 0x0048, 0x0049, 0x004A, 0x000D, 0x000A, 
+        0x52C8, 0x52CC, 0x52CF, 0x52D1, 0x52D4, 0x52D6, 0x52DB, 0x52DC, 0x000D, 0x000A,
+        0xFF1F, 0xFF01, 0x309B, 0x309C, 0x00B4, 0xFF40, 0x00A8, 0xFF3E, 0x000D, 0x000A,
+        0x004B, 0x004C, 0x004D, 0x004E, 0x004F, 0x0050, 0x0051, 0x0052, 0x000D, 0x000A,
+        0xFFE3, 0xFF3F, 0x30FD, 0x30FE, 0x309D, 0x309E, 0x3003, 0x4EDD, 0x000D, 0x000A, 
+        0x3005, 0x3006, 0x3007, 0x30FC, 0x2015, 0x2010, 0xFF0F, 0x005C, 0x000D, 0x000A, 
+        0x301C, 0x2016, 0xFF5C, 0x2026, 0x2025, 0x2018, 0x2019, 0x201C, 0x000D, 0x000A, 
+        0x201D, 0xFF08, 0xFF09, 0x3014, 0xFF75, 0xFF76, 0xFF77, 0xFF78, 0x000D, 0x000A,
+        0xFF79, 0xFF7A, 0xFF7B, 0xFF7C, 0xFF7D, 0xFF7E, 0xFF7F, 0xFF80, 0x000D, 0x000A,
+        0x0053, 0x0054, 0x0055, 0x0056, 0x0057, 0x0058, 0x0059, 0x005A, 0x000D, 0x000A,
+        0x4F94, 0x4F97, 0x52BA, 0x52BB, 0x52BD, 0x52C0, 0x52C4, 0x52C6, 0x000D, 0x000A,
+        0xFF81, 0xFF82, 0xFF83, 0xFF84, 0xFF85, 0xFF86, 0xFF87, 0xFF88, 0x000D, 0x000A,
+        0x0053, 0x0054, 0x0055, 0x0056, 0x0057, 0x0058, 0x0059, 0x005A, 0x000D, 0x000A,
+        0xFF89, 0xFF8A, 0xFF8B, 0x0020, 0xFF8D, 0xFF8E, 0xFF8F, 0xFF90, 0x000D, 0x000A,
+        0xFF91, 0xFF92, 0xFF93, 0xFF94, 0xFF95, 0xFF96, 0xFF97, 0xFF98, 0x000D, 0x000A,
+        0x4F78, 0x4F79, 0x4F7A, 0x4F7D, 0x4F7E, 0x4F81, 0x4F82, 0x4F84, 0x000D, 0x000A,
+        0x4F85, 0x4F89, 0x4F8A, 0x4F8C, 0x4F8E, 0x4F90, 0x4F92, 0x4F93, 0x000D, 0x000A,
+        0x52E1, 0x52E5, 0x52E8, 0x52E9, 0x000D, 0x000A
+      };
+	const UChar* uSource;
+	const UChar* uSourceLimit;
+	const char* cSource;
+	const char* cSourceLimit;
+	UChar *uTargetLimit =NULL;
+	UChar *uTarget;
+	char *cTarget;
+	const char *cTargetLimit;
+	char *cBuf; 
+	UChar *uBuf,*test;
+    int32_t uBufSize = 120;
+    UErrorCode errorCode=U_ZERO_ERROR;
+    UConverter *cnv;
+
+    cnv=ucnv_open("ISO_2022,locale=jp,version=1", &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("Unable to open a iso-2022 converter: %s\n", u_errorName(errorCode));
+        return;
+    }
+
+	uBuf =  (UChar*)malloc(uBufSize * sizeof(UChar)*5);
+	cBuf =(char*)malloc(uBufSize * sizeof(char) * 5);
+	uSource = (const UChar*)&in[0];
+	uSourceLimit=(const UChar*)&in[sizeof(in)/2];
+	cTarget = cBuf;
+	cTargetLimit = cBuf +uBufSize*5;
+	uTarget = uBuf;
+	uTargetLimit = uBuf+ uBufSize*5;
+	ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&uSource,uSourceLimit,NULL,TRUE, &errorCode);
+    if(U_FAILURE(errorCode)){
+        log_err("ucnv_fromUnicode conversion failed reason %s\n", u_errorName(errorCode));
+        return;
+    }
+    cSource = cBuf;
+	cSourceLimit =cTarget;
+	test =uBuf;
+	ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,NULL,TRUE,&errorCode);
+	if(U_FAILURE(errorCode)){
+        log_err("ucnv_toUnicode conversion failed reason %s\n", u_errorName(errorCode));
+        return;
+    }
+    uSource = (const UChar*)&in[0];
+	while(uSource<uSourceLimit){
+		if(*test!=*uSource){
+  
+			log_err("Expected : \\u%04X \t Got: \\u%04X\n",*uSource,(int)*test) ;
+		}
+		*uSource++;
+		*test++;
+	}
+    /*ucnv_close(cnv);
+    cnv=ucnv_open("ISO_2022,locale=jp,version=1", &errorCode);*/
+    TestSmallTargetBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv,"iso-2022,locale=jp");
+    TestSmallSourceBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv,"iso-2022,locale=jp");
+	ucnv_close(cnv);
+	free(uBuf);
+	free(cBuf);
+}
+
+void
+TestISO_2022_JP_2() {
     /* test input */
     static const uint16_t in[]={
         0x00A8, 0x3003, 0x3005, 0x2015, 0xFF5E, 0x2016, 0x2026, 0x2018, 0x000D, 0x000A, 
@@ -1566,7 +1737,7 @@ TestISO_2022_JP() {
     UErrorCode errorCode=U_ZERO_ERROR;
     UConverter *cnv;
 
-    cnv=ucnv_open("ISO_2022,locale=jp", &errorCode);
+    cnv=ucnv_open("ISO_2022,locale=jp,version=2", &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("Unable to open a iso-2022 converter: %s\n", u_errorName(errorCode));
         return;
@@ -1675,7 +1846,7 @@ TestISO_2022_KR() {
 	free(cBuf);
 }
 void
-TestISO_2022_CN() {
+TestISO_2022_CN_EXT() {
     /* test input */
     static const uint16_t in[]={
          0x4DB3, 0x4DB4, 0x4DB5, 0x4E00, 0x4E00, 0x4E01, 0x4E02, 0x4E03, 0x000D, 0x000A,
@@ -1712,7 +1883,87 @@ TestISO_2022_CN() {
     UErrorCode errorCode=U_ZERO_ERROR;
     UConverter *cnv;
 
-    cnv=ucnv_open("ISO_2022,locale=cn", &errorCode);
+    cnv=ucnv_open("ISO_2022,locale=cn,version=1", &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("Unable to open a iso-2022 converter: %s\n", u_errorName(errorCode));
+        return;
+    }
+
+	uBuf =  (UChar*)malloc(uBufSize * sizeof(UChar)*5);
+	cBuf =(char*)malloc(uBufSize * sizeof(char) * 10);
+	uSource = (const UChar*)&in[0];
+	uSourceLimit=(const UChar*)&in[sizeof(in)/2];
+	cTarget = cBuf;
+	cTargetLimit = cBuf +uBufSize*5;
+	uTarget = uBuf;
+	uTargetLimit = uBuf+ uBufSize*5;
+	ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&uSource,uSourceLimit,NULL,TRUE, &errorCode);
+    if(U_FAILURE(errorCode)){
+        log_err("ucnv_fromUnicode conversion failed reason %s\n", u_errorName(errorCode));
+        return;
+    }
+    cSource = cBuf;
+	cSourceLimit =cTarget;
+	test =uBuf;
+	ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,NULL,TRUE,&errorCode);
+	if(U_FAILURE(errorCode)){
+        log_err("ucnv_toUnicode conversion failed reason %s\n", u_errorName(errorCode));
+        return;
+    }
+    uSource = (const UChar*)&in[0];
+	while(uSource<uSourceLimit){
+		if(*test!=*uSource){
+			log_err("Expected : \\u%04X \t Got: \\u%04X\n",*uSource,(int)*test) ;
+		}
+        else{
+			log_verbose("      Got: \\u%04X\n",(int)*test) ;
+        }
+		*uSource++;
+		*test++;
+	}
+	ucnv_close(cnv);
+	free(uBuf);
+	free(cBuf);
+}
+
+void
+TestISO_2022_CN() {
+    /* test input */
+    static const uint16_t in[]={
+         0x4E00, 0x4E00, 0x4E01, 0x4E03, 0x60F6, 0x60F7, 0x60F8, 0x60FB, 0x000D, 0x000A,
+         0x0392, 0x0393, 0x0394, 0x0395, 0x0396, 0x0397, 0x60FB, 0x60FC, 0x000D, 0x000A,
+         0x4E07, 0x4E08, 0x4E08, 0x4E09, 0x4E0A, 0x4E0B, 0x0042, 0x0043, 0x000D, 0x000A,
+         0x4E0C, 0x0021, 0x0022, 0x0023, 0x0024, 0xFF40, 0xFF41, 0xFF42, 0x000D, 0x000A,
+         0xFF43, 0xFF44, 0xFF45, 0xFF46, 0xFF47, 0xFF48, 0xFF49, 0xFF4A, 0x000D, 0x000A,
+         0xFF4B, 0xFF4C, 0xFF4D, 0xFF4E, 0xFF4F, 0x6332, 0x63B0, 0x643F, 0x000D, 0x000A,
+         0x64D8, 0x8004, 0x6BEA, 0x6BF3, 0x6BFD, 0x6BF5, 0x6BF9, 0x6C05, 0x000D, 0x000A,
+         0x6C07, 0x6C06, 0x6C0D, 0x6C15, 0x9CD9, 0x9CDC, 0x9CDD, 0x9CDF, 0x000D, 0x000A,
+         0x9CE2, 0x977C, 0x9785, 0x9791, 0x9792, 0x9794, 0x97AF, 0x97AB, 0x000D, 0x000A,
+         0x97A3, 0x97B2, 0x97B4, 0x9AB1, 0x9AB0, 0x9AB7, 0x9E58, 0x9AB6, 0x000D, 0x000A,
+         0x9ABA, 0x9ABC, 0x9AC1, 0x9AC0, 0x9AC5, 0x9AC2, 0x9ACB, 0x9ACC, 0x000D, 0x000A,
+         0x9AD1, 0x9B45, 0x9B43, 0x9B47, 0x9B49, 0x9B48, 0x9B4D, 0x9B51, 0x000D, 0x000A,
+         0x98E8, 0x990D, 0x992E, 0x9955, 0x9954, 0x9ADF, 0x60FE, 0x60FF, 0x000D, 0x000A,
+         0x60F2, 0x60F3, 0x60F4, 0x60F5, 0x000D, 0x000A, 0x60F9, 0x60FA, 0x000D, 0x000A,
+         0x6100, 0x6101, 0x0041, 0x0044, 0x0045, 0x0046, 0x0047, 0x0048, 0x000D, 0x000A,
+         0x247D, 0x247E, 0x247F, 0x2480, 0x2481, 0x2482, 0x2483, 0x2484, 0x2485, 0x2486,
+         0x2487, 0x2460, 0x2461, 0xFF20, 0xFF21, 0xFF22, 0x0049, 0x004A, 0x000D, 0x000A,
+
+      };
+	const UChar* uSource;
+	const UChar* uSourceLimit;
+	const char* cSource;
+	const char* cSourceLimit;
+	UChar *uTargetLimit =NULL;
+	UChar *uTarget;
+	char *cTarget;
+	const char *cTargetLimit;
+	char *cBuf; 
+	UChar *uBuf,*test;
+    int32_t uBufSize = 180;
+    UErrorCode errorCode=U_ZERO_ERROR;
+    UConverter *cnv;
+
+    cnv=ucnv_open("ISO_2022,locale=cn,version=0", &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("Unable to open a iso-2022 converter: %s\n", u_errorName(errorCode));
         return;
@@ -1756,7 +2007,6 @@ TestISO_2022_CN() {
 	free(uBuf);
 	free(cBuf);
 }
-
 void
 TestEBCDIC_STATEFUL() {
     /* test input */
