@@ -53,9 +53,9 @@ static const UDataInfo dataInfo={
     sizeof(UChar),
     0,
 
-    0x43, 0x76, 0x41, 0x6c,     /* dataFormat="CvAl" */
-    2, 1, 0, 0,                 /* formatVersion */
-    1, 4, 2, 0                  /* dataVersion */
+    {0x43, 0x76, 0x41, 0x6c},     /* dataFormat="CvAl" */
+    {2, 1, 0, 0},                 /* formatVersion */
+    {1, 4, 2, 0}                  /* dataVersion */
 };
 
 typedef struct {
@@ -110,9 +110,6 @@ allocString(StringBlock *block, uint32_t length);
 
 static int
 compareAliases(const void *alias1, const void *alias2);
-
-static int
-compareConverters(const void *converter1, const void *converter2);
 
 static uint16_t
 getTagNumber(const char *tag, uint16_t tagLen);

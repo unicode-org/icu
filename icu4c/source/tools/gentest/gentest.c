@@ -39,9 +39,9 @@ static const UDataInfo dataInfo={
     sizeof(UChar),
     0,
 
-    0x54, 0x65, 0x73, 0x74,     /* dataFormat="Test" */
-    1, 0, 0, 0,                 /* formatVersion */
-    1, 0, 0, 0                  /* dataVersion */
+    {0x54, 0x65, 0x73, 0x74},     /* dataFormat="Test" */
+    {1, 0, 0, 0},                 /* formatVersion */
+    {1, 0, 0, 0}                  /* dataVersion */
 };
 
 static void createData(const char*);
