@@ -261,6 +261,18 @@ if test $threads = true; then
        dnl We're using normal windows compilers. Threading is available.
        ICU_USE_THREADS=1
      fi ;;
+   *-*-hpux*)
+     dnl Add -mt because it does several nice things on newer compilers.
+     case "${icu_cv_host_frag}" in
+       mh-hpux-acc)
+         OLD_CXXFLAGS="${CXXFLAGS}"
+         CXXFLAGS="${CXXFLAGS} -mt"
+         if test x"`${CXX} ${CXXFLAGS} 2>&1`" != x""; then
+           CXXFLAGS="${OLD_CXXFLAGS}"
+         fi
+       ;;
+     esac
+     ;;
    esac
   fi
 fi
