@@ -655,6 +655,17 @@ public final class CollationElementIterator
     }
 
     /**
+     * Determine if a character is a Thai base consonant which sorts before
+     * its pre-vowel.
+     * @param ch character to test
+     * @return true if ch is a Thai base consonants, false otherwise
+     */
+    static final boolean isThaiBaseConsonant(char ch) 
+    {
+        return ch >= 0xe01 && ch <= 0xe2e;
+    }
+    
+    /**
      * Determine if a character is a Thai vowel, which sorts after its base
      * consonant.
      * @param ch character to test
@@ -2165,7 +2176,7 @@ public final class CollationElementIterator
     private int previousContraction(RuleBasedCollator collator, int ce, char ch)
     {
         m_utilStringBuffer_.setLength(0);
-        while (collator.isUnsafe(ch)) {
+        while (collator.isUnsafe(ch) || isThaiBaseConsonant(ch)) {
             m_utilStringBuffer_.insert(0, ch);
             ch = previousChar();
             if (isBackwardsStart()) {
