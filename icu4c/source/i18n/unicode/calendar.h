@@ -2023,6 +2023,7 @@ private:
     char actualLocale[ULOC_FULLNAME_CAPACITY];
 
  public:
+#if !UCONFIG_NO_SERVICE
     /**
      * INTERNAL FOR 2.6 --  Registration.
      */
@@ -2074,6 +2075,7 @@ private:
      * @internal
      */
     friend class DefaultCalendarFactory;
+#endif /* !UCONFIG_NO_SERVICE */
 
     /**
      * @internal
