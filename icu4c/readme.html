@@ -840,7 +840,7 @@
       <tr>
         <td>OS/390 (zSeries)</td>
 
-        <td>CC</td>
+        <td>CC r10</td>
 
         <td>Regularly tested</td>
       </tr>
@@ -1125,6 +1125,8 @@
         <ul>
           <li>icu/source/common</li>
 
+          <li>icu/source/data</li>
+
           <li>icu/source/i18n</li>
 
           <li>icu/source/tools/ctestfw</li>
@@ -1187,10 +1189,9 @@
 
     <p>The PDS member names are as follows:</p>
 <pre>
-<samp>IXMICUUC --&gt; libicuuc<i>XX</i>.dll
-IXMICUDA --&gt; libicudt<i>XX</i>e.dll
-IXMICUD1 --&gt; libicudt<i>XX</i>e_390.dll
-IXMICUTE --&gt; libtestdata.dll</samp>
+<samp>IXMI<i>XX</i>UC --&gt; libicuuc<i>XX</i>.dll
+IXMI<i>XX</i>DA --&gt; libicudt<i>XX</i>e.dll
+IXMI<i>XX</i>D1 --&gt; libicudt<i>XX</i>e_390.dll</samp>
 </pre>
 
     <p>Example PDS attributes are as follows:</p>
