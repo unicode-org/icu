@@ -35,9 +35,11 @@ else
 ICUPKGDATA_OUTDIR = $(OUTDIR)
 endif
 
+ICUDATA_SOURCE_ARCHIVE = $(shell [ -e $(srcdir)/in/$(ICUDATA_PLATFORM_NAME).dat ] && echo -n $(srcdir)/in/$(ICUDATA_PLATFORM_NAME).dat)
+
 top_builddir_from_tmp = $(patsubst ..%,../..%,$(top_builddir))
 CURDIR:=$(CURR_FULL_DIR)
-PKGDATA = $(BINDIR)/pkgdata $(PKGDATA_OPTS) -q -c -s $(CURDIR)/out/build/$(ICUDATA_PLATFORM_NAME) -d $(ICUPKGDATA_OUTDIR) -M"PKGDATA_LDFLAGS=\"$(LDFLAGSICUDT)\""
+PKGDATA = $(BINDIR)/pkgdata $(PKGDATA_OPTS) -q -c -s $(CURDIR)/out/build/$(ICUDATA_PLATFORM_NAME) -d $(ICUPKGDATA_OUTDIR) -M'PKGDATA_LDFLAGS="$(LDFLAGSICUDT)"'
 
 
 # OBJDATADIR must be a short path (with ..'s) to the data.
@@ -54,7 +56,8 @@ OUTDIR=$(top_builddir)/data/out
 endif
 
 OUTTMPDIR=$(OUTDIR)/tmp
-BUILDDIR=$(OUTDIR)/build/$(ICUDATA_PLATFORM_NAME)
+MAINBUILDDIR=$(OUTDIR)/build/
+BUILDDIR=$(MAINBUILDDIR)/$(ICUDATA_PLATFORM_NAME)
 UNICODEDATADIR=$(SRCDATADIR)/unidata
 LOCSRCDIR=$(SRCDATADIR)/locales
 COLSRCDIR=$(SRCDATADIR)/coll
@@ -262,14 +265,22 @@ ALL_FILES_LIST = $(DAT_FILES_SHORT) $(CNV_FILES_SHORT) $(BRK_FILES_SHORT) $(RES_
 ## Files to remove for 'make clean'
 CLEANFILES = *~ icupkg.inc
 
-$(OUTTMPDIR)/icudata.lst: $(SRCLISTDEPS)
+ifeq ($(ICUDATA_SOURCE_ARCHIVE),)
+build-local: build-dir $(SO_VERSION_DATA) $(ALL_FILES) $(OUTTMPDIR)/icudata.lst $(OS390LIST)
+$(OUTTMPDIR)/icudata.lst: $(SRCLISTDEPS) build-dir
 	@echo "generating $@ (list of data files)"
 	@-$(RMV) $@
 	@for file in $(ALL_FILES_LIST); do \
 	  echo $$file >> $@; \
 	done;
+else
+build-local: build-dir $(SO_VERSION_DATA) $(OUTTMPDIR)/icudata.lst $(OS390LIST)
+$(OUTTMPDIR)/icudata.lst: $(SRCLISTDEPS) build-dir
+	@echo "Unpacking $(ICUDATA_SOURCE_ARCHIVE) and generating $@ (list of data files)"
+	@-$(RMV) $@
+	$(INVOKE) $(BINDIR)/decmn -d $(MAINBUILDDIR) --pkgdata $(ICUDATA_SOURCE_ARCHIVE) > $@
+endif
 
-build-local: build-dir $(SO_VERSION_DATA) $(ALL_FILES) $(OUTTMPDIR)/icudata.lst $(OS390LIST)
 
 build-dir: $(BUILD_DIRS)
 $(BUILD_DIRS):
