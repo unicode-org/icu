@@ -331,7 +331,7 @@ int main(int argc, char** argv)
             printAllConverters(pname);
             goto normal_exit;
         }
-        else if (strcmp("-h", *iter) == 0 || !strcmp("--help", *iter))
+        else if (strcmp("-h", *iter) == 0 || !strcmp("-?", *iter) == 0 || !strcmp("--help", *iter))
         {
             usage(pname, 0);
         }
