@@ -130,9 +130,9 @@ make install DESTDIR=$RPM_BUILD_ROOT
 %doc readme.html
 %doc license.html
 /usr/share/icu/%{version}/license.html
-/usr/share/icu/%{version}/*.cnv
-/usr/share/icu/%{version}/*.icu
-/usr/share/icu/%{version}/*.spp
+/usr/share/icu/%{version}/icudt30l/*.cnv
+/usr/share/icu/%{version}/icudt30l/*.icu
+/usr/share/icu/%{version}/icudt30l/*.spp
 
 /usr/bin/derb
 /usr/bin/genbrk
@@ -172,10 +172,9 @@ make install DESTDIR=$RPM_BUILD_ROOT
 /usr/man/man8/gensprep.8.*
 
 %files -n icu-locales
-/usr/share/icu/%{version}/*.brk
-/usr/share/icu/%{version}/*.res
-#TODO Fix the location of these files.
-#/usr/share/icu/%{version}/coll/*.res
+/usr/share/icu/%{version}/icudt30l/*.brk
+/usr/share/icu/%{version}/icudt30l/*.res
+/usr/share/icu/%{version}/icudt30l/coll/*.res
 
 %files -n libicu30
 %doc license.html
