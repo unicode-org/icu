@@ -21,6 +21,7 @@
 
 #include "unicode/utypes.h"
 
+#ifdef ICU_SCSU_USE_DEPRECATES
 
 /**
  * \file
@@ -155,5 +156,7 @@ U_CAPI void U_EXPORT2 scsu_decompress(UnicodeCompressor *comp,
 			  const uint8_t     **source,
 			  const uint8_t     *sourceLimit,
 			  UErrorCode        *status);
+
+#endif
 
 #endif
