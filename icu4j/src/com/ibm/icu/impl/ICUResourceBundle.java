@@ -672,10 +672,10 @@ public abstract class ICUResourceBundle extends UResourceBundle{
 
     protected static final long RES_BOGUS = 0xffffffff;
 
-    protected  ICUResourceBundle handleGet(String key, Hashtable table){
+    protected  ICUResourceBundle handleGet(String key, HashMap table){
         throw new UResourceTypeMismatchException("");   
     }
-    protected  ICUResourceBundle handleGet(int index, Hashtable table){
+    protected  ICUResourceBundle handleGet(int index, HashMap table){
         throw new UResourceTypeMismatchException("");   
     }
 

@@ -9,7 +9,7 @@ package com.ibm.icu.impl;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.IntBuffer;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
@@ -133,7 +133,7 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
 	private static final int getCharOffset(int offset) {
 		return (offset * 2);
 	}
-	private final ICUResourceBundle createBundleObject(String key, long resource,String resPath, Hashtable table) {
+	private final ICUResourceBundle createBundleObject(String key, long resource,String resPath, HashMap table) {
 		//if (resource != RES_BOGUS) {
 			switch (RES_GET_TYPE(resource)) {
 				case STRING :
@@ -204,7 +204,7 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
 		public ICUResourceBundle handleGet(String key) {
 			return handleGet(key, null);
 		}
-		protected ICUResourceBundle handleGet(String key, Hashtable table) {
+		protected ICUResourceBundle handleGet(String key, HashMap table) {
 			int offset = RES_GET_OFFSET(resource);
 			// offset+0 contains number of entries
 			// offset+1 contains the keyOffset  
@@ -232,7 +232,7 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
             int keyOffset = rawData.getChar(charOffset);
             return RES_GET_KEY(rawData, keyOffset).toString();   
         }
-		public ICUResourceBundle handleGet(int index, Hashtable table) {
+		public ICUResourceBundle handleGet(int index, HashMap table) {
 			if (index > size) {
 				throw new IndexOutOfBoundsException();
 			}
@@ -284,7 +284,7 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
 		public ICUResourceBundle get(String key) {
 			return get(key, null);
 		}
-		public ICUResourceBundle get(String key, Hashtable table) {
+		public ICUResourceBundle get(String key, HashMap table) {
 			int offset = RES_GET_OFFSET(resource);
 			// offset+0 contains number of entries
 			// offset+1 contains the keyOffset  
@@ -311,7 +311,7 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
             int keyOffset = rawData.getInt(charOffset);
             return RES_GET_KEY(rawData, keyOffset).toString();   
         }
-		public ICUResourceBundle get(int index, Hashtable table) {
+		public ICUResourceBundle get(int index, HashMap table) {
 			if (index > size) {
 				throw new IndexOutOfBoundsException();
 			}
@@ -434,7 +434,7 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
 		protected ICUResourceBundle handleGet(String index) {
 			return handleGet(index, null);
 		}
-		protected ICUResourceBundle handleGet(String index, Hashtable table) {
+		protected ICUResourceBundle handleGet(String index, HashMap table) {
 			int val = getIndex(index);
 			if (val > -1) {
 				return handleGet(val, table);
@@ -444,7 +444,7 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
 		protected ICUResourceBundle handleGet(int index) {
 			return handleGet(index, null);
 		}
-		protected ICUResourceBundle handleGet(int index, Hashtable table) {
+		protected ICUResourceBundle handleGet(int index, HashMap table) {
 			if (index > size) {
 				throw new IndexOutOfBoundsException();
 			}
@@ -576,12 +576,12 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
 		}
 		return -1;
 	}
-	private ICUResourceBundle findResource(String key, long resource, Hashtable table) {
+	private ICUResourceBundle findResource(String key, long resource, HashMap table) {
 		String locale = null, keyPath = null;
 		String bundleName;
 		String resPath = getStringValue(resource);
 		if (table == null) {
-			table = new Hashtable();
+			table = new HashMap();
 		}
 		if (table.get(resPath) != null) {
 			throw new IllegalArgumentException(
