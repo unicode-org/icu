@@ -137,15 +137,47 @@ static void ThreadSafeUnicodeSetInit(UnicodeSet **pSet, const UChar *pattern, UE
 }
 
 
+
+//----------------------------------------------------------------------------------------
+//
+//   caseClose(UnicodeSet)     TODO: replace by the real UnicodeSet memboer function once 
+//                             Alan has it implemented
+//
+//----------------------------------------------------------------------------------------
+static void caseClose(UnicodeSet *theSet) {
+    int32_t   rn;
+    int32_t   numRanges = theSet->getRangeCount();
+
+    for (rn=0; rn<numRanges; rn++) {
+        UChar32 rs = theSet->getRangeStart(rn);
+        UChar32 re = theSet->getRangeEnd(rn);
+        UChar32 c;
+        for (c=rs; c<=re; c++) {
+            UChar32 lowerC = u_tolower(c);
+            UChar32 upperC = u_toupper(c);
+            if (lowerC != c) {
+                theSet->add(lowerC);
+            }
+            if (upperC != c) {
+                theSet->add(upperC);
+            }
+        }
+    }
+}
+
+
+
+
 //----------------------------------------------------------------------------------------
 //
 //  Constructor.
 //
 //----------------------------------------------------------------------------------------
-RegexCompile::RegexCompile(UErrorCode &status) : fParenStack(status)
+RegexCompile::RegexCompile(RegexPattern *rxp, UErrorCode &status) : fParenStack(status)
 {
     fStatus             = &status;
 
+    fRXPat          = rxp;
     fScanIndex      = 0;
     fNextIndex      = 0;
     fPeekChar       = -1;
@@ -153,7 +185,7 @@ RegexCompile::RegexCompile(UErrorCode &status) : fParenStack(status)
     fCharNum        = 0;
     fQuoteMode      = FALSE;
     fFreeForm       = FALSE;
-    fCaseI          = FALSE;
+    fCaseI          = (fRXPat->fFlags & UREGEX_CASE_INSENSITIVE) != 0;
 
     fMatchOpenParen  = -1;
     fMatchCloseParen = -1;
@@ -226,14 +258,11 @@ void RegexCompile::cleanup() {
 //
 //---------------------------------------------------------------------------------
 void    RegexCompile::compile(
-                         RegexPattern &rxp,          // User level pattern object to receive
-                                                     //    the compiled pattern.
                          const UnicodeString &pat,   // Source pat to be compiled.
                          UParseError &pp,            // Error position info
                          UErrorCode &e)              // Error Code
 {
     fStatus             = &e;
-    fRXPat              = &rxp;
     fParseErr           = &pp;
     fStackPtr           = 0;
     fStack[fStackPtr]   = 0;
@@ -376,14 +405,15 @@ void    RegexCompile::compile(
     int32_t loc;
     for (loc=0; loc<fRXPat->fCompiledPat->size(); loc++) {
         int32_t op = fRXPat->fCompiledPat->elementAti(loc);
-        if (URX_TYPE(op) == URX_BACKREF) {
+        int32_t opType = URX_TYPE(op);
+        if (opType == URX_BACKREF || opType == URX_BACKREF_I) {
             int32_t where = URX_VAL(op);
             if (where > fRXPat->fGroupMap->size()) {
                 error(U_REGEX_INVALID_BACK_REF);
                 break;
             }
             where = fRXPat->fGroupMap->elementAti(where-1);
-            op    = URX_BUILD(URX_BACKREF, where);
+            op    = URX_BUILD(opType, where);
             fRXPat->fCompiledPat->setElementAt(op, loc);
         }
     }
@@ -1021,6 +1051,9 @@ UBool RegexCompile::doParseActions(EParseAction action)
     case doScanUnicodeSet:
         {
             UnicodeSet *theSet = scanSet();
+            if (fCaseI && theSet != NULL) {
+                caseClose(theSet);   // TODO:  replace with the real function.
+            }
             compileSet(theSet);
         }
         break;
@@ -1060,8 +1093,12 @@ UBool RegexCompile::doParseActions(EParseAction action)
             //  we fill the operand with the capture group number.  At the end
             //  of compilation, it will be changed to the variables location.
             U_ASSERT(groupNum > 0);
-            // int32_t  varsLoc = fRXPat->fGroupMap->elementAti(groupNum-1);
-            int32_t  op = URX_BUILD(URX_BACKREF, groupNum);
+            int32_t  op;
+            if (fCaseI) {
+                op = URX_BUILD(URX_BACKREF_I, groupNum);
+            } else {
+                op = URX_BUILD(URX_BACKREF, groupNum);
+            }
             fRXPat->fCompiledPat->addElement(op, *fStatus);
         }
         break;
@@ -1217,7 +1254,7 @@ void RegexCompile::literalChar()  {
     //   force this new literal char to begin a new string, and not append to the previous.
     op     = fRXPat->fCompiledPat->lastElementi();
     opType = URX_TYPE(op);
-    if (!(opType == URX_STRING_LEN || opType == URX_ONECHAR)) {
+    if (!(opType == URX_STRING_LEN || opType == URX_ONECHAR || opType == URX_ONECHAR_I)) {
         fixLiterals();
     }
 

@@ -1149,6 +1149,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
             break;
 
         case URX_BACKREF:
+        case URX_BACKREF_I:
             {
                 U_ASSERT(opValue < frameSize);
                 int32_t groupStartIdx = fp->fExtra[opValue];
@@ -1156,21 +1157,41 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
                 U_ASSERT(groupStartIdx <= groupEndIdx);
                 int32_t len = groupEndIdx-groupStartIdx;
                 if (groupStartIdx < 0) {
+                    // This capture group has not participated in the match thus far,
                     fp = (REStackFrame *)fStack->popFrame(frameSize);   // FAIL, no match.
                 }
 
-                if (groupStartIdx < 0 || len == 0) {
-                        // This capture group has not participated in the match thus far,
-                        //   or the match was of an empty string.
-                        //   Verified by testing:  Perl matches succeed in these cases, so
+                if (len == 0) {
+                        //   The capture group match was of an empty string.
+                        //   Verified by testing:  Perl matches succeed in this case, so
                         //   we do too.
                         break;
                     }
+                /*
                 if ((fp->fInputIdx + len > inputLen) || 
                     u_strncmp(inputBuf+groupStartIdx, inputBuf+fp->fInputIdx, len) != 0) {
                     fp = (REStackFrame *)fStack->popFrame(frameSize);   // FAIL, no match.
                 } else {
                     fp->fInputIdx += len;     // Match.  Advance current input position.
+                }
+                */
+                UBool  haveMatch = FALSE;
+                if (fp->fInputIdx + len <= inputLen) {
+                    if (opType == URX_BACKREF) {
+                        if (u_strncmp(inputBuf+groupStartIdx, inputBuf+fp->fInputIdx, len) == 0) {
+                            haveMatch = TRUE;
+                        }
+                    } else {
+                        if (u_strncasecmp(inputBuf+groupStartIdx, inputBuf+fp->fInputIdx,
+                                  len, U_FOLD_CASE_DEFAULT) == 0) {
+                            haveMatch = TRUE;
+                        }
+                    }
+                }
+                if (haveMatch) {
+                    fp->fInputIdx += len;     // Match.  Advance current input position.
+                } else {
+                    fp = (REStackFrame *)fStack->popFrame(frameSize);   // FAIL, no match.
                 }
             }
             break;
@@ -1228,6 +1249,47 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
                 fp->fInputIdx = fData[opValue+1];
             }
             break;
+
+        case URX_ONECHAR_I:
+            if (fp->fInputIdx < inputLen) {
+                UChar32   c;
+                U16_NEXT(inputBuf, fp->fInputIdx, inputLen, c);
+                if (u_foldCase(c, U_FOLD_CASE_DEFAULT) == opValue) {           
+                    break;
+                }
+            }
+            fp = (REStackFrame *)fStack->popFrame(frameSize);
+            break;
+
+        case URX_STRING_I:
+            {
+                // Test input against a literal string.
+                // Strings require two slots in the compiled pattern, one for the
+                //   offset to the string text, and one for the length.
+                int32_t stringStartIdx, stringLen;
+                stringStartIdx = opValue;
+
+                op      = pat[fp->fPatIdx];
+                fp->fPatIdx++;
+                opType  = URX_TYPE(op);
+                opValue = URX_VAL(op);
+                U_ASSERT(opType == URX_STRING_LEN);
+                stringLen = opValue;
+
+                int32_t stringEndIndex = fp->fInputIdx + stringLen;
+                if (stringEndIndex <= inputLen &&
+                    u_strncasecmp(inputBuf+fp->fInputIdx, litText+stringStartIdx,
+                                  stringLen, U_FOLD_CASE_DEFAULT) == 0) {
+                    // Success.  Advance the current input position.
+                    fp->fInputIdx = stringEndIndex;
+                } else {
+                    // No match.  Back up matching to a saved state
+                    fp = (REStackFrame *)fStack->popFrame(frameSize);
+                }
+            }
+            break;
+
+
 
         default:
             // Trouble.  The compiled pattern contains an entry with an

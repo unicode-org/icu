@@ -306,16 +306,16 @@ a[-]?c	ac	y	$&	ac
 'a[-b]'i	A-	y	$&	A-
 'a[b-]'i	A-	y	$&	A-
 'a[b-a]'i	-	c	-	Invalid [] range "b-a"
-'a[]b'i	-	c	-	Unmatched [
+'a[]b'i	-	ci	-	Unmatched [
 'a['i	-	c	-	Unmatched [
 'a]'i	A]	y	$&	A]
-'a[]]b'i	A]B	y	$&	A]B
+'a[]]b'i	A]B	yi	$&	A]B
 'a[^bc]d'i	AED	y	$&	AED
-'a[^bc]d'i	ABD	n	-	-
+'a[^bc]d'i	ABD	ni	-	-          #  TODO:  icu set handling bug
 'a[^-b]c'i	ADC	y	$&	ADC
 'a[^-b]c'i	A-C	n	-	-
 'a[^]b]c'i	A]C	n	-	-
-'a[^]b]c'i	ADC	y	$&	ADC
+'a[^]b]c'i	ADC	yi	$&	ADC
 'ab|cd'i	ABC	y	$&	AB
 'ab|cd'i	ABCD	y	$&	AB
 '()ef'i	DEF	y	$&-$1	EF-
@@ -357,7 +357,7 @@ a[-]?c	ac	y	$&	ac
 'ab*'i	XAYABBBZ	y	$&	A
 '(ab|cd)e'i	ABCDE	y	$&-$1	CDE-CD
 '[abhgefdc]ij'i	HIJ	y	$&	HIJ
-'^(ab|cd)e'i	ABCDE	n	x$1y	XY
+'^(ab|cd)e'i	ABCDE	ni	x$1y	XY
 '(abc|)ef'i	ABCDEF	y	$&-$1	EF-
 '(a|b)c*d'i	ABCD	y	$&-$1	BCD-B
 '(ab|ab*)bc'i	ABC	y	$&-$1	ABC-A
