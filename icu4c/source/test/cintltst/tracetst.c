@@ -11,7 +11,6 @@
 
 #include "unicode/utypes.h"
 #include "unicode/utrace.h"
-#include "utracimp.h"
 #include "unicode/uclean.h"
 #include "unicode/uchar.h"
 #include "unicode/ures.h"
@@ -19,6 +18,7 @@
 #include "cintltst.h"
 #include <stdlib.h>
 #include <string.h>
+#include "utracimp.h"
 
 
 static void TestTraceAPI(void);
@@ -188,9 +188,13 @@ static void TestTraceAPI() {
         cnv = ucnv_open(NULL, &status);
         TEST_ASSERT(U_SUCCESS(status));
         ucnv_close(cnv);
+#if U_ENABLE_TRACING
         TEST_ASSERT(gTraceEntryCount > 0);
         TEST_ASSERT(gTraceExitCount  > 0);
         TEST_ASSERT(gTraceDataCount  > 0);
+#else
+        log_info("Tracing has been disabled. Testing of this feature has been skipped.\n");
+#endif
     }
 
 
