@@ -327,13 +327,13 @@ U_CAPI char* U_EXPORT2 u_austrncpy(char *dst,
 
 
 /**
- * synonym for uprv_memcpy
+ * Synonym for uprv_memcpy(), but with UChars only.
  * @draft
  */
 UChar *u_memcpy(UChar *dest, const UChar *src, int32_t count);
 
 /**
- * synonym for uprv_memmove
+ * Synonym for uprv_memmove(), but with UChars only.
  * @draft
  */
 UChar *u_memmove(UChar *dest, const UChar *src, int32_t count);
@@ -350,22 +350,45 @@ UChar *u_memmove(UChar *dest, const UChar *src, int32_t count);
 UChar *u_memset(UChar *dest, UChar c, int32_t count);
 
 /**
- * synonym for u_strncmp
+ * Compare the first <TT>count</TT> UChars of each buffer.
+ *
+ * @param buf1 The first string to compare.
+ * @param buf2 The second string to compare.
+ * @param count The maximum number of UChars to compare.
+ * @return When buf1 < buf2, a negative number is returned.
+ *      When buf1 == buf2, 0 is returned.
+ *      When buf1 > buf2, a positive number is returned.
  * @draft
  */
-#define u_memcmp(buf1, buf2, count) u_strncmp(buf1, buf2, count)
+int32_t u_memcmp(UChar *buf1, UChar *buf2, int32_t count);
 
 /**
- * synonym for u_strchr
+ * Search for a UChar within a Unicode string until <TT>count</TT>
+ * is reached.
+ *
+ * @param src string to search in
+ * @param ch character to find
+ * @param count maximum number of UChars in <TT>src</TT>to search for
+ *      <TT>ch</TT>.
+ * @return A pointer within src, pointing to <TT>ch</TT>, or NULL if it
+ *      was not found.
  * @draft
  */
-#define u_memchr(buf, c, count) u_strchr(buf, c, count)
+UChar *u_memchr(UChar *src, UChar ch, int32_t count);
 
 /**
- * synonym for u_strchr32
+ * Search for a UChar32 within a Unicode string until <TT>count</TT>
+ * is reached. This also includes surrogates in UTF-16.
+ *
+ * @param src string to search in
+ * @param ch character to find
+ * @param count maximum number of UChars in <TT>src</TT>to search for
+ *      <TT>ch</TT>.
+ * @return A pointer within src, pointing to <TT>ch</TT>, or NULL if it
+ *      was not found.
  * @draft
  */
-#define u_memchr32(buf, c, count) u_strchr32(buf, c, count)
+UChar *u_memchr32(UChar *src, UChar32 ch, int32_t count);
 
 /**
  * Unicode String literals in C.

@@ -444,10 +444,59 @@ u_memset(UChar *dest, UChar c, int32_t count) {
     UChar *ptr = dest;
     UChar *limit = dest + count;
 
-    while(ptr < limit) {
+    while (ptr < limit) {
         *(ptr++) = c;
     }
     return dest;
+}
+
+int32_t
+u_memcmp(UChar *buf1, UChar *buf2, int32_t count) {
+    UChar *limit = buf1 + count;
+    int32_t result;
+
+    while (buf1 < limit) {
+        result = (int32_t)(uint16_t)*buf1 - (int32_t)(uint16_t)*buf2;
+        if (result != 0) {
+            return result;
+        }
+        buf1++;
+        buf2++;
+    }
+
+    return 0;
+}
+
+UChar *
+u_memchr(UChar *src, UChar ch, int32_t count) {
+    UChar *ptr = src;
+    UChar *limit = src + count;
+
+    while (ptr < limit) {
+        if (*ptr == ch) {
+            return ptr;
+        }
+        ptr++;
+    }
+
+    return NULL;
+}
+
+UChar *
+u_memchr32(UChar *src, UChar32 ch, int32_t count) {
+    int32_t strItr = 0;
+    int32_t lastIndex;
+    UChar32 stringCh;
+
+    while (strItr < count) {
+        lastIndex = strItr;
+        UTF_NEXT_CHAR_SAFE(src, strItr, count, stringCh, TRUE);
+        if (stringCh == ch) {
+            return src + (strItr - (strItr - lastIndex));
+        }
+    }
+
+    return NULL;
 }
 
 /* string casing ------------------------------------------------------------ */
