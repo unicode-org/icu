@@ -32,6 +32,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "ucol_tok.h"
 #include "cstring.h"
 #include "uoptions.h"
@@ -1285,8 +1286,7 @@ void outputHTMLHeader(const char *locale, UScriptCode script[],
     fprintf(OUTPUT_, "light blue - tertiary greater than the previous character\n");
     fprintf(OUTPUT_, "--!>\n");
 
-    fprintf(OUTPUT_, "\n<h2>%s</h2>\n", locale);
-    
+    fprintf(OUTPUT_, "<table border=0>\n");
     UChar      displayname[64];
     UErrorCode error = U_ZERO_ERROR;
     int32_t size = uloc_getDisplayName(locale, NULL, displayname, 64, &error);
@@ -1298,18 +1298,68 @@ void outputHTMLHeader(const char *locale, UScriptCode script[],
         int32_t utf8size = 0;
         u_strToUTF8(utf8displayname, 128, &utf8size, displayname, size, &error);
     }
-    fprintf(OUTPUT_, "<a href=http://oss.software.ibm.com/cvs/icu/~checkout~/icu/data/%s.txt>%s</a><br>\n", locale, utf8displayname);
-    fprintf(stdout, "%s\n", locale);
-    fprintf(OUTPUT_, "<ul>\n");
+
+    fprintf(OUTPUT_, "<tr><th>Locale</th><td class='noborder'>%s</td></tr>\n", utf8displayname);
+    fprintf(OUTPUT_, "<tr><th>Script(s)</th>");
+    fprintf(OUTPUT_, "<td class='noborder'>");
     for (int i = 0; i < scriptcount; i ++) {
-        fprintf(OUTPUT_, "<li> %s\n", uscript_getName(script[i]));
+        fprintf(OUTPUT_, "%s", uscript_getName(script[i]));
+        if (i + 1 != scriptcount) {
+            fprintf(OUTPUT_, ", ");
+        }
     }
-    fprintf(OUTPUT_, "</ul>\n");
+    fprintf(OUTPUT_, "</td></tr>\n");
+    
+    fprintf(OUTPUT_, "<tr><th>Rules</th><td class='noborder'><a href=http://oss.software.ibm.com/cvs/icu/~checkout~/icu/data/%s.txt>%s.txt</a></td></tr>\n", locale, locale);
+    
     UVersionInfo version;
     ucol_getVersion(COLLATOR_, version);
-    fprintf(OUTPUT_, "<p>Collator version %d.%d.%d.%d</p>\n", 
+    fprintf(OUTPUT_, "<tr><th>Collator version</th><td class='noborder'>%d.%d.%d.%d</td></tr>\n", 
                       version[0], version[1], version[2], version[3]);
-    fprintf(OUTPUT_, "<p><a href=help.html>How to read the table</a></p>\n");
+    
+    UColAttribute attr = UCOL_FRENCH_COLLATION;
+    while (attr < UCOL_ATTRIBUTE_COUNT) {
+        UColAttributeValue value = ucol_getAttribute(COLLATOR_, attr, &error);
+        if (U_FAILURE(error)) {
+            fprintf(stdout, "Error getting attribute\n");
+            return;
+        }
+        if (value != UCOL_DEFAULT) {
+            if (attr == UCOL_FRENCH_COLLATION && value != UCOL_OFF) {
+                fprintf(OUTPUT_, "<tr><th>French Collation</th><td class='noborder'>on, code %d</td></tr>\n", value);
+            }
+            if (attr == UCOL_ALTERNATE_HANDLING && value != UCOL_NON_IGNORABLE) {
+                fprintf(OUTPUT_, "<tr><th>Alternate Handling</th><td class='noborder'>shifted, code%d</td></tr>\n", value);
+            }
+            if (attr == UCOL_CASE_FIRST && value != UCOL_OFF) {
+                fprintf(OUTPUT_, "<tr><th>Case First</th><td class='noborder'>on, code %d</td></tr>\n", value);
+            }
+            if (attr == UCOL_CASE_LEVEL && value != UCOL_OFF) {
+                fprintf(OUTPUT_, "<tr><th>Case Level</th><td class='noborder'>on, code %d</td></tr>\n", value);
+            }
+            if (attr == UCOL_NORMALIZATION_MODE && value != UCOL_OFF) {
+                fprintf(OUTPUT_, "<tr><th>Normalization</th><td class='noborder'>on, code %d</td></tr>\n", value);
+            }
+            if (attr == UCOL_STRENGTH && value != UCOL_TERTIARY) {
+                fprintf(OUTPUT_, "<tr><th>Strength</th><td class='noborder'>code %d</td></tr>\n", value);
+            }
+            if (attr == UCOL_HIRAGANA_QUATERNARY_MODE && value != UCOL_OFF) {
+                fprintf(OUTPUT_, "<tr><th>Hiragana Quaternary</th><td class='noborder'>on, code %d</td></tr>\n", value);
+            }
+        }
+        attr = (UColAttribute)(attr + 1);
+    }
+
+    // Get UNIX-style time and display as number and string.
+    time_t ltime;
+    time( &ltime );
+    fprintf(OUTPUT_, "<tr><th>Date Generated</th><td class='noborder'>%s</td></tr>", ctime(&ltime));
+     
+    fprintf(OUTPUT_, "</table>\n");
+
+    fprintf(OUTPUT_, "<p><a href=help.html>How to read the table</a><br>\n");
+    fprintf(OUTPUT_, "<a href=http://www.jtcsv.com/cgi-bin/icu-bugs/>Submit a bug</a></p>\n");
+
     fprintf(OUTPUT_, "\n<table>\n");
     fprintf(OUTPUT_, "\n<tr><th>Codepoint</th><th>Name</th></tr>\n");
 }
@@ -1366,7 +1416,7 @@ void serializeScripts() {
     FILE *list = fopen(filename, "w");
     filename[dirlength] = 0;
     if (list == NULL) {
-        fprintf(stdout, "Cannot open file:%s\n", filename);
+        fprintf(stdout, "Cannot open file: %s\n", filename);
         return;
     }
 
