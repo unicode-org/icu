@@ -18,7 +18,7 @@ import java.util.ListResourceBundle;
  * RuleBasedNumberFormat data for German
  *
  * @author Richard Gillam
- * @version $Version$ $Date: 2000/02/10 06:25:52 $
+ * @version $Version$ $Date: 2000/02/15 21:09:23 $
  */
 public class NumberFormatRules_de extends ListResourceBundle {
     /**
@@ -69,7 +69,13 @@ public class NumberFormatRules_de extends ListResourceBundle {
             + "    2,000,000,000: << Milliarden[ >%alt-ones>];\n"
             + "    1,000,000,000,000: eine Billion[ >%alt-ones>];\n"
             + "    2,000,000,000,000: << Billionen[ >%alt-ones>];\n"
-            + "    1,000,000,000,000,000: =#,##0=;" }
+            + "    1,000,000,000,000,000: =#,##0=;"
+            + "%%lenient-parse:\n"
+            + "    & ae , \u00e4 & ae , \u00c4\n"
+            + "    & oe , \u00f6 & oe , \u00d6\n"
+            + "    & ue , \u00fc & ue , \u00dc\n"
+        }
+            
         // again, I'm not 100% sure of these rules.  I think both "hundert" and
         // "einhundert" are correct or 100, but I'm not sure which is preferable
         // in situations where this framework is likely to be used.  Also, is it
@@ -78,3 +84,4 @@ public class NumberFormatRules_de extends ListResourceBundle {
         // decimals.
     };
 }
+
