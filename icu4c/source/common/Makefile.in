@@ -54,7 +54,7 @@ DEFS += -DU_COMMON_IMPLEMENTATION
 LIBS = $(LIBICUDT) $(DEFAULT_LIBS)
 
 OBJECTS = putil.o uobject.o cmemory.o umutex.o \
-udata.o ucmndata.o udatamem.o udataswp.o umapfile.o \
+udata.o ucmndata.o udatamem.o udataswp.o umapfile.o ucol_swp.o \
 uresbund.o uresdata.o resbund.o ucat.o locmap.o uloc.o locid.o \
 uhash.o uhash_us.o \
 ucnv.o ucnv_bld.o ucnv_cb.o ucnv_cnv.o ucnv_err.o ucnv_io.o ucnvlat1.o \
