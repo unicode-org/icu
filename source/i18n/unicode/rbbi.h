@@ -456,7 +456,7 @@ private:
      * Constructs a RuleBasedBreakIterator that uses the already-created
      * tables object that is passed in as a parameter.
      */
-    RuleBasedBreakIterator(RuleBasedBreakIteratorTables* tables);
+    RuleBasedBreakIterator(RuleBasedBreakIteratorTables* adoptTables);
 
     friend class BreakIterator;
 };

@@ -45,9 +45,9 @@ RuleBasedBreakIterator::fgClassID = 0;
  * Constructs a RuleBasedBreakIterator that uses the already-created
  * tables object that is passed in as a parameter.
  */
-RuleBasedBreakIterator::RuleBasedBreakIterator(RuleBasedBreakIteratorTables* tables)
+RuleBasedBreakIterator::RuleBasedBreakIterator(RuleBasedBreakIteratorTables* adoptTables)
 : text(NULL),
-  tables(tables)
+  tables(adoptTables)
 {
 }
 
