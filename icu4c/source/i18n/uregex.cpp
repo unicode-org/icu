@@ -15,11 +15,15 @@
 #include "unicode/unistr.h"
 #include "unicode/ustring.h"
 #include "unicode/uchar.h"
+#include "unicode/uobject.h"
 #include "umutex.h"
 #include "uassert.h"
+#include "cmemory.h"
 
-struct URegularExpression {
+struct URegularExpression: public UMemory {
+public:
     URegularExpression();
+    ~URegularExpression();
     int32_t           fMagic;
     RegexPattern     *fPat;
     int32_t          *fPatRefCount;
@@ -49,7 +53,16 @@ URegularExpression::URegularExpression() {
     fTextLength   = 0;
 }
 
-
+URegularExpression::~URegularExpression() {
+    delete fMatcher;
+    fMatcher = NULL;
+    if (fPatRefCount!=NULL && umtx_atomic_dec(fPatRefCount)==0) {
+        delete fPat;
+        uprv_free(fPatString);
+        uprv_free(fPatRefCount);
+    }
+    fMagic = 0;
+}
 
 //----------------------------------------------------------------------------------------
 //
@@ -97,16 +110,17 @@ uregex_open( const  UChar          *pattern,
     }
 
     URegularExpression *re     = new URegularExpression;
-    int32_t            *refC   = new int32_t;
-    UChar              *patBuf = new UChar[actualPatLen+1];
+    int32_t            *refC   = (int32_t *)uprv_malloc(sizeof(int32_t));
+    UChar              *patBuf = (UChar *)uprv_malloc(sizeof(UChar)*(actualPatLen+1));
     if (re == NULL || refC == NULL || patBuf == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         delete re;
-        delete refC;
-        delete patBuf;
+        uprv_free(refC);
+        uprv_free(patBuf);
         return NULL;
     }
     re->fPatRefCount = refC;
+    *re->fPatRefCount = 1;
 
     //
     // Make a copy of the pattern string, so we can return it later if asked.
@@ -130,23 +144,16 @@ uregex_open( const  UChar          *pattern,
     if (U_FAILURE(*status)) {
         goto ErrorExit;
     }
-    *re->fPatRefCount = 1;
 
     //
     // Create the matcher object
     //
     re->fMatcher = re->fPat->matcher(*status);
-    if (U_FAILURE(*status)) {
-        goto ErrorExit;
+    if (U_SUCCESS(*status)) {
+        return re;
     }
 
-    return re;
-
 ErrorExit:
-    delete re->fMatcher;
-    delete re->fPat;
-    delete re->fPatString;
-    delete re->fPatRefCount;
     delete re;
     return NULL;
 
@@ -189,15 +196,6 @@ uregex_close(URegularExpression  *re) {
     if (validateRE(re, &status, FALSE) == FALSE) {
         return;
     }
-
-    delete re->fMatcher;
-    if (umtx_atomic_dec(re->fPatRefCount) == 0) {
-        delete re->fPat;
-        delete re->fPatString;
-        delete re->fPatRefCount;
-    }
-
-    re->fMagic = 0;
     delete re;
 }
 
