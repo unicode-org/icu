@@ -1,5 +1,5 @@
 ## Makefile.in for ICU - test/ieeetest
-## Copyright (c) 1999-2003, International Business Machines Corporation and
+## Copyright (c) 1999-2004, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Source directory information
@@ -17,7 +17,7 @@ subdir = test/ieeetest
 CLEANFILES = *~ $(DEPS)
 
 ## Target information
-TARGET = ieeetest
+TARGET = ieeetest$(EXEEXT)
 
 DEFS += -I$(top_builddir)/common -I$(top_srcdir)/common
 LIBS = $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
