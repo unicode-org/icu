@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000, International Business Machines
+*   Copyright (C) 2000-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -396,7 +396,7 @@ array_write_java( struct SResource *res, UErrorCode *status) {
         current = res->u.fArray.fFirst;
         i = 0;
         while(current != NULL){
-            if(current->fType!=RES_STRING){
+            if(current->fType!=URES_STRING){
                 allStrings = FALSE;
                 break;
             }
@@ -417,7 +417,7 @@ array_write_java( struct SResource *res, UErrorCode *status) {
         }
         first=current;
         while (current != NULL) {
-            /*if(current->fType==RES_STRING){
+            /*if(current->fType==URES_STRING){
                 write_tabs(out);
             }*/
             res_write_java(current, status);
@@ -694,25 +694,25 @@ res_write_java(struct SResource *res,UErrorCode *status) {
 
     if (res != NULL) {
         switch (res->fType) {
-        case RES_STRING:
+        case URES_STRING:
              string_write_java    (res, status);
              return;
-        case RES_ALIAS:
+        case URES_ALIAS:
              alias_write_java     (res, status);
              return;
-        case RES_INT_VECTOR:
+        case URES_INT_VECTOR:
              intvector_write_java (res, status);
              return;
-        case RES_BINARY:
+        case URES_BINARY:
              bin_write_java       (res, status);
              return;
-        case RES_INT:
+        case URES_INT:
              int_write_java       (res, status);
              return;
-        case RES_ARRAY:
+        case URES_ARRAY:
              array_write_java     (res, status);
              return;
-        case RES_TABLE:
+        case URES_TABLE:
              table_write_java     (res, status);
              return;
 
@@ -803,4 +803,3 @@ bundle_write_java(struct SRBRoot *bundle, const char *outputDir,const char* outp
 
     ucnv_close(conv);
 }
-

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2001, International Business Machines Corporation and
+ * Copyright (c) 1997-2003, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -391,7 +391,7 @@ static void TestNewTypes() {
     strcpy(action, "getting and testing of string with embeded zero");
     res = ures_getByKey(theBundle, "zerotest", res, &status);
     CONFIRM_ErrorCode(status, U_ZERO_ERROR);
-    CONFIRM_INT_EQ(ures_getType(res), RES_STRING);
+    CONFIRM_INT_EQ(ures_getType(res), URES_STRING);
     zeroString=ures_getString(res, &len, &status);
     if(U_SUCCESS(status)){
         CONFIRM_ErrorCode(status, U_ZERO_ERROR);
@@ -407,7 +407,7 @@ static void TestNewTypes() {
     strcpy(action, "getting and testing of binary type");
     res = ures_getByKey(theBundle, "binarytest", res, &status);
     CONFIRM_ErrorCode(status, U_ZERO_ERROR);
-    CONFIRM_INT_EQ(ures_getType(res), RES_BINARY);
+    CONFIRM_INT_EQ(ures_getType(res), URES_BINARY);
     binResult=(uint8_t*)ures_getBinary(res,  &len, &status);
     if(U_SUCCESS(status)){
         CONFIRM_ErrorCode(status, U_ZERO_ERROR);
@@ -420,7 +420,7 @@ static void TestNewTypes() {
     strcpy(action, "getting and testing of imported binary type");
     res = ures_getByKey(theBundle, "importtest", res, &status);
     CONFIRM_ErrorCode(status, U_ZERO_ERROR);
-    CONFIRM_INT_EQ(ures_getType(res), RES_BINARY);
+    CONFIRM_INT_EQ(ures_getType(res), URES_BINARY);
     binResult=(uint8_t*)ures_getBinary(res,  &len, &status);
     if(U_SUCCESS(status)){
         CONFIRM_ErrorCode(status, U_ZERO_ERROR);
@@ -433,7 +433,7 @@ static void TestNewTypes() {
     strcpy(action, "getting and testing of integer types");
     res = ures_getByKey(theBundle, "one", res, &status);
     CONFIRM_ErrorCode(status, U_ZERO_ERROR);
-    CONFIRM_INT_EQ(ures_getType(res), RES_INT);
+    CONFIRM_INT_EQ(ures_getType(res), URES_INT);
     intResult=ures_getInt(res, &status);
     uintResult = ures_getUInt(res, &status);
     if(U_SUCCESS(status)){
@@ -445,7 +445,7 @@ static void TestNewTypes() {
     strcpy(action, "getting minusone");
     res = ures_getByKey(theBundle, "minusone", res, &status);
     CONFIRM_ErrorCode(status, U_ZERO_ERROR);
-    CONFIRM_INT_EQ(ures_getType(res), RES_INT);
+    CONFIRM_INT_EQ(ures_getType(res), URES_INT);
     intResult=ures_getInt(res, &status);
     uintResult = ures_getUInt(res, &status);
     if(U_SUCCESS(status)){
@@ -458,7 +458,7 @@ static void TestNewTypes() {
     strcpy(action, "getting plusone");
     res = ures_getByKey(theBundle, "plusone", res, &status);
     CONFIRM_ErrorCode(status, U_ZERO_ERROR);
-    CONFIRM_INT_EQ(ures_getType(res), RES_INT);
+    CONFIRM_INT_EQ(ures_getType(res), URES_INT);
     intResult=ures_getInt(res, &status);
     uintResult = ures_getUInt(res, &status);
     if(U_SUCCESS(status)){
@@ -469,7 +469,7 @@ static void TestNewTypes() {
 
     res = ures_getByKey(theBundle, "onehundredtwentythree", res, &status);
     CONFIRM_ErrorCode(status, U_ZERO_ERROR);
-    CONFIRM_INT_EQ(ures_getType(res), RES_INT);
+    CONFIRM_INT_EQ(ures_getType(res), URES_INT);
     intResult=ures_getInt(res, &status);
     if(U_SUCCESS(status)){
         CONFIRM_ErrorCode(status, U_ZERO_ERROR);
@@ -581,7 +581,7 @@ static void TestEmptyTypes() {
     strcpy(action, "getting and testing of explicit string of zero length string");
     res = ures_getByKey(theBundle, "emptyexplicitstring", res, &status);
     CONFIRM_ErrorCode(status, U_ZERO_ERROR);
-    CONFIRM_INT_EQ(ures_getType(res), RES_STRING);
+    CONFIRM_INT_EQ(ures_getType(res), URES_STRING);
     zeroString=ures_getString(res, &len, &status);
     if(U_SUCCESS(status)){
         CONFIRM_ErrorCode(status, U_ZERO_ERROR);
@@ -596,7 +596,7 @@ static void TestEmptyTypes() {
     strcpy(action, "getting and testing of normal string of zero length string");
     res = ures_getByKey(theBundle, "emptystring", res, &status);
     CONFIRM_ErrorCode(status, U_ZERO_ERROR);
-    CONFIRM_INT_EQ(ures_getType(res), RES_STRING);
+    CONFIRM_INT_EQ(ures_getType(res), URES_STRING);
     zeroString=ures_getString(res, &len, &status);
     if(U_SUCCESS(status)){
         CONFIRM_ErrorCode(status, U_ZERO_ERROR);
@@ -611,7 +611,7 @@ static void TestEmptyTypes() {
     strcpy(action, "getting and testing of empty int");
     res = ures_getByKey(theBundle, "emptyint", res, &status);
     CONFIRM_ErrorCode(status, U_ZERO_ERROR);
-    CONFIRM_INT_EQ(ures_getType(res), RES_INT);
+    CONFIRM_INT_EQ(ures_getType(res), URES_INT);
     intResult=ures_getInt(res, &status);
     if(U_SUCCESS(status)){
         CONFIRM_ErrorCode(status, U_ZERO_ERROR);
@@ -625,7 +625,7 @@ static void TestEmptyTypes() {
     strcpy(action, "getting and testing of zero length intvector");
     res = ures_getByKey(theBundle, "emptyintv", res, &status);
     CONFIRM_ErrorCode(status, U_ZERO_ERROR);
-    CONFIRM_INT_EQ(ures_getType(res), RES_INT_VECTOR);
+    CONFIRM_INT_EQ(ures_getType(res), URES_INT_VECTOR);
 
     if(U_FAILURE(status)){
         log_err("Couldn't get emptyintv key %s\n", u_errorName(status));
@@ -641,7 +641,7 @@ static void TestEmptyTypes() {
     strcpy(action, "getting and testing of zero length emptybin");
     res = ures_getByKey(theBundle, "emptybin", res, &status);
     CONFIRM_ErrorCode(status, U_ZERO_ERROR);
-    CONFIRM_INT_EQ(ures_getType(res), RES_BINARY);
+    CONFIRM_INT_EQ(ures_getType(res), URES_BINARY);
 
     if(U_FAILURE(status)){
         log_err("Couldn't get emptybin key %s\n", u_errorName(status));
@@ -657,7 +657,7 @@ static void TestEmptyTypes() {
     strcpy(action, "getting and testing of zero length emptyarray");
     res = ures_getByKey(theBundle, "emptyarray", res, &status);
     CONFIRM_ErrorCode(status, U_ZERO_ERROR);
-    CONFIRM_INT_EQ(ures_getType(res), RES_ARRAY);
+    CONFIRM_INT_EQ(ures_getType(res), URES_ARRAY);
 
     if(U_FAILURE(status)){
         log_err("Couldn't get emptyarray key %s\n", u_errorName(status));
@@ -673,7 +673,7 @@ static void TestEmptyTypes() {
     strcpy(action, "getting and testing of zero length emptytable");
     res = ures_getByKey(theBundle, "emptytable", res, &status);
     CONFIRM_ErrorCode(status, U_ZERO_ERROR);
-    CONFIRM_INT_EQ(ures_getType(res), RES_TABLE);
+    CONFIRM_INT_EQ(ures_getType(res), URES_TABLE);
 
     if(U_FAILURE(status)){
         log_err("Couldn't get emptytable key %s\n", u_errorName(status));
@@ -744,11 +744,11 @@ static void TestBinaryCollationData(){
     coll = ures_getByKey(teRes, "CollationElements", coll, &status);
     if(U_SUCCESS(status)){
         CONFIRM_ErrorCode(status, U_ZERO_ERROR);
-        CONFIRM_INT_EQ(ures_getType(coll), RES_TABLE);
+        CONFIRM_INT_EQ(ures_getType(coll), URES_TABLE);
         binColl=ures_getByKey(coll, "%%CollationBin", binColl, &status);  
         if(U_SUCCESS(status)){
             CONFIRM_ErrorCode(status, U_ZERO_ERROR);
-            CONFIRM_INT_EQ(ures_getType(binColl), RES_BINARY);
+            CONFIRM_INT_EQ(ures_getType(binColl), URES_BINARY);
             binResult=(uint8_t*)ures_getBinary(binColl,  &len, &status);
             if(U_SUCCESS(status)){
                 CONFIRM_ErrorCode(status, U_ZERO_ERROR);
@@ -859,7 +859,7 @@ static void TestAPI() {
     }
     ures_getByKey(teRes, "string_only_in_te", teFillin, &status);
     teFillin2=ures_getNextResource(teFillin, teFillin2, &status);
-    if(ures_getType(teFillin2) != RES_STRING){
+    if(ures_getType(teFillin2) != URES_STRING){
         log_err("ERROR: getType for getNextResource after ures_openFillIn failed\n");
     }
     teFillin2=ures_getNextResource(teFillin, teFillin2, &status);
@@ -964,10 +964,10 @@ static void TestErrorConditions(){
     if(ures_getSize(NULL) != 0){
         log_err("ERROR: ures_getSize() should return 0 when UResourceBundle=NULL.  Got =%d\n", ures_getSize(NULL));
     }
-    /*Test ures_getType() with UResourceBundle = NULL should return RES_BOGUS or -1*/
+    /*Test ures_getType() with UResourceBundle = NULL should return URES_NONE==-1*/
     status=U_ZERO_ERROR;
-    if(ures_getType(NULL) != RES_NONE){  
-        log_err("ERROR: ures_getType() should return RES_NONE when UResourceBundle=NULL.  Got =%d\n", ures_getType(NULL));
+    if(ures_getType(NULL) != URES_NONE){  
+        log_err("ERROR: ures_getType() should return URES_NONE when UResourceBundle=NULL.  Got =%d\n", ures_getType(NULL));
     }
     /*Test ures_getKey() with UResourceBundle = NULL*/
     status=U_ZERO_ERROR;
@@ -1420,7 +1420,7 @@ static UBool testTag(const char* frag,
         CONFIRM_ErrorCode(status,expected_resource_status);
         if (U_SUCCESS(status)) {
             /*confirm the resource type is an array*/
-            CONFIRM_INT_EQ(ures_getType(array), RES_ARRAY);
+            CONFIRM_INT_EQ(ures_getType(array), URES_ARRAY);
             /*confirm the size*/
             count=ures_getSize(array);
             CONFIRM_INT_GE(count,1);
@@ -1500,7 +1500,7 @@ static UBool testTag(const char* frag,
         if (U_SUCCESS(status))
         {
             /*confirm the resource type is an 2darray*/
-            CONFIRM_INT_EQ(ures_getType(array2d), RES_ARRAY);
+            CONFIRM_INT_EQ(ures_getType(array2d), URES_ARRAY);
             row_count=ures_getSize(array2d);
             CONFIRM_INT_GE(row_count,1);
 
@@ -1510,7 +1510,7 @@ static UBool testTag(const char* frag,
                 CONFIRM_ErrorCode(status, expected_resource_status);
                 if(U_SUCCESS(status)){
                     /*confirm the resourcetype of each table row is an array*/
-                    CONFIRM_INT_EQ(ures_getType(tableRow), RES_ARRAY);
+                    CONFIRM_INT_EQ(ures_getType(tableRow), URES_ARRAY);
                     column_count=ures_getSize(tableRow);
                     CONFIRM_INT_GE(column_count,1);
 
@@ -1594,7 +1594,7 @@ static UBool testTag(const char* frag,
         CONFIRM_ErrorCode(status, expected_resource_status);
         if (U_SUCCESS(status)) {
             UResType bundleType=ures_getType(tags);
-            CONFIRM_INT_EQ(bundleType, RES_TABLE);
+            CONFIRM_INT_EQ(bundleType, URES_TABLE);
 
             tag_count=ures_getSize(tags);
             CONFIRM_INT_GE((int32_t)tag_count, (int32_t)0); 
@@ -1634,7 +1634,7 @@ static UBool testTag(const char* frag,
                 tagelement=ures_getByKey(tags, item_tag, tagelement, &status);
                 if(!U_FAILURE(status)){
                     UResType elementType=ures_getType(tagelement);
-                    CONFIRM_INT_EQ(elementType, RES_STRING);
+                    CONFIRM_INT_EQ(elementType, URES_STRING);
                     if(strcmp(ures_getKey(tagelement), item_tag) == 0){
                         record_pass();
                     }else{

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2002, International Business Machines Corporation and
+ * Copyright (c) 1997-2003, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -319,7 +319,7 @@ NewResourceBundleTest::TestIteration()
                 if(U_SUCCESS(err)){
                     expected=element;
                     if(bundle.getSize() > 1){
-                        CONFIRM_EQ(bundle.getType(), RES_ARRAY);
+                        CONFIRM_EQ(bundle.getType(), URES_ARRAY);
                         expected+=itoa(row, buf);
                         ResourceBundle rowbundle=bundle.get(row, err);
                         if(!U_FAILURE(err) && rowbundle.getSize()>1){
@@ -338,7 +338,7 @@ NewResourceBundleTest::TestIteration()
                         }
                     }
                     else{
-                        CONFIRM_EQ(bundle.getType(), (int32_t)RES_STRING);
+                        CONFIRM_EQ(bundle.getType(), (int32_t)URES_STRING);
                     }
                 }
                 CONFIRM_EQ(got, expected);
@@ -492,7 +492,7 @@ NewResourceBundleTest::TestOtherAPI(){
                   if(U_SUCCESS(err)){
                       expected=element;
                       if(ures_getSize(bundle) > 1){
-                          CONFIRM_EQ(ures_getType(bundle), RES_ARRAY);
+                          CONFIRM_EQ(ures_getType(bundle), URES_ARRAY);
                           expected+=itoa(row, buf);
                           rowbundle=ures_getByIndex(bundle, row, rowbundle, &err);
                           if(!U_FAILURE(err) && ures_getSize(rowbundle)>1){
@@ -516,7 +516,7 @@ NewResourceBundleTest::TestOtherAPI(){
                           }
                       }
                       else{
-                          CONFIRM_EQ(ures_getType(bundle), (int32_t)RES_STRING);
+                          CONFIRM_EQ(ures_getType(bundle), (int32_t)URES_STRING);
                       }
                   }
                   CONFIRM_EQ(got, expected);
@@ -675,7 +675,7 @@ NewResourceBundleTest::testTag(const char* frag,
         {
             //confirm the resource type is an array
             UResType bundleType=array.getType();
-            CONFIRM_EQ(bundleType, RES_ARRAY);
+            CONFIRM_EQ(bundleType, URES_ARRAY);
 
             count=array.getSize();
             CONFIRM_GE(count,1);
@@ -750,7 +750,7 @@ NewResourceBundleTest::testTag(const char* frag,
         {
             //confirm the resource type is an 2darray
             UResType bundleType=array2d.getType();
-            CONFIRM_EQ(bundleType, RES_ARRAY);
+            CONFIRM_EQ(bundleType, URES_ARRAY);
 
             row_count=array2d.getSize();
             CONFIRM_GE(row_count,1);
@@ -761,7 +761,7 @@ NewResourceBundleTest::testTag(const char* frag,
                 if(U_SUCCESS(status)){
                     //confirm the resourcetype of each table row is an array
                     UResType rowType=tablerow.getType();
-                    CONFIRM_EQ(rowType, RES_ARRAY);
+                    CONFIRM_EQ(rowType, URES_ARRAY);
 
                     column_count=tablerow.getSize();
                     CONFIRM_GE(column_count,1);
@@ -837,7 +837,7 @@ NewResourceBundleTest::testTag(const char* frag,
 
         if (U_SUCCESS(status)) {
             UResType bundleType=tags.getType();
-            CONFIRM_EQ(bundleType, RES_TABLE);
+            CONFIRM_EQ(bundleType, URES_TABLE);
 
             tag_count=tags.getSize();
             CONFIRM_GE((int32_t)tag_count, (int32_t)0); 
@@ -897,7 +897,7 @@ NewResourceBundleTest::testTag(const char* frag,
                 ResourceBundle tagelement=tags.get(item_tag, status);
                 if(!U_FAILURE(status)){
                     UResType elementType=tagelement.getType();
-                    CONFIRM_EQ(elementType, (int32_t)RES_STRING);
+                    CONFIRM_EQ(elementType, (int32_t)URES_STRING);
                     const char* key=tagelement.getKey();
                     CONFIRM_EQ((UnicodeString)key, (UnicodeString)item_tag);
                     UnicodeString t=tagelement.getString(status);
@@ -977,7 +977,7 @@ NewResourceBundleTest::TestNewTypes() {
     strcpy(action, "getting and testing of string with embeded zero");
     ResourceBundle res = theBundle.get("zerotest", status);
     CONFIRM_UErrorCode(status, U_ZERO_ERROR);
-    CONFIRM_EQ(res.getType(), RES_STRING);
+    CONFIRM_EQ(res.getType(), URES_STRING);
     UnicodeString zeroString=res.getString(status);
 	len = zeroString.length();
     if(U_SUCCESS(status)){
@@ -994,7 +994,7 @@ NewResourceBundleTest::TestNewTypes() {
     strcpy(action, "getting and testing of binary type");
     res = theBundle.get("binarytest", status);
     CONFIRM_UErrorCode(status, U_ZERO_ERROR);
-    CONFIRM_EQ(res.getType(), RES_BINARY);
+    CONFIRM_EQ(res.getType(), URES_BINARY);
     binResult=(uint8_t*)res.getBinary(len, status);
     if(U_SUCCESS(status)){
         CONFIRM_UErrorCode(status, U_ZERO_ERROR);
@@ -1007,7 +1007,7 @@ NewResourceBundleTest::TestNewTypes() {
     strcpy(action, "getting and testing of imported binary type");
     res = theBundle.get("importtest",status);
     CONFIRM_UErrorCode(status, U_ZERO_ERROR);
-    CONFIRM_EQ(res.getType(), RES_BINARY);
+    CONFIRM_EQ(res.getType(), URES_BINARY);
     binResult=(uint8_t*)res.getBinary(len, status);
     if(U_SUCCESS(status)){
         CONFIRM_UErrorCode(status, U_ZERO_ERROR);
@@ -1020,7 +1020,7 @@ NewResourceBundleTest::TestNewTypes() {
     strcpy(action, "getting and testing of integer types");
     res = theBundle.get("one",  status);
     CONFIRM_UErrorCode(status, U_ZERO_ERROR);
-    CONFIRM_EQ(res.getType(), RES_INT);
+    CONFIRM_EQ(res.getType(), URES_INT);
     intResult=res.getInt(status);
     uintResult = res.getUInt(status);
     if(U_SUCCESS(status)){
@@ -1032,7 +1032,7 @@ NewResourceBundleTest::TestNewTypes() {
     strcpy(action, "getting minusone");
     res = theBundle.get((const char*)"minusone", status);
     CONFIRM_UErrorCode(status, U_ZERO_ERROR);
-    CONFIRM_EQ(res.getType(), RES_INT);
+    CONFIRM_EQ(res.getType(), URES_INT);
     intResult=res.getInt(status);
     uintResult = res.getUInt(status);
     if(U_SUCCESS(status)){
@@ -1045,7 +1045,7 @@ NewResourceBundleTest::TestNewTypes() {
     strcpy(action, "getting plusone");
     res = theBundle.get("plusone",status);
     CONFIRM_UErrorCode(status, U_ZERO_ERROR);
-    CONFIRM_EQ(res.getType(), RES_INT);
+    CONFIRM_EQ(res.getType(), URES_INT);
     intResult=res.getInt(status);
     uintResult = res.getUInt(status);
     if(U_SUCCESS(status)){
@@ -1056,7 +1056,7 @@ NewResourceBundleTest::TestNewTypes() {
 
     res = theBundle.get("onehundredtwentythree",status);
     CONFIRM_UErrorCode(status, U_ZERO_ERROR);
-    CONFIRM_EQ(res.getType(), RES_INT);
+    CONFIRM_EQ(res.getType(), URES_INT);
     intResult=res.getInt(status);
     if(U_SUCCESS(status)){
         CONFIRM_UErrorCode(status, U_ZERO_ERROR);
