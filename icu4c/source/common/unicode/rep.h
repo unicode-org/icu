@@ -14,7 +14,6 @@
 #ifndef REP_H
 #define REP_H
 
-#include "unicode/utypes.h"
 #include "unicode/uobject.h"
 
 U_NAMESPACE_BEGIN
