@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Collator.java,v $ 
-* $Date: 2002/12/03 20:45:20 $ 
-* $Revision: 1.17 $
+* $Date: 2002/12/11 19:48:36 $ 
+* $Revision: 1.18 $
 *
 *******************************************************************************
 */
@@ -329,15 +329,18 @@ public abstract class Collator implements Comparator, Cloneable
         if (service == null) {
             return new RuleBasedCollator(locale);
         } else {
+            ///CLOVER:OFF
             try {
                 return (Collator)((Collator)service.get(locale)).clone();
             }
             catch (CloneNotSupportedException e) {
                 throw new InternalError(e.getMessage());
             }
+            ///CLOVER:ON
         }
     }
 
+    ///CLOVER:OFF
     private static ICULocaleService service;
     private static ICULocaleService getService() {
         if (service == null) {
@@ -371,6 +374,7 @@ public abstract class Collator implements Comparator, Cloneable
         }
         return false;
     }
+    ///CLOVER:ON
     
     /**
      * Get the set of Locales for which Collators are installed. 
@@ -384,7 +388,9 @@ public abstract class Collator implements Comparator, Cloneable
         if (service != null) {
             return service.getAvailableLocales();
         } else {
+            ///CLOVER:OFF
             return ICULocaleData.getAvailableLocales();
+            ///CLOVER:ON
         }
     }
 

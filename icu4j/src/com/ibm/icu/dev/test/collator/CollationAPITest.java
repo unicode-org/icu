@@ -711,5 +711,87 @@ public class CollationAPITest extends TestFmwk {
             || !key.getSourceString().equals(abc)) {
             errln("TestCollator collationkey API is returning wrong values");
         }
+        UnicodeSet set = col1.getTailoredSet();
+        if (!set.equals(new UnicodeSet(0, 0x10FFFF))) {
+            errln("Error getting default tailored set");
+        }
+    }
+    
+     /** 
+     * Simple test the collator setter and getters
+     */
+    public void TestSetGet() 
+    {
+        RuleBasedCollator collator = (RuleBasedCollator)Collator.getInstance();
+        int decomp = collator.getDecomposition();
+        int strength = collator.getStrength();
+        boolean alt = collator.isAlternateHandlingShifted();
+        boolean caselevel = collator.isCaseLevel();
+        boolean french = collator.isFrenchCollation();
+        boolean hquart = collator.isHiraganaQuaternary();
+        boolean lowercase = collator.isLowerCaseFirst();
+        boolean uppercase = collator.isUpperCaseFirst();
+        
+        collator.setDecomposition(Collator.CANONICAL_DECOMPOSITION);
+        if (collator.getDecomposition() != Collator.CANONICAL_DECOMPOSITION) {
+            errln("Setting decomposition failed");
+        }
+        collator.setStrength(Collator.QUATERNARY);
+        if (collator.getStrength() != Collator.QUATERNARY) {
+            errln("Setting strength failed");
+        }
+        collator.setAlternateHandlingShifted(!alt);
+        if (collator.isAlternateHandlingShifted() == alt) {
+            errln("Setting alternate handling failed");
+        }
+        collator.setCaseLevel(!caselevel);
+        if (collator.isCaseLevel() == caselevel) {
+            errln("Setting case level failed");
+        }
+        collator.setFrenchCollation(!french);
+        if (collator.isFrenchCollation() == french) {
+            errln("Setting french collation failed");
+        }
+        collator.setHiraganaQuaternary(!hquart);
+        if (collator.isHiraganaQuaternary() == hquart) {
+            errln("Setting hiragana quartenary failed");
+        }
+        collator.setLowerCaseFirst(!lowercase);
+        if (collator.isLowerCaseFirst() == lowercase) {
+            errln("Setting lower case first failed");
+        }
+        collator.setUpperCaseFirst(!uppercase);
+        if (collator.isUpperCaseFirst() == uppercase) {
+            errln("Setting upper case first failed");
+        }   
+        collator.setDecompositionDefault();
+        if (collator.getDecomposition() != decomp) {
+            errln("Setting decomposition default failed");
+        }
+        collator.setStrengthDefault();
+        if (collator.getStrength() != strength) {
+            errln("Setting strength default failed");
+        }
+        collator.setAlternateHandlingDefault();
+        if (collator.isAlternateHandlingShifted() != alt) {
+            errln("Setting alternate handling default failed");
+        }
+        collator.setCaseLevelDefault();
+        if (collator.isCaseLevel() != caselevel) {
+            errln("Setting case level default failed");
+        }
+        collator.setFrenchCollationDefault();
+        if (collator.isFrenchCollation() != french) {
+            errln("Setting french handling default failed");
+        }
+        collator.setHiraganaQuaternaryDefault();
+        if (collator.isHiraganaQuaternary() != hquart) {
+            errln("Setting Hiragana Quartenary default failed");
+        }
+        collator.setCaseFirstDefault();
+        if (collator.isLowerCaseFirst() != lowercase 
+            || collator.isUpperCaseFirst() != uppercase) {
+            errln("Setting case first handling default failed");
+        }
     }
 }

@@ -1649,4 +1649,18 @@ public class CollationMiscTest extends TestFmwk{
         genericRulesStarter(rules[i], data[i]);
       }
     }    
+    
+    public void TestIdenticalCompare() 
+    {    
+        try {
+            RuleBasedCollator coll 
+                    = new RuleBasedCollator("& \uD800\uDC00 = \uD800\uDC01");
+            String strA = "AA\u0300\u0316\uD800\uDC01";
+            String strB = "A\u00c0\u0316\uD800\uDC00";
+            coll.setStrength(Collator.IDENTICAL);
+            doTest(coll, strA, strB, 1);
+        } catch (Exception e) {
+            errln(e.getMessage());
+        }
+    }
 }
