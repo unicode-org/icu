@@ -86,7 +86,7 @@
 
 struct collIterate {
   UChar *string; /* Original string */
-  UChar *start;  /* Pointer to the start of the source string. Either points to string
+  /* UChar *start;  Pointer to the start of the source string. Either points to string
                     or to writableBuffer */
   UChar *endp;   /* string end ptr.  Is undefined for null terminated strings */
   UChar *pos; /* This is position in the string.  Can be to original or writable buf */
@@ -117,10 +117,6 @@ struct UCollationElements
   * Struct wrapper for source data
   */
         collIterate        iteratordata_;
-  /**
-  * Source text length
-  */
-        int32_t            length_;
   /**
   * Indicates if this data has been reset.
   */
@@ -259,52 +255,6 @@ void ucol_CEBuf_Expand(ucol_CEBuf *b);
     }                                                                                 \
 }
 
-/**
-* Macro that gets a simple CE.
-* So what it does is that it will first check the expansion buffer. If the 
-* expansion buffer is not empty, ie the end pointer to the expansion buffer 
-* is different from the start pointer, we return the collation element at the 
-* return pointer and decrement it.
-* For more complicated CEs it resorts to getComplicatedCE.
-*/
-#define UCOL_GETPREVCE(order, coll, data, length, status) {                  \
-  if ((data).CEpos > (data).CEs) {                                           \
-    (data).toReturn --;                                                      \
-    (order) = *((data).toReturn);                                            \
-    if ((data).CEs == (data).toReturn) {                                     \
-      (data).CEpos = (data).toReturn = (data).CEs;                           \
-    }                                                                        \
-  }                                                                          \
-  else {                                                                     \
-    if ((data).pos == (data).start) {                                        \
-      (order) = UCOL_NO_MORE_CES;                                            \
-    }                                                                        \
-    else {                                                                   \
-      UChar ch;                                                              \
-      (data).pos --;                                                         \
-      ch = *((data).pos);                                                    \
-      if (ch <= 0xFF) {                                                      \
-        (order) = (coll)->latinOneMapping[ch];                               \
-      }                                                                      \
-      else                                                                   \
-        if ((data).isThai && UCOL_ISTHAIBASECONSONANT(ch) &&                 \
-               ((data).pos) != (data).start &&                               \
-               UCOL_ISTHAIPREVOWEL(*((data).pos -1))) {                      \
-          result = UCOL_THAI;                                                \
-        }                                                                    \
-        else {                                                               \
-          (result) = ucmp32_get((coll)->mapping, ch);                        \
-        }                                                                    \
-      if ((order) >= UCOL_NOT_FOUND) {                                       \
-        (order) = getSpecialPrevCE((coll), (order), &(data), (status));      \
-        if ((order) == UCOL_NOT_FOUND) {                                     \
-          (order) = ucol_getPrevUCA(ch, &(data), (status));                  \
-        }                                                                    \
-      }                                                                      \
-    }                                                                        \
-  }                                                                          \
-}
-
 /* 
 * Macro to get the maximum size of an expansion ending with the argument ce.
 * Used in the Boyer Moore algorithm.
@@ -349,6 +299,9 @@ uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, U
 uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE, 
                           collIterate *source, UErrorCode *status);
 U_CAPI uint32_t U_EXPORT2 ucol_getNextCE(const UCollator *coll, collIterate *collationSource, UErrorCode *status);
+U_CAPI uint32_t U_EXPORT2 ucol_getPrevCE(const UCollator *coll, 
+                                         collIterate *collationSource, 
+                                         UErrorCode *status);
 uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *status);
 uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource, UErrorCode *status);
 
