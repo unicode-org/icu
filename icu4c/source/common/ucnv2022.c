@@ -3136,7 +3136,12 @@ UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                             mySourceChar+= (uint32_t) args->converter->toUnicodeStatus<<8;
                             args->converter->toUnicodeStatus = 0;
                             pBuf = tempBuf;
-                            targetUniChar = _MBCSSimpleGetNextUChar(myData->currentConverter->sharedData, &pBuf, tempLimit, FALSE);
+                            if(myData->currentConverter!=NULL){
+                                targetUniChar = _MBCSSimpleGetNextUChar(myData->currentConverter->sharedData, &pBuf, tempLimit, FALSE);
+                            }else{
+                                *err=U_INVALID_CHAR_FOUND;
+                                break;
+                            }
                         }
                     }
                     else{
