@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/ReplaceableString.java,v $ 
- * $Date: 2002/02/25 22:43:58 $ 
- * $Revision: 1.10 $
+ * $Date: 2002/07/02 23:50:34 $ 
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */
@@ -26,7 +26,7 @@ import com.ibm.icu.impl.Utility;
  *
  * @see Replaceable
  * @author Alan Liu
- * @version $RCSfile: ReplaceableString.java,v $ $Revision: 1.10 $ $Date: 2002/02/25 22:43:58 $
+ * @version $RCSfile: ReplaceableString.java,v $ $Revision: 1.11 $ $Date: 2002/07/02 23:50:34 $
  */
 public class ReplaceableString implements Replaceable {
     private StringBuffer buf;
@@ -182,5 +182,12 @@ public class ReplaceableString implements Replaceable {
         char[] text = new char[limit - start];
         getChars(start, limit, text, 0);
         replace(dest, dest, text, 0, limit - start);
+    }
+    
+    /**
+     * Implements Replaceable
+     */
+    public boolean hasMetaData() {
+    	return false;
     }
 }
