@@ -32,7 +32,6 @@
 #include "ucmpwrit.h"
 #include "makeconv.h"
 #include "genmbcs.h"
-#include "unicode/uclean.h"
 
 #define DEBUG 0
 
@@ -268,13 +267,6 @@ int main(int argc, char* argv[])
     char cnvNameWithPkg[UCNV_MAX_FULL_FILE_NAME_LENGTH];
     UVersionInfo icuVersion;
 
-    /* Initialize ICU */
-    u_init(&err);
-    if (U_FAILURE(err)) {
-        fprintf(stderr, "%s: can not initialize ICU.  err = %s\n",
-            argv[0], u_errorName(err));
-        exit(1);
-    }
     err = U_ZERO_ERROR;
 
     U_MAIN_INIT_ARGS(argc, argv);
