@@ -136,7 +136,7 @@ BRK_FILES=$(BRK_FILES_SHORT:%=$(BUILDDIR)/$(ICUDT)%)
 -include $(UCMSRCDIR)/ucmfiles.mk
 -include $(UCMSRCDIR)/ucmebcdic.mk
 -include $(UCMSRCDIR)/ucmlocal.mk
-ALL_UCM_SOURCE=ibm-37.ucm ibm-1047-s390.ucm $(UCM_SOURCE_CORE) $(UCM_SOURCE_FILES) $(UCM_SOURCE_EBCDIC) $(UCM_SOURCE_LOCAL)
+ALL_UCM_SOURCE=ibm-37.ucm ibm-1047.ucm $(UCM_SOURCE_CORE) $(UCM_SOURCE_FILES) $(UCM_SOURCE_EBCDIC) $(UCM_SOURCE_LOCAL)
 UCM_FILES = $(ALL_UCM_SOURCE:%=$(SRCDATADIR)/%)
 CNV_FILES = $(ALL_UCM_SOURCE:%.ucm=$(BUILDDIR)/$(ICUDT)%.cnv)
 
@@ -264,7 +264,7 @@ icupkg.inc: $(srcdir)/icupkg.inc.in  $(top_builddir)/config.status
 
 ###########
 ########### 390 (z/OS) support
-UCMFILES390=ebcdic-xml-us.ucm ibm-37-s390.ucm ibm-1047-s390.ucm ibm-4909.ucm
+UCMFILES390=ebcdic-xml-us.ucm ibm-37.ucm ibm-1047.ucm ibm-4909.ucm
 ALLFILES390=uprops.icu unorm.icu cnvalias.icu $(UCMFILES390:.ucm=.cnv)
 
 $(BUILDDIR)/icudata390.lst:  $(SRCLISTDEPS)
