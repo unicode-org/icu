@@ -9,7 +9,7 @@
 
 
 zh_SG {
-    Version { "1.1" }
+    Version { "2.0" }
 
     NumberPatterns { 
         "#,##0.###;-#,##0.###",

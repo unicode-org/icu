@@ -8,7 +8,7 @@
 // Tamil locale.  Based on Hindi locale
 
 ta_IN {
-    Version { "1.3" }
+    Version { "2.0" }
     LocaleID:int { 0x449 }
 //    ShortCountry { IND }
 

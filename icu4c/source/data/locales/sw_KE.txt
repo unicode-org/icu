@@ -9,7 +9,7 @@
 
 
 sw_KE {
-    Version { "1.1" }
+    Version { "2.0" }
 //    LocaleString { "sw_KE" }
     NumberPatterns {
         "#,##0.###;-#,##0.###",
