@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding = "Windows-1252"?>
+<?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.00"
@@ -12,8 +12,8 @@
 	<Configurations>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory=".\Release"
-			IntermediateDirectory=".\Release"
+			OutputDirectory=".\decmn_Win32_Release"
+			IntermediateDirectory=".\decmn_Win32_Release"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
@@ -28,10 +28,10 @@
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
 				DisableLanguageExtensions="TRUE"
-				PrecompiledHeaderFile=".\Release/decmn.pch"
-				AssemblerListingLocation=".\Release/"
-				ObjectFile=".\Release/"
-				ProgramDataBaseFileName=".\Release/"
+				PrecompiledHeaderFile=".\decmn_Win32_Release/decmn.pch"
+				AssemblerListingLocation=".\decmn_Win32_Release/"
+				ObjectFile=".\decmn_Win32_Release/"
+				ProgramDataBaseFileName=".\decmn_Win32_Release/"
 				WarningLevel="4"
 				SuppressStartupBanner="TRUE"
 				CompileAs="0"/>
@@ -43,15 +43,15 @@
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="icuuc.lib icutu.lib"
-				OutputFile=".\Release/decmn.exe"
+				OutputFile=".\decmn_Win32_Release/decmn.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\..\lib"
-				ProgramDatabaseFile=".\Release/decmn.pdb"
+				ProgramDatabaseFile=".\decmn_Win32_Release/decmn.pdb"
 				SubSystem="1"/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName=".\Release/decmn.tlb"/>
+				TypeLibraryName=".\decmn_Win32_Release/decmn.tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
@@ -69,8 +69,8 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory=".\Debug"
-			IntermediateDirectory=".\Debug"
+			OutputDirectory=".\decmn_Win32_Debug"
+			IntermediateDirectory=".\decmn_Win32_Debug"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
@@ -85,10 +85,10 @@
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				DisableLanguageExtensions="TRUE"
-				PrecompiledHeaderFile=".\Debug/decmn.pch"
-				AssemblerListingLocation=".\Debug/"
-				ObjectFile=".\Debug/"
-				ProgramDataBaseFileName=".\Debug/"
+				PrecompiledHeaderFile=".\decmn_Win32_Debug/decmn.pch"
+				AssemblerListingLocation=".\decmn_Win32_Debug/"
+				ObjectFile=".\decmn_Win32_Debug/"
+				ProgramDataBaseFileName=".\decmn_Win32_Debug/"
 				BrowseInformation="1"
 				WarningLevel="4"
 				SuppressStartupBanner="TRUE"
@@ -102,16 +102,16 @@
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="icuucd.lib icutud.lib"
-				OutputFile=".\Debug/decmn.exe"
+				OutputFile=".\decmn_Win32_Debug/decmn.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\..\lib"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile=".\Debug/decmn.pdb"
+				ProgramDatabaseFile=".\decmn_Win32_Debug/decmn.pdb"
 				SubSystem="1"/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName=".\Debug/decmn.tlb"/>
+				TypeLibraryName=".\decmn_Win32_Debug/decmn.tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
