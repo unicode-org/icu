@@ -628,6 +628,8 @@ static void TestSScanset(void) {
 
     TestSScanSetFormat("%1[ab]  ", abcUChars, abcChars, TRUE);
     TestSScanSetFormat("%2[^f]", abcUChars, abcChars, TRUE);
+
+    TestSScanSetFormat("%[qrst]", abcUChars, abcChars, TRUE);
     TestSScanSetFormat("%[a-]", abcUChars, abcChars, TRUE);
 
     /* Bad format */

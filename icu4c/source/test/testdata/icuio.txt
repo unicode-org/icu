@@ -255,6 +255,9 @@ icuio {
                     "%llx", "123456789abcdef0", "8", "123456789abcdef0"
                 }
                 {
+                    "%S", "a\U00010000b", "S", "a\U00010000b"
+                }
+                {
                     "%[abce]", "abcd ef01", "S", "abc"
                 }
                 {
@@ -276,7 +279,19 @@ icuio {
                     "%3[^e-f]", "abccdefg", "S", "abc"
                 }
                 {
-                    "%S", "a\U00010000b", "S", "a\U00010000b"
+                    "%*3[abc]%[cde]", "abccdefg", "S", "cde"
+                }
+                {
+                    "%*3S%S", "a bc efg", "S", "bc"
+                }
+                {
+                    "%*3S%S", "abcd efg", "S", "d"
+                }
+                {
+                    "%*3s%s", "abcd efg", "s", "d"
+                }
+                {
+                    "%*3d%d", "1234", "4", "4"
                 }
             }
         }

@@ -371,9 +371,9 @@ u_scanf_string_handler(UFILE        *input,
     if(U_FAILURE(status))
         return -1;
 
-    while( (isNotEOF = ufile_getch(input, &c))
-        && (c != info->fPadChar && !u_isWhitespace(c))
-        && (info->fWidth == -1 || count < info->fWidth) )
+    while( (info->fWidth == -1 || count < info->fWidth) 
+        && (isNotEOF = ufile_getch(input, &c))
+        && (c != info->fPadChar && !u_isWhitespace(c)))
     {
 
         if (!info->fSkipArg) {
@@ -399,7 +399,7 @@ u_scanf_string_handler(UFILE        *input,
 
     /* put the final character we read back on the input */
     if (!info->fSkipArg) {
-        if(isNotEOF)
+        if(isNotEOF && (info->fWidth == -1 || count < info->fWidth) )
             u_fungetc(c, input);
 
         /* add the terminator */
@@ -432,9 +432,9 @@ u_scanf_ustring_handler(UFILE       *input,
     /* get the string one character at a time, truncating to the width */
     count = 0;
 
-    while( (isNotEOF = ufile_getch(input, &c))
-        && (c != info->fPadChar && ! u_isWhitespace(c))
-        && (info->fWidth == -1 || count < info->fWidth) )
+    while( (info->fWidth == -1 || count < info->fWidth)
+        && (isNotEOF = ufile_getch(input, &c))
+        && (c != info->fPadChar && ! u_isWhitespace(c)))
     {
 
         /* put the character from the input onto the target */
@@ -448,8 +448,9 @@ u_scanf_ustring_handler(UFILE       *input,
 
     /* put the final character we read back on the input */
     if (!info->fSkipArg) {
-        if(isNotEOF)
+        if(isNotEOF && (info->fWidth == -1 || count < info->fWidth)) {
             u_fungetc(c, input);
+        }
 
         /* add the terminator */
         *alias = 0x0000;
@@ -1042,16 +1043,11 @@ u_scanf_scanset_handler(UFILE       *input,
 {
     USet        *scanset;
     UErrorCode  status = U_ZERO_ERROR;
+    int32_t     chLeft = INT32_MAX;
     UChar32     c;
-    UChar       *s     = (UChar*) (args[0].ptrValue);
-    UChar       *alias = NULL;
-    UChar       *limit = NULL;
+    UChar       *alias = (UChar*) (args[0].ptrValue);
     UBool       isNotEOF = FALSE;
     UBool       readCharacter = FALSE;
-
-
-    /* fill the input's internal buffer */
-    ufile_fill_uchar_buffer(input);
 
     /* Create an empty set */
     scanset = uset_open(0, -1);
@@ -1059,39 +1055,33 @@ u_scanf_scanset_handler(UFILE       *input,
     /* Back up one to get the [ */
     fmt--;
 
-    if (!info->fSkipArg) {
-        /* truncate to the width, if specified and alias the target */
-        alias = s;
-        if(info->fWidth != -1) {
-            limit = alias + info->fWidth;
-        }
-        else {
-            limit = U_MAX_PTR(alias);
-        }
+    /* truncate to the width, if specified and alias the target */
+    if(info->fWidth >= 0) {
+        chLeft = info->fWidth;
     }
 
     /* parse the scanset from the fmt string */
-    *consumed = uset_applyPattern(scanset, fmt, u_strlen(fmt), 0, &status);
+    *consumed = uset_applyPattern(scanset, fmt, -1, 0, &status);
 
     /* verify that the parse was successful */
     if (U_SUCCESS(status)) {
         c=0;
 
         /* grab characters one at a time and make sure they are in the scanset */
-        while(info->fSkipArg || alias < limit) {
+        while(chLeft > 0) {
             if ((isNotEOF = ufile_getch32(input, &c)) && uset_contains(scanset, c)) {
                 readCharacter = TRUE;
                 if (!info->fSkipArg) {
                     int32_t idx = 0;
                     UBool isError = FALSE;
-                    int32_t capacity = (int32_t)(limit - alias);
 
-                    U16_APPEND(alias, idx, capacity, c, isError);
-                    alias += idx;
+                    U16_APPEND(alias, idx, chLeft, c, isError);
                     if (isError) {
                         break;
                     }
+                    alias += idx;
                 }
+                chLeft -= (1 + U_IS_SUPPLEMENTARY(c));
             }
             else {
                 /* if the character's not in the scanset, break out */
@@ -1100,7 +1090,7 @@ u_scanf_scanset_handler(UFILE       *input,
         }
 
         /* put the final character we read back on the input */
-        if(isNotEOF) {
+        if(isNotEOF && chLeft > 0) {
             u_fungetc(c, input);
         }
     }
