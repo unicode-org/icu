@@ -90,7 +90,7 @@ PATH = $(PATH);$(ICUP)\bin
 !INCLUDE "$(ICUDATA)\ucmfiles.mk"
 !IF EXISTS("$(ICUDATA)\ucmlocal.mk")
 !INCLUDE "$(ICUDATA)\ucmlocal.mk"
-$(UCM_SOURCE)=$(UCM_SOURCE) $(UCM_SOURCE_LOCAL)
+UCM_SOURCE=$(UCM_SOURCE) $(UCM_SOURCE_LOCAL)
 !ELSE
 #!MESSAGE Warning: cannot find "ucmlocal.mk"
 !ENDIF
@@ -127,7 +127,7 @@ BRK_FILES = "$(ICUDATA)\sent.brk" "$(ICUDATA)\char.brk" "$(ICUDATA)\line.brk" "$
 "$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" :  $(CNV_FILES) $(BRK_FILES) uprops.dat unames.dat cnvalias.dat tz.dat $(ALL_RES) 
 	@echo Building icu data
 	@cd "$(ICUDBLD)"
- 	"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -v -T . -m dll -c -p $(U_ICUDATA_NAME) -O "$(PKGOPT)" -d "$(DLL_OUTPUT)" -s . <<pkgdatain.txt
+ 	"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -e icudata -v -T . -m dll -c -p $(U_ICUDATA_NAME) -O "$(PKGOPT)" -d "$(DLL_OUTPUT)" -s . <<pkgdatain.txt
 uprops.dat
 unames.dat
 cnvalias.dat

@@ -81,7 +81,8 @@ static UOption options[]={
 /*11*/    UOPTION_DEF( "rebuild", 'F', UOPT_NO_ARG),
 /*12*/    UOPTION_DEF( "tempdir", 'T', UOPT_REQUIRES_ARG),
 /*13*/    UOPTION_DEF( "install", 'I', UOPT_REQUIRES_ARG),
-/*14*/    UOPTION_SOURCEDIR 
+/*14*/    UOPTION_SOURCEDIR ,
+/*15*/    UOPTION_DEF( "entrypoint", 'e', UOPT_REQUIRES_ARG),
 };
 
 const char options_help[][160]={
@@ -103,7 +104,8 @@ const char options_help[][160]={
   "Force rebuilding of all data",
   "Specify temporary dir (default: output dir)",
   "Install the data (specify target)",
-  "Specify a custom source directory"
+  "Specify a custom source directory",
+  "Specify a custom entrypoint name (default: short name)"
 };
 
 int
@@ -259,6 +261,13 @@ main(int argc, char* argv[]) {
   } else {
     o.srcDir   = ".";
   }
+
+  if( options[15].doesOccur ) {
+    o.entryName = options[15].value;
+  } else {
+    o.entryName = o.shortName;
+  }
+
   /* OK options are set up. Now the file lists. */
   tail = NULL;
   for( i=1; i<argc; i++) {

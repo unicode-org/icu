@@ -52,11 +52,13 @@ write8(FileStream *out, uint8_t byte);
 /* -------------------------------------------------------------------------- */
 
 static UOption options[]={
-    UOPTION_HELP_H,
-    UOPTION_HELP_QUESTION_MARK,
-    UOPTION_DESTDIR,
-    UOPTION_DEF("object", 'o', UOPT_NO_ARG),
-    UOPTION_DEF("name", 'n', UOPT_REQUIRES_ARG)
+/*0*/UOPTION_HELP_H,
+     UOPTION_HELP_QUESTION_MARK,
+     UOPTION_DESTDIR,
+     UOPTION_DEF("object", 'o', UOPT_NO_ARG),
+     UOPTION_DEF("name", 'n', UOPT_REQUIRES_ARG),
+/*5*/UOPTION_DEF( "entrypoint", 'e', UOPT_REQUIRES_ARG)
+
 };
 
 char symPrefix[100];
@@ -208,6 +210,10 @@ writeObjectCode(const char *filename, const char *destdir) {
     entry[0]='_';
     getOutFilename(filename, destdir, buffer, entry+1, ".obj");
 
+    if(options[5].doesOccur) {
+        uprv_strcpy(entry+1, options[5].value);
+        uprv_strcat(entry, "_dat");
+    }
     /* turn dashes in the entry name into underscores */
     entryLength=uprv_strlen(entry);
     for(i=0; i<entryLength; ++i) {
