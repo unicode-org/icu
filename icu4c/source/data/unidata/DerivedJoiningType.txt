@@ -1,18 +1,19 @@
 # DerivedJoiningType-4.0.0.txt
-# Date: 2003-03-12, 23:52:29 GMT [MD]
+# Date: 2003-04-05, 02:42:00 GMT [MD]
 #
 # Unicode Character Database: Derived Property Data
 # Generated algorithmically from the Unicode Character Database
 # For documentation, see UCD.html
-# Note: Unassigned and Noncharacter codepoints are omitted,
-#       except when listing Noncharacter or Cn.
+# Note: Unassigned and Noncharacter codepoints may be omitted
+#       if they have default property values.
 # ================================================
 
 
 # ================================================
-# Joining Type (listing ArabicShaping.txt, field 1).
+# Joining Type (listing ArabicShaping.txt, field 2).
 #	Type T is derived, as described in ArabicShaping.txt
-#	All code points not listed here have the type U
+#	All code points not explicitly listed in this file have the property
+#	value:   U.
 # ================================================
 
 0640          ; C # Lm       ARABIC TATWEEL
@@ -77,6 +78,7 @@
 
 # ================================================
 
+# No values for L
 
 # Total code points: 0
 

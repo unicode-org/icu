@@ -1,5 +1,5 @@
 # SpecialCasing-4.0.0.txt
-# Date: 2003-02-25,23:12:50 GMT [MD]
+# Date: 2003-03-14, 20:22:04 GMT [MD]
 #
 # Special Casing Properties
 #
@@ -9,6 +9,8 @@
 # characters where they are 1-1, and does not have locale-specific mappings.)
 # For more information, see the discussion of Case Mappings in the Unicode Standard.
 #
+# All code points not listed in this file that do not have a simple case mappings
+# in UnicodeData.txt map to themselves.
 # ================================================================================
 # Format
 # ================================================================================

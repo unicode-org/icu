@@ -2,6 +2,9 @@
 # Correlated with Unicode 4.0
 # Note: The casing of block names is not normative.
 #       For example, "Basic Latin" and "BASIC LATIN" are equivalent.
+#
+# Code points not explicitly listed in this file are given the value No_Block.
+#
 # Start Code..End Code; Block Name
 0000..007F; Basic Latin
 0080..00FF; Latin-1 Supplement
