@@ -75,17 +75,17 @@ $(TESTDATABLD)\$(TESTDT)test.icu : {"$(ICUTOOLS)\gentest\$(CFG)"}gentest.exe
 # Targets for nfscis.spp
 "$(TESTDATABLD)\$(TESTDT)nfscis.spp" : {"$(ICUTOOLS)\gensprep\$(CFG)"}gensprep.exe "$(TESTDATA)\nfs4_cis_prep.txt"
 	@echo Building nfscis.spp
-	@"$(ICUTOOLS)\gensprep\$(CFG)\gensprep" -s "$(TESTDATA)" -d "$(TESTDATABLD)\\" -b nfscis -p "$(TESTPKG)" -u 3.2.0 -k -n "$(ICUTOOLS)\\..\\data\\unidata" nfs4_cis_prep.txt
+	@"$(ICUTOOLS)\gensprep\$(CFG)\gensprep" -s "$(TESTDATA)" -d "$(TESTDATABLD)\\" -b nfscis -p "$(TESTPKG)" -u 3.2.0 -k -n "$(ICUTOOLS)\..\data\unidata" nfs4_cis_prep.txt
 
 # Targets for nfsmxs.spp
 "$(TESTDATABLD)\$(TESTDT)nfsmxs.spp" : {"$(ICUTOOLS)\gensprep\$(CFG)"}gensprep.exe "$(TESTDATA)\nfs4_mixed_prep_s.txt"
 	@echo Building nfsmxs.spp
-	@"$(ICUTOOLS)\gensprep\$(CFG)\gensprep" -s "$(TESTDATA)" -d "$(TESTDATABLD)\\" -b nfsmxs -p "$(TESTPKG)" -u 3.2.0 -k -n "$(ICUTOOLS)\\..\\data\\unidata" nfs4_mixed_prep_s.txt
+	@"$(ICUTOOLS)\gensprep\$(CFG)\gensprep" -s "$(TESTDATA)" -d "$(TESTDATABLD)\\" -b nfsmxs -p "$(TESTPKG)" -u 3.2.0 -k -n "$(ICUTOOLS)\..\data\unidata" nfs4_mixed_prep_s.txt
 
 # Targets for nfsmxp.spp
 "$(TESTDATABLD)\$(TESTDT)nfsmxp.spp" : {"$(ICUTOOLS)\gensprep\$(CFG)"}gensprep.exe "$(TESTDATA)\nfs4_mixed_prep_p.txt"
 	@echo Building nfsmxp.spp
-	@"$(ICUTOOLS)\gensprep\$(CFG)\gensprep" -s "$(TESTDATA)" -d "$(TESTDATABLD)\\" -b nfsmxp -p "$(TESTPKG)" -u 3.2.0 -k -n "$(ICUTOOLS)\\..\\data\\unidata" nfs4_mixed_prep_p.txt
+	@"$(ICUTOOLS)\gensprep\$(CFG)\gensprep" -s "$(TESTDATA)" -d "$(TESTDATABLD)\\" -b nfsmxp -p "$(TESTPKG)" -u 3.2.0 -k -n "$(ICUTOOLS)\..\data\unidata" nfs4_mixed_prep_p.txt
 
 
 # Targets for test converter data
