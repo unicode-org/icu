@@ -792,7 +792,24 @@ ibm-8482_P100-1999 { UTR22* }   ibm-8482 { IBM* }   # host SBCS (Katakana). Euro
 # This avoids the duplication of all EBCDIC SBCS and mixed-SBCS/DBCS
 # mapping files.
 
-# Some examples
+# Some examples below for declaring old-style, obsolete aliases with the "-s390"
+# suffix to map to the new-style, recommended names with the option added.
+# These are listed here for backward compatibility.
+# Do not use these; instead use the normal converter name with the option
+# added as recommended above.
+
+# Note: It is not possible to define an alias (non-initial name in a line here)
+# that itself contains a converter option like this one for swapping LF<->NL.
+# Such names would never be found because ucnv_open() will first parse and strip
+# options before looking up a name in this table.
+# ucnv_open() then parses the lookup result (the canonical name on the left
+# in lines here) as well.
+
+# This also means that it is not necessary to add anything to convrtrs.txt
+# for converter names like "ibm-1026,swaplfnl" to work -
+# they are already covered by the normal option parsing together with the
+# regular, option-less alias elsewhere in this file.
+
 ibm-37_P100-1995,swaplfnl     ibm-37-s390 ibm037-s390
 ibm-1047_P100-1995,swaplfnl   ibm-1047-s390
 ibm-1140_P100-1997,swaplfnl   ibm-1140-s390
