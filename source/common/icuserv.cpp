@@ -877,8 +877,9 @@ const Hashtable*
 ICUService::getVisibleIDMap(UErrorCode& status) const {
   if (U_FAILURE(status)) return NULL;
 
+  // must only be called when lock is already held
+
   ICUService* ncthis = (ICUService*)this; // cast away semantic const
-  Mutex mutex(&ncthis->lock);
   if (idCache == NULL) {
     ncthis->idCache = new Hashtable();
     if (idCache == NULL) {
