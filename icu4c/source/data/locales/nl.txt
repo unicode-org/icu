@@ -434,8 +434,18 @@ nl {
         "1,000,000,000,000: << triljoen[ >>];\n"
         "1,000,000,000,000,000: =#,##0="
     }
+    Keys{
+       calendar { "Kalender" }
+       collation { "Soorten" }
+       currency {"Muntsoort"}
+    }
     Types{
-        TRADITIONAL { "Traditioneel" }
+        calendar{
+           traditional { "Traditioneel Soorten" }
+        }
+        collation{
+           traditional { "Traditioneel Kalendar" }
+        }
     }
     Variants{
         REVISED { "Gewijzigd" }

@@ -799,9 +799,18 @@ sv {
             "1,000,000,000,000,000,000,000,000,000,000,000,000,000: =#,##0="
 */
     }
-
+    Keys{
+         collation { "Sortera" }
+         calendar  { "Kalendar" }
+         currency  { "Valuta"}
+    }
     Types{
-        TRADITIONAL { "Traditionell" }
+        collation{
+            traditional { "Traditionell Sortera" }
+        }
+        calendar{
+            traditional { "Traditionell Kalendar" }
+        }
     }
     Variants{
         REVISED { "Reviderad" }

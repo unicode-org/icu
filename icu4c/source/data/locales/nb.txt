@@ -416,13 +416,23 @@ nb {
         ",",
         "+",
     }
+    Keys{
+	calendar    { "Kalendar" }
+	//collation {""}
+	currency    { "Valuta" }
+    }
 
     Types{
-        TRADITIONAL { "Tradisjonell" }
+        collation{
+            traditional { "Tradisjonell" }
+        }
+        calendar{
+            traditional { "Tradisjonell Kalender" }
+        }
     }
     Variants{
         EURO    { "Europeisk" }
-        PREEURO { "F\u00f8r-eruropeisk" }
+        //PREEURO { "F\u00f8r-eruropeisk" }
         REVISED { "Revidert" }
     }
 

@@ -625,11 +625,21 @@ pt {
         "2,000,000,000: << bilh\u00F5es[>>];\n"     
         "1,000,000,000,000: =#,##0=;" 
     }
+    Keys {
+       collation { "Sorte" }
+       calendar  { "Caled\u00E1rio" }
+       currency  { "Moeda Corrente"}
+    }
     Types{
-        TRADITIONAL { "Tradicional" }
+        collation{
+            traditional{ "Tradicional Sorte" }
+        }
+        calendar{
+            traditional{ "Tradicional Caled\u00E1rio" }
+        }
     }
     Variants{
-        PREEURO { "Pr\u00e9-Euro" }
+        //PREEURO { "Pr\u00e9-Euro" }
         REVISED { "Revisado" }
     }
     zoneStrings { 

@@ -18,22 +18,36 @@ root {
         Fallback{ "" }
         NY      { "NY" }        // No longer valid variant. Here for backwards compatibility.
         EURO    { "EURO" }      // EURO variant display name
-        PREEURO { "PREEURO" }   // PREEURO variant display name
         POSIX   { "POSIX" }
         REVISED { "REVISED" }
     }
     Keys{
-        Collation { "Collation" }
-        Calendar  { "Calendar" }
+        collation { "COLLATION" }
+        calendar  { "CALDENDAR" }
+	currency  { "CURRENCY" }
     }
     Types{
         // keys for collation (traditional may also be used for traditional chinese)
-        Fallback{ "" }
-        DIRECT      { "DIRECT"    }
-        PHONEBOOK   { "PHONEBOOK" }
-        PINYIN      { "PINYIN"    }
-        STROKE      { "STROKE"    }
-        TRADITIONAL { "TRADITIONAL" }
+	// The values in root must always be capitalized because the signify the values are         // codes not translations
+        collation{
+          Fallback{ "" }
+          direct      { "DIRECT"    }
+          phonebook   { "PHONEBOOK" }
+          pinyin      { "PINYIN"    }
+          stroke      { "STROKE"    }
+          traditional { "TRADITIONAL" }
+        }
+        calendar{
+	  Fallback{ "" }
+          traditional { "TRADITIONAL" }
+          japanese    { "JAPANESE"  }
+	  buddhist    { "BUDDHIST"  }
+	  islamic     { "ISLAMIC"   }
+	  hebrew      { "HEBREW"    }
+	  chinese     { "CHINESE"   }
+	  gregorian   { "GREGORIAN" }
+
+        }
     }
 
     // TODO: Remove this
@@ -380,8 +394,8 @@ root {
         "7"
     }
     Eras { 
-        "CE",
-        "BCE"
+        "BCE", // BC
+        "CE"   // AD
     }
     MonthAbbreviations {
         "1",
@@ -1583,6 +1597,13 @@ root {
         "M/d/yyyy",
         "{1} {0}",
     }
+    
+    // the PaperSize units are in mm
+    PaperSize:intvector{
+        297, // height
+        210  // width 
+    }
+    MeasurementSystem:int{ 0 } // ISO/Metric system
 
     // Last update: May 2003
     CurrencyCodes {
