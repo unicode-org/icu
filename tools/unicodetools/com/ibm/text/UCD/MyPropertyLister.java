@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/MyPropertyLister.java,v $
-* $Date: 2004/02/06 18:30:20 $
-* $Revision: 1.11 $
+* $Date: 2004/02/18 03:08:59 $
+* $Revision: 1.12 $
 *
 *******************************************************************************
 */
@@ -39,7 +39,7 @@ final class MyPropertyLister extends PropertyLister {
         int main = (propMask & 0xFF00);
         if (main == COMBINING_CLASS) {
             String s = UCD.getCombiningClassID_fromIndex((short)(propMask & 0xFF), LONG);
-            if (s.startsWith("Fixed")) s = "Other Combining Class";
+            if (s.charAt(0) <= '9') s = "Other Combining Class";
             return "# " + s;
         } else if (main == BINARY_PROPERTIES) {
             return "";

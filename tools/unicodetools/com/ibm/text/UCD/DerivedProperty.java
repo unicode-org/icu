@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/DerivedProperty.java,v $
-* $Date: 2004/02/07 01:01:16 $
-* $Revision: 1.24 $
+* $Date: 2004/02/18 03:08:59 $
+* $Revision: 1.25 $
 *
 *******************************************************************************
 */
@@ -285,7 +285,7 @@ public final class DerivedProperty implements UCD_Types {
         byte val;
         CaseDProp (int i) {
             type = DERIVED_CORE;
-                isStandard = false;
+            isStandard = false;
             val = (i == Missing_Uppercase ? Lu : i == Missing_Lowercase ? Ll : Lt);
             name = "Possible_Missing_" + CaseNames[i-Missing_Uppercase];
             header = "# Derived Property: " + name
@@ -306,7 +306,7 @@ public final class DerivedProperty implements UCD_Types {
         String MAYBE;
         Normalizer nfx;
         QuickDProp (int i) {
-            // setValueType((i == NFC || i == NFKC) ? ENUMERATED : BINARY);
+            //setValueType((i == NFC || i == NFKC) ? ENUMERATED_PROP : BINARY_PROP);
             setValueType(ENUMERATED_PROP);
             type = DERIVED_NORMALIZATION;
             nfx = nf[i];
@@ -611,7 +611,7 @@ of characters, the first of which has a non-zero combining class.
                     + "\r\n#  Uses the full case folding from CaseFolding.txt, without the T option."
                     ;
             }
-            public String getValue(int cp, byte style) { 
+            public String getValue(int cp, byte style) {
                 if (!ucdData.isRepresented(cp)) return "";
                 String b = nfkc.normalize(fold(cp));
                 String c = nfkc.normalize(fold(b));
@@ -860,7 +860,7 @@ of characters, the first of which has a non-zero combining class.
             {
                 type = DERIVED_CORE;
                 name = "Grapheme_Extend";
-                shortName = "GrExt";
+                shortName = "Gr_Ext";
                 header = header = "# Derived Property: " + name
                     + "\r\n#  Generated from: Me + Mn + Other_Grapheme_Extend"
                     + "\r\n#  Note: depending on an application's interpretation of Co (private use),"
@@ -883,7 +883,7 @@ of characters, the first of which has a non-zero combining class.
             {
                 type = DERIVED_CORE;
                 name = "Grapheme_Base";
-                shortName = "GrBase";
+                shortName = "Gr_Base";
                 
                 header = header = "# Derived Property: " + name
                     + "\r\n#  Generated from: [0..10FFFF] - Cc - Cf - Cs - Co - Cn - Zl - Zp - Grapheme_Extend"

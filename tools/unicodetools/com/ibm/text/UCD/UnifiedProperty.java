@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UnifiedProperty.java,v $
-* $Date: 2004/02/07 01:01:12 $
-* $Revision: 1.6 $
+* $Date: 2004/02/18 03:09:02 $
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -27,10 +27,6 @@ public final class UnifiedProperty extends UCDProperty {
     }
     
     public static UCDProperty make(int propMask, UCD ucd) {
-        if (propMask == AGE) {
-            System.out.println();
-        }
-
         if ((propMask & 0xFF00) == (BINARY_PROPERTIES & 0xFF00)) {
             return UnifiedBinaryProperty.make(propMask, ucd);
         }
@@ -81,25 +77,29 @@ public final class UnifiedProperty extends UCDProperty {
     }
 
     private static void cacheNames(UCD ucd) {
-        System.out.println("Caching Property Names");
+        //System.out.println("Caching Property Names");
         propNameCache = new HashMap();
         
         for (int i = 0; i < LIMIT_ENUM; ++i) {
             UCDProperty up = UnifiedProperty.make(i, ucd);
             if (up == null) continue;
             if (!up.isStandard()) continue;
-            if (up.getValueType() < BINARY_PROP) continue;
-            String shortRaw = up.getProperty(SHORT);
-            String shortName = Utility.getSkeleton(shortRaw);
-            String longRaw = up.getProperty(LONG);
-            String longName = Utility.getSkeleton(longRaw);
+            //if (up.getValueType() < BINARY_PROP) continue;
             Integer result = new Integer(i);
-            if (!propNameCache.keySet().contains(longName)) propNameCache.put(longName, result);
-            if (!propNameCache.keySet().contains(shortName)) propNameCache.put(shortName, result);
+            
+            String longRaw = up.getPropertyName(LONG);
+            String longName = Utility.getSkeleton(longRaw);
+            String shortRaw = up.getPropertyName(SHORT);
+            String shortName = Utility.getSkeleton(shortRaw);
+            //System.out.println("Caching Names: " + longRaw + ", " + shortRaw);
+            if (longName != null && !propNameCache.keySet().contains(longName)) propNameCache.put(longName, result);
+
+            if (shortName != null && !propNameCache.keySet().contains(shortName)) propNameCache.put(shortName, result);
+
             String key = longRaw != null ? longRaw : shortRaw;
             availablePropNames.add(key);            
         }
-        System.out.println("Done Caching");
+        //System.out.println("Done Caching");
     }
     
     static Map cache = new HashMap();
@@ -185,8 +185,8 @@ public final class UnifiedProperty extends UCDProperty {
     
     public String getFullName(byte style) {
         String pre = "";
-        String preShort = getProperty(SHORT);
-        String preLong = getProperty(LONG);
+        String preShort = getPropertyName(SHORT);
+        String preLong = getPropertyName(LONG);
         if (style < LONG) pre = preShort;
         else if (style == LONG || preShort.equals(preLong)) pre = preLong;
         else pre = preShort + "(" + preLong + ")";

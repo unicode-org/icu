@@ -6,8 +6,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/ICUPropertyFactory.java,v $
- * $Date: 2004/02/12 00:47:30 $
- * $Revision: 1.2 $
+ * $Date: 2004/02/18 03:08:57 $
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -45,52 +45,21 @@ import com.ibm.icu.util.VersionInfo;
 
 public class ICUPropertyFactory extends UnicodeProperty.Factory {
         
-    public static class RegexMatcher implements UnicodeProperty.Matcher {
-        private Matcher matcher;
-        
-        public UnicodeProperty.Matcher set(String pattern) {
-            matcher = Pattern.compile(pattern).matcher("");
-            return this;
-        }
-        public boolean matches(String value) {
-            matcher.reset(value);
-            return matcher.matches();
-        }       
-    }
-
     static class ICUProperty extends UnicodeProperty {
             protected int propEnum = Integer.MIN_VALUE;
             
             protected ICUProperty(String propName, int propEnum) {
-                this.propEnum = propEnum;
                 setName(propName);
+                this.propEnum = propEnum;
                 setType(internalGetPropertyType(propEnum));
             }
 
             boolean shownException = false;
             
             public String _getValue(int codePoint) {
-                if (propEnum < UProperty.INT_LIMIT) {
-                    int enumValue = -1;
-                    String value = null;
-                    try {
-                        enumValue = UCharacter.getIntPropertyValue(codePoint, propEnum);
-                        if (enumValue >= 0) value = UCharacter.getPropertyValueName(propEnum,enumValue, UProperty.NameChoice.LONG);
-                    } catch (IllegalArgumentException e) {
-                        if (!shownException) {
-                            System.out.println("Fail: " + getName() + ", " + Integer.toHexString(codePoint));
-                            shownException = true;
-                        }
-                    }
-                    return value != null ? value : String.valueOf(enumValue);
-                } else if (propEnum < UProperty.DOUBLE_LIMIT) {
-                    double num = UCharacter.getUnicodeNumericValue(codePoint);
-                    if (num == UCharacter.NO_NUMERIC_VALUE) return null;
-                    return Double.toString(num);
-                    // TODO: Fix HACK -- API deficient
-                } else switch(propEnum) {
+                switch(propEnum) {
                     case UProperty.AGE: String temp = UCharacter.getAge(codePoint).toString();
-                        if (temp.equals("0.0.0.0")) return "UNSPECIFIED";
+                        if (temp.equals("0.0.0.0")) return "unassigned";
                         if (temp.endsWith(".0.0")) return temp.substring(0,temp.length()-4);
                         return temp;
                     case UProperty.BIDI_MIRRORING_GLYPH: return UTF16.valueOf(UCharacter.getMirror(codePoint));
@@ -119,31 +88,26 @@ public class ICUPropertyFactory extends UnicodeProperty.Factory {
                     case isCasefolded: return String.valueOf(UCharacter.foldCase(UTF16.valueOf(codePoint),true).equals(UTF16.valueOf(codePoint)));
                     case isCased: return String.valueOf(UCharacter.toLowerCase(Locale.ENGLISH,UTF16.valueOf(codePoint)).equals(UTF16.valueOf(codePoint)));
                 }
-                return null;
-            }
-
-            public Collection _getAvailableValueAliases(Collection result) {
-                if (result == null) result = new ArrayList();
                 if (propEnum < UProperty.INT_LIMIT) {
-                    if (Binary_Extras.isInRange(propEnum)) {
-                        propEnum = UProperty.BINARY_START; // HACK
-                    }
-                    int start = UCharacter.getIntPropertyMinValue(propEnum);
-                    int end = UCharacter.getIntPropertyMaxValue(propEnum);
-                    for (int i = start; i <= end; ++i) {
-                        String alias = getFixedValueAlias(null, i, UProperty.NameChoice.LONG);
-                        String alias2 = getFixedValueAlias(null, i, UProperty.NameChoice.SHORT);
-                        if (alias == null) {
-                            alias = alias2;
+                    int enumValue = -1;
+                    String value = null;
+                    try {
+                        enumValue = UCharacter.getIntPropertyValue(codePoint, propEnum);
+                        if (enumValue >= 0) value = fixedGetPropertyValueName(propEnum,enumValue, UProperty.NameChoice.LONG);
+                    } catch (IllegalArgumentException e) {
+                        if (!shownException) {
+                            System.out.println("Fail: " + getName() + ", " + Integer.toHexString(codePoint));
+                            shownException = true;
                         }
-                        //System.out.println(propertyAlias + "\t" + i + ":\t" + alias);
-                        if (alias != null && !result.contains(alias)) result.add(alias);
                     }
-                } else {
-                    String alias = getFixedValueAlias(null, -1,UProperty.NameChoice.LONG);
-                    if (alias != null && !result.contains(alias)) result.add(alias);
+                    return value != null ? value : String.valueOf(enumValue);
+                } else if (propEnum < UProperty.DOUBLE_LIMIT) {
+                    double num = UCharacter.getUnicodeNumericValue(codePoint);
+                    if (num == UCharacter.NO_NUMERIC_VALUE) return null;
+                    return Double.toString(num);
+                    // TODO: Fix HACK -- API deficient
                 }
-                return result;
+                return null;
             }
 
             /**
@@ -161,7 +125,7 @@ public class ICUPropertyFactory extends UnicodeProperty.Factory {
                     return "<number>";
                 }
                 if (valueAlias != null && !valueAlias.equals("<integer>")) {
-                    valueEnum = UCharacter.getPropertyValueEnum(propEnum,valueAlias);
+                    valueEnum = fixedGetPropertyValueEnum(propEnum,valueAlias);
                 }
                 // because these are defined badly, there may be no normal (long) name.
                 // if there is 
@@ -171,50 +135,112 @@ public class ICUPropertyFactory extends UnicodeProperty.Factory {
                 if (nameChoice == UProperty.NameChoice.LONG) {
                     result = fixedGetPropertyValueName(propEnum,valueEnum, UProperty.NameChoice.SHORT);
                     if (result != null) return result;
+                    if (propEnum == UProperty.CANONICAL_COMBINING_CLASS) return null;
                     return "<integer>";
                }
                return null;
             }
 
-            private static String fixedGetPropertyValueName(int propEnum, int valueEnum, int nameChoice) {
+            private static int fixedGetPropertyValueEnum(int propEnum, String valueAlias) {
                 try {
-                    return UCharacter.getPropertyValueName(propEnum,valueEnum,nameChoice);
+                    return UCharacter.getPropertyValueEnum(propEnum, valueAlias);
+                } catch (Exception e) {
+                    return Integer.parseInt(valueAlias);
+                }
+            }
+    
+            static Map fixSkeleton = new HashMap();
+            private static String fixedGetPropertyValueName(int propEnum, int valueEnum, int nameChoice) {
+                
+                try {
+                    String value = UCharacter.getPropertyValueName(propEnum,valueEnum,nameChoice);
+                    String newValue = (String) fixSkeleton.get(value);
+                    if (newValue == null) {
+                        newValue = value;
+                        if (propEnum == UProperty.JOINING_GROUP) {
+                            newValue = newValue.toLowerCase(Locale.ENGLISH);
+                        } 
+                        newValue = regularize(newValue, true);
+                        fixSkeleton.put(value, newValue);
+                    }
+                    return newValue;
                 } catch (Exception e) {
                     return null;
                 }
             }
 
-            public Collection _getAliases(Collection result) {
+            public List _getNameAliases(List result) {
                 if (result == null) result = new ArrayList();
                 String alias = String_Extras.get(propEnum);
                 if (alias == null) alias = Binary_Extras.get(propEnum);
                 if (alias != null) {
-                    if (!result.contains(alias)) result.add(alias);
+                    addUnique(alias, result);
                 } else {
-                    try {
-                        for (int nameChoice = 0; ; ++nameChoice) {
-                            alias = UCharacter.getPropertyName(propEnum, nameChoice);
-                            if (alias == null) break;
-                            if (nameChoice > 2) {
-                                System.out.println("Something wrong");
-                            }
-                            if (!result.contains(alias)) result.add(alias);
-                        }
-                    } catch (IllegalArgumentException e) {
-                        // ok, continue
+                    addUnique(getFixedPropertyName(propEnum, UProperty.NameChoice.SHORT), result);
+                    addUnique(getFixedPropertyName(propEnum, UProperty.NameChoice.LONG), result);
+                }
+                return result;
+            }
+            
+            public String getFixedPropertyName(int propName, int nameChoice) {
+                try {
+                    return UCharacter.getPropertyName(propEnum, nameChoice);
+                } catch (IllegalArgumentException e) {
+                    return null;
+                }
+            }
+
+            private Map cccHack = new HashMap();
+            boolean needCccHack = true;
+            
+            public List _getAvailableValues(List result) {
+                if (result == null) result = new ArrayList();
+                if (propEnum == UProperty.AGE) {
+                    addAllUnique(new String[] {
+                        "unassigned","1.1","2.0","2.1","3.0","3.1","3.2","4.0"},
+                        result);
+                    return result;
+                }
+                if (propEnum < UProperty.INT_LIMIT) {
+                    if (Binary_Extras.isInRange(propEnum)) {
+                        propEnum = UProperty.BINARY_START; // HACK
                     }
+                    int start = UCharacter.getIntPropertyMinValue(propEnum);
+                    int end = UCharacter.getIntPropertyMaxValue(propEnum);
+                    for (int i = start; i <= end; ++i) {
+                        String alias = getFixedValueAlias(null, i, UProperty.NameChoice.LONG);
+                        String alias2 = getFixedValueAlias(null, i, UProperty.NameChoice.SHORT);
+                        if (alias == null) {
+                            alias = alias2;
+                            if (alias == null && propEnum == UProperty.CANONICAL_COMBINING_CLASS) {
+                                alias = String.valueOf(i);
+                            }
+                        }
+                        if (needCccHack && propEnum == UProperty.CANONICAL_COMBINING_CLASS) { // HACK
+                            cccHack.put(alias, String.valueOf(i));
+                        }
+                        //System.out.println(propertyAlias + "\t" + i + ":\t" + alias);
+                        addUnique(alias, result);
+                    }
+                    needCccHack = false;
+                } else {
+                    String alias = getFixedValueAlias(null, -1,UProperty.NameChoice.LONG);
+                    addUnique(alias, result);
                 }
                 return result;
             }
 
-            public Collection _getValueAliases(String valueAlias, Collection result) {
+            public List _getValueAliases(String valueAlias, List result) {
                 if (result == null) result = new ArrayList();
-                for (int nameChoice = 0; ; ++nameChoice) {
-                    String alias = getFixedValueAlias(valueAlias, -1, nameChoice);
-                    if (nameChoice > 2) break;
-                    if (alias == null) continue;
-                    if (!result.contains(alias)) result.add(alias);
+                if (propEnum == UProperty.AGE) {
+                    addUnique(valueAlias, result);
+                    return result;
                 }
+                if (propEnum == UProperty.CANONICAL_COMBINING_CLASS) {
+                    addUnique(cccHack.get(valueAlias), result); // add number
+                }
+                addUnique(getFixedValueAlias(valueAlias, -1, UProperty.NameChoice.SHORT), result);
+                addUnique(getFixedValueAlias(valueAlias, -1, UProperty.NameChoice.LONG), result);
                 return result;
             }
 
@@ -224,12 +250,16 @@ public class ICUPropertyFactory extends UnicodeProperty.Factory {
              */
             private int internalGetPropertyType(int propEnum) {
                 switch(propEnum) {
-                    //case UProperty.AGE: 
-                    //case UProperty.NAME:
-                    //case UProperty.UNICODE_1_NAME: 
+                    case UProperty.AGE: 
+                    case UProperty.BLOCK: 
+                    case UProperty.SCRIPT: 
+                        return UnicodeProperty.CATALOG;
+                    case UProperty.ISO_COMMENT:
+                    case UProperty.NAME:
+                    case UProperty.UNICODE_1_NAME: 
+                        return UnicodeProperty.MISC;
                     case UProperty.BIDI_MIRRORING_GLYPH:
                     case UProperty.CASE_FOLDING:
-                    case UProperty.ISO_COMMENT:
                     case UProperty.LOWERCASE_MAPPING:
                     case UProperty.SIMPLE_CASE_FOLDING: 
                     case UProperty.SIMPLE_LOWERCASE_MAPPING:
@@ -237,7 +267,7 @@ public class ICUPropertyFactory extends UnicodeProperty.Factory {
                     case UProperty.SIMPLE_UPPERCASE_MAPPING:
                     case UProperty.TITLECASE_MAPPING: 
                     case UProperty.UPPERCASE_MAPPING: 
-                    return UnicodeProperty.EXTENDED_STRING;
+                        return UnicodeProperty.EXTENDED_STRING;
                 }
                 if (propEnum < UProperty.BINARY_START) return UnicodeProperty.UNKNOWN;
                 if (propEnum < UProperty.BINARY_LIMIT) return UnicodeProperty.BINARY;
@@ -312,7 +342,7 @@ public class ICUPropertyFactory extends UnicodeProperty.Factory {
             ;
         
         private ICUPropertyFactory() {
-            Collection c = getInternalAvailablePropertyAliases(new TreeSet());
+            Collection c = getInternalAvailablePropertyAliases(new ArrayList());
             Iterator it = c.iterator();
             while (it.hasNext()) {
                 add(getInternalProperty((String)it.next()));
@@ -327,7 +357,7 @@ public class ICUPropertyFactory extends UnicodeProperty.Factory {
             return singleton;
         }
         
-        public Collection getInternalAvailablePropertyAliases(Collection result) {
+        public List getInternalAvailablePropertyAliases(List result) {
             int[][] ranges = {
                 {UProperty.BINARY_START,    UProperty.BINARY_LIMIT},
                 {UProperty.INT_START,       UProperty.INT_LIMIT},
@@ -337,6 +367,7 @@ public class ICUPropertyFactory extends UnicodeProperty.Factory {
             for (int i = 0; i < ranges.length; ++i) {
                 for (int j = ranges[i][0]; j < ranges[i][1]; ++j) {
                     String alias = UCharacter.getPropertyName(j, UProperty.NameChoice.LONG);
+                    UnicodeProperty.addUnique(alias, result);
                     if (!result.contains(alias)) result.add(alias);
                 }
             }

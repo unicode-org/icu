@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD.java,v $
-* $Date: 2004/02/12 08:23:16 $
-* $Revision: 1.31 $
+* $Date: 2004/02/18 03:09:01 $
+* $Revision: 1.32 $
 *
 *******************************************************************************
 */
@@ -865,10 +865,17 @@ public final class UCD implements UCD_Types {
     }
 
     static String getCombiningClassID_fromIndex (short index, byte style) {
+        return index < 0 
+            || index >= UCD_Names.COMBINING_CLASS.length 
+            ? null
+            : style == SHORT 
+            ? UCD_Names.COMBINING_CLASS[index] 
+            : UCD_Names.LONG_COMBINING_CLASS[index];
+/*
         if (index > 255) return null;
         index &= 0xFF;
         if (style == NORMAL || style == NUMBER) return String.valueOf(index);
-        String s = "Fixed";
+        String s = "";
         switch (index) {
             case 0: s = style < LONG ? "NR" : "NotReordered"; break;
             case 1: s = style < LONG ? "OV" :  "Overlay"; break;
@@ -894,9 +901,10 @@ public final class UCD implements UCD_Types {
             case 233: s = style < LONG ? "DB" :   "DoubleBelow"; break;
             case 234: s = style < LONG ? "DA" :   "DoubleAbove"; break;
             case 240: s = style < LONG ? "IS" :   "IotaSubscript"; break;
-            default: s += "_" + index;
+            default: s += "" + index;
         }
         return s;
+        */
     }
     
 
@@ -1309,6 +1317,7 @@ to guarantee identifier closure.
             isRemapped = true;
             result.name = null; // clean this up, since we reuse UNASSIGNED
             result.shortName = null;
+            result.decompositionType = NONE;
             if (fixStrings) {
                 constructedName = "<reserved-" + Utility.hex(codePoint, 4) + ">";
                 //result.shortName = Utility.replace(result.name, UCD_Names.NAME_ABBREVIATIONS);
@@ -1570,13 +1579,13 @@ to guarantee identifier closure.
         if (blockData == null) loadBlocks();
         return (String)blockData.getValue(codePoint);
     }
-    public Collection getBlockNames() {
+    public List getBlockNames() {
             return getBlockNames(null);
     }
-    public Collection getBlockNames(Collection result) {
+    public List getBlockNames(List result) {
         if (result == null) result = new ArrayList();
         if (blockData == null) loadBlocks();
-        return blockData.getAvailableValues(result);
+        return (List)blockData.getAvailableValues(result);
     }
     public UnicodeSet getBlockSet(String value, UnicodeSet result) {
         if (result == null) result = new UnicodeSet();

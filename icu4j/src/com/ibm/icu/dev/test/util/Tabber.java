@@ -6,8 +6,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/Tabber.java,v $
- * $Date: 2004/02/12 00:47:30 $
- * $Revision: 1.4 $
+ * $Date: 2004/02/18 03:08:57 $
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -17,7 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Tabber {
-    static final byte LEFT = 0, CENTER = 1, RIGHT = 2;
+    public static final byte LEFT = 0, CENTER = 1, RIGHT = 2;
+    private static final String[] ALIGNMENT_NAMES = {"Left", "Center", "Right"};
     
     /**
      * Repeats a string n times
@@ -54,18 +55,32 @@ public abstract class Tabber {
     public abstract void process_field(int count, String source, int start, int limit, StringBuffer output);
 
     public static class MonoTabber extends Tabber {
+        int minGap = 0;
     
         private List stops = new ArrayList();
         private List types = new ArrayList();
+        
+        public String toString() {
+            StringBuffer buffer = new StringBuffer();
+            for (int i = 0; i < stops.size(); ++i) {
+                if (i != 0) buffer.append("; ");
+                buffer
+                .append(ALIGNMENT_NAMES[((Integer)types.get(i)).intValue()])
+                .append(",")
+                .append(stops.get(i));
+            } 
+            return buffer.toString();
+        }
     
         /**
          * Adds tab stop and how to align the text UP TO that stop
          * @param tabPos
          * @param type
          */
-        public void addAbsolute(int tabPos, int type) {
+        public MonoTabber addAbsolute(int tabPos, int type) {
             stops.add(new Integer(tabPos));
             types.add(new Integer(type));
+            return this;
         }
     
         /**
@@ -73,10 +88,11 @@ public abstract class Tabber {
          * @param tabPos
          * @param type
          */
-        public void add(int fieldWidth, byte type) {
+        public MonoTabber add(int fieldWidth, byte type) {
             int last = getStop(stops.size()-1);
             stops.add(new Integer(last + fieldWidth));
             types.add(new Integer(type));
+            return this;
         }
         
         public int getStop(int fieldNumber) {
@@ -116,7 +132,7 @@ public abstract class Tabber {
         public void process_field(int count, String source, int start, int limit, StringBuffer output) {
             String piece = source.substring(start, limit);
             int startPos = getStop(count-1);
-            int endPos = getStop(count) - 1;
+            int endPos = getStop(count) - minGap;
             int type = getType(count);
             switch (type) {
                 case LEFT: 
@@ -129,11 +145,9 @@ public abstract class Tabber {
                     break;
             }
 
-            if (output.length() < startPos) {
-                output.append(repeat(" ", startPos - output.length()));
-            } else if (startPos != 0) { // don't do anything on first instance
-                output.append(" "); // otherwise minimum of first space
-            }
+            int gap = startPos - output.length();
+            if (count != 0 && gap < minGap) gap = minGap;
+            if (gap > 0) output.append(repeat(" ", gap));
             output.append(piece);
         }
         

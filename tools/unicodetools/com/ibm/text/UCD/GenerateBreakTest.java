@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateBreakTest.java,v $
-* $Date: 2004/02/12 08:23:15 $
-* $Revision: 1.10 $
+* $Date: 2004/02/18 03:08:59 $
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */
@@ -149,7 +149,7 @@ abstract public class GenerateBreakTest implements UCD_Types {
             result.append(ucd.getCodeAndName(cp));
             for (int j = 0; j < props.length; ++j) {
                 result.append(", ");
-                result.append(props[j].getProperty(SHORT)).append('=').append(props[j].getValue(cp,SHORT));
+                result.append(props[j].getPropertyName(SHORT)).append('=').append(props[j].getValue(cp,SHORT));
             }
         }
         return result.toString();

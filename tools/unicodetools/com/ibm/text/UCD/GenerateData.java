@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateData.java,v $
-* $Date: 2004/02/12 08:23:15 $
-* $Revision: 1.33 $
+* $Date: 2004/02/18 03:08:59 $
+* $Revision: 1.34 $
 *
 *******************************************************************************
 */
@@ -17,6 +17,7 @@ import java.util.*;
 import java.io.*;
 
 import com.ibm.text.utility.*;
+import com.ibm.icu.dev.test.util.UnicodeProperty;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 
@@ -391,8 +392,8 @@ public class GenerateData implements UCD_Types {
                 if (propAbb.equals("") || propAbb.equals(UCD_Names.YN_TABLE[1])) {
                     System.out.println("WHOOPS: " + Utility.hex(i));
                 }
-                propAbb = Utility.getUnskeleton(up.getProperty(SHORT), false);
-                prop = Utility.getUnskeleton(up.getProperty(LONG), true);
+                propAbb = Utility.getUnskeleton(up.getPropertyName(SHORT), false);
+                prop = Utility.getUnskeleton(up.getPropertyName(LONG), true);
                 addLine(sorted, 
                     type == SCRIPT
                     ? UCD_Names.PROP_TYPE_NAMES[CATALOG_PROP][1]
@@ -407,7 +408,7 @@ public class GenerateData implements UCD_Types {
             if (up.getValueType() < BINARY_PROP) continue;
             value = up.getValue(LONG);
             if (value.length() == 0) value = "none";
-            else if (value.equals("<unused>")) continue;
+            else if (value.equals(UnicodeProperty.UNUSED)) continue;
 
             if (type != DECOMPOSITION_TYPE) {
                 value = Utility.getUnskeleton(value, true);
@@ -429,7 +430,7 @@ public class GenerateData implements UCD_Types {
 
             
             if (type == COMBINING_CLASS) {
-                if (value.startsWith("Fixed_")) { continue; }
+                if (value.charAt(0) <= '9') { continue; }
             }
             
             
@@ -502,7 +503,7 @@ public class GenerateData implements UCD_Types {
         log.println("# " + filename + UnicodeDataFile.getFileSuffix(false));
         log.println(UnicodeDataFile.generateDateLine());
         log.println("#");
-        Utility.appendFile("PropertyAliasHeader.txt", Utility.LATIN1, log);
+        Utility.appendFile("PropertyAliasesHeader.txt", Utility.LATIN1, log);
         log.println(HORIZONTAL_LINE);
         log.println();
         int count = Utility.print(log, sorted, "\r\n", new MyBreaker(true));
@@ -522,7 +523,7 @@ public class GenerateData implements UCD_Types {
         log.println("# " + filename + UnicodeDataFile.getFileSuffix(false));
         log.println(UnicodeDataFile.generateDateLine());
         log.println("#");
-        Utility.appendFile("PropertyValueAliasHeader.txt", Utility.LATIN1, log);
+        Utility.appendFile("PropertyValueAliasesHeader.txt", Utility.LATIN1, log);
         log.println(HORIZONTAL_LINE);
         log.println();
         Utility.print(log, sorted, "\r\n", new MyBreaker(false));

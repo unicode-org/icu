@@ -1,9 +1,13 @@
 package com.ibm.icu.dev.test.util;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
+import java.util.TreeSet;
 
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.UnicodeSet;
@@ -14,7 +18,7 @@ import com.ibm.icu.text.UnicodeSetIterator;
  * @author Davis
  */
 // TODO Optimize using range map
-public final class UnicodeMap {
+public final class UnicodeMap implements Cloneable {
     static final boolean ASSERTIONS = false;
     static final long GROWTH_PERCENT = 200; // 100 is no growth!
     static final long GROWTH_GAP = 10; // extra bump!
@@ -23,8 +27,48 @@ public final class UnicodeMap {
     private int[] transitions = {0,0x110000,0,0,0,0,0,0,0,0};
     private Object[] values = new Object[10];
     {
-        values[1] = "TERMINAL";
+        values[1] = "TERMINAL"; // just for debugging
     }
+    private int lastIndex = 0;
+    
+    /* Boilerplate */
+    public boolean equals(Object other) {
+        if (other == null) return false;
+        try {
+            UnicodeMap that = (UnicodeMap) other;
+            if (length != that.length || !equator.equals(that.equator)) return false;
+            for (int i = 0; i < length-1; ++i) {
+                if (transitions[i] != that.transitions[i]) return false;
+                if (!equator.isEqual(values[i], that.values[i])) return false;
+            }
+            return true;
+        } catch (ClassCastException e) {
+            return false;
+        }
+    }
+    
+    public int hashCode() {
+        int result = length;
+        // TODO might want to abbreviate this for speed.
+        for (int i = 0; i < length-1; ++i) {
+            result = 37*result + transitions[i];
+            result = 37*result + equator.getHashCode(values[i]);
+        }
+        return result;
+    }
+    
+    /**
+     * Standard clone. Warning, as with Collections, does not do deep clone.
+     */
+    public Object clone() {
+        UnicodeMap that = new UnicodeMap();
+        that.length = length;
+        that.transitions = (int[]) transitions.clone();
+        that.values = (Object[]) values.clone();
+        return that;
+    }
+    
+    /* for internal consistency checking */
     
     void _checkInvariants() {
         if (length < 2
@@ -62,17 +106,28 @@ public final class UnicodeMap {
           * @return
           */
          public boolean isEqual(Object a, Object b);
+
+        /**
+         * @param object
+         * @return
+         */
+        public int getHashCode(Object object);
     }
     
-    public static class SimpleEquator implements Equator {
+    public static final class SimpleEquator implements Equator {
         public boolean isEqual(Object a, Object b) {
             if (a == b) return true;
             if (a == null || b == null) return false;
             return a.equals(b);
         }
+        public int getHashCode(Object a) {
+            if (a == null) return 0;
+            return a.hashCode();
+        }
     }
-    private Equator equator = new SimpleEquator();
-
+    private static Equator SIMPLE = new SimpleEquator(); 
+    private Equator equator = SIMPLE;
+ 
     /**
      * Finds an index such that inversionList[i] <= codepoint < inversionList[i+1]
      * Assumes that 0 <= codepoint <= 0x10FFFF
@@ -181,41 +236,53 @@ public final class UnicodeMap {
      * @return this, for chaining
      */
     private UnicodeMap _put(int codepoint, Object value) {
-        int baseIndex = _findIndex(codepoint);
+        // Warning: baseIndex is an invariant; must
+        // be defined such that transitions[baseIndex] < codepoint
+        // at end of this routine.
+        int baseIndex;
+        if (transitions[lastIndex] <= codepoint 
+          && codepoint < transitions[lastIndex+1]) {
+            baseIndex = lastIndex;
+        } else { 
+            baseIndex = _findIndex(codepoint);
+        }
         int limitIndex = baseIndex + 1;
         // cases are (a) value is already set
         if (equator.isEqual(values[baseIndex], value)) return this;
         int baseCP = transitions[baseIndex];
         int limitCP = transitions[limitIndex];
-        // CASE: At very start of range
+        // we now start walking through the difference case,
+        // based on whether we are at the start or end of range
+        // and whether the range is a single character or multiple
+        
         if (baseCP == codepoint) {
+            // CASE: At very start of range
             boolean connectsWithPrevious = 
                 baseIndex != 0 && equator.isEqual(value, values[baseIndex-1]);               
                 
-            // CASE: Single codepoint range
             if (limitCP == codepoint + 1) {
+                // CASE: Single codepoint range
                 boolean connectsWithFollowing =
                     baseIndex < length - 1 && equator.isEqual(value, values[limitIndex]);
-                // A1a connects with previous & following, so remove index
+                
                 if (connectsWithPrevious) {
+                    // A1a connects with previous & following, so remove index
                     if (connectsWithFollowing) {
                         _removeAt(baseIndex, 2);
-                        return this;
+                     } else {
+                        _removeAt(baseIndex, 1); // extend previous
                     }
-                    _removeAt(baseIndex, 1); // extend previous
-                    return this;
+                    --baseIndex; // fix up
                 } else if (connectsWithFollowing) {
                     _removeAt(baseIndex, 1); // extend following backwards
                     transitions[baseIndex] = codepoint; 
-                    return this;
+                } else {
+                    // doesn't connect on either side, just reset
+                    values[baseIndex] = value;
                 }
-                // doesn't connect on either side, just reset
-                values[baseIndex] = value;
-                return this;
-            }                   
+            } else if (connectsWithPrevious) {             
             // A.1: start of multi codepoint range
             // if connects
-            if (connectsWithPrevious) {
                 ++transitions[baseIndex]; // extend previous
             } else {
                 // otherwise insert new transition
@@ -224,10 +291,8 @@ public final class UnicodeMap {
                 values[baseIndex] = value;
                 transitions[baseIndex] = codepoint;
             }
-            return this;
-        }
-        // CASE: at end of range
-        if (limitCP == codepoint + 1) {
+        } else if (limitCP == codepoint + 1) {
+            // CASE: at end of range        
             // if connects, just back up range
             boolean connectsWithFollowing =
                 baseIndex < length - 1 && equator.isEqual(value, values[limitIndex]);
@@ -240,14 +305,16 @@ public final class UnicodeMap {
                 transitions[limitIndex] = codepoint;
                 values[limitIndex] = value;
             }
-            return this;
+        } else {
+            // CASE: in middle of range
+            // insert gap, then set the new range
+            _insertGapAt(++baseIndex,2);
+            transitions[baseIndex] = codepoint;
+            values[baseIndex] = value;
+            transitions[baseIndex+1] = codepoint + 1;
+            values[baseIndex+1] = values[baseIndex-1]; // copy lower range values
         }
-        // CASE: in middle of range
-        _insertGapAt(++baseIndex,2);
-        transitions[baseIndex] = codepoint;
-        values[baseIndex] = value;
-        transitions[++baseIndex] = codepoint + 1;
-        values[baseIndex] = values[baseIndex-2]; // copy lower range values
+        lastIndex = baseIndex; // store for next time
         return this;
     }
     /**
@@ -331,7 +398,9 @@ public final class UnicodeMap {
     public UnicodeSet getSet(Object value, UnicodeSet result) {
         if (result == null) result = new UnicodeSet();
         for (int i = 0; i < length - 1; ++i) {
-            if (values[i] == value) result.add(transitions[i], transitions[i+1]-1);
+            if (equator.isEqual(value, values[i])) {
+                result.add(transitions[i], transitions[i+1]-1);
+            } 
         }
         return result;
     }
@@ -339,20 +408,28 @@ public final class UnicodeMap {
         return getSet(value,null);
     }
     /**
-     * Returns the list of possible values. Deposits into
-     * result if it is not null. Remember to clear if you just want
+     * Returns the list of possible values. Deposits each non-null value into
+     * result. Creates result if it is null. Remember to clear result if
+     * you are not appending to existing collection.
      * @param result
      * @return
      */
     public Collection getAvailableValues(Collection result) {
-        if (result == null) result = new HashSet();
-         for (int i = 0; i < length - 1; ++i) {
+        if (result == null) result = new ArrayList(1);
+        for (int i = 0; i < length - 1; ++i) {
             Object value = values[i];
             if (value == null) continue;
             if (result.contains(value)) continue;
             result.add(value);
         }
         return result;
+    }
+    
+    /**
+     * Convenience method
+     */
+    public Collection getAvailableValues() {
+        return getAvailableValues(null);
     }
     /**
      * Gets the value associated with a given code point.
@@ -368,18 +445,33 @@ public final class UnicodeMap {
     }
     
     public String toString() {
+        return toString(null);
+    }
+    public String toString(Comparator collected) {
         StringBuffer result = new StringBuffer();       
-        for (int i = 0; i < length-1; ++i) {
-            Object value = values[i];
-            if (value == null) continue;
-            int start = transitions[i];
-            int end = transitions[i+1]-1;
-            result.append(Utility.hex(start));
-            if (start != end) result.append("..")
-            .append(Utility.hex(end));
-            result.append("\t=>")
-            .append(values[i] == null ? "null" : values[i].toString())
-            .append("\r\n");
+        if (collected == null) {
+            for (int i = 0; i < length-1; ++i) {
+                Object value = values[i];
+                if (value == null) continue;
+                int start = transitions[i];
+                int end = transitions[i+1]-1;
+                result.append(Utility.hex(start));
+                if (start != end) result.append("..")
+                .append(Utility.hex(end));
+                result.append("\t=> ")
+                .append(values[i] == null ? "null" : values[i].toString())
+                .append("\r\n");
+            }
+        } else {
+            Set set = (Set) getAvailableValues(new TreeSet(collected));
+            for (Iterator it = set.iterator(); it.hasNext();) {
+                Object value = it.next();
+                UnicodeSet s = getSet(value);
+                result.append(value)
+                .append("\t=> ")
+                .append(s.toPattern(true))
+                .append("\r\n");
+            }
         }
         return result.toString();
     }

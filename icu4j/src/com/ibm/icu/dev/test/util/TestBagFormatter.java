@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/TestBagFormatter.java,v $
- * $Date: 2004/02/12 00:47:30 $
- * $Revision: 1.8 $
+ * $Date: 2004/02/18 03:08:57 $
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -16,6 +16,7 @@ package com.ibm.icu.dev.test.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.TreeSet;
 import java.util.Iterator;
 import java.io.IOException;
@@ -29,32 +30,56 @@ import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.text.Transliterator;
 import com.ibm.icu.text.UnicodeSet;
 
+// TODO change to use test framework
 public class TestBagFormatter {
     
     static final void generatePropertyAliases(boolean showValues) {
+        generatePropertyAliases(showValues, ICUPropertyFactory.make());
+    }
+    
+    static final void generatePropertyAliases(boolean showValues, UnicodeProperty.Factory ups) {
         Collator order = Collator.getInstance(Locale.ENGLISH);
-        UnicodeProperty.Factory ups = ICUPropertyFactory.make();
         TreeSet props = new TreeSet(order);
         TreeSet values = new TreeSet(order);
-        Collection aliases = new ArrayList();
         BagFormatter bf = new BagFormatter();
-        ups.getAvailableAliases(props);
-        Iterator it = props.iterator();
-        while (it.hasNext()) {
-            String propAlias = (String)it.next();
-            UnicodeProperty up = ups.getProperty(propAlias);
-            System.out.println();
-            aliases.clear();
-            System.out.println(bf.join(up.getAliases(aliases)));
-            if (!showValues) continue;
-            values.clear();
-            up.getAvailableValueAliases(values);
-            Iterator it2 = values.iterator();
-            while (it2.hasNext()) {
-                String valueAlias = (String)it2.next();
-                aliases.clear();
-                System.out.println("\t" + bf.join(up.getValueAliases(valueAlias, aliases)));
+        props.addAll(ups.getAvailableNames());
+        for (int i = UnicodeProperty.BINARY; i < UnicodeProperty.LIMIT_TYPE; ++i) {
+            System.out.println(UnicodeProperty.getTypeName(i));
+            Iterator it = props.iterator();
+            while (it.hasNext()) {
+                String propAlias = (String)it.next();
+                UnicodeProperty up = ups.getProperty(propAlias);
+                int type = up.getType();
+                if (type != i) continue;                
+                System.out.println();
+                System.out.println(propAlias + "\t" + bf.join(up.getNameAliases()));
+                if (!showValues) continue;
+                values.clear();
+                if (type == UnicodeProperty.NUMERIC || type == UnicodeProperty.EXTENDED_NUMERIC) {
+                    UnicodeMap um = new UnicodeMap();
+                    um.putAll(up);
+                    System.out.println(um.toString(new NumberComparator()));
+                    continue;
+                }
+                values.clear();
+                values.addAll(up.getAvailableValues());
+                Iterator it2 = values.iterator();
+                while (it2.hasNext()) {
+                    String valueAlias = (String)it2.next();
+                    System.out.println("\t" + bf.join(valueAlias + "\t" + up.getValueAliases(valueAlias)));
+                }
             }
+        }
+    }
+    
+    static class NumberComparator implements Comparator {
+        public int compare(Object o1, Object o2) {
+            if (o1 == o2) return 0;
+            if (o1 == null) return 1;
+            if (o2 == null) return -1;
+            double n1 = Double.parseDouble((String)o1);
+            double n2 = Double.parseDouble((String)o2);
+            return n1 < n2 ? -1 : n1 > n2 ? 1 : 0;
         }
     }
 
@@ -62,14 +87,21 @@ public class TestBagFormatter {
         System.out.println("Start");
         try {
             //readCharacters();
+            UnicodeProperty prop = ICUPropertyFactory.make().getProperty("Canonicalcombiningclass");
+            prop.getAvailableValues();
             
             generatePropertyAliases(true);
             
             BagFormatter bf = new BagFormatter();
 
-            UnicodeSet us = new UnicodeSet("[:numeric_value=2:]");  
+            UnicodeSet us = new UnicodeSet("[:gc=nd:]");  
+            BagFormatter.CONSOLE.println("[:gc=nd:]");
+            bf.showSetNames(BagFormatter.CONSOLE,us);
+
+            us = new UnicodeSet("[:numeric_value=2:]");  
             BagFormatter.CONSOLE.println("[:numeric_value=2:]");
             bf.showSetNames(BagFormatter.CONSOLE,us);
+            
             us = new UnicodeSet("[:numeric_type=numeric:]");   
             BagFormatter.CONSOLE.println("[:numeric_type=numeric:]");
             bf.showSetNames(BagFormatter.CONSOLE,us);
