@@ -380,7 +380,7 @@ AC_SUBST(RELATIVEDATADIR)
 dnl added for s/390 DLL loading detection
 
 if test "$ac_cv_func_dllload" = "yes"; then
-    CPPFLAGS="$(CPPFLAGS) -DICU_USE_SHL_LOAD"
+    CPPFLAGS="${CPPFLAGS} -DICU_USE_SHL_LOAD"
 fi
 
 dnl output the Makefiles
