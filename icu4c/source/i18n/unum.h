@@ -100,7 +100,7 @@
  * It is also possible to change or set the symbols used for a particular
  * locale like the currency symbol, the grouping seperator , monetary seperator 
  * etc by making use of functions unum_setSymbols() and unum_getSymbols().
- * 
+ */
 /** A number formatter */
 typedef void* UNumberFormat;
 
