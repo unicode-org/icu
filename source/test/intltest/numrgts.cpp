@@ -2155,9 +2155,7 @@ void NumberFormatRegressionTest::Test4216742(void) {
     int32_t DATA[] = { INT32_MIN, INT32_MAX, -100000000, 100000000 };
     int DATA_length = sizeof(DATA) / sizeof(DATA[0]);
     for (int i=0; i<DATA_length; ++i) {
-        char buf[64];
-        sprintf(buf, "%ld", DATA[i]);
-        UnicodeString str(buf);
+        UnicodeString str((UnicodeString)"" + DATA[i]);
         for (int m = 1; m <= 100; m++) {
             fmt->setMultiplier(m);
             Formattable num;
