@@ -1,4 +1,6 @@
 #/usr/bin/perl
+# Copyright (c) 2001-2003 International Business Machines
+# Corporation and others. All Rights Reserved.
 
 ####################################################################################
 # filterRFC3454.pl:

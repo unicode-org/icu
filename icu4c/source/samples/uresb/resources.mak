@@ -1,3 +1,5 @@
+## Copyright (c) 2001-2003 International Business Machines
+## Corporation and others. All Rights Reserved.
 TARGETS = uresb_en.res uresb_root.res uresb_sr.res
 GENRB = ..\..\..\bin\genrb.exe
 GENRBOPT = -s. -d. --package-name uresb  

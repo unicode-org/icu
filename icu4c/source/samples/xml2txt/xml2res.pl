@@ -1,5 +1,7 @@
 #/usr/bin/perl
 
+## Copyright (c) 2001-2003 International Business Machines
+## Corporation and others. All Rights Reserved.
 ####################################################################################
 # xml2res.pl:
 # This tool invokes xml2txt and genrb to produce res files from xml files

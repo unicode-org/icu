@@ -1,7 +1,6 @@
 /********************************************************************
- * Copyright (c) 2001, 
- * International Business Machines Corporation and others. 
- * All Rights Reserved.
+ * Copyright (c) 2001-2003 International Business Machines 
+ * Corporation and others. All Rights Reserved.
  ********************************************************************
  * File USRCHDAT.H
  * Modification History:
