@@ -856,7 +856,7 @@ TimeZoneRegressionTest::Test4162593()
 void TimeZoneRegressionTest::TestJ186() {
     UErrorCode status = U_ZERO_ERROR;
     SimpleTimeZone z(0, "ID");
-    z.setDSTSavings(0); // Must do this!
+    z.setDSTSavings(0, status); // Must do this!
     z.setStartRule(Calendar::FEBRUARY, 1, Calendar::SUNDAY, 0, status);
     failure(status, "setStartRule()");
     if (z.useDaylightTime()) {
