@@ -80,7 +80,8 @@ UnicodeString* CompoundTransliterator::split(const UnicodeString& s,
     // changed MED
     // see how many there are
     count = 1;
-    for (int32_t i = 0; i < s.length(); ++i) {
+	int32_t i;
+    for (i = 0; i < s.length(); ++i) {
         if (s.charAt(i) == divider) ++count;
     }
     
@@ -88,7 +89,7 @@ UnicodeString* CompoundTransliterator::split(const UnicodeString& s,
     UnicodeString* result = new UnicodeString[count];
     int32_t last = 0;
     int32_t current = 0;
-    int32_t i;
+    
     for (i = 0; i < s.length(); ++i) {
         if (s.charAt(i) == divider) {
             s.extractBetween(last, i, result[current++]);
@@ -278,10 +279,11 @@ void CompoundTransliterator::handleKeyboardTransliterate(Replaceable& text,
      * will get unexpected results.
      */
     const UnicodeFilter* F = getFilter();
+	int32_t i;
     UnicodeFilter** f = 0;
     if (F != 0) {
         f = new UnicodeFilter*[count];
-        for (int32_t i=0; i<count; ++i) {
+        for (i=0; i<count; ++i) {
             f[i] = trans[i]->getFilter()->clone();
             trans[i]->adoptFilter(UnicodeFilterLogic::createAnd(*F, *f[i]));
         }
@@ -296,7 +298,7 @@ void CompoundTransliterator::handleKeyboardTransliterate(Replaceable& text,
      * globalLimit for insertions or deletions that have happened.
      */
     
-    for (int32_t i=0; i<count; ++i) {
+    for (i=0; i<count; ++i) {
         index[CURSOR] = cursor; // Reset cursor
         index[LIMIT] = limit;
         
@@ -313,7 +315,7 @@ void CompoundTransliterator::handleKeyboardTransliterate(Replaceable& text,
     
     // Fixup the transliterator filters, if we had to modify them.
     if (f != 0) {
-        for (int32_t i=0; i<count; ++i) {
+        for (i=0; i<count; ++i) {
             trans[i]->adoptFilter(f[i]);
         }
         delete[] f;
