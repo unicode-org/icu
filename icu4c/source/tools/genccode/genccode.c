@@ -51,7 +51,9 @@
 #include "toolutil.h"
 #include "uoptions.h"
 
-static uint32_t column=UINT32_MAX;
+#define MAX_COLUMN ((uint32_t)(0xFFFFFFFFU))
+
+static uint32_t column=MAX_COLUMN;
 
 #ifdef WIN32
 #define CAN_GENERATE_OBJECTS
@@ -143,7 +145,7 @@ main(int argc, char* argv[]) {
             if (verbose) {
                 fprintf(stdout, message, filename);
             }
-            column=UINT32_MAX;
+            column=MAX_COLUMN;
             writeCode(filename, options[2].value);
         }
     }
@@ -252,6 +254,7 @@ writeCCode(const char *filename, const char *destdir) {
     T_FileStream_close(in);
 }
 
+#ifdef CAN_GENERATE_OBJECTS
 static void
 writeObjectCode(const char *filename, const char *destdir) {
 #ifdef WIN32
@@ -374,6 +377,7 @@ writeObjectCode(const char *filename, const char *destdir) {
     T_FileStream_close(in);
 #endif
 }
+#endif
 
 static void
 getOutFilename(const char *inFilename, const char *destdir, char *outFilename, char *entryName, const char *newSuffix) {
@@ -446,7 +450,7 @@ write8(FileStream *out, uint8_t byte) {
     s[i]=0;
 
     /* write the value, possibly with comma and newline */
-    if(column==UINT32_MAX) {
+    if(column==MAX_COLUMN) {
         /* first byte */
         column=1;
     } else if(column<16) {
@@ -467,7 +471,7 @@ write8str(FileStream *out, uint8_t byte) {
     sprintf(s, "\\x%02X", byte);
 
     /* write the value, possibly with comma and newline */
-    if(column==UINT32_MAX) {
+    if(column==MAX_COLUMN) {
         /* first byte */
         column=1;
         T_FileStream_writeLine(out, "\"");
