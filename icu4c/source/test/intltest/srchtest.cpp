@@ -663,10 +663,10 @@ void StringSearchTest::TestStrength()
 void StringSearchTest::TestBreakIterator()
 {
     UChar temp[128];
-    u_unescape(BREAKITERATOR[0].text, temp, 128);
+    u_unescape(BREAKITERATOREXACT[0].text, temp, 128);
     UnicodeString text;
     text.setTo(temp, u_strlen(temp));
-    u_unescape(BREAKITERATOR[0].pattern, temp, 128);
+    u_unescape(BREAKITERATOREXACT[0].pattern, temp, 128);
     UnicodeString pattern;
     pattern.setTo(temp, u_strlen(temp));
 
@@ -698,7 +698,8 @@ void StringSearchTest::TestBreakIterator()
 
     int count = 0;
     while (count < 4) {
-        const SearchData        *search   = &(BREAKITERATOR[count]);     
+        // special purposes for tests numbers 0-3
+        const SearchData        *search   = &(BREAKITERATOREXACT[count]);     
               RuleBasedCollator *collator = getCollator(search->collator);
               BreakIterator     *breaker  = getBreakIterator(search->breaker);
               StringSearch      *strsrch; 
@@ -724,7 +725,7 @@ void StringSearchTest::TestBreakIterator()
             collator->setStrength(getECollationStrength(UCOL_TERTIARY));
             delete strsrch;
         }
-        search   = &(BREAKITERATOR[count + 1]);
+        search   = &(BREAKITERATOREXACT[count + 1]);
         breaker  = getBreakIterator(search->breaker);
         if (breaker != NULL) {
             breaker->setText(text);
@@ -743,8 +744,8 @@ void StringSearchTest::TestBreakIterator()
         count += 2;
     }
     count = 0;
-    while (BREAKITERATOR[count].text != NULL) {
-         if (!assertEqual(&BREAKITERATOR[count])) {
+    while (BREAKITERATOREXACT[count].text != NULL) {
+         if (!assertEqual(&BREAKITERATOREXACT[count])) {
              errln("Error at test number %d", count);
          }
          count ++;
@@ -1507,6 +1508,7 @@ void StringSearchTest::TestBreakIteratorCanonical()
     int        count  = 0;
 
     while (count < 4) {
+        // special purposes for tests numbers 0-3
               UChar           temp[128];
         const SearchData     *search   = &(BREAKITERATORCANONICAL[count]);     
     
@@ -1538,7 +1540,7 @@ void StringSearchTest::TestBreakIteratorCanonical()
             delete strsrch;
             return;
         }
-        search  = &(BREAKITERATOR[count + 1]);
+        search  = &(BREAKITERATOREXACT[count + 1]);
         breaker = getBreakIterator(search->breaker);
         breaker->setText(strsrch->getText());
         strsrch->setBreakIterator(breaker, status);

@@ -75,6 +75,9 @@
  * <\ul>
  * <p>
  * A breakiterator can be used if only matches at logical breaks are desired.
+ * Using a breakiterator will only give you results that exactly matches the
+ * boundaries given by the breakiterator. For instance the pattern "e" will
+ * not be found in the string "\u00e9" if a character break iterator is used.
  * <p>
  * Options are provided to handle overlapping matches. 
  * E.g. In English, overlapping matches produces the result 0 and 2 

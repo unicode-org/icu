@@ -413,10 +413,30 @@ inline UBool isBreakUnit(const UStringSearch *strsrch, int32_t start,
         // otherwise, we can use following() on the position before the 
         // specified one and return true of the position we get back is the 
         // one the user specified
-        return (start == startindex || 
+        UBool result = (start == startindex || 
                 ubrk_following(breakiterator, start - 1) == start) && 
                (end == endindex || 
                 ubrk_following(breakiterator, end - 1) == end);
+        if (result) {
+            // iterates the individual ces
+                  UCollationElements *coleiter  = strsrch->utilIter;
+            const UChar              *text      = strsrch->search->text + 
+                                                                      start;
+                  UErrorCode          status    = U_ZERO_ERROR;
+            ucol_setText(coleiter, text, end - start, &status);
+            for (int32_t count = 0; count < strsrch->pattern.CELength;
+                 count ++) {
+                uint32_t ce = getCE(strsrch, ucol_next(coleiter, &status));
+                if (U_FAILURE(status) || ce != strsrch->pattern.CE[count]) {
+                    return FALSE;
+                }
+            }
+            if (ucol_next(coleiter, &status) != UCOL_NULLORDER) {
+                // extra collation elements at the end of the match
+                return FALSE;
+            }
+        }
+        return result;
     }
     return TRUE;
 }
@@ -905,7 +925,8 @@ inline int32_t getColElemIterOffset(const UCollationElements *coleiter,
 * Checks match for contraction. 
 * If the match ends with a partial contraction we fail.
 * If the match starts too far off (because of backwards iteration) we try to
-* chip off the extra characters.
+* chip off the extra characters depending on whether a breakiterator has
+* been used.
 * Internal method, error assumed to be success, caller has to check status 
 * before calling this method.
 * @param strsrch string search data
@@ -982,7 +1003,7 @@ UBool checkNextExactContractionMatch(UStringSearch *strsrch,
 * <li> the potential match does not repeat the previous match
 * <li> boundaries are correct
 * <li> exact matches has no extra accents
-* <li> identical matches
+* <li> identical matchesb
 * <li> potential match does not end in the middle of a contraction
 * <\ul>
 * Otherwise the offset will be shifted to the next character.
