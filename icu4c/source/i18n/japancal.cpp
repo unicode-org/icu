@@ -503,8 +503,8 @@ int32_t JapaneseCalendar::handleGetLimit(UCalendarDateFields field, ELimitType l
         { 
           Mutex m;
           if(gJapanYearLimitsKnown==FALSE) {
-            gJapanCalendarLimits[field][UCAL_LIMIT_LEAST_MAXIMUM] = min;
-            gJapanCalendarLimits[field][UCAL_LIMIT_MAXIMUM] = max;
+            gJapanCalendarLimits[field][UCAL_LIMIT_LEAST_MAXIMUM] = ++min; // 1-based
+            gJapanCalendarLimits[field][UCAL_LIMIT_MAXIMUM] = ++max; // 1-based
             gJapanYearLimitsKnown = TRUE;
           }
         }

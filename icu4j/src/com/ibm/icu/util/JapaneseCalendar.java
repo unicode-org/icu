@@ -553,8 +553,8 @@ public class JapaneseCalendar extends GregorianCalendar {
                         max = d;
                     }
                 }
-                LIMITS[field][LEAST_MAXIMUM] = min;
-                LIMITS[field][MAXIMUM] = max;
+                LIMITS[field][LEAST_MAXIMUM] = ++min; // 1-based
+                LIMITS[field][MAXIMUM] = ++max; // 1-based
             }
             return LIMITS[field][limitType];
         default:
