@@ -2562,12 +2562,13 @@ int32_t RBBILineMonkey::next(int32_t prevPos) {
   
     // Loop runs once per position in the test text, until a break position
     //  is found.
-    nextPos = fText->moveIndex32(prevPos, 1);
+    nextPos = fCharBI->following(prevPos);
     pos     = prevPos;
     for (;;) {
-        prevPos = pos;
-        pos     = nextPos;
-        nextPos = fText->moveIndex32(pos, 1);
+        prevPos   = pos;
+        pos       = nextPos;
+        nextCPPos = fText->moveIndex32(pos, 1);
+        nextPos   = fCharBI->following(pos);     // Advance by grapheme cluster
         UChar32 prevChar = fText->char32At(prevPos);
         UChar32 thisChar = fText->char32At(pos);
 
@@ -2592,23 +2593,24 @@ int32_t RBBILineMonkey::next(int32_t prevPos) {
         }
 
         // LB 3c  Don't break before hard line breaks
-        if (thisChar == 0x0d || prevChar == 0x0a || thisChar == 0x85 ||
-            fBK->contains(thisChar)) {continue;}
+        if (thisChar == 0x0d || thisChar == 0x0a || thisChar == 0x85 ||
+            fBK->contains(thisChar)) {
+                continue;
+        }
 
         // LB 4  DOn't break before spaces or zero-width space.
-        if (fSP->contains(thisChar)) {continue;}
-        if (fZW->contains(thisChar)) {continue;}
+        if (fSP->contains(thisChar)) {
+            continue;
+        }
+        if (fZW->contains(thisChar)) {
+            continue;
+        }
 
 
         // LB 5  Break after zero width space
         if (fZW->contains(prevChar)) {
             break;
         }
-
-
-        nextCPPos = nextPos;
-        nextPos = fCharBI->following(pos);
-
 
         // LB 6  Treat Korean Syllables as a single unit
         //       (Requires no explicit action.  nextChar already advances by grapheme cluster
@@ -2631,7 +2633,9 @@ int32_t RBBILineMonkey::next(int32_t prevPos) {
         if (fCL->contains(thisChar) ||
             fEX->contains(thisChar) ||
             fIS->contains(thisChar) ||
-            fSY->contains(thisChar))    {continue;}
+            fSY->contains(thisChar))    {
+            continue;
+        }
 
         // LB 9  Don't break after OP SP*
         for (tPos=prevPos; ; tPos=fCharBI->preceding(tPos)) {
@@ -2722,27 +2726,36 @@ fall_through_11:
         if (fBA->contains(thisChar) ||
             fHY->contains(thisChar) ||
             fNS->contains(thisChar) ||
-            fBB->contains(prevChar) )   {continue;}
+            fBB->contains(prevChar) )   {
+            continue;
+        }
 
         // LB 16
         if (fAL->contains(prevChar) && fIN->contains(thisChar) ||
             fID->contains(prevChar) && fIN->contains(thisChar) ||
             fIN->contains(prevChar) && fIN->contains(thisChar) ||
-            fNU->contains(prevChar) && fIN->contains(thisChar) )   {continue; }
+            fNU->contains(prevChar) && fIN->contains(thisChar) )   {
+            continue; 
+        }
 
 
         // LB 17
         if (fID->contains(prevChar) && fPO->contains(thisChar) ||
             fAL->contains(prevChar) && fNU->contains(thisChar) ||
-            fNU->contains(prevChar) && fAL->contains(thisChar) )   {continue; }
+            fNU->contains(prevChar) && fAL->contains(thisChar) )   {
+            continue; 
+        }
 
         // LB 18    Numbers
-        UnicodeString  subStr(*fText, pos);
+        UnicodeString  subStr(*fText, prevPos);
         fNumberMatcher->reset(subStr);
         if (fNumberMatcher->lookingAt(status)) {
-            nextPos = pos + fNumberMatcher->end(status);
-            continue;
-            // TODO:  CHeck status codes
+            // TODO:  Check status codes
+            int32_t numEndIdx = prevPos + fNumberMatcher->end(status);
+            if (numEndIdx > pos) {
+                nextPos = numEndIdx;
+                continue;
+            }
         }
 
         // LB 18b

@@ -52,27 +52,34 @@ $Extend  = [:Grapheme_Extend = TRUE:];
 
 
 #
-#  Rule LB1.  By default, treat AI  (characters with ambiguous east Asian width) and
-#                               SA  (South East Asian: Thai, Lao, Khmer) as $AL  (Alphabetic)
+#  Rule LB1.  By default, treat AI  (characters with ambiguous east Asian width),
+#                               SA  (South East Asian: Thai, Lao, Khmer)
+#                               XX  (Unknown, unassigned)
+#                         as $AL  (Alphabetic)
 #
-$ALPlus = $AL | $AI | $SA;
+$ALPlus = $AL | $AI | $SA | $XX;
 
 #
 #  Combining Marks.   X $CM*  behaves as if it were X.  Rule LB6.
 #
 $ALcm = $ALPlus $CM*;
-$IDcm = ($ID $CM* | $SP $CM+);
-$NUcm = $NU $Extend*;
-$HYcm = $HY $Extend*;
-$QUcm = $QU $Extend*;
-$POcm = $PO $Extend*;
-$OPcm = $OP $Extend*;
 $BAcm = $BA $Extend*;
 $BBcm = $BB $Extend*;
-$NScm = $NS $Extend*;
-$GLcm = $GL $Extend*;
 $B2cm = $B2 $Extend*;
+$CLcm = $CL $Extend*;
+$EXcm = $EX $Extend*;
+$GLcm = $GL $Extend*;
+$HYcm = $HY $Extend*;
+$IDcm = ($ID $CM* | $SP $CM+);
 $INcm = $IN $Extend*;
+$IScm = $IS $Extend*;
+$NScm = $NS $Extend*;
+$NUcm = $NU $Extend*;
+$OPcm = $OP $Extend*;
+$POcm = $PO $Extend*;
+$PRcm = $PR $Extend*;
+$QUcm = $QU $Extend*;
+$SYcm = $SY $Extend*;
 
 
 #  New Lines.  Always break after, never break before.
@@ -98,14 +105,21 @@ $Openings = (($QUcm $SP*)? $OPcm $SP*)*;
 #            Rule LB 8, 11, 15
 $Closings =  ($SP*( ($CL ($SP* $NScm)?  |  $EX  | $IS  | $SY) $Extend*) | $BAcm | $HYcm  | $NScm)*;
 
+$WordClosings = ($CLcm | $EXcm | $IScm | $SYcm | $BAcm | $HYcm | $NScm)*;
+
 #
 #  Words.  Includes mixed Alpha-numerics.
 #          Rules 11a, 16, 17, 19, more or less.
 #
-$Number         =  $PR? ($OPcm | $HYcm)? $NU ($NU | $IS)* $CL? $POcm?; # Numbers 
+$Number         =  $PRcm? ($OPcm | $HYcm)? $NU ($NU | $IS)* $CL? $POcm?; # Numbers 
                                                                        # Regex form, rather than rule 18
                                                                        
-$Word   = (($IDcm | ($ALcm | $NUcm)+) ($POcm? | $INcm?))  ;            # Alpha-numeric.   16, 17 
+# Alpha-numeric.   16, 17 
+$Word   = ($IDcm | ($ALcm | $NUcm)+) ($POcm? | $INcm?) |
+           $INcm  |
+           $CB;                                             # Deviation from TR for $CB
+                                                            #   We treat as a single char word
+                                                            
 $Dashes = (($B2cm $SP*)*);                                             # Dashes           11a   
         
         
@@ -116,12 +130,13 @@ $HYMinus = $HYcm ($NUcm ($NUcm | $IS)* $CL? $POcm?)?;       # For Rle LB15, Don'
  
  
         
-$Word15 = ($BBcm* ($Word | $Number | $Dashes)? ($BAcm | $HYMinus | $NScm)*) |  # Rule 15. Stuff sticks around words.
-          $BBcm* [^[:Cc:] $BK $CR $LF $ZW $SP $GL ] $Extend*  |                 # Allow characters that don't meet the
-          $BBcm* [^$BK $CR $LF $ZW $SP $GL ];                                      #  more elaborate definitions for WORD
-                                                                            #  to be glued.
-        
-$GluedWord  = ($GLcm | $QUcm)? $Word15 (($GLcm | $QUcm) $Word15)*;  # "Glue" will stick anything below it together.
+$Word15 = $Openings? (
+             ($BBcm* $Openings ($Word | $Number | $Dashes)? ($BAcm | $HYMinus | $NScm)*) |   # Rule 15. Stuff sticks around words.
+             $BBcm* [^[:Cc:] $BK $CR $LF $ZW $SP $GL ] $Extend*  |                 # Allow characters that don't meet the
+             $BBcm* [^$BK $CR $LF $ZW $SP $GL ]                                 #  more elaborate definitions for WORD
+             )  $WordClosings?;                                                          #  to be glued.
+       
+$GluedWord  = $Openings? ($GLcm | $QUcm)? $Word15 (($GLcm | $QUcm) $Word15)*;  # "Glue" will stick anything below it together.
                                                                     # Rules 13, 14
 
 #
