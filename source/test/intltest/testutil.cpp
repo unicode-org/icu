@@ -11,14 +11,6 @@
 #include "unicode/unicode.h"
 #include "unicode/unistr.h"
 
-int8_t TestUtility::getScript(UChar c) {
-  return getScript(getBlock(c));
-}
-
-int8_t TestUtility::getScript(int8_t block) {
-  return blockToScript[block];
-}
-
 struct Split {
     UChar ch;
     int8_t i1;
@@ -69,14 +61,13 @@ static const Split gTestUtilitySplit[] = {
 };
 
 int8_t TestUtility::getBlock(UChar c) {
-  int32_t index = c >> 7;
-  int8_t block = charToBlock[index];
+  int8_t block = charToBlock[((uint16_t)c) >> 7];
   while (block < 0) { // take care of exceptions, blocks split across 128 boundaries
-      const Split tuple = gTestUtilitySplit[-block-1];
-      if (c < tuple.ch)
-          block = tuple.i1;
+      const Split *tuple = &gTestUtilitySplit[-block-1];
+      if (c < tuple->ch)
+          block = tuple->i1;
       else
-          block = tuple.i2;
+          block = tuple->i2;
   }
   return block;
 }
