@@ -2530,7 +2530,7 @@ ko {
         //}
     }
     Variants{
-        EURO    { "\uc720\ub85c" }
+        // EURO    { "\uc720\ub85c" }
         // PREEURO { "\uc720\ub85c \uc774\uc804" }
         REVISED { "\uac1c\uc815" }
     }

@@ -51,6 +51,7 @@ zh_SG {
         "#,##0%",
         "#E0",
     }
+/*
     zoneStrings { 
         {
             "SST",
@@ -61,4 +62,5 @@ zh_SG {
 //            "Singapore"
         }
     }
+*/
 }

@@ -354,15 +354,7 @@ he {
         "\u05D3\u05E6\u05DE\u05D1\u05E8",
     }
     localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
-    zoneStrings { 
-        {
-            "Africa/Casablanca",
-            "GMT",
-            "GMT",
-            "GMT",
-            "GMT",
-        }
-    }
+
     LocaleScript:array { 
         "Hebr"    // ISO 15924 Name 
     }

@@ -477,15 +477,7 @@ ru {
         "\u0414\u0435\u043A\u0430\u0431\u0440\u044C",
     }
     localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
-    zoneStrings { 
-        {
-            "Africa/Casablanca",
-            "GMT",
-            "GMT",
-            "GMT",
-            "GMT",
-        }
-    }
+
     LocaleScript:array {
         "Cyrl"      // ISO 15924 Name 
     }

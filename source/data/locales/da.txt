@@ -436,14 +436,5 @@ da {
         "2,000,000,000,000: << billione[ >>];\n"
         "1,000,000,000,000,000: =#,##0=;"
     }
-    zoneStrings {
-        {
-            "Europe/Copenhagen",
-            "Central European Time",
-            "MET",
-            "Central European Time (DST)",
-            "MET",
-            "Copenhagen",
-        }
-    }
+
 }

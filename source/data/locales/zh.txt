@@ -6771,17 +6771,9 @@ zh {
         }
     }
     Variants{
-        EURO    { "\u6b27\u5143" }
+        // EURO    { "\u6b27\u5143" }
         // PREEURO { "\u65e7\u5e01" }
         REVISED { "\u5df2\u4fee\u8ba2" }
     }
-    zoneStrings { 
-        {
-            "Africa/Casablanca",
-            "GMT",
-            "GMT",
-            "GMT",
-            "GMT",
-        }
-    }
+
 }

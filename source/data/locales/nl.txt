@@ -507,14 +507,4 @@ nl {
     Variants{
         REVISED { "Gewijzigd" }
     }
-
-    zoneStrings { 
-        {
-            "Africa/Casablanca",
-            "GMT",
-            "GMT",
-            "GMT",
-            "GMT",
-        }
-    }
 }

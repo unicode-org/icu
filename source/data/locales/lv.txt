@@ -372,15 +372,6 @@ lv {
         "+",
     }
     localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
-    zoneStrings { 
-        {
-            "Africa/Casablanca",
-            "GMT",
-            "GMT",
-            "GMT",
-            "GMT",
-        }
-    }
     ExemplarCharacters { "[a-z \u0101 \u0113 \u012b \u014d \u016b \u0123 \u0137 \u013c \u0146 \u0157 \u010d \u0161 \u017e]" }
     LocaleScript{ 
         "Latn",  // ISO 15924 Name 

@@ -817,6 +817,7 @@ sv {
     Variants{
         REVISED { "Reviderad" }
     }
+/*
     zoneStrings { 
         {
             "Europe/Stockholm",
@@ -827,5 +828,6 @@ sv {
             "Stockholm",
         }
     }
+*/
 }
 

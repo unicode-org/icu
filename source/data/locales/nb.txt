@@ -433,19 +433,9 @@ nb {
         }
     }
     Variants{
-        EURO    { "Europeisk" }
+        // EURO    { "Europeisk" }
         //PREEURO { "F\u00f8r-eruropeisk" }
         REVISED { "Revidert" }
     }
 
-    zoneStrings {
-        {
-            "Europe/Oslo",
-            "Central European Time",
-            "MET",
-            "Central European Time (DST)",
-            "MET",
-            "Oslo"
-        }
-    }
 }

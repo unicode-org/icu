@@ -582,14 +582,5 @@ it {
             "2000: <%%with-o<mila; <%%with-o<mil[>%%with-a>];\n"
             "100,000: =%main=;\n" 
     }
-    zoneStrings { 
-        {
-            "Europe/Rome",
-            "CET",
-            "CET",
-            "CET",
-            "CET",
-            "Rome",
-        }
-    }
+
 }
