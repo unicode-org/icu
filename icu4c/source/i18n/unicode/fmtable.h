@@ -27,18 +27,28 @@ U_NAMESPACE_BEGIN
  * its subclasses for formatting.  Formattable is a thin wrapper
  * class which interconverts between the primitive numeric types
  * (double, long, etc.) as well as UDate and UnicodeString.
- * <P>
- * Note that this is fundamentally different from the Java behavior, since
+ *
+ * <p>Formattable objects may also contain a currency in the form of a
+ * 3-letter ISO 4217 code.  Any Formattable object may have an
+ * associated currency, although this is intended for use with numeric
+ * objects.  A numeric Formattable object with a currency is a
+ * "currency amount", and is handled specially by NumberFormat.
+ * During formatting, the currency of the object is used to determine
+ * the currency display name or symbol, the rounding, and the fraction
+ * digit counts.  During parsing, if a valid currency is parsed, it is
+ * stored in the Formattable result.
+ * 
+ * <p>Note that this is fundamentally different from the Java behavior, since
  * in this case the various formattable objects do not occupy a hierarchy,
  * but are all wrapped within this one class.  Formattable encapsulates all
  * the polymorphism in itself.
- * <P>
- * It would be easy to change this so that Formattable was an abstract base
+ * 
+ * <p>It would be easy to change this so that Formattable was an abstract base
  * class of a genuine hierarchy, and that would clean up the code that
  * currently must explicitly check for type, but that seems like overkill at
  * this point.
  *
- * The Formattable class is not suitable for subclassing.
+ * <p>The Formattable class is not suitable for subclassing.
  */
 class U_I18N_API Formattable : public UObject {
 public:
@@ -87,6 +97,30 @@ public:
      * @draft ICU 2.8
      */
     Formattable(int64_t ll);
+
+    /**
+     * Creates a Formattable for a currency amount.
+     * @param n the numeric value
+     * @param currency the currency code
+     * @draft ICU 3.0
+     */
+    Formattable(double n, const UChar* currency);
+
+    /**
+     * Creates a Formattable for a currency amount.
+     * @param n the numeric value
+     * @param currency the currency code
+     * @draft ICU 3.0
+     */
+    Formattable(int32_t n, const UChar* currency);
+
+    /**
+     * Creates a Formattable for a currency amount.
+     * @param n the numeric value
+     * @param currency the currency code
+     * @draft ICU 3.0
+     */
+    Formattable(int64_t n, const UChar* currency);
 
     /**
      * Creates a Formattable object with a char string pointer.
@@ -365,6 +399,15 @@ public:
      * @stable ICU 2.0
      */
     Formattable&    operator[](int32_t index) { return fValue.fArrayAndCount.fArray[index]; }
+       
+    /**
+     * Returns the currency of this object, or NULL if this object has
+     * no associated currency.  Any type may have a currency, although
+     * this is intended for use with numeric types.
+     * @return a null-terminated 3-letter ISO 4217 code, or NULL
+     * @draft ICU 3.0
+     */
+    const UChar*    getCurrency() const;
 
     /**
      * Sets the double value of this object and changes the type to
@@ -429,7 +472,18 @@ public:
      * @stable ICU 2.0
      */ 
     void            adoptArray(Formattable* array, int32_t count);
-        
+       
+    /**
+     * Sets the currency of this object.  Only numeric types may have
+     * a currency.  If isoCode is NULL then the currency is removed
+     * from this object.  Any type may have a currency, although
+     * this is intended for use with numeric types.
+     * @param currency a null-terminated 3-letter ISO 4217 code, or NULL.
+     * If longer than 3 characters, the extra characters are ignored.
+     * @draft ICU 3.0
+     */
+    void            setCurrency(const UChar* currency);
+
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
@@ -470,9 +524,6 @@ private:
 
     UnicodeString* getBogus() const;
 
-    // Note: For now, we do not handle unsigned long and unsigned
-    // double types.  Smaller unsigned types, such as unsigned
-    // short, can fit within a long.
     union {
         UnicodeString*  fString;
         double          fDouble;
@@ -486,6 +537,7 @@ private:
     }                   fValue;
 
     Type                fType;
+    UChar               fCurrency[4];
     UnicodeString       fBogus; // Bogus string when it's needed.
 };
 

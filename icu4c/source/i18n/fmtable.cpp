@@ -18,6 +18,7 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/fmtable.h"
+#include "unicode/ustring.h"
 #include "cmemory.h"
 
 // *****************************************************************************
@@ -44,7 +45,9 @@ inline void setError(UErrorCode& ec, UErrorCode err) {
 Formattable::Formattable()
     :   UObject(), fType(kLong)
 {
+    fBogus.setToBogus();
     fValue.fInt64 = 0;
+    fCurrency[0] = 0;
 }
 
 // -------------------------------------
@@ -55,6 +58,7 @@ Formattable::Formattable(UDate date, ISDATE /*isDate*/)
 {
     fBogus.setToBogus();
     fValue.fDate = date;
+    fCurrency[0] = 0;
 }
 
 // -------------------------------------
@@ -65,6 +69,7 @@ Formattable::Formattable(double value)
 {
     fBogus.setToBogus();
     fValue.fDouble = value;
+    fCurrency[0] = 0;
 }
 
 // -------------------------------------
@@ -75,6 +80,7 @@ Formattable::Formattable(int32_t value)
 {
     fBogus.setToBogus();
     fValue.fInt64 = value;
+    fCurrency[0] = 0;
 }
 
 // -------------------------------------
@@ -85,6 +91,25 @@ Formattable::Formattable(int64_t value)
 {
     fBogus.setToBogus();
     fValue.fInt64 = value;
+    fCurrency[0] = 0;
+}
+
+Formattable::Formattable(double n, const UChar* currency) : UObject(), fType(kDouble) {
+    fBogus.setToBogus();
+    fValue.fDouble = n;
+    setCurrency(currency);
+}
+
+Formattable::Formattable(int32_t n, const UChar* currency) : UObject(), fType(kLong) {
+    fBogus.setToBogus();
+    fValue.fInt64 = n;
+    setCurrency(currency);
+}
+
+Formattable::Formattable(int64_t n, const UChar* currency) : UObject(), fType(kInt64) {
+    fBogus.setToBogus();
+    fValue.fInt64 = n;
+    setCurrency(currency);
 }
 
 // -------------------------------------
@@ -95,6 +120,7 @@ Formattable::Formattable(const char* stringToCopy)
 {
     fBogus.setToBogus();
     fValue.fString = new UnicodeString(stringToCopy);
+    fCurrency[0] = 0;
 }
 
 // -------------------------------------
@@ -105,6 +131,7 @@ Formattable::Formattable(const UnicodeString& stringToCopy)
 {
     fBogus.setToBogus();
     fValue.fString = new UnicodeString(stringToCopy);
+    fCurrency[0] = 0;
 }
 
 // -------------------------------------
@@ -116,6 +143,7 @@ Formattable::Formattable(UnicodeString* stringToAdopt)
 {
     fBogus.setToBogus();
     fValue.fString = stringToAdopt;
+    fCurrency[0] = 0;
 }
 
 // -------------------------------------
@@ -126,6 +154,7 @@ Formattable::Formattable(const Formattable* arrayToCopy, int32_t count)
     fBogus.setToBogus();
     fValue.fArrayAndCount.fArray = createArrayCopy(arrayToCopy, count);
     fValue.fArrayAndCount.fCount = count;
+    fCurrency[0] = 0;
 }
 
 // -------------------------------------
@@ -177,6 +206,8 @@ Formattable::operator=(const Formattable& source)
             fValue.fDate = source.fValue.fDate;
             break;
         }
+
+        u_strcpy(fCurrency, source.fCurrency);
     }
     return *this;
 }
@@ -186,33 +217,47 @@ Formattable::operator=(const Formattable& source)
 UBool
 Formattable::operator==(const Formattable& that) const
 {
-    // Checks class ID.
     if (this == &that) return TRUE;
 
     // Returns FALSE if the data types are different.
     if (fType != that.fType) return FALSE;
 
     // Compares the actual data values.
+    UBool equal = TRUE;
     switch (fType) {
     case kDate:
-        return fValue.fDate == that.fValue.fDate;
+        equal = (fValue.fDate == that.fValue.fDate);
+        break;
     case kDouble:
-        return fValue.fDouble == that.fValue.fDouble;
+        equal = (fValue.fDouble == that.fValue.fDouble);
+        break;
     case kLong:
-        case kInt64:
-        return fValue.fInt64 == that.fValue.fInt64;
+    case kInt64:
+        equal = (fValue.fInt64 == that.fValue.fInt64);
+        break;
     case kString:
-        return *(fValue.fString) == *(that.fValue.fString);
+        equal = (*(fValue.fString) == *(that.fValue.fString));
+        break;
     case kArray:
-        if (fValue.fArrayAndCount.fCount != that.fValue.fArrayAndCount.fCount)
-            return FALSE;
+        if (fValue.fArrayAndCount.fCount != that.fValue.fArrayAndCount.fCount) {
+            equal = FALSE;
+            break;
+        }
         // Checks each element for equality.
-        for (int32_t i=0; i<fValue.fArrayAndCount.fCount; ++i)
-            if (fValue.fArrayAndCount.fArray[i] != that.fValue.fArrayAndCount.fArray[i])
-                return FALSE;
+        for (int32_t i=0; i<fValue.fArrayAndCount.fCount; ++i) {
+            if (fValue.fArrayAndCount.fArray[i] != that.fValue.fArrayAndCount.fArray[i]) {
+                equal = FALSE;
+                break;
+            }
+        }
         break;
     }
-    return TRUE;
+
+    if (equal) {
+        equal = (u_strcmp(fCurrency, that.fCurrency) == 0);
+    }
+
+    return equal;
 }
 
 // -------------------------------------
@@ -338,6 +383,11 @@ Formattable::getDouble(UErrorCode& status) const
     }
 }
 
+const UChar*
+Formattable::getCurrency() const {
+    return (fCurrency[0] != 0) ? fCurrency : NULL;
+}
+
 // -------------------------------------
 // Sets the value to a double value d.
 
@@ -426,6 +476,15 @@ Formattable::adoptArray(Formattable* array, int32_t count)
     fType = kArray;
     fValue.fArrayAndCount.fArray = array;
     fValue.fArrayAndCount.fCount = count;
+}
+
+void
+Formattable::setCurrency(const UChar* currency) {
+    fCurrency[0] = 0;
+    if (currency != NULL) {
+        uprv_memcpy(&fCurrency[0], currency, 3*sizeof(fCurrency[0]));
+        fCurrency[3] = 0;
+    }
 }
 
 // -------------------------------------
