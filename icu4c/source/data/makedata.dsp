@@ -118,6 +118,17 @@ CFG=makedata - Win32 Debug
 # Name "makedata - Win32 Debug"
 # Name "makedata - Win64 Release"
 # Name "makedata - Win64 Debug"
+
+!IF  "$(CFG)" == "makedata - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "makedata - Win32 Debug"
+
+!ELSEIF  "$(CFG)" == "makedata - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "makedata - Win64 Debug"
+
+!ENDIF 
+
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
@@ -133,6 +144,10 @@ CFG=makedata - Win32 Debug
 
 SOURCE=.\makedata.mak
 # PROP Intermediate_Dir ".\out\build"
+# End Source File
+# Begin Source File
+
+SOURCE=.\misc\miscfiles.mk
 # End Source File
 # Begin Source File
 
