@@ -990,7 +990,7 @@ LocaleTest::TestAtypicalLocales()
                                      CharsToUnicodeString("B\\u00E9lgica") };
     // De-Anglicizing root required the change from
     // English display names to ISO Codes - ram 2003/09/26
-    UnicodeString arabicDisplayNames [] = { "de (CA)",
+    UnicodeString bengaliDisplayNames [] = { "de (CA)",
                                      "ja (ZA)",
                                      "ru (MX)",
                                      "en (FR)",
@@ -1035,15 +1035,15 @@ LocaleTest::TestAtypicalLocales()
 
     for (i = 0; i < 9; i++) {
         UnicodeString name;
-        localesToTest[i].getDisplayName(Locale("ar", "ES"), name);
-        logln(name + " Locale fallback to ar, and data fallback to root");
-        if (name != arabicDisplayNames[i])
-            errln("Lookup in Arabic failed: expected \"" + arabicDisplayNames[i]
+        localesToTest[i].getDisplayName(Locale("be", "ES"), name);
+        logln(name + " Locale fallback to be, and data fallback to root");
+        if (name != bengaliDisplayNames[i])
+            errln("Lookup in Bengali failed: expected \"" + bengaliDisplayNames[i]
                         + "\", got \"" + name + "\"");
-        localesToTest[i].getDisplayName(Locale("ar", "EG"), name);
+        localesToTest[i].getDisplayName(Locale("be", "EG"), name);
         logln(name + " Data fallback to root");
-        if (name != arabicDisplayNames[i])
-            errln("Lookup in Arabic failed: expected \"" + arabicDisplayNames[i]
+        if (name != bengaliDisplayNames[i])
+            errln("Lookup in Bengali failed: expected \"" + bengaliDisplayNames[i]
                         + "\", got \"" + name + "\"");
     }
 }
