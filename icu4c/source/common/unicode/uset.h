@@ -16,17 +16,25 @@
 *   C version of UnicodeSet.
 */
 
+
+/**
+ * \file
+ * \brief C API: Unicode Set
+ *
+ * <p>This is a C wrapper around the C++ UnicodeSet class.</p>
+ */
+
 #ifndef __USET_H__
 #define __USET_H__
 
 #include "unicode/utypes.h"
 
+struct USet;
 /**
  * A UnicodeSet.  Use the uset_* API to manipulate.  Create with
  * uset_open*, and destroy with uset_close.
  * @draft ICU 2.4
  */
-struct USet;
 typedef struct USet USet;
 
 enum {
@@ -38,12 +46,28 @@ enum {
  * possible directly on a serialized set.  See below.
  * @draft ICU 2.4
  */
-struct USerializedSet {
+typedef struct USerializedSet {
+    /**
+     * The serialized Unicode Set.
+     * @draft ICU 2.4
+     */
     const uint16_t *array;
-    int32_t bmpLength, length;
+    /**
+     * The length of the array that contains BMP characters.
+     * @draft ICU 2.4
+     */
+    int32_t bmpLength;
+    /**
+     * The total length of the array.
+     * @draft ICU 2.4
+     */
+    int32_t length;
+    /**
+     * A small buffer for the array to reduce memory allocations.
+     * @draft ICU 2.4
+     */
     uint16_t staticArray[USET_SERIALIZED_STATIC_ARRAY_CAPACITY];
-};
-typedef struct USerializedSet USerializedSet;
+} USerializedSet;
 
 
 /*********************************************************************
