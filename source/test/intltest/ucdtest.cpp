@@ -572,7 +572,7 @@ void UnicodeTest::TestCharLength()
 		1, 0xe000
 	};
 	
-	int16_t i;
+	int32_t i;
 	UBool multiple;
 	for(i=0; i<sizeof(codepoint)/sizeof(codepoint[0]); i=i+2){
 		UChar32 c=codepoint[i+1];

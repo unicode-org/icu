@@ -207,7 +207,7 @@ void TransliteratorAPITest::TestGetDisplayName() {
           "Kana-Latin"                 ,"Kana to Latin"        
       };
     UnicodeString name="";
-    Transliterator* t;
+    Transliterator* t=NULL;
     UnicodeString message;
     for (int32_t i=0; i<sizeof(dispNames)/sizeof(dispNames[0]); i=i+2 ) {
         t = Transliterator::createInstance(dispNames[i+0]);
@@ -249,7 +249,7 @@ void TransliteratorAPITest::TestTransliterate1(){
     UnicodeString gotResult;
     UnicodeString temp;
     UnicodeString message;
-    Transliterator* t;
+    Transliterator* t=NULL;
     logln("Testing transliterate");
 
     for(int i=0;i<sizeof(Data)/sizeof(Data[0]); i=i+3){

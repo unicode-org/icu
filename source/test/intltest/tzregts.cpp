@@ -674,7 +674,7 @@ TimeZoneRegressionTest::Test4154525()
         UBool valid = DATA[i+1] == GOOD;
         UnicodeString method;
         for(int32_t j=0; j < 2; ++j) {
-            SimpleTimeZone *z;
+            SimpleTimeZone *z=NULL;
             switch (j) {
                 case 0:
                     method = "constructor";
