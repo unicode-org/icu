@@ -12,7 +12,7 @@
 
 
 root {
-    Version { "3" }
+    Version { "3.1" }
     "%%EURO" { "Euro" }         // Euro variant display name
     "%%B"    { "Bokm\u00e5l" }  // Norwegian variant display name
     "%%NY"   { "Nynorsk" }      // Norwegian variant display name

@@ -2,12 +2,13 @@
 // Marathi locale.  Based on Hindi locale
 
 mr_IN {
-      LocaleID { "044e" }
+    Version { "1.1" }
+    LocaleID { "044e" }
     ShortCountry { IND }
 
     CurrencyElements {
         "\u0930\u0941",
-        RUP,  // Rs. ? No.
+        INR,  // Rs. ? No.
         "."
     }
     LocaleString { "mr_IN" }
@@ -26,6 +27,4 @@ mr_IN {
         "1",
         "1"
     }
-   Version { "0.1" }
-
 }
