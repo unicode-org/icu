@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Main.java,v $
-* $Date: 2002/04/23 01:59:14 $
-* $Revision: 1.11 $
+* $Date: 2002/05/29 02:01:00 $
+* $Revision: 1.12 $
 *
 *******************************************************************************
 */
@@ -65,8 +65,13 @@ public final class Main implements UCD_Types {
             else if (arg.equalsIgnoreCase("checkSpeed")) VerifyUCD.checkSpeed();
             else if (arg.equalsIgnoreCase("verifyNormalizationStability")) VerifyUCD.verifyNormalizationStability();
             
-            else if (arg.equalsIgnoreCase("generateHanTransliterator")) GenerateHanTransliterator.main();
+            else if (arg.equalsIgnoreCase("hanTransliterator")) GenerateHanTransliterator.main(0);
+            else if (arg.equalsIgnoreCase("romajiTransliterator")) GenerateHanTransliterator.main(1);
+            else if (arg.equalsIgnoreCase("pinYinTransliterator")) GenerateHanTransliterator.main(2);
             else if (arg.equalsIgnoreCase("compareBlueberry")) VerifyUCD.compareBlueberry();
+            
+            else if (arg.equalsIgnoreCase("checkBIDI")) VerifyUCD.checkBIDI();
+            
 
             else if (arg.equalsIgnoreCase("testDerivedProperties")) DerivedProperty.test();
             else if (arg.equalsIgnoreCase("checkCase")) VerifyUCD.checkCase();
@@ -181,6 +186,10 @@ public final class Main implements UCD_Types {
 
             } else if (arg.equalsIgnoreCase("DerivedAge")) {
                 GenerateData.generateAge("DerivedData/", "DerivedAge");
+                
+            } else if (arg.equalsIgnoreCase("backwardsCompat")) {
+                GenerateData.backwardsCompat("DerivedData/extracted/", "Compatibility_ID_START",
+        			new int[] {ID_Start, ID_Continue_NO_Cf, Mod_ID_Start, Mod_ID_Continue_NO_Cf});
                 
             } else if (arg.equalsIgnoreCase("DerivedCoreProperties")) {
                 GenerateData.generateDerived(DERIVED_CORE, true, GenerateData.HEADER_DERIVED, "DerivedData/", "DerivedCoreProperties");

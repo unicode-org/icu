@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Types.java,v $
-* $Date: 2002/03/22 22:08:53 $
-* $Revision: 1.11 $
+* $Date: 2002/05/29 02:01:00 $
+* $Revision: 1.12 $
 *
 *******************************************************************************
 */
@@ -150,6 +150,7 @@ public interface UCD_Types {
 
     static final int
         LETTER_MASK = (1<<Lu) | (1<<Ll) | (1<<Lt) | (1<<Lm) | (1 << Lo),
+        CASED_LETTER_MASK = (1<<Lu) | (1<<Ll) | (1<<Lt),
         MARK_MASK = (1<<Mn) | (1<<Me) | (1<<Mc),
         NUMBER_MASK = (1<<Nd) | (1<<Nl) | (1<<No),
         SEPARATOR_MASK = (1<<Zs) | (1<<Zl) | (1<<Zp),

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/PropertyLister.java,v $
-* $Date: 2002/03/15 01:57:01 $
-* $Revision: 1.8 $
+* $Date: 2002/05/29 02:01:00 $
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
@@ -58,10 +58,7 @@ abstract public class PropertyLister implements UCD_Types {
 
     public String optionalComment(int cp) {
         if (!usePropertyComment || !breakByCategory) return "";
-        byte cat = getModCat(cp);
-        if (cat == FAKELC) return "L&";
-        if (cat == FAKENC) return "NC";
-        return ucdData.getCategoryID_fromIndex(cat);
+        return ucdData.getModCatID_fromIndex(getModCat(cp));
     }
 
     public int minPropertyWidth() {
@@ -144,6 +141,10 @@ abstract public class PropertyLister implements UCD_Types {
         }
         return result;
     }
+    
+    byte getModCat(int cp) {
+    	return ucdData.getModCat(cp, breakByCategory ? CASED_LETTER_MASK : 0);
+    }
 
 
     /**
@@ -168,23 +169,6 @@ abstract public class PropertyLister implements UCD_Types {
         return lastSpace;
     }
     
-    private static final byte FAKERC = 63; // fake category for comparison
-    private static final byte FAKELC = 63; // fake category for comparison
-    private static final byte FAKENC = 64; // fake category for comparison
-    
-    private byte getModCat(int cp) {
-        byte cat = ucdData.getCategory(cp);
-        if (cat == UNASSIGNED && ucdData.isNoncharacter(cp)) cat = FAKENC;
-        else if (breakByCategory) {
-            if (cat == Lt || cat == Ll || cat == Lu) cat = FAKELC;
-        } else {
-            // MASH almost everything together
-            if (cat != CONTROL && cat != FORMAT && cat != SURROGATE 
-                && cat != PRIVATE_USE && cat != UNASSIGNED) cat = FAKERC;
-        }
-        return cat;
-    }
-
     public int print() {
         set.clear();
         int count = 0;

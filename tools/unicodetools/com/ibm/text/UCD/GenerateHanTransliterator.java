@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateHanTransliterator.java,v $
-* $Date: 2002/03/15 01:57:01 $
-* $Revision: 1.3 $
+* $Date: 2002/05/29 02:01:00 $
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -23,9 +23,10 @@ public final class GenerateHanTransliterator {
     static final boolean TESTING = false;
     static int type;
     
-    public static void main() {
+    public static void main(int typeIn) {
+    	type = typeIn;
+    	Default.setUCD();
         try {
-            type = 0;
             System.out.println("Starting");
             generate();
         } catch (Exception e) {
@@ -43,23 +44,27 @@ public final class GenerateHanTransliterator {
         String name = "$Han$English";
         String key = "kDefinition"; // kMandarin, kKorean, kJapaneseKun, kJapaneseOn
         String filter = "kJis0";
+        String filename = "Han_English";
         switch (type) {
             default: break;
             case 1: name = "$Han$OnRomaji";
                 key = "kJapaneseOn";
                 filter = "kJis0";
+                filename = "Han_Romaji";
                 break;
             case 2: name = "$Han$Pinyin";
                 key = "kMandarin";
+                filename = "Han_Pinyin";
                 filter = null;
                 break;
         }
         
-        out = Utility.openPrintWriter("Transliterate_Han_English.txt");
-        err = Utility.openPrintWriter("Transliterate_Han_English.log.txt");
+        out = Utility.openPrintWriter("Transliterate_" + filename + ".txt", false, false);
+        err = Utility.openPrintWriter("Transliterate_" + filename + "_log.txt", false, false);
         
-        BufferedReader in = Utility.openUnicodeFile("Unihan", "3.2.0", true); 
+        BufferedReader in = Utility.openUnicodeFile("Unihan", Default.ucdVersion, true); 
 
+		int totalCount = 0;
         int count = 0;
         String oldCode = "";
         String oldLine = "";
@@ -76,11 +81,15 @@ public final class GenerateHanTransliterator {
             if (line == null) break;
             if (line.length() < 6) continue;
             if (line.charAt(0) == '#') continue;
-            String code = line.substring(2,6);
+            int tabPos = line.indexOf('	');
+            String code = line.substring(2, tabPos);
+            
             /* if (code.compareTo("9FA0") >= 0) {
                 System.out.println("? " + line);
             }*/
             if (!code.equals(oldCode)) {
+            	totalCount++;
+            	
                 if (foundKey && foundFilter) {
                     count++;
                     /*if (true) { //*/
@@ -106,6 +115,8 @@ public final class GenerateHanTransliterator {
         }
         if (foundKey && foundFilter) printDef(out, oldCode, oldLine, oldStart);
         
+        System.out.println("Total: " + totalCount);
+        System.out.println("Defined Count: " + count);
         in.close();
         out.close();
         err.close();
@@ -137,6 +148,7 @@ public final class GenerateHanTransliterator {
         String definition = line.substring(start,end);
         if (type == 2) definition = handlePinyin(definition, line);
         definition.trim();
+        definition = definition.toLowerCase();
         String cp = UTF16.valueOf(Integer.parseInt(code, 16));
         String key = (String) definitionMap.get(definition);
         if (key == null) {

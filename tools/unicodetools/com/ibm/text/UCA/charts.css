@@ -14,4 +14,5 @@ tt           { font-size: 50% }
 
 td.g { font-size: 120%; text-align: Center; width: 72px; color: #808080; }
 td.n { font-size: 120%; text-align: Center; width: 72px; color: #000000; background-color: #CCCCFF; } 
-td.z { font-size: 120%; text-align: Center; width: 72px; font-weight: bold; background-color: #EEEEEE; } 
+td.z { font-size: 120%; text-align: Center; width: 72px; font-weight: bold; background-color: #EEEEEE; }
+td.h { font-size: 120%; text-align: Left; color: #000000; background-color: #EEEEEE; } 

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/DiffPropertyLister.java,v $
-* $Date: 2001/12/06 00:05:53 $
-* $Revision: 1.5 $
+* $Date: 2002/05/29 02:01:00 $
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -16,13 +16,23 @@ import java.io.*;
 
 class DiffPropertyLister extends PropertyLister {
     private UCD oldUCD;
+    private static final int NOPROPERTY = -1;
 
-    public DiffPropertyLister(String oldUCDName, String newUCDName, PrintWriter output) {
+    public DiffPropertyLister(String oldUCDName, String newUCDName, PrintWriter output, int property) {
         this.output = output;
         this.ucdData = UCD.make(newUCDName);
-        if (oldUCDName != null) this.oldUCD = UCD.make(oldUCDName);
-        breakByCategory = false;
+        if (property != NOPROPERTY) newProp = DerivedProperty.make(property, ucdData);
+        
+        if (oldUCDName != null) {
+        	this.oldUCD = UCD.make(oldUCDName);
+        	if (property != NOPROPERTY) oldProp = DerivedProperty.make(property, oldUCD);
+        }
+        breakByCategory = property != NOPROPERTY;
         useKenName = false;
+    }
+    
+    public DiffPropertyLister(String oldUCDName, String newUCDName, PrintWriter output) {
+    	this(oldUCDName, newUCDName, output, NOPROPERTY);
     }
 
     public String valueName(int cp) {
@@ -39,13 +49,38 @@ class DiffPropertyLister extends PropertyLister {
     }
     */
 
+	UnicodeProperty newProp = null;
+	UnicodeProperty oldProp = null;
+	String value = "";
+	
+    public String optionalComment(int cp) {
+    	String normal = super.optionalComment(cp);
+        return oldUCD.getModCatID_fromIndex(
+        	oldUCD.getModCat(cp, breakByCategory ? CASED_LETTER_MASK : 0))
+        	+ "/" + normal;
+    }
+
+	
 
     public byte status(int cp) {
+    	if (newProp == null) {
+        	return ucdData.isAllocated(cp) && (oldUCD == null || !oldUCD.isAllocated(cp)) ? INCLUDE : EXCLUDE;
+    	}
+    	
+    	// just look at property differences among allocated characters
+    	
+    	if (!ucdData.isAllocated(cp)) return EXCLUDE;    	
+    	if (!oldUCD.isAllocated(cp)) return EXCLUDE;   
+    	
+    	String val = newProp.getValue(cp);
+    	String oldVal = oldProp.getValue(cp);
+    	if (!oldVal.equals(val)) return INCLUDE;
+    	return EXCLUDE;
+
         /*if (cp == 0xFFFF) {
             System.out.println("# " + Utility.hex(cp));
         }
         */
-        return ucdData.isAllocated(cp) && (oldUCD == null || !oldUCD.isAllocated(cp)) ? INCLUDE : EXCLUDE;
     }
     
     public String headerString() {
@@ -91,6 +126,8 @@ class DiffPropertyLister extends PropertyLister {
     */
     
     private String major_minor_only(String s) {
+    	if (newProp != null) return s;
+    	
         return s.substring(0, s.lastIndexOf('.'));
     }
 

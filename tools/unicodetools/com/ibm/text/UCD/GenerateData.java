@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateData.java,v $
-* $Date: 2002/04/23 01:59:14 $
-* $Revision: 1.17 $
+* $Date: 2002/05/29 02:01:00 $
+* $Revision: 1.18 $
 *
 *******************************************************************************
 */
@@ -1077,6 +1077,55 @@ public class GenerateData implements UCD_Types {
 
     };
     
+    static final void backwardsCompat(String directory, String filename, int[] list) throws IOException {
+    
+        Default.setUCD();
+        String newFile = directory + filename + getFileSuffix(true);
+        PrintWriter log = Utility.openPrintWriter(newFile);
+        String mostRecent = generateBat(directory, filename, getFileSuffix(true));
+        try {
+        	for (int i = 0; i < list.length; ++i) {
+        		int prop = list[i];
+            	log.println();
+            	log.println(HORIZONTAL_LINE);
+        		log.println("###### " + DerivedProperty.make(prop, Default.ucd).getName());
+            	//log.println();
+            	//log.println(HORIZONTAL_LINE);
+            	//new DiffPropertyLister("3.2.0", "1.1.0", log, prop).print();
+            	log.println();
+            	log.println(HORIZONTAL_LINE);
+            	new DiffPropertyLister("3.2.0", "2.0.0", log, prop).print();
+            	log.println();
+            	log.println(HORIZONTAL_LINE);
+            	new DiffPropertyLister("3.2.0", "2.1.2", log, prop).print();
+            	log.println();
+            	log.println(HORIZONTAL_LINE);
+            	new DiffPropertyLister("3.2.0", "2.1.5", log, prop).print();
+            	log.println();
+            	log.println(HORIZONTAL_LINE);
+            	new DiffPropertyLister("3.2.0", "2.1.8", log, prop).print();
+            	log.println();
+            	log.println(HORIZONTAL_LINE);
+            	new DiffPropertyLister("3.2.0", "3.0.0", log, prop).print();
+            	log.println(HORIZONTAL_LINE);
+            	log.println();
+            	new DiffPropertyLister("3.2.0", "3.0.1", log, prop).print();
+            	log.println(HORIZONTAL_LINE);
+            	log.println();
+            	new DiffPropertyLister("3.2.0", "3.1.0", log, prop).print();
+            	log.println(HORIZONTAL_LINE);
+            	log.println();
+            	new DiffPropertyLister("3.2.0", "3.1.1", log, prop).print();
+            	log.println(HORIZONTAL_LINE);
+            }
+        } finally {
+            if (log != null) {
+                log.close();
+                Utility.renameIdentical(mostRecent, Utility.getOutputName(newFile));
+            }
+        }
+    }
+    
     static final void generateAge(String directory, String filename) throws IOException {
         Default.setUCD();
         String newFile = directory + filename + getFileSuffix(true);
@@ -1102,7 +1151,7 @@ public class GenerateData implements UCD_Types {
             log.println("# For details on the contents of each version, see");
             log.println("#   http://www.unicode.org/versions/enumeratedversions.html.");
             
-            http://www.unicode.org/versions/enumeratedversions.html
+            // http://www.unicode.org/versions/enumeratedversions.html
             
             log.println(HORIZONTAL_LINE);
             log.println();

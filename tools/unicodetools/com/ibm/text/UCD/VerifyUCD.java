@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/VerifyUCD.java,v $
-* $Date: 2002/04/23 01:59:14 $
-* $Revision: 1.12 $
+* $Date: 2002/05/29 02:01:00 $
+* $Revision: 1.13 $
 *
 *******************************************************************************
 */
@@ -280,6 +280,54 @@ public class VerifyUCD implements UCD_Types {
     		if (result != sResult) {
     			System.out.println("Failure with " + x + " at " + Default.ucd.getCodeAndName(cp));
     		}
+    	}
+    	return result;
+    }
+    
+    public static void checkBIDI() {
+    	Default.setUCD();
+    	
+        for (int cp = 0; cp <= 0x10FFFF; ++cp) {
+            Utility.dot(cp);
+            if (!Default.ucd.isAllocated(cp)) continue;
+            
+            if (!Default.nfd.normalizationDiffers(cp)) continue;
+            
+            String decomp = Default.nfd.normalize(cp);
+            String comp = Default.nfc.normalize(cp);
+            String source = UTF16.valueOf(cp);
+            
+            String bidiDecomp = getBidi(decomp, true);
+            String bidiComp = getBidi(comp, true);
+            String bidiSource = getBidi(source, true);
+            
+            if (!bidiDecomp.equals(bidiSource) || !bidiComp.equals(bidiSource)) {
+            	Utility.fixDot();
+            	System.out.println(Default.ucd.getCodeAndName(cp) + ": " + getBidi(source, false));
+            	System.out.println("\tNFC: " + Default.ucd.getCodeAndName(comp) + ": " + getBidi(comp, false));
+            	System.out.println("\tNFD: " + Default.ucd.getCodeAndName(decomp) + ": " + getBidi(decomp, false));
+            }
+    	}
+    }
+    
+    public static String getBidi(String s, boolean compact) {
+    	String result = "";
+    	byte lastBidi = -1;
+    	int cp;
+    	for (int i = 0; i < s.length(); i += UTF16.getCharCount(cp)) {
+    		cp = UTF16.charAt(s, i);
+    		byte bidi = Default.ucd.getBidiClass(cp);
+    		if (compact) {
+    			if (bidi == BIDI_NSM) {
+    				if (lastBidi != -1) bidi = lastBidi;
+    			}
+    			if (bidi == lastBidi && bidi != BIDI_ES && bidi != BIDI_CS) {
+    				continue;
+    			}
+    		}
+    		result += Default.ucd.getCase(
+    			Default.ucd.getBidiClassID_fromIndex(bidi, SHORT), FULL, TITLE);
+    		lastBidi = bidi;
     	}
     	return result;
     }

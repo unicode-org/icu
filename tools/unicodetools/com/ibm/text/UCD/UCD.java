@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD.java,v $
-* $Date: 2002/04/23 01:59:14 $
-* $Revision: 1.11 $
+* $Date: 2002/05/29 02:01:00 $
+* $Revision: 1.12 $
 *
 *******************************************************************************
 */
@@ -193,6 +193,79 @@ public final class UCD implements UCD_Types {
      */
     public byte getCategory(int codePoint) {
         return get(codePoint, false).generalCategory;
+    }
+    
+    private static final byte FAKE_SYMBOL = 57; // fake category for comparison
+    private static final byte FAKE_PUNCTUATION = 58; // fake category for comparison
+    private static final byte FAKE_SEPERATOR = 59; // fake category for comparison
+    private static final byte FAKE_NUMBER = 60; // fake category for comparison
+    private static final byte FAKE_MARK = 61; // fake category for comparison
+    private static final byte FAKE_LETTER = 62; // fake category for comparison
+    private static final byte FAKE_OTHER = 63; // fake category for comparison
+    private static final byte FAKENC = 31; // fake category for comparison
+    
+    public byte getModCat(int cp, int collapseBits) {
+        byte cat = getCategory(cp);
+        if (cat == UNASSIGNED && isNoncharacter(cp)) cat = FAKENC;
+        if (((1<<cat) & collapseBits) != 0) {
+        	switch (cat) {
+				case UNASSIGNED: cat = FAKE_OTHER; break;
+				case FAKENC: cat = FAKE_OTHER; break;
+				
+				case UPPERCASE_LETTER: cat = FAKE_LETTER; break;
+				case LOWERCASE_LETTER: cat = FAKE_LETTER; break;
+				case TITLECASE_LETTER: cat = FAKE_LETTER; break;
+				case MODIFIER_LETTER: cat = FAKE_LETTER; break;
+				case OTHER_LETTER: cat = FAKE_LETTER; break;
+				
+				case NON_SPACING_MARK: cat = FAKE_MARK; break;
+				case ENCLOSING_MARK: cat = FAKE_MARK; break;
+				case COMBINING_SPACING_MARK: cat = FAKE_MARK; break;
+				
+				case DECIMAL_DIGIT_NUMBER: cat = FAKE_NUMBER; break;
+				case LETTER_NUMBER: cat = FAKE_NUMBER; break;
+				case OTHER_NUMBER: cat = FAKE_NUMBER; break;
+				
+				case SPACE_SEPARATOR: cat = FAKE_SEPERATOR; break;
+				case LINE_SEPARATOR: cat = FAKE_SEPERATOR; break;
+				case PARAGRAPH_SEPARATOR: cat = FAKE_SEPERATOR; break;
+				
+				case CONTROL: cat = FAKE_OTHER; break;
+				case FORMAT: cat = FAKE_OTHER; break;
+				case UNUSED_CATEGORY: cat = FAKE_OTHER; break;
+				case PRIVATE_USE: cat = FAKE_OTHER; break;
+				case SURROGATE: cat = FAKE_OTHER; break;
+				
+				case DASH_PUNCTUATION: cat = FAKE_PUNCTUATION; break;
+				case START_PUNCTUATION: cat = FAKE_PUNCTUATION; break;
+				case END_PUNCTUATION: cat = FAKE_PUNCTUATION; break;
+				case CONNECTOR_PUNCTUATION: cat = FAKE_PUNCTUATION; break;
+				case OTHER_PUNCTUATION: cat = FAKE_PUNCTUATION; break;
+				case INITIAL_PUNCTUATION: cat = FAKE_PUNCTUATION; break;
+				case FINAL_PUNCTUATION: cat = FAKE_PUNCTUATION; break;
+				
+				case MATH_SYMBOL: cat = FAKE_SYMBOL; break;
+				case CURRENCY_SYMBOL: cat = FAKE_SYMBOL; break;
+				case MODIFIER_SYMBOL: cat = FAKE_SYMBOL; break;
+				case OTHER_SYMBOL: cat = FAKE_SYMBOL; break;
+
+			}
+        }
+        return cat;
+    }
+
+    public String getModCatID_fromIndex(byte cat) {
+    	switch (cat) {
+			case FAKE_SYMBOL: return "S&";
+			case FAKE_PUNCTUATION: return "P&";
+			case FAKE_SEPERATOR: return "Z&";
+			case FAKE_NUMBER: return "N&";
+			case FAKE_MARK: return "M&";
+			case FAKE_LETTER: return "L&";
+			case FAKE_OTHER: return "C&";
+			case FAKENC: return "NC";
+        }
+        return getCategoryID_fromIndex(cat);
     }
 
     /**
