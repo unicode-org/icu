@@ -1,4 +1,4 @@
-﻿// Copyright (c) 1998-2001 IBM, Inc. and others.
+﻿// Copyright (c) 1998-2002 IBM, Inc. and others.
 //
 // Maltese locale.
 // Maintained by srl@monkey.sbay.org [See below for full credits]
@@ -803,7 +803,7 @@ mt {
 //        "Latn",  // ISO 15924 Name 
 //    }
 
-    ExemplarCharacters { "[[a-z \u00e0 \u00ec \u00f9 \u00e8 \u00f2 {\u0063\u002e} {\u0068\u002f} {\u0067\u002e} {\u0067\u0068\u002f} {\u007a\u002e}]-[\u0063\u0079]]" }
+    ExemplarCharacters { "[[a-z \u00e0 \u00ec \u00f9 \u00e8 \u00f2 ċ ġ ħ {għ} ż]-[cy]]" }
 
 // Spellout rules.  Experimental.
 
