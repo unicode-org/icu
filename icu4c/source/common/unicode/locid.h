@@ -327,29 +327,29 @@ public:
     /** Useful constant for this language. */
     static const Locale &getTraditionalChinese(void);
 
-    /** Useful constant for this country. */
+    /** Useful constant for this country/region. */
     static const Locale &getFrance(void);
-    /** Useful constant for this country. */
+    /** Useful constant for this country/region. */
     static const Locale &getGermany(void);
-    /** Useful constant for this country. */
+    /** Useful constant for this country/region. */
     static const Locale &getItaly(void);
-    /** Useful constant for this country. */
+    /** Useful constant for this country/region. */
     static const Locale &getJapan(void);
-    /** Useful constant for this country. */
+    /** Useful constant for this country/region. */
     static const Locale &getKorea(void);
-    /** Useful constant for this country. */
+    /** Useful constant for this country/region. */
     static const Locale &getChina(void);
-    /** Useful constant for this country. */
+    /** Useful constant for this country/region. */
     static const Locale &getPRC(void);
-    /** Useful constant for this country. */
+    /** Useful constant for this country/region. */
     static const Locale &getTaiwan(void);
-    /** Useful constant for this country. */
+    /** Useful constant for this country/region. */
     static const Locale &getUK(void);
-    /** Useful constant for this country. */
+    /** Useful constant for this country/region. */
     static const Locale &getUS(void);
-    /** Useful constant for this country. */
+    /** Useful constant for this country/region. */
     static const Locale &getCanada(void);
-    /** Useful constant for this country. */
+    /** Useful constant for this country/region. */
     static const Locale &getCanadaFrench(void);
 
 
