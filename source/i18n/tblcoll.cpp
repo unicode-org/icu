@@ -1508,10 +1508,10 @@ RuleBasedCollator::compareEx(const   UChar* source,
 
         int8_t comparison;
         
-        Normalizer::normalize(source, getDecomposition(), 
+        Normalizer::normalize(UnicodeString(source, sourceLength), getDecomposition(), 
                       0, sourceDecomp,  status);
 
-        Normalizer::normalize(target, getDecomposition(), 
+        Normalizer::normalize(UnicodeString(target, targetLength), getDecomposition(), 
                       0, targetDecomp,  status);
         
         comparison = sourceDecomp.compare(targetDecomp);
@@ -1673,8 +1673,8 @@ RuleBasedCollator::getCollationKey( const   UChar*  source,
 	// if the result is too big
 	if(resLen > tblcoll_StackBufferLen) {
 		allocRes = new uint8_t[resLen];
+		resLen = ucol_getSortKey((UCollator *)this, source, sourceLen, allocRes, tblcoll_StackBufferLen);
 	}
-	resLen = ucol_getSortKey((UCollator *)this, source, sourceLen, allocRes, tblcoll_StackBufferLen);
 	sortkey = CollationKey(allocRes, resLen);
 	if(allocRes != result) {
 		delete[] allocRes;
