@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $ 
-* $Date: 2002/11/13 20:19:43 $ 
-* $Revision: 1.44 $
+* $Date: 2002/12/10 21:47:31 $ 
+* $Revision: 1.45 $
 *
 *******************************************************************************
 */
@@ -553,6 +553,14 @@ public final class UCharacterTest extends TestFmwk
                 			type);
           			break;
         		}
+                
+                if (UCharacter.getIntPropertyValue(ch, 
+                           UProperty.GENERAL_CATEGORY_MASK) != (1 << type)) {
+                    errln("error: getIntPropertyValue(\\u" + 
+                          Integer.toHexString(ch) + 
+                          ", UProperty.GENERAL_CATEGORY_MASK) != " +
+                          "getMask(getType(ch))");
+                }
         
         		// testing combining class
         		if (UCharacter.getCombiningClass(ch) != cc)
@@ -635,7 +643,16 @@ public final class UCharacterTest extends TestFmwk
         
         // sanity check on repeated properties 
         for (ch = 0xfffe; ch <= 0x10ffff;) {
-            if (UCharacter.getType(ch) != UCharacterCategory.UNASSIGNED) {
+            type = UCharacter.getType(ch);
+            if (UCharacter.getIntPropertyValue(ch, 
+                                               UProperty.GENERAL_CATEGORY_MASK)
+                != (1 << type)) {
+                errln("error: UCharacter.getIntPropertyValue(\\u"
+                      + Integer.toHexString(ch) 
+                      + ", UProperty.GENERAL_CATEGORY_MASK) != " 
+                      + "getMask(getType())");
+            }
+            if (type != UCharacterCategory.UNASSIGNED) {
                 errln("error: UCharacter.getType(\\u" + Utility.hex(ch, 4) 
                         + " != UCharacterCategory.UNASSIGNED (returns "
                         + UCharacterCategory.toString(UCharacter.getType(ch)) 
@@ -652,6 +669,15 @@ public final class UCharacterTest extends TestFmwk
         // test that PUA is not "unassigned"
         for(ch = 0xe000; ch <= 0x10fffd;) {
             type = UCharacter.getType(ch);
+            if (UCharacter.getIntPropertyValue(ch, 
+                                               UProperty.GENERAL_CATEGORY_MASK)
+                != (1 << type)) {
+                errln("error: UCharacter.getIntPropertyValue(\\u"
+                      + Integer.toHexString(ch) 
+                      + ", UProperty.GENERAL_CATEGORY_MASK) != " 
+                      + "getMask(getType())");
+            }
+
             if (type == UCharacterCategory.UNASSIGNED) {
                 errln("error: UCharacter.getType(\\u" 
                         + Utility.hex(ch, 4) 
@@ -1789,6 +1815,15 @@ public final class UCharacterTest extends TestFmwk
                           min + ", exp. 0");
                 }
             }
+        }
+        
+        if (UCharacter.getIntPropertyMinValue(UProperty.GENERAL_CATEGORY_MASK)
+            != 0 
+            || UCharacter.getIntPropertyMaxValue(
+                                               UProperty.GENERAL_CATEGORY_MASK)
+               != (1 << UCharacterCategory.CHAR_CATEGORY_COUNT) -1) {
+            errln("error: UCharacter.getIntPropertyMin/MaxValue("
+                  + "UProperty.GENERAL_CATEGORY_MASK) is wrong");
         }
 
         /* Max should be -1 for invalid properties. */

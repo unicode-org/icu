@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2002/12/05 23:53:56 $ 
-* $Revision: 1.55 $
+* $Date: 2002/12/10 21:47:30 $ 
+* $Revision: 1.56 $
 *
 *******************************************************************************
 */
@@ -2952,9 +2952,11 @@ public final class UCharacter
      * values have more than one name.  The nameChoice determines
      * which one is returned.
      *
-     * @param property UProperty selector in the range
-     * UProperty.INT_START <= x < UProperty.INT_LIMIT or
-     * UProperty.BINARY_START <= x < UProperty.BINARY_LIMIT.
+     * @param property UProperty selector constant.
+     * UProperty.INT_START &lt;= property &lt; UProperty.INT_LIMIT or
+     * UProperty.BINARY_START &lt;= property &lt; UProperty.BINARY_LIMIT or
+     * UProperty.MASK_START &lt; = property &lt; UProperty.MASK_LIMIT.
+     * If out of range, null is returned.
      *
      * @param value selector for a value for the given property.  In
      * general, valid values range from 0 up to some maximum.  There
@@ -2997,11 +2999,11 @@ public final class UCharacter
      * specified in the Unicode database file PropertyValueAliases.txt.
      * Short, long, and any other variants are recognized.
      *
-     * @param prop the UProperty selector for the property to which
-     * the given value alias belongs.  It should be in the range
-     * UProperty.INT_START <= x < UProperty.INT_LIMIT or
-     * UProperty.BINARY_START <= x < UProperty.BINARY_LIMIT; only
-     * these properties define value names and enums.
+     * @param property UProperty selector constant.
+     * UProperty.INT_START &lt;= property &lt; UProperty.INT_LIMIT or
+     * UProperty.BINARY_START &lt;= property &lt; UProperty.BINARY_LIMIT or
+     * UProperty.MASK_START &lt; = property &lt; UProperty.MASK_LIMIT.
+     * Only these properties can be enumerated.
      *
      * @param valueAlias the value name to be matched.  The name is
      * compared using "loose matching" as described in
@@ -3013,6 +3015,8 @@ public final class UCharacter
      * [:L:] to be represented.
      *
      * @see UProperty
+     * @throws IllegalArgumentException if property is not a valid UProperty
+     *         selector
      * @draft ICU 2.4
      */
     public static int getPropertyValueEnum(int property,
@@ -3669,9 +3673,10 @@ public final class UCharacter
      * </pre>
      * @param ch code point to test.
      * @param which UProperty selector constant, identifies which binary 
-     *        property to check. Must be UProperty.BINARY_START &lt;= which
-     *        &lt; UProperty.BINARY_LIMIT or UProperty.INT_START &lt;= which
-     *        &lt; UProperty.INT_LIMIT.
+     *        property to check. Must be 
+     *        UProperty.BINARY_START &lt;= which &lt; UProperty.BINARY_LIMIT or 
+     *        UProperty.INT_START &lt;= which &lt; UProperty.INT_LIMIT or 
+     *        UProperty.MASK_START &lt;= which &lt; UProperty.MASK_LIMIT.
      * @return numeric value that is directly the property value or,
      *         for enumerated properties, corresponds to the numeric value of 
      *         the enumerated constant of the respective property value 
@@ -3761,7 +3766,9 @@ public final class UCharacter
             case UProperty.SCRIPT:
                 return UScript.getScript(ch);
             }
-        } 
+        } else if (type == UProperty.GENERAL_CATEGORY_MASK) {
+            return UCharacterProperty.getMask(getType(ch));
+        }
         return 0; // undefined
     }
     
@@ -3770,9 +3777,10 @@ public final class UCharacter
      * Can be used together with UCharacter.getIntPropertyMaxValue(int)
      * to allocate arrays of com.ibm.icu.text.UnicodeSet or similar.
      * @param which UProperty selector constant, identifies which binary 
-     *        property to check. Must be UProperty.BINARY_START &lt;= which
-     *        &lt; UProperty.BINARY_LIMIT or UProperty.INT_START &lt;= which
-     *        &lt; UProperty.INT_LIMIT.
+     *        property to check. Must be 
+     *        UProperty.BINARY_START &lt;= which &lt; UProperty.BINARY_LIMIT or 
+     *        UProperty.INT_START &lt;= which &lt; UProperty.INT_LIMIT or
+     *        UProperty.MASK_START &lt;= which &lt; UProperty.MASK_LIMIT.
      * @return Minimum value returned by UCharacter.getIntPropertyValue(int) 
      *         for a Unicode property. 0 if the property 
      *         selector is out of range.
@@ -3806,11 +3814,12 @@ public final class UCharacter
      * </ul>
      * For undefined UProperty constant values, min/max values will be 0/-1.
      * @param which UProperty selector constant, identifies which binary 
-     *        property to check. Must be UProperty.BINARY_START &lt;= which
-     *        &lt; UProperty.BINARY_LIMIT or UProperty.INT_START &lt;= which
-     *        &lt; UProperty.INT_LIMIT.
-     * @return Maximum value returned by u_getIntPropertyValue for a Unicode property.
-     *         <= 0 if the property selector is out of range.
+     *        property to check. Must be 
+     *        UProperty.BINARY_START &lt;= which &lt; UProperty.BINARY_LIMIT or 
+     *        UProperty.INT_START &lt;= which &lt; UProperty.INT_LIMIT or
+     *        UProperty.MASK_START &lt;= which &lt; UProperty.MASK_LIMIT.
+     * @return Maximum value returned by u_getIntPropertyValue for a Unicode 
+     *         property. &lt;= 0 if the property selector is out of range.
      * @see UProperty
      * @see #hasBinaryProperty
      * @see #getUnicodeVersion
@@ -3865,7 +3874,10 @@ public final class UCharacter
                 }
                 return max;
             }
-        } 
+        } else if (type == UProperty.GENERAL_CATEGORY_MASK) {
+            return UCharacterProperty.getMask(
+                                   UCharacterCategory.CHAR_CATEGORY_COUNT) - 1;
+        }
         return -1; // undefined
     }
 

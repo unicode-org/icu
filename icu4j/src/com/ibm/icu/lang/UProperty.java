@@ -6,8 +6,8 @@
 *
 * $Source: 
 *      /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterCategory.java $ 
-* $Date: 2002/12/04 00:12:54 $ 
-* $Revision: 1.7 $
+* $Date: 2002/12/10 21:47:31 $ 
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -361,11 +361,32 @@ public interface UProperty
      */
     public static final int INT_LIMIT = 0x100B;
 
+    /** 
+     * Enumerated property General_Category, returned as a bit mask. 
+     * When used in u_getIntPropertyValue(c), same as U_MASK(u_charType(c)), 
+     * returns bit masks for UCharCategory values where exactly one bit is set. 
+     * When used with u_getPropertyValueName() and u_getPropertyValueEnum(), 
+     * a multi-bit mask is used for sets of categories like "Letters". 
+     * Mask values should be cast to uint32_t. 
+     * @draft ICU 2.4
+     */ 
+    public static final int GENERAL_CATEGORY_MASK = 0x2000; 
+    /** 
+     * First constant for bit-mask Unicode properties. 
+     * @draft ICU 2.4
+     */
+    public static final int MASK_START = GENERAL_CATEGORY_MASK;
+    /** 
+     * One more than the last constant for bit-mask Unicode properties. 
+     * @draft ICU 2.4
+     */ 
+    public static final int MASK_LIMIT = 0x2001; 
+    
     /**
      * First constant for double Unicode properties.
      * @draft ICU 2.4
      */
-    public static final int DOUBLE_START = 0x2000;
+    public static final int DOUBLE_START = 0x3000;
     /**
      * Double property Numeric_Value.
      * Corresponds to UCharacter.getUnicodeNumericValue(int).
@@ -376,13 +397,12 @@ public interface UProperty
      * One more than the last constant for double Unicode properties.
      * @draft ICU 2.4
      */
-    public static final int DOUBLE_LIMIT = 0x2001;
-
+    public static final int DOUBLE_LIMIT = 0x3001;
     /**
      * First constant for string Unicode properties.
      * @draft ICU 2.4
      */
-    public static final int STRING_START = 0x3000;
+    public static final int STRING_START = 0x4000;
     /**
      * String property Age.
      * Corresponds to UCharacter.getAge(int).
@@ -394,78 +414,78 @@ public interface UProperty
      * Corresponds to UCharacter.getMirror(int).
      * @draft ICU 2.4
      */
-    public static final int BIDI_MIRRORING_GLYPH = 0x3001;
+    public static final int BIDI_MIRRORING_GLYPH = 0x4001;
     /**
      * String property Case_Folding.
      * Corresponds to UCharacter.foldCase(String, boolean).
      * @draft ICU 2.4
      */
-    public static final int CASE_FOLDING = 0x3002;
+    public static final int CASE_FOLDING = 0x4002;
     /**
      * String property ISO_Comment.
      * Corresponds to UCharacter.getISOComment(int).
      * @draft ICU 2.4
      */
-    public static final int ISO_COMMENT = 0x3003;
+    public static final int ISO_COMMENT = 0x4003;
     /**
      * String property Lowercase_Mapping.
      * Corresponds to UCharacter.toLowerCase(String).
      * @draft ICU 2.4
      */
-    public static final int LOWERCASE_MAPPING = 0x3004;
+    public static final int LOWERCASE_MAPPING = 0x4004;
     /**
      * String property Name.
      * Corresponds to UCharacter.getName(int).
      * @draft ICU 2.4
      */
-    public static final int NAME = 0x3005;
+    public static final int NAME = 0x4005;
     /**
      * String property Simple_Case_Folding.
      * Corresponds to UCharacter.foldCase(int, boolean).
      * @draft ICU 2.4
      */
-    public static final int SIMPLE_CASE_FOLDING = 0x3006;
+    public static final int SIMPLE_CASE_FOLDING = 0x4006;
     /**
      * String property Simple_Lowercase_Mapping.
      * Corresponds to UCharacter.toLowerCase(int).
      * @draft ICU 2.4
      */
-    public static final int SIMPLE_LOWERCASE_MAPPING = 0x3007;
+    public static final int SIMPLE_LOWERCASE_MAPPING = 0x4007;
     /**
      * String property Simple_Titlecase_Mapping.
      * Corresponds to UCharacter.toTitleCase(int).
      * @draft ICU 2.4
      */
-    public static final int SIMPLE_TITLECASE_MAPPING = 0x3008;
+    public static final int SIMPLE_TITLECASE_MAPPING = 0x4008;
     /**
      * String property Simple_Uppercase_Mapping.
      * Corresponds to UCharacter.toUpperCase(int).
      * @draft ICU 2.4
      */
-    public static final int SIMPLE_UPPERCASE_MAPPING = 0x3009;
+    public static final int SIMPLE_UPPERCASE_MAPPING = 0x4009;
     /**
      * String property Titlecase_Mapping.
      * Corresponds to UCharacter.toTitleCase(String).
      * @draft ICU 2.4
      */
-    public static final int TITLECASE_MAPPING = 0x300A;
+    public static final int TITLECASE_MAPPING = 0x400A;
     /**
      * String property Unicode_1_Name.
      * Corresponds to UCharacter.getName1_0(int).
      * @draft ICU 2.4
      */
-    public static final int UNICODE_1_NAME = 0x300B;
+    public static final int UNICODE_1_NAME = 0x400B;
     /**
      * String property Uppercase_Mapping.
      * Corresponds to UCharacter.toUpperCase(String).
      * @draft ICU 2.4
      */
-    public static final int UPPERCASE_MAPPING = 0x300C;
+    public static final int UPPERCASE_MAPPING = 0x400C;
     /**
      * One more than the last constant for string Unicode properties.
      * @draft ICU 2.4
      */
-    public static final int STRING_LIMIT = 0x300D;
+    public static final int STRING_LIMIT = 0x400D;
 
     /**
      * Selector constants for UCharacter.getPropertyName() and
