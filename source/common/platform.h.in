@@ -97,6 +97,7 @@ typedef unsigned long uint32_t;
 
 #ifdef OS390
 #   define U_CHARSET_FAMILY 1
+#   define U_SIZEOF_WCHAR_T 2
 #endif
 
 /*===========================================================================*/
