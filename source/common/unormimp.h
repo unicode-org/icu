@@ -158,8 +158,8 @@ unorm_haveData(UErrorCode *pErrorCode);
  * Does not check for bad input and uses growBuffer.
  * @internal
  */
-U_CFUNC int32_t
-unorm_internalNormalize(UChar *dest, int32_t destCapacity,
+U_CAPI int32_t U_EXPORT2
+unorm_internalNormalize(UChar **pDest, int32_t *pDestCapacity,
                         const UChar *src, int32_t srcLength,
                         UNormalizationMode mode, UBool ignoreHangul,
                         UGrowBuffer *growBuffer, void *context,
@@ -169,8 +169,8 @@ unorm_internalNormalize(UChar *dest, int32_t destCapacity,
  * internal API, used by normlzr.cpp
  * @internal
  */
-U_CFUNC int32_t
-unorm_decompose(UChar *dest, int32_t destCapacity,
+U_CAPI int32_t U_EXPORT2
+unorm_decompose(UChar **pDest, int32_t *pDestCapacity,
                 const UChar *src, int32_t srcLength,
                 UBool compat, UBool ignoreHangul,
                 UGrowBuffer *growBuffer, void *context,
@@ -180,8 +180,8 @@ unorm_decompose(UChar *dest, int32_t destCapacity,
  * internal API, used by normlzr.cpp
  * @internal
  */
-U_CFUNC int32_t
-unorm_compose(UChar *dest, int32_t destCapacity,
+U_CAPI int32_t U_EXPORT2
+unorm_compose(UChar **pDest, int32_t *pDestCapacity,
               const UChar *src, int32_t srcLength,
               UBool compat, UBool ignoreHangul,
               UGrowBuffer *growBuffer, void *context,
@@ -255,7 +255,7 @@ unorm_getFCD16FromSurrogatePair(const uint16_t *fcdTrieIndex, uint16_t fcd16, UC
  * @internal
  */
 U_CFUNC int32_t
-unorm_nextNormalize(UChar *dest, int32_t destCapacity,
+unorm_nextNormalize(UChar *&dest, int32_t &destCapacity,
                     CharacterIterator &src,
                     UNormalizationMode mode, UBool ignoreHangul,
                     UGrowBuffer *growBuffer, void *context,
@@ -266,7 +266,7 @@ unorm_nextNormalize(UChar *dest, int32_t destCapacity,
  * @internal
  */
 U_CFUNC int32_t
-unorm_previousNormalize(UChar *dest, int32_t destCapacity,
+unorm_previousNormalize(UChar *&dest, int32_t &destCapacity,
                         CharacterIterator &src,
                         UNormalizationMode mode, UBool ignoreHangul,
                         UGrowBuffer *growBuffer, void *context,
