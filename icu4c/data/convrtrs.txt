@@ -73,9 +73,10 @@ ISO_2022			 iso-2022 {	MIME	 } 2022 cp2022
 ISO_2022,locale=ja,version=0	 ISO_2022_JP, ISO-2022-JP, csISO2022JP, iso-2022-jp { MIME }
 ISO_2022,locale=ja,version=1	 ISO_2022_JP_1, ISO-2022-JP-1
 ISO_2022,locale=ja,version=2	 ISO_2022_JP_2, ISO-2022-JP-2,csISO2022JP2, iso-2022-jp-2 {	MIME }
-ISO_2022,locale=ko		 ISO_2022_KR, csISO2022KR, iso-2022-kr { MIME }
+ISO_2022,locale=ko				 ISO_2022_KR, csISO2022KR, iso-2022-kr { MIME }
 ISO_2022,locale=zh,version=0	 ISO_2022_CN, csISO2022CN, iso-2022-cn { MIME }
 ISO_2022,locale=zh,version=1	 ISO_2022_CN_EXT, ISO-2022-CN-EXT, iso-2022-cn-ext
+HZ								 hz, HZ-GB-2312 { MIME }
 LMBCS-1			 lmbcs
 LMBCS-2
 LMBCS-3	        
