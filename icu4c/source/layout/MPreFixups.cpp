@@ -1,8 +1,11 @@
 /*
- * (C) Copyright IBM Corp. 2002-2003 - All Rights Reserved
+ *
+ * (C) Copyright IBM Corp. 2002-2004 - All Rights Reserved
+ *
  */
 
 #include "LETypes.h"
+#include "LEGlyphStorage.h"
 #include "MPreFixups.h"
 
 U_NAMESPACE_BEGIN
@@ -37,18 +40,18 @@ void MPreFixups::add(le_int32 baseIndex, le_int32 mpreIndex)
     }
 }
 
-void MPreFixups::apply(LEGlyphID *glyphs, le_int32 *charIndices)
+void MPreFixups::apply(LEGlyphStorage &glyphStorage)
 {
     for (le_int32 fixup = 0; fixup < fFixupCount; fixup += 1) {
         le_int32 baseIndex = fFixupData[fixup].fBaseIndex;
         le_int32 mpreIndex = fFixupData[fixup].fMPreIndex;
         le_int32 mpreLimit = mpreIndex + 1;
 
-        while (glyphs[baseIndex] == 0xFFFF || glyphs[baseIndex] == 0xFFFE) {
+        while (glyphStorage[baseIndex] == 0xFFFF || glyphStorage[baseIndex] == 0xFFFE) {
             baseIndex -= 1;
         }
 
-        while (glyphs[mpreLimit] == 0xFFFF || glyphs[mpreLimit] == 0xFFFE) {
+        while (glyphStorage[mpreLimit] == 0xFFFF || glyphStorage[mpreLimit] == 0xFFFE) {
             mpreLimit += 1;
         }
 
@@ -56,6 +59,7 @@ void MPreFixups::apply(LEGlyphID *glyphs, le_int32 *charIndices)
             continue;
         }
 
+		LEErrorCode success = LE_NO_ERROR;
         le_int32   mpreCount = mpreLimit - mpreIndex;
         le_int32   moveCount = baseIndex - mpreLimit;
         le_int32   mpreDest  = baseIndex - mpreCount;
@@ -64,18 +68,21 @@ void MPreFixups::apply(LEGlyphID *glyphs, le_int32 *charIndices)
         le_int32   i;
 
         for (i = 0; i < mpreCount; i += 1) {
-            mpreSave[i]  = glyphs[mpreIndex + i];
-            indexSave[i] = charIndices[mpreIndex + i];
+            mpreSave[i]  = glyphStorage[mpreIndex + i];
+			indexSave[i] = glyphStorage.getCharIndex(mpreIndex + i, success); //charIndices[mpreIndex + i];
         }
 
         for (i = 0; i < moveCount; i += 1) {
-            glyphs[mpreIndex + i] = glyphs[mpreLimit + i];
-            charIndices[mpreIndex + i] = charIndices[mpreLimit + i];
+			LEGlyphID glyph = glyphStorage[mpreLimit + i];
+			le_int32 charIndex = glyphStorage.getCharIndex(mpreLimit + i, success);
+
+			glyphStorage[mpreIndex + i] = glyph;
+			glyphStorage.setCharIndex(mpreIndex + i, charIndex, success);
         }
 
         for (i = 0; i < mpreCount; i += 1) {
-            glyphs[mpreDest + i] = mpreSave[i];
-            charIndices[mpreDest + i] = indexSave[i];
+			glyphStorage[mpreDest + i] = mpreSave[i];
+			glyphStorage.setCharIndex(mpreDest, indexSave[i], success);
         }
         
         LE_DELETE_ARRAY(indexSave);

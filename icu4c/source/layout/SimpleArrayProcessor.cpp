@@ -1,7 +1,6 @@
 /*
- * @(#)SimpleArrayProcessor.cpp	1.6 00/03/15
  *
- * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
  *
  */
 
@@ -11,6 +10,7 @@
 #include "NonContextualGlyphSubst.h"
 #include "NonContextualGlyphSubstProc.h"
 #include "SimpleArrayProcessor.h"
+#include "LEGlyphStorage.h"
 #include "LESwaps.h"
 
 U_NAMESPACE_BEGIN
@@ -33,15 +33,17 @@ SimpleArrayProcessor::~SimpleArrayProcessor()
 {
 }
 
-void SimpleArrayProcessor::process(LEGlyphID *glyphs, le_int32 * /*charIndices*/, le_int32 glyphCount)
+void SimpleArrayProcessor::process(LEGlyphStorage &glyphStorage)
 {
+	le_int32 glyphCount = glyphStorage.getGlyphCount();
     le_int32 glyph;
 
     for (glyph = 0; glyph < glyphCount; glyph += 1) {
-        if (glyphs[glyph] < 0xFFFF) {
-            TTGlyphID newGlyph = SWAPW(simpleArrayLookupTable->valueArray[glyphs[glyph]]);
+		LEGlyphID thisGlyph = glyphStorage[glyph];
+        if (LE_GET_GLYPH(thisGlyph) < 0xFFFF) {
+            TTGlyphID newGlyph = SWAPW(simpleArrayLookupTable->valueArray[LE_GET_GLYPH(thisGlyph)]);
 
-            glyphs[glyph] = LE_SET_GLYPH(glyphs[glyph], newGlyph);
+			glyphStorage[glyph] = LE_SET_GLYPH(thisGlyph, newGlyph);
         }
     }
 }

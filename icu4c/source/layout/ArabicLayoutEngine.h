@@ -1,8 +1,7 @@
 
 /*
- * @(#)ArabicLayoutEngine.h	1.3 00/03/15
  *
- * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
  *
  */
 
@@ -112,7 +111,7 @@ protected:
      * @internal
      */
     virtual le_int32 characterProcessing(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft,
-            LEUnicode *&outChars, le_int32 *&charIndices, const LETag **&featureTags, LEErrorCode &success);
+            LEUnicode *&outChars, LEGlyphStorage &glyphStorage, LEErrorCode &success);
 
     /**
      * This method applies the GPOS table if it is present, otherwise it ensures that all vowel
@@ -131,7 +130,9 @@ protected:
      *
      * @internal
      */
-    virtual void adjustGlyphPositions(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, LEGlyphID glyphs[], le_int32 glyphCount, float positions[], LEErrorCode &success);
+    virtual void adjustGlyphPositions(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, LEGlyphStorage &glyphStorage, LEErrorCode &success);
+
+	// static void adjustMarkGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool rightToLeft, LEGlyphStorage &glyphStorage, LEErrorCode &success);
 
 private:
 
@@ -199,8 +200,7 @@ protected:
      *
      * @internal
      */
-    virtual le_int32 glyphPostProcessing(LEGlyphID tempGlyphs[], le_int32 tempCharIndices[], le_int32 tempGlyphCount,
-                    LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success);
+    virtual le_int32 glyphPostProcessing(LEGlyphStorage &tempGlyphStorage, LEGlyphStorage &glyphStorage, LEErrorCode &success);
 
     /**
      * This method copies the input characters into the output glyph index array,
@@ -221,7 +221,7 @@ protected:
      * @internal
      */
     virtual void mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, le_bool mirror,
-        LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success);
+        LEGlyphStorage &glyphStorage, LEErrorCode &success);
 
     /**
      * This method ensures that all vowel and accent glyphs have a zero advance width by calling
@@ -239,7 +239,7 @@ protected:
      *
      * @internal
      */
-    virtual void adjustGlyphPositions(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, LEGlyphID glyphs[], le_int32 glyphCount, float positions[], LEErrorCode &success);
+    virtual void adjustGlyphPositions(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, LEGlyphStorage &glyphStorage, LEErrorCode &success);
 };
 
 U_NAMESPACE_END

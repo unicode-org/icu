@@ -1,8 +1,7 @@
 
 /*
- * @(#)GXLayoutEngine.h	1.4 00/03/15
  *
- * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
  *
  */
 
@@ -10,13 +9,14 @@
 #define __GXLAYOUTENGINE_H
 
 #include "LETypes.h"
-#include "LEFontInstance.h"
-#include "LEGlyphFilter.h"
 #include "LayoutEngine.h"
 
 #include "MorphTables.h"
 
 U_NAMESPACE_BEGIN
+
+class LEFontInstance;
+class LEGlyphStorage;
 
 /**
  * This class implements layout for QuickDraw GX or Apple Advanced Typograyph (AAT)
@@ -102,7 +102,7 @@ protected:
      * @internal
      */
     virtual le_int32 computeGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft,
-        LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success);
+        LEGlyphStorage &glyphStorage, LEErrorCode &success);
 
     /**
      * This method adjusts the glyph positions using the font's

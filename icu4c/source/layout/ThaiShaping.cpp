@@ -1,13 +1,13 @@
 /*
- * @(#)ThaiShaping.cpp	1.13 00/03/15
  *
- * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
  *
  */
 
 #include "LETypes.h"
 #include "LEGlyphFilter.h"
 #include "OpenTypeTables.h"
+#include "LEGlyphStorage.h"
 #include "ThaiShaping.h"
 
 U_NAMESPACE_BEGIN
@@ -143,36 +143,38 @@ LEUnicode ThaiShaping::noDescenderCOD(LEUnicode cod, le_uint8 glyphSet)
 }
 
 le_uint8 ThaiShaping::doTransition (StateTransition transition, LEUnicode currChar, le_int32 inputIndex, le_uint8 glyphSet,
-        LEUnicode errorChar, LEUnicode *outputBuffer, le_int32 *charIndices, le_int32 &outputIndex)
+        LEUnicode errorChar, LEUnicode *outputBuffer, LEGlyphStorage &glyphStorage, le_int32 &outputIndex)
 {
+	LEErrorCode success = LE_NO_ERROR;
+
     switch (transition.action) {
     case tA:
-        charIndices[outputIndex] = inputIndex;
+        glyphStorage.setCharIndex(outputIndex, inputIndex, success);
         outputBuffer[outputIndex++] = currChar;
         break;
         
     case tC:
-        charIndices[outputIndex] = inputIndex;
+        glyphStorage.setCharIndex(outputIndex, inputIndex, success);
         outputBuffer[outputIndex++] = currChar;
         break;
         
     case tD:
-        charIndices[outputIndex] = inputIndex;
+        glyphStorage.setCharIndex(outputIndex, inputIndex, success);
         outputBuffer[outputIndex++] = leftAboveVowel(currChar, glyphSet);
         break;
         
     case tE:
-        charIndices[outputIndex] = inputIndex;
+        glyphStorage.setCharIndex(outputIndex, inputIndex, success);
         outputBuffer[outputIndex++] = lowerRightTone(currChar, glyphSet);
         break;
         
     case tF:
-        charIndices[outputIndex] = inputIndex;
+        glyphStorage.setCharIndex(outputIndex, inputIndex, success);
         outputBuffer[outputIndex++] = lowerLeftTone(currChar, glyphSet);
         break;
     
     case tG:
-        charIndices[outputIndex] = inputIndex;
+        glyphStorage.setCharIndex(outputIndex, inputIndex, success);
         outputBuffer[outputIndex++] = upperLeftTone(currChar, glyphSet);
         break;
         
@@ -184,38 +186,38 @@ le_uint8 ThaiShaping::doTransition (StateTransition transition, LEUnicode currCh
         if (cod != coa) {
             outputBuffer[outputIndex - 1] = coa;
             
-            charIndices[outputIndex] = inputIndex;
+            glyphStorage.setCharIndex(outputIndex, inputIndex, success);
             outputBuffer[outputIndex++] = currChar;
             break;
         }
 
-        charIndices[outputIndex] = inputIndex;
+        glyphStorage.setCharIndex(outputIndex, inputIndex, success);
         outputBuffer[outputIndex++] = lowerBelowVowel(currChar, glyphSet);
         break;
     }
         
     case tR:
-        charIndices[outputIndex] = inputIndex;
+        glyphStorage.setCharIndex(outputIndex, inputIndex, success);
         outputBuffer[outputIndex++] = errorChar;
 
-        charIndices[outputIndex] = inputIndex;
+        glyphStorage.setCharIndex(outputIndex, inputIndex, success);
         outputBuffer[outputIndex++] = currChar;
         break;
         
     case tS:
         if (currChar == CH_SARA_AM) {
-            charIndices[outputIndex] = inputIndex;
+            glyphStorage.setCharIndex(outputIndex, inputIndex, success);
             outputBuffer[outputIndex++] = errorChar;
         }
 
-        charIndices[outputIndex] = inputIndex;
+        glyphStorage.setCharIndex(outputIndex, inputIndex, success);
         outputBuffer[outputIndex++] = currChar;
         break;
         
     default:
         // FIXME: if we get here, there's an error
         // in the state table!
-        charIndices[outputIndex] = inputIndex;
+        glyphStorage.setCharIndex(outputIndex, inputIndex, success);
         outputBuffer[outputIndex++] = currChar;
         break;
      }
@@ -224,14 +226,14 @@ le_uint8 ThaiShaping::doTransition (StateTransition transition, LEUnicode currCh
 }
 
 le_uint8 ThaiShaping::getNextState(LEUnicode ch, le_uint8 prevState, le_int32 inputIndex, le_uint8 glyphSet, LEUnicode errorChar,
-                              le_uint8 &charClass, LEUnicode *output, le_int32 *charIndices, le_int32 &outputIndex)
+                              le_uint8 &charClass, LEUnicode *output, LEGlyphStorage &glyphStorage, le_int32 &outputIndex)
 {
     StateTransition transition;
 
     charClass = getCharClass(ch);
     transition = getTransition(prevState, charClass);
     
-    return doTransition(transition, ch, inputIndex, glyphSet, errorChar, output, charIndices, outputIndex);
+    return doTransition(transition, ch, inputIndex, glyphSet, errorChar, output, glyphStorage, outputIndex);
 }
 
 le_bool ThaiShaping::isLegalHere(LEUnicode ch, le_uint8 prevState)
@@ -261,7 +263,7 @@ le_bool ThaiShaping::isLegalHere(LEUnicode ch, le_uint8 prevState)
 }
     
 le_int32 ThaiShaping::compose(const LEUnicode *input, le_int32 offset, le_int32 charCount, le_uint8 glyphSet,
-                          LEUnicode errorChar, LEUnicode *output, le_int32 *charIndices)
+                          LEUnicode errorChar, LEUnicode *output, LEGlyphStorage &glyphStorage)
 {
     le_uint8 state = 0;
     le_int32 inputIndex;
@@ -278,19 +280,19 @@ le_int32 ThaiShaping::compose(const LEUnicode *input, le_int32 offset, le_int32 
         if (ch == CH_SARA_AM && isLegalHere(ch, state)) {
             outputIndex = conOutput;
             state = getNextState(CH_NIKHAHIT, conState, inputIndex, glyphSet, errorChar, charClass,
-                output, charIndices, outputIndex);
+                output, glyphStorage, outputIndex);
             
             for (int j = conInput + 1; j < inputIndex; j += 1) {
                 ch = input[j + offset];
                 state = getNextState(ch, state, j, glyphSet, errorChar, charClass,
-                    output, charIndices, outputIndex);
+                    output, glyphStorage, outputIndex);
             }
             
             ch = CH_SARA_AA;
         }
         
         state = getNextState(ch, state, inputIndex, glyphSet, errorChar, charClass,
-            output, charIndices, outputIndex);
+            output, glyphStorage, outputIndex);
         
         if (charClass >= CON && charClass <= COD) {
             conState = state;

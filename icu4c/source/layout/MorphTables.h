@@ -1,7 +1,6 @@
 /*
- * @(#)MorphTables.h	1.5 00/03/15
  *
- * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
  *
  */
 
@@ -17,6 +16,8 @@
 #include "LayoutTables.h"
 
 U_NAMESPACE_BEGIN
+
+class LEGlyphStorage;
 
 typedef le_uint32 FeatureFlags;
 
@@ -46,7 +47,7 @@ struct MorphTableHeader
     le_uint32   nChains;
     ChainHeader chains[ANY_NUMBER];
 
-    void process(LEGlyphID *glyphs, le_int32 *glyphIndices, le_int32 glyphCount) const;
+    void process(LEGlyphStorage &glyphStorage) const;
 };
 
 typedef le_int16 SubtableCoverage;
@@ -76,7 +77,7 @@ struct MorphSubtableHeader
     SubtableCoverage    coverage;
     FeatureFlags        subtableFeatures;
 
-    void process(LEGlyphID *glyphs, le_int32 *glyphIndices, le_int32 glyphCount) const;
+    void process(LEGlyphStorage &glyphStorage) const;
 };
 
 U_NAMESPACE_END

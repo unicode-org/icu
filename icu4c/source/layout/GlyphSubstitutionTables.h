@@ -1,7 +1,6 @@
 /*
- * @(#)GlyphSubstitutionTables.h	1.9 00/03/15
  *
- * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
  *
  */
 
@@ -23,10 +22,11 @@
 
 U_NAMESPACE_BEGIN
 
+class LEGlyphStorage;
+
 struct GlyphSubstitutionTableHeader : public GlyphLookupTableHeader
 {
-    le_int32    process(LEGlyphID *&glyphs, const LETag **&glyphTags, le_int32 *&charIndices, le_int32 glyphCount,
-                 le_bool rightToLeft, LETag scriptTag, LETag languageTag,
+    le_int32    process(LEGlyphStorage &glyphStorage, le_bool rightToLeft, LETag scriptTag, LETag languageTag,
                  const GlyphDefinitionTableHeader *glyphDefinitionTableHeader,
                  const LEGlyphFilter *filter = NULL, const LETag *featureOrder = NULL) const;
 };

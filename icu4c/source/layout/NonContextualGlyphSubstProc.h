@@ -1,7 +1,6 @@
 /*
- * @(#)NonContextualGlyphSubstProc.h	1.6 00/03/15
  *
- * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
  *
  */
 
@@ -20,10 +19,12 @@
 
 U_NAMESPACE_BEGIN
 
+class LEGlyphStorage;
+
 class NonContextualGlyphSubstitutionProcessor : public SubtableProcessor
 {
 public:
-    virtual void process(LEGlyphID *glyphs, le_int32 *charIndices, le_int32 glyphCount) = 0;
+    virtual void process(LEGlyphStorage &glyphStorage) = 0;
 
     static SubtableProcessor *createInstance(const MorphSubtableHeader *morphSubtableHeader);
 

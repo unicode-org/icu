@@ -2,16 +2,14 @@
 /*
  * %W% %W%
  *
- * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
  *
  */
 
 #ifndef __LAYOUTENGINE_H
 #define __LAYOUTENGINE_H
 
-#ifndef __LETYPES_H
 #include "LETypes.h"
-#endif
 
 #include <string.h>
 
@@ -19,6 +17,7 @@ U_NAMESPACE_BEGIN
 
 class LEFontInstance;
 class LEGlyphFilter;
+class LEGlyphStorage;
 
 /**
  * This is a virtual base class used to do complex text layout. The text must all
@@ -70,32 +69,7 @@ protected:
      *
      * @internal
      */
-    le_int32 fGlyphCount;
-
-    /**
-     * The output glyph array
-     *
-     * @internal
-     */
-    LEGlyphID *fGlyphs;
-
-    /**
-     * The character index array. One entry for each output glyph, giving the index
-     * in the input character array of the character which corresponds to this glyph.
-     *
-     * @internal
-     */
-    le_int32 *fCharIndices;
-
-    /**
-     * The glyph position array. There are two entries for each glyph giving the
-     * X and Y positions of the glyph. Thus, for glyph i, the X position is at index
-     * 2i, and the Y position is at index 2i + 1. There are also two entries for the
-     * X and Y position of the advance of the last glyph.
-     *
-     * @internal
-     */
-    float *fPositions;
+    LEGlyphStorage *fGlyphStorage;
 
     /**
      * The font instance for the text font.
@@ -174,7 +148,7 @@ protected:
      *
      * @internal
      */
-    virtual le_int32 computeGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft, LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success);
+    virtual le_int32 computeGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft, LEGlyphStorage &glyphStorage, LEErrorCode &success);
 
     /**
      * This method does basic glyph positioning. The default implementation positions
@@ -192,7 +166,7 @@ protected:
      *
      * @internal
      */
-    virtual void positionGlyphs(const LEGlyphID glyphs[], le_int32 glyphCount, float x, float y, float *&positions, LEErrorCode &success);
+    virtual void positionGlyphs(LEGlyphStorage &glyphStorage, float x, float y, LEErrorCode &success);
 
     /**
      * This method does positioning adjustments like accent positioning and
@@ -218,7 +192,7 @@ protected:
      *
      * @internal
      */
-    virtual void adjustGlyphPositions(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool /*reverse*/, LEGlyphID glyphs[], le_int32 glyphCount, float positions[], LEErrorCode &success);
+    virtual void adjustGlyphPositions(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool /*reverse*/, LEGlyphStorage &glyphStorage, LEErrorCode &success);
 
     /**
      * This method gets a table from the font associated with
@@ -261,7 +235,7 @@ protected:
      *
      * @internal
      */
-    virtual void mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, le_bool mirror, LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success);
+    virtual void mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, le_bool mirror, LEGlyphStorage &glyphStorage, LEErrorCode &success);
 
     /**
      * This is a convenience method that forces the advance width of mark
@@ -278,7 +252,10 @@ protected:
      *
      * @internal
      */
-    static void adjustMarkGlyphs(const LEGlyphID glyphs[], le_int32 glyphCount, le_bool reverse, LEGlyphFilter *markFilter, float positions[], LEErrorCode &success);
+    static void adjustMarkGlyphs(LEGlyphStorage &glyphStorage, LEGlyphFilter *markFilter, LEErrorCode &success);
+
+	static void adjustMarkGlyphs(const LEUnicode chars[], le_int32 charCount, le_bool reverse, LEGlyphStorage &glyphStorage, LEGlyphFilter *markFilter, LEErrorCode &success);
+
 
 public:
     /**
@@ -323,10 +300,7 @@ public:
      *
      * @stable ICU 2.8
      */
-    le_int32 getGlyphCount() const
-    {
-        return fGlyphCount;
-    };
+    le_int32 getGlyphCount() const;
 
     /**
      * This method copies the glyph array into a caller supplied array.
@@ -385,7 +359,7 @@ public:
      * X and Y position for each glyph, plus an extra X and Y for the
      * advance of the last glyph.
      *
-     * @param glyphs - the destiniation position array
+     * @param positions - the destiniation position array
      * @param success - set to an error code if the operation fails
      *
      * @stable ICU 2.8

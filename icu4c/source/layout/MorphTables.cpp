@@ -1,7 +1,7 @@
 /*
  * %W% %W%
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998 - 2004 - All Rights Reserved
  *
  */
 
@@ -15,11 +15,12 @@
 #include "LigatureSubstProc.h"
 #include "NonContextualGlyphSubstProc.h"
 //#include "ContextualGlyphInsertionProcessor.h"
+#include "LEGlyphStorage.h"
 #include "LESwaps.h"
 
 U_NAMESPACE_BEGIN
 
-void MorphTableHeader::process(LEGlyphID *glyphs, le_int32 *glyphIndices, le_int32 glyphCount) const
+void MorphTableHeader::process(LEGlyphStorage &glyphStorage) const
 {
     const ChainHeader *chainHeader = chains;
     le_uint32 chainCount = SWAPL(this->nChains);
@@ -41,7 +42,7 @@ void MorphTableHeader::process(LEGlyphID *glyphs, le_int32 *glyphIndices, le_int
 
             // should check coverage more carefully...
             if ((coverage & scfVertical) == 0 && (subtableFeatures & defaultFlags) != 0) {
-                subtableHeader->process(glyphs, glyphIndices, glyphCount);
+                subtableHeader->process(glyphStorage);
             }
 
             subtableHeader = (const MorphSubtableHeader *) ((char *)subtableHeader + length);
@@ -51,7 +52,7 @@ void MorphTableHeader::process(LEGlyphID *glyphs, le_int32 *glyphIndices, le_int
     }
 }
 
-void MorphSubtableHeader::process(LEGlyphID *glyphs, le_int32 *glyphIndices, le_int32 glyphCount) const
+void MorphSubtableHeader::process(LEGlyphStorage &glyphStorage) const
 {
     SubtableProcessor *processor = NULL;
 
@@ -87,7 +88,7 @@ void MorphSubtableHeader::process(LEGlyphID *glyphs, le_int32 *glyphIndices, le_
     }
 
     if (processor != NULL) {
-        processor->process(glyphs, glyphIndices, glyphCount);
+        processor->process(glyphStorage);
         delete processor;
     }
 }

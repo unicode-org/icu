@@ -1,13 +1,14 @@
 /*
  * %W% %E%
  *
- * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
  *
  */
 
 #include "LETypes.h"
 #include "OpenTypeTables.h"
 #include "HebrewShaping.h"
+#include "LEGlyphStorage.h"
 
 U_NAMESPACE_BEGIN
 
@@ -20,10 +21,11 @@ const LETag hebrewTags[] =
 };
 
 void HebrewShaping::shape(const LEUnicode * /*chars*/, le_int32 /*offset*/, le_int32 charCount, le_int32 /*charMax*/,
-                          le_bool rightToLeft, const LETag **tags)
+                          le_bool rightToLeft, LEGlyphStorage &glyphStorage)
 {
 
     le_int32 count, out = 0, dir = 1;
+	LEErrorCode success = LE_NO_ERROR;
 
     if (rightToLeft) {
         out = charCount - 1;
@@ -31,7 +33,7 @@ void HebrewShaping::shape(const LEUnicode * /*chars*/, le_int32 /*offset*/, le_i
     }
 
     for (count = 0; count < charCount; count += 1, out += dir) {
-		tags[out] = hebrewTags;
+		glyphStorage.setAuxData(out, (void *) hebrewTags, success);
 	}
 }
 

@@ -1,14 +1,14 @@
 
 /*
- * %W% %E%
  *
- * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
  *
  */
 
 #include "LETypes.h"
 #include "LEScripts.h"
 #include "LEGlyphFilter.h"
+#include "LEGlyphStorage.h"
 #include "LayoutEngine.h"
 #include "OpenTypeLayoutEngine.h"
 #include "ArabicLayoutEngine.h"
@@ -63,7 +63,7 @@ ArabicOpenTypeLayoutEngine::ArabicOpenTypeLayoutEngine(const LEFontInstance *fon
                         const GlyphSubstitutionTableHeader *gsubTable)
     : OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, gsubTable)
 {
-    // fFeatureOrder = ArabicShaping::getFeatureOrder();
+    /**/ fFeatureOrder = ArabicShaping::getFeatureOrder();
 }
 
 ArabicOpenTypeLayoutEngine::ArabicOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode)
@@ -81,7 +81,7 @@ ArabicOpenTypeLayoutEngine::~ArabicOpenTypeLayoutEngine()
 // Output: characters, char indices, tags
 // Returns: output character count
 le_int32 ArabicOpenTypeLayoutEngine::characterProcessing(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft,
-        LEUnicode *&/*outChars*/, le_int32 *&/*charIndices*/, const LETag **&featureTags, LEErrorCode &success)
+        LEUnicode *&/*outChars*/, LEGlyphStorage &glyphStorage, LEErrorCode &success)
 {
     if (LE_FAILURE(success)) {
         return 0;
@@ -92,9 +92,10 @@ le_int32 ArabicOpenTypeLayoutEngine::characterProcessing(const LEUnicode chars[]
         return 0;
     }
 
-    featureTags = LE_NEW_ARRAY(const LETag *, count);
+	glyphStorage.adoptGlyphCount(count);
+	glyphStorage.allocateAuxData(success);
 
-    if (featureTags == NULL) {
+    if (LE_FAILURE(success)) {
         success = LE_MEMORY_ALLOCATION_ERROR;
         return 0;
     }
@@ -102,16 +103,12 @@ le_int32 ArabicOpenTypeLayoutEngine::characterProcessing(const LEUnicode chars[]
     switch (fScriptCode) {
     case arabScriptCode:
     {
-        GlyphShaper shaper(featureTags);
-
-        // NOTE: may not need seperate shaper if always use tags...
-        // NOTE: shaper could allocate the feature tags...
-        ArabicShaping::shape(chars, offset, count, max, rightToLeft, shaper);
+        ArabicShaping::shape(chars, offset, count, max, rightToLeft, glyphStorage);
         break;
     }
 
     case hebrScriptCode:
-        HebrewShaping::shape(chars, offset, count, max, rightToLeft, featureTags);
+        HebrewShaping::shape(chars, offset, count, max, rightToLeft, glyphStorage);
         break;
     }
 
@@ -119,45 +116,28 @@ le_int32 ArabicOpenTypeLayoutEngine::characterProcessing(const LEUnicode chars[]
 }
 
 void ArabicOpenTypeLayoutEngine::adjustGlyphPositions(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse,
-                                                      LEGlyphID glyphs[], le_int32 glyphCount, float positions[], LEErrorCode &success)
+                                                      LEGlyphStorage &glyphStorage, LEErrorCode &success)
 {
     if (LE_FAILURE(success)) {
         return;
     }
 
-    if (chars == NULL || glyphs == NULL || positions == NULL || offset < 0 || count < 0) {
+    if (chars == NULL || offset < 0 || count < 0) {
         success = LE_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
 
     if (fGPOSTable != NULL) {
-        OpenTypeLayoutEngine::adjustGlyphPositions(chars, offset, count, reverse, glyphs, glyphCount, positions, success);
+        OpenTypeLayoutEngine::adjustGlyphPositions(chars, offset, count, reverse, glyphStorage, success);
     } else if (fGDEFTable != NULL) {
         GDEFMarkFilter filter(fGDEFTable);
 
-        adjustMarkGlyphs(glyphs, glyphCount, FALSE, &filter, positions, success);
+        adjustMarkGlyphs(glyphStorage, &filter, success);
     } else {
         GlyphDefinitionTableHeader *gdefTable = (GlyphDefinitionTableHeader *) ArabicShaping::glyphDefinitionTable;
         GDEFMarkFilter filter(gdefTable);
-        LEGlyphID *tempGlyphs;
 
-        // FIXME: we could avoid the memory allocation and copying here by
-        // making a clone of the adjustMarkGlyphs method which took characters
-        // directly...
-        tempGlyphs = LE_NEW_ARRAY(LEGlyphID, count);
-
-        if (tempGlyphs == NULL) {
-            success = LE_MEMORY_ALLOCATION_ERROR;
-            return;
-        }
-
-        for (le_int32 i = 0; i < count; i += 1) {
-            tempGlyphs[i] = (LEGlyphID) chars[offset + i];
-        }
-
-        adjustMarkGlyphs(tempGlyphs, count, reverse, &filter, positions, success);
-
-        LE_DELETE_ARRAY(tempGlyphs);
+		adjustMarkGlyphs(&chars[offset], count, reverse, glyphStorage, &filter, success);
     }
 }
 
@@ -186,21 +166,16 @@ UnicodeArabicOpenTypeLayoutEngine::~UnicodeArabicOpenTypeLayoutEngine()
 }
 
 // "glyphs", "indices" -> glyphs, indices
-le_int32 UnicodeArabicOpenTypeLayoutEngine::glyphPostProcessing(LEGlyphID tempGlyphs[], le_int32 tempCharIndices[], le_int32 tempGlyphCount,
-                LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success)
+le_int32 UnicodeArabicOpenTypeLayoutEngine::glyphPostProcessing(LEGlyphStorage &tempGlyphStorage, LEGlyphStorage &glyphStorage, LEErrorCode &success)
 {
     if (LE_FAILURE(success)) {
-        return 0;
-    }
-
-    if (tempGlyphs == NULL || tempCharIndices == NULL ||tempGlyphCount < 0) {
-        success = LE_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
 
     // FIXME: we could avoid the memory allocation and copy if we
     // made a clone of mapCharsToGlyphs which took the fake glyphs
     // directly.
+	le_int32 tempGlyphCount = tempGlyphStorage.getGlyphCount();
     LEUnicode *tempChars = LE_NEW_ARRAY(LEUnicode, tempGlyphCount);
 
     if (tempChars == NULL) {
@@ -209,19 +184,19 @@ le_int32 UnicodeArabicOpenTypeLayoutEngine::glyphPostProcessing(LEGlyphID tempGl
     }
 
     for (le_int32 i = 0; i < tempGlyphCount; i += 1) {
-        tempChars[i] = (LEUnicode) LE_GET_GLYPH(tempGlyphs[i]);
+		tempChars[i] = (LEUnicode) LE_GET_GLYPH(tempGlyphStorage[i]);
     }
 
-    charIndices = tempCharIndices;
+	glyphStorage.adoptCharIndicesArray(tempGlyphStorage);
 
-    ArabicOpenTypeLayoutEngine::mapCharsToGlyphs(tempChars, 0, tempGlyphCount, FALSE, TRUE, glyphs, charIndices, success);
+    ArabicOpenTypeLayoutEngine::mapCharsToGlyphs(tempChars, 0, tempGlyphCount, FALSE, TRUE, glyphStorage, success);
 
     LE_DELETE_ARRAY(tempChars);
 
     return tempGlyphCount;
 }
 
-void UnicodeArabicOpenTypeLayoutEngine::mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, le_bool /*mirror*/, LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success)
+void UnicodeArabicOpenTypeLayoutEngine::mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, le_bool /*mirror*/, LEGlyphStorage &glyphStorage, LEErrorCode &success)
 {
     if (LE_FAILURE(success)) {
         return;
@@ -232,68 +207,35 @@ void UnicodeArabicOpenTypeLayoutEngine::mapCharsToGlyphs(const LEUnicode chars[]
         return;
     }
 
-    le_int32 i, dir, out;
-
-    out = 0;
-    dir = 1;
+    le_int32 i, dir = 1, out = 0;
 
     if (reverse) {
         out = count - 1;
         dir = -1;
     }
 
-    glyphs = LE_NEW_ARRAY(LEGlyphID, count);
+	glyphStorage.allocateGlyphArray(count, reverse, success);
 
-    if (glyphs == NULL) {
-        success = LE_MEMORY_ALLOCATION_ERROR;
-        return;
-    }
-
-    charIndices = LE_NEW_ARRAY(le_int32, count);
-
-    if (charIndices == NULL) {
-        LE_DELETE_ARRAY(glyphs);
-        success = LE_MEMORY_ALLOCATION_ERROR;
-        return;
-    }
-
-    for (i = 0; i < count; i += 1, out += dir) {
-        glyphs[out] = (LEGlyphID) chars[offset + i];
-        charIndices[out] = i;
+	for (i = 0; i < count; i += 1, out += dir) {
+		glyphStorage[out] = (LEGlyphID) chars[offset + i];
     }
 }
 
 void UnicodeArabicOpenTypeLayoutEngine::adjustGlyphPositions(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse,
-                                                      LEGlyphID glyphs[], le_int32 glyphCount, float positions[], LEErrorCode &success)
+                                                      LEGlyphStorage &glyphStorage, LEErrorCode &success)
 {
     if (LE_FAILURE(success)) {
         return;
     }
 
-    if (chars == NULL || glyphs == NULL || positions == NULL || offset < 0 || count < 0 || glyphCount < 0) {
+    if (chars == NULL || offset < 0 || count < 0) {
         success = LE_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
 
     GDEFMarkFilter filter(fGDEFTable);
 
-    // FIXME: we could avoid the memory allocation and copying here by
-    // making a clone of the adjustMarkGlyphs method which took characters
-    // directly...
-    LEGlyphID *tempGlyphs = LE_NEW_ARRAY(LEGlyphID, count);
-
-    if (tempGlyphs == NULL) {
-        success = LE_MEMORY_ALLOCATION_ERROR;
-        return;
-    }
-
-    for (le_int32 i = 0; i < count; i += 1) {
-        tempGlyphs[i] = (LEGlyphID) chars[offset + i];
-    }
-
-    adjustMarkGlyphs(tempGlyphs, count, reverse, &filter, positions, success);
-
-    LE_DELETE_ARRAY(tempGlyphs);
+    adjustMarkGlyphs(&chars[offset], count, reverse, glyphStorage, &filter, success);
 }
 
 U_NAMESPACE_END
