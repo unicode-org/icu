@@ -14,6 +14,7 @@
 *                            Changed weekdays/short weekdays to be one-based
 *   06/14/99    stephen     Removed SimpleDateFormat::fgTimeZoneDataSuffix
 *   11/16/99    weiv        Added 'Y' and 'e' to fgPatternChars
+*   03/27/00    weiv        Keeping resource bundle around!
 *******************************************************************************
 */
  
@@ -160,6 +161,7 @@ DateFormatSymbols& DateFormatSymbols::operator=(const DateFormatSymbols& other)
         else fZoneStrings = other.fZoneStrings;
 
     fLocalPatternChars = other.fLocalPatternChars;
+
     return *this;
 }
 
@@ -416,6 +418,17 @@ DateFormatSymbols::setLocalPatternChars(const UnicodeString& newLocalPatternChar
 //------------------------------------------------------
 
 void
+DateFormatSymbols::initField(UnicodeString **field, int32_t& length, const ResourceBundle data, uint8_t ownfield, UErrorCode &status) {
+    //ResourceBundle data = source->getByKey(tag, status);
+    length = data.getSize();
+    *field = new UnicodeString[length];
+    for(int32_t i = 0; i<length; i++) {
+        *(*(field)+i) = data.getStringEx(i, status);
+    }
+    setIsOwned(ownfield, TRUE);
+}
+
+void
 DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, bool_t useLastResortData)
 {
     if (U_FAILURE(status)) return;
@@ -427,7 +440,9 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, bool
      * We cast away const here, but that's okay; we won't delete any of
      * these.
      */
-    ResourceBundle resource(u_getDataDirectory(), locale, status);
+    /*ResourceBundle resource(Locale::getDataDirectory(), locale, status);*/
+    ResourceBundle resource(NULL, locale, status);
+    /*resource.open(UnicodeString(""), locale, status);*/
     if (U_FAILURE(status))
     {
         if (useLastResortData)
@@ -466,30 +481,70 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, bool
     // if we make it to here, the resource data is cool, and we can get everything out
     // of it that we need except for the time-zone and localized-pattern data, which
     // are stoerd in a separate file
-    fEras           = (UnicodeString*)resource.getStringArray(SimpleDateFormat::fgErasTag, fErasCount, status);
-    fMonths         = (UnicodeString*)resource.getStringArray(SimpleDateFormat::fgMonthNamesTag, fMonthsCount, status);
-    fShortMonths    = (UnicodeString*)resource.getStringArray(SimpleDateFormat::fgMonthAbbreviationsTag, fShortMonthsCount, status);
-    // {sfb} fixed to handle 1-based weekdays
-    UnicodeString *lWeekdays = (UnicodeString*)resource.getStringArray(SimpleDateFormat::fgDayNamesTag, fWeekdaysCount, status);
-    fWeekdays = new UnicodeString [8];
-    fWeekdays[0] = UnicodeString();
-    uprv_arrayCopy(lWeekdays, 0, fWeekdays, 1, 7);
-    setIsOwned(kWeekdays, TRUE);
-    //fWeekdays       = (UnicodeString*)resource.getStringArray(SimpleDateFormat::fgDayNamesTag, fWeekdaysCount, status);
+    initField(&fEras, fErasCount, resource.get(SimpleDateFormat::fgErasTag, status), kEras, status);
+    initField(&fMonths, fMonthsCount, resource.get(SimpleDateFormat::fgMonthNamesTag, status), kMonths, status);
+    initField(&fShortMonths, fShortMonthsCount, resource.get(SimpleDateFormat::fgMonthAbbreviationsTag, status), kShortMonths, status);
+    initField(&fAmPms, fAmPmsCount, resource.get(SimpleDateFormat::fgAmPmMarkersTag, status), kAmPms, status);
+    fLocalPatternChars = resource.getStringEx(SimpleDateFormat::fgLocalPatternCharsTag, status);
 
-    UnicodeString *lSWeekdays = (UnicodeString*)resource.getStringArray(SimpleDateFormat::fgDayAbbreviationsTag, fShortWeekdaysCount, status);
-    fShortWeekdays = new UnicodeString [8];
+
+    //fEras           = (UnicodeString*)resource.getStringArray(SimpleDateFormat::fgErasTag, fErasCount, status);
+    //fMonths         = (UnicodeString*)resource.getStringArray(SimpleDateFormat::fgMonthNamesTag, fMonthsCount, status);
+    //fShortMonths    = (UnicodeString*)resource.getStringArray(SimpleDateFormat::fgMonthAbbreviationsTag, fShortMonthsCount, status);
+    //fAmPms          = (UnicodeString*)resource.getStringArray(SimpleDateFormat::fgAmPmMarkersTag, fAmPmsCount, status);
+    //fLocalPatternChars = *resource.getString(SimpleDateFormat::fgLocalPatternCharsTag, status);
+
+    ResourceBundle zoneArray = resource.get(SimpleDateFormat::fgZoneStringsTag, status);
+    fZoneStringsRowCount = zoneArray.getSize();
+    ResourceBundle zoneRow = zoneArray.get((int32_t)0, status);
+    fZoneStringsColCount = zoneRow.getSize();
+    fZoneStrings = new UnicodeString * [fZoneStringsRowCount];
+    for(int32_t i = 0; i<fZoneStringsRowCount; i++) {
+        *(fZoneStrings+i) = new UnicodeString[fZoneStringsColCount];
+        zoneRow = zoneArray.get(i, status);
+        for(int32_t j = 0; j<fZoneStringsColCount; j++) {
+            fZoneStrings[i][j] = zoneRow.getStringEx(j, status);
+        }
+    }
+    setIsOwned(kZoneStrings, TRUE);
+
+/*
+    ResourceBundle data = resource.getByKey(SimpleDateFormat::fgErasTag, status);
+    fErasCount = data.getSize();
+    fEras = new UnicodeString[fErasCount];
+    for(int32_t i = 0; i<fErasCount; i++) {
+        fEras[i] = data.getStringByIndex(i, status);
+    }
+    setIsOwned(kEras, TRUE);
+    data = resource.getByKey(SimpleDateFormat::fgMonthNamesTag, status);
+    fMonthsCount = data.getSize();
+    fMonths = new UnicodeString[fMonthsCount];
+    for(int32_t i = 0; i<fMonthsCount; i++) {
+        fMonths[i] = data.getStringByIndex(i, status);
+    }
+    setIsOwned(kMonths, TRUE);
+*/
+    // {sfb} fixed to handle 1-based weekdays
+    ResourceBundle weekdaysData = resource.get(SimpleDateFormat::fgDayNamesTag, status);
+    fWeekdaysCount = weekdaysData.getSize();
+    fWeekdays = new UnicodeString[fWeekdaysCount+1];
+    fWeekdays[0] = UnicodeString();
+    for(i = 0; i<fWeekdaysCount; i++) {
+        fWeekdays[i+1] = weekdaysData.getStringEx(i, status);
+    }
+    setIsOwned(kWeekdays, TRUE);
+
+    ResourceBundle lsweekdaysData = resource.get(SimpleDateFormat::fgDayAbbreviationsTag, status);
+    fShortWeekdaysCount = lsweekdaysData.getSize();
+    fShortWeekdays = new UnicodeString[fShortWeekdaysCount+1];
     fShortWeekdays[0] = UnicodeString();
-    uprv_arrayCopy(lSWeekdays, 0, fShortWeekdays, 1, 7);
+    for(i = 0; i<fShortWeekdaysCount; i++) {
+        fShortWeekdays[i+1] = lsweekdaysData.getStringEx(i, status);
+    }
     setIsOwned(kShortWeekdays, TRUE);
-    //fShortWeekdays  = (UnicodeString*)resource.getStringArray(SimpleDateFormat::fgDayAbbreviationsTag, fShortWeekdaysCount, status);
 
     fWeekdaysCount = fShortWeekdaysCount = 8;
     
-    fAmPms          = (UnicodeString*)resource.getStringArray(SimpleDateFormat::fgAmPmMarkersTag, fAmPmsCount, status);
-
-    fZoneStrings    = (UnicodeString**)resource.get2dArray(SimpleDateFormat::fgZoneStringsTag, fZoneStringsRowCount, fZoneStringsColCount, status);
-    resource.getString(SimpleDateFormat::fgLocalPatternCharsTag, fLocalPatternChars, status);
     // If the locale data does not include new pattern chars, use the defaults
     if (fLocalPatternChars.length() < PATTERN_CHARS_LEN) {
         UnicodeString str;

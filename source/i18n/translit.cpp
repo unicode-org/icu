@@ -383,7 +383,9 @@ UnicodeString& Transliterator::getDisplayName(const UnicodeString& ID,
                                               const Locale& inLocale,
                                               UnicodeString& result) {
     UErrorCode status = U_ZERO_ERROR;
+
     ResourceBundle bundle(u_getDataDirectory(), inLocale, status);
+
     // Suspend checking status until later...
 
     // build the char* key
@@ -394,10 +396,13 @@ UnicodeString& Transliterator::getDisplayName(const UnicodeString& ID,
 
     // Try to retrieve a UnicodeString* from the bundle.  The result,
     // if any, should NOT be deleted.
-    const UnicodeString* resString = bundle.getString(key, status);
+    /*const UnicodeString* resString = bundle.getString(key, status);*/
+    UnicodeString resString = bundle.getStringEx(key, status);
 
-    if (U_SUCCESS(status) && resString != 0) {
-        return result = *resString; // [sic] assign & return
+    /*if (U_SUCCESS(status) && resString != 0) {*/
+    if (U_SUCCESS(status) && resString.length() != 0) {
+        /*return result = *resString; // [sic] assign & return*/
+        return result = resString; // [sic] assign & return
     }
 
     // We have failed to get a name from the locale data.  This is
@@ -407,10 +412,13 @@ UnicodeString& Transliterator::getDisplayName(const UnicodeString& ID,
     // name from the ID.
 
     status = U_ZERO_ERROR;
-    resString = bundle.getString(RB_DISPLAY_NAME_PATTERN, status);
+    /*resString = bundle.getString(RB_DISPLAY_NAME_PATTERN, status);*/
+    resString = bundle.getStringEx(RB_DISPLAY_NAME_PATTERN, status);
 
-    if (U_SUCCESS(status) && resString != 0) {
-        MessageFormat msg(*resString, inLocale, status);
+    /*if (U_SUCCESS(status) && resString != 0) {*/
+    if (U_SUCCESS(status) && resString.length() != 0) {
+        /*MessageFormat msg(*resString, inLocale, status);*/
+        MessageFormat msg(resString, inLocale, status);
         // Suspend checking status until later...
 
         // We pass either 2 or 3 Formattable objects to msg.
@@ -440,10 +448,12 @@ UnicodeString& Transliterator::getDisplayName(const UnicodeString& ID,
             args[j].getString(s);
             key[length + s.extract(0, sizeof(key)-length-1, key+length, "")]=0;
 
-            resString = bundle.getString(key, status);
+            /*resString = bundle.getString(key, status);*/
+            resString = bundle.getStringEx(key, status);
 
             if (U_SUCCESS(status)) {
-                args[j] = *resString;
+                /*args[j] = *resString;*/
+                args[j] = resString;
             }
         }
         
@@ -642,20 +652,22 @@ Transliterator* Transliterator::_createInstance(const UnicodeString& ID,
         // 2-d array at static init time, as a locale language.  We're
         // just using the locale mechanism to map through to a file
         // name; this in no way represents an actual locale.
+
         char *ch;
         ch = new char[entry->rbFile.size() + 1];
         ch[entry->rbFile.extract(0, 0x7fffffff, ch, "")] = 0;
         Locale fakeLocale(ch);
         delete [] ch;
 
-        ResourceBundle bundle(Transliterator::getDataDirectory(),
+        ResourceBundle bundle(NULL,
                               fakeLocale, status);
         
         // Call RBT to parse the rules from the resource bundle
 
         // We don't own the rules - 'rules' is an alias pointer to
         // a string in the RB cache.
-        const UnicodeString* rules = bundle.getString(RB_RULE, status);
+        /*const UnicodeString* rules = bundle.getString(RB_RULE, status);*/
+        UnicodeString rules = bundle.getStringEx(RB_RULE, status);
 
         // If rules == 0 at this point, or if the status indicates a
         // failure, then we don't have any rules -- there is probably
@@ -663,9 +675,15 @@ Transliterator* Transliterator::_createInstance(const UnicodeString& ID,
         // correspond to all the installed transliterators; if it
         // lists something that's not installed, we'll get a null
         // pointer here.
-        if (rules != 0 && U_SUCCESS(status)) {
+/*        if (rules != 0 && U_SUCCESS(status)) {
 
             data = TransliterationRuleParser::parse(*rules, isReverse
+                                    ? RuleBasedTransliterator::REVERSE
+                                    : RuleBasedTransliterator::FORWARD,
+                                    parseError); */
+        if (rules.length() != 0 && U_SUCCESS(status)) {
+
+            data = TransliterationRuleParser::parse(rules, isReverse
                                     ? RuleBasedTransliterator::REVERSE
                                     : RuleBasedTransliterator::FORWARD,
                                     parseError);
@@ -868,8 +886,12 @@ void Transliterator::initializeCache(void) {
      * }
      */
 
-    Locale indexLoc("index");
+    Locale indexLoc("translit_index");
+/*
     ResourceBundle bundle(Transliterator::getDataDirectory(),
+                          indexLoc, status);
+*/
+    ResourceBundle bundle(NULL,
                           indexLoc, status);
 
     int32_t rows, cols;
@@ -886,7 +908,7 @@ void Transliterator::initializeCache(void) {
                     entry->entryType = (col == 0) ?
                         CacheEntry::RULE_BASED_PLACEHOLDER :
                         CacheEntry::REVERSE_RULE_BASED_PLACEHOLDER;
-                    entry->rbFile = row[2];
+                    entry->rbFile = UnicodeString(row[2]);
                     //uhash_putKey(cache, hash(row[col]), entry, &status);
                     cache->put(row[col], entry, status);
 
@@ -897,7 +919,8 @@ void Transliterator::initializeCache(void) {
                      * need to do is change the id vector so that it
                      * owns its strings and create a copy here.
                      */
-                    cacheIDs.addElement((void*) &row[col]);
+                    /*cacheIDs.addElement((void*) &row[col]);*/
+                    cacheIDs.addElement((void*) new UnicodeString(row[col]));
                 }
             }
         }

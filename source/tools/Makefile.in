@@ -119,19 +119,27 @@ include $(srcdir)/makeconv/ucmfiles.mk
 -include $(srcdir)/makeconv/ucmlocal.mk
 ALL_UCM_SOURCE= $(UCM_SOURCE) $(UCM_SOURCE_LOCAL)
 
+include $(srcdir)/genrb/genrbfiles.mk
+-include $(srcdir)/genrb/reslocal.mk
+ALL_RES_SOURCE= $(GENRB_SOURCE) $(TRANSLIT_SOURCE) $(RESOURCE_SRC) $(RES_SOURCE_LOCAL)
 
 UCM_FILES = $(ALL_UCM_SOURCE:%=$(top_srcdir)/../data/%)
 CNV_FILES = $(ALL_UCM_SOURCE:%.ucm=$(OBJDATADIR)/%.cnv)
+
+RES_SRC_FILES = $(ALL_RES_SOURCE:%=$(top_srcdir)/../data/%)
+RES_FILES = $(ALL_RES_SOURCE:%.txt=$(OBJDATADIR)/%.res)
+
 DATAFILESC=$(CNV_FILES)
+DATAFILESR=$(RES_FILES)
 
-
-DATAFILES=$(DATAFILESD) $(DATAFILESC) $(DATAFILESB)
+DATAFILES=$(DATAFILESD) $(DATAFILESC) $(DATAFILESB) $(DATAFILESR)
 
 SRCDATAFILESD=$(DATAFILESD:%.dat=%_dat.c)
+SRCDATAFILESR=$(DATAFILESR:%.res=%_res.c)
 SRCDATAFILESC=$(DATAFILESC:%.cnv=%_cnv.c)
 SRCDATAFILESB=$(DATAFILESB:%.brk=%_brk.c)
 
-SRCDATAFILES=$(SRCDATAFILESD) $(SRCDATAFILESC) $(SRCDATAFILESB) $(OBJDATADIR)/icudata_dat.c
+SRCDATAFILES=$(SRCDATAFILESD) $(SRCDATAFILESC) $(SRCDATAFILESB) $(SRCDATAFILESR) $(OBJDATADIR)/icudata_dat.c
 
 
 OBJDATAFILES=$(SRCDATAFILES:%.c=%.o)
@@ -147,9 +155,12 @@ TESTDATADLL=$(OBJDATADIR)/libtest_dat.$(SO)
 BASEDATADLL=$(OBJDATADIR)/libbase_dat.$(SO)
 BASETESTDATADLL=$(OBJDATADIR)/libbase_test_dat.$(SO)
 
+blah:
+	echo $(SRCDATAFILES)
+
 BASETESTDATA=base_test.dat
 build-basetestdata: 
-	@echo Generating the base test data file (base_test.dat) from (test.dat)
+	@echo Generating the base test data file base_test.dat from test.dat
 	@cp $(TESTDATAD) $(SRCDATADIR)/$(BASETESTDATA)
 	@ls -l $(SRCDATADIR)/$(BASETESTDATA)
 
@@ -182,7 +193,7 @@ gencmn/mkmap.tmp: Makefile $(DATAFILES)
 
 
 $(COMMONFILE):	$(DATAFILES) gencmn/mkmap.tmp
-	@echo -n Generating common file $(COMMONFILE).  Number of files:
+	@echo -n Generating common file $(COMMONFILE).  Number of files: Objdata dir is $(OBJDATADIR)
 	-@wc -l gencmn/mkmap.tmp
 	-rm -f $(COMMONFILE)
 	(cd gencmn ; ./gencmn -c -d ../$(OBJDATADIR) 1000000 mkmap.tmp )
@@ -201,6 +212,9 @@ build-testdlls: $(TESTDATADLL) $(BASEDATADLL) $(BASETESTDATADLL)
 %_brk.c: %.brk
 	(cd genccode ; ./genccode ../$< )
 
+%_res.c: %.res
+	(cd genccode ; ./genccode ../$< )
+        
 ## Note: this generates a dummy C++ file to cause the HPUX CC linker
 ## to load exception handling (when requested..) 
 

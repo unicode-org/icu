@@ -22,7 +22,7 @@
 #include "unicode/uloc.h"
 
 #include "unicode/utypes.h"
-#include "unicode/ures.h"
+#include "uresimp.h"
 #include "unicode/uchar.h"
 #include "umutex.h"
 #include "cstring.h"
@@ -497,14 +497,15 @@ uint32_t uloc_getLCID(const char* localeID)
   UErrorCode err = U_ZERO_ERROR;
   char temp[30];
   const UChar* lcid = NULL;
+  int32_t lcidLen = 0;
   uint32_t result = 0;
-  UResourceBundle* bundle = ures_open(u_getDataDirectory(), localeID, &err);
+  UResourceBundle* bundle = ures_open(NULL, localeID, &err);
   
   if (U_SUCCESS(err))
     {
-      lcid = ures_get(bundle, _kLocaleID, &err);
+      lcid = ures_getStringByKey(bundle, _kLocaleID, &lcidLen, &err);
       ures_close(bundle);
-      if (U_FAILURE(err) || !lcid || u_strlen(lcid) == 0)    
+      if (U_FAILURE(err) || !lcid || lcidLen == 0)
     {
       return 0;
     }
@@ -530,7 +531,6 @@ int32_t uloc_getDisplayLanguage(const char* locale,
   UResourceBundle* bundle;
   const UChar* temp = NULL;  
   bool_t isDefaultLocale = FALSE;
-  const char* dataDir = u_getDataDirectory();
   bool_t done = FALSE;
 
   if (U_FAILURE(*status)) return 0;
@@ -579,7 +579,7 @@ int32_t uloc_getDisplayLanguage(const char* locale,
         }
       
       
-      bundle = ures_open(dataDir, inLocale, &err);
+      bundle = ures_open(NULL, inLocale, &err);
       
       if (U_SUCCESS(err))
         {
@@ -654,7 +654,6 @@ int32_t uloc_getDisplayCountry(const char* locale,
   UResourceBundle* bundle = NULL;
   char inLocaleBuffer[TEMPBUFSIZE];
   bool_t isDefaultLocale = FALSE;
-  const char* dataDir = u_getDataDirectory();
   bool_t done = FALSE;
 
   if (U_FAILURE(*status)) return 0;
@@ -703,7 +702,7 @@ int32_t uloc_getDisplayCountry(const char* locale,
     }
       
 
-      bundle = ures_open(dataDir, inLocale, &err);      
+      bundle = ures_open(NULL, inLocale, &err);      
       
       if (U_SUCCESS(err))
     {
@@ -777,7 +776,6 @@ int32_t uloc_getDisplayVariant(const char* locale,
   bool_t isDefaultLocale = FALSE;
   char inVariantTagBuffer[TEMPBUFSIZE+2];
   char* inVariantTag = inVariantTagBuffer;
-  const char* dataDir = u_getDataDirectory();
   bool_t done = FALSE;
 
   if (U_FAILURE(*status)) return 0;
@@ -839,7 +837,7 @@ int32_t uloc_getDisplayVariant(const char* locale,
     }
 
       
-      bundle = ures_open(dataDir, inLocale, &err);      
+      bundle = ures_open(NULL, inLocale, &err);      
       
       if (U_SUCCESS(err))
     {
@@ -1006,15 +1004,6 @@ int32_t uloc_getDisplayName(const char* locale,
   return i;
 }
 
-
-/**
- * Returns a list of all available locales.  The return value is a pointer to
- * an array of pointers to ULocale objects.  Both this array and the pointers
- * it contains are owned by ICU and should not be deleted or written through
- * by the caller.  The array is terminated by a null pointer. RTG
- */
-U_CAPI UnicodeString** T_ResourceBundle_listInstalledLocales(const char* path, int32_t* numInstalledLocales);
-
 const char*
 uloc_getAvailable(int32_t offset) 
 {
@@ -1035,41 +1024,47 @@ int32_t uloc_countAvailable()
 
 void _lazyEvaluate_installedLocales()
 {
-  UnicodeString** temp;
-  char **  temp2;
-  int i;
-  int32_t strSize;
-  if (_installedLocales == NULL)
-    {
-      temp = T_ResourceBundle_listInstalledLocales(u_getDataDirectory(),
-                           &_installedLocalesCount);
-      temp2 = (char **) uprv_malloc(sizeof(char*) * (_installedLocalesCount+1));
-      
-      for (i = 0; i < _installedLocalesCount; i++)
-    {
-      strSize = T_UnicodeString_length(temp[i]);
 
-      temp2[i] = (char*) uprv_malloc(sizeof(char) *
-                        (strSize + 1));
+    UResourceBundle *index = NULL;
+    UResourceBundle installed;
+    UErrorCode status = U_ZERO_ERROR;
+    const UChar *lname;
+    char ** temp;
+    int32_t i = 0;
+    int32_t len = 0;
 
-      T_UnicodeString_extract(temp[i], temp2[i]);
-      temp2[i][strSize] = 0; /* Terminate the string */
-    }
-      {
-    umtx_lock(NULL);
-    if (_installedLocales == NULL)
-      {
-        _installedLocales = temp2;
-        temp2 = NULL;
+    index = ures_open(NULL, kIndexLocaleName, &status);
+    ures_getByKey(index, kIndexTag, &installed, &status);
+
+    if(U_SUCCESS(status)) {
+      _installedLocalesCount = ures_getSize(&installed);
+      temp = (char **) uprv_malloc(sizeof(char*) * (_installedLocalesCount+1));
+
+      ures_resetIterator(&installed);
+      while(ures_hasNext(&installed)) {
+        lname = ures_getNextString(&installed, &len, NULL, &status);
+        temp[i] = (char*) uprv_malloc(sizeof(char) * (len + 1));
+
+        u_UCharsToChars(lname, temp[i], len);
+        temp[i][len] = 0; /* Terminate the string */
+        i++;
       }
-    else {
-      for (i = 0; i < _installedLocalesCount; i++) uprv_free(temp2[i]);
-      uprv_free(temp2);
-    }
-    umtx_unlock(NULL);
+      {
+	umtx_lock(NULL);
+	if (_installedLocales == NULL)
+	{
+	  _installedLocales = temp;
+	  temp = NULL;
+	} else {
+	  for (i = 0; i < _installedLocalesCount; i++) uprv_free(temp[i]);
+	  uprv_free(temp);
+	}
+	umtx_unlock(NULL);
     
       }
+      ures_close(&installed);
     }
+    ures_close(index);
 }
 
 /**

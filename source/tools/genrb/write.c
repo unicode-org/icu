@@ -27,11 +27,12 @@
 
 /* Protos */
 static void write_ustring(FileStream *rb, const UChar *data);
-static void write_strlist(FileStream *rb, const UChar *name, 
+static void write_string(FileStream *rb, const char *data);
+static void write_strlist(FileStream *rb, const char *name, 
 			  const struct SStringList *list);
-static void write_strlist2d(FileStream *rb, const UChar *name,
+static void write_strlist2d(FileStream *rb, const char *name,
 			    const struct SStringList2d *list);
-static void write_taglist(FileStream *rb, const UChar *name,
+static void write_taglist(FileStream *rb, const char *name,
 			  const struct STaggedList *list);
 
 /* Special values */
@@ -65,10 +66,21 @@ write_ustring(FileStream *rb,
   T_FileStream_write(rb, data, sizeof(UChar) * len);
 }
 
+static void
+write_string(FileStream *rb,
+             const char *data) {
+    int32_t len;
+
+    len = uprv_strlen(data);
+    T_FileStream_write(rb, &len, sizeof(len));
+
+    T_FileStream_write(rb, data, sizeof(char) * len);
+}
+
 /* Write a string list */
 static void
 write_strlist(FileStream *rb, 
-	      const UChar *name,
+	      const char *name,
 	      const struct SStringList *list)
 {
   int32_t i;
@@ -77,7 +89,7 @@ write_strlist(FileStream *rb,
   T_FileStream_write(rb, &sSTRINGLIST, sizeof(sSTRINGLIST));
 
   /* Write the name of this string list */
-  write_ustring(rb, name);
+  write_string(rb, name);
 
   /* Write the item count */
   T_FileStream_write(rb, &list->fCount, sizeof(list->fCount));
@@ -91,7 +103,7 @@ write_strlist(FileStream *rb,
 /* Write a 2-d string list */
 static void 
 write_strlist2d(FileStream *rb,
-		const UChar *name,
+		const char *name,
 		const struct SStringList2d *list)
 {
   int32_t i, j;
@@ -101,7 +113,7 @@ write_strlist2d(FileStream *rb,
   T_FileStream_write(rb, &sSTRINGLIST2D, sizeof(sSTRINGLIST2D));
 
   /* Write the name of this 2-d string list */
-  write_ustring(rb, name);
+  write_string(rb, name);
 
   /* Write the row count */
   T_FileStream_write(rb, &list->fRowCount, sizeof(list->fRowCount));
@@ -124,25 +136,34 @@ write_strlist2d(FileStream *rb,
 /* Write a tagged list */
 static void 
 write_taglist(FileStream *rb, 
-	      const UChar *name,
+	      const char *name,
 	      const struct STaggedList *list)
 {
-  int32_t i;
+//  int32_t i;
+  struct SStringPair *current;
 
   /* Write out the value indicating this is a tagged list */
   T_FileStream_write(rb, &sTAGGEDLIST, sizeof(sTAGGEDLIST));
 
   /* Write the name of this tagged list */
-  write_ustring(rb, name);
+  write_string(rb, name);
 
   /* Write the item count */
   T_FileStream_write(rb, &list->fCount, sizeof(list->fCount));
 
   /* Write out each key/value pair */
-  for(i = 0; i < list->fCount; ++i) {
-    write_ustring(rb, list->fData[i].fKey);
-    write_ustring(rb, list->fData[i].fValue);
+  current = list->fFirst;
+  while(current != NULL) {
+      write_string(rb, current->fKey);
+      write_ustring(rb, current->fValue);
+      current = current->fNext;
   }
+
+
+//  for(i = 0; i < list->fCount; ++i) {
+//    write_ustring(rb, list->fData[i].fKey);
+//    write_ustring(rb, list->fData[i].fValue);
+//  }
 }
 
 /* Write a parsed SRBItemList to a file */
@@ -151,7 +172,7 @@ rb_write(FileStream *f,
 	 struct SRBItemList *data, 
 	 UErrorCode *status)
 {
-  int32_t i;
+//  int32_t i;
   struct SRBItem *item;
 
   if(U_FAILURE(*status)) return;
@@ -162,10 +183,13 @@ rb_write(FileStream *f,
   /* Write the locale name to the file */
   write_ustring(f, data->fLocale);
 
-  /* Successively write each list item */
-  for(i = 0; i < data->fCount; ++i) {
+  item = data->fFirst;
 
-    item = data->fData[i];
+  /* Successively write each list item */
+//  for(i = 0; i < data->fCount; ++i) {
+  while(item != NULL) {
+
+//    item = data->fData[i];
 
     switch(item->fData->fType) {
     case eStringList:
@@ -188,6 +212,7 @@ rb_write(FileStream *f,
       goto finish;
       /*break;*/
     }
+    item = item->fNext;
   }
 
   /* Indicate the end of the data */

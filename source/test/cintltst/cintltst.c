@@ -56,7 +56,7 @@ int main ( int argc, const char **argv )
         return 1;
     }
 
-    rb = ures_open(0, "en", &errorCode);
+    rb = ures_open(NULL, "en", &errorCode);
     if(U_SUCCESS(errorCode)) {
         /* ok */
         ures_close(rb);
@@ -79,7 +79,7 @@ void
 ctest_pathnameInContext( char* fullname, int32_t maxsize, const char* relPath ) 
 {
     char mainDirBuffer[200];
-    char* mainDir;
+    char* mainDir = NULL;
     const char inpSepChar = '|';
     char* tmp;
     int32_t lenMainDir;

@@ -702,11 +702,13 @@ Calendar::setWeekCountData(const Locale& desiredLocale, UErrorCode& status)
     //      "1"     // min days in week
     //   }
 
-    const UnicodeString *dateTimeElements;
-    int32_t count;
+    //const UnicodeString *dateTimeElements;
+    //int32_t count;
 
     if (U_FAILURE(status)) return;
-    ResourceBundle resource(u_getDataDirectory(), desiredLocale, status);
+    ResourceBundle resource(NULL, desiredLocale, status);
+    //ResourceBundle resource(Locale::getDataDirectory(), desiredLocale, status);
+    //resource.open(UnicodeString(""), desiredLocale, status);
 
     // If the resource data doesn't seem to be present at all, then use last-resort
     // hard-coded data.
@@ -718,16 +720,22 @@ Calendar::setWeekCountData(const Locale& desiredLocale, UErrorCode& status)
         return;
     }
 
-    dateTimeElements = resource.getStringArray(kDateTimeElements, count, status);
+    //dateTimeElements = resource.getStringArray(kDateTimeElements, count, status);
+    ResourceBundle dateTimeElements = resource.get(kDateTimeElements, status);
+
+
     if (U_FAILURE(status)) return;
-    if (count != 2)
+//    if (count != 2)
+    if(dateTimeElements.getSize()!=2)
     {
         status = U_INVALID_FORMAT_ERROR;
         return;
     }
 
-    fFirstDayOfWeek = (Calendar::EDaysOfWeek)stringToDayNumber(dateTimeElements[0], status);
-    fMinimalDaysInFirstWeek = (uint8_t)stringToDayNumber(dateTimeElements[1], status);
+    //fFirstDayOfWeek = (Calendar::EDaysOfWeek)stringToDayNumber(dateTimeElements[0], status);
+    //fMinimalDaysInFirstWeek = (uint8_t)stringToDayNumber(dateTimeElements[1], status);
+    fFirstDayOfWeek = (Calendar::EDaysOfWeek)stringToDayNumber(dateTimeElements.getStringEx((int32_t)0, status), status);
+    fMinimalDaysInFirstWeek = (uint8_t)stringToDayNumber(dateTimeElements.getStringEx(1, status), status);
 }
 
 /**

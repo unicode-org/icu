@@ -172,7 +172,8 @@ DecimalFormatSymbols::initialize(const Locale& locale, UErrorCode& status,
 {
     if (U_FAILURE(status)) return;
 
-    ResourceBundle resource(u_getDataDirectory(), locale, status);
+    /*ResourceBundle resource(Locale::getDataDirectory(), locale, status);*/
+    ResourceBundle resource(NULL, locale, status);
     if (U_FAILURE(status))
     {
         // Initializes with last resort data if necessary.
@@ -184,12 +185,23 @@ DecimalFormatSymbols::initialize(const Locale& locale, UErrorCode& status,
         return;
     }
 
-    int32_t numberElementsLength=0;
     // Gets the number element array.
-    const UnicodeString* numberElements = resource.getStringArray(fgNumberElements, numberElementsLength, status);
-    int32_t currencyElementsLength=0;
+    int32_t i = 0;
+    ResourceBundle numberElementsRes = resource.get(fgNumberElements, status);
+    int32_t numberElementsLength = numberElementsRes.getSize();
+    UnicodeString* numberElements = new UnicodeString[numberElementsLength];
+    for(i = 0; i<numberElementsLength; i++) {
+        numberElements[i] = numberElementsRes.getStringEx(i, status);
+    }
+
     // Gets the currency element array.
-    const UnicodeString* currencyElements = resource.getStringArray(fgCurrencyElements, currencyElementsLength, status);
+    ResourceBundle currencyElementsRes = resource.get(fgCurrencyElements, status);
+    int32_t currencyElementsLength = currencyElementsRes.getSize();
+    UnicodeString* currencyElements = new UnicodeString[currencyElementsLength];
+    for(i = 0; i<currencyElementsLength; i++) {
+        currencyElements[i] = currencyElementsRes.getStringEx(i, status);
+    }
+
     if (U_FAILURE(status)) return;
 
     // If the array size is too small, something is wrong with the resource

@@ -1038,7 +1038,11 @@ findLibraryPath(char *path, int size) {
 }
 
 /* define a path for fallbacks */
+#ifdef WIN32
+#define FALLBACK_PATH U_FILE_SEP_STRING ".." U_FILE_SEP_STRING "data"
+#else
 #define FALLBACK_PATH U_FILE_SEP_STRING "share" U_FILE_SEP_STRING "icu" U_FILE_SEP_STRING U_ICU_VERSION U_FILE_SEP_STRING
+#endif
 
 /* #include <stdio.h> */
 /* #include <unistd.h> */
@@ -1645,7 +1649,8 @@ _uErrorName[U_ERROR_LIMIT]={
     "U_INVALID_TABLE_FORMAT",
     "U_INVALID_TABLE_FILE",
     "U_BUFFER_OVERFLOW_ERROR",
-    "U_UNSUPPORTED_ERROR"
+    "U_UNSUPPORTED_ERROR",
+    "U_RESOURCE_TYPE_MISMATCH"
 };
 
 U_CAPI const char * U_EXPORT2

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-1999, International Business Machines
+*   Copyright (C) 1998-2000, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -12,6 +12,7 @@
 *
 *   Date        Name        Description
 *   05/26/99    stephen     Creation.
+*   02/25/00    weiv        Overhaul to write udata
 *******************************************************************************
 */
 
@@ -22,8 +23,7 @@
 #include "read.h"
 #include "unicode/ustdio.h"
 #include "ustr.h"
-#include "list.h"
-#include "rblist.h"
+#include "reslist.h"
 #include "unicode/ustring.h"
 
 /* Node IDs for the state transition table. */
@@ -95,29 +95,29 @@ struct STransition {
    comma-delimited list (transition from eList to eIdle on
    kCloseBrace). */
 static struct STransition gTransitionTable [] = {
-  /* kString           kOpenBrace            kCloseBrace         kComma*/
-  {eError,eNOP},       {eError,eNOP},        {eError,eNOP},      {eError,eNOP},
+  /*                kString           kOpenBrace            kCloseBrace         kComma                 kColon*/
+  /*eError*/    {eError,eNOP},       {eError,eNOP},        {eError,eNOP},      {eError,eNOP},
   
-  {eGotLoc,eOpen},     {eError,eNOP},        {eError,eNOP},      {eError,eNOP},
-  {eError,eNOP},       {eIdle,eNOP},         {eError,eNOP},      {eError,eNOP},
+  /*eInitial*/  {eGotLoc,eOpen},     {eError,eNOP},        {eError,eNOP},      {eError,eNOP},
+  /*eGotLoc*/   {eError,eNOP},       {eIdle,eNOP},         {eError,eNOP},      {eError,eNOP},
+ 
+  /*eIdle*/     {eGotTag,eSetTag},   {eError,eNOP},        {eInitial,eClose},  {eError,eNOP},
+  /*eGotTag*/   {eError,eNOP},       {eNode5,eNOP},        {eError,eNOP},      {eError,eNOP},
+  /*eNode5*/    {eNode6,eNOP},       {e2dArray,eBeg2dList},{eError,eNOP},      {eError,eNOP},
+  /*eNode6*/    {eError,eNOP},       {eTagList,eBegTagged},{eIdle,eStr},       {eList,eBegList},
   
-  {eGotTag,eSetTag},   {eError,eNOP},        {eInitial,eClose},  {eError,eNOP},
-  {eError,eNOP},       {eNode5,eNOP},        {eError,eNOP},      {eError,eNOP},
-  {eNode6,eNOP},       {e2dArray,eBeg2dList},{eError,eNOP},      {eError,eNOP},
-  {eError,eNOP},       {eTagList,eBegTagged},{eIdle,eStr},       {eList,eBegList},
-  
-  {eNode8,eListStr},   {eError,eNOP},         {eIdle,eEndList},  {eError,eNOP},
-  {eError,eNOP},       {eError,eNOP},         {eIdle,eEndList},  {eList,eNOP},
-  
-  {eNode10,eTaggedStr},{eError,eNOP},         {eError,eNOP},     {eError,eNOP},
-  {eError,eNOP},       {eError,eNOP},         {eNode11,eNOP},    {eError,eNOP},
-  {eNode12,eNOP},      {eError,eNOP},         {eIdle,eEndTagged},{eError,eNOP},
-  {eError,eNOP},       {eTagList,eSubtag},    {eError,eNOP},     {eError,eNOP},
+  /*eList*/     {eNode8,eListStr},   {eError,eNOP},         {eIdle,eEndList},  {eError,eNOP},
+  /*eNode8*/    {eError,eNOP},       {eError,eNOP},         {eIdle,eEndList},  {eList,eNOP},
+ 
+  /*eTagList*/  {eNode10,eTaggedStr},{eError,eNOP},         {eError,eNOP},     {eError,eNOP},
+  /*eNode10*/   {eError,eNOP},       {eError,eNOP},         {eNode11,eNOP},    {eError,eNOP},
+  /*eNode11*/   {eNode12,eNOP},      {eError,eNOP},         {eIdle,eEndTagged},{eError,eNOP},
+  /*eNode12*/   {eError,eNOP},       {eTagList,eSubtag},    {eError,eNOP},     {eError,eNOP},
 
-  {eNode14,e2dStr},    {eError,eNOP},         {eNode15,eNOP},    {eError,eNOP},
-  {eError,eNOP},       {eError,eNOP},         {eNode15,eNOP},    {e2dArray,eNOP},
-  {eError,eNOP},       {e2dArray,eNewRow},    {eIdle,eEnd2dList},{eNode16,eNOP},
-  {eError,eNOP},       {e2dArray,eNewRow},    {eIdle,eEnd2dList},{eError,eNOP} 
+  /*e2dArray*/  {eNode14,e2dStr},    {eError,eNOP},         {eNode15,eNOP},    {eError,eNOP},
+  /*eNode14*/   {eError,eNOP},       {eError,eNOP},         {eNode15,eNOP},    {e2dArray,eNOP},
+  /*eNode15*/   {eError,eNOP},       {e2dArray,eNewRow},    {eIdle,eEnd2dList},{eNode16,eNOP},
+  /*eNode16*/   {eError,eNOP},       {e2dArray,eNewRow},    {eIdle,eEnd2dList},{eError,eNOP} 
 };
 
 /* Row length is 4 */
@@ -157,7 +157,7 @@ static bool_t compareUString(const void* ustr1, const void* ustr2) {
  * parse
  ********************************************************************/
 
-struct SRBItemList*
+struct SRBRoot*
 parse(FileStream *f, const char *cp,
       UErrorCode *status)
 {
@@ -168,36 +168,47 @@ parse(FileStream *f, const char *cp,
 
   struct UString token;
   struct UString tag;
-  struct UString subtag;
-  struct UString localeName;
-  struct UString keyname;
 
-  struct SRBItem *item;
-  struct SRBItemList *list;
-  struct SList *current;
+    char cTag[1024];
+    char cSubTag[1024];
+    struct SRBRoot *bundle = NULL;
+    struct SResource *rootTable = NULL;
+    struct SResource *temp = NULL;
+    struct SResource *temp1 = NULL;
+    struct SResource *temp2 = NULL;
 
-  /* Hashtable for keeping track of seen tag names */
-  struct UHashtable *data;
+    /* Hashtable for keeping track of seen tag names */
+    struct UHashtable *data;
 
 
-  if(U_FAILURE(*status)) return 0;
+    if(U_FAILURE(*status)) return NULL;
 
-  /* setup */
+    /* setup */
 
   ustr_init(&token);
   ustr_init(&tag);
-  ustr_init(&subtag);
-  ustr_init(&localeName);
-  ustr_init(&keyname);
+/*  
+    cTag = uprv_malloc(1024);
+    if(cTag == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
+    cSubTag = uprv_malloc(1024);
+    if(cSubTag == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
+*/
 
   node = eInitial;
   data = 0;
-  current = 0;
-  item = 0;
 
   file = u_finit((FILE *)f, 0, cp);
 /*  file = u_finit(f, cp, status); */
-  list = rblist_open(status);
+
+    bundle = bundle_open(status);
+    rootTable = bundle -> fRoot;
+
   if(U_FAILURE(*status) || file == NULL) goto finish;
   
   /* iterate through the stream */
@@ -210,7 +221,9 @@ parse(FileStream *f, const char *cp,
     switch(type) {
     case tok_EOF:
       *status = (node == eInitial) ? U_ZERO_ERROR : U_INVALID_FORMAT_ERROR;
-      setErrorText("Unexpected EOF encountered");
+      if(U_FAILURE(*status)) {
+        setErrorText("Unexpected EOF encountered");
+      }
       goto finish;
       /*break;*/
 
@@ -227,153 +240,162 @@ parse(FileStream *f, const char *cp,
     node = t.fNext;
     
     if(node == eError) {
-      *status = U_INVALID_FORMAT_ERROR;
-      goto finish;
+        *status = U_INVALID_FORMAT_ERROR;
+        goto finish;
     }
     
     switch(t.fAction) {
     case eNOP:
-      break;
+        break;
       
       /* Record the last string as the tag name */
     case eSetTag:
-      ustr_cpy(&tag, &token, status);
-      if(U_FAILURE(*status)) goto finish;
-      if(get(data, &tag)) {
-	 char *s;
-	*status = U_INVALID_FORMAT_ERROR;
-       s = uprv_malloc(1024);
-       strcpy(s, "Duplicate tag name detected: ");
-       u_austrcpy(s+strlen(s), tag.fChars);
-       setErrorText(s);
-	goto finish;
-      }
-      break;
+        ustr_cpy(&tag, &token, status);
+        u_UCharsToChars(tag.fChars, cTag, u_strlen(tag.fChars)+1);
+        if(U_FAILURE(*status)) goto finish;
+        /*if(uhash_get(data, uhash_hashUString(tag.fChars)) != 0) {*/
+        if(get(data, &tag)) {
+	        char *s;
+	        *status = U_INVALID_FORMAT_ERROR;
+            s = uprv_malloc(1024);
+            strcpy(s, "Duplicate tag name detected: ");
+            u_austrcpy(s+strlen(s), tag.fChars);
+            setErrorText(s);
+	        goto finish;
+        }
+
+        break;
 
       /* Record a singleton string */
     case eStr:
-      if(current != 0) {
-	*status = U_INTERNAL_PROGRAM_ERROR;
-	goto finish;
-      }
-      current = strlist_open(status);
-      strlist_add(current, token.fChars, status);
-      item = make_rbitem(tag.fChars, current, status);
-      rblist_add(list, item, status);
-      put(data, &tag, status);
-      if(U_FAILURE(*status)) goto finish;
-      current = 0;
-      item = 0;
-      break;
+        if(temp != NULL) {
+	        *status = U_INTERNAL_PROGRAM_ERROR;
+	        goto finish;
+        }
+        temp = string_open(bundle, cTag, token.fChars, status);
+        table_add(rootTable, temp, status);
+        /*uhash_put(data, tag.fChars, status);*/
+        put(data, &tag, status);
+        if(U_FAILURE(*status)) goto finish;
+        temp = NULL;
+        break;
 
       /* Begin a string list */
     case eBegList:
-      if(current != 0) {
-	*status = U_INTERNAL_PROGRAM_ERROR;
-	goto finish;
-      }
-      current = strlist_open(status);
-      strlist_add(current, token.fChars, status);
-      if(U_FAILURE(*status)) goto finish;
-      break;
+        if(temp != NULL) {
+	        *status = U_INTERNAL_PROGRAM_ERROR;
+	        goto finish;
+        }
+        temp = array_open(bundle, cTag, status);
+        temp1 = string_open(bundle, NULL, token.fChars, status);
+        array_add(temp, temp1, status);
+        temp1 = NULL;
+        if(U_FAILURE(*status)) goto finish;
+        break;
       
       /* Record a comma-delimited list string */      
     case eListStr:
-      strlist_add(current, token.fChars, status);
-      if(U_FAILURE(*status)) goto finish;
-      break;
+        temp1 = string_open(bundle, NULL, token.fChars, status);
+        array_add(temp, temp1, status);
+        temp1 = NULL;
+        if(U_FAILURE(*status)) goto finish;
+        break;
       
       /* End a string list */
     case eEndList:
-      put(data, &tag, status);
-      item = make_rbitem(tag.fChars, current, status);
-      rblist_add(list, item, status);
-      if(U_FAILURE(*status)) goto finish;
-      current = 0;
-      item = 0;
-      break;
+        /*uhash_put(data, tag.fChars, status);*/
+        put(data, &tag, status);
+        table_add(rootTable, temp, status);
+        temp = NULL;
+        if(U_FAILURE(*status)) goto finish;
+        break;
       
     case eBeg2dList:
-      if(current != 0) {
-	*status = U_INTERNAL_PROGRAM_ERROR;
-	goto finish;
-      }
-      current = strlist2d_open(status);
-      if(U_FAILURE(*status)) goto finish;
-      break;
+        if(temp != NULL) {
+	        *status = U_INTERNAL_PROGRAM_ERROR;
+	        goto finish;
+        }
+        temp = array_open(bundle, cTag, status);
+        temp1 = array_open(bundle, NULL, status);
+        if(U_FAILURE(*status)) goto finish;
+        break;
       
     case eEnd2dList:
-      put(data, &tag, status);
-      item = make_rbitem(tag.fChars, current, status);
-      rblist_add(list, item, status);
-      if(U_FAILURE(*status)) goto finish;
-      current = 0;
-      item = 0;
-      break;
+        /*uhash_put(data, tag.fChars, status);*/
+        put(data, &tag, status);
+        array_add(temp, temp1, status);
+        table_add(rootTable, temp, status);
+        temp1 = NULL;
+        temp = NULL;
+        if(U_FAILURE(*status)) goto finish;
+        break;
       
     case e2dStr:
-      strlist2d_add(current, token.fChars, status);
-      if(U_FAILURE(*status)) goto finish;
-      break;
+        temp2 = string_open(bundle, NULL, token.fChars, status);
+        array_add(temp1, temp2, status);
+        temp2 = NULL;
+        if(U_FAILURE(*status)) goto finish;
+        break;
       
     case eNewRow:
-      strlist2d_newRow(current, status);
-      if(U_FAILURE(*status)) goto finish;
-      break;
+        array_add(temp, temp1, status);
+        temp1 = array_open(bundle, NULL, status);
+        if(U_FAILURE(*status)) goto finish;
+        break;
       
     case eBegTagged:
-      if(current != 0) {
-	*status = U_INTERNAL_PROGRAM_ERROR;
-	goto finish;
-      }
-      current = taglist_open(status);
-      ustr_cpy(&subtag, &token, status);
-      if(U_FAILURE(*status)) goto finish;
-      break;
+        if(temp != NULL) {
+	        *status = U_INTERNAL_PROGRAM_ERROR;
+	        goto finish;
+        }
+        temp = table_open(bundle, cTag, status);
+        u_UCharsToChars(token.fChars, cSubTag, u_strlen(token.fChars)+1);
+        if(U_FAILURE(*status)) goto finish;
+        break;
       
     case eEndTagged:
-      put(data, &tag, status);
-      item = make_rbitem(tag.fChars, current, status);
-      rblist_add(list, item, status);
-      if(U_FAILURE(*status)) goto finish;
-      current = 0;
-      item = 0;
-      break;
+        /*uhash_put(data, tag.fChars, status);*/
+        put(data, &tag, status);
+        table_add(rootTable, temp, status);
+        temp = NULL;
+        if(U_FAILURE(*status)) goto finish;
+        break;
       
     case eTaggedStr:
-      taglist_add(current, subtag.fChars, token.fChars, status);
-      if(U_FAILURE(*status)) goto finish;
-      break;
+        temp1 = string_open(bundle, cSubTag, token.fChars, status);
+        table_add(temp, temp1, status);
+        temp1 = NULL;
+        if(U_FAILURE(*status)) goto finish;
+        break;
       
       /* Record the last string as the subtag */
     case eSubtag:
-      ustr_cpy(&subtag, &token, status);
-      if(U_FAILURE(*status)) goto finish;
-      if(taglist_get(current, subtag.fChars, status) != 0) {
-	*status = U_INVALID_FORMAT_ERROR;
-	setErrorText("Duplicate subtag found in tagged list");
-	goto finish;
-      }
-      break;
+        u_UCharsToChars(token.fChars, cSubTag, u_strlen(token.fChars)+1);
+        if(U_FAILURE(*status)) goto finish;
+        if(table_get(temp, cSubTag, status) != 0) {
+	        *status = U_INVALID_FORMAT_ERROR;
+	        setErrorText("Duplicate subtag found in tagged list");
+	        goto finish;
+        }
+        break;
       
     case eOpen:
       if(data != 0) {
-	*status = U_INTERNAL_PROGRAM_ERROR;
-	goto finish;
-      }
-      ustr_cpy(&localeName, &token, status);
-      rblist_setlocale(list, localeName.fChars, status);
-      if(U_FAILURE(*status)) goto finish;
-      data = uhash_open(hashUString, compareUString, status);
-      uhash_setKeyDeleter(data, freeUString);
-      break;
+	        *status = U_INTERNAL_PROGRAM_ERROR;
+	        goto finish;
+        }
+        bundle_setlocale(bundle, token.fChars, status);
+        if(U_FAILURE(*status)) goto finish;
+        data = uhash_open(hashUString, compareUString, status);
+        uhash_setKeyDeleter(data, freeUString);
+        break;
       
     case eClose:
-      if(data == 0) {
-	*status = U_INTERNAL_PROGRAM_ERROR;
-	goto finish;
-      }
-      break;
+        if(data == 0) {
+	        *status = U_INTERNAL_PROGRAM_ERROR;
+	        goto finish;
+        }
+        break;
     }
   }
 
@@ -384,17 +406,14 @@ parse(FileStream *f, const char *cp,
   if(data != 0)
     uhash_close(data);
 
-  if(item != 0)
-    uprv_free(item);
-
   ustr_deinit(&token);
   ustr_deinit(&tag);
-  ustr_deinit(&subtag);
-  ustr_deinit(&localeName);
-  ustr_deinit(&keyname);
+
+    /*uprv_free(cTag);*/
+    /*uprv_free(cSubTag);*/
 
   if(file != 0)
     u_fclose(file);
 
-  return list;
+  return bundle;
 }
