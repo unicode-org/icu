@@ -21,6 +21,7 @@
 #include "unicode/utypes.h"
 #include "unicode/ucnv_err.h"
 #include "ucnv_bld.h"
+#include "ucnvmbcs.h"
 #include "ucmp8.h"
 #include "ucmp16.h"
 
@@ -42,16 +43,6 @@ typedef struct
     CompactShortArray fromUnicodeFallback;
   }
 UConverterDBCSTable;
-
-typedef struct
-  {
-    UBool *starters; /* [256]; */
-    CompactShortArray toUnicode;
-    CompactShortArray fromUnicode;
-    CompactShortArray toUnicodeFallback;
-    CompactShortArray fromUnicodeFallback;
-  }
-UConverterMBCSTable;
 
 union UConverterTable
   {
@@ -141,8 +132,7 @@ U_CDECL_BEGIN
                  args->offsets = saveOffsets; \
                   for (;My_i < myTargetIndex;My_i++) {args->offsets[My_i] += currentOffset  ;   } \
                 }
-/*
-*/
+
 
 typedef void (*UConverterLoad) (UConverterSharedData *sharedData, const uint8_t *raw, UErrorCode *pErrorCode);
 typedef void (*UConverterUnload) (UConverterSharedData *sharedData);
