@@ -26,6 +26,8 @@
 *   This is useful for generating a partial mapping table and to handle the input
 *   ranges algorithmically in conversion.
 *
+*   Single surrogates are excluded from the output.
+*
 *   To compile, just call a C compiler/linker with this source file.
 *   On Windows: cl gbmake4.c
 */
@@ -71,7 +73,7 @@ readRanges() {
     char *s, *end;
     unsigned long c1, c2;
 
-    /* parse the input file from stdin, in the format of gb18030markus2.txt */
+    /* parse the input file from stdin, in the format of gbkuni30.txt */
     while(gets(line)!=NULL) {
         /* skip empty and comment lines */
         if(line[0]==0 || line[0]=='#') {
@@ -108,7 +110,7 @@ readRanges() {
         /* set the flags for all code points in this range */
         while(c1<=c2) {
             if(flags[c1]!=UNASSIGNED) {
-                fprintf(stderr, "error: range covers already-assigned U+%04lx\n", c1);
+                fprintf(stderr, "error: range covers already-assigned U+%04lX\n", c1);
                 return 1;
             }
             flags[c1++]=ROUNDTRIP|FOURBYTE;
@@ -126,7 +128,7 @@ main(int argc, const char *argv[]) {
     unsigned char bytes[4]={ 0x81, 0x30, 0x81, 0x30 };
     char flag;
 
-    /* parse the input file from stdin, in the format of gb18030markus2.txt */
+    /* parse the input file from stdin, in the format of gbkuni30.txt */
     while(gets(line)!=NULL) {
         /* skip empty and comment lines */
         if(line[0]==0 || line[0]=='#' || line[0]==0x1a) {
@@ -176,7 +178,7 @@ main(int argc, const char *argv[]) {
 
         /* set the flag for the code point, make sure the mapping from Unicode is not duplicate */
         if((flags[c]&flag&FROMU)!=0) {
-            fprintf(stderr, "error: duplicate assignment for U+%04lx, old flags %u, new %s\n", c, flags[c], line);
+            fprintf(stderr, "error: duplicate assignment for U+%04lX, old flags %u, new %s\n", c, flags[c], line);
             return 1;
         }
         flags[c]|=flag;
@@ -184,9 +186,13 @@ main(int argc, const char *argv[]) {
 
     if(argc<=1) {
         /* generate all four-byte sequences that are not already in the input */
-        for(c=0x81; c<=0xffff; ++c) {
+        for(c=0x80; c<=0xffff; ++c) {
+            /* skip single surrogates */
+            if(c==0xd800) {
+                c=0xe000;
+            }
             if(flags[c]==UNASSIGNED) {
-                printf("%04lx:%02x%02x%02x%02x\n", c, bytes[0], bytes[1], bytes[2], bytes[3]);
+                printf("%04lX:%02X%02X%02X%02X\n", c, bytes[0], bytes[1], bytes[2], bytes[3]);
                 /* increment the sequence for the next code point */
                 incFourGB18030(bytes);
             } else if(flags[c]&FOURBYTE) {
@@ -200,12 +206,17 @@ main(int argc, const char *argv[]) {
         unsigned long c1, c2;
 
         printf("ranges\n");
-        for(c1=0x81; c1<=0xffff;) {
+        for(c1=0x80; c1<=0xffff;) {
+            /* skip single surrogates */
+            if(c1==0xd800) {
+                c1=0xe000;
+            }
+
             /* get start bytes of range */
             memcpy(b1, bytes, 4);
 
             /* look for the first non-range code point */
-            for(c2=c1; c2<=0xffff && flags[c2]==UNASSIGNED; ++c2) {
+            for(c2=c1; c2<=0xffff && flags[c2]==UNASSIGNED && c2!=0xd800; ++c2) {
                 /* save this sequence to avoid decrementing it after this loop */
                 memcpy(b2, bytes, 4);
                 /* increment the sequence for the next code point */
@@ -214,10 +225,15 @@ main(int argc, const char *argv[]) {
             /* c2 is the first code point after the range; b2 are the bytes for the last code point in the range */
 
             /* print this range, number of codes first for easy sorting */
-            printf("%06lx  U+%04lx-%04lx  GB+%02x%02x%02x%02x-%02x%02x%02x%02x\n",
+            printf("%06lX  U+%04lX-%04lX  GB+%02X%02X%02X%02X-%02X%02X%02X%02X\n",
                 c2-c1, c1, c2-1,
                 b1[0], b1[1], b1[2], b1[3],
                 b2[0], b2[1], b2[2], b2[3]);
+
+            /* skip single surrogates */
+            if(c2==0xd800) {
+                c2=0xe000;
+            }
 
             /* skip all assigned Unicode BMP code points */
             for(c1=c2; c1<=0xffff && flags[c1]!=UNASSIGNED; ++c1) {
