@@ -52,8 +52,7 @@ CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 LDFLAGS = @LDFLAGS@ \
 $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/common@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/i18n
-LIBS = @LIBS@ -L$(libdir) -L$(top_builddir)/common -licu-uc \
-		-L$(top_builddir)/i18n -licu-i18n
+LIBS = $(LIBICU-UC) $(LIBICU-I18N) @LIBS@
 
 OBJECTS = locbund.o loccache.o ufile.o ufmt_cmn.o uprintf.o uprntf_p.o	\
 uscanf.o uscanf_p.o uscanset.o ustdio.o

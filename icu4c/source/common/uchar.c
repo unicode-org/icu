@@ -19,6 +19,7 @@
 *
 *   4/15/99     Madhu        Updated all the function definitions for C Implementation
 *   5/20/99     Madhu		Added the function u_getVersion()
+*   8/19/1999   srl            Upgraded scripts to Unicode3.0 
 ********************************************************************************************
 */
 #include "utypes.h"
@@ -4706,75 +4707,96 @@ static const int8_t  isLetterMask = (1 << UPPERCASE_LETTER) | (1 << LOWERCASE_LE
 
 
 static const BlockScriptMap fScriptIndex[] = {
-    {    0x0000, 0x007F },
-    {    0x0080, 0x00FF },
-    {    0x0100, 0x017F },
-    {    0x0180, 0x024F },
-    {    0x0250, 0x02AF },
-    {    0x02B0, 0x02FF },
-    {    0x0300, 0x036F },
-    {    0x0370, 0x03FF },
-    {    0x0400, 0x04FF },
-    {    0x0530, 0x058F },
-    {    0x0590, 0x05FF },
-    {    0x0600, 0x06FF },
-    {    0x0900, 0x097F },
-    {    0x0980, 0x09FF },
-    {    0x0A00, 0x0A7F },
-    {    0x0A80, 0x0AFF },
-    {    0x0B00, 0x0B7F },
-    {    0x0B80, 0x0BFF },
-    {    0x0C00, 0x0C7F },
-    {    0x0C80, 0x0CFF },
-    {    0x0D00, 0x0D7F },
-    {    0x0E00, 0x0E7F },
-    {    0x0E80, 0x0EFF },
-    {    0x0F00, 0x0FBF },
-    {    0x10A0, 0x10FF },
-    {    0x1100, 0x11FF },
-    {    0x1E00, 0x1EFF },
-    {    0x1F00, 0x1FFF },
-    {    0x2000, 0x206F },
-    {    0x2070, 0x209F },
-    {    0x20A0, 0x20CF },
-    {    0x20D0, 0x20FF },
-    {    0x2100, 0x214F },
-    {    0x2150, 0x218F },
-    {    0x2190, 0x21FF },
-    {    0x2200, 0x22FF },
-    {    0x2300, 0x23FF },
-    {    0x2400, 0x243F },
-    {    0x2440, 0x245F },
-    {    0x2460, 0x24FF },
-    {    0x2500, 0x257F },
-    {    0x2580, 0x259F },
-    {    0x25A0, 0x25FF },
-    {    0x2600, 0x26FF },
-    {    0x2700, 0x27BF },
-    {    0x3000, 0x303F },
-    {    0x3040, 0x309F },
-    {    0x30A0, 0x30FF },
-    {    0x3100, 0x312F },
-    {    0x3130, 0x318F },
-    {    0x3190, 0x319F },
-    {    0x3200, 0x32FF },
-    {    0x3300, 0x33FF },
-    {    0x4E00, 0x9FFF },
-    {    0xAC00, 0xD7A3 },
-    {    0xD800, 0xDB7F },
-    {    0xDB80, 0xDBFF },
-    {    0xDC00, 0xDFFF },
-    {    0xE000, 0xF8FF },
-    {    0xF900, 0xFAFF },
-    {    0xFB00, 0xFB4F },
-    {    0xFB50, 0xFDFF },
-    {    0xFE20, 0xFE2F },
-    {    0xFE30, 0xFE4F },
-    {    0xFE50, 0xFE6F },
-    {    0xFE70, 0xFEFE },
-    {    0xFEFF, 0xFEFF },
-    {    0xFF00, 0xFFEF },
-    {    0xFFF0, 0xFFFF }
+/* Generated from the Unicode-3.0-beta blocks.txt file */
+  { 0x0000, 0x007F }, /*BASIC_LATIN */
+  { 0x0080, 0x00FF }, /*LATIN_1_SUPPLEMENT */
+  { 0x0100, 0x017F }, /*LATIN_EXTENDED_A */
+  { 0x0180, 0x024F }, /*LATIN_EXTENDED_B */
+  { 0x0250, 0x02AF }, /*IPA_EXTENSIONS */
+  { 0x02B0, 0x02FF }, /*SPACING_MODIFIER_LETTERS */
+  { 0x0300, 0x036F }, /*COMBINING_DIACRITICAL_MARKS */
+  { 0x0370, 0x03FF }, /*GREEK */
+  { 0x0400, 0x04FF }, /*CYRILLIC */
+  { 0x0530, 0x058F }, /*ARMENIAN */
+  { 0x0590, 0x05FF }, /*HEBREW */
+  { 0x0600, 0x06FF }, /*ARABIC */
+  { 0x0700, 0x074F }, /*SYRIAC */
+  { 0x0780, 0x07BF }, /*THAANA */
+  { 0x0900, 0x097F }, /*DEVANAGARI */
+  { 0x0980, 0x09FF }, /*BENGALI */
+  { 0x0A00, 0x0A7F }, /*GURMUKHI */
+  { 0x0A80, 0x0AFF }, /*GUJARATI */
+  { 0x0B00, 0x0B7F }, /*ORIYA */
+  { 0x0B80, 0x0BFF }, /*TAMIL */
+  { 0x0C00, 0x0C7F }, /*TELUGU */
+  { 0x0C80, 0x0CFF }, /*KANNADA */
+  { 0x0D00, 0x0D7F }, /*MALAYALAM */
+  { 0x0D80, 0x0DFF }, /*SINHALA */
+  { 0x0E00, 0x0E7F }, /*THAI */
+  { 0x0E80, 0x0EFF }, /*LAO */
+  { 0x0F00, 0x0FFF }, /*TIBETAN */
+  { 0x1000, 0x109F }, /*MYANMAR */
+  { 0x10A0, 0x10FF }, /*GEORGIAN */
+  { 0x1100, 0x11FF }, /*HANGUL_JAMO */
+  { 0x1200, 0x137F }, /*ETHIOPIC */
+  { 0x13A0, 0x13FF }, /*CHEROKEE */
+  { 0x1400, 0x167F }, /*UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS */
+  { 0x1680, 0x169F }, /*OGHAM */
+  { 0x16A0, 0x16FF }, /*RUNIC */
+  { 0x1780, 0x17FF }, /*KHMER */
+  { 0x1800, 0x18AF }, /*MONGOLIAN */
+  { 0x1E00, 0x1EFF }, /*LATIN_EXTENDED_ADDITIONAL */
+  { 0x1F00, 0x1FFF }, /*GREEK_EXTENDED */
+  { 0x2000, 0x206F }, /*GENERAL_PUNCTUATION */
+  { 0x2070, 0x209F }, /*SUPERSCRIPTS_AND_SUBSCRIPTS */
+  { 0x20A0, 0x20CF }, /*CURRENCY_SYMBOLS */
+  { 0x20D0, 0x20FF }, /*COMBINING_MARKS_FOR_SYMBOLS */
+  { 0x2100, 0x214F }, /*LETTERLIKE_SYMBOLS */
+  { 0x2150, 0x218F }, /*NUMBER_FORMS */
+  { 0x2190, 0x21FF }, /*ARROWS */
+  { 0x2200, 0x22FF }, /*MATHEMATICAL_OPERATORS */
+  { 0x2300, 0x23FF }, /*MISCELLANEOUS_TECHNICAL */
+  { 0x2400, 0x243F }, /*CONTROL_PICTURES */
+  { 0x2440, 0x245F }, /*OPTICAL_CHARACTER_RECOGNITION */
+  { 0x2460, 0x24FF }, /*ENCLOSED_ALPHANUMERICS */
+  { 0x2500, 0x257F }, /*BOX_DRAWING */
+  { 0x2580, 0x259F }, /*BLOCK_ELEMENTS */
+  { 0x25A0, 0x25FF }, /*GEOMETRIC_SHAPES */
+  { 0x2600, 0x26FF }, /*MISCELLANEOUS_SYMBOLS */
+  { 0x2700, 0x27BF }, /*DINGBATS */
+  { 0x2800, 0x28FF }, /*BRAILLE_PATTERNS */
+  { 0x2E80, 0x2EFF }, /*CJK_RADICALS_SUPPLEMENT */
+  { 0x2F00, 0x2FDF }, /*KANGXI_RADICALS */
+  { 0x2FF0, 0x2FFF }, /*IDEOGRAPHIC_DESCRIPTION_CHARACTERS */
+  { 0x3000, 0x303F }, /*CJK_SYMBOLS_AND_PUNCTUATION */
+  { 0x3040, 0x309F }, /*HIRAGANA */
+  { 0x30A0, 0x30FF }, /*KATAKANA */
+  { 0x3100, 0x312F }, /*BOPOMOFO */
+  { 0x3130, 0x318F }, /*HANGUL_COMPATIBILITY_JAMO */
+  { 0x3190, 0x319F }, /*KANBUN */
+  { 0x31A0, 0x31BF }, /*BOPOMOFO_EXTENDED */
+  { 0x3200, 0x32FF }, /*ENCLOSED_CJK_LETTERS_AND_MONTHS */
+  { 0x3300, 0x33FF }, /*CJK_COMPATIBILITY */
+  { 0x3400, 0x4DB5 }, /*CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A */
+  { 0x4E00, 0x9FFF }, /*CJK_UNIFIED_IDEOGRAPHS */
+  { 0xA000, 0xA48F }, /*YI_SYLLABLES */
+  { 0xA490, 0xA4CF }, /*YI_RADICALS */
+  { 0xAC00, 0xD7A3 }, /*HANGUL_SYLLABLES */
+  { 0xD800, 0xDB7F }, /*HIGH_SURROGATES */
+  { 0xDB80, 0xDBFF }, /*HIGH_PRIVATE_USE_SURROGATES */
+  { 0xDC00, 0xDFFF }, /*LOW_SURROGATES */
+  { 0xE000, 0xF8FF }, /*PRIVATE_USE */
+  { 0xF900, 0xFAFF }, /*CJK_COMPATIBILITY_IDEOGRAPHS */
+  { 0xFB00, 0xFB4F }, /*ALPHABETIC_PRESENTATION_FORMS */
+  { 0xFB50, 0xFDFF }, /*ARABIC_PRESENTATION_FORMS_A */
+  { 0xFE20, 0xFE2F }, /*COMBINING_HALF_MARKS */
+  { 0xFE30, 0xFE4F }, /*CJK_COMPATIBILITY_FORMS */
+  { 0xFE50, 0xFE6F }, /*SMALL_FORM_VARIANTS */
+  { 0xFE70, 0xFEFE }, /*ARABIC_PRESENTATION_FORMS_B */
+  { 0xFEFF, 0xFEFF }, /*SPECIALS */
+  { 0xFF00, 0xFFEF }, /*HALFWIDTH_AND_FULLWIDTH_FORMS */
+  { 0xFFF0, 0xFFFD }, /*SPECIALS_2 = "SCRIPT_COUNT" (really specials) */
+  { 0xFFFF, 0xFFFF } /* END */
 };
 const UChar cellWidthRanges[] =
     {
@@ -4898,6 +4920,8 @@ u_charScript(UChar ch)
     for( j = 0; index == -1 && fScriptIndex[j].fFirstCode != 0xFFFF; ++j )
         if( fScriptIndex[j].fFirstCode <= ch && ch <= fScriptIndex[j].fLastCode ) {
             index = j;
+	    if(j == SCRIPT_COUNT) /* "SPECIALS 2" */
+	      index = SPECIALS;
         }
     if(index >= SCRIPT_COUNT) {
         returnValue = NO_SCRIPT;

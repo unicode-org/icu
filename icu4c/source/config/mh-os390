@@ -1,7 +1,8 @@
+## -*-makefile-*-
 ## 390-specific setup 
 
 CFLAGS390=	-W0,"langlvl(extended)" -g -Wc,dll,expo
-DEFS390=        -DIBM_OS390 -D_OPEN_THREADS -D_XOPEN_SOURCE_EXTENDED
+DEFS390=        -D_OPEN_THREADS -D_XOPEN_SOURCE_EXTENDED
 ARFLAGS=        -cr
 
 
@@ -17,7 +18,7 @@ COMPILE.cc=	_CXX_CXXSUFFIX="cpp" _CXX_STEPS="-1" $(CXX) $(DEFS) $(CPPFLAGS) $(CP
 LINK.c=		$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
 LINK.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
 
-## Commands for shared library (dll)                       			
+## Commands for shared library (dll)
 SHLIB.c=	$(LINK.c) -Wl,dll
 SHLIB.cc=	$(LINK.cc) -Wl,dll
 
@@ -26,6 +27,11 @@ LD_RPATH=	-I
 
 ## Shared object suffix (switch to dll for shared library build)
 SO=		dll
+
+## Link commands to link to ICU libs
+LIBICU-UC= 	$(top_builddir)/common/libicu-uc.x
+LIBICU-I18N= 	$(top_builddir)/i18n/libicu-i18n.x
+LIBCTESTFW= 	$(top_builddir)/tools/ctestfw/libctestfw.x
 
 ## Special 390 rules
 

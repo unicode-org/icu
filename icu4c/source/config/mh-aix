@@ -1,3 +1,4 @@
+## -*-makefile-*-
 ## Aix-specific setup (for xlC)
 
 ## Commands to generate dependency files
@@ -25,6 +26,11 @@ LD_RPATH_PRE=
 
 ## Shared object suffix
 SO=		a
+
+## Link commands to link to ICU libs
+LIBICU-UC= 	-L$(top_builddir)/common -licu-uc
+LIBICU-I18N= 	-L$(top_builddir)/i18n -licu-i18n
+LIBCTESTFW= 	-L$(top_builddir)/tools/ctestfw -lctestfw
 
 ## Special AIX rules
 

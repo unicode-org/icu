@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSFile$ $Revision: 1.1 $ $Date: 1999/08/16 21:51:05 $
+ * @(#)$RCSFile$ $Revision: 1.2 $ $Date: 1999/09/03 22:08:46 $
  *
  * (C) Copyright IBM Corp. 1997-1998 - All Rights Reserved
  *

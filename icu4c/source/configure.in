@@ -1,3 +1,4 @@
+dnl -*-m4-*-
 dnl configure.in for ICU
 dnl Stephen F. Booth
 
@@ -6,7 +7,7 @@ AC_INIT(common/utypes.h)
 AC_CONFIG_HEADER(common/icucfg.h)
 PACKAGE="icu"
 AC_SUBST(PACKAGE)
-VERSION="1.2.2"
+VERSION="1.2.5"
 AC_SUBST(VERSION)
 
 dnl Checks for programs
@@ -145,6 +146,7 @@ case "${host}" in
 	*-*-linux*) 	platform=LINUX ;;
 	*-*-aix*) 	platform=AIX ;;
 	*-*-hpux*) 	platform=HPUX ;;
+	*-*-os390*)	platform=OS390 ;;
 	*) 		platform=UNKNOWN ;;
 esac
 AC_SUBST(platform)
@@ -157,6 +159,7 @@ case "${host}" in
 	*-*-linux*) 	ld_rpath_suf=" " ;;
 	*-*-aix*) 	ld_rpath_suf="" ;;
 	*-*-hpux*) 	ld_rpath_suf=":" ;;
+	*-*-os390*)	ld_rpath_suf=" " ;;
 	*) 		ld_rpath_suf="" ;;
 esac
 AC_SUBST(ld_rpath_suf)

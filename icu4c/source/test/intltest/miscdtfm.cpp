@@ -71,7 +71,7 @@ DateFormatMiscTests::failure(UErrorCode status, const char* msg)
 }
 
 /*
- * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.1 $ $Date: 1999/08/16 21:51:30 $
+ * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.2 $ $Date: 1999/09/03 22:08:47 $
  *
  * @bug 4097450
  */
@@ -163,7 +163,7 @@ DateFormatMiscTests::test4097450()
 }
 
 /*
- * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.1 $ $Date: 1999/08/16 21:51:30 $
+ * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.2 $ $Date: 1999/09/03 22:08:47 $
  *
  * @bug 4099975
  */

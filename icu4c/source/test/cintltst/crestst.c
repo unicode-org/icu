@@ -35,6 +35,8 @@
 #include "crestst.h"
 #include "ctest.h"
 
+void TestFallback();
+
 /*****************************************************************************/
 
 /**
@@ -86,12 +88,8 @@ typedef enum E_Where E_Where;
 /*****************************************************************************/
 
 #define CONFIRM_EQ(actual,expected) if (u_strcmp(expected,actual)==0){ record_pass(); } else { record_fail(); log_err("%s  returned  %s  instead of %s\n", action, austrdup(actual), austrdup(expected)); pass=FALSE; }
-#ifdef _DEBUG
-#define CONFIRM_ErrorCode(actual,expected) if ((expected)==(actual)) { record_pass(); } else { record_fail();  log_err("%s returned  %s  instead of %s\n", action, myErrorName(actual), myErrorName(expected)); pass=FALSE; }
-#else
-#define CONFIRM_ErrorCode(actual,expected)
-#endif
 
+#define CONFIRM_ErrorCode(actual,expected) if ((expected)==(actual)) { record_pass(); } else { record_fail();  log_err("%s returned  %s  instead of %s\n", action, myErrorName(actual), myErrorName(expected)); pass=FALSE; }
 
 
 /* Array of our test objects */
@@ -120,6 +118,8 @@ param[] =
 
 static int32_t bundles_count = sizeof(param) / sizeof(param[0]);
 
+
+
 /***************************************************************************************/
 
 /* Array of our test objects */
@@ -131,6 +131,7 @@ void addResourceBundleTest(TestNode** root)
   addTest(root, &TestConstruction1, "tsutil/crestst/TestConstruction1");
   addTest(root, &TestConstruction2, "tsutil/crestst/TestConstruction2");
   addTest(root, &TestResourceBundles, "tsutil/crestst/TestResourceBundle");
+  addTest(root, &TestFallback, "tsutil/crestst/TestFallback");
 
 }
 
@@ -148,6 +149,7 @@ void TestResourceBundles()
   testTag("only_in_te_IN", FALSE, FALSE, TRUE);
   testTag("in_te_te_IN", FALSE, TRUE, TRUE);
   testTag("nonexistent", FALSE, FALSE, FALSE);
+
   log_verbose("Passed:=  %d   Failed=   %d \n", pass, fail);
 
 }
@@ -279,6 +281,7 @@ bool_t testTag(const char* frag,
   char buf[5];
   char item_tag[10];
   int32_t i,j,k,row,col;
+  int32_t actual_bundle;
   int32_t count = 0;
   int32_t row_count=0;
   int32_t column_count=0;
@@ -304,13 +307,39 @@ bool_t testTag(const char* frag,
 
       CONFIRM_ErrorCode(status,param[i].expected_constructor_status);
 
+      if(i == 5)
+	actual_bundle = 0; /* ne -> default */
+      else if(i == 3)
+	actual_bundle = 1; /* te_NE -> te */
+      else if(i == 4)
+	actual_bundle = 2; /* te_IN_NE -> te_IN */
+      else
+	actual_bundle = i;
+
       expected_resource_status = MISSING_RESOURCE_ERROR;
       for (j=e_te_IN; j>=e_Default; --j)
         {
-      if (is_in[j] && param[i].inherits[j])
+	  if (is_in[j] && param[i].inherits[j])
             {
-          expected_resource_status = ZERO_ERROR;
-          break;
+	      
+	      if(j == actual_bundle) /* it's in the same bundle OR it's a nonexistent=default bundle (5) */
+		expected_resource_status = ZERO_ERROR;
+	      else if(j == 0)
+		expected_resource_status = USING_DEFAULT_ERROR;
+	      else
+		expected_resource_status = USING_FALLBACK_ERROR;
+
+	      log_verbose("%s[%d]::%s: in<%d:%s> inherits<%d:%s>.  actual_bundle=%s\n",
+			  param[i].name, 
+			  i,
+			  frag,
+			  j,
+			  is_in[j]?"Yes":"No",
+			  j,
+			  param[i].inherits[j]?"Yes":"No",
+			  param[actual_bundle].name);
+
+	      break;
             }
         }
 
@@ -346,18 +375,21 @@ bool_t testTag(const char* frag,
 
       ures_get(theBundle, tag, &status);
       if(SUCCESS(status))
-    string=ures_get(theBundle, tag, &status);
+	{
+	  status = ZERO_ERROR;
+	  string=ures_get(theBundle, tag, &status);
+	}
 
-
+      log_verbose("%s got %d, expected %d\n", action, status, expected_resource_status);
 
       CONFIRM_ErrorCode(status, expected_resource_status);
 
 
       if(SUCCESS(status)){
-    expected_string=(UChar*)malloc(sizeof(UChar)*(u_strlen(base) + 3));
-    u_strcpy(expected_string,base);
-
-
+	expected_string=(UChar*)malloc(sizeof(UChar)*(u_strlen(base) + 3));
+	u_strcpy(expected_string,base);
+	
+	
       }
       else
     {
@@ -398,7 +430,10 @@ bool_t testTag(const char* frag,
         string=ures_getArrayItem(theBundle, tag, index, &status);
 
 
-      expected_status = (index >= 0 && index < count) ? ZERO_ERROR : MISSING_RESOURCE_ERROR;
+      /* how could 'index==j' ever be >= count ? */
+      expected_status = (index >= 0 && index < count) ? expected_resource_status : MISSING_RESOURCE_ERROR;
+
+      log_verbose("Status for %s was %d, expected %d\n", action, status, expected_status);
 
       CONFIRM_ErrorCode(status,expected_status);
 
@@ -447,25 +482,25 @@ bool_t testTag(const char* frag,
 
 
       expected_status = (row >= 0 && row < row_count && col >= 0 && col < column_count) ?
-        ZERO_ERROR : MISSING_RESOURCE_ERROR;
+        expected_resource_status : MISSING_RESOURCE_ERROR;
 
       CONFIRM_ErrorCode(status,expected_status);
 
       if (SUCCESS(status))
-            {
+	{
           UChar element[3];
           u_strcpy(expected_string,base);
           u_uastrcpy(element,itoa1(row,buf));
           u_strcat(expected_string, element);
           u_uastrcpy(element,itoa1(col,buf));
           u_strcat(expected_string, element);
-
-            }
+	  
+	}
       else
-            {
-
+	{
+	  
           u_strcpy(expected_string,kERROR);
-            }
+	}
       CONFIRM_EQ(string,expected_string);
     }
       }
@@ -500,24 +535,24 @@ bool_t testTag(const char* frag,
 
       if (index < 0)
             {
-          CONFIRM_ErrorCode(status,MISSING_RESOURCE_ERROR);
+	      CONFIRM_ErrorCode(status,MISSING_RESOURCE_ERROR);
             }
       else
-            {
+	{
           UChar* element;
           if (strcmp(myErrorName(status),"MISSING_RESOURCE_ERROR")!=0) {
-        count++;
-        u_strcpy(expected_string,base);
-        element=(UChar*)malloc(sizeof(UChar) * (strlen(buf)+1));
-        u_uastrcpy(element,buf);
-        u_strcat(expected_string,element);
-        free(element);
-        CONFIRM_EQ(string,expected_string);
+	    count++;
+	    u_strcpy(expected_string,base);
+	    element=(UChar*)malloc(sizeof(UChar) * (strlen(buf)+1));
+	    u_uastrcpy(element,buf);
+	    u_strcat(expected_string,element);
+	    free(element);
+	    CONFIRM_EQ(string,expected_string);
           }
-            }
-
+	}
+      
         }
-
+      
       free(expected_string);
       free(base);
       ures_close(theBundle);
@@ -535,4 +570,55 @@ void record_fail()
   ++fail;
 }
 
+/**
+ * Test to make sure that the USING_FALLBACK_ERROR and USING_DEFAULT_ERROR
+ * are set correctly
+ */
 
+void TestFallback()
+{
+  UErrorCode status = ZERO_ERROR;
+  UResourceBundle *fr_FR = NULL;
+  const UChar *junk; /* ignored */
+  
+  log_verbose("Opening fr_FR..");
+  fr_FR = ures_open(NULL, "fr_FR", &status);
+  if(FAILURE(status))
+    {
+      log_err("Couldn't open fr_FR - %d\n", status);
+      return;
+    }
+
+  status = ZERO_ERROR;
+
+
+  /* clear it out..  just do some calls to get the gears turning */
+  junk = ures_get(fr_FR, "LocaleID", &status);
+  status = ZERO_ERROR;
+  junk = ures_get(fr_FR, "LocaleString", &status);
+  status = ZERO_ERROR;
+  junk = ures_get(fr_FR, "LocaleID", &status);
+  status = ZERO_ERROR;
+
+  /* OK first one. This should be a Default value. */
+  junk = ures_get(fr_FR, "Version", &status);
+  if(status != USING_DEFAULT_ERROR)
+    {
+      log_err("Expected USING_DEFAULT_ERROR when trying to get Version from fr_FR, got %d\n", 
+	      status);
+    }
+  
+  status = ZERO_ERROR;
+
+  /* and this is a Fallback, to fr */
+  junk = ures_get(fr_FR, "ShortLanguage", &status);
+  if(status != USING_FALLBACK_ERROR)
+    {
+      log_err("Expected USING_FALLBACK_ERROR when trying to get ShortLanguage from fr_FR, got %d\n", 
+	      status);
+    }
+  
+  status = ZERO_ERROR;
+  
+  ures_close(fr_FR);
+}
