@@ -1180,13 +1180,28 @@ void TransliteratorTest::TestNameMap(void) {
         return;
     }
 
+    // Careful:  CharsToUS will convert "\\N" => "N"; use "\\\\N" for \N
     expect(*uni2name, CharsToUnicodeString("\\u00A0abc\\u4E01\\u00B5\\u0A81\\uFFFD\\u0004\\u0009\\u0081\\uFFFF"),
-           CharsToUnicodeString("{NO-BREAK SPACE}abc{CJK UNIFIED IDEOGRAPH-4E01}{MICRO SIGN}{GUJARATI SIGN CANDRABINDU}{REPLACEMENT CHARACTER}{END OF TRANSMISSION}{CHARACTER TABULATION}{<control-0081>}{<noncharacter-FFFF>}"));
-    expect(*name2uni, "{ NO-BREAK SPACE}abc{  CJK UNIFIED  IDEOGRAPH-4E01  }{x{MICRO SIGN}{GUJARATI SIGN CANDRABINDU}{REPLACEMENT CHARACTER}{END OF TRANSMISSION}{CHARACTER TABULATION}{<control-0081>}{<noncharacter-FFFF>}{<control-0004>}{",
-           CharsToUnicodeString("\\u00A0abc\\u4E01{x\\u00B5\\u0A81\\uFFFD\\u0004\\u0009\\u0081\\uFFFF\\u0004{"));
+           CharsToUnicodeString("\\\\N{NO-BREAK SPACE}abc\\\\N{CJK UNIFIED IDEOGRAPH-4E01}\\\\N{MICRO SIGN}\\\\N{GUJARATI SIGN CANDRABINDU}\\\\N{REPLACEMENT CHARACTER}\\\\N{END OF TRANSMISSION}\\\\N{CHARACTER TABULATION}\\\\N{<control-0081>}\\\\N{<noncharacter-FFFF>}"));
+    expect(*name2uni, "{\\N { NO-BREAK SPACE}abc\\N{  CJK UNIFIED  IDEOGRAPH-4E01  }\\N{x\\N{MICRO SIGN}\\N{GUJARATI SIGN CANDRABINDU}\\N{REPLACEMENT CHARACTER}\\N{END OF TRANSMISSION}\\N{CHARACTER TABULATION}\\N{<control-0081>}\\N{<noncharacter-FFFF>}\\N{<control-0004>}\\N{",
+           CharsToUnicodeString("{\\u00A0abc\\u4E01\\\\N{x\\u00B5\\u0A81\\uFFFD\\u0004\\u0009\\u0081\\uFFFF\\u0004\\\\N{"));
 
     delete uni2name;
     delete name2uni;
+
+    // round trip
+    Transliterator* t =
+        Transliterator::createInstance("Any-Name;Name-Any", UTRANS_FORWARD, parseError, status);
+    if (t==0) {
+        errln("FAIL: createInstance returned NULL");
+        delete t;
+        return;
+    }
+
+    // Careful:  CharsToUS will convert "\\N" => "N"; use "\\\\N" for \N
+    UnicodeString s = CharsToUnicodeString("{\\u00A0abc\\u4E01\\\\N{x\\u00B5\\u0A81\\uFFFD\\u0004\\u0009\\u0081\\uFFFF\\u0004\\\\N{");
+    expect(*t, s, s);
+    delete t;
 }
 
 /**
@@ -1678,7 +1693,7 @@ void TransliteratorTest::TestSupplemental() {
 
     expectT("Any-Name",
            CharsToUnicodeString("\\U00010330\\U000E0061\\u00A0"),
-           "{GOTHIC LETTER AHSA}{TAG LATIN SMALL LETTER A}{NO-BREAK SPACE}");
+           "\\N{GOTHIC LETTER AHSA}\\N{TAG LATIN SMALL LETTER A}\\N{NO-BREAK SPACE}");
 
     expectT("Any-Hex/Unicode",
            CharsToUnicodeString("\\U00010330\\U0010FF00\\U000E0061\\u00A0"),
@@ -3541,12 +3556,13 @@ void TransliteratorTest::TestUserFunction() {
     _TUFReg("Any-gif", t, 0);
 
     t = Transliterator::createFromRules("RemoveCurly",
-                                        "[\\{\\}] > ;",
+                                        "[\\{\\}] > ; '\\N' > ;",
                                         UTRANS_FORWARD, pe, ec);
     if (t == NULL || U_FAILURE(ec)) {
         errln((UnicodeString)"FAIL: createFromRules RemoveCurly " + u_errorName(ec));
         goto FAIL;
     }
+    expect(*t, "\\N{name}", "name");
     _TUFReg("Any-RemoveCurly", t, 1);
 
     logln("Trying &hex");
@@ -3588,7 +3604,7 @@ void TransliteratorTest::TestUserFunction() {
 
     // Test that filters are allowed after &
     t = Transliterator::createFromRules("test",
-                                        "(.) > &Hex($1) ' ' &[\\{\\}]Remove(&Name($1)) ' ';",
+                                        "(.) > &Hex($1) ' ' &RemoveCurly(&Name($1)) ' ';",
                                         UTRANS_FORWARD, pe, ec);
     if (t == NULL || U_FAILURE(ec)) {
         errln((UnicodeString)"FAIL: createFromRules test " + u_errorName(ec));

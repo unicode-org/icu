@@ -16,27 +16,15 @@ U_NAMESPACE_BEGIN
 
 /**
  * A transliterator that performs character to name mapping.
+ * It generates the Perl syntax \N{name}.
  * @author Alan Liu
  */
 class U_I18N_API UnicodeNameTransliterator : public Transliterator {
-
-    UChar32 openDelimiter;
-    UChar32 closeDelimiter;
 
  public:
 
     /**
      * Constructs a transliterator.
-     * @param openDelimiter  the open delimiter character.
-     * @param closeDelimiter the close delimiter character.
-     * @param adoptedFilter  the filter to be adopted.
-     */
-    UnicodeNameTransliterator(UChar32 openDelimiter, UChar32 closeDelimiter,
-                                UnicodeFilter* adoptedFilter = 0);
-
-    /**
-     * Constructs a transliterator with the default delimiters '{' and
-     * '}'.
      * @param adoptedFilter the filter to be adopted.
      */
     UnicodeNameTransliterator(UnicodeFilter* adoptedFilter = 0);
