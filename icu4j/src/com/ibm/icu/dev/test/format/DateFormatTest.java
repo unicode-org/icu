@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/DateFormatTest.java,v $ 
- * $Date: 2001/10/31 05:01:39 $ 
- * $Revision: 1.3 $
+ * $Date: 2001/11/27 17:53:32 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -110,6 +110,9 @@ public class DateFormatTest extends com.ibm.test.TestFmwk {
              */
     
             boolean ok = fmtDstOffset == null || fmtDstOffset.equals(dstOffset);
+            //fix the jdk resources differences between jdk 1.2 and jdk 1.3
+            String javaVersion = System.getProperty("java.version");
+            ok = ok || (javaVersion.startsWith("1.2") && (fmtDstOffset != null) && fmtDstOffset.equals(""));
             if (ok) {
                 logln(i + " " + ids[i] + " " + dstOffset + " "
                       + fmtOffset + (fmtDstOffset != null ? " ok" : " ?")); 
@@ -204,6 +207,9 @@ public class DateFormatTest extends com.ibm.test.TestFmwk {
         dateFormats[1] = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL, Locale.FRANCE);
         dateFormats[2] = new SimpleDateFormat("G, y, M, d, k, H, m, s, S, E, D, F, w, W, a, h, K, z, y, E", Locale.US);
         dateFormats[3] = new SimpleDateFormat("GGGG, yyyy, MMMM, dddd, kkkk, HHHH, mmmm, ssss, SSSS, EEEE, DDDD, FFFF, wwww, WWWW, aaaa, hhhh, KKKK, zzzz, yyyy, EEEE", Locale.US);
+        //fix the jdk resources differences between jdk 1.2 and jdk 1.3
+        String javaVersion = System.getProperty("java.version");
+        
         for (j = 0, exp = 0; j < dateFormats_length; ++j) {
             String str;
             DateFormat df = dateFormats[j];
@@ -225,6 +231,9 @@ public class DateFormatTest extends com.ibm.test.TestFmwk {
                 } else {
                     // we cannot have latin-1 characters in source code, therefore we fix up the string for "aou^t" 
                     expStr = expStr + "\u0061" + "\u006f" + "\u00fb" + "\u0074";
+                }
+                if (javaVersion.startsWith("1.2") && (exp==31)) {
+                    expStr = "GMT-07:00";
                 }
                 if (!field.equals(expStr))
                     errln("FAIL: field #" + i + " " + fieldNames[i] + " = \"" + field + "\", expected \"" + expStr + "\"");
@@ -731,15 +740,21 @@ public class DateFormatTest extends com.ibm.test.TestFmwk {
         ((SimpleTimeZone)tz).setDSTSavings(3600000);
         dfFrench.setTimeZone(tz);
         dfUS.setTimeZone(tz);
-        //String expectedFRENCH = "lundi 15 septembre 1997 00 h 00 GMT-07:00";
+        String expectedFRENCH_JDK12 = "lundi 15 septembre 1997 00 h 00 GMT-07:00";
         String expectedFRENCH = "lundi 15 septembre 1997 00 h 00 PDT";
-        //UnicodeString expectedUS ( "Monday, September 15, 1997 12:00:00 o'clock AM PDT" );
         String expectedUS = "Monday, September 15, 1997 12:00:00 AM PDT";
         logln("Date set to : " + testDate);
         String out = dfFrench.format(testDate);
         logln("Date Formated with French Locale " + out);
-        if (!out.equals(expectedFRENCH))
-            errln("FAIL: Expected " + expectedFRENCH);
+        //fix the jdk resources differences between jdk 1.2 and jdk 1.3
+        String javaVersion = System.getProperty("java.version");
+        if (javaVersion.startsWith("1.2")) {
+            if (!out.equals(expectedFRENCH_JDK12))
+                errln("FAIL: Expected " + expectedFRENCH_JDK12);
+        } else {
+            if (!out.equals(expectedFRENCH))
+                errln("FAIL: Expected " + expectedFRENCH);
+        }
         out = dfUS.format(testDate);
         logln("Date Formated with US Locale " + out);
         if (!out.equals(expectedUS))
