@@ -1632,11 +1632,11 @@ if test "${enable_shared+set}" = set; then
   enableval="$enable_shared"
    case "${enableval}" in
 	     yes|"") enabled=yes; ENABLE_SHARED=YES ;;
-	     no) ;;
+	     no);;
 	     *) ;;
     esac
 else
-  ENABLE_SHARED=YES
+  enabled=yes; ENABLE_SHARED=YES
 
 fi
 

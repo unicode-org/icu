@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.145 2002/01/03 22:35:02 weiv-oss Exp $
+dnl $Id: configure.in,v 1.146 2002/01/08 22:10:21 yves-oss Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -183,10 +183,10 @@ AC_ARG_ENABLE(shared,
     [  --enable-shared[=PKGS]  build shared libraries [default=yes]],
     [ case "${enableval}" in
 	     yes|"") enabled=yes; ENABLE_SHARED=YES ;;
-	     no) ;;
+	     no);;
 	     *) ;;
     esac],
-    [ENABLE_SHARED=YES]
+    [enabled=yes; ENABLE_SHARED=YES]
 )
 AC_MSG_RESULT($enabled)
 AC_SUBST(ENABLE_SHARED)
