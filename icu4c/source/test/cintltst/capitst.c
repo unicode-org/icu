@@ -1338,7 +1338,7 @@ void TestSortKeyBufferOverrun(void) {
   UChar uString[256];
   int32_t strLen = 0;
   UCollator *coll = ucol_open("root", &status);
-  strLen = u_unescape(cString, uString, uprv_strlen(cString));
+  strLen = u_unescape(cString, uString, 256);
 
   if(U_SUCCESS(status)) {
     log_verbose("testing non ignorable\n");
