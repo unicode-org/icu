@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-solaris,v 1.19 2000/10/17 16:39:33 yves Exp $
+## $Id: mh-solaris,v 1.20 2000/10/17 16:52:58 yves Exp $
 
 ## Flags for position independent code
 SHAREDLIBCFLAGS = -KPIC
@@ -32,15 +32,15 @@ SHLIB.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -G
 LD_RPATH=	-R
 LD_RPATH_PRE=	
 
+## Environment variable to set a runtime search path
+LDLIBRARYPATH_ENVVAR = LD_LIBRARY_PATH
+
 ## Compiler switch to embed a library name
 LD_SONAME = -h $(MIDDLE_SO_TARGET)
 
 ## Versioned target for a shared library.
 FINAL_SO_TARGET = $(SO_TARGET).$(SO_TARGET_VERSION)
 MIDDLE_SO_TARGET = $(SO_TARGET).$(SO_TARGET_VERSION_MAJOR) 
-
-## Environment variable to set a runtime search path
-LDLIBRARYPATH_ENVVAR = LD_LIBRARY_PATH
 
 ###  How ICU libraries are named...  ex. $(LIBICU)uc$(SO)
 ## Prefix for the ICU library names
