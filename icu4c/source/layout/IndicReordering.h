@@ -33,17 +33,18 @@ struct IndicClassTable
 {
     enum CharClassValues
     {
-        CC_RESERVED             = 0,
-        CC_VOWEL_MODIFIER       = 1,
-        CC_STRESS_MARK          = 2,
-        CC_INDEPENDENT_VOWEL    = 3,
-        CC_CONSONANT            = 4,
-        CC_CONSONANT_WITH_NUKTA = 5,
-        CC_NUKTA                = 6,
-        CC_DEPENDENT_VOWEL      = 7,
-        CC_VIRAMA               = 8,
-        CC_ZERO_WIDTH_MARK      = 9,
-        CC_COUNT                = 10
+        CC_RESERVED             =  0,
+        CC_VOWEL_MODIFIER       =  1,
+        CC_STRESS_MARK          =  2,
+        CC_INDEPENDENT_VOWEL    =  3,
+        CC_INDEPENDENT_VOWEL_2  =  4,
+        CC_CONSONANT            =  5,
+        CC_CONSONANT_WITH_NUKTA =  6,
+        CC_NUKTA                =  7,
+        CC_DEPENDENT_VOWEL      =  8,
+        CC_VIRAMA               =  9,
+        CC_ZERO_WIDTH_MARK      = 10,
+        CC_COUNT                = 11
     };
 
     enum CharClassFlags

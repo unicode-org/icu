@@ -304,15 +304,16 @@ static const LETag tagArray[] =
 
 static const le_int8 stateTable[][IndicClassTable::CC_COUNT] =
 {
-//   xx  vm  sm  iv  ct  cn  nu  dv  vr  zw
-    { 1,  1,  1,  5,  3,  2,  1,  1,  1,  1}, // 0
-    {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, // 1
-    {-1,  6,  1, -1, -1, -1, -1,  5,  4, -1}, // 2
-    {-1,  6,  1, -1, -1, -1,  2,  5,  4, -1}, // 3
-    {-1, -1, -1, -1,  3,  2, -1, -1, -1,  7}, // 4
-    {-1,  6,  1, -1, -1, -1, -1, -1, -1, -1}, // 5
-    {-1, -1,  1, -1, -1, -1, -1, -1, -1, -1}, // 6
-    {-1, -1, -1, -1,  3,  2, -1, -1, -1, -1}  // 7
+//   xx  vm  sm  iv  i2  ct  cn  nu  dv  vr  zw
+    { 1,  1,  1,  5,  8,  3,  2,  1,  1,  1,  1}, // 0
+    {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, // 1
+    {-1,  6,  1, -1, -1, -1, -1, -1,  5,  4, -1}, // 2
+    {-1,  6,  1, -1, -1, -1, -1,  2,  5,  4, -1}, // 3
+    {-1, -1, -1, -1, -1,  3,  2, -1, -1, -1,  7}, // 4
+    {-1,  6,  1, -1, -1, -1, -1, -1, -1, -1, -1}, // 5
+    {-1, -1,  1, -1, -1, -1, -1, -1, -1, -1, -1}, // 6
+    {-1, -1, -1, -1, -1,  3,  2, -1, -1, -1, -1}, // 7
+    {-1,  6,  1, -1, -1, -1, -1, -1, -1,  4, -1}  // 8
 
 };
 
@@ -401,6 +402,7 @@ le_int32 IndicReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
             output.writeLengthMark();
             break;
 
+        case IndicClassTable::CC_INDEPENDENT_VOWEL_2:
         case IndicClassTable::CC_CONSONANT:
         case IndicClassTable::CC_CONSONANT_WITH_NUKTA:
         {
