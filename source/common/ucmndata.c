@@ -68,6 +68,7 @@ static uint32_t offsetTOCEntryCount(const UDataMemory *pData) {
 static const DataHeader *
 offsetTOCLookupFn(const UDataMemory *pData,
                   const char *tocEntryName,
+                  int32_t *pLength,
                   UErrorCode *pErrorCode) {
     const UDataOffsetTOC  *toc = (UDataOffsetTOC *)pData->toc;
     if(toc!=NULL) {
@@ -95,6 +96,11 @@ offsetTOCLookupFn(const UDataMemory *pData,
 /*      fprintf(stderr, "Found: %p\n",(base+toc[2*start+1])) */
             fprintf(stderr, "Found it\n");
 #endif
+            if((start+1)<toc->count) {
+                *pLength=(int32_t)(toc->entry[start+1].dataOffset-toc->entry[start].dataOffset);
+            } else {
+                *pLength=-1;
+            }
             return (const DataHeader *)&base[toc->entry[start].dataOffset];
         } else {
 #ifdef UDATA_DEBUG
@@ -124,6 +130,7 @@ static uint32_t pointerTOCEntryCount(const UDataMemory *pData) {
 
 static const DataHeader *pointerTOCLookupFn(const UDataMemory *pData,
                    const char *name,
+                   int32_t *pLength,
                    UErrorCode *pErrorCode) {
     if(pData->toc!=NULL) {
         const PointerTOC *toc = (PointerTOC *)pData->toc;
@@ -148,6 +155,7 @@ static const DataHeader *pointerTOCLookupFn(const UDataMemory *pData,
 
         if(uprv_strcmp(name, toc->entry[start].entryName)==0) {
             /* found it */
+            *pLength=-1;
             return UDataMemory_normalizeDataPointer(toc->entry[start].pHeader);
         } else {
             return NULL;
