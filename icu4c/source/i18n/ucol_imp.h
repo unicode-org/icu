@@ -516,7 +516,7 @@ typedef struct {
       uint32_t contractionIndex; /* UChar *contractionIndex;        */
       uint32_t contractionCEs;   /* uint32_t *contractionCEs;       */
       uint32_t contractionSize;  /* needed for various closures */
-      uint32_t latinOneMapping;  /* fast track to latin1 chars      */
+      /*int32_t latinOneMapping;*/ /* this is now handled in the trie itself *//* fast track to latin1 chars      */
 
       uint32_t endExpansionCE;      /* array of last collation element in
                                        expansion */
