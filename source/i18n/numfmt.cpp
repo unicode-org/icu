@@ -339,6 +339,7 @@ public:
   virtual ~NFFactory()
   {
     delete _delegate;
+    delete _ids;
   }
 
   virtual UObject* create(const ICUServiceKey& key, const ICUService* service, UErrorCode& status) const

@@ -15,6 +15,7 @@
 #include "unicode/ustring.h"
 #include "cstring.h"
 #include "uassert.h"
+#include "iculserv.h"
 
 //------------------------------------------------------------
 // Constants
@@ -117,11 +118,9 @@ _findMetaData(const UChar* currency) {
     return data;
 }
 
-U_CAPI const UChar* U_EXPORT2
-ucurr_forLocale(const char* locale,
-                UErrorCode* ec) {
+const UChar* 
+internal_ucurr_forLocale(const char* locale, UErrorCode* ec) {
 
-    if (ec != NULL && U_SUCCESS(*ec)) {
         // Extract the country name and variant name.  We only
         // recognize two variant names, EURO and PREEURO.
         char country[12];
@@ -145,9 +144,150 @@ ucurr_forLocale(const char* locale,
 	if (U_SUCCESS(*ec)) {
 	    return s;
 	}
-    }
 
     return NULL;
+}
+
+// ------------------------------------------
+//
+// Registration
+//
+//-------------------------------------------
+
+static ICULocaleService* gService = NULL;
+
+// -------------------------------------
+
+class CurrencyRef : public UObject {
+public:
+    const UChar* str;
+    CurrencyRef(const UChar* isoCode) : str(isoCode) {}
+
+    inline virtual UClassID getDynamicClassID() const {
+		return (UClassID)&fgClassID;
+	}
+
+	inline static  UClassID getStaticClassID() {
+		return (UClassID)&fgClassID;
+	}
+
+private:
+    /**
+     * Class ID
+     */
+    static const char fgClassID;
+};
+
+const char CurrencyRef::fgClassID = 0;
+
+// -------------------------------------
+
+CurrencyRef* 
+makeCurrencyRef(const Locale& loc, UErrorCode& status) {
+  const UChar* isoCode = internal_ucurr_forLocale(loc.getName(), &status);
+  if (isoCode) {
+    return new CurrencyRef(isoCode);
+  }
+  return NULL;
+}
+
+// -------------------------------------
+
+class ICUCurrencyFactory : public ICUResourceBundleFactory {
+protected:
+  virtual UObject* handleCreate(const Locale& loc, int32_t kind, const ICUService* service, UErrorCode& status) const {
+    return makeCurrencyRef(loc, status);
+  }
+};
+
+// -------------------------------------
+
+class ICUCurrencyService : public ICULocaleService {
+public:
+    ICUCurrencyService()
+        : ICULocaleService("Currency")
+    {
+        UErrorCode status = U_ZERO_ERROR;
+        registerFactory(new ICUCurrencyFactory(), status);
+    }
+
+    virtual UObject* cloneInstance(UObject* instance) const {
+        return new CurrencyRef(((CurrencyRef*)instance)->str);
+    }
+
+    virtual UObject* handleDefault(const ICUServiceKey& key, UnicodeString* actualID, UErrorCode& status) const {
+        LocaleKey& lkey = (LocaleKey&)key;
+        Locale loc;
+        lkey.currentLocale(loc);
+        return makeCurrencyRef(loc, status);
+    }
+
+    virtual UBool isDefault() const {
+        return countFactories() == 1;
+    }
+};
+
+// -------------------------------------
+
+static UMTX gLock = 0;
+
+static ICULocaleService* 
+getService(void)
+{
+    Mutex mutex(&gLock);
+    if (gService == NULL) {
+        gService = new ICUCurrencyService();
+    }
+    return gService;
+}
+
+// -------------------------------------
+
+U_CAPI UCurrRegistryKey U_EXPORT2
+ucurr_register(const UChar* isoCode, const char* locale, UErrorCode *status) 
+{
+    URegistryKey result = NULL;
+    if (status && U_SUCCESS(*status)) {
+        CurrencyRef* ref = new CurrencyRef(isoCode);
+        Locale loc(locale);
+        result = getService()->registerInstance(ref, loc, *status);
+    }
+    return result;
+}
+
+// -------------------------------------
+
+U_CAPI UBool U_EXPORT2
+ucurr_unregister(UCurrRegistryKey key, UErrorCode* status) 
+{
+  if (status && U_SUCCESS(*status)) {
+    if (gService != NULL) {
+      return gService->unregister(key, *status);
+    }
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
+  }
+  return FALSE;
+}
+
+// -------------------------------------
+
+U_CAPI const UChar* U_EXPORT2
+ucurr_forLocale(const char* locale,
+                UErrorCode* ec) {
+    if (ec != NULL && U_SUCCESS(*ec)) {
+    if (gService) {
+      const UChar* result = NULL;
+      Locale loc(locale);
+      CurrencyRef* ref = (CurrencyRef*)gService->get(loc, *ec);
+      if (ref) {
+        result = ref->str; // points to original
+        delete ref;
+      }
+      return result;
+    } 
+    return internal_ucurr_forLocale(locale, ec);
+	}
+	return NULL;
 }
 
 /**
@@ -300,6 +440,18 @@ ucurr_getRoundingIncrement(const UChar* currency) {
     // Return data[1] / 10^(data[0]).  The only actual rounding data,
     // as of this writing, is CHF { 2, 5 }.
     return double(data[1]) / POW10[data[0]];
+}
+
+/**
+ * Release all static memory held by breakiterator.  
+ */
+U_CFUNC UBool currency_cleanup(void) {
+  if (gService) {
+    delete gService;
+    gService = NULL;
+  }
+  umtx_destroy(&gLock);
+  return TRUE;
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

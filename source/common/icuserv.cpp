@@ -875,8 +875,11 @@ ICUService::getVisibleIDs(UVector& result, const UnicodeString* matchID, UErrorC
 
 const Hashtable* 
 ICUService::getVisibleIDMap(UErrorCode& status) const {
-  if (U_SUCCESS(status) && idCache == NULL) {
-    ICUService* ncthis = (ICUService*)this; // cast away semantic const
+  if (U_FAILURE(status)) return NULL;
+
+  ICUService* ncthis = (ICUService*)this; // cast away semantic const
+  Mutex mutex(&ncthis->lock);
+  if (idCache == NULL) {
     ncthis->idCache = new Hashtable();
     if (idCache == NULL) {
       status = U_MEMORY_ALLOCATION_ERROR;
@@ -899,7 +902,7 @@ ICUService::getVisibleIDMap(UErrorCode& status) const {
 UnicodeString& 
 ICUService::getDisplayName(const UnicodeString& id, UnicodeString& result) const 
 {
-	return getDisplayName(id, result, Locale::getDefault());
+  return getDisplayName(id, result, Locale::getDefault());
 }
 
 UnicodeString& 
