@@ -67,6 +67,8 @@ doLOGICALArabicDeShapingTest(void);
 
 static void TestReorder(void);
 
+static void TestFailureRecovery(void);
+
 /* helpers ------------------------------------------------------------------ */
 
 static const char *levelString="...............................................................";
@@ -90,6 +92,7 @@ addComplexTest(TestNode** root) {
     addTest(root, doBiDiTest, "complex/bidi/BiDiTest");
     addTest(root, doInverseBiDiTest, "complex/bidi/inverse");
     addTest(root, TestReorder,"complex/bidi/TestReorder");
+    addTest(root, TestFailureRecovery,"complex/bidi/TestFailureRecovery");
     addTest(root, doArabicShapingTest, "complex/arabic-shaping/ArabicShapingTest");
     addTest(root, doLamAlefSpecialVLTRArabicShapingTest, "complex/arabic-shaping/lamalef");
     addTest(root, doTashkeelSpecialVLTRArabicShapingTest, "complex/arabic-shaping/tashkeel");
@@ -663,43 +666,63 @@ testReordering(UBiDi *pBiDi, int testNumber) {
     /* check that the indexes are the same between these and ubidi_getLogical/VisualIndex() */
     for(i=0; i<length; ++i) {
         if(logicalMap1[i]!=logicalMap2[i]) {
-            log_verbose("bidi reordering error in tests[%d]: logicalMap1[i]!=logicalMap2[i] at i=%d\n", testNumber, i);
+            log_err("bidi reordering error in tests[%d]: logicalMap1[i]!=logicalMap2[i] at i=%d\n", testNumber, i);
             break;
         }
         if(logicalMap1[i]!=logicalMap3[i]) {
-            log_verbose("bidi reordering error in tests[%d]: logicalMap1[i]!=logicalMap3[i] at i=%d\n", testNumber, i);
+            log_err("bidi reordering error in tests[%d]: logicalMap1[i]!=logicalMap3[i] at i=%d\n", testNumber, i);
             break;
         }
 
         if(visualMap1[i]!=visualMap2[i]) {
-            log_verbose("bidi reordering error in tests[%d]: visualMap1[i]!=visualMap2[i] at i=%d\n", testNumber, i);
+            log_err("bidi reordering error in tests[%d]: visualMap1[i]!=visualMap2[i] at i=%d\n", testNumber, i);
             break;
         }
         if(visualMap1[i]!=visualMap3[i]) {
-            log_verbose("bidi reordering error in tests[%d]: visualMap1[i]!=visualMap3[i] at i=%d\n", testNumber, i);
+            log_err("bidi reordering error in tests[%d]: visualMap1[i]!=visualMap3[i] at i=%d\n", testNumber, i);
             break;
         }
         if(visualMap1[i]!=visualMap4[i]) {
-            log_verbose("bidi reordering error in tests[%d]: visualMap1[i]!=visualMap4[i] at i=%d\n", testNumber, i);
+            log_err("bidi reordering error in tests[%d]: visualMap1[i]!=visualMap4[i] at i=%d\n", testNumber, i);
             break;
         }
 
         if(logicalMap1[i]!=ubidi_getVisualIndex(pBiDi, i, &errorCode)) {
-            log_verbose("bidi reordering error in tests[%d]: logicalMap1[i]!=ubidi_getVisualIndex(i) at i=%d\n", testNumber, i);
+            log_err("bidi reordering error in tests[%d]: logicalMap1[i]!=ubidi_getVisualIndex(i) at i=%d\n", testNumber, i);
             break;
         }
         if(U_FAILURE(errorCode)) {
-            log_verbose("ubidi_getVisualIndex(tests[%d], %d): error %s\n", testNumber, i, myErrorName(errorCode));
+            log_err("ubidi_getVisualIndex(tests[%d], %d): error %s\n", testNumber, i, myErrorName(errorCode));
             break;
         }
         if(visualMap1[i]!=ubidi_getLogicalIndex(pBiDi, i, &errorCode)) {
-            log_verbose("bidi reordering error in tests[%d]: visualMap1[i]!=ubidi_getLogicalIndex(i) at i=%d\n", testNumber, i);
+            log_err("bidi reordering error in tests[%d]: visualMap1[i]!=ubidi_getLogicalIndex(i) at i=%d\n", testNumber, i);
             break;
         }
         if(U_FAILURE(errorCode)) {
-            log_verbose("ubidi_getLogicalIndex(tests[%d], %d): error %s\n", testNumber, i, myErrorName(errorCode));
+            log_err("ubidi_getLogicalIndex(tests[%d], %d): error %s\n", testNumber, i, myErrorName(errorCode));
             break;
         }
+    }
+}
+
+static void TestFailureRecovery(void) {
+    UErrorCode status;
+
+    status = U_FILE_ACCESS_ERROR;
+    if (ubidi_writeReordered(NULL, NULL, 0, 0, &status) != 0) {
+        log_err("ubidi_writeReordered did not return 0 when passed a failing UErrorCode\n");
+    }
+    if (ubidi_writeReverse(NULL, 0, NULL, 0, 0, &status) != 0) {
+        log_err("ubidi_writeReverse did not return 0 when passed a failing UErrorCode\n");
+    }
+    status = U_ZERO_ERROR;
+    if (ubidi_writeReordered(NULL, NULL, 0, 0, &status) != 0 || status != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("ubidi_writeReordered did not fail as expected\n");
+    }
+    status = U_ZERO_ERROR;
+    if (ubidi_writeReverse(NULL, 0, NULL, 0, 0, &status) != 0 || status != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("ubidi_writeReverse did not fail as expected\n");
     }
 }
 
