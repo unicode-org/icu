@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Names.java,v $
-* $Date: 2001/10/26 23:33:07 $
-* $Revision: 1.5 $
+* $Date: 2001/10/31 00:02:27 $
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -31,7 +31,8 @@ final class UCD_Names implements UCD_Types {
         {"suc", "Simple_Uppercase_Mapping"},
         {"stc", "Simple_Titlecase_Mapping"},
         {"sfc", "Simple_Case_Folding"},
-        {"scc", "Special_Case_Condition"}
+        {"scc", "Special_Case_Condition"},
+        {"blk", "Block"}
     };
 
     static final String[] UNIFIED_PROPERTIES = {
@@ -404,9 +405,19 @@ final class UCD_Names implements UCD_Types {
         "FinalPunctuation" // = Punctuation, Final quote 30 (may behave like Ps or Pe dependingon usage)
     };
 
+    static final String[][] SUPER_CATEGORIES = {
+        {"L", "Letter"},
+        {"M", "Mark"},
+        {"N", "Number"},
+        {"Z", "Separator"},
+        {"C", "Other"},
+        {"S", "Symbol"},
+        {"P", "Punctuation"},
+    };
 
 
-    static String[] BC = {
+
+    static final String[] BC = {
         "L", //	Left-Right; Most alphabetic, syllabic, and logographic characters (e.g., CJK ideographs)
         "R", //	Right-Left; Arabic, Hebrew, and punctuation specific to those scripts
         "EN", //	European Number
@@ -751,8 +762,6 @@ final class UCD_Names implements UCD_Types {
         "P",    // U+11C1; P; HANGUL JONGSEONG PHIEUPH
         "H",    // U+11C2; H; HANGUL JONGSEONG HIEUH
     };
-
-
 
 /*
     static {
