@@ -79,7 +79,16 @@ enum {
       *    If set, recognize line terminators within string,
       *    otherwise, match only at start and end of input string.
       *   @draft ICU 2.4 */
-    UREGEX_MULTILINE        = 8
+    UREGEX_MULTILINE        = 8,
+
+    /**  Unicode word boundaries.
+      *     If set, \b uses the Unicode TR 29 definition of word boundaries.
+      *     Warning: Unicode word boundaries are quite different from
+      *     traditional regular expression word boundaries.  See
+      *     http://unicode.org/reports/tr29/#Word_Boundaries
+      *     @draft ICU 2.8
+      */
+    UREGEX_UWORD            = 256
 };
 
 
@@ -479,6 +488,17 @@ public:
     */
     virtual UBool matches(UErrorCode &status);
 
+   /**
+    *   Attempts to match the input string, beginning at startIndex, against the pattern.
+    *   The match must extend to the end of the input string.
+    *    @param   startIndex The input string index at which to begin matching.
+    *    @param   status     A reference to a UErrorCode to receive any errors.
+    *    @return TRUE if there is a match
+    *    @draft ICU 2.8
+    */
+    virtual UBool matches(int32_t startIndex, UErrorCode &status);
+
+
 
 
    /**
@@ -495,6 +515,21 @@ public:
     */
     virtual UBool lookingAt(UErrorCode &status);
 
+
+  /**
+    *   Attempts to match the input string, starting from the specified index, against the pattern.
+    *   The match may be of any length, and is not required to extend to the end
+    *   of the input string.  Contrast with match().
+    *
+    *   <p>If the match succeeds then more information can be obtained via the <code>start()</code>,
+    *     <code>end()</code>, and <code>group()</code> functions.</p>
+    *
+    *    @param   startIndex The input string index at which to begin matching.
+    *    @param   status     A reference to a UErrorCode to receive any errors.
+    *    @return  TRUE if there is a match.
+    *    @draft ICU 2.8
+    */
+    virtual UBool lookingAt(int32_t startIndex, UErrorCode &status);
 
    /**
     *  Find the next pattern match in the input string.
@@ -613,6 +648,18 @@ public:
 
 
    /**
+    *   Return TRUE of the most recent attempted match or match touched
+    *   the end of the input string.  For failed matches, this normally
+    *   means thta some amount of additional input, appended to the
+    *   existing input string, could have resulted in a match
+    *   @return  True if the most recently attempted match reached the
+    *            end of the input string.
+    *   @draft   ICU 2.8
+    */
+    virtual UBool touchedEnd();
+
+
+   /**
     *   Resets this matcher.  The effect is to remove any memory of previous matches,
     *       and to cause subsequent find() operations to begin at the beginning of
     *       the input string.
@@ -621,6 +668,18 @@ public:
     *   @draft ICU 2.4
     */
     virtual RegexMatcher &reset();
+
+
+   /**
+    *   Resets this matcher, and set the current input position.
+    *   The effect is to remove any memory of previous matches,
+    *       and to cause subsequent find() operations to begin at 
+    *       the specified position in the input string.
+    *
+    *   @return this RegexMatcher.
+    *   @draft ICU 2.8
+    */
+    virtual RegexMatcher &reset(int32_t index, UErrorCode &status);
 
 
    /**
@@ -833,6 +892,9 @@ private:
 
     UErrorCode          fDeferredStatus;   // Save error state if that cannot be immediately
                                            //   reported, or that permanently disables this matcher.
+
+    UBool               fTouchedEnd;       // Set true if match engine reaches eof on input
+                                           //   while attempting a match.
 
 };
 
