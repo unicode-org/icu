@@ -89,7 +89,7 @@ GlyphDefinitionTables.o \
 GlyphIterator.o \
 GlyphLookupTables.o \
 GlyphPosnLookupProc.o \
-GlyphPositioningAdjustments.o  \
+GlyphPositionAdjustments.o \
 GlyphPositioningTables.o \
 GlyphSubstLookupProc.o \
 GlyphSubstitutionTables.o \
