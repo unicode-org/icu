@@ -31,6 +31,7 @@
 #include "unicode/fieldpos.h"
 #include "unicode/parsepos.h"
 #include "unicode/parseerr.h" 
+#include "unicode/locid.h"
 
 U_NAMESPACE_BEGIN
 /**
@@ -231,6 +232,14 @@ public:
      * @stable ICU 2.0
      */
     virtual UClassID getDynamicClassID() const = 0;
+
+    /** Get the locale for this format object. You can choose between valid and actual locale.
+     *  @param type type of the locale we're looking for (valid or actual) 
+     *  @param status error code for the operation
+     *  @return the locale
+     *  @draft ICU 2.8
+     */
+    virtual Locale getLocale(ULocDataLocaleType type, UErrorCode& status) const = 0;
 
 protected:
     /**
