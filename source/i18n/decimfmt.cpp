@@ -314,6 +314,7 @@ DecimalFormat::operator=(const DecimalFormat& rhs)
     else 
         *fSymbols = *rhs.fSymbols;
     fUseExponentialNotation = rhs.fUseExponentialNotation;
+    fExponentSignAlwaysShown = rhs.fExponentSignAlwaysShown;
     /*Bertrand A. D. Update 98.03.17*/
     fIsCurrencyFormat = rhs.fIsCurrencyFormat;
     /*end of Update*/
@@ -2722,8 +2723,8 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
             fUseExponentialNotation = (expDigits >= 0);
             if (fUseExponentialNotation) {
                 fMinExponentDigits = expDigits;
-                fExponentSignAlwaysShown = expSignAlways;
             }
+            fExponentSignAlwaysShown = expSignAlways;
             fIsCurrencyFormat = isCurrency;
             int digitTotalCount = digitLeftCount + zeroDigitCount + digitRightCount;
             // The effectiveDecimalPos is the position the decimal is at or
