@@ -7,7 +7,7 @@
 all: $(ALL_SUBDIR) $(RESTARGET) $(TARGET)  
 
 $(TARGET): $(OBJECTS)
-	$(LINK.cc) $^ $(LOADLIBES) $(LDLIBS) -o $@
+	$(LINK.cc) $^ $(LOADLIBES) $(LDLIBS) -o $@ $(XTRALIBS)
 
 $(RESTARGET): $(RESFILES)
 	$(PKGDATA) --name $(RESNAME) --mode $(RESMODE) $(PKGDATAOPTS) $(RESLIST)
