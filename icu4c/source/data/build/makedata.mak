@@ -8,7 +8,7 @@
 #
 #	12/10/1999	weiv	Created
 
-U_ICUDATA_NAME=icudt18l
+U_ICUDATA_NAME=icudt19l
 
 #If no config, we default to debug
 !IF "$(CFG)" == ""
@@ -140,7 +140,7 @@ BRK_FILES = "$(ICUDBLD)\sent.brk" "$(ICUDBLD)\char.brk" "$(ICUDBLD)\line.brk" "$
 "$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" :  $(CNV_FILES) $(BRK_FILES) qchk.dat fchk.dat uprops.dat unames.dat unorm.dat cnvalias.dat tz.dat ucadata.dat invuca.dat $(ALL_RES) icudata.res
 	@echo Building icu data
 	@cd "$(ICUDBLD)"
- 	"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -e icudata -v -T . -m dll -c -p $(U_ICUDATA_NAME) -O "$(PKGOPT)" -d "$(DLL_OUTPUT)" -s . <<pkgdatain.txt
+ 	"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -e $(U_ICUDATA_NAME) -v -T . -m dll -c -p $(U_ICUDATA_NAME) -O "$(PKGOPT)" -d "$(DLL_OUTPUT)" -s . <<pkgdatain.txt
 qchk.dat
 fchk.dat
 uprops.dat
