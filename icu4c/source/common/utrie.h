@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2001-2004, International Business Machines
+*   Copyright (C) 2001-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -109,6 +109,23 @@ enum {
  *  possible duplicate entries for 1024 lead surrogates.)
  */
 #define UTRIE_MAX_BUILD_TIME_DATA_LENGTH (0x110000+UTRIE_DATA_BLOCK_LENGTH+0x400)
+
+/**
+ * Number of bytes for a dummy trie.
+ * A dummy trie is an empty runtime trie, used when a real data trie cannot
+ * be loaded.
+ * The number of bytes works for Latin-1-linear tries with 32-bit data
+ * (worst case).
+ *
+ * Calculation:
+ *   BMP index + 1 index block for lead surrogate code points +
+ *   Latin-1-linear array + 1 data block for lead surrogate code points
+ *
+ * Latin-1: if(UTRIE_SHIFT<=8) { 256 } else { included in first data block }
+ *
+ * @see utrie_unserializeDummy
+ */
+#define UTRIE_DUMMY_SIZE ((UTRIE_BMP_INDEX_LENGTH+UTRIE_SURROGATE_BLOCK_COUNT)*2+(UTRIE_SHIFT<=8?256:UTRIE_DATA_BLOCK_LENGTH)*4+UTRIE_DATA_BLOCK_LENGTH*4)
 
 /**
  * Runtime UTrie callback function.
@@ -482,6 +499,33 @@ utrie_enum(const UTrie *trie,
  */
 U_CAPI int32_t U_EXPORT2
 utrie_unserialize(UTrie *trie, const void *data, int32_t length, UErrorCode *pErrorCode);
+
+/**
+ * "Unserialize" a dummy trie.
+ * A dummy trie is an empty runtime trie, used when a real data trie cannot
+ * be loaded.
+ *
+ * The input memory is filled so that the trie always returns the initialValue,
+ * or the leadUnitValue for lead surrogate code points.
+ * The Latin-1 part is always set up to be linear.
+ *
+ * @param trie a pointer to the runtime trie structure
+ * @param data a pointer to 32-bit-aligned memory to be filled with the dummy trie data
+ * @param length the number of bytes available at data (recommended to use UTRIE_DUMMY_SIZE)
+ * @param initialValue the initial value that is set for all code points
+ * @param leadUnitValue the value for lead surrogate code _units_ that do not
+ *                      have associated supplementary data
+ * @param pErrorCode an in/out ICU UErrorCode
+ *
+ * @see UTRIE_DUMMY_SIZE
+ * @see utrie_open
+ */
+U_CAPI int32_t U_EXPORT2
+utrie_unserializeDummy(UTrie *trie,
+                       void *data, int32_t length,
+                       uint32_t initialValue, uint32_t leadUnitValue,
+                       UBool make16BitTrie,
+                       UErrorCode *pErrorCode);
 
 /* Building a trie ----------------------------------------------------------*/
 

@@ -25,13 +25,136 @@
 #include "unicode/uchar.h"
 #include "unicode/uscript.h"
 #include "cstring.h"
+#include "ucln_cmn.h"
+#include "umutex.h"
 #include "unormimp.h"
 #include "ubidi_props.h"
 #include "uprops.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
-/* API functions ------------------------------------------------------------ */
+/* cleanup ------------------------------------------------------------------ */
+
+static UCaseProps *gCsp=NULL;
+static UBiDiProps *gBdp=NULL;
+
+static UBool U_CALLCONV uprops_cleanup(void) {
+    gCsp=NULL;
+    gBdp=NULL;
+    return TRUE;
+}
+
+/* case mapping properties API ---------------------------------------------- */
+
+/* get the UCaseProps singleton, or else its dummy, once and for all */
+static UCaseProps *
+getCaseProps() {
+    /*
+     * This lazy intialization with double-checked locking (without mutex protection for
+     * the initial check) is transiently unsafe under certain circumstances.
+     * Check the readme and use u_init() if necessary.
+     */
+
+    /* the initial check is performed by the GET_CASE_PROPS() macro */
+    UCaseProps *csp;
+    UErrorCode errorCode=U_ZERO_ERROR;
+
+    csp=ucase_getSingleton(&errorCode);
+    if(U_FAILURE(errorCode)) {
+        errorCode=U_ZERO_ERROR;
+        csp=ucase_getDummy(&errorCode);
+        if(U_FAILURE(errorCode)) {
+            return NULL;
+        }
+    }
+
+    umtx_lock(NULL);
+    if(gCsp==NULL) {
+        gCsp=csp;
+        csp=NULL;
+        ucln_common_registerCleanup(UCLN_COMMON_UPROPS, uprops_cleanup);
+    }
+    umtx_unlock(NULL);
+
+    return gCsp;
+}
+
+#define GET_CASE_PROPS() (gCsp!=NULL ? gCsp : getCaseProps())
+
+/* public API (see uchar.h) */
+
+U_CAPI UBool U_EXPORT2
+u_isULowercase(UChar32 c) {
+    return (UBool)(UCASE_LOWER==ucase_getType(GET_CASE_PROPS(), c));
+}
+
+U_CAPI UBool U_EXPORT2
+u_isUUppercase(UChar32 c) {
+    return (UBool)(UCASE_UPPER==ucase_getType(GET_CASE_PROPS(), c));
+}
+
+/* Transforms the Unicode character to its lower case equivalent.*/
+U_CAPI UChar32 U_EXPORT2
+u_tolower(UChar32 c) {
+    return ucase_tolower(GET_CASE_PROPS(), c);
+}
+    
+/* Transforms the Unicode character to its upper case equivalent.*/
+U_CAPI UChar32 U_EXPORT2
+u_toupper(UChar32 c) {
+    return ucase_toupper(GET_CASE_PROPS(), c);
+}
+
+/* Transforms the Unicode character to its title case equivalent.*/
+U_CAPI UChar32 U_EXPORT2
+u_totitle(UChar32 c) {
+    return ucase_totitle(GET_CASE_PROPS(), c);
+}
+
+/* return the simple case folding mapping for c */
+U_CAPI UChar32 U_EXPORT2
+u_foldCase(UChar32 c, uint32_t options) {
+    return ucase_fold(GET_CASE_PROPS(), c, options);
+}
+
+/* bidi/shaping properties API ---------------------------------------------- */
+
+/* get the UBiDiProps singleton, or else its dummy, once and for all */
+static UBiDiProps *
+getBiDiProps() {
+    /*
+     * This lazy intialization with double-checked locking (without mutex protection for
+     * the initial check) is transiently unsafe under certain circumstances.
+     * Check the readme and use u_init() if necessary.
+     */
+
+    /* the initial check is performed by the GET_BIDI_PROPS() macro */
+    UBiDiProps *bdp;
+    UErrorCode errorCode=U_ZERO_ERROR;
+
+    bdp=ubidi_getSingleton(&errorCode);
+    if(U_FAILURE(errorCode)) {
+        errorCode=U_ZERO_ERROR;
+        bdp=ubidi_getDummy(&errorCode);
+        if(U_FAILURE(errorCode)) {
+            return NULL;
+        }
+    }
+
+    umtx_lock(NULL);
+    if(gBdp==NULL) {
+        gBdp=bdp;
+        bdp=NULL;
+        ucln_common_registerCleanup(UCLN_COMMON_UPROPS, uprops_cleanup);
+    }
+    umtx_unlock(NULL);
+
+    return gBdp;
+}
+
+#define GET_BIDI_PROPS() (gBdp!=NULL ? gBdp : getBiDiProps())
+
+/* general properties API functions ----------------------------------------- */
 
 static const struct {
     int32_t column;
@@ -105,9 +228,8 @@ u_hasBinaryProperty(UChar32 c, UProperty which) {
         } else {
             if(column==UPROPS_SRC_CASE) {
                 /* case mapping properties */
-                UErrorCode errorCode=U_ZERO_ERROR;
-                UCaseProps *csp=ucase_getSingleton(&errorCode);
-                if(U_FAILURE(errorCode)) {
+                UCaseProps *csp=GET_CASE_PROPS();
+                if(csp==NULL) {
                     return FALSE;
                 }
                 switch(which) {
@@ -141,9 +263,8 @@ u_hasBinaryProperty(UChar32 c, UProperty which) {
 #endif
             } else if(column==UPROPS_SRC_BIDI) {
                 /* bidi/shaping properties */
-                UErrorCode errorCode=U_ZERO_ERROR;
-                UBiDiProps *bdp=ubidi_getSingleton(&errorCode);
-                if(U_FAILURE(errorCode)) {
+                UBiDiProps *bdp=GET_BIDI_PROPS();
+                if(bdp==NULL) {
                     return FALSE;
                 }
                 switch(which) {
@@ -164,7 +285,6 @@ u_hasBinaryProperty(UChar32 c, UProperty which) {
 
 U_CAPI int32_t U_EXPORT2
 u_getIntPropertyValue(UChar32 c, UProperty which) {
-    UBiDiProps *bdp;
     UErrorCode errorCode;
     int32_t type;
 
@@ -193,21 +313,9 @@ u_getIntPropertyValue(UChar32 c, UProperty which) {
         case UCHAR_GENERAL_CATEGORY:
             return (int32_t)u_charType(c);
         case UCHAR_JOINING_GROUP:
-            errorCode=U_ZERO_ERROR;
-            bdp=ubidi_getSingleton(&errorCode);
-            if(bdp!=NULL) {
-                return ubidi_getJoiningGroup(bdp, c);
-            } else {
-                return 0;
-            }
+            return ubidi_getJoiningGroup(GET_BIDI_PROPS(), c);
         case UCHAR_JOINING_TYPE:
-            errorCode=U_ZERO_ERROR;
-            bdp=ubidi_getSingleton(&errorCode);
-            if(bdp!=NULL) {
-                return ubidi_getJoiningType(bdp, c);
-            } else {
-                return 0;
-            }
+            return ubidi_getJoiningType(GET_BIDI_PROPS(), c);
         case UCHAR_LINE_BREAK:
             return (int32_t)(u_getUnicodeProperties(c, 0)&UPROPS_LB_MASK)>>UPROPS_LB_SHIFT;
         case UCHAR_NUMERIC_TYPE:
@@ -256,8 +364,6 @@ u_getIntPropertyMinValue(UProperty which) {
 
 U_CAPI int32_t U_EXPORT2
 u_getIntPropertyMaxValue(UProperty which) {
-    UErrorCode errorCode;
-
     if(which<UCHAR_BINARY_START) {
         return -1; /* undefined */
     } else if(which<UCHAR_BINARY_LIMIT) {
@@ -269,8 +375,7 @@ u_getIntPropertyMaxValue(UProperty which) {
         case UCHAR_BIDI_CLASS:
         case UCHAR_JOINING_GROUP:
         case UCHAR_JOINING_TYPE:
-            errorCode=U_ZERO_ERROR;
-            return ubidi_getMaxValue(ubidi_getSingleton(&errorCode), which);
+            return ubidi_getMaxValue(GET_BIDI_PROPS(), which);
         case UCHAR_BLOCK:
             return (uprv_getMaxValues(0)&UPROPS_BLOCK_MASK)>>UPROPS_BLOCK_SHIFT;
         case UCHAR_CANONICAL_COMBINING_CLASS:
