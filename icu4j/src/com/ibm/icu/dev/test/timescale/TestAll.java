@@ -16,15 +16,19 @@ import com.ibm.icu.dev.test.TestFmwk.TestGroup;
 public class TestAll extends TestGroup {
 
     public TestAll() {
-        super(new String[] {
-            "TimeScaleAPITest",
-            "TimeScaleDataTest",
-            "TimeScaleMonkeyTest",
-        });
+        super(
+            new String[] {
+                "TimeScaleAPITest",
+                "TimeScaleDataTest",
+                "TimeScaleMonkeyTest",
+            },
+            "All TimeScale tests");
     }
 
     public static void main(String[] args)
     {
         new TestAll().run(args);
     }
+
+    public static final String CLASS_TARGET_NAME  = "TimeScale";
 }
