@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (c) 1996-2002, International Business Machines
+* Copyright (c) 1996-2003, International Business Machines
 * Corporation and others. All Rights Reserved.
 ******************************************************************************
 * File unorm.cpp
@@ -2240,13 +2240,13 @@ _getNextCombining(UChar *&p, const UChar *limit,
             /* a compatibility decomposition contained Jamos */
             c2=0;
             cc=0;
-            if(!dx_contains(dx, c)) {
+            // ### only if excluding composition parts -- if(!dx_contains(dx, c)) {
                 combiningIndex=(uint16_t)(0xfff0|(norm32>>_NORM_EXTRA_SHIFT));
                 return norm32&_NORM_COMBINES_ANY;
-            } else {
-                combiningIndex=0;
-                return 0;
-            }
+            // ### only if excluding composition parts -- } else {
+            // ### only if excluding composition parts --     combiningIndex=0;
+            // ### only if excluding composition parts --     return 0;
+            // ### only if excluding composition parts -- }
         } else {
             /* c is a lead surrogate, get the real norm32 */
             if(p!=limit && UTF_IS_SECOND_SURROGATE(c2=*p)) {
@@ -2262,17 +2262,17 @@ _getNextCombining(UChar *&p, const UChar *limit,
 
         cc=(uint8_t)(norm32>>_NORM_CC_SHIFT);
 
-        if(!dx_contains(dx, c, c2)) {
+        // ### only if excluding composition parts -- if(!dx_contains(dx, c, c2)) {
             combineFlags=norm32&_NORM_COMBINES_ANY;
             if(combineFlags!=0) {
                 combiningIndex=*(_getExtraData(norm32)-1);
             }
 
             return combineFlags;
-        } else {
-            combiningIndex=0;
-            return 0;
-        }
+        // ### only if excluding composition parts -- } else {
+        // ### only if excluding composition parts --     combiningIndex=0;
+        // ### only if excluding composition parts --     return 0;
+        // ### only if excluding composition parts -- }
     }
 }
 
@@ -2401,7 +2401,9 @@ _recompose(UChar *p, UChar *&limit, const UnicodeSet *dx) {
                     if(c2<JAMO_L_COUNT) {
                         pRemove=p-1;
                         c=(UChar)(HANGUL_BASE+(c2*JAMO_V_COUNT+(c-JAMO_V_BASE))*JAMO_T_COUNT);
-                        if(p!=limit && (c2=(UChar)(*p-JAMO_T_BASE))<JAMO_T_COUNT && !dx_contains(dx, c2)) {
+                        // ### only if excluding composition parts -- forbid intermediate (LV) if excluded
+                        // ### when not excluding parts, we catch the final syllable below
+                        if(p!=limit && (c2=(UChar)(*p-JAMO_T_BASE))<JAMO_T_COUNT /* ### only if excluding composition parts -- && !dx_contains(dx, c2)*/) {
                             ++p;
                             c+=c2;
                         }
@@ -2669,23 +2671,25 @@ _composePart(UChar *stackBuffer, UChar *&buffer, int32_t &bufferCapacity, int32_
 static inline UBool
 _composeHangul(UChar prev, UChar c, uint32_t norm32, const UChar *&src, const UChar *limit,
                UBool compat, UChar *dest, const UnicodeSet *dx) {
-    if(dx!=NULL && (dx->contains(prev) || dx->contains(c))) {
+    /* ### only if excluding composition parts -- if(dx!=NULL && (dx->contains(prev) || dx->contains(c))) {
         return FALSE;
-    }
+    }*/
     if(isJamoVTNorm32JamoV(norm32)) {
         /* c is a Jamo V, compose with previous Jamo L and following Jamo T */
         prev=(UChar)(prev-JAMO_L_BASE);
         if(prev<JAMO_L_COUNT) {
             c=(UChar)(HANGUL_BASE+(prev*JAMO_V_COUNT+(c-JAMO_V_BASE))*JAMO_T_COUNT);
+            // ### only if excluding composition parts -- forbid intermediate (LV) if excluded
+            // ### when not excluding parts, we catch the final syllable below
 
             /* check if the next character is a Jamo T (normal or compatibility) */
             if(src!=limit) {
                 UChar next, t;
 
                 next=*src;
-                if(dx_contains(dx, next)) {
+                // ### only if excluding composition parts -- if(dx_contains(dx, next)) {
                     /* excluded */
-                } else if((t=(UChar)(next-JAMO_T_BASE))<JAMO_T_COUNT) {
+                /* ### only if excluding composition parts -- } else*/ if((t=(UChar)(next-JAMO_T_BASE))<JAMO_T_COUNT) {
                     /* normal Jamo T */
                     ++src;
                     c+=t;
