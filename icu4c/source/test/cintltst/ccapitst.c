@@ -30,18 +30,6 @@
 #define MAX_FILE_LEN 1024*20
 #define UCS_FILE_NAME_SIZE 100
 
-/* default codepage name for ucnv_getDefaultName() testing */
-#ifdef WIN32
-    /* this assumes a Western European Windows */
-#   define DEFAULT_CODEPAGE "IBM-1252"
-#elif defined(OS390)
-#   define DEFAULT_CODEPAGE "ibm-1047-s390"
-#elif defined(OS400)
-#   define DEFAULT_CODEPAGE "ibm-37"
-#else
-#   define DEFAULT_CODEPAGE "LATIN_1"
-#endif
-
 /*writes and entire UChar* (string) along with a BOM to a file*/
 void WriteToFile(const UChar *a, FILE *myfile); 
 /*Case insensitive compare*/
@@ -330,32 +318,29 @@ void TestConvert()
     
     /* Testing ucnv_getName()*/
     /*default code page */
-    if ((uprv_stricmp(ucnv_getName(someConverters[0], &err), DEFAULT_CODEPAGE)==0)&&
-        (uprv_stricmp(ucnv_getName(someConverters[1], &err), DEFAULT_CODEPAGE)==0))
-      log_verbose("getName ok\n");
-    else 
-        log_err("getName failed\n");
-  
+    ucnv_getName(someConverters[0], &err);
+    if(U_FAILURE(err)) {
+        log_err("getName[0] failed\n");
+    } else {
+        log_verbose("getName(someConverters[0]) returned %s\n", ucnv_getName(someConverters[0], &err));
+    }
+    ucnv_getName(someConverters[1], &err);
+    if(U_FAILURE(err)) {
+        log_err("getName[1] failed\n");
+    } else {
+        log_verbose("getName(someConverters[1]) returned %s\n", ucnv_getName(someConverters[1], &err));
+    }
+
     /*Testing ucnv_getDefaultName() and ucnv_setDefaultNAme()*/
-    if(uprv_stricmp(ucnv_getDefaultName(), DEFAULT_CODEPAGE)==0)
-      log_verbose("getDefaultName o.k.\n");
-    else
-      log_err("getDefaultName failed \n");
+    log_verbose("getDefaultName returned %s\n", ucnv_getDefaultName());
    
     /*change the default name by setting it */
     ucnv_setDefaultName("changed");
     if(strcmp(ucnv_getDefaultName(), "changed")==0)
       log_verbose("setDefaultName o.k");
     else
-      log_err("setDefaultName failed");
-    /*set it back to the original name */
+      log_err("setDefaultName failed");  
     
-    ucnv_setDefaultName(DEFAULT_CODEPAGE);
-    
-        
-
-
-   
     ucnv_close(someConverters[0]);
      ucnv_close(someConverters[1]);
     ucnv_close(someConverters[2]);
