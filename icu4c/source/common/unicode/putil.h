@@ -237,8 +237,8 @@ U_CAPI void U_EXPORT2
 u_UCharsToChars(const UChar *us, char *cs, UTextOffset length);
 
 /**
- * Parse a string with dotted-decimal version information
- * and fill in a UVersionInfo structure with the result.
+ * Parse a string with dotted-decimal version information and
+ * fill in a UVersionInfo structure with the result.
  *
  * @param versionArray The destination structure for the version information.
  * @param versionString A string with dotted-decimal version information,
