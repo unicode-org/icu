@@ -36,48 +36,7 @@ releaseDefaultConverter(UConverter *converter);
 
 #define MAX_STRLEN 0x0FFFFFFF
 
-UChar*
-u_strcat(UChar     *dst, 
-    const UChar     *src)
-{
-  UChar *anchor = dst;            /* save a pointer to start of dst */
-
-  while(*dst != 0) {              /* To end of first string          */
-    ++dst;
-  }
-  while((*dst = *src) != 0) {     /* copy string 2 over              */
-    ++dst;
-    ++src;
-  }
-
-  return anchor;
-}
-
-UChar* 
-u_strncat(UChar     *dst, 
-     const UChar     *src, 
-     int32_t     n ) 
-{
-  if(n > 0) {
-    UChar *anchor = dst;            /* save a pointer to start of dst */
-
-    while(*dst != 0) {              /* To end of first string          */
-      ++dst;
-    }
-    while((*dst = *src) != 0) {     /* copy string 2 over              */
-      ++dst;
-      if(--n == 0) {
-        *dst = 0;
-        break;
-      }
-      ++src;
-    }
-  
-    return anchor;
-  } else {
-    return dst;
-  }
-}
+/* ---- String searching functions ---- */
 
 UChar*
 u_strchr(const UChar *s, UChar c) 
@@ -133,120 +92,6 @@ u_strchr32(const UChar *s, UChar32 c) {
     buffer[i] = 0;
     return u_strstr(s, buffer);
   }
-}
-
-int32_t  
-u_strcmp(const UChar *s1, 
-    const UChar *s2) 
-{
-  int32_t rc;
-  for(;;) {
-    rc = (int32_t)*s1 - (int32_t)*s2;
-    if(rc != 0 || *s1 == 0) {
-      return rc;
-    }
-    ++s1;
-    ++s2;
-  }
-}
-
-/* String compare in code point order - u_strcmp() compares in code unit order. */
-U_CAPI int32_t U_EXPORT2
-u_strcmpCodePointOrder(const UChar *s1, const UChar *s2) {
-  static const UChar utf16Fixup[32]={
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0x2000, 0xf800, 0xf800, 0xf800, 0xf800
-  };
-  UChar c1, c2;
-  int32_t diff;
-
-  /* rotate each code unit's value so that surrogates get the highest values */
-  for(;;) {
-    c1=*s1;
-    c1+=utf16Fixup[c1>>11]; /* additional "fix-up" line */
-    c2=*s2;
-    c2+=utf16Fixup[c2>>11]; /* additional "fix-up" line */
-
-    /* now c1 and c2 are in UTF-32-compatible order */
-    diff=(int32_t)c1-(int32_t)c2;
-    if(diff!=0 || c1==0 /* redundant: || c2==0 */) {
-      return diff;
-    }
-    ++s1;
-    ++s2;
-  }
-}
-
-int32_t  
-u_strncmp(const UChar     *s1, 
-     const UChar     *s2, 
-     int32_t     n) 
-{
-  if(n > 0) {
-    int32_t rc;
-    for(;;) {
-      rc = (int32_t)*s1 - (int32_t)*s2;
-      if(rc != 0 || *s1 == 0 || --n == 0) {
-        return rc;
-      }
-      ++s1;
-      ++s2;
-    }
-  } else {
-    return 0;
-  }
-}
-
-UChar*
-u_strcpy(UChar     *dst, 
-    const UChar     *src) 
-{
-  UChar *anchor = dst;            /* save a pointer to start of dst */
-
-  while((*dst = *src) != 0) {     /* copy string 2 over              */
-    ++dst;
-    ++src;
-  }
-
-  return anchor;
-}
-
-UChar* 
-u_strncpy(UChar     *dst, 
-     const UChar     *src, 
-     int32_t     n) 
-{
-  UChar *anchor = dst;            /* save a pointer to start of dst */
-
-  if(n > 0) {
-    while((*dst = *src) != 0) {   /* copy string 2 over              */
-      ++dst;
-      if(--n == 0) {
-        *dst = 0;
-        break;
-      }
-      ++src;
-    }
-  } else {
-    *dst = 0;
-  }
-
-  return anchor;
-}
-
-int32_t  
-u_strlen(const UChar *s) 
-{
-# if U_SIZEOF_WCHAR_T == U_SIZEOF_UCHAR
-    return uprv_wcslen(s);
-# else
-    const UChar *t = s;
-    while(*t != 0) {
-      ++t;
-    }
-    return t - s;
-#endif
 }
 
 /* Search for a codepoint in a string that matches one of the matchSet codepoints. */
@@ -383,6 +228,203 @@ u_strspn(const UChar *string, const UChar *matchSet)
 
     /* Found a mismatch or didn't find it. */
     return retValue;
+}
+
+/* ----- Text manipulation functions --- */
+
+UChar*
+u_strtok_r(UChar    *src, 
+     const UChar    *delim,
+           UChar   **saveState)
+{
+    UChar *tokSource;
+    UChar *nextToken;
+    uint32_t nonDelimIdx;
+
+    if (src != NULL) {
+        tokSource = src;
+    }
+    else if (saveState && *saveState) {
+        tokSource = *saveState;
+    }
+    else {
+        return NULL;
+    }
+
+    /* Skip initial delimiters */
+    nonDelimIdx = u_strspn(tokSource, delim);
+    tokSource = &tokSource[nonDelimIdx];
+
+    nextToken = u_strpbrk(tokSource, delim);
+    if (nextToken != NULL) {
+        *(nextToken++) = 0;
+        *saveState = nextToken;
+        return tokSource;
+    }
+    else if (saveState && *saveState) {
+        *saveState = NULL;
+        return tokSource;
+    }
+    return NULL;
+}
+
+UChar*
+u_strcat(UChar     *dst, 
+    const UChar     *src)
+{
+  UChar *anchor = dst;            /* save a pointer to start of dst */
+
+  while(*dst != 0) {              /* To end of first string          */
+    ++dst;
+  }
+  while((*dst = *src) != 0) {     /* copy string 2 over              */
+    ++dst;
+    ++src;
+  }
+
+  return anchor;
+}
+
+UChar* 
+u_strncat(UChar     *dst, 
+     const UChar     *src, 
+     int32_t     n ) 
+{
+  if(n > 0) {
+    UChar *anchor = dst;            /* save a pointer to start of dst */
+
+    while(*dst != 0) {              /* To end of first string          */
+      ++dst;
+    }
+    while((*dst = *src) != 0) {     /* copy string 2 over              */
+      ++dst;
+      if(--n == 0) {
+        *dst = 0;
+        break;
+      }
+      ++src;
+    }
+  
+    return anchor;
+  } else {
+    return dst;
+  }
+}
+
+/* ----- Text property functions --- */
+
+int32_t  
+u_strcmp(const UChar *s1, 
+    const UChar *s2) 
+{
+  int32_t rc;
+  for(;;) {
+    rc = (int32_t)*s1 - (int32_t)*s2;
+    if(rc != 0 || *s1 == 0) {
+      return rc;
+    }
+    ++s1;
+    ++s2;
+  }
+}
+
+/* String compare in code point order - u_strcmp() compares in code unit order. */
+U_CAPI int32_t U_EXPORT2
+u_strcmpCodePointOrder(const UChar *s1, const UChar *s2) {
+  static const UChar utf16Fixup[32]={
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0x2000, 0xf800, 0xf800, 0xf800, 0xf800
+  };
+  UChar c1, c2;
+  int32_t diff;
+
+  /* rotate each code unit's value so that surrogates get the highest values */
+  for(;;) {
+    c1=*s1;
+    c1+=utf16Fixup[c1>>11]; /* additional "fix-up" line */
+    c2=*s2;
+    c2+=utf16Fixup[c2>>11]; /* additional "fix-up" line */
+
+    /* now c1 and c2 are in UTF-32-compatible order */
+    diff=(int32_t)c1-(int32_t)c2;
+    if(diff!=0 || c1==0 /* redundant: || c2==0 */) {
+      return diff;
+    }
+    ++s1;
+    ++s2;
+  }
+}
+
+int32_t  
+u_strncmp(const UChar     *s1, 
+     const UChar     *s2, 
+     int32_t     n) 
+{
+  if(n > 0) {
+    int32_t rc;
+    for(;;) {
+      rc = (int32_t)*s1 - (int32_t)*s2;
+      if(rc != 0 || *s1 == 0 || --n == 0) {
+        return rc;
+      }
+      ++s1;
+      ++s2;
+    }
+  } else {
+    return 0;
+  }
+}
+
+UChar*
+u_strcpy(UChar     *dst, 
+    const UChar     *src) 
+{
+  UChar *anchor = dst;            /* save a pointer to start of dst */
+
+  while((*dst = *src) != 0) {     /* copy string 2 over              */
+    ++dst;
+    ++src;
+  }
+
+  return anchor;
+}
+
+UChar* 
+u_strncpy(UChar     *dst, 
+     const UChar     *src, 
+     int32_t     n) 
+{
+  UChar *anchor = dst;            /* save a pointer to start of dst */
+
+  if(n > 0) {
+    while((*dst = *src) != 0) {   /* copy string 2 over              */
+      ++dst;
+      if(--n == 0) {
+        *dst = 0;
+        break;
+      }
+      ++src;
+    }
+  } else {
+    *dst = 0;
+  }
+
+  return anchor;
+}
+
+int32_t  
+u_strlen(const UChar *s) 
+{
+# if U_SIZEOF_WCHAR_T == U_SIZEOF_UCHAR
+    return uprv_wcslen(s);
+# else
+    const UChar *t = s;
+    while(*t != 0) {
+      ++t;
+    }
+    return t - s;
+#endif
 }
 
 /* conversions between char* and UChar* ------------------------------------- */
