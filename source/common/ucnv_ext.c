@@ -663,7 +663,7 @@ ucnv_extMatchFromU(const int32_t *cx,
 
     /* return result */
     if(matchValue==UCNV_EXT_FROM_U_SUBCHAR1) {
-        return 1;
+        return 1; /* assert matchLength==2 */
     }
 
     *pMatchValue=UCNV_EXT_FROM_U_MASK_ROUNDTRIP(matchValue);

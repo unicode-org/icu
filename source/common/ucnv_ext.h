@@ -269,6 +269,12 @@
  *   (i.e., "no mapping" with preference for <subchar1> rather than <subchar>),
  *   and all other items are unique non-zero results.
  *
+ *   The default value of a fromUTableValues[] section that is referenced
+ *   _directly_ from a fromUStage3b[] item may also be UCNV_EXT_FROM_U_SUBCHAR1,
+ *   but this value must not occur anywhere else in fromUTableValues[]
+ *   because "no mapping" is always a property of a single code point,
+ *   never of multiple.
+ *
  *
  * char fromUBytes[];
  *
