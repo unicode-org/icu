@@ -54,7 +54,7 @@ void TransliteratorAPITest::runIndexedTest( int32_t index, UBool exec, char* &na
 		case 10: name = "TestGetAdoptFilter"; if (exec) TestGetAdoptFilter(); break;
 		case 11: name = "TestClone"; if (exec) TestClone(); break;
         case 12: name = "TestNullTransliterator"; if (exec) TestNullTransliterator(); break;
-                 
+                
         default: name = ""; break; /*needed to end loop*/
     }
 }
@@ -82,6 +82,11 @@ void TransliteratorAPITest::TestgetID() {
             if(ID != t->getID())
                 errln("FAIL: getID() returned " + t->getID() + " instead of " + ID);
          }
+         ID=(UnicodeString)Transliterator::getAvailableID(i);
+         if(ID != (UnicodeString)Transliterator::getAvailableID(0)){
+             errln("FAIL: calling getAvailableID(index > coundAvailableIDs) should make index=0\n");
+         }
+
 		 delete t;
 
 		 
@@ -108,12 +113,13 @@ void TransliteratorAPITest::TestgetID() {
 			 errln("FAIL: getID or clone failed");
 			 
 
-		 delete t1;
+         delete t1;
 		 delete t2;
          delete t3;
          delete t4;
 		 delete t5;
-		 
+
+        		 
 
  }
 void TransliteratorAPITest::TestgetInverse() {
@@ -550,13 +556,10 @@ void TransliteratorAPITest::TestNullTransliterator(){
         errln("ERROR: NullTransliterator->handleTransliterate() failed");
     }
     doTest((UnicodeString)"NullTransliterator->handleTransliterate", replaceable, s);
+    delete nullTrans;
 
     
 }
-    
-
-
-
 /**
  * Used by TestFiltering().
  */
