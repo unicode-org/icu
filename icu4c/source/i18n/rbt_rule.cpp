@@ -29,12 +29,54 @@
  * <code>output</code>; that is, -1 is equivalent to
  * <code>output.length()</code>.  If greater than
  * <code>output.length()</code> then an exception is thrown.
+ * @param adoptedSegs array of 2n integers.  Each of n pairs consists of offset,
+ * limit for a segment of the input string.  Characters in the output string
+ * refer to these segments if they are in a special range determined by the
+ * associated RuleBasedTransliterator.Data object.  May be null if there are
+ * no segments.
+ */
+TransliterationRule::TransliterationRule(const UnicodeString& input,
+                                         int32_t anteContextPos, int32_t postContextPos,
+                                         const UnicodeString& output,
+                                         int32_t cursorPos, int32_t cursorOffset,
+                                         int32_t* adoptedSegs,
+                                         UErrorCode& status) {
+    init(input, anteContextPos, postContextPos,
+         output, cursorPos, cursorOffset, adoptedSegs, status);
+}
+
+/**
+ * Construct a new rule with the given input, output text, and other
+ * attributes.  A cursor position may be specified for the output text.
+ * @param input input string, including key and optional ante and
+ * post context
+ * @param anteContextPos offset into input to end of ante context, or -1 if
+ * none.  Must be <= input.length() if not -1.
+ * @param postContextPos offset into input to start of post context, or -1
+ * if none.  Must be <= input.length() if not -1, and must be >=
+ * anteContextPos.
+ * @param output output string
+ * @param cursorPos offset into output at which cursor is located, or -1 if
+ * none.  If less than zero, then the cursor is placed after the
+ * <code>output</code>; that is, -1 is equivalent to
+ * <code>output.length()</code>.  If greater than
+ * <code>output.length()</code> then an exception is thrown.
  */
 TransliterationRule::TransliterationRule(const UnicodeString& input,
                                          int32_t anteContextPos, int32_t postContextPos,
                                          const UnicodeString& output,
                                          int32_t cursorPos,
                                          UErrorCode& status) {
+    init(input, anteContextPos, postContextPos,
+         output, cursorPos, 0, NULL, status);
+}
+
+void TransliterationRule::init(const UnicodeString& input,
+                               int32_t anteContextPos, int32_t postContextPos,
+                               const UnicodeString& output,
+                               int32_t cursorPos, int32_t cursorOffset,
+                               int32_t* adoptedSegs,
+                               UErrorCode& status) {
     if (U_FAILURE(status)) {
         return;
     }
@@ -61,35 +103,24 @@ TransliterationRule::TransliterationRule(const UnicodeString& input,
         keyLength = postContextPos - anteContextLength;
     }
     if (cursorPos < 0) {
-        this->cursorPos = output.length();
+        cursorPos = output.length();
     } else {
         if (cursorPos > output.length()) {
             // throw new IllegalArgumentException("Invalid cursor position");
             status = U_ILLEGAL_ARGUMENT_ERROR;
             return;
         }
-        this->cursorPos = cursorPos;
     }
+    this->cursorPos = cursorPos + cursorOffset;
     pattern = input;
     this->output = output;
+    // We don't validate the segments array.  The caller must
+    // guarantee that the segments are well-formed.
+    this->segments = adoptedSegs;
 }
 
-TransliterationRule::~TransliterationRule() {}
-
-/**
- * Return the length of the key.  Equivalent to <code>getKey().length()</code>.
- * @return the length of the match key.
- */
-int32_t TransliterationRule::getKeyLength(void) const {
-    return keyLength;
-}
-
-/**
- * Return the output string.
- * @return the output string.
- */
-const UnicodeString& TransliterationRule::getOutput(void) const {
-    return output;
+TransliterationRule::~TransliterationRule() {
+    delete[] segments;
 }
 
 /**
@@ -115,7 +146,7 @@ int32_t TransliterationRule::getAnteContextLength(void) const {
  * unless the first character of the key is a set.  If it's a
  * set, or otherwise can match multiple keys, the index value is -1.
  */
-int16_t TransliterationRule::getIndexValue(const TransliterationRuleData& data) {
+int16_t TransliterationRule::getIndexValue(const TransliterationRuleData& data) const {
     if (anteContextLength == pattern.length()) {
         // A pattern with just ante context {such as foo)>bar} can
         // match any key.
@@ -123,6 +154,71 @@ int16_t TransliterationRule::getIndexValue(const TransliterationRuleData& data) 
     }
     UChar c = pattern.charAt(anteContextLength);
     return data.lookupSet(c) == NULL ? (c & 0xFF) : -1;
+}
+
+/**
+ * Do a replacement of the input pattern with the output text in
+ * the given string, at the given offset.  This method assumes
+ * that a match has already been found in the given text at the
+ * given position.
+ * @param text the text containing the substring to be replaced
+ * @param offset the offset into the text at which the pattern
+ * matches.  This is the offset to the point after the ante
+ * context, if any, and before the match string and any post
+ * context.
+ * @param data the RuleBasedTransliterator.Data object specifying
+ * context for this transliterator.
+ * @return the change in the length of the text
+ */
+int32_t TransliterationRule::replace(Replaceable& text, int32_t offset,
+                                     const TransliterationRuleData& data) const {
+    if (segments == NULL) {
+        text.handleReplaceBetween(offset, offset + keyLength, output);
+        return output.length() - keyLength;
+    } else {
+        /* When there are segments to be copied, use the Replaceable.copy()
+         * API in order to retain out-of-band data.  Copy everything to the
+         * point after the key, then delete the key.  That is, copy things
+         * into offset + keyLength, then replace offset .. offset +
+         * keyLength with the empty string.
+         *
+         * Minimize the number of calls to Replaceable.replace() and
+         * Replaceable.copy().
+         */
+        int32_t textStart = offset - anteContextLength;
+        int32_t dest = offset + keyLength; // copy new text to here
+        UnicodeString buf;
+        for (int32_t i=0; i<output.length(); ++i) {
+            UChar c = output.charAt(i);
+            int32_t b = data.lookupSegmentReference(c);
+            if (b < 0) {
+                // Accumulate straight (non-segment) text.
+                buf.append(c);
+            } else {
+                // Insert any accumulated straight text.
+                if (buf.length() > 0) {
+                    text.handleReplaceBetween(dest, dest, buf);
+                    dest += buf.length();
+                    buf.remove();
+                }
+                // Copy segment with out-of-band data
+                b *= 2;
+                text.copy(textStart + segments[b],
+                          textStart + segments[b+1], dest);
+                dest += segments[b+1] - segments[b];
+            }
+
+        }
+        // Insert any accumulated straight text.
+        if (buf.length() > 0) {
+            text.handleReplaceBetween(dest, dest, buf);
+            dest += buf.length();
+        }
+        // Delete the key
+        buf.remove();
+        text.handleReplaceBetween(offset, offset + keyLength, buf);
+        return dest - (offset + keyLength) - keyLength;
+    }
 }
 
 /**
@@ -136,7 +232,7 @@ int16_t TransliterationRule::getIndexValue(const TransliterationRuleData& data) 
  * then it will match any key.
  */
 UBool TransliterationRule::matchesIndexValue(uint8_t v,
-                                   const TransliterationRuleData& data) {
+                                   const TransliterationRuleData& data) const {
     if (anteContextLength == pattern.length()) {
         // A pattern with just ante context {such as foo)>bar} can
         // match any key.

@@ -15,6 +15,8 @@
 class TransliterationRuleData;
 class UnicodeSet;
 class ParseData;
+class RuleHalf;
+class ParsePosition;
 
 class TransliterationRuleParser {
 
@@ -67,25 +69,16 @@ class TransliterationRuleParser {
      */
     UChar variableLimit;
 
-    // Operators
-    static const UChar VARIABLE_DEF_OP;
-    static const UChar FORWARD_RULE_OP;
-    static const UChar REVERSE_RULE_OP;
-    static const UChar FWDREV_RULE_OP; // internal rep of <> op
-    static const UnicodeString OPERATORS;
+    /**
+     * When we encounter an undefined variable, we do not immediately signal
+     * an error, in case we are defining this variable, e.g., "$a = [a-z];".
+     * Instead, we save the name of the undefined variable, and substitute
+     * in the placeholder char variableLimit - 1, and decrement
+     * variableLimit.
+     */
+    UnicodeString undefinedVariableName;
 
-    // Other special characters
-    static const UChar QUOTE;
-    static const UChar ESCAPE;
-    static const UChar END_OF_RULE;
-    static const UChar RULE_COMMENT_CHAR;
-    static const UChar VARIABLE_REF_OPEN;
-    static const UChar VARIABLE_REF_CLOSE;
-    static const UChar CONTEXT_OPEN;
-    static const UChar CONTEXT_CLOSE;
-    static const UChar SET_OPEN;
-    static const UChar SET_CLOSE;
-    static const UChar CURSOR_POS;
+    static const UnicodeString gOPERATORS;
 
 public:
 
@@ -151,8 +144,22 @@ private:
      * register it in the setVariables hash, and return the substitution
      * character.
      */
-    UChar registerSet(UnicodeSet* adoptedSet);
+    //UChar registerSet(UnicodeSet* adoptedSet);
  
+    /**
+     * Parse a UnicodeSet out, store it, and return the stand-in character
+     * used to represent it.
+     */
+    UChar parseSet(const UnicodeString& rule,
+                   ParsePosition& pos);
+
+    /**
+     * Append the value of the given variable name to the given
+     * UnicodeString.
+     */
+    void appendVariableDef(const UnicodeString& name,
+                           UnicodeString& buf);
+        
     /**
      * Determines what part of the private use region of Unicode we can use for
      * variable stand-ins.  The correct way to do this is as follows: Parse each
@@ -178,6 +185,8 @@ private:
     static int32_t quotedIndexOf(const UnicodeString& text,
                                  int32_t start, int32_t limit,
                                  UChar c);
+
+    friend class RuleHalf;
 };
 
 #endif
