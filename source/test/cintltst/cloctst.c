@@ -2701,6 +2701,7 @@ static void TestGetLocale(void) {
     UChar EMPTY[1] = {0};
 
     /* === udat === */
+#if !UCONFIG_NO_FORMATTING
     {
         UDateFormat *obj;
         const char *req = "en_US_REDWOODSHORES", *valid, *actual;
@@ -2721,8 +2722,10 @@ static void TestGetLocale(void) {
         _checklocs("udat", req, valid, actual);
         udat_close(obj);
     }
+#endif
 
     /* === ucal === */
+#if !UCONFIG_NO_FORMATTING
     {
         UCalendar *obj;
         const char *req = "fr_FR_PROVENCAL", *valid, *actual;
@@ -2743,8 +2746,10 @@ static void TestGetLocale(void) {
         _checklocs("ucal", req, valid, actual);
         ucal_close(obj);
     }
+#endif
 
     /* === unum === */
+#if !UCONFIG_NO_FORMATTING
     {
         UNumberFormat *obj;
         const char *req = "zh_TW_TAINAN", *valid, *actual;
@@ -2765,8 +2770,10 @@ static void TestGetLocale(void) {
         _checklocs("unum", req, valid, actual);
         unum_close(obj);
     }
+#endif
 
     /* === umsg === */
+#if !UCONFIG_NO_FORMATTING
     {
         UMessageFormat *obj;
         const char *req = "ja_JP_TAKAYAMA", *valid, *actual;
@@ -2803,8 +2810,10 @@ static void TestGetLocale(void) {
         }
         umsg_close(obj);
     }
+#endif
 
     /* === ubrk === */
+#if !UCONFIG_NO_BREAK_ITERATION
     {
         UBreakIterator *obj;
         const char *req = "ar_KW_ABDALI", *valid, *actual;
@@ -2826,8 +2835,10 @@ static void TestGetLocale(void) {
         _checklocs("ubrk", req, valid, actual);
         ubrk_close(obj);
     }
+#endif
 
     /* === ucol === */
+#if !UCONFIG_NO_COLLATION
     {
         UCollator *obj;
         const char *req = "es_AR_BUENOSAIRES", *valid, *actual;
@@ -2845,4 +2856,5 @@ static void TestGetLocale(void) {
         _checklocs("ucol", req, valid, actual);
         ucol_close(obj);
     }
+#endif
 }
