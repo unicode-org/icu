@@ -93,10 +93,12 @@ int main(int argc, const char* const argv[])
                     "Proceeding to load data from dat file.\n");
             errorCode = U_ZERO_ERROR;
 
+            ctest_setICU_DATA();
         }
 
         /* If no ICU_DATA environment was set, try to fake up one. */
-        ctest_setICU_DATA();
+        
+        fprintf(stderr, "u_getDataDirectory() = %s\n", u_getDataDirectory());
 
 #ifdef XP_MAC_CONSOLE
         argc = ccommand((char***)&argv);
@@ -332,11 +334,12 @@ const char *ctest_dataOutDir()
  *                       tests dynamically load some data.
  */
 void ctest_setICU_DATA() {
-
+    
 
     /* No location for the data dir was identifiable.
      *   Add other fallbacks for the test data location here if the need arises
      */
+    u_setDataDirectory(ctest_dataOutDir());
 }
 
 
