@@ -17,6 +17,7 @@
 #include "unicode/udata.h"
 #include "unicode/ucnv.h"
 #include "unicode/ures.h"
+#include "unicode/ustring.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "filestrm.h"
