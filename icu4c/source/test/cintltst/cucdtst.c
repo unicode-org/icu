@@ -1670,17 +1670,10 @@ TestCharNames() {
         }
 
         if (!ok) {
-            char c1[256], c2[256];
-            u_UCharsToChars(pat, c1, l1);
-            u_UCharsToChars(dumbPat, c2, l2);
-            c1[l1] = c2[l2] = 0;
             log_err("FAIL: uprv_getCharNameCharacters() returned %s, expected %s (too many lowercase a-z are ok)\n",
-                    c1, c2);
-        } else {
-            char c1[256];
-            u_UCharsToChars(pat, c1, l1);
-            c1[l1] = 0;
-            log_verbose("Ok: uprv_getCharNameCharacters() returned %s\n", c1);
+                    aescstrdup(pat, l1), aescstrdup(dumbPat, l2));
+        } else if(VERBOSITY) {
+            log_verbose("Ok: uprv_getCharNameCharacters() returned %s\n", aescstrdup(pat, l1));
         }
 
         uset_close(set);
