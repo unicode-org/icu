@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $ 
-* $Date: 2002/11/21 22:19:52 $ 
-* $Revision: 1.24 $
+* $Date: 2002/11/21 23:14:52 $ 
+* $Revision: 1.25 $
 *
 *******************************************************************************
 */
@@ -576,10 +576,14 @@ public final class RuleBasedCollator extends Collator
      *            invalid syntax. IOException 
      * @draft ICU 2.4
      */
-  	public UnicodeSet getTailoredSet() throws Exception
+  	public UnicodeSet getTailoredSet()
   	{
-	  CollationRuleParser src = new CollationRuleParser(getRules());
-	  return src.getTailoredSet();
+        try {
+	       CollationRuleParser src = new CollationRuleParser(getRules());
+	       return src.getTailoredSet();
+        } catch(Exception e) {
+            throw new InternalError("A tailoring rule should not have errors. Something is quite wrong!");
+        }
   	}
 
 	/**
