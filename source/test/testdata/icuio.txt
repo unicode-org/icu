@@ -273,6 +273,9 @@ icuio {
                     "%[^e-f]", "abccdefg", "S", "abccd"
                 }
                 {
+                    "%3[^e-f]", "abccdefg", "S", "abc"
+                }
+                {
                     "%S", "a\U00010000b", "S", "a\U00010000b"
                 }
             }
