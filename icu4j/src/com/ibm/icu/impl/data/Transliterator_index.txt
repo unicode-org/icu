@@ -48,8 +48,8 @@ Cyrillic-Latin:file:Transliterator_Cyrillic_Latin.txt:UTF8:FORWARD
 Latin-Greek:file:Transliterator_Greek_Latin.txt:UTF8:REVERSE
 Greek-Latin:file:Transliterator_Greek_Latin.txt:UTF8:FORWARD
 
-Latin-el:file:Transliterator_el_Latin.txt:UTF8:REVERSE
-el-Latin:file:Transliterator_el_Latin.txt:UTF8:FORWARD
+Latin-Greek/UNGEGN:alias:Latin-el/UNGEGN
+Greek-Latin/UNGEGN:alias:el-Latin/UNGEGN
 
 LowerLatin-Jamo:internal:Transliterator_Latin_Jamo.txt:UTF8:FORWARD
 Latin-Jamo:alias:[:Latin:]Any-Lower;LowerLatin-Jamo
