@@ -733,6 +733,12 @@ class U_I18N_API NumberFormatFactory : public UObject {
 public:
 
     /**
+     * Destructor
+     * @draft ICU 3.0
+     */
+    virtual ~NumberFormatFactory();
+
+    /**
      * Return true if this factory will be visible.  Default is true.
      * If not visible, the locales supported by this factory will not
      * be listed by getAvailableLocales.
