@@ -573,22 +573,54 @@ protected:
                                      UBool incremental) const = 0;
 
     /**
-     * Core transliteration method called by all other methods in
-     * Tranliterator.  This method splits up the input text into
-     * segments of unfiltered text and passes those to
-     * handleTransliterate().  For most subclasses this is convenient
-     * and efficient.  Subclasses that can more efficiently handle the
-     * filter logic on their own (rare) can override
-     * filteredTransliterate().  Such subclasses must still implement
-     * handleTransliterate() but they can do so with an empty body,
-     * since filteredTransliterate() is the only method that calls
-     * handleTransliterate().
+     * Transliterate a substring of text, as specified by index, taking filters
+     * into account.  This method is for subclasses that need to delegate to
+     * another transliterator, such as CompoundTransliterator.
+     * @param text the text to be transliterated
+     * @param index the position indices
+     * @param incremental if TRUE, then assume more characters may be inserted
+     * at index.limit, and postpone processing to accomodate future incoming
+     * characters
      */
     virtual void filteredTransliterate(Replaceable& text,
                                        UTransPosition& index,
                                        UBool incremental) const;
 
-    friend class CompoundTransliterator; // for filteredTransliterate
+    friend class CompoundTransliterator; // for filteredTransliterate()
+
+private:
+
+    /**
+     * Top-level transliteration method, handling filtering, incremental and
+     * non-incremental transliteration, and rollback.  All transliteration
+     * public API methods eventually call this method with a rollback argument
+     * of TRUE.  Other entities may call this method but rollback should be
+     * FALSE.
+     * 
+     * <p>If this transliterator has a filter, break up the input text into runs
+     * of unfiltered characters.  Pass each run to
+     * <subclass>.handleTransliterate().
+     *
+     * <p>In incremental mode, if rollback is TRUE, perform a special
+     * incremental procedure in which several passes are made over the input
+     * text, adding one character at a time, and committing successful
+     * transliterations as they occur.  Unsuccessful transliterations are rolled
+     * back and retried with additional characters to give correct results.
+     *
+     * @param text the text to be transliterated
+     * @param index the position indices
+     * @param incremental if TRUE, then assume more characters may be inserted
+     * at index.limit, and postpone processing to accomodate future incoming
+     * characters
+     * @param rollback if TRUE and if incremental is TRUE, then perform special
+     * incremental processing, as described above, and undo partial
+     * transliterations where necessary.  If incremental is FALSE then this
+     * parameter is ignored.
+     */
+    virtual void filteredTransliterate(Replaceable& text,
+                                       UTransPosition& index,
+                                       UBool incremental,
+                                       UBool rollback) const;
 
 public:
 
