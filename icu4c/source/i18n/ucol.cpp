@@ -824,14 +824,12 @@ uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource,
 
     if (UTF_IS_SECOND_SURROGATE(ch)) 
     {
-      UChar *temp = collationSource->pos;
       /* This is where the s***t hits the fan */
       /* it turns out, the first part of the if can be satisfied even if we're */
       /* at the beggining of the string */
       /* we have to make sure we know what is the situation we're in */
       /* quick fix is by using isUsingWritable, as shown below */
-      if ((((collationSource->string < temp && collationSource->isUsingWritable == FALSE)) ||
-          ((collationSource->writableBuffer < temp && collationSource->isUsingWritable == TRUE))) &&
+      if ((collationSource->start < collationSource->pos) &&
           (UTF_IS_FIRST_SURROGATE(prevChar = *(collationSource->pos - 1)))) 
       {
         uint32_t cp = ((prevChar << 10UL) + ch - ((0xd800 << 10UL) + 0xdc00));
@@ -913,8 +911,9 @@ uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, U
                 *(targetCopy++) = *(sourceCopy++);
             }
         }
-        source->pos = source->writableBuffer;
-        source->len = targetCopy;
+        source->pos   = source->writableBuffer;
+        source->start = source->writableBuffer;
+        source->len   = targetCopy;
         source->CEpos = source->toReturn = source->CEs;
         CE = UCOL_IGNORABLE;
       } else { /* we have already played with the string, so treat Thai as a length one expansion */
@@ -929,7 +928,6 @@ uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, U
         const UChar *ContractionStart = UCharOffset = (UChar *)coll->image+getContractOffset(CE);
 
         if (source->pos>=source->len) { /* this is the end of string */
-          /* synwee : added for testing */
           {
             CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex)); /* So we'll pick whatever we have at the point... */
             if (CE == UCOL_NOT_FOUND && firstFound != UCOL_NOT_FOUND) {
@@ -1070,9 +1068,9 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
             }
         }
         source->pos   = targetCopy;
+        source->start = source->writableBuffer;
         source->len   = targetCopy;
         source->CEpos = source->toReturn = source->CEs;
-        source->isUsingWritable = TRUE;
         CE = UCOL_IGNORABLE;
       } 
       else 
@@ -1101,7 +1099,7 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
                       (UCharOffset - coll->contractionIndex));
         }
 
-        if ((uint32_t)(strend - source->pos) == length) { 
+        if (source->pos == source->start) { 
           /* this is the start of string */
           CE = *(coll->contractionCEs + 
                  (UCharOffset - coll->contractionIndex)); 
