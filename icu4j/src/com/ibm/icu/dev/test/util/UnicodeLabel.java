@@ -21,15 +21,18 @@ public abstract class UnicodeLabel {
     public int getMaxWidth(boolean isShort) {
         return 0;
     }
+    
     private static class Hex extends UnicodeLabel {
         public String getValue(int codepoint, boolean isShort) {
             if (isShort) return Utility.hex(codepoint,4);
             return "U+" + Utility.hex(codepoint,4);
         }       
     }
+    
     public static class Constant extends UnicodeLabel {
         private String value;
         public Constant(String value) {
+            if (value == null) value = "";
             this.value = value;
         }
         public String getValue(int codepoint, boolean isShort) {

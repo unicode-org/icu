@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UnifiedBinaryProperty.java,v $
-* $Date: 2004/02/07 01:01:13 $
-* $Revision: 1.16 $
+* $Date: 2004/02/18 03:09:01 $
+* $Revision: 1.17 $
 *
 *******************************************************************************
 */
@@ -63,9 +63,9 @@ public final class UnifiedBinaryProperty extends UCDProperty {
                 if (!up.isStandard()) continue;
                 if (up.getValueType() < BINARY_PROP) continue;
                 String shortValue = Utility.getSkeleton(up.getValue(SHORT));
-                String shortName = Utility.getSkeleton(up.getProperty(SHORT));
+                String shortName = Utility.getSkeleton(up.getPropertyName(SHORT));
                 String longValue = Utility.getSkeleton(up.getValue(LONG));
-                String longName = Utility.getSkeleton(up.getProperty(LONG));
+                String longName = Utility.getSkeleton(up.getPropertyName(LONG));
                 Integer result = new Integer(i);
                 propNameCache.put(longName + "=" + longValue, result);
                 propNameCache.put(longName + "=" + shortValue, result);
@@ -313,8 +313,8 @@ public final class UnifiedBinaryProperty extends UCDProperty {
     public String getFullName(byte style) {
         String pre = "";
         /*if ((majorProp) != BINARY_PROPERTIES>>8)*/ {
-            String preShort = getProperty(SHORT) + "=";
-            String preLong = getProperty(LONG) + "=";
+            String preShort = getPropertyName(SHORT) + "=";
+            String preLong = getPropertyName(LONG) + "=";
             if (style < LONG) pre = preShort;
             else if (style == LONG || preShort.equals(preLong)) pre = preLong;
             else pre = preShort + "(" + preLong + ")";

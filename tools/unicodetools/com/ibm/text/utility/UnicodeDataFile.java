@@ -37,6 +37,7 @@ public class UnicodeDataFile {
             result.out.println("#       if they have default property values.");
             result.out.println("# ================================================");
         }
+        
         return result;
     }
     

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/TestData.java,v $
-* $Date: 2004/02/07 01:01:14 $
-* $Revision: 1.14 $
+* $Date: 2004/02/18 03:09:00 $
+* $Revision: 1.15 $
 *
 *******************************************************************************
 */
@@ -138,8 +138,21 @@ public class TestData implements UCD_Types {
 		}
 	}
 
+    public static class RegexMatcher implements UnicodeProperty.Matcher {
+        private Matcher matcher;
+        
+        public UnicodeProperty.Matcher set(String pattern) {
+            matcher = Pattern.compile(pattern).matcher("");
+            return this;
+        }
+        public boolean matches(String value) {
+            matcher.reset(value);
+            return matcher.matches();
+        }       
+    }
+
     static BagFormatter bf = new BagFormatter();
-    static UnicodeProperty.Matcher matcher = new ICUPropertyFactory.RegexMatcher();
+    static UnicodeProperty.Matcher matcher = new RegexMatcher();
 
     private static void showPropDiff(String p1, UnicodeSet s1, String p2, UnicodeSet s2) {
         System.out.println("Property Listing");

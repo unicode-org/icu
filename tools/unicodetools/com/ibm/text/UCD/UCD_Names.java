@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Names.java,v $
-* $Date: 2004/02/12 08:23:17 $
-* $Revision: 1.25 $
+* $Date: 2004/02/18 03:09:01 $
+* $Revision: 1.26 $
 *
 *******************************************************************************
 */
@@ -15,6 +15,7 @@ package com.ibm.text.UCD;
 
 import java.util.Locale;
 
+import com.ibm.icu.dev.test.util.UnicodeProperty;
 import com.ibm.text.utility.*;
 
 
@@ -297,7 +298,7 @@ final class UCD_Names implements UCD_Types {
     "TIBETAN", // 	TIBETAN
     "MYANMAR", // 	MYANMAR
     "GEORGIAN", // 	GEORGIAN
-    "<unused>", // 	JAMO -- NOT SEPARATED FROM HANGUL IN 15924
+    UnicodeProperty.UNUSED, // 	JAMO -- NOT SEPARATED FROM HANGUL IN 15924
     "HANGUL", // 	HANGUL
     "ETHIOPIC", // 	ETHIOPIC
     "CHEROKEE", // 	CHEROKEE
@@ -355,7 +356,7 @@ final class UCD_Names implements UCD_Types {
     "Tibt", // 	TIBETAN
     "Mymr", // 	MYANMAR
     "Geor", // 	GEORGIAN
-    "<unused>", // 	JAMO -- NOT SEPARATED FROM HANGUL IN 15924
+    UnicodeProperty.UNUSED, // 	JAMO -- NOT SEPARATED FROM HANGUL IN 15924
     "Hang", // 	HANGUL
     "Ethi", // 	ETHIOPIC
     "Cher", // 	CHEROKEE
@@ -434,7 +435,7 @@ final class UCD_Names implements UCD_Types {
 
         "Cc", // = Other, Control 15
         "Cf", // = Other, Format 16
-        "<unused>", // missing
+        UnicodeProperty.UNUSED, // missing
         "Co", // = Other, Private Use 18
         "Cs", // = Other, Surrogate 19
 
@@ -477,7 +478,7 @@ final class UCD_Names implements UCD_Types {
 
         "Control", // = Other, Control 15
         "Format", // = Other, Format 16
-        "<unused>", // missing
+        UnicodeProperty.UNUSED, // missing
         "PrivateUse", // = Other, Private Use 18
         "Surrogate", // = Other, Surrogate 19
 
@@ -522,7 +523,7 @@ final class UCD_Names implements UCD_Types {
         "S", //	Segment Separator
         "WS", //	Whitespace
         "ON", //	Other Neutrals ; All other characters: punctuation, symbols
-        "<unused>", "BN", "NSM", "AL", "LRO", "RLO", "LRE", "RLE", "PDF"
+        UnicodeProperty.UNUSED, "BN", "NSM", "AL", "LRO", "RLO", "LRE", "RLE", "PDF"
     };
 
     static String[] LONG_BIDI_CLASS = {
@@ -537,7 +538,7 @@ final class UCD_Names implements UCD_Types {
         "SegmentSeparator", //	Segment Separator
         "WhiteSpace", //	Whitespace
         "OtherNeutral", //	Other Neutrals ; All other characters: punctuation, symbols
-        "<unused>",
+        UnicodeProperty.UNUSED,
         "BoundaryNeutral", "NonspacingMark", "ArabicLetter",
         "LeftToRightOverride",
         "RightToLeftOverride", "LeftToRightEmbedding",
@@ -590,7 +591,7 @@ final class UCD_Names implements UCD_Types {
     };
     static {
         fixArray(LONG_DECOMPOSITION_TYPE);
-        fixArray(DECOMPOSITION_TYPE);
+        //fixArray(DECOMPOSITION_TYPE);
     }
 
 
@@ -659,7 +660,7 @@ final class UCD_Names implements UCD_Types {
                 case 233: s = style < LONG ? "DB" :   "DoubleBelow"; break;
                 case 234: s = style < LONG ? "DA" :   "DoubleAbove"; break;
                 case 240: s = style < LONG ? "IS" :   "IotaSubscript"; break;
-                default: s = style < LONG ? "" + index : "Fixed_" + index;
+                default: s = "" + index;
             }
             if (style < LONG) COMBINING_CLASS[index] = s;
             else LONG_COMBINING_CLASS[index] = s;
@@ -809,6 +810,13 @@ final class UCD_Names implements UCD_Types {
             array[i] = Utility.getUnskeleton(
                 array[i].toLowerCase(Locale.ENGLISH),
                 true);
+        }
+    }
+
+    static void titlecase (String[] array) {
+        for (int i = 0; i < array.length; ++i) {
+            array[i] = array[1].substring(0,1).toUpperCase()
+                 + array[i].substring(1);
         }
     }
 

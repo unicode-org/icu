@@ -70,7 +70,7 @@ public abstract class UCDProperty implements UCD_Types {
        * Get the full name. Style is SHORT, NORMAL, LONG
        */
       public String getFullName(byte style) { 
-          return getProperty(style) + "=" + getValue(style);
+          return getPropertyName(style) + "=" + getValue(style);
       }
       
       public String getFullName() { 
@@ -79,7 +79,7 @@ public abstract class UCDProperty implements UCD_Types {
       /**
        * Get the property name. Style is SHORT, NORMAL, LONG
        */
-      public String getProperty(byte style) { 
+      public String getPropertyName(byte style) { 
             if (style == NORMAL) style = defaultPropertyStyle;
             switch (style) {
                 case LONG: return skeletonize ? Utility.getUnskeleton(name.toString(), false) : name.toString();
@@ -89,9 +89,9 @@ public abstract class UCDProperty implements UCD_Types {
             }
       }
       
-      public String getProperty() { return getProperty(NORMAL); }
+      public String getPropertyName() { return getPropertyName(NORMAL); }
       
-      public void setProperty(byte style, String in) {
+      public void setPropertyName(byte style, String in) {
             if (style == NORMAL) style = defaultPropertyStyle;
             switch (style) {
               case LONG: name = Utility.getUnskeleton(in, false); break;
@@ -145,7 +145,7 @@ public abstract class UCDProperty implements UCD_Types {
        */
 		public String getListingValue(int cp) {
         	if (getValueType() != BINARY_PROP) return getValue(cp, LONG);
-        	return getProperty(LONG);
+        	return getPropertyName(LONG);
 		}
       
       /**
@@ -173,8 +173,8 @@ public abstract class UCDProperty implements UCD_Types {
       
       // Old Name for compatibility
       boolean isTest() { return isStandard(); }
-      String getName(byte style) { return getProperty(style); }
-      String getName() { return getProperty(); }
+      String getName(byte style) { return getPropertyName(style); }
+      String getName() { return getPropertyName(); }
       
   }
     

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Types.java,v $
-* $Date: 2004/02/06 18:30:19 $
-* $Revision: 1.26 $
+* $Date: 2004/02/18 03:09:01 $
+* $Revision: 1.27 $
 *
 *******************************************************************************
 */
@@ -15,7 +15,7 @@ package com.ibm.text.UCD;
 
 public interface UCD_Types {
     
-    public static final int dVersion = 5; // change to fix the generated file D version. If less than zero, no "d"
+    public static final int dVersion = 6; // change to fix the generated file D version. If less than zero, no "d"
     static final byte BINARY_FORMAT = 14; // bumped if binary format of UCD changes. Forces rebuild
     
     

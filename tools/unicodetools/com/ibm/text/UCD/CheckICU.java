@@ -53,14 +53,13 @@ public class CheckICU {
     public static void test() throws IOException {
         //generateFile("4.0.0", "DerivedCombiningClass");
         //generateFile("4.0.0", "DerivedCoreProperties");
-         if (true) return;
         checkUCD();
         itemFailures = new UnicodeSet();
         icuFactory = ICUPropertyFactory.make();
         toolFactory = ToolUnicodePropertySource.make("4.0.0");
 
         String[] quickList = {
-            "Math",
+            "Canonical_Combining_Class",
             // "Script", "Bidi_Mirroring_Glyph", "Case_Folding",
             //"Numeric_Value"
         };
@@ -69,9 +68,9 @@ public class CheckICU {
         }
         if (quickList.length > 0) return;
 
-        Collection availableTool = toolFactory.getAvailableAliases(new TreeSet());
+        Collection availableTool = toolFactory.getAvailableNames();
        
-        Collection availableICU = icuFactory.getAvailableAliases(new TreeSet());
+        Collection availableICU = icuFactory.getAvailableNames();
         System.out.println(showDifferences("Property Aliases", "ICU", availableICU, "Tool", availableTool));
         Collection common = new TreeSet(availableICU);
         common.retainAll(availableTool);
@@ -140,12 +139,12 @@ public class CheckICU {
                 + "\tTool: " + UnicodeProperty.getTypeName(toolType));
         }
         
-        Collection icuAliases = icuProp.getAliases(new ArrayList());
-        Collection toolAliases = toolProp.getAliases(new ArrayList());
+        Collection icuAliases = icuProp.getNameAliases(new ArrayList());
+        Collection toolAliases = toolProp.getNameAliases(new ArrayList());
         System.out.println(showDifferences("Aliases", "ICU", icuAliases, "Tool", toolAliases));
         
-        icuAliases = icuProp.getAvailableValueAliases(new ArrayList());
-        toolAliases = toolProp.getAvailableValueAliases(new ArrayList());
+        icuAliases = icuProp.getAvailableValues(new ArrayList());
+        toolAliases = toolProp.getAvailableValues(new ArrayList());
         System.out.println(showDifferences("Value Aliases", "ICU", icuAliases, "Tool", toolAliases));
         
         // TODO do property value aliases

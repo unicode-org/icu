@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2004/02/12 08:23:14 $
-* $Revision: 1.39 $
+* $Date: 2004/02/18 03:09:02 $
+* $Revision: 1.40 $
 *
 *******************************************************************************
 */
@@ -22,6 +22,7 @@ import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.Replaceable;
 import com.ibm.icu.text.ReplaceableString;
 import com.ibm.icu.text.UnicodeMatcher;
+import com.ibm.icu.dev.test.util.UnicodeProperty;
 
 import com.ibm.text.UCD.*;
 
@@ -119,6 +120,8 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
      */
     
     public static String getSkeleton(String source) {
+        return UnicodeProperty.toSkeleton(source);
+        /*
         skeletonBuffer.setLength(0);
         boolean gotOne = false;
         // remove spaces, '_', '-'
@@ -139,6 +142,7 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
         }
         if (!gotOne) return source; // avoid string creation
         return skeletonBuffer.toString();
+        */
     }
     
     private static StringBuffer skeletonBuffer = new StringBuffer();
@@ -149,6 +153,8 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
      */
     
     public static String getUnskeleton(String source, boolean titlecaseStart) {
+        return UnicodeProperty.regularize(source, titlecaseStart);
+        /*
         if (source == null) return source;
         if (source.equals("noBreak")) return source; // HACK
         StringBuffer result = new StringBuffer();
@@ -176,6 +182,7 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
             lastCat = cat;
         }
         return result.toString();
+        */
     }
     
     public static String findSubstring(String source, Set target, boolean invert) {

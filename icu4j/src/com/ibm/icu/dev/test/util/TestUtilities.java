@@ -1,9 +1,13 @@
 package com.ibm.icu.dev.test.util;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -11,6 +15,8 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import com.ibm.icu.dev.test.AbstractTestLog;
+import com.ibm.icu.dev.test.TestBoilerplate;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
@@ -32,15 +38,16 @@ public class TestUtilities extends TestFmwk {
     Map map3 = new TreeMap();
     UnicodeMap.Equator equator = new UnicodeMap.SimpleEquator();
     SortedSet log = new TreeSet();
+    static String[] TEST_VALUES = {null, "A", "B", "C", "D", "E", "F"};
+    static Random random = new Random(12345);
     
     public void TestUnicodeMap() {
-        Random random = new Random(12345);
-        String[] values = {null, "A", "B", "C", "D", "E", "F"};
+        random.setSeed(12345);
         // do random change to both, then compare
         logln("Comparing against HashMap");
         for (int counter = 0; counter < ITERATIONS; ++counter) {
             int start = random.nextInt(LIMIT);
-            String value = values[random.nextInt(values.length)];
+            String value = TEST_VALUES[random.nextInt(TEST_VALUES.length)];
             String logline = Utility.hex(start) + "\t" + value;
             if (SHOW_PROGRESS) logln(counter + "\t" + logline);
             log.add(logline);
@@ -67,33 +74,30 @@ public class TestUtilities extends TestFmwk {
         Set values1 = (Set) map1.getAvailableValues(new TreeSet());
         Set values2 = new TreeSet(map2.values());
         Set temp;
-        if (!values1.equals(values2)) {
-            errln("Values differ:");
-            errln("UnicodeMap - HashMap");
-            temp = new TreeSet(values1);
-            temp.removeAll(values2);
-            errln(show(temp));
-            errln("HashMap - UnicodeMap");
-            temp = new TreeSet(values2);
-            temp.removeAll(values1);
-            errln(show(temp));
-        } else {
-            logln("Comparing Sets");
-            for (Iterator it = values1.iterator(); it.hasNext();) {
-                Object value = it.next();
-                logln(value == null ? "null" : value.toString());
-                UnicodeSet set1 = map1.getSet(value);
-                UnicodeSet set2 = getSet(map2, value);
-                if (!set1.equals(set2)) {
-                    errln("Sets differ:");
-                    errln("UnicodeMap - HashMap");
-                    errln(new UnicodeSet(set1).removeAll(set2).toPattern(true));
-                    errln("HashMap - UnicodeMap");
-                    errln(new UnicodeSet(set2).removeAll(set1).toPattern(true));
-                }
-            }
+        if (!TestBoilerplate.verifySetsIdentical(this, values1, values2)) {
+            throw new IllegalArgumentException("Halting");
         }
-              
+        logln("Comparing Sets");
+        for (Iterator it = values1.iterator(); it.hasNext();) {
+            Object value = it.next();
+            logln(value == null ? "null" : value.toString());
+            UnicodeSet set1 = map1.getSet(value);
+            UnicodeSet set2 = TestBoilerplate.getSet(map2, value);
+            if (!TestBoilerplate.verifySetsIdentical(this, set1, set2)) {
+                throw new IllegalArgumentException("Halting");
+            }
+        }           
+
+        // check boilerplate
+        List argList = new ArrayList();
+        argList.add("TestMain");
+        if (params.nothrow) argList.add("-nothrow");
+        if (params.verbose) argList.add("-verbose");
+        String[] args = new String[argList.size()];
+        argList.toArray(args);
+        new UnicodeMapBoilerplate().run(args);
+         // TODO: the following is not being reached
+        new UnicodeSetBoilerplate().run(args);       
     }
     
     public void check(int counter) {
@@ -105,9 +109,8 @@ public class TestUtilities extends TestFmwk {
                      + "\t UnicodeMap: " + value1
                      + "\t HashMap: " + value2);
                 errln("UnicodeMap: " + map1);
-                errln("Log: " + show(log));
-                errln("HashMap: " + show(map2));
-                throw new IllegalArgumentException("Halting");
+                errln("Log: " + TestBoilerplate.show(log));
+                errln("HashMap: " + TestBoilerplate.show(map2));
             }
         }
     }
@@ -189,31 +192,78 @@ public class TestUtilities extends TestFmwk {
         return (end-start)/1000/iterations;
     }
     
-    String show(Collection c) {
-        StringBuffer buffer = new StringBuffer();
-        for (Iterator it = c.iterator(); it.hasNext();) {
-            buffer.append(it.next() + "\r\n");
+    static class UnicodeMapBoilerplate extends TestBoilerplate {
+
+        /* 
+         * @see com.ibm.icu.dev.test.TestBoilerplate#_hasSameBehavior(java.lang.Object, java.lang.Object)
+         */
+        protected boolean _hasSameBehavior(Object a, Object b) {
+            // we are pretty confident in the equals method, so won't bother with this right now.
+            return true;
         }
-        return buffer.toString();
+
+        /*
+         * @see com.ibm.icu.dev.test.TestBoilerplate#_createTestObject()
+         */
+        protected boolean _addTestObject(List list) {
+            if (list.size() > 30) return false;
+            UnicodeMap result = new UnicodeMap();
+            for (int i = 0; i < 50; ++i) {
+                int start = random.nextInt(25);
+                String value = TEST_VALUES[random.nextInt(TEST_VALUES.length)];
+                result.put(start, value);
+            }
+            list.add(result);
+            return true;
+        }
     }
     
-    String show(Map m) {
-        StringBuffer buffer = new StringBuffer();
-        for (Iterator it = m.keySet().iterator(); it.hasNext();) {
-            Object key = it.next();
-            buffer.append(key + "=>" + m.get(key) + "\r\n");
+    static class StringBoilerplate extends TestBoilerplate {
+
+        /* 
+         * @see com.ibm.icu.dev.test.TestBoilerplate#_hasSameBehavior(java.lang.Object, java.lang.Object)
+         */
+        protected boolean _hasSameBehavior(Object a, Object b) {
+            // we are pretty confident in the equals method, so won't bother with this right now.
+            return true;
         }
-        return buffer.toString();
+
+        /*
+         * @see com.ibm.icu.dev.test.TestBoilerplate#_createTestObject()
+         */
+        protected boolean _addTestObject(List list) {
+            if (list.size() > 31) return false;
+            StringBuffer result = new StringBuffer();
+            for (int i = 0; i < 10; ++i) {
+                result.append((char)random.nextInt(0xFF));
+            }
+            list.add(result.toString());
+            return true;
+        }
     }
     
-    UnicodeSet getSet(Map m, Object value) {
-        UnicodeSet result = new UnicodeSet();
-        for (Iterator it = m.keySet().iterator(); it.hasNext();) {
-            Object key = it.next();
-            Object val = m.get(key);
-            if (!val.equals(value)) continue;
-            result.add(((Integer)key).intValue());
+    static class UnicodeSetBoilerplate extends TestBoilerplate {
+
+        /* 
+         * @see com.ibm.icu.dev.test.TestBoilerplate#_hasSameBehavior(java.lang.Object, java.lang.Object)
+         */
+        protected boolean _hasSameBehavior(Object a, Object b) {
+            // we are pretty confident in the equals method, so won't bother with this right now.
+            return true;
         }
-        return result;
+
+        /*
+         * @see com.ibm.icu.dev.test.TestBoilerplate#_createTestObject()
+         */
+        protected boolean _addTestObject(List list) {
+            if (list.size() > 32) return false;
+            UnicodeSet result = new UnicodeSet();
+            for (int i = 0; i < 50; ++i) {
+                result.add(random.nextInt(100));
+            }
+            list.add(result.toString());
+            return true;
+        }
     }
+
 }
