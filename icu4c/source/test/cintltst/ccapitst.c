@@ -201,7 +201,9 @@ static void TestConvert()
         uenum_reset(allNamesEnum, &err);
         while ((string = uenum_next(allNamesEnum, &len, &err))) {
             count2++;
-            log_verbose("read \"%s\", length %i\n", string, len);
+            ucnv_close(ucnv_open(string, &err));
+            log_verbose("read \"%s\", length %i (%s)\n", string, len, U_SUCCESS(err) ? "available" : "unavailable");
+            err = U_ZERO_ERROR;
         }
         if (count1 != count2) {
             log_err("FAILURE! uenum_reset(allNamesEnum, &err); doesn't work\n");
