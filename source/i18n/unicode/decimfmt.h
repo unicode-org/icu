@@ -28,12 +28,12 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "unicode/dcfmtsym.h"
 #include "unicode/numfmt.h"
 #include "unicode/locid.h"
 
 U_NAMESPACE_BEGIN
 
-class DecimalFormatSymbols;
 class DigitList;
 
 /**
@@ -1174,6 +1174,13 @@ private:
                     DigitList& digits, UBool* status) const;
 
     /**
+     * Get a decimal format symbol.
+     * Returns a const reference to the symbol string.
+     * @internal
+     */
+    inline const UnicodeString &getConstSymbol(DecimalFormatSymbols::ENumberFormatSymbol symbol) const;
+
+    /**
      * Append an affix to the given StringBuffer, using quotes if
      * there are special characters.  Single quotes themselves must be
      * escaped in either case.
@@ -1295,6 +1302,10 @@ DecimalFormat::format(int32_t number,
     return format(number, output, pos);
 }
 
+inline const UnicodeString &
+DecimalFormat::getConstSymbol(DecimalFormatSymbols::ENumberFormatSymbol symbol) const {
+    return fSymbols->getConstSymbol(symbol);
+}
 
 U_NAMESPACE_END
 
