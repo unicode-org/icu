@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/test/text/Attic/UCharacterTest.java,v $ 
-* $Date: 2001/11/07 00:30:02 $ 
-* $Revision: 1.18 $
+* $Date: 2001/12/03 20:58:59 $ 
+* $Revision: 1.19 $
 *
 *******************************************************************************
 */
@@ -64,7 +64,7 @@ public final class UCharacterTest extends TestFmwk
     int lower[] = {0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0xb1, 0x00b2, 
                    0xb3, 0x68, 0x69, 0x6a, 0x2e, 0x3f, 0x3a, 0x6b, 0x6c,
                    0x6d, 0x6e, 0x6f, 0x01c6, 0x01c9, 0x000c, 0x0000};
-    
+        
     int size = upper.length;
     
     for (int i = 0; i < size; i ++) 
@@ -425,6 +425,7 @@ public final class UCharacterTest extends TestFmwk
   * e.g. java -DUnicodeData="data_directory_path" 
   * com.ibm.test.text.UCharacterTest
   */
+  /*
   public void TestUnicodeData()
   {
     // this is the 2 char category types used in the UnicodeData file
@@ -551,6 +552,7 @@ public final class UCharacterTest extends TestFmwk
   /**
   * Test for the character names
   */
+  /*
   public void TestNames()
   {
     int c[] = {0x0061, 0x0284, 0x3401, 0x7fed, 0xac00, 0xd7a3, 0xff08, 0xffe5,
@@ -904,10 +906,25 @@ public final class UCharacterTest extends TestFmwk
     {
       e.printStackTrace();
     }
+    
+    String special = "ab'cD \uFB00i\u0131I\u0130 \u01C7\u01C8\u01C9 " + 
+                     UTF16.valueOf(0x1043C) + UTF16.valueOf(0x10414);
+    String specialUpper = "AB'CD FFIII\u0130 \u01C7\u01C7\u01C7 " +
+                          UTF16.valueOf(0x10414) + UTF16.valueOf(0x10414);
+    String specialLower = "ab'cd \uFB00i\u0131ii \u01C9\u01C9\u01C9 " + 
+                          UTF16.valueOf(0x1043C) + UTF16.valueOf(0x1043C);
+    String result = UCharacter.toUpperCase(special);
+    if (!result.equals(specialUpper)) {
+        errln("Error getting uppercase in special string");
+    }
+    result = UCharacter.toLowerCase(special);
+    if (!result.equals(specialLower)) {
+        errln("Error getting lowercase in special string");
+    }
   }
   
   /**
-  * Converting the hex numbers represented between ';' to Unicode strings
+  * Converting the hex numbers represented betwee                             n ';' to Unicode strings
   * @param str string to break up into Unicode strings
   * @return array of Unicode strings ending with a null
   */
