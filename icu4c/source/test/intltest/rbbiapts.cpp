@@ -757,7 +757,8 @@ void RBBIAPITest::TestRegistration() {
   {
     StringEnumeration* avail = BreakIterator::getAvailableLocales();
     UBool found = FALSE;
-    while (const UnicodeString* p = avail->snext(status)) {
+	const UnicodeString* p;
+    while (p = avail->snext(status)) {
       if (p->compare("xx") == 0) {
 	found = TRUE;
 	break;
@@ -789,7 +790,8 @@ void RBBIAPITest::TestRegistration() {
   {
     StringEnumeration* avail = BreakIterator::getAvailableLocales();
     UBool found = FALSE;
-    while (const UnicodeString* p = avail->snext(status)) {
+	const UnicodeString* p;
+    while (p = avail->snext(status)) {
       if (p->compare("xx") == 0) {
 	found = TRUE;
 	break;
