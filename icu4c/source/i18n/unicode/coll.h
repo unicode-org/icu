@@ -861,6 +861,13 @@ protected:
   */
   virtual void setLocales(const Locale& requestedLocale, const Locale& validLocale);
 
+public:
+   /**
+	* used only by ucol_open, not for public use
+	* @internal
+	*/
+   static UCollator* createUCollator(const char* loc, UErrorCode* status);
+
 private:
   /**
    * Assignment operator. Private for now.
