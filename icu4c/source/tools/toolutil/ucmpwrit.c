@@ -24,27 +24,27 @@
 
 U_CAPI  uint32_t U_EXPORT2 udata_write_ucmp8 (UNewDataMemory *pData, const CompactByteArray* array)
 {
-  int32_t size;
+  int32_t size = 0;
 
-    udata_write32(pData, ICU_UCMP8_VERSION);
-    size += 4;
+  udata_write32(pData, ICU_UCMP8_VERSION);
+  size += 4;
+  
+  udata_write32(pData, array->fCount);
+  size += 4;
+  
+  udata_writeBlock(pData, array->fIndex, sizeof(array->fIndex[0])*UCMP8_kIndexCount);
+  size += sizeof(array->fIndex[0])*UCMP8_kIndexCount;
+  
+  udata_writeBlock(pData, array->fArray, sizeof(array->fArray[0])*array->fCount);
+  size += sizeof(array->fArray[0])*array->fCount;
+  
+  while(size%4) /* end padding */
+  {
+      udata_writePadding(pData, 1); /* Pad total so far to even size */
+      size += 1;
+  }
 
-    udata_write32(pData, array->fCount);
-    size += 4;
-
-    udata_writeBlock(pData, array->fIndex, sizeof(array->fIndex[0])*UCMP8_kIndexCount);
-    size += sizeof(array->fIndex[0])*UCMP8_kIndexCount;
-
-    udata_writeBlock(pData, array->fArray, sizeof(array->fArray[0])*array->fCount);
-    size += sizeof(array->fArray[0])*array->fCount;
-
-    while(size%4) /* end padding */
-    {
-        udata_writePadding(pData, 1); /* Pad total so far to even size */
-        size += 1;
-    }
-
-    return size;
+  return size;
 }
 
 /* internal constants*/
@@ -88,7 +88,7 @@ const uint32_t UCMP16_kBlockMask = UCMP16_kBlockMask_int;
 
 U_CAPI  uint32_t U_EXPORT2 udata_write_ucmp16 (UNewDataMemory *pData, const CompactShortArray* array)
 {
-  int32_t size;
+  int32_t size = 0;
 
   udata_write32(pData, ICU_UCMP16_VERSION);
   size += 4;
@@ -109,10 +109,10 @@ U_CAPI  uint32_t U_EXPORT2 udata_write_ucmp16 (UNewDataMemory *pData, const Comp
   size += sizeof(array->fArray[0])*array->fCount;
   
   while(size%4) /* end padding */
-    {
+  {
       udata_writePadding(pData, 1); /* Pad total so far to even size */
       size += 1;
-    }
+  }
 
   return size;
 }
