@@ -1,3 +1,16 @@
+/**
+*******************************************************************************
+* Copyright (C) 1996-2001, International Business Machines Corporation and    *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*
+* $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/PropertyLister.java,v $
+* $Date: 2001/08/31 00:30:17 $
+* $Revision: 1.2 $
+*
+*******************************************************************************
+*/
+
 package com.ibm.text.UCD;
 
 import java.io.*;
@@ -5,11 +18,11 @@ import com.ibm.text.utility.*;
 
 
 abstract public class PropertyLister implements UCD_Types {
-    
+
     static final boolean COMPRESS_NAMES = false;
     static final boolean DROP_INDICATORS = true;
-    
-    
+
+
     protected UCD ucdData;
     protected PrintStream output;
     protected boolean showOnConsole;
@@ -17,37 +30,37 @@ abstract public class PropertyLister implements UCD_Types {
     protected int firstRealCp = -2;
     protected int lastRealCp = -2;
     protected boolean alwaysBreaks = false; // set to true if property only breaks
-    
+
     public static final byte INCLUDE = 0, BREAK = 1, CONTINUE = 2, EXCLUDE = 3;
-    
-    /** 
+
+    /**
      * @return status. Also have access to firstRealCp, lastRealCp
      */
     abstract public byte status(int cp);
-    
+
     public String headerString() {
         return "";
     }
-    
+
     public String propertyName(int cp) {
         return "";
     }
-    
+
     public String optionalName(int cp) {
         return "";
     }
-    
+
     public String optionalComment(int cp) {
         if (!usePropertyComment) return "";
         int cat = ucdData.getCategory(cp);
         if (cat == Lt || cat == Ll || cat == Lu) return "L&";
         return ucdData.getCategoryID(cp);
     }
-    
+
     public int minPropertyWidth() {
         return 1;
     }
-    
+
     public void format(int startCp, int endCp, int realCount) {
         try {
             String prop = propertyName(startCp);
@@ -65,7 +78,7 @@ abstract public class PropertyLister implements UCD_Types {
                 String count = (bridge == 0) ? "" + realCount : realCount + "/" + bridge;
                 String countStr = Utility.repeat(" ", 3-count.length()) + "[" + count + "] ";
                 String gap = Utility.repeat(" ", 12 - width(startCp) - width(endCp));
-                
+
                 line = Utility.hex(startCp,4) + ".." + Utility.hex(endCp,4) + gap
                         + prop + opt + pgap + " # " + optCom
                         + countStr;
@@ -75,7 +88,7 @@ abstract public class PropertyLister implements UCD_Types {
                     if (com == 0) {
                         line += startName + ".." + endName;
                     } else {
-                        line += startName.substring(0,com) 
+                        line += startName.substring(0,com)
                             + "(" + startName.substring(com) + ".." + endName.substring(com) + ")";
                     }
                 }
@@ -93,17 +106,17 @@ abstract public class PropertyLister implements UCD_Types {
             output.println(line);
             if (showOnConsole) System.out.println(line);
         } catch (Exception e) {
-            throw new ChainException("Format error {0}, {1}", 
+            throw new ChainException("Format error {0}, {1}",
                 new Object[]{new Integer(startCp), new Integer(endCp)}, e);
         }
     }
-    
+
     int width(int cp) {
-        return cp <= 0xFFFF ? 4 
-             : cp <= 0xFFFFF ? 5 
+        return cp <= 0xFFFF ? 4
+             : cp <= 0xFFFFF ? 5
              : 6;
     }
-    
+
     String getKenName(int cp) {
         String result = ucdData.getName(cp);
         if (result == null) return "";
@@ -113,8 +126,8 @@ abstract public class PropertyLister implements UCD_Types {
         }
         return result;
     }
-    
-    
+
+
     /**
      * @return common initial substring length ending with SPACE or HYPHEN-MINUS. 0 if there is none
      */
@@ -136,14 +149,14 @@ abstract public class PropertyLister implements UCD_Types {
         }
         return lastSpace;
     }
-    
+
     public int print() {
         int count = 0;
         firstRealCp = -1;
         byte firstRealCpCat = -1;
         lastRealCp = -1;
         int realRangeCount = 0;
-        
+
         String header = headerString();
         if (header.length() != 0) {
             output.println(header);
@@ -156,7 +169,7 @@ abstract public class PropertyLister implements UCD_Types {
                 if (cat == Lt || cat == Ll) cat = Lu;
                 if (cat != firstRealCpCat) s = BREAK;
             }
-            
+
             switch(s) {
               case CONTINUE:
                 break; // do nothing
@@ -177,7 +190,7 @@ abstract public class PropertyLister implements UCD_Types {
                 lastRealCp = firstRealCp = cp;
                 firstRealCpCat = ucdData.getCategory(firstRealCp);
                 if (firstRealCpCat == Lt || firstRealCpCat == Ll) firstRealCpCat = Lu;
-                
+
                 realRangeCount = 1;
                 count++;
                 break;
@@ -193,7 +206,7 @@ abstract public class PropertyLister implements UCD_Types {
         if (firstRealCp != -1) {
             format(firstRealCp, lastRealCp, realRangeCount);
         }
-        
+
         if (count == 0) System.out.println("WARNING -- ZERO COUNT FOR " + header);
         output.println();
         output.println("# Total code points: " + count);

@@ -1,10 +1,23 @@
+/**
+*******************************************************************************
+* Copyright (C) 1996-2001, International Business Machines Corporation and    *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*
+* $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Types.java,v $
+* $Date: 2001/08/31 00:29:50 $
+* $Revision: 1.2 $
+*
+*******************************************************************************
+*/
+
 package com.ibm.text.UCD;
 
 public interface UCD_Types {
     public static final String DATA_DIR = "C:\\DATA\\";
     public static final String BIN_DIR = DATA_DIR + "\\BIN\\";
     public static final String GEN_DIR = DATA_DIR + "\\GEN\\";
-    
+
 
     static final byte BINARY_FORMAT = 5; // bumped if binary format of UCD changes
     /*
@@ -24,7 +37,7 @@ public interface UCD_Types {
  13	Lower case equivalent mapping. Similar to 12. This field is informative.
  14	Title case equivalent mapping. Similar to 12. This field is informative.
     */
-    
+
     // Binary ENUM Grouping
     public static final int
         CATEGORY = 0,
@@ -41,9 +54,9 @@ public interface UCD_Types {
         AGE = 0xB00,
         NEXT_ENUM = 0x100,
         LIMIT_ENUM = AGE + 0x100;
-        
+
     public static final int LIMIT_COMBINING_CLASS = 256;
-    
+
     // getCategory
     public static final byte
 	UNASSIGNED		= 0,
@@ -78,7 +91,7 @@ public interface UCD_Types {
 	INITIAL_PUNCTUATION	= 29,
 	FINAL_PUNCTUATION		= 30,
 	LIMIT_CATEGORY = FINAL_PUNCTUATION+1,
-	
+
 	// Unicode abbreviations
 	Lu = UPPERCASE_LETTER,
 	Ll = LOWERCASE_LETTER,
@@ -110,7 +123,7 @@ public interface UCD_Types {
 	Sc = CURRENCY_SYMBOL,
 	Sk = MODIFIER_SYMBOL,
 	So = OTHER_SYMBOL;
-	
+
     static final int
         LETTER_MASK = (1<<Lu) | (1<<Ll) | (1<<Lt) | (1<<Lm) | (1 << Lo),
         MARK_MASK = (1<<Mn) | (1<<Me) | (1<<Mc),
@@ -120,12 +133,12 @@ public interface UCD_Types {
         PUNCTUATION_MASK = (1<<Pc) | (1<<Pd) | (1<<Ps) | (1<<Pe) | (1<<Po) | (1<<Pi) | (1<<Pf),
         SYMBOL_MASK = (1<<Sm) | (1<<Sc) | (1<<Sk) | (1<<So),
         UNASSIGNED_MASK = (1<<Cn);
-	
+
 	// Binary Properties
-	
+
 	public static final byte
 	    BidiMirrored = 0,
-	    CompositionExclusion = 1, 
+	    CompositionExclusion = 1,
         White_space = 2,
         Non_break = 3,
 	    Bidi_Control = 4,
@@ -154,11 +167,11 @@ public interface UCD_Types {
         Reserved_Cf_Code_Point = 27,
         Deprecated = 28,
 	    LIMIT_BINARY_PROPERTIES = 29;
-	    
+
 	/*
     static final int
 	    BidiMirroredMask = 1<<BidiMirrored,
-	    CompositionExclusionMask = 1<<CompositionExclusion, 
+	    CompositionExclusionMask = 1<<CompositionExclusion,
 	    AlphabeticMask = 1<<Alphabetic,
 	    Bidi_ControlMask = 1<<Bidi_Control,
         DashMask = 1<<Dash,
@@ -181,15 +194,15 @@ public interface UCD_Types {
     // line break
     public static final byte
         LBXX = 0, LBOP = 1, LBCL = 2, LBQU = 3, LBGL = 4, LBNS = 5, LBEX = 6, LBSY = 7,
-        LBIS = 8, LBPR = 9, LBPO = 10, LBNU = 11, LBAL = 12, LBID = 13, LBIN = 14, LBHY = 15, 
-        LBCM = 16, LBBB = 17, LBBA = 18, LBSP = 19, LBBK = 20, LBCR = 21, LBLF = 22, LBCB = 23, 
+        LBIS = 8, LBPR = 9, LBPO = 10, LBNU = 11, LBAL = 12, LBID = 13, LBIN = 14, LBHY = 15,
+        LBCM = 16, LBBB = 17, LBBA = 18, LBSP = 19, LBBK = 20, LBCR = 21, LBLF = 22, LBCB = 23,
         LBSA = 24, LBAI = 25, LBB2 = 26, LBSG = 27, LBZW = 28, LIMIT_LINE_BREAK = 29;
-    
+
     // east asian width
     public static final byte
-         EAN = 0, EAA = 1, EAH = 2, EAW = 3, EAF = 4, EANa = 5, 
+         EAN = 0, EAA = 1, EAH = 2, EAW = 3, EAF = 4, EANa = 5,
          LIMIT_EAST_ASIAN_WIDTH = 6;
-         
+
 	// bidi class
 	static final byte
 	    BIDI_L = 0,     // Left-Right; Most alphabetic, syllabic, and logographic characters (e.g., CJK ideographs)
@@ -214,7 +227,7 @@ public interface UCD_Types {
 	    BIDI_RLE = 18,
 	    BIDI_PDF = 19,
 	    LIMIT_BIDI_CLASS = 20;
-	    
+
 	// decompositionType
     static final byte NONE = 0,
         CANONICAL = 1,
@@ -239,7 +252,7 @@ public interface UCD_Types {
 
     // mirrored type
     static final byte NO = 0, YES = 1, MIRRORED_LIMIT = 2;
-    
+
     // for QuickCheck
     static final byte QNO = 0, QMAYBE = 1, QYES = 2;
 
@@ -251,7 +264,7 @@ public interface UCD_Types {
     static final byte UNNORMALIZED = 0, C = 1, KC = 2, D = 3, KD = 4, FORM_LIMIT = 5;
 
     // numericType
-    static final byte NUMERIC_NONE = 0, NUMERIC = 1, DIGIT = 2, DECIMAL = 3, 
+    static final byte NUMERIC_NONE = 0, NUMERIC = 1, DIGIT = 2, DECIMAL = 3,
         LIMIT_NUMERIC_TYPE = 4;
 
     public static final byte // SCRIPT CODE
@@ -263,7 +276,7 @@ public interface UCD_Types {
         HEBREW_SCRIPT = 5,
         ARABIC_SCRIPT = 6,
         SYRIAC_SCRIPT = 7,
-        THAANA_SCRIPT = 8, 
+        THAANA_SCRIPT = 8,
         DEVANAGARI_SCRIPT = 9,
         BENGALI_SCRIPT = 10,
         GURMUKHI_SCRIPT = 11,
@@ -298,8 +311,8 @@ public interface UCD_Types {
         DESERET_SCRIPT = 40,
         INHERITED_SCRIPT = 41,
         LIMIT_SCRIPT = 42;
-        
-  static final int 
+
+  static final int
     UNKNOWN = 0,
     AGE10 = 1,
     AGE20 = 2,
@@ -307,9 +320,9 @@ public interface UCD_Types {
     AGE30 = 4,
     AGE31 = 5,
     LIMIT_AGE = 6;
-        
-        
-        
+
+
+
 public static byte
     JT_C = 0,
     JT_D = 1,

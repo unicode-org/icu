@@ -1,3 +1,16 @@
+/**
+*******************************************************************************
+* Copyright (C) 1996-2001, International Business Machines Corporation and    *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*
+* $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/CompactName.java,v $
+* $Date: 2001/08/31 00:30:17 $
+* $Revision: 1.2 $
+*
+*******************************************************************************
+*/
+
 package com.ibm.text.UCD;
 
 import java.io.IOException;
@@ -6,28 +19,28 @@ import java.io.*;
 import java.text.*;
 
 public class CompactName {
-    
+
     static final boolean DEBUG = false;
-    
+
     public static void main(String[] args) throws IOException {
-        
+
         int test = tokenFromString("ABZ");
         String ss = stringFromToken(test);
         System.out.println(ss);
-        
+
         CompactName.addWord("ABSOLUTEISM");
-        
+
         for (int i = 0; i < CompactName.lastToken; ++i) {
             String s = CompactName.stringFromToken(i);
             System.out.println(s);
         }
-        
+
     }
-    
-    
+
+
     static final char[] compactMap = new char[128];
     static final char[] compactUnmap = new char[128];
-    
+
     static {
         char counter = 0;
         compactMap[0] = counter++;
@@ -38,14 +51,14 @@ public class CompactName {
         compactMap['>'] = counter++;
         compactMap['<'] = counter++;
         compactMap['*'] = counter++;
-        
+
         compactUnmap[0] = 0;
         for (char i = 0; i < compactUnmap.length; ++i) {
             int x = compactMap[i];
             if (x != 0) compactUnmap[x] = i;
         }
     }
-    
+
     /*
     static String expand(String s) {
         StringBuffer result = new StringBuffer();
@@ -58,7 +71,7 @@ public class CompactName {
         }
         return result.toString();
     }
-    
+
     static String compact(String s) {
         StringBuffer result = new StringBuffer();
         for (int i = 0; i < s.length(); ++i) {
@@ -72,27 +85,27 @@ public class CompactName {
         return result.toString();
     }
     */
-    
+
     static Map string_token = new HashMap();
     static Map token_string = new HashMap();
-    
+
     static int[] tokenList = new int[40000];
     static final int tokenStart = 0;
     static int lastToken = 0;
-    
+
     static int spacedMinimum = Integer.MAX_VALUE;
-    
+
     static boolean isLiteral(int i) {
         return (i & 0x8000) != 0;
     }
-    
+
     static int addTokenForString(String s, int lead, int trail) {
         Object in = string_token.get(s);
         if (in != null) throw new IllegalArgumentException();
         int value = (lead << 16) + (trail & 0xFFFF);
         int result = lastToken;
         tokenList[lastToken++] = value;
-        
+
         if (DEBUG) {
             System.out.println("'" + s + "', tokenList[" + result + "] = lead: " + lead + ", trail: " + trail);
             String roundTrip = stringFromToken(result);
@@ -103,7 +116,7 @@ public class CompactName {
         string_token.put(s, new Integer(result));
         return result;
     }
-    
+
     static String stringFromToken(int i) {
         String result;
         if ((i & 0x8000) != 0) {
@@ -125,7 +138,7 @@ public class CompactName {
         if (DEBUG) System.out.println("token: " + i + " => '" + result + "'");
         return result;
     }
-    
+
     static int tokenFromString(String s) {
         if (s.length() <= 3) {
             int first = compactMap[s.charAt(0)];
@@ -137,17 +150,17 @@ public class CompactName {
         if (in == null) return -1;
         return ((Integer)in).intValue();
     }
-    
-    
+
+
     static int addWord(String s) {
-        
+
         int result = tokenFromString(s);
         if (result != -1) return result;
         int bestLen = 0;
         int best_i = 0;
-        
+
         int limit = s.length() - 1;
-        
+
         for (int i = limit; i >= 1; --i) {
 
             String firstPart = s.substring(0, i);
@@ -155,7 +168,7 @@ public class CompactName {
 
             int lead = tokenFromString(firstPart);
             int trail = tokenFromString(lastPart);
-            
+
             if (lead >= 0 && trail >= 0) { // if both match, return immediately with pair
                 if (DEBUG) show(s, firstPart, lastPart, "MATCH BOTH");
                 return addTokenForString(s, lead, trail);
@@ -187,34 +200,34 @@ public class CompactName {
                 return addTokenForString(s, addWord(firstPart), trail);
             }
         }
-        
+
         // break at multiple of 3
-        
+
         best_i = ((s.length() + 1) / 6) * 3;
         String firstPart = s.substring(0, best_i);
         String lastPart = s.substring(best_i);
         if (DEBUG) show(s, firstPart, lastPart, "Fallback");
         return addTokenForString(s, addWord(firstPart), addWord(lastPart));
     }
-    
+
     static void show(String s, String firstPart, String lastPart, String comment) {
         System.out.println((s) + " => '" + (firstPart)
             + "' # '" + (lastPart) + "' " + comment);
     }
-    
+
     static void startLines() {
         spacedMinimum = lastToken;
     }
-    
+
     static int addLine(String s) {
-        
+
         int result = tokenFromString(s);
         if (result != -1) return result;
         int bestLen = 0;
         int best_i = 0;
-        
+
         int limit = s.length() - 2;
-        
+
         for (int i = limit; i >= 1; --i) {
             char c = s.charAt(i);
             if (c != ' ') continue;
@@ -224,7 +237,7 @@ public class CompactName {
 
             int lead = tokenFromString(firstPart);
             int trail = tokenFromString(lastPart);
-            
+
             if (lead >= 0 && trail >= 0) { // if both match, return immediately with pair
                 if (DEBUG) show(s, firstPart, lastPart, "MATCH BOTH");
                 return addTokenForString(s, lead, trail);
@@ -253,7 +266,7 @@ public class CompactName {
                 return addTokenForString(s, addLine(firstPart), trail);
             }
         }
-        
+
         System.out.println("SHOULD HAVE MATCHED!!");
         throw new IllegalArgumentException("SHOULD HAVE MATCHED!! " + s);
     }

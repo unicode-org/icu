@@ -1,3 +1,16 @@
+/**
+*******************************************************************************
+* Copyright (C) 1996-2001, International Business Machines Corporation and    *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*
+* $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/BuildNames.java,v $
+* $Date: 2001/08/31 00:30:17 $
+* $Revision: 1.2 $
+*
+*******************************************************************************
+*/
+
 package com.ibm.text.UCD;
 
 import java.io.IOException;
@@ -10,35 +23,35 @@ import com.ibm.text.utility.*;
 
 
 public class BuildNames implements UCD_Types {
-    
+
     static final boolean DEBUG = true;
-    
+
     static UCD ucd;
-    
+
     public static void main(String[] args) throws IOException {
-        
+
         ucd = UCD.make();
-    
+
         collectWords();
     }
-    
+
     static Set words = new TreeSet(new LengthFirstComparator());
     static Set lines = new TreeSet(new LengthFirstComparator());
     static int[] letters = new int[128];
-    
+
     static void stash(String word) {
         words.add(word);
         for (int i = 0; i < word.length(); ++i) {
             letters[word.charAt(i)]++;
         }
     }
-    
+
     static String transform(String line) {
         StringBuffer result = new StringBuffer();
         boolean changed = false;
         for (int i = 0; i < line.length(); ++i) {
             char c = line.charAt(i);
-            
+
             if (c == '-' || c == '<' || c == '>') {
                 if (result.length() > 0 && result.charAt(result.length()-1) != ' ') result.append(' ');
                 result.append(c);
@@ -46,7 +59,7 @@ public class BuildNames implements UCD_Types {
                 changed = true;
                 continue;
             }
-            
+
             if ('a' <= c && c <= 'z') {
                 result.append((char)(c - 'a' + 'A'));
                 changed = true;
@@ -56,15 +69,15 @@ public class BuildNames implements UCD_Types {
                 result.append('*').append((char)(c - '0' + 'A'));
                 changed = true;
                 continue;
-            }                
+            }
             result.append(c);
         }
         if (!changed) return line;
         return result.toString().trim();
     }
-    
+
     static void collectWords() throws IOException {
-        
+
         System.out.println("Gathering data");
         //Counter counter = new Counter();
         String[] parts = new String[100];
@@ -74,23 +87,23 @@ public class BuildNames implements UCD_Types {
         for (int i = 0; i < 0x10FFFF; ++i) {
             if (ucd.hasComputableName(i)) continue;
             String name = transform(ucd.getName(i));
-            
-            
+
+
             sum += name.length();
             used++;
-            
+
             // replace numbers & letters
-            
+
             int len = Utility.split(name, ' ', parts);
             for (int j = 0; j < len; ++j) {
                 stash(parts[j]);
             }
-            
+
             lines.add(name);
         }
         System.out.println("Overhead: " + (lastLink - used) + ", " + ((lastLink - used) * 100 / used) + "%");
         System.out.println("Strings: " + sum + ", " + (lastLink*4));
-        
+
         System.out.println();
         System.out.println("Compacting Words");
         System.out.println();
@@ -104,7 +117,7 @@ public class BuildNames implements UCD_Types {
             if (false || !goesRound) System.out.println("Compacting: '" + s + "': " + i++ + "(" + CompactName.lastToken + ")"
                 + (goesRound ? ": NO RT: '" + round + "'" : ""));
         }
-        
+
         System.out.println();
         System.out.println("Compacting Lines");
         System.out.println();
@@ -122,18 +135,18 @@ public class BuildNames implements UCD_Types {
             if (false || !goesRound) System.out.println("Compacting: '" + s + "': " + i++ + "(" + CompactName.lastToken + ")"
                 + (!goesRound ? ": NO RT: '" + round + "'" : ""));
         }
-        
+
         /*System.out.println("Printing Compact Forms");
         for (int i = 0; i < CompactName.lastToken; ++i) {
             String s = CompactName.stringFromToken(i);
             System.out.println(i + ": '" + s + "'");
         }*/
-        
+
         System.out.println("Strings: " + sum
             + ", " + (CompactName.spacedMinimum*4)
             + ", " + (CompactName.lastToken*4)
         );
-        
+
     }
     /*
         Set stuff = new TreeSet();
@@ -142,7 +155,7 @@ public class BuildNames implements UCD_Types {
                 stuff.add(new Integer((letters[i] << 8) + i));
             }
         }
-        
+
         it = stuff.iterator();
         while (it.hasNext()) {
             int in = ((Integer) it.next()).intValue();
@@ -153,13 +166,13 @@ public class BuildNames implements UCD_Types {
                 System.out.println("\tNo Round Trip: '" + rname + "'");
             }
     */
-    
+
     static Map stringToInt = new HashMap();
     static Map intToString = new HashMap();
-    
+
     static final int[] remap = new int['Z'+1];
     static final int maxToken;
-    
+
     static {
         int counter = 1;
         remap[' '] = counter++;
@@ -174,7 +187,7 @@ public class BuildNames implements UCD_Types {
         }
         maxToken = counter;
     }
-    
+
     static final String[] unmap = new String[maxToken];
     static {
         unmap[0] = "";
@@ -183,16 +196,16 @@ public class BuildNames implements UCD_Types {
             if (x != 0) unmap[x] = String.valueOf((char)i);
         }
     }
-    
+
     static int[] links = new int[40000];
     static final int linkStart = 0;
     static int lastLink = 0;
     static final int LITERAL_BOUND = 0x7FFF - maxToken * maxToken;
-    
+
     static boolean isLiteral(int i) {
         return (i & 0x7FFF) > LITERAL_BOUND;
     }
-    
+
     static String lookup(int i) {
         String result;
         boolean trailingSpace = false;
@@ -216,7 +229,7 @@ public class BuildNames implements UCD_Types {
         if (DEBUG) System.out.println("token: " + i + " => '" + result + "'");
         return result;
     }
-    
+
     static int getInt(String s) {
         if (s.length() < 3) {
             if (s.length() == 0) return 0;
@@ -228,14 +241,14 @@ public class BuildNames implements UCD_Types {
         if (in == null) return -1;
         return ((Integer)in).intValue();
     }
-    
+
     static int putString(String s, int lead, int trail) {
         Object in = stringToInt.get(s);
         if (in != null) throw new IllegalArgumentException();
         int value = (lead << 16) + (trail & 0xFFFF);
         int result = lastLink;
         links[lastLink++] = value;
-        
+
         if (DEBUG) {
             System.out.println("'" + s + "', link[" + result + "] = lead: " + lead + ", trail: " + trail);
             String roundTrip = lookup(result);
@@ -246,7 +259,7 @@ public class BuildNames implements UCD_Types {
         stringToInt.put(s, new Integer(result));
         return result;
     }
-    
+
     // s cannot have a trailing space. Must be <,>,-,SPACE,0-9,A-Z
     static int addString(String s) {
         int result = getInt(s);
@@ -259,9 +272,9 @@ public class BuildNames implements UCD_Types {
         int lastSpace = -1;
         int spaceBits;
         int endOfFirst;
-        
+
         // invariant. We break after a space if there is one.
-        
+
         for (int i = 1; i < limit; ++i) {
             char c = s.charAt(i-1);
             spaceBits = 0;
@@ -271,7 +284,7 @@ public class BuildNames implements UCD_Types {
                 endOfFirst--;
                 spaceBits = 0x8000;
             }
-            
+
             String firstPart = s.substring(0, endOfFirst);
             String lastPart = s.substring(i);
             if (firstPart.equals("<START OF ")) {
@@ -292,7 +305,7 @@ public class BuildNames implements UCD_Types {
                 if (i > bestSpaceLen && c == ' ') {
                     bestSpaceLen = i;
                     bestSpace_i = i + 1;
-                }                    
+                }
             }
             int end_i = s.length() - i;
             if (!isLiteral(trail)) {
@@ -310,9 +323,9 @@ public class BuildNames implements UCD_Types {
             bestLen = bestSpaceLen;
             best_i = bestSpace_i;
         }
-        
+
         spaceBits = 0;
-        
+
         if (bestLen > 0) { // if one matches, recurse -- and return pair
             endOfFirst = best_i;
             if (lastSpace > 0) {
@@ -335,8 +348,8 @@ public class BuildNames implements UCD_Types {
         }
         // otherwise, we failed to find anything. Then break before the last word, if there is one
         // otherwise break in the middle (but at even value)
-        
-        
+
+
         if (lastSpace >= 0) {
             best_i = lastSpace;
             endOfFirst = lastSpace - 1;
@@ -350,7 +363,7 @@ public class BuildNames implements UCD_Types {
             + "' # '" + lastPart + "' FALLBACK");
         return putString(s, spaceBits | addString(firstPart), addString(lastPart));
     }
-    
+
     /*
     static int addCompression(String s) {
         Object in = stringToInt.get(s);
@@ -363,7 +376,7 @@ public class BuildNames implements UCD_Types {
             if (c == ' ' || c == '-') {
                 Object pos1 = stringToInt.get(s.substring(0,i+1));
                 //Object pos23 = stringToInt.get(s..substring(i));
-                
+
 
                     if (pos2 >= 0 && pos3 >= 0) {
                         fullToCompressed.put(value, new Integer(index + reserved));
@@ -381,11 +394,11 @@ public class BuildNames implements UCD_Types {
                         }
                     }
                 }
-                
+
             }
         }
     }
-        
+
     static void gatherData() throws IOException {
         System.out.println("Gathering data");
         Counter counter = new Counter();
@@ -415,29 +428,29 @@ public class BuildNames implements UCD_Types {
                 }
             }
         }
-        
+
         System.out.println("Sorting data");
         Map m = counter.extract();
-        
+
         System.out.println("Printing data");
-        
+
         PrintWriter log = new PrintWriter(
             new BufferedWriter(
             new OutputStreamWriter(
                 new FileOutputStream(GEN_DIR + "NameCompression.txt")),
             32*1024));
-        
+
         log.println("total: " + total);
-        
+
         Iterator it = m.keySet().iterator();
-        
+
         String mondo = "";
         int i = 0;
         int strTotal = 0;
-        
+
         int index = 0;
         Map fullToCompressed = new HashMap();
-        
+
         String mondoIndex = "";
 
         main:
@@ -448,20 +461,20 @@ public class BuildNames implements UCD_Types {
             String value =  (String)m.get(key);
             log.println(i++ + ": " + key + ": \"" + value + "\"");
             strTotal += value.length();
-            
-            
+
+
             // first 128 are the highest frequency, inc. space
-            
+
             if (index < 128 - SINGLES) {
                 mondo += value;
                 fullToCompressed.put(value, new String((char)(index + reserved)));
                 continue;
             }
-            
+
             int pos = mondo.indexOf(value);
             if (pos >= 0) {
                 // try splitting!
-                
+
                 int bestBreak = -1;
                 boolean pickFirst = false;
                 if (value.length() > 2) for (int k = 1; k < value.length()-1; ++k) {
@@ -493,22 +506,22 @@ public class BuildNames implements UCD_Types {
                     mondo += value;
                 }
             }
-            
+
             // high bit on, means 2 bytes, look in array
         }
- 
+
         log.println("strTotal: " + strTotal);
         log.println("mondo: " + mondo.length());
-        
+
         int k = 80;
         for (; k < mondo.length(); k += 80) {
             log.println(mondo.substring(k-80, k));
         }
         log.println(mondo.substring(k-80)); // last line
-        
+
         log.close();
     }
-    
+
     static int indexOf(StringBuffer target, String source) {
         int targetLen = target.length() - source.length();
         main:
@@ -520,10 +533,10 @@ public class BuildNames implements UCD_Types {
         }
         return -1;
     }
-    
+
     static final int SINGLES = 26 + 10 + 2;
     */
-    
+
     /*
     static String decode(int x) {
         if (x < SINGLES) {
@@ -533,6 +546,6 @@ public class BuildNames implements UCD_Types {
             return " ";
         }
         if (x < binaryLimit) {
-            x = 
+            x =
     */
 }

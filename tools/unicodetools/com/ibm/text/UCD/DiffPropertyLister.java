@@ -1,23 +1,36 @@
+/**
+*******************************************************************************
+* Copyright (C) 1996-2001, International Business Machines Corporation and    *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*
+* $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/DiffPropertyLister.java,v $
+* $Date: 2001/08/31 00:30:17 $
+* $Revision: 1.2 $
+*
+*******************************************************************************
+*/
+
 package com.ibm.text.UCD;
 import java.io.*;
 
 class DiffPropertyLister extends PropertyLister {
     private UCD oldUCD;
-        
+
     public DiffPropertyLister(String oldUCDName, String newUCDName, PrintStream output) {
         this.output = output;
         this.ucdData = UCD.make(newUCDName);
         if (oldUCDName != null) this.oldUCD = UCD.make(oldUCDName);
     }
-    
+
     public byte status (int cp) {
         return INCLUDE;
     }
-        
+
     public String propertyName(int cp) {
         return ucdData.getVersion();
     }
-    
+
     /*
     public String optionalName(int cp) {
         if ((propMask & 0xFF00) == DECOMPOSITION_TYPE) {
@@ -27,7 +40,7 @@ class DiffPropertyLister extends PropertyLister {
         }
     }
     */
-        
+
 
     public byte status(int lastCp, int cp) {
         /*if (cp == 0xFFFF) {
@@ -36,7 +49,7 @@ class DiffPropertyLister extends PropertyLister {
         */
         return ucdData.isAllocated(cp) && (oldUCD == null || !oldUCD.isAllocated(cp)) ? INCLUDE : EXCLUDE;
     }
-    
+
     public int print() {
         String status;
         if (oldUCD != null) {
@@ -56,10 +69,10 @@ class DiffPropertyLister extends PropertyLister {
         } else {
             output.println("# Total " + count + " code points allocated in " + ucdData.getVersion());
         }
-        
+
         output.println();
         return count;
     }
-        
+
 }
-    
+

@@ -1,16 +1,29 @@
+/**
+*******************************************************************************
+* Copyright (C) 1996-2001, International Business Machines Corporation and    *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*
+* $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Names.java,v $
+* $Date: 2001/08/31 00:29:50 $
+* $Revision: 1.2 $
+*
+*******************************************************************************
+*/
+
 package com.ibm.text.UCD;
 
 import com.ibm.text.utility.*;
 
 
 final class UCD_Names implements UCD_Types {
-    
+
     static final String[] UNIFIED_PROPERTIES = {
         "General Category (listing UnicodeData.txt, field 2: see UnicodeData.html)",
         "Combining Class (listing UnicodeData.txt, field 3: see UnicodeData.html)",
         "Bidi Class (listing UnicodeData.txt, field 4: see UnicodeData.html)",
         "Decomposition Type (from UnicodeData.txt, field 5: see UnicodeData.html)",
-        "Numeric Type (from UnicodeData.txt, field 6/7/8: see UnicodeData.html)", 
+        "Numeric Type (from UnicodeData.txt, field 6/7/8: see UnicodeData.html)",
         "East Asian Width (listing EastAsianWidth.txt, field 1)",
         "Line Break (listing LineBreak.txt, field 1)",
         "Joining Type (listing ArabicShaping.txt, field 1).\r\n"
@@ -21,13 +34,13 @@ final class UCD_Names implements UCD_Types {
         "Script",
         "Age (from a comparison of UCD versions 1.1 [minus Hangul], 2.0, 2.1, 3.0, 3.1)"
     };
-    
+
     static final String[] SHORT_UNIFIED_PROPERTIES = {
         "GeneralCategory",
         "CombiningClass",
         "BidiClass",
         "DecompositionType",
-        "NumericType", 
+        "NumericType",
         "EastAsianWidth",
         "LineBreak",
         "JoiningType",
@@ -36,13 +49,13 @@ final class UCD_Names implements UCD_Types {
         "Script",
         "Age"
     };
-    
+
     static final String[] ABB_UNIFIED_PROPERTIES = {
         "gc",
         "cc",
         "bc",
         "dt",
-        "nt", 
+        "nt",
         "ea",
         "lb",
         "jt",
@@ -51,11 +64,11 @@ final class UCD_Names implements UCD_Types {
         "sc",
         "Ag"
     };
-    
-    
+
+
     static final String[] BP = {
 	    "BidiMirrored",
-	    "CompositionExclusion", 
+	    "CompositionExclusion",
         "White_Space",
         "NonBreak",
 	    "Bidi_Control",
@@ -84,10 +97,10 @@ final class UCD_Names implements UCD_Types {
         "Reserved_Cf_Code_Point",
         "Deprecated",
     };
-    
+
     static final String[] SHORT_BP = {
 	    "BidiM",
-	    "CExc", 
+	    "CExc",
         "WhSp",
         "NBrk",
 	    "BdCon",
@@ -116,11 +129,11 @@ final class UCD_Names implements UCD_Types {
         "RCf",
         "Dep",
     };
-    
+
     /*
     static final String[] BP_OLD = {
 	    "BidiMirrored",
-	    "CompositionExclusion", 
+	    "CompositionExclusion",
         "White_space",
         "Non_break",
 	    "Bidi_Control",
@@ -146,7 +159,7 @@ final class UCD_Names implements UCD_Types {
         "UnifiedIdeograph"
     };
     */
-    
+
     static final String[] DeletedProperties = {
         "Private_Use",
         "Composite",
@@ -158,17 +171,17 @@ final class UCD_Names implements UCD_Types {
         "Private_Use_High_Surrogate",
         "Unassigned_Code_Point"
     };
-    
+
     static final String[] YN_TABLE = {"N", "Y"};
-    
+
     static String[] EA = {
         "N", "A", "H", "W", "F", "Na"
-    };        
-        
+    };
+
     static String[] SHORT_EA = {
         "Neutral", "Ambiguous", "Halfwidth", "Wide", "Fullwidth", "Narrow"
-    };        
-        
+    };
+
     static final String[] LB = {
         "XX", "OP", "CL", "QU", "GL", "NS", "EX", "SY",
         "IS", "PR", "PO", "NU", "AL", "ID", "IN", "HY",
@@ -177,11 +190,11 @@ final class UCD_Names implements UCD_Types {
     };
 
     static final String[] LONG_LB = {
-        "Unknown", "OpenPunctuation", "ClosePunctuation", "Quotation", 
+        "Unknown", "OpenPunctuation", "ClosePunctuation", "Quotation",
         "Glue", "Nonstarter", "Exclamation", "BreakSymbols",
-        "InfixNumeric", "PrefixNumeric", "PostfixNumeric", 
+        "InfixNumeric", "PrefixNumeric", "PostfixNumeric",
         "Numeric", "Alphabetic", "Ideographic", "Inseperable", "Hyphen",
-        "CombiningMark", "BreakBefore", "BreakAfter", "Space", 
+        "CombiningMark", "BreakBefore", "BreakAfter", "Space",
         "MandatoryBreak", "CarriageReturn", "LineFeed", "ContingentBreak",
         "ComplexContext", "Ambiguous", "BreakBeforeAndAfter", "Surrogate", "ZWSpace"
     };
@@ -230,7 +243,7 @@ final class UCD_Names implements UCD_Types {
     "DESERET",
     "INHERITED",
   };
-  
+
 	public static final String[] ABB_SCRIPT = {
     "Zyyy", // 	COMMON -- NOT A LETTER: NO EXACT CORRESPONDENCE IN 15924
     "Latn", // 	LATIN
@@ -275,17 +288,17 @@ final class UCD_Names implements UCD_Types {
     "Dsrt",
     "Qaai",
   };
-  
-  
-  
+
+
+
   static final String[] AGE = {
     "UNSPECIFIED",
     "1.1",
     "2.0", "2.1",
     "3.0", "3.1"
   };
-    
-    
+
+
     static final String[] GC = {
         "Cn", // = Other, Not Assigned 0
 
@@ -328,7 +341,7 @@ final class UCD_Names implements UCD_Types {
         "Pi", // = Punctuation, Initial quote 29 (may behave like Ps or Pe depending on usage)
         "Pf" // = Punctuation, Final quote 30 (may behave like Ps or Pe dependingon usage)
     };
-    
+
     static final String[] LONG_GC = {
         "Unassigned", // = Other, Not Assigned 0
 
@@ -372,7 +385,7 @@ final class UCD_Names implements UCD_Types {
         "FinalPunctuation" // = Punctuation, Final quote 30 (may behave like Ps or Pe dependingon usage)
     };
 
-    
+
 
     static String[] BC = {
         "L", //	Left-Right; Most alphabetic, syllabic, and logographic characters (e.g., CJK ideographs)
@@ -388,7 +401,7 @@ final class UCD_Names implements UCD_Types {
         "ON", //	Other Neutrals ; All other characters: punctuation, symbols
         "<unused>", "BN", "NSM", "AL", "LRO", "RLO", "LRE", "RLE", "PDF"
     };
-        
+
     static String[] LONG_BC = {
         "LeftToRight", //	Left-Right; Most alphabetic, syllabic, and logographic characters (e.g., CJK ideographs)
         "RightToLeft", //	Right-Left; Arabic, Hebrew, and punctuation specific to those scripts
@@ -401,13 +414,13 @@ final class UCD_Names implements UCD_Types {
         "SegmentSeparator", //	Segment Separator
         "WhiteSpace", //	Whitespace
         "OtherNeutral", //	Other Neutrals ; All other characters: punctuation, symbols
-        "<unused>", 
-        "BoundaryNeutral", "NonspacingMark", "ArabicLetter", 
-        "LeftToRightOverride", 
-        "RightToLeftOverride", "LeftToRightEmbedding", 
+        "<unused>",
+        "BoundaryNeutral", "NonspacingMark", "ArabicLetter",
+        "LeftToRightOverride",
+        "RightToLeftOverride", "LeftToRightEmbedding",
         "RightToLeftEmbedding", "PopDirectionalFormat"
     };
-        
+
     private static String[] CASE_TABLE = {
         "LOWER", "TITLE", "UPPER", "UNCASED"
     };
@@ -432,7 +445,7 @@ final class UCD_Names implements UCD_Types {
         "square",	// A CJK squared font variant.
         "fraction",	// A vulgar fraction form.
     };
-    
+
     static String[] SHORT_DT = {
         "", // NONE
         "ca", // CANONICAL
@@ -453,7 +466,7 @@ final class UCD_Names implements UCD_Types {
         "sq",	// A CJK squared font variant.
         "fr",	// A vulgar fraction form.
     };
-    
+
     static private String[] MIRRORED_TABLE = {
         "N",
         "Y"
@@ -465,14 +478,14 @@ final class UCD_Names implements UCD_Types {
         "digit",
         "decimal",
     };
-    
+
     static String[] SHORT_NT = {
         "",
         "nu",
         "di",
         "de",
     };
-    
+
     static {
         if (LIMIT_CATEGORY != GC.length) {
             System.err.println("!! ERROR !! UnicodeTypes and UInfo out of sync: category");
@@ -511,9 +524,9 @@ final class UCD_Names implements UCD_Types {
             System.err.println("!! ERROR !! UnicodeTypes and UInfo out of sync: age");
         }
     }
-    
+
     public static byte ON = Utility.lookup("ON", BC);
-    
+
     public static String[] JOINING_TYPE = {
         "C",
         "D",
@@ -584,7 +597,7 @@ final class UCD_Names implements UCD_Types {
         "YUDH_HE",
         "ZAIN",
     };
-    
+
     public static String[] OLD_JOINING_GROUP = {
         "<no shaping>",
         "AIN",
@@ -637,9 +650,9 @@ final class UCD_Names implements UCD_Types {
         "YUDH HE",
         "ZAIN",
     };
-    
-    
-    
+
+
+
     static String[] JAMO_L_TABLE = {
                 // Value;  Short Name; Unicode Name
         "G",    // U+1100; G; HANGUL CHOSEONG KIYEOK
@@ -662,7 +675,7 @@ final class UCD_Names implements UCD_Types {
         "P",    // U+1111; P; HANGUL CHOSEONG PHIEUPH
         "H"     // U+1112; H; HANGUL CHOSEONG HIEUH
     };
-    
+
     static String[] JAMO_V_TABLE = {
                 // Value;  Short Name; Unicode Name
         "A",    // U+1161; A; HANGUL JUNGSEONG A
@@ -687,7 +700,7 @@ final class UCD_Names implements UCD_Types {
         "YI",   // U+1174; YI; HANGUL JUNGSEONG YI
         "I",    // U+1175; I; HANGUL JUNGSEONG I
     };
-    
+
     static String[] JAMO_T_TABLE = {
                 // Value;  Short Name; Unicode Name
         "",     // filler, for LV syllable
@@ -721,7 +734,7 @@ final class UCD_Names implements UCD_Types {
     };
 
 
-    
+
 /*
     static {
         UNASSIGNED_INFO.code = '\uFFFF';
