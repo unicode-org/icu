@@ -49,7 +49,6 @@
 #include "olsontz.h"
 #include "mutex.h"
 #include "unicode/udata.h"
-#include "tzdat.h"
 #include "ucln_in.h"
 #include "cstring.h"
 #include "cmemory.h"

@@ -27,7 +27,6 @@
 
 #include "unicode/simpletz.h"
 #include "unicode/gregocal.h"
-#include "tzdat.h"
 
 U_NAMESPACE_BEGIN
 
@@ -119,40 +118,6 @@ SimpleTimeZone::SimpleTimeZone(int32_t rawOffsetGMT, const UnicodeString& ID,
               savingsEndMonth, savingsEndDay, savingsEndDayOfWeek,
               savingsEndTime, savingsEndTimeMode,
               savingsDST, status);
-}
-
-/**
- * Construct from memory-mapped data.  For private use by TimeZone.
- */
-SimpleTimeZone::SimpleTimeZone(const StandardZone& stdZone,
-                               const UnicodeString& ID)
-:   TimeZone(ID)
-{
-    UErrorCode status = U_ZERO_ERROR;
-    construct(stdZone.gmtOffset,
-              0, 0, 0, 0, WALL_TIME,
-              0, 0, 0, 0, WALL_TIME,
-              0, status);
-}
-
-/**
- * Construct from memory-mapped data.  For private use by TimeZone.
- */
-SimpleTimeZone::SimpleTimeZone(const DSTZone& dstZone,
-                               const UnicodeString& ID)
-:   TimeZone(ID)
-{
-    UErrorCode status = U_ZERO_ERROR;
-    construct(dstZone.gmtOffset,
-              dstZone.onsetRule.month, dstZone.onsetRule.dowim,
-              dstZone.onsetRule.dow,
-              dstZone.onsetRule.time * (int32_t)60000,
-              (TimeMode)dstZone.onsetRule.mode,
-              dstZone.ceaseRule.month, dstZone.ceaseRule.dowim,
-              dstZone.ceaseRule.dow,
-              dstZone.ceaseRule.time * (int32_t)60000,
-              (TimeMode)dstZone.ceaseRule.mode,
-              dstZone.dstSavings * (int32_t)60000, status);
 }
 
 /**
