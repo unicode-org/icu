@@ -8,14 +8,14 @@
 el {
     Version { "2.0" }
     AmPmMarkers { 
-        "\u03C0\u03BC",
-        "\u03BC\u03BC",
+        "\u03A0\u039C",	// The lowercase form is "\u03C0\u03BC". Both are valid. It's also been seen as mixed case too.
+        "\u039C\u039C",	// The lowercase form is "\u03BC\u03BC". Both are valid. It's also been seen as mixed case too.
     }
     collations {
-      standard { 
-        Version { "2.0" }
-        Sequence { "[normalization on]" }
-      }
+        standard {
+            Version { "2.0" }
+            Sequence { "[normalization on]" }
+        }
     }
     Countries { 
         AD { "\u0391\u03BD\u03B4\u03CC\u03C1\u03B1" }
@@ -267,6 +267,23 @@ el {
         ZM { "\u0396\u03AC\u03BC\u03C0\u03B9\u03B1" }
         ZW { "\u0396\u03B9\u03BC\u03C0\u03AC\u03BC\u03C0\u03BF\u03C5\u03B5" }
     }
+    // Currency display names
+    Currencies {
+        EUR { "\u20AC", "\u0395\u03A5\u03A1\u03A9" } // lowercase is \u03B5\u03C5\u03C1\u03CE
+        GRD { "\u0394\u03C1\u03C7", "\u0394\u03C1\u03C7" } // Currency symbol is the same as the name. This may need to change.
+
+        // The following only have the currency names. The currency symbols are missing or need verification.
+        AUD { "AUD", "\u0394\u039F\u039B\u0391\u03A1\u0399\u039F \u0391\u03A5\u03A3\u03A4\u03A1\u0391\u039B\u0399\u0391\u03A3" }
+        CAD { "CAD", "\u0394\u039F\u039B\u0391\u03A1\u0399\u039F \u039A\u0391\u039D\u0391\u0394\u0391" }
+        CHF { "CHF", "\u03A6\u03A1\u0391\u0393\u039A\u039F \u0395\u039B\u0392\u0395\u03A4\u0399\u0391\u03A3" }
+        CYP { "CYP", "\u039B\u0399\u03A1\u0391 \u039A\u03A5\u03A0\u03A1\u039F\u03A5" }
+        DKK { "DKK", "\u039A\u039F\u03A1\u039F\u039D\u0391 \u0394\u0391\u039D\u0399\u0391\u03A3" }
+        GBP { "\u00A3", "\u039B\u0399\u03A1\u0391 \u0391\u0393\u0393\u039B\u0399\u0391\u03A3" }
+        JPY { "\u00A5", "\u0393\u0399\u0395\u039D \u0399\u0391\u03A0\u03A9\u039D\u0399\u0391\u03A3" }
+        NOK { "NOK", "\u039A\u039F\u03A1\u039F\u039D\u0391 \u039D\u039F\u03A1\u0392\u0397\u0393\u0399\u0391\u03A3" }
+        SEK { "SEK", "\u039A\u039F\u03A1\u039F\u039D\u0391 \u03A3\u039F\u03A5\u0397\u0394\u0399\u0391\u03A3" }
+        USD { "USD", "\u0394\u039F\u039B\u0391\u03A1\u0399\u039F \u0397\u03A0\u0391" }
+    }
     DateTimeElements:intvector { 
         2,
         1,
@@ -275,11 +292,11 @@ el {
         "h:mm:ss a z",
         "h:mm:ss a z",
         "h:mm:ss a",
-        "h:mm a",
-        "EEEE, d MMMM yyyy",
-        "d MMMM yyyy",
-        "d MMM yyyy",
-        "d/M/yyyy",
+        "h:mm a",   // While Greece uses both 12 and 24 hour formats, we use one for consistency due to limitations of current ICU API.
+        "EEEE, dd MMMM yyyy",
+        "dd MMMM yyyy",
+        "dd MMM yyyy",
+        "dd/MM/yyyy",
         "{1} {0}",
     }
     DayAbbreviations { 
@@ -411,35 +428,34 @@ el {
 /*
  * omit rules for Greek until we have complete and valid data.
 
-//         * Spellout rules for Greek.  Again in Greek we have to supply the words
-//         * for the multiples of 100 because they can't be derived algorithmically.
-//         * Also, the tens digit changes form when followed by a ones digit: an
-//         * accent mark disappears from the tens digit and moves to the ones digit.
-//         * Therefore, instead of using the [] notation, we actually have to use
-//         * two separate rules for each multiple of 10 to show the two forms of
-//         * the word.
+    // * Spellout rules for Greek.  Again in Greek we have to supply the words
+    // * for the multiples of 100 because they can't be derived algorithmically.
+    // * Also, the tens digit changes form when followed by a ones digit: an
+    // * accent mark disappears from the tens digit and moves to the ones digit.
+    // * Therefore, instead of using the [] notation, we actually have to use
+    // * two separate rules for each multiple of 10 to show the two forms of
+    // * the word.
 
     // Can someone supply me with information on negatives and decimals?
-    // I'm also missing the word for zero.  Can someone clue me in?
 
     SpelloutRules {
-        "zero (incomplete data); \u03ad\u03bd\u03b1; \u03b4\u03cd\u03bf; \u03b4\u03c1\u03af\u03b1; "
+        "\u03bc\u03b7\u03b4\u03ad\u03bd; \u03ad\u03bd\u03b1; \u03b4\u03cd\u03bf; \u03c4\u03c1\u03af\u03b1; "
         "\u03c4\u03ad\u03c3\u03c3\u03b5\u03c1\u03b1; \u03c0\u03ad\u03bd\u03c4\u03b5; "
         "\u03ad\u03be\u03b9; \u03b5\u03c0\u03c4\u03ac; \u03bf\u03ba\u03c4\u03ce; "
         "\u03b5\u03bd\u03bd\u03ad\u03b1;\n"
         "10: \u03b4\u03ad\u03ba\u03b1; "
-        "\u03ad\u03bd\u03b4\u03b5\u03ba\u03b1; \u03b4\u03ce\u03b4\u03b5\u03ba\u03b1; "
-        "\u03b4\u03b5\u03ba\u03b1>>;\n"
+            "\u03ad\u03bd\u03c4\u03b5\u03ba\u03b1; \u03b4\u03ce\u03b4\u03b5\u03ba\u03b1; "
+            "\u03b4\u03b5\u03ba\u03b1>>;\n"
         "20: \u03b5\u03af\u03ba\u03bf\u03c3\u03b9; \u03b5\u03b9\u03ba\u03bf\u03c3\u03b9>>;\n"
         "30: \u03c4\u03c1\u03b9\u03ac\u03bd\u03c4\u03b1; \u03c4\u03c1\u03b9\u03b1\u03bd\u03c4\u03b1>>;\n"
         "40: \u03c3\u03b1\u03c1\u03ac\u03bd\u03c4\u03b1; \u03c3\u03b1\u03c1\u03b1\u03bd\u03c4\u03b1>>;\n"
         "50: \u03c0\u03b5\u03bd\u03ae\u03bd\u03c4\u03b1; \u03c0\u03b5\u03bd\u03b7\u03bd\u03c4\u03b1>>;\n"
         "60: \u03b5\u03be\u03ae\u03bd\u03c4\u03b1; \u03b5\u03be\u03b7\u03bd\u03c4\u03b1>>;\n"
         "70: \u03b5\u03b2\u03b4\u03bf\u03bc\u03ae\u03bd\u03c4\u03b1; "
-        "\u03b5\u03b2\u03b4\u03bf\u03bc\u03b7\u03bd\u03c4\u03b1>>;\n"
+            "\u03b5\u03b2\u03b4\u03bf\u03bc\u03b7\u03bd\u03c4\u03b1>>;\n"
         "80: \u03bf\u03b3\u03b4\u03cc\u03bd\u03c4\u03b1; \u03bf\u03b3\u03b4\u03bf\u03bd\u03c4\u03b1>>;\n"
         "90: \u03b5\u03bd\u03bd\u03b5\u03bd\u03ae\u03bd\u03c4\u03b1; "
-        "\u03b5\u03bd\u03bd\u03b5\u03bd\u03b7\u03bd\u03c4\u03b1>>;\n"
+            "\u03b5\u03bd\u03bd\u03b5\u03bd\u03b7\u03bd\u03c4\u03b1>>;\n"
         "100: \u03b5\u03ba\u03b1\u03c4\u03cc[\u03bd >>];\n"
         "200: \u03b4\u03b9\u03b1\u03ba\u03cc\u03c3\u03b9\u03b1[ >>];\n"
         "300: \u03c4\u03c1\u03b9\u03b1\u03ba\u03cc\u03c3\u03b9\u03b1[ >>];\n"
@@ -451,19 +467,14 @@ el {
         "900: \u03b5\u03bd\u03bd\u03b9\u03b1\u03ba\u03cc\u03c3\u03b9\u03b1[ >>];\n"
         "1000: \u03c7\u03af\u03bb\u03b9\u03b1[ >>];\n"
         "2000: << \u03c7\u03af\u03bb\u03b9\u03b1[ >>];\n"
-        "1,000,000: << \u03b5\u03ba\u03b1\u03c4\u03bf\u03bc\u03bc\u03b9\u03cc\u03c1\u03b9\u03bf[ >>];\n"
-        "1,000,000,000: << \u03b4\u03b9\u03c3\u03b5\u03ba\u03b1\u03c4\u03bf\u03bc\u03bc\u03b9\u03cc\u03c1\u03b9\u03bf[ >>];\n"
+        "1,000,000: << \u03b5\u03ba\u03b1\u03c4\u03bf\u03bc\u03bc\u03cd\u03c1\u03b9\u03bf[ >>];\n"
+        "1,000,000,000: << \u03b4\u03b9\u03c3\u03b5\u03ba\u03b1\u03c4\u03bf\u03bc\u03bc\u03cd\u03c1\u03b9\u03bf[ >>];\n"
         "1,000,000,000,000: =#,##0="
-     }
+    }
 */
 
     TransliterateLATIN {
         "UNGEGN",
         "::Greek-Latin/UNGEGN;"
-    }
-
-    // Currency display names
-    Currencies {
-        GRD { "\u0394\u03C1\u03C7", "GRD" }
     }
 }
