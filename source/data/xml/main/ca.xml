@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.1/ldml.dtd">
+<!DOCTYPE ldml SYSTEM " 	http://www.unicode.org/cldr/dtd/1.1/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " http://www.unicode.org/cldr/dtd/1.1/ldmlICU.dtd"> 
+%icu;
+]
+>
 <ldml>
 	<identity>
-		<version number="1.1"/>
-		<generation date="2004-05-27" />
+		<version number="4.0"/>
+		<generation date="2004-06-01" />
 		<language type="ca" /> 
 	</identity>
 	<localeDisplayNames>
@@ -350,6 +355,11 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[a-z é í ó ú à è ò ï ü ŀ ç ñ]</exemplarCharacters>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Latn</icu:script>
+			</icu:scripts>
+		</special>
 	</characters>
 	<dates>
 		<localizedPatternChars>GuMtkHmsSEDFwWahKzUeygAZ</localizedPatternChars>

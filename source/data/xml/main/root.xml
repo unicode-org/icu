@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.1/ldml.dtd">
-<ldml draft="true">
+<!DOCTYPE ldml SYSTEM " 	http://www.unicode.org/cldr/dtd/1.1/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " http://www.unicode.org/cldr/dtd/1.1/ldmlICU.dtd"> 
+%icu;
+]
+>
+<ldml>
 	<identity>
-		<version number="1.1"/>
-		<generation date="2004-05-27" />
+		<version number="5.0"/>
+		<generation date="2004-06-01" />
 		<language type="" /> 
 	</identity>
 	<localeDisplayNames>
@@ -808,6 +813,11 @@
 	</layout>
 	<characters>
 		<exemplarCharacters>[]</exemplarCharacters>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Zyyy</icu:script>
+			</icu:scripts>
+		</special>
 	</characters>
 	<measurement>
 		<measurementSystem type="metric"/>
@@ -1448,10 +1458,10 @@
 						<era type="161">Kentoku</era>
 						<era type="162">Bunchũ</era>
 						<era type="163">Tenju</era>
-						<era type="164">Kōwa</era>
-						<era type="165">Genchũ</era>
-						<era type="166">Meitoku</era>
-						<era type="167">Kōryaku</era>
+						<era type="164">Kōryaku</era>
+						<era type="165">Kōwa</era>
+						<era type="166">Genchũ</era>
+						<era type="167">Meitoku</era>
 						<era type="168">Kakei</era>
 						<era type="169">Kōō</era>
 						<era type="170">Meitoku</era>
@@ -1662,4 +1672,20 @@
 			</currency>
 		</currencies>
 	</numbers>
+	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+		<icu:ruleBasedNumberFormats>
+			<icu:ruleBasedNumberFormat type="spellout">
+=#,##0.######=;
+
+			</icu:ruleBasedNumberFormat>
+			<icu:ruleBasedNumberFormat type="ordinal">
+=#,##0=;
+
+			</icu:ruleBasedNumberFormat>
+			<icu:ruleBasedNumberFormat type="duration">
+=#,##0=;
+
+			</icu:ruleBasedNumberFormat>
+		</icu:ruleBasedNumberFormats>
+	</special>
 </ldml>

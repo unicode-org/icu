@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.1/ldml.dtd">
+<!DOCTYPE ldml SYSTEM " 	http://www.unicode.org/cldr/dtd/1.1/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " http://www.unicode.org/cldr/dtd/1.1/ldmlICU.dtd"> 
+%icu;
+]
+>
 <ldml>
 	<identity>
-		<version number="1.1"/>
-		<generation date="2004-05-27" />
+		<version number="3.0"/>
+		<generation date="2004-06-01" />
 		<language type="pl" /> 
 	</identity>
 	<localeDisplayNames>
@@ -285,6 +290,11 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[a-z ó ą ę ć ń ś ź ł ż]</exemplarCharacters>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Latn</icu:script>
+			</icu:scripts>
+		</special>
 	</characters>
 	<dates>
 		<calendars>
@@ -489,4 +499,41 @@
 			</currency>
 		</currencies>
 	</numbers>
+	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+		<icu:ruleBasedNumberFormats>
+			<icu:ruleBasedNumberFormat type="spellout">
+-x: minus &gt;&gt;;
+zero; jeden; dwa; trzy; cztery; pięć;
+sześć; siedem; osiem; dziewięć; dziesięć;
+jedenaście; dwanaście; trzynaście; czternaście; piętnaście;
+szesnaście; siedemnaście; osiemnaście; dziewiętnaście;
+20: dwadzieścia[ &gt;&gt;];
+30: trzydzieści[ &gt;&gt;];
+40: czterdzieści[ &gt;&gt;];
+50: pięćdziesiąt[ &gt;&gt;];
+60: sześćdziesiąt[ &gt;&gt;];
+70: siedemdziesiąt[ &gt;&gt;];
+80: osiemdziesiąt[ &gt;&gt;];
+90: dziewięćdziesiąt[ &gt;&gt;];
+100: sto[ &gt;&gt;];
+200: dwieście[ &gt;&gt;];
+300: trzysta[ &gt;&gt;];
+400: czterysta[ &gt;&gt;];
+500: pięćset[ &gt;&gt;];
+600: sześćset[ &gt;&gt;];
+700: siedemset[ &gt;&gt;];
+800: osiemset[ &gt;&gt;];
+900: dziewięćset[ &gt;&gt;];
+1000: tysiąc[ &gt;&gt;];
+2000: &lt;&lt; tysiący[ &gt;&gt;];
+1,000,000: milion[ &gt;&gt;];
+2,000,000: &lt;&lt; miliony[ &gt;&gt;];
+1,000,000,000: bilion[ &gt;&gt;];
+2,000,000,000: &lt;&lt; biliony[ &gt;&gt;];
+1,000,000,000,000: trylion[ &gt;&gt;];
+2,000,000,000,000: &lt;&lt; tryliony[ &gt;&gt;];
+1,000,000,000,000,000: =#,##0=;
+			</icu:ruleBasedNumberFormat>
+		</icu:ruleBasedNumberFormats>
+	</special>
 </ldml>
