@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 1996-2003, International Business Machines Corporation and
+ * Copyright (C) 1996-2004, International Business Machines Corporation and
  * others. All Rights Reserved.
  */
 package com.ibm.icu.text;
