@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD.java,v $
-* $Date: 2003/07/07 15:58:56 $
-* $Revision: 1.27 $
+* $Date: 2003/07/21 15:50:06 $
+* $Revision: 1.28 $
 *
 *******************************************************************************
 */
@@ -767,12 +767,12 @@ public final class UCD implements UCD_Types {
         return get(codePoint, false).joiningGroup;
     }
 
-    public int getBinaryProperties(int codePoint) {
+    public long getBinaryProperties(int codePoint) {
         return get(codePoint, false).binaryProperties;
     }
 
     public boolean getBinaryProperty(int codePoint, int bit) {
-        return (get(codePoint, false).binaryProperties & (1<<bit)) != 0;
+        return (get(codePoint, false).binaryProperties & (1L<<bit)) != 0;
     }
 
     // ENUM Mask Utilties
@@ -991,7 +991,7 @@ public final class UCD implements UCD_Types {
     }
 
     public String getBinaryPropertiesID(int codePoint, byte bit) {
-        return (getBinaryProperties(codePoint) & (1<<bit)) != 0 ? UCD_Names.YN_TABLE[1] : UCD_Names.YN_TABLE[0];
+        return getBinaryProperty(codePoint, bit) ? UCD_Names.YN_TABLE[1] : UCD_Names.YN_TABLE[0];
     }
 
     public static String getBinaryPropertiesID_fromIndex(byte bit) {

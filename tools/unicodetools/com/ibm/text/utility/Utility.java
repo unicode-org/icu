@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2003/07/07 15:58:56 $
-* $Revision: 1.34 $
+* $Date: 2003/07/21 15:50:07 $
+* $Revision: 1.35 $
 *
 *******************************************************************************
 */
@@ -283,8 +283,13 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
 	}
 
     public static int intFrom(String p) {
-        if (p.length() == 0) return Short.MIN_VALUE;
+        if (p.length() == 0) return Integer.MIN_VALUE;
         return Integer.parseInt(p);
+    }
+
+    public static long longFrom(String p) {
+        if (p.length() == 0) return Long.MIN_VALUE;
+        return Long.parseInt(p);
     }
 
     public static float floatFrom(String p) {

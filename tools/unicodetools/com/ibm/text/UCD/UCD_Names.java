@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Names.java,v $
-* $Date: 2003/05/02 21:46:33 $
-* $Revision: 1.21 $
+* $Date: 2003/07/21 15:50:05 $
+* $Revision: 1.22 $
 *
 *******************************************************************************
 */
@@ -18,7 +18,7 @@ import com.ibm.text.utility.*;
 
 final class UCD_Names implements UCD_Types {
     
-    public static String[][] NON_ENUMERATED = {
+    public static String[][] NON_ENUMERATED_NAMES = {
         {"na", "Name"},
         {"dm", "Decomposition_Mapping"},
         {"nv", "Numeric_Value"},
@@ -148,6 +148,8 @@ final class UCD_Names implements UCD_Types {
         "Soft_Dotted",
         "Logical_Order_Exception",
         "Other_ID_Start",
+        "Sentence_Terminal",
+        "Variation_Selector"
     };
 
     static final String[] SHORT_BP = {
@@ -183,6 +185,8 @@ final class UCD_Names implements UCD_Types {
         "SD",
         "LOE",
         "OIDS",
+        "STerm",
+        "VS"
     };
 
     /*
@@ -591,9 +595,11 @@ final class UCD_Names implements UCD_Types {
         "numeric",
         "digit",
         "decimal",
+        /*
         "Han_Primary",
         "Han_Accounting",
         "Han_Other"
+        */
     };
 
     static String[] SHORT_NT = {
@@ -601,47 +607,46 @@ final class UCD_Names implements UCD_Types {
         "nu",
         "di",
         "de",
+        /*
         "hp",
         "ha",
         "ho"
+        */
     };
 
     static {
         if (LIMIT_CATEGORY != GC.length || LIMIT_CATEGORY != LONG_GC.length) {
-            System.err.println("!! ERROR !! UnicodeTypes and UInfo out of sync: category");
+            System.err.println("!! ERROR !! Enums and Names out of sync: category");
         }
         if (LIMIT_BIDI_CLASS != BC.length) {
-            System.err.println("!! ERROR !! UnicodeTypes and UInfo out of sync: bidi");
+            System.err.println("!! ERROR !! Enums and Names out of sync: bidi");
         }
         if (LIMIT_LINE_BREAK != LB.length || LIMIT_LINE_BREAK != LONG_LB.length) {
-            System.err.println("!! ERROR !! UnicodeTypes and UInfo out of sync: linebreak");
+            System.err.println("!! ERROR !! Enums and Names out of sync: linebreak");
         }
         if (LIMIT_DECOMPOSITION_TYPE != DT.length || LIMIT_DECOMPOSITION_TYPE != SHORT_DT.length) {
-            System.err.println("!! ERROR !! UnicodeTypes and UInfo out of sync: compat type");
+            System.err.println("!! ERROR !! Enums and Names out of sync: decomp type");
         }
-        if (MIRRORED_LIMIT != MIRRORED_TABLE.length) {
-            System.err.println("!! ERROR !! UnicodeTypes and UInfo out of sync: compat type");
+        if (LIMIT_MIRRORED != MIRRORED_TABLE.length) {
+            System.err.println("!! ERROR !! Enums and Names out of sync: compat type");
         }
-        if (MIRRORED_LIMIT != MIRRORED_TABLE.length) {
-            System.err.println("!! ERROR !! UnicodeTypes and UInfo out of sync: compat type");
-        }
-        if (CASE_LIMIT != CASE_TABLE.length) {
-            System.err.println("!! ERROR !! UnicodeTypes and UInfo out of sync: case");
+        if (LIMIT_CASE != CASE_TABLE.length) {
+            System.err.println("!! ERROR !! Enums and Names out of sync: case");
         }
         if (LIMIT_NUMERIC_TYPE != NT.length) {
-            System.err.println("!! ERROR !! UnicodeTypes and UInfo out of sync: case");
+            System.err.println("!! ERROR !! Enums and Names out of sync: numeric type");
         }
         if (LIMIT_EAST_ASIAN_WIDTH != EA.length) {
-            System.err.println("!! ERROR !! UnicodeTypes and UInfo out of sync: east Asian Width");
+            System.err.println("!! ERROR !! Enums and Names out of sync: east Asian Width");
         }
         if (LIMIT_BINARY_PROPERTIES != BP.length) {
-            System.err.println("!! ERROR !! UnicodeTypes and UInfo out of sync: binary properties");
+            System.err.println("!! ERROR !! Enums and Names out of sync: binary properties");
         }
         if (LIMIT_SCRIPT != SCRIPT.length) {
-            System.err.println("!! ERROR !! UnicodeTypes and UInfo out of sync: script");
+            System.err.println("!! ERROR !! Enums and Names out of sync: script");
         }
         if (LIMIT_AGE != AGE.length) {
-            System.err.println("!! ERROR !! UnicodeTypes and UInfo out of sync: age");
+            System.err.println("!! ERROR !! Enums and Names out of sync: age");
         }
     }
 
@@ -928,6 +933,18 @@ final class UCD_Names implements UCD_Types {
         {"HANGUL", "H."},
     };
     
+    static final String[][] PROP_TYPE_NAMES = {
+        {"Numeric", "AA"},
+        {"String", "AB"},
+        {"Descriptive", "AC"},
+        {"Catalog", "AD"},
+        {"Enumerated", "AE"},
+        {"Binary", "ZX"},
+        {"Flattened Binary", "ZY"},
+        {"Unknown", "ZZ"}
+    };
+    
+
     /*
 LETTER: 23598
 MATHEMATICAL:   11976

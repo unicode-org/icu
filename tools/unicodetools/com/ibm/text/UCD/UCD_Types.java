@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Types.java,v $
-* $Date: 2003/04/03 02:29:30 $
-* $Revision: 1.23 $
+* $Date: 2003/07/21 15:50:05 $
+* $Revision: 1.24 $
 *
 *******************************************************************************
 */
@@ -15,7 +15,7 @@ package com.ibm.text.UCD;
 
 public interface UCD_Types {
     
-    public static final int dVersion = 21; // change to fix the generated file D version. If less than zero, no "d"
+    public static final int dVersion = 2; // change to fix the generated file D version. If less than zero, no "d"
     
     public static final String BASE_DIR = "C:\\DATA\\";
     public static final String UCD_DIR = BASE_DIR + "UCD\\";
@@ -34,7 +34,7 @@ public interface UCD_Types {
     	CJK_B_BASE = 0x20000,
     	CJK_B_LIMIT = 0x2A6DF+1;
     
-    static final byte BINARY_FORMAT = 8; // bumped if binary format of UCD changes
+    static final byte BINARY_FORMAT = 10; // bumped if binary format of UCD changes
     
     // Unicode Property Types
     static final byte 
@@ -45,11 +45,15 @@ public interface UCD_Types {
         ALL = (byte)-1;
         
      static final byte
-        NON_ENUMERATED = -1,
-        ENUMERATED = 0,
-        BINARY = 1,
-        FLATTENED_BINARY = 2;
-    
+        NUMERIC_PROP = 0,
+        STRING_PROP = 1,
+        DESCRIPTIVE_PROP = 2,
+        CATALOG_PROP = 3,
+        ENUMERATED_PROP = 4,
+        BINARY_PROP = 5,
+        FLATTENED_BINARY_PROP = 6,
+        UNKNOWN_PROP = 7;
+       
     /*
   0	Code value in 4-digit hexadecimal format.
   1	Unicode 2.1 Character Name. These names match exactly the
@@ -209,7 +213,9 @@ public interface UCD_Types {
         Soft_Dotted = 29,
         Logical_Order_Exception = 30,
         Other_ID_Start = 31,
-	    LIMIT_BINARY_PROPERTIES = 32;
+    Sentence_Terminal = 32,
+    Variation_Selector = 33,
+	    LIMIT_BINARY_PROPERTIES = 34;
 
 	/*
     static final int
@@ -301,13 +307,13 @@ public interface UCD_Types {
         LIMIT_DECOMPOSITION_TYPE = 18;
 
     // mirrored type
-    static final byte NO = 0, YES = 1, MIRRORED_LIMIT = 2;
+    static final byte NO = 0, YES = 1, LIMIT_MIRRORED = 2;
 
     // for QuickCheck
     static final byte QNO = 0, QMAYBE = 1, QYES = 2;
 
     // case type
-    static final byte LOWER = 0, TITLE = 1, UPPER = 2, UNCASED = 3, FOLD = 3, CASE_LIMIT = 4;
+    static final byte LOWER = 0, TITLE = 1, UPPER = 2, UNCASED = 3, FOLD = 3, LIMIT_CASE = 4;
     static final byte SIMPLE = 0, FULL = 8;
 
     // normalization type

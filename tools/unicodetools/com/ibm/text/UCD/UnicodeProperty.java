@@ -9,7 +9,7 @@ public abstract class UnicodeProperty implements UCD_Types {
     protected UCD       ucd;
     protected boolean   isStandard = true;
     protected byte      type = NOT_DERIVED;
-    private byte        valueType = BINARY;
+    private byte        valueType = BINARY_PROP;
     protected boolean   hasUnassigned = false;
     protected boolean   isBinary = true;
     protected byte      defaultValueStyle = SHORT;
@@ -114,7 +114,7 @@ public abstract class UnicodeProperty implements UCD_Types {
       public String getValue(int cp) { return getValue(cp, NORMAL); }
 
       public void setValue(byte style, String in) {
-            if (getValueType() < BINARY) throw new IllegalArgumentException("Can't set varying value: " + style);
+            if (getValueType() < BINARY_PROP) throw new IllegalArgumentException("Can't set varying value: " + style);
             if (style == NORMAL) style = defaultValueStyle;
             switch (style) {
               case LONG: valueName = Utility.getUnskeleton(in, false); break;
@@ -125,7 +125,7 @@ public abstract class UnicodeProperty implements UCD_Types {
       }
       
       public String getValue(byte style) {
-            if (getValueType() < BINARY) throw new IllegalArgumentException(
+            if (getValueType() < BINARY_PROP) throw new IllegalArgumentException(
                 "Value varies in " + getName(LONG) + "; call getValue(cp)");
             try {
                 if (style == NORMAL) style = defaultValueStyle;
@@ -144,7 +144,7 @@ public abstract class UnicodeProperty implements UCD_Types {
        * special hack for NFD/NFKD
        */
 		public String getListingValue(int cp) {
-        	if (getValueType() != BINARY) return getValue(cp, LONG);
+        	if (getValueType() != BINARY_PROP) return getValue(cp, LONG);
         	return getProperty(LONG);
 		}
       

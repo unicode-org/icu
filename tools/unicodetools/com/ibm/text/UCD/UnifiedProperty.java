@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UnifiedProperty.java,v $
-* $Date: 2003/02/25 23:38:22 $
-* $Revision: 1.3 $
+* $Date: 2003/07/21 15:50:05 $
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -63,7 +63,7 @@ public final class UnifiedProperty extends UnicodeProperty {
                 UnicodeProperty up = UnifiedProperty.make(i, ucd);
                 if (up == null) continue;
                 if (!up.isStandard()) continue;
-                if (up.getValueType() < BINARY) continue;
+                if (up.getValueType() < BINARY_PROP) continue;
                 String shortName = Utility.getSkeleton(up.getProperty(SHORT));
                 String longName = Utility.getSkeleton(up.getProperty(LONG));
                 Integer result = new Integer(i);
@@ -120,7 +120,7 @@ public final class UnifiedProperty extends UnicodeProperty {
         majorProp = propMask >> 8;
         
         //System.out.println("A: " + getValueType());
-        if (majorProp <= (JOINING_GROUP>>8) || majorProp == SCRIPT>>8) setValueType(FLATTENED_BINARY);
+        if (majorProp <= (JOINING_GROUP>>8) || majorProp == SCRIPT>>8) setValueType(FLATTENED_BINARY_PROP);
         //System.out.println("B: " + getValueType());
         
         header = UCD_Names.UNIFIED_PROPERTY_HEADERS[majorProp];

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/DerivedProperty.java,v $
-* $Date: 2003/05/02 21:46:33 $
-* $Revision: 1.21 $
+* $Date: 2003/07/21 15:50:06 $
+* $Revision: 1.22 $
 *
 *******************************************************************************
 */
@@ -230,7 +230,7 @@ public final class DerivedProperty implements UCD_Types {
         
         GenDProp (int i) {
             isStandard = false;
-            setValueType(NON_ENUMERATED);
+            setValueType(STRING_PROP);
             type = DERIVED_NORMALIZATION;
             nfx = nf[i];
             name = nfx.getName();
@@ -307,7 +307,7 @@ public final class DerivedProperty implements UCD_Types {
         Normalizer nfx;
         QuickDProp (int i) {
             // setValueType((i == NFC || i == NFKC) ? ENUMERATED : BINARY);
-            setValueType(ENUMERATED);
+            setValueType(ENUMERATED_PROP);
             type = DERIVED_NORMALIZATION;
             nfx = nf[i];
             NO = nfx.getName() + "_NO";
@@ -601,7 +601,7 @@ of characters, the first of which has a non-zero combining class.
         dprops[FC_NFKC_Closure] = new UnicodeProperty() {
             {
                 type = DERIVED_NORMALIZATION;
-                setValueType(NON_ENUMERATED);
+                setValueType(STRING_PROP);
                 name = "FC_NFKC_Closure";
                 shortName = "FC_NFKC";
                 header = "# Derived Property: " + name
@@ -626,7 +626,7 @@ of characters, the first of which has a non-zero combining class.
                 type = DERIVED_NORMALIZATION;
                 isStandard = false;
                 name = "FC_NFC_Closure";
-                setValueType(NON_ENUMERATED);
+                setValueType(STRING_PROP);
                 shortName = "FC_NFC";
                 header = "# Derived Property: " + name
                     + "\r\n#  Generated from computing: b = NFC(Fold(a)); c = NFC(Fold(b));"
@@ -656,7 +656,8 @@ of characters, the first of which has a non-zero combining class.
                 hasUnassigned = true;
                 shortName = "DI";
                 header = header = "# Derived Property: " + name
-                    + "\r\n#  Generated from Other_Default_Ignorable_Code_Point + Cf + Cc + Cs - White_Space"
+                    + "\r\n#  Generated from (Other_Default_Ignorable_Code_Point + Variation_Selector"
+                    + "\r\n#    + Noncharacter_Code_Point + Cf + Cc + Cs) - White_Space"
                     //+ "\r\n#    - U+0600..U+0603 - U+06DD - U+070F"
                ;
             }
@@ -666,6 +667,8 @@ of characters, the first of which has a non-zero combining class.
             	//if (0x0600 <= cp && cp <= 0x0603 || 0x06DD == cp || 0x070F == cp) return false;
             	
                 if (ucdData.getBinaryProperty(cp, Other_Default_Ignorable_Code_Point)) return true;
+                if (ucdData.getBinaryProperty(cp, Variation_Selector)) return true;
+                if (ucdData.getBinaryProperty(cp, Noncharacter_Code_Point)) return true;
                 byte cat = ucdData.getCategory(cp);
                 if (cat == Cf || cat == Cs || cat == Cc) return true;
                 return false;
@@ -887,7 +890,7 @@ of characters, the first of which has a non-zero combining class.
         for (int i = 0; i < dprops.length; ++i) {
             UnicodeProperty up = dprops[i];
             if (up == null) continue;
-            if (up.getValueType() != BINARY) continue;
+            if (up.getValueType() != BINARY_PROP) continue;
             up.setValue(NUMBER, "1");
             up.setValue(SHORT, "T");
             up.setValue(LONG, "True");
