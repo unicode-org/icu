@@ -54,6 +54,15 @@
 #define UCOL_EXPAND_CE_BUFFER_SIZE 64
 
 
+/* Unsafe UChar hash table table size.                                           */
+/*  size is 32 bytes for 1 bit for each latin 1 char + some power of two for     */
+/*  hashing the rest of the chars.   Size in bytes                               */
+#define UCOL_UNSAFECP_TABLE_SIZE 1056
+                                    /* mask value down to "some power of two"-1  */
+                                    /*  number of bits, not num of bytes.        */
+#define UCOL_UNSAFECP_TABLE_MASK 0x1fff    
+
+
 #define UCOL_RUNTIME_VERSION 1
 #define UCOL_BUILDER_VERSION 1
 

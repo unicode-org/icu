@@ -20,6 +20,7 @@
 */
 
 #include "ucaelems.h"
+#include "unicode/uchar.h"
 
 void uprv_uca_reverseElement(ExpansionTable *expansions, UCAElements *el) {
     int32_t i = 0;
@@ -91,7 +92,9 @@ tempUCATable * uprv_uca_initTempTable(UCATableHeader *image, UErrorCode *status)
   t->maxExpansions = (MaxExpansionTable *)uprv_malloc(
                                                    sizeof(MaxExpansionTable));
   t->maxExpansions->size = 0;
-  return t;
+  t->unsafeCP = (uint8_t *)uprv_malloc(UCOL_UNSAFECP_TABLE_SIZE);
+  uprv_memset(t->unsafeCP, 0, UCOL_UNSAFECP_TABLE_SIZE);
+ return t;
 }
 
 void uprv_uca_closeTempTable(tempUCATable *t) {
@@ -103,6 +106,7 @@ void uprv_uca_closeTempTable(tempUCATable *t) {
   uprv_free(t->maxExpansions->endExpansionCE);
   uprv_free(t->maxExpansions->expansionCESize);
   uprv_free(t->maxExpansions);
+  uprv_free(t->unsafeCP);
 
   uprv_free(t);
 }
@@ -234,6 +238,36 @@ int uprv_uca_setMaxExpansion(uint32_t           endexpansion,
   return maxexpansion->position;
 }
 
+
+static void unsafeCPSet(uint8_t *table, UChar c) {
+    uint32_t    hash;
+    uint8_t     *htByte;
+
+    hash = c;
+    if (hash >= UCOL_UNSAFECP_TABLE_SIZE*8) {
+        if (hash >= 0xd800 && hash <= 0xf8ff) {
+            /*  Part of a surrogate, or in private use area.            */
+            /*   These don't go in the table                            */
+            return;
+        }
+        hash = (hash & UCOL_UNSAFECP_TABLE_MASK) + 256;
+    }
+    htByte = &table[hash>>3];
+    *htByte |= (1 << (hash & 7));
+}
+
+
+/*  to the UnsafeCP hash table, add all chars with combining class != 0     */
+void uprv_uca_unsafeCPAddCCNZ(tempUCATable *t) {
+    UChar       c;
+    for (c=0; c<0xffff; c++) {
+        if (u_getCombiningClass(c) != 0)
+            unsafeCPSet(t->unsafeCP, c);
+    }
+}
+
+
+
 /* This adds a read element, while testing for existence */
 uint32_t uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode *status) {
   CompactIntArray *mapping = t->mapping;
@@ -280,7 +314,12 @@ uint32_t uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode
   CE = ucmp32_get(mapping, element->cPoints[0]);
 
   if(element->cSize > 1) { /* we're adding a contraction */
-    /* and we need to deal with it */
+    int32_t  i;
+    for (i=1; i<element->cSize; i++) {   /* First add contraction chars to unsafe CP hash table */
+        unsafeCPSet(t->unsafeCP, element->cPoints[i]);
+    }
+
+    /* then we need to deal with it */
     /* we could aready have something in table - or we might not */
     /* The fact is that we want to add or modify an existing contraction */
     /* and add it backwards then */
@@ -371,6 +410,7 @@ uint32_t uprv_uca_processContraction(CntTable *contractions, UCAElements *elemen
     }
 }
 
+
 UCATableHeader *uprv_uca_reassembleTable(tempUCATable *t, UCATableHeader *mD, UErrorCode *status) {
     CompactIntArray *mapping = t->mapping;
     ExpansionTable *expansions = t->expansions;
@@ -399,11 +439,16 @@ UCATableHeader *uprv_uca_reassembleTable(tempUCATable *t, UCATableHeader *mD, UE
     uint32_t tableOffset = 0;
     uint8_t *dataStart;
 
-    uint32_t toAllocate = paddedsize(sizeof(UCATableHeader))+paddedsize(expansions->position*sizeof(uint32_t))+paddedsize(mappingSize)+paddedsize(contractionsSize*(sizeof(UChar)+sizeof(uint32_t))+paddedsize(0x100*sizeof(uint32_t))  
+    uint32_t toAllocate = paddedsize(sizeof(UCATableHeader))+
+                                    paddedsize(expansions->position*sizeof(uint32_t))+
+                                    paddedsize(mappingSize)+
+                                    paddedsize(contractionsSize*(sizeof(UChar)+sizeof(uint32_t)))+
+                                    paddedsize(0x100*sizeof(uint32_t))  
                                      /* maxexpansion array */
                                      + paddedsize(maxexpansion->position * sizeof(uint32_t)) +
                                      /* maxexpansion size array */
-                                     paddedsize(maxexpansion->position * sizeof(uint8_t)));
+                                     paddedsize(maxexpansion->position * sizeof(uint8_t)) +
+                                     paddedsize(UCOL_UNSAFECP_TABLE_SIZE);
 
     if(mD == NULL) {
       dataStart = (uint8_t *)malloc(toAllocate);
@@ -463,6 +508,13 @@ UCATableHeader *uprv_uca_reassembleTable(tempUCATable *t, UCATableHeader *mD, UE
     uprv_memcpy(dataStart + tableOffset, maxexpansion->expansionCESize + 1, 
                 maxexpansion->position * sizeof(uint8_t));
     tableOffset += paddedsize(maxexpansion->position * sizeof(uint8_t));
+
+    /* Unsafe chars table.  Finish it off, then copy it. */
+    uprv_uca_unsafeCPAddCCNZ(t);
+    myData->unsafeCP = tableOffset;
+    uprv_memcpy(dataStart + tableOffset, t->unsafeCP, UCOL_UNSAFECP_TABLE_SIZE);
+    tableOffset += paddedsize(UCOL_UNSAFECP_TABLE_SIZE);
+
 
     if(tableOffset != toAllocate) {
         fprintf(stderr, "calculation screwup!!! Expected to write %i but wrote %i instead!!!\n", toAllocate, tableOffset);
