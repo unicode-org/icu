@@ -163,17 +163,17 @@ main(int argc,
         status = U_ZERO_ERROR;
         arg    = getLongPathname(argv[i]);
 
-    if (inputDir) {
-        uprv_strcpy(theCurrentFileName, inputDir);
-        uprv_strcat(theCurrentFileName, U_FILE_SEP_STRING);
-    } else {
-        *theCurrentFileName = 0;
-    }
-    uprv_strcat(theCurrentFileName, arg);
+        if (inputDir) {
+            uprv_strcpy(theCurrentFileName, inputDir);
+            uprv_strcat(theCurrentFileName, U_FILE_SEP_STRING);
+        } else {
+            *theCurrentFileName = 0;
+        }
+        uprv_strcat(theCurrentFileName, arg);
 
-    if (verbose) {
-        printf("processing file \"%s\"\n",  gCurrentFileName);
-    }
+        if (verbose) {
+            printf("processing file \"%s\"\n", theCurrentFileName);
+        }
         processFile(arg, encoding, inputDir, outputDir, &status);
     }
 
