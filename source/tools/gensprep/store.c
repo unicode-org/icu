@@ -37,27 +37,103 @@
 #define DO_DEBUG_OUT 0
 
 
-/**
-
-This is a simple Trie with the following structure
-
-16-bit USPREP sets:
-if(trieWord >= 0xFFF0){
-
-    UStringPrepType enum = value - 0xFFF0;
-
-}else{
-
-    Bit
-    0       ON:  USPREP_PROHIBITED
-    1       OFF: the next 13 bits contain the delta
-            ON: the next 13 bits contain the index into the mapping array
-    2..15   Contain the index into the mapping array or delta 
-
-}
-
-    
-*/
+/* 
+ * StringPrep profile file format ------------------------------------
+ * 
+ * The file format prepared and written here contains a 16-bit trie and a mapping table.
+ * 
+ * Before the data contents described below, there are the headers required by
+ * the udata API for loading ICU data. Especially, a UDataInfo structure
+ * precedes the actual data. It contains platform properties values and the
+ * file format version.
+ * 
+ * The following is a description of format version 2.
+ * 
+ * Data contents:
+ * 
+ * The contents is a parsed, binary form of RFC3454 and possibly
+ * NormalizationCorrections.txt depending on the options specified on the profile.
+ * 
+ * Any Unicode code point from 0 to 0x10ffff can be looked up to get
+ * the trie-word, if any, for that code point. This means that the input
+ * to the lookup are 21-bit unsigned integers, with not all of the
+ * 21-bit range used.
+ * 
+ * It is assumed that client code keeps a uint32_t pointer
+ * to the beginning of the data:
+ * 
+ *   const uint32_t *p32;
+ *
+ * *.spp files customarily begin with a UDataInfo structure, see udata.h and .c.
+ * After that there are the following structures:
+ *
+ * uint16_t indexes[_SPREP_INDEX_TOP];          -- _SPREP_INDEX_TOP=16, see enum in sprpimpl.h file
+ *
+ * UTrie stringPrepTrie;                        -- size in bytes=indexes[_SPREP_INDEX_TRIE_SIZE]
+ * 
+ * uint16_t mappingTable[];                     -- Contains the sequecence of code units that the code point maps to 
+ *                                                 size in bytes = indexes[_SPREP_INDEX_MAPPING_DATA_SIZE]
+ *
+ * The indexes array also contains the following values:
+ *
+ *  indexes[_SPREP_NORM_CORRECTNS_LAST_UNI_VERSION]  -- The index of Unicode version of last entry in NormalizationCorrections.txt 
+ *  indexes[_SPREP_ONE_UCHAR_MAPPING_INDEX_START]    -- The starting index of 1 UChar  mapping index in the mapping table 
+ *  indexes[_SPREP_TWO_UCHARS_MAPPING_INDEX_START]   -- The starting index of 2 UChars mapping index in the mapping table
+ *  indexes[_SPREP_THREE_UCHARS_MAPPING_INDEX_START] -- The starting index of 3 UChars mapping index in the mapping table
+ *  indexes[_SPREP_FOUR_UCHARS_MAPPING_INDEX_START]  -- The starting index of 4 UChars mapping index in the mapping table
+ *  indexes[_SPREP_OPTIONS]                          -- Bit set of options to turn on in the profile, e.g: USPREP_NORMALIZATION_ON, USPREP_CHECK_BIDI_ON
+ *    
+ *
+ * StringPrep Trie :
+ *
+ * The StringPrep tries is a 16-bit trie that contains data for the profile. 
+ * Each code point is associated with a value (trie-word) in the trie.
+ *
+ * - structure of data words from the trie
+ * 
+ *  i)  A value greater than _SPREP_TYPE_THRESHOLD (0xFFF0) represents the type associated with the code point
+ *      if(trieWord > _SPREP_TYPE_THRESHOLD){
+ *          type = trieWord - 0xFFF0;
+ *      }
+ *      The type can be :
+ *          USPREP_UNASSIGNED           
+ *          USPREP_PROHIBITED           
+ *          USPREP_LABEL_SEPARATOR      
+ *          USPREP_DELETE  
+ * 
+ *  ii) A value less than _SPREP_TYPE_THRESHOLD means the type is USPREP_MAP and
+ *      contains distribution described below
+ *      
+ *      0       -  ON : The code point is prohibited (USPREP_PROHIBITED)
+ *      1       -  ON : The value in the next 14 bits is an index into the mapping table
+ *                 OFF: The value in the next 14 bits is an delta value from the code point
+ *      2..15   -  Contains data as described by bit 1. If all bits are set 
+ *                 (value = _SPREP_MAX_INDEX_VALUE) then the type is USPREP_DELETE
+ *
+ *  
+ * Mapping Table:
+ * The data in mapping table is sorted according to the length of the mapping sequence.
+ * If the type of the code point is USPREP_MAP and value in trie word is an index, the index
+ * is compared with start indexes of sequence length start to figure out the length according to
+ * the following algorithm:
+ *
+ *              if(       index >= indexes[_SPREP_ONE_UCHAR_MAPPING_INDEX_START] &&
+ *                        index < indexes[_SPREP_TWO_UCHARS_MAPPING_INDEX_START]){
+ *                   length = 1;
+ *               }else if(index >= indexes[_SPREP_TWO_UCHARS_MAPPING_INDEX_START] &&
+ *                        index < indexes[_SPREP_THREE_UCHARS_MAPPING_INDEX_START]){
+ *                   length = 2;
+ *               }else if(index >= indexes[_SPREP_THREE_UCHARS_MAPPING_INDEX_START] &&
+ *                        index < indexes[_SPREP_FOUR_UCHARS_MAPPING_INDEX_START]){
+ *                   length = 3;
+ *               }else{
+ *                   // The first position in the mapping table contains the length 
+ *                   // of the sequence
+ *                   length = mappingTable[index++];
+ *        
+ *               }
+ *
+ */
 
 /* file data ---------------------------------------------------------------- */
 /* indexes[] value names */
