@@ -145,5 +145,9 @@ public class ReplaceableTest extends TestFmwk {
             chars.copy(start, limit, dest);
             styles.copy(start, limit, dest);
         }
+        
+        public boolean hasMetaData() {
+        	return true;
+        }
     }
 }
