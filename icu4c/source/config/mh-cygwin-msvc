@@ -88,11 +88,6 @@ LIBCTESTFW=	$(top_builddir)/tools/ctestfw/$(LIBICU)$(CTESTFW_STUBNAME)$(ICULIBSU
 LIBICUTOOLUTIL=	$(LIBDIR)/$(LIBICU)$(TOOLUTIL_STUBNAME)$(ICULIBSUFFIX).lib
 LIBICUIO=	$(LIBDIR)/$(LIBICU)$(IO_STUBNAME)$(ICULIBSUFFIX).lib
 
-## If we can't use the shared libraries, use the static libraries
-ifneq ($(ENABLE_SHARED),YES)
-LIBICU=$(LIBSICU)
-endif
-
 # Current full path directory.
 CURR_FULL_DIR=$(shell cygpath -wma .)
 # Current full path directory for use in source code in a -D compiler option.
