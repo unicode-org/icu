@@ -131,11 +131,11 @@ ibm-943                 Shift_JIS { MIME } csWindows31J     sjis cp943 cp932 ms_
 ibm-949                 KS_C_5601-1987 { IANA } iso-ir-149 KS_C_5601-1989 csKSC56011987 KSC_5601 { MIME } johab ks_x_1001:1992       # KSC-5601-1992, korean
 ibm-1370                Big5 { MIME     } csBig5 x-big5 cp950 # Taiwan Big-5 (w/ euro update)
 ibm-950                 # Taiwan Big-5 (w/o euro update)
-ibm-1386                GB_2312-80 { IANA } iso-ir-58 csISO58GB231280 gbk chinese gb  GB2312 { MIME } gb2312-1980 cp936 zh_cn # Chinese GBK removed
+ibm-1386                iso-ir-58 gbk chinese gb  cp936 zh_cn # Chinese GBK removed
 ibm-33722               EUC-JP { MIME } ibm-eucJP eucjis extended_unix_code_packed_format_for_japanese cseuckdfmtjapanese X-EUC-JP  # Japan EUC
 ibm-970                 EUC-KR { IANA MIME } ibm-eucKR csEUCKR                       # Korean EUC
 ibm-964                 EUC-TW { MIME } ibm-eucTW cns11643              # Taiwan EUC
-ibm-1383                EUC-CN { MIME } ibm-eucCN                       # China EUC
+ibm-1383                EUC-CN { MIME } ibm-eucCN GB_2312-80 { IANA } csISO58GB231280 GB2312 { MIME } gb2312-1980                       # China EUC
 ibm-1162                tis-620 cp874 windows-874 { MIME } ms874 cp9066 # Thai (w/ euro update)
 ibm-874                 ibm-1161 # Same as 1162 (w/o euro update)
 
