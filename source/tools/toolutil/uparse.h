@@ -83,6 +83,27 @@ u_parseCodePoints(const char *s,
                   UErrorCode *pErrorCode);
 
 /**
+ * Parse a list of code points like 0061 0308 0300
+ * into a UChar * string.
+ * s must end with either ';' or NUL.
+ *
+ * Set the first code point in *pFirst.
+ *
+ * @param s Input char * string.
+ * @param dest Output string buffer.
+ * @param destCapacity Capacity of dest in numbers of UChars.
+ * @param pFirst If pFirst!=NULL the *pFirst will be set to the first
+ *               code point in the string.
+ * @param pErrorCode ICU error code.
+ * @return The length of the string in numbers of UChars.
+ */
+U_CAPI int32_t U_EXPORT2
+u_parseString(const char *s,
+              UChar *dest, int32_t destCapacity,
+              uint32_t *pFirst,
+              UErrorCode *pErrorCode);
+
+/**
  * Parse a code point range like
  * 0085 or
  * 4E00..9FA5.
