@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NumberFormat.java,v $ 
- * $Date: 2002/10/04 19:41:02 $ 
- * $Revision: 1.16 $
+ * $Date: 2002/10/04 19:49:10 $ 
+ * $Revision: 1.17 $
  *
  *****************************************************************************************
  */
@@ -163,7 +163,7 @@ import com.ibm.icu.impl.LocaleUtility;
  *
  * see          DecimalFormat
  * see          java.text.ChoiceFormat
- * @version      $Revision: 1.16 $
+ * @version      $Revision: 1.17 $
  * @author       Mark Davis
  * @author       Helena Shih
  * @author       Alan Liu
@@ -484,13 +484,10 @@ public abstract class NumberFormat extends Format{
         public static final int FORMAT_INTEGER = INTEGERSTYLE;
 
         /**
-         * Return true if this factory will 'cover' other locales that
-         * are more specific than the ones in this factory.  E.g., if
-         * this 'covers' other locales, then by supporting the 'en'
-         * locale, this also supports 'en_US', 'en_US_ETC' and so on,
-         * even though only the 'en' locale is listed.
-         */
-        public abstract boolean covers();
+         * Return true if this factory will be visible.  Default is true.  */
+        public boolean visible() {
+            return true;
+        }
 
         /**
          * Return an unmodifiable collection of the locale names directly 
@@ -508,15 +505,19 @@ public abstract class NumberFormat extends Format{
 
     public static abstract class SimpleNumberFormatFactory extends NumberFormatFactory {
         final Set localeNames;
-        final boolean covers;
+        final boolean visible;
 
-        public SimpleNumberFormatFactory(Locale locale, boolean covers) {
+        public SimpleNumberFormatFactory(Locale locale) {
+            this(locale, true);
+        }
+        
+        public SimpleNumberFormatFactory(Locale locale, boolean visible) {
             localeNames = Collections.singleton(LocaleUtility.canonicalLocaleString(locale));
-            this.covers = covers;
+            this.visible = visible;
         }
 
-        public final boolean covers() {
-            return covers;
+        public final boolean visible() {
+            return visible;
         }
 
         public final Set getSupportedLocaleNames() {
@@ -528,7 +529,7 @@ public abstract class NumberFormat extends Format{
         private NumberFormatFactory delegate;
 
         NFFactory(NumberFormatFactory delegate) {
-            super(delegate.covers() ? VISIBLE_COVERS : VISIBLE);
+            super(delegate.visible() ? VISIBLE : INVISIBLE);
 
             this.delegate = delegate;
         }
