@@ -11,6 +11,9 @@ en_IE {
         "a.m.",
         "p.m.",
     }
+    Currencies {
+        IEP { "\u00A3","Irish Pound" } // 1922-2001
+    }
     DateTimeElements:intvector { 
         2,
         1,
