@@ -32,14 +32,6 @@ UChar* appendCompareResult(UCollationResult result, UChar* target);
 
 UChar* CharsToUChars(const char* chars);
 
-UCollationResult
-ctst_strcollTestIncremental(    const    UCollator    *coll,
-        const    UChar        *source,
-        int32_t            sourceLength,
-        const    UChar        *target,
-        int32_t            targetLength);
-
-
 void addCollAPITest(TestNode**);
 void addCurrencyTest(TestNode**);
 void addNormTest(TestNode**);
