@@ -308,3 +308,22 @@ uprv_strdup(const char *src) {
 
     return dup;
 }
+
+U_CAPI char* U_EXPORT2
+uprv_strndup(const char *src, int32_t n) {
+  size_t len;
+  char *dup;
+
+  if(n < 0) {
+    dup = uprv_strdup(src);
+  } else {
+    dup = (char*)uprv_malloc(n+1);
+    if (dup) { 
+      uprv_memcpy(dup, src, n);
+      dup[n] = 0;
+    }
+  }
+
+  return dup;
+}
+
