@@ -857,6 +857,13 @@ void UnicodeSetTest::TestCloseOver() {
         "[a\\uFF3A]",
         "[aA\\uFF3A\\uFF5A]",
 
+        CASE,
+        "[a-z]","[A-Za-z\\u017F\\u212A]",
+        CASE,
+        "[abc]","[A-Ca-c]",
+        CASE,
+        "[ABC]","[A-Ca-c]",
+
         NULL
     };
 
