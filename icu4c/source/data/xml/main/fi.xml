@@ -1,168 +1,476 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.1/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="3.0"/>
-		<generation date="2004-05-14" />
+		<version number="1.1"/>
+		<generation date="2004-05-27" />
 		<language type="fi" /> 
 	</identity>
 	<localeDisplayNames>
 		<languages>
+			<language type="aa">afar</language>
 			<language type="ab">abhaasi</language>
+			<language type="ace">aceh</language>
+			<language type="ada">adangme</language>
+			<language type="ady">adyghe</language>
 			<language type="ae">avesta</language>
-			<language type="af">afrikanhollanti</language>
-			<language type="am">amharan kieli</language>
+			<language type="af">afrikaans</language>
+			<language type="afa">muut afroaasialaiset kielet</language>
+			<language type="afh">afrihili</language>
+			<language type="ak">akan</language>
+			<language type="akk">akkadi</language>
+			<language type="ale">aleutti</language>
+			<language type="alg">algonkin-kielet</language>
+			<language type="am">amhara</language>
 			<language type="an">aragonia</language>
+			<language type="ang">muinaisenglanti</language>
+			<language type="apa">apassi</language>
 			<language type="ar">arabia</language>
+			<language type="arc">aramea</language>
+			<language type="arn">araukaani</language>
+			<language type="arp">arapaho</language>
+			<language type="art">muut tekokielet</language>
+			<language type="arw">arawak</language>
 			<language type="as">assami</language>
+			<language type="ast">astuuri</language>
+			<language type="ath">athabasca-kielet</language>
+			<language type="aus">australialaiset kielet</language>
 			<language type="av">avaari</language>
+			<language type="awa">awadhi</language>
 			<language type="ay">aimara</language>
 			<language type="az">azerbaizani</language>
 			<language type="ba">baškiiri</language>
+			<language type="bad">banda</language>
+			<language type="bai">bamileke</language>
+			<language type="bal">balutši</language>
+			<language type="bam">bambara</language>
+			<language type="ban">bali</language>
+			<language type="bas">basa</language>
+			<language type="bat">muut balttilaiset kielet</language>
 			<language type="be">valkovenäjä</language>
+			<language type="bej">bedauje</language>
+			<language type="bem">bemba</language>
+			<language type="ber">berberi</language>
 			<language type="bg">bulgaria</language>
 			<language type="bh">bihari</language>
+			<language type="bho">bhodžpuri</language>
+			<language type="bi">bislama</language>
+			<language type="bik">bicol</language>
+			<language type="bin">bini</language>
+			<language type="bla">mustajalka</language>
+			<language type="bm">bambara</language>
 			<language type="bn">bengali</language>
+			<language type="bnt">bantu</language>
 			<language type="bo">tiibet</language>
 			<language type="br">bretoni</language>
+			<language type="bra">bradž</language>
 			<language type="bs">bosnia</language>
+			<language type="btk">batakki</language>
+			<language type="bua">burjaatti</language>
+			<language type="bug">bugi</language>
+			<language type="byn">blin</language>
 			<language type="ca">katalaani</language>
+			<language type="cad">caddo</language>
+			<language type="cai">muut Keski-Amerikan intiaanikielet</language>
+			<language type="car">karib</language>
+			<language type="cau">muut kaukasialaiset kielet</language>
 			<language type="ce">tšetšeeni</language>
+			<language type="ceb">sebuano</language>
+			<language type="cel">muut kelttiläiset kielet</language>
+			<language type="ch">chamorro</language>
+			<language type="chb">chibcha</language>
+			<language type="chg">tšagatai</language>
+			<language type="chk">truk</language>
+			<language type="chm">mari</language>
+			<language type="chn">chinook</language>
+			<language type="cho">choctaw</language>
+			<language type="chp">chipewya</language>
+			<language type="chr">cherokee</language>
+			<language type="chy">cheyenne</language>
+			<language type="cmc">tšam</language>
 			<language type="co">korsika</language>
-			<language type="cs">tšekki</language>
+			<language type="cop">kopti</language>
+			<language type="cpe">pidginenglanti</language>
+			<language type="cpf">muut ranskaan perustuvat kreolit ja pidginit</language>
+			<language type="cpp">muut portugaliin perustuvat kreolit ja pidginit</language>
+			<language type="cr">cree</language>
+			<language type="crh">krimin turkki; krimin tataari</language>
+			<language type="crp">muut kreolit ja pidginit</language>
+			<language type="cs">tsekki</language>
+			<language type="csb">kashubi</language>
 			<language type="cu">kirkkoslaavi</language>
+			<language type="cus">muut kuusilaiset kielet</language>
 			<language type="cv">tšuvassi</language>
 			<language type="cy">kymri</language>
 			<language type="da">tanska</language>
+			<language type="dak">sioux</language>
+			<language type="dar">dargva</language>
+			<language type="day">dajakki</language>
 			<language type="de">saksa</language>
+			<language type="del">delaware</language>
+			<language type="den">slaavi</language>
+			<language type="dgr">dogrib</language>
+			<language type="din">dinka</language>
+			<language type="doi">dogri</language>
+			<language type="dra">muut dravidakielet</language>
+			<language type="dsb">ala-sorbi</language>
+			<language type="dua">duala</language>
+			<language type="dum">keskihollanti</language>
 			<language type="dv">malediivi</language>
+			<language type="dyu">djula</language>
 			<language type="dz">bhutani</language>
+			<language type="ee">ewe</language>
+			<language type="efi">efik</language>
+			<language type="egy">muinaisegypti</language>
+			<language type="eka">ekajuk</language>
 			<language type="el">kreikka</language>
+			<language type="elx">elami</language>
 			<language type="en">englanti</language>
+			<language type="enm">keskienglanti</language>
 			<language type="eo">esperanto</language>
 			<language type="es">espanja</language>
 			<language type="et">viro</language>
 			<language type="eu">baski</language>
+			<language type="ewo">ewondo</language>
 			<language type="fa">farsi</language>
+			<language type="fan">fang</language>
+			<language type="fat">fanti</language>
 			<language type="ff">fulani</language>
 			<language type="fi">suomi</language>
+			<language type="fiu">muut suomalais-ugrilaiset kielet</language>
 			<language type="fj">fidži</language>
 			<language type="fo">fääri</language>
+			<language type="fon">fong</language>
 			<language type="fr">ranska</language>
+			<language type="frm">keskiranska</language>
+			<language type="fro">muinaisranska</language>
+			<language type="fur">friuli</language>
 			<language type="fy">friisi</language>
 			<language type="ga">iiri</language>
+			<language type="gaa">ga</language>
+			<language type="gay">gayo</language>
+			<language type="gba">gbaja</language>
 			<language type="gd">gaeli</language>
+			<language type="gem">muut germaaniset kielet</language>
 			<language type="gez">etiopia</language>
+			<language type="gil">kiribati</language>
 			<language type="gl">galicia</language>
+			<language type="gmh">keskiyläsaksa</language>
+			<language type="gn">guarani</language>
+			<language type="goh">muinaisyläsaksa</language>
+			<language type="gon">gondi</language>
+			<language type="gor">gorontalo</language>
+			<language type="got">gootti</language>
+			<language type="grb">grebo</language>
+			<language type="grc">muinaiskreikka</language>
 			<language type="gu">gujarati</language>
 			<language type="gv">manx</language>
+			<language type="gwi">gwitşin</language>
+			<language type="ha">hausa</language>
+			<language type="hai">haida</language>
 			<language type="haw">havaiji</language>
 			<language type="he">heprea</language>
 			<language type="hi">hindi</language>
+			<language type="hil">ilongo</language>
+			<language type="him">himachali</language>
+			<language type="hit">heetti</language>
+			<language type="hmn">hmong</language>
 			<language type="ho">hiri-motu</language>
 			<language type="hr">kroaatti</language>
+			<language type="hsb">ylä-sorbi</language>
 			<language type="ht">haiti</language>
 			<language type="hu">unkari</language>
+			<language type="hup">hupa</language>
 			<language type="hy">armenia</language>
+			<language type="hz">herero</language>
+			<language type="ia">interlingua</language>
+			<language type="iba">iban</language>
 			<language type="id">indonesia</language>
+			<language type="ie">interlingue</language>
+			<language type="ig">igbo</language>
 			<language type="ii">pohjois-ji</language>
 			<language type="ik">inupiak</language>
+			<language type="ilo">iloko</language>
+			<language type="inc">muut intialaiset kielet</language>
+			<language type="ine">muut indoeurooppalaiset kielet</language>
+			<language type="inh">inguuši</language>
+			<language type="io">ido</language>
+			<language type="ira">iran</language>
+			<language type="iro">irokeesi</language>
 			<language type="is">islanti</language>
 			<language type="it">italia</language>
 			<language type="iu">eskimo</language>
 			<language type="ja">japani</language>
+			<language type="jbo">lojba</language>
+			<language type="jpr">juutalaispersia</language>
+			<language type="jrb">juutalaisarabia</language>
 			<language type="jv">jaava</language>
 			<language type="ka">georgia</language>
+			<language type="kaa">karakalpakki</language>
+			<language type="kab">kabyyli</language>
+			<language type="kac">džingpho</language>
+			<language type="kam">kamba</language>
+			<language type="kar">karen</language>
+			<language type="kaw">kavi</language>
+			<language type="kbd">kabardi</language>
+			<language type="kg">kongo</language>
+			<language type="kha">khasi</language>
+			<language type="khi">muut khoisankielet</language>
+			<language type="kho">khotani</language>
 			<language type="ki">kikuju</language>
 			<language type="kj">kuanjama</language>
 			<language type="kk">kazakki</language>
-			<language type="kl">gröönlandi</language>
+			<language type="kl">grönlanti</language>
 			<language type="km">khmer</language>
+			<language type="kmb">kimbundu</language>
 			<language type="kn">kannada</language>
 			<language type="ko">korea</language>
+			<language type="kok">konkani</language>
+			<language type="kos">kosrae</language>
+			<language type="kpe">kpelle</language>
+			<language type="kr">kanuri</language>
+			<language type="krc">karachay-balkar</language>
+			<language type="kro">kru-kielet</language>
+			<language type="kru">kurukh</language>
 			<language type="ks">kašmiri</language>
 			<language type="ku">kurdi</language>
+			<language type="kum">kumukki</language>
+			<language type="kut">kutenai</language>
+			<language type="kv">komi</language>
 			<language type="kw">korni</language>
 			<language type="ky">kirgiisi</language>
 			<language type="la">latina</language>
+			<language type="lad">juutalaisespanja</language>
+			<language type="lah">lahnda</language>
+			<language type="lam">lamba</language>
 			<language type="lb">luxemburg</language>
+			<language type="lez">lezgi</language>
+			<language type="lg">ganda</language>
 			<language type="li">limburgi</language>
 			<language type="ln">lingala</language>
 			<language type="lo">lao</language>
+			<language type="lol">mongo</language>
+			<language type="loz">lozi</language>
 			<language type="lt">liettua</language>
 			<language type="lu">katangan luba</language>
+			<language type="lua">luba</language>
+			<language type="lui">luiseno</language>
+			<language type="lun">lunda</language>
+			<language type="lus">lushai</language>
 			<language type="lv">latvia</language>
+			<language type="mad">madura</language>
+			<language type="mag">magahi</language>
+			<language type="mai">maithili</language>
+			<language type="mak">makassar</language>
+			<language type="man">mandingo</language>
+			<language type="map">austronesia</language>
+			<language type="mas">maasai</language>
+			<language type="mdf">mokša</language>
+			<language type="mdr">mandar</language>
+			<language type="men">mende</language>
 			<language type="mg">malagasi</language>
+			<language type="mga">keski-iiri</language>
 			<language type="mh">marshalli</language>
+			<language type="mi">maori</language>
+			<language type="mic">micmac</language>
+			<language type="min">minangkabau</language>
+			<language type="mis">sekalaiset kielet</language>
 			<language type="mk">makedonia</language>
+			<language type="mkh">muut mon-khmer-kielet</language>
 			<language type="ml">malajalam</language>
 			<language type="mn">mongoli</language>
+			<language type="mnc">mantšu</language>
+			<language type="mni">manipuri</language>
+			<language type="mno">manobo-kielet</language>
 			<language type="mo">moldova</language>
+			<language type="moh">mohawk</language>
+			<language type="mos">mosi</language>
 			<language type="mr">marathi</language>
 			<language type="ms">malaiji</language>
 			<language type="mt">malta</language>
+			<language type="mul">monikielinen</language>
+			<language type="mun">mundakielet</language>
+			<language type="mus">muskogi</language>
+			<language type="mwr">marwari</language>
 			<language type="my">burma</language>
+			<language type="myn">maya</language>
+			<language type="myv">ersä</language>
+			<language type="na">nauru</language>
+			<language type="nah">nahuatl</language>
+			<language type="nai">muut Pohjois-Amerikan intiaanikielet</language>
+			<language type="nap">napolin italia</language>
 			<language type="nb">kirjanorja</language>
 			<language type="nd">pohjoisndebele</language>
+			<language type="nds">alasaksa</language>
+			<language type="ne">nepali</language>
+			<language type="new">newari</language>
+			<language type="ng">ndonga</language>
+			<language type="nia">nias</language>
+			<language type="nic">muut nigeriläis-kongolaiset kielet</language>
+			<language type="niu">niue</language>
 			<language type="nl">hollanti</language>
 			<language type="nn">uusnorja</language>
 			<language type="no">norja</language>
+			<language type="nog">nogai</language>
+			<language type="non">muinaisskandinaavi</language>
 			<language type="nr">eteländebele</language>
+			<language type="nso">pedi</language>
+			<language type="nub">nuubialaiset kielet</language>
 			<language type="nv">navaho</language>
 			<language type="ny">njandža, tšewa</language>
+			<language type="nym">nyamwezi</language>
+			<language type="nyn">nyankole</language>
+			<language type="nyo">nyoro</language>
+			<language type="nzi">nzima</language>
 			<language type="oc">oksitaani, provensaali</language>
+			<language type="oj">ojibwa</language>
 			<language type="om">oromo</language>
 			<language type="or">orija</language>
 			<language type="os">osseetti</language>
+			<language type="osa">osage</language>
+			<language type="ota">osmani</language>
+			<language type="oto">otomangelaiset kielet</language>
+			<language type="pa">punjabi</language>
+			<language type="paa">muut papualaiskielet</language>
+			<language type="pag">pangasinan</language>
+			<language type="pal">pahlavi</language>
+			<language type="pam">pampanga</language>
+			<language type="pap">papiamentu</language>
+			<language type="pau">palau</language>
+			<language type="peo">muinaispersia</language>
+			<language type="phi">muut filippiiniläiskielet</language>
+			<language type="phn">foinikia</language>
+			<language type="pi">pali</language>
 			<language type="pl">puola</language>
+			<language type="pon">pohnpei</language>
+			<language type="pra">prakriitit</language>
+			<language type="pro">muinaisprovensaali</language>
 			<language type="ps">pašto</language>
 			<language type="pt">portugali</language>
 			<language type="qu">ketšua</language>
+			<language type="raj">rajasthani</language>
+			<language type="rap">rapanui</language>
+			<language type="rar">rarotonga</language>
 			<language type="rm">retoromaani</language>
+			<language type="rn">rundi</language>
 			<language type="ro">romania</language>
+			<language type="roa">muut romaaniset kielet</language>
+			<language type="rom">romani</language>
 			<language type="ru">venäjä</language>
 			<language type="rw">ruanda</language>
 			<language type="sa">sanskriitti</language>
+			<language type="sad">sandawe</language>
+			<language type="sah">jakuutti</language>
+			<language type="sai">muut Etelä-Amerikan intiaanikielet</language>
+			<language type="sal">sališ</language>
+			<language type="sam">länsiaramea</language>
+			<language type="sas">sasak</language>
+			<language type="sat">santali</language>
 			<language type="sc">sardi</language>
+			<language type="sco">skotti</language>
+			<language type="sd">sindhi</language>
 			<language type="se">pohjoissaame</language>
+			<language type="sel">selkuppi</language>
+			<language type="sem">muut seemiläiset kielet</language>
+			<language type="sg">sango</language>
+			<language type="sga">muinaisiiri</language>
+			<language type="sgn">viittomakielet</language>
 			<language type="sh">serbokroatia</language>
+			<language type="shn">šan</language>
 			<language type="si">singaleesi</language>
+			<language type="sid">sidamo</language>
+			<language type="sio">siouxilaiset kielet</language>
+			<language type="sit">muut sinotiibetiläiset kielet</language>
 			<language type="sk">slovakki</language>
 			<language type="sl">sloveeni</language>
+			<language type="sla">muut slaavilaiset kielet</language>
 			<language type="sm">samoa</language>
+			<language type="sma">eteläsaame</language>
+			<language type="smi">muut saamen kielet</language>
+			<language type="smj">luulajan saame</language>
+			<language type="smn">inarinsaame</language>
+			<language type="sms">koltansaame</language>
+			<language type="sn">shona</language>
+			<language type="snk">soninke</language>
 			<language type="so">somali</language>
+			<language type="sog">sogdi</language>
+			<language type="son">songhai</language>
 			<language type="sq">albania</language>
 			<language type="sr">serbia</language>
+			<language type="srr">serer</language>
 			<language type="ss">swazi</language>
+			<language type="ssa">muut nilosaharalaiset kielet</language>
 			<language type="st">eteläsotho</language>
 			<language type="su">sunda</language>
+			<language type="suk">sukuma</language>
+			<language type="sus">susu</language>
+			<language type="sux">sumeri</language>
 			<language type="sv">ruotsi</language>
 			<language type="sw">suahili</language>
 			<language type="syr">syyria</language>
 			<language type="ta">tamili</language>
+			<language type="tai">muut thaikielet</language>
 			<language type="te">telugu</language>
+			<language type="tem">temne</language>
+			<language type="ter">tereno</language>
+			<language type="tet">tetum</language>
 			<language type="tg">tadžikki</language>
 			<language type="th">thai</language>
 			<language type="ti">tigrinja</language>
+			<language type="tig">tigre</language>
 			<language type="tk">turkmeeni</language>
+			<language type="tkl">tokelau</language>
+			<language type="tl">tagalog</language>
+			<language type="tli">tlingit</language>
+			<language type="tmh">tamašek</language>
+			<language type="tn">tswana</language>
 			<language type="to">Tonga-saarten tonga</language>
+			<language type="tog">tonga</language>
+			<language type="tpi">tok-pisin</language>
 			<language type="tr">turkki</language>
+			<language type="ts">tsonga</language>
+			<language type="tsi">tsimshian</language>
 			<language type="tt">tataari</language>
+			<language type="tum">tumbuka</language>
+			<language type="tup">tupilaiset kielet</language>
+			<language type="tut">muut altailaiset kielet</language>
+			<language type="tvl">tuvalu</language>
+			<language type="tw">twi</language>
 			<language type="ty">tahiti</language>
+			<language type="tyv">tuviini</language>
+			<language type="udm">udmurtti</language>
+			<language type="ug">uiguuri</language>
+			<language type="uga">ugarit</language>
 			<language type="uk">ukraina</language>
+			<language type="umb">umbundu</language>
+			<language type="und">määrittelemätön</language>
 			<language type="ur">urdu</language>
 			<language type="uz">uzbekki</language>
+			<language type="ve">venda</language>
 			<language type="vi">vietnam</language>
+			<language type="vo">volapük</language>
+			<language type="vot">vatja</language>
 			<language type="wa">valloni</language>
+			<language type="wak">wakasilaiset kielet</language>
+			<language type="wal">walamo</language>
+			<language type="war">waray</language>
+			<language type="was">washo</language>
+			<language type="wen">sorbi</language>
+			<language type="wo">wolof</language>
+			<language type="xal">kalmukki</language>
 			<language type="xh">kafferi</language>
+			<language type="yao">jao</language>
+			<language type="yap">jap</language>
 			<language type="yi">jiddi</language>
 			<language type="yo">joruba</language>
+			<language type="ypk">juppik-kielet</language>
+			<language type="za">zhuang</language>
+			<language type="zap">zapoteekki</language>
+			<language type="zen">zenaga</language>
 			<language type="zh">kiina</language>
+			<language type="znd">zande</language>
+			<language type="zu">zulu</language>
+			<language type="zun">zuni</language>
 		</languages>
 		<scripts>
 			<script type="Arab">Arabialainen</script>
@@ -219,7 +527,7 @@
 			<territory type="BR">Brasilia</territory>
 			<territory type="BS">Bahama</territory>
 			<territory type="BT">Bhutan</territory>
-			<territory type="BV">Bouvet'nsaari</territory>
+			<territory type="BV">Bouvet’nsaari</territory>
 			<territory type="BW">Botswana</territory>
 			<territory type="BY">Valko-Venäjä</territory>
 			<territory type="BZ">Belize</territory>
@@ -247,7 +555,7 @@
 			<territory type="DM">Dominica</territory>
 			<territory type="DO">Dominikaaninen tasavalta</territory>
 			<territory type="DZ">Algeria</territory>
-			<territory type="EC">Equador</territory>
+			<territory type="EC">Ecuador</territory>
 			<territory type="EE">Viro</territory>
 			<territory type="EG">Egypti</territory>
 			<territory type="EH">Länsi-Sahara</territory>
@@ -304,7 +612,7 @@
 			<territory type="KM">Komorit</territory>
 			<territory type="KN">Saint Kitts ja Nevis</territory>
 			<territory type="KP">Pohjois-Korea</territory>
-			<territory type="KR">Etelä-Korea</territory>
+			<territory type="KR">Korean tasavalta</territory>
 			<territory type="KW">Kuwait</territory>
 			<territory type="KY">Caymansaaret</territory>
 			<territory type="KZ">Kazakstan</territory>
@@ -351,7 +659,7 @@
 			<territory type="NP">Nepal</territory>
 			<territory type="NR">Nauru</territory>
 			<territory type="NU">Niue</territory>
-			<territory type="NZ">Uusi Seelanti</territory>
+			<territory type="NZ">Uusi-Seelanti</territory>
 			<territory type="OM">Oman</territory>
 			<territory type="PA">Panama</territory>
 			<territory type="PE">Peru</territory>
@@ -436,12 +744,12 @@
 			<key type="currency">Valuutta</key>
 		</keys>
 		<types>
-			<type type="arabic" key="calendar">Islamilainen kalenteri</type>
-			<type type="arabic-civil" key="calendar">Islamilainen siviilikalenteri</type>
 			<type type="buddhist" key="calendar">Buddhalainen kalenteri</type>
 			<type type="chinese" key="calendar">Kiinalainen kalenteri</type>
 			<type type="gregorian" key="calendar">Gregoriaaninen kalenteri</type>
 			<type type="hebrew" key="calendar">Juutalainen kalenteri</type>
+			<type type="islamic" key="calendar">Islamilainen kalenteri</type>
+			<type type="islamic-civil" key="calendar">Islamilainen siviilikalenteri</type>
 			<type type="japanese" key="calendar">Japanilainen kalenteri</type>
 			<type type="direct" key="collation">Suora järjestys</type>
 			<type type="phonebook" key="collation">Osoitekirjajärjestys</type>
@@ -452,83 +760,10 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[a-z ä ö]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Latn</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
 		<localizedPatternChars>GanjkHmsSEDFwWxhKzAeugXZ</localizedPatternChars>
 		<calendars>
-			<calendar type="arabic">
-				<months>
-					<monthContext type="format">
-						<monthWidth type="abbreviated">
-							<month type="1">Muhárram</month>
-							<month type="2">Sáfar</month>
-							<month type="3">Rabí' al-áwwal</month>
-							<month type="4">Rabí' al-ákhir</month>
-							<month type="5">Džumada-l-úla</month>
-							<month type="6">Džumada-l-ákhira</month>
-							<month type="7">Radžab</month>
-							<month type="8">Ša'bán</month>
-							<month type="9">Ramadán</month>
-							<month type="10">Šawwal</month>
-							<month type="11">Dhu-l-qada</month>
-							<month type="12">Dhu-l-hiddža</month>
-						</monthWidth>
-						<monthWidth type="wide">
-							<month type="1">Muhárram</month>
-							<month type="2">Sáfar</month>
-							<month type="3">Rabí' al-áwwal</month>
-							<month type="4">Rabí' al-ákhir</month>
-							<month type="5">Džumada-l-úla</month>
-							<month type="6">Džumada-l-ákhira</month>
-							<month type="7">Radžab</month>
-							<month type="8">Ša'bán</month>
-							<month type="9">Ramadán</month>
-							<month type="10">Šawwal</month>
-							<month type="11">Dhu-l-qada</month>
-							<month type="12">Dhu-l-hiddža</month>
-						</monthWidth>
-					</monthContext>
-				</months>
-			</calendar>
-			<calendar type="arabic-civil">
-				<months>
-					<monthContext type="format">
-						<monthWidth type="abbreviated">
-							<month type="1">Muhárram</month>
-							<month type="2">Sáfar</month>
-							<month type="3">Rabí' al-áwwal</month>
-							<month type="4">Rabí' al-ákhir</month>
-							<month type="5">Džumada-l-úla</month>
-							<month type="6">Džumada-l-ákhira</month>
-							<month type="7">Radžab</month>
-							<month type="8">Ša'bán</month>
-							<month type="9">Ramadán</month>
-							<month type="10">Šawwal</month>
-							<month type="11">Dhu-l-qada</month>
-							<month type="12">Dhu-l-hiddža</month>
-						</monthWidth>
-						<monthWidth type="wide">
-							<month type="1">Muhárram</month>
-							<month type="2">Sáfar</month>
-							<month type="3">Rabí' al-áwwal</month>
-							<month type="4">Rabí' al-ákhir</month>
-							<month type="5">Džumada-l-úla</month>
-							<month type="6">Džumada-l-ákhira</month>
-							<month type="7">Radžab</month>
-							<month type="8">Ša'bán</month>
-							<month type="9">Ramadán</month>
-							<month type="10">Šawwal</month>
-							<month type="11">Dhu-l-qada</month>
-							<month type="12">Dhu-l-hiddža</month>
-						</monthWidth>
-					</monthContext>
-				</months>
-			</calendar>
 			<calendar type="gregorian">
 				<months>
 					<monthContext type="format">
@@ -547,7 +782,18 @@
 							<month type="12">joulu</month>
 						</monthWidth>
 						<monthWidth type="narrow">
-							<month type="1">THMHTKHESLMJ</month>
+							<month type="1">T</month>
+							<month type="2">H</month>
+							<month type="3">M</month>
+							<month type="4">H</month>
+							<month type="5">T</month>
+							<month type="6">K</month>
+							<month type="7">H</month>
+							<month type="8">E</month>
+							<month type="9">S</month>
+							<month type="10">L</month>
+							<month type="11">M</month>
+							<month type="12">J</month>
 						</monthWidth>
 						<monthWidth type="wide">
 							<month type="1">tammikuu</month>
@@ -600,6 +846,14 @@
 					<minDays count="4"/>
 					<firstDay day="mon"/>
 				</week>
+				<am>ap.</am>
+				<pm>ip.</pm>
+				<eras>
+					<eraAbbr>
+						<era type="1">eaa.</era>
+						<era type="2">jaa.</era>
+					</eraAbbr>
+				</eras>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">
@@ -690,7 +944,396 @@
 					</monthContext>
 				</months>
 			</calendar>
+			<calendar type="islamic">
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">Muhárram</month>
+							<month type="2">Sáfar</month>
+							<month type="3">Rabíʻ al-áwwal</month>
+							<month type="4">Rabíʻ al-ákhir</month>
+							<month type="5">Džumada-l-úla</month>
+							<month type="6">Džumada-l-ákhira</month>
+							<month type="7">Radžab</month>
+							<month type="8">Šaʻbán</month>
+							<month type="9">Ramadán</month>
+							<month type="10">Šawwal</month>
+							<month type="11">Dhu-l-qada</month>
+							<month type="12">Dhu-l-hiddža</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">Muhárram</month>
+							<month type="2">Sáfar</month>
+							<month type="3">Rabíʻ al-áwwal</month>
+							<month type="4">Rabíʻ al-ákhir</month>
+							<month type="5">Džumada-l-úla</month>
+							<month type="6">Džumada-l-ákhira</month>
+							<month type="7">Radžab</month>
+							<month type="8">Šaʻbán</month>
+							<month type="9">Ramadán</month>
+							<month type="10">Šawwal</month>
+							<month type="11">Dhu-l-qada</month>
+							<month type="12">Dhu-l-hiddža</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+			</calendar>
+			<calendar type="islamic-civil">
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">Muhárram</month>
+							<month type="2">Sáfar</month>
+							<month type="3">Rabíʻ al-áwwal</month>
+							<month type="4">Rabíʻ al-ákhir</month>
+							<month type="5">Džumada-l-úla</month>
+							<month type="6">Džumada-l-ákhira</month>
+							<month type="7">Radžab</month>
+							<month type="8">Šaʻbán</month>
+							<month type="9">Ramadán</month>
+							<month type="10">Šawwal</month>
+							<month type="11">Dhu-l-qada</month>
+							<month type="12">Dhu-l-hiddža</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">Muhárram</month>
+							<month type="2">Sáfar</month>
+							<month type="3">Rabíʻ al-áwwal</month>
+							<month type="4">Rabíʻ al-ákhir</month>
+							<month type="5">Džumada-l-úla</month>
+							<month type="6">Džumada-l-ákhira</month>
+							<month type="7">Radžab</month>
+							<month type="8">Šaʻbán</month>
+							<month type="9">Ramadán</month>
+							<month type="10">Šawwal</month>
+							<month type="11">Dhu-l-qada</month>
+							<month type="12">Dhu-l-hiddža</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+			</calendar>
 		</calendars>
+		<timeZoneNames>
+			<zone type="PST">
+				<long>
+				<standard>Tyynenmeren normaaliaika</standard>
+				<daylight>Tyynenmeren kesäaika</daylight>
+				</long>
+				<short>
+					<standard>PST</standard>
+					<daylight>PDT</daylight>
+				</short>
+				<exemplarCity>Los Angeles</exemplarCity>
+			</zone>
+			<zone type="America/Los_Angeles">
+				<long>
+				<standard>Tyynenmeren normaaliaika</standard>
+				<daylight>Tyynenmeren kesäaika</daylight>
+				</long>
+				<short>
+					<standard>PST</standard>
+					<daylight>PDT</daylight>
+				</short>
+				<exemplarCity>Los Angeles</exemplarCity>
+			</zone>
+			<zone type="MST">
+				<long>
+				<standard>Kalliovuorten normaaliaika</standard>
+				<daylight>Kalliovuorten kesäaika</daylight>
+				</long>
+				<short>
+					<standard>MST</standard>
+					<daylight>MDT</daylight>
+				</short>
+				<exemplarCity>Denver</exemplarCity>
+			</zone>
+			<zone type="America/Denver">
+				<long>
+				<standard>Kalliovuorten normaaliaika</standard>
+				<daylight>Kalliovuorten kesäaika</daylight>
+				</long>
+				<short>
+					<standard>MST</standard>
+					<daylight>MDT</daylight>
+				</short>
+				<exemplarCity>Denver</exemplarCity>
+			</zone>
+			<zone type="PNT">
+				<long>
+				<standard>Kalliovuorten normaaliaika</standard>
+				<daylight>Kalliovuorten normaaliaika</daylight>
+				</long>
+				<short>
+					<standard>MST</standard>
+					<daylight>MST</daylight>
+				</short>
+				<exemplarCity>Phoenix</exemplarCity>
+			</zone>
+			<zone type="America/Phoenix">
+				<long>
+				<standard>Kalliovuorten normaaliaika</standard>
+				<daylight>Kalliovuorten normaaliaika</daylight>
+				</long>
+				<short>
+					<standard>MST</standard>
+					<daylight>MST</daylight>
+				</short>
+				<exemplarCity>Phoenix</exemplarCity>
+			</zone>
+			<zone type="CST">
+				<long>
+				<standard>Keskinen normaaliaika</standard>
+				<daylight>Keskinen kesäaika</daylight>
+				</long>
+				<short>
+					<standard>CST</standard>
+					<daylight>CDT</daylight>
+				</short>
+				<exemplarCity>Chicago</exemplarCity>
+			</zone>
+			<zone type="America/Chicago">
+				<long>
+				<standard>Keskinen normaaliaika</standard>
+				<daylight>Keskinen kesäaika</daylight>
+				</long>
+				<short>
+					<standard>CST</standard>
+					<daylight>CDT</daylight>
+				</short>
+				<exemplarCity>Chicago</exemplarCity>
+			</zone>
+			<zone type="EST">
+				<long>
+				<standard>Itäinen normaaliaika</standard>
+				<daylight>Itäinen kesäaika</daylight>
+				</long>
+				<short>
+					<standard>EST</standard>
+					<daylight>EDT</daylight>
+				</short>
+				<exemplarCity>New York</exemplarCity>
+			</zone>
+			<zone type="America/New_York">
+				<long>
+				<standard>Itäinen normaaliaika</standard>
+				<daylight>Itäinen kesäaika</daylight>
+				</long>
+				<short>
+					<standard>EST</standard>
+					<daylight>EDT</daylight>
+				</short>
+				<exemplarCity>New York</exemplarCity>
+			</zone>
+			<zone type="IET">
+				<long>
+				<standard>Itäinen normaaliaika</standard>
+				<daylight>Itäinen normaaliaika</daylight>
+				</long>
+				<short>
+					<standard>EST</standard>
+					<daylight>EST</daylight>
+				</short>
+				<exemplarCity>Indianapolis</exemplarCity>
+			</zone>
+			<zone type="America/Indianapolis">
+				<long>
+				<standard>Itäinen normaaliaika</standard>
+				<daylight>Itäinen normaaliaika</daylight>
+				</long>
+				<short>
+					<standard>EST</standard>
+					<daylight>EST</daylight>
+				</short>
+				<exemplarCity>Indianapolis</exemplarCity>
+			</zone>
+			<zone type="HST">
+				<long>
+				<standard>Havaijin normaaliaika</standard>
+				<daylight>Havaijin kesäaika</daylight>
+				</long>
+				<short>
+					<standard>HST</standard>
+					<daylight>HST</daylight>
+				</short>
+				<exemplarCity>Honolulu</exemplarCity>
+			</zone>
+			<zone type="Pacific/Honolulu">
+				<long>
+				<standard>Havaijin normaaliaika</standard>
+				<daylight>Havaijin normaaliaika</daylight>
+				</long>
+				<short>
+					<standard>HST</standard>
+					<daylight>HST</daylight>
+				</short>
+				<exemplarCity>Honolulu</exemplarCity>
+			</zone>
+			<zone type="AST">
+				<long>
+				<standard>Alaskan normaaliaika</standard>
+				<daylight>Alaskan kesäaika</daylight>
+				</long>
+				<short>
+					<standard>AST</standard>
+					<daylight>ADT</daylight>
+				</short>
+				<exemplarCity>Anchorage</exemplarCity>
+			</zone>
+			<zone type="America/Anchorage">
+				<long>
+				<standard>Alaskan normaaliaika</standard>
+				<daylight>Alaskan kesäaika</daylight>
+				</long>
+				<short>
+					<standard>AST</standard>
+					<daylight>ADT</daylight>
+				</short>
+				<exemplarCity>Anchorage</exemplarCity>
+			</zone>
+			<zone type="America/Halifax">
+				<long>
+				<standard>Atlantin normaaliaika</standard>
+				<daylight>Atlantin kesäaika</daylight>
+				</long>
+				<short>
+					<standard>AST</standard>
+					<daylight>ADT</daylight>
+				</short>
+				<exemplarCity>Halifax</exemplarCity>
+			</zone>
+			<zone type="CNT">
+				<long>
+				<standard>Newfoundlandin normaaliaika</standard>
+				<daylight>Newfoundlandin kesäaika</daylight>
+				</long>
+				<short>
+					<standard>CNT</standard>
+					<daylight>CDT</daylight>
+				</short>
+				<exemplarCity>St. Johns</exemplarCity>
+			</zone>
+			<zone type="America/St_Johns">
+				<long>
+				<standard>Newfoundlandin normaaliaika</standard>
+				<daylight>Newfoundlandin kesäaika</daylight>
+				</long>
+				<short>
+					<standard>CNT</standard>
+					<daylight>CDT</daylight>
+				</short>
+				<exemplarCity>St. Johns</exemplarCity>
+			</zone>
+			<zone type="ECT">
+				<long>
+				<standard>Keski-Euroopan normaaliaika</standard>
+				<daylight>Keski-Euroopan kesäaika</daylight>
+				</long>
+				<short>
+					<standard>CET</standard>
+					<daylight>CEST</daylight>
+				</short>
+				<exemplarCity>Pariisi</exemplarCity>
+			</zone>
+			<zone type="Europe/Paris">
+				<long>
+				<standard>Keski-Euroopan normaaliaika</standard>
+				<daylight>Keski-Euroopan kesäaika</daylight>
+				</long>
+				<short>
+					<standard>CET</standard>
+					<daylight>CEST</daylight>
+				</short>
+				<exemplarCity>Pariisi</exemplarCity>
+			</zone>
+			<zone type="GMT">
+				<long>
+				<standard>Greenwichin aika</standard>
+				<daylight>Greenwichin aika</daylight>
+				</long>
+				<short>
+					<standard>GMT</standard>
+					<daylight>GMT</daylight>
+				</short>
+				<exemplarCity>Lontoo</exemplarCity>
+			</zone>
+			<zone type="Africa/Casablanca">
+				<long>
+				<standard>Greenwichin aika</standard>
+				<daylight>Greenwichin aika</daylight>
+				</long>
+				<short>
+					<standard>GMT</standard>
+					<daylight>GMT</daylight>
+				</short>
+				<exemplarCity>Casablanca</exemplarCity>
+			</zone>
+			<zone type="Asia/Jerusalem">
+				<long>
+				<standard>Israelin normaaliaika</standard>
+				<daylight>Israelin kesäaika</daylight>
+				</long>
+				<short>
+					<standard>IST</standard>
+					<daylight>IDT</daylight>
+				</short>
+				<exemplarCity>Jerusalem</exemplarCity>
+			</zone>
+			<zone type="JST">
+				<long>
+				<standard>Japanin normaaliaika</standard>
+				<daylight>Japanin normaaliaika</daylight>
+				</long>
+				<short>
+					<standard>JST</standard>
+					<daylight>JST</daylight>
+				</short>
+				<exemplarCity>Tokio</exemplarCity>
+			</zone>
+			<zone type="Asia/Tokyo">
+				<long>
+				<standard>Japanin normaaliaika</standard>
+				<daylight>Japanin normaaliaika</daylight>
+				</long>
+				<short>
+					<standard>JST</standard>
+					<daylight>JST</daylight>
+				</short>
+				<exemplarCity>Tokio</exemplarCity>
+			</zone>
+			<zone type="Europe/Bucharest">
+				<long>
+				<standard>Itä-Euroopan normaaliaika</standard>
+				<daylight>Itä-Euroopan kesäaika</daylight>
+				</long>
+				<short>
+					<standard>EET</standard>
+					<daylight>EEST</daylight>
+				</short>
+				<exemplarCity>Bukarest</exemplarCity>
+			</zone>
+			<zone type="CTT">
+				<long>
+				<standard>Kiinan normaaliaika</standard>
+				<daylight>Kiinan normaaliaika</daylight>
+				</long>
+				<short>
+					<standard>CTT</standard>
+					<daylight>CDT</daylight>
+				</short>
+				<exemplarCity>Shanghai</exemplarCity>
+			</zone>
+			<zone type="Asia/Shanghai">
+				<long>
+				<standard>Kiinan normaaliaika</standard>
+				<daylight>Kiinan normaaliaika</daylight>
+				</long>
+				<short>
+					<standard>CTT</standard>
+					<daylight>CDT</daylight>
+				</short>
+				<exemplarCity>Shanghai</exemplarCity>
+			</zone>
+		</timeZoneNames>
 	</dates>
 	<numbers>
 		<symbols>
@@ -1933,7 +2576,7 @@
 				<symbol>TND</symbol>
 			</currency>
 			<currency type="TOP">
-				<displayName>Tongan pa´anga</displayName>
+				<displayName>Tongan paʻanga</displayName>
 				<symbol>T$</symbol>
 			</currency>
 			<currency type="TOS">
@@ -2151,10 +2794,6 @@
 			<currency type="XPF">
 				<displayName>CFP-frangi</displayName>
 				<symbol>CFPF</symbol>
-			</currency>
-			<currency type="XPS">
-				<displayName>sterling-punta</displayName>
-				<symbol>XPS</symbol>
 			</currency>
 			<currency type="XSS">
 				<displayName>sterling-shillinki</displayName>

@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.1/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="2.0"/>
-		<generation date="2004-05-14" />
+		<version number="1.1"/>
+		<generation date="2004-05-27" />
 		<language type="ja" /> 
 	</identity>
 	<localeDisplayNames>
@@ -35,10 +30,13 @@
 			<language type="bo">チベット語</language>
 			<language type="br">ブルトン語</language>
 			<language type="bs">ボスニア語</language>
+			<language type="byn">ビリン語</language>
 			<language type="ca">カタロニア語</language>
 			<language type="ce">チェチェン語</language>
 			<language type="ch">チャモロ語</language>
+			<language type="chr">チェロキー語</language>
 			<language type="co">コルシカ語</language>
+			<language type="cr">クリー語</language>
 			<language type="cs">チェコ語</language>
 			<language type="cu">教会スラブ語</language>
 			<language type="cv">チュヴァシュ語</language>
@@ -99,6 +97,7 @@
 			<language type="km">カンボジア語</language>
 			<language type="kn">カンナダ語</language>
 			<language type="ko">韓国語</language>
+			<language type="kok">コンカニ語</language>
 			<language type="kr">カヌリ語</language>
 			<language type="ks">カシミール語</language>
 			<language type="ku">クルド語</language>
@@ -136,7 +135,7 @@
 			<language type="nr">南ンデベレ語</language>
 			<language type="nv">ナバホ語</language>
 			<language type="ny">ニャンジャ語、チチェワ語、チェワ語</language>
-			<language type="oc">プロバンス語</language>
+			<language type="oc">プロヴァンス語</language>
 			<language type="oj">オブジワ語</language>
 			<language type="om">ガラ語</language>
 			<language type="or">オリヤー語</language>
@@ -168,7 +167,7 @@
 			<language type="sq">アルバニア語</language>
 			<language type="sr">セルビア語</language>
 			<language type="ss">シスワティ語</language>
-			<language type="st">セソト語</language>
+			<language type="st">南セソト語</language>
 			<language type="su">スンダ語</language>
 			<language type="sv">スウェーデン語</language>
 			<language type="sw">スワヒリ語</language>
@@ -187,6 +186,7 @@
 			<language type="ts">ツォンガ語</language>
 			<language type="tt">タタール語</language>
 			<language type="tw">トゥイ語</language>
+			<language type="ty">タヒチ語</language>
 			<language type="ug">ウイグル語</language>
 			<language type="uk">ウクライナ語</language>
 			<language type="ur">ウルドゥー語</language>
@@ -526,13 +526,6 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[一-丁七万-下不-与且世丘-丙両並中丸-丹主久乏乗乙九乱乳乾了予-争事-二互五-井亜亡交享-亭人仁今-介仏仕-他付-仙代-以仮仰仲件任企伏-休会伝伯伴伸伺似但位-佐体何余作佳併使例侍供依価侮-侯侵便係-促俊俗保信修俳俵俸倉個倍倒候借倣-値倫倹偉偏停健側-偶偽傍傑傘-備催債傷傾働像僕僚僧儀億儒償優元-兆先-光克免児党入全八-六共兵具-典兼内-円冊再冒冗写冠冬冷准凍凝凡処凶凸-出刀刃分-刈刊刑列初判-別利到制-券刺-刻則削前剖剛剣-剤副-剰割創劇力功-加劣助-努励労効劾勅勇勉動勘-務勝募勢勤勧勲勺匁包化-北匠匹-医匿十千升-午半卑-協南-単博占印-危即-卵卸厄厘厚原厳去参又及-収叔取-受叙口-句叫-召可-台史-右号-司各合-吉同-向君吟否含吸-吹呈-告周味呼-命和咲哀-品員哲唆-唇唐唯唱商問啓善喚喜-喝喪-喫営嗣嘆嘱器噴嚇囚-四回因団困囲-図固国圏園土圧-在地坂均坊坑坪垂型垣埋城域執培-基堀堂堅堕堤堪報場塀-塁塊塑塔塗塚塩塾境墓増墜墨墳墾壁壇壊壌士壮声-売変夏夕-外多夜夢大天-夫央失奇奉奏契奔奥奨奪奮女-奴好如-妄妊妙妥妨妹妻姉始姓-委姫姻姿威娘娠娯婆婚婦婿媒嫁嫌嫡嬢子孔字-存孝季-孤学孫宅宇-安完宗-定宜-宝実客-室宮宰害-家容宿寂寄密富寒寛寝察寡寧審寮寸寺対-寿封-専射将尉-尋導-小少尚就尺尼-局居屈届-屋展属層-履屯山岐岩岬岳岸峠-峡峰島崇崎崩川-州巡巣工-巨差己巻市-布帆希帝帥師席帯-帰帳常帽幅幕幣干-年幸-幹幻-幾庁広床序底店府度-座庫庭庶-庸廃廉-廊延-廷建弁弊式-弐弓-引弟弦-弧弱張強弾当形彩彫彰-影役彼往-征径-待律-後徐徒-従得御復-循微徳-徴徹心必忌-忍志-忙応忠快念怒怖思怠急性怪恋恐恒恥恨-恩恭息恵悔悟-悠患悦悩-悪悲悼情惑惜惨惰想愁愉意愚-愛感慈態-慌慎慕慢-慣慨慮慰慶憂憎憤憩憲憶憾懇懐懲懸成-戒戦戯戸戻房-所扇扉手才打払扱扶批承-技抄把抑投抗-折抜択披抱抵抹押-抽担拍拐拒-拓拘-拙招拝拠-拡括拷拾持指挑挙挟振挿捕捜捨据掃授掌排掘掛採-探接控-推措掲描-提揚-換握揮援揺損搬-搭携搾摂摘摩撃撤撮撲擁操擦擬支改攻放-政故敏救敗教敢-散敬数整-敵敷文斉斎斗料斜斤-斥断新方施旅旋族旗既日旧-早旬昆-昇明易-昔星-映春昨昭是昼時晩普-景晴晶暁暇暑暖-暗暦暫暮暴曇曜曲更書-曹替-最月-有服朕朗望朝期木未-札朱朴机朽杉材-村束条来杯東松-板析林枚果-枝枠枢枯架柄某染-柔柱柳査栄栓校株核-根格-栽桃案桑桜桟梅械棄棋棒棚棟森棺植検業極楼-楽概構様槽標模権-横樹橋機欄欠-次欧欲欺款歌歓止-正武歩歯歳-歴死殉-残殖殴-段殺-殻殿母-毎毒比毛氏民気水氷-永汁-求汗汚江-池決汽沈沖没-沢河沸-油治-沼沿況泉-泊泌法泡-泣泥注泰泳洋洗洞津洪活派流浄-浅浜浦浪浮浴海-浸消涙涯液涼淑淡深混添清渇-渉渋渓減渡渦温測港湖湯湾-満源準溝溶滅滋滑滝-滞滴漁-漂漆漏演漠漢漫-漬漸潔潜潟潤潮澄激-濁濃濫濯瀬火灯-灰災炉-炊炎炭点-為烈無焦然焼煙照煩煮熟熱燃燥爆爵-父片-版牛牧物牲特犠犬犯状狂狩独-狭猛猟猫献猶猿獄獣獲玄率玉王珍珠班現球理琴環璽瓶甘甚生産用田-申男町-画界畑畔留畜-畝略番異畳疎疑疫疲疾病症痘痛痢痴療癒癖発-登白-百的皆-皇皮皿盆益盗盛盟監-盤目盲直相盾省看-県真-眠眺眼着睡督瞬矛矢知短矯石砂研-砕砲破硝硫-硬碁碑確磁磨礁礎示礼社祈-祉祖祝-神祥票祭禁禅禍福秀-私秋科-秒秘租秩称移程税稚種稲稼稿-穀穂積穏穫穴究空突窃窒-窓窮-窯立竜章童端競竹笑笛符第筆等筋筒答策箇算管箱節範築篤簡簿籍米粉粋粒粗-粘粛粧精糖糧糸系糾紀約-紅紋納純紙-紛素-索紫累-細紳紹-紺終組経結絞絡給統絵-絶絹継-続維綱-網綿緊総緑-緒線締編-緩緯練縁縄縛縦縫縮績繁繊織-繕繭繰缶罪置罰署罷羅羊美群義羽翁翌習翻-翼老考者耐耕耗耳聖聞聴職肉肌肖肝肢肥肩-肪肯育肺胃胆背胎胞胴胸能脂脅脈脚脱脳脹腐腕腰腸-腹膚膜膨臓臣臨自臭至-致興舌舎舗舞-舟航般舶船艇艦良色芋芝花芳芸芽苗若-苦英茂茎茶草荒荘荷菊菌菓菜華落葉著葬蒸蓄蔵薄薦薪-薬藩藻虐虚虜虞虫蚊蚕蛇蛍蛮融血衆行術街衛衝衡衣表衰衷袋被裁-裂装裏裕補裸製複褐褒襟襲西要覆-覇見規視覚覧親観角解触言訂計討訓託-記訟訪設許訳-訴診証詐詔-評詞詠試詩詰-詳誇誉誌-認誓誕誘語誠誤説-読課調談請論諭-諮諸諾謀-謁謄謙講謝謡謹識譜警議譲護谷豆豊豚象豪貝-貞負-貢貧-販貫-責貯貴買-貸費貿-賀賃-賄資賊賓賛-賜賞賠賢賦質購贈赤赦走赴起超越趣足距跡路跳践踊踏躍身車軌-軍軒軟転軸軽較載輝輩-輪輸轄辛辞辱-農辺込迅迎近返迫迭述迷追退-送逃逆透-逐逓-途通逝速-造連逮週-進逸遂遅遇遊-運遍-過道-違遠遣適遭-遮遵遷-選遺避還邦邪邸郊郎郡部郭郵郷都酌-配酒酔酢酪酬酵酷-酸醜醸釈里-量金針釣鈍鈴鉄鉛鉢鉱銀銃銅銑銘銭鋭鋳鋼錘錠錬錯録鍛鎖鎮鏡鐘鑑長門閉開閑間関-閣閥閲闘防阻附降限陛院-陥陪陰陳陵-陶陸険陽隅-隆隊階-随隔際-障隠隣隷隻雄-雇雌雑離-難雨雪雰雲零-雷電需震霊霜霧露青静非面革靴音韻響頂項-順預-頒領頭頻-頼題-額顔-顕願類顧風飛食飢飯飲飼-飾養餓館首香馬駄-駆駐騎騒-験騰驚骨髄高髪鬼魂魅魔魚鮮鯨鳥鳴鶏麗麦麻黄黒黙鼓鼻齢]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Kana</icu:script>
-				<icu:script type="2">Hira</icu:script>
-				<icu:script type="3">Hani</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
 		<localizedPatternChars>GanjkHmsSEDFwWxhKzAeugXZ</localizedPatternChars>
@@ -946,6 +939,281 @@
 			</calendar>
 		</calendars>
 		<timeZoneNames>
+			<zone type="PST">
+				<long>
+				<standard>太平洋標準時</standard>
+				<daylight>太平洋夏時間</daylight>
+				</long>
+				<short>
+					<standard>PST</standard>
+					<daylight>PDT</daylight>
+				</short>
+				<exemplarCity>ロサンゼルス</exemplarCity>
+			</zone>
+			<zone type="America/Los_Angeles">
+				<long>
+				<standard>太平洋標準時</standard>
+				<daylight>太平洋夏時間</daylight>
+				</long>
+				<short>
+					<standard>PST</standard>
+					<daylight>PDT</daylight>
+				</short>
+				<exemplarCity>ロサンゼルス</exemplarCity>
+			</zone>
+			<zone type="MST">
+				<long>
+				<standard>山地標準時</standard>
+				<daylight>山地夏時間</daylight>
+				</long>
+				<short>
+					<standard>MST</standard>
+					<daylight>MDT</daylight>
+				</short>
+				<exemplarCity>デンバー</exemplarCity>
+			</zone>
+			<zone type="America/Denver">
+				<long>
+				<standard>山地標準時</standard>
+				<daylight>山地夏時間</daylight>
+				</long>
+				<short>
+					<standard>MST</standard>
+					<daylight>MDT</daylight>
+				</short>
+				<exemplarCity>デンバー</exemplarCity>
+			</zone>
+			<zone type="PNT">
+				<long>
+				<standard>山地標準時</standard>
+				<daylight>山地標準時</daylight>
+				</long>
+				<short>
+					<standard>MST</standard>
+					<daylight>MST</daylight>
+				</short>
+				<exemplarCity>フェニックス</exemplarCity>
+			</zone>
+			<zone type="America/Phoenix">
+				<long>
+				<standard>山地標準時</standard>
+				<daylight>山地標準時</daylight>
+				</long>
+				<short>
+					<standard>MST</standard>
+					<daylight>MST</daylight>
+				</short>
+				<exemplarCity>フェニックス</exemplarCity>
+			</zone>
+			<zone type="CST">
+				<long>
+				<standard>中部標準時</standard>
+				<daylight>中部夏時間</daylight>
+				</long>
+				<short>
+					<standard>CST</standard>
+					<daylight>CDT</daylight>
+				</short>
+				<exemplarCity>シカゴ</exemplarCity>
+			</zone>
+			<zone type="America/Chicago">
+				<long>
+				<standard>中部標準時</standard>
+				<daylight>中部夏時間</daylight>
+				</long>
+				<short>
+					<standard>CST</standard>
+					<daylight>CDT</daylight>
+				</short>
+				<exemplarCity>シカゴ</exemplarCity>
+			</zone>
+			<zone type="EST">
+				<long>
+				<standard>東部標準時</standard>
+				<daylight>東部夏時間</daylight>
+				</long>
+				<short>
+					<standard>EST</standard>
+					<daylight>EDT</daylight>
+				</short>
+				<exemplarCity>ニューヨーク</exemplarCity>
+			</zone>
+			<zone type="America/New_York">
+				<long>
+				<standard>東部標準時</standard>
+				<daylight>東部夏時間</daylight>
+				</long>
+				<short>
+					<standard>EST</standard>
+					<daylight>EDT</daylight>
+				</short>
+				<exemplarCity>ニューヨーク</exemplarCity>
+			</zone>
+			<zone type="IET">
+				<long>
+				<standard>東部標準時</standard>
+				<daylight>東部標準時</daylight>
+				</long>
+				<short>
+					<standard>EST</standard>
+					<daylight>EST</daylight>
+				</short>
+				<exemplarCity>インディアナポリス</exemplarCity>
+			</zone>
+			<zone type="America/Indianapolis">
+				<long>
+				<standard>東部標準時</standard>
+				<daylight>東部標準時</daylight>
+				</long>
+				<short>
+					<standard>EST</standard>
+					<daylight>EST</daylight>
+				</short>
+				<exemplarCity>インディアナポリス</exemplarCity>
+			</zone>
+			<zone type="HST">
+				<long>
+				<standard>ハワイ標準時</standard>
+				<daylight>ハワイ標準時</daylight>
+				</long>
+				<short>
+					<standard>HST</standard>
+					<daylight>HST</daylight>
+				</short>
+				<exemplarCity>ホノルル</exemplarCity>
+			</zone>
+			<zone type="Pacific/Honolulu">
+				<long>
+				<standard>ハワイ標準時</standard>
+				<daylight>ハワイ標準時</daylight>
+				</long>
+				<short>
+					<standard>HST</standard>
+					<daylight>HST</daylight>
+				</short>
+				<exemplarCity>ホノルル</exemplarCity>
+			</zone>
+			<zone type="AST">
+				<long>
+				<standard>アラスカ標準時</standard>
+				<daylight>アラスカ夏時間</daylight>
+				</long>
+				<short>
+					<standard>AST</standard>
+					<daylight>ADT</daylight>
+				</short>
+				<exemplarCity>アンカレッジ</exemplarCity>
+			</zone>
+			<zone type="America/Anchorage">
+				<long>
+				<standard>アラスカ標準時</standard>
+				<daylight>アラスカ夏時間</daylight>
+				</long>
+				<short>
+					<standard>AST</standard>
+					<daylight>ADT</daylight>
+				</short>
+				<exemplarCity>アンカレッジ</exemplarCity>
+			</zone>
+			<zone type="America/Halifax">
+				<long>
+				<standard>大西洋標準時</standard>
+				<daylight>大西洋夏時間</daylight>
+				</long>
+				<short>
+					<standard>AST</standard>
+					<daylight>ADT</daylight>
+				</short>
+				<exemplarCity>ハリファクス</exemplarCity>
+			</zone>
+			<zone type="CNT">
+				<long>
+				<standard>ニューファンドランド島標準時</standard>
+				<daylight>ニューファンドランド島夏時間</daylight>
+				</long>
+				<short>
+					<standard>CNT</standard>
+					<daylight>CDT</daylight>
+				</short>
+				<exemplarCity>セントジョンズ</exemplarCity>
+			</zone>
+			<zone type="America/St_Johns">
+				<long>
+				<standard>ニューファンドランド島標準時</standard>
+				<daylight>ニューファンドランド島夏時間</daylight>
+				</long>
+				<short>
+					<standard>CNT</standard>
+					<daylight>CDT</daylight>
+				</short>
+				<exemplarCity>セントジョンズ</exemplarCity>
+			</zone>
+			<zone type="ECT">
+				<long>
+				<standard>中欧標準時</standard>
+				<daylight>中欧夏時間</daylight>
+				</long>
+				<short>
+					<standard>CET</standard>
+					<daylight>CEST</daylight>
+				</short>
+				<exemplarCity>パリ</exemplarCity>
+			</zone>
+			<zone type="Europe/Paris">
+				<long>
+				<standard>中欧標準時</standard>
+				<daylight>中欧夏時間</daylight>
+				</long>
+				<short>
+					<standard>CET</standard>
+					<daylight>CEST</daylight>
+				</short>
+				<exemplarCity>パリ</exemplarCity>
+			</zone>
+			<zone type="GMT">
+				<long>
+				<standard>グリニッジ標準時</standard>
+				<daylight>グリニッジ標準時</daylight>
+				</long>
+				<short>
+					<standard>GMT</standard>
+					<daylight>GMT</daylight>
+				</short>
+				<exemplarCity>ロンドン</exemplarCity>
+			</zone>
+			<zone type="Africa/Casablanca">
+				<long>
+				<standard>グリニッジ標準時</standard>
+				<daylight>グリニッジ標準時</daylight>
+				</long>
+				<short>
+					<standard>GMT</standard>
+					<daylight>GMT</daylight>
+				</short>
+				<exemplarCity>カサブランカ</exemplarCity>
+			</zone>
+			<zone type="Asia/Jerusalem">
+				<long>
+				<standard>イスラエル標準時</standard>
+				<daylight>イスラエル夏時間</daylight>
+				</long>
+				<short>
+					<standard>IST</standard>
+					<daylight>IDT</daylight>
+				</short>
+				<exemplarCity>エルサレム</exemplarCity>
+			</zone>
+			<zone type="JST">
+				<long>
+				<standard>日本標準時</standard>
+				<daylight>日本標準時</daylight>
+				</long>
+				<short>
+					<standard>JST</standard>
+					<daylight>JST</daylight>
+				</short>
+				<exemplarCity>東京</exemplarCity>
+			</zone>
 			<zone type="Asia/Tokyo">
 				<long>
 				<standard>日本標準時</standard>
@@ -955,22 +1223,124 @@
 					<standard>JST</standard>
 					<daylight>JST</daylight>
 				</short>
+				<exemplarCity>東京</exemplarCity>
+			</zone>
+			<zone type="Europe/Bucharest">
+				<long>
+				<standard>東欧標準時</standard>
+				<daylight>東欧夏時間</daylight>
+				</long>
+				<short>
+					<standard>EET</standard>
+					<daylight>EEST</daylight>
+				</short>
+				<exemplarCity>ブカレスト</exemplarCity>
+			</zone>
+			<zone type="CTT">
+				<long>
+				<standard>中国標準時</standard>
+				<daylight>中国標準時</daylight>
+				</long>
+				<short>
+					<standard>CTT</standard>
+					<daylight>CDT</daylight>
+				</short>
+				<exemplarCity>上海</exemplarCity>
+			</zone>
+			<zone type="Asia/Shanghai">
+				<long>
+				<standard>中国標準時</standard>
+				<daylight>中国標準時</daylight>
+				</long>
+				<short>
+					<standard>CTT</standard>
+					<daylight>CDT</daylight>
+				</short>
+				<exemplarCity>上海</exemplarCity>
 			</zone>
 		</timeZoneNames>
 	</dates>
 	<numbers>
 		<currencies>
+			<currency type="ADD">
+				<displayName>アンドラ ディナール</displayName>
+				<symbol>ADD</symbol>
+			</currency>
+			<currency type="ADP">
+				<displayName>アンドラ ペセタ</displayName>
+				<symbol>ADP</symbol>
+			</currency>
 			<currency type="AED">
 				<displayName>UAE ディルハム</displayName>
 				<symbol>AED</symbol>
 			</currency>
+			<currency type="AFA">
+				<displayName>アフガニー (1927-2002)</displayName>
+				<symbol>AFA</symbol>
+			</currency>
+			<currency type="AFN">
+				<displayName>アフガニー</displayName>
+				<symbol>Af</symbol>
+			</currency>
+			<currency type="AIF">
+				<displayName>アファールおよびイサス フラン</displayName>
+				<symbol>AIF</symbol>
+			</currency>
+			<currency type="ALK">
+				<displayName>アルバニア レク (1946-1961)</displayName>
+				<symbol>ALK</symbol>
+			</currency>
 			<currency type="ALL">
-				<displayName>レク</displayName>
+				<displayName>アルバニア レク</displayName>
 				<symbol>ALL</symbol>
+			</currency>
+			<currency type="ALV">
+				<displayName>アルバニア レク (Valute)</displayName>
+				<symbol>ALV</symbol>
+			</currency>
+			<currency type="ALX">
+				<displayName>アルバニア レク (f)</displayName>
+				<symbol>ALX</symbol>
 			</currency>
 			<currency type="AMD">
 				<displayName>アルメニア ドラム</displayName>
 				<symbol>AMD</symbol>
+			</currency>
+			<currency type="ANG">
+				<displayName>オランダ領アンティル ギルダー</displayName>
+				<symbol>ANG</symbol>
+			</currency>
+			<currency type="AOA">
+				<displayName>クワンザ (AOA)</displayName>
+				<symbol>AOA</symbol>
+			</currency>
+			<currency type="AOK">
+				<displayName>クワンザ (1977-1990)</displayName>
+				<symbol>AOK</symbol>
+			</currency>
+			<currency type="AON">
+				<displayName>アンゴラ 新クワンザ (1990-2000)</displayName>
+				<symbol>AON</symbol>
+			</currency>
+			<currency type="AOR">
+				<displayName>アンゴラ 旧クワンザ (1995-1999)</displayName>
+				<symbol>AOR</symbol>
+			</currency>
+			<currency type="AOS">
+				<displayName>アンゴラ エスクード</displayName>
+				<symbol>AOS</symbol>
+			</currency>
+			<currency type="ARA">
+				<displayName>アルゼンチン アゥストラール</displayName>
+				<symbol>ARA</symbol>
+			</currency>
+			<currency type="ARM">
+				<displayName>アルゼンチン ペソ (MN)</displayName>
+				<symbol>ARM</symbol>
+			</currency>
+			<currency type="ARP">
+				<displayName>アルゼンチン ペソ (1983-1985)</displayName>
+				<symbol>ARP</symbol>
 			</currency>
 			<currency type="ARS">
 				<displayName>アルゼンチン ペソ</displayName>
@@ -980,17 +1350,85 @@
 				<displayName>オーストラリア ドル</displayName>
 				<symbol>AUD</symbol>
 			</currency>
+			<currency type="AUP">
+				<displayName>オーストラリア ポンド</displayName>
+				<symbol>AUP</symbol>
+			</currency>
+			<currency type="AWG">
+				<displayName>アルバ ギルダー</displayName>
+				<symbol>AWG</symbol>
+			</currency>
 			<currency type="AZM">
 				<displayName>アゼルバイジャン マナト</displayName>
 				<symbol>AZM</symbol>
 			</currency>
+			<currency type="BAD">
+				<displayName>ボスニア ディナール</displayName>
+				<symbol>BAD</symbol>
+			</currency>
+			<currency type="BAM">
+				<displayName>ボスニア マルク (BAM)</displayName>
+				<symbol>BAM</symbol>
+			</currency>
+			<currency type="BAN">
+				<displayName>ボスニア 新ディナール</displayName>
+				<symbol>BAN</symbol>
+			</currency>
+			<currency type="BBD">
+				<displayName>バルバドス ドル</displayName>
+				<symbol>BBD</symbol>
+			</currency>
+			<currency type="BDT">
+				<displayName>バングラデシュ タカ</displayName>
+				<symbol>BDT</symbol>
+			</currency>
+			<currency type="BEC">
+				<displayName>ベルギー フラン (BEC)</displayName>
+				<symbol>BEC</symbol>
+			</currency>
+			<currency type="BEF">
+				<displayName>ベルギー フラン</displayName>
+				<symbol>BEF</symbol>
+			</currency>
+			<currency type="BEL">
+				<displayName>ベルギー フラン (BEL)</displayName>
+				<symbol>BEL</symbol>
+			</currency>
 			<currency type="BGL">
-				<displayName>レフ</displayName>
+				<displayName>ブルガリア レフ (BGL)</displayName>
 				<symbol>BGL</symbol>
 			</currency>
+			<currency type="BGM">
+				<displayName>ブルガリア レフ (BGM)</displayName>
+				<symbol>BGM</symbol>
+			</currency>
+			<currency type="BGN">
+				<displayName>ブルガリア 新レフ</displayName>
+				<symbol>BGN</symbol>
+			</currency>
+			<currency type="BGO">
+				<displayName>ブルガリア レフ (1879-1952)</displayName>
+				<symbol>BGO</symbol>
+			</currency>
+			<currency type="BGX">
+				<displayName>ブルガリア レフ (FEC)</displayName>
+				<symbol>BGX</symbol>
+			</currency>
 			<currency type="BHD">
-				<displayName>バーレーン ディーナール</displayName>
+				<displayName>バーレーン ディナール</displayName>
 				<symbol>BHD</symbol>
+			</currency>
+			<currency type="BIF">
+				<displayName>ブルンジ フラン</displayName>
+				<symbol>BIF</symbol>
+			</currency>
+			<currency type="BMD">
+				<displayName>バミューダ ドル</displayName>
+				<symbol>BMD</symbol>
+			</currency>
+			<currency type="BMP">
+				<displayName>バミューダ ポンド</displayName>
+				<symbol>BMP</symbol>
 			</currency>
 			<currency type="BND">
 				<displayName>ブルネイ ドル</displayName>
@@ -1000,49 +1438,217 @@
 				<displayName>ボリビアノ</displayName>
 				<symbol>BOB</symbol>
 			</currency>
+			<currency type="BOL">
+				<displayName>ボリビア ボリビアノ (1863-1962)</displayName>
+				<symbol>BOL</symbol>
+			</currency>
+			<currency type="BOP">
+				<displayName>ボリビア ペソ</displayName>
+				<symbol>BOP</symbol>
+			</currency>
+			<currency type="BOV">
+				<displayName>ボリビア Mvdol</displayName>
+				<symbol>BOV</symbol>
+			</currency>
+			<currency type="BRB">
+				<displayName>ブラジル 新クルゼイロ (BRB、1967-1986)</displayName>
+				<symbol>BRB</symbol>
+			</currency>
+			<currency type="BRC">
+				<displayName>ブラジル クルゼイロ (BRC)</displayName>
+				<symbol>BRC</symbol>
+			</currency>
+			<currency type="BRE">
+				<displayName>ブラジル クルゼイロ (BRE、1990-1993)</displayName>
+				<symbol>BRE</symbol>
+			</currency>
 			<currency type="BRL">
-				<displayName>ブラジル レアール</displayName>
+				<displayName>ブラジル レアル</displayName>
 				<symbol>BRL</symbol>
 			</currency>
+			<currency type="BRN">
+				<displayName>ブラジル 新クルゼイロ (BRN)</displayName>
+				<symbol>BRN</symbol>
+			</currency>
+			<currency type="BRR">
+				<displayName>ブラジル クルゼイロ レアル</displayName>
+				<symbol>BRR</symbol>
+			</currency>
+			<currency type="BRZ">
+				<displayName>ブラジル クルゼイロ (BRZ、1942-1967)</displayName>
+				<symbol>BRZ</symbol>
+			</currency>
+			<currency type="BSD">
+				<displayName>バハマ ドル</displayName>
+				<symbol>BSD</symbol>
+			</currency>
+			<currency type="BSP">
+				<displayName>バハマ ポンド</displayName>
+				<symbol>BSP</symbol>
+			</currency>
+			<currency type="BTN">
+				<displayName>ブータン ニュルタム</displayName>
+				<symbol>BTN</symbol>
+			</currency>
+			<currency type="BTR">
+				<displayName>ブータン ルピー</displayName>
+				<symbol>BTR</symbol>
+			</currency>
+			<currency type="BUK">
+				<displayName>ビルマ チャット</displayName>
+				<symbol>BUK</symbol>
+			</currency>
+			<currency type="BUR">
+				<displayName>ビルマ ルピー</displayName>
+				<symbol>BUR</symbol>
+			</currency>
+			<currency type="BWP">
+				<displayName>ボツワナ プラ</displayName>
+				<symbol>BWP</symbol>
+			</currency>
 			<currency type="BYB">
-				<displayName>ベラルーシ ルーブル</displayName>
+				<displayName>ベラルーシ ルーブル (BYB、1994-1999)</displayName>
 				<symbol>BYB</symbol>
+			</currency>
+			<currency type="BYL">
+				<displayName>ベラルーシ ルーブル (BYL、1992-1994)</displayName>
+				<symbol>BYL</symbol>
+			</currency>
+			<currency type="BYR">
+				<displayName>ベラルーシ ルーブル</displayName>
+				<symbol>BYR</symbol>
 			</currency>
 			<currency type="BZD">
 				<displayName>ベリーズ ドル</displayName>
 				<symbol>BZD</symbol>
 			</currency>
+			<currency type="BZH">
+				<displayName>英領ホンジュラス ドル</displayName>
+				<symbol>BZH</symbol>
+			</currency>
 			<currency type="CAD">
 				<displayName>カナダ ドル</displayName>
 				<symbol>CAD</symbol>
+			</currency>
+			<currency type="CDF">
+				<displayName>コンゴ フラン</displayName>
+				<symbol>CDF</symbol>
+			</currency>
+			<currency type="CDG">
+				<displayName>コンゴ共和国 フラン</displayName>
+				<symbol>CDG</symbol>
+			</currency>
+			<currency type="CDL">
+				<displayName>コンゴ ザイール</displayName>
+				<symbol>CDL</symbol>
+			</currency>
+			<currency type="CFF">
+				<displayName>中央アフリカ共和国 CFA フラン</displayName>
+				<symbol>CFF</symbol>
 			</currency>
 			<currency type="CHF">
 				<displayName>スイス フラン</displayName>
 				<symbol>CHF</symbol>
 			</currency>
+			<currency type="CKD">
+				<displayName>クック諸島 ドル</displayName>
+				<symbol>CKD</symbol>
+			</currency>
+			<currency type="CLC">
+				<displayName>チリ ペソ (CLC)</displayName>
+				<symbol>CLC</symbol>
+			</currency>
+			<currency type="CLE">
+				<displayName>チリ エスクード</displayName>
+				<symbol>CLE</symbol>
+			</currency>
+			<currency type="CLF">
+				<displayName>チリ ウニダ デ フォメント</displayName>
+				<symbol>CLF</symbol>
+			</currency>
 			<currency type="CLP">
 				<displayName>チリ ペソ</displayName>
 				<symbol>CLP</symbol>
 			</currency>
+			<currency type="CMF">
+				<displayName>カメルーン CFA フラン</displayName>
+				<symbol>CMF</symbol>
+			</currency>
+			<currency type="CNP">
+				<displayName>中国人民元</displayName>
+				<symbol>CNP</symbol>
+			</currency>
+			<currency type="CNX">
+				<displayName>中国 米ドル (FEC)</displayName>
+				<symbol>CNX</symbol>
+			</currency>
 			<currency type="CNY">
-				<displayName>元人民幣</displayName>
+				<displayName>中国人民元</displayName>
 				<symbol>CNY</symbol>
+			</currency>
+			<currency type="COB">
+				<displayName>コロンビア ペソ (COB)</displayName>
+				<symbol>COB</symbol>
+			</currency>
+			<currency type="COF">
+				<displayName>コンゴ CFA フラン</displayName>
+				<symbol>COF</symbol>
 			</currency>
 			<currency type="COP">
 				<displayName>コロンビア ペソ</displayName>
 				<symbol>COP</symbol>
 			</currency>
 			<currency type="CRC">
-				<displayName>コスタリカ コローン</displayName>
+				<displayName>コスタリカ コロン</displayName>
 				<symbol>CRC</symbol>
+			</currency>
+			<currency type="CSC">
+				<displayName>チェコスロバキア コルナ (CSC)</displayName>
+				<symbol>CSC</symbol>
+			</currency>
+			<currency type="CSK">
+				<displayName>チェコスロバキア コルナ (CSK)</displayName>
+				<symbol>CSK</symbol>
+			</currency>
+			<currency type="CUP">
+				<displayName>キューバ ペソ</displayName>
+				<symbol>CUP</symbol>
+			</currency>
+			<currency type="CUX">
+				<displayName>キューバ (FEC)</displayName>
+				<symbol>CUX</symbol>
+			</currency>
+			<currency type="CVE">
+				<displayName>カーボベルデ エスクード</displayName>
+				<symbol>CVE</symbol>
+			</currency>
+			<currency type="CWG">
+				<displayName>キュラソー島 ギルダー</displayName>
+				<symbol>CWG</symbol>
+			</currency>
+			<currency type="CYP">
+				<displayName>キプロス ポンド</displayName>
+				<symbol>CYP</symbol>
 			</currency>
 			<currency type="CZK">
 				<displayName>チェコ コルナ</displayName>
 				<symbol>CZK</symbol>
 			</currency>
+			<currency type="DDM">
+				<displayName>東ドイツ マルク</displayName>
+				<symbol>DDM</symbol>
+			</currency>
 			<currency type="DEM">
 				<displayName>ドイツ マルク</displayName>
 				<symbol>DEM</symbol>
+			</currency>
+			<currency type="DES">
+				<displayName>ドイツ マルク (Sperrmark)</displayName>
+				<symbol>DES</symbol>
+			</currency>
+			<currency type="DJF">
+				<displayName>ジブチ フラン</displayName>
+				<symbol>DJF</symbol>
 			</currency>
 			<currency type="DKK">
 				<displayName>デンマーク クローネ</displayName>
@@ -1053,67 +1659,263 @@
 				<symbol>DOP</symbol>
 			</currency>
 			<currency type="DZD">
-				<displayName>アルジェリア ディーナール</displayName>
+				<displayName>アルジェリア ディナール</displayName>
 				<symbol>DZD</symbol>
 			</currency>
+			<currency type="DZF">
+				<displayName>アルジェリア 新フラン</displayName>
+				<symbol>DZF</symbol>
+			</currency>
+			<currency type="DZG">
+				<displayName>アルジェリア フラン (DZG)</displayName>
+				<symbol>DZG</symbol>
+			</currency>
+			<currency type="ECS">
+				<displayName>エクアドル スクレ</displayName>
+				<symbol>ECS</symbol>
+			</currency>
+			<currency type="ECV">
+				<displayName>エクアドル UVC</displayName>
+				<symbol>ECV</symbol>
+			</currency>
 			<currency type="EEK">
-				<displayName>クルーン</displayName>
+				<displayName>エストニア クルーン</displayName>
 				<symbol>EEK</symbol>
 			</currency>
 			<currency type="EGP">
 				<displayName>エジプト ポンド</displayName>
 				<symbol>EGP</symbol>
 			</currency>
+			<currency type="ERN">
+				<displayName>エリトリア ナクファ</displayName>
+				<symbol>ERN</symbol>
+			</currency>
+			<currency type="ESP">
+				<displayName>スペイン ペセタ</displayName>
+				<symbol>ESP</symbol>
+			</currency>
+			<currency type="ETB">
+				<displayName>エチオピア ブル</displayName>
+				<symbol>ETB</symbol>
+			</currency>
+			<currency type="ETD">
+				<displayName>エチオピア ドル</displayName>
+				<symbol>ETD</symbol>
+			</currency>
 			<currency type="EUR">
 				<displayName>ユーロ</displayName>
 				<symbol>€</symbol>
+			</currency>
+			<currency type="FIM">
+				<displayName>フィンランド マルカ</displayName>
+				<symbol>FIM</symbol>
+			</currency>
+			<currency type="FIN">
+				<displayName>フィンランド マルカ (1860-1962)</displayName>
+				<symbol>FIN</symbol>
+			</currency>
+			<currency type="FJD">
+				<displayName>フィジー諸島 ドル</displayName>
+				<symbol>FJD</symbol>
+			</currency>
+			<currency type="FJP">
+				<displayName>フィジー諸島 ポンド</displayName>
+				<symbol>FJP</symbol>
+			</currency>
+			<currency type="FKP">
+				<displayName>フォークランド（マルビナス）諸島 ポンド</displayName>
+				<symbol>FKP</symbol>
+			</currency>
+			<currency type="FOK">
+				<displayName>フェロー諸島 クローナ</displayName>
+				<symbol>FOK</symbol>
 			</currency>
 			<currency type="FRF">
 				<displayName>フランス フラン</displayName>
 				<symbol>FRF</symbol>
 			</currency>
+			<currency type="FRG">
+				<displayName>フランス フラン (Franc Germinal/Franc Poincare)</displayName>
+				<symbol>FRG</symbol>
+			</currency>
+			<currency type="GAF">
+				<displayName>ガボン CFA フラン</displayName>
+				<symbol>GAF</symbol>
+			</currency>
 			<currency type="GBP">
-				<displayName>英貨ポンド</displayName>
+				<displayName>英国ポンド</displayName>
 				<symbol>£</symbol>
 			</currency>
+			<currency type="GEK">
+				<displayName>グルジア クーポン ラリ</displayName>
+				<symbol>GEK</symbol>
+			</currency>
 			<currency type="GEL">
-				<displayName>ラリ</displayName>
+				<displayName>グルジア ラリ</displayName>
 				<symbol>GEL</symbol>
 			</currency>
+			<currency type="GHC">
+				<displayName>ガーナ セディ</displayName>
+				<symbol>GHC</symbol>
+			</currency>
+			<currency type="GHO">
+				<displayName>ガーナ 旧セディ</displayName>
+				<symbol>GHO</symbol>
+			</currency>
+			<currency type="GHP">
+				<displayName>ガーナ ポンド</displayName>
+				<symbol>GHP</symbol>
+			</currency>
+			<currency type="GHR">
+				<displayName>ガーナ 新セディ</displayName>
+				<symbol>GHR</symbol>
+			</currency>
+			<currency type="GIP">
+				<displayName>ジブラルタル ポンド</displayName>
+				<symbol>GIP</symbol>
+			</currency>
+			<currency type="GLK">
+				<displayName>グリーンランド クローネ</displayName>
+				<symbol>GLK</symbol>
+			</currency>
+			<currency type="GMD">
+				<displayName>ガンビア ダラシ</displayName>
+				<symbol>GMD</symbol>
+			</currency>
+			<currency type="GMP">
+				<displayName>ガンビア ポンド</displayName>
+				<symbol>GMP</symbol>
+			</currency>
+			<currency type="GNF">
+				<displayName>ギニア フラン</displayName>
+				<symbol>GNF</symbol>
+			</currency>
+			<currency type="GNI">
+				<displayName>ギニア フラン (1960-1972)</displayName>
+				<symbol>GNI</symbol>
+			</currency>
+			<currency type="GNS">
+				<displayName>ギニア シリー</displayName>
+				<symbol>GNS</symbol>
+			</currency>
+			<currency type="GPF">
+				<displayName>グアドループ フラン</displayName>
+				<symbol>GPF</symbol>
+			</currency>
+			<currency type="GQE">
+				<displayName>赤道ギニア ギニー</displayName>
+				<symbol>GQE</symbol>
+			</currency>
+			<currency type="GQF">
+				<displayName>赤道ギニア フラン</displayName>
+				<symbol>GQF</symbol>
+			</currency>
+			<currency type="GQP">
+				<displayName>赤道ギニア ペセタ</displayName>
+				<symbol>GQP</symbol>
+			</currency>
+			<currency type="GRD">
+				<displayName>ギリシャ ドラクマ</displayName>
+				<symbol>GRD</symbol>
+			</currency>
+			<currency type="GRN">
+				<displayName>ギリシャ 新ドラクマ</displayName>
+				<symbol>GRN</symbol>
+			</currency>
 			<currency type="GTQ">
-				<displayName>ケッツァル</displayName>
+				<displayName>グアテマラ ケツァル</displayName>
 				<symbol>GTQ</symbol>
+			</currency>
+			<currency type="GUF">
+				<displayName>仏領ギアナ フラン</displayName>
+				<symbol>GUF</symbol>
+			</currency>
+			<currency type="GWE">
+				<displayName>ポルトガル領ギニア エスクード</displayName>
+				<symbol>GWE</symbol>
+			</currency>
+			<currency type="GWM">
+				<displayName>ポルトガル領ギニア ミルレイス</displayName>
+				<symbol>GWM</symbol>
+			</currency>
+			<currency type="GWP">
+				<displayName>ギニアビサウ ペソ</displayName>
+				<symbol>GWP</symbol>
+			</currency>
+			<currency type="GYD">
+				<displayName>ガイアナ ドル</displayName>
+				<symbol>GYD</symbol>
 			</currency>
 			<currency type="HKD">
 				<displayName>香港ドル</displayName>
 				<symbol>HKD</symbol>
 			</currency>
 			<currency type="HNL">
-				<displayName>レンピラ</displayName>
+				<displayName>ホンジュラス レンピラ</displayName>
 				<symbol>HNL</symbol>
+			</currency>
+			<currency type="HRD">
+				<displayName>クロアチア ディナール</displayName>
+				<symbol>HRD</symbol>
 			</currency>
 			<currency type="HRK">
 				<displayName>クロアチア クーナ</displayName>
 				<symbol>HRK</symbol>
 			</currency>
+			<currency type="HTG">
+				<displayName>ハイチ グールド</displayName>
+				<symbol>HTG</symbol>
+			</currency>
 			<currency type="HUF">
-				<displayName>フォーリント</displayName>
+				<displayName>ハンガリー フォリント</displayName>
 				<symbol>HUF</symbol>
 			</currency>
+			<currency type="IBP">
+				<displayName>北アイルランド ポンド</displayName>
+				<symbol>IBP</symbol>
+			</currency>
+			<currency type="IDG">
+				<displayName>インドネシア ニカギルダー</displayName>
+				<symbol>IDG</symbol>
+			</currency>
+			<currency type="IDJ">
+				<displayName>インドネシア ジャワ ルピア</displayName>
+				<symbol>IDJ</symbol>
+			</currency>
+			<currency type="IDN">
+				<displayName>インドネシア 新ルピア</displayName>
+				<symbol>IDN</symbol>
+			</currency>
 			<currency type="IDR">
-				<displayName>ルピア</displayName>
+				<displayName>インドネシア ルピア</displayName>
 				<symbol>IDR</symbol>
+			</currency>
+			<currency type="IEP">
+				<displayName>アイリッシュ ポンド</displayName>
+				<symbol>IEP</symbol>
+			</currency>
+			<currency type="ILL">
+				<displayName>イスラエル シェケル</displayName>
+				<symbol>ILL</symbol>
+			</currency>
+			<currency type="ILP">
+				<displayName>イスラエル ポンド</displayName>
+				<symbol>ILP</symbol>
 			</currency>
 			<currency type="ILS">
 				<displayName>イスラエル新シェケル</displayName>
 				<symbol>ILS</symbol>
+			</currency>
+			<currency type="IMP">
+				<displayName>マン島 ポンド</displayName>
+				<symbol>IMP</symbol>
 			</currency>
 			<currency type="INR">
 				<displayName>インド ルピー</displayName>
 				<symbol>=0#Rs.|1#Re.|1&lt;Rs.</symbol>
 			</currency>
 			<currency type="IQD">
-				<displayName>イラク ディーナール</displayName>
+				<displayName>イラク ディナール</displayName>
 				<symbol>IQD</symbol>
 			</currency>
 			<currency type="IRR">
@@ -1128,12 +1930,20 @@
 				<displayName>イタリア リラ</displayName>
 				<symbol>₤</symbol>
 			</currency>
+			<currency type="JEP">
+				<displayName>ジャージー島 ポンド</displayName>
+				<symbol>JEP</symbol>
+			</currency>
 			<currency type="JMD">
 				<displayName>ジャマイカ ドル</displayName>
 				<symbol>JMD</symbol>
 			</currency>
+			<currency type="JMP">
+				<displayName>ジャマイカ ポンド</displayName>
+				<symbol>JMP</symbol>
+			</currency>
 			<currency type="JOD">
-				<displayName>ヨルダン ディーナール</displayName>
+				<displayName>ヨルダン ディナール</displayName>
 				<symbol>JOD</symbol>
 			</currency>
 			<currency type="JPY">
@@ -1145,88 +1955,340 @@
 				<symbol>KES</symbol>
 			</currency>
 			<currency type="KGS">
-				<displayName>ソム</displayName>
+				<displayName>キルギスタン ソム</displayName>
 				<symbol>KGS</symbol>
 			</currency>
+			<currency type="KHO">
+				<displayName>カンボジア 旧リエル</displayName>
+				<symbol>KHO</symbol>
+			</currency>
+			<currency type="KHR">
+				<displayName>カンボジア リエル</displayName>
+				<symbol>KHR</symbol>
+			</currency>
+			<currency type="KID">
+				<displayName>キリバス ドル</displayName>
+				<symbol>KID</symbol>
+			</currency>
+			<currency type="KMF">
+				<displayName>コモロ フラン</displayName>
+				<symbol>KMF</symbol>
+			</currency>
+			<currency type="KPP">
+				<displayName>北朝鮮 人民ウォン</displayName>
+				<symbol>KPP</symbol>
+			</currency>
+			<currency type="KPW">
+				<displayName>北朝鮮 ウォン</displayName>
+				<symbol>KPW</symbol>
+			</currency>
+			<currency type="KRH">
+				<displayName>韓国 ホアン</displayName>
+				<symbol>KRH</symbol>
+			</currency>
+			<currency type="KRO">
+				<displayName>韓国 旧ウォン</displayName>
+				<symbol>KRO</symbol>
+			</currency>
 			<currency type="KRW">
-				<displayName>ウォン</displayName>
+				<displayName>韓国 ウォン</displayName>
 				<symbol>￦</symbol>
 			</currency>
 			<currency type="KWD">
-				<displayName>クウェート ディーナール</displayName>
+				<displayName>クウェート ディナール</displayName>
 				<symbol>KWD</symbol>
 			</currency>
+			<currency type="KYD">
+				<displayName>ケイマン諸島 ドル</displayName>
+				<symbol>KYD</symbol>
+			</currency>
+			<currency type="KZR">
+				<displayName>カザフスタン ルーブル</displayName>
+				<symbol>KZR</symbol>
+			</currency>
 			<currency type="KZT">
-				<displayName>テンゲ</displayName>
+				<displayName>カザフスタン テンゲ</displayName>
 				<symbol>KZT</symbol>
+			</currency>
+			<currency type="LAK">
+				<displayName>ラオス キープ</displayName>
+				<symbol>LAK</symbol>
 			</currency>
 			<currency type="LBP">
 				<displayName>レバノン ポンド</displayName>
 				<symbol>LBP</symbol>
 			</currency>
+			<currency type="LIF">
+				<displayName>リヒテンシュタイン フラン</displayName>
+				<symbol>LIF</symbol>
+			</currency>
+			<currency type="LKR">
+				<displayName>スリランカ ルピー</displayName>
+				<symbol>LKR</symbol>
+			</currency>
+			<currency type="LNR">
+				<displayName>セイロン ルピー</displayName>
+				<symbol>LNR</symbol>
+			</currency>
+			<currency type="LRD">
+				<displayName>リベリア ドル</displayName>
+				<symbol>LRD</symbol>
+			</currency>
+			<currency type="LSL">
+				<displayName>レソト ロティ</displayName>
+				<symbol>LSL</symbol>
+			</currency>
 			<currency type="LTL">
 				<displayName>リトアニア リタス</displayName>
 				<symbol>LTL</symbol>
 			</currency>
+			<currency type="LTT">
+				<displayName>リトアニア タロナ</displayName>
+				<symbol>LTT</symbol>
+			</currency>
+			<currency type="LUF">
+				<displayName>ルクセンブルグ フラン</displayName>
+				<symbol>LUF</symbol>
+			</currency>
 			<currency type="LVL">
-				<displayName>ラトビア ラット</displayName>
+				<displayName>ラトビア ラッツ</displayName>
 				<symbol>LVL</symbol>
 			</currency>
+			<currency type="LVR">
+				<displayName>ラトビア ルーブル</displayName>
+				<symbol>LVR</symbol>
+			</currency>
+			<currency type="LYB">
+				<displayName>リビア リラ (British Military Authority)</displayName>
+				<symbol>LYB</symbol>
+			</currency>
 			<currency type="LYD">
-				<displayName>リビア ディーナール</displayName>
+				<displayName>リビア ディナール</displayName>
 				<symbol>LYD</symbol>
+			</currency>
+			<currency type="LYP">
+				<displayName>リピア ポンド</displayName>
+				<symbol>LYP</symbol>
 			</currency>
 			<currency type="MAD">
 				<displayName>モロッコ ディルハム</displayName>
 				<symbol>MAD</symbol>
 			</currency>
+			<currency type="MAF">
+				<displayName>モロッコ フラン</displayName>
+				<symbol>MAF</symbol>
+			</currency>
+			<currency type="MCF">
+				<displayName>モナコ フラン</displayName>
+				<symbol>MCF</symbol>
+			</currency>
+			<currency type="MCG">
+				<displayName>モナコ フラン (MCG)</displayName>
+				<symbol>MCG</symbol>
+			</currency>
+			<currency type="MDC">
+				<displayName>モルドバ レイ クーポン</displayName>
+				<symbol>MDC</symbol>
+			</currency>
+			<currency type="MDL">
+				<displayName>モルドバ レイ</displayName>
+				<symbol>MDL</symbol>
+			</currency>
+			<currency type="MDR">
+				<displayName>モルドバ レイ クーポン</displayName>
+				<symbol>MDR</symbol>
+			</currency>
+			<currency type="MGA">
+				<displayName>マダガスカル アリアリ</displayName>
+				<symbol>MGA</symbol>
+			</currency>
+			<currency type="MGF">
+				<displayName>マダガスカル フラン</displayName>
+				<symbol>MGF</symbol>
+			</currency>
+			<currency type="MHD">
+				<displayName>マーシャル諸島 ドル</displayName>
+				<symbol>MHD</symbol>
+			</currency>
 			<currency type="MKD">
-				<displayName>デナル</displayName>
+				<displayName>マケドニア デナル</displayName>
 				<symbol>MKD</symbol>
 			</currency>
+			<currency type="MKN">
+				<displayName>マケドニア デナル (1992-1993)</displayName>
+				<symbol>MKN</symbol>
+			</currency>
+			<currency type="MLF">
+				<displayName>マリ フラン</displayName>
+				<symbol>MLF</symbol>
+			</currency>
+			<currency type="MMK">
+				<displayName>ミャンマー チャット</displayName>
+				<symbol>MMK</symbol>
+			</currency>
+			<currency type="MMX">
+				<displayName>ミャンマー ドル (FEC)</displayName>
+				<symbol>MMX</symbol>
+			</currency>
 			<currency type="MNT">
-				<displayName>トゥグリク</displayName>
+				<displayName>モンゴル トグログ</displayName>
 				<symbol>MNT</symbol>
 			</currency>
 			<currency type="MOP">
-				<displayName>パタカ</displayName>
+				<displayName>マカオ パタカ</displayName>
 				<symbol>MOP</symbol>
 			</currency>
+			<currency type="MQF">
+				<displayName>マルティニーク島 フラン</displayName>
+				<symbol>MQF</symbol>
+			</currency>
+			<currency type="MRO">
+				<displayName>モーリタニア ウギア</displayName>
+				<symbol>MRO</symbol>
+			</currency>
+			<currency type="MTL">
+				<displayName>マルタ リラ</displayName>
+				<symbol>MTL</symbol>
+			</currency>
+			<currency type="MTP">
+				<displayName>マルタ ポンド</displayName>
+				<symbol>MTP</symbol>
+			</currency>
+			<currency type="MUR">
+				<displayName>モーリシャス ルピー</displayName>
+				<symbol>MUR</symbol>
+			</currency>
+			<currency type="MVP">
+				<displayName>モルディブ諸島 ルピー</displayName>
+				<symbol>MVP</symbol>
+			</currency>
 			<currency type="MVR">
-				<displayName>ルフィヤ</displayName>
+				<displayName>モルディブ諸島 ルフィア</displayName>
 				<symbol>MVR</symbol>
+			</currency>
+			<currency type="MWK">
+				<displayName>マラウィ クワチャ</displayName>
+				<symbol>MK</symbol>
+			</currency>
+			<currency type="MWP">
+				<displayName>マラウィ ポンド</displayName>
+				<symbol>MWP</symbol>
 			</currency>
 			<currency type="MXN">
 				<displayName>メキシコ ペソ</displayName>
 				<symbol>MXN</symbol>
 			</currency>
+			<currency type="MXP">
+				<displayName>メキシコ ペソ (MXP、1861-1992)</displayName>
+				<symbol>MXP</symbol>
+			</currency>
+			<currency type="MXV">
+				<displayName>メキシコ UDI</displayName>
+				<symbol>MXV</symbol>
+			</currency>
 			<currency type="MYR">
 				<displayName>マレーシア リンギット</displayName>
 				<symbol>MYR</symbol>
 			</currency>
+			<currency type="MZE">
+				<displayName>モザンピーク エスクード</displayName>
+				<symbol>MZE</symbol>
+			</currency>
+			<currency type="MZM">
+				<displayName>モザンピーク メティカル</displayName>
+				<symbol>MZM</symbol>
+			</currency>
+			<currency type="NAD">
+				<displayName>ナミビア ドル</displayName>
+				<symbol>NAD</symbol>
+			</currency>
+			<currency type="NCF">
+				<displayName>ニューカレドニア CFP フラン</displayName>
+				<symbol>NCF</symbol>
+			</currency>
+			<currency type="NGN">
+				<displayName>ナイジェリア ナイラ</displayName>
+				<symbol>NGN</symbol>
+			</currency>
+			<currency type="NGP">
+				<displayName>ナイジェリア ポンド</displayName>
+				<symbol>NGP</symbol>
+			</currency>
+			<currency type="NHF">
+				<displayName>ニューヘブリディーズ諸島 CFP フラン</displayName>
+				<symbol>NHF</symbol>
+			</currency>
+			<currency type="NIC">
+				<displayName>ニカラグア コルドバ</displayName>
+				<symbol>NIC</symbol>
+			</currency>
+			<currency type="NIG">
+				<displayName>ニカラグア コルドバ (NIG)</displayName>
+				<symbol>NIG</symbol>
+			</currency>
 			<currency type="NIO">
-				<displayName>コルドバ オロ</displayName>
+				<displayName>ニカラグア コルドバ オロ</displayName>
 				<symbol>NIO</symbol>
+			</currency>
+			<currency type="NLG">
+				<displayName>オランダ ギルダー</displayName>
+				<symbol>NLG</symbol>
 			</currency>
 			<currency type="NOK">
 				<displayName>ノルウェー クローネ</displayName>
 				<symbol>NOK</symbol>
 			</currency>
+			<currency type="NPR">
+				<displayName>ネパール ルピー</displayName>
+				<symbol>NPR</symbol>
+			</currency>
 			<currency type="NZD">
 				<displayName>ニュージーランド ドル</displayName>
 				<symbol>NZD</symbol>
+			</currency>
+			<currency type="NZP">
+				<displayName>ニュージーランド ポンド</displayName>
+				<symbol>NZP</symbol>
 			</currency>
 			<currency type="OMR">
 				<displayName>オマーン リアル</displayName>
 				<symbol>OMR</symbol>
 			</currency>
+			<currency type="OMS">
+				<displayName>オマーン リアル (OMS)</displayName>
+				<symbol>OMS</symbol>
+			</currency>
 			<currency type="PAB">
-				<displayName>バルボア</displayName>
+				<displayName>パナマ バルボア</displayName>
 				<symbol>PAB</symbol>
 			</currency>
+			<currency type="PDK">
+				<displayName>沿ドニエストル ルーブル (PDK)</displayName>
+				<symbol>PDK</symbol>
+			</currency>
+			<currency type="PDN">
+				<displayName>沿ドニエストル 新ルーブル (PDN)</displayName>
+				<symbol>PDN</symbol>
+			</currency>
+			<currency type="PDR">
+				<displayName>沿ドニエストル ルーブル (PDR)</displayName>
+				<symbol>PDR</symbol>
+			</currency>
+			<currency type="PEI">
+				<displayName>ペルー インティ</displayName>
+				<symbol>PEI</symbol>
+			</currency>
 			<currency type="PEN">
-				<displayName>ヌエボ ソル</displayName>
+				<displayName>ペルー 新ソル</displayName>
 				<symbol>PEN</symbol>
+			</currency>
+			<currency type="PES">
+				<displayName>ペルー ソル</displayName>
+				<symbol>PES</symbol>
+			</currency>
+			<currency type="PGK">
+				<displayName>パプアニューギニア キナ</displayName>
+				<symbol>PGK</symbol>
 			</currency>
 			<currency type="PHP">
 				<displayName>フィリピン ペソ</displayName>
@@ -1237,28 +2299,80 @@
 				<symbol>PKR</symbol>
 			</currency>
 			<currency type="PLN">
-				<displayName>ズロチ</displayName>
+				<displayName>ポーランド ズウォティ</displayName>
 				<symbol>PLN</symbol>
 			</currency>
+			<currency type="PLX">
+				<displayName>ポーランド 米ドル (FEC)</displayName>
+				<symbol>PLX</symbol>
+			</currency>
+			<currency type="PLZ">
+				<displayName>ポーランド ズウォティ (1950-1995)</displayName>
+				<symbol>PLZ</symbol>
+			</currency>
+			<currency type="PSP">
+				<displayName>パレスチナ ポンド</displayName>
+				<symbol>PSP</symbol>
+			</currency>
+			<currency type="PTC">
+				<displayName>ポルトガル コント</displayName>
+				<symbol>PTC</symbol>
+			</currency>
+			<currency type="PTE">
+				<displayName>ポルトガル エスクード</displayName>
+				<symbol>PTE</symbol>
+			</currency>
 			<currency type="PYG">
-				<displayName>グアラニー</displayName>
+				<displayName>パラグアイ グアラニ</displayName>
 				<symbol>PYG</symbol>
 			</currency>
 			<currency type="QAR">
 				<displayName>カタール リアル</displayName>
 				<symbol>QAR</symbol>
 			</currency>
+			<currency type="REF">
+				<displayName>レユニオン島 フラン</displayName>
+				<symbol>REF</symbol>
+			</currency>
 			<currency type="ROL">
-				<displayName>レイ</displayName>
+				<displayName>ルーマニア レイ</displayName>
 				<symbol>ROL</symbol>
 			</currency>
+			<currency type="RON">
+				<displayName>ルーマニア 新レイ</displayName>
+				<symbol>RON</symbol>
+			</currency>
 			<currency type="RUR">
-				<displayName>ロシア ルーブル</displayName>
+				<displayName>ロシア ルーブル (1991-1998)</displayName>
 				<symbol>RUR</symbol>
 			</currency>
+			<currency type="RWF">
+				<displayName>ルワンダ フラン</displayName>
+				<symbol>RWF</symbol>
+			</currency>
 			<currency type="SAR">
-				<displayName>サウジ リヤール</displayName>
+				<displayName>サウジ リヤル</displayName>
 				<symbol>SAR</symbol>
+			</currency>
+			<currency type="SAS">
+				<displayName>サウジ リヤル (SAS)</displayName>
+				<symbol>SAS</symbol>
+			</currency>
+			<currency type="SBD">
+				<displayName>ソロモン諸島 ドル</displayName>
+				<symbol>SBD</symbol>
+			</currency>
+			<currency type="SCR">
+				<displayName>セイシェル ルピー</displayName>
+				<symbol>SCR</symbol>
+			</currency>
+			<currency type="SDD">
+				<displayName>スーダン ディナール</displayName>
+				<symbol>SDD</symbol>
+			</currency>
+			<currency type="SDP">
+				<displayName>スーダン ポンド</displayName>
+				<symbol>SDP</symbol>
 			</currency>
 			<currency type="SEK">
 				<displayName>スウェーデン クローナ</displayName>
@@ -1268,25 +2382,117 @@
 				<displayName>シンガポール ドル</displayName>
 				<symbol>SGD</symbol>
 			</currency>
+			<currency type="SHP">
+				<displayName>セントヘレナ島 ポンド</displayName>
+				<symbol>SHP</symbol>
+			</currency>
+			<currency type="SIB">
+				<displayName>スロベニア トラール (SIB)</displayName>
+				<symbol>SIB</symbol>
+			</currency>
 			<currency type="SIT">
-				<displayName>トラル</displayName>
+				<displayName>スロベニア トラール</displayName>
 				<symbol>SIT</symbol>
 			</currency>
 			<currency type="SKK">
 				<displayName>スロバキア コルナ</displayName>
 				<symbol>SKK</symbol>
 			</currency>
+			<currency type="SLL">
+				<displayName>シエラレオネ レオン</displayName>
+				<symbol>SLL</symbol>
+			</currency>
+			<currency type="SML">
+				<displayName>サンマリノ リラ</displayName>
+				<symbol>SML</symbol>
+			</currency>
+			<currency type="SOS">
+				<displayName>ソマリア シリング</displayName>
+				<symbol>SOS</symbol>
+			</currency>
+			<currency type="SQS">
+				<displayName>ソマリランド シリング</displayName>
+				<symbol>SQS</symbol>
+			</currency>
+			<currency type="SRG">
+				<displayName>スリナム ギルダー</displayName>
+				<symbol>SRG</symbol>
+			</currency>
+			<currency type="SSP">
+				<displayName>スコットランド ポンド</displayName>
+				<symbol>SSP</symbol>
+			</currency>
+			<currency type="STD">
+				<displayName>サントメ・プリンシペ ドブラ</displayName>
+				<symbol>STD</symbol>
+			</currency>
+			<currency type="STE">
+				<displayName>サントメ・プリンシペ エスクード</displayName>
+				<symbol>STE</symbol>
+			</currency>
+			<currency type="SUN">
+				<displayName>ソ連 新ルーブル</displayName>
+				<symbol>SUN</symbol>
+			</currency>
+			<currency type="SUR">
+				<displayName>ソ連 ルーブル</displayName>
+				<symbol>SUR</symbol>
+			</currency>
+			<currency type="SVC">
+				<displayName>エルサルバドル コロン</displayName>
+				<symbol>SVC</symbol>
+			</currency>
 			<currency type="SYP">
 				<displayName>シリア ポンド</displayName>
 				<symbol>SYP</symbol>
 			</currency>
+			<currency type="SZL">
+				<displayName>スワジランド リランゲニ</displayName>
+				<symbol>SZL</symbol>
+			</currency>
+			<currency type="TCC">
+				<displayName>タークス・カイコス諸島 クローン</displayName>
+				<symbol>TCC</symbol>
+			</currency>
+			<currency type="TDF">
+				<displayName>チャド CFA フラン</displayName>
+				<symbol>TDF</symbol>
+			</currency>
 			<currency type="THB">
-				<displayName>バーツ</displayName>
+				<displayName>タイ バーツ</displayName>
 				<symbol>THB</symbol>
 			</currency>
+			<currency type="TJR">
+				<displayName>タジキスタン ルーブル</displayName>
+				<symbol>TJR</symbol>
+			</currency>
+			<currency type="TJS">
+				<displayName>タジキスタン ソモニ</displayName>
+				<symbol>TJS</symbol>
+			</currency>
+			<currency type="TMM">
+				<displayName>トルクメニスタン マナト</displayName>
+				<symbol>TMM</symbol>
+			</currency>
 			<currency type="TND">
-				<displayName>チュニジア ディーナール</displayName>
+				<displayName>チュニジア ディナール</displayName>
 				<symbol>TND</symbol>
+			</currency>
+			<currency type="TOP">
+				<displayName>トンガ パ・アンガ</displayName>
+				<symbol>TOP</symbol>
+			</currency>
+			<currency type="TOS">
+				<displayName>トンガ ポンド</displayName>
+				<symbol>TOS</symbol>
+			</currency>
+			<currency type="TPE">
+				<displayName>ティモール エスクード</displayName>
+				<symbol>TPE</symbol>
+			</currency>
+			<currency type="TPP">
+				<displayName>ティモール パタカ</displayName>
+				<symbol>TPP</symbol>
 			</currency>
 			<currency type="TRL">
 				<displayName>トルコ リラ</displayName>
@@ -1296,45 +2502,273 @@
 				<displayName>トリニダードトバゴ ドル</displayName>
 				<symbol>TTD</symbol>
 			</currency>
+			<currency type="TTO">
+				<displayName>トリニダードトバゴ 旧ドル</displayName>
+				<symbol>TTO</symbol>
+			</currency>
+			<currency type="TVD">
+				<displayName>ツバル ドル</displayName>
+				<symbol>TVD</symbol>
+			</currency>
 			<currency type="TWD">
-				<displayName>新台湾元</displayName>
+				<displayName>新台湾ドル</displayName>
 				<symbol>TWD</symbol>
 			</currency>
+			<currency type="TZS">
+				<displayName>タンザニア シリング</displayName>
+				<symbol>TZS</symbol>
+			</currency>
 			<currency type="UAH">
-				<displayName>フリブナ</displayName>
+				<displayName>ウクライナ グリブナ</displayName>
 				<symbol>UAH</symbol>
+			</currency>
+			<currency type="UAK">
+				<displayName>ウクライナ カルボバネツ</displayName>
+				<symbol>UAK</symbol>
+			</currency>
+			<currency type="UGS">
+				<displayName>ウガンダ シリング (1966-1987)</displayName>
+				<symbol>UGS</symbol>
+			</currency>
+			<currency type="UGX">
+				<displayName>ウガンダ シリング</displayName>
+				<symbol>UGX</symbol>
 			</currency>
 			<currency type="USD">
 				<displayName>米ドル</displayName>
 				<symbol>$</symbol>
 			</currency>
+			<currency type="USN">
+				<displayName>米ドル (翌日)</displayName>
+				<symbol>USN</symbol>
+			</currency>
+			<currency type="USS">
+				<displayName>米ドル (当日)</displayName>
+				<symbol>USS</symbol>
+			</currency>
+			<currency type="UYF">
+				<displayName>ウルグアイ ペソ (UYF)</displayName>
+				<symbol>UYF</symbol>
+			</currency>
+			<currency type="UYP">
+				<displayName>ウルグアイ ペソ (1975-1993)</displayName>
+				<symbol>UYP</symbol>
+			</currency>
 			<currency type="UYU">
 				<displayName>ウルグアイ ペソ</displayName>
 				<symbol>UYU</symbol>
+			</currency>
+			<currency type="UZC">
+				<displayName>ウズベキスタン スム (UZC)</displayName>
+				<symbol>UZC</symbol>
 			</currency>
 			<currency type="UZS">
 				<displayName>ウズベキスタン スム</displayName>
 				<symbol>UZS</symbol>
 			</currency>
+			<currency type="VAL">
+				<displayName>バチカン リラ</displayName>
+				<symbol>VAL</symbol>
+			</currency>
+			<currency type="VDD">
+				<displayName>北ベトナム ドン (VDD)</displayName>
+				<symbol>VDD</symbol>
+			</currency>
+			<currency type="VDN">
+				<displayName>北ベトナム 新ドン</displayName>
+				<symbol>VDN</symbol>
+			</currency>
+			<currency type="VDP">
+				<displayName>北ベトナム ドン (VDP)</displayName>
+				<symbol>VDP</symbol>
+			</currency>
 			<currency type="VEB">
-				<displayName>ボリバル</displayName>
+				<displayName>ベネズエラ ボリバル</displayName>
 				<symbol>VEB</symbol>
 			</currency>
+			<currency type="VGD">
+				<displayName>英領バージン諸島 ドル</displayName>
+				<symbol>VGD</symbol>
+			</currency>
 			<currency type="VND">
-				<displayName>ドン</displayName>
+				<displayName>ベトナム ドン</displayName>
 				<symbol>đ</symbol>
+			</currency>
+			<currency type="VNN">
+				<displayName>ベトナム 新ドン</displayName>
+				<symbol>VNN</symbol>
+			</currency>
+			<currency type="VNR">
+				<displayName>ベトナム共和国 ドン</displayName>
+				<symbol>VNR</symbol>
+			</currency>
+			<currency type="VNS">
+				<displayName>ベトナム自治区 ドン</displayName>
+				<symbol>VNS</symbol>
+			</currency>
+			<currency type="VUV">
+				<displayName>バヌアツ バツ</displayName>
+				<symbol>VUV</symbol>
+			</currency>
+			<currency type="WSP">
+				<displayName>西サモア ポンド</displayName>
+				<symbol>WSP</symbol>
+			</currency>
+			<currency type="WST">
+				<displayName>西サモア タラ</displayName>
+				<symbol>WST</symbol>
+			</currency>
+			<currency type="XAD">
+				<displayName>アジア ディナール勘定単位</displayName>
+				<symbol>XAD</symbol>
+			</currency>
+			<currency type="XAF">
+				<displayName>CFA フラン BEAC</displayName>
+				<symbol>XAF</symbol>
+			</currency>
+			<currency type="XAM">
+				<displayName>アジア通貨単位 (AMU)</displayName>
+				<symbol>XAM</symbol>
+			</currency>
+			<currency type="XAU">
+				<displayName>金</displayName>
+				<symbol>XAU</symbol>
+			</currency>
+			<currency type="XBA">
+				<displayName>ヨーロッパ混合単位 (EURCO)</displayName>
+				<symbol>XBA</symbol>
+			</currency>
+			<currency type="XBB">
+				<displayName>ヨーロッパ通貨単位 (EMU-6)</displayName>
+				<symbol>XBB</symbol>
+			</currency>
+			<currency type="XBC">
+				<displayName>ヨーロッパ勘定単位 (EUA-9)</displayName>
+				<symbol>XBC</symbol>
+			</currency>
+			<currency type="XBD">
+				<displayName>ヨーロッパ勘定単位 (EUA-17)</displayName>
+				<symbol>XBD</symbol>
+			</currency>
+			<currency type="XCD">
+				<displayName>東カリブ ドル</displayName>
+				<symbol>EC$</symbol>
+			</currency>
+			<currency type="XCF">
+				<displayName>CFA 新フラン</displayName>
+				<symbol>XCF</symbol>
+			</currency>
+			<currency type="XDR">
+				<displayName>特別引き出し権 (Special Drawing Rights)</displayName>
+				<symbol>XDR</symbol>
+			</currency>
+			<currency type="XEF">
+				<displayName>CFA フラン (BCEAEC)</displayName>
+				<symbol>XEF</symbol>
+			</currency>
+			<currency type="XEU">
+				<displayName>ヨーロッパ通貨単位</displayName>
+				<symbol>XEU</symbol>
+			</currency>
+			<currency type="XFO">
+				<displayName>フランス フラン (XFO)</displayName>
+				<symbol>XFO</symbol>
+			</currency>
+			<currency type="XFU">
+				<displayName>フランス UIC フラン</displayName>
+				<symbol>XFU</symbol>
+			</currency>
+			<currency type="XID">
+				<displayName>イスラム ディナール</displayName>
+				<symbol>XID</symbol>
+			</currency>
+			<currency type="XMF">
+				<displayName>フランス 新フラン (XMF)</displayName>
+				<symbol>XMF</symbol>
+			</currency>
+			<currency type="XNF">
+				<displayName>仏領アンティル諸島 CFA フラン</displayName>
+				<symbol>XNF</symbol>
+			</currency>
+			<currency type="XOF">
+				<displayName>CFA フラン BCEAO</displayName>
+				<symbol>XOF</symbol>
+			</currency>
+			<currency type="XPF">
+				<displayName>CFP フラン</displayName>
+				<symbol>XPF</symbol>
+			</currency>
+			<currency type="XSS">
+				<displayName>シリング ポンド</displayName>
+				<symbol>XSS</symbol>
+			</currency>
+			<currency type="XTR">
+				<displayName>コメコン振替ルーブル</displayName>
+				<symbol>XTR</symbol>
+			</currency>
+			<currency type="YDD">
+				<displayName>イエメン ディナール</displayName>
+				<symbol>YDD</symbol>
+			</currency>
+			<currency type="YEI">
+				<displayName>イエメン リアル (YEI)</displayName>
+				<symbol>YEI</symbol>
 			</currency>
 			<currency type="YER">
 				<displayName>イエメン リアル</displayName>
 				<symbol>YER</symbol>
 			</currency>
+			<currency type="YUD">
+				<displayName>ユーゴスラビア ディナール (YUD)</displayName>
+				<symbol>YUD</symbol>
+			</currency>
+			<currency type="YUF">
+				<displayName>ユーゴスラビア ディナール (YUF)</displayName>
+				<symbol>YUF</symbol>
+			</currency>
+			<currency type="YUG">
+				<displayName>ユーゴスラビア ディナール (YUG)</displayName>
+				<symbol>YUG</symbol>
+			</currency>
+			<currency type="YUM">
+				<displayName>ユーゴスラビア スーパー ディナール</displayName>
+				<symbol>YUM</symbol>
+			</currency>
 			<currency type="YUN">
-				<displayName>ユーゴスラビア新ディーナール</displayName>
+				<displayName>ユーゴスラビア 新ディナール (YUN)</displayName>
 				<symbol>YUN</symbol>
 			</currency>
+			<currency type="YUO">
+				<displayName>ユーゴスラビア ディナール (YUO)</displayName>
+				<symbol>YUO</symbol>
+			</currency>
+			<currency type="YUR">
+				<displayName>ユーゴスラビア ディナール (YUR)</displayName>
+				<symbol>YUR</symbol>
+			</currency>
+			<currency type="ZAL">
+				<displayName>南アフリカ ランド (ZAL)</displayName>
+				<symbol>ZAL</symbol>
+			</currency>
+			<currency type="ZAP">
+				<displayName>南アフリカ ポンド</displayName>
+				<symbol>ZAP</symbol>
+			</currency>
 			<currency type="ZAR">
-				<displayName>ランド</displayName>
+				<displayName>南アフリカ ランド</displayName>
 				<symbol>ZAR</symbol>
+			</currency>
+			<currency type="ZMP">
+				<displayName>ザンビア ポンド</displayName>
+				<symbol>ZMP</symbol>
+			</currency>
+			<currency type="ZRN">
+				<displayName>ザイール 新ザイール</displayName>
+				<symbol>ZRN</symbol>
+			</currency>
+			<currency type="ZRZ">
+				<displayName>ザイール ザイール</displayName>
+				<symbol>ZRZ</symbol>
 			</currency>
 			<currency type="ZWD">
 				<displayName>ジンバブエ ドル</displayName>
@@ -1342,30 +2776,4 @@
 			</currency>
 		</currencies>
 	</numbers>
-	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-		<icu:ruleBasedNumberFormats>
-			<icu:ruleBasedNumberFormat type="spellout">
-%financial:
-零; 壱; 弐; 参; 四; 伍; 六; 七; 八; 九;
-拾[&gt;&gt;];
-20: &lt;&lt;拾[&gt;&gt;];
-100: &lt;&lt;百[&gt;&gt;];
-1000: &lt;&lt;千[&gt;&gt;];
-10,000: &lt;&lt;万[&gt;&gt;];
-100,000,000: &lt;&lt;億[&gt;&gt;];
-1,000,000,000,000: &lt;&lt;兆[&gt;&gt;];
-10,000,000,000,000,000: =#,##0=;
-%traditional:
-零; 一; 二; 三; 四; 五; 六; 七; 八; 九;
-十[&gt;&gt;];
-20: &lt;&lt;十[&gt;&gt;];
-100: &lt;&lt;百[&gt;&gt;];
-1000: &lt;&lt;千[&gt;&gt;];
-10,000: &lt;&lt;万[&gt;&gt;];
-100,000,000: &lt;&lt;億[&gt;&gt;];
-1,000,000,000,000: &lt;&lt;兆[&gt;&gt;];
-10,000,000,000,000,000: =#,##0=;
-			</icu:ruleBasedNumberFormat>
-		</icu:ruleBasedNumberFormats>
-	</special>
 </ldml>

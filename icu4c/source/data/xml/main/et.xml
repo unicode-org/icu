@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.1/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="3.0"/>
-		<generation date="2004-05-14" />
+		<version number="1.1"/>
+		<generation date="2004-05-27" />
 		<language type="et" /> 
 	</identity>
 	<localeDisplayNames>
@@ -76,7 +71,7 @@
 			<territory type="BR">Brasiilia</territory>
 			<territory type="BS">Bahama saared</territory>
 			<territory type="BT">Bhutan</territory>
-			<territory type="BV">Bouvet' saar</territory>
+			<territory type="BV">Bouvet’ saar</territory>
 			<territory type="BW">Botswana</territory>
 			<territory type="BY">Valgevene</territory>
 			<territory type="BZ">Belize</territory>
@@ -86,7 +81,7 @@
 			<territory type="CF">Kesk-Aafrika Vabariik</territory>
 			<territory type="CG">Kongo</territory>
 			<territory type="CH">Ĩveits</territory>
-			<territory type="CI">Cote d'Ivoire</territory>
+			<territory type="CI">Cote d’Ivoire</territory>
 			<territory type="CK">Cooki saared</territory>
 			<territory type="CL">Tiiili</territory>
 			<territory type="CM">Kamerun</territory>
@@ -290,11 +285,6 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[a-z õ ä ö ü š ž]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Latn</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
 		<localizedPatternChars>GanjkHmsSEDFwWxhKzAeugXZ</localizedPatternChars>

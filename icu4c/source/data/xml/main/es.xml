@@ -1,37 +1,51 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.1/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="3.0"/>
-		<generation date="2004-05-14" />
+		<version number="1.1"/>
+		<generation date="2004-05-27" />
 		<language type="es" /> 
 	</identity>
 	<localeDisplayNames>
 		<languages>
 			<language type="aa">afar</language>
+			<language type="ab">abkhaziano</language>
+			<language type="ae">avéstico</language>
 			<language type="af">afrikaans</language>
+			<language type="ak">akan</language>
 			<language type="am">amárico</language>
+			<language type="an">aragonés</language>
 			<language type="ar">árabe</language>
 			<language type="as">asamés</language>
-			<language type="az">azerbayano</language>
+			<language type="av">avar</language>
+			<language type="ay">aymara</language>
+			<language type="az">azerí</language>
+			<language type="ba">bashkir</language>
 			<language type="be">bielorruso</language>
 			<language type="bg">búlgaro</language>
 			<language type="bh">bihari</language>
 			<language type="bi">bislama</language>
+			<language type="bm">bambara</language>
 			<language type="bn">bengalí</language>
 			<language type="bo">tibetano</language>
 			<language type="br">bretón</language>
+			<language type="bs">bosnio</language>
+			<language type="byn">blin</language>
 			<language type="ca">catalán</language>
+			<language type="ce">checheno</language>
+			<language type="ch">chamorro</language>
+			<language type="chr">cherokee</language>
 			<language type="co">corso</language>
+			<language type="cr">cree</language>
 			<language type="cs">checo</language>
+			<language type="cu">eslavo eclesiástico</language>
+			<language type="cv">chuvash</language>
 			<language type="cy">galés</language>
 			<language type="da">danés</language>
 			<language type="de">alemán</language>
+			<language type="dv">divehi</language>
+			<language type="dz">bhutaní</language>
+			<language type="ee">ewe</language>
 			<language type="el">griego</language>
 			<language type="en">inglés</language>
 			<language type="eo">esperanto</language>
@@ -39,43 +53,68 @@
 			<language type="et">estonio</language>
 			<language type="eu">vasco</language>
 			<language type="fa">farsi</language>
+			<language type="ff">fula</language>
 			<language type="fi">finlandés</language>
+			<language type="fj">fidji</language>
 			<language type="fo">feroés</language>
 			<language type="fr">francés</language>
+			<language type="fy">frisón</language>
 			<language type="ga">irlandés</language>
 			<language type="gd">gaélico escocés</language>
+			<language type="gez">geez</language>
 			<language type="gl">gallego</language>
-			<language type="gu">goujaratí</language>
+			<language type="gn">guaraní</language>
+			<language type="gu">gujarati</language>
 			<language type="gv">gaélico manés</language>
 			<language type="ha">hausa</language>
 			<language type="haw">hawaiano</language>
 			<language type="he">hebreo</language>
 			<language type="hi">hindi</language>
+			<language type="ho">hiri motu</language>
 			<language type="hr">croata</language>
+			<language type="ht">haitiano</language>
 			<language type="hu">húngaro</language>
 			<language type="hy">armenio</language>
+			<language type="hz">herero</language>
+			<language type="ia">interlingua</language>
 			<language type="id">indonesio</language>
 			<language type="ie">interlingue</language>
+			<language type="ig">igbo</language>
+			<language type="ii">sichuan yi</language>
 			<language type="ik">inupiak</language>
+			<language type="io">ido</language>
 			<language type="is">islandés</language>
 			<language type="it">italiano</language>
 			<language type="iu">inuktitut</language>
 			<language type="ja">japonés</language>
+			<language type="jv">javanés</language>
 			<language type="ka">georgiano</language>
+			<language type="kg">kongo</language>
+			<language type="ki">kikuyu</language>
+			<language type="kj">kuanyama</language>
 			<language type="kk">kazajo</language>
 			<language type="kl">groenlandés</language>
-			<language type="km">kmer</language>
-			<language type="kn">canara</language>
+			<language type="km">jemer</language>
+			<language type="kn">canarés</language>
 			<language type="ko">coreano</language>
+			<language type="kok">konkani</language>
+			<language type="kr">kanuri</language>
+			<language type="ks">cachemiro</language>
 			<language type="ku">kurdo</language>
+			<language type="kv">komi</language>
 			<language type="kw">córnico</language>
 			<language type="ky">kirghiz</language>
 			<language type="la">latín</language>
+			<language type="lb">luxemburgués</language>
+			<language type="lg">ganda</language>
+			<language type="li">limburgués</language>
 			<language type="ln">lingala</language>
 			<language type="lo">laosiano</language>
 			<language type="lt">lituano</language>
-			<language type="lv">letonio</language>
+			<language type="lu">luba-katanga</language>
+			<language type="lv">letón</language>
 			<language type="mg">malgache</language>
+			<language type="mh">marshalés</language>
 			<language type="mi">maorí</language>
 			<language type="mk">macedonio</language>
 			<language type="ml">malayalam</language>
@@ -87,49 +126,79 @@
 			<language type="my">birmano</language>
 			<language type="na">nauruano</language>
 			<language type="nb">bokmal noruego</language>
+			<language type="nd">ndebele septentrional</language>
 			<language type="ne">nepalí</language>
+			<language type="ng">ndonga</language>
 			<language type="nl">holandés</language>
 			<language type="nn">nynorsk noruego</language>
 			<language type="no">noruego</language>
+			<language type="nr">ndebele meridional</language>
+			<language type="nv">navajo</language>
+			<language type="ny">nyanja</language>
+			<language type="oc">occitano (después del 1500)</language>
+			<language type="oj">ojibwa</language>
 			<language type="om">oromo</language>
 			<language type="or">oriya</language>
+			<language type="os">osético</language>
 			<language type="pa">punjabí</language>
+			<language type="pi">pali</language>
 			<language type="pl">polaco</language>
 			<language type="ps">pashto</language>
 			<language type="pt">portugués</language>
 			<language type="qu">quechua</language>
+			<language type="rm">reto-romance</language>
+			<language type="rn">kiroundi</language>
 			<language type="ro">rumano</language>
 			<language type="root">raíz</language>
 			<language type="ru">ruso</language>
+			<language type="rw">kinyarwanda</language>
 			<language type="sa">sánscrito</language>
+			<language type="sc">sardo</language>
+			<language type="sd">sindhi</language>
+			<language type="se">sami septentrional</language>
 			<language type="sg">sango</language>
-			<language type="sh">serbocroata</language>
-			<language type="si">cingalés</language>
+			<language type="sh">serbo-croata</language>
+			<language type="si">singalés</language>
+			<language type="sid">sidamo</language>
 			<language type="sk">eslovaco</language>
 			<language type="sl">esloveno</language>
 			<language type="sm">samoano</language>
+			<language type="sn">shona</language>
 			<language type="so">somalí</language>
 			<language type="sq">albanés</language>
 			<language type="sr">serbio</language>
+			<language type="ss">siswati</language>
+			<language type="st">sesotho</language>
 			<language type="su">sundanés</language>
 			<language type="sv">sueco</language>
 			<language type="sw">swahili</language>
+			<language type="syr">siriaco</language>
 			<language type="ta">tamil</language>
 			<language type="te">telugu</language>
+			<language type="tg">tayiko</language>
 			<language type="th">tailandés</language>
 			<language type="ti">tigrinya</language>
+			<language type="tig">tigré</language>
+			<language type="tk">turkmeno</language>
 			<language type="tl">tagalo</language>
+			<language type="tn">setchwana</language>
+			<language type="to">tonga (Islas Tonga)</language>
 			<language type="tr">turco</language>
 			<language type="ts">tsonga</language>
-			<language type="tt">tátaro</language>
+			<language type="tt">tatar</language>
+			<language type="tw">twi</language>
+			<language type="ty">tahitiano</language>
 			<language type="ug">uigur</language>
 			<language type="uk">ucraniano</language>
 			<language type="ur">urdu</language>
 			<language type="uz">uzbeko</language>
+			<language type="ve">venda</language>
 			<language type="vi">vietnamita</language>
 			<language type="vo">volapuk</language>
+			<language type="wa">valón</language>
 			<language type="wo">uolof</language>
 			<language type="xh">xhosa</language>
+			<language type="yi">yidish</language>
 			<language type="yo">yoruba</language>
 			<language type="za">zhuang</language>
 			<language type="zh">chino</language>
@@ -139,20 +208,24 @@
 			<script type="Arab">árabe</script>
 			<script type="Armn">armenio</script>
 			<script type="Beng">bengalí</script>
+			<script type="Bopo">bopomofo</script>
 			<script type="Brai">braille</script>
+			<script type="Buhd">buhid</script>
 			<script type="Cans">símbolos aborígenes canadienses unificados</script>
 			<script type="Cher">cherokee</script>
 			<script type="Cprt">chipriota</script>
 			<script type="Cyrl">cirílico</script>
 			<script type="Deva">devanagari</script>
+			<script type="Dsrt">deseret</script>
 			<script type="Ethi">etíopico</script>
 			<script type="Geor">georgiano</script>
 			<script type="Goth">gótico</script>
 			<script type="Grek">griego</script>
-			<script type="Gujr">goujaratí</script>
+			<script type="Gujr">gujarati</script>
 			<script type="Guru">gurmuji</script>
 			<script type="Hang">hangul</script>
 			<script type="Hani">han</script>
+			<script type="Hano">hanunoo</script>
 			<script type="Hans">han simplificado</script>
 			<script type="Hant">han tradicional</script>
 			<script type="Hebr">hebreo</script>
@@ -160,9 +233,11 @@
 			<script type="Ital">antigua bastardilla</script>
 			<script type="Kana">katakana</script>
 			<script type="Khmr">jemer</script>
-			<script type="Knda">canara</script>
+			<script type="Knda">canarés</script>
 			<script type="Laoo">lao</script>
 			<script type="Latn">latín</script>
+			<script type="Limb">limbu</script>
+			<script type="Linb">linear B</script>
 			<script type="Mlym">malayálam</script>
 			<script type="Mong">mongoliano</script>
 			<script type="Mymr">myanmar</script>
@@ -171,6 +246,7 @@
 			<script type="Osma">osmaniya</script>
 			<script type="Qaac">copto</script>
 			<script type="Runr">rúnico</script>
+			<script type="Shaw">shavian</script>
 			<script type="Sinh">binhala</script>
 			<script type="Syrc">siriaco</script>
 			<script type="Tagb">tagbanúa</script>
@@ -202,7 +278,7 @@
 			<territory type="AU">Australia</territory>
 			<territory type="AW">Aruba</territory>
 			<territory type="AZ">Azerbaiyán</territory>
-			<territory type="BA">Bosnia y Hercegovina</territory>
+			<territory type="BA">Bosnia-Herzegovina</territory>
 			<territory type="BB">Barbados</territory>
 			<territory type="BD">Bangladesh</territory>
 			<territory type="BE">Bélgica</territory>
@@ -236,7 +312,7 @@
 			<territory type="CR">Costa Rica</territory>
 			<territory type="CU">Cuba</territory>
 			<territory type="CV">Cabo Verde</territory>
-			<territory type="CX">Isla de Christmas</territory>
+			<territory type="CX">Isla Navidad</territory>
 			<territory type="CY">Chipre</territory>
 			<territory type="CZ">República Checa</territory>
 			<territory type="DE">Alemania</territory>
@@ -253,7 +329,7 @@
 			<territory type="ES">España</territory>
 			<territory type="ET">Etiopía</territory>
 			<territory type="FI">Finlandia</territory>
-			<territory type="FJ">Fidji</territory>
+			<territory type="FJ">Fiyi</territory>
 			<territory type="FK">Islas Falkland (Malvinas)</territory>
 			<territory type="FM">Micronesia</territory>
 			<territory type="FO">Islas Feroe</territory>
@@ -277,7 +353,7 @@
 			<territory type="GU">Guam</territory>
 			<territory type="GW">Guinea-Bissau</territory>
 			<territory type="GY">Guyana</territory>
-			<territory type="HK">Hong Kong, Región administrativa especial de China</territory>
+			<territory type="HK">Hong-Kong, Región administrativa especial de China</territory>
 			<territory type="HM">Islas Heard y McDonald</territory>
 			<territory type="HN">Honduras</territory>
 			<territory type="HR">Croacia</territory>
@@ -287,8 +363,8 @@
 			<territory type="IE">Irlanda</territory>
 			<territory type="IL">Israel</territory>
 			<territory type="IN">India</territory>
-			<territory type="IO">Territorios Británicos del Océano Índico</territory>
-			<territory type="IQ">Irak</territory>
+			<territory type="IO">Territorios Británico del Océano Índico</territory>
+			<territory type="IQ">Iraq</territory>
 			<territory type="IR">Irán</territory>
 			<territory type="IS">Islandia</territory>
 			<territory type="IT">Italia</territory>
@@ -299,20 +375,20 @@
 			<territory type="KG">Kirguizistán</territory>
 			<territory type="KH">Camboya</territory>
 			<territory type="KI">Kiribati</territory>
-			<territory type="KM">Comores</territory>
+			<territory type="KM">Comoras</territory>
 			<territory type="KN">San Cristóbal y Nieves</territory>
 			<territory type="KP">Corea del Norte</territory>
 			<territory type="KR">Corea del Sur</territory>
 			<territory type="KW">Kuwait</territory>
 			<territory type="KY">Islas Caimán</territory>
-			<territory type="KZ">Kazajistán</territory>
+			<territory type="KZ">Kazajstán</territory>
 			<territory type="LA">Laos</territory>
 			<territory type="LB">Líbano</territory>
 			<territory type="LC">Saint Lucia</territory>
 			<territory type="LI">Liechtenstein</territory>
 			<territory type="LK">Sri Lanka</territory>
 			<territory type="LR">Liberia</territory>
-			<territory type="LS">Lesoto</territory>
+			<territory type="LS">Lesotho</territory>
 			<territory type="LT">Lituania</territory>
 			<territory type="LU">Luxemburgo</territory>
 			<territory type="LV">Letonia</territory>
@@ -334,7 +410,7 @@
 			<territory type="MT">Malta</territory>
 			<territory type="MU">Mauricio</territory>
 			<territory type="MV">Maldivas</territory>
-			<territory type="MW">Malaui</territory>
+			<territory type="MW">Malawi</territory>
 			<territory type="MX">México</territory>
 			<territory type="MY">Malasia</territory>
 			<territory type="MZ">Mozambique</territory>
@@ -348,7 +424,7 @@
 			<territory type="NO">Noruega</territory>
 			<territory type="NP">Nepal</territory>
 			<territory type="NR">Nauru</territory>
-			<territory type="NU">Niue</territory>
+			<territory type="NU">Isla Niue</territory>
 			<territory type="NZ">Nueva Zelanda</territory>
 			<territory type="OM">Omán</territory>
 			<territory type="PA">Panamá</territory>
@@ -367,7 +443,7 @@
 			<territory type="PY">Paraguay</territory>
 			<territory type="QA">Qatar</territory>
 			<territory type="RE">Réunion</territory>
-			<territory type="RO">Rumania</territory>
+			<territory type="RO">Rumanía</territory>
 			<territory type="RU">Rusia</territory>
 			<territory type="RW">Ruanda</territory>
 			<territory type="SA">Arabia Saudí</territory>
@@ -396,7 +472,7 @@
 			<territory type="TG">Togo</territory>
 			<territory type="TH">Tailandia</territory>
 			<territory type="TJ">Tayikistán</territory>
-			<territory type="TK">Tokelau</territory>
+			<territory type="TK">Islas Tokelau</territory>
 			<territory type="TL">Timor Oriental</territory>
 			<territory type="TM">Turkmenistán</territory>
 			<territory type="TN">Túnez</territory>
@@ -408,7 +484,7 @@
 			<territory type="TZ">Tanzania</territory>
 			<territory type="UA">Ucrania</territory>
 			<territory type="UG">Uganda</territory>
-			<territory type="UM">Islas menores alejadas de Estados Unidos</territory>
+			<territory type="UM">Islas menores alejadas de los Estados Unidos</territory>
 			<territory type="US">Estados Unidos</territory>
 			<territory type="UY">Uruguay</territory>
 			<territory type="UZ">Uzbekistán</territory>
@@ -433,19 +509,19 @@
 		</variants>
 		<keys>
 			<key type="calendar">calendario</key>
-			<key type="collation">colación</key>
+			<key type="collation">intercalación</key>
 			<key type="currency">moneda</key>
 		</keys>
 		<types>
-			<type type="arabic" key="calendar">calendario islámico</type>
-			<type type="arabic-civil" key="calendar">calendario civil islámico</type>
 			<type type="buddhist" key="calendar">calendario budista</type>
 			<type type="chinese" key="calendar">calendario chino</type>
 			<type type="gregorian" key="calendar">calendario gregoriano</type>
 			<type type="hebrew" key="calendar">calendario hebreo</type>
+			<type type="islamic" key="calendar">calendario islámico</type>
+			<type type="islamic-civil" key="calendar">calendario civil islámico</type>
 			<type type="japanese" key="calendar">calendario japonés</type>
 			<type type="direct" key="collation">orden directo</type>
-			<type type="phonebook" key="collation">orden guía de telefónos</type>
+			<type type="phonebook" key="collation">orden de listín telefónico</type>
 			<type type="pinyin" key="collation">orden pinyin</type>
 			<type type="stroke" key="collation">orden pincelada</type>
 			<type type="traditional" key="collation">orden tradicional</type>
@@ -453,11 +529,6 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[a-z ñ á é í ó ú ü]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Latn</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
 		<localizedPatternChars>GuMtkHmsSEDFwWahKzUeygAZ</localizedPatternChars>
@@ -521,7 +592,13 @@
 							<day type="sat">sáb</day>
 						</dayWidth>
 						<dayWidth type="narrow">
-							<day type="sun">DLMMJVS</day>
+							<day type="sun">D</day>
+							<day type="mon">L</day>
+							<day type="tue">M</day>
+							<day type="wed">M</day>
+							<day type="thu">J</day>
+							<day type="fri">V</day>
+							<day type="sat">S</day>
 						</dayWidth>
 						<dayWidth type="wide">
 							<day type="sun">domingo</day>
@@ -599,6 +676,327 @@
 				</dateTimeFormats>
 			</calendar>
 		</calendars>
+		<timeZoneNames>
+			<zone type="PST">
+				<long>
+				<standard>Hora estándar del Pacífico</standard>
+				<daylight>Hora de verano del Pacífico</daylight>
+				</long>
+				<short>
+					<standard>PST</standard>
+					<daylight>PDT</daylight>
+				</short>
+				<exemplarCity>Los Ángeles</exemplarCity>
+			</zone>
+			<zone type="America/Los_Angeles">
+				<long>
+				<standard>Hora estándar del Pacífico</standard>
+				<daylight>Hora de verano del Pacífico</daylight>
+				</long>
+				<short>
+					<standard>PST</standard>
+					<daylight>PDT</daylight>
+				</short>
+				<exemplarCity>Los Ángeles</exemplarCity>
+			</zone>
+			<zone type="MST">
+				<long>
+				<standard>Hora estándar de Montaña</standard>
+				<daylight>Hora de verano de Montaña</daylight>
+				</long>
+				<short>
+					<standard>MST</standard>
+					<daylight>MDT</daylight>
+				</short>
+				<exemplarCity>Denver</exemplarCity>
+			</zone>
+			<zone type="America/Denver">
+				<long>
+				<standard>Hora estándar de Montaña</standard>
+				<daylight>Hora de verano de Montaña</daylight>
+				</long>
+				<short>
+					<standard>MST</standard>
+					<daylight>MDT</daylight>
+				</short>
+				<exemplarCity>Denver</exemplarCity>
+			</zone>
+			<zone type="PNT">
+				<long>
+				<standard>Hora estándar de Montaña</standard>
+				<daylight>Hora estándar de Montaña</daylight>
+				</long>
+				<short>
+					<standard>MST</standard>
+					<daylight>MST</daylight>
+				</short>
+				<exemplarCity>Phoenix</exemplarCity>
+			</zone>
+			<zone type="America/Phoenix">
+				<long>
+				<standard>Hora estándar de Montaña</standard>
+				<daylight>Hora estándar de Montaña</daylight>
+				</long>
+				<short>
+					<standard>MST</standard>
+					<daylight>MST</daylight>
+				</short>
+				<exemplarCity>Phoenix</exemplarCity>
+			</zone>
+			<zone type="CST">
+				<long>
+				<standard>Hora estándar central</standard>
+				<daylight>Hora de verano central</daylight>
+				</long>
+				<short>
+					<standard>CST</standard>
+					<daylight>CDT</daylight>
+				</short>
+				<exemplarCity>Chicago</exemplarCity>
+			</zone>
+			<zone type="America/Chicago">
+				<long>
+				<standard>Hora estándar central</standard>
+				<daylight>Hora de verano central</daylight>
+				</long>
+				<short>
+					<standard>CST</standard>
+					<daylight>CDT</daylight>
+				</short>
+				<exemplarCity>Chicago</exemplarCity>
+			</zone>
+			<zone type="EST">
+				<long>
+				<standard>Hora estándar oriental</standard>
+				<daylight>Hora de verano oriental</daylight>
+				</long>
+				<short>
+					<standard>EST</standard>
+					<daylight>EDT</daylight>
+				</short>
+				<exemplarCity>Nueva York</exemplarCity>
+			</zone>
+			<zone type="America/New_York">
+				<long>
+				<standard>Hora estándar oriental</standard>
+				<daylight>Hora de verano oriental</daylight>
+				</long>
+				<short>
+					<standard>EST</standard>
+					<daylight>EDT</daylight>
+				</short>
+				<exemplarCity>Nueva York</exemplarCity>
+			</zone>
+			<zone type="IET">
+				<long>
+				<standard>Hora estándar oriental</standard>
+				<daylight>Hora estándar oriental</daylight>
+				</long>
+				<short>
+					<standard>EST</standard>
+					<daylight>EST</daylight>
+				</short>
+				<exemplarCity>Indianápolis</exemplarCity>
+			</zone>
+			<zone type="America/Indianapolis">
+				<long>
+				<standard>Hora estándar oriental</standard>
+				<daylight>Hora estándar oriental</daylight>
+				</long>
+				<short>
+					<standard>EST</standard>
+					<daylight>EST</daylight>
+				</short>
+				<exemplarCity>Indianápolis</exemplarCity>
+			</zone>
+			<zone type="HST">
+				<long>
+				<standard>Hora estándar de Hawai</standard>
+				<daylight>Hora estándar de Hawai</daylight>
+				</long>
+				<short>
+					<standard>HST</standard>
+					<daylight>HST</daylight>
+				</short>
+				<exemplarCity>Honolulu</exemplarCity>
+			</zone>
+			<zone type="Pacific/Honolulu">
+				<long>
+				<standard>Hora estándar de Hawai</standard>
+				<daylight>Hora estándar de Hawai</daylight>
+				</long>
+				<short>
+					<standard>HST</standard>
+					<daylight>HST</daylight>
+				</short>
+				<exemplarCity>Honolulu</exemplarCity>
+			</zone>
+			<zone type="AST">
+				<long>
+				<standard>Hora estándar de Alaska</standard>
+				<daylight>Hora de verano de Alaska</daylight>
+				</long>
+				<short>
+					<standard>AST</standard>
+					<daylight>ADT</daylight>
+				</short>
+				<exemplarCity>Anchorage</exemplarCity>
+			</zone>
+			<zone type="America/Anchorage">
+				<long>
+				<standard>Hora estándar de Alaska</standard>
+				<daylight>Hora de verano de Alaska</daylight>
+				</long>
+				<short>
+					<standard>AST</standard>
+					<daylight>ADT</daylight>
+				</short>
+				<exemplarCity>Anchorage</exemplarCity>
+			</zone>
+			<zone type="America/Halifax">
+				<long>
+				<standard>Hora estándar del Atlántico</standard>
+				<daylight>Hora de verano del Atlántico</daylight>
+				</long>
+				<short>
+					<standard>AST</standard>
+					<daylight>ADT</daylight>
+				</short>
+				<exemplarCity>Halifax</exemplarCity>
+			</zone>
+			<zone type="CNT">
+				<long>
+				<standard>Hora estándar de Newfoundland</standard>
+				<daylight>Hora de verano de Newfoundland</daylight>
+				</long>
+				<short>
+					<standard>CNT</standard>
+					<daylight>CDT</daylight>
+				</short>
+				<exemplarCity>St. Johns</exemplarCity>
+			</zone>
+			<zone type="America/St_Johns">
+				<long>
+				<standard>Hora estándar de Newfoundland</standard>
+				<daylight>Hora de verano de Newfoundland</daylight>
+				</long>
+				<short>
+					<standard>CNT</standard>
+					<daylight>CDT</daylight>
+				</short>
+				<exemplarCity>St. Johns</exemplarCity>
+			</zone>
+			<zone type="ECT">
+				<long>
+				<standard>Hora estándar de Europa Central</standard>
+				<daylight>Hora de verano de Europa Central</daylight>
+				</long>
+				<short>
+					<standard>CET</standard>
+					<daylight>CEST</daylight>
+				</short>
+				<exemplarCity>París</exemplarCity>
+			</zone>
+			<zone type="Europe/Paris">
+				<long>
+				<standard>Hora estándar de Europa Central</standard>
+				<daylight>Hora de verano de Europa Central</daylight>
+				</long>
+				<short>
+					<standard>CET</standard>
+					<daylight>CEST</daylight>
+				</short>
+				<exemplarCity>París</exemplarCity>
+			</zone>
+			<zone type="GMT">
+				<long>
+				<standard>Hora media de Greenwich</standard>
+				<daylight>Hora media de Greenwich</daylight>
+				</long>
+				<short>
+					<standard>GMT</standard>
+					<daylight>GMT</daylight>
+				</short>
+				<exemplarCity>Londres</exemplarCity>
+			</zone>
+			<zone type="Africa/Casablanca">
+				<long>
+				<standard>Hora media de Greenwich</standard>
+				<daylight>Hora media de Greenwich</daylight>
+				</long>
+				<short>
+					<standard>GMT</standard>
+					<daylight>GMT</daylight>
+				</short>
+				<exemplarCity>Casablanca</exemplarCity>
+			</zone>
+			<zone type="Asia/Jerusalem">
+				<long>
+				<standard>Hora estándar de Israel</standard>
+				<daylight>Hora de verano de Israel</daylight>
+				</long>
+				<short>
+					<standard>IST</standard>
+					<daylight>IDT</daylight>
+				</short>
+				<exemplarCity>Jerusalén</exemplarCity>
+			</zone>
+			<zone type="JST">
+				<long>
+				<standard>Hora estándar de Japón</standard>
+				<daylight>Hora estándar de Japón</daylight>
+				</long>
+				<short>
+					<standard>JST</standard>
+					<daylight>JST</daylight>
+				</short>
+				<exemplarCity>Tokio</exemplarCity>
+			</zone>
+			<zone type="Asia/Tokyo">
+				<long>
+				<standard>Hora estándar de Japón</standard>
+				<daylight>Hora estándar de Japón</daylight>
+				</long>
+				<short>
+					<standard>JST</standard>
+					<daylight>JST</daylight>
+				</short>
+				<exemplarCity>Tokio</exemplarCity>
+			</zone>
+			<zone type="Europe/Bucharest">
+				<long>
+				<standard>Hora estándar de Europa del Este</standard>
+				<daylight>Hora de verano de Europa del Este</daylight>
+				</long>
+				<short>
+					<standard>EET</standard>
+					<daylight>EEST</daylight>
+				</short>
+				<exemplarCity>Bucarest</exemplarCity>
+			</zone>
+			<zone type="CTT">
+				<long>
+				<standard>Hora estándar de China</standard>
+				<daylight>Hora estándar de China</daylight>
+				</long>
+				<short>
+					<standard>CTT</standard>
+					<daylight>CDT</daylight>
+				</short>
+				<exemplarCity>Shanghai</exemplarCity>
+			</zone>
+			<zone type="Asia/Shanghai">
+				<long>
+				<standard>Hora estándar de China</standard>
+				<daylight>Hora estándar de China</daylight>
+				</long>
+				<short>
+					<standard>CTT</standard>
+					<daylight>CDT</daylight>
+				</short>
+				<exemplarCity>Shanghai</exemplarCity>
+			</zone>
+		</timeZoneNames>
 	</dates>
 	<numbers>
 		<decimalFormats>
@@ -1307,7 +1705,7 @@
 				<symbol>JEP</symbol>
 			</currency>
 			<currency type="JMD">
-				<displayName>Dólar de Jamaica</displayName>
+				<displayName>dólar de Jamaica</displayName>
 				<symbol>J$</symbol>
 			</currency>
 			<currency type="JMP">
@@ -1855,7 +2253,7 @@
 				<symbol>TND</symbol>
 			</currency>
 			<currency type="TOP">
-				<displayName>pa'anga tongano</displayName>
+				<displayName>paʻanga tongano</displayName>
 				<symbol>T$</symbol>
 			</currency>
 			<currency type="TOS">
@@ -2074,10 +2472,6 @@
 				<displayName>franco CFP</displayName>
 				<symbol>CFPF</symbol>
 			</currency>
-			<currency type="XPS">
-				<displayName>libra esterlina</displayName>
-				<symbol>XPS</symbol>
-			</currency>
 			<currency type="XSS">
 				<displayName>chelín esterlino</displayName>
 				<symbol>XSS</symbol>
@@ -2160,40 +2554,4 @@
 			</currency>
 		</currencies>
 	</numbers>
-	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-		<icu:ruleBasedNumberFormats>
-			<icu:ruleBasedNumberFormat type="spellout">
--x: menos &gt;&gt;;
-x.x: &lt;&lt; punto &gt;&gt;;
-cero; uno; dos; tres; cuatro; cinco; seis; siete; ocho; nueve;
-diez; once; doce; trece; catorce; quince; dieciséis;
-    diecisiete; dieciocho; diecinueve;
-veinte; veintiuno; veintidós; veintitrés; veinticuatro;
-    veinticinco; veintiséis; veintisiete; veintiocho;
-    veintinueve;
-30: treinta[ y &gt;&gt;];
-40: cuarenta[ y &gt;&gt;];
-50: cincuenta[ y &gt;&gt;];
-60: sesenta[ y &gt;&gt;];
-70: setenta[ y &gt;&gt;];
-80: ochenta[ y &gt;&gt;];
-90: noventa[ y &gt;&gt;];
-100: cien;
-101: ciento &gt;&gt;;
-200: doscientos[ &gt;&gt;];
-300: trescientos[ &gt;&gt;];
-400: cuatrocientos[ &gt;&gt;];
-500: quinientos[ &gt;&gt;];
-600: seiscientos[ &gt;&gt;];
-700: setecientos[ &gt;&gt;];
-800: ochocientos[ &gt;&gt;];
-900: novecientos[ &gt;&gt;];
-1000: mil[ &gt;&gt;];
-2000: &lt;&lt; mil[ &gt;&gt;];
-1,000,000: un millón[ &gt;&gt;];
-2,000,000: &lt;&lt; millón[ &gt;&gt;];
-1,000,000,000: =#,##0= (incomplete data);
-			</icu:ruleBasedNumberFormat>
-		</icu:ruleBasedNumberFormats>
-	</special>
 </ldml>

@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.1/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="2.0"/>
-		<generation date="2004-05-14" />
+		<version number="1.1"/>
+		<generation date="2004-05-27" />
 		<language type="hu" /> 
 	</identity>
 	<localeDisplayNames>
@@ -399,93 +394,10 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[a-z á é í ó ú ö ü ő ű {cs} {dz} {dzs} {gy} {ly} {ny} {sz} {ty} {zs} {ccs} {ddz} {ddzs} {ggy} {lly} {nny} {ssz} {tty} {zzs}]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Latn</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
 		<localizedPatternChars>GanjkHmsSEDFwWxhKzAeugXZ</localizedPatternChars>
 		<calendars>
-			<calendar type="arabic">
-				<months>
-					<monthContext type="format">
-						<monthWidth type="abbreviated">
-							<month type="1">Moharrem</month>
-							<month type="2">Safar</month>
-							<month type="3">Rébi el avvel</month>
-							<month type="4">Rébi el accher</month>
-							<month type="5">Dsemádi el avvel</month>
-							<month type="6">Dsemádi el accher</month>
-							<month type="7">Redseb</month>
-							<month type="8">Sabán</month>
-							<month type="9">Ramadán</month>
-							<month type="10">Sevvál</month>
-							<month type="11">Dsül kade</month>
-							<month type="12">Dsül hedse</month>
-						</monthWidth>
-						<monthWidth type="wide">
-							<month type="1">Moharrem</month>
-							<month type="2">Safar</month>
-							<month type="3">Rébi el avvel</month>
-							<month type="4">Rébi el accher</month>
-							<month type="5">Dsemádi el avvel</month>
-							<month type="6">Dsemádi el accher</month>
-							<month type="7">Redseb</month>
-							<month type="8">Sabán</month>
-							<month type="9">Ramadán</month>
-							<month type="10">Sevvál</month>
-							<month type="11">Dsül kade</month>
-							<month type="12">Dsül hedse</month>
-						</monthWidth>
-					</monthContext>
-				</months>
-				<eras>
-					<eraAbbr>
-						<era type="1">MF</era>
-					</eraAbbr>
-				</eras>
-			</calendar>
-			<calendar type="arabic-civil">
-				<months>
-					<monthContext type="format">
-						<monthWidth type="abbreviated">
-							<month type="1">Moharrem</month>
-							<month type="2">Safar</month>
-							<month type="3">Rébi el avvel</month>
-							<month type="4">Rébi el accher</month>
-							<month type="5">Dsemádi el avvel</month>
-							<month type="6">Dsemádi el accher</month>
-							<month type="7">Redseb</month>
-							<month type="8">Sabán</month>
-							<month type="9">Ramadán</month>
-							<month type="10">Sevvál</month>
-							<month type="11">Dsül kade</month>
-							<month type="12">Dsül hedse</month>
-						</monthWidth>
-						<monthWidth type="wide">
-							<month type="1">Moharrem</month>
-							<month type="2">Safar</month>
-							<month type="3">Rébi el avvel</month>
-							<month type="4">Rébi el accher</month>
-							<month type="5">Dsemádi el avvel</month>
-							<month type="6">Dsemádi el accher</month>
-							<month type="7">Redseb</month>
-							<month type="8">Sabán</month>
-							<month type="9">Ramadán</month>
-							<month type="10">Sevvál</month>
-							<month type="11">Dsül kade</month>
-							<month type="12">Dsül hedse</month>
-						</monthWidth>
-					</monthContext>
-				</months>
-				<eras>
-					<eraAbbr>
-						<era type="1">MF</era>
-					</eraAbbr>
-				</eras>
-			</calendar>
 			<calendar type="buddhist">
 				<eras>
 					<eraAbbr>
@@ -652,6 +564,84 @@
 				<eras>
 					<eraAbbr>
 						<era type="1">TÉ</era>
+					</eraAbbr>
+				</eras>
+			</calendar>
+			<calendar type="islamic">
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">Moharrem</month>
+							<month type="2">Safar</month>
+							<month type="3">Rébi el avvel</month>
+							<month type="4">Rébi el accher</month>
+							<month type="5">Dsemádi el avvel</month>
+							<month type="6">Dsemádi el accher</month>
+							<month type="7">Redseb</month>
+							<month type="8">Sabán</month>
+							<month type="9">Ramadán</month>
+							<month type="10">Sevvál</month>
+							<month type="11">Dsül kade</month>
+							<month type="12">Dsül hedse</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">Moharrem</month>
+							<month type="2">Safar</month>
+							<month type="3">Rébi el avvel</month>
+							<month type="4">Rébi el accher</month>
+							<month type="5">Dsemádi el avvel</month>
+							<month type="6">Dsemádi el accher</month>
+							<month type="7">Redseb</month>
+							<month type="8">Sabán</month>
+							<month type="9">Ramadán</month>
+							<month type="10">Sevvál</month>
+							<month type="11">Dsül kade</month>
+							<month type="12">Dsül hedse</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<eras>
+					<eraAbbr>
+						<era type="1">MF</era>
+					</eraAbbr>
+				</eras>
+			</calendar>
+			<calendar type="islamic-civil">
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">Moharrem</month>
+							<month type="2">Safar</month>
+							<month type="3">Rébi el avvel</month>
+							<month type="4">Rébi el accher</month>
+							<month type="5">Dsemádi el avvel</month>
+							<month type="6">Dsemádi el accher</month>
+							<month type="7">Redseb</month>
+							<month type="8">Sabán</month>
+							<month type="9">Ramadán</month>
+							<month type="10">Sevvál</month>
+							<month type="11">Dsül kade</month>
+							<month type="12">Dsül hedse</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">Moharrem</month>
+							<month type="2">Safar</month>
+							<month type="3">Rébi el avvel</month>
+							<month type="4">Rébi el accher</month>
+							<month type="5">Dsemádi el avvel</month>
+							<month type="6">Dsemádi el accher</month>
+							<month type="7">Redseb</month>
+							<month type="8">Sabán</month>
+							<month type="9">Ramadán</month>
+							<month type="10">Sevvál</month>
+							<month type="11">Dsül kade</month>
+							<month type="12">Dsül hedse</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<eras>
+					<eraAbbr>
+						<era type="1">MF</era>
 					</eraAbbr>
 				</eras>
 			</calendar>

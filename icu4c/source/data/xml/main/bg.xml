@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.1/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="2.0"/>
-		<generation date="2004-05-14" />
+		<version number="1.1"/>
+		<generation date="2004-05-27" />
 		<language type="bg" /> 
 	</identity>
 	<localeDisplayNames>
@@ -86,7 +81,7 @@
 			<territory type="CF">Централноафриканска Република</territory>
 			<territory type="CG">Конго</territory>
 			<territory type="CH">Швейцария</territory>
-			<territory type="CI">Кот д'Ивоар</territory>
+			<territory type="CI">Кот д’Ивоар</territory>
 			<territory type="CK">Острови Кук</territory>
 			<territory type="CL">Чили</territory>
 			<territory type="CM">Камерун</territory>
@@ -288,11 +283,6 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[а-ь юяѣѫ]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Cyrl</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
 		<localizedPatternChars>GanjkHmsSEDFwWxhKzAeugXZ</localizedPatternChars>
