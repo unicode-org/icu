@@ -25,8 +25,8 @@ U_NAMESPACE_BEGIN
  * @return 0 if the two tokens are equal, -1 if tok1 is < tok2, or
  * +1 if tok1 is > tok2.
  */
-typedef int8_t (U_EXPORT2 * U_CALLCONV USortComparator)(UHashTok tok1,
-                                                        UHashTok tok2);
+typedef int8_t U_CALLCONV USortComparator(UHashTok tok1,
+                                          UHashTok tok2);
 
 /**
  * A token assignment function.  It may copy an integer, copy
@@ -34,8 +34,8 @@ typedef int8_t (U_EXPORT2 * U_CALLCONV USortComparator)(UHashTok tok1,
  * @param dst The token to be assigned to
  * @param src The token to assign from
  */
-typedef void (U_EXPORT2 * U_CALLCONV UTokenAssigner)(UHashTok dst,
-                                                     UHashTok src);
+typedef void U_CALLCONV UTokenAssigner(UHashTok dst,
+                                       UHashTok src);
 
 /**
  * <p>Ultralightweight C++ implementation of a <tt>void*</tt> vector
@@ -121,7 +121,7 @@ public:
      * Assign this object to another (make this a copy of 'other').
      * Use the 'assign' function to assign each element.
      */
-    void assign(const UVector& other, UTokenAssigner assign, UErrorCode &ec);
+    void assign(const UVector& other, UTokenAssigner *assign, UErrorCode &ec);
 
     /**
      * Compare this vector with another.  They will be considered
@@ -236,14 +236,14 @@ public:
      * as defined by 'compare'.  The current elements are assumed to
      * be sorted already.
      */
-    void sortedInsert(void* obj, USortComparator compare, UErrorCode& ec);
+    void sortedInsert(void* obj, USortComparator *compare, UErrorCode& ec);
 
     /**
      * Insert the given integer into this vector at its sorted position
      * as defined by 'compare'.  The current elements are assumed to
      * be sorted already.
      */
-    void sortedInsert(int32_t obj, USortComparator compare, UErrorCode& ec);
+    void sortedInsert(int32_t obj, USortComparator *compare, UErrorCode& ec);
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
@@ -264,7 +264,7 @@ private:
 
     int32_t indexOf(UHashTok key, int32_t startIndex = 0, int8_t hint = 0) const;
 
-    void sortedInsert(UHashTok tok, USortComparator compare, UErrorCode& ec);
+    void sortedInsert(UHashTok tok, USortComparator *compare, UErrorCode& ec);
 
     // Disallow
     UVector(const UVector&);

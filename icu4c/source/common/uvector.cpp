@@ -88,7 +88,7 @@ UVector::~UVector() {
  * Assign this object to another (make this a copy of 'other').
  * Use the 'assign' function to assign each element.
  */
-void UVector::assign(const UVector& other, UTokenAssigner assign, UErrorCode &ec) {
+void UVector::assign(const UVector& other, UTokenAssigner *assign, UErrorCode &ec) {
     if (ensureCapacity(other.count, ec)) {
         setSize(other.count);
         for (int32_t i=0; i<other.count; ++i) {
@@ -421,7 +421,7 @@ void* UVector::orphanElementAt(int32_t index) {
  * as defined by 'compare'.  The current elements are assumed to
  * be sorted already.
  */
-void UVector::sortedInsert(void* obj, USortComparator compare, UErrorCode& ec) {
+void UVector::sortedInsert(void* obj, USortComparator *compare, UErrorCode& ec) {
     UHashTok tok;
     tok.pointer = obj;
     sortedInsert(tok, compare, ec);
@@ -432,14 +432,14 @@ void UVector::sortedInsert(void* obj, USortComparator compare, UErrorCode& ec) {
  * as defined by 'compare'.  The current elements are assumed to
  * be sorted already.
  */
-void UVector::sortedInsert(int32_t obj, USortComparator compare, UErrorCode& ec) {
+void UVector::sortedInsert(int32_t obj, USortComparator *compare, UErrorCode& ec) {
     UHashTok tok;
     tok.integer = obj;
     sortedInsert(tok, compare, ec);
 }
 
 // ASSUME elements[] IS CURRENTLY SORTED
-void UVector::sortedInsert(UHashTok tok, USortComparator compare, UErrorCode& ec) {
+void UVector::sortedInsert(UHashTok tok, USortComparator *compare, UErrorCode& ec) {
     // Perform a binary search for the location to insert tok at.  Tok
     // will be inserted between two elements a and b such that a <=
     // tok && tok < b, where there is a 'virtual' elements[-1] always
