@@ -85,7 +85,7 @@ itoa(int32_t i, char* buf)
 
 // Array of our test objects
 
-struct
+static struct
 {
     const char* name;
     Locale *locale;
@@ -108,7 +108,7 @@ param[] =
     { "ne",         NULL,   U_USING_DEFAULT_WARNING,  e_Root,      { TRUE, FALSE, FALSE }, { TRUE, FALSE, FALSE } }
 };
 
-int32_t bundles_count = sizeof(param) / sizeof(param[0]);
+static const int32_t bundles_count = sizeof(param) / sizeof(param[0]);
 
 //***************************************************************************************
 
