@@ -3131,7 +3131,7 @@ private:
   // common function for case mappings
   UnicodeString &
   caseMap(BreakIterator *titleIter,
-          const Locale& locale,
+          const char *locale,
           uint32_t options,
           int32_t toWhichCase);
 

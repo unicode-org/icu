@@ -96,50 +96,8 @@ enum {
 };
 
 UnicodeString &
-UnicodeString::toLower() {
-  return caseMap(0, Locale::getDefault(), 0, TO_LOWER);
-}
-
-UnicodeString &
-UnicodeString::toLower(const Locale &locale) {
-  return caseMap(0, locale, 0, TO_LOWER);
-}
-
-UnicodeString &
-UnicodeString::toUpper() {
-  return caseMap(0, Locale::getDefault(), 0, TO_UPPER);
-}
-
-UnicodeString &
-UnicodeString::toUpper(const Locale &locale) {
-  return caseMap(0, locale, 0, TO_UPPER);
-}
-
-#if !UCONFIG_NO_BREAK_ITERATION
-
-UnicodeString &
-UnicodeString::toTitle(BreakIterator *titleIter) {
-  return caseMap(titleIter, Locale::getDefault(), 0, TO_TITLE);
-}
-
-UnicodeString &
-UnicodeString::toTitle(BreakIterator *titleIter, const Locale &locale) {
-  return caseMap(titleIter, locale, 0, TO_TITLE);
-}
-
-#endif
-
-UnicodeString &
-UnicodeString::foldCase(uint32_t options) {
-    /* The Locale parameter isn't used.
-    We pick a random non-case specific locale that is created cheaply.
-    */
-    return caseMap(0, Locale::getEnglish(), options, FOLD_CASE);
-}
-
-UnicodeString &
 UnicodeString::caseMap(BreakIterator *titleIter,
-                       const Locale& locale,
+                       const char *locale,
                        uint32_t options,
                        int32_t toWhichCase) {
   if(fLength <= 0) {
@@ -189,7 +147,7 @@ UnicodeString::caseMap(BreakIterator *titleIter,
       cTitleIter = (UBreakIterator *)titleIter;
       ubrk_setText(cTitleIter, oldArray, oldLength, &errorCode);
     } else {
-      cTitleIter = ubrk_open(UBRK_WORD, locale.getName(),
+      cTitleIter = ubrk_open(UBRK_WORD, locale,
                              oldArray, oldLength,
                              &errorCode);
     }
@@ -207,18 +165,18 @@ UnicodeString::caseMap(BreakIterator *titleIter,
     if(toWhichCase==TO_LOWER) {
       fLength = ustr_toLower(csp, fArray, fCapacity,
                              oldArray, oldLength,
-                             locale.getName(), &errorCode);
+                             locale, &errorCode);
     } else if(toWhichCase==TO_UPPER) {
       fLength = ustr_toUpper(csp, fArray, fCapacity,
                              oldArray, oldLength,
-                             locale.getName(), &errorCode);
+                             locale, &errorCode);
     } else if(toWhichCase==TO_TITLE) {
 #if UCONFIG_NO_BREAK_ITERATION
         errorCode=U_UNSUPPORTED_ERROR;
 #else
       fLength = ustr_toTitle(csp, fArray, fCapacity,
                              oldArray, oldLength,
-                             cTitleIter, locale.getName(), &errorCode);
+                             cTitleIter, locale, &errorCode);
 #endif
     } else {
       fLength = ustr_foldCase(csp, fArray, fCapacity,
@@ -241,6 +199,46 @@ UnicodeString::caseMap(BreakIterator *titleIter,
     setToBogus();
   }
   return *this;
+}
+
+UnicodeString &
+UnicodeString::toLower() {
+  return caseMap(0, Locale::getDefault().getName(), 0, TO_LOWER);
+}
+
+UnicodeString &
+UnicodeString::toLower(const Locale &locale) {
+  return caseMap(0, locale.getName(), 0, TO_LOWER);
+}
+
+UnicodeString &
+UnicodeString::toUpper() {
+  return caseMap(0, Locale::getDefault().getName(), 0, TO_UPPER);
+}
+
+UnicodeString &
+UnicodeString::toUpper(const Locale &locale) {
+  return caseMap(0, locale.getName(), 0, TO_UPPER);
+}
+
+#if !UCONFIG_NO_BREAK_ITERATION
+
+UnicodeString &
+UnicodeString::toTitle(BreakIterator *titleIter) {
+  return caseMap(titleIter, Locale::getDefault().getName(), 0, TO_TITLE);
+}
+
+UnicodeString &
+UnicodeString::toTitle(BreakIterator *titleIter, const Locale &locale) {
+  return caseMap(titleIter, locale.getName(), 0, TO_TITLE);
+}
+
+#endif
+
+UnicodeString &
+UnicodeString::foldCase(uint32_t options) {
+    /* The Locale parameter isn't used. Use "" instead. */
+    return caseMap(0, "", options, FOLD_CASE);
 }
 
 U_NAMESPACE_END
