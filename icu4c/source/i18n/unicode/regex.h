@@ -19,6 +19,7 @@ U_NAMESPACE_BEGIN
 class RegexMatcher;
 class UVector;
 class UStack;
+class UnicodeSet;
 
 
 //---------------------------------------------------------------------------------
@@ -26,7 +27,7 @@ class UStack;
 //  Flags for Regular Expression Modes.
 //   TODO:  Move to C header once one exists.
 //   All flags default to off or false
-//   All are as defined by Java Regexes.
+//   All are as defined by Java Regexps.
 //
 //---------------------------------------------------------------------------------
 enum {
@@ -34,7 +35,7 @@ enum {
         UREGEX_CASE_INSENSITIVE = 2,      // Enable case insensitive matching.
         UREGEX_COMMENTS         = 4,      // Allow white space and comments within patterns
         UREGEX_DOTALL           = 32,     // If set, "." matches line terminators.
-                                          //   otherwise matching stops at line end.
+                                          //   otherwise . matching stops at line end.
         UREGEX_MULTILINE        = 8,      // Control behavior of "$" and "^". 
                                           //   If set, recognize line terminators within string
                                           //   otherwise, match only at start and end of
@@ -165,7 +166,7 @@ private:
     //
     UnicodeString   fPattern;      // The original pattern string.
     int32_t         fFlags;        // The flags used when compiling the pattern.
-                                   //   TODO:  make an enum type for the flags.
+                                   //   
     UVector         *fCompiledPat; // The compiled, tokenized pattern.
     UnicodeString   fLiteralText;  // Any literal string data from the pattern, 
                                    //   after un-escaping, for use during the match.
@@ -179,6 +180,9 @@ private:
 
     int32_t         fNumCaptureGroups;
     int32_t         fMaxCaptureDigits;
+
+    const UnicodeSet  **fStaticSets;  // Ptr to static (shared) sets for predefined
+                                    //   regex character classes, e.g. Word.
 
     friend class RegexCompile;
     friend class RegexMatcher;
@@ -428,6 +432,7 @@ private:
                                 int32_t &repIdx,
                                 int32_t &textStart,
                                 int32_t &textEnd);
+    UBool        isWordBoundary(int32_t pos);         // perform the \b test
 
 
     const RegexPattern  *fPattern;

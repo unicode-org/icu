@@ -263,6 +263,7 @@ void RegexTest::regex_find(char *pat, char *input, UErrorCode expectedStatus, in
     // matcher->groupCount does not include group 0, the entire match, hence the +1.
     if (isMatch == FALSE && groupStarts.size() != 0) {
         errln("Error at line %d:  Match expected, but none found.\n", line);
+        failed = true;
         goto cleanupAndReturn;
     }
     int i;
@@ -315,7 +316,7 @@ void RegexTest::Basic() {
 //
 #if 0
     {
-    REGEX_FIND( "\\p{Lu}+", "here we go ... <0>ABC</0> and no more.")
+    REGEX_FIND("\\D+", "<0>non digits</0>");
     }
     exit(1);
 #endif
@@ -428,7 +429,6 @@ void RegexTest::Basic() {
     
     // REGEX_TESTLM("\101\142", "Ab", TRUE, TRUE);      // Octal     TODO: not implemented yet.
     REGEX_TESTLM("\\a", "\\u0007", TRUE, TRUE);        // BEL
-    REGEX_TESTLM("\\b", "\\u0008", TRUE, TRUE);        // BS
     // REGEX_TESTLM("\\cL", "\\u000c", TRUE, TRUE);       // Control-L (or whatever) TODO: bug in Unescape
     // REGEX_TESTLM("\\e", "\\u001b", TRUE, TRUE);        // Escape  TODO: bug in Unescape
     REGEX_TESTLM("\\f", "\\u000c", TRUE, TRUE);        // Form Feed
@@ -1011,6 +1011,34 @@ void RegexTest::Extended() {
     // Unicode Properties as naked elements in a pattern
     REGEX_FIND( "\\p{Lu}+", "here we go ... <0>ABC</0> and no more.");
     REGEX_FIND( "(\\p{L}+)(\\P{L}*?) (\\p{Zs}*)",  "7999<0><1>letters</1><2>4949%^&*(</2> <3>   </3></0>");
+
+    // \w and \W
+    REGEX_FIND( "\\w+", "  $%^&*( <0>hello123</0>%^&*(");
+    REGEX_FIND( "\\W+", "<0>  $%^&*( </0>hello123%^&*(");
+
+    // \b \B
+    REGEX_FIND( ".*?\\b(.).*", "<0>  $%^&*( <1>h</1>ello123%^&*()gxx</0>");
+
+                 // Finds first chars of up to 5 words
+    REGEX_FIND( "(?:.*?\\b(\\w))?(?:.*?\\b(\\w))?(?:.*?\\b(\\w))?(?:.*?\\b(\\w))?(?:.*?\\b(\\w))?",
+        "<0><1>T</1>the <2>q</2>ick <3>b</3>rown <4>f</4></0>ox");
+    REGEX_FIND( "H.*?((?:\\B.)+)", "<0>H<1>ello</1></0> ");
+    REGEX_FIND( ".*?((?:\\B.)+).*?((?:\\B.)+).*?((?:\\B.)+)",
+        "<0>H<1>ello</1> <2>    </2>g<3>oodbye</3></0> ");
+
+    REGEX_FIND("(?:.*?\\b(.))?(?:.*?\\b(.))?(?:.*?\\b(.))?(?:.*?\\b(.))?(?:.*?\\b(.))?.*",
+        "<0>   \\u0301 \\u0301<1>A</1>\\u0302BC\\u0303\\u0304<2> </2>\\u0305 \\u0306"
+        "<3>X</3>\\u0307Y\\u0308</0>");
+
+    // . does not match new-lines
+    REGEX_FIND(".", "\\u000a\\u000d\\u0085\\u000c\\u2028\\u2029<0>X</0>\\u000aY");
+    REGEX_FIND("A.", "A\\u000a ");  // no match
+
+    // \d for decimal digits
+    REGEX_FIND("\\d*", "<0>0123456789\\u0660\\u06F9\\u0969\\u0A66\\u1369"
+        "\\u17E2\\uFF10\\U0001D7CE\\U0001D7FF</0>non-digits");  
+    REGEX_FIND("\\D+", "<0>non digits</0>");
+    REGEX_FIND("\\D*(\\d*)(\\D*)", "<0>non-digits<1>3456666</1><2>more non digits</2></0>");
 
 }
 

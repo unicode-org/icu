@@ -72,9 +72,26 @@ static UnicodeSet  *gUnescapeCharSet;
 //    will handle.
 //
 static const UChar gUnescapeCharPattern[] = {
-//    [     a     b     c     e     f     n     r     t     u     U     ] 
-    0x5b, 0x61, 0x62, 0x63, 0x65, 0x66, 0x6e, 0x72, 0x74, 0x75, 0x55, 0x5d};
+//    [     a     c     e     f     n     r     t     u     U     ] 
+    0x5b, 0x61, 0x63, 0x65, 0x66, 0x6e, 0x72, 0x74, 0x75, 0x55, 0x5d, 0};
 
+
+
+//----------------------------------------------------------------------------------------
+//
+//  Unicode Set Definitions for Regular Expression composite properties
+//
+//----------------------------------------------------------------------------------------
+
+static const UChar gIsWordPattern[] = {
+//    [     \     p     {     L     l     }     \     p     {     L     u     }
+    0x5b, 0x5c, 0x70, 0x7b, 0x4c, 0x6c, 0x7d, 0x5c, 0x70, 0x7b, 0x4c, 0x75, 0x7d,
+//          \     p     {     L     t     }     \     p     {     L     o     }
+          0x5c, 0x70, 0x7b, 0x4c, 0x74, 0x7d, 0x5c, 0x70, 0x7b, 0x4c, 0x6f, 0x7d,
+//          \     p     {     N     d     }     ]
+          0x5c, 0x70, 0x7b, 0x4e, 0x64, 0x7d, 0x5d, 0};
+
+static const UnicodeSet *gPropSets[URX_LAST_SET];
 
 //----------------------------------------------------------------------------------------
 //
@@ -101,7 +118,7 @@ RegexCompile::RegexCompile(UErrorCode &status) : fParenStack(status)
     }
 
     //
-    //  Set up the constant Unicode Sets.
+    //  Set up the constant (static) Unicode Sets.
     //    
     if (gRuleSets[kRuleSet_rule_char-128] == NULL) {
         //  TODO:  Make thread safe.
@@ -110,6 +127,7 @@ RegexCompile::RegexCompile(UErrorCode &status) : fParenStack(status)
         gRuleSets[kRuleSet_white_space-128]     = new UnicodeSet(UnicodePropertySet::getRuleWhiteSpaceSet(status));
         gRuleSets[kRuleSet_digit_char-128]      = new UnicodeSet(gRuleSet_digit_char_pattern,      status);
         gUnescapeCharSet                        = new UnicodeSet(gUnescapeCharPattern,             status);
+        gPropSets[URX_ISWORD_SET]               = new UnicodeSet(gIsWordPattern,                   status); 
         if (U_FAILURE(status)) {
             delete gRuleSets[kRuleSet_rule_char-128];
             delete gRuleSets[kRuleSet_white_space-128];
@@ -119,6 +137,11 @@ RegexCompile::RegexCompile(UErrorCode &status) : fParenStack(status)
             gRuleSets[kRuleSet_white_space-128] = NULL;
             gRuleSets[kRuleSet_digit_char-128]  = NULL;
             gUnescapeCharSet = NULL;
+            int i;
+            for (i=0; i<URX_LAST_SET; i++) {
+                delete gPropSets[i];
+                gPropSets[i] = NULL;
+            }
             return;
         }
     }
@@ -164,6 +187,7 @@ void    RegexCompile::compile(
 
     // Prepare the RegexPattern object to receive the compiled pattern.
     fRXPat->fPattern        = pat;
+    fRXPat->fStaticSets     = gPropSets;
 
 
     // Initialize the pattern scanning state machine
@@ -685,16 +709,26 @@ UBool RegexCompile::doParseActions(EParseAction action)
         fRXPat->fCompiledPat->addElement(URX_BUILD(URX_BACKSLASH_B, 0), *fStatus);
         break;
 
+    case doBackslashD:
+        fRXPat->fCompiledPat->addElement(URX_BUILD(URX_BACKSLASH_D, 1), *fStatus);
+        break;
+
+    case doBackslashd:
+        fRXPat->fCompiledPat->addElement(URX_BUILD(URX_BACKSLASH_D, 0), *fStatus);
+        break;
+
     case doBackslashG:
         fRXPat->fCompiledPat->addElement(URX_BUILD(URX_BACKSLASH_G, 0), *fStatus);
         break;        
 
     case doBackslashW:
-        fRXPat->fCompiledPat->addElement(URX_BUILD(URX_BACKSLASH_W, 1), *fStatus);
+        fRXPat->fCompiledPat->addElement(
+            URX_BUILD(URX_STATIC_SETREF, URX_ISWORD_SET | URX_NEG_SET), *fStatus);
         break;        
 
     case doBackslashw:
-        fRXPat->fCompiledPat->addElement(URX_BUILD(URX_BACKSLASH_W, 0), *fStatus);
+        fRXPat->fCompiledPat->addElement(
+            URX_BUILD(URX_STATIC_SETREF, URX_ISWORD_SET), *fStatus);
         break;        
 
     case doBackslashX:
@@ -772,7 +806,6 @@ int32_t   RegexCompile::blockTopLoc(UBool reserveLoc) {
         if (reserveLoc) {
             int32_t opAtTheLoc = fRXPat->fCompiledPat->elementAti(theLoc);
             int32_t prevType = URX_TYPE(opAtTheLoc);
-            U_ASSERT(prevType==URX_ONECHAR || prevType==URX_SETREF || prevType==URX_DOTANY);
             int32_t  nop = URX_BUILD(URX_NOP, 0);
             fRXPat->fCompiledPat->insertElementAt(nop, theLoc, *fStatus);
         }

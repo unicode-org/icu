@@ -26,7 +26,7 @@ static const uint32_t     URX_STATE_SAVE    = 6;    // Value field is pattern po
 static const uint32_t     URX_NOP           = 7;
 static const uint32_t     URX_START_CAPTURE = 8;    // Value field is capture group number.
 static const uint32_t     URX_END_CAPTURE   = 9;    // Value field is capture group number
-static const uint32_t     URX_UNUSED10      = 10;   
+static const uint32_t     URX_STATIC_SETREF = 10;   // Value field is index of set in array of sets.   
 static const uint32_t     URX_SETREF        = 11;   // Value field is index of set in array of sets.
 static const uint32_t     URX_DOTANY        = 12; 
 static const uint32_t     URX_JMP           = 13;   // Value field is destination position in
@@ -35,10 +35,13 @@ static const uint32_t     URX_FAIL          = 14;   // Stop match operation;  No
 
 static const uint32_t     URX_BACKSLASH_A   = 15;   
 static const uint32_t     URX_BACKSLASH_B   = 16;   // Value field:  0:  \b    1:  \B
+static const uint32_t     URX_BACKSLASH_D   = 22;   // Value field:  0:  \d    1:  \D
 static const uint32_t     URX_BACKSLASH_G   = 17; 
 static const uint32_t     URX_BACKSLASH_W   = 18;   // Value field:  0:  \w    1:  \W
 static const uint32_t     URX_BACKSLASH_X   = 19;
 static const uint32_t     URX_BACKSLASH_Z   = 20;   // Value field:  0:  \z    1:  \Z
+
+static const uint32_t     URX_DOTANY_ALL    = 21;   // ., in the . matches any mode.
 
 
 //
@@ -49,5 +52,16 @@ static const uint32_t     URX_BACKSLASH_Z   = 20;   // Value field:  0:  \z    1
 #define URX_VAL(x)           ((x) & 0xffffff)
 
                 
+//
+//  Access to Unicode Sets for composite properties
+//     The sets are accessed by the match engine for things like \w (word boundary)
+//     
+static const uint32_t     URX_ISWORD_SET  = 1;
+static const uint32_t     URX_ISALNUM_SET = 2;
+static const uint32_t     URX_ISALPHA_SET = 3;
+static const uint32_t     URX_LAST_SET    = 4;
+
+static const uint32_t     URX_NEG_SET     = 0x800000;  // Flag bit to reverse sense of set
+                                                       //   membership test.
 #endif
 
