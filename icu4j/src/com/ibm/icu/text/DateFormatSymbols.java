@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DateFormatSymbols.java,v $ 
- * $Date: 2000/04/27 22:41:39 $ 
- * $Revision: 1.3 $
+ * $Date: 2000/05/12 23:19:35 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -64,7 +64,7 @@ import com.ibm.util.Utility;
 
  * @see          DateFormat
  * @see          SimpleDateFormat
- * @see          java.util.SimpleTimeZone
+ * @see          com.ibm.util.SimpleTimeZone
  * @version      1.31 09/21/99
  * @author       Chen-Lieh Huang
  */
@@ -169,7 +169,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * are localized names.  If a zone does not implement daylight savings
      * time, the daylight savings time names are ignored.
      * @see java.text.resources.DateFormatZoneData
-     * @see java.util.TimeZone
+     * @see com.ibm.util.TimeZone
      * @serial
      */
     String zoneStrings[][] = null;
@@ -505,7 +505,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @param ID the given time zone ID.
      * @return the index of the given time zone ID.  Returns -1 if
      * the given time zone ID can't be located in the DateFormatSymbols object.
-     * @see java.util.SimpleTimeZone
+     * @see com.ibm.util.SimpleTimeZone
      */
     final int getZoneIndex (String ID)
     {

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/holiday/HolidayCalendarDemo.java,v $ 
- * $Date: 2000/04/26 19:13:48 $ 
- * $Revision: 1.4 $
+ * $Date: 2000/05/12 23:21:32 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -23,7 +23,8 @@ import java.io.*;
 //import java.text.SimpleDateFormat;
 import com.ibm.text.SimpleDateFormat;
 import java.text.DateFormatSymbols;
-import java.util.SimpleTimeZone;
+//import java.util.SimpleTimeZone;
+import com.ibm.util.SimpleTimeZone;
 import java.util.Locale;
 import java.util.Vector;
 import java.util.Date;

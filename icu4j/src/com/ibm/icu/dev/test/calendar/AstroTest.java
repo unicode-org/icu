@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/AstroTest.java,v $ 
- * $Date: 2000/03/21 02:20:08 $ 
- * $Revision: 1.3 $
+ * $Date: 2000/05/12 23:19:12 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -15,7 +15,6 @@ package com.ibm.test.calendar;
 // AstroTest
 
 import com.ibm.test.*;
-import java.util.SimpleTimeZone;
 import com.ibm.util.*;
 
 import com.ibm.util.CalendarAstronomer.*;

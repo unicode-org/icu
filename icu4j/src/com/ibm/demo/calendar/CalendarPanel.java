@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/demo/calendar/Attic/CalendarPanel.java,v $ 
- * $Date: 2000/03/31 18:49:02 $ 
- * $Revision: 1.4 $
+ * $Date: 2000/05/12 23:21:23 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -24,7 +24,8 @@ import java.io.*;
 
 //import java.text.DateFormat;
 import com.ibm.text.DateFormat;
-import java.util.SimpleTimeZone;
+//import java.util.SimpleTimeZone;
+import com.ibm.util.SimpleTimeZone;
 //import java.util.*;
 import java.util.Date;
 import java.util.Locale;

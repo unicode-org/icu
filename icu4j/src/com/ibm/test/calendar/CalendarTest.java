@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/calendar/Attic/CalendarTest.java,v $ 
- * $Date: 2000/03/21 02:20:08 $ 
- * $Revision: 1.3 $
+ * $Date: 2000/05/12 23:19:12 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -18,7 +18,6 @@ import com.ibm.text.DateFormat;
 import com.ibm.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.SimpleTimeZone;
 import com.ibm.util.*;
 
 /**

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/util/Attic/IBMCalendar.java,v $ 
- * $Date: 2000/04/27 22:34:40 $ 
- * $Revision: 1.9 $
+ * $Date: 2000/05/12 23:20:10 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -18,7 +18,6 @@ import com.ibm.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-import java.util.TimeZone;
 import java.text.MessageFormat;
 import com.ibm.text.DateFormat;
 import com.ibm.text.DateFormatSymbols;

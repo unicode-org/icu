@@ -5,18 +5,15 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/JapaneseCalendar.java,v $ 
- * $Date: 2000/03/21 02:19:32 $ 
- * $Revision: 1.3 $
+ * $Date: 2000/05/12 23:20:10 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
 package com.ibm.util;
 
 import java.util.Date;
-import com.ibm.util.GregorianCalendar;
 import java.util.Locale;
-import java.util.SimpleTimeZone;
-import java.util.TimeZone;
 
 /**
  * <code>JapaneseCalendar</code> is a subclass of <code>GregorianCalendar</code>
@@ -43,7 +40,7 @@ import java.util.TimeZone;
  * constants rather than using actual, absolute numbers.
  * <p>
  *
- * @see java.util.GregorianCalendar
+ * @see com.ibm.util.GregorianCalendar
  *
  * @author Laura Werner
  */

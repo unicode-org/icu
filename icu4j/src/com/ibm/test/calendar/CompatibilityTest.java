@@ -7,8 +7,6 @@
 package com.ibm.test.calendar;
 import com.ibm.util.*;
 import java.util.Date;
-import java.util.TimeZone;
-import java.util.SimpleTimeZone;
 import java.util.Locale;
 import java.text.*;
 import java.io.*;

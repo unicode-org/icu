@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/SimpleDateFormat.java,v $ 
- * $Date: 2000/04/27 22:41:39 $ 
- * $Revision: 1.4 $
+ * $Date: 2000/05/12 23:19:35 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -20,12 +20,12 @@ import java.text.NumberFormat;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
 
-import java.util.TimeZone;
+import com.ibm.util.TimeZone;
 import com.ibm.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import java.util.SimpleTimeZone;
+import com.ibm.util.SimpleTimeZone;
 import com.ibm.util.GregorianCalendar;
 import java.io.ObjectInputStream;
 import java.io.IOException;
@@ -170,9 +170,9 @@ import java.lang.StringIndexOutOfBoundsException;
  * time zone. There is one common decimal format to handle all the numbers;
  * the digit count is handled programmatically according to the pattern.
  *
- * @see          java.util.Calendar
- * @see          java.util.GregorianCalendar
- * @see          java.util.TimeZone
+ * @see          com.ibm.util.Calendar
+ * @see          com.ibm.util.GregorianCalendar
+ * @see          com.ibm.util.TimeZone
  * @see          DateFormat
  * @see          DateFormatSymbols
  * @see          DecimalFormat
