@@ -54,7 +54,7 @@ import java.util.TreeMap;
  * repeated effort.</p>
  *
  * <p>ICUService implements ICUNotifier, so that clients can register
- * to to receive notification when factories are added or removed from 
+ * to receive notification when factories are added or removed from 
  * the service.  ICUService provides a default EventListener subinterface,
  * ServiceListener, which can be registered with the service.  When
  * the service changes, the ServiceListener's serviceChanged method
@@ -168,7 +168,7 @@ public class ICUService extends ICUNotifier {
      * A default implementation of factory.  This provides default
      * implementations for subclasses, and implements a singleton
      * factory that matches a single id and returns a single
-     * (possible deferred-initialized) instance.  If visible is
+     * (possibly deferred-initialized) instance.  If visible is
      * true, updates the map passed to updateVisibleIDs with a
      * mapping from id to itself.
      */
@@ -177,19 +177,31 @@ public class ICUService extends ICUNotifier {
 	protected String id;
 	protected boolean visible;
 
+	/**
+	 * Convenience constructor that calls SimpleFactory(Object, String, boolean)
+	 * with visible true.
+	 */
 	public SimpleFactory(Object instance, String id) {
 	    this(instance, id, true);
 	}
 
+	/**
+	 * Construct a simple factory that maps a single id to a single 
+	 * service instance.  If visible is true, the id will be visible.
+	 * Neither the instance nor the id can be null.
+	 */
 	public SimpleFactory(Object instance, String id, boolean visible) {
 	    if (instance == null || id == null) {
-		throw new IllegalArgumentException("instance and id must each not be null");
+		throw new IllegalArgumentException("Instance or id is null");
 	    }
 	    this.instance = instance;
 	    this.id = id;
 	    this.visible = visible;
 	}
 
+	/**
+	 * Return the service instance if id equals the key's currentID.
+	 */
 	public Object create(Key key) {
 	    if (id.equals(key.currentID())) {
 		return instance;
@@ -197,10 +209,17 @@ public class ICUService extends ICUNotifier {
 	    return null;
 	}
 
+	/**
+	 * If visible, adds a mapping from id -> this to the result.
+	 */
 	public void updateVisibleIDs(Map result) {
 	    if (visible) result.put(id, this);
 	}
 
+	/**
+	 * If id equals this.id, returns id regardless of locale, otherwise
+	 * returns null.
+	 */
 	public String getDisplayName(String id, Locale locale) {
 	    return (visible && id.equals(this.id)) ? id : null;
 	}
@@ -214,9 +233,10 @@ public class ICUService extends ICUNotifier {
     }
 
     /**
-     * <p>Given an id, return a service object, and the actual id under
-     * which it was found.  If no service object matches this id,
-     * return null.</p>
+     * <p>Given an id, return a service object, and, if actualIDReturn
+     * is not null, the actual id under which it was found in the
+     * first element of actualIDReturn.  If no service object matches
+     * this id, return null, and leave actualIDReturn unchanged.</p>
      *
      * <p>This tries each registered factory in order, and if none can
      * generate a service object for the key, repeats the process with
@@ -230,7 +250,6 @@ public class ICUService extends ICUNotifier {
 	if (factories.size() == 0) {
 	    return null;
 	}
-
 	
 	CacheEntry result = null;
 	Key key = createKey(id);
