@@ -1497,17 +1497,45 @@ static void TestJ1968(void) {
     char myConvName[] = "My really really really really really really really really really really really"
                           " really really really really really really really really really really really"
                           " really really really really really really really really long converter name";
+    UChar myConvNameU[sizeof(myConvName)];
 
+    u_charsToUChars(myConvName, myConvNameU, sizeof(myConvName));
+
+    err = U_ZERO_ERROR;
+    myConvNameU[UCNV_MAX_CONVERTER_NAME_LENGTH+1] = 0;
+    cnv = ucnv_openU(myConvNameU, &err);
+    if (cnv || err != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("1U) Didn't get U_ILLEGAL_ARGUMENT_ERROR as expected %s\n", u_errorName(err));
+    }
+
+    err = U_ZERO_ERROR;
+    myConvNameU[UCNV_MAX_CONVERTER_NAME_LENGTH] = 0;
+    cnv = ucnv_openU(myConvNameU, &err);
+    if (cnv || err != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("2U) Didn't get U_ILLEGAL_ARGUMENT_ERROR as expected %s\n", u_errorName(err));
+    }
+
+    err = U_ZERO_ERROR;
+    myConvNameU[UCNV_MAX_CONVERTER_NAME_LENGTH-1] = 0;
+    cnv = ucnv_openU(myConvNameU, &err);
+    if (cnv || err != U_FILE_ACCESS_ERROR) {
+        log_err("3U) Didn't get U_FILE_ACCESS_ERROR as expected %s\n", u_errorName(err));
+    }
+
+
+    
+    
+    err = U_ZERO_ERROR;
     cnv = ucnv_open(myConvName, &err);
-    if (cnv || err != U_BUFFER_OVERFLOW_ERROR) {
-        log_err("1) Didn't get U_BUFFER_OVERFLOW_ERROR as expected %s\n", u_errorName(err));
+    if (cnv || err != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("1) Didn't get U_ILLEGAL_ARGUMENT_ERROR as expected %s\n", u_errorName(err));
     }
 
     err = U_ZERO_ERROR;
     myConvName[UCNV_MAX_CONVERTER_NAME_LENGTH] = ',';
     cnv = ucnv_open(myConvName, &err);
-    if (cnv || err != U_BUFFER_OVERFLOW_ERROR) {
-        log_err("2) Didn't get U_BUFFER_OVERFLOW_ERROR as expected %s\n", u_errorName(err));
+    if (cnv || err != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("2) Didn't get U_ILLEGAL_ARGUMENT_ERROR as expected %s\n", u_errorName(err));
     }
 
     err = U_ZERO_ERROR;
@@ -1521,10 +1549,11 @@ static void TestJ1968(void) {
     myConvName[UCNV_MAX_CONVERTER_NAME_LENGTH-1] = ',';
     strncpy(myConvName + UCNV_MAX_CONVERTER_NAME_LENGTH, "locale=", 7);
     cnv = ucnv_open(myConvName, &err);
-    if (cnv || err != U_BUFFER_OVERFLOW_ERROR) {
-        log_err("4) Didn't get U_BUFFER_OVERFLOW_ERROR as expected %s\n", u_errorName(err));
+    if (cnv || err != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("4) Didn't get U_ILLEGAL_ARGUMENT_ERROR as expected %s\n", u_errorName(err));
     }
 
+    /* The comma isn't really a part of the converter name. */
     err = U_ZERO_ERROR;
     myConvName[UCNV_MAX_CONVERTER_NAME_LENGTH] = 0;
     cnv = ucnv_open(myConvName, &err);
@@ -1533,11 +1562,19 @@ static void TestJ1968(void) {
     }
 
     err = U_ZERO_ERROR;
+    myConvName[UCNV_MAX_CONVERTER_NAME_LENGTH-1] = ' ';
+    cnv = ucnv_open(myConvName, &err);
+    if (cnv || err != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("6) Didn't get U_ILLEGAL_ARGUMENT_ERROR as expected %s\n", u_errorName(err));
+    }
+
+    err = U_ZERO_ERROR;
     myConvName[UCNV_MAX_CONVERTER_NAME_LENGTH-1] = 0;
     cnv = ucnv_open(myConvName, &err);
-    if (cnv || U_SUCCESS(err)) {
-        log_err("Shouldn't be able to open %s\n", myConvName);
+    if (cnv || err != U_FILE_ACCESS_ERROR) {
+        log_err("7) Didn't get U_FILE_ACCESS_ERROR as expected %s\n", u_errorName(err));
     }
+
 }
 
 
