@@ -20,7 +20,7 @@
 *******************************************************************************
 */
 
-#include "ustdio.h"
+#include "unicode/ustdio.h"
 #include "ufile.h"
 #include "ufmt_cmn.h"
 #include "unicode/ucnv.h"

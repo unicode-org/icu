@@ -24,7 +24,7 @@
 #include "uscanf.h"
 #include "uscanf_p.h"
 #include "uscanset.h"
-#include "ustdio.h"
+#include "unicode/ustdio.h"
 #include "ufile.h"
 #include "unicode/ustring.h"
 #include "locbund.h"

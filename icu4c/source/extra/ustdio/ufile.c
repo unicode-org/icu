@@ -22,7 +22,7 @@
 */
 
 #include "uhash.h"
-#include "ustdio.h"
+#include "unicode/ustdio.h"
 #include "ufile.h"
 #include "unicode/uloc.h"
 #include "loccache.h"
