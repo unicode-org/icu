@@ -137,6 +137,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(55,TestParseError);
         TESTCASE(56,TestOutputSet);
         TESTCASE(57,TestVariableRange);
+        TESTCASE(58,TestInvalidPostContext);
         default: name = ""; break;
     }
 }
@@ -2666,6 +2667,28 @@ void TransliteratorTest::TestVariableRange() {
         UnicodeString err(pe.preContext);
         err.append((UChar)124/*|*/).append(pe.postContext);
         logln("Ok: " + err);
+        return;
+    }
+    errln("FAIL: No syntax error");
+}
+
+/**
+ * Test invalid post context error handling
+ */
+void TransliteratorTest::TestInvalidPostContext() {
+    UnicodeString rule = "a}b{c>d;";
+    UErrorCode ec = U_ZERO_ERROR;
+    UParseError pe;
+    Transliterator *t = Transliterator::createFromRules("ID", rule, UTRANS_FORWARD, pe, ec);
+    delete t;
+    if (U_FAILURE(ec)) {
+        UnicodeString err(pe.preContext);
+        err.append((UChar)124/*|*/).append(pe.postContext);
+        if (err.indexOf("a}b{c") >= 0) {
+            logln("Ok: " + err);
+        } else {
+            errln("FAIL: " + err);
+        }
         return;
     }
     errln("FAIL: No syntax error");

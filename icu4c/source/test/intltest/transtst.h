@@ -272,6 +272,11 @@ class TransliteratorTest : public IntlTest {
      */
     void TestVariableRange();
 
+    /**
+     * Test invalid post context error handling
+     */
+    void TestInvalidPostContext();
+
     //======================================================================
     // Support methods
     //======================================================================

@@ -1161,7 +1161,8 @@ int32_t TransliteratorParser::parseRule(const UnicodeString& rule, int32_t pos, 
         //(right->cursorOffset > (left->text.length() - left->post)) ||
         //(-right->cursorOffset > left->ante) ||
         right->anchorStart || right->anchorEnd ||
-        !isValidOutput(right->text)) {
+        !isValidOutput(right->text) ||
+        left->ante > left->post) {
 
         return syntaxError(U_MALFORMED_RULE, rule, start);
     }
