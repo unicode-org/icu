@@ -120,7 +120,7 @@ static char *
 {
   char *pound;
 
-  line = skipWhitespace(line);
+  line = (char*)skipWhitespace(line);
   pound = uprv_strchr (line, '#');
   if (pound != NULL)
   {
