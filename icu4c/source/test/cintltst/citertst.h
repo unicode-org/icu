@@ -31,14 +31,16 @@
     * unicode characters.
     */
     static void TestUnicodeChar(void);
-
     /**
     * Test for CollationElementIterator previous and next for the whole set of
     * unicode characters with normalization on.
     */
     static void TestNormalizedUnicodeChar(void);
-
-       /**
+    /**
+    * Test incremental normalization
+    */
+    static void TestNormalization(void);
+     /**
      * Test for CollationElementIterator.previous()
      *
      * @bug 4108758 - Make sure it works with contracting characters
