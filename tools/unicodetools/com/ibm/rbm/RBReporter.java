@@ -12,7 +12,7 @@ import java.awt.event.*;
 import java.io.*;
 import java.util.*;
 
-import org.apache.xerces.dom.*;
+import org.apache.xerces.dom.DocumentImpl;
 import org.apache.xml.serialize.*;
 import org.w3c.dom.*;
 
@@ -566,7 +566,7 @@ public class RBReporter extends JFrame {
      */ 
 	
     public Document getXMLReportz(boolean detailed) {
-        DocumentImpl xml = new DocumentImpl();
+        Document xml = new DocumentImpl();
         Element root = xml.createElement("REPORT");
         root.setAttribute("BASECLASS", rbm.getBaseClass());
         root.setAttribute("DATE", (new Date()).toString());
