@@ -430,8 +430,10 @@ public abstract class ICUResourceBundle extends UResourceBundle{
             } catch (MissingResourceException t) {
                 // Ignore error and continue search. 
             }
-            r = (ICUResourceBundle)r.getParent();
-            defDepth ++;
+            if(defLoc == null) {
+                r = (ICUResourceBundle)r.getParent();
+                defDepth ++;
+            }
         } while ((r != null) && (defLoc == null));
         
         
@@ -444,11 +446,21 @@ public abstract class ICUResourceBundle extends UResourceBundle{
                     ICUResourceBundle irb = r.get(resName);
                    /* UResourceBundle urb = */irb.get(kwVal); 
                     fullBase = r.getULocale(); // If the get() completed, we have the full base locale
+
+                    // If we fell back to an ancestor of the old 'default',
+                    // we need to re calculate the "default" keyword.
+                    if((fullBase != null) && ((resDepth)>defDepth)) {
+                        defStr = irb.getString(DEFAULT_TAG); 
+                        defLoc = r.getULocale();            
+                        defDepth = resDepth;
+                    }
             } catch (MissingResourceException t) {
                 // Ignore error, 
             }
-            r = (ICUResourceBundle)r.getParent();
-            resDepth ++;
+            if(fullBase == null) {
+                r = (ICUResourceBundle)r.getParent();
+                resDepth ++;
+            }
         } while ((r != null) && (fullBase == null));
         
         if(fullBase == null && // Could not find resource 'kwVal'
@@ -466,11 +478,21 @@ public abstract class ICUResourceBundle extends UResourceBundle{
                         /*UResourceBundle urb =*/ irb.get(kwVal); 
                         // if we didn't fail before this..
                         fullBase = r.getULocale();
+                        
+                        // If we fell back to an ancestor of the old 'default',
+                        // we need to re calculate the "default" keyword.
+                        if((fullBase != null) && ((resDepth)>defDepth)) {
+                            defStr = irb.getString(DEFAULT_TAG); 
+                            defLoc = r.getULocale();            
+                            defDepth = resDepth;
+                        }
                 } catch (MissingResourceException t) {
                     // Ignore error, continue search.
                 }
-                r = (ICUResourceBundle)r.getParent();
-                resDepth ++;
+                if(fullBase == null) {
+                    r = (ICUResourceBundle)r.getParent();
+                    resDepth ++;
+                }
             } while ((r != null) && (fullBase == null));
         }
 
