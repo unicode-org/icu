@@ -22,6 +22,10 @@
 
 #include "unicode/utypes.h"
 
+#define UFMT_DEFAULT_BUFFER_SIZE 64
+#define MAX_UCHAR_BUFFER_SIZE(buffer) (sizeof(buffer)/(UTF_MAX_CHAR_LENGTH*sizeof(UChar)))
+#define MAX_UCHAR_BUFFER_NEEDED(strLen) ((strLen+1)*UTF_MAX_CHAR_LENGTH*sizeof(UChar))
+
 /** 
  * Enum representing the possible argument types for uprintf/uscanf
  */
@@ -119,13 +123,15 @@ ufmt_utol(const UChar     *buffer,
 /**
  * Convert a string from the default codepage to Unicode.
  * @param s The string to convert, in the default codepage.
- * @param len The number of characters in s.
+ * @param sSize The size of s to convert.
+ * @param target The buffer to convert to.
+ * @param tSize The size of target
  * @return A pointer to a newly allocated converted version of s, or 0 
  * on error.
  */
 UChar*
-ufmt_defaultCPToUnicode(const char *s,
-            int32_t len);
+ufmt_defaultCPToUnicode(const char *s, int32_t sSize,
+                        UChar *target, int32_t tSize);
 
 
 /**
@@ -138,6 +144,17 @@ ufmt_defaultCPToUnicode(const char *s,
 char*
 ufmt_unicodeToDefaultCP(const UChar *s,
             int32_t len);
+
+/**
+ * Get the number of fraction digits based on the requested precision.
+ * This is a shortcoming of the formatting API, which doesn't
+ * support precision
+ * @param num The number to look at
+ * @param precision The requested precision
+ * @return The fraction digits size to use on the formatting API.
+ */
+int32_t
+ufmt_getFractionDigits(double num, int32_t precision);
 
 #endif
 

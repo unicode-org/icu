@@ -18,6 +18,7 @@
 ******************************************************************************
 */
 
+#include "cstring.h"
 #include "cmemory.h"
 #include "ufmt_cmn.h"
 #include "unicode/uchar.h"
@@ -126,24 +127,25 @@ ufmt_utol(const UChar     *buffer,
 }
 
 UChar*
-ufmt_defaultCPToUnicode(const char *s,
-                        int32_t len)
+ufmt_defaultCPToUnicode(const char *s, int32_t sSize,
+                        UChar *target, int32_t tSize)
 {
-    int32_t size;
-    UChar *target, *alias;
+    UChar *alias;
     UErrorCode status = U_ZERO_ERROR;
     UConverter *defConverter = u_getDefaultConverter(&status);
     
     if(U_FAILURE(status) || defConverter == 0)
         return 0;
+
+    if(sSize <= 0) {
+        sSize = uprv_strlen(s) + 1;
+    }
     
     /* perform the conversion in one swoop */
-    size = (len + 1) / ucnv_getMinCharSize(defConverter);
-    target = (UChar*) uprv_malloc(size * sizeof(UChar));
     if(target != 0) {
         
         alias = target;
-        ucnv_toUnicode(defConverter, &alias, alias + size, &s, s + len, 
+        ucnv_toUnicode(defConverter, &alias, alias + tSize, &s, s + sSize - 1, 
             NULL, TRUE, &status);
         
         

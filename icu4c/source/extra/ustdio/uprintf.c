@@ -276,19 +276,28 @@ u_vfprintf(    UFILE        *f,
 {
     int32_t count;
     UChar *pattern;
+    UChar buffer[UFMT_DEFAULT_BUFFER_SIZE];
+    int32_t size = (int32_t)strlen(patternSpecification) + 1;
 
     /* convert from the default codepage to Unicode */
-    pattern = ufmt_defaultCPToUnicode(patternSpecification,
-        (int32_t)strlen(patternSpecification));
-    if(pattern == 0) {
-        return 0;
+    if (size >= MAX_UCHAR_BUFFER_SIZE(buffer)) {
+        pattern = (UChar *)uprv_malloc(size * sizeof(UChar));
+        if(pattern == 0) {
+            return 0;
+        }
     }
+    else {
+        pattern = buffer;
+    }
+    ufmt_defaultCPToUnicode(patternSpecification, size, pattern, size);
 
     /* do the work */
     count = u_vfprintf_u(f, pattern, ap);
 
     /* clean up */
-    uprv_free(pattern);
+    if (pattern != buffer) {
+        uprv_free(pattern);
+    }
 
     return count;
 }
@@ -377,19 +386,30 @@ u_printf_string_handler(UFILE                 *stream,
                         const u_printf_spec_info     *info,
                         const ufmt_args            *args)
 {
-    UChar *s = NULL;
+    UChar *s;
+    UChar buffer[UFMT_DEFAULT_BUFFER_SIZE];
     int32_t len, written;
+    int32_t argSize;
     const char *arg = (const char*)(args[0].ptrValue);
 
     /* convert from the default codepage to Unicode */
     if (arg) {
-        s = ufmt_defaultCPToUnicode(arg, (int32_t)strlen(arg));
+        argSize = (int32_t)strlen(arg) + 1;
+        if (argSize >= MAX_UCHAR_BUFFER_SIZE(buffer)) {
+            s = ufmt_defaultCPToUnicode(arg, argSize,
+                    (UChar *)uprv_malloc(MAX_UCHAR_BUFFER_NEEDED(argSize)),
+                    MAX_UCHAR_BUFFER_NEEDED(argSize));
+            if(s == NULL) {
+                return 0;
+            }
+        }
+        else {
+            s = ufmt_defaultCPToUnicode(arg, argSize, buffer,
+                    sizeof(buffer)/sizeof(UChar));
+        }
     }
     else {
         s = gNullStr;
-    }
-    if(s == NULL) {
-        return 0;
     }
     len = u_strlen(s);
 
@@ -407,7 +427,7 @@ u_printf_string_handler(UFILE                 *stream,
     }
 
     /* clean up */
-    if (gNullStr != s) {
+    if (gNullStr != s && buffer != s) {
         uprv_free(s);
     }
 
@@ -638,15 +658,14 @@ u_printf_char_handler(UFILE                 *stream,
                       const u_printf_spec_info         *info,
                       const ufmt_args              *args)
 {
-    UChar *s;
+    UChar s[UTF_MAX_CHAR_LENGTH+1];
     int32_t len = 1, written;
     unsigned char arg = (unsigned char)(args[0].intValue);
 
     /* convert from default codepage to Unicode */
-    s = ufmt_defaultCPToUnicode((const char *)&arg, 1);
-    if(s == 0) {
-        return 0;
-    }
+    ufmt_defaultCPToUnicode((const char *)&arg, 2, s, sizeof(s)/sizeof(UChar));
+
+    /* Remember that this may be a surrogate pair */
     if (arg != 0) {
         len = u_strlen(s);
     }
@@ -663,9 +682,6 @@ u_printf_char_handler(UFILE                 *stream,
         /* determine if the string should be padded */
         written = u_printf_pad_and_justify(stream, info, s, len);
     }
-
-    /* clean up */
-    uprv_free(s);
 
     return written;
 }
@@ -720,8 +736,8 @@ u_printf_scientific_handler(UFILE             *stream,
     /* clone the stream's bundle if it isn't owned */
     if(! stream->fOwnBundle) {
         stream->fBundle     = u_locbund_clone(stream->fBundle);
-        stream->fOwnBundle     = TRUE;
-        format           = u_locbund_getScientificFormat(stream->fBundle);
+        stream->fOwnBundle  = TRUE;
+        format              = u_locbund_getScientificFormat(stream->fBundle);
     }
 
     srcLen = unum_getSymbol(format,
@@ -784,11 +800,13 @@ u_printf_scientific_handler(UFILE             *stream,
     unum_setAttribute(format, UNUM_MIN_FRACTION_DIGITS, minDecimalDigits);
     unum_setAttribute(format, UNUM_MAX_FRACTION_DIGITS, maxDecimalDigits);
 
-    unum_setSymbol(format,
+    /* Since we clone the fBundle and we're only using the scientific
+       format, we don't need to save the old exponent value. */
+    /*unum_setSymbol(format,
         UNUM_EXPONENTIAL_SYMBOL,
         srcExpBuf,
         srcLen,
-        &status);
+        &status);*/
 
     return u_printf_pad_and_justify(stream, info, result, u_strlen(result));
 }
@@ -963,11 +981,11 @@ u_printf_currency_handler(UFILE             *stream,
     else if(info->fAlt) {
         /* '#' means always show decimal point */
         /* copy of printf behavior on Solaris - '#' shows 6 digits */
-        unum_setAttribute(format, UNUM_FRACTION_DIGITS, 6);
+        unum_setAttribute(format, UNUM_FRACTION_DIGITS, 2);
     }
     else {
-        /* # of decimal digits is 6 if precision not specified */
-        unum_setAttribute(format, UNUM_FRACTION_DIGITS, 6);
+        /* # of decimal digits is 2 if precision not specified, 2 is typical */
+        unum_setAttribute(format, UNUM_FRACTION_DIGITS, 2);
     }
 
     /* set whether to show the sign */
@@ -1060,11 +1078,11 @@ u_printf_scidbl_handler(UFILE                 *stream,
         /* call the double handler */
         return u_printf_double_handler(stream, &scidbl_info, args);
     }
-    else if(num < 0.0001
+    else if(num < 0.0001 || (scidbl_info.fPrecision < 1 && 1000000.0 <= num)
         || (scidbl_info.fPrecision != -1 && num > uprv_pow10(scidbl_info.fPrecision)))
     {
         /* use 'e' or 'E' notation */
-        scidbl_info.fSpec = scidbl_info.fSpec - 1;
+        scidbl_info.fSpec = scidbl_info.fSpec - 2;
         /* call the scientific handler */
         return u_printf_scientific_handler(stream, &scidbl_info, args);
     }
