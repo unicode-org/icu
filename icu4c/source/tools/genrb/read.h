@@ -29,6 +29,7 @@ enum ETokenType
   tok_open_brace,           /* An opening brace character */
   tok_close_brace,          /* A closing brace character */
   tok_comma,                /* A comma */
+  tok_colon,                /* A colon */
   tok_start_string,         /* :String */
   tok_start_binary,         /* :Binary */
   tok_start_table,          /* :Table */
@@ -39,7 +40,7 @@ enum ETokenType
   
   tok_EOF,                  /* End of the file has been reached successfully */
   tok_error,                /* An error, such an unterminated quoted string */
-  tok_token_type_count = 11 /* Number of "real" token types */
+  tok_token_type_count = 12 /* Number of "real" token types */
 };
 
 enum ETokenType getNextToken(UFILE *f,

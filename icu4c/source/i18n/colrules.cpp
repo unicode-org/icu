@@ -32,8 +32,6 @@
 
 #define ARRAY_LENGTH(array) (sizeof array / sizeof array[0])
 
-
-
 static const UChar defaultRulesArray[] =
 {
     0x003D, 0x0027, 0x200B, 0x0027, 0x003D, 0x200C, 0x003D, 0x200D, 0x003D, 0x200E, 
@@ -125,4 +123,9 @@ static const UChar defaultRulesArray[] =
 };
 
 UnicodeString RuleBasedCollator::DEFAULTRULES(defaultRulesArray, ARRAY_LENGTH(defaultRulesArray));
+
+U_CAPI const UChar * U_EXPORT2 ucol_getDefaultRulesArray(uint32_t *size) {
+	*size = ARRAY_LENGTH(defaultRulesArray); 
+	return defaultRulesArray;
+}
 
