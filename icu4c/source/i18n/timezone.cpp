@@ -472,7 +472,6 @@ class TZEnumeration : public StringEnumeration {
     int32_t  pos;
     void* _bufp;
     int32_t _buflen;
-    enum { BUFFER_GROW = 8 }; // must be >= 1
 
 public:
     TZEnumeration() {
@@ -609,22 +608,18 @@ public:
     }
 
     const char* next(int32_t* resultLength, UErrorCode& status) {
+        // TODO: Later a subclass of StringEnumeration will be available
+        // that implements next() and unext() in terms of snext().
+        // Inherit from that class when available and remove this method
+        // (and its declaration).
         const UnicodeString* us = snext(status);
-        if (us) {
-            int newlen;
-            for (newlen = us->extract((char*)_bufp, _buflen / sizeof(char), NULL, status);
-                 status == U_STRING_NOT_TERMINATED_WARNING || status == U_BUFFER_OVERFLOW_ERROR;
-                 ) {
-                resizeBuffer((newlen + BUFFER_GROW) * sizeof(char));
-                status = U_ZERO_ERROR;
+        int32_t newlen;
+        if (us != NULL && ensureCapacity((newlen=us->length()) + 1)) {
+            us->extract(0, INT32_MAX, (char*) _bufp, "");
+            if (resultLength) {
+                resultLength[0] = newlen;
             }
-            if (U_SUCCESS(status)) {
-                ((char*)_bufp)[newlen] = 0;
-                if (resultLength) {
-                  resultLength[0] = newlen;
-                }
-                return (const char*)_bufp;
-            }
+            return (const char*)_bufp;
         }
         return NULL;
     }
@@ -654,13 +649,19 @@ public:
     }
 
 private:
-    void resizeBuffer(int32_t newlen) {
-        if (_bufp) {
-            _bufp = uprv_realloc(_bufp, newlen);
-        } else {
-            _bufp = uprv_malloc(newlen);
+    /**
+     * Guarantee that _bufp is allocated to include _buflen characters
+     * where _buflen >= minlen.  Return TRUE if successful, FALSE
+     * otherwise.
+     */
+    UBool ensureCapacity(int32_t minlen) {
+        if (_bufp != NULL && _buflen >= minlen) {
+            return TRUE;
         }
-        _buflen = newlen;
+        _buflen = minlen + 8; // add 8 to prevent thrashing
+        _bufp = (_bufp == NULL) ? uprv_malloc(_buflen)
+                                : uprv_realloc(_bufp, _buflen);
+        return _bufp != NULL;
     }
 };
 
