@@ -660,29 +660,53 @@ public class LDMLUtilities {
     public static void appendXPathAttribute(Node node, StringBuffer xpath){
         boolean terminate = false;
     	String val = getAttributeValue(node, LDMLConstants.TYPE);
+        String and =  "and";
+        boolean isStart = true;
         if(val!=null){
-        	xpath.append("[@type='");
+            if(isStart){
+                xpath.append("[");
+                isStart=false;
+            }
+        	xpath.append("@type='");
             xpath.append(val);
             xpath.append("'");
             terminate = true;
         }
         val = getAttributeValue(node, LDMLConstants.ALT);
         if(val!=null){
-            xpath.append("and @alt='");
+            if(isStart){
+                xpath.append("[");
+                isStart=false;
+            }else{
+                xpath.append(and);
+            }
+            xpath.append("@alt='");
             xpath.append(val);
             xpath.append("'");
             terminate = true;
         }
         val = getAttributeValue(node, LDMLConstants.KEY);
         if(val!=null){
-            xpath.append("and @key='");
+            if(isStart){
+                xpath.append("[");
+                isStart=false;
+            }else{
+                xpath.append(and);
+            }
+            xpath.append("@key='");
             xpath.append(val);
             xpath.append("'");
             terminate = true;
         }
         val = getAttributeValue(node, LDMLConstants.REGISTRY);
         if(val!=null){
-            xpath.append("and @registry='");
+            if(isStart){
+                xpath.append("[");
+                isStart=false;
+            }else{
+                xpath.append(and);
+            }
+            xpath.append("@registry='");
             xpath.append(val);
             xpath.append("'");
             terminate = true;
@@ -762,7 +786,7 @@ public class LDMLUtilities {
         return false;
     }
 
-    private static final Node getNonaltNode(NodeList list /*, StringBuffer xpath*/){
+    private static final Node getNonAltNode(NodeList list /*, StringBuffer xpath*/){
         // A nonalt node is one which .. does not have alternate
         // attribute set
         Node node =null;
@@ -814,7 +838,7 @@ public class LDMLUtilities {
             int len = nl.getLength();
             //TODO watch for attribute "alt"
             if(len>1){
-                Node best = getNonaltNode(nl);
+                Node best = getNonAltNode(nl);
                 if(best != null) {
                     System.err.println("Chose best node from " + xpath);
                     return best;

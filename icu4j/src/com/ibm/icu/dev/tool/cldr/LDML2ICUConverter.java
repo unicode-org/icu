@@ -935,8 +935,10 @@ public class LDML2ICUConverter {
             String name = node.getNodeName();
             ICUResourceWriter.Resource res = null;
             if(name.equals(LDMLConstants.EXEMPLAR_CHARACTERS)){
-                res = parseStringResource(node);
-                res.name = (String) keyNameMap.get(LDMLConstants.EXEMPLAR_CHARACTERS);
+                if(!isDraft(node, xpath)&&!isAlternate(node)){
+                    res = parseStringResource(node);
+                    res.name = (String) keyNameMap.get(LDMLConstants.EXEMPLAR_CHARACTERS);
+                }
             }else if(name.equals(LDMLConstants.ALIAS)){
                 res = parseAliasResource(node, xpath);
             }else if(name.equals(LDMLConstants.MAPPING)){
@@ -2871,7 +2873,7 @@ public class LDML2ICUConverter {
             
             FileOutputStream file = new FileOutputStream(outputFileName);
             BufferedOutputStream writer = new BufferedOutputStream(file);
-            System.err.println(sourceFileName + ": INFO: Creating ICU ResourceBundle: "+outputFileName);
+            System.out.println("INFO: Creating ICU ResourceBundle: "+outputFileName);
             //TODO: fix me
             writeHeader(writer,sourceFileName);
 
