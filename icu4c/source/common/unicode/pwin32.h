@@ -64,7 +64,7 @@
 #endif
 /* Determine whether to override placement new and delete for STL. */
 #ifndef U_HAVE_PLACEMENT_NEW
-#define U_HAVE_PLACEMENT_NEW 0
+#define U_HAVE_PLACEMENT_NEW 1
 #endif
 
 /*===========================================================================*/
