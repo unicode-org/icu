@@ -86,7 +86,7 @@ void NormalizerConformanceTest::TestConformance(void) {
         if (T_FileStream_eof(input)) {
             break;
         }
-        T_FileStream_readLine(input, lineBuf, sizeof(lineBuf));
+        T_FileStream_readLine(input, lineBuf, (int32_t)sizeof(lineBuf));
         UnicodeString line(lineBuf, "");
         if (line.length() == 0) continue;
         

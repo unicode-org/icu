@@ -6,7 +6,6 @@
  
 #include "numrgts.h"
 
-#include <stdio.h> // sprintf
 #include <float.h> // DBL_MIN, DBL_MAX
 
 #include "unicode/dcfmtsym.h"
@@ -1921,7 +1920,7 @@ void NumberFormatRegressionTest::Test4176114(void) {
         "000,000", "#,000,000",
         "0,000,000,000,000.0000", "#0,000,000,000,000.0000", // Reported
     };
-    int DATA_length = sizeof(DATA) / sizeof(DATA[0]);
+    int DATA_length = (int)(sizeof(DATA) / sizeof(DATA[0]));
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString s;
     for (int i=0; i<DATA_length; i+=2) {
@@ -1948,7 +1947,7 @@ void NumberFormatRegressionTest::Test4179818(void) {
         "1.2501", "#.#",   "1.3",
         "0.9999", "#",     "1",
     };
-    int DATA_length = sizeof(DATA) / sizeof(DATA[0]); 
+    int DATA_length = (int)(sizeof(DATA) / sizeof(DATA[0])); 
     double DOUBLE[] = {
         1.2511,
         1.2501,
@@ -2153,7 +2152,7 @@ void NumberFormatRegressionTest::Test4216742(void) {
     DecimalFormat *fmt = (DecimalFormat*) NumberFormat::createInstance(Locale::US, status);
     failure(status, "createInstance");
     int32_t DATA[] = { INT32_MIN, INT32_MAX, -100000000, 100000000 };
-    int DATA_length = sizeof(DATA) / sizeof(DATA[0]);
+    int DATA_length = (int)(sizeof(DATA) / sizeof(DATA[0]));
     for (int i=0; i<DATA_length; ++i) {
         UnicodeString str((UnicodeString)"" + DATA[i]);
         for (int m = 1; m <= 100; m++) {
@@ -2187,7 +2186,7 @@ void NumberFormatRegressionTest::Test4216742(void) {
 void NumberFormatRegressionTest::Test4217661(void) {
     const double D[] = {  0.001, 1.001, 0.006,  1.006 };
     const char*  S[] = { "0",   "1",   "0.01", "1.01" };
-    int D_length = sizeof(D) / sizeof(D[0]);
+    int D_length = (int)(sizeof(D) / sizeof(D[0]));
     UErrorCode status = U_ZERO_ERROR;
     NumberFormat *fmt = NumberFormat::createInstance(Locale::US, status);
     failure(status, "createInstance");
@@ -2236,7 +2235,7 @@ void NumberFormatRegressionTest::Test4243011(void) {
 
     const double NUM[] = {  -2.5,  -1.5,  -0.5,  0.5,  1.5,  2.5,  3.5,  4.5 };
     const char*  STR[] = { "-2.", "-2.", "-0.", "0.", "2.", "2.", "4.", "4." };
-    int32_t  N   = sizeof(NUM) / sizeof(NUM[0]);
+    int32_t N = (int32_t)(sizeof(NUM) / sizeof(NUM[0]));
 
     for (int32_t i=0; i<N; ++i) {
         UnicodeString str;
@@ -2305,21 +2304,21 @@ void NumberFormatRegressionTest::Test4243108(void) {
  */
 void NumberFormatRegressionTest::TestJ691(void) {
     UErrorCode status = U_ZERO_ERROR;
-	Locale loc("fr", "CH");
-	
-	// set up the input date string & expected output
-	UnicodeString udt("11.10.2000", "");
+    Locale loc("fr", "CH");
+
+    // set up the input date string & expected output
+    UnicodeString udt("11.10.2000", "");
     UnicodeString exp("11.10.00", "");
 
-	// create a Calendar for this locale
-	Calendar *cal = Calendar::createInstance(loc, status);
+    // create a Calendar for this locale
+    Calendar *cal = Calendar::createInstance(loc, status);
     if (U_FAILURE(status)) {
         errln("FAIL: Calendar::createInstance() returned " + (UnicodeString)u_errorName(status));
         return;
     }
 
-	// create a NumberFormat for this locale
-	NumberFormat *nf = NumberFormat::createInstance(loc, status);
+    // create a NumberFormat for this locale
+    NumberFormat *nf = NumberFormat::createInstance(loc, status);
     if (U_FAILURE(status)) {
         errln("FAIL: NumberFormat::createInstance() returned " + (UnicodeString)u_errorName(status));
         return;
@@ -2327,24 +2326,24 @@ void NumberFormatRegressionTest::TestJ691(void) {
 
     // *** Here's the key: We don't want to have to do THIS:
     // nf->setParseIntegerOnly(TRUE);
-	
-	// create the DateFormat
-	DateFormat *df = DateFormat::createDateInstance(DateFormat::kShort, loc);
+
+    // create the DateFormat
+    DateFormat *df = DateFormat::createDateInstance(DateFormat::kShort, loc);
     if (U_FAILURE(status)) {
         errln("FAIL: DateFormat::createInstance() returned " + (UnicodeString)u_errorName(status));
         return;
     }
 
-	df->adoptCalendar(cal);
-	df->adoptNumberFormat(nf);
+    df->adoptCalendar(cal);
+    df->adoptNumberFormat(nf);
 
-	// set parsing to lenient & parse
-	df->setLenient(TRUE);
-	UDate ulocdat = df->parse(udt, status);
-	
-	// format back to a string
-	UnicodeString outString;
-	df->format(ulocdat, outString);
+    // set parsing to lenient & parse
+    df->setLenient(TRUE);
+    UDate ulocdat = df->parse(udt, status);
+
+    // format back to a string
+    UnicodeString outString;
+    df->format(ulocdat, outString);
 
     if (outString != exp) {
         errln("FAIL: " + udt + " => " + outString);
