@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $ 
- * $Date: 2001/02/08 18:53:01 $ 
- * $Revision: 1.27 $
+ * $Date: 2001/03/30 22:56:47 $ 
+ * $Revision: 1.28 $
  *
  *****************************************************************************************
  */
@@ -680,6 +680,18 @@ public class TransliteratorTest extends TestFmwk {
         String dev = "\u0901\u090B\u0925";
         String guj = "\u0A81\u0A8B\u0AA5";
         expect(dg, dev, guj);
+    }
+
+    /**
+     * Test filter syntax in IDs.
+     */
+    public void TestFilterIDs() {
+        String ID = "Unicode-Hex[aeiou]";
+        expect(Transliterator.getInstance(ID), "quizzical",
+               "q\\u0075\\u0069zz\\u0069c\\u0061l");
+        ID = "Unicode-Hex[aeiou];Hex-Unicode[^5]";
+        expect(Transliterator.getInstance(ID), "quizzical",
+               "q\\u0075izzical");
     }
 
     //======================================================================
