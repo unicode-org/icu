@@ -1,3 +1,4 @@
+package demo.translit;
 import java.applet.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -14,7 +15,7 @@ import com.ibm.text.*;
  * <p>Copyright (c) IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Demo.java,v $ $Revision: 1.1 $ $Date: 1999/12/20 18:29:21 $
+ * @version $RCSfile: Demo.java,v $ $Revision: 1.2 $ $Date: 2000/01/11 04:15:27 $
  */
 public class Demo extends Frame {
 

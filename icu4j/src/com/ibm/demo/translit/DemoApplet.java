@@ -1,4 +1,4 @@
-
+package demo.translit;
 import java.awt.*;
 import java.awt.event.*;
 import java.applet.*;
@@ -12,7 +12,7 @@ import com.ibm.text.components.AppletFrame;
  * <p>Copyright (c) IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: DemoApplet.java,v $ $Revision: 1.1 $ $Date: 1999/12/20 18:29:21 $
+ * @version $RCSfile: DemoApplet.java,v $ $Revision: 1.2 $ $Date: 2000/01/11 04:15:27 $
  */
 public class DemoApplet extends Applet {
 
