@@ -111,8 +111,8 @@ class UVector;
  * "[:Lu:]" and the Perl-like syntax "\p{Lu}" are recognized.  For a
  * complete list of supported property patterns, see the User's Guide
  * for UnicodeSet at
- * <a href="http://oss.software.ibm.com/icu/userguide/unicodeset.html">
- * http://oss.software.ibm.com/icu/userguide/unicodeset.html</a>.
+ * <a href="http://oss.software.ibm.com/icu/userguide/unicodeSet.html">
+ * http://oss.software.ibm.com/icu/userguide/unicodeSet.html</a>.
  * Actual determination of property data is defined by the underlying
  * Unicode database as implemented by UCharacter.
  *
@@ -212,7 +212,7 @@ class UVector;
  *     </tr>
  *     <tr>
  *       <td nowrap valign="top" align="right"><code>property :=&nbsp; </code></td>
- *       <td valign="top"><em>a Unicode property set pattern</td>
+ *       <td valign="top"><em>a Unicode property set pattern</em></td>
  *     </tr>
  *   </table>
  *   <br>
