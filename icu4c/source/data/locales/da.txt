@@ -370,7 +370,7 @@ da {
         //zh_cn { "Kinesisk (Forkortet)" }
         //zh_tw { "Kinesisk (Uforkortet)" }
     }
-    localPatternChars { "GuMtkHmsSEDFwWahKzUeugAZ" }
+    localPatternChars { "GuMtkHmsSEDFwWahKzUeygAZ" }
     MonthAbbreviations { 
         "jan",
         "feb",

@@ -612,7 +612,7 @@ es {
         zh { "chino" }
         zu { "zul\u00FA" }
     }
-    localPatternChars { "GuMtkHmsSEDFwWahKzUeugAZ" }
+    localPatternChars { "GuMtkHmsSEDFwWahKzUeygAZ" }
     LocaleScript{ 
         "Latn",  // ISO 15924 Name 
     }
