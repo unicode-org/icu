@@ -61,10 +61,6 @@
 #include "unicode/resbund.h"
 #include "cmemory.h"
 
-#ifdef _DEBUG
-  #include "unistrm.h"
-#endif
-
 /* global variable ---------------------------------------------------------- */
 
 /*
