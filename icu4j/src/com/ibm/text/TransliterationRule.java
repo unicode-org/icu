@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/TransliterationRule.java,v $
- * $Date: 2001/11/21 22:21:45 $
- * $Revision: 1.36 $
+ * $Date: 2001/11/29 22:31:18 $
+ * $Revision: 1.37 $
  *
  *****************************************************************************************
  */
@@ -46,7 +46,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.36 $ $Date: 2001/11/21 22:21:45 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.37 $ $Date: 2001/11/29 22:31:18 $
  */
 class TransliterationRule {
 
@@ -849,10 +849,32 @@ class TransliterationRule {
                         : output))
             + '}';
     }
+
+    /**
+     * Union the set of all characters that may be modified by this rule
+     * into the given set.
+     */
+    UnicodeSet getSourceSet(UnicodeSet toUnionTo) {
+        int limit = anteContextLength + keyLength;
+        for (int i=anteContextLength; i<limit; ++i) {
+            int ch = UTF16.charAt(pattern, i);
+            i += UTF16.getCharCount(ch);
+            UnicodeMatcher matcher = data.lookup(ch);
+            if (matcher == null) {
+                toUnionTo.add(ch);
+            } else {
+                matcher.getMatchSet(toUnionTo);
+            }
+        }
+        return toUnionTo;
+    }
 }
 
 /**
  * $Log: TransliterationRule.java,v $
+ * Revision 1.37  2001/11/29 22:31:18  alan
+ * jitterbug 1560: add source-set methods and TransliteratorUtility class
+ *
  * Revision 1.36  2001/11/21 22:21:45  alan
  * jitterbug 1533: incorporate Mark's review comments; move escape handling methods to Utility
  *

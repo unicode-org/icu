@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/StringMatcher.java,v $ 
- * $Date: 2001/10/30 18:04:08 $ 
- * $Revision: 1.3 $
+ * $Date: 2001/11/29 22:31:18 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -151,6 +151,28 @@ class StringMatcher implements UnicodeMatcher {
         int c = UTF16.charAt(pattern, 0);
         UnicodeMatcher m = data.lookup(c);
         return (m == null) ? ((c & 0xFF) == v) : m.matchesIndexValue(v);
+    }
+
+    /**
+     * Implementation of UnicodeMatcher API.  Union the set of all
+     * characters that may be matched by this object into the given
+     * set.
+     * @param toUnionTo the set into which to union the source characters
+     * @return a reference to toUnionTo
+     */
+    public UnicodeSet getMatchSet(UnicodeSet toUnionTo) {
+        for (int i=0; i<pattern.length(); ++i) {
+            // OK TO GET 16-BIT code point because stand-ins are always
+            // in the BMP
+            int ch = pattern.charAt(i);
+            UnicodeMatcher matcher = data.lookup(ch);
+            if (matcher == null) {
+                toUnionTo.add(ch);
+            } else {
+                matcher.getMatchSet(toUnionTo);
+            }
+        }
+        return toUnionTo;
     }
 
     /**

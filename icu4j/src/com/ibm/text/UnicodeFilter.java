@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UnicodeFilter.java,v $ 
- * $Date: 2001/10/25 22:33:19 $ 
- * $Revision: 1.7 $
+ * $Date: 2001/11/29 22:31:18 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -76,5 +76,14 @@ public abstract class UnicodeFilter implements UnicodeMatcher {
      */
     public boolean matchesIndexValue(int v) {
         return false;
+    }
+
+    /**
+     * Stubbed out implementation of UnicodeMatcher API.
+     * @param toUnionTo the set into which to union the source characters
+     * @return a reference to toUnionTo
+     */
+    public UnicodeSet getMatchSet(UnicodeSet toUnionTo) {
+        return toUnionTo;
     }
 }

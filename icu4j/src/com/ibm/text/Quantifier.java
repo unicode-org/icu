@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/Quantifier.java,v $ 
- * $Date: 2001/11/20 00:25:18 $ 
- * $Revision: 1.4 $
+ * $Date: 2001/11/29 22:31:18 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -102,6 +102,20 @@ class Quantifier implements UnicodeMatcher {
      */
     public boolean matchesIndexValue(int v) {
         return (minCount == 0) || matcher.matchesIndexValue(v);
+    }
+
+    /**
+     * Implementation of UnicodeMatcher API.  Union the set of all
+     * characters that may be matched by this object into the given
+     * set.
+     * @param toUnionTo the set into which to union the source characters
+     * @return a reference to toUnionTo
+     */
+    public UnicodeSet getMatchSet(UnicodeSet toUnionTo) {
+        if (maxCount > 0) {
+            matcher.getMatchSet(toUnionTo);
+        }
+        return toUnionTo;
     }
 }
 

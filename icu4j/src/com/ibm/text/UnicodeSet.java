@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UnicodeSet.java,v $
- * $Date: 2001/11/22 00:05:50 $
- * $Revision: 1.47 $
+ * $Date: 2001/11/29 22:31:18 $
+ * $Revision: 1.48 $
  *
  *****************************************************************************************
  */
@@ -204,7 +204,7 @@ import com.ibm.util.Utility;
  * Unicode property
  * </table>
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.47 $ $Date: 2001/11/22 00:05:50 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.48 $ $Date: 2001/11/29 22:31:18 $
  */
 public class UnicodeSet extends UnicodeFilter {
 
@@ -652,6 +652,18 @@ public class UnicodeSet extends UnicodeFilter {
         } else {
             return super.matches(text, offset, limit, incremental);
         }
+    }
+
+    /**
+     * Implementation of UnicodeMatcher API.  Union the set of all
+     * characters that may be matched by this object into the given
+     * set.
+     * @param toUnionTo the set into which to union the source characters
+     * @return a reference to toUnionTo
+     */
+    public UnicodeSet getMatchSet(UnicodeSet toUnionTo) {
+        toUnionTo.addAll(this);
+        return toUnionTo;
     }
 
     /**

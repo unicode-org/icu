@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/Transliterator.java,v $
- * $Date: 2001/11/29 17:54:31 $
- * $Revision: 1.69 $
+ * $Date: 2001/11/29 22:31:18 $
+ * $Revision: 1.70 $
  *
  *****************************************************************************************
  */
@@ -242,7 +242,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.69 $ $Date: 2001/11/29 17:54:31 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.70 $ $Date: 2001/11/29 22:31:18 $
  */
 public abstract class Transliterator {
     /**
@@ -1095,7 +1095,7 @@ public abstract class Transliterator {
             RB_LOCALE_ELEMENTS, inLocale);
 
         // Use the registered display name, if any
-        String n = (String) displayNameCache.get(ID);
+        String n = (String) displayNameCache.get(new CaseInsensitiveString(ID));
         if (n != null) {
             return n;
         }
@@ -1291,6 +1291,15 @@ public abstract class Transliterator {
     }
 
     /**
+     * Return the set of all characters that may be modified by this
+     * Transliterator, ignoring the effect of filters.  The default
+     * implementation returns an empty set.
+     */
+    UnicodeSet getSourceSet() {
+        return new UnicodeSet();
+    }
+
+    /**
      * Parse a compound ID (possibly a degenerate one, containing no
      * ID_DELIM).  If idSplitPoint >= 0 and adoptedSplitTrans != 0, then
      * insert adoptedSplitTrans in the compound ID at offset idSplitPoint.
@@ -1378,6 +1387,51 @@ public abstract class Transliterator {
             }
         }
     }
+
+//  /**
+//   * Parse an ID into pieces.  Take IDs of the form T, T/V, S-T, S-T/V, or S/V-T.
+//   * If the source is missing, return a source of ANY.
+//   * @param id the id string, in any of several forms
+//   * @return an array of 4 strings: source, target, variant, and isSourcePresent.
+//   * Source and 
+//   */
+//  static String[] IDtoSTV(String id) {
+//      String source = ANY;
+//      String target = null;
+//      String variant = ""; // Variant INCLUDING "/"
+
+//      int sep = id.indexOf(ID_SEP);
+//      int var = id.indexOf(VARIANT_SEP);
+//      if (var < 0) {
+//          var = id.length();
+//      }
+//      boolean isSourcePresent = false;
+//      
+//      if (sep < 0) {
+//          // Form: T/V or T (or /V)
+//          target = id.substring(0, var);
+//          variant = id.substring(var);
+//      } else if (sep < var) {
+//          // Form: S-T/V or S-T (or -T/V or -T)
+//          if (sep > 0) {
+//              source = id.substring(0, sep);
+//              isSourcePresent = true;
+//          }
+//          target = id.substring(++sep, var);
+//          variant = id.substring(var);
+//      } else {
+//          // Form: (S/V-T or /V-T)
+//          if (var > 0) {
+//              source = id.substring(0, var);
+//              isSourcePresent = true;
+//          }
+//          variant = id.substring(var, sep++);
+//          target = id.substring(sep);
+//      }
+
+//      return new String[] { source, target, variant,
+//                            isSourcePresent ? "1" : "" };
+//  }
 
     /**
      * Parse a single ID, possibly including an inline filter, and return
