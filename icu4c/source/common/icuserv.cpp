@@ -638,6 +638,12 @@ private:
   UBool fActive;
 };
 
+struct UVectorDeleter {
+  UVector* _obj;
+  UVectorDeleter() : _obj(NULL) {}
+  ~UVectorDeleter() { delete _obj; }
+};
+  
 UObject* 
 ICUService::getKey(ICUServiceKey& key, UnicodeString* actualReturn, const ICUServiceFactory* factory, UErrorCode& status) const 
 {
@@ -674,7 +680,7 @@ ICUService::getKey(ICUServiceKey& key, UnicodeString* actualReturn, const ICUSer
     }
 
     UnicodeString currentDescriptor;
-    UVector* cacheDescriptorList = NULL;
+    UVectorDeleter cacheDescriptorList;
     UBool putInCache = FALSE;
 
     int32_t startIndex = 0;
@@ -707,7 +713,7 @@ ICUService::getKey(ICUServiceKey& key, UnicodeString* actualReturn, const ICUSer
       // first test of cache failed, so we'll have to update
       // the cache if we eventually succeed-- that is, if we're 
       // going to update the cache at all.
-      putInCache = cacheResult;
+      putInCache = TRUE;
 
       int32_t n = 0;
       int32_t index = startIndex;
@@ -715,7 +721,6 @@ ICUService::getKey(ICUServiceKey& key, UnicodeString* actualReturn, const ICUSer
         ICUServiceFactory* f = (ICUServiceFactory*)factories->elementAt(index++);
         UObject* service = f->create(key, this, status);
         if (U_FAILURE(status)) {
-          delete cacheDescriptorList;
           delete service;
           return NULL;
         }
@@ -723,7 +728,6 @@ ICUService::getKey(ICUServiceKey& key, UnicodeString* actualReturn, const ICUSer
           result = new CacheEntry(currentDescriptor, service);
           if (result == NULL) {
             delete service;
-            delete cacheDescriptorList;
             status = U_MEMORY_ALLOCATION_ERROR;
             return NULL;
           }
@@ -737,52 +741,45 @@ ICUService::getKey(ICUServiceKey& key, UnicodeString* actualReturn, const ICUSer
       // don't want to keep querying on an id that's going to
       // fallback to the one that succeeded, we want to hit the
       // cache the first time next goaround.
-      if (cacheDescriptorList == NULL) {
-        cacheDescriptorList = new UVector(uhash_deleteUnicodeString, NULL, 5, status);
+      if (cacheDescriptorList._obj == NULL) {
+        cacheDescriptorList._obj = new UVector(uhash_deleteUnicodeString, NULL, 5, status);
         if (U_FAILURE(status)) {
           return NULL;
         }
       }
       UnicodeString* idToCache = new UnicodeString(currentDescriptor);
       if (idToCache == NULL || idToCache->isBogus()) {
-        delete cacheDescriptorList;
         status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
       }
 
-      cacheDescriptorList->addElement(idToCache, status);
+      cacheDescriptorList._obj->addElement(idToCache, status);
       if (U_FAILURE(status)) {
-        delete cacheDescriptorList;
         return NULL;
       }
     } while (key.fallback());
   outerEnd:
 
     if (result != NULL) {
-      if (putInCache) {
+      if (putInCache && cacheResult) {
         serviceCache->put(result->actualDescriptor, result, status);
         if (U_FAILURE(status)) {
           delete result;
-          delete cacheDescriptorList;
           return NULL;
         }
 
-        if (cacheDescriptorList != NULL) {
-          for (int32_t i = cacheDescriptorList->size(); --i >= 0;) {
-            UnicodeString* desc = (UnicodeString*)cacheDescriptorList->elementAt(i);
+        if (cacheDescriptorList._obj != NULL) {
+          for (int32_t i = cacheDescriptorList._obj->size(); --i >= 0;) {
+            UnicodeString* desc = (UnicodeString*)cacheDescriptorList._obj->elementAt(i);
             serviceCache->put(*desc, result, status);
             if (U_FAILURE(status)) {
               delete result;
-              delete cacheDescriptorList;
               return NULL;
             }
 
             result->ref();
-            cacheDescriptorList->removeElementAt(i);
+            cacheDescriptorList._obj->removeElementAt(i);
           }
-
-          delete cacheDescriptorList;
-          cacheDescriptorList = NULL;
         }
       }
 
@@ -799,11 +796,16 @@ ICUService::getKey(ICUServiceKey& key, UnicodeString* actualReturn, const ICUSer
 
         if (actualReturn->isBogus()) {
           status = U_MEMORY_ALLOCATION_ERROR;
+	  delete result;
           return NULL;
         }
       }
 
-      return cloneInstance(result->service);
+      UObject* service = cloneInstance(result->service);
+      if (putInCache && !cacheResult) {
+	delete result;
+      }
+      return service;
     }
   }
 

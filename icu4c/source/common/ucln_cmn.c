@@ -59,6 +59,9 @@ u_cleanup(void)
 #if !UCONFIG_NO_BREAK_ITERATION
 	breakiterator_cleanup();
 #endif
+#if !UCONFIG_NO_SERVICE
+    service_cleanup();
+#endif
 #ifdef ICU_UNICODECONVERTER_USE_DEPRECATES
     UnicodeConverter_cleanup(); /* <-- deprecated code */
 #endif /* ICU_UNICODECONVERTER_USE_DEPRECATES */

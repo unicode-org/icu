@@ -121,13 +121,21 @@ LocaleUtility::isFallbackOf(const UnicodeString& root, const UnicodeString& chil
        child.charAt(root.length()) == UNDERSCORE_CHAR);
 }
 
+UBool
+LocaleUtility::cleanup(void) {
+  if (cache) {
+    Mutex mutex(&lock);
+    delete cache;
+    cache = NULL;
+  }
+  umtx_destroy(&lock);
+}
+
 Hashtable * LocaleUtility::cache = NULL;
 
 const UChar LocaleUtility::UNDERSCORE_CHAR = 0x005f;
 
 UMTX LocaleUtility::lock = 0;
-
-/// !!! dlf need to destroy this lock in a cleanup function
 
 /*
  ******************************************************************
@@ -412,6 +420,12 @@ SimpleLocaleKeyFactory::SimpleLocaleKeyFactory(UObject* objToAdopt,
   , _id(locale)
   , _kind(kind)
 {
+}
+
+SimpleLocaleKeyFactory::~SimpleLocaleKeyFactory()
+{
+  delete _obj;
+  _obj = NULL;
 }
 
 UObject*
@@ -804,6 +818,15 @@ ICULocaleService::createKey(const UnicodeString* id, int32_t kind, UErrorCode& s
 }
 
 U_NAMESPACE_END
+
+// defined in ucln_cmn.h
+
+/**
+ * Release all static memory held by breakiterator.  
+ */
+U_CFUNC UBool service_cleanup(void) {
+  return LocaleUtility::cleanup();
+}
 
 /* !UCONFIG_NO_SERVICE */
 #endif

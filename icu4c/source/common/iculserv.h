@@ -313,6 +313,11 @@ class U_COMMON_API SimpleLocaleKeyFactory : public LocaleKeyFactory {
                            int32_t coverage);
 
     /**
+     * Destructor.
+     */
+    virtual ~SimpleLocaleKeyFactory();
+
+    /**
      * Override of superclass method.  Returns the service object if kind/locale match.  Service is not used.
      */
     UObject* create(const ICUServiceKey& key, const ICUService* service, UErrorCode& status) const;
@@ -545,6 +550,7 @@ public:
   static UnicodeString& initNameFromLocale(const Locale& locale, UnicodeString& result);
   static const Hashtable* getAvailableLocaleNames(const UnicodeString& bundleID);
   static UBool isFallbackOf(const UnicodeString& root, const UnicodeString& child);
+  static UBool cleanup(void);
 };
 
 U_NAMESPACE_END
