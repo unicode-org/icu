@@ -77,6 +77,26 @@ TimeZone::getGMT(void)
 }
 
 /**
+ * udata callback to verify the zone data.
+ */
+U_CDECL_BEGIN
+static UBool
+isTimeZoneDataAcceptable(void * /*context*/,
+                           const char * /*type*/, const char * /*name*/,
+                           const UDataInfo *pInfo) {
+    return
+        pInfo->size >= sizeof(UDataInfo) &&
+        pInfo->isBigEndian == U_IS_BIG_ENDIAN &&
+        pInfo->charsetFamily == U_CHARSET_FAMILY &&
+        pInfo->dataFormat[0] == TZ_SIG_0 &&
+        pInfo->dataFormat[1] == TZ_SIG_1 &&
+        pInfo->dataFormat[2] == TZ_SIG_2 &&
+        pInfo->dataFormat[3] == TZ_SIG_3 &&
+        pInfo->formatVersion[0] == TZ_FORMAT_VERSION;
+}
+U_CDECL_END
+
+/**
  * Attempt to load the system zone data from icudata.dll (or its
  * equivalent).  After this call returns DATA_LOADED will be true.
  * DATA itself will be non-null if the load succeeded; otherwise it
@@ -95,7 +115,7 @@ void TimeZone::loadZoneData() {
         if (!DATA_LOADED) {
             UErrorCode status = U_ZERO_ERROR;
             UDATA_POINTER = udata_openChoice(0, TZ_DATA_TYPE, TZ_DATA_NAME, // THIS IS NOT A LEAK!
-                                             isDataAcceptable, 0, &status); // see the comment on udata_close line
+                                             isTimeZoneDataAcceptable, 0, &status); // see the comment on udata_close line
             UDataMemory *data = UDATA_POINTER;
             if (U_SUCCESS(status)) {
                 DATA = (TZHeader*)udata_getMemory(data);
@@ -133,24 +153,6 @@ void TimeZone::loadZoneData() {
             DATA_LOADED = TRUE;
         }
     }
-}
-
-/**
- * udata callback to verify the zone data.
- */
-UBool U_CALLCONV
-TimeZone::isDataAcceptable(void * /*context*/,
-                           const char * /*type*/, const char * /*name*/,
-                           const UDataInfo *pInfo) {
-    return
-        pInfo->size >= sizeof(UDataInfo) &&
-        pInfo->isBigEndian == U_IS_BIG_ENDIAN &&
-        pInfo->charsetFamily == U_CHARSET_FAMILY &&
-        pInfo->dataFormat[0] == TZ_SIG_0 &&
-        pInfo->dataFormat[1] == TZ_SIG_1 &&
-        pInfo->dataFormat[2] == TZ_SIG_2 &&
-        pInfo->dataFormat[3] == TZ_SIG_3 &&
-        pInfo->formatVersion[0] == TZ_FORMAT_VERSION;
 }
 
 // *****************************************************************************
