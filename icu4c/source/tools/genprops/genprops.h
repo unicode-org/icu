@@ -58,6 +58,9 @@ bidiNames[];
 extern const char *const
 genCategoryNames[];
 
+/* properties vectors in props2.c */
+extern uint32_t *pv;
+
 /* prototypes */
 U_CFUNC void
 writeUCDFilename(char *basename, const char *filename, const char *suffix);

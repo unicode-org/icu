@@ -27,10 +27,11 @@
 #include "unicode/putil.h"
 #include "cmemory.h"
 #include "cstring.h"
-#include "unicode/udata.h"
 #include "unewdata.h"
 #include "uoptions.h"
 #include "uparse.h"
+#include "uprops.h"
+#include "propsvec.h"
 
 U_CDECL_BEGIN
 #include "genprops.h"
@@ -217,7 +218,7 @@ getTokenIndex(const char *const tokens[], int32_t countTokens, const char *s) {
                     }
                 } else {
                     z=u_skipWhitespace(s+j);
-                    if(*z==';' || *z==0) {
+                    if(*z==';' || *z==0 || *z=='#' || *z=='\r' || *z=='\n') {
                         return i;
                     } else {
                         break;
@@ -514,6 +515,28 @@ bidiNames[U_CHAR_DIRECTION_COUNT]={
     "WS", "ON", "LRE", "LRO", "AL", "RLE", "RLO", "PDF", "NSM", "BN"
 };
 
+const char *const
+decompositionTypeNames[U_DT_COUNT]={
+    NULL,
+    NULL,
+    "compat",
+    "circle",
+    "final",
+    "font",
+    "fraction",
+    "initial",
+    "isolated",
+    "medial",
+    "narrow",
+    "noBreak",
+    "small",
+    "square",
+    "sub",
+    "super",
+    "vertical",
+    "wide"
+};
+
 static struct {
     uint32_t first, last, props;
     char name[80];
@@ -562,6 +585,33 @@ unicodeDataLineFn(void *context,
             fields[4][0], (unsigned long)p.code);
         *pErrorCode=U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
+    }
+
+    /* get decomposition type, field 5 */
+    if(fields[5][0]<fields[5][1]) {
+        /* there is some decomposition */
+        if(*fields[5][0]!='<') {
+            /* canonical */
+            i=U_DT_CANONICAL;
+        } else {
+            /* get compatibility type */
+            end=fields[5][0]+1;
+            while(end<fields[5][1] && *end!='>') {
+                ++end;
+            }
+            *end='#';
+            i=getTokenIndex(decompositionTypeNames, U_DT_COUNT, fields[5][0]+1);
+            if(i<0) {
+                fprintf(stderr, "genprops: unknown decomposition type \"%s\" at code 0x%lx\n",
+                    fields[5][0], (unsigned long)p.code);
+                *pErrorCode=U_PARSE_ERROR;
+                exit(U_PARSE_ERROR);
+            }
+            if(!upvec_setValue(pv, p.code, p.code+1, 2, (uint32_t)i, UPROPS_DT_MASK, pErrorCode)) {
+                fprintf(stderr, "genprops error: unable to set decomposition type: %s\n", u_errorName(*pErrorCode));
+                exit(*pErrorCode);
+            }
+        }
     }
 
     /* decimal digit value, field 6 */
