@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2001-2003, International Business Machines
+*   Copyright (C) 2001-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -137,6 +137,11 @@ struct UTrie {
     /**
      * This function is not used in _FROM_LEAD, _FROM_BMP, and _FROM_OFFSET_TRAIL macros.
      * If convenience macros like _GET16 or _NEXT32 are used, this function must be set.
+     *
+     * utrie_unserialize() sets a default function which simply returns
+     * the lead surrogate's value itself - which is the inverse of the default
+     * folding function used by utrie_serialize().
+     *
      * @see UTrieGetFoldingOffset
      */
     UTrieGetFoldingOffset *getFoldingOffset;
@@ -461,7 +466,7 @@ UTrieEnumRange(const void *context, UChar32 start, UChar32 limit, uint32_t value
  * @param context an opaque pointer that is passed on to the callback functions
  */
 U_CAPI void U_EXPORT2
-utrie_enum(UTrie *trie,
+utrie_enum(const UTrie *trie,
            UTrieEnumValue *enumValue, UTrieEnumRange *enumRange, const void *context);
 
 /**
@@ -648,7 +653,9 @@ utrie_setRange32(UNewTrie *trie, UChar32 start, UChar32 limit, uint32_t value, U
  * @param capacity the number of bytes available at data
  * @param getFoldedValue a callback function that calculates the value for
  *                       a lead surrogate from all of its supplementary code points
- *                       and the folding offset
+ *                       and the folding offset;
+ *                       if NULL, then a default function is used which returns just
+ *                       the input offset when there are any non-initial-value entries
  * @param reduceTo16Bits flag for whether the values are to be reduced to a
  *                       width of 16 bits for serialization and runtime
  * @param pErrorCode a UErrorCode argument; among other possible error codes:
