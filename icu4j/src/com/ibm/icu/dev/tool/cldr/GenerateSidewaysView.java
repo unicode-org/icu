@@ -63,7 +63,8 @@ import com.ibm.icu.util.UResourceBundle;
         SOURCEDIR = 2,
         DESTDIR = 3,
         MATCH = 4,
-        SKIP = 5;
+        SKIP = 5,
+        TZADIR = 6;
 
     private static final UOption[] options = {
             UOption.HELP_H(),
@@ -72,7 +73,10 @@ import com.ibm.icu.util.UResourceBundle;
             UOption.DESTDIR().setDefault("C:\\DATA\\GEN\\cldr\\main\\"),
             UOption.create("match", 'm', UOption.REQUIRES_ARG).setDefault(".*"),
             UOption.create("skip", 's', UOption.REQUIRES_ARG).setDefault("zh_(C|S|HK|M).*"),
+            UOption.create("tzadir", 't', UOption.REQUIRES_ARG).setDefault("C:\\ICU4J\\icu4j\\src\\com\\ibm\\icu\\dev\\tool\\cldr\\"),
+
     };
+    private static String timeZoneAliasDir = null;
     
     public static void main(String[] args) throws SAXException, IOException {
         UOption.parseArgs(args, options);
@@ -81,6 +85,7 @@ import com.ibm.icu.util.UResourceBundle;
         Matcher matcher = Pattern.compile(options[MATCH].value).matcher("");
         //matcher = Pattern.compile("(root|b).*").matcher("");
         log = BagFormatter.openUTF8Writer(options[DESTDIR].value, "log.txt");
+        timeZoneAliasDir = options[TZADIR].value;
         try {
             File sourceDir = new File(options[SOURCEDIR].value);
             String[] contents = sourceDir.list();
@@ -111,7 +116,7 @@ import com.ibm.icu.util.UResourceBundle;
         static void init() {
             map = new HashMap();
         	try {
-				BufferedReader br = BagFormatter.openUTF8Reader("C:\\ICU4J\\icu4j\\src\\com\\ibm\\icu\\dev\\tool\\cldr\\", "timezone_aliases.txt");
+				BufferedReader br = BagFormatter.openUTF8Reader(timeZoneAliasDir, "timezone_aliases.txt");
 				String[] pieces = new String[2];
 				while (true) {
 					String line = br.readLine();
@@ -141,7 +146,8 @@ import com.ibm.icu.util.UResourceBundle;
     {
         try {
             SAXParserFactory factory = SAXParserFactory.newInstance();
-            factory.setValidating(false);
+            factory.setValidating(true);
+
             SAX = factory.newSAXParser();
         } catch (Exception e) {
             throw new IllegalArgumentException("can't start");
@@ -268,7 +274,7 @@ import com.ibm.icu.util.UResourceBundle;
     public String toString() {
         StringBuffer buffer = new StringBuffer();
         buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n"
-        + "<!DOCTYPE ldml SYSTEM \"http://www.unicode.org/cldr/dtd/1.1/ldml.dtd\">\r\n");
+        + "<!DOCTYPE ldml SYSTEM \"http://www.unicode.org/cldr/dtd/1.2/alpha/ldml.dtd\">\r\n");
         ElementChain empty = new ElementChain();
         ElementChain old = empty;
         for (Iterator it = data.iterator(); it.hasNext();) {
@@ -704,7 +710,7 @@ import com.ibm.icu.util.UResourceBundle;
                 Object value = map.get(key);
                 if (value == null || !value.equals(otherValue)) continue;
                 if (((ElementChain)key).containsElement("identity")) continue;
-                log.println("Removing " + key + "\t" + value);
+                log.println("Removing " + ((ElementChain)key).toString(true) + "\t" + value);
                 map.remove(key);
                 while(list.remove(key)) {}
             }
