@@ -172,7 +172,10 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
 
     gInBufferSize = inputsize;
     gOutBufferSize = outputsize;
+
     /*From Unicode*/
+    log_verbose("Testing fromUnicode with UCNV_FROM_U_CALLBACK_SKIP  \n");
+
     if(!testConvertFromUnicode(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
             expskipIBM_949, sizeof(expskipIBM_949), "ibm-949",
             (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SKIP, toIBM949Offsskip, NULL, 0 ))
@@ -186,7 +189,46 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
             (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SKIP, toIBM930Offsskip , NULL, 0))
         log_err("u-> ibm-930 with skip did not match.\n");
 
-     log_verbose("Testing fromUnicode with UCNV_FROM_U_CALLBACK_SKIP  \n");
+    {
+        static const UChar usasciiFromU[] = { 0x61, 0x80, 0x4e00, 0x31, 0xd800, 0xdfff, 0x39 };
+        static const uint8_t usasciiFromUBytes[] = { 0x61, 0x31, 0x39 };
+        static const int32_t usasciiFromUOffsets[] = { 0, 3, 6 };
+
+        static const UChar latin1FromU[] = { 0x61, 0x80, 0x4e00, 0x31, 0xd800, 0xdfff, 0x39 };
+        static const uint8_t latin1FromUBytes[] = { 0x61, 0x80, 0x31, 0x39 };
+        static const int32_t latin1FromUOffsets[] = { 0, 1, 3, 6 };
+
+        /* US-ASCII */
+        if(!testConvertFromUnicode(usasciiFromU, sizeof(usasciiFromU)/U_SIZEOF_UCHAR,
+                                   usasciiFromUBytes, sizeof(usasciiFromUBytes),
+                                   "US-ASCII",
+                                   UCNV_FROM_U_CALLBACK_SKIP, usasciiFromUOffsets,
+                                   NULL, 0)
+        ) {
+            log_err("u->US-ASCII with skip did not match.\n");
+        }
+
+        /* SBCS NLTC codepage 367 for US-ASCII */
+        if(!testConvertFromUnicode(usasciiFromU, sizeof(usasciiFromU)/U_SIZEOF_UCHAR,
+                                   usasciiFromUBytes, sizeof(usasciiFromUBytes),
+                                   "ibm-367",
+                                   UCNV_FROM_U_CALLBACK_SKIP, usasciiFromUOffsets,
+                                   NULL, 0)
+        ) {
+            log_err("u->ibm-367 with skip did not match.\n");
+        }
+
+        /* ISO-Latin-1 */
+        if(!testConvertFromUnicode(latin1FromU, sizeof(latin1FromU)/U_SIZEOF_UCHAR,
+                                   latin1FromUBytes, sizeof(latin1FromUBytes),
+                                   "LATIN_1",
+                                   UCNV_FROM_U_CALLBACK_SKIP, latin1FromUOffsets,
+                                   NULL, 0)
+        ) {
+            log_err("u->LATIN_1 with skip did not match.\n");
+        }
+    }
+
     {
         UChar inputTest[] = { 0x0061, 0xd801, 0xdc01, 0xd801, 0x0061 };
         const uint8_t toIBM943[]= { 0x61, 0x61 };
@@ -301,6 +343,8 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
     }
 
     /*to Unicode*/
+    log_verbose("Testing toUnicode with UCNV_TO_U_CALLBACK_SKIP  \n");
+
     if(!testConvertToUnicode(expskipIBM_949, sizeof(expskipIBM_949),
              IBM_949skiptoUnicode, sizeof(IBM_949skiptoUnicode)/sizeof(IBM_949skiptoUnicode),"ibm-949",
             (UConverterToUCallback)UCNV_TO_U_CALLBACK_SKIP, fromIBM949Offs, NULL, 0 ))
@@ -315,9 +359,47 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
             (UConverterToUCallback)UCNV_TO_U_CALLBACK_SKIP, fromIBM930Offs, NULL, 0 ))
         log_err("ibm-930->u with skip did not match.\n");
 
-    log_verbose("Testing toUnicode with UCNV_TO_U_CALLBACK_SKIP  \n");
     {
-          
+        static const uint8_t usasciiToUBytes[] = { 0x61, 0x80, 0x31 };
+        static const UChar usasciiToU[] = { 0x61, 0x31 };
+        static const int32_t usasciiToUOffsets[] = { 0, 2 };
+
+        static const uint8_t latin1ToUBytes[] = { 0x61, 0x80, 0x31 };
+        static const UChar latin1ToU[] = { 0x61, 0x80, 0x31 };
+        static const int32_t latin1ToUOffsets[] = { 0, 1, 2 };
+
+        /* US-ASCII */
+        if(!testConvertToUnicode(usasciiToUBytes, sizeof(usasciiToUBytes),
+                                 usasciiToU, sizeof(usasciiToU)/U_SIZEOF_UCHAR,
+                                 "US-ASCII",
+                                 UCNV_TO_U_CALLBACK_SKIP, usasciiToUOffsets,
+                                 NULL, 0)
+        ) {
+            log_err("US-ASCII->u with skip did not match.\n");
+        }
+
+        /* SBCS NLTC codepage 367 for US-ASCII */
+        if(!testConvertToUnicode(usasciiToUBytes, sizeof(usasciiToUBytes),
+                                 usasciiToU, sizeof(usasciiToU)/U_SIZEOF_UCHAR,
+                                 "ibm-367",
+                                 UCNV_TO_U_CALLBACK_SKIP, usasciiToUOffsets,
+                                 NULL, 0)
+        ) {
+            log_err("ibm-367->u with skip did not match.\n");
+        }
+
+        /* ISO-Latin-1 */
+        if(!testConvertToUnicode(latin1ToUBytes, sizeof(latin1ToUBytes),
+                                 latin1ToU, sizeof(latin1ToU)/U_SIZEOF_UCHAR,
+                                 "LATIN_1",
+                                 UCNV_TO_U_CALLBACK_SKIP, latin1ToUOffsets,
+                                 NULL, 0)
+        ) {
+            log_err("LATIN_1->u with skip did not match.\n");
+        }
+    }
+
+    {
         const uint8_t sampleTxtEBCIDIC_STATEFUL [] ={
             0x0e, 0x5d, 0x5f , 0x41, 0x79, 0x41, 0x44
         };
@@ -1432,39 +1514,13 @@ UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const uint8_t 
                   checkOffsets ? offs : NULL,
                   doFlush, /* flush if we're at the end of the input data */
                   &status);
-
-        /*check for an INVALID character for testing the call back function STOP*/
-        if(status == U_INVALID_CHAR_FOUND || status == U_ILLEGAL_CHAR_FOUND )
-        {
-            junk[0] = 0;
-            offset_str[0] = 0;
-            for(p = junkout;p<targ;p++)
-                sprintf(junk + strlen(junk), "0x%02x, ", (0xFF) & (unsigned int)*p);
-            /*  printSeqErr(junkout, expectlen);*/
-            if(!memcmp(junkout, expect, expectLen))
-            {
-                log_verbose("Matches!\n");
-                ucnv_close(conv);
-                return TRUE;
-            }
-            else
-            {
-                log_err("String does not match. %s\n", gNuConvTestName);
-                log_verbose("String does not match. %s\n", gNuConvTestName);
-                log_info("\nGot:");
-                printSeqErr(junkout, expectLen);
-                log_info("\nExpected:");
-                printSeqErr(expect, expectLen);
-                ucnv_close(conv);
-                return FALSE;
-            }
-
-        }
     } while ( (status == U_BUFFER_OVERFLOW_ERROR) || (U_SUCCESS(status) && (sourceLimit < realSourceEnd)) );
 
-    if(U_FAILURE(status))
+    /* allow failure codes for the stop callback */
+    if(U_FAILURE(status) &&
+       (callback != UCNV_FROM_U_CALLBACK_STOP || (status != U_INVALID_CHAR_FOUND && status != U_ILLEGAL_CHAR_FOUND)))
     {
-        log_err("Problem doing toUnicode, errcode %s %s\n", myErrorName(status), gNuConvTestName);
+        log_err("Problem in fromUnicode, errcode %s %s\n", myErrorName(status), gNuConvTestName);
         return FALSE;
     }
 
@@ -1504,35 +1560,36 @@ UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const uint8_t 
 
     if (checkOffsets && (expectOffsets != 0) )
     {
-        log_verbose("\ncomparing %d offsets..\n", targ-junkout);
+        log_verbose("comparing %d offsets..\n", targ-junkout);
         if(memcmp(junokout,expectOffsets,(targ-junkout) * sizeof(int32_t) )){
-            log_err("\ndid not get the expected offsets while %s \n", gNuConvTestName);
+            log_err("did not get the expected offsets while %s \n", gNuConvTestName);
             log_err("Got Output : ");
             printSeqErr(junkout, targ-junkout);
-            log_err("\nGot Offsets : ");
+            log_err("Got Offsets:      ");
             for(p=junkout;p<targ;p++)
-                log_err("%d, ", junokout[p-junkout]); 
-            log_err("\nExpected Offsets: ");
+                log_err("%d,", junokout[p-junkout]); 
+            log_err("\n");
+            log_err("Expected Offsets: ");
             for(i=0; i<(targ-junkout); i++)
                 log_err("%d,", expectOffsets[i]);
+            log_err("\n");
+            return FALSE;
         }
     }
 
-    log_verbose("\n\ncomparing..\n");
     if(!memcmp(junkout, expect, expectLen))
     {
-        log_verbose("Matches!\n");
+        log_verbose("String matches! %s\n", gNuConvTestName);
         return TRUE;
     }
     else
     {
         log_err("String does not match. %s\n", gNuConvTestName);
-        log_verbose("String does not match. %s\n", gNuConvTestName);
-        printf("\nsource: ");
+        log_err("source: ");
         printUSeqErr(source, sourceLen);
-        log_err("\nGot: ");
+        log_err("Got:      ");
         printSeqErr(junkout, expectLen);
-        log_err("\nExpected: ");
+        log_err("Expected: ");
         printSeqErr(expect, expectLen);
         return FALSE;
     }
@@ -1637,38 +1694,11 @@ UBool testConvertToUnicode( const uint8_t *source, int sourcelen, const UChar *e
                 checkOffsets ? offs : NULL,
                 (UBool)(srcLimit == realSourceEnd), /* flush if we're at the end of the source data */
                 &status);
-
-        /*check for an INVALID character for testing the call back function STOP*/
-        if(status == U_INVALID_CHAR_FOUND || status == U_ILLEGAL_CHAR_FOUND || status == U_TRUNCATED_CHAR_FOUND )
-        {
-            junk[0] = 0;
-            offset_str[0] = 0;
-            for(p = junkout;p<targ;p++)
-                sprintf(junk + strlen(junk), "0x%04x, ", (0xFFFF) & (unsigned int)*p);
-            /*      printUSeqErr(junkout, expectlen);*/
-            if(!memcmp(junkout, expect, expectlen*2))
-            {
-                log_verbose("Matches!\n");
-                ucnv_close(conv);
-                return TRUE;
-            }
-            else
-            {
-                log_err("String does not match. %s\n", gNuConvTestName);
-                log_verbose("String does not match. %s\n", gNuConvTestName);
-                printf("\nGot: ");
-                printUSeqErr(junkout, expectlen);
-                printf("\nExpected: ");
-                printUSeqErr(expect, expectlen);
-                ucnv_close(conv);
-                return FALSE;
-            }
-        }
-
     } while ( (status == U_BUFFER_OVERFLOW_ERROR) || (U_SUCCESS(status) && (srcLimit < realSourceEnd)) ); /* while we just need another buffer */
 
-
-    if(U_FAILURE(status))
+    /* allow failure codes for the stop callback */
+    if(U_FAILURE(status) &&
+       (callback != UCNV_TO_U_CALLBACK_STOP || (status != U_INVALID_CHAR_FOUND && status != U_ILLEGAL_CHAR_FOUND && status != U_TRUNCATED_CHAR_FOUND)))
     {
         log_err("Problem doing toUnicode, errcode %s %s\n", myErrorName(status), gNuConvTestName);
         return FALSE;
@@ -1705,17 +1735,20 @@ UBool testConvertToUnicode( const uint8_t *source, int sourcelen, const UChar *e
     {
         if(memcmp(junokout,expectOffsets,(targ-junkout) * sizeof(int32_t)))
         {
-            log_err("\n\ndid not get the expected offsets while %s \n", gNuConvTestName);
-            log_err("\nGot offsets:      ");
+            log_err("did not get the expected offsets while %s \n", gNuConvTestName);
+            log_err("Got offsets:      ");
             for(p=junkout;p<targ;p++)
                 log_err("  %2d,", junokout[p-junkout]); 
-            log_err("\nExpected offsets: ");
+            log_err("\n");
+            log_err("Expected offsets: ");
             for(i=0; i<(targ-junkout); i++)
                 log_err("  %2d,", expectOffsets[i]);
-            log_err("\nGot output:       ");
+            log_err("\n");
+            log_err("Got output:       ");
             for(i=0; i<(targ-junkout); i++)
                 log_err("0x%04x,", junkout[i]);
-            log_err("\nFrom source:      ");
+            log_err("\n");
+            log_err("From source:      ");
             for(i=0; i<(src-source); i++)
                 log_err("  0x%02x,", (unsigned char)source[i]);
             log_err("\n");
@@ -1731,10 +1764,11 @@ UBool testConvertToUnicode( const uint8_t *source, int sourcelen, const UChar *e
     {
         log_err("String does not match. %s\n", gNuConvTestName);
         log_verbose("String does not match. %s\n", gNuConvTestName);
-        printf("\nGot: ");
+        log_err("Got:      ");
         printUSeqErr(junkout, expectlen);
-        printf("\nExpected: ");
+        log_err("Expected: ");
         printUSeqErr(expect, expectlen);
+        log_err("\n");
         return FALSE;
     }
 }
