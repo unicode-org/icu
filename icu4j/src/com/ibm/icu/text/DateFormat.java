@@ -613,7 +613,7 @@ public abstract class DateFormat extends UFormat {
      * for the given locale.
      * @param style the given formatting style. For example,
      * SHORT for "h:mm a" in the US locale.
-     * @param aLocale the given locale.
+     * @param locale the given ulocale.
      * @return a time formatter.
      * @draft ICU 3.2
      * @deprecated This is a draft API and might change in a future release of ICU.
@@ -668,7 +668,7 @@ public abstract class DateFormat extends UFormat {
      * for the given locale.
      * @param style the given formatting style. For example,
      * SHORT for "M/d/yy" in the US locale.
-     * @param aLocale the given locale.
+     * @param locale the given ulocale.
      * @return a date formatter.
      * @draft ICU 3.2
      * @deprecated This is a draft API and might change in a future release of ICU.
@@ -726,7 +726,7 @@ public abstract class DateFormat extends UFormat {
      * for the given locale.
      * @param dateStyle the given date formatting style.
      * @param timeStyle the given time formatting style.
-     * @param aLocale the given locale.
+     * @param locale the given ulocale.
      * @return a date/time formatter.
      * @draft ICU 3.2
      * @deprecated This is a draft API and might change in a future release of ICU.
