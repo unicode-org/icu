@@ -17,7 +17,7 @@
 #include "unicode/translit.h"
 #include "unicode/ucnv.h"
 #include "unicode/ucnv_err.h"
-#include "unicode/unicode.h"
+#include "unicode/uchar.h"
 #include "unicode/unifilt.h"
 #include "unicode/uniset.h"
 #include "unicode/unitohex.h"

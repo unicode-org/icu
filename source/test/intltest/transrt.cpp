@@ -11,7 +11,7 @@
 #include "unicode/translit.h"
 #include "unicode/rbt.h"
 #include "unicode/uniset.h"
-#include "unicode/unicode.h"
+#include "unicode/uchar.h"
 #include "unicode/normlzr.h"
 #include "unicode/uchar.h"
 #include "unicode/parseerr.h"
