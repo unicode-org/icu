@@ -18,8 +18,6 @@
 #include "unicode/ustring.h"
 #include "unicode/uscript.h"
 
-#include "unicode/loengine.h"
-
 #include "GnomeFontInstance.h"
 
 #include "paragraph.h"
@@ -27,7 +25,6 @@
 #include "GnomeGUISupport.h"
 #include "GnomeFontMap.h"
 #include "UnicodeReader.h"
-#include "scrptrun.h"
 
 #define ARRAY_LENGTH(array) (sizeof array / sizeof array[0])
 
