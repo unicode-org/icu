@@ -376,14 +376,14 @@ unum_getAttribute(const UNumberFormat*          fmt,
         return df->getGroupingSize();    
         
     case UNUM_ROUNDING_MODE:
-        return ((DecimalFormat*)df)->getRoundingMode(); // TODO remove cast!
+        return df->getRoundingMode();
         
     case UNUM_FORMAT_WIDTH:
-        return ((DecimalFormat*)df)->getFormatWidth(); // TODO remove cast!
+        return df->getFormatWidth();
         
         /** The position at which padding will take place. */
     case UNUM_PADDING_POSITION:
-        return ((DecimalFormat*)df)->getPadPosition(); // TODO remove cast!
+        return df->getPadPosition();
         
     default:
         break;
@@ -495,7 +495,7 @@ unum_getDoubleAttribute(const UNumberFormat*          fmt,
 {
     if (((const NumberFormat*)fmt)->getDynamicClassID() == DecimalFormat::getStaticClassID() && 
 	attr == UNUM_ROUNDING_INCREMENT) {
-        return ((DecimalFormat*)fmt)->getRoundingIncrement(); // TODO: cast to const DecimalFormat*!
+        return ((const DecimalFormat*)fmt)->getRoundingIncrement();
     } else {
         return -1.0;
     }
@@ -549,7 +549,7 @@ unum_getTextAttribute(const UNumberFormat*  fmt,
         break;
         
       case UNUM_PADDING_CHARACTER:
-        res = ((DecimalFormat*) df)->getPadCharacterString(); // TODO: remove cast!
+        res = df->getPadCharacterString();
         break;
         
       case UNUM_CURRENCY_CODE:
@@ -564,7 +564,7 @@ unum_getTextAttribute(const UNumberFormat*  fmt,
       U_ASSERT(((const NumberFormat*)fmt)->getDynamicClassID() == RuleBasedNumberFormat::getStaticClassID());
       const RuleBasedNumberFormat* rbnf = (const RuleBasedNumberFormat*)fmt;
       if (tag == UNUM_DEFAULT_RULESET) {
-	res = ((RuleBasedNumberFormat*)rbnf)->getDefaultRuleSetName(); // TODO: remove cast!
+	res = rbnf->getDefaultRuleSetName();
       } else if (tag == UNUM_PUBLIC_RULESETS) {
 	int32_t count = rbnf->getNumberOfRuleSetNames();
 	for (int i = 0; i < count; ++i) {
@@ -664,7 +664,6 @@ unum_toPattern(    const    UNumberFormat*          fmt,
     return pat.extract(result, resultLength, *status);
 }
 
-// TODO: first parameter should be const!
 U_CAPI int32_t U_EXPORT2
 unum_getSymbol(const UNumberFormat *fmt,
                UNumberFormatSymbol symbol,
