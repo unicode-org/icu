@@ -127,35 +127,56 @@ ufmt_isws(UChar c)
       u_isspace(c));
 }
 
+UConverter *gDef = NULL;
+
 UChar*
 ufmt_defaultCPToUnicode(const char *s,
             int32_t len)
 {
   int32_t size;
   UChar *target, *alias;
-  UConverter *defConverter;
+  UConverter *defConverter = NULL;
   UErrorCode status = U_ZERO_ERROR;
 
-  defConverter = ucnv_open(ucnv_getDefaultName(), &status);
+  umtx_lock(NULL);
+    if(gDef != NULL)
+      {
+        defConverter = gDef;
+        gDef = NULL;
+      }
+  umtx_unlock(NULL);
+
+  if(defConverter == NULL)
+    defConverter = ucnv_open(ucnv_getDefaultName(), &status);
+
   if(U_FAILURE(status) || defConverter == 0)
     return 0;
 
   /* perform the conversion in one swoop */
   size = (len + 1) / ucnv_getMinCharSize(defConverter);
   target = (UChar*) malloc(size * sizeof(UChar));
-  if(target == 0) {
-    ucnv_close(defConverter);
-    return 0;
+  if(target != 0) {
+
+    alias = target;
+    ucnv_toUnicode(defConverter, &alias, alias + size, &s, s + len, 
+                   NULL, TRUE, &status);
+    
+
+    /* add the null terminator */
+    *alias = 0x0000;
   }
-  
-  alias = target;
-  ucnv_toUnicode(defConverter, &alias, alias + size, &s, s + len, 
-         NULL, TRUE, &status);
 
-  ucnv_close(defConverter);
+  umtx_lock(NULL);
+    if(gDef == NULL)
+    {
+      gDef = defConverter;
+      defConverter = NULL;
+    }
+  umtx_unlock(NULL);
 
-  /* add the null terminator */
-  *alias = 0x0000;
+  if(defConverter != NULL) {
+    ucnv_close(defConverter);
+  }
 
   return target;
 }
@@ -166,10 +187,20 @@ ufmt_unicodeToDefaultCP(const UChar *s,
 {
   int32_t size;
   char *target, *alias;
-  UConverter *defConverter;
+  UConverter *defConverter = NULL;
   UErrorCode status = U_ZERO_ERROR;
 
-  defConverter = ucnv_open(ucnv_getDefaultName(), &status);
+  umtx_lock(NULL);
+    if(gDef != NULL)
+      {
+        defConverter = gDef;
+        gDef = NULL;
+      }
+  umtx_unlock(NULL);
+
+  if(defConverter == NULL)
+    defConverter = ucnv_open(ucnv_getDefaultName(), &status);
+
   if(U_FAILURE(status) || defConverter == 0)
     return 0;
 
@@ -177,19 +208,28 @@ ufmt_unicodeToDefaultCP(const UChar *s,
   target = (char*) 
     malloc((len + 1) * ucnv_getMaxCharSize(defConverter) * sizeof(char));
   size = (len) * ucnv_getMaxCharSize(defConverter) * sizeof(char);
-  if(target == 0) {
-    ucnv_close(defConverter);
-    return 0;
+  if(target != 0) {
+
+    alias = target;
+    ucnv_fromUnicode(defConverter, &alias, alias + size, &s, s + len, 
+                     NULL, TRUE, &status);
+    
+    
+    /* add the null terminator */
+    *alias = 0x00;
   }
-  
-  alias = target;
-  ucnv_fromUnicode(defConverter, &alias, alias + size, &s, s + len, 
-           NULL, TRUE, &status);
 
-  ucnv_close(defConverter);
+  umtx_lock(NULL);
+    if(gDef == NULL)
+    {
+      gDef = defConverter;
+      defConverter = NULL;
+    }
+  umtx_unlock(NULL);
 
-  /* add the null terminator */
-  *alias = 0x00;
+  if(defConverter != NULL) {
+    ucnv_close(defConverter);
+  }
 
   return target;
 }
