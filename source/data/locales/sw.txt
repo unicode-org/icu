@@ -11,11 +11,114 @@
 sw {
     Version { "2.0" }
 
-    Countries {   
+    // Many of these names came from www.geonames.de
+    Countries {
+        Fallback{ "en" }
+        AE { "Muugano wa Falme za Nchi za Kiarabu" }
+        AG { "Antigua na Barbuda" }
+        AR { "Ajentina" }
+
+        BA { "Bosnia na Herzegowina" }
+        BE { "Ubelgiji" }
+        BR { "Brazili" }
+        BS { "Visiwa vya Bahama" }
+
+        CA { "Kanada" }
+        CF { "Jamhuri ya Afrika ya Kati" }
+        CG { "Kongo" }
+        CH { "Uswisi" }
+        CI { "Pwani ya Pembe" }
+        CM { "Kamerun" }
+        CN { "Uchina" }
+        CO { "Kolombia" }
+        //CS { "Serbiya da Montenegro" }
+        CV { "Rasi Verde" }
+        CZ { "Jamhuri ya Czech" }
+
+        DE { "Udachi" }
+        DJ { "Jibuti" }
+        DK { "Udenmarki" }
+        DM { "Dominika" }
+        DO { "Jamhuri ya Dominikan" }
+
+        EC { "Ekvado" }
+        EG { "Misri" }
+        ES { "Uhispania" }
+        ET { "Uhabeshi" }
+
+        FR { "Ufaransa" }
+
+        GB { "Uingereza" }
+        GQ { "Guinea ya Ikweta" }
+
+        HR { "Kroatia" }
+        HU { "Hungaria" }
+
+        IL { "Uyahudi" } // This could be Israeli instead
+        IN { "Uhindi" }
+        IQ { "Iraki" }
+        IR { "Uajemi" } // This could be Iran instead
+        IS { "Barafu" }
+        IT { "Uitaliani" }
+
+        JM { "Jamaika" }
+        JP { "Ujapani" }
+
         KE { "Kenya" }
+        KH { "Kampuchea" }
+        KM { "Visiwa vya Komoro" }
+        KN { "Saint Kitts na Nevis" }
+        KP { "Korea ya Kaskazini" }
+        KR { "Korea ya Kusini" }
+
+        LU { "Luksemburg" }
+
+        MA { "Moroko" }
+        MC { "Monako" }
+        //MG { "Madagascar" } // Could also be Buki or Malagasi
+        MH { "Visiwa vya Marshall"}
+        MX { "Meksiko" }
+        MY { "Malasya" }
+        MZ { "Msumbiji" }
+
+        NI { "Nikaragua" }
+        NL { "Uholanzi" }
+        NO { "Unorwe" }
+        NP { "Nepali" }
+
+        PG { "Papua Guinea Mpya" }
+        PH { "Filipino" }
+        PT { "Ureno" }
+        PY { "Paragwai" }
+
+        RU { "Urusi" }
+
+        SA { "Arabuni Saudi" }
+        SB { "Visiwa vya Solomon" }
+        SC { "Visiwa vya Shelisheli" }
+        SE { "Uswidi" }
+        SO { "Somali" }
+        ST { "Sao Tome na Principe" }
+
+        TD { "Chadi" }
+        TL { "Timor ya Mashariki" }
+        TR { "Uturuki" }
+        TT { "Trinidad na Tobago" }
         TZ { "Tanzania" }
+
+        US { "Muungano wa Nchi za Amerika" }
+        UY { "Urugwai" }
+
+        VA { "Vatikano" }
+        VC { "Saint Vincent na Grenadines" }
+
+        YE { "Yemeni" }
+
+        ZA { "Afrika ya Kusini" }
+        //ZM { "Zambia" }
+        //ZW { "Zimbabwe" }
     }
-    DateTimeElements:intvector { 
+    DateTimeElements:intvector {
         7,
         1,
     }
@@ -28,7 +131,7 @@ sw {
         "Iju",
         "Jmo",
     }
-    DayNames { 
+    DayNames {
         "Jumapili",
         "Jumatatu",
         "Jumanne",
@@ -37,14 +140,14 @@ sw {
         "Ijumaa",
         "Jumamosi",
     }
-    Eras { 
+    Eras {
         "KK",
         "BK",
     }
-    Languages { 
+    Languages {
         sw  { "Kiswahili" }
     }
-    MonthAbbreviations { 
+    MonthAbbreviations {
         "Jan",
         "Feb",
         "Mar",
@@ -58,7 +161,7 @@ sw {
         "Nov",
         "Des",
     }
-    MonthNames { 
+    MonthNames {
         "Januari",
         "Februari",
         "Machi",
@@ -72,7 +175,7 @@ sw {
         "Novemba",
         "Desemba",
     }
-    zoneStrings { 
+    zoneStrings {
         {
             "Africa/Nairobi",
             "Saa za Africa Mashariki",  // East African Time
@@ -82,8 +185,8 @@ sw {
             "Nairobi",
         }
     }
-    LocaleScript:array{ 
-      "Latn",  // ISO 15924 Name 
+    LocaleScript:array{
+      "Latn",  // ISO 15924 Name
     }
     ExemplarCharacters{
       "[a-z]"
