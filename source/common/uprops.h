@@ -280,12 +280,18 @@ uprv_openRuleWhiteSpaceSet(UErrorCode* ec);
 U_CAPI int32_t U_EXPORT2
 uprv_getMaxCharNameLength();
 
+#if 0
+/* 
+Currently not used but left for future use. Probably by UnicodeSet. 
+urename.h and unames.c changed accordingly. 
+*/
 /**
  * Get the maximum length of an ISO comment.
  * @return 0 if no ISO comments available.
  */
 U_CAPI int32_t U_EXPORT2
 uprv_getMaxISOCommentLength();
+#endif
 
 /**
  * Fills set with characters that are used in Unicode character names.
@@ -296,6 +302,11 @@ uprv_getMaxISOCommentLength();
 U_CAPI void U_EXPORT2
 uprv_getCharNameCharacters(USet* set);
 
+#if 0
+/* 
+Currently not used but left for future use. Probably by UnicodeSet. 
+urename.h and unames.c changed accordingly. 
+*/
 /**
  * Fills set with characters that are used in Unicode character names.
  * Just empties the set if no ISO comments are available.
@@ -303,6 +314,8 @@ uprv_getCharNameCharacters(USet* set);
  */
 U_CAPI void U_EXPORT2
 uprv_getISOCommentCharacters(USet* set);
+*/
+#endif
 
 /**
  * Enumerate each core properties data trie and add the

@@ -863,11 +863,27 @@
 #define uprv_getCharNameCharacters uprv_getCharNameCharacters_2_4
 #define uprv_getDefaultCodepage uprv_getDefaultCodepage_2_4
 #define uprv_getDefaultLocaleID uprv_getDefaultLocaleID_2_4
+
+#if 0
+/* 
+Currently not used but left for future use. Probably by UnicodeSet. 
+uprops.h and unames.c changed accordingly. 
+*/
 #define uprv_getISOCommentCharacters uprv_getISOCommentCharacters_2_4
+#endif
+
 #define uprv_getInclusions uprv_getInclusions_2_4
 #define uprv_getInfinity uprv_getInfinity_2_4
 #define uprv_getMaxCharNameLength uprv_getMaxCharNameLength_2_4
+
+#if 0
+/* 
+Currently not used but left for future use. Probably by UnicodeSet. 
+uprops.h and unames.c changed accordingly. 
+*/
 #define uprv_getMaxISOCommentLength uprv_getMaxISOCommentLength_2_4
+#endif
+
 #define uprv_getMaxValues uprv_getMaxValues_2_4
 #define uprv_getNaN uprv_getNaN_2_4
 #define uprv_getUTCtime uprv_getUTCtime_2_4

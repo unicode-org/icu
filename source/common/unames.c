@@ -1773,6 +1773,11 @@ uprv_getMaxCharNameLength() {
     }
 }
 
+#if 0
+/* 
+Currently not used but left for future use. Probably by UnicodeSet. 
+urename.h and uprops.h changed accordingly. 
+*/
 U_CAPI int32_t U_EXPORT2
 uprv_getMaxISOCommentLength() {
     UErrorCode errorCode=U_ZERO_ERROR;
@@ -1782,6 +1787,7 @@ uprv_getMaxISOCommentLength() {
         return 0;
     }
 }
+#endif
 
 /**
  * Converts the char set cset into a Unicode set uset.
@@ -1831,6 +1837,11 @@ uprv_getCharNameCharacters(USet* set) {
     charSetToUSet(gNameSet, set);
 }
 
+#if 0
+/* 
+Currently not used but left for future use. Probably by UnicodeSet. 
+urename.h and uprops.h changed accordingly. 
+*/
 /**
  * Fills set with characters that are used in Unicode character names.
  * @param set USet to receive characters. Existing contents are deleted.
@@ -1839,6 +1850,7 @@ U_CAPI void U_EXPORT2
 uprv_getISOCommentCharacters(USet* set) {
     charSetToUSet(gISOCommentSet, set);
 }
+#endif
 
 /*
  * Hey, Emacs, please set the following:
