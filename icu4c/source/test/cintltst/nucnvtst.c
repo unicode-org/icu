@@ -122,7 +122,7 @@ TestNextUCharError(UConverter* cnv, const char* source, const char* limit, UErro
 void TestInBufSizes(void)
 {
   TestNewConvertWithBufferSizes(NEW_MAX_BUFFER,1);
-//#if 0
+#if 1
   TestNewConvertWithBufferSizes(NEW_MAX_BUFFER,2);
   TestNewConvertWithBufferSizes(NEW_MAX_BUFFER,3);
   TestNewConvertWithBufferSizes(NEW_MAX_BUFFER,4);
@@ -131,19 +131,19 @@ void TestInBufSizes(void)
   TestNewConvertWithBufferSizes(1,1);
   TestNewConvertWithBufferSizes(2,3);
   TestNewConvertWithBufferSizes(3,2);
-//#endif
+#endif
 }
 
 void TestOutBufSizes(void)
 {
-//#if 0
+#if 1
   TestNewConvertWithBufferSizes(NEW_MAX_BUFFER,NEW_MAX_BUFFER);
   TestNewConvertWithBufferSizes(1,NEW_MAX_BUFFER);
   TestNewConvertWithBufferSizes(2,NEW_MAX_BUFFER);
   TestNewConvertWithBufferSizes(3,NEW_MAX_BUFFER);
   TestNewConvertWithBufferSizes(4,NEW_MAX_BUFFER);
   TestNewConvertWithBufferSizes(5,NEW_MAX_BUFFER);
-//#endif
+#endif
 }
 
 
@@ -594,7 +594,7 @@ void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
   log_verbose("\n\n\nTesting conversions with InputBufferSize = %d, OutputBufferSize = %d\n", gInBufferSize, gOutBufferSize);
 
     
-//#if 0
+#if 1
     /*UTF-8*/
     if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
             expectedUTF8, sizeof(expectedUTF8), "UTF8", toUTF8Offs ))
@@ -644,9 +644,9 @@ void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
 
  
 /****/
-//#endif
+#endif
 
-//#if 0
+#if 1
     /*UTF-8*/
     if(!testConvertToU(expectedUTF8, sizeof(expectedUTF8),
                sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "utf8", fmUTF8Offs ))
@@ -922,8 +922,8 @@ TestUTF16BE() {
     }
     /*Test for the condition where there is a surrogate pair*/
     {
-    //    static const uint8_t source2[]={};
-    //    TestNextUCharError(cnv, (const char*)source2, (const char*)source2+sizeof(source2), U_TRUNCATED_CHAR_FOUND, "an invalid character");
+      /*    static const uint8_t source2[]={};
+	    TestNextUCharError(cnv, (const char*)source2, (const char*)source2+sizeof(source2), U_TRUNCATED_CHAR_FOUND, "an invalid character"); */
     }
     ucnv_close(cnv);
 }
@@ -1824,3 +1824,4 @@ void TestEBCDICUS4XML()
 }
 
 
+#endif
