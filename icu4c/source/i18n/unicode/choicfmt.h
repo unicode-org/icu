@@ -55,21 +55,27 @@ class MessageFormat;
  * <p>In most cases, the preferred way to define a
  * <code>ChoiceFormat</code> is with a pattern. Here is an example of a
  * <code>ChoiceFormat</code> pattern:</p>
+ *
+ * \htmlonly<pre>    0&#x2264;are no files|1&#x2264;is one file|1&lt;are many files</pre>\endhtmlonly
+ * 
+ * <p>or equivalently,</p>
  * 
  * <pre>    0#are no files|1#is one file|1&lt;are many files</pre>
  * 
  * <p>The pattern consists of a number or <em>range specifiers</em>
- * separated by vertical bars U+007C (<code>|</code>). There is no
+ * separated by vertical bars '|' (U+007C). There is no
  * vertical bar after the last range.  Each range specifier is of the
- * form <em>number separator string</em>.</p>
+ * form:</p>
+ *
+ * \htmlonly<blockquote><em>Number Separator String</em></blockquote>\endhtmlonly
  * 
  * <p><em>Number</em> is a floating point number that can be parsed by a
  * default <code>NumberFormat</code> for the US locale. It gives the
  * lower limit of this range. The lower limit is either inclusive or
- * exclusive, depending on the <em>separator</em>. (The upper limit is
- * given by the lower limit of the next range.)  The Unicode infinity
- * sign U+221E is recognized for positive infinity. It may be preceded by
- * '<code>-</code>' (U+002D) to indicate negative infinity.</p>
+ * exclusive, depending on the <em>separator</em>. The upper limit is
+ * given by the lower limit of the next range.  The Unicode infinity
+ * sign \htmlonly&#x221E \endhtmlonly (U+221E) is recognized for positive infinity. It may be preceded by
+ * '-' (U+002D) to indicate negative infinity.</p>
  * 
  * <p><em>String</em> is the format string for this range, with special
  * characters enclosed in single quotes (<code>'The #
@@ -79,15 +85,18 @@ class MessageFormat;
  * <p><em>Separator</em> is one of the following single characters:
  * 
  * <ul>
- *   <li>U+0023 (<code>#</code>) indicates that the lower limit given by
- *     <em>number</em> is inclusive.  That is, the limit value belongs to
- *     this range.  Another way of saying this is that the corresponding
- *     closure is <code>FALSE</code>.  The Unicode less than or equals
- *     sign U+2264 may be used in place of <code>#</code>.</li>
- *   <li>U+003C (<code>&lt;</code>) indicates that the lower limit given
- *     by <em>number</em> is exclusive.  This means that the limit
- *     belongs to the prior range.</li> Another way of saying this is
- *     that the corresponding closure is <code>TRUE</code>.
+ *   <li>\htmlonly'&#x2264;' \endhtmlonly (U+2264) or '#' (U+0023)
+ *   indicates that the lower limit given by <em>Number</em> is
+ *   inclusive.  (The two characters are equivalent to ChoiceFormat.)
+ *   This means that the limit value <em>Number</em> belongs to this
+ *   range.  Another way of saying this is that the corresponding
+ *   closure is <code>FALSE</code>.</li>
+ *
+ *   <li>'<' (U+003C) indicates that the lower limit given by
+ *   <em>Number</em> is exclusive.  This means that the value
+ *   <em>Number</em> belongs to the prior range.</li> Another way of
+ *   saying this is that the corresponding closure is
+ *   <code>TRUE</code>.
  * </ul>
  * 
  * <p>See below for more information about closures.</p>
@@ -177,70 +186,66 @@ class MessageFormat;
  * 
  * <p>Here is a simple example that shows formatting and parsing: </p>
  * 
- * <pre>
  * \code
- *   #include &lt;unicode/choicfmt.h&gt;
- *   #include &lt;unicode/unistr.h&gt;
- *   #include &lt;iostream.h&gt;
+ *   #include <unicode/choicfmt.h>
+ *   #include <unicode/unistr.h>
+ *   #include <iostream.h>
  *   
  *   int main(int argc, char *argv[]) {
  *       double limits[] = {1,2,3,4,5,6,7};
  *       UnicodeString monthNames[] = {
- *           &quot;Sun&quot;,&quot;Mon&quot;,&quot;Tue&quot;,&quot;Wed&quot;,&quot;Thu&quot;,&quot;Fri&quot;,&quot;Sat&quot;};
+ *           "Sun","Mon","Tue","Wed","Thu","Fri","Sat"};
  *       ChoiceFormat fmt(limits, monthNames, 7);
  *       UnicodeString str;
  *       char buf[256];
- *       for (double x = 1.0; x &lt;= 8.0; x += 1.0) {
+ *       for (double x = 1.0; x <= 8.0; x += 1.0) {
  *           fmt.format(x, str);
- *           str.extract(0, str.length(), buf, 256, &quot;&quot;);
+ *           str.extract(0, str.length(), buf, 256, "");
  *           str.truncate(0);
- *           cout &lt;&lt; x &lt;&lt; &quot; -&gt; &quot;
- *                &lt;&lt; buf &lt;&lt; endl;
+ *           cout << x << " -> "
+ *                << buf << endl;
  *       }
- *       cout &lt;&lt; endl;
+ *       cout << endl;
  *       return 0;
  *   }
  * \endcode
- * </pre>
  * 
  * <p>Here is a more complex example using a <code>ChoiceFormat</code>
  * constructed from a pattern together with a
  * <code>MessageFormat</code>.</p>
  * 
- * <pre>
  * \code
- *   #include &lt;unicode/choicfmt.h&gt;
- *   #include &lt;unicode/msgfmt.h&gt;
- *   #include &lt;unicode/unistr.h&gt;
- *   #include &lt;iostream.h&gt;
+ *   #include <unicode/choicfmt.h>
+ *   #include <unicode/msgfmt.h>
+ *   #include <unicode/unistr.h>
+ *   #include <iostream.h>
  * 
  *   int main(int argc, char *argv[]) {
  *       UErrorCode status = U_ZERO_ERROR;
  *       double filelimits[] = {0,1,2};
  *       UnicodeString filepart[] =
- *           {&quot;are no files&quot;,&quot;is one file&quot;,&quot;are {0} files&quot;};
+ *           {"are no files","is one file","are {0} files"};
  *       ChoiceFormat* fileform = new ChoiceFormat(filelimits, filepart, 3 );
  *       Format* testFormats[] =
  *           {fileform, NULL, NumberFormat::createInstance(status)};
- *       MessageFormat pattform(&quot;There {0} on {1}&quot;, status );
+ *       MessageFormat pattform("There {0} on {1}", status );
  *       pattform.adoptFormats(testFormats, 3);
- *       Formattable testArgs[] = {0L, &quot;Disk A&quot;};
+ *       Formattable testArgs[] = {0L, "Disk A"};
  *       FieldPosition fp(0);
  *       UnicodeString str;
  *       char buf[256];
- *       for (int32_t i = 0; i &lt; 4; ++i) {
+ *       for (int32_t i = 0; i < 4; ++i) {
  *           Formattable fInt(i);
  *           testArgs[0] = fInt;
  *           pattform.format(testArgs, 2, str, fp, status );
- *           str.extract(0, str.length(), buf, &quot;&quot;);
+ *           str.extract(0, str.length(), buf, "");
  *           str.truncate(0);
- *           cout &lt;&lt; &quot;Output for i=&quot; &lt;&lt; i &lt;&lt; &quot; : &quot; &lt;&lt; buf &lt;&lt; endl;
+ *           cout << "Output for i=" << i << " : " << buf << endl;
  *       }
- *       cout &lt;&lt; endl;
+ *       cout << endl;
  *       return 0;
  *   }
  * \endcode
- * </pre>
  */
 class U_I18N_API ChoiceFormat: public NumberFormat {
 public:
