@@ -36,6 +36,7 @@
 #include "bocsu.h"
 
 #include "unormimp.h"
+#include "unorm_it.h"
 #include "uresimp.h"
 #include "umutex.h"
 #include "uhash.h"
@@ -151,7 +152,8 @@ inline void backupState(const collIterate *data, collIterateState *backup)
     backup->bufferaddress = data->writableBuffer;
     backup->buffersize    = data->writableBufSize;
     if(data->iterator != NULL) {
-      backup->iteratorIndex = data->iterator->getIndex(data->iterator, UITER_CURRENT);
+      //backup->iteratorIndex = data->iterator->getIndex(data->iterator, UITER_CURRENT);
+      backup->iteratorIndex = data->iterator->getState(data->iterator);
     }
 }
 
@@ -166,10 +168,12 @@ static
 inline void loadState(collIterate *data, const collIterateState *backup,
                       UBool        forwards)
 {
+  UErrorCode status = U_ZERO_ERROR;
     data->flags       = backup->flags;
     data->origFlags   = backup->origFlags;
     if(data->iterator != NULL) {
-      data->iterator->move(data->iterator, backup->iteratorIndex, UITER_ZERO);
+      //data->iterator->move(data->iterator, backup->iteratorIndex, UITER_ZERO);
+      data->iterator->setState(data->iterator, backup->iteratorIndex, &status);
     }
     data->pos         = backup->pos;
     if ((data->flags & UCOL_ITER_INNORMBUF) &&
@@ -1092,7 +1096,8 @@ static
 inline void normalizeIterator(collIterate *collationSource) {
   UErrorCode status = U_ZERO_ERROR;
   UBool wasNormalized = FALSE;
-  int32_t iterIndex = collationSource->iterator->getIndex(collationSource->iterator, UITER_CURRENT);
+  //int32_t iterIndex = collationSource->iterator->getIndex(collationSource->iterator, UITER_CURRENT);
+  uint32_t iterIndex = collationSource->iterator->getState(collationSource->iterator);
   int32_t normLen = unorm_next(collationSource->iterator, collationSource->writableBuffer, 
     (int32_t)collationSource->writableBufSize, UNORM_FCD, 0, TRUE, &wasNormalized, &status);
   if(status == U_BUFFER_OVERFLOW_ERROR || normLen == (int32_t)collationSource->writableBufSize) {
@@ -1108,7 +1113,8 @@ inline void normalizeIterator(collIterate *collationSource) {
         return;
     }
     status = U_ZERO_ERROR;
-    collationSource->iterator->move(collationSource->iterator, iterIndex, UITER_ZERO);
+    //collationSource->iterator->move(collationSource->iterator, iterIndex, UITER_ZERO);
+    collationSource->iterator->setState(collationSource->iterator, iterIndex, &status);
     normLen = unorm_next(collationSource->iterator, collationSource->writableBuffer, 
     (int32_t)collationSource->writableBufSize, UNORM_FCD, 0, TRUE, &wasNormalized, &status);
   }
@@ -1133,7 +1139,8 @@ inline void normalizeIteratorBackwards(collIterate *collationSource) {
   UErrorCode status = U_ZERO_ERROR;
   UBool wasNormalized = FALSE;
   collationSource->iterator->move(collationSource->iterator, -1, UITER_CURRENT);
-  int32_t iterIndex = collationSource->iterator->getIndex(collationSource->iterator, UITER_CURRENT);
+  //int32_t iterIndex = collationSource->iterator->getIndex(collationSource->iterator, UITER_CURRENT);
+  uint32_t iterIndex = collationSource->iterator->getState(collationSource->iterator);
   *(collationSource->writableBuffer) = 0;
   int32_t normLen = unorm_previous(collationSource->iterator, collationSource->writableBuffer+1, 
     (int32_t)collationSource->writableBufSize, UNORM_FCD, 0, TRUE, &wasNormalized, &status);
@@ -1151,7 +1158,8 @@ inline void normalizeIteratorBackwards(collIterate *collationSource) {
     }
     *(collationSource->writableBuffer) = 0;
     status = U_ZERO_ERROR;
-    collationSource->iterator->move(collationSource->iterator, iterIndex, UITER_ZERO);
+    //collationSource->iterator->move(collationSource->iterator, iterIndex, UITER_ZERO);
+    collationSource->iterator->setState(collationSource->iterator, iterIndex, &status);
     normLen = unorm_previous(collationSource->iterator, collationSource->writableBuffer+1, 
     (int32_t)collationSource->writableBufSize, UNORM_FCD, 0, TRUE, &wasNormalized, &status);
   }
@@ -1302,12 +1310,13 @@ inline uint32_t ucol_IGetNextCE(const UCollator *coll, collIterate *collationSou
             ch = *collationSource->pos++;
         }
         else if(collationSource->flags & UCOL_USE_ITERATOR) {
-          if(!(collationSource->flags & UCOL_ITER_NORM)) {
+          //if(!(collationSource->flags & UCOL_ITER_NORM)) {
             UChar32 iterch = collationSource->iterator->next(collationSource->iterator);
             if(iterch == U_SENTINEL) {
               return UCOL_NO_MORE_CES;
             }
             ch = (UChar)iterch;
+#if 0
           } else {
             // do the incremental normalization of the iterator contents.
             // God knows how we're going to get back from it :)
@@ -1318,6 +1327,7 @@ inline uint32_t ucol_IGetNextCE(const UCollator *coll, collIterate *collationSou
               return UCOL_NO_MORE_CES;
             }
           }
+#endif
         }
         else
         {
@@ -1959,9 +1969,9 @@ inline UChar getNextNormalizedChar(collIterate *data)
       }
     }
 
-    if (data->flags & UCOL_ITER_NORM && data->flags & UCOL_USE_ITERATOR) {
-      normalizeIterator(data);
-    }
+    //if (data->flags & UCOL_ITER_NORM && data->flags & UCOL_USE_ITERATOR) {
+      //normalizeIterator(data);
+    //}
 
     UChar  *pEndWritableBuffer = NULL;
     UBool  innormbuf = (UBool)(data->flags & UCOL_ITER_INNORMBUF);
@@ -1987,13 +1997,13 @@ inline UChar getNextNormalizedChar(collIterate *data)
           // (since we encountered zero). This means, in the 
           // case we're using char iterator, that we need to 
           // do another round of normalization. 
-          if(data->origFlags & UCOL_USE_ITERATOR) {
+          //if(data->origFlags & UCOL_USE_ITERATOR) {
             // we need to restore original flags,
             // otherwise, we'll lose them
-            data->flags = data->origFlags;
-            normalizeIterator(data);
-            return *(data->pos++);
-          } else {
+            //data->flags = data->origFlags;
+            //normalizeIterator(data);
+            //return *(data->pos++);
+          //} else {
             /*
             in writable buffer, at this point fcdPosition can not be
             pointing to the end of the data string. see contracting tag.
@@ -2007,7 +2017,7 @@ inline UChar getNextNormalizedChar(collIterate *data)
             }
             pEndWritableBuffer = data->pos;
             data->pos = data->fcdPosition;
-          }
+          //}
         }
         else {
             if (*(data->pos + 1) == 0) {
@@ -2595,7 +2605,12 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
             }
 */
             if(source->iterator) {
-              state.iteratorIndex--;
+              //state.iteratorIndex--;
+              uint32_t tempIndex = source->iterator->getState(source->iterator);
+              source->iterator->setState(source->iterator, state.iteratorIndex, status);
+              source->iterator->move(source->iterator, -1, UITER_CURRENT);
+              state.iteratorIndex = source->iterator->getState(source->iterator);
+              source->iterator->setState(source->iterator, tempIndex, status);
             }
             if(state.pos) {
               state.pos --;
@@ -2916,10 +2931,10 @@ inline UChar getPrevNormalizedChar(collIterate *data)
       }
     }
 
-    if(data->flags & UCOL_USE_ITERATOR) {
-      normalizeIteratorBackwards(data); 
-      return *(data->pos - 1);
-    }
+    //if(data->flags & UCOL_USE_ITERATOR) {
+      //normalizeIteratorBackwards(data); 
+      //return *(data->pos - 1);
+    //}
 
     start = data->pos;
     if (data->flags & UCOL_ITER_HASLEN) {
@@ -4913,6 +4928,501 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
     return sortKeySize;
 }
 
+
+enum {
+  UCOL_PSK_PRIMARY = 0,
+    UCOL_PSK_SECONDARY = 1,
+    UCOL_PSK_CASE = 2,
+    UCOL_PSK_TERTIARY = 3,
+    UCOL_PSK_QUATERNARY = 4,
+    UCOL_PSK_QUIN = 5,
+    UCOL_PSK_IDENTICAL = 6,
+    UCOL_PSK_NULL = 7,
+    UCOL_PSK_LIMIT
+};
+
+U_CAPI int32_t U_EXPORT2 
+ucol_nextSortKeyPart(UCollator *coll,
+                     UCharIterator *iter,
+                     uint32_t state[2],
+                     uint8_t *dest, int32_t count,
+                     UErrorCode *status) {
+
+ /*
+ * state:
+ * struct or simply uint32_t[2]?
+ *
+ * 1st word for UCharIterator
+ * 2nd word:
+ * Bits
+ *  7.. 0   CEs since UCharIterator state
+ * 10.. 8   level: 0=primary, 1=sec, 2=case, 3=tertiary, 4=qua, 5=kvin, 6=identical, 7=null
+ *          -> null level writes just 0s after the identical level
+ *     11   byte index in the CE, 0/1
+ * 19..12
+ *      ?   ?for french secondary?
+ *
+ * No need to count UChars since UCharIterator state?!
+ *
+ * Initial state: both words 0, test specially.
+ */
+
+/*
+ * getNextCE() needs to sync each time
+ * - if an iterator is used
+ * - before getting a UChar (iter->next() or unorm_next())
+ * - if the UChar buffer is empty
+ * - and the CE buffer is empty
+ *
+ * -> sync means save state=uiter_getState(iter)
+ *    and reset countCEs=0
+ * -> otherwise for each CE delivered ++countCEs
+ */
+    /* error checking */
+    if(status==NULL || U_FAILURE(*status)) {
+        return 0;
+    }
+    if( coll==NULL || iter==NULL ||
+        state==NULL ||
+        count<0 || (count>0 && dest==NULL)
+    ) {
+        *status=U_ILLEGAL_ARGUMENT_ERROR;
+    }
+
+
+    if(count==0) {
+        /* nothing to do */
+        return 0;
+    }
+
+    int32_t strength = ucol_getAttribute(coll, UCOL_STRENGTH, status);
+    uint8_t UCOL_HIRAGANA_QUAD = 
+      (ucol_getAttribute(coll, UCOL_HIRAGANA_QUATERNARY_MODE, status) == UCOL_ON)?0xFE:0xFF;
+
+    collIterate s;
+
+    IInit_collIterate(coll, NULL, -1, &s);
+    s.iterator = iter;
+    s.flags |= UCOL_USE_ITERATOR;
+
+    UNormIterator *normIter = NULL;
+    if(ucol_getAttribute(coll, UCOL_NORMALIZATION_MODE, status) == UCOL_ON) {
+      normIter = unorm_openIter(status);
+      s.iterator = unorm_setIter(normIter, iter, UNORM_FCD, status);
+      s.flags &= ~UCOL_ITER_NORM;
+      if(U_FAILURE(*status)) {
+        return 0;
+      }
+    }
+
+    UBool notIsContinuation = FALSE;
+    uint32_t CE;
+
+    // The state of the iterator from the 
+    // previous invocation
+    uint32_t iterState = state[0];
+    uint32_t newState = 0;
+    if(iterState == 0) {
+      /* initial state */
+      iter->move(s.iterator, 0, UITER_START);
+    } else {
+        /* reset to previous state */
+      s.iterator->setState(s.iterator, state[0], status);
+      if(U_FAILURE(*status)) {
+          return 0;
+      }
+    }
+
+    // Number of times to skip because the iterator returned
+    // UITER_NO_STATE.
+    int32_t iterSkips = (state[1] >> 12) & 0xFF;
+    if(iterSkips) {
+      s.iterator->move(s.iterator, iterSkips, UITER_CURRENT);
+      iterSkips = 0;
+    }
+
+
+    // Skip the CEs that we got from an extraction
+    // and delivered in the previous call
+    int32_t countCEs= state[1]&0xFF;
+    // We have to keep tab on how many expansion CEs
+    // was already consumed - we might have to remember
+    // it over invocations.
+    int32_t consumedExpansionCEs = countCEs;
+    // Clean out the expansion buffer
+    while(countCEs-->0) {
+        CE = ucol_IGetNextCE(coll, &s, status);
+        if(CE==UCOL_NO_MORE_CES) {
+            /* should not happen */
+            *status=U_INTERNAL_PROGRAM_ERROR;
+            return 0;
+        }
+    }
+    int32_t level= (state[1]>>8)&7/* extract from state[1] */;
+    int32_t byteCount = 0; /* intra-CE byte counter */
+    UBool dontAdvanceIteratorBecauseWeNeedALevelTerminator = FALSE; 
+    int32_t i=0; /* destination byte counter <=count */
+    int32_t j = 0;
+
+    // We are going to be looping until we provide enough
+    // bytes.
+    //while(i < count) {
+      // Before every iteration, we remember what was the latest
+      // state successfully processed. Then we begin the transaction.
+        switch(level) {
+        case UCOL_PSK_PRIMARY:
+          byteCount = (state[1]>>11)&1; 
+          for(;;) {
+              if(i==count) {
+                  goto saveState;
+              }
+              // We should save the state only if we
+              // are sure that we are done with the
+              // previous iterator state
+              if(consumedExpansionCEs == 0 && byteCount == 0) {
+                newState = s.iterator->getState(s.iterator);
+                if(newState != UITER_NO_STATE) {
+                  iterState = newState;
+                  iterSkips = 0;
+                } else {
+                  iterSkips++;
+                }
+              }
+              CE = ucol_IGetNextCE(coll, &s, status);
+              if(CE==UCOL_NO_MORE_CES) {
+                  // Add the level separator
+                  dest[i++] = UCOL_LEVELTERMINATOR; 
+                  byteCount=0;
+                  // Restart the iteration an move to the
+                  // second level
+                  s.iterator->move(s.iterator, 0, UITER_START);
+                  state[0] = 0;
+                  level = UCOL_PSK_SECONDARY;
+                  break;
+              }
+              CE >>= 16; /* get primary */
+              if(CE != 0) {
+                if(byteCount == 0) {
+                  dest[i++]=(uint8_t)(CE >> 8);
+                } else {
+                  byteCount = 0;
+                }
+                if((CE &=0xff)!=0) {
+                    if(i==count) {
+                        /* overflow */
+                        byteCount=1;
+                        goto saveState;
+                    }
+                    dest[i++]=(uint8_t)CE;
+                }
+              }
+              if(s.CEpos - s.toReturn) {
+                consumedExpansionCEs++;
+              } else {
+                consumedExpansionCEs = 0;
+              }
+          }
+          /* fall through to next level */
+        case UCOL_PSK_SECONDARY:
+          if(strength >= UCOL_SECONDARY) {
+            for(;;) {
+              if(i == count) {
+                goto saveState;
+              }
+              // We should save the state only if we
+              // are sure that we are done with the
+              // previous iterator state
+              if(consumedExpansionCEs == 0) {
+                newState = s.iterator->getState(s.iterator);
+                if(newState != UITER_NO_STATE) {
+                  iterState = newState;
+                  iterSkips = 0;
+                } else {
+                  iterSkips++;
+                }
+              }
+              CE = ucol_IGetNextCE(coll, &s, status);
+              if(CE==UCOL_NO_MORE_CES) {
+                  // Add the level separator
+                  dest[i++] = UCOL_LEVELTERMINATOR; 
+                  byteCount=0;
+                  // Restart the iteration an move to the
+                  // second level
+                  s.iterator->move(s.iterator, 0, UITER_START);
+                  state[0] = 0;
+                  level = UCOL_PSK_CASE;
+                  break;
+              }
+              notIsContinuation = !isContinuation(CE);
+              CE >>= 8; /* get secondary */
+              if(CE != 0) {
+                dest[i++]=(uint8_t)CE;
+              }
+              if(s.CEpos - s.toReturn) {
+                consumedExpansionCEs++;
+              } else {
+                consumedExpansionCEs = 0;
+              }
+            }
+          } else {
+            level = UCOL_PSK_CASE;
+          }
+            /* fall through to next level */
+        case UCOL_PSK_CASE:
+          if(ucol_getAttribute(coll, UCOL_CASE_LEVEL, status) == UCOL_ON) {
+            uint32_t caseShift = UCOL_CASE_SHIFT_START;
+            uint8_t caseByte = UCOL_CASE_BYTE_START;
+            uint8_t caseBits = 0;
+
+            for(;;) {
+              if(i == count) {
+                goto saveState;
+              }
+              // We should save the state only if we
+              // are sure that we are done with the
+              // previous iterator state
+              if(consumedExpansionCEs == 0) {
+                newState = s.iterator->getState(s.iterator);
+                if(newState != UITER_NO_STATE) {
+                  iterState = newState;
+                  iterSkips = 0;
+                } else {
+                  iterSkips++;
+                }
+              }
+              CE = ucol_IGetNextCE(coll, &s, status);
+              if(CE==UCOL_NO_MORE_CES) {
+                // On the case level we might have an unfinished
+                // case byte. Add one if it's started.
+                if(caseShift != UCOL_CASE_SHIFT_START) {
+                  dest[i++] = caseByte;
+                }
+                // This is kind of tricky - situation where
+                // we need to keep the iterator in the old 
+                // state, but don't need to bring anything
+                // to the next invocation
+                if(i < count) {
+                  // Add the level separator
+                  dest[i++] = UCOL_LEVELTERMINATOR; 
+                  // Restart the iteration and move to the
+                  // next level
+                  s.iterator->move(s.iterator, 0, UITER_START);
+                  state[0] = 0;
+                  level = UCOL_PSK_TERTIARY;
+                } else {
+                  dontAdvanceIteratorBecauseWeNeedALevelTerminator = TRUE;
+                }
+                break;
+              }
+
+              if(!isContinuation(CE)) {
+                CE = (uint8_t)(CE & UCOL_BYTE_SIZE_MASK);
+                caseBits = (uint8_t)(CE & 0xC0);
+                // this copies the case level logic from the 
+                // sort key generation code
+                if(CE != 0) {
+                  if(coll->caseFirst == UCOL_UPPER_FIRST) {
+                    if((caseBits & 0xC0) == 0) {
+                      caseByte |= 1 << (--caseShift);
+                    } else {
+                      caseByte |= 0 << (--caseShift);
+                      /* second bit */
+                      if(caseShift == 0) {
+                        dest[i++] = caseByte;
+                        caseShift = UCOL_CASE_SHIFT_START;
+                        caseByte = UCOL_CASE_BYTE_START;
+                      }
+                      caseByte |= ((caseBits>>6)&1) << (--caseShift);
+                    }
+                  } else {
+                    if((caseBits & 0xC0) == 0) {
+                      caseByte |= 0 << (--caseShift);
+                    } else {
+                      caseByte |= 1 << (--caseShift);
+                      /* second bit */
+                      if(caseShift == 0) {
+                        dest[i++] = caseByte;
+                        caseShift = UCOL_CASE_SHIFT_START;
+                        caseByte = UCOL_CASE_BYTE_START;
+                      }
+                      caseByte |= ((caseBits>>7)&1) << (--caseShift);
+                    }
+                  }
+                }
+
+              }
+              // Not sure this is correct for the case level - revisit
+              if(s.CEpos - s.toReturn) {
+                consumedExpansionCEs++;
+              } else {
+                consumedExpansionCEs = 0;
+              }
+            }
+          } else {
+            level = UCOL_PSK_TERTIARY;
+          }
+            /* fall through to next level */
+        case UCOL_PSK_TERTIARY:
+          if(strength >= UCOL_TERTIARY) {
+            for(;;) {
+              if(i == count) {
+                goto saveState;
+              }
+              // We should save the state only if we
+              // are sure that we are done with the
+              // previous iterator state
+              if(consumedExpansionCEs == 0) {
+                newState = s.iterator->getState(s.iterator);
+                if(newState != UITER_NO_STATE) {
+                  iterState = newState;
+                  iterSkips = 0;
+                } else {
+                  iterSkips++;
+                }
+              }
+              CE = ucol_IGetNextCE(coll, &s, status);
+              if(CE==UCOL_NO_MORE_CES) {
+                  // Add the level separator
+                  dest[i++] = UCOL_LEVELTERMINATOR; 
+                  byteCount=0;
+                  // Restart the iteration an move to the
+                  // second level
+                  s.iterator->move(s.iterator, 0, UITER_START);
+                  state[0] = 0;
+                  level = UCOL_PSK_QUATERNARY;
+                  break;
+              }
+              notIsContinuation = !isContinuation(CE);
+
+              if(notIsContinuation) {
+                CE = (uint8_t)(CE & UCOL_BYTE_SIZE_MASK);
+                CE ^= coll->caseSwitch;
+                CE &= coll->tertiaryMask;
+              } else {
+                CE = (uint8_t)((CE & UCOL_REMOVE_CONTINUATION));
+              }
+
+              if(CE != 0) {
+                dest[i++]=(uint8_t)CE;
+              }
+              if(s.CEpos - s.toReturn) {
+                consumedExpansionCEs++;
+              } else {
+                consumedExpansionCEs = 0;
+              }
+            }
+          } else {
+            // if we're not doing tertiary
+            // skip to the end
+            level = UCOL_PSK_NULL;
+          }
+            /* fall through to next level */
+        case UCOL_PSK_QUATERNARY:
+          if(strength >= UCOL_QUATERNARY) {
+            for(;;) {
+              if(i == count) {
+                goto saveState;
+              }
+              // We should save the state only if we
+              // are sure that we are done with the
+              // previous iterator state
+              if(consumedExpansionCEs == 0) {
+                newState = s.iterator->getState(s.iterator);
+                if(newState != UITER_NO_STATE) {
+                  iterState = newState;
+                  iterSkips = 0;
+                } else {
+                  iterSkips++;
+                }
+              }
+              CE = ucol_IGetNextCE(coll, &s, status);
+              if(CE==UCOL_NO_MORE_CES) {
+                  // Add the level separator
+                  dest[i++] = UCOL_LEVELTERMINATOR; 
+                  byteCount=0;
+                  // Restart the iteration an move to the
+                  // second level
+                  s.iterator->move(s.iterator, 0, UITER_START);
+                  state[0] = 0;
+                  level = UCOL_PSK_QUIN;
+                  break;
+              }
+              notIsContinuation = !isContinuation(CE);
+              if(notIsContinuation) {
+                if(s.flags & UCOL_WAS_HIRAGANA) { // This was Hiragana and we need to note it
+                  dest[i++] = UCOL_HIRAGANA_QUAD;
+                } else {
+                  dest[i++] = 0xFF;
+                }
+              }
+              if(s.CEpos - s.toReturn) {
+                consumedExpansionCEs++;
+              } else {
+                consumedExpansionCEs = 0;
+              }
+            }
+          } else {
+            // if we're not doing quaternary
+            // skip to the end
+            level = UCOL_PSK_NULL;
+          }
+            /* fall through to next level */
+        case UCOL_PSK_QUIN:
+          level = UCOL_PSK_IDENTICAL;
+            /* fall through to next level */
+        case UCOL_PSK_IDENTICAL:
+          if(strength >= UCOL_IDENTICAL) {
+          } else {
+            level = UCOL_PSK_NULL;
+          }
+            /* fall through to next level */
+        case UCOL_PSK_NULL:
+          j = i;
+          while(j<count) {
+              dest[j++]=0;
+          }
+          break;
+        default:
+          *status = U_INTERNAL_PROGRAM_ERROR;
+          return 0;
+        }
+    //}
+
+saveState:
+    // overflow CEs from an expansion.... That means that we have to backup one in the iterator...
+    // how to dance here????
+
+    // now we need to return stuff. First we want to see whether we have
+    // done everything for the current state of iterator.
+    if(consumedExpansionCEs || iterSkips || byteCount || dontAdvanceIteratorBecauseWeNeedALevelTerminator) {
+      // if we are in expansion or we were not able to 
+      // fit parts of the CE, we will have to redo this
+      // character.
+      state[0] = iterState;
+    } else {
+      // otherwise, this character is done, so we will
+      // continue further in the next invocation.
+      if((newState = s.iterator->getState(s.iterator))!= UITER_NO_STATE) {
+        state[0] = s.iterator->getState(s.iterator);
+      } else {
+        state[0] = iterState;
+        iterSkips++;
+      }
+    }
+    // save the number of CEs we have already processed
+    state[1] = consumedExpansionCEs;
+    state[1] |= (level << 8); // Next we put in the level of comparison
+    state[1] |= (byteCount << 11);
+    state[1] |= ((iterSkips & 0xFF) << 12);
+
+    if(normIter != NULL) {
+      unorm_closeIter(normIter);
+    }
+
+    //save state stored in CE iterator, iterator state & countCEs, plus local byteCount;
+    return i;
+}
+
 /**
  * Produce a bound for a given sortkey and a number of levels.
  */
@@ -6053,7 +6563,7 @@ static UCollationResult ucol_compareUsingSortKeys(collIterate *sColl,
 }
 
 
-static UCollationResult 
+static inline UCollationResult 
 ucol_strcollRegular( collIterate *sColl, collIterate *tColl,
 //              const UCollator    *coll,
 //              const UChar        *source,
@@ -6910,7 +7420,28 @@ ucol_strcollIter( const UCollator    *coll,
   tColl.flags |= UCOL_USE_ITERATOR;
   tColl.iterator = tIter;
 
-  return ucol_strcollRegular(&sColl, &tColl, status);
+  if(ucol_getAttribute(coll, UCOL_NORMALIZATION_MODE, status) == UCOL_ON) {
+    UNormIterator *sNormIter = unorm_openIter(status);
+    sColl.iterator = unorm_setIter(sNormIter, sIter, UNORM_FCD, status);
+    sColl.flags &= ~UCOL_ITER_NORM;
+
+    UNormIterator *tNormIter = unorm_openIter(status);
+    tColl.iterator = unorm_setIter(tNormIter, tIter, UNORM_FCD, status);
+    tColl.flags &= ~UCOL_ITER_NORM;
+
+    UCollationResult normResult;
+
+    if(U_SUCCESS(*status)) {
+      normResult = ucol_strcollRegular(&sColl, &tColl, status);
+    }
+
+    unorm_closeIter(sNormIter);
+    unorm_closeIter(tNormIter);
+
+    return normResult;
+  } else {
+    return ucol_strcollRegular(&sColl, &tColl, status);
+  }
 
   //*status = U_UNSUPPORTED_ERROR;
   //return UCOL_EQUAL;
@@ -6929,6 +7460,7 @@ ucol_strcoll( const UCollator    *coll,
               int32_t            targetLength) {
     U_ALIGN_CODE(16);
     UErrorCode status = U_ZERO_ERROR;
+      collIterate sColl, tColl;
 
     /* Scan the strings.  Find:                                                             */
     /*    The length of any leading portion that is equal                                   */
@@ -7021,25 +7553,37 @@ ucol_strcoll( const UCollator    *coll,
         }
     }
 
-    // Preparing the context objects for iterating over strings
-    collIterate sColl, tColl;
+    if(!coll->latinOneUse || (sourceLength > 0 && *source&0xff00) || (targetLength > 0 && *target&0xff00)) {
+      // Preparing the context objects for iterating over strings
+      IInit_collIterate(coll, source, sourceLength, &sColl);
+      IInit_collIterate(coll, target, targetLength, &tColl);
+      return ucol_strcollRegular(&sColl, &tColl, &status);
+    } else {
+      return ucol_strcollUseLatin1(coll, source, sourceLength, target, targetLength, &status);    
+    }
 
-    IInit_collIterate(coll, source, sourceLength, &sColl);
-    IInit_collIterate(coll, target, targetLength, &tColl);
-
-
+#if 0
     // TODO: revisit the conditions here. We don't want to initialize colliterate structures if we're going to use the regular loop
     if(coll->latinOneUse) {
       if ((sourceLength > 0 && *source&0xff00) || (targetLength > 0 && *target&0xff00)) { // source or target start with non-latin-1
+        // Preparing the context objects for iterating over strings
+        collIterate sColl, tColl;
+        IInit_collIterate(coll, source, sourceLength, &sColl);
+        IInit_collIterate(coll, target, targetLength, &tColl);
         return ucol_strcollRegular(&sColl, &tColl, &status);
         //return ucol_strcollRegular(coll, source, sourceLength, target, targetLength, &status);
       } else {
         return ucol_strcollUseLatin1(coll, source, sourceLength, target, targetLength, &status);    
       }
     } else {
+      // Preparing the context objects for iterating over strings
+      collIterate sColl, tColl;
+      IInit_collIterate(coll, source, sourceLength, &sColl);
+      IInit_collIterate(coll, target, targetLength, &tColl);
       return ucol_strcollRegular(&sColl, &tColl, &status);
       //return ucol_strcollRegular(coll, source, sourceLength, target, targetLength, &status);
     }
+#endif
 }
 
 /* convenience function for comparing strings */

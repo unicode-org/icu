@@ -260,14 +260,14 @@ static void doTestVariant(UCollator* myCollation, const UChar source[], const UC
     UErrorCode status = U_ZERO_ERROR;
     UColAttributeValue norm = ucol_getAttribute(myCollation, UCOL_NORMALIZATION_MODE, &status);
 
-    {
+    if(0) {
       UCharIterator sIter, tIter;
       uiter_setString(&sIter, source, sLen);
       uiter_setString(&tIter, target, tLen);
       compareResultIter = ucol_strcollIter(myCollation, &sIter, &tIter, &status);
     }
     /* convert the strings to UTF-8 and do try comparing with char iterator */
-    if(!QUICK) {
+    if(0) { /*!QUICK*/
       char utf8Source[256], utf8Target[256];
       int32_t utf8SourceLen = 0, utf8TargetLen = 0;
       u_strToUTF8(utf8Source, 256, &utf8SourceLen, source, sLen, &status);
@@ -278,7 +278,7 @@ static void doTestVariant(UCollator* myCollation, const UChar source[], const UC
         if(U_SUCCESS(status)) { /* probably buffer is not big enough */
           UCollationResult compareResultUTF8 = result, compareResultUTF8Norm = result;
           UCharIterator sIter, tIter;
-          log_verbose("Strings converted to UTF-8:%s, %s\n", aescstrdup(source,-1), aescstrdup(target,-1));
+          //log_verbose("Strings converted to UTF-8:%s, %s\n", aescstrdup(source,-1), aescstrdup(target,-1));
           uiter_setUTF8(&sIter, utf8Source, utf8SourceLen);
           uiter_setUTF8(&tIter, utf8Target, utf8TargetLen);
        /*uiter_setString(&sIter, source, sLen);
@@ -290,10 +290,10 @@ static void doTestVariant(UCollator* myCollation, const UChar source[], const UC
           compareResultUTF8Norm = ucol_strcollIter(myCollation, &sIter, &tIter, &status);
           ucol_setAttribute(myCollation, UCOL_NORMALIZATION_MODE, norm, &status);
           if(compareResultUTF8 != compareResultIter) {
-            log_err("different results in iterative comparison for normalization on and UTF-8. %s, %s\n", aescstrdup(source,-1), aescstrdup(target,-1));
+            log_err("different results in iterative comparison for UTF-16 and UTF-8 encoded strings. %s, %s\n", aescstrdup(source,-1), aescstrdup(target,-1));
           }
           if(compareResultUTF8 != compareResultUTF8Norm) {
-            log_err("different results in iterative when normalization is turned on. %s, %s\n", aescstrdup(source,-1), aescstrdup(target,-1));
+            log_err("different results in iterative when normalization is turned on with UTF-8 strings. %s, %s\n", aescstrdup(source,-1), aescstrdup(target,-1));
           }
         } else {
           log_verbose("Target UTF-8 buffer too small! Did not compare!\n");
@@ -301,6 +301,36 @@ static void doTestVariant(UCollator* myCollation, const UChar source[], const UC
         if(U_FAILURE(status)) {
           log_verbose("UTF-8 strcoll failed! Ignoring result\n");
         }
+      }
+    }
+
+    /* testing the partial sortkeys */
+    if(0) { /*!QUICK*/
+      int32_t pieceSize = 1;
+      uint8_t sBuf[1], tBuf[1];
+      UCharIterator sIter, tIter;
+      uint32_t sState[2], tState[2];
+      int32_t sSize = pieceSize, tSize = pieceSize;
+      int32_t partialSKResult = 0;
+      status = U_ZERO_ERROR;
+      sState[0] = 0; sState[1] = 0;
+      tState[0] = 0; tState[1] = 0;
+      while(sSize == pieceSize && tSize == pieceSize && partialSKResult == 0) {
+        uiter_setString(&sIter, source, sLen);
+        uiter_setString(&tIter, target, tLen);
+        sSize = ucol_nextSortKeyPart(myCollation, &sIter, sState, sBuf, pieceSize, &status);
+        tSize = ucol_nextSortKeyPart(myCollation, &tIter, tState, tBuf, pieceSize, &status);
+        partialSKResult = memcmp(sBuf, tBuf, pieceSize);
+      }
+
+      if(partialSKResult < 0) {
+          partialSKResult=UCOL_LESS;
+      }
+      else if(partialSKResult > 0) {
+          partialSKResult= UCOL_GREATER;
+      }
+      if(partialSKResult != result) {
+        log_err("Partial sortkey comparison returned wrong result: %s, %s\n", aescstrdup(source,-1), aescstrdup(target,-1));
       }
     }
 

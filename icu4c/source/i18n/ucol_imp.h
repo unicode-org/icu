@@ -176,7 +176,7 @@ struct collIterateState {
     uint32_t  buffersize;
     uint8_t   flags;
     uint8_t   origFlags;
-    int32_t   iteratorIndex;
+    uint32_t   iteratorIndex;
 };
 
 U_CAPI void U_EXPORT2 
