@@ -42,4 +42,6 @@ U_CFUNC UBool ucol_bld_cleanup(void);
 
 U_CFUNC UBool regex_cleanup(void);
 
+U_CFUNC UBool usearch_cleanup(void);
+
 #endif
