@@ -17,6 +17,7 @@
 
 #include "buddhcal.h"
 #include "unicode/gregocal.h"
+#include "mutex.h"
 #include <float.h>
 
 U_NAMESPACE_BEGIN
@@ -93,16 +94,6 @@ BuddhistCalendar::monthLength(int32_t month) const
     // ignore era
     return monthLength(month, year);
 }
-
-#if 0
-UBool 
-BuddhistCalendar::isLeapYear(int32_t year) const
-{
-    return (year >= fGregorianCutoverYear ?
-        ((year%4 == 0) && ((year%100 != 0) || (year%400 == 0))) : // Gregorian
-        (year%4 == 0)); // Julian
-}
-#endif
 
 int32_t BuddhistCalendar::internalGetEra() const
 {
@@ -196,9 +187,16 @@ UDate
 BuddhistCalendar::internalGetDefaultCenturyStart() const
 {
   // lazy-evaluate systemDefaultCenturyStart
-  if (fgSystemDefaultCenturyStart == fgSystemDefaultCentury)
+  UBool needsUpdate;
+  { 
+    Mutex m;
+    needsUpdate = (fgSystemDefaultCenturyStart == fgSystemDefaultCentury);
+  }
+
+  if (needsUpdate) {
     initializeSystemDefaultCentury();
-  
+  }
+
   // use defaultCenturyStart unless it's the flag value;
   // then use systemDefaultCenturyStart
   
@@ -208,14 +206,21 @@ BuddhistCalendar::internalGetDefaultCenturyStart() const
 int32_t
 BuddhistCalendar::internalGetDefaultCenturyStartYear() const
 {
-    // lazy-evaluate systemDefaultCenturyStartYear
-  if (fgSystemDefaultCenturyStart == fgSystemDefaultCentury)
-        initializeSystemDefaultCentury();
+  // lazy-evaluate systemDefaultCenturyStartYear
+  UBool needsUpdate;
+  { 
+    Mutex m;
+    needsUpdate = (fgSystemDefaultCenturyStart == fgSystemDefaultCentury);
+  }
 
-    // use defaultCenturyStart unless it's the flag value;
-    // then use systemDefaultCenturyStartYear
+  if (needsUpdate) {
+    initializeSystemDefaultCentury();
+  }
 
-    return    fgSystemDefaultCenturyStartYear;
+  // use defaultCenturyStart unless it's the flag value;
+  // then use systemDefaultCenturyStartYear
+  
+  return    fgSystemDefaultCenturyStartYear;
 }
 
 void
@@ -233,8 +238,13 @@ BuddhistCalendar::initializeSystemDefaultCentury()
     {
       calendar->setTime(Calendar::getNow(), status);
       calendar->add(UCAL_YEAR, -80, status);
-      fgSystemDefaultCenturyStart = calendar->getTime(status);
-      fgSystemDefaultCenturyStartYear = calendar->get(UCAL_YEAR, status);
+      UDate    newStart =  calendar->getTime(status);
+      int32_t  newYear  =  calendar->get(UCAL_YEAR, status);
+      {
+        Mutex m;
+        fgSystemDefaultCenturyStart = newStart;
+        fgSystemDefaultCenturyStartYear = newYear;
+      }
       delete calendar;
     }
     // We have no recourse upon failure unless we want to propagate the failure

@@ -339,9 +339,10 @@ JapaneseCalendar::monthLength(int32_t month, int32_t year) const
 int32_t
 JapaneseCalendar::monthLength(int32_t month) const
 {
-    int32_t year = internalGet(UCAL_YEAR);
-    // ignore era
-    return monthLength(month, year);
+  UErrorCode status = U_ZERO_ERROR;
+  int32_t year = internalGet(UCAL_YEAR);
+  // ignore era
+  return GregorianCalendar::monthLength(month, getGregorianYear(status));
 }
 
 int32_t JapaneseCalendar::getDefaultMonthInYear() const
@@ -357,7 +358,7 @@ int32_t JapaneseCalendar::getDefaultMonthInYear() const
 
   if(year == kEraInfo[era].year) {
     // Yes, we're in the first year of this era.
-    return kEraInfo[era].month;
+    return kEraInfo[era].month-1;
   }
 
   if(era < kCurrentEra) { 
@@ -376,7 +377,7 @@ int32_t JapaneseCalendar::getDefaultDayInMonth(int32_t month) const
   int32_t day = GregorianCalendar::getDefaultDayInMonth(month);
   
   if(year == kEraInfo[era].year) {
-    if(month == kEraInfo[era].month) {
+    if(month == (kEraInfo[era].month-1)) {
       return kEraInfo[era].day;
     }
   }
@@ -393,14 +394,14 @@ int32_t JapaneseCalendar::internalGetEra() const
 int32_t
 JapaneseCalendar::getGregorianYear(UErrorCode &status)  const
 {
-  int32_t year = (fStamp[UCAL_YEAR] != kUnset) ? internalGet(UCAL_YEAR) : 0;
+  int32_t year = (fStamp[UCAL_YEAR] != kUnset) ? internalGet(UCAL_YEAR) : 1; // default year = 1
   int32_t era = kCurrentEra;
   if (fStamp[UCAL_ERA] != kUnset) {
     era = internalGet(UCAL_ERA);
   }
   
   if ((era<0)||(era>kCurrentEra)) {
-      status = U_BRK_INIT_ERROR;
+      status = U_ILLEGAL_ARGUMENT_ERROR;
       return 0 ;
   }
   return year + kEraInfo[era].year - 1;
@@ -477,7 +478,7 @@ void JapaneseCalendar::timeToFields(UDate theTime, UBool quick, UErrorCode& stat
   }
 
 #ifdef U_DEBUG_JCAL
-  fprintf(stderr, "  low=%d,.. %d\n", low, year);
+  fprintf(stderr, "  low[era]=%d,.. %d\n", low, year);
 #endif
   // Now we've found the last era that starts before this date, so
   // adjust the year to count from the start of that era.  Note that
@@ -486,6 +487,10 @@ void JapaneseCalendar::timeToFields(UDate theTime, UBool quick, UErrorCode& stat
   
   internalSet(UCAL_ERA, low);
   internalSet(UCAL_YEAR, year - kEraInfo[low].year + 1);
+#ifdef U_DEBUG_JCAL
+  fprintf(stderr, "  Set ERA=%d, year=%d\n", low, year-kEraInfo[low].year+1);
+#endif
+
 }
 
 /*
