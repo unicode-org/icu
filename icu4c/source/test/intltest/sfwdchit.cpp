@@ -88,7 +88,7 @@ UBool SimpleFwdCharIterator::operator==(const ForwardCharacterIterator& that) co
 int32_t SimpleFwdCharIterator::hashCode(void) const {
     if (fHashCode == kInvalidHashCode)
     {
-        UHashKey key;
+        UHashTok key;
         key.pointer = fStart;
         ((SimpleFwdCharIterator *)this)->fHashCode = uhash_hashUChars(key);
     }

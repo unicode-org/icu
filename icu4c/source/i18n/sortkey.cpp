@@ -307,7 +307,7 @@ CollationKey::hashCode() const
 
     if (fHashCode == kInvalidHashCode)
     {
-        UHashKey key;
+        UHashTok key;
         key.pointer = fBytes;
         ((CollationKey *)this)->fHashCode = uhash_hashChars(key);
 #if 0

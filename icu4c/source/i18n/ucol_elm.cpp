@@ -28,10 +28,10 @@
 
 static uint32_t uprv_uca_processContraction(CntTable *contractions, UCAElements *element, uint32_t existingCE, UErrorCode *status);
 
-static int32_t prefixLookupHash(const UHashKey e) {
+static int32_t prefixLookupHash(const UHashTok e) {
   UCAElements *element = (UCAElements *)e.pointer;
   UChar buf[256];
-  UHashKey key;
+  UHashTok key;
   key.pointer = buf;
   uprv_memcpy(buf, element->cPoints, element->cSize*sizeof(UChar));
   buf[element->cSize] = 0;
@@ -40,18 +40,18 @@ static int32_t prefixLookupHash(const UHashKey e) {
   return uhash_hashUChars(key);
 }
 
-static int8_t prefixLookupComp(const UHashKey e1, const UHashKey e2) {
+static int8_t prefixLookupComp(const UHashTok e1, const UHashTok e2) {
   UCAElements *element1 = (UCAElements *)e1.pointer;
   UCAElements *element2 = (UCAElements *)e2.pointer;
 
   UChar buf1[256];
-  UHashKey key1;
+  UHashTok key1;
   key1.pointer = buf1;
   uprv_memcpy(buf1, element1->cPoints, element1->cSize*sizeof(UChar));
   buf1[element1->cSize] = 0;
 
   UChar buf2[256];
-  UHashKey key2;
+  UHashTok key2;
   key2.pointer = buf2;
   uprv_memcpy(buf2, element2->cPoints, element2->cSize*sizeof(UChar));
   buf2[element2->cSize] = 0;
@@ -545,7 +545,7 @@ static void uprv_uca_unsafeCPAddCCNZ(tempUCATable *t) {
       uint32_t NFCbufLen = 0;
       UErrorCode status = U_ZERO_ERROR;
       while((e = uhash_nextElement(t->prefixLookup, &i)) != NULL) {
-        element = (UCAElements *)e->value;
+        element = (UCAElements *)e->value.pointer;
         // codepoints here are in the NFD form. We need to add the
         // first code point of the NFC form to unsafe, because 
         // strcoll needs to backup over them.

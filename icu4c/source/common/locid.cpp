@@ -479,7 +479,7 @@ Locale& Locale::init(const char* localeID)
 int32_t
 Locale::hashCode() const 
 {
-    UHashKey hashKey;
+    UHashTok hashKey;
     hashKey.pointer = fullName;
     return uhash_hashChars(hashKey);
 }

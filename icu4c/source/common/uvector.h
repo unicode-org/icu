@@ -80,7 +80,7 @@ private:
 
     int32_t capacity;
 
-    UHashKey* elements;
+    UHashTok* elements;
 
     UObjectDeleter deleter;
 

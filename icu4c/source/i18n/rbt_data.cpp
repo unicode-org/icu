@@ -45,7 +45,7 @@ TransliterationRuleData::TransliterationRuleData(const TransliterationRuleData& 
         const UHashElement *e;
         while ((e = other.variableNames->nextElement(pos)) != 0) {
             UnicodeString* value =
-                new UnicodeString(*(const UnicodeString*)e->value);
+                new UnicodeString(*(const UnicodeString*)e->value.pointer);
             variableNames->put(*(UnicodeString*)e->key.pointer, value, status);
         }
     }

@@ -34,7 +34,7 @@ UVector::UVector(UObjectDeleter d, UKeyComparator c, UErrorCode &status, int32_t
 }
 
 void UVector::_init(int32_t initialCapacity, UErrorCode &status) {
-    elements = new UHashKey[initialCapacity];
+    elements = new UHashTok[initialCapacity];
     if (elements == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
     } else {
@@ -129,7 +129,7 @@ void UVector::removeAllElements(void) {
 
 int32_t UVector::indexOf(void* obj, int32_t startIndex) const {
     if (comparer != 0) {
-        UHashKey key;
+        UHashTok key;
         key.pointer = obj;
         for (int32_t i=startIndex; i<count; ++i) {
             if ((*comparer)(key, elements[i])) {
@@ -145,7 +145,7 @@ UBool UVector::ensureCapacity(int32_t minimumCapacity, UErrorCode &status) {
         return TRUE;
     } else {
         int32_t newCap = capacity * 2;
-        UHashKey* newElems = new UHashKey[newCap];
+        UHashTok* newElems = new UHashTok[newCap];
         if (newElems == 0) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return FALSE;

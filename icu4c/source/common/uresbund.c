@@ -43,19 +43,19 @@ static UBool isMutexInited = FALSE;
 static UMTX resbMutex = NULL;
 
 /* INTERNAL: hashes an entry  */
-static int32_t hashEntry(const UHashKey parm) {
+static int32_t hashEntry(const UHashTok parm) {
     UResourceDataEntry *b = (UResourceDataEntry *)parm.pointer;
-    UHashKey namekey, pathkey;
+    UHashTok namekey, pathkey;
     namekey.pointer = b->fName;
     pathkey.pointer = b->fPath;
     return uhash_hashChars(namekey)+37*uhash_hashChars(pathkey);
 }
 
 /* INTERNAL: compares two entries */
-static UBool compareEntries(const UHashKey p1, const UHashKey p2) {
+static UBool compareEntries(const UHashTok p1, const UHashTok p2) {
     UResourceDataEntry *b1 = (UResourceDataEntry *)p1.pointer;
     UResourceDataEntry *b2 = (UResourceDataEntry *)p2.pointer;
-    UHashKey name1, name2, path1, path2;
+    UHashTok name1, name2, path1, path2;
     name1.pointer = b1->fName;
     name2.pointer = b2->fName;
     path1.pointer = b1->fPath;
@@ -182,7 +182,7 @@ static int32_t ures_flushCache()
     umtx_lock(&resbMutex);
     while ((e = uhash_nextElement(cache, &pos)) != NULL)
     {
-        resB = (UResourceDataEntry *) e->value;
+        resB = (UResourceDataEntry *) e->value.pointer;
         /* Deletes only if reference counter == 0
          * Don't worry about the children of this node.
          * Those will eventually get deleted too, if not already.
@@ -250,7 +250,7 @@ static UResourceDataEntry *init_entry(const char *localeID, const char *path, UE
     char aliasName[100] = { 0 };
     int32_t aliasLen = 0;
     UBool isAlias = FALSE;
-    UHashKey hashkey;
+    UHashTok hashkey;
 
     if(U_FAILURE(*status)) {
         return NULL;

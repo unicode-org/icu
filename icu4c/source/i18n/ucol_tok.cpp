@@ -694,7 +694,7 @@ inline UColToken *getVirginBefore(UColTokenParser *src, UColToken *sourceToken, 
   
   uint32_t key = (*newCharsLen << 24) | *charsOffset;
 
-  sourceToken = (UColToken *)uhash_geti(src->tailored, (int32_t)key);
+  sourceToken = (UColToken *)uhash_iget(src->tailored, (int32_t)key);
   return sourceToken;
   
   // if we found a tailored thing, we have to get one further down the line
@@ -761,7 +761,7 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
       key = newCharsLen << 24 | charsOffset;
 
       /*  4 Lookup each source in the CharsToToken map, and find a sourceToken */
-      sourceToken = (UColToken *)uhash_geti(uchars2tokens, (int32_t)key);
+      sourceToken = (UColToken *)uhash_iget(uchars2tokens, (int32_t)key);
 
       if(newStrength != UCOL_TOK_RESET) {
         if(lastToken == NULL) { /* this means that rules haven't started properly */
@@ -785,7 +785,7 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
           sourceToken->previous = NULL;
           sourceToken->noOfCEs = 0;
           sourceToken->noOfExpCEs = 0;
-          uhash_puti(uchars2tokens, (int32_t)sourceToken->source, sourceToken, status);
+          uhash_iput(uchars2tokens, (int32_t)sourceToken->source, sourceToken, status);
         } else {
           /* we could have fished out a reset here */
           if(sourceToken->strength != UCOL_TOK_RESET && lastToken != sourceToken) {
@@ -923,7 +923,7 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
           while(searchCharsLen > 1 && sourceToken == NULL) {
             searchCharsLen--;
             key = searchCharsLen << 24 | charsOffset;
-            sourceToken = (UColToken *)uhash_geti(uchars2tokens, (int32_t)key);
+            sourceToken = (UColToken *)uhash_iget(uchars2tokens, (int32_t)key);
           }
           if(sourceToken != NULL) {
             expandNext = (newCharsLen - searchCharsLen) << 24 | (charsOffset + searchCharsLen);
@@ -1046,7 +1046,7 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
           ListList[src->resultLen].reset = sourceToken;
 
           src->resultLen++;
-          uhash_puti(uchars2tokens, (int32_t)sourceToken->source, sourceToken, status);
+          uhash_iput(uchars2tokens, (int32_t)sourceToken->source, sourceToken, status);
         } else { /* reset to something already in rules */
           top = FALSE;
         }
@@ -1081,7 +1081,7 @@ void ucol_tok_closeTokenList(UColTokenParser *src) {
 }
 
 int32_t
-uhash_hashTokens(const UHashKey k) {
+uhash_hashTokens(const UHashTok k) {
   int32_t hash = 0;
   uint32_t key = (uint32_t)k.integer;
   if (key != 0) {
@@ -1099,7 +1099,7 @@ uhash_hashTokens(const UHashKey k) {
   return hash;
 }
 
-UBool uhash_compareTokens(const UHashKey key1, const UHashKey key2) {
+UBool uhash_compareTokens(const UHashTok key1, const UHashTok key2) {
     uint32_t p1 = (uint32_t) key1.integer;
     uint32_t p2 = (uint32_t) key2.integer;
     const UChar *s1 = (p1 & 0x00FFFFFF) + rulesToParse;
