@@ -79,7 +79,7 @@ all-recursive install-recursive clean-recursive distclean-recursive dist-recursi
 	  (cd $$subdir && $(MAKE) $$local_target) || exit; \
 	done; \
 	if test "$$dot_seen" = "no"; then \
-	  $(MAKE) "$$target-local" || exit 1; \
+	  $(MAKE) "$$target-local" || exit; \
 	fi
 
 all-local:
