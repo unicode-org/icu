@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacterTypeIterator.java,v $
-* $Date: 2002/10/03 23:42:02 $
-* $Revision: 1.6 $
+* $Date: 2002/11/15 20:39:26 $
+* $Revision: 1.7 $
 *
 ******************************************************************************
 */
@@ -22,13 +22,15 @@ import com.ibm.icu.impl.UCharacterProperty;
  * the same type.
  * Example of use:<br>
  * <pre>
- * UCharacterTypeIterator iterator = UCharacter.getUCharacterTypeIterator();
- * while (iterator.next()) {
+ * RangeValueIterator iterator = UCharacter.getTypeIterator();
+ * RangeValueIterator.Element element = new RangeValueIterator.Element();
+ * while (iterator.next(element)) {
  *     System.out.println("Codepoint \\u" + 
- *                        Integer.toHexString(iterator.getStart()) + 
+ *                        Integer.toHexString(element.start) + 
  *                        " to codepoint \\u" +
- *                        Integer.toHexString(iterator.getLimit() - 1) + 
- *                        " has the character type " + iterator.getValue());
+ *                        Integer.toHexString(element.limit - 1) + 
+ *                        " has the character type " + 
+ *                        element.value);
  * }
  * </pre>
  * @author synwee
