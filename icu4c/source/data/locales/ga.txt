@@ -735,8 +735,8 @@ ga{
 //        "�",
 //    }
 //    LocaleScript{ 
-//        "LATN",  // ISO 15924 Name 
-//        "OGAM"   // maybe
+//        "Latn",  // ISO 15924 Name 
+//        "Ogam"   // maybe
 //    }
     Eras { 
         "RC",
