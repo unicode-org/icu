@@ -301,7 +301,7 @@ public abstract class Collator implements Comparator, Cloneable
      */
     public static final Collator getInstance()
     {
-        return getInstance(Locale.getDefault());
+        return getInstance(ULocale.getDefault());
     }
 
     /**
@@ -380,7 +380,7 @@ public abstract class Collator implements Comparator, Cloneable
     }
 
     static abstract class ServiceShim {
-        abstract Collator getInstance(Locale l);
+        abstract Collator getInstance(ULocale l);
         abstract Object registerInstance(Collator c, Locale l);
         abstract Object registerFactory(CollatorFactory f);
         abstract boolean unregister(Object k);
@@ -419,11 +419,11 @@ public abstract class Collator implements Comparator, Cloneable
      *         be returned.
      * @see java.util.Locale
      * @see java.util.ResourceBundle
+     * @see #getInstance(Locale)
      * @see #getInstance()
-     * @stable ICU 2.8
+     * @draft ICU 3.0
      */
-    public static final Collator getInstance(Locale locale)
-    {
+    public static final Collator getInstance(ULocale locale) {
         Collator coll = null;
         if (shim == null) {
             coll = new RuleBasedCollator(locale);
@@ -433,6 +433,23 @@ public abstract class Collator implements Comparator, Cloneable
             coll = shim.getInstance(locale);
         }
         return coll;
+    }
+
+    /**
+     * Gets the Collator for the desired locale.
+     * @param locale the desired locale.
+     * @return Collator for the desired locale if it is created successfully.
+     *         Otherwise if there is no Collator
+     *         associated with the current locale, a default UCA collator will
+     *         be returned.
+     * @see java.util.Locale
+     * @see java.util.ResourceBundle
+     * @see #getInstance(ULocale)
+     * @see #getInstance()
+     * @stable ICU 2.8
+     */
+    public static final Collator getInstance(Locale locale) {
+        return getInstance(new ULocale(locale));
     }
 
     /**
