@@ -2,7 +2,7 @@
 #******************************************************************************
 #   Copyright (C) 1999-2003, International Business Machines
 #   Corporation and others.  All Rights Reserved.
-# $Revision: 1.36 $
+# $Revision: 1.37 $
 #******************************************************************************
 # This Makefile.inc is designed to be included into projects which make use
 # of the ICU.
@@ -206,21 +206,33 @@ ICUDATA_NAME = icudt@LIB_VERSION_MAJOR@@ICUDATA_CHAR@
 # The default data dir changes depending on what packaging mode 
 # is being used
 ifeq ($(strip $(PKGDATA_MODE)),)
+#SH# if [ "x$PKGDATA_MODE" = "x" ];
+#SH# then
 PKGDATA_MODE=@DATA_PACKAGING_MODE@
+#SH# fi
 endif
+
+#SH# case "$PKGDATA_MODE" in
 ifeq ($(PKGDATA_MODE),common)
+#SH# common)
 ICUDATA_DIR = $(pkgdatadir)
 ICUPKGDATA_DIR = $(ICUDATA_DIR)
+#SH# ;;
 else
 ifeq ($(PKGDATA_MODE),dll)
+#SH# dll)
 ICUDATA_DIR = $(pkgdatadir)
 ICUPKGDATA_DIR = $(libdir)
+#SH# ;;
 else
-ICUDATA_DIR = $(pkglibdir)
+#SH# *)
+ICUDATA_DIR = $(pkgdatadir)
 ICUPKGDATA_DIR = $(ICUDATA_DIR)
+#SH# ;;
 endif
 endif
 
+#SH# esac
 
 ##################################################################
 ##################################################################
