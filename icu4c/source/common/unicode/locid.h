@@ -49,6 +49,8 @@
  * according to the customs/conventions of the user's native country,
  * region, or culture.
  *
+ * The Locale class is not suitable for subclassing.
+ *
  * <P>
  * You create a <code>Locale</code> object using the constructor in
  * this class:
