@@ -1103,21 +1103,6 @@ static void TestStop(int32_t inputsize, int32_t outputsize)
 
 
     }
-    log_verbose("Testing fromUnicode for UTF-8 with UCNV_FROM_U_CALLBACK_STOP \n");
-    {
-        static const UChar testinput[]={ 0x20ac, 0xd801, 0xdc01, 0xdc01, 0xd801, 0xffff, 0x0061,};
-        static const uint8_t expectedUTF8[]= { 0xe2, 0x82, 0xac, 
-                           0xf0, 0x90, 0x90, 0x81, 
-                           0xed, 0xb0, 0x81, 0xed, 0xa0, 0x81,
-                           0xef, 0xbf, 0xbf, 0x61,
-                           
-        };
-        static const int32_t offsets[]={ 0, 0, 0, 1, 1, 1, 1, 3, 3, 3, 4, 4, 4, 5, 5, 5, 6 };
-        if(!testConvertFromUnicode(testinput, sizeof(testinput)/sizeof(testinput[0]),
-                expectedUTF8, sizeof(expectedUTF8), "utf8",
-                UCNV_FROM_U_CALLBACK_STOP, offsets, NULL, 0 ))
-            log_err("u-> utf8 with stop did not match.\n");
-    }
     log_verbose("Testing fromUnicode for SCSU with UCNV_FROM_U_CALLBACK_STOP \n");
     {
         static const UChar SCSU_inputText[]={ 0x0041, 0xd801/*illegal*/, 0x0042, };
@@ -1364,6 +1349,23 @@ static void TestSub(int32_t inputsize, int32_t outputsize)
             log_err("u-> SCSU with substitute did not match.\n");
     }
     
+    log_verbose("Testing fromUnicode for UTF-8 with UCNV_FROM_U_CALLBACK_SUBSTITUTE\n");
+    {
+        static const UChar testinput[]={ 0x20ac, 0xd801, 0xdc01, 0xdc01, 0xd801, 0xffff, 0x0061,};
+        static const uint8_t expectedUTF8[]= { 0xe2, 0x82, 0xac, 
+                           0xf0, 0x90, 0x90, 0x81, 
+                           0xef, 0xbf, 0xbd, 0xef, 0xbf, 0xbd,
+                           0xef, 0xbf, 0xbf, 0x61,
+                           
+        };
+        static const int32_t offsets[]={ 0, 0, 0, 1, 1, 1, 1, 3, 3, 3, 4, 4, 4, 5, 5, 5, 6 };
+        if(!testConvertFromUnicode(testinput, sizeof(testinput)/sizeof(testinput[0]),
+                expectedUTF8, sizeof(expectedUTF8), "utf8",
+                UCNV_FROM_U_CALLBACK_SUBSTITUTE, offsets, NULL, 0 )) {
+            log_err("u-> utf8 with stop did not match.\n");
+        }
+    }
+
     log_verbose("Testing fromUnicode for UTF-16 with UCNV_FROM_U_CALLBACK_SUBSTITUTE\n");
     {
         static const UChar in[]={ 0x0041, 0xfeff };

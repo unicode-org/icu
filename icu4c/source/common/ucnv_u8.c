@@ -222,7 +222,9 @@ morebytes:
              * - encode a code point <= U+10ffff
              * - use the fewest possible number of bytes for their code points
              * - use at most 4 bytes (for i>=4 it is 0x10ffff<utf8_minChar32[])
-             * - single surrogate code points are legal but irregular (also cause a callback)
+             *
+             * Starting with Unicode 3.2, surrogate code points must not be encoded in UTF-8.
+             * There are no irregular sequences any more.
              */
             if (i == inBytes && ch <= MAXIMUM_UTF && ch >= utf8_minChar32[i] && !UTF_IS_SURROGATE(ch))
             {
@@ -254,12 +256,10 @@ morebytes:
             }
             else
             {
-                UConverterCallbackReason reason =
-                    i == inBytes && i == 3 && UTF_IS_SURROGATE(ch) ? UCNV_IRREGULAR : UCNV_ILLEGAL;
                 args->source = (const char *) mySource;
                 args->target = myTarget;
                 args->converter->invalidCharLength = (int8_t)i;
-                if (T_UConverter_toUnicode_InvalidChar_Callback(args, reason, err))
+                if (T_UConverter_toUnicode_InvalidChar_Callback(args, UCNV_ILLEGAL, err))
                 {
                     /* Stop if the error wasn't handled */
                     break;
@@ -383,7 +383,9 @@ morebytes:
              * - encode a code point <= U+10ffff
              * - use the fewest possible number of bytes for their code points
              * - use at most 4 bytes (for i>=4 it is 0x10ffff<utf8_minChar32[])
-             * - single surrogate code points are legal but irregular (also cause a callback)
+             *
+             * Starting with Unicode 3.2, surrogate code points must not be encoded in UTF-8.
+             * There are no irregular sequences any more.
              */
             if (i == inBytes && ch <= MAXIMUM_UTF && ch >= utf8_minChar32[i] && !UTF_IS_SURROGATE(ch))
             {
@@ -417,8 +419,6 @@ morebytes:
             }
             else
             {
-                UConverterCallbackReason reason =
-                    i == inBytes && i == 3 && UTF_IS_SURROGATE(ch) ? UCNV_IRREGULAR : UCNV_ILLEGAL;
                 UBool useOffset;
 
                 args->source = (const char *) mySource;
@@ -426,7 +426,7 @@ morebytes:
                 args->offsets = myOffsets;
                 args->converter->invalidCharLength = (int8_t)i;
                 if (T_UConverter_toUnicode_InvalidChar_OffsetCallback(args,
-                 offsetNum, reason, err))
+                    offsetNum, UCNV_ILLEGAL, err))
                 {
                     /* Stop if the error wasn't handled */
                     break;
@@ -481,6 +481,7 @@ donefornow:
 U_CFUNC void T_UConverter_fromUnicode_UTF8 (UConverterFromUnicodeArgs * args,
                                     UErrorCode * err)
 {
+    UConverter *cnv = args->converter;
     const UChar *mySource = args->source;
     unsigned char *myTarget = (unsigned char *) args->target;
     const UChar *sourceLimit = args->sourceLimit;
@@ -489,11 +490,11 @@ U_CFUNC void T_UConverter_fromUnicode_UTF8 (UConverterFromUnicodeArgs * args,
     int16_t indexToWrite;
     char temp[4];
 
-    if (args->converter->fromUnicodeStatus && myTarget < targetLimit)
+    if (cnv->fromUSurrogateLead && myTarget < targetLimit)
     {
-        ch = args->converter->fromUnicodeStatus;
-        args->converter->fromUnicodeStatus = 0;
-        goto lowsurogate;
+        ch = cnv->fromUSurrogateLead;
+        cnv->fromUSurrogateLead = 0;
+        goto lowsurrogate;
     }
 
     while (mySource < sourceLimit && myTarget < targetLimit)
@@ -513,31 +514,86 @@ U_CFUNC void T_UConverter_fromUnicode_UTF8 (UConverterFromUnicodeArgs * args,
             }
             else
             {
-                args->converter->charErrorBuffer[0] = (char) ((ch & 0x3f) | 0x80);
-                args->converter->charErrorBufferLength = 1;
+                cnv->charErrorBuffer[0] = (char) ((ch & 0x3f) | 0x80);
+                cnv->charErrorBufferLength = 1;
                 *err = U_BUFFER_OVERFLOW_ERROR;
             }
         }
         else
-        /* Check for surogates */
+        /* Check for surrogates */
         {
-            if ((ch >= SURROGATE_HIGH_START) && (ch <= SURROGATE_HIGH_END))
-            {
-lowsurogate:
-                if (mySource < sourceLimit)
-                {
-                    ch2 = *mySource;
-                    if ((ch2 >= SURROGATE_LOW_START) && (ch2 <= SURROGATE_LOW_END))
-                    {
-                        /* If there were two surrogates, combine them otherwise treat them normally */
-                        ch = ((ch - SURROGATE_HIGH_START) << HALF_SHIFT) + ch2 + SURROGATE_LOW_BASE;
-                        mySource++;
+            if(UTF_IS_SURROGATE(ch) /* && not CESU-8 */) {
+                if(UTF_IS_SURROGATE_FIRST(ch)) {
+lowsurrogate:
+                    if (mySource < sourceLimit) {
+                        /* test the following code unit */
+                        UChar trail=*mySource;
+                        if(UTF_IS_SECOND_SURROGATE(trail)) {
+                            ++mySource;
+                            ch=UTF16_GET_PAIR_VALUE(ch, trail);
+                            ch2 = 0;
+                            /* convert this supplementary code point */
+                            /* exit this condition tree */
+                        } else {
+                            /* this is an unmatched lead code unit (1st surrogate) */
+                            /* callback(illegal) */
+                            ch2 = ch;
+                        }
+                    } else {
+                        /* no more input */
+                        cnv->fromUSurrogateLead = (UChar)ch;
+                        break;
                     }
+                } else {
+                    /* this is an unmatched trail code unit (2nd surrogate) */
+                    /* callback(illegal) */
+                    ch2 = ch;
                 }
-                else if (!args->flush)
-                {
-                    args->converter->fromUnicodeStatus = ch;
-                    break;
+
+                if(ch2 != 0) {
+                    /* call the callback function with all the preparations and post-processing */
+                    *err = U_ILLEGAL_CHAR_FOUND;
+
+                    /* update the arguments structure */
+                    args->source=mySource;
+                    args->target=(char *)myTarget;
+
+                    /* write the code point as code units */
+                    cnv->invalidUCharBuffer[0] = (UChar)ch2;
+                    cnv->invalidUCharLength = 1;
+
+                    /* call the callback function */
+                    cnv->fromUCharErrorBehaviour(cnv->fromUContext, args, cnv->invalidUCharBuffer, 1, ch2, UCNV_ILLEGAL, err);
+
+                    /* get the converter state from UConverter */
+                    ch = cnv->fromUSurrogateLead;
+                    cnv->fromUSurrogateLead = 0;
+
+                    myTarget=(uint8_t *)args->target;
+                    mySource=args->source;
+
+                    /*
+                     * If the callback overflowed the target, then we need to
+                     * stop here with an overflow indication.
+                     */
+                    if(*err==U_BUFFER_OVERFLOW_ERROR) {
+                        break;
+                    } else if(U_FAILURE(*err)) {
+                        /* break on error */
+                        break;
+                    } else if(cnv->charErrorBufferLength>0) {
+                        /* target is full */
+                        *err=U_BUFFER_OVERFLOW_ERROR;
+                        break;
+                        /*
+                         * } else if(ch != 0) { ...
+                         * ### TODO 2002jul01 markus: It looks like this code (from ucnvmbcs.c)
+                         * does not handle the case where the callback leaves ch=fromUSurrogateLead!=0 .
+                         * We would have to check myTarget<targetLimit and goto lowsurrogate?!
+                         */
+                    }
+
+                    continue;
                 }
             }
 
@@ -563,7 +619,7 @@ lowsurogate:
                 }
                 else
                 {
-                    args->converter->charErrorBuffer[args->converter->charErrorBufferLength++] = temp[indexToWrite];
+                    cnv->charErrorBuffer[cnv->charErrorBufferLength++] = temp[indexToWrite];
                     *err = U_BUFFER_OVERFLOW_ERROR;
                 }
             }
@@ -574,6 +630,11 @@ lowsurogate:
     {
         *err = U_BUFFER_OVERFLOW_ERROR;
     }
+    if(args->flush && mySource >= sourceLimit && cnv->fromUSurrogateLead != 0 && U_SUCCESS(*err)) {
+        /* a Unicode code point remains incomplete (only a first surrogate) */
+        *err = U_TRUNCATED_CHAR_FOUND;
+        cnv->fromUSurrogateLead = 0;
+    }
 
     args->target = (char *) myTarget;
     args->source = mySource;
@@ -582,21 +643,22 @@ lowsurogate:
 U_CFUNC void T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
                                                   UErrorCode * err)
 {
+    UConverter *cnv = args->converter;
     const UChar *mySource = args->source;
     unsigned char *myTarget = (unsigned char *) args->target;
     int32_t *myOffsets = args->offsets;
     const UChar *sourceLimit = args->sourceLimit;
     const unsigned char *targetLimit = (unsigned char *) args->targetLimit;
     uint32_t ch, ch2;
-    int32_t offsetNum = 0;
+    int32_t offsetNum = 0, nextSourceIndex;
     int16_t indexToWrite;
     char temp[4];
 
-    if (args->converter->fromUnicodeStatus && myTarget < targetLimit)
+    if (cnv->fromUSurrogateLead && myTarget < targetLimit)
     {
-        ch = args->converter->fromUnicodeStatus;
-        args->converter->fromUnicodeStatus = 0;
-        goto lowsurogate;
+        ch = cnv->fromUSurrogateLead;
+        cnv->fromUSurrogateLead = 0;
+        goto lowsurrogate;
     }
 
     while (mySource < sourceLimit && myTarget < targetLimit)
@@ -619,31 +681,95 @@ U_CFUNC void T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC (UConverterFromUnicodeA
             }
             else
             {
-                args->converter->charErrorBuffer[0] = (char) ((ch & 0x3f) | 0x80);
-                args->converter->charErrorBufferLength = 1;
+                cnv->charErrorBuffer[0] = (char) ((ch & 0x3f) | 0x80);
+                cnv->charErrorBufferLength = 1;
                 *err = U_BUFFER_OVERFLOW_ERROR;
             }
         }
         else
-        /* Check for surogates */
+        /* Check for surrogates */
         {
-            if ((ch >= SURROGATE_HIGH_START) && (ch <= SURROGATE_HIGH_END))
-            {
-lowsurogate:
-                if (mySource < sourceLimit)
-                {
-                    ch2 = *mySource;
-                    if ((ch2 >= SURROGATE_LOW_START) && (ch2 <= SURROGATE_LOW_END))
-                    {
-                        /* If there were two surrogates, combine them otherwise treat them normally */
-                        ch = ((ch - SURROGATE_HIGH_START) << HALF_SHIFT) + ch2 + SURROGATE_LOW_BASE;
-                        mySource++;
+            nextSourceIndex = offsetNum + 1;
+
+            if(UTF_IS_SURROGATE(ch) /* && not CESU-8 */) {
+                if(UTF_IS_SURROGATE_FIRST(ch)) {
+lowsurrogate:
+                    if (mySource < sourceLimit) {
+                        /* test the following code unit */
+                        UChar trail=*mySource;
+                        if(UTF_IS_SECOND_SURROGATE(trail)) {
+                            ++mySource;
+                            ++nextSourceIndex;
+                            ch=UTF16_GET_PAIR_VALUE(ch, trail);
+                            ch2 = 0;
+                            /* convert this supplementary code point */
+                            /* exit this condition tree */
+                        } else {
+                            /* this is an unmatched lead code unit (1st surrogate) */
+                            /* callback(illegal) */
+                            ch2 = ch;
+                        }
+                    } else {
+                        /* no more input */
+                        cnv->fromUSurrogateLead = (UChar)ch;
+                        break;
                     }
+                } else {
+                    /* this is an unmatched trail code unit (2nd surrogate) */
+                    /* callback(illegal) */
+                    ch2 = ch;
                 }
-                else if (!args->flush)
-                {
-                    args->converter->fromUnicodeStatus = ch;
-                    break;
+
+                if(ch2 != 0) {
+                    /* call the callback function with all the preparations and post-processing */
+                    *err = U_ILLEGAL_CHAR_FOUND;
+
+                    /* update the arguments structure */
+                    args->source=mySource;
+                    args->target=(char *)myTarget;
+                    args->offsets=myOffsets;
+
+                    /* write the code point as code units */
+                    cnv->invalidUCharBuffer[0] = (UChar)ch2;
+                    cnv->invalidUCharLength = 1;
+
+                    /* call the callback function */
+                    cnv->fromUCharErrorBehaviour(cnv->fromUContext, args, cnv->invalidUCharBuffer, 1, ch2, UCNV_ILLEGAL, err);
+
+                    /* get the converter state from UConverter */
+                    ch = cnv->fromUSurrogateLead;
+                    cnv->fromUSurrogateLead = 0;
+
+                    /* update target and deal with offsets if necessary */
+                    myOffsets=ucnv_updateCallbackOffsets(myOffsets, ((uint8_t *)args->target)-myTarget, offsetNum);
+                    myTarget=(uint8_t *)args->target;
+
+                    /* update the source pointer and index */
+                    offsetNum=nextSourceIndex+(args->source-mySource);
+                    mySource=args->source;
+
+                    /*
+                     * If the callback overflowed the target, then we need to
+                     * stop here with an overflow indication.
+                     */
+                    if(*err==U_BUFFER_OVERFLOW_ERROR) {
+                        break;
+                    } else if(U_FAILURE(*err)) {
+                        /* break on error */
+                        break;
+                    } else if(cnv->charErrorBufferLength>0) {
+                        /* target is full */
+                        *err=U_BUFFER_OVERFLOW_ERROR;
+                        break;
+                        /*
+                         * } else if(ch != 0) { ...
+                         * ### TODO 2002jul01 markus: It looks like this code (from ucnvmbcs.c)
+                         * does not handle the case where the callback leaves ch=fromUSurrogateLead!=0 .
+                         * We would have to check myTarget<targetLimit and goto lowsurrogate?!
+                         */
+                    }
+
+                    continue;
                 }
             }
 
@@ -670,17 +796,22 @@ lowsurogate:
                 }
                 else
                 {
-                    args->converter->charErrorBuffer[args->converter->charErrorBufferLength++] = temp[indexToWrite];
+                    cnv->charErrorBuffer[cnv->charErrorBufferLength++] = temp[indexToWrite];
                     *err = U_BUFFER_OVERFLOW_ERROR;
                 }
             }
-            offsetNum += (ch >= 0x10000) + 1;
+            offsetNum = nextSourceIndex;
         }
     }
 
     if (mySource < sourceLimit && myTarget >= targetLimit && U_SUCCESS(*err))
     {
         *err = U_BUFFER_OVERFLOW_ERROR;
+    }
+    if(args->flush && mySource >= sourceLimit && cnv->fromUSurrogateLead != 0 && U_SUCCESS(*err)) {
+        /* a Unicode code point remains incomplete (only a first surrogate) */
+        *err = U_TRUNCATED_CHAR_FOUND;
+        cnv->fromUSurrogateLead = 0;
     }
 
     args->target = (char *) myTarget;
@@ -693,7 +824,6 @@ U_CFUNC UChar32 T_UConverter_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
     UChar buffer[2];
     char const *sourceInitial;
     UChar* myUCharPtr;
-    UConverterCallbackReason reason;
     uint16_t extraBytesToWrite;
     uint8_t myByte;
     UChar32 ch;
@@ -777,7 +907,9 @@ U_CFUNC UChar32 T_UConverter_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
          * - encode a code point <= U+10ffff
          * - use the fewest possible number of bytes for their code points
          * - use at most 4 bytes (for i>=4 it is 0x10ffff<utf8_minChar32[])
-         * - single surrogate code points are legal but irregular (also cause a callback)
+         *
+         * Starting with Unicode 3.2, surrogate code points must not be encoded in UTF-8.
+         * There are no irregular sequences any more.
          */
         if (isLegalSequence && (uint32_t)ch <= MAXIMUM_UTF && (uint32_t)ch >= utf8_minChar32[extraBytesToWrite] && !UTF_IS_SURROGATE(ch)) {
             return ch; /* return the code point */
@@ -789,20 +921,14 @@ CALL_ERROR_FUNCTION:
         uprv_memcpy(args->converter->invalidCharBuffer, sourceInitial, extraBytesToWrite);
 
         myUCharPtr = buffer;
-        if (isLegalSequence && extraBytesToWrite == 3 && UTF_IS_SURROGATE(ch)) {
-            reason = UCNV_IRREGULAR;
-            *err = U_INVALID_CHAR_FOUND;
-        } else {
-            reason = UCNV_ILLEGAL;
-            *err = U_ILLEGAL_CHAR_FOUND;
-        }
+        *err = U_ILLEGAL_CHAR_FOUND;
         args->target = myUCharPtr;
         args->targetLimit = buffer + 2;
         args->converter->fromCharErrorBehaviour(args->converter->toUContext,
                                         args,
                                         sourceInitial,
                                         extraBytesToWrite,
-                                        reason,
+                                        UCNV_ILLEGAL,
                                         err);
 
         if(U_SUCCESS(*err)) {
