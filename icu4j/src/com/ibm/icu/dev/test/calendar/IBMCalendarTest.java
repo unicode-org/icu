@@ -4,8 +4,8 @@
  * others. All Rights Reserved.
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/IBMCalendarTest.java,v $ 
- * $Date: 2003/10/02 20:50:58 $ 
- * $Revision: 1.24 $
+ * $Date: 2004/02/25 00:04:56 $ 
+ * $Revision: 1.25 $
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.calendar;
@@ -16,6 +16,7 @@ import java.text.ParseException;
 
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.impl.ZoneMeta;
+import com.ibm.icu.impl.CalendarAstronomer;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.*;

@@ -5,13 +5,14 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/HebrewCalendar.java,v $ 
- * $Date: 2003/10/02 20:50:26 $ 
- * $Revision: 1.20 $
+ * $Date: 2004/02/25 00:03:13 $ 
+ * $Revision: 1.21 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.util;
 import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.impl.CalendarCache;
 import java.util.Date;
 import java.util.Locale;
 

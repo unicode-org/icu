@@ -4,23 +4,21 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/Attic/CalendarCache.java,v $ 
- * $Date: 2002/12/18 19:24:15 $ 
- * $Revision: 1.7 $
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/CalendarCache.java,v $ 
+ * $Date: 2004/02/25 00:02:34 $ 
+ * $Revision: 1.1 $
  *
  *****************************************************************************************
  */
-package com.ibm.icu.util;
+package com.ibm.icu.impl;
 
 /**
  * @internal
- * @deprecated ICU 2.4. This class may be removed or modified.
  */
 public class CalendarCache
 {
     /**
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public CalendarCache() {
         makeArrays(arraySize);
@@ -40,7 +38,6 @@ public class CalendarCache
     
     /**
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public synchronized long get(long key) {
         return values[findIndex(key)];
@@ -48,7 +45,6 @@ public class CalendarCache
     
     /**
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public synchronized void put(long key, long value)
     {
@@ -132,7 +128,6 @@ public class CalendarCache
 
     /**
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     static public  long EMPTY   = Long.MIN_VALUE;
 }

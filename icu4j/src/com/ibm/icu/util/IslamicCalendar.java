@@ -5,13 +5,15 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/IslamicCalendar.java,v $ 
- * $Date: 2003/12/02 01:34:31 $ 
- * $Revision: 1.22 $
+ * $Date: 2004/02/25 00:03:26 $ 
+ * $Revision: 1.23 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.util;
 import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.impl.CalendarAstronomer;
+import com.ibm.icu.impl.CalendarCache;
 import java.util.Date;
 import java.util.Locale;
 
