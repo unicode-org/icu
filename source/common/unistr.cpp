@@ -790,7 +790,7 @@ UnicodeString::extract(UTextOffset start,
   // perform the conversion
   // there is no loop here since we assume the buffer is large enough
 
-  ucnv_fromUnicode(converter, &myTarget,  myTarget + arraySize,
+  ucnv_fromUnicode(converter, &myTarget,  myTargetLimit,
            &mySource, mySourceEnd, NULL, TRUE, &status);
 
   // close the converter
