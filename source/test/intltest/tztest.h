@@ -46,11 +46,16 @@ public:
      * Test the setStartRule/setEndRule API calls.
      */
     virtual void TestRuleAPI(void);
+ 
+    void findTransition(const TimeZone& tz,
+                        UDate min, UDate max);
 
-    /**
+   /**
      * subtest used by TestRuleAPI
      **/
-    void testUsingBinarySearch(SimpleTimeZone* tz, UDate min, UDate max, UDate expectedBoundary);
+    void testUsingBinarySearch(const TimeZone& tz,
+                               UDate min, UDate max,
+                               UDate expectedBoundary);
 
 
     /**
@@ -73,6 +78,8 @@ public:
     void TestAlternateRules(void);
 
     void TestCountries(void);
+
+    void TestHistorical(void);
 
     static const UDate INTERVAL;
 

@@ -44,6 +44,7 @@ void TimeZoneTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
         CASE(8, TestDSTSavings);
         CASE(9, TestAlternateRules);
         CASE(10,TestCountries);
+        CASE(11,TestHistorical);
         default: name = ""; break;
     }
 }
@@ -174,8 +175,8 @@ TimeZoneTest::TestRuleAPI()
           " = " + dateToString(expJulyOne));
     }
 
-    testUsingBinarySearch(zone, date(90, UCAL_JANUARY, 1), date(90, UCAL_JUNE, 15), marchOne);
-    testUsingBinarySearch(zone, date(90, UCAL_JUNE, 1), date(90, UCAL_DECEMBER, 31), julyOne);
+    testUsingBinarySearch(*zone, date(90, UCAL_JANUARY, 1), date(90, UCAL_JUNE, 15), marchOne);
+    testUsingBinarySearch(*zone, date(90, UCAL_JUNE, 1), date(90, UCAL_DECEMBER, 31), julyOne);
 
     if (zone->inDaylightTime(marchOne - 1000, status) ||
         !zone->inDaylightTime(marchOne, status))
@@ -195,25 +196,56 @@ TimeZoneTest::TestRuleAPI()
 }
 
 void
-TimeZoneTest::testUsingBinarySearch(SimpleTimeZone* tz, UDate min, UDate max, UDate expectedBoundary)
+TimeZoneTest::findTransition(const TimeZone& tz,
+                             UDate min, UDate max) {
+    UErrorCode ec = U_ZERO_ERROR;
+    UnicodeString id,s;
+    UBool startsInDST = tz.inDaylightTime(min, ec);
+    if (failure(ec, "TimeZone::inDaylightTime")) return;
+    if (tz.inDaylightTime(max, ec) == startsInDST) {
+        logln("Error: " + tz.getID(id) + ".inDaylightTime(" + dateToString(min) + ") = " + (startsInDST?"TRUE":"FALSE") +
+              ", inDaylightTime(" + dateToString(max) + ") = " + (startsInDST?"TRUE":"FALSE"));
+        return;
+    }
+    if (failure(ec, "TimeZone::inDaylightTime")) return;
+    while ((max - min) > INTERVAL) {
+        UDate mid = (min + max) / 2;
+        if (tz.inDaylightTime(mid, ec) == startsInDST) {
+            min = mid;
+        } else {
+            max = mid;
+        }
+        if (failure(ec, "TimeZone::inDaylightTime")) return;
+    }
+    min = 1000.0 * uprv_floor(min/1000.0);
+    max = 1000.0 * uprv_floor(max/1000.0);
+    logln(tz.getID(id) + " Before: " + min/1000 + " = " +
+          dateToString(min,s,tz));
+    logln(tz.getID(id) + " After:  " + max/1000 + " = " +
+          dateToString(max,s,tz));
+}
+
+void
+TimeZoneTest::testUsingBinarySearch(const TimeZone& tz,
+                                    UDate min, UDate max,
+                                    UDate expectedBoundary)
 {
     UErrorCode status = U_ZERO_ERROR;
-    UBool startsInDST = tz->inDaylightTime(min, status);
-    if (failure(status, "SimpleTimeZone::inDaylightTime")) return;
-    if (tz->inDaylightTime(max, status) == startsInDST) {
+    UBool startsInDST = tz.inDaylightTime(min, status);
+    if (failure(status, "TimeZone::inDaylightTime")) return;
+    if (tz.inDaylightTime(max, status) == startsInDST) {
         logln("Error: inDaylightTime(" + dateToString(max) + ") != " + ((!startsInDST)?"TRUE":"FALSE"));
         return;
     }
-    if (failure(status, "SimpleTimeZone::inDaylightTime")) return;
+    if (failure(status, "TimeZone::inDaylightTime")) return;
     while ((max - min) > INTERVAL) {
         UDate mid = (min + max) / 2;
-        if (tz->inDaylightTime(mid, status) == startsInDST) {
+        if (tz.inDaylightTime(mid, status) == startsInDST) {
             min = mid;
-        }
-        else {
+        } else {
             max = mid;
         }
-        if (failure(status, "SimpleTimeZone::inDaylightTime")) return;
+        if (failure(status, "TimeZone::inDaylightTime")) return;
     }
     logln(UnicodeString("Binary Search Before: ") + uprv_floor(0.5 + min) + " = " + dateToString(min));
     logln(UnicodeString("Binary Search After:  ") + uprv_floor(0.5 + max) + " = " + dateToString(max));
@@ -288,12 +320,62 @@ void
 TimeZoneTest::TestGetAvailableIDs913()
 {
     UErrorCode ec = U_ZERO_ERROR;
+    int32_t i;
+
+    // Test legacy API -- remove these tests when the corresponding API goes away (duh)
+    int32_t numIDs = -1;
+    const UnicodeString** ids = TimeZone::createAvailableIDs(numIDs);
+    if (ids == 0 || numIDs < 1) {
+        errln("FAIL: createAvailableIDs()");
+    } else {
+        UnicodeString buf("TimeZone::createAvailableIDs() = { ");
+        for(i=0; i<numIDs; ++i) {
+            if (i) buf.append(", ");
+            buf.append(*ids[i]);
+        }
+        buf.append(" } ");
+        logln(buf + numIDs);
+        // we own the array; the caller owns the contained strings (yuck)
+        uprv_free(ids);
+    }
+
+    numIDs = -1;
+    ids = TimeZone::createAvailableIDs(-8*U_MILLIS_PER_HOUR, numIDs);
+    if (ids == 0 || numIDs < 1) {
+        errln("FAIL: createAvailableIDs(-8:00)");
+    } else {
+        UnicodeString buf("TimeZone::createAvailableIDs(-8:00) = { ");
+        for(i=0; i<numIDs; ++i) {
+            if (i) buf.append(", ");
+            buf.append(*ids[i]);
+        }
+        buf.append(" } ");
+        logln(buf + numIDs);
+        // we own the array; the caller owns the contained strings (yuck)
+        uprv_free(ids);
+    }
+
+    numIDs = -1;
+    ids = TimeZone::createAvailableIDs("US", numIDs);
+    if (ids == 0 || numIDs < 1) {
+        errln("FAIL: createAvailableIDs(US)");
+    } else {
+        UnicodeString buf("TimeZone::createAvailableIDs(US) = { ");
+        for(i=0; i<numIDs; ++i) {
+            if (i) buf.append(", ");
+            buf.append(*ids[i]);
+        }
+        buf.append(" } ");
+        logln(buf + numIDs);
+        // we own the array; the caller owns the contained strings (yuck)
+        uprv_free(ids);
+    }
+
     UnicodeString str;
     UnicodeString *buf = new UnicodeString("TimeZone::createEnumeration() = { ");
     int32_t s_length;
     StringEnumeration* s = TimeZone::createEnumeration();
     s_length = s->count(ec);
-    int32_t i;
     for (i = 0; i < s_length;++i) {
         if (i > 0) *buf += ", ";
         *buf += *s->snext(ec);
@@ -327,9 +409,9 @@ TimeZoneTest::TestGetAvailableIDs913()
     delete s;
 
     buf->truncate(0);
-    *buf += "TimeZone::createEnumeration(GMT+02:00) = { ";
+    *buf += "TimeZone::createEnumeration(GMT+01:00) = { ";
 
-    s = TimeZone::createEnumeration(+ 2 * 60 * 60 * 1000);
+    s = TimeZone::createEnumeration(1 * U_MILLIS_PER_HOUR);
     s_length = s->count(ec);
     for (i = 0; i < s_length;++i) {
         if (i > 0) *buf += ", ";
@@ -337,6 +419,20 @@ TimeZoneTest::TestGetAvailableIDs913()
     }
     *buf += " };";
     logln(*buf);
+
+
+    buf->truncate(0);
+    *buf += "TimeZone::createEnumeration(US) = { ";
+
+    s = TimeZone::createEnumeration("US");
+    s_length = s->count(ec);
+    for (i = 0; i < s_length;++i) {
+        if (i > 0) *buf += ", ";
+        *buf += *s->snext(ec);
+    }
+    *buf += " };";
+    logln(*buf);
+
     TimeZone *tz = TimeZone::createTimeZone("PST");
     if (tz != 0) logln("getTimeZone(PST) = " + tz->getID(str));
     else errln("FAIL: getTimeZone(PST) = null");
@@ -361,6 +457,10 @@ TimeZoneTest::TestGetAvailableIDs913()
 
 
 /**
+ * NOTE: As of ICU 2.8, this test confirms that the "tz.alias"
+ * file, used to build ICU alias zones, is working.  It also
+ * looks at some genuine Olson compatibility IDs. [aliu]
+ *
  * This test is problematic. It should really just confirm that
  * the list of compatibility zone IDs exist and are somewhat
  * meaningful (that is, they aren't all aliases of GMT). It goes a
@@ -449,10 +549,10 @@ void TimeZoneTest::TestShortZoneIDs()
         {"AST", -540, TRUE},
         {"PST", -480, TRUE},
         {"PNT", -420, FALSE},
-        {"MST", -420, TRUE},
+        {"MST", -420, FALSE}, // updated Aug 2003 aliu
         {"CST", -360, TRUE},
         {"IET", -300, FALSE},
-        {"EST", -300, TRUE},
+        {"EST", -300, FALSE}, // updated Aug 2003 aliu
         {"PRT", -240, FALSE},
         {"CNT", -210, TRUE},
         {"AGT", -180, FALSE}, // updated 26 Sep 2000 aliu
@@ -468,13 +568,13 @@ void TimeZoneTest::TestShortZoneIDs()
         {"EAT", 180, FALSE},
         {"MET", 60, TRUE}, // updated 12/3/99 aliu
         {"NET", 240, TRUE}, // updated 12/3/99 aliu
-        {"PLT", 300, TRUE}, // updated 12/3/02 aliu; Pakistan using DST as of 2002
+        {"PLT", 300, FALSE}, // updated Aug 2003 aliu
         {"IST", 330, FALSE},
         {"BST", 360, FALSE},
         {"VST", 420, FALSE},
-        {"CTT", 480, TRUE}, // updated 12/3/99 aliu
+        {"CTT", 480, FALSE}, // updated Aug 2003 aliu
         {"JST", 540, FALSE},
-        {"ACT", 570, TRUE}, // updated 12/3/99 aliu
+        {"ACT", 570, FALSE}, // updated Aug 2003 aliu
         {"AET", 600, TRUE},
         {"SST", 660, FALSE},
         // "NST", 720, FALSE,
@@ -526,7 +626,7 @@ void TimeZoneTest::TestShortZoneIDs()
 
     const char* compatibilityMap[] = {
         // This list is copied from tz.alias.  If tz.alias
-        // changes, this list must be updated.  Current as of 1/31/01
+        // changes, this list must be updated.  Current as of Aug 2003
         "ACT", "Australia/Darwin",
         "AET", "Australia/Sydney",
         "AGT", "America/Buenos_Aires",
@@ -541,14 +641,14 @@ void TimeZoneTest::TestShortZoneIDs()
         "EAT", "Africa/Addis_Ababa",
         "ECT", "Europe/Paris",
         // EET Europe/Istanbul # EET is a standard UNIX zone
-        "EST", "America/New_York",
+        // "EST", "America/New_York", # EST is an Olson alias now (2003)
         "HST", "Pacific/Honolulu",
         "IET", "America/Indianapolis",
         "IST", "Asia/Calcutta",
         "JST", "Asia/Tokyo",
         // MET Asia/Tehran # MET is a standard UNIX zone
         "MIT", "Pacific/Apia",
-        "MST", "America/Denver",
+        // "MST", "America/Denver", # MST is an Olson alias now (2003)
         "NET", "Asia/Yerevan",
         "NST", "Pacific/Auckland",
         "PLT", "Asia/Karachi",
@@ -649,8 +749,8 @@ void TimeZoneTest::TestCustomParse()
         // ID        Expected offset in minutes
         //"GMT",       kUnparseable,   Isn't custom. Can't test it here. [returns normal GMT]
         {"GMT-YOUR.AD.HERE", kUnparseable},
-        {"GMT0",      kUnparseable},
-        {"GMT+0",     (0)},
+        // {"GMT0",      kUnparseable}, // ICU 2.8: An Olson zone ID
+        // {"GMT+0",     (0)}, // ICU 2.8: An Olson zone ID
         {"GMT+1",     (60)},
         {"GMT-0030",  (-30)},
         {"GMT+15:99", (15*60+99)},
@@ -1085,6 +1185,61 @@ void TimeZoneTest::TestCountries() {
 	delete s1;
 	delete s2;
     delete s;
+}
+
+void TimeZoneTest::TestHistorical() {
+    const int32_t H = U_MILLIS_PER_HOUR;
+    struct {
+        char* id;
+        int32_t time; // epoch seconds
+        int32_t offset; // total offset (millis)
+    } DATA[] = {
+        // Add transition points (before/after) as desired to test historical
+        // behavior.
+        "America/Los_Angeles", 638963999, -8*H, // Sun Apr 01 01:59:59 GMT-08:00 1990
+        "America/Los_Angeles", 638964000, -7*H, // Sun Apr 01 03:00:00 GMT-07:00 1990
+        "America/Los_Angeles", 657104399, -7*H, // Sun Oct 28 01:59:59 GMT-07:00 1990
+        "America/Los_Angeles", 657104400, -8*H, // Sun Oct 28 01:00:00 GMT-08:00 1990
+        "America/Goose_Bay", -116445601, -4*H, // Sun Apr 24 01:59:59 GMT-04:00 1966
+        "America/Goose_Bay", -116445600, -3*H, // Sun Apr 24 03:00:00 GMT-03:00 1966
+        "America/Goose_Bay", -100119601, -3*H, // Sun Oct 30 01:59:59 GMT-03:00 1966
+        "America/Goose_Bay", -100119600, -4*H, // Sun Oct 30 01:00:00 GMT-04:00 1966
+        "America/Goose_Bay", -84391201, -4*H, // Sun Apr 30 01:59:59 GMT-04:00 1967
+        "America/Goose_Bay", -84391200, -3*H, // Sun Apr 30 03:00:00 GMT-03:00 1967
+        "America/Goose_Bay", -68670001, -3*H, // Sun Oct 29 01:59:59 GMT-03:00 1967
+        "America/Goose_Bay", -68670000, -4*H, // Sun Oct 29 01:00:00 GMT-04:00 1967
+        0, 0, 0
+    };
+    
+    for (int32_t i=0; DATA[i].id!=0; ++i) {
+        char* id = DATA[i].id;
+        TimeZone *tz = TimeZone::createTimeZone(id);
+        UnicodeString s;
+        if (tz == 0) {
+            errln("FAIL: Cannot create %s", id);
+        } else if (tz->getID(s) != UnicodeString(id)) {
+            errln((UnicodeString)"FAIL: createTimeZone(" + id + ") => " + s);
+        } else {
+            UErrorCode ec = U_ZERO_ERROR;
+            int32_t raw, dst;
+            UDate when = (double) DATA[i].time * U_MILLIS_PER_SECOND;
+            tz->getOffset(when, FALSE, raw, dst, ec);
+            if (U_FAILURE(ec)) {
+                errln("FAIL: getOffset");
+            } else if ((raw+dst) != DATA[i].offset) {
+                errln((UnicodeString)"FAIL: " + DATA[i].id + ".getOffset(" +
+                      //when + " = " +
+                      dateToString(when) + ") => " +
+                      raw + ", " + dst);
+            } else {
+                logln((UnicodeString)"Ok: " + DATA[i].id + ".getOffset(" +
+                      //when + " = " +
+                      dateToString(when) + ") => " +
+                      raw + ", " + dst);
+            }
+        }
+        delete tz;
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
