@@ -590,7 +590,7 @@ protected:
 
     /**
      * Default assignment operator.
-     * @param rigth the object to be copied.
+     * @param right the object to be copied.
      * @stable ICU 2.0
      */
     TimeZone& operator=(const TimeZone& right);
