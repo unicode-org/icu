@@ -317,7 +317,7 @@ void CompoundTransliteratorTest::TestTransliterate(){
     delete ct1;
    UnicodeString Data[]={
              //ID, input string, transliterated string
-             "Unicode-Hex;Hex-Unicode;Unicode-Hex",     "hello",  "\\u0068\\u0065\\u006C\\u006C\\u006F", 
+             "Unicode-Hex;Hex-Unicode;Unicode-Hex",     "hello",  UnicodeString("\\u0068\\u0065\\u006C\\u006C\\u006F", ""), 
              "Unicode-Hex;Hex-Unicode",                 "hello! How are you?",  "hello! How are you?",
 			 "Devanagari-Latin;Latin-Devanagari",        CharsToUnicodeString("\\u092D\\u0948'\\u0930'\\u0935"),  CharsToUnicodeString("\\u092D\\u0948\\u0930\\u0935"), // quotes lost
 	    	 "Latin-Cyrillic;Cyrillic-Latin",           "a'b'k'd'e'f'g'h'i'j'Shch'shch'zh'h", "abkdefghijShchshchzhh",
