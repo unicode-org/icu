@@ -32,6 +32,9 @@
 #   include <console.h>
 #endif
 
+/* ### TODO: remove when the new normalization implementation is finished */
+#include "unormimp.h"
+
 U_CAPI void U_EXPORT2 ucnv_orphanAllConverters();
 
 static char* _testDirectory=NULL;
@@ -88,6 +91,13 @@ int main(int argc, const char* const argv[])
     }
 
     fprintf(stdout, "Default locale for this run is %s\n", uloc_getDefault());
+
+    /* ### TODO: remove when the new normalization implementation is finished */
+    if(argc>1 && argv[1][0]=='N') {
+        unorm_setNewImplementation((UBool)(argv[1][1]=='+'));
+        ++argv;
+        --argc;
+    }
 
     root = NULL;
     addAllTests(&root);
