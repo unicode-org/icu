@@ -271,4 +271,15 @@ u_versionToString(UVersionInfo versionArray, char *versionString);
 U_CAPI void U_EXPORT2
 u_getVersion(UVersionInfo versionArray);
 
+/* Define U_UPPER_ORDINAL */
+#if U_CHARSET_FAMILY==U_ASCII_FAMILY
+#   define U_UPPER_ORDINAL(x) ((x)-'A')
+#elif U_CHARSET_FAMILY==U_EBCDIC_FAMILY
+#   define U_UPPER_ORDINAL(x) (((x) < 'J') ? ((x)-'A') : \
+                               (((x) < 'S') ? ((x)-'J'+9) : \
+                               (((x)-'S'+18))
+#else
+#   error Unknown charset family!
+#endif
+
 #endif
