@@ -294,7 +294,7 @@ public:
     /**
      * Return the current index in the text being searched.
      * If the iteration has gone past the end of the text
-     * (or past the beginning for a backwards search), {@link #USEARCH_DONE} 
+     * (or past the beginning for a backwards search), USEARCH_DONE
      * is returned.
      * @return current index in the text being searched.
      * @draft ICU 2.0
@@ -431,6 +431,7 @@ protected:
      * @param status for errors if any occurs
      * @return The index at which the matched text in the target starts, or 
      *         USEARCH_DONE if no match was found.
+	 * @draft ICU 2.0.
      */
     virtual int32_t handleNext(int32_t position, UErrorCode &status);
 
@@ -454,6 +455,7 @@ protected:
      * @param status for errors if any occurs
      * @return The index at which the matched text in the target starts, or 
      *         USEARCH_DONE if no match was found.
+	 * @draft ICU 2.0.
      */
     virtual int32_t handlePrev(int32_t position, UErrorCode &status);
     
@@ -463,18 +465,22 @@ private :
 
     /**
     * RuleBasedCollator, contains exactly the same UCollator * in m_strsrch_
+	* @draft ICU 2.0.
     */
     RuleBasedCollator  m_collator_;
     /**
     * Pattern text
+	* @draft ICU 2.0.
     */
     UnicodeString      m_pattern_;
     /**
     * Corresponding collation rules
+	* @draft ICU 2.0.
     */
     UnicodeString      m_collation_rules_;
     /**
     * String search struct data
+	* @draft ICU 2.0.
     */
     UStringSearch     *m_strsrch_;
 
