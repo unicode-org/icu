@@ -26,8 +26,6 @@
 #include "unicode/uset.h"
 #include "unicode/uniset.h"
 
-U_NAMESPACE_BEGIN
-
 U_CAPI USet* U_EXPORT2
 uset_open(UChar32 start, UChar32 end) {
     return (USet*) new UnicodeSet(start, end);
@@ -113,6 +111,7 @@ uset_size(const USet* set) {
     return ((const UnicodeSet*) set)->size();
 }
 
+U_NAMESPACE_BEGIN
 /**
  * This class only exists to provide access to the UnicodeSet private
  * USet support API.  Declaring a class a friend is more portable than
@@ -129,6 +128,7 @@ public:
         return set.getString(i);
     }
 };
+U_NAMESPACE_END
 
 U_CAPI int32_t U_EXPORT2
 uset_getItemCount(const USet* uset) {
@@ -351,8 +351,6 @@ uset_getSerializedRange(const USerializedSet* set, int32_t rangeIndex,
         }
     }
 }
-
-U_NAMESPACE_END
 
 // TODO Investigate incorporating this code into UnicodeSet to improve
 // efficiency.
