@@ -1,0 +1,333 @@
+/*
+ *******************************************************************************
+ * Copyright (C) 1996-2000, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ *
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/TransliterationRuleSet.java,v $
+ * $Date: 2001/10/26 22:48:41 $
+ * $Revision: 1.15 $
+ *
+ *****************************************************************************************
+ */
+package com.ibm.text;
+
+import java.util.*;
+
+/**
+ * A set of rules for a <code>RuleBasedTransliterator</code>.  This set encodes
+ * the transliteration in one direction from one set of characters or short
+ * strings to another.  A <code>RuleBasedTransliterator</code> consists of up to
+ * two such sets, one for the forward direction, and one for the reverse.
+ *
+ * <p>A <code>TransliterationRuleSet</code> has one important operation, that of
+ * finding a matching rule at a given point in the text.  This is accomplished
+ * by the <code>findMatch()</code> method.
+ *
+ * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
+ *
+ * @author Alan Liu
+ * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.15 $ $Date: 2001/10/26 22:48:41 $
+ */
+class TransliterationRuleSet {
+    /**
+     * Vector of rules, in the order added.  This is only used while the rule
+     * set is getting built.  After that, freeze() reorders and indexes the
+     * rules, and this Vector is freed.
+     */
+    private Vector ruleVector;
+
+    /**
+     * Length of the longest preceding context
+     */
+    private int maxContextLength;
+
+    /**
+     * Sorted and indexed table of rules.  This is created by freeze() from
+     * the rules in ruleVector.
+     */
+    private TransliterationRule[] rules;
+
+    /**
+     * Index table.  For text having a first character c, compute x = c&0xFF.
+     * Now use rules[index[x]..index[x+1]-1].  This index table is created by
+     * freeze().
+     */
+    private int[] index;
+
+    private static final String COPYRIGHT =
+        "\u00A9 IBM Corporation 1999-2001. All rights reserved.";
+
+    /**
+     * Construct a new empty rule set.
+     */
+    public TransliterationRuleSet() {
+        ruleVector = new Vector();
+        maxContextLength = 0;
+    }
+
+    /**
+     * Return the maximum context length.
+     * @return the length of the longest preceding context.
+     */
+    public int getMaximumContextLength() {
+        return maxContextLength;
+    }
+
+    /**
+     * Add a rule to this set.  Rules are added in order, and order is
+     * significant.
+     * @param rule the rule to add
+     */
+    public void addRule(TransliterationRule rule) {
+        if (ruleVector == null) {
+            throw new IllegalArgumentException("Cannot add rules after freezing");
+        }
+        ruleVector.addElement(rule);
+        int len;
+        if ((len = rule.getAnteContextLength()) > maxContextLength) {
+            maxContextLength = len;
+        }
+
+        rules = null;
+    }
+
+    /**
+     * Close this rule set to further additions, check it for masked rules,
+     * and index it to optimize performance.  Once this method is called,
+     * addRule() can no longer be called.
+     * @exception IllegalArgumentException if some rules are masked
+     */
+    public void freeze() {
+        /* Construct the rule array and index table.  We reorder the
+         * rules by sorting them into 256 bins.  Each bin contains all
+         * rules matching the index value for that bin.  A rule
+         * matches an index value if string whose first key character
+         * has a low byte equal to the index value can match the rule.
+         *
+         * Each bin contains zero or more rules, in the same order
+         * they were found originally.  However, the total rules in
+         * the bins may exceed the number in the original vector,
+         * since rules that have a variable as their first key
+         * character will generally fall into more than one bin.
+         *
+         * That is, each bin contains all rules that either have that
+         * first index value as their first key character, or have
+         * a set containing the index value as their first character.
+         */
+        int n = ruleVector.size();
+        index = new int[257]; // [sic]
+        Vector v = new Vector(2*n); // heuristic; adjust as needed
+
+        /* Precompute the index values.  This saves a LOT of time.
+         */
+        int[] indexValue = new int[n];
+        for (int j=0; j<n; ++j) {
+            TransliterationRule r = (TransliterationRule) ruleVector.elementAt(j);
+            indexValue[j] = r.getIndexValue();
+        }
+        for (int x=0; x<256; ++x) {
+            index[x] = v.size();
+            for (int j=0; j<n; ++j) {
+                if (indexValue[j] >= 0) {
+                    if (indexValue[j] == x) {
+                        v.addElement(ruleVector.elementAt(j));
+                    }
+                } else {
+                    // If the indexValue is < 0, then the first key character is
+                    // a set, and we must use the more time-consuming
+                    // matchesIndexValue check.  In practice this happens
+                    // rarely, so we seldom tread this code path.
+                    TransliterationRule r = (TransliterationRule) ruleVector.elementAt(j);
+                    if (r.matchesIndexValue(x)) {
+                        v.addElement(r);
+                    }
+                }
+            }
+        }
+        index[256] = v.size();
+
+        /* Freeze things into an array.
+         */
+        rules = new TransliterationRule[v.size()];
+        v.copyInto(rules);
+        ruleVector = null;
+
+        StringBuffer errors = null;
+
+        /* Check for masking.  This is MUCH faster than our old check,
+         * which was each rule against each following rule, since we
+         * only have to check for masking within each bin now.  It's
+         * 256*O(n2^2) instead of O(n1^2), where n1 is the total rule
+         * count, and n2 is the per-bin rule count.  But n2<<n1, so
+         * it's a big win.
+         */
+        for (int x=0; x<256; ++x) {
+            for (int j=index[x]; j<index[x+1]-1; ++j) {
+                TransliterationRule r1 = rules[j];
+                for (int k=j+1; k<index[x+1]; ++k) {
+                    TransliterationRule r2 = rules[k];
+                    if (r1.masks(r2)) {
+                        if (errors == null) {
+                            errors = new StringBuffer();
+                        } else {
+                            errors.append("\n");
+                        }
+                        errors.append("Rule " + r1 + " masks " + r2);
+                    }
+                }
+            }
+        }
+
+        if (errors != null) {
+            throw new IllegalArgumentException(errors.toString());
+        }
+    }
+
+    /**
+     * To enable a detailed dump of which rules are matching, set
+     * DEBUG to true.  <<This generates a lot of output.>>
+     */
+    private static final boolean DEBUG = false;
+
+    /**
+     * Transliterate the given text with the given UTransPosition
+     * indices.  Return TRUE if the transliteration should continue
+     * or FALSE if it should halt (because of a U_PARTIAL_MATCH match).
+     * Note that FALSE is only ever returned if isIncremental is TRUE.
+     * @param text the text to be transliterated
+     * @param pos the position indices, which will be updated
+     * @param incremental if TRUE, assume new text may be inserted
+     * at index.limit, and return FALSE if thre is a partial match.
+     * @return TRUE unless a U_PARTIAL_MATCH has been obtained,
+     * indicating that transliteration should stop until more text
+     * arrives.
+     */
+    public boolean transliterate(Replaceable text,
+                                 Transliterator.Position pos,
+                                 boolean incremental) {
+        int indexByte = UTF16.charAt(text, pos.start) & 0xFF;
+        for (int i=index[indexByte]; i<index[indexByte+1]; ++i) {
+            int m = rules[i].matchAndReplace(text, pos, incremental);
+            switch (m) {
+            case UnicodeMatcher.U_MATCH:
+                if (DEBUG) {
+                    System.out.println("match " + rules[i].toRule(true) +
+                                       " => " + formatInput(text, pos));
+                }
+                return true;
+            case UnicodeMatcher.U_PARTIAL_MATCH:
+                if (DEBUG) {
+                    System.out.println("partial match " + rules[i].toRule(true) +
+                                       " => " + formatInput(text, pos));
+                }
+                return false;
+            default: /* Ram: added default to make GCC happy */
+                break;
+            }
+        }
+        // No match or partial match from any rule
+        pos.start += UTF16.getCharCount(UTF16.charAt(text, pos.start));
+        if (DEBUG) {
+            System.out.println("no match => " + formatInput(text, pos));
+        }
+        return true;
+    }
+
+  /**
+   * For debugging purposes; format the given text in the form
+   * aaa{bbb|ccc|ddd}eee, where the {} indicate the context start
+   * and limit, and the || indicate the start and limit.
+   */
+  private static String formatInput(Replaceable text,
+                                    Transliterator.Position pos) {
+      if (DEBUG) {
+          ReplaceableString input = (ReplaceableString) text;
+          StringBuffer appendTo = new StringBuffer();
+          if (0 <= pos.contextStart &&
+              pos.contextStart <= pos.start &&
+              pos.start <= pos.limit &&
+              pos.limit <= pos.contextLimit &&
+              pos.contextLimit <= input.length()) {
+
+              String a, b, c, d, e;
+              a = input.substring(0, pos.contextStart);
+              b = input.substring(pos.contextStart, pos.start);
+              c = input.substring(pos.start, pos.limit);
+              d = input.substring(pos.limit, pos.contextLimit);
+              e = input.substring(pos.contextLimit, input.length());
+              appendTo.append(a).append('{').append(b).
+                  append('|').append(c).append('|').append(d).
+                  append('}').append(e);
+          } else {
+              appendTo.append("INVALID Position {cs=" +
+                              pos.contextStart + ", s=" + pos.start + ", l=" +
+                              pos.limit + ", cl=" + pos.contextLimit + "} on " +
+                              input);
+          }
+          return com.ibm.util.Utility.escape(appendTo.toString());
+      } else {
+          return null;
+      }
+  }
+
+    /**
+     * Create rule strings that represents this rule set.
+     */
+    String toRules(boolean escapeUnprintable) {
+        int i;
+        int count = index[256];
+        StringBuffer ruleSource = new StringBuffer();
+        for (i=0; i<count; ++i) {
+            if (i != 0) {
+                ruleSource.append('\n');
+            }
+            ruleSource.append(rules[i].toRule(escapeUnprintable));
+        }
+        return ruleSource.toString();
+    }
+}
+
+/* $Log: TransliterationRuleSet.java,v $
+ * Revision 1.15  2001/10/26 22:48:41  alan
+ * jitterbug 68: add DEBUG support to dump rule-based match progression
+ *
+ * Revision 1.14  2001/10/25 22:33:19  alan
+ * jitterbug 73: use int for index values to avoid signedness problems
+ *
+ * Revision 1.13  2001/09/26 18:17:42  alan
+ * jitterbug 67: delete obsolete code
+ *
+ * Revision 1.12  2001/09/26 18:00:06  alan
+ * jitterbug 67: sync parser with icu4c, allow unlimited, nested segments
+ *
+ * Revision 1.11  2001/09/19 17:43:38  alan
+ * jitterbug 60: initial implementation of toRules()
+ *
+ * Revision 1.10  2000/06/29 21:59:23  alan4j
+ * Fix handling of Transliterator.Position fields
+ *
+ * Revision 1.9  2000/03/10 04:07:24  johnf
+ * Copyright update
+ *
+ * Revision 1.8  2000/02/03 18:11:19  Alan
+ * Use array rather than hashtable for char-to-set map
+ *
+ * Revision 1.7  2000/01/27 18:59:19  Alan
+ * Use Position rather than int[] and move all subclass overrides to one method (handleTransliterate)
+ *
+ * Revision 1.6  2000/01/18 20:36:17  Alan
+ * Make UnicodeSet inherit from UnicodeFilter
+ *
+ * Revision 1.5  2000/01/04 21:43:57  Alan
+ * Add rule indexing, and move masking check to TransliterationRuleSet.
+ *
+ * Revision 1.4  1999/12/22 01:40:54  Alan
+ * Consolidate rule pattern anteContext, key, and postContext into one string.
+ *
+ * Revision 1.3  1999/12/22 01:05:54  Alan
+ * Improve masking checking; turn it off by default, for better performance
+ *
+ * Revision 1.2  1999/12/22 00:01:36  Alan
+ * Detect a>x masking a>y
+ */
