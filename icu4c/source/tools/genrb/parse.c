@@ -46,6 +46,7 @@ U_STRING_DECL(k_type_table,     "table",     5);
 U_STRING_DECL(k_type_int,       "int",       3);
 U_STRING_DECL(k_type_integer,   "integer",   7);
 U_STRING_DECL(k_type_array,     "array",     5);
+U_STRING_DECL(k_type_alias,     "alias",     5);
 U_STRING_DECL(k_type_intvector, "intvector", 9);
 U_STRING_DECL(k_type_import,    "import",    6);
 U_STRING_DECL(k_type_reserved,  "reserved",  8);
@@ -58,6 +59,7 @@ enum EResourceType
      RT_TABLE,
      RT_INTEGER,
      RT_ARRAY,
+     RT_ALIAS,
      RT_INTVECTOR,
      RT_IMPORT,
      RT_RESERVED
@@ -72,6 +74,7 @@ const char *resourceNames[] =
      "Table",
      "Integer",
      "Array",
+     "Alias",
      "Int vector",
      "Import",
      "Reserved",
@@ -121,6 +124,7 @@ void initParser(void)
     U_STRING_INIT(k_type_int,       "int",       3);
     U_STRING_INIT(k_type_integer,   "integer",   7);
     U_STRING_INIT(k_type_array,     "array",     5);
+    U_STRING_INIT(k_type_alias,     "alias",     5);
     U_STRING_INIT(k_type_intvector, "intvector", 9);
     U_STRING_INIT(k_type_import,    "import",    6);
     U_STRING_INIT(k_type_reserved,  "reserved",  8);
@@ -302,6 +306,8 @@ parseResourceType(UErrorCode *status)
         result = RT_STRING;
     } else if (u_strcmp(tokenValue->fChars, k_type_array) == 0) {
         result = RT_ARRAY;
+    } else if (u_strcmp(tokenValue->fChars, k_type_alias) == 0) {
+        result = RT_ALIAS;
     } else if (u_strcmp(tokenValue->fChars, k_type_table) == 0) {
         result = RT_TABLE;
     } else if (u_strcmp(tokenValue->fChars, k_type_binary) == 0) {
@@ -473,6 +479,33 @@ parseString(char *tag, uint32_t startline, UErrorCode *status)
 }
 
 static struct SResource *
+parseAlias(char *tag, uint32_t startline, UErrorCode *status)
+{
+    struct UString   *tokenValue;
+    struct SResource *result = NULL;
+
+    expect(TOK_STRING, &tokenValue, NULL, status);
+
+    if (U_SUCCESS(*status))
+    {
+        /* create the string now - tokenValue doesn't survive a call to getToken (and therefore
+        doesn't survive expect either) */
+
+        result = alias_open(bundle, tag, tokenValue->fChars, tokenValue->fLength, status);
+
+        expect(TOK_CLOSE_BRACE, NULL, NULL, status);
+
+        if (U_FAILURE(*status))
+        {
+            alias_close(result, status);
+            return NULL;
+        }
+    }
+
+    return result;
+}
+
+static struct SResource *
 parseCollationElements(char *tag, uint32_t startline, UErrorCode *status)
 {
     struct SResource  *result = NULL;
@@ -580,7 +613,8 @@ parseCollationElements(char *tag, uint32_t startline, UErrorCode *status)
                 if (U_SUCCESS(intStatus) && data != NULL)
                 {
                     member = bin_open(bundle, "%%CollationBin", len, data, status);
-                    table_add(bundle->fRoot, member, line, status);
+                    /*table_add(bundle->fRoot, member, line, status);*/
+                    table_add(result, member, line, status);
                     uprv_free(data);
                 }
                 else
@@ -1206,6 +1240,7 @@ parseResource(char *tag, UErrorCode *status)
     case RT_STRING:     return parseString    (tag, startline, status);
     case RT_TABLE:      return parseTable     (tag, startline, status);
     case RT_ARRAY:      return parseArray     (tag, startline, status);
+    case RT_ALIAS:      return parseAlias     (tag, startline, status);
     case RT_BINARY:     return parseBinary    (tag, startline, status);
     case RT_INTEGER:    return parseInteger   (tag, startline, status);
     case RT_IMPORT:     return parseImport    (tag, startline, status);
