@@ -1524,25 +1524,20 @@ GregorianCalendar::roll(EDateFields field, int32_t amount, UErrorCode& status)
     int32_t cMonthLen=0; // 'c' for cutover; in days
     int32_t cDayOfMonth=0; // no discontinuity: [0, cMonthLen)
     double cMonthStart=0.0; // in ms
-    switch (field) {
-    case DAY_OF_MONTH:
-    case WEEK_OF_MONTH:
-        {
-            max = monthLength(internalGet(MONTH));
-            double t = internalGetTime();
-            // We subtract 1 from the DAY_OF_MONTH to make it zero-based, and an
-            // additional 10 if we are after the cutover.  Thus the monthStart
-            // value will be correct iff we actually are in the cutover month.
-            cDayOfMonth = internalGet(DAY_OF_MONTH) - ((t >= fGregorianCutover) ? 10 : 0);
-            cMonthStart = t - ((cDayOfMonth - 1) * kOneDay);
+    if (field == DAY_OF_MONTH || field == WEEK_OF_MONTH) {
+        max = monthLength(internalGet(MONTH));
+        double t = internalGetTime();
+        // We subtract 1 from the DAY_OF_MONTH to make it zero-based, and an
+        // additional 10 if we are after the cutover.  Thus the monthStart
+        // value will be correct iff we actually are in the cutover month.
+        cDayOfMonth = internalGet(DAY_OF_MONTH) - ((t >= fGregorianCutover) ? 10 : 0);
+        cMonthStart = t - ((cDayOfMonth - 1) * kOneDay);
 
-            // A month containing the cutover is 10 days shorter.
-            if ((cMonthStart < fGregorianCutover) &&
-                (cMonthStart + (cMonthLen=(max-10))*kOneDay >= fGregorianCutover)) {
-                inCutoverMonth = TRUE;
-            }
+        // A month containing the cutover is 10 days shorter.
+        if ((cMonthStart < fGregorianCutover) &&
+            (cMonthStart + (cMonthLen=(max-10))*kOneDay >= fGregorianCutover)) {
+            inCutoverMonth = TRUE;
         }
-        break;
     }
 
     switch (field) {
