@@ -416,19 +416,6 @@ private:
     void initField(UnicodeString **field, int32_t& length, const UChar *data, LastResortSize numStr, LastResortSize strLen, UErrorCode &status);
 
     /**
-     * Load data for specified 'type', falling back to gregorian if needed
-     *
-     * @param rb ResourceBundle
-     * @param tag Resource key to data
-     * @param type Calendar type
-     * @param status Error Status
-     * @internal
-     */
-    static ResourceBundle
-      getData(ResourceBundle &rb, const char *tag, const char *type, UErrorCode& status);
-
-
-    /**
      * Called by the constructors to actually load data from the resources
      *
      * @param locale               The locale to get symbols for.
