@@ -10,7 +10,7 @@
 
 <h2>ReadMe: International Components for Unicode for Java</h2>
 
-<p>Version: 2.2 July 2002 </p>
+<p>Version: 2.2 August 15th 2002 </p>
 
 <hr size="2" width="100%" align="center">
 
@@ -65,6 +65,8 @@ for checks and similar documents.</blockquote>
     <li>Unicode Text Compression – Standard compression of Unicode text
               <blockquote>Suitable for large numbers of small fields, where LZW and similar schemes
 do not apply.</blockquote>
+    <li>Collation - Rule-based, up-to-date Unicode Collation Algorithm (UCA) sorting order
+        <blockquote>For fast multilingual string comparison</blockquote>
     </ul>
 In some cases, the above support has been rolled into a later release of
 Java. For example, the Thai word-break is now in Java 1.4. However, if you
@@ -87,12 +89,20 @@ For more details please see the <a href=http://oss.software.ibm.com/icu/press.ht
 </p>
 
 <h3><a NAME="PlatformDependencies"></a><u>Platform Dependencies</u></h3>
-
-<p>Parts of ICU4J depend on functionality that is only available in Java2 (JDK1.2) or
-later, although some components work under 1.1.&nbsp; However, all components should be
-compiled using a Java 1.2.x or 1.3.x compiler, as even components that run using a 1.1.x JVM may require
-language features that are only present in Java2.&nbsp; Currently 1.1.x is unsupported and
-untested, and you use the components on a 1.1.x system at your own risk.</p>
+      <P>
+      Parts of ICU4J depend on functionality that is only available in JDK 1.3
+      or later, although some components work under earlier JVMs. All 
+      components should be compiled using a Java2 compiler, as even components 
+      that run under earlier JVMs can require language features that are only 
+      present in Java2. Currently 1.1.x and 1.2.x JVMs are unsupported and untested, and you use 
+      the components on these JVMs at your own risk.</P>
+      <p>
+      The reference platforms which we support and test ICU4J on are:<ul>
+<li> Win2000, IBM JDK 1.3
+<li> Solaris 2.7, Sun JDK 1.3.1
+<li> AIX 5.1, IBM JDK 1.3
+</ul>
+</p>
 
 <h3><a NAME="obtaining"></a><u>How to Download ICU4J</u></h3>
 
@@ -225,6 +235,7 @@ drive and any directory on that drive that you chose to install icu4j into. </p>
       <li>Transliteration
       <li>Normalization
       <li>String manipulation
+      <li>Collation
       <li>String search
       <li>Unicode compression
       <li>Unicode sets
@@ -263,18 +274,11 @@ drive and any directory on that drive that you chose to install icu4j into. </p>
 
 <p><b>Data organization:</b> </p>
 
-<p>Data is stored in various locations in ICU4J:
+<p>Data used in ICU4J is stored in the following locations as described:
 
 <ul>
-  <li>Data that is &quot;raw&quot; data goes into <strong>$Root/src/data</strong>. This
-    includes things like the raw Unicode database. <strong>$Root/src/data</strong> does <em>not</em>
-    contain <strong>.java</strong> source files.</li>
-  <li>Data that is in the form of a Java class, typically (but not necessarily) a ResourceBundle, 
-    goes into one of the packages <code>com.ibm.util.resources</code> or <code>com.ibm.text.resources</code>,
-    depending on whether the associated code lives in <code>com.ibm.util</code> or <code>com.ibm.text</code>.</li>
-  <li>Data that is not part of ICU4J proper (or its base tool set), but rather part of a test,
-    sample, or demo, should go near the source code of its owner. This makes it easy to ship a
-    core ICU4J release without optional components.</li>
+  <li>The ICU4J core tools, namely the packages <code>com.ibm.icu.lang</code>, <code>com.ibm.icu.text</code>, <code>com.ibm.icu.util</code>, <code>com.ibm.icu.math</code> and <code>com.ibm.icu.text</code>, stores data it use in the package <code>com.ibm.icu.impl.data</code>. All resource bundles are stored in <code>com.ibm.icu.impl.data</code></li>
+  <li>Data that is not part of ICU4J core, but rather part of a test, sample, or demo, is stored in the package <code>com.ibm.icu.dev.data</code>.</li>
 </ul>
 
 <h3><u><a name="API"></a>Where to get Documentation</u></h3>
@@ -283,22 +287,21 @@ drive and any directory on that drive that you chose to install icu4j into. </p>
 
 <ul>
   <li><a href="http://oss.software.ibm.com/icu4j/doc/index.html">Index to all ICU4J API</a></li>
-  <li>International Calendars &#150; <a href="http://oss.software.ibm.com/icu4j/doc/com/ibm/util/IslamicCalendar.html">Islamic</a>,
-    <a href="http://oss.software.ibm.com/icu4j/doc/com/ibm/util/BuddhistCalendar.html">Buddhist</a>, <a
-    href="http://oss.software.ibm.com/icu4j/doc/com/ibm/util/HebrewCalendar.html">Hebrew</a>, <a
-    href="http://oss.software.ibm.com/icu4j/doc/com/ibm/util/JapaneseCalendar.html">Japanese</a>.</li>
-  <li><a href="http://oss.software.ibm.com/icu4j/doc/com/ibm/text/Normalizer.html">Unicode Normalization</a> &#150;
+  <li>International Calendars &#150; <a href="http://oss.software.ibm.com/icu4j/doc/com/ibm/icu/util/IslamicCalendar.html">Islamic</a>,
+    <a href="http://oss.software.ibm.com/icu4j/doc/com/ibm/icu/util/BuddhistCalendar.html">Buddhist</a>, <a
+    href="http://oss.software.ibm.com/icu4j/doc/com/ibm/icu/util/HebrewCalendar.html">Hebrew</a>, <a
+    href="http://oss.software.ibm.com/icu4j/doc/com/ibm/icu/util/JapaneseCalendar.html">Japanese</a>.</li>
+  <li><a href="http://oss.software.ibm.com/icu4j/doc/com/ibm/icu/text/Normalizer.html">Unicode Normalization</a> &#150;
     Canonical text representation for W3C.</li>
-  <li><a href="http://oss.software.ibm.com/icu4j/doc/com/ibm/text/NumberFormat.html">Number Format Enhancements</a> &#150;
+  <li><a href="http://oss.software.ibm.com/icu4j/doc/com/ibm/icu/text/NumberFormat.html">Number Format Enhancements</a> &#150;
     Scientific Notation, Spelled out.</li>
-  <li><a href="http://oss.software.ibm.com/icu4j/doc/com/ibm/text/BreakIterator.html">Enhanced word-break detection</a>
+  <li><a href="http://oss.software.ibm.com/icu4j/doc/com/ibm/icu/text/BreakIterator.html">Enhanced word-break detection</a>
     &#150; Rule-based, supports Thai</li>
-  <li><a href="http://oss.software.ibm.com/icu4j/doc/com/ibm/text/StringSearch.html">Unicode Text Searching</a> &#150;
-    Efficient multi-lingual searching.</li>
-<li><a href="http://oss.software.ibm.com/icu4j/doc/com/ibm/text/Transliterator.html">Transliteration</a> &#150; A general framework for onverting text from one format to another, e.g. Cyrillic to Latin, or Hex to Unicode.
-  <li>Unicode Text <a href="http://oss.software.ibm.com/icu4j/doc/com/ibm/text/UnicodeCompressor.html">Compression</a> &amp;
-    <a href="http://oss.software.ibm.com/icu4j/doc/com/ibm/text/UnicodeDecompressor.html">Decompression</a> &#150; 2:1
+<li><a href="http://oss.software.ibm.com/icu4j/doc/com/ibm/icu/text/Transliterator.html">Transliteration</a> &#150; A general framework for onverting text from one format to another, e.g. Cyrillic to Latin, or Hex to Unicode.
+  <li>Unicode Text <a href="http://oss.software.ibm.com/icu4j/doc/com/ibm/icu/text/UnicodeCompressor.html">Compression</a> &amp;
+    <a href="http://oss.software.ibm.com/icu4j/doc/com/ibm/icu/text/UnicodeDecompressor.html">Decompression</a> &#150; 2:1
     compression on English Unicode text.</li>
+  <li>Collation - <a href="http://oss.software.ibm.com/icu4j/doc/com/ibm/icu/text/RuleBasedCollator.html">Rule-based sorting</a>, <a href="http://oss.software.ibm.com/icu4j/doc/com/ibm/icu/text/StringSearch.html">Efficient multi-lingual searching</a> </li>
 </ul>
 
 <h3><a NAME="HowToInstallJavac"></a><u>How to Install and Build</u></h3>
@@ -423,7 +426,7 @@ targets, see the build.xml file:</p>
 file.</p>
 
 <p>After doing a build it is a good idea to run all the icu4j tests by typing <br>&quot;java
--classpath $Root/classes -DUnicodeData=$Root/src/data/unicode com.ibm.test.TestAll&quot;.</p>
+-classpath $Root/classes -DUnicodeData=$Root/src/com/ibm/icu/dev/data/unicode com.ibm.test.TestAll&quot;.</p>
 
 <p>(If you are allergic to build systems, as an alternative to using
 Ant you can build by running javac and javadoc directly. This
@@ -442,12 +445,12 @@ demo classes, so unless you build ICU4J there is little to try out.
 
 To try out the <strong>richedit</strong> package, first build the richeditJar target.
 This is a 'runnable' jar file.  To run the richedit demo, type: 
-<tt><blockquote>  java -jar richedit/richedit.jar</blockquote></tt>
+<tt><blockquote>  java -jar $Root/richedit/richedit.jar</blockquote></tt>
 
 This will present an empty edit pane with an awt interface.</p>
 
 <p>With a fuller command line you can try out other options, for example:
-<tt><blockquote>   java -classpath richedit/richedit.jar com.ibm.richtext.demo.EditDemo [-swing][file]</blockquote></tt>
+<tt><blockquote>   java -classpath $Root/richedit/richedit.jar com.ibm.richtext.demo.EditDemo [-swing][file]</blockquote></tt>
 This will use an awt GUI, or a swing GUI if
 <tt>-swing</tt> is passed on the command line.  It will open a text
 file if one is provided, otherwise it will open a blank page.  Click
@@ -467,15 +470,17 @@ with Java) supports these languages.</p>
 experiment with the ICU4J classes.  First, build ICU4J using <tt>ant&nbsp;all</tt>.  Then try
 one of the following:
 <ul>
-<li><tt>java -classpath classes com.ibm.demo.calendar.CalendarApp</tt>
-<li><tt>java -classpath classes com.ibm.demo.holiday.HolidayCalendarDemo</tt>
-<li><tt>java -classpath classes com.ibm.demo.rbbi.TextBoundDemo</tt><br>(Click in the text, then use <tt>ctrl-N</tt> and <tt>ctrl-P</tt> to select the next or previous block of text.)
-<li><tt>java -classpath classes com.ibm.demo.rbnf.RbnfDemo</tt>
-<li><tt>java -classpath classes com.ibm.demo.translit.Demo</tt>
+<li><tt>java -classpath classes com.ibm.icu.dev.demo.calendar.CalendarApp</tt>
+<li><tt>java -classpath classes com.ibm.icu.dev.demo.holiday.HolidayCalendarDemo</tt>
+<li><tt>java -classpath classes com.ibm.icu.dev.demo.rbbi.TextBoundDemo</tt><br>(Click in the text, then use <tt>ctrl-N</tt> and <tt>ctrl-P</tt> to select the next or previous block of text.)
+<li><tt>java -classpath classes com.ibm.icu.dev.demo.rbnf.RbnfDemo</tt>
+<li><tt>java -classpath classes com.ibm.icu.dev.demo.translit.Demo</tt>
 </ul>
 </p>
 
 <h3><a name="WhereToFindMore"></a><u>Where to Find More Information</u></h3>
+
+<p>For information specific to this current release, please refer to the <a href="http://oss.software.ibm.com/cvs/icu4j/~checkout~/icu4j/releasenotes.html?only_with_tag=release-2-2">releasenotes.html</a></p>
 
 <p><a href="http://oss.software.ibm.com/icu4j">http://oss.software.ibm.com/icu4j</a> is a
 pointer to general information about the International Components for Unicode in Java </p>
