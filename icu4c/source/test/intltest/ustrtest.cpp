@@ -715,6 +715,24 @@ UnicodeStringTest::TestCaseConversion()
         }
     }
 
+    // test some supplementary characters (>= Unicode 3.1)
+    {
+        UnicodeString t;
+
+        UnicodeString
+            deseretInput=UnicodeString("\\U0001043C\\U00010414", "").unescape(),
+            deseretLower=UnicodeString("\\U0001043C\\U0001043C", "").unescape(),
+            deseretUpper=UnicodeString("\\U00010414\\U00010414", "").unescape();
+        t=deseretInput.toLower();
+        if(t!=deseretLower) {
+            errln("error lowercasing Deseret (plane 1) characters");
+        }
+        t=deseretInput.toUpper();
+        if(t!=deseretUpper) {
+            errln("error uppercasing Deseret (plane 1) characters");
+        }
+    }
+
     // Unicode 3.1.1 SpecialCasing tests
     {
         UnicodeString t;
