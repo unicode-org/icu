@@ -78,19 +78,20 @@ kk{
         "%",
         "0",
         "#",
-        "+",
         "-",
         "E",
         "\u2030",
         "\u221E",
         "\uFFFD",
         ",",
+        "+",
     }
     Currencies {
         KZT { "\u0442\u04A3\u0433.", "KZT" }
     }
     LocaleScript:array { "Cyrl" }
-    ExemplarCharacters { "[\u0430-\u044f \u044b \u044d \u0451]" }
+    // \u049B should be removed if it's not in the native language and country names.
+    ExemplarCharacters { "[\u0430-\u044f\u044b\u044d\u0451\u0456\u049B\u04A3]" }
     CollationElements {
         Version { "1.0" }
         Sequence { 
