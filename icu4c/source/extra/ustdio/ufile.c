@@ -114,12 +114,26 @@ u_fopen(const char    *filename,
     return result;
 }
 
+U_CAPI UBool U_EXPORT2
+u_feof(UFILE  *f)
+{
+    UBool endOfBuffer;
+    if (f == NULL) {
+        return TRUE;
+    }
+    endOfBuffer = (UBool)(f->str.fPos >= f->str.fLimit);
+    if (f->fFile != NULL) {
+        return endOfBuffer && feof(f->fFile);
+    }
+    return endOfBuffer;
+}
+
 U_CAPI void U_EXPORT2
 u_fflush(UFILE *file)
 {
-  ufile_flush_translit(file);
-  fflush(file->fFile);
-  /* TODO: flush input */
+    ufile_flush_translit(file);
+    fflush(file->fFile);
+    /* TODO: flush input */
 }
 
 U_CAPI void
