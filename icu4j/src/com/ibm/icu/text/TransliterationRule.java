@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliterationRule.java,v $ 
- * $Date: 2000/11/29 19:12:32 $ 
- * $Revision: 1.25 $
+ * $Date: 2001/06/29 22:35:41 $ 
+ * $Revision: 1.26 $
  *
  *****************************************************************************************
  */
@@ -44,7 +44,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.25 $ $Date: 2000/11/29 19:12:32 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.26 $ $Date: 2001/06/29 22:35:41 $
  */
 class TransliterationRule {
     /**
@@ -447,10 +447,6 @@ class TransliterationRule {
                                  UnicodeFilter filter) {
         // Match anteContext, key, and postContext
         int cursor = pos.start - anteContextLength;
-        //[ANCHOR]if (cursor < pos.contextStart
-        //[ANCHOR]    || (cursor + pattern.length()) > pos.contextLimit) {
-        //[ANCHOR]    return false;
-        //[ANCHOR]}
         // Quick length check; this is a performance win for long rules.
         // Widen by one (on both sides) to allow anchor matching.
         if (cursor < (pos.contextStart - 1)
@@ -458,8 +454,6 @@ class TransliterationRule {
             return false;
         }
         for (int i=0; i<pattern.length(); ++i, ++cursor) {
-            //[ANCHOR]if (!charMatches(pattern.charAt(i), text.charAt(cursor),
-            //[ANCHOR]                 variables, filter)) {
             if (!charMatches(pattern.charAt(i), text, cursor, pos,
                              variables, filter)) {
                 return false;
@@ -467,6 +461,208 @@ class TransliterationRule {
         }
         return true;
     }
+
+//|    /**
+//|     * Array of quantifiers.  Each quantifier is represented by 4
+//|     * integers: The start and limit (in the pattern), the minimum
+//|     * count, and the maximum count.  Counts are inclusive.
+//|     * quant.length is always a multiple of 4.  quant may be null.  If
+//|     * quant is not null, it must have a length >= 4.  Quants are
+//|     * arranged in order of increasing start index, and secondarily in
+//|     * order of increasing limit index.  They may be nested but they
+//|     * may not otherwise overlap.
+//|     */
+//|    private int[] quant;
+//|
+//|    /**
+//|     */
+//|    boolean matchAndReplace(Replaceable text,
+//|                            Transliterator.Position pos,
+//|                            RuleBasedTransliterator.Data data) {
+//|        // Set the cursor to point to the start of the anteContext.
+//|        // The textPos is an index into the source text.
+//|        int textPos = pos.start - anteContextLength;
+//|        
+//|        int patternLen = pattern.length();
+//|
+//|        // patternPos is the relative position in the pattern text, from
+//|        // 0..patternLen-1.
+//|        int patternPos = 0;
+//|
+//|        // Local array of match data.  Match i corresponds to quant i.
+//|        // Each match is described by 2 integers: match start (in the
+//|        // source text) and match limit.  If the match is empty then
+//|        // match start == match limit.  Match count is not stored; if
+//|        // the count fell in the legal range, we accept it; if not, we
+//|        // return with a match failure.  We also store two integers
+//|        // at the start; [0] is the index to the next quant to be
+//|        // matched, and [1] is unused.
+//|        int[] matchState = null;
+//|
+//|        int iQuant = 0;
+//|        int quantStart = -1;
+//|
+//|        if (quant != null) {
+//|            quantStart = quant[iQuant];
+//|
+//|            matchState = new int[2 + (quant.length / 2)];
+//|            for (int i=0; i<matchState.length; ++i) {
+//|                matchState[i] = -1;
+//|            }
+//|
+//|            matchState[0] = 4;
+//|        }
+//|
+//|        while (patternPos < patternLen) {
+//|            if (patternPos == quantStart) {
+//|                // Match a quant, including repetitions and nested quants
+//|                int newTextPos = matchQuant(text, pos, data,
+//|                                           textPos, iQuant, matchState);
+//|                if (newTextPos < 0) {
+//|                    // Match failure
+//|                    return newTextPos;
+//|                }
+//|
+//|                // Match success
+//|                textPos = newTextPos;
+//|
+//|                // Update patternPos to point after the quant we just matched
+//|                patternPos = quant[iQuant+1];
+//|
+//|                // Update the next quant
+//|                iQuant = matchState[0];
+//|                if (iQuant < quant.length) {
+//|                    quantStart = quant[iQuant];
+//|                    matchState[0] += 4;
+//|                } else {
+//|                    quantStart = -1; // No more quants
+//|                }
+//|
+//|                continue;
+//|            }
+//|
+//|            // Do a single-character match test, with the filtering etc.
+//|            // embodied in the Replaceable object.
+//|            if (!charMatches(pattern.charAt(patternPos), text, textPos, data)) {
+//|                // On match failure, return
+//|                return false;
+//|            }
+//|
+//|            ++textPos;
+//|            ++patternPos;
+//|        }
+//|
+//|        // We've successfully matched the pattern.  All the match data
+//|        // is in matchState[].
+//|    }
+//|
+//|    /**
+//|     * @param matchState stores the current match status.  For
+//|     * quant i, matchState[2+2*i] stores the start and
+//|     * matchState[3+2*i] stores the limit index in the matched
+//|     * source text.  matchState[0] stores the next unmatched
+//|     * quant index * 4.
+//|     */
+//|    private int matchQuant(Replaceable text,
+//|                           Transliterator.Position pos,
+//|                           RuleBasedTransliterator.Data data,
+//|                           int textPos,
+//|                           int iQuant,
+//|                           int[] matchState) {
+//|        // assert(quant != null);
+//|        // assert(iQuant < quant.length);
+//|        // assert(matchState != null);
+//|        // assert(matchState.length == quant.length/2 + 2);
+//|
+//|        int nextIQuant = matchState[0];
+//|        int nextQuantStart = -1;
+//|        if (nextIQuant < quant.length) {
+//|            nextQuantStart = quant[nextIQuant];
+//|            matchState[0] += 4;
+//|        }
+//|
+//|        int patternPos = quant[iQuant];
+//|        int quantLimit = quant[iQuant+1];
+//|
+//|        // Save our backup position in case we fail to match a
+//|        // quant repetition.
+//|        int backupTextPos = textPos;
+//|
+//|        // Save our starting match position
+//|        matchState[2*iQuant + 2] = textPos;
+//|
+//|        int matchCount = 0;
+//|
+//|        for (;;) {
+//|            // If we are at the start of the next quant, then match it
+//|            // recursively.  This will (if successful) move the patternPos
+//|            // to the next quant limit, and increment the next iQuant
+//|            // stored in matchState[0] -- but it will not, of course
+//|            // update our nextIQuant; we have to do after we return.
+//|            if (patternPos == nextQuantStart) {
+//|                textPos = matchQuant(text, pos, data, textPos, nextIQuant, matchState);
+//|                if (textPos < 0) {
+//|                    return textPos; // value <0 indicates match failure
+//|                }
+//|
+//|                // We have successfully done a recursive quant match
+//|                // so we know the patternPos is at the next quantLimit.
+//|                patternPos = quant[nextIQuant+1];
+//|
+//|                // Update nextIQuant and nextQuantStart.
+//|                nextIQuant = matchState[0];
+//|                if (nextIQuant < quant.length) {
+//|                    nextQuantStart = quant[nextIQuant];
+//|                    matchState[0] += 4;
+//|                } else {
+//|                    nextQuantStart = -1;
+//|                }
+//|
+//|                continue;
+//|            }
+//|
+//|            // We are not at the start of a nested quant, so do
+//|            // a normal character match.
+//|            if (charMatches(pattern.charAt(patternPos), text, textPos, data)) {
+//|                // Match success -- continue
+//|                ++textPos;
+//|                ++patternPos;
+//|                // If we have matched a full segment, then save a new
+//|                // backup position and see about repeating.
+//|                if (patternPos == quantLimit) {
+//|                    backupTextPos = textPos;
+//|                    ++matchCount;
+//|                    // If we are allowed to have more matched, be greedy;
+//|                    // backup the patternPos and see if we have another match
+//|                    if (matchCount < quant[iQuant+3]) {
+//|                        patternPos = quant[iQuant];
+//|                        continue;
+//|                    }
+//|
+//|                    // We have exhausted the maximum match count, so we
+//|                    // are done.  Save our limit position and return.
+//|                    matchState[2*iQuant + 3] = textPos; // Limit
+//|                    return textPos;
+//|                }
+//|            }
+//|
+//|            // Match failure
+//|            else {
+//|                // Backup to our last successful position and see
+//|                // if we matched the proper count for this quant.
+//|                textPos = backupTextPos;
+//|                
+//|                // assert(matchCount <= quant[iQuant+3]
+//|                if (matchCount >= quant[iQuant+2]) {
+//|                    matchState[2*iQuant + 3] = textPos; // Limit
+//|                    return textPos;
+//|                }
+//|
+//|                // We failed to make the minimum match count.
+//|                return -1;
+//|            }
+//|        }
+//|    }
 
     /**
      * Return the degree of match between this rule and the given text.  The
@@ -529,9 +725,6 @@ class TransliterationRule {
                                        RuleBasedTransliterator.Data variables,
                                        UnicodeFilter filter) {
         int cursor = pos.start - anteContextLength;
-        //[ANCHOR]if (cursor < pos.contextStart) {
-        //[ANCHOR]    return -1;
-        //[ANCHOR]}
         // Quick length check; this is a performance win for long rules.
         // Widen by one to allow anchor matching.
         if (cursor < (pos.contextStart - 1)) {
@@ -539,8 +732,6 @@ class TransliterationRule {
         }
         int i;
         for (i=0; i<pattern.length() && cursor<pos.contextLimit; ++i, ++cursor) {
-            //[ANCHOR]if (!charMatches(pattern.charAt(i), text.charAt(cursor),
-            //[ANCHOR]                 variables, filter)) {
             if (!charMatches(pattern.charAt(i), text, cursor, pos,
                              variables, filter)) {
                 return -1;
@@ -574,33 +765,13 @@ class TransliterationRule {
             (((set = variables.lookupSet(keyChar)) == null) ?
              keyChar == textChar : set.contains(textChar));
     }
-
-    /**
-     * Return true if the given key matches the given text.  This method
-     * accounts for the fact that the key character may represent a character
-     * set.  Note that the key and text characters may not be interchanged
-     * without altering the results.
-     * @param keyChar a character in the match key
-     * @param textChar a character in the text being transliterated
-     * @param variables a dictionary of variables mapping <code>Character</code>
-     * to <code>UnicodeSet</code>
-     * @param filter the filter.  Any character for which
-     * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
-     * altered by this transliterator.  If <tt>filter</tt> is
-     * <tt>null</tt> then no filtering is applied.
-     */
-    protected static final boolean charMatches(char keyChar, char textChar,
-                                               RuleBasedTransliterator.Data variables,
-                                               UnicodeFilter filter) {
-        UnicodeSet set = null;
-        return (filter == null || filter.contains(textChar)) &&
-            (((set = variables.lookupSet(keyChar)) == null) ?
-             keyChar == textChar : set.contains(textChar));
-    }
 }
 
 /**
  * $Log: TransliterationRule.java,v $
+ * Revision 1.26  2001/06/29 22:35:41  alan4j
+ * Implement Any-Upper Any-Lower and Any-Title transliterators
+ *
  * Revision 1.25  2000/11/29 19:12:32  alan4j
  * Update docs
  *
