@@ -1,3 +1,6 @@
+Copyright (C) 2000-2003, International Business Machines
+Corporation and others.  All Rights Reserved.
+
 This directory contains information, input files and scripts for
 packaging ICU using specific packaging tools. We assume that the
 packager is familiar with the tools and procedures needed to build a

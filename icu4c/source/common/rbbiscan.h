@@ -1,7 +1,7 @@
 //
 //  rbbiscan.h
 //
-//  Copyright (C) 2002, International Business Machines Corporation and others.
+//  Copyright (C) 2002-2003, International Business Machines Corporation and others.
 //  All Rights Reserved.
 //
 //  This file contains declarations for class RBBIRuleScanner
