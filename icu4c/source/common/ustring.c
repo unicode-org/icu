@@ -603,8 +603,9 @@ u_strCaseMap(UChar *dest, int32_t destCapacity,
     }
 
     /* check for overlapping source and destination */
-    if( (src>=dest && src<(dest+destCapacity)) ||
-        (dest>=src && dest<(src+srcLength))
+    if( dest!=NULL &&
+        ((src>=dest && src<(dest+destCapacity)) ||
+         (dest>=src && dest<(src+srcLength)))
     ) {
         /* overlap: provide a temporary destination buffer and later copy the result */
         if(destCapacity<=(sizeof(buffer)/U_SIZEOF_UCHAR)) {
