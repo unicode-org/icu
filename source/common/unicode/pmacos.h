@@ -48,7 +48,9 @@
  *
  */
 
+#ifndef U_IOSTREAM_SOURCE
 #define U_IOSTREAM_SOURCE 198506	/* Wish we could use 199711 but that breaks while compiling chariter.cpp */
+#endif
 
 /* Determines whether specific types are available */
 #define HAVE_INT8_T 0
