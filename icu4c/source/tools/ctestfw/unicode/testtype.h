@@ -10,7 +10,7 @@
 #include "unicode/utypes.h"
 
 /*Deals with imports and exports of the dynamic library*/
-#if defined(_WIN32) || defined(U_CYGWIN)
+#if !defined(U_STATIC_IMPLEMENTATION) && (defined(_WIN32) || defined(U_CYGWIN))
     #define T_CTEST_EXPORT __declspec(dllexport)
     #define T_CTEST_IMPORT __declspec(dllimport)
 #else
