@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $
- * $Date: 2001/10/03 00:14:23 $
- * $Revision: 1.44 $
+ * $Date: 2001/10/03 16:26:50 $
+ * $Revision: 1.45 $
  *
  *****************************************************************************************
  */
@@ -241,7 +241,7 @@ import com.ibm.util.CaseInsensitiveString;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.44 $ $Date: 2001/10/03 00:14:23 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.45 $ $Date: 2001/10/03 16:26:50 $
  */
 public abstract class Transliterator {
     /**
@@ -553,12 +553,12 @@ public abstract class Transliterator {
             index.contextLimit += insertion.length();
         }
 
-        char last = (text.length() > 0) ?
-            text.charAt(text.length() - 1) : 0;
-        if (UTF16.isLeadSurrogate(last)) {
-            // Oops, the caller passed us a single lead surrogate at the
-            // end of the insertion.  Don't transliterate until more text
-            // comes in.
+        if (index.limit > 0 &&
+            UTF16.isLeadSurrogate(text.charAt(index.limit - 1))) {
+            // Oops, there is a dangling lead surrogate in the buffer.
+            // This will break most transliterators, since they will
+            // assume it is part of a pari.  Don't transliterate until
+            // more text comes in.
             return;
         }
 
@@ -588,17 +588,7 @@ public abstract class Transliterator {
      */
     public final void transliterate(Replaceable text, Position index,
                                     int insertion) {
-        if ((insertion & 0xFFFF0000) == 0 && UTF16.isLeadSurrogate((char)insertion)) {
-            // Oops, the caller passed us a single lead surrogate.  In
-            // general, we don't support this, but we'll do the caller a
-            // favor in the special case of LEAD followed by TRAIL
-            // insertion.  Anything else won't work.
-            text.replace(index.limit, index.limit, String.valueOf((char)insertion));
-            ++index.limit;
-            ++index.contextLimit;
-        } else {
-            transliterate(text, index, UTF16.valueOf(insertion));
-        }
+        transliterate(text, index, UTF16.valueOf(insertion));
     }
 
     /**
