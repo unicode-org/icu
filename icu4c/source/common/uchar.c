@@ -1488,9 +1488,14 @@ single:
     return (result==c) ? -length : length;
 }
 
+/*
+ * Lowercases [srcStart..srcLimit[ but takes
+ * context [0..srcLength[ into account.
+ */
 U_CFUNC int32_t
 u_internalStrToLower(UChar *dest, int32_t destCapacity,
                      const UChar *src, int32_t srcLength,
+                     int32_t srcStart, int32_t srcLimit,
                      const char *locale,
                      UErrorCode *pErrorCode) {
     UCharIterator iter;
@@ -1504,6 +1509,9 @@ u_internalStrToLower(UChar *dest, int32_t destCapacity,
          * If we do not have real character properties data,
          * then we only do a fixed-length ASCII case mapping.
          */
+        src+=srcStart;
+        srcLength-=srcStart;
+
         if(srcLength<=destCapacity) {
             destIndex=srcLength;
             *pErrorCode=U_USING_DEFAULT_ERROR;
@@ -1528,9 +1536,10 @@ u_internalStrToLower(UChar *dest, int32_t destCapacity,
     uiter_setString(&iter, src, srcLength);
 
     /* case mapping loop */
-    srcIndex=destIndex=0;
-    while(srcIndex<srcLength) {
-        UTF_NEXT_CHAR(src, srcIndex, srcLength, c);
+    srcIndex=srcStart;
+    destIndex=0;
+    while(srcIndex<srcLimit) {
+        UTF_NEXT_CHAR(src, srcIndex, srcLimit, c);
         GET_PROPS_UNSAFE(c, props);
         if(!PROPS_VALUE_IS_EXCEPTION(props)) {
             if((1UL<<GET_CATEGORY(props))&(1UL<<U_UPPERCASE_LETTER|1UL<<U_TITLECASE_LETTER)) {
