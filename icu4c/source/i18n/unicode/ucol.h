@@ -391,12 +391,11 @@ ucol_equal(const UCollator *coll,
  * Compare two UTF-8 encoded trings.
  * The strings will be compared using the options already specified.
  * @param coll The UCollator containing the comparison rules.
- * @param source The source string.
- * @param sourceLength The length of source, or -1 if null-terminated.
- * @param target The target string.
- * @param targetLength The length of target, or -1 if null-terminated.
+ * @param sIter The source string iterator.
+ * @param tIter The target string iterator.
  * @return The result of comparing the strings; one of UCOL_EQUAL,
  * UCOL_GREATER, UCOL_LESS
+ * @param status A pointer to an UErrorCode to receive any errors
  * @see ucol_strcoll
  * @draft ICU 2.6
  */
@@ -490,7 +489,7 @@ ucol_getRules(    const    UCollator    *coll,
  * Sort keys may be compared using <TT>strcmp</TT>.
  * @param coll The UCollator containing the collation rules.
  * @param source The string to transform.
- * @param sourecLength The length of source, or -1 if null-terminated.
+ * @param sourceLength The length of source, or -1 if null-terminated.
  * @param result A pointer to a buffer to receive the attribute.
  * @param resultLength The maximum size of result.
  * @return The size needed to fully store the sort key..
