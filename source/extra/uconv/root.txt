@@ -1,6 +1,6 @@
 ﻿// -*- Coding: utf-8; -*-  [all uconv resource files]
 // Copyright (c) 2000 IBM, Inc. and Others.
-// $Revision: 1.19 $
+// $Revision: 1.20 $
 //
 // Root translation file for uconv messages.
 // So you want to translate this file??? Great!
@@ -28,7 +28,7 @@ root
 
   lcUsageWord { "usage" }
   ucUsageWord { "Usage" }
-  usage { "{0}: {1} [ -h, -?, --help ] [ -V, --version ] [ -s, --silent ] [ -v, --verbose ] [ -l, --list | --list-code code | --default-code | -L, --list-transliterators ] [ --canon ] [ -x transliterator ] [ --to-callback callback | -c ] [ --from-callback callback | -i ] [ --callback callback ] [ --fallback | --no-fallback ] -f, --from-code code -t, --to-code code [ file ... ] [ -o, --output file ]\n" }
+  usage { "{0}: {1} [ -h, -?, --help ] [ -V, --version ] [ -s, --silent ] [ -v, --verbose ] [ -l, --list | --list-code code | --default-code | -L, --list-transliterators ] [ --canon ] [ -x transliterator ] [ --to-callback callback | -c ] [ --from-callback callback | -i ] [ --callback callback ] [ --fallback | --no-fallback ] [ -b, --block-size size ] -f, --from-code code -t, --to-code code [ file ... ] [ -o, --output file ]\n" }
 
   help {  "Options:  -h, --help                    print this message\n"
           "          -V, --version                 print the program version\n"
@@ -45,6 +45,7 @@ root
 	  "          --from-callback callback      use callback on original encoding\n"
 	  "          -i                            ignore invalid sequences in the input\n"
           "          --callback callback           use callback on both encodings\n"
+	  "          -b, --block-size size         read size bytes blocks (default: 4096)"
 	  "          --fallback                    use fallback mapping\n"
 	  "          --no-fallback                 do not use fallback mapping\n"
 	  "          -f, --from-code code          set the original encoding\n"
@@ -60,6 +61,8 @@ root
   noSuchCodeset  { "Couldn''t find encoding: {0}.\n" } // 0: name of the encoding
   noFromCodeset  { "No conversion from encoding given (use -f)\n" }
   noToCodeset    {  "No conversion to encoding given (use -t)\n"  }
+
+  badBlockSize	{ "Bad block size: {0}.\n" } // 0: size of the block
 
   cantOpenFromCodeset { "Couldn''t open from encoding {0}: {1}\n" }  // 0:set, 1: err
   cantOpenToCodeset { "Couldn''t open to encoding {0}: {1}\n" } // 0: set, 1: err

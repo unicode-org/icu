@@ -35,7 +35,7 @@
 #include <fcntl.h>
 #endif
 
-static const size_t buffsize = 4096;	/* Size of conversion buffer. */
+#define DEFAULT_BUFSZ	4096
 
 static UResourceBundle *gBundle = 0;	/* Bundle containing messages. */
 
@@ -369,35 +369,31 @@ static UBool convertFile(const char *pname,
 			 UConverterFromUCallback fromucallback,
 			 const void *fromuctxt,
 			 int fallback,
+                         size_t bufsz,
 			 const char *translit,
 			 const char *infilestr,
-			 FILE * outfile, int verbose)
-{
+			 FILE * outfile, int verbose) {
     FILE *infile;
     UBool ret = TRUE;
     UConverter *convfrom = 0;
     UConverter *convto = 0;
     UErrorCode err = U_ZERO_ERROR;
     UBool flush;
-    const char *cbuffiter;
-    char *buffiter;
-    const size_t readsize = buffsize - 1;
-    char *buff = 0;
+    const char *cbufp;
+    char *bufp;
+    char *buf = 0;
 
     uint32_t foffset = 0;	/* Where we are in the file, for error reporting. */
 
-    UConverterFromUCallback oldfromucallback;
-    UConverterToUCallback oldtoucallback;
-    const void *oldcontext;
-
-    const UChar *cuniiter;
-    UChar *uniiter;
-    UChar *unibuff = 0;
+    const UChar *unibufbp;
+    UChar *unibufp;
+    UChar *unibuf = 0;
     int32_t *fromoffsets = 0, *tooffsets = 0;
 
-    size_t rd, totbuffsize;
+    size_t rd, tobufsz;
 
-    Transliterator *t = NULL;
+    Transliterator *t = 0;      // Transliterator acting on Unicode data.
+    UnicodeString u;            // String to do the transliteration.
 
     // Open the correct input file or connect to stdin for reading input
 
@@ -424,6 +420,7 @@ static UBool convertFile(const char *pname,
     if (verbose) {
 	fprintf(stderr, "%s:\n", infilestr);
     }
+
     // Create transliterator as needed.
 
     if (translit != NULL && *translit) {
@@ -441,6 +438,7 @@ static UBool convertFile(const char *pname,
 	    goto error_exit;
 	}
     }
+
     // Create codepage converter. If the codepage or its aliases weren't
     // available, it returns NULL and a failure code. We also set the
     // callbacks, and return errors in the same way.
@@ -453,8 +451,7 @@ static UBool convertFile(const char *pname,
 	       u_wmsg_errorName(err));
 	goto error_exit;
     }
-    ucnv_setToUCallBack(convfrom, toucallback, touctxt, &oldtoucallback,
-			&oldcontext, &err);
+    ucnv_setToUCallBack(convfrom, toucallback, touctxt, 0, 0, &err);
     if (U_FAILURE(err)) {
 	initMsg(pname);
 	u_wmsg("cantSetCallback", u_wmsg_errorName(err));
@@ -469,8 +466,7 @@ static UBool convertFile(const char *pname,
 	       u_wmsg_errorName(err));
 	goto error_exit;
     }
-    ucnv_setFromUCallBack(convto, fromucallback, fromuctxt,
-			  &oldfromucallback, &oldcontext, &err);
+    ucnv_setFromUCallBack(convto, fromucallback, fromuctxt, 0, 0, &err);
     if (U_FAILURE(err)) {
 	initMsg(pname);
 	u_wmsg("cantSetCallback", u_wmsg_errorName(err));
@@ -479,20 +475,21 @@ static UBool convertFile(const char *pname,
     ucnv_setFallback(convto, fallback);
 
     // To ensure that the buffer always is of enough size, we
-    // must take the worst case scenario, that is the character in the codepage
-    // that uses the most bytes and multiply it against the buffsize
+    // must take the worst case scenario, that is the character in
+    // the codepage that uses the most bytes and multiply it against
+    // the buffer size.
 
-    totbuffsize = buffsize * ucnv_getMaxCharSize(convto);
-    buff = new char[totbuffsize];
-    unibuff = new UChar[buffsize];
+    tobufsz = bufsz * ucnv_getMaxCharSize(convto);
+    buf = new char[tobufsz];
+    unibuf = new UChar[bufsz];
 
-    fromoffsets = new int32_t[buffsize];
-    tooffsets = new int32_t[totbuffsize];
+    fromoffsets = new int32_t[bufsz];
+    tooffsets = new int32_t[tobufsz];
 
     // OK, we can convert now.
 
     do {
-	rd = fread(buff, 1, readsize, infile);
+	rd = fread(buf, 1, bufsz, infile);
 	if (ferror(infile) != 0) {
 	    UnicodeString str(strerror(errno));
 	    str.append((UChar32) 0);
@@ -500,22 +497,25 @@ static UBool convertFile(const char *pname,
 	    u_wmsg("cantRead", str.getBuffer());
 	    goto error_exit;
 	}
-	// Convert the read buffer into the new coding
-	// After the call 'uniiter' will be placed on the last character that was converted
-	// in the 'unibuff'. 
-	// Also the 'cbuffiter' is positioned on the last converted character.
-	// At the last conversion in the file, flush should be set to true so that
-	// we get all characters converted
-	//
-	// The converter must be flushed at the end of conversion so that characters
-	// on hold also will be written
-	uniiter = unibuff;
-	cbuffiter = buff;
-	flush = rd != readsize;
-	ucnv_toUnicode(convfrom, &uniiter, uniiter + buffsize, &cbuffiter,
-		       cbuffiter + rd, fromoffsets, flush, &err);
 
-	foffset += cbuffiter - buff;
+	// Convert the read buffer into the new coding
+	// After the call 'unibufp' will be placed on the last
+        // character that was converted in the 'unibuf'. 
+	// Also the 'cbufp' is positioned on the last converted
+        // character.
+	// At the last conversion in the file, flush should be set to
+        // true so that we get all characters converted
+	//
+	// The converter must be flushed at the end of conversion so
+        // that characters on hold also will be written.
+
+	unibufp = unibuf;
+	cbufp = buf;
+	flush = rd != bufsz;
+	ucnv_toUnicode(convfrom, &unibufp, unibufp + bufsz, &cbufp,
+		       cbufp + rd, fromoffsets, flush, &err);
+
+	foffset += cbufp - buf;
 
 	if (U_FAILURE(err)) {
 	    char pos[32];
@@ -526,9 +526,11 @@ static UBool convertFile(const char *pname,
 		   u_wmsg_errorName(err));
 	    goto error_exit;
 	}
-	// At the last conversion, the converted characters should be equal to number
-	// of chars read.
-	if (flush && cbuffiter != (buff + rd)) {
+
+	// At the last conversion, the converted characters should be
+        // equal to number of chars read.
+
+	if (flush && cbufp != (buf + rd)) {
 	    char pos[32];
 	    sprintf(pos, "%u", foffset);
 	    UnicodeString str(pos, strlen(pos) + 1);
@@ -536,87 +538,99 @@ static UBool convertFile(const char *pname,
 	    u_wmsg("premEndInput", str.getBuffer());
 	    goto error_exit;
 	}
-	// Convert the Unicode buffer into the destination codepage
-	// Again 'buffiter' will be placed on the last converted character
-	// And 'cuniiter' will be placed on the last converted unicode character
-	// At the last conversion flush should be set to true to ensure that 
-	// all characters left get converted
 
-	UnicodeString u(unibuff, uniiter - unibuff);
-	buffiter = buff;
-	cuniiter = unibuff;
+        // Prepare to transliterate and convert.
+
+        if (t) {
+            u.setTo(unibuf, unibufp - unibuf); // Copy into string.
+        } else {
+            u.setTo(unibuf, unibufp - unibuf, bufsz); // Share the buffer.
+        }
+
+        // Transliterate if needed.
 
 	if (t) {
 	    t->transliterate(u);
-	    u.extract(0, u.length(), unibuff, 0);
-	    uniiter = unibuff + u.length();
-
 	}
 
-	ucnv_fromUnicode(convto, &buffiter, buffiter + totbuffsize,
-			 &cuniiter,
-			 cuniiter + (size_t) (uniiter - unibuff),
-			 tooffsets, flush, &err);
+        int32_t ulen = u.length();
 
-	if (U_FAILURE(err)) {
-	    char pos[32];
+	// Convert the Unicode buffer into the destination codepage
+	// Again 'bufp' will be placed on the last converted character
+	// And 'unibufbp' will be placed on the last converted unicode character
+	// At the last conversion flush should be set to true to ensure that 
+	// all characters left get converted
 
-	    uint32_t erroffset =
-		dataOffset(fromoffsets, buffiter - buff, tooffsets);
+        unibufbp = u.getBuffer();
 
-	    sprintf(pos, "%u", foffset - (uniiter - unibuff) + erroffset);
-	    UnicodeString str(pos, strlen(pos) + 1);
-	    initMsg(pname);
-	    u_wmsg("problemCvtFromU", str.getBuffer(),
-		   u_wmsg_errorName(err));
-	    goto error_exit;
-	}
-	// At the last conversion, the converted characters should be equal to number
-	// of consumed characters.
-	if (flush && cuniiter != (unibuff + (size_t) (uniiter - unibuff))) {
-	    char pos[32];
-	    sprintf(pos, "%u", foffset);
-	    UnicodeString str(pos, strlen(pos) + 1);
-	    initMsg(pname);
-	    u_wmsg("premEnd", str.getBuffer());
-	    goto error_exit;
-	}
-	// Finally, write the converted buffer to the output file
-	rd = (size_t) (buffiter - buff);
-	if (fwrite(buff, 1, rd, outfile) != rd) {
-	    UnicodeString str(strerror(errno), "");
-	    initMsg(pname);
-	    u_wmsg("cantWrite", str.getBuffer());
-	    goto error_exit;
-	}
+        do {
+            int32_t len = ulen > bufsz ? bufsz : ulen;
 
-    } while (!flush);		// Stop when we have flushed the converters (this means that it's the end of output)
+            bufp = buf;
+	    unibufp = (UChar *) (unibufbp + len);
+
+            ucnv_fromUnicode(convto, &bufp, bufp + tobufsz,
+                             &unibufbp,
+                             unibufp,
+                             tooffsets, flush, &err);
+            
+            if (U_FAILURE(err)) {
+                char pos[32];
+                
+                uint32_t erroffset =
+                    dataOffset(fromoffsets, bufp - buf, tooffsets);
+                
+                sprintf(pos, "%u", foffset - (unibufp - unibuf) + erroffset);
+                UnicodeString str(pos, strlen(pos) + 1);
+                initMsg(pname);
+                u_wmsg("problemCvtFromU", str.getBuffer(),
+                       u_wmsg_errorName(err));
+                goto error_exit;
+            }
+
+            // At the last conversion, the converted characters should be equal to number
+            // of consumed characters.
+            if (flush && unibufbp != (unibuf + (size_t) (unibufp - unibuf))) {
+                char pos[32];
+                sprintf(pos, "%u", foffset);
+                UnicodeString str(pos, strlen(pos) + 1);
+                initMsg(pname);
+                u_wmsg("premEnd", str.getBuffer());
+                goto error_exit;
+            }
+            
+            // Finally, write the converted buffer to the output file
+            
+            rd = (size_t) (bufp - buf);
+            if (fwrite(buf, 1, rd, outfile) != rd) {
+                UnicodeString str(strerror(errno), "");
+                initMsg(pname);
+                u_wmsg("cantWrite", str.getBuffer());
+                goto error_exit;
+            }
+        } while ((ulen -= bufsz) > 0);
+    } while (!flush);		// Stop when we have flushed the
+                                // converters (this means that it's
+                                // the end of output) 
 
     goto normal_exit;
 
- error_exit:
+error_exit:
     ret = FALSE;
 
- normal_exit:
-    // Close the created converters
+normal_exit:
+    // Cleanup.
 
-    if (convfrom)
-	ucnv_close(convfrom);
-    if (convto)
-	ucnv_close(convto);
+    if (convfrom) ucnv_close(convfrom);
+    if (convto)	ucnv_close(convto);
 
-    if (t)
-	delete t;
+    if (t) delete t;
 
-    if (buff)
-	delete[]buff;
-    if (unibuff)
-	delete[]unibuff;
+    if (buf) delete[] buf;
+    if (unibuf)	delete[] unibuf;
 
-    if (fromoffsets)
-	delete[]fromoffsets;
-    if (tooffsets)
-	delete[]tooffsets;
+    if (fromoffsets) delete[] fromoffsets;
+    if (tooffsets) delete[] tooffsets;
 
     if (infile != stdin) {
 	fclose(infile);
@@ -625,8 +639,7 @@ static UBool convertFile(const char *pname,
     return ret;
 }
 
-static void usage(const char *pname, int ecode)
-{
+static void usage(const char *pname, int ecode) {
     const UChar *msg;
     int32_t msgLen;
     UErrorCode err = U_ZERO_ERROR;
@@ -661,6 +674,8 @@ int main(int argc, char **argv)
     FILE *outfile;
     int ret = 0;
     int seenf = 0;
+
+    size_t bufsz = DEFAULT_BUFSZ;
 
     const char *fromcpage = 0;
     const char *tocpage = 0;
@@ -716,6 +731,20 @@ int main(int argc, char **argv)
 	    fallback = 1;
 	} else if (!strcmp("--no-fallback", *iter)) {
 	    fallback = 0;
+	} else if (strcmp("-b", *iter) == 0 || !strcmp("--block-size", *iter)) {
+	    iter++;
+	    if (iter != end) {
+		bufsz = atoi(*iter);
+                if ((int) bufsz <= 0) {
+                    initMsg(pname);
+		    UnicodeString str(*iter);
+		    initMsg(pname);
+		    u_wmsg("badBlockSize", str.getBuffer());
+		    return 3;
+                }
+            } else {
+		usage(pname, 1);
+            }
 	} else if (strcmp("-l", *iter) == 0 || !strcmp("--list", *iter)) {
 	    if (printTranslits) {
 		usage(pname, 1);
@@ -885,6 +914,8 @@ int main(int argc, char **argv)
 	    ;
 	} else if (!strcmp("--no-fallback", *iter)) {
 	    ;
+	} else if (strcmp("-b", *iter) == 0 || !strcmp("--block-size", *iter)) {
+	    iter++;
 	} else if (strcmp("-l", *iter) == 0 || !strcmp("--list", *iter)) {
 	    ;
 	} else if (strcmp("--default-code", *iter) == 0) {
@@ -921,7 +952,7 @@ int main(int argc, char **argv)
 	    seenf = 1;
 	    if (!convertFile
 		(pname, fromcpage, toucallback, touctxt, tocpage,
-		 fromucallback, fromuctxt, fallback, translit, *iter,
+		 fromucallback, fromuctxt, fallback, bufsz, translit, *iter,
 		 outfile, verbose)) {
 		goto error_exit;
 	    }
@@ -931,7 +962,7 @@ int main(int argc, char **argv)
     if (!seenf) {
 	if (!convertFile
 	    (pname, fromcpage, toucallback, touctxt, tocpage,
-	     fromucallback, fromuctxt, fallback, translit, 0, outfile,
+	     fromucallback, fromuctxt, fallback, bufsz, translit, 0, outfile,
 	     verbose)) {
 	    goto error_exit;
 	}
