@@ -23,6 +23,10 @@ ifeq ($(ENABLE_DEBUG),1)
 # /MDd means 'compiles and links a debugable multithreaded program with DLL'
 THREADSCFLAGS += /MDd
 THREADSCXXFLAGS += /MDd
+# The debug flags are defined here because configure can't handle them.
+CFLAGS+=/Zi
+CXXFLAGS+=/Zi
+LDFLAGS+=/DEBUG
 else
 # /MD means 'compiles and links a multithreaded program with DLL'
 THREADSCFLAGS += /MD

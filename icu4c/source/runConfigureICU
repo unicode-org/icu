@@ -265,9 +265,9 @@ case $platform in
         CXX=cl; export CXX
         RELEASE_CFLAGS='/O2 /Ob2'
         RELEASE_CXXFLAGS='/O2 /Ob2'
-        DEBUG_CFLAGS='/Zi'
-        DEBUG_CXXFLAGS='/Zi'
-        DEBUG_LDFLAGS='/DEBUG'
+        # The real debug flags are defined by the mh file because configure can't handle them.
+        DEBUG_CFLAGS=
+        DEBUG_CXXFLAGS=
         ;;
     MacOSX)
         THE_OS="MacOS X (Darwin)"
