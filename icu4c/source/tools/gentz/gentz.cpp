@@ -381,7 +381,7 @@ OffsetIndex* gentz::parseOffsetIndexTable(FileStream* in) {
         }
         int8_t* nextIndex = (int8_t*)&(zoneNumberArray[alignedCount]);
 	
-        index->nextEntryDelta = (i==(n-1)) ? 0 : (nextIndex - (int8_t*)index);
+        index->nextEntryDelta = (uint16_t) ((i==(n-1)) ? 0 : (nextIndex - (int8_t*)index));
         index = (OffsetIndex*)nextIndex;
     }
     offsetIndexSize = (int8_t*)index - (int8_t*)result;

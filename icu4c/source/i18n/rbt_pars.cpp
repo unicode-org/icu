@@ -196,6 +196,11 @@ public:
                     int32_t start) {
         return parser.syntaxError(code, rule, start);
     }
+
+private:
+    // Disallowed methods; no impl.
+    RuleHalf(const RuleHalf&);
+    RuleHalf& operator=(const RuleHalf&);
 };
 
 const UnicodeString RuleHalf::gOperators = OPERATORS;

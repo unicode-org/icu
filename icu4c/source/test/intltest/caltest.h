@@ -161,7 +161,7 @@ public:
     virtual void doYEAR_WOYLoop(Calendar *cal, 
         SimpleDateFormat *sdf, int32_t times, UErrorCode& status);
     // test subroutine used by TestDOW_LOCALandYEAR_WOY
-    virtual void loop_addroll(Calendar *cal, SimpleDateFormat *sdf, 
+    virtual void loop_addroll(Calendar *cal, /*SimpleDateFormat *sdf, */
         int times, Calendar::EDateFields field, Calendar::EDateFields field2, 
         UErrorCode& errorCode);
 

@@ -37,7 +37,7 @@ Formattable::Formattable()
 // -------------------------------------
 // Creates a formattable object with a Date instance.
 
-Formattable::Formattable(UDate date, ISDATE isDate)
+Formattable::Formattable(UDate date, ISDATE /*isDate*/)
     :   fType(kDate)
 {
     fValue.fDate = date;

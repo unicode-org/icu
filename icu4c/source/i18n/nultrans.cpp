@@ -15,7 +15,7 @@ Transliterator* NullTransliterator::clone(void) const {
     return new NullTransliterator();
 }
 
-void NullTransliterator::handleTransliterate(Replaceable& text, UTransPosition& offsets,
-                                             UBool isIncremental) const {
+void NullTransliterator::handleTransliterate(Replaceable& /*text*/, UTransPosition& offsets,
+                                             UBool /*isIncremental*/) const {
     offsets.start = offsets.limit;
 }

@@ -187,6 +187,10 @@ private:
                                  UChar c);
 
     friend class RuleHalf;
+
+    // Disallowed methods; no impl.
+    TransliterationRuleParser(const TransliterationRuleParser&);
+    TransliterationRuleParser& operator=(const TransliterationRuleParser&);
 };
 
 #endif

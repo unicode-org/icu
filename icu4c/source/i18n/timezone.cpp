@@ -137,8 +137,8 @@ void TimeZone::loadZoneData() {
  * udata callback to verify the zone data.
  */
 UBool U_CALLCONV
-TimeZone::isDataAcceptable(void *context,
-                           const char *type, const char *name,
+TimeZone::isDataAcceptable(void * /*context*/,
+                           const char * /*type*/, const char * /*name*/,
                            const UDataInfo *pInfo) {
     return
         pInfo->size >= sizeof(UDataInfo) &&
