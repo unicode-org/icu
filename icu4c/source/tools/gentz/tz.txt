@@ -1,10 +1,10 @@
 1999 # (tzdata1999j) version of Olson zone
 10 #  data from ftp://elsie.nci.nih.gov
-416 # total zone count
+417 # total zone count
 41 # max count of zones with same gmtOffset
 25 # max name length not incl final zero
-6022 # length of name table in bytes
-222 # count of standard zones to follow
+6026 # length of name table in bytes
+223 # count of standard zones to follow
 20,0 # Africa/Abidjan GMT+0:00
 48,10800 # Africa/Addis_Ababa GMT+3:00
 67,3600 # Africa/Algiers GMT+1:00
@@ -174,59 +174,60 @@
 4495,0 # Etc/UCT GMT+0
 4503,0 # Etc/UTC GMT+0
 5018,7200 # Europe/Tallinn GMT+2:00
-5167,-36000 # HST GMT-10:00
-5171,-18000 # IET GMT-5:00
-5175,19800 # IST GMT+5:30
-5179,10800 # Indian/Antananarivo GMT+3:00
-5199,18000 # Indian/Chagos GMT+5:00
-5213,25200 # Indian/Christmas GMT+7:00
-5230,23400 # Indian/Cocos GMT+6:30
-5243,10800 # Indian/Comoro GMT+3:00
-5257,18000 # Indian/Kerguelen GMT+5:00
-5274,14400 # Indian/Mahe GMT+4:00
-5286,18000 # Indian/Maldives GMT+5:00
-5302,14400 # Indian/Mauritius GMT+4:00
-5319,10800 # Indian/Mayotte GMT+3:00
-5334,14400 # Indian/Reunion GMT+4:00
-5349,32400 # JST GMT+9:00
-5357,-39600 # MIT GMT-11:00
-5373,18000 # PLT GMT+5:00
-5377,-25200 # PNT GMT-7:00
-5381,-14400 # PRT GMT-4:00
-5389,-39600 # Pacific/Apia GMT-11:00
-5464,46800 # Pacific/Enderbury GMT+13:00
-5482,-36000 # Pacific/Fakaofo GMT-10:00
-5511,43200 # Pacific/Funafuti GMT+12:00
-5528,-21600 # Pacific/Galapagos GMT-6:00
-5546,-32400 # Pacific/Gambier GMT-9:00
-5562,39600 # Pacific/Guadalcanal GMT+11:00
-5582,36000 # Pacific/Guam GMT+10:00
-5595,-36000 # Pacific/Honolulu GMT-10:00
-5612,-36000 # Pacific/Johnston GMT-10:00
-5629,50400 # Pacific/Kiritimati GMT+14:00
-5648,39600 # Pacific/Kosrae GMT+11:00
-5663,43200 # Pacific/Kwajalein GMT+12:00
-5681,43200 # Pacific/Majuro GMT+12:00
-5696,-34200 # Pacific/Marquesas GMT-9:30
-5714,-39600 # Pacific/Midway GMT-11:00
-5729,43200 # Pacific/Nauru GMT+12:00
-5743,-39600 # Pacific/Niue GMT-11:00
-5756,41400 # Pacific/Norfolk GMT+11:30
-5787,-39600 # Pacific/Pago_Pago GMT-11:00
-5805,32400 # Pacific/Palau GMT+9:00
-5819,-28800 # Pacific/Pitcairn GMT-8:00
-5836,39600 # Pacific/Ponape GMT+11:00
-5851,36000 # Pacific/Port_Moresby GMT+10:00
-5890,36000 # Pacific/Saipan GMT+10:00
-5905,-36000 # Pacific/Tahiti GMT-10:00
-5920,43200 # Pacific/Tarawa GMT+12:00
-5953,36000 # Pacific/Truk GMT+10:00
-5966,43200 # Pacific/Wake GMT+12:00
-5979,43200 # Pacific/Wallis GMT+12:00
-5994,36000 # Pacific/Yap GMT+10:00
-6006,39600 # SST GMT+11:00
-6010,0 # UTC GMT+0
-6014,25200 # VST GMT+7:00
+5167,0 # GMT GMT+0:00
+5171,-36000 # HST GMT-10:00
+5175,-18000 # IET GMT-5:00
+5179,19800 # IST GMT+5:30
+5183,10800 # Indian/Antananarivo GMT+3:00
+5203,18000 # Indian/Chagos GMT+5:00
+5217,25200 # Indian/Christmas GMT+7:00
+5234,23400 # Indian/Cocos GMT+6:30
+5247,10800 # Indian/Comoro GMT+3:00
+5261,18000 # Indian/Kerguelen GMT+5:00
+5278,14400 # Indian/Mahe GMT+4:00
+5290,18000 # Indian/Maldives GMT+5:00
+5306,14400 # Indian/Mauritius GMT+4:00
+5323,10800 # Indian/Mayotte GMT+3:00
+5338,14400 # Indian/Reunion GMT+4:00
+5353,32400 # JST GMT+9:00
+5361,-39600 # MIT GMT-11:00
+5377,18000 # PLT GMT+5:00
+5381,-25200 # PNT GMT-7:00
+5385,-14400 # PRT GMT-4:00
+5393,-39600 # Pacific/Apia GMT-11:00
+5468,46800 # Pacific/Enderbury GMT+13:00
+5486,-36000 # Pacific/Fakaofo GMT-10:00
+5515,43200 # Pacific/Funafuti GMT+12:00
+5532,-21600 # Pacific/Galapagos GMT-6:00
+5550,-32400 # Pacific/Gambier GMT-9:00
+5566,39600 # Pacific/Guadalcanal GMT+11:00
+5586,36000 # Pacific/Guam GMT+10:00
+5599,-36000 # Pacific/Honolulu GMT-10:00
+5616,-36000 # Pacific/Johnston GMT-10:00
+5633,50400 # Pacific/Kiritimati GMT+14:00
+5652,39600 # Pacific/Kosrae GMT+11:00
+5667,43200 # Pacific/Kwajalein GMT+12:00
+5685,43200 # Pacific/Majuro GMT+12:00
+5700,-34200 # Pacific/Marquesas GMT-9:30
+5718,-39600 # Pacific/Midway GMT-11:00
+5733,43200 # Pacific/Nauru GMT+12:00
+5747,-39600 # Pacific/Niue GMT-11:00
+5760,41400 # Pacific/Norfolk GMT+11:30
+5791,-39600 # Pacific/Pago_Pago GMT-11:00
+5809,32400 # Pacific/Palau GMT+9:00
+5823,-28800 # Pacific/Pitcairn GMT-8:00
+5840,39600 # Pacific/Ponape GMT+11:00
+5855,36000 # Pacific/Port_Moresby GMT+10:00
+5894,36000 # Pacific/Saipan GMT+10:00
+5909,-36000 # Pacific/Tahiti GMT-10:00
+5924,43200 # Pacific/Tarawa GMT+12:00
+5957,36000 # Pacific/Truk GMT+10:00
+5970,43200 # Pacific/Wake GMT+12:00
+5983,43200 # Pacific/Wallis GMT+12:00
+5998,36000 # Pacific/Yap GMT+10:00
+6010,39600 # SST GMT+11:00
+6014,0 # UTC GMT+0
+6018,25200 # VST GMT+7:00
 end
 194 # count of dst zones to follow
 0,34200,9,3,0,120,w,2,-1,1,120,w,60 # ACT GMT+9:30 Oct 3 2:00 Mar lastSun 2:00 1:00
@@ -409,22 +410,22 @@ end
 5121,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Warsaw GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
 5135,7200,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Zaporozhye GMT+2:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
 5153,3600,2,-1,1,60,u,9,-1,1,60,u,60 # Europe/Zurich GMT+1:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
-5353,3600,2,-1,1,120,s,9,-1,1,120,s,60 # MET GMT+1:00 Mar lastSun 2:00s Oct lastSun 2:00s 1:00
-5361,-25200,3,1,-1,120,w,9,-1,1,120,w,60 # MST GMT-7:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
-5365,14400,2,-1,1,120,s,9,-1,1,120,s,60 # NET GMT+4:00 Mar lastSun 2:00s Oct lastSun 2:00s 1:00
-5369,43200,9,1,-1,120,s,2,15,-1,120,s,60 # NST GMT+12:00 Oct Sun>=1 2:00s Mar Sun>=15 2:00s 1:00
-5385,-28800,3,1,-1,120,w,9,-1,1,120,w,60 # PST GMT-8:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
-5402,43200,9,1,-1,120,s,2,15,-1,120,s,60 # Pacific/Auckland GMT+12:00 Oct Sun>=1 2:00s Mar Sun>=15 2:00s 1:00
-5419,45900,9,1,-1,165,s,2,15,-1,165,s,60 # Pacific/Chatham GMT+12:45 Oct Sun>=1 2:45s Mar Sun>=15 2:45s 1:00
-5435,-21600,9,9,-1,0,w,3,4,0,0,w,60 # Pacific/Easter GMT-6:00 Oct Sun>=9 0:00 Apr 4 0:00 1:00
-5450,39600,9,23,-1,0,w,0,23,-1,0,w,60 # Pacific/Efate GMT+11:00 Oct Sun>=23 0:00 Jan Sun>=23 0:00 1:00
-5498,43200,10,1,-1,120,w,1,-1,1,180,w,60 # Pacific/Fiji GMT+12:00 Nov Sun>=1 2:00 Feb lastSun 3:00 1:00
-5772,39600,11,1,0,120,s,2,2,0,120,s,60 # Pacific/Noumea GMT+11:00 Dec 1 2:00s Mar 2 2:00s 1:00
-5872,-36000,9,-1,1,0,w,2,1,-1,0,w,30 # Pacific/Rarotonga GMT-10:00 Oct lastSun 0:00 Mar Sun>=1 0:00 0:30
-5935,46800,9,1,-7,120,s,3,16,-1,120,s,60 # Pacific/Tongatapu GMT+13:00 Oct Sat>=1 2:00s Apr Sun>=16 2:00s 1:00
-6018,0,2,-1,1,60,u,9,-1,1,60,u,60 # WET GMT+0:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
+5357,3600,2,-1,1,120,s,9,-1,1,120,s,60 # MET GMT+1:00 Mar lastSun 2:00s Oct lastSun 2:00s 1:00
+5365,-25200,3,1,-1,120,w,9,-1,1,120,w,60 # MST GMT-7:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+5369,14400,2,-1,1,120,s,9,-1,1,120,s,60 # NET GMT+4:00 Mar lastSun 2:00s Oct lastSun 2:00s 1:00
+5373,43200,9,1,-1,120,s,2,15,-1,120,s,60 # NST GMT+12:00 Oct Sun>=1 2:00s Mar Sun>=15 2:00s 1:00
+5389,-28800,3,1,-1,120,w,9,-1,1,120,w,60 # PST GMT-8:00 Apr Sun>=1 2:00 Oct lastSun 2:00 1:00
+5406,43200,9,1,-1,120,s,2,15,-1,120,s,60 # Pacific/Auckland GMT+12:00 Oct Sun>=1 2:00s Mar Sun>=15 2:00s 1:00
+5423,45900,9,1,-1,165,s,2,15,-1,165,s,60 # Pacific/Chatham GMT+12:45 Oct Sun>=1 2:45s Mar Sun>=15 2:45s 1:00
+5439,-21600,9,9,-1,0,w,3,4,0,0,w,60 # Pacific/Easter GMT-6:00 Oct Sun>=9 0:00 Apr 4 0:00 1:00
+5454,39600,9,23,-1,0,w,0,23,-1,0,w,60 # Pacific/Efate GMT+11:00 Oct Sun>=23 0:00 Jan Sun>=23 0:00 1:00
+5502,43200,10,1,-1,120,w,1,-1,1,180,w,60 # Pacific/Fiji GMT+12:00 Nov Sun>=1 2:00 Feb lastSun 3:00 1:00
+5776,39600,11,1,0,120,s,2,2,0,120,s,60 # Pacific/Noumea GMT+11:00 Dec 1 2:00s Mar 2 2:00s 1:00
+5876,-36000,9,-1,1,0,w,2,1,-1,0,w,30 # Pacific/Rarotonga GMT-10:00 Oct lastSun 0:00 Mar Sun>=1 0:00 0:30
+5939,46800,9,1,-7,120,s,3,16,-1,120,s,60 # Pacific/Tongatapu GMT+13:00 Oct Sat>=1 2:00s Apr Sun>=16 2:00s 1:00
+6022,0,2,-1,1,60,u,9,-1,1,60,u,60 # WET GMT+0:00 Mar lastSun 1:00u Oct lastSun 1:00u 1:00
 end
-416 # count of names to follow
+417 # count of names to follow
 ACT
 AET
 AGT
@@ -774,6 +775,7 @@ Europe/Vilnius
 Europe/Warsaw
 Europe/Zaporozhye
 Europe/Zurich
+GMT
 HST
 IET
 IST
@@ -842,7 +844,7 @@ UTC
 VST
 WET
 end
-416 # count of name index table entries to follow
+417 # count of name index table entries to follow
 d0 # ACT
 d1 # AET
 d2 # AGT
@@ -1192,112 +1194,113 @@ d176 # Europe/Vilnius
 d177 # Europe/Warsaw
 d178 # Europe/Zaporozhye
 d179 # Europe/Zurich
-s169 # HST
-s170 # IET
-s171 # IST
-s172 # Indian/Antananarivo
-s173 # Indian/Chagos
-s174 # Indian/Christmas
-s175 # Indian/Cocos
-s176 # Indian/Comoro
-s177 # Indian/Kerguelen
-s178 # Indian/Mahe
-s179 # Indian/Maldives
-s180 # Indian/Mauritius
-s181 # Indian/Mayotte
-s182 # Indian/Reunion
-s183 # JST
+s169 # GMT
+s170 # HST
+s171 # IET
+s172 # IST
+s173 # Indian/Antananarivo
+s174 # Indian/Chagos
+s175 # Indian/Christmas
+s176 # Indian/Cocos
+s177 # Indian/Comoro
+s178 # Indian/Kerguelen
+s179 # Indian/Mahe
+s180 # Indian/Maldives
+s181 # Indian/Mauritius
+s182 # Indian/Mayotte
+s183 # Indian/Reunion
+s184 # JST
 d180 # MET
-s184 # MIT
+s185 # MIT
 d181 # MST
 d182 # NET
 d183 # NST
-s185 # PLT
-s186 # PNT
-s187 # PRT
+s186 # PLT
+s187 # PNT
+s188 # PRT
 d184 # PST
-s188 # Pacific/Apia
+s189 # Pacific/Apia
 d185 # Pacific/Auckland
 d186 # Pacific/Chatham
 d187 # Pacific/Easter
 d188 # Pacific/Efate
-s189 # Pacific/Enderbury
-s190 # Pacific/Fakaofo
+s190 # Pacific/Enderbury
+s191 # Pacific/Fakaofo
 d189 # Pacific/Fiji
-s191 # Pacific/Funafuti
-s192 # Pacific/Galapagos
-s193 # Pacific/Gambier
-s194 # Pacific/Guadalcanal
-s195 # Pacific/Guam
-s196 # Pacific/Honolulu
-s197 # Pacific/Johnston
-s198 # Pacific/Kiritimati
-s199 # Pacific/Kosrae
-s200 # Pacific/Kwajalein
-s201 # Pacific/Majuro
-s202 # Pacific/Marquesas
-s203 # Pacific/Midway
-s204 # Pacific/Nauru
-s205 # Pacific/Niue
-s206 # Pacific/Norfolk
+s192 # Pacific/Funafuti
+s193 # Pacific/Galapagos
+s194 # Pacific/Gambier
+s195 # Pacific/Guadalcanal
+s196 # Pacific/Guam
+s197 # Pacific/Honolulu
+s198 # Pacific/Johnston
+s199 # Pacific/Kiritimati
+s200 # Pacific/Kosrae
+s201 # Pacific/Kwajalein
+s202 # Pacific/Majuro
+s203 # Pacific/Marquesas
+s204 # Pacific/Midway
+s205 # Pacific/Nauru
+s206 # Pacific/Niue
+s207 # Pacific/Norfolk
 d190 # Pacific/Noumea
-s207 # Pacific/Pago_Pago
-s208 # Pacific/Palau
-s209 # Pacific/Pitcairn
-s210 # Pacific/Ponape
-s211 # Pacific/Port_Moresby
+s208 # Pacific/Pago_Pago
+s209 # Pacific/Palau
+s210 # Pacific/Pitcairn
+s211 # Pacific/Ponape
+s212 # Pacific/Port_Moresby
 d191 # Pacific/Rarotonga
-s212 # Pacific/Saipan
-s213 # Pacific/Tahiti
-s214 # Pacific/Tarawa
+s213 # Pacific/Saipan
+s214 # Pacific/Tahiti
+s215 # Pacific/Tarawa
 d192 # Pacific/Tongatapu
-s215 # Pacific/Truk
-s216 # Pacific/Wake
-s217 # Pacific/Wallis
-s218 # Pacific/Yap
-s219 # SST
-s220 # UTC
-s221 # VST
+s216 # Pacific/Truk
+s217 # Pacific/Wake
+s218 # Pacific/Wallis
+s219 # Pacific/Yap
+s220 # SST
+s221 # UTC
+s222 # VST
 d193 # WET
 end
 39 # index by offset entries to follow
--43200,1,280
--39600,6,279,365,373,393,395,398
--36000,8,57,278,349,379,386,387,403,405
--34200,1,392
--32400,7,4,58,110,130,163,288,383
--28800,8,83,113,158,160,161,287,372,400
--25200,12,69,78,84,85,88,106,119,135,164,286,366,370
--21600,22,66,71,72,77,80,89,97,107,116,121,122,133,141,142,143,154,155,162,270,285,376,382
--18000,24,68,76,86,94,98,101,102,103,104,105,108,112,114,125,127,128,129,132,136,138,157,275,284,350
--14400,36,59,60,62,63,64,67,73,81,82,87,91,93,95,96,99,100,111,117,118,126,137,139,140,145,146,150,151,152,153,156,159,170,245,254,283,371
--12600,2,149,269
--10800,19,2,61,65,70,74,75,79,90,92,109,115,120,123,124,134,144,147,265,282
--7200,3,131,252,281
--3600,5,148,244,247,249,277
-0,30,5,6,10,12,13,18,20,21,25,26,36,45,49,50,52,53,246,248,250,251,253,276,303,304,308,316,322,323,413,415
-3600,41,8,11,15,19,24,33,34,35,37,40,47,48,51,55,56,268,273,289,305,306,309,310,311,313,315,317,324,325,326,328,330,331,332,334,338,340,343,344,346,348,364
-7200,39,3,14,16,17,27,28,29,31,32,38,39,41,42,43,54,174,183,190,194,200,214,267,274,295,307,312,314,318,319,320,321,327,333,336,337,339,342,345,347
-10800,21,7,9,22,23,30,44,46,171,172,179,180,209,219,221,272,296,329,341,352,356,361
-11224,3,222,223,224
-12600,1,233
-14400,12,176,181,192,213,232,243,297,335,358,360,362,367
-16200,1,201
-18000,13,177,178,184,193,203,226,231,242,298,353,357,359,369
-19800,2,186,351
-20700,1,205
-21600,9,168,173,188,189,215,216,234,266,299
-23400,2,220,355
-25200,10,166,182,198,206,217,225,239,300,354,414
-28800,21,165,185,187,191,195,196,197,204,207,208,210,212,228,229,230,236,237,238,263,271,301
-32400,8,199,218,227,235,241,302,363,399
-34200,4,0,255,257,258
-36000,14,1,167,240,256,259,260,262,264,290,385,402,404,408,411
-37800,1,261
-39600,8,211,291,377,384,389,397,401,412
-41400,1,396
-43200,14,169,175,202,292,368,374,380,381,390,391,394,406,409,410
-45900,1,375
-46800,3,293,378,407
-50400,2,294,388
+-43200,280,1,280 # -12:00 d=Etc/GMT+12 Etc/GMT+12
+-39600,374,6,279,366,374,394,396,399 # -11:00 d=Pacific/Apia Etc/GMT+11 MIT Pacific/Apia Pacific/Midway Pacific/Niue Pacific/Pago_Pago
+-36000,387,8,57,278,350,380,387,388,404,406 # -10:00 d=Pacific/Honolulu America/Adak Etc/GMT+10 HST Pacific/Fakaofo Pacific/Honolulu Pacific/Johnston Pacific/Rarotonga Pacific/Tahiti
+-34200,393,1,393 # -9:30 d=Pacific/Marquesas Pacific/Marquesas
+-32400,58,7,4,58,110,130,163,288,384 # -9:00 d=America/Anchorage AST America/Anchorage America/Juneau America/Nome America/Yakutat Etc/GMT+9 Pacific/Gambier
+-28800,113,8,83,113,158,160,161,287,373,401 # -8:00 d=America/Los_Angeles America/Dawson America/Los_Angeles America/Tijuana America/Vancouver America/Whitehorse Etc/GMT+8 PST Pacific/Pitcairn
+-25200,85,12,69,78,84,85,88,106,119,135,164,286,367,371 # -7:00 d=America/Denver America/Boise America/Chihuahua America/Dawson_Creek America/Denver America/Edmonton America/Inuvik America/Mazatlan America/Phoenix America/Yellowknife Etc/GMT+7 MST PNT
+-21600,77,22,66,71,72,77,80,89,97,107,116,121,122,133,141,142,143,154,155,162,270,285,377,383 # -6:00 d=America/Chicago America/Belize America/Cambridge_Bay America/Cancun America/Chicago America/Costa_Rica America/El_Salvador America/Guatemala America/Iqaluit America/Managua America/Menominee America/Mexico_City America/Pangnirtung America/Rainy_River America/Rankin_Inlet America/Regina America/Swift_Current America/Tegucigalpa America/Winnipeg CST Etc/GMT+6 Pacific/Easter Pacific/Galapagos
+-18000,105,24,68,76,86,94,98,101,102,103,104,105,108,112,114,125,127,128,129,132,136,138,157,275,284,351 # -5:00 d=America/Indianapolis America/Bogota America/Cayman America/Detroit America/Grand_Turk America/Guayaquil America/Havana America/Indiana/Knox America/Indiana/Marengo America/Indiana/Vevay America/Indianapolis America/Jamaica America/Lima America/Louisville America/Montreal America/Nassau America/New_York America/Nipigon America/Panama America/Port-au-Prince America/Porto_Acre America/Thunder_Bay EST Etc/GMT+5 IET
+-14400,140,36,59,60,62,63,64,67,73,81,82,87,91,93,95,96,99,100,111,117,118,126,137,139,140,145,146,150,151,152,153,156,159,170,245,254,283,372 # -4:00 d=America/Puerto_Rico America/Anguilla America/Antigua America/Aruba America/Asuncion America/Barbados America/Boa_Vista America/Caracas America/Cuiaba America/Curacao America/Dominica America/Glace_Bay America/Goose_Bay America/Grenada America/Guadeloupe America/Guyana America/Halifax America/La_Paz America/Manaus America/Martinique America/Montserrat America/Port_of_Spain America/Porto_Velho America/Puerto_Rico America/Santiago America/Santo_Domingo America/St_Kitts America/St_Lucia America/St_Thomas America/St_Vincent America/Thule America/Tortola Antarctica/Palmer Atlantic/Bermuda Atlantic/Stanley Etc/GMT+4 PRT
+-12600,149,2,149,269 # -3:30 d=America/St_Johns America/St_Johns CNT
+-10800,70,19,2,61,65,70,74,75,79,90,92,109,115,120,123,124,134,144,147,265,282 # -3:00 d=America/Buenos_Aires AGT America/Araguaina America/Belem America/Buenos_Aires America/Catamarca America/Cayenne America/Cordoba America/Fortaleza America/Godthab America/Jujuy America/Maceio America/Mendoza America/Miquelon America/Montevideo America/Paramaribo America/Rosario America/Sao_Paulo BET Etc/GMT+3
+-7200,131,3,131,252,281 # -2:00 d=America/Noronha America/Noronha Atlantic/South_Georgia Etc/GMT+2
+-3600,244,5,148,244,247,249,277 # -1:00 d=Atlantic/Azores America/Scoresbysund Atlantic/Azores Atlantic/Cape_Verde Atlantic/Jan_Mayen Etc/GMT+1
+0,349,31,5,6,10,12,13,18,20,21,25,26,36,45,49,50,52,53,246,248,250,251,253,276,303,304,308,316,322,323,349,414,416 # +0:00 d=GMT Africa/Abidjan Africa/Accra Africa/Bamako Africa/Banjul Africa/Bissau Africa/Casablanca Africa/Conakry Africa/Dakar Africa/El_Aaiun Africa/Freetown Africa/Lome Africa/Monrovia Africa/Nouakchott Africa/Ouagadougou Africa/Sao_Tome Africa/Timbuktu Atlantic/Canary Atlantic/Faeroe Atlantic/Madeira Atlantic/Reykjavik Atlantic/St_Helena Etc/GMT Etc/UCT Etc/UTC Europe/Belfast Europe/Dublin Europe/Lisbon Europe/London GMT UTC WET
+3600,331,41,8,11,15,19,24,33,34,35,37,40,47,48,51,55,56,268,273,289,305,306,309,310,311,313,315,317,324,325,326,328,330,331,332,334,338,340,343,344,346,348,365 # +1:00 d=Europe/Paris Africa/Algiers Africa/Bangui Africa/Brazzaville Africa/Ceuta Africa/Douala Africa/Kinshasa Africa/Lagos Africa/Libreville Africa/Luanda Africa/Malabo Africa/Ndjamena Africa/Niamey Africa/Porto-Novo Africa/Tunis Africa/Windhoek CET ECT Etc/GMT-1 Europe/Amsterdam Europe/Andorra Europe/Belgrade Europe/Berlin Europe/Brussels Europe/Budapest Europe/Copenhagen Europe/Gibraltar Europe/Luxembourg Europe/Madrid Europe/Malta Europe/Monaco Europe/Oslo Europe/Paris Europe/Prague Europe/Rome Europe/Stockholm Europe/Tirane Europe/Vaduz Europe/Vienna Europe/Warsaw Europe/Zurich MET
+7200,17,39,3,14,16,17,27,28,29,31,32,38,39,41,42,43,54,174,183,190,194,200,214,267,274,295,307,312,314,318,319,320,321,327,333,336,337,339,342,345,347 # +2:00 d=Africa/Cairo ART Africa/Blantyre Africa/Bujumbura Africa/Cairo Africa/Gaborone Africa/Harare Africa/Johannesburg Africa/Khartoum Africa/Kigali Africa/Lubumbashi Africa/Lusaka Africa/Maputo Africa/Maseru Africa/Mbabane Africa/Tripoli Asia/Amman Asia/Beirut Asia/Damascus Asia/Gaza Asia/Jerusalem Asia/Nicosia CAT EET Etc/GMT-2 Europe/Athens Europe/Bucharest Europe/Chisinau Europe/Helsinki Europe/Istanbul Europe/Kaliningrad Europe/Kiev Europe/Minsk Europe/Riga Europe/Simferopol Europe/Sofia Europe/Tallinn Europe/Uzhgorod Europe/Vilnius Europe/Zaporozhye
+10800,7,21,7,9,22,23,30,44,46,171,172,179,180,209,219,221,272,296,329,341,353,357,362 # +3:00 d=Africa/Addis_Ababa Africa/Addis_Ababa Africa/Asmera Africa/Dar_es_Salaam Africa/Djibouti Africa/Kampala Africa/Mogadishu Africa/Nairobi Antarctica/Syowa Asia/Aden Asia/Baghdad Asia/Bahrain Asia/Kuwait Asia/Qatar Asia/Riyadh EAT Etc/GMT-3 Europe/Moscow Europe/Tiraspol Indian/Antananarivo Indian/Comoro Indian/Mayotte
+11224,224,3,222,223,224 # +3:07:04 d=Asia/Riyadh89 Asia/Riyadh87 Asia/Riyadh88 Asia/Riyadh89
+12600,233,1,233 # +3:30 d=Asia/Tehran Asia/Tehran
+14400,243,12,176,181,192,213,232,243,297,335,359,361,363,368 # +4:00 d=Asia/Yerevan Asia/Aqtau Asia/Baku Asia/Dubai Asia/Muscat Asia/Tbilisi Asia/Yerevan Etc/GMT-4 Europe/Samara Indian/Mahe Indian/Mauritius Indian/Reunion NET
+16200,201,1,201 # +4:30 d=Asia/Kabul Asia/Kabul
+18000,203,13,177,178,184,193,203,226,231,242,298,354,358,360,370 # +5:00 d=Asia/Karachi Asia/Aqtobe Asia/Ashkhabad Asia/Bishkek Asia/Dushanbe Asia/Karachi Asia/Samarkand Asia/Tashkent Asia/Yekaterinburg Etc/GMT-5 Indian/Chagos Indian/Kerguelen Indian/Maldives PLT
+19800,186,2,186,352 # +5:30 d=Asia/Calcutta Asia/Calcutta IST
+20700,205,1,205 # +5:45 d=Asia/Katmandu Asia/Katmandu
+21600,189,9,168,173,188,189,215,216,234,266,299 # +6:00 d=Asia/Dacca Antarctica/Mawson Asia/Almaty Asia/Colombo Asia/Dacca Asia/Novosibirsk Asia/Omsk Asia/Thimbu BST Etc/GMT-6
+23400,220,2,220,356 # +6:30 d=Asia/Rangoon Asia/Rangoon Indian/Cocos
+25200,225,10,166,182,198,206,217,225,239,300,355,415 # +7:00 d=Asia/Saigon Antarctica/Davis Asia/Bangkok Asia/Jakarta Asia/Krasnoyarsk Asia/Phnom_Penh Asia/Saigon Asia/Vientiane Etc/GMT-7 Indian/Christmas VST
+28800,228,21,165,185,187,191,195,196,197,204,207,208,210,212,228,229,230,236,237,238,263,271,301 # +8:00 d=Asia/Shanghai Antarctica/Casey Asia/Brunei Asia/Chungking Asia/Dili Asia/Harbin Asia/Hong_Kong Asia/Irkutsk Asia/Kashgar Asia/Kuala_Lumpur Asia/Kuching Asia/Macao Asia/Manila Asia/Shanghai Asia/Singapore Asia/Taipei Asia/Ujung_Pandang Asia/Ulan_Bator Asia/Urumqi Australia/Perth CTT Etc/GMT-8
+32400,235,8,199,218,227,235,241,302,364,400 # +9:00 d=Asia/Tokyo Asia/Jayapura Asia/Pyongyang Asia/Seoul Asia/Tokyo Asia/Yakutsk Etc/GMT-9 JST Pacific/Palau
+34200,258,4,0,255,257,258 # +9:30 d=Australia/Darwin ACT Australia/Adelaide Australia/Broken_Hill Australia/Darwin
+36000,264,14,1,167,240,256,259,260,262,264,290,386,403,405,409,412 # +10:00 d=Australia/Sydney AET Antarctica/DumontDUrville Asia/Vladivostok Australia/Brisbane Australia/Hobart Australia/Lindeman Australia/Melbourne Australia/Sydney Etc/GMT-10 Pacific/Guam Pacific/Port_Moresby Pacific/Saipan Pacific/Truk Pacific/Yap
+37800,261,1,261 # +10:30 d=Australia/Lord_Howe Australia/Lord_Howe
+39600,385,8,211,291,378,385,390,398,402,413 # +11:00 d=Pacific/Guadalcanal Asia/Magadan Etc/GMT-11 Pacific/Efate Pacific/Guadalcanal Pacific/Kosrae Pacific/Noumea Pacific/Ponape SST
+41400,397,1,397 # +11:30 d=Pacific/Norfolk Pacific/Norfolk
+43200,375,14,169,175,202,292,369,375,381,382,391,392,395,407,410,411 # +12:00 d=Pacific/Auckland Antarctica/McMurdo Asia/Anadyr Asia/Kamchatka Etc/GMT-12 NST Pacific/Auckland Pacific/Fiji Pacific/Funafuti Pacific/Kwajalein Pacific/Majuro Pacific/Nauru Pacific/Tarawa Pacific/Wake Pacific/Wallis
+45900,376,1,376 # +12:45 d=Pacific/Chatham Pacific/Chatham
+46800,379,3,293,379,408 # +13:00 d=Pacific/Enderbury Etc/GMT-13 Pacific/Enderbury Pacific/Tongatapu
+50400,389,2,294,389 # +14:00 d=Pacific/Kiritimati Etc/GMT-14 Pacific/Kiritimati
 end

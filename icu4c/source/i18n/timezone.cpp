@@ -299,17 +299,30 @@ TimeZone::initDefault()
             // is in use or not and possibly using the host locale to
             // select from multiple zones at a the same offset.  We
             // don't do any of this now, but we could easily add this.
-            if (fgDefaultZone == 0) {
-                // Use the first entry in the time zone list that has the
+            if (fgDefaultZone == 0 && DATA != 0) {
+                // Use the designated default in the time zone list that has the
                 // appropriate GMT offset, if there is one.
 
-                int32_t numMatches = 0;
-                const UnicodeString** matches =
-                    createAvailableIDs(rawOffset, numMatches);
-                if (numMatches > 0) {
-                    fgDefaultZone = createTimeZone(*matches[0]);
+                const OffsetIndex* index = INDEX_BY_OFFSET;
+                
+                for (;;) {
+                    if (index->gmtOffset > rawOffset) {
+                        // Went past our desired offset; no match found
+                        break;
+                    }
+                    if (index->gmtOffset == rawOffset) {
+                        // Found our desired offset
+                        fgDefaultZone = createTimeZone(ZONE_IDS[index->defaultZone]);
+                        break;
+                    }
+                    // Compute the position of the next entry.  If the delta value
+                    // in this entry is zero, then there is no next entry.
+                    uint16_t delta = index->nextEntryDelta;
+                    if (delta == 0) {
+                        break;
+                    }
+                    index = (const OffsetIndex*)((int8_t*)index + delta);
                 }
-                delete[] matches;
             }
 
             // If we _still_ don't have a time zone, use GMT.  This
