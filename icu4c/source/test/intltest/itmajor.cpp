@@ -139,7 +139,7 @@ void MajorTestLevel::runIndexedTest( int32_t index, UBool exec, const char* &nam
 #endif
                 break;
         case 10: name = "idna";
-#if !UCONFIG_NO_IDNA
+#if !UCONFIG_NO_IDNA  && !UCONFIG_NO_TRANSLITERATION
             if(exec){
                 logln("TestSuite IDNA----"); logln();
                 TestIDNA test;
