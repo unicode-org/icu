@@ -190,7 +190,7 @@ and created from a converter that is shared across threads.
 U_CAPI UConverter* U_EXPORT2
 ucnv_safeClone(const UConverter* cnv, void *stackBuffer, int32_t *pBufferSize, UErrorCode *status)
 {
-    UConverter * localConverter;
+    UConverter *localConverter, *allocatedConverter;
     int32_t bufferSizeNeeded;
     char *stackBufferChars = (char *)stackBuffer;
     UErrorCode cbErr;
@@ -260,7 +260,7 @@ ucnv_safeClone(const UConverter* cnv, void *stackBuffer, int32_t *pBufferSize, U
     if (*pBufferSize < bufferSizeNeeded || stackBuffer == NULL)
     {
         /* allocate one here...*/
-        localConverter = (UConverter *) uprv_malloc (bufferSizeNeeded);
+        localConverter = allocatedConverter = (UConverter *) uprv_malloc (bufferSizeNeeded);
 
         if(localConverter == NULL) {
             *status = U_MEMORY_ALLOCATION_ERROR;
@@ -276,16 +276,22 @@ ucnv_safeClone(const UConverter* cnv, void *stackBuffer, int32_t *pBufferSize, U
     } else {
         /* just use the stack buffer */
         localConverter = (UConverter*) stackBuffer;
+        allocatedConverter = NULL;
     }
 
     /* Copy initial state */
     uprv_memcpy(localConverter, cnv, sizeof(UConverter));
-    localConverter->isCopyLocal = FALSE;
+    localConverter->isCopyLocal = localConverter->isExtraLocal = FALSE;
 
     /* now either call the safeclone fcn or not */
     if (cnv->sharedData->impl->safeClone != NULL) {
         /* call the custom safeClone function */
         localConverter = cnv->sharedData->impl->safeClone(cnv, localConverter, pBufferSize, status);
+    }
+
+    if(localConverter==NULL || U_FAILURE(*status)) {
+        uprv_free(allocatedConverter);
+        return NULL;
     }
 
     /* increment refcount of shared data if needed */
@@ -296,10 +302,6 @@ ucnv_safeClone(const UConverter* cnv, void *stackBuffer, int32_t *pBufferSize, U
     */
     if (cnv->sharedData->referenceCounter != ~0) {
         ucnv_incrementRefCount(cnv->sharedData);
-    }
-
-    if(localConverter==NULL || U_FAILURE(*status)) {
-        return NULL;
     }
 
     if(localConverter == (UConverter*)stackBuffer) {
@@ -317,6 +319,8 @@ ucnv_safeClone(const UConverter* cnv, void *stackBuffer, int32_t *pBufferSize, U
                 localConverter->isCopyLocal?"TRUE":"FALSE");
 #endif
     }
+
+    localConverter->isExtraLocal = localConverter->isCopyLocal;
 
     /* allow callback functions to handle any memory allocation */
     toUArgs.converter = fromUArgs.converter = localConverter;

@@ -169,8 +169,11 @@ _ISCIIOpen(UConverter *cnv, const char *name,const char *locale,uint32_t options
 }
 static void 
 _ISCIIClose(UConverter *cnv){
-    if(cnv->extraInfo && !cnv->isCopyLocal){
-        uprv_free(cnv->extraInfo);
+    if(cnv->extraInfo!=NULL) {
+        if(!cnv->isExtraLocal) {
+            uprv_free(cnv->extraInfo);
+        }
+        cnv->extraInfo=NULL;
     }
 }
 
@@ -1449,6 +1452,7 @@ _ISCII_SafeClone(const UConverter *cnv,
 
     uprv_memcpy(&localClone->mydata, cnv->extraInfo, sizeof(UConverterDataISCII));
     localClone->cnv.extraInfo = &localClone->mydata;
+    localClone->cnv.isExtraLocal = TRUE;
 
     return &localClone->cnv;
 }

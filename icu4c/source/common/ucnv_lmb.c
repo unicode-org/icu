@@ -584,7 +584,7 @@ _LMBCSOpenWorker(UConverter*  _this,
 static void 
 _LMBCSClose(UConverter *   _this) 
 {
-    if (_this->extraInfo != NULL && !_this->isCopyLocal)
+    if (_this->extraInfo != NULL && !_this->isExtraLocal)
     {
         ulmbcs_byte_t Ix;
         UConverterDataLMBCS * extraInfo = (UConverterDataLMBCS *) _this->extraInfo;

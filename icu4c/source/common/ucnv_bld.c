@@ -761,6 +761,7 @@ ucnv_createConverterFromSharedData(UConverter *myUConverter,
     /* initialize the converter */
     uprv_memset(myUConverter, 0, sizeof(UConverter));
     myUConverter->isCopyLocal = isCopyLocal;
+    myUConverter->isExtraLocal = FALSE;
     myUConverter->sharedData = mySharedConverterData;
     myUConverter->options = options;
     myUConverter->mode = UCNV_SI;
