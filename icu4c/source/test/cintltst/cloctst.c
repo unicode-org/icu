@@ -68,10 +68,10 @@ static const char* rawData2[LOCALE_INFO_SIZE][LOCALE_SIZE] = {
     /* display country (English) */
     {   "United States",    "France",   "Spain",  "Greece",   "Norway", "China", "Germany", "", "Japan"       },
     /* display variant (English) */
-    {   "",     "",     "",     "",     "Nynorsk",  "", "", "", ""       },
+    {   "",     "",     "",     "",     "NY",  "", "", "", ""       },
     /* display name (English) */
     {   "English (United States)", "French (France)", "Catalan (Spain)", 
-        "Greek (Greece)", "Norwegian (Norway, Nynorsk)", "Chinese (Simplified Han, China)", 
+        "Greek (Greece)", "Norwegian (Norway, NY)", "Chinese (Simplified Han, China)", 
         "German (Germany, Collation=Phonebook Order)", "Spanish (Collation=Traditional)", "Japanese (Japan, Calendar=JAPANESE)" },
 
     /* display language (French) */

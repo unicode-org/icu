@@ -1474,14 +1474,14 @@ en {
     Types{
         // variants for collation (traditional may also be used for traditional chinese)
         collation{
-          phonebook   { "Phonebook Order" }
-          pinyin      { "Pinyin Order"    }
-          traditional { "Traditional"     }
-          stroke      { "Stroke Order"    }
-          direct      { "Direct Order"    }
+            phonebook   { "Phonebook Order" }
+            pinyin      { "Pinyin Order" }
+            traditional { "Traditional" }
+            stroke      { "Stroke Order" }
+            direct      { "Direct Order" }
        }
        calendar{
-         traditional{ "Traditional Calendar" }
+            traditional{ "Traditional Calendar" }
        }
     }
 
@@ -1489,7 +1489,7 @@ en {
     Variants{
         //PREEURO { "Pre-Euro" }   // PREEURO variant display name
         EURO    { "Euro" }         // EURO variant display name
-        NY      { "Nynorsk" }      // Norwegian variant display name
+        //NY      { "Nynorsk" }      // Norwegian variant display name
         POSIX   { "Posix" }
     }
 
