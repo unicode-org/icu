@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2003, International Business Machines
+*   Copyright (C) 2002-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -214,7 +214,9 @@ static const struct {
     {  1, U_MASK(UPROPS_WHITE_SPACE) },
     {  1, U_MASK(UPROPS_XID_CONTINUE) },
     {  1, U_MASK(UPROPS_XID_START) },
-    { -1, U_MASK(UPROPS_CASE_SENSITIVE_SHIFT) }
+    { -1, U_MASK(UPROPS_CASE_SENSITIVE_SHIFT) },
+    {  2, U_MASK(UPROPS_V2_S_TERM) },
+    {  2, U_MASK(UPROPS_V2_VARIATION_SELECTOR) }
 };
 
 U_CAPI UBool U_EXPORT2
