@@ -21,9 +21,12 @@ import java.util.Dictionary;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.8 $ $Date: 2000/01/13 23:53:23 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.9 $ $Date: 2000/01/18 02:38:55 $
  *
  * $Log: TransliterationRule.java,v $
+ * Revision 1.9  2000/01/18 02:38:55  Alan
+ * Fix filtering bug.
+ *
  * Revision 1.8  2000/01/13 23:53:23  Alan
  * Fix bugs found during ICU port
  *
@@ -519,9 +522,9 @@ class TransliterationRule {
                                                Dictionary variables, UnicodeFilter filter) {
         UnicodeSet set = null;
         return (filter == null || filter.isIn(textChar)) &&
-            ((set = (UnicodeSet) variables.get(new Character(keyChar)))
+            (((set = (UnicodeSet) variables.get(new Character(keyChar)))
              == null) ?
-            keyChar == textChar : set.contains(textChar);
+             keyChar == textChar : set.contains(textChar));
     }
 
     /**
