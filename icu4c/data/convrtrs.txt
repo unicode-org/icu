@@ -337,4 +337,4 @@ ibm-12712-s390         # EBCDIC Hebrew
 ibm-16804-s390         # EBCDIC Arabic
 
 # GB 18030 is partly algorithmic, using the MBCS converter
-gb18030
+gb18030                ibm-1392
