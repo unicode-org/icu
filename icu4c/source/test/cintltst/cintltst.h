@@ -34,6 +34,12 @@ U_CFUNC void addAllTests(TestNode** root);
 U_CFUNC const char* ctest_dataOutDir(void);
 
 /**
+ * Return the path to the icu/source/data/  directory 
+ * for out of source builds too returns the source directory
+ */
+U_CFUNC const char* ctest_dataSrcDir(void);
+
+/**
  *complete a relative path to a full pathname, and convert to platform-specific syntax. 
  * The character seperating directories for the relative path is '|'.
  * @fullname the full path name
