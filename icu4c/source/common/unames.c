@@ -106,6 +106,10 @@ enumGroupNames(UCharNames *names, Group *group,
                UCharNameChoice nameChoice);
 
 static UBool
+enumExtNames(UChar32 start, UChar32 end,
+             UEnumCharNamesFn *fn, void *context);
+
+static UBool
 enumNames(UCharNames *names,
           UChar32 start, UChar32 limit,
           UEnumCharNamesFn *fn, void *context,
@@ -197,8 +201,11 @@ u_charName(UChar32 code, UCharNameChoice nameChoice,
 
     if(i==0) {
         if (nameChoice == U_EXTENDED_CHAR_NAME) {
-            /* extended character name */
-            length = getExtName((uint32_t) code, buffer, (uint16_t) bufferLength);
+            length = getName(uCharNames, (uint32_t )code, U_EXTENDED_CHAR_NAME, buffer, (uint16_t) bufferLength);
+            if (!length) {
+                /* extended character name */
+                length = getExtName((uint32_t) code, buffer, (uint16_t) bufferLength);
+            }
         } else {
             /* normal character name */
             length=getName(uCharNames, (uint32_t)code, nameChoice, buffer, (uint16_t)bufferLength);
@@ -309,16 +316,7 @@ u_charFromName(UCharNameChoice nameChoice,
     /* normal character name */
     findName.otherName=upper;
     findName.code=error;
-
-    if (nameChoice == U_EXTENDED_CHAR_NAME) {
-        enumNames(uCharNames, 0, UCHAR_MAX_VALUE + 1, DO_FIND_NAME, &findName, U_UNICODE_CHAR_NAME);
-        if (findName.code == error) {
-            enumNames(uCharNames, 0, UCHAR_MAX_VALUE + 1, DO_FIND_NAME, &findName, U_UNICODE_10_CHAR_NAME);
-        }
-    } else {
-        enumNames(uCharNames, 0, UCHAR_MAX_VALUE + 1, DO_FIND_NAME, &findName, nameChoice);
-    }
-
+    enumNames(uCharNames, 0, UCHAR_MAX_VALUE + 1, DO_FIND_NAME, &findName, nameChoice);
     if (findName.code == error) {
          *pErrorCode = U_ILLEGAL_CHAR_FOUND;
     }
@@ -646,6 +644,14 @@ expandName(UCharNames *names,
                     /* explicit letter */
                     WRITE_CHAR(buffer, bufferLength, bufferPos, c);
                 } else {
+                    /* stop, but skip the semicolon if we are seeking
+                       extended names and there was no 2.0 name but there
+                       is a 1.0 name. */
+                    if(!bufferPos && nameChoice == U_EXTENDED_CHAR_NAME) {
+                        if ((uint8_t)';'>=tokenCount || tokens[(uint8_t)';']==(uint16_t)(-1)) {
+                            continue;
+                        }
+                    }
                     /* finished */
                     break;
                 }
@@ -680,6 +686,7 @@ compareName(UCharNames *names,
     uint16_t token, tokenCount=*tokens++;
     uint8_t *tokenStrings=(uint8_t *)names+names->tokenStringOffset;
     uint8_t c;
+    const char *origOtherName = otherName;
 
     if(nameChoice==U_UNICODE_10_CHAR_NAME) {
         /*
@@ -732,6 +739,14 @@ compareName(UCharNames *names,
                         return FALSE;
                     }
                 } else {
+                    /* stop, but skip the semicolon if we are seeking
+                       extended names and there was no 2.0 name but there
+                       is a 1.0 name. */
+                    if(otherName == origOtherName && nameChoice == U_EXTENDED_CHAR_NAME) {
+                        if ((uint8_t)';'>=tokenCount || tokens[(uint8_t)';']==(uint16_t)(-1)) {
+                            continue;
+                        }
+                    }
                     /* finished */
                     break;
                 }
@@ -770,8 +785,10 @@ enumGroupNames(UCharNames *names, Group *group,
         uint16_t length;
 
         while(start<=end) {
-            length=expandName(names, s+offsets[start&GROUP_MASK], lengths[start&GROUP_MASK], nameChoice,
-                              buffer, sizeof(buffer));
+            length=expandName(names, s+offsets[start&GROUP_MASK], lengths[start&GROUP_MASK], nameChoice, buffer, sizeof(buffer));
+            if (!length && nameChoice == U_EXTENDED_CHAR_NAME) {
+                buffer[length = getExtName(start, buffer, sizeof(buffer))] = 0;
+            }
             /* here, we assume that the buffer is large enough */
             if(length>0) {
                 if(!fn(context, start, nameChoice, buffer, length)) {
@@ -790,6 +807,35 @@ enumGroupNames(UCharNames *names, Group *group,
             ++start;
         }
     }
+    return TRUE;
+}
+
+/*
+ * enumExtNames enumerate extended names.
+ * It only needs to do it if it is called with a real function and not
+ * with the dummy DO_FIND_NAME, because u_charFromName() does a check
+ * for extended names by itself.
+ */ 
+static UBool
+enumExtNames(UChar32 start, UChar32 end,
+             UEnumCharNamesFn *fn, void *context)
+{
+    if(fn!=DO_FIND_NAME) {
+        char buffer[200];
+        uint16_t length;
+        
+        while(start<=end) {
+            buffer[length = getExtName(start, buffer, sizeof(buffer))] = 0;
+            /* here, we assume that the buffer is large enough */
+            if(length>0) {
+                if(!fn(context, start, U_EXTENDED_CHAR_NAME, buffer, length)) {
+                    return FALSE;
+                }
+            }
+            ++start;
+        }
+    }
+
     return TRUE;
 }
 
@@ -825,6 +871,15 @@ enumNames(UCharNames *names,
             }
         } else if(startGroupMSB>group->groupMSB) {
             /* make sure that we start enumerating with the first group after start */
+            if (group + 1 < groupLimit && (group + 1)->groupMSB > startGroupMSB && nameChoice == U_EXTENDED_CHAR_NAME) {
+                UChar32 end = (group + 1)->groupMSB << GROUP_SHIFT;
+                if (end > limit) {
+                    end = limit;
+                }
+		if (!enumExtNames(start, end - 1, fn, context)) {
+		    return FALSE;
+		}
+	    }
             ++group;
         }
 
@@ -837,14 +892,40 @@ enumNames(UCharNames *names,
             if(!enumGroupNames(names, group, start, start+LINES_PER_GROUP-1, fn, context, nameChoice)) {
                 return FALSE;
             }
-            ++group;
+            if (group + 1 < groupLimit && (group + 1)->groupMSB > group->groupMSB + 1 && nameChoice == U_EXTENDED_CHAR_NAME) {
+                UChar32 end = (group + 1)->groupMSB << GROUP_SHIFT;
+                if (end > limit) {
+                    end = limit;
+                }
+		if (!enumExtNames((group->groupMSB + 1) << GROUP_SHIFT, end - 1, fn, context)) {
+		    return FALSE;
+		}
+	    }
+	    ++group;
         }
 
         /* enumerate within the end group (group->groupMSB==endGroupMSB) */
         if(group<groupLimit && group->groupMSB==endGroupMSB) {
             return enumGroupNames(names, group, (limit-1)&~GROUP_MASK, limit-1, fn, context, nameChoice);
+        } else if (nameChoice == U_EXTENDED_CHAR_NAME && group == groupLimit) {
+            UChar32 next = ((group - 1)->groupMSB + 1) << GROUP_SHIFT;
+            if (next > start) {
+                start = next;
+            }
+        } else {
+            return TRUE;
         }
     }
+
+    /* we have not found a group, which means everything is made of
+       extended names. */
+    if (nameChoice == U_EXTENDED_CHAR_NAME) {
+        if (limit > UCHAR_MAX_VALUE + 1) {
+            limit = UCHAR_MAX_VALUE + 1;
+        }
+        return enumExtNames(start, limit - 1, fn, context);
+    }
+    
     return TRUE;
 }
 
@@ -1351,35 +1432,28 @@ static const char *getCharCatName(UChar32 cp) {
 }
 
 static uint16_t getExtName(uint32_t code, char *buffer, uint16_t bufferLength) {
-    uint16_t length = getName(uCharNames, (uint32_t )code, U_UNICODE_CHAR_NAME, buffer, (uint16_t) bufferLength);
-    if (!length) {
-        if (getCharCat(code) == U_CONTROL_CHAR) {
-            length = getName(uCharNames, (uint32_t)code, U_UNICODE_10_CHAR_NAME, buffer, (uint16_t)bufferLength);
-        }
-        if (!length) {
-            const char *catname = getCharCatName(code);
-            
-            UChar32 cp;
-            int ndigits, i;
+    const char *catname = getCharCatName(code);
+    uint16_t length = 0;
 
-            WRITE_CHAR(buffer, bufferLength, length, '<');
-            while (catname[length - 1]) {
-                WRITE_CHAR(buffer, bufferLength, length, catname[length - 1]);
-            }
-            WRITE_CHAR(buffer, bufferLength, length, '-');
-            for (cp = code, ndigits = 0; cp; ++ndigits, cp >>= 4)
-                ;
-            if (ndigits < 4)
-                ndigits = 4;
-            for (cp = code, i = ndigits; (cp || i > 0) && bufferLength; cp >>= 4, bufferLength--) {
-                uint8_t v = (uint8_t)(cp & 0xf);
-                buffer[--i] = (v < 10 ? '0' + v : 'A' + v - 10);
-            }
-            buffer += ndigits;
-            length += ndigits;
-            WRITE_CHAR(buffer, bufferLength, length, '>');
-        }
+    UChar32 cp;
+    int ndigits, i;
+    
+    WRITE_CHAR(buffer, bufferLength, length, '<');
+    while (catname[length - 1]) {
+        WRITE_CHAR(buffer, bufferLength, length, catname[length - 1]);
     }
+    WRITE_CHAR(buffer, bufferLength, length, '-');
+    for (cp = code, ndigits = 0; cp; ++ndigits, cp >>= 4)
+        ;
+    if (ndigits < 4)
+        ndigits = 4;
+    for (cp = code, i = ndigits; (cp || i > 0) && bufferLength; cp >>= 4, bufferLength--) {
+        uint8_t v = (uint8_t)(cp & 0xf);
+        buffer[--i] = (v < 10 ? '0' + v : 'A' + v - 10);
+    }
+    buffer += ndigits;
+    length += ndigits;
+    WRITE_CHAR(buffer, bufferLength, length, '>');
 
     return length;
 }
