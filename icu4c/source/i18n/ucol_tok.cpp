@@ -201,7 +201,26 @@ void ucol_uprv_tok_setOptionInImage(UColOptionSet *opts, UColAttribute attrib, U
   }
 }
 
-#define UTOK_OPTION_COUNT 15
+typedef struct {
+  uint32_t startCE;
+  uint32_t startContCE;
+  uint32_t limitCE;
+  uint32_t limitContCE;
+} indirectBoundaries;
+
+static indirectBoundaries ucolIndirectBoundaries[] = {
+  { UCOL_RESET_TOP_VALUE, 0, UCOL_NEXT_TOP_VALUE, 0 },
+  { UCOL_FIRST_PRIMARY_IGNORABLE, 0, UCOL_NEXT_FIRST_PRIMARY_IGNORABLE, 0 },
+  { UCOL_LAST_PRIMARY_IGNORABLE, 0, UCOL_NEXT_LAST_PRIMARY_IGNORABLE, 0 },
+  { UCOL_FIRST_SECONDARY_IGNORABLE, 0, UCOL_NEXT_FIRST_SECONDARY_IGNORABLE, 0 },
+  { UCOL_LAST_SECONDARY_IGNORABLE, 0, UCOL_NEXT_LAST_SECONDARY_IGNORABLE, 0 },
+  { UCOL_FIRST_TERTIARY_IGNORABLE, 0, UCOL_NEXT_FIRST_TERTIARY_IGNORABLE, 0 },
+  { UCOL_LAST_TERTIARY_IGNORABLE, 0, UCOL_NEXT_LAST_TERTIARY_IGNORABLE, 0 },
+  { UCOL_FIRST_VARIABLE, 0, UCOL_NEXT_FIRST_VARIABLE, 0 },
+  { UCOL_LAST_VARIABLE, 0, UCOL_NEXT_LAST_VARIABLE, 0 },
+};
+
+#define UTOK_OPTION_COUNT 17
 
 static UBool didInit = FALSE;
 /* we can be strict, or we can be lenient */
@@ -220,7 +239,11 @@ U_STRING_DECL(suboption_08, "3",              1);
 U_STRING_DECL(suboption_09, "4",              1);
 U_STRING_DECL(suboption_10, "I",              1);
 
-
+U_STRING_DECL(suboption_11, "primary",        7);
+U_STRING_DECL(suboption_12, "secondary",      9);
+U_STRING_DECL(suboption_13, "tertiary",       8);
+U_STRING_DECL(suboption_14, "variable",       8);
+U_STRING_DECL(suboption_15, "ignorable",      9);
 
 U_STRING_DECL(option_00,    "undefined",      9);
 U_STRING_DECL(option_01,    "rearrange",      9);  
@@ -237,6 +260,16 @@ U_STRING_DECL(option_11,    "charset",        7);
 U_STRING_DECL(option_12,    "before",         6);  
 U_STRING_DECL(option_13,    "hiraganaQ",      9);
 U_STRING_DECL(option_14,    "strength",       8);
+U_STRING_DECL(option_15,    "first",          5);
+U_STRING_DECL(option_16,    "last",           4);
+
+/*
+[last variable] last variable value 
+[last primary ignorable] largest CE for primary ignorable 
+[last secondary ignorable] largest CE for secondary ignorable 
+[last tertiary ignorable] largest CE for tertiary ignorable 
+[top] guaranteed to be above all implicit CEs, for now and in the future (in 1.8) 
+*/
 
 
 static const ucolTokSuboption alternateSub[2] = {
@@ -273,6 +306,13 @@ static const ucolTokSuboption strengthSub[5] = {
   {suboption_10, 1, UCOL_IDENTICAL},
 };
 
+static const ucolTokSuboption firstLastSub[4] = {
+  {suboption_11, 7, UCOL_PRIMARY},
+  {suboption_12, 9, UCOL_PRIMARY},
+  {suboption_13, 8, UCOL_PRIMARY},
+  {suboption_14, 8, UCOL_PRIMARY},
+};
+
 static const ucolTokOption rulesOptions[UTOK_OPTION_COUNT] = {
  {option_02,  9, alternateSub, 2, UCOL_ALTERNATE_HANDLING}, /*"alternate" */
  {option_03,  9, frenchSub, 1, UCOL_FRENCH_COLLATION}, /*"backwards"      */
@@ -283,8 +323,10 @@ static const ucolTokOption rulesOptions[UTOK_OPTION_COUNT] = {
  {option_14, 8, strengthSub, 5, UCOL_STRENGTH}, /*"strength" */
  {option_04, 12, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"variable top"   */
  {option_01,  9, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"rearrange"      */
- {option_05,  3, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"top"            */
  {option_12,  6, beforeSub, 3, UCOL_ATTRIBUTE_COUNT}, /*"before"    */
+ {option_05,  3, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"top"            */
+ {option_15,  5, firstLastSub, 4, UCOL_ATTRIBUTE_COUNT}, /*"first" */
+ {option_16,  4, firstLastSub, 4, UCOL_ATTRIBUTE_COUNT}, /*"last" */
  {option_00,  9, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"undefined"      */
  {option_09, 11, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"scriptOrder"    */
  {option_10, 11, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"charsetname"    */
@@ -311,7 +353,8 @@ int32_t u_strncmpNoCase(const UChar     *s1,
 }
 
 static
-uint8_t ucol_uprv_tok_readAndSetOption(UColOptionSet *opts, const UChar* start, const UChar *end, UErrorCode *status) {
+uint8_t ucol_uprv_tok_readAndSetOption(UColTokenParser *src, const UChar *end, UErrorCode *status) {
+  const UChar* start = src->current;
   uint32_t i = 0;
   int32_t j=0;
   UBool foundOption = FALSE;
@@ -331,6 +374,12 @@ uint8_t ucol_uprv_tok_readAndSetOption(UColOptionSet *opts, const UChar* start, 
     U_STRING_INIT(suboption_09, "4",              1);
     U_STRING_INIT(suboption_10, "I",              1);
 
+    U_STRING_INIT(suboption_11, "primary",        7);
+    U_STRING_INIT(suboption_12, "secondary",      9);
+    U_STRING_INIT(suboption_13, "tertiary",       8);
+    U_STRING_INIT(suboption_14, "variable",       8);
+    U_STRING_INIT(suboption_15, "ignorable",      9);
+
 
     U_STRING_INIT(option_00, "undefined",      9);
     U_STRING_INIT(option_01, "rearrange",      9);  
@@ -347,6 +396,8 @@ uint8_t ucol_uprv_tok_readAndSetOption(UColOptionSet *opts, const UChar* start, 
     U_STRING_INIT(option_12, "before",         6);  
     U_STRING_INIT(option_13, "hiraganaQ",      9);
     U_STRING_INIT(option_14, "strength",       8);
+    U_STRING_INIT(option_15, "last",           4);
+    U_STRING_INIT(option_16, "first",          5);
   }
   start++; /*skip opening '['*/
   while(i < UTOK_OPTION_COUNT) {
@@ -372,7 +423,7 @@ uint8_t ucol_uprv_tok_readAndSetOption(UColOptionSet *opts, const UChar* start, 
     if(optionArg) {
       for(j = 0; j<rulesOptions[i].subSize; j++) {
         if(u_strncmpNoCase(optionArg, rulesOptions[i].subopts[j].subName, rulesOptions[i].subopts[j].subLen) == 0) {
-          ucol_uprv_tok_setOptionInImage(opts, rulesOptions[i].attr, rulesOptions[i].subopts[j].attrVal);
+          ucol_uprv_tok_setOptionInImage(src->opts, rulesOptions[i].attr, rulesOptions[i].subopts[j].attrVal);
           return UCOL_TOK_SUCCESS;
         }
       }
@@ -383,9 +434,7 @@ uint8_t ucol_uprv_tok_readAndSetOption(UColOptionSet *opts, const UChar* start, 
     return UCOL_TOK_SUCCESS | UCOL_TOK_VARIABLE_TOP;
   } else if(i == 8) {  /*rearange */
     return UCOL_TOK_SUCCESS;
-  } else if(i == 9) {  /*top */
-    return UCOL_TOK_SUCCESS | UCOL_TOK_TOP;
-  } else if(i == 10) {  /*before*/
+  } else if(i == 9) {  /*before*/
     if(optionArg) {
       for(j = 0; j<rulesOptions[i].subSize; j++) {
         if(u_strncmpNoCase(optionArg, rulesOptions[i].subopts[j].subName, rulesOptions[i].subopts[j].subLen) == 0) {
@@ -395,6 +444,19 @@ uint8_t ucol_uprv_tok_readAndSetOption(UColOptionSet *opts, const UChar* start, 
     }
     *status = U_ILLEGAL_ARGUMENT_ERROR;
     return 0;
+  } else if(i == 10) {  /*top */ /* we are going to have an array with structures of limit CEs */
+    /* index to this array will be src->parsedToken.indirectIndex*/
+    src->parsedToken.indirectIndex = 0;
+    return UCOL_TOK_SUCCESS | UCOL_TOK_TOP;
+  } else if(i < 13) { /* first, last */
+    for(j = 0; j<rulesOptions[i].subSize; j++) {
+      if(u_strncmpNoCase(optionArg, rulesOptions[i].subopts[j].subName, rulesOptions[i].subopts[j].subLen) == 0) {
+        src->parsedToken.indirectIndex = (uint16_t)(i-10+j*2);         
+        return UCOL_TOK_SUCCESS | UCOL_TOK_TOP;;
+      }
+    }
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
+    return FALSE;
   } else {
     *status = U_UNSUPPORTED_ERROR;
     return 0;
@@ -421,6 +483,7 @@ ucol_tok_parseNextToken(UColTokenParser *src,
   uint32_t newStrength = UCOL_TOK_UNSET; 
 
   src->parsedToken.prefixOffset = 0; src->parsedToken.prefixLen = 0;
+  src->parsedToken.indirectIndex = 0;
 
   while (src->current < src->end) {
       UChar ch = *(src->current);
@@ -544,12 +607,17 @@ ucol_tok_parseNextToken(UColTokenParser *src,
         case 0x005b/*'['*/:
           /* options - read an option, analyze it */
           if((optionEnd = u_strchr(src->current, 0x005d /*']'*/)) != NULL) {
-            uint8_t result = ucol_uprv_tok_readAndSetOption(src->opts, src->current, optionEnd, status);
+            uint8_t result = ucol_uprv_tok_readAndSetOption(src, optionEnd, status);
             src->current = optionEnd;
             if(U_SUCCESS(*status)) {
               if(result & UCOL_TOK_TOP) {
                 if(newStrength == UCOL_TOK_RESET) { 
                   top = TRUE;
+                  charsOffset = src->extraCurrent - src->source;
+                  *src->extraCurrent++ = 0xFFFE;
+                  *src->extraCurrent++ = (UChar)(ucolIndirectBoundaries[src->parsedToken.indirectIndex].startCE >> 16);
+                  *src->extraCurrent++ = (UChar)(ucolIndirectBoundaries[src->parsedToken.indirectIndex].startCE & 0xFFFF);
+                  newCharsLen = 3;
                   src->current++;
                   goto EndOfLoop;
                 } else {
@@ -880,15 +948,22 @@ inline UColToken *getVirginBefore(UColTokenParser *src, UColToken *sourceToken, 
     // character to which we want to anchor is already tailored. 
     // We need to construct a new token which will be the anchor
     // point
-    *src->extraCurrent++ = 0x0000;
-    *src->extraCurrent++ = 0x0000;
-    src->parsedToken.charsLen+=2;
+    *(src->extraCurrent-1) = 0xFFFE;
+    *src->extraCurrent++ = (UChar)ch;
+    src->parsedToken.charsLen++;
     src->lh[src->resultLen].baseCE = CE & 0xFFFFFF3F;
     if(isContinuation(SecondCE)) {
       src->lh[src->resultLen].baseContCE = SecondCE;
     } else {
       src->lh[src->resultLen].baseContCE = 0;
     }
+    src->lh[src->resultLen].nextCE = 0;
+    src->lh[src->resultLen].nextContCE = 0;
+    src->lh[src->resultLen].previousCE = 0;
+    src->lh[src->resultLen].previousContCE = 0;
+
+    src->lh[src->resultLen].indirect = FALSE;
+
     sourceToken = ucol_tok_initAReset(src, 0, &expandNext, parseError, status);   
   }
 
@@ -902,7 +977,7 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
   uint32_t expandNext = 0;
   UBool variableTop = FALSE;
   UBool top = FALSE;
-  uint8_t specs = 0;
+  uint16_t specs = 0;
 
   UColTokListHeader *ListList = NULL;
 
@@ -1178,12 +1253,24 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
             } else {
               ListList[src->resultLen].baseContCE = 0;
             }
+            ListList[src->resultLen].nextCE = 0;
+            ListList[src->resultLen].nextContCE = 0;
+            ListList[src->resultLen].previousCE = 0;
+            ListList[src->resultLen].previousContCE = 0;
+            ListList[src->resultLen].indirect = FALSE;
             sourceToken = ucol_tok_initAReset(src, expand, &expandNext, parseError, status);
           } else { /* top == TRUE */
             top = FALSE;
-            ListList[src->resultLen].baseCE = UCOL_RESET_TOP_VALUE;
-            ListList[src->resultLen].baseContCE = 0;
+            ListList[src->resultLen].baseCE = ucolIndirectBoundaries[src->parsedToken.indirectIndex].startCE;
+            ListList[src->resultLen].baseContCE = ucolIndirectBoundaries[src->parsedToken.indirectIndex].startContCE;
+            ListList[src->resultLen].nextCE = ucolIndirectBoundaries[src->parsedToken.indirectIndex].limitCE;
+            ListList[src->resultLen].nextContCE = ucolIndirectBoundaries[src->parsedToken.indirectIndex].limitContCE;
+            ListList[src->resultLen].previousCE = 0;
+            ListList[src->resultLen].previousContCE = 0;
+            ListList[src->resultLen].indirect = TRUE;
+
             sourceToken = ucol_tok_initAReset(src, 0, &expandNext, parseError, status);
+
           }
         } else { /* reset to something already in rules */
           top = FALSE;
