@@ -3,8 +3,8 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_Latin_Katakana.txt,v $
-# $Date: 2001/11/30 01:59:44 $
-# $Revision: 1.16 $
+# $Date: 2001/11/30 22:36:12 $
+# $Revision: 1.17 $
 #--------------------------------------------------------------------
 
 # note: a global filter is more efficient, but MUST include all source chars
@@ -491,6 +491,6 @@ x > | ks ;
 # note: a global filter is more efficient, but MUST include all source chars!!
 #:: ([\u0000-\u007E \u3001\u3002 \u3099-\u309C \u30A1-\u30FC \uFF61-\uFF9F [:Latin:][:Katakana:] [:nonspacing mark:]]);
 # MINIMAL FILTER GENERATED FOR: Latin-Katakana BACKWARD
-:: ( [~\u3001-\u3002\u30A1-\u30FA\u30FC-\u30FE] ) ;
+:: ( [~\u3001-\u3002\u304C\u304E\u3050\u3052\u3054\u3056\u3058\u305A\u305C\u305E\u3060\u3062\u3065\u3067\u3069\u3070-\u3071\u3073-\u3074\u3076-\u3077\u3079-\u307A\u307C-\u307D\u3094\u3099-\u309B\u309E\u30A1-\u30FA\u30FC-\u30FE] ) ;
 
 # eof
