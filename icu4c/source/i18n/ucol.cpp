@@ -3296,7 +3296,8 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
         UCharOffset = strbuffer + (UCOL_MAX_BUFFER - 1);
         *(UCharOffset --) = 0;
         noChars = 0;
-        while (ucol_unsafeCP(schar, coll)) {
+        // have to swap thai characters
+        while (ucol_unsafeCP(schar, coll) || UCOL_ISTHAIBASECONSONANT(schar)) {
             *(UCharOffset) = schar;
             noChars++;
             UCharOffset --;
