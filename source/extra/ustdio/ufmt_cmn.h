@@ -53,7 +53,7 @@ typedef enum ufmt_type_info ufmt_type_info;
  * Union representing a uprintf/uscanf argument
  */
 union ufmt_args {
-    signed int    intValue;      /* int, UChar */     /* TODO: Should int32_t be used instead of int? */
+    int64_t    int64Value;      /* int, UChar */     /* TODO: Should int32_t be used instead of int? */
     float         floatValue;    /* float */
     double        doubleValue;   /* double */
     void          *ptrValue;     /* any pointer - void*, char*, wchar_t*, UChar* */
@@ -100,10 +100,10 @@ ufmt_isdigit(UChar     c,
  * which will be padded with zeroes. -1 means do not pad.
  */
 void 
-ufmt_ltou(UChar     *buffer, 
+ufmt_64tou(UChar     *buffer, 
       int32_t     *len,
-      uint32_t         value, 
-      uint32_t     radix,
+      uint64_t     value, 
+      uint8_t     radix,
       UBool    uselower,
       int32_t    minDigits);
 
@@ -115,10 +115,10 @@ ufmt_ltou(UChar     *buffer,
  * @param radix The desired radix
  * @return The numeric value.
  */
-long
-ufmt_utol(const UChar     *buffer, 
+int64_t
+ufmt_uto64(const UChar     *buffer, 
       int32_t     *len,
-      int32_t     radix);
+      int8_t     radix);
 
 /**
  * Convert a string from the default codepage to Unicode.
