@@ -398,7 +398,7 @@ const UChar *ucol_tok_parseNextToken(UColTokenParser *src,
   UBool wasInQuote = FALSE;
   UChar *optionEnd = NULL;
   uint8_t before = 0;
-
+  UBool isEscaped = FALSE;
   uint32_t newCharsLen = 0, newExtensionLen = 0;
   uint32_t charsOffset = 0, extensionOffset = 0;
   uint32_t newStrength = UCOL_TOK_UNSET; 
@@ -424,7 +424,27 @@ const UChar *ucol_tok_parseNextToken(UColTokenParser *src,
           newExtensionLen++;
         }
       }
-    } else {
+    }else if(isEscaped){
+      isEscaped =FALSE;
+      if (newStrength == UCOL_TOK_UNSET) {
+        *status = U_INVALID_FORMAT_ERROR;
+        syntaxError(src->source,(src->current-src->source),(src->end-src->source),parseError);
+        return NULL;
+      }
+      if(ch != 0x0000  && src->current != src->end) {
+          if (inChars) {
+            if(newCharsLen == 0) {
+              charsOffset = src->current - src->source;
+            }
+            newCharsLen++;
+          } else {
+            if(newExtensionLen == 0) {
+              extensionOffset = src->current - src->source;
+            }
+            newExtensionLen++;
+          }
+      }
+    }else {
       /* Sets the strength for this entry */
       switch (ch) {
         case 0x003D/*'='*/ : 
@@ -517,6 +537,7 @@ const UChar *ucol_tok_parseNextToken(UColTokenParser *src,
                   goto EndOfLoop;
                 } else {
                   *status = U_INVALID_FORMAT_ERROR;
+                  syntaxError(src->source,(src->current-src->source),(src->end-src->source),parseError);
                 }
               } else if(result & UCOL_TOK_VARIABLE_TOP) {
                 if(newStrength != UCOL_TOK_RESET && newStrength != UCOL_TOK_UNSET) {
@@ -556,6 +577,9 @@ const UChar *ucol_tok_parseNextToken(UColTokenParser *src,
           wasInQuote = FALSE; /* if we were copying source characters, we want to stop now */
           inChars = FALSE; /* we're now processing expansion */
           break;
+        case 0x005C /* back slash for escaped chars */:
+            isEscaped = TRUE;
+            break;
         /* found a quote, we're gonna start copying */
         case 0x0027/*'\''*/:
           if (newStrength == UCOL_TOK_UNSET) { /* quote is illegal until we have a strength */
