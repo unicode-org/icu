@@ -2131,7 +2131,7 @@ TestISO_2022_JP() {
     UConverter *cnv;
     int32_t* offsets = (int32_t*) malloc(uBufSize * sizeof(int32_t) * 5);
     int32_t* myOff= offsets;
-    cnv=ucnv_open("ISO_2022,locale=jp,version=0", &errorCode);
+    cnv=ucnv_open("ISO_2022_JP_1", &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("Unable to open a iso-2022 converter: %s\n", u_errorName(errorCode));
         return;
@@ -2373,7 +2373,7 @@ TestISO_2022_JP_1() {
     UErrorCode errorCode=U_ZERO_ERROR;
     UConverter *cnv;
 
-    cnv=ucnv_open("ISO_2022,locale=jp,version=1", &errorCode);
+    cnv=ucnv_open("ISO_2022_JP_1", &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("Unable to open a iso-2022 converter: %s\n", u_errorName(errorCode));
         return;
@@ -2457,7 +2457,7 @@ TestISO_2022_JP_2() {
     UConverter *cnv;
     int32_t* offsets = (int32_t*) malloc(uBufSize * sizeof(int32_t) * 5);
     int32_t* myOff= offsets;
-    cnv=ucnv_open("ISO_2022,locale=jp,version=2", &errorCode);
+    cnv=ucnv_open("ISO_2022_JP_2", &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("Unable to open a iso-2022 converter: %s\n", u_errorName(errorCode));
         return;
