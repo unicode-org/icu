@@ -3,11 +3,12 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/9 14:56
+// * Date & Time: 2004/8/26 12:57
 // * Source File: \work\locale\common\collation\\ko.xml
 // *
 // ***************************************************************************
 ko{
+    Version{"1.1.1"}
     collations{
         standard{
             Sequence{
@@ -678,7 +679,7 @@ ko{
                 "<<嘻<<悕<<戲<<暿<<欷<<燹<<爔<<豨<<餼"
                 "&힐<<詰<<犵<<纈<<襭<<頡<<黠"
             }
-            Version{"1.1.1"}
+            Version{"2.1"}
         }
     }
 }

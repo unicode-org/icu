@@ -1,13 +1,15 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Date & Time: 2004/8/25 19:9
+// * Source File: \work\locale\common\collation\\zh_TW_STROKE.xml
 // *
 // ***************************************************************************
-
-zh_TW_STROKE {
-    Version{ "2.0" }
-    collations { 
-      default { "stroke" }
+zh_TW_STROKE{
+    Version{"1.1.1"}
+    collations{
+        default{"stroke"}
     }
 }

@@ -3,11 +3,12 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/9 14:58
+// * Date & Time: 2004/8/26 12:59
 // * Source File: \work\locale\common\collation\\sq.xml
 // *
 // ***************************************************************************
 sq{
+    Version{"1.1.1"}
     collations{
         standard{
             Sequence{
@@ -23,7 +24,7 @@ sq{
                 "&[before 1]Y<xh<<<Xh<<<XH"
                 "&[before 1]Ʒ<zh<<<Zh<<<ZH"
             }
-            Version{"1.1.1"}
+            Version{"2.0"}
         }
     }
 }

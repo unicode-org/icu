@@ -3,15 +3,16 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/9 14:56
+// * Date & Time: 2004/8/26 12:55
 // * Source File: \work\locale\common\collation\\el.xml
 // *
 // ***************************************************************************
 el{
+    Version{"1.1.1"}
     collations{
         standard{
             Sequence{" [normalization on ]"}
-            Version{"1.1.1"}
+            Version{"2.0"}
         }
     }
 }
