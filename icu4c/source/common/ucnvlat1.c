@@ -472,7 +472,8 @@ static const UConverterStaticData _Latin1StaticData={
     819, UCNV_IBM, UCNV_LATIN_1, 1, 1,
     { 0x1a, 0, 0, 0 }, 1, FALSE, FALSE,
     0,
-    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
+    0,
+    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
 };
 
 const UConverterSharedData _Latin1Data={
@@ -759,7 +760,8 @@ static const UConverterStaticData _ASCIIStaticData={
     367, UCNV_IBM, UCNV_US_ASCII, 1, 1,
     { 0x1a, 0, 0, 0 }, 1, FALSE, FALSE,
     0,
-    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
+    0,
+    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
 };
 
 const UConverterSharedData _ASCIIData={

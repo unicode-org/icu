@@ -3149,22 +3149,34 @@ _MBCSWriteSub(UConverterFromUnicodeArgs *pArgs,
               int32_t offsetIndex,
               UErrorCode *pErrorCode) {
     UConverter *cnv=pArgs->converter;
-    char *p;
+    char *p, *subchar;
     char buffer[4];
+    int32_t length;
+
+    /* first, select between subChar and subChar1 */
+    if(cnv->subChar1!=0 && cnv->invalidUCharBuffer[0]<=0xff) {
+        /* select subChar1 if it is set (not 0) and the unmappable Unicode code point is up to U+00ff (IBM MBCS behavior) */
+        subchar=(char *)&cnv->subChar1;
+        length=1;
+    } else {
+        /* select subChar in all other cases */
+        subchar=(char *)cnv->subChar;
+        length=cnv->subCharLen;
+    }
 
     switch(cnv->sharedData->table->mbcs.outputType) {
     case MBCS_OUTPUT_2_SISO:
         p=buffer;
 
         /* fromUnicodeStatus contains prevLength */
-        switch(cnv->subCharLen) {
+        switch(length) {
         case 1:
             if(cnv->fromUnicodeStatus==2) {
                 /* DBCS mode and SBCS sub char: change to SBCS */
                 cnv->fromUnicodeStatus=1;
                 *p++=UCNV_SI;
             }
-            *p++=cnv->subChar[0];
+            *p++=subchar[0];
             break;
         case 2:
             if(cnv->fromUnicodeStatus==1) {
@@ -3172,8 +3184,8 @@ _MBCSWriteSub(UConverterFromUnicodeArgs *pArgs,
                 cnv->fromUnicodeStatus=2;
                 *p++=UCNV_SO;
             }
-            *p++=cnv->subChar[0];
-            *p++=cnv->subChar[1];
+            *p++=subchar[0];
+            *p++=subchar[1];
             break;
         default:
             *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
@@ -3185,7 +3197,7 @@ _MBCSWriteSub(UConverterFromUnicodeArgs *pArgs,
         break;
     default:
         ucnv_cbFromUWriteBytes(pArgs,
-                               (const char *)cnv->subChar, cnv->subCharLen,
+                               subchar, length,
                                offsetIndex, pErrorCode);
         break;
     }

@@ -855,7 +855,8 @@ const UConverterStaticData _UTF8StaticData={
     1208, UCNV_IBM, UCNV_UTF8, 1, 4,
     { 0xef, 0xbf, 0xbd, 0 },3,FALSE,FALSE,
     0,
-    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
+    0,
+    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
 };
 
 
@@ -1284,7 +1285,8 @@ const UConverterStaticData _UTF16BEStaticData={
     1200, UCNV_IBM, UCNV_UTF16_BigEndian, 2, 2,
     { 0xff, 0xfd, 0, 0 },2,FALSE,FALSE,
     0,
-    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
+    0,
+    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
 };
 
 
@@ -1384,7 +1386,8 @@ const UConverterStaticData _UTF16LEStaticData={
     1200, UCNV_IBM, UCNV_UTF16_LittleEndian, 2, 2,
     { 0xfd, 0xff, 0, 0 },2,FALSE,FALSE,
     0,
-    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
+    0,
+    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
 };
 
 
@@ -1862,7 +1865,8 @@ const UConverterStaticData _UTF32BEStaticData = {
     UCNV_IBM, UCNV_UTF32_BigEndian, 4, 4,
     { 0, 0, 0xff, 0xfd }, 4, FALSE, FALSE,
     0,
-    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
+    0,
+    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
 };
 
 const UConverterSharedData _UTF32BEData = {
@@ -2341,7 +2345,8 @@ const UConverterStaticData _UTF32LEStaticData = {
     UCNV_IBM, UCNV_UTF32_BigEndian, 4, 4,
     { 0xfd, 0xff, 0, 0 }, 4, FALSE, FALSE,
     0,
-    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
+    0,
+    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
 };
 
 
@@ -3136,7 +3141,8 @@ static const UConverterStaticData _UTF7StaticData={
     { 0x3f, 0, 0, 0 }, 1, /* the subchar is not used */
     FALSE, FALSE,
     0,
-    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
+    0,
+    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
 };
 
 const UConverterSharedData _UTF7Data={

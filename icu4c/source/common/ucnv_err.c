@@ -39,13 +39,6 @@
 #define UCNV_PRV_ESCAPE_JAVA    'J'
 
 
-UBool 
-  CONVERSION_U_SUCCESS (UErrorCode err)
-{
-  if ((err == U_INVALID_CHAR_FOUND) || (err == U_ILLEGAL_CHAR_FOUND))    return FALSE;
-  else    return TRUE;
-}
-
 /*Takes a int32_t and fills in  a UChar* string with that number "radix"-based
  * and padded with "pad" zeroes
  */
