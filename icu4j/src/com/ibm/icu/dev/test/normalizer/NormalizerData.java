@@ -1,6 +1,5 @@
 package com.ibm.icu.dev.test.normalizer;
 
-import java.util.Hashtable;
 import java.util.BitSet;
 
 import com.ibm.icu.dev.test.UTF16Util;

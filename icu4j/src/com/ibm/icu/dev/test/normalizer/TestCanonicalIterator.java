@@ -5,15 +5,13 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/normalizer/TestCanonicalIterator.java,v $ 
- * $Date: 2003/01/28 18:55:34 $ 
- * $Revision: 1.12 $
+ * $Date: 2003/04/09 21:38:16 $ 
+ * $Revision: 1.13 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.dev.test.normalizer;
 
-import java.text.CharacterIterator;
-import java.text.StringCharacterIterator;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.SortedSet;
