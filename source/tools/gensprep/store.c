@@ -28,10 +28,6 @@
 #include "uhash.h"
 
 
-#ifdef WIN32
-#   pragma warning(disable: 4100)
-#endif
-
 #define DO_DEBUG_OUT 0
 
 

@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 2002, International Business Machines
+*   Copyright (C) 2002-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  utfperf.c
@@ -22,7 +22,11 @@
 #include <fcntl.h>	/* for _O_BINARY */
 #include <io.h>		/* for _setmode() */
 
-#if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
+#include "unicode/utypes.h"
+#include "unicode/ucnv.h"
+#include "unicode/ustring.h"
+
+#if defined(U_WINDOWS)
 #   include <windows.h>
 #else
 #   include <sys/time.h>
@@ -34,10 +38,6 @@
         return t.tv_sec*1000+t.tv_usec/1000;
     };
 #endif
-
-#include "unicode/utypes.h"
-#include "unicode/ucnv.h"
-#include "unicode/ustring.h"
 
 /* definitions and text buffers */
 

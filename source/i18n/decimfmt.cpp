@@ -2712,13 +2712,6 @@ DecimalFormat::appendAffixPattern(UnicodeString& appendTo,
 
 //------------------------------------------------------------------------------
 
-/* Tell the VC++ compiler not to spew out the warnings about integral size conversion */
-/*
-#ifdef _WIN32
-#pragma warning( disable : 4761 )
-#endif
-*/
-
 UnicodeString&
 DecimalFormat::toPattern(UnicodeString& result, UBool localized) const
 {

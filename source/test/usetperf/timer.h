@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2004, International Business Machines
+* Copyright (c) 2002-2005, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * 2002-09-20 aliu Created.
@@ -15,7 +15,7 @@
 //----------------------------------------------------------------------
 // Win32
 
-#if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
+#if defined(U_WINDOWS)
 
 #include <windows.h>
 

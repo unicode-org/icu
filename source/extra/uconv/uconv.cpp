@@ -1,6 +1,6 @@
 /*****************************************************************************
 *
-*   Copyright (C) 1999-2004, International Business Machines
+*   Copyright (C) 1999-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************/
@@ -38,7 +38,7 @@
 
 #include "unicode/uwmsg.h"
 
-#if (defined(WIN32) || defined(U_CYGWIN)) && !defined(__STRICT_ANSI__)
+#if (defined(U_WINDOWS) || defined(U_CYGWIN)) && !defined(__STRICT_ANSI__)
 #include <io.h>
 #include <fcntl.h>
 #define USE_FILENO_BINARY_MODE 1
@@ -1143,7 +1143,7 @@ main(int argc, char **argv)
 
     // Get and prettify pname.
     pname = uprv_strrchr(*argv, U_FILE_SEP_CHAR);
-#ifdef WIN32
+#ifdef U_WINDOWS
     if (!pname) {
         pname = uprv_strrchr(*argv, '/');
     }
