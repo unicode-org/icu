@@ -836,6 +836,7 @@ void IntlTestRBNF::TestLLong()
         LLAssert(n.abs() == llong(0, 1));
     }
 
+#ifdef RBNF_DEBUG
     logln("Testing atoll");
     // atoll
     const char empty[] = "";
@@ -850,6 +851,7 @@ void IntlTestRBNF::TestLLong()
     LLAssert(llong::atoll(neg_12345) == -llong(0, 12345));
     LLAssert(llong::atoll(big1, 16) == llong(0x12345678, 0x9abcdef0));
     LLAssert(llong::atoll(big2, 16) == llong(0xffffffff, 0xffffffff));
+#endif
 
     // u_atoll
     const UChar uempty[] = { 0 };
@@ -865,6 +867,7 @@ void IntlTestRBNF::TestLLong()
     LLAssert(llong::utoll(ubig1, 16) == llong(0x12345678, 0x9abcdef0));
     LLAssert(llong::utoll(ubig2, 16) == llong(0xffffffff, 0xffffffff));
 
+#ifdef RBNF_DEBUG
     logln("Testing lltoa");
     // lltoa
     {
@@ -874,6 +877,7 @@ void IntlTestRBNF::TestLLong()
         LLAssert(((-llong(0, 12345)).lltoa(buf, (uint32_t)sizeof(buf)) == 6) && (strcmp(buf, neg_12345) == 0));
         LLAssert((llong(0x12345678, 0x9abcdef0).lltoa(buf, (uint32_t)sizeof(buf), 16) == 16) && (strcmp(buf, big1) == 0));
     }
+#endif
 
     logln("Testing u_lltoa");
     // u_lltoa

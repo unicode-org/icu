@@ -216,11 +216,15 @@ public:
     inline llong abs() const;
 
     // simple construction from ASCII and Unicode strings
+#ifdef RBNF_DEBUG
     static llong atoll(const char* str, uint32_t radix = 10);
+#endif
     static llong utoll(const UChar* str, uint32_t radix = 10);
 
     // output as ASCII or Unicode strings or as raw values, preceeding '-' if signed
+#ifdef RBNF_DEBUG
     uint32_t lltoa(char* buffer, uint32_t buflen, uint32_t radix = 10, UBool raw = FALSE) const;
+#endif
     uint32_t lltou(UChar* buffer, uint32_t buflen, uint32_t radix = 10, UBool raw = FALSE) const;
 
 private:
