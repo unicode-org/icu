@@ -73,4 +73,16 @@ U_CFUNC const char* loadTestData(UErrorCode* err);
 #define myErrorName(errorCode) u_errorName(errorCode)
 
 
+/**
+ * Call this once to get a consistent timezone. Use ctest_resetTimeZone to set it back to the original value.
+ * @param optionalTimeZone Set this to a requested timezone.
+ *      Set to NULL to use the standard test timezone (Pacific Time)
+ */
+U_CFUNC void ctest_setTimeZone(const char *optionalTimeZone, UErrorCode *status);
+/**
+ * Call this once get back the original timezone
+ */
+U_CFUNC void ctest_resetTimeZone(void);
+
+
 #endif
