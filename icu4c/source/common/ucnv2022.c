@@ -211,7 +211,7 @@ typedef enum
 
 
 /*Below are the 3 arrays depicting a state transition table*/
-int8_t normalize_esq_chars_2022[256] = {
+static const int8_t normalize_esq_chars_2022[256] = {
 /*       0      1       2       3       4      5       6        7       8       9           */
 
          0     ,0      ,0      ,0      ,0      ,0      ,0      ,0      ,0      ,0
@@ -243,7 +243,7 @@ int8_t normalize_esq_chars_2022[256] = {
 };
 
 #define MAX_STATES_2022 74
-int32_t escSeqStateTable_Key_2022[MAX_STATES_2022] = {
+static const int32_t escSeqStateTable_Key_2022[MAX_STATES_2022] = {
 /*   0           1           2           3           4           5           6           7           8           9           */
 
      1          ,34         ,36         ,39         ,55         ,57         ,60         ,61         ,1093       ,1096
@@ -257,7 +257,7 @@ int32_t escSeqStateTable_Key_2022[MAX_STATES_2022] = {
 };
 
 
-const char* escSeqStateTable_Result_2022[MAX_STATES_2022] = {
+static const char* const escSeqStateTable_Result_2022[MAX_STATES_2022] = {
  /*  0                      1                        2                      3                   4                   5                        6                      7                       8                       9    */
 
      NULL                   ,NULL                   ,NULL                   ,NULL               ,NULL               ,NULL                   ,NULL                   ,NULL                   ,"latin1"               ,"latin1"
@@ -270,7 +270,7 @@ const char* escSeqStateTable_Result_2022[MAX_STATES_2022] = {
     ,"ibm-920"              ,"ibm-915"              ,"ibm-915"              ,"latin1"
 };
 
-UCNV_TableStates_2022 escSeqStateTable_Value_2022[MAX_STATES_2022] = {
+static const UCNV_TableStates_2022 escSeqStateTable_Value_2022[MAX_STATES_2022] = {
 /*          0                           1                         2                             3                           4                           5                               6                        7                          8                           9       */
      VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022     ,VALID_NON_TERMINAL_2022    ,VALID_SS2_SEQUENCE        ,VALID_SS3_SEQUENCE         ,VALID_NON_TERMINAL_2022    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022
     ,VALID_MAYBE_TERMINAL_2022  ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022
@@ -1427,7 +1427,7 @@ toUnicodeCallback(UConverterToUnicodeArgs* args, const uint32_t sourceChar,const
 *          ISO-8859-7 : alisas to ibm-9409 mapping table
 */
 #define MAX_VALID_CP_JP 9
-static Cnv2022Type myConverterType[MAX_VALID_CP_JP]={
+static const Cnv2022Type myConverterType[MAX_VALID_CP_JP]={
     ASCII1,
     LATIN1,
     SBCS,
@@ -1440,7 +1440,7 @@ static Cnv2022Type myConverterType[MAX_VALID_CP_JP]={
 
 };
 
-static StateEnum nextStateArray[5][MAX_VALID_CP_JP]= {
+static const StateEnum nextStateArray[5][MAX_VALID_CP_JP]= {
     {JISX201 ,INVALID_STATE,INVALID_STATE,JISX208,ASCII,INVALID_STATE,INVALID_STATE,INVALID_STATE,INVALID_STATE},
     {JISX201,INVALID_STATE,INVALID_STATE,JISX208,JISX212,ASCII,INVALID_STATE,INVALID_STATE,INVALID_STATE},
     {ISO8859_1,ISO8859_7,JISX201,JISX208,JISX212,GB2312,KSC5601,ASCII,INVALID_STATE},
@@ -1765,7 +1765,7 @@ getTrail:
  * <ESC>$A  GB2312
  * <ESC>$(C KSC5601
  */
-static StateEnum nextStateToUnicodeJP[5][MAX_STATES_2022]= {
+static const StateEnum nextStateToUnicodeJP[5][MAX_STATES_2022]= {
     {
 /*      0                1               2               3               4               5               6               7               8               9    */
     INVALID_STATE   ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE
@@ -2469,7 +2469,7 @@ UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
 
 
 /********************** ISO2022-CN Data **************************/
-static const char* escSeqCharsCN[10] ={
+static const char* const escSeqCharsCN[10] ={
         "\x0F",             /* ASCII */
         "\x1B\x24\x29\x41", /* GB 2312-80 */
         "\x1B\x24\x29\x45", /* ISO-IR-165 */
@@ -2481,7 +2481,7 @@ static const char* escSeqCharsCN[10] ={
         "\x1B\x24\x2B\x4C", /* CNS 11643-1992 Plane 6 */
         "\x1B\x24\x2B\x4D"  /* CNS 11643-1992 Plane 7 */
 };
-static int escSeqCharsLenCN[10] = {
+static const int escSeqCharsLenCN[10] = {
     1,      /* length of escSeq for ASCII */
     4,      /* length of escSeq for GB 2312-80 */
     4,      /* length of escSeq for ISO-IR-165 */
@@ -2493,7 +2493,7 @@ static int escSeqCharsLenCN[10] = {
     4,      /* length of escSeq for CNS 11643-1992 Plane 6 */
     4       /* length of escSeq for CNS 11643-1992 Plane 7 */
 };
-static const char* shiftSeqCharsCN[10] ={
+static const char* const shiftSeqCharsCN[10] ={
         "",                     /* ASCII */
         (const char*) "\x0E",   /* GB 2312-80 */
         (const char*) "\x0E",   /* ISO-IR-165 */
@@ -2505,7 +2505,7 @@ static const char* shiftSeqCharsCN[10] ={
         UCNV_SS3,               /* CNS 11643-1992 Plane 6 */
         UCNV_SS3                /* CNS 11643-1992 Plane 7 */
 };
-static int shiftSeqCharsLenCN[10] ={
+static const int shiftSeqCharsLenCN[10] ={
     0,      /* length of shiftSeq for ASCII */
     1,      /* length of shiftSeq for GB 2312-80 */
     1,      /* length of shiftSeq for ISO-IR-165 */
@@ -2525,7 +2525,7 @@ typedef enum  {
         CNS_11643=3
 } StateEnumCN;
 
-static Cnv2022Type myConverterTypeCN[4]={
+static const Cnv2022Type myConverterTypeCN[4]={
         ASCII1,
         DBCS,
         DBCS,
@@ -2804,7 +2804,7 @@ callback:
 }
 
 /*************** to unicode *******************/
-static StateEnumCN nextStateToUnicodeCN[2][MAX_STATES_2022]= {
+static const StateEnumCN nextStateToUnicodeCN[2][MAX_STATES_2022]= {
     {
 /*      0                1               2               3               4               5               6               7               8               9    */
      INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE  ,INVALID_STATE

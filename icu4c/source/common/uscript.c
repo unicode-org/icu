@@ -18,7 +18,7 @@
 #define U_SCRIPT_NAMES_ARRAY_SIZE 38
 #define U_SCRIPT_ABBR_ARRAY_SIZE 41
 
-static const char* scriptNames[]={
+static const char * const scriptNames[]={
         "ARABIC",     /* U_ARABIC     */
         "ARMENIAN",   /* U_ARMENIAN   */
         "BENGALI",    /* U_BENGALI    */
@@ -60,7 +60,7 @@ static const char* scriptNames[]={
     
 };
 
-static const char* scriptAbbr[]= {
+static const char * const scriptAbbr[]= {
         "Arab",       /* U_ARABIC     */
         "Armn",       /* U_ARMENIAN   */
         "Beng",       /* U_BENGALI    */
@@ -211,7 +211,7 @@ static const UScriptCode scriptAbbrCodes[] = {
         U_YI         ,
         U_COMMON     , 
 };
-static const char* scriptCodeName[]={
+static const char * const scriptCodeName[]={
     "U_INVALID_CODE",
     "U_COMMON",    
     "U_INHERITED", 
@@ -260,7 +260,7 @@ static const char* scriptCodeName[]={
 
 /* binary search the string array */
 static int 
-findStringIndex(const char* sortedArr[],const char* target, int size){
+findStringIndex(const char* const *sortedArr, const char* target, int size){
     int left, middle, right,rc;
     left =0;
     right= size-1;
