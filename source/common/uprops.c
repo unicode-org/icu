@@ -44,3 +44,19 @@ uscript_getScript(UChar32 c, UErrorCode *pErrorCode) {
 
     return (UScriptCode)(u_getUnicodeProperties(c, 0)&UPROPS_SCRIPT_MASK);
 }
+
+U_CAPI UBlockCode U_EXPORT2
+ublock_getCode(UChar32 c) {
+    uint32_t b;
+
+    if((uint32_t)c>0x10ffff) {
+        return UBLOCK_INVALID_CODE;
+    }
+
+    b=(u_getUnicodeProperties(c, 0)&UPROPS_BLOCK_MASK)>>UPROPS_BLOCK_SHIFT;
+    if(b==0) {
+        return UBLOCK_INVALID_CODE;
+    } else {
+        return (UBlockCode)b;
+    }
+}
