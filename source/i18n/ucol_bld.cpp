@@ -405,7 +405,7 @@ U_CFUNC uint32_t ucol_getSimpleCEGenerator(ucolCEGenerator *g, UColToken *tok, u
   } 
 
   g->noOfRanges = ucol_allocWeights(low, high, count, g->ranges);
-  g->current = UCOL_BYTE_COMMON;
+  g->current = UCOL_BYTE_COMMON<<24;
 
   if(g->noOfRanges == 0) {
     *status = U_INTERNAL_PROGRAM_ERROR;
