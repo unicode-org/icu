@@ -44,7 +44,7 @@ public:
      * Lookup the UnicodeSet associated with the given character, and
      * return it.  Return <tt>null</tt> if not found.
      */
-    virtual const UnicodeSet* lookupSet(UChar ch) const = 0;
+    virtual const UnicodeSet* lookupSet(UChar32 ch) const = 0;
 
     /**
      * Parse a symbol reference name from the given string, starting

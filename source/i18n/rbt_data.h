@@ -90,14 +90,14 @@ public:
 
     ~TransliterationRuleData();
 
-    const UnicodeSet* lookupSet(UChar standIn) const;
+    const UnicodeSet* lookupSet(UChar32 standIn) const;
 
     /**
      * Return the zero-based index of the segment represented by the given
      * character, or -1 if none.  Repeat: This is a zero-based return value,
      * 0..8, even though these are notated "$1".."$9".
      */
-    int32_t lookupSegmentReference(UChar c) const;
+    int32_t lookupSegmentReference(UChar32 c) const;
 
     /**
      * Return the character used to stand for the given segment reference.

@@ -66,6 +66,8 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(30,TestCompoundFilter);
         TESTCASE(31,TestRemove);
         TESTCASE(32,TestToRules);
+        TESTCASE(33,TestContext);
+        TESTCASE(34,TestSupplemental);
         default: name = ""; break;
     }
 }
@@ -152,7 +154,9 @@ void TransliteratorTest::TestSimpleRules(void) {
      */
     expect(UnicodeString("ab>x|y;", "") +
            "yc>z",
-           "eabcd", "exzd");        /* Another set of rules:
+           "eabcd", "exzd");
+
+    /* Another set of rules:
      *    1. ab>x|yzacw
      *    2. za>q
      *    3. qc>r
@@ -476,7 +480,7 @@ class TestFilter : public UnicodeFilter {
     virtual UnicodeFilter* clone() const {
         return new TestFilter(*this);
     }
-    virtual UBool contains(UChar c) const {
+    virtual UBool contains(UChar32 c) const {
         return c != (UChar)0x0063 /*c*/;
     }
 };
@@ -506,6 +510,12 @@ void TransliteratorTest::TestFiltering(void) {
  * Test anchors
  */
 void TransliteratorTest::TestAnchors(void) {
+    expect(UnicodeString("^a  > 0; a$ > 2 ; a > 1;", ""),
+           "aaa",
+           "012");
+    expect(UnicodeString("$s=[z$]; $s{a>0; a}$s>2; a>1;", ""),
+           "aaa",
+           "012");
     expect(UnicodeString("^ab  > 01 ;"
            " ab  > |8 ;"
            "  b  > k ;"
@@ -1451,18 +1461,44 @@ void TransliteratorTest::TestToRules(void) {
     }
 }
 
+void TransliteratorTest::TestContext() {
+    UTransPosition pos = {0, 2, 0, 1}; // cs cl s l
+    expect("de > x; {d}e > y;",
+           "de",
+           "ye",
+           &pos);
+
+    expect("ab{c} > z;",
+           "xadabdabcy",
+           "xadabdabzy");
+}
+
+void TransliteratorTest::TestSupplemental() {
+    expect(CharsToUnicodeString("$a=\\U00010300; $s=[\\U00010300-\\U00010323];"
+                                "a > $a; $s > i;"),
+           CharsToUnicodeString("ab\\U0001030Fx"),
+           CharsToUnicodeString("\\U00010300bix"));
+
+    expect(CharsToUnicodeString("$a=[a-z\\U00010300-\\U00010323];"
+                                "$b=[A-Z\\U00010400-\\U0001044D];"
+                                "($a)($b) > $2 $1;"),
+           CharsToUnicodeString("aB\\U00010300\\U00010400c\\U00010401\\U00010301D"),
+           CharsToUnicodeString("Ba\\U00010400\\U00010300\\U00010401cD\\U00010301"));
+}
+
 //======================================================================
 // Support methods
 //======================================================================
 void TransliteratorTest::expect(const UnicodeString& rules,
                                 const UnicodeString& source,
-                                const UnicodeString& expectedResult) {
+                                const UnicodeString& expectedResult,
+                                UTransPosition *pos) {
     UErrorCode status = U_ZERO_ERROR;
     Transliterator *t = new RuleBasedTransliterator("<ID>", rules, status);
     if (U_FAILURE(status)) {
         errln("FAIL: Transliterator constructor failed");
     } else {
-        expect(*t, source, expectedResult);
+        expect(*t, source, expectedResult, pos);
     }
     delete t;
 }
@@ -1477,34 +1513,49 @@ void TransliteratorTest::expect(const Transliterator& t,
 
 void TransliteratorTest::expect(const Transliterator& t,
                                 const UnicodeString& source,
-                                const UnicodeString& expectedResult) {
-    UnicodeString result(source);
-    t.transliterate(result);
-    expectAux(t.getID() + ":String", source, result, expectedResult);
+                                const UnicodeString& expectedResult,
+                                UTransPosition *pos) {
+    if (pos == 0) {
+        UnicodeString result(source);
+        t.transliterate(result);
+        expectAux(t.getID() + ":String", source, result, expectedResult);
+    }
+
+    UTransPosition index={0, 0, 0, 0};
+    if (pos != 0) {
+        index = *pos;
+    }
 
     UnicodeString rsource(source);
-    t.transliterate(rsource);
+    if (pos == 0) {
+        t.transliterate(rsource);
+    } else {
+        // Do it all at once -- below we do it incrementally
+        t.finishTransliteration(rsource, *pos);
+    }
     expectAux(t.getID() + ":Replaceable", source, rsource, expectedResult);
 
     // Test keyboard (incremental) transliteration -- this result
     // must be the same after we finalize (see below).
-    rsource.remove();
-    UTransPosition index={0, 0, 0, 0};
     UnicodeString log;
-
-    for (int32_t i=0; i<source.length(); ++i) {
-        if (i != 0) {
-            log.append(" + ");
-        }
-        log.append(source.charAt(i)).append(" -> ");
+    rsource.remove();
+    if (pos != 0) {
+        rsource = source;
+        formatInput(log, rsource, index);
+        log.append(" -> ");
         UErrorCode status = U_ZERO_ERROR;
-        t.transliterate(rsource, index, source.charAt(i), status);
-        // Append the string buffer with a vertical bar '|' where
-        // the committed index is.
-        UnicodeString left, right;
-        rsource.extractBetween(0, index.start, left);
-        rsource.extractBetween(index.start, rsource.length(), right);
-        log.append(left).append((UChar)PIPE).append(right);
+        t.transliterate(rsource, index, status);
+        formatInput(log, rsource, index);
+    } else {
+        for (int32_t i=0; i<source.length(); ++i) {
+            if (i != 0) {
+                log.append(" + ");
+            }
+            log.append(source.charAt(i)).append(" -> ");
+            UErrorCode status = U_ZERO_ERROR;
+            t.transliterate(rsource, index, source.charAt(i), status);
+            formatInput(log, rsource, index);
+        }
     }
     
     // As a final step in keyboard transliteration, we must call
@@ -1516,6 +1567,41 @@ void TransliteratorTest::expect(const Transliterator& t,
     expectAux(t.getID() + ":Keyboard", log,
               rsource == expectedResult,
               expectedResult);
+}
+
+/**
+ * @param appendTo result is appended to this param.
+ * @param input the string being transliterated
+ * @param pos the index struct
+ */
+UnicodeString& TransliteratorTest::formatInput(UnicodeString &appendTo,
+                                               const UnicodeString& input,
+                                               const UTransPosition& pos) {
+    // Output a string of the form aaa{bbb|ccc|ddd}eee, where
+    // the {} indicate the context start and limit, and the ||
+    // indicate the start and limit.
+    if (0 <= pos.contextStart &&
+        pos.contextStart <= pos.start &&
+        pos.start <= pos.limit &&
+        pos.limit <= pos.contextLimit &&
+        pos.contextLimit <= input.length()) {
+
+        UnicodeString a, b, c, d, e;
+        input.extractBetween(0, pos.contextStart, a);
+        input.extractBetween(pos.contextStart, pos.start, b);
+        input.extractBetween(pos.start, pos.limit, c);
+        input.extractBetween(pos.limit, pos.contextLimit, d);
+        input.extractBetween(pos.contextLimit, input.length(), e);
+        appendTo.append(a).append((UChar)123/*{*/).append(b).
+            append((UChar)PIPE).append(c).append((UChar)PIPE).append(d).
+            append((UChar)125/*}*/).append(e);
+    } else {
+        appendTo.append((UnicodeString)"INVALID UTransPosition {cs=" +
+                        pos.contextStart + ", s=" + pos.start + ", l=" +
+                        pos.limit + ", cl=" + pos.contextLimit + "} on " +
+                        input);
+    }
+    return appendTo;
 }
 
 void TransliteratorTest::expectAux(const UnicodeString& tag,

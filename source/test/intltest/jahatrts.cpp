@@ -73,7 +73,7 @@ class TestJamoFilter : public UnicodeFilter {
     virtual UnicodeFilter* clone() const {
         return new TestJamoFilter(*this);
     }
-    virtual UBool contains(UChar c) const {
+    virtual UBool contains(UChar32 c) const {
        if(c == 0x1101 )
           return FALSE;
        else

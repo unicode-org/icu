@@ -10,6 +10,7 @@
 
 #include "unicode/unistr.h"
 #include "unicode/utrans.h"
+#include "unicode/unimatch.h"
 
 class Replaceable;
 class TransliterationRuleData;
@@ -35,39 +36,6 @@ class TransliterationRuleData;
 class TransliterationRule {
 
 public:
-
-    /**
-     * Constants returned by <code>getMatchDegree()</code> indicating
-     * the degree of match between the text and this rule.
-     * @see #getMatchDegree
-     */
-    enum {
-        /**
-         * Constant returned by <code>getMatchDegree()</code>
-         * indicating a mismatch between the text and this rule.  One
-         * or more characters of the context or key do not match the
-         * text.
-         */
-        MISMATCH,
-
-        /**
-         * Constant returned by <code>getMatchDegree()</code>
-         * indicating a partial match between the text and this rule.
-         * All characters of the text match the corresponding context
-         * or key, but more characters are required for a complete
-         * match.  There are some key or context characters at the end
-         * of the pattern that remain unmatched because the text isn't
-         * long enough.
-         */
-        PARTIAL_MATCH,
-
-        /**
-         * Constant returned by <code>getMatchDegree()</code>
-         * indicating a complete match between the text and this rule.
-         * The text matches all context and key characters.
-         */
-        FULL_MATCH
-    };
 
     /**
      * The character at index i, where i < contextStart || i >= contextLimit,
@@ -110,6 +78,14 @@ private:
     int32_t* segments;
 
     /**
+     * A value we compute from segments.  The first index into segments[]
+     * that is >= anteContextLength.  That is, the first one that is within
+     * the forward scanned part of the pattern -- the key or the postContext.
+     * If there are no segments, this has the value -1.
+     */
+    int32_t firstKeySeg;
+
+    /**
      * The length of the string that must match before the key.  If
      * zero, then there is no matching requirement before the key.
      * Substring [0,anteContextLength) of pattern is the anteContext.
@@ -129,6 +105,25 @@ private:
      * the cursorPos is output.length().
      */
     int32_t cursorPos;
+
+    /**
+     * Miscellaneous attributes.
+     */
+    int8_t flags;
+
+    /**
+     * Flag attributes.
+     */
+    enum {
+        ANCHOR_START = 1,
+        ANCHOR_END   = 2,
+    };
+
+    /**
+     * A reference to the data for this rule.  The data provides
+     * lookup services for matchers and segments.
+     */
+    const TransliterationRuleData& data;
 
 public:
 
@@ -169,6 +164,7 @@ public:
                         int32_t cursorPosition, int32_t cursorOffset,
                         int32_t* adoptedSegs,
                         UBool anchorStart, UBool anchorEnd,
+                        const TransliterationRuleData& data,
                         UErrorCode& status);
 
     /**
@@ -192,6 +188,7 @@ public:
                         int32_t anteContextPos, int32_t postContextPos,
                         const UnicodeString& outputStr,
                         int32_t cursorPosition,
+                        const TransliterationRuleData& data,
                         UErrorCode& status);
 
     /**
@@ -213,9 +210,13 @@ public:
     /**
      * Return the preceding context length.  This method is needed to
      * support the <code>Transliterator</code> method
-     * <code>getMaximumContextLength()</code>.
+     * <code>getMaximumContextLength()</code>.  Internally, this is
+     * implemented as the anteContextLength, optionally plus one if
+     * there is a start anchor.  The one character anchor gap is
+     * needed to make repeated incremental transliteration with
+     * anchors work.
      */
-    virtual int32_t getAnteContextLength(void) const;
+    virtual int32_t getContextLength(void) const;
 
     /**
      * Internal method.  Returns 8-bit index value for this rule.
@@ -223,24 +224,7 @@ public:
      * unless the first character of the key is a set.  If it's a
      * set, or otherwise can match multiple keys, the index value is -1.
      */
-    int16_t getIndexValue(const TransliterationRuleData& data) const;
-
-    /**
-     * Do a replacement of the input pattern with the output text in
-     * the given string, at the given offset.  This method assumes
-     * that a match has already been found in the given text at the
-     * given position.
-     * @param text the text containing the substring to be replaced
-     * @param offset the offset into the text at which the pattern
-     * matches.  This is the offset to the point after the ante
-     * context, if any, and before the match string and any post
-     * context.
-     * @param data the RuleBasedTransliterator.Data object specifying
-     * context for this transliterator.
-     * @return the change in the length of the text
-     */
-    int32_t replace(Replaceable& text, int32_t offset,
-                    const TransliterationRuleData& data) const;
+    int16_t getIndexValue() const;
 
     /**
      * Internal method.  Returns true if this rule matches the given
@@ -252,8 +236,7 @@ public:
      * value.  If the rule contains only ante context, as in foo)>bar,
      * then it will match any key.
      */
-    UBool matchesIndexValue(uint8_t v,
-                             const TransliterationRuleData& data) const;
+    UBool matchesIndexValue(uint8_t v) const;
 
     /**
      * Return true if this rule masks another rule.  If r1 masks r2 then
@@ -264,88 +247,35 @@ public:
     virtual UBool masks(const TransliterationRule& r2) const;
 
     /**
-     * Return true if this rule matches the given text.
-     * @param text the text, both translated and untranslated
-     * @param start the beginning index, inclusive; <code>0 <= start
-     * <= limit</code>.
-     * @param limit the ending index, exclusive; <code>start <= limit
-     * <= text.length()</code>.
-     * @param cursor position at which to translate next, representing offset
-     * into text.  This value must be between <code>start</code> and
-     * <code>limit</code>.
+     * Attempt a match and replacement at the given position.  Return
+     * the degree of match between this rule and the given text.  The
+     * degree of match may be mismatch, a partial match, or a full
+     * match.  A mismatch means at least one character of the text
+     * does not match the context or key.  A partial match means some
+     * context and key characters match, but the text is not long
+     * enough to match all of them.  A full match means all context
+     * and key characters match.
+     * 
+     * If a full match is obtained, perform a replacement, update pos,
+     * and return U_MATCH.  Otherwise both text and pos are unchanged.
+     * 
+     * @param text the text
+     * @param pos the position indices
+     * @param incremental if TRUE, test for partial matches that may
+     * be completed by additional text inserted at pos.limit.
+     * @return one of <code>U_MISMATCH</code>,
+     * <code>U_PARTIAL_MATCH</code>, or <code>U_MATCH</code>.  If
+     * incremental is FALSE then U_PARTIAL_MATCH will not be returned.
      */
-    virtual UBool matches(const Replaceable& text,
-                          const UTransPosition& pos,
-                          const TransliterationRuleData& data) const;
-
-    /**
-     * Return the degree of match between this rule and the given text.  The
-     * degree of match may be mismatch, a partial match, or a full match.  A
-     * mismatch means at least one character of the text does not match the
-     * context or key.  A partial match means some context and key characters
-     * match, but the text is not long enough to match all of them.  A full
-     * match means all context and key characters match.
-     * @param text the text, both translated and untranslated
-     * @param start the beginning index, inclusive; <code>0 <= start
-     * <= limit</code>.
-     * @param limit the ending index, exclusive; <code>start <= limit
-     * <= text.length()</code>.
-     * @param cursor position at which to translate next, representing offset
-     * into text.  This value must be between <code>start</code> and
-     * <code>limit</code>.
-     * @return one of <code>MISMATCH</code>, <code>PARTIAL_MATCH</code>, or
-     * <code>FULL_MATCH</code>.
-     * @see #MISMATCH
-     * @see #PARTIAL_MATCH
-     * @see #FULL_MATCH
-     */
-    virtual int32_t getMatchDegree(const Replaceable& text,
-                                   const UTransPosition& pos,
-                                   const TransliterationRuleData& data) const;
-
-    /**
-     * Return the number of characters of the text that match this rule.  If
-     * there is a mismatch, return -1.  If the text is not long enough to match
-     * any characters, return 0.
-     * @param text the text, both translated and untranslated
-     * @param start the beginning index, inclusive; <code>0 <= start
-     * <= limit</code>.
-     * @param limit the ending index, exclusive; <code>start <= limit
-     * <= text.length()</code>.
-     * @param cursor position at which to translate next, representing offset
-     * into text.  This value must be between <code>start</code> and
-     * <code>limit</code>.
-     * @param data a dictionary of variables mapping <code>Character</code>
-     * to <code>UnicodeSet</code>
-     * @return -1 if there is a mismatch, 0 if the text is not long enough to
-     * match any characters, otherwise the number of characters of text that
-     * match this rule.
-     */
-    virtual int32_t getRegionMatchLength(const Replaceable& text,
-                                         const UTransPosition& pos,
-                                         const TransliterationRuleData& data) const;
-
-    /**
-     * Return true if the given key matches the given text.  This method
-     * accounts for the fact that the key character may represent a character
-     * set.  Note that the key and text characters may not be interchanged
-     * without altering the results.
-     * @param keyChar a character in the match key
-     * @param textChar a character in the text being transliterated
-     * @param data a dictionary of variables mapping <code>Character</code>
-     * to <code>UnicodeSet</code>
-     */
-    virtual UBool charMatches(UChar keyChar, const Replaceable& textChar,
-                              int32_t index,
-                              const UTransPosition& pos,
-                              const TransliterationRuleData& data) const;
+    UMatchDegree matchAndReplace(Replaceable& text,
+                                 UTransPosition& pos,
+                                 UBool incremental) const;
 
     /**
      * Create a rule string that represents this rule object.  Append
      * it to the given string.
      */
     virtual UnicodeString& toRule(UnicodeString& pat,
-                                  const TransliterationRuleData& data,
                                   UBool escapeUnprintable) const;
 private:
 

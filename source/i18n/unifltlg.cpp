@@ -21,7 +21,7 @@ public:
     NullFilter(UBool r) { result = r; }
     NullFilter(const NullFilter& f) : UnicodeFilter(f) { result = f.result; }
     virtual ~NullFilter() {}
-    virtual UBool contains(UChar /*c*/) const { return result; }
+    virtual UBool contains(UChar32 /*c*/) const { return result; }
     virtual UnicodeFilter* clone() const { return new NullFilter(*this); }
 };
 
@@ -31,7 +31,7 @@ public:
     UnicodeNotFilter(UnicodeFilter* adopted);
     UnicodeNotFilter(const UnicodeNotFilter&);
     virtual ~UnicodeNotFilter();
-    virtual UBool contains(UChar c) const;
+    virtual UBool contains(UChar32 c) const;
     virtual UnicodeFilter* clone() const;
 };
 
@@ -39,7 +39,7 @@ UnicodeNotFilter::UnicodeNotFilter(UnicodeFilter* adopted) : filt(adopted) {}
 UnicodeNotFilter::UnicodeNotFilter(const UnicodeNotFilter& f)
  : UnicodeFilter(f), filt(f.filt->clone()) {}
 UnicodeNotFilter::~UnicodeNotFilter() { delete filt; }
-UBool UnicodeNotFilter::contains(UChar c) const { return !filt->contains(c); }
+UBool UnicodeNotFilter::contains(UChar32 c) const { return !filt->contains(c); }
 UnicodeFilter* UnicodeNotFilter::clone() const { return new UnicodeNotFilter(*this); }
 
 /**
@@ -61,7 +61,7 @@ public:
     UnicodeAndFilter(UnicodeFilter* adopted1, UnicodeFilter* adopted2);
     UnicodeAndFilter(const UnicodeAndFilter&);
     virtual ~UnicodeAndFilter();
-    virtual UBool contains(UChar c) const;
+    virtual UBool contains(UChar32 c) const;
     virtual UnicodeFilter* clone() const;
 };
 
@@ -69,7 +69,7 @@ UnicodeAndFilter::UnicodeAndFilter(UnicodeFilter* f1, UnicodeFilter* f2) : filt1
 UnicodeAndFilter::UnicodeAndFilter(const UnicodeAndFilter& f)
  : UnicodeFilter(f), filt1(f.filt1->clone()), filt2(f.filt2->clone()) {}
 UnicodeAndFilter::~UnicodeAndFilter() { delete filt1; delete filt2; }
-UBool UnicodeAndFilter::contains(UChar c) const { return filt1->contains(c) && filt2->contains(c); }
+UBool UnicodeAndFilter::contains(UChar32 c) const { return filt1->contains(c) && filt2->contains(c); }
 UnicodeFilter* UnicodeAndFilter::clone() const { return new UnicodeAndFilter(*this); }
 
 /**
@@ -99,7 +99,7 @@ public:
     UnicodeOrFilter(UnicodeFilter* adopted1, UnicodeFilter* adopted2);
     UnicodeOrFilter(const UnicodeOrFilter&);
     virtual ~UnicodeOrFilter();
-    virtual UBool contains(UChar c) const;
+    virtual UBool contains(UChar32 c) const;
     virtual UnicodeFilter* clone() const;
 };
 
@@ -107,7 +107,7 @@ UnicodeOrFilter::UnicodeOrFilter(UnicodeFilter* f1, UnicodeFilter* f2) : filt1(f
 UnicodeOrFilter::UnicodeOrFilter(const UnicodeOrFilter& f)
  : UnicodeFilter(f), filt1(f.filt1->clone()), filt2(f.filt2->clone()) {}
 UnicodeOrFilter::~UnicodeOrFilter() { delete filt1; delete filt2; }
-UBool UnicodeOrFilter::contains(UChar c) const { return filt1->contains(c) || filt2->contains(c); }
+UBool UnicodeOrFilter::contains(UChar32 c) const { return filt1->contains(c) || filt2->contains(c); }
 UnicodeFilter* UnicodeOrFilter::clone() const { return new UnicodeOrFilter(*this); }
 
 /**
