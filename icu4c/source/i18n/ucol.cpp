@@ -1525,17 +1525,17 @@ ucol_calcSortKey(const    UCollator    *coll,
     /* If we need to normalize, we'll do it all at once at the beggining! */
     UColAttributeValue normMode = coll->normalizationMode;
     if((normMode != UCOL_OFF) 
-      /* && (u_quickCheck(source, len, UNORM_NFD, status) != UQUICK_CHECK_YES) 
-      && (u_quickCheck(source, len, UNORM_NFC, status) != UQUICK_CHECK_YES)) */
+      /* && (unorm_quickCheck(source, len, UNORM_NFD, status) != UNORM_YES) 
+      && (unorm_quickCheck(source, len, UNORM_NFC, status) != UNORM_YES)) */
       /* changed by synwee */
       && !checkFCD(source, len, status))
     {
       /*fprintf(stderr, ".");*/
-        normSourceLen = u_normalize(source, sourceLength, UNORM_NFD, 0, normSource, normSourceLen, status);
+        normSourceLen = unorm_normalize(source, sourceLength, UNORM_NFD, 0, normSource, normSourceLen, status);
         if(U_FAILURE(*status)) {
             *status=U_ZERO_ERROR;
             normSource = (UChar *) uprv_malloc((normSourceLen+1)*sizeof(UChar));
-            normSourceLen = u_normalize(source, sourceLength, UNORM_NFD, 0, normSource, (normSourceLen+1), status);
+            normSourceLen = unorm_normalize(source, sourceLength, UNORM_NFD, 0, normSource, (normSourceLen+1), status);
         }
     	normSource[normSourceLen] = 0;
 		s.string = normSource;
@@ -1962,17 +1962,17 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
     /* If we need to normalize, we'll do it all at once at the beggining! */
     UColAttributeValue normMode = coll->normalizationMode;
     if((normMode != UCOL_OFF) 
-      /* && (u_quickCheck(source, len, UNORM_NFD, status) != UQUICK_CHECK_YES)
-      && (u_quickCheck(source, len, UNORM_NFC, status) != UQUICK_CHECK_YES)) */
+      /* && (unorm_quickCheck(source, len, UNORM_NFD, status) != UNORM_YES)
+      && (unorm_quickCheck(source, len, UNORM_NFC, status) != UNORM_YES)) */
       /* changed by synwee */
       && !checkFCD(source, len, status))
     {
 
-        normSourceLen = u_normalize(source, sourceLength, UNORM_NFD, 0, normSource, normSourceLen, status);
+        normSourceLen = unorm_normalize(source, sourceLength, UNORM_NFD, 0, normSource, normSourceLen, status);
         if(U_FAILURE(*status)) {
             *status=U_ZERO_ERROR;
             normSource = (UChar *) uprv_malloc((normSourceLen+1)*sizeof(UChar));
-            normSourceLen = u_normalize(source, sourceLength, UNORM_NFD, 0, normSource, (normSourceLen+1), status);
+            normSourceLen = unorm_normalize(source, sourceLength, UNORM_NFD, 0, normSource, (normSourceLen+1), status);
         }
     	normSource[normSourceLen] = 0;
 		s.string = normSource;
@@ -2564,12 +2564,12 @@ ucol_strcoll(    const    UCollator    *coll,
     
     init_collIterate(source, sourceLength, &sColl, FALSE);
     if((coll->normalizationMode == UCOL_ON)
-      /* && (u_quickCheck( sColl.string, sColl.len - sColl.string, UNORM_NFD, &status) != UQUICK_CHECK_YES)
-      && (u_quickCheck( sColl.string, sColl.len - sColl.string, UNORM_NFC, &status) != UQUICK_CHECK_YES)) */
+      /* && (unorm_quickCheck( sColl.string, sColl.len - sColl.string, UNORM_NFD, &status) != UNORM_YES)
+      && (unorm_quickCheck( sColl.string, sColl.len - sColl.string, UNORM_NFC, &status) != UNORM_YES)) */
       /* changed by synwee */
       && !checkFCD(sColl.string, sColl.len - sColl.string, &status))
     {
-        normSourceLength = u_normalize(source, sourceLength, UNORM_NFD, 0, normSource, normSourceLength, &status);
+        normSourceLength = unorm_normalize(source, sourceLength, UNORM_NFD, 0, normSource, normSourceLength, &status);
         /* if we don't have enough space in buffers, we'll recursively call strcoll, so that we have single point */
         /* of exit - to free buffers we allocated. Otherwise, returns from strcoll are in various places and it   */
         /* would be hard to track all the exit points.                                                            */
@@ -2577,12 +2577,12 @@ ucol_strcoll(    const    UCollator    *coll,
             UColAttributeValue mode = coll->normalizationMode;
             normSourceP = (UChar *)uprv_malloc((normSourceLength+1)*sizeof(UChar));
             status = U_ZERO_ERROR;
-            normSourceLength = u_normalize(source, sourceLength, UNORM_NFD, 0, normSourceP, normSourceLength+1, &status);
-            normTargetLength = u_normalize(target, targetLength, UNORM_NFD, 0, normTargetP, normTargetLength, &status);
+            normSourceLength = unorm_normalize(source, sourceLength, UNORM_NFD, 0, normSourceP, normSourceLength+1, &status);
+            normTargetLength = unorm_normalize(target, targetLength, UNORM_NFD, 0, normTargetP, normTargetLength, &status);
             if(U_FAILURE(status)) { /* This would be buffer overflow */
                 normTargetP = (UChar *)uprv_malloc((normTargetLength+1)*sizeof(UChar));
                 status = U_ZERO_ERROR;
-                normTargetLength = u_normalize(target, targetLength, UNORM_NFD, 0, normTargetP, normTargetLength+1, &status);
+                normTargetLength = unorm_normalize(target, targetLength, UNORM_NFD, 0, normTargetP, normTargetLength+1, &status);
             }
             ((UCollator *)coll)->normalizationMode = UCOL_OFF;
             UCollationResult result = ucol_strcoll(coll, normSourceP, normSourceLength, normTargetP, normTargetLength);
@@ -2598,17 +2598,17 @@ ucol_strcoll(    const    UCollator    *coll,
 
     init_collIterate(target, targetLength, &tColl, FALSE);
     if((coll->normalizationMode == UCOL_ON)
-      /* && (u_quickCheck(tColl.string, tColl.len - tColl.string, UNORM_NFD, &status) != UQUICK_CHECK_YES)
-      && (u_quickCheck(tColl.string, tColl.len - tColl.string, UNORM_NFC, &status) != UQUICK_CHECK_YES)) */
+      /* && (unorm_quickCheck(tColl.string, tColl.len - tColl.string, UNORM_NFD, &status) != UNORM_YES)
+      && (unorm_quickCheck(tColl.string, tColl.len - tColl.string, UNORM_NFC, &status) != UNORM_YES)) */
       /* changed by synwee */
       && !checkFCD(tColl.string, tColl.len - tColl.string, &status))
     {
-      normTargetLength = u_normalize(target, targetLength, UNORM_NFD, 0, normTarget, normTargetLength, &status);
+      normTargetLength = unorm_normalize(target, targetLength, UNORM_NFD, 0, normTarget, normTargetLength, &status);
       if(U_FAILURE(status)) { /* This would be buffer overflow */
           UColAttributeValue mode = coll->normalizationMode;
           normTargetP = (UChar *)uprv_malloc((normTargetLength+1)*sizeof(UChar));
           status = U_ZERO_ERROR;
-          normTargetLength = u_normalize(target, targetLength, UNORM_NFD, 0, normTargetP, normTargetLength+1, &status);
+          normTargetLength = unorm_normalize(target, targetLength, UNORM_NFD, 0, normTargetP, normTargetLength+1, &status);
           ((UCollator *)coll)->normalizationMode = UCOL_OFF;
           UCollationResult result = ucol_strcoll(coll, normSourceP, normSourceLength, normTargetP, normTargetLength);
           ((UCollator *)coll)->normalizationMode = mode;

@@ -148,7 +148,7 @@ Normalizer::normalize(const UnicodeString& source,
                       UnicodeString& result, 
                       UErrorCode &status)
 {
-  if (quickCheckWithOption(source, mode, options, status) == UQUICK_CHECK_YES)
+  if (quickCheck(source, mode, status) == UNORM_YES)
   {
     result = source;
     return;
@@ -169,21 +169,13 @@ Normalizer::normalize(const UnicodeString& source,
   }
 }
 
-UQUICK_CHECK_VALUES
-Normalizer::quickCheck(const UnicodeString& source, Normalizer::EMode mode, 
+UNormalizationCheckResult
+Normalizer::quickCheck(const UnicodeString& source,
+                       Normalizer::EMode mode, 
                        UErrorCode &status)
 {
-  return quickCheckWithOption(source, mode, 0, status);
-}
-
-UQUICK_CHECK_VALUES
-Normalizer::quickCheckWithOption(const UnicodeString& source,
-                                  Normalizer::EMode    mode, 
-                                  int32_t              options,
-                                  UErrorCode&          status)
-{
   if (U_FAILURE(status))
-    return UQUICK_CHECK_MAYBE;
+    return UNORM_MAYBE;
 
   uint32_t length = source.length();
   UChar s[StackBufferLen];
@@ -194,13 +186,9 @@ Normalizer::quickCheckWithOption(const UnicodeString& source,
 	
 	source.extract(0, length, ps);
   ps[length] = 0;
-  UQUICK_CHECK_VALUES result;
-  if ((options & IGNORE_HANGUL) != 0)
-    result = u_quickCheckWithOption(ps, length, getUNormalizationMode(mode, 
-                                    status), UNORM_IGNORE_HANGUL, &status);
-  else
-    result = u_quickCheck(ps, length, getUNormalizationMode(mode, status),
-                          &status);
+  UNormalizationCheckResult result;
+  result = unorm_quickCheck(ps, length, getUNormalizationMode(mode, status),
+                            &status);
   if (ps != s)
     delete[] ps;
   return result;

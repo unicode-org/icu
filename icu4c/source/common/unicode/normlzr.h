@@ -480,44 +480,22 @@ class U_COMMON_API Normalizer
   /**
   * Performing quick check on a string, to quickly determine if the string is 
   * in a particular normalization format.
-  * Three types of result can be returned UQUICK_CHECK_YES, UQUICK_CHECK_NO or
-  * UQUICK_CHECK_MAYBE. Result UQUICK_CHECK_YES indicates that the argument
-  * string is in the desired normalized format, UQUICK_CHECK_NO determines that
+  * Three types of result can be returned UNORM_YES, UNORM_NO or
+  * UNORM_MAYBE. Result UNORM_YES indicates that the argument
+  * string is in the desired normalized format, UNORM_NO determines that
   * argument string is not in the desired normalized format. A 
-  * UQUICK_CHECK_MAYBE result indicates that a more thorough check is required, 
+  * UNORM_MAYBE result indicates that a more thorough check is required, 
   * the user may have to put the string in its normalized form and compare the 
   * results.
   * @param source       string for determining if it is in a normalized format
   * @paran mode         normalization format
   * @param status A pointer to an UErrorCode to receive any errors
-  * @return UQUICK_CHECK_YES, UQUICK_CHECK_NO or UQUICK_CHECK_MAYBE
+  * @return UNORM_YES, UNORM_NO or UNORM_MAYBE
   */
-  static UQUICK_CHECK_VALUES
+  static UNormalizationCheckResult
   quickCheck(const UnicodeString& source,
              EMode                mode, 
              UErrorCode&          status);
-
-  /**
-  * Performing quick check on a string, to quickly determine if the string is 
-  * in a particular normalization format.
-  * Three types of result can be returned UQUICK_CHECK_YES, UQUICK_CHECK_NO or
-  * UQUICK_CHECK_MAYBE. Result UQUICK_CHECK_YES indicates that the argument
-  * string is in the desired normalized format, UQUICK_CHECK_NO determines that
-  * argument string is not in the desired normalized format. A 
-  * UQUICK_CHECK_MAYBE result indicates that a more thorough check is required, 
-  * the user may have to put the string in its normalized form and compare the 
-  * results.
-  * @param source string for determining if it is in a normalized format
-  * @paran mode normalization format
-  * @param options the optional features to be enabled.
-  * @param status A pointer to an UErrorCode to receive any errors
-  * @return UQUICK_CHECK_YES, UQUICK_CHECK_NO or UQUICK_CHECK_MAYBE
-  */
-  static UQUICK_CHECK_VALUES
-  quickCheckWithOption(const UnicodeString& source,
-                       EMode                mode, 
-                       int32_t              options,
-                       UErrorCode&          status);
 
   //-------------------------------------------------------------------------
   // CharacterIterator overrides
