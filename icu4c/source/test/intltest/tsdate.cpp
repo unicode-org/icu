@@ -201,7 +201,7 @@ double IntlTestDateFormat::randDouble()
 {
     // Assume 8-bit (or larger) rand values.  Also assume
     // that the system rand() function is very poor, which it always is.
-    double d;
+    double d=0.0;
     int32_t i;
     do {
         for (i=0; i < sizeof(double); ++i)
