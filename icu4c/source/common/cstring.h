@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2003, International Business Machines
+*   Copyright (C) 1997-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -31,7 +31,6 @@
 #include <ctype.h>
 
 #define uprv_strcpy(dst, src) U_STANDARD_CPP_NAMESPACE  strcpy(dst, src)
-#define uprv_strcpyWithSize(dst, src, size) U_STANDARD_CPP_NAMESPACE strncpy(dst, src, size)
 #define uprv_strncpy(dst, src, size) U_STANDARD_CPP_NAMESPACE strncpy(dst, src, size)
 #define uprv_strlen(str) U_STANDARD_CPP_NAMESPACE strlen(str)
 #define uprv_strcmp(s1, s2) U_STANDARD_CPP_NAMESPACE strcmp(s1, s2)
@@ -61,6 +60,7 @@ uprv_ebcdictolower(char c);
 #endif
 
 
+#define uprv_strtod(source, end) U_STANDARD_CPP_NAMESPACE strtod(source, end)
 #define uprv_strtoul(str, end, base) U_STANDARD_CPP_NAMESPACE strtoul(str, end, base)
 #define uprv_strtol(str, end, base) U_STANDARD_CPP_NAMESPACE strtol(str, end, base)
 #ifdef WIN32

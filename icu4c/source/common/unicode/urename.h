@@ -960,7 +960,6 @@
 #define uprv_sortArray uprv_sortArray_3_1
 #define uprv_strCompare uprv_strCompare_3_1
 #define uprv_strdup uprv_strdup_3_1
-#define uprv_strtod uprv_strtod_3_1
 #define uprv_syntaxError uprv_syntaxError_3_1
 #define uprv_timezone uprv_timezone_3_1
 #define uprv_toupper uprv_toupper_3_1

@@ -32,6 +32,7 @@
 #include "unicode/locid.h"
 #include "cpputils.h"
 #include "ustrfmt.h"
+#include "cstring.h"
 
 // *****************************************************************************
 // class ChoiceFormat
