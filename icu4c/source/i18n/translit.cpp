@@ -16,9 +16,7 @@
 #include "transreg.h"
 #include "ucln_in.h"
 #include "unicode/cpdtrans.h"
-#include "unicode/hangjamo.h"
 #include "unicode/hextouni.h"
-#include "unicode/jamohang.h"
 #include "unicode/locid.h"
 #include "unicode/msgfmt.h"
 #include "unicode/name2uni.h"
@@ -316,9 +314,10 @@ void Transliterator::_transliterate(Replaceable& text,
     }
 
     if (index.contextStart < 0 ||
-        index.contextLimit > text.length() ||
         index.start < index.contextStart ||
-        index.start > index.contextLimit) {
+        index.limit < index.start ||
+        index.contextLimit < index.limit ||
+        text.length() < index.contextLimit) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
@@ -1428,8 +1427,6 @@ void Transliterator::initializeRegistry(void) {
 
     registry->put(new HexToUnicodeTransliterator(), TRUE);
     registry->put(new UnicodeToHexTransliterator(), TRUE);
-    registry->put(new JamoHangulTransliterator(), TRUE);
-    registry->put(new HangulJamoTransliterator(), TRUE);
     registry->put(new NullTransliterator(), TRUE);
     registry->put(new RemoveTransliterator(), TRUE);
     registry->put(new LowercaseTransliterator(), TRUE);
