@@ -149,7 +149,7 @@ static const struct callback_ent *findCallback(const char *name) {
        may not be that portable. */
 
     for (i = 0; i < count; ++i) {
-        if (!strcmp(name, transcode_callbacks[i].name)) {
+        if (!uprv_stricmp(name, transcode_callbacks[i].name)) {
             return &transcode_callbacks[i];
         }
     }
