@@ -1332,9 +1332,7 @@ LocaleTest::Test4147552()
                              Locale("no", "NO", "NY") 
     };
     
-    UnicodeString edn("Norwegian (Norway, Bokm");
-    edn += (UChar32)0x00e5;
-    edn += "l)";
+    UnicodeString edn("Norwegian (Norway, B)");
     UnicodeString englishDisplayNames [] = { 
                                                 "Norwegian (Norway)",
                                                  edn,
@@ -1342,14 +1340,12 @@ LocaleTest::Test4147552()
                                                  //"Norwegian (Norway,NY)" 
                                                  "Norwegian (Norway, Nynorsk)" 
     };
-    UnicodeString ndn("Norsk (Norge, Bokm");
-    ndn += (UChar32)0x00e5;
-    ndn += "l)";
+    UnicodeString ndn("norsk (Norge, B");
     UnicodeString norwegianDisplayNames [] = { 
-                                                "Norsk (Norge)",
-                                                "Norsk (Norge, B)", 
+                                                "norsk (Norge)",
+                                                "norsk (Norge, B)", 
                                                 //ndn, 
-                                                 "Norsk (Noreg, NY)" 
+                                                 "norsk (Noreg, NY)" 
                                                  //"Norsk (Noreg, Nynorsk)" 
     };
 
