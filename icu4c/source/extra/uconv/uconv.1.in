@@ -94,7 +94,7 @@ the the destination encoding.
 Omit invalid characters from the output.
 .TP
 .B "\-i"
-Ignore invalid sequences from the input.
+Ignore invalid sequences in the input.
 .TP
 .BI "\-f\fP, \fB\-\-from\-code" " encoding"
 Set the original encoding of the data to 
