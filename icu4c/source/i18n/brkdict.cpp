@@ -9,6 +9,7 @@
 */
 
 #include "brkdict.h"
+#include "cmemory.h"
 
 //=================================================================================
 // deserialization
@@ -65,14 +66,16 @@ BreakDictionary::readDictionaryFile(FileStream* in)
     // an index array followed by a data array)
     T_FileStream_read(in, &l, 4);
     SWAP32(l);
-    uint16_t* temp = new uint16_t[l];
+    /*uint16_t* temp = new uint16_t[l];*/
+    uint16_t* temp = (uint16_t*) uprv_malloc(sizeof(uint16_t)*l);
     T_FileStream_read(in, temp, l * sizeof (int16_t) );
     for (i = 0; i < l; i++) {
         SWAP16(temp[i]);
     }
     T_FileStream_read(in, &l, 4);
     SWAP32(l);
-    int8_t* temp2 = new int8_t[l];
+    /*int8_t* temp2 = new int8_t[l];*/
+    int8_t* temp2 = (int8_t*) uprv_malloc(sizeof(int8_t)*l);
     T_FileStream_read(in, temp2, l);
     columnMap = ucmp8_openAdopt(temp, temp2, l);
 
