@@ -1396,6 +1396,21 @@ public:
                                     UTextOffset limit,
                                     const UnicodeString& text);
 
+  /**
+   * Copy a substring of this object, retaining attribute (out-of-band)
+   * information.  This method is used to duplicate or reorder substrings.
+   * The destination index must not overlap the source range.
+   * 
+   * @param start the beginning index, inclusive; <code>0 <= start <=
+   * limit</code>.
+   * @param limit the ending index, exclusive; <code>start <= limit <=
+   * length()</code>.
+   * @param dest the destination index.  The characters from
+   * <code>start..limit-1</code> will be copied to <code>dest</code>.
+   * Implementations of this method may assume that <code>dest <= start ||
+   * dest >= limit</code>.
+   */
+  virtual void copy(int32_t start, int32_t limit, int32_t dest);
 
   /* Search and replace operations */
 
