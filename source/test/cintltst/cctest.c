@@ -8,7 +8,7 @@
 #include "unicode/ucnv_err.h"
 
 #include "cintltst.h"
-#include "ustr_imp.h"
+#include "ustr_cnv.h"
 void TestDefaultConverterError(void); /* keep gcc happy */
 
 

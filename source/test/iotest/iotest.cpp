@@ -21,7 +21,7 @@
 #include "unicode/uchar.h"
 #include "unicode/unistr.h"
 #include "unicode/ustring.h"
-#include "ustr_imp.h"
+#include "ustr_cnv.h"
 #include "iotest.h"
 #include "unicode/tstdtmod.h"
 

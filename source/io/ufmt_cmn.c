@@ -23,7 +23,7 @@
 #include "ufmt_cmn.h"
 #include "unicode/uchar.h"
 #include "unicode/ucnv.h"
-#include "ustr_imp.h"
+#include "ustr_cnv.h"
 
 #define DIGIT_0     0x0030
 #define DIGIT_9     0x0039
