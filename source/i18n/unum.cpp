@@ -664,4 +664,12 @@ unum_applyPattern(  UNumberFormat  *format,
         ((DecimalFormat*)format)->applyPattern(pat,*parseError, *status);
 }
 
+U_CAPI const char* U_EXPORT2
+unum_getLocaleByType(const UNumberFormat *fmt,
+                     ULocDataLocaleType type,
+                     UErrorCode* status)
+{
+  return NULL;
+}
+
 #endif /* #if !UCONFIG_NO_FORMATTING */

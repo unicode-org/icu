@@ -570,4 +570,12 @@ umsg_vparse(UMessageFormat *fmt,
     delete [] args;
 }
 
+U_CAPI const char* U_EXPORT2
+umsg_getLocaleByType(const UMessageFormat *fmt,
+                     ULocDataLocaleType type,
+                     UErrorCode* status)
+{
+  return NULL;
+}
+
 #endif /* #if !UCONFIG_NO_FORMATTING */

@@ -528,6 +528,17 @@ udat_setSymbols(    UDateFormat             *format,
                     int32_t                 valueLength,
                     UErrorCode              *status);
 
+/** Get the locale for this date format object. You can choose between valid and actual locale.
+ *  @param cal The calendar object
+ *  @param type type of the locale we're looking for (valid or actual) 
+ *  @param status error code for the operation
+ *  @return the locale name
+ */
+U_CAPI const char* U_EXPORT2
+udat_getLocaleByType(const UDateFormat *fmt,
+                     ULocDataLocaleType type,
+                     UErrorCode* status); 
+
 /********************* Obsolete API ************************************/
 /**
  * TODO: Remove after Aug 2002
