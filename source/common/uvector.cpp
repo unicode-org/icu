@@ -113,7 +113,9 @@ void UVector::addElement(void* obj, UErrorCode &status) {
 
 void UVector::addElement(int32_t elem, UErrorCode &status) {
     if (ensureCapacity(count + 1, status)) {
-        elements[count++].integer = elem;
+        elements[count].pointer = NULL;     // Pointers may be bigger than ints.
+        elements[count].integer = elem;
+        count++;
     }
 }
 
@@ -130,8 +132,10 @@ void UVector::setElementAt(void* obj, int32_t index) {
 void UVector::setElementAt(int32_t elem, int32_t index) {
     if (0 <= index && index < count) {
         if (elements[index].pointer != 0 && deleter != 0) {
+            // TODO:  this should be an error.  mixing up ints and pointers.
             (*deleter)(elements[index].pointer);
         }
+        elements[index].pointer = NULL;
         elements[index].integer = elem;
     }
     /* else index out of range */
@@ -226,6 +230,32 @@ void UVector::removeAllElements(void) {
     count = 0;
 }
 
+UBool   UVector::equals(const UVector &other) const {
+    int      i;
+
+    if (this->count != other.count) {
+        return FALSE;
+    }
+    if (comparer == 0) {
+        for (i=0; i<count; i++) {
+            if (elements[i].pointer != other.elements[i].pointer) {
+                return FALSE;
+            }
+        }
+    } else {
+        UHashTok key;
+        for (i=0; i<count; i++) {
+            key.pointer = &other.elements[i];
+            if (!(*comparer)(key, elements[i])) {
+                return FALSE;
+            }
+        }
+    }
+    return TRUE;
+}
+
+
+
 int32_t UVector::indexOf(void* obj, int32_t startIndex) const {
     UHashTok key;
     key.pointer = obj;
@@ -244,6 +274,12 @@ int32_t UVector::indexOf(UHashTok key, int32_t startIndex) const {
     if (comparer != 0) {
         for (i=startIndex; i<count; ++i) {
             if ((*comparer)(key, elements[i])) {
+                return i;
+            }
+        }
+    } else {
+        for (i=startIndex; i<count; ++i) {
+            if (key.pointer == elements[i].pointer) {
                 return i;
             }
         }

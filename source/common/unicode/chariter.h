@@ -465,7 +465,7 @@ public:
   virtual UChar32       next32(void) = 0;
         
   /**
-   * Advances to the previous code unit in the iteration rance
+   * Advances to the previous code unit in the iteration range
    * (toward startIndex()), and returns that code unit.  If there are
    * no more code units to return, returns DONE.  
    * @stable
@@ -473,7 +473,7 @@ public:
   virtual UChar         previous(void) = 0;
 
   /**
-   * Advances to the previous code point in the iteration rance
+   * Advances to the previous code point in the iteration range
    * (toward startIndex()), and returns that code point.  If there are
    * no more code points to return, returns DONE.  
    * @stable

@@ -63,7 +63,7 @@ BreakIterator::createWordInstance(const Locale& key, UErrorCode& status)
             result = new DictionaryBasedBreakIterator(file, filename, status);
         }
         else {
-            result = new RuleBasedBreakIterator(file);
+            result = new RuleBasedBreakIterator(file, status);
         }
     }
 
@@ -97,7 +97,7 @@ BreakIterator::createLineInstance(const Locale& key, UErrorCode& status)
             result = new DictionaryBasedBreakIterator(file, filename, status);
         }
         else {
-            result = new RuleBasedBreakIterator(file);
+            result = new RuleBasedBreakIterator(file, status);
         }
     }
 
@@ -121,7 +121,7 @@ BreakIterator::createCharacterInstance(const Locale& key, UErrorCode& status)
     UDataMemory* file = udata_open(NULL, "brk", filename, &status);
 
     if (!U_FAILURE(status)) {
-        result = new RuleBasedBreakIterator(file);
+        result = new RuleBasedBreakIterator(file, status);
     }
 
     return result;
@@ -144,7 +144,7 @@ BreakIterator::createSentenceInstance(const Locale& key, UErrorCode& status)
     UDataMemory* file = udata_open(NULL, "brk", filename, &status);
 
     if (!U_FAILURE(status)) {
-        result = new RuleBasedBreakIterator(file);
+        result = new RuleBasedBreakIterator(file, status);
     }
 
     return result;
@@ -167,7 +167,7 @@ BreakIterator::createTitleInstance(const Locale& key, UErrorCode& status)
     UDataMemory* file = udata_open(NULL, "brk", filename, &status);
 
     if (!U_FAILURE(status)) {
-        result = new RuleBasedBreakIterator(file);
+        result = new RuleBasedBreakIterator(file, status);
     }
 
     return result;

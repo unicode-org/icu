@@ -19,54 +19,86 @@ U_NAMESPACE_BEGIN
 
 const char DictionaryBasedBreakIterator::fgClassID = 0;
 
-//=======================================================================
-// constructors
-//=======================================================================
 
-DictionaryBasedBreakIterator::DictionaryBasedBreakIterator(UDataMemory* tablesImage,
-                                                           const char* dictionaryFilename, 
-                                                           UErrorCode& status)
-: RuleBasedBreakIterator((UDataMemory*)NULL),
-  dictionaryCharCount(0),
-  cachedBreakPositions(NULL),
-  numCachedBreakPositions(0),
-  positionInCache(0)
-{
-    tables = new DictionaryBasedBreakIteratorTables(tablesImage, dictionaryFilename, status);
-    if (U_FAILURE(status)) {
-        delete tables;
-        return;
-    }
-    tables->addReference();
+//-------------------------------------------------------------------------------
+//
+// constructors
+//
+//-------------------------------------------------------------------------------
+
+DictionaryBasedBreakIterator::DictionaryBasedBreakIterator() :
+RuleBasedBreakIterator() {
+    init();
 }
 
-//=======================================================================
-// boilerplate
-//=======================================================================
 
-/**
- * Destructor
- */
+DictionaryBasedBreakIterator::DictionaryBasedBreakIterator(UDataMemory* rbbiData,
+                                                           const char* dictionaryFilename, 
+                                                           UErrorCode& status)
+: RuleBasedBreakIterator(rbbiData, status)
+{
+    init();
+    fTables = new DictionaryBasedBreakIteratorTables(dictionaryFilename, status);
+    if (U_FAILURE(status)) {
+        fTables->removeReference();
+        fTables = NULL;
+        return;
+    }
+}
+
+
+DictionaryBasedBreakIterator::DictionaryBasedBreakIterator(const DictionaryBasedBreakIterator &other) :
+RuleBasedBreakIterator(other)
+{
+    init();
+    if (other.fTables != NULL) {
+        fTables = other.fTables;
+        fTables->addReference();
+    }
+}
+
+
+
+
+//-------------------------------------------------------------------------------
+//
+//   Destructor
+//
+//-------------------------------------------------------------------------------
 DictionaryBasedBreakIterator::~DictionaryBasedBreakIterator()
 {
     uprv_free(cachedBreakPositions);
+    cachedBreakPositions = NULL;
+    if (fTables != NULL) {fTables->removeReference();};
 }
 
-/**
- * Assignment operator.  Sets this iterator to have the same behavior,
- * and iterate over the same text, as the one passed in.
- */
+//-------------------------------------------------------------------------------
+//
+//   Assignment operator.     Sets this iterator to have the same behavior,
+//                            and iterate over the same text, as the one passed in.
+//
+//-------------------------------------------------------------------------------
 DictionaryBasedBreakIterator&
 DictionaryBasedBreakIterator::operator=(const DictionaryBasedBreakIterator& that) {
-    reset();
+    if (this == &that) {
+        return *this;
+    }
+    reset();      // clears out cached break positions.
     RuleBasedBreakIterator::operator=(that);
+    if (this->fTables != that.fTables) {
+        if (this->fTables != NULL) {this->fTables->removeReference();};
+        this->fTables = that.fTables;
+        if (this->fTables != NULL) {this->fTables->addReference();};
+    }
     return *this;
 }
 
-/**
- * Returns a newly-constructed RuleBasedBreakIterator with the same
- * behavior, and iterating over the same text, as this one.
- */
+//-------------------------------------------------------------------------------
+//
+//   Clone()    Returns a newly-constructed RuleBasedBreakIterator with the same
+//              behavior, and iterating over the same text, as this one.
+//
+//-------------------------------------------------------------------------------
 BreakIterator*
 DictionaryBasedBreakIterator::clone() const {
     return new DictionaryBasedBreakIterator(*this);
@@ -88,7 +120,7 @@ DictionaryBasedBreakIterator::previous()
     // covered by them, just move one step backward in the cache
     if (cachedBreakPositions != NULL && positionInCache > 0) {
         --positionInCache;
-        text->setIndex(cachedBreakPositions[positionInCache]);
+        fText->setIndex(cachedBreakPositions[positionInCache]);
         return cachedBreakPositions[positionInCache];
     }
 
@@ -117,11 +149,11 @@ DictionaryBasedBreakIterator::preceding(int32_t offset)
     // if the offset passed in is already past the end of the text,
     // just return DONE; if it's before the beginning, return the
     // text's starting offset
-    if (text == NULL || offset > text->endIndex()) {
+    if (fText == NULL || offset > fText->endIndex()) {
         return BreakIterator::DONE;
     }
-    else if (offset < text->startIndex()) {
-        return text->startIndex();
+    else if (offset < fText->startIndex()) {
+        return fText->startIndex();
     }
 
     // if we have no cached break positions, or "offset" is outside the
@@ -143,8 +175,8 @@ DictionaryBasedBreakIterator::preceding(int32_t offset)
                && offset > cachedBreakPositions[positionInCache])
             ++positionInCache;
         --positionInCache;
-        text->setIndex(cachedBreakPositions[positionInCache]);
-        return text->getIndex();
+        fText->setIndex(cachedBreakPositions[positionInCache]);
+        return fText->getIndex();
     }
 }
 
@@ -160,11 +192,11 @@ DictionaryBasedBreakIterator::following(int32_t offset)
     // if the offset passed in is already past the end of the text,
     // just return DONE; if it's before the beginning, return the
     // text's starting offset
-    if (text == NULL || offset > text->endIndex()) {
+    if (fText == NULL || offset > fText->endIndex()) {
         return BreakIterator::DONE;
     }
-    else if (offset < text->startIndex()) {
-        return text->startIndex();
+    else if (offset < fText->startIndex()) {
+        return fText->startIndex();
     }
 
     // if we have no cached break positions, or if "offset" is outside the
@@ -185,8 +217,8 @@ DictionaryBasedBreakIterator::following(int32_t offset)
         while (positionInCache < numCachedBreakPositions
                && offset >= cachedBreakPositions[positionInCache])
             ++positionInCache;
-        text->setIndex(cachedBreakPositions[positionInCache]);
-        return text->getIndex();
+        fText->setIndex(cachedBreakPositions[positionInCache]);
+        return fText->getIndex();
     }
 }
 
@@ -205,14 +237,14 @@ DictionaryBasedBreakIterator::handleNext()
         // start by using the inherited handleNext() to find a tentative return
         // value.   dictionaryCharCount tells us how many dictionary characters
         // we passed over on our way to the tentative return value
-        int32_t startPos = text->getIndex();
-        dictionaryCharCount = 0;
+        int32_t startPos = fText->getIndex();
+        fDictionaryCharCount = 0;
         int32_t result = RuleBasedBreakIterator::handleNext();
 
         // if we passed over more than one dictionary character, then we use
         // divideUpDictionaryRange() to regenerate the cached break positions
         // for the new range
-        if (dictionaryCharCount > 1 && result - startPos > 1) {
+        if (fDictionaryCharCount > 1 && result - startPos > 1) {
             divideUpDictionaryRange(startPos, result, status);
             if (U_FAILURE(status)) {
                 return -9999;   // SHOULD NEVER GET HERE!
@@ -232,7 +264,7 @@ DictionaryBasedBreakIterator::handleNext()
     // and return it
     if (cachedBreakPositions != NULL) {
         ++positionInCache;
-        text->setIndex(cachedBreakPositions[positionInCache]);
+        fText->setIndex(cachedBreakPositions[positionInCache]);
         return cachedBreakPositions[positionInCache];
     }
     return -9999;   // SHOULD NEVER GET HERE!
@@ -244,105 +276,92 @@ DictionaryBasedBreakIterator::reset()
     uprv_free(cachedBreakPositions);
     cachedBreakPositions = NULL;
     numCachedBreakPositions = 0;
-    dictionaryCharCount = 0;
+    fDictionaryCharCount = 0;
     positionInCache = 0;
 }
 
 
-// internal type for BufferClone 
-struct bufferCloneStructUChar
-{
-    uint8_t bi   [sizeof(DictionaryBasedBreakIterator)] ;
-    uint8_t text [sizeof(UCharCharacterIterator)] ;
-};
 
-struct bufferCloneStructString
-{
-    uint8_t bi   [sizeof(DictionaryBasedBreakIterator)] ;
-    uint8_t text [sizeof(StringCharacterIterator)] ;
-};
+//-------------------------------------------------------------------------------
+//
+//    init()    Common initialization routine, for use by constructors, etc.
+//
+//-------------------------------------------------------------------------------
+void DictionaryBasedBreakIterator::init() {
+    cachedBreakPositions    = NULL;
+    fTables                 = NULL;
+    numCachedBreakPositions = 0;
+    fDictionaryCharCount    = 0;
+    positionInCache         = 0;
+}
 
+
+//-------------------------------------------------------------------------------
+//
+//    BufferClone
+//
+//-------------------------------------------------------------------------------
 BreakIterator *  DictionaryBasedBreakIterator::createBufferClone(void *stackBuffer,
-                                   int32_t &BufferSize,
+                                   int32_t &bufferSize,
                                    UErrorCode &status)
 {
-    DictionaryBasedBreakIterator * localIterator;
-    int32_t bufferSizeNeeded = 0; 
-    UBool IterIsUChar = FALSE;
-    UBool IterIsString = FALSE;
-    char *stackBufferChars = (char *)stackBuffer;
-
     if (U_FAILURE(status)){
-        return 0;
+        return NULL;
     }
 
-    /* Pointers on 64-bit platforms need to be aligned
-     * on a 64-bit boundry in memory.
-     */
+    //
+    //  If user buffer size is zero this is a preflight operation to 
+    //    obtain the needed buffer size, allowing for worst case misalignment.
+    //
+    if (bufferSize == 0) {
+        bufferSize = sizeof(DictionaryBasedBreakIterator) + U_ALIGNMENT_OFFSET_UP(0);
+        return NULL;
+    }
+
+    //
+    //  Check the alignment and size of the user supplied buffer.
+    //  Allocate heap memory if the user supplied memory is insufficient.
+    //
+    char    *buf   = (char *)stackBuffer;
+    int32_t s      = bufferSize;
+
+    if (stackBuffer == NULL) {
+        s = 0;   // Ignore size, force allocation if user didn't give us a buffer.
+    }
     if (U_ALIGNMENT_OFFSET(stackBuffer) != 0) {
-        int32_t offsetUp = (int32_t)U_ALIGNMENT_OFFSET_UP(stackBufferChars);
-        BufferSize -= offsetUp;
-        stackBufferChars += offsetUp;
+        int32_t offsetUp = (int32_t)U_ALIGNMENT_OFFSET_UP(buf);
+        s   -= offsetUp;
+        buf += offsetUp;
     }
-    stackBuffer = (void *)stackBufferChars;
+    if (s < sizeof(DictionaryBasedBreakIterator)) {
+        buf = (char *) new DictionaryBasedBreakIterator();
+        if (buf == 0) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return NULL;
+        }
+        status = U_SAFECLONE_ALLOCATED_WARNING;
+    }
 
-    if (text == NULL)
-    {
-        bufferSizeNeeded = (int32_t) sizeof(DictionaryBasedBreakIterator);
+    //
+    //  Initialize the clone object.  
+    //    TODO:  using an overloaded C++ "operator new" to directly initialize the
+    //           copy in the user's buffer would be better, but it doesn't seem
+    //           to get along with namespaces.  Investigate why.
+    //
+    //           The memcpy is only safe with an empty (default constructed)
+    //           break iterator.  Use on others can screw up reference counts
+    //           to data.  memcpy-ing objects is not really a good idea...
+    //
+    DictionaryBasedBreakIterator localIter;        // Empty break iterator, source for memcpy
+    DictionaryBasedBreakIterator *clone = (DictionaryBasedBreakIterator *)buf;
+    uprv_memcpy(clone, &localIter, sizeof(DictionaryBasedBreakIterator)); // clone = empty, but initialized, iterator.
+    *clone = *this;                               // clone = the real one we want.
+    if (status != U_SAFECLONE_ALLOCATED_WARNING) {
+        clone->fBufferClone = TRUE;
     }
-    else if (text->getDynamicClassID() == StringCharacterIterator::getStaticClassID()) 
-    {
-        bufferSizeNeeded = (int32_t) sizeof(struct bufferCloneStructString);
-        IterIsString = TRUE;
-    } 
-    else if (text->getDynamicClassID() == UCharCharacterIterator::getStaticClassID()) 
-    {
-        bufferSizeNeeded = (int32_t) sizeof(struct bufferCloneStructUChar);
-        IterIsUChar = TRUE;
-    }
-    else
-    {
-        // code has changed - time to make a real CharacterIterator::CreateBufferClone()
-    }
-    if (BufferSize <= 0){ /* 'preflighting' request - set needed size into *pBufferSize */
-        BufferSize = bufferSizeNeeded;
-        return 0;
-    }
-    if (BufferSize < bufferSizeNeeded || !stackBuffer)
-    {
-        /* allocate one here...*/
-        localIterator = new DictionaryBasedBreakIterator(*this);
-        status = U_SAFECLONE_ALLOCATED_ERROR;
-        return localIterator;
-    }
-    if (IterIsUChar) {
-        struct bufferCloneStructUChar * localClone 
-                = (struct bufferCloneStructUChar  *)stackBuffer;
-        localIterator = (DictionaryBasedBreakIterator *)&localClone->bi;
-        uprv_memcpy(localIterator, this, sizeof(DictionaryBasedBreakIterator));
-        uprv_memcpy(&localClone->text, text, sizeof(UCharCharacterIterator));
-        localIterator->text = (CharacterIterator *) &localClone->text;
-    } else if (IterIsString) {
-        struct bufferCloneStructString * localClone 
-                = (struct bufferCloneStructString  *)stackBuffer;
-        localIterator = (DictionaryBasedBreakIterator *)&localClone->bi;
-        uprv_memcpy(localIterator, this, sizeof(DictionaryBasedBreakIterator));
-        uprv_memcpy(&localClone->text, text, sizeof(StringCharacterIterator));
-        localIterator->text = (CharacterIterator *)&localClone->text;
-    } else {
-        DictionaryBasedBreakIterator * localClone 
-                = (DictionaryBasedBreakIterator *)stackBuffer;
-        localIterator = localClone;
-        uprv_memcpy(localIterator, this, sizeof(DictionaryBasedBreakIterator));
-    }
-    // must not use (or delete) the copy of the old cache if it exists - not threadsafe
-    localIterator->fBufferClone = TRUE;
-    localIterator->cachedBreakPositions = NULL;
-    localIterator->numCachedBreakPositions = 0;
-    localIterator->positionInCache = 0;
-
-    return localIterator;    
+    return clone;    
 }
+
 
 
 
@@ -357,23 +376,17 @@ BreakIterator *  DictionaryBasedBreakIterator::createBufferClone(void *stackBuff
 void
 DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t endPos, UErrorCode &status)
 {
-    // to avoid casts throughout the rest of this function
-    DictionaryBasedBreakIteratorTables* dictionaryTables
-            = (DictionaryBasedBreakIteratorTables*)(this->tables);
-
     // the range we're dividing may begin or end with non-dictionary characters
     // (i.e., for line breaking, we may have leading or trailing punctuation
     // that needs to be kept with the word).  Seek from the beginning of the
     // range to the first dictionary character
-    text->setIndex(startPos);
-    UChar c = text->current();
-    int category = dictionaryTables->lookupCategory(c, this);
-    while (category == UBRK_IGNORE || !dictionaryTables->categoryFlags[category]) {
-        c = text->next();
-        category = dictionaryTables->lookupCategory(c, this);
+    fText->setIndex(startPos);
+    UChar c = fText->current();
+    while (isDictionaryChar(c) == FALSE) {
+        c = fText->next();
     }
-    
 
+    
     // initialize.  We maintain two stacks: currentBreakPositions contains
     // the list of break positions that will be returned if we successfully
     // finish traversing the whole range now.  possibleBreakPositions lists
@@ -406,7 +419,7 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
     // dictionary.  In this case, we "bless" the break positions that got us the
     // farthest as real break positions, and then start over from scratch with
     // the character where the error occurred.
-    int32_t farthestEndPoint = text->getIndex();
+    int32_t farthestEndPoint = fText->getIndex();
     UStack bestBreakPositions(status);
     UBool bestBreakPositionsInitialized = FALSE;
 
@@ -414,25 +427,25 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
         return;
     }
     // initialize (we always exit the loop with a break statement)
-    c = text->current();
+    c = fText->current();
     for (;;) {
 
         // if we can transition to state "-1" from our current state, we're
         // on the last character of a legal word.  Push that position onto
         // the possible-break-positions stack
-        if (dictionaryTables->dictionary.at(state, (int32_t)0) == -1) {
-            possibleBreakPositions.push(text->getIndex(), status);
+        if (fTables->fDictionary->at(state, (int32_t)0) == -1) {
+            possibleBreakPositions.push(fText->getIndex(), status);
         }
 
         // look up the new state to transition to in the dictionary
-        state = dictionaryTables->dictionary.at(state, c);
+        state = fTables->fDictionary->at(state, c);
 
         // if the character we're sitting on causes us to transition to
         // the "end of word" state, then it was a non-dictionary character
         // and we've successfully traversed the whole range.  Drop out
         // of the loop.
         if (state == -1) {
-            currentBreakPositions.push(text->getIndex(), status);
+            currentBreakPositions.push(fText->getIndex(), status);
             break;
         }
 
@@ -440,12 +453,12 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
         // the error state, or if we've gone off the end of the range
         // without transitioning to the "end of word" state, we've hit
         // an error...
-        else if (state == 0 || text->getIndex() >= endPos) {
+        else if (state == 0 || fText->getIndex() >= endPos) {
 
             // if this is the farthest we've gotten, take note of it in
             // case there's an error in the text
-            if (text->getIndex() > farthestEndPoint) {
-                farthestEndPoint = text->getIndex();
+            if (fText->getIndex() > farthestEndPoint) {
+                farthestEndPoint = fText->getIndex();
                 bestBreakPositions.removeAllElements();
                 bestBreakPositionsInitialized = TRUE;
                 for (int32_t i = 0; i < currentBreakPositions.size(); i++) {
@@ -481,7 +494,7 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
                     }
                     bestBreakPositions.removeAllElements();
                     if (farthestEndPoint < endPos) {
-                        text->setIndex(farthestEndPoint + 1);
+                        fText->setIndex(farthestEndPoint + 1);
                     }
                     else {
                         break;
@@ -489,12 +502,12 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
                 }
                 else {
                     if ((currentBreakPositions.isEmpty()
-                            || currentBreakPositions.peeki() != text->getIndex())
-                            && text->getIndex() != startPos) {
-                        currentBreakPositions.push(text->getIndex(), status);
+                            || currentBreakPositions.peeki() != fText->getIndex())
+                            && fText->getIndex() != startPos) {
+                        currentBreakPositions.push(fText->getIndex(), status);
                     }
-                    text->next();
-                    currentBreakPositions.push(text->getIndex(), status);
+                    fText->next();
+                    currentBreakPositions.push(fText->getIndex(), status);
                 }
             }
 
@@ -512,13 +525,13 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
                     wrongBreakPositions.addElement(temp2, status);
                 }
                 currentBreakPositions.push(temp, status);
-                text->setIndex(currentBreakPositions.peeki());
+                fText->setIndex(currentBreakPositions.peeki());
             }
 
             // re-sync "c" for the next go-round, and drop out of the loop if
             // we've made it off the end of the range
-            c = text->current();
-            if (text->getIndex() >= endPos) {
+            c = fText->current();
+            if (fText->getIndex() >= endPos) {
                 break;
             }
         }
@@ -526,7 +539,7 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
         // if we didn't hit any exceptional conditions on this last iteration,
         // just advance to the next character and loop
         else {
-            c = text->next();
+            c = fText->next();
         }
     }
 

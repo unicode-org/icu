@@ -239,8 +239,8 @@ void RBBITest::TestDefaultRuleBasedWordIteration()
     worddata->addElement ("wordrules");
     worddata->addElement (".");
     worddata->addElement(" ");
-    worddata->addElement("alpha-beta-gamma");
-    worddata->addElement(" ");
+    worddata->addElement(CharsToUnicodeString("alpha\\u00adbeta\\u00adgamma"));
+    worddata->addElement(" "); 
     worddata->addElement(CharsToUnicodeString("\\u092f\\u0939"));
     worddata->addElement(" ");
     worddata->addElement(CharsToUnicodeString("\\u0939\\u093f") + halfNA + CharsToUnicodeString("\\u0926\\u0940"));
@@ -271,7 +271,7 @@ void RBBITest::TestDefaultRuleBasedWordIteration()
     worddata->addElement(CharsToUnicodeString("\\u00A3")); //pound sign
     worddata->addElement(CharsToUnicodeString("\\u00A4")); //currency sign
     worddata->addElement(CharsToUnicodeString("\\u00A5")); //yen sign
-    worddata->addElement("alpha-beta-gamma");
+    worddata->addElement(CharsToUnicodeString("alpha\\u05f3beta\\u05f4gamma"));
     worddata->addElement(" ");
     worddata->addElement("Badges");
     worddata->addElement("?");
@@ -318,24 +318,28 @@ void RBBITest::TestDefaultRuleBasedWordIteration()
 
     // Words containing surrogates
     //    Hi surrogates of d801-d802-d834-d835 are letters.
-    worddata->addElement(CharsToUnicodeString("abc\\ud800\\udc00def"));
+    worddata->addElement(CharsToUnicodeString("abc\\U00010300"));
     worddata->addElement(" ");
-    worddata->addElement(CharsToUnicodeString("abc\\ud801\\udc00def"));
+    worddata->addElement(CharsToUnicodeString("abc\\U0001044D"));
     worddata->addElement(" ");
-    worddata->addElement(CharsToUnicodeString("abc\\ud834\\udc00def"));
+    worddata->addElement(CharsToUnicodeString("abc\\U0001D433"));  //MATHEMATICAL BOLD SMALL Z
     worddata->addElement(" ");
-    worddata->addElement(CharsToUnicodeString("abc\\ud835\\udc00def"));
+    worddata->addElement(CharsToUnicodeString("abc\\U0001D7C9"));  //MATHEMATICAL SANS-SERIF BOLD ITALIC PI
     worddata->addElement(" ");
 
-    worddata->addElement(CharsToUnicodeString("abc"));  // same test with surrogate outside of letter range.
-    worddata->addElement(CharsToUnicodeString("\\ud802\\udc00"));   
+    worddata->addElement(CharsToUnicodeString("abc"));  // same test outside of letter range.
+    worddata->addElement(CharsToUnicodeString("\\U0001D800"));   
     worddata->addElement(CharsToUnicodeString("def"));
+    worddata->addElement(CharsToUnicodeString("\\U0001D3FF"));   
     worddata->addElement(" ");
 
-    // Kanji stays together, including extended chars, but separates from Latin.
+    // Hiragana & Katakana stay together, but separates from each other and Latin.
+    //   TODO:  Hira and Kata ranges from UnicodeSet differ slightly from
+    //          what's in Unicode Scripts file.   Investigate.  
     worddata->addElement(CharsToUnicodeString("abc"));
-    worddata->addElement(CharsToUnicodeString("\\ud840\\udc00\\u9f00\\ud841\\udc01\\ud870\\udc03\\u4e00"));
-    worddata->addElement(CharsToUnicodeString("xyz"));
+    worddata->addElement(CharsToUnicodeString("\\u3041\\u3094\\u309d\\u309e"));   // Hiragana
+    worddata->addElement(CharsToUnicodeString("\\u30a1\\u30fd\\uff66\\uff9d"));  // Katakana
+    worddata->addElement(CharsToUnicodeString("def"));
 
     generalIteratorTest(*wordIterDefault, worddata);
 
@@ -397,7 +401,7 @@ void RBBITest::TestDefaultRuleBasedSentenceIteration()
       sentdata->addElement("What is the proper use of the abbreviation pp.? ");
       sentdata->addElement("Yes, I am definatelly 12\" tall!!");
       // test for bug #4113835: \n and \r count as spaces, not as paragraph breaks
-      sentdata->addElement(CharsToUnicodeString("Now\ris\nthe\r\ntime\n\rfor\r\rall\\u2029"));
+      sentdata->addElement(CharsToUnicodeString("Now\ris\nthe\r\ntime\n\rfor\r\rall\\u037e"));
 
     // test that it doesn't break sentences at the boundary between CJK
     // and other letters
@@ -406,22 +410,24 @@ void RBBITest::TestDefaultRuleBasedSentenceIteration()
         + CharsToUnicodeString("\\u611d\\u57b6\\u2510\\u5d46\".\\u2029"));
       sentdata->addElement(CharsToUnicodeString("\\u5487\\u67ff\\ue591\\u5017\\u61b3\\u60a1\\u9510\\u8165\\u9de8")
         + CharsToUnicodeString("\\u97e4JAVA\\u821c\\u8165\\u7fc8\\u51ce\\u306d\\ue30b\\u2494\\u56d8\\u4ec0")
-        + CharsToUnicodeString("\\u60b1\\u8560\\u51ba\\u611d\\u57b6\\u2510\\u5d46\\u97e5\\u7751\\u2029"));
+        + CharsToUnicodeString("\\u60b1\\u8560\\u51ba\\u611d\\u57b6\\u2510\\u5d46\\u97e5\\u7751\\u3002"));
       sentdata->addElement(CharsToUnicodeString("\\u5487\\u67ff\\ue591\\u5017\\u61b3\\u60a1\\u9510\\u8165\\u9de8\\u97e4")
         + CharsToUnicodeString("\\u6470\\u8790JAVA\\u821c\\u8165\\u7fc8\\u51ce\\u306d\\ue30b\\u2494\\u56d8")
-        + CharsToUnicodeString("\\u4ec0\\u60b1\\u8560\\u51ba\\u611d\\u57b6\\u2510\\u5d46\\u97e5\\u7751\\u2029"));
+        + CharsToUnicodeString("\\u4ec0\\u60b1\\u8560\\u51ba\\u611d\\u57b6\\u2510\\u5d46\\u97e5\\u7751\\u2048"));
       sentdata->addElement(CharsToUnicodeString("He said, \"I can go there.\"\\u2029"));
 
       // Treat fullwidth variants of .!? the same as their
       // normal counterparts
+#if 0   // Not according to TR29.  TODO:  what is the right thing for these chars?
       sentdata->addElement(CharsToUnicodeString("I know I'm right\\uff0e "));
       sentdata->addElement(CharsToUnicodeString("Right\\uff1f "));
       sentdata->addElement(CharsToUnicodeString("Right\\uff01 "));
+#endif
 
       // Don't break sentences at boundary between CJK and digits
       sentdata->addElement(CharsToUnicodeString("\\u5487\\u67ff\\ue591\\u5017\\u61b3\\u60a1\\u9510\\u8165\\u9de8")
                 + CharsToUnicodeString("\\u97e48888\\u821c\\u8165\\u7fc8\\u51ce\\u306d\\ue30b\\u2494\\u56d8\\u4ec0")
-                + CharsToUnicodeString("\\u60b1\\u8560\\u51ba\\u611d\\u57b6\\u2510\\u5d46\\u97e5\\u7751\\u2029"));
+                + CharsToUnicodeString("\\u60b1\\u8560\\u51ba\\u611d\\u57b6\\u2510\\u5d46\\u97e5\\u7751\\u3001"));
 
       // Break sentence between a sentence terminator and
       // opening punctuation
@@ -529,7 +535,9 @@ void RBBITest::TestDefaultRuleBasedLineIteration()
       linedata->addElement("is ");
       linedata->addElement("$-23,456.78, ");
       linedata->addElement("not ");
-      linedata->addElement("-$32,456.78!\n");
+      // linedata->addElement("-$32,456.78!\n");    // Doesn't break this way according to TR29
+      linedata->addElement("-");
+      linedata->addElement("$32,456.78!\n");
 
     // to test for bug #4098467
     // What follows is a string of Korean characters (I found it in the Yellow Pages
@@ -537,15 +545,36 @@ void RBBITest::TestDefaultRuleBasedLineIteration()
     // it correctly), first as precomposed syllables, and then as conjoining jamo.
     // Both sequences should be semantically identical and break the same way.
     // precomposed syllables...
+
+      // By TR14, precomposed Hangul syllables should not be grouped together.
+#if 0
       linedata->addElement(CharsToUnicodeString("\\uc0c1\\ud56d "));
       linedata->addElement(CharsToUnicodeString("\\ud55c\\uc778 "));
       linedata->addElement(CharsToUnicodeString("\\uc5f0\\ud569 "));
       linedata->addElement(CharsToUnicodeString("\\uc7a5\\ub85c\\uad50\\ud68c "));
+#endif
+      linedata->addElement(CharsToUnicodeString("\\uc0c1"));
+      linedata->addElement(CharsToUnicodeString("\\ud56d "));
+      linedata->addElement(CharsToUnicodeString("\\ud55c"));
+      linedata->addElement(CharsToUnicodeString("\\uc778 "));
+      linedata->addElement(CharsToUnicodeString("\\uc5f0"));
+      linedata->addElement(CharsToUnicodeString("\\ud569 "));
+      linedata->addElement(CharsToUnicodeString("\\uc7a5"));
+      linedata->addElement(CharsToUnicodeString("\\ub85c"));
+      linedata->addElement(CharsToUnicodeString("\\uad50"));
+      linedata->addElement(CharsToUnicodeString("\\ud68c "));
+
     // conjoining jamo...
-      linedata->addElement(CharsToUnicodeString("\\u1109\\u1161\\u11bc\\u1112\\u1161\\u11bc "));
-      linedata->addElement(CharsToUnicodeString("\\u1112\\u1161\\u11ab\\u110b\\u1175\\u11ab "));
-      linedata->addElement(CharsToUnicodeString("\\u110b\\u1167\\u11ab\\u1112\\u1161\\u11b8 "));
-      linedata->addElement(CharsToUnicodeString("\\u110c\\u1161\\u11bc\\u1105\\u1169\\u1100\\u116d\\u1112\\u116c"));
+      linedata->addElement(CharsToUnicodeString("\\u1109\\u1161\\u11bc"));
+      linedata->addElement(CharsToUnicodeString("\\u1112\\u1161\\u11bc "));
+      linedata->addElement(CharsToUnicodeString("\\u1112\\u1161\\u11ab"));
+      linedata->addElement(CharsToUnicodeString("\\u110b\\u1175\\u11ab "));
+      linedata->addElement(CharsToUnicodeString("\\u110b\\u1167\\u11ab"));
+      linedata->addElement(CharsToUnicodeString("\\u1112\\u1161\\u11b8 "));
+      linedata->addElement(CharsToUnicodeString("\\u110c\\u1161\\u11bc"));
+      linedata->addElement(CharsToUnicodeString("\\u1105\\u1169"));
+      linedata->addElement(CharsToUnicodeString("\\u1100\\u116d"));
+      linedata->addElement(CharsToUnicodeString("\\u1112\\u116c"));
 
     // to test for bug #4117554: Fullwidth .!? should be treated as postJwrd
       linedata->addElement(CharsToUnicodeString("\\u4e01\\uff0e"));
@@ -648,8 +677,9 @@ void RBBITest::TestHindiWordBreak()
 {
     Vector *hindiWordData = new Vector();
 
+#if 0
     //hindi
-    hindiWordData->addElement(CharsToUnicodeString("\\u0917\\u092a-\\u0936\\u092a"));
+    hindiWordData->addElement(CharsToUnicodeString("\\u0917\\u092a\\u00ad\\u0936\\u092a"));
     hindiWordData->addElement("!");
     hindiWordData->addElement(CharsToUnicodeString("\\u092f\\u0939"));
     hindiWordData->addElement(" ");
@@ -664,11 +694,12 @@ void RBBITest::TestHindiWordBreak()
     hindiWordData->addElement(" ");
     hindiWordData->addElement(CharsToUnicodeString("\\u0938\\u093f\\u0916\\u094b\\u0917\\u0947"));
     hindiWordData->addElement("?");
+#endif
     hindiWordData->addElement("\n"); 
-    hindiWordData->addElement(":");
+    hindiWordData->addElement(CharsToUnicodeString(":"));
     hindiWordData->addElement(deadPA+CharsToUnicodeString("\\u0930\\u093e\\u092f")+visarga);    //no break before visarga
     hindiWordData->addElement(" ");
-
+#if 0
     hindiWordData->addElement(CharsToUnicodeString("\\u0935") + deadRA+ CharsToUnicodeString("\\u0937\\u093e"));
     hindiWordData->addElement("\r\n");
     hindiWordData->addElement(deadPA+ CharsToUnicodeString("\\u0930\\u0915\\u093e\\u0936"));     //deadPA+RA+KA+vowel AA+SHA -> prakash
@@ -697,7 +728,7 @@ void RBBITest::TestHindiWordBreak()
     hindiWordData->addElement("\n");
     hindiWordData->addElement(halfSA+CharsToUnicodeString("\\u0935\\u0924\\u0902")+deadTA+CharsToUnicodeString("\\u0930"));
     hindiWordData->addElement("\r");
-
+#endif
     UErrorCode status=U_ZERO_ERROR;
     RuleBasedBreakIterator *e=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createWordInstance(Locale::getDefault(), status);
     if(U_FAILURE(status)){

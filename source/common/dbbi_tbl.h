@@ -11,7 +11,6 @@
 #ifndef DBBI_TBL_H
 #define DBBI_TBL_H
 
-#include "rbbi_tbl.h"
 #include "brkdict.h"
 #include "unicode/udata.h"
 
@@ -20,38 +19,42 @@ U_NAMESPACE_BEGIN
 /* forward declaration */
 class DictionaryBasedBreakIterator;
 
-/**
- * This subclass of RuleBasedBreakIteratorTables contains the additional
- * static data that is used by DictionaryBasedBreakIterator.  This comprises
- * the dictionary itself and an array of flags that indicate which characters
- * are in the dictionary.
- *
- * @author Richard Gillam
- */
-class DictionaryBasedBreakIteratorTables : public RuleBasedBreakIteratorTables {
+//
+//   DictionaryBasedBreakIteratorTables
+//
+//        This class sits between instances of DictionaryBasedBreakIterator
+//        and the dictionary data itself,  which is of type BreakDictionary.
+//        It provides reference counting, allowing multiple copies of a
+//        DictionaryBasedBreakIterator to share a single instance of
+//        BreakDictionary.
+//
+//        TODO:  it'd probably be cleaner to add the reference counting to
+//        BreakDictionary and get rid of this class, but doing it this way
+//        was a convenient transition from earlier code, and time is short...
+//
+class DictionaryBasedBreakIteratorTables {
 
 private:
-    /**
-     * a list of known words that is used to divide up contiguous ranges of letters,
-     * stored in a compressed, indexed, format that offers fast access
-     */
-    BreakDictionary dictionary;
+    int32_t      fRefCount;
 
-    /**
-     * a list of flags indicating which character categories are contained in
-     * the dictionary file (this is used to determine which ranges of characters
-     * to apply the dictionary to)
-     */
-    int8_t* categoryFlags;
 
+public:
     //=======================================================================
     // constructor
     //=======================================================================
+    DictionaryBasedBreakIteratorTables(const char*       dictionaryFilename,
+                                             UErrorCode& status);
 
-    DictionaryBasedBreakIteratorTables(UDataMemory* tablesMemory,
-                                       const char* dictionaryFilename,
-                                       UErrorCode& status);
-                                 
+    BreakDictionary    *fDictionary;
+    void addReference();
+    void removeReference();
+    /**
+     * Destructor.  Should not be used directly.  Use removeReference() istead.
+     *              (Not private to avoid compiler warnings.)
+     */
+    virtual ~DictionaryBasedBreakIteratorTables();
+
+private:
     /**
      * The copy constructor is declared private and not implemented.
      * THIS CLASS MAY NOT BE COPIED.
@@ -62,26 +65,15 @@ private:
     // boilerplate
     //=======================================================================
 
-    /**
-     * Destructor
-     */
-    virtual ~DictionaryBasedBreakIteratorTables();
 
     /**
      * The assignment operator is declared private and not implemented.
      * THIS CLASS MAY NOT BE COPIED.
+     * Call addReference() and share an existing copy instead.
      */
     DictionaryBasedBreakIteratorTables& operator=(
             const DictionaryBasedBreakIteratorTables& that);
 
-protected:
-    /**
-     * Looks up a character's category (i.e., its category for breaking purposes,
-     * not its Unicode category)
-     */
-    virtual int32_t lookupCategory(UChar c, BreakIterator* bi) const;
-
-    friend class DictionaryBasedBreakIterator;
 };
 
 U_NAMESPACE_END

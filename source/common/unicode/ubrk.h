@@ -7,6 +7,8 @@
 #define UBRK_H
 
 #include "unicode/utypes.h"
+#include "unicode/parseerr.h"
+
 /**
  * \file
  * \brief C API: BreakIterator
@@ -219,19 +221,23 @@ ubrk_open(UBreakIteratorType type,
  * The rule syntax is ... (TBD)
  * @param rules A set of rules specifying the text breaking conventions.
  * @param rulesLength The number of characters in rules, or -1 if null-terminated.
- * @param text The text to be iterated over.
+ * @param text The text to be iterated over.  May be null, in which case ubrk_setText() is
+ *        used to specify the text to be iterated.
  * @param textLength The number of characters in text, or -1 if null-terminated.
+ * @param parseErr   Receives position and context information for any syntax errors
+ *                   detected while parsing the rules.
  * @param status A UErrorCode to receive any errors.
  * @return A UBreakIterator for the specified rules.
  * @see ubrk_open
- * @stable
+ * @draft
  */
 U_CAPI UBreakIterator* U_EXPORT2 
-ubrk_openRules(const UChar *rules,
-           int32_t rulesLength,
-           const UChar *text,
-           int32_t textLength,
-           UErrorCode *status);
+ubrk_openRules(const UChar     *rules,
+               int32_t         rulesLength,
+               const UChar     *text,
+               int32_t          textLength,
+               UParseError     *parseErr,
+               UErrorCode      *status);
 
 /**
  * Thread safe cloning operation
@@ -396,5 +402,15 @@ ubrk_countAvailable(void);
 */
 U_CAPI  UBool U_EXPORT2 
 ubrk_isBoundary(UBreakIterator *bi, int32_t offset);
+
+/**
+ * Return the status from the break rule that determined the most recently
+ * returned break position.  The values appear in the rule source
+ * within brackets, {123}, for example.  For rules that do not specify a
+ * status, a default value of 0 is returned.
+ */
+U_CAPI  int16_t U_EXPORT2
+ubrk_getRuleStatus();
+
 
 #endif

@@ -20,7 +20,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "unicode/ucol.h"
+#include <unicode/ucol.h>
 
 // Very simple example code - sticks a sortkey in the buffer
 // Not much error checking
