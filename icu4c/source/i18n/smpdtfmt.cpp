@@ -520,7 +520,7 @@ SimpleDateFormat::subFormat(UnicodeString& result,
     result.remove();
 
     // if the pattern character is unrecognized, signal an error and dump out
-    if ((patternCharIndex = (EField)DateFormatSymbols::fgPatternChars.indexOf(ch)) == (EField)-1)
+    if ((patternCharIndex = (EField)DateFormatSymbols::getPatternChars().indexOf(ch)) == (EField)-1)
     {
         status = U_INVALID_FORMAT_ERROR;
         return result;
@@ -1079,7 +1079,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
     ParsePosition pos(0);
     int32_t patternCharIndex = -1;
     
-    if ((patternCharIndex = DateFormatSymbols::fgPatternChars.indexOf(ch)) == -1) 
+    if ((patternCharIndex = DateFormatSymbols::getPatternChars().indexOf(ch)) == -1) 
         return -start;
     
     pos.setIndex(start);
@@ -1471,7 +1471,7 @@ UnicodeString&
 SimpleDateFormat::toLocalizedPattern(UnicodeString& result,
                                      UErrorCode& status) const
 {
-    translatePattern(fPattern, result, DateFormatSymbols::fgPatternChars, fSymbols->fLocalPatternChars, status);
+    translatePattern(fPattern, result, DateFormatSymbols::getPatternChars(), fSymbols->fLocalPatternChars, status);
     return result;
 }
 
@@ -1489,7 +1489,7 @@ void
 SimpleDateFormat::applyLocalizedPattern(const UnicodeString& pattern,
                                         UErrorCode &status)
 {
-    translatePattern(pattern, fPattern, fSymbols->fLocalPatternChars, DateFormatSymbols::fgPatternChars, status);
+    translatePattern(pattern, fPattern, fSymbols->fLocalPatternChars, DateFormatSymbols::getPatternChars(), status);
 }
 
 //----------------------------------------------------------------------
