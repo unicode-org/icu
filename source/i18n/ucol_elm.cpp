@@ -1477,6 +1477,7 @@ struct enumStruct {
   tempUCATable *t;
   UCollator *tempColl;
   UCollationElements* colEl;
+  int32_t noOfClosures;
   UErrorCode *status;
 };
 U_CDECL_BEGIN
@@ -1489,20 +1490,31 @@ _enumCategoryRangeClosureCategory(const void *context, UChar32 start, UChar32 li
   UCollationElements* colEl = ((enumStruct *)context)->colEl;
   UCAElements el;
   UChar decomp[256] = { 0 };
-  uint32_t noOfDec = 0;
+  int32_t noOfDec = 0;
 
   UChar32 u32 = 0;
   UChar comp[2];
   uint32_t len = 0;
 
-  if (type > 0) { // if the range is assigned - we might ommit more categories later
+  if (type != U_UNASSIGNED && type != U_PRIVATE_USE_CHAR) { // if the range is assigned - we might ommit more categories later
     for(u32 = start; u32 < limit; u32++) {
-      len = 0;
-      UTF_APPEND_CHAR_UNSAFE(comp, len, u32);
-      if((noOfDec = unorm_normalize(comp, len, UNORM_NFD, 0, decomp, 256, status)) > 1
-        || (noOfDec == 1 && *decomp != (UChar)u32))
+      noOfDec = unorm_getDecomposition(u32, FALSE, decomp, 256);
+      //if((noOfDec = unorm_normalize(comp, len, UNORM_NFD, 0, decomp, 256, status)) > 1
+        //|| (noOfDec == 1 && *decomp != (UChar)u32))
+      if(noOfDec > 0) // if we're positive, that means there is no decomposition
       {
+        len = 0;
+        UTF_APPEND_CHAR_UNSAFE(comp, len, u32);
         if(ucol_strcoll(tempColl, comp, len, decomp, noOfDec) != UCOL_EQUAL) {
+#ifdef UCOL_DEBUG
+          fprintf(stderr, "Closure: %08X -> ", u32);
+          uint32_t i = 0;
+          for(i = 0; i<noOfDec; i++) {
+            fprintf(stderr, "%04X ", decomp[i]);
+          }
+          fprintf(stderr, "\n");
+#endif
+          ((enumStruct *)context)->noOfClosures++;
           el.cPoints = decomp;
           el.cSize = noOfDec;
           el.noOfCEs = 0;
@@ -1548,9 +1560,11 @@ _enumCategoryRangeClosureCategory(const void *context, UChar32 start, UChar32 li
 }
 U_CDECL_END
 
-U_CAPI void U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 uprv_uca_canonicalClosure(tempUCATable *t, UErrorCode *status) 
 {
+  enumStruct context;
+  context.noOfClosures = 0;
   if(U_SUCCESS(*status)) {
     UCollator *tempColl = NULL;
     if(U_SUCCESS(*status)) {
@@ -1571,7 +1585,6 @@ uprv_uca_canonicalClosure(tempUCATable *t, UErrorCode *status)
     /* produce canonical closure */
     UCollationElements* colEl = ucol_openElements(tempColl, NULL, 0, status);
 
-    enumStruct context;
     context.t = t;
     context.tempColl = tempColl;
     context.colEl = colEl;
@@ -1581,6 +1594,7 @@ uprv_uca_canonicalClosure(tempUCATable *t, UErrorCode *status)
     ucol_closeElements(colEl);
     ucol_close(tempColl);
   }
+  return context.noOfClosures;
 }
 
 U_NAMESPACE_END
