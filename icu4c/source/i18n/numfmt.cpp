@@ -75,6 +75,7 @@ static const UChar gLastResortScientificPat[] = {
 
 U_NAMESPACE_BEGIN
 
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(NumberFormat)
 // If the maximum base 10 exponent were 4, then the largest number would
 // be 99,999 which has 5 digits.
 const int32_t NumberFormat::fgMaxIntegerDigits = DBL_MAX_10_EXP + 1; // Should be ~40 ? --srl

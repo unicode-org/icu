@@ -9,6 +9,8 @@
 
 U_NAMESPACE_BEGIN
 
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(UnicodeFunctor)
+
 UnicodeFunctor::~UnicodeFunctor() {}
 
 UnicodeMatcher* UnicodeFunctor::toMatcher() const {

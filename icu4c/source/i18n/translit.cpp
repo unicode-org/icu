@@ -100,6 +100,8 @@ static const UChar EMPTY[] = {0}; //""
 
 U_NAMESPACE_BEGIN
 
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(Transliterator)
+
 /**
  * Return TRUE if the given UTransPosition is valid for text of
  * the given length.

@@ -648,6 +648,16 @@ public:
 public:
 
     /**
+     * Return the class ID for this class.  This is useful for
+     * comparing to a return value from getDynamicClassID(). Note that,
+     * because NumberFormat is an abstract base class, no fully constructed object
+     * will have the class ID returned by NumberFormat::getStaticClassID().
+     * @return The class ID for all objects of this class.
+     * @stable ICU 2.0
+     */
+    static UClassID getStaticClassID(void);
+
+    /**
      * Returns a unique class ID POLYMORPHICALLY.  Pure virtual override.
      * This method is to implement a simple version of RTTI, since not all
      * C++ compilers support genuine RTTI.  Polymorphic operator==() and
@@ -658,7 +668,7 @@ public:
      * other classes have different class IDs.
      * @stable ICU 2.0
      */
-    virtual UClassID getDynamicClassID(void) const = 0;
+    virtual UClassID getDynamicClassID(void) const;
 
 protected:
 

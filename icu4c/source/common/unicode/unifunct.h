@@ -67,18 +67,13 @@ public:
      */
     virtual UnicodeReplacer* toReplacer() const;
 
-    /*
+    /**
      * Return the class ID for this class.  This is useful only for
-     * comparing to a return value from getDynamicClassID().  For example:
-     * <pre>
-     * .      Base* polymorphic_pointer = createPolymorphicObject();
-     * .      if (polymorphic_pointer->getDynamicClassID() ==
-     * .          Derived::getStaticClassID()) ...
-     * </pre>
+     * comparing to a return value from getDynamicClassID(). 
      * @return          The class ID for all objects of this class.
      * @stable ICU 2.0
      */
-    /*static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }*/
+    static UClassID getStaticClassID(void);
 
     /**
      * Returns a unique class ID <b>polymorphically</b>.  This method
@@ -86,24 +81,16 @@ public:
      * compilers support genuine RTTI.  Polymorphic operator==() and
      * clone() methods call this method.
      * 
-     * <p>Concrete subclasses of UnicodeFunctor that wish clients to
-     * be able to identify them should implement getDynamicClassID()
-     * and also a static method and data member:
-     * 
-     * <pre>
-     * static UClassID getStaticClassID() { return (UClassID)&fgClassID; }
-     * static char fgClassID;
-     * </pre>
-     *
-     * Subclasses that do not implement this method will have a
-     * dynamic class ID of UnicodeFunctor::getStatisClassID().
+     * <p>Concrete subclasses of UnicodeFunctor should use the macro
+     *    UOBJECT_DEFINE_RTTI_IMPLEMENTATION from uobject.h to
+     *    provide definitios getStaticClassID and getDynamicClassID.
      *
      * @return The class ID for this object. All objects of a given
      * class have the same class ID.  Objects of other classes have
      * different class IDs.
      * @stable ICU 2.4
      */
-    virtual UClassID getDynamicClassID(void) const = 0;
+    virtual UClassID getDynamicClassID(void) const;
 
     /**
      * Set the data object associated with this functor.  The data
@@ -124,13 +111,6 @@ protected:
      */
     /*UnicodeFunctor();*/
 
-private:
-
-    /*
-     * Class identifier for subclasses of UnicodeFunctor that do not
-     * define their class (anonymous subclasses).
-     */
-    /*static const char fgClassID;*/
 };
 
 /*inline UnicodeFunctor::UnicodeFunctor() {}*/
