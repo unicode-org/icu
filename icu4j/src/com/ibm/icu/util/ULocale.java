@@ -1895,18 +1895,27 @@ public final class ULocale implements Serializable {
      */
     private static String getTableString(String tableName, String subtableName, String item, ICUResourceBundle bundle) {
         try {
+	  for (;;) {
             // special case currency
             if ("currency".equals(subtableName)) {
-                ICUResourceBundle table = bundle.get("Currencies");
+                ICUResourceBundle table = bundle.getWithFallback("Currencies");
                 table = table.getWithFallback(item);
                 return table.getString(1);
             } else {
-                ICUResourceBundle table = bundle.get(tableName);
-                if (subtableName != null) {
-                    table = bundle.get(subtableName);
-                }
-                return table.getString(item);
+                ICUResourceBundle table = bundle.getWithFallback(tableName);
+		try {
+		  if (subtableName != null) {
+                    table = bundle.getWithFallback(subtableName);
+		  }
+		  table = table.getWithFallback(item);
+		  return table.getString();
+		}
+		catch (MissingResourceException e) {
+		  table = table.getWithFallback("Fallback");
+		  bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(new ULocale(table.getString()));
+		}
             }
+	  }
         }
         catch (Exception e) {
 //          System.out.println("gtsi: " + e.getMessage());
