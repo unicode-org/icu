@@ -490,7 +490,7 @@ import com.ibm.text.SimpleDateFormat;
  *   <li>Subclasses should implement {@link #handleGetYearLength}
  *     to return the number of days in the given
  *     extended year. This method is used by
- *     {@link #computeWeekFields} to compute the
+ *     <tt>computeWeekFields()</tt> to compute the
  *     {@link #WEEK_OF_YEAR} and {@link #YEAR_WOY} fields.</li>
  * 
  *   <li>Subclasses should implement {@link #handleGetLimit}
@@ -641,7 +641,7 @@ import com.ibm.text.SimpleDateFormat;
  * @see          GregorianCalendar
  * @see          TimeZone
  * @see          DateFormat
- * @version      $Revision: 1.19 $ $Date: 2000/11/30 21:54:16 $
+ * @version      $Revision: 1.20 $ $Date: 2001/06/29 20:53:42 $
  * @author Mark Davis, David Goldsmith, Chen-Lieh Huang, Alan Liu, Laura Werner
  * @since JDK1.1
  */
@@ -1189,7 +1189,7 @@ public abstract class Calendar implements Serializable, Cloneable {
     /**
      * The currently set time for this calendar, expressed in milliseconds after
      * January 1, 1970, 0:00:00 GMT.
-     * @see #isTimeSet
+     * @see <tt>isTimeSet</tt>
      * @serial
      */
     private long          time;
