@@ -51,19 +51,16 @@
 
 #   define IS_MAP(map) ((map)!=0)
 
+    /* Needed by OSF to get the correct mmap version */
+#   define _XOPEN_SOURCE_EXTENDED
+
 #   include <unistd.h>
 #   include <sys/mman.h>
 #   include <sys/stat.h>
 #   include <fcntl.h>
 
 #   ifndef MAP_FAILED
-#       ifdef U_OSF
-            /* This is the older definition and is not UNIX95 or XPG4-UNIX
-               source code compatible. */
-#           define MAP_FAILED ((caddr_t)-1)
-#       else
-#           define MAP_FAILED ((void*)-1)
-#       endif
+#       define MAP_FAILED ((void*)-1)
 #   endif
 
 #   if defined(OS390) && defined (OS390_STUBDATA)
