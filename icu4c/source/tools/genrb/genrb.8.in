@@ -1,72 +1,97 @@
-.TH GENRB 1 @VERSION@ "ICU"
-\" -*-nroff-*-   $Revision: 1.1 $ 
+.TH GENRB 8 "19 September 2000" "ICU @VERSION@"
+\" -*-nroff-*-   $Revision: 1.2 $ 
 .SH NAME
-genrb \- Compile a resource bundle
+.B genrb
+\- compile a resource bundle
 .SH SYNOPSIS
-.ta 6n
-\fBgenrb\fP  	[-\fIoptions\fP ...] [ \fIbundle.txt\fP ...]
+.B genrb
+[
+.BR "\-V\fP, \fB\-\-version"
+]
+[
+.BR "\-h\fP, \fB\-?\fP, \fB\-\-help"
+]
+[
+.BR "\-v\fP, \fB\-\-verbose"
+]
+[
+.BI "\-e\fP, \fB\-\-encoding" " encoding"
+]
+[
+.BI "\-s\fP, \fB\-\-sourcedir" " source"
+]
+[
+.BI "\-d\fP, \fB\-\-destdir" " destination"
+]
+.IR bundle " \.\.\."
 .SH DESCRIPTION
-The 
-.I genrb
-program converts resource bundle source files (
-.I .txt
-) to their binary form (
-.I .res
-).
-.I convrtrs.txt
-into the binary file
-.I cnvalias.dat
-.SH OPTIONS
+.B genrb
+converts the resource
+.I bundle
+source files passed on the command line to their binary form.
+The resulting files have a
+.B .res
+extension while resource bundle source files typically have a 
+.B .txt
+extension.
 .PP
-.TP 8
-.B \-\-help\fP or \fB \-h \fP or \fB \-?
-Displays a short help message
-.TP 8
-.B \-\-version\fP or \fB \-V
-Prints out version number and exits
-.TP 8
-.B \-\-verbose\fP or \fB \-v
-Turns on Verbose mode (default: off)
-.TP 8
-.B \-\-destdir=\fIpath\fP\fR \fP or \fB \-d=\fIpath\fP
-Change the output destination directory. Default is ICU_DATA directory.
-See
-.B ENVIRONMENT
-below.
-.TP 8
-.B \-\-encoding=\fIencoding\fP\fR \fP or \fB \-e=\fIencoding\fP
-Change the encoding used for source files. Default is the invariant (subset of ASCII or EBCDIC)
-codepage for the system. (See below: 
-.B INVARIANT CHARACTERS
-)
-Note: auto detects utf-8, utf-16 BE and LE if a byte order mark (BOM) is present. 
-.TP 8
+These binary files can then be loaded directly by ICU or reused by other
+tools such as
+.BR pkgdata (8).
+.SH OPTIONS
+.TP
+.BR \-V\fP, \fB\-\-version
+Print the version of
+.B genrb
+and exit.
+.TP
+.BR \-h\fP, \fB\-?\fP, \fB\-\-help
+Print help about usage and exit.
+.TP
+.BR \-v\fP, \fB\-\-verbose
+Print the command's version number and exit.
+.TP
+.BI "\-e\fP, \fB\-\-encoding" " encoding"
+Set the encoding used to read input files to
+.IR encoding .
+The default encoding is the invariant (subset of ASCII or EBCDIC)
+codepage for the system. See section
+.BR "INVARIANT CHARACTERS" .
+.B genrb
+does automatically detect UTF-8, UTF-16BE, and UTF-8LE if a byte order mark
+(BOM) is present.
+.TP
+.BI "\-s\fP, \fB\-\-sourcedir" " source"
+.TP
+.BI "\-d\fP, \fB\-\-destdir" " destination"
+Set the destination directory to
+.IR destination .
+The default destination directory is specified by the environment variable
+.BR ICU_DATA .
 .B \-\-sourcedir=\fIpath\fP\fR \fP or \fB \-s=\fIpath\fP
-Change the default source directory. Default is ICU_DATA directory.
-See
-.B ENVIRONMENT
-below.
 .TP 8
 .I bundle.txt ...
 Specify the source resource bundle files which will be compiled. 
 The filename should be a locale ID, for example,  \fBja_JP.txt\fP for Japanese (Japan),   
 or \fBroot.txt\fP for the root bundle. 
-.fi
-.sp
 .SH INVARIANT CHARACTERS
-.PP
-.TP 8
-The 'invariant character set' consists of the following characters . It is the set which is guaranteed to
-be available regardless of code page.
-.TP 8
-[a-z]|[A-Z]|[0-9]|_| |+|-|*|/
-.sp
+The
+.B invariant character set
+consists of the following set of characters, expressed as a standard POSIX
+regular expression:
+.BR "[a-z]|[A-Z]|[0-9]|_| |+|-|*|/" .
+This is the set which is guaranteed to be available regardless of code page.
 .SH ENVIRONMENT
-.PP
-.TP 8
+.TP 10
 .B ICU_DATA
-Specifies the directory containing ICU data.  Default is \fI@prefix@share/icu/@VERSION@/\fP
-- Make sure there is a trailing slash.
+Specifies the directory containing ICU data. Defaults to
+.BR I@prefix@share/icu/@VERSION@/ .
+Some tools in ICU depend on the presence of the trailing slash. It is thus
+important to make sure that it is present if
+.B ICU_DATA
+is set.
+.SH VERSION
+@VERSION@
 .SH COPYRIGHT
-Copyright (c) 2000 IBM, Inc. and others.
+Copyright (C) 2000 IBM, Inc. and others.
 
