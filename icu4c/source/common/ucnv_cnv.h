@@ -220,4 +220,23 @@ extern const UConverterSharedData
 
 U_CDECL_END
 
+/**
+ * This function is useful for implementations of getNextUChar().
+ * After a call to a callback function or to toUnicode(), an output buffer
+ * begins with a Unicode code point that needs to be returned as UChar32,
+ * and all following code units must be prepended to the - potentially
+ * prefilled - overflow buffer in the UConverter.
+ * The buffer should be at least of capacity UTF_MAX_CHAR_LENGTH so that a
+ * complete UChar32's UChars fit into it.
+ *
+ * @param cnv    The converter that will get remaining UChars copied to its overflow area.
+ * @param buffer An array of UChars that was passed into a callback function
+ *               or a toUnicode() function.
+ * @param length The number of code units (UChars) that are actually in the buffer.
+ *               This must be >0.
+ * @return The code point from the first UChars in the buffer.
+ */
+U_CFUNC UChar32
+ucnv_getUChar32KeepOverflow(UConverter *cnv, const UChar *buffer, int32_t length);
+
 #endif /* UCNV_CNV */
