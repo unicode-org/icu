@@ -9,9 +9,10 @@
 **********************************************************************
 */
 
+#include "olsontz.h"
+
 #if !UCONFIG_NO_FORMATTING
 
-#include "olsontz.h"
 #include "unicode/ures.h"
 #include "unicode/simpletz.h"
 #include "unicode/gregocal.h"
