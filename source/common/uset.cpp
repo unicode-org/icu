@@ -27,6 +27,7 @@
 #include "unicode/uniset.h"
 #include "cmemory.h"
 #include "unicode/ustring.h"
+#include "unicode/parsepos.h"
 
 U_CAPI USet* U_EXPORT2
 uset_open(UChar32 start, UChar32 end) {
@@ -76,6 +77,35 @@ uset_openPatternOptions(const UChar* pattern, int32_t patternLength,
 U_CAPI void U_EXPORT2
 uset_close(USet* set) {
     delete (UnicodeSet*) set;
+}
+
+U_CAPI int32_t U_EXPORT2 
+uset_applyPattern(USet *set,
+                  const UChar *pattern, int32_t patternLength,
+                  uint32_t options,
+                  UErrorCode *status){
+
+    // status code needs to be checked since we 
+    // dereference it
+    if(status == NULL || U_FAILURE(*status)){
+        return 0;
+    }
+
+    // check only the set paramenter
+    // if pattern is NULL or null terminate
+    // UnicodeString constructor takes care of it
+    if(set == NULL){
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
+    UnicodeString pat(pattern, patternLength);
+
+    ParsePosition pos;
+   
+    ((UnicodeSet*) set)->applyPattern(pat, pos, options, NULL, *status);
+    
+    return pos.getIndex();
 }
 
 U_CAPI int32_t U_EXPORT2
