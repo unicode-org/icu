@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/rbbi/BreakIteratorTest.java,v $ 
- * $Date: 2001/09/08 01:16:42 $ 
- * $Revision: 1.6 $
+ * $Date: 2001/11/06 11:20:06 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -1303,6 +1303,102 @@ lineSelectionData.addElement("(\u0e1b\u0e23\u0e30\u0e40\u0e17\u0e28\u0e44\u0e17\
             errln("Didn't get break before period in \"boo.\"");
         if (wb.current() != 4 && wb.next() != 4)
             errln("Didn't get break at end of string.");
+    }
+    
+    // The Following two tests are ported from ICU4C 1.8.1 [Richard/GCL]
+    /** 
+     * Port From:   ICU4C v1.8.1 : textbounds : IntlTestTextBoundary
+     * Source File: $ICU4CRoot/source/test/intltest/ittxtbd.cpp
+     **/
+    /**
+     * test methods preceding, following and isBoundary
+     **/
+    public void TestPreceding() {
+        String words3 = "aaa bbb ccc";
+        BreakIterator e = BreakIterator.getWordInstance(Locale.getDefault());
+        e.setText( words3 );
+        e.first();
+        int p1 = e.next();
+        int p2 = e.next();
+        int p3 = e.next();
+        int p4 = e.next();
+        
+        int f = e.following(p2+1);
+        int p = e.preceding(p2+1);
+        if (f!=p3)
+            errln("IntlTestTextBoundary::TestPreceding: f!=p3");
+        if (p!=p2)
+            errln("IntlTestTextBoundary::TestPreceding: p!=p2");
+        
+        if (p1+1!=p2)
+            errln("IntlTestTextBoundary::TestPreceding: p1+1!=p2");
+        
+        if (p3+1!=p4)
+            errln("IntlTestTextBoundary::TestPreceding: p3+1!=p4");
+        
+        if (!e.isBoundary(p2) || e.isBoundary(p2+1) || !e.isBoundary(p3))
+        {
+            errln("IntlTestTextBoundary::TestPreceding: isBoundary err");
+        }
+    }
+    
+    /**
+     * Test Thai word break using generalIteratorTest()
+     **/
+    public void TestThaiWordBreak() {
+        Vector thaiWordSelection = new Vector();
+
+        thaiWordSelection.addElement("\u0E1A\u0E17"); //2
+        thaiWordSelection.addElement("\u0E17\u0E35\u0E48"); //5
+        thaiWordSelection.addElement("\u0E51"); //6
+        thaiWordSelection.addElement("\u0E1E\u0E32\u0E22\u0E38"); //10
+        thaiWordSelection.addElement("\u0E44\u0E0B\u0E42\u0E04\u0E25\u0E19"); //16
+        thaiWordSelection.addElement("\r\n"); //18
+
+        // This is the correct result
+        //thaiWordSelection.addElement(("\u0E42\u0E14\u0E42\u0E23\u0E18\u0E35")); //24
+        //thaiWordSelection.addElement(("\u0E2D\u0E32\u0E28\u0E31\u0E22")); //29
+
+        // and this is what the dictionary does...
+        thaiWordSelection.addElement("\u0E42\u0E14"); // 20
+        thaiWordSelection.addElement("\u0E42\u0E23\u0E18\u0E35\u0E2D\u0E32\u0E28\u0E31\u0E22"); //29
+
+        thaiWordSelection.addElement("\u0E2D\u0E22\u0E39\u0E48"); //33
+
+        // This is the correct result
+        //thaiWordSelection.addElement("\u0E17\u0E48\u0E32\u0E21"); //37
+        //thaiWordSelection.addElement("\u0E01\u0E25\u0E32\u0E07"); //41
+
+        // and this is what the dictionary does
+        thaiWordSelection.addElement("\u0E17\u0E48\u0E32\u0E21\u0E01\u0E25\u0E32\u0E07"); //41
+
+        thaiWordSelection.addElement("\u0E17\u0E38\u0E48\u0E07"); //45
+        thaiWordSelection.addElement("\u0E43\u0E2B\u0E0D\u0E48"); //49
+        thaiWordSelection.addElement("\u0E43\u0E19"); //51
+
+        // This is the correct result
+        //thaiWordSelection.addElement("\u0E41\u0E04\u0E19\u0E0B\u0E31\u0E2A"); //57
+        //thaiWordSelection.addElement("\u0E01\u0E31\u0E1A"); //60
+
+        // and this is what the dictionary does
+        thaiWordSelection.addElement("\u0E41\u0E04\u0E19"); // 54
+        thaiWordSelection.addElement("\u0E0B\u0E31\u0E2A\u0E01\u0E31\u0E1A"); //60
+
+        thaiWordSelection.addElement("\u0E25\u0E38\u0E07"); //63
+
+        // This is the correct result
+        //thaiWordSelection.addElement("\u0E40\u0E2E\u0E19\u0E23\u0E35"); //68
+        //thaiWordSelection.addElement("\u0E0A\u0E32\u0E27"); //71
+        //thaiWordSelection.addElement("\u0E44\u0E23\u0E48"); //74
+        //thaiWordSelection.addElement("\u0E41\u0E25\u0E30"); //77
+
+        // and this is what the dictionary does
+        thaiWordSelection.addElement("\u0E40\u0E2E"); // 65
+        thaiWordSelection.addElement("\u0E19\u0E23\u0E35\u0E0A\u0E32\u0E27\u0E44\u0E23\u0E48\u0E41\u0E25\u0E30"); //77
+
+        BreakIterator e = BreakIterator.getWordInstance(new Locale("th","","")); 
+
+        generalIteratorTest(e, thaiWordSelection);
     }
 }
 
