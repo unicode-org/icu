@@ -85,6 +85,20 @@ typedef uint32_t U_CALLCONV
 UDataReadUInt32(uint32_t x);
 
 /**
+ * Convert one uint16_t from platform to input endianness.
+ * @draft ICU 2.8
+ */
+typedef void U_CALLCONV
+UDataWriteUInt16(uint16_t *p, uint16_t x);
+
+/**
+ * Convert one uint32_t from platform to input endianness.
+ * @draft ICU 2.8
+ */
+typedef void U_CALLCONV
+UDataWriteUInt32(uint32_t *p, uint32_t x);
+
+/**
  * Compare invariant-character strings, one in the output data and the
  * other one caller-provided in Unicode.
  * An output data string is compared because strings are usually swapped
@@ -131,6 +145,13 @@ struct UDataSwapper {
     UDataReadUInt32 *readUInt32;
     /** Compare an invariant-character output string with a local one. @draft ICU 2.8 */
     UDataCompareInvChars *compareInvChars;
+
+    /* basic functions for writing data values */
+
+    /** Convert one uint16_t from platform to input endianness. @draft ICU 2.8 */
+    UDataWriteUInt16 *writeUInt16;
+    /** Convert one uint32_t from platform to input endianness. @draft ICU 2.8 */
+    UDataWriteUInt32 *writeUInt32;
 
     /* basic functions for data transformations */
 
@@ -187,11 +208,29 @@ udata_swapDataHeader(const UDataSwapper *ds,
                      const void *inData, int32_t length, void *outData,
                      UErrorCode *pErrorCode);
 
+/**
+ * Convert one int16_t from input to platform endianness.
+ * @draft ICU 2.8
+ */
 U_CAPI int16_t U_EXPORT2
 udata_readInt16(const UDataSwapper *ds, int16_t x);
 
+/**
+ * Convert one int32_t from input to platform endianness.
+ * @draft ICU 2.8
+ */
 U_CAPI int32_t U_EXPORT2
 udata_readInt32(const UDataSwapper *ds, int32_t x);
+
+/**
+ * Swap a block of invariant, NUL-terminated strings, but not padding
+ * bytes after the last string.
+ * @internal
+ */
+U_CAPI int32_t U_EXPORT2
+udata_swapInvStringBlock(const UDataSwapper *ds,
+                         const void *inData, int32_t length, void *outData,
+                         UErrorCode *pErrorCode);
 
 U_CAPI void U_EXPORT2
 udata_printError(const UDataSwapper *ds,
