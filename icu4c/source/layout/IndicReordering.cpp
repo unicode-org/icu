@@ -2,8 +2,8 @@
  * (C) Copyright IBM Corp. 1998 - 2003 - All Rights Reserved
  *
  * $Source: /xsrl/Nsvn/icu/icu/source/layout/IndicReordering.cpp,v $
- * $Date: 2003/05/13 00:44:33 $
- * $Revision: 1.11 $
+ * $Date: 2003/05/20 23:37:02 $
+ * $Revision: 1.12 $
  *
  */
 
@@ -155,22 +155,22 @@ enum
 
 const LETag emptyTag       = 0x00000000; // ''
 
-const LETag nuktFeatureTag = LE_MAKE_TAG('n', 'u', 'k', 't');
-const LETag akhnFeatureTag = LE_MAKE_TAG('a', 'k', 'h', 'n');
-const LETag rphfFeatureTag = LE_MAKE_TAG('r', 'p', 'h', 'f');
-const LETag blwfFeatureTag = LE_MAKE_TAG('b', 'l', 'w', 'f');
-const LETag halfFeatureTag = LE_MAKE_TAG('h', 'a', 'l', 'f');
-const LETag pstfFeatureTag = LE_MAKE_TAG('p', 's', 't', 'f');
-const LETag vatuFeatureTag = LE_MAKE_TAG('v', 'a', 't', 'u');
-const LETag presFeatureTag = LE_MAKE_TAG('p', 'r', 'e', 's');
-const LETag blwsFeatureTag = LE_MAKE_TAG('b', 'l', 'w', 's');
-const LETag abvsFeatureTag = LE_MAKE_TAG('a', 'b', 'v', 's');
-const LETag pstsFeatureTag = LE_MAKE_TAG('p', 's', 't', 's');
-const LETag halnFeatureTag = LE_MAKE_TAG('h', 'a', 'l', 'n');
+const LETag nuktFeatureTag = LE_NUKT_FEATURE_TAG;
+const LETag akhnFeatureTag = LE_AKHN_FEATURE_TAG;
+const LETag rphfFeatureTag = LE_RPHF_FEATURE_TAG;
+const LETag blwfFeatureTag = LE_BLWF_FEATURE_TAG;
+const LETag halfFeatureTag = LE_HALF_FEATURE_TAG;
+const LETag pstfFeatureTag = LE_PSTF_FEATURE_TAG;
+const LETag vatuFeatureTag = LE_VATU_FEATURE_TAG;
+const LETag presFeatureTag = LE_PRES_FEATURE_TAG;
+const LETag blwsFeatureTag = LE_BLWS_FEATURE_TAG;
+const LETag abvsFeatureTag = LE_ABVS_FEATURE_TAG;
+const LETag pstsFeatureTag = LE_PSTS_FEATURE_TAG;
+const LETag halnFeatureTag = LE_HALN_FEATURE_TAG;
 
-const LETag blwmFeatureTag = LE_MAKE_TAG('b', 'l', 'w', 'm');
-const LETag abvmFeatureTag = LE_MAKE_TAG('a', 'b', 'v', 'm');
-const LETag distFeatureTag = LE_MAKE_TAG('d', 'i', 's', 't');
+const LETag blwmFeatureTag = LE_BLWM_FEATURE_TAG;
+const LETag abvmFeatureTag = LE_ABVM_FEATURE_TAG;
+const LETag distFeatureTag = LE_DIST_FEATURE_TAG;
 
 // These are in the order in which the features need to be applied
 // for correct processing

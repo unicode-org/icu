@@ -6,8 +6,8 @@
  * YOU REALLY KNOW WHAT YOU'RE DOING.
  *
  * $Source: /xsrl/Nsvn/icu/icu/source/layout/ScriptAndLanguageTags.cpp,v $
- * $Date: 2003/04/15 20:43:27 $
- * $Revision: 1.6 $
+ * $Date: 2003/05/20 23:38:13 $
+ * $Revision: 1.7 $
  */
 
 #include "LETypes.h"

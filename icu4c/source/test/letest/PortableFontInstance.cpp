@@ -86,8 +86,8 @@ PortableFontInstance::PortableFontInstance(char *fileName, float pointSize, LEEr
     fread(&tempDir, sizeof tempDir, 1, fFile);
 
     le_int32 dirSize = sizeof tempDir + ((SWAPW(tempDir.numTables) - ANY_NUMBER) * sizeof(DirectoryEntry));
-    const LETag headTag = LE_MAKE_TAG('h', 'e', 'a', 'd');
-    const LETag hheaTag = LE_MAKE_TAG('h', 'h', 'e', 'a');
+    const LETag headTag = LE_HEAD_TABLE_TAG;
+    const LETag hheaTag = LE_HHEA_TABLE_TAG;
     const HEADTable *headTable = NULL;
     const HHEATable *hheaTable = NULL;
     le_uint16 numTables = 0;
@@ -230,7 +230,7 @@ const void *PortableFontInstance::readFontTable(LETag tableTag) const
 
 CMAPMapper *PortableFontInstance::findUnicodeMapper()
 {
-    LETag cmapTag = LE_MAKE_TAG('c', 'm', 'a', 'p');
+    LETag cmapTag = LE_CMAP_TABLE_TAG;
     const CMAPTable *cmap = (CMAPTable *) readFontTable(cmapTag);
 
     if (cmap == NULL) {
@@ -246,8 +246,8 @@ void PortableFontInstance::getGlyphAdvance(LEGlyphID glyph, LEPoint &advance) co
     TTGlyphID ttGlyph = (TTGlyphID) LE_GET_GLYPH(glyph);
 
     if (fHMTXTable == NULL) {
-        LETag maxpTag = LE_MAKE_TAG('m', 'a', 'x', 'p');
-        LETag hmtxTag = LE_MAKE_TAG('h', 'm', 't', 'x');
+        LETag maxpTag = LE_MAXP_TABLE_TAG;
+        LETag hmtxTag = LE_HMTX_TABLE_TAG;
         const MAXPTable *maxpTable = (MAXPTable *) readFontTable(maxpTag);
         PortableFontInstance *realThis = (PortableFontInstance *) this;
 

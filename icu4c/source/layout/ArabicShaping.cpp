@@ -64,21 +64,21 @@ ArabicShaping::ShapeType ArabicShaping::getShapeType(LEUnicode c)
     return ST_NOSHAPE_NONE;
 }
 
-const LETag isolFeatureTag = LE_MAKE_TAG('i', 's', 'o', 'l');
-const LETag initFeatureTag = LE_MAKE_TAG('i', 'n', 'i', 't');
-const LETag mediFeatureTag = LE_MAKE_TAG('m', 'e', 'd', 'i');
-const LETag finaFeatureTag = LE_MAKE_TAG('f', 'i', 'n', 'a');
-const LETag ligaFeatureTag = LE_MAKE_TAG('l', 'i', 'g', 'a');
-const LETag msetFeatureTag = LE_MAKE_TAG('m', 's', 'e', 't');
-const LETag markFeatureTag = LE_MAKE_TAG('m', 'a', 'r', 'k');
-const LETag ccmpFeatureTag = LE_MAKE_TAG('c', 'c', 'm', 'p');
-const LETag rligFeatureTag = LE_MAKE_TAG('r', 'l', 'i', 'g');
-const LETag caltFeatureTag = LE_MAKE_TAG('c', 'a', 'l', 't');
-const LETag dligFeatureTag = LE_MAKE_TAG('d', 'l', 'i', 'g');
-const LETag cswhFeatureTag = LE_MAKE_TAG('c', 's', 'w', 'h');
-const LETag cursFeatureTag = LE_MAKE_TAG('c', 'u', 'r', 's');
-const LETag kernFeatureTag = LE_MAKE_TAG('k', 'e', 'r', 'n');
-const LETag mkmkFeatureTag = LE_MAKE_TAG('m', 'k', 'm', 'k');
+const LETag isolFeatureTag = LE_ISOL_FEATURE_TAG;
+const LETag initFeatureTag = LE_INIT_FEATURE_TAG;
+const LETag mediFeatureTag = LE_MEDI_FEATURE_TAG;
+const LETag finaFeatureTag = LE_FINA_FEATURE_TAG;
+const LETag ligaFeatureTag = LE_LIGA_FEATURE_TAG;
+const LETag msetFeatureTag = LE_MSET_FEATURE_TAG;
+const LETag markFeatureTag = LE_MARK_FEATURE_TAG;
+const LETag ccmpFeatureTag = LE_CCMP_FEATURE_TAG;
+const LETag rligFeatureTag = LE_RLIG_FEATURE_TAG;
+const LETag caltFeatureTag = LE_CALT_FEATURE_TAG;
+const LETag dligFeatureTag = LE_DLIG_FEATURE_TAG;
+const LETag cswhFeatureTag = LE_CSWH_FEATURE_TAG;
+const LETag cursFeatureTag = LE_CURS_FEATURE_TAG;
+const LETag kernFeatureTag = LE_KERN_FEATURE_TAG;
+const LETag mkmkFeatureTag = LE_MKMK_FEATURE_TAG;
 
 const LETag emptyTag       = 0x00000000; // ''
 
