@@ -35,6 +35,11 @@
  *  <code>RegexMatcher</code> includes API for doing plain find or search
  *  operations, for search and replace operations, and for obtaining detailed
  *  information about bounds of a match. </p>
+ *
+ * <p>Note that by constructing <code>RegexMatcher</code> objects directly from regular 
+ * expression pattern strings application code can be simplified and the explicit
+ * need for <code>RegexPattern</code> objects can usually be eliminated.
+ * </p>
  */
 
 #include "unicode/utypes.h"
@@ -104,6 +109,7 @@ public:
     /**
      * Copy Constructor.  Create a new RegexPattern object that is equivalent
      *                    to the source object.
+     * @param source the pattern object to be copied.
      * @stable ICU 2.4
      */
     RegexPattern(const RegexPattern &source);
@@ -164,6 +170,10 @@ public:
     *
     * <p>All pattern match mode flags are set to their default values.</p>
     *
+    * <p>Note that it is often more convenient to construct a RegexMatcher directly
+    *    from a pattern string rather than separately compiling the pattern and
+    *    then creating a RegexMatcher object from the pattern.</p>
+    *
     * @param regex The regular expression to be compiled.
     * @param pe    Receives the position (line and column nubers) of any error
     *              within the regular expression.)
@@ -186,6 +196,10 @@ public:
     * objects created from the pattern are active.  RegexMatchers keep a pointer
     * back to their pattern, so premature deletion of the pattern is a
     * catastrophic error.</p>
+    *
+    * <p>Note that it is often more convenient to construct a RegexMatcher directly
+    *    from a pattern string instead of than separately compiling the pattern and
+    *    then creating a RegexMatcher object from the pattern.</p>
     *
     * @param regex The regular expression to be compiled.
     * @param flags The match mode flags to be used.
@@ -212,6 +226,10 @@ public:
     * objects created from the pattern are active.  RegexMatchers keep a pointer
     * back to their pattern, so premature deletion of the pattern is a
     * catastrophic error.</p>
+    *
+    * <p>Note that it is often more convenient to construct a RegexMatcher directly
+    *    from a pattern string instead of than separately compiling the pattern and
+    *    then creating a RegexMatcher object from the pattern.</p>
     *
     * @param regex The regular expression to be compiled.
     * @param flags The match mode flags to be used.
@@ -237,10 +255,15 @@ public:
     * RegexMatcher can then be used to perform match, find or replace operations
     * on the input.  Note that a RegexPattern object must not be deleted while
     * RegexMatchers created from it still exist and might possibly be used again.
+    * <p>
+    * The matcher will retain a reference to the supplied input string, and all regexp
+    * pattern matching operations happen directly on this original string.  It is
+    * critical that the string not be altered or deleted before use by the regular
+    * expression operations is complete.
     *
-    * @param input The input string to which the regular expression will be applied.
+    * @param input    The input string to which the regular expression will be applied.
     * @param status   A reference to a UErrorCode to receive any errors.
-    * @return      A RegexMatcher object for this pattern and input.
+    * @return         A RegexMatcher object for this pattern and input.
     *
     * @stable ICU 2.4
     */
@@ -282,7 +305,7 @@ public:
     * Test whether a string matches a regular expression.  This convenience function
     * both compiles the reguluar expression and applies it in a single operation.
     * Note that if the same pattern needs to be applied repeatedly, this method will be
-    * less efficient than creating and reusing a RegexPattern object.
+    * less efficient than creating and reusing a RegexMatcher object.
     *
     * @param regex The regular expression
     * @param input The string data to be matched
@@ -451,9 +474,15 @@ public:
       * created for the same expression, it will be more efficient to
       * separately create and cache a RegexPattern object, and use
       * its matcher() method to create the RegexMatcher objects.
+      * <p>
+      * The matcher will retain a reference to the supplied input string, and all regexp
+      * pattern matching operations happen directly on the original string.  It is
+      * critical that the string not be altered or deleted before use by the regular
+      * expression operations is complete.
       *
-      *  @param regexp The Regular Expression to be compiled.
-      *  @param input  The string to match
+      *  @param regexp The Regular Expression to be compiled.  
+      *  @param input  The string to match.  The matcher retains a reference to the
+      *                caller's string; mo copy is made.
       *  @param flags  Regular expression options, such as case insensitive matching.
       *                @see UREGEX_CASE_INSENSITIVE
       *  @param status Any errors are reported by setting this UErrorCode variable.
@@ -627,7 +656,7 @@ public:
 
 
    /**
-    *    Returns the index in the input string of the character following the
+    *    Returns the index in the input string of the first character following the
     *    text matched during the previous match operation.
     *   @param   status      A reference to a UErrorCode to receive any errors.  Possible
     *                        errors are  U_REGEX_INVALID_STATE if no match has been
@@ -646,9 +675,9 @@ public:
     *                        errors are  U_REGEX_INVALID_STATE if no match has been
     *                        attempted or the last match failed and
     *                        U_INDEX_OUTOFBOUNDS_ERROR for a bad capture group number
-    *    @return  the index of the last character, plus one, of the text
+    *    @return  the index of the first character following the text
     *              captured by the specifed group during the previous match operation.
-    *              Return -1 if the capture group was not part of the match.
+    *              Return -1 if the capture group exists in the pattern but was not part of the match.
     *    @stable ICU 2.4
     */
     virtual int32_t end(int group, UErrorCode &status) const;
@@ -680,7 +709,13 @@ public:
    /**
     *   Resets this matcher with a new input string.  This allows instances of RegexMatcher
     *     to be reused, which is more efficient than creating a new RegexMatcher for
-    *     each input string to be processed.
+    *     each input string to be processed.  
+    *   @param input The new string on which subsequent pattern matches will operate.
+    *                The matcher retains a reference to the callers string, and operates
+    *                directly on that.  Ownership of the string remains with the caller.
+    *                Because no copy of the string is made, it is essential that the
+    *                caller not delete the string until after regexp operations on it
+    *                are done.  
     *   @return this RegexMatcher.
     *   @stable ICU 2.4
     */
@@ -763,7 +798,7 @@ public:
     *   Implements a replace operation intended to be used as part of an
     *   incremental find-and-replace.
     *
-    *   <p>The input string, starting from the end of the previous match and ending at
+    *   <p>The input string, starting from the end of the previous replacement and ending at
     *   the start of the current match, is appended to the destination string.  Then the
     *   replacement string is appended to the output string,
     *   including handling any substitutions of captured text.</p>
@@ -792,7 +827,7 @@ public:
 
    /**
     * As the final step in a find-and-replace operation, append the remainder
-    * of the input string, starting at the position following the last match,
+    * of the input string, starting at the position following the last appendReplacement(),
     * to the destination string. <code>appendTail()</code> is intended to be invoked after one
     * or more invocations of the <code>RegexMatcher::appendReplacement()</code>.
     *
