@@ -61,6 +61,11 @@ const UChar SimpleDateFormat::fgDefaultPattern[] =
     0x79, 0x79, 0x79, 0x79, 0x4D, 0x4D, 0x64, 0x64, 0x20, 0x68, 0x68, 0x3A, 0x6D, 0x6D, 0x20, 0x61, 0
 };  /* "yyyyMMdd hh:mm a" */
 
+// This prefix is designed to NEVER MATCH real text, in order to
+// suppress the parsing of negative numbers.  Adjust as needed (if
+// this becomes valid Unicode).
+static const UChar SUPPRESS_NEGATIVE_PREFIX[] = {0xAB00, 0};
+
 /**
  * These are the tags we expect to see in normal resource bundle files associated
  * with a locale.
@@ -687,41 +692,6 @@ SimpleDateFormat::zeroPaddingNumber(UnicodeString &appendTo, int32_t value, int3
 
 //----------------------------------------------------------------------
 
-// {sfb} removed
-/*
-// this function will dump output to the console on a debug build when there's a parse error
-#ifdef _DEBUG
-void chk(ParsePosition& val, UChar ch, ParsePosition& start, int32_t count)
-{
-    if (val.getIndex() < 0)
-    {
-        cout << "[Parse failure on '" << (char)ch << "' x " << dec << count << " @ " << start.getIndex() << ']';
-    }
-}
-#else
-inline void chk(ParsePosition& val, UChar ch, ParsePosition& start, int32_t count)
-{
-}
-#endif
-
-inline Date
-parseFailureResult(ParsePosition& pos, ParsePosition& oldStart, ParsePosition& failurePos)
-{
-    // Note: The C++ version currently supports the notion of returning zero
-    // with a non-zero parse position, but only if this format is lenient.
-    // The returned position in this case is the first un-parseable character.
-    // This is useful, but is not present in the Java version, and causes a
-    // DateFormat test to fail.
-    
-    // For now, I am removing this function.  It can be restored later.
-
-    // if (!isLenient()) pos = oldStart;
-    // else { pos = failurePos.getIndex(); if (pos.getIndex() < 0) pos = -pos.getIndex(); };
-    pos = oldStart;
-    return 0;
-}
-*/
-
 void
 SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition& pos) const
 {
@@ -733,6 +703,7 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
     UChar prevCh = 0;
     int32_t count = 0;
     int32_t interQuoteCount = 1; // Number of chars between quotes
+    UBool allowNegative = TRUE;
 
     // loop through the pattern string character by character, using it to control how
     // we match characters in the input
@@ -789,7 +760,8 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
                 if (count > 0) 
                 {
                     int32_t startOffset = start;
-                    start = subParse(text, start, prevCh, count, FALSE, ambiguousYear, cal);
+                    start = subParse(text, start, prevCh, count, FALSE, allowNegative, ambiguousYear, cal);
+                    allowNegative = TRUE;
                     if ( start < 0 ) {
                         pos.setErrorIndex(startOffset);
                         pos.setIndex(oldStart);
@@ -831,7 +803,11 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
                     // obeyCount.  That's because the next field directly
                     // abuts this one, so we have to use the count to know when
                     // to stop parsing. [LIU]
-                    start = subParse(text, start, prevCh, count, TRUE, ambiguousYear, cal);
+                    // Don't allow negatives in this field or in the next.
+                    // This prevents anomalies like HHmmss matching 12-34
+                    // as 12:-3:4, or 11:57:04.
+                    start = subParse(text, start, prevCh, count, TRUE, FALSE, ambiguousYear, cal);
+                    allowNegative = FALSE;
                     if (start < 0) {
                         pos.setErrorIndex(startOffset);
                         pos.setIndex(oldStart);
@@ -854,7 +830,8 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
                 // handle cases like: MM-dd-yy, HH:mm:ss, or yyyy MM dd,
                 // where ch = '-', ':', or ' ', repectively.
                 int32_t startOffset = start;
-                start = subParse( text, start, prevCh, count, FALSE, ambiguousYear, cal);
+                start = subParse( text, start, prevCh, count, FALSE, allowNegative, ambiguousYear, cal);
+                allowNegative = TRUE;
                 if ( start < 0 ) {
                     pos.setErrorIndex(startOffset);
                     pos.setIndex(oldStart);
@@ -897,7 +874,7 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
     if (count > 0) 
     {
         int32_t startOffset = start;
-        start = subParse(text, start, prevCh, count, FALSE, ambiguousYear, cal);
+        start = subParse(text, start, prevCh, count, FALSE, allowNegative, ambiguousYear, cal);
         if ( start < 0 ) {
             pos.setIndex(oldStart);
             pos.setErrorIndex(startOffset);
@@ -1034,31 +1011,6 @@ SimpleDateFormat::set2DigitYearStart(UDate d, UErrorCode& status)
 }
 
 /**
- * Parse the given text, at the given position, as a numeric value, using
- * this objects fNumberFormat. Return the corresponding long value in the
- * fill-in parameter 'value'. If the parse fails, this method leaves pos
- * unchanged and returns FALSE; otherwise it advances pos and
- * returns TRUE.
- */
-// {sfb} removed
-/*
-UBool
-SimpleDateFormat::subParseLong(const UnicodeString& text, ParsePosition& pos, int32_t& value) const
-{
-    Formattable parseResult;
-    ParsePosition posSave = pos;
-    fNumberFormat->parse(text, parseResult, pos);
-    if (pos != posSave && parseResult.getType() == Formattable::kLong)
-    {
-        value = parseResult.getLong();
-        return TRUE;
-    }
-    pos = posSave;
-    return FALSE;
-}
-*/
-
-/**
  * Private member function that converts the parsed date strings into
  * timeFields. Returns -start (for ParsePosition) if failed.
  * @param text the time text to be parsed.
@@ -1069,13 +1021,14 @@ SimpleDateFormat::subParseLong(const UnicodeString& text, ParsePosition& pos, in
  * indicating matching failure, otherwise.
  */
 int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UChar ch, int32_t count,
-                           UBool obeyCount, UBool ambiguousYear[], Calendar& cal) const
+                           UBool obeyCount, UBool allowNegative, UBool ambiguousYear[], Calendar& cal) const
 {
     Formattable number;
     int32_t value = 0;
     int32_t i;
     ParsePosition pos(0);
     int32_t patternCharIndex;
+    UnicodeString temp;
     UChar *patternCharPtr = u_strchr(DateFormatSymbols::getPatternUChars(), ch);
 
     if (patternCharPtr == NULL) {
@@ -1113,16 +1066,17 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         int32_t parseStart = pos.getIndex(); // WORK AROUND BUG IN NUMBER FORMAT IN 1.2B3
         // It would be good to unify this with the obeyCount logic below,
         // but that's going to be difficult.
-        if (obeyCount)
-        {
-            if ((start+count) > text.length()) 
+        const UnicodeString* src;
+        if (obeyCount) {
+            if ((start+count) > text.length()) {
                 return -start;
-            UnicodeString temp;
+            }
             text.extractBetween(0, start + count, temp);
-            fNumberFormat->parse(temp, number, pos);
+            src = &temp;
+        } else {
+            src = &text;
         }
-        else 
-            fNumberFormat->parse(text, number, pos);
+        parseInt(*src, number, pos, allowNegative);
         if (pos.getIndex() == parseStart)
             // WORK AROUND BUG IN NUMBER FORMAT IN 1.2B3
             return -start;
@@ -1389,23 +1343,45 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         // WORK AROUND BUG IN NUMBER FORMAT IN 1.2B3
         int32_t parseStart = pos.getIndex();
         // Handle "generic" fields
-        if (obeyCount)
-        {
-            if ((start+count) > text.length()) 
+        const UnicodeString* src;
+        if (obeyCount) {
+            if ((start+count) > text.length()) {
                 return -start;
-            UnicodeString s;
-            // {sfb} old code had extract, make sure it works
-            text.extractBetween(0, start + count, s);
-            fNumberFormat->parse(s, number, pos);
+            }
+            text.extractBetween(0, start + count, temp);
+            src = &temp;
+        } else {
+            src = &text;
         }
-        else 
-            fNumberFormat->parse(text, number, pos);
+        parseInt(*src, number, pos, allowNegative);
         if (pos.getIndex() != parseStart) {
             // WORK AROUND BUG IN NUMBER FORMAT IN 1.2B3
             cal.set(field, number.getLong());
             return pos.getIndex();
         }
         return -start;
+    }
+}
+
+/**
+ * Parse an integer using fNumberFormat.  This method is semantically
+ * const, but actually may modify fNumberFormat.
+ */
+void SimpleDateFormat::parseInt(const UnicodeString& text,
+                                Formattable& number,
+                                ParsePosition& pos,
+                                UBool allowNegative) const {
+    UnicodeString oldPrefix;
+    DecimalFormat* df = NULL;
+    if (!allowNegative &&
+        fNumberFormat->getDynamicClassID() == DecimalFormat::getStaticClassID()) {
+        df = (DecimalFormat*)fNumberFormat;
+        df->getNegativePrefix(oldPrefix);
+        df->setNegativePrefix(SUPPRESS_NEGATIVE_PREFIX);
+    }
+    fNumberFormat->parse(text, number, pos);
+    if (df != NULL) {
+        df->setNegativePrefix(oldPrefix);
     }
 }
 
@@ -1516,28 +1492,6 @@ SimpleDateFormat::setDateFormatSymbols(const DateFormatSymbols& newFormatSymbols
     fSymbols = new DateFormatSymbols(newFormatSymbols);
 }
 
-
-//----------------------------------------------------------------------
-
-// {sfb} removed
-/*int32_t
-SimpleDateFormat::getZoneIndex(const UnicodeString& ID) const
-{
-    // this function searches a time zone list for a time zone with the specified
-    // ID.  It'll either return an apprpriate row number or -1 if the ID wasn't
-    // found.
-    int32_t index, col;
-
-    for (col=0; col<=4 && col<fSymbols->fZoneStringsColCount; col+=2)
-    {
-        for (index = 0; index < fSymbols->fZoneStringsRowCount; index++)
-        {
-            if (fSymbols->fZoneStrings[index][col] == ID) return index;
-        }
-    }
-
-    return - 1;
-}*/
 
 //----------------------------------------------------------------------
 
