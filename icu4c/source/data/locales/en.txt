@@ -1234,6 +1234,7 @@ en {
         Hant { "Traditional Han" } // Not a formal part of ISO-15924 yet
         Hebr { "Hebrew" }
         Hira { "Hiragana" }
+        Hrkt { "Katakana or Hiragana" }
         Ital { "Old Italic" }
         Kana { "Katakana" }
         Khmr { "Khmer" }
