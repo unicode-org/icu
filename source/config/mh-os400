@@ -32,6 +32,9 @@ LD_RPATH_PRE=	-I
 ## to the actual data versus the stub data
 POST_DATA_BUILD = os400-data-rebind
 
+# The stubdata directory is the same directory as the normal data library.
+STUBDATA_LIBDIR = $(LIBDIR)/
+
 ## Versioned target for a shared library.
 FINAL_SO_TARGET = $(SO_TARGET)
 MIDDLE_SO_TARGET = 
