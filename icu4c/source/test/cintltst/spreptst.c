@@ -52,11 +52,11 @@ static void
 Test_nfs4_cs_prep_data(void){
     UErrorCode errorCode = U_ZERO_ERROR;
     log_verbose("Testing nfs4_cs_prep_ci.txt\n");
-    doStringPrepTest("nfscsi","nfs4_cs_prep_ci.txt", USPREP_NONE, &errorCode);
+    doStringPrepTest("nfscsi","nfs4_cs_prep_ci.txt", USPREP_DEFAULT, &errorCode);
 
     log_verbose("Testing nfs4_cs_prep_cs.txt\n");
     errorCode = U_ZERO_ERROR;
-    doStringPrepTest("nfscss","nfs4_cs_prep_cs.txt", USPREP_NONE, &errorCode);
+    doStringPrepTest("nfscss","nfs4_cs_prep_cs.txt", USPREP_DEFAULT, &errorCode);
     
 
 }
@@ -64,17 +64,17 @@ static void
 Test_nfs4_cis_prep_data(void){
     UErrorCode errorCode = U_ZERO_ERROR;
     log_verbose("Testing nfs4_cis_prep.txt\n");
-    doStringPrepTest("nfscis","nfs4_cis_prep.txt", USPREP_NONE, &errorCode);
+    doStringPrepTest("nfscis","nfs4_cis_prep.txt", USPREP_DEFAULT, &errorCode);
 }
 static void 
 Test_nfs4_mixed_prep_data(void){
     UErrorCode errorCode = U_ZERO_ERROR;
     log_verbose("Testing nfs4_mixed_prep_s.txt\n");
-    doStringPrepTest("nfsmxs","nfs4_mixed_prep_s.txt", USPREP_NONE, &errorCode);
+    doStringPrepTest("nfsmxs","nfs4_mixed_prep_s.txt", USPREP_DEFAULT, &errorCode);
 
     errorCode = U_ZERO_ERROR;
     log_verbose("Testing nfs4_mixed_prep_p.txt\n");
-    doStringPrepTest("nfsmxp","nfs4_mixed_prep_p.txt", USPREP_NONE, &errorCode);
+    doStringPrepTest("nfsmxp","nfs4_mixed_prep_p.txt", USPREP_DEFAULT, &errorCode);
 
 }
 
