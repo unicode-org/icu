@@ -97,18 +97,114 @@ public class RoundTripTest extends TestFmwk {
           .test(null, "[\u0400-\u045F]", null, this, new Legal());
     }
     
-    public void TestDevanagari() throws IOException, ParseException {
+    //----------------------------------
+    // Inter-Indic Tests
+    //----------------------------------
+   public void TestDevanagariLatin() throws IOException, ParseException {
         new Test("Latin-DEVANAGARI", 
           TestUtility.LATIN_SCRIPT, TestUtility.DEVANAGARI_SCRIPT)
           .test(null, "[:Devanagari:]", null, this, new Legal());
     }
-    
-    public void TestDevanagariTamil() throws IOException, ParseException {
+    public void TestDevanagariBengali() throws IOException, ParseException {
+        new Test("BENGALI-DEVANAGARI", 
+          TestUtility.BENGALI_SCRIPT, TestUtility.DEVANAGARI_SCRIPT)
+          .test("[:BENGALI:]", "[:Devanagari:]", 
+                "[\u0950\u0935\u0912\u0933\u090e\u090D\u0911\u093d\u0929\u0934[\u0958-\u095f]\u09F0\u09F1]", /*roundtrip exclusions*/
+                this, new Legal());
+        new Test("DEVANAGARI-BENGALI", 
+            TestUtility.DEVANAGARI_SCRIPT, TestUtility.BENGALI_SCRIPT )
+          .test( "[:Devanagari:]", "[:BENGALI:]",
+                  "[\u0950\u0935\u0912\u0933\u090e\u090D\u0911\u093d\u0929\u0934[\u0958-\u095f]\u09F0\u09F1]", /*roundtrip exclusions*/
+                  this, new Legal());
+    }
+    public void TestDevanagariGurmukhi() throws IOException, ParseException {
+        new Test("GURMUKHI-DEVANAGARI", 
+          TestUtility.GURMUKHI_SCRIPT, TestUtility.DEVANAGARI_SCRIPT)
+          .test("[:GURMUKHI:]", "[:Devanagari:]", 
+                "[\u0950\u090D\u090e\u0912\u0911\u090b\u090c\u0934\u0960\u0961\u0937\u0a72\u0a73\u0a74\u093d]", /*roundtrip exclusions*/
+                this, new Legal());
+        new Test("DEVANAGARI-GURMUKHI", 
+            TestUtility.DEVANAGARI_SCRIPT, TestUtility.GURMUKHI_SCRIPT )
+          .test( "[:Devanagari:]", "[:GURMUKHI:]",
+                  "[\u0950\u090D\u090e\u0912\u0911\u090b\u090c\u0934\u0960\u0961\u0937\u0a72\u0a73\u0a74\u093d]", /*roundtrip exclusions*/
+                  this, new Legal());
+    } 
+    public void TestDevanagariGujarati() throws IOException, ParseException {
+        new Test("GUJARATI-DEVANAGARI", 
+          TestUtility.GUJARATI_SCRIPT, TestUtility.DEVANAGARI_SCRIPT)
+          .test("[:GUJARATI:]", "[:Devanagari:]", 
+                "[\u0961\u090c\u090e\u0912]", /*roundtrip exclusions*/
+                this, new Legal());
+        new Test("DEVANAGARI-GUJARATI", 
+            TestUtility.DEVANAGARI_SCRIPT, TestUtility.GUJARATI_SCRIPT )
+          .test( "[:Devanagari:]", "[:GUJARATI:]",
+                  "[\u0961\u090c\u090e\u0912]", /*roundtrip exclusions*/
+                  this, new Legal());
+   }
+   public void TestDevanagariOriya() throws IOException, ParseException {
+        new Test("ORIYA-DEVANAGARI", 
+          TestUtility.ORIYA_SCRIPT, TestUtility.DEVANAGARI_SCRIPT)
+          .test("[:ORIYA:]", "[:Devanagari:]", 
+                "[\u0950\u090D\u090e\u0912\u0911\u0931\u0935]", /*roundtrip exclusions*/
+                this, new Legal());
+        new Test("DEVANAGARI-ORIYA", 
+            TestUtility.DEVANAGARI_SCRIPT, TestUtility.ORIYA_SCRIPT )
+          .test( "[:Devanagari:]", "[:ORIYA:]",
+                  "[\u0950\u090D\u090e\u0912\u0911\u0931\u0935]", /*roundtrip exclusions*/
+                  this, new Legal());
+   }
+   public void TestDevanagariTamil() throws IOException, ParseException {
         new Test("Tamil-DEVANAGARI", 
           TestUtility.TAMIL_SCRIPT, TestUtility.DEVANAGARI_SCRIPT)
-          .test("[:tamil:]", "[:Devanagari:]", null, this, new Legal());
+          .test("[:tamil:]", "[:Devanagari:]", 
+                  "[\u0950\u090D\u0911\u093d\u0929\u0934[\u0958-\u095f]\u090B\u090C\u0916\u0917\u0918\u091B\u091D\u0920\u0921\u0922\u0925\u0926\u0927\u092B\u092C\u092D\u0936\u0960\u0961]", /*roundtrip exclusions*/
+                  this, new Legal());
+        new Test("DEVANAGARI-Tamil", 
+            TestUtility.DEVANAGARI_SCRIPT, TestUtility.TAMIL_SCRIPT )
+          .test( "[:Devanagari:]", "[:tamil:]",
+                  "[\u0950\u090D\u0911\u093d\u0929\u0934[\u0958-\u095f]]", /*roundtrip exclusions*/
+                  this, new Legal());
+   }
+   public void TestDevanagariTelugu() throws IOException, ParseException {
+        new Test("Telugu-DEVANAGARI", 
+          TestUtility.TELUGU_SCRIPT, TestUtility.DEVANAGARI_SCRIPT)
+          .test("[:telugu:]", "[:Devanagari:]", 
+                "[\u0950\u090D\u0911\u093d\u0929\u0934[\u0958-\u095f]]", /*roundtrip exclusions*/
+                this, new Legal());
+        new Test("DEVANAGARI-TELUGU", 
+            TestUtility.DEVANAGARI_SCRIPT, TestUtility.TELUGU_SCRIPT )
+          .test( "[:Devanagari:]", "[:TELUGU:]",
+                  "[\u0950\u090D\u0911\u093d\u0929\u0934[\u0958-\u095f]]", /*roundtrip exclusions*/
+                  this, new Legal());
     }
-    
+    public void TestDevanagariKannada() throws IOException, ParseException {
+        new Test("KANNADA-DEVANAGARI", 
+          TestUtility.KANNADA_SCRIPT, TestUtility.DEVANAGARI_SCRIPT)
+          .test("[:KANNADA:]", "[:Devanagari:]", 
+                "[\u0950\u090D\u0911\u093d\u0929\u0934[\u0958-\u095f]]", /*roundtrip exclusions*/
+                this, new Legal());
+        new Test("DEVANAGARI-KANNADA", 
+            TestUtility.DEVANAGARI_SCRIPT, TestUtility.KANNADA_SCRIPT )
+          .test( "[:Devanagari:]", "[:KANNADA:]",
+                  "[\u0950\u090D\u0911\u093d\u0929\u0934[\u0958-\u095f]]", /*roundtrip exclusions*/ 
+                  this, new Legal());
+    }
+    public void TestDevanagariMalayalam() throws IOException, ParseException {
+        new Test("MALAYALAM-DEVANAGARI", 
+          TestUtility.MALAYALAM_SCRIPT, TestUtility.DEVANAGARI_SCRIPT)
+          .test("[:MALAYALAM:]", "[:Devanagari:]", 
+                "[\u0950\u090D\u0911\u093d\u0929\u0934[\u0958-\u095f]]", /*roundtrip exclusions*/
+                this, new Legal());
+        new Test("DEVANAGARI-MALAYALAM", 
+            TestUtility.DEVANAGARI_SCRIPT, TestUtility.MALAYALAM_SCRIPT )
+          .test( "[:Devanagari:]", "[:MALAYALAM:]",
+                  "[\u0950\u090D\u0911\u093d\u0929\u0934[\u0958-\u095f]]", /*roundtrip exclusions*/
+                  this, new Legal());
+    } 
+
+    //---------------
+    // End Indic
+    //---------------
     public static class Legal {
         public boolean is(String sourceString) {return true;}
     }
@@ -262,23 +358,25 @@ public class RoundTripTest extends TestFmwk {
             return false;
         }
       
-        public void test(String sourceRange, String targetRange, String roundtripExclusions, TestLog log, Legal legalSource) 
+        public void test(String sourceRange, String targetRange, String roundtripExclusions,
+                         TestLog log, Legal legalSource) 
           throws java.io.IOException, java.text.ParseException {
             
             this.legalSource = legalSource;
       
             if (sourceRange != null && sourceRange.length() > 0) {
                 this.sourceRange = new UnicodeSet(sourceRange);
+            }else{
+                this.sourceRange = new UnicodeSet("[a-zA-Z]");
             }
             if (targetRange != null && targetRange.length() > 0) {
                 this.targetRange = new UnicodeSet(targetRange);
             }
             if (roundtripExclusions != null && roundtripExclusions.length() > 0) {
                 this.roundtripExclusions = new UnicodeSet(roundtripExclusions);
+            }else{
+                this.roundtripExclusions = new UnicodeSet(); // empty
             }
-
-            if (this.sourceRange == null) this.sourceRange = new UnicodeSet("[a-zA-Z]");
-            if (this.roundtripExclusions == null) this.roundtripExclusions = new UnicodeSet(); // empty
 
             this.log = log;
 

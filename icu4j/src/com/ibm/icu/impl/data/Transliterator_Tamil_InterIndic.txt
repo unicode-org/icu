@@ -16,6 +16,7 @@
 #--------------------------------------------------------------------
 # Tamil-InterIndic
 #:: NFD (NFC) ;
+\u0bc6\u0bd7>\ue04c;
 \u0b82>\ue002; # SIGN ANUSVARA
 \u0b83>\ue003; # SIGN VISARGA
 \u0b85>\ue005; # LETTER A

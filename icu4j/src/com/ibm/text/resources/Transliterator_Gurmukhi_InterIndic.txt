@@ -86,10 +86,10 @@
 \u0a6d>\ue06d; # DIGIT SEVEN
 \u0a6e>\ue06e; # DIGIT EIGHT
 \u0a6f>\ue06f; # DIGIT NINE
-# \u0a70>; # UNMAPPED Gurmukhi-InterIndic: TIPPI
-# \u0a71>; # UNMAPPED Gurmukhi-InterIndic: ADDAK
-# \u0a72>; # UNMAPPED Gurmukhi-InterIndic: IRI
-# \u0a73>; # UNMAPPED Gurmukhi-InterIndic: URA
-# \u0a74>; # UNMAPPED Gurmukhi-InterIndic: EK ONKAR
+\u0a70>\ue070; # TIPPI
+\u0a71>\ue071; # ADDAK
+\u0a72>\ue072; # IRI
+\u0a73>\ue073; # URA
+\u0a74>\ue074; # EK ONKAR
 #    :: NFC (NFD) ;
 # eof
