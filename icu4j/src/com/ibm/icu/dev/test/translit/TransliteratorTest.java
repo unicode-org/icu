@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $ 
- * $Date: 2001/03/30 22:56:47 $ 
- * $Revision: 1.28 $
+ * $Date: 2001/03/30 23:23:27 $ 
+ * $Revision: 1.29 $
  *
  *****************************************************************************************
  */
@@ -683,7 +683,7 @@ public class TransliteratorTest extends TestFmwk {
     }
 
     /**
-     * Test filter syntax in IDs.
+     * Test filter syntax in IDs. (J23)
      */
     public void TestFilterIDs() {
         String ID = "Unicode-Hex[aeiou]";
@@ -692,6 +692,17 @@ public class TransliteratorTest extends TestFmwk {
         ID = "Unicode-Hex[aeiou];Hex-Unicode[^5]";
         expect(Transliterator.getInstance(ID), "quizzical",
                "q\\u0075izzical");
+    }
+
+    /**
+     * Inverse of "Null" should be "Null". (J21)
+     */
+    public void TestNullInverse() {
+        Transliterator t = Transliterator.getInstance("Null");
+        Transliterator u = t.getInverse();
+        if (!u.getID().equals("Null")) {
+            errln("FAIL: Inverse of Null should be Null");
+        }
     }
 
     //======================================================================

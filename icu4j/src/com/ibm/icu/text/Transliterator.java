@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $ 
- * $Date: 2001/03/30 22:50:08 $ 
- * $Revision: 1.27 $
+ * $Date: 2001/03/30 23:24:30 $ 
+ * $Revision: 1.28 $
  *
  *****************************************************************************************
  */
@@ -240,7 +240,7 @@ import com.ibm.text.resources.ResourceReader;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.27 $ $Date: 2001/03/30 22:50:08 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.28 $ $Date: 2001/03/30 23:24:30 $
  */
 public abstract class Transliterator {
     /**
@@ -782,10 +782,13 @@ public abstract class Transliterator {
             if (direction == REVERSE) {
                 i = ID.indexOf('-');
                 if (i < 0) {
-                    throw new IllegalArgumentException("No inverse for: "
-                                                       + ID);
+                    if (!ID.equals(NullTransliterator._ID)) {
+                        throw new IllegalArgumentException("No inverse for: "
+                                                           + ID);
+                    }
+                } else {
+                    ID = ID.substring(i+1) + '-' + ID.substring(0, i);
                 }
-                ID = ID.substring(i+1) + '-' + ID.substring(0, i);
             }
 
             Transliterator t = internalGetInstance(ID);
