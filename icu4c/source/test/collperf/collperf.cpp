@@ -36,6 +36,14 @@
 //            -qsort                     Quicksort timing test
 //            -binsearch                 Binary Search timing test
 //            -keygen                    Sort Key Generation timing test
+//            -french                    French accent ordering
+//            -norm                      Normalizing mode on
+//            -shifted                   Shifted mode
+//            -lower                     Lower case first
+//            -upper                     Upper case first
+//            -case                      Enable separate case level
+//            -level n                   Sort level, 1 to 5, for Primary, Secndary, Tertiary, Quaternary, Identical
+//            -keyhist                   Sort Key size histogram
 
 
 #include <stdio.h>
@@ -81,7 +89,7 @@ const int SORT_DEFAULT = 0;
 //  Command line option variables
 //     These global variables are set according to the options specified
 //     on the command line by the user.
-char * opt_fName      = "american.txt";
+char * opt_fName      = 0;
 char * opt_locale     = "en_US";
 int    opt_langid     = 0x409;      // English, US
 UBool  opt_help       = FALSE;
@@ -96,6 +104,13 @@ UBool  opt_uselen     = FALSE;
 UBool  opt_usekeys    = FALSE;
 UBool  opt_norm       = FALSE;
 UBool  opt_keygen     = FALSE;
+UBool  opt_french     = FALSE;
+UBool  opt_shifted    = FALSE;
+UBool  opt_lower      = FALSE;
+UBool  opt_upper      = FALSE;
+UBool  opt_case       = FALSE;
+int    opt_level      = 0;
+UBool  opt_keyhist    = FALSE;
 
 
 
@@ -109,21 +124,28 @@ struct OptSpec {
 };
 
 OptSpec opts[] = {
-    {"-file",   OptSpec::STRING, &opt_fName},
-    {"-locale", OptSpec::STRING, &opt_locale},
-    {"-langid", OptSpec::NUM,    &opt_langid},
-    {"-qsort",  OptSpec::FLAG,   &opt_qsort},
-    {"-binsearch",  OptSpec::FLAG,   &opt_binsearch},
-    {"-win",    OptSpec::FLAG,   &opt_win},
-    {"-unix",   OptSpec::FLAG,   &opt_unix},
-    {"-uselen", OptSpec::FLAG,   &opt_uselen},
-    {"-usekeys",OptSpec::FLAG,   &opt_usekeys},
-    {"-norm",   OptSpec::FLAG,   &opt_norm},
-    {"-keygen", OptSpec::FLAG,   &opt_keygen},
-    {"-loop",   OptSpec::NUM,    &opt_loopCount},
-    {"-terse",  OptSpec::FLAG,   &opt_terse},
-    {"-help",   OptSpec::FLAG,   &opt_help},
-    {"-?",      OptSpec::FLAG,   &opt_help},
+    {"-file",        OptSpec::STRING, &opt_fName},
+    {"-locale",      OptSpec::STRING, &opt_locale},
+    {"-langid",      OptSpec::NUM,    &opt_langid},
+    {"-qsort",       OptSpec::FLAG,   &opt_qsort},
+    {"-binsearch",   OptSpec::FLAG,   &opt_binsearch},
+    {"-win",         OptSpec::FLAG,   &opt_win},
+    {"-unix",        OptSpec::FLAG,   &opt_unix},
+    {"-uselen",      OptSpec::FLAG,   &opt_uselen},
+    {"-usekeys",     OptSpec::FLAG,   &opt_usekeys},
+    {"-norm",        OptSpec::FLAG,   &opt_norm},
+    {"-french",      OptSpec::FLAG,   &opt_french},
+    {"-shifted",     OptSpec::FLAG,   &opt_shifted},
+    {"-lower",       OptSpec::FLAG,   &opt_lower},
+    {"-upper",       OptSpec::FLAG,   &opt_upper},
+    {"-case",        OptSpec::FLAG,   &opt_case},
+    {"-level",       OptSpec::NUM,    &opt_level},
+    {"-keyhist",     OptSpec::FLAG,   &opt_keyhist},
+    {"-keygen",      OptSpec::FLAG,   &opt_keygen},
+    {"-loop",        OptSpec::NUM,    &opt_loopCount},
+    {"-terse",       OptSpec::FLAG,   &opt_terse},
+    {"-help",        OptSpec::FLAG,   &opt_help},
+    {"-?",           OptSpec::FLAG,   &opt_help},
     {0, OptSpec::FLAG, 0}
 };
 
@@ -555,6 +577,7 @@ void doBinarySearch()
     int ns = (int)(float(1000000) * (float)elapsedTime / (float)gCount);
     if (opt_terse == FALSE) {
         printf("binary search:  total # of string compares = %d\n", gCount);
+        printf("binary search:  compares per loop = %d\n", gCount / loops);
         printf("binary search:  time per compare = %d ns\n", ns);
     } else {
         printf("%d, ", ns);
@@ -645,6 +668,51 @@ void doQSort() {
 };
 
 
+
+//---------------------------------------------------------------------------------------
+//
+//    doKeyHist()       Output a table of data for
+//                        average sort key size vs. string length.
+//
+//---------------------------------------------------------------------------------------
+void doKeyHist() {
+    int     i;
+    int     maxLen = 0;
+
+    // Find the maximum string length
+    for (i=0; i<gNumFileLines; i++) {
+        if (gFileLines[i].len > maxLen) maxLen = gFileLines[i].len;
+    }
+
+    // Allocate arrays to hold the histogram data
+    int *accumulatedLen  = new int[maxLen+1];
+    int *numKeysOfSize   = new int[maxLen+1];
+    for (i=0; i<=maxLen; i++) {
+        accumulatedLen[i] = 0;
+        numKeysOfSize[i] = 0;
+    }
+
+    // Fill the arrays...
+    for (i=0; i<gNumFileLines; i++) {
+        int len = gFileLines[i].len;
+        accumulatedLen[len] += strlen(gFileLines[i].icuSortKey);
+        numKeysOfSize[len] += 1;
+    }
+
+    // And write out averages
+    printf("String Length,  Avg Key Length,  Avg Key Len per char\n");
+    for (i=1; i<=maxLen; i++) {
+        if (numKeysOfSize[i] > 0) {
+            printf("%d, %f, %f\n", i, (float)accumulatedLen[i] / (float)numKeysOfSize[i],
+                (float)accumulatedLen[i] / (float)(numKeysOfSize[i] * i));
+        }
+    }
+}
+
+
+
+
+
 //----------------------------------------------------------------------------------------
 //
 //   UnixConvert   -- Convert the lines of the file to the encoding for UNIX
@@ -702,9 +770,10 @@ void  UnixConvert() {
 //
 //----------------------------------------------------------------------------------------
 int main(int argc, const char** argv) {
-    if (ProcessOptions(argc, argv, opts) != TRUE || opt_help) {
+    if (ProcessOptions(argc, argv, opts) != TRUE || opt_help || opt_fName == 0) {
         printf("Usage:  strperf options...\n"
-            "-file file_name            utf-16 format file of names\n"
+            "-help                      Display this message.\n"
+            "-file file_name            utf-16 format file of names.\n"
             "-locale name               ICU locale to use.  Default is en_US\n"
             "-langid 0x1234             Windows Language ID number.  Default 0x409 (en_US)\n"
             "                              see http://msdn.microsoft.com/library/psdk/winbase/nls_8xo3.htm\n"
@@ -714,10 +783,17 @@ int main(int argc, const char** argv) {
             "-usekeys                   Run tests using sortkeys rather than strcoll\n"
             "-loop nnnn                 Loopcount for test.  Adjust for reasonable total running time.\n"
             "-terse                     Terse numbers-only output.  Intended for use by scripts.\n"
-            "-help                      Display this message.\n"
-            "-qsort                     Quicksort timing test\n"
+            "-french                    French accent ordering\n"
+            "-norm                      Normalizing mode on\n"
+            "-shifted                   Shifted mode\n"
+            "-lower                     Lower case first\n"
+            "-upper                     Upper case first\n"
+            "-case                      Enable separate case level\n"
+            "-level n                   Sort level, 1 to 5, for Primary, Secndary, Tertiary, Quaternary, Identical\n"
+            "-keyhist                   Produce a table sort key size vs. string length\n"
             "-binsearch                 Binary Search timing test\n"
             "-keygen                    Sort Key Generation timing test\n"
+            "-qsort                     Quicksort timing test\n"
             );
         exit (1);
     }
@@ -738,6 +814,48 @@ int main(int argc, const char** argv) {
     }
     if (opt_norm) {
         ucol_setAttribute(gCol, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
+    }
+    if (opt_french) {
+        ucol_setAttribute(gCol, UCOL_FRENCH_COLLATION, UCOL_ON, &status);
+    }
+    if (opt_lower) {
+        ucol_setAttribute(gCol, UCOL_CASE_FIRST, UCOL_LOWER_FIRST, &status);
+    }
+    if (opt_upper) {
+        ucol_setAttribute(gCol, UCOL_CASE_FIRST, UCOL_UPPER_FIRST, &status);
+    }
+    if (opt_case) {
+        ucol_setAttribute(gCol, UCOL_CASE_LEVEL, UCOL_ON, &status);
+    }
+    if (opt_shifted) {
+        ucol_setAttribute(gCol, UCOL_ALTERNATE_HANDLING, UCOL_SHIFTED, &status);
+    }
+    if (opt_level != 0) {
+        switch (opt_level) {
+        case 1:
+            ucol_setAttribute(gCol, UCOL_STRENGTH, UCOL_PRIMARY, &status);
+            break;
+        case 2:
+            ucol_setAttribute(gCol, UCOL_STRENGTH, UCOL_SECONDARY, &status);
+            break;
+        case 3:
+            ucol_setAttribute(gCol, UCOL_STRENGTH, UCOL_TERTIARY, &status);
+            break;
+        case 4:
+            ucol_setAttribute(gCol, UCOL_STRENGTH, UCOL_QUATERNARY, &status);
+            break;
+        case 5:
+            ucol_setAttribute(gCol, UCOL_STRENGTH, UCOL_IDENTICAL, &status);
+            break;
+        default:
+            fprintf(stderr, "-level param must be between 1 and 5\n");
+            exit(-1);
+        }
+    }
+
+    if (U_FAILURE(status)) {
+        fprintf(stderr, "Collator attribute setting failed.: %d\n", status);
+        return -1;
     }
 
 
@@ -951,6 +1069,7 @@ int main(int argc, const char** argv) {
     if (opt_qsort)     doQSort();
     if (opt_binsearch) doBinarySearch();
     if (opt_keygen)    doKeyGen();
+    if (opt_keyhist)   doKeyHist();
 
     return 0;
 
