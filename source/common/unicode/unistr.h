@@ -3937,7 +3937,15 @@ UnicodeString::removeBetween(int32_t start,
 inline UBool 
 UnicodeString::truncate(int32_t targetLength)
 {
-  if((uint32_t)targetLength < (uint32_t)fLength) {
+  if(fFlags & kIsBogus) {
+    // truncation of a bogus string should make an empty non-bogus string
+    // any modification of a bogus string should make it valid
+    fArray = fStackBuffer;
+    fLength = 0;
+    fCapacity = US_STACKBUF_SIZE;
+    fFlags = kShortString;
+    return FALSE;
+  } else if((uint32_t)targetLength < (uint32_t)fLength) {
     fLength = targetLength;
     return TRUE;
   } else {
