@@ -25,7 +25,6 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-#include "unicode/uobject.h"
 #include "unicode/unistr.h"
 #include "unicode/fmtable.h"
 #include "unicode/fieldpos.h"
@@ -34,8 +33,6 @@
 #include "unicode/locid.h"
 
 U_NAMESPACE_BEGIN
-
-class ResourceBundle;
 
 /**
  * Base class for all formats.  This is an abstract base class which
@@ -247,9 +244,6 @@ public:
     const char* getLocaleID(ULocDataLocaleType type, UErrorCode &status) const;
 
  protected:
-    /** @draft ICU 2.8 */
-    void setLocales(const ResourceBundle& res);
-
     /** @draft ICU 2.8 */
     void setLocaleIDs(const char* valid, const char* actual);
 

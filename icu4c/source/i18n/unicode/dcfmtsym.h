@@ -248,7 +248,7 @@ private:
      * @param numberElements    the number format symbols
      * @param numberElementsLength length of numberElements
      */
-    void initialize(const UnicodeString* numberElements, int32_t numberElementsLength);
+    void initialize(const UChar** numberElements, int32_t *numberElementsStrLen, int32_t numberElementsLength);
 
     /**
      * Initialize the symbols with default values.
