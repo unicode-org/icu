@@ -25,10 +25,13 @@
 #include <unicode/uloc.h>
 #include <unicode/ucoleitr.h>
 #include <unicode/uchar.h>
+#include <unicode/uscript.h>
 #include <unicode/utf16.h>
 #include <unicode/putil.h>
 #include <unicode/ustring.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "ucol_tok.h"
 #include "cstring.h"
 #include "uoptions.h"
@@ -49,6 +52,7 @@ static UOption options[]={
     {"attribute",     NULL, NULL, NULL, 'a', UOPT_REQUIRES_ARG, 0},
     {"rule",          NULL, NULL, NULL, 'r', UOPT_REQUIRES_ARG, 0},
     {"normalization", NULL, NULL, NULL, 'n', UOPT_REQUIRES_ARG, 0},
+    {"scripts",       NULL, NULL, NULL, 't', UOPT_NO_ARG, 0},
 	UOPTION_VERBOSE
 };
 
@@ -63,10 +67,10 @@ static FILE *OUTPUT_;
 
 static UColAttributeValue ATTRIBUTE_[UCOL_ATTRIBUTE_COUNT] = {
     UCOL_DEFAULT, UCOL_DEFAULT, UCOL_DEFAULT, UCOL_DEFAULT, UCOL_DEFAULT, 
-    UCOL_DEFAULT
+    UCOL_DEFAULT, UCOL_DEFAULT
 };
 
-static UColAttributeValue NORMALIZATION_ = UCOL_DEFAULT;
+static UNormalizationMode NORMALIZATION_ = UNORM_DEFAULT;
 
 typedef struct {
     int   value;
@@ -108,6 +112,12 @@ static const EnumNameValuePair NORMALIZATION_VALUE_[] = {
     {UNORM_NFKC, "UNORM_NFKC"},
     NULL
 };
+
+typedef struct {
+    UChar ch[32];
+    int   count; // number of codepoint
+    UBool tailored;
+} ScriptElement;
 
 /**
 * Writes the hexadecimal of a null-terminated array of codepoints into a 
@@ -170,7 +180,7 @@ void serialize(FILE *f, UCollationElements *iter) {
         sortkeylength = ucol_getSortKey(iter->iteratordata_.coll, codepoint, 
                                         -1, sortkey, 64);
     }
-    if (options[9].doesOccur) {
+    if (options[10].doesOccur) {
         serialize(stdout, codepoint);
         fprintf(stdout, "\n");
     }
@@ -242,6 +252,8 @@ void serialize(FILE *f, UChar *rule, int rlen, UBool contractiononly,
           uint32_t         chLen    = 0;
           uint32_t         exOffset = 0; 
           uint32_t         exLen    = 0;
+          uint32_t         prefixOffset = 0; 
+          uint32_t         prefixLen    = 0;
           uint8_t          specs    = 0;
           UBool            rstart   = TRUE;
           UColTokenParser  src;
@@ -255,9 +267,11 @@ void serialize(FILE *f, UChar *rule, int rlen, UBool contractiononly,
     src.end          = rule + rlen;
     src.extraCurrent = src.end;
     src.extraEnd     = src.end + UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
+
         
     while ((current = ucol_tok_parseNextToken(&src, &strength, &chOffset, 
                                               &chLen, &exOffset, &exLen,
+                                              &prefixOffset, &prefixLen,
                                               &specs, rstart, &parseError,
                                               &error)) 
                                               != NULL) {
@@ -611,7 +625,7 @@ CLOSETAILOR :
         fprintf(stdout, "Rules\n");
         UErrorCode  error = U_ZERO_ERROR;
         UParseError parseError;
-        COLLATOR_ = ucol_openRules(rule, u_strlen(rule), NORMALIZATION_, 
+        COLLATOR_ = ucol_openRules(rule, u_strlen(rule), UCOL_DEFAULT, 
                                    UCOL_DEFAULT_STRENGTH, &parseError, &error);
         if (U_FAILURE(error)) {
             fprintf(stdout, "Collator creation failed:");
@@ -724,13 +738,663 @@ void parseAttributes() {
 * Parser for normalization mode
 */
 void parseNormalization() {
-    const char *str = options[6].value;
+    const char *str = options[8].value;
     int norm = parseEnums(NORMALIZATION_VALUE_, str);
     if (norm == -1) {
         fprintf(stdout, "Normalization mode not found: %s\n", str);
         return;
     }
-    NORMALIZATION_ = (UColAttributeValue)norm;
+    NORMALIZATION_ = (UNormalizationMode)norm;
+}
+
+/**
+* Checks if the locale argument is a base language 
+* @param locale to be checked
+* @return TRUE if it is a base language
+*/
+inline UBool checkLocaleForLanguage(const char *locale)
+{
+    return strlen(locale) <= 2;
+}
+
+/**
+* Converts a UChar array into its string form "xxxx xxxx"
+* @param ch array of UChar characters
+* @param count number of UChar characters
+*/
+void outputUChar(UChar ch[], int count)
+{
+    for (int i = 0; i < count; i ++) {
+        fprintf(OUTPUT_, "%04X ", ch[i]);
+    }
+}
+
+/**
+* If it is a primary difference returns -1 or 1.
+* If it is a secondary difference returns -2 or 2.
+* If it is a tertiary difference returns -3 or 3.
+* If equals returns 0.
+*/
+int compareSortKey(const void *elem1, const void *elem2)
+{
+    // compare the 2 script element sort key
+    UChar     *ch1   = ((ScriptElement *)elem1)->ch;
+    UChar     *ch2   = ((ScriptElement *)elem2)->ch;
+    int        size1 = ((ScriptElement *)elem1)->count;
+    int        size2 = ((ScriptElement *)elem2)->count;
+    UErrorCode error = U_ZERO_ERROR;
+    
+    ucol_setStrength(COLLATOR_, UCOL_PRIMARY);
+    int result = ucol_strcoll(COLLATOR_, ch1, size1, ch2, size2);
+    if (result == 0) {
+        ucol_setStrength(COLLATOR_, UCOL_SECONDARY);
+        result = ucol_strcoll(COLLATOR_, ch1, size1, ch2, size2);
+        if (result == 0) {
+            ucol_setStrength(COLLATOR_, UCOL_TERTIARY);
+            result = ucol_strcoll(COLLATOR_, ch1, size1, ch2, size2);
+            if (result < 0) {
+                return -3;
+            }
+            if (result > 0) {
+                return 3;
+            }    
+        }
+        if (result < 0) {
+            return -2;
+        }
+        if (result > 0) {
+            return 2;
+        }
+    }
+    return result;
+}
+
+/**
+* Output serialized script elements
+* @param element the element to output
+* @param compare the comparison with the previous element
+* @param expansion flags TRUE if element has an expansion
+*/
+void outputScriptElem(ScriptElement &element, int compare, UBool expansion)
+{
+    switch (compare) {
+    case 0: 
+        if (expansion) {
+            fprintf(OUTPUT_, "<tr><td class='eq' title='["); 
+        }
+        else {
+            fprintf(OUTPUT_, "<tr><td class='q' title='["); 
+        }
+        break;  
+    case -1: 
+        if (expansion) {
+            fprintf(OUTPUT_, "<tr><td class='ep' title='["); 
+        }
+        else {
+            fprintf(OUTPUT_, "<tr><td class='p' title='["); 
+        }
+        break;        
+    case -2: 
+        if (expansion) {
+            fprintf(OUTPUT_, "<tr><td class='es' title='["); 
+        }
+        else {
+            fprintf(OUTPUT_, "<tr><td class='s' title='["); 
+        }
+        break;
+    default: 
+        if (expansion) {
+            fprintf(OUTPUT_, "<tr><td class='et' title='["); 
+        }
+        else {
+            fprintf(OUTPUT_, "<tr><td class='t' title='["); 
+        }
+    }
+
+    uint8_t sortkey[32];
+    ucol_setStrength(COLLATOR_, UCOL_TERTIARY);
+    ucol_getSortKey(COLLATOR_, element.ch, element.count, sortkey, 32);
+    int i = 0;
+    while (sortkey[i] != 0) {
+        if (sortkey[i] == 1) {
+            fprintf(OUTPUT_, " | ");
+        }
+        else {
+            fprintf(OUTPUT_, "%02x", sortkey[i]);
+        }
+
+        i ++;
+    }
+
+    fprintf(OUTPUT_, "]'>");
+    
+    int32_t    length;
+    UErrorCode error = U_ZERO_ERROR;
+    char       utf8[128];
+    u_strToUTF8(utf8, 128, &length, element.ch, element.count, &error);
+    if (U_FAILURE(error)) {
+        fprintf(stdout, "Error converting UChar to utf8\n");
+        return;
+    }
+    
+    if (element.tailored) {
+        fprintf(OUTPUT_, "<font class='r'>%s</font><br>", utf8);
+    }
+    else {
+        fprintf(OUTPUT_, "%s<br>", utf8);
+    }
+    fprintf(OUTPUT_, "<tt>");
+    outputUChar(element.ch, element.count);
+    fprintf(OUTPUT_, "</tt></td><td class='n'>");
+
+    i = 0;
+    while (i < element.count) {
+        char    str[128];
+        UChar32 codepoint;
+        UTF_NEXT_CHAR(element.ch, i, element.count, codepoint);
+        UTextOffset temp = u_charName(codepoint, U_UNICODE_CHAR_NAME, str, 128, 
+                                      &error);
+        if (U_FAILURE(error)) {
+            fprintf(stdout, "Error getting character name\n");
+            return;
+        }
+        fprintf(OUTPUT_, "%s\n", str);
+        if (i < element.count) {
+            fprintf(OUTPUT_, "<br>\n");
+        }
+    }
+
+    fprintf(OUTPUT_, "</td></tr>\n");
+}
+
+/**
+* Checks if codepoint belongs to scripts
+* @param script list
+* @param scriptcount number of scripts
+* @param codepoint to test
+* @return TRUE if codepoint belongs to scripts
+*/
+UBool checkInScripts(UScriptCode script[], int scriptcount, 
+                     UChar32 codepoint)
+{
+    UErrorCode error = U_ZERO_ERROR;
+    for (int i = 0; i < scriptcount; i ++) {
+        if (uscript_getScript(codepoint, &error) == script[i]) {
+            return TRUE;
+        }
+        if (U_FAILURE(error)) {
+            fprintf(stdout, "Error checking character in scripts\n");
+            return FALSE;
+        }
+    }
+    return FALSE;
+}
+
+/**
+* Checks if the set of codepoints belongs to the script
+* @param script list
+* @param scriptcount number of scripts
+* @param scriptelem
+* @return TRUE if all codepoints belongs to the script
+*/
+inline UBool checkInScripts(UScriptCode script[], int scriptcount,
+                           ScriptElement scriptelem)
+{
+    int i = 0;
+    while (i < scriptelem.count) {
+        UChar32     codepoint;
+        UTF_NEXT_CHAR(scriptelem.ch, i, scriptelem.count, codepoint);
+        UErrorCode  error = U_ZERO_ERROR;
+        if (checkInScripts(script, scriptcount, codepoint)) {
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+/**
+* Gets the script elements and contractions belonging to the script
+* @param script list
+* @param scriptcount number of scripts
+* @param elems output list
+* @return number of script elements
+*/
+int getScriptElements(UScriptCode script[], int scriptcount, 
+                      ScriptElement scriptelem[])
+{
+    UErrorCode error = U_ZERO_ERROR;
+    UChar32    codepoint = 0;
+    int        count     = 0;
+    while (codepoint <= UCHAR_MAX_VALUE) { 
+        if (checkInScripts(script, scriptcount, codepoint)) {
+            scriptelem[count].count = 0;
+            UTF16_APPEND_CHAR_UNSAFE(scriptelem[count].ch, 
+                                     scriptelem[count].count, codepoint);
+            scriptelem[count].tailored = FALSE;
+            count ++;
+        }
+        if (U_FAILURE(error)) {
+            fprintf(stdout, "Error determining codepoint in script\n");
+            return -1;
+        }
+        codepoint ++;
+    }
+    
+    UChar    ucarules[0x10000];
+    UChar   *rule;
+    int32_t  rulelength = 0;
+
+    rule      = ucarules;
+    rulelength = ucol_getRulesEx(COLLATOR_, UCOL_FULL_RULES, ucarules, 
+                                 0x10000);
+    if (rulelength + UCOL_TOK_EXTRA_RULE_SPACE_SIZE > 0x10000) {
+        rule = (UChar *)malloc(sizeof(UChar) * 
+                                (rulelength + UCOL_TOK_EXTRA_RULE_SPACE_SIZE));
+        rulelength = ucol_getRulesEx(COLLATOR_, UCOL_FULL_RULES, rule, 
+                                     rulelength);
+    }
+    
+    const UChar           *current  = NULL;
+          uint32_t         strength = 0;
+          uint32_t         chOffset = 0; 
+          uint32_t         chLen    = 0;
+          uint32_t         exOffset = 0; 
+          uint32_t         exLen    = 0;
+          uint32_t         prefixOffset = 0; 
+          uint32_t         prefixLen    = 0;
+          uint8_t          specs    = 0;
+          UBool            rstart   = TRUE;
+          UColTokenParser  src;
+          UColOptionSet    opts;
+          UParseError      parseError;
+    
+    src.opts = &opts;
+      
+    src.source       = src.current = rule;
+    src.end          = rule + rulelength;
+    src.extraCurrent = src.end;
+    src.extraEnd     = src.end + UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
+
+        
+    while ((current = ucol_tok_parseNextToken(&src, &strength, &chOffset, 
+                                              &chLen, &exOffset, &exLen,
+                                              &prefixOffset, &prefixLen,
+                                              &specs, rstart, &parseError,
+                                              &error)) 
+                                              != NULL) {
+        // contractions handled here
+        if (chLen > 1) {
+            u_strncpy(scriptelem[count].ch, rule + chOffset, chLen);
+            scriptelem[count].count = chLen;
+            if (checkInScripts(script, scriptcount, scriptelem[count])) {
+                scriptelem[count].tailored     = FALSE;
+                count ++;
+            }
+        }
+        rstart = FALSE;
+    }
+    if (U_FAILURE(error)) {
+        fprintf(stdout, "Error parsing rules\n");
+    }
+    if (rule != ucarules) {
+       free(rule);
+    }
+    return count;
+}
+
+int compareCodepoints(const void *elem1, const void *elem2)
+{
+    UChar *ch1 = ((ScriptElement *)elem1)->ch; // key
+    UChar *ch2 = ((ScriptElement *)elem2)->ch;
+    ch1[((ScriptElement *)elem1)->count] = 0;
+    ch2[((ScriptElement *)elem2)->count] = 0;
+
+    // compare the 2 codepoints
+    return u_strcmp(ch1, ch2);
+}
+
+UBool hasSubNFD(ScriptElement &se, ScriptElement &key)
+{
+    UChar *ch1 = se.ch; 
+    UChar *ch2 = key.ch; // key
+    ch1[se.count] = 0;
+    ch2[key.count] = 0;
+    
+    // compare the 2 codepoints
+    if (u_strstr(ch1, ch2) != NULL) {
+        return TRUE;
+    }
+
+    // check the decomposition 
+    UChar      norm[32];
+    UErrorCode error = U_ZERO_ERROR;
+    int        size  = unorm_normalize(ch1, se.count, UNORM_NFD, 0, norm, 32, 
+                                       &error);    
+    if (U_FAILURE(error)) {
+        fprintf(stdout, "Error normalizing\n");
+    }
+    if (u_strstr(norm, ch2) != NULL) {
+        return TRUE;
+    }
+    return FALSE;
+}
+
+/**
+* Marks tailored elements
+* @param script list
+* @param scriptcount number of scripts
+* @param scriptelem script element list
+* @param scriptelemlength size of the script element list
+*/
+void markTailored(UScriptCode script[], int scriptcount, 
+                  ScriptElement scriptelem[], int scriptelemlength)
+{
+          int32_t  rulelength;
+    const UChar   *rule = ucol_getRules(COLLATOR_, &rulelength);
+    
+    const UChar           *current  = NULL;
+          uint32_t         strength = 0;
+          uint32_t         chOffset = 0; 
+          uint32_t         chLen    = 0;
+          uint32_t         exOffset = 0; 
+          uint32_t         exLen    = 0;
+          uint32_t         prefixOffset = 0; 
+          uint32_t         prefixLen    = 0;
+          uint8_t          specs    = 0;
+          UBool            rstart   = TRUE;
+          UColTokenParser  src;
+          UColOptionSet    opts;
+          UParseError      parseError;
+    
+    src.opts = &opts;
+    
+    UChar *copy = (UChar *)malloc(
+               (rulelength + UCOL_TOK_EXTRA_RULE_SPACE_SIZE) * sizeof(UChar));
+    memcpy(copy, rule, rulelength * sizeof(UChar));
+
+    src.source       = src.current = copy;
+    src.end          = (UChar *)copy + rulelength;
+    src.extraCurrent = src.end;
+    src.extraEnd     = src.end + UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
+
+    UErrorCode    error = U_ZERO_ERROR;
+        
+    while ((current = ucol_tok_parseNextToken(&src, &strength, &chOffset, 
+                                              &chLen, &exOffset, &exLen,
+                                              &prefixOffset, &prefixLen,
+                                              &specs, rstart, &parseError,
+                                              &error)) 
+                                              != NULL) {
+        if (chLen >= 1 && strength != UCOL_TOK_RESET) {
+            // skipping the reset characters and non useful stuff.
+            ScriptElement se;
+            u_strncpy(se.ch, copy + chOffset, chLen);
+            se.count = chLen;
+
+            if (checkInScripts(script, scriptcount, se)) {
+                /*
+                ScriptElement *tse = (ScriptElement *)bsearch(&se, scriptelem, 
+                                                              scriptelemlength, 
+                                                         sizeof(ScriptElement), 
+                                                         compareCodepoints);
+                */
+                for (int i = 0; i < scriptelemlength; i ++) {
+                    if (!scriptelem[i].tailored && 
+                        hasSubNFD(scriptelem[i], se)) {
+                        scriptelem[i].tailored = TRUE;
+                    }
+                }
+            }
+        }
+        rstart = FALSE;
+    }
+    free(copy);
+    if (U_FAILURE(error)) {
+        fprintf(stdout, "Error parsing rules\n");
+    }
+}
+
+/**
+* Checks if the collation iterator has more than 1 collation element
+* @parem coleiter collation element iterator
+* @return TRUE if collation iterator has more than 1 collation element
+*/
+UBool hasExpansions(UCollationElements *coleiter)
+{
+    UErrorCode error = U_ZERO_ERROR;
+    int32_t    ce    = ucol_next(coleiter, &error);
+    int        count = 0;
+
+    if (U_FAILURE(error)) {
+        fprintf(stdout, "Error getting next collation element\n");
+    }
+    while (ce != UCOL_NULLORDER) {
+        if ((UCOL_PRIMARYORDER(ce) != 0) && !isContinuation(ce)) {
+            count ++;
+            if (count == 2) {
+                return TRUE;
+            }
+        }
+        ce = ucol_next(coleiter, &error);
+        if (U_FAILURE(error)) {
+            fprintf(stdout, "Error getting next collation element\n");
+        }
+    }
+    return FALSE;
+}
+
+/**
+* Prints the footer for index.html
+* @param file output file
+*/
+void outputHTMLFooter()
+{
+    fprintf(OUTPUT_, "</table>\n");
+    fprintf(OUTPUT_, "</body>\n");
+    fprintf(OUTPUT_, "</html>\n");
+}
+
+/**
+* Serialize the codepoints from start to end into an html file.
+* Arranging them into ascending collation order.
+* @param script code list
+* @param scriptcount number of scripts
+*/
+void serializeScripts(UScriptCode script[], int scriptcount) 
+{
+    UErrorCode  error  = U_ZERO_ERROR;
+    
+    ScriptElement *scriptelem = 
+                     (ScriptElement *)malloc(sizeof(ScriptElement) * 0x20000);
+    if (scriptelem == NULL) {
+        fprintf(stdout, "Memory error\n");
+        return;
+    }
+    int count = getScriptElements(script, scriptcount, scriptelem);    
+    // Sort script elements using Quicksort algorithm:
+    qsort(scriptelem, count, sizeof(ScriptElement), compareCodepoints);
+    markTailored(script, scriptcount, scriptelem, count);
+    // Sort script elements using Quicksort algorithm:
+    qsort(scriptelem, count, sizeof(ScriptElement), compareSortKey);
+
+    UCollationElements* coleiter = ucol_openElements(COLLATOR_, 
+                                                     scriptelem[0].ch,
+                                                     scriptelem[0].count,
+                                                     &error);
+    if (U_FAILURE(error)) {
+        fprintf(stdout, "Error creating collation element iterator\n");
+        return;
+    }
+
+    outputScriptElem(scriptelem[0], 0, hasExpansions(coleiter));
+    for (int i = 0; i < count - 1; i ++) {
+        ucol_setText(coleiter, scriptelem[i + 1].ch, scriptelem[i + 1].count,
+                     &error);
+        if (U_FAILURE(error)) {
+            fprintf(stdout, "Error setting text in collation element iterator\n");
+            return;
+        }
+        outputScriptElem(scriptelem[i + 1], 
+                         compareSortKey(scriptelem + i, scriptelem + i + 1),
+                         hasExpansions(coleiter));
+    }
+    free(scriptelem);
+    outputHTMLFooter();
+}
+
+/**
+* Prints the header for the html
+* @param locale name
+* @param script
+* @param scriptcount number of scripts
+*/
+void outputHTMLHeader(const char *locale, UScriptCode script[], 
+                      int scriptcount)
+{
+    fprintf(OUTPUT_, "<html>\n");
+    fprintf(OUTPUT_, "<head>\n");
+    fprintf(OUTPUT_, "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n");
+    fprintf(OUTPUT_, "<meta http-equiv=\"Content-Language\" content=\"en-us\">\n");
+    fprintf(OUTPUT_, "<link rel=\"stylesheet\" href=\"charts.css\" type=\"text/css\">\n");
+    fprintf(OUTPUT_, "<title>Collation charts</title>\n");
+    fprintf(OUTPUT_, "<base target=\"main\">\n");
+    fprintf(OUTPUT_, "</head>\n");
+
+    fprintf(OUTPUT_, "<body>\n");
+    fprintf(OUTPUT_, "<!--\n");
+    fprintf(OUTPUT_, "This file contains sorted characters in ascending order according to the locale stated\n");
+    fprintf(OUTPUT_, "If the character is in red, it is tailored in the collation rules.\n");
+    fprintf(OUTPUT_, "Background colours have certain meanings:\n");
+    fprintf(OUTPUT_, "White - equals the previous character\n");
+    fprintf(OUTPUT_, "dark blue - primary greater than the previous character\n");
+    fprintf(OUTPUT_, "blue - secondary greater than the previous character\n");
+    fprintf(OUTPUT_, "light blue - tertiary greater than the previous character\n");
+    fprintf(OUTPUT_, "--!>\n");
+
+    fprintf(OUTPUT_, "\n<h2>%s</h2>\n", locale);
+    fprintf(stdout, "Locale: %s\n", locale);
+    fprintf(OUTPUT_, "<ul>\n");
+    for (int i = 0; i < scriptcount; i ++) {
+        fprintf(OUTPUT_, "<li> %s\n", uscript_getName(script[i]));
+    }
+    fprintf(OUTPUT_, "</ul>\n");
+    UVersionInfo version;
+    ucol_getVersion(COLLATOR_, version);
+    fprintf(OUTPUT_, "<p>Collator version %d.%d.%d.%d</p>\n", 
+                      version[0], version[1], version[2], version[3]);
+    fprintf(OUTPUT_, "<p><a href=help.html>How to read the table</a></p>\n");
+    fprintf(OUTPUT_, "\n<table>\n");
+    fprintf(OUTPUT_, "\n<tr><th>Codepoint</th><th>Name</th></tr>\n");
+}
+
+/**
+* Prints the header for index.html
+* @param file output file
+*/
+void outputListHTMLHeader(FILE *file)
+{
+    fprintf(file, "<html>\n");
+    fprintf(file, "<head>\n");
+    fprintf(file, "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n");
+    fprintf(file, "<meta http-equiv=\"Content-Language\" content=\"en-us\">\n");
+    fprintf(file, "<title>Collation Charts</title>\n");
+    fprintf(OUTPUT_, "<base target=\"main\">\n");
+    fprintf(file, "</head>\n");
+    fprintf(file, "<body>\n");
+    fprintf(file, "<h2 align=center>Collation Charts</h2>\n");
+    fprintf(file, "<p align=center>\n");
+}
+
+/**
+* Prints the footer for index.html
+* @param file output file
+*/
+void outputListHTMLFooter(FILE *file)
+{
+    fprintf(file, "</p>\n");
+    fprintf(file, "</body>\n");
+    fprintf(file, "</html>\n");
+}
+
+/**
+* Gets all scripts and serialize their codepoints into an html file.
+*/
+void serializeScripts() {
+    char filename[128];
+    int  dirlength = 0;
+
+    if (options[4].doesOccur) {
+        strcpy(filename, options[4].value);
+        dirlength = appendDirSeparator(filename);
+    }
+
+    const char    *locale;
+          int32_t  localelist = 0;
+        
+    localelist = ucol_countAvailable() - 1;
+    locale      = ucol_getAvailable(localelist);
+
+    strcat(filename, "list.html");
+    FILE *list = fopen(filename, "w");
+    filename[dirlength] = 0;
+    if (list == NULL) {
+        fprintf(stdout, "Cannot open file:%s\n", filename);
+        return;
+    }
+
+    outputListHTMLHeader(list);
+
+    while (TRUE) {
+        UErrorCode error = U_ZERO_ERROR;
+        COLLATOR_ = ucol_open(locale, &error);
+        if (U_FAILURE(error)) {
+            fprintf(stdout, "Collator creation failed:");
+            fprintf(stdout, u_errorName(error));
+            return;
+        }
+        if ((error != U_USING_FALLBACK_WARNING && // not tailored
+            error != U_USING_DEFAULT_WARNING) ||
+            checkLocaleForLanguage(locale)) {
+            fprintf(list, "<a href=%s.html>%s</a> | ", locale, locale);
+            setAttributes(COLLATOR_, &error);
+            setNormalization(COLLATOR_);
+            if (U_FAILURE(error)) {
+               fprintf(stdout, "Collator attribute setting failed:");
+               fprintf(stdout, u_errorName(error));
+               return;
+            }
+
+            UScriptCode scriptcode[32];
+            uint32_t scriptcount = uscript_getCode(locale, scriptcode, 32, 
+                                                   &error);
+            if (U_FAILURE(error)) {
+                fprintf(stdout, "Error getting lcale scripts\n");
+                return;
+            }
+
+            strcat(filename, locale);
+            strcat(filename, ".html");
+            OUTPUT_ = fopen(filename, "w");
+            if (OUTPUT_ == NULL) {
+                fprintf(stdout, "Cannot open file:%s\n", filename);
+                return;
+            }
+            outputHTMLHeader(locale, scriptcode, scriptcount);
+            serializeScripts(scriptcode, scriptcount);
+            fclose(OUTPUT_);
+        }
+        ucol_close(COLLATOR_);
+
+        filename[dirlength] = 0;
+        localelist --;
+        if (localelist < 0) {
+            break;
+        }
+        locale = ucol_getAvailable(localelist);
+    }
+    fprintf(list, "<a href=help.html>help</a>");
+    outputListHTMLFooter(list);
+    fclose(list);
 }
 
 /** 
@@ -765,7 +1429,9 @@ int main(int argc, char *argv[]) {
                         "--rule filename\n" 
                         "    Name of file containing the collation rules.\n"
                         "--normalizaton mode\n" 
-                        "    UNormalizationMode mode to be used.\n");
+                        "    UNormalizationMode mode to be used.\n"
+                        "--scripts\n" 
+                        "    Codepoints from all scripts are sorted and serialized.\n");
         fprintf(stdout, "Example: dumpce --serialize --locale af --destdir /temp --attribute UCOL_STRENGTH=UCOL_DEFAULT_STRENGTH,4=17");
         return argc < 0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
@@ -781,6 +1447,9 @@ int main(int argc, char *argv[]) {
     }
     if (options[3].doesOccur) {
         serialize();
+    }
+    if (options[9].doesOccur) {
+        serializeScripts();
     }
     return 0;
 }
