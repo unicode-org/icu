@@ -21,7 +21,6 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				InlineFunctionExpansion="2"
-				EnableIntrinsicFunctions="TRUE"
 				ImproveFloatingPointConsistency="TRUE"
 				AdditionalIncludeDirectories="..\..\include,..\common"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;U_I18N_IMPLEMENTATION"
@@ -1145,9 +1144,6 @@
 				RelativePath=".\rematch.cpp">
 			</File>
 			<File
-				RelativePath=".\remtrans.cpp">
-			</File>
-			<File
 				RelativePath=".\repattrn.cpp">
 			</File>
 			<File
@@ -1259,6 +1255,9 @@
 			</File>
 			<File
 				RelativePath=".\rbt_set.h">
+			</File>
+			<File
+				RelativePath=".\remtrans.cpp">
 			</File>
 			<File
 				RelativePath=".\remtrans.h">
