@@ -12,32 +12,17 @@
 #include "unicode/unistr.h"
 #include "cmemory.h"
 
-/* Note: There was an old implementation that indexed by first letter of
- * key.  Problem with this is that key may not have a meaningful first
- * letter; e.g., {Lu}>*.  One solution is to keep a separate vector of all
- * rules whose intial key letter is a category variable.  However, the
- * problem is that they must be kept in order with respect to other rules.
- * One solution -- add a sequence number to each rule.  Do the usual
- * first-letter lookup, and also a lookup from the spare bin with rules like
- * {Lu}>*.  Take the lower sequence number.  This seems complex and not
- * worth the trouble, but we may revisit this later.  For documentation (or
- * possible resurrection) the old code is included below, commented out
- * with the remark "// OLD INDEXED IMPLEMENTATION".  Under the old
- * implementation, <code>rules</code> is a Hashtable, not a Vector.
- */
+static void _deleteRule(void *rule) {
+    delete (TransliterationRule *)rule;
+}
 
 /**
  * Construct a new empty rule set.
  */
-void deleteRule(void *rule) {
-    delete (TransliterationRule *)rule;
-}
-
 TransliterationRuleSet::TransliterationRuleSet() {
     maxContextLength = 0;
     ruleVector = new UVector();
-    ruleVector->setDeleter(&deleteRule);
-    isFrozen = FALSE;
+    ruleVector->setDeleter(&_deleteRule);
     rules = NULL;
 }
 
@@ -46,8 +31,7 @@ TransliterationRuleSet::TransliterationRuleSet() {
  * has already been frozen.
  */
 TransliterationRuleSet::TransliterationRuleSet(const TransliterationRuleSet& other) :
-    ruleVector(NULL),
-        isFrozen(TRUE),
+    ruleVector(0),
     maxContextLength(other.maxContextLength) {
 
     uprv_memcpy(index, other.index, sizeof(index));
@@ -62,9 +46,6 @@ TransliterationRuleSet::TransliterationRuleSet(const TransliterationRuleSet& oth
  * Destructor.
  */
 TransliterationRuleSet::~TransliterationRuleSet() {
-    if(ruleVector != NULL) {
-        ruleVector->removeAllElements();
-    }
     delete ruleVector;
     delete[] rules;
 }
@@ -79,21 +60,14 @@ int32_t TransliterationRuleSet::getMaximumContextLength(void) const {
 
 /**
  * Add a rule to this set.  Rules are added in order, and order is
- * significant.
+ * significant.  The last call to this method must be followed by
+ * a call to <code>freeze()</code> before the rule set is used.
  *
- * <p>Once freeze() is called, this method must not be called.
  * @param adoptedRule the rule to add
  */
 void TransliterationRuleSet::addRule(TransliterationRule* adoptedRule,
                                      UErrorCode& status) {
     if (U_FAILURE(status)) {
-        delete adoptedRule;
-        return;
-    }
-    //if (ruleVector == NULL) {
-    if (isFrozen == TRUE) {
-        // throw new IllegalArgumentException("Cannot add rules after freezing");
-        status = U_ILLEGAL_ARGUMENT_ERROR;
         delete adoptedRule;
         return;
     }
@@ -103,13 +77,20 @@ void TransliterationRuleSet::addRule(TransliterationRule* adoptedRule,
     if ((len = adoptedRule->getAnteContextLength()) > maxContextLength) {
         maxContextLength = len;
     }
+
+    delete[] rules; // Contains alias pointers
+    rules = 0;
 }
 
 /**
- * Close this rule set to further additions, check it for masked rules,
- * and index it to optimize performance.  Once this method is called,
- * addRule() can no longer be called.
- * @exception IllegalArgumentException if some rules are masked
+ * Check this for masked rules and index it to optimize performance.
+ * The sequence of operations is: (1) add rules to a set using
+ * <code>addRule()</code>; (2) freeze the set using
+ * <code>freeze()</code>; (3) use the rule set.  If
+ * <code>addRule()</code> is called after calling this method, it
+ * invalidates this object, and this method must be called again.
+ * That is, <code>freeze()</code> may be called multiple times,
+ * although for optimal performance it shouldn't be.
  */
 void TransliterationRuleSet::freeze(const TransliterationRuleData& data,
                                     UErrorCode& status) {
@@ -169,13 +150,11 @@ void TransliterationRuleSet::freeze(const TransliterationRuleData& data,
 
     /* Freeze things into an array.
      */
+    delete[] rules; // Contains alias pointers
     rules = new TransliterationRule*[v.size()];
     for (j=0; j<v.size(); ++j) {
         rules[j] = (TransliterationRule*) v.elementAt(j);
     }
-    //delete ruleVector;
-    //ruleVector = NULL;
-    isFrozen = TRUE;
 
     // TODO Add error reporting that indicates the rules that
     //      are being masked.
