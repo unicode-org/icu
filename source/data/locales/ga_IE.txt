@@ -12,18 +12,18 @@ ga_IE {
 
     CurrencyElements { 
             "£",
-            "IEP ",
+            "IEP",
             ".",
     }
     DateTimePatterns { 
+            "HH:mm:ss",
+            "HH:mm:ss",
+            "HH:mm:ss",
             "HH:mm:ss ",
-            "HH:mm:ss ",
-            "HH:mm:ss ",
-            "HH:mm:ss ",
-            "EEE DD MMM yyyy z",
-            "EEE DD MMM yyyy z",
-            "DD/MM/yy",
-            "DD/MM/yy",
+            "EEE dd MMM yyyy z",
+            "EEE dd MMM yyyy z",
+            "dd/MM/yy",
+            "dd/MM/yy",
             "{1} {0}",
     }
 

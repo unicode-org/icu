@@ -7,22 +7,10 @@
 
 af{
     Version { "x0.1" }
-	
-	AmPmMarkers { 
+            
+            AmPmMarkers { 
             "VM",
             "NM",
-    }
-
-    DateTimePatterns { 
-            "HH:mm:ss ",
-            "HH:mm:ss ",
-            "HH:mm:ss ",
-            "HH:mm:ss ",
-            "EEE DD MMM yyyy z",
-            "EEE DD MMM yyyy z",
-            "DD/MM/yy",
-            "DD/MM/yy",
-            "{1} {0}",
     }
     DayAbbreviations { 
             "So",
@@ -86,8 +74,8 @@ af{
             "∞",
             "�",
     }
-            LocaleID {"0436"}
-            LocaleString{ "af" }
+    LocaleID {"36"}
+    LocaleString{ "af" }
             
             // /**************** Info Below is needed ****************/
             // CollationElements{}
