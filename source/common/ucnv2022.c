@@ -223,8 +223,13 @@ _ISO2022Open(UConverter *cnv, const char *name, const char *locale, UErrorCode *
     if(cnv->extraInfo != NULL) {
 		UConverterDataISO2022 *myConverterData=(UConverterDataISO2022 *) cnv->extraInfo; 
 		UConverter **array= myConverterData->myConverterArray;
-		myConverterData->currentLocale = (char*) uprv_malloc(sizeof(char) * strlen(locale));
-		strcpy(myConverterData->currentLocale,locale);
+		if( (locale != NULL) && (uprv_strlen(locale) > 0) ) {
+			myConverterData->currentLocale = (char*) uprv_malloc(sizeof(char) * uprv_strlen(locale));
+			uprv_strcpy(myConverterData->currentLocale,locale);
+		}
+		else {
+			myConverterData->currentLocale = NULL;
+		}
         myConverterData->myConverterArray[0] =NULL;
 		if(locale && uprv_stricmp(locale,"jp")==0){
 			myConverterData->myConverterArray[0]=	ucnv_open("ASCII", errorCode );
