@@ -407,12 +407,12 @@ u_strtok_r(UChar    *src,
  * @param s2 A string to compare.
  * @return 0 if <code>s1</code> and <code>s2</code> are bitwise equal; a negative
  * value if <code>s1</code> is bitwise less than <code>s2,/code>; a positive
- * value if <code>s1</code> is bitwise greater than <code>s2,/code>.
+ * value if <code>s1</code> is bitwise greater than <code>s2</code>.
  * @stable ICU 2.0
  */
 U_CAPI int32_t  U_EXPORT2
 u_strcmp(const UChar     *s1, 
-    const UChar     *s2);
+         const UChar     *s2);
 
 /**
  * Compare two Unicode strings in code point order.

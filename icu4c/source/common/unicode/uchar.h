@@ -1168,7 +1168,7 @@ typedef enum UEastAsianWidth {
 
 /**
  * Selector constants for u_charName().
- * <code>u_charName() returns the "modern" name of a
+ * u_charName() returns the "modern" name of a
  * Unicode character; or the name that was defined in
  * Unicode version 1.0, before the Unicode standard merged
  * with ISO-10646; or an "extended" name that gives each
