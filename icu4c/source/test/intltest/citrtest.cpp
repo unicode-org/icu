@@ -40,13 +40,13 @@ public:
     virtual void getText(UnicodeString& result) {
         text.extract(0,text.length(),result);
     }
+    static UClassID getStaticClassID(void){ 
+        return (UClassID)(&fgClassID); 
+    }
     virtual UClassID getDynamicClassID(void) const{ 
         return getStaticClassID(); 
     }
 
-    static UClassID getStaticClassID(void){ 
-        return (UClassID)(&fgClassID); 
-    }
     virtual UBool operator==(const ForwardCharacterIterator& /*that*/) const{
         return TRUE;
     }
@@ -1102,12 +1102,12 @@ public:
     }
 
     // RTTI
-    virtual UClassID getDynamicClassID() const {
-        return getStaticClassID();
-    }
-
     static UClassID getStaticClassID() {
         return (UClassID)(&fgClassID);
+    }
+
+    virtual UClassID getDynamicClassID() const {
+        return getStaticClassID();
     }
 
 private:
