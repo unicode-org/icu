@@ -167,7 +167,7 @@ Normalizer::normalize(const UnicodeString& source,
     } else {
         /* make sure that we do not operate on the same buffer in source and result */
         result.cloneArrayIfNeeded(-1, source.length()+20, FALSE);
-        result.fLength=unorm_internalNormalize(result.fArray, result.fCapacity,
+        result.fLength=unorm_internalNormalize(&result.fArray, &result.fCapacity,
                                                source.fArray, source.fLength,
                                                mode, (options&IGNORE_HANGUL)!=0,
                                                UnicodeString::growBuffer, &result,
@@ -200,7 +200,7 @@ Normalizer::compose(const UnicodeString& source,
     } else {
         /* make sure that we do not operate on the same buffer in source and result */
         result.cloneArrayIfNeeded(-1, source.length()+20, FALSE);
-        result.fLength=unorm_compose(result.fArray, result.fCapacity,
+        result.fLength=unorm_compose(&result.fArray, &result.fCapacity,
                                      source.fArray, source.fLength,
                                      compat, (options&IGNORE_HANGUL)!=0,
                                      UnicodeString::growBuffer, &result,
@@ -221,7 +221,7 @@ Normalizer::decompose(const UnicodeString& source,
     } else {
         /* make sure that we do not operate on the same buffer in source and result */
         result.cloneArrayIfNeeded(-1, source.length()+20, FALSE);
-        result.fLength=unorm_decompose(result.fArray, result.fCapacity,
+        result.fLength=unorm_decompose(&result.fArray, &result.fCapacity,
                                        source.fArray, source.fLength,
                                        compat, (options&IGNORE_HANGUL)!=0,
                                        UnicodeString::growBuffer, &result,
