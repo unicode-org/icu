@@ -2016,7 +2016,7 @@ ures_openAvailableLocales(const char *path, UErrorCode *status)
 U_CAPI int32_t U_EXPORT2
 ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
                              const char *path, const char *resName, const char *keyword, const char *locid,
-                             UBool *isAvailable, UErrorCode *status)
+                             UBool *isAvailable, UBool omitDefault, UErrorCode *status)
 {
     char kwVal[1024] = ""; /* value of keyword 'keyword' */
     char defVal[1024] = ""; /* default value for given locale */
@@ -2039,8 +2039,8 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
     }
     uloc_getBaseName(locid, base, 1024-1,&subStatus);
 #if defined(URES_TREE_DEBUG)
-    fprintf(stderr, "gFE: %s: [%s @ %s = %s] - %s\n", 
-        locid, keyword, base, kwVal, u_errorName(subStatus));
+    fprintf(stderr, "getFunctionalEquivalent: \"%s\" [%s=%s] in %s - %s\n", 
+            locid, keyword, kwVal, base, u_errorName(subStatus));
 #endif
     ures_initStackObject(&bund1);
     ures_initStackObject(&bund2);
@@ -2064,7 +2064,7 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
         isAvailable = NULL; /* only want to set this the first time around */
         
 #if defined(URES_TREE_DEBUG)
-        fprintf(stderr, "%s;%s -> %s\n", path?path:"ICUDATA", parent, u_errorName(subStatus));
+        fprintf(stderr, "%s;%s -> %s [%s]\n", path?path:"ICUDATA", parent, u_errorName(subStatus), ures_getLocale(res, &subStatus));
 #endif
         if(U_FAILURE(subStatus)) {
             *status = subStatus;
@@ -2124,8 +2124,14 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
             *status = subStatus;
         } else if(subStatus == U_ZERO_ERROR) {
             ures_getByKey(res,resName,&bund1, &subStatus);
+#if defined(URES_TREE_DEBUG)
+/**/ fprintf(stderr,"@%d [%s] %s\n", __LINE__, resName, u_errorName(subStatus));
+#endif
             if(subStatus == U_ZERO_ERROR) {
                 ures_getByKey(&bund1, kwVal, &bund2, &subStatus);
+#if defined(URES_TREE_DEBUG)
+/**/ fprintf(stderr,"@%d [%s] %s\n", __LINE__, kwVal, u_errorName(subStatus));
+#endif
                 if(subStatus == U_ZERO_ERROR) {
 #if defined(URES_TREE_DEBUG)
                     fprintf(stderr, "%s;%s -> full %s=%s,  %s\n", 
@@ -2200,16 +2206,17 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
     if(U_SUCCESS(*status)) {
         if(!full[0]) {
 #if defined(URES_TREE_DEBUG)
-            fprintf(stderr, "Still could not load keyword %s=%s\n", keyword, kwVal);
-            *status = U_MISSING_RESOURCE_ERROR;
+          fprintf(stderr, "Still could not load keyword %s=%s\n", keyword, kwVal);
 #endif
-        } else if( (!uprv_strcmp(kwVal, defVal)) && /* if the requested kw is default, */
-                                                    uprv_strlen(defLoc) <= uprv_strlen(full)) { /* and the default is in or in an 
-            ancestor of the current locale */
+          *status = U_MISSING_RESOURCE_ERROR;
+        } else if(omitDefault &&
+          (!uprv_strcmp(kwVal, defVal)) && /* if the requested kw is default, */
+            uprv_strlen(defLoc) <= uprv_strlen(full)) {
+          /* and the default is in or in an ancestor of the current locale */
 #if defined(URES_TREE_DEBUG)
-            fprintf(stderr, "Removing unneeded var %s=%s\n", keyword, kwVal);
+          fprintf(stderr, "Removing unneeded var %s=%s\n", keyword, kwVal);
 #endif
-            kwVal[0]=0;
+          kwVal[0]=0;
         }
         uprv_strcpy(found, full);
         if(kwVal[0]) {
@@ -2217,6 +2224,11 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
             uprv_strcat(found, keyword);
             uprv_strcat(found, "=");
             uprv_strcat(found, kwVal);
+        } else if(!omitDefault) {
+            uprv_strcat(found, "@");
+            uprv_strcat(found, keyword);
+            uprv_strcat(found, "=");
+            uprv_strcat(found, defVal);
         }
     }
     /* we found the default locale - no need to repeat it.*/
