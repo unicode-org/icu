@@ -307,7 +307,7 @@ public class CheckTags {
                 break;
 
             case DRAFT:
-              if (tag.text().indexOf("ICU 2.2") != -1) {
+              if (tag.text().indexOf("ICU 2.4") != -1) {
                 foundRequiredTag = true;
                 tagErr(tag);
                 break;

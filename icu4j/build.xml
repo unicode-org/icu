@@ -435,7 +435,8 @@
         <javadoc sourcepath="${src.dir}"
                  packagenames="com.ibm.icu.*"
                  excludepackagenames="com.ibm.icu.dev.*,com.ibm.icu.impl.*"
-                 classpath="${build.dir}">
+                 classpath="${build.dir}"
+		 source="1.4">
             <doclet name="com.ibm.icu.dev.tool.docs.CheckTags"
                     path="${build.dir}">
 <!--                <param name="-brief"/> -->
