@@ -361,7 +361,12 @@ res_findResource(const ResourceData *pResData, Resource r, const char** path, co
         }
       }
     } else if(type == URES_ARRAY) {
-      t2 = _res_getArrayItem(pResData->pRoot, t1, indexR);
+      indexR = uprv_strtol(pathP, &closeIndex, 10);
+      if(closeIndex != pathP) {
+        t2 = _res_getArrayItem(pResData->pRoot, t1, indexR);
+      } else {
+        t2 = RES_BOGUS; /* have an array, but don't have a valid index */
+      }
       *key = NULL;
     } else { /* can't do much here, except setting t2 to bogus */
       t2 = RES_BOGUS;
