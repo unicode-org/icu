@@ -69,6 +69,7 @@ ArabicShaping.o \
 ClassDefinitionTables.o \
 ContextualSubstSubtables.o \
 CoverageTables.o \
+CursiveAttachmentSubtables.o \
 DeviceTables.o \
 Features.o \
 GDEFMarkFilter.o \

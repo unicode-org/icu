@@ -181,23 +181,30 @@ void OpenTypeLayoutEngine::adjustGlyphPositions(const LEUnicode chars[], le_int3
         le_int32 i;
 
         for (i = 0; i < glyphCount; i += 1) {
-            float xPlacement = fFontInstance->xUnitsToPoints(adjustments[i].getXPlacement());
-            float xAdvance   = fFontInstance->xUnitsToPoints(adjustments[i].getXAdvance());
-            float yPlacement = fFontInstance->yUnitsToPoints(adjustments[i].getYPlacement());
-            float yAdvance   = fFontInstance->yUnitsToPoints(adjustments[i].getYAdvance());
+            float xAdvance   = adjustments[i].getXAdvance();
+            float yAdvance   = adjustments[i].getYAdvance();
+            float xPlacement = 0;
+            float yPlacement = 0;
 
-            xAdjust += xPlacement;
-            yAdjust += yPlacement;
+#if 0
+            xAdjust += xKerning;
+            yAdjust += yKerning;
+#endif
 
-            positions[i*2] += xAdjust;
-            positions[i*2+1] += yAdjust;
+            for (le_int32 base = i; base >= 0; base = adjustments[base].getBaseOffset()) {
+                xPlacement += adjustments[base].getXPlacement();
+                yPlacement += adjustments[base].getYPlacement();
+            }
 
-            xAdjust += xAdvance;
-            yAdjust += yAdvance;
+            positions[i*2]   += xAdjust + fFontInstance->xUnitsToPoints(xPlacement);
+            positions[i*2+1] -= yAdjust + fFontInstance->yUnitsToPoints(yPlacement);
+
+            xAdjust += fFontInstance->xUnitsToPoints(xAdvance);
+            yAdjust += fFontInstance->yUnitsToPoints(yAdvance);
         }
 
-        positions[glyphCount*2] += xAdjust;
-        positions[glyphCount*2+1] += yAdjust;
+        positions[glyphCount*2]   += xAdjust;
+        positions[glyphCount*2+1] -= yAdjust;
 
         delete[] adjustments;
     }

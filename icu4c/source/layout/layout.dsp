@@ -186,6 +186,10 @@ SOURCE=.\CoverageTables.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\CursiveAttachmentSubtables.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\DeviceTables.cpp
 # End Source File
 # Begin Source File
@@ -427,6 +431,10 @@ SOURCE=.\ContextualSubstSubtables.h
 # Begin Source File
 
 SOURCE=.\CoverageTables.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\CursiveAttachmentSubtables.h
 # End Source File
 # Begin Source File
 

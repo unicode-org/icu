@@ -1,7 +1,7 @@
 /*
  * @(#)Lookups.h	1.5 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998 - 2002 - All Rights Reserved
  *
  */
 
@@ -15,7 +15,7 @@ U_NAMESPACE_BEGIN
 
 enum LookupFlags
 {
-    lfReservedBit           = 0x0001,
+    lfBaselineIsLogicalEnd  = 0x0001,  // The MS spec. calls this flag "RightToLeft" but this name is more accurate 
     lfIgnoreBaseGlyphs      = 0x0002,
     lfIgnoreLigatures       = 0x0004,
     lfIgnoreMarks           = 0x0008,
