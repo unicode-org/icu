@@ -340,7 +340,7 @@ static struct ErrorCases{
       U_IDNA_CHECK_BIDI_ERROR,
       FALSE, TRUE, TRUE
     },  
-    /*
+    
     { 
       {
         0x0077, 0x0077, 0x0077, 0x002e, // www. 
@@ -348,11 +348,43 @@ static struct ErrorCases{
         0x002e, 0x0063, 0x006f, 0x006d, // com. 
         0x0000
       },
-      "www.xn--989AoMsVi.com",
-      U_ZERO_ERROR,
+      "www.XN--ghbgi278xia.com",
+      U_IDNA_PROHIBITED_CODEPOINT_FOUND_ERROR,
       FALSE, TRUE, TRUE
     },
-    */
+    { 
+      {
+        0x0077, 0x0077, 0x0077, 0x002e, // www. 
+        0x002D, 0x0041, 0x0042, 0x0043, 0x0044, 0x0045, // HYPHEN at the start of label 
+        0x002e, 0x0063, 0x006f, 0x006d, // com. 
+        0x0000
+      },
+      "www.-abcde.com",
+      U_IDNA_STD3_ASCII_RULES_ERROR,
+      TRUE, TRUE, FALSE
+    },
+    { 
+      {
+        0x0077, 0x0077, 0x0077, 0x002e, // www. 
+        0x0041, 0x0042, 0x0043, 0x0044, 0x0045,0x002D, // HYPHEN at the end of the label
+        0x002e, 0x0063, 0x006f, 0x006d, // com. 
+        0x0000
+      },
+      "www.abcde-.com",
+      U_IDNA_STD3_ASCII_RULES_ERROR,
+      TRUE, TRUE, FALSE
+    },
+    { 
+      {
+        0x0077, 0x0077, 0x0077, 0x002e, // www. 
+        0x0041, 0x0042, 0x0043, 0x0044, 0x0045,0x0040, // Containing non LDH code point
+        0x002e, 0x0063, 0x006f, 0x006d, // com. 
+        0x0000
+      },
+      "www.abcde@.com",
+      U_IDNA_STD3_ASCII_RULES_ERROR,
+      TRUE, TRUE, FALSE
+    },
 };
 
 
@@ -558,87 +590,135 @@ void TestIDNA::testAPI(const UChar* src, const UChar* expected, const char* test
     int32_t expectedLen = u_strlen(expected);
     int32_t options = (useSTD3ASCIIRules == TRUE) ? UIDNA_USE_STD3_RULES : UIDNA_DEFAULT;
     UParseError parseError;
+    int32_t tSrcLen = u_strlen(src);
+    UChar* tSrc = (UChar*) uprv_malloc( U_SIZEOF_UCHAR * tSrcLen );
+
+    uprv_memcpy(tSrc,src,tSrcLen * U_SIZEOF_UCHAR);
 
     // test null-terminated source and return value of number of UChars required
-    destLen = func(src,-1,dest,0,options, &parseError , &status);
-    if(status == U_BUFFER_OVERFLOW_ERROR){
-        status = U_ZERO_ERROR; // reset error code
-        if(destLen+1 < MAX_DEST_SIZE){
-            dest = destStack;
-            destLen = func(src,-1,dest,destLen+1,options, &parseError, &status);
-            // TODO : compare output with expected
-            if(U_SUCCESS(status) && (doCompare==TRUE) && u_strCaseCompare(dest,destLen, expected,expectedLen,0,&status)!=0){
-                errln("Did not get the expected result for "+UnicodeString(testName) +" null terminated source. Expected : " 
-                       + prettify(UnicodeString(expected,expectedLen))
-                       + " Got: " + prettify(UnicodeString(dest,destLen))
-                    );
-            }
-        }else{
-            errln( "%s null terminated source failed. Requires destCapacity > 300\n",testName);
-        }
-    }
-
-    if(status != expectedStatus){
-        errln( "Did not get the expected error for %s null terminated source failed. Expected: %s Got: %s\n",testName, u_errorName(expectedStatus), u_errorName(status));
-    } 
-    if(testUnassigned ){
-        status = U_ZERO_ERROR;
-        destLen = func(src,-1,dest,0,options | UIDNA_ALLOW_UNASSIGNED, &parseError, &status);
+    if( expectedStatus != U_IDNA_STD3_ASCII_RULES_ERROR ){
+        destLen = func(src,-1,dest,0,options, &parseError , &status);
         if(status == U_BUFFER_OVERFLOW_ERROR){
             status = U_ZERO_ERROR; // reset error code
             if(destLen+1 < MAX_DEST_SIZE){
                 dest = destStack;
-                destLen = func(src,-1,dest,destLen+1,options | UIDNA_ALLOW_UNASSIGNED, &parseError, &status);
+                destLen = func(src,-1,dest,destLen+1,options, &parseError, &status);
+                // TODO : compare output with expected
+                if(U_SUCCESS(status) && expectedStatus != U_IDNA_STD3_ASCII_RULES_ERROR&& (doCompare==TRUE) && u_strCaseCompare(dest,destLen, expected,expectedLen,0,&status)!=0){
+                    errln("Did not get the expected result for "+UnicodeString(testName) +" null terminated source. Expected : " 
+                           + prettify(UnicodeString(expected,expectedLen))
+                           + " Got: " + prettify(UnicodeString(dest,destLen))
+                        );
+                }
+            }else{
+                errln( "%s null terminated source failed. Requires destCapacity > 300\n",testName);
+            }
+        }
+
+        if(status != expectedStatus){
+            errln( "Did not get the expected error for %s null terminated source failed. Expected: %s Got: %s\n",testName, u_errorName(expectedStatus), u_errorName(status));
+        } 
+        if(testUnassigned ){
+            status = U_ZERO_ERROR;
+            destLen = func(src,-1,dest,0,options | UIDNA_ALLOW_UNASSIGNED, &parseError, &status);
+            if(status == U_BUFFER_OVERFLOW_ERROR){
+                status = U_ZERO_ERROR; // reset error code
+                if(destLen+1 < MAX_DEST_SIZE){
+                    dest = destStack;
+                    destLen = func(src,-1,dest,destLen+1,options | UIDNA_ALLOW_UNASSIGNED, &parseError, &status);
+                    // TODO : compare output with expected
+                    if(U_SUCCESS(status) && (doCompare==TRUE) && u_strCaseCompare(dest,destLen, expected,expectedLen,0,&status)!=0){
+                        //errln("Did not get the expected result for %s null terminated source with both options set.\n",testName);
+                        errln("Did not get the expected result for "+UnicodeString(testName) +" null terminated source with both options set. Expected: "+ prettify(UnicodeString(expected,expectedLen)));
+                
+                    }
+                }else{
+                    errln( "%s null terminated source failed. Requires destCapacity > 300\n",testName);
+                }
+            }
+            //testing query string
+            if(status != expectedStatus && expectedStatus != U_IDNA_UNASSIGNED_CODEPOINT_FOUND_ERROR){
+                errln( "Did not get the expected error for %s null terminated source with options set. Expected: %s Got: %s\n",testName, u_errorName(expectedStatus), u_errorName(status));
+            }  
+        }
+
+        status = U_ZERO_ERROR;
+
+        // test source with lengthand return value of number of UChars required
+        destLen = func(tSrc, tSrcLen, dest,0,options, &parseError, &status);
+        if(status == U_BUFFER_OVERFLOW_ERROR){
+            status = U_ZERO_ERROR; // reset error code
+            if(destLen+1 < MAX_DEST_SIZE){
+                dest = destStack;
+                destLen = func(src,u_strlen(src),dest,destLen+1,options, &parseError, &status);
+                // TODO : compare output with expected
+                if(U_SUCCESS(status) && (doCompare==TRUE) && u_strCaseCompare(dest,destLen, expected,expectedLen,0,&status)!=0){
+                    errln("Did not get the expected result for %s with source length.\n",testName);
+                }
+            }else{
+                errln( "%s with source length  failed. Requires destCapacity > 300\n",testName);
+            }
+        }
+
+        if(status != expectedStatus){
+            errln( "Did not get the expected error for %s with source length. Expected: %s Got: %s\n",testName, u_errorName(expectedStatus), u_errorName(status));
+        } 
+        if(testUnassigned){
+            status = U_ZERO_ERROR;
+
+            destLen = func(tSrc,tSrcLen,dest,0,options | UIDNA_ALLOW_UNASSIGNED, &parseError, &status);
+
+            if(status == U_BUFFER_OVERFLOW_ERROR){
+                status = U_ZERO_ERROR; // reset error code
+                if(destLen+1 < MAX_DEST_SIZE){
+                    dest = destStack;
+                    destLen = func(src,u_strlen(src),dest,destLen+1,options | UIDNA_ALLOW_UNASSIGNED, &parseError, &status);
+                    // TODO : compare output with expected
+                    if(U_SUCCESS(status) && (doCompare==TRUE) && u_strCaseCompare(dest,destLen, expected,expectedLen,0,&status)!=0){
+                        errln("Did not get the expected result for %s with source length and both options set.\n",testName);
+                    }
+                }else{
+                    errln( "%s with source length  failed. Requires destCapacity > 300\n",testName);
+                }
+            }
+            //testing query string
+            if(status != expectedStatus && expectedStatus != U_IDNA_UNASSIGNED_CODEPOINT_FOUND_ERROR){
+                errln( "Did not get the expected error for %s with source length and options set. Expected: %s Got: %s\n",testName, u_errorName(expectedStatus), u_errorName(status));
+            }
+        }
+    }else{
+
+        status = U_ZERO_ERROR;
+        destLen = func(src,-1,dest,0,options | UIDNA_USE_STD3_RULES, &parseError, &status);
+        if(status == U_BUFFER_OVERFLOW_ERROR){
+            status = U_ZERO_ERROR; // reset error code
+            if(destLen+1 < MAX_DEST_SIZE){
+                dest = destStack;
+                destLen = func(src,-1,dest,destLen+1,options | UIDNA_USE_STD3_RULES, &parseError, &status);
                 // TODO : compare output with expected
                 if(U_SUCCESS(status) && (doCompare==TRUE) && u_strCaseCompare(dest,destLen, expected,expectedLen,0,&status)!=0){
                     //errln("Did not get the expected result for %s null terminated source with both options set.\n",testName);
                     errln("Did not get the expected result for "+UnicodeString(testName) +" null terminated source with both options set. Expected: "+ prettify(UnicodeString(expected,expectedLen)));
-                
+            
                 }
             }else{
                 errln( "%s null terminated source failed. Requires destCapacity > 300\n",testName);
             }
         }
         //testing query string
-        if(status != expectedStatus && expectedStatus != U_IDNA_UNASSIGNED_CODEPOINT_FOUND_ERROR){
+        if(status != expectedStatus){
             errln( "Did not get the expected error for %s null terminated source with options set. Expected: %s Got: %s\n",testName, u_errorName(expectedStatus), u_errorName(status));
-        }  
-    }
+        } 
 
-    status = U_ZERO_ERROR;
-    int32_t tSrcLen = u_strlen(src);
-    UChar* tSrc = (UChar*) uprv_malloc( U_SIZEOF_UCHAR * tSrcLen );
-    uprv_memcpy(tSrc,src,tSrcLen * U_SIZEOF_UCHAR);
-
-    // test source with lengthand return value of number of UChars required
-    destLen = func(tSrc, tSrcLen, dest,0,options, &parseError, &status);
-    if(status == U_BUFFER_OVERFLOW_ERROR){
-        status = U_ZERO_ERROR; // reset error code
-        if(destLen+1 < MAX_DEST_SIZE){
-            dest = destStack;
-            destLen = func(src,u_strlen(src),dest,destLen+1,options, &parseError, &status);
-            // TODO : compare output with expected
-            if(U_SUCCESS(status) && (doCompare==TRUE) && u_strCaseCompare(dest,destLen, expected,expectedLen,0,&status)!=0){
-                errln("Did not get the expected result for %s with source length.\n",testName);
-            }
-        }else{
-            errln( "%s with source length  failed. Requires destCapacity > 300\n",testName);
-        }
-    }
-
-    if(status != expectedStatus){
-        errln( "Did not get the expected error for %s with source length. Expected: %s Got: %s\n",testName, u_errorName(expectedStatus), u_errorName(status));
-    } 
-    if(testUnassigned){
         status = U_ZERO_ERROR;
 
-        destLen = func(tSrc,tSrcLen,dest,0,options | UIDNA_ALLOW_UNASSIGNED, &parseError, &status);
+        destLen = func(tSrc,tSrcLen,dest,0,options | UIDNA_USE_STD3_RULES, &parseError, &status);
 
         if(status == U_BUFFER_OVERFLOW_ERROR){
             status = U_ZERO_ERROR; // reset error code
             if(destLen+1 < MAX_DEST_SIZE){
                 dest = destStack;
-                destLen = func(src,u_strlen(src),dest,destLen+1,options | UIDNA_ALLOW_UNASSIGNED, &parseError, &status);
+                destLen = func(src,u_strlen(src),dest,destLen+1,options | UIDNA_USE_STD3_RULES, &parseError, &status);
                 // TODO : compare output with expected
                 if(U_SUCCESS(status) && (doCompare==TRUE) && u_strCaseCompare(dest,destLen, expected,expectedLen,0,&status)!=0){
                     errln("Did not get the expected result for %s with source length and both options set.\n",testName);

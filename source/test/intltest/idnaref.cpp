@@ -437,11 +437,13 @@ idnaref_toUnicode(const UChar* src, int32_t srcLength,
     b1Len = 0;
     UBool* caseFlags = NULL;
 
-    UBool srcIsASCII = TRUE;
-
 	//get the options
     UBool allowUnassigned   = (UBool)((options & IDNAREF_ALLOW_UNASSIGNED) != 0);
     UBool useSTD3ASCIIRules = (UBool)((options & IDNAREF_USE_STD3_RULES) != 0);
+
+    UBool srcIsASCII = TRUE;
+    UBool srcIsLDH = TRUE;
+    int32_t failPos =0;
 
     if(U_FAILURE(*status)){
         goto CLEANUP;
@@ -453,12 +455,26 @@ idnaref_toUnicode(const UChar* src, int32_t srcLength,
             if(src[srcLength]> 0x7f){
                 srcIsASCII = FALSE;
             }
+            // here we do not assemble surrogates
+            // since we know that LDH code points
+            // are in the ASCII range only
+            if(prep->isLDHChar(src[srcLength])==FALSE){
+                srcIsLDH = FALSE;
+                failPos = srcLength;
+            }
             srcLength++;
         }
     }else{
         for(int32_t j=0; j<srcLength; j++){
             if(src[j]> 0x7f){
                 srcIsASCII = FALSE;
+            }
+            // here we do not assemble surrogates
+            // since we know that LDH code points
+            // are in the ASCII range only
+            if(prep->isLDHChar(src[j])==FALSE){
+                srcIsLDH = FALSE;
+                failPos = j;
             }
         }
     }
@@ -560,6 +576,27 @@ idnaref_toUnicode(const UChar* src, int32_t srcLength,
             uprv_memmove(dest, b2, b2Len * U_SIZEOF_UCHAR);
         }
     }else{
+        // verify that STD3 ASCII rules are satisfied
+        if(useSTD3ASCIIRules == TRUE){
+            if( srcIsLDH == FALSE /* source contains some non-LDH characters */
+                || src[0] ==  HYPHEN || src[srcLength-1] == HYPHEN){
+                *status = U_IDNA_STD3_ASCII_RULES_ERROR;
+
+                /* populate the parseError struct */
+                if(srcIsLDH==FALSE){
+                    // failPos is always set the index of failure
+                    uprv_syntaxError(src,failPos, srcLength,parseError);
+                }else if(src[0] == HYPHEN){
+                    // fail position is 0 
+                    uprv_syntaxError(src,0,srcLength,parseError);
+                }else{
+                    // the last index in the source is always length-1
+                    uprv_syntaxError(src, (srcLength>0) ? srcLength-1 : srcLength, srcLength,parseError);
+                }
+
+                goto CLEANUP;
+            }
+        }
         //copy the source to destination
         if(srcLength <= destCapacity){
             uprv_memmove(dest,src,srcLength * U_SIZEOF_UCHAR);
