@@ -8,11 +8,10 @@
 **********************************************************************
 */
 
-#include "ucmp8.h"
 #include "unicode/dbbi.h"
+#include "unicode/schriter.h"
 #include "dbbi_tbl.h"
 #include "uvector.h"
-#include "unicode/schriter.h"
 #include "cmemory.h"
 
 U_NAMESPACE_BEGIN
