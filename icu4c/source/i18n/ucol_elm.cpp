@@ -161,7 +161,7 @@ tempUCATable *uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status) {
 
   // a hashing clone function would be very nice. We have none currently...
   // However, we should be good, as closing should not produce any prefixed elements.
-  t->prefixLookup = NULL; // prefixes are not used in closing
+  r->prefixLookup = NULL; // prefixes are not used in closing
 
   /* expansions */
   if(t->expansions != NULL) {
