@@ -64,6 +64,9 @@ STATIC_O = ao
 %.$(SO): %.$(SO).$(SO_TARGET_VERSION_MAJOR)
 	$(RM) $@ && ln -s ${*F}.$(SO).$(SO_TARGET_VERSION) $@
 
+# The type of assembly to write for generating an object file
+GENCCODE_ASSEMBLY=-a gcc
+
 ##  Bind internal references
 
 # LDflags that pkgdata will use
