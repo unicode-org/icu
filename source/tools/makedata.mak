@@ -51,7 +51,7 @@ CPP_FLAGS = /I$(ICUP)\include /GD /c /Fo$@
 !ERROR An invalid configuration is specified.
 !ENDIF
 
-!IF "$(CFG)" == "Debug"
+!IF "$(CFG)" == "Debug" || "$(CFG)" == "debug"
 PKGOPT=D:$(ICUP)
 !ELSE
 PKGOPT=R:$(ICUP)
