@@ -17,6 +17,11 @@
 *   that would otherwise be too long as macros.
 */
 
+/* set import/export definitions */
+#ifndef U_COMMON_IMPLEMENTATION
+#   define U_COMMON_IMPLEMENTATION
+#endif
+
 #include "unicode/umachine.h"
 #include "unicode/utf.h"
 
@@ -37,7 +42,7 @@
  * -finish:
  * (BSR: Bit Scan Reverse, scans for a 1-bit, starting from the MSB)
  */
-uint8_t U_EXPORT2
+U_CAPI uint8_t U_EXPORT2
 utf8_countTrailBytes[256]={
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
