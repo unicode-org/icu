@@ -550,7 +550,7 @@ DecimalFormat::format(  double number,
      * -Infinity.  Proper detection of -0.0 is needed to deal with the
      * issues raised by bugs 4106658, 4106667, and 4147706.  Liu 7/6/98.
      */
-    bool_t isNegative = (number < 0.0) || (number == 0.0 && 1/number < 0.0);
+    bool_t isNegative = icu_isNegative(number);
     if (isNegative) number = -number;
 
     // Do this BEFORE checking to see if value is infinite! Sets the
