@@ -55,9 +55,9 @@ GnomeFontInstance::GnomeFontInstance(TT_Engine engine, const TT_Text *fontPathNa
 
     fUnitsPerEM = faceProperties.header->Units_Per_EM;
 
-    fAscent  = (le_int32) yUnitsToPoints(faceProperties.horizontal->Ascender);
-    fDescent = (le_int32) -yUnitsToPoints(faceProperties.horizontal->Descender);
-    fLeading = (le_int32) yUnitsToPoints(faceProperties.horizontal->Line_Gap);
+    fAscent  = (le_int32) (yUnitsToPoints(faceProperties.horizontal->Ascender) * fDeviceScaleY);
+    fDescent = (le_int32) -(yUnitsToPoints(faceProperties.horizontal->Descender) * fDeviceScaleY);
+    fLeading = (le_int32) (yUnitsToPoints(faceProperties.horizontal->Line_Gap) * fDeviceScaleY);
 
     // printf("Face = %s, unitsPerEM = %d, ascent = %d, descent = %d\n", fontPathName, fUnitsPerEM, fAscent, fDescent);
 
