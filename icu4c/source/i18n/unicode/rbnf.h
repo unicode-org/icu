@@ -531,7 +531,7 @@ public:
      * with the first String being the ULocale ID, and the remaining
      * Strings being the localizations of the rule set names, in the
      * same order as the initial array.  Arrays are NULL-terminated.
-     * @param description A description of the formatter's desired behavior.
+     * @param rules A description of the formatter's desired behavior.
      * See the class documentation for a complete explanation of the description
      * syntax.
      * @param localizations the localization information.
@@ -683,7 +683,8 @@ public:
   /**
    * Return the index'th display name locale.
    * @param index the index of the locale
-   * @param return the locale
+   * @param status set to a failure code when this function fails
+   * @return the locale
    * @see #getNumberOfRuleSetDisplayNameLocales
    * @draft ICU 3.2
    */

@@ -416,7 +416,7 @@ typedef enum UTimeScaleValue {
  * 
  * @param timeScale The time scale
  * @param value A constant representing the value to get
- * 
+ * @param status The status code. Set to <code>U_ILLEGAL_ARGUMENT_ERROR</code> if arguments are invalid.
  * @return - the value.
  * 
  * @draft ICU 3.2
@@ -445,7 +445,7 @@ U_DRAFT int64_t U_EXPORT2
 /**
  * Convert a datetime from the universal time scale to a <code>int64_t</code> in the given time scale.
  *
- * @param universal The datetime in the universal time scale
+ * @param universalTime The datetime in the universal time scale
  * @param timeScale The time scale to convert to
  * @param status The status code. Set to <code>U_ILLEGAL_ARGUMENT_ERROR</code> if the conversion is out of range.
  * 
