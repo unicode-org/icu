@@ -308,7 +308,7 @@ the litterature, delimited by curly braces for easy recognition of those
 substitutions in the output.
 .SH FILES
 .TP 15
-.B uconvmsg.dat
+.B @thepkgicudatadir@/@PACKAGE@/@VERSION@/uconvmsg.dat
 Compiled resource bundle containing localized messages printed
 by
 .BR uconv .
