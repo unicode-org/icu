@@ -1604,7 +1604,7 @@ static void TestKeywordSetError(void)
 
     for(i=0;i<=2;i++) {
         /* 1- test a short buffer with growing text */
-        blen=strlen(kwSetTestCases[i].l)+1;
+        blen=(int32_t)strlen(kwSetTestCases[i].l)+1;
         memset(buffer,'%',1023);
         strcpy(buffer,kwSetTestCases[i].l);
         status = U_ZERO_ERROR;
@@ -1626,7 +1626,7 @@ static void TestKeywordSetError(void)
 
     for(i=3;i<=4;i++) {
         /* 2- test a short buffer - text the same size or shrinking   */
-        blen=strlen(kwSetTestCases[i].l)+1;
+        blen=(int32_t)strlen(kwSetTestCases[i].l)+1;
         memset(buffer,'%',1023);
         strcpy(buffer,kwSetTestCases[i].l);
         status = U_ZERO_ERROR;
@@ -2060,8 +2060,8 @@ static int32_t _cmpversion(const char* version) {
  * prefix + '_' + x, then return 1.  Otherwise return a value < 0.
  */
 static UBool _loccmp(const char* string, const char* prefix) {
-    int32_t slen = uprv_strlen(string),
-            plen = uprv_strlen(prefix);
+    int32_t slen = (int32_t)uprv_strlen(string),
+            plen = (int32_t)uprv_strlen(prefix);
     int32_t c = uprv_strncmp(string, prefix, plen);
     /* 'root' is less than everything */
     if (uprv_strcmp(prefix, "root") == 0) {
