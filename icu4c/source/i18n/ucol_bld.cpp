@@ -349,13 +349,14 @@ U_CFUNC void ucol_inv_getGapPositions(/*UColTokenParser *src,*/ UColTokListHeade
         t2 = *(CETable+3*(pos)+1);
         lh->gapsHi[3*st] = (t1 & UCOL_PRIMARYMASK) | (t2 & UCOL_PRIMARYMASK) >> 16;
         lh->gapsHi[3*st+1] = (t1 & UCOL_SECONDARYMASK) << 16 | (t2 & UCOL_SECONDARYMASK) << 8;
-        lh->gapsHi[3*st+2] = (UCOL_TERTIARYORDER(t1)) << 24 | (UCOL_TERTIARYORDER(t2)) << 16;
+        //lh->gapsHi[3*st+2] = (UCOL_TERTIARYORDER(t1)) << 24 | (UCOL_TERTIARYORDER(t2)) << 16;
+        lh->gapsHi[3*st+2] = (t1&0x3f) << 24 | (t2&0x3f) << 16;
         pos--;
         t1 = *(CETable+3*(pos));
         t2 = *(CETable+3*(pos)+1);
         lh->gapsLo[3*st] = (t1 & UCOL_PRIMARYMASK) | (t2 & UCOL_PRIMARYMASK) >> 16;
         lh->gapsLo[3*st+1] = (t1 & UCOL_SECONDARYMASK) << 16 | (t2 & UCOL_SECONDARYMASK) << 8;
-        lh->gapsLo[3*st+2] = (UCOL_TERTIARYORDER(t1)) << 24 | (UCOL_TERTIARYORDER(t2)) << 16;
+        lh->gapsLo[3*st+2] = (t1&0x3f) << 24 | (t2&0x3f) << 16;
       }
     }
   }
@@ -428,7 +429,7 @@ U_CFUNC uint32_t ucol_getCEGenerator(ucolCEGenerator *g, uint32_t* lows, uint32_
           low = UCOL_COMMON_TOP2<<24;
           high = 0xFFFFFFFF;
         } else {
-          low = 0x02000000;
+          //low = 0x02000000;
           high = 0x40000000;
         }
         break;
@@ -634,89 +635,119 @@ U_CFUNC void ucol_initBuffers(/*UColTokenParser *src,*/ UColTokListHeader *lh, U
   }
 }
 
-uint8_t ucol_uprv_getCaseBits(const UCollator *UCA, const UChar *src, uint32_t len, UErrorCode *status) {
-  UChar n[128];
-  uint32_t i = 0;
+uint32_t u_toLargeKana(const UChar *source, const uint32_t sourceLen, UChar *resBuf, const uint32_t resLen, UErrorCode *status) {
+  uint32_t i = 0; 
+  UChar c;
 
+  if(U_FAILURE(*status)) {
+    return 0;
+  }
+
+  if(sourceLen > resLen) {
+    *status = U_MEMORY_ALLOCATION_ERROR;
+    return 0;
+  }
+  
+  for(i = 0; i < sourceLen; i++) {
+    c = source[i];
+    if(0x3042 < c && c < 0x30ef) { /* Kana range */
+      switch(c - 0x3000) {
+      case 0x41: case 0x43: case 0x45: case 0x47: case 0x49: case 0x63: case 0x83: case 0x85: case 0x8E:
+      case 0xA1: case 0xA3: case 0xA5: case 0xA7: case 0xA9: case 0xC3: case 0xE3: case 0xE5: case 0xEE:
+        c++;
+        break;
+      case 0xF5:
+        c = 0x30AB;
+        break;
+      case 0xF6:
+        c = 0x30B1;
+        break;
+      }
+    }
+    resBuf[i] = c;
+  }
+  return sourceLen;
+}
+
+uint32_t u_toSmallKana(const UChar *source, const uint32_t sourceLen, UChar *resBuf, const uint32_t resLen, UErrorCode *status) {
+  uint32_t i = 0; 
+  UChar c;
+
+  if(U_FAILURE(*status)) {
+    return 0;
+  }
+
+  if(sourceLen > resLen) {
+    *status = U_MEMORY_ALLOCATION_ERROR;
+    return 0;
+  }
+  
+  for(i = 0; i < sourceLen; i++) {
+    c = source[i];
+    if(0x3042 < c && c < 0x30ef) { /* Kana range */
+      switch(c - 0x3000) {
+      case 0x42: case 0x44: case 0x46: case 0x48: case 0x4A: case 0x64: case 0x84: case 0x86: case 0x8F:
+      case 0xA2: case 0xA4: case 0xA6: case 0xA8: case 0xAA: case 0xC4: case 0xE4: case 0xE6: case 0xEF:
+        c--;
+        break;
+      case 0xAB:
+        c = 0x30F5;
+        break;
+      case 0xB1:
+        c = 0x30F6;
+        break;
+      }
+    }
+    resBuf[i] = c;
+  }
+  return sourceLen;
+}
+
+uint8_t ucol_uprv_getCaseBits(const UCollator *UCA, const UChar *src, uint32_t len, UErrorCode *status) {
+  uint32_t i = 0;
+  UChar n[128];
   uint32_t nLen = 0;
+  uint32_t uCount = 0, lCount = 0;
 
   collIterate s;
   uint32_t order = 0;
 
-  uint8_t caseBits;
-  UBool isMixed = FALSE;
-  
   if(U_FAILURE(*status)) {
     return UCOL_LOWER_CASE;
   }
 
   nLen = unorm_normalize(src, len, UNORM_NFKD, 0, n, 128, status);
 
-  init_collIterate(UCA, n, nLen, &s);
-
-  order = ucol_getNextCE(UCA, &s, status);
-  if(isContinuation(order)) {
-    *status = U_INTERNAL_PROGRAM_ERROR;
-    return UCOL_LOWER_CASE;
-  }
-
-  caseBits = order & UCOL_CASE_BIT_MASK;
-  for(;;) {
+  for(i = 0; i < nLen; i++) {
+    init_collIterate(UCA, &n[i], 1, &s);
     order = ucol_getNextCE(UCA, &s, status);
-    if(order == UCOL_NO_MORE_CES) {
-        break;
-    }
-    if(isContinuation(order)) { 
-      continue;
-    }
-    if(caseBits != (order & UCOL_CASE_BIT_MASK)) {
-      isMixed = TRUE;
-      break;
-    }
-  }
-
-  if(isMixed == TRUE) {
-    uint32_t noUpper = 0;
-    uint32_t noLower = 0;
-
-    // Let's analyze again, letter by letter
-    for(i = 0; i < nLen; i++) {
-      if(u_isupper(n[i]) == TRUE) {
-        noUpper++;
-      }
-      if(u_islower(n[i]) == TRUE) {
-        noLower++;
-      }
-      if(u_istitle(n[i]) == TRUE) {
-        return UCOL_MIXED_CASE;
-      }
-    }
-
-    if(noUpper > 0 && noLower > 0 && noUpper + noLower <= nLen) {
-      return UCOL_MIXED_CASE;
-    }
-  }
-
-  return caseBits;
-
-
-#if 0
-  nuLen = u_strToLower(nu, 128, n, nLen, "", status);
-  if(nuLen == nLen) {
-    if(u_strncmp(n, nu, nuLen) == 0) {
+    if(isContinuation(order)) {
+      *status = U_INTERNAL_PROGRAM_ERROR;
       return UCOL_LOWER_CASE;
     }
-  }
-
-  nuLen = u_strToUpper(nu, 128, n, nLen, "", status);
-  if(nuLen == nLen) {
-    if(u_strncmp(n, nu, nuLen) == 0) {
-      return UCOL_UPPER_CASE;
+    if((order&UCOL_CASE_BIT_MASK)== UCOL_UPPER_CASE) {
+      uCount++;
+    } else {
+      if(u_islower(n[i])) {
+        lCount++;
+      } else {
+        UChar sk[1], lk[1];
+        u_toSmallKana(&n[i], 1, sk, 1, status);
+        u_toLargeKana(&n[i], 1, lk, 1, status);
+        if(sk[0] == n[i] && lk[0] != n[i]) {
+          lCount++;
+        }
+      }
     }
   }
-  return UCOL_MIXED_CASE;
-#endif
 
+  if(uCount != 0 && lCount != 0) {
+    return UCOL_MIXED_CASE;
+  } else if(uCount != 0) {
+    return UCOL_UPPER_CASE;
+  } else {
+    return UCOL_LOWER_CASE;
+  }
 }
 
 U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokListHeader *lh, UHashtable *tailored, UErrorCode *status) {
@@ -1148,14 +1179,18 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
       }
     }
 
-    tempUCATable *tempTable = uprv_uca_cloneTempTable(t, status);
-
-    UCATableHeader *tempData = uprv_uca_assembleTable(tempTable, status);
-    UCollator *tempColl = ucol_initCollator(tempData, 0, status);
-
+    UCollator *tempColl = NULL;
     if(U_SUCCESS(*status)) {
-      tempColl->rb = NULL;
-      tempColl->hasRealData = TRUE;
+      tempUCATable *tempTable = uprv_uca_cloneTempTable(t, status);
+
+      UCATableHeader *tempData = uprv_uca_assembleTable(tempTable, status);
+      tempColl = ucol_initCollator(tempData, 0, status);
+
+      if(U_SUCCESS(*status)) {
+        tempColl->rb = NULL;
+        tempColl->hasRealData = TRUE;
+      }
+      uprv_uca_closeTempTable(tempTable);    
     }
 
 
@@ -1189,7 +1224,6 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
           }
         }
       }
-      uprv_uca_closeTempTable(tempTable);    
       ucol_close(tempColl);
     }
   }
