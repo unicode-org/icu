@@ -23473,12 +23473,13 @@ FDD0 008F; [,, 3F 03]
 [first tertiary ignorable [,,]] # CONSTRUCTED
 [last tertiary ignorable [,,]] # CONSTRUCTED
 # Warning: Case bits are masked in the following
-[first tertiary in secondary non-ignorable [X, X, 05]] # U+0332 COMBINING LOW LINE
-[last tertiary in secondary non-ignorable [X, X, 3D]] # U+2A74 DOUBLE COLON EQUAL
+# The four commented values below are still not supported by ICU
+#[first tertiary in secondary non-ignorable [X, X, 05]] # U+0332 COMBINING LOW LINE
+#[last tertiary in secondary non-ignorable [X, X, 3D]] # U+2A74 DOUBLE COLON EQUAL
 [first secondary ignorable [,, 3F 03]] # CONSTRUCTED
 [last secondary ignorable [,, 3F 03]] # CONSTRUCTED
-[first secondary in primary non-ignorable [X, 05, X]] # U+0009 <CHARACTER TABULATION>
-[last secondary in primary non-ignorable [X, 05, X]] # U+0009 <CHARACTER TABULATION>
+#[first secondary in primary non-ignorable [X, 05, X]] # U+0009 <CHARACTER TABULATION>
+#[last secondary in primary non-ignorable [X, 05, X]] # U+0009 <CHARACTER TABULATION>
 [first primary ignorable [, 87, 05]] # U+0332 COMBINING LOW LINE
 [last primary ignorable [, E2 65, 05]] # U+10320 OLD ITALIC NUMERAL ONE
 [first variable [05 07, 05, 05]] # U+0009 <CHARACTER TABULATION>
