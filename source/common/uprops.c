@@ -226,6 +226,8 @@ u_hasBinaryProperty(UChar32 c, UProperty which) {
         return (u_getUnicodeProperties(c, 1)&FLAG(UPROPS_XID_CONTINUE))!=0;
     case UCHAR_XID_START:
         return (u_getUnicodeProperties(c, 1)&FLAG(UPROPS_XID_START))!=0;
+    case UCHAR_CASE_SENSITIVE:
+        return uprv_isCaseSensitive(c);
     default:
         /* not a known binary property */
         return FALSE;
