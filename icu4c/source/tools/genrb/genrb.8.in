@@ -141,6 +141,4 @@ is set.
 .SH COPYRIGHT
 Copyright (C) 2000-2002 IBM, Inc. and others.
 .SH SEE ALSO
-.BR derb (8)
-.br
 .BR pkgdata (8)
