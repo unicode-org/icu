@@ -169,10 +169,10 @@ clean-local: clean-pkgdata
 	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
 	$(RMV) $(SRCDATAFILES) $(DATAFILES) icupkg.inc
 	-@if [ -f $(TMPDATADIR)/icudata_dll.mak ]; then \
-		(cd pkgdata ; ./pkgdata -T $(TMPDATADIR) -m dll -p icudata -O $(DATABUILDDIR)/icupkg.inc $(TMPDATADIR)/icudata.lst -d $(DATABUILDDIR) --clean ) \
+		(cd pkgdata ; $(INVOKE) ./pkgdata -T $(TMPDATADIR) -m dll -p icudata -O $(DATABUILDDIR)/icupkg.inc $(TMPDATADIR)/icudata.lst -d $(DATABUILDDIR) --clean ) \
 	fi
 	-@if [ -f $(TMPDATADIR)/icudata_common.mak ]; then \
-		(cd pkgdata; ./pkgdata -T $(TMPDATADIR) -m common -p icudata -O $(DATABUILDDIR)/icupkg.inc $(TMPDATADIR)/icudata.lst -d $(DATABUILDDIR) --clean ) \
+		(cd pkgdata; $(INVOKE) ./pkgdata -T $(TMPDATADIR) -m common -p icudata -O $(DATABUILDDIR)/icupkg.inc $(TMPDATADIR)/icudata.lst -d $(DATABUILDDIR) --clean ) \
 	fi
 	-@$(RMV) $(TMPDATADIR)
 
@@ -210,11 +210,10 @@ install-pkgdata: $(TMPDATADIR)/icudata.lst $(TMPDATADIR)/icupkg.inc
 
 
 clean-pkgdata:
-	@$(mkinstalldirs) $(TMPDATADIR)
-	-@(cd $(TMPDATADIR); $(INVOKE) $(PKGDATA) -p icudata ./icudata.lst --clean || echo '### Warning, cannot clean up icu/data if pkgdata is already gone.' )
-	-@(cd $(TMPDATADIR); $(INVOKE) $(PKGDATA) -p testdat1  ./testdata.lst --clean || echo '### Warning, cannot clean up icu/data if pkgdata is already gone.' )
-	-@(cd $(TMPDATADIR); $(INVOKE) $(PKGDATA) -p testdat2  ./testdata.lst --clean || echo '### Warning, cannot clean up icu/data if pkgdata is already gone.' )
-	-$(RMV) $(TMPDATADIR)/icudata.lst $(TMPDATADIR)/icupkg.inc 
+	-(cd $(TMPDATADIR); $(INVOKE) $(PKGDATA) -p icudata ./icudata.lst --clean || echo '### Warning, cannot clean up icu/data if pkgdata is already gone.' )
+	-(cd $(TMPDATADIR); $(INVOKE) $(PKGDATA) -p testdat1  ./testdata.lst --clean || echo '### Warning, cannot clean up icu/data if pkgdata is already gone.' )
+	-(cd $(TMPDATADIR); $(INVOKE) $(PKGDATA) -p testdat2  ./testdata.lst --clean || echo '### Warning, cannot clean up icu/data if pkgdata is already gone.' )
+	-$(RMV) $(TMPDATADIR)/icudata.lst $(TMPDATADIR)/testdata.lst $(TMPDATADIR)/icupkg.inc 
 
 check-local:
 
