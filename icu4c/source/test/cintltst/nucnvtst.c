@@ -66,7 +66,7 @@ static void TestConv(const uint16_t in[],
                      const char* lang, 
                      char byteArr[],
                      int byteArrLen);
-
+static void TestRoundTrippingAllUTF();
 static void TestCoverageMBCS(void);
 
 void addTestNewConvert(TestNode** root);
@@ -2738,10 +2738,10 @@ static void TestConv(const uint16_t in[],int len, const char* conv, const char* 
     const char *cTargetLimit;
     char *cBuf;
     UChar *uBuf,*test;
-    int32_t uBufSize = 120;
+    int32_t uBufSize = 120*10;
     UErrorCode errorCode=U_ZERO_ERROR;
     UConverter *cnv;
-    int32_t* offsets = (int32_t*) malloc(uBufSize * sizeof(int32_t) * 5);
+    int32_t* offsets = (int32_t*) malloc(uBufSize * sizeof(int32_t) );
     int32_t* myOff= offsets;
     cnv=ucnv_open(conv, &errorCode);
     if(U_FAILURE(errorCode)) {
@@ -2749,20 +2749,20 @@ static void TestConv(const uint16_t in[],int len, const char* conv, const char* 
         return;
     }
 
-    uBuf =  (UChar*)malloc(uBufSize * sizeof(UChar)*5);
-    cBuf =(char*)malloc(uBufSize * sizeof(char) * 5);
+    uBuf =  (UChar*)malloc(uBufSize * sizeof(UChar));
+    cBuf =(char*)malloc(uBufSize * sizeof(char));
     uSource = (const UChar*)&in[0];
     uSourceLimit=uSource+len;
     cTarget = cBuf;
-    cTargetLimit = cBuf +uBufSize*5;
+    cTargetLimit = cBuf +uBufSize;
     uTarget = uBuf;
-    uTargetLimit = uBuf+ uBufSize*5;
+    uTargetLimit = uBuf+ uBufSize;
     ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&uSource,uSourceLimit,myOff,TRUE, &errorCode);
     if(U_FAILURE(errorCode)){
         log_err("ucnv_fromUnicode conversion failed reason %s\n", u_errorName(errorCode));
         return;
     }
-    log_verbose("length of compressed string for language %s using %s:%i \n",conv,lang,(cTarget-cBuf));
+    /*log_verbose("length of compressed string for language %s using %s:%i \n",conv,lang,(cTarget-cBuf));*/
     cSource = cBuf;
     cSourceLimit =cTarget;
     test =uBuf;
@@ -2776,7 +2776,7 @@ static void TestConv(const uint16_t in[],int len, const char* conv, const char* 
     uSource = (const UChar*)&in[0];
     while(uSource<uSourceLimit){
         if(*test!=*uSource){
-            log_err("Expected : \\u%04X \t Got: \\u%04X\n",*uSource,(int)*test) ;
+            log_err("for codeapge %s : Expected : \\u%04X \t Got: \\u%04X\n",conv,*uSource,(int)*test) ;
         }
         uSource++;
         test++;
@@ -2814,6 +2814,56 @@ static void TestConv(const uint16_t in[],int len, const char* conv, const char* 
     free(cBuf);
     free(offsets);
 }
+static UChar
+_charAt(int32_t offset, void *context) {
+    return ((char*)context)[offset];
+}
+
+static int32_t
+unescape(UChar* dst, int32_t dstLen,const char* src,int32_t srcLen,UErrorCode *status){
+    int32_t srcIndex=0;
+    int32_t dstIndex=0;
+    if(U_FAILURE(*status)){
+        return 0;
+    }
+    if((dst==NULL && dstLen>0) || (src==NULL ) || dstLen < -1 || srcLen <-1 ){
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+    if(srcLen==-1){
+        srcLen = uprv_strlen(src);
+    }
+
+    for (; srcIndex<srcLen; ) {
+        UChar32 c = src[srcIndex++];
+        if (c == 0x005C /*'\\'*/) {
+            c = u_unescapeAt(_charAt,&srcIndex,srcLen,(void*)src); /* advances i*/
+            if (c == (UChar32)0xFFFFFFFF) {
+                *status=U_INVALID_CHAR_FOUND; /* return empty string */
+                break; /* invalid escape sequence */
+            }
+        }
+        if(dstIndex < dstLen){
+            if(c>0xFFFF){
+               dst[dstIndex++] = UTF16_LEAD(c);
+               if(dstIndex<dstLen){
+                    dst[dstIndex]=UTF16_TRAIL(c);
+               }else{
+                   *status=U_BUFFER_OVERFLOW_ERROR;
+               }
+            }else{
+                dst[dstIndex]=(UChar)c;
+            }
+
+        }else{
+            *status = U_BUFFER_OVERFLOW_ERROR;
+        }
+        dstIndex++; /* for preflighting */
+    }
+    return dstIndex;
+}
+
+
 static void
 TestSCSU() {
 
@@ -2913,7 +2963,9 @@ TestSCSU() {
         0xD869, 0xDEC1, 0xD869, 0xDEC2, 0xD869, 0xDEC3, 0xD869, 0xDEC4, 0xD869, 0xDEC8, 
         0xD869, 0xDECA, 0xD869, 0xDECB, 0xD869, 0xDECD, 0xD869, 0xDECE, 0xD869, 0xDECF, 
         0xD869, 0xDED0, 0xD869, 0xDED1, 0xD869, 0xDED2, 0xD869, 0xDED3, 0xD869, 0xDED4, 
-        0xD869, 0xDED5, 
+        0xD869, 0xDED5, 0xD800, 0xDC00, 0xD800, 0xDC00, 0xD800, 0xDC00, 0xDBFF, 0xDFFF,
+        0xDBFF, 0xDFFF, 0xDBFF, 0xDFFF,
+
 
         0x4DB3, 0x4DB4, 0x4DB5, 0x4E00, 0x4E00, 0x4E01, 0x4E02, 0x4E03, 0x000D, 0x000A,
         0x0392, 0x0393, 0x0394, 0x0395, 0x0396, 0x0397, 0x33E0, 0x33E6, 0x000D, 0x000A,
@@ -2921,6 +2973,67 @@ TestSCSU() {
         0x4E0C, 0x0021, 0x0022, 0x0023, 0x0024, 0xFF40, 0xFF41, 0xFF42, 0x000D, 0x000A,
         0xFF43, 0xFF44, 0xFF45, 0xFF46, 0xFF47, 0xFF48, 0xFF49, 0xFF4A, 0x000D, 0x000A,
     };
+    static const char *fTestCases [] = {
+          "\\ud800\\udc00", /* smallest surrogate*/
+          "\\ud8ff\\udcff",
+          "\\udBff\\udFff", /* largest surrogate pair*/
+          "\\ud834\\udc00",
+          "\\U10FFFF",
+          "Hello \\u9292 \\u9192 World!",
+          "Hell\\u0429o \\u9292 \\u9192 W\\u00e4rld!",
+          "Hell\\u0429o \\u9292 \\u9292W\\u00e4rld!",
+  
+          "\\u0648\\u06c8", /* catch missing reset*/
+          "\\u0648\\u06c8",
+  
+          "\\u4444\\uE001", /* lowest quotable*/
+          "\\u4444\\uf2FF", /* highest quotable*/
+          "\\u4444\\uf188\\u4444",
+          "\\u4444\\uf188\\uf288",
+          "\\u4444\\uf188abc\\u0429\\uf288",
+          "\\u9292\\u2222",
+          "Hell\\u0429\\u04230o \\u9292 \\u9292W\\u00e4\\u0192rld!",
+          "Hell\\u0429o \\u9292 \\u9292W\\u00e4rld!",
+          "Hello World!123456",
+          "Hello W\\u0081\\u011f\\u0082!", /* Latin 1 run*/
+  
+          "abc\\u0301\\u0302",  /* uses SQn for u301 u302*/
+          "abc\\u4411d",      /* uses SQU*/
+          "abc\\u4411\\u4412d",/* uses SCU*/
+          "abc\\u0401\\u0402\\u047f\\u00a5\\u0405", /* uses SQn for ua5*/
+          "\\u9191\\u9191\\u3041\\u9191\\u3041\\u3041\\u3000", /* SJIS like data*/
+          "\\u9292\\u2222",
+          "\\u9191\\u9191\\u3041\\u9191\\u3041\\u3041\\u3000",
+          "\\u9999\\u3051\\u300c\\u9999\\u9999\\u3060\\u9999\\u3065\\u3065\\u3065\\u300c",
+          "\\u3000\\u266a\\u30ea\\u30f3\\u30b4\\u53ef\\u611b\\u3044\\u3084\\u53ef\\u611b\\u3044\\u3084\\u30ea\\u30f3\\u30b4\\u3002",
+  
+          "", /* empty input*/
+          "\\u0000", /* smallest BMP character*/
+          "\\uFFFF", /* largest BMP character*/
+  
+          /* regression tests*/
+          "\\u6441\\ub413\\ua733\\uf8fe\\ueedb\\u587f\\u195f\\u4899\\uf23d\\u49fd\\u0aac\\u5792\\ufc22\\ufc3c\\ufc46\\u00aa",
+          "\\u00df\\u01df\\uf000\\udbff\\udfff\\u000d\n\\u0041\\u00df\\u0401\\u015f\\u00df\\u01df\\uf000\\udbff\\udfff",
+          "\\u30f9\\u8321\\u05e5\\u181c\\ud72b\\u2019\\u99c9\\u2f2f\\uc10c\\u82e1\\u2c4d\\u1ebc\\u6013\\u66dc\\ubbde\\u94a5\\u4726\\u74af\\u3083\\u55b9\\u000c",
+          "\\u0041\\u00df\\u0401\\u015f",
+          "\\u9066\\u2123abc",
+          "\\ud266\\u43d7\\u\\ue386\\uc9c0\\u4a6b\\u9222\\u901f\\u7410\\ua63f\\u539b\\u9596\\u482e\\u9d47\\ucfe4\\u7b71\\uc280\\uf26a\\u982f\\u862a\\u4edd\\uf513\\ufda6\\u869d\\u2ee0\\ua216\\u3ff6\\u3c70\\u89c0\\u9576\\ud5ec\\ubfda\\u6cca\\u5bb3\\ubcea\\u554c\\u914e\\ufa4a\\uede3\\u2990\\ud2f5\\u2729\\u5141\\u0f26\\uccd8\\u5413\\ud196\\ubbe2\\u51b9\\u9b48\\u0dc8\\u2195\\u21a2\\u21e9\\u00e4\\u9d92\\u0bc0\\u06c5",
+          "\\uf95b\\u2458\\u2468\\u0e20\\uf51b\\ue36e\\ubfc1\\u0080\\u02dd\\uf1b5\\u0cf3\\u6059\\u7489",
+    };
+    int i=0;
+    for(;i<sizeof(fTestCases)/sizeof(*fTestCases);i++){
+        const char* cSrc = fTestCases[i];
+        UErrorCode status = U_ZERO_ERROR;
+        int32_t cSrcLen,srcLen;
+        UChar* src;
+        //UConverter* cnv = ucnv_open("SCSU",&status);
+        cSrcLen= srcLen =  uprv_strlen(fTestCases[i]);
+        src = (UChar*) uprv_malloc(sizeof(UChar) * srcLen);
+        srcLen=unescape(src,srcLen,cSrc,cSrcLen,&status);
+        log_verbose("Testing roundtrip for src: %s at index :%d\n",cSrc,i);
+        TestConv(src,srcLen,"SCSU","Coverage",NULL,0);
+        uprv_free(src);
+    }
     TestConv(allFeaturesUTF16,(sizeof(allFeaturesUTF16)/2),"SCSU","all features", (char *)allFeaturesSCSU,sizeof(allFeaturesSCSU));
     TestConv(allFeaturesUTF16,(sizeof(allFeaturesUTF16)/2),"SCSU","all features",(char *)allFeaturesSCSU,sizeof(allFeaturesSCSU));
     TestConv(japaneseUTF16,(sizeof(japaneseUTF16)/2),"SCSU","japaneese",(char *)japaneseSCSU,sizeof(japaneseSCSU));
