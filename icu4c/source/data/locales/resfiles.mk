@@ -19,14 +19,14 @@
 #  * To REPLACE the default list and only build with a few
 #     locale:
 #    _____________________________________________________
-#    |  GENRB_SOURCE = root.txt index.txt ar.txt ar_AE.txt
+#    |  GENRB_SOURCE = ar.txt ar_AE.txt en.txt de.txt zh.txt
 #
 #
 
 
 # This is the list of locales that are built, but not considered installed in ICU.
 # These are usually aliased locales or the root locale.
-GENRB_ALIAS_SOURCE = root.txt\
+GENRB_ALIAS_SOURCE = \
 iw.txt iw_IL.txt\
 no.txt no_NO.txt no_NO_NY.txt
 

@@ -190,10 +190,10 @@ GENRB_SOURCE=$(GENRB_SOURCE) $(GENRB_SOURCE_LOCAL)
 !ERROR ERROR: cannot find "resfiles.mk"
 !ENDIF
 
-RB_FILES = $(GENRB_ALIAS_SOURCE:.txt=.res) $(GENRB_SOURCE:.txt=.res)
+RB_FILES = root.res $(GENRB_ALIAS_SOURCE:.txt=.res) $(GENRB_SOURCE:.txt=.res)
 
 # The installed locales don't have aliased locales
-INSTALLED_RB_FILES = $(GENRB_SOURCE:.txt=,) $(GENRB_SOURCE_LOCAL:.txt=,)
+INSTALLED_RB_FILES = $(GENRB_SOURCE:.txt=,)
 
 # Read list of transliterator resource bundle files
 !IF EXISTS("$(ICUSRCDATA)\$(ICUTRNS)\trnsfiles.mk")
