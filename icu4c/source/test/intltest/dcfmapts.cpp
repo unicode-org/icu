@@ -29,7 +29,13 @@ void IntlTestDecimalFormatAPI::runIndexedTest( int32_t index, UBool exec, char* 
                     testAPI(par);
                 }
                 break;
-
+		case 1: name = "Rounding test";
+			if(exec) {
+			   logln((UnicodeString)"DecimalFormat Rounding test---");
+               testRounding(par);
+			}
+			break;
+	
         default: name = ""; break;
     }
 }
@@ -219,11 +225,45 @@ void IntlTestDecimalFormatAPI::testAPI(char *par)
     }
 
     pat.setDecimalSeparatorAlwaysShown(TRUE);
-    UBool tf = pat.isDecimalSeparatorAlwaysShown();
+    bool_t tf = pat.isDecimalSeparatorAlwaysShown();
     logln((UnicodeString)"DecimalSeparatorIsAlwaysShown (should be TRUE) is " + (UnicodeString) (tf ? "TRUE" : "FALSE"));
     if(tf != TRUE) {
         errln((UnicodeString)"ERROR: setDecimalSeparatorAlwaysShown() failed");
     }
+	// Added by Ken Liu testing set/isExponentSignAlwaysShown
+	pat.setExponentSignAlwaysShown(TRUE);
+    bool_t esas = pat.isExponentSignAlwaysShown();
+    logln((UnicodeString)"ExponentSignAlwaysShown (should be TRUE) is " + (UnicodeString) (esas ? "TRUE" : "FALSE"));
+    if(esas != TRUE) {
+        errln((UnicodeString)"ERROR: ExponentSignAlwaysShown() failed");
+    }
+
+    // Added by Ken Liu testing set/isScientificNotation
+    pat.setScientificNotation(TRUE);
+    UBool sn = pat.isScientificNotation();
+    logln((UnicodeString)"isScientificNotation (should be TRUE) is " + (UnicodeString) (sn ? "TRUE" : "FALSE"));
+    if(sn != TRUE) {
+        errln((UnicodeString)"ERROR: setScientificNotation() failed");
+    }
+    
+	// Added by Ken Liu testing set/getMinimumExponentDigits
+	int8_t MinimumExponentDigits = 0;
+    pat.setMinimumExponentDigits(2);
+    MinimumExponentDigits = pat.getMinimumExponentDigits();
+    logln((UnicodeString)"MinimumExponentDigits (should be 2) is " + (int8_t) MinimumExponentDigits);
+    if(MinimumExponentDigits != 2) {
+        errln((UnicodeString)"ERROR: setMinimumExponentDigits() failed");
+    }
+
+	// Added by Ken Liu testing set/getRoundingIncrement
+	double RoundingIncrement = 0.0;
+    pat.setRoundingIncrement(2.0);
+    RoundingIncrement = pat.getRoundingIncrement();
+    logln((UnicodeString)"RoundingIncrement (should be 2.0) is " + (double) RoundingIncrement);
+    if(RoundingIncrement != 2.0) {
+        errln((UnicodeString)"ERROR: setRoundingIncrement() failed");
+    }
+    //end of Ken's Adding
 
     UnicodeString funkyPat;
     funkyPat = pat.toPattern(funkyPat);
@@ -280,4 +320,59 @@ void IntlTestDecimalFormatAPI::testAPI(char *par)
     }
 
     delete test;
+}
+
+void IntlTestDecimalFormatAPI::testRounding(char *par)
+{
+    UErrorCode status = U_ZERO_ERROR;
+	double Roundingnumber = 2.55;
+	double Roundingnumber1 = -2.55;
+	                  //+2.55 results   -2.55 results
+	double result[]={   3.0,            -2.0,    //  kRoundCeiling  0,
+                        2.0,            -3.0,    //  kRoundFloor    1,
+					    2.0,	        -2.0,    //  kRoundDown     2,	
+					    3.0,            -3.0,    //  kRoundUp       3,
+					    3.0,            -3.0,    //  kRoundHalfEven 4,
+					    3.0,            -3.0,    //  kRoundHalfDown 5,
+						3.0, 	        -3.0     //  kRoundHalfUp   6 
+	};
+	DecimalFormat pat(status);
+    if(U_FAILURE(status)) {
+        errln((UnicodeString)"ERROR: Could not create DecimalFormat (default)");
+    }
+	uint16_t mode;
+	uint16_t i=0;
+	UnicodeString message;
+	UnicodeString resultStr;
+	for(mode=0;mode < 7;mode++){
+		pat.setRoundingMode((DecimalFormat::ERoundingMode)mode);
+		if(pat.getRoundingMode() != (DecimalFormat::ERoundingMode)mode){
+			errln((UnicodeString)"SetRoundingMode or GetRoundingMode failed for mode=" + mode);
+		}
+
+       
+		//for +2.55 with RoundingIncrement=1.0
+		pat.setRoundingIncrement(1.0);
+		pat.format(Roundingnumber, resultStr);
+		message= (UnicodeString)"round(" + (double)Roundingnumber + UnicodeString(",") + mode + UnicodeString(",FALSE) with RoundingIncrement=1.0==>");
+		verify(message, resultStr, result[i++]);	
+		message.remove();
+		resultStr.remove();
+		        
+		//for -2.55 with RoundingIncrement=1.0
+		pat.format(Roundingnumber1, resultStr);
+		message= (UnicodeString)"round(" + (double)Roundingnumber1 + UnicodeString(",") + mode + UnicodeString(",FALSE) with RoundingIncrement=1.0==>");
+		verify(message, resultStr, result[i++]);
+		message.remove();
+		resultStr.remove();
+	}
+
+}
+void IntlTestDecimalFormatAPI::verify(const UnicodeString& message, const UnicodeString& got, double expected){
+	logln((UnicodeString)message + got + (UnicodeString)" Expected : " + expected);
+	UnicodeString expectedStr("");
+	expectedStr=expectedStr + expected;
+	if(got != expectedStr ) {
+			errln((UnicodeString)"ERROR: Round() failed:  " + message + got + (UnicodeString)"  Expected : " + expectedStr);
+		}
 }

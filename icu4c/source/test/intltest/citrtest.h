@@ -21,6 +21,10 @@ public:
      **/
     void TestConstructionAndEquality(void);
     /**
+     * Test Constructors and operators ==, != and a few other methods for UChariter
+     **/
+    void TestConstructionAndEqualityUChariter(void);
+    /**
      * test the iteration functionality in different ways
      **/
     void TestIteration(void);

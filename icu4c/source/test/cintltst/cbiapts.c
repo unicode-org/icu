@@ -36,9 +36,10 @@ void addBrkIterAPITest(TestNode** root)
 void TestBreakIteratorCAPI()
 {
     UErrorCode status = U_ZERO_ERROR;
-    UBreakIterator *word, *sentence, *line, *character, *b;
+    UBreakIterator *word, *sentence, *line, *character, *b, *bogus;
     UChar text[50];
     UTextOffset start,pos,end,to;
+    int32_t i;
     int32_t count = 0;
     u_uastrcpy(text, "He's from Africa. ""Mr. Livingston, I presume?"" Yeah");
     status  = U_ZERO_ERROR;
@@ -63,7 +64,7 @@ void TestBreakIteratorCAPI()
         log_verbose("PASS: Successfully opened  sentence breakiterator\n");
     }
     
-    line         = ubrk_open(UBRK_SENTENCE, "en_US", text, u_strlen(text), &status);
+    line         = ubrk_open(UBRK_LINE, "en_US", text, u_strlen(text), &status);
     if(U_FAILURE(status)){
         log_err("FAIL: Error in ubrk_open() for line breakiterator: %s\n", myErrorName(status));
     }
@@ -71,15 +72,27 @@ void TestBreakIteratorCAPI()
         log_verbose("PASS: Successfully opened  line breakiterator\n");
     }
     
-    character     = ubrk_open(UBRK_SENTENCE, "en_US", text, u_strlen(text), &status);
+    character     = ubrk_open(UBRK_CHARACTER, "en_US", text, u_strlen(text), &status);
     if(U_FAILURE(status)){
         log_err("FAIL: Error in ubrk_open() for character breakiterator: %s\n", myErrorName(status));
     }
     else{
         log_verbose("PASS: Successfully opened  character breakiterator\n");
     }
+    /*trying to open an illegal iterator*/
+    bogus     = ubrk_open(4, "en_US", text, u_strlen(text), &status);
+    if(U_SUCCESS(status)){
+        log_err("FAIL: Error in ubrk_open() for BOGUS breakiterator. Expected U_MEMORY_ALLOCATION_ERROR");
+    }
+    if(U_FAILURE(status)){
+        if(status != U_MEMORY_ALLOCATION_ERROR){
+            log_err("FAIL: Error in ubrk_open() for BOGUS breakiterator. Expected U_MEMORY_ALLOCATION_ERROR\n Got %s\n", myErrorName(status));
+        }
+    }
+    status=U_ZERO_ERROR;
 
-/* ======= Test ubrk_countAvialable() and ubrk_getAvilable() */
+
+/* ======= Test ubrk_countAvialable() and ubrk_getAvialable() */
 
     log_verbose("\nTesting ubrk_countAvailable() and ubrk_getAvailable()\n");
     count=ubrk_countAvailable();
@@ -90,7 +103,14 @@ void TestBreakIteratorCAPI()
     else{
         log_verbose("PASS: ubrk_countAvialable() successful returned %d\n", count);
     }
-
+    for(i=0;i<count;i++)
+	{
+        log_verbose("%s\n", ubrk_getAvailable(i)); 
+		if (ubrk_getAvailable(i) == 0)
+			log_err("No locale for which breakiterator is applicable\n");
+		else 
+			log_verbose("A locale %s for which breakiterator is applicable\n",ubrk_getAvailable(i));
+	}
 
 /*========Test ubrk_first(), ubrk_last()...... and other functions*/
   
@@ -125,25 +145,24 @@ void TestBreakIteratorCAPI()
     log_verbose("\nTesting the functions for character\n");
     ubrk_first(character);
     pos = ubrk_following(character, 5);
-    if(pos!=18)
-       log_err("error ubrk_following(character,5) did not return 18\n");
+    if(pos!=6)
+       log_err("error ubrk_following(character,5) did not return 6\n");
     log_verbose("Following (character,5) = %d\n", (int32_t)pos);
     pos=ubrk_following(character, 18);
-    if(pos!=22)
-       log_err("error ubrk_following(character,18) did not return 22\n");
+    if(pos!=19)
+       log_err("error ubrk_following(character,18) did not return 19\n");
     log_verbose("Followingcharacter,18) = %d\n", (int32_t)pos);
     pos=ubrk_preceding(character, 22);
-    if(pos!=18)
-       log_err("error ubrk_preceding(character,22) did not return 18\n");
+    if(pos!=21)
+       log_err("error ubrk_preceding(character,22) did not return 21\n");
     log_verbose("preceding(character,22) = %d\n", (int32_t)pos);
     
 
     log_verbose("\nTesting the functions for line\n");
-    ubrk_first(line);
+    pos=ubrk_first(line);
+    if(pos != 0)
+        log_err("error ubrk_first(line) returned %d, expected 0\n", (int32_t)pos);
     pos = ubrk_next(line);
-    if(pos!=18)
-        log_err("error ubrk_next(line) did not return 18\n");
-    log_verbose("Next (line) = %d\n", (int32_t)pos);
     pos=ubrk_following(line, 18);
     if(pos!=22)
         log_err("error ubrk_following(line) did not return 22\n");

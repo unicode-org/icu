@@ -73,10 +73,11 @@ void setNuConvTestName(const char *codepage, const char *direction)
 void addTestConvertErrorCallBack(TestNode** root)
 {
    addTest(root, &TestSkipCallBack,  "tsconv/nccbtst/TestSkipCallBack");
+   addTest(root, &TestStopCallBack,  "tsconv/nccbtst/TestStopCallBack");
    addTest(root, &TestSubCallBack,   "tsconv/nccbtst/TestSubCallBack");
    addTest(root, &TestSubWithValueCallBack, "tsconv/nccbtst/TestSubWithValueCallBack");
    addTest(root, &TestLegalAndOtherCallBack,  "tsconv/nccbtst/TestLegalAndOtherCallBack");
-	addTest(root, &TestSingleByteCallBack,  "tsconv/nccbtst/TestSingleByteCallBack");
+   addTest(root, &TestSingleByteCallBack,  "tsconv/nccbtst/TestSingleByteCallBack");
 }
 
 void TestSkipCallBack()
@@ -85,6 +86,13 @@ void TestSkipCallBack()
      TestSkip(1,NEW_MAX_BUFFER);
      TestSkip(1,1);
      TestSkip(NEW_MAX_BUFFER, 1);
+}
+void TestStopCallBack()
+{
+	 TestStop(NEW_MAX_BUFFER, NEW_MAX_BUFFER);
+     TestStop(1,NEW_MAX_BUFFER);
+     TestStop(1,1);
+     TestStop(NEW_MAX_BUFFER, 1);
 }
 void TestSubCallBack()
 {
@@ -171,6 +179,64 @@ void TestSkip(int32_t inputsize, int32_t outputsize)
 			 IBM_930skiptoUnicode, sizeof(IBM_930skiptoUnicode)/sizeof(IBM_930skiptoUnicode[0]),"ibm-930",
 	        (UConverterToUCallback)UCNV_TO_U_CALLBACK_SKIP, fromIBM930Offs ))
 		log_err("ibm-930->u with skip did not match.\n");
+
+}
+void TestStop(int32_t inputsize, int32_t outputsize)
+{
+	UChar	sampleText[] =  { 0x0000, 0xAC00, 0xAC01, 0xEF67, 0xD700 };
+	UChar  sampleText2[] =  { 0x6D63, 0x6D64, 0x6D65, 0x6D66 };
+
+	const char expstopIBM_949[]= { 
+		(char)0x00, (char)0xb0, (char)0xa1, (char)0xb0, (char)0xa2};
+	
+	const char expstopIBM_943[] = { 
+		(char)0x9f, (char)0xaf, (char)0x9f, (char)0xb1};
+	
+	const char expstopIBM_930[] = { 
+		(char)0x0e, (char)0x5d, (char)0x5f, (char)0x5d, (char)0x63};
+	
+	UChar IBM_949stoptoUnicode[]= {0x0000, 0xAC00, 0xAC01};
+	UChar IBM_943stoptoUnicode[]= { 0x6D63, 0x6D64};
+	UChar IBM_930stoptoUnicode[]= { 0x6D63, 0x6D64};
+
+
+	int32_t  toIBM949Offsstop [] = { 0, 1, 1, 2, 2};
+	int32_t  toIBM943Offsstop [] = { 0, 0, 1, 1};
+	int32_t  toIBM930Offsstop [] = { 0, 0, 0, 1, 1};
+	
+    int32_t  fromIBM949Offs [] = { 0, 1, 3};
+	int32_t  fromIBM943Offs [] = { 0, 2};
+	int32_t  fromIBM930Offs [] = { 1, 3};
+
+	gInBufferSize = inputsize;
+	gOutBufferSize = outputsize;
+	/*From Unicode*/
+	if(!testConvertFromUnicode(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
+			expstopIBM_949, sizeof(expstopIBM_949), "ibm-949",
+	        (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_STOP, toIBM949Offsstop ))
+		log_err("u-> ibm-949 with stop did not match.\n");
+	if(!testConvertFromUnicode(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
+			expstopIBM_943, sizeof(expstopIBM_943), "ibm-943",
+	        (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_STOP, toIBM943Offsstop ))
+		log_err("u-> ibm-943 with stop did not match.\n");
+	if(!testConvertFromUnicode(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
+			expstopIBM_930, sizeof(expstopIBM_930), "ibm-930",
+	        (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_STOP, toIBM930Offsstop ))
+		log_err("u-> ibm-930 with stop did not match.\n");
+
+	/*to Unicode*/
+	if(!testConvertToUnicode(expstopIBM_949, sizeof(expstopIBM_949),
+			 IBM_949stoptoUnicode, sizeof(IBM_949stoptoUnicode)/sizeof(IBM_949stoptoUnicode),"ibm-949",
+	        (UConverterToUCallback)UCNV_TO_U_CALLBACK_STOP, fromIBM949Offs ))
+		log_err("ibm-949->u with stop did not match.\n");
+    if(!testConvertToUnicode(expstopIBM_943, sizeof(expstopIBM_943),
+			 IBM_943stoptoUnicode, sizeof(IBM_943stoptoUnicode)/sizeof(IBM_943stoptoUnicode[0]),"ibm-943",
+	        (UConverterToUCallback)UCNV_TO_U_CALLBACK_STOP, fromIBM943Offs ))
+		log_err("ibm-943->u with stop did not match.\n");
+    if(!testConvertToUnicode(expstopIBM_930, sizeof(expstopIBM_930),
+			 IBM_930stoptoUnicode, sizeof(IBM_930stoptoUnicode)/sizeof(IBM_930stoptoUnicode[0]),"ibm-930",
+	        (UConverterToUCallback)UCNV_TO_U_CALLBACK_STOP, fromIBM930Offs ))
+		log_err("ibm-930->u with stop did not match.\n");
 
 }
 void TestSub(int32_t inputsize, int32_t outputsize)
@@ -437,15 +503,36 @@ UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const char *ex
 			      checkOffsets ? offs : NULL,
 			      doFlush, /* flush if we're at the end of the input data */
 			      &status);
-	
-	  } while ( (status == U_INDEX_OUTOFBOUNDS_ERROR) || (sourceLimit < realSourceEnd) );
-	    
-	 if(U_FAILURE(status))
-	  {
-	    log_err("Problem tdoing fromUnicode, errcode %d %s\n", myErrorName(status), gNuConvTestName);
-	    return FALSE;
-	  }
 
+      /*check for an INVALID character for testing the call back function STOP*/
+	 if(status == U_INVALID_CHAR_FOUND || status == U_ILLEGAL_CHAR_FOUND  )
+     {
+		for(p = junkout;p<targ;p++)
+		  sprintf(junk + strlen(junk), "0x%02x, ", (0xFF) & (unsigned int)*p);
+		/*		printSeqErr(junkout, expectlen);*/
+		if(!memcmp(junkout, expect, expectLen))
+		{
+		log_verbose("Matches!\n");
+		return TRUE;
+		}
+		else
+		{	
+		log_err("String does not match. %s\n", gNuConvTestName);
+		log_verbose("String does not match. %s\n", gNuConvTestName);
+		printSeq(junkout, expectLen);
+		printSeq(expect, expectLen);
+		return FALSE;
+		}
+		
+	} 
+	} while ( (status == U_INDEX_OUTOFBOUNDS_ERROR) || (sourceLimit < realSourceEnd) );
+	
+	if(U_FAILURE(status))
+	{
+		log_err("Problem doing toUnicode, errcode %d %s\n", myErrorName(status), gNuConvTestName);
+		return FALSE;
+	}
+   	
 	log_verbose("\nConversion done [%d uchars in -> %d chars out]. \nResult :",
 		sourceLen, targ-junkout);
 	if(VERBOSITY)
@@ -602,11 +689,8 @@ UBool testConvertToUnicode( const char *source, int sourcelen, const UChar *expe
 			    checkOffsets ? offs : NULL,
 			    (UBool)(srcLimit == realSourceEnd), /* flush if we're at the end of hte source data */
 			    &status);
-
-	   	   
-
-	  } while ( (status == U_INDEX_OUTOFBOUNDS_ERROR) || (srcLimit < realSourceEnd) ); /* while we just need another buffer */
-	/*check for an INVALID character for testing the call back function STOP*/
+        
+         /*check for an INVALID character for testing the call back function STOP*/
 	if(status == U_INVALID_CHAR_FOUND || status == U_ILLEGAL_CHAR_FOUND )
 	{
 		for(p = junkout;p<targ;p++)
@@ -627,6 +711,10 @@ UBool testConvertToUnicode( const char *source, int sourcelen, const UChar *expe
 		}
 		
 	}
+
+	  } while ( (status == U_INDEX_OUTOFBOUNDS_ERROR) || (srcLimit < realSourceEnd) ); /* while we just need another buffer */
+
+    
 	if(U_FAILURE(status))
 	{
 		log_err("Problem doing toUnicode, errcode %d %s\n", myErrorName(status), gNuConvTestName);

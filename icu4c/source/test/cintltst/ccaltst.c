@@ -68,7 +68,15 @@ void TestCalendar()
         }
         log_verbose("%s\n", austrdup(ucal_getAvailableTZIDs(offset, i, &status)));
     }
-
+    /*get Illegal TZID where index >= count*/
+    ucal_getAvailableTZIDs(offset, i, &status);
+    if(U_SUCCESS(status)){
+        log_err("FAIL: Expected U_INDEX_OUTOFBOUNDS_ERROR where index > count for TZID's");
+    }
+    if(status != U_INDEX_OUTOFBOUNDS_ERROR){
+        log_err("FAIL:for TZID index > count Expected INDEX_OUTOFBOUNDS_ERROR Got %s\n", myErrorName(status));
+    }
+    status=U_ZERO_ERROR;
     
 
     /*Testing the  ucal_open() function*/
@@ -106,8 +114,8 @@ void TestCalendar()
     else
         log_err("FAIL: Error in countAvialable()\n");
 
-    /*for(i=0;i<count;i++) */
-        /*log_verbose("%s\n", uloc_getName(ucal_getAvailable(i))); */
+    for(i=0;i<count;i++) 
+       log_verbose("%s\n", ucal_getAvailable(i)); 
     
 
     /*Testing the equality between calendar's*/
@@ -160,10 +168,27 @@ void TestCalendar()
         log_verbose("PASS: got the correct time zone display name %s\n", austrdup(result) );
     }
     else{
-        log_err("FAIL: got the wrong time zone display name %s, wanted %s\n", austrdup(result) , expectPDT);
+        log_err("FAIL: got the wrong time zone(DST) display name %s, wanted %s\n", austrdup(result) , expectPDT);
+    }
+    
+    ucal_getTimeZoneDisplayName(caldef, UCAL_SHORT_DST, "en_US", result, resultlength, &status);
+    u_uastrcpy(tzdname, "PDT");
+    if(u_strcmp(tzdname, result) != 0){
+        log_err("FAIL: got the wrong time zone(SHORT_DST) display name %s, wanted %s\n", austrdup(result), austrdup(tzdname));
     }
 
+    ucal_getTimeZoneDisplayName(caldef, UCAL_STANDARD, "en_US", result, resultlength, &status);
+    u_uastrcpy(tzdname, "Pacific Standard Time");
+    if(u_strcmp(tzdname, result) != 0){
+        log_err("FAIL: got the wrong time zone(STANDARD) display name %s, wanted %s\n", austrdup(result), austrdup(tzdname));
+    }
 
+    ucal_getTimeZoneDisplayName(caldef, UCAL_SHORT_STANDARD, "en_US", result, resultlength, &status);
+    u_uastrcpy(tzdname, "PST");
+    if(u_strcmp(tzdname, result) != 0){
+        log_err("FAIL: got the wrong time zone(SHORT_STANDARD) display name %s, wanted %s\n", austrdup(result), austrdup(tzdname));
+    }
+    
     
     /*testing the setAttributes and getAttributes of a UCalendar*/
     log_verbose("\nTesting the getAttributes and set Attributes\n");
@@ -188,6 +213,11 @@ void TestCalendar()
         ucal_setAttribute(calit, UCAL_FIRST_DAY_OF_WEEK,i);
         if (ucal_getAttribute(calit, UCAL_FIRST_DAY_OF_WEEK) != i) 
             log_err("FAIL: set/getFirstDayOfWeek failed\n");
+    }
+    /*get bogus Attribute*/
+    count=ucal_getAttribute(calit, 99);//BOGUS_ATTRIBUTE
+    if(count != -1){
+        log_err("FAIL: get/bogus attribute should return -1\n");
     }
 
     /*set it back to normal */
@@ -782,6 +812,13 @@ void TestGetLimits()
         log_verbose("getLimits successful\n");    
 
     
+    /*get BOGUS_LIMIT type*/
+    val=ucal_getLimit(cal, UCAL_SECOND, 99, &status);
+    if(val != -1){
+        log_err("FAIL: ucal_getLimit() with BOGUS type should return -1\n");
+    }
+    status=U_ZERO_ERROR;
+
 
     ucal_close(cal);
     free(tzID);
