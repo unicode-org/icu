@@ -491,13 +491,13 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
     if (segments == NULL) {
         text.handleReplaceBetween(pos.start, keyLimit, output);
         lenDelta = output.length() - (keyLimit - pos.start);
-        if (cursorPos >= 0 && cursorPos < keyLength) {
-            // Within the key, the cursor refers to 16-bit code units
+        if (cursorPos >= 0 && cursorPos <= output.length()) {
+            // Within the output string, the cursor refers to 16-bit code units
             newStart = pos.start + cursorPos;
         } else {
             newStart = pos.start;
             int32_t n = cursorPos;
-            // Outside the key, cursorPos counts code points
+            // Outside the output string, cursorPos counts code points
             while (n > 0) {
                 newStart += UTF_CHAR_LENGTH(text.char32At(newStart));
                 --n;

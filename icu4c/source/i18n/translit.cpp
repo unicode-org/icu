@@ -253,17 +253,7 @@ void Transliterator::transliterate(Replaceable& text,
                                    UChar32 insertion,
                                    UErrorCode& status) const {
     UnicodeString str(insertion);
-    if (UTF_IS_LEAD(insertion)) {
-        // Oops, the caller passed us a single lead surrogate.  In
-        // general, we don't support this, but we'll do the caller a
-        // favor in the special case of LEAD followed by TRAIL
-        // insertion.  Anything else won't work.
-        text.handleReplaceBetween(index.limit, index.limit, str);
-        ++index.limit;
-        ++index.contextLimit;
-    } else {
-        _transliterate(text, index, &str, status);
-    }
+    _transliterate(text, index, &str, status);
 }
 
 /**
@@ -327,6 +317,15 @@ void Transliterator::_transliterate(Replaceable& text,
         text.handleReplaceBetween(index.limit, index.limit, *insertion);
         index.limit += insertion->length();
         index.contextLimit += insertion->length();
+    }
+
+    if (index.limit > 0 &&
+        UTF_IS_LEAD(text.charAt(index.limit - 1))) {
+        // Oops, there is a dangling lead surrogate in the buffer.
+        // This will break most transliterators, since they will
+        // assume it is part of a pari.  Don't transliterate until
+        // more text comes in.
+        return;
     }
 
     filteredTransliterate(text, index, TRUE);
