@@ -85,7 +85,7 @@
  * code point values (0..U+10ffff). They are indicated with negative values instead.
  *
  * For more information see the ICU User Guide Strings chapter
- * (http://oss.software.ibm.com/icu/userguide/).
+ * (http://icu.sourceforge.net/userguide/strings.html).
  *
  * <em>Usage:</em>
  * ICU coding guidelines for if() statements should be followed when using these macros.
