@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/NeutralToJ1Converter.java,v $ 
- * $Date: 2003/09/10 23:36:09 $ 
- * $Revision: 1.4 $
+ * $Date: 2003/11/21 19:46:25 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -61,7 +61,7 @@ public class NeutralToJ1Converter extends LocaleConverter {
 
     private static class CollationConversion extends Conversion {
         public String convert(Hashtable source) throws ConversionError {
-            Object[][] elements = (Object[][])source.get("CollationElements");
+            Object[][] elements = (Object[][])source.get("collations");
             CollationItem[] items = (CollationItem[])elements[2][1];
             if (items == null) {
                 return "";

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/PosixToNeutralConverter.java,v $ 
- * $Date: 2003/09/10 23:36:09 $ 
- * $Revision: 1.4 $
+ * $Date: 2003/11/21 19:46:25 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -942,7 +942,7 @@ public class PosixToNeutralConverter extends LocaleConverter {
     
     private void convertCOLLATE(Hashtable result, Hashtable source) {
         String[] sortOrder = (String[])source.get("sort_order");    
-        final Object[][] DEFAULT_COLLATION=(Object[][]) getDefault("CollationElements");
+        final Object[][] DEFAULT_COLLATION=(Object[][]) getDefault("collations");
         final Object[][] elements=(Object[][])clone2DArr(DEFAULT_COLLATION);        
         if (sortOrder != null) {
             if (!"forward".equals(sortOrder[0])) {
@@ -1023,7 +1023,7 @@ public class PosixToNeutralConverter extends LocaleConverter {
                 elements[1][1] = "false";
             }
             elements[2][1]=(Object)rules;
-            resultPut(result, "CollationElements", elements);
+            resultPut(result, "collations", elements);
         }
     }
         

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/data/TestDataElements_testaliases.java,v $
-* $Date: 2003/10/07 17:24:18 $
-* $Revision: 1.7 $
+* $Date: 2003/11/21 19:46:24 $
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -21,7 +21,7 @@ public class TestDataElements_testaliases extends ICUListResourceBundle {
     }
     static final Object[][] data = new Object[][] { 
                 {
-                    "CollationElements",
+                    "collations",
                     new ICUListResourceBundle.Alias("/ICUDATA/uk"),
                 },
 // Circular aliases test moved to TestCircularAliases
@@ -35,7 +35,7 @@ public class TestDataElements_testaliases extends ICUListResourceBundle {
 //                },
                 {
                     "anotheralias",
-                    new ICUListResourceBundle.Alias("/ICUDATA/uk/CollationElements"),
+                    new ICUListResourceBundle.Alias("/ICUDATA/uk/collations"),
                 },
 // Moved to TestNonExisting
 //                {

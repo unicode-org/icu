@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/JavaLocaleWriter.java,v $ 
- * $Date: 2002/02/16 03:05:29 $ 
- * $Revision: 1.2 $
+ * $Date: 2003/11/21 19:46:25 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -27,14 +27,14 @@ public class JavaLocaleWriter extends LocaleWriter {
         indent(3);
     }
     protected void write(String tag, Object o) {
-        if ("CollationElements".equals(tag)) {
+        if ("collations".equals(tag)) {
              writeTagged(tag,(Object[][])o);
         } else if (!(o instanceof CollationItem[])) {
             super.write(tag, o);
         } else {
             CollationItem[] items = (CollationItem[])o;
             print("{ ");
-            printString("CollationElements");
+            printString("collations");
             println(", ");
             for (int i = 0; i < items.length; i++) {
                 if(items[i]!=null){

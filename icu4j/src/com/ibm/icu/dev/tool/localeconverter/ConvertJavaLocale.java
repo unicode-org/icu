@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/ConvertJavaLocale.java,v $ 
- * $Date: 2003/09/10 23:36:09 $ 
- * $Revision: 1.5 $
+ * $Date: 2003/11/21 19:46:25 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -74,7 +74,7 @@ public class ConvertJavaLocale {
         "CurrencyElements",
         "DateTimePatterns",
         "DateTimeElements",   
-        "CollationElements",
+        "collations",
         "zoneStrings",
         "localPatternChars",
     };

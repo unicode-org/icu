@@ -1761,7 +1761,7 @@ public class SearchTest extends TestFmwk {
         int count = 0;
         while (SUPPLEMENTARY[count].text != null) {
             if (!assertEqual(SUPPLEMENTARY[count])) {
-                errln("Error at test number" + count);
+                errln("Error at test number " + count);
             }
             count ++;
         }

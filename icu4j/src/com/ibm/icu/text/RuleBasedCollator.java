@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $
-* $Date: 2003/11/18 17:53:53 $
-* $Revision: 1.51 $
+* $Date: 2003/11/21 19:46:25 $
+* $Revision: 1.52 $
 *
 *******************************************************************************
 */
@@ -28,6 +28,7 @@ import com.ibm.icu.impl.BOCU;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.impl.StringUCharacterIterator;
+import com.ibm.icu.impl.ICUListResourceBundle;
 
 /**
  * <p>RuleBasedCollator is a concrete subclass of Collator. It allows
@@ -1613,7 +1614,17 @@ public final class RuleBasedCollator extends Collator
         initUtility();
         if (rb != null) {
             try {
-                Object elements = rb.getObject("CollationElements");
+                // TODO: this is to be updated after the key word search
+                //       is implemented.
+                Object collkey 
+                    = ((ICUListResourceBundle)rb).getObjectWithFallback(
+                                                          "collations/default");
+                // collations/default will always give a string back
+                // keyword for the real collation data
+                // if "collations/collkey" will return null if collkey == null 
+                Object elements 
+                            = ((ICUListResourceBundle)rb).getObjectWithFallback(
+                                                       "collations/" + collkey);
                 if (elements != null) {
                     Object[][] rules = (Object[][])elements;
                     // %%CollationBin

@@ -21,6 +21,7 @@ import com.ibm.icu.dev.test.*;
 import com.ibm.icu.text.*;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.ICULocaleData;
+import com.ibm.icu.impl.ICUListResourceBundle;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -44,7 +45,12 @@ public class CollationMiscTest extends TestFmwk{
         ResourceBundle rb = ICULocaleData.getLocaleElements(locale);
         if (rb != null) {
             try {
-                 Object elements = rb.getObject("CollationElements");
+                 String collkey 
+                 = (String)((ICUListResourceBundle)rb).getObjectWithFallback(
+                                                       "collations/default"); 
+                 Object elements
+                 = ((ICUListResourceBundle)rb).getObjectWithFallback(
+                                                    "collations/" + collkey);
                  if (elements != null) {
                      return true;
                  }
@@ -1593,7 +1599,12 @@ public class CollationMiscTest extends TestFmwk{
             Locale l = locale[i];
             try {
                 ResourceBundle rb = ICULocaleData.getLocaleElements(l);
-                Object elements = rb.getObject("CollationElements");
+                String collkey 
+                    = (String)((ICUListResourceBundle)rb).getObjectWithFallback(
+                                                          "collations/default"); 
+                Object elements 
+                            = ((ICUListResourceBundle)rb).getObjectWithFallback(
+                                                       "collations/" + collkey);
                 if (elements == null) {
                     continue;
                 }
