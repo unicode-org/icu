@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/tools/normalizer/Attic/QuickCheckBuilder.java,v $ 
-* $Date: 2001/02/28 20:53:29 $ 
-* $Revision: 1.1 $
+* $Date: 2001/03/03 04:13:37 $ 
+* $Revision: 1.2 $
 *
 ******************************************************************************
 */
@@ -75,9 +75,16 @@ public class QuickCheckBuilder
     try
     {
       byte result[] = getQuickCheckArray(input);
+      int notyes[] = getNotYesFirstCP(result);
       ByteTrie trie = new ByteTrie(result);
       FileWriter f = new FileWriter(output);
       BufferedWriter w = new BufferedWriter(f);
+      
+      w.write("UChar32 UQUICK_CHECK_MIN_VALUES_[] = {");
+      w.write("0x" + Integer.toHexString(notyes[0]) + ", 0x" + 
+              Integer.toHexString(notyes[1]) + ", 0x" + 
+              Integer.toHexString(notyes[2]) + ", 0x" + 
+              Integer.toHexString(notyes[3]) + "};\n");
       
       String s = trie.toString();
       w.write(s);
@@ -321,6 +328,37 @@ public class QuickCheckBuilder
     {
     }
     return true;
+  }
+  
+  /**
+  * Returns an array of the first codepoints that do not have a YES for their
+  * respective normalization format. Hence 
+  * <p> getNotYesFirstCP[0] is the first codepoint that is not a NFD_YES<br>
+  * getNotYesFirstCP[1] is the first codepoint that is not a NFKD_YES<br>
+  * getNotYesFirstCP[2] is the first codepoint that is not a NFC_YES<br>
+  * getNotYesFirstCP[3] is the first codepoint that is not a NFKC_YES<br>
+  * @param quickcheck array of quickcheck values
+  * @return array of first codepoints not a YES
+  */
+  private int[] getNotYesFirstCP(byte[] quickcheck)
+  {
+    int result[] = {UCharacter.MAX_VALUE, UCharacter.MAX_VALUE, 
+                    UCharacter.MAX_VALUE, UCharacter.MAX_VALUE};
+    int length = quickcheck.length;
+    byte value;
+    for (int codepoint = 0; codepoint < UCharacter.MAX_VALUE; codepoint ++)
+    {
+      value = quickcheck[codepoint];
+      if ((value & NFD_YES_MASK_) == 0 && (codepoint < result[0]))
+        result[0] = codepoint;
+      if ((value & NFKD_YES_MASK_) == 0 && (codepoint < result[1]))
+        result[1] = codepoint;
+      if ((value & NFC_YES_MASK_) == 0 && (codepoint < result[2]))
+        result[2] = codepoint;
+      if ((value & NFKC_YES_MASK_) == 0 && (codepoint < result[3]))
+        result[3] = codepoint;
+    }
+    return result;
   }
   
   // private data members ------------------------------------------------
