@@ -57,6 +57,9 @@ cd lib
 copy *.jar ..\zip\lib\
 cd ..
 
+echo ** Copying License
+copy ..\..\..\license.html zip
+
 @echo * Directory created: zip
 @echo ** Don't forget to modify preferences.properties
 pause
