@@ -25,7 +25,6 @@
  * 08/23/01     george      Convert to C
  */
 
-#include "unicode/uloc.h"
 #include "locmap.h"
 #include "cstring.h"
 
