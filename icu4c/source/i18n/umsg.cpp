@@ -245,6 +245,31 @@ u_formatMessage(    const    char        *locale,
                 UErrorCode    *status,
                 ...)
 {
+  va_list    ap;
+  int32_t actLen;
+  if(U_FAILURE(*status)) return -1;
+
+  // start vararg processing
+  va_start(ap, status);
+
+  actLen = u_vformatMessage(locale,pattern,patternLength,result,resultLength,ap,status);
+
+  // end vararg processing
+  va_end(ap);
+
+  return actLen;
+}
+
+U_CAPI int32_t
+u_vformatMessage(    const    char        *locale,
+            const    UChar        *pattern,
+                int32_t        patternLength,
+                UChar        *result,
+                int32_t        resultLength,
+                va_list       ap,
+                UErrorCode    *status)
+
+{
   if(U_FAILURE(*status)) return -1;
 
   int32_t patLen = (patternLength == -1 ? u_strlen(pattern) : patternLength);
@@ -256,7 +281,6 @@ u_formatMessage(    const    char        *locale,
   // This is a simplified version of the C++ pattern parser
   // All it does is look for an unquoted '{' and read the type
 
-  va_list    ap;
   int32_t     part         = 0;
   bool_t     inQuote     = FALSE;
   int32_t     braceStack     = 0;
@@ -348,9 +372,6 @@ u_formatMessage(    const    char        *locale,
     return -1;
   }
 
-  // start vararg processing
-  va_start(ap, status);
-
   // iterate through the vararg list, and get the arguments out
   for(int32_t i = 0; i < count; ++i) {
     
@@ -385,9 +406,6 @@ u_formatMessage(    const    char        *locale,
     }
   }
   
-  // end vararg processing
-  va_end(ap);
-
   // End pseudo-parser
   // ========================================
 
@@ -402,7 +420,6 @@ u_formatMessage(    const    char        *locale,
   return actLen;
 }
 
-
 // For parse, do the reverse of format:
 //  1. Call through to the C++ APIs
 //  2. Just assume the user passed in enough arguments.
@@ -416,6 +433,29 @@ u_parseMessage(    const    char        *locale,
             UErrorCode    *status,
             ...)
 {
+  va_list    ap;
+
+  if(U_FAILURE(*status)) return;
+
+  // start vararg processing
+  va_start(ap, status);
+
+  u_vparseMessage(locale,pattern,patternLength,source,sourceLength,ap,status);
+
+  // end vararg processing
+  va_end(ap);
+
+}
+
+U_CAPI void 
+u_vparseMessage(    const    char        *locale,
+        const    UChar        *pattern,
+            int32_t        patternLength,
+        const    UChar        *source,
+            int32_t        sourceLength,
+            va_list       ap,
+            UErrorCode    *status)
+{
   if(U_FAILURE(*status)) return;
 
   int32_t patLen = (patternLength == -1 ? u_strlen(pattern) : patternLength);
@@ -426,10 +466,6 @@ u_parseMessage(    const    char        *locale,
   UnicodeString srcString((UChar*)source, srcLen, srcLen);
   int32_t count = 0;
   Formattable *args = fmt.parse(srcString, count, *status);
-
-  // start vararg processing
-  va_list ap;
-  va_start(ap, status);
 
   UDate *aDate;
   double *aDouble;
@@ -469,9 +505,6 @@ u_parseMessage(    const    char        *locale,
     }
   }
   
-  // end vararg processing
-  va_end(ap);
-
   // clean up
   delete [] args;
 }
