@@ -4,7 +4,7 @@
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/i18n/unicode/ucurr.h,v $ 
-* $Revision: 1.3 $
+* $Revision: 1.4 $
 **********************************************************************
 */
 #ifndef _UCURR_H_
@@ -46,24 +46,52 @@ ucurr_forLocale(const char* locale,
                 UErrorCode* ec);
 
 /**
- * Returns the display string for the given currency in the
- * given locale.  For example, the display string for the USD
+ * Selector constants for ucurr_getName().
+ *
+ * @see ucurr_getName
+ * @draft ICU 2.6
+ */
+typedef enum UCurrNameStyle {
+    /**
+     * Selector for ucurr_getName indicating a symbolic name for a
+     * currency, such as "$" for USD.
+     * @draft ICU 2.6
+     */
+    UCURR_SYMBOL_NAME,
+
+    /**
+     * Selector for ucurr_getName indicating the long name for a
+     * currency, such as "US Dollar" for USD.
+     * @draft ICU 2.6
+     */
+    UCURR_LONG_NAME,
+} UCurrNameStyle;
+
+/**
+ * Returns the display name for the given currency in the
+ * given locale.  For example, the display name for the USD
  * currency object in the en_US locale is "$".
  * @param currency null-terminated 3-letter ISO 4217 code
  * @param locale locale in which to display currency
+ * @param nameStyle selector for which kind of name to return
+ * @param isChoiceFormat fill-in set to TRUE if the returned value
+ * is a ChoiceFormat pattern; otherwise it is a static string
  * @param len fill-in parameter to receive length of result
  * @param ec error code
  * @return pointer to display string of 'len' UChars.  If the
  * resource data contains no entry for 'currency', then
  * 'currency' itself is returned.  The result string may NOT be
- * null terminated.
- * @draft ICU 2.2
+ * null terminated.  If *isChoiceFormat is TRUE, then the result
+ * is a ChoiceFormat pattern.  Otherwise it is a static string.
+ * @draft ICU 2.6
  */
 U_CAPI const UChar* U_EXPORT2
-ucurr_getSymbol(const UChar* currency,
-                const char*  locale,
-		int32_t*     len,
-                UErrorCode*  ec);
+ucurr_getName(const UChar* currency,
+              const char* locale,
+              UCurrNameStyle nameStyle,
+              UBool* isChoiceFormat,
+              int32_t* len,
+              UErrorCode* ec);
 
 /**
  * Returns the number of the number of fraction digits that should

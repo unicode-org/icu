@@ -233,9 +233,9 @@ private:
      * The array must be of the correct size.
      * 
      * @param numberElements    the number format symbols
-     * @param currencyElements  the currency symbols
+     * @param numberElementsLength length of numberElements
      */
-    void initialize(const UnicodeString* numberElements, const UnicodeString* currencyElements);
+    void initialize(const UnicodeString* numberElements, int32_t numberElementsLength);
 
     /**
      * Initialize the symbols with default values.
@@ -285,7 +285,6 @@ private:
     Locale locale;
 
     static const char fgNumberElements[];
-    static const char fgCurrencyElements[];
 
     /**
      * The address of this static class variable serves as this class's ID
