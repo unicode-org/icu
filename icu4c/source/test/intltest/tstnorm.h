@@ -48,9 +48,9 @@ public:
     void TestVerisign(void);
 
 private:
-    static UnicodeString canonTests[][3];
-    static UnicodeString compatTests[][3];
-    static UnicodeString hangulCanon[][3];
+    UnicodeString canonTests[24][3];
+    UnicodeString compatTests[11][3];
+    UnicodeString hangulCanon[2][3];
 
 
     //------------------------------------------------------------------------
