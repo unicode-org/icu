@@ -78,8 +78,6 @@ class PropertyAliases {
     // -- begin pnames data --
     // Enum=>name EnumToOffset object for binary and enumerated
     // properties
-    //DELETED:Offset enumToName_binaryOffset;
-    //DELETED:Offset enumToName_enumeratedOffset;
     Offset enumToName_offset;
 
     // Name=>enum data for binary & enumerated properties
@@ -88,6 +86,8 @@ class PropertyAliases {
     // Enum=>offset EnumToOffset object mapping enumerated properties
     // to ValueMap objects
     Offset enumToValue_offset;
+
+    int8_t reserved[2];
     // -- end pnames data --
 
     friend class Builder;
@@ -310,6 +310,7 @@ class NameToEnum {
  *  enumToName_offset (>0)
  *  nameToEnum_offset (>2)
  *  enumToValue_offset (>3)
+ *  (alignment padding build in to header)
  * 
  * 0: # EnumToOffset obj for props => name groups
  *  count
@@ -369,7 +370,6 @@ class NameToEnum {
  * 
  * 99: # string pool {SP}
  *  [pool of nul-terminated char* strings]
- * 
  */
 
 #endif
