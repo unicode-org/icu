@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002, International Business Machines
+* Copyright (c) 2002-2003, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -157,6 +157,11 @@ class PropertyAliases {
     
     inline EnumValue getPropertyValueEnum(EnumValue prop,
                                           const char* alias) const;
+
+    static int32_t
+    swap(const UDataSwapper *ds,
+         const uint8_t *inBytes, int32_t length, uint8_t *outBytes,
+         UErrorCode *pErrorCode);
 };
 
 //----------------------------------------------------------------------
@@ -189,6 +194,10 @@ class EnumToOffset {
         return sizeof(EnumToOffset) + sizeof(Offset) * (n - 1);
     }
 
+    int32_t getSize() {
+        return getSize(enumLimit - enumStart);
+    }
+
  public:
 
     Offset getOffset(EnumValue enumProbe) const {
@@ -199,6 +208,12 @@ class EnumToOffset {
         const Offset* p = getOffsetArray();
         return p[enumProbe - enumStart];
     }
+
+    static int32_t
+    swap(const UDataSwapper *ds,
+         const uint8_t *inBytes, int32_t length, uint8_t *outBytes,
+         uint8_t *temp, int32_t pos,
+         UErrorCode *pErrorCode);
 };
 
 //----------------------------------------------------------------------
@@ -239,6 +254,10 @@ class NonContiguousEnumToOffset {
         return sizeof(int32_t) + (sizeof(EnumValue) + sizeof(Offset)) * n;
     }
 
+    int32_t getSize() {
+        return getSize(count);
+    }
+
  public:
 
     Offset getOffset(EnumValue enumProbe) const {
@@ -253,6 +272,12 @@ class NonContiguousEnumToOffset {
         }
         return 0; // not found
     }
+
+    static int32_t
+    swap(const UDataSwapper *ds,
+         const uint8_t *inBytes, int32_t length, uint8_t *outBytes,
+         uint8_t *temp, int32_t pos,
+         UErrorCode *pErrorCode);
 };
 
 //----------------------------------------------------------------------
@@ -291,6 +316,10 @@ class NameToEnum {
         return sizeof(int32_t) + (sizeof(Offset) + sizeof(EnumValue)) * n;
     }
 
+    int32_t getSize() {
+        return getSize(count);
+    }
+
  public:
   
     EnumValue getEnum(const char* alias, const PropertyAliases& data) const {
@@ -310,7 +339,22 @@ class NameToEnum {
         
         return UCHAR_INVALID_CODE;
     }
+
+    static int32_t
+    swap(const UDataSwapper *ds,
+         const uint8_t *inBytes, int32_t length, uint8_t *outBytes,
+         uint8_t *temp, int32_t pos,
+         UErrorCode *pErrorCode);
 };
+
+/**
+ * Swap pnames.icu. See udataswp.h.
+ * @internal
+ */
+U_CAPI int32_t U_EXPORT2
+upname_swap(const UDataSwapper *ds,
+            const void *inData, int32_t length, void *outData,
+            UErrorCode *pErrorCode);
 
 /*----------------------------------------------------------------------
  * 
@@ -348,7 +392,20 @@ class NameToEnum {
  *  nameToEnum_offset (>2)
  *  enumToValue_offset (>3)
  *  (alignment padding build in to header)
- * 
+ *
+ * The header also contains the following, used by "external readers"
+ * like ICU4J and icuswap.
+ *
+ *  // The following are needed by external readers of this data.
+ *  // We don't use them ourselves.
+ *  int16_t total_size; // size in bytes excluding the udata header
+ *  Offset valueMap_offset; // offset to start of array
+ *  int16_t valueMap_count; // number of entries
+ *  Offset nameGroupPool_offset; // offset to start of array
+ *  int16_t nameGroupPool_count; // number of entries (not groups)
+ *  Offset stringPool_offset; // offset to start of pool
+ *  int16_t stringPool_count; // number of strings (not size in bytes)
+ *
  * 0: # NonContiguousEnumToOffset obj for props => name groups
  *  count
  *  enumArray [x count]
