@@ -92,7 +92,7 @@ static void initMsg(const char *pname) {
                 fprintf(stderr,
                     "%s: warning: couldn't open bundle %s: %s\n",
                     pname, dataPath, u_errorName(err));
-				fprintf(stderr, "%s: warning: messages will not be displayed\n", pname);
+                fprintf(stderr, "%s: warning: messages will not be displayed\n", pname);
             }
         }
     }
@@ -438,9 +438,9 @@ static UBool convertFile(const char *pname,
         infile = fopen(infilestr, "rb");
         if (infile == 0) {
             UnicodeString str1(infilestr, "");
-			str1.append((UChar32) 0);
+            str1.append((UChar32) 0);
             UnicodeString str2(strerror(errno), "");
-			str2.append((UChar32) 0);
+            str2.append((UChar32) 0);
             initMsg(pname);
             u_wmsg(stderr, "cantOpenInputF", str1.getBuffer(), str2.getBuffer());
             return FALSE;
@@ -450,8 +450,8 @@ static UBool convertFile(const char *pname,
         infile = stdin;
 #ifdef WIN32
         if (setmode(fileno(stdin), O_BINARY) == -1) {
-			initMsg(pname);
-			u_wmsg(stderr, "cantSetInBinMode");
+            initMsg(pname);
+            u_wmsg(stderr, "cantSetInBinMode");
             return FALSE;
         }
 #endif
@@ -478,8 +478,8 @@ static UBool convertFile(const char *pname,
         }
 
         if (U_FAILURE(err)) {
-		    str.append((UChar32) 0);
-			initMsg(pname);
+            str.append((UChar32) 0);
+            initMsg(pname);
 
             if (parse.line >= 0) {
                 UChar linebuf[20], offsetbuf[20];
@@ -490,7 +490,7 @@ static UBool convertFile(const char *pname,
             } else {
                 u_wmsg(stderr, "cantCreateTranslit", str.getBuffer(),
                     u_wmsg_errorName(err));
-			}
+            }
 
             if (t) {
                 delete t;
@@ -719,7 +719,7 @@ static void usage(const char *pname, int ecode) {
     const UChar *msg;
     int32_t msgLen;
     UErrorCode err = U_ZERO_ERROR;
-	FILE *fp = ecode ? stderr : stdout;
+    FILE *fp = ecode ? stderr : stdout;
     int res;
 
     initMsg(pname);
@@ -732,8 +732,8 @@ static void usage(const char *pname, int ecode) {
     res = u_wmsg(fp, "usage", mname.getBuffer(), upname.getBuffer());
     if (!ecode) {
         if (!res) {
-			fputc('\n', fp);
-		}
+            fputc('\n', fp);
+        }
         if (!u_wmsg(fp, "help")) {
             /* Now dump callbacks and finish. */
 
@@ -741,9 +741,9 @@ static void usage(const char *pname, int ecode) {
                 sizeof(transcode_callbacks) / sizeof(*transcode_callbacks);
             for (i = 0; i < count; ++i) {
                 fprintf(fp, " %s", transcode_callbacks[i].name);
-			}
+            }
             fputc('\n', fp);
-		}
+        }
     }
 
     exit(ecode);

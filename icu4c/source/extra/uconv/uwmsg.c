@@ -172,7 +172,7 @@ U_CAPI int u_wmsg(FILE *fp, const char *tag, ... )
         return -1;
     }
 
-	return 0;
+    return 0;
 }
 
 /* these will break if the # of messages change. simply add or remove 0's .. */
