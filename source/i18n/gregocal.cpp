@@ -2059,6 +2059,13 @@ GregorianCalendar::internalGetEra() const {
     return isSet(UCAL_ERA) ? internalGet(UCAL_ERA) : AD;
 }
 
+const char *
+GregorianCalendar::getType() const {
+  //static const char kGregorianType = "gregorian";
+
+  return "gregorian";
+}
+
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

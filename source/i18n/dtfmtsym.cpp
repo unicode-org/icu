@@ -136,13 +136,28 @@ DateFormatSymbols::DateFormatSymbols(const Locale& locale,
                                      UErrorCode& status)
     : UObject()
 {
-    initializeData(locale, status);
+  initializeData(locale, NULL,  status);
 }
 
 DateFormatSymbols::DateFormatSymbols(UErrorCode& status)
     : UObject()
 {
-    initializeData(Locale::getDefault(), status, TRUE);
+  initializeData(Locale::getDefault(), NULL, status, TRUE);
+}
+
+
+DateFormatSymbols::DateFormatSymbols(const Locale& locale,
+                                     const char *type,
+                                     UErrorCode& status)
+    : UObject()
+{
+  initializeData(locale, type,  status);
+}
+
+DateFormatSymbols::DateFormatSymbols(const char *type, UErrorCode& status)
+    : UObject()
+{
+  initializeData(Locale::getDefault(), type, status, TRUE);
 }
 
 DateFormatSymbols::DateFormatSymbols(const DateFormatSymbols& other)
@@ -519,8 +534,14 @@ DateFormatSymbols::initField(UnicodeString **field, int32_t& length, const UChar
     }
 }
 
+ResourceBundle
+DateFormatSymbols::getData(ResourceBundle &rb, const char *tag, const char * /*type*/, UErrorCode& status )
+{
+  return rb.get(tag, status);
+}
+
 void
-DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, UBool useLastResortData)
+DateFormatSymbols::initializeData(const Locale& locale, const char * /* type */, UErrorCode& status, UBool useLastResortData)
 {
     int32_t i;
 
