@@ -38,7 +38,7 @@
 static char* _testDirectory=NULL;
 
 // Static list of errors found
-static UnicodeString errorList = UnicodeString("", "");
+static UnicodeString errorList;
 
 //-----------------------------------------------------------------------------
 //convenience classes to ease porting code that uses the Java
@@ -248,7 +248,10 @@ IntlTest::appendHex(uint32_t number,
             int8_t digits, 
             UnicodeString& target)
 {
-    static const UnicodeString digitString("0123456789ABCDEF");
+    static const UChar digitString[] = {
+        0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39,
+        0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0
+    }; /* "0123456789ABCDEF" */
 
     switch (digits)
     {
