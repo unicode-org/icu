@@ -24,6 +24,7 @@
 #include "ucnv_cnv.h"
 #include "cstring.h"
 #include "cmemory.h"
+#include "uinvchar.h"
 #include "filestrm.h"
 #include "toolutil.h"
 #include "uoptions.h"

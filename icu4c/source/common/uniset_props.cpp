@@ -33,6 +33,7 @@
 #include "propname.h"
 #include "unormimp.h"
 #include "ucase.h"
+#include "uinvchar.h"
 #include "charstr.h"
 #include "ustrfmt.h"
 #include "mutex.h"

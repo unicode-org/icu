@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (C) 1998-2003, International Business Machines Corporation 
+* Copyright (C) 1998-2004, International Business Machines Corporation 
 * and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -16,6 +16,7 @@
 #include "unicode/ustring.h"
 #include "unicode/ucnv.h"
 #include "cstring.h"
+#include "uinvchar.h"
 #include "cintltst.h"
 #include "cmemory.h"
 
