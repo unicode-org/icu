@@ -75,7 +75,7 @@ void RBDataMap::init(UResourceBundle *data, UErrorCode &status) {
 
 void RBDataMap::init(UResourceBundle *headers, UResourceBundle *data, UErrorCode &status)
 {
-  int32_t i = 0, j = 0;
+  int32_t i = 0;
   fData->removeAll();
   UResourceBundle *t = NULL;
   const UChar *key = NULL;
@@ -122,10 +122,11 @@ const UnicodeString* RBDataMap::getStringArray(int32_t& count, const char* key, 
   UnicodeString hashKey(key, "");
   ResourceBundle *r = (ResourceBundle *)fData->get(hashKey);
   if(r != NULL) {
-    int32_t size = r->getSize();
     int32_t i = 0;
-    UnicodeString *result = new UnicodeString[size];
-    for(i = 0; i<size; i++) {
+
+    count = r->getSize();
+    UnicodeString *result = new UnicodeString[count];
+    for(i = 0; i<count; i++) {
       result[i] = r->getStringEx(i, status);
     }
     return result;
@@ -140,11 +141,12 @@ const int32_t* RBDataMap::getIntArray(int32_t& count, const char* key, UErrorCod
   UnicodeString hashKey(key, "");
   ResourceBundle *r = (ResourceBundle *)fData->get(hashKey);
   if(r != NULL) {
-    int32_t size = r->getSize();
-    int32_t *result = new int32_t[size];
     int32_t i = 0;
+
+    count = r->getSize();
+    int32_t *result = new int32_t[count];
     UnicodeString stringRes;
-    for(i = 0; i<size; i++) {
+    for(i = 0; i<count; i++) {
       stringRes = r->getStringEx(i, status);
       result[i] = utoi(stringRes);
     }
