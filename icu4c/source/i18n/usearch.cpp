@@ -2447,9 +2447,6 @@ U_CAPI UStringSearch * U_EXPORT2 usearch_openFromCollator(
 
         result->collator    = collator;
         result->strength    = ucol_getStrength(collator);
-        result->toNormalize = ucol_getAttribute(collator, 
-                                                  UCOL_NORMALIZATION_MODE,
-                                                  status) == UCOL_ON;
         result->ceMask      = getMask(result->strength);
         result->toShift     =  
              ucol_getAttribute(collator, UCOL_ALTERNATE_HANDLING, status) == 
@@ -2694,6 +2691,10 @@ U_CAPI void U_EXPORT2 usearch_setText(      UStringSearch *strsrch,
             strsrch->search->matchedIndex  = USEARCH_DONE;
             strsrch->search->matchedLength = 0;
             strsrch->search->reset         = TRUE;
+			if (strsrch->search->breakIter != NULL) {
+				ubrk_setText(strsrch->search->breakIter, text, 
+							 textlength, status);
+			}
         }
     }
 }
@@ -2724,9 +2725,6 @@ U_CAPI void U_EXPORT2 usearch_setCollator(      UStringSearch *strsrch,
             }
             strsrch->collator    = collator;
             strsrch->strength    = ucol_getStrength(collator);
-            strsrch->toNormalize = ucol_getAttribute(collator, 
-                                                      UCOL_NORMALIZATION_MODE,
-                                                      status) == UCOL_ON;
             strsrch->ceMask      = getMask(strsrch->strength);
             // if status is a failure, ucol_getAttribute returns UCOL_DEFAULT
             strsrch->toShift     =  
@@ -2740,6 +2738,7 @@ U_CAPI void U_EXPORT2 usearch_setCollator(      UStringSearch *strsrch,
                     init_collIterate(collator, strsrch->search->text, 
                                      strsrch->search->textLength, 
                                      &(strsrch->textIter->iteratordata_));
+					strsrch->utilIter->iteratordata_.coll = collator;
                 }
             }
         }
@@ -3036,9 +3035,6 @@ U_CAPI void U_EXPORT2 usearch_reset(UStringSearch *strsrch)
         uint32_t   varTop;
 
         strsrch->strength    = ucol_getStrength(strsrch->collator);
-        strsrch->toNormalize = ucol_getAttribute(strsrch->collator, 
-                                                 UCOL_NORMALIZATION_MODE,
-                                                 &status) == UCOL_ON;
         ceMask = getMask(strsrch->strength);
         if (strsrch->ceMask != ceMask) {
             strsrch->ceMask = ceMask;

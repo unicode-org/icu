@@ -47,10 +47,10 @@ U_NAMESPACE_BEGIN
  * UnicodeString target("The quick brown fox jumped over the lazy fox");
  * UnicodeString pattern("fox");
  *
- * SearchIterator *iter = new StringSearch(pattern, target);
- *
- * for (int pos = iter->first(); pos != USEARCH_DONE; 
- *                               pos = iter->next()) {
+ * SearchIterator *iter  = new StringSearch(pattern, target);
+ * UErrorCode      error = U_ZERO_ERROR;
+ * for (int pos = iter->first(error); pos != USEARCH_DONE; 
+ *                               pos = iter->next(error)) {
  *     printf("Found match at %d pos, length is %d\n", pos, 
  *                                             iter.getMatchLength());
  * }
