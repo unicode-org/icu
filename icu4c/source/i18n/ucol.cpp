@@ -866,7 +866,7 @@ void ucol_initUCA(UErrorCode *status) {
                     uprv_free(newUCA);
                 }
                 else {
-                    i18n_registerCleanup();
+                    ucln_i18n_registerCleanup();
                 }
             }else{
                 udata_close(result);

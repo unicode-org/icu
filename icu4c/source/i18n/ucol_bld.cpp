@@ -1068,7 +1068,7 @@ ucol_initInverseUCA(UErrorCode *status)
                 uprv_free(newInvUCA);
             }
             else {
-                i18n_registerCleanup();
+                ucln_i18n_registerCleanup();
             }
         }
     }
