@@ -77,7 +77,6 @@ public:
     le_int32 applyInsertions();
 
 private:
-    GlyphIterator();
     le_bool filterGlyph(le_uint32 index) const;
     le_bool hasFeatureTag() const;
     le_bool nextInternal(le_uint32 delta = 1);
