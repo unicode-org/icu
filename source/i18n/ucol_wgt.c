@@ -313,18 +313,18 @@ ucol_allocWeights(uint32_t lowerLimit, uint32_t upperLimit,
     /* number of usable byte values 3..maxByte */
     uint32_t countBytes=maxByte-UCOL_BYTE_FIRST_TAILORED+1;
 
-    /* countBytes to the power of index */
-    uint32_t powers[5]={
-        1,
-        countBytes,
-        countBytes*countBytes,
-        countBytes*countBytes*countBytes,
-        countBytes*countBytes*countBytes*countBytes
-    };
-
     uint32_t lengthCounts[6]; /* [0] unused, [5] to make index checks unnecessary */
     uint32_t maxCount;
     int32_t i, rangeCount, minLength, maxLength;
+
+    /* countBytes to the power of index */
+    uint32_t powers[5];
+    /* gcc requires explicit initialization */
+    powers[0] = 1;
+    powers[1] = countBytes;
+    powers[2] = countBytes*countBytes;
+    powers[3] = countBytes*countBytes*countBytes;
+    powers[4] = countBytes*countBytes*countBytes*countBytes;
 
 #ifdef UCOL_DEBUG
     puts("");
