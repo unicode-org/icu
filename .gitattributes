@@ -139,4 +139,6 @@ icu4j/src/com/ibm/demo/rbbi/genesis.dict -text svneol=native#application/octet-s
 icu4j/src/com/ibm/demo/translit/demo.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/data/holidays_jp.ucs -text svneol=native#application/octet-stream
 icu4j/src/com/ibm/icu/dev/demo/translit/demo.html svneol=native#text/html
+icu4j/src/com/ibm/icu/impl/data/thai_dict -text
+icu4j/src/com/ibm/text/resources/thai_dict -text
 icu4j/src/data/holidays_jp.ucs -text svneol=native#application/octet-stream
