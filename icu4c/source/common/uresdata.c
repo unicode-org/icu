@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *                                                                             *
-* Copyright (C) 1999-2004, International Business Machines Corporation        *
+* Copyright (C) 1999-2005, International Business Machines Corporation        *
 *               and others. All Rights Reserved.                              *
 *                                                                             *
 *******************************************************************************
@@ -119,72 +119,79 @@ static Resource
 _res_findTableItem(const Resource *pRoot, const Resource res, const char *key,
                    int32_t *index, const char **realKey) {
     const uint16_t *p=(const uint16_t *)RES_GET_POINTER(pRoot, res);
-    int32_t i, start, limit;
+    uint32_t mid, start, limit;
+    uint32_t lastMid;
+    int result;
 
     limit=*p++; /* number of entries */
 
-    if(limit == 0) { /* this table is empty */
-        *index=URESDATA_ITEM_NOT_FOUND;
-        return RES_BOGUS;
-    }
+    if(limit != 0) {
+        /* do a binary search for the key */
+        start=0;
+        lastMid = UINT32_MAX;
+        for (;;) {
+            mid = (uint32_t)((start + limit) / 2);
+            if (lastMid == mid) {   /* Have we moved? */
+                break;  /* We haven't moved, and it wasn't found. */
+            }
+            lastMid = mid;
+            result = uprv_strcmp(key, RES_GET_KEY(pRoot, p[mid]));
 
-    /* do a binary search for the key */
-    start=0;
-    while(start<limit-1) {
-        i=(int32_t)((start+limit)/2);
-        if(uprv_strcmp(key, RES_GET_KEY(pRoot, p[i]))<0) {
-            limit=i;
-        } else {
-            start=i;
+            if (result < 0) {
+                limit = mid;
+            } else if (result > 0) {
+                start = mid;
+            } else {
+                /* We found it! */
+                *index=mid;
+                *realKey=RES_GET_KEY(pRoot, p[mid]);
+                limit=*(p-1);   /* itemCount */
+                return ((const Resource *)(p+limit+(~limit&1)))[mid];
+            }
         }
     }
 
-    /* did we really find it? */
-    if(uprv_strcmp(key, RES_GET_KEY(pRoot, p[start]))==0) {
-        *index=start;
-        *realKey=RES_GET_KEY(pRoot, p[start]);
-        limit=*(p-1);   /* itemCount */
-        return ((const Resource *)(p+limit+(~limit&1)))[start];
-    } else {
-        *index=URESDATA_ITEM_NOT_FOUND;
-        return RES_BOGUS;   /* not found */
-    }
+    *index=URESDATA_ITEM_NOT_FOUND;
+    return RES_BOGUS;   /* not found or table is empty. */
 }
 
 static Resource
 _res_findTable32Item(const Resource *pRoot, const Resource res, const char *key,
                      int32_t *index, const char **realKey) {
     const int32_t *p=(const int32_t *)RES_GET_POINTER(pRoot, res);
-    int32_t i, start, limit;
+    int32_t mid, start, limit;
+    int32_t lastMid;
+    int result;
 
     limit=*p++; /* number of entries */
 
-    if(limit == 0) { /* this table is empty */
-        *index=URESDATA_ITEM_NOT_FOUND;
-        return RES_BOGUS;
-    }
+    if(limit != 0) {
+        /* do a binary search for the key */
+        start=0;
+        lastMid = INT32_MAX;
+        for (;;) {
+            mid = (uint32_t)((start + limit) / 2);
+            if (lastMid == mid) {   /* Have we moved? */
+                break;  /* We haven't moved, and it wasn't found. */
+            }
+            lastMid = mid;
+            result = uprv_strcmp(key, RES_GET_KEY(pRoot, p[mid]));
 
-    /* do a binary search for the key */
-    start=0;
-    while(start<limit-1) {
-        i=(int32_t)((start+limit)/2);
-        if(uprv_strcmp(key, RES_GET_KEY(pRoot, p[i]))<0) {
-            limit=i;
-        } else {
-            start=i;
+            if (result < 0) {
+                limit = mid;
+            } else if (result > 0) {
+                start = mid;
+            } else {
+                /* We found it! */
+                *index=mid;
+                *realKey=RES_GET_KEY(pRoot, p[mid]);
+                return ((const Resource *)(p+(*(p-1))))[mid];
+            }
         }
     }
 
-    /* did we really find it? */
-    if(uprv_strcmp(key, RES_GET_KEY(pRoot, p[start]))==0) {
-        *index=start;
-        *realKey=RES_GET_KEY(pRoot, p[start]);
-        limit=*(p-1);   /* itemCount */
-        return ((const Resource *)(p+limit))[start];
-    } else {
-        *index=URESDATA_ITEM_NOT_FOUND;
-        return RES_BOGUS;   /* not found */
-    }
+    *index=URESDATA_ITEM_NOT_FOUND;
+    return RES_BOGUS;   /* not found or table is empty. */
 }
 
 /* helper for res_load() ---------------------------------------------------- */
