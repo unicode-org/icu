@@ -111,6 +111,7 @@ typedef struct {
   UHashtable *tailored;
   UColOptionSet *opts;
   uint32_t resultLen;
+  uint32_t listCapacity;
   UColTokListHeader *lh;
   UColToken *varTop;
 } UColTokenParser;

@@ -977,6 +977,17 @@ static uint32_t uprv_uca_processContraction(CntTable *contractions, UCAElements 
 
 static uint32_t uprv_uca_finalizeAddition(tempUCATable *t, UCAElements *element, UErrorCode *status) {
   uint32_t CE = UCOL_NOT_FOUND;
+  // This should add a completely ignorable element to the 
+  // unsafe table, so that backward iteration will skip
+  // over it when treating contractions.
+  uint32_t i = 0;
+  if(element->mapCE == 0) {
+    for(i = 0; i < element->cSize; i++) {
+      if(!UTF_IS_TRAIL(element->cPoints[i])) {
+        unsafeCPSet(t->unsafeCP, element->cPoints[i]);
+      }
+    }
+  }
   if(element->cSize > 1) { /* we're adding a contraction */
     uint32_t i = 0;
     UChar32 cp;
@@ -1151,24 +1162,7 @@ uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode *status)
       }
       source = it.next();
     }
-#if 0
-    CE = uprv_uca_finalizeAddition(t, element, status);  
-    UChar composed[256];
-    uint32_t compLen = unorm_normalize(element->cPoints, element->cSize, UNORM_NFC, 0, composed, 256, status);;
-
-    if(compLen != element->cSize || uprv_memcmp(composed, element->cPoints, element->cSize*sizeof(UChar))) {
-      // composed form of a contraction is different than the decomposed form!
-      // do it!
-#ifdef UCOL_DEBUG
-      fprintf(stderr, "Adding composed for %04X->%04X\n", *element->cPoints, *composed);
-#endif
-      element->cSize = compLen;
-      uprv_memcpy(element->cPoints, composed, element->cSize*sizeof(UChar));
-      uprv_uca_finalizeAddition(t, element, status);
-    }
-#else
     CE = element->mapCE;
-#endif
   } else {
       CE = uprv_uca_finalizeAddition(t, element, status);  
   }
@@ -1485,7 +1479,6 @@ struct enumStruct {
   UCollationElements* colEl;
   UErrorCode *status;
 };
-#include <stdio.h>
 U_CDECL_BEGIN
 static UBool U_CALLCONV
 _enumCategoryRangeClosureCategory(const void *context, UChar32 start, UChar32 limit, UCharCategory type) {

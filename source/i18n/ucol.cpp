@@ -54,6 +54,7 @@ U_NAMESPACE_USE
 #define ZERO_CC_LIMIT_            0xC0
 
 static UCollator* UCA = NULL;
+static UCAConstants *UCAconsts = NULL; 
 static UDataMemory* UCA_DATA_MEM = NULL;
 
 
@@ -83,6 +84,13 @@ isAcceptableUCA(void * /*context*/,
         return FALSE;
     }
 }
+
+
+static int32_t U_CALLCONV
+_getFoldingOffset(uint32_t data) {
+    return (int32_t)(data&0xFFFFFF);
+}
+
 U_CDECL_END
 
 static
@@ -222,6 +230,22 @@ inline UBool collIter_eos(collIterate *s) {
         // Main string with an end pointer.
         return s->fcdPosition == s->endp;
     }
+}
+
+/*
+* collIter_bos()
+*     Checks for a collIterate being positioned at the start of
+*     its source string.
+*
+*/
+static
+inline UBool collIter_bos(collIterate *source) {
+  if (source->pos <= source->string ||
+      ((source->flags & UCOL_ITER_INNORMBUF) &&
+      *(source->pos - 1) == 0 && source->fcdPosition == NULL)) {
+    return TRUE;
+  }
+  return FALSE;
 }
 
 
@@ -996,8 +1020,9 @@ void ucol_initUCA(UErrorCode *status) {
                     ucln_i18n_registerCleanup();
                 }
                 // Initalize variables for implicit generation
-                UCAConstants *consts = (UCAConstants *)((uint8_t *)UCA->image + UCA->image->UCAConsts);
-                uprv_uca_initImplicitConstants(consts->UCA_PRIMARY_IMPLICIT_MIN);
+                UCAconsts = (UCAConstants *)((uint8_t *)UCA->image + UCA->image->UCAConsts);
+                uprv_uca_initImplicitConstants(UCAconsts->UCA_PRIMARY_IMPLICIT_MIN);
+                UCA->mapping->getFoldingOffset = _getFoldingOffset;
             }else{
                 udata_close(result);
                 uprv_free(newUCA);
@@ -2039,65 +2064,19 @@ uint32_t getDiscontiguous(const UCollator *coll, collIterate *source,
     return *(coll->contractionCEs + (constart - coll->contractionIndex));
 }
 
-#if 0
-/* added for Han implicit CE */
-static const uint32_t IMPLICIT_HAN_START_ = 0x3400;
-static const uint32_t IMPLICIT_HAN_LIMIT_ = 0xA000;
-static const uint32_t IMPLICIT_SUPPLEMENTARY_COUNT_ = 0x100000;
-static const uint32_t IMPLICIT_BYTES_TO_AVOID_ = 3;
-static const uint32_t IMPLICIT_OTHER_COUNT_ = 256 - IMPLICIT_BYTES_TO_AVOID_;
-static const uint32_t IMPLICIT_LAST_COUNT_ = IMPLICIT_OTHER_COUNT_ / 2;
-static const uint32_t IMPLICIT_LAST_COUNT2_ =
-                       (IMPLICIT_SUPPLEMENTARY_COUNT_ - 1) /
-                       (IMPLICIT_OTHER_COUNT_ * IMPLICIT_OTHER_COUNT_) + 1;
-static const uint32_t IMPLICIT_HAN_SHIFT_ = IMPLICIT_LAST_COUNT_ *
-                              IMPLICIT_OTHER_COUNT_ - IMPLICIT_HAN_START_;
-static const uint32_t IMPLICIT_BOUNDARY_ = 2 * IMPLICIT_OTHER_COUNT_ *
-                                  IMPLICIT_LAST_COUNT_ + IMPLICIT_HAN_START_;
-static const uint32_t IMPLICIT_LAST2_MULTIPLIER_ = IMPLICIT_OTHER_COUNT_ /
-                                                        IMPLICIT_LAST_COUNT2_;
-
-
 static
-inline uint32_t getImplicit(UChar32 cp, collIterate *collationSource, uint32_t hanFixup) {
-  if ((cp & 0xFFFE) == 0xFFFE || (0xD800 <= cp && cp <= 0xDC00)) {
-      return 0;  /* illegal code value, use completely ignoreable! */
+inline UBool isNonChar(UChar32 cp) {
+  if ((cp & 0xFFFE) == 0xFFFE || (0xFDD0 <= cp && cp <= 0xFDEF) || (0xD800 <= cp && cp <= 0xDC00)) {
+    return TRUE;
   }
-
-  /*
-  we must skip all 00, 01, 02 bytes, so most bytes have 253 values
-  we must leave a gap of 01 between all values of the last byte, so the last byte has 126 values (3 byte case)
-  we shift so that HAN all has the same first primary, for compression.
-  for the 4 byte case, we make the gap as large as we can fit.
-  Three byte forms are EC xx xx, ED xx xx, EE xx xx (with a gap of 1)
-  Four byte forms (most supplementaries) are EF xx xx xx (with a gap of LAST2_MULTIPLIER == 14)
-  */
-  int32_t last0 = cp - IMPLICIT_BOUNDARY_;
-  uint32_t r = 0;
-  if (last0 < 0) {
-      cp += IMPLICIT_HAN_SHIFT_; // shift so HAN shares single block
-      int32_t last1 = cp / IMPLICIT_LAST_COUNT_;
-      last0 = cp % IMPLICIT_LAST_COUNT_;
-      int32_t last2 = last1 / IMPLICIT_OTHER_COUNT_;
-      last1 %= IMPLICIT_OTHER_COUNT_;
-      r = 0xEC030300 - hanFixup + (last2 << 24) + (last1 << 16) + (last0 << 9);
-  } else {
-      int32_t last1 = last0 / IMPLICIT_LAST_COUNT2_;
-      last0 %= IMPLICIT_LAST_COUNT2_;
-      int32_t last2 = last1 / IMPLICIT_OTHER_COUNT_;
-      last1 %= IMPLICIT_OTHER_COUNT_;
-      r = 0xEF030303 - hanFixup + (last2 << 16) + (last1 << 8) + (last0 * IMPLICIT_LAST2_MULTIPLIER_);
-  } 
-  *(collationSource->CEpos++) = ((r & 0x0000FFFF)<<16) | 0x000000C0;
-  return (r & UCOL_PRIMARYMASK) | 0x00000505; // This was 'order'
+  return FALSE;
 }
-#endif
 
 /* now uses Mark's getImplicitPrimary code */
 static
 inline uint32_t getImplicit(UChar32 cp, collIterate *collationSource) {
-  if ((cp & 0xFFFE) == 0xFFFE || (0xD800 <= cp && cp <= 0xDC00)) {
-      return 0;  /* illegal code value, use completely ignoreable! */
+  if(isNonChar(cp)) {
+    return 0;
   }
   uint32_t r = getImplicitPrimary(cp);
   *(collationSource->CEpos++) = ((r & 0x0000FFFF)<<16) | 0x000000C0;
@@ -2208,10 +2187,7 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
 
           // First we position ourselves at the begining of contraction sequence 
           const UChar *ContractionStart = UCharOffset = (UChar *)coll->image+getContractOffset(CE);
-          if (source->pos == source->string ||
-              ((source->flags & UCOL_ITER_INNORMBUF) &&
-              *(source->pos - 1) == 0 && source->fcdPosition == NULL)) {
-          // if(sourcePointer == source->string) {
+          if (collIter_bos(source)) {
             CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex));
             break;
           }
@@ -2231,6 +2207,42 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
           }
           else
           {
+              // if there is a completely ignorable code point in the middle of 
+              // a prefix, we need to act as if it's not there
+              // assumption: 'real' noncharacters (*fffe, *ffff, fdd0-fdef are set to zero)
+              // lone surrogates cannot be set to zero as it would break other processing
+              uint32_t isZeroCE = UTRIE_GET32_FROM_LEAD(coll->mapping, schar);
+              // it's easy for BMP code points
+              if(isZeroCE == 0) {
+                continue;
+              } else if(UTF_IS_TRAIL(schar) || UTF_IS_LEAD(schar)) {
+                // for supplementary code points, we have to check the next one
+                // situations where we are going to ignore
+                // 1. beginning of the string: schar is a lone surrogate
+                // 2. schar is a lone surrogate
+                // 3. schar is a trail surrogate in a valid surrogate sequence
+                //    that is explicitly set to zero.
+                if (!collIter_bos(source)) {
+                  UChar lead;
+                  if(UTF_IS_LEAD(lead = getPrevNormalizedChar(source))) {
+                    isZeroCE = UTRIE_GET32_FROM_LEAD(coll->mapping, lead);
+                    if(getCETag(isZeroCE) == SURROGATE_TAG) {
+                      uint32_t finalCE = UTRIE_GET32_FROM_OFFSET_TRAIL(coll->mapping, isZeroCE&0xFFFFFF, schar);
+                      if(finalCE == 0) {
+                        // this is a real, assigned completely ignorable code point
+                        source->pos--;
+                        continue;
+                      }
+                    }
+                  } else {
+                    // lone surrogate, completely ignorable
+                    continue;
+                  }
+                } else {
+                  // lone surrogate at the beggining, completely ignorable
+                  continue;
+                }
+              }
               // Source string char was not in the table.
               //   We have not found the prefix.
               CE = *(coll->contractionCEs +
@@ -2297,6 +2309,35 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
         }
         else
         {
+            // if there is a completely ignorable code point in the middle of 
+            // contraction, we need to act as if it's not there
+            uint32_t isZeroCE = UTRIE_GET32_FROM_LEAD(coll->mapping, schar);
+            // it's easy for BMP code points
+            if(isZeroCE == 0) {
+              continue;
+            } else if(UTF_IS_LEAD(schar)) {
+              if(!collIter_eos(source)) {
+                backupState(source, &state);
+                UChar trail = getNextNormalizedChar(source);
+                if(UTF_IS_TRAIL(trail)) { // do stuff with trail
+                  if(getCETag(isZeroCE) == SURROGATE_TAG) {
+                    uint32_t finalCE = UTRIE_GET32_FROM_OFFSET_TRAIL(coll->mapping, isZeroCE&0xFFFFFF, trail);
+                    if(finalCE == 0) {
+                      continue;
+                    }
+                  }
+                } else {
+                  // broken surrogate sequence, thus completely ignorable
+                  loadState(source, &state, TRUE);
+                  continue;
+                }
+                loadState(source, &state, TRUE);
+              } else { // no  more characters, so broken surrogate pair... 
+                // this contraction will ultimately fail, but not because of us
+                continue; 
+              }
+            }
+
             // Source string char was not in contraction table.
             //   Unless we have a discontiguous contraction, we have finished
             //   with this contraction.
@@ -2710,56 +2751,19 @@ inline UChar getPrevNormalizedChar(collIterate *data)
     return ch;
 }
 
-#if 0
-static
-inline uint32_t getPrevImplicit(UChar32 cp, collIterate *collationSource, uint32_t hanFixup) {
-      if ((cp & 0xFFFE) == 0xFFFE || (0xD800 <= cp && cp <= 0xDC00)) {
-          return 0;  /* illegal code value, use completely ignoreable! */
-      }
-      /* we must skip all 00, 01, 02 bytes, so most bytes have 253 values
-       we must leave a gap of 01 between all values of the last byte, so the last byte has 126 values (3 byte case)
-       we shift so that HAN all has the same first primary, for compression.
-       for the 4 byte case, we make the gap as large as we can fit.
-       Three byte forms are EC xx xx, ED xx xx, EE xx xx (with a gap of 1)
-       Four byte forms (most supplementaries) are EF xx xx xx (with a gap of LAST2_MULTIPLIER == 14)
-      */
-      int32_t last0 = cp - IMPLICIT_BOUNDARY_;
-      uint32_t r = 0;
-
-      if (last0 < 0) {
-          cp += IMPLICIT_HAN_SHIFT_; // shift so HAN shares single block
-          int32_t last1 = cp / IMPLICIT_LAST_COUNT_;
-          last0 = cp % IMPLICIT_LAST_COUNT_;
-          int32_t last2 = last1 / IMPLICIT_OTHER_COUNT_;
-          last1 %= IMPLICIT_OTHER_COUNT_;
-          r = 0xEC030300 - hanFixup + (last2 << 24) + (last1 << 16) + (last0 << 9);
-      } else {
-          int32_t last1 = last0 / IMPLICIT_LAST_COUNT2_;
-          last0 %= IMPLICIT_LAST_COUNT2_;
-          int32_t last2 = last1 / IMPLICIT_OTHER_COUNT_;
-          last1 %= IMPLICIT_OTHER_COUNT_;
-          r = 0xEF030303 - hanFixup + (last2 << 16) + (last1 << 8) +
-              (last0 * IMPLICIT_LAST2_MULTIPLIER_);
-      }
-      *(collationSource->CEpos++) = (r & UCOL_PRIMARYMASK) | 0x00000505;
-      collationSource->toReturn = collationSource->CEpos;
-      return ((r & 0x0000FFFF)<<16) | 0x000000C0;
-}
-#endif
-
 
 /* now uses Mark's getImplicitPrimary code */
 static
 inline uint32_t getPrevImplicit(UChar32 cp, collIterate *collationSource) {
-      if ((cp & 0xFFFE) == 0xFFFE || (0xD800 <= cp && cp <= 0xDC00)) {
-          return 0;  /* illegal code value, use completely ignoreable! */
-      }
+  if(isNonChar(cp)) {
+    return 0;
+  }
 
-      uint32_t r = getImplicitPrimary(cp);
+  uint32_t r = getImplicitPrimary(cp);
 
-      *(collationSource->CEpos++) = (r & UCOL_PRIMARYMASK) | 0x00000505;
-      collationSource->toReturn = collationSource->CEpos;
-      return ((r & 0x0000FFFF)<<16) | 0x000000C0;
+  *(collationSource->CEpos++) = (r & UCOL_PRIMARYMASK) | 0x00000505;
+  collationSource->toReturn = collationSource->CEpos;
+  return ((r & 0x0000FFFF)<<16) | 0x000000C0;
 }
 
 /**
@@ -2779,6 +2783,7 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
         UChar    buffer[UCOL_MAX_BUFFER];
         uint32_t *endCEBuffer;
         UChar   *strbuffer;
+        int32_t noChars = 0;
 
   for(;;)
   {
@@ -2856,9 +2861,7 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
           // First we position ourselves at the begining of contraction sequence 
           const UChar *ContractionStart = UCharOffset = (UChar *)coll->image+getContractOffset(CE);
 
-          if (source->pos == source->string ||
-              ((source->flags & UCOL_ITER_INNORMBUF) &&
-              *(source->pos - 1) == 0 && source->fcdPosition == NULL)) {
+          if (collIter_bos(source)) {
           //if(sourcePointer == source->string) {
             CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex));
             break;
@@ -2878,7 +2881,43 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
                   (UCharOffset - coll->contractionIndex));
           }
           else
-          {
+          {             
+              // if there is a completely ignorable code point in the middle of 
+              // a prefix, we need to act as if it's not there
+              // assumption: 'real' noncharacters (*fffe, *ffff, fdd0-fdef are set to zero)
+              // lone surrogates cannot be set to zero as it would break other processing
+              uint32_t isZeroCE = UTRIE_GET32_FROM_LEAD(coll->mapping, schar);
+              // it's easy for BMP code points
+              if(isZeroCE == 0) {
+                continue;
+              } else if(UTF_IS_TRAIL(schar) || UTF_IS_LEAD(schar)) {
+                // for supplementary code points, we have to check the next one
+                // situations where we are going to ignore
+                // 1. beginning of the string: schar is a lone surrogate
+                // 2. schar is a lone surrogate
+                // 3. schar is a trail surrogate in a valid surrogate sequence
+                //    that is explicitly set to zero.
+                if (!collIter_bos(source)) {
+                  UChar lead;
+                  if(UTF_IS_LEAD(lead = getPrevNormalizedChar(source))) {
+                    isZeroCE = UTRIE_GET32_FROM_LEAD(coll->mapping, lead);
+                    if(getCETag(isZeroCE) == SURROGATE_TAG) {
+                      uint32_t finalCE = UTRIE_GET32_FROM_OFFSET_TRAIL(coll->mapping, isZeroCE&0xFFFFFF, schar);
+                      if(finalCE == 0) {
+                        // this is a real, assigned completely ignorable code point
+                        source->pos--;
+                        continue;
+                      }
+                    }
+                  } else {
+                    // lone surrogate, completely ignorable
+                    continue;
+                  }
+                } else {
+                  // lone surrogate at the beggining, completely ignorable
+                  continue;
+                }
+              }
               // Source string char was not in the table.
               //   We have not found the prefix.
               CE = *(coll->contractionCEs +
@@ -2917,8 +2956,10 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
         strbuffer = buffer;
         UCharOffset = strbuffer + (UCOL_MAX_BUFFER - 1);
         *(UCharOffset --) = 0;
+        noChars = 0;
         while (ucol_unsafeCP(schar, coll)) {
             *(UCharOffset) = schar;
+            noChars++;
             UCharOffset --;
             schar = getPrevNormalizedChar(source);
             source->pos --;
@@ -2945,12 +2986,14 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
         }
         /* adds the initial base character to the string */
         *(UCharOffset) = schar;
+        noChars++;
 
         /* a new collIterate is used to simply things, since using the current
         collIterate will mean that the forward and backwards iteration will
         share and change the same buffers. we don't want to get into that. */
         collIterate temp;
-        IInit_collIterate(coll, UCharOffset, -1, &temp);
+        //IInit_collIterate(coll, UCharOffset, -1, &temp);
+        IInit_collIterate(coll, UCharOffset, noChars, &temp);
         temp.flags &= ~UCOL_ITER_NORM;
 
         CE = ucol_IGetNextCE(coll, &temp, status);
@@ -3441,7 +3484,8 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
                       currentSize++;
                       leadPrimary = 0;
                   } else if(primary1<UCOL_BYTE_FIRST_NON_LATIN_PRIMARY ||
-                      (primary1 > (UCOL_RESET_TOP_VALUE>>24) && primary1 < (UCOL_NEXT_TOP_VALUE>>24))) {
+                      //(primary1 > (UCOL_RESET_TOP_VALUE>>24) && primary1 < (UCOL_NEXT_TOP_VALUE>>24))) {
+                      (primary1 > (*UCAconsts->UCA_LAST_NON_VARIABLE>>24) && primary1 < (*UCAconsts->UCA_FIRST_IMPLICIT>>24))) {
                   /* not compressible */
                       leadPrimary = 0;
                       currentSize+=2;
@@ -3881,7 +3925,8 @@ ucol_calcSortKey(const    UCollator    *coll,
                         *primaries++ = primary1;
                         leadPrimary = 0;
                     } else if(primary1<UCOL_BYTE_FIRST_NON_LATIN_PRIMARY ||
-                        (primary1 > (UCOL_RESET_TOP_VALUE>>24) && primary1 < (UCOL_NEXT_TOP_VALUE>>24))) {
+                        //(primary1 > (UCOL_RESET_TOP_VALUE>>24) && primary1 < (UCOL_NEXT_TOP_VALUE>>24))) {
+                        (primary1 > (*UCAconsts->UCA_LAST_NON_VARIABLE>>24) && primary1 < (*UCAconsts->UCA_FIRST_IMPLICIT>>24))) {
                     /* not compressible */
                         leadPrimary = 0;
                         *primaries++ = primary1;
@@ -4365,7 +4410,8 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
                       *primaries++ = primary1;
                       leadPrimary = 0;
                   } else if(primary1<UCOL_BYTE_FIRST_NON_LATIN_PRIMARY ||
-                      (primary1 > (UCOL_RESET_TOP_VALUE>>24) && primary1 < (UCOL_NEXT_TOP_VALUE>>24))) {
+                      //(primary1 > (UCOL_RESET_TOP_VALUE>>24) && primary1 < (UCOL_NEXT_TOP_VALUE>>24))) {
+                      (primary1 > (*UCAconsts->UCA_LAST_NON_VARIABLE>>24) && primary1 < (*UCAconsts->UCA_FIRST_IMPLICIT>>24))) {
                   /* not compressible */
                       leadPrimary = 0;
                       *primaries++ = primary1;
@@ -4740,7 +4786,10 @@ ucol_setVariableTop(UCollator *coll, const UChar *varTop, int32_t len, UErrorCod
 
   uint32_t CE = ucol_IGetNextCE(coll, &s, status);
 
-  if(s.pos != s.endp) {
+  /* here we check if we have consumed all characters */
+  /* you can put in either one character or a contraction */
+  /* you shouldn't put more... */
+  if(s.pos != s.endp || CE == UCOL_NO_MORE_CES) {
     *status = U_CE_NOT_FOUND_ERROR;
     return 0;
   }
