@@ -306,6 +306,10 @@ public class TransliteratorTest extends IntlTest {
         Transliterator b = Transliterator.getInstance("Hex-Unicode");
         Transliterator[] trans = { a, b };
         Transliterator ab = new CompoundTransliterator(trans);
+
+        // Do some basic tests of b
+        expect(b, "\\u0030\\u0031", "01");
+
         String s = "abcde";
         expect(ab, s, s);
 
