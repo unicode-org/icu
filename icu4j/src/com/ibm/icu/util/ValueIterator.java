@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/ValueIterator.java,v $
-* $Date: 2002/04/05 01:38:11 $
-* $Revision: 1.7 $
+* $Date: 2002/04/05 01:49:03 $
+* $Revision: 1.8 $
 *
 ******************************************************************************
 */
@@ -14,7 +14,7 @@
 package com.ibm.icu.util;
 
 /**
- * <p>Interface for enabling iteration over sets of [int, Object], where
+ * <p>Interface for enabling iteration over sets of <int, Object>, where
  * int is the sorted integer index in ascending order and Object, its 
  * associated value.</p>
  * <p>The ValueIterator allows iterations over integer indexes in the range 
