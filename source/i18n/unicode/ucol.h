@@ -339,6 +339,18 @@ ucol_strcoll(    const    UCollator    *coll,
         int32_t            targetLength);
 
 /**
+ * see the reference for ucol_strcoll. This is a temporary placeholder 
+ * for the new implementation
+ * @draft DO NOT USE!!! temporary prototyping support. Will be removed by 1.7 release.
+ */
+U_CAPI UCollationResult
+ucol_strcollEx(    const    UCollator    *coll,
+        const    UChar        *source,
+        int32_t            sourceLength,
+        const    UChar        *target,
+        int32_t            targetLength);
+
+/**
  * Determine if one string is greater than another.
  * This function is equivalent to \Ref{ucol_strcoll} == UCOL_GREATER
  * @param coll The UCollator containing the comparison rules.
@@ -541,7 +553,9 @@ ucol_getSortKey(const    UCollator    *coll,
         int32_t            resultLength);
 
 /**
- * see the above comment. This is the placeholder for the new implementation
+ * see the reference for ucol_getSortKey. This is a temporary placeholder 
+ * for the new implementation
+ * @draft DO NOT USE! temporary prototyping support. Will be removed by 1.7 release.
  */
 U_CAPI int32_t
 ucol_getSortKeyEx(const    UCollator    *coll,
@@ -768,6 +782,76 @@ ucol_getVersion(const UCollator* coll, UVersionInfo info);
  */
 U_CAPI uint8_t *
 ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status);
+
+
+/* Following are the new APIs for 1.7. They are all draft and most are not even implemented */
+
+typedef enum UColAttribute UColAttribute;
+
+typedef enum UColAttributeValue UColAttributeValue;
+
+/**
+ * Universal attribute setter
+ * @param coll collator which attributes are to be changed
+ * @param attr attribute type 
+ * @param value attribute value
+ * @param status to indicate whether the operation went on smoothly or there were errors
+ * @draft API 1.7 freeze
+ */
+U_CAPI void ucol_setAttribute(const UCollator *coll, const UColAttribute attr, const UColAttributeValue value, UErrorCode *status);
+
+/**
+ * Universal attribute getter
+ * @param coll collator which attributes are to be changed
+ * @param attr attribute type
+ * @return attribute value
+ * @param status to indicate whether the operation went on smoothly or there were errors
+ * @draft API 1.7 freeze
+ */
+U_CAPI UColAttributeValue ucol_getAttribute(const UCollator *coll, const UColAttribute attr, UErrorCode *status);
+
+/**
+ * Thread safe cloning operation
+ * @param coll collator to be cloned
+ * @param stackBuffer user allocated space for the new clone. If NULL new memory will be allocated
+ * @param bufferSize size of allocated space. If not enough new memory will be allocated.
+ * @param status to indicate whether the operation went on smoothly or there were errors
+ * @return pointer to the new clone
+ * @draft API 1.7 freeze
+ */
+U_CAPI UCollator *ucol_safeClone(const UCollator *coll, void *stackBuffer, uint32_t bufferSize, UErrorCode *status);
+
+/* declaration for forward iterating function */
+typedef UChar UCharForwardIterator(void *context);
+
+/**
+ * String compare that uses user supplied character iteration.
+ * The idea is to prevent users from having to convert the whole string into UChar's before comparing
+ * since sometimes strings differ on first couple of characters.
+ * @param coll collator to be used for comparing
+ * @param source pointer to function for iterating over the first string
+ * @param sourceContext data to be passed to the first iterating function.
+ * @param target pointer to function for iterating over the second string
+ * @param targetContext data to be passed to the second iterating function.
+ * @return The result of comparing the strings; one of UCOL_EQUAL,
+ * UCOL_GREATER, UCOL_LESS
+ */
+U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll, 
+								 UCharForwardIterator *source, void *sourceContext,
+								 UCharForwardIterator *target, void *targetContext);
+
+typedef enum UColRuleOption UColRuleOption ;
+
+/**
+ * Returns current rules. Delta defines whether full rules are returned or just the tailoring. 
+ * Returns number of UChars needed to store rules. If buffer is NULL or bufferLen is not enough 
+ * to store rules, will store up to available space.
+ * @param coll collator to get the rules from
+ * @param delta one of 	UCOL_TAILORING_ONLY, UCOL_FULL_RULES. 
+ * @param buffer buffer to store the result in. If NULL, you'll get no rules.
+ * @param bufferLen lenght of buffer to store rules in. If less then needed you'll get only the part that fits in.
+ */
+U_CAPI int32_t ucol_getRulesEx(const UCollator *coll, UColRuleOption delta, UChar *buffer, int32_t bufferLen);
 
 
 #endif
