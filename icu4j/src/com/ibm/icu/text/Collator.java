@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Collator.java,v $
-* $Date: 2003/02/11 01:19:02 $
-* $Revision: 1.21 $
+* $Date: 2003/02/18 22:02:46 $
+* $Revision: 1.22 $
 *
 *******************************************************************************
 */
@@ -339,42 +339,7 @@ public abstract class Collator implements Comparator, Cloneable
             ///CLOVER:ON
         }
     }
-
-    ///CLOVER:OFF
-    private static ICULocaleService service;
-    private static ICULocaleService getService() {
-        if (service == null) {
-            ICULocaleService newService = new ICULocaleService("Collator");
-
-            class CollatorFactory extends ICUResourceBundleFactory {
-                protected Object handleCreate(Locale loc, int kind, ICUService service) {
-                    return new RuleBasedCollator(loc);
-                }
-            }
-            newService.registerFactory(new CollatorFactory());
-
-            synchronized (Collator.class) {
-                if (service == null) {
-                    service = newService;
-                }
-            }
-        }
-        return service;
-    }
-
-    /* @prototype */
-    /* public */ static final Object register(Collator collator, Locale locale) {
-        return getService().registerObject(collator, locale);
-    }
-
-    /* @prototype */
-    /* public */ static final boolean unregister(Object registryKey) {
-        if (service != null) {
-            return service.unregisterFactory((Factory)registryKey);
-        }
-        return false;
-    }
-
+    
     ///CLOVER:ON
     /**
      * Get the set of Locales for which Collators are installed.
@@ -393,15 +358,7 @@ public abstract class Collator implements Comparator, Cloneable
             ///CLOVER:ON
         }
     }
-    ////CLOVER:OFF
-    /* @prototype */
-    /* public */ static final Map getDisplayNames(Locale locale) {
-        Collator col = Collator.getInstance(locale);
-        return getService().getDisplayNames(locale, col, null);
-    }
-    ////CLOVER:ON
-
-    // end registry stuff
+    
 
     /**
      * <p>Returns this Collator's strength property. The strength property
@@ -558,6 +515,53 @@ public abstract class Collator implements Comparator, Cloneable
      * @draft ICU 2.2
      */
     public abstract CollationKey getCollationKey(String source);
+    
+      /** 
+     * <p>
+     * Variable top is a two byte primary value which causes all the codepoints 
+     * with primary values that are less or equal than the variable top to be 
+     * shifted when alternate handling is set to SHIFTED.
+     * </p>
+     * <p>
+     * Sets the variable top to a collation element value of a string supplied.
+     * </p> 
+     * @param varTop one or more (if contraction) characters to which the 
+     *               variable top should be set
+     * @return a int value containing the value of the variable top in upper 16
+     *         bits. Lower 16 bits are undefined.
+     * @exception IllegalArgumentException is thrown if varTop argument is not 
+     *            a valid variable top element. A variable top element is 
+     *            invalid when it is a contraction that does not exist in the
+     *            Collation order or when the PRIMARY strength collation 
+     *            element for the variable top has more than two bytes
+     * @see #getVariableTop
+     * @see #resetVariableTop
+     * @see RuleBasedCollator#setAlternateHandlingShifted
+     * @draft ICU 2.6
+     */
+    public abstract int setVariableTop(String varTop);
+    
+    /** 
+     * Gets the variable top value of a Collator. 
+     * Lower 16 bits are undefined and should be ignored.
+     * @return the variable top value of a Collator.
+     * @see #setVariableTop
+     * @see #resetVariableTop
+     * @draft ICU 2.6
+     */
+    public abstract int getVariableTop();
+    
+    /** 
+     * Sets the variable top to a collation element value supplied.
+     * Variable top is set to the upper 16 bits. 
+     * Lower 16 bits are ignored.
+     * @param varTop Collation element value, as returned by setVariableTop or 
+     *               getVariableTop
+     * @see #getVariableTop
+     * @see #setVariableTop
+     * @draft ICU 2.6
+     */
+    public abstract void setVariableTop(int varTop);
 
     // protected constructor -------------------------------------------------
 
@@ -568,7 +572,30 @@ public abstract class Collator implements Comparator, Cloneable
     protected Collator()
     {
     }
+    
+    // package private methods -----------------------------------------------
 
+    /* @prototype */
+    /* public */ static final Object register(Collator collator, Locale locale) {
+        return getService().registerObject(collator, locale);
+    }
+
+    /* @prototype */
+    /* public */ static final boolean unregister(Object registryKey) {
+        if (service != null) {
+            return service.unregisterFactory((Factory)registryKey);
+        }
+        return false;
+    }
+    
+    ////CLOVER:OFF
+    /* @prototype */
+    /* public */ static final Map getDisplayNames(Locale locale) {
+        Collator col = Collator.getInstance(locale);
+        return getService().getDisplayNames(locale, col, null);
+    }
+    ////CLOVER:ON
+    
     // private data members --------------------------------------------------
 
     /**
@@ -580,5 +607,33 @@ public abstract class Collator implements Comparator, Cloneable
      * Decomposition mode
      */
     private int m_decomposition_ = CANONICAL_DECOMPOSITION;
+    
+    private static ICULocaleService service;
+    
+    // private methods -------------------------------------------------------
+    
+    ///CLOVER:OFF
+    
+    private static ICULocaleService getService() {
+        if (service == null) {
+            ICULocaleService newService = new ICULocaleService("Collator");
+
+            class CollatorFactory extends ICUResourceBundleFactory {
+                protected Object handleCreate(Locale loc, int kind, ICUService service) {
+                    return new RuleBasedCollator(loc);
+                }
+            }
+            newService.registerFactory(new CollatorFactory());
+
+            synchronized (Collator.class) {
+                if (service == null) {
+                    service = newService;
+                }
+            }
+        }
+        return service;
+    }
+    
+    // end registry stuff
 }
 

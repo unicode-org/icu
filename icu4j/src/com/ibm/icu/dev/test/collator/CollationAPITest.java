@@ -18,6 +18,7 @@
 package com.ibm.icu.dev.test.collator;
 
 import java.util.Locale;
+import java.util.Arrays;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import com.ibm.icu.dev.test.*;
@@ -686,6 +687,20 @@ public class CollationAPITest extends TestFmwk {
                 temp2[temp1.length] = 0;
                 return new CollationKey(source, temp2);
             }
+            
+            public void setVariableTop(int ce)
+            {
+            }
+            
+            public int setVariableTop(String str) 
+            {
+                return 0;
+            }
+            
+            public int getVariableTop()
+            {
+                return 0;
+            }
         }
  
         Collator col1 = new TestCollator();
@@ -794,4 +809,120 @@ public class CollationAPITest extends TestFmwk {
             errln("Setting case first handling default failed");
         }
     }
+    
+    public void TestBounds() 
+    {
+        Collator coll = Collator.getInstance(new Locale("sh"));
+          
+        String test[] = { "John Smith", "JOHN SMITH", 
+                          "john SMITH", "j\u00F6hn sm\u00EFth",
+                          "J\u00F6hn Sm\u00EFth", "J\u00D6HN SM\u00CFTH",
+                          "john smithsonian", "John Smithsonian",
+        };
+      
+        String testStr[] = {
+                          "\u010CAKI MIHALJ", 
+                          "\u010CAKI MIHALJ",
+                          "\u010CAKI PIRO\u0160KA", 
+                          "\u010CABAI ANDRIJA",
+                          "\u010CABAI LAJO\u0160", 
+                          "\u010CABAI MARIJA",
+                          "\u010CABAI STEVAN", 
+                          "\u010CABAI STEVAN",
+                          "\u010CABARKAPA BRANKO", 
+                          "\u010CABARKAPA MILENKO",
+                          "\u010CABARKAPA MIROSLAV", 
+                          "\u010CABARKAPA SIMO",
+                          "\u010CABARKAPA STANKO", 
+                          "\u010CABARKAPA TAMARA",
+                          "\u010CABARKAPA TOMA\u0160", 
+                          "\u010CABDARI\u0106 NIKOLA",
+                          "\u010CABDARI\u0106 ZORICA",
+                          "\u010CABI NANDOR",
+                          "\u010CABOVI\u0106 MILAN",
+                          "\u010CABRADI AGNEZIJA",
+                          "\u010CABRADI IVAN",
+                          "\u010CABRADI JELENA",
+                          "\u010CABRADI LJUBICA",
+                          "\u010CABRADI STEVAN",
+                          "\u010CABRDA MARTIN",
+                          "\u010CABRILO BOGDAN",
+                          "\u010CABRILO BRANISLAV",
+                          "\u010CABRILO LAZAR",
+                          "\u010CABRILO LJUBICA",
+                          "\u010CABRILO SPASOJA",
+                          "\u010CADE\u0160 ZDENKA",
+                          "\u010CADESKI BLAGOJE",
+                          "\u010CADOVSKI VLADIMIR",
+                          "\u010CAGLJEVI\u0106 TOMA",
+                          "\u010CAGOROVI\u0106 VLADIMIR",
+                          "\u010CAJA VANKA",
+                          "\u010CAJI\u0106 BOGOLJUB",
+                          "\u010CAJI\u0106 BORISLAV",
+                          "\u010CAJI\u0106 RADOSLAV",
+                          "\u010CAK\u0160IRAN MILADIN",
+                          "\u010CAKAN EUGEN",
+                          "\u010CAKAN EVGENIJE",
+                          "\u010CAKAN IVAN",
+                          "\u010CAKAN JULIJAN",
+                          "\u010CAKAN MIHAJLO",
+                          "\u010CAKAN STEVAN",
+                          "\u010CAKAN VLADIMIR",
+                          "\u010CAKAN VLADIMIR",
+                          "\u010CAKAN VLADIMIR",
+                          "\u010CAKARA ANA",
+                          "\u010CAKAREVI\u0106 MOMIR",
+                          "\u010CAKAREVI\u0106 NEDELJKO",
+                          "\u010CAKI \u0160ANDOR",
+                          "\u010CAKI AMALIJA",
+                          "\u010CAKI ANDRA\u0160",
+                          "\u010CAKI LADISLAV",
+                          "\u010CAKI LAJO\u0160",
+                          "\u010CAKI LASLO" }; 
+        
+        CollationKey testKey[] = new CollationKey[testStr.length];
+        for (int i = 0; i < testStr.length; i ++) {
+            testKey[i] = coll.getCollationKey(testStr[i]);
+        }
+        
+        Arrays.sort(testKey);
+        for(int i = 0; i < testKey.length - 1; i ++) {
+            CollationKey lower 
+                           = testKey[i].getBound(CollationKey.BoundMode.LOWER,
+                                                 Collator.SECONDARY);
+            for (int j = i + 1; j < testKey.length; j ++) {
+                CollationKey upper 
+                           = testKey[j].getBound(CollationKey.BoundMode.UPPER,
+                                                 Collator.SECONDARY);
+                for (int k = i; k <= j; k ++) {
+                    if (lower.compareTo(testKey[k]) > 0) {
+                        errln("Problem with lower bound at i = " + i + " j = "
+                              + j + " k = " + k);
+                    }
+                    if (upper.compareTo(testKey[k]) <= 0) {
+                        errln("Problem with upper bound at i = " + i + " j = "
+                              + j + " k = " + k);
+                    }
+                }
+            }
+        }
+        
+        for (int i = 0; i < test.length; i ++) 
+        {
+            CollationKey key = coll.getCollationKey(test[i]);
+            CollationKey lower = key.getBound(CollationKey.BoundMode.LOWER,
+                                              Collator.SECONDARY);
+            CollationKey upper = key.getBound(CollationKey.BoundMode.UPPER_LONG,
+                                              Collator.SECONDARY);
+            for (int j = i + 1; j < test.length; j ++) {
+                key = coll.getCollationKey(test[j]);
+                if (lower.compareTo(key) > 0) {
+                    errln("Problem with lower bound i = " + i + " j = " + j);
+                }
+                if (upper.compareTo(key) <= 0) {
+                    errln("Problem with upper bound i = " + i + " j = " + j);
+                }
+            }
+        }
+    }    
 }

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $
-* $Date: 2003/01/28 18:55:41 $
-* $Revision: 1.30 $
+* $Date: 2003/02/18 22:02:46 $
+* $Revision: 1.31 $
 *
 *******************************************************************************
 */
@@ -17,7 +17,6 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import java.util.MissingResourceException;
 import java.util.Arrays;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
@@ -187,7 +186,26 @@ import com.ibm.icu.impl.ICUDebug;
  */
 public final class RuleBasedCollator extends Collator
 {
-    // public data members ---------------------------------------------------
+    // public inner classes --------------------------------------------------
+    
+    /** 
+     * Options for retrieving the rule string 
+     * @draft ICU 2.6
+     */
+    public static final class RuleOption 
+    {
+        /** 
+         * Retrieve tailoring only
+         * @draft ICU 2.6
+         */
+        public static final int TAILORING_ONLY = 0;
+        /** 
+         * Retrieve UCA rules and tailoring 
+         * @draft ICU 2.6
+         */
+        public static final int FULL_RULES = 1;
+    };
+    
 
     // public constructors ---------------------------------------------------
 
@@ -561,17 +579,115 @@ public final class RuleBasedCollator extends Collator
         super.setStrength(newStrength);
         updateInternalState();
     }
+    
+    /** 
+     * <p>
+     * Variable top is a two byte primary value which causes all the codepoints 
+     * with primary values that are less or equal than the variable top to be 
+     * shifted when alternate handling is set to SHIFTED.
+     * </p>
+     * <p>
+     * Sets the variable top to a collation element value of a string supplied.
+     * </p> 
+     * @param varTop one or more (if contraction) characters to which the 
+     *               variable top should be set
+     * @return a int value containing the value of the variable top in upper 16
+     *         bits. Lower 16 bits are undefined.
+     * @exception IllegalArgumentException is thrown if varTop argument is not 
+     *            a valid variable top element. A variable top element is 
+     *            invalid when 
+     *            <ul>
+     *            <li>it is a contraction that does not exist in the
+     *                Collation order
+     *            <li>when the PRIMARY strength collation element for the 
+     *                variable top has more than two bytes
+     *            <li>when the varTop argument is null or zero in length.
+     *            </ul>
+     * @see #getVariableTop
+     * @see #resetVariableTop
+     * @see RuleBasedCollator#setAlternateHandlingShifted
+     * @draft ICU 2.6
+     */
+    public int setVariableTop(String varTop)
+    {
+        if (varTop == null || varTop.length() == 0) {
+            throw new IllegalArgumentException(
+            "Variable top argument string can not be null or zero in length.");
+        }
+        
+        m_srcUtilColEIter_.setText(varTop);
+        int ce = m_srcUtilColEIter_.next();
+        
+        // here we check if we have consumed all characters 
+        // you can put in either one character or a contraction
+        // you shouldn't put more... 
+        if (m_srcUtilColEIter_.getOffset() != varTop.length() 
+            || ce == CollationElementIterator.NULLORDER) {
+            throw new IllegalArgumentException(
+            "Variable top argument string is a contraction that does not exist "
+            + "in the Collation order");
+        }
+        
+        int nextCE = m_srcUtilColEIter_.next();
+        
+        if ((nextCE != CollationElementIterator.NULLORDER) 
+            && (!isContinuation(nextCE) || (nextCE & CE_PRIMARY_MASK_) != 0)) {
+                throw new IllegalArgumentException(
+                "Variable top argument string can only have a single collation "
+                + "element that has less than or equal to two PRIMARY strength "
+                + "bytes");
+        }
+        
+        m_variableTopValue_ = (ce & CE_PRIMARY_MASK_) >> 16;
+        
+        return ce & CE_PRIMARY_MASK_;
+    }
+    
+    /** 
+     * Sets the variable top to a collation element value supplied.
+     * Variable top is set to the upper 16 bits. 
+     * Lower 16 bits are ignored.
+     * @param varTop Collation element value, as returned by setVariableTop or 
+     *               getVariableTop
+     * @see #getVariableTop
+     * @see #setVariableTop
+     * @draft ICU 2.6
+     */
+    public void setVariableTop(int varTop)
+    {
+        m_variableTopValue_ = (varTop & CE_PRIMARY_MASK_) >> 16;
+    }
 
     // public getters --------------------------------------------------------
 
     /**
      * Gets the collation rules for this RuleBasedCollator.
+     * Equivalent to String getRules(RuleOption.FULL_RULES).
      * @return returns the collation rules
+     * @see #getRules(int)
      * @draft ICU 2.2
      */
     public String getRules()
     {
         return m_rules_;
+    }
+    
+    /**
+     * Returns current rules. Delta defines whether full rules are returned or just the tailoring. 
+     * Returns number of UChars needed to store rules. If buffer is NULL or bufferLen is not enough 
+     * to store rules, will store up to available space.
+     * @param ruleoption one of RuleOption.TAILORING_ONLY, RuleOption.FULL_RULES. 
+     * @return current rules
+     * @see #getRules
+     * @draft ICU 2.6
+     */
+    public String getRules(int ruleoption)
+    {
+        if (ruleoption == RuleOption.TAILORING_ONLY) {
+            return m_rules_;
+        }
+        // take the UCA rules and append real rules at the end 
+        return UCA_.m_rules_.concat(m_rules_);
     }
 
     /**
@@ -693,7 +809,7 @@ public final class RuleBasedCollator extends Collator
      {
         return (m_caseFirst_ == AttributeValue.UPPER_FIRST_);
      }
-
+     
     /**
      * Return true if a lowercase character is sorted before the corresponding uppercase character.
      * See setCaseFirst(boolean) for details.
@@ -767,6 +883,19 @@ public final class RuleBasedCollator extends Collator
         return m_isHiragana4_;
     }
 
+    /** 
+     * Gets the variable top value of a Collator. 
+     * Lower 16 bits are undefined and should be ignored.
+     * @return the variable top value of a Collator.
+     * @see #setVariableTop
+     * @see #resetVariableTop
+     * @draft ICU 2.6
+     */
+    public int getVariableTop()
+    {
+          return m_variableTopValue_ << 16;
+    }
+    
     // public other methods -------------------------------------------------
 
     /**
@@ -939,7 +1068,7 @@ public final class RuleBasedCollator extends Collator
           return compareRegular(source, target, offset);
         }
     }
-
+    
     // package private inner interfaces --------------------------------------
 
     /**
@@ -1344,6 +1473,9 @@ public final class RuleBasedCollator extends Collator
      */
     static final int LAST_COUNT2_ = OTHER_COUNT_ / 21;
     static final int IMPLICIT_3BYTE_COUNT_ = 1;
+    
+    static final byte SORT_LEVEL_TERMINATOR_ = 1;
+
 
     // block to initialise character property database
     static
@@ -1371,8 +1503,9 @@ public final class RuleBasedCollator extends Collator
             IMPLICIT_BASE_3BYTE_ = (IMPLICIT_BASE_BYTE_ << 24) + 0x030300;
             IMPLICIT_BASE_4BYTE_ = ((IMPLICIT_BASE_BYTE_
                                      + IMPLICIT_3BYTE_COUNT_) << 24) + 0x030303;
-            UCA_.m_rules_ = null;
             UCA_.init();
+            ResourceBundle rb = ICULocaleData.getLocaleElements(Locale.ENGLISH);
+            UCA_.m_rules_ = (String)rb.getObject("%%UCARULES");
         }
         catch (Exception e)
         {
@@ -1747,8 +1880,6 @@ public final class RuleBasedCollator extends Collator
 
     private static final byte SORT_CASE_BYTE_START_ = (byte)0x80;
     private static final byte SORT_CASE_SHIFT_START_ = (byte)7;
-
-    private static final byte SORT_LEVEL_TERMINATOR_ = 1;
 
     /**
      * CE buffer size
