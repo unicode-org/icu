@@ -1197,13 +1197,17 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* args,
             /*Do the conversion*/
             if(mySourceChar == 0x0020){
                 targetUniChar = mySourceChar;
-            /* this seems to be broken --ram*/
-              /*  if(currentState > 2){
+            
+                if(currentState > 2){
                     concatEscape(args, &myTargetIndex, &myTargetLength,	escSeqChars[0],err,strlen(escSeqChars[0]));
                     
                     TEST_ERROR_CONDITION(args,myTargetIndex, mySourceIndex, isTargetUCharDBCS,myConverterData, err);
+                    isTargetUCharDBCS=FALSE;
                 }
-                //myConverterData->isEscapeAppended=isEscapeAppended =FALSE;*/
+                concatString(args, &myTargetIndex, &myTargetLength,&targetUniChar,err,&mySourceIndex);
+                myConverterData->isEscapeAppended=isEscapeAppended =FALSE;
+                TEST_ERROR_CONDITION(args,myTargetIndex, mySourceIndex,	isTargetUCharDBCS,myConverterData, err);
+                continue;
             }
             /* if the source character is CR or LF then append the ASCII escape sequence*/
             else if(mySourceChar== 0x000A || mySourceChar== 0x000D || mySourceChar==0x0009 || mySourceChar==0x000B){
