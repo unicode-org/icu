@@ -1,11 +1,11 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2003, International Business Machines Corporation and         *
+ * Copyright (C) 2001-2004, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberFormatTest.java,v $ 
- * $Date: 2004/02/20 19:40:31 $ 
- * $Revision: 1.23 $
+ * $Date: 2004/03/24 18:39:47 $ 
+ * $Revision: 1.24 $
  *
  *****************************************************************************************
  */
@@ -21,7 +21,9 @@ import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.text.*;
 import com.ibm.icu.text.NumberFormat.*;
 import com.ibm.icu.util.*;
-
+import com.ibm.icu.impl.LocaleUtility;
+import com.ibm.icu.impl.data.ResourceReader;
+import com.ibm.icu.impl.data.TokenIterator;
 import java.math.BigInteger;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
@@ -968,6 +970,162 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 errln("FAIL: pattern \"" + pat + "\" should have " +
                       (valid?"succeeded":"failed") + "; got " + msg);
             }
+        }
+    }
+
+    /**
+     * Return an integer representing the next token from this
+     * iterator.  The integer will be an index into the given list, or
+     * -1 if there are no more tokens, or -2 if the token is not on
+     * the list.
+     */
+    private static int keywordIndex(String tok) {
+        for (int i=0; i<KEYWORDS.length; ++i) {
+            if (tok.equals(KEYWORDS[i])) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private static final String KEYWORDS[] = {
+        /*0*/ "ref=", // <reference pattern to parse numbers>
+        /*1*/ "loc=", // <locale for formats>
+        /*2*/ "f:",   // <pattern or '-'> <number> <exp. string>
+        /*3*/ "fp:",  // <pattern or '-'> <number> <exp. string> <exp. number>
+        /*4*/ "rt:",  // <pattern or '-'> <(exp.) number> <(exp.) string>
+        /*5*/ "p:",   // <pattern or '-'> <string> <exp. number>
+        /*6*/ "perr:",   // <pattern or '-'> <invalid string>
+        /*7*/ "pat:", // <pattern or '-'> <exp. toPattern or '-' or 'err'>
+    };
+
+    public void TestCases() {
+        ResourceReader reader = new ResourceReader(NumberFormatTest.class,
+                                                   "NumberFormatTestCases.txt");
+        TokenIterator tokens = new TokenIterator(reader);
+
+        Locale loc = new Locale("en", "US", "");
+        DecimalFormat ref = null, fmt = null;
+        String pat = null;
+
+        try {
+            for (;;) {
+                String tok = tokens.next();
+                if (tok == null) {
+                    break;
+                }
+                String where = "(" + tokens.getLineNumber() + ") ";
+                int cmd = keywordIndex(tok);
+                switch (cmd) {
+                case 0:
+                    // ref= <reference pattern>
+                    ref = new DecimalFormat(tokens.next(),
+                                            new DecimalFormatSymbols(Locale.US));
+                    break;
+                case 1:
+                    // loc= <locale>
+                	loc = LocaleUtility.getLocaleFromName(tokens.next());
+                    break;
+                case 2: // f:
+                case 3: // fp:
+                case 4: // rt:
+                case 5: // p:
+                	tok = tokens.next();
+                    if (!tok.equals("-")) {
+                    	pat = tok;
+                        try {
+                            fmt = new DecimalFormat(pat, new DecimalFormatSymbols(loc));
+                        } catch (IllegalArgumentException iae) {
+                            errln(where + "Pattern \"" + pat + '"');
+                            iae.printStackTrace();
+                            tokens.next(); // consume remaining tokens
+                            tokens.next();
+                            if (cmd == 3) tokens.next();
+                            continue;
+                        }
+                    }
+                    String str = null;
+                    try {
+                        if (cmd == 2 || cmd == 3 || cmd == 4) {
+                            // f: <pattern or '-'> <number> <exp. string>
+                            // fp: <pattern or '-'> <number> <exp. string> <exp. number>
+                            // rt: <pattern or '-'> <number> <string>
+                            String num = tokens.next();
+                            str = tokens.next();
+                            Number n = (Number) ref.parse(num);
+                            assertEquals(where + '"' + pat + "\".format(" + num + ")",
+                                         str, fmt.format(n));
+                            if (cmd == 3) { // fp:
+                                n = (Number) ref.parse(tokens.next());
+                            }
+                            if (cmd != 2) { // != f:
+                                assertEquals(where + '"' + pat + "\".parse(\"" + str + "\")",
+                                             n, fmt.parse(str));
+                            } 
+                        }
+                        // p: <pattern or '-'> <string to parse> <exp. number>
+                        else {
+                            str = tokens.next();
+                            String expstr = tokens.next();
+                            Number exp = (Number) ref.parse(expstr);
+                            assertEquals(where + '"' + pat + "\".parse(\"" + str + "\")",
+                                         exp, fmt.parse(str));
+                        }
+                    } catch (ParseException e) {
+                        errln(where + '"' + pat + "\".parse(\"" + str +
+                              "\") threw an exception");
+                        e.printStackTrace();
+                    }
+                    break;
+                case 6:
+                    // perr: <pattern or '-'> <invalid string>
+                    errln("Under construction");
+                    return;
+                case 7:
+                    // pat: <pattern> <exp. toPattern, or '-' or 'err'>
+                    String testpat = tokens.next();
+                    String exppat  = tokens.next();
+                    boolean err    = exppat.equals("err");
+                    if (testpat.equals("-")) {
+                        if (err) {
+                            errln("Invalid command \"pat: - err\" at " +  tokens.describePosition());
+                            continue;
+                        }
+                        testpat = pat;
+                    }
+                    if (exppat.equals("-")) exppat = testpat;
+                    try {
+                        DecimalFormat f = null;
+                        if (testpat == pat) { // [sic]
+                            f = fmt;
+                        } else {
+                            f = new DecimalFormat(testpat);
+                        }
+                        if (err) {
+                            errln(where + "Invalid pattern \"" + testpat +
+                                  "\" was accepted");
+                        } else {
+                            assertEquals(where + '"' + testpat + "\".toPattern()",
+                                         exppat, f.toPattern());
+                        }
+                    } catch (IllegalArgumentException iae2) {
+                        if (err) {
+                            logln("Ok: " + where + "Invalid pattern \"" + testpat +
+                                  "\" threw an exception");
+                        } else {
+                            errln(where + "Valid pattern \"" + testpat +
+                                  "\" threw an exception");
+                            iae2.printStackTrace();
+                        }
+                    }
+                    break;
+                case -1:
+                    errln("Unknown command \"" + tok + "\" at " + tokens.describePosition());
+                    return;
+                }
+            }
+        } catch (java.io.IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
