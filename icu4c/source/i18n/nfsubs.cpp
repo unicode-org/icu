@@ -714,15 +714,6 @@ FractionalPartSubstitution::FractionalPartSubstitution(int32_t _pos,
         // cast away const
         ((NFRuleSet*)getRuleSet())->makeIntoFractionRuleSet();
     }
-    
-    // TODO: Thai doesn't use spaces, so spelling out decimals with 
-    // spaces between the words for each digit is incorrect.
-    // The rules don't seem to accomodate this, at least I can't figure 
-    // out how to handle it using the rules.  Need to provide better
-    // control over fractional part formatting.  
-    // For now, just check if locale uses the Thai language.
-    
-    // useSpaces = strcmp(formatter->locale.getLanguage(), "th") != 0;
 }
 
 //-----------------------------------------------------------------------
