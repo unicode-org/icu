@@ -5,7 +5,7 @@
 *******************************************************************************
 */
 
-package com.ibm.test.text;
+package com.ibm.icu.test.text;
 
 import com.ibm.test.TestFmwk;
 import com.ibm.text.ArabicShaping;
