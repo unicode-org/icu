@@ -673,7 +673,10 @@ public class LDMLUtilities {
      * @param node
      * @param xpath
      */
-    public static void appendXPathAttribute(Node node, StringBuffer xpath){
+    public static final void appendXPathAttribute(Node node, StringBuffer xpath){
+        appendXPathAttribute(node,xpath,false);
+    }
+    public static void appendXPathAttribute(Node node, StringBuffer xpath,boolean ignoreAlt){
         boolean terminate = false;
     	String val = getAttributeValue(node, LDMLConstants.TYPE);
         String and =  "and";
@@ -688,18 +691,20 @@ public class LDMLUtilities {
             xpath.append("'");
             terminate = true;
         }
-        val = getAttributeValue(node, LDMLConstants.ALT);
-        if(val!=null){
-            if(isStart){
-                xpath.append("[");
-                isStart=false;
-            }else{
-                xpath.append(and);
+        if(!ignoreAlt) {
+            val = getAttributeValue(node, LDMLConstants.ALT);
+            if(val!=null){
+                if(isStart){
+                    xpath.append("[");
+                    isStart=false;
+                }else{
+                    xpath.append(and);
+                }
+                xpath.append("@alt='");
+                xpath.append(val);
+                xpath.append("'");
+                terminate = true;
             }
-            xpath.append("@alt='");
-            xpath.append(val);
-            xpath.append("'");
-            terminate = true;
         }
         val = getAttributeValue(node, LDMLConstants.KEY);
         if(val!=null){
@@ -810,6 +815,24 @@ public class LDMLUtilities {
             node = list.item(i);
             if(/*!isDraft(node, xpath)&& */!isAlternate(node)){
                 return node;
+            }
+        }
+        return null;
+    }
+    public static Node getNonAltNodeLike(Node parent, Node child){
+        StringBuffer childXpath = new StringBuffer(child.getNodeName());
+        appendXPathAttribute(child,childXpath,true);
+        String childXPathString = childXpath.toString();
+        for(Node other=parent.getFirstChild(); other!=null; other=other.getNextSibling() ){
+            if((other.getNodeType()!=Node.ELEMENT_NODE)  || (other==child)) {
+                continue;
+            }
+            StringBuffer otherXpath = new StringBuffer(other.getNodeName());
+            appendXPathAttribute(other,otherXpath);
+          //  System.out.println("Compare: " + childXpath + " to " + otherXpath);
+            if(childXPathString.equals(otherXpath.toString())) {
+              //  System.out.println("Match!");
+                return other;
             }
         }
         return null;

@@ -49,13 +49,19 @@ public class LDMLComparator {
     private static final int OPT_SOURCE  = 0x200; /*2exp9*/
     private static final int OPT_DEST    = 0x400; /*2exp10*/
     private static final int OPT_LINUX   = 0x800; /*2exp11*/
-    private static final int OPT_AIX     = 0x1000; /*2exp12*/
-    private static final int OPT_COMMON  = 0x2000; /*2exp13*/
-    private static final int OPT_DIFF = 0x4000; /*2exp15*/   //PN
-    private static final int OPT_DIFF_REF_COMMON = 0x8000; /*2exp16*/  //PN
-    private static final int OPT_BULK = 0x00010000;   //PN
-    private static final int OPT_CASE_SENSITIVE = 0x00020000;   //PN
-    private static final int OPT_UNKNOWN = 0x00040000;   
+    private static final int OPT_AIX    = 0x1000; /*2exp12*/
+    private static final int OPT_COMMON = 0x2000; /*2exp13*/
+    private static final int OPT_DIFF   = 0x4000; /*2exp15*/   //PN
+    private static final int OPT_DIFF_REF_COMMON
+                                        = 0x8000; /*2exp16*/  //PN
+    private static final int OPT_BULK 
+                                    = 0x00010000;   //PN
+    private static final int OPT_CASE_SENSITIVE 
+                                    = 0x00020000;   //PN
+    private static final int OPT_VETTING
+                                    = 0x00040000;   
+    private static final int OPT_UNKNOWN 
+                                    = 0x00080000;   
     
     private static final String COMMON      = "common";     
     private static final String ICU         = "icu";    
@@ -70,11 +76,15 @@ public class LDMLComparator {
     private static final String AIX         = "aix";        
     private static final String LINUX       = "linux";    
     
+    private static final String ALTERNATE   = "ALT";
+    private static final String ALTERNATE_TITLE   = "(Original)";
+    private static final String ALT_COLOR   = "#DDDDFD";
     //PN added
     private static final String DIFF        = "diff";
     private static final String DIFF_REF_COMMON = "diff_ref_common";
     private static final String BULK        = "bulk";
     private static final String CASE_SENSITIVE = "case_sensitive";
+    private static final String VETTING        = "vetting";
     private static final String[] PLATFORM_PRINT_ORDER ={
         COMMON,     
         ICU,
@@ -109,6 +119,7 @@ public class LDMLComparator {
         "-" + DIFF_REF_COMMON,  //PN added, same as diff only common is excluded from diff but gets printed to html for reference purposes
         "-" + BULK,  //do a bulk comparison of folder contents
         "-" + CASE_SENSITIVE,  //do case sensitive matching (by default it's not case sensitive)
+        "-" + VETTING // go into Vetting mode. (show draft, etc)
     };
    
 
@@ -146,6 +157,9 @@ public class LDMLComparator {
     private int m_iTotalConflictingElements = 0;
     private int m_iTotalNonConflictingElements = 0;
     private TreeMap m_LocaleSummaryDataMap = new TreeMap ();  //key = localename, data = summary info
+    private boolean m_Vetting = false;
+    
+    private int m_totalCount = 0;
     
     private class CompareElement
     {
@@ -193,12 +207,12 @@ public class LDMLComparator {
         colorHash.put( OPEN_OFFICE, "#FFFF33");
         colorHash.put( AIX,         "#EB97FE");
         colorHash.put( LINUX,       "#1191F1");
-        // TODO
+        // TODO - use deprecatedMap instead.
         //deprecatedLanguageCodes.put("sh", "what ever the new one is");
         deprecatedLanguageCodes.put("iw", "he");
         deprecatedLanguageCodes.put("in", "id");
         deprecatedLanguageCodes.put("ji", "yi");
-        deprecatedLanguageCodes.put("jw", "jv"); // this does not even exist, JDK think jw is javanese!!
+        deprecatedLanguageCodes.put("jw", "jv"); // this does not even exist, JDK thinks jw is javanese!!
         
         //country codes
         deprecatedCountryCodes.put("TP", "TL");
@@ -228,22 +242,38 @@ public class LDMLComparator {
             }
             else
             {
-                localeStr  = goldFileName.substring(goldFileName.lastIndexOf(File.separatorChar)+1,goldFileName.indexOf('.'));
+                localeStr  = goldFileName.substring(goldFileName.lastIndexOf(File.separatorChar)+1,goldFileName.lastIndexOf('.'));
                 
                 String fileName = destFolder+File.separator+localeStr+".html";
-                OutputStreamWriter os = new OutputStreamWriter(new FileOutputStream(fileName),encoding);
-                System.out.println("INFO: Creating file named: " + fileName);
-                
-                addToCompareMap(goldFileName, goldKey);
+                m_totalCount = 0;
+                if((m_iOptions & OPT_VETTING) != 0)
+                {
+                    m_Vetting = true;
+                    addVettable(goldFileName, goldKey);
+                }
+                else
+                {
+                    addToCompareMap(goldFileName, goldKey);
+                }
                 for(;en.hasMoreElements();)
                 {
                     String key = (String)en.nextElement();
                     String compFile = (String) optionTable.get(key);
-                    addToCompareMap(compFile,key);
-                    
+                    if((m_iOptions & OPT_VETTING) != 0) {
+                        addVettable(goldFileName, goldKey);
+                    } else {
+                        addToCompareMap(compFile,key);
+                    }
                 }
-                PrintWriter writer = new PrintWriter(os);
-                printHTML(writer, localeStr);
+                if((m_totalCount == 0) && m_Vetting) { // only  optional for vetting.
+                    System.out.println("INFO:  no file created (nothing to write..) " + fileName);
+                } else {
+                    OutputStreamWriter os = new OutputStreamWriter(new FileOutputStream(fileName),encoding);
+                    System.out.println("INFO: Creating file named: " + fileName);
+                    
+                    PrintWriter writer = new PrintWriter(os);
+                    printHTML(writer, localeStr);
+                }
             }
         }catch(Exception e)
         {
@@ -295,7 +325,7 @@ public class LDMLComparator {
                     
                     if (USER_OPTIONS[i].equals(option))
                     {
-                        result |= (int)(1 << i);
+                        result |= (int)(1 << i); // calculate option bit value
                         optionRecognized = true;
                         if(USER_OPTIONS[i].equals("-s"))
                         {
@@ -315,6 +345,10 @@ public class LDMLComparator {
                         else if (USER_OPTIONS[i].equals("-" + BULK))
                         {
                             
+                        }
+                        else if (USER_OPTIONS[i].equals("-" + VETTING))
+                        {
+                         m_Vetting = true;   
                         }
                         else if (USER_OPTIONS[i].equals("-" + CASE_SENSITIVE))
                         {}
@@ -387,6 +421,9 @@ public class LDMLComparator {
                
             }
         }        
+        if(m_Vetting) {
+            writer.print("<th bgcolor=\"" + ALT_COLOR + "\">" + ALTERNATE_TITLE + "</th>");
+        }
         writer.print("            </tr>\n");
     }
 
@@ -418,6 +455,9 @@ public class LDMLComparator {
             
             //     }
         }
+        if(m_Vetting) {
+            writer.print("<th>" + ALTERNATE_TITLE + "</th>");
+        }
         writer.print("            </tr>\n");
     }
     
@@ -441,7 +481,6 @@ public class LDMLComparator {
             String value = (String)element.platformData.get(m_PlatformVect.elementAt(i));
             if (value == null)
                 continue;
-            
             //loop until non null value is found, this is the reference for comparison
             if (bFoundFirst == false)
             {
@@ -528,7 +567,7 @@ public class LDMLComparator {
             String value = (String)element.platformData.get(platform);
             if (value == null)
                 continue;
-            
+
             //loop until non null value is found, this is the reference for comparison
             if (bFoundFirst == false)
             {
@@ -648,10 +687,20 @@ public class LDMLComparator {
                 if(isEqual){
                     value = "=";
                 }
-                if(caseDiff==true){
-                    writer.print("                <td bgcolor="+color+">"+value+"&#x2020;</td>\n");
-                }else{
-                    writer.print("                <td bgcolor="+color+">"+value+"</td>\n");
+                if(m_Vetting) {
+                    String altText = (String)element.platformData.get("ALT");
+                    writer.print("<td>" + value + "</td>");
+                    if(altText!=null) { 
+                        writer.print("                <td bgcolor="+ALT_COLOR+">"+altText);
+                        writer.print("</td>\n");
+                    }
+                } else {
+                    if(caseDiff==true){
+                        writer.print("                <td bgcolor="+color+">"+value+"&#x2020;");
+                    }else{
+                        writer.print("                <td bgcolor="+color+">"+value);
+                    }
+                    writer.print("</td>\n");
                 }
             }
         }
@@ -790,7 +839,32 @@ public class LDMLComparator {
              doesNotExist.put(key, "");
              return false;
          }
-         return extractMergeData(testDoc,key);
+         return extractMergeData(testDoc,key,false);
+
+     }				   
+
+     private Document getParsedLocale(String localeName,String fileName){
+         // here we assume that "_" is the delimiter
+         int index = fileName.lastIndexOf(File.separatorChar);
+         String sourceDir = fileName.substring(0, index+1);
+         String locale = fileName.substring(index+1, fileName.lastIndexOf("."));
+         System.out.println("INFO: getting parsed data for : " + fileName);
+         Document doc = LDMLUtilities.parse(fileName,true); // ?  
+         
+         return doc;
+     }
+     
+     private boolean addVettable(String fileName, String key)
+     {
+         // parse the test doc only if gold doc was parsed OK  
+         Document testDoc = getParsedLocale(key,fileName);
+         requested.put(key,"");
+         if (null == testDoc)
+         {
+             doesNotExist.put(key, "");
+             return false;
+         }
+         return extractMergeData(testDoc,key,false);
 
      }				   
 
@@ -838,7 +912,7 @@ public class LDMLComparator {
 
     private void addElement(String childNode, String parentNode, String id, String index, 
                             String platformValue, String platformName){
-       
+        m_totalCount++;       
         Object obj = compareMap.get(id);
         CompareElement element;
         if(obj==null){
@@ -864,7 +938,6 @@ public class LDMLComparator {
         }
         
         element.platformData.put(platformName, platformValue);
-        
     }
     
     private boolean childrenAreElements(Node node){
@@ -906,11 +979,26 @@ public class LDMLComparator {
         return "";
     }
     
-    private boolean extractMergeData(Node node,String key){
+    private boolean extractMergeData(Node node,String key, boolean parentDraft){
         Node childOfSource;
+        String altText = null;
         for(childOfSource = node.getFirstChild(); childOfSource != null; childOfSource = childOfSource.getNextSibling()) {
              if (childOfSource.getNodeType() != Node.ELEMENT_NODE) {
                  continue;
+             }
+             Node altForChild = null;
+             boolean subDraft = parentDraft;
+             if(m_Vetting && LDMLUtilities.isNodeDraft(childOfSource)) {
+                String alt = LDMLUtilities.getAttributeValue(childOfSource, LDMLConstants.ALT);
+                if((alt!=null)&&alt.equals(LDMLConstants.PROPOSED)) {
+                    altForChild = LDMLUtilities.getNonAltNodeLike(node, childOfSource);
+                    if(altForChild == null) {
+                        throw new IllegalArgumentException("ERR: can't find a node like this one: " + childOfSource.toString());
+                    }
+                }
+                if(!subDraft) {
+                    subDraft = true;
+                }
              }
              String childOfSourceName = childOfSource.getNodeName();
              //Ignore collation and special tags
@@ -936,6 +1024,19 @@ public class LDMLComparator {
                     String temp = trim(valueNode.getNodeValue());
                     if(!temp.equals("standard")){
                         nodeValue = temp;
+                    }
+                 }
+                 if(altForChild != null) {
+                     Node valueNode2 = altForChild.getFirstChild();
+                     if(valueNode2 != null){
+                        String temp = trim(valueNode2.getNodeValue());
+                        if(!temp.equals("standard")){
+                            altText = temp;
+                        } else {
+                            altText = "??? alt=standard";
+                        }
+                    } else {
+                        altText = "??? alt has no value";
                     }
                  }
                  Node parentNode = childOfSource.getParentNode();
@@ -1060,40 +1161,65 @@ public class LDMLComparator {
                      }
                      if(!index.equals("")){
                          if(!index.equals(nodeValue) && !index.equals("Fallback")){
-                            addElement(childNodeName, parentNodeName, id, index, nodeValue, key);
+                            if(!m_Vetting || subDraft) {                         
+                                addElement(childNodeName, parentNodeName, id, index, nodeValue, key);
+                                if(altText!=null) {
+                                    addElement(childNodeName, parentNodeName, id, index, altText, "ALT");
+                                }
+                            }
                          } 
                      }else{
                          if(!type.equals(nodeValue) && !type.equals("Fallback")){
-                            addElement(childNodeName, parentNodeName, id, type, nodeValue, key);
+                            if(!m_Vetting || subDraft) {                         
+                                addElement(childNodeName, parentNodeName, id, type, nodeValue, key);
+                                if(altText!=null) {
+                                    addElement(childNodeName, parentNodeName, id, index, altText, "ALT");
+                                }
+                            }
                          }
                      }
                  }
-                 if(attr.getLength()>0 && typeNode==null){
+                 if(attr.getLength()>0 && typeNode==null){ //TODO: make this a fcn
                      // add an element for each attribute different for each attribute
-                     for(int i=0; i<attr.getLength(); i++){
-                         Node item = attr.item(i);
-                         String attrName =item.getNodeName();
-                         if(attrName.equals("type")){
-                             continue;
-                         }
-                         if(grandParentNodeName.equals("zone") ){
-                            parentNodeName = grandParentNodeName+"\u200b_"+parentNodeName;    
-                         } 
-                         String id = grandParentNodeName+"_"+parentNodeName+"_"+childNodeName+"_"+type+"_"+attrName;
-                         if(!index.equals("")){
-                             addElement(childNodeName, parentNodeName, id, index, item.getNodeValue(), key);
-                         }else if(!type.equals("")){
-                             addElement(childNodeName, parentNodeName, id, type, item.getNodeValue(), key);
-                         }else{
-                             if(!attrName.equals("draft")){
-                                 addElement(childNodeName, parentNodeName, id, attrName, item.getNodeValue(), key);
+                     if(!m_Vetting || subDraft) {                         
+                         for(int i=0; i<attr.getLength(); i++){
+                             Node item = attr.item(i);
+                             String attrName =item.getNodeName();
+                             String subAltText = null;
+                             if(attrName.equals("type")){
+                                 continue;
+                             }
+                             if(attrName.equals("alt")){
+                                 continue;
+                             }
+                             if(attrName.equals("draft")){
+                                 continue;
+                             }
+                             if(grandParentNodeName.equals("zone") ){
+                                parentNodeName = grandParentNodeName+"\u200b_"+parentNodeName;    
+                             } 
+                             String id = grandParentNodeName+"_"+parentNodeName+"_"+childNodeName+"_"+type+"_"+attrName;
+                             String subNodeValue = item.getNodeValue();
+                             if(altForChild!=null) {
+                                subAltText="?";
+                                System.err.println(parentNodeName + "/" + childNodeName + " alt?? : " + altText); 
+                                throw new IllegalArgumentException("UNKNOWN ALT SUBTAG THINGY + " + parentNodeName + "/" + childNodeName + " alt?? : " + altText + " not " + subNodeValue);
+                             }
+                             if(!index.equals("")){
+                                 addElement(childNodeName, parentNodeName, id, index, subNodeValue, key);
+                             }else if(!type.equals("")){
+                                 addElement(childNodeName, parentNodeName, id, type, subNodeValue, key);
+                             }else{
+                                 if(!attrName.equals("draft")){
+                                     addElement(childNodeName, parentNodeName, id, attrName, subNodeValue, key);
+                                 }
                              }
                          }
                      }
                  }
              }else{
                  //the element has more children .. recurse to pick them all
-                 extractMergeData(childOfSource,key);
+                 extractMergeData(childOfSource,key, subDraft);
              }
         }
         return true;
