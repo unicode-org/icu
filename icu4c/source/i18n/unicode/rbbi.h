@@ -10,11 +10,10 @@
 #ifndef RBBI_H
 #define RBBI_H
 
-#include "utypes.h"
-#include "rbbi_tbl.h"
+#include "unicode/utypes.h"
 #include "unicode/brkiter.h"
-#include "filestrm.h"
 
+class RuleBasedBreakIteratorTables;
 /**
  * <p>A subclass of BreakIterator whose behavior is specified using a list of rules.</p>
  * 

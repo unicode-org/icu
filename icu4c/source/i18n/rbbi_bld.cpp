@@ -8,10 +8,10 @@
 **********************************************************************
 */
 
-#include "rbbi.h"
+#include "unicode\rbbi.h"
 #include "rbbi_bld.h"
 #include "cmemory.h"
-#include "unicode.h"
+#include "unicode\unicode.h"
 
 //=======================================================================
 // RuleBasedBreakIterator.Builder

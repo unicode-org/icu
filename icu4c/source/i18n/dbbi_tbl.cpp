@@ -7,6 +7,7 @@
 **********************************************************************
 */
 
+#include "ucmp8.h"
 #include "dbbi_tbl.h"
 #include "unicode/dbbi.h"
 
