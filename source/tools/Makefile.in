@@ -245,14 +245,14 @@ install-everything: install-files install-dlls
 
 install-files:
 	@for file in $(UDATA_FILES); do \
-	  echo $(INSTALL_DATA) $(top_builddir)/data/$$file $(pkgdatadir)/$(VERSION)/$$file; \
-	  $(INSTALL_DATA) $(top_builddir)/data/$$file $(pkgdatadir)/$(VERSION)/$$file; \
+	  echo $(INSTALL_DATA) $(top_builddir)/data/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/$$file; \
+	  $(INSTALL_DATA) $(top_builddir)/data/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/$$file || exit; \
 	done
 
 install-dlls:
 	@for file in $(UDATA_DLLS); do \
-	  echo $(INSTALL_DATA) $(top_builddir)/data/$$file $(pkgdatadir)/$(VERSION)/$$file; \
-	  $(INSTALL_DATA) $(top_builddir)/data/$$file $(pkgdatadir)/$(VERSION)/$$file; \
+	  echo $(INSTALL_DATA) $(top_builddir)/data/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/$$file; \
+	  $(INSTALL_DATA) $(top_builddir)/data/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/$$file || exit; \
 	done
 
 

@@ -100,11 +100,11 @@ all-local: $(srcdir)/configure builddata
 
 install-local:
 	@for file in $(EXTRA_DATA); do \
-	  echo $(INSTALL_DATA) $(top_srcdir)/../data/$$file $(pkgdatadir)/$(VERSION)/$$file; \
-	  $(INSTALL_DATA) $(top_srcdir)/../data/$$file $(pkgdatadir)/$(VERSION)/$$file; \
+	  echo $(INSTALL_DATA) $(top_srcdir)/../data/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/$$file; \
+	  $(INSTALL_DATA) $(top_srcdir)/../data/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/$$file || exit; \
 	done
-	$(INSTALL_DATA) $(top_builddir)/config/Makefile $(pkgdatadir)/Makefile.inc
-	$(INSTALL_SCRIPT) $(top_srcdir)/mkinstalldirs $(sbindir)/mkinstalldirs
+	$(INSTALL_DATA) $(top_builddir)/config/Makefile $(DESTDIR)$(pkgdatadir)/Makefile.inc
+	$(INSTALL_SCRIPT) $(top_srcdir)/mkinstalldirs $(DESTDIR)$(sbindir)/mkinstalldirs
 
 ## Generate HTML documentation
 doc:

@@ -77,8 +77,8 @@ all-local: $(TARGET)
 install-local: install-library
 
 install-library: all-local
-	$(mkinstalldirs) $(libdir)
-	$(INSTALL) $(TARGET) $(libdir)/$(TARGET)
+	$(mkinstalldirs) $(DESTDIR)$(libdir)
+	$(INSTALL) $(TARGET) $(DESTDIR)$(libdir)/$(TARGET)
 
 
 dist-local:
