@@ -67,7 +67,7 @@ static void
 usage(void)
 {
         fprintf(stderr,
-		"usage: unaligned  <command-path> [command-args...]\n\n"
+		"usage: unaligned [-b] <command-path> [command-args...]\n\n"
 		"  This program is designed to assist debugging of\n"
 		"  unaligned traps by running the program in gdb\n"
 		"  and causing it to get SIGBUS when it encounters\n"
@@ -85,15 +85,22 @@ main(int argc, char **argv)
 {
 	const char my_debugger[] = "/usr/bin/gdb";
 
-	char* temp_str;
-	char* curr;
+	char *temp_str;
+	char *curr;
 	int size = 0;
 	int curr_arg;
+	int isBatchMode = 0;
 
 	/* check that we have at least 1 argument */
 	if (argc < 2) {
 		usage();
 	}
+	if( strcmp("-b" , argv[1]) == 0 ){
+	    isBatchMode = 1;
+	    curr_arg = 2;
+        }else{
+	    curr_arg = 1;
+	}        
 
 	trap_unaligned();
 
@@ -101,15 +108,19 @@ main(int argc, char **argv)
 		/* We're going to use bash process redirection to create a "file" for gdb to read
 		 * containing the arguments we need */
 		size = 2048;
-		for(curr_arg = 1; curr_arg < argc; curr_arg++) {
+		for(; curr_arg < argc; curr_arg++) {
 			size += strlen(argv[curr_arg]);
 		}
-		temp_str = (char *)malloc(size);
+		temp_str = (char *) malloc(sizeof(char) * size);
 		if (!temp_str) {
 		    fprintf(stderr, "Unable to malloc memory for string use: %s\n", strerror(errno));
 		    exit(255);
 		}
-		sprintf(temp_str, "%s -batch %s -x <( echo file %s; echo set args", my_debugger, argv[1], argv[1]);
+		if(isBatchMode==1){
+			sprintf(temp_str, "%s -batch %s -x <( echo file %s; echo set args", my_debugger, argv[2], argv[2]);
+	        }else{
+			sprintf(temp_str, "%s %s -x <( echo file %s; echo set args", my_debugger, argv[1], argv[1]);
+		}
 		curr = temp_str + strlen(temp_str);
 		for(curr_arg = 2; curr_arg < argc; curr_arg++) {
 	    		sprintf(curr, " %s", argv[curr_arg]);
