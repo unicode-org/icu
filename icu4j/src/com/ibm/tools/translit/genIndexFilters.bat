@@ -59,6 +59,12 @@ convertIndex();
 
 ######################################################################
 # Convert the index file from Java to C format
+# Assume lines are of the form:
+#   <ID>:alias:<FILTER>;<REMAINDER>
+# <REMAINDER> can be
+#   Lower;NFX;...
+#   NFX;Lower;...
+#   NFX;...
 sub convertIndex {
     $IN = "Transliterator_index.txt";
     $OUT = "$IN.new";
@@ -66,17 +72,25 @@ sub convertIndex {
     open(OUT, ">$DIR/$OUT") or die;
     
     while (<IN>) {
-        if (/^([^:]+):alias:\[.+?;(NF[^;]+)/) {
+        # Look for lines that are aliases with NF*
+        if (/^([^:]+):alias:(\[.+?);\s*((NF[^\s]*?)\s*;.+)$/i) {
             my $id = $1;
-            my $NFXD = $2;
-            print STDERR "$id\n";
+            my $oldset = $2;
+            my $remainder = $3;
+            my $NFXD = $4;
             my $lower = '';
-            $lower = 'lower' if ($id =~ /^Latin-/i);
+            # Check for Lower
+            # If it comes before NF* then adjust accordingly
+            if (/^([^:]+):alias:(\[.+?);\s*(Lower\s*;.+)$/i) {
+                $lower = 'lower';
+                if (length($2) < length($oldset)) {
+                    $oldset = $2;
+                    $remainder = $3;
+                }
+            }
+            print STDERR "$id $NFXD $lower\n";
             my $set = getSourceSet($id, $NFXD, $lower);
-            my $line = $_;
-            $line =~ s/^([^:]+:alias:)\[.+?(;NF)/$1$set$2/;
-            print OUT $line;
-            $_ = "## $_";
+            $_ = "$id:alias:$set;$remainder\n";
         }
         print OUT;
     }
