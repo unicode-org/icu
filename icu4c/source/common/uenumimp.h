@@ -19,6 +19,17 @@
 
 #include "unicode/uenum.h"
 
+/** 
+ * following are the type declarations for 
+ * implementations of APIs. If any of these
+ * functions are NULL, U_UNSUPPORTED_ERROR
+ * is returned. If close is NULL, the enumeration
+ * object is going to be released.
+ * Initial error checking is done in the body
+ * of API function, so the implementations 
+ * need not to check the initial error condition.
+ */
+
 /**
  * Function type declaration for uenum_close().
  *
@@ -89,16 +100,11 @@ UEnumReset(UEnumeration* en,
 
 
 struct UEnumeration {
-  UChar *currentUChar;
-  char  *currentChar;
+  /* context. Use it for what you need */
+  void *context;
 
-  void *context1;
-  void *context2;
-
-  int32_t int1;
-  int32_t int2;
-
-  /* these are functions that will 
+  /** 
+   * these are functions that will 
    * be used for APIs
    */
   /* called from uenum_close */
@@ -112,5 +118,6 @@ struct UEnumeration {
   /* called from uenum_reset */
   UEnumReset *reset;
 };
+
 
 #endif

@@ -26,67 +26,68 @@ static const char* test1[] = {
     "fourth"
 };
 
+struct chArrayContext {
+  int32_t currIndex;
+  int32_t maxIndex;
+  char *currChar;
+  UChar *currUChar;
+  char **array;
+};
+
+typedef struct chArrayContext chArrayContext;
+
+#define cont ((chArrayContext *)en->context)
+
 void chArrayClose(UEnumeration *en) {
-  if(en->currentUChar != NULL) {
-    uprv_free(en->currentUChar);
+  if(cont->currUChar != NULL) {
+    uprv_free(cont->currUChar);
   }
   uprv_free(en);
 }
 
 int32_t chArrayCount(UEnumeration *en, UErrorCode *status) {
-  if(U_FAILURE(*status)) {
-    return 0;
-  }
-  return en->int1;
+  return cont->maxIndex;
 }
 
 const UChar* chArrayUNext(UEnumeration *en, int32_t *resultLength, UErrorCode *status) {
-
-  if(U_FAILURE(*status)) {
-    return NULL;
-  }
-
-  if(en->int2 >= en->int1) {
+  if(cont->currIndex >= cont->maxIndex) {
     return NULL;
   }
   
-  if(en->currentUChar == NULL) {
-    en->currentUChar = (UChar *)uprv_malloc(1024*sizeof(UChar));
+  if(cont->currUChar == NULL) {
+    cont->currUChar = (UChar *)uprv_malloc(1024*sizeof(UChar));
   }
 
-  *resultLength = uprv_strlen(en->currentChar);
-  en->currentChar = ((char **)en->context1)[en->int2];
-  u_charsToUChars(en->currentChar, en->currentUChar, *resultLength);
-  en->int2++;
-  return en->currentUChar;
+  cont->currChar = (cont->array)[cont->currIndex];
+  *resultLength = uprv_strlen(cont->currChar);
+  u_charsToUChars(cont->currChar, cont->currUChar, *resultLength);
+  cont->currIndex++;
+  return cont->currUChar;
 }
 
 const char* chArrayNext(UEnumeration *en, int32_t *resultLength, UErrorCode *status) {
-  if(U_FAILURE(*status)) {
-    return NULL;
-  }
-
-  if(en->int2 >= en->int1) {
+  if(cont->currIndex >= cont->maxIndex) {
     return NULL;
   }
   
-  en->currentChar = ((char **)en->context1)[en->int2];
-  en->int2++;
-  *resultLength = uprv_strlen(en->currentChar);
-  return en->currentChar;
+  cont->currChar = (cont->array)[cont->currIndex];
+  *resultLength = uprv_strlen(cont->currChar);
+  cont->currIndex++;
+  return cont->currChar;
 }
 
 void chArrayReset(UEnumeration *en, UErrorCode *status) {
-  if(U_FAILURE(*status)) {
-    return;
-  }
-  en->int2 = 0;
+  cont->currIndex = 0;
 }
 
+chArrayContext myCont = {
+  0, 0,
+    NULL, NULL,
+    NULL
+};
+
 UEnumeration chEnum = {
-    NULL, NULL,
-    NULL, NULL,
-    0, 0,
+    &myCont,
     chArrayClose,
     chArrayCount,
     chArrayUNext,
@@ -95,11 +96,11 @@ UEnumeration chEnum = {
 };
 
 static UEnumeration *getchArrayEnum(const char** source, int32_t size) {
-  UEnumeration *result = (UEnumeration *)uprv_malloc(sizeof(UEnumeration));
-  memcpy(result, &chEnum, sizeof(UEnumeration));
-  result->context1 = (void *)source;
-  result->int1 = size;
-  return result;
+  UEnumeration *en = (UEnumeration *)uprv_malloc(sizeof(UEnumeration));
+  memcpy(en, &chEnum, sizeof(UEnumeration));
+  cont->array = (char **)source;
+  cont->maxIndex = size;
+  return en;
 }
 
 static void EnumerationTest(void) {
