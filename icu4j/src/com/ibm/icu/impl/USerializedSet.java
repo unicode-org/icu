@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/USerializedSet.java,v $ 
- * $Date: 2003/06/11 16:31:31 $ 
- * $Revision: 1.5 $
+ * $Date: 2004/01/09 03:07:12 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
 */
@@ -161,6 +161,7 @@ public final class USerializedSet {
      * @return true if set contains c
      * @draft ICU 2.4
      */
+    ///CLOVER:OFF
 	public final boolean contains(int c) {
 	
 	    if(c>0x10ffff) {
@@ -184,6 +185,7 @@ public final class USerializedSet {
 	        return (boolean)(((i+bmpLength)&2)!=0);
 	    }
 	}
+    ///CLOVER:ON
     /**
      * Returns the number of disjoint ranges of characters contained in
      * the given serialized set.  Ignores any strings contained in the

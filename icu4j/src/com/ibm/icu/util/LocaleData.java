@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/LocaleData.java,v $
- * $Date: 2003/12/01 21:20:24 $
- * $Revision: 1.4 $
+ * $Date: 2004/01/09 03:09:05 $
+ * $Revision: 1.5 $
  *
  *******************************************************************************
 */
@@ -30,8 +30,9 @@ public final class LocaleData {
     private static final String PAPER_SIZE          = "PaperSize";
     
     // private constructor to prevent default construction
+    ///CLOVER:OFF
     private LocaleData(){}
-    
+    ///CLOVER:ON
     /**
      * Returns the exemplar characters for the given locale ID.
      *

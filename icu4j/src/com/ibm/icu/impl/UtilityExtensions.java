@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/UtilityExtensions.java,v $
- * $Date: 2003/06/03 18:49:33 $
- * $Revision: 1.3 $
+ * $Date: 2004/01/09 03:07:13 $
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -18,12 +18,9 @@ import com.ibm.icu.text.UnicodeMatcher;
 import com.ibm.icu.text.Transliterator;
 /**
  * @author Ram
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
- * To enable and disable the creation of type comments go to
- * Window>Preferences>Java>Code Generation.
  */
+//This class contains utility functions so testing not needed
+///CLOVER:OFF
 public class UtilityExtensions {
     /**
      * Append the given string to the rule.  Calls the single-character
@@ -119,3 +116,4 @@ public class UtilityExtensions {
     }
 
 }
+//CLOVER:ON

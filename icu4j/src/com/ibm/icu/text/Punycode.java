@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Punycode.java,v $ 
- * $Date: 2003/08/27 21:12:04 $ 
- * $Revision: 1.1 $
+ * $Date: 2004/01/09 03:08:46 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -94,7 +94,7 @@ final class Punycode {
 	    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
 	};
 
-
+    ///CLOVER:OFF
 	private static char asciiCaseMap(char b, boolean uppercase) {
 	    if(uppercase) {
 	        if(SMALL_A<=b && b<=SMALL_Z) {
@@ -107,7 +107,7 @@ final class Punycode {
 	    }
 	    return b;
 	}	
-    
+    ///CLOVER:ON
     /**
      * digitToBasic() returns the basic code point whose value
      * (when used for representing integers) is d, which must be in the
@@ -281,10 +281,11 @@ final class Punycode {
     private static boolean isBasic(int ch){
         return (ch < INITIAL_N);
     }
-    
+    ///CLOVER:OFF
     private static boolean isBasicUpperCase(int ch){
         return( CAPITAL_A<=ch && ch >= CAPITAL_Z);
     }
+    ///CLOVER:ON
     private static boolean isSurrogate(int ch){
         return (((ch)&0xfffff800)==0xd800);
     }
