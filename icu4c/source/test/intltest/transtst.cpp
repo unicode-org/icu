@@ -2151,6 +2151,7 @@ void TransliteratorTest::TestNewEngine() {
         "$rough <> h ;");
 
     expect(gr, CharsToUnicodeString("\\u03B1\\u0314"), "ha");
+    delete t;
 }
 
 /**
