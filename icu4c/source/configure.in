@@ -307,10 +307,13 @@ AC_SUBST(HAVE_MMAP)
 
 dnl Check to see if genccode can generate simple assembly.
 GENCCODE_ASSEMBLY=
-if test "$GCC" = yes; then
-    dnl We're using gcc, and the simple -a gcc command line works for genccode
-    GENCCODE_ASSEMBLY="-a gcc"
-fi
+case "${host}" in
+i*86-*-*bsd*|i*86-*-linux*)
+    if test "$GCC" = yes; then
+        dnl We're using gcc, and the simple -a gcc command line works for genccode
+        GENCCODE_ASSEMBLY="-a gcc"
+    fi ;;
+esac
 AC_SUBST(GENCCODE_ASSEMBLY)
 
 
