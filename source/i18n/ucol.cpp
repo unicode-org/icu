@@ -350,25 +350,27 @@ int32_t ucol_getNextCE(const UCollator *coll, collIterate *source, UErrorCode *s
         // returned next time this method is called.
         if (*(source->pos) == 0x0000) return *(source->pos++); // \u0000 is not valid in C++'s UnicodeString
     	*(source->CEpos++) = CollationElementIterator::UNMAPPEDCHARVALUE;
-	    *(source->CEpos) = *(source->pos)<<16;
+	    *(source->CEpos++) = *(source->pos)<<16;
     } else {
         // Contraction sequence start...
         if (*(source->CEpos) >= UCOL_CONTRACTCHARINDEX) {
+			UChar key[1024];
+			for(int aj = 0; aj < 1024; aj++) {
+				key[aj] = 0;
+			}
+			uint32_t posKey = 0;
+
             VectorOfPToContractElement* list = ((RuleBasedCollator *)coll)->data->contractTable->at(*(source->CEpos)-UCOL_CONTRACTCHARINDEX);
             // The upper line obtained a list of contracting sequences.
             if (list != NULL) {
 				EntryPair *pair = (EntryPair *)list->at(0); // Taking out the first one.
 				int32_t order = pair->value; // This got us mapping for just the first element - the one that signalled a contraction.
 
-				UChar key[1024];
-				uint32_t posKey = 0;
-
 				key[posKey++] = *(source->pos);
 				// This tries to find the longes common match for the data in contraction table...
 				// and needs to be rewritten, especially the test down there!
 				int32_t i;
 				UBool foundSmaller = TRUE;
-
 				while(source->pos<source->len && foundSmaller) {
 
 					key[posKey++] = *(++source->pos);
@@ -382,6 +384,7 @@ int32_t ucol_getNextCE(const UCollator *coll, collIterate *source, UErrorCode *s
 							foundSmaller = TRUE;
 						}
 						i++;
+
 					}
 				}
 				source->pos--; /* spit back the last char - it wasn't part of the sequence */
@@ -506,9 +509,7 @@ ucol_strcoll(    const    UCollator    *coll,
         if (gets)
         {
             //sOrder = getStrengthOrder((NormalizerIterator*)cursor1, status);
-            //printf("/Ex 1 Go/ %x, %x, %x, %x, %x, %x\n", sColl.string, sColl.len, sColl.pos, sColl.CEs, sColl.CEpos, sColl.toReturn);
             sOrder = ucol_getNextCE(coll, &sColl, &status);
-            //printf("/Ex 1 End/ %x, %x, %x, %x, %x, %x\n", sColl.string, sColl.len, sColl.pos, sColl.CEs, sColl.CEpos, sColl.toReturn);
 
             if (U_FAILURE(status))
             {
@@ -521,9 +522,7 @@ ucol_strcoll(    const    UCollator    *coll,
         if (gett)
         {
             //tOrder = getStrengthOrder((NormalizerIterator*)cursor2, status);
-            //printf("/Ex 2 Go/ %x, %x, %x, %x, %x, %x\n", tColl.string, tColl.len, tColl.pos, tColl.CEs, tColl.CEpos, tColl.toReturn);
             tOrder = ucol_getNextCE(coll, &tColl, &status);
-            //printf("/Ex 2 End/ %x, %x, %x, %x, %x, %x\n", tColl.string, tColl.len, tColl.pos, tColl.CEs, tColl.CEpos, tColl.toReturn);
 
             if (U_FAILURE(status))
             {
@@ -820,9 +819,7 @@ ucol_getSortKey(const    UCollator    *coll,
         uint8_t        *result,
         int32_t        resultLength)
 {
-
     //uprv_memset(result, 0xAA, resultLength); // for debug purposes
-
 
     /* 
     Still problems in:
@@ -870,7 +867,7 @@ ucol_getSortKey(const    UCollator    *coll,
     uint8_t *terstart = tertiaries;
 
 	collIterate s;
-    init_collIterate((UChar *)source, len, &s);
+   init_collIterate((UChar *)source, len, &s);
 
     // If we need to normalize, we'll do it all at once at the beggining!
     if(((RuleBasedCollator *)coll)->getDecomposition() != Normalizer::NO_OP) {
@@ -882,8 +879,8 @@ ucol_getSortKey(const    UCollator    *coll,
         if(normSourceLen > UCOL_MAX_BUFFER) {
             normSource = (UChar *) uprv_malloc(normSourceLen*sizeof(UChar));
         }
-
 		normalized.extract(0, normSourceLen, normSource);
+		normSource[normSourceLen] = 0;
 		s.string = normSource;
         s.pos = normSource;
 		s.len = normSource+normSourceLen;
