@@ -4,3 +4,7 @@ Makefile
 *.dat
 *.res
 *.brk
+*.dll
+*.exp
+*.obj
+*.lib
