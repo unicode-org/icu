@@ -2366,6 +2366,7 @@ public:
    *                  that are to be titlecased.
    *                  If none is provided (0), then a standard titlecase
    *                  break iterator is opened.
+   *                  Otherwise the provided iterator is set to the string's text.
    * @return A reference to this.
    * @stable ICU 2.1
    */
@@ -2393,6 +2394,7 @@ public:
    *                  that are to be titlecased.
    *                  If none is provided (0), then a standard titlecase
    *                  break iterator is opened.
+   *                  Otherwise the provided iterator is set to the string's text.
    * @param locale    The locale to consider.
    * @return A reference to this.
    * @stable ICU 2.1
