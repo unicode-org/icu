@@ -358,7 +358,7 @@ What is the proper use of the abbreviation pp.•? •Yes, I am definatelly 12" 
 <data>•  •\u0041•</data>
 <data>•  •\u0009•</data>
 <data>•  •\u00B4•</data>
-<data>•    \u000C•</data>    # LB3C  × BK
+<data>•    \u000C<100></data>    # LB3C  × BK
 <data>•  •\u2014•</data>
 <data>•  •\uFFFC•</data>
 <data>•   \u0029•</data>    # LB 8   × CL
@@ -369,7 +369,7 @@ What is the proper use of the abbreviation pp.•? •Yes, I am definatelly 12" 
 <data>•  •\u4E00•</data>
 <data>•  •\u2024•</data>
 <data>•   \u002C•</data>    # LB 8   × IS
-<data>•   \u000A•</data>    # LB3C   × ( BK | CR | LF | NL )
+<data>•   \u000A<100></data>    # LB3C   × ( BK | CR | LF | NL )
 <data>•  •\u0E5A•</data>
 <data>•  •\u0032•</data>
 <data>•  •\u0028•</data>
@@ -387,34 +387,34 @@ What is the proper use of the abbreviation pp.•? •Yes, I am definatelly 12" 
 # 3a  Always break after hard line breaks.
 # 3c  Never break before hard line breaks.
 
-<data>•  •\u00A1\u2028•\u00A1•</data>
-<data>•  •\u0041\u2028•\u0041•</data>
-<data>•  •\u0009\u2028•\u0009•</data>
-<data>•  •\u00B4\u2028•\u00B4•</data>
-<data>•   \u000C•\u2028•\u000C•</data>
-<data>•  •\u2014\u2028•\u2014•</data>
-<data>•  •\uFFFC\u2028•\uFFFC•</data>
-<data>•   \u0029\u2028•\u0029•</data>
-#<data>•   \u0301\u2028•\u0301•</data>    # TODO:  fix.
-<data>•   \u0021\u2028•\u0021•</data>
-#<data>•   \u00A0\u2028•\u00A0•</data>    # TODO:  fix
-<data>•  •\u002D\u2028•\u002D•</data>
-<data>•  •\u4E00\u2028•\u4E00•</data>
-<data>•  •\u2024\u2028•\u2024•</data>
-<data>•   \u002C\u2028•\u002C•</data>
-<data>•   \u000A•\u2028•\u000A•</data>
-<data>•  •\u0E5A\u2028•\u0E5A•</data>
-<data>•  •\u0032\u2028•\u0032•</data>
-<data>•  •\u0028\u2028•\u0028•</data>
-<data>•  •\u0025\u2028•\u0025•</data>
-<data>•  •\u0024\u2028•\u0024•</data>
-<data>•  •\u0022\u2028•\u0022•</data>
-<data>•  •\u0E01\u2028•\u0E01•</data>
-<data>•  •\uDB7F\u2028•\uDB7F•</data>
-<data>•   \u0020\u2028•\u0020•</data>
-<data>•   \u002F\u2028•\u002F•</data>
-<data>•  •\uF8FF\u2028•\uF8FF•</data>
-<data>•   \u200B\u2028•\u200B•</data>
+<data>•  •\u00A1\u2028<100>\u00A1•</data>
+<data>•  •\u0041\u2028<100>\u0041•</data>
+<data>•  •\u0009\u2028<100>\u0009•</data>
+<data>•  •\u00B4\u2028<100>\u00B4•</data>
+<data>•   \u000C<100>\u2028<100>\u000C<100></data>
+<data>•  •\u2014\u2028<100>\u2014•</data>
+<data>•  •\uFFFC\u2028<100>\uFFFC•</data>
+<data>•   \u0029\u2028<100>\u0029•</data>
+#<data>•   \u0301\u2028<100>\u0301•</data>    # TODO:  fix.
+<data>•   \u0021\u2028<100>\u0021•</data>
+#<data>•   \u00A0\u2028<100>\u00A0•</data>    # TODO:  fix
+<data>•  •\u002D\u2028<100>\u002D•</data>
+<data>•  •\u4E00\u2028<100>\u4E00•</data>
+<data>•  •\u2024\u2028<100>\u2024•</data>
+<data>•   \u002C\u2028<100>\u002C•</data>
+<data>•   \u000A<100>\u2028<100>\u000A<100></data>
+<data>•  •\u0E5A\u2028<100>\u0E5A•</data>
+<data>•  •\u0032\u2028<100>\u0032•</data>
+<data>•  •\u0028\u2028<100>\u0028•</data>
+<data>•  •\u0025\u2028<100>\u0025•</data>
+<data>•  •\u0024\u2028<100>\u0024•</data>
+<data>•  •\u0022\u2028<100>\u0022•</data>
+<data>•  •\u0E01\u2028<100>\u0E01•</data>
+<data>•  •\uDB7F\u2028<100>\uDB7F•</data>
+<data>•   \u0020\u2028<100>\u0020•</data>
+<data>•   \u002F\u2028<100>\u002F•</data>
+<data>•  •\uF8FF\u2028<100>\uF8FF•</data>
+<data>•   \u200B\u2028<100>\u200B•</data>
 
 
 #
@@ -424,11 +424,11 @@ What is the proper use of the abbreviation pp.•? •Yes, I am definatelly 12" 
 <line>
 
 <data>•Multi-•Level •example •of •a •semi-•idiotic •non-•sensical •(non-•important) •sentence. 
-•Hi  •Hello •How\n•are\r•you\u2028•fine.\t•good.  •Now\r•is\n•the\r\n•time\n•\r•for\r•\r•all•</data>
+<100>Hi  •Hello •How\n<100>are\r<100>you\u2028<100>fine.\t•good.  •Now\r<100>is\n<100>the\r\n<100>time\n<100>\r<100>for\r<100>\r<100>all•</data>
 
 <line>
-<data>•Hello! •how\r\n• •(are)\r• •you? •I'am •fine- •Thankyou. •foo\u00a0bar 
-•How, •are, •you? •This, •costs •$20,00,000.•</data>
+<data>•Hello! •how\r\n<100> •(are)\r<100> •you? •I'am •fine- •Thankyou. •foo\u00a0bar 
+<100>How, •are, •you? •This, •costs •$20,00,000.•</data>
 
 #     test for bug #4068133
 #
@@ -438,10 +438,10 @@ What is the proper use of the abbreviation pp.•? •Yes, I am definatelly 12" 
 <data>•foo\u00a0bar•</data>
 
 #     to test for bug #4097920
-<data>•dog,•cat,•mouse •(one)•(two)\n•</data>
+<data>•dog,•cat,•mouse •(one)•(two)\n<100></data>
 
 #     to test for bug #4035266
-<data>•The •balance •is •$-23,456.78, •not •-•$32,456.78!\n•</data>
+<data>•The •balance •is •$-23,456.78, •not •-•$32,456.78!\n<100></data>
 
 
 #      to test for bug #4098467
