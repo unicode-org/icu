@@ -31,6 +31,13 @@ CollationDanishTest::CollationDanishTest()
 {
     UErrorCode status = U_ZERO_ERROR;
     myCollation = Collator::createInstance(Locale("da", "DK", ""),status);
+    if(!myCollation || U_FAILURE(status)) {
+      errln(__FILE__ "failed to create! err " + UnicodeString(u_errorName(status)));
+	/* if it wasn't already: */
+	delete myCollation;
+	myCollation = NULL;
+    }
+
 }
 
 CollationDanishTest::~CollationDanishTest()
@@ -236,6 +243,12 @@ void CollationDanishTest::TestPrimary(/* char* par */)
 void CollationDanishTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln("TestSuite CollationDanishTest: ");
+
+    if((!myCollation) && exec) {
+      errln(__FILE__ " cannot test - failed to create collator.");
+      name = "";
+      return;
+    }
     switch (index) {
         case 0: name = "TestPrimary";   if (exec)   TestPrimary(/* par */); break;
         case 1: name = "TestTertiary";  if (exec)   TestTertiary(/* par */); break;

@@ -32,6 +32,12 @@ CollationGermanTest::CollationGermanTest()
 {
     UErrorCode status = U_ZERO_ERROR;
     myCollation = Collator::createInstance(Locale::GERMANY, status);
+    if(!myCollation || U_FAILURE(status)) {
+      errln(__FILE__ "failed to create! err " + UnicodeString(u_errorName(status)));
+	/* if it wasn't already: */
+	delete myCollation;
+	myCollation = NULL;
+    }
 }
 
 CollationGermanTest::~CollationGermanTest()
@@ -90,6 +96,10 @@ const Collator::EComparisonResult CollationGermanTest::results[][2] =
 
 void CollationGermanTest::doTest( UnicodeString source, UnicodeString target, Collator::EComparisonResult result)
 {
+	if(myCollation == NULL ) {
+		errln("decoll: cannot start test, collator is null\n");
+	return;
+	}
     Collator::EComparisonResult compareResult = myCollation->compare(source, target);
     SimpleFwdCharIterator src(source);
     SimpleFwdCharIterator trg(target);
@@ -110,6 +120,11 @@ void CollationGermanTest::doTest( UnicodeString source, UnicodeString target, Co
 
 void CollationGermanTest::TestTertiary(/* char* par */)
 {
+	if(myCollation == NULL ) {
+		errln("decoll: cannot start test, collator is null\n");
+	return;
+	}
+
     int32_t i = 0;
     myCollation->setStrength(Collator::TERTIARY);
     for (i = 0; i < 12 ; i++)
@@ -119,6 +134,10 @@ void CollationGermanTest::TestTertiary(/* char* par */)
 }
 void CollationGermanTest::TestPrimary(/* char* par */)
 {
+	if(myCollation == NULL ) {
+		errln("decoll: cannot start test, collator is null\n");
+	return;
+	}
     int32_t i;
     myCollation->setStrength(Collator::PRIMARY);
     for (i = 0; i < 12 ; i++)
