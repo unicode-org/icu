@@ -70,9 +70,10 @@ class NumberFormatServiceShim extends NumberFormat.NumberFormatShim {
     }
 
     NumberFormat createInstance(Locale desiredLocale, int choice) {
-        if (service.isDefault()) {
-            return NumberFormat.createInstance(desiredLocale, choice);
-        }
+	// use service cache
+//          if (service.isDefault()) {
+//              return NumberFormat.createInstance(desiredLocale, choice);
+//          }
         Locale[] actualLoc = new Locale[1];
         NumberFormat fmt = (NumberFormat)service.get(desiredLocale, choice,
                                                      actualLoc);
