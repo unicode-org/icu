@@ -384,14 +384,14 @@ static UBool convertFile(const char *pname,
     char *bufp;
     char *buf = 0;
 
-    uint32_t foffset = 0;   /* Where we are in the file, for error reporting. */
+    uint32_t infoffset = 0, outfoffset = 0;   /* Where we are in the file, for error reporting. */
 
     const UChar *unibufbp;
     UChar *unibufp;
     UChar *unibuf = 0;
     int32_t *fromoffsets = 0, *tooffsets = 0;
 
-    size_t rd, tobufsz;
+    size_t rd, wr, tobufsz;
 
     Transliterator *t = 0;      // Transliterator acting on Unicode data.
     UnicodeString u;            // String to do the transliteration.
@@ -511,6 +511,8 @@ static UBool convertFile(const char *pname,
     // OK, we can convert now.
 
     do {
+        char willexit = 0;
+
         rd = fread(buf, 1, bufsz, infile);
         if (ferror(infile) != 0) {
             UnicodeString str(strerror(errno));
@@ -537,27 +539,27 @@ static UBool convertFile(const char *pname,
         ucnv_toUnicode(convfrom, &unibufp, unibufp + bufsz, &cbufp,
             cbufp + rd, fromoffsets, flush, &err);
 
-        foffset += cbufp - buf;
+        infoffset += cbufp - buf;
 
         if (U_FAILURE(err)) {
             char pos[32];
-            sprintf(pos, "%u", foffset - 1);
+            sprintf(pos, "%u", infoffset - 1);
             UnicodeString str(pos, strlen(pos) + 1);
             initMsg(pname);
             u_wmsg("problemCvtToU", str.getBuffer(), u_wmsg_errorName(err));
-            goto error_exit;
+            willexit = 1;
         }
 
         // At the last conversion, the converted characters should be
         // equal to number of chars read.
 
-        if (flush && cbufp != (buf + rd)) {
+        if (flush && !willexit && cbufp != (buf + rd)) {
             char pos[32];
-            sprintf(pos, "%u", foffset);
+            sprintf(pos, "%u", infoffset);
             UnicodeString str(pos, strlen(pos) + 1);
             initMsg(pname);
             u_wmsg("premEndInput", str.getBuffer());
-            goto error_exit;
+            willexit = 1;
         }
 
         // Prepare to transliterate and convert.
@@ -596,37 +598,51 @@ static UBool convertFile(const char *pname,
                              tooffsets, flush, &err);
 
             if (U_FAILURE(err)) {
+                const char *errtag;
                 char pos[32];
 
                 uint32_t erroffset =
                     dataOffset(fromoffsets, bufp - buf, tooffsets);
+                int32_t ferroffset = infoffset - (unibufp - unibufu) + erroffset;
 
-                sprintf(pos, "%u", foffset - (unibufp - unibufu) + erroffset);
+                if ((int32_t) ferroffset < 0) {
+                    ferroffset = outfoffset + (bufp - buf);
+                    errtag = "problemCvtFromUOut";
+                } else {
+                    errtag = "problemCvtFromU";
+                }
+                sprintf(pos, "%u", ferroffset);
                 UnicodeString str(pos, strlen(pos) + 1);
                 initMsg(pname);
-                u_wmsg("problemCvtFromU", str.getBuffer(),
+                u_wmsg(errtag, str.getBuffer(),
                        u_wmsg_errorName(err));
-                goto error_exit;
+                willexit = 1;
             }
 
             // At the last conversion, the converted characters should be equal to number
             // of consumed characters.
-            if (flush && unibufbp != (unibufu + (size_t) (unibufp - unibufu))) {
+            if (flush && !willexit && unibufbp != (unibufu + (size_t) (unibufp - unibufu))) {
                 char pos[32];
-                sprintf(pos, "%u", foffset);
+                sprintf(pos, "%u", infoffset);
                 UnicodeString str(pos, strlen(pos) + 1);
                 initMsg(pname);
                 u_wmsg("premEnd", str.getBuffer());
-                goto error_exit;
+                willexit = 1;
             }
 
             // Finally, write the converted buffer to the output file
 
+
             rd = (size_t) (bufp - buf);
-            if (fwrite(buf, 1, rd, outfile) != rd) {
+            outfoffset += (wr = fwrite(buf, 1, rd, outfile));
+            if (wr != rd) {
                 UnicodeString str(strerror(errno), "");
                 initMsg(pname);
                 u_wmsg("cantWrite", str.getBuffer());
+                willexit = 1;
+            }
+
+            if (willexit) {
                 goto error_exit;
             }
         } while ((ulen -= bufsz) > 0);
