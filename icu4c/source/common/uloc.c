@@ -1906,9 +1906,10 @@ uloc_getDisplayName(const char *locale,
 
     if ((hasScript && !hasCountry)
         || ((hasScript || hasCountry) && !hasVariant && !hasKeywords)
-        || ((hasScript || hasCountry || hasVariant) && !hasKeywords))
+        || ((hasScript || hasCountry || hasVariant) && !hasKeywords)
+        || (hasLanguage && !hasScript && !hasCountry && !hasVariant && !hasKeywords))
     {
-        /* remove ", " */
+        /* remove ", " or " (" */
         length-=2;
     }
 
