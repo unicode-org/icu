@@ -4,13 +4,13 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/rbbi/Attic/BreakIteratorRules_en_US_TEST.java,v $ 
- * $Date: 2000/09/22 18:52:47 $ 
- * $Revision: 1.5 $
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/rbbi/Attic/BreakIteratorRules_en_US_TEST.java,v $
+ * $Date: 2000/11/18 00:18:12 $
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
-package com.ibm.text.resources;
+package com.ibm.test.rbbi;
 
 import java.util.ListResourceBundle;
 import java.net.URL;
@@ -24,7 +24,7 @@ import java.net.URL;
 public class BreakIteratorRules_en_US_TEST extends ListResourceBundle {
     private static final URL url =
         BreakIteratorRules_en_US_TEST.class.getResource("/com/ibm/data/misc/english.dict");
-    
+
     public Object[][] getContents() {
         return contents;
     }
@@ -39,7 +39,7 @@ public class BreakIteratorRules_en_US_TEST extends ListResourceBundle {
                            "DictionaryBasedBreakIterator",     // line-break iterator class
                            "RuleBasedBreakIterator" }          // sentence-break iterator class
         },
-        
+
         // These are the same word-breaking rules as are specified in the default
         // resource, except that the Latin letters, apostrophe, and hyphen are
         // specified as dictionary characters
@@ -122,7 +122,7 @@ public class BreakIteratorRules_en_US_TEST extends ListResourceBundle {
 
             // keep together runs of Kanji
             + "{kanji}*;"},
-        
+
         // These are the same line-breaking rules as are specified in the default
         // resource, except that the Latin letters, apostrophe, and hyphen are
         // specified as dictionary characters
@@ -204,9 +204,9 @@ public class BreakIteratorRules_en_US_TEST extends ListResourceBundle {
             // line-break character or CRLF combination with the word.  (line separators
             // "win" over nbsp's)
             + "{word}({nbsp}+{word})*\r?{break}?;" },
-            
+
         // these two resources specify the pathnames of the dictionary files to
-        // use for word breaking and line breaking.  Both currently refer to 
+        // use for word breaking and line breaking.  Both currently refer to
         // a file called english.dict placed in com\ibm\text\resources
         // somewhere in the class path.  It's important to note that
         // english.dict was created for testing purposes only, and doesn't
