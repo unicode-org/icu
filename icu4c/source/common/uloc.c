@@ -1012,6 +1012,30 @@ static const UEnumeration gKeywordsEnum = {
     uloc_kw_resetKeywords
 };
 
+U_CAPI UEnumeration* U_EXPORT2
+uloc_openKeywordList(const char *keywordList, int32_t keywordListSize, UErrorCode* status)
+{
+  UKeywordsContext *myContext = NULL;
+  UEnumeration *result = NULL;
+
+  if(U_FAILURE(*status)) {
+    return NULL;
+  }
+  result = (UEnumeration *)uprv_malloc(sizeof(UEnumeration));
+  uprv_memcpy(result, &gKeywordsEnum, sizeof(UEnumeration));
+  myContext = uprv_malloc(sizeof(UKeywordsContext));
+  if (myContext == NULL) {
+    *status = U_MEMORY_ALLOCATION_ERROR;
+    uprv_free(result);
+    return NULL;
+  }
+  myContext->keywords = (char *)uprv_malloc(keywordListSize+1);
+  uprv_memcpy(myContext->keywords, keywordList, keywordListSize);
+  myContext->keywords[keywordListSize] = 0;
+  myContext->current = myContext->keywords;
+  result->context = myContext;
+  return result;
+}
 
 U_CAPI UEnumeration* U_EXPORT2
 uloc_openKeywords(const char* localeID,
@@ -1020,10 +1044,6 @@ uloc_openKeywords(const char* localeID,
     int32_t i=0;
     char keywords[256];
     int32_t keywordsCapacity = 256;
-    UKeywordsContext *myContext = NULL;
-
-    UEnumeration *result = NULL;
-
     if(status==NULL || U_FAILURE(*status)) {
         return 0;
     }
@@ -1057,22 +1077,10 @@ uloc_openKeywords(const char* localeID,
     }
 
     if(i) {
-      result = (UEnumeration *)uprv_malloc(sizeof(UEnumeration));
-      uprv_memcpy(result, &gKeywordsEnum, sizeof(UEnumeration));
-      myContext = uprv_malloc(sizeof(UKeywordsContext));
-      if (myContext == NULL) {
-          *status = U_MEMORY_ALLOCATION_ERROR;
-          uprv_free(result);
-          return NULL;
-      }
-      myContext->keywords = (char *)uprv_malloc(i+1);
-      uprv_memcpy(myContext->keywords, keywords, i);
-      myContext->keywords[i] = 0;
-      myContext->current = myContext->keywords;
-      result->context = myContext;
+        return uloc_openKeywordList(keywords, i, status);
+    } else {
+        return NULL;
     }
-
-    return result;
 
     /*return u_terminateChars(keywords, keywordsCapacity, i, status);*/
 }
