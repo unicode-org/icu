@@ -783,6 +783,64 @@ GregorianCalendar::getEpochDay(UErrorCode& status)
 }
 
 // -------------------------------------
+void GregorianCalendar::calculateFromYear_Woy(void) {
+    UErrorCode errorCode=U_ZERO_ERROR;
+
+    // We need to get January 1st of year in question
+    Calendar *calt = new GregorianCalendar(errorCode);
+    calt->set(internalGet(Calendar::YEAR_WOY), Calendar::JANUARY, 1);
+    int32_t day1Jan = calt->get(Calendar::DAY_OF_WEEK, errorCode);
+    delete (calt);
+
+    // Get data for calculation
+    int32_t dow = internalGet(Calendar::DOW_LOCAL);
+    int32_t woy = internalGet(Calendar::WEEK_OF_YEAR);
+    int32_t year = internalGet(Calendar::YEAR_WOY);
+
+    // This is calculated day of year
+    int32_t doy = ((woy-1)*7+dow-day1Jan+getFirstDayOfWeek());
+
+/*
+    // Unsuccesful attempt to solve cutover year
+    if (year==fGregorianCutoverYear) {
+        if (doy>=355) {
+            year++;
+            doy -= 355+7;
+        } else if (doy>=298) {
+                doy +=20;
+        }
+    }
+*/
+
+    if (day1Jan-getFirstDayOfWeek()<getMinimalDaysInFirstWeek()) {
+        // There is a possibility that we're in the last year
+        if(dow<day1Jan-1 && woy == 1 && doy<=0) {
+            // we're still in the last year
+            doy += yearLength(year-1);
+            // substract a year to get real year!
+            year--;
+            set(DAY_OF_YEAR,doy);
+            set(YEAR, year);
+            return;
+        } else {
+        }
+    } else {
+        doy += 7;
+    }
+
+    // This is taking us to the next year!
+    if(doy>yearLength(year)) {
+        doy -= yearLength(year);
+        year ++;
+        // add a year to get real year!
+    } 
+
+    // set calculated values
+    set(DAY_OF_YEAR,doy);
+    set(YEAR, year);
+    return;
+}
+// -------------------------------------
 
 void
 GregorianCalendar::computeTime(UErrorCode& status)
@@ -793,6 +851,12 @@ GregorianCalendar::computeTime(UErrorCode& status)
     if (! isLenient() && ! validateFields()) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
+    }
+
+    // If the only available stuff is localized day of week, week of year and adjusted year
+    // we'll calculate the rest from there
+    if (fStamp[YEAR] == kUnset && fStamp[YEAR_WOY] != kUnset) {
+        calculateFromYear_Woy();
     }
 
     // This function takes advantage of the fact that unset fields in
@@ -977,10 +1041,10 @@ GregorianCalendar::computeJulianDay(bool_t isGregorian, int32_t year)
     // fields are missing, we use their default values, which are those of
     // the epoch start, or in the case of DAY_OF_WEEK, the first day in
     // the week.
-    int32_t monthStamp     = fStamp[MONTH];
+    int32_t monthStamp   = fStamp[MONTH];
     int32_t domStamp     = fStamp[DAY_OF_MONTH];
     int32_t womStamp     = fStamp[WEEK_OF_MONTH];
-    int32_t dowimStamp     = fStamp[DAY_OF_WEEK_IN_MONTH];
+    int32_t dowimStamp   = fStamp[DAY_OF_WEEK_IN_MONTH];
     int32_t doyStamp     = fStamp[DAY_OF_YEAR];
     int32_t woyStamp     = fStamp[WEEK_OF_YEAR];
 
@@ -1232,6 +1296,18 @@ GregorianCalendar::add(EDateFields field, int32_t amount, UErrorCode& status)
         return;   // Do nothing!
     complete(status);
 
+    if (field == YEAR_WOY) {
+        computeTime(status);
+        add(YEAR, amount, status);
+        return;
+    }
+
+    if (field == DOW_LOCAL) {
+        computeTime(status);
+        add(DAY_OF_WEEK, amount, status);
+        return;
+    }
+
     if (field == YEAR) {
         int32_t year = internalGet(YEAR);
         if (internalGetEra() == AD) {
@@ -1377,6 +1453,18 @@ GregorianCalendar::roll(EDateFields field, int32_t amount, UErrorCode& status)
 
     if (amount == 0) 
         return; // Nothing to do
+
+    if(field == YEAR_WOY) {
+        computeTime(status);
+        roll(YEAR, amount, status);
+        return;
+    }
+
+    if(field == DOW_LOCAL) {
+        computeTime(status);
+        roll(DAY_OF_WEEK, amount, status);
+        return;
+    }
 
     int32_t min = 0, max = 0, gap;
     if (field >= 0 && field < FIELD_COUNT) {
