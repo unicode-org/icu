@@ -212,23 +212,33 @@ UnicodeString::~UnicodeString()
 UnicodeString&
 UnicodeString::operator= (const UnicodeString& src)
 {
-  // if src is bogus, or we're bogus, or assigning to ourselves, do nothing
-  if(fBogus || src.isBogus() || this == &src)
-  return *this;
+  // if assigning to ourselves, do nothing
+  if(this == &src) {
+    return *this;
+  }
 
-  // if src is ref counted, point ourselves at its array
-  if(src.fRefCounted) {
+  // if src is bogus, set ourselves to bogus
+  if(src.isBogus()) {
+    setToBogus();
+    return *this;
+  }
+
+  // if src is aliased or ref counted, point ourselves at its array
+  if(src.fArray != src.fStackBuffer) {
 
     // if we're ref counted, decrement our current ref count
     if(fRefCounted && removeRef() == 0)
-    delete [] fArray;
+      delete [] fArray;
 
     fArray      = src.fArray;
     fLength     = src.fLength;
     fCapacity   = src.fCapacity;
     fHashCode   = src.fHashCode;
-    fRefCounted = TRUE;
-    addRef();
+    fRefCounted = src.fRefCounted;
+    if(fRefCounted) {
+      addRef();
+    }
+    fBogus      = FALSE;
   }
   // if src isn't ref counted, just do a replace
   else {
@@ -748,16 +758,15 @@ UnicodeString::doHashCode()
 void
 UnicodeString::setToBogus()
 {
-  fBogus = TRUE;
-  if(fRefCounted) {
-    if(removeRef() == 0)
-      delete [] fArray;
-
-    fArray = 0;
-    fCapacity = fLength = 0;
+  if(fRefCounted && removeRef() == 0) {
+    delete [] fArray;
   }
 
+  fArray = 0;
+  fCapacity = fLength = 0;
   fHashCode = kInvalidHashCode;
+  fRefCounted = FALSE;
+  fBogus = TRUE;
 }
 
 //========================================
@@ -903,6 +912,7 @@ UnicodeString::doCodepageCreate(const char *codepageData,
     } else {
       u_charsToUChars(codepageData, getArrayStart(), dataLength);
     }
+    fLength = dataLength;
     return;
   }
 
@@ -1021,20 +1031,29 @@ UnicodeString::orphanStorage()
   if(fBogus)
     return 0;
 
-  // clone our array, if necessary
-  ((UnicodeString*)this)->cloneArrayIfNeeded();
+  UChar *retVal;
 
   // if we're ref counted, get rid of the leading ref count
-  if(fRefCounted) {
-    us_arrayCopy(getArrayStart(), 0, fArray, 0, fLength);
+  if(fRefCounted && removeRef() == 0) {
+    retVal = fArray;
+  } else {
+    // if we don't own the memory, then we have to allocate it
+    retVal = new UChar[fLength + 1];
+    if(retVal == 0) {
+      return 0;
+    }
   }
 
-  UChar *retVal = fArray;
+  // shift or copy characters
+  us_arrayCopy(getArrayStart(), 0, retVal, 0, fLength);
+  retVal[fLength] = 0;
 
+  // set self to empty
   fArray = fStackBuffer;
   fLength = 0;
   fCapacity = US_STACKBUF_SIZE;
   fHashCode = kEmptyHashCode;
+  fRefCounted = FALSE;
 
   return retVal;
 }
@@ -1059,7 +1078,7 @@ void
 UnicodeString::cloneArrayIfNeeded()
 {
   // if we're ref counted, make a copy of the buffer if necessary
-  if(fRefCounted && refCount() > 1) {
+  if(fArray != fStackBuffer && refCount() > 1) {
     UChar *copy = new UChar [ fCapacity ];
     if( ! copy ) {
       setToBogus();
