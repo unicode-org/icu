@@ -1191,7 +1191,8 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
               log_err("current CE is not less than base CE\n");
             }
             if(currCE < lastCE || (currCE == lastCE && currContCE <= lastContCE)) {
-              log_err("sequence of generated CEs is broken\n");
+              log_err("sequence of generated CEs is broken:  curr=%08X, last=%08X, currCont=%08X, lastCont=%08X\n",
+                            currCE, lastCE, currContCE, lastContCE);
             }
           }
         }
@@ -1313,6 +1314,13 @@ static void RamsRulesTest(void) {
     if(hasCollationElements(locName)) {
       if (uprv_strcmp("ja", locName)==0) {
         log_verbose("Don't know how to test Japanese because of prefixes\n");
+        continue;
+      }
+      /*
+       * TODO: fix testCEs for testing the Farsi rules
+       */
+      if (uprv_strcmp("fa", locName)==0 && U_ICU_VERSION_MAJOR_NUM==2 && U_ICU_VERSION_MINOR_NUM == 2) {
+        log_verbose("Donot test fa locale due to a bug in testCEs\n");
         continue;
       }
       log_verbose("Testing locale %s\n", locName);
