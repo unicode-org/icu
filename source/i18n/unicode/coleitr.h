@@ -123,11 +123,11 @@ public:
 
     // CollationElementIterator public data member ------------------------------
 
-    /**
-    * NULLORDER indicates that an error has occured while processing
-    * @stable ICU 2.0
-    */
     enum {
+        /**
+         * NULLORDER indicates that an error has occured while processing
+         * @stable ICU 2.0
+         */
         NULLORDER = (int32_t)0xffffffff
     };
 
