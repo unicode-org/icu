@@ -123,9 +123,9 @@ void TitlecaseTransliterator::handleTransliterate(
         type=ucase_getTypeOrIgnorable(fCsp, c);
         if(type>=0) { // not case-ignorable
             if(doTitle) {
-                result=ucase_toFullTitle(fCsp, c, rep_caseContextIterator, &csc, &s, fLocName, &locCache);
+                result=ucase_toFullTitle(fCsp, c, utrans_rep_caseContextIterator, &csc, &s, fLocName, &locCache);
             } else {
-                result=ucase_toFullLower(fCsp, c, rep_caseContextIterator, &csc, &s, fLocName, &locCache);
+                result=ucase_toFullLower(fCsp, c, utrans_rep_caseContextIterator, &csc, &s, fLocName, &locCache);
             }
             doTitle = (UBool)(type==0); // doTitle=isUncased
 
