@@ -271,7 +271,7 @@ public:
      * @stable ICU 2.0
      */
 #ifdef U_CYGWIN
-    U_COMMON_API static const int32_t DONE;
+    static U_COMMON_API const int32_t DONE;
 #else
     static const int32_t DONE;
 #endif

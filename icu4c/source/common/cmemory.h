@@ -70,7 +70,7 @@ typedef union {
   *  This is used to determine whether ICU is in an initial, unused state.
   */
 U_CFUNC UBool 
-cmemory_inUse();
+cmemory_inUse(void);
 
 /**
   *  Mark the ICU heap as not being in use, even if it is.
@@ -79,7 +79,7 @@ cmemory_inUse();
   *    TODO:  this is awkward.  Think about something cleaner.
   */
 U_CFUNC void 
-cmemory_clearInUse();
+cmemory_clearInUse(void);
 
 /**
   *  Heap clean up function, called from u_cleanup()

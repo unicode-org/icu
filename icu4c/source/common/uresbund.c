@@ -1268,7 +1268,7 @@ ures_getByKeyWithFallback(const UResourceBundle *resB,
                           UResourceBundle *fillIn, 
                           UErrorCode *status) {
     Resource res = RES_BOGUS;
-    UResourceDataEntry *realData = NULL;
+    /*UResourceDataEntry *realData = NULL;*/
     const char *key = inKey;
 
     if (status==NULL || U_FAILURE(*status)) {
@@ -1487,21 +1487,20 @@ ures_getLocaleByType(const UResourceBundle* resourceBundle,
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
     } else {
-      const UResourceBundle *parent = NULL;
-      switch(type) {
-      case ULOC_ACTUAL_LOCALE:
-        return resourceBundle->fData->fName;
-        break;
-      case ULOC_VALID_LOCALE:
-        return resourceBundle->fTopLevelData->fName;
-        break;
-      case ULOC_REQUESTED_LOCALE:
-        return NULL;
-        break;
-      default:
-        *status = U_ILLEGAL_ARGUMENT_ERROR;
-        return NULL;
-      }
+        switch(type) {
+        case ULOC_ACTUAL_LOCALE:
+            return resourceBundle->fData->fName;
+            break;
+        case ULOC_VALID_LOCALE:
+            return resourceBundle->fTopLevelData->fName;
+            break;
+        case ULOC_REQUESTED_LOCALE:
+            return NULL;
+            break;
+        default:
+            *status = U_ILLEGAL_ARGUMENT_ERROR;
+            return NULL;
+        }
     }
 }
 
