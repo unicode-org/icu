@@ -768,10 +768,10 @@ ucol_getLocale(const UCollator *coll, ULocDataLocaleType type, UErrorCode *statu
  */
 #ifdef U_USE_DEPRECATED_FORMAT_API
 
-#if ((U_ICU_VERSION_MAJOR_NUM != 2) || (U_ICU_VERSION_MINOR_NUM !=1))
+#if ((U_ICU_VERSION_MAJOR_NUM != 2) || (U_ICU_VERSION_MINOR_NUM != 2))
 #   error "ICU version has changed. Please redefine the macros under U_USE_DEPRECATED_FORMAT_API pre-processor definition"
 #else 
-#   define ucol_openRules_2_1(rules,rulesLength,normalizationMode,strength,status) ucol_openRules(rules,rulesLength,(UColAttributeValue)normalizationMode,strength,NULL,status)
+#   define ucol_openRules_2_2(rules,rulesLength,normalizationMode,strength,status) ucol_openRules(rules,rulesLength,(UColAttributeValue)normalizationMode,strength,NULL,status)
 #endif
 
 #endif

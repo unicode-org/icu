@@ -689,7 +689,7 @@ uint8_t ucol_uprv_getCaseBits(const UCollator *UCA, const UChar *src, uint32_t l
   nLen = unorm_normalize(src, len, UNORM_NFKD, 0, n, 128, status);
   if(U_SUCCESS(*status)) {
     for(i = 0; i < nLen; i++) {
-      init_collIterate(UCA, &n[i], 1, &s);
+      uprv_init_collIterate(UCA, &n[i], 1, &s);
       order = ucol_getNextCE(UCA, &s, status);
       if(isContinuation(order)) {
         *status = U_INTERNAL_PROGRAM_ERROR;
@@ -765,7 +765,7 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
           /* then pick CEs out until there is no more and stuff them into expansion */
           collIterate s;
           uint32_t order = 0;
-          init_collIterate(src->UCA, expOffset + src->source, 1, &s);
+          uprv_init_collIterate(src->UCA, expOffset + src->source, 1, &s);
 
           for(;;) {
             order = ucol_getNextCE(src->UCA, &s, status);
@@ -1034,7 +1034,7 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
         el.noOfCEs = 0;
         el.prefix = el.prefixChars;
         el.prefixSize = 0;
-        init_collIterate(src->UCA, decomp, 1, &colIt);
+        uprv_init_collIterate(src->UCA, decomp, 1, &colIt);
         while(CE != UCOL_NO_MORE_CES) {
           CE = ucol_getNextCE(src->UCA, &colIt, status);
           if(CE != UCOL_NO_MORE_CES) {

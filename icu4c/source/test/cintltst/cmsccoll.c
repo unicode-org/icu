@@ -1130,7 +1130,7 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
       varT = (UBool)((specs & UCOL_TOK_VARIABLE_TOP) != 0);
       top_ = (UBool)((specs & UCOL_TOK_TOP) != 0);
 
-      init_collIterate(coll, rulesCopy+chOffset, chLen, &c);
+      uprv_init_collIterate(coll, rulesCopy+chOffset, chLen, &c);
 
       currCE = ucol_getNextCE(coll, &c, status);
       if(currCE == 0 && UCOL_ISTHAIPREVOWEL(*(rulesCopy+chOffset))) {
@@ -1164,7 +1164,7 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
             result = ucol_inv_getNextCE(baseCE & 0xFFFFFF3F, baseContCE, &nextCE, &nextContCE, maxStrength);
           }
           if(result < 0) {
-            if(isTailored(coll, *(rulesCopy+oldOffset), status)) {
+            if(ucol_isTailored(coll, *(rulesCopy+oldOffset), status)) {
               log_verbose("Reset is tailored codepoint %04X, don't know how to continue, taking next test\n", *(rulesCopy+oldOffset));
               return;
             } else {
@@ -1366,12 +1366,12 @@ static void IsTailoredTest(void) {
   coll = ucol_openRules(rule, ruleLen, UCOL_OFF, UCOL_TERTIARY, NULL,&status);
   if(U_SUCCESS(status)) {
     for(i = 0; i<tailoredLen; i++) {
-      if(!isTailored(coll, tailored[i], &status)) {
+      if(!ucol_isTailored(coll, tailored[i], &status)) {
         log_err("%i: %04X should be tailored - it is reported as not\n", i, tailored[i]);
       }
     }
     for(i = 0; i<notTailoredLen; i++) {
-      if(isTailored(coll, notTailored[i], &status)) {
+      if(ucol_isTailored(coll, notTailored[i], &status)) {
         log_err("%i: %04X should not be tailored - it is reported as it is\n", i, notTailored[i]);
       }
     }
@@ -2872,7 +2872,7 @@ static void TestVariableTopSetting(void) {
 
           /* before we start screaming, let's see if there is a problem with the rules */
           collIterate s;
-          init_collIterate(coll, rulesCopy+oldChOffset, oldChLen, &s);
+          uprv_init_collIterate(coll, rulesCopy+oldChOffset, oldChLen, &s);
 
           CE = ucol_getNextCE(coll, &s, &status);
 
