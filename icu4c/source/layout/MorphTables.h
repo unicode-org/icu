@@ -1,0 +1,76 @@
+/*
+ * @(#)MorphTables.h	1.5 00/03/15
+ *
+ * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ *
+ */
+
+#ifndef __MORPHTABLES_H
+#define __MORPHTABLES_H
+
+#include "LETypes.h"
+#include "LayoutTables.h"
+
+typedef le_uint32 FeatureFlags;
+
+typedef le_int16 FeatureType;
+typedef le_int16 FeatureSetting;
+
+struct FeatureTableEntry
+{
+    FeatureType     featureType;
+    FeatureSetting  featureSetting;
+    FeatureFlags    enableFlags;
+    FeatureFlags    disableFlags;
+};
+
+struct ChainHeader
+{
+    FeatureFlags        defaultFlags;
+    le_uint32           chainLength;
+    le_int16           nFeatureEntries;
+    le_int16           nSubtables;
+    FeatureTableEntry   featureTable[ANY_NUMBER];
+};
+
+struct MorphTableHeader
+{
+    le_int32    version;
+    le_uint32   nChains;
+    ChainHeader chains[ANY_NUMBER];
+
+    void process(LEGlyphID *glyphs, le_int32 *glyphIndices, le_int32 glyphCount);
+};
+
+typedef le_int16 SubtableCoverage;
+
+enum SubtableCoverageFlags
+{
+    scfVertical = 0x8000,
+    scfReverse  = 0x4000,
+    scfIgnoreVt = 0x2000,
+    scfReserved = 0x1FF8,
+    scfTypeMask = 0x0007
+};
+
+enum MorphSubtableType
+{
+    mstIndicRearrangement               = 0,
+    mstContextualGlyphSubstitution      = 1,
+    mstLigatureSubstitution             = 2,
+    mstReservedUnused                   = 3,
+    mstNonContextualGlyphSubstitution   = 4,
+    mstContextualGlyphInsertion         = 5
+};
+
+struct MorphSubtableHeader
+{
+    le_int16           length;
+    SubtableCoverage    coverage;
+    FeatureFlags        subtableFeatures;
+
+    void process(LEGlyphID *glyphs, le_int32 *glyphIndices, le_int32 glyphCount);
+};
+
+#endif
+
