@@ -881,16 +881,16 @@ TestSurrogateSearching() {
         NULL!=u_memchr32(s+1, supp2, 9) ||
         NULL!=u_strstr(s+1, sub_supp2) ||
         NULL!=u_strFindFirst(s+1, -1, sub_supp2, -1) ||
-        NULL!=u_strFindFirst(s+1, -1, sub_supp2, 1) ||
+        NULL!=u_strFindFirst(s+1, -1, sub_supp2, 2) ||
         NULL!=u_strFindFirst(s+1, 9, sub_supp2, -1) ||
-        NULL!=u_strFindFirst(s+1, 9, sub_supp2, 1) ||
+        NULL!=u_strFindFirst(s+1, 9, sub_supp2, 2) ||
         NULL!=u_strrchr32(s+1, supp2) ||
         NULL!=u_memrchr32(s+1, supp2, 9) ||
         NULL!=u_strrstr(s+1, sub_supp2) ||
         NULL!=u_strFindLast(s+1, -1, sub_supp2, -1) ||
-        NULL!=u_strFindLast(s+1, -1, sub_supp2, 1) ||
+        NULL!=u_strFindLast(s+1, -1, sub_supp2, 2) ||
         NULL!=u_strFindLast(s+1, 9, sub_supp2, -1) ||
-        NULL!=u_strFindLast(s+1, 9, sub_supp2, 1)
+        NULL!=u_strFindLast(s+1, 9, sub_supp2, 2)
     ) {
         log_err("error: one of the u_str[chr etc](U+10403) incorrectly finds something\n");
     }
