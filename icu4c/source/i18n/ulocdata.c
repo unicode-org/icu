@@ -27,6 +27,7 @@ ulocdata_getExemplarSet(USet *fillIn, const char *localeID,
     UResourceBundle *bundle = NULL;
     const UChar *exemplarChars = NULL;
     int32_t len = 0;
+    UErrorCode localStatus = U_ZERO_ERROR;
 
     if (U_FAILURE(*status)){
         return NULL;
@@ -37,7 +38,6 @@ ulocdata_getExemplarSet(USet *fillIn, const char *localeID,
         return NULL;
     }
     
-    UErrorCode localStatus = U_ZERO_ERROR;
     exemplarChars = ures_getStringByKey(bundle, EXEMPLAR_CHARS, &len, &localStatus);
     if (U_FAILURE(localStatus) || (*status != U_USING_DEFAULT_WARNING && localStatus != U_ZERO_ERROR)) {
         *status = localStatus;
