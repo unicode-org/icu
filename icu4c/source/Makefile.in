@@ -121,7 +121,7 @@ clean-local:
 
 distclean-local:
 	rm -f Makefile config.cache config.log config.status config/Makefile
-	rm -f common/platform.h common/icucfg.h
+	rm -f common/unicode/platform.h common/icucfg.h
 
 check-local:
 
