@@ -566,9 +566,17 @@ static void TestFileStream(void){
     if(T_FileStream_error(stream)){
         log_data_err("T_FileStream_error shouldn't have an error %s\n",fileName);
     }
-    T_FileStream_writeLine(stream,testline);
+    if(!T_FileStream_error(NULL)){
+        log_err("T_FileStream_error didn't get an error %s\n",fileName);
+    }
+    T_FileStream_putc(stream, 0x20);
     if(!T_FileStream_error(stream)){
-        log_data_err("T_FileStream_error didn't get an error %s\n",fileName);
+        /*
+         Warning 
+         writing to a read-only file may not consistently fail on all platforms
+         (e.g. HP-UX, FreeBSD, MacOSX)
+        */
+        log_verbose("T_FileStream_error didn't get an error when writing to a readonly file %s\n",fileName);
     }
 
     T_FileStream_close(stream);

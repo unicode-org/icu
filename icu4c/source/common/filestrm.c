@@ -178,6 +178,12 @@ T_FileStream_eof(FileStream* fileStream)
     return feof((FILE*)fileStream);
 }
 
+/*
+ Warning 
+ This function may not work consistently on all platforms
+ (e.g. HP-UX, FreeBSD and MacOSX don't return an error when
+ putc is used on a file opened as readonly)
+*/
 U_CAPI int U_EXPORT2
 T_FileStream_error(FileStream* fileStream)
 {
