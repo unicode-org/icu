@@ -1080,6 +1080,9 @@ public class CollationAPITest extends TestFmwk {
             log(list[i].toString());
             log(" , the display name is : ");
             logln(list[i].getDisplayName());
+            logln("     ...... Or display as: " + Collator.getDisplayName(list[i]));
+            logln("     ...... and display in Chinese: " + 
+                    Collator.getDisplayName(list[i],Locale.CHINA));            
         }
     }    
 }

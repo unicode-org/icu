@@ -171,17 +171,17 @@ public class CollationServiceTest extends TestFmwk {
             CollatorFactory delegate;
     
             TestFactoryWrapper(CollatorFactory delegate) {
-		this.delegate = delegate;
+                this.delegate = delegate;
             }
     
-	    public Collator createCollator(ULocale loc) {
-		return delegate.createCollator(loc);
+            public Collator createCollator(ULocale loc) {
+                return delegate.createCollator(loc);
             }
     
             // use CollatorFactory getDisplayName(ULocale, ULocale) for coverage
     
-	    public Set getSupportedLocaleIDs() {
-		return delegate.getSupportedLocaleIDs();
+            public Set getSupportedLocaleIDs() {
+                return delegate.getSupportedLocaleIDs();
             }
         }
 
@@ -325,5 +325,10 @@ public class CollationServiceTest extends TestFmwk {
         }
         assertTrue("getFunctionalEquivalent(fr_FR).isAvailable==false",
                    isAvailable[0] == false);
+
+        equiv = Collator.getFunctionalEquivalent(KW[0], new ULocale("zh_Hans"));
+        if (assertTrue("getFunctionalEquivalent(zh_Hans)!=null", equiv!=null)) {
+            assertEquals("getFunctionalEquivalent(zh_Hans)", "zh", equiv.toString());
+        }
     }
 }
