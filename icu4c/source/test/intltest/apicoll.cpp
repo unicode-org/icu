@@ -106,7 +106,7 @@ CollationAPITest::TestProperty(/* char* par */)
 
     logln("The property tests begin : ");
     logln("Test ctors : ");
-    col = Collator::createInstance(success);
+    col = Collator::createInstance(Locale::ENGLISH, success);
 
     if (U_FAILURE(success))
     {
@@ -207,7 +207,7 @@ CollationAPITest::TestProperty(/* char* par */)
     }
 
     delete col;
-    col = Collator::createInstance(success);
+    col = Collator::createInstance(Locale::ENGLISH, success);
     if (U_FAILURE(success))
     {
         errln("Creating default collator failed.");
@@ -259,7 +259,7 @@ CollationAPITest::TestHashCode(/* char* par */)
     logln("hashCode tests begin.");
     UErrorCode success = U_ZERO_ERROR;
     Collator *col1 = 0;
-    col1 = Collator::createInstance(success);
+    col1 = Collator::createInstance(Locale::ENGLISH, success);
     if (U_FAILURE(success))
     {
         errln("Default collation creation failed.");
@@ -276,7 +276,7 @@ CollationAPITest::TestHashCode(/* char* par */)
     }
 
     Collator *col3 = 0;
-    col3 = Collator::createInstance(success);
+    col3 = Collator::createInstance(Locale::ENGLISH, success);
     if (U_FAILURE(success))
     {
         errln("2nd default collation creation failed.");
@@ -304,7 +304,7 @@ CollationAPITest::TestCollationKey(/* char* par */)
     logln("testing CollationKey begins...");
     Collator *col = 0;
     UErrorCode success=U_ZERO_ERROR;
-    col = Collator::createInstance(success);
+    col = Collator::createInstance(Locale::ENGLISH, success);
     if (U_FAILURE(success))
     {
         errln("Default collation creation failed.");
@@ -388,7 +388,7 @@ CollationAPITest::TestElemIter(/* char* par */)
     logln("testing sortkey begins...");
     Collator *col = 0;
     UErrorCode success = U_ZERO_ERROR;
-    col = Collator::createInstance(success);
+    col = Collator::createInstance(Locale::ENGLISH, success);
     if (U_FAILURE(success))
     {
         errln("Default collation creation failed.");
@@ -396,7 +396,7 @@ CollationAPITest::TestElemIter(/* char* par */)
     }
        
     UnicodeString testString1("XFILE What subset of all possible test cases has the highest probability of detecting the most errors?");
-    UnicodeString testString2("Xf ile What subset of all possible test cases has the lowest probability of detecting the least errors?");
+    UnicodeString testString2("Xf_ile What subset of all possible test cases has the lowest probability of detecting the least errors?");
     logln("Constructors and comparison testing....");
     CollationElementIterator *iterator1 = ((RuleBasedCollator*)col)->createCollationElementIterator(testString1);
     
@@ -459,8 +459,8 @@ CollationAPITest::TestElemIter(/* char* par */)
 
     order1 = iterator1->next(success); 
     order3 = iterator3->next(success);
-    doAssert((CollationElementIterator::secondaryOrder(order1) == 
-        CollationElementIterator::secondaryOrder(order3)), "The secondary orders should be the same");
+    doAssert((CollationElementIterator::secondaryOrder(order1) != 
+        CollationElementIterator::secondaryOrder(order3)), "The secondary orders should not be the same");
     doAssert((order1 != CollationElementIterator::NULLORDER), "Unexpected end of iterator reached");
 
     iterator1->reset(); iterator2->reset(); iterator3->reset();
@@ -516,8 +516,8 @@ CollationAPITest::TestElemIter(/* char* par */)
         return;
     }
 
-    doAssert((CollationElementIterator::secondaryOrder(order1) == 
-        CollationElementIterator::secondaryOrder(order3)), "The secondary orders should be the same");
+    doAssert((CollationElementIterator::secondaryOrder(order1) != 
+        CollationElementIterator::secondaryOrder(order3)), "The secondary orders should not be the same");
     doAssert((order1 != CollationElementIterator::NULLORDER), "Unexpected end of iterator reached");
     doAssert((*iterator2 != *iterator3), "The iterators should be different");
 
@@ -525,7 +525,7 @@ CollationAPITest::TestElemIter(/* char* par */)
     //test error values
     success=U_UNSUPPORTED_ERROR;
     Collator *colerror=NULL;
-    colerror=Collator::createInstance(success);
+    colerror=Collator::createInstance(Locale::ENGLISH, success);
     if (colerror != 0 || success == U_ZERO_ERROR){
         errln("Error: createInstance(UErrorCode != U_ZERO_ERROR) should just return and not create an instance\n");
     }
@@ -580,7 +580,7 @@ CollationAPITest::TestOperators(/* char* par */)
     doAssert((*col1 == *col2), "Collator objects not equal after assignment (operator=)");
         
     success = U_ZERO_ERROR;
-    Collator *col3 = Collator::createInstance(success);
+    Collator *col3 = Collator::createInstance(Locale::ENGLISH, success);
     if (U_FAILURE(success)) {
         errln("Default collation creation failed.");
         return;
@@ -642,7 +642,7 @@ void
 CollationAPITest::TestDuplicate(/* char* par */)
 {
     UErrorCode status = U_ZERO_ERROR;
-    Collator *col1 = Collator::createInstance(status);
+    Collator *col1 = Collator::createInstance(Locale::ENGLISH, status);
     if (U_FAILURE(status)) {
         logln("Default collator creation failed.");
         return;
@@ -665,7 +665,7 @@ CollationAPITest::TestCompare(/* char* par */)
     logln("The compare tests begin : ");
     Collator *col = 0;
     UErrorCode success = U_ZERO_ERROR;
-    col = Collator::createInstance(success);
+    col = Collator::createInstance(Locale::ENGLISH, success);
     if (U_FAILURE(success)) {
         errln("Default collation creation failed.");
         return;
