@@ -728,7 +728,16 @@ public:
      */
 class U_I18N_API SimpleNumberFormatFactory : public NumberFormatFactory {
 protected:
+    /*
+     * True if the locale supported by this factory is visible.
+     * @draft ICU 2.6
+     */
     const UBool _visible;
+
+    /*
+     * The locale supported by this factory, as a UnicodeString.
+     * @draft ICU 2.6
+     */
     UnicodeString _id;
 
 public:
