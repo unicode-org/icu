@@ -71,6 +71,73 @@ static const char PLAIN_SEPARATORS[9] = { '\r', '\n', '\t', ' ', '<', '>' ,'"' ,
 static const char CODEPOINT_SEPARATORS[8] = {  '\r', '>', '\\', 'x', '\n', ' ', '\t', '\0' };
 static const char UNICODE_CODEPOINT_SEPARATORS[6] = {  '<', '>', 'U', ' ', '\t', '\0' };
 
+/* Remove all characters followed by '#'
+ */
+char *
+  removeComments (char *line)
+{
+  char *pound = icu_strchr (line, '#');
+
+  if (pound != NULL)
+    *pound = '\0';
+  return line;
+}
+
+/*Returns uppercased string */
+char *
+  strtoupper (char *name)
+{
+  int32_t i = 0;
+
+  while (name[i] = icu_toupper (name[i]))
+    i++;
+
+  return name;
+}
+
+/* Returns true in c is a in set 'setOfChars', false otherwise
+ */
+bool_t 
+  isInSet (char c, const char *setOfChars)
+{
+  uint8_t i = 0;
+
+  while (setOfChars[i] != '\0')
+    {
+      if (c == setOfChars[i++])
+	return TRUE;
+    }
+
+  return FALSE;
+}
+
+/* Returns pointer to the next non-whitespace (or non-separator)
+ */
+int32_t 
+  nextTokenOffset (const char *line, const char *separators)
+{
+  int32_t i = 0;
+
+  while (line[i] && isInSet (line[i], separators))
+    i++;
+
+  return i;
+}
+
+/* Returns pointer to the next token based on the set of separators
+ */
+char *
+  getToken (char *token, char *line, const char *separators)
+{
+  int32_t i = nextTokenOffset (line, separators);
+  int8_t j = 0;
+
+  while (line[i] && (!isInSet (line[i], separators)))
+    token[j++] = line[i++];
+  token[j] = '\0';
+
+  return line + i;
+}
 
 
 int main(int argc, char** argv)
