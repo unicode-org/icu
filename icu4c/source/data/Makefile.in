@@ -95,18 +95,20 @@ check-local:
 
 # During this INVOKE we only want to use stubdata.
 # We don't want to try to write over files that we are using.
+PKGDATA_INVOKE:=$(subst :$(top_builddir)/data/out,,$(INVOKE))
+
 packagedata: icupkg.inc $(BUILDDIR)/icudata.lst 
-	$(subst :$(top_builddir)/data/out,,$(INVOKE)) $(PKGDATA) -e $(ICUDATA_ENTRY_POINT) -T $(BUILDDIR) -p $(ICUDATA_NAME) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) $(BUILDDIR)/icudata.lst
+	$(PKGDATA_INVOKE) $(PKGDATA) -e $(ICUDATA_ENTRY_POINT) -T $(BUILDDIR) -p $(ICUDATA_NAME) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) $(BUILDDIR)/icudata.lst
 ifneq ($(ENABLE_STATIC),)
-	$(subst :$(top_builddir)/data/out,,$(INVOKE)) $(PKGDATA) -e $(ICUDATA_ENTRY_POINT) -T $(BUILDDIR) -p $(ICUDATA_NAME) -m static $(BUILDDIR)/icudata.lst
+	$(PKGDATA_INVOKE) $(PKGDATA) -e $(ICUDATA_ENTRY_POINT) -T $(BUILDDIR) -p $(ICUDATA_NAME) -m static $(BUILDDIR)/icudata.lst
 endif
 
 ## Install ICU data.
 install-local:  $(BUILDDIR)/icudata.lst ./icupkg.inc install-convrtrstxt $(OS390INSTALL)
 	$(MKINSTALLDIRS) $(TMPDATADIR) $(DESTDIR)$(ICUPKGDATA_DIR)
-	$(INVOKE) $(PKGDATA) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) -e $(ICUDATA_ENTRY_POINT) -T $(BUILDDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(BUILDDIR)/icudata.lst -I $(DESTDIR)$(ICUPKGDATA_DIR)
+	$(PKGDATA_INVOKE) $(PKGDATA) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) -e $(ICUDATA_ENTRY_POINT) -T $(BUILDDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(BUILDDIR)/icudata.lst -I $(DESTDIR)$(ICUPKGDATA_DIR)
 ifneq ($(ENABLE_STATIC),)
-	$(INVOKE) $(PKGDATA) -m static -e $(ICUDATA_ENTRY_POINT) -T $(BUILDDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(BUILDDIR)/icudata.lst -I $(DESTDIR)$(ICUPKGDATA_DIR)
+	$(PKGDATA_INVOKE) $(PKGDATA) -m static -e $(ICUDATA_ENTRY_POINT) -T $(BUILDDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(BUILDDIR)/icudata.lst -I $(DESTDIR)$(ICUPKGDATA_DIR)
 endif
 
 install-convrtrstxt: $(DESTDIR)$(pkgsysconfdir)/convrtrs.txt
