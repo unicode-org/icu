@@ -58,7 +58,7 @@ eu {
     }
     NumberElements { 
             ",",
-            "",
+            ".", // even if not used
             ";",
             "%",
             "0",
