@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TestMText.java,v $ $Revision: 1.2 $ $Date: 2000/04/24 20:52:58 $
+ * @(#)$RCSfile: TestMText.java,v $ $Revision: 1.3 $ $Date: 2000/04/26 17:39:58 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -356,7 +356,7 @@ public class TestMText extends TestFmwk {
         }
     }
 
-    protected void err(String message) {
+    public void err(String message) {
     
         if (testIteration != NOT_IN_MONKEY_TEST) {
             message = "testIteration="+testIteration+"; testCase="+theCase+message;

@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: FmwkTestTextPanel.java,v $ $Revision: 1.1 $ $Date: 2000/04/24 21:10:58 $
+ * @(#)$RCSfile: FmwkTestTextPanel.java,v $ $Revision: 1.2 $ $Date: 2000/04/26 17:39:58 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -36,17 +36,7 @@ public final class FmwkTestTextPanel extends TestFmwk {
         ttp.test();
         // If TestTextPanel gets more tests, add them here
     }
-    
-    protected void errln(String message) {
-    
-        super.errln(message);
-    }
-    
-    protected void logln(String message) {
-    
-        super.logln(message);
-    }
-    
+
     private final class TTP extends TestTextPanel {
     
         protected void reportError(String message) {
