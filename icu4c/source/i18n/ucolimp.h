@@ -191,6 +191,29 @@ static uint8_t utf16fixup[32] = {
 }
 
 
+#define UCOL_GETNEXTCENEW(order, coll, collationSource, status) {                     \
+    if (U_FAILURE(*(status)) || ((collationSource).pos>=(collationSource).len          \
+      && (collationSource).CEpos <= (collationSource).toReturn)) {                    \
+      (order) = UCOL_NULLORDER;                                                       \
+    } else if ((collationSource).CEpos > (collationSource).toReturn) {                \
+      (order) = *((collationSource).toReturn++);                                      \
+    } else {                                                                          \
+      UChar ch = *(collationSource).pos;                                              \
+      (collationSource).CEpos = (collationSource).toReturn = (collationSource).CEs;   \
+      if(ch < 0xFF) { (order) = (coll)->latinOneMapping[ch]; }                        \
+      else {   (order) = ucmp32_get((coll)->mapping, ch);   }                         \
+      if((order) >= UCOL_NOT_FOUND) {                                                 \
+        *((collationSource).CEpos) = (order);                                         \
+        (order) = getSpecialCENew((coll), &(collationSource), (status));              \
+        if((order) == UCOL_NOT_FOUND) {                                               \
+          (order) = ucol_getNextUCA(ch, &(collationSource), (status));               \
+        }                                                                             \
+      }                                                                               \
+    }                                                                                 \
+    (collationSource).pos++;                                                          \
+}
+
+uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *status);
 int32_t getComplicatedCE(const UCollator *coll, collIterate *source, UErrorCode *status);
 void incctx_cleanUpContext(incrementalContext *ctx);
 UChar incctx_appendChar(incrementalContext *ctx, UChar c);
@@ -287,6 +310,7 @@ struct UCollatorNew {
     const uint32_t *expansion;            
     const UChar *contractionIndex;        
     const uint32_t *contractionCEs;       
+    uint8_t variableMax;
     UChar variableTopValue;
     UColAttributeValue frenchCollation;
     UColAttributeValue alternateHandling; /* attribute for handling variable elements*/
@@ -294,13 +318,13 @@ struct UCollatorNew {
     UColAttributeValue caseLevel;         /* do we have an extra case level */
     UColAttributeValue normalizationMode; /* attribute for normalization */
     UColAttributeValue strength;          /* attribute for strength */
-    UChar variableTopValueDefault;
-    UColAttributeValue frenchCollationDefault;
-    UColAttributeValue alternateHandlingDefault; /* attribute for handling variable elements*/
-    UColAttributeValue caseFirstDefault;         /* who goes first, lower case or uppercase */
-    UColAttributeValue caseLevelDefault;         /* do we have an extra case level */
-    UColAttributeValue normalizationModeDefault; /* attribute for normalization */
-    UColAttributeValue strengthDefault;          /* attribute for strength */
+    UBool variableTopValueisDefault;
+    UBool frenchCollationisDefault;
+    UBool alternateHandlingisDefault; /* attribute for handling variable elements*/
+    UBool caseFirstisDefault;         /* who goes first, lower case or uppercase */
+    UBool caseLevelisDefault;         /* do we have an extra case level */
+    UBool normalizationModeisDefault; /* attribute for normalization */
+    UBool strengthisDefault;          /* attribute for strength */
 };
 
 uint32_t getSpecialCENew(const UCollatorNew *coll, collIterate *source, UErrorCode *status);

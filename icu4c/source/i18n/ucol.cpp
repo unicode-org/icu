@@ -87,19 +87,22 @@ UCollatorNew* ucol_initCollator(const UCATableHeader *image, UCollatorNew *fillI
     result->contractionIndex = (UChar*)((uint8_t*)result->image+result->image->contractionIndex);
     result->expansion = (uint32_t*)((uint8_t*)result->image+result->image->expansion);
     /* set attributes */
-    result->caseFirstDefault = result->image->caseFirst;
-    result->caseLevelDefault = result->image->caseLevel;
-    result->frenchCollationDefault = result->image->frenchCollation;
-    result->normalizationModeDefault = result->image->normalizationMode;
-    result->strengthDefault = result->image->strength;
-    result->variableTopValueDefault = result->image->variableTopValue;
+    result->caseFirst = result->image->caseFirst;
+    result->caseLevel = result->image->caseLevel;
+    result->frenchCollation = result->image->frenchCollation;
+    result->normalizationMode = result->image->normalizationMode;
+    result->strength = result->image->strength;
+    result->variableTopValue = result->image->variableTopValue;
 
-    result->caseFirst = UCOL_DEFAULT;
-    result->caseLevel = UCOL_DEFAULT;
-    result->frenchCollation = UCOL_DEFAULT;
-    result->normalizationMode = UCOL_DEFAULT;
-    result->strength = UCOL_DEFAULT;
-    result->variableTopValue = UCOL_DEFAULT;
+    result->caseFirstisDefault = TRUE;
+    result->caseLevelisDefault = TRUE;
+    result->frenchCollationisDefault = TRUE;
+    result->normalizationModeisDefault = TRUE;
+    result->strengthisDefault = TRUE;
+    result->variableTopValueisDefault = TRUE;
+
+    uint32_t variableMaxCE = ucmp32_get(result->mapping, result->variableTopValue);
+    result->variableMax = (variableMaxCE & 0xFF000000) >> 24;
 
     return result;
 }
@@ -198,22 +201,28 @@ uint32_t ucol_getNextCENew(const UCollatorNew *coll, collIterate *collationSourc
         *(collationSource->CEpos) = order;                            /* prepare the buffer */
         order = getSpecialCENew(coll, collationSource, status);       /* and try to get the special CE */
         if(order == UCOL_NOT_FOUND) {   /* We couldn't find a good CE in the tailoring */
-          if(ch < 0xFF) {               /* so we'll try to find it in the UCA */
-            order = UCA->latinOneMapping[ch];
-          } else {
-            order = ucmp32_get(UCA->mapping, ch);
-          }
-        }
-        if(order >= UCOL_NOT_FOUND) { /* UCA also gives us a special CE */
-          order = getSpecialCENew(UCA, collationSource, status); 
-        } 
-        if(order == UCOL_NOT_FOUND) { /* This is where we have to resort to algorithmical generation */
-          /* Make up an artifical CE from code point as per UCA */
+          ucol_getNextUCA(ch, collationSource, status);
         }
       } 
     } 
     collationSource->pos++; /* we're advancing to the next codepoint */
     /* This means that contraction should spit back the last codepoint eaten! */
+    return order; /* return the CE */
+}
+
+uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *status) {
+    uint32_t order;
+    if(ch < 0xFF) {               /* so we'll try to find it in the UCA */
+      order = UCA->latinOneMapping[ch];
+    } else {
+      order = ucmp32_get(UCA->mapping, ch);
+    }
+    if(order >= UCOL_NOT_FOUND) { /* UCA also gives us a special CE */
+      order = getSpecialCENew(UCA, collationSource, status); 
+    } 
+    if(order == UCOL_NOT_FOUND) { /* This is where we have to resort to algorithmical generation */
+      /* Make up an artifical CE from code point as per UCA */
+    }
     return order; /* return the CE */
 }
 
@@ -271,24 +280,30 @@ uint32_t getSpecialCENew(const UCollatorNew *coll, collIterate *source, UErrorCo
       /* This should handle contractions */
       while(true) {
         /* First we position ourselves at the begining of contraction sequence */
-        UCharOffset = (UChar *)coll->image+getContractOffset(CE);
+        const UChar *ContractionStart = UCharOffset = (UChar *)coll->image+getContractOffset(CE);
 
         /* we need to convey the notion of having a backward search - most probably through the context object */
-        /* if (backwardsSearch) offset += contractionUChars[(int16_t)offset]; else ++offset */
+        /* if (backwardsSearch) offset += contractionUChars[(int16_t)offset]; else UCharOffset++;  */
+        UCharOffset++; /* skip the backward offset, see above */
         if (source->pos>=source->len) { /* this is the end of string */
           CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex)); /* So we'll pick whatever we have at the point... */
           source->pos--; /* I think, since we'll advance in the getCE */         
           break;
         }
-        schar = *(source->pos++);
+        schar = *(++source->pos);
         while(schar > (tchar = *(UCharOffset++))) ; /* since the contraction codepoints should be ordered, we skip all that are smaller */
         if(schar != tchar) { /* we didn't find the correct codepoint. We can use either the first or the last CE */
-          UCharOffset--; /* We moved one after the 0xFFFF, so we better back up. */
+          if(tchar == 0xFFFF) {
+            UCharOffset--; /* We moved one after the 0xFFFF, so we better back up. We're gonna use the last CE*/
+          } else {
+            UCharOffset = ContractionStart; /* We're not at the end, bailed out in the middle. Better use starting CE */
+          }
           source->pos--; /* Spit out the last char of the string, wasn't tasty enough */
         }
         CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex));
-        if(getCETag(CE) != CONTRACTION_TAG) {
-          source->pos--; /* I think, since we'll advance in the getCE */
+        if(!isContraction(CE)) {
+          /* Maybe not */
+          /*source->pos--;*/ /* I think, since we'll advance in the getCE */
           break;  
         }
       }
@@ -324,69 +339,6 @@ uint32_t getSpecialCENew(const UCollatorNew *coll, collIterate *source, UErrorCo
   return CE;
 }
 
-int32_t ucol_getSortKeySizeNew(const UCollatorNew *coll, collIterate *s, int32_t currentSize, UColAttributeValue strength, int32_t len) {
-    UErrorCode status = U_ZERO_ERROR;
-    UBool  compareSec   = (strength >= UCOL_SECONDARY);
-    UBool  compareTer   = (strength >= UCOL_TERTIARY);
-    UBool  compareQuad  = (strength >= UCOL_QUATERNARY);
-    UBool  compareIdent = (strength == UCOL_IDENTICAL);
-    int32_t order = UCOL_NULLORDER;
-    uint16_t primary = 0;
-    uint8_t secondary = 0;
-    uint8_t tertiary = 0;
-    
-
-    for(;;) {
-        order = ucol_getNextCENew(coll, s, &status);
-        if(order == UCOL_NULLORDER) {
-            break;
-        }
-
-        primary = ((order & UCOL_PRIMARYORDERMASK)>> UCOL_PRIMARYORDERSHIFT);
-        secondary = ((order & UCOL_SECONDARYORDERMASK)>> UCOL_SECONDARYORDERSHIFT);
-        tertiary = (order & UCOL_TERTIARYORDERMASK);
-
-        if(primary != UCOL_PRIMIGNORABLE) {
-            currentSize += 2;
-            if(compareSec) {
-                currentSize++;
-            }
-            if(compareTer) {
-                currentSize++;
-            }
-        } else if(secondary != 0) {
-            if(compareSec) {
-                currentSize++;
-            }
-            if(compareTer) {
-                currentSize++;
-            }
-        } else if(tertiary != 0) {
-            if(compareTer) {
-                currentSize++;
-            }
-        }
-    }
-
-    if(compareIdent) {
-        currentSize += len*sizeof(UChar);
-        UChar *ident = s->string;
-        while(ident<s->len) {
-            if((*(ident) >> 8) + utf16fixup[*(ident) >> 11]<0x02) {
-
-                currentSize++;
-            }
-            if((*(ident) & 0xFF)<0x02) {
-                currentSize++;
-            }
-        }
-
-    }
-
-    return currentSize;
-    
-}
-    
 uint8_t *reallocateBuffer(uint8_t **secondaries, uint8_t *secStart, uint8_t *second, int32_t *secSize, UErrorCode *status) {
   uint8_t *newStart = NULL;
 
@@ -410,10 +362,6 @@ uint8_t *reallocateBuffer(uint8_t **secondaries, uint8_t *secStart, uint8_t *sec
 }
 
 
-#define MIN_VALUE 0x02
-#define UNMARKED 0x03
-#define UCOL_VARIABLE_MAX 0x20
-
 void uprv_ucol_reverse_buffer(uint8_t *start, uint8_t *end) {
   uint8_t temp;
   while(start<end) {
@@ -423,6 +371,132 @@ void uprv_ucol_reverse_buffer(uint8_t *start, uint8_t *end) {
   }
 }
 
+#define MIN_VALUE 0x02
+#define UNMARKED 0x03
+#define UCOL_VARIABLE_MAX 0x20
+#define UCOL_NEW_IGNORABLE 0
+
+int32_t ucol_getSortKeySizeNew(const UCollatorNew *coll, collIterate *s, int32_t currentSize, UColAttributeValue strength, int32_t len) {
+    UErrorCode status = U_ZERO_ERROR;
+    uint8_t compareSec   = (strength >= UCOL_SECONDARY)?0:0xFF;
+    uint8_t compareTer   = (strength >= UCOL_TERTIARY)?0:0xFF;
+    uint8_t compareQuad  = (strength >= UCOL_QUATERNARY)?0:0xFF;
+    UBool  compareIdent = (strength == UCOL_IDENTICAL);
+    UBool  doCase = (coll->caseLevel == UCOL_ON);
+    UBool  shifted = (coll->alternateHandling == UCOL_SHIFTED);
+
+    uint8_t variableMax = coll->variableMax;
+
+    int32_t order = UCOL_NULLORDER;
+    uint16_t primary = 0;
+    uint8_t primary1 = 0;
+    uint8_t primary2 = 0;
+    uint8_t primary3 = 0;
+    uint32_t ce = 0;
+    uint8_t secondary = 0;
+    uint8_t tertiary = 0;
+    int32_t caseShift = 0;
+    
+
+    for(;;) {
+          /*order = ucol_getNextCENew(coll, s, status);*/
+          UCOL_GETNEXTCENEW(order, coll, *s, &status);
+
+          if(order == UCOL_NULLORDER) {
+              break;
+          }
+
+          /* We're saving order in ce, since we will destroy order in order to get primary, secondary, tertiary in order ;)*/
+          ce = order;
+
+
+          tertiary = (order & UCOL_TERTIARYORDERMASK);
+          secondary = (order >>= 8) & 0xFF;
+          primary3 = 0; /* the third primary */
+          primary2 = (order >>= 8) & 0xFF;;
+          primary1 = order >>= 8;
+
+          if((tertiary & 0xF0) == 0xF0) { /* This indicates a long primary (11110000) */
+            /* Note: long primary can appear both as a normal CE or as a continuation CE (not that it matters much) */
+            primary3 = secondary;
+            secondary = (tertiary & 0x0F) + MIN_VALUE;
+            tertiary = UNMARKED;
+          }
+
+          if(shifted && primary1 < variableMax && primary1 != 0) { 
+            currentSize++;
+            if(primary2 != 0) {
+              currentSize++;
+            }
+          } else {
+            /* Note: This code assumes that the table is well built i.e. not having 0 bytes where they are not supposed to be. */
+            /* Usually, we'll have non-zero primary1 & primary2, except in cases of LatinOne and friends, when primary2 will   */
+            /* be zero with non zero primary1. primary3 is different than 0 only for long primaries - see above.               */
+            if(primary1 != UCOL_NEW_IGNORABLE) {
+              currentSize++;
+              if(primary2 != UCOL_NEW_IGNORABLE) {
+                currentSize++;
+                if(primary3 != UCOL_NEW_IGNORABLE) {
+                  currentSize++;
+                }
+              }
+            }               
+
+            if(secondary > compareSec) { /* I think that != 0 test should be != IGNORABLE */
+              /* This thing should also contain the compression logic, as in: */
+              /*
+                if (ws  == COMMON2 && COMMON2  <= secondary[-1] && secondary[-1] < COMMON_MAX2)
+                    ++secondary[-1]; // simply increment!!
+                else *secondary++ = ws;
+              */
+
+              currentSize++;
+            }
+
+            if(doCase) {
+              if (caseShift  == 0) {
+                currentSize++;
+                caseShift = 7;
+              }
+              caseShift--;
+            }
+
+            if(tertiary > compareTer) { /* I think that != 0 test should be != IGNORABLE */
+              /* This thing should also contain the compression logic, as in: */
+              /*
+                if (ws  == COMMON2 && COMMON2  <= secondary[-1] && secondary[-1] < COMMON_MAX2)
+                    ++secondary[-1]; // simply increment!!
+                else *secondary++ = ws;
+              */
+              currentSize++;
+            }
+
+            if(shifted && primary1 > compareQuad) {
+              currentSize++;
+            }
+
+          }
+    }
+
+    if(compareIdent) {
+        currentSize += len*sizeof(UChar);
+        UChar *ident = s->string;
+        while(ident<s->len) {
+            if((*(ident) >> 8) + utf16fixup[*(ident) >> 11]<0x02) {
+
+                currentSize++;
+            }
+            if((*(ident) & 0xFF)<0x02) {
+                currentSize++;
+            }
+        }
+
+    }
+
+    return currentSize;
+    
+}
+    
 int32_t
 ucol_calcSortKeyNew(const    UCollatorNew    *coll,
         const    UChar        *source,
@@ -459,17 +533,18 @@ ucol_calcSortKeyNew(const    UCollatorNew    *coll,
 
 	int32_t len = (sourceLength == -1 ? u_strlen(source) : sourceLength);
 
+    uint8_t variableMax = coll->variableMax;
 
-    UColAttributeValue strength = ucol_getAttributeNew(coll, UCOL_STRENGTH, status);
+    UColAttributeValue strength = coll->strength;
 
-    UBool  compareSec   = (strength >= UCOL_SECONDARY);
-    UBool  compareTer   = (strength >= UCOL_TERTIARY);
-    UBool  compareQuad  = (strength >= UCOL_QUATERNARY);
+    uint8_t compareSec   = (strength >= UCOL_SECONDARY)?0:0xFF;
+    uint8_t compareTer   = (strength >= UCOL_TERTIARY)?0:0xFF;
+    uint8_t compareQuad  = (strength >= UCOL_QUATERNARY)?0:0xFF;
     UBool  compareIdent = (strength == UCOL_IDENTICAL);
-    UBool  doCase = (ucol_getAttributeNew(coll, UCOL_CASE_LEVEL, status) == UCOL_ON);
-    UBool  upperFirst = (ucol_getAttributeNew(coll, UCOL_CASE_FIRST, status) == UCOL_UPPER_FIRST);
-    UBool  shifted = (ucol_getAttributeNew(coll, UCOL_ALTERNATE_HANDLING, status) == UCOL_SHIFTED);
-    UBool  isFrenchSec = (ucol_getAttributeNew(coll, UCOL_FRENCH_COLLATION, status) == UCOL_ON);
+    UBool  doCase = (coll->caseLevel == UCOL_ON);
+    UBool  upperFirst = (coll->caseFirst == UCOL_UPPER_FIRST);
+    UBool  shifted = (coll->alternateHandling == UCOL_SHIFTED);
+    UBool  isFrenchSec = (coll->frenchCollation == UCOL_ON);
 
     /* support for special features like caselevel and funky secondaries */
     uint8_t *frenchStartPtr = NULL;
@@ -482,7 +557,7 @@ ucol_calcSortKeyNew(const    UCollatorNew    *coll,
     init_collIterate((UChar *)source, len, &s, FALSE);
 
     // If we need to normalize, we'll do it all at once at the beggining!
-    UColAttributeValue normMode = ucol_getAttributeNew(coll, UCOL_NORMALIZATION_MODE, status);
+    UColAttributeValue normMode = coll->normalizationMode;
     if(normMode != UCOL_OFF) {
         normSourceLen = u_normalize(source, sourceLength, UNORM_NFD, 0, normSource, normSourceLen, status);
         if(U_FAILURE(*status)) {
@@ -513,7 +588,6 @@ ucol_calcSortKeyNew(const    UCollatorNew    *coll,
     uint32_t order = 0;
     uint32_t ce = 0;
 
-    uint16_t primary = 0;
     uint8_t primary1 = 0;
     uint8_t primary2 = 0;
     uint8_t primary3 = 0;
@@ -528,7 +602,8 @@ ucol_calcSortKeyNew(const    UCollatorNew    *coll,
     for(;;) {
         for(i=prevBuffSize; i<minBufferSize; ++i) {
 
-            order = ucol_getNextCENew(coll, &s, status);
+            /*order = ucol_getNextCENew(coll, &s, status);*/
+            UCOL_GETNEXTCENEW(order, coll, s, status);
 
             if(order == UCOL_NULLORDER) {
                 finished = TRUE;
@@ -537,7 +612,6 @@ ucol_calcSortKeyNew(const    UCollatorNew    *coll,
 
             /* We're saving order in ce, since we will destroy order in order to get primary, secondary, tertiary in order ;)*/
             ce = order;
-
 
             tertiary = (order & UCOL_TERTIARYORDERMASK);
             secondary = (order >>= 8) & 0xFF;
@@ -563,7 +637,7 @@ ucol_calcSortKeyNew(const    UCollatorNew    *coll,
             /* we're using too much space and need to reallocate the primary buffer or easily bail */
             /* out to ucol_getSortKeySizeNew.                                                      */
 
-            if(shifted && primary1 < UCOL_VARIABLE_MAX && primary1 > 0) { 
+            if(shifted && primary1 < variableMax && primary1 != 0) { 
               /* We are dealing with a variable and we're treating them as shifted */
               /* This is a shifted ignorable */
               *quads++ = primary1;
@@ -576,20 +650,20 @@ ucol_calcSortKeyNew(const    UCollatorNew    *coll,
               /* Note: This code assumes that the table is well built i.e. not having 0 bytes where they are not supposed to be. */
               /* Usually, we'll have non-zero primary1 & primary2, except in cases of LatinOne and friends, when primary2 will   */
               /* be zero with non zero primary1. primary3 is different than 0 only for long primaries - see above.               */
-              if(primary1 != 0) {
+              if(primary1 != UCOL_NEW_IGNORABLE) {
                 *primaries++ = primary1; /* scriptOrder[primary1]; */ /* This is the script ordering thingie */
                 sortKeySize++;
+                if(primary2 != UCOL_NEW_IGNORABLE) {
+                  *primaries++ = primary2; /* second part */
+                  sortKeySize++;
+                  if(primary3 != UCOL_NEW_IGNORABLE) {
+                    *primaries++ = primary2; /* third part */
+                    sortKeySize++;
+                  }
+                }
               }               
-              if(primary2 != 0) {
-                *primaries++ = primary2; /* second part */
-                sortKeySize++;
-              }
-              if(primary3 != 0) {
-                *primaries++ = primary2; /* third part */
-                sortKeySize++;
-              }
 
-              if(compareSec && secondary != 0) { /* I think that != 0 test should be != IGNORABLE */
+              if(secondary > compareSec) { /* I think that != 0 test should be != IGNORABLE */
                 /* This thing should also contain the compression logic, as in: */
                 /*
                   if (ws  == COMMON2 && COMMON2  <= secondary[-1] && secondary[-1] < COMMON_MAX2)
@@ -625,7 +699,7 @@ ucol_calcSortKeyNew(const    UCollatorNew    *coll,
                 *(cases-1) |= (tertiary & 0x80) >> (8-caseShift--);
               }
 
-              if(compareTer && tertiary != 0) { /* I think that != 0 test should be != IGNORABLE */
+              if(tertiary > compareTer) { /* I think that != 0 test should be != IGNORABLE */
                 /* This thing should also contain the compression logic, as in: */
                 /*
                   if (ws  == COMMON2 && COMMON2  <= secondary[-1] && secondary[-1] < COMMON_MAX2)
@@ -637,46 +711,13 @@ ucol_calcSortKeyNew(const    UCollatorNew    *coll,
                 sortKeySize++;
               }
 
-              if(compareQuad && shifted && primary1 > 0) {
+              if(shifted && primary1 > compareQuad) {
                 *quads++ = 0xFF;
                 sortKeySize++;
               }
 
             }
 
-/* This is an old peace of code... I'm leaving it here just for discussion regarding */
-/* ignorables and situations with primary ignorable vs. variable top and ignorables  */            
-#if 0
-/*
-            if(primary != UCOL_PRIMIGNORABLE) {
-                *(primaries++) = (primary>>8);
-                *(primaries++) = (primary&0xFF);
-                sortKeySize += 2;
-                if(compareSec) {
-                    *(secondaries++) = secondary;
-                    sortKeySize++;
-                }
-                if(compareTer) {
-                    *(tertiaries++) = tertiary;
-                    sortKeySize++;
-                }
-            } else if(secondary != UCOL_SECIGNORABLE) {
-                if(compareSec) {
-                    *(secondaries++) = secondary;
-                    sortKeySize++;
-                }
-                if(compareTer) {
-                    *(tertiaries++) = tertiary;
-                    sortKeySize++;
-                }
-            } else if(tertiary != UCOL_TERIGNORABLE) {
-                if(compareTer) {
-                    *(tertiaries++) = tertiary;
-                    sortKeySize++;
-                }
-            }
-*/
-#endif
             if(sortKeySize>resultLength) { /* We have stepped over the primary buffer */
               if(allocatePrimary == FALSE) { /* need to save our butts if we cannot reallocate */
                 resultOverflow = TRUE;
@@ -712,7 +753,7 @@ ucol_calcSortKeyNew(const    UCollatorNew    *coll,
 
     if(U_SUCCESS(*status)) {
       /* we have done all the CE's, now let's put them together to form a key */
-      if(compareSec) {
+      if(compareSec == 0) {
         *(primaries++) = UCOL_LEVELTERMINATOR;
         uint32_t secsize = secondaries-secStart;
         if(isFrenchSec) { /* do the reverse copy */
@@ -737,14 +778,14 @@ ucol_calcSortKeyNew(const    UCollatorNew    *coll,
         primaries += casesize;
       }
 
-      if(compareTer) {
+      if(compareTer == 0) {
         *(primaries++) = UCOL_LEVELTERMINATOR;
         uint32_t tersize = tertiaries - terStart;
         uprv_memcpy(primaries, terStart, tersize);
         primaries += tersize;
       }
 
-      if(compareQuad) {
+      if(compareQuad == 0) {
           *(primaries++) = UCOL_LEVELTERMINATOR;
           uint32_t quadsize = quads - quadStart;
           uprv_memcpy(primaries, quadStart, quadsize);
@@ -804,14 +845,8 @@ ucol_calcSortKeyNew(const    UCollatorNew    *coll,
 
     if(terStart != tert) {
         uprv_free(terStart);
-    }
-    if(secStart != second) {
         uprv_free(secStart);
-    } 
-    if(caseStart != caseB) {
         uprv_free(caseStart);
-    }
-    if(quadStart != quad) {
         uprv_free(quadStart);
     }
 
@@ -839,10 +874,13 @@ U_CAPI void ucol_setAttributeNew(UCollatorNew *coll, UColAttribute attr, UColAtt
 	case UCOL_FRENCH_COLLATION: /* attribute for direction of secondary weights*/
 		if(value == UCOL_ON) {
 			coll->frenchCollation = UCOL_ON;
+            coll->frenchCollationisDefault = FALSE;
 		} else if (value == UCOL_OFF) {
 			coll->frenchCollation = UCOL_OFF;
+            coll->frenchCollationisDefault = FALSE;
 		} else if (value == UCOL_DEFAULT) {
-            coll->frenchCollation = UCOL_DEFAULT;
+            coll->frenchCollationisDefault = TRUE;
+            coll->frenchCollation = coll->image->frenchCollation;
 		} else {
 			*status = U_ILLEGAL_ARGUMENT_ERROR  ;
 		}
@@ -850,10 +888,13 @@ U_CAPI void ucol_setAttributeNew(UCollatorNew *coll, UColAttribute attr, UColAtt
     case UCOL_ALTERNATE_HANDLING: /* attribute for handling variable elements*/
 		if(value == UCOL_SHIFTED) {
 			coll->alternateHandling = UCOL_SHIFTED;
+            coll->alternateHandlingisDefault = FALSE;
 		} else if (value == UCOL_NON_IGNORABLE) {
 			coll->alternateHandling = UCOL_NON_IGNORABLE;
+            coll->alternateHandlingisDefault = FALSE;
 		} else if (value == UCOL_DEFAULT) {
-            coll->alternateHandling = UCOL_DEFAULT;
+            coll->alternateHandlingisDefault = TRUE;
+            coll->alternateHandling = coll->image->alternateHandling ;
 		} else {
 			*status = U_ILLEGAL_ARGUMENT_ERROR  ;
 		}
@@ -861,10 +902,13 @@ U_CAPI void ucol_setAttributeNew(UCollatorNew *coll, UColAttribute attr, UColAtt
 	case UCOL_CASE_FIRST: /* who goes first, lower case or uppercase */
 		if(value == UCOL_LOWER_FIRST) {
 			coll->caseFirst = UCOL_LOWER_FIRST;
+            coll->caseFirstisDefault = FALSE;
 		} else if (value == UCOL_UPPER_FIRST) {
 			coll->caseFirst = UCOL_UPPER_FIRST;
+            coll->caseFirstisDefault = FALSE;
 		} else if (value == UCOL_DEFAULT) {
-            coll->caseFirst = UCOL_DEFAULT;
+            coll->caseFirst = coll->image->caseFirst;
+            coll->caseFirstisDefault = TRUE;
 		} else {
 			*status = U_ILLEGAL_ARGUMENT_ERROR  ;
 		}
@@ -872,10 +916,13 @@ U_CAPI void ucol_setAttributeNew(UCollatorNew *coll, UColAttribute attr, UColAtt
 	case UCOL_CASE_LEVEL: /* do we have an extra case level */
 		if(value == UCOL_ON) {
 			coll->caseLevel = UCOL_ON;
+            coll->caseLevelisDefault = FALSE;
 		} else if (value == UCOL_OFF) {
 			coll->caseLevel = UCOL_OFF;
+            coll->caseLevelisDefault = FALSE;
 		} else if (value == UCOL_DEFAULT) {
-            coll->caseLevel = UCOL_DEFAULT;
+            coll->caseLevel = coll->image->caseLevel;
+            coll->caseLevelisDefault = TRUE;
 		} else {
 			*status = U_ILLEGAL_ARGUMENT_ERROR  ;
 		}
@@ -883,20 +930,26 @@ U_CAPI void ucol_setAttributeNew(UCollatorNew *coll, UColAttribute attr, UColAtt
 	case UCOL_NORMALIZATION_MODE: /* attribute for normalization */
 		if(value == UCOL_ON) {
             coll->normalizationMode = UCOL_ON;
+            coll->normalizationModeisDefault = FALSE;
 		} else if (value == UCOL_OFF) {
             coll->normalizationMode = UCOL_OFF;
+            coll->normalizationModeisDefault = FALSE;
 		} else if (value == UCOL_ON_WITHOUT_HANGUL) {
             coll->normalizationMode = UCOL_ON_WITHOUT_HANGUL ;
+            coll->normalizationModeisDefault = FALSE;
 		} else if (value == UCOL_DEFAULT) {
-            coll->normalizationMode = UCOL_DEFAULT;
+            coll->normalizationModeisDefault = TRUE;
+            coll->normalizationMode = coll->image->normalizationMode;
 		} else {
 			*status = U_ILLEGAL_ARGUMENT_ERROR  ;
 		}
 		break;
 	case UCOL_STRENGTH:         /* attribute for strength */
         if (value == UCOL_DEFAULT) {
-            coll->strength = UCOL_DEFAULT;
+            coll->strengthisDefault = TRUE;
+            coll->strength = coll->image->strength;
 		} else if (value <= UCOL_IDENTICAL) {
+            coll->strengthisDefault = FALSE;
 			coll->strength = value;
 		} else {
 			*status = U_ILLEGAL_ARGUMENT_ERROR  ;
@@ -912,43 +965,43 @@ U_CAPI void ucol_setAttributeNew(UCollatorNew *coll, UColAttribute attr, UColAtt
 U_CAPI UColAttributeValue ucol_getAttributeNew(const UCollatorNew *coll, UColAttribute attr, UErrorCode *status) {
 	switch(attr) {
 	case UCOL_FRENCH_COLLATION: /* attribute for direction of secondary weights*/
-        if(coll->frenchCollation == UCOL_DEFAULT) {
-            return coll->frenchCollationDefault;
+        if(coll->frenchCollationisDefault) {
+            return coll->image->frenchCollation;
         } else {
             return coll->frenchCollation;
         }
 		break;
     case UCOL_ALTERNATE_HANDLING: /* attribute for handling variable elements*/
-        if(coll->alternateHandling == UCOL_DEFAULT) {
-            return coll->alternateHandlingDefault;
+        if(coll->alternateHandlingisDefault) {
+            return coll->image->alternateHandling;
         } else {
             return coll->alternateHandling;
         }
         break;
 	case UCOL_CASE_FIRST: /* who goes first, lower case or uppercase */
-        if(coll->caseFirst == UCOL_DEFAULT) {
-            return coll->caseFirstDefault;
+        if(coll->caseFirstisDefault) {
+            return coll->image->caseFirst;
         } else {
             return coll->caseFirst;
         }
 		break;
 	case UCOL_CASE_LEVEL: /* do we have an extra case level */
-        if(coll->caseLevel == UCOL_DEFAULT) {
-            return coll->caseLevelDefault;
+        if(coll->caseLevelisDefault) {
+            return coll->image->caseLevel;
         } else {
             return coll->caseLevel;
         }
 		break;
 	case UCOL_NORMALIZATION_MODE: /* attribute for normalization */
-        if(coll->normalizationMode == UCOL_DEFAULT) {
-            return coll->normalizationModeDefault;
+        if(coll->normalizationModeisDefault) {
+            return coll->image->normalizationMode;
         } else {
             return coll->normalizationMode;
         }
 		break;
 	case UCOL_STRENGTH:         /* attribute for strength */
-        if(coll->strength == UCOL_DEFAULT) {
-            return coll->strengthDefault;
+        if(coll->strengthisDefault) {
+            return coll->image->strength;
         } else {
             return coll->strength;
         }
