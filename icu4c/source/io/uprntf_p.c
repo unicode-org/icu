@@ -316,10 +316,6 @@ u_printf_double_handler(const u_printf_stream_handler  *handler,
         /* set the # of decimal digits */
         unum_setAttribute(format, UNUM_FRACTION_DIGITS, info->fPrecision);
     }
-    else if(info->fPrecision == 0 && ! info->fAlt) {
-        /* no decimal point in this case */
-        unum_setAttribute(format, UNUM_FRACTION_DIGITS, 0);
-    }
     else if(info->fAlt) {
         /* '#' means always show decimal point */
         /* copy of printf behavior on Solaris - '#' shows 6 digits */
@@ -629,10 +625,6 @@ u_printf_scientific_handler(const u_printf_stream_handler  *handler,
         /* set the # of decimal digits */
         unum_setAttribute(format, UNUM_FRACTION_DIGITS, info->fPrecision);
     }
-    else if(info->fPrecision == 0 && ! info->fAlt) {
-        /* no decimal point in this case */
-        unum_setAttribute(format, UNUM_FRACTION_DIGITS, 0);
-    }
     else if(info->fAlt) {
         /* '#' means always show decimal point */
         /* copy of printf behavior on Solaris - '#' shows 6 digits */
@@ -710,10 +702,6 @@ u_printf_percent_handler(const u_printf_stream_handler  *handler,
     if(info->fPrecision != -1) {
         /* set the # of decimal digits */
         unum_setAttribute(format, UNUM_FRACTION_DIGITS, info->fPrecision);
-    }
-    else if(info->fPrecision == 0 && ! info->fAlt) {
-        /* no decimal point in this case */
-        unum_setAttribute(format, UNUM_FRACTION_DIGITS, 0);
     }
     else if(info->fAlt) {
         /* '#' means always show decimal point */
@@ -913,10 +901,6 @@ u_printf_spellout_handler(const u_printf_stream_handler *handler,
     if(info->fPrecision != -1) {
         /* set the # of decimal digits */
         unum_setAttribute(format, UNUM_FRACTION_DIGITS, info->fPrecision);
-    }
-    else if(info->fPrecision == 0 && ! info->fAlt) {
-        /* no decimal point in this case */
-        unum_setAttribute(format, UNUM_FRACTION_DIGITS, 0);
     }
     else if(info->fAlt) {
         /* '#' means always show decimal point */
