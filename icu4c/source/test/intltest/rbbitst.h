@@ -70,8 +70,10 @@ public:
     UChar *ReadAndConvertFile(const char *fileName, int &ulen, UErrorCode &status);
     void executeTest(TestParams *);
 
-    
- 
+    void TestWordBreaks();
+    void TestWordBoundary();
+    void TestLineBreaks();
+    void TestSentBreaks();
     
     
 /***********************/
