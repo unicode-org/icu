@@ -108,6 +108,7 @@ GlyphIterator::GlyphIterator(LEGlyphID *&theGlyphs, GlyphPositionAdjustment *the
 }
 
 GlyphIterator::GlyphIterator(GlyphIterator &that)
+  : InsertionCallback()
 {
     direction    = that.direction;
     position     = that.position;
@@ -117,19 +118,19 @@ GlyphIterator::GlyphIterator(GlyphIterator &that)
     cursiveFirstPosition = that.cursiveFirstPosition;
     cursiveLastPosition  = that.cursiveLastPosition;
 
-	glyphsRef = that.glyphsRef;
-	glyphs = that.glyphs;
+    glyphsRef = that.glyphsRef;
+    glyphs = that.glyphs;
     glyphPositionAdjustments = that.glyphPositionAdjustments;
-	charIndicesRef = that.charIndicesRef;
-	charIndices = that.charIndices;
-	glyphCount = that.glyphCount;
-	insertionList = that.insertionList;
-	ownInsertionList = false;
-	srcIndex = that.srcIndex;
-	destIndex = that.destIndex;
+    charIndicesRef = that.charIndicesRef;
+    charIndices = that.charIndices;
+    glyphCount = that.glyphCount;
+    insertionList = that.insertionList;
+    ownInsertionList = false;
+    srcIndex = that.srcIndex;
+    destIndex = that.destIndex;
     lookupFlags = that.lookupFlags;
     featureTag = that.featureTag;
-	glyphTagsRef = that.glyphTagsRef;
+    glyphTagsRef = that.glyphTagsRef;
     glyphTags = that.glyphTags;
     glyphClassDefinitionTable = that.glyphClassDefinitionTable;
     markAttachClassDefinitionTable = that.markAttachClassDefinitionTable;
@@ -224,7 +225,6 @@ le_int32 GlyphIterator::applyInsertions()
 	}
 
 	le_int32 newGlyphCount = glyphCount + growAmount;
-	le_int32 dest = newGlyphCount - 1;
 
 	*glyphsRef      = glyphs      = (LEGlyphID *)    LE_GROW_ARRAY(glyphs,      newGlyphCount);
 	*glyphTagsRef   = glyphTags   = (const LETag **) LE_GROW_ARRAY(glyphTags,   newGlyphCount);

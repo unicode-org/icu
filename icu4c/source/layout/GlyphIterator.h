@@ -88,7 +88,7 @@ public:
 
     GlyphIterator(GlyphIterator &that, le_uint16 newLookupFlags);
 
-    ~GlyphIterator();
+    virtual ~GlyphIterator();
 
 	void reset(le_uint16 newLookupFlags, LETag newFeatureTag);
 
