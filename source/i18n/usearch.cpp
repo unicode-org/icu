@@ -230,7 +230,8 @@ inline uint16_t initializePatternCETable(UStringSearch *strsrch,
         strsrch->utilIter = coleiter;
     }
     else {
-        init_collIterate(strsrch->collator, pattern->text, pattern->textLength,
+        uprv_init_collIterate(strsrch->collator, pattern->text,
+                         pattern->textLength,
                          &coleiter->iteratordata_);
     }
         
@@ -2739,9 +2740,9 @@ U_CAPI void U_EXPORT2 usearch_setCollator(      UStringSearch *strsrch,
             if (U_SUCCESS(*status)) {
                 initialize(strsrch, status);
                 if (U_SUCCESS(*status)) {
-                    init_collIterate(collator, strsrch->search->text, 
-                                     strsrch->search->textLength, 
-                                     &(strsrch->textIter->iteratordata_));
+                    uprv_init_collIterate(collator, strsrch->search->text, 
+                                          strsrch->search->textLength, 
+                                          &(strsrch->textIter->iteratordata_));
 					strsrch->utilIter->iteratordata_.coll = collator;
                 }
             }
@@ -3061,9 +3062,9 @@ U_CAPI void U_EXPORT2 usearch_reset(UStringSearch *strsrch)
         if (!sameCollAttribute) {
             initialize(strsrch, &status);
         }
-        init_collIterate(strsrch->collator, strsrch->search->text, 
-                         strsrch->search->textLength, 
-                         &(strsrch->textIter->iteratordata_));
+        uprv_init_collIterate(strsrch->collator, strsrch->search->text, 
+                              strsrch->search->textLength, 
+                              &(strsrch->textIter->iteratordata_));
         strsrch->search->matchedLength      = 0;
         strsrch->search->matchedIndex       = USEARCH_DONE;
         strsrch->search->isOverlap          = FALSE;
