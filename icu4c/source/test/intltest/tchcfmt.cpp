@@ -53,7 +53,53 @@ TestChoiceFormat::TestSimpleExample( void )
         res2 = " ??? ";
         it_out << ix << " -> " << res1 << " -> " << res2 << endl;
     }
+    //Testing ==operator
+    const double filelimits[] = {0,1,2};
+    const UnicodeString filepart[] = {"are no files","is one file","are {2} files"};
+    ChoiceFormat* formnew=new ChoiceFormat(filelimits, filepart, 3);
+    ChoiceFormat* formequal=new ChoiceFormat(limits, monthNames, 7);
+    if(*formnew == *form){
+        errln("ERROR: ==operator failed\n");
+    }
+    if(!(*form == *formequal)){
+        errln("ERROR: ==operator failed\n");
+    }
+    delete formequal; 
+    
+    //Testing adoptChoices() 
+    formnew->adoptChoices(limits, monthNames, 7);
+    if(!(*formnew == *form)){
+        errln("ERROR: ==Operator or adoptChoices failed\n");
+    }
+      
+    //Testing getLimits()
+    double *gotLimits=0;
+    int32_t count=0;
+    gotLimits=(double*)form->getLimits(count);
+    if(count != 7){
+        errln("getLimits didn't update the count correctly\n");
+    }
+    for(ix=0; ix<count; ix++){
+        if(gotLimits[ix] != limits[ix]){
+            errln((UnicodeString)"getLimits didn't get the limits correctly.  Expected " + limits[ix] + " Got " + gotLimits[ix]);
+        }
+    }
+    //Testing getFormat()
+    count=0;
+    UnicodeString *gotFormats=0;
+    gotFormats=(UnicodeString*)form->getFormats(count);
+    if(count != 7){
+        errln("getFormats didn't update the count correctly\n");
+    }
+    for(ix=0; ix<count; ix++){
+        if(gotFormats[ix] != monthNames[ix]){
+            errln((UnicodeString)"getFormats didn't get the Formats correctly.  Expected " + monthNames[ix] + " Got " + gotFormats[ix]);
+        }
+    }
+    
+   
     delete form;
+   
 }
 
 void
