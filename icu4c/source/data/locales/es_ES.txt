@@ -28,6 +28,17 @@ es_ES {
         "#,##0%",
         "#E0",
     }
+    Currencies{
+        ESP { 
+            "\u20A7",
+            "peseta espa\u00F1ola", 
+            :array{
+                "#,##0 \u00A4;-#,##0 \u00A4", /*currency pattern*/ 
+                ",",  /*decimal sperator*/  
+                "."  /*grouping separator*/
+            }
+       }
+    }
     calendar{
         gregorian{
             DateTimePatterns{

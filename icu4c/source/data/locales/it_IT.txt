@@ -27,4 +27,15 @@ it_IT {
             }
         }
     }
+    Currencies{
+        ITL { 
+            "\u20A4", 
+            "Lira Italiana", 
+            :array{
+                "\u00A4 #,##0;-\u00A4 #,##0", /* currency pattern */
+                ",", /* decimal separator */
+                ".", /* grouping separator */
+            }
+        }
+    }
 }

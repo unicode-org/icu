@@ -485,7 +485,7 @@ static const CanonicalizationMap CANONICALIZE_MAP[] = {
     { "de__PHONEBOOK",  "de", "collation", "phonebook" },
     { "de_AT_PREEURO",  "de_AT", "currency", "ATS" },
     { "de_DE_PREEURO",  "de_DE", "currency", "DEM" },
-    { "de_LU_PREEURO",  "de_LU", "currency", "EUR" },
+    { "de_LU_PREEURO",  "de_LU", "currency", "LUF" },
     { "el_GR_PREEURO",  "el_GR", "currency", "GRD" },
     { "en_BOONT",       "en__BOONT", NULL, NULL }, /* registered name */
     { "en_SCOUSE",      "en__SCOUSE", NULL, NULL }, /* registered name */

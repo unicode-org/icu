@@ -2005,7 +2005,7 @@ void LocaleTest::TestCanonicalization(void)
         { "ca_ES_PREEURO", "ca_ES_PREEURO", "ca_ES@currency=ESP" },
         { "de_AT_PREEURO", "de_AT_PREEURO", "de_AT@currency=ATS" },
         { "de_DE_PREEURO", "de_DE_PREEURO", "de_DE@currency=DEM" },
-        { "de_LU_PREEURO", "de_LU_PREEURO", "de_LU@currency=EUR" },
+        { "de_LU_PREEURO", "de_LU_PREEURO", "de_LU@currency=LUF" },
         { "el_GR_PREEURO", "el_GR_PREEURO", "el_GR@currency=GRD" },
         { "en_BE_PREEURO", "en_BE_PREEURO", "en_BE@currency=BEF" },
         { "en_IE_PREEURO", "en_IE_PREEURO", "en_IE@currency=IEP" },

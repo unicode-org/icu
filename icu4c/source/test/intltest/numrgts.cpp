@@ -716,8 +716,10 @@ void NumberFormatRegressionTest::Test4092480 (void)
  * interpreted as monetary separator if currency symbol is seen!
  */
 void NumberFormatRegressionTest::Test4087244 (void) {
-    Locale *de = new Locale("pt","PT_PREEURO");
     UErrorCode status = U_ZERO_ERROR;
+    char loc[256] = {0};
+    uloc_canonicalize("pt_PT_PREEURO", loc, 256, &status);
+    Locale *de = new Locale(loc);
     NumberFormat *nf = NumberFormat::createCurrencyInstance(*de, status);
     if(U_FAILURE(status)) {
       errln("Error creating DecimalFormat: %s", u_errorName(status));
@@ -783,7 +785,9 @@ void NumberFormatRegressionTest::Test4070798 (void)
     UnicodeString expectedPercent(chars3, 9, 9);
 
     UErrorCode status = U_ZERO_ERROR;
-    formatter = NumberFormat::createInstance(Locale("fr_FR_PREEURO"), status);
+    char loc[256]={0};
+    int len = uloc_canonicalize("fr_FR_PREEURO", loc, 256, &status);
+    formatter = NumberFormat::createInstance(Locale(loc), status);
     if(U_FAILURE(status)) {
       errln("Error creating DecimalFormat: %s", u_errorName(status));
       delete formatter;
@@ -800,8 +804,8 @@ void NumberFormatRegressionTest::Test4070798 (void)
         " Received " + tempString );
     }
     delete formatter;
-
-    formatter = NumberFormat::createCurrencyInstance(Locale("fr_FR_PREEURO"), status);
+    len = uloc_canonicalize("fr_FR_PREEURO", loc, 256, &status);
+    formatter = NumberFormat::createCurrencyInstance(loc, status);
     failure(status, "NumberFormat::createCurrencyInstance");
     tempString.remove();
     tempString = formatter->format( 5789.9876, tempString );
@@ -814,8 +818,9 @@ void NumberFormatRegressionTest::Test4070798 (void)
         " Received " + tempString );
     }
     delete formatter;
-
-    formatter = NumberFormat::createPercentInstance(Locale("fr_FR_PREEURO"), status);
+   
+    uloc_canonicalize("fr_FR_PREEURO", loc, 256, &status);
+    formatter = NumberFormat::createPercentInstance(Locale(loc), status);
     failure(status, "NumberFormat::createPercentInstance");
     tempString.remove();
     tempString = formatter->format (-5789.9876, tempString);
@@ -916,7 +921,9 @@ void NumberFormatRegressionTest::Test4071014 (void)
     UnicodeString expectedPercent("-578.999%");
 
     UErrorCode status = U_ZERO_ERROR;
-    formatter = NumberFormat::createInstance(Locale("de_DE_PREEURO"), status);
+    char loc[256]={0};
+    int len = uloc_canonicalize("de_DE_PREEURO", loc, 256, &status);
+    formatter = NumberFormat::createInstance(Locale(loc), status);
     failure(status, "NumberFormat::createNumberInstance");
     tempString.remove();
     tempString = formatter->format (-5789.9876, tempString);
@@ -929,8 +936,8 @@ void NumberFormatRegressionTest::Test4071014 (void)
         " Received " + tempString );
     }
     delete formatter;
-
-    formatter = NumberFormat::createCurrencyInstance(Locale("de_DE_PREEURO"), status);
+    uloc_canonicalize("de_DE_PREEURO", loc, 256, &status);
+    formatter = NumberFormat::createCurrencyInstance(Locale(loc), status);
     failure(status, "NumberFormat::createCurrencyInstance");
     tempString.remove();
     tempString = formatter->format( 5789.9876, tempString );
@@ -977,7 +984,9 @@ void NumberFormatRegressionTest::Test4071859 (void)
     expectedCurrency = expectedCurrency.unescape();
 
     UErrorCode status = U_ZERO_ERROR;
-    formatter = NumberFormat::createInstance(Locale("it_IT_PREEURO"), status);
+    char loc[256]={0};
+    int len = uloc_canonicalize("it_IT_PREEURO", loc, 256, &status);
+    formatter = NumberFormat::createInstance(Locale(loc), status);
     failure(status, "NumberFormat::createNumberInstance");
     tempString = formatter->format (-5789.9876, tempString);
 
@@ -989,8 +998,8 @@ void NumberFormatRegressionTest::Test4071859 (void)
         " Received " + tempString );
     }
     delete formatter;
-
-    formatter = NumberFormat::createCurrencyInstance(Locale("it_IT_PREEURO"), status);
+    uloc_canonicalize("it_IT_PREEURO", loc, 256, &status);
+    formatter = NumberFormat::createCurrencyInstance(Locale(loc), status);
     failure(status, "NumberFormat::createCurrencyInstance");
     tempString.remove();
     tempString = formatter->format( -5789.9876, tempString );
@@ -1003,8 +1012,8 @@ void NumberFormatRegressionTest::Test4071859 (void)
         " Received " + tempString );
     }
     delete formatter;
-
-    formatter = NumberFormat::createPercentInstance(Locale("it_IT_PREEURO"), status);
+    uloc_canonicalize("it_IT_PREEURO", loc, 256, &status);
+    formatter = NumberFormat::createPercentInstance(Locale(loc), status);
     failure(status, "NumberFormat::createPercentInstance");
     tempString.remove();
     tempString = formatter->format (-5789.9876, tempString);
