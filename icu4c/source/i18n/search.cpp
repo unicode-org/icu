@@ -233,9 +233,15 @@ int32_t SearchIterator::next(UErrorCode &status)
             }
         }
 
-        if (matchindex != USEARCH_DONE) {
-            return handleNext(matchindex + matchlength, status); 
-        }
+        if (matchlength > 0) {
+			// if matchlength is 0 we are at the start of the iteration
+			if (m_search_->isOverlap) {
+				offset ++;
+			}
+			else {
+				offset += matchlength;
+			}
+		}
         return handleNext(offset, status);
     }
     return USEARCH_DONE;

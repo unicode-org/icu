@@ -554,28 +554,18 @@ inline int32_t shiftForward(UStringSearch *strsrch,
                                 int32_t        patternceindex)
 {
 	UPattern *pattern = &(strsrch->pattern);
-    if (strsrch->search->isOverlap) {
-        if (textoffset > 0) {
-            textoffset ++;
+    if (ce != UCOL_NULLORDER) {
+        int32_t shift = pattern->shift[hash(ce)];
+        // this is to adjust for characters in the middle of the 
+        // substring for matching that failed.
+        int32_t adjust = pattern->CELength - patternceindex;
+        if (adjust > 1 && shift >= adjust) {
+            shift -= adjust - 1;
         }
-        else {
-            textoffset = pattern->defaultShiftSize;
-        }
+        textoffset += shift;
     }
     else {
-        if (ce != UCOL_NULLORDER) {
-            int32_t shift = pattern->shift[hash(ce)];
-            // this is to adjust for characters in the middle of the 
-            // substring for matching that failed.
-            int32_t adjust = pattern->CELength - patternceindex;
-            if (adjust > 1 && shift >= adjust) {
-                shift -= adjust - 1;
-            }
-            textoffset += shift;
-        }
-        else {
-            textoffset += pattern->defaultShiftSize;
-        }
+        textoffset += pattern->defaultShiftSize;
     }
         
     textoffset = getNextUStringSearchBaseOffset(strsrch, textoffset);
@@ -2977,13 +2967,26 @@ U_CAPI int32_t U_EXPORT2 usearch_next(UStringSearch *strsrch,
                     search->matchedIndex = USEARCH_DONE;
                 }
             }
-            else if (search->isCanonicalMatch) {
-                // can't use exact here since extra accents are allowed.
-                usearch_handleNextCanonical(strsrch, status);
-            }
             else {
-                usearch_handleNextExact(strsrch, status);
-            }
+				if (search->matchedLength > 0) {
+					// if matchlength is 0 we are at the start of the iteration
+					int offset = ucol_getOffset(strsrch->textIter);
+					if (search->isOverlap) {
+						ucol_setOffset(strsrch->textIter, offset + 1, status);
+					}
+					else {
+						ucol_setOffset(strsrch->textIter, 
+							           offset + search->matchedLength, status);
+					}
+				}
+				if (search->isCanonicalMatch) {
+					// can't use exact here since extra accents are allowed.
+					usearch_handleNextCanonical(strsrch, status);
+				}
+				else {
+					usearch_handleNextExact(strsrch, status);
+				}
+			}
             
             if (U_FAILURE(*status)) {
                 return USEARCH_DONE;
@@ -3138,14 +3141,6 @@ UBool usearch_handleNextExact(UStringSearch *strsrch, UErrorCode *status)
     int32_t             patterncelength = strsrch->pattern.CELength;
     int32_t             textoffset      = ucol_getOffset(coleiter);
 
-    // shifting it check for setting offset
-    // if setOffset is called previously or there was no previous match, we
-    // leave the offset as it is.
-    if (strsrch->search->matchedIndex != USEARCH_DONE) {
-        textoffset = strsrch->search->matchedIndex + 
-                     strsrch->search->matchedLength;
-    }
-    
 	// status used in setting coleiter offset, since offset is checked in
 	// shiftForward before setting the coleiter offset, status never 
 	// a failure
@@ -3219,7 +3214,7 @@ UBool usearch_handleNextExact(UStringSearch *strsrch, UErrorCode *status)
         
 		if (checkNextExactMatch(strsrch, &textoffset, status)) {
             // status checked in ucol_setOffset
-            setColEIterOffset(coleiter, textoffset);
+            setColEIterOffset(coleiter,	strsrch->search->matchedIndex);
 			return TRUE;
         }
     }
@@ -3241,14 +3236,6 @@ UBool usearch_handleNextCanonical(UStringSearch *strsrch, UErrorCode *status)
     int32_t         textoffset      = ucol_getOffset(coleiter);
     UBool               hasPatternAccents = 
        strsrch->pattern.hasSuffixAccents || strsrch->pattern.hasPrefixAccents;
-          
-    // shifting it check for setting offset
-    // if setOffset is called previously or there was no previous match, we
-    // leave the offset as it is.
-    if (strsrch->search->matchedIndex != USEARCH_DONE) {
-        textoffset = strsrch->search->matchedIndex + 
-                     strsrch->search->matchedLength;
-    }
     
     textoffset = shiftForward(strsrch, textoffset, UCOL_NULLORDER, 
                               patterncelength);
@@ -3326,7 +3313,7 @@ UBool usearch_handleNextCanonical(UStringSearch *strsrch, UErrorCode *status)
         }
         
         if (checkNextCanonicalMatch(strsrch, &textoffset, status)) {
-            setColEIterOffset(coleiter, textoffset);
+            setColEIterOffset(coleiter, strsrch->search->matchedIndex);
             return TRUE;
         }
     }

@@ -85,8 +85,8 @@ private:
     void TestGetSetOffsetCanonical();
     void TestSupplementaryCanonical();
     void TestContractionCanonical();
-    void TestSearchIterator();
-	void TestUClassID();
+    void TestUClassID();
+	void TestSubclass();
 };
 
 #endif /* #if !UCONFIG_NO_COLLATION */
