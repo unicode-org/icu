@@ -622,7 +622,7 @@ public class DecimalFormat extends NumberFormat {
      */
     public DecimalFormat() {
         // [NEW]
-        Locale def = ULocale.getDefault();
+        ULocale def = ULocale.getDefault();
         String pattern = getPattern(def, 0);
         // Always applyPattern after the symbols are set
         this.symbols = new DecimalFormatSymbols(def);
@@ -650,7 +650,7 @@ public class DecimalFormat extends NumberFormat {
      */
     public DecimalFormat(String pattern) {
         // Always applyPattern after the symbols are set
-        Locale def = ULocale.getDefault();
+        ULocale def = ULocale.getDefault();
         this.symbols = new DecimalFormatSymbols(def);
         setCurrency(Currency.getInstance(def));
         applyPattern( pattern, false );

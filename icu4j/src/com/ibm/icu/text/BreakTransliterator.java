@@ -7,8 +7,10 @@
 package com.ibm.icu.text;
 
 import com.ibm.icu.lang.UCharacter;
-import java.util.Locale;
+import com.ibm.icu.util.ULocale;
+
 import java.text.CharacterIterator;
+import java.util.Locale;
 
 
 /**
