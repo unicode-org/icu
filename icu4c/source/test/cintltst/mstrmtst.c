@@ -9,7 +9,7 @@
 * Modification History:
 *
 *   Date          Name        Description
-*   07/19/2000    Madhu	      Creation 
+*   07/19/2000    Madhu       Creation 
 *******************************************************************************
 */
 
@@ -33,18 +33,17 @@ void
 addMemoryStreamTest(TestNode** root)
 {
     addTest(root, &TestMemoryStreamAPI,       "/tsutil/mstrmtst/TestMemoryStreamAPI");
-    
-  
+
 }
 
 void TestMemoryStreamAPI(){
     UMemoryStream *memStream=NULL;
     int32_t size=999, x=0;
-    uint8_t *gotBuffer=0;
+    const uint8_t *gotBuffer=0;
     uint8_t buffer[]={ 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 
                        0xa1, 0xa2, 0xa3, 0xa4, 0xa5, 0xa6, 0xa7, 0xa8, 
     };
-    
+
     log_verbose("Testing the function uprv_mstrm_openNew()\n");
     memStream=uprv_mstrm_openNew(size);
     if(memStream == NULL){
@@ -57,7 +56,7 @@ void TestMemoryStreamAPI(){
     if(memStream == NULL){
         log_err("uprv_mstrm_openNew() failed with size=0\n");
     }
-    
+
     log_verbose("Testing the function uprv_mstrm_write()\n");
     x=uprv_mstrm_write(memStream, buffer, sizeof(buffer)/sizeof(buffer[0]) );
     if(x == -1){
@@ -66,7 +65,7 @@ void TestMemoryStreamAPI(){
     if(x != sizeof(buffer)/sizeof(buffer[0])){
         log_err("uprv_mstrm_write() wrote %d characters instead of %d\n", x, sizeof(buffer)/sizeof(buffer[0]));
     }
-    
+
     log_verbose("Testing the function uprv_mstrm_getBuffer())\n");
     x=0;
     gotBuffer=uprv_mstrm_getBuffer(memStream, &x);
