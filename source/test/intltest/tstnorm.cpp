@@ -39,6 +39,7 @@ void BasicNormalizerTest::runIndexedTest(int32_t index, UBool exec,
         CASE(10,TestVerisign);
         CASE(11,TestPreviousNext);
         CASE(12,TestNormalizerAPI);
+        CASE(13,TestConcatenate);
         default: name = ""; break;
     }
 }
@@ -801,5 +802,71 @@ BasicNormalizerTest::TestNormalizerAPI() {
     Normalizer::normalize(s, UNORM_NONE, 0, out, status);
     if(out!=s) {
         errln("error in Normalizer::normalize(UNORM_NONE)");
+    }
+}
+
+void BasicNormalizerTest::TestConcatenate() {
+    static const char *const
+    cases[][4]={
+        /* mode, left, right, result */
+        {
+            "C",
+            "re",
+            "\\u0301sum\\u00e9",
+            "r\\u00e9sum\\u00e9"
+        },
+        {
+            "C",
+            "a\\u1100",
+            "\\u1161bcdefghijk",
+            "a\\uac00bcdefghijk"
+        }
+        /* ### TODO: add more interesting cases */
+    };
+
+    UnicodeString left, right, expect, result, r;
+    UErrorCode errorCode;
+    UNormalizationMode mode;
+    int32_t i;
+
+    /* test concatenation */
+    for(i=0; i<sizeof(cases)/sizeof(cases[0]); ++i) {
+        switch(*cases[i][0]) {
+        case 'C': mode=UNORM_NFC; break;
+        case 'D': mode=UNORM_NFD; break;
+        case 'c': mode=UNORM_NFKC; break;
+        case 'd': mode=UNORM_NFKD; break;
+        default: mode=UNORM_NONE; break;
+        }
+
+        left=UnicodeString(cases[i][1], "").unescape();
+        right=UnicodeString(cases[i][2], "").unescape();
+        expect=UnicodeString(cases[i][3], "").unescape();
+
+        result=r=UnicodeString();
+        errorCode=U_ZERO_ERROR;
+
+        r=Normalizer::concatenate(left, right, result, mode, 0, errorCode);
+        if(U_FAILURE(errorCode) || result!=r || result!=expect) {
+            errln("error in Normalizer::concatenate(), cases[%d] fails with %s, result==expect: %d\n",
+                    i, u_errorName(errorCode), result==expect);
+        }
+    }
+
+    /* test error cases */
+
+    /* left.getBuffer()==result.getBuffer() */
+    result=r=expect=UnicodeString("zz", "");
+    errorCode=U_UNEXPECTED_TOKEN;
+    r=Normalizer::concatenate(left, right, result, mode, 0, errorCode);
+    if(errorCode!=U_UNEXPECTED_TOKEN || result!=r || !result.isBogus()) {
+        errln("error in Normalizer::concatenate(), violates UErrorCode protocol\n");
+    }
+
+    left.setToBogus();
+    errorCode=U_ZERO_ERROR;
+    r=Normalizer::concatenate(left, right, result, mode, 0, errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR || result!=r || !result.isBogus()) {
+        errln("error in Normalizer::concatenate(), does not detect left.isBogus()\n");
     }
 }
