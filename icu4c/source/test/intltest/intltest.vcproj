@@ -412,7 +412,13 @@
 				RelativePath=".\incaltst.cpp">
 			</File>
 			<File
+				RelativePath=".\astrotst.cpp">
+			</File>
+			<File
 				RelativePath=".\incaltst.h">
+			</File>
+			<File
+				RelativePath=".\astrotst.h">
 			</File>
 			<File
 				RelativePath=".\itformat.cpp">
