@@ -1,6 +1,6 @@
 /*  
 ********************************************************************************
-*   Copyright (C) 1997-1999, International Business Machines
+*   Copyright (C) 1997-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -300,7 +300,27 @@ private:
 
 private:
 
-    void initField(UnicodeString **field, int32_t& length, const ResourceBundle data, uint8_t ownfield, UErrorCode &status);
+    /* Sizes for the last resort string arrays */
+    typedef enum {
+        kMonthNum = 13,
+        kMonthLen = 3,
+
+        kDayNum = 8,
+        kDayLen = 2,
+
+        kAmPmNum = 2,
+        kAmPmLen = 3,
+
+        kEraNum = 2,
+        kEraLen = 3,
+
+        kZoneNum = 5,
+        kZoneLen = 4,
+    } LastResortSize;
+
+    void initField(UnicodeString **field, int32_t& length, const ResourceBundle data, UErrorCode &status);
+    void initField(UnicodeString **field, int32_t& length, const UChar *data, LastResortSize numStr, LastResortSize strLen, UErrorCode &status);
+
     /**
      * Called by the constructors to actually load data from the resources
      */
@@ -309,12 +329,10 @@ private:
     /**
      * Copy or alias an array in another object, as appropriate.
      */
-    void assignArray(UnicodeString*& dstArray,
-                     int32_t& dstCount,
-                     const UnicodeString* srcArray,
-                     int32_t srcCount,
-                     const DateFormatSymbols& other,
-                     int32_t which);
+    static void assignArray(UnicodeString*& dstArray,
+                            int32_t& dstCount,
+                            const UnicodeString* srcArray,
+                            int32_t srcCount);
 
     /**
      * Return true if the given arrays' contents are equal, or if the arrays are
@@ -354,6 +372,11 @@ private:
     void dispose(void);
 
     /**
+     * Copy all of the other's data to this.
+     */
+    void copyData(const DateFormatSymbols& other);
+
+    /**
      * Delete just the zone strings, if they are owned by this object. This
      * method does NOT modify fIsOwned; the caller must handle that.
      */
@@ -363,53 +386,13 @@ private:
      * These are static arrays we use only in the case where we have no
      * resource data.
      */
-    static const UnicodeString     fgLastResortMonthNames[];
-    static const UnicodeString     fgLastResortDayNames[];
-    static const UnicodeString     fgLastResortAmPmMarkers[];
-    static const UnicodeString     fgLastResortEras[];
-    static const UnicodeString     fgLastResortZoneStrings[];
-    static UnicodeString**         fgLastResortZoneStringsH;
+    static const UChar            fgLastResortMonthNames[kMonthNum][kMonthLen];
+    static const UChar            fgLastResortDayNames[kDayNum][kDayLen];
+    static const UChar            fgLastResortAmPmMarkers[kAmPmNum][kAmPmLen];
+    static const UChar            fgLastResortEras[kEraNum][kEraLen];
+    static const UChar            fgLastResortZoneStrings[kZoneNum][kZoneLen];
 
-    /**
-     * The member fIsOwned is a bit field with flags indicating which of the arrays
-     * we own. This is necessary since the user may alter our symbols, but in
-     * most cases, will not, so we do not want to copy these arrays unless
-     * necessary.
-     */
-    enum
-    {
-        kEras,
-        kMonths,
-        kShortMonths,
-        kWeekdays,
-        kShortWeekdays,
-        kAmPms,
-        kZoneStrings
-    };
-    uint8_t                 fIsOwned;
-
-    /**
-     * Sets the fIsOwned flag for the specfied string array
-     */
-    void                    setIsOwned(int32_t which, UBool isOwned);
-
-    /**
-     * Tests the fIsOwned flag for the specified string array
-     */
-    UBool                  isOwned(int32_t which) const;
 };
-
-inline void
-DateFormatSymbols::setIsOwned(int32_t which, UBool isOwned)
-{
-    fIsOwned = (uint8_t)(( fIsOwned & ~(1 << which) ) | ( (isOwned ? 1 : 0) << which ));
-}
-
-inline UBool
-DateFormatSymbols::isOwned(int32_t which) const
-{
-    return ( (fIsOwned >> which) & 1 ) != 0;
-}
 
 #endif // _DTFMTSYM
 //eof
