@@ -277,11 +277,7 @@ static const ILcidPosixElement de[] = {
     {0x10407,"de__PHONEBOOK"}  /*This is really de_DE_PHONEBOOK on Windows, maybe 10007*/
 };
 
-static const ILcidPosixElement div_MV[] = {
-    {0x65,   "div"},
-    {0x0465, "div_MV"},
-};
-
+ILCID_POSIX_ELEMENT_ARRAY(0x0465, dv, dv_MV)
 ILCID_POSIX_ELEMENT_ARRAY(0x0408, el, el_GR)
 
 static const ILcidPosixElement en[] = {
@@ -505,7 +501,7 @@ static const ILcidPosixMap gPosixIDmap[] = {
     ILCID_POSIX_MAP(cs),    /*  cs  Czech                     0x05 */
     ILCID_POSIX_MAP(da),    /*  da  Danish                    0x06 */
     ILCID_POSIX_MAP(de),    /*  de  German                    0x07 */
-    ILCID_POSIX_MAP(div_MV),/*  div Divehi                    0x65 */
+    ILCID_POSIX_MAP(dv),    /*  dv Divehi                     0x65 */
     ILCID_POSIX_MAP(el),    /*  el  Greek                     0x08 */
     ILCID_POSIX_MAP(en),    /*  en  English                   0x09 */
     ILCID_POSIX_MAP(en_US_POSIX), /*    invariant             0x7f */
