@@ -7,9 +7,10 @@
 #include "unicode/ustring.h"
 #include "unicode/ctest.h"
 #include "unicode/ucnv.h"
-#include <stdio.h>
 
 void TestEuroRegression(void);
+void addTestEuroRegression(TestNode** root);
+
 void addTestEuroRegression(TestNode** root)
 {
     addTest(root, &TestEuroRegression, "tsconv/eurocreg/TestEuroRegression");

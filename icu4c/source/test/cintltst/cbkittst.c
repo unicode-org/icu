@@ -17,6 +17,8 @@
 void addBrkIterAPITest(TestNode**);
 void addBrkIterRegrTest(TestNode**);
 
+void addBreakIter(TestNode** root);
+
 void addBreakIter(TestNode** root)
 {
     addBrkIterAPITest(root);
