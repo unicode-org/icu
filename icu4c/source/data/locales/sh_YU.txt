@@ -6,7 +6,7 @@
 // ***************************************************************************
 
 sh_YU {
-    Version { "1.0" }
+    Version { "2.0" }
 //    LocaleString { "sh_YU" }
 //    ShortCountry { "YUG" }
     LocaleID:int { 0x081a }

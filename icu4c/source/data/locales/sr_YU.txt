@@ -6,7 +6,7 @@
 // ***************************************************************************
 
 sr_YU {
-    Version{ "1.0" }
+    Version{ "2.0" }
 //    LocaleString { "sr_YU" }
     /* Discarding duplicate data for tag: NumberPatterns */
 //    ShortCountry { "YUG" }

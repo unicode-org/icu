@@ -11,7 +11,7 @@
 // *    Department of Linguistics and Translation, Universite de Montreal, Montreal
 
 so{ 
-    Version{ "1.0" }
+    Version{ "2.0" }
     DayAbbreviations {
         "Axa",
         "Isn",

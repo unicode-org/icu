@@ -6,7 +6,7 @@
 // ***************************************************************************
 
 lt {
-    Version{ "1.1" }
+    Version{ "2.0" }
     CollationElements { 
         Version { "1.0" }
         Sequence { "[backwards 2]& C < c\u030C <<< C\u030C & I << y = \u0131 <<< Y = \u0130 "

@@ -18,7 +18,7 @@
 //  but, U+0307 is the DOT ABOVE needed for ż, ċ, and ġ (in collation rules)
 
 mt {
-    Version { "0.10.5" } // 2002-01-15 
+    Version { "1.0" } // 2002-01-15 
 //    ShortLanguage { mlt }
 
 //  "%%PHONEBOOK" { "Bħal lista tat-telefon" }

@@ -7,7 +7,7 @@
 // Marathi locale.  Based on Hindi locale
 
 mr_IN {
-    Version { "1.2" }
+    Version { "2.0" }
     LocaleID:int { 0x044e }
 //    ShortCountry { IND }
 
