@@ -968,11 +968,6 @@ int getScriptElements(UScriptCode script[], int scriptcount,
         codepoint ++;
     }
 
-    int32_t  rulelength = ucol_getRulesEx(COLLATOR_, UCOL_FULL_RULES, NULL, 0);
-    UChar   *rule       = (UChar *)malloc(sizeof(UChar) * 
-                                (rulelength + UCOL_TOK_EXTRA_RULE_SPACE_SIZE));
-    rulelength = ucol_getRulesEx(COLLATOR_, UCOL_FULL_RULES, rule, 
-                                 rulelength);
     const UChar           *current  = NULL;
           uint32_t         strength = 0;
           uint32_t         chOffset = 0; 
@@ -986,10 +981,14 @@ int getScriptElements(UScriptCode script[], int scriptcount,
           UColTokenParser  src;
           UColOptionSet    opts;
           UParseError      parseError;
-        
-    src.source       = rule,
-    src.current      = rule;
-    src.end          = rule + rulelength;
+
+    int32_t  rulelength = ucol_getRulesEx(COLLATOR_, UCOL_FULL_RULES, NULL, 0);
+    src.source       = (UChar *)malloc(sizeof(UChar) * 
+                                (rulelength + UCOL_TOK_EXTRA_RULE_SPACE_SIZE));
+    rulelength = ucol_getRulesEx(COLLATOR_, UCOL_FULL_RULES, src.source, 
+                                 rulelength);
+    src.current      = src.source;
+    src.end          = src.source + rulelength;
     src.extraCurrent = src.end;
     src.extraEnd     = src.end + UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
     src.opts         = &opts;
@@ -1005,7 +1004,7 @@ int getScriptElements(UScriptCode script[], int scriptcount,
                                               &error)) != NULL) {
         // contractions handled here
         if (chLen > 1) {
-            u_strncpy(scriptelem[count].ch, rule + chOffset, chLen);
+            u_strncpy(scriptelem[count].ch, src.source + chOffset, chLen);
             scriptelem[count].count = chLen;
             if (checkInScripts(script, scriptcount, scriptelem[count])) {
                 scriptelem[count].tailored     = FALSE;
@@ -1086,15 +1085,12 @@ void markTailored(UScriptCode script[], int scriptcount,
           UColOptionSet    opts;
           UParseError      parseError;
     
-    src.opts = &opts;
-    
-    UChar *copy = (UChar *)malloc(
+    src.opts         = &opts;
+    src.source       = (UChar *)malloc(
                (rulelength + UCOL_TOK_EXTRA_RULE_SPACE_SIZE) * sizeof(UChar));
-    memcpy(copy, rule, rulelength * sizeof(UChar));
-
-    src.source       = copy;
-	src.current = copy;
-    src.end          = (UChar *)copy + rulelength;
+    memcpy(src.source, rule, rulelength * sizeof(UChar));
+	src.current      = src.source;
+    src.end          = (UChar *)src.source + rulelength;
     src.extraCurrent = src.end;
     src.extraEnd     = src.end + UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
 
@@ -1105,7 +1101,7 @@ void markTailored(UScriptCode script[], int scriptcount,
         if (chLen >= 1 && strength != UCOL_TOK_RESET) {
             // skipping the reset characters and non useful stuff.
             ScriptElement se;
-            u_strncpy(se.ch, copy + chOffset, chLen);
+            u_strncpy(se.ch, src.source + chOffset, chLen);
             se.count = chLen;
 
             if (checkInScripts(script, scriptcount, se)) {
@@ -1125,7 +1121,7 @@ void markTailored(UScriptCode script[], int scriptcount,
         }
         rstart = FALSE;
     }
-    free(copy);
+    free(src.source);
     if (U_FAILURE(error)) {
         fprintf(stdout, "Error parsing rules\n");
     }
