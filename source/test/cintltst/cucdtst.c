@@ -429,6 +429,19 @@ static void TestIdentifier()
 }
 
 /* for each line of UnicodeData.txt, check some of the properties */
+/*
+ * ### TODO
+ * This test fails incorrectly if the First or Last code point of a repetitive area
+ * is overridden, which is allowed and is encouraged for the PUAs.
+ * Currently, this means that both area First/Last and override lines are
+ * tested against the properties from the API,
+ * and the area boundary will not match and cause an error.
+ *
+ * This function should detect area boundaries and skip them for the test of individual
+ * code points' properties.
+ * Then it should check that the areas contain all the same properties except where overridden.
+ * For this, it would have had to set a flag for which code points were listed explicitly.
+ */
 static void
 unicodeDataLineFn(void *context,
                   char *fields[][2], int32_t fieldCount,
@@ -558,6 +571,8 @@ static void TestUnicodeData()
     UVersionInfo versionArray;
     char *fields[15][2];
     UErrorCode errorCode;
+    UChar32 c;
+    int8_t type;
 
     /* Look inside ICU_DATA first */
     strcpy(newPath, u_getDataDirectory());
@@ -601,6 +616,34 @@ static void TestUnicodeData()
     }
     if(U_FAILURE(errorCode)) {
         log_err("error parsing UnicodeData.txt: %s\n", u_errorName(errorCode));
+    }
+
+    /* sanity check on repeated properties */
+    for(c=0xfffe; c<=0x10ffff;) {
+        if(u_charType(c)!=U_UNASSIGNED) {
+            log_err("error: u_charType(U+%04lx)!=U_UNASSIGNED\n", c);
+        }
+        if((c&0xffff)==0xfffe) {
+            ++c;
+        } else {
+            c+=0xffff;
+        }
+    }
+
+    for(c=0xe000; c<=0x10fffd;) {
+        type=u_charType(c);
+        if(type==U_UNASSIGNED) {
+            log_err("error: u_charType(U+%04lx)==U_UNASSIGNED\n", c);
+        } else if(type!=U_PRIVATE_USE_CHAR) {
+            log_verbose("PUA override: u_charType(U+%04lx)=%d\n", c, type);
+        }
+        if(c==0xf8ff) {
+            c=0xf0000;
+        } else if(c==0xffffd) {
+            c=0x100000;
+        } else {
+            ++c;
+        }
     }
 }
 
