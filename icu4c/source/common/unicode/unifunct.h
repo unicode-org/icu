@@ -117,6 +117,9 @@ class U_COMMON_API UnicodeFunctor : public UObject {
 
  protected:
 
+    /**
+     * @stable ICU 2.0
+     */
     UnicodeFunctor();
 
  private:

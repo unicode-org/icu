@@ -103,6 +103,9 @@ public:
 
 protected:
 
+    /**
+     * @stable ICU 2.0
+     */
     UnicodeFilter();
 
 private:
