@@ -367,103 +367,129 @@ _getPrevCC(const UChar *start, const UChar *&p) {
 /* reorder UTF-16 in-place -------------------------------------------------- */
 
 /*
- * merge two parts of a UTF-16 string in-place
+ * merge two UTF-16 string parts together
  * to canonically order (order by combining classes) their concatenation
  *
- * before: [start..p[ is already ordered, and
- *         [p..limit[ is ordered in itself, but
- *                    not in relation to [start..p[
- *                    - exception: not ordered if !isOrdered
- * after: [start..limit[ is ordered
+ * the two strings may already be adjacent, so that the merging is done in-place
+ * if the two strings are not adjacent, then the buffer holding the first one
+ * must be large enough
+ * the second string may or may not be ordered in itself
  *
- * the algorithm is a simple bubble-sort that takes the characters from *p++
+ * before: [start..current[ is already ordered, and
+ *         [next..limit[    may be ordered in itself, but
+ *                          is not in relation to [start..current[
+ * after: [start..current+(limit-next)[ is ordered
+ *
+ * the algorithm is a simple bubble-sort that takes the characters from *next++
  * and inserts them in correct combining class order into the preceding part
  * of the string
  *
  * returns the trailing combining class
  */
 static uint8_t
-_mergeOrdered(const UChar *start, const UChar *p, const UChar *limit, UBool isOrdered=TRUE) {
+_mergeOrdered(UChar *start, UChar *current,
+              const UChar *next, const UChar *limit, UBool isOrdered=TRUE) {
     const UChar *pBack, *pPreBack;
-    UChar *pSplit, *q;
+    UChar *q, *r;
     UChar c, c2;
     uint8_t cc, prevCC, trailCC=0;
+    UBool adjacent;
 
-    if(start==p && isOrdered) {
-        /* nothing to do */
-        if(start!=limit) {
-            return _getPrevCC(start, limit);
-        } else {
-            return 0;
-        }
-    }
+    adjacent= current==next;
 
-    while(p<limit) {
-        pSplit=(UChar *)p;
-        cc=_getNextCC(p, limit, c, c2);
-        if(cc==0) {
-            /* does not bubble back */
-            trailCC=0;
-            if(isOrdered) {
-                break;
-            } else {
-                start=p;
-            }
-        } else {
-            /* search for the insertion point where cc>=prevCC */
-            pPreBack=pBack=pSplit;
-            prevCC=_getPrevCC(start, pPreBack);
-            if(cc>=prevCC) {
+    if(start!=current || !isOrdered) {
+        while(next<limit) {
+            cc=_getNextCC(next, limit, c, c2);
+            if(cc==0) {
                 /* does not bubble back */
-                trailCC=cc;
+                trailCC=0;
+                if(adjacent) {
+                    current=(UChar *)next;
+                } else {
+                    *current++=c;
+                    if(c2!=0) {
+                        *current++=c2;
+                    }
+                }
                 if(isOrdered) {
                     break;
+                } else {
+                    start=current;
                 }
             } else {
-                /* this will be the last code point, so keep its cc */
-                trailCC=prevCC;
-                pBack=pPreBack;
-                while(start<pPreBack) {
-                    prevCC=_getPrevCC(start, pPreBack);
-                    if(cc>=prevCC) {
+                /* search for the insertion point where cc>=prevCC */
+                pPreBack=pBack=current;
+                prevCC=_getPrevCC(start, pPreBack);
+                if(cc>=prevCC) {
+                    /* does not bubble back */
+                    trailCC=cc;
+                    if(adjacent) {
+                        current=(UChar *)next;
+                    } else {
+                        *current++=c;
+                        if(c2!=0) {
+                            *current++=c2;
+                        }
+                    }
+                    if(isOrdered) {
                         break;
                     }
+                } else {
+                    /* this will be the last code point, so keep its cc */
+                    trailCC=prevCC;
                     pBack=pPreBack;
-                }
+                    while(start<pPreBack) {
+                        prevCC=_getPrevCC(start, pPreBack);
+                        if(cc>=prevCC) {
+                            break;
+                        }
+                        pBack=pPreBack;
+                    }
 
-                /*
-                 * this is where we are right now with all these pointers:
-                 * [start..pPreBack[ 0..? code points that we can ignore
-                 * [pPreBack..pBack[ 0..1 code points with prevCC<=cc
-                 * [pBack..pSplit[   0..n code points with >cc, move up to insert (c, c2)
-                 * [pSplit..p[          1 code point (c, c2) with cc
-                 * [p..limit[        0..? code points yet to be bubbled in
-                 */
+                    /*
+                     * this is where we are right now with all these pointers:
+                     * [start..pPreBack[ 0..? code points that we can ignore
+                     * [pPreBack..pBack[ 0..1 code points with prevCC<=cc
+                     * [pBack..current[  0..n code points with >cc, move up to insert (c, c2)
+                     * [current..next[      1 code point (c, c2) with cc
+                     * [next..limit[     0..? code points yet to be bubbled in
+                     *
+                     * note that current and next may be unrelated (if not adjacent)!
+                     */
 
-                /* move the code units in between up */
-                q=(UChar *)p;
-                do {
-                    *--q=*--pSplit;
-                } while(pBack!=pSplit);
+                    /* move the code units in between up (q moves left of r) */
+                    q=current;
+                    r=current= c2==0 ? current+1 : current+2;
+                    do {
+                        *--r=*--q;
+                    } while(pBack!=q);
 
-                /* insert (c, c2) */
-                *pSplit=c;
-                if(c2!=0) {
-                    *(pSplit+1)=c2;
-                }
+                    /* insert (c, c2) */
+                    *q=c;
+                    if(c2!=0) {
+                        *(q+1)=c2;
+                    }
 
-                if(isOrdered) {
-                    /* we know that the new part is ordered in itself, so we can move start up */
-                    start=q; /* set it to after where (c, c2) were inserted */
+                    if(isOrdered) {
+                        /* we know that the new part is ordered in itself, so we can move start up */
+                        start=r; /* set it to after where (c, c2) were inserted */
+                    }
                 }
             }
         }
     }
 
-    if(p==limit) {
+    if(next==limit) {
         /* we know the cc of the last code point */
         return trailCC;
     } else {
+        if(!adjacent) {
+            /* copy the second string part */
+            do {
+                *current++=*next++;
+            } while(next!=limit);
+            limit=current;
+        }
         return _getPrevCC(start, limit);
     }
 }
@@ -471,18 +497,18 @@ _mergeOrdered(const UChar *start, const UChar *p, const UChar *limit, UBool isOr
 /*
  * simpler, more efficient version of _mergeOrdered() -
  * inserts only one code point into the preceding string
- * assume that (c, c2) has not yet inserted at [pSplit..p[
+ * assume that (c, c2) has not yet been inserted at [current..p[
  */
 static uint8_t
-_insertOrdered(const UChar *start, UChar *pSplit, UChar *p,
+_insertOrdered(const UChar *start, UChar *current, UChar *p,
                UChar c, UChar c2, uint8_t cc) {
     const UChar *pBack, *pPreBack;
-    UChar *q;
+    UChar *r;
     uint8_t prevCC, trailCC=cc;
 
-    if(start<pSplit && cc!=0) {
+    if(start<current && cc!=0) {
         /* search for the insertion point where cc>=prevCC */
-        pPreBack=pBack=pSplit;
+        pPreBack=pBack=current;
         prevCC=_getPrevCC(start, pPreBack);
         if(cc<prevCC) {
             /* this will be the last code point, so keep its cc */
@@ -500,22 +526,22 @@ _insertOrdered(const UChar *start, UChar *pSplit, UChar *p,
              * this is where we are right now with all these pointers:
              * [start..pPreBack[ 0..? code points that we can ignore
              * [pPreBack..pBack[ 0..1 code points with prevCC<=cc
-             * [pBack..pSplit[   0..n code points with >cc, move up to insert (c, c2)
-             * [pSplit..p[          1 code point (c, c2) with cc
+             * [pBack..current[  0..n code points with >cc, move up to insert (c, c2)
+             * [current..p[         1 code point (c, c2) with cc
              */
 
             /* move the code units in between up */
-            q=p;
+            r=p;
             do {
-                *--q=*--pSplit;
-            } while(pBack!=pSplit);
+                *--r=*--current;
+            } while(pBack!=current);
         }
     }
 
     /* insert (c, c2) */
-    *pSplit=c;
+    *current=c;
     if(c2!=0) {
-        *(pSplit+1)=c2;
+        *(current+1)=c2;
     }
 
     /* we know the cc of the last code point */
@@ -740,7 +766,8 @@ unorm_decompose(UChar *dest, int32_t destCapacity,
                 GrowBuffer *growBuffer, void *context,
                 UErrorCode *pErrorCode) {
     UChar buffer[3];
-    const UChar *limit, *prevSrc, *p, *reorderStart;
+    const UChar *limit, *prevSrc, *p;
+    UChar *reorderStart;
     uint32_t norm32, ccOrQCMask, qcMask;
     int32_t destIndex, length;
     UChar c, c2, minNoMaybe;
@@ -912,14 +939,15 @@ unorm_decompose(UChar *dest, int32_t destCapacity,
                 }
             } else {
                 /* general: multiple code points (ordered by themselves) from decomposition */
-                /* append the decomposition */
-                do {
-                    dest[destIndex++]=*p++;
-                } while(--length>0);
-
                 if(cc!=0 && cc<prevCC) {
                     /* the decomposition is out of order with respect to the preceding text */
-                    trailCC=_mergeOrdered(reorderStart, reorderSplit, dest+destIndex);
+                    destIndex+=length;
+                    trailCC=_mergeOrdered(reorderStart, reorderSplit, p, p+length);
+                } else {
+                    /* just append the decomposition */
+                    do {
+                        dest[destIndex++]=*p++;
+                    } while(--length>0);
                 }
             }
         } else {
@@ -1118,14 +1146,15 @@ _decomposeFCD(const UChar *src, const UChar *decompLimit, const UChar *limit,
                 }
             } else {
                 /* general: multiple code points (ordered by themselves) from decomposition */
-                /* append the decomposition */
-                do {
-                    dest[destIndex++]=*p++;
-                } while(--length>0);
-
                 if(cc!=0 && cc<prevCC) {
                     /* the decomposition is out of order with respect to the preceding text */
-                    trailCC=_mergeOrdered(reorderStart, reorderSplit, dest+destIndex);
+                    destIndex+=length;
+                    trailCC=_mergeOrdered(reorderStart, reorderSplit, p, p+length);
+                } else {
+                    /* just append the decomposition */
+                    do {
+                        dest[destIndex++]=*p++;
+                    } while(--length>0);
                 }
             }
         } else {
@@ -1348,7 +1377,7 @@ enum {
 
 /* get the composition properties of the next character */
 inline uint32_t
-_getNextCombining(const UChar *&p, const UChar *limit,
+_getNextCombining(UChar *&p, const UChar *limit,
                   UChar &c, UChar &c2,
                   uint16_t &combiningIndex, uint8_t &cc) {
     uint32_t norm32, combineFlags;
@@ -1443,10 +1472,11 @@ _recompose(UChar *p, UChar *&limit) {
         if((combineFlags&_NORM_COMBINES_BACK) && starter!=NULL) {
             if(combineBackIndex&0x8000) {
                 /* c is a Jamo 2 or 3, see if we can compose it with the previous character */
-                /* ignore Jamo 3 because we compose it when we handle Jamo 2 - and the input does not contain Hanguls */
+                pRemove=NULL; /* NULL while no Hangul composition */
+                c2=*starter;
                 if(combineBackIndex==0xfff2) {
                     /* Jamo 2, compose with previous Jamo 1 and following Jamo 3 */
-                    c2=(UChar)(*(p-2)-JAMO_L_BASE);
+                    c2=(UChar)(c2-JAMO_L_BASE);
                     if(c2<JAMO_L_COUNT) {
                         pRemove=p-1;
                         c=(UChar)(HANGUL_BASE+(c2*JAMO_V_COUNT+(c-JAMO_V_BASE))*JAMO_T_COUNT);
@@ -1454,19 +1484,34 @@ _recompose(UChar *p, UChar *&limit) {
                             ++p;
                             c+=c2;
                         }
-                        *(pRemove-1)=c;
-
-                        /* remove the Jamo(s) */
-                        q=pRemove;
-                        r=p;
-                        while(r<limit) {
-                            *q++=*r++;
-                        }
-                        p=pRemove;
-                        limit=q;
+                        *starter=c;
                     }
-                    c2=0;
+                } else {
+                    /* Jamo 3, compose with previous Hangul that does not have a Jamo 3 */
+                    if(isHangulWithoutJamo3(c2)) {
+                        pRemove=p-1;
+                        *starter=(UChar)(c2+(c-JAMO_T_BASE));
+                    }
                 }
+
+                if(pRemove!=NULL) {
+                    /* remove the Jamo(s) */
+                    q=pRemove;
+                    r=p;
+                    while(r<limit) {
+                        *q++=*r++;
+                    }
+                    p=pRemove;
+                    limit=q;
+                }
+
+                c2=0;
+                /*
+                 * now: cc==0 and the combining index does not include "forward" ->
+                 * the rest of the loop body will reset starter;
+                 * technically, a composed Hangul syllable is a starter, but it
+                 * does not combine forward now that we have consumed all eligible Jamos
+                 */
             } else if(!(combineFwdIndex&0x8000) && (prevCC<cc || prevCC==0)) {
                 /* try to combine the starter with (c, c2) */
                 uint16_t key, value, value2;
@@ -1895,7 +1940,8 @@ _composePart(UChar *stackBuffer, UChar *&buffer, int32_t &bufferCapacity, int32_
         }
 
         /* reorder the backwards decomposition, set prevCC */
-        prevCC=_mergeOrdered(buffer+firstStarterIndex, buffer+firstStarterIndex, buffer+limitIndex, FALSE);
+        reorderSplit=buffer+firstStarterIndex;
+        prevCC=_mergeOrdered(reorderSplit, reorderSplit, reorderSplit, buffer+limitIndex, FALSE);
 
         /* adjust destIndex: back out what had been copied with qc "yes" */
         destIndex-=(int32_t)(prevSrc-starter);
@@ -1922,25 +1968,29 @@ _composePart(UChar *stackBuffer, UChar *&buffer, int32_t &bufferCapacity, int32_
             }
         }
 
-        /* append the decomposition */
-        /* ### TODO: worth trying to use _insertOrdered() ? */
-        reorderSplit=buffer+limitIndex;
-        do {
-            buffer[limitIndex++]=*p++;
-        } while(--length>0);
-
-        /* cc!=0 because otherwise we would have gotten p==NULL */
-        if(cc<prevCC) {
+        if(cc!=0 && cc<prevCC) {
             /* the decomposition is out of order with respect to the preceding text */
-            prevCC=_mergeOrdered(buffer+firstStarterIndex, reorderSplit, buffer+limitIndex);
+            reorderSplit=buffer+limitIndex;
+            limitIndex+=length;
+            if(length==1) {
+                prevCC=_insertOrdered(buffer+firstStarterIndex, reorderSplit, buffer+limitIndex, *p, 0, cc);
+            } else {
+                prevCC=_mergeOrdered(buffer+firstStarterIndex, reorderSplit, p, p+length);
+            }
         } else {
+            /* just append the decomposition */
+            do {
+                buffer[limitIndex++]=*p++;
+            } while(--length>0);
             prevCC=trailCC;
         }
     }
 
     /* recompose between the two starters */
     recomposeLimit=buffer+limitIndex;
-    prevCC=_recompose(buffer+firstStarterIndex, recomposeLimit);
+    if((limitIndex-firstStarterIndex)>=2) {
+        prevCC=_recompose(buffer+firstStarterIndex, recomposeLimit);
+    }
 
     /* set output parameters and return with a pointer to the recomposition */
     prevStarter=src;
@@ -2067,9 +2117,10 @@ unorm_compose(UChar *dest, int32_t destCapacity,
 
             if(/* ### TODO: do we need to do this? !ignoreHangul && ### */ destIndex>0) {
                 /* c is a Jamo 2 or 3, see if we can compose it with the previous character */
+                c2=*(prevSrc-1);
                 if(norm32<_NORM_JAMO2_TOP) {
                     /* Jamo 2, compose with previous Jamo 1 and following Jamo 3 */
-                    c2=(UChar)(*(prevSrc-1)-JAMO_L_BASE);
+                    c2=(UChar)(c2-JAMO_L_BASE);
                     if(c2<JAMO_L_COUNT) {
                         c=(UChar)(HANGUL_BASE+(c2*JAMO_V_COUNT+(c-JAMO_V_BASE))*JAMO_T_COUNT);
                         if((limit==NULL || src!=limit) && (c2=(UChar)(*src-JAMO_T_BASE))<JAMO_T_COUNT) {
@@ -2083,7 +2134,6 @@ unorm_compose(UChar *dest, int32_t destCapacity,
                     }
                 } else {
                     /* Jamo 3, compose with previous Hangul that does not have a Jamo 3 */
-                    c2=*(prevSrc-1);
                     if(isHangulWithoutJamo3(c2)) {
                         if(destIndex<=destCapacity) {
                             dest[destIndex-1]=(UChar)(c2+(c-JAMO_T_BASE));
