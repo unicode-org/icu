@@ -27,6 +27,7 @@
 #define MAGIC2 19641227
 
 #define URES_MAX_ALIAS_LEVEL 256
+#define URES_MAX_BUFFER_SIZE 256
 
 /*
 enum UResEntryType {
