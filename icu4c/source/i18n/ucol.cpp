@@ -3658,6 +3658,13 @@ ucol_getSortKey(const    UCollator    *coll,
         int32_t        resultLength)
 {
   UErrorCode status = U_ZERO_ERROR;
+
+  if(source == NULL) {
+    // this is actually an error situation, but we would need to 
+    // have an error code to return it. Until we introduce a new
+    // API, it stays like this
+    return 0;
+  }
   /* this uses the function pointer that is set in updateinternalstate */
   /* currently, there are two funcs: */
   /*ucol_calcSortKey(...);*/
@@ -7819,6 +7826,10 @@ ucol_strcollIter( const UCollator    *coll,
   if(!status || U_FAILURE(*status) || sIter == tIter) {
     return UCOL_EQUAL;
   }
+  if(sIter == NULL || tIter == NULL || coll == NULL) {
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
+    return UCOL_EQUAL;
+  }
 
   UCollationResult result = UCOL_EQUAL;
 
@@ -7909,6 +7920,11 @@ ucol_strcoll( const UCollator    *coll,
               int32_t            targetLength) {
     U_ALIGN_CODE(16);
     UErrorCode status = U_ZERO_ERROR;
+    if(source == NULL || target == NULL) {
+      // do not crash, but return. Should have 
+      // status argument to return error.
+      return UCOL_EQUAL;
+    }
       collIterate sColl, tColl;
 
     /* Scan the strings.  Find:                                                             */
@@ -8010,29 +8026,6 @@ ucol_strcoll( const UCollator    *coll,
     } else {
       return ucol_strcollUseLatin1(coll, source, sourceLength, target, targetLength, &status);    
     }
-
-#if 0
-    // TODO: revisit the conditions here. We don't want to initialize colliterate structures if we're going to use the regular loop
-    if(coll->latinOneUse) {
-      if ((sourceLength > 0 && *source&0xff00) || (targetLength > 0 && *target&0xff00)) { // source or target start with non-latin-1
-        // Preparing the context objects for iterating over strings
-        collIterate sColl, tColl;
-        IInit_collIterate(coll, source, sourceLength, &sColl);
-        IInit_collIterate(coll, target, targetLength, &tColl);
-        return ucol_strcollRegular(&sColl, &tColl, &status);
-        //return ucol_strcollRegular(coll, source, sourceLength, target, targetLength, &status);
-      } else {
-        return ucol_strcollUseLatin1(coll, source, sourceLength, target, targetLength, &status);    
-      }
-    } else {
-      // Preparing the context objects for iterating over strings
-      collIterate sColl, tColl;
-      IInit_collIterate(coll, source, sourceLength, &sColl);
-      IInit_collIterate(coll, target, targetLength, &tColl);
-      return ucol_strcollRegular(&sColl, &tColl, &status);
-      //return ucol_strcollRegular(coll, source, sourceLength, target, targetLength, &status);
-    }
-#endif
 }
 
 /* convenience function for comparing strings */
