@@ -51,33 +51,94 @@ ucmpe32_open(int32_t defaultValue, int32_t surrogateValue, UErrorCode *status)
   uprv_memset(this_obj->stage1, 0, this_obj->stage1Top*sizeof(uint16_t));
 
   /* allocate stage 2 of the trie and reset the first block */
-  this_obj->stage2= (int32_t*)uprv_malloc(60000*sizeof(*(this_obj->stage2)));
+  this_obj->stage2= (int32_t*)uprv_malloc(INIT_UCMPE32_STAGE2_SIZE*sizeof(*(this_obj->stage2)));
   if(this_obj->stage2 == NULL) {
     *status = U_MEMORY_ALLOCATION_ERROR;
     uprv_free(this_obj->stage1);
     uprv_free(this_obj);
     return NULL;
   }
+  this_obj->stage2Size = INIT_UCMPE32_STAGE2_SIZE;
+  this_obj->stage2DefaultTop = 0;
   this_obj->fDefaultValue = defaultValue;
   this_obj->fSurrogateValue = surrogateValue;
-  for(bla = this_obj->stage2; bla<this_obj->stage2+_UCMPE32_STAGE_2_BLOCK_COUNT; bla++) {
+  for(bla = this_obj->stage2; bla<this_obj->stage2+INIT_UCMPE32_STAGE2_SIZE; bla++) {
+  /*for(bla = this_obj->stage2; bla<this_obj->stage2+_UCMPE32_STAGE_2_BLOCK_COUNT; bla++) {*/
     *bla = this_obj->fDefaultValue;
   }
   this_obj->stage2Top = _UCMPE32_STAGE_2_BLOCK_COUNT;
 
   this_obj->fCompact = FALSE; 
   this_obj->fBogus = FALSE;
+  this_obj->fInitPhase = TRUE;
 
   return this_obj;
 }
 
+/*
+ * Set a range of UnicodeChars to the same value 
+ */
+void
+ucmpe32_setRange32(CompactEIntArray* this_obj, UChar32 start, UChar32 end, int32_t value) {
+    UChar32 code = 0;
 
+    uint32_t s1Start = start>>_UCMPE32_TRIE_SHIFT;
+    uint32_t s1End = end>>_UCMPE32_TRIE_SHIFT;
+
+    int32_t *bla;
+    uint32_t i = 0;
+
+    /* Allocate a block for repeat stuff */
+    int32_t repeatBlock = 0;
+
+    if (this_obj->fInitPhase == FALSE || this_obj->fCompact == TRUE || (start > end)) {
+      return;
+    }
+
+    /* if there is stuff that doesn't fit */
+    if((start & _UCMPE32_STAGE_2_MASK) != 0) { /* at the start */
+      s1Start++;
+      for(code = start; code < (UChar32)(s1Start<<_UCMPE32_TRIE_SHIFT); code++) {
+        ucmpe32_set32(this_obj, code, value);
+      }
+    }
+
+    repeatBlock = this_obj->stage2Top;
+    this_obj->stage2Top += _UCMPE32_STAGE_2_BLOCK_COUNT;
+    for(bla = this_obj->stage2+repeatBlock; bla<this_obj->stage2+this_obj->stage2Top; bla++) {
+      *bla = value;
+    }
+    for(i = s1Start; i< s1End; i++) {
+      this_obj->stage1[i] = (uint16_t)(repeatBlock);
+    }
+
+    if((end & _UCMPE32_STAGE_2_MASK) != 0) { /* at the end */
+      for(code = (s1End<<_UCMPE32_TRIE_SHIFT); code <= end; code++) {
+        ucmpe32_set32(this_obj, code, value);
+      }
+    } else {
+      this_obj->stage1[s1End] = (uint16_t)(repeatBlock);
+    }
+    this_obj->stage2DefaultTop = this_obj->stage2Top;
+    this_obj->fInitPhase = TRUE;
+
+}
 
 /*
  * get or create a Norm unit;
  * get or create the intermediate trie entries for it as well
  */
 /********* THIS IS THE ADD FUNCTION ********************/
+int32_t 
+ucmpe32_get32(CompactEIntArray* this_obj, UChar32 code) {
+  int16_t stage1 = (this_obj->stage1[(code >> _UCMPE32_TRIE_SHIFT)]); 
+  int32_t offset = (code & _UCMPE32_STAGE_2_MASK);
+  int32_t result = this_obj->stage2[stage1 + offset];
+
+  return result;
+
+}
+
 void  
 ucmpe32_set32(CompactEIntArray* this_obj, UChar32 code, int32_t value)
 {
@@ -87,18 +148,27 @@ ucmpe32_set32(CompactEIntArray* this_obj, UChar32 code, int32_t value)
       return;
     }
 
+    this_obj->fInitPhase = FALSE;
+
     {
         uint32_t i;
         uint16_t j;
 
         i=code>>_UCMPE32_TRIE_SHIFT;
         j=this_obj->stage1[i];
-        if(j==0) {
+        if(j<=this_obj->stage2DefaultTop) {
             /* allocate a stage 2 block */
-            int32_t *p, *bla;           
+            int32_t *p, *bla, value;           
+            value = this_obj->stage2[j]; /* pick the value the empty block was filled with */
+            if(this_obj->stage2Size < (this_obj->stage2Top + _UCMPE32_STAGE_2_BLOCK_COUNT)) {
+              this_obj->stage2 = (int32_t *)uprv_realloc(this_obj->stage2, 2*this_obj->stage2Size);
+              if(this_obj->stage2 == NULL) {
+              }
+              this_obj->stage2Size *= 2;
+            }
             p = this_obj->stage2+this_obj->stage2Top;
             for(bla = p; bla<p+_UCMPE32_STAGE_2_BLOCK_COUNT; bla++) {
-              *bla = this_obj->fDefaultValue;
+              *bla = value; /* fill the newly allocated block with the default values for that block */
             }
             this_obj->stage2Top += _UCMPE32_STAGE_2_BLOCK_COUNT;
 
@@ -126,11 +196,10 @@ ucmpe32_setSurrogate(CompactEIntArray* this_obj, UChar lead, UChar trail, int32_
  * Fold the supplementary code point data for one lead surrogate.
  */
 static uint16_t
-foldLeadSurrogate(uint16_t *parent, int32_t parentCount,
-                  int32_t *stage, int32_t *pStageCount,
-                  uint32_t base, int32_t surrogateValue) {
+foldLeadSurrogate(CompactEIntArray* this_obj, 
+                  uint32_t base, int32_t top) {
     uint32_t leadNorm32=0;
-    uint32_t i, j, s2;
+    int32_t i, j, s2;
     uint32_t leadSurrogate=0xd7c0+(base>>10);
 
 #if 0
@@ -138,11 +207,11 @@ foldLeadSurrogate(uint16_t *parent, int32_t parentCount,
 #endif
     /* calculate the 32-bit data word for the lead surrogate */
     for(i=0; i<_UCMPE32_SURROGATE_BLOCK_COUNT; ++i) {
-        s2=parent[(base>>_UCMPE32_TRIE_SHIFT)+i];
+        s2=this_obj->stage1[(base>>_UCMPE32_TRIE_SHIFT)+i];
         if(s2!=0) {
             for(j=0; j<_UCMPE32_STAGE_2_BLOCK_COUNT; ++j) {
                 /* basically, or all 32-bit data into the one for the lead surrogate */
-                leadNorm32|=stage[s2+j];
+                leadNorm32|=this_obj->stage2[s2+j];
             }
         }
     }
@@ -160,19 +229,19 @@ foldLeadSurrogate(uint16_t *parent, int32_t parentCount,
      * this is because 16 bits in the FCD trie data do not allow for anything
      * but the two leading and trailing combining classes of the canonical decomposition.
      */
-    leadNorm32= surrogateValue | ((parentCount<<_UCMPE32_TRIE_SHIFT)&~_UCMPE32_STAGE_2_MASK);
+    leadNorm32= this_obj->fSurrogateValue | ((top<<_UCMPE32_TRIE_SHIFT)&~_UCMPE32_STAGE_2_MASK);
 
     /* enter the lead surrogate's data */
-    s2=parent[leadSurrogate>>_UCMPE32_TRIE_SHIFT];
-    if(s2==0) {
+    s2=this_obj->stage1[leadSurrogate>>_UCMPE32_TRIE_SHIFT];
+    if(s2<=this_obj->stage2DefaultTop) {
         /* allocate a new stage 2 block in stage (the memory is there from makeAll32()/makeFCD()) */
-        s2=parent[leadSurrogate>>_UCMPE32_TRIE_SHIFT]=(uint16_t)*pStageCount;
-        *pStageCount+=_UCMPE32_STAGE_2_BLOCK_COUNT;
+        s2=this_obj->stage1[leadSurrogate>>_UCMPE32_TRIE_SHIFT]=(uint16_t)this_obj->stage2Top;
+        this_obj->stage2Top+=_UCMPE32_STAGE_2_BLOCK_COUNT;
     }
-    stage[s2+(leadSurrogate&_UCMPE32_STAGE_2_MASK)]=leadNorm32;
+    this_obj->stage2[s2+(leadSurrogate&_UCMPE32_STAGE_2_MASK)]=leadNorm32;
 
     /* move the actual stage 1 indexes from the supplementary position to the new one */
-    uprv_memmove(parent+parentCount, parent+(base>>_UCMPE32_TRIE_SHIFT), _UCMPE32_SURROGATE_BLOCK_COUNT*2);
+    uprv_memmove(this_obj->stage1+top, this_obj->stage1+(base>>_UCMPE32_TRIE_SHIFT), _UCMPE32_SURROGATE_BLOCK_COUNT*2);
 
     /* increment stage 1 top */
     return _UCMPE32_SURROGATE_BLOCK_COUNT;
@@ -186,19 +255,17 @@ foldLeadSurrogate(uint16_t *parent, int32_t parentCount,
  * Use after makeAll32().
  */
 static uint32_t
-foldSupplementary(uint16_t *parent, int32_t parentCount,
-                  int32_t *stage, int32_t *pStageCount,
-                  int32_t surrogateValue) {
+foldSupplementary(CompactEIntArray* this_obj, int32_t top) {
     uint32_t c;
     uint16_t i;
 
     /* search for any stage 1 entries for supplementary code points */
     for(c=0x10000; c<0x110000;) {
-        i=parent[c>>_UCMPE32_TRIE_SHIFT];
+        i=this_obj->stage1[c>>_UCMPE32_TRIE_SHIFT];
         if(i!=0) {
             /* there is data, treat the full block for a lead surrogate */
             c&=~0x3ff;
-            parentCount+=foldLeadSurrogate(parent, parentCount, stage, pStageCount, c, surrogateValue);
+            top+=foldLeadSurrogate(this_obj, c, top);
             c+=0x400;
         } else {
             c+=_UCMPE32_STAGE_2_BLOCK_COUNT;
@@ -208,7 +275,7 @@ foldSupplementary(uint16_t *parent, int32_t parentCount,
     printf("trie index count: BMP %u  all Unicode %lu  folded %u\n",
            _UCMPE32_STAGE_1_BMP_COUNT, (long)_UCMPE32_STAGE_1_MAX_COUNT, parentCount);
 #endif
-    return parentCount;
+    return top;
 }
 
 void 
@@ -225,9 +292,7 @@ ucmpe32_compact(CompactEIntArray* this_obj) {
     uint16_t i, start, prevEnd, newStart;
 
     /* fold supplementary code points into lead surrogates */
-    this_obj->stage1Top=foldSupplementary(this_obj->stage1, _UCMPE32_STAGE_1_BMP_COUNT, 
-      this_obj->stage2, &this_obj->stage2Top, this_obj->fSurrogateValue);
-
+    this_obj->stage1Top=foldSupplementary(this_obj, _UCMPE32_STAGE_1_BMP_COUNT);
     map[0]=0;
     newStart=_UCMPE32_STAGE_2_BLOCK_COUNT;
     for(start=newStart; start<this_obj->stage2Top;) {
@@ -297,6 +362,8 @@ ucmpe32_clone(CompactEIntArray* orig, UErrorCode *status)
   }
   uprv_memcpy(this_obj->stage1, orig->stage1, this_obj->stage1Top*sizeof(uint16_t));
 
+  this_obj->stage2Size = orig->stage2Size;
+  this_obj->stage2DefaultTop = orig->stage2DefaultTop;
   this_obj->stage2Top = orig->stage2Top; 
   this_obj->stage2 = (int32_t*)uprv_malloc(60000*sizeof(*(this_obj->stage2)));
   if(this_obj->stage2 == NULL) {
@@ -311,6 +378,7 @@ ucmpe32_clone(CompactEIntArray* orig, UErrorCode *status)
   this_obj->fStructSize = sizeof(CompactEIntArray);
 
   this_obj->fCompact = orig->fCompact;
+  this_obj->fInitPhase = orig->fInitPhase;
 
   return this_obj;
 }

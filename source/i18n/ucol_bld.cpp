@@ -841,7 +841,7 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
         uprv_uca_addAnElement(t, &el, status);
       }
     }
-#endif 
+#endif
 
 #if UCOL_DEBUG_DUPLICATES
     if(*status != U_ZERO_ERROR) {
@@ -1044,6 +1044,66 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
 
       /* produce canonical closure */
       UCollationElements* colEl = ucol_openElements(tempColl, NULL, 0, status);
+      UChar32 u32 = 0;
+      UChar comp[2];
+      uint32_t len = 0;
+      for(u32 = 0; u32 < 0x30000; u32++) {
+        len = 0;
+        UTF_APPEND_CHAR_UNSAFE(comp, len, u32);
+        if((noOfDec = unorm_normalize(comp, len, UNORM_NFD, 0, decomp, 256, status)) > 1
+          || (noOfDec == 1 && *decomp != (UChar)u))
+        {
+          if(ucol_strcoll(tempColl, comp, len, decomp, noOfDec) != UCOL_EQUAL) {
+            el.cPoints = decomp;
+            el.cSize = noOfDec;
+            el.noOfCEs = 0;
+            el.prefix = el.prefixChars;
+            el.prefixSize = 0;
+
+            UCAElements *prefix=(UCAElements *)uhash_get(t->prefixLookup, &el);
+            if(prefix == NULL) {
+              el.cPoints = comp;
+              el.cSize = len;
+              el.prefix = el.prefixChars;
+              el.prefixSize = 0;
+              el.noOfCEs = 0;
+              ucol_setText(colEl, decomp, noOfDec, status);
+              while((el.CEs[el.noOfCEs] = ucol_next(colEl, status)) != UCOL_NULLORDER) {
+                el.noOfCEs++;
+              }
+            } else {
+              el.cPoints = comp;
+              el.cSize = len;
+              el.prefix = el.prefixChars;
+              el.prefixSize = 0;
+              el.noOfCEs = 1;
+              el.CEs[0] = prefix->mapCE;
+              // This character uses a prefix. We have to add it 
+              // to the unsafe table, as it decomposed form is already
+              // in. In Japanese, this happens for \u309e & \u30fe
+              // Since unsafeCPSet is static in ucol_elm, we are going
+              // to wrap it up in the uprv_uca_unsafeCPAddCCNZ function
+            }
+
+            uprv_uca_addAnElement(t, &el, status);
+          }
+        }
+        switch(u32) {
+        case 0x33FF:
+          u32 = 0xAC00;
+          break;
+        case 0xFFFF:
+          u32 = 0x1D000;
+          break;
+        case 0x1DFFF:
+          u32 = 0x2F800;
+          break;
+        }
+      }
+
+#if 0
+      /* produce canonical closure */
+      UCollationElements* colEl = ucol_openElements(tempColl, NULL, 0, status);
       for(u = 0; u < 0xFFFF; u++) {
         if((noOfDec = unorm_normalize(&u, 1, UNORM_NFD, 0, decomp, 256, status)) > 1
           || (noOfDec == 1 && *decomp != (UChar)u))
@@ -1086,6 +1146,7 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
           }
         }
       }
+#endif
       ucol_closeElements(colEl);
       ucol_close(tempColl);
     }
