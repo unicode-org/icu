@@ -759,6 +759,7 @@ U_CFUNC void T_UConverter_toUnicode_EBCDIC_STATEFUL (UConverterToUnicodeArgs *ar
                                      reason,
                                      err);
 
+                  myMode = args->converter->mode;
                   args->source = saveSource;
                   args->target = saveTarget;
                   args->offsets = saveOffsets;
@@ -901,6 +902,7 @@ U_CFUNC void T_UConverter_toUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverterToU
                   args->target = saveTarget;
                   if (U_FAILURE (*err))   break;
                   args->converter->invalidCharLength = 0;
+                  myMode = args->converter->mode;
                 }
             }
         }
@@ -970,8 +972,7 @@ U_CFUNC void T_UConverter_fromUnicode_EBCDIC_STATEFUL (UConverterFromUnicodeArgs
                   
                   if ((!isTargetUCharDBCS)&&(myTargetIndex+1 >= targetLength))
                     {
-                      args->converter->charErrorBuffer[0] = (char) targetUniChar;
-                      args->converter->charErrorBufferLength = 1;
+                      args->converter->charErrorBuffer[args->converter->charErrorBufferLength++] = (char) targetUniChar;
                       *err = U_INDEX_OUTOFBOUNDS_ERROR;
                       break;
                     }
@@ -1030,6 +1031,7 @@ U_CFUNC void T_UConverter_fromUnicode_EBCDIC_STATEFUL (UConverterFromUnicodeArgs
               args->source = saveSource;
               args->target = saveTarget;
               args->offsets = saveOffsets;
+              isTargetUCharDBCS  = args->converter->fromUnicodeStatus;
               if (U_FAILURE (*err)) break;
               args->converter->invalidUCharLength = 0;
             }
@@ -1153,6 +1155,7 @@ U_CFUNC void T_UConverter_fromUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverterF
                                      (UChar32)mySourceChar,
                                      UCNV_UNASSIGNED,
                                      err);
+              isTargetUCharDBCS  = args->converter->fromUnicodeStatus;
               args->source = saveSource;
               args->target = saveTarget;
               args->offsets = saveOffsets;
