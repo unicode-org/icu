@@ -271,7 +271,7 @@ private:
 };
 
 inline UClassID DictionaryBasedBreakIterator::getDynamicClassID(void) const {
-    return RuleBasedBreakIterator::getStaticClassID();
+    return DictionaryBasedBreakIterator::getStaticClassID();
 }
 
 inline UClassID DictionaryBasedBreakIterator::getStaticClassID(void) {
