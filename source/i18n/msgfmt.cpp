@@ -519,18 +519,17 @@ MessageFormat::applyPattern(const UnicodeString& newPattern,
 // -------------------------------------
 // Converts this MessageFormat instance to a pattern. 
 UnicodeString&
-MessageFormat::toPattern(UnicodeString& result) const
+MessageFormat::toPattern(UnicodeString& appendTo) const
 {
     // later, make this more extensible
     int32_t lastOffset = 0;
     for (int i = 0; i <= fMaxOffset; ++i) {
-        copyAndFixQuotes(fPattern, lastOffset, fOffsets[i], result);
+        copyAndFixQuotes(fPattern, lastOffset, fOffsets[i], appendTo);
         lastOffset = fOffsets[i];
-        result += LEFT_CURLY_BRACE;
+        appendTo += LEFT_CURLY_BRACE;
         // {sfb} check this later
-        //result += (UChar) (fArgumentNumbers[i] + '0');
-        UnicodeString temp;
-        result += itos(fArgumentNumbers[i], temp);
+        //appendTo += (UChar) (fArgumentNumbers[i] + '0');
+        itos(fArgumentNumbers[i], appendTo);
         if (fFormats[i] == NULL) {
             // do nothing, string format
         } 
@@ -543,22 +542,22 @@ MessageFormat::toPattern(UnicodeString& result) const
             NumberFormat *percentTemplate = NumberFormat::createPercentInstance(fLocale, status);
             NumberFormat *integerTemplate = createIntegerFormat(fLocale, status);
  
-            result += COMMA;
-            result += g_umsg_number;
+            appendTo += COMMA;
+            appendTo += g_umsg_number;
             if (formatAlias != *numberTemplate) {
-                result += COMMA;
+                appendTo += COMMA;
                 if (formatAlias == *currencyTemplate) {
-                    result += g_umsg_currency;
+                    appendTo += g_umsg_currency;
                 } 
                 else if (formatAlias == *percentTemplate) {
-                    result += g_umsg_percent;
+                    appendTo += g_umsg_percent;
                 } 
                 else if (formatAlias == *integerTemplate) {
-                    result += g_umsg_integer;
+                    appendTo += g_umsg_integer;
                 } 
                 else {
                     UnicodeString buffer;
-                    result += ((DecimalFormat*)fFormats[i])->toPattern(buffer);
+                    appendTo += ((DecimalFormat*)fFormats[i])->toPattern(buffer);
                 }
             }
             
@@ -579,58 +578,58 @@ MessageFormat::toPattern(UnicodeString& result) const
             DateFormat *fullTimeTemplate = DateFormat::createTimeInstance(DateFormat::kFull, fLocale);
             
             
-            result += COMMA;
+            appendTo += COMMA;
             if (formatAlias == *defaultDateTemplate) {
-                result += g_umsg_date;
+                appendTo += g_umsg_date;
             } 
             else if (formatAlias == *shortDateTemplate) {
-                result += g_umsg_date;
-                result += COMMA;
-                result += g_umsg_short;
+                appendTo += g_umsg_date;
+                appendTo += COMMA;
+                appendTo += g_umsg_short;
             } 
             else if (formatAlias == *defaultDateTemplate) {
-                result += g_umsg_date;
-                result += COMMA;
-                result += g_umsg_medium;
+                appendTo += g_umsg_date;
+                appendTo += COMMA;
+                appendTo += g_umsg_medium;
             } 
             else if (formatAlias == *longDateTemplate) {
-                result += g_umsg_date;
-                result += COMMA;
-                result += g_umsg_long;
+                appendTo += g_umsg_date;
+                appendTo += COMMA;
+                appendTo += g_umsg_long;
             } 
             else if (formatAlias == *fullDateTemplate) {
-                result += g_umsg_date;
-                result += COMMA;
-                result += g_umsg_full;
+                appendTo += g_umsg_date;
+                appendTo += COMMA;
+                appendTo += g_umsg_full;
             } 
             else if (formatAlias == *defaultTimeTemplate) {
-                result += g_umsg_time;
+                appendTo += g_umsg_time;
             } 
             else if (formatAlias == *shortTimeTemplate) {
-                result += g_umsg_time;
-                result += COMMA;
-                result += g_umsg_short;
+                appendTo += g_umsg_time;
+                appendTo += COMMA;
+                appendTo += g_umsg_short;
             } 
             else if (formatAlias == *defaultTimeTemplate) {
-                result += g_umsg_time;
-                result += COMMA;
-                result += g_umsg_medium;
+                appendTo += g_umsg_time;
+                appendTo += COMMA;
+                appendTo += g_umsg_medium;
             } 
             else if (formatAlias == *longTimeTemplate) {
-                result += g_umsg_time;
-                result += COMMA;
-                result += g_umsg_long;
+                appendTo += g_umsg_time;
+                appendTo += COMMA;
+                appendTo += g_umsg_long;
             } 
             else if (formatAlias == *fullTimeTemplate) {
-                result += g_umsg_time;
-                result += COMMA;
-                result += g_umsg_full;
+                appendTo += g_umsg_time;
+                appendTo += COMMA;
+                appendTo += g_umsg_full;
             } 
             else {
                 UnicodeString buffer;
-                result += g_umsg_date;
-                result += COMMA;
-                result += ((SimpleDateFormat*)fFormats[i])->toPattern(buffer);
+                appendTo += g_umsg_date;
+                appendTo += COMMA;
+                appendTo += ((SimpleDateFormat*)fFormats[i])->toPattern(buffer);
             }
             
             delete defaultDateTemplate;
@@ -645,18 +644,18 @@ MessageFormat::toPattern(UnicodeString& result) const
         } 
         else if (fFormats[i]->getDynamicClassID() == ChoiceFormat::getStaticClassID()) {
             UnicodeString buffer;
-            result += COMMA;
-            result += g_umsg_choice;
-            result += COMMA;
-            result += ((ChoiceFormat*)fFormats[i])->toPattern(buffer);
+            appendTo += COMMA;
+            appendTo += g_umsg_choice;
+            appendTo += COMMA;
+            appendTo += ((ChoiceFormat*)fFormats[i])->toPattern(buffer);
         } 
         else {
-            //result += ", unknown";
+            //appendTo += ", unknown";
         }
-        result += RIGHT_CURLY_BRACE;
+        appendTo += RIGHT_CURLY_BRACE;
   }
-  copyAndFixQuotes(fPattern, lastOffset, fPattern.length(), result);
-  return result;
+  copyAndFixQuotes(fPattern, lastOffset, fPattern.length(), appendTo);
+  return appendTo;
 }
  
 // -------------------------------------
@@ -761,26 +760,26 @@ MessageFormat::getFormats(int32_t& cnt) const
 UnicodeString&
 MessageFormat::format(const Formattable* source,
                       int32_t cnt, 
-                      UnicodeString& result, 
+                      UnicodeString& appendTo, 
                       FieldPosition& ignore, 
                       UErrorCode& success) const
 {
     if (U_FAILURE(success)) 
-        return result;
+        return appendTo;
     
-    return format(source, cnt, result, ignore, 0, success);
+    return format(source, cnt, appendTo, ignore, 0, success);
 }
  
 // -------------------------------------
 // Internally creates a MessageFormat instance based on the
 // pattern and formats the arguments Formattable array and 
-// copy into the result buffer.
+// copy into the appendTo buffer.
  
 UnicodeString&
 MessageFormat::format(  const UnicodeString& pattern,
                         const Formattable* arguments,
                         int32_t cnt,
-                        UnicodeString& result, 
+                        UnicodeString& appendTo, 
                         UErrorCode& success)
 {
     // {sfb} why does this use a local when so many other places use a static?
@@ -788,71 +787,70 @@ MessageFormat::format(  const UnicodeString& pattern,
     /* test for NULL */
     if (temp == 0) {
         success = U_MEMORY_ALLOCATION_ERROR;
-        return result;
+        return appendTo;
     }
     if (U_FAILURE(success)) 
-        return result;
+        return appendTo;
     FieldPosition ignore(0);
-    temp->format(arguments, cnt, result, ignore, success);
+    temp->format(arguments, cnt, appendTo, ignore, success);
     delete temp;
-    return result;
+    return appendTo;
 }
  
 // -------------------------------------
 // Formats the source Formattable object and copy into the 
-// result buffer.  The Formattable object must be an array
+// appendTo buffer.  The Formattable object must be an array
 // of Formattable instances, returns error otherwise.
  
 UnicodeString&
 MessageFormat::format(const Formattable& source, 
-                      UnicodeString& result, 
+                      UnicodeString& appendTo, 
                       FieldPosition& ignore, 
                       UErrorCode& success) const
 {
     int32_t cnt;
 
     if (U_FAILURE(success)) 
-        return result;
+        return appendTo;
     if (source.getType() != Formattable::kArray) {
         success = U_ILLEGAL_ARGUMENT_ERROR;
-        return result;
+        return appendTo;
     }
     const Formattable* tmpPtr = source.getArray(cnt);
     
-    return format(tmpPtr, cnt, result, ignore, 0, success);
+    return format(tmpPtr, cnt, appendTo, ignore, 0, success);
 }
  
 // -------------------------------------
-// Formats the arguments Formattable array and copy into the result buffer.
+// Formats the arguments Formattable array and copy into the appendTo buffer.
 // Ignore the FieldPosition result for error checking.
 
 UnicodeString&
 MessageFormat::format(const Formattable* arguments, 
                       int32_t cnt, 
-                      UnicodeString& result, 
+                      UnicodeString& appendTo, 
                       FieldPosition& status, 
                       int32_t recursionProtection,
                       UErrorCode& success) const 
 {
     if(/*arguments == NULL ||*/ cnt < 0) {
         success = U_ILLEGAL_ARGUMENT_ERROR;
-        return result;
+        return appendTo;
     }
     
     int32_t lastOffset = 0;
     for (int32_t i = 0; i <= fMaxOffset;++i) {
         // Append the prefix of current format element.
-        result.append(fPattern, lastOffset, fOffsets[i] - lastOffset);
+        appendTo.append(fPattern, lastOffset, fOffsets[i] - lastOffset);
         lastOffset = fOffsets[i];
         int32_t argumentNumber = fArgumentNumbers[i];
         // Checks the scope of the argument number.
         if (argumentNumber >= cnt) {
             /*success = U_ILLEGAL_ARGUMENT_ERROR;
-            return result;*/
-            result += LEFT_CURLY_BRACE;
-            UnicodeString temp;
-            result += itos(argumentNumber, temp);
-            result += RIGHT_CURLY_BRACE;
+            return appendTo;*/
+            appendTo += LEFT_CURLY_BRACE;
+            itos(argumentNumber, appendTo);
+            appendTo += RIGHT_CURLY_BRACE;
             continue;
         }
 
@@ -871,13 +869,13 @@ MessageFormat::format(const Formattable* arguments,
                 arg.indexOf(LEFT_CURLY_BRACE) >= 0
             ) {
                 MessageFormat temp(arg, fLocale, success);
-                temp.format(arguments, cnt, result, status, recursionProtection, success);
+                temp.format(arguments, cnt, appendTo, status, recursionProtection, success);
                 if (U_FAILURE(success)) { 
-                    return result; 
+                    return appendTo; 
                 }
             }
             else {
-                result += arg;
+                appendTo += arg;
             }
         }
         // If the obj data type is a number, use a NumberFormat instance.
@@ -886,41 +884,41 @@ MessageFormat::format(const Formattable* arguments,
             numTemplate = NumberFormat::createInstance(fLocale, success);
             if (numTemplate == NULL || U_FAILURE(success)) { 
                 delete numTemplate; 
-                return result; 
+                return appendTo; 
             }
             if (type == Formattable::kDouble) {
-                numTemplate->format(obj->getDouble(), result);
+                numTemplate->format(obj->getDouble(), appendTo);
             } else {
-                numTemplate->format(obj->getLong(), result);
+                numTemplate->format(obj->getLong(), appendTo);
             }
             delete numTemplate;
             if (U_FAILURE(success)) 
-                return result;
+                return appendTo;
         }
         // If the obj data type is a Date instance, use a DateFormat instance.
         else if (type == Formattable::kDate) {
             DateFormat *dateTemplate = NULL;
             dateTemplate = DateFormat::createDateTimeInstance(DateFormat::kShort, DateFormat::kShort, fLocale);
             if (dateTemplate == NULL) { 
-                return result; 
+                return appendTo; 
             }
-            dateTemplate->format(obj->getDate(), result);
+            dateTemplate->format(obj->getDate(), appendTo);
             delete dateTemplate;
         }
         else if (type == Formattable::kString) {
-            result += obj->getString();
+            appendTo += obj->getString();
         }
         else {
 #ifdef LIUDEBUG  
             cerr << "Unknown object of type:" << type << endl;
 #endif
             success = U_ILLEGAL_ARGUMENT_ERROR;
-            return result;
+            return appendTo;
         }
     }
     // Appends the rest of the pattern characters after the real last offset.
-    result.append(fPattern, lastOffset, 0x7fffffff);
-    return result;
+    appendTo.append(fPattern, lastOffset, 0x7fffffff);
+    return appendTo;
 }
 
 
@@ -983,8 +981,7 @@ MessageFormat::parse(const UnicodeString& source,
                 UnicodeString strValue = buffer;
                 UnicodeString temp(LEFT_CURLY_BRACE);
                 // {sfb} check this later
-                UnicodeString temp1;
-                temp += itos(fArgumentNumbers[i], temp1);
+                itos(fArgumentNumbers[i], temp);
                 temp += RIGHT_CURLY_BRACE;
                 if (strValue != temp) {
                     source.extract(sourceOffset,next - sourceOffset, buffer);
@@ -1164,7 +1161,7 @@ MessageFormat::stoi(const UnicodeString& string)
  */
 UnicodeString&
 MessageFormat::itos(int32_t i,
-                    UnicodeString& string)
+                    UnicodeString& appendTo)
 {
     /*
     UErrorCode status = U_ZERO_ERROR;
@@ -1184,8 +1181,8 @@ MessageFormat::itos(int32_t i,
     */
     UChar temp[10] = { '\0' };
     uprv_itou(temp,i,16,0);
-    string.append(temp);
-    return string;
+    appendTo.append(temp);
+    return appendTo;
 }
 
 // -------------------------------------
@@ -1375,36 +1372,36 @@ void
 MessageFormat::copyAndFixQuotes(const UnicodeString& source, 
                                 int32_t start, 
                                 int32_t end, 
-                                UnicodeString& target)
+                                UnicodeString& appendTo)
 {
     UBool gotLB = FALSE;
     
     for (int32_t i = start; i < end; ++i) {
         UChar ch = source[i];
         if (ch == LEFT_CURLY_BRACE) {
-            target += SINGLE_QUOTE;
-            target += LEFT_CURLY_BRACE;
-            target += SINGLE_QUOTE;
+            appendTo += SINGLE_QUOTE;
+            appendTo += LEFT_CURLY_BRACE;
+            appendTo += SINGLE_QUOTE;
             gotLB = TRUE;
         } 
         else if (ch == RIGHT_CURLY_BRACE) {
             if(gotLB) {
-                target += RIGHT_CURLY_BRACE;
+                appendTo += RIGHT_CURLY_BRACE;
                 gotLB = FALSE;
             }
             else {
                 // orig code.
-                target += SINGLE_QUOTE;
-                target += RIGHT_CURLY_BRACE;
-                target += SINGLE_QUOTE;
+                appendTo += SINGLE_QUOTE;
+                appendTo += RIGHT_CURLY_BRACE;
+                appendTo += SINGLE_QUOTE;
             }
         } 
         else if (ch == SINGLE_QUOTE) {
-            target += SINGLE_QUOTE;
-            target += SINGLE_QUOTE;
+            appendTo += SINGLE_QUOTE;
+            appendTo += SINGLE_QUOTE;
         } 
         else {
-            target += ch;
+            appendTo += ch;
         }
     }
 }

@@ -170,17 +170,17 @@ public:
      * object type is not a numeric type, then it returns a failing
      * UErrorCode.
      *
-     * @param obj           The object to format.
-     * @param toAppendTo    Where the text is to be appended.
-     * @param pos           On input: an alignment field, if desired.
-     *                      On output: the offsets of the alignment field.
-     * @param status        Output param filled with success/failure status.
-     * @return              The value passed in as toAppendTo (this allows chaining,
-     *                      as with UnicodeString::append())
+     * @param obj       The object to format.
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
+     * @param pos       On input: an alignment field, if desired.
+     *                  On output: the offsets of the alignment field.
+     * @param status    Output param filled with success/failure status.
+     * @return          Reference to 'appendTo' parameter.
      * @stable
      */
     virtual UnicodeString& format(const Formattable& obj,
-                                  UnicodeString& toAppendTo,
+                                  UnicodeString& appendTo,
                                   FieldPosition& pos,
                                   UErrorCode& status) const;
 
@@ -221,65 +221,68 @@ public:
      * pure virtual format() methods with the default FieldPosition.
      *
      * @param number    The value to be formatted.
-     * @param output    Output param with the formatted string.
-     * @return          A reference to 'output' param.
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
+     * @return          Reference to 'appendTo' parameter.
      * @stable
      */
     UnicodeString& format(  double number,
-                            UnicodeString& output) const;
+                            UnicodeString& appendTo) const;
 
     /**
      * Format a long number. These methods call the NumberFormat
      * pure virtual format() methods with the default FieldPosition.
      *
      * @param number    The value to be formatted.
-     * @param output    Output param with the formatted string.
-     * @return          A reference to 'output' param.
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
+     * @return          Reference to 'appendTo' parameter.
      * @stable
      */
     UnicodeString& format(  int32_t number,
-                            UnicodeString& output) const;
+                            UnicodeString& appendTo) const;
 
-   /**
-    * Format a double number. Concrete subclasses must implement
-    * these pure virtual methods.
-    *
-    * @param number     The value to be formatted.
-    * @param toAppendTo The string to append the formatted string to.
-    *                   This is an output parameter.
-    * @param pos        On input: an alignment field, if desired.
-    *                   On output: the offsets of the alignment field.
-    * @return           A reference to 'toAppendTo'.
-    * @stable
-    */
+    /**
+     * Format a double number. Concrete subclasses must implement
+     * these pure virtual methods.
+     *
+     * @param number    The value to be formatted.
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
+     * @param pos       On input: an alignment field, if desired.
+     *                  On output: the offsets of the alignment field.
+     * @return          Reference to 'appendTo' parameter.
+     * @stable
+     */
     virtual UnicodeString& format(double number,
-                                  UnicodeString& toAppendTo,
+                                  UnicodeString& appendTo,
                                   FieldPosition& pos) const = 0;
-   /**
-    * Format a long number. Concrete subclasses must implement
-    * these pure virtual methods.
-    *
-    * @param number     The value to be formatted.
-    * @param toAppendTo The string to append the formatted string to.
-    *                   This is an output parameter.
-    * @param pos        On input: an alignment field, if desired.
-    *                   On output: the offsets of the alignment field.
-    * @return           A reference to 'toAppendTo'.
-    * @stable
+    /**
+     * Format a long number. Concrete subclasses must implement
+     * these pure virtual methods.
+     *
+     * @param number    The value to be formatted.
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
+     * @param pos       On input: an alignment field, if desired.
+     *                  On output: the offsets of the alignment field.
+     * @return          Reference to 'appendTo' parameter.
+     * @stable
     */
     virtual UnicodeString& format(int32_t number,
-                                  UnicodeString& toAppendTo,
+                                  UnicodeString& appendTo,
                                   FieldPosition& pos) const = 0;
 
     /**
      * Redeclared Format method.
-     * @param obj      the object to be formatted.
-     * @param result   Output param with the formatted string. 
-     * @return         A reference to 'result'.
+     * @param obj       The object to be formatted.
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
+     * @return          Reference to 'appendTo' parameter.
      * @stable
      */
     UnicodeString& format(const Formattable& obj,
-                          UnicodeString& result,
+                          UnicodeString& appendTo,
                           UErrorCode& status) const;
 
    /**
@@ -620,9 +623,9 @@ NumberFormat::isParseIntegerOnly() const
 
 inline UnicodeString&
 NumberFormat::format(const Formattable& obj,
-                     UnicodeString& result,
+                     UnicodeString& appendTo,
                      UErrorCode& status) const {
-    return Format::format(obj, result, status);
+    return Format::format(obj, appendTo, status);
 }
 
 U_NAMESPACE_END

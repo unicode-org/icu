@@ -123,14 +123,14 @@ public:
      * Formats an object to produce a string.
      *
      * @param obj       The object to format.
-     * @param result    Output parameter which will be filled in with the
-     *                  formatted string.
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
      * @param status    Output parameter filled in with success or failure status.
-     * @return          Reference to 'result' parameter.
+     * @return          Reference to 'appendTo' parameter.
      * @stable
      */
     UnicodeString& format(const Formattable& obj,
-                          UnicodeString& result,
+                          UnicodeString& appendTo,
                           UErrorCode& status) const;
 
     /**
@@ -140,17 +140,17 @@ public:
      * object type it doesn't handle (e.g., if a numeric Formattable is passed
      * to a DateFormat object) then it returns a failing UErrorCode.
      *
-     * @param obj           The object to format.
-     * @param toAppendTo    Where the text is to be appended.
-     * @param pos           On input: an alignment field, if desired.
-     *                      On output: the offsets of the alignment field.
-     * @param status        Output param filled with success/failure status.
-     * @return              The value passed in as toAppendTo (this allows chaining,
-     *                      as with UnicodeString::append())
+     * @param obj       The object to format.
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
+     * @param pos       On input: an alignment field, if desired.
+     *                  On output: the offsets of the alignment field.
+     * @param status    Output param filled with success/failure status.
+     * @return          Reference to 'appendTo' parameter.
      * @stable
      */
     virtual UnicodeString& format(const Formattable& obj,
-                                  UnicodeString& toAppendTo,
+                                  UnicodeString& appendTo,
                                   FieldPosition& pos,
                                   UErrorCode& status) const = 0;
 

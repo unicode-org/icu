@@ -311,11 +311,12 @@ public:
 
     /**
      * Gets the pattern. See the class description.
-     * @param result    Output param which will receive the pattern.
-     * @return          A reference to 'result'.
+     * @param appendTo  Output parameter to receive the pattern.
+     *                  Result is appended to existing contents.
+     * @return          Reference to 'appendTo' parameter.
      * @stable
      */
-    virtual UnicodeString& toPattern(UnicodeString& result) const;
+    virtual UnicodeString& toPattern(UnicodeString& appendTo) const;
 
     /**
      * Sets formats to use on parameters.
@@ -383,14 +384,16 @@ public:
      *
      * @param source    An array of objects to be formatted & substituted.
      * @param count     the size of the array.
-     * @param result    Where text is appended.
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
      * @param ignore    No useful status is returned.
      * @param success   Output param set to success/failure code
+     * @return          Reference to 'appendTo' parameter.
      * @stable
      */
     UnicodeString& format(  const Formattable* source,
                             int32_t count,
-                            UnicodeString& result,
+                            UnicodeString& appendTo,
                             FieldPosition& ignore,
                             UErrorCode& success) const;
 
@@ -400,14 +403,16 @@ public:
      * @param pattern   the pattern.
      * @param source    An array of objects to be formatted & substituted.
      * @param count     the size of the array.
-     * @param result    Where text is appended.
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
      * @param success   Output param set to success/failure code
+     * @return          Reference to 'appendTo' parameter.
      * @stable
      */
     static UnicodeString& format(   const UnicodeString& pattern,
                                     const Formattable* arguments,
                                     int32_t count,
-                                    UnicodeString& result,
+                                    UnicodeString& appendTo,
                                     UErrorCode& success);
 
     /**
@@ -416,30 +421,31 @@ public:
      * object type is not of type kArray, then it returns a failing
      * UErrorCode.
      *
-     * @param obj           The object to format
-     * @param toAppendTo    Where the text is to be appended
-     * @param pos           On input: an alignment field, if desired.
-     *                      On output: the offsets of the alignment field.
-     * @param status        Output param filled with success/failure status.
-     * @return              The value passed in as toAppendTo (this allows chaining,
-     *                      as with UnicodeString::append())
+     * @param obj       The object to format
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
+     * @param pos       On input: an alignment field, if desired.
+     *                  On output: the offsets of the alignment field.
+     * @param status    Output param filled with success/failure status.
+     * @return          Reference to 'appendTo' parameter.
      * @stable
      */
     virtual UnicodeString& format(const Formattable& obj,
-                                  UnicodeString& toAppendTo,
+                                  UnicodeString& appendTo,
                                   FieldPosition& pos,
                                   UErrorCode& status) const;
 
     /**
      * Redeclared Format method.
-     * @param obj           The object to format
-     * @param result        Output param which will receive the formatted string
-     * @param status        Output param filled with success/failure status.
-     * @return              A reference to 'result'.
+     * @param obj       The object to format
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
+     * @param status    Output param filled with success/failure status.
+     * @return          Reference to 'appendTo' parameter.
      * @stable
      */
     UnicodeString& format(const Formattable& obj,
-                          UnicodeString& result,
+                          UnicodeString& appendTo,
                           UErrorCode& status) const;
 
     /**
@@ -596,19 +602,24 @@ private:
                             const UChar * const *list);
 
     /**
-     * Formats the array of arguments and copies the result into the result buffer,
-     * updates the field position.
-     * @param arguments the formattable objects array.
-     * @param cnt the array count.
-     * @param status field position status.
-     * @param recursionProtection Initially zero. Bits 0..9 are used to indicate
-     * that a parameter has already been seen, to avoid recursion.  Currently
-     * unused.
-     * @param success the error code status.
+     * Formats the array of arguments and copies the result into the
+     * result buffer, updates the field position.
+     *
+     * @param arguments The formattable objects array.
+     * @param cnt       The array count.
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
+     * @param status    Field position status.
+     * @param recursionProtection
+     *                  Initially zero. Bits 0..9 are used to indicate
+     *                  that a parameter has already been seen, to
+     *                  avoid recursion.  Currently unused.
+     * @param success   The error code status.
+     * @return          Reference to 'appendTo' parameter.
      */
     UnicodeString&  format( const Formattable* arguments,
                             int32_t cnt,
-                            UnicodeString& result,
+                            UnicodeString& appendTo,
                             FieldPosition& status,
                             int32_t recursionProtection,
                             UErrorCode& success) const;
@@ -638,9 +649,10 @@ private:
      * @param source
      * @param start the text offset to start the process of in the source string
      * @param end the text offset to end the process of in the source string
-     * @param target the result buffer
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
      */
-    static void copyAndFixQuotes(const UnicodeString& source, int32_t start, int32_t end, UnicodeString& target);
+    static void copyAndFixQuotes(const UnicodeString& appendTo, int32_t start, int32_t end, UnicodeString& target);
 
     /**
      * Converts a string to an integer value using a default NumberFormat object
@@ -655,11 +667,12 @@ private:
      * Converts an integer value to a string using a default NumberFormat object
      * which is static (shared by all MessageFormat instances).  This replaces
      * a call to wtoi().
-     * @param i the integer to format
-     * @param string the destination string
-     * @return a reference to string.
+     * @param i         The integer to format
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
+     * @return          Reference to 'appendTo' parameter.
      */
-    static UnicodeString& itos(int32_t i, UnicodeString& string);
+    static UnicodeString& itos(int32_t i, UnicodeString& appendTo);
 };
 
 inline UClassID
@@ -670,9 +683,9 @@ MessageFormat::getDynamicClassID() const
 
 inline UnicodeString&
 MessageFormat::format(const Formattable& obj,
-                      UnicodeString& result,
+                      UnicodeString& appendTo,
                       UErrorCode& status) const {
-    return Format::format(obj, result, status);
+    return Format::format(obj, appendTo, status);
 }
 U_NAMESPACE_END
 
