@@ -2329,7 +2329,7 @@ _MBCSSingleFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     int32_t *offsets;
 
     const uint16_t *table;
-    const uint8_t *p, *bytes;
+    const uint8_t *bytes;
 
     UChar32 c;
 
@@ -2423,11 +2423,9 @@ getTrail:
 
             /* convert the Unicode code point in c into codepage bytes */
             i=MBCS_STAGE_2_MULTIPLIER*(uint32_t)table[c>>10]+((c>>3)&0x7e);
-            p=bytes;
 
             /* MBCS_OUTPUT_1 */
-            p+=(16*(uint32_t)table[i+1]+(c&0xf));
-            value=*p;
+            value=bytes[16*(uint32_t)table[i+1]+(c&0xf)];
 
             /* is this code point assigned, or do we use fallbacks? */
             if( (table[i]&(1<<(c&0xf)))!=0 ||
@@ -2550,7 +2548,7 @@ _MBCSSingleFromBMPWithOffsets(UConverterFromUnicodeArgs *pArgs,
     int32_t *offsets;
 
     const uint16_t *table;
-    const uint8_t *p, *bytes;
+    const uint8_t *bytes;
 
     UChar32 c;
 
@@ -2599,39 +2597,41 @@ _MBCSSingleFromBMPWithOffsets(UConverterFromUnicodeArgs *pArgs,
          * a matched surrogate pair for a "surrogate code point".
          */
         c=*source++;
-        if(!UTF_IS_SURROGATE(c)) {
-            /* convert the Unicode code point in c into codepage bytes */
-            i=MBCS_STAGE_2_MULTIPLIER*(uint32_t)table[c>>10]+((c>>3)&0x7e);
-            p=bytes;
+        /*
+         * Do not immediately check for single surrogates:
+         * Assume that they are unassigned and check for them in that case.
+         * This speeds up the conversion of assigned characters.
+         */
+        /* convert the Unicode code point in c into codepage bytes */
+        i=MBCS_STAGE_2_MULTIPLIER*(uint32_t)table[c>>10]+((c>>3)&0x7e);
 
-            /* MBCS_OUTPUT_1 */
-            p+=(16*(uint32_t)table[i+1]+(c&0xf));
-            value=*p;
+        /* MBCS_OUTPUT_1 */
+        value=bytes[16*(uint32_t)table[i+1]+(c&0xf)];
 
-            /* is this code point assigned, or do we use fallbacks? */
-            if( (table[i]&(1<<(c&0xf)))!=0 ||
-                UCNV_FROM_U_USE_FALLBACK(cnv, c) && (value!=0 || c==0)
-            ) {
-                /* assigned, write the output character bytes from value and length */
-                /* length==1 */
-                /* this is easy because we know that there is enough space */
-                *target++=value;
-                --targetCapacity;
+        /* is this code point assigned, or do we use fallbacks? */
+        if( (table[i]&(1<<(c&0xf)))!=0 ||
+            UCNV_FROM_U_USE_FALLBACK(cnv, c) && (value!=0 || c==0)
+        ) {
+            /* assigned, write the output character bytes from value and length */
+            /* length==1 */
+            /* this is easy because we know that there is enough space */
+            *target++=value;
+            --targetCapacity;
 
-                /* normal end of conversion: prepare for a new character */
-                c=0;
-                continue;
-            } else { /* unassigned */
-                /*
-                 * We allow a 0 byte output if the Unicode code point is
-                 * U+0000 and also if the "assigned" bit is set for this entry.
-                 * There is no way with this data structure for fallback output
-                 * for other than U+0000 to be a zero byte.
-                 */
-                /* callback(unassigned) */
-                reason=UCNV_UNASSIGNED;
-                *pErrorCode=U_INVALID_CHAR_FOUND;
-            }
+            /* normal end of conversion: prepare for a new character */
+            c=0;
+            continue;
+        } else if(!UTF_IS_SURROGATE(c)) {
+            /* normal, unassigned BMP character */
+            /*
+             * We allow a 0 byte output if the Unicode code point is
+             * U+0000 and also if the "assigned" bit is set for this entry.
+             * There is no way with this data structure for fallback output
+             * for other than U+0000 to be a zero byte.
+             */
+            /* callback(unassigned) */
+            reason=UCNV_UNASSIGNED;
+            *pErrorCode=U_INVALID_CHAR_FOUND;
         } else if(UTF_IS_SURROGATE_FIRST(c)) {
 getTrail:
             if(source<sourceLimit) {
@@ -2907,8 +2907,7 @@ U_CFUNC int32_t
 _MBCSSingleFromUChar32(UConverterSharedData *sharedData,
                        UChar32 c,
                        UBool useFallback) {
-    const uint16_t *table=sharedData->table->mbcs.fromUnicodeTable;
-    const uint8_t *p;
+    const uint16_t *table;
     uint32_t i;
     int32_t value;
 
@@ -2918,13 +2917,12 @@ _MBCSSingleFromUChar32(UConverterSharedData *sharedData,
     }
 
     /* convert the Unicode code point in c into codepage bytes (same as in _MBCSFromUnicodeWithOffsets) */
+    table=sharedData->table->mbcs.fromUnicodeTable;
     i=MBCS_STAGE_2_MULTIPLIER*(uint32_t)table[c>>10]+((c>>3)&0x7e);
-    p=sharedData->table->mbcs.fromUnicodeBytes;
 
     /* get the byte for the output */
     /* MBCS_OUTPUT_1 */
-    p+=(16*(uint32_t)table[i+1]+(c&0xf));
-    value=*p;
+    value=sharedData->table->mbcs.fromUnicodeBytes[16*(uint32_t)table[i+1]+(c&0xf)];
 
     /* is this code point assigned, or do we use fallbacks? */
     if( (table[i]&(1<<(c&0xf)))!=0 ||
