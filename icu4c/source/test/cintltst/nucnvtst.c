@@ -55,6 +55,7 @@ static void TestEBCDIC_STATEFUL(void);
 static void TestGB18030(void);
 static void TestLMBCS(void);
 static void TestJitterbug255(void);
+static void TestJitterbug792(void);
 static void TestEBCDICUS4XML(void);
 
 #define NEW_MAX_BUFFER 999
@@ -200,6 +201,7 @@ void addTestNewConvert(TestNode** root)
    addTest(root, &TestGB18030, "tsconv/nucnvtst/TestGB18030");
    addTest(root, &TestLMBCS, "tsconv/nucnvtst/TestLMBCS");
    addTest(root, &TestJitterbug255, "tsconv/nucnvtst/TestJitterbug255");
+   addTest(root, &TestJitterbug792, "tsconv/nucnvtst/TestJitterbug792");
    addTest(root, &TestEBCDICUS4XML, "tsconv/nucnvtst/TestEBCDICUS4XML");
 }
 
@@ -3759,6 +3761,65 @@ static void TestJitterbug255()
     ucnv_close(cnv);
 }
 
+
+static void TestJitterbug792()
+{
+#define U_NUM_792_CONVERTERS 3
+#define U_MAX_792_TEST_SIZE  21
+    /* FOR ICU 1.8 we have patched the UCM files. 
+      This test is to make sure there are no accidental regressions to the old mappings 
+      Some day the patch may be unnecessary, after the IBM repository catches up.
+    */
+    const char * ConverterNames [U_NUM_792_CONVERTERS] =
+    {
+    "ibm-5351", 
+    "ibm-5352", 
+    "ibm-5353"
+    };
+    const uint16_t inChars [U_NUM_792_CONVERTERS][U_MAX_792_TEST_SIZE] = 
+    {
+    {0x00A1, 0x00D7, 0x00B8, 0x00F7, 0x00BF, 0x05F3, 0x05F4,0x000},
+    {0x0679, 0xFB66, 0xFB68, 0x0688, 0xFB88, 0x06A9, 0xFB8E, 0xFB90,0x0691 ,0xFB8C,0x06BA, 0xFB9E,0x06BE, 0xFBAA,0xFBAC,0x06C1, 0xFBA6, 0xFBA8, 0x06D2, 0xFBAE, 0x000},
+    {0x00A8, 0x02C7, 0x00B8, 0x00AF, 0x02DB, 0x00B4, 0x02D9, 0x000}
+    };
+    const uint16_t * pInChars;
+    
+    const uint8_t outBytes [U_NUM_792_CONVERTERS][U_MAX_792_TEST_SIZE] =
+    {
+    {0xA1, 0xAA, 0xB8, 0xBA, 0xBF, 0xD7, 0xD8, 0x00},
+    {0x8A, 0x8A, 0x8A, 0x8F, 0x8F, 0x98, 0x98,0x98,0x9A,0x9A,0x9F,0x9F,0xAA,0xAA,0xAA,0xC0,0xC0,0xC0,0xFF,0xFF, 0x00},
+    {0x8D, 0x8E, 0x8F, 0x9D, 0x9E, 0xB4, 0xFF, 0x00}
+    };
+    uint8_t outBuffer [U_MAX_792_TEST_SIZE];
+    UErrorCode status = U_ZERO_ERROR;
+    uint8_t * pOutBuffer;
+    UConverter *cnv = 0;
+    int i;
+
+    for (i=0; i<U_NUM_792_CONVERTERS; i++)
+    {
+        cnv = ucnv_open(ConverterNames[i], &status); 
+        if (U_FAILURE(status) || cnv == 0) {
+            log_err("Failed to open the converter for %s\n", ConverterNames[i]);
+            return;
+        }
+        ucnv_setFallback(cnv, TRUE);
+        pOutBuffer = outBuffer;
+        pInChars = inChars[i];
+        ucnv_fromUnicode(cnv, 
+                &pOutBuffer, outBuffer + sizeof(outBuffer), 
+                (const UChar**)&pInChars, pInChars + u_strlen(pInChars) +1, 
+                NULL, TRUE, &status);
+        
+        if (U_FAILURE(status)) {
+            log_err("Failed to convert correctly for %s\n", ConverterNames[i]);
+        }
+        if (strcmp(outBuffer, outBytes[i])){
+            log_err("Failed to correctly convert buffer for %s\n", ConverterNames[i]);
+        }
+        ucnv_close(cnv);
+    }
+}
 static void TestEBCDICUS4XML()
 {
     UChar unicodes_x[] = {0x0000, 0x0000, 0x0000, 0x0000};
