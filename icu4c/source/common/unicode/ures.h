@@ -566,7 +566,9 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getByKey(const UResourceBundle *resourceB
  */
 U_CAPI const UChar* U_EXPORT2 ures_getStringByKey(const UResourceBundle *resB, const char* key, int32_t* len, UErrorCode *status);
 
-
+U_CFUNC const char* ures_getName(const UResourceBundle* resB);
+U_CFUNC const char* ures_getPath(const UResourceBundle* resB);
+U_CFUNC const char* ures_getTag(const UResourceBundle* resB);
 
 #endif /*_URES*/
 /*eof*/
