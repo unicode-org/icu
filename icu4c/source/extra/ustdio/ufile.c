@@ -120,9 +120,10 @@ ufile_lookup_codepage(const char *locale)
   return 0;
 }
 
-UBool hasICUData() {
+UBool hasICUData(const char *cp) {
     UErrorCode status = U_ZERO_ERROR;
     UConverter *cnv = NULL;
+#if 0
     UResourceBundle *r = NULL;
     
     r = ures_open(NULL, NULL, &status);
@@ -131,8 +132,8 @@ UBool hasICUData() {
     } else {
         ures_close(r);
     }
-
-    cnv = ucnv_open(NULL, &status);
+#endif
+    cnv = ucnv_open(cp, &status);
     if(cnv == NULL) {
         return FALSE;
     } else {
@@ -224,7 +225,7 @@ u_finit(FILE        *f,
   result->fConverter = NULL;
   result->fBundle = NULL;
 
-  if(hasICUData() == TRUE) {
+  if(hasICUData(codepage) == TRUE) {
       /* if locale is 0, use the default */
       if(locale == 0)
         locale = uloc_getDefault();
@@ -243,6 +244,9 @@ u_finit(FILE        *f,
   /* if the codepage is 0, use the default for the locale */
   if(codepage == 0) {
     codepage = ufile_lookup_codepage(locale); 
+
+
+
     /* if the codepage is still 0, the default codepage will be used */
     if(codepage == 0) {
         result->fConverter = ucnv_open(0, &status);
