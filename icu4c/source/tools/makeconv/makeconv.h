@@ -55,8 +55,11 @@ struct NewConverter {
 };
 
 /* object constructors */
+#if 0
+/* SBCS replaced by MBCS 2000dec20 */
 U_CFUNC NewConverter *
 SBCSOpen(void);
+#endif
 
 U_CFUNC NewConverter *
 DBCSOpen(void);

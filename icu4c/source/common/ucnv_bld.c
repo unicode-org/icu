@@ -23,7 +23,6 @@
 #include "ucnv_io.h"
 #include "uhash.h"
 #include "ucmp16.h"
-#include "ucmp8.h"
 #include "ucnv_bld.h"
 #include "unicode/ucnv_err.h"
 #include "ucnv_cnv.h"
