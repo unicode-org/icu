@@ -394,13 +394,13 @@ typedef enum UErrorCode {
     U_ZERO_ERROR              =  0,     /**< No error, no warning. */
 
     U_ILLEGAL_ARGUMENT_ERROR  =  1,     /**< Start of codes indicating failure */
-    U_MISSING_RESOURCE_ERROR  =  2,
-    U_INVALID_FORMAT_ERROR    =  3,
-    U_FILE_ACCESS_ERROR       =  4,
+    U_MISSING_RESOURCE_ERROR  =  2,     /**< The requested resource cannot be found */
+    U_INVALID_FORMAT_ERROR    =  3,     /**< Data format is not what is expected */
+    U_FILE_ACCESS_ERROR       =  4,     /**< The requested file cannot be found */
     U_INTERNAL_PROGRAM_ERROR  =  5,     /**< Indicates a bug in the library code */
-    U_MESSAGE_PARSE_ERROR     =  6,
+    U_MESSAGE_PARSE_ERROR     =  6,     /**< Unable to parse a message (message format) */
     U_MEMORY_ALLOCATION_ERROR =  7,     /**< Memory allocation error */
-    U_INDEX_OUTOFBOUNDS_ERROR =  8,
+    U_INDEX_OUTOFBOUNDS_ERROR =  8,     /**< Trying to access the index that is out of bounds */
     U_PARSE_ERROR             =  9,     /**< Equivalent to Java ParseException */
     U_INVALID_CHAR_FOUND      = 10,     /**< In the Character conversion routines: Invalid character or sequence was encountered. In other APIs: Invalid character or code point name. */
     U_TRUNCATED_CHAR_FOUND    = 11,     /**< In the Character conversion routines: More bytes are required to complete the conversion successfully */
