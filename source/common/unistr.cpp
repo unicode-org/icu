@@ -276,7 +276,7 @@ UnicodeString::UnicodeString(UChar *buff,
     fCapacity = US_STACKBUF_SIZE;
     fArray = fStackBuffer;
     fFlags = kShortString;
-  } else if(buffLength < -1 || buffLength > buffCapacity) {
+  } else if(buffLength < -1 || buffCapacity < 0 || buffLength > buffCapacity) {
     setToBogus();
   } else if(buffLength == -1) {
     // fLength = u_strlen(buff); but do not look beyond buffCapacity
@@ -1045,9 +1045,16 @@ UnicodeString::setTo(UChar *buffer,
     return *this;
   }
 
-  if(buffLength < 0 || buffLength > buffCapacity) {
+  if(buffLength < -1 || buffCapacity < 0 || buffLength > buffCapacity) {
     setToBogus();
     return *this;
+  } else if(buffLength == -1) {
+    // buffLength = u_strlen(buff); but do not look beyond buffCapacity
+    const UChar *p = buffer, *limit = buffer + buffCapacity;
+    while(p != limit && *p != 0) {
+      ++p;
+    }
+    buffLength = (int32_t)(p - buffer);
   }
 
   releaseArray();
@@ -1662,8 +1669,11 @@ UnicodeString::doCodepageCreate(const char *codepageData,
                 const char *codepage)
 {
   // if there's nothing to convert, do nothing
-  if(codepageData == 0 || dataLength <= 0) {
+  if(codepageData == 0 || dataLength == 0 || dataLength < -1) {
     return;
+  }
+  if(dataLength == -1) {
+    dataLength = uprv_strlen(codepageData);
   }
 
   UErrorCode status = U_ZERO_ERROR;
