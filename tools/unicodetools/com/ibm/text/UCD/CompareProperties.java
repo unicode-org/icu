@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/CompareProperties.java,v $
-* $Date: 2003/05/14 22:31:38 $
-* $Revision: 1.1 $
+* $Date: 2003/07/21 15:50:07 $
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -179,7 +179,7 @@ public class CompareProperties implements UCD_Types {
 	        }
 	        UnicodeProperty up = UnifiedBinaryProperty.make(i, Default.ucd);
 	        if (up == null) continue;
-			if (up.getValueType() < BINARY) {
+			if (up.getValueType() < BINARY_PROP) {
 				System.out.println("\tSkipping " + up.getName() + "; value varies");
 				continue;
 			}
@@ -401,7 +401,7 @@ public class CompareProperties implements UCD_Types {
                 System.out.println("Skipping " + upi.getName() + "; not standard");
                 continue;
             }
-            if (upi.getValueType() < UCD_Types.BINARY) {
+            if (upi.getValueType() < UCD_Types.BINARY_PROP) {
                 System.out.println("Skipping " + upi.getName() + "; value varies");
                 continue;
             }
@@ -422,7 +422,7 @@ public class CompareProperties implements UCD_Types {
                 UnicodeProperty upj = UnifiedBinaryProperty.make(j, Default.ucd);
                 if (upj == null) continue;
                 if (!upj.isStandard()) continue;
-                if (upj.getValueType() < UCD_Types.BINARY) continue;
+                if (upj.getValueType() < UCD_Types.BINARY_PROP) continue;
                 
     
                 if ((j >> 8) != last) {

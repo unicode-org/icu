@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/VerifyUCD.java,v $
-* $Date: 2003/03/12 16:01:26 $
-* $Revision: 1.21 $
+* $Date: 2003/07/21 15:50:05 $
+* $Revision: 1.22 $
 *
 *******************************************************************************
 */
@@ -920,7 +920,7 @@ can help you narrow these down.
             
             int ccc = Default.ucd.getCombiningClass(cp);
             
-            for (byte style = FOLD; style < CASE_LIMIT; ++style) {
+            for (byte style = FOLD; style < LIMIT_CASE; ++style) {
                 
                 String fold_NFD = Default.nfd.normalize(Default.ucd.getCase(realTest, FULL, style));
                 String NFD_fold = Default.ucd.getCase(Default.nfd.normalize(realTest), FULL, style);
@@ -2246,7 +2246,7 @@ E0020-E007F; [TAGGING CHARACTERS]
                 check(i, Default.ucd.getNumericType(i), Default.ucd.getNumericType(j), UCD_Names.NT, "NumericType");
 
                 if (false) {
-                    for (byte k = LOWER; k <= FOLD; ++k) {
+                    for (byte k = LOWER; k < LIMIT_CASE; ++k) {
                         check(i, Default.ucd.getCase(i, SIMPLE, k), Default.ucd.getCase(j, SIMPLE, k), "Simple("+k+")");
                         check(i, Default.ucd.getCase(i, FULL, k), Default.ucd.getCase(j, FULL, k), "Full("+k+")");
                     }

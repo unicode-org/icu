@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateData.java,v $
-* $Date: 2003/05/02 21:46:33 $
-* $Revision: 1.28 $
+* $Date: 2003/07/21 15:50:06 $
+* $Revision: 1.29 $
 *
 *******************************************************************************
 */
@@ -350,33 +350,30 @@ public class GenerateData implements UCD_Types {
         Set sorted = new TreeSet(java.text.Collator.getInstance());
         Set accumulation = new TreeSet(java.text.Collator.getInstance());
         
-        /*
-        BufferedReader blocks = Utility.openUnicodeFile("Blocks", Default.ucd.getVersion());
-        String[] parts = new String[10];
-        while (true) {
-            String line = blocks.readLine();
-            if (line == null) break;
-            int commentPos = line.indexOf('#');
-            if (commentPos >= 0) line = line.substring(0,commentPos);
-            line = line.trim();
-            if (line.length() == 0) continue;
-            int count = Utility.split(line,';',parts);
-            if (count != 2) System.out.println("Whow!");
-            value = Utility.getUnskeleton(parts[1].trim(), true);
-            valueAbb = "n/a";
-            addLine(sorted, "blk; " + valueAbb + spacing + "; " + value);
-            checkDuplicate(duplicates, accumulation, value, "Block=" + value);
-        }
-        blocks.close();
-        */
-        
-        for (int k = 0; k < UCD_Names.NON_ENUMERATED.length; ++k) {
-            propAbb = Utility.getUnskeleton(UCD_Names.NON_ENUMERATED[k][0], false);
-            prop = Utility.getUnskeleton(UCD_Names.NON_ENUMERATED[k][1], true);
-            addLine(sorted, "AA", propAbb, prop);
+        for (int k = 0; k < UCD_Names.NON_ENUMERATED_NAMES.length; ++k) {
+            propAbb = Utility.getUnskeleton(UCD_Names.NON_ENUMERATED_NAMES[k][0], false);
+            prop = Utility.getUnskeleton(UCD_Names.NON_ENUMERATED_NAMES[k][1], true);
+            
+            byte type = STRING_PROP;
+            if (propAbb.equals("nv")) {
+                type = NUMERIC_PROP;
+            } else if (propAbb.equals("age")) {
+                type = CATALOG_PROP;
+            } else if (propAbb.equals("blk")) {
+                type = CATALOG_PROP;
+            } else if (propAbb.equals("na")) {
+                type = DESCRIPTIVE_PROP;
+            } else if (propAbb.equals("na1")) {
+                type = DESCRIPTIVE_PROP;
+            } else if (propAbb.equals("isc")) {
+                type = DESCRIPTIVE_PROP;
+            }
+            addLine(sorted, UCD_Names.PROP_TYPE_NAMES[type][1], propAbb, prop);
             checkDuplicate(duplicates, accumulation, propAbb, prop);
             if (!prop.equals(propAbb)) checkDuplicate(duplicates, accumulation, prop, prop);
         }
+        addLine(sorted, UCD_Names.PROP_TYPE_NAMES[CATALOG_PROP][1], "URS", "Unicode_Radical_Stroke");
+        // TODO: merge above
  
         for (int k = 0; k < UCD_Names.SUPER_CATEGORIES.length; ++k) {
             valueAbb = Utility.getUnskeleton(UCD_Names.SUPER_CATEGORIES[k][0], false);
@@ -385,8 +382,6 @@ public class GenerateData implements UCD_Types {
             checkDuplicate(duplicates, accumulation, value, "General_Category=" + value);
             if (!value.equals(valueAbb)) checkDuplicate(duplicates, accumulation, valueAbb, "General_Category=" + value);
         }
-        
-        addLine(sorted, "AA", "URS", "Unicode_Radical_Stroke");
         
         /*
         addLine(sorted, "xx; T         ; True");
@@ -428,16 +423,18 @@ public class GenerateData implements UCD_Types {
                 }
                 propAbb = Utility.getUnskeleton(up.getProperty(SHORT), false);
                 prop = Utility.getUnskeleton(up.getProperty(LONG), true);
-                addLine(sorted, type != DERIVED && type != BINARY_PROPERTIES ? "BB" 
-                    : up.getValueType() == NON_ENUMERATED ? "AA" 
-                    : up.getValueType() == ENUMERATED ? "BB"
-                    : "ZZ", 
+                addLine(sorted, 
+                    type == SCRIPT
+                    ? UCD_Names.PROP_TYPE_NAMES[CATALOG_PROP][1]
+                    : type != DERIVED && type != BINARY_PROPERTIES 
+                    ? UCD_Names.PROP_TYPE_NAMES[ENUMERATED_PROP][1] 
+                    : UCD_Names.PROP_TYPE_NAMES[up.getValueType()][1], 
                     propAbb, prop);
                 checkDuplicate(duplicates, accumulation, propAbb, prop);
                 if (!prop.equals(propAbb)) checkDuplicate(duplicates, accumulation, prop, prop);
             }
             
-            if (up.getValueType() < BINARY) continue;
+            if (up.getValueType() < BINARY_PROP) continue;
             value = up.getValue(LONG);
             if (value.length() == 0) value = "none";
             else if (value.equals("<unused>")) continue;
@@ -493,7 +490,7 @@ public class GenerateData implements UCD_Types {
             /*
             if (type == BINARY_PROPERTIES || type == DERIVED) {
                 //if (value.equals(YN_TABLE_LONG[1])) continue;
-                addLine(sorted, "ZZ", valueAbb, value);
+                addLine(sorted, PROP_TYPE_NAMES[BINARY][1], valueAbb, value);
                 checkDuplicate(duplicates, accumulation, value, value);
                 if (!value.equalsIgnoreCase(valueAbb)) checkDuplicate(duplicates, accumulation, valueAbb, value);
                 continue;
@@ -596,9 +593,17 @@ public class GenerateData implements UCD_Types {
             this.status = status;
         }
         
+        public byte getType (String c) {
+            for (byte i = 0; i <= BINARY_PROP; ++i) {
+                if (c.startsWith(UCD_Names.PROP_TYPE_NAMES[i][1])) return i;
+            }
+            return UNKNOWN_PROP;
+        }
+        
         public boolean filter(Object current) {
             String c = current.toString();
-            if (c.startsWith("AA") || c.startsWith("BB") || c.startsWith("ZZ")) return status;
+            byte type = getType(c);
+            if (type != UNKNOWN_PROP) return status;
             return !status;
         }
         
@@ -612,9 +617,8 @@ public class GenerateData implements UCD_Types {
             if (!c.substring(0,2).equals(o.substring(0,2))) {
                 sep = "\r\n";
                 if (status) {
-                    if (c.startsWith("AA")) sep = sep + HORIZONTAL_LINE + sep + "# Non-enumerated Properties" + sep + HORIZONTAL_LINE + sep;
-                    if (c.startsWith("BB")) sep = sep + HORIZONTAL_LINE + sep + "# Enumerated Non-Binary Properties" + sep + HORIZONTAL_LINE + sep;
-                    if (c.startsWith("ZZ")) sep = sep + HORIZONTAL_LINE + sep + "# Binary Properties" + sep + HORIZONTAL_LINE + sep;
+                    byte type = getType(c);
+                    sep = sep + HORIZONTAL_LINE + sep + "# " + UCD_Names.PROP_TYPE_NAMES[type][0] + " Properties" + sep + HORIZONTAL_LINE + sep;
                 }
             }
             if (status) {

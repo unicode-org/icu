@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UData.java,v $
-* $Date: 2003/03/15 02:36:48 $
-* $Revision: 1.8 $
+* $Date: 2003/07/21 15:50:05 $
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
@@ -33,7 +33,7 @@ class UData implements UCD_Types {
 
     int codePoint = -1;
     double numericValue = Double.NaN;
-    int binaryProperties; // bidiMirroring, compositionExclusions, PropList
+    long binaryProperties; // bidiMirroring, compositionExclusions, PropList
 
     byte generalCategory = Cn;
     byte combiningClass = 0;
@@ -224,9 +224,9 @@ class UData implements UCD_Types {
         }
 
         //String bp = "";
-        int bprops = binaryProperties;
+        long bprops = binaryProperties;
         for (int i = 0; i < LIMIT_BINARY_PROPERTIES; ++i) {
-            if ((bprops & (1<<i)) != 0) result.append(UCD_Names.BP[i]).append("='T' ");
+            if ((bprops & (1L<<i)) != 0) result.append(UCD_Names.BP[i]).append("='T' ");
         }
         if (lastPos != result.length()) {
             result.append("\r\n");
@@ -266,7 +266,7 @@ class UData implements UCD_Types {
         writeString(os, bidiMirror);
 
         os.writeDouble(numericValue);
-        os.writeInt(binaryProperties);
+        os.writeLong(binaryProperties);
 
         os.writeByte(generalCategory);
         os.writeByte(combiningClass);
@@ -298,7 +298,7 @@ class UData implements UCD_Types {
         bidiMirror = readString(is);
 
         numericValue = is.readDouble();
-        binaryProperties = is.readInt();
+        binaryProperties = is.readLong();
 
         generalCategory = is.readByte();
         combiningClass = is.readByte();

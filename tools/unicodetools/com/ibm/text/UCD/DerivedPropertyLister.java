@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/DerivedPropertyLister.java,v $
-* $Date: 2002/03/20 00:21:43 $
-* $Revision: 1.10 $
+* $Date: 2003/07/21 15:50:06 $
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */
@@ -34,7 +34,7 @@ final class DerivedPropertyLister extends PropertyLister {
         this.ucdData = ucd;
         // this.dprop = new DerivedProperty(ucd);
         uprop = DerivedProperty.make(propMask, ucd);
-        varies = uprop.getValueType() < BINARY;
+        varies = uprop.getValueType() < BINARY_PROP;
 
         width = super.minPropertyWidth();
         switch (propMask) {

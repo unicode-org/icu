@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/ConvertUCD.java,v $
-* $Date: 2003/03/12 16:01:26 $
-* $Revision: 1.11 $
+* $Date: 2003/07/21 15:50:06 $
+* $Revision: 1.12 $
 *
 *******************************************************************************
 */
@@ -701,7 +701,7 @@ public final class ConvertUCD implements UCD_Types {
 
     static void setBinaryProperty(int cp, int binProp) {
         UData charEntry = getEntry(cp);
-        charEntry.binaryProperties |= (1 << binProp);
+        charEntry.binaryProperties |= (1L << binProp);
     }
 
     static void appendCharProperties(int cp, String key) {
@@ -824,7 +824,7 @@ public final class ConvertUCD implements UCD_Types {
                 uData.specialCasing += fieldValue;
 
             } else if (fieldName.equals("xp")) {
-                uData.binaryProperties |= 1 << Utility.lookup(fieldValue, UCD_Names.BP, true);
+                uData.binaryProperties |= 1L << Utility.lookup(fieldValue, UCD_Names.BP, true);
                 //UCD_Names.BP_OLD
 
             } else if (fieldName.equals("gc")) {
@@ -866,7 +866,7 @@ public final class ConvertUCD implements UCD_Types {
             } else if (fieldName.equals("cc")) {
                 uData.combiningClass = (byte)Utility.intFrom(fieldValue);
             } else if (fieldName.equals("bp")) {
-                uData.binaryProperties = (byte)Utility.intFrom(fieldValue);
+                uData.binaryProperties = (byte)Utility.longFrom(fieldValue);
             } else {
                 throw new IllegalArgumentException("Unknown fieldName");
             }
