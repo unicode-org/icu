@@ -21,7 +21,7 @@
 
 U_NAMESPACE_BEGIN
 
-const char RuleBasedTransliterator::fgClassID = 0; // Value is irrelevant
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(RuleBasedTransliterator)
 
 void RuleBasedTransliterator::_construct(const UnicodeString& rules,
                                          UTransDirection direction,
@@ -47,6 +47,88 @@ void RuleBasedTransliterator::_construct(const UnicodeString& rules,
 
     data = parser.orphanData();
     setMaximumContextLength(data->ruleSet.getMaximumContextLength());
+}
+
+/**
+ * Constructs a new transliterator from the given rules.
+ * @param id            the id for the transliterator.
+ * @param rules         rules, separated by ';'
+ * @param direction     either FORWARD or REVERSE.
+ * @param adoptedFilter the filter for this transliterator.
+ * @param parseError    Struct to recieve information on position 
+ *                      of error if an error is encountered
+ * @param status        Output param set to success/failure code.
+ * @exception IllegalArgumentException if rules are malformed
+ * or direction is invalid.
+ */
+RuleBasedTransliterator::RuleBasedTransliterator(
+                            const UnicodeString& id,
+                            const UnicodeString& rules,
+                            UTransDirection direction,
+                            UnicodeFilter* adoptedFilter,
+                            UParseError& parseError,
+                            UErrorCode& status) :
+    Transliterator(id, adoptedFilter) {
+    _construct(rules, direction,parseError,status);
+}
+
+/**
+ * Constructs a new transliterator from the given rules.
+ * @param id            the id for the transliterator.
+ * @param rules         rules, separated by ';'
+ * @param direction     either FORWARD or REVERSE.
+ * @param adoptedFilter the filter for this transliterator.
+ * @param status        Output param set to success/failure code.
+ * @exception IllegalArgumentException if rules are malformed
+ * or direction is invalid.
+ */
+RuleBasedTransliterator::RuleBasedTransliterator(
+                            const UnicodeString& id,
+                            const UnicodeString& rules,
+                            UTransDirection direction,
+                            UnicodeFilter* adoptedFilter,
+                            UErrorCode& status) :
+    Transliterator(id, adoptedFilter) {
+    UParseError parseError;
+    _construct(rules, direction,parseError, status);
+}
+
+/**
+ * Covenience constructor with no filter.
+ */
+RuleBasedTransliterator::RuleBasedTransliterator(
+                            const UnicodeString& id,
+                            const UnicodeString& rules,
+                            UTransDirection direction,
+                            UErrorCode& status) :
+    Transliterator(id, 0) {
+    UParseError parseError;
+    _construct(rules, direction,parseError, status);
+}
+
+/**
+ * Covenience constructor with no filter and FORWARD direction.
+ */
+RuleBasedTransliterator::RuleBasedTransliterator(
+                            const UnicodeString& id,
+                            const UnicodeString& rules,
+                            UErrorCode& status) :
+    Transliterator(id, 0) {
+    UParseError parseError;
+    _construct(rules, UTRANS_FORWARD, parseError, status);
+}
+
+/**
+ * Covenience constructor with FORWARD direction.
+ */
+RuleBasedTransliterator::RuleBasedTransliterator(
+                            const UnicodeString& id,
+                            const UnicodeString& rules,
+                            UnicodeFilter* adoptedFilter,
+                            UErrorCode& status) :
+    Transliterator(id, adoptedFilter) {
+    UParseError parseError;
+    _construct(rules, UTRANS_FORWARD,parseError, status);
 }
 
 RuleBasedTransliterator::RuleBasedTransliterator(const UnicodeString& id,
