@@ -853,7 +853,7 @@ ucnv_io_getDefaultConverterName() {
                 name = "US-ASCII";
                 /* there is no 'algorithmic' converter for EBCDIC */
 #elif defined(OS390)
-                name = "ibm-1047-s390";
+                name = "ibm-1047" UCNV_SWAP_LFNL_OPTION_STRING;
 #else
                 name = "ibm-37";
 #endif
