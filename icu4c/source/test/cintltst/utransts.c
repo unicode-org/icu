@@ -27,6 +27,7 @@ static void TestOpenInverse(void);
 static void TestClone(void);
 static void TestRegisterUnregister(void);
 static void TestExtractBetween(void);
+static void TestUnicodeIDs(void);
 
 static void _expectRules(const char*, const char*, const char*);
 static void _expect(const UTransliterator* trans, const char* cfrom, const char* cto);
@@ -43,6 +44,7 @@ addUTransTest(TestNode** root) {
     TEST(TestClone);
     TEST(TestRegisterUnregister);
     TEST(TestExtractBetween);
+    TEST(TestUnicodeIDs);
 }
 
 /*------------------------------------------------------------------
