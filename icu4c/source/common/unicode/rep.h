@@ -203,7 +203,16 @@ protected:
      */
     Replaceable();
 
-    Replaceable &Replaceable::operator=(const Replaceable &); // not implemented
+    /*
+     * Assignment operator not declared. The compiler will provide one
+     * which does nothing since this class does not contain any data members.
+     * API/code coverage may show the assignment operator as present and
+     * untested - ignore.
+     * Subclasses need this assignment operator if they use compiler-provided
+     * assignment operators of their own. An alternative to not declaring one
+     * here would be to declare and empty-implement a protected or public one.
+    Replaceable &Replaceable::operator=(const Replaceable &);
+     */
 
     /**
      * Virtual version of length().
