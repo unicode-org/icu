@@ -109,29 +109,27 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 		&& CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 packagedata: build/icudata.lst $(top_builddir)/tools/pkgdata/icupkg.inc
-	( cd build ; \
-	$(INVOKE) $(PKGDATA) -e $(ICUDATA_BASENAME_VERSION) -s . -T . -p $(ICUDATA_NAME) -m $(PKGDATA_MODE) icudata.lst ; \
-	)
+	cd build ; \
+	$(INVOKE) $(PKGDATA) -e $(ICUDATA_BASENAME_VERSION) -s . -T . -p $(ICUDATA_NAME) -m $(PKGDATA_MODE) icudata.lst
 ifeq ($(strip $(PKGDATA_MODE)), dll)
 		$(RM) libicudata.$(SO) && ln -s $(LIB_ICUDATA_NAME).$(SO) libicudata.$(SO) ; 
 endif
 
 packagetest: $(TESTDATAOBJDIR)/testdata.lst $(top_builddir)/tools/pkgdata/icupkg.inc
-	( cd $(TESTDATAOBJDIR) ; $(INVOKE) $(PKGDATA) -T . -s . -p testdata -m common testdata.lst )
+	cd $(TESTDATAOBJDIR) ; $(INVOKE) $(PKGDATA) -T . -s . -p testdata -m common testdata.lst
 
 cleanpackage:
 	@echo Cleaning up packaged data..
-	@-( cd build ; $(INVOKE) $(PKGDATA) -m $(PKGDATA_MODE) -s . -T . -p $(ICUDATA_NAME) icudata.lst --clean 2> /dev/null)
-	@-( cd $(TESTDATAOBJDIR) ; $(INVOKE) $(PKGDATA) -m common -T . -s . -p testdata testdata.lst  --clean 2> /dev/null )
+	@-cd build ; $(INVOKE) $(PKGDATA) -m $(PKGDATA_MODE) -s . -T . -p $(ICUDATA_NAME) icudata.lst --clean 2> /dev/null
+	@-cd $(TESTDATAOBJDIR) ; $(INVOKE) $(PKGDATA) -m common -T . -s . -p testdata testdata.lst  --clean 2> /dev/null
 	$(RMV) $(ICUDATA_NAME).* build/icudata.lst build/*.mak
 
 ## Install ICU data. Make a convenience link 'icudata' library if it's a library mode.
 install-local:  build/icudata.lst $(top_builddir)/tools/pkgdata/icupkg.inc install-convrtrstxt $(OS390INSTALL)
 	$(MKINSTALLDIRS) $(TMPDATADIR) $(DESTDIR)$(libdir)
-	( cd build ; $(INVOKE) $(PKGDATA) -m $(PKGDATA_MODE) -e $(ICUDATA_BASENAME_VERSION) -T . -s . -p $(ICUDATA_NAME) icudata.lst -I $(DESTDIR)$(libdir) )
+	cd build ; $(INVOKE) $(PKGDATA) -m $(PKGDATA_MODE) -e $(ICUDATA_BASENAME_VERSION) -T . -s . -p $(ICUDATA_NAME) icudata.lst -I $(DESTDIR)$(ICUPKGDATA_DIR)
 ifeq ($(strip $(PKGDATA_MODE)),dll)
-		$(RM) libicudata.$(SO) && ln -s $(LIB_ICUDATA_NAME).$(SO) libicudata.$(SO) ; 
-		(cd $(DESTDIR)$(libdir); $(RM) libicudata.$(SO) && ln -s $(LIB_ICUDATA_NAME).$(SO) libicudata.$(SO))
+		cd $(DESTDIR)$(ICUPKGDATA_DIR); $(RM) libicudata.$(SO) && ln -s $(LIB_ICUDATA_NAME).$(SO) libicudata.$(SO)
 endif
 
 install-convrtrstxt: $(top_srcdir)/../data/convrtrs.txt
@@ -149,11 +147,11 @@ testdata: $(SPECIALTESTDATA)
 #### 390 support
 install390: build/icudata390.lst $(top_builddir)/tools/pkgdata/icupkg.inc
 	$(MKINSTALLDIRS) $(TMPDATADIR) $(DESTDIR)$(libdir)
-	( cd build ; $(INVOKE) $(PKGDATA) -s . -T ../tmp3901 -p $(ICUDATA_NAME)$(BATCH_STUB_SUFFIX) -e $(ICUDATA_BASENAME_VERSION) icudata390.lst -m dll -I $(DESTDIR)$(libdir))
+	cd build ; $(INVOKE) $(PKGDATA) -s . -T ../tmp3901 -p $(ICUDATA_NAME)$(BATCH_STUB_SUFFIX) -e $(ICUDATA_BASENAME_VERSION) icudata390.lst -m dll -I $(DESTDIR)$(ICUPKGDATA_DIR)
 
 #### $(LIB_ICUDATA_NAME)$(BATCH_SUFFIX) is the subset data for batch mode
 package390: build/icudata390.lst build/icudata.lst $(top_builddir)/tools/pkgdata/icupkg.inc
 	@$(MKINSTALLDIRS) tmp3901
-	( cd build ; $(INVOKE) $(PKGDATA) -s . -T ../tmp3901 -p $(ICUDATA_NAME)$(BATCH_STUB_SUFFIX) -e $(ICUDATA_BASENAME_VERSION) icudata390.lst -m dll)
+	cd build ; $(INVOKE) $(PKGDATA) -s . -T ../tmp3901 -p $(ICUDATA_NAME)$(BATCH_STUB_SUFFIX) -e $(ICUDATA_BASENAME_VERSION) icudata390.lst -m dll
 	cp $(top_builddir)/data/$(LIB_ICUDATA_NAME)$(BATCH_STUB_SUFFIX).$(SO) $(top_builddir)/stubdata/$(LIB_ICUDATA_NAME)$(BATCH_STUB_SUFFIX).$(SO)
 

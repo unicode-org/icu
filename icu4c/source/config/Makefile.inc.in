@@ -2,7 +2,7 @@
 #******************************************************************************
 #   Copyright (C) 1999-2001, International Business Machines
 #   Corporation and others.  All Rights Reserved.
-# $Revision: 1.19 $
+# $Revision: 1.20 $
 #******************************************************************************
 # This Makefile is designed to be included into projects which make use
 # of the ICU.
@@ -101,8 +101,15 @@ ifeq ($(strip $(PKGDATA_MODE)),)
 PKGDATA_MODE=@DATA_PACKAGING_MODE@
 endif
 ifeq ($(PKGDATA_MODE),common)
-ICUDATA_DIR=$(pkgdatadir)
+ICUDATA_DIR = $(pkgdatadir)
+ICUPKGDATA_DIR = $(ICUDATA_DIR)/$(VERSION)
 else
-ICUDATA_DIR=$(pkglibdir)
+ifeq ($(PKGDATA_MODE),dll)
+ICUDATA_DIR = $(pkgdatadir)
+ICUPKGDATA_DIR = $(libdir)
+else
+ICUDATA_DIR = $(pkglibdir)
+ICUPKGDATA_DIR = $(ICUDATA_DIR)/$(VERSION)
+endif
 endif
 

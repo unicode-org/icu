@@ -42,9 +42,16 @@ ifeq ($(strip $(PKGDATA_MODE)),)
 PKGDATA_MODE=@DATA_PACKAGING_MODE@
 endif
 ifeq ($(PKGDATA_MODE),common)
-ICUDATA_DIR=$(pkgdatadir)
+ICUDATA_DIR = $(pkgdatadir)
+ICUPKGDATA_DIR = $(ICUDATA_DIR)/$(VERSION)
 else
-ICUDATA_DIR=$(pkglibdir)
+ifeq ($(PKGDATA_MODE),dll)
+ICUDATA_DIR = $(pkgdatadir)
+ICUPKGDATA_DIR = $(libdir)
+else
+ICUDATA_DIR = $(pkglibdir)
+ICUPKGDATA_DIR = $(ICUDATA_DIR)/$(VERSION)
+endif
 endif
 
 # ICU specific directories

@@ -105,7 +105,7 @@ ifneq ($(ENABLE_STATIC),)
 endif
 ifneq ($(ENABLE_SHARED),)
 	$(INSTALL-L) $(MIDDLE_SO_TARGET) $(DESTDIR)$(libdir)/$(MIDDLE_SO_TARGET)
-	$(INSTALL-L) $(SO_TARGET) $(DESTDIR)$(libdir)/$(SO_TARGET)
+	cd $(DESTDIR)$(libdir) && $(RM) $(SO_TARGET) && ln -s $(MIDDLE_SO_TARGET) $(SO_TARGET)
 endif
 
 dist-local:
