@@ -117,7 +117,7 @@ static const char*
 ufile_lookup_codepage(const char *locale)
 { 
   int32_t i;
-  for(i = 0; ufile_locale2codepage[i][0]; i+= 2)
+  for(i = 0; ufile_locale2codepage[i]; i+= 2)
     if( ! strncmp(ufile_locale2codepage[i], locale, 2))
       return ufile_locale2codepage[i + 1];
   return 0;
