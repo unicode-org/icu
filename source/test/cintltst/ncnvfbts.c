@@ -196,7 +196,7 @@ UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const uint8_t 
                   doFlush, /* flush if we're at the end of the input data */
                   &status);
 
-    } while ( (status == U_INDEX_OUTOFBOUNDS_ERROR) || (sourceLimit < realSourceEnd) );
+    } while ( (status == U_BUFFER_OVERFLOW_ERROR) || (sourceLimit < realSourceEnd) );
 
     if(U_FAILURE(status))
     {
@@ -358,7 +358,7 @@ UBool testConvertToUnicode( const uint8_t *source, int sourcelen, const UChar *e
                 checkOffsets ? offs : NULL,
                 (UBool)(srcLimit == realSourceEnd), /* flush if we're at the end of hte source data */
                 &status);
-    } while ( (status == U_INDEX_OUTOFBOUNDS_ERROR) || (srcLimit < realSourceEnd) ); /* while we just need another buffer */
+    } while ( (status == U_BUFFER_OVERFLOW_ERROR) || (srcLimit < realSourceEnd) ); /* while we just need another buffer */
 
 
     if(U_FAILURE(status))

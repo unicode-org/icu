@@ -242,7 +242,7 @@ UErrorCode compsample_02()
           scsu_compress(&comp, &target, output+SAMPLE2BUFFERSIZE,
                         &source, input+sourceLen, &status);
           
-          if( (status == U_ZERO_ERROR) || (status == U_INDEX_OUTOFBOUNDS_ERROR)) {
+          if( (status == U_ZERO_ERROR) || (status == U_BUFFER_OVERFLOW_ERROR)) {
             /* got all of it */
 //            printBytes("out", output, target-output); // Uncomment for very verbose output..
             

@@ -921,8 +921,6 @@ int32_t  XMLUConvert( UConverter* inConverter,
         flush,
         err);
     
-    if (*err == U_INDEX_OUTOFBOUNDS_ERROR) *err = U_BUFFER_OVERFLOW_ERROR;
-    
    // *inBufSize = inBufferAlias;
     return outBufferAlias - outBuffer;
 }
@@ -969,11 +967,11 @@ void XMLU_fromCodepageToCodepage(    UConverter*    outConverter,
             flush,
             err);
         
-            /*U_INDEX_OUTOFBOUNDS_ERROR means that the output "CHUNK" is full
+            /*U_BUFFER_OVERFLOW_ERROR means that the output "CHUNK" is full
             *we will require at least another loop (it's a recoverable error)
         */
         
-        if (U_SUCCESS(*err) || (*err == U_INDEX_OUTOFBOUNDS_ERROR))
+        if (U_SUCCESS(*err) || (*err == U_BUFFER_OVERFLOW_ERROR))
         {
             *err = U_ZERO_ERROR;
             out_chunk_alias2 = out_chunk;
@@ -1024,11 +1022,11 @@ void XMLU_fromCodepageToCodepage(    UConverter*    outConverter,
 		      flush,
 		      err);
 
-      /*U_INDEX_OUTOFBOUNDS_ERROR means that the output "CHUNK" is full
+      /*U_BUFFER_OVERFLOW_ERROR means that the output "CHUNK" is full
        *we will require at least another loop (it's a recoverable error)
        */
 
-      if (U_SUCCESS (*err) || (*err == U_INDEX_OUTOFBOUNDS_ERROR))
+      if (U_SUCCESS (*err) || (*err == U_BUFFER_OVERFLOW_ERROR))
 	{
 	  *err = U_ZERO_ERROR;
 	  out_chunk_alias2 = out_chunk;
