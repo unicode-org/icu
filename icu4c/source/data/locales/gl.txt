@@ -7,6 +7,13 @@
 
 gl {
     Version { "2.0" }
+    Countries {
+        ES { "España" }
+    }
+    // Currency display names
+    Currencies {
+        ESP { "\u20A7", "ESP" } // Spanish Peseta
+    }
     DayAbbreviations { 
         "Dom",
         "Lun",
@@ -25,6 +32,13 @@ gl {
         "Venres",
         "Sábado",
     }
+    Languages {
+        gl { "galego" }
+    }
+    LocaleScript{ 
+        "Latn",  // ISO 15924 Name 
+    }
+    ExemplarCharacters { "[a-z\u00e1\u00e9\u00ed\u00f3\u00fa\u00fc\u00f1]" }
     MonthAbbreviations { 
         "Xan",
         "Feb",
@@ -68,10 +82,6 @@ gl {
         ",",
         "+",
     }
-    LocaleScript{ 
-        "Latn",  // ISO 15924 Name 
-    }
-    ExemplarCharacters { "[a-z \u00e1 \u00e9 \u00ed \u00f3 \u00fa \u00fc \u00f1]" }
     
     // /**************** Info Below is needed ****************/
     // collations{}
@@ -82,9 +92,4 @@ gl {
     // localPatternChars{}
     //
 
-
-    // Currency display names
-    Currencies {
-        ESP { "\u20A7", "ESP" } // Spanish Peseta
-    }
 }
