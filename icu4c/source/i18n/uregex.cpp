@@ -667,13 +667,15 @@ int32_t RegexCImpl::appendReplacement(URegularExpression    *regexp,
     }
 
     // Copy input string from the end of previous match to start of current match
-    int32_t  len = m->fMatchStart-m->fLastMatchEnd;
+    int32_t  startIdx = m->fLastMatchEnd;
+    int32_t  len = m->fMatchStart - startIdx;
     if (len > 0) {
         if (len < capacityRemaining) {
-            u_memcpy(&dest[resultLen], regexp->fText, len);
+            // TODO:  replace memcpy with inline loop
+            u_memcpy(&dest[resultLen], &regexp->fText[startIdx], len);
             capacityRemaining -= len;
         } else if (capacityRemaining > 0) {
-            u_memcpy(&dest[resultLen], regexp->fText, capacityRemaining);
+            u_memcpy(&dest[resultLen], &regexp->fText[startIdx], capacityRemaining);
             capacityRemaining = 0;
         }
         resultLen += len;
@@ -1093,6 +1095,16 @@ uregex_split(   URegularExpression      *regexp,
                          &regexp->fText[nextOutputStringStart], inputLen-nextOutputStringStart);
             break;
         }
+    }
+
+    // Zero out any unused portion of the destFields array
+    int j;
+    for (j=i+1; j<destFieldsCapacity; j++) {
+        destFields[j] = NULL;
+    }
+
+    if (requiredCapacity != NULL) {
+        *requiredCapacity = destIdx;
     }
     return i+1;
 }
