@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCollationData.java,v $ 
-* $Date: 2002/06/28 01:59:53 $ 
-* $Revision: 1.24 $
+* $Date: 2002/07/03 02:15:46 $ 
+* $Revision: 1.25 $
 *
 *******************************************************************************
 */
@@ -346,6 +346,18 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
             addStringX(s, option);
         }
         
+        // Add special examples
+        /*
+        addStringX("\u2024\u2024", option);
+        addStringX("\u2024\u2024\u2024", option);
+        addStringX("\u2032\u2032", option);
+        addStringX("\u2032\u2032\u2032", option);
+        addStringX("\u2033\u2033\u2033", option);
+        addStringX("\u2034\u2034", option);
+        */
+        
+        
+        
         UnicodeSet found = collator.found;
         if (!found2.containsAll(found2)) {
             System.out.println("In both: " + new UnicodeSet(found).retainAll(found2).toPattern(true));
@@ -581,6 +593,7 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
         log.println("</table>");
         log.println("<p>Errors: " + errorCount + "</p>");
         log.println("<p>Space/Tatweel exceptions: " + skipSet.toPattern(true) + "</p>");
+    	log.flush();
         collator.setStrength(oldStrength);
         Utility.fixDot();
     }
@@ -905,7 +918,24 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
         return len;
     }
     
-    static void writeNonspacingDifference() throws IOException {
+    static int getStrengthDiff(CEList celist) {
+        int result = QUARTERNARY_DIFF;
+        for (int j = 0; j < celist.length(); ++j) {
+            int ce = celist.at(j);
+            if (collator.getPrimary(ce) != 0) {
+                return PRIMARY_DIFF;
+            } else if (collator.getSecondary(ce) != 0) {
+                result = SECONDARY_DIFF;
+            } else if (collator.getTertiary(ce) != 0) {
+                result = TERTIARY_DIFF;
+            }
+        }
+        return result;
+    }
+    
+    static String[] strengthName = {"XYZ", "0YZ", "00Z", "000"};
+    
+    static void writeCategoryCheck() throws IOException {
         /*PrintWriter diLog = new PrintWriter(
             new BufferedWriter(
                 new OutputStreamWriter(
@@ -913,10 +943,9 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
                     "UTF8"),
                 32*1024));
                 */
-        PrintWriter diLog = Utility.openPrintWriter("UCA_Nonspacing.js", false, false);
-                
-        diLog.write('\uFEFF');
-
+    	log.println("<h2>8. Checking against categories</h2>");
+    	log.println("<p>These are not necessarily errors, but should be examined for <i>possible</i> errors</p>");
+        log.println("<table border='1' cellspacing='0' cellpadding='2'>");
         Normalizer nfd = new Normalizer(Normalizer.NFD, UNICODE_VERSION);
         
         Set sorted = new TreeSet();
@@ -924,31 +953,240 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
         for (int i = 0; i < 0x10FFFF; ++i) {
             Utility.dot(i);
             if (!ucd.isRepresented(i)) continue;
-            byte cat = ucd.getCategory(i);
-            boolean isNonSpacing = cat == Mn || cat == Me;
             CEList celist = collator.getCEList(UTF32.valueOf32(i), true);
-            boolean isPrimaryIgnorable = true;
-            for (int j = 0; j < celist.length(); ++j) {
-                int ce = celist.at(j);
-                int primary = collator.getPrimary(ce);
-                if (primary != 0) {
-                    isPrimaryIgnorable = false;
-                    break;
-                }
-            }
+            int real = getStrengthDiff(celist);
             
-            if (isNonSpacing != isPrimaryIgnorable) {
-                sorted.add(ucd.getCategoryID(i)
-                    + "\t" + celist
-                    + "\t" + ucd.getCodeAndName(i));
+            int desired = PRIMARY_DIFF;
+            byte cat = ucd.getCategory(i);
+            if (cat == Cc || cat == Cs || cat == Cf || ucd.isNoncharacter(i)) desired = QUARTERNARY_DIFF;
+            else if (cat == Mn || cat == Me) desired = SECONDARY_DIFF;
+            
+            String listName = celist.toString();
+            if (listName.length() == 0) listName = "<i>ignore</i>";
+            if (real != desired) {
+                sorted.add("<tr><td>" + strengthName[real]
+                    + "</td><td>" + strengthName[desired]
+                    + "</td><td>" + ucd.getCategoryID(i)
+                    + "</td><td>" + listName
+                    + "</td><td>" + ucd.getCodeAndName(i)
+                    + "</td></tr>");
             }
         }
         
-        Utility.print(diLog, sorted, "\r\n");
-        
-        diLog.close();
+        Utility.print(log, sorted, "\r\n");
+    	log.println("</table>");
+    	log.flush();
     }
     
+    static void writeDuplicates() {
+    	log.println("<h2>9. Checking characters that are not canonical equivalents, but have same CE</h2>");
+    	log.println("<p>These are not necessarily errors, but should be examined for <i>possible</i> errors</p>");
+        log.println("<table border='1' cellspacing='0' cellpadding='2'>");
+        
+        UCA.UCAContents cc = collator.getContents(UCA.FIXED_CE, toD);
+        
+        Map map = new TreeMap();
+        
+        while (true) {
+            String s = cc.next();
+            if (s == null) break;
+            if (!toD.isNormalized(s)) continue; // only unnormalized stuff
+            if (UTF16.countCodePoint(s) == 1) {
+                int cat = ucd.getCategory(UTF16.charAt(s,0));
+                if (cat == Cn || cat == Cc || cat == Cs) continue;
+            }
+            
+            CEList celist = collator.getCEList(s, true);
+            Utility.addToSet(map, celist, s);
+        }
+        
+        Iterator it = map.keySet().iterator();
+        while (it.hasNext()) {
+            CEList celist = (CEList) it.next();
+            Set s = (Set) map.get(celist);
+            String name = celist.toString();
+            if (name.length() == 0) name = "<i>ignore</i>";
+            if (s.size() > 1) {
+                    log.println("<tr><td>" + name 
+                        + "</td><td>" + getHTML_NameSet(s, null, true)
+                        + "</td></tr>");
+            }
+        }
+    	log.println("</table>");
+    	log.flush();
+    }
+    
+    
+    static void writeOverlap() {
+    	log.println("<h2>10. Checking overlaps</h2>");
+    	log.println("<p>These are not necessarily errors, but should be examined for <i>possible</i> errors</p>");
+        log.println("<table border='1' cellspacing='0' cellpadding='2'>");
+        
+        UCA.UCAContents cc = collator.getContents(UCA.FIXED_CE, toD);
+        
+        Map map = new TreeMap();
+        Map tails = new TreeMap();
+        
+        int counter = 0;
+        System.out.println("Collecting items");
+        
+        while (true) {
+            String s = cc.next();
+            if (s == null) break;
+            Utility.dot(counter++);
+            if (!toD.isNormalized(s)) continue; // only normalized stuff
+            CEList celist = collator.getCEList(s, true);
+            map.put(celist, s);
+        }
+        
+        Utility.fixDot();
+        System.out.println("Collecting tails");
+        
+        Iterator it = map.keySet().iterator();
+        while (it.hasNext()) {
+            CEList celist = (CEList) it.next();
+            Utility.dot(counter++);
+            int len = celist.length();
+            if (len < 2) continue;
+            
+            for (int i = 1; i < len; ++i) {
+                CEList tail = celist.sub(i, len);
+                Utility.dot(counter++);
+                if (map.get(tail) == null) { // skip anything in main
+                    Utility.addToSet(tails, tail, celist);
+                }
+            }
+        }
+        
+        Utility.fixDot();
+        System.out.println("Finding overlaps");
+        
+        // we now have a set of main maps, and a set of tails
+        // the main maps to string, the tails map to set of CELists
+
+        it = map.keySet().iterator();
+        List first = new ArrayList();
+        List second = new ArrayList();
+        
+        while (it.hasNext()) {
+            CEList celist = (CEList) it.next();
+            int len = celist.length();
+            if (len < 2) continue;
+            Utility.dot(counter++);
+            first.clear();
+            second.clear();
+            if (overlaps(map, tails, celist, 0, first, second)) {
+                reverse(first);
+                reverse(second);
+            
+                log.println("<tr><td>" + getHTML_NameSet(first, null, false) 
+                    + "</td><td>" + getHTML_NameSet(first, map, true)
+                    + "</td><td>" + getHTML_NameSet(second, null, false)
+                    + "</td><td>" + getHTML_NameSet(second, map, true)
+                    + "</td></tr>");
+            }
+        }
+    	log.println("</table>");
+    	log.flush();
+    }
+    
+    static void reverse(List ell) {
+        int i = 0;
+        int j = ell.size() - 1;
+        while (i < j) {
+            Object temp = ell.get(i);
+            ell.set(i, ell.get(j));
+            ell.set(j, temp);
+            ++i;
+            --j;
+        }
+    }
+    
+    static final boolean DEBUG_SHOW_OVERLAP = false;
+    
+    static boolean overlaps(Map map, Map tails, CEList celist, int depth, List me, List other) {
+        if (depth == 5) return false;
+        boolean gotOne = false;
+        if (DEBUG_SHOW_OVERLAP && depth > 0) {
+            Object foo = map.get(celist);
+            System.out.println(Utility.repeat("**", depth) + "Trying:" + celist + ", "
+                + (foo != null ? ucd.getCodeAndName(foo.toString()) : ""));
+            gotOne = true;
+        }
+        int len = celist.length();
+        // if the tail of the celist matches something, then ArrayList
+        // A. subtract the match and retry
+        // B. if that doesn't work, see if the result is the tail of something else.
+        for (int i = 1; i < len; ++i) {
+            CEList tail = celist.sub(i, len);
+            if (map.get(tail) != null) {
+ 
+                if (DEBUG_SHOW_OVERLAP && !gotOne) {
+                    Object foo = map.get(celist);
+                    System.out.println(Utility.repeat("**", depth) + "Trying:" + celist + ", "
+                        + (foo != null ? ucd.getCodeAndName(foo.toString()) : ""));
+                    gotOne = true;
+                }
+
+                if (DEBUG_SHOW_OVERLAP) System.out.println(Utility.repeat("**", depth) + "  Match tail at " + i + ": " + tail + ", " + ucd.getCodeAndName(map.get(tail).toString()));
+                // temporarily add tail
+                int oldListSize = me.size();
+                me.add(tail);
+                
+                // the tail matched, try 3 options
+                CEList head = celist.sub(0, i);
+                
+                // see if the head matches exactly!
+                
+                if (map.get(head) != null) {
+                    if (DEBUG_SHOW_OVERLAP) System.out.println(Utility.repeat("**", depth) + "  Match head at "
+                        + i + ": " + head + ", " + ucd.getCodeAndName(map.get(head).toString()));
+                    me.add(head);
+                    other.add(celist);
+                    return true;
+                }
+                
+                // see if the end of the head matches something (recursively)
+                
+               if (DEBUG_SHOW_OVERLAP) System.out.println(Utility.repeat("**", depth) + "  Checking rest");
+               if (overlaps(map, tails, head, depth+1, me, other)) return true;
+                
+                // otherwise we see if the head is some tail
+                
+                Set possibleFulls = (Set) tails.get(head);
+                if (possibleFulls != null) {
+                    Iterator it = possibleFulls.iterator();
+                    while(it.hasNext()) {
+                        CEList full = (CEList)it.next();
+                        CEList possibleHead = full.sub(0,full.length() - head.length());
+                        if (DEBUG_SHOW_OVERLAP) System.out.println(Utility.repeat("**", depth) + "  Reversing " + full
+                            + ", " + ucd.getCodeAndName(map.get(full).toString()) 
+                            + ", " + possibleHead);
+                        if (overlaps(map, tails, possibleHead, depth+1, other, me)) return true;
+                    }
+                }
+                    
+                // didn't work, so retract!
+                me.remove(oldListSize);
+            }
+        }
+        return false;
+    }
+    
+    // if m exists, then it is a mapping to strings. Use it.
+    // otherwise just print what is in set
+    static String getHTML_NameSet(Collection set, Map m, boolean useName) {
+        StringBuffer result = new StringBuffer();
+        Iterator it = set.iterator();
+        while (it.hasNext()) {
+            if (result.length() != 0) result.append(";<br>");
+            Object item = it.next();
+            if (m != null) item = m.get(item);
+            if (useName) item = ucd.getCodeAndName(item.toString());
+            result.append(item);
+        }
+        return result.toString();
+    }
 
     static void writeContractions() throws IOException {
         /*PrintWriter diLog = new PrintWriter(
@@ -958,7 +1196,7 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
                     "UTF8"),
                 32*1024));
                 */
-        PrintWriter diLog = Utility.openPrintWriter("UCA_Contractions.js", false, false);
+        PrintWriter diLog = Utility.openPrintWriter("UCA_Contractions.txt", false, false);
                 
         diLog.write('\uFEFF');
 
@@ -1381,7 +1619,20 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
     static Normalizer NFC = new Normalizer(Normalizer.NFC, "");
     static Normalizer nfkdNew = new Normalizer(Normalizer.NFKD, "");
     
-    static void writeRules (byte option) throws IOException {
+    static int getFirstCELen(int[] ces, int len) {
+        if (len < 2) return len;
+    	int expansionStart = 1;
+    	if (UCA.isImplicitLeadCE(ces[0])) {
+    		expansionStart = 2; // move up if first is double-ce
+    	} 
+    	if (len > expansionStart && homelessSecondaries.contains(UCA.getSecondary(ces[expansionStart]))) {
+    		++expansionStart; // move up if *second* is homeless ignoreable
+    	}
+    	return expansionStart;
+    }
+    
+    
+    static void writeRules (byte option, boolean shortPrint) throws IOException {
         
         //testTransitivity();
         //if (true) return;
@@ -1423,10 +1674,28 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
             log2.println(s + "\t" + CEList.toString(ces, len) + "\t" + ucd.getCodeAndName(s));
             
             addToBackMap(backMap, ces, len, s, false);
+            
+            int ce2 = 0;
+            int ce3 = 0;
+            int logicalFirstLen = getFirstCELen(ces, len);
+            if (logicalFirstLen > 1) {
+                ce2 = ces[1];
+                if (logicalFirstLen > 2) {
+                    ce3 = ces[2];
+                }
+            }
 
-            String key = String.valueOf((char)(ces[0]>>>16))
-                + String.valueOf((char)(ces[0] & 0xFFFF))
+            String key = String.valueOf(UCA.getPrimary(ces[0])) + String.valueOf(UCA.getPrimary(ce2)) + String.valueOf(UCA.getPrimary(ce3))
+                + String.valueOf(UCA.getSecondary(ces[0])) + String.valueOf(UCA.getSecondary(ce2)) + String.valueOf(UCA.getSecondary(ce3))
+                + String.valueOf(UCA.getTertiary(ces[0])) + String.valueOf(UCA.getTertiary(ce2)) + String.valueOf(UCA.getTertiary(ce3))
                 + collator.getSortKey(s, UCA.NON_IGNORABLE) + '\u0000' + UCA.codePointOrder(s);
+                
+                //String.valueOf((char)(ces[0]>>>16)) + String.valueOf((char)(ces[0] & 0xFFFF))
+                //+ String.valueOf((char)(ce2>>>16)) + String.valueOf((char)(ce2 & 0xFFFF))
+                
+            if (s.equals("\u0660") || s.equals("\u2080")) {
+                System.out.println(ucd.getCodeAndName(s) + "\t" + Utility.hex(key));
+            }
                 
             ordered.put(key, s);
             alreadyDone.add(s);
@@ -1511,9 +1780,10 @@ F900..FAFF; CJK Compatibility Ideographs
         
         System.out.println("Writing");
         
-        String filename = "UCA_Rules.txt";
-        if (option == WITH_NAMES) filename = "UCA_Rules_With_Names.txt";
-        else if (option == IN_XML) filename = "UCA_Rules.xml";
+        String filename = "UCA_Rules";
+        if (shortPrint) filename += "_SHORT";
+        if (option == IN_XML) filename += ".xml"; else filename += ".txt";
+        
         log = Utility.openPrintWriter(filename, false, false);
         
         String[] commentText = {
@@ -1561,12 +1831,14 @@ F900..FAFF; CJK Compatibility Ideographs
         int len = -1;
         
         String nextChr = "";
-        int nextLen = -1;
+        int nextLen = -1; // -1 signals that we need to skip!!
         int[] nextCes = new int[50];
         
         String lastChr = "";
         int lastLen = -1;
         int[] lastCes = new int[50];
+        int lastExpansionStart = 0;
+        int expansionStart = 0;
         
         long variableTop = collator.getVariableHigh() & INT_MASK;
         
@@ -1580,6 +1852,7 @@ F900..FAFF; CJK Compatibility Ideographs
             lastCE = ce;
             lastLen = len;
             lastChr = chr;
+            lastExpansionStart = expansionStart;
             if (len > 0) {
                 System.arraycopy(ces, 0, lastCes, 0, lastLen);
             }
@@ -1636,20 +1909,20 @@ F900..FAFF; CJK Compatibility Ideographs
             nextLen = collator.getCEs(nextChr, true, nextCes);
             nextCE = nextCes[0];
             
-            // for debugging
-           
-            
-            if (false) System.out.println(
-                CEList.toString(lastCE) + " " 
-                + CEList.toString(ce) + " " 
-                + CEList.toString(nextCE) + " " 
-                + ucd.getCodeAndName(chr)
-                );
-            
             // skip first (fake) element
             
             if (len == -1) continue;
             
+            
+            // for debugging
+           
+            
+            if (loopCounter < 5) {
+                System.out.println(loopCounter);
+                System.out.println(CEList.toString(lastCes, lastLen) + ", " + ucd.getCodeAndName(lastChr));
+                System.out.println(CEList.toString(ces, len) + ", " + ucd.getCodeAndName(chr));
+                System.out.println(CEList.toString(nextCes, nextLen) + ", " + ucd.getCodeAndName(nextChr));
+            }
             
             // get relation
             
@@ -1659,7 +1932,15 @@ F900..FAFF; CJK Compatibility Ideographs
             }*/
             
             
-            int relation = getStrengthDifference(ces, len, lastCes, lastLen);
+    		expansionStart = getFirstCELen(ces, len);
+            
+            // int relation = getStrengthDifference(ces, len, lastCes, lastLen);
+            int relation = getStrengthDifference(ces, expansionStart, lastCes, lastExpansionStart);
+
+            if (relation == QUARTERNARY_DIFF) {
+                int relation2 = getStrengthDifference(ces, len, lastCes, lastLen);
+                if (relation2 != QUARTERNARY_DIFF) relation = TERTIARY_DIFF;
+            }
 
             // RESETs: do special case for relations to fixed items
             
@@ -1697,50 +1978,12 @@ F900..FAFF; CJK Compatibility Ideographs
                 }
             }
             
-            /*
-            if (firstTime
-              || collator.getPrimary(lastCE) == 0 && collator.getPrimary(ce) != 0
-              || collator.getSecondary(lastCE) == 0 && collator.getSecondary(ce) != 0
-              || collator.getTertiary(lastCE) == 0 && collator.getTertiary(ce) != 0) {
-                if (collator.getPrimary(ce) != 0) {
-                    
-                } else if (collator.getSecondary(ce) != 0) {
-                    reset = "[last secondary ignorable]";
-                } else if (collator.getTertiary(ce) != 0) {
-                    reset = "[last tertiary ignorable]";
-                } else {
-                    
-                    //reset = quoteOperand(chr);
-                }
-            } else if (variableTop != 0 && ce > variableTop) {
-                reset = "[variable top]";
-                xmlReset = 1;
-                variableTop = 0;
-            } else {
-                int primary = collator.getPrimary(ce);
-                if (UCA.isImplicitLeadPrimary(primary)) {
-             */   
-            
-            /*
-            if (primary >= 0x3400) {
-                if (primary == 0x9FA6) {
-                    primary = '\u9FA5';
-                }
-                if (primary < 0x9FA6) {
-                }
-            }
-            */
-
             if (chr.equals("\u2F00")) {
                 System.out.println(CEList.toString(ces, len));
             }
             
             // There are double-CEs, so we have to know what the length of the first bit is.
             
-    		int expansionStart = 1;
-    		if (UCA.isImplicitLeadCE(ces[0])) {
-    			expansionStart = 2; // move up if first is double-ce
-    		}
             
             // check expansions
             
@@ -1751,7 +1994,24 @@ F900..FAFF; CJK Compatibility Ideographs
                 log2.println("Exp: " + ucd.getCodeAndName(chr) + ", " + CEList.toString(ces, len) + ", start: " + expansionStart);
                 int[] rel = {relation};
                 expansion = getFromBackMap(backMap, ces, expansionStart, len, chr, rel);
-                relation = rel[0];
+                // relation = rel[0];
+                
+                // The relation needs to be fixed differently. Since it is an expansion, it should be compared to
+                // the first CE
+                // ONLY reset if the sort keys are not equal
+                if (false && (relation == PRIMARY_DIFF || relation == SECONDARY_DIFF)) {
+                    int relation2 = getStrengthDifference(ces, expansionStart, lastCes, lastExpansionStart);
+                    if (relation2 != relation) {
+                        System.out.println ();
+                        System.out.println ("Resetting: " + RELATION_NAMES[relation] + " to " + RELATION_NAMES[relation2]);
+                        System.out.println ("LCes: " + CEList.toString(lastCes, lastLen) + ", " + lastExpansionStart 
+                            + ", " + ucd.getCodeAndName(lastChr));
+                        System.out.println ("Ces:  " + CEList.toString(ces, len) + ", " + expansionStart 
+                            + ", " + ucd.getCodeAndName(chr));
+                        relation = relation2;
+                    }
+                }
+                
             }
             
             // print results
@@ -1771,12 +2031,20 @@ F900..FAFF; CJK Compatibility Ideographs
                 }
                 if (!firstTime) {
                     log.print("  <" + XML_RELATION_NAMES[relation] + "/>");
-                    log.println(Utility.quoteXML(chr));
+                    log.print(Utility.quoteXML(chr));
                     //log.print("</" + XML_RELATION_NAMES[relation] + ">");
                 }
                 if (expansion.length() > 0) {
-                    log.println("<x/>" + Utility.quoteXML(expansion));
+                    log.print("<x/>" + Utility.quoteXML(expansion));
                 }
+                if (!shortPrint) {
+                    log.print("\t<!--" 
+                        + CEList.toString(ces, len) + " " 
+                        + ucd.getCodeAndName(chr));
+                    if (expansion.length() > 0) log.print(" / " + Utility.hex(expansion));
+                    log.print("-->");
+                }
+                log.println();
             } else {
                 if (insertVariableTop) log.println(RELATION_NAMES[0] + " [variable top]");
                 if (reset.length() != 0) log.println("& " 
@@ -1784,7 +2052,7 @@ F900..FAFF; CJK Compatibility Ideographs
                 	+ (resetComment.length() != 0 ? "\t\t# " + resetComment : ""));
                 if (!firstTime) log.print(RELATION_NAMES[relation] + " " + quoteOperand(chr));
                 if (expansion.length() > 0) log.print(" / " + quoteOperand(expansion));
-                if (option == WITH_NAMES) {
+                if (!shortPrint) {
                     log.print("\t# " 
                         + CEList.toString(ces, len) + " " 
                         + ucd.getCodeAndName(chr));
@@ -1821,39 +2089,99 @@ F900..FAFF; CJK Compatibility Ideographs
     }
         
     static long getPrimary(int[] ces, int len) {
-        if (len <= 0) return 0;
-    	if (UCA.isImplicitLeadCE(ces[0])) {
-    		return (UCA.getPrimary(ces[0]) << 16) + UCA.getPrimary(ces[1]);
-    	} else {
-    		return UCA.getPrimary(ces[0]);
+        for (int i = 0; i < len; ++i) {
+            int result = UCA.getPrimary(ces[i]);
+            if (result == 0) continue;
+    	    if (UCA.isImplicitLeadPrimary(result)) {
+    		    return (result << 16) + UCA.getPrimary(ces[i+1]);
+    	    } else {
+    		    return result;
+    	    }
     	}
+    	return 0;
     }
     
     static long getSecondary(int[] ces, int len) {
-        if (len <= 0) return 0;
-    	if (UCA.isImplicitLeadCE(ces[0])) {
-    		return (UCA.getSecondary(ces[0]) << 16) + UCA.getSecondary(ces[1]);
-    	} else {
-    		return UCA.getSecondary(ces[0]);
-    	}
+        for (int i = 0; i < len; ++i) {
+            int result = UCA.getSecondary(ces[i]);
+            if (result == 0) continue;
+            return result;
+        }
+    	return 0;
     }
     
     static long getTertiary(int[] ces, int len) {
-        if (len <= 0) return 0;
-    	if (UCA.isImplicitLeadCE(ces[0])) {
-    		return (UCA.getTertiary(ces[0]) << 16) + UCA.getTertiary(ces[1]);
-    	} else {
-    		return UCA.getTertiary(ces[0]);
+        for (int i = 0; i < len; ++i) {
+    		int result = UCA.getTertiary(ces[i]);
+            if (result == 0) continue;
+            return result;
     	}
+    	return 0;
     }
     
     static final int 
     	PRIMARY_DIFF = 0,
     	SECONDARY_DIFF = 1,
     	TERTIARY_DIFF = 2,
-    	QUARTERNARY_DIFF = 3;
+    	QUARTERNARY_DIFF = 3,
+    	DONE = -1;
     	
+    static class CE_Iterator {
+        int[] ces;
+        int len;
+        int current;
+        int level;
+        
+        void reset(int[] ces, int len) {
+            this.ces = ces;
+            this.len = len;
+            current = 0;
+            level = PRIMARY_DIFF;
+        }
+        void setLevel(int level) {
+            current = 0;
+            this.level = level;
+        }
+        int next() {
+            int val = DONE;
+            while (current < len) {
+                int ce = ces[current++];
+                switch (level) {
+                    case PRIMARY_DIFF: val = UCA.getPrimary(ce); break;
+                    case SECONDARY_DIFF: val = UCA.getSecondary(ce); break;
+                    case TERTIARY_DIFF: val = UCA.getTertiary(ce); break;
+                }
+                if (val != 0) return val;
+            }
+            return DONE;
+        }
+    }                    
+   
+    static CE_Iterator ceit1 = new CE_Iterator();
+    static CE_Iterator ceit2 = new CE_Iterator();
+    
+    // WARNING, Never Recursive!
+    
 	static int getStrengthDifference(int[] ces, int len, int[] lastCes, int lastLen) {
+	    if (false && lastLen > 0 && lastCes[0] > 0) {
+	        System.out.println("DeBug");
+	    }
+	    ceit1.reset(ces, len);
+	    ceit2.reset(lastCes, lastLen);
+	    
+	    for (int level = PRIMARY_DIFF; level <= TERTIARY_DIFF; ++level) {
+	        ceit1.setLevel(level);
+	        ceit2.setLevel(level);
+	        while (true) {
+	            int weight1 = ceit1.next();
+	            int weight2 = ceit2.next();
+	            if (weight1 != weight2) return level;
+	            if (weight1 == DONE) break;
+	        }
+	    }
+	    return QUARTERNARY_DIFF;
+	    
+	    /*
 		
         int relation = QUARTERNARY_DIFF;
         if (getPrimary(ces, len) != getPrimary(lastCes, lastLen)) {
@@ -1880,6 +2208,7 @@ F900..FAFF; CJK Compatibility Ideographs
             }
         }
         return relation;
+        */
     }
     
     
@@ -1964,8 +2293,16 @@ F900..FAFF; CJK Compatibility Ideographs
 		*/
     }
     
-    static int[] ignorableList = {
-    	UCA.makeKey(0x0000, 0x0153, 0x0002),
+    
+    static UnicodeSet homelessSecondaries = new UnicodeSet(0x0153,0x0170);
+    
+    /*static int[] ignorableList = new int[homelessSecondaries.size()];
+    
+    static {
+        UnicodeSetIterator ui = new UnicodeSetIterator(homelessSecondaries);
+        int counter = 0;
+        while (ui.next()) {
+            ignorableList. UCA.makeKey(0x0000, 0x0153, 0x0002),
     	UCA.makeKey(0x0000, 0x0154, 0x0002),
     	UCA.makeKey(0x0000, 0x0155, 0x0002),
     	UCA.makeKey(0x0000, 0x0156, 0x0002),
@@ -1996,6 +2333,8 @@ F900..FAFF; CJK Compatibility Ideographs
     	UCA.makeKey(0x0000, 0x016F, 0x0002),
     	UCA.makeKey(0x0000, 0x0170, 0x0002),
     };
+    */
+    
     
     static final String getFromBackMap(Map backMap, int[] originalces, int expansionStart, int len, String chr, int[] rel) {
     	int[] ces = (int[])(originalces.clone());
@@ -2035,7 +2374,7 @@ F900..FAFF; CJK Compatibility Ideographs
             }
             if (s == null) {
             	do {
-            		if (contains(ignorableList, 0, ignorableList.length, ces[i])) {
+            		if (homelessSecondaries.contains(UCA.getSecondary(ces[i]))) {
             			s = "";
             			if (rel[0] > 1) rel[0] = 1; // HACK
             			break;
@@ -2360,7 +2699,7 @@ F900..FAFF; CJK Compatibility Ideographs
         System.out.println("Sorting");
         Map ordered = new TreeMap();
         Set contentsForCanonicalIteration = new TreeSet();
-        UCA.UCAContents ucac = collator.getContents(UCA.FIXED_CE, null); // NFD
+        UCA.UCAContents ucac = collator.getContents(UCA.FIXED_CE, null);
         int ccounter = 0;
         while (true) {
             Utility.dot(ccounter++);
@@ -2374,13 +2713,15 @@ F900..FAFF; CJK Compatibility Ideographs
         System.out.println("Start Adding canonical Equivalents2");
         int canCount = 0;
         
-        System.out.println("Add missing decomposibles");
+        System.out.println("Add missing decomposibles and non-characters");
         for (int i = 0; i < 0x10FFFF; ++i) {
-            if (!ucd.isAllocated(i)) continue;
-            if (NFD.isNormalized(i)) continue;
-            if (collator.getCEType(i) >= UCA.FIXED_CE) continue;
+            if (!ucd.isNoncharacter(i)) {
+                if (!ucd.isAllocated(i)) continue;
+                if (NFD.isNormalized(i)) continue;
+                if (collator.getCEType(i) >= UCA.FIXED_CE) continue;
+            }
             String s = UTF16.valueOf(i);
-            if (contentsForCanonicalIteration.contains(s)) continue;
+            if (contentsForCanonicalIteration.contains(s)) continue; // skip if already present
             contentsForCanonicalIteration.add(s);
             ordered.put(collator.getSortKey(s, UCA.NON_IGNORABLE) + '\u0000' + s, s);
             System.out.println(" + " + ucd.getCodeAndName(s));
@@ -2463,8 +2804,8 @@ F900..FAFF; CJK Compatibility Ideographs
         
         Utility.fixDot();
         System.out.println("Writing");
-        PrintWriter shortLog = new PrintWriter(new BufferedWriter(new FileWriter(GEN_DIR + filename + ".txt"), 32*1024));
-        PrintWriter longLog = new PrintWriter(new BufferedWriter(new FileWriter(GEN_DIR + filename + "_long.txt"), 32*1024));
+        PrintWriter shortLog = new PrintWriter(new BufferedWriter(new FileWriter(GEN_DIR + filename + "_SHORT.txt"), 32*1024));
+        PrintWriter longLog = new PrintWriter(new BufferedWriter(new FileWriter(GEN_DIR + filename + ".txt"), 32*1024));
         log = new PrintWriter(new DualWriter(shortLog, longLog));
         
         PrintWriter summary = new PrintWriter(new BufferedWriter(new FileWriter(GEN_DIR + filename + "_summary.txt"), 32*1024));
@@ -2531,7 +2872,7 @@ F900..FAFF; CJK Compatibility Ideographs
                             
         while (it.hasNext()) {
             Object sortKey = it.next();
-            String chr = (String)ordered.get(sortKey);
+            String chr = (String)ordered.get(sortKey);            
 
             // get CEs and fix
             int len = collator.getCEs(chr, true, ces);
@@ -3697,90 +4038,11 @@ static int swapCJK(int i) {
         log.println("<p>Note: characters with decompositions to space + X, and tatweel + X are excluded,"
         	+ " as are a few special characters: " + compatibilityExceptions.toPattern(true) + "</p>");
         
-        if (DO_CHARTS) {
-        	System.out.println("Charts");
-        	
-        		for (int j = 0; j < 2; ++j) { // with and without key
-	        
-            	String name = "Collation";
-            	String other = "CollationKey";
-            	boolean SHOW_CE = false;
-	            
-            	if (j == 1) {
-                	SHOW_CE = true;
-                	name = "CollationKey";
-                	other = "Collation";
-            	}
-
-            	it = sortedD.keySet().iterator();
-	            
-            	int end = sortedD.size() >> 7;
-	            
-            	PrintWriter out = writeHead(0, end, name, other, version, SHOW_CE);
-	            
-            	String lastCol = "";
-            	String lastChar = "";
-            	boolean firstRow = true;
-            	int page = 0;
-            	for (int count = 0; it.hasNext(); count++) {
-                	page = count >> 7;
-                	if (count > 0 && (count & 0xf) == 0) {
-                    	if ((count & 0x7F) == 0) {
-                        	writeTail(out, page-1, name, other, SHOW_CE);
-                        	out = writeHead(page, end, name, other, version, SHOW_CE);
-                        	System.out.println("Block: " + page);
-                        	firstRow = true;
-                    	} else {
-                        	out.println("</tr><tr>");
-                        	firstRow = false;
-                    	}
-                	}
-                	String col2 = (String)it.next();
-                	String ch2 = (String)sortedD.get(col2);
-	                
-                	// remove mark
-                	col2 = col2.substring(0,col2.length()-1);
-	            
-                	int strength = getStrengthDifference(lastCol, col2);
-                	lastCol = col2;
-	                
-                	out.print("<td");
-                	int color = 0xFFFFFF;
-                	switch (strength) {
-                    	// case 4: color = 0xFFFFFF; break; // white
-                    	case 3: color = 0xCCCCFF; break;
-                    	case 2: color = 0x9999FF; break;
-                    	case 1: color = 0x6666FF; break;
-                    	case 0: color = 0x3333FF; break;
-                	}
-                	/*if (mark == MARK2) {
-                    	color = color & 0xFF00FF;
-                	}*/
-                	if (color != 0xFFFFFF) out.print(" bgcolor='#" + Integer.toString(color,16) + "'");
-                	//if (firstRow) out.print(" width='6%'");
-                	out.print(">");
-	                
-                	//log.println(Utility.hex(ch2.charAt(0)));
-                	boolean ignorable = col2.charAt(0) == 0;
-                	out.print(HTMLString(ch2) + "<br><tt>"
-                    	+ (ignorable ? "<u>" : "")
-                    	+ Utility.hex(ch2, " ")
-                    	+ (ignorable ? "</u>" : "")
-                    	);
-                	if (SHOW_CE) out.print("</tt><br><tt><b>" + UCA.toString(col2) + "</b>");
-                	out.println("</tt></td>");
-	                
-                	// remember
-                	lastCol = col2;
-                	lastChar = ch2;
-            	}
-            	writeTail(out, page-1, name, other, SHOW_CE);
-        	}
-        }
-        
         checkWellformedTable();
         addClosure();
-        
+        writeDuplicates();
+        writeOverlap();
+
         log.println("</body></html>");
         log.close();
         sortedD.clear();
@@ -3859,6 +4121,7 @@ static int swapCJK(int i) {
         }
     	log.println("</table>");
     	log.println("<p>Items: " + canCount + "</p>");
+    	log.flush();
     }
     
 	static void checkWellformedTable() throws IOException {
@@ -3994,6 +4257,7 @@ static int swapCJK(int i) {
                 
         
         log.println("<p>Errors: " + errorCount + "</p>");
+    	log.flush();
     }
     
     
@@ -4145,6 +4409,7 @@ A4C6;YI RADICAL KE;So;0;ON;;;;;N;;;;;
         //log.println("Removed " + countRem + " adjacent duplicates.<br>");
         System.out.println("Left " + countDups + " conflicts.<br>");
         log.println("Left " + countDups + " conflicts.<br>");
+    	log.flush();
    }
 
    static void removeAdjacentDuplicates2() {
@@ -4207,6 +4472,7 @@ A4C6;YI RADICAL KE;So;0;ON;;;;;N;;;;;
         
         log.println("</table>");
         log.println("<p>Errors: " + errorCount + "</p>");
+    	log.flush();
    }
    
     static int compareMinusLast(String a, String b) {
@@ -4271,6 +4537,7 @@ A4C6;YI RADICAL KE;So;0;ON;;;;;N;;;;;
         log.println("</table>");
         log.println("<p>Errors: " + errorCount + "</p>");
         log.println("<br>");
+    	log.flush();
     }
     
     static boolean containsCombining(String s) {

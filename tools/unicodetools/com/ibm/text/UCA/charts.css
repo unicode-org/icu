@@ -1,18 +1,21 @@
-td           { border: 1 solid #0000FF; color: #000000; background-color: #FFFFFF; 
+td			{ border: 1 solid #0000FF; color: #000000; background-color: #FFFFFF; 
             font-size: 120%; text-align: Center; vertical-align: top; width: 48px }
-td.p         { color: #000000; background-color: #7777FF }
-td.s         { color: #000000; background-color: #BBBBFF }
-td.t         { color: #000000; background-color: #DDDDFF }
-td.q         { color: #000000; background-color: #FFFFFF }
-td.ep        { color: #000000; background-color: #FF5555 }
-td.es        { color: #000000; background-color: #FF7777 }
-td.et        { color: #000000; background-color: #FF9999 }
-td.eq        { color: #000000; background-color: #FFBBBB }
-th           { vertical-align: top; font-weight: bold }
-th.x         { vertical-align: top; font-weight: regular; text-align: Left }
-tt           { font-size: 50% }
+td.p		{ color: #000000; background-color: #7777FF }
+td.s		{ color: #000000; background-color: #BBBBFF }
+td.t		{ color: #000000; background-color: #DDDDFF }
+td.q		{ color: #000000; background-color: #FFFFFF }
+td.ep		{ color: #000000; background-color: #FF5555 }
+td.es		{ color: #000000; background-color: #FF7777 }
+td.et		{ color: #000000; background-color: #FF9999 }
+td.eq		{ color: #000000; background-color: #FFBBBB }
+th			{ vertical-align: top; font-weight: bold }
+th.x		{ vertical-align: top; font-weight: regular; text-align: Left }
+tt			{ font-size: 50% }
 
-td.g { font-size: 120%; text-align: Center; width: 72px; color: #808080; }
-td.n { font-size: 120%; text-align: Center; width: 72px; color: #000000; background-color: #CCCCFF; } 
-td.z { font-size: 120%; text-align: Center; width: 72px; font-weight: bold; background-color: #EEEEEE; }
-td.h { font-size: 120%; text-align: Left; color: #000000; background-color: #EEEEEE; } 
+td.name	{ text-align: left; vertical-align: middle; width: 96% }
+body		{ background-color: #FFFFFF; }
+
+td.g		{ font-size: 120%; text-align: Center; width: 72px; color: #808080; }
+td.n		{ font-size: 120%; text-align: Center; width: 72px; color: #000000; background-color: #CCCCFF; } 
+td.z		{ font-size: 120%; text-align: Center; width: 72px; font-weight: bold; background-color: #EEEEEE; }
+td.h		{ font-size: 120%; text-align: Left; color: #000000; background-color: #EEEEEE; } 

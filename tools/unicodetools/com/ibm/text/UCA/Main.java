@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/Main.java,v $ 
-* $Date: 2002/06/28 01:59:58 $ 
-* $Revision: 1.8 $
+* $Date: 2002/07/03 02:15:47 $ 
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
@@ -19,9 +19,9 @@ import com.ibm.text.utility.*;
 public class Main {
 	static final String UCDVersion = "";
 	static final String[] ICU_FILES = {"writeCollationValidityLog", "writeFractionalUCA",
-		"WriteRules", "WriteRulesWithNames", "WriteRulesXML",
-		"writeconformance", "writeconformanceshifted", 
-		"short", "writeconformance", "writeconformanceshifted", 
+		"WriteRules", "WriteRulesXML", "writeconformance", "writeconformanceshifted", 
+		"short", 
+		"WriteRules", "WriteRulesXML", "writeconformance", "writeconformanceshifted", 
     };
 	
 	public static void main(String args[]) throws Exception {
@@ -45,10 +45,9 @@ public class Main {
             System.out.println("OPTION: " + arg);
             
             if		(arg.equalsIgnoreCase("ICU")) args = Utility.append(args, ICU_FILES);
-			else if (arg.equalsIgnoreCase("WriteRulesWithNames")) WriteCollationData.writeRules(WriteCollationData.WITH_NAMES);
             else if (arg.equalsIgnoreCase("GenOverlap")) GenOverlap.test(WriteCollationData.collator);
             else if (arg.equalsIgnoreCase("validateUCA")) GenOverlap.validateUCA(WriteCollationData.collator);
-            else if (arg.equalsIgnoreCase("writeNonspacingDifference")) WriteCollationData.writeNonspacingDifference();
+            //else if (arg.equalsIgnoreCase("writeNonspacingDifference")) WriteCollationData.writeNonspacingDifference();
             
             else if (arg.equalsIgnoreCase("collationChart")) WriteCharts.collationChart(WriteCollationData.collator);
             else if (arg.equalsIgnoreCase("normalizationChart")) WriteCharts.normalizationChart();
@@ -61,8 +60,9 @@ public class Main {
             else if (arg.equalsIgnoreCase("generateRevision")) GenOverlap.generateRevision(WriteCollationData.collator);
             else if (arg.equalsIgnoreCase("listCyrillic")) GenOverlap.listCyrillic(WriteCollationData.collator);
             
-            else if (arg.equalsIgnoreCase("WriteRules")) WriteCollationData.writeRules(WriteCollationData.WITHOUT_NAMES);
-            else if (arg.equalsIgnoreCase("WriteRulesXML")) WriteCollationData.writeRules(WriteCollationData.IN_XML);
+            else if (arg.equalsIgnoreCase("WriteRules")) WriteCollationData.writeRules(WriteCollationData.WITHOUT_NAMES, shortPrint);
+			// else if (arg.equalsIgnoreCase("WriteRulesWithNames")) WriteCollationData.writeRules(WriteCollationData.WITH_NAMES);
+            else if (arg.equalsIgnoreCase("WriteRulesXML")) WriteCollationData.writeRules(WriteCollationData.IN_XML, shortPrint);
             else if (arg.equalsIgnoreCase("checkDisjointIgnorables")) WriteCollationData.checkDisjointIgnorables();
             else if (arg.equalsIgnoreCase("writeContractions")) WriteCollationData.writeContractions();
             else if (arg.equalsIgnoreCase("writeFractionalUCA")) WriteCollationData.writeFractionalUCA("FractionalUCA");
