@@ -1482,7 +1482,7 @@ void RBBITest::TestExtended() {
                 if (nameEndIdx != -1) {
                     UErrorCode status = U_ZERO_ERROR;
                     testString.extract(charIdx+2, nameLength, charNameBuf, sizeof(charNameBuf));
-                    charNameBuf[sizeof(charNameBuf)] = 0;
+                    charNameBuf[sizeof(charNameBuf)-1] = 0;
                     theChar = u_charFromName(U_UNICODE_CHAR_NAME, charNameBuf, &status);
                     if (U_FAILURE(status)) {
                         theChar = -1;

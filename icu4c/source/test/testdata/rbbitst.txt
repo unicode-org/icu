@@ -90,11 +90,12 @@
 #
 ##########################################################################################
 
-
-
 <word>
+
+#
+# Quick sanity test
+#
 <data>•hello<200> •there<200> •goodbye<200></data>
-<data>•word<200> •two<200> •</data>
 <data>•hello<200> •12345<100> •,•</data>
 
 
@@ -312,6 +313,104 @@ What is the proper use of the abbreviation pp.•? •Yes, I am definatelly 12" 
 #
 #
 ################################################################
+
+#
+# Test Character for each of the line break classes.
+#
+# 00A1;AI # INVERTED EXCLAMATION MARK  ¡
+# 0041;AL # LATIN CAPITAL LETTER A
+# 0009;BA # <control>
+# 00B4;BB # ACUTE ACCENT
+# 000C;BK # <control>
+# 2014;B2 # EM DASH
+# FFFC;CB # OBJECT REPLACEMENT CHARACTER
+# 0029;CL # RIGHT PARENTHESIS
+# 0301;CM # COMBINING ACUTE ACCENT
+# 0021;EX # EXCLAMATION MARK
+# 00A0;GL # NO-BREAK SPACE
+# 002D;HY # HYPHEN-MINUS
+# 4E00;ID # <CJK Ideograph, First>
+# 2024;IN # ONE DOT LEADER
+# 002C;IS # COMMA
+# 000A;LF # <control>
+# 0E5A;NS # THAI CHARACTER ANGKHANKHU
+# 0032;NU # DIGIT TWO
+# 0028;OP # LEFT PARENTHESIS
+# 0025;PO # PERCENT SIGN
+# 0024;PR # DOLLAR SIGN
+# 0022;QU # QUOTATION MARK
+# 0E01;SA # THAI CHARACTER KO KAI
+# DB7F;SG # Surrogate
+# 0020;SP # SPACE
+# 002F;SY # SOLIDUS /
+# F8FF;XX # Private Use
+# 200B;ZW # ZERO WIDTH SPACE
+
+
+# 2b  Always break at end of text
+
+<data>•   \u00A1•</data>
+<data>•   \u0041•</data>
+<data>•   \u0009•</data>
+<data>•   \u00B4•</data>
+<data>•   \u000C•</data>
+<data>•   \u2014•</data>
+<data>•   \uFFFC•</data>
+<data>•   \u0029•</data>
+<data>•   \u0301•</data>
+<data>•   \u0021•</data>
+<data>•   \u00A0•</data>
+<data>•   \u002D•</data>
+<data>•   \u4E00•</data>
+<data>•   \u2024•</data>
+<data>•   \u002C•</data>
+<data>•   \u000A•</data>
+<data>•   \u0E5A•</data>
+<data>•   \u0032•</data>
+<data>•   \u0028•</data>
+<data>•   \u0025•</data>
+<data>•   \u0024•</data>
+<data>•   \u0022•</data>
+<data>•   \u0E01•</data>
+<data>•   \uDB7F•</data>
+<data>•   \u0020•</data>
+<data>•   \u002F•</data>
+<data>•   \uF8FF•</data>
+<data>•   \u200B•</data>
+
+
+# 3a  Always break after hard line breaks.
+# 3c  Never break before hard line breaks.
+
+<data>•   \u00A1\u2028•\u00A1•</data>
+<data>•   \u0041\u2028•\u0041•</data>
+<data>•   \u0009\u2028•\u0009•</data>
+<data>•   \u00B4\u2028•\u00B4•</data>
+<data>•   \u000C\u2028•\u000C•</data>
+<data>•   \u2014\u2028•\u2014•</data>
+<data>•   \uFFFC\u2028•\uFFFC•</data>
+<data>•   \u0029\u2028•\u0029•</data>
+<data>•   \u0301\u2028•\u0301•</data>
+<data>•   \u0021\u2028•\u0021•</data>
+<data>•   \u00A0\u2028•\u00A0•</data>
+<data>•   \u002D\u2028•\u002D•</data>
+<data>•   \u4E00\u2028•\u4E00•</data>
+<data>•   \u2024\u2028•\u2024•</data>
+<data>•   \u002C\u2028•\u002C•</data>
+<data>•   \u000A•\u2028•\u000A•</data>
+<data>•   \u0E5A\u2028•\u0E5A•</data>
+<data>•   \u0032\u2028•\u0032•</data>
+<data>•   \u0028\u2028•\u0028•</data>
+<data>•   \u0025\u2028•\u0025•</data>
+<data>•   \u0024\u2028•\u0024•</data>
+<data>•   \u0022\u2028•\u0022•</data>
+<data>•   \u0E01\u2028•\u0E01•</data>
+<data>•   \uDB7F\u2028•\uDB7F•</data>
+<data>•   \u0020\u2028•\u0020•</data>
+<data>•   \u002F\u2028•\u002F•</data>
+<data>•   \uF8FF\u2028•\uF8FF•</data>
+<data>•   \u200B\u2028•\u200B•</data>
+
 #
 #  Old Line Break Test data.  Orginally located in RBBITest::TestDefaultRuleBasedLineIteration()
 #
