@@ -95,6 +95,8 @@ public class ICUResourceBundle extends UResourceBundle{
 
     private static final String ICU_RESOURCE_INDEX = "res_index";
     
+	private static final String DEFAULT_TAG = "default";
+    
     /**
      * Return the version number associated with this UResourceBundle as an 
      * VersionInfo object.
@@ -349,8 +351,6 @@ public class ICUResourceBundle extends UResourceBundle{
         return (UResourceBundle)parent;   
     }
     
-
-    
     /**
      * Returns a functionally equivalent locale, considering keywords as well, for the specified keyword.
      * @param BASE resource specifier
@@ -388,7 +388,29 @@ public class ICUResourceBundle extends UResourceBundle{
      * @internal ICU 3.0
      */
     public static final String[] getKeywordValues(String baseName, String keyword){
-        return null;
+        Set keywords = new HashSet();
+		ULocale locales[] = createULocaleList(baseName,ICU_DATA_CLASS_LOADER);
+		int i;
+		
+		for(i=0;i<locales.length;i++) {
+			try {
+				UResourceBundle b = UResourceBundle.getBundleInstance(baseName, locales[i]);
+				// downcast to ICUResourceBundle?
+				ICUResourceBundle irb = (ICUResourceBundle)(b.getObject(keyword));
+				Enumeration e = irb.getKeys();
+				Object s;
+				while(e.hasMoreElements()) {
+					s= e.nextElement();
+					if ((s instanceof String) && !DEFAULT_TAG.equals(s)) { // don't add 'default' items
+						keywords.add(s);
+					}
+				}
+			} catch (Throwable t){
+				//System.err.println("Error in  - " + new Integer(i).toString() + " - " + t.toString());
+				// ignore the err - just skip that resource
+			}
+		}
+		return (String[])keywords.toArray(new String[0]);
     }
     
     /**
