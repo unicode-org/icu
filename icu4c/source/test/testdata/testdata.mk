@@ -20,10 +20,14 @@ ALL : "$(TESTDATAOUT)\testdata.dat"
 # and CollationElements (which will not work with a newer swapper)
 # markus 2003nov19
 
+# icu26e_testtypes.res is the same, but icuswapped to big-endian EBCDIC
+# markus 2003nov21
+
 "$(TESTDATAOUT)\testdata.dat" : "$(TESTDATABLD)\casing.res" "$(TESTDATABLD)\conversion.res" "$(TESTDATABLD)\mc.res" "$(TESTDATABLD)\root.res" "$(TESTDATABLD)\te.res" "$(TESTDATABLD)\te_IN.res" "$(TESTDATABLD)\testaliases.res" "$(TESTDATABLD)\testtypes.res" "$(TESTDATABLD)\testempty.res" "$(TESTDATABLD)\$(TESTDT)iscii.res" "$(TESTDATABLD)\$(TESTDT)idna_rules.res" "$(TESTDATABLD)\DataDrivenCollationTest.res" "$(TESTDATABLD)\$(TESTDT)test.icu" "$(TESTDATABLD)\$(TESTDT)testtable32.res" "$(TESTDATABLD)\$(TESTDT)test1.cnv" "$(TESTDATABLD)\$(TESTDT)test3.cnv" "$(TESTDATABLD)\$(TESTDT)test4.cnv" "$(TESTDATABLD)\$(TESTDT)test4x.cnv" "$(TESTDATABLD)\$(TESTDT)ibm9027.cnv" "$(TESTDATABLD)\$(TESTDT)nfscsi.spp" "$(TESTDATABLD)\$(TESTDT)nfscss.spp" "$(TESTDATABLD)\$(TESTDT)nfscis.spp" "$(TESTDATABLD)\$(TESTDT)nfsmxs.spp" "$(TESTDATABLD)\$(TESTDT)nfsmxp.spp"
 	@echo Building test data
 	@copy "$(TESTDATABLD)\$(TESTDT)te.res" "$(TESTDATAOUT)\$(TESTDT)nam.typ"
 	@copy "$(TESTDATA)\$(TESTDT)icu26_testtypes.res" "$(TESTDATABLD)"
+	@copy "$(TESTDATA)\$(TESTDT)icu26e_testtypes.res" "$(TESTDATABLD)"
 	@"$(ICUP)\bin\pkgdata" -f -v -m common -c -p"$(TESTPKG)" -d "$(TESTDATAOUT)" -T "$(TESTDATABLD)" -s "$(TESTDATABLD)" <<
 $(TESTDT)casing.res
 $(TESTDT)conversion.res
@@ -34,6 +38,7 @@ $(TESTDT)te.res
 $(TESTDT)te_IN.res
 $(TESTDT)testtypes.res
 $(TESTDT)icu26_testtypes.res
+$(TESTDT)icu26e_testtypes.res
 $(TESTDT)testempty.res
 $(TESTDT)testaliases.res
 $(TESTDT)iscii.res
