@@ -332,11 +332,12 @@ u_strcmp(const UChar *s1,
     }
 }
 
+/* rotate surrogates to the top to get code point order; assume c>=0xd800 */
 #define UTF16FIXUP(c) {                  \
-if ((c) >= 0xE000) {                     \
-    (c) -= 0x800;                        \
-} else if ((c) >= 0xD800) {              \
-    (c) += 0x2000;                       \
+    if ((c) >= 0xe000) {                 \
+        (c) -= 0x800;                    \
+    } else {                             \
+        (c) += 0x2000;                   \
     }                                    \
 }
 
