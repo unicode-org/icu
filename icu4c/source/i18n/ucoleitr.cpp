@@ -56,6 +56,10 @@ ucol_openElements(const UCollator  *coll,
   result->normalization_ = UNORM_DEFAULT;
 
   result->isWritable = FALSE;
+
+  if (text == NULL) {
+      textLength = 0;
+  }
   init_collIterate(coll, text, textLength, &result->iteratordata_);
 
   return result;
@@ -180,6 +184,10 @@ ucol_setText(      UCollationElements *elems,
     uprv_free(elems->iteratordata_.string);
   }
  
+  if (text == NULL) {
+      textLength = 0;
+  }
+
   elems->isWritable = FALSE;
   init_collIterate(elems->iteratordata_.coll, text, textLength, &elems->iteratordata_);
 

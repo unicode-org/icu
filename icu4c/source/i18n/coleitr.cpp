@@ -139,15 +139,21 @@ void CollationElementIterator::setText(const UnicodeString& source,
   if (U_FAILURE(status)) {
     return;
   }
+  	
   int32_t length = source.length();
-  UChar *string = (UChar *)uprv_malloc(sizeof(UChar) * length);
-  source.extract(0, length, string);
-	
-  if (m_data_->isWritable && 
-      m_data_->iteratordata_.string != NULL) {
+  UChar *string = NULL;
+  if (m_data_->isWritable && m_data_->iteratordata_.string != NULL) {
     uprv_free(m_data_->iteratordata_.string);
   }
   m_data_->isWritable = TRUE;
+  if (length > 0) {
+    string = (UChar *)uprv_malloc(sizeof(UChar) * length);
+    source.extract(0, length, string);
+  }
+  else {
+    string = (UChar *)uprv_malloc(sizeof(UChar));
+    *string = 0;
+  }
   init_collIterate(m_data_->iteratordata_.coll, string, length, 
                    &m_data_->iteratordata_);
 }
@@ -160,14 +166,22 @@ void CollationElementIterator::setText(CharacterIterator& source,
     return;
     
   int32_t length = source.getLength();
-  UChar *buffer = (UChar *)uprv_malloc(sizeof(UChar) * length);
-  /* 
-  Using this constructor will prevent buffer from being removed when
-  string gets removed
-  */
-  UnicodeString string;
-  source.getText(string);
-  string.extract(0, length, buffer);
+  UChar *buffer = NULL;
+
+  if (length == 0) {
+    buffer = (UChar *)uprv_malloc(sizeof(UChar));
+    *buffer = 0;
+  }
+  else {
+      buffer = (UChar *)uprv_malloc(sizeof(UChar) * length);
+      /* 
+      Using this constructor will prevent buffer from being removed when
+      string gets removed
+      */
+      UnicodeString string;
+      source.getText(string);
+      string.extract(0, length, buffer);
+  }
   
   if (m_data_->isWritable && m_data_->iteratordata_.string != NULL)
     uprv_free(m_data_->iteratordata_.string);
@@ -232,10 +246,8 @@ CollationElementIterator::CollationElementIterator(
   }
   else {
       string = (UChar *)uprv_malloc(sizeof(UChar));
-      // null terminate it
       *string = 0;
   }
-
   m_data_ = ucol_openElements(order->ucollator, string, length, &status);
   m_data_->isWritable = TRUE;
 }
@@ -273,15 +285,21 @@ CollationElementIterator::CollationElementIterator(
   }
   */
   int32_t length = sourceText.getLength();
-  UChar *buffer = (UChar *)uprv_malloc(sizeof(UChar) * length);
-  /* 
-  Using this constructor will prevent buffer from being removed when
-  string gets removed
-  */
-  UnicodeString string(buffer, length, length);
-  ((CharacterIterator &)sourceText).getText(string);
-  string.extract(0, length, buffer);
-  
+  UChar *buffer;
+  if (length > 0) {
+      buffer = (UChar *)uprv_malloc(sizeof(UChar) * length);
+      /* 
+      Using this constructor will prevent buffer from being removed when
+      string gets removed
+      */
+      UnicodeString string(buffer, length, length);
+      ((CharacterIterator &)sourceText).getText(string);
+      string.extract(0, length, buffer);
+  }
+  else {
+      buffer = (UChar *)uprv_malloc(sizeof(UChar));
+      *buffer = 0;
+  }
   m_data_ = ucol_openElements(order->ucollator, buffer, length, &status);
   m_data_->isWritable = TRUE;
 }
