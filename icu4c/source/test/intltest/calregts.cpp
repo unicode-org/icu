@@ -1665,7 +1665,7 @@ void CalendarRegressionTest::Test4197699() {
         2000,  Calendar::JANUARY,   1,   52,
         2001,  Calendar::DECEMBER,  31,  1,
     };
-    int32_t DATA_length = sizeof(DATA) / sizeof(DATA[0]);
+    int32_t DATA_length = (int32_t)(sizeof(DATA) / sizeof(DATA[0]));
 
     UnicodeString str;
     DateFormat& dfmt = *(DateFormat*)&fmt;
@@ -1766,7 +1766,7 @@ void CalendarRegressionTest::TestJ81() {
         30, 42, 293, Calendar::SATURDAY,
         31, 43, 294, Calendar::SUNDAY
     };
-    int32_t DOY_DATA_length = sizeof(DOY_DATA) / sizeof(DOY_DATA[0]);
+    int32_t DOY_DATA_length = (int32_t)(sizeof(DOY_DATA) / sizeof(DOY_DATA[0]));
     for (i=0; i<DOY_DATA_length; i+=4) {
         // Test time->fields
         cal.set(1582, Calendar::OCTOBER, DOY_DATA[i]);
@@ -1846,7 +1846,7 @@ void CalendarRegressionTest::TestJ81() {
         // { Calendar::YEAR_WOY, ADD|ROLL, 1, -ONE_DAY, +6*ONE_DAY },
         // { Calendar::DOW_LOCAL, ADD|ROLL, 2, -ONE_DAY, +1*ONE_DAY }
     };
-    int32_t DATA_length = sizeof(DATA) / sizeof(DATA[0]);
+    int32_t DATA_length = (int32_t)(sizeof(DATA) / sizeof(DATA[0]));
 
     // Now run the tests
     for (i=0; i<DATA_length; ++i) {
@@ -1920,7 +1920,7 @@ void CalendarRegressionTest::TestJ438(void) {
         1964, Calendar::SEPTEMBER, 7,  1999, Calendar::JUNE, 4,
         1999, Calendar::JUNE, 4,       1964, Calendar::SEPTEMBER, 7,
     };
-    int32_t DATA_length = sizeof(DATA)/sizeof(DATA[0]);
+    int32_t DATA_length = (int32_t)(sizeof(DATA)/sizeof(DATA[0]));
     Calendar* pcal = Calendar::createInstance(Locale::US, ec);
     Calendar& cal = *pcal;
     int32_t i;
