@@ -1,52 +1,55 @@
-// *******************************************************************************
+// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2000, International Business Machines
+// *   Copyright (C) 1997-2002, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
-// *******************************************************************************
+// ***************************************************************************
 
 en_IE {
-    Countries { 
-        US { "United States" }
-        GB { "United Kingdom" }
-        CA { "Canada" }
-        IE { "Ireland" }
-        AU { "Australia" }
-        NZ { "New Zealand" }
-    }
+    Version { "1.0" }
+//    Duplicated in parent
+//    Countries { 
+//        US { "United States" }
+//        GB { "United Kingdom" }
+//        CA { "Canada" }
+//        IE { "Ireland" }
+//        AU { "Australia" }
+//        NZ { "New Zealand" }
+//    }
     CurrencyElements { 
-            "\u20AC",
-            "EUR",
-            ".",
+        "\u20AC",
+        "EUR",
+        ".",
     }
     DateTimeElements { 
-            "2",
-            "1",
+        "2",
+        "1",
     }
     DateTimePatterns { 
-            "HH:mm:ss 'o''clock' z",
-            "HH:mm:ss z",
-            "HH:mm:ss",
-            "HH:mm",
-            "dd MMMM yyyy",
-            "dd MMMM yyyy",
-            "dd-MMM-yy",
-            "dd/MM/yy",
-            "{1} {0}",
+        "HH:mm:ss 'o''clock' z",
+        "HH:mm:ss z",
+        "HH:mm:ss",
+        "HH:mm",
+        "dd MMMM yyyy",
+        "dd MMMM yyyy",
+        "dd-MMM-yy",
+        "dd/MM/yy",
+        "{1} {0}",
     }
-    Languages { 
-        en { "English" }
-    }
+//    Duplicated in parent
+//    Languages { 
+//        en { "English" }
+//    }
     LocaleID { "1809" }
-    LocaleString { "en_IE" }
-    ShortCountry { "IRL" }
+//    LocaleString { "en_IE" }
+//    ShortCountry { "IRL" }
     zoneStrings { 
         {
-                "Europe/London",
-                "Greenwich Mean Time",
-                "GMT",
-                "Ireland Summer Time",
-                "IST",
+            "Europe/London",
+            "Greenwich Mean Time",
+            "GMT",
+            "Ireland Summer Time",
+            "IST",
         }
     }
 }

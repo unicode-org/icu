@@ -1,12 +1,12 @@
-// *******************************************************************************
+// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2000, International Business Machines
+// *   Copyright (C) 1997-2002, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
-// *******************************************************************************
+// ***************************************************************************
 
 tr {
-    Version{ "1.1.1" }
+    Version{ "1.2" }
     // According to Nurdan Mete from IBM Turkey, the following would be the correct
     // sorting order for Turkish
     CollationElements { 
@@ -22,98 +22,96 @@ tr {
         TR { "T\u00FCrkiye" }
     }
     DateTimeElements { 
-            "2",
-            "1",
+        "2",
+        "1",
     }
     DateTimePatterns { 
-            "HH:mm:ss z",
-            "HH:mm:ss z",
-            "HH:mm:ss",
-            "HH:mm",
-            "dd MMMM yyyy EEEE",
-            "dd MMMM yyyy EEEE",
-            "dd.MMM.yyyy",
-            "dd.MM.yyyy",
-            "{1} {0}",
+        "HH:mm:ss z",
+        "HH:mm:ss z",
+        "HH:mm:ss",
+        "HH:mm",
+        "dd MMMM yyyy EEEE",
+        "dd MMMM yyyy EEEE",
+        "dd.MMM.yyyy",
+        "dd.MM.yyyy",
+        "{1} {0}",
     }
     DayAbbreviations { 
-            "Paz",
-            "Pzt",
-            "Sal",
-            "\u00C7ar",
-            "Per",
-            "Cum",
-            "Cmt",
+        "Paz",
+        "Pzt",
+        "Sal",
+        "\u00C7ar",
+        "Per",
+        "Cum",
+        "Cmt",
     }
     DayNames { 
-            "Pazar",
-            "Pazartesi",
-            "Sal\u0131",
-            "\u00C7ar\u015Famba",
-            "Per\u015Fembe",
-            "Cuma",
-            "Cumartesi",
+        "Pazar",
+        "Pazartesi",
+        "Sal\u0131",
+        "\u00C7ar\u015Famba",
+        "Per\u015Fembe",
+        "Cuma",
+        "Cumartesi",
     }
     Languages { 
         tr { "T\u00FCrk\u00E7e" }
     }
     LocaleID { "1f" }
-    LocaleString { "tr" }
+//    LocaleString { "tr" }
     MonthAbbreviations { 
-            "Oca",
-            "\u015Eub",
-            "Mar",
-            "Nis",
-            "May",
-            "Haz",
-            "Tem",
-            "A\u011Fu",
-            "Eyl",
-            "Eki",
-            "Kas",
-            "Ara",
-            "",
+        "Oca",
+        "\u015Eub",
+        "Mar",
+        "Nis",
+        "May",
+        "Haz",
+        "Tem",
+        "A\u011Fu",
+        "Eyl",
+        "Eki",
+        "Kas",
+        "Ara",
     }
     MonthNames { 
-            "Ocak",
-            "\u015Eubat",
-            "Mart",
-            "Nisan",
-            "May\u0131s",
-            "Haziran",
-            "Temmuz",
-            "A\u011Fustos",
-            "Eyl\u00FCl",
-            "Ekim",
-            "Kas\u0131m",
-            "Aral\u0131k",
-            "",
+        "Ocak",
+        "\u015Eubat",
+        "Mart",
+        "Nisan",
+        "May\u0131s",
+        "Haziran",
+        "Temmuz",
+        "A\u011Fustos",
+        "Eyl\u00FCl",
+        "Ekim",
+        "Kas\u0131m",
+        "Aral\u0131k",
     }
     NumberElements { 
-            ",",
-            ".",
-            ";",
-            "%",
-            "0",
-            "#",
-            "-",
-            "E",
-            "\u2030",
-            "\u221E",
-            "\uFFFD",
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
     }
-    ShortLanguage { "tur" }
+//    ShortLanguage { "tur" }
     localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
     zoneStrings { 
         {
-                "Africa/Casablanca",
-                "GMT",
-                "GMT",
-                "GMT",
-                "GMT",
+            "Africa/Casablanca",
+            "GMT",
+            "GMT",
+            "GMT",
+            "GMT",
         }
     }
-    LocaleScript{ 
-                "Latn",  // ISO 15924 Name 
-    }
+//    LocaleScript{ 
+//        "Latn",  // ISO 15924 Name 
+//    }
 }

@@ -60,6 +60,7 @@ static void TestDateFormat()
     {
         log_err("FAIL: error in creating the dateformat using full time style with french locale\n %s\n", 
             myErrorName(status) );
+        return;
     }
     /* this is supposed to open default date format, but later on it treats it like it is "en_US" 
        - very bad if you try to run the tests on machine where default locale is NOT "en_US" */
@@ -69,18 +70,21 @@ static void TestDateFormat()
     {
         log_err("FAIL: error in creating the dateformat using short date and time style\n %s\n", 
             myErrorName(status) );
+        return;
     }
     it = udat_open(UDAT_DEFAULT, UDAT_MEDIUM, "it_IT", NULL, 0, NULL, 0,&status);
     if(U_FAILURE(status))
     {
         log_err("FAIL: error in creating the dateformat using medium date style with italian locale\n %s\n", 
             myErrorName(status) );
+        return;
     }
     de = udat_open(UDAT_LONG, UDAT_LONG, "de_DE", NULL, 0, NULL, 0,&status);
     if(U_FAILURE(status))
     {
         log_err("FAIL: error in creating the dateformat using long time and date styles with german locale\n %s\n",
             myErrorName(status));
+        return;
     }
     /*creating a default dateformat */
     def1 = udat_open(UDAT_SHORT, UDAT_SHORT, NULL, NULL, 0,NULL, 0, &status);
@@ -88,6 +92,7 @@ static void TestDateFormat()
     {
         log_err("FAIL: error in creating the dateformat using short date and time style\n %s\n", 
             myErrorName(status) );
+        return;
     }
 
 
@@ -326,6 +331,7 @@ static void TestSymbols()
     {
         log_err("error in creating the dateformat using full time style with french locale\n %s\n", 
             myErrorName(status) );
+        return;
     }
     /*creating a default dateformat */
     log_verbose("\ncreating a date format with default locale\n");
@@ -337,17 +343,20 @@ static void TestSymbols()
     {
         log_err("error in creating the dateformat using short date and time style\n %s\n", 
             myErrorName(status) );
+        return;
     }
     
     
     /*Testing countSymbols, getSymbols and setSymbols*/
     log_verbose("\nTesting countSymbols\n");
     /*since the month names has the last string empty and week names are 1 based 1.e first string in the weeknames array is empty */
-    if(udat_countSymbols(def, UDAT_ERAS)!=2 || udat_countSymbols(def, UDAT_MONTHS)!=13 || 
-        udat_countSymbols(def, UDAT_SHORT_MONTHS)!=13 || udat_countSymbols(def, UDAT_WEEKDAYS)!=8 ||
+    if(udat_countSymbols(def, UDAT_ERAS)!=2 || udat_countSymbols(def, UDAT_MONTHS)!=12 || 
+        udat_countSymbols(def, UDAT_SHORT_MONTHS)!=12 || udat_countSymbols(def, UDAT_WEEKDAYS)!=8 ||
         udat_countSymbols(def, UDAT_SHORT_WEEKDAYS)!=8 || udat_countSymbols(def, UDAT_AM_PMS)!=2 ||
         udat_countSymbols(def, UDAT_LOCALIZED_CHARS)!=1)
-      log_err("FAIL: error in udat_countSymbols\n");
+    {
+        log_err("FAIL: error in udat_countSymbols\n");
+    }
     else
         log_verbose("PASS: udat_countSymbols() successful\n");
 

@@ -60,6 +60,7 @@ void Test4029195()
     if(U_FAILURE(status))
     {
         log_err("FAIL: error in creating the dateformat using default date and time style : %s\n", myErrorName(status));
+        return;
     }
     resultlength=0;
     resultlengthneeded=udat_toPattern(df, TRUE, NULL, resultlength, &status);
@@ -156,33 +157,32 @@ void Test4056591()
     if(U_FAILURE(status))
     {
         log_err("FAIL: error in creating the dateformat using u_openPattern(): %s\n", myErrorName(status));
+        return;
     }
     start = 1800;
     udat_set2DigitYearStart(def, start, &status);
     if(U_FAILURE(status))
         log_err("ERROR: in setTwoDigitStartDate: %s\n", myErrorName(status));
     if( (udat_get2DigitYearStart(def, &status) != start))
-            log_err("ERROR: get2DigitYearStart broken\n");
+        log_err("ERROR: get2DigitYearStart broken\n");
         
 
-        for(i = 0; i < 4; ++i) {
-            u_uastrcpy(s, strings[i]);
-            exp = d[i];
-            got = udat_parse(def, s, u_strlen(s), 0, &status);
-            gotdate=myFormatit(def, got);
-            expdate=myFormatit(def, exp);
-            
-            if(u_strcmp(gotdate, expdate) !=0){
-                log_err("set2DigitYearStart broken for %s \n  got: %s, expected: %s\n", austrdup(s),
-                    austrdup(gotdate), austrdup(expdate) );
-            }
+    for(i = 0; i < 4; ++i) {
+        u_uastrcpy(s, strings[i]);
+        exp = d[i];
+        got = udat_parse(def, s, u_strlen(s), 0, &status);
+        gotdate=myFormatit(def, got);
+        expdate=myFormatit(def, exp);
+
+        if(u_strcmp(gotdate, expdate) !=0){
+            log_err("set2DigitYearStart broken for %s \n  got: %s, expected: %s\n", austrdup(s),
+                austrdup(gotdate), austrdup(expdate) );
         }
-
-        udat_close(def);
-        ucal_close(cal);
-        uprv_free(tzID);
-   
-
+    }
+    
+    udat_close(def);
+    ucal_close(cal);
+    uprv_free(tzID);
 }
 
 
@@ -203,6 +203,7 @@ void Test4059917()
     if(U_FAILURE(status))
     {
         log_err("FAIL: error in creating the dateformat using openPattern: %s\n", myErrorName(status));
+        return;
     }
     myDate=(UChar*)uprv_malloc(sizeof(UChar) * 11);
     u_uastrcpy(myDate, "1970/01/12");
@@ -215,6 +216,7 @@ void Test4059917()
     if(U_FAILURE(status))
     {
         log_err("FAIL: error in creating the dateformat using openPattern: %s\n", myErrorName(status));
+        return;
     }
     u_uastrcpy(myDate, "19700112");
     aux917( def, myDate );
@@ -282,6 +284,7 @@ void Test4060212()
     {
         log_err("FAIL: error in creating the dateformat using default date and time style: %s\n", 
                         myErrorName(status) );
+        return;
     }
     myString = myFormatit(fmt, myDate);
     u_uastrcpy(tzID, "PST");
@@ -319,12 +322,13 @@ void Test4061287()
     df = udat_open(UDAT_IGNORE,UDAT_IGNORE,NULL,NULL,0,pattern, u_strlen(pattern),&status);
     if(U_FAILURE(status)){
         log_err("ERROR: failure in open pattern of test4061287: %s\n", myErrorName(status));
+        return;
     }
 
     pos=0;
     
     udat_setLenient(df, FALSE);
-       ok=udat_isLenient(df);
+    ok=udat_isLenient(df);
     if(ok==TRUE)
         log_err("setLenient nor working\n");
     ok = FALSE;
@@ -374,6 +378,7 @@ void Test4073003()
     {
         log_err("FAIL: error in creating the dateformat using short date and time style: %s\n", 
             myErrorName(status));
+        return;
     }
     u_uastrcpy(temp, "m/D/yy");
     udat_applyPattern(fmt, TRUE, temp, u_strlen(temp));
@@ -434,8 +439,9 @@ void Test4162071()
     df = udat_open(UDAT_IGNORE,UDAT_IGNORE,"en_US",NULL,0,format, u_strlen(format),&status);
     if(U_FAILURE(status)){
         log_err("ERROR: couldn't create date format: %s\n", myErrorName(status));
+        return;
     }
-  pos=0;
+    pos=0;
     x = udat_parse(df, datestr, u_strlen(datestr), &pos, &status);
     if(U_FAILURE(status)){
                 log_err("ERROR : parse format  %s failes : %s\n", austrdup(format), myErrorName(status));
@@ -461,6 +467,7 @@ void Test714(void)
     {
         log_err("FAIL: error in creating the dateformat using medium time style and NO date style: %s\n", 
             myErrorName(status));
+        return;
     }
     result =myFormatit(fmt, d);
     u_uastrcpy(temp, expect);

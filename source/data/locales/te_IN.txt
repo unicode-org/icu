@@ -1,12 +1,15 @@
-// -*- Coding:US-ASCII-*-
-// *   Copyright (C) 1997-2001, International Business Machines
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
-// $Revision: 1.6 $
+// *
+// ***************************************************************************
+// $Revision: 1.7 $
 //
 // Telugu Locale. Data by Ram [ram@jtcsv.com]
 
 te_IN {
-    Version{ "1.0" }
+    Version{ "1.1" }
     AmPmMarkers {
         "\u0c2a\u0c42\u0c30\u0c4d\u0c35\u0c3e\u0c39\u0c4d\u0c28",
         "\u0c05\u0c2a\u0c30\u0c3e\u0c39\u0c4d\u0c28",
@@ -30,12 +33,12 @@ te_IN {
 
     // LanguageLibraryUse { "Te" }
     // Measurement { "Metric" }
-    NumberPatterns {
-        "#,#0.##;-#,#0.##",
-        "\u00A4 #,#0.00;-\u00A4 #,#0.00",
-        "#,#0%",
-    }
-    ShortLanguage { "tel" }
+//    NumberPatterns {
+//        "#,#0.##;-#,#0.##",
+//        "\u00A4 #,#0.00;-\u00A4 #,#0.00",
+//        "#,#0%",
+//    }
+//    ShortLanguage { "tel" }
     //PaperSize {
     //    Hieght { "297" }
     //    Width { "210" }

@@ -1,10 +1,15 @@
-// *   Copyright (C) 1997-2001, International Business Machines
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
 // Konkani locale
 
 kok_IN {
     Version { "1.1.1" }
     LocaleID { "0457" }
-    ShortCountry { IND }
+//    ShortCountry { IND }
 
     CurrencyElements {
         "\u0930\u0941",
@@ -22,9 +27,8 @@ kok_IN {
         "d-M-yy",
         "{1} {0}"
     }
-    DateTimeElements {
-        "1",
-        "1"
-    }
-
+//    DateTimeElements {
+//        "1",
+//        "1"
+//    }
 }

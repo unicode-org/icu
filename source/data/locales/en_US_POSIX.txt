@@ -1,16 +1,16 @@
-// *******************************************************************************
+// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2001, International Business Machines
+// *   Copyright (C) 1997-2002, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
-// *******************************************************************************
+// ***************************************************************************
 
 // This is an invariant locale.
 // This has been also known as the C locale on Unix or the invariant locale in Windows.
 en_US_POSIX {
+    Version{ "1.0" }
     CollationElements { 
         Version { "1.0" }
-        Override { "FALSE" }
         Sequence { "& '\u0040' < A < B < C < D < E < F < G < H < I < J < K < L < M"
         " < N < O < P < Q < R < S < T < U < V < W < X < Y < Z"
         " & '\u0060' < a < b < c < d < e < f < g < h < i < j < k < l < m"
@@ -26,23 +26,24 @@ en_US_POSIX {
     }
     // No grouping separators
     NumberPatterns { 
-            "###0.###;-###0.###",
-            "\u00A4 ###0.00;-\u00A4 ###0.00",
-            "###0%",
+        "###0.###;-###0.###",
+        "\u00A4 ###0.00;-\u00A4 ###0.00",
+        "###0%",
+        "#E0",
     }
     NumberElements {
-            ".",
-            ",",
-            ";",
-            "%",
-            "0",
-            "#",
-            "-",
-            "E",
-            "0/00",
-            "INF",  // Older programs can parse infinity this way.
-            "\uFFFD",
+        ".",
+        ",",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "0/00",
+        "INF",  // Older programs can parse infinity this way.
+        "\uFFFD",
     }
-    LocaleString { "en_US_POSIX" }
+//    LocaleString { "en_US_POSIX" }
     LocaleID { "7F" }
 }

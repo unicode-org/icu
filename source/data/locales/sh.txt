@@ -1,53 +1,53 @@
-// *******************************************************************************
+// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2001, International Business Machines
+// *   Copyright (C) 1997-2002, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
-// *******************************************************************************
+// ***************************************************************************
 
 sh {
-    Version { "1.1.1" }
+    Version { "1.2" }
     CollationElements { 
-	    Version { "2.0" }
-		Sequence { 	
-                "& C < \u010D <<< \u010C < \u0107 <<< \u0106"
-				"&\u0110 < d\u017E <<< D\u017E <<< D\u017D"
-				"& L < lj, Lj <<< LJ"
-				"& N < nj, Nj <<< NJ "
-				"& S < \u0161 <<< \u0160"
-				"& Z < \u017E <<< \u017D"
-			}
-	}
+        Version { "2.0" }
+        Sequence {
+            "& C < \u010D <<< \u010C < \u0107 <<< \u0106"
+            "&\u0110 < d\u017E <<< D\u017E <<< D\u017D"
+            "& L < lj, Lj <<< LJ"
+            "& N < nj, Nj <<< NJ "
+            "& S < \u0161 <<< \u0160"
+            "& Z < \u017E <<< \u017D"
+            }
+    }
     Countries { 
         AF { "Avganistan" }
         AL { "Albanija" }
         DZ { "Al\u017Eir" }
         AD { "Andora" }
-        AO { "Angola" }
-        AR { "Argentina" }
+        //AO { "Angola" }
+        //AR { "Argentina" }
         AM { "Armenija" }
-        AW { "Aruba" }
+        //AW { "Aruba" }
         AU { "Australija" }
         AT { "Austrija" }
         AZ { "Azerbejd\u017Ean" }
         BS { "Bahami" }
         BH { "Bahrein" }
         BD { "Banglade\u0161" }
-        BB { "Barbados" }
+        //BB { "Barbados" }
         BY { "Belorusija" }
         BE { "Belgija" }
         BZ { "Belise" }
-        BJ { "Benin" }
-        BM { "Bermuda" }
+        //BJ { "Benin" }
+        //BM { "Bermuda" }
         BT { "Butan" }
         BO { "Bolivija" }
         BA { "Bosna i Hercegovina" }
         BW { "Bocvana" }
-        BR { "Brazil" }
+        //BR { "Brazil" }
         BN { "Brunej" }
         BG { "Bugarska" }
-        BF { "Burkina Faso" }
-        BI { "Burundi" }
+        //BF { "Burkina Faso" }
+        //BI { "Burundi" }
         KH { "Kambod\u017Ea" }
         CM { "Kamerun" }
         CA { "Kanada" }
@@ -80,7 +80,7 @@ sh {
         GF { "Francuska Gvajana" }
         PF { "Francuska Polinezija" }
         TF { "Francuske Ju\u017Ene Teritorije" }
-        GA { "Gabon" }
+        //GA { "Gabon" }
         GM { "Gambija" }
         GE { "Gruzija" }
         DE { "Nema\u010Dka" }
@@ -91,28 +91,28 @@ sh {
         GN { "Gvineja" }
         GW { "Gvineja-Bisao" }
         GY { "Gvajana" }
-        HT { "Haiti" }
-        HN { "Honduras" }
-        HK { "Hong Kong S.A.R., China" }
+        //HT { "Haiti" }
+        //HN { "Honduras" }
+        //HK { "Hong Kong S.A.R., China" }
         HU { "Ma\u0111arska" }
         IS { "Island" }
         IN { "Indija" }
         ID { "Indonezija" }
-        IR { "Iran" }
+        //IR { "Iran" }
         IQ { "Irak" }
         IE { "Irska" }
         IL { "Izrael" }
         IT { "Italija" }
         JM { "Jamajka" }
-        JP { "Japan" }
-        JO { "Jordan" }
+        //JP { "Japan" }
+        //JO { "Jordan" }
         KZ { "Kazahstan" }
         KE { "Kenija" }
         KP { "Severna Koreja" }
         KR { "Ju\u017Ena Koreja" }
         KW { "Kuvajt" }
         KG { "Kirgistan" }
-        LA { "Laos" }
+        //LA { "Laos" }
         LV { "Letonija" }
         LB { "Liban" }
         LS { "Lesoto" }
@@ -124,8 +124,8 @@ sh {
         MK { "Makedonija" }
         MG { "Madagaskar" }
         MY { "Malezija" }
-        ML { "Mali" }
-        MT { "Malta" }
+        //ML { "Mali" }
+        //MT { "Malta" }
         MQ { "Martinik" }
         MR { "Mauritanija" }
         MU { "Mauricius" }
@@ -138,31 +138,31 @@ sh {
         MZ { "Mozambik" }
         MM { "Mijnamar" }
         NA { "Namibija" }
-        NP { "Nepal" }
+        //NP { "Nepal" }
         NL { "Holandija" }
         AN { "Holandski Antili" }
         NC { "Nova Kaledonija" }
         NZ { "Novi Zeland" }
         NI { "Nikaragva" }
-        NE { "Niger" }
+        //NE { "Niger" }
         NG { "Nigerija" }
         NO { "Norve\u0161ka" }
-        OM { "Oman" }
-        PK { "Pakistan" }
-        PA { "Panama" }
+        //OM { "Oman" }
+        //PK { "Pakistan" }
+        //PA { "Panama" }
         PG { "Papua Nova Gvineja" }
         PY { "Paragvaj" }
-        PE { "Peru" }
+        //PE { "Peru" }
         PH { "Filipini" }
         PL { "Poljska" }
-        PT { "Portugal" }
+        //PT { "Portugal" }
         PR { "Porto Riko" }
         QA { "Katar" }
         RO { "Rumunija" }
         RU { "Rusija" }
         RW { "Ruanda" }
         SA { "Saudijska Arabija" }
-        SN { "Senegal" }
+        //SN { "Senegal" }
         SP { "Srbija" }
         SC { "Sej\u0161eli" }
         SL { "Sijera Leone" }
@@ -173,7 +173,7 @@ sh {
         ZA { "Ju\u017Ena Afrika" }
         ES { "\u0160panija" }
         LK { "\u0160rilanka" }
-        SD { "Sudan" }
+        //SD { "Sudan" }
         SR { "Surinam" }
         SZ { "Svazilend" }
         SE { "\u0160vedska" }
@@ -183,18 +183,18 @@ sh {
         TJ { "Tad\u017Eikistan" }
         TZ { "Tanzanija" }
         TH { "Tajland" }
-        TG { "Togo" }
+        //TG { "Togo" }
         TT { "Trinidad i Tobago" }
         TN { "Tunis" }
         TR { "Turska" }
-        TM { "Turkmenistan" }
-        UG { "Uganda" }
+        //TM { "Turkmenistan" }
+        //UG { "Uganda" }
         UA { "Ukrajina" }
         AE { "Ujedinjeni Arapski Emirati" }
         GB { "Velika Britanija" }
         US { "Sjedinjene Ameri\u010Dke Dr\u017Eave" }
         UY { "Urugvaj" }
-        UZ { "Uzbekistan" }
+        //UZ { "Uzbekistan" }
         VA { "Vatikan" }
         VE { "Venecuela" }
         VN { "Vijetnam" }
@@ -208,37 +208,37 @@ sh {
         ZW { "Zimbabve" }
     }
     DateTimePatterns { 
-            "HH.mm.ss z",
-            "HH.mm.ss z",
-            "H.mm.ss",
-            "H.mm",
-            "EEEE, dd. MMMM yyyy. ",
-            "EEEE, d.MM.yyyy.",
-            "dd.MM.yyyy.",
-            "d.M.yy.",
-            "{1} {0}",
+        "HH.mm.ss z",
+        "HH.mm.ss z",
+        "H.mm.ss",
+        "H.mm",
+        "EEEE, dd. MMMM yyyy. ",
+        "EEEE, d.MM.yyyy.",
+        "dd.MM.yyyy.",
+        "d.M.yy.",
+        "{1} {0}",
     }
     DayAbbreviations { 
-            "ned",
-            "pon",
-            "uto",
-            "sre",
-            "\u010Det",
-            "pet",
-            "sub",
+        "ned",
+        "pon",
+        "uto",
+        "sre",
+        "\u010Det",
+        "pet",
+        "sub",
     }
     DayNames { 
-            "nedelja",
-            "ponedeljak",
-            "utorak",
-            "sreda",
-            "\u010Detvrtak",
-            "petak",
-            "subota",
+        "nedelja",
+        "ponedeljak",
+        "utorak",
+        "sreda",
+        "\u010Detvrtak",
+        "petak",
+        "subota",
     }
     Eras { 
-            "p. n. e.",
-            "n. e.",
+        "p. n. e.",
+        "n. e.",
     }
     Languages { 
         af { "Afrikanerski" }
@@ -259,7 +259,7 @@ sh {
         da { "Danski" }
         nl { "Holandski" }
         en { "Engleski" }
-        eo { "Esperanto" }
+        //eo { "Esperanto" }
         et { "Estonski" }
         fi { "Finski" }
         fr { "Francuski" }
@@ -267,7 +267,6 @@ sh {
         de { "Nema\u010Dki" }
         el { "Gr\u010Dki" }
         he { "Hebrejski" }
-        iw { "Hebrejski" }
         hu { "Ma\u0111arski" }
         is { "Islandski" }
         id { "Indonezijski" }
@@ -291,7 +290,7 @@ sh {
         rm { "Reto-Romanski" }
         ro { "Rumunski" }
         ru { "Ruski" }
-        sa { "Sanskrit" }
+        //sa { "Sanskrit" }
         sr { "Srpski" }
         sh { "Srpsko-Hrvatski" }
         sk { "Slova\u010Dki" }
@@ -306,62 +305,60 @@ sh {
         yi { "Jidi\u0161" }
     }
     LocaleID { "081a" }
-    LocaleString { "sh" }
+//    LocaleString { "sh" }
     MonthAbbreviations { 
-            "jan",
-            "feb",
-            "mar",
-            "apr",
-            "maj",
-            "jun",
-            "jul",
-            "avg",
-            "sep",
-            "okt",
-            "nov",
-            "dec",
-            "",
+        "jan",
+        "feb",
+        "mar",
+        "apr",
+        "maj",
+        "jun",
+        "jul",
+        "avg",
+        "sep",
+        "okt",
+        "nov",
+        "dec",
     }
     MonthNames { 
-            "januar",
-            "februar",
-            "mart",
-            "april",
-            "maj",
-            "juni",
-            "juli",
-            "avgust",
-            "septembar",
-            "oktobar",
-            "novembar",
-            "decembar",
-            "",
+        "januar",
+        "februar",
+        "mart",
+        "april",
+        "maj",
+        "juni",
+        "juli",
+        "avgust",
+        "septembar",
+        "oktobar",
+        "novembar",
+        "decembar",
     }
     NumberElements { 
-            ",",
-            ".",
-            ";",
-            "%",
-            "0",
-            "#",
-            "-",
-            "E",
-            "\u2030",
-            "\u221E",
-            "\uFFFD",
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
     }
-    ShortLanguage { "srp" }
+//    ShortLanguage { "srp" }
     localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
     zoneStrings { 
         {
-                "Europe/Belgrade",
-                "Centralno Evropsko Vreme",
-                "CET",
-                "Centralno Evropsko Letnje Vreme",
-                "CET",
+            "Europe/Belgrade",
+            "Centralno Evropsko Vreme",
+            "CET",
+            "Centralno Evropsko Letnje Vreme",
+            "CET",
         }
     }
-    LocaleScript{ 
-                "Latn",  // ISO 15924 Name 
-    }
+//    LocaleScript{ 
+//                "Latn",  // ISO 15924 Name 
+//    }
 }

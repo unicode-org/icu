@@ -1,12 +1,12 @@
-// *******************************************************************************
+// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2000, International Business Machines
+// *   Copyright (C) 1997-2002, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
-// *******************************************************************************
+// ***************************************************************************
 
 pl {
-    
+    Version{ "1.0" }
     CollationElements { 
 	    Version { "2" }
 		Sequence { "&A < a\u0328 <<< A\u0328" 
@@ -22,102 +22,99 @@ pl {
         PL { "Polska" }
     }
     DateTimeElements { 
-            "2",
-            "1",
+        "2",
+        "1",
     }
     DateTimePatterns { 
-            "HH:mm:ss z",
-            "HH:mm:ss z",
-            "HH:mm:ss",
-            "HH:mm",
-            "EEEE, d MMMM yyyy",
-            "d MMMM yyyy",
-            "yyyy-MM-dd",
-            "yy-MM-dd",
-            "{1} {0}",
+        "HH:mm:ss z",
+        "HH:mm:ss z",
+        "HH:mm:ss",
+        "HH:mm",
+        "EEEE, d MMMM yyyy",
+        "d MMMM yyyy",
+        "yyyy-MM-dd",
+        "yy-MM-dd",
+        "{1} {0}",
     }
     DayAbbreviations { 
-            "N",
-            "Pn",
-            "Wt",
-            "\u015Ar",
-            "Cz",
-            "Pt",
-            "So",
+        "N",
+        "Pn",
+        "Wt",
+        "\u015Ar",
+        "Cz",
+        "Pt",
+        "So",
     }
     DayNames { 
-            "niedziela",
-            "poniedzia\u0142ek",
-            "wtorek",
-            "\u015Broda",
-            "czwartek",
-            "pi\u0105tek",
-            "sobota",
+        "niedziela",
+        "poniedzia\u0142ek",
+        "wtorek",
+        "\u015Broda",
+        "czwartek",
+        "pi\u0105tek",
+        "sobota",
     }
     Eras { 
-            "p.n.e.",
-            "n.e.",
+        "p.n.e.",
+        "n.e.",
     }
     Languages { 
         pl { "polski" }
     }
     LocaleID { "15" }
-    LocaleString { "pl" }
+//    LocaleString { "pl" }
     MonthAbbreviations { 
-            "sty",
-            "lut",
-            "mar",
-            "kwi",
-            "maj",
-            "cze",
-            "lip",
-            "sie",
-            "wrz",
-            "pa\u017A",
-            "lis",
-            "gru",
-            "",
+        "sty",
+        "lut",
+        "mar",
+        "kwi",
+        "maj",
+        "cze",
+        "lip",
+        "sie",
+        "wrz",
+        "pa\u017A",
+        "lis",
+        "gru",
     }
     MonthNames { 
-            "stycze\u0144",
-            "luty",
-            "marzec",
-            "kwiecie\u0144",
-            "maj",
-            "czerwiec",
-            "lipiec",
-            "sierpie\u0144",
-            "wrzesie\u0144",
-            "pa\u017Adziernik",
-            "listopad",
-            "grudzie\u0144",
-            "",
+        "stycze\u0144",
+        "luty",
+        "marzec",
+        "kwiecie\u0144",
+        "maj",
+        "czerwiec",
+        "lipiec",
+        "sierpie\u0144",
+        "wrzesie\u0144",
+        "pa\u017Adziernik",
+        "listopad",
+        "grudzie\u0144",
     }
     NumberElements { 
-            ",",
-            "\u00A0",
-            ";",
-            "%",
-            "0",
-            "#",
-            "-",
-            "E",
-            "\u2030",
-            "\u221E",
-            "\uFFFD",
+        ",",
+        "\u00A0",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
     }
-    ShortLanguage { "pol" }
+//    ShortLanguage { "pol" }
     zoneStrings { 
         {
-                "Africa/Casablanca",
-                "GMT",
-                "GMT",
-                "GMT",
-                "GMT",
+            "Africa/Casablanca",
+            "GMT",
+            "GMT",
+            "GMT",
+            "GMT",
         }
     }
-    LocaleScript{ 
-                "Latn",  // ISO 15924 Name 
-    }
-
+//    LocaleScript{ 
+//        "Latn",  // ISO 15924 Name 
+//    }
 }

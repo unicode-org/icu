@@ -1,9 +1,9 @@
-// *******************************************************************************
+// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2000, International Business Machines
+// *   Copyright (C) 1997-2002, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
-// *******************************************************************************
+// ***************************************************************************
 
 // Country names in de, de_AT, and de_CH are short names from the
 // list of names maintained by the German
@@ -14,6 +14,7 @@
 // Date there: 1999-apr-19
 
 de_CH {
+    Version { "1.0" }
     Countries {
         BD { "Bangladesh" }
         BW { "Botswana" }
@@ -28,38 +29,39 @@ de_CH {
         GB { "Grossbritannien" }
     }
     CurrencyElements { 
-            "SFr.",
-            "CHF",
-            ".",
+        "SFr.",
+        "CHF",
+        ".",
     }
     LocaleID { "0807" }
-    LocaleString { "de_CH" }
+//    LocaleString { "de_CH" }
     NumberElements { 
-            ".",
-            "'",
-            ";",
-            "%",
-            "0",
-            "#",
-            "-",
-            "E",
-            "\u2030",
-            "\u221E",
-            "\uFFFD",
+        ".",
+        "'",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
     }
     NumberPatterns { 
-            "#,##0.###;-#,##0.###",
-            "\u00A4 #,##0.00;\u00A4-#,##0.00",
-            "#,##0%",
+        "#,##0.###;-#,##0.###",
+        "\u00A4 #,##0.00;\u00A4-#,##0.00",
+        "#,##0%",
+        "#E0",
     }
-    ShortCountry { "CHE" }
+//    ShortCountry { "CHE" }
     zoneStrings { 
         {
-                "Africa/Casablanca",
-                "GMT",
-                "GMT",
-                "GMT",
-                "GMT",
+            "Africa/Casablanca",
+            "GMT",
+            "GMT",
+            "GMT",
+            "GMT",
         }
     }
 }

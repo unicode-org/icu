@@ -1,15 +1,21 @@
-// *   Copyright (C) 1997-2001, International Business Machines
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
 // srl@monkey.sbay.org, with help from Shehnaz Nagpurwala and Anwar Nagpurwala
 // Hindi locale. Need to work on unicodizing more of the text..
 
 hi_IN {
-    ShortCountry { IND }
-    Version { "1.0" }
+    Version { "1.1" }
     NumberPatterns {
         "#,##,##0.###",
         "\u00A4 #,##0.00;-\u00A4 #,##0.00",
-        "#,##0%"
+        "#,##0%",
+        "#E0",
     }
+//    ShortCountry { IND }
     CurrencyElements {
         "\u0930\u0941",
         "INR",  
@@ -26,9 +32,9 @@ hi_IN {
         "d-M-yy",
         "{1} {0}"
     }
-    DateTimeElements {
-        "1",
-        "1"
-    }
+//    DateTimeElements {
+//        "1",
+//        "1"
+//    }
     LocaleID { "0439" }
 }

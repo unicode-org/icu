@@ -1,33 +1,48 @@
-// *******************************************************************************
+// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2000, International Business Machines
+// *   Copyright (C) 1997-2002, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
-// *******************************************************************************
+// ***************************************************************************
 
 es_CL {
+    Version { "1.0" }
     CurrencyElements { 
-            "$",
-            "CLP",
-            ",",
+        "$",
+        "CLP",
+        ",",
     }
     DateTimePatterns { 
-            "hh:mm:ss a z",
-            "hh:mm:ss a z",
-            "hh:mm:ss a",
-            "hh:mm a",
-            "EEEE d' de 'MMMM' de 'yyyy",
-            "d' de 'MMMM' de 'yyyy",
-            "dd-MM-yyyy",
-            "dd-MM-yy",
-            "{1} {0}",
+        "hh:mm:ss a z",
+        "hh:mm:ss a z",
+        "hh:mm:ss a",
+        "hh:mm a",
+        "EEEE d' de 'MMMM' de 'yyyy",
+        "d' de 'MMMM' de 'yyyy",
+        "dd-MM-yyyy",
+        "dd-MM-yy",
+        "{1} {0}",
     }
     LocaleID { "340a" }
-    LocaleString { "es_CL" }
-    NumberPatterns { 
-            "#,##0.###;-#,##0.###",
-            "\u00A4#,##0.00;\u00A4-#,##0.00",
-            "#,##0%",
+//    LocaleString { "es_CL" }
+    NumberElements {
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
     }
-    ShortCountry { "CHL" }
+    NumberPatterns { 
+        "#,##0.###;-#,##0.###",
+        "\u00A4#,##0.00;\u00A4-#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+//    ShortCountry { "CHL" }
 }

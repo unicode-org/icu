@@ -1,17 +1,18 @@
-// *******************************************************************************
+// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2000, International Business Machines
+// *   Copyright (C) 1997-2002, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
-// *******************************************************************************
+// ***************************************************************************
 
 ar_YE {
+    Version{ "1.0" }
     CurrencyElements { 
             "\u0631.\u064A.\u200F",
             "YER",
             ".",
     }
-    LocaleString { "ar_YE" }
-    ShortCountry { "YEM" }
+//    LocaleString { "ar_YE" }
+//    ShortCountry { "YEM" }
     LocaleID { "2401" }
 }

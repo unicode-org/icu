@@ -1,17 +1,22 @@
-// Copyright (c) 2001 IBM, Inc. and Others.
+// ***************************************************************************
+// *
+// *   Copyright (C) 2001-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
 // Marathi locale.  Based on Hindi locale
 
 mr_IN {
-    Version { "1.1.1" }
+    Version { "1.2" }
     LocaleID { "044e" }
-    ShortCountry { IND }
+//    ShortCountry { IND }
 
     CurrencyElements {
         "\u0930\u0941",
         "INR",  // Rs. ? No.
         "."
     }
-    LocaleString { "mr_IN" }
+//    LocaleString { "mr_IN" }
     DateTimePatterns {
         "hh:mm:ss a z",
         "hh:mm:ss a z",
@@ -23,8 +28,8 @@ mr_IN {
         "d-M-yy",
         "{1} {0}"
     }
-    DateTimeElements {
-        "1",
-        "1"
-    }
+//    DateTimeElements {
+//        "1",
+//        "1"
+//    }
 }

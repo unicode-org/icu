@@ -1,23 +1,24 @@
-// *******************************************************************************
+// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2000, International Business Machines
+// *   Copyright (C) 1997-2002, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
-// *******************************************************************************
+// ***************************************************************************
 
 tr_TR {
-    Version{ "1.0" }
+    Version{ "1.1" }
     CurrencyElements { 
-            "TL",
-            "TRL",
-            ",",
+        "TL",
+        "TRL",
+        ",",
     }
-    LocaleString { "tr_TR" }
+//    LocaleString { "tr_TR" }
     NumberPatterns { 
-            "#,##0.###;-#,##0.###",
-            "#,##0 \u00A4;-#,##0 \u00A4",
-            "#,##0%",
+        "#,##0.###;-#,##0.###",
+        "#,##0 \u00A4;-#,##0 \u00A4",
+        "#,##0%",
+        "#E0",
     }
-    ShortCountry { "TUR" }
+//    ShortCountry { "TUR" }
     LocaleID { "041f" }
 }
