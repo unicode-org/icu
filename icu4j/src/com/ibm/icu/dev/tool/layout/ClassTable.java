@@ -6,10 +6,6 @@
  *
  * Created on Dec 3, 2003
  *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/layout/ClassTable.java,v $
- * $Date: 2003/12/17 04:54:39 $
- * $Revision: 1.2 $
- * 
  *******************************************************************************
  */
 package com.ibm.icu.dev.tool.layout;

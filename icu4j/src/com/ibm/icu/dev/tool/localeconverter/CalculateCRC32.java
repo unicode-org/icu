@@ -4,10 +4,7 @@
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 *
-* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/CalculateCRC32.java,v $ 
 * $Date: 2003/05/19 
-* $Revision: 1.2 $
-*
 ******************************************************************************
 */
 

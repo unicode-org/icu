@@ -6,10 +6,6 @@
  *
  * Created on Dec 3, 2003
  *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/layout/ModuleWriter.java,v $
- * $Date: 2004/03/26 17:57:24 $
- * $Revision: 1.7 $
- * 
  *******************************************************************************
  */
 

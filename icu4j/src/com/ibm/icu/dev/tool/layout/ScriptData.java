@@ -3,12 +3,6 @@
  * Copyright (C) 1998-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/layout/ScriptData.java,v $
- * $Date: 2003/12/09 01:18:11 $
- * $Revision: 1.4 $
- *
- *******************************************************************************
  */
 package com.ibm.icu.dev.tool.layout;
 

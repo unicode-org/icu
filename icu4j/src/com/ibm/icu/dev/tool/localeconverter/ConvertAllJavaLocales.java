@@ -3,12 +3,6 @@
  * Copyright (C) 2002-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/ConvertAllJavaLocales.java,v $
- * $Date: 2003/12/20 03:06:57 $
- * $Revision: 1.6 $
- *
- *******************************************************************************
  */
 
 package com.ibm.icu.dev.tool.localeconverter;
@@ -48,12 +42,6 @@ locale
  * Copyright (C) 2002-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/ConvertAllJavaLocales.java,v $ 
- * $Date: 2003/12/20 03:06:57 $ 
- * $Revision: 1.6 $
- *
- *****************************************************************************************
  */
 public class ConvertAllJavaLocales {
     public static void main(String args[]) {

@@ -3,12 +3,6 @@
  * Copyright (C) 1998-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/layout/ScriptNameBuilder.java,v $
- * $Date: 2003/12/09 01:18:12 $
- * $Revision: 1.4 $
- *
- *******************************************************************************
  */
 package com.ibm.icu.dev.tool.layout;
 

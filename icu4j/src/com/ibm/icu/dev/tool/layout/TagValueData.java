@@ -6,10 +6,6 @@
  *
  * Created on Dec 3, 2003
  *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/layout/TagValueData.java,v $
- * $Date: 2003/12/09 01:18:11 $
- * $Revision: 1.1 $
- * 
  *******************************************************************************
  */
 

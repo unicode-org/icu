@@ -3,12 +3,6 @@
  * Copyright (C) 2002-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/ICU2LocaleWriter.java,v $ 
- * $Date: 2003/12/20 03:07:00 $ 
- * $Revision: 1.7 $
- *
- *****************************************************************************************
  */
  
 package com.ibm.icu.dev.tool.localeconverter;
