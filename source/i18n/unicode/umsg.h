@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1996-2001, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) 1996-2003, International Business Machines Corporation and others. All Rights Reserved.
 *******************************************************************************
 *
 *   file name:  umsg.h
@@ -368,7 +368,7 @@ u_parseMessageWithError(const char  *locale,
                         int32_t     patternLength,
                         const UChar *source,
                         int32_t     sourceLength,
-                        UParseError *error,
+                        UParseError *parseError,
                         UErrorCode  *status,
                         ...);
 
@@ -397,7 +397,7 @@ u_vparseMessageWithError(const char  *locale,
                          const UChar *source,
                          int32_t     sourceLength,
                          va_list     ap,
-                         UParseError *error,
+                         UParseError *parseError,
                          UErrorCode* status);
 
 /*----------------------- New experimental API --------------------------- */
