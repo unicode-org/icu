@@ -2,7 +2,7 @@
  * This is a tool to check the tags on ICU4J files.  In particular, we're looking for:
  *
  * - methods that have no tags
- * - custom tags: @draft, @stable, @internal
+ * - custom tags: @draft, @stable, @internal?
  * - standard tags: @since, @deprecated
  *
  * Syntax of tags:
@@ -10,7 +10,7 @@
  * @stable ICU X.X.X
  * @internal
  * @since  (don't use)
- * @deprecated to be removed in YY-MM-DD. [Use ...]
+ * @deprecated to be removed in ICU X.X. [Use ...]
  *
  * flags names of classes and their members that have no tags or incorrect syntax.
  *
@@ -20,11 +20,14 @@
  * javadoc -classpath ${JAVA_HOME}/lib/tools.jar -doclet CheckTags -sourcepath ${ICU4J_src} [packagenames]
  */
 
+package com.ibm.icu.dev.tool.docs;
+
 import com.sun.javadoc.*;
 
 public class CheckTags {
     RootDoc root;
     boolean log;
+    boolean brief = true;
     DocStack stack = new DocStack();
 
     class DocNode {
@@ -73,39 +76,50 @@ public class CheckTags {
             }
         }
 
+        
         public void output(String msg, boolean error, boolean newline) {
-            DocNode last = index > 0 ? stack[index-1] : null;
-            if (error && last != null) {
+            output(msg, error, newline, index-1);
+        }
+
+        void output(String msg, boolean error, boolean newline, int ix) {
+            DocNode last = stack[ix];
+            if (error) {
                 last.errorCount += 1;
             }
 
-            for (int i = 0; i < index;) {
-                DocNode n = stack[i];
-                if (n.printed) {
-                    if (msg != null || !last.printed) { // since index > 0 last is not null
-                        if (this.newline && i == 0) {
-                            System.out.println();
+            boolean show = !brief || last.reportError;
+            if (show) {
+                if (brief && error) {
+                    msg = null; // nuke error messages if we're brief, just report headers and totals
+                }
+                for (int i = 0; i < index;) {
+                    DocNode n = stack[i];
+                    if (n.printed) {
+                        if (msg != null || !last.printed) { // since index > 0 last is not null
+                            if (this.newline && i == 0) {
+                                System.out.println();
+                            }
+                            System.out.print("  ");
+                            this.newline = false;
                         }
-                        System.out.print("  ");
-                        this.newline = false;
+                        ++i;
+                    } else {
+                        System.out.print(n.header);
+                        this.newline = true;
+                        n.printed = true;
+                        i = 0;
                     }
-                    ++i;
-                } else {
-                    System.out.print(n.header);
-                    this.newline = true;
-                    n.printed = true;
-                    i = 0;
                 }
-            }
 
-            if (msg != null) {
-                if (index == 0 && this.newline) {
-                    System.out.println();
+                if (msg != null) {
+                    if (index == 0 && this.newline) {
+                        System.out.println();
+                    }
+                    if (error) {
+                        System.out.print("*** ");
+                    }
+                    System.out.print(msg);
                 }
-                if (error) {
-                    System.out.print("*** ");
-                }
-                System.out.print(msg);
             }
 
             this.newline = newline;
@@ -116,7 +130,7 @@ public class CheckTags {
             int ec = stack[index].errorCount;
             if (ec > 0 || index == 0) { // always report for outermost element
                 if (stack[index].reportError) {
-                    output("(" + ec + (ec == 1 ? " error" : " errors") + ")", false, true);
+                    output("(" + ec + (ec == 1 ? " error" : " errors") + ")", false, true, index);
                 }
 
                 // propagate to parent
@@ -134,6 +148,8 @@ public class CheckTags {
     public static int optionLength(String option) {
         if (option.equals("-log")) {
             return 1;
+        } else if (option.equals("-brief")) {
+            return 1;
         }
         return 0;
     }
@@ -143,15 +159,17 @@ public class CheckTags {
 
         String[][] options = root.options();
         for (int i = 0; i < options.length; ++i) {
-            if (options[i][0].equals("-log")) {
+            String opt = options[i][0];
+            if (opt.equals("-log")) {
                 this.log = true;
-                break;
+            } else if (opt.equals("-brief")) {
+                this.brief = true;
             }
         }
     }
 
     boolean run() {
-        doDocs(root.classes(), "Package");
+        doDocs(root.classes(), "Package", true);
         return false;
     }
 
@@ -216,9 +234,9 @@ public class CheckTags {
         errln(tag.toString() + " [" + tag.position() + "]");
     }
 
-    void doDocs(ProgramElementDoc[] docs, String header) {
+    void doDocs(ProgramElementDoc[] docs, String header, boolean reportError) {
         if (docs != null && docs.length > 0) {
-            stack.push(header, true);
+            stack.push(header, reportError);
             for (int i = 0; i < docs.length; ++i) {
                 doDoc(docs[i]);
             }
@@ -241,10 +259,10 @@ public class CheckTags {
             doTags(doc.tags());
             if (isClass) {
                 ClassDoc cdoc = (ClassDoc)doc;
-                doDocs(cdoc.innerClasses(), "Inner Classes");
-                doDocs(cdoc.fields(), "Fields");
-                doDocs(cdoc.constructors(), "Constructors");
-                doDocs(cdoc.methods(), "Methods");
+                doDocs(cdoc.innerClasses(), "Inner Classes", true);
+                doDocs(cdoc.fields(), "Fields", !brief);
+                doDocs(cdoc.constructors(), "Constructors", !brief);
+                doDocs(cdoc.methods(), "Methods", !brief);
             }
             stack.pop();
         }
