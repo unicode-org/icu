@@ -118,7 +118,7 @@ public:
      * Returns 0.0 if zero length.
      * @return the value of the digit list.
      */
-    double getDouble(void);
+    double getDouble(void) /*const*/;
 
     /**
      * Utility routine to get the value of the digit list
@@ -126,7 +126,7 @@ public:
      * Returns 0 if zero length.
      * @return the value of the digit list, return 0 if it is zero length
      */
-    int32_t getLong(void);
+    int32_t getLong(void) /*const*/;
 
     /**
      * Utility routine to get the value of the digit list
@@ -134,7 +134,7 @@ public:
      * Returns 0 if zero length.
      * @return the value of the digit list, return 0 if it is zero length
      */
-    int64_t getInt64(void);
+    int64_t getInt64(void) /*const*/;
 
     /**
      * Return true if the number represented by this object can fit into
@@ -143,7 +143,7 @@ public:
      * @return true if the number represented by this object can fit into
      * a long, return false otherwise.
      */
-    UBool fitsIntoLong(UBool ignoreNegativeZero);
+    UBool fitsIntoLong(UBool ignoreNegativeZero) /*const*/;
 
     /**
      * Return true if the number represented by this object can fit into
@@ -152,7 +152,7 @@ public:
      * @return true if the number represented by this object can fit into
      * a long, return false otherwise.
      */
-    UBool fitsIntoInt64(UBool ignoreNegativeZero);
+    UBool fitsIntoInt64(UBool ignoreNegativeZero) /*const*/;
 
     /**
      * Utility routine to set the value of the digit list from a double
@@ -235,13 +235,7 @@ private:
      */
     void round(int32_t maximumDigits);
 
-    /**
-     * Initializes the buffer that records the mimimum long value.
-     * @param maximumDigits The maximum number of digits to be shown.
-     */
-    /*static void initializeLONG_MIN_REP(void);*/
-
-    UBool shouldRoundUp(int32_t maximumDigits);
+    UBool shouldRoundUp(int32_t maximumDigits) const;
 };
  
 // -------------------------------------
