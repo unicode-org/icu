@@ -45,7 +45,7 @@
 
 #   define MAP_IMPLEMENTATION MAP_WIN32
 
-/* ### Todo: auto detect mmap(). Until then, just add your platform here. */
+/* ### Todo: properly auto detect mmap(). Until then, just add your platform here. */
 #elif U_HAVE_MMAP || defined(AIX) || defined(HPUX) || defined(OS390) || defined(PTX)
     typedef size_t MemoryMap;
 
@@ -70,7 +70,9 @@
 #       define LIB_PREFIX_LENGTH 3
 #       define LIB_SUFFIX ".dll"
 #       define MAP_IMPLEMENTATION MAP_390DLL
-#       define U_MAKE_STR(name) #name
+
+/* This is inconvienient until we figure out what to do with U_ICUDATA_NAME in utypes.h */
+#       define U_ICUDATA_ENTRY_NAME "icudt" U_ICU_VERSION_SHORT "_dat"
 #   else
 #       define MAP_IMPLEMENTATION MAP_POSIX
 #   endif
@@ -180,18 +182,18 @@
             return FALSE;
         }
 
-		pData->map = (char *)data + length;
+        pData->map = (char *)data + length;
         pData->pHeader=(const DataHeader *)data;
         pData->mapAddr = data;
         return TRUE;
     }
 
-	
-	
+    
+    
     void
     uprv_unmapFile(UDataMemory *pData) {
         if(pData!=NULL && pData->map!=NULL) {
-			size_t dataLen = (char *)pData->map - (char *)pData->mapAddr;
+            size_t dataLen = (char *)pData->map - (char *)pData->mapAddr;
             if(munmap(pData->mapAddr, dataLen)==-1) {
             }
             pData->pHeader=NULL;
@@ -353,16 +355,13 @@
                /* we have a data DLL - what kind of lookup do we need here? */
                /* try to find the Table of Contents */
                UDataMemory_init(pData); /* Clear the output struct.        */
-               val=dllqueryvar((dllhandle*)handle, U_MAKE_STR(U_ICUDATA_ENTRY_POINT));
+               val=dllqueryvar((dllhandle*)handle, U_ICUDATA_ENTRY_NAME);
                if(val == 0) {
                     /* failed... so keep looking */
                     return FALSE;
                }
 #              ifdef UDATA_DEBUG
-                    fprintf(stderr, "dllqueryvar(%08X, %s) -> %08X\n",
-                                    handle,
-                                    U_MAKE_STR(U_ICUDATA_ENTRY_POINT),
-                                    val);
+                    fprintf(stderr, "dllqueryvar(%08X, %s) -> %08X\n", handle, U_ICUDATA_ENTRY_NAME, val);
 #              endif
 
                pData->pHeader=(const DataHeader *)val;
