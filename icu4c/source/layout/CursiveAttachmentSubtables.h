@@ -1,7 +1,6 @@
 /*
- * %W% %E%
  *
- * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved
  *
  */
 
@@ -14,12 +13,13 @@
  */
 
 #include "LETypes.h"
-#include "LEFontInstance.h"
 #include "OpenTypeTables.h"
 #include "GlyphPositioningTables.h"
-#include "GlyphIterator.h"
 
 U_NAMESPACE_BEGIN
+
+class LEFontInstance;
+class GlyphIterator;
 
 struct EntryExitRecord
 {

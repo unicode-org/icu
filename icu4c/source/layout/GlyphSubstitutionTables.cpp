@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved
  *
  */
 
@@ -9,7 +9,6 @@
 #include "OpenTypeTables.h"
 #include "Lookups.h"
 #include "GlyphDefinitionTables.h"
-#include "GlyphPositionAdjustments.h"
 #include "GlyphSubstitutionTables.h"
 #include "GlyphSubstLookupProc.h"
 #include "ScriptAndLanguage.h"

@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved
  *
  */
 
@@ -12,7 +12,7 @@
 #include "Lookups.h"
 #include "ScriptAndLanguage.h"
 #include "GlyphDefinitionTables.h"
-#include "GlyphPositionAdjustments.h"
+#include "GlyphIterator.h"
 #include "LookupProcessor.h"
 #include "LEGlyphStorage.h"
 #include "LESwaps.h"
@@ -48,7 +48,7 @@ le_uint32 LookupProcessor::applyLookupTable(const LookupTable *lookupTable, Glyp
     return 1;
 }
 
-le_int32 LookupProcessor::process(LEGlyphStorage &glyphStorage, GlyphPositionAdjustment *glyphPositionAdjustments,
+le_int32 LookupProcessor::process(LEGlyphStorage &glyphStorage, GlyphPositionAdjustments *glyphPositionAdjustments,
                               le_bool rightToLeft, const GlyphDefinitionTableHeader *glyphDefinitionTableHeader,
                               const LEFontInstance *fontInstance) const
 {

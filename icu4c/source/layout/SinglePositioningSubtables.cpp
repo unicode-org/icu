@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved
  *
  */
 
@@ -11,7 +11,6 @@
 #include "SinglePositioningSubtables.h"
 #include "ValueRecords.h"
 #include "GlyphIterator.h"
-#include "GlyphPositionAdjustments.h"
 #include "LESwaps.h"
 
 U_NAMESPACE_BEGIN
@@ -48,13 +47,7 @@ le_uint32 SinglePositioningFormat1Subtable::process(GlyphIterator *glyphIterator
     le_int32 coverageIndex = getGlyphCoverage(glyph);
 
     if (coverageIndex >= 0) {
-        GlyphPositionAdjustment adjustment;
-
-        glyphIterator->getCurrGlyphPositionAdjustment(adjustment);
-
-        valueRecord.adjustPosition(SWAPW(valueFormat), (const char *) this, adjustment, fontInstance);
-
-        glyphIterator->setCurrGlyphPositionAdjustment(&adjustment);
+        valueRecord.adjustPosition(SWAPW(valueFormat), (const char *) this, *glyphIterator, fontInstance);
 
         return 1;
     }
@@ -68,13 +61,7 @@ le_uint32 SinglePositioningFormat2Subtable::process(GlyphIterator *glyphIterator
     le_int16 coverageIndex = (le_int16) getGlyphCoverage(glyph);
 
     if (coverageIndex >= 0) {
-        GlyphPositionAdjustment adjustment;
-
-        glyphIterator->getCurrGlyphPositionAdjustment(adjustment);
-
-        valueRecordArray[0].adjustPosition(coverageIndex, SWAPW(valueFormat), (const char *) this, adjustment, fontInstance);
-
-        glyphIterator->setCurrGlyphPositionAdjustment(&adjustment);
+        valueRecordArray[0].adjustPosition(coverageIndex, SWAPW(valueFormat), (const char *) this, *glyphIterator, fontInstance);
 
         return 1;
     }

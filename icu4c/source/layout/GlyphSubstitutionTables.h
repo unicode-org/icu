@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved
  *
  */
 
@@ -13,16 +13,15 @@
  */
 
 #include "LETypes.h"
-#include "LEGlyphFilter.h"
 #include "OpenTypeTables.h"
 #include "Lookups.h"
 #include "GlyphLookupTables.h"
-#include "GlyphDefinitionTables.h"
-#include "GlyphPositionAdjustments.h"
 
 U_NAMESPACE_BEGIN
 
-class LEGlyphStorage;
+class  LEGlyphStorage;
+class  LEGlyphFilter;
+struct GlyphDefinitionTableHeader;
 
 struct GlyphSubstitutionTableHeader : public GlyphLookupTableHeader
 {
