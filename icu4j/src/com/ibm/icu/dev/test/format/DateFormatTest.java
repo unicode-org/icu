@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/DateFormatTest.java,v $ 
- * $Date: 2003/03/13 20:27:47 $ 
- * $Revision: 1.13 $
+ * $Date: 2003/04/04 19:20:51 $ 
+ * $Revision: 1.14 $
  *
  *****************************************************************************************
  */
@@ -871,6 +871,23 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             null,     "12-34",  null,
             null,     "00+05",  null,
             "ahhmm",  "PM730",  "1970 01 01 19:30:00",
+        };
+
+        expectParse(DATA, new Locale("en"));
+    }
+
+    /**
+     * Test handling of white space.
+     */
+    public void TestWhiteSpaceParsing() {
+        String DATA[] = {
+            "yyyy MM dd",
+
+            // pattern, input, expected parse or null if expect parse failure
+
+            // Pattern space run should parse input text space run
+            "MM   d yy",   " 04 01 03",    "2003 04 01",
+            null,          " 04  01   03 ", "2003 04 01",
         };
 
         expectParse(DATA, new Locale("en"));

@@ -5,14 +5,16 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecimalFormat.java,v $ 
- * $Date: 2003/02/21 01:49:21 $ 
- * $Revision: 1.21 $
+ * $Date: 2003/04/04 19:20:52 $ 
+ * $Revision: 1.22 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.text;
 
 import com.ibm.icu.util.Currency;
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.impl.UCharacterProperty;
 import java.text.ParsePosition;
 import java.text.FieldPosition;
 import java.math.BigInteger;
@@ -1180,25 +1182,44 @@ public class DecimalFormat extends NumberFormat {
         int oldStart = parsePosition.getIndex();
         int backup;
 
-        // check for positivePrefix; take longest
-        boolean gotPositive = text.regionMatches(position,positivePrefix,0,
-                                                 positivePrefix.length());
-        boolean gotNegative = text.regionMatches(position,negativePrefix,0,
-                                                 negativePrefix.length());
-        if (gotPositive && gotNegative) {
-            if (positivePrefix.length() > negativePrefix.length())
-                gotNegative = false;
-            else if (positivePrefix.length() < negativePrefix.length())
-                gotPositive = false;
+        // Match positive and negative prefixes; prefer longest match.
+        int posMatch = compareAffix(positivePrefix, text, position);
+        int negMatch = compareAffix(negativePrefix, text, position);
+        if (posMatch >= 0 && negMatch >= 0) {
+            if (posMatch > negMatch) {
+                negMatch = -1;
+            } else if (negMatch > posMatch) {
+                posMatch = -1;
+            }  
         }
-        if (gotPositive) {
-            position += positivePrefix.length();
-        } else if (gotNegative) {
-            position += negativePrefix.length();
+        if (posMatch >= 0) {
+            position += posMatch;
+        } else if (negMatch >= 0) {
+            position += negMatch;
         } else {
             //PP:parsePosition.errorIndex = position;
             return false;
         }
+
+//        // check for positivePrefix; take longest
+//        boolean gotPositive = text.regionMatches(position,positivePrefix,0,
+//                                                 positivePrefix.length());
+//        boolean gotNegative = text.regionMatches(position,negativePrefix,0,
+//                                                 negativePrefix.length());
+//        if (gotPositive && gotNegative) {
+//            if (positivePrefix.length() > negativePrefix.length())
+//                gotNegative = false;
+//            else if (positivePrefix.length() < negativePrefix.length())
+//                gotPositive = false;
+//        }
+//        if (gotPositive) {
+//            position += positivePrefix.length();
+//        } else if (gotNegative) {
+//            position += negativePrefix.length();
+//        } else {
+//            //PP:parsePosition.errorIndex = position;
+//            return false;
+//        }
         // process digits or Inf, find decimal position
         status[STATUS_INFINITE] = false;
         if (!isExponent && text.regionMatches(position,symbols.getInfinity(),0,
@@ -1371,37 +1392,114 @@ public class DecimalFormat extends NumberFormat {
             }
         }
 
-        // check for positiveSuffix
-        if (gotPositive)
-            gotPositive = text.regionMatches(position,positiveSuffix,0,
-                                             positiveSuffix.length());
-        if (gotNegative)
-            gotNegative = text.regionMatches(position,negativeSuffix,0,
-                                             negativeSuffix.length());
-
-        // if both match, take longest
-        if (gotPositive && gotNegative) {
-            if (positiveSuffix.length() > negativeSuffix.length())
-                gotNegative = false;
-            else if (positiveSuffix.length() < negativeSuffix.length())
-                gotPositive = false;
+        // Match positive and negative suffixes; prefer longest match.
+        if (posMatch >= 0) {
+            posMatch = compareAffix(positiveSuffix, text, position);
+        }
+        if (negMatch >= 0) {
+            negMatch = compareAffix(negativeSuffix, text, position);
+        }
+        if (posMatch >= 0 && negMatch >= 0) {
+            if (posMatch > negMatch) {
+                negMatch = -1;
+            } else if (negMatch > posMatch) {
+                posMatch = -1;
+            }  
         }
 
-        // fail if neither or both
-        if (gotPositive == gotNegative) {
+        // Fail if neither or both
+        if ((posMatch >= 0) == (negMatch >= 0)) {
             //PP:parsePosition.errorIndex = position;
             return false;
         }
 
-        parsePosition.setIndex(position +
-            (gotPositive ? positiveSuffix.length() : negativeSuffix.length())); // mark success!
+        parsePosition.setIndex(position + (posMatch>=0 ? posMatch : negMatch));
 
-        status[STATUS_POSITIVE] = gotPositive;
+        status[STATUS_POSITIVE] = (posMatch >= 0);
+
+//        // check for positiveSuffix
+//        if (gotPositive)
+//            gotPositive = text.regionMatches(position,positiveSuffix,0,
+//                                             positiveSuffix.length());
+//        if (gotNegative)
+//            gotNegative = text.regionMatches(position,negativeSuffix,0,
+//                                             negativeSuffix.length());
+//
+//        // if both match, take longest
+//        if (gotPositive && gotNegative) {
+//            if (positiveSuffix.length() > negativeSuffix.length())
+//                gotNegative = false;
+//            else if (positiveSuffix.length() < negativeSuffix.length())
+//                gotPositive = false;
+//        }
+//
+//        // fail if neither or both
+//        if (gotPositive == gotNegative) {
+//            //PP:parsePosition.errorIndex = position;
+//            return false;
+//        }
+//
+//        parsePosition.setIndex(position +
+//            (gotPositive ? positiveSuffix.length() : negativeSuffix.length())); // mark success!
+//
+//        status[STATUS_POSITIVE] = gotPositive;
         if (parsePosition.getIndex() == oldStart) {
             //PP:parsePosition.errorIndex = position;
             return false;
         }
         return true;
+    }
+
+    /**
+     * Return the length matched by the given affix, or -1 if none.
+     * Runs of white space in the affix, match runs of white space in
+     * the input.  Pattern white space and input white space are
+     * determined differently; see code.
+     * @param affix pattern string, taken as a literal
+     * @param input input text
+     * @param pos offset into input at which to begin matching
+     * @return length of input that matches, or -1 if match failure
+     */
+    private int compareAffix(String affix, String input, int pos) {
+        int start = pos;
+        for (int i=0; i<affix.length(); ) {
+            int c = UTF16.charAt(affix, i);
+            int len = UTF16.getCharCount(c);
+            i += len;
+            if (UCharacterProperty.isRuleWhiteSpace(c)) {
+                // Advance over run in pattern
+                while (i < affix.length()) {
+                    c = UTF16.charAt(affix, i);
+                    if (!UCharacterProperty.isRuleWhiteSpace(c)) {
+                        break;
+                    }
+                    i += UTF16.getCharCount(c);
+                }
+                
+                // Advance over run in input text
+                int s = pos;
+                while (pos < input.length()) {
+                    c = UTF16.charAt(input, pos);
+                    if (!UCharacter.isUWhiteSpace(c)) {
+                        break;
+                    }
+                    pos += UTF16.getCharCount(c);
+                }
+
+                // Must see at least one white space char in input
+                if (pos == s) {
+                    return -1;
+                }
+            } else {
+                if (pos < input.length() &&
+                    UTF16.charAt(input, pos) == c) {
+                    pos += len;
+                } else {
+                    return -1;
+                }
+            }
+        }
+        return pos - start;
     }
 
     /**
