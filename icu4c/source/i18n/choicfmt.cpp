@@ -132,7 +132,6 @@ UBool
 ChoiceFormat::operator==(const Format& that) const
 {
     if (this == &that) return TRUE;
-    if (this->getDynamicClassID() != that.getDynamicClassID()) return FALSE;  // not the same class
     if (!NumberFormat::operator==(that)) return FALSE;
     ChoiceFormat& thatAlias = (ChoiceFormat&)that;
     if (fCount != thatAlias.fCount) return FALSE;
