@@ -141,9 +141,12 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
                                    "\tdone;\n\n");
   }
 
+  T_FileStream_writeLine(makefile, "$(TEMP_DIR)/icudata_dat.o : $(TEMP_DIR)/icudata_dat.c\n"
+                         "\t$(COMPILE.cc) -o $@ $<\n\n");
+
   T_FileStream_writeLine(makefile, "# 'TOCOBJ' contains C Table of Contents objects [if any]\n");
   if(!strcmp(o->shortName, "icudata")) {
-    T_FileStream_writeLine(makefile, "$(TEMP_DIR)/icudata_dat.c: $(CMNLIST)\n\n"
+    T_FileStream_writeLine(makefile, "$(TEMP_DIR)/icudata_dat.c: $(CMNLIST)\n"
                            "\t$(TOOL) $(GENCMN) -S -d $(TEMP_DIR) 0 $(CMNLIST)\n\n");
     sprintf(tmp, "TOCOBJ= icudata_dat%s \n\n", OBJ_SUFFIX);
     T_FileStream_writeLine(makefile, tmp);
