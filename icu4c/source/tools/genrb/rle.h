@@ -18,8 +18,8 @@
 #ifndef RLE_H
 #define RLE_H 1
 
-#include "unicode\utypes.h"
-#include "unicode\ustring.h"
+#include "unicode/utypes.h"
+#include "unicode/ustring.h"
 
 U_CDECL_BEGIN
 /**
