@@ -4,8 +4,8 @@
  * Corporation and others.  All Rights Reserved.
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberRegression.java,v $ 
- * $Date: 2004/02/04 02:36:38 $ 
- * $Revision: 1.18 $
+ * $Date: 2004/03/22 23:58:57 $ 
+ * $Revision: 1.19 $
  *
  *****************************************************************************************
  **/
@@ -1091,6 +1091,8 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
      * Empty pattern produces double negative prefix.
      */
     public void Test4140009() {
+        final double IN[]  = {  123.456,   -123.456  };
+        final String OUT[] = { "123.456", "-123.456" };
         for (int i=0; i<2; ++i) {
             DecimalFormat f = null;
             switch (i) {
@@ -1104,12 +1106,10 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
                 f.applyPattern("");
                 break;
             }
-            String s = f.format(123.456);
-            if (!s.equals("123.456"))
-                errln("Fail: Format empty pattern x 123.456 => " + s);
-            s = f.format(-123.456);
-            if (!s.equals("-123.456"))
-                errln("Fail: Format empty pattern x -123.456 => " + s);
+            for (int j=0; j<2; ++j) {
+                assertEquals("<empty pat " + i + ">.format(" + IN[j] + ")",
+                             OUT[j], f.format(IN[j]));
+            }
         }
     }
 
