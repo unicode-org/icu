@@ -235,7 +235,7 @@ private:
      * Assignment operator.
      *
      */
-    StringPrep& operator=(const StringPrep&){};
+    StringPrep& operator=(const StringPrep& other) {return *this;};
 
     /**
      * Return true if another object is semantically equal to this one.
