@@ -13,6 +13,7 @@ GEN_DEPS.cc= $(CXX) -E -MM $(DEFS) $(CPPFLAGS)
 CFLAGS += -qproto -qroconst
 CXXFLAGS += -qproto -qroconst
 
+GENCCODE_ASSEMBLY=-a gcc
 ## Flags for position independent code
 SHAREDLIBCFLAGS = -qpic=large
 SHAREDLIBCXXFLAGS = -qpic=large
