@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1997-2004, International Business Machines
+*   Copyright (C) 1997-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -271,16 +271,14 @@ public:
      */
     virtual void  adoptText(CharacterIterator* it) = 0;
 
-    /**
-     * DONE is returned by previous() and next() after all valid
-     * boundaries have been returned.
-     * @stable ICU 2.0
-     */
-#ifdef U_CYGWIN
-    static U_COMMON_API const int32_t DONE;
-#else
-    static const int32_t DONE;
-#endif
+    enum {
+        /**
+         * DONE is returned by previous() and next() after all valid
+         * boundaries have been returned.
+         * @stable ICU 2.0
+         */
+        DONE = (int32_t)-1
+    };
 
     /**
      * Return the index of the first character in the text being scanned.

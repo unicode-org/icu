@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2004, International Business Machines
+*   Copyright (C) 1999-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -56,16 +56,6 @@
 U_NAMESPACE_BEGIN
 
 SymbolTable::~SymbolTable() {}
-
-/**
- * Minimum value that can be stored in a UnicodeSet.
- */
-const UChar32 UnicodeSet::MIN_VALUE = UNICODESET_LOW;
-
-/**
- * Maximum value that can be stored in a UnicodeSet.
- */
-const UChar32 UnicodeSet::MAX_VALUE = UNICODESET_HIGH - 1;
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(UnicodeSet)
 
