@@ -138,7 +138,7 @@ public:
      * Destructor
      * @stable ICU 2.0
      */
-    ~FieldPosition();
+    virtual ~FieldPosition();
 
     /**
      * Assignment operator

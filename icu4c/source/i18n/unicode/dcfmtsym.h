@@ -157,7 +157,7 @@ public:
      * Destructor.
      * @stable ICU 2.0
      */
-    ~DecimalFormatSymbols();
+    virtual ~DecimalFormatSymbols();
 
     /**
      * Return true if another object is semantically equal to this one.

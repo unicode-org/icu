@@ -166,7 +166,7 @@ public:
     /** Destructor.
      * @stable ICU 2.0
      */
-    ~ResourceBundle();
+    virtual ~ResourceBundle();
 
     /**
      * Clone this object.
