@@ -1198,6 +1198,8 @@ GC_Done:
             }
             break;
 
+            // TODO:  Possessive flavor of loop ops, or take them out if no longer needed.
+
         case URX_STO_SP:
             U_ASSERT(opValue >= 0 && opValue < fPattern->fDataSize);
             fData[opValue] = fStack->size();

@@ -66,6 +66,8 @@ RegexPattern &RegexPattern::operator = (const RegexPattern &other) {
     fFlags            = other.fFlags;
     fLiteralText      = other.fLiteralText;
     fBadState         = other.fBadState;
+    fMinMatchLen      = other.fMinMatchLen;
+    fMaxMatchLen      = other.fMaxMatchLen;
     fMaxCaptureDigits = other.fMaxCaptureDigits;
     fStaticSets       = other.fStaticSets;    
     if (fBadState) {
@@ -111,7 +113,9 @@ RegexPattern &RegexPattern::operator = (const RegexPattern &other) {
 void RegexPattern::init() {
     fFlags            = 0;
     fBadState         = FALSE;
-    fMaxCaptureDigits = 1;     // TODO:  calculate for real.
+    fMinMatchLen      = 0;
+    fMaxMatchLen      = -1;
+    fMaxCaptureDigits = 1;  
     fStaticSets       = NULL;
     fMatcher          = NULL;
     fFrameSize        = 0;
@@ -353,6 +357,7 @@ int32_t  RegexPattern::split(const UnicodeString &input,
     //
     // If we don't already have a cached matcher object from a previous call
     //   to split(), create one now.
+    //  TODO:  NOT THREAD SAFE.   FIX.
     //
     if (fMatcher == NULL) {
         RegexMatcher *m = matcher(input, status);
@@ -560,7 +565,9 @@ void   RegexPattern::dump() const {
         REGEX_DUMP_DEBUG_PRINTF("%c", fPattern.charAt(i));
     }
     REGEX_DUMP_DEBUG_PRINTF("\n");
-    REGEX_DUMP_DEBUG_PRINTF("Pattern Valid?:     %s\n", fBadState? "no" : "yes");
+    REGEX_DUMP_DEBUG_PRINTF("Pattern Valid?:     %s\n"  , fBadState? "no" : "yes");
+    REGEX_DUMP_DEBUG_PRINTF("   Min Match Length:  %d\n", fMinMatchLen);
+    REGEX_DUMP_DEBUG_PRINTF("   Max Match Length:  %d\n", fMaxMatchLen);
     REGEX_DUMP_DEBUG_PRINTF("\nIndex   Binary     Type             Operand\n"
            "-------------------------------------------\n");
     for (index = 0; index<fCompiledPat->size(); index++) {
