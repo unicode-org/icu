@@ -896,13 +896,37 @@ void RTTest::logRoundTripFailure(const UnicodeString& from,
 // Specific Tests
 //--------------------------------------------------------------------
 
+    /*
+    Note: Unicode 3.2 added new Hiragana/Katakana characters:
+    
+3095..3096    ; 3.2 #   [2] HIRAGANA LETTER SMALL KA..HIRAGANA LETTER SMALL KE
+309F..30A0    ; 3.2 #   [2] HIRAGANA DIGRAPH YORI..KATAKANA-HIRAGANA DOUBLE HYPHEN
+30FF          ; 3.2 #       KATAKANA DIGRAPH KOTO
+31F0..31FF    ; 3.2 #  [16] KATAKANA LETTER SMALL KU..KATAKANA LETTER SMALL RO
+
+    We will not add them to the rules until they are more supported (e.g. in fonts on Windows)
+    A bug has been filed to remind us to do this: #1979.
+    */
+    
+static const char KATAKANA[] = "[[[:katakana:][\\u30A1-\\u30FA\\u30FC]]-[\\u30FF\\u31F0-\\u31FF]]";
+static const char HIRAGANA[] = "[[[:hiragana:][\\u3040-\\u3094]]-[\\u3095-\\u3096\\u309F-\\u30A0]]";
+static const char LENGTH[] = "[\\u30FC]";
+static const char HALFWIDTH_KATAKANA[] = "[\\uFF65-\\uFF9D]";
+static const char KATAKANA_ITERATION[] = "[\\u30FD\\u30FE]";
+static const char HIRAGANA_ITERATION[] = "[\\u309D\\u309E]";
+static const int32_t TEMP_MAX=256;
+
 void TransliteratorRoundTripTest::TestKana() {
     RTTest test("Katakana-Hiragana");
     Legal *legal = new Legal();
-    test.test(UnicodeString("[[:katakana:]\\u30A1-\\u30FA\\u30FC]", ""), 
-              UnicodeString("[[:hiragana:]\\u3040-\\u3094\\u30FC]", ""),
-              "[\\u30FC\\u309D\\u309E\\uFF66-\\uFF9D]", this, 
-              quick, legal);
+    char temp[TEMP_MAX];
+    strcpy(temp, "[");
+    strcat(temp, HALFWIDTH_KATAKANA);
+    strcat(temp, LENGTH);
+    strcat(temp, "]");
+	test.test(KATAKANA, UnicodeString("[") + HIRAGANA + LENGTH + UnicodeString("]"), 
+              temp, 
+              this, quick, legal);
     delete legal;
 }
 
@@ -910,17 +934,23 @@ void TransliteratorRoundTripTest::TestHiragana() {
     RTTest test("Latin-Hiragana");
     Legal *legal = new Legal();
     test.test(UnicodeString("[a-zA-Z]", ""), 
-              UnicodeString("[[:hiragana:]\\u3040-\\u3094]", ""), 
-              "[\\u309D\\u309E]", this, quick, legal);
+              HIRAGANA, 
+              HIRAGANA_ITERATION, this, quick, legal);
     delete legal;
 }
 
 void TransliteratorRoundTripTest::TestKatakana() {
     RTTest test("Latin-Katakana");
     Legal *legal = new Legal();
+    char temp[TEMP_MAX];
+    strcpy(temp, "[");
+    strcat(temp, KATAKANA_ITERATION);
+    strcat(temp, HALFWIDTH_KATAKANA);
+    strcat(temp, "]");
     test.test(UnicodeString("[a-zA-Z]", ""), 
-              UnicodeString("[[:katakana:]\\u30A1-\\u30FA\\u30FC]", ""),
-              "[\\u30FD\\u30FE\\uFF66-\\uFF9D]", this, quick, legal);
+              KATAKANA,
+              temp, 
+              this, quick, legal);
     delete legal;
 }
 
