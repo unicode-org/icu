@@ -1,10 +1,10 @@
 /*
-*****************************************************************************************
+********************************************************************************
 *
 *   Copyright (C) 1996-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
-*****************************************************************************************
+********************************************************************************
 */
 
 #ifndef CTEST_H
@@ -16,8 +16,10 @@
 
 /* prototypes *********************************/
 
+U_CDECL_BEGIN
 typedef void (*TestFunctionPtr)(void);
 typedef struct TestNode TestNode;
+U_CDECL_END
 
 /**
  * Set this to zero to disable log_verbose() messages.
