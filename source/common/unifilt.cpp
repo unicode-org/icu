@@ -8,7 +8,6 @@
 
 #include "unicode/unifilt.h"
 #include "unicode/rep.h"
-#include "rbt_rule.h"
 
 U_NAMESPACE_BEGIN
 

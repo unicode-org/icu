@@ -3,8 +3,8 @@
 * Copyright (c) 2002, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
-* $Source: /xsrl/Nsvn/icu/icu/source/i18n/unicode/Attic/usetiter.h,v $ 
-* $Revision: 1.5 $
+* $Source: /xsrl/Nsvn/icu/icu/source/common/unicode/usetiter.h,v $ 
+* $Revision: 1.1 $
 **********************************************************************
 */
 #ifndef USETITER_H
@@ -49,7 +49,7 @@ class UnicodeString;
  * @author M. Davis
  * @draft
  */
-class U_I18N_API UnicodeSetIterator {
+class U_COMMON_API UnicodeSetIterator {
 
  protected:
 	

@@ -49,12 +49,12 @@ ucal.o calendar.o gregocal.o timezone.o simpletz.o \
 sortkey.o bocsu.o coleitr.o coll.o ucoleitr.o \
 ucol.o ucol_bld.o ucol_cnt.o ucol_elm.o ucol_tok.o ucol_wgt.o tblcoll.o \
 strmatch.o usearch.o search.o stsearch.o \
-uniset.o unifltlg.o translit.o utrans.o \
+unifltlg.o translit.o utrans.o \
 cpdtrans.o hextouni.o rbt.o rbt_data.o rbt_pars.o rbt_rule.o rbt_set.o \
 nultrans.o remtrans.o titletrn.o tolowtrn.o toupptrn.o \
-name2uni.o uni2name.o unitohex.o nortrans.o unifilt.o quant.o transreg.o \
-nfrs.o nfrule.o nfsubs.o rbnf.o upropset.o util.o esctrn.o unesctrn.o \
-funcrepl.o strrepl.o tridpars.o unifunct.o caniter.o usetiter.o \
+name2uni.o uni2name.o unitohex.o nortrans.o quant.o transreg.o \
+nfrs.o nfrule.o nfsubs.o rbnf.o esctrn.o unesctrn.o \
+funcrepl.o strrepl.o tridpars.o caniter.o \
 currency.o
 
 

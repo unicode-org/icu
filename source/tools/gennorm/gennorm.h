@@ -18,7 +18,7 @@
 #define __GENPROPS_H__
 
 #include "unicode/utypes.h"
-#include "uset.h"
+#include "unicode/uset.h"
 
 /* file definitions */
 #define DATA_NAME "unorm"

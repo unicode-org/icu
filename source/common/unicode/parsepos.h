@@ -36,7 +36,7 @@ U_NAMESPACE_BEGIN
  * @see         java.text.Format
  */
 
-class U_I18N_API ParsePosition {
+class U_COMMON_API ParsePosition {
 public:
     /**
      * Default constructor, the index starts with 0 as default.
