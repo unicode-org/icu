@@ -61,6 +61,7 @@ protected:
      * @internal
      */
     RBBIDataWrapper    *fData;
+    /** @internal */
     UTrie              *fCharMappings;
 
     /** Rule {tag} value for the most recent match. 
