@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/ValueIterator.java,v $
-* $Date: 2002/04/05 01:49:03 $
-* $Revision: 1.8 $
+* $Date: 2002/12/03 20:46:09 $
+* $Revision: 1.9 $
 *
 ******************************************************************************
 */
@@ -36,8 +36,7 @@ package com.ibm.icu.util;
  * }
  * </pre>
  * @author synwee
- * @since release 2.1, March 5th 2002
- * @draft 2.1
+ * @draft ICU 2.1
  */
 public interface ValueIterator
 {
@@ -46,20 +45,32 @@ public interface ValueIterator
     /**
     * <p>The return result container of each iteration. Stores the next 
     * integer index and its associated value Object.</p> 
-    * @draft 2.1
+    * @draft ICU 2.1
     */
     public static final class Element
     {
+        // public data members ----------------------------------------
+        
         /**
         * Integer index of the current iteration
-        * @draft 2.1
+        * @draft ICU 2.1
         */
         public int integer;
         /**
         * Gets the Object value associated with the integer index.
-        * @draft 2.1
+        * @draft ICU 2.1
         */ 
         public Object value;
+        
+        // public constructor ------------------------------------------
+        
+        /**
+         * Empty default constructor to make javadoc happy
+         * @draft ICU 2.4
+         */
+        public Element()
+        {
+        }
     }
     
     // public methods -------------------------------------------------
@@ -72,7 +83,7 @@ public interface ValueIterator
     * @param element for storing the result index and value
     * @return true if we are not at the end of the iteration, false otherwise.
     * @see Element
-    * @draft 2.1
+    * @draft ICU 2.1
     */
     public boolean next(Element element);
     
@@ -80,7 +91,7 @@ public interface ValueIterator
     * <p>Resets the iterator to start iterating from the integer index 
     * Integer.MIN_VALUE or X if a setRange(X, Y) has been called previously.
     * </p>
-    * @draft 2.1
+    * @draft ICU 2.1
     */
     public void reset();
     
@@ -98,7 +109,7 @@ public interface ValueIterator
      * @param limit 1 integer after the last integer in range 
      * @exception IllegalArgumentException thrown when attempting to set an 
      *            illegal range. E.g limit <= start
-     * @draft 2.1
+     * @draft ICU 2.1
      */
     public void setRange(int start, int end);
 }

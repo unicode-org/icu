@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/RangeValueIterator.java,v $
-* $Date: 2002/04/15 17:26:56 $
-* $Revision: 1.4 $
+* $Date: 2002/12/03 20:46:09 $
+* $Revision: 1.5 $
 *
 ******************************************************************************
 */
@@ -49,8 +49,7 @@ package com.ibm.icu.util;
  * }
  * </pre>
  * @author synwee
- * @since release 2.1, Jan 17 2002
- * @draft 2.1
+ * @draft ICU 2.1
  */
 public interface RangeValueIterator
 {
@@ -60,27 +59,39 @@ public interface RangeValueIterator
     * Return result wrapper for com.ibm.icu.util.RangeValueIterator.
     * Stores the start and limit of the continous result range and the
     * common value all integers between [start, limit - 1] has.
-    * @draft 2.1
+    * @draft ICU 2.1
     */
     public class Element
     {
+        // public data member ---------------------------------------------
+        
         /**
         * Starting integer of the continuous result range that has the same 
         * value
-        * @draft 2.1
+        * @draft ICU 2.1
         */
         public int start;
         /**
         * (End + 1) integer of continuous result range that has the same 
         * value
-        * @draft 2.1
+        * @draft ICU 2.1
         */
         public int limit;
         /**
         * Gets the common value of the continous result range
-        * @draft 2.1
+        * @draft ICU 2.1
         */ 
         public int value;
+        
+        // public constructor --------------------------------------------
+        
+        /**
+         * Empty default constructor to make javadoc happy
+         * @draft ICU 2.4
+         */
+        public Element() 
+        {
+        }
     }
     
     // public methods -------------------------------------------------
@@ -93,13 +104,13 @@ public interface RangeValueIterator
     * @param element for storing the result range and value
     * @return true if we are not at the end of the iteration, false otherwise.
     * @see Element
-    * @draft 2.1
+    * @draft ICU 2.1
     */
     public boolean next(Element element);
     
     /**
     * Resets the iterator to the beginning of the iteration.
-    * @draft 2.1
+    * @draft ICU 2.1
     */
     public void reset();
 }
