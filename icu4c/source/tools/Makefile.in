@@ -141,10 +141,7 @@ DATAFILESL=$(DAT_FILES) $(CNV_FILESL) $(BRK_FILES) $(RES_FILESL)
 ## Files to remove for 'make clean'
 CLEANFILES = *~ $(BRK_FILES)
 
-#install-local: all-local install-pkgdata
-
 install-local:
-
 
 dist-local:
 
@@ -193,19 +190,6 @@ $(TMPDATADIR)2/icupkg.inc: pkgdata/icupkg.inc
 # build the ICU and test data
 
 build-local:
-
-
-#build-local build-pkgdata: $(TMPDATADIR)/$(ICUDATA_NAME).lst $(TMPDATADIR)/testdata.lst  $(TMPDATADIR)/icupkg.inc $(TMPDATADIR)2/icupkg.inc $(TMPDATADIR)2/testdata.lst $(DATAFILES) $(top_builddir)/test/testdata/root.res
-#	@$(MKINSTALLDIRS) $(TMPDATADIR)
-#	@$(MKINSTALLDIRS) $(TMPDATADIR)2
-#	(cd $(TMPDATADIR); $(INVOKE) $(PKGDATA) -p $(ICUDATA_NAME) ./$(ICUDATA_NAME).lst   )
-#	(cd $(TMPDATADIR); $(INVOKE) $(PKGDATA) -p testdat1  ./testdata.lst )
-#	(cd $(TMPDATADIR)2; $(INVOKE) $(PKGDATA) -p testdat2  ./testdata.lst )
-
-install-pkgdata: $(TMPDATADIR)/$(ICUDATA_NAME).lst $(TMPDATADIR)/icupkg.inc
-	$(MKINSTALLDIRS) $(TMPDATADIR) $(DESTDIR)$(ICUDATA_DIR)/$(VERSION)
-	(cd $(TMPDATADIR); $(INVOKE) $(PKGDATA) -m dll -p $(ICUDATA_NAME) ./$(ICUDATA_NAME).lst -I $(DESTDIR)$(ICUDATA_DIR)/$(VERSION))
-	(cd $(DESTDIR)$(ICUDATA_DIR)/$(VERSION); $(RM) icudata.$(SO) && ln -s $(ICUDATA_NAME).$(SO) icudata.$(SO))
 
 clean-pkgdata:
 	-(cd $(TMPDATADIR); $(INVOKE) $(PKGDATA) -m dll -p $(ICUDATA_NAME) ./$(ICUDATA_NAME).lst --clean || echo '### Warning, cannot clean up icu/data if pkgdata is already gone.' )
