@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedNumberFormat.java,v $ 
- * $Date: 2002/03/10 19:40:16 $ 
- * $Revision: 1.6 $
+ * $Date: 2002/05/15 17:14:04 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -16,10 +16,8 @@ package com.ibm.icu.text;
 import com.ibm.icu.impl.ICULocaleData;
 
 import java.math.BigInteger;
-import java.text.Collator;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
-import java.text.RuleBasedCollator;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Vector;
@@ -473,7 +471,7 @@ import java.util.Vector;
  * using these features.</p>
  *
  * @author Richard Gillam
- * $RCSfile: RuleBasedNumberFormat.java,v $ $Revision: 1.6 $ $Date: 2002/03/10 19:40:16 $
+ * $RCSfile: RuleBasedNumberFormat.java,v $ $Revision: 1.7 $ $Date: 2002/05/15 17:14:04 $
  * @see NumberFormat
  * @see DecimalFormat
  */
