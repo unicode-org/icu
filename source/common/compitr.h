@@ -63,7 +63,7 @@ class U_COMMON_API ComposedCharIter
    * {@link #next} returns this value when there are no more composed
    * characters over which to iterate.
    */
-  static const UChar    DONE;
+  enum { DONE = 0xffff };
     
   /**
    * Construct a new <tt>ComposedCharIter</tt>.  The iterator will return
