@@ -155,6 +155,8 @@ static int32_t bundles_count = sizeof(param) / sizeof(param[0]);
 
 
 static void printUChars(UChar*);
+
+static void TestGetVersion();
 /***************************************************************************************/
 
 /* Array of our test objects */
@@ -165,6 +167,7 @@ void addNEWResourceBundleTest(TestNode** root)
     addTest(root, &TestConstruction2,   "tsutil/creststn/TestConstruction2");
     addTest(root, &TestResourceBundles, "tsutil/creststn/TestResourceBundle");
     addTest(root, &TestFallback,        "tsutil/creststn/TestFallback");
+    addTest(root, &TestGetVersion,        "tsutil/creststn/TestGetVersion");
     addTest(root, &TestAliasConflict,   "tsutil/creststn/TestAlias");
     addTest(root, &TestNewTypes,        "tsutil/creststn/TestNewTypes");
     addTest(root, &TestBinaryCollationData, "tsutil/creststn/TestBinaryCollationData");
@@ -618,6 +621,31 @@ static void TestErrorConditions(){
     ures_close(teRes);
     
 
+}
+
+static void TestGetVersion(){
+    UVersionInfo minVersionArray = {0x01, 0x01, 0x00, 0x00};
+    UVersionInfo maxVersionArray = {0x50, 0x80, 0xcf, 0xcf};
+    UVersionInfo versionArray;
+    UErrorCode status= U_ZERO_ERROR;
+    UResourceBundle* resB = ures_open(NULL,"root", &status);
+    int i=0;
+    log_verbose("The ures_getVersion tests begin : \n");
+
+    if (U_FAILURE(status)) {
+        log_err("Default en_US resource bundle creation failed.: %s\n", myErrorName(status));
+        return;
+    }
+
+    ures_getVersion(resB, versionArray);
+    for (i=0; i<4; ++i) {
+      if (versionArray[i] < minVersionArray[i] ||
+          versionArray[i] > maxVersionArray[i]) {
+        log_err("Testing ucol_getVersion() - unexpected result: %d.%d.%d.%d\n", 
+            versionArray[0], versionArray[1], versionArray[2], versionArray[3]);
+        break;
+      }
+    }
 }
 
 static void TestResourceBundles()
