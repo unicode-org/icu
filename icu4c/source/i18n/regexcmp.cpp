@@ -822,6 +822,13 @@ UBool RegexCompile::doParseActions(EParseAction action)
         error(U_REGEX_UNIMPLEMENTED);
         break;
 
+    case doPossesiveStar:
+    case doPossesivePlus:
+    case doPossesiveOpt:
+        //  TODO:  implement
+        error(U_REGEX_UNIMPLEMENTED);
+        break;
+
     case doMatchMode:   //  (?i)    and similar
         // TODO:  implement
         error(U_REGEX_UNIMPLEMENTED);
