@@ -893,7 +893,7 @@ public class GregorianCalendar extends Calendar {
     }
 
     // Return JD of start of given month/year
-    protected int handleComputeMonthStart(int eyear, int month) {
+    protected int handleComputeMonthStart(int eyear, int month, boolean useMonth) {
 
         // If the month is out of range, adjust it into range, and
         // modify the extended year value accordingly.

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/util/Attic/HebrewCalendar.java,v $ 
- * $Date: 2000/11/18 00:30:54 $ 
- * $Revision: 1.6 $
+ * $Date: 2000/11/28 00:50:13 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -732,7 +732,7 @@ public class HebrewCalendar extends Calendar {
     }
 
     // Return JD of start of given month/year
-    protected int handleComputeMonthStart(int eyear, int month) {
+    protected int handleComputeMonthStart(int eyear, int month, boolean useMonth) {
 
         // Resolve out-of-range months.  This is necessary in order to
         // obtain the correct year.

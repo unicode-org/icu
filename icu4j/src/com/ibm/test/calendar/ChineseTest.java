@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  *********************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/calendar/Attic/ChineseTest.java,v $
- * $Date: 2000/11/21 20:20:44 $
- * $Revision: 1.3 $
+ * $Date: 2000/11/28 00:51:41 $
+ * $Revision: 1.4 $
  */
 package com.ibm.test.calendar;
 import com.ibm.util.*;
@@ -255,6 +255,96 @@ public class ChineseTest extends CalendarTest {
             } catch (java.text.ParseException e) {
                 errln("Fail: " + s + " -> parse failure at " + e.getErrorOffset());
                 errln(e.toString());
+            }
+        }
+    }
+
+    /**
+     * Make sure IS_LEAP_MONTH participates in field resolution.
+     */
+    public void TestResolution() {
+        ChineseCalendar cal = new ChineseCalendar();
+        DateFormat fmt = DateFormat.getDateInstance(cal, DateFormat.DEFAULT);
+
+        // May 22 2001 = y4638 m4 d30 doy119
+        // May 23 2001 = y4638 m4* d1 doy120
+
+        final int THE_YEAR = 4638;
+        final int END = -1;
+
+        int[] DATA = {
+            // Format:
+            // (field, value)+, END, exp.month, exp.isLeapMonth, exp.DOM
+            // Note: exp.month is ONE-BASED
+
+            // If we set DAY_OF_YEAR only, that should be used
+            Calendar.DAY_OF_YEAR, 1,
+            END,
+            1,0,1, // Expect 1-1
+            
+            // If we set MONTH only, that should be used
+            ChineseCalendar.IS_LEAP_MONTH, 1,
+            Calendar.DAY_OF_MONTH, 1,
+            Calendar.MONTH, 3,
+            END,
+            4,1,1, // Expect 4*-1
+            
+            // If we set the DOY last, that should take precedence
+            Calendar.MONTH, 1, // Should ignore
+            ChineseCalendar.IS_LEAP_MONTH, 1, // Should ignore
+            Calendar.DAY_OF_MONTH, 1, // Should ignore
+            Calendar.DAY_OF_YEAR, 121,
+            END,
+            4,1,2, // Expect 4*-2
+            
+            // If we set MONTH last, that should take precedence
+            ChineseCalendar.IS_LEAP_MONTH, 1,
+            Calendar.DAY_OF_MONTH, 1,
+            Calendar.DAY_OF_YEAR, 5, // Should ignore
+            Calendar.MONTH, 3,
+            END,
+            4,1,1, // Expect 4*-1
+            
+            // If we set IS_LEAP_MONTH last, that should take precedence
+            Calendar.MONTH, 3,
+            Calendar.DAY_OF_MONTH, 1,
+            Calendar.DAY_OF_YEAR, 5, // Should ignore
+            ChineseCalendar.IS_LEAP_MONTH, 1,
+            END,
+            4,1,1, // Expect 4*-1
+        };
+
+        StringBuffer buf = new StringBuffer();
+        for (int i=0; i<DATA.length; ) {
+            cal.clear();
+            cal.set(Calendar.EXTENDED_YEAR, THE_YEAR);
+            buf.setLength(0);
+            buf.append("EXTENDED_YEAR=" + THE_YEAR);
+            while (DATA[i] != END) {
+                cal.set(DATA[i++], DATA[i++]);
+                buf.append(" " + fieldName(DATA[i-2]) + "=" + DATA[i-1]);
+            }
+            ++i; // Skip over END mark
+            int expMonth = DATA[i++]-1;
+            int expIsLeapMonth = DATA[i++];
+            int expDOM = DATA[i++];
+            int month = cal.get(Calendar.MONTH);
+            int isLeapMonth = cal.get(ChineseCalendar.IS_LEAP_MONTH);
+            int dom = cal.get(Calendar.DAY_OF_MONTH);
+            if (expMonth == month && expIsLeapMonth == isLeapMonth &&
+                dom == expDOM) {
+                logln("OK: " + buf + " => " + fmt.format(cal.getTime()));
+            } else {
+                String s = fmt.format(cal.getTime());
+                cal.clear();
+                cal.set(Calendar.EXTENDED_YEAR, THE_YEAR);
+                cal.set(Calendar.MONTH, expMonth);
+                cal.set(ChineseCalendar.IS_LEAP_MONTH, expIsLeapMonth);
+                cal.set(Calendar.DAY_OF_MONTH, expDOM);
+                errln("Fail: " + buf + " => " + s +
+                      " | " + (month+1) + "," + isLeapMonth + "," + dom +
+                      ", expected " + fmt.format(cal.getTime()) +
+                      " | " + (expMonth+1) + "," + expIsLeapMonth + "," + expDOM);
             }
         }
     }

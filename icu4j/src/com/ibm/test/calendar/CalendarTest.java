@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/calendar/Attic/CalendarTest.java,v $ 
- * $Date: 2000/11/21 06:58:06 $ 
- * $Revision: 1.8 $
+ * $Date: 2000/11/28 00:51:41 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -59,6 +59,7 @@ public class CalendarTest extends TestFmwk {
         "MINUTE", "SECOND", "MILLISECOND", "ZONE_OFFSET",
         "DST_OFFSET", "YEAR_WOY", "DOW_LOCAL", "EXTENDED_YEAR",
         "JULIAN_DAY", "MILLISECONDS_IN_DAY",
+        "IS_LEAP_MONTH" // (ChineseCalendar only)
     };
 
     public static final String fieldName(int f) {

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/BuddhistCalendar.java,v $ 
- * $Date: 2000/11/18 00:30:54 $ 
- * $Revision: 1.6 $
+ * $Date: 2000/11/28 00:50:12 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -164,8 +164,8 @@ public class BuddhistCalendar extends GregorianCalendar {
     }
 
     // Return JD of start of given month/year
-    protected int handleComputeMonthStart(int eyear, int month) {
-        return super.handleComputeMonthStart(eyear + BUDDHIST_ERA_START, month);
+    protected int handleComputeMonthStart(int eyear, int month, boolean useMonth) {
+        return super.handleComputeMonthStart(eyear + BUDDHIST_ERA_START, month, useMonth);
     }
 
     protected void handleComputeFields(int julianDay) {

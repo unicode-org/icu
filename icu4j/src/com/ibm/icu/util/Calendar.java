@@ -641,7 +641,7 @@ import com.ibm.text.SimpleDateFormat;
  * @see          GregorianCalendar
  * @see          TimeZone
  * @see          DateFormat
- * @version      $Revision: 1.14 $ $Date: 2000/11/22 21:26:55 $
+ * @version      $Revision: 1.15 $ $Date: 2000/11/28 00:50:12 $
  * @author Mark Davis, David Goldsmith, Chen-Lieh Huang, Alan Liu, Laura Werner
  * @since JDK1.1
  */
@@ -3944,11 +3944,15 @@ public abstract class Calendar implements Serializable, Cloneable {
      * given month in the given extended year.  Subclasses should override
      * this method to implement their calendar system.
      * @param eyear the extended year
-     * @param month the zero-based month
+     * @param month the zero-based month, or 0 if useMonth is false
+     * @param useMonth if false, compute the day before the first day of
+     * the given year, otherwise, compute the day before the first day of
+     * the given month
      * @param return the Julian day number of the day before the first
      * day of the given month and year
      */
-    abstract protected int handleComputeMonthStart(int eyear, int month);
+    abstract protected int handleComputeMonthStart(int eyear, int month,
+                                                   boolean useMonth);
 
     /**
      * Return the extended year defined by the current fields.  This will
@@ -3966,8 +3970,8 @@ public abstract class Calendar implements Serializable, Cloneable {
      * implementation than the default implementation in Calendar.
      */
     protected int handleGetMonthLength(int extendedYear, int month) {
-        return handleComputeMonthStart(extendedYear, month+1) -
-               handleComputeMonthStart(extendedYear, month);
+        return handleComputeMonthStart(extendedYear, month+1, true) -
+               handleComputeMonthStart(extendedYear, month, true);
     }
 
     /**
@@ -3977,8 +3981,8 @@ public abstract class Calendar implements Serializable, Cloneable {
      * default implementation in Calendar.
      */
     protected int handleGetYearLength(int eyear) {
-        return handleComputeMonthStart(eyear+1, 0) -
-               handleComputeMonthStart(eyear, 0);
+        return handleComputeMonthStart(eyear+1, 0, false) -
+               handleComputeMonthStart(eyear, 0, false);
     }
 
     /**
@@ -4008,7 +4012,7 @@ public abstract class Calendar implements Serializable, Cloneable {
 
         // Get the Julian day of the day BEFORE the start of this year.
         // If useMonth is true, get the day before the start of the month.
-        int julianDay = handleComputeMonthStart(year, useMonth ? internalGet(MONTH) : 0);
+        int julianDay = handleComputeMonthStart(year, useMonth ? internalGet(MONTH) : 0, useMonth);
 
         if (bestField == DAY_OF_MONTH) {
             return julianDay + internalGet(DAY_OF_MONTH, 1);
