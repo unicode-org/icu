@@ -221,8 +221,8 @@ void CollationThaiTest::TestDictionary(void) {
         }
 
         if (lastWord.length() > 0) {
-            // TODO: this line should be enabled when j2720 is fixed.
-            //doTest(coll, lastWord, word, Collator::LESS);
+            // line enabled for j2720 
+            doTest(coll, lastWord, word, UCOL_LESS);
             int32_t result = coll->compare(lastWord, word);
 
             if (result >= 0) {
