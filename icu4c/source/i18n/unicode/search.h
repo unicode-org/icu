@@ -17,7 +17,13 @@
 #include "unicode/brkiter.h"
 #include "unicode/usearch.h"
 
+/**
+* @stable
+*/
 struct USearch;
+/**
+* @stable
+*/
 typedef struct USearch USearch;
 
 U_NAMESPACE_BEGIN
