@@ -721,6 +721,7 @@ U_CFUNC void T_UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* arg
                     concatEscape(args, &myTargetIndex, &myTargetLength, escSeqChars[0],err,strlen(escSeqChars[0]));
                     isTargetUCharDBCS=FALSE;
                     soAppended =FALSE;
+                     myConverterData->isEscapeAppended=isEscapeAppended=FALSE;
                     myConverterData->soAppended=FALSE;
                     TEST_ERROR_CONDITION(args,myTargetIndex, mySourceIndex, isTargetUCharDBCS,myConverterData, err);
                 }
