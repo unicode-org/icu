@@ -86,6 +86,8 @@ static UOption options[]={
     UOPTION_DEF( "source", 'S', UOPT_NO_ARG)
 };
 
+char symPrefix[100];
+
 extern int
 main(int argc, const char *argv[]) {
     static uint8_t buffer[4096];
@@ -102,6 +104,17 @@ main(int argc, const char *argv[]) {
     options[6].value=COMMON_DATA_NAME;
     options[7].value=DATA_TYPE;
     argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
+
+    /* if it is ICU data.. no prefix. */
+    if(!uprv_strcmp(options[6].value, COMMON_DATA_NAME))
+    {
+      symPrefix[0] = 0;
+    }
+    else
+    {
+      uprv_strcpy(symPrefix, options[6].value);
+      uprv_strcat(symPrefix, "_");
+    }
 
     /* error handling, printing usage message */
     if(argc<0) {
@@ -289,10 +302,10 @@ main(int argc, const char *argv[]) {
             options[6].value, options[7].value);
         T_FileStream_writeLine(out, buffer);
 
-        sprintf(buffer, "extern const char\n    %s[]", files[0].pathname);
+        sprintf(buffer, "extern const char\n    %s%s[]", symPrefix, files[0].pathname);
         T_FileStream_writeLine(out, buffer);
         for(i=1; i<fileCount; ++i) {
-            sprintf(buffer, ",\n    %s[]", files[i].pathname);
+            sprintf(buffer, ",\n    %s%s[]", symPrefix, files[i].pathname);
             T_FileStream_writeLine(out, buffer);
         }
         T_FileStream_writeLine(out, ";\n\n");
@@ -309,7 +322,7 @@ main(int argc, const char *argv[]) {
             "        const char *name;\n"
             "        const void *data;\n"
             "    } toc[%lu];\n"
-            "} U_EXPORT2 icudata_dat = {\n"
+            "} U_EXPORT2 %s_dat = {\n"
             "    32, 0xda, 0x27, {\n"
             "        %lu, 0, \n"
             "        %u, %u, %u, 0, \n"
@@ -320,6 +333,7 @@ main(int argc, const char *argv[]) {
             "    \"\", %lu, 0, {\n",
             32-4-sizeof(UDataInfo),
             fileCount,
+            options[6].value,
             sizeof(UDataInfo),
             U_IS_BIG_ENDIAN,
             U_CHARSET_FAMILY,
@@ -328,10 +342,10 @@ main(int argc, const char *argv[]) {
         );
         T_FileStream_writeLine(out, buffer);
 
-        sprintf(buffer, "        { \"%s\", %s }", files[0].basename, files[0].pathname);
+        sprintf(buffer, "        { \"%s\", %s%s }", files[0].basename, symPrefix, files[0].pathname);
         T_FileStream_writeLine(out, buffer);
         for(i=1; i<fileCount; ++i) {
-            sprintf(buffer, ",\n        { \"%s\", %s }", files[i].basename, files[i].pathname);
+            sprintf(buffer, ",\n        { \"%s\", %s%s }", files[i].basename, symPrefix, files[i].pathname);
             T_FileStream_writeLine(out, buffer);
         }
       

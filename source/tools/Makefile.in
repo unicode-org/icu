@@ -200,8 +200,8 @@ $(TMPDATADIR)/icupkg.inc: pkgdata/icupkg.inc
 build-local build-pkgdata: $(TMPDATADIR)/icudata.lst $(TMPDATADIR)/testdata.lst  $(TMPDATADIR)/icupkg.inc $(DATAFILES) $(DATABUILDDIR)/test.dat
 	@$(mkinstalldirs) $(TMPDATADIR)
 	(cd $(TMPDATADIR); $(PKGDATA) -p icudata ./icudata.lst   )
-	(cd $(TMPDATADIR); $(PKGDATA) -p base    ./testdata.lst  )
-	(cd $(TMPDATADIR); $(PKGDATA) -p base_test  ./testdata.lst )
+	(cd $(TMPDATADIR); $(PKGDATA) -p testdat1  ./testdata.lst )
+	(cd $(TMPDATADIR); $(PKGDATA) -p testdat2  ./testdata.lst )
 
 install-pkgdata: $(TMPDATADIR)/icudata.lst $(TMPDATADIR)/icupkg.inc
 	$(mkinstalldirs) $(TMPDATADIR)  $(DESTDIR)$(pkgdatadir)/$(VERSION)

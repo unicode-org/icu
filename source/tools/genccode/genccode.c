@@ -55,13 +55,26 @@ static UOption options[]={
     UOPTION_HELP_H,
     UOPTION_HELP_QUESTION_MARK,
     UOPTION_DESTDIR,
-    UOPTION_DEF("object", 'o', UOPT_NO_ARG)
+    UOPTION_DEF("object", 'o', UOPT_NO_ARG),
+    UOPTION_DEF("name", 'n', UOPT_REQUIRES_ARG)
 };
+
+char symPrefix[100];
 
 extern int
 main(int argc, const char *argv[]) {
     /* read command line options */
     argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
+
+    if(options[4].doesOccur)
+    {
+      uprv_strcpy(symPrefix, options[4].value);
+      uprv_strcat(symPrefix, "_");
+    }
+    else
+    {
+      symPrefix[0] = 0;
+    }
 
     /* error handling, printing usage message */
     if(argc<0) {
@@ -129,11 +142,12 @@ writeCCode(const char *filename, const char *destdir) {
 
     sprintf(buffer,
         "#include \"unicode/utypes.h\"\n"
-        "U_EXPORT const struct {\n"
+        "U_CDECL_BEGIN\n"
+        "const struct {\n"
         "    double bogus;\n"
         "    uint8_t bytes[%ld]; \n"
-        "} U_EXPORT2 %s={ 0, {\n",
-        T_FileStream_size(in), entry);
+        "} %s%s={ 0, {\n",
+        T_FileStream_size(in), symPrefix, entry);
     T_FileStream_writeLine(out, buffer);
 
     for(;;) {
@@ -146,7 +160,7 @@ writeCCode(const char *filename, const char *destdir) {
         }
     }
 
-    T_FileStream_writeLine(out, "\n}\n};\n");
+    T_FileStream_writeLine(out, "\n}\n};\nU_CDECL_END\n");
 
     if(T_FileStream_error(in)) {
         fprintf(stderr, "genccode: file read error while generating from file %s\n", filename);
