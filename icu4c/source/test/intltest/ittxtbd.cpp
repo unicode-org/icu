@@ -1186,12 +1186,22 @@ void IntlTestTextBoundary::generalIteratorTest(BreakIterator& bi, Vector* expect
     UnicodeString text = createTestData(elems);
     delete elems;
 
+    logln("comparing forward and backward...");
     bi.setText(text);
 
     Vector *nextResults = testFirstAndNext(bi, text);
+    if (nextResults == NULL) {
+        errln("Couldn't get nextResults!");
+        return;
+    }
+
     Vector *previousResults = testLastAndPrevious(bi, text);
 
-    logln("comparing forward and backward...");
+    if (previousResults == NULL) {
+        errln("Couldn't get previousResults!");
+        return;
+    }
+
     int errs = getErrors();
     UnicodeString str1="forward iteration";
     UnicodeString str2="backward iteration";
@@ -1238,9 +1248,12 @@ Vector* IntlTestTextBoundary::testFirstAndNext(BreakIterator& bi, UnicodeString&
     while (p != BreakIterator::DONE) {
         p = bi.next();
         if (p != BreakIterator::DONE) {
-            if (p <= lastP)
+            if (p <= lastP) {
                 errln((UnicodeString)"next() failed to move forward: next() on position "
                                 + lastP + (UnicodeString)" yielded " + p);
+                errln("Are the *.brk files corrupt?");
+                return NULL;
+            }
 
             text.extractBetween(lastP, p, selection);  
             result->addElement(selection);
