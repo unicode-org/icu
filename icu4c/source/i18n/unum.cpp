@@ -206,7 +206,7 @@ unum_formatInt64(const UNumberFormat* fmt,
     if(pos != 0)
         fp.setField(pos->field);
     
-    ((NumberFormat*)fmt)->format(number, res, fp);
+    ((const NumberFormat*)fmt)->format(number, res, fp);
     
     if(pos != 0) {
         pos->beginIndex = fp.getBeginIndex();
@@ -239,7 +239,7 @@ unum_formatDouble(    const    UNumberFormat*  fmt,
   if(pos != 0)
     fp.setField(pos->field);
   
-  ((NumberFormat*)fmt)->format(number, res, fp);
+  ((const NumberFormat*)fmt)->format(number, res, fp);
   
   if(pos != 0) {
     pos->beginIndex = fp.getBeginIndex();
@@ -249,13 +249,47 @@ unum_formatDouble(    const    UNumberFormat*  fmt,
   return res.extract(result, resultLength, *status);
 }
 
+U_DRAFT int32_t U_EXPORT2 
+unum_formatDoubleCurrency(const UNumberFormat* fmt,
+                          double number,
+                          UChar* currency,
+                          UChar* result,
+                          int32_t resultLength,
+                          UFieldPosition* pos, /* ignored if 0 */
+                          UErrorCode* status) {
+    if (U_FAILURE(*status)) return -1;
+
+    UnicodeString res;
+    if (!(result==NULL && resultLength==0)) {
+        // NULL destination for pure preflighting: empty dummy string
+        // otherwise, alias the destination buffer
+        res.setTo(result, 0, resultLength);
+    }
+    
+    FieldPosition fp;
+    if (pos != 0) {
+        fp.setField(pos->field);
+    }
+  
+    Formattable n(number, currency);
+    ((const NumberFormat*)fmt)->format(n, res, fp, *status);
+    
+    if (pos != 0) {
+        pos->beginIndex = fp.getBeginIndex();
+        pos->endIndex = fp.getEndIndex();
+    }
+  
+    return res.extract(result, resultLength, *status);
+}
+
 static void
 parseRes(Formattable& res,
-                const   UNumberFormat*  fmt,
-        const   UChar*          text,
-        int32_t         textLength,
-        int32_t         *parsePos /* 0 = start */,
-        UErrorCode      *status)
+         const   UNumberFormat*  fmt,
+         const   UChar*          text,
+         int32_t         textLength,
+         int32_t         *parsePos /* 0 = start */,
+         UBool parseCurrency,
+         UErrorCode      *status)
 {
     if(U_FAILURE(*status))
         return;
@@ -267,7 +301,11 @@ parseRes(Formattable& res,
     if(parsePos != 0)
         pp.setIndex(*parsePos);
     
-    ((NumberFormat*)fmt)->parse(src, res, pp);
+    if (parseCurrency) {
+        ((const NumberFormat*)fmt)->parseCurrency(src, res, pp);
+    } else {
+        ((const NumberFormat*)fmt)->parse(src, res, pp);
+    }
     
     if(parsePos != 0) {
         if(pp.getErrorIndex() == -1)
@@ -287,7 +325,7 @@ unum_parse(    const   UNumberFormat*  fmt,
         UErrorCode      *status)
 {
     Formattable res;
-    parseRes(res, fmt, text, textLength, parsePos, status);
+    parseRes(res, fmt, text, textLength, parsePos, FALSE, status);
     return res.getLong(*status);
 }
 
@@ -299,7 +337,7 @@ unum_parseInt64(    const   UNumberFormat*  fmt,
         UErrorCode      *status)
 {
     Formattable res;
-    parseRes(res, fmt, text, textLength, parsePos, status);
+    parseRes(res, fmt, text, textLength, parsePos, FALSE, status);
     return res.getInt64(*status);
 }
 
@@ -311,7 +349,23 @@ unum_parseDouble(    const   UNumberFormat*  fmt,
             UErrorCode      *status)
 {
     Formattable res;
-    parseRes(res, fmt, text, textLength, parsePos, status);
+    parseRes(res, fmt, text, textLength, parsePos, FALSE, status);
+    return res.getDouble(*status);
+}
+
+U_DRAFT double U_EXPORT2
+unum_parseDoubleCurrency(const UNumberFormat* fmt,
+                         const UChar* text,
+                         int32_t textLength,
+                         int32_t* parsePos, /* 0 = start */
+                         UChar* currency,
+                         UErrorCode* status) {
+    Formattable res;
+    parseRes(res, fmt, text, textLength, parsePos, TRUE, status);
+    currency[0] = 0;
+    if (res.getCurrency() != 0) {
+        u_strcpy(currency, res.getCurrency());
+    }
     return res.getDouble(*status);
 }
 

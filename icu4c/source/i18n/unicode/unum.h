@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2003, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) 1997-2004, International Business Machines Corporation and others. All Rights Reserved.
 * Modification History:
 *
 *   Date        Name        Description
@@ -339,6 +339,36 @@ unum_formatDouble(    const    UNumberFormat*  fmt,
             UErrorCode*     status);
 
 /**
+ * Format a double currency amount using a UNumberFormat.
+ * The double will be formatted according to the UNumberFormat's locale.
+ * @param fmt the formatter to use
+ * @param number the number to format
+ * @param currency the 3-letter null-terminated ISO 4217 currency code
+ * @param result a pointer to the buffer to receive the formatted number
+ * @param resultLength the maximum number of UChars to write to result
+ * @param pos a pointer to a UFieldPosition.  On input,
+ * position->field is read.  On output, position->beginIndex and
+ * position->endIndex indicate the beginning and ending indices of
+ * field number position->field, if such a field exists.  This
+ * parameter may be NULL, in which case it is ignored.
+ * @param status a pointer to an input-output UErrorCode
+ * @return the total buffer size needed; if greater than resultLength,
+ * the output was truncated.
+ * @see unum_formatDouble
+ * @see unum_parseDoubleCurrency
+ * @see UFieldPosition
+ * @draft ICU 3.0
+ */
+U_DRAFT int32_t U_EXPORT2 
+unum_formatDoubleCurrency(const UNumberFormat* fmt,
+                          double number,
+                          UChar* currency,
+                          UChar* result,
+                          int32_t resultLength,
+                          UFieldPosition* pos, /* ignored if 0 */
+                          UErrorCode* status);
+
+/**
 * Parse a string into an integer using a UNumberFormat.
 * The string will be parsed according to the UNumberFormat's locale.
 * @param fmt The formatter to use.
@@ -409,6 +439,33 @@ unum_parseDouble(    const   UNumberFormat*  fmt,
             int32_t         textLength,
             int32_t         *parsePos /* 0 = start */,
             UErrorCode      *status);
+
+/**
+ * Parse a string into a double and a currency using a UNumberFormat.
+ * The string will be parsed according to the UNumberFormat's locale.
+ * @param fmt the formatter to use
+ * @param text the text to parse
+ * @param textLength the length of text, or -1 if null-terminated
+ * @param parsePos a pointer to an offset index into text at which to
+ * begin parsing. On output, *parsePos will point after the last
+ * parsed character.  This parameter may be 0, in which case parsing
+ * begins at offset 0.
+ * @param currency a pointer to the buffer to receive the parsed null-
+ * terminated currency.  This buffer must have a capacity of at least
+ * 4 UChars.
+ * @param status a pointer to an input-output UErrorCode
+ * @return the parsed double
+ * @see unum_parseDouble
+ * @see unum_formatDoubleCurrency
+ * @draft ICU 3.0
+ */
+U_DRAFT double U_EXPORT2
+unum_parseDoubleCurrency(const UNumberFormat* fmt,
+                         const UChar* text,
+                         int32_t textLength,
+                         int32_t* parsePos, /* 0 = start */
+                         UChar* currency,
+                         UErrorCode* status);
 
 /**
  * Set the pattern used by a UNumberFormat.  This can only be used
