@@ -289,7 +289,7 @@ icu4c/source/samples/ucnv/data02.bin -text svneol=unset#application/octet-stream
 icu4c/source/test/collperf/readme.html svneol=native#text/html
 icu4c/source/test/letest/readme.html svneol=native#text/html
 icu4c/source/test/testdata/importtest.bin -text
-icu4c/source/test/testdata/ja_data.bin -text svneol=unset#application/octet-stream
+icu4c/source/test/testdata/iscii.bin -text svneol=native#application/octet-stream
 icu4c/source/test/testdata/uni-text.bin -text
 icu4j/build.xml svneol=native#text/xml
 icu4j/license.html svneol=native#text/html
