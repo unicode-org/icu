@@ -1,0 +1,22 @@
+// *******************************************************************************
+// *
+// *   Copyright (C) 1997-2000, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// *******************************************************************************
+
+fi_FI {
+    CurrencyElements { 
+            "mk",
+            "FIM",
+            ",",
+    }
+    LocaleString { "fi_FI" }
+    NumberPatterns { 
+            "#,##0.###;-#,##0.###",
+            "#,##0.00 \u00A4;-#,##0.00 \u00A4",
+            "#,##0%",
+    }
+    ShortCountry { "FIN" }
+    LocaleID { "040b" }
+}

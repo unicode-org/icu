@@ -1,0 +1,132 @@
+﻿ // -*- Coding: utf-8; -*-
+//--------------------------------------------------------------------
+// Copyright (c) 1999-2001, International Business Machines
+// Corporation and others.  All Rights Reserved.
+//--------------------------------------------------------------------
+// THIS IS A MACHINE-GENERATED FILE
+// Tool: dumpICUrules.bat
+// Source: \icu4j\src\com\ibm\text\resources/Transliterator_Devanagari_InterIndic.utf8.txt
+// Date: Thu Mar  1 20:03:54 2001
+//--------------------------------------------------------------------
+
+// Devanagari_InterIndic
+
+Devanagari_InterIndic {
+  Rule {
+//--------------------------------------------------------------------
+// Copyright (c) 1999-2001, International Business Machines
+// Corporation and others.  All Rights Reserved.
+//--------------------------------------------------------------------
+// Date: Tue Jan 23 12:41:57 2001
+//--------------------------------------------------------------------
+
+// Devanagari-InterIndic
+
+"ँ>\uE001;" // SIGN CANDRABINDU
+"ं>\uE002;" // SIGN ANUSVARA
+"ः>\uE003;" // SIGN VISARGA
+"अ>\uE005;" // LETTER A
+"आ>\uE006;" // LETTER AA
+"इ>\uE007;" // LETTER I
+"ई>\uE008;" // LETTER II
+"उ>\uE009;" // LETTER U
+"ऊ>\uE00A;" // LETTER UU
+"ऋ>\uE00B;" // LETTER VOCALIC R
+"ऌ>\uE00C;" // LETTER VOCALIC L
+// ऍ>; // UNMAPPED Devanagari-InterIndic: LETTER CANDRA E
+// ऎ>; // UNMAPPED Devanagari-InterIndic: LETTER SHORT E
+"ए>\uE081;" // LETTER E
+"ऐ>\uE010;" // LETTER AI
+// ऑ>; // UNMAPPED Devanagari-InterIndic: LETTER CANDRA O
+// ऒ>; // UNMAPPED Devanagari-InterIndic: LETTER SHORT O
+"ओ>\uE082;" // LETTER O
+"औ>\uE014;" // LETTER AU
+"क>\uE015;" // LETTER KA
+"ख>\uE016;" // LETTER KHA
+"ग>\uE017;" // LETTER GA
+"घ>\uE018;" // LETTER GHA
+"ङ>\uE019;" // LETTER NGA
+"च>\uE01A;" // LETTER CA
+"छ>\uE01B;" // LETTER CHA
+"ज>\uE01C;" // LETTER JA
+"झ>\uE01D;" // LETTER JHA
+"ञ>\uE01E;" // LETTER NYA
+"ट>\uE01F;" // LETTER TTA
+"ठ>\uE020;" // LETTER TTHA
+"ड>\uE021;" // LETTER DDA
+"ढ>\uE022;" // LETTER DDHA
+"ण>\uE023;" // LETTER NNA
+"त>\uE024;" // LETTER TA
+"थ>\uE025;" // LETTER THA
+"द>\uE026;" // LETTER DA
+"ध>\uE027;" // LETTER DHA
+"न>\uE028;" // LETTER NA
+"ऩ>\uE029;" // LETTER NNNA
+"प>\uE02A;" // LETTER PA
+"फ>\uE02B;" // LETTER PHA
+"ब>\uE02C;" // LETTER BA
+"भ>\uE02D;" // LETTER BHA
+"म>\uE02E;" // LETTER MA
+"य>\uE02F;" // LETTER YA
+"र>\uE030;" // LETTER RA
+"ऱ>\uE083;" // LETTER RRA
+"ल>\uE032;" // LETTER LA
+"ळ>\uE033;" // LETTER LLA
+"ऴ>\uE034;" // LETTER LLLA
+"व>\uE035;" // LETTER VA
+"श>\uE036;" // LETTER SHA
+"ष>\uE037;" // LETTER SSA
+"स>\uE038;" // LETTER SA
+"ह>\uE039;" // LETTER HA
+"़>\uE03C;" // SIGN NUKTA
+"ऽ>\uE03D;" // SIGN AVAGRAHA
+"ा>\uE03E;" // VOWEL SIGN AA
+"ि>\uE03F;" // VOWEL SIGN I
+"ी>\uE040;" // VOWEL SIGN II
+"ु>\uE041;" // VOWEL SIGN U
+"ू>\uE042;" // VOWEL SIGN UU
+"ृ>\uE043;" // VOWEL SIGN VOCALIC R
+"ॄ>\uE044;" // VOWEL SIGN VOCALIC RR
+"ॅ>\uE045;" // VOWEL SIGN CANDRA E
+// ॆ>; // UNMAPPED Devanagari-InterIndic: VOWEL SIGN SHORT E
+"े>\uE084;" // VOWEL SIGN E
+"ै>\uE048;" // VOWEL SIGN AI
+"ॉ>\uE049;" // VOWEL SIGN CANDRA O
+// ॊ>; // UNMAPPED Devanagari-InterIndic: VOWEL SIGN SHORT O
+"ो>\uE085;" // VOWEL SIGN O
+"ौ>\uE04C;" // VOWEL SIGN AU
+"्>\uE04D;" // SIGN VIRAMA
+"ॐ>\uE050;" // OM
+// ॑>; // UNMAPPED Devanagari-InterIndic: STRESS SIGN UDATTA
+// ॒>; // UNMAPPED Devanagari-InterIndic: STRESS SIGN ANUDATTA
+// ॓>; // UNMAPPED Devanagari-InterIndic: GRAVE ACCENT
+// ॔>; // UNMAPPED Devanagari-InterIndic: ACUTE ACCENT
+// क़>; // UNMAPPED Devanagari-InterIndic: LETTER QA
+"ख़>\uE059;" // LETTER KHHA
+"ग़>\uE05A;" // LETTER GHHA
+"ज़>\uE05B;" // LETTER ZA
+// ड़>; // UNMAPPED Devanagari-InterIndic: LETTER DDDHA
+"ढ़>\uE05D;" // LETTER RHA
+"फ़>\uE05E;" // LETTER FA
+"य़>\uE05F;" // LETTER YYA
+"ॠ>\uE060;" // LETTER VOCALIC RR
+"ॡ>\uE061;" // LETTER VOCALIC LL
+"ॢ>\uE062;" // VOWEL SIGN VOCALIC L
+"ॣ>\uE063;" // VOWEL SIGN VOCALIC LL
+// ।>; // UNMAPPED Devanagari-InterIndic: DANDA
+// ॥>; // UNMAPPED Devanagari-InterIndic: DOUBLE DANDA
+"०>\uE066;" // DIGIT ZERO
+"१>\uE067;" // DIGIT ONE
+"२>\uE068;" // DIGIT TWO
+"३>\uE069;" // DIGIT THREE
+"४>\uE06A;" // DIGIT FOUR
+"५>\uE06B;" // DIGIT FIVE
+"६>\uE06C;" // DIGIT SIX
+"७>\uE06D;" // DIGIT SEVEN
+"८>\uE06E;" // DIGIT EIGHT
+"९>\uE06F;" // DIGIT NINE
+// ॰>; // UNMAPPED Devanagari-InterIndic: ABBREVIATION SIGN
+
+// eof
+  }
+}

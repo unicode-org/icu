@@ -1,0 +1,106 @@
+## -*-makefile-*-
+#******************************************************************************
+#   Copyright (C) 1999-2001, International Business Machines
+#   Corporation and others.  All Rights Reserved.
+# $Revision: 1.18 $
+#******************************************************************************
+# This Makefile is designed to be included into projects which make use
+# of the ICU.
+
+SHELL = @SHELL@
+CFLAGS = @CFLAGS@ 
+CPPFLAGS = @CPPFLAGS@ $(LIBCPPFLAGS) -I$(prefix)/include
+CXXFLAGS = @CXXFLAGS@ 
+FFLAGS = @FFLAGS@
+DEFS = @DEFS@ 
+ENABLE_RPATH = @ENABLE_RPATH@
+ifeq ($(ENABLE_RPATH),YES)
+RPATHLDFLAGS = $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
+endif
+LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
+LIBS = @LIBS@ 
+ICUPREFIX = icu
+ICULIBS = $(LIBS) -L$(libdir) -l$(ICUPREFIX)uc -l$(ICUPREFIX)i18n
+exec_prefix = @exec_prefix@
+prefix = @prefix@
+program_transform_name = @program_transform_name@
+bindir = @bindir@
+sbindir = @sbindir@
+libexecdir = @libexecdir@
+datadir = @datadir@
+sysconfdir = @sysconfdir@
+sharedstatedir = @sharedstatedir@
+localstatedir = @localstatedir@
+libdir = @libdir@
+includedir = @includedir@
+oldincludedir = @oldincludedir@
+infodir = @infodir@
+mandir = @mandir@
+PACKAGE = @PACKAGE@
+VERSION = @VERSION@
+LIB_VERSION = @LIB_VERSION@
+LIB_VERSION_MAJOR = @LIB_VERSION_MAJOR@
+CC = @CC@
+CXX = @CXX@
+
+INSTALL  =  @INSTALL@
+INSTALL_PROGRAM  =  @INSTALL_PROGRAM@
+INSTALL_DATA  =  @INSTALL_DATA@
+
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_SCRIPT = @INSTALL_SCRIPT@
+INSTALL_DATA = @INSTALL_DATA@
+AUTOCONF = @AUTOCONF@
+
+pkgdatadir = $(datadir)/$(PACKAGE)
+pkglibdir = $(libdir)/$(PACKAGE)
+
+MKINSTALLDIRS = $(SHELL) $(pkgdatadir)/mkinstalldirs
+
+host = @host@
+host_alias = @host_alias@
+host_cpu = @host_cpu@
+host_vendor = @host_vendor@
+host_os = @host_os@
+
+LIB_M = @LIB_M@
+CPP = @CPP@
+U_HAVE_INTTYPES_H = @U_HAVE_INTTYPES_H@
+U_IS_BIG_ENDIAN = @U_IS_BIG_ENDIAN@
+HAVE_INT8_T = @HAVE_INT8_T@
+HAVE_UINT8_T = @HAVE_UINT8_T@
+HAVE_INT16_T = @HAVE_INT16_T@
+HAVE_UINT16_T = @HAVE_UINT16_T@
+HAVE_INT32_T = @HAVE_INT32_T@
+HAVE_UINT32_T = @HAVE_UINT32_T@
+HAVE_BOOL_T = @HAVE_BOOL_T@
+EXTRAS_TRUE = @EXTRAS_TRUE@
+EXTRAS_FALSE = @EXTRAS_FALSE@
+TESTS_TRUE = @TESTS_TRUE@
+TESTS_FALSE = @TESTS_FALSE@
+SAMPLES_TRUE = @SAMPLES_TRUE@
+SAMPLES_FALSE = @SAMPLES_FALSE@
+
+platform = @platform@
+
+ld_rpath_suf = @ld_rpath_suf@
+
+include $(pkgdatadir)/$(VERSION)/config/@platform_make_fragment_name@
+
+DEFAULT_MODE = @DATA_PACKAGING_MODE@
+
+GENCCODE = $(sbindir)/genccode
+GENCMN = $(sbindir)/gencmn
+
+INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(libdir):$$$(LDLIBRARYPATH_ENVVAR)
+
+# Should be the same as U_ICUDATA_NAME
+ICUDATA_NAME = icudt@LIB_VERSION_MAJOR@@ICUDATA_CHAR@
+ifeq ($(strip $(PKGDATA_MODE)),)
+PKGDATA_MODE=@DATA_PACKAGING_MODE@
+endif
+ifeq ($(PKGDATA_MODE),common)
+ICUDATA_DIR=$(pkgdatadir)
+else
+ICUDATA_DIR=$(pkglibdir)
+endif

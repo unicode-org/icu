@@ -1,0 +1,13 @@
+This package was debianized by Yves Arrouye <yves@debian.org> on
+Fri, 15 Sep 2000 14:22:09 -0700.
+
+It was downloaded from ICU's CVS repository, which can be accessed
+anonymously through :pserver:anoncvs@oss.software.ibm.com:/usr/cvs/icu.
+The CVS module is icu.
+
+Upstream Author(s): International Business Machines (IBM) and Others.
+
+You are free to distribute this software under the terms of the IBM Public
+License Version 1.0. A copy of this license can be found in the license.html
+file.
+
