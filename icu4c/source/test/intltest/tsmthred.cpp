@@ -529,35 +529,7 @@ int32_t kPercentFormatTestDataLength = sizeof(kPercentFormatTestData) / sizeof(k
 
 void errorToString(UErrorCode theStatus, UnicodeString &string)
 {
-    /* don't use these: 
-        USING_FALLBACK_ERROR  = -128,       // Start of information results (semantically successful) 
-        USING_DEFAULT_ERROR   = -127
-    */
-    double limits[] = {0,1,2,3,4,5,6,7,8,9,10,11};
-    UnicodeString errors[] = {   
-       "ZERO_ERROR", 
-       "ILLEGAL_ARGUMENT_ERROR", 
-       "MISSING_RESOURCE_ERROR", 
-       "INVALID_FORMAT_ERROR", 
-       "FILE_ACCESS_ERROR", 
-       "INTERNAL_PROGRAM_ERROR", 
-       "MESSAGE_PARSE_ERROR", 
-       "MEMORY_ALLOCATION_ERROR", 
-       "INDEX_OUTOFBOUNDS_ERROR", 
-       "PARSE_ERROR", 
-       "INVALID_CHAR_FOUND", 
-       "INPUT_CHAR_TRUNCATED", 
-    };
-
-    ChoiceFormat* form = new ChoiceFormat(limits, errors, 12 );
-    ParsePosition* status = new ParsePosition(0);
-    FieldPosition f1(0), f2(0);
-    status->setIndex(0);
-    Formattable parseResult;
-    string.remove();
-    form->format((int32_t)theStatus,string, f1);
-    delete form;
-    delete status;
+    string=errorName(theStatus);
 }
 
 // "Someone from {2} is receiving a #{0} error - {1}. Their telephone call is costing {3 number,currency}."
@@ -612,7 +584,7 @@ public:
     {
         int32_t iteration;
 
-        UErrorCode status = ZERO_ERROR;
+        UErrorCode status = U_ZERO_ERROR;
         NumberFormat *formatter = NumberFormat::createInstance(Locale::ENGLISH,status);
 
         if(FAILURE(status))
@@ -671,32 +643,32 @@ public:
             {
             default:
             case 0:
-                statusToCheck=                      FILE_ACCESS_ERROR;
+                statusToCheck=                      U_FILE_ACCESS_ERROR;
                 patternToCheck=                     "0:Someone from {2} is receiving a #{0} error - {1}. Their telephone call is costing {3,number,currency}."; // number,currency
                 messageLocale=                      Locale("en","US");
                 countryToCheck=                     Locale("","HR");
                 currencyToCheck=                    8192.77;
-                expected=                           "0:Someone from Croatia is receiving a #4 error - FILE_ACCESS_ERROR. Their telephone call is costing $8,192.77.";
+                expected=                           "0:Someone from Croatia is receiving a #4 error - U_FILE_ACCESS_ERROR. Their telephone call is costing $8,192.77.";
                 break;
             case 1:
-                statusToCheck=                      INDEX_OUTOFBOUNDS_ERROR;
+                statusToCheck=                      U_INDEX_OUTOFBOUNDS_ERROR;
                 patternToCheck=                     "1:A customer in {2} is receiving a #{0} error - {1}. Their telephone call is costing {3,number,currency}."; // number,currency
                 messageLocale=                      Locale("de","DE");
                 countryToCheck=                     Locale("","BF");
                 currencyToCheck=                    2.32;
-                expected=                           "1:A customer in Burkina Faso is receiving a #8 error - INDEX_OUTOFBOUNDS_ERROR. Their telephone call is costing $2.32.";
+                expected=                           "1:A customer in Burkina Faso is receiving a #8 error - U_INDEX_OUTOFBOUNDS_ERROR. Their telephone call is costing $2.32.";
             case 2:
-                statusToCheck=                      MEMORY_ALLOCATION_ERROR;
+                statusToCheck=                      U_MEMORY_ALLOCATION_ERROR;
                 patternToCheck=                     "2:user in {2} is receiving a #{0} error - {1}. They insist they just spent {3,number,currency} on memory."; // number,currency
                 messageLocale=                      Locale("de","AT"); // Austrian German
                 countryToCheck=                     Locale("","US"); // hmm
                 currencyToCheck=                    40193.12;
-                expected=                           UEscapeString("2:user in Vereinigte Staaten is receiving a #7 error - MEMORY_ALLOCATION_ERROR. They insist they just spent \\u00f6S 40.193,12 on memory.");
+                expected=                           UEscapeString("2:user in Vereinigte Staaten is receiving a #7 error - U_MEMORY_ALLOCATION_ERROR. They insist they just spent \\u00f6S 40.193,12 on memory.");
                 break;
             }
 
             UnicodeString result;
-            UErrorCode status = ZERO_ERROR;
+            UErrorCode status = U_ZERO_ERROR;
             formatErrorMessage(status,patternToCheck,messageLocale,statusToCheck,countryToCheck,currencyToCheck,result);
             if(FAILURE(status))
             {

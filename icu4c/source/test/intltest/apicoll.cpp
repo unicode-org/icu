@@ -69,7 +69,7 @@ CollationAPITest::doAssert(bool_t condition, const char *message)
 void
 CollationAPITest::TestProperty( char* par )
 {
-    UErrorCode success = ZERO_ERROR;
+    UErrorCode success = U_ZERO_ERROR;
     Collator *col = 0;
 
     logln("The property tests begin : ");
@@ -153,7 +153,7 @@ CollationAPITest::TestProperty( char* par )
 
     logln("Create junk collation: ");
     Locale abcd("ab", "CD", "");
-    success = ZERO_ERROR;
+    success = U_ZERO_ERROR;
     Collator *junk = 0;
     junk = Collator::createInstance(abcd, success);
 
@@ -197,7 +197,7 @@ void
 CollationAPITest::TestHashCode( char* par )
 {
     logln("hashCode tests begin.");
-    UErrorCode success = ZERO_ERROR;
+    UErrorCode success = U_ZERO_ERROR;
     Collator *col1 = 0;
     col1 = Collator::createInstance(success);
     if (FAILURE(success))
@@ -243,7 +243,7 @@ CollationAPITest::TestCollationKey( char* par )
 {       
     logln("testing CollationKey begins...");
     Collator *col = 0;
-    UErrorCode success = ZERO_ERROR;
+    UErrorCode success = U_ZERO_ERROR;
     col = Collator::createInstance(success);
     if (FAILURE(success))
     {
@@ -253,7 +253,7 @@ CollationAPITest::TestCollationKey( char* par )
 
     CollationKey sortk1, sortk2;
     UnicodeString test1("Abcda"), test2("abcda");
-    UErrorCode key1Status = ZERO_ERROR, key2Status = ZERO_ERROR;
+    UErrorCode key1Status = U_ZERO_ERROR, key2Status = U_ZERO_ERROR;
                 
     logln("Use tertiary comparison level testing ....");
 
@@ -327,7 +327,7 @@ CollationAPITest::TestElemIter( char* par )
 {       
     logln("testing sortkey begins...");
     Collator *col = 0;
-    UErrorCode success = ZERO_ERROR;
+    UErrorCode success = U_ZERO_ERROR;
     col = Collator::createInstance(success);
     if (FAILURE(success))
     {
@@ -464,7 +464,7 @@ CollationAPITest::TestElemIter( char* par )
 void
 CollationAPITest::TestOperators( char* par )
 {
-    UErrorCode success = ZERO_ERROR;
+    UErrorCode success = U_ZERO_ERROR;
     UnicodeString ruleset1("< a, A < b, B < c, C; ch, cH, Ch, CH < d, D, e, E");
     UnicodeString ruleset2("< a, A < b, B < c, C < d, D, e, E");
     RuleBasedCollator *col1 = new RuleBasedCollator(ruleset1, success);
@@ -472,7 +472,7 @@ CollationAPITest::TestOperators( char* par )
         errln("RuleBasedCollator creation failed.");
         return;
     }
-    success = ZERO_ERROR;
+    success = U_ZERO_ERROR;
     RuleBasedCollator *col2 = new RuleBasedCollator(ruleset2, success);
     if (FAILURE(success)) {
         errln("The RuleBasedCollator constructor failed when building with the 2nd rule set.");
@@ -484,7 +484,7 @@ CollationAPITest::TestOperators( char* par )
     *col1 = *col2;
     doAssert((*col1 == *col2), "Collator objects not equal after assignment (operator=)");
         
-    success = ZERO_ERROR;
+    success = U_ZERO_ERROR;
     Collator *col3 = Collator::createInstance(success);
     if (FAILURE(success)) {
         errln("Default collation creation failed.");
@@ -519,7 +519,7 @@ CollationAPITest::TestOperators( char* par )
 void 
 CollationAPITest::TestDuplicate( char* par )
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     Collator *col1 = Collator::createInstance(status);
     if (FAILURE(status)) {
         logln("Default collator creation failed.");
@@ -542,7 +542,7 @@ CollationAPITest::TestCompare( char* par )
 {
     logln("The compare tests begin : ");
     Collator *col = 0;
-    UErrorCode success = ZERO_ERROR;
+    UErrorCode success = U_ZERO_ERROR;
     col = Collator::createInstance(success);
     if (FAILURE(success)) {
         errln("Default collation creation failed.");

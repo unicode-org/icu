@@ -292,7 +292,7 @@ void T_UConverter_toUnicode_SBCS (UConverter * _this,
 	    }
 	  else
 	    {
-	      *err = INVALID_CHAR_FOUND;
+	      *err = U_INVALID_CHAR_FOUND;
 	      _this->invalidCharBuffer[0] = (char) mySource[mySourceIndex - 1];
 	      _this->invalidCharLength = 1;
 
@@ -313,7 +313,7 @@ void T_UConverter_toUnicode_SBCS (UConverter * _this,
 	}
       else
 	{
-	  *err = INDEX_OUTOFBOUNDS_ERROR;
+	  *err = U_INDEX_OUTOFBOUNDS_ERROR;
 	  break;
 	}
     }
@@ -376,7 +376,7 @@ void   T_UConverter_toUnicode_DBCS (UConverter * _this,
 		}
 	      else
 		{
-		  *err = INVALID_CHAR_FOUND;
+		  *err = U_INVALID_CHAR_FOUND;
 		  _this->invalidCharBuffer[0] = (char) (mySourceChar >> 8);
 		  _this->invalidCharBuffer[1] = (char) mySourceChar;
 		  _this->invalidCharLength = 2;
@@ -399,7 +399,7 @@ void   T_UConverter_toUnicode_DBCS (UConverter * _this,
 	}
       else
 	{
-	  *err = INDEX_OUTOFBOUNDS_ERROR;
+	  *err = U_INDEX_OUTOFBOUNDS_ERROR;
 	  break;
 	}
     }
@@ -414,7 +414,7 @@ void   T_UConverter_toUnicode_DBCS (UConverter * _this,
        
       if (SUCCESS(*err)) 
 	{
-	  *err = TRUNCATED_CHAR_FOUND;
+	  *err = U_TRUNCATED_CHAR_FOUND;
 	  _this->toUnicodeStatus = 0x00;
 	}
     }
@@ -451,7 +451,7 @@ void  T_UConverter_toUnicode_LATIN_1 (UConverter * _this,
   if ((targetLimit - *target) < sourceLength)
     {
       readLen = targetLimit - *target;
-      *err = INDEX_OUTOFBOUNDS_ERROR;
+      *err = U_INDEX_OUTOFBOUNDS_ERROR;
     }
   else
     {
@@ -494,7 +494,7 @@ void   T_UConverter_fromUnicode_LATIN_1 (UConverter * _this,
 	    }
 	  else
 	    {
-	      *err = INVALID_CHAR_FOUND;
+	      *err = U_INVALID_CHAR_FOUND;
 	      _this->invalidUCharBuffer[0] = (UChar) mySource[mySourceIndex++];
 	      _this->invalidUCharLength = 1;
 
@@ -516,7 +516,7 @@ void   T_UConverter_fromUnicode_LATIN_1 (UConverter * _this,
 	}
       else
 	{
-	  *err = INDEX_OUTOFBOUNDS_ERROR;
+	  *err = U_INDEX_OUTOFBOUNDS_ERROR;
 	  break;
 	}
     }
@@ -564,7 +564,7 @@ void T_UConverter_fromUnicode_SBCS (UConverter * _this,
 	  else
 	    {
 
-	      *err = INVALID_CHAR_FOUND;
+	      *err = U_INVALID_CHAR_FOUND;
 	      _this->invalidUCharBuffer[0] = (UChar)mySource[mySourceIndex - 1];
 	      _this->invalidUCharLength = 1;
 
@@ -588,7 +588,7 @@ void T_UConverter_fromUnicode_SBCS (UConverter * _this,
 	}
       else
 	{
-	  *err = INDEX_OUTOFBOUNDS_ERROR;
+	  *err = U_INDEX_OUTOFBOUNDS_ERROR;
 	  break;
 	}
 
@@ -661,7 +661,7 @@ void T_UConverter_toUnicode_EBCDIC_STATEFUL (UConverter * _this,
 		}
 	      else
 		{
-		  *err = INVALID_CHAR_FOUND;
+		  *err = U_INVALID_CHAR_FOUND;
 		  if (mySourceChar > 0xff)
 		    {
 		      _this->invalidCharLength = 2;
@@ -692,7 +692,7 @@ void T_UConverter_toUnicode_EBCDIC_STATEFUL (UConverter * _this,
 	}
       else
 	{
-	  *err = INDEX_OUTOFBOUNDS_ERROR;
+	  *err = U_INDEX_OUTOFBOUNDS_ERROR;
 	  break;
 	}
     }
@@ -706,7 +706,7 @@ void T_UConverter_toUnicode_EBCDIC_STATEFUL (UConverter * _this,
       {
 	if (SUCCESS(*err)) 
 	  {
-	    *err = TRUNCATED_CHAR_FOUND;
+	    *err = U_TRUNCATED_CHAR_FOUND;
 	    _this->toUnicodeStatus = 0x00;
 	  }
       }
@@ -788,7 +788,7 @@ void T_UConverter_toUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverter * _this,
 		{
 		  int32_t currentOffset = offsets[myTargetIndex-1] + 2;/* Because mySourceIndex was already incremented */
 		  
-		  *err = INVALID_CHAR_FOUND;
+		  *err = U_INVALID_CHAR_FOUND;
 		  if (mySourceChar > 0xFF)
 		    {
 		      _this->invalidCharLength = 2;
@@ -820,7 +820,7 @@ void T_UConverter_toUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverter * _this,
 	}
       else
 	{
-	  *err = INDEX_OUTOFBOUNDS_ERROR;
+	  *err = U_INDEX_OUTOFBOUNDS_ERROR;
 	  break;
 	}
     }
@@ -834,7 +834,7 @@ void T_UConverter_toUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverter * _this,
       {
 	if (SUCCESS(*err)) 
 	  {
-	    *err = TRUNCATED_CHAR_FOUND;
+	    *err = U_TRUNCATED_CHAR_FOUND;
 	    _this->toUnicodeStatus = 0x00;
 	  }
       }
@@ -911,7 +911,7 @@ void T_UConverter_toUnicode_MBCS (UConverter * _this,
 		}
 	      else
 		{
-		  *err = INVALID_CHAR_FOUND;
+		  *err = U_INVALID_CHAR_FOUND;
 		  if (mySourceChar > 0xff)
 		    {
 		      _this->invalidCharLength = 2;
@@ -942,7 +942,7 @@ void T_UConverter_toUnicode_MBCS (UConverter * _this,
 	}
       else
 	{
-	  *err = INDEX_OUTOFBOUNDS_ERROR;
+	  *err = U_INDEX_OUTOFBOUNDS_ERROR;
 	  break;
 	}
     }
@@ -956,7 +956,7 @@ void T_UConverter_toUnicode_MBCS (UConverter * _this,
     {
       if (SUCCESS(*err)) 
 	{
-	  *err = TRUNCATED_CHAR_FOUND; 
+	  *err = U_TRUNCATED_CHAR_FOUND; 
 	  _this->toUnicodeStatus = 0x00;
 	}
     }
@@ -1047,7 +1047,7 @@ void T_UConverter_toUnicode_MBCS_OFFSETS_LOGIC (UConverter * _this,
 		{
 			  int32_t currentOffset = offsets[myTargetIndex-1] + ((oldMySourceChar>0x00FF)?2:1);
 			  
-		  *err = INVALID_CHAR_FOUND;
+		  *err = U_INVALID_CHAR_FOUND;
 		  if (mySourceChar > 0xff)
 		    {
 		      _this->invalidCharLength = 2;
@@ -1078,7 +1078,7 @@ void T_UConverter_toUnicode_MBCS_OFFSETS_LOGIC (UConverter * _this,
 	}
       else
 	{
-	  *err = INDEX_OUTOFBOUNDS_ERROR;
+	  *err = U_INDEX_OUTOFBOUNDS_ERROR;
 	  break;
 	}
     }
@@ -1092,7 +1092,7 @@ void T_UConverter_toUnicode_MBCS_OFFSETS_LOGIC (UConverter * _this,
     {
       if (SUCCESS(*err)) 
 	{
-	  *err = TRUNCATED_CHAR_FOUND; 
+	  *err = U_TRUNCATED_CHAR_FOUND; 
 	  _this->toUnicodeStatus = 0x00;
 	}
     }
@@ -1150,7 +1150,7 @@ void T_UConverter_fromUnicode_EBCDIC_STATEFUL (UConverter * _this,
 		    {
 		      _this->charErrorBuffer[0] = (char) targetUniChar;
 		      _this->charErrorBufferLength = 1;
-		      *err = INDEX_OUTOFBOUNDS_ERROR;
+		      *err = U_INDEX_OUTOFBOUNDS_ERROR;
 		      break;
 		    }
 		  else if (myTargetIndex+1 >= targetLength)
@@ -1158,7 +1158,7 @@ void T_UConverter_fromUnicode_EBCDIC_STATEFUL (UConverter * _this,
  		      _this->charErrorBuffer[0] = (char) (targetUniChar >> 8);
 		      _this->charErrorBuffer[1] = (char) targetUniChar & 0x00FF;
 		      _this->charErrorBufferLength = 2;
-		      *err = INDEX_OUTOFBOUNDS_ERROR;
+		      *err = U_INDEX_OUTOFBOUNDS_ERROR;
 		      break;
 		    }
 		  
@@ -1179,7 +1179,7 @@ void T_UConverter_fromUnicode_EBCDIC_STATEFUL (UConverter * _this,
 		    {
 		      _this->charErrorBuffer[0] = (char) targetUniChar;
 		      _this->charErrorBufferLength = 1;
-		      *err = INDEX_OUTOFBOUNDS_ERROR;
+		      *err = U_INDEX_OUTOFBOUNDS_ERROR;
 		      break;
 		    }
 		}
@@ -1187,7 +1187,7 @@ void T_UConverter_fromUnicode_EBCDIC_STATEFUL (UConverter * _this,
 	  else
 	    {
 	      isTargetUCharDBCS = oldIsTargetUCharDBCS;
-	      *err = INVALID_CHAR_FOUND;
+	      *err = U_INVALID_CHAR_FOUND;
 	      _this->invalidUCharBuffer[0] = (UChar) mySourceChar;
 	      _this->invalidUCharLength = 1;
 
@@ -1209,7 +1209,7 @@ void T_UConverter_fromUnicode_EBCDIC_STATEFUL (UConverter * _this,
 	}
       else
 	{
-	  *err = INDEX_OUTOFBOUNDS_ERROR;
+	  *err = U_INDEX_OUTOFBOUNDS_ERROR;
 	  break;
 	}
 
@@ -1273,7 +1273,7 @@ void T_UConverter_fromUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverter * _this,
 		    {
 		      _this->charErrorBuffer[0] = (char) targetUniChar;
 		      _this->charErrorBufferLength = 1;
-		      *err = INDEX_OUTOFBOUNDS_ERROR;
+		      *err = U_INDEX_OUTOFBOUNDS_ERROR;
 		      break;
 		    }
 		  else if (myTargetIndex+1 >= targetLength)
@@ -1281,7 +1281,7 @@ void T_UConverter_fromUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverter * _this,
  		      _this->charErrorBuffer[0] = (char) (targetUniChar >> 8);
 		      _this->charErrorBuffer[1] = (char) targetUniChar & 0x00FF;
 		      _this->charErrorBufferLength = 2;
-		      *err = INDEX_OUTOFBOUNDS_ERROR;
+		      *err = U_INDEX_OUTOFBOUNDS_ERROR;
 		      break;
 		    }
 		}
@@ -1304,7 +1304,7 @@ void T_UConverter_fromUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverter * _this,
 		    {
 		      _this->charErrorBuffer[0] = (char) targetUniChar;
 		      _this->charErrorBufferLength = 1;
-		      *err = INDEX_OUTOFBOUNDS_ERROR;
+		      *err = U_INDEX_OUTOFBOUNDS_ERROR;
 		      break;
 		    }
 		}
@@ -1312,7 +1312,7 @@ void T_UConverter_fromUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverter * _this,
 	  else
 	    {
 	      int32_t currentOffset = offsets[myTargetIndex-1]+1;
-	      *err = INVALID_CHAR_FOUND;
+	      *err = U_INVALID_CHAR_FOUND;
 	      _this->invalidUCharBuffer[0] = (UChar) mySourceChar;
 	      _this->invalidUCharLength = 1;
 
@@ -1335,7 +1335,7 @@ void T_UConverter_fromUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverter * _this,
 	}
       else
 	{
-	  *err = INDEX_OUTOFBOUNDS_ERROR;
+	  *err = U_INDEX_OUTOFBOUNDS_ERROR;
 	  break;
 	}
 
@@ -1399,13 +1399,13 @@ void   T_UConverter_fromUnicode_MBCS (UConverter * _this,
 		    {
 		      _this->charErrorBuffer[0] = (char) targetUniChar;
 		      _this->charErrorBufferLength = 1;
-		      *err = INDEX_OUTOFBOUNDS_ERROR;
+		      *err = U_INDEX_OUTOFBOUNDS_ERROR;
 		    }
 		}
 	    }
 	  else
 	    {
-	      *err = INVALID_CHAR_FOUND;
+	      *err = U_INVALID_CHAR_FOUND;
 	      _this->invalidUCharBuffer[0] = (UChar) mySourceChar;
 	      _this->invalidUCharLength = 1;
 
@@ -1426,7 +1426,7 @@ void   T_UConverter_fromUnicode_MBCS (UConverter * _this,
 	}
       else
 	{
-	  *err = INDEX_OUTOFBOUNDS_ERROR;
+	  *err = U_INDEX_OUTOFBOUNDS_ERROR;
 	  break;
 	}
       
@@ -1495,7 +1495,7 @@ void   T_UConverter_fromUnicode_MBCS_OFFSETS_LOGIC (UConverter * _this,
 		    {
 		      _this->charErrorBuffer[0] = (char) targetUniChar;
 		      _this->charErrorBufferLength = 1;
-		      *err = INDEX_OUTOFBOUNDS_ERROR;
+		      *err = U_INDEX_OUTOFBOUNDS_ERROR;
 		    }
 		}
 	    }
@@ -1504,7 +1504,7 @@ void   T_UConverter_fromUnicode_MBCS_OFFSETS_LOGIC (UConverter * _this,
 	      int32_t currentOffset = mySourceIndex -1;
 	      int32_t* offsetsAnchor = offsets;
 	      
-	      *err = INVALID_CHAR_FOUND;
+	      *err = U_INVALID_CHAR_FOUND;
 	      _this->invalidUCharBuffer[0] = (UChar) mySourceChar;
 	      _this->invalidUCharLength = 1;
 
@@ -1525,7 +1525,7 @@ void   T_UConverter_fromUnicode_MBCS_OFFSETS_LOGIC (UConverter * _this,
 	}
       else
 	{
-	  *err = INDEX_OUTOFBOUNDS_ERROR;
+	  *err = U_INDEX_OUTOFBOUNDS_ERROR;
 	  break;
 	}
 
@@ -1692,7 +1692,7 @@ void changeState_2022(UConverter* _this,
 	    puts("INVALID_2022");
 #endif /*Debug*/
 	    _this->toUnicodeStatus = 0;
-	    *err = ILLEGAL_CHAR_FOUND;
+	    *err = U_ILLEGAL_CHAR_FOUND;
 	    return;
 	  }
 	  
@@ -1867,7 +1867,7 @@ void T_UConverter_toUnicode_ISO_2022(UConverter* _this,
   if (FAILURE(*err)) return;
   if ((_this == NULL) || (targetLimit < *target) || (sourceLimit < *source))
     {
-      *err = ILLEGAL_ARGUMENT_ERROR;
+      *err = U_ILLEGAL_ARGUMENT_ERROR;
       return;
     }
   
@@ -1941,7 +1941,7 @@ void T_UConverter_toUnicode_ISO_2022_OFFSETS_LOGIC(UConverter* _this,
   if (FAILURE(*err)) return;
   if ((_this == NULL) || (targetLimit < *target) || (sourceLimit < *source))
     {
-      *err = ILLEGAL_ARGUMENT_ERROR;
+      *err = U_ILLEGAL_ARGUMENT_ERROR;
       return;
     }
   
@@ -2052,12 +2052,12 @@ void   T_UConverter_fromUnicode_DBCS (UConverter * _this,
 		{
 		  _this->charErrorBuffer[0] = (char) targetUniChar;
 		  _this->charErrorBufferLength = 1;
-		  *err = INDEX_OUTOFBOUNDS_ERROR;
+		  *err = U_INDEX_OUTOFBOUNDS_ERROR;
 		}
 	    }
 	  else
 	    {
-	      *err = INVALID_CHAR_FOUND;
+	      *err = U_INVALID_CHAR_FOUND;
 	      _this->invalidUCharBuffer[0] = (UChar) mySourceChar;
 	      _this->invalidUCharLength = 1;
 
@@ -2080,7 +2080,7 @@ void   T_UConverter_fromUnicode_DBCS (UConverter * _this,
 	}
       else
 	{
-	  *err = INDEX_OUTOFBOUNDS_ERROR;
+	  *err = U_INDEX_OUTOFBOUNDS_ERROR;
 	  break;
 	}
     }
@@ -2142,7 +2142,7 @@ void T_UConverter_fromUnicode_UTF8 (UConverter * _this,
 		{
 		  _this->charErrorBuffer[0] = (char) ((ch & 0x3f) | 0x80);
 		  _this->charErrorBufferLength = 1;
-		  *err = INDEX_OUTOFBOUNDS_ERROR;
+		  *err = U_INDEX_OUTOFBOUNDS_ERROR;
 		}
 	    }
 	  else
@@ -2185,14 +2185,14 @@ void T_UConverter_fromUnicode_UTF8 (UConverter * _this,
 		  else
 		    {
 		      _this->charErrorBuffer[_this->charErrorBufferLength++] = temp[i];
-		      *err = INDEX_OUTOFBOUNDS_ERROR;
+		      *err = U_INDEX_OUTOFBOUNDS_ERROR;
 		    }
 		}
 	    }
 	}
       else
 	{
-	  *err = INDEX_OUTOFBOUNDS_ERROR;
+	  *err = U_INDEX_OUTOFBOUNDS_ERROR;
 	  break;
 	}
 
@@ -2257,7 +2257,7 @@ void T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC (UConverter * _this,
 		{
 		  _this->charErrorBuffer[0] = (char) ((ch & 0x3f) | 0x80);
 		  _this->charErrorBufferLength = 1;
-		  *err = INDEX_OUTOFBOUNDS_ERROR;
+		  *err = U_INDEX_OUTOFBOUNDS_ERROR;
 		}
 	    }
 	  else
@@ -2301,14 +2301,14 @@ void T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC (UConverter * _this,
 		  else
 		    {
 		      _this->charErrorBuffer[_this->charErrorBufferLength++] = temp[i];
-		      *err = INDEX_OUTOFBOUNDS_ERROR;
+		      *err = U_INDEX_OUTOFBOUNDS_ERROR;
 		    }
 		}
 	    }
 	}
       else
 	{
-	  *err = INDEX_OUTOFBOUNDS_ERROR;
+	  *err = U_INDEX_OUTOFBOUNDS_ERROR;
 	  break;
 	}
 
@@ -2354,12 +2354,12 @@ void  T_UConverter_fromUnicode_UTF16_BE (UConverter * _this,
 	    {
 	      _this->charErrorBuffer[0] = (char) mySourceChar;
 	      _this->charErrorBufferLength = 1;
-	      *err = INDEX_OUTOFBOUNDS_ERROR;
+	      *err = U_INDEX_OUTOFBOUNDS_ERROR;
 	    }
 	}
       else
 	{
-	  *err = INDEX_OUTOFBOUNDS_ERROR;
+	  *err = U_INDEX_OUTOFBOUNDS_ERROR;
 	  break;
 	}
     }
@@ -2404,12 +2404,12 @@ void   T_UConverter_fromUnicode_UTF16_LE (UConverter * _this,
 	    {
 	      _this->charErrorBuffer[0] = (char) (mySourceChar >> 8);
 	      _this->charErrorBufferLength = 1;
-	      *err = INDEX_OUTOFBOUNDS_ERROR;
+	      *err = U_INDEX_OUTOFBOUNDS_ERROR;
 	    }
 	}
       else
 	{
-	  *err = INDEX_OUTOFBOUNDS_ERROR;
+	  *err = U_INDEX_OUTOFBOUNDS_ERROR;
 	  break;
 	}
     }
@@ -2464,7 +2464,7 @@ void T_UConverter_toUnicode_UTF16_BE (UConverter * _this,
 	}
       else
  	{
-	  *err = INDEX_OUTOFBOUNDS_ERROR;
+	  *err = U_INDEX_OUTOFBOUNDS_ERROR;
 	  break;
 	}
     }
@@ -2475,7 +2475,7 @@ void T_UConverter_toUnicode_UTF16_BE (UConverter * _this,
     {
       if (SUCCESS(*err)) 
 	{
-	  *err = TRUNCATED_CHAR_FOUND;
+	  *err = U_TRUNCATED_CHAR_FOUND;
 	  _this->toUnicodeStatus = 0x00;
 	}
     }
@@ -2531,7 +2531,7 @@ void  T_UConverter_toUnicode_UTF16_LE (UConverter * _this,
 	}
       else
 	{
-	  *err = INDEX_OUTOFBOUNDS_ERROR;
+	  *err = U_INDEX_OUTOFBOUNDS_ERROR;
 	  break;
 	}
     }
@@ -2543,7 +2543,7 @@ void  T_UConverter_toUnicode_UTF16_LE (UConverter * _this,
     {
       if (SUCCESS(*err)) 
 	{
-	  *err = TRUNCATED_CHAR_FOUND; 
+	  *err = U_TRUNCATED_CHAR_FOUND; 
 	  _this->toUnicodeStatus = 0x00;
 	}
     }
@@ -2615,7 +2615,7 @@ void T_UConverter_toUnicode_UTF8 (UConverter * _this,
 			  {
 			    if (SUCCESS(*err)) 
 			      {
-				*err = TRUNCATED_CHAR_FOUND;
+				*err = U_TRUNCATED_CHAR_FOUND;
 				_this->toUnicodeStatus = 0x00;
 			      }
 			  }
@@ -2656,13 +2656,13 @@ void T_UConverter_toUnicode_UTF8 (UConverter * _this,
 			{
 			  _this->invalidUCharBuffer[0] = (UChar) ch;
 			  _this->invalidUCharLength = 1;
-			  *err = INDEX_OUTOFBOUNDS_ERROR;
+			  *err = U_INDEX_OUTOFBOUNDS_ERROR;
 			}
 		    }
 		}
 	      else
 		{
-		  *err = ILLEGAL_CHAR_FOUND;
+		  *err = U_ILLEGAL_CHAR_FOUND;
 		  _this->invalidCharLength = (int8_t)i;
 		  
 #ifdef Debug
@@ -2687,7 +2687,7 @@ void T_UConverter_toUnicode_UTF8 (UConverter * _this,
       else
 	/* End of target buffer */
 	{
-	  *err = INDEX_OUTOFBOUNDS_ERROR;
+	  *err = U_INDEX_OUTOFBOUNDS_ERROR;
 	  break;
 	}
     }
@@ -2754,7 +2754,7 @@ void T_UConverter_toUnicode_UTF8_OFFSETS_LOGIC (UConverter * _this,
 			  {
 			    if (SUCCESS(*err)) 
 			      {
-				*err = TRUNCATED_CHAR_FOUND;
+				*err = U_TRUNCATED_CHAR_FOUND;
 				_this->toUnicodeStatus = 0x00;
 			      }
 			  }
@@ -2797,7 +2797,7 @@ void T_UConverter_toUnicode_UTF8_OFFSETS_LOGIC (UConverter * _this,
 			{
 			  _this->invalidUCharBuffer[0] = (UChar) ch;
 			  _this->invalidUCharLength = 1;
-			  *err = INDEX_OUTOFBOUNDS_ERROR;
+			  *err = U_INDEX_OUTOFBOUNDS_ERROR;
 			}
 		    }
 		}
@@ -2805,7 +2805,7 @@ void T_UConverter_toUnicode_UTF8_OFFSETS_LOGIC (UConverter * _this,
 		{
 		  int32_t currentOffset = offsets[myTargetIndex-1];
 
-		  *err = ILLEGAL_CHAR_FOUND;
+		  *err = U_ILLEGAL_CHAR_FOUND;
 		  _this->invalidCharLength = (int8_t)i;
 		  
 /* Needed explicit cast for mySource on MVS to make compiler happy - JJD */
@@ -2829,7 +2829,7 @@ void T_UConverter_toUnicode_UTF8_OFFSETS_LOGIC (UConverter * _this,
       else
 	/* End of target buffer */
 	{
-	  *err = INDEX_OUTOFBOUNDS_ERROR;
+	  *err = U_INDEX_OUTOFBOUNDS_ERROR;
 	  break;
 	}
     }
@@ -2884,7 +2884,7 @@ void  flushInternalUnicodeBuffer (UConverter * _this,
 		   sizeof (UChar) * (myUCharErrorBufferLength - targetLength));
       _this->UCharErrorBufferLength -= (int8_t) targetLength;
       *myTargetIndex = targetLength;
-      *err = INDEX_OUTOFBOUNDS_ERROR;
+      *err = U_INDEX_OUTOFBOUNDS_ERROR;
     }
 
   return;
@@ -2930,7 +2930,7 @@ void  flushInternalCharBuffer (UConverter * _this,
 		   (myCharErrorBufferLength - targetLength));
       _this->charErrorBufferLength -= (int8_t) targetLength;
       *myTargetIndex = targetLength;
-      *err = INDEX_OUTOFBOUNDS_ERROR;
+      *err = U_INDEX_OUTOFBOUNDS_ERROR;
     }
 
   return;
@@ -2948,7 +2948,7 @@ UChar T_UConverter_getNextUChar_SBCS(UConverter* converter,
   
   if ((*source)+1 > sourceLimit) 
     {
-      *err = INDEX_OUTOFBOUNDS_ERROR;
+      *err = U_INDEX_OUTOFBOUNDS_ERROR;
       return 0xFFFD;
     }
   
@@ -2962,7 +2962,7 @@ UChar T_UConverter_getNextUChar_SBCS(UConverter* converter,
       UChar* myUCharPtr = &myUChar;
       const char* sourceFinal = *source;
       
-      *err = INVALID_CHAR_FOUND;
+      *err = U_INVALID_CHAR_FOUND;
       
       /*Calls the ErrorFunctor after rewinding the input buffer*/
       (*source)--;
@@ -2978,7 +2978,7 @@ UChar T_UConverter_getNextUChar_SBCS(UConverter* converter,
 					err);
 
       /*makes the internal caching transparent to the user*/
-      if (*err == INDEX_OUTOFBOUNDS_ERROR) *err = ZERO_ERROR;
+      if (*err == U_INDEX_OUTOFBOUNDS_ERROR) *err = U_ZERO_ERROR;
       
       return myUChar;
     }
@@ -2997,7 +2997,7 @@ UChar T_UConverter_getNextUChar_LATIN_1(UConverter* converter,
   
   if ((*source)+1 > sourceLimit) 
     {
-      *err = INDEX_OUTOFBOUNDS_ERROR;
+      *err = U_INDEX_OUTOFBOUNDS_ERROR;
       return 0xFFFD;
     }
   
@@ -3013,7 +3013,7 @@ UChar T_UConverter_getNextUChar_ISO_2022(UConverter* converter,
   /*Arguments Check*/
   if  (sourceLimit < *source)
     {
-      *err = ILLEGAL_ARGUMENT_ERROR;
+      *err = U_ILLEGAL_ARGUMENT_ERROR;
       return 0xFFFD;
     }
   
@@ -3060,12 +3060,12 @@ UChar T_UConverter_getNextUChar_DBCS(UConverter* converter,
       if ((*source) >= sourceLimit)
 	{
 	  /*Either caller has reached the end of the byte stream*/
-	  *err = INDEX_OUTOFBOUNDS_ERROR;
+	  *err = U_INDEX_OUTOFBOUNDS_ERROR;
 	}
       else if (((*source)+1) == sourceLimit)
 	{
 	  /* a character was cut in half*/
-	  *err = TRUNCATED_CHAR_FOUND;
+	  *err = U_TRUNCATED_CHAR_FOUND;
 	}
       
       return 0xFFFD;
@@ -3086,7 +3086,7 @@ UChar T_UConverter_getNextUChar_DBCS(UConverter* converter,
       /*Calls the ErrorFunctor after rewinding the input buffer*/
       (*source) -= 2;
       
-      *err = INVALID_CHAR_FOUND;
+      *err = U_INVALID_CHAR_FOUND;
     
       /*It's is very likely that the ErrorFunctor will write to the
        *internal buffers */
@@ -3099,7 +3099,7 @@ UChar T_UConverter_getNextUChar_DBCS(UConverter* converter,
 					TRUE,
 					err);
       /*makes the internal caching transparent to the user*/
-      if (*err == INDEX_OUTOFBOUNDS_ERROR) *err = ZERO_ERROR;
+      if (*err == U_INDEX_OUTOFBOUNDS_ERROR) *err = U_ZERO_ERROR;
 
       return myUChar;
     }
@@ -3117,7 +3117,7 @@ UChar T_UConverter_getNextUChar_MBCS(UConverter* converter,
   /*Input boundary check*/
   if ((*source)+1 > sourceLimit) 
     {
-      *err = INDEX_OUTOFBOUNDS_ERROR;
+      *err = U_INDEX_OUTOFBOUNDS_ERROR;
       return 0xFFFD;
     }
   
@@ -3135,7 +3135,7 @@ UChar T_UConverter_getNextUChar_MBCS(UConverter* converter,
        * and update the source ptr*/
       if ((*source + 2) > sourceLimit) 
 	{
-	  *err = TRUNCATED_CHAR_FOUND;
+	  *err = U_TRUNCATED_CHAR_FOUND;
 	  return 0xFFFD;
 	}
 
@@ -3152,7 +3152,7 @@ UChar T_UConverter_getNextUChar_MBCS(UConverter* converter,
       const char* sourceFinal = *source;
       UChar* myUCharPtr = &myUChar;
       
-      *err = INVALID_CHAR_FOUND;
+      *err = U_INVALID_CHAR_FOUND;
       *source = sourceInitial;
       
       /*It's is very likely that the ErrorFunctor will write to the
@@ -3167,7 +3167,7 @@ UChar T_UConverter_getNextUChar_MBCS(UConverter* converter,
 					err);
       
       /*makes the internal caching transparent to the user*/
-      if (*err == INDEX_OUTOFBOUNDS_ERROR) *err = ZERO_ERROR;
+      if (*err == U_INDEX_OUTOFBOUNDS_ERROR) *err = U_ZERO_ERROR;
       
       return myUChar;
     }
@@ -3185,7 +3185,7 @@ UChar T_UConverter_getNextUChar_EBCDIC_STATEFUL(UConverter* converter,
   /*Input boundary check*/
   if ((*source)+1 > sourceLimit) 
     {
-      *err = INDEX_OUTOFBOUNDS_ERROR;
+      *err = U_INDEX_OUTOFBOUNDS_ERROR;
       return 0xFFFD;
     }
   
@@ -3199,7 +3199,7 @@ UChar T_UConverter_getNextUChar_EBCDIC_STATEFUL(UConverter* converter,
       /*Rechecks boundary after consuming the shift sequence*/
       if ((*source)+1 > sourceLimit) 
 	{
-	  *err = INDEX_OUTOFBOUNDS_ERROR;
+	  *err = U_INDEX_OUTOFBOUNDS_ERROR;
 	  return 0xFFFD;
 	}
     }
@@ -3217,7 +3217,7 @@ UChar T_UConverter_getNextUChar_EBCDIC_STATEFUL(UConverter* converter,
        * and update the source ptr*/
       if ((*source + 2) > sourceLimit) 
 	{
-	  *err = TRUNCATED_CHAR_FOUND;
+	  *err = U_TRUNCATED_CHAR_FOUND;
 	  return 0xFFFD;
 	}
 
@@ -3234,7 +3234,7 @@ UChar T_UConverter_getNextUChar_EBCDIC_STATEFUL(UConverter* converter,
       const char* sourceFinal = *source;
       UChar* myUCharPtr = &myUChar;
       
-      *err = INVALID_CHAR_FOUND;
+      *err = U_INVALID_CHAR_FOUND;
       *source = sourceInitial;
       
       /*It's is very likely that the ErrorFunctor will write to the
@@ -3249,7 +3249,7 @@ UChar T_UConverter_getNextUChar_EBCDIC_STATEFUL(UConverter* converter,
 					err);
       
       /*makes the internal caching transparent to the user*/
-      if (*err == INDEX_OUTOFBOUNDS_ERROR) *err = ZERO_ERROR;
+      if (*err == U_INDEX_OUTOFBOUNDS_ERROR) *err = U_ZERO_ERROR;
       
       return myUChar;
     }
@@ -3267,12 +3267,12 @@ UChar T_UConverter_getNextUChar_UTF16_BE(UConverter* converter,
       if ((*source) >= sourceLimit)
 	{
 	  /*Either caller has reached the end of the byte stream*/
-	  *err = INDEX_OUTOFBOUNDS_ERROR;
+	  *err = U_INDEX_OUTOFBOUNDS_ERROR;
 	}
       else if (((*source)+1) == sourceLimit)
 	{
 	  /* a character was cut in half*/
-	  *err = TRUNCATED_CHAR_FOUND;
+	  *err = U_TRUNCATED_CHAR_FOUND;
 	}
       
       return 0xFFFD;
@@ -3299,12 +3299,12 @@ UChar T_UConverter_getNextUChar_UTF16_LE(UConverter* converter,
       if ((*source) >= sourceLimit)
 	{
 	  /*Either caller has reached the end of the byte stream*/
-	  *err = INDEX_OUTOFBOUNDS_ERROR;
+	  *err = U_INDEX_OUTOFBOUNDS_ERROR;
 	}
       else if (((*source)+1) == sourceLimit)
 	{
 	  /* a character was cut in half*/
-	  *err = TRUNCATED_CHAR_FOUND;
+	  *err = U_TRUNCATED_CHAR_FOUND;
 	}
       
       return 0xFFFD;
@@ -3334,7 +3334,7 @@ UChar T_UConverter_getNextUChar_UTF8(UConverter* converter,
   /*Input boundary check*/
   if ((*source)+1 > sourceLimit) 
     {
-      *err = INDEX_OUTOFBOUNDS_ERROR;
+      *err = U_INDEX_OUTOFBOUNDS_ERROR;
       return 0xFFFD;
     }
   
@@ -3348,7 +3348,7 @@ UChar T_UConverter_getNextUChar_UTF8(UConverter* converter,
 
   if ((*source + extraBytesToWrite) > sourceLimit)
     {
-      *err = TRUNCATED_CHAR_FOUND;
+      *err = U_TRUNCATED_CHAR_FOUND;
       return 0xFFFD;
     }
   else
@@ -3416,7 +3416,7 @@ UChar T_UConverter_getNextUChar_UTF8(UConverter* converter,
     const char* sourceFinal = *source;
     UChar* myUCharPtr = &myUChar;
     
-    *err = ILLEGAL_CHAR_FOUND;
+    *err = U_ILLEGAL_CHAR_FOUND;
     *source = sourceInitial;
     
     /*It's is very likely that the ErrorFunctor will write to the
@@ -3431,10 +3431,8 @@ UChar T_UConverter_getNextUChar_UTF8(UConverter* converter,
 				      err);
     
     /*makes the internal caching transparent to the user*/
-    if (*err == INDEX_OUTOFBOUNDS_ERROR) *err = ZERO_ERROR;
+    if (*err == U_INDEX_OUTOFBOUNDS_ERROR) *err = U_ZERO_ERROR;
     
     return myUChar;
   }
 } 
-
-

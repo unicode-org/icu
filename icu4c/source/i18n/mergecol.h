@@ -72,7 +72,7 @@ public:
      * Creates a merged collation table from a pattern string.
      * @param pattern the pattern string.
      * @param status the error code status.  If the input pattern is incorrect,
-     * this will be set to INVALID_FORMAT_ERROR.
+     * this will be set to U_INVALID_FORMAT_ERROR.
      */
   MergeCollation( const   UnicodeString&  pattern,
           Normalizer::EMode decompMode,
@@ -127,7 +127,7 @@ public:
   /**
      * Sets the pattern.
      * @param pattern string.
-     * @param status the error code status, it will be set to INVALID_FORMAT_ERROR
+     * @param status the error code status, it will be set to U_INVALID_FORMAT_ERROR
      * if the pattern is incorrect.
      */
   void setPattern(const   UnicodeString&  pattern,
@@ -137,7 +137,7 @@ public:
   /**
      * Adds a pattern to the current merge collation object.
      * @param pattern the new pattern to be added.
-     * @param status the error code status, it will be set to INVALID_FORMAT_ERROR
+     * @param status the error code status, it will be set to U_INVALID_FORMAT_ERROR
      * if the pattern is incorrect.
      */
   void addPattern(const   UnicodeString&  pattern,
@@ -190,7 +190,7 @@ private:
      * (which is usually at the end).  Strength indicates the text order
      * weight for an entry.
      * @param newEntry the new pattern entry
-     * @param status the error code status, it will be set to INVALID_FORMAT_ERROR
+     * @param status the error code status, it will be set to U_INVALID_FORMAT_ERROR
      * if the strength is RESET and a previous entry can't be found.
      */
   void fixEntry(  PatternEntry*   newEntry,
@@ -201,7 +201,7 @@ private:
      * merge collation object.
      * @param lastEntry the entry that was previously installed.
      * @param excess the extra characters 
-     * @param status the error code status, it will be set to INVALID_FORMAT_ERROR
+     * @param status the error code status, it will be set to U_INVALID_FORMAT_ERROR
      * if the strength is RESET and a previous entry can't be found.
      * @return the offset of the found entry
      */

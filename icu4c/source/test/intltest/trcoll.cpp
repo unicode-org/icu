@@ -33,7 +33,7 @@
 CollationTurkishTest::CollationTurkishTest()
 : myCollation(0)
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     myCollation = Collator::createInstance(Locale("tr", "", ""),status);
 }
 
@@ -89,7 +89,7 @@ void CollationTurkishTest::doTest( UnicodeString source, UnicodeString target, C
 {
     Collator::EComparisonResult compareResult = myCollation->compare(source, target);
     CollationKey sortKey1, sortKey2;
-    UErrorCode key1status = ZERO_ERROR, key2status = ZERO_ERROR; //nos
+    UErrorCode key1status = U_ZERO_ERROR, key2status = U_ZERO_ERROR; //nos
     myCollation->getCollationKey(source, /*nos*/ sortKey1, key1status );
     myCollation->getCollationKey(target, /*nos*/ sortKey2, key2status );
     if (FAILURE(key1status) || FAILURE(key2status)) {

@@ -104,6 +104,17 @@
 
 
 
+/* Define NULL pointer value  if it isn't already defined */
+
+#ifndef NULL
+#ifdef XP_CPLUSPLUS
+#define NULL    0
+#else
+#define NULL    ((void *)0)
+#endif
+#endif
+
+
 /*===========================================================================*/
 /* Calendar/TimeZone data types                                              */
 /*===========================================================================*/
@@ -197,25 +208,30 @@ typedef void* ClassID;
 
 /** Error code to replace exception handling */
 enum UErrorCode {
-  ZERO_ERROR              =  0,
-  ILLEGAL_ARGUMENT_ERROR  =  1,       /* Start of codes indicating failure */
-  MISSING_RESOURCE_ERROR  =  2,
-  INVALID_FORMAT_ERROR    =  3,
-  FILE_ACCESS_ERROR       =  4,
-  INTERNAL_PROGRAM_ERROR  =  5,       /* Indicates a bug in the library code */
-  MESSAGE_PARSE_ERROR     =  6,
-  MEMORY_ALLOCATION_ERROR =  7,       /* Memory allocation error */
-  INDEX_OUTOFBOUNDS_ERROR =  8,
-  PARSE_ERROR             =  9,       /* Equivalent to Java ParseException */
-  INVALID_CHAR_FOUND      = 10,       /* In the Character conversion routines: Invalid character or sequence was encountered*/
-  TRUNCATED_CHAR_FOUND    = 11,       /* In the Character conversion routines: More bytes are required to complete the conversion successfully*/
-  ILLEGAL_CHAR_FOUND     =  12,       /* In codeset conversion: a sequence that does NOT belong in the codepage has been encountered*/
-  INVALID_TABLE_FORMAT   =  13,       /*Conversion table file found, nut corrupted*/
-  INVALID_TABLE_FILE     =  14,       /*Conversion table file not found*/
-  BUFFER_OVERFLOW_ERROR =   15,        /* A result would not fit in the supplied buffer */
-  UNSUPPORTED_ERROR     = 16,         /* Requested operation not supported in current context */
-  USING_FALLBACK_ERROR  = -128,       /* Start of information results (semantically successful) */
-  USING_DEFAULT_ERROR   = -127
+    U_ERROR_INFO_START        = -128,     /* Start of information results (semantically successful) */
+    U_USING_FALLBACK_ERROR    = -128,
+    U_USING_DEFAULT_ERROR     = -127,
+    U_ERROR_INFO_LIMIT,
+
+    U_ZERO_ERROR              =  0,       /* success */
+
+    U_ILLEGAL_ARGUMENT_ERROR  =  1,       /* Start of codes indicating failure */
+    U_MISSING_RESOURCE_ERROR  =  2,
+    U_INVALID_FORMAT_ERROR    =  3,
+    U_FILE_ACCESS_ERROR       =  4,
+    U_INTERNAL_PROGRAM_ERROR  =  5,       /* Indicates a bug in the library code */
+    U_MESSAGE_PARSE_ERROR     =  6,
+    U_MEMORY_ALLOCATION_ERROR =  7,       /* Memory allocation error */
+    U_INDEX_OUTOFBOUNDS_ERROR =  8,
+    U_PARSE_ERROR             =  9,       /* Equivalent to Java ParseException */
+    U_INVALID_CHAR_FOUND      = 10,       /* In the Character conversion routines: Invalid character or sequence was encountered*/
+    U_TRUNCATED_CHAR_FOUND    = 11,       /* In the Character conversion routines: More bytes are required to complete the conversion successfully*/
+    U_ILLEGAL_CHAR_FOUND      = 12,       /* In codeset conversion: a sequence that does NOT belong in the codepage has been encountered*/
+    U_INVALID_TABLE_FORMAT    = 13,       /* Conversion table file found, but corrupted*/
+    U_INVALID_TABLE_FILE      = 14,       /* Conversion table file not found*/
+    U_BUFFER_OVERFLOW_ERROR   = 15,       /* A result would not fit in the supplied buffer */
+    U_UNSUPPORTED_ERROR       = 16,       /* Requested operation not supported in current context */
+    U_ERROR_LIMIT
 };
 
 #ifndef XP_CPLUSPLUS
@@ -225,11 +241,11 @@ typedef enum UErrorCode UErrorCode;
 /* Use the following to determine if an UErrorCode represents */
 /* operational success or failure. */
 #ifdef XP_CPLUSPLUS
-inline bool_t SUCCESS(UErrorCode code) { return (bool_t)(code<=ZERO_ERROR); }
-inline bool_t FAILURE(UErrorCode code) { return (bool_t)(code>ZERO_ERROR); }
+inline bool_t SUCCESS(UErrorCode code) { return (bool_t)(code<=U_ZERO_ERROR); }
+inline bool_t FAILURE(UErrorCode code) { return (bool_t)(code>U_ZERO_ERROR); }
 #else
-#define SUCCESS(x) ((x)<=ZERO_ERROR)
-#define FAILURE(x) ((x)>ZERO_ERROR)
+#define SUCCESS(x) ((x)<=U_ZERO_ERROR)
+#define FAILURE(x) ((x)>U_ZERO_ERROR)
 #endif
 
 
@@ -296,42 +312,56 @@ icu_arrayCopy(const UChar *src, int32_t srcStart,
 /* This function is useful for debugging; it returns the text name */
 /* of an UErrorCode result.  This is not the most efficient way of */
 /* doing this but it's just for Debug builds anyway. */
-#if defined(_DEBUG) && defined(XP_CPLUSPLUS)
-inline const char* errorName(UErrorCode code)
-{
-  switch (code) {
-  case ZERO_ERROR:                return "ZERO_ERROR";
-  case ILLEGAL_ARGUMENT_ERROR:    return "ILLEGAL_ARGUMENT_ERROR";
-  case MISSING_RESOURCE_ERROR:    return "MISSING_RESOURCE_ERROR";
-  case INVALID_FORMAT_ERROR:      return "INVALID_FORMAT_ERROR";
-  case FILE_ACCESS_ERROR:         return "FILE_ACCESS_ERROR";
-  case INTERNAL_PROGRAM_ERROR:    return "INTERNAL_PROGRAM_ERROR";
-  case MESSAGE_PARSE_ERROR:       return "MESSAGE_PARSE_ERROR";
-  case MEMORY_ALLOCATION_ERROR:   return "MEMORY_ALLOCATION_ERROR";
-  case PARSE_ERROR:               return "PARSE_ERROR";
-  case INVALID_CHAR_FOUND:        return "INVALID_CHAR_FOUND";
-  case TRUNCATED_CHAR_FOUND:      return "TRUNCATED_CHAR_FOUND";
-  case ILLEGAL_CHAR_FOUND:        return "ILLEGAL_CHAR_FOUND";
-  case INVALID_TABLE_FORMAT:      return "INVALID_TABLE_FORMAT";
-  case INVALID_TABLE_FILE:        return "INVALID_TABLE_FILE";
-  case BUFFER_OVERFLOW_ERROR:     return "BUFFER_OVERFLOW_ERROR";
-  case USING_FALLBACK_ERROR:      return "USING_FALLBACK_ERROR";
-  case USING_DEFAULT_ERROR:       return "USING_DEFAULT_ERROR";
-  default:                        return "[BOGUS UErrorCode]";
-  }
-}
-#endif
 
-/* Define NULL pointer value  if it isn't already defined */
+/* Do not use these arrays directly: they will move to a .c file! */
+static const char *
+_uErrorInfoName[U_ERROR_INFO_LIMIT-U_ERROR_INFO_START]={
+    "U_USING_FALLBACK_ERROR",
+    "U_USING_DEFAULT_ERROR"
+};
 
-#ifndef NULL
+static const char *
+_uErrorName[U_ERROR_LIMIT]={
+    "U_ZERO_ERROR",
+
+    "U_ILLEGAL_ARGUMENT_ERROR",
+    "U_MISSING_RESOURCE_ERROR",
+    "U_INVALID_FORMAT_ERROR",
+    "U_FILE_ACCESS_ERROR",
+    "U_INTERNAL_PROGRAM_ERROR",
+    "U_MESSAGE_PARSE_ERROR",
+    "U_MEMORY_ALLOCATION_ERROR",
+    "U_INDEX_OUTOFBOUNDS_ERROR",
+    "U_PARSE_ERROR",
+    "U_INVALID_CHAR_FOUND",
+    "U_TRUNCATED_CHAR_FOUND",
+    "U_ILLEGAL_CHAR_FOUND",
+    "U_INVALID_TABLE_FORMAT",
+    "U_INVALID_TABLE_FILE",
+    "U_BUFFER_OVERFLOW_ERROR",
+    "U_UNSUPPORTED_ERROR"
+};
+
 #ifdef XP_CPLUSPLUS
-#define NULL    0
+inline const char *
+errorName(UErrorCode code)
+{
+    if(code>=0 && code<U_ERROR_LIMIT) {
+        return _uErrorName[code];
+    } else if(code>=U_ERROR_INFO_START && code<U_ERROR_INFO_LIMIT) {
+        return _uErrorInfoName[code];
+    } else {
+        return "[BOGUS UErrorCode]";
+    }
+}
 #else
-#define NULL    ((void *)0)
+#   define errorName(code) \
+        ((code)>=0 && (code)<U_ERROR_LIMIT) ? \
+            _uErrorName[code] : \
+            ((code)>=U_ERROR_INFO_START && (code)<U_ERROR_INFO_LIMIT) ? \
+                _uErrorInfoName[code] : \
+                "[BOGUS UErrorCode]"
 #endif
-#endif
-
 
 /*===========================================================================*/
 /* Include header for platform utilies */
@@ -340,7 +370,3 @@ inline const char* errorName(UErrorCode code)
 #include "putil.h"
 
 #endif /* _UTYPES */
-
-
-
-

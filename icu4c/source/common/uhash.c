@@ -97,7 +97,7 @@ uhash_openSize(UHashFunction func,
   
   result = (UHashtable*) icu_malloc(sizeof(UHashtable));
   if(result == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     return 0;
   }
   
@@ -166,7 +166,7 @@ uhash_putKey(UHashtable *hash,
   if(hash->count > hash->highWaterMark) {
     if (hash->isGrowable)    uhash_rehash(hash, status);
     else  {
-      *status = INDEX_OUTOFBOUNDS_ERROR;
+      *status = U_INDEX_OUTOFBOUNDS_ERROR;
       return UHASH_INVALID;
     }
   }
@@ -216,7 +216,7 @@ uhash_put(UHashtable *hash,
   if(hash->count > hash->highWaterMark) {
     if (hash->isGrowable)    uhash_rehash(hash, status);
     else  {
-      *status = INDEX_OUTOFBOUNDS_ERROR;
+      *status = U_INDEX_OUTOFBOUNDS_ERROR;
       return UHASH_INVALID;
     }
   }
@@ -351,13 +351,13 @@ uhash_initialize(UHashtable *hash,
 
   hash->values         = (void**) icu_malloc(sizeof(void*) * hash->length);
   if(hash->values == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     return;
   }
 
   hash->hashes         = (int32_t*) icu_malloc(sizeof(int32_t) * hash->length);
   if(hash->values == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     icu_free(hash->values);
     return;
   }
@@ -566,5 +566,3 @@ uhash_hashLong(const void *parm)
   int32_t hash = (int32_t) parm;
   return (int32_t) (hash & 0x7FFFFFFF);
 }
-
-

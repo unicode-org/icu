@@ -48,7 +48,7 @@ void addDtFrDepTest(TestNode** root)
 void TestTwoDigitYearDSTParse()
 {
     UDateFormat *fullFmt, *fmt;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UChar *pattern;
     UDate d;
     UChar *str;
@@ -97,7 +97,7 @@ void TestPartialParse994()
 {
     int32_t pos;
     UDateFormat *f;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UChar *s;
     UDate d, null;
     null=0;
@@ -128,7 +128,7 @@ void tryPat994(UDateFormat* format, const char* pattern, const char* s, UDate ex
     UDate date;
     UDate null=0;
     int32_t pos;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     str=(UChar*)malloc(sizeof(UChar) * (strlen(s) + 1) );
     u_uastrcpy(str, s);
     pat=(UChar*)malloc(sizeof(UChar) * (strlen(pattern) + 1) );
@@ -166,7 +166,7 @@ void TestRunTogetherPattern985()
     UChar *pattern, *now, *then;
     UDateFormat *format;
     UDate date1, date2;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     pattern=(UChar*)malloc(sizeof(UChar) * (strlen("yyyyMMddHHmmssSSS")+1) );
     u_uastrcpy(pattern, "yyyyMMddHHmmssSSS");
     format = udat_openPattern(pattern, u_strlen(pattern), NULL, &status);
@@ -200,14 +200,14 @@ void TestCzechMonths459()
     UDateFormat *fmt;
     UCalendar *cal;
     UDate june, july, d;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     
     fmt = udat_open(UDAT_FULL, UDAT_FULL, "cs", NULL, 0, &status);
     if(FAILURE(status)){log_err("Error in constructing the date format\n"); }
     lneed=0;
     lneed=udat_toPattern(fmt, TRUE, NULL, lneed, &status);
-    if(status==BUFFER_OVERFLOW_ERROR){
-        status=ZERO_ERROR;
+    if(status==U_BUFFER_OVERFLOW_ERROR){
+        status=U_ZERO_ERROR;
         pattern=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
         udat_toPattern(fmt, TRUE, pattern, lneed+1, &status);
     }
@@ -254,7 +254,7 @@ void TestQuotePattern161()
     UDate currentTime_1;
     UChar *pattern, *tzID, *exp;
     UChar *dateString;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     pattern=(UChar*)malloc(sizeof(UChar) * (strlen("MM/dd/yyyy 'at' hh:mm:ss a zzz")+1) );
     u_uastrcpy(pattern, "MM/dd/yyyy 'at' hh:mm:ss a zzz");
     
@@ -277,4 +277,3 @@ void TestQuotePattern161()
         log_err("Error in formatting a pattern with single quotes\n");
     
 }
-

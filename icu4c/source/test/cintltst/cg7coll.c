@@ -190,13 +190,13 @@ void doTest(UCollator *myCollation, const UChar source[], const UChar target[], 
 void TestG7Locales()
 {
     UCollator *myCollation, *tblColl1;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     const UChar *defRules;
     int32_t i, rlen, j, n;
     log_verbose("Testing  ucol_openRules for all the locales\n");
     for (i = 0; i < 8; i++)
     {
-        status = ZERO_ERROR;
+        status = U_ZERO_ERROR;
         myCollation = ucol_open(locales[i], &status);
         if (FAILURE(status))
         {
@@ -205,7 +205,7 @@ void TestG7Locales()
         }
 
         defRules = ucol_getRules(myCollation, &rlen);
-        status = ZERO_ERROR;
+        status = U_ZERO_ERROR;
         tblColl1 = ucol_openRules(defRules, rlen, UCOL_NO_NORMALIZATION, 
                    UCOL_DEFAULT_STRENGTH, &status);
         if (FAILURE(status))
@@ -241,9 +241,9 @@ void TestDemo1()
     UChar *newRules, *temp;
     int32_t len, rlen, j, n;
 
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     log_verbose("Demo Test 1 : Create a new table collation with rules \" & Z < p, P \" \n");
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     col = ucol_open(NULL, &status);
     if(FAILURE(status)){
         log_err("Error in creation of Collator in Demo1  :%s\n", myErrorName(status));
@@ -284,13 +284,13 @@ void TestDemo1()
 void TestDemo2()
 {
     UCollator *col, *myCollation;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     const UChar *baseRules;
     UChar *newRules, *temp;
     int32_t len, rlen, j, n;
 
     log_verbose("Demo Test 2 : Create a new table collation with rules \"& C < ch , cH, Ch, CH\"");
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     col = ucol_open(NULL, &status);
     if(FAILURE(status)){
         log_err("Error in creation of Collator in Demo1  : %s\n", myErrorName(status));
@@ -329,13 +329,13 @@ void TestDemo2()
 void TestDemo3()
 {
     UCollator *col, *myCollation;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     const UChar *baseRules;
     UChar *newRules, *temp;
     int32_t rlen, j, n, len;
     
     log_verbose("Demo Test 3 : Create a new table collation with rules \"& Question'-'mark ; '?' & Hash'-'mark ; '#' & Ampersand ; '&'\" \n");
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     col = ucol_open(NULL, &status);
     if(FAILURE(status)){
         log_err("Error in creation of Collator in Demo3  : %s\n", myErrorName(status));
@@ -376,13 +376,13 @@ void TestDemo3()
 void TestDemo4()
 {
     UCollator *col, *myCollation;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     const UChar *baseRules;
     UChar *newRules, *temp;
     int32_t rlen, j, n, len;
     
     log_verbose("Demo Test 4 : Create a new table collation with rules \" & aa ; a'-' & ee ; e'-' & ii ; i'-' & oo ; o'-' & uu ; u'-' \"\n");
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     col = ucol_open(NULL, &status);
     if(FAILURE(status)){
         log_err("Error in creation of Collator in Demo1  : %s\n", myErrorName(status));

@@ -55,7 +55,7 @@ main(int argc,
   char *arg;
   const UChar *tz = 0;
   UDateFormatStyle style = UDAT_DEFAULT;
-  UErrorCode status = ZERO_ERROR;
+  UErrorCode status = U_ZERO_ERROR;
 
 
   /* parse the options */
@@ -164,8 +164,8 @@ date(const UChar *tz,
 
   fmt = udat_open(style, style, 0, tz, -1, status);
   len = udat_format(fmt, ucal_getNow(), 0, len, 0, status);
-  if(*status == BUFFER_OVERFLOW_ERROR) {
-    *status = ZERO_ERROR;
+  if(*status == U_BUFFER_OVERFLOW_ERROR) {
+    *status = U_ZERO_ERROR;
     s = (UChar*) malloc(sizeof(UChar) * (len+1));
     if(s == 0) goto finish;
     udat_format(fmt, ucal_getNow(), s, len + 1, 0, status);

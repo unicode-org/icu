@@ -422,7 +422,7 @@ void TestTertiary()
 {
     int32_t len,i;
     UChar *rules, *newRules;
-    UErrorCode status=ZERO_ERROR;
+    UErrorCode status=U_ZERO_ERROR;
     const char* str="& C < ch, cH, Ch, CH & Five, 5 & Four, 4 & one, 1 & Ampersand; '&' & Two, 2 ";
     newRules=(UChar*)malloc(sizeof(UChar*) * (strlen(str)+1));
     u_uastrcpy(newRules, str);
@@ -451,7 +451,7 @@ void TestPrimary( )
 {
     int32_t len,i;
     UChar *rules, *newRules;
-    UErrorCode status=ZERO_ERROR;
+    UErrorCode status=U_ZERO_ERROR;
     const char* str="& C < ch, cH, Ch, CH & Five, 5 & Four, 4 & one, 1 & Ampersand; '&' & Two, 2 ";
     
     newRules=(UChar*)malloc(sizeof(UChar*) * strlen(str));
@@ -484,7 +484,7 @@ void TestSecondary()
     int32_t i;
     int32_t len;
     UChar *rules, *newRules;
-    UErrorCode status=ZERO_ERROR;
+    UErrorCode status=U_ZERO_ERROR;
     const char* str="& C < ch, cH, Ch, CH & Five, 5 & Four, 4 & one, 1 & Ampersand; '&' & Two, 2 ";
     
     newRules=(UChar*)malloc(sizeof(UChar*) * strlen(str));
@@ -514,7 +514,7 @@ void TestIdentical()
     int32_t i;
     int32_t len;
     UChar *rules = 0, *newRules = 0;
-    UErrorCode status=ZERO_ERROR;
+    UErrorCode status=U_ZERO_ERROR;
     const char* str="& C < ch, cH, Ch, CH & Five, 5 & Four, 4 & one, 1 & Ampersand; '&' & Two, 2 ";
 
     newRules=(UChar*)malloc(sizeof(UChar*) * strlen(str));
@@ -543,7 +543,7 @@ void TestExtra()
     int32_t i, j;
     int32_t len;
     UChar *rules, *newRules;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     const char* str="& C < ch, cH, Ch, CH & Five, 5 & Four, 4 & one, 1 & Ampersand; '&' & Two, 2 ";
     newRules=(UChar*)malloc(sizeof(UChar*) * strlen(str));
     u_uastrcpy(newRules, str);

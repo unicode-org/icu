@@ -28,11 +28,7 @@ void T_fillOutputParams(const UnicodeString* temp,
   if (resultLengthOut) {
     *resultLengthOut = actual;
     if (SUCCESS(*status) && overflowed) {
-      *status = BUFFER_OVERFLOW_ERROR;
+      *status = U_BUFFER_OVERFLOW_ERROR;
     }
   }
 }
-
-
-
-

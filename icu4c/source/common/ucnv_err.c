@@ -38,7 +38,7 @@
 bool_t 
   CONVERSION_SUCCESS (UErrorCode err)
 {
-  if ((err == INVALID_CHAR_FOUND) || (err == ILLEGAL_CHAR_FOUND))    return FALSE;
+  if ((err == U_INVALID_CHAR_FOUND) || (err == U_ILLEGAL_CHAR_FOUND))    return FALSE;
   else    return TRUE;
 }
 
@@ -114,7 +114,7 @@ void   MissingUnicodeAction_SKIP (UConverter * _this,
 				  UErrorCode * err)
 {
   if (CONVERSION_SUCCESS (*err))    return;
-  *err = ZERO_ERROR;
+  *err = U_ZERO_ERROR;
 }
 
 void   MissingUnicodeAction_SUBSTITUTE (UConverter * _this,
@@ -161,7 +161,7 @@ void   MissingUnicodeAction_SUBSTITUTE (UConverter * _this,
     {
       icu_memcpy (*target, togo, togoLen);
       *target += togoLen;
-      *err = ZERO_ERROR;
+      *err = U_ZERO_ERROR;
       if (offsets)
 	{
 	  int i=0;
@@ -188,7 +188,7 @@ void   MissingUnicodeAction_SUBSTITUTE (UConverter * _this,
 		  togoLen - (targetLimit - *target));
       _this->charErrorBufferLength += togoLen - (targetLimit - *target);
       *target += (targetLimit - *target);
-      *err = INDEX_OUTOFBOUNDS_ERROR;
+      *err = U_INDEX_OUTOFBOUNDS_ERROR;
     }
 
   return;
@@ -220,7 +220,7 @@ void   MissingUnicodeAction_SUBSTITUTEwithValue (UConverter * _this,
   char myTarget[VALUE_STRING_LENGTH];
   char *myTargetAlias = myTarget;
   const UChar *myValueSource = NULL;
-  UErrorCode err2 = ZERO_ERROR;
+  UErrorCode err2 = U_ZERO_ERROR;
   uint32_t myFromUnicodeStatus = _this->fromUnicodeStatus;
 
 
@@ -284,7 +284,7 @@ void   MissingUnicodeAction_SUBSTITUTEwithValue (UConverter * _this,
     {
       icu_memcpy (*target, myTarget, valueStringLength);
       *target += valueStringLength;
-      *err = ZERO_ERROR;
+      *err = U_ZERO_ERROR;
 
       if (offsets)
 	{
@@ -313,7 +313,7 @@ void   MissingUnicodeAction_SUBSTITUTEwithValue (UConverter * _this,
 		  valueStringLength - (targetLimit - *target));
       _this->charErrorBufferLength += valueStringLength - (targetLimit - *target);
       *target += (targetLimit - *target);
-      *err = INDEX_OUTOFBOUNDS_ERROR;
+      *err = U_INDEX_OUTOFBOUNDS_ERROR;
     }
 
   return;
@@ -331,7 +331,7 @@ void MissingCharAction_SKIP (UConverter * _this,
 			     UErrorCode * err)
 {
   if (CONVERSION_SUCCESS (*err))   return;
-  *err = ZERO_ERROR;
+  *err = U_ZERO_ERROR;
 }
 
 void   MissingCharAction_SUBSTITUTE (UConverter * _this,
@@ -351,13 +351,13 @@ void   MissingCharAction_SUBSTITUTE (UConverter * _this,
       **target = 0xFFFD;
       (*target)++;
       if (offsets)  *offsets = 0;
-      *err = ZERO_ERROR;
+      *err = U_ZERO_ERROR;
     }
   else
     {
       _this->UCharErrorBuffer[_this->UCharErrorBufferLength] = 0xFFFD;
       _this->UCharErrorBufferLength++;
-      *err = INDEX_OUTOFBOUNDS_ERROR;
+      *err = U_INDEX_OUTOFBOUNDS_ERROR;
     }
   
   return;
@@ -407,7 +407,7 @@ void  MissingCharAction_SUBSTITUTEwithValue (UConverter * _this,
 	}
       *target += valueStringLength;
       
-      *err = ZERO_ERROR;
+      *err = U_ZERO_ERROR;
     }
   else
     {
@@ -428,15 +428,8 @@ void  MissingCharAction_SUBSTITUTEwithValue (UConverter * _this,
 		  (sizeof (UChar)) * (valueStringLength - (targetLimit - *target)));
       _this->UCharErrorBufferLength += valueStringLength - (targetLimit - *target);
       *target += (targetLimit - *target);
-      *err = INDEX_OUTOFBOUNDS_ERROR;
+      *err = U_INDEX_OUTOFBOUNDS_ERROR;
     }
   
   return;
 }
-
-
-
-
-
-
-

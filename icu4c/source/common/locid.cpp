@@ -259,7 +259,7 @@ Locale::operator==( const   Locale& other) const
 Locale& Locale::init(const char* localeID)
 {
   int k,l;
-  UErrorCode err = ZERO_ERROR;
+  UErrorCode err = U_ZERO_ERROR;
 
   if (localeID == NULL) localeID = uloc_getDefault();
   l = uloc_getLanguage(localeID, 
@@ -431,7 +431,7 @@ Locale::getISO3Language(UnicodeString& lang, UErrorCode& status) const
 
     lang = uloc_getISO3Language(fullName);
     if (lang.size() == 0)
-      status = MISSING_RESOURCE_ERROR;
+      status = U_MISSING_RESOURCE_ERROR;
     
     return lang;
 }
@@ -452,7 +452,7 @@ Locale::getISO3Country(UnicodeString& cntry, UErrorCode& status) const
 
     cntry = uloc_getISO3Country(fullName);
     if (cntry.size() == 0)
-        status = MISSING_RESOURCE_ERROR;
+        status = U_MISSING_RESOURCE_ERROR;
 
     return cntry;
 }
@@ -486,7 +486,7 @@ UnicodeString&
 Locale::getDisplayLanguage( const   Locale&         inLocale,
                 UnicodeString&  dispLang) const
 {
-  UErrorCode status = ZERO_ERROR;
+  UErrorCode status = U_ZERO_ERROR;
   UChar bufBuffer[BUFFER_SIZE];
   UChar* buf = bufBuffer;
   
@@ -499,9 +499,9 @@ Locale::getDisplayLanguage( const   Locale&         inLocale,
                      &status);
   
 
-  if (status == BUFFER_OVERFLOW_ERROR)
+  if (status == U_BUFFER_OVERFLOW_ERROR)
     {
-      status = ZERO_ERROR;
+      status = U_ZERO_ERROR;
       buf = new UChar[size];
       
       uloc_getDisplayLanguage(fullName,
@@ -529,7 +529,7 @@ UnicodeString&
 Locale::getDisplayCountry(  const   Locale&         inLocale,
                                     UnicodeString&  dispCntry) const
 {
-  UErrorCode status = ZERO_ERROR;
+  UErrorCode status = U_ZERO_ERROR;
   UChar bufBuffer[BUFFER_SIZE];
   UChar* buf = bufBuffer;
   
@@ -540,9 +540,9 @@ Locale::getDisplayCountry(  const   Locale&         inLocale,
                     BUFFER_SIZE,
                     &status);
   
-  if (status == BUFFER_OVERFLOW_ERROR)
+  if (status == U_BUFFER_OVERFLOW_ERROR)
     {
-      status = ZERO_ERROR;
+      status = U_ZERO_ERROR;
       buf = new UChar[size];
       uloc_getDisplayCountry(fullName,
                  inLocale.fullName,
@@ -571,7 +571,7 @@ Locale::getDisplayVariant(UnicodeString& dispVar) const
 UnicodeString& Locale::getDisplayVariant(const Locale& inLocale,
                      UnicodeString& dispVar) const
 {
-  UErrorCode status = ZERO_ERROR;
+  UErrorCode status = U_ZERO_ERROR;
   UChar bufBuffer[BUFFER_SIZE];
   UChar* buf = bufBuffer;
   
@@ -582,9 +582,9 @@ UnicodeString& Locale::getDisplayVariant(const Locale& inLocale,
                     BUFFER_SIZE,
                     &status);
   
-  if (status == BUFFER_OVERFLOW_ERROR)
+  if (status == U_BUFFER_OVERFLOW_ERROR)
     {
-      status = ZERO_ERROR;
+      status = U_ZERO_ERROR;
       buf = new UChar[size];
       uloc_getDisplayVariant(fullName,
                  inLocale.fullName,
@@ -612,7 +612,7 @@ UnicodeString&
 Locale::getDisplayName( const   Locale&     inLocale,
             UnicodeString& result) const
 {
-  UErrorCode status = ZERO_ERROR;
+  UErrorCode status = U_ZERO_ERROR;
   UChar bufBuffer[BUFFER_SIZE];
   UChar* buf = bufBuffer;
   
@@ -622,9 +622,9 @@ Locale::getDisplayName( const   Locale&     inLocale,
                  BUFFER_SIZE,
                  &status);
   
-  if (status == BUFFER_OVERFLOW_ERROR)
+  if (status == U_BUFFER_OVERFLOW_ERROR)
     {
-      status = ZERO_ERROR;
+      status = U_ZERO_ERROR;
       
       buf = new UChar[size];
       uloc_getDisplayName(fullName,
@@ -757,7 +757,7 @@ Locale::getLanguagesForCountry(const UnicodeString& country, int32_t& count)
   // the String s parsed to produce a Hashtable, which is then used for all
   // lookups.
   if(ctry2LangMapping == 0) {
-    UErrorCode err = ZERO_ERROR;
+    UErrorCode err = U_ZERO_ERROR;
     UHashtable *temp = uhash_open(uhash_hashUString, &err);
     if (FAILURE(err)) 
       {
@@ -842,6 +842,5 @@ void Locale::setFromPOSIXID(const UnicodeString &posixIDString)
     init(buffer);
     if (buffer != onStack)    delete [] buffer;
 }
-
 
 //eof

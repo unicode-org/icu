@@ -759,7 +759,7 @@ UnicodeString::extract(UTextOffset start,
   const UChar *mySource    = getArrayStart() + start;
   const UChar *mySourceEnd = mySource + length;
   char *myTarget           = dst;
-  UErrorCode status        = ZERO_ERROR;
+  UErrorCode status        = U_ZERO_ERROR;
   int32_t arraySize        = 0x0FFFFFFF;
 
   // create the converter
@@ -810,7 +810,7 @@ UnicodeString::doCodepageCreate(const char *codepageData,
   const char *mySource     = codepageData;
   const char *mySourceEnd  = mySource + sourceLen;
   UChar *myTarget          = getArrayStart();
-  UErrorCode status        = ZERO_ERROR;
+  UErrorCode status        = U_ZERO_ERROR;
   int32_t arraySize        = getCapacity();
 
   // create the converter
@@ -835,7 +835,7 @@ UnicodeString::doCodepageCreate(const char *codepageData,
   // perform the conversion
   do {
     // reset the error code
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
 
     // perform the conversion
     ucnv_toUnicode(converter, &myTarget,  myTarget + arraySize,
@@ -880,7 +880,7 @@ UnicodeString::doCodepageCreate(const char *codepageData,
       arraySize   = getCapacity() - fLength;
     }
   }
-  while(status == INDEX_OUTOFBOUNDS_ERROR);
+  while(status == U_INDEX_OUTOFBOUNDS_ERROR);
 
   fHashCode = kInvalidHashCode;
 
@@ -1245,5 +1245,3 @@ operator<<(ostream& stream,
   stream.setf(saveFlags & ios::basefield, ios::basefield);
   return stream;
 }
-
-

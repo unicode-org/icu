@@ -47,7 +47,7 @@ TestChoiceFormat::TestSimpleExample( void )
     //for (double i = 0.0; i <= 8.0; ++i) {
     for (int32_t ix = 0; ix <= 8; ++ix) {
         double i = ix; //nos
-        status = ZERO_ERROR;
+        status = U_ZERO_ERROR;
         fpos = 0;
         str = "";
         res1 = form->format(i, str, fpos, status );
@@ -65,7 +65,7 @@ TestChoiceFormat::TestSimpleExample( void )
 void
 TestChoiceFormat::TestComplexExample( void )
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     const double filelimits[] = {0,1,2};
     const UnicodeString filepart[] = {"are no files","is one file","are {2} files"};
 
@@ -131,12 +131,12 @@ TestChoiceFormat::TestComplexExample( void )
         "There are 3 files on Disk_A"
     };
 
-    if (status != ZERO_ERROR) return;
+    if (status != U_ZERO_ERROR) return;
 
     int32_t i;
     for (i = 0; i < 4; ++i) {
         str = "";
-        status = ZERO_ERROR;
+        status = U_ZERO_ERROR;
         testArgs[0] = Formattable((int32_t)i);
         testArgs[2] = testArgs[0];
         res2 = pattform->format(testArgs, 3, str, fpos, status );
@@ -185,7 +185,7 @@ TestChoiceFormat::TestComplexExample( void )
     };
 
     fileform->applyPattern("0#is no folder|1#is one folder|2#are many folders", status );
-    if (status == ZERO_ERROR) it_out << "status applyPattern OK!" << endl;
+    if (status == U_ZERO_ERROR) it_out << "status applyPattern OK!" << endl;
     if (!chkstatus( status, "***  test_complex_example pattform" )) {
         delete fileform;
         delete filenumform;
@@ -196,7 +196,7 @@ TestChoiceFormat::TestComplexExample( void )
     fpos = 0;
     for (i = 0; i < 4; ++i) {
         str = "";
-        status = ZERO_ERROR;
+        status = U_ZERO_ERROR;
         testArgs[0] = Formattable((int32_t)i);
         testArgs[2] = testArgs[0];
         res2 = pattform->format(testArgs, 3, str, fpos, status );
@@ -328,7 +328,7 @@ TestChoiceFormat::TestComplexExample( void )
 
     str = "";
     fpos = 0;
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     double arg_double = 3.0;
     res1 = form_pat.format( arg_double, str, fpos );
     it_out << "ChoiceFormat format:" << res1 << endl;
@@ -336,7 +336,7 @@ TestChoiceFormat::TestComplexExample( void )
 
     str = "";
     fpos = 0;
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     int32_t arg_long = 3;
     res1 = form_pat.format( arg_long, str, fpos );
     it_out << "ChoiceFormat format:" << res1 << endl;
@@ -345,7 +345,7 @@ TestChoiceFormat::TestComplexExample( void )
     Formattable ft( T_INT32(3) );
     str = "";
     fpos = 0;
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     res1 = form_pat.format( ft, str, fpos, status );
     if (!chkstatus( status, "***  test_complex_example format (int32_t, ...)" )) {
         delete fileform;
@@ -359,7 +359,7 @@ TestChoiceFormat::TestComplexExample( void )
     Formattable fta[] = { T_INT32(3) };
     str = "";
     fpos = 0;
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     res1 = form_pat.format( fta, 1, str, fpos, status );
     if (!chkstatus( status, "***  test_complex_example format (int32_t, ...)" )) {
         delete fileform;

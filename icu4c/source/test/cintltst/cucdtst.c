@@ -33,36 +33,36 @@ const UChar  LAST_CHAR_CODE_IN_FILE = 0xFFFD;
 const char tagStrings[] = "MnMcMeNdNlNoZsZlZpCcCfCsCoCnLuLlLtLmLoPcPdPsPePoSmScSkSoPiPf";
 const int32_t tagValues[] =
     {
-    /* Mn */ NON_SPACING_MARK,
-	/* Mc */ COMBINING_SPACING_MARK,
-	/* Me */ ENCLOSING_MARK,
-	/* Nd */ DECIMAL_DIGIT_NUMBER,
-	/* Nl */ LETTER_NUMBER,
-	/* No */ OTHER_NUMBER,
-	/* Zs */ SPACE_SEPARATOR,
-	/* Zl */ LINE_SEPARATOR,
-	/* Zp */ PARAGRAPH_SEPARATOR,
-	/* Cc */ CONTROL,
-	/* Cf */ FORMAT,
-	/* Cs */ SURROGATE,
-	/* Co */ PRIVATE_USE,
-	/* Cn */ UNASSIGNED,
-	/* Lu */ UPPERCASE_LETTER,
-	/* Ll */ LOWERCASE_LETTER,
-	/* Lt */ TITLECASE_LETTER,
-	/* Lm */ MODIFIER_LETTER,
-	/* Lo */ OTHER_LETTER,
-	/* Pc */ CONNECTOR_PUNCTUATION,
-	/* Pd */ DASH_PUNCTUATION,
-	/* Ps */ START_PUNCTUATION,
-	/* Pe */ END_PUNCTUATION,
-	/* Po */ OTHER_PUNCTUATION,
-	/* Sm */ MATH_SYMBOL,
-	/* Sc */ CURRENCY_SYMBOL,
-	/* Sk */ MODIFIER_SYMBOL,
-	/* So */ OTHER_SYMBOL,
-	/* Pi */ INITIAL_PUNCTUATION,
-	/* Pf */ FINAL_PUNCTUATION
+    /* Mn */ U_NON_SPACING_MARK,
+	/* Mc */ U_COMBINING_SPACING_MARK,
+	/* Me */ U_ENCLOSING_MARK,
+	/* Nd */ U_DECIMAL_DIGIT_NUMBER,
+	/* Nl */ U_LETTER_NUMBER,
+	/* No */ U_OTHER_NUMBER,
+	/* Zs */ U_SPACE_SEPARATOR,
+	/* Zl */ U_LINE_SEPARATOR,
+	/* Zp */ U_PARAGRAPH_SEPARATOR,
+	/* Cc */ U_CONTROL_CHAR,
+	/* Cf */ U_FORMAT_CHAR,
+	/* Cs */ U_SURROGATE,
+	/* Co */ U_PRIVATE_USE_CHAR,
+	/* Cn */ U_UNASSIGNED,
+	/* Lu */ U_UPPERCASE_LETTER,
+	/* Ll */ U_LOWERCASE_LETTER,
+	/* Lt */ U_TITLECASE_LETTER,
+	/* Lm */ U_MODIFIER_LETTER,
+	/* Lo */ U_OTHER_LETTER,
+	/* Pc */ U_CONNECTOR_PUNCTUATION,
+	/* Pd */ U_DASH_PUNCTUATION,
+	/* Ps */ U_START_PUNCTUATION,
+	/* Pe */ U_END_PUNCTUATION,
+	/* Po */ U_OTHER_PUNCTUATION,
+	/* Sm */ U_MATH_SYMBOL,
+	/* Sc */ U_CURRENCY_SYMBOL,
+	/* Sk */ U_MODIFIER_SYMBOL,
+	/* So */ U_OTHER_SYMBOL,
+	/* Pi */ U_INITIAL_PUNCTUATION,
+	/* Pf */ U_FINAL_PUNCTUATION
     };
 const char dirStrings[][5] = {
     "L",
@@ -384,7 +384,7 @@ void TestUnicodeData()
             }
         }
 
-        if (u_charScript((UChar)0x0041 != BASIC_LATIN)) {
+        if (u_charScript((UChar)0x0041 != U_BASIC_LATIN)) {
             log_err("Unicode character script property failed !\n");
         }
         if (input) 

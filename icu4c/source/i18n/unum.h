@@ -38,7 +38,7 @@
  * .   UChar myString[20];
  * .   UFieldPosition pos=0;
  * .   double myNumber = 7.0;
- * .   UErrorCode success = ZERO_ERROR;
+ * .   UErrorCode success = U_ZERO_ERROR;
  * .   UNumberFormat* nf = unum_open(UNUM_DEFAULT, NULL, &success)
  * .   unum_formatDouble(nf, myNumber, myString, u_strlen(myString), &pos, &status);
  * .   printf(" Example 1: %s\n", austrdup(myString) ); //austrdup( a function used to convert UChar* to char*)
@@ -50,7 +50,7 @@
  * <pre>
  * .    UChar* myString;
  * .    t_int32 i, resultlength, reslenneeded;
- * .    UErrorCode success = ZERO_ERROR;
+ * .    UErrorCode success = U_ZERO_ERROR;
  * .    UFieldPosition pos=0;
  * .    t_int32 a[] = { 123, 3333, -1234567 };
  * .    const t_int32 a_len = sizeof(a) / sizeof(a[0]);
@@ -58,8 +58,8 @@
  * .    for (i = 0; i < a_len; i++) {
  * .    resultlength=0;
  * .    reslenneeded=unum_format(nf, a[i], NULL, resultlength, &pos, &status);
- * .    if(status==BUFFER_OVERFLOW_ERROR){
- * .        status=ZERO_ERROR;
+ * .    if(status==U_BUFFER_OVERFLOW_ERROR){
+ * .        status=U_ZERO_ERROR;
  * .        resultlength=resultlengthneeded+1;
  * .        result=(UChar*)malloc(sizeof(UChar) * resultlength);
  * .        unum_format(nf, a[i], result, resultlength, &pos, &status);

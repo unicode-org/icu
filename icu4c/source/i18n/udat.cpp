@@ -45,7 +45,7 @@ udat_open(            UDateFormatStyle        timeStyle,
                          Locale().init(locale));
   
   if(fmt == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     return 0;
   }
 
@@ -55,7 +55,7 @@ udat_open(            UDateFormatStyle        timeStyle,
     zone = TimeZone::createTimeZone(UnicodeString((UChar*)tzID,
 						  length, length));
     if(zone == 0) {
-      *status = MEMORY_ALLOCATION_ERROR;
+      *status = U_MEMORY_ALLOCATION_ERROR;
       delete fmt;
       return 0;
     }
@@ -87,7 +87,7 @@ udat_openPattern(    const   UChar           *pattern,
                         *status);
 
   if(retVal == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     return 0;
   }
   return retVal;
@@ -108,7 +108,7 @@ udat_clone(const UDateFormat *fmt,
   Format *res = ((SimpleDateFormat*)fmt)->clone();
   
   if(res == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     return 0;
   }
 
@@ -168,7 +168,7 @@ udat_parse(    const    UDateFormat*        format,
       *parsePos = pp.getIndex();
     else {
       *parsePos = pp.getErrorIndex();
-      *status = PARSE_ERROR;
+      *status = U_PARSE_ERROR;
     }
   }
   
@@ -274,7 +274,7 @@ udat_applyPattern(            UDateFormat     *format,
 {
   int32_t len = (patternLength == -1 ? u_strlen(pattern) : patternLength);
   const UnicodeString pat((UChar*)pattern, len, len);
-  UErrorCode status = ZERO_ERROR;
+  UErrorCode status = U_ZERO_ERROR;
 
   if(localized)
     ((SimpleDateFormat*)format)->applyLocalizedPattern(pat, status);
@@ -419,7 +419,7 @@ udat_setSymbols(    UDateFormat             *format,
   UnicodeString *array = 0;
 
   if(syms == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     return;
   }
 
@@ -428,7 +428,7 @@ udat_setSymbols(    UDateFormat             *format,
     res = syms->getEras(count);
     array = new UnicodeString[count];
     if(array == 0) {
-      *status = MEMORY_ALLOCATION_ERROR;
+      *status = U_MEMORY_ALLOCATION_ERROR;
       return;
     }
     icu_arrayCopy(res, array, count);
@@ -441,7 +441,7 @@ udat_setSymbols(    UDateFormat             *format,
     res = syms->getMonths(count);
     array = new UnicodeString[count];
     if(array == 0) {
-      *status = MEMORY_ALLOCATION_ERROR;
+      *status = U_MEMORY_ALLOCATION_ERROR;
       return;
     }
     icu_arrayCopy(res, array, count);
@@ -454,7 +454,7 @@ udat_setSymbols(    UDateFormat             *format,
     res = syms->getShortMonths(count);
     array = new UnicodeString[count];
     if(array == 0) {
-      *status = MEMORY_ALLOCATION_ERROR;
+      *status = U_MEMORY_ALLOCATION_ERROR;
       return;
     }
     icu_arrayCopy(res, array, count);
@@ -467,7 +467,7 @@ udat_setSymbols(    UDateFormat             *format,
     res = syms->getWeekdays(count);
     array = new UnicodeString[count];
     if(array == 0) {
-      *status = MEMORY_ALLOCATION_ERROR;
+      *status = U_MEMORY_ALLOCATION_ERROR;
       return;
     }
     icu_arrayCopy(res, array, count);
@@ -480,7 +480,7 @@ udat_setSymbols(    UDateFormat             *format,
     res = syms->getShortWeekdays(count);
     array = new UnicodeString[count];
     if(array == 0) {
-      *status = MEMORY_ALLOCATION_ERROR;
+      *status = U_MEMORY_ALLOCATION_ERROR;
       return;
     }
     icu_arrayCopy(res, array, count);
@@ -493,7 +493,7 @@ udat_setSymbols(    UDateFormat             *format,
     res = syms->getAmPmStrings(count);
     array = new UnicodeString[count];
     if(array == 0) {
-      *status = MEMORY_ALLOCATION_ERROR;
+      *status = U_MEMORY_ALLOCATION_ERROR;
       return;
     }
     icu_arrayCopy(res, array, count);

@@ -33,14 +33,14 @@ ucal_getAvailableTZIDs(        int32_t         rawOffset,
                                  count);
 
   if(tzs == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     return 0;
   }
 
   if(index < count)
     retVal = tzs[index]->getUChars();
   else
-    *status = INDEX_OUTOFBOUNDS_ERROR;
+    *status = U_INDEX_OUTOFBOUNDS_ERROR;
   
   delete [] tzs;
   return retVal;
@@ -55,7 +55,7 @@ ucal_countAvailableTZIDs(int32_t rawOffset)
                                   count);
 
   if(tzs == 0) {
-    // TBD: MEMORY_ALLOCATION_ERROR
+    // TBD: U_MEMORY_ALLOCATION_ERROR
     return 0;
   }
 
@@ -90,14 +90,14 @@ ucal_open(    const    UChar*          zoneID,
 						  length, length));
   }
   if(zone == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     return 0;
   }
   
   Calendar *cal = 0;
   cal = Calendar::createInstance(zone, Locale().init(locale), *status);
   if(cal == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     delete zone;
     return 0;
   }
@@ -129,7 +129,7 @@ ucal_setTimeZone(    UCalendar*      cal,
 						  length, length));
   }
   if(zone == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     return;
   }
 

@@ -56,7 +56,7 @@ ULocaleBundle*
 u_locbund_clone(const ULocaleBundle *bundle)
 {
   ULocaleBundle *result = (ULocaleBundle*)malloc(sizeof(ULocaleBundle));
-  UErrorCode status = ZERO_ERROR;
+  UErrorCode status = U_ZERO_ERROR;
 
   if(result == 0)
     return 0;
@@ -119,7 +119,7 @@ u_locbund_delete(ULocaleBundle *bundle)
 UNumberFormat*        
 u_locbund_getNumberFormat(ULocaleBundle *bundle)
 {
-  UErrorCode status = ZERO_ERROR;
+  UErrorCode status = U_ZERO_ERROR;
   
   if(bundle->fNumberFormat == 0) {
     bundle->fNumberFormat = unum_open(UNUM_DEFAULT, bundle->fLocale, &status);
@@ -133,7 +133,7 @@ u_locbund_getNumberFormat(ULocaleBundle *bundle)
 UNumberFormat*    
 u_locbund_getPercentFormat(ULocaleBundle *bundle)
 {
-  UErrorCode status = ZERO_ERROR;
+  UErrorCode status = U_ZERO_ERROR;
   
   if(bundle->fPercentFormat == 0) {
     bundle->fPercentFormat = unum_open(UNUM_PERCENT, bundle->fLocale, &status);
@@ -147,7 +147,7 @@ u_locbund_getPercentFormat(ULocaleBundle *bundle)
 UNumberFormat*    
 u_locbund_getCurrencyFormat(ULocaleBundle *bundle)
 {
-  UErrorCode status = ZERO_ERROR;
+  UErrorCode status = U_ZERO_ERROR;
   
   if(bundle->fCurrencyFormat == 0) {
     bundle->fCurrencyFormat = unum_open(UNUM_CURRENCY, bundle->fLocale, 
@@ -164,7 +164,7 @@ u_locbund_getCurrencyFormat(ULocaleBundle *bundle)
 UNumberFormat*    
 u_locbund_getScientificFormat(ULocaleBundle *bundle)
 {
-  UErrorCode status = ZERO_ERROR;
+  UErrorCode status = U_ZERO_ERROR;
   UChar pattern [PAT_SIZE];
 
   if(bundle->fScientificFormat == 0) {
@@ -184,7 +184,7 @@ u_locbund_getScientificFormat(ULocaleBundle *bundle)
 UNumberFormat*
 u_locbund_getSpelloutFormat(ULocaleBundle *bundle)
 {
-  UErrorCode status = ZERO_ERROR;
+  UErrorCode status = U_ZERO_ERROR;
   
   if(bundle->fSpelloutFormat == 0) {
     bundle->fSpelloutFormat = unum_open(UNUM_SPELLOUT, bundle->fLocale, 
@@ -197,7 +197,7 @@ u_locbund_getSpelloutFormat(ULocaleBundle *bundle)
 UDateFormat*
 u_locbund_getDateFormat(ULocaleBundle *bundle)
 {
-  UErrorCode status = ZERO_ERROR;
+  UErrorCode status = U_ZERO_ERROR;
   
   if(bundle->fDateFormat == 0) {
     bundle->fDateFormat = udat_open(UDAT_NONE, UDAT_DEFAULT, 
@@ -210,7 +210,7 @@ u_locbund_getDateFormat(ULocaleBundle *bundle)
 UDateFormat*
 u_locbund_getTimeFormat(ULocaleBundle *bundle)
 {
-  UErrorCode status = ZERO_ERROR;
+  UErrorCode status = U_ZERO_ERROR;
   
   if(bundle->fTimeFormat == 0) {
     bundle->fTimeFormat = udat_open(UDAT_DEFAULT, UDAT_NONE, 

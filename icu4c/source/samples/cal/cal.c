@@ -82,7 +82,7 @@ main(int argc,
   int optind = 1;
   char *arg;
   int32_t month = -1, year = -1;
-  UErrorCode status = ZERO_ERROR;
+  UErrorCode status = U_ZERO_ERROR;
 
 
   /* parse the options */

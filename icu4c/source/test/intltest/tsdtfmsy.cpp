@@ -44,7 +44,7 @@ void IntlTestDateFormatSymbols::runIndexedTest( int32_t index, bool_t exec, char
  */
 void IntlTestDateFormatSymbols::TestGetMonths()
 {
-    UErrorCode  status = ZERO_ERROR;
+    UErrorCode  status = U_ZERO_ERROR;
     int32_t cnt;
     const UnicodeString* month;
     DateFormatSymbols *symbol;
@@ -68,14 +68,14 @@ void IntlTestDateFormatSymbols::TestGetMonths()
  */
 void IntlTestDateFormatSymbols::testSymbols(char *par)
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
 
     DateFormatSymbols fr(Locale::FRENCH, status);
     if(FAILURE(status)) {
         errln("ERROR: Couldn't create French DateFormatSymbols");
     }
 
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     DateFormatSymbols en(Locale::ENGLISH, status);
     if(FAILURE(status)) {
         errln("ERROR: Couldn't create English DateFormatSymbols");
@@ -147,7 +147,7 @@ void IntlTestDateFormatSymbols::testSymbols(char *par)
     }
 
 
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     DateFormatSymbols foo(status);
     DateFormatSymbols bar(foo);
 

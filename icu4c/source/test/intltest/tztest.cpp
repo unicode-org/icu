@@ -154,7 +154,7 @@ TimeZoneTest::TestGenericAPI()
     logln(UnicodeString("Value returned from t_timezone = ") + tzoffset);
     // Invert sign because UNIX semantics are backwards
     if (tzoffset < 0) tzoffset = -tzoffset;
-        UErrorCode status = ZERO_ERROR;
+        UErrorCode status = U_ZERO_ERROR;
     // --- The following test would fail outside PST now that
     // --- PST is generally set to be default timezone in format tests
     //if ((*saveDefault == *pstZone) && (tzoffset != 28800)) {
@@ -187,7 +187,7 @@ TimeZoneTest::TestGenericAPI()
 void
 TimeZoneTest::TestRuleAPI()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
 
     UDate offset = 60*60*1000*1.75; // Pick a weird offset
     SimpleTimeZone *zone = new SimpleTimeZone((int32_t)offset, "TestZone");
@@ -260,7 +260,7 @@ TimeZoneTest::TestRuleAPI()
 void
 TimeZoneTest::testUsingBinarySearch(SimpleTimeZone* tz, UDate min, UDate max, UDate expectedBoundary)
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     bool_t startsInDST = tz->inDaylightTime(min, status);
     if (failure(status, "SimpleTimeZone::inDaylightTime")) return;
     if (tz->inDaylightTime(max, status) == startsInDST) {
@@ -321,7 +321,7 @@ TimeZoneTest::TestPRTOffset()
 void
 TimeZoneTest::TestVariousAPI518()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     TimeZone* time_zone = TimeZone::createTimeZone("PST");
     UDate d = date(97, Calendar::APRIL, 30);
     UnicodeString str;
@@ -858,7 +858,7 @@ void TimeZoneTest::TestCustomParse()
 void
 TimeZoneTest::TestDisplayName()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     int32_t i;
     TimeZone *zone = TimeZone::createTimeZone("PST");
     UnicodeString name;
@@ -983,7 +983,7 @@ TimeZoneTest::TestDisplayName()
 void
 TimeZoneTest::TestDSTSavings()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     // It might be better to find a way to integrate this test into the main TimeZone
     // tests above, but I don't have time to figure out how to do this (or if it's
     // even really a good idea).  Let's consider that a future.  --rtg 1/27/98
@@ -1043,7 +1043,7 @@ TimeZoneTest::TestAlternateRules()
     SimpleTimeZone tz(-5 * kMillisPerHour, "alternateRuleTest");
 
     // test the day-of-month API
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     tz.setStartRule(Calendar::MARCH, 10, 12 * kMillisPerHour, status);
     if(FAILURE(status))
         errln("tz.setStartRule failed");

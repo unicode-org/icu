@@ -177,13 +177,13 @@ parse(FileStream *f,
 
     switch(type) {
     case tok_EOF:
-      *status = (node == eInitial) ? ZERO_ERROR : INVALID_FORMAT_ERROR;
+      *status = (node == eInitial) ? U_ZERO_ERROR : U_INVALID_FORMAT_ERROR;
       setErrorText("Unexpected EOF encountered");
       goto finish;
       /*break;*/
 
     case tok_error:
-      *status = INVALID_FORMAT_ERROR;
+      *status = U_INVALID_FORMAT_ERROR;
       goto finish;
       /*break;*/
       
@@ -195,7 +195,7 @@ parse(FileStream *f,
     node = t.fNext;
     
     if(node == eError) {
-      *status = INVALID_FORMAT_ERROR;
+      *status = U_INVALID_FORMAT_ERROR;
       goto finish;
     }
     
@@ -208,7 +208,7 @@ parse(FileStream *f,
       ustr_cpy(&tag, &token, status);
       if(FAILURE(*status)) goto finish;
       if(uhash_get(data, uhash_hashUString(tag.fChars)) != 0) {
-	*status = INVALID_FORMAT_ERROR;
+	*status = U_INVALID_FORMAT_ERROR;
 	setErrorText("Duplicate tag name detected");
 	goto finish;
       }
@@ -217,7 +217,7 @@ parse(FileStream *f,
       /* Record a singleton string */
     case eStr:
       if(current != 0) {
-	*status = INTERNAL_PROGRAM_ERROR;
+	*status = U_INTERNAL_PROGRAM_ERROR;
 	goto finish;
       }
       current = strlist_open(status);
@@ -233,7 +233,7 @@ parse(FileStream *f,
       /* Begin a string list */
     case eBegList:
       if(current != 0) {
-	*status = INTERNAL_PROGRAM_ERROR;
+	*status = U_INTERNAL_PROGRAM_ERROR;
 	goto finish;
       }
       current = strlist_open(status);
@@ -259,7 +259,7 @@ parse(FileStream *f,
       
     case eBeg2dList:
       if(current != 0) {
-	*status = INTERNAL_PROGRAM_ERROR;
+	*status = U_INTERNAL_PROGRAM_ERROR;
 	goto finish;
       }
       current = strlist2d_open(status);
@@ -287,7 +287,7 @@ parse(FileStream *f,
       
     case eBegTagged:
       if(current != 0) {
-	*status = INTERNAL_PROGRAM_ERROR;
+	*status = U_INTERNAL_PROGRAM_ERROR;
 	goto finish;
       }
       current = taglist_open(status);
@@ -314,7 +314,7 @@ parse(FileStream *f,
       ustr_cpy(&subtag, &token, status);
       if(FAILURE(*status)) goto finish;
       if(taglist_get(current, subtag.fChars, status) != 0) {
-	*status = INVALID_FORMAT_ERROR;
+	*status = U_INVALID_FORMAT_ERROR;
 	setErrorText("Duplicate subtag found in tagged list");
 	goto finish;
       }
@@ -322,7 +322,7 @@ parse(FileStream *f,
       
     case eOpen:
       if(data != 0) {
-	*status = INTERNAL_PROGRAM_ERROR;
+	*status = U_INTERNAL_PROGRAM_ERROR;
 	goto finish;
       }
       ustr_cpy(&localeName, &token, status);
@@ -333,7 +333,7 @@ parse(FileStream *f,
       
     case eClose:
       if(data == 0) {
-	*status = INTERNAL_PROGRAM_ERROR;
+	*status = U_INTERNAL_PROGRAM_ERROR;
 	goto finish;
       }
       break;

@@ -82,9 +82,9 @@ CAPI void U_EXPORT2 scsu_reset(UnicodeCompressor *comp);
  * This function is not guaranteed to completely fill the output buffer, nor
  * is it guaranteed to compress the entire input.  
  * If the source data is completely compressed, <TT>status</TT> will be set
- * to <TT>ZERO_ERROR</TT>.  
+ * to <TT>U_ZERO_ERROR</TT>.  
  * If the source data is not completely compressed, <TT>status</TT> will be
- * set to <TT>INDEX_OUTOFBOUNDS_ERROR</TT>.  If this occurs, larger buffers
+ * set to <TT>U_INDEX_OUTOFBOUNDS_ERROR</TT>.  If this occurs, larger buffers
  * should be allocated, or data flushed, and the function should be called
  * again with the new buffers.
  *
@@ -114,9 +114,9 @@ CAPI void U_EXPORT2 scsu_compress(UnicodeCompressor *comp,
  * This function will either completely fill the output buffer, or
  * consume the entire input.  
  * If the source data is completely compressed, <TT>status</TT> will be set
- * to <TT>ZERO_ERROR</TT>.  
+ * to <TT>U_ZERO_ERROR</TT>.  
  * If the source data is not completely compressed, <TT>status</TT> will be
- * set to <TT>INDEX_OUTOFBOUNDS_ERROR</TT>.  If this occurs, larger buffers
+ * set to <TT>U_INDEX_OUTOFBOUNDS_ERROR</TT>.  If this occurs, larger buffers
  * should be allocated, or data flushed, and the function should be called
  * again with the new buffers.
  *

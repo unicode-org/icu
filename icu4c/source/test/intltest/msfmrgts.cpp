@@ -56,24 +56,6 @@ MessageFormatRegressionTest::runIndexedTest( int32_t index, bool_t exec, char* &
     }
 }
 
-const char* 
-MessageFormatRegressionTest::errorName(UErrorCode code)
-{
-    switch (code) {
-        case ZERO_ERROR:                return "ZERO_ERROR";
-        case ILLEGAL_ARGUMENT_ERROR:    return "ILLEGAL_ARGUMENT_ERROR";
-        case MISSING_RESOURCE_ERROR:    return "MISSING_RESOURCE_ERROR";
-        case INVALID_FORMAT_ERROR:      return "INVALID_FORMAT_ERROR";
-        case FILE_ACCESS_ERROR:         return "FILE_ACCESS_ERROR";
-        case INTERNAL_PROGRAM_ERROR:    return "INTERNAL_PROGRAM_ERROR";
-        case MESSAGE_PARSE_ERROR:       return "MESSAGE_PARSE_ERROR";
-        case MEMORY_ALLOCATION_ERROR:   return "MEMORY_ALLOCATION_ERROR";
-        case USING_FALLBACK_ERROR:      return "USING_FALLBACK_ERROR";
-        case USING_DEFAULT_ERROR:       return "USING_DEFAULT_ERROR";
-        default:                        return "[BOGUS UErrorCode]";
-    }
-}
-
 bool_t 
 MessageFormatRegressionTest::failure(UErrorCode status, const char* msg)
 {
@@ -100,7 +82,7 @@ void MessageFormatRegressionTest::Test4074764() {
     //length of the string without param while it is not so
     //in the other case.
 
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     MessageFormat *messageFormatter = new MessageFormat("", status);
 
     failure(status, "couldn't create MessageFormat");
@@ -165,7 +147,7 @@ void MessageFormatRegressionTest::Test4074764() {
  */
 void MessageFormatRegressionTest::Test4058973() 
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     MessageFormat *fmt = new MessageFormat("{0,choice,0#no files|1#one file|1< {0,number,integer} files}", status);
     failure(status, "new MessageFormat");
 
@@ -185,7 +167,7 @@ void MessageFormatRegressionTest::Test4058973()
  */
 void MessageFormatRegressionTest::Test4031438() 
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     
     UnicodeString pattern1("Impossible {1} has occurred -- status code is {0} and message is {2}.");
     UnicodeString pattern2("Double '' Quotes {0} test and quoted '{1}' test plus 'other {2} stuff'.");
@@ -282,7 +264,7 @@ void MessageFormatRegressionTest::Test4052223()
         errln("ParsePosition.getErrorIndex initialization failed.");
     }
 
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     MessageFormat *fmt = new MessageFormat("There are {0} apples growing on the {1} tree.", status);
     failure(status, "new MessageFormat");
     UnicodeString str("There is one apple growing on the peach tree.");
@@ -333,7 +315,7 @@ void MessageFormatRegressionTest::Test4104976()
         UnicodeString("xyz"), 
         UnicodeString("abc")
     };
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     ChoiceFormat *cf = new ChoiceFormat(limits, formats, status);
     failure(status, "new ChoiceFormat");
     //try {
@@ -449,7 +431,7 @@ void MessageFormatRegressionTest::Test4111739()
 void MessageFormatRegressionTest::Test4114743()
 {
     UnicodeString originalPattern("initial pattern");
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     MessageFormat *mf = new MessageFormat(originalPattern, status);
     failure(status, "new MessageFormat");
     //try {
@@ -474,7 +456,7 @@ void MessageFormatRegressionTest::Test4116444()
         (UnicodeString) "{0,date,short}"
     };
     
-    UErrorCode status = ZERO_ERROR;    
+    UErrorCode status = U_ZERO_ERROR;    
     MessageFormat *mf = new MessageFormat("", status);
     failure(status, "new MessageFormat");
 
@@ -521,7 +503,7 @@ void MessageFormatRegressionTest::Test4116444()
 void MessageFormatRegressionTest::Test4114739()
 {
 
-    UErrorCode status = ZERO_ERROR;    
+    UErrorCode status = U_ZERO_ERROR;    
     MessageFormat *mf = new MessageFormat("<{0}>", status);
     failure(status, "new MessageFormat");
 
@@ -555,7 +537,7 @@ void MessageFormatRegressionTest::Test4114739()
 void MessageFormatRegressionTest::Test4113018()
 {
     UnicodeString originalPattern("initial pattern");
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     MessageFormat *mf = new MessageFormat(originalPattern, status);
     failure(status, "new messageFormat");
     UnicodeString illegalPattern("format: {0, xxxYYY}");
@@ -578,7 +560,7 @@ void MessageFormatRegressionTest::Test4113018()
  */
 void MessageFormatRegressionTest::Test4106661()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     ChoiceFormat *fmt = new ChoiceFormat(
       "-1#are negative| 0#are no or fraction | 1#is one |1.0<is 1+ |2#are two |2<are more than 2.", status);
     failure(status, "new ChoiceFormat");
@@ -630,7 +612,7 @@ void MessageFormatRegressionTest::Test4106661()
  */
 void MessageFormatRegressionTest::Test4094906()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UnicodeString pattern("-");
     pattern += (UChar) 0x221E;
     pattern += "<are negative|0.0<are no or fraction|1.0#is one|1.0<is 1+|";
@@ -689,7 +671,7 @@ void MessageFormatRegressionTest::Test4094906()
  */
 void MessageFormatRegressionTest::Test4118592()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     MessageFormat *mf = new MessageFormat("", status);
     failure(status, "new messageFormat");
     UnicodeString pattern("{0,choice,1#YES|2#NO}");
@@ -729,7 +711,7 @@ void MessageFormatRegressionTest::Test4118592()
  */
 void MessageFormatRegressionTest::Test4118594()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     MessageFormat *mf = new MessageFormat("{0}, {0}, {0}", status);
     failure(status, "new MessageFormat");
     UnicodeString forParsing("x, y, z");
@@ -776,7 +758,7 @@ void MessageFormatRegressionTest::Test4105380()
 {
     UnicodeString patternText1("The disk \"{1}\" contains {0}.");
     UnicodeString patternText2("There are {0} on the disk \"{1}\"");
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     MessageFormat *form1 = new MessageFormat(patternText1, status);
     failure(status, "new MessageFormat");
     MessageFormat *form2 = new MessageFormat(patternText2, status);
@@ -814,7 +796,7 @@ void MessageFormatRegressionTest::Test4105380()
  */
 void MessageFormatRegressionTest::Test4120552()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     MessageFormat *mf = new MessageFormat("pattern", status);
     failure(status, "new MessageFormat");
     UnicodeString texts[] = {
@@ -851,7 +833,7 @@ void MessageFormatRegressionTest::Test4142938()
     UnicodeString pat( (UnicodeString)"''Vous'' {0,choice,0#n''|1#}avez sélectionné " + 
         "{0,choice,0#aucun|1#{0}} client{0,choice,0#s|1#|2#s} " + 
         "personnel{0,choice,0#s|1#|2#s}.");
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     MessageFormat *mf = new MessageFormat(pat, status);
     failure(status, "new MessageFormat");
 
@@ -909,7 +891,7 @@ void MessageFormatRegressionTest::TestChoicePatternQuote()
     };
     for (int i=0; i<9; i+=3) {
         //try {
-            UErrorCode status = ZERO_ERROR;
+            UErrorCode status = U_ZERO_ERROR;
             ChoiceFormat *cf = new ChoiceFormat(DATA[i], status);
             failure(status, "new ChoiceFormat");
             for (int j=0; j<=1; ++j) {
@@ -946,7 +928,7 @@ void MessageFormatRegressionTest::TestChoicePatternQuote()
  */
 void MessageFormatRegressionTest::Test4112104() 
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     MessageFormat *format = new MessageFormat("", status);
     failure(status, "new MessageFormat");
     //try {

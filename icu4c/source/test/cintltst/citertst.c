@@ -33,7 +33,7 @@
 
 #define ARRAY_LENGTH(array) (sizeof array / sizeof array[0])
 
-static UErrorCode status = ZERO_ERROR;
+static UErrorCode status = U_ZERO_ERROR;
 UCollator *en_us;
 
 
@@ -60,7 +60,7 @@ void TestPrevious()
     UChar *source;
     UCollator *c1, *c2, *c3;
     UCollationElements *iter;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     test1=(UChar*)malloc(sizeof(UChar) * 50);
     test2=(UChar*)malloc(sizeof(UChar) * 50);
     u_uastrcpy(test1, "What subset of all possible test cases?");
@@ -151,7 +151,7 @@ void TestPrevious()
  */
 void TestOffset()
 {    
-    UErrorCode status= ZERO_ERROR;
+    UErrorCode status= U_ZERO_ERROR;
     UCollationElements *iter, *pristine;
     int32_t offset;
     int32_t *orders;
@@ -187,7 +187,7 @@ void TestOffset()
             myErrorName(status));
         return;
     }
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
 
     ucol_setOffset(iter, 0, &status);
     if (FAILURE(status))
@@ -213,7 +213,7 @@ void TestOffset()
 void TestSetText()
 {
     int32_t c,i;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UCollationElements *iter1, *iter2;
     test1=(UChar*)malloc(sizeof(UChar) * 50);
     test2=(UChar*)malloc(sizeof(UChar) * 50);
@@ -275,7 +275,7 @@ void backAndForth(UCollationElements *iter)
 {
     /* Run through the iterator forwards and stick it into an array */
     int32_t index, o;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     int32_t orderLength = 0;
     int32_t *orders;
     orders= getOrders(iter, &orderLength);
@@ -329,7 +329,7 @@ int32_t* getOrders(UCollationElements *iter, int32_t *orderLength)
     int32_t size = 0;
     int32_t *temp;
     int32_t *orders =(int32_t*)malloc(sizeof(int32_t) * maxSize);
-    status= ZERO_ERROR;
+    status= U_ZERO_ERROR;
 
    
     
@@ -372,7 +372,7 @@ void assertEqual(UCollationElements *i1, UCollationElements *i2)
 {
     int32_t c1, c2;
     int32_t count = 0;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
 
     do
     {

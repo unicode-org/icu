@@ -61,7 +61,7 @@ read_ustring(FileStream *rb,
   /* Allocate space for the string */
   s = (UChar*) icu_malloc(sizeof(UChar) * (len + 1));
   if(s == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     return 0;
   }
 
@@ -234,7 +234,7 @@ parse(FileStream *f,
   
   /* Verify the byte ordering matches */
   if(bom != sBOM) {
-    *status = INVALID_FORMAT_ERROR;
+    *status = U_INVALID_FORMAT_ERROR;
     goto finish;
   }
 
@@ -286,7 +286,7 @@ parse(FileStream *f,
 
   /* Check if any errors occurred during reading */
   if(T_FileStream_error(f) != 0) {
-    *status = FILE_ACCESS_ERROR;
+    *status = U_FILE_ACCESS_ERROR;
   }
 
  finish:

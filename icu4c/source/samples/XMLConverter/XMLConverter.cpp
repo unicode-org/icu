@@ -118,7 +118,7 @@ void usage(char *  exeName)
 
 int main(int argc, char** argv)
 {
-    UErrorCode err = ZERO_ERROR;
+    UErrorCode err = U_ZERO_ERROR;
     char* inFileName; 
     char* outFileName;
     char * encName = NULL;
@@ -201,7 +201,7 @@ void convertFile(char* encName, char* iFN, char* oFN, UConverter* outConvrtr)
     char            rawBuf[RAWBUFSIZE];
     char*           pRawBuf     = NULL;
     unsigned long   bytesRead   = 0;
-	UErrorCode       err         = ZERO_ERROR;
+	UErrorCode       err         = U_ZERO_ERROR;
 	
     //get the file size
     //
@@ -356,7 +356,7 @@ void convertFile(char* encName, char* iFN, char* oFN, UConverter* outConvrtr)
     char *outBuf = new char[RAWBUFSIZE];
     int  outBufSize = RAWBUFSIZE;
     bool tFlush = false;
-    err = ZERO_ERROR;
+    err = U_ZERO_ERROR;
    
     if (verbose)
         fprintf(stdout, "processing the rest of the file \n");
@@ -382,7 +382,7 @@ void convertFile(char* encName, char* iFN, char* oFN, UConverter* outConvrtr)
              }
          }
 
-        if ((err != BUFFER_OVERFLOW_ERROR) && FAILURE(err) )
+        if ((err != U_BUFFER_OVERFLOW_ERROR) && FAILURE(err) )
         {
 #if defined(_DEBUG)
             fprintf (stderr, "Error transcoding rest of the file: (%s) %d\n", errorName(err), err);
@@ -391,7 +391,7 @@ void convertFile(char* encName, char* iFN, char* oFN, UConverter* outConvrtr)
             fclose(outFile);
             exit(1);
         }
-        if ((bytesRead > 0) && (err !=ZERO_ERROR))
+        if ((bytesRead > 0) && (err !=U_ZERO_ERROR))
         {
 	  if(verbose)
 	    fprintf(stderr, "err=%d * read %d bytes\n", err,bytesRead);
@@ -411,8 +411,8 @@ void convertFile(char* encName, char* iFN, char* oFN, UConverter* outConvrtr)
         }
         toRead = (RAWBUFSIZE > bytesLeft) ? bytesLeft : RAWBUFSIZE;
         if (toRead < RAWBUFSIZE) tFlush = true;
-        if (err == BUFFER_OVERFLOW_ERROR)
-            err = ZERO_ERROR;
+        if (err == U_BUFFER_OVERFLOW_ERROR)
+            err = U_ZERO_ERROR;
     }
     ucnv_close(inConvrtr);
     delete inEncodName;
@@ -506,7 +506,7 @@ long convertFirstLine( FILE* inF, char* inEncName,
     char            tempBuf[RAWBUFSIZE];
     int             bufLength       = 0;
     long            bytesNeeded     = 0;
-    UErrorCode      err             = ZERO_ERROR;
+    UErrorCode      err             = U_ZERO_ERROR;
 
     bytesNeeded = ucnv_convert("ascii",
 			inEncName,
@@ -516,9 +516,9 @@ long convertFirstLine( FILE* inF, char* inEncName,
 			bytesRead,
 			&err);
     
-    if (err == BUFFER_OVERFLOW_ERROR)
+    if (err == U_BUFFER_OVERFLOW_ERROR)
     {
-	    err = ZERO_ERROR;
+	    err = U_ZERO_ERROR;
     }
 	else if (FAILURE(err))
 	{
@@ -767,7 +767,7 @@ long convertFirstLine( FILE* inF, char* inEncName,
            fwrite( (void*) uBuf, 1, 1, outF);
         }
 
-        err = ZERO_ERROR;
+        err = U_ZERO_ERROR;
         long oneChar = 0;
         while ( *stringTwo != '\0' )
         {
@@ -779,9 +779,9 @@ long convertFirstLine( FILE* inF, char* inEncName,
                 (const char*) stringTwo,
 			    1,
 			    &err);
-            if (err == BUFFER_OVERFLOW_ERROR)
+            if (err == U_BUFFER_OVERFLOW_ERROR)
             {
-	            err = ZERO_ERROR;
+	            err = U_ZERO_ERROR;
             }
 	        else if (FAILURE(err))
 	        {
@@ -843,7 +843,7 @@ long convertFirstLine( FILE* inF, char* inEncName,
      //transcode this ascii type to the input encoding type  
      //and get the pointer to the end of first line in the input buffer 
      //
-     err = ZERO_ERROR;
+     err = U_ZERO_ERROR;
      endBytes = ucnv_convert(newInEncName,
      		"ascii",
 			(char*) newBuf,
@@ -852,9 +852,9 @@ long convertFirstLine( FILE* inF, char* inEncName,
 			bufHere,
 			&err);
     
-    if (err == BUFFER_OVERFLOW_ERROR)
+    if (err == U_BUFFER_OVERFLOW_ERROR)
     {
-	    err = ZERO_ERROR;
+	    err = U_ZERO_ERROR;
     }
 	else if (FAILURE(err))
 	{
@@ -914,7 +914,7 @@ int32_t  XMLUConvert( UConverter* inConverter,
         flush,
         err);
     
-    if (*err == INDEX_OUTOFBOUNDS_ERROR) *err = BUFFER_OVERFLOW_ERROR;
+    if (*err == U_INDEX_OUTOFBOUNDS_ERROR) *err = U_BUFFER_OVERFLOW_ERROR;
     
    // *inBufSize = inBufferAlias;
     return outBufferAlias - outBuffer;
@@ -962,13 +962,13 @@ void XMLU_fromCodepageToCodepage(    UConverter*    outConverter,
             flush,
             err);
         
-            /*INDEX_OUTOFBOUNDS_ERROR means that the output "CHUNK" is full
+            /*U_INDEX_OUTOFBOUNDS_ERROR means that the output "CHUNK" is full
             *we will require at least another loop (it's a recoverable error)
         */
         
-        if (SUCCESS(*err) || (*err == INDEX_OUTOFBOUNDS_ERROR))
+        if (SUCCESS(*err) || (*err == U_INDEX_OUTOFBOUNDS_ERROR))
         {
-            *err = ZERO_ERROR;
+            *err = U_ZERO_ERROR;
             out_chunk_alias2 = out_chunk;
             
             while ((out_chunk_alias2 != out_chunk_alias) && SUCCESS(*err))
@@ -1017,13 +1017,13 @@ void XMLU_fromCodepageToCodepage(    UConverter*    outConverter,
 		      flush,
 		      err);
 
-      /*INDEX_OUTOFBOUNDS_ERROR means that the output "CHUNK" is full
+      /*U_INDEX_OUTOFBOUNDS_ERROR means that the output "CHUNK" is full
        *we will require at least another loop (it's a recoverable error)
        */
 
-      if (SUCCESS (*err) || (*err == INDEX_OUTOFBOUNDS_ERROR))
+      if (SUCCESS (*err) || (*err == U_INDEX_OUTOFBOUNDS_ERROR))
 	{
-	  *err = ZERO_ERROR;
+	  *err = U_ZERO_ERROR;
 	  out_chunk_alias2 = out_chunk;
 
 	  while ((out_chunk_alias2 != out_chunk_alias) && SUCCESS (*err))

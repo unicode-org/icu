@@ -37,14 +37,14 @@ void IntlTestDecimalFormatSymbols::runIndexedTest( int32_t index, bool_t exec, c
  */
 void IntlTestDecimalFormatSymbols::testSymbols(char *par)
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
 
     DecimalFormatSymbols fr(Locale::FRENCH, status);
     if(FAILURE(status)) {
         errln("ERROR: Couldn't create French DecimalFormatSymbols");
     }
 
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     DecimalFormatSymbols en(Locale::ENGLISH, status);
     if(FAILURE(status)) {
         errln("ERROR: Couldn't create English DecimalFormatSymbols");
@@ -128,7 +128,7 @@ void IntlTestDecimalFormatSymbols::testSymbols(char *par)
         errln("ERROR: get/set Exponential failed");
     }
 
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     DecimalFormatSymbols foo(status);
     
     DecimalFormatSymbols bar(foo);

@@ -169,7 +169,7 @@ void TestTertiary( )
 {
     
     int32_t i;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     myCollation = ucol_open("fr_FR", &status);
     if(FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
@@ -187,7 +187,7 @@ void TestSecondary()
 {
     int32_t i,j, testAcuteSize;
     UCollationResult expected;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     myCollation = ucol_open("fr_FR", &status);
     if(FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
@@ -211,7 +211,7 @@ ucol_close(myCollation);
 void TestExtra()
 {
     int32_t i, j;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     myCollation = ucol_open("fr_FR", &status);
     if(FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));

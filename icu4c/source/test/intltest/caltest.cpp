@@ -148,7 +148,7 @@ void CalendarTest::runIndexedTest( int32_t index, bool_t exec, char* &name, char
 void
 CalendarTest::TestGenericAPI()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UnicodeString str;
 
     UDate when = date(90, Calendar::APRIL, 15);
@@ -337,7 +337,7 @@ CalendarTest::TestGenericAPI()
 void
 CalendarTest::TestRog()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     GregorianCalendar* gc = new GregorianCalendar(status);
     if (FAILURE(status)) { errln("Couldn't create GregorianCalendar"); return; }
     int32_t year = 1997, month = Calendar::APRIL, date = 1;
@@ -371,7 +371,7 @@ CalendarTest::TestDOW943()
 
 void CalendarTest::dowTest(bool_t lenient)
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     GregorianCalendar* cal = new GregorianCalendar(status);
     if (FAILURE(status)) { errln("Couldn't create GregorianCalendar"); return; }
     cal->set(1997, Calendar::AUGUST, 12);
@@ -399,7 +399,7 @@ void CalendarTest::dowTest(bool_t lenient)
 void
 CalendarTest::TestClonesUnique908()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     Calendar *c = Calendar::createInstance(status);
     if (FAILURE(status)) { errln("Calendar::createInstance failed"); return; }
     Calendar *d = (Calendar*) c->clone();
@@ -423,7 +423,7 @@ void
 CalendarTest::TestGregorianChange768()
 {
     bool_t b;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UnicodeString str;
     GregorianCalendar* c = new GregorianCalendar(status);
     if (FAILURE(status)) { errln("Couldn't create GregorianCalendar"); return; }
@@ -448,7 +448,7 @@ CalendarTest::TestGregorianChange768()
 void
 CalendarTest::TestDisambiguation765()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     Calendar *c = Calendar::createInstance(status);
     if (FAILURE(status)) { errln("Calendar::createInstance failed"); return; }
     c->setLenient(FALSE);
@@ -470,7 +470,7 @@ CalendarTest::TestDisambiguation765()
     c->set(Calendar::DAY_OF_WEEK_IN_MONTH, - 1);
     verify765("1997 last Tuesday in June = ", c, 1997, Calendar::JUNE, 24);
     // IllegalArgumentException e = null;
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     //try {
         c->clear();
         c->set(Calendar::YEAR, 1997);
@@ -495,7 +495,7 @@ CalendarTest::TestDisambiguation765()
     c->set(Calendar::MONTH, Calendar::JUNE);
     c->set(Calendar::WEEK_OF_MONTH, 5);
     verify765("1997 Tuesday in week 5 of June = ", c, 1997, Calendar::JULY, 1);
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     //try {
         c->clear();
         c->set(Calendar::YEAR, 1997);
@@ -542,7 +542,7 @@ void
 CalendarTest::verify765(const UnicodeString& msg, Calendar* c, int32_t year, int32_t month, int32_t day)
 {
     UnicodeString str;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     if (c->get(Calendar::YEAR, status) == year &&
         c->get(Calendar::MONTH, status) == month &&
         c->get(Calendar::DATE, status) == day) {
@@ -561,7 +561,7 @@ CalendarTest::verify765(const UnicodeString& msg, Calendar* c, int32_t year, int
 void
 CalendarTest::verify765(const UnicodeString& msg/*, IllegalArgumentException e*/, UErrorCode status)
 {
-    if (status != ILLEGAL_ARGUMENT_ERROR) errln("FAIL: No IllegalArgumentException for " + msg);
+    if (status != U_ILLEGAL_ARGUMENT_ERROR) errln("FAIL: No IllegalArgumentException for " + msg);
     else logln("PASS: " + msg + "IllegalArgument as expected");
 }
  
@@ -583,7 +583,7 @@ void
 CalendarTest::test4064654(int32_t yr, int32_t mo, int32_t dt, int32_t hr, int32_t mn, int32_t sc)
 {
     UDate date;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UnicodeString str;
     Calendar *gmtcal = Calendar::createInstance(status);
     if (FAILURE(status)) { errln("Calendar::createInstance failed"); return; }
@@ -627,7 +627,7 @@ void
 CalendarTest::TestAddSetOrder621()
 {
     UDate d = date(97, 4, 14, 13, 23, 45);
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     Calendar *cal = Calendar::createInstance(status);
     if (FAILURE(status)) { 
         errln("Calendar::createInstance failed"); 
@@ -702,7 +702,7 @@ void
 CalendarTest::TestAdd520()
 {
     int32_t y = 1997, m = Calendar::FEBRUARY, d = 1;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     GregorianCalendar *temp = new GregorianCalendar(y, m, d, status);
     if (FAILURE(status)) { errln("Couldn't create GregorianCalendar"); return; }
     check520(temp, y, m, d);
@@ -739,7 +739,7 @@ CalendarTest::TestAddRollExtensive()
 {
     int32_t maxlimit = 40;
     int32_t y = 1997, m = Calendar::FEBRUARY, d = 1, hr = 1, min = 1, sec = 0, ms = 0;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     GregorianCalendar *temp = new GregorianCalendar(y, m, d, status);
     if (FAILURE(status)) { errln("Couldn't create GregorianCalendar"); return; }
 
@@ -755,10 +755,10 @@ CalendarTest::TestAddRollExtensive()
     while (e < Calendar::FIELD_COUNT) {
         int32_t i;
         int32_t limit = maxlimit;
-        status = ZERO_ERROR;
+        status = U_ZERO_ERROR;
         for (i = 0; i < limit; i++) {
             temp->add(e, 1, status);
-            if (FAILURE(status)) { limit = i; status = ZERO_ERROR; }
+            if (FAILURE(status)) { limit = i; status = U_ZERO_ERROR; }
         }
         for (i = 0; i < limit; i++) {
             temp->add(e, -1, status);
@@ -774,10 +774,10 @@ CalendarTest::TestAddRollExtensive()
     while (e < Calendar::FIELD_COUNT) {
         int32_t i;
         int32_t limit = maxlimit;
-        status = ZERO_ERROR;
+        status = U_ZERO_ERROR;
         for (i = 0; i < limit; i++) {
             temp->roll(e, 1, status);
-            if (FAILURE(status)) { limit = i; status = ZERO_ERROR; }
+            if (FAILURE(status)) { limit = i; status = U_ZERO_ERROR; }
         }
         for (i = 0; i < limit; i++) {
             temp->roll(e, -1, status);
@@ -799,7 +799,7 @@ CalendarTest::check520(Calendar* c,
                         int32_t ms, Calendar::EDateFields field)
 
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     if (c->get(Calendar::YEAR, status) != y ||
         c->get(Calendar::MONTH, status) != m ||
         c->get(Calendar::DATE, status) != d ||
@@ -834,7 +834,7 @@ CalendarTest::check520(Calendar* c,
                         int32_t y, int32_t m, int32_t d)
 
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     if (c->get(Calendar::YEAR, status) != y ||
         c->get(Calendar::MONTH, status) != m ||
         c->get(Calendar::DATE, status) != d) {
@@ -862,7 +862,7 @@ void
 CalendarTest::TestFieldSet4781()
 {
     // try {
-        UErrorCode status = ZERO_ERROR;
+        UErrorCode status = U_ZERO_ERROR;
         GregorianCalendar *g = new GregorianCalendar(status);
         if (FAILURE(status)) { errln("Couldn't create GregorianCalendar"); return; }
         GregorianCalendar *g2 = new GregorianCalendar(status);
@@ -935,7 +935,7 @@ UnicodeString& CalendarTest::FILENAME = "tmp337.bin";
 void
 CalendarTest::TestSecondsZero121()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     Calendar *cal = new GregorianCalendar(status);
     if (FAILURE(status)) { errln("Couldn't create GregorianCalendar"); return; }
     cal->setTime(Calendar::getNow(), status);
@@ -960,7 +960,7 @@ CalendarTest::TestSecondsZero121()
 void
 CalendarTest::TestAddSetGet0610()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     {
         Calendar *calendar = new GregorianCalendar(status);
         if (FAILURE(status)) { errln("Couldn't create GregorianCalendar"); return; }
@@ -1007,7 +1007,7 @@ CalendarTest::TestAddSetGet0610()
 UnicodeString
 CalendarTest::value(Calendar* calendar)
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     return UnicodeString("") + (int32_t)calendar->get(Calendar::YEAR, status) +
         "/" + (int32_t)calendar->get(Calendar::MONTH, status) +
         "/" + (int32_t)calendar->get(Calendar::DATE, status) +
@@ -1024,7 +1024,7 @@ UnicodeString CalendarTest::EXPECTED_0610 = "1993/0/5";
 void
 CalendarTest::TestFields060()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     int32_t year = 1997;
     int32_t month = Calendar::OCTOBER;
     int32_t dDate = 22;
@@ -1064,7 +1064,7 @@ const int32_t CalendarTest::EXPECTED_FIELDS_length = sizeof(CalendarTest::EXPECT
 void
 CalendarTest::TestEpochStartFields()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     TimeZone *z = TimeZone::createDefault();
     Calendar *c = Calendar::createInstance(status);
     if (FAILURE(status)) { errln("Calendar::createInstance failed"); return; }
@@ -1120,7 +1120,7 @@ int32_t CalendarTest::EPOCH_FIELDS[] = {
 void
 CalendarTest::TestDOWProgression()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     Calendar *cal = new GregorianCalendar(1972, Calendar::OCTOBER, 26, status);
     if (FAILURE(status)) { errln("Couldn't create GregorianCalendar"); return; }
     marchByDelta(cal, 24);
@@ -1132,7 +1132,7 @@ CalendarTest::TestDOWProgression()
 void
 CalendarTest::marchByDelta(Calendar* cal, int32_t delta)
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     Calendar *cur = (Calendar*) cal->clone();
     int32_t initialDOW = cur->get(Calendar::DAY_OF_WEEK, status);
     if (FAILURE(status)) { errln("Calendar::get failed"); return; }

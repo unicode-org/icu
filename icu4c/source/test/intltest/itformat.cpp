@@ -55,7 +55,7 @@ void IntlTestFormat::runIndexedTest( int32_t index, bool_t exec, char* &name, ch
         TimeZone *tz = TimeZone::createTimeZone("PST");
         TimeZone::setDefault(*tz);
         delete tz;
-        UErrorCode status = ZERO_ERROR;
+        UErrorCode status = U_ZERO_ERROR;
         Locale::setDefault( Locale::ENGLISH, status );
         if (FAILURE(status)) {
             errln("itformat: couldn't set default Locale to ENGLISH!");
@@ -419,7 +419,7 @@ void IntlTestFormat::runIndexedTest( int32_t index, bool_t exec, char* &name, ch
     if (exec) {
         // restore saved Locale and TimeZone
         TimeZone::adoptDefault(saveDefaultTimeZone);
-        UErrorCode status = ZERO_ERROR;
+        UErrorCode status = U_ZERO_ERROR;
         Locale::setDefault( saveDefaultLocale, status );
         if (FAILURE(status)) {
             errln("itformat: couldn't re-set default Locale!");

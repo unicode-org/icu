@@ -127,7 +127,7 @@ void setNuConvTestName(const char *codepage, const char *direction)
 bool_t testConvertFromU( const UChar *source, int sourceLen,  const char *expect, int expectLen, 
 			    const char *codepage, int32_t *expectOffsets)
 {
-	UErrorCode status = ZERO_ERROR;
+	UErrorCode status = U_ZERO_ERROR;
 	UConverter *conv = 0;
 	char	junkout[NEW_MAX_BUFFER]; /* FIX */
 	int32_t	junokout[NEW_MAX_BUFFER]; /* FIX */
@@ -190,7 +190,7 @@ bool_t testConvertFromU( const UChar *source, int sourceLen,  const char *expect
 	    log_verbose("calling fromUnicode @ SOURCE:%08lx to %08lx  TARGET: %08lx to %08lx, flush=%s\n", src,sourceLimit, targ,end, doFlush?"TRUE":"FALSE");
 	    
 
-	    status = ZERO_ERROR;
+	    status = U_ZERO_ERROR;
  
 	    ucnv_fromUnicode (conv,
 			      &targ,
@@ -201,7 +201,7 @@ bool_t testConvertFromU( const UChar *source, int sourceLen,  const char *expect
 			      doFlush, /* flush if we're at the end of the input data */
 			      &status);
 	
-	  } while ( (status == INDEX_OUTOFBOUNDS_ERROR) || (sourceLimit < realSourceEnd) );
+	  } while ( (status == U_INDEX_OUTOFBOUNDS_ERROR) || (sourceLimit < realSourceEnd) );
 	    
 	if(FAILURE(status))
 	  {
@@ -269,7 +269,7 @@ bool_t testConvertFromU( const UChar *source, int sourceLen,  const char *expect
 bool_t testConvertToU( const char *source, int sourcelen, const UChar *expect, int expectlen, 
 		       const char *codepage, int32_t *expectOffsets)
 {
-	UErrorCode status = ZERO_ERROR;
+	UErrorCode status = U_ZERO_ERROR;
 	UConverter *conv = 0;
 	UChar	junkout[NEW_MAX_BUFFER]; /* FIX */
 	int32_t	junokout[NEW_MAX_BUFFER]; /* FIX */
@@ -333,7 +333,7 @@ bool_t testConvertToU( const char *source, int sourcelen, const UChar *expect, i
 
 	    /* oldTarg = targ; */
 
-	    status = ZERO_ERROR;
+	    status = U_ZERO_ERROR;
 
 	    ucnv_toUnicode (conv,
 			    &targ,
@@ -346,7 +346,7 @@ bool_t testConvertToU( const char *source, int sourcelen, const UChar *expect, i
 
 	    /*	    offs += (targ-oldTarg); */
 
-	  } while ( (status == INDEX_OUTOFBOUNDS_ERROR) || (srcLimit < realSourceEnd) ); /* while we just need another buffer */
+	  } while ( (status == U_INDEX_OUTOFBOUNDS_ERROR) || (srcLimit < realSourceEnd) ); /* while we just need another buffer */
 
 	if(FAILURE(status))
 	{
@@ -536,7 +536,7 @@ void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
 void TestConverterTypesAndStarters()
 {
 	UConverter* myConverter[3];
-	UErrorCode err = ZERO_ERROR;
+	UErrorCode err = U_ZERO_ERROR;
 	bool_t mystarters[256];
 	int i;
 	

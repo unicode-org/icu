@@ -218,7 +218,7 @@ UnicodeString&
 umsg_itos(int32_t i,
       UnicodeString& string)
 {
-  UErrorCode status = ZERO_ERROR;
+  UErrorCode status = U_ZERO_ERROR;
   NumberFormat *myFormat = umsg_getNumberFormat(status);
   
   if(FAILURE(status))
@@ -324,7 +324,7 @@ u_formatMessage(    const    char        *locale,
       int32_t argNum = umsg_stoi(pattern + bracePos + 1, *status);
 
       if(argNum >= MAX_ARGS) {
-        *status = INTERNAL_PROGRAM_ERROR;
+        *status = U_INTERNAL_PROGRAM_ERROR;
         return -1;
       }
       
@@ -350,7 +350,7 @@ u_formatMessage(    const    char        *locale,
 
   // detect any unmatched braces in the pattern
   if(braceStack == 0 && part != 0) {
-    *status = INVALID_FORMAT_ERROR;
+    *status = U_INVALID_FORMAT_ERROR;
     return -1;
   }
 

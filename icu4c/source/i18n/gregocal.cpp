@@ -768,7 +768,7 @@ GregorianCalendar::computeTime(UErrorCode& status)
         return;
 
     if (! isLenient() && ! validateFields()) {
-        status = ILLEGAL_ARGUMENT_ERROR;
+        status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
 
@@ -785,7 +785,7 @@ GregorianCalendar::computeTime(UErrorCode& status)
             year = 1 - year;
         // Even in lenient mode we disallow ERA values other than AD & BC
         else if (era != AD) {
-            status = ILLEGAL_ARGUMENT_ERROR;
+            status = U_ILLEGAL_ARGUMENT_ERROR;
             return;
         }
     }
@@ -1309,7 +1309,7 @@ GregorianCalendar::add(EDateFields field, int32_t amount, UErrorCode& status)
         case ZONE_OFFSET:
         case DST_OFFSET:
         default:
-            status = ILLEGAL_ARGUMENT_ERROR;
+            status = U_ILLEGAL_ARGUMENT_ERROR;
             return;
         }
 
@@ -1602,7 +1602,7 @@ GregorianCalendar::roll(EDateFields field, int32_t amount, UErrorCode& status)
     case ZONE_OFFSET:
     case DST_OFFSET:
     default:
-        status = ILLEGAL_ARGUMENT_ERROR;
+        status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
         // These fields cannot be rolled
     }
@@ -1681,7 +1681,7 @@ GregorianCalendar::getActualMaximum(EDateFields field) const
      * that we permit it, rather than complicating the code to handle such
      * intricacies. - liu 8/20/98 */
 
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
 
     switch (field) {
         // we have functions that enable us to fast-path number of days in month

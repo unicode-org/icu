@@ -77,7 +77,6 @@ public:
     static const UDate LATEST_SUPPORTED_MILLIS;
 
 protected:
-    const char* errorName(UErrorCode code);
     bool_t failure(UErrorCode status, const char* msg);
 };
 

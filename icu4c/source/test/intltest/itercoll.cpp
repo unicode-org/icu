@@ -32,7 +32,7 @@
 
 #define ARRAY_LENGTH(array) (sizeof array / sizeof array[0])
 
-static UErrorCode status = ZERO_ERROR;
+static UErrorCode status = U_ZERO_ERROR;
 
 const UnicodeString CollationIteratorTest::test1 = "What subset of all possible test cases?";
 const UnicodeString CollationIteratorTest::test2 = "has the highest probability of detecting";
@@ -55,7 +55,7 @@ CollationIteratorTest::~CollationIteratorTest()
  */
 void CollationIteratorTest::TestPrevious(char *par)
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     CollationElementIterator *iter = en_us->createCollationElementIterator(test1);
 
     // A basic test to see if it's working at all
@@ -139,7 +139,7 @@ void CollationIteratorTest::TestOffset(char *par)
 
     // Now set the offset back to the beginning and see if it works
     CollationElementIterator *pristine = en_us->createCollationElementIterator(test1);
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
 
     iter->setOffset(0, status);
 
@@ -166,7 +166,7 @@ void CollationIteratorTest::TestSetText(char *par)
 {
     CollationElementIterator *iter1 = en_us->createCollationElementIterator(test1);
     CollationElementIterator *iter2 = en_us->createCollationElementIterator(test2);
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
 
     // Run through the second iterator just to exercise it
     int32_t c = iter2->next(status);
@@ -238,7 +238,7 @@ void CollationIteratorTest::TestMaxExpansion(char *par)
  */
 void CollationIteratorTest::TestClearBuffers(char *par)
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     RuleBasedCollator *c = NULL;
     c = new RuleBasedCollator("< a < b < c & ab = d", status);
 
@@ -318,7 +318,7 @@ void CollationIteratorTest::backAndForth(CollationElementIterator &iter)
     // Run through the iterator forwards and stick it into an array
     int32_t orderLength = 0;
     int32_t *orders = getOrders(iter, orderLength);
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
 
     // Now go through it backwards and make sure we get the same values
     int32_t index = orderLength;
@@ -384,7 +384,7 @@ void CollationIteratorTest::backAndForth(CollationElementIterator &iter)
  */
 void CollationIteratorTest::verifyExpansion(UnicodeString rules, ExpansionRecord tests[], int32_t testCount)
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     RuleBasedCollator *coll = NULL;
     coll = new RuleBasedCollator(rules, status);
 
@@ -457,7 +457,7 @@ int32_t *CollationIteratorTest::getOrders(CollationElementIterator &iter, int32_
     int32_t maxSize = 100;
     int32_t size = 0;
     int32_t *orders = new int32_t[maxSize];
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
 
     int32_t order;
     while ((order = iter.next(status)) != CollationElementIterator::NULLORDER)
@@ -495,7 +495,7 @@ int32_t *CollationIteratorTest::getOrders(CollationElementIterator &iter, int32_
 UnicodeString &CollationIteratorTest::orderString(CollationElementIterator &iter, UnicodeString &target)
 {
     int32_t order;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
 
     while ((order = iter.next(status)) != CollationElementIterator::NULLORDER)
     {
@@ -510,7 +510,7 @@ UnicodeString &CollationIteratorTest::orderString(CollationElementIterator &iter
 void CollationIteratorTest::assertEqual(CollationElementIterator &i1, CollationElementIterator &i2)
 {
     int32_t c1, c2, count = 0;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
 
     do
     {

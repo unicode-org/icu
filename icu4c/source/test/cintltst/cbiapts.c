@@ -41,13 +41,13 @@ void addBrkIterAPITest(TestNode** root)
 
 void TestBreakIteratorCAPI()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UBreakIterator *word, *sentence, *line, *character, *b;
     UChar text[50];
     UTextOffset start,pos,end,to;
     int32_t count = 0;
     u_uastrcpy(text, "He's from Africa. ""Mr. Livingston, I presume?"" Yeah");
-    status  = ZERO_ERROR;
+    status  = U_ZERO_ERROR;
 
 /*test ubrk_open()*/
     log_verbose("\nTesting BreakIterator open functions\n");

@@ -57,7 +57,7 @@ addComplexTest(TestNode** root) {
 extern void
 doBiDiTest() {
     UBiDi *pBiDi, *pLine=NULL;
-    UErrorCode errorCode=ZERO_ERROR;
+    UErrorCode errorCode=U_ZERO_ERROR;
 
     log_verbose("*** bidi regression test ***\n");
 
@@ -92,7 +92,7 @@ doTests(UBiDi *pBiDi, UBiDi *pLine) {
     UBiDiLevel paraLevel;
 
     for(i=0; i<bidiTestCount; ++i) {
-        errorCode=ZERO_ERROR;
+        errorCode=U_ZERO_ERROR;
         s=getStringFromDirProps(tests[i].text, tests[i].length);
         paraLevel=tests[i].paraLevel;
         ubidi_setPara(pBiDi, s, -1, paraLevel, NULL, &errorCode);
@@ -126,7 +126,7 @@ doTest(UBiDi *pBiDi, int testNumber, BiDiTestData *test, UTextOffset lineStart) 
     const UBiDiLevel *levels=test->levels;
     const uint8_t *visualMap=test->visualMap;
     UTextOffset i, len=ubidi_getLength(pBiDi), logicalIndex, runCount;
-    UErrorCode errorCode=ZERO_ERROR;
+    UErrorCode errorCode=U_ZERO_ERROR;
     UBiDiLevel level, level2;
 
     testReordering(pBiDi, testNumber);
@@ -212,7 +212,7 @@ testReordering(UBiDi *pBiDi, int testNumber) {
     UTextOffset
         logicalMap1[200], logicalMap2[200], logicalMap3[200],
         visualMap1[200], visualMap2[200], visualMap3[200], visualMap4[200];
-    UErrorCode errorCode=ZERO_ERROR;
+    UErrorCode errorCode=U_ZERO_ERROR;
     UBiDiLevel levels[200];
     UTextOffset i, length=ubidi_getLength(pBiDi);
     UTextOffset runCount, visualIndex, logicalStart, runLength;

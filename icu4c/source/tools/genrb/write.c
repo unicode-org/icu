@@ -187,7 +187,7 @@ rb_write(FileStream *f,
       break;
 
     case eEmpty:
-      *status = INTERNAL_PROGRAM_ERROR;
+      *status = U_INTERNAL_PROGRAM_ERROR;
       setErrorText("Unexpected empty item found");
       goto finish;
       /*break;*/
@@ -199,7 +199,7 @@ rb_write(FileStream *f,
 
   /* Check if any errors occurred during writing */
   if(T_FileStream_error(f) != 0) {
-    *status = FILE_ACCESS_ERROR;
+    *status = U_FILE_ACCESS_ERROR;
   }
 
  finish:
