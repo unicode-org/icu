@@ -2702,11 +2702,11 @@ UnicodeSet::applyPropertyAlias(const UnicodeString& prop,
                     return *this;
                 }
                 break;
+            default:
+                // p is a non-binary, non-enumerated property that we
+                // don't support (yet).
+                FAIL(ec);
             }
-
-            // p is a non-binary, non-enumerated property that we
-            // don't support (yet).
-            FAIL(ec);
         }
     }
 

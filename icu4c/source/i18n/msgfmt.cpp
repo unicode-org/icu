@@ -170,6 +170,8 @@ static UnicodeString& itos(int32_t i, UnicodeString& appendTo) {
 MessageFormat::MessageFormat(const UnicodeString& pattern,
                              UErrorCode& success)
 : fLocale(Locale::getDefault()),  // Uses the default locale
+  formatAliases(NULL),
+  formatAliasesCapacity(0),
   subformats(NULL),
   subformatCount(0),
   subformatCapacity(0),
@@ -177,8 +179,7 @@ MessageFormat::MessageFormat(const UnicodeString& pattern,
   argTypeCount(0),
   argTypeCapacity(0),
   defaultNumberFormat(NULL),
-  defaultDateFormat(NULL),
-  formatAliases(NULL)
+  defaultDateFormat(NULL)
 {
     if (!allocateSubformats(DEFAULT_INITIAL_CAPACITY) ||
         !allocateArgTypes(DEFAULT_INITIAL_CAPACITY)) {
@@ -192,6 +193,8 @@ MessageFormat::MessageFormat(const UnicodeString& pattern,
                              const Locale& newLocale,
                              UErrorCode& success)
 : fLocale(newLocale),
+  formatAliases(NULL),
+  formatAliasesCapacity(0),
   subformats(NULL),
   subformatCount(0),
   subformatCapacity(0),
@@ -199,8 +202,7 @@ MessageFormat::MessageFormat(const UnicodeString& pattern,
   argTypeCount(0),
   argTypeCapacity(0),
   defaultNumberFormat(NULL),
-  defaultDateFormat(NULL),
-  formatAliases(NULL)
+  defaultDateFormat(NULL)
 {
     if (!allocateSubformats(DEFAULT_INITIAL_CAPACITY) ||
         !allocateArgTypes(DEFAULT_INITIAL_CAPACITY)) {
@@ -215,6 +217,8 @@ MessageFormat::MessageFormat(const UnicodeString& pattern,
                              UParseError& parseError,
                              UErrorCode& success)
 : fLocale(newLocale),
+  formatAliases(NULL),
+  formatAliasesCapacity(0),
   subformats(NULL),
   subformatCount(0),
   subformatCapacity(0),
@@ -222,8 +226,7 @@ MessageFormat::MessageFormat(const UnicodeString& pattern,
   argTypeCount(0),
   argTypeCapacity(0),
   defaultNumberFormat(NULL),
-  defaultDateFormat(NULL),
-  formatAliases(NULL)
+  defaultDateFormat(NULL)
 {
     if (!allocateSubformats(DEFAULT_INITIAL_CAPACITY) ||
         !allocateArgTypes(DEFAULT_INITIAL_CAPACITY)) {
@@ -235,6 +238,8 @@ MessageFormat::MessageFormat(const UnicodeString& pattern,
 
 MessageFormat::MessageFormat(const MessageFormat& that)
 : Format(that),
+  formatAliases(NULL),
+  formatAliasesCapacity(0),
   subformats(NULL),
   subformatCount(0),
   subformatCapacity(0),
@@ -242,8 +247,7 @@ MessageFormat::MessageFormat(const MessageFormat& that)
   argTypeCount(0),
   argTypeCapacity(0),
   defaultNumberFormat(NULL),
-  defaultDateFormat(NULL),
-  formatAliases(NULL)
+  defaultDateFormat(NULL)
 {
     *this = that;
 }
@@ -1231,6 +1235,7 @@ MessageFormat::makeFormat(int32_t formatNumber,
         break;
 
     default:
+        argType = Formattable::kString;
         ec = U_ILLEGAL_ARGUMENT_ERROR;
         break;
     }
