@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Utility.java,v $
- * $Date: 2003/09/24 22:06:27 $
- * $Revision: 1.44 $
+ * $Date: 2003/09/29 23:18:03 $
+ * $Revision: 1.45 $
  *
  *****************************************************************************************
  */
@@ -800,6 +800,9 @@ public final class Utility {
                 }
                 ++offset;
             }
+            if (result < 0 || result >= 0x110000) {
+                return -1;
+            }
             offset16[0] = offset;
             return result;
         }
@@ -911,7 +914,7 @@ public final class Utility {
             }
             if (result < 0 || result >= 0x110000) {
                 chars.setPos(save);
-                result = -1;
+                return -1;
             }           
             return result;
         }
