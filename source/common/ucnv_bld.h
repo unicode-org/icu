@@ -140,6 +140,7 @@ UConverterSharedData;
 
 
 /*Defines a UConverter, the lightweight mutable part the user sees */
+U_CFUNC
 struct UConverter
   {
     int32_t toUnicodeStatus;	/*Used to internalize stream status information */
