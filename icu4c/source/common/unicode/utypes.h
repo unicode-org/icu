@@ -383,6 +383,38 @@ enum UErrorCode {
     U_CE_NOT_FOUND_ERROR      = 21,     /**< Currently used only while setting variable top, but can be used generally */
     U_PRIMARY_TOO_LONG_ERROR  = 22,     /**< User tried to set variable top to a primary that is longer than two bytes */
     U_STATE_TOO_OLD_ERROR     = 23,     /**< ICU cannot construct a service from this state, as it is no longer supported */
+    /* The errorcode are for Number format C API */
+    U_UNSUPPORTED_ATTRIBUTE   = 24,
+    U_UNSUPPORTED_PROPERTY    = 25,
+    /* 
+     * the error code range 0x10000 0x10100 are reserved for Transliterator
+     */
+    U_PARSE_ERROR_BASE = 0x10000,      /**< start of Transliterator specific parse Errors */
+    U_BAD_VARIABLE_DEFINITION,
+    U_MALFORMED_RULE,
+    U_MALFORMED_SET,
+    U_MALFORMED_SYMBOL_REFERENCE,
+    U_MALFORMED_UNICODE_ESCAPE,
+    U_MALFORMED_VARIABLE_DEFINITION,
+    U_MALFORMED_VARIABLE_REFERENCE,
+    U_MISMATCHED_SEGMENT_DELIMITERS,
+    U_MISPLACED_ANCHOR_START,
+    U_MISPLACED_CURSOR_OFFSET,
+    U_MISPLACED_QUANTIFIER,
+    U_MISSING_OPERATOR,
+    U_MISSING_SEGMENT_CLOSE,
+    U_MULTIPLE_ANTE_CONTEXTS,
+    U_MULTIPLE_CURSORS,
+    U_MULTIPLE_POST_CONTEXTS,
+    U_TRAILING_BACKSLASH,
+    U_UNDEFINED_SEGMENT_REFERENCE,
+    U_UNDEFINED_VARIABLE,
+    U_UNQUOTED_SPECIAL,
+    U_UNTERMINATED_QUOTE,
+    U_PARSE_ERROR_END,              /**< end of Transliterator specific parse Errors */
+    /*
+     * End Transliterator parse Errors
+     */
     U_ERROR_LIMIT                       /**< This must always be the last value to indicate the limit for UErrorCode (last error code +1) */
 };
 
