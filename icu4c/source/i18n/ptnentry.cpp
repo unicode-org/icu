@@ -143,34 +143,34 @@ void PatternEntry::addToBuffer(UnicodeString& toAddTo,
   if (showWhiteSpace && toAddTo.length() > 0)
     // Adds new line before each primary strength entry.
     if (strength == Collator::PRIMARY || lastEntry != NULL)
-      toAddTo += 0x000A/*'\n'*/;
+      toAddTo += (UChar)0x000A/*'\n'*/;
     else
-      toAddTo += 0x0020/*' '*/;
+      toAddTo += (UChar)0x0020/*' '*/;
   if (lastEntry != NULL) {
-    toAddTo += 0x0026/*'&'*/;
+    toAddTo += (UChar)0x0026/*'&'*/;
     if (showWhiteSpace)
-      toAddTo += 0x0020/*' '*/;
+      toAddTo += (UChar)0x0020/*' '*/;
     lastEntry->appendQuotedChars(toAddTo);
     appendQuotedExtension(toAddTo);
     if (showWhiteSpace)
-      toAddTo += 0x0020/*' '*/;
+      toAddTo += (UChar)0x0020/*' '*/;
   }
   // Check the strength for the correct symbol to append
   switch (strength) {
-  case Collator::IDENTICAL:   toAddTo += 0x003D/*'='*/; break;
-  case Collator::TERTIARY:    toAddTo += 0x002C/*','*/; break;
-  case Collator::SECONDARY:   toAddTo += 0x003B/*';'*/; break;
-  case Collator::PRIMARY:     toAddTo += 0x003C/*'<'*/; break;
-  case PatternEntry::RESET:   toAddTo += 0x0026/*'&'*/; break;
-  case PatternEntry::UNSET:   toAddTo += 0x003F/*'?'*/; break;
+  case Collator::IDENTICAL:   toAddTo += (UChar)0x003D/*'='*/; break;
+  case Collator::TERTIARY:    toAddTo += (UChar)0x002C/*','*/; break;
+  case Collator::SECONDARY:   toAddTo += (UChar)0x003B/*';'*/; break;
+  case Collator::PRIMARY:     toAddTo += (UChar)0x003C/*'<'*/; break;
+  case PatternEntry::RESET:   toAddTo += (UChar)0x0026/*'&'*/; break;
+  case PatternEntry::UNSET:   toAddTo += (UChar)0x003F/*'?'*/; break;
   }
   if (showWhiteSpace)
-    toAddTo += 0x0020/*' '*/;
+    toAddTo += (UChar)0x0020/*' '*/;
   appendQuoted(chars,toAddTo);
   // If there's an expending char and needs to be shown, 
   // append that after the entry
   if (showExtension && extension.length() != 0) {
-    toAddTo += 0x002F/*'/'*/;
+    toAddTo += (UChar)0x002F/*'/'*/;
     appendQuoted(extension,toAddTo);
   }
 }
@@ -181,32 +181,32 @@ void PatternEntry::appendQuoted(const UnicodeString& chars, UnicodeString& toAdd
   UChar ch = chars[T_INT32(0)];
   if (Unicode::isSpaceChar(ch)) {
     inQuote = TRUE;
-    toAddTo += 0x0027/*'\''*/;
+    toAddTo += (UChar)0x0027/*'\''*/;
   } else if (isSpecialChar(ch)) {
     inQuote = TRUE;
-    toAddTo += 0x0027/*'\''*/;
+    toAddTo += (UChar)0x0027/*'\''*/;
   } else {
     switch (ch) {
     case 0x0010: case 0x000C/*'\f'*/: 
     case 0x000D/*'\r'*/: case 0x0009/*'\t'*/: 
     case 0x000A/*'\n'*/: case 0x0040/*'@'*/:
       inQuote = TRUE;
-      toAddTo += 0x0027/*'\''*/;
+      toAddTo += (UChar)0x0027/*'\''*/;
       break;
     case 0x0027/*'\''*/:
       inQuote = TRUE;
-      toAddTo += 0x0027/*'\''*/;
+      toAddTo += (UChar)0x0027/*'\''*/;
       break;
     default:
       if (inQuote) {
-    inQuote = FALSE; toAddTo += 0x0027/*'\''*/;
+        inQuote = FALSE; toAddTo += (UChar)0x0027/*'\''*/;
       }
       break;
     }
   }
   toAddTo += chars;
   if (inQuote)
-    toAddTo += 0x0027/*'\''*/;
+    toAddTo += (UChar)0x0027/*'\''*/;
 }
 
 PatternEntry::Parser::Parser(const UnicodeString &pattern, 

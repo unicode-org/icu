@@ -61,16 +61,16 @@ utf8_countTrailBytes[256]={
     3, 3, 3, 3, 3, 3, 3, 3,
     4, 4, 4, 4,
     5, 5,
-    6, 6    /* illegal sequences with lead bytes 0xfe and 0xff */
+    0, 0    /* illegal bytes 0xfe and 0xff */
 };
 
 static UChar32
 utf8_minRegular[4]={ 0, 0x80, 0x800, 0x10000 };
 
 static UChar32
-utf8_errorValue[7]={
+utf8_errorValue[6]={
     UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_2, UTF_ERROR_VALUE, 0x10ffff,
-    0x3ffffff, 0x7fffffff, -1 /* 0xffffffff in a signed value! */
+    0x3ffffff, 0x7fffffff
 };
 
 U_CAPI UChar32 U_EXPORT2
@@ -81,13 +81,9 @@ utf8_nextCharSafeBody(const uint8_t *s, UTextOffset *pi, UTextOffset length, UCh
         uint8_t trail, illegal=0;
 
         UTF8_MASK_LEAD_BYTE((c), count);
-        /* count==0 for illegally leading trail bytes */
-        /* count==6 for illegal pseudo-lead bytes 0xfe, 0xff */
+        /* count==0 for illegally leading trail bytes and the illegal bytes 0xfe and 0xff */
         switch(count) {
         /* each branch falls through to the next one */
-        case 6:
-            ++i;
-            illegal=1;
         case 5:
             trail=s[(i)++];
             (c)=((c)<<6)|(trail&0x3f);
@@ -148,11 +144,12 @@ utf8_nextCharSafeBody(const uint8_t *s, UTextOffset *pi, UTextOffset length, UCh
         }
     } else /* too few bytes left */ {
         /* error handling */
-        c=utf8_errorValue[length-i];
+        UTextOffset i0=i;
         /* don't just set (i)=(length) in case there is an illegal sequence */
         while((i)<(length) && UTF8_IS_TRAIL(s[i])) {
             ++(i);
         }
+        c=utf8_errorValue[i-i0];
     }
     *pi=i;
     return c;
@@ -185,11 +182,11 @@ utf8_appendCharSafeBody(uint8_t *s, UTextOffset i, UTextOffset length, UChar32 c
     /* c>0x10ffff or not enough space, write an error value */
     length-=i;
     if(length>0) {
-        if(length>2) {
-            length=2;
+        if(length>3) {
+            length=3;
         }
         s+=i;
-        c=utf8_errorValue[length];
+        c=utf8_errorValue[length-1];
         UTF8_APPEND_CHAR_SAFE(s, i, length, c);
     }
     return i;
@@ -204,7 +201,7 @@ utf8_prevCharSafeBody(const uint8_t *s, UTextOffset *pi, UChar32 c, bool_t stric
         c&=0x3f;
         while(i>0 && count<6) {
             b=s[--i];
-            if(b&0x80) {
+            if((uint8_t)(b-0x80)<0x7e) { /* 0x80<=b<0xfe */
                 if(b&0x40) {
                     /* lead byte */
                     uint8_t shouldCount=UTF8_COUNT_TRAIL_BYTES(b);
@@ -254,9 +251,9 @@ utf8_back1SafeBody(const uint8_t *s, UTextOffset i) {
     UTextOffset I=i, Z;
     uint8_t b;
 
-    /* read at most the 7 bytes s[Z] to s[i], inclusively */
-    if(I>6) {
-        Z=I-6;
+    /* read at most the 6 bytes s[Z] to s[i], inclusively */
+    if(I>5) {
+        Z=I-5;
     } else {
         Z=0;
     }
@@ -264,7 +261,7 @@ utf8_back1SafeBody(const uint8_t *s, UTextOffset i) {
     /* return I if the sequence starting there is long enough to include i */
     for(;;) {
         b=s[I];
-        if(!(b&0x80)) {
+        if((uint8_t)(b-0x80)>=0x7e) { /* not 0x80<=b<0xfe */
             break;
         } else if(b>=0xc0) {
             if(UTF8_COUNT_TRAIL_BYTES(b)>=(i-I)) {

@@ -327,7 +327,7 @@ ChoiceFormat::toPattern(UnicodeString& result) const
     result.remove();
     for (int32_t i = 0; i < fCount; ++i) {
         if (i != 0) {
-            result += 0x007C /*'|'*/;
+            result += (UChar)0x007C /*'|'*/;
         }
         // choose based upon which has less precision
         // approximate that by choosing the closest one to an integer.
@@ -342,29 +342,29 @@ ChoiceFormat::toPattern(UnicodeString& result) const
         if (tryLessOrEqual < tryLess && 
             ! (uprv_isNaN(tryLessOrEqual) || uprv_isNaN(tryLess))) {
             result += dtos(fChoiceLimits[i], buf, status);
-            result += 0x0023 /*'#'*/;
+            result += (UChar)0x0023 /*'#'*/;
         } 
         else {
             if (uprv_isPositiveInfinity(fChoiceLimits[i])) {
-                result += 0x221E;
+                result += (UChar32)0x221E;
             } else if (uprv_isNegativeInfinity(fChoiceLimits[i])) {
-                result += 0x002D /*'-'*/;
-                result += 0x221E;
+                result += (UChar)0x002D /*'-'*/;
+                result += (UChar32)0x221E;
             } else {
                 result += dtos(less, buf, status);
             }
-            result += 0x003C /*'<'*/;
+            result += (UChar)0x003C /*'<'*/;
         }
         // Append fChoiceFormats[i], using quotes if there are special characters.
         // Single quotes themselves must be escaped in either case.
         UnicodeString text = fChoiceFormats[i];
-        bool_t needQuote = text.indexOf(0x003C /*'<'*/) >= 0
-            || text.indexOf(0x0023 /*'#'*/) >= 0
-            || text.indexOf(0x2264) >= 0
-            || text.indexOf(0x007C /*'|'*/) >= 0;
+        bool_t needQuote = text.indexOf((UChar)0x003C /*'<'*/) >= 0
+            || text.indexOf((UChar)0x0023 /*'#'*/) >= 0
+            || text.indexOf((UChar32)0x2264) >= 0
+            || text.indexOf((UChar)0x007C /*'|'*/) >= 0;
         if (needQuote) 
-            result += 0x0027 /*'\''*/;
-        if (text.indexOf(0x0027 /*'\''*/) < 0) 
+            result += (UChar)0x0027 /*'\''*/;
+        if (text.indexOf((UChar)0x0027 /*'\''*/) < 0) 
             result += text;
         else {
             for (int j = 0; j < text.length(); ++j) {
@@ -375,7 +375,7 @@ ChoiceFormat::toPattern(UnicodeString& result) const
             }
         }
         if (needQuote) 
-            result += 0x0027 /*'\''*/;
+            result += (UChar)0x0027 /*'\''*/;
     }
     
     return result;

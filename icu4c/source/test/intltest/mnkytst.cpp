@@ -123,7 +123,7 @@ void CollationMonkeyTest::TestCollationKey( char* par )
 
     UnicodeString msg;
     UnicodeString addOne(subs);
-    addOne += 0xE000;
+    addOne += (UChar32)0xE000;
 
     myCollator->getCollationKey(subs, collationKey1, status1);
     myCollator->getCollationKey(addOne, collationKey2, status2);
@@ -189,7 +189,7 @@ CollationMonkeyTest::TestCompare(char* par)
 
     UnicodeString msg;
     UnicodeString addOne(subs);
-    addOne += 0xE000;
+    addOne += (UChar32)0xE000;
 
     result = myCollator->compare(subs, addOne);
     if (result != -1)

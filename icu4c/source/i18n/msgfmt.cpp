@@ -293,7 +293,7 @@ MessageFormat::toPattern(UnicodeString& result) const
   for (int i = 0; i <= fMaxOffset; ++i) {
     copyAndFixQuotes(fPattern, lastOffset, fOffsets[i], result);
     lastOffset = fOffsets[i];
-    result += 0x007B /*'{'*/;
+    result += (UChar)0x007B /*'{'*/;
     // {sfb} check this later
     //result += (UChar) (fArgumentNumbers[i] + '0');
     UnicodeString temp;
@@ -400,7 +400,7 @@ MessageFormat::toPattern(UnicodeString& result) const
     else {
       //result += ", unknown";
     }
-    result += 0x007D /*'}'*/;
+    result += (UChar)0x007D /*'}'*/;
   }
   copyAndFixQuotes(fPattern, lastOffset, fPattern.length(), result);
   return result;
