@@ -115,6 +115,9 @@ U_NAMESPACE_BEGIN
  *                                             iter.getMatchLength());
  * }
  * </code></pre>
+ * <p>
+ * Note, StringSearch is not to be subclassed.
+ * </p>
  * @see SearchIterator
  * @see RuleBasedCollator
  * @since ICU 2.0
