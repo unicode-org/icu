@@ -139,9 +139,7 @@ writeObjRules(UPKGOptions *o,  FileStream *makefile, CharList **objects)
         parents = pkg_appendToList(parents, NULL, uprv_strdup(infiles->str));
 
         /* make up commands.. */
-        sprintf(stanza, "$(INVOKE) $(GENCCODE) -n $(CNAME) -d $(TEMP_DIR) %s%s $<",
-                (o->version)?"-r ":"",
-                o->version?o->version:"");
+        sprintf(stanza, "$(INVOKE) $(GENCCODE) -n $(ENTRYPOINT) -d $(TEMP_DIR) <");
         commands = pkg_appendToList(commands, NULL, uprv_strdup(stanza));
 
         sprintf(stanza, "$(COMPILE.c) -o $@ $(TEMP_DIR)/%s", cfile);
@@ -235,19 +233,17 @@ void pkg_mode_static(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
             "\tdone;\n\n");
     }
 
-    sprintf(tmp,"$(TEMP_DIR)/$(CNAME)_dat.$(STATIC_O) : $(TEMP_DIR)/$(CNAME)_dat.c\n"
+    sprintf(tmp,"$(TEMP_DIR)/$(NAME)_dat.$(STATIC_O) : $(TEMP_DIR)/$(NAME)_dat.c\n"
         "\t$(COMPILE.c) -o $@ $<\n\n");
     T_FileStream_writeLine(makefile, tmp);
 
     T_FileStream_writeLine(makefile, "# 'TOCOBJ' contains C Table of Contents objects [if any]\n");
 
-    sprintf(tmp, "$(TEMP_DIR)/$(CNAME)_dat.c: $(CMNLIST)\n"
-            "\t$(INVOKE) $(GENCMN) -e $(ENTRYPOINT) -n $(CNAME) -S -d $(TEMP_DIR) %s%s 0 $(CMNLIST)\n\n",
-            (o->version)?"-r ":"",
-            o->version?o->version:"");
+    sprintf(tmp, "$(TEMP_DIR)/$(NAME)_dat.c: $(CMNLIST)\n"
+            "\t$(INVOKE) $(GENCMN) -e $(ENTRYPOINT) -n $(NAME) -S -d $(TEMP_DIR) 0 $(CMNLIST)\n\n");
 
     T_FileStream_writeLine(makefile, tmp);
-    sprintf(tmp, "TOCOBJ= $(CNAME)_dat%s \n\n", OBJ_SUFFIX);
+    sprintf(tmp, "TOCOBJ= $(NAME)_dat%s \n\n", OBJ_SUFFIX);
     T_FileStream_writeLine(makefile, tmp);
     sprintf(tmp, "TOCSYM= $(ENTRYPOINT)_dat \n\n"); /* entrypoint not always shortname! */
     T_FileStream_writeLine(makefile, tmp);
