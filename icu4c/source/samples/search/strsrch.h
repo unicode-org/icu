@@ -136,13 +136,13 @@ public:
      * Equality operator.  Returns TRUE if both BreakIterators are of the
      * same class, have the same behavior, and iterate over the same text.
      */
-    virtual bool_t operator==(const SearchIterator& that) const;
+    virtual UBool operator==(const SearchIterator& that) const;
 
     /**
      * Not-equal operator.  If operator== returns TRUE, this returns FALSE,
      * and vice versa.
      */
-    bool_t operator!=(const SearchIterator& that) const;
+    UBool operator!=(const SearchIterator& that) const;
 
     /**
      * Returns a newly-constructed RuleBasedBreakIterator with the same
@@ -373,7 +373,7 @@ private:
     static char fgClassID;
 };
 
-inline bool_t StringSearch::operator!=(const SearchIterator& that) const 
+inline UBool StringSearch::operator!=(const SearchIterator& that) const 
 {
     return !operator==(that);
 }

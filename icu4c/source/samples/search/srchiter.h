@@ -77,13 +77,13 @@ public:
      * Equality operator.  Returns TRUE if both BreakIterators are of the
      * same class, have the same behavior, and iterate over the same text.
      */
-    virtual bool_t operator==(const SearchIterator& that) const;
+    virtual UBool operator==(const SearchIterator& that) const;
 
     /**
      * Not-equal operator.  If operator== returns TRUE, this returns FALSE,
      * and vice versa.
      */
-    bool_t operator!=(const SearchIterator& that) const;
+    UBool operator!=(const SearchIterator& that) const;
 
     /**
      * Returns a newly-constructed RuleBasedBreakIterator with the same
@@ -177,14 +177,14 @@ public:
      * <p>
      * The default setting of this property is <tt>true</tt>
      */
-    void setOverlapping(bool_t allowOverlap);
+    void setOverlapping(UBool allowOverlap);
     
     /**
      * Determines whether overlapping matches are returned.
      *
      * @see #setOverlapping
      */
-    bool_t isOverlapping(void) const;
+    UBool isOverlapping(void) const;
     
     /**
      * Returns the length of text in the target which matches the search
@@ -366,20 +366,20 @@ private:
      * <code>end</code> is one or more whole units of text as determined by
      * the current <code>BreakIterator</code>.
      */
-    bool_t isBreakUnit(int32_t start, int32_t end);
+    UBool isBreakUnit(int32_t start, int32_t end);
     
     //-------------------------------------------------------------------------
     // Private data...
     //-------------------------------------------------------------------------
     int32_t                 index;          // Current position in the target text
     int32_t                 length;         // Length of matched text, or 0
-    bool_t                  overlap;        // Return overlapping matches?
+    UBool                  overlap;        // Return overlapping matches?
     CharacterIterator*      target;         // Target text to be searched
     BreakIterator*          breaker;        // Break iterator to constrain matches
-    bool_t                  backward;
+    UBool                  backward;
 };
 
-inline bool_t SearchIterator::operator!=(const SearchIterator& that) const
+inline UBool SearchIterator::operator!=(const SearchIterator& that) const
 {
    return !operator==(that); 
 }
