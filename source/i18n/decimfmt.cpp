@@ -780,7 +780,7 @@ DecimalFormat::subformat(UnicodeString& result,
                     fieldPosition.setBeginIndex(result.length());
             }
             // Restores the digit character or pads the buffer with zeros.
-            UChar c = (UChar)((i < digits.fCount) ?
+            UChar32 c = (UChar32)((i < digits.fCount) ?
                           (digits.fDigits[i] + zeroDelta) :
                           zero);
             result += c;
@@ -823,7 +823,7 @@ DecimalFormat::subformat(UnicodeString& result,
             result += (zero);
         for (i=0; i<expDigits.fDecimalAt; ++i)
         {
-            UChar c = (UChar)((i < expDigits.fCount) ?
+            UChar32 c = (UChar32)((i < expDigits.fCount) ?
                           (expDigits.fDigits[i] + zeroDelta) : zero);
             result += c;
         }
@@ -862,7 +862,7 @@ DecimalFormat::subformat(UnicodeString& result,
             if (i < digits.fDecimalAt && digitIndex < digits.fCount)
             {
                 // Output a real digit
-                result += ((UChar)(digits.fDigits[digitIndex++] + zeroDelta));
+                result += ((UChar32)(digits.fDigits[digitIndex++] + zeroDelta));
             }
             else
             {
@@ -908,7 +908,7 @@ DecimalFormat::subformat(UnicodeString& result,
                 if (i >= negDecimalAt)
                 {
                     // Output a digit
-                    result += ((UChar)(digits.fDigits[digitIndex++] + zeroDelta));
+                    result += ((UChar32)(digits.fDigits[digitIndex++] + zeroDelta));
                 }
                 else
                 {
@@ -2023,10 +2023,11 @@ DecimalFormat::appendAffix(    UnicodeString& buffer,
         buffer += affix;
     else {
         for (int32_t j = 0; j < affix.length(); ++j) {
-            UChar c = affix[j];
+            UChar32 c = affix.char32At(j);
             buffer += c;
             if (c == 0x0027 /*'\''*/)
                 buffer += c;
+            j = j + UTF_NEED_MULTIPLE_UCHAR(c);
         }
     }
     if (needQuote)
@@ -2595,8 +2596,9 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                         return;
                     }
                     padPos = pos;
-                    padChar = pattern[(UTextOffset) ++pos];
-                    pos += padEscape.length();
+                    padChar = pattern.char32At(++pos);
+                    pos += 1 + UTF_NEED_MULTIPLE_UCHAR(pattern.char32At(pos));
+//                    pos += padEscape.length();
                     continue;
                 } else if (pattern.compare(pos, minus.length(), minus) == 0) {
                     affix->append(kQuote); // Encode minus
