@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/BreakIteratorRules.java,v $ 
- * $Date: 2000/03/10 04:07:26 $ 
- * $Revision: 1.2 $
+ * $Date: 2000/09/26 21:47:31 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -46,7 +46,9 @@ public class BreakIteratorRules extends ListResourceBundle {
             // ignore non-spacing marks and enclosing marks (since we never
             // put a break before ignore characters, this keeps combining
             // accents with the base characters they modify)
-            "$ignore=[[:Mn:][:Me:]];"
+            // FIXME: the virama thing is probably a hack...
+              "devaVirama=[\u094d];"
+            + "$ignore=[[[:Mn:]-{devaVirama}][:Me:]];"
 
             // other category definitions
             + "choseong=[\u1100-\u115f];"
@@ -67,22 +69,30 @@ public class BreakIteratorRules extends ListResourceBundle {
             // keep Hangul syllables spelled out using conjoining jamo together
             + "{choseong}*{jungseong}*{jongseong}*;"
 
-            // various additions for Hindi support
-            + "nukta=[\u093c];"
-            + "danda=[\u0964\u0965];"
-            + "virama=[\u094d];"
-            + "devVowelSign=[\u093e-\u094c\u0962\u0963];"
-            + "devConsonant=[\u0915-\u0939];"
-            + "devNuktaConsonant=[\u0958-\u095f];"
-            + "devCharEnd=[\u0902\u0903\u0951-\u0954];"
+            // revised Devanagari support - full syllables
+            // simplified by allowing some nonsense syllables
+            // FIXME: nukta, non-spacing matras, and the modifiers
+            // are all ignorable, so they don't need to be mentioned
+            // here... (but the rules read better if they are...)
+            + "devaNukta=[\u093c];"
+            + "devaVowel=[\u0905-\u0914];"
+            + "devaMatra=[\u093e-\u094c\u0962\u0963];"
+            + "devaConsonant=[\u0915-\u0939\u0958-\u095f];"
+            + "devaModifier=[\u0901-\u0903\u0951-\u0954];"
+            + "zwnj=[\u200c];"
             + "zwj=[\u200d];"
+   
+            // consonant followed optionally by a nukta
+            + "devaCN=({devaConsonant}{devaNukta}?);"
             
-            + "devCAMN=({devConsonant}{nukta}?);"
-            + "devConsonant1=({devNuktaConsonant}|{devCAMN});"
-            + "devConjunct=(({devConsonant1}{virama}{zwj}?)?{devConsonant1});"
-
-            + "{devConjunct}{devVowelSign}?{devCharEnd}?;"
-            + "{danda}{nukta};"
+            // a virama followed by an optional zwj or zwnj
+            + "devaJoin=({devaVirama}[{zwj}{zwnj}]?);"
+            
+            // a syllable with at least one consonant
+            + "({devaCN}?{devaJoin})*{devaCN}({devaJoin}|{devaMatra}?{devaModifier}*);"
+            
+            // a syllable without consonants
+            + "{devaVowel}{devaModifier}*;"
         },
 
         // default rules for finding word boundaries
