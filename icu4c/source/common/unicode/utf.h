@@ -201,10 +201,17 @@ typedef int32_t UTextOffset;
 #define UTF_IS_SURROGATE(uchar) (((uchar)&0xfffff800)==0xd800)
 
 /**
+ * Is a given 32-bit code point a Unicode noncharacter?
+ */
+#define UTF_IS_UNICODE_NONCHAR(c) \
+    (((((c) & 0xfffe) == 0xfffe) || ((c) >= 0xfdd0 && (c) <= 0xfdef)) && \
+    ((c) <= 0x10ffff))
+
+/**
  * Is a given 32-bit code point/Unicode scalar value
  * actually a valid Unicode (abstract) character?
  *
- * Non-characters include:
+ * Code points that are not characters include:
  * - single surrogate code points (U+d800..U+dfff, 2048 code points)
  * - the last two code points on each plane (U+__fffe and U+__ffff, 34 code points)
  * - U+fdd0..U+fdef (new with Unicode 3.1, 32 code points)
@@ -217,8 +224,7 @@ typedef int32_t UTextOffset;
     ((uint32_t)(c)<0xd800 || \
         ((uint32_t)(c)>0xdfff && \
          (uint32_t)(c)<=0x10ffff && \
-         ((c)&0xfffe)!=0xfffe && \
-         !(0xfdd0<=(uint32_t)(c) && (uint32_t)(c)<=0xfdef)))
+         !UTF_IS_UNICODE_NONCHAR(c)))
 
 /**
  * Is a given 32-bit code an error value
