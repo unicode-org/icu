@@ -572,7 +572,7 @@ int32_t RuleBasedBreakIterator::current(void) const {
 //     vectors through here.  This method initializes the state machine to state 1
 //     and advances through the text character by character until we reach the end
 //     of the text or the state machine transitions to state 0.  We update our return
-//     value every time the state machine passes through a possible end state.
+//     value every time the state machine passes through an accepting state.
 //
 //-----------------------------------------------------------------------------------
 int32_t RuleBasedBreakIterator::handleNext(void) {
@@ -584,17 +584,13 @@ int32_t RuleBasedBreakIterator::handleNext(void) {
     fLastBreakTagValid = TRUE;
 
     // if we're already at the end of the text, return DONE.
-    if (fText == NULL || fData == NULL || fText->getIndex() == fText->endIndex()) {
+    if (fText == NULL || fData == NULL || fText->hasNext() == FALSE) {
         fLastBreakTag = 0;
         return BreakIterator::DONE;
     }
 
-    // no matter what, we always advance at least one character forward
-    int32_t temp = fText->getIndex();
-    fText->next32();
-    int32_t result = fText->getIndex();
-    fText->setIndex(temp);
-
+    int32_t initialPosition = fText->getIndex();
+    int32_t result          = initialPosition;
     int32_t lookaheadResult = 0;
 
     // Initialize the state machine.  Begin in state 1
@@ -621,15 +617,29 @@ int32_t RuleBasedBreakIterator::handleNext(void) {
     // loop until we reach the end of the text or transition to state 0
     for (;;) {
         if (c == CharacterIterator::DONE && fText->hasNext()==FALSE) {
-            // Note: CharacterIterator::DONE is 0xffff, which is also a legal
-            //       character value.  Check for DONE first, because it's quicker,
-            //       but also need to check fText->hasNext() to be certain.
+            // Reached end of input string.
+            //    Note: CharacterIterator::DONE is 0xffff, which is also a legal
+            //          character value.  Check for DONE first, because it's quicker,
+            //          but also need to check fText->hasNext() to be certain.
+
+            if (lookaheadResult > result) {
+                // We ran off the end of the string with a pending look-ahead match.
+                // Treat this as if the look-ahead condition had been met, and return
+                //  the match at the / position from the look-ahead rule.
+                result          = lookaheadResult;
+                fLastBreakTag   = lookaheadTag;
+                lookaheadStatus = 0;
+            } else if (result == initialPosition) {
+                // Ran off end, no match found.
+                // Treat as a break at the end of the input string.
+                result = fText->endIndex();
+            }
             break;
         }
         // look up the current character's character category, which tells us
         // which column in the state table to look at.
         // Note:  the 16 in UTRIE_GET16 refers to the size of the data being returned,
-        //        not the size of the character going in.
+        //        not the size of the character going in, which is a UChar32.
         //
         UTRIE_GET16(&fData->fTrie, c, category);
 
@@ -662,8 +672,6 @@ int32_t RuleBasedBreakIterator::handleNext(void) {
         // Get the next character.  Doing it here positions the iterator
         //    to the correct position for recording matches in the code that
         //    follows.
-        //  TODO:  16 bit next, and a 16 bit TRIE lookup, with escape code
-        //         for non-BMP chars, would be faster.
         c = fText->next32();
 
         if (row->fAccepting == 0 && row->fLookAhead == 0) {
@@ -710,25 +718,25 @@ int32_t RuleBasedBreakIterator::handleNext(void) {
 
 continueOn:
         if (state == STOP_STATE) {
+            // This is the normal exit from the lookup state machine.
+            // We have advanced through the string until it is certain that no
+            //   longer match is possible, no matter what characters follow.
             break;
         }
-
-        // c = fText->next32();
     }
 
-    // if we've run off the end of the text, and the very last character took us into
-    // a lookahead state, advance the break position to the lookahead position
-    // (the theory here is that if there are no characters at all after the lookahead
-    // position, that always matches the lookahead criteria)
-    //   TODO:  is this really the right behavior?
-    if (c == CharacterIterator::DONE &&
-        fText->hasNext()==FALSE &&
-        lookaheadResult == fText->endIndex()) {
-            result          = lookaheadResult;
-            fLastBreakTag   = lookaheadTag;
+    // The state machine is done.  Check whether it found a match...
+
+    // If the iterator failed to advance in the match engine, force it ahead by one.
+    //   (This really indicates a defect in the break rules.  They should always match
+    //    at least one character.)
+    if (result == initialPosition) {
+        result = fText->setIndex(initialPosition);
+        fText ->next32();
+        result = fText->getIndex();
     }
 
-
+    // Leave the iterator at our result position.
     fText->setIndex(result);
     if (fTrace) {
         RBBIDebugPrintf("result = %d\n\n", result);
