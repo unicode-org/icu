@@ -631,7 +631,51 @@ private:
      * number corresponds to the array of arguments to be formatted.
      * @internal
      */
-    class Subformat;
+    class Subformat {
+    public:
+        /**
+         * @internal 
+         */
+        Format* format; // formatter
+        /**
+         * @internal 
+         */
+        int32_t offset; // offset into fPattern
+        /**
+         * @internal 
+         */
+        int32_t arg;    // 0-based argument number
+
+        /**
+         * Clone that.format and assign it to this.format
+         * Do NOT delete this.format
+         * @internal
+         */
+        Subformat& operator=(const Subformat& that) {
+            format = that.format ? that.format->clone() : NULL;
+            offset = that.offset;
+            arg = that.arg;
+            return *this;
+        }
+
+        /**
+         * @internal 
+         */
+        UBool operator==(const Subformat& that) const {
+            // Do cheap comparisons first
+            return offset == that.offset &&
+                   arg == that.arg &&
+                   ((format == that.format) || // handles NULL
+                    (*format == *that.format));
+        }
+
+        /**
+         * @internal
+         */
+        UBool operator!=(const Subformat& that) const {
+            return !operator==(that);
+        }
+    };
 
     /**
      * A MessageFormat contains an array of subformats.  This array
@@ -755,3 +799,4 @@ U_NAMESPACE_END
 
 #endif // _MSGFMT
 //eof
+
