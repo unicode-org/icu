@@ -191,7 +191,6 @@ AC_DEFUN(AC_CHECK_STRICT_COMPILE,
 
     if test "$ac_use_strict_options" = yes
     then
-echo "${host}"
         if test "$GCC" = yes
         then
             CFLAGS="$CFLAGS -Wall -ansi -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings"
