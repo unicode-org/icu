@@ -128,7 +128,7 @@ clean-local:
 	test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 	rm -f $(TARGET) $(OBJECTS)
 
-distclean-local: clean-local
+distclean-local: clean-local clean-sentinel
 	rm -f Makefile $(DEPS) $(CNV_FILES)
 	rm -f @DATABUILDDIR@/*.col
 
