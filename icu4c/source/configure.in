@@ -131,7 +131,12 @@ if test $threads = true; then
   AC_PTHREAD_FREEBSD
  fi
 
- AC_CHECK_FUNC(pthread_mutex_create)
+ AC_CHECK_FUNC(pthread_mutex_lock)
+
+ if test $ac_cv_func_pthread_mutex_lock = yes; then
+   ICU_USE_THREADS=1
+ fi
+
 fi
 fi
 
