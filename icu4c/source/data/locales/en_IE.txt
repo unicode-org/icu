@@ -15,7 +15,7 @@ en_IE {
         IEP { "\u00A3","Irish Pound" } // 1922-2001
     }
     DateTimeElements:intvector { 
-        2,
+        1,
         1,
     }
     DateTimePatterns { 
