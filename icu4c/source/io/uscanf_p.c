@@ -691,15 +691,15 @@ u_scanf_string_handler(UFILE        *input,
                        int32_t      *fmtConsumed,
                        int32_t      *argConverted)
 {
-    UChar     c;
-    UBool       isNotEOF;
+    const UChar *source;
+    UConverter  *conv;
+    char        *arg    = (char*)(args[0].ptrValue);
+    char        *alias  = arg;
+    char        *limit;
+    UErrorCode  status  = U_ZERO_ERROR;
     int32_t     count;
-    const UChar     *source;
-    UConverter     *conv;
-    UErrorCode     status     = U_ZERO_ERROR;
-    char         *arg     = (char*)(args[0].ptrValue);
-    char         *alias     = arg;
-    char         *limit;
+    UChar       c;
+    UBool       isNotEOF = FALSE;
 
     /* skip all ws in the input */
     if (info->fIsString) {
@@ -748,7 +748,7 @@ u_scanf_string_handler(UFILE        *input,
 
     /* put the final character we read back on the input */
     if (!info->fSkipArg) {
-        if(isNotEOF && (info->fWidth == -1 || count < info->fWidth) )
+        if ((info->fWidth == -1 || count < info->fWidth) && isNotEOF)
             u_fungetc(c, input);
 
         /* add the terminator */
@@ -788,11 +788,11 @@ u_scanf_ustring_handler(UFILE       *input,
                         int32_t     *fmtConsumed,
                         int32_t     *argConverted)
 {
-    UChar     c;
-    UBool       isNotEOF;
-    int32_t     count;
-    UChar     *arg     = (UChar*)(args[0].ptrValue);
-    UChar     *alias     = arg;
+    UChar   *arg     = (UChar*)(args[0].ptrValue);
+    UChar   *alias     = arg;
+    int32_t count;
+    UChar   c;
+    UBool   isNotEOF = FALSE;
 
     /* skip all ws in the input */
     if (info->fIsString) {
@@ -818,7 +818,7 @@ u_scanf_ustring_handler(UFILE       *input,
 
     /* put the final character we read back on the input */
     if (!info->fSkipArg) {
-        if(isNotEOF && (info->fWidth == -1 || count < info->fWidth)) {
+        if((info->fWidth == -1 || count < info->fWidth) && isNotEOF) {
             u_fungetc(c, input);
         }
 
