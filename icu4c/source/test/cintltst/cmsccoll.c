@@ -2196,7 +2196,7 @@ static void TestIncrementalNormalize(void) {
         strB = malloc((maxSLen+1) * sizeof(UChar));
 
         coll = ucol_open("en_US", &status);
-        ucol_setNormalization(coll, UNORM_NFD);
+        ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
 
         /* for (sLen = 4; sLen<maxSLen; sLen++) { */
         for (sLen = 1000; sLen<1001; sLen++) {

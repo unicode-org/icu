@@ -9,6 +9,10 @@
 *   03/01/2001  George      port to HP/UX
 ************************************************************************/
 
+/* These APIs are becoming private */
+#define ICU_COMPOUNDTRANSLITERATOR_USE_DEPRECATES 1
+#define ICU_RULEBASEDTRANSLITERATOR_USE_DEPRECATES 1
+
 #include "jamotest.h"
 #include "unicode/utypes.h"
 #include "unicode/translit.h"

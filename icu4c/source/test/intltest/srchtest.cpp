@@ -1401,7 +1401,7 @@ void StringSearchTest::TestContraction()
     UnicodeString rules;
     rules.setTo(temp, u_strlen(temp));
     RuleBasedCollator *collator = new RuleBasedCollator(rules, 
-        getECollationStrength(UCOL_TERTIARY), Normalizer::DECOMP, status); 
+        getECollationStrength(UCOL_TERTIARY), UCOL_ON, status); 
     if (U_FAILURE(status)) {
         errln("Error opening collator %s", u_errorName(status));
     }
@@ -1440,7 +1440,7 @@ void StringSearchTest::TestIgnorable()
     int        count  = 0;
     RuleBasedCollator *collator = new RuleBasedCollator(rules,  
                             getECollationStrength(IGNORABLE[count].strength), 
-                            Normalizer::DECOMP, status);  
+                            UCOL_ON, status);  
     if (U_FAILURE(status)) {
         errln("Error opening collator %s", u_errorName(status));
         return;
@@ -1681,7 +1681,7 @@ void StringSearchTest::TestCollatorCanonical()
     rules.setTo(temp, u_strlen(temp));
     RuleBasedCollator *tailored = new RuleBasedCollator(rules, 
         getECollationStrength(COLLATORCANONICAL[1].strength), 
-        Normalizer::DECOMP, status);
+        UCOL_ON, status);
 
     if (U_FAILURE(status)) {
         errln("Error opening rule based collator %s", u_errorName(status));
@@ -1952,7 +1952,7 @@ void StringSearchTest::TestContractionCanonical()
 
     UErrorCode         status   = U_ZERO_ERROR;
     RuleBasedCollator *collator = new RuleBasedCollator(rules, 
-        getECollationStrength(UCOL_TERTIARY), Normalizer::DECOMP, status); 
+        getECollationStrength(UCOL_TERTIARY), UCOL_ON, status); 
     if (U_FAILURE(status)) {
         errln("Error opening collator %s", u_errorName(status));
     }

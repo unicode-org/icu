@@ -407,7 +407,7 @@ void CollationIteratorTest::TestAssignment()
     }
 
     source = CharsToUnicodeString("a\\u0300\\u0325");
-    coll->setDecomposition(Normalizer::DECOMP);
+    coll->setAttribute(UCOL_NORMALIZATION_MODE, UCOL_ON, status);
     CollationElementIterator *iter4 
                         = coll->createCollationElementIterator(source);
     CollationElementIterator iter5(*iter4);

@@ -50,15 +50,7 @@ void MajorTestLevel::runIndexedTest( int32_t index, UBool exec, const char* &nam
                 }
                 break;
 
-        case 1: name = "convert"; 
-                if (exec) {
-                    logln("TestSuite Convert---"); logln();
-                    IntlTestConvert test;
-                    callTest( test, par );
-                }
-                break;
-
-        case 2: name = "normalize"; 
+        case 1: name = "normalize"; 
                 if (exec) {
                     logln("TestSuite Normalize---"); logln();
                     IntlTestNormalize test;
@@ -66,7 +58,7 @@ void MajorTestLevel::runIndexedTest( int32_t index, UBool exec, const char* &nam
                 }
                 break;
 
-        case 3: name = "collate"; 
+        case 2: name = "collate"; 
                 if (exec) {
                     logln("TestSuite Collator---"); logln();
                     IntlTestCollator test;
@@ -74,7 +66,7 @@ void MajorTestLevel::runIndexedTest( int32_t index, UBool exec, const char* &nam
                 }
                 break;
 
-        case 4: name = "textbounds"; 
+        case 3: name = "textbounds"; 
                 if (exec) {
                     logln("TestSuite TextBoundary---"); logln();
                     IntlTestTextBoundary test;
@@ -82,7 +74,7 @@ void MajorTestLevel::runIndexedTest( int32_t index, UBool exec, const char* &nam
                 }
                 break;
 
-        case 5: name = "format"; 
+        case 4: name = "format"; 
                 if (exec) {
                     logln("TestSuite Format---"); logln();
                     IntlTestFormat test;
@@ -90,7 +82,7 @@ void MajorTestLevel::runIndexedTest( int32_t index, UBool exec, const char* &nam
                 }
                 break;
 
-        case 6: name = "translit"; 
+        case 5: name = "translit"; 
                 if (exec) {
                     logln("TestSuite Transliterator---"); logln();
                     IntlTestTransliterator test;
@@ -98,27 +90,38 @@ void MajorTestLevel::runIndexedTest( int32_t index, UBool exec, const char* &nam
                 }
                 break;
 
-        case 7: name = "rbbi"; 
+        case 6: name = "rbbi"; 
                 if (exec) {
                     logln("TestSuite RuleBasedBreakIterator---"); logln();
                     IntlTestRBBI test;
                     callTest( test, par );
                 }
                 break;
-        case 8: name = "rbnf";
-            if (exec) {
+        case 7: name = "rbnf";
+                if (exec) {
                     logln("TestSuite RuleBasedNumberFormat----"); logln();
                     IntlTestRBNF test;
                     callTest(test, par);
-            }
-            break;
-        case 9: name = "rbnfrt";
-            if (exec) {
+                }
+                break;
+        case 8: name = "rbnfrt";
+                if (exec) {
                     logln("TestSuite RuleBasedNumberFormat RT----"); logln();
                     RbnfRoundTripTest test;
                     callTest(test, par);
-            }
-            break;
+                }
+                break;
+
+/* Only the C API is exists */
+#ifdef ICU_UNICODECONVERTER_USE_DEPRECATES
+        case 9: name = "convert"; 
+                if (exec) {
+                    logln("TestSuite Convert---"); logln();
+                    IntlTestConvert test;
+                    callTest( test, par );
+                }
+                break;
+#endif /* ICU_UNICODECONVERTER_USE_DEPRECATES */
 
         default: name = ""; break;
     }

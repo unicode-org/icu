@@ -191,17 +191,18 @@ void TimeZoneRegressionTest:: Test4073215()
  *                 1:00 AM STD  = display name 1:00 AM ST
  */
 void TimeZoneRegressionTest:: Test4084933() {
+    UErrorCode status = U_ZERO_ERROR;
     TimeZone *tz = TimeZone::createTimeZone("PST");
 
     int32_t offset1 = tz->getOffset(1,
-        1997, Calendar::OCTOBER, 26, Calendar::SUNDAY, (2*60*60*1000));
+        1997, Calendar::OCTOBER, 26, Calendar::SUNDAY, (2*60*60*1000), status);
     int32_t offset2 = tz->getOffset(1,
-        1997, Calendar::OCTOBER, 26, Calendar::SUNDAY, (2*60*60*1000)-1);
+        1997, Calendar::OCTOBER, 26, Calendar::SUNDAY, (2*60*60*1000)-1, status);
 
     int32_t offset3 = tz->getOffset(1,
-        1997, Calendar::OCTOBER, 26, Calendar::SUNDAY, (1*60*60*1000));
+        1997, Calendar::OCTOBER, 26, Calendar::SUNDAY, (1*60*60*1000), status);
     int32_t offset4 = tz->getOffset(1,
-        1997, Calendar::OCTOBER, 26, Calendar::SUNDAY, (1*60*60*1000)-1);
+        1997, Calendar::OCTOBER, 26, Calendar::SUNDAY, (1*60*60*1000)-1, status);
 
     /*
      *  The following was added just for consistency.  It shows that going *to* Daylight
@@ -209,21 +210,22 @@ void TimeZoneRegressionTest:: Test4084933() {
      */
 
     int32_t offset5 = tz->getOffset(1,
-        1997, Calendar::APRIL, 6, Calendar::SUNDAY, (2*60*60*1000));
+        1997, Calendar::APRIL, 6, Calendar::SUNDAY, (2*60*60*1000), status);
     int32_t offset6 = tz->getOffset(1,
-        1997, Calendar::APRIL, 6, Calendar::SUNDAY, (2*60*60*1000)-1);
+        1997, Calendar::APRIL, 6, Calendar::SUNDAY, (2*60*60*1000)-1, status);
 
     int32_t offset7 = tz->getOffset(1,
-        1997, Calendar::APRIL, 6, Calendar::SUNDAY, (1*60*60*1000));
+        1997, Calendar::APRIL, 6, Calendar::SUNDAY, (1*60*60*1000), status);
     int32_t offset8 = tz->getOffset(1,
-        1997, Calendar::APRIL, 6, Calendar::SUNDAY, (1*60*60*1000)-1);
+        1997, Calendar::APRIL, 6, Calendar::SUNDAY, (1*60*60*1000)-1, status);
 
     int32_t SToffset = (int32_t)(-8 * 60*60*1000L);
     int32_t DToffset = (int32_t)(-7 * 60*60*1000L);
     if (offset1 != SToffset || offset2 != SToffset ||
         offset3 != SToffset || offset4 != DToffset ||
         offset5 != DToffset || offset6 != SToffset ||
-        offset7 != SToffset || offset8 != SToffset)
+        offset7 != SToffset || offset8 != SToffset
+        || U_FAILURE(status))
         errln("Fail: TimeZone misbehaving");
 
     delete tz;
@@ -426,7 +428,7 @@ void TimeZoneRegressionTest:: Test4126678()
     cal->set(1998 - 1900, Calendar::APRIL, 5, 10, 0);
     //Date dt = new Date(1998-1900, Calendar::APRIL, 5, 10, 0);
     
-    if (! tz->inDaylightTime(cal->getTime(status), status) || U_FAILURE(status))
+    if (! tz->useDaylightTime() || U_FAILURE(status))
         errln("We're not in Daylight Savings Time and we should be.\n");
 
     //cal.setTime(dt);
@@ -442,7 +444,7 @@ void TimeZoneRegressionTest:: Test4126678()
         cal->get(Calendar::DST_OFFSET, status);
 
     failure(status, "cal->get");
-    int32_t offset = tz->getOffset((uint8_t)era, year, month, day, (uint8_t)dayOfWeek, millis);
+    int32_t offset = tz->getOffset((uint8_t)era, year, month, day, (uint8_t)dayOfWeek, millis, status);
     int32_t raw_offset = tz->getRawOffset();
     if (offset == raw_offset)
         errln("Offsets should not match when in DST");
