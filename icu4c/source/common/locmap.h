@@ -6,7 +6,7 @@
 *
 *****************************************************************************************
 */
-// $Revision: 1.5 $
+// $Revision: 1.6 $
 //===============================================================================
 //
 // File locmap.hpp      : Locale Mapping Classes
@@ -32,6 +32,9 @@ class Locale;
 // Internal Classes for LCID <--> POSIX Mapping
 //
 /////////////////////////////////////////////////
+
+/* forward declaration */
+class ILcidPosixMap;
 
 class ILcidPosixElement
 {

@@ -14,6 +14,11 @@
 #include "unicode/unistr.h"
 #include "unicode/brkiter.h"
 #include "filestrm.h"
+
+/* forward declarations */
+class RuleBasedBreakIterator;
+class DictionaryBasedBreakIterator;
+
 /**
  * This class contains the internal static tables that are used by the
  * RuleBasedBreakIterator.  Once created, these tables are immutable,

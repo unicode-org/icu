@@ -14,6 +14,9 @@
 #include "rbbi_tbl.h"
 #include "brkdict.h"
 
+/* forward declaration */
+class DictionaryBasedBreakIterator;
+
 /**
  * This subclass of RuleBasedBreakIteratorTables contains the additional
  * static data that is used by DictionaryBasedBreakIterator.  This comprises

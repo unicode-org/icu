@@ -15,6 +15,8 @@
 
 class ParsePosition;
 class TransliterationRuleData;
+class TransliterationRuleParser;
+class TransliterationRule;
 
 /**
  * A mutable set of Unicode characters.  Objects of this class

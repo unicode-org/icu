@@ -27,6 +27,7 @@
 
 struct StandardZone;
 struct DSTZone;
+class TimeZone;
 
 /**
  * <code>SimpleTimeZone</code> is a concrete subclass of <code>TimeZone</code>

@@ -1,7 +1,16 @@
 /******************************************************************************
 * Copyright © {1996-1999}, International Business Machines Corporation and others. All Rights Reserved.
- ******************************************************************************
- */
+******************************************************************************
+* Created by:     Mark Davis, Helena Shih
+*
+* Modification History:
+* Date        Name        Description
+*
+*  8/18/97     helena      Added internal API documentation.
+*  8/14/98     erm         Synched with 1.2 version of PatternEntry.java
+* 04/23/99     stephen     Removed EDecompositionMode, merged with
+*                          Normalizer::EMode
+*/
 
 #ifndef PTNENTRY_H
 #define PTNENTRY_H
@@ -11,22 +20,16 @@
 #include "unicode/coll.h"
 #include "unicode/normlzr.h"
 
+/* forward declarations */
+class MergeCollation;
+class PointerToPatternEntry;
+class VectorOfPointersToPatternEntry;
+
 /**
  *
  * Utility class for normalizing and merging patterns for collation.
  * This is to be used with MergeCollation for adding patterns to an
  * existing rule table.
- */
- /*
- * Created by:     Mark Davis, Helena Shih
- *
- * Modification History:
- * Date        Name        Description
- *
- *  8/18/97     helena      Added internal API documentation.
- *  8/14/98     erm         Synched with 1.2 version of PatternEntry.java
- * 04/23/99     stephen     Removed EDecompositionMode, merged with
- *                          Normalizer::EMode
  */
 class PatternEntry 
 {

@@ -318,6 +318,8 @@ class VectorOfPointer {
 // Noted by Helena Shih on 6/23/97 with pending design changes (slimming collation).
 //=================================================================================================
 
+class VectorOfPToExpandTable;
+
 /** 
  * PToExpandTable is a smart-pointer to a VectorOfInt that is used to store
  * the collation orders that are the result of an expansion.
@@ -485,6 +487,8 @@ class VectorOfPToExpandTable {
         VectorOfInt**       fElements;
         bool_t              fBogus;
 };
+
+class VectorOfPToContractElement;
 
 /** 
  * PToContractElement is a smart-pointer to an array that is used to store
@@ -660,6 +664,8 @@ class VectorOfPToContractElement {
         bool_t              fBogus;
 };
 
+class VectorOfPToContractTable;
+
 /**
  * Pointer to each contracing element list.
  */
@@ -818,6 +824,7 @@ class VectorOfPToContractTable {
 };
 
 class PatternEntry;
+class VectorOfPointersToPatternEntry;
 
 /**
  *  Proxy class for accessing elements of a VectorOfPointersToPatternEntry

@@ -13,6 +13,9 @@
 #include "unicode/unistr.h"
 #include "unicode/chariter.h"
 
+/* forward declaration */
+class ComposedCharIter;
+
 /**
  * <tt>Normalizer</tt> transforms Unicode text into an equivalent composed or
  * decomposed form, allowing for easier sorting and searching of text.

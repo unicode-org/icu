@@ -31,6 +31,7 @@
 
 class Normalizer;
 class VectorOfPToContractElement;
+class RuleBasedCollator;
 
 /**
  * The CollationElementIterator class is used as an iterator to walk through
