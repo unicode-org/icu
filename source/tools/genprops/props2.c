@@ -121,7 +121,7 @@ parseAge(const char *filename, uint32_t *pv, UErrorCode *pErrorCode) {
 }
 
 U_CFUNC int32_t
-writeAdditionalData(uint8_t *p, int32_t capacity, int32_t indexes[16]) {
+writeAdditionalData(uint8_t *p, int32_t capacity, int32_t indexes[UPROPS_INDEX_COUNT]) {
     int32_t length;
     UErrorCode errorCode;
 
@@ -141,14 +141,16 @@ writeAdditionalData(uint8_t *p, int32_t capacity, int32_t indexes[16]) {
         /* set indexes */
         indexes[UPROPS_ADDITIONAL_VECTORS_INDEX]=
             indexes[UPROPS_ADDITIONAL_TRIE_INDEX]+length/4;
-        indexes[UPROPS_ADDITIONAL_VECTORS_TOP_INDEX]=
+        indexes[UPROPS_ADDITIONAL_VECTORS_COLUMNS_INDEX]=
             indexes[UPROPS_ADDITIONAL_VECTORS_INDEX]+pvCount;
+        indexes[UPROPS_ADDITIONAL_VECTORS_COLUMNS_INDEX]=UPROPS_VECTOR_WORDS;
     }
 
     if(p!=NULL && (pvCount*4)<=capacity) {
         uprv_memcpy(p, pv, pvCount*4);
         if(beVerbose) {
             printf("number of additional props vectors:    %5u\n", pvCount/UPROPS_VECTOR_WORDS);
+            printf("number of 32-bit words per vector:     %5u\n", UPROPS_VECTOR_WORDS);
         }
     }
     length+=pvCount*4;

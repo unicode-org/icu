@@ -35,7 +35,6 @@
 /*
  * ### TODO
  * document structure with additional properties
- * increment version number
  * use index enums in uchar.c
  * improve UTrie compaction: remove identical data blocks before folding! - need to remember which ones are skipped?!
  */
@@ -253,7 +252,7 @@ static UDataInfo dataInfo={
     0,
 
     { 0x55, 0x50, 0x72, 0x6f },                 /* dataFormat="UPro" */
-    { 2, 0, UTRIE_SHIFT, UTRIE_INDEX_SHIFT },   /* formatVersion */
+    { 2, 1, UTRIE_SHIFT, UTRIE_INDEX_SHIFT },   /* formatVersion */
     { 3, 0, 0, 0 }                              /* dataVersion */
 };
 
@@ -770,7 +769,7 @@ getFoldedPropsValue(UNewTrie *trie, UChar32 start, int32_t offset) {
 
 extern void
 generateData(const char *dataDir) {
-    static int32_t indexes[16]={
+    static int32_t indexes[UPROPS_INDEX_COUNT]={
         0, 0, 0, 0,
         0, 0, 0, 0,
         0, 0, 0, 0,
