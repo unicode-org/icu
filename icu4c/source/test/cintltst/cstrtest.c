@@ -257,6 +257,9 @@ TestInvariant() {
     if(!uprv_isInvariantUString(invariantUChars, -1)) {
         log_err("uprv_isInvariantUString(invariantUChars) failed\n");
     }
+    if(!uprv_isInvariantString(invariantChars+strlen(invariantChars), 1)) {
+        log_err("uprv_isInvariantString(\"\\0\") failed\n");
+    }
 
     for(i=0; i<(sizeof(variantChars)-1); ++i) {
         if(uprv_isInvariantString(variantChars+i, 1)) {
