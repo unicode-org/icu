@@ -382,6 +382,7 @@ void IntlCalendarTest::TestBuddhistFormat() {
         
         simpleTest(loc, expect, expectDate, status);
     }
+    status = U_ZERO_ERROR;
     {
         UnicodeString expect = CharsToUnicodeString("\\u0E27\\u0E31\\u0E19\\u0E40\\u0E2A\\u0E32\\u0E23\\u0E4C\\u0E17\\u0E35\\u0E48"
             " 8 \\u0E01\\u0E31\\u0e19\\u0e22\\u0e32\\u0e22\\u0e19 \\u0e1e.\\u0e28. 2544");
@@ -390,6 +391,7 @@ void IntlCalendarTest::TestBuddhistFormat() {
         
         simpleTest(loc, expect, expectDate, status);
     }
+    status = U_ZERO_ERROR;
     {
         UnicodeString expect = CharsToUnicodeString("\\u0E27\\u0E31\\u0E19\\u0E40\\u0E2A\\u0E32\\u0E23\\u0E4C\\u0E17\\u0E35\\u0E48"
             " 8 \\u0E01\\u0E31\\u0e19\\u0e22\\u0e32\\u0e22\\u0e19 \\u0e04.\\u0e28. 2001");
@@ -398,6 +400,7 @@ void IntlCalendarTest::TestBuddhistFormat() {
         
         simpleTest(loc, expect, expectDate, status);
     }
+    status = U_ZERO_ERROR;
     {
         UnicodeString expect = CharsToUnicodeString("\\u0E27\\u0E31\\u0E19\\u0E40\\u0E2A\\u0E32\\u0E23\\u0E4C\\u0E17\\u0E35\\u0E48"
             " 8 \\u0E01\\u0E31\\u0e19\\u0e22\\u0e32\\u0e22\\u0e19 \\u0e04.\\u0e28. 2001");

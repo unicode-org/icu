@@ -284,7 +284,7 @@ char NFTestFactory::gID = 0;
 void
 IntlTestNumberFormatAPI::testRegistration() 
 {
-	
+#if !UCONFIG_NO_SERVICE
 	UErrorCode status = U_ZERO_ERROR;
 	
 	NumberFormat* f0 = NumberFormat::createInstance(SWAP_LOC, status);
@@ -384,6 +384,7 @@ IntlTestNumberFormatAPI::testRegistration()
 	}
 
 	delete locs;
+#endif
 }
 
 

@@ -1348,6 +1348,7 @@ void NumberFormatTest::TestCurrencyPatterns(void) {
 }
 
 void NumberFormatTest::TestRegCurrency(void) {
+#if !UCONFIG_NO_SERVICE
     UErrorCode status = U_ZERO_ERROR;
     UChar USD[4];
     ucurr_forLocale("en_US", USD, 4, &status);
@@ -1409,6 +1410,7 @@ void NumberFormatTest::TestRegCurrency(void) {
         errln("FAIL: didn't return EUR for en_US_EURO after unregister of en_US_EURO");
     }
     status = U_ZERO_ERROR; // reset
+#endif
 }
 
 void NumberFormatTest::TestCurrencyNames(void) {
