@@ -85,7 +85,7 @@ void
 TestNextUChar(UConverter* cnv, const char* source, const char* limit, const uint32_t results[], const char* message)
 {
      const char* s0;
-     char* s=(char*)source;
+     const char* s=(char*)source;
      const uint32_t *r=results;
      UErrorCode errorCode=U_ZERO_ERROR;
      uint32_t c;
@@ -107,7 +107,7 @@ TestNextUChar(UConverter* cnv, const char* source, const char* limit, const uint
 void 
 TestNextUCharError(UConverter* cnv, const char* source, const char* limit, UErrorCode expected, const char* message)
 {
-     char* s=(char*)source;
+     const char* s=(char*)source;
      UErrorCode errorCode=U_ZERO_ERROR;
      uint32_t c;
      c=ucnv_getNextUChar(cnv, &s, limit, &errorCode);
@@ -1564,7 +1564,7 @@ TestLMBCS() {
 
          if (U_SUCCESS (errorCode))
 	     {
-            if ((pSource - pszLMBCS) == offsets [codepointCount+1])
+            if ((pSource - (const char *)pszLMBCS) == offsets [codepointCount+1])
             {
                /* we are on to the next code point: check value */
                            
