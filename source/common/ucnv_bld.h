@@ -232,7 +232,7 @@ UConverterDataLMBCS;
  * If pkg==NULL, then this function must be called inside umtx_lock(&cnvCacheMutex).
  */
 UConverterSharedData *
-ucnv_load(const char *pkg, const char *name, UErrorCode *err);
+ucnv_load(UConverterLoadArgs *pArgs, UErrorCode *err);
 
 /**
  * Unload a non-algorithmic converter.

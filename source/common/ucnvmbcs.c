@@ -863,6 +863,7 @@ _EBCDICSwapLFNL(UConverterSharedData *sharedData, UErrorCode *pErrorCode) {
 
 static void
 _MBCSLoad(UConverterSharedData *sharedData,
+          UConverterLoadArgs *pArgs,
           const uint8_t *raw,
           UErrorCode *pErrorCode) {
     UDataInfo info;
@@ -884,6 +885,7 @@ _MBCSLoad(UConverterSharedData *sharedData,
     }
 
     if(mbcsTable->outputType==MBCS_OUTPUT_EXT_ONLY) {
+        UConverterLoadArgs args={ 0 };
         UConverterSharedData *baseSharedData;
         const int32_t *extIndexes;
         const char *baseName;
@@ -895,17 +897,28 @@ _MBCSLoad(UConverterSharedData *sharedData,
             return;
         }
 
+        if(pArgs->nestedLoads!=1) {
+            /* an extension table must not be loaded as a base table */
+            *pErrorCode=U_INVALID_TABLE_FILE;
+            return;
+        }
+
         /* load the base table */
         baseName=(const char *)(header+1);
         if(0==uprv_strcmp(baseName, sharedData->staticData->name)) {
             /* forbid loading this same extension-only file */
-            /* TODO better prevention of loading another extension table */
             *pErrorCode=U_INVALID_TABLE_FORMAT;
             return;
         }
 
-        /* TODO pass package name, same as current converter (see ucnv_bld.c) and/or parse out of prefix of base name */
-        baseSharedData=ucnv_load(NULL, baseName, pErrorCode);
+        /* TODO parse package name out of the prefix of the base name in the extension .cnv file? */
+        args.size=sizeof(UConverterLoadArgs);
+        args.nestedLoads=2;
+        args.reserved=pArgs->reserved;
+        args.options=pArgs->options;
+        args.pkg=pArgs->pkg;
+        args.name=baseName;
+        baseSharedData=ucnv_load(&args, pErrorCode);
         if(U_FAILURE(*pErrorCode)) {
             return;
         }
