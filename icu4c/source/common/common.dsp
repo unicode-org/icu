@@ -600,6 +600,14 @@ InputPath=.\unicode\strenum.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\uarrsort.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\uarrsort.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\ucmp8.c
 # End Source File
 # Begin Source File
