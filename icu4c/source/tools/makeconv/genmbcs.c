@@ -929,14 +929,14 @@ MBCSSingleAddFromUnicode(NewConverter *cnvData,
     }
 
     /* check that this Unicode code point was still unassigned */
-    if(old>=0xf00) {
+    if(old>=0x100) {
         if(isFallback>=0) {
             fprintf(stderr, "error: duplicate Unicode code point at U+%04x<->0x%02lx see 0x%02x\n",
-                c, (unsigned long)b, old);
+                c, (unsigned long)b, old&0xff);
             return FALSE;
         } else if(VERBOSE) {
             fprintf(stderr, "duplicate Unicode code point at U+%04x<->0x%02lx see 0x%02x\n",
-                c, (unsigned long)b, old);
+                c, (unsigned long)b, old&0xff);
         }
         /* continue after the above warning if the precision of the mapping is unspecified */
     }
