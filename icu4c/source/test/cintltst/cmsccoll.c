@@ -1095,6 +1095,10 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
   UParseError parseError;
   UChar *rulesCopy = NULL;
   collIterate c;
+  UCollator *UCA = ucol_open("root", status);
+  UCAConstants *consts = (UCAConstants *)((uint8_t *)UCA->image + UCA->image->UCAConsts);
+  uint32_t UCOL_RESET_TOP_VALUE = consts->UCA_LAST_NON_VARIABLE[0], UCOL_RESET_TOP_CONT = consts->UCA_LAST_NON_VARIABLE[1], 
+           UCOL_NEXT_TOP_VALUE = consts->UCA_FIRST_IMPLICIT[0], UCOL_NEXT_TOP_CONT = consts->UCA_FIRST_IMPLICIT[1];
 
   baseCE=baseContCE=nextCE=nextContCE=currCE=currContCE=lastCE=lastContCE = UCOL_NOT_FOUND;
 
@@ -1141,8 +1145,9 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
 
       if(strength == UCOL_TOK_RESET) {
         if(top_ == TRUE) {
+          
           nextCE = baseCE = currCE = UCOL_RESET_TOP_VALUE;
-          nextContCE = baseContCE = currContCE = 0;
+          nextContCE = baseContCE = currContCE = UCOL_RESET_TOP_CONT;
         } else {
           nextCE = baseCE = currCE;
           nextContCE = baseContCE = currContCE;
@@ -1154,7 +1159,7 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
           if(baseCE == UCOL_RESET_TOP_VALUE) {
               log_verbose("Resetting to [top]\n");
               nextCE = UCOL_NEXT_TOP_VALUE;
-              nextContCE = 0;
+              nextContCE = UCOL_NEXT_TOP_CONT;
           } else {
             result = ucol_inv_getNextCE(baseCE & 0xFFFFFF3F, baseContCE, &nextCE, &nextContCE, maxStrength);
           }
@@ -2207,7 +2212,9 @@ static void TestIncrementalNormalize(void) {
         char  sortKeyBz[50];
         int   r;
 
-        result = ucol_strcoll(coll, strA, -3, strB, -3);
+        /* there used to be -3 here. Hmmmm.... */
+        /*result = ucol_strcoll(coll, strA, -3, strB, -3);*/
+        result = ucol_strcoll(coll, strA, 3, strB, 3);
         if (result != UCOL_GREATER) {
             log_err("ERROR 1 in test 4\n");
         }
@@ -2498,8 +2505,6 @@ static void TestCyrillicTailoring(void) {
       "\\u0410\\u0306a",
       "\\u04d0A"
   };
-  log_err("*** Disabled, pending corrected FractionalUCA.txt from Mark ***\n");
-  return;
     genericLocaleStarter("ru", test, 3);
     genericRulesStarter("&\\u0410 = \\u0410", test, 3);
     genericRulesStarter("&Z < \\u0410", test, 3);
@@ -2826,9 +2831,6 @@ static void TestVariableTopSetting(void) {
   UChar second[256] = { 0 };
   UParseError parseError;
 
-  log_err("*** Disabled, pending amendend UCARules.txt from Mark ***\n");
-  return;
-
   src.opts = &opts;
 
   log_verbose("Slide variable top over UCARules\n");
@@ -2862,12 +2864,32 @@ static void TestVariableTopSetting(void) {
         varTopOriginal = ucol_getVariableTop(coll, &status);
         varTop1 = ucol_setVariableTop(coll, rulesCopy+oldChOffset, oldChLen, &status);
         if(U_FAILURE(status)) {
-          if(status == U_PRIMARY_TOO_LONG_ERROR) {
-            log_verbose("= Expected failure for %04X =", *(rulesCopy+oldChOffset));
-          } else {
-            log_err("Unexpected failure setting variable top for %04X at offset %d. Error %s\n", *(rulesCopy+oldChOffset), oldChOffset, u_errorName(status));
+          char buffer[256];
+          char *buf = buffer;
+          uint32_t i = 0, j;
+          uint32_t CE = UCOL_NO_MORE_CES;
+
+          /* before we start screaming, let's see if there is a problem with the rules */
+          collIterate s;
+          init_collIterate(coll, rulesCopy+oldChOffset, oldChLen, &s);
+
+          CE = ucol_getNextCE(coll, &s, &status);
+
+          for(i = 0; i < oldChLen; i++) {
+            j = sprintf(buf, "%04X ", *(rulesCopy+oldChOffset+i));
+            buf += j;
           }
-          continue;
+          if(status == U_PRIMARY_TOO_LONG_ERROR) {
+            log_verbose("= Expected failure for %s =", buffer);
+          } else {
+            if(s.pos == s.endp) {
+              log_err("Unexpected failure setting variable top at offset %d. Error %s. Codepoints: %s\n", 
+                oldChOffset, u_errorName(status), buffer);
+            } else {
+              log_verbose("There is a goofy contraction in UCA rules that does not appear in the fractional UCA. Codepoints: %s\n", 
+                buffer);
+            }
+          }
         }
         varTop2 = ucol_getVariableTop(coll, &status);
         if((varTop1 & 0xFFFF0000) != (varTop2 & 0xFFFF0000)) {
@@ -2906,6 +2928,7 @@ static void TestVariableTopSetting(void) {
         oldExLen = exLen;
       }
     }
+    status = U_ZERO_ERROR;
   }
   else {
     log_err("Unexpected failure getting rules %s\n", u_errorName(status));
@@ -2920,8 +2943,8 @@ static void TestVariableTopSetting(void) {
   log_verbose("Testing setting variable top to contractions\n");
   {
     /* uint32_t tailoredCE = UCOL_NOT_FOUND; */
-    UChar *conts = (UChar *)((uint8_t *)coll->image + coll->image->UCAConsts+sizeof(UCAConstants));
-    /*UChar *conts = (UChar *)((uint8_t *)coll->image + coll->image->contractionUCACombos);*/
+    /*UChar *conts = (UChar *)((uint8_t *)coll->image + coll->image->UCAConsts+sizeof(UCAConstants));*/
+    UChar *conts = (UChar *)((uint8_t *)coll->image + coll->image->contractionUCACombos);
     while(*conts != 0) {
       if(*(conts+2) == 0) {
         varTop1 = ucol_setVariableTop(coll, conts, -1, &status);
@@ -2929,7 +2952,9 @@ static void TestVariableTopSetting(void) {
         varTop1 = ucol_setVariableTop(coll, conts, 3, &status);
       }
       if(U_FAILURE(status)) {
-        log_err("Couldn't set variable top to a contraction\n");
+        log_err("Couldn't set variable top to a contraction %04X %04X %04X\n",
+          *conts, *(conts+1), *(conts+2));
+        status = U_ZERO_ERROR;
       }
       conts+=3;
     }
@@ -3489,8 +3514,11 @@ static void TestRuleOptions(void) {
     { "&[before 1][first tertiary ignorable]<<<k", 
     { "\\u0000", "k"}, 2}, /* you cannot go before first tertiary ignorable */
     /* - all befores here amount to zero */
-    { "&[before 3][last primary ignorable]<<<k",
-    { "k", "\\u20e3"}, 2},
+    /* cannot test this anymore, as [last primary ignorable] doesn't have a 
+     * code point associated to it anymore 
+     */
+    /*{ "&[before 3][last primary ignorable]<<<k",
+    { "k", "\\u20e3"}, 2},*/
   };
   uint32_t i;
 
