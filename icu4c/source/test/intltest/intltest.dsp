@@ -132,7 +132,7 @@ SOURCE=.\cppcnvt.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\cpputils.cpp
+SOURCE=.\cputilst.cpp
 # End Source File
 # Begin Source File
 
@@ -456,7 +456,7 @@ SOURCE=.\cppcnvt.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\cpputils.h
+SOURCE=.\cputilst.h
 # End Source File
 # Begin Source File
 

@@ -257,7 +257,11 @@ UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_t *expe
  
         ucnv_fromUnicode (conv,
                   (char **)&targ,
+#if defined(OS400)
+                  (const char*)end,
+#else
                   (const int8_t*)end,
+#endif
                   &src,
                   sourceLimit,
                   checkOffsets ? offs : NULL,
@@ -1332,8 +1336,8 @@ TestISO_2022_JP() {
 
 	uBuf =  (UChar*)malloc(uBufSize * sizeof(UChar)*5);
 	cBuf =(char*)malloc(uBufSize * sizeof(char) * 5);
-	uSource = &in[0];
-	uSourceLimit=&in[sizeof(in)/2];
+	uSource = (const UChar*)&in[0];
+	uSourceLimit=(const UChar*)&in[sizeof(in)/2];
 	cTarget = cBuf;
 	cTargetLimit = cBuf +uBufSize*5;
 	uTarget = uBuf;
@@ -1351,7 +1355,7 @@ TestISO_2022_JP() {
         log_err("ucnv_fromUnicode conversion failed reason %s\n", u_errorName(errorCode));
         return;
     }
-    uSource = &in[0];
+    uSource = (const UChar*)&in[0];
 	while(uSource<uSourceLimit){
 		if(*test!=*uSource){
 			log_err("Expected : \\u%04X \t Got: \\u%04X\n",*uSource,(int)*test) ;
