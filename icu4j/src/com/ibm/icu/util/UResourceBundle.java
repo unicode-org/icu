@@ -26,10 +26,9 @@ import com.ibm.icu.util.ULocale;
  * a data file. You create a resource bundle that manages the resources for a given
  * locale and then ask it for individual resources.
  * <P>
- * This API is analogous to JDK {@link #ResourceBundle java.util ResourceBundle}, 
- * but the semantics are considerably different. In ResourceBundle class, an object is created 
+ * In ResourceBundle class, an object is created 
  * and the sub items are fetched using getString, getObject methods. 
- * In UResource,each individual element of a resource is a resource by itself.
+ * In UResourceBundle,each individual element of a resource is a resource by itself.
  * 
  * <P>
  * Resource bundles in ICU are currently defined using text files which conform to the following
@@ -38,7 +37,7 @@ import com.ibm.icu.util.ULocale;
  * <a href="http://oss.software.ibm.com/icu/userguide/ResourceManagement.html">Users Guide</a>.
  * <P>
  *
- * The UResource class is not suitable for subclassing.
+ *
  *
  * @draft ICU 3.0
  * @author ram
@@ -49,8 +48,13 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @draft ICU 3.0
      */
 	protected static final String ICU_DATA_PATH = "com/ibm/icu/impl/";
-
-	public static final String ICU_BUNDLE = "data/icudt"+VersionInfo.ICU_DATA_VERSION;    /**
+    /**
+     * The data path to be used with getBundleInstance API
+     * @draft ICU 3.0
+     */
+	public static final String ICU_BUNDLE = "data/icudt"+VersionInfo.ICU_DATA_VERSION;    
+    
+    /**
      * The base name of ICU data to be used with getBundleInstance API
      * @draft ICU 3.0
      */
@@ -63,12 +67,16 @@ public abstract class UResourceBundle extends ResourceBundle{
     public static final String ICU_COLLATION_BASE_NAME = ICU_BASE_NAME + "/coll";
     
     /**
-     * The class loader constanst to be used with getBundleInstance API
+     * The class loader constant to be used with getBundleInstance API
      * @draft ICU 3.0
      */
     public static final ClassLoader ICU_DATA_CLASS_LOADER = ICUData.class.getClassLoader();
-
-    public static final String INSTALLED_LOCALES = "InstalledLocales";
+    
+    /**
+     * The name of the resource containing the installed locales
+     * @draft ICU 3.0
+     */
+    protected static final String INSTALLED_LOCALES = "InstalledLocales";
     
     /**
      * The locale ID of this bundle
@@ -89,10 +97,10 @@ public abstract class UResourceBundle extends ResourceBundle{
     protected boolean hasFallback;
     
     /**
-     * Gets a resource bundle using the specified base name and locale.
+     * Creates a resource bundle using the specified base name and locale.
      * ICU_DATA_CLASS is used as the default root.
      * @param baseName the base name of the resource bundle, a fully qualified class name
-     * @param locale the locale for which a resource bundle is desired
+     * @param localeName the locale for which a resource bundle is desired
      * @exception MissingResourceException
      *     if no resource bundle for the specified base name can be found
      * @return a resource bundle for the given base name and locale
@@ -103,7 +111,7 @@ public abstract class UResourceBundle extends ResourceBundle{
     }
     
     /**
-     * Gets a resource bundle using the specified base name, locale, and class root.
+     * Creates a resource bundle using the specified base name, locale, and class root.
      *
      * @param baseName the base name of the resource bundle, a fully qualified class name
      * @param localeName the locale for which a resource bundle is desired
@@ -118,7 +126,7 @@ public abstract class UResourceBundle extends ResourceBundle{
     }
     
     /**
-     * Gets a resource bundle using the specified base name, locale, and class root.
+     * Creates a resource bundle using the specified base name, locale, and class root.
      *
      * @param baseName the base name of the resource bundle, a fully qualified class name
      * @param localeName the locale for which a resource bundle is desired
@@ -145,7 +153,7 @@ public abstract class UResourceBundle extends ResourceBundle{
     
     
     /**
-     * Creates a UResourceBundle for the locale specified, from which users can extract strings by using
+     * Creates a UResourceBundle for the locale specified, from which users can extract resources by using
      * their corresponding keys.
      * @param locale  specifies the locale for which we want to open the resource.
      *                If null the bundle for default locale is opened.              
@@ -160,7 +168,7 @@ public abstract class UResourceBundle extends ResourceBundle{
     }
     /**
      * Creates a UResourceBundle for the default locale and specified base name,
-     * from which users can extract strings by using their corresponding keys.
+     * from which users can extract resources by using their corresponding keys.
      * @param baseName  specifies the locale for which we want to open the resource.
      *                If null the bundle for default locale is opened.              
      * @return a resource bundle for the given base name and default locale              
@@ -170,8 +178,8 @@ public abstract class UResourceBundle extends ResourceBundle{
         return getBundleInstance( baseName, ULocale.getDefault().toString(), ICU_DATA_CLASS_LOADER );
     }
     /**
-    * Creates a UResourceBundle for the default locale and specified base name,
-     * from which users can extract strings by using their corresponding keys.
+     * Creates a UResourceBundle for the specified locale and specified base name,
+     * from which users can extract resources by using their corresponding keys.
      * @param baseName  specifies the locale for which we want to open the resource.
      *                If null the bundle for default locale is opened.              
      * @param locale  specifies the locale for which we want to open the resource.
@@ -185,7 +193,7 @@ public abstract class UResourceBundle extends ResourceBundle{
     }
    
     /**
-     * Creates a UResourceBundle, from which users can extract strings by using
+     * Creates a UResourceBundle, from which users can extract resources by using
      * their corresponding keys.
      * @param baseName string containing the name of the data package.
      *                    If null the default ICU package name is used.
@@ -215,10 +223,16 @@ public abstract class UResourceBundle extends ResourceBundle{
     /**
      * Get the locale of this bundle
      * @return the locale of this resource bundle
+     * @draft ICU 3.0
      */
     public Locale getLocale(){
         return getULocale().toLocale();   
     }
+    /**
+     * Set the parent bundle of this bundle
+     * @param parent
+     * @draft ICU 3.0
+     */
     protected void setParent(UResourceBundle parent){
         this.parent = parent;   
     }
@@ -373,7 +387,7 @@ public abstract class UResourceBundle extends ResourceBundle{
     /**
      * Creates a new ICUResourceBundle for the given locale, baseName and class loader
      * @param baseName the base name of the resource bundle, a fully qualified class name
-     * @param localeName the locale for which a resource bundle is desired
+     * @param localeID the locale for which a resource bundle is desired
      * @param root the class object from which to load the resource bundle
      * @exception MissingResourceException
      *     if no resource bundle for the specified base name can be found

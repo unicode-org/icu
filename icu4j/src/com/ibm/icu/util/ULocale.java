@@ -639,7 +639,7 @@ public final class ULocale implements Serializable {
      * Construct a ULocale from a string of the form "sv_FI_ALAND".
      * By default this constructor will not normalize the localeID. 
      * 
-     * @param locName string representation of the locale, e.g:
+     * @param localeID string representation of the locale, e.g:
      * "en_US", "sy-Cyrl-YU"
      * @param localeID The locale identifier as a string
      * @draft ICU 2.8
@@ -2139,7 +2139,7 @@ public final class ULocale implements Serializable {
      * Return a keyword value localized for display in the specified locale.
      * @param localeID the id of the locale whose keyword value is to be displayed.
      * @param keyword the keyword whose value is to be displayed.
-     * @param displayLocaleID the id of the locale in which to display the value.
+     * @param displayLocale the id of the locale in which to display the value.
      * @return the localized value name.
      * @draft ICU 3.0
      */
@@ -2181,7 +2181,7 @@ public final class ULocale implements Serializable {
 
     /**
      * Return the locale ID localized for display in the provided locale.
-     * @param the locale whose name is to be displayed.
+     * @param localeID the locale whose name is to be displayed.
      * @param displayLocale the locale in which to display the locale name.
      * @return the localized locale name.
      * @draft ICU 3.0
