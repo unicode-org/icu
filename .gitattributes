@@ -1,21 +1,7 @@
 * text=auto !eol
 icu4c/license.html svneol=native#text/html
 icu4c/readme.html svneol=native#text/html
-icu4c/source/data/brkitr/charBE.brk -text
-icu4c/source/data/brkitr/charLE.brk -text
-icu4c/source/data/brkitr/lineBE.brk -text
-icu4c/source/data/brkitr/lineLE.brk -text
-icu4c/source/data/brkitr/line_thBE.brk -text
-icu4c/source/data/brkitr/line_thLE.brk -text
-icu4c/source/data/brkitr/sentBE.brk -text
-icu4c/source/data/brkitr/sentLE.brk -text
 icu4c/source/data/brkitr/thaidict.brk -text
-icu4c/source/data/brkitr/titleBE.brk -text
-icu4c/source/data/brkitr/titleLE.brk -text
-icu4c/source/data/brkitr/wordBE.brk -text
-icu4c/source/data/brkitr/wordLE.brk -text
-icu4c/source/data/brkitr/word_thBE.brk -text
-icu4c/source/data/brkitr/word_thLE.brk -text
 icu4c/source/data/unidata/UCARules.txt -text svneol=unset#application/octet-stream
 icu4c/source/extra/scrptrun/readme.html svneol=native#text/html
 icu4c/source/samples/layout/readme.html svneol=native#text/html
