@@ -28,18 +28,4 @@ le_int32 GlyphSubstitutionTableHeader::process(LEGlyphID *&glyphs, const LETag *
     return processor.process(glyphs, NULL, glyphTags, charIndices, glyphCount, rightToLeft, glyphDefinitionTableHeader, NULL);
 }
 
-le_bool GlyphSubstitutionTableHeader::coversScript(LETag scriptTag) const
-{
-    const ScriptListTable *scriptListTable = (const ScriptListTable *) ((char *)this + SWAPW(scriptListOffset));
-
-    return scriptListTable->findScript(scriptTag) != NULL;
-}
-
-le_bool GlyphSubstitutionTableHeader::coversScriptAndLanguage(LETag scriptTag, LETag languageTag) const
-{
-    const ScriptListTable *scriptListTable = (const ScriptListTable *) ((char *)this + SWAPW(scriptListOffset));
-
-    return scriptListTable->findLanguage(scriptTag, languageTag, TRUE) != NULL;
-}
-
 U_NAMESPACE_END

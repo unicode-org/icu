@@ -87,6 +87,7 @@ Features.o \
 GDEFMarkFilter.o \
 GlyphDefinitionTables.o \
 GlyphIterator.o \
+GlyphLookupTables.o \
 GlyphPosnLookupProc.o \
 GlyphPositioningTables.o \
 GlyphSubstLookupProc.o \
