@@ -171,7 +171,7 @@ RegexMatcher &RegexMatcher::appendReplacement(UnicodeString &dest,
                     dest.append(escapedChar);
                     replIdx += (c==0x55? 9: 5); 
                     // TODO:  Report errors for mal-formed \u escapes?
-                    //        As this is, the original sequence is output.
+                    //        As this is, the original sequence is output, which may be OK.
                     continue;
                 }
             }
@@ -651,6 +651,94 @@ REStackFrame *RegexMatcher::resetStack() {
 //--------------------------------------------------------------------------------
 void RegexMatcher::setTrace(UBool state) {
     fTraceDebug = state;
+}
+
+
+
+//---------------------------------------------------------------------
+//
+//   split
+//
+//---------------------------------------------------------------------
+int32_t  RegexMatcher::split(const UnicodeString &input,
+        UnicodeString    dest[],
+        int32_t          destCapacity,
+        UErrorCode       &status)
+{
+    //
+    // Check arguements for validity
+    //
+    if (U_FAILURE(status)) {
+        return 0;
+    };
+
+    if (destCapacity < 1) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
+
+    //
+    // Reset for the input text
+    //
+    reset(input);
+    int32_t   inputLen = input.length();
+    int32_t   nextOutputStringStart = 0;
+    if (inputLen == 0) {
+        return 0;
+    }
+
+
+    //
+    // Loop through the input text, searching for the delimiter pattern
+    //
+    int i;
+    int32_t numCaptureGroups = fPattern->fGroupMap->size();
+    for (i=0; ; i++) {
+        if (i==destCapacity-1) {
+            // There is only one output string left.
+            // Fill it with whatever is left from the input, then exit the loop.
+            dest[i].setTo(input, nextOutputStringStart, inputLen-nextOutputStringStart);
+            break;
+        }
+        if (find()) {
+            // We found another delimiter.  Move everything from where we started looking
+            //  up until the start of the delimiter into the next output string.
+            int32_t fieldLen = fMatchStart - nextOutputStringStart;
+            dest[i].setTo(input, nextOutputStringStart, fieldLen);
+            nextOutputStringStart = fMatchEnd;
+
+            // If the delimiter pattern has capturing parentheses, the captured
+            //  text goes out into the next n destination strings.
+            int32_t groupNum;
+            for (groupNum=1; groupNum<=numCaptureGroups; groupNum++) {
+                if (i==destCapacity-1) {
+                    break;
+                }
+                i++;
+                dest[i] = group(groupNum, status);
+            }
+
+            if (nextOutputStringStart == inputLen) {
+                // The delimiter was at the end of the string.  We're done.
+                break;
+            }
+
+            if (i==destCapacity-1) {
+                // We've filled up the last output string with capture group data.
+                //  Give back the last string, to be used for the remainder of the input.
+                i--;
+            }
+        }
+        else
+        {
+            // We ran off the end of the input while looking for the next delimiter.
+            // All the remaining text goes into the current output string.
+            dest[i].setTo(input, nextOutputStringStart, inputLen-nextOutputStringStart);
+            break;
+        }
+    }
+    return i+1;
 }
 
 

@@ -54,6 +54,7 @@ U_NAMESPACE_BEGIN
 //
 enum {
      URX_RESERVED_OP   = 0,    // For multi-operand ops, most non-first words.
+     URX_RESERVED_OP_N = 255,  // For multi-operand ops, negative operand values.
      URX_BACKTRACK     = 1,
      URX_END           = 2,
      URX_ONECHAR       = 3,    // Value field is the 21 bit unicode char to match
@@ -84,7 +85,7 @@ enum {
 
      URX_CTR_INIT      = 25,   // Counter Inits for {Interval} loops.
      URX_CTR_INIT_NG   = 26,   //   3 kinds, normal, non-greedy, and possesive.
-     URX_CTR_INIT_P    = 27,   //   These are 4 word opcodes.  See description.
+     URX_UNUSED_2      = 27,   //   These are 4 word opcodes.  See description.
                                //    First Operand:  Data loc of counter variable
                                //    2nd   Operand:  Pat loc of the URX_CTR_LOOPx 
                                //                    at the end of the loop.
@@ -92,7 +93,7 @@ enum {
                                //    4th   Operand:  Max count, -1 for unbounded.
      URX_CTR_LOOP      = 28,   // Loop Ops for {interval} loops.
      URX_CTR_LOOP_NG   = 29,   //   Also in three flavors.
-     URX_CTR_LOOP_P    = 30,   //   Operand is loc of corresponding CTR_INIT.
+     URX_UNUSED_3      = 30,   //   Operand is loc of corresponding CTR_INIT.
 
      URX_RELOC_OPRND   = 31,   // Operand value in multi-operand ops that refers
                                //   back into compiled pattern code, and thus must
@@ -180,10 +181,10 @@ enum {
         "URX_DOLLAR",          \
         "CTR_INIT",            \
         "CTR_INIT_NG",         \
-        "CTR_INIT_P",          \
+        "CTR_UNUSED_2",        \
         "CTR_LOOP",            \
         "CTR_LOOP_NG",         \
-        "CTR_LOOP_P",          \
+        "CTR_UNUSED_3",        \
         "RELOC_OPRND",         \
         "STO_SP",              \
         "LD_SP",               \
@@ -207,7 +208,7 @@ enum {
 //  Convenience macros for assembling and disassembling a compiled operation.
 //
 #define URX_BUILD(type, val) (int32_t)((type << 24) | (val))
-#define URX_TYPE(x)          ((x) >> 24) 
+#define URX_TYPE(x)          ((uint32_t)(x) >> 24) 
 #define URX_VAL(x)           ((x) & 0xffffff)
 
                 
