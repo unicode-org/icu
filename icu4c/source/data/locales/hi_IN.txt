@@ -4,7 +4,7 @@
 
 hi_IN {
     ShortCountry { IND }
-    Vesion{ "1.0" }
+    Version { "1.0" }
     NumberPatterns {
         "#,##,##0.###",
         "\u00A4 #,##0.00;-\u00A4 #,##0.00",
@@ -30,7 +30,5 @@ hi_IN {
         "1",
         "1"
     }
-   Version { "0.3" }     
-   LocaleID { "0439" }
-
+    LocaleID { "0439" }
 }
