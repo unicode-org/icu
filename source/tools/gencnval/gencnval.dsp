@@ -89,6 +89,10 @@ LINK32=link.exe
 
 SOURCE=.\gencnval.c
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\common\ucnv_io.c
+# End Source File
 # End Group
 # Begin Group "Header Files"
 

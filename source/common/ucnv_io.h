@@ -99,4 +99,11 @@ ucnv_io_getDefaultConverterName(void);
 U_CFUNC void
 ucnv_io_setDefaultConverterName(const char *name);
 
+/**
+ * Lexically compare two converter names/aliases, ignoring case and
+ * the delimiters '-', '_', and ' '.
+ */
+U_CFUNC int
+charsetNameCmp(const char *name1, const char *name2);
+
 #endif /* _UCNV_IO */

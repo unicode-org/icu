@@ -122,7 +122,10 @@ U_CDECL_END
 
 /**
  * Creates a UConverter object with the names specified as a C string.
- * The actual name will be resolved with the alias file.
+ * The actual name will be resolved with the alias file
+ * using a case-insensitive string comparison that ignores
+ * the delimiters '-', '_', and ' ' (dash, underscore, and space).
+ * E.g., the names "UTF8", "utf-8", and "Utf 8" are all equivalent.
  * If <code>NULL</code> is passed for the converter name, it will create one with the
  * getDefaultName return value.
  *
@@ -151,8 +154,12 @@ UConverter* U_EXPORT2 ucnv_open   (const char *converterName, UErrorCode * err);
 
 /**
  * Creates a Unicode converter with the names specified as unicode string. The name should be limited to
- * the ASCII-7 alphanumerics range. The actual name will be resolved with the alias file.
- * if <TT>NULL</TT> is passed for the converter name, it will create one with the
+ * the ASCII-7 alphanumerics range.
+ * The actual name will be resolved with the alias file
+ * using a case-insensitive string comparison that ignores
+ * the delimiters '-', '_', and ' ' (dash, underscore, and space).
+ * E.g., the names "UTF8", "utf-8", and "Utf 8" are all equivalent.
+ * If <TT>NULL</TT> is passed for the converter name, it will create one with the
  * getDefaultName return value.
  * @param converterName : name of the uconv table in a zero terminated Unicode string
  * @param err outgoing error status <TT>U_MEMORY_ALLOCATION_ERROR, TABLE_NOT_FOUND</TT>
@@ -714,7 +721,9 @@ U_CAPI int32_t U_EXPORT2 ucnv_countAvailable (void);
 
 
 /**
- * Gives the number of aliases for given converter or alias name
+ * Gives the number of aliases for given converter or alias name.
+ * Note that additional aliases are recognized by ucnv_open().
+ * This method only enumerates the listed entries in the alias file.
  * @param alias alias name
  * @param pErrorCode result of operation
  * @return number of names on alias list
@@ -724,7 +733,9 @@ U_CAPI uint16_t
 ucnv_countAliases(const char *alias, UErrorCode *pErrorCode);
 
 /**
- * Gives the name of the alias at given index of alias list
+ * Gives the name of the alias at given index of alias list.
+ * Note that additional aliases are recognized by ucnv_open().
+ * This method only enumerates the listed entries in the alias file.
  * @param alias alias name
  * @param n index in alias list
  * @param pErrorCode result of operation
@@ -735,7 +746,9 @@ U_CAPI const char *
 ucnv_getAlias(const char *alias, uint16_t n, UErrorCode *pErrorCode);
 
 /**
- * Fill-up the list of alias names for the given alias
+ * Fill-up the list of alias names for the given alias.
+ * Note that additional aliases are recognized by ucnv_open().
+ * This method only enumerates the listed entries in the alias file.
  * @param alias alias name
  * @param aliases fill-in list, aliases is a pointer to an array of
  *        <code>ucnv_countAliases()</code> string-pointers
