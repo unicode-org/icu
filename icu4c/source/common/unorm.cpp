@@ -2263,6 +2263,13 @@ unorm_normalize(const UChar *src, int32_t srcLength,
  * filled again.
  */
 
+/*
+ * ### TODO:
+ * Now that UCharIterator.next/previous return (int32_t)-1 not (UChar)0xffff
+ * if iteration bounds are reached,
+ * try to not call hasNext/hasPrevious and instead check for >=0.
+ */
+
 /* backward iteration ------------------------------------------------------- */
 
 /*
@@ -2275,7 +2282,7 @@ _getPrevNorm32(UCharIterator &src, uint32_t minC, uint32_t mask, UChar &c, UChar
     uint32_t norm32;
 
     /* need src.hasPrevious() */
-    c=src.previous(&src);
+    c=(UChar)src.previous(&src);
     c2=0;
 
     /* check for a surrogate before getting norm32 to see if we need to predecrement further */
@@ -2286,7 +2293,7 @@ _getPrevNorm32(UCharIterator &src, uint32_t minC, uint32_t mask, UChar &c, UChar
     } else if(UTF_IS_SURROGATE_FIRST(c) || !src.hasPrevious(&src)) {
         /* unpaired surrogate */
         return 0;
-    } else if(UTF_IS_FIRST_SURROGATE(c2=src.previous(&src))) {
+    } else if(UTF_IS_FIRST_SURROGATE(c2=(UChar)src.previous(&src))) {
         norm32=_getNorm32(c2);
         if((norm32&mask)==0) {
             /* all surrogate pairs with this lead surrogate have irrelevant data */
@@ -2392,6 +2399,7 @@ unorm_previous(UCharIterator *src,
     IsPrevBoundaryFn *isPreviousBoundary;
     uint32_t mask;
     int32_t startIndex, bufferLength, bufferCapacity, destLength;
+    int32_t c, c2;
     UChar minC;
 
     /* check argument values */
@@ -2438,16 +2446,12 @@ unorm_previous(UCharIterator *src,
         break;
     case UNORM_NONE:
         destLength=0;
-        if(src->hasPrevious(src)) {
-            UChar c, c2;
-
-            c=src->previous(src);
+        if((c=src->previous(src))>=0) {
             destLength=1;
-            if(UTF_IS_TRAIL(c) && src->hasPrevious(src)) {
-                c2=src->previous(src);
+            if(UTF_IS_TRAIL(c) && (c2=src->previous(src))>=0) {
                 if(UTF_IS_LEAD(c2)) {
                     if(destCapacity>=2) {
-                        dest[1]=c; /* trail surrogate */
+                        dest[1]=(UChar)c; /* trail surrogate */
                         destLength=2;
                     }
                     c=c2; /* lead surrogate to be written below */
@@ -2457,7 +2461,7 @@ unorm_previous(UCharIterator *src,
             }
 
             if(destCapacity>0) {
-                dest[0]=c;
+                dest[0]=(UChar)c;
             }
         }
         return u_terminateUChars(dest, destCapacity, destLength, pErrorCode);
@@ -2516,7 +2520,7 @@ _getNextNorm32(UCharIterator &src, uint32_t minC, uint32_t mask, UChar &c, UChar
     uint32_t norm32;
 
     /* need src.hasNext() to be true */
-    c=src.next(&src);
+    c=(UChar)src.next(&src);
     c2=0;
 
     if(c<minC) {
@@ -2525,7 +2529,7 @@ _getNextNorm32(UCharIterator &src, uint32_t minC, uint32_t mask, UChar &c, UChar
 
     norm32=_getNorm32(c);
     if(UTF_IS_FIRST_SURROGATE(c)) {
-        if(src.hasNext(&src) && UTF_IS_SECOND_SURROGATE(c2=src.current(&src))) {
+        if(src.hasNext(&src) && UTF_IS_SECOND_SURROGATE(c2=(UChar)src.current(&src))) {
             src.move(&src, 1, UITERATOR_CURRENT); /* skip the c2 surrogate */
             if((norm32&mask)==0) {
                 /* irrelevant data */
@@ -2591,10 +2595,10 @@ _findNextIterationBoundary(UCharIterator &src,
     stackBuffer=buffer;
 
     /* get one character and ignore its properties */
-    buffer[0]=c=src.next(&src);
+    buffer[0]=c=(UChar)src.next(&src);
     bufferIndex=1;
     if(UTF_IS_FIRST_SURROGATE(c) && src.hasNext(&src)) {
-        if(UTF_IS_SECOND_SURROGATE(c2=src.next(&src))) {
+        if(UTF_IS_SECOND_SURROGATE(c2=(UChar)src.next(&src))) {
             buffer[bufferIndex++]=c2;
         } else {
             src.move(&src, -1, UITERATOR_CURRENT); /* back out the non-trail-surrogate */
@@ -2621,7 +2625,7 @@ _findNextIterationBoundary(UCharIterator &src,
                 }
             } else {
                 *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
-                src.move(&src, 0, UITERATOR_END);
+                src.move(&src, 0, UITERATOR_LIMIT);
                 return 0;
             }
         }
@@ -2642,6 +2646,7 @@ unorm_next(UCharIterator *src,
     IsNextBoundaryFn *isNextBoundary;
     uint32_t mask;
     int32_t bufferLength, bufferCapacity, destLength;
+    int32_t c, c2;
     UChar minC;
 
     /* check argument values */
@@ -2688,16 +2693,12 @@ unorm_next(UCharIterator *src,
         break;
     case UNORM_NONE:
         destLength=0;
-        if(src->hasNext(src)) {
-            UChar c, c2;
-
-            c=src->next(src);
+        if((c=src->next(src))>=0) {
             destLength=1;
-            if(UTF_IS_LEAD(c) && src->hasNext(src)) {
-                c2=src->next(src);
+            if(UTF_IS_LEAD(c) && (c2=src->next(src))>=0) {
                 if(UTF_IS_TRAIL(c2)) {
                     if(destCapacity>=2) {
-                        dest[1]=c2; /* trail surrogate */
+                        dest[1]=(UChar)c2; /* trail surrogate */
                         destLength=2;
                     }
                     /* lead surrogate to be written below */
@@ -2707,7 +2708,7 @@ unorm_next(UCharIterator *src,
             }
 
             if(destCapacity>0) {
-                dest[0]=c;
+                dest[0]=(UChar)c;
             }
         }
         return u_terminateUChars(dest, destCapacity, destLength, pErrorCode);
