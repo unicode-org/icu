@@ -6,11 +6,18 @@
 GEN_DEPS.c=	$(CC1) -E -M $(DEFS) $(CPPFLAGS)
 GEN_DEPS.cc=	$(CXX1) -E -M $(DEFS) $(CPPFLAGS)
 
-DEFS+=-DOS400 -D_MULTI_THREADED
+DEFS+=-DOS400
+THREADSCPPFLAGS = -D_MULTI_THREADED
 
 ## Commands to compile
-COMPILE.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) -c -qTERASPACE=*YES -qSTGMDL=*INHERIT -qPFROPT=*STRDONLY
-COMPILE.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c -qTERASPACE=*YES -qSTGMDL=*INHERIT -qPFROPT=*STRDONLY
+# -qTERASPACE: large pointers
+# -qALWLIBUPD: It allows the compiled service program to have dependencies on
+#	service programs in a different library than that specified originally
+#	by CRTSRVPGM after having used the UPDSRVPGM command.
+#	Similar to -fPIC and -install_name on other compilers, but different.
+# -qPFROPT=*STRDONLY: Strings are read-only
+COMPILE.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) -c -qTERASPACE=*YES -qSTGMDL=*INHERIT -qALWLIBUPD=*YES -qPFROPT=*STRDONLY
+COMPILE.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c -qTERASPACE=*YES -qSTGMDL=*INHERIT -qALWLIBUPD=*YES -qPFROPT=*STRDONLY
 
 ## Commands to link
 ## We need to use the C++ linker, even when linking C programs, since
