@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/translit/Demo.java,v $ 
- * $Date: 2002/02/16 03:05:00 $ 
- * $Revision: 1.12 $
+ * $Date: 2002/03/16 03:49:43 $ 
+ * $Revision: 1.13 $
  *
  *****************************************************************************************
  */
@@ -28,7 +28,7 @@ import com.ibm.icu.text.*;
  * <p>Copyright (c) IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Demo.java,v $ $Revision: 1.12 $ $Date: 2002/02/16 03:05:00 $
+ * @version $RCSfile: Demo.java,v $ $Revision: 1.13 $ $Date: 2002/03/16 03:49:43 $
  */
 public class Demo extends Frame {
 
@@ -88,7 +88,7 @@ public class Demo extends Frame {
         add(text);
 
         setSize(width, height);
-        setTransliterator("Latin-Greek");
+        setTransliterator("Latin-Greek", false);
     }
 
     private void initMenus() {
@@ -216,7 +216,7 @@ public class Demo extends Frame {
         swapSelectionItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 Transliterator inv = translit.getInverse();
-                setTransliterator(inv.getID());
+                setTransliterator(inv.getID(), false);
             }
         });
         
@@ -286,7 +286,7 @@ public class Demo extends Frame {
                 String compound = "";
                 try {
                     compound = compoundDialog.getArea().getText();
-                    setTransliterator(compound);
+                    setTransliterator(compound, false);
                 } catch (RuntimeException ex) {
                     compoundDialog.getArea().setText(compound + "\n" + ex.getMessage());
                 }
@@ -299,6 +299,33 @@ public class Demo extends Frame {
         mitem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 compoundDialog.show();
+            }
+        });
+        
+        // RuleBased Transliterator
+        
+        rulesDialog = new InfoDialog(this, "Rule-Based Transliterator", "",
+           "a > b;"
+        );
+        button = new Button("Set");
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String compound = "";
+                try {
+                    compound = rulesDialog.getArea().getText();
+                    setTransliterator(compound, true);
+                } catch (RuntimeException ex) {
+                    rulesDialog.getArea().setText(compound + "\n" + ex.getMessage());
+                }
+            }
+        });
+        rulesDialog.getBottom().add(button);
+        
+        translitMenu.add(mitem = new MenuItem("From Rules...", 
+            new MenuShortcut(KeyEvent.VK_R)));
+        mitem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                rulesDialog.show();
             }
         });
         
@@ -341,6 +368,7 @@ public class Demo extends Frame {
     InfoDialog helpDialog;
     InfoDialog hexDialog;
     InfoDialog compoundDialog;
+    InfoDialog rulesDialog;
     MenuItem convertSelectionItem = null;
     MenuItem invertSelectionItem = null;
     MenuItem swapSelectionItem = null;
@@ -354,10 +382,35 @@ public class Demo extends Frame {
                 return aa.getLabel().compareTo(bb.getLabel());
             }
         });
+        
+    // ADD Factory since otherwise getInverse blows out
+    static class DummyFactory implements Transliterator.Factory {
+        static DummyFactory singleton = new DummyFactory();
+        static HashMap m = new HashMap();
+
+        // Since Transliterators are immutable, we don't have to clone on set & get
+        static void add(String ID, Transliterator t) {
+            m.put(ID, t);
+            //System.out.println("Registering: " + ID + ", " + t.toRules(true));
+            Transliterator.registerFactory(ID, singleton);
+        }
+        public Transliterator getInstance(String ID) {
+            return (Transliterator) m.get(ID);
+        }
+    }
     
-    void setTransliterator(String name) {
+    
+    void setTransliterator(String name, boolean rules) {
         System.out.println("Got: " + name);
-        translit = Transliterator.getInstance(name);
+        if (!rules) {
+        	translit = Transliterator.getInstance(name);
+        } else {
+        	translit = Transliterator.createFromRules("Any-Test", name, Transliterator.FORWARD);
+            DummyFactory.add("Any-Test", translit);
+        	
+        	Transliterator translit2 = Transliterator.createFromRules("Test-Any", name, Transliterator.REVERSE);
+            DummyFactory.add("Test-Any", translit2);
+        }
         text.flush();
         text.setTransliterator(translit);
         convertSelectionItem.setLabel(Transliterator.getDisplayName(translit.getID()));
@@ -399,13 +452,13 @@ public class Demo extends Frame {
             this.name = name;
         }
         public void actionPerformed(ActionEvent e) {
-            setTransliterator(name);
+            setTransliterator(name, false);
         }
         public void itemStateChanged(ItemEvent e) {
             if (e.getStateChange() == e.SELECTED) {
-                setTransliterator(name);
+                setTransliterator(name, false);
             } else {
-                setTransliterator("Any-Null");
+                setTransliterator("Any-Null", false);
             }
         }
     }
