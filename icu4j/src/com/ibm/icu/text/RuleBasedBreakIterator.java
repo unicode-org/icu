@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedBreakIterator.java,v $ 
- * $Date: 2000/07/20 17:03:33 $ 
- * $Revision: 1.8 $
+ * $Date: 2000/07/25 21:11:59 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -240,7 +240,7 @@ import java.io.*;
  * &nbsp; For examples, see the resource data (which is annotated).</p>
  *
  * @author Richard Gillam
- * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.8 $ $Date: 2000/07/20 17:03:33 $
+ * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.9 $ $Date: 2000/07/25 21:11:59 $
  */
 public class RuleBasedBreakIterator extends BreakIterator {
 
@@ -1708,7 +1708,7 @@ System.out.println();
             //   - The basic idea here is to read successive character-category groups
             //   from the input string.  For each group, you create a state and point
             //   the appropriate entries in the previous state to it.  This produces a
-            //   straight line from the start state to the end state.  The {}, *, and (|)
+            //   straight line from the start state to the end state.  The ?, +, *, and (|)
             //   idioms produce branches in this straight line.  These branches (states
             //   that can transition to more than one other state) are called "decision
             //   points."  A list of decision points is kept.  This contains a list of
@@ -1883,8 +1883,8 @@ System.out.println();
                     // special-cased above
                     if (pendingChars.length() != 0) {
 
-                        // if the expression is followed by an asterisk, then push a copy
-                        // of the current decision point list onto the stack
+                        // if the expression is followed by an asterisk or a question mark,
+                        //  then push a copy of the current decision point list onto the stack
                         if (p + 1 < rule.length() && (
                             rule.charAt(p + 1) == '*' ||
                             rule.charAt(p + 1) == '?'
@@ -1923,25 +1923,29 @@ System.out.println();
                     }
                 }
 
-                // a * denotes a repeating character or group (* after () is handled separately
-                // below).  In addition to restoring the decision point list, modify the
-                // current state to point to itself on the appropriate character categories.
+                // a * or a + denotes a repeating character or group, and a ? denotes an
+                // optional character group. (*, + and ? after () are handled separately below.)
                 if (c == '+' || c == '*' || c == '?') {
-                    // when there's a *, update the current state to loop back on itself
+                    // when there's a * or a +, update the current state to loop back on itself
                     // on the character categories that caused us to enter this state
                     if (c == '*' || c == '+') {
+                        // Note: we process one state at a time because updateStateTable
+                        // may add new states, and we want to process them as well.
                         for (int i = lastState + 1; i < tempStateTable.size(); i++) {
                             Vector temp = new Vector();
                             temp.addElement(new Integer(i));
                             updateStateTable(temp, pendingChars, (short)(lastState + 1));
                         }
                         
+                        // If we just added any new states, add them to the decison point list
+                        // Note: it might be a good idea to avoid adding new states to the
+                        // decision point list in more than one place...
                         while (currentState + 1 < tempStateTable.size()) {
                             decisionPointList.addElement(new Integer(++currentState));
                         }
                     }
 
-                    // pop the top element off the decision point stack and merge
+                    // for * and ? pop the top element off the decision point stack and merge
                     // it with the current decision point list (this causes the divergent
                     // paths through the state table to come together again on the next
                     // new state)
@@ -2052,7 +2056,7 @@ System.out.println();
                         exitPoints.addElement(decisionPointList.elementAt(i));
                     decisionPointList = exitPoints;
 
-                    // if the ) isn't followed by a *, then all we have to do is throw
+                    // if the ) isn't followed by a *, + or ?, then all we have to do is throw
                     // away the other list on the decision point stack, and we're done
                     if (p + 1 >= rule.length() || (
                             rule.charAt(p + 1) != '*' &&
@@ -2062,7 +2066,8 @@ System.out.println();
                         decisionPointStack.pop();
                     }
 
-                    // but if the sequence repeats, we have a lot more work to do...
+                    // but if the sequence is conditional or it repeats,
+                    // we have a lot more work to do...
                     else {
 
                         // now exitPoints and decisionPointList have to point to equivalent
@@ -2086,7 +2091,7 @@ System.out.println();
                             decisionPointList = temp;
                         }
 
-                        // finally, copy every forward reference from the entry point
+                        // finally, for * and + copy every forward reference from the entry point
                         // list into every state in the new decision point list
                         if (rule.charAt(p + 1) == '+' || rule.charAt(p + 1) == '*') {
                             for (int i = 0; i < tempState.length; i++) {
@@ -2098,7 +2103,7 @@ System.out.println();
                             }
                         }
 
-                        // update lastState and currentState, and throw away the *
+                        // update lastState and currentState, and throw away the *, +, or ?
                         lastState = currentState;
                         currentState = tempStateTable.size() - 1;
                         ++p;
