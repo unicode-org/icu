@@ -64,7 +64,7 @@ void TestNumberFormat()
     UErrorCode status=U_ZERO_ERROR;
     UNumberFormatStyle style= UNUM_DEFAULT;
     UNumberFormat *pattern;
-    UNumberFormat *def, *fr, *cur_def, *cur_fr, *per_def, *per_fr, *spellout_def, *cur_frpattern;
+    UNumberFormat *def, *fr, *cur_def, *cur_fr, *per_def, *per_fr, *cur_frpattern;
     /* Testing unum_open() with various Numberformat styles and locales*/
     status = U_ZERO_ERROR;
     log_verbose("Testing  unum_open() with default style and locale\n");

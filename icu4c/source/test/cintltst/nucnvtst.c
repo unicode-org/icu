@@ -144,7 +144,7 @@ bool_t testConvertFromU( const UChar *source, int sourceLen,  const char *expect
 	bool_t doFlush;
 
 	for(i=0;i<NEW_MAX_BUFFER;i++)
-		junkout[i] = 0xF0;
+		junkout[i] = (char)0xF0;
 	for(i=0;i<NEW_MAX_BUFFER;i++)
 		junokout[i] = 0xFF;
 
@@ -341,7 +341,7 @@ bool_t testConvertToU( const char *source, int sourcelen, const UChar *expect, i
 			    &src,
 			    srcLimit,
 			    checkOffsets ? offs : NULL,
-			    (srcLimit == realSourceEnd), /* flush if we're at the end of hte source data */
+			    (bool_t)(srcLimit == realSourceEnd), /* flush if we're at the end of hte source data */
 			    &status);
 
 	    /*	    offs += (targ-oldTarg); */
@@ -473,7 +473,7 @@ void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
 
 	/* Sahha [health],  slashed h's */
 	const UChar malteseUChars[] = { 0x0053, 0x0061, 0x0127, 0x0127, 0x0061 };
-	const char expectedMaltese913[] = { 0x53, 0x61, 0xB1, 0xB1, 0x61 };
+	const char expectedMaltese913[] = { (char)0x53, (char)0x61, (char)0xB1, (char)0xB1, (char)0x61 };
 	/*********************************** START OF CODE finally *************/
 
   gInBufferSize = insize;
@@ -551,7 +551,6 @@ void TestConverterTypesAndStarters()
 	UConverter* myConverter[3];
 	UErrorCode err = U_ZERO_ERROR;
 	bool_t mystarters[256];
-	int i;
 	
 	const bool_t expectedKSCstarters[256] = {
 		FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,

@@ -18,13 +18,14 @@
 *     Madhu Katragadda             Ported for C API
 *********************************************************************************
 *//* C API TEST For COLLATOR */
+#include <stdio.h>
+#include <string.h>
 #include "unicode/utypes.h"
 #include "unicode/ucol.h"
 #include "unicode/uloc.h"
 #include "cintltst.h"
 #include "capitst.h"
 #include "unicode/ustring.h"
-#include <string.h>
 
 void addCollAPITest(TestNode** root)
 {
