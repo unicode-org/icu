@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/RbnfTest.java,v $ 
- * $Date: 2002/07/30 21:37:07 $ 
- * $Revision: 1.10 $
+ * $Date: 2002/07/31 00:55:03 $ 
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */
@@ -36,6 +36,24 @@ public class RbnfTest extends TestFmwk {
                             + e.toString());
             e.printStackTrace();
         }
+    }
+
+    public void TestCoverage() {
+	// extra calls to boost coverage numbers
+	RuleBasedNumberFormat fmt0 = new RuleBasedNumberFormat(RuleBasedNumberFormat.SPELLOUT);
+	RuleBasedNumberFormat fmt1 = (RuleBasedNumberFormat)fmt0.clone();
+	RuleBasedNumberFormat fmt2 = new RuleBasedNumberFormat(RuleBasedNumberFormat.SPELLOUT);
+	if (!fmt0.equals(fmt0)) {
+	    errln("self equality fails");
+	}
+	if (!fmt0.equals(fmt1)) {
+	    errln("clone equality fails");
+	}
+	if (!fmt0.equals(fmt2)) {
+	    errln("duplicate equality fails");
+	}
+	String str = fmt0.toString();
+	logln(str);
     }
 
     public void TestUndefinedSpellout() {
