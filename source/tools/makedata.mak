@@ -13,6 +13,14 @@ CFG=Debug
 !MESSAGE No configuration specified. Defaulting to common - Win32 Debug.
 !ENDIF 
 
+!IF [cl.exe]
+!MESSAGE Could not find build tools!
+!ERROR Make sure cl.exe and link.exe are on PATH!
+!ELSE
+!MESSAGE found $(PROG)
+!ENDIF
+
+
 #Let's see if user has given us a path to ICU
 #This could be found according to the path to makefile, but for now it is this way
 !MESSAGE ICUP=$(ICUP)
