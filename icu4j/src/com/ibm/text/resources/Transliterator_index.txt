@@ -57,7 +57,8 @@ Greek-Latin:file:Transliterator_Latin_Greek.utf8.txt:UTF8:REVERSE
 Latin-Hebrew:file:Transliterator_Latin_Hebrew.utf8.txt:UTF8:FORWARD
 Hebrew-Latin:file:Transliterator_Latin_Hebrew.utf8.txt:UTF8:REVERSE
 
-Latin-Jamo:file:Transliterator_Latin_Jamo.utf8.txt:UTF8:FORWARD
+LowerLatin-Jamo:internal:Transliterator_Latin_Jamo.utf8.txt:UTF8:FORWARD
+Latin-Jamo:alias:Any-Lower;LowerLatin-Jamo
 Jamo-Latin:file:Transliterator_Latin_Jamo.utf8.txt:UTF8:REVERSE
 
 Latin-Kana:file:Transliterator_Latin_Kana.utf8.txt:UTF8:FORWARD
