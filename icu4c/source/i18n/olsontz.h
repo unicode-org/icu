@@ -27,7 +27,7 @@ class U_I18N_API OlsonTimeZone: public TimeZone {
      * Construct from a resource bundle.
      * @param top the top-level zoneinfo resource bundle.  This is used
      * to lookup the rule that `res' may refer to, if there is one.
-     * @param res the resource bundle for the zone to be constructed
+     * @param res the resource bundle of the zone to be constructed
      * @param ec input-output error code
      */
     OlsonTimeZone(const UResourceBundle* top,
@@ -119,7 +119,8 @@ class U_I18N_API OlsonTimeZone: public TimeZone {
 
  protected:
     /**
-     * Default constructor
+     * Default constructor.  Creates a time zone with an empty ID and
+     * a fixed GMT offset of zero.
      */
     OlsonTimeZone();
 
