@@ -819,6 +819,7 @@ UResourceBundle *ures_copyResb(UResourceBundle *r, const UResourceBundle *origin
         }
         uprv_memcpy(r, original, sizeof(UResourceBundle));
         r->fResPath = NULL;
+        r->fResPathLen = 0;
         if(original->fResPath) {
           ures_appendResPath(r, original->fResPath, original->fResPathLen);
         }
@@ -1626,7 +1627,7 @@ ures_open(const char* path,
     }
 
     /* first "canonicalize" the locale ID */
-    length = uloc_getNameNoKeywords(localeID, canonLocaleID, sizeof(canonLocaleID), status);
+    length = uloc_getBaseName(localeID, canonLocaleID, sizeof(canonLocaleID), status);
     if(U_FAILURE(*status) || *status == U_STRING_NOT_TERMINATED_WARNING) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;

@@ -981,7 +981,7 @@ static const UEnumeration gKeywordsEnum = {
 
 
 U_CAPI UEnumeration* U_EXPORT2
-uloc_getKeywords(const char* localeID,
+uloc_openKeywords(const char* localeID,
                         UErrorCode* status) 
 {
     int32_t i=0;
@@ -1145,7 +1145,7 @@ uloc_getName(const char* localeID,
 }
 
 U_CAPI int32_t  U_EXPORT2
-uloc_getNameNoKeywords(const char* localeID,
+uloc_getBaseName(const char* localeID,
              char* name,
              int32_t nameCapacity,
              UErrorCode* err)  
