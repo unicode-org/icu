@@ -403,7 +403,7 @@ public:
   * Gets the locale of the Collator
   * @draft ICU 2.1
   */
-  virtual const Locale getLocale(UErrorCode& status) const = 0;
+  virtual const Locale getLocale(ULocDataLocaleType type, UErrorCode& status) const = 0;
 
   /**
   * Convenience method for comparing two strings based on the collation rules.

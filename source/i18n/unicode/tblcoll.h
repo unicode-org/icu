@@ -336,11 +336,14 @@ public:
 
   /**
   * Gets the locale of the Collator
+  * @param type can be either requested, valid or actual locale. For more
+  *             information see the definition of ULocDataLocaleType in
+  *             uloc.h
   * @return locale where the collation data lives. If the collator
   *         was instantiated from rules, locale is empty.
   * @draft ICU 2.1
   */
-  virtual const Locale getLocale(UErrorCode& status) const;
+  virtual const Locale getLocale(ULocDataLocaleType type, UErrorCode& status) const;
 
   /**
    * Gets the table-based rules for the collation object.
