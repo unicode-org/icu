@@ -13,6 +13,7 @@
 #
 
 !!chain  
+!!LBCMNoChain
 
 $AI = [:LineBreak =  Ambiguous:];
 $AL = [:LineBreak =  Alphabetic:];

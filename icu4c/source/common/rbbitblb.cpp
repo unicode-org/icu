@@ -374,11 +374,13 @@ void RBBITableBuilder::calcChainedFollowPos(RBBINode *fTree) {
         //                            don't chain from it.
         // TODO:  Add rule syntax for this behavior, get specifics out of here and
         //        into the rule file.
-        UChar32 c = this->fRB->fSetBuilder->getFirstChar(endNode->fVal);
-        U_ASSERT(c != -1);
-        ULineBreak cLBProp = (ULineBreak)u_getIntPropertyValue(c, UCHAR_LINE_BREAK);
-        if (cLBProp == U_LB_COMBINING_MARK) {
-            continue;
+        if (fRB->fLBCMNoChain) {
+            UChar32 c = this->fRB->fSetBuilder->getFirstChar(endNode->fVal);
+            U_ASSERT(c != -1);
+            ULineBreak cLBProp = (ULineBreak)u_getIntPropertyValue(c, UCHAR_LINE_BREAK);
+            if (cLBProp == U_LB_COMBINING_MARK) {
+                continue;
+            }
         }
 
 

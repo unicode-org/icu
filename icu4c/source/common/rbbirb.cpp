@@ -60,6 +60,7 @@ RBBIRuleBuilder::RBBIRuleBuilder(const UnicodeString   &rules,
     fForwardTables      = NULL;
     fReverseTables      = NULL;
     fChainRules         = FALSE;
+    fLBCMNoChain        = FALSE;
 
     UErrorCode oldstatus = status;   
 

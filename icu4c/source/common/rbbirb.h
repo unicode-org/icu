@@ -126,6 +126,9 @@ public:
     UBool                         fChainRules;       // True for chained Unicode TR style rules.
                                                      // False for traditional regexp rules.
 
+    UBool                         fLBCMNoChain;      // True:  suppress chaining of rules on
+                                                     //   chars with LineBreak property == CM.
+
     RBBISetBuilder                *fSetBuilder;      // Set and Character Category builder.
     UVector                       *fUSetNodes;       // Vector of all uset nodes.
 
