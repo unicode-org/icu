@@ -312,5 +312,13 @@ public class TestUScript extends TestFmwk{
             }
             oldAbbrId = newAbbrId;
     	}
-    }    	
+    }
+    public void TestScriptNames(){
+        for(int i=0; i<UScript.CODE_LIMIT;i++){
+            String name = UScript.getName(i);
+            if(name.equals("") ){
+                errln("FAILED: getName for code : "+i);
+            }
+        }
+    }   	
  }
