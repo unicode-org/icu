@@ -97,5 +97,6 @@ static void TestGetLocale(void);
 static void setUpDataTable(void);
 static void cleanUpDataTable(void);
 /*static void displayDataTable(void);*/
+static void TestAcceptLanguage(void);
 
 #endif
