@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/Attic/readme.txt,v $
-* $Date: 2003/03/18 16:38:11 $
-* $Revision: 1.9 $
+* $Date: 2003/04/23 19:00:04 $
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
@@ -16,7 +16,7 @@ can be used to:
 
 - build the Derived Unicode files in the UCD (Unicode Character Database),
 - build the transformed UCA (Unicode Collation Algorithm) files needed by ICU.
-- run consistency checks on beta releases of the UCD and the UCA , and
+- run consistency checks on beta releases of the UCD and the UCA.
 
 
 WARNING!!
@@ -32,12 +32,18 @@ WARNING!!
 
 Instructions:
 
-0. If you are using Eclipse for your IDE, look at the instructions on
+0. You will need to get ICU4J on your system, using CVS.
+You need both the main ICU4J and a subproject called unicodetools. See:
+
+http://oss.software.ibm.com/icu/develop/cvs.html
+
+Inside unicodetools, look at com/ibm/text. The main directories of interest are UCD, UCA and utility.
+
+0a. If you are using Eclipse for your IDE, look at the instructions on
 
 http://oss.software.ibm.com/icu/docs/eclipse_howto/eclipse_howto.htm
 
-
-1. You must edit UCD_Types.java at the top, to set the directories for the build:
+1. In UCD, you must edit UCD_Types.java at the top, to set the directories for the build:
 
     public static final String DATA_DIR = "C:\\DATA\\";
     public static final String UCD_DIR = BASE_DIR + "UCD\\";
@@ -61,7 +67,7 @@ Unicode site to this format.
 a complete set of data files for that release, you need to also download the previous
 complete release). Most of the N.M-Update directorys are complete, *except*:
 
-    4.0-Update, which does not contain a copy of Unihan.txt
+    4.0-Update, which does not contain a copy of Unihan.txt and some other files
     3.1-Update, which does not contain a copy of BidiMirroring.txt
 
 
@@ -121,7 +127,9 @@ with the options
 
 This builds an compressed format of all the UCD data (except blocks and Unihan)
 into the BIN directory. Don't worry about the voluminous console messages, unless one says
-"FAIL". 
+"FAIL".
+
+You have to manually do this if you change any of the data files in that version!!
 
 4b. All of the generated files get a "d" version number, e.g. CaseFolding-4.0.0d3.txt.
 To change the D version on generated files, edit the link in GenerateData.java:
