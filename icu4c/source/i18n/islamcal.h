@@ -362,7 +362,7 @@ class U_I18N_API IslamicCalendar : public Calendar {
    * @return   The class ID for all objects of this class.
    * @internal
    */
-  static inline UClassID getStaticClassID(void);
+  static UClassID getStaticClassID(void);
 
   /**
    * return the calendar type, "buddhist".
