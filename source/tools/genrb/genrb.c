@@ -11,7 +11,7 @@
 * Modification History:
 *
 *   Date        Name        Description
-*   05/25/99    stephen	    Creation.
+*   05/25/99    stephen     Creation.
 *******************************************************************************
 */
 
@@ -41,13 +41,8 @@ U_CDECL_END
 #include "unicode/uloc.h"
 
 /* Protos */
-static void usage(void);
-static void version(void);
 static void processFile(const char *filename, const char* cp, const char *inputDir, const char *outputDir, UErrorCode *status);
 static char* make_res_filename(const char *filename, const char *outputDir, UErrorCode *status);
-static char* make_col_filename(const char *filename, const char *outputDir, UErrorCode *status);
-static void make_col(const char *filename, UErrorCode *status);
-int main(int argc, char **argv);
 
 /* File suffixes */
 #define RES_SUFFIX ".res"
@@ -343,7 +338,7 @@ make_res_filename(const char *filename,
 static char*
 make_col_filename(const char *filename,
                   const char *outputDir,
-		 UErrorCode *status)
+         UErrorCode *status)
 {
   char *basename;
   char *dirname;
