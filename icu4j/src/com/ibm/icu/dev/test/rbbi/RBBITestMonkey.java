@@ -10,6 +10,7 @@ import com.ibm.icu.dev.test.*;
 import com.ibm.icu.text.RuleBasedBreakIterator;
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.UCharacterIterator;
+import com.ibm.icu.text.UTF16;
 import com.ibm.icu.impl.StringUCharacterIterator;
 import com.ibm.icu.text.UnicodeSet;
 import java.text.CharacterIterator;
@@ -22,7 +23,7 @@ import java.util.Locale;
 /**
  * @author andy
  *
- * TODO To change the template for this generated type comment go to
+ * TODO To change the template for this generated type comment go to 
  * Window - Preferences - Java - Code Generation - Code and Comments
  */
 public class RBBITestMonkey extends TestFmwk {
@@ -69,12 +70,10 @@ public class RBBITestMonkey extends TestFmwk {
         UnicodeSet                fAnySet;
 
         String                    fText;
-        StringUCharacterIterator  fCI;
 
 
     RBBICharMonkey() {
     	fText       = null;
-        fCI         = new StringUCharacterIterator();
         fCRLFSet    = new UnicodeSet("[\\r\\n]");
         fControlSet = new UnicodeSet("[[\\p{Zl}\\p{Zp}\\p{Cc}\\p{Cf}]-[\\n]-[\\r]]");
         fExtendSet  = new UnicodeSet("[\\p{Grapheme_Extend}]");
@@ -93,30 +92,19 @@ public class RBBITestMonkey extends TestFmwk {
 
 
     void setText(String s) {
-        fText = s;
-        fCI.setText(fText);
-        
+        fText = s;        
     }
-
-
-    int  next(int i) {
-        int  retVal;
-        fCI.setIndex(i);
-        CINextGC(fCI);
-        retVal = fCI.getIndex();
-        if (retVal == UCharacterIterator.DONE) {
-            retVal = -1;   
-        }
-        return retVal;
-    }
-
-
-    List  charClasses() {
+    
+    List charClasses() {
         return fSets;
     }
+    
+    int next(int i) {
+        return nextGC(fText, i);
+    }
     }
 
-    
+
     static class RBBIWordMonkey extends RBBIMonkeyKind {
         List  charClasses() {
          return null;   // TODO:   
@@ -146,6 +134,25 @@ public class RBBITestMonkey extends TestFmwk {
     
     }
 
+    /**
+     * return the index of the next code point in the input text.
+     * @param i the preceding index
+     * @return
+     * @internal
+     */
+    static int  nextCP(String s, int i) {
+        int  retVal = i + 1;
+        if (retVal > s.length()) {
+            return -1;
+        }
+        int  c = UTF16.charAt(s, i);
+        if (c >= UTF16.SUPPLEMENTARY_MIN_VALUE) {
+            retVal++;
+        }
+        return retVal;
+    }
+
+
  
     private static UnicodeSet GC_Control =
          new UnicodeSet("[[:Zl:][:Zp:][:Cc:][:Cf:]-[\\u000d\\u000a]]");
@@ -168,19 +175,32 @@ public class RBBITestMonkey extends TestFmwk {
     private static UnicodeSet GC_LVT = 
         new UnicodeSet("[[:Hangul_Syllable_Type=LVT:]]");
     
-    
-    private static int CINextGC(UCharacterIterator ci) {
-    	int    pos = ci.getIndex();
-    	int    c = ci.nextCodePoint();
-    	int    c2;
+    /**
+     * Find the end of the extent of a grapheme cluster.
+     * This is the reference implementation used by the monkey test for comparison
+     * with the RBBI results.
+     * @param s  The string containing the text to be analyzed  
+     * @param i  The index of the start of the grapheme cluster.
+     * @return   The index of the first code point following the grapheme cluster
+     * @internal
+     */
+    private static int nextGC(String s, int i) {
+        if (i >= s.length() ) {
+            return -1;
+        }
+
+    	int    c = UTF16.charAt(s, i);
+        int    pos = i;
     	
     	if (c == 0x0d) {
-    		c2 = ci.currentCodePoint();
-    		if (c2 == 0x0a) {
-    			ci.nextCodePoint();
-    			return pos;
-    		}
+    	    pos = nextCP(s, i);
+            c = UTF16.charAt(s, pos);
+    		if (c == 0x0a) {
+    		    pos = nextCP(s, i);
+            }
+            return pos;
     	}
+        
     	if (GC_Control.contains(c)) {
     		return pos;   
     	}
@@ -247,14 +267,18 @@ public class RBBITestMonkey extends TestFmwk {
     				break state_loop;
     			case 5:
     				if (GC_Extend.contains(c)) {
-                        hangulState = 5;
-    					break;
+    				    hangulState = 5;
+    				    break;
     				}
     				break state_loop;
     		}
     		// We have exited the switch statement, but are still in the loop.
     		// Still in a Hangul Syllable, advance to the next code point.
-    		c = ci.nextCodePoint();           
+    		if (pos >= s.length()) {
+    		    break;
+    		}
+    		c = UTF16.charAt(s, pos);    
+    		pos = nextCP(s, pos); 
     	}  // end of loop
     	
     	if (hangulState != 1) {
@@ -264,11 +288,14 @@ public class RBBITestMonkey extends TestFmwk {
     	
     	// Ordinary characters.  Consume any following Extends.
     	for (;;) {
-    		c2 = ci.currentCodePoint();
-    		if (GC_Extend.contains(c2) == false) {
+            c = UTF16.charAt(s, pos);    
+     		if (GC_Extend.contains(c) == false) {
     			break;
     		}
-    		ci.nextCodePoint();  
+            pos = nextCP(s, pos); 
+            if (pos >= s.length()) {
+                break;
+            }
     	}
     	
     	return pos;   
@@ -285,7 +312,7 @@ public class RBBITestMonkey extends TestFmwk {
     private static int  m_rand()
     {
         m_seed = m_seed * 1103515245 + 12345;
-        return (int)(m_seed/65536) % 32768;
+        return (int)(m_seed >>> 16) % 32768;
     }
 
     
@@ -307,8 +334,8 @@ void RunMonkey(BreakIterator  bi, RBBIMonkeyKind mk, String name, int  seed, int
     int              expectedCount    = 0;
     boolean[]        expectedBreaks   = new boolean[TESTSTRINGLEN*2 + 1];
     boolean[]        forwardBreaks    = new boolean[TESTSTRINGLEN*2 + 1];
-    boolean[]        reverseBreaks    = new boolean[TESTSTRINGLEN*2+1];
-    boolean[]        isBoundaryBreaks = new boolean[TESTSTRINGLEN*2+1];
+    boolean[]        reverseBreaks    = new boolean[TESTSTRINGLEN*2 + 1];
+    boolean[]        isBoundaryBreaks = new boolean[TESTSTRINGLEN*2 + 1];
     int              i;
     int              loopCount = 0;
 
@@ -346,7 +373,7 @@ void RunMonkey(BreakIterator  bi, RBBIMonkeyKind mk, String name, int  seed, int
             if (c < 0) {   // TODO:  deal with sets containing strings.
                 errln("c < 0");
             }
-            testText.append(c);
+            UTF16.appendCodePoint(testText, c);
         }
 
         Arrays.fill(expected, 0);
@@ -491,66 +518,55 @@ void RunMonkey(BreakIterator  bi, RBBIMonkeyKind mk, String name, int  seed, int
     }
 }
 
-public void TestMonkey(/* String[]   params */) {
+public void TestCharMonkey() {
+    
+    int        loopCount = 500;
+    int        seed      = 1;
+    String     breakType = "all";
+    
+    if (params.inclusion >= 9) {
+        loopCount = 10000;
+    }
+    
+    RBBICharMonkey  m = new RBBICharMonkey();
+    BreakIterator   bi = BreakIterator.getCharacterInstance(Locale.US);
+    // RunMonkey(bi, m, "char", seed, loopCount);
+}
 
-        int        loopCount = 500;
-        int        seed      = 1;
-        String     breakType = "all";
-        boolean    quick = true;   // TODO:  from test framework in C++.  What's the equivalent here?
-//        Locale         locale("en");
+public void TestWordMonkey() {
+    
+    int        loopCount = 500;
+    int        seed      = 1;
+    String     breakType = "all";
+    
+    if (params.inclusion >= 9) {
+        loopCount = 10000;
+    }
+    
+    logln("Word Break Monkey Test");
+    RBBIWordMonkey  m = new RBBIWordMonkey();
+    BreakIterator   bi = BreakIterator.getWordInstance(Locale.US);
+    //RunMonkey(bi, m, "word", seed, loopCount);
+}
 
-        if (quick == false) {
-            loopCount = 10000;
-        }
-
-        /*
-        if (params) {
-            UnicodeString p(params);
-            loopCount = getIntParam("loop", p, loopCount);
-            seed      = getIntParam("seed", p, seed);
-
-            RegexMatcher m(" *type *= *(char|word|line|sent|title) *", p, 0, status);
-            if (m.find()) {
-                breakType = m.group(1, status);
-                m.reset();
-                p = m.replaceFirst("", status);
-            }
-
-            m.reset(p);
-            if (RegexMatcher("\\S", p, 0, status).find()) {
-                // Each option is stripped out of the option string as it is processed.
-                // All options have been checked.  The option string should have been completely emptied..
-                char buf[100];
-                p.extract(buf, sizeof(buf), NULL, status);
-                buf[sizeof(buf)-1] = 0;
-                errln("Unrecognized or extra parameter:  %s\n", buf);
-                return;
-            }
-
-        }
-*/
-        if (breakType == "char" || breakType == "all") {
-            RBBICharMonkey  m = new RBBICharMonkey();
-            BreakIterator   bi = BreakIterator.getCharacterInstance(Locale.US);
-            //RunMonkey(bi, m, "char", seed, loopCount);
-        }
-
-        if (breakType == "word" || breakType == "all") {
-            logln("Word Break Monkey Test");
-            RBBIWordMonkey  m = new RBBIWordMonkey();
-            BreakIterator   bi = BreakIterator.getWordInstance(Locale.US);
-            //RunMonkey(bi, m, "word", seed, loopCount);
-        }
-
-        if (breakType == "line" || breakType == "all") {
-            logln("Line Break Monkey Test");
-            RBBILineMonkey  m = new RBBILineMonkey();
-            BreakIterator   bi = BreakIterator.getLineInstance(Locale.US);
-            if (params == null) {
-                loopCount = 50;
-            }
-            //RunMonkey(bi, m, "line", seed, loopCount);
-        }
+public void TestLineMonkey() {
+    
+    int        loopCount = 500;
+    int        seed      = 1;
+    String     breakType = "all";
+    
+    if (params.inclusion >= 9) {
+        loopCount = 10000;
+    }
+    
+    logln("Line Break Monkey Test");
+    RBBILineMonkey  m = new RBBILineMonkey();
+    BreakIterator   bi = BreakIterator.getLineInstance(Locale.US);
+    if (params == null) {
+        loopCount = 50;
+    }
+    // RunMonkey(bi, m, "line", seed, loopCount);
+}
 
 }
-}
+
