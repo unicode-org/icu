@@ -1,5 +1,5 @@
 ## -*-sh-*-
-## BEGIN of icu-config-bottom. $Revision: 1.6 $
+## BEGIN of icu-config-bottom. $Revision: 1.7 $
 ## Copyright (c) 2002, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
@@ -47,6 +47,7 @@ allflags()
     echo "  --ldflags-searchpath   Print only -L (search path) directive"
     echo "  --ldflags-system       Print only system libs ICU links with (-lpthread, -lm)"
     echo "  --ldflags-ustdio       Print ICU ustdio link directive. Use in addition to --ldflags "
+    echo "  --ldflags-obsolete     Print ICU obsolete link directive. Use in addition to --ldflags. (requires icuapps/obsolete to be built and installed.) "
     echo "  --mandir               Print manpage (man) path"
     echo "  --prefix               Print PREFIX to icu install (/usr/local)"
     echo "  --prefix=XXX           Set prefix to XXX for remainder of command"
@@ -219,6 +220,10 @@ do
 
 	--ldflags-ustdio)
 	    echo $ICULIBS_USTDIO
+	    ;;
+
+	--ldflags-obsolete)
+	    echo $ICULIBS_OBSOLETE
 	    ;;
 
 	--ldflags-toolutil)
