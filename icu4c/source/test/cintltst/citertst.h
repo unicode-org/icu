@@ -52,7 +52,11 @@
      * Test for getMaxExpansion()
      */
     static void TestMaxExpansion(void);
-    
+    /**
+    * Test Bug 672, where different locales give a different offset after 
+    * a previous for the same string at the same position
+    */
+    static void TestBug672(void);
     
     /*------------------------------------------------------------------------
      Internal utilities
