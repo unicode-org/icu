@@ -31,12 +31,9 @@
 #include "uparse.h"
 #include "sprpimpl.h"
 
-#include "unicode/uset.h"
 #include "unicode/udata.h"
 #include "unicode/utypes.h"
-#include "unicode/uchar.h"
 #include "unicode/putil.h"
-#include "unicode/uclean.h"
 
 
 U_CDECL_BEGIN
