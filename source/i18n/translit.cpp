@@ -829,7 +829,7 @@ void Transliterator::initializeCache(void) {
     // Before looking for the resource, construct our cache.
     // That way if the resource is absent, we will at least
     // have a valid cache object.
-    cache = uhash_open(uhash_hashUString, &status);
+    cache = uhash_open((UHashFunction)uhash_hashUString, &status);
     cacheIDs.setComparer(compareIDs);
 
     /* The following code parses the index table located in
