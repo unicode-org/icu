@@ -930,6 +930,104 @@ openCommonData(
 
 
 
+
+/*----------------------------------------------------------------------*
+ *                                                                      *
+ *   extendICUData   If the full set of ICU data was not loaded at      *
+ *                   program startup, load it now.  This function will  *
+ *                   be called when the lookup of an ICU data item in   *
+ *                   the common ICU data fails.                         *
+ *                                                                      *
+ *                   return true if new data is loaded, false otherwise.*
+ *                                                                      *
+ *----------------------------------------------------------------------*/
+static UBool extendICUData()
+{
+#ifndef OS390
+    return FALSE;
+#else
+    
+    /*  390 specific Library Loading.
+     *  This is the only platform left that dynamically loads an ICU Data Library.
+     *  All other platforms use .data files when dynamic loading is required, but
+     *  this turn out to be awkward to support in 390 batch mode.
+     */
+    static UBool isLibLoaded;
+
+    if (isLibLoaded == TRUE) {
+        /* We've already been through here once and loaded the full ICU Data library.
+        *  Nothing more left to load.    */
+        return false;
+    }
+
+
+    /* Need to do loading in a mutex-protected section of code because we
+     *  don't want to load it twice because of a race.
+     */
+    umtx_lock(NULL);
+    if (isLibLoaded) {
+        return FALSE;
+    }
+
+    /* TODO:  the following code is just a mish-mash of pieces from the
+     *        previous data library loading code that might be useful
+     *        in putting together something that works.
+     */
+    
+    Library lib;
+    inBasename=U_ICUDATA_NAME"_390"; 
+    suffix=strcpy_returnEnd(basename, inBasename);
+    uprv_strcpy(suffix, LIB_SUFFIX);
+    
+    if (uprv_isOS390BatchMode()) {
+    /* ### hack: we still need to get u_getDataDirectory() fixed
+    for OS/390 (batch mode - always return "//"? )
+    and this here straightened out with LIB_PREFIX and LIB_SUFFIX (both empty?!)
+    This is probably due to the strange file system on OS/390.  It's more like
+        a database with short entry names than a typical file system. */
+        if (s390dll) {
+            lib=LOAD_LIBRARY("//IXMICUD1", "//IXMICUD1");
+        }
+        else {
+            /* U_ICUDATA_NAME should always have the correct name */
+            /* 390port: BUT FOR BATCH MODE IT IS AN EXCEPTION ... */
+            /* 390port: THE NEXT LINE OF CODE WILL NOT WORK !!!!! */
+            /*lib=LOAD_LIBRARY("//" U_ICUDATA_NAME, "//" U_ICUDATA_NAME);*/
+            lib=LOAD_LIBRARY("//IXMICUDA", "//IXMICUDA"); /*390port*/
+        }
+    }
+    
+    lib=LOAD_LIBRARY(pathBuffer, basename);
+    if(!IS_LIBRARY(lib) && basename!=pathBuffer) {
+        /* try basename only next */
+        lib=LOAD_LIBRARY(basename, basename);
+    }
+    
+    if(IS_LIBRARY(lib)) {
+        /* we have a data DLL - what kind of lookup do we need here? */
+        char entryName[100];
+        const DataHeader *pHeader;
+        *basename=0;
+    }
+    
+    checkCommonData(&tData, pErrorCode);
+    if (U_SUCCESS(*pErrorCode)) {
+        /* Don't close the old data - someone might be using it
+         * May need to change the global to be a pointer rather than a static struct
+         * to get a clean switch-over.
+         */
+        setCommonICUData(&tData);
+        
+    }
+    
+    umtx_unlock(NULL);
+    return U_SUCCESS(???);
+#endif  /* OS390 */
+}
+
+
+
+
 U_CAPI void U_EXPORT2
 udata_setCommonData(const void *data, UErrorCode *pErrorCode) {
     UDataMemory dataMemory;
@@ -1126,34 +1224,42 @@ doOpenChoice(const char *path, const char *type, const char *name,
     setEntryNames(type, name, tocEntryName, dllEntryName);
 
 
-    /* try to get common data */
-    pCommonData=openCommonData(path, isICUData, &errorCode);
+    /* try to get common data.  The loop is for platforms such as the 390 that do
+     *  not initially load the full set of ICU data.  If the lookup of an ICU data item
+     *  fails, the full (but slower to load) set is loaded, the and the loop repeats,
+     *  trying the lookup again.  Once the full set of ICU data is loaded, the loop wont
+     *  repeat because the full set will be checked the first time through.  */
+    for (;;) {
+        pCommonData=openCommonData(path, isICUData, &errorCode);
 #ifdef UDATA_DEBUG
-    fprintf(stderr, "commonData;%p\n", pCommonData);
-    fflush(stderr);
+        fprintf(stderr, "commonData;%p\n", pCommonData);
+        fflush(stderr);
 #endif
-
-    if(U_SUCCESS(errorCode)) {
-        /* look up the data piece in the common data */
-        pHeader=pCommonData->lookupFn(pCommonData, tocEntryName, dllEntryName, &errorCode);
+        
+        if(U_SUCCESS(errorCode)) {
+            /* look up the data piece in the common data */
+            pHeader=pCommonData->lookupFn(pCommonData, tocEntryName, dllEntryName, &errorCode);
 #ifdef UDATA_DEBUG
-        fprintf(stderr, "Common found: %p\n", pHeader);
+            fprintf(stderr, "Common found: %p\n", pHeader);
 #endif
-        if(pHeader!=NULL) {
-            pEntryData = checkDataItem(pHeader, isAcceptable, context, type, name, &errorCode, pErrorCode);
-            if (U_FAILURE(*pErrorCode)) {
-                return NULL;
-            }
-            if (pEntryData != NULL) {
-                return pEntryData;
+            if(pHeader!=NULL) {
+                pEntryData = checkDataItem(pHeader, isAcceptable, context, type, name, &errorCode, pErrorCode);
+                if (U_FAILURE(*pErrorCode)) {
+                    return NULL;
+                }
+                if (pEntryData != NULL) {
+                    return pEntryData;
+                }
             }
         }
+        /* Data wasn't found.  If we were looking for an ICUData item and there is 
+         * more data available, load it and try again,
+         * otherwise break out of this loop. */
+        if (!(isICUData && extendICUData())) {
+            break;
+        }
+    };
 
-    }
-
-    /*  TODO:   fall back to alternate/extended common data for 390
-     *          goes HERE.
-     */
 
     /* the data was not found in the common data,  look further */
     /* try to get an individual data file */
