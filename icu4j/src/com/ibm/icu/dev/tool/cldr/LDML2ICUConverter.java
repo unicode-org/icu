@@ -1617,6 +1617,7 @@ public class LDML2ICUConverter {
         if(isAlternate(root)){
             return null;
         }
+        
         int savedLength = xpath.length();
         getXPath(root, xpath);
         int oldLength = xpath.length();
@@ -1943,6 +1944,17 @@ public class LDML2ICUConverter {
     private ICUResourceWriter.Resource parseWeekend(Node root, StringBuffer xpath){
         Node wkendStart = getVettedNode(root, LDMLConstants.WENDSTART, xpath);
         Node wkendEnd = getVettedNode(root, LDMLConstants.WENDEND, xpath);
+        // TODO: fixme..
+        if(locName.equals("root")) {
+            if(wkendStart==null) { 
+                System.out.println("Note: attempting to override root's draft status for weekend-start"); 
+                wkendStart = LDMLUtilities.getNode(root, LDMLConstants.WENDSTART , fullyResolvedDoc, xpath.toString());
+            }
+            if(wkendEnd==null) { 
+                System.out.println("Note: attempting to override root's draft status for weekend-end"); 
+                wkendEnd = LDMLUtilities.getNode(root, LDMLConstants.WENDEND , fullyResolvedDoc, xpath.toString());
+            }
+        }
         ICUResourceWriter.ResourceIntVector wkend = null;
         
         if(wkendStart!=null && wkendEnd!=null){
@@ -1974,6 +1986,18 @@ public class LDML2ICUConverter {
         Node firstDay = getVettedNode(root, LDMLConstants.FIRSTDAY);
         ICUResourceWriter.ResourceIntVector dte = null;
         
+        if((minDays != null) || (firstDay != null)) { // only if we have ONE or the other.
+            // fetch inherited to complete the resource..
+            if(minDays == null) {
+                minDays = getVettedNode(root, LDMLConstants.MINDAYS , xpath);
+                System.out.println("INFO: parseDTE: Pulled out from the fully-resolved minDays: " + minDays.toString());
+            }
+            if(firstDay == null) {
+                firstDay = getVettedNode(root, LDMLConstants.FIRSTDAY , xpath);
+                System.out.println("INFO: parseDTE: Pulled out from the fully-resolved firstDay: " + firstDay.toString());
+            }
+        }
+         
         if(minDays!=null && firstDay!=null){
             dte =  new ICUResourceWriter.ResourceIntVector();
             ICUResourceWriter.ResourceInt int1 = new ICUResourceWriter.ResourceInt();
@@ -1985,8 +2009,8 @@ public class LDML2ICUConverter {
             dte.first = int1;
             int1.next = int2;
         }
-        if((minDays==null && firstDay!=null) || minDays!=null && firstDay==null){
-            throw new RuntimeException("Could not find "+minDays+" or "+firstDay +" from fullyResolved locale!!");
+        if((minDays==null && firstDay!=null) || (minDays!=null && firstDay==null)){
+            throw new RuntimeException("Could not find minDays="+minDays+" or firstDay="+firstDay +" from fullyResolved locale!!");
         }
         return dte;
     }
