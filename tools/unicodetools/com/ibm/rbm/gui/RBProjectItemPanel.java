@@ -143,11 +143,13 @@ class RBProjectItemPanel extends JPanel implements ActionListener {
 			for (int i=0; i < bundles.size(); i++) {
 				Bundle bundle = (Bundle)bundles.elementAt(i);
 				BundleItem bundleItem = bundle.getBundleItem(key);
-				boolean translated = bundleItem.isTranslated();
+				//boolean translated = bundleItem.isTranslated();
 				JLabel encodingLabel = new JLabel(Resources.getTranslation("project_panel_bundle", bundle.toString()),
 												  SwingConstants.LEFT);
-				if (!translated) encodingLabel.setText(Resources.getTranslation("project_panel_bundle_untranslated",
-																				bundle.toString()));
+				if (bundleItem == null || !bundleItem.isTranslated()) {
+				    encodingLabel.setText(Resources.getTranslation("project_panel_bundle_untranslated",
+																	bundle.toString()));
+				}
 				String fieldText = (bundleItem == null ? Resources.getTranslation("project_panel_item_inherits") :
 														 bundleItem.getTranslation());
 				JTextField itemField = new JTextField(fieldText);

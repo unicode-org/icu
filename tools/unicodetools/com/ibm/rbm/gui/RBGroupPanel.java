@@ -490,3 +490,32 @@ class GroupComboActionListener implements ActionListener {
 		} else RBManagerGUI.debugMsg("Selection changed, but no active components");
 	}
 }
+
+/**
+ * The list model for groups
+ */
+class GroupItemsListModel extends AbstractListModel {
+	BundleGroup group;
+	
+	public void setGroup(BundleGroup group) {
+		this.group = group;
+	}
+	
+	public GroupItemsListModel(BundleGroup group) {
+		this.group = group;
+	}
+	
+	public int getSize() {
+		if (group == null) return 0;
+		return group.getItemCount();
+	}
+	
+	public Object getElementAt(int index) {
+		return group.getBundleItem(index);
+	}
+	
+	public void update() {
+		fireContentsChanged(this, 0, getSize()-1);
+	}
+}
+
