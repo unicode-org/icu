@@ -476,6 +476,10 @@ SOURCE=.\cnumtst.c
 
 SOURCE=.\cnumtst.h
 # End Source File
+# Begin Source File
+
+SOURCE=.\utmstest.c
+# End Source File
 # End Group
 # Begin Group "locales & resources"
 
