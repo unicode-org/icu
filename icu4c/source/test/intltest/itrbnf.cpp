@@ -237,6 +237,26 @@ void IntlTestRBNF::TestFractionalRuleSet()
         "    9: <0</9;\n"
         "   10: <0</10;\n");
 
+    // mondo hack
+    int len = fracRules.length();
+    int change = 2;
+    for (int i = 0; i < len; ++i) {
+      UChar ch = fracRules.charAt(i);
+      if (ch == '\n') {
+	change = 2; // change ok
+      } else if (ch == ':') {
+	change = 1; // change, but once we hit a non-space char, don't change
+      } else if (ch == ' ') {
+	if (change != 0) {
+	  fracRules.setCharAt(i, (UChar)0x200e);
+	}
+      } else {
+	if (change == 1) {
+	  change = 0;
+	}
+      }
+    }
+
     UErrorCode status = U_ZERO_ERROR;
     UParseError perror;
     RuleBasedNumberFormat formatter(fracRules, Locale::getEnglish(), perror, status);
