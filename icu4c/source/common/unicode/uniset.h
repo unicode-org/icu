@@ -216,7 +216,7 @@ class UVector;
  * @author Alan Liu
  * @stable
  */
-class U_I18N_API UnicodeSet : public UnicodeFilter {
+class U_COMMON_API UnicodeSet : public UnicodeFilter {
 
     int32_t len; // length of list used; 0 <= len <= capacity
     int32_t capacity; // capacity of list
@@ -820,6 +820,51 @@ public:
      * @see #getRangeEnd
      */
     virtual UChar32 getRangeEnd(int32_t index) const;
+
+    /**
+     * Serializes this set into an array of 16-bit integers.  The array
+     * has following format (each line is one 16-bit integer):
+     *
+     *  length     = (n+2*m) | (m!=0?0x8000:0)
+     *  bmpLength  = n; present if m!=0
+     *  bmp[0]
+     *  bmp[1]
+     *  ...
+     *  bmp[n-1]
+     *  supp-high[0]
+     *  supp-low[0]
+     *  supp-high[1]
+     *  supp-low[1]
+     *  ...
+     *  supp-high[m-1]
+     *  supp-low[m-1]
+     *
+     * The array starts with a header.  After the header are n bmp
+     * code points, then m supplementary code points.  Either n or m
+     * or both may be zero.  n+2*m is always <= 0x7FFF.
+     *
+     * If there are no supplementary characters (if m==0) then the
+     * header is one 16-bit integer, 'length', with value n.
+     *
+     * If there are supplementary characters (if m!=0) then the header
+     * is two 16-bit integers.  The first, 'length', has value
+     * (n+2*m)|0x8000.  The second, 'bmpLength', has value n.
+     *
+     * After the header the code points are stored in ascending order.
+     * Supplementary code points are stored as most significant 16
+     * bits followed by least significant 16 bits.
+     *
+     * @param dest pointer to buffer of destCapacity 16-bit integers.
+     * May be NULL only if destCapacity is zero.
+     * @param destCapacity size of dest, or zero.  Must not be negative.
+     * @param ec error code.  Will be set to U_INDEX_OUTOFBOUNDS_ERROR
+     * if n+2*m > 0x7FFF.  Will be set to U_BUFFER_OVERFLOW_ERROR if
+     * n+2*m+(m!=0?2:1) > destCapacity.
+     * @return the total length of the serialized format, including
+     * the header, that is, n+2*m+(m!=0?2:1), or 0 on error other
+     * than U_BUFFER_OVERFLOW_ERROR.
+     */
+    int32_t serialize(uint16_t *dest, int32_t destCapacity, UErrorCode& ec) const;
 
     /**
      * Reallocate this objects internal structures to take up the least

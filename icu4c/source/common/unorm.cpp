@@ -32,7 +32,7 @@
 #include "ustr_imp.h"
 #include "umutex.h"
 #include "utrie.h"
-#include "uset.h"
+#include "unicode/uset.h"
 #include "unormimp.h"
 
 /*

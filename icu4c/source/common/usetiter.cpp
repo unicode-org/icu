@@ -3,9 +3,9 @@
 * Copyright (c) 2002, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
-* $Source: /xsrl/Nsvn/icu/icu/source/i18n/Attic/usetiter.cpp,v $ 
-* $Date: 2002/04/30 22:11:47 $ 
-* $Revision: 1.2 $
+* $Source: /xsrl/Nsvn/icu/icu/source/common/usetiter.cpp,v $ 
+* $Date: 2002/05/29 18:33:33 $ 
+* $Revision: 1.1 $
 **********************************************************************
 */
 #include "unicode/usetiter.h"

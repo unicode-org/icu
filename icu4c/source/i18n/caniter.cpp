@@ -6,7 +6,7 @@
  */
 
 #include "hash.h"
-#include "uset.h"
+#include "unicode/uset.h"
 #include "unormimp.h"
 #include "caniter.h"
 #include "cmemory.h"
@@ -395,7 +395,7 @@ Hashtable *CanonicalIterator::getEquivalents2(const UChar *segment, int32_t segL
     USerializedSet starts;
 
     // cycle through all the characters
-    UChar32 cp, limit = 0;
+    UChar32 cp, end = 0;
     int32_t i = 0, j;
     for (i = 0; i < segLen; i += UTF16_CHAR_LENGTH(cp)) {
         // see if any character is at the start of some decomposition
@@ -404,7 +404,7 @@ Hashtable *CanonicalIterator::getEquivalents2(const UChar *segment, int32_t segL
           continue;
         }
         // if so, see which decompositions match 
-        for(j = 0, cp = limit; cp < limit || uset_getSerializedRange(&starts, j++, &cp, &limit); ++cp) {
+        for(j = 0, cp = end+1; cp <= end || uset_getSerializedRange(&starts, j++, &cp, &end); ++cp) {
             //Hashtable *remainder = extract(cp, segment, segLen, i, status);
             Hashtable *remainder = extract(cp, segment, segLen, i, status);
             if (remainder == NULL) continue;
