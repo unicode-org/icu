@@ -89,68 +89,68 @@ static struct ConformanceTestCases
    conformanceTestCases[] =
    {
   
-     {
+     {/*0*/
        "Case folding ASCII U+0043 U+0041 U+0046 U+0045",
        "\x43\x41\x46\x45", "\x63\x61\x66\x65",
        "nfs4_cis_prep", 
        U_ZERO_ERROR
 
      },
-     {
+     {/*1*/
        "Case folding 8bit U+00DF (german sharp s)",
        "\xC3\x9F", "\x73\x73", 
        "nfs4_cis_prep", 
        U_ZERO_ERROR  
      },
-     {
+     {/*2*/
        "Non-ASCII multibyte space character U+1680",
        "\xE1\x9A\x80", NULL, 
        "nfs4_cis_prep", 
        U_STRINGPREP_PROHIBITED_ERROR
      },
-     {
+     {/*3*/
        "Non-ASCII 8bit control character U+0085",
        "\xC2\x85", NULL, 
        "nfs4_cis_prep",
        U_STRINGPREP_PROHIBITED_ERROR
      },
-     {
+     {/*4*/
        "Non-ASCII multibyte control character U+180E",
        "\xE1\xA0\x8E", NULL, 
        "nfs4_cis_prep", 
        U_STRINGPREP_PROHIBITED_ERROR
      },
-     {
+     {/*5*/
        "Non-ASCII control character U+1D175",
        "\xF0\x9D\x85\xB5", NULL, 
        "nfs4_cis_prep",
        U_STRINGPREP_PROHIBITED_ERROR
      },
-     {
+     {/*6*/
        "Plane 0 private use character U+F123",
        "\xEF\x84\xA3", NULL, 
        "nfs4_cis_prep", 
        U_STRINGPREP_PROHIBITED_ERROR
      },
-     {
+     {/*7*/
        "Plane 15 private use character U+F1234",
        "\xF3\xB1\x88\xB4", NULL, 
        "nfs4_cis_prep",
        U_STRINGPREP_PROHIBITED_ERROR
      },
-     {
+     {/*8*/
        "Plane 16 private use character U+10F234",
        "\xF4\x8F\x88\xB4", NULL, 
        "nfs4_cis_prep",
        U_STRINGPREP_PROHIBITED_ERROR
      },
-     {
+     {/*9*/
        "Non-character code point U+8FFFE",
        "\xF2\x8F\xBF\xBE", NULL, 
        "nfs4_cis_prep",
        U_STRINGPREP_PROHIBITED_ERROR
      },
-     {
+     {/*10*/
        "Non-character code point U+10FFFF",
        "\xF4\x8F\xBF\xBF", NULL,
        "nfs4_cis_prep", 
@@ -163,80 +163,81 @@ static struct ConformanceTestCases
        U_STRINGPREP_PROHIBITED_ERROR
      },
 */
-     {
+     {/*11*/
        "Non-plain text character U+FFFD",
        "\xEF\xBF\xBD", NULL, 
        "nfs4_cis_prep",
        U_STRINGPREP_PROHIBITED_ERROR
      },
-     {
+     {/*12*/
        "Ideographic description character U+2FF5",
        "\xE2\xBF\xB5", NULL, 
        "nfs4_cis_prep", 
        U_STRINGPREP_PROHIBITED_ERROR
      },
-     {
+     {/*13*/
        "Display property character U+0341",
        "\xCD\x81", "\xCC\x81",
        "nfs4_cis_prep", U_ZERO_ERROR
 
      },
 
-     {
+     {/*14*/
        "Left-to-right mark U+200E",
        "\xE2\x80\x8E", "\xCC\x81", 
        "nfs4_cis_prep",
        U_STRINGPREP_PROHIBITED_ERROR
      },
-     {
+     {/*15*/
 
        "Deprecated U+202A",
        "\xE2\x80\xAA", "\xCC\x81", 
        "nfs4_cis_prep", 
        U_STRINGPREP_PROHIBITED_ERROR
      },
-     {
+     {/*16*/
        "Language tagging character U+E0001",
        "\xF3\xA0\x80\x81", "\xCC\x81", 
        "nfs4_cis_prep", 
        U_STRINGPREP_PROHIBITED_ERROR
      },
-     {
+     {/*17*/
        "Language tagging character U+E0042",
        "\xF3\xA0\x81\x82", NULL, 
        "nfs4_cis_prep", 
        U_STRINGPREP_PROHIBITED_ERROR
      },
-     {
+     {/*18*/
        "Bidi: RandALCat character U+05BE and LCat characters",
        "\x66\x6F\x6F\xD6\xBE\x62\x61\x72", NULL, 
        "nfs4_cis_prep", 
        U_STRINGPREP_CHECK_BIDI_ERROR
      },
-     {
+     {/*19*/
        "Bidi: RandALCat character U+FD50 and LCat characters",
        "\x66\x6F\x6F\xEF\xB5\x90\x62\x61\x72", NULL,
        "nfs4_cis_prep",
        U_STRINGPREP_CHECK_BIDI_ERROR
      },
-     {
+     {/*20*/
        "Bidi: RandALCat character U+FB38 and LCat characters",
-       "\x66\x6F\x6F\xEF\xB9\xB6\x62\x61\x72", "\x66\x6F\x6F \xd9\x8e\x62\x61\x72",
+       "\x66\x6F\x6F\xEF\xB9\xB6\x62\x61\x72", "\x66\x6F\x6F\x20\xd9\x8e\x62\x61\x72",
        "nfs4_cis_prep", 
        U_ZERO_ERROR
      },
-     { "Bidi: RandALCat without trailing RandALCat U+0627 U+0031",
+     {/*21*/
+       "Bidi: RandALCat without trailing RandALCat U+0627 U+0031",
        "\xD8\xA7\x31", NULL, 
        "nfs4_cis_prep", 
        U_STRINGPREP_CHECK_BIDI_ERROR
      },
-     {
+     {/*22*/
        "Bidi: RandALCat character U+0627 U+0031 U+0628",
        "\xD8\xA7\x31\xD8\xA8", "\xD8\xA7\x31\xD8\xA8",
        "nfs4_cis_prep", 
        U_ZERO_ERROR
      },
-     {
+     {/*23*/
        "Unassigned code point U+E0002",
        "\xF3\xA0\x80\x82", NULL, 
        "nfs4_cis_prep", 
@@ -263,8 +264,33 @@ static struct ConformanceTestCases
      },
   */
 };
+
+#define MAX_BUFFER_SIZE  1000
+
+static int32_t 
+unescapeData(const char* src, int32_t srcLen, 
+             char* dest, int32_t destCapacity, 
+             UErrorCode* status){
+
+    UChar b1Stack[MAX_BUFFER_SIZE];
+    int32_t b1Capacity = MAX_BUFFER_SIZE,
+            b1Len      = 0,
+            destLen    = 0;
+
+    UChar* b1 = b1Stack;
+
+    b1Len = u_unescape(src,b1,b1Capacity);
+
+    u_strToUTF8(dest, destCapacity, &destLen, b1, b1Len, status);
+
+    return destLen;
+}
+
+
 static void Test_nfs4_cis_prep(void){
     int32_t i=0;
+
+    int32_t expLen = 0;
     for(i=0;i< (int32_t)(sizeof(conformanceTestCases)/sizeof(conformanceTestCases[0]));i++){
         const char* src = conformanceTestCases[i].in;
         UErrorCode status = U_ZERO_ERROR;
@@ -273,12 +299,14 @@ static void Test_nfs4_cis_prep(void){
         const char* expectedDest = conformanceTestCases[i].out;
         char* dest = NULL;
         int32_t destLen = 0;
+
         destLen = nfs4_cis_prepare(src , strlen(src), dest, destLen, &parseError, &status); 
         if(status == U_BUFFER_OVERFLOW_ERROR){
             status = U_ZERO_ERROR;
             dest = (char*) malloc(++destLen);
             destLen = nfs4_cis_prepare( src , strlen(src), dest, destLen, &parseError, &status); 
         }
+
         if(expectedStatus != status){
             log_err("Did not get the expected status for nfs4_cis_prep at index %i. Expected: %s Got: %s\n",i, u_errorName(expectedStatus), u_errorName(status));
         }
@@ -372,65 +400,49 @@ static const char* mixed_prep_data[] ={
 
 };
 
-#define MAX_BUFFER_SIZE  1000
 
-static int32_t 
-unescapeData(const char* src, int32_t srcLen, 
-             char* dest, int32_t destCapacity, 
-             UErrorCode* status){
-
-    UChar b1Stack[MAX_BUFFER_SIZE];
-    char b2Stack[MAX_BUFFER_SIZE];
-    int32_t b1Capacity = MAX_BUFFER_SIZE,
-            b2Capacity = MAX_BUFFER_SIZE,
-            b1Len      = 0,
-            b2Len      = 0;
-
-    UChar* b1 = b1Stack;
-    char*  b2 = b2Stack;
-
-    b1Len = u_unescape(src,b1,b1Capacity);
-    u_strToUTF8(b2, b2Capacity, &b2Len, b1, b1Len, status);
-    if(U_SUCCESS(*status) &&  b2Len <= destCapacity){
-        memmove(dest, b2, b2Len);
-    }
-    return b2Len;
-}
 static void 
 Test_nfs4_mixed_prep(void){
-    int32_t i=0;
-    char src[MAX_BUFFER_SIZE];
-    int32_t srcLen;
+    {
+        int32_t i=0;
+        char src[MAX_BUFFER_SIZE];
+        int32_t srcLen;
 
-    for(i=0; i< LENGTHOF(mixed_prep_data); i++){
-        int32_t destLen=0;
-        char* dest = NULL;
-        UErrorCode status = U_ZERO_ERROR;
-        UParseError parseError;
-        srcLen = unescapeData(mixed_prep_data[i], strlen(mixed_prep_data[i]), src, MAX_BUFFER_SIZE, &status);
-        if(U_FAILURE(status)){
-            log_err("Conversion of data at index %i failed. Error: %s\n", i, u_errorName(status));
-            continue;
-        }
-        destLen = nfs4_mixed_prepare(src, srcLen, NULL, 0, &parseError, &status);
-        if(status == U_BUFFER_OVERFLOW_ERROR){
-            status = U_ZERO_ERROR;
-            dest = (char*)malloc(++destLen);
-            destLen = nfs4_mixed_prepare(src, srcLen, dest, destLen, &parseError, &status);
-        }
-        free(dest);
-        if(U_FAILURE(status)){
-            log_err("Preparation of string at index %i failed. Error: %s\n", i, u_errorName(status));
-            continue;
-        }
-    } 
+        for(i=0; i< LENGTHOF(mixed_prep_data); i++){
+            int32_t destLen=0;
+            char* dest = NULL;
+            UErrorCode status = U_ZERO_ERROR;
+            UParseError parseError;
+            srcLen = unescapeData(mixed_prep_data[i], strlen(mixed_prep_data[i]), src, MAX_BUFFER_SIZE, &status);
+            if(U_FAILURE(status)){
+                log_err("Conversion of data at index %i failed. Error: %s\n", i, u_errorName(status));
+                continue;
+            }
+            destLen = nfs4_mixed_prepare(src, srcLen, NULL, 0, &parseError, &status);
+            if(status == U_BUFFER_OVERFLOW_ERROR){
+                status = U_ZERO_ERROR;
+                dest = (char*)malloc(++destLen);
+                destLen = nfs4_mixed_prepare(src, srcLen, dest, destLen, &parseError, &status);
+            }
+            free(dest);
+            if(U_FAILURE(status)){
+                log_err("Preparation of string at index %i failed. Error: %s\n", i, u_errorName(status));
+                continue;
+            }
+        } 
+    }
     /* test the error condition */
     {
-        const char* src = "OWNER@oss.software.ibm.com";
+        const char* source = "OWNER@oss.software.ibm.com";
         char dest[MAX_BUFFER_SIZE];
+        char src[MAX_BUFFER_SIZE] = {0};
         UErrorCode status = U_ZERO_ERROR;
         UParseError parseError;
-        int32_t destLen = nfs4_mixed_prepare(src, srcLen, dest, MAX_BUFFER_SIZE, &parseError, &status);
+        
+        int32_t srcLen = unescapeData(source, strlen(source), src, MAX_BUFFER_SIZE, &status);
+
+        nfs4_mixed_prepare(src, srcLen, dest, MAX_BUFFER_SIZE, &parseError, &status);
+
         if(status != U_PARSE_ERROR){
             log_err("Did not get the expected error.Expected: %s Got: %s\n", u_errorName(U_PARSE_ERROR), u_errorName(status));
         }
@@ -452,13 +464,16 @@ Test_nfs4_cs_prep(void){
             char dest[MAX_BUFFER_SIZE] = {'\0'};
             int32_t destLen = nfs4_cs_prepare(src, srcLen, dest, MAX_BUFFER_SIZE, FALSE, &parseError, &status);
             if(U_FAILURE(status)){
-                log_err("StringPrep failed with error: %s\n", u_errorName(status));
+                log_err("StringPrep failed for case: BiDi Checking Turned OFF with error: %s\n", u_errorName(status));
             }
             if(strcmp(dest,src)!=0){
-                log_err("Did not get the expected output!");
+                log_err("Did not get the expected output for case: BiDi Checking Turned OFF\n");
+            }
+            if(destLen != srcLen){
+                log_err("Did not get the expected length for the output for case: BiDi Checking Turned OFF. Expected: %i Got: %i\n", srcLen, destLen);
             }
         }else{
-            log_err("Conversion failed with error: %s\n", u_errorName(status));
+            log_err("Conversion failed for case: BiDi Checking Turned OFF with error: %s\n", u_errorName(status));
         }
     }
     {
@@ -472,13 +487,16 @@ Test_nfs4_cs_prep(void){
             char dest[MAX_BUFFER_SIZE] = {'\0'};
             int32_t destLen = nfs4_cs_prepare(src, srcLen, dest, MAX_BUFFER_SIZE, FALSE, &parseError, &status);
             if(U_FAILURE(status)){
-                log_err("StringPrep failed with error: %s\n", u_errorName(status));
+                log_err("StringPrep failed for case: Normalization Turned OFF with error: %s\n", u_errorName(status));
             }
             if(strcmp(dest,src)!=0){
-                log_err("Did not get the expected output!");
+                log_err("Did not get the expected output for case: Normalization Turned OFF\n");
+            }
+            if(destLen != srcLen){
+                log_err("Did not get the expected length for the output for case: Normalization Turned OFF. Expected: %i Got: %i\n", srcLen, destLen);
             }
         }else{
-            log_err("Conversion failed with error: %s\n", u_errorName(status));
+            log_err("Conversion failed for case: Normalization Turned OFF with error: %s\n", u_errorName(status));
         }
     }
     {
@@ -492,13 +510,16 @@ Test_nfs4_cs_prep(void){
             char dest[MAX_BUFFER_SIZE] = {'\0'};
             int32_t destLen = nfs4_cs_prepare(src, srcLen, dest, MAX_BUFFER_SIZE, TRUE, &parseError, &status);
             if(U_FAILURE(status)){
-                log_err("StringPrep failed with error: %s\n", u_errorName(status));
+                log_err("StringPrep failed for case: Case Mapping Turned OFF with error: %s\n", u_errorName(status));
             }
             if(strcmp(dest,src)!=0){
-                log_err("Did not get the expected output!");
+                log_err("Did not get the expected output for case: Case Mapping Turned OFF\n");
+            }
+            if(destLen != srcLen){
+                log_err("Did not get the expected length for the output for case: Case Mapping Turned OFF. Expected: %i Got: %i\n", srcLen, destLen);
             }
         }else{
-            log_err("Conversion failed with error: %s\n", u_errorName(status));
+            log_err("Conversion failed for case: Case Mapping Turned OFF with error: %s\n", u_errorName(status));
         }
     }
     {
@@ -507,19 +528,24 @@ Test_nfs4_cs_prep(void){
         const char *expected = "thisisatest";
         UErrorCode status = U_ZERO_ERROR;
         char src[MAX_BUFFER_SIZE]={'\0'};
+        char exp[MAX_BUFFER_SIZE]={'\0'};
         UParseError parseError;
         int32_t srcLen = unescapeData(source, strlen(source), src, MAX_BUFFER_SIZE, &status);
+        int32_t expLen = unescapeData(expected, strlen(expected), exp, MAX_BUFFER_SIZE, &status);
         if(U_SUCCESS(status)){
             char dest[MAX_BUFFER_SIZE] = {'\0'};
             int32_t destLen = nfs4_cs_prepare(src, srcLen, dest, MAX_BUFFER_SIZE, FALSE, &parseError, &status);
             if(U_FAILURE(status)){
-                log_err("StringPrep failed with error: %s\n", u_errorName(status));
+                log_err("StringPrep failed for case: Case Mapping Turned On with error: %s\n", u_errorName(status));
             }
-            if(strcmp(expected, dest)!=0){
-                log_err("Did not get the expected output!");
+            if(strcmp(exp, dest)!=0){
+                log_err("Did not get the expected output for case: Case Mapping Turned On!\n");
+            }
+            if(destLen != expLen){
+                log_err("Did not get the expected length for the outputfor case: Case Mapping Turned On. Expected: %i Got: %i\n", strlen(expected), destLen);
             }
         }else{
-            log_err("Conversion failed with error: %s\n", u_errorName(status));
+            log_err("Conversion failed for case: Case Mapping Turned ON with error: %s\n", u_errorName(status));
         }
     }
 }
