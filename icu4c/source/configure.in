@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.135 2001/11/07 23:48:17 emader-oss Exp $
+dnl $Id: configure.in,v 1.136 2001/11/10 03:14:17 yves-oss Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -704,7 +704,7 @@ AC_SUBST(DATA_PACKAGING_MODE)
 dnl Sets a library suffix
 AC_MSG_CHECKING([for a library suffix to use])
 AC_ARG_WITH(library-suffix,
-	[  --with-library-suffix=suffix tag a suffix to the library names [default=]],
+	[  --with-library-suffix=suffix    tag a suffix to the library names [default=]],
 	[ICULIBSUFFIX="${withval}"],
 	[ICULIBSUFFIX=])
 msg=$ICULIBSUFFIX
