@@ -31,8 +31,10 @@
 #   define UDATA_DLL
 #endif
 
-#define COMMON_DATA_NAME "icudata"
-#define COMMON_DATA_NAME_LENGTH 7
+#define COMMON_DATA_NAME U_ICUDATA_NAME
+#define COMMON_DATA_NAME_LENGTH 8
+/* Tests must verify that it remains 8 characters. */
+
 #define DATA_TYPE "dat"
 
 /* If you are excruciatingly bored turn this on .. */
@@ -323,12 +325,20 @@ typedef struct {
 #if MAP_IMPLEMENTATION==MAP_WIN32
     static UBool
     uprv_mapFile(UDataMemory *pData, const char *path, const char *basename) {
-        char buffer[100];
+        char buffer[200];
         HANDLE map;
+		char *p;
 
         /* set up the mapping name and the filename */
-        uprv_strcpy(buffer, "icu ");
-        uprv_strcpy(buffer+4, basename);
+        uprv_strcpy(buffer, "icu" U_ICU_VERSION " ");
+        uprv_strcat(buffer, path);
+        
+		/* replace in buffer \ with /   */
+		for(p=buffer; *p; p++) {
+			if (*p == '\\') {
+				*p = '/';
+			}
+		}
 
         /* open the mapping */
         map=OpenFileMapping(FILE_MAP_READ, FALSE, buffer);
@@ -746,7 +756,7 @@ openCommonData(UDataMemory *pData,
             /* ### hack: we still need to get u_getDataDirectory() fixed
                for OS/390 (batch mode - always return "//"? )
                and this here straightened out with LIB_PREFIX and LIB_SUFFIX (both empty?!) */
-            lib=LOAD_LIBRARY("//icudata", "//icudata");
+            lib=LOAD_LIBRARY("//" U_ICUDATA_NAME, "//" U_ICUDATA_NAME);
 #       else
             lib=LOAD_LIBRARY(pathBuffer, basename);
 #       endif
