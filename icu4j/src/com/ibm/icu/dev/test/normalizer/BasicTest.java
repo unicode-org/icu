@@ -649,16 +649,16 @@ public class BasicTest extends TestFmwk {
     public void TestQuickCheckPerCP() {
         int c, lead, trail;
         String s, nfd;
-        //int lccc1, lccc2, tccc1, tccc2;
+        int lccc1, lccc2, tccc1, tccc2;
         int qc1, qc2;
 
         if(
             UCharacter.getIntPropertyMaxValue(UProperty.NFD_QUICK_CHECK)!=1 || // YES
             UCharacter.getIntPropertyMaxValue(UProperty.NFKD_QUICK_CHECK)!=1 ||
             UCharacter.getIntPropertyMaxValue(UProperty.NFC_QUICK_CHECK)!=2 || // MAYBE
-            UCharacter.getIntPropertyMaxValue(UProperty.NFKC_QUICK_CHECK)!=2/* ||
-            UCharacter.getIntPropertyMaxValue(UProperty.LEAD_CANONICAL_COMBINING_CLASS)!=u_getIntPropertyMaxValue(UCHAR_CANONICAL_COMBINING_CLASS) ||
-            UCharacter.getIntPropertyMaxValue(UProperty.TRAIL_CANONICAL_COMBINING_CLASS)!=u_getIntPropertyMaxValue(UCHAR_CANONICAL_COMBINING_CLASS)*/
+            UCharacter.getIntPropertyMaxValue(UProperty.NFKC_QUICK_CHECK)!=2 ||
+            UCharacter.getIntPropertyMaxValue(UProperty.LEAD_CANONICAL_COMBINING_CLASS)!=UCharacter.getIntPropertyMaxValue(UProperty.CANONICAL_COMBINING_CLASS) ||
+            UCharacter.getIntPropertyMaxValue(UProperty.TRAIL_CANONICAL_COMBINING_CLASS)!=UCharacter.getIntPropertyMaxValue(UProperty.CANONICAL_COMBINING_CLASS)
         ) {
             errln("wrong result from one of the u_getIntPropertyMaxValue(UCHAR_NF*_QUICK_CHECK) or UCHAR_*_CANONICAL_COMBINING_CLASS");
         }
@@ -694,25 +694,23 @@ public class BasicTest extends TestFmwk {
             if(qc1!=qc2) {
                 errln("getIntPropertyValue(NFKD)="+qc1+" != "+qc2+"=quickCheck(NFKD) for U+"+Integer.toHexString(c));
             }
-/*
-            length=unorm_normalize(s, length, UNORM_NFD, 0, nfd, LENGTHOF(nfd), &errorCode);
-            U16_GET(nfd, 0, 0, length, lead);
-            U16_GET(nfd, 0, length-1, length, trail);
 
-            lccc1=u_getIntPropertyValue(c, UCHAR_LEAD_CANONICAL_COMBINING_CLASS);
-            lccc2=u_getCombiningClass(lead);
-            tccc1=u_getIntPropertyValue(c, UCHAR_TRAIL_CANONICAL_COMBINING_CLASS);
-            tccc2=u_getCombiningClass(trail);
+            nfd=Normalizer.normalize(s, Normalizer.NFD);
+            lead=UTF16.charAt(nfd, 0);
+            trail=UTF16.charAt(nfd, nfd.length()-1);
+
+            lccc1=UCharacter.getIntPropertyValue(c, UProperty.LEAD_CANONICAL_COMBINING_CLASS);
+            lccc2=UCharacter.getCombiningClass(lead);
+            tccc1=UCharacter.getIntPropertyValue(c, UProperty.TRAIL_CANONICAL_COMBINING_CLASS);
+            tccc2=UCharacter.getCombiningClass(trail);
 
             if(lccc1!=lccc2) {
-                log_err("u_getIntPropertyValue(lccc)=%d != %d=u_getCombiningClass(lead) for U+%04x\n",
-                        lccc1, lccc2, c);
+                errln("getIntPropertyValue(lccc)="+lccc1+" != "+lccc2+"=getCombiningClass(lead) for U+"+Integer.toHexString(c));
             }
             if(tccc1!=tccc2) {
-                log_err("u_getIntPropertyValue(tccc)=%d != %d=u_getCombiningClass(trail) for U+%04x\n",
-                        tccc1, tccc2, c);
+                errln("getIntPropertyValue(tccc)="+tccc1+" != "+tccc2+"=getCombiningClass(trail) for U+"+Integer.toHexString(c));
             }
-*/
+
             /* skip some code points */
             c=(20*c)/19+1;
         }

@@ -402,12 +402,32 @@ public interface UProperty
      * @draft ICU 3.0
      */
     public static final int NFKC_QUICK_CHECK = 0x100F;
+    /**
+     * Enumerated property Lead_Canonical_Combining_Class.
+     * ICU-specific property for the ccc of the first code point
+     * of the decomposition, or lccc(c)=ccc(NFD(c)[0]).
+     * Useful for checking for canonically ordered text;
+     * see Normalizer.FCD and http://www.unicode.org/notes/tn5/#FCD .
+     * Returns 8-bit numeric values like CANONICAL_COMBINING_CLASS.
+     * @draft ICU 3.0
+     */
+    public static final int LEAD_CANONICAL_COMBINING_CLASS = 0x1010;
+    /**
+     * Enumerated property Trail_Canonical_Combining_Class.
+     * ICU-specific property for the ccc of the last code point
+     * of the decomposition, or lccc(c)=ccc(NFD(c)[last]).
+     * Useful for checking for canonically ordered text;
+     * see Normalizer.FCD and http://www.unicode.org/notes/tn5/#FCD .
+     * Returns 8-bit numeric values like CANONICAL_COMBINING_CLASS.
+     * @draft ICU 3.0
+     */
+    public static final int TRAIL_CANONICAL_COMBINING_CLASS = 0x1011;
     /** 
      * One more than the last constant for enumerated/integer Unicode 
      * properties. 
      * @draft ICU 2.4 
      */
-    public static final int INT_LIMIT = 0x1010;
+    public static final int INT_LIMIT = 0x1012;
 
     /** 
      * Bitmask property General_Category_Mask.
