@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $
-* $Date: 2003/06/04 22:18:50 $
-* $Revision: 1.72 $
+* $Date: 2003/06/13 19:27:24 $
+* $Revision: 1.73 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -72,6 +72,7 @@
         <property name="doc.dir" value="doc"/>
         <property name="jar.file" value="icu4j.jar"/>
         <property name="icu4j.manifest" value="${src.dir}/com/ibm/icu/manifest.stub"/>
+        <property name="icu4j.module.manifest" value="${src.dir}/com/ibm/icu/manifest.module.stub"/>
         <property name="zip.file" value="../icu4j${DSTAMP}.zip"/>
         <property name="zipSrc.file" value="../icu4jSrc${DSTAMP}.zip"/>
 
@@ -356,13 +357,12 @@
          <!-- For basic support names data is not needed -->
          <delete file="${build.dir}/com/ibm/icu/impl/data/unames.icu"/>
     </target>
-
     <target name="moduleJar" depends="init">
         <jar jarfile="${jar.file}"
             compress="true"
             includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*"
             basedir="${build.dir}"
-            manifest="${icu4j.manifest}"/>
+            manifest="${icu4j.module.manifest}"/>
     </target>
 
     <!--
