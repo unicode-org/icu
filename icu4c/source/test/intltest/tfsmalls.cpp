@@ -36,7 +36,7 @@ void test_ParsePosition( void )
     }
     delete pp1;
 
-    
+
     {
         UTextOffset to = 5;
         ParsePosition pp2( to );
@@ -157,8 +157,6 @@ void test_FieldPosition( void )
 
 void test_Formattable( void )
 {
-    UErrorCode status = U_ZERO_ERROR;
-
     Formattable* ftp = new Formattable();
     if (!ftp || !(ftp->getType() == Formattable::kLong) || !(ftp->getLong() == 0)) {
         it_errln("*** Formattable constructor or getType or getLong");

@@ -63,24 +63,24 @@ public:
 
   void addElement(UnicodeString text) { fEnd->fLink = new TextLink(&fBase, text); fEnd = fEnd->fLink; ++fSize; }
   void insertElementAt(UnicodeString text, int pos) { 
-	  if(pos >= fSize || pos < 0)
-		  ;
-	  else if(pos == 0){
+      if(pos >= fSize || pos < 0)
+          ;
+      else if(pos == 0){
           TextLink* insert = new TextLink(&fBase, text);
-		  insert->fLink=fBase.fLink;
-		  ++fSize;
-		  fBase.fLink=insert;
-	  }
-	  else{
+          insert->fLink=fBase.fLink;
+          ++fSize;
+          fBase.fLink=insert;
+      }
+      else{
           TextLink* link = fBase.fLink; 
-		  while(--pos > 0)
+          while(--pos > 0)
              link=link->fLink;
           TextLink* insert = new TextLink(&fBase, text);
-		  insert->fLink =link->fLink;
+          insert->fLink =link->fLink;
           link->fLink=insert;
-		  ++fSize;
+          ++fSize;
 
-	  }
+      }
 
   }
     UnicodeString elementAt(int32_t pos) {
@@ -534,12 +534,12 @@ void IntlTestTextBoundary::addTestCharacterData()
 
 UnicodeString IntlTestTextBoundary::createTestData(Enumeration* e)
 {
-  UnicodeString result = "";
+    UnicodeString result = "";
 
-  while (e->hasMoreElements()) {
-    result += e->nextElement();
-  }
-  return result;
+    while (e->hasMoreElements()) {
+        result += e->nextElement();
+    }
+    return result;
 }
 
 //---------------------------------------------
@@ -614,8 +614,8 @@ void IntlTestTextBoundary::TestCharacterIteration()
         errln("Failed to create the BreakIterator for default locale in TestCharacterIteration.\n");
         return;
     }
-   // generalIteratorTest(*e, testCharacterText, characterSelectionData);
-	generalIteratorTest(*e, characterSelectionData);
+    // generalIteratorTest(*e, testCharacterText, characterSelectionData);
+    generalIteratorTest(*e, characterSelectionData);
     delete e;
 }
 void IntlTestTextBoundary::TestCharacterInvariants()
@@ -763,17 +763,17 @@ thaiLineSelection->addElement(CharsToUnicodeString("\\u0e2b\\u0e19\\u0e49\\u0e32
         thaiLineSelection->addElement(CharsToUnicodeString("\\u0e17\\u0e35\\u0e48"));
         thaiLineSelection->addElement(CharsToUnicodeString("\\u0e19\\u0e31\\u0e49\\u0e19"));
 
-	    BreakIterator* e = BreakIterator::createLineInstance(
+        BreakIterator* e = BreakIterator::createLineInstance(
                                                 Locale("th"), status); 
         if (U_FAILURE(status))
         {
             errln("Failed to create the BreakIterator for default locale in TestThaiLineBreak.\n");
             return;
         }
-			
+
         generalIteratorTest(*e, thaiLineSelection);
-		delete e;
-		delete thaiLineSelection;
+        delete e;
+        delete thaiLineSelection;
     }
 
 void IntlTestTextBoundary::TestMixedThaiLineBreak() 
@@ -830,18 +830,18 @@ thaiLineSelection->addElement(CharsToUnicodeString("(\\u0e1b\\u0e23\\u0e30\\u0e4
         thaiLineSelection->addElement(CharsToUnicodeString("\\u0e19\\u0e31\\u0e49\\u0e19 "));
         thaiLineSelection->addElement(CharsToUnicodeString("(\"\\u0e2e\\u0e32\\u0e23\\u0e4c\\u0e14\\u0e14\\u0e34\\u0e2a\\u0e01\\u0e4c\")."));
 
-	    BreakIterator* e = BreakIterator::createLineInstance(
+        BreakIterator* e = BreakIterator::createLineInstance(
                                                 Locale("th"), status); 
         if (U_FAILURE(status))
         {
             errln("Failed to create the BreakIterator for default locale in TestMixedThaiLineBreak.\n");
             return;
         }
-			
-			
+
+
         generalIteratorTest(*e, thaiLineSelection);
-		delete e;
-		delete thaiLineSelection;
+        delete e;
+        delete thaiLineSelection;
 }
 
 
@@ -860,17 +860,17 @@ void IntlTestTextBoundary::TestMaiyamok()
         thaiLineSelection->addElement(CharsToUnicodeString("\\u0e40\\u0e03\\u0e35\\u0e22\\u0e07"));
         thaiLineSelection->addElement(CharsToUnicodeString("\\u0e43\\u0e2b\\u0e21\\u0e48"));
 
-	    BreakIterator* e = BreakIterator::createLineInstance(
+        BreakIterator* e = BreakIterator::createLineInstance(
                                                 Locale("th"), status); 
-			
+
         if (U_FAILURE(status))
         {
             errln("Failed to create the BreakIterator for default locale in TestMaiyamok.\n");
             return;
         }
         generalIteratorTest(*e, thaiLineSelection);
-		delete e;
-		delete thaiLineSelection;
+        delete e;
+        delete thaiLineSelection;
 }
 
 /**
@@ -954,7 +954,7 @@ void IntlTestTextBoundary::TestGetAvailableLocales()
 
     if (locCount == 0)
         errln("getAvailableLocales() returned an empty list!");
-    // I have no idea how to test this function...
+    // Todo: I have no idea how to test this function...
 }
 
 //Testing the BreakIterator::getDisplayName() function 
@@ -1010,7 +1010,6 @@ void IntlTestTextBoundary::TestBug4153072() {
     UnicodeString str("...Hello, World!...");
     int32_t begin = 3;
     int32_t end = str.length() - 3;
-    UBool gotException = FALSE;
     UBool dummy;
 
     StringCharacterIterator* textIterator = new StringCharacterIterator(str, begin, end, begin);
@@ -1062,31 +1061,30 @@ void IntlTestTextBoundary::runIndexedTest( int32_t index, UBool exec, char* &nam
 {
     if (exec) logln("TestSuite TextBoundary: ");
     switch (index) {
-    	case 0: name = "TestSentenceIteration"; if(exec) TestSentenceIteration(); break;
-		case 1: name = "TestWordIteration"; if(exec) TestWordIteration(); break;
+        case 0: name = "TestSentenceIteration"; if(exec) TestSentenceIteration(); break;
+        case 1: name = "TestWordIteration"; if(exec) TestWordIteration(); break;
         case 2: name = "TestLineIteration"; if(exec) TestLineIteration(); break;
-		case 3: name = "TestCharacterIteration"; if(exec) TestCharacterIteration(); break;
-		case 4: name = "TestSentenceInvariants"; if(exec) TestSentenceInvariants();break;
-		case 5: name = "TestWordInvariants"; if(exec) TestWordInvariants();break;
-		case 6: name = "TestLineInvariants"; if(exec) TestLineInvariants();break;
-		case 7: name = "TestCharacterInvariants"; if(exec) TestCharacterInvariants();break;
-    
-		case 8: name = "TestEmptyString"; if (exec) TestEmptyString(); break;
+        case 3: name = "TestCharacterIteration"; if(exec) TestCharacterIteration(); break;
+        case 4: name = "TestSentenceInvariants"; if(exec) TestSentenceInvariants();break;
+        case 5: name = "TestWordInvariants"; if(exec) TestWordInvariants();break;
+        case 6: name = "TestLineInvariants"; if(exec) TestLineInvariants();break;
+        case 7: name = "TestCharacterInvariants"; if(exec) TestCharacterInvariants();break;
+
+        case 8: name = "TestEmptyString"; if (exec) TestEmptyString(); break;
         case 9: name = "TestGetAvailableLocales"; if (exec) TestGetAvailableLocales(); break;
         case 10: name = "TestGetDisplayName"; if (exec) TestGetDisplayName(); break;
         case 11: name = "TestPreceding"; if (exec) TestPreceding(); break;
         case 12: name = "TestBug4153072"; if (exec) TestBug4153072(); break;
         case 13: name = "TestEndBehaviour"; if (exec) TestEndBehaviour(); break;
 
-	
+
         case 14: name = "TestJapaneseLineBreak"; if (exec) TestJapaneseLineBreak(); break;
         case 15: name = "TestThaiLineBreak"; if(exec) TestThaiLineBreak(); break;
         case 16: name = "TestMixedThaiLineBreak"; if(exec) TestMixedThaiLineBreak(); break;
         case 17: name = "TestMaiyamok"; if(exec) TestMaiyamok(); break;
-   
 
-      
-       
+
+
         default: name = ""; break; //needed to end loop
     }
 }
@@ -1099,8 +1097,8 @@ void IntlTestTextBoundary::runIndexedTest( int32_t index, UBool exec, char* &nam
 void IntlTestTextBoundary::generalIteratorTest(BreakIterator& bi, Vector* expectedResult) 
 {
     Enumeration *elems = expectedResult->elements();
-	UnicodeString text = createTestData(elems);
-	delete elems;
+    UnicodeString text = createTestData(elems);
+    delete elems;
 
     bi.setText(&text);
 
@@ -1109,14 +1107,14 @@ void IntlTestTextBoundary::generalIteratorTest(BreakIterator& bi, Vector* expect
 
     logln("comparing forward and backward...");
     int errs = getErrors();
-	UnicodeString str1="forward iteration";
-	UnicodeString str2="backward iteration";
+    UnicodeString str1="forward iteration";
+    UnicodeString str2="backward iteration";
     compareFragmentLists(str1, str2, nextResults,
                     previousResults);
     if (getErrors() == errs) {
         logln("comparing expected and actual...");
-		str1="expected result";
-		str2="actual result";
+        str1="expected result";
+        str2="actual result";
         compareFragmentLists(str1, str2, expectedResult,
                         nextResults);
     }
@@ -1127,10 +1125,10 @@ void IntlTestTextBoundary::generalIteratorTest(BreakIterator& bi, Vector* expect
     for (int i = 0; i < expectedResult->size(); i++)
         boundaries[i + 2] = boundaries[i + 1] + ((UnicodeString)expectedResult->elementAt(i)).
                         length();
-	
+
     int len = expectedResult->size() + 3 -1;
-	boundaries[len] = BreakIterator::DONE;
-  
+    boundaries[len] = BreakIterator::DONE;
+
     testFollowing(bi, text, boundaries);
     testPreceding(bi, text, boundaries);
     testIsBoundary(bi, text, boundaries);
@@ -1172,7 +1170,7 @@ Vector* IntlTestTextBoundary::testLastAndPrevious(BreakIterator& bi, UnicodeStri
     int32_t p = bi.last();
     int32_t lastP = p;
     Vector *result = new Vector();
-	UnicodeString selection;
+    UnicodeString selection;
 
     if (p != text.length())
         errln((UnicodeString)"last() returned " + p + (UnicodeString)" instead of " + text.length());
@@ -1192,7 +1190,7 @@ Vector* IntlTestTextBoundary::testLastAndPrevious(BreakIterator& bi, UnicodeStri
         }
         lastP = p;
     }
-	return result;
+    return result;
 }
 
 void IntlTestTextBoundary::compareFragmentLists(UnicodeString& f1Name, UnicodeString& f2Name, Vector* f1, Vector* f2) 
@@ -1203,7 +1201,7 @@ void IntlTestTextBoundary::compareFragmentLists(UnicodeString& f1Name, UnicodeSt
     UnicodeString s2;
     int32_t t1 = 0;
     int32_t t2 = 0;
-	UnicodeString target;
+    UnicodeString target;
 
     while (p1 < f1->size() && p2 < f2->size()) {
         s1 = (UnicodeString)f1->elementAt(p1);

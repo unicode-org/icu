@@ -477,7 +477,6 @@ void BasicNormalizerTest::assertEqual(const UnicodeString&    input,
                       Normalizer*        iter,
                       const UnicodeString&    errPrefix)
 {
-    int index = 0;
     UnicodeString result;
 
     for (UChar32 ch = iter->first(); ch != iter->DONE; ch = iter->next()) {

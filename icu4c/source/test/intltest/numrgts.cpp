@@ -677,7 +677,6 @@ void NumberFormatRegressionTest::Test4087244 (void) {
     const DecimalFormatSymbols *sym = df->getDecimalFormatSymbols();
     UChar decSep = sym->getDecimalSeparator();
     UChar monSep = sym->getMonetaryDecimalSeparator();
-    UChar zero = sym->getZeroDigit();
     if (decSep == monSep) {
         errln("ERROR in test: want decimal sep != monetary sep");
         return;
@@ -2257,7 +2256,7 @@ void NumberFormatRegressionTest::Test4243108(void) {
     failure(status, "DecimalFormatSymbols ct");
     DecimalFormat fmt(UnicodeString("#.#"), sym, status);
     failure(status, "DecimalFormat ct");
-    
+
     UnicodeString str;
     FieldPosition pos;
 
@@ -2289,5 +2288,5 @@ void NumberFormatRegressionTest::Test4243108(void) {
     } else {
         errln(UnicodeString("FAIL 0.0 x #.# = ") + str +
               ", want " + exp);
-    }    
+    }
 }
