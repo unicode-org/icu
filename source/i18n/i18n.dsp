@@ -290,6 +290,10 @@ SOURCE=.\ucal.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\ucln_in.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\ucol.cpp
 # End Source File
 # Begin Source File
@@ -1418,6 +1422,10 @@ InputPath=.\unicode\ucal.h
 
 !ENDIF 
 
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucln_in.h
 # End Source File
 # Begin Source File
 
