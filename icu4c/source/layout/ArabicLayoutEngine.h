@@ -43,7 +43,7 @@ public:
 	 * @see OpenTypeLayoutEngine
 	 * @see ScriptAndLangaugeTags.h for script and language codes
 	 */
-    ArabicOpenTypeLayoutEngine(LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
+    ArabicOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
                             GlyphSubstitutionTableHeader *gsubTable);
 
  	/**
@@ -57,7 +57,7 @@ public:
 	 * @see OpenTypeLayoutEngine
 	 * @see ScriptAndLangaugeTags.h for script and language codes
 	 */
-    ArabicOpenTypeLayoutEngine(LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode);
+    ArabicOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode);
 
  	/**
 	 * The destructor, virtual for correct polymorphic invocation.
@@ -81,11 +81,12 @@ protected:
 	 * @param outChars - the output character arrayt
 	 * @param charIndices - the output character index array
 	 * @param featureTags - the output feature tag array
+	 * @param success - set to an error code if the operation fails
 	 *
 	 * @return the output character count
 	 */
     virtual le_int32 characterProcessing(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft,
-            LEUnicode *&outChars, le_int32 *&charIndices, const LETag **&featureTags);
+            LEUnicode *&outChars, le_int32 *&charIndices, const LETag **&featureTags, LEErrorCode &success);
 
 	/**
 	 * This method applies the GPOS table if it is present, otherwise it ensures that all vowel
@@ -100,8 +101,9 @@ protected:
 	 * @param glyphs - the input glyph array
 	 * @param glyphCount - the number of glyphs
 	 * @param positions - the position array, will be updated as needed
+	 * @param success - output parameter set to an error code if the operation fails
 	 */
-    virtual void adjustGlyphPositions(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, LEGlyphID glyphs[], le_int32 glyphCount, float positions[]);
+    virtual void adjustGlyphPositions(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, LEGlyphID glyphs[], le_int32 glyphCount, float positions[], LEErrorCode &success);
 };
 
 /**
@@ -128,7 +130,7 @@ public:
 	 * @see LEFontInstance
 	 * @see ScriptAndLanguageTags.h for script and language codes
 	 */
-    UnicodeArabicOpenTypeLayoutEngine(LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode);
+    UnicodeArabicOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode);
 
  	/**
 	 * The destructor, virtual for correct polymorphic invocation.
@@ -149,11 +151,12 @@ protected:
 	 * Output parameters:
 	 * @param glyphs - the output glyph index array
 	 * @param charIndices - the output character index array
+	 * @param success - set to an error code if the operation fails
 	 *
 	 * @return the number of glyph indices in the output glyph index array
 	 */
     virtual le_int32 glyphPostProcessing(LEGlyphID tempGlyphs[], le_int32 tempCharIndices[], le_int32 tempGlyphCount,
-                    LEGlyphID *&glyphs, le_int32 *&charIndices);
+                    LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success);
 
 	/**
 	 * This method copies the input characters into the output glyph index array,
@@ -169,9 +172,10 @@ protected:
 	 * Output parameters:
 	 * @param glyphs - the glyph array
 	 * @param charIndices - the character index array
+	 * @param success - set to an error code if the operation fails
 	 */
     virtual void mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, le_bool mirror,
-        LEGlyphID *&glyphs, le_int32 *&charIndices);
+        LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success);
 
 	/**
 	 * This method ensures that all vowel and accent glyphs have a zero advance width by calling
@@ -185,8 +189,9 @@ protected:
 	 * @param glyphs - the input glyph array
 	 * @param glyphCount - the number of glyphs
 	 * @param positions - the position array, will be updated as needed
+	 * @param success - output parameter set to an error code if the operation fails
 	 */
-    virtual void adjustGlyphPositions(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, LEGlyphID glyphs[], le_int32 glyphCount, float positions[]);
+    virtual void adjustGlyphPositions(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, LEGlyphID glyphs[], le_int32 glyphCount, float positions[], LEErrorCode &success);
 };
 
 #endif

@@ -35,7 +35,7 @@ le_int16 ValueRecord::getFieldValue(le_int16 index, ValueFormat valueFormat, Val
 }
 
 void ValueRecord::adjustPosition(ValueFormat valueFormat, char *base, GlyphPositionAdjustment &positionAdjustment,
-                                 LEFontInstance *fontInstance)
+                                 const LEFontInstance *fontInstance)
 {
     if ((valueFormat & vfbXPlacement) != 0) {
         le_int16 value = getFieldValue(valueFormat, vrfXPlacement);
@@ -131,7 +131,7 @@ void ValueRecord::adjustPosition(ValueFormat valueFormat, char *base, GlyphPosit
 }
 
 void ValueRecord::adjustPosition(le_int16 index, ValueFormat valueFormat, char *base, GlyphPositionAdjustment &positionAdjustment,
-                                 LEFontInstance *fontInstance)
+                                 const LEFontInstance *fontInstance)
 {
     if ((valueFormat & vfbXPlacement) != 0) {
         le_int16 value = getFieldValue(index, valueFormat, vrfXPlacement);

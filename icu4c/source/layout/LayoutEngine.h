@@ -9,15 +9,14 @@
 #ifndef __LAYOUTENGINE_H
 #define __LAYOUTENGINE_H
 
+#ifndef __LETYPES_H
 #include "LETypes.h"
-#include "LEFontInstance.h"
-#include "LEGlyphFilter.h"
-
-#include "unicode/utypes.h"
+#endif
 
 #include <string.h>
 
-#define ARRAY_COPY(dst, src, count) memcpy(dst, src, (count) * sizeof (src)[0])
+class LEFontInstance;
+class LEGlyphFilter;
 
 /**
  * This is a virtual base class used to do complex text layout. The text must all
@@ -25,6 +24,9 @@
  * created by calling the layoutEngineFactory method. Fonts are identified by
  * instances of the LEFontInstance class. Script and language codes are identified
  * by integer codes, which are defined in ScriptAndLanuageTags.h.
+ *
+ * Note that this class is not public API. It is declared public so that it can be
+ * exported from the library that it is a part of.
  *
  * The input to the layout process is an array of characters in logical order,
  * and a starting X, Y position for the text. The output is an array of glyph indices,
@@ -79,7 +81,8 @@ protected:
 	/**
 	 * The glyph position array. There are two entries for each glyph giving the
 	 * X and Y positions of the glyph. Thus, for glyph i, the X position is at index
-	 * 2i, and the Y position is at index 2i + 1.
+	 * 2i, and the Y position is at index 2i + 1. There are also two entries for the
+	 * X and Y position of the advance of the last glyph.
 	 */
     float *fPositions;
 
@@ -88,7 +91,7 @@ protected:
 	 *
 	 * @see LEFontInstance
 	 */
-    LEFontInstance *fFontInstance;
+    const LEFontInstance *fFontInstance;
 
 	/**
 	 * The script code for the text
@@ -115,7 +118,7 @@ protected:
 	 * @see LEFontInstance
 	 * @see ScriptAndLanguageTags.h
 	 */
-    LayoutEngine(LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode);
+    LayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode);
 
     /**
 	 * This overrides the default no argument constructor to make it
@@ -144,10 +147,11 @@ protected:
 	 * Output parameters:
 	 * @param glyphs - the glyph index array
 	 * @param charIndices - the character index array
+	 * @param success - set to an error code if the operation fails
 	 *
 	 * @return the number of glyphs in the glyph index array
 	 */
-    virtual le_int32 computeGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft, LEGlyphID *&glyphs, le_int32 *&charIndices);
+    virtual le_int32 computeGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft, LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success);
 
 	/**
 	 * This method does basic glyph positioning. The default implementation positions
@@ -163,7 +167,7 @@ protected:
 	 * Output parameters:
 	 * @param positions - the output X and Y positions (two entries per glyph)
 	 */
-    virtual void positionGlyphs(const LEGlyphID glyphs[], le_int32 glyphCount, float x, float y, float *&positions);
+    virtual void positionGlyphs(const LEGlyphID glyphs[], le_int32 glyphCount, float x, float y, float *&positions, LEErrorCode &success);
 
 	/**
 	 * This method does positioning adjustments like accent positioning and
@@ -182,13 +186,24 @@ protected:
 	 * @param glyphs - the input glyph array
 	 * @param glyphCount - the number of glyphs
 	 * @param positions - the position array, will be updated as needed
+	 * @param success - output parameter set to an error code if the operation fails
 	 *
 	 * Note: the positions are passed as a plain array because this method should
 	 * not need to reallocate them.
 	 */
-    virtual void adjustGlyphPositions(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, LEGlyphID glyphs[], le_int32 glyphCount, float positions[])
+    virtual void adjustGlyphPositions(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, LEGlyphID glyphs[], le_int32 glyphCount, float positions[], LEErrorCode &success)
     {
+		if (LE_FAILURE(success)) {
+			return;
+		}
+
+		if (chars == NULL || glyphs == NULL || positions == NULL || offset < 0 || count < 0) {
+			success = LE_ILLEGAL_ARGUMENT_ERROR;
+			return;
+		}
+
         // default is no adjustments
+		return;
     };
 
 	/**
@@ -201,10 +216,7 @@ protected:
 	 *
 	 * @return the address of the table.
 	 */
-    virtual const void *getFontTable(LETag tableTag)
-    {
-        return fFontInstance->getFontTable(tableTag);
-    };
+    virtual const void *getFontTable(LETag tableTag) const;
 
 	/**
 	 * This method does character to glyph mapping. The default implementation
@@ -227,10 +239,11 @@ protected:
 	 * Output parameters:
 	 * @param glyphs - the glyph array
 	 * @param charIndices - the character index array
+	 * @param success - set to an error code if the operation fails
 	 *
 	 * @see LEFontInstance
 	 */
-    virtual void mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, le_bool mirror, LEGlyphID *&glyphs, le_int32 *&charIndices);
+    virtual void mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, le_bool mirror, LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success);
 
 	/**
 	 * This is a convenience method that forces the advance width of mark
@@ -241,10 +254,11 @@ protected:
 	 * @param reverse - true if the glyph array has been reordered
 	 * @param markFilter - used to identify mark glyphs
 	 * @param positions - the glyph position array - updated as required
+	 * @param success - output parameter set to an error code if the operation fails
 	 *
 	 * @see LEGlyphFilter
 	 */
-    static void adjustMarkGlyphs(const LEGlyphID glyphs[], le_int32 glyphCount, le_bool reverse, LEGlyphFilter *markFilter, float positions[]);
+    static void adjustMarkGlyphs(const LEGlyphID glyphs[], le_int32 glyphCount, le_bool reverse, LEGlyphFilter *markFilter, float positions[], LEErrorCode &success);
 
 public:
 	/**
@@ -267,13 +281,26 @@ public:
 	 * @param rightToLeft - true if the characers are in a right to left directional run
 	 * @param x - the initial X position
 	 * @param y - the initial Y position
+	 * @param success - output parameter set to an error code if the operation fails
 	 *
 	 * @return the number of glyphs in the glyph array
 	 *
 	 * Note; the glyph, character index and position array can be accessed
 	 * using the getter method below.
 	 */
-    le_int32 layoutChars(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft, float x, float y);
+    le_int32 layoutChars(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft, float x, float y, LEErrorCode &success);
+
+	/**
+	 * This method returns the number of glyphs in the glyph array. Note
+	 * that the number of glyphs will be greater than or equal to the number
+	 * of characters used to create the LayoutEngine.
+	 *
+	 * @return the number of glyphs in the glyph array
+	 */
+	le_int32 getGlyphCount() const
+	{
+		return fGlyphCount;
+	};
 
 	/**
 	 * This method copies the glyph array into a caller supplied array.
@@ -281,10 +308,24 @@ public:
 	 * the glyphs.
 	 *
 	 * @param glyphs - the destiniation glyph array
+	 * @param success - set to an error code if the operation fails
 	 */
-    void getGlyphs(LEGlyphID glyphs[])
+    void getGlyphs(LEGlyphID glyphs[], LEErrorCode &success) const
     {
-        ARRAY_COPY(glyphs, fGlyphs, fGlyphCount);
+		if (LE_FAILURE(success)) {
+			return;
+		}
+
+		if (glyphs == NULL) {
+			success = LE_ILLEGAL_ARGUMENT_ERROR;
+			return;
+		}
+
+		if (fGlyphs == NULL) {
+			success = LE_NO_LAYOUT_ERROR;
+		}
+
+        LE_ARRAY_COPY(glyphs, fGlyphs, fGlyphCount);
     };
 
 	/**
@@ -295,54 +336,107 @@ public:
 	 *
 	 * @param glyphs - the destination (32 bit) glyph array
 	 * @param extraBits - this value will be ORed with each glyph index
+	 * @param success - set to an error code if the operation fails
 	 */
-    void getGlyphs(le_uint32 glyphs[], le_uint32 extraBits);
+    void getGlyphs(le_uint32 glyphs[], le_uint32 extraBits, LEErrorCode &success) const;
 
 	/**
 	 * This method copies the character index array into a caller supplied array.
-	 * The caller must ensure that the array is large enough to hold all
-	 * the character indices.
+	 * The caller must ensure that the array is large enough to hold a
+	 * character index for each glyph.
 	 *
 	 * @param charIndices - the destiniation character index array
+	 * @param success - set to an error code if the operation fails
 	 */
-    void getCharIndices(le_int32 charIndices[])
+    void getCharIndices(le_int32 charIndices[], LEErrorCode &success) const
     {
-        ARRAY_COPY(charIndices, fCharIndices, fGlyphCount);
+		if LE_FAILURE(success) {
+			return;
+		}
+
+		if (charIndices == NULL) {
+			success = LE_ILLEGAL_ARGUMENT_ERROR;
+			return;
+		}
+
+		if (fCharIndices == NULL) {
+			success = LE_NO_LAYOUT_ERROR;
+			return;
+		}
+
+        LE_ARRAY_COPY(charIndices, fCharIndices, fGlyphCount);
     };
 
 	/**
 	 * This method copies the character index array into a caller supplied array.
-	 * The caller must ensure that the array is large enough to hold all
-	 * the character indices.
+	 * The caller must ensure that the array is large enough to hold a
+	 * character index for each glyph.
 	 *
 	 * @param charIndices - the destiniation character index array
 	 * @param indexBase - an offset which will be added to each index
+	 * @param success - set to an error code if the operation fails
 	 */
-    void getCharIndices(le_int32 charIndices[], le_int32 indexBase);
+    void getCharIndices(le_int32 charIndices[], le_int32 indexBase, LEErrorCode &success) const;
 
 	/**
 	 * This method copies the position array into a caller supplied array.
-	 * The caller must ensure that the array is large enough to hold all
-	 * the positions.
+	 * The caller must ensure that the array is large enough to hold an
+	 * X and Y position for each glyph, plus an extra X and Y for the
+	 * advance of the last glyph.
 	 *
 	 * @param glyphs - the destiniation position array
+	 * @param success - set to an error code if the operation fails
 	 */
-    void getGlyphPositions(float positions[])
+    void getGlyphPositions(float positions[], LEErrorCode &success) const
     {
-        ARRAY_COPY(positions, fPositions, fGlyphCount * 2 + 2);
+		if LE_FAILURE(success) {
+			return;
+		}
+
+		if (positions == NULL) {
+			success = LE_ILLEGAL_ARGUMENT_ERROR;
+			return;
+		}
+
+		if (fPositions == NULL) {
+			success = LE_NO_LAYOUT_ERROR;
+			return;
+		}
+
+        LE_ARRAY_COPY(positions, fPositions, fGlyphCount * 2 + 2);
     };
 
 	/**
-	 * This method returns the x position of the glyph at the
-	 * given index.
+	 * This method returns the X and Y position of the glyph at
+	 * the given index.
 	 *
+	 * Input parameters:
 	 * @param glyphIndex - the index of the glyph
 	 *
-	 * @return the glyph's x position
+	 * Output parameters:
+	 * @param x - the glyph's X position
+	 * @param y - the glyph's Y position
+	 * @param success - set to an error code if the operation fails
+	 *
 	 */
-    float getGlyphXPosition(le_int32 glyphIndex)
+    void getGlyphPosition(le_int32 glyphIndex, float &x, float &y, LEErrorCode &success) const
     {
-        return fPositions[glyphIndex * 2];
+		if (LE_FAILURE(success)) {
+			return;
+		}
+
+		if (glyphIndex > fGlyphCount) {
+			success = LE_INDEX_OUT_OF_BOUNDS_ERROR;
+			return;
+		}
+
+		if (fPositions == NULL) {
+			success = LE_NO_LAYOUT_ERROR;
+			return;
+		}
+
+        x = fPositions[glyphIndex * 2];
+		y = fPositions[glyphIndex * 2 + 1];
     };
 
 	/**
@@ -360,10 +454,13 @@ public:
 	 * @param fontInstance - the font of the text
 	 * @param scriptCode - the script of the text
 	 * @param langaugeCode - the language of the text
+	 * @param success - output parameter set to an error code if the operation fails
+	 *
+	 * @return a LayoutEngine which can layout text in the given font.
 	 *
 	 * @see LEFontInstance
 	 */
-    static LayoutEngine *layoutEngineFactory(LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode);
+    static LayoutEngine *layoutEngineFactory(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode, LEErrorCode &success);
     
 };
 

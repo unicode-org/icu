@@ -18,20 +18,20 @@ struct AnchorTable
     le_int16   xCoordinate;
     le_int16   yCoordinate;
 
-    void    getAnchor(LEGlyphID glyphID, LEFontInstance *fontInstance,
+    void    getAnchor(LEGlyphID glyphID, const LEFontInstance *fontInstance,
                       LEPoint &anchor);
 };
 
 struct Format1AnchorTable : AnchorTable
 {
-    void getAnchor(LEFontInstance *fontInstance, LEPoint &anchor);
+    void getAnchor(const LEFontInstance *fontInstance, LEPoint &anchor);
 };
 
 struct Format2AnchorTable : AnchorTable
 {
     le_uint16  anchorPoint;
 
-    void getAnchor(LEGlyphID glyphID, LEFontInstance *fontInstance, LEPoint &anchor);
+    void getAnchor(LEGlyphID glyphID, const LEFontInstance *fontInstance, LEPoint &anchor);
 };
 
 struct Format3AnchorTable : AnchorTable
@@ -39,7 +39,7 @@ struct Format3AnchorTable : AnchorTable
     Offset  xDeviceTableOffset;
     Offset  yDeviceTableOffset;
 
-    void getAnchor(LEFontInstance *fontInstance, LEPoint &anchor);
+    void getAnchor(const LEFontInstance *fontInstance, LEPoint &anchor);
 };
 
 

@@ -41,7 +41,7 @@ GlyphSubstitutionLookupProcessor::GlyphSubstitutionLookupProcessor()
 }
 
 le_uint32 GlyphSubstitutionLookupProcessor::applySubtable(LookupSubtable *lookupSubtable, le_uint16 lookupType,
-                                                       GlyphIterator *glyphIterator, LEFontInstance *fontInstance)
+                                                       GlyphIterator *glyphIterator, const LEFontInstance *fontInstance)
 {
     le_uint32 delta = 0;
 

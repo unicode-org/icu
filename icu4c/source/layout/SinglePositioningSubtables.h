@@ -17,7 +17,7 @@
 
 struct SinglePositioningSubtable : GlyphPositioningSubtable
 {
-    le_uint32  process(GlyphIterator *glyphIterator, LEFontInstance *fontInstance);
+    le_uint32  process(GlyphIterator *glyphIterator, const LEFontInstance *fontInstance);
 };
 
 struct SinglePositioningFormat1Subtable : SinglePositioningSubtable
@@ -25,7 +25,7 @@ struct SinglePositioningFormat1Subtable : SinglePositioningSubtable
     ValueFormat valueFormat;
     ValueRecord valueRecord;
 
-    le_uint32  process(GlyphIterator *glyphIterator, LEFontInstance *fontInstance);
+    le_uint32  process(GlyphIterator *glyphIterator, const LEFontInstance *fontInstance);
 };
 
 struct SinglePositioningFormat2Subtable : SinglePositioningSubtable
@@ -34,7 +34,7 @@ struct SinglePositioningFormat2Subtable : SinglePositioningSubtable
     le_uint16      valueCount;
     ValueRecord valueRecordArray[ANY_NUMBER];
 
-    le_uint32  process(GlyphIterator *glyphIterator, LEFontInstance *fontInstance);
+    le_uint32  process(GlyphIterator *glyphIterator, const LEFontInstance *fontInstance);
 };
 
 #endif

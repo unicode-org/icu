@@ -28,7 +28,7 @@ public:
 	 *
 	 * @return the adjusted character
 	 */
-    virtual LEUnicode32 mapChar(LEUnicode32 ch) = 0;
+    virtual LEUnicode32 mapChar(LEUnicode32 ch) const = 0;
 };
 
 /**
@@ -62,7 +62,7 @@ public:
 	 *
 	 * @return the address of the table in memory
 	 */
-    virtual const void *getFontTable(LETag tableTag) = 0;
+    virtual const void *getFontTable(LETag tableTag) const = 0;
 
 	/**
 	 * This method is used to determine if the font can
@@ -74,7 +74,7 @@ public:
 	 *
 	 * @return true if the font can render ch.
 	 */
-    virtual le_bool canDisplay(LEUnicode ch) = 0;
+    virtual le_bool canDisplay(LEUnicode32 ch) const = 0;
 
 	/**
 	 * This method returns the number of design units in
@@ -82,7 +82,7 @@ public:
 	 *
 	 * @return the number of design units pre EM.
 	 */
-    virtual le_int32 getUnitsPerEM() = 0;
+    virtual le_int32 getUnitsPerEM() const = 0;
 
 	/**
 	 * This method maps an array of charcter codes to an array of glyph
@@ -97,7 +97,7 @@ public:
 	 *
 	 * @see LECharMapper
 	 */
-    virtual void mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, LECharMapper *mapper, LEGlyphID glyphs[]) = 0;
+    virtual void mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, const LECharMapper *mapper, LEGlyphID glyphs[]) const = 0;
 
 	/**
 	 * This method maps a single character to a glyph index, using the
@@ -110,7 +110,7 @@ public:
 	 *
 	 * @see LECharMapper
 	 */
-    virtual LEGlyphID mapCharToGlyph(LEUnicode32 ch, LECharMapper *mapper) = 0;
+    virtual LEGlyphID mapCharToGlyph(LEUnicode32 ch, const LECharMapper *mapper) const = 0;
 
 	/**
 	 * This method gets a name from the font. (e.g. the family name) The encoding
@@ -123,7 +123,7 @@ public:
 	 *
 	 * @return the number of characters in the name
 	 */
-    virtual le_int32 getName(le_uint16 platformID, le_uint16 scriptID, le_uint16 languageID, le_uint16 nameID, LEUnicode *name) = 0;
+    virtual le_int32 getName(le_uint16 platformID, le_uint16 scriptID, le_uint16 languageID, le_uint16 nameID, LEUnicode *name) const = 0;
 
 	//
     // Metrics
@@ -135,7 +135,7 @@ public:
 	 * @param glyph - the glyph index
 	 * @param advance - the X and Y pixel values will be stored here
 	 */
-    virtual void getGlyphAdvance(LEGlyphID glyph, LEPoint &advance) = 0;
+    virtual void getGlyphAdvance(LEGlyphID glyph, LEPoint &advance) const = 0;
 
 	/**
 	 * This method gets the hinted X and Y pixel coordinates of a particular
@@ -147,7 +147,7 @@ public:
 	 *
 	 * @return true if the point coordinates could be stored.
 	 */
-    virtual le_bool getGlyphPoint(LEGlyphID glyph, le_int32 pointNumber, LEPoint &point) = 0;
+    virtual le_bool getGlyphPoint(LEGlyphID glyph, le_int32 pointNumber, LEPoint &point) const = 0;
 
     /**
 	 * This method returns the width of the font's EM square
@@ -155,7 +155,7 @@ public:
 	 *
 	 * @return the pixel width of the EM square
 	 */
-    virtual float getXPixelsPerEm() = 0;
+    virtual float getXPixelsPerEm() const = 0;
 
     /**
 	 * This method returns the height of the font's EM square
@@ -163,7 +163,7 @@ public:
 	 *
 	 * @return the pixel height of the EM square
 	 */
-    virtual float getYPixelsPerEm() = 0;
+    virtual float getYPixelsPerEm() const = 0;
 
     /**
 	 * This method converts font design units in the
@@ -173,7 +173,7 @@ public:
 	 *
 	 * @return points in the X direction
 	 */
-    virtual float xUnitsToPoints(float xUnits) = 0;
+    virtual float xUnitsToPoints(float xUnits) const = 0;
 
     /**
 	 * This method converts font design units in the
@@ -183,7 +183,7 @@ public:
 	 *
 	 * @return points in the Y direction
 	 */
-    virtual float yUnitsToPoints(float yUunits) = 0;
+    virtual float yUnitsToPoints(float yUunits) const = 0;
 
     /**
 	 * This method converts font design units to points.
@@ -191,7 +191,7 @@ public:
 	 * @param units - X and Y design units
 	 * @param points - set to X and Y points
 	 */
-    virtual void unitsToPoints(LEPoint &units, LEPoint &points) = 0;
+    virtual void unitsToPoints(LEPoint &units, LEPoint &points) const = 0;
 
     /**
 	 * This method converts pixels in the
@@ -201,7 +201,7 @@ public:
 	 *
 	 * @return font design units in the X direction
 	 */
-    virtual float xPixelsToUnits(float xPixels) = 0;
+    virtual float xPixelsToUnits(float xPixels) const = 0;
 
     /**
 	 * This method converts pixels in the
@@ -211,7 +211,7 @@ public:
 	 *
 	 * @return font design units in the Y direction
 	 */
-    virtual float yPixelsToUnits(float yPixels) = 0;
+    virtual float yPixelsToUnits(float yPixels) const = 0;
 
     /**
 	 * This method converts pixels to font design units.
@@ -219,7 +219,7 @@ public:
 	 * @param pixels - X and Y pixel
 	 * @param units - set to X and Y font design units
 	 */
-    virtual void pixelsToUnits(LEPoint &pixels, LEPoint &units) = 0;
+    virtual void pixelsToUnits(LEPoint &pixels, LEPoint &units) const = 0;
 
 	/**
 	 * This method transforms an X, Y point in font design units to a
@@ -229,7 +229,7 @@ public:
 	 * @param yFunits - the Y coordinate in font design units
 	 * @param pixels - the tranformed co-ordinate in pixels
 	 */
-    virtual void transformFunits(float xFunits, float yFunits, LEPoint &pixels) = 0;
+    virtual void transformFunits(float xFunits, float yFunits, LEPoint &pixels) const = 0;
 
 	/**
 	 * This is a convenience method used to convert
