@@ -224,6 +224,13 @@ icu4c/source/tools/dumpce/*.html
 icu4c/source/tools/dumpce/*.o
 icu4c/source/tools/dumpce/Makefile
 icu4c/source/tools/dumpce/dumpce
+icu4c/source/tools/genbrk/*.d
+icu4c/source/tools/genbrk/*.pdb
+icu4c/source/tools/genbrk/*.plg
+icu4c/source/tools/genbrk/Debug
+icu4c/source/tools/genbrk/Makefile
+icu4c/source/tools/genbrk/Release
+icu4c/source/tools/genbrk/genbrk
 icu4c/source/tools/genccode/*.d
 icu4c/source/tools/genccode/*.pdb
 icu4c/source/tools/genccode/*.plg
