@@ -33,7 +33,7 @@
 
 /* fallback properties for the ASCII range if the data cannot be loaded */
 /* these are printed by genprops in verbose mode */
-static uint32_t staticProps32Table[0xa0]={
+static uint32_t staticProps32Table[]={
     /* 0x00 */ 0x48f,
     /* 0x01 */ 0x48f,
     /* 0x02 */ 0x48f,
