@@ -17,9 +17,14 @@
 #define UCOLEITR_H
 
 /**  
- * This indicates the last element in a UCollationElements has been consumed.
+ * This indicates an error has occured during processing.
  */
 #define UCOL_NULLORDER        0xFFFFFFFF
+/*
+* End or start of the of string has been reached, hence there's no more 
+* collation element to be retrieved.
+*/
+#define UCOL_NO_MORE_CES      0x00010101
 
 #include "unicode/ucol.h"
 
@@ -124,8 +129,9 @@ ucol_reset(UCollationElements *elems);
  * A single character may contain more than one collation element.
  * @param elems The UCollationElements containing the text.
  * @param status A pointer to an UErrorCode to receive any errors.
- * @return The next collation elements ordering, or \Ref{UCOL_NULLORDER} if 
- *         the end of the text is reached.
+ * @return The next collation elements ordering, otherwise returns NULLORDER 
+ *         if an error has occured or NO_MORE_CES if the end of string has 
+ *         been reached
  */
 U_CAPI int32_t
 ucol_next(UCollationElements *elems, UErrorCode *status);
@@ -135,8 +141,9 @@ ucol_next(UCollationElements *elems, UErrorCode *status);
  * A single character may contain more than one collation element.
  * @param elems The UCollationElements containing the text.
  * @param status A pointer to an UErrorCode to receive any errors.
- * @return The previous collation elements ordering, or \Ref{UCOL_NULLORDER}
- * if the end of the text is reached.
+ * @return The previous collation elements ordering, otherwise returns 
+ *         NULLORDER if an error has occured or NO_MORE_CES if the start of 
+ *         string has been reached
  */
 U_CAPI int32_t
 ucol_previous(UCollationElements *elems, UErrorCode *status);

@@ -41,6 +41,7 @@
 /* synwee : public can't remove */
 int32_t const CollationElementIterator::NULLORDER = 0xffffffff;
 // int32_t const CollationElementIterator::UNMAPPEDCHARVALUE = 0x7fff0000;
+int32_t const CollationElementIterator::NO_MORE_CES = 0x00010101;
 
 /* CollationElementIterator public constructor/destructor ------------------ */
 
@@ -53,7 +54,8 @@ CollationElementIterator::CollationElementIterator(
 
 CollationElementIterator::~CollationElementIterator()
 {
-  ucol_closeElements(m_data_);
+  if (isDataOwned_)
+    ucol_closeElements(m_data_);
 }
 
 /* CollationElementIterator public methods --------------------------------- */
@@ -65,8 +67,9 @@ UTextOffset CollationElementIterator::getOffset() const
 
 /**
 * Get the ordering priority of the next character in the string.
-* @return the next character's ordering. Returns NULLORDER if the end of string 
-*         is reached.
+* @return the next character's ordering. Returns NULLORDER if an error has 
+*         occured otherwise if the end of string has been reached, 
+*         NO_MORE_CES is returned.
 */
 int32_t CollationElementIterator::next(UErrorCode& status)
 {
@@ -186,8 +189,9 @@ UBool CollationElementIterator::operator==(
 /**
 * Get the ordering priority of the previous collation element in the string.
 * @param status the error code status.
-* @return the previous element's ordering. Returns NULLORDER if the beginning of 
-*         string is reached.
+* @return the previous element's ordering. Returns NULLORDER if an error has 
+*         occured otherwise if the start of string has been reached, 
+*         NO_MORE_CES is returned.
 */
 int32_t CollationElementIterator::previous(UErrorCode& status)
 {
@@ -342,7 +346,7 @@ void CollationElementIterator::setText(CharacterIterator& source,
   Using this constructor will prevent buffer from being removed when
   string gets removed
   */
-  UnicodeString string(buffer, length, length);
+  UnicodeString string;
   source.getText(string);
   string.extract(0, length, buffer);
   m_data_->length_ = length;
@@ -388,9 +392,10 @@ CollationElementIterator::CollationElementIterator(
 * over the source text using the specified collator
 */
 CollationElementIterator::CollationElementIterator(
-                                                const UnicodeString& sourceText,
-                                                const RuleBasedCollator* order,
-                                                UErrorCode& status)
+                                               const UnicodeString& sourceText,
+                                               const RuleBasedCollator* order,
+                                               UErrorCode& status)
+                                               : isDataOwned_(TRUE)
 {
   if (U_FAILURE(status))
     return;
@@ -413,7 +418,16 @@ CollationElementIterator::CollationElementIterator(
       status = U_MEMORY_ALLOCATION_ERROR;
   }
   */
-  m_data_ = ucol_openElements(order->ucollator, NULL, 0, &status);
+  int32_t length = sourceText.length();
+  UChar *string = new UChar[length];
+  /* 
+  Using this constructor will prevent buffer from being removed when
+  string gets removed
+  */
+  sourceText.extract(0, length, string);
+
+  m_data_ = ucol_openElements(order->ucollator, string, length, &status);
+  m_data_->iteratordata_.isWritable = TRUE;
 }
 
 /** 
@@ -455,11 +469,11 @@ CollationElementIterator::CollationElementIterator(
   string gets removed
   */
   UnicodeString string(buffer, length, length);
-  // synwee sourceText.getText(string);
+  ((CharacterIterator &)sourceText).getText(string);
   string.extract(0, length, buffer);
   
-  m_data_ = ucol_openElements(order->ucollator, NULL, 0, &status);
-  // synwee ucol_setText(m_data_, buffer, length, TRUE, &status);
+  m_data_ = ucol_openElements(order->ucollator, buffer, length, &status);
+  m_data_->iteratordata_.isWritable = TRUE;
 }
 
 /* CollationElementIterator private methods -------------------------------- */
@@ -494,7 +508,8 @@ const CollationElementIterator& CollationElementIterator::operator=(
         
       orderAlias = other.orderAlias;
     */
-    this->m_data_ = other.m_data_;
+    this->m_data_      = other.m_data_;
+    this->isDataOwned_ = FALSE;
   }
 
   return *this;

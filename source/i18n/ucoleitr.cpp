@@ -113,8 +113,56 @@ ucol_previous(UCollationElements *elems,
     return UCOL_NULLORDER;
 
   int32_t result;
-  UCOL_GETPREVCE(result, elems->collator_, elems->iteratordata_, 
-                 elems->length_, status);
+  /* UCOL_GETPREVCE(result, elems->collator_, elems->iteratordata_, 
+                 elems->length_, status); */
+
+  /* synwee : to be removed, only for testing */
+  const UCollator   *coll  = elems->collator_;
+        collIterate *data  = &(elems->iteratordata_);
+        int32_t     length = elems->length_;
+
+  if (data->CEpos > data->CEs) 
+  {                                               
+    (result) = *(data->toReturn --);                                           
+    if (data->CEs == data->toReturn)                                
+      data->CEpos = data->toReturn = data->CEs;                                                                        
+  }                                                                          
+  else 
+  {                    
+    /* 
+    pointers are always at the next position to be retrieved for getnextce 
+    for every first previous step after a next, value returned will the same 
+    as the last next value
+    */
+    if (data->len - data->pos == length)
+      (result) = UCOL_NO_MORE_CES;                                                                                                                    
+    else 
+    {                  
+      if (data->pos != data->writableBuffer)
+        data->pos --;                                 
+      else 
+      {                                                                 
+        data->pos = data->string +                                             
+                            (length - (data->len - data->writableBuffer));     
+        data->len = data->string + length;                                     
+        data->isThai = TRUE;                                                  
+      }                
+
+      UChar ch = *(data->pos);
+      if (ch <= 0xFF)                                                
+        (result) = (coll)->latinOneMapping[ch];                                                                                       
+      else
+        (result) = ucmp32_get((coll)->mapping, ch);                           
+                                                                       
+      if ((result) >= UCOL_NOT_FOUND) 
+      {
+        (result) = getSpecialPrevCE(coll, result, data, length, status);      
+        if ((result) == UCOL_NOT_FOUND)
+          (result) = ucol_getPrevUCA(ch, data, length, status);                                      
+      }                                                                      
+    }                                                                        
+  }                     
+
   return result;
 }
 
@@ -191,6 +239,7 @@ ucol_setOffset(UCollationElements    *elems,
     ci->writableBuffer = ci->stackWritableBuffer;
   }
 }
+
 
 
 
