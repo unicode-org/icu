@@ -248,7 +248,7 @@ decodeBocu1(Bocu1Rx *pRx, uint8_t b);
  * @param c current code point, 0..0x10ffff
  * @return "previous code point" state value
  */
-U_INLINE int32_t
+static U_INLINE int32_t
 bocu1Prev(int32_t c) {
     /* compute new prev */
     if(0x3040<=c && c<=0x309f) {
@@ -1005,8 +1005,10 @@ TestBOCU1(void) {
     ucnv_close(bocu1);
 }
 
+U_CFUNC void addBOCU1Tests(TestNode** root);
+
 U_CFUNC void
-addBOCU1Tests(TestNode** root) {    
+addBOCU1Tests(TestNode** root) {
     addTest(root, TestBOCU1RefDiff, "tsconv/bocu1tst/TestBOCU1RefDiff");
     addTest(root, TestBOCU1, "tsconv/bocu1tst/TestBOCU1");
 }
