@@ -770,7 +770,7 @@ int32_t TransliterationRuleParser::syntaxError(int32_t parseErrorCode,
         if (end < 0) {
             end = rule.length();
         }
-        int32_t len = uprv_max(end - start, U_PARSE_CONTEXT_LEN-1);
+        int32_t len = uprv_min(end - start, U_PARSE_CONTEXT_LEN-1);
         // Extract everything into the preContext and leave the postContext
         // blank, since we don't have precise error position.
         // TODO: Fix this.
