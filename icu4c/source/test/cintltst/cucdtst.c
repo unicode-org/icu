@@ -18,6 +18,7 @@
 #include <string.h>
 #include "unicode/uchar.h"
 #include "unicode/utypes.h"
+#include "unicode/putil.h"
 #include "cstring.h"
 #include "cintltst.h"
 #include "cucdtst.h"
@@ -815,14 +816,14 @@ static const struct {
     uint32_t code;
     const char *name, *oldName;
 } names[]={
-    0x0061, "LATIN SMALL LETTER A", "",
-    0x0284, "LATIN SMALL LETTER DOTLESS J WITH STROKE AND HOOK", "LATIN SMALL LETTER DOTLESS J BAR HOOK",
-    0x3401, "CJK UNIFIED IDEOGRAPH-3401", "",
-    0x7fed, "CJK UNIFIED IDEOGRAPH-7FED", "",
-    0xac00, "HANGUL SYLLABLE GA", "",
-    0xd7a3, "HANGUL SYLLABLE HIH", "",
-    0xff08, "FULLWIDTH LEFT PARENTHESIS", "FULLWIDTH OPENING PARENTHESIS",
-    0xffe5, "FULLWIDTH YEN SIGN", ""
+    {0x0061, "LATIN SMALL LETTER A", ""},
+    {0x0284, "LATIN SMALL LETTER DOTLESS J WITH STROKE AND HOOK", "LATIN SMALL LETTER DOTLESS J BAR HOOK"},
+    {0x3401, "CJK UNIFIED IDEOGRAPH-3401", ""},
+    {0x7fed, "CJK UNIFIED IDEOGRAPH-7FED", ""},
+    {0xac00, "HANGUL SYLLABLE GA", ""},
+    {0xd7a3, "HANGUL SYLLABLE HIH", ""},
+    {0xff08, "FULLWIDTH LEFT PARENTHESIS", "FULLWIDTH OPENING PARENTHESIS"},
+    {0xffe5, "FULLWIDTH YEN SIGN", ""}
 };
 
 static UBool
@@ -892,7 +893,7 @@ TestCharNames() {
             log_err("u_charName(0x%lx - 1.0) error %s\n", names[i].code, u_errorName(errorCode));
             return;
         }
-        if(length<0 || length>0 && 0!=uprv_strcmp(name, names[i].oldName) || length!=(uint16_t)uprv_strlen(name)) {
+        if(length<0 || (length>0 && 0!=uprv_strcmp(name, names[i].oldName)) || length!=(uint16_t)uprv_strlen(name)) {
             log_err("u_charName(0x%lx - 1.0) gets %s length %ld instead of nothing or %s\n", names[i].code, name, length, names[i].oldName);
         }
 
