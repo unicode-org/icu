@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/IntlTestNumberFormat.java,v $ 
- * $Date: 2003/05/23 17:37:22 $ 
- * $Revision: 1.6 $
+ * $Date: 2003/05/23 23:43:19 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -17,6 +17,8 @@
 
 package com.ibm.icu.dev.test.format;
 import java.util.Locale;
+import java.util.Random;
+
 import com.ibm.icu.text.*;
 
 /**
