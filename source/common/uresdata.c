@@ -827,7 +827,7 @@ ures_swap(const UDataSwapper *ds,
     inBundle=(const Resource *)((const char *)inData+headerSize);
     bottom=0x7fffffff;
     top=maxTableLength=0;
-    rootRes=*inBundle;
+    rootRes=udata_readInt32(ds, *inBundle);
     ures_preflightResource(ds, inBundle, bundleLength, rootRes,
                            &bottom, &top, &maxTableLength,
                            pErrorCode);
@@ -855,7 +855,7 @@ ures_swap(const UDataSwapper *ds,
 
         ds->swapInvChars(ds, inChars, stringsLength, outBundle+1, pErrorCode);
         if(U_FAILURE(*pErrorCode)) {
-            udata_printError(ds, "ures_swapResource().swapInvChars(keys) failed - %s\n",
+          udata_printError(ds, "ures_swapResource().swapInvChars(keys,%d) failed - %s\n",  stringsLength,
                              u_errorName(*pErrorCode));
             return 0;
         }
