@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $
-* $Date: 2002/12/03 06:27:43 $
-* $Revision: 1.59 $
+* $Date: 2002/12/05 21:34:12 $
+* $Revision: 1.60 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -55,7 +55,7 @@
         </condition>
 
 	<condition property="doc.params"
-	    value="-breakiterator -use -tagletpath ./classes -taglet com.ibm.icu.dev.tool.docs.ICUTaglet">
+	    value="-breakiterator -use -tagletpath ./classes -taglet com.ibm.icu.dev.tool.docs.ICUTaglet -group 'ICU Core' 'com.ibm.icu.lang*:com.ibm.icu.math*:com.ibm.icu.text*:com.ibm.icu.util*' -group 'ICU Tools' 'com.ibm.icu.dev*' -group 'Rich Text Editing' 'com.ibm.richtext*'">
             <equals arg1="${version.1.4}" arg2="true"/>
 	</condition>
     </target>
@@ -162,7 +162,8 @@
     <target name="docs" depends="anthack1,anthack2,tools">
         <echo message="doc params: ${doc.params}"/>
         <mkdir dir="${doc.dir}"/>
-        <javadoc packagenames="com.ibm.icu.lang,com.ibm.icu.dev.tool.translit,com.ibm.icu.text,com.ibm.icu.impl.data,com.ibm.icu.dev.tool.compression,com.ibm.icu.dev.tool.normalizer,com.ibm.icu.util,com.ibm.icu.dev.tool.rbbi,com.ibm.icu.math,com.ibm.richtext.textlayout,com.ibm.richtext.textlayout.attributes,com.ibm.richtext.awtui,com.ibm.richtext.print,com.ibm.richtext.styledtext,com.ibm.richtext.swingui,com.ibm.richtext.textapps,com.ibm.richtext.textformat,com.ibm.richtext.textpanel,com.ibm.richtext.uiimpl,com.ibm.richtext.uiimpl.resources,com.ibm.richtext.textapps.resources"
+        <javadoc
+            packagenames="com.ibm.icu.lang,com.ibm.icu.dev.tool.translit,com.ibm.icu.text,com.ibm.icu.impl.data,com.ibm.icu.dev.tool.compression,com.ibm.icu.util,com.ibm.icu.dev.tool.rbbi,com.ibm.icu.math,com.ibm.richtext.textlayout,com.ibm.richtext.textlayout.attributes,com.ibm.richtext.awtui,com.ibm.richtext.print,com.ibm.richtext.styledtext,com.ibm.richtext.swingui,com.ibm.richtext.textapps,com.ibm.richtext.textformat,com.ibm.richtext.textpanel,com.ibm.richtext.uiimpl,com.ibm.richtext.uiimpl.resources,com.ibm.richtext.textapps.resources"
             sourcepath="${src.dir}"
             destdir="${doc.dir}"
             nodeprecatedlist="true"
