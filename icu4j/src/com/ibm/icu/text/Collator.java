@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Collator.java,v $
-* $Date: 2003/04/19 00:01:53 $
-* $Revision: 1.24 $
+* $Date: 2003/05/01 17:09:16 $
+* $Revision: 1.25 $
 *
 *******************************************************************************
 */
@@ -318,6 +318,12 @@ public abstract class Collator implements Comparator, Cloneable
 
     // begin registry stuff
 
+    /**
+     * A factory used with registerFactory to register multiple collators and provide
+     * display names for them.  If standard locale display names are sufficient, 
+     * Collator instances may be registered instead.
+     * @draft ICU 2.6
+     */
     public static abstract class CollatorFactory {
         /**
          * Return true if this factory will be visible.  Default is true.
@@ -325,6 +331,7 @@ public abstract class Collator implements Comparator, Cloneable
          * be listed by getAvailableLocales.
          *
          * @return true if this factory is visible
+         * @draft ICU 2.6
          */
         public boolean visible() {
             return true;
@@ -335,6 +342,7 @@ public abstract class Collator implements Comparator, Cloneable
          * is not supported, return null.
          * @param loc the locale for which this collator is to be created.
          * @return the newly created collator.
+         * @draft ICU 2.6
          */
         public abstract Collator createCollator(Locale loc);
 
@@ -344,6 +352,7 @@ public abstract class Collator implements Comparator, Cloneable
          * @param objectLocale the locale identifying the collator
          * @param displayLocale the locale for which the display name of the collator should be localized
          * @return the display name
+         * @draft ICU 2.6
          */
         public String getDisplayName(Locale objectLocale, Locale displayLocale) {
             if (visible()) {
@@ -361,6 +370,7 @@ public abstract class Collator implements Comparator, Cloneable
          * supported by this factory.
          *
          * @return the set of supported locale IDs.
+         * @draft ICU 2.6
          */
         public abstract Set getSupportedLocaleIDs();
     }
@@ -451,10 +461,9 @@ public abstract class Collator implements Comparator, Cloneable
 
     /**
      * Get the set of Locales for which Collators are installed.
-     * @return the list of available locales which collators are installed.
-     *         The set of Locales returned will be the ones registered in
-     *         ICULocaleService, if ICULocaleService is used. Otherwise it will
-     *         be the set of Locales that are installed with ICU4J.
+     * @return the list of available locales in which collators are installed.
+     *         The list of Locales returned will include any that have been registered,
+     *         in addition to those Locales that are installed with ICU4J.
      * @draft ICU 2.4
      */
     public static Locale[] getAvailableLocales() {
@@ -465,15 +474,10 @@ public abstract class Collator implements Comparator, Cloneable
     }
 
     /**
-     * Return a mapping of display names to collators, localized to the provided locale.
-     * @draft 2.6
-     */
-    static final Map getDisplayNames(Locale displayLocale) {
-        return getShim().getDisplayNames(displayLocale);
-    }
-
-    /**
      * Get the name of the collator for the objectLocale, localized for the displayLocale.
+     * @param objectLocale the locale of the collator
+     * @param displayLocale the locale for the collator's display name
+     * @return the display name
      * @draft 2.6
      */
     static public String getDisplayName(Locale objectLocale, Locale displayLocale) {
@@ -481,8 +485,9 @@ public abstract class Collator implements Comparator, Cloneable
     }
 
     /**
-     * Return a mapping of display names to collators, localized to the provided locale.
      * Get the name of the collator for the objectLocale, localized for the current locale.
+     * @param objectLocale the locale of the collator
+     * @return the display name
      * @draft 2.6
      */
     static public String getDisplayName(Locale objectLocale) {
