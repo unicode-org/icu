@@ -53,7 +53,7 @@ CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 LDFLAGS = @LDFLAGS@ \
 $(LD_RPATH)$(LD_RPATH_PRE)$(top_builddir)/common@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/i18n
-LIBS = $(LIBICU-UC) $(LIBICU-I18N) @LIBS@ @LIB_M@
+LIBS = $(LIBICU-I18N) $(LIBICU-UC) @LIBS@ @LIB_M@
 
 OBJECTS = allcoll.o apicoll.o callimts.o calregts.o caltest.o		\
 caltztst.o citrtest.o cppcnvt.o cputilst.o currcoll.o dacoll.o		\

@@ -95,6 +95,31 @@ if test $hpuxcma = true; then
   esac
 fi
 
+dnl Check whether to build shared libraries
+AC_ARG_ENABLE(shared,
+    [  --enable-shared=[PKGS]  build shared libraries [default=no]],
+    [ case "${enableval}" in
+	     yes|"") ENABLE_SHARED=YES ;;
+	     no) ;;
+	     *) ;;
+    esac],
+    [ENABLE_SHARED=YES]
+)
+AC_SUBST(ENABLE_SHARED)
+
+dnl Check whether to build static libraries
+AC_ARG_ENABLE(static,
+    [  --enable-static[=PKGS]  build static libraries [default=no]],
+    [ case "${enableval}" in
+	     yes|"") ENABLE_STATIC=YES ;;
+	     no) ;;
+	     *) ;;
+    esac],
+)
+AC_SUBST(ENABLE_STATIC)
+
+AC_PROG_RANLIB
+
 threads=true
 
 dnl Enable/disable threads

@@ -50,6 +50,17 @@ CLEANFILES = *~
 ## Target information
 TARGET = cintltst
 
+ENABLE_STATIC = @ENABLE_STATIC@
+
+# Oh, this hurts my sensibility. This is supposedly a C test and we need to
+# link using a C++ compiler?! Better fix this depency on ustring.o and
+# the ostream !@(*$!@.
+
+ifneq ($(ENABLE_STATIC),)
+LINK = $(LINK.cc)
+else
+LINK = $(LINK.c)
+endif
 
 DEFS = @DEFS@
 
@@ -60,7 +71,7 @@ CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 LDFLAGS = @LDFLAGS@ \
 $(LD_RPATH)$(LD_RPATH_PRE)$(top_builddir)/common@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/i18n@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/tools/ctestfw
-LIBS = $(LIBICU-UC) $(LIBICU-I18N) $(LIBCTESTFW) @LIBS@ @LIB_M@
+LIBS = $(LIBCTESTFW) $(LIBICU-I18N) $(LIBICU-UC) @LIBS@ @LIB_M@
 
 OBJECTS = callcoll.o calltest.o capitst.o cbiapts.o cbkittst.o		\
 ccaltst.o ccapitst.o ccolltst.o cconvtst.o ccurrtst.o cdantst.o		\
@@ -110,7 +121,7 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 $(TARGET) : $(OBJECTS)
-	$(LINK.c) -o $@ $^ $(LIBS)
+	$(LINK) -o $@ $^ $(LIBS)
 
 ifeq (,$(MAKECMDGOALS))
 -include $(DEPS)

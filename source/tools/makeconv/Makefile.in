@@ -54,13 +54,21 @@ CLEANFILES = *~
 ## Target information
 TARGET = makeconv
 
+ENABLE_STATIC = @ENABLE_STATIC@
+
+ifneq ($(ENABLE_STATIC),)
+LINK = $(LINK.cc)
+else
+LINK = $(LINK.c)
+endif
+
 DEFS = @DEFS@
 CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcdir)/../toolutil
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 LDFLAGS = @LDFLAGS@ \
 $(LD_RPATH)$(LD_RPATH_PRE)$(top_builddir)/common@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/tools/toolutil@ld_rpath_suf@$(LD_RPATH_PRE)$(libdir)
-LIBS = $(LIBICU-UC) @LIBS@ @LIB_M@ $(LIBICU-TOOLUTIL)
+LIBS = $(LIBICU-TOOLUTIL) $(LIBICU-UC) @LIBS@ @LIB_M@
 
 OBJECTS = makeconv.o ucnvstat.o genmbcs.o
 
@@ -121,8 +129,8 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
-$(TARGET) : $(OBJECTS)
-	$(LINK.c) -o $@ $^ $(LIBS)
+$(TARGET): $(OBJECTS)
+	$(LINK) -o $@ $^ $(LIBS)
 
 # Rule to build a compiled cnv file
 $(top_builddir)/data/test%.cnv : $(top_srcdir)/test/testdata/test%.ucm
