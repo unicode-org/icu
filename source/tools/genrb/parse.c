@@ -366,7 +366,7 @@ parseUCARules(char *tag, uint32_t startline, UErrorCode *status)
     expect(TOK_STRING, &tokenValue, &line, status);
 
     if(isVerbose()){
-        printf(" %s at line %i \n", tag,startline);
+        printf(" %s at line %i \n",  (tag == NULL) ? "(null)" : tag,startline);
     }
     /* make the filename including the directory */
     if (inputdir != NULL)
@@ -487,7 +487,7 @@ parseString(char *tag, uint32_t startline, UErrorCode *status)
         return parseUCARules(tag, startline, status);
     }
     if(isVerbose()){
-        printf(" string %s at line %i \n", tag,startline);
+        printf(" string %s at line %i \n",  (tag == NULL) ? "(null)" : tag,startline);
     }
     expect(TOK_STRING, &tokenValue, NULL, status);
 
@@ -519,7 +519,7 @@ parseAlias(char *tag, uint32_t startline, UErrorCode *status)
     expect(TOK_STRING, &tokenValue, NULL, status);
     
     if(isVerbose()){
-        printf(" alias %s at line %i \n", tag,startline);
+        printf(" alias %s at line %i \n",  (tag == NULL) ? "(null)" : tag,startline);
     }
     
     if (U_SUCCESS(*status))
@@ -560,7 +560,7 @@ parseCollationElements(char *tag, uint32_t startline, UErrorCode *status)
         return NULL;
     }
     if(isVerbose()){
-        printf(" collation elements %s at line %i \n", tag,startline);
+        printf(" collation elements %s at line %i \n",  (tag == NULL) ? "(null)" : tag,startline);
     }
     /* '{' . (name resource)* '}' */
     for (;;)
@@ -710,7 +710,7 @@ realParseTable(struct SResource *table, char *tag, uint32_t startline, UErrorCod
 
     /* '{' . (name resource)* '}' */
     if(isVerbose()){
-        printf(" parsing table %s at line %i \n", tag,startline);
+        printf(" parsing table %s at line %i \n", (tag == NULL) ? "(null)" : tag,startline);
     }
     for (;;)
     {
@@ -785,7 +785,7 @@ parseTable(char *tag, uint32_t startline, UErrorCode *status)
         return parseCollationElements(tag, startline, status);
     }
     if(isVerbose()){
-        printf(" table %s at line %i \n", tag,startline);
+        printf(" table %s at line %i \n",  (tag == NULL) ? "(null)" : tag,startline);
     }
     result = table_open(bundle, tag, status);
 
@@ -813,7 +813,7 @@ parseArray(char *tag, uint32_t startline, UErrorCode *status)
         return NULL;
     }
     if(isVerbose()){
-        printf(" array %s at line %i \n", tag,startline);
+        printf(" array %s at line %i \n",  (tag == NULL) ? "(null)" : tag,startline);
     }
     /* '{' . resource [','] '}' */
     for (;;)
@@ -902,7 +902,7 @@ parseIntVector(char *tag, uint32_t startline, UErrorCode *status)
     }
 
     if(isVerbose()){
-        printf(" vector %s at line %i \n", tag,startline);
+        printf(" vector %s at line %i \n",  (tag == NULL) ? "(null)" : tag,startline);
     }
     
     /* '{' . string [','] '}' */
@@ -1004,7 +1004,7 @@ parseBinary(char *tag, uint32_t startline, UErrorCode *status)
     }
     
     if(isVerbose()){
-        printf(" binary %s at line %i \n", tag,startline);
+        printf(" binary %s at line %i \n",  (tag == NULL) ? "(null)" : tag,startline);
     }
 
     count = uprv_strlen(string);
@@ -1083,7 +1083,7 @@ parseInteger(char *tag, uint32_t startline, UErrorCode *status)
     }
 
     if(isVerbose()){
-        printf(" integer %s at line %i \n", tag,startline);
+        printf(" integer %s at line %i \n",  (tag == NULL) ? "(null)" : tag,startline);
     }
     
     if (uprv_strlen(string) <= 0)
@@ -1139,7 +1139,7 @@ parseImport(char *tag, uint32_t startline, UErrorCode *status)
     }
 
     if(isVerbose()){
-        printf(" import %s at line %i \n", tag,startline);
+        printf(" import %s at line %i \n",  (tag == NULL) ? "(null)" : tag,startline);
     }
     
     /* Open the input file for reading */
@@ -1255,7 +1255,7 @@ parseInclude(char *tag, uint32_t startline, UErrorCode *status)
     }
 
     if(isVerbose()){
-        printf(" include %s at line %i \n", tag,startline);
+        printf(" include %s at line %i \n",  (tag == NULL) ? "(null)" : tag,startline);
     }
 
     fullname = (char *) uprv_malloc(inputdirLength + count + 2);
@@ -1317,7 +1317,7 @@ parseResource(char *tag, UErrorCode *status)
     token = getToken(&tokenValue, &startline, status);
     
     if(isVerbose()){
-        printf(" resource %s at line %i \n", tag,startline);
+        printf(" resource %s at line %i \n",  (tag == NULL) ? "(null)" : tag,startline);
     }
     
     /* name . [ ':' type ] '{' resource '}' */
