@@ -1,5 +1,5 @@
 ## Makefile.in for ICU - samples/cal
-## Copyright (c) 1999-2003, International Business Machines Corporation and
+## Copyright (c) 1999-2004, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Source directory information
@@ -18,7 +18,7 @@ subdir = samples/cal
 CLEANFILES = *~ $(DEPS)
 
 ## Target information
-TARGET = icucal
+TARGET = icucal$(EXEEXT)
 
 LINK = $(LINK.cc)
 

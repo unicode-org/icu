@@ -1,6 +1,6 @@
 ## ******************************************************************************
 ## *
-## *   Copyright (C) 1999-2003, International Business Machines
+## *   Copyright (C) 1999-2004, International Business Machines
 ## *   Corporation and others.  All Rights Reserved.
 ## *
 ## *******************************************************************************
@@ -38,7 +38,7 @@ ALL_MAN_FILES = $(TARGET).$(SECTION)
 CLEANFILES = *~ $(DEPS) $(ALL_MAN_FILES)
 
 ## Target information
-TARGET = uconv
+TARGET = uconv$(EXEEXT)
 
 CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(srcdir)/../toolutil
 LIBS = $(LIBICUI18N) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
@@ -104,7 +104,7 @@ clean-local: resclean
 	$(RMV) $(OBJECTS) $(TARGET)
 
 resclean:
-	-$(INVOKE) $(top_builddir)/tools/pkgdata/pkgdata --clean -p $(RESDIR) -O pkgdata.inc -m $(PKGMODE) -d $(RESDIR) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
+	#-$(INVOKE) $(top_builddir)/tools/pkgdata/pkgdata --clean -p $(RESDIR) -O pkgdata.inc -m $(PKGMODE) -d $(RESDIR) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
 	$(RMV) pkgdata.inc $(RESDIR)
 
 distclean-local: clean-local
