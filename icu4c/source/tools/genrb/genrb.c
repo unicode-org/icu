@@ -49,12 +49,12 @@ enum
     COPYRIGHT,
     PACKAGE_NAME,
     BUNDLE_NAME,
-    WRITE_XML,
+    WRITE_XLIFF,
     TOUCHFILE,
     STRICT,
     NO_BINARY_COLLATION,
     /*added by Jing*/
-    LANGUAGE
+    LANGUAGE,
 };
 
 UOption options[]={
@@ -71,7 +71,7 @@ UOption options[]={
                       UOPTION_COPYRIGHT,
                       UOPTION_PACKAGE_NAME,
                       UOPTION_BUNDLE_NAME,
-                      UOPTION_DEF( "write-xml", 'x', UOPT_NO_ARG),
+                      UOPTION_DEF( "write-xliff", 'x', UOPT_OPTIONAL_ARG),
                       UOPTION_DEF( "touchfile", 't', UOPT_NO_ARG),
                       UOPTION_DEF( "strict",    'k', UOPT_NO_ARG), /* 14 */
                       UOPTION_DEF( "noBinaryCollation", 'C', UOPT_NO_ARG),/* 15 */
@@ -80,14 +80,14 @@ UOption options[]={
                   };
 
 static     UBool       write_java = FALSE;
-static     UBool       write_xml = FALSE;
+static     UBool       write_xliff = FALSE;
 static     UBool       touchfile = FALSE;
 static     const char* outputEnc ="";
 static     const char* gPackageName=NULL;
 static     const char* bundleName=NULL;
 /*added by Jing*/
 static     const char* language = NULL;
-
+static     const char* xliffOutputFileName = NULL;
 int
 main(int argc,
      char* argv[])
@@ -147,15 +147,15 @@ main(int argc,
                 "\t                         defaults to ASCII and \\uXXXX format.\n"
                 "\t-p or --package-name     For ICU4J: package name for writing the ListResourceBundle for ICU4J,\n"
                 "\t                         defaults to com.ibm.icu.impl.data\n"
-                "\t                         For ICU4C: Package name on output. Specfiying\n"
+                "\t                         For ICU4C: Package name for the .res files on output. Specfiying\n"
                 "\t                         'ICUDATA' defaults to the current ICU4C data name.\n");
         fprintf(stderr,
                 "\t-b or --bundle-name      bundle name for writing the ListResourceBundle for ICU4J,\n"
                 "\t                         defaults to LocaleElements\n"
-                "\t-x or --write-xml        write a XML file for the resource bundle.\n"
+                "\t-x or --write-xliff      write a XLIFF file for the resource bundle. Followed by an optional output file name.\n"
                 "\t-k or --strict           use pedantic parsing of syntax\n"
                 /*added by Jing*/
-                "\t-l or --language         language code compliant with ISO 639.\n");
+                "\t-l or --language         For XLIFF: language code compliant with ISO 639.\n");
 
         return argc < 0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
@@ -230,8 +230,11 @@ main(int argc,
         bundleName = options[BUNDLE_NAME].value;
     }
 
-    if(options[WRITE_XML].doesOccur) {
-        write_xml = TRUE;
+    if(options[WRITE_XLIFF].doesOccur) {
+        write_xliff = TRUE;
+        if(options[WRITE_XLIFF].value != NULL){
+            xliffOutputFileName = options[WRITE_XLIFF].value;
+        }
     }
 
     if(options[NO_BINARY_COLLATION].doesOccur) {
@@ -422,8 +425,8 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
     }
     if(write_java== TRUE){
         bundle_write_java(data,outputDir,outputEnc, outputFileName, sizeof(outputFileName),packageName,bundleName,status);
-    }else if(write_xml ==TRUE){
-        bundle_write_xml(data,outputDir,outputEnc, filename, outputFileName, sizeof(outputFileName),language, packageName,status);
+    }else if(write_xliff ==TRUE){
+        bundle_write_xml(data,outputDir,outputEnc, filename, outputFileName, sizeof(outputFileName),language, xliffOutputFileName,status);
     }else{
         /* Write the data to the file */
         bundle_write(data, outputDir, packageName, outputFileName, sizeof(outputFileName), status);
