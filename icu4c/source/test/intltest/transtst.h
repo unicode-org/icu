@@ -19,6 +19,10 @@
  */
 class TransliteratorTest : public IntlTest {
 
+public:
+    TransliteratorTest();
+
+private:
     void runIndexedTest(int32_t index, UBool exec, const char* &name,
                         char* par=NULL);
 
@@ -353,6 +357,10 @@ class TransliteratorTest : public IntlTest {
                     const UnicodeString& testRulesForward);
     void CheckIncrementalAux(const Transliterator* t, 
                              const UnicodeString& input);
+
+
+    const UnicodeString DESERET_DEE;
+    const UnicodeString DESERET_dee;
 
 };
 

@@ -77,6 +77,12 @@ enum {
     UPPER_A   =((UChar)0x0041)  /*A*/
 };
 
+TransliteratorTest::TransliteratorTest()
+:   DESERET_DEE((UChar32)0x10414),
+    DESERET_dee((UChar32)0x1043C)
+{
+}
+
 void
 TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
                                    const char* &name, char* /*par*/) {
@@ -3013,9 +3019,6 @@ void TransliteratorTest::TestDisplayName() {
         delete t;
     }
 }
-
-const UnicodeString DESERET_DEE((UChar32)0x10414);
-const UnicodeString DESERET_dee((UChar32)0x1043C);
 
 void TransliteratorTest::TestSpecialCases(void) {
     const UnicodeString registerRules[] = {
