@@ -3660,7 +3660,7 @@ cycheng@ca.ibm.c...	i ask sherman to send you more inconsistent data
 weiv	thanks
 cycheng@ca.ibm.c...	the 4 strings we sent are just samples
 */
-
+#if 0
 static void Alexis(void) {
   UErrorCode status = U_ZERO_ERROR;
   UCollator *coll = ucol_open("", &status);
@@ -3699,6 +3699,7 @@ static void Alexis(void) {
 
   ucol_close(coll);
 }
+#endif
 
 #define CMSCOLL_ALEXIS2_BUFFER_SIZE 256
 static void Alexis2(void) {
