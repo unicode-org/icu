@@ -407,6 +407,15 @@ SOURCE=.\unistr.cpp
 # Begin Source File
 
 SOURCE=.\unorm.cpp
+
+!IF  "$(CFG)" == "common - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "common - Win32 Debug"
+
+# ADD CPP /Ze
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
