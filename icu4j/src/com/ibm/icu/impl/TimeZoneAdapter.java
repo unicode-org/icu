@@ -31,20 +31,35 @@ import java.util.Date;
  * @since ICU 2.8
  */
 public class TimeZoneAdapter extends java.util.TimeZone {
-
+ 
     /**
-     * The contained com.ibm.icu.util.TimeZone object.
+     * The contained com.ibm.icu.util.TimeZone object.  Must not be null.
      * We delegate all methods to this object.
      */
     private TimeZone zone;
     
     /**
+     * Given a java.util.TimeZone, wrap it in the appropriate adapter
+     * subclass of com.ibm.icu.util.TimeZone and return the adapter.
+     */
+    public static java.util.TimeZone wrap(com.ibm.icu.util.TimeZone tz) {
+        if (tz instanceof JDKTimeZone) {
+            return ((JDKTimeZone) tz).unwrap();
+        }
+        return new TimeZoneAdapter(tz);
+    }
+
+    /**
+     * Return the java.util.TimeZone wrapped by this object.
+     */
+    public com.ibm.icu.util.TimeZone unwrap() {
+        return zone;
+    }
+
+    /**
      * Constructs an adapter for a com.ibm.icu.util.TimeZone object.
      */
-    public TimeZoneAdapter(TimeZone zone) {
-        if (zone instanceof JDKTimeZone) {
-            throw new RuntimeException();
-        }
+    private TimeZoneAdapter(TimeZone zone) {
         this.zone = zone;
         super.setID(zone.getID());
     }

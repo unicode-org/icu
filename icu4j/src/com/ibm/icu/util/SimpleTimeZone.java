@@ -36,7 +36,7 @@ public class SimpleTimeZone extends JDKTimeZone {
      * @stable ICU 2.0
      */
     public SimpleTimeZone(int rawOffset, String ID) {
-        super(new java.util.SimpleTimeZone(rawOffset, ID));
+        this(new java.util.SimpleTimeZone(rawOffset, ID));
     }
 
     /**
@@ -100,7 +100,7 @@ public class SimpleTimeZone extends JDKTimeZone {
     public SimpleTimeZone(int rawOffset, String ID,
                           int startMonth, int startDay, int startDayOfWeek, int startTime,
                           int endMonth, int endDay, int endDayOfWeek, int endTime) {
-        super(new java.util.SimpleTimeZone(rawOffset, ID, startMonth, startDay,
+        this(new java.util.SimpleTimeZone(rawOffset, ID, startMonth, startDay,
                                  startDayOfWeek, startTime, endMonth,
                                  endDay, endDayOfWeek, endTime));
     }
@@ -117,7 +117,7 @@ public class SimpleTimeZone extends JDKTimeZone {
                           int startMonth, int startDay, int startDayOfWeek, int startTime,
                           int endMonth, int endDay, int endDayOfWeek, int endTime,
                           int dstSavings) {
-        super(new java.util.SimpleTimeZone(rawOffset, ID, startMonth, startDay,
+        this(new java.util.SimpleTimeZone(rawOffset, ID, startMonth, startDay,
                                  startDayOfWeek, startTime, endMonth,
                                  endDay, endDayOfWeek, endTime, dstSavings));
     }
@@ -129,7 +129,7 @@ public class SimpleTimeZone extends JDKTimeZone {
      * @stable ICU 2.0
      */
     public void setStartYear(int year) {
-        getJDKSTZ().setStartYear(year);
+        unwrapSTZ().setStartYear(year);
     }
 
     /**
@@ -155,7 +155,7 @@ public class SimpleTimeZone extends JDKTimeZone {
      */
     public void setStartRule(int month, int dayOfWeekInMonth, int dayOfWeek,
                              int time) {
-        getJDKSTZ().setStartRule(month, dayOfWeekInMonth, dayOfWeek, time);
+        unwrapSTZ().setStartRule(month, dayOfWeekInMonth, dayOfWeek, time);
     }
 
     /**
@@ -171,7 +171,7 @@ public class SimpleTimeZone extends JDKTimeZone {
      * @stable ICU 2.0
      */
     public void setStartRule(int month, int dayOfMonth, int time) {
-        getJDKSTZ().setStartRule(month, dayOfMonth, time);
+        unwrapSTZ().setStartRule(month, dayOfMonth, time);
     }
 
     /**
@@ -192,7 +192,7 @@ public class SimpleTimeZone extends JDKTimeZone {
      * @stable ICU 2.0
      */
     public void setStartRule(int month, int dayOfMonth, int dayOfWeek, int time, boolean after) {
-        getJDKSTZ().setStartRule(month, dayOfMonth, dayOfWeek, time, after);
+        unwrapSTZ().setStartRule(month, dayOfMonth, dayOfWeek, time, after);
     }
 
     /**
@@ -217,7 +217,7 @@ public class SimpleTimeZone extends JDKTimeZone {
      */
     public void setEndRule(int month, int dayOfWeekInMonth, int dayOfWeek,
                            int time) {
-        getJDKSTZ().setEndRule(month, dayOfWeekInMonth, dayOfWeek, time);
+        unwrapSTZ().setEndRule(month, dayOfWeekInMonth, dayOfWeek, time);
     }
 
     /**
@@ -233,7 +233,7 @@ public class SimpleTimeZone extends JDKTimeZone {
      * @stable ICU 2.0
      */
     public void setEndRule(int month, int dayOfMonth, int time) {
-        getJDKSTZ().setEndRule(month, dayOfMonth, time);
+        unwrapSTZ().setEndRule(month, dayOfMonth, time);
     }
 
     /**
@@ -254,7 +254,7 @@ public class SimpleTimeZone extends JDKTimeZone {
      * @stable ICU 2.0
      */
     public void setEndRule(int month, int dayOfMonth, int dayOfWeek, int time, boolean after) {
-        getJDKSTZ().setEndRule(month, dayOfMonth, dayOfWeek, time, after);
+        unwrapSTZ().setEndRule(month, dayOfMonth, dayOfWeek, time, after);
     }
 
     /**
@@ -265,7 +265,7 @@ public class SimpleTimeZone extends JDKTimeZone {
      * @stable ICU 2.0
      */
     public void setDSTSavings(int millisSavedDuringDST) {
-        getJDKSTZ().setDSTSavings(millisSavedDuringDST);
+        unwrapSTZ().setDSTSavings(millisSavedDuringDST);
     }
 
     /**
@@ -276,22 +276,24 @@ public class SimpleTimeZone extends JDKTimeZone {
      * @stable ICU 2.0
      */
     public int getDSTSavings() {
-        return getJDKSTZ().getDSTSavings();
+        return unwrapSTZ().getDSTSavings();
     }
 
     /**
      * Constructs a SimpleTimeZone that wraps the given
-     * java.util.SimpleTimeZone.
+     * java.util.SimpleTimeZone.  Do not call; use the TimeZone
+     * API.
+     * @internal
      */
-    SimpleTimeZone(java.util.SimpleTimeZone tz) {
+    public SimpleTimeZone(java.util.SimpleTimeZone tz) {
         super(tz);
     }
 
     /**
      * Returns the java.util.SimpleTimeZone that this class wraps.
      */
-    java.util.SimpleTimeZone getJDKSTZ() {
-        return (java.util.SimpleTimeZone) getJDKZone();
+    java.util.SimpleTimeZone unwrapSTZ() {
+        return (java.util.SimpleTimeZone) unwrap();
     }
 }
 
