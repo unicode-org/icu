@@ -1,3 +1,10 @@
+#!/usr/local/bin/perl
+#  ********************************************************************
+#  * COPYRIGHT:
+#  * Copyright (c) 2002, International Business Machines Corporation and
+#  * others. All Rights Reserved.
+#  ********************************************************************
+
 package Dataset;
 use Statistics::Descriptive;
 use Statistics::Distributions;

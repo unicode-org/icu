@@ -1,4 +1,6 @@
 #!/bin/sh
+# Copyright (C) 2001 - 2002, International Business Machines Corporation.      
+# All Rights Reserved.                                                       
 #
 # Authors:
 # Ami Fixler

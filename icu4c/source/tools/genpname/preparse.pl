@@ -1,4 +1,9 @@
 #!perl
+#  ********************************************************************
+#  * COPYRIGHT:
+#  * Copyright (c) 2002, International Business Machines Corporation and
+#  * others. All Rights Reserved.
+#  ********************************************************************
 
 # This script reads in UCD files PropertyAliases.txt and
 # PropertyValueAliases.txt and correlates them with ICU enums

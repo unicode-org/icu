@@ -1,5 +1,10 @@
 #!/usr/bin/perl
 #line 14
+#  ********************************************************************
+#  * COPYRIGHT:
+#  * Copyright (c) 2002, International Business Machines Corporation and
+#  * others. All Rights Reserved.
+#  ********************************************************************
 
 # Script to generate the ICULocaleData.jar file.  This file is
 # part of icu4j.  It is checked into CVS.  It is generated from

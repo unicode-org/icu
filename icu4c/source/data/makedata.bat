@@ -1,4 +1,6 @@
 @echo off
+rem Copyright (c) 1999-2002, International Business Machines Corporation and
+rem others. All Rights Reserved.
 rem makedata.bat
 rem batch file for Windows for creating the ICU data files
 rem parameter:

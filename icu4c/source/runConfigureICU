@@ -1,4 +1,6 @@
 #!/bin/sh
+# Copyright (c) 1999-2002, International Business Machines Corporation and
+# others. All Rights Reserved.
 
 # runConfigureICU: This script will run the "configure" script for the appropriate platform
 # Only supported platforms are recognized

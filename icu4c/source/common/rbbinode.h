@@ -1,3 +1,9 @@
+/********************************************************************
+ * COPYRIGHT:
+ * Copyright (c) 2001-2002, International Business Machines Corporation and
+ * others. All Rights Reserved.
+ ********************************************************************/
+
 #ifndef RBBINODE_H
 #define RBBINODE_H
 
