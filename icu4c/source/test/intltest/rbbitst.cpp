@@ -166,11 +166,24 @@ void BITestData::clearResults() {
 }
 
 
-//--------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------
 //
-//    RBBITest 
+//    Cannned Test Characters
 //
-//--------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------
+
+static const UChar cannedTestArray[] = {
+    0x0001, 0x0002, 0x0003, 0x0004, 0x0020, 0x0021, '\\', 0x0022, 0x0023, 0x0024, 0x0025, 0x0026, 0x0028, 0x0029, 0x002b, 0x002d, 0x0030, 0x0031,
+    0x0032, 0x0033, 0x0034, 0x003c, 0x003d, 0x003e, 0x0041, 0x0042, 0x0043, 0x0044, 0x0045, 0x005b, 0x005d, 0x005e, 0x005f, 0x0060, 0x0061, 0x0062, 0x0063, 0x0064, 0x0065, 0x007b,
+    0x007d, 0x007c, 0x002c, 0x00a0, 0x00a2,
+    0x00a3, 0x00a4, 0x00a5, 0x00a6, 0x00a7, 0x00a8, 0x00a9, 0x00ab, 0x00ad, 0x00ae, 0x00af, 0x00b0, 0x00b2, 0x00b3, 
+    0x00b4, 0x00b9, 0x00bb, 0x00bc, 0x00bd, 0x02b0, 0x02b1, 0x02b2, 0x02b3, 0x02b4, 0x0300, 0x0301, 0x0302, 0x0303,
+    0x0304, 0x05d0, 0x05d1, 0x05d2, 0x05d3, 0x05d4, 0x0903, 0x093e, 0x093f, 0x0940, 0x0949, 0x0f3a, 0x0f3b, 0x2000,
+    0x2001, 0x2002, 0x200c, 0x200d, 0x200e, 0x200f, 0x2010, 0x2011, 0x2012, 0x2028, 0x2029, 0x202a, 0x203e, 0x203f,
+    0x2040, 0x20dd, 0x20de, 0x20df, 0x20e0, 0x2160, 0x2161, 0x2162, 0x2163, 0x2164, 0x0000
+};
+
+static UnicodeString* cannedTestChars = 0;
 
 #define  halfNA     "\\u0928\\u094d\\u200d"
 #define  halfSA     "\\u0938\\u094d\\u200d"
@@ -178,7 +191,23 @@ void BITestData::clearResults() {
 #define  halfKA     "\\u0915\\u094d\\u200d"
 #define  deadTA     "\\u0924\\u094d"
 
+//--------------------------------------------------------------------------------------
+//
+//    RBBITest    constructor and destructor
+//
+//--------------------------------------------------------------------------------------
 
+RBBITest::RBBITest() {
+    UnicodeString temp(cannedTestArray);
+    cannedTestChars = new UnicodeString();
+    *cannedTestChars += (UChar)0x0000;
+    *cannedTestChars += temp;
+}
+
+
+RBBITest::~RBBITest() {
+    delete cannedTestChars;
+}
 
 //--------------------------------------------------------------------
 //tests default rules based character iteration
@@ -209,6 +238,32 @@ void RBBITest::TestDefaultRuleBasedCharacterIteration()
     ADD_DATACHUNK(chardata, "e\\u0301", 0, status);                   //acuteE
     ADD_DATACHUNK(chardata, "&", 0, status);
     ADD_DATACHUNK(chardata, "e\\u0303", 0, status);                   //tildaE
+
+    ADD_DATACHUNK(chardata, "S\\u0300", 0, status); //graveS
+    ADD_DATACHUNK(chardata, "i\\u0301", 0, status); // acuteBelowI
+    ADD_DATACHUNK(chardata, "m", 0, status);
+    ADD_DATACHUNK(chardata, "p", 0, status);
+    ADD_DATACHUNK(chardata, "l", 0, status);
+    ADD_DATACHUNK(chardata, "e\\u0301", 0, status);  // acuteE
+    ADD_DATACHUNK(chardata, " ", 0, status);
+    ADD_DATACHUNK(chardata, "s", 0, status);
+    ADD_DATACHUNK(chardata, "a\\u0302", 0, status);  // circumflexA
+    ADD_DATACHUNK(chardata, "m", 0, status);
+    ADD_DATACHUNK(chardata, "p", 0, status);
+    ADD_DATACHUNK(chardata, "l", 0, status);
+    ADD_DATACHUNK(chardata, "e\\u0303", 0, status);  // tildeE
+    ADD_DATACHUNK(chardata, ".", 0, status);
+    ADD_DATACHUNK(chardata, "w", 0, status);
+    ADD_DATACHUNK(chardata, "a\\u0302", 0, status);  // circumflexA
+    ADD_DATACHUNK(chardata, "w", 0, status);
+    ADD_DATACHUNK(chardata, "a", 0, status);
+    ADD_DATACHUNK(chardata, "f", 0, status);
+    ADD_DATACHUNK(chardata, "q", 0, status);
+    ADD_DATACHUNK(chardata, "\n", 0, status);
+    ADD_DATACHUNK(chardata, "\r", 0, status);
+    ADD_DATACHUNK(chardata, "\r\n", 0, status);
+    ADD_DATACHUNK(chardata, "\n", 0, status);
+
     //devanagiri characters for Hindi support
     ADD_DATACHUNK(chardata, "\\u0906", 0, status);                    //devanagiri AA
     //ADD_DATACHUNK(chardata, "\\u093e\\u0901", 0);              //devanagiri vowelsign AA+ chandrabindhu
@@ -232,6 +287,10 @@ void RBBITest::TestDefaultRuleBasedCharacterIteration()
     ADD_DATACHUNK(chardata, "S\\u0300", 0, status);                   //graveS
     ADD_DATACHUNK(chardata, "i\\u0301", 0, status);                   //acuteBelowI
     ADD_DATACHUNK(chardata, "!", 0, status);
+
+
+
+
 
     // What follows is a string of Korean characters (I found it in the Yellow Pages
     // ad for the Korean Presbyterian Church of San Francisco, and I hope I transcribed
@@ -354,6 +413,8 @@ void RBBITest::TestDefaultRuleBasedWordIteration()
     ADD_DATACHUNK(worddata, "$", 0, status);
     ADD_DATACHUNK(worddata, "30.10", T_NUMBER, status);
     ADD_DATACHUNK(worddata, " ", 0, status);
+    ADD_DATACHUNK(worddata, "12,34", T_NUMBER, status);
+    ADD_DATACHUNK(worddata, " ", 0, status);
     ADD_DATACHUNK(worddata, "\\u00A2", 0, status); //cent sign
     ADD_DATACHUNK(worddata, "\\u00A3", 0, status); //pound sign
     ADD_DATACHUNK(worddata, "\\u00A4", 0, status); //currency sign
@@ -365,14 +426,33 @@ void RBBITest::TestDefaultRuleBasedWordIteration()
     ADD_DATACHUNK(worddata, " ", 0, status);
     ADD_DATACHUNK(worddata, "BADGES", T_LETTER, status);
     ADD_DATACHUNK(worddata, "!", 0, status);
+    ADD_DATACHUNK(worddata, "?", 0, status);
+    ADD_DATACHUNK(worddata, "!", 0, status);
+    ADD_DATACHUNK(worddata, " ", 0, status);
+    ADD_DATACHUNK(worddata, "We", T_LETTER, status);
+    ADD_DATACHUNK(worddata, " ", 0, status);
+    ADD_DATACHUNK(worddata, "don't", T_LETTER, status);
+    ADD_DATACHUNK(worddata, " ", 0, status);
+    ADD_DATACHUNK(worddata, "need", T_LETTER, status);
+    ADD_DATACHUNK(worddata, " ", 0, status);
+    ADD_DATACHUNK(worddata, "no", T_LETTER, status);
+    ADD_DATACHUNK(worddata, " ", 0, status);
+    ADD_DATACHUNK(worddata, "STINKING", T_LETTER, status);
+    ADD_DATACHUNK(worddata, " ", 0, status);
+    ADD_DATACHUNK(worddata, "BADGES", T_LETTER, status);
+    ADD_DATACHUNK(worddata, "!", 0, status);
+    ADD_DATACHUNK(worddata, "!", 0, status);
+
     ADD_DATACHUNK(worddata, "1000,233,456.000", T_NUMBER, status);
     ADD_DATACHUNK(worddata, " ", 0, status);
+
     ADD_DATACHUNK(worddata, "1,23.322", T_NUMBER, status);
     ADD_DATACHUNK(worddata, "%", 0, status);
     ADD_DATACHUNK(worddata, "123.1222", T_NUMBER, status);
     ADD_DATACHUNK(worddata, "$", 0, status);
     ADD_DATACHUNK(worddata, "123,000.20", T_NUMBER, status);
     ADD_DATACHUNK(worddata, " ", 0, status);
+
     ADD_DATACHUNK(worddata, "179.01", T_NUMBER, status);
     ADD_DATACHUNK(worddata, "%", 0, status);
     ADD_DATACHUNK(worddata, "X", T_LETTER, status);
@@ -428,12 +508,54 @@ void RBBITest::TestDefaultRuleBasedWordIteration()
     ADD_DATACHUNK(worddata, "\\u3094\\u0301", T_H_OR_K, status);   // Hiragana
     ADD_DATACHUNK(worddata, "\\u309d", T_H_OR_K, status);   // Hiragana
     ADD_DATACHUNK(worddata, "\\u30a1\\u30fd\\uff66\\uff9d", T_H_OR_K, status);  // Katakana
-    // ADD_DATACHUNK(worddata, "def", T_LETTER, status);   // TODO  why does this fail???
-    ADD_DATACHUNK(worddata, ".", 0, status);
+    ADD_DATACHUNK(worddata, "def", T_LETTER, status);
+    ADD_DATACHUNK(worddata, "#", 0, status);
 
     // Words with interior formatting characters
     ADD_DATACHUNK(worddata, "def\\u0301\\u070Fabc", T_LETTER, status);
+    ADD_DATACHUNK(worddata, " ", 0, status);
     
+    // to test for bug #4097779
+    ADD_DATACHUNK(worddata, "aa\\u0300a", T_LETTER, status);
+    ADD_DATACHUNK(worddata, " ", 0, status);
+
+    // to test for bug #4098467
+    // What follows is a string of Korean characters (I found it in the Yellow Pages
+    // ad for the Korean Presbyterian Church of San Francisco, and I hope I transcribed
+    // it correctly), first as precomposed syllables, and then as conjoining jamo.
+    // Both sequences should be semantically identical and break the same way.
+    // precomposed syllables...
+    ADD_DATACHUNK(worddata, "\\uc0c1\\ud56d", T_LETTER, status);
+    ADD_DATACHUNK(worddata, " ", 0, status);
+    ADD_DATACHUNK(worddata, "\\ud55c\\uc778", T_LETTER, status);
+    ADD_DATACHUNK(worddata, " ", 0, status);
+    ADD_DATACHUNK(worddata, "\\uc5f0\\ud569", T_LETTER, status);
+    ADD_DATACHUNK(worddata, " ", 0, status);
+    ADD_DATACHUNK(worddata, "\\uc7a5\\ub85c\\uad50\\ud68c", T_LETTER, status);
+    ADD_DATACHUNK(worddata, " ", 0, status);
+    // conjoining jamo...
+    ADD_DATACHUNK(worddata, "\\u1109\\u1161\\u11bc\\u1112\\u1161\\u11bc", T_LETTER, status);
+    ADD_DATACHUNK(worddata, " ", 0, status);
+    ADD_DATACHUNK(worddata, "\\u1112\\u1161\\u11ab\\u110b\\u1175\\u11ab", T_LETTER, status);
+    ADD_DATACHUNK(worddata, " ", 0, status);
+    ADD_DATACHUNK(worddata, "\\u110b\\u1167\\u11ab\\u1112\\u1161\\u11b8", T_LETTER, status);
+    ADD_DATACHUNK(worddata, " ", 0, status);
+    ADD_DATACHUNK(worddata, "\\u110c\\u1161\\u11bc\\u1105\\u1169\\u1100\\u116d\\u1112\\u116c", T_LETTER, status);
+    ADD_DATACHUNK(worddata, " ", 0, status);
+
+    // this is a test for bug #4117554: the ideographic iteration mark (U+3005) should
+    // count as a Kanji character for the purposes of word breaking
+    ADD_DATACHUNK(worddata, "abc", T_LETTER, status);
+    // Unicode TR29:  Ideographs do NOT group together into words.
+    //wordSelectionData->addElement(CharsToUnicodeString("\\u4e01\\u4e02\\u3005\\u4e03\\u4e03"));
+    ADD_DATACHUNK(worddata, "\\u4e01", T_IDEO, status);
+    ADD_DATACHUNK(worddata, "\\u4e02", T_IDEO, status);
+    ADD_DATACHUNK(worddata, "\\u3005", T_LETTER, status);   // TODO:  3005 is ideographic iteration mark
+                                                            //        Treating as letter is according to TR.
+                                                            //        Check whether this is really intended.
+    ADD_DATACHUNK(worddata, "\\u4e03", T_IDEO, status);
+    ADD_DATACHUNK(worddata, "\\u4e03", T_IDEO, status);
+    ADD_DATACHUNK(worddata, "abc",     T_LETTER, status);
 
     if (U_FAILURE(status)){
         errln("FAIL : in BITestData construction");
@@ -531,6 +653,40 @@ void RBBITest::TestDefaultRuleBasedSentenceIteration()
       // opening punctuation
       ADD_DATACHUNK(sentdata, "How do you do?", 0, status);
       ADD_DATACHUNK(sentdata, "(fine).", 0, status);
+
+      // test for bug #4158381: Don't break sentence after period if it isn't
+      // followed by a space
+      ADD_DATACHUNK(sentdata, "Test <code>Flags.Flag</code> class.  ", 0, status);
+      ADD_DATACHUNK(sentdata, "Another test.\\u2029", 0, status);
+      
+      // test for bug #4158381: No breaks when there are no terminators around
+      ADD_DATACHUNK(sentdata, "<P>Provides a set of &quot;lightweight&quot; (all-java<FONT SIZE=\"-2\">"
+                              "<SUP>TM</SUP></FONT> language) components that, to the maximum degree possible,"
+                              "work the same on all platforms.  ", 0, status);
+      ADD_DATACHUNK(sentdata, "Another test.\\u2029", 0, status);
+      
+      // test for bug #4143071: Make sure sentences that end with digits
+      // work right
+      ADD_DATACHUNK(sentdata, "Today is the 27th of May, 1998.  ", 0, status);
+      ADD_DATACHUNK(sentdata, "Tomorrow with be 28 May 1998.  ", 0, status);
+      ADD_DATACHUNK(sentdata, "The day after will be the 30th.\\u2029", 0, status);
+      
+      // test for bug #4152416: Make sure sentences ending with a capital
+      // letter are treated correctly
+      // Unicode TR29 reverses above bug:  Don't break a sentence if the last word begins with an upper case letter.
+      ADD_DATACHUNK(sentdata, "The type of all primitive <code>boolean</code> values accessed in the "            
+          "target VM.  Calls to xxx will return an implementor of this interface.  \\u2029", 0, status);
+      
+      // test for bug #4152117: Make sure sentence breaking is handling
+      // punctuation correctly [COULD NOT REPRODUCE THIS BUG, BUT TEST IS
+      // HERE TO MAKE SURE IT DOESN'T CROP UP]
+      ADD_DATACHUNK(sentdata, "Constructs a randomly generated BigInteger, uniformly distributed "
+                              "over the range <tt>0</tt> to <tt>(2<sup>numBits</sup> - 1)</tt>, inclusive.  ", 0, status);
+      ADD_DATACHUNK(sentdata, "The uniformity of the distribution assumes that a fair source of random bits "
+                              "is provided in <tt>rnd</tt>.  ", 0, status);
+      ADD_DATACHUNK(sentdata, "Note that this constructor always constructs a non-negative biginteger.  \n", 0, status);
+      ADD_DATACHUNK(sentdata, "Ahh abc.  \n", 0, status);
+
       //sentence breaks for hindi which used Devanagari script
       //make sure there is sentence break after ?,danda(hindi phrase separator),fullstop followed by space and no break after \n \r
       ADD_DATACHUNK(sentdata,  "\\u0928\\u092e" halfSA
@@ -1198,6 +1354,222 @@ void RBBITest::TestAbbrRuleBasedWordIteration()
       delete rb;
 } */
 
+
+
+void RBBITest::TestThaiLineBreak() {
+    UErrorCode status = U_ZERO_ERROR;
+    BITestData thaiLineSelection(status);
+
+    // \u0e2f-- the Thai paiyannoi character-- isn't a letter.  It's a symbol that
+    // represents elided letters at the end of a long word.  It should be bound to
+    // the end of the word and not treated as an independent punctuation mark.
+
+
+    ADD_DATACHUNK(thaiLineSelection, NULL, 0, status);           // Break at start of data
+    ADD_DATACHUNK(thaiLineSelection, "\\u0e2a\\u0e16\\u0e32\\u0e19\\u0e35\\u0e2f", 0, status);
+    ADD_DATACHUNK(thaiLineSelection, "\\u0e08\\u0e30", 0, status);
+    ADD_DATACHUNK(thaiLineSelection, "\\u0e23\\u0e30\\u0e14\\u0e21", 0, status);
+    ADD_DATACHUNK(thaiLineSelection, "\\u0e40\\u0e08\\u0e49\\u0e32", 0, status);
+//        ADD_DATACHUNK(thaiLineSelection, "\\u0e2b\\u0e19\\u0e49\\u0e32", 0, status);
+//        ADD_DATACHUNK(thaiLineSelection, "\\u0e17\\u0e35\\u0e48", 0, status);
+    ADD_DATACHUNK(thaiLineSelection, "\\u0e2b\\u0e19\\u0e49\\u0e32\\u0e17\\u0e35\\u0e48", 0, status);
+    // the commented-out lines (I think) are the preferred result; this line is what our current dictionary is giving us
+    ADD_DATACHUNK(thaiLineSelection, "\\u0e2d\\u0e2d\\u0e01", 0, status);
+    ADD_DATACHUNK(thaiLineSelection, "\\u0e21\\u0e32", 0, status);
+    ADD_DATACHUNK(thaiLineSelection, "\\u0e40\\u0e23\\u0e48\\u0e07", 0, status);
+    ADD_DATACHUNK(thaiLineSelection, "\\u0e23\\u0e30\\u0e1a\\u0e32\\u0e22", 0, status);
+    ADD_DATACHUNK(thaiLineSelection, "\\u0e2d\\u0e22\\u0e48\\u0e32\\u0e07", 0, status);
+    ADD_DATACHUNK(thaiLineSelection, "\\u0e40\\u0e15\\u0e47\\u0e21", 0, status);
+
+    // the one time where the paiyannoi occurs somewhere other than at the end
+    // of a word is in the Thai abbrevation for "etc.", which both begins and
+    // ends with a paiyannoi
+    ADD_DATACHUNK(thaiLineSelection, "\\u0e2f\\u0e25\\u0e2f", 0, status);
+    ADD_DATACHUNK(thaiLineSelection, "\\u0e17\\u0e35\\u0e48", 0, status);
+    ADD_DATACHUNK(thaiLineSelection, "\\u0e19\\u0e31\\u0e49\\u0e19", 0, status);
+
+    RuleBasedBreakIterator* e = (RuleBasedBreakIterator *)BreakIterator::createLineInstance(
+        Locale("th"), status); 
+    if (U_FAILURE(status))
+    {
+        errln("Failed to create the BreakIterator for Thai locale in TestThaiLineBreak.\n");
+        return;
+    }
+
+    generalIteratorTest(*e, thaiLineSelection);
+}
+
+
+
+void RBBITest::TestMixedThaiLineBreak() 
+{
+    UErrorCode   status = U_ZERO_ERROR;
+    BITestData   thaiLineSelection(status);
+
+    ADD_DATACHUNK(thaiLineSelection, NULL, 0, status);           // Break at start of data
+    
+    // Arabic numerals should always be separated from surrounding Thai text
+/*
+        ADD_DATACHUNK(thaiLineSelection, "\\u0e04\\u0e48\\u0e32", 0, status);
+        ADD_DATACHUNK(thaiLineSelection, "\\u0e40\\u0e07\\u0e34\\u0e19", 0, status);
+        ADD_DATACHUNK(thaiLineSelection, "\\u0e1a\\u0e32\\u0e17", 0, status);
+        ADD_DATACHUNK(thaiLineSelection, "\\u0e41\\u0e15\\u0e30", 0, status);
+        ADD_DATACHUNK(thaiLineSelection, "\\u0e23\\u0e30\\u0e14\\u0e31\\u0e1a", 0, status);
+        thaiLineSelection->addElement("39");
+        ADD_DATACHUNK(thaiLineSelection, "\\u0e1a\\u0e32\\u0e17 ", 0, status);
+
+        // words in non-Thai scripts should always be separated from surrounding Thai text
+        ADD_DATACHUNK(thaiLineSelection, "\\u0e17\\u0e14", 0, status);
+        ADD_DATACHUNK(thaiLineSelection, "\\u0e2a\\u0e2d\\u0e1a", 0, status);
+        thaiLineSelection->addElement("Java");
+        ADD_DATACHUNK(thaiLineSelection, "\\u0e1a\\u0e19", 0, status);
+        ADD_DATACHUNK(thaiLineSelection, "\\u0e40\\u0e04\\u0e23\\u0e37\\u0e48\\u0e2d\\u0e07", 0, status);
+        ADD_DATACHUNK(thaiLineSelection, "\\u0e44\\u0e2d\\u0e1a\\u0e35\\u0e40\\u0e2d\\u0e47\\u0e21 ", 0, status);
+
+        // Thai numerals should always be separated from the text surrounding them
+        ADD_DATACHUNK(thaiLineSelection, "\\u0e04\\u0e48\\u0e32", 0, status);
+        ADD_DATACHUNK(thaiLineSelection, "\\u0e40\\u0e07\\u0e34\\u0e19", 0, status);
+        ADD_DATACHUNK(thaiLineSelection, "\\u0e1a\\u0e32\\u0e17", 0, status);
+        ADD_DATACHUNK(thaiLineSelection, "\\u0e41\\u0e15\\u0e30", 0, status);
+        ADD_DATACHUNK(thaiLineSelection, "\\u0e23\\u0e30\\u0e14\\u0e31\\u0e1a", 0, status);
+        ADD_DATACHUNK(thaiLineSelection, "\\u0e53\\u0e59", 0, status);
+        ADD_DATACHUNK(thaiLineSelection, "\\u0e1a\\u0e32\\u0e17 ", 0, status);
+
+        // Thai text should interact correctly with punctuation and symbols
+        ADD_DATACHUNK(thaiLineSelection, "\\u0e44\\u0e2d\\u0e1a\\u0e35\\u0e40\\u0e2d\\u0e47\\u0e21", 0, status);
+//        ADD_DATACHUNK(thaiLineSelection, "(\\u0e1b\\u0e23\\u0e30\\u0e40\\u0e17\\u0e28", 0, status);
+//        ADD_DATACHUNK(thaiLineSelection, "\\u0e44\\u0e17\\u0e22)", 0, status);
+ADD_DATACHUNK(thaiLineSelection, "(\\u0e1b\\u0e23\\u0e30\\u0e40\\u0e17\\u0e28\\u0e44\\u0e17\\u0e22)", 0, status);
+// I believe the commented-out reading above to be the correct one, but this is what passes with our current dictionary
+        ADD_DATACHUNK(thaiLineSelection, "\\u0e08\\u0e33\\u0e01\\u0e31\\u0e14", 0, status);
+        ADD_DATACHUNK(thaiLineSelection, "\\u0e40\\u0e1b\\u0e34\\u0e14", 0, status);
+        ADD_DATACHUNK(thaiLineSelection, "\\u0e15\\u0e31\\u0e27\"", 0, status);
+*/
+
+    // The Unicode Linebreak TR says do not break before or after quotes.
+    //    So this test is changed ot not break around the quote.
+    //    TODO:  should Thai break around the around the quotes, like the original behavior here?
+//    ADD_DATACHUNK(thaiLineSelection, "\\u0e2e\\u0e32\\u0e23\\u0e4c\\u0e14\\u0e14\\u0e34\\u0e2a\\u0e01\\u0e4c\"", 0, status);
+//    ADD_DATACHUNK(thaiLineSelection, "\\u0e23\\u0e38\\u0e48\\u0e19", 0, status);
+      ADD_DATACHUNK(thaiLineSelection, "\\u0e2e\\u0e32\\u0e23\\u0e4c\\u0e14\\u0e14\\u0e34\\u0e2a\\u0e01\\u0e4c\""
+                                                         "\\u0e23\\u0e38\\u0e48\\u0e19", 0, status);
+    
+    ADD_DATACHUNK(thaiLineSelection, "\\u0e43\\u0e2b\\u0e21\\u0e48", 0, status);
+    ADD_DATACHUNK(thaiLineSelection, "\\u0e40\\u0e14\\u0e37\\u0e2d\\u0e19\\u0e21\\u0e34.", 0, status);
+    ADD_DATACHUNK(thaiLineSelection, "\\u0e22.", 0, status);
+    ADD_DATACHUNK(thaiLineSelection, "\\u0e19\\u0e35\\u0e49", 0, status);
+    ADD_DATACHUNK(thaiLineSelection, "\\u0e23\\u0e32\\u0e04\\u0e32", 0, status);
+    ADD_DATACHUNK(thaiLineSelection, "$200", 0, status);
+    ADD_DATACHUNK(thaiLineSelection, "\\u0e40\\u0e17\\u0e48\\u0e32", 0, status);
+    ADD_DATACHUNK(thaiLineSelection, "\\u0e19\\u0e31\\u0e49\\u0e19 ", 0, status);
+    ADD_DATACHUNK(thaiLineSelection, "(\"\\u0e2e\\u0e32\\u0e23\\u0e4c\\u0e14\\u0e14\\u0e34\\u0e2a\\u0e01\\u0e4c\").", 0, status);
+
+    RuleBasedBreakIterator* e = (RuleBasedBreakIterator *)BreakIterator::createLineInstance(Locale("th"), status); 
+    if (U_FAILURE(status))
+    {
+        errln("Failed to create the BreakIterator for Thai locale in TestMixedThaiLineBreak.\n");
+        return;
+    }
+
+
+    generalIteratorTest(*e, thaiLineSelection);
+}
+
+
+void RBBITest::TestMaiyamok() 
+{
+    UErrorCode status = U_ZERO_ERROR;
+    BITestData   thaiLineSelection(status);
+    ADD_DATACHUNK(thaiLineSelection, NULL, 0, status);           // Break at start of data
+    // the Thai maiyamok character is a shorthand symbol that means "repeat the previous
+    // word".  Instead of appearing as a word unto itself, however, it's kept together
+    // with the word before it
+    ADD_DATACHUNK(thaiLineSelection, "\\u0e44\\u0e1b\\u0e46", 0, status);
+    ADD_DATACHUNK(thaiLineSelection, "\\u0e21\\u0e32\\u0e46", 0, status);
+    ADD_DATACHUNK(thaiLineSelection, "\\u0e23\\u0e30\\u0e2b\\u0e27\\u0e48\\u0e32\\u0e07", 0, status);
+    ADD_DATACHUNK(thaiLineSelection, "\\u0e01\\u0e23\\u0e38\\u0e07\\u0e40\\u0e17\\u0e1e", 0, status);
+    ADD_DATACHUNK(thaiLineSelection, "\\u0e41\\u0e25\\u0e30", 0, status);
+    ADD_DATACHUNK(thaiLineSelection, "\\u0e40\\u0e03\\u0e35\\u0e22\\u0e07", 0, status);
+    ADD_DATACHUNK(thaiLineSelection, "\\u0e43\\u0e2b\\u0e21\\u0e48", 0, status);
+
+    RuleBasedBreakIterator* e = (RuleBasedBreakIterator *)BreakIterator::createLineInstance(
+        Locale("th"), status); 
+
+    if (U_FAILURE(status))
+    {
+        errln("Failed to create the BreakIterator for Thai locale in TestMaiyamok.\n");
+        return;
+    }
+    generalIteratorTest(*e, thaiLineSelection);
+    delete e;
+}
+
+void RBBITest::TestThaiWordBreak() {
+    UErrorCode status = U_ZERO_ERROR;
+    BITestData   thaiWordSelection(status);
+
+    ADD_DATACHUNK(thaiWordSelection, NULL, 0, status);           // Break at start of data
+    ADD_DATACHUNK(thaiWordSelection, "\\u0E1A\\u0E17", 0, status); //2
+    ADD_DATACHUNK(thaiWordSelection, "\\u0E17\\u0E35\\u0E48", 0, status); //5
+    ADD_DATACHUNK(thaiWordSelection, "\\u0E51", 0, status); //6
+    ADD_DATACHUNK(thaiWordSelection, "\\u0E1E\\u0E32\\u0E22\\u0E38", 0, status); //10
+    ADD_DATACHUNK(thaiWordSelection, "\\u0E44\\u0E0B\\u0E42\\u0E04\\u0E25\\u0E19", 0, status); //16
+    ADD_DATACHUNK(thaiWordSelection, "\\u000D\\u000A", 0, status); //18
+
+    // This is the correct result
+    //ADD_DATACHUNK(thaiWordSelection, "\\u0E42\\u0E14\\u0E42\\u0E23\\u0E18\\u0E35", 0, status); //24
+    //ADD_DATACHUNK(thaiWordSelection, "\\u0E2D\\u0E32\\u0E28\\u0E31\\u0E22", 0, status); //29
+
+    // and this is what the dictionary does...
+    ADD_DATACHUNK(thaiWordSelection, "\\u0E42\\u0E14", 0, status); // 20
+    ADD_DATACHUNK(thaiWordSelection, "\\u0E42\\u0E23\\u0E18\\u0E35\\u0E2D\\u0E32\\u0E28\\u0E31\\u0E22", 0, status); //29
+
+    ADD_DATACHUNK(thaiWordSelection, "\\u0E2D\\u0E22\\u0E39\\u0E48", 0, status); //33
+
+    // This is the correct result
+    //ADD_DATACHUNK(thaiWordSelection, "\\u0E17\\u0E48\\u0E32\\u0E21", 0, status); //37
+    //ADD_DATACHUNK(thaiWordSelection, "\\u0E01\\u0E25\\u0E32\\u0E07", 0, status); //41
+
+    // and this is what the dictionary does
+    ADD_DATACHUNK(thaiWordSelection, "\\u0E17\\u0E48\\u0E32\\u0E21\\u0E01\\u0E25\\u0E32\\u0E07", 0, status); //41
+
+    ADD_DATACHUNK(thaiWordSelection, "\\u0E17\\u0E38\\u0E48\\u0E07", 0, status); //45
+    ADD_DATACHUNK(thaiWordSelection, "\\u0E43\\u0E2B\\u0E0D\\u0E48", 0, status); //49
+    ADD_DATACHUNK(thaiWordSelection, "\\u0E43\\u0E19", 0, status); //51
+
+    // This is the correct result
+    //ADD_DATACHUNK(thaiWordSelection, "\\u0E41\\u0E04\\u0E19\\u0E0B\\u0E31\\u0E2A", 0, status); //57
+    //ADD_DATACHUNK(thaiWordSelection, "\\u0E01\\u0E31\\u0E1A", 0, status); //60
+
+    // and this is what the dictionary does
+    ADD_DATACHUNK(thaiWordSelection, "\\u0E41\\u0E04\\u0E19", 0, status); // 54
+    ADD_DATACHUNK(thaiWordSelection, "\\u0E0B\\u0E31\\u0E2A\\u0E01\\u0E31\\u0E1A", 0, status); //60
+
+    ADD_DATACHUNK(thaiWordSelection, "\\u0E25\\u0E38\\u0E07", 0, status); //63
+
+    // This is the correct result
+    //ADD_DATACHUNK(thaiWordSelection, "\\u0E40\\u0E2E\\u0E19\\u0E23\\u0E35", 0, status); //68
+    //ADD_DATACHUNK(thaiWordSelection, "\\u0E0A\\u0E32\\u0E27", 0, status); //71
+    //ADD_DATACHUNK(thaiWordSelection, "\\u0E44\\u0E23\\u0E48", 0, status); //74
+    //ADD_DATACHUNK(thaiWordSelection, "\\u0E41\\u0E25\\u0E30", 0, status); //77
+
+    // and this is what the dictionary does
+    ADD_DATACHUNK(thaiWordSelection, "\\u0E40\\u0E2E", 0, status); // 65
+    ADD_DATACHUNK(thaiWordSelection, "\\u0E19\\u0E23\\u0E35\\u0E0A\\u0E32\\u0E27\\u0E44\\u0E23\\u0E48\\u0E41\\u0E25\\u0E30", 0, status); //77
+
+    RuleBasedBreakIterator* e = (RuleBasedBreakIterator *)BreakIterator::createWordInstance(
+        Locale("th"), status); 
+    if (U_FAILURE(status))
+    {
+        errln("Failed to create the BreakIterator for Thai locale in TestThaiWordBreak.\n");
+        return;
+    }
+
+    generalIteratorTest(*e, thaiWordSelection);
+    delete e;
+}
+
+
 //---------------------------------------------
 // runIndexedTest
 //---------------------------------------------
@@ -1223,11 +1595,42 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
             if(exec) TestTitleBreak();                         break;
         case 7: name = "TestStatusReturn";
             if(exec) TestStatusReturn();                       break;
-        case 8: name = "TestLineBreakData";
-            if(exec) TestLineBreakData();                       break;
 
-//      case 6: name = "TestDanda()";
-//           if(exec) TestDanda();                             break;
+        case 8: name = "TestLineBreakData";
+            if(exec) TestLineBreakData();                      break;
+        case 9: name = "TestSentenceInvariants";
+            if(exec) TestSentenceInvariants();                 break;
+        case 10: name = "TestCharacterInvariants";
+            if(exec) TestCharacterInvariants();                break;
+        case 11: name = "TestWordInvariants";
+            if(exec) TestWordInvariants();                     break;
+
+        case 12: name = "TestEmptyString";
+            if(exec) TestEmptyString();                        break;
+
+        case 13: name = "TestGetAvailableLocales";
+            if(exec) TestGetAvailableLocales();                break;
+
+        case 14: name = "TestGetDisplayName";
+            if(exec) TestGetDisplayName();                     break;
+
+        case 15: name = "TestEndBehaviour";
+            if(exec) TestEndBehaviour();                       break;
+        case 16: name = "TestBug4153072";
+            if(exec) TestBug4153072();                         break;
+        case 17: name = "TestJapaneseLineBreak()";
+             if(exec) TestJapaneseLineBreak();                 break;
+
+
+        case 18: name = "TestThaiLineBreak()";
+             if(exec) TestThaiLineBreak();                     break;
+        case 19: name = "TestMixedThaiLineBreak()";
+             if(exec) TestMixedThaiLineBreak();                break;
+        case 20: name = "TestMaiyamok()";
+             if(exec) TestMaiyamok();                          break;
+        case 21: name = "TestThaiWordBreak()";
+             if(exec) TestThaiWordBreak();                     break;
+
 //      case 7: name = "TestHindiCharacterWrapping()";
 //           if(exec) TestHindiCharacterWrapping();            break;
 //      case 8: name = "TestCustomRuleBasedWordIteration";
@@ -1485,6 +1888,488 @@ void RBBITest::doMultipleSelectionTest(RuleBasedBreakIterator& iterator, BITestD
     delete testIterator;
 }
 
+
+
+//--------------------------------------------------------------------------------------------
+//
+//    Break Iterator Invariants Tests
+//
+//--------------------------------------------------------------------------------------------
+
+void RBBITest::TestCharacterInvariants()
+{
+    UErrorCode status = U_ZERO_ERROR;
+    BreakIterator *e = BreakIterator::createCharacterInstance(Locale::getDefault(), status);
+    if (U_FAILURE(status))
+    {
+        errln("Failed to create the BreakIterator for default locale in TestCharacterInvariants.\n");
+        return;
+    }
+    UnicodeString s = *cannedTestChars + CharsToUnicodeString("\\u1100\\u1101\\u1102\\u1160\\u1161\\u1162\\u11a8\\u11a9\\u11aa");
+    doBreakInvariantTest(*e, s);
+    s = *cannedTestChars + CharsToUnicodeString("\\u1100\\u1101\\u1102\\u1160\\u1161\\u1162\\u11a8\\u11a9\\u11aa");
+    doOtherInvariantTest(*e, s);
+    delete e;
+}
+
+
+void RBBITest::TestWordInvariants()
+{
+    UErrorCode status = U_ZERO_ERROR;
+    BreakIterator *e = BreakIterator::createWordInstance(Locale::getDefault(), status);
+    if (U_FAILURE(status))
+    {
+        errln("Failed to create the BreakIterator for default locale in TestWordInvariants.\n");
+        return;
+    }
+    UnicodeString s = *cannedTestChars + CharsToUnicodeString("\',.\\u3041\\u3042\\u3043\\u309b\\u309c\\u30a1\\u30a2\\u30a3\\u4e00\\u4e01\\u4e02");
+    doBreakInvariantTest(*e, s);
+    s = *cannedTestChars + CharsToUnicodeString("\',.\\u3041\\u3042\\u3043\\u309b\\u309c\\u30a1\\u30a2\\u30a3\\u4e00\\u4e01\\u4e02");
+    doOtherInvariantTest(*e, s);
+    delete e;
+}
+
+
+void RBBITest::TestSentenceInvariants()
+{
+    UErrorCode status = U_ZERO_ERROR;
+    BreakIterator *e = BreakIterator::createSentenceInstance(Locale::getDefault(), status);
+    if (U_FAILURE(status))
+    {
+        errln("Failed to create the BreakIterator for default locale in TestSentenceInvariant.\n");
+        return;
+    }
+    UnicodeString s = *cannedTestChars + CharsToUnicodeString(".,\\u3001\\u3002\\u3041\\u3042\\u3043\\ufeff");
+    doOtherInvariantTest(*e, s);
+    delete e;
+}
+
+
+void RBBITest::TestLineInvariants()
+{
+    UErrorCode status = U_ZERO_ERROR;
+    BreakIterator *e = BreakIterator::createLineInstance(Locale::getUS(), status);
+    if (U_FAILURE(status))
+    {
+        errln("Failed to create the BreakIterator for default locale in TestLineInvariants.\n");
+        return;
+    }
+    UnicodeString s = CharsToUnicodeString(".,;:\\u3001\\u3002\\u3041\\u3042\\u3043\\u3044\\u3045\\u30a3\\u4e00\\u4e01\\u4e02");
+    UnicodeString testChars = *cannedTestChars + s;
+    doBreakInvariantTest(*e, testChars);
+    doOtherInvariantTest(*e, testChars);
+
+    int32_t errCount = 0, testCharsLen, noBreakLen, dashesLen;
+    int32_t i, j, k;
+
+    // in addition to the other invariants, a line-break iterator should make sure that:
+    // it doesn't break around the non-breaking characters,
+    // EXCEPT breaking after a space takes precedence over not breaking before
+    //        an non-breaking char.  So says TR 14.
+    UnicodeString noBreak = CharsToUnicodeString("\\u00a0\\u2007\\u2011\\ufeff");
+    UnicodeString work("aaa");
+    testCharsLen = testChars.length();
+    noBreakLen = noBreak.length();
+    for (i = 0; i < testCharsLen; i++) {
+        UChar c = testChars[i];
+        if (c == '\r' || c == '\n' || c == 0x2029 || c == 0x2028 || c == 0x0003 ||
+            u_charType(c) == U_CONTROL_CHAR) {
+            continue;
+        }
+        work[0] = c;
+        for (j = 0; j < noBreakLen; j++) {
+            work[1] = noBreak[j];
+            for (k = 0; k < testCharsLen; k++) {
+                work[2] = testChars[k];
+                e->setText(work);
+                for (int l = e->first(); l != BreakIterator::DONE; l = e->next()) {
+                    UChar c1 = work[l - 1];
+                    UChar c2 = work[l];
+                    if (c1 == 0x20 && l == 1) {
+                        continue;
+                    }
+                    if (l == 1 || l == 2) {
+                        errln("Got break between U+" + UCharToUnicodeString(c1) + 
+                            " and U+" + UCharToUnicodeString(c2));
+                        errCount++;
+                        if (errCount >= 75)
+                            return;
+                    }
+                }
+            }
+        }
+    }
+
+    // it does break after hyphens (Rule 15B from TR 14
+    //  (unless they're followed by a digit, a non-spacing mark,
+    // a currency symbol, a non-breaking space, or a line or paragraph separator
+    //  or something of class BA, HY, NS, QU, GL, CL, EX, IS or SY from TR14 when the hyphen is /u002d
+
+    // This test is sufficiently screwed up that I'm largely disabling it.  TODO:  fix it.  06/12/2002  AGH
+    //
+    UnicodeString dashes = CharsToUnicodeString("-\\u00ad\\u2010\\u2012\\u2013\\u2014");
+    dashesLen = dashes.length();
+    for (i = 0; i < testCharsLen; i++) {
+        work[0] = testChars[i];
+        for (j = 0; j < dashesLen; j++) {
+            UChar c1 = work[1] = dashes[j];
+            for (k = 0; k < testCharsLen; k++) {
+                UChar c2 = work[2] = testChars[k];
+                int8_t type = u_charType(c2);
+                if (type == U_DECIMAL_DIGIT_NUMBER ||
+                    type == U_OTHER_NUMBER ||
+                    type == U_NON_SPACING_MARK ||
+                    type == U_ENCLOSING_MARK ||
+                    type == U_CURRENCY_SYMBOL ||
+                    type == U_SPACE_SEPARATOR ||
+                    type == U_DASH_PUNCTUATION ||
+                    type == U_CONTROL_CHAR ||
+                    type == U_FORMAT_CHAR ||
+                    c2 == '\n'   || c2 == '\r'   || c2 == 0x2028 || c2 == 0x2029 ||
+                    c2 == 0x0003 || c2 == 0x00a0 || c2 == 0x2007 || c2 == 0x2011 ||
+                    c2 == 0xfeff)
+                {
+                    continue;
+                }
+                // If c1 == hyphen-minus, and ...
+                if (c1 == 0x002d  &&  (
+                       c2 == 0x0021  ||   // !
+                       c2 == 0x002c  ||   // ,
+                       c2 == 0x002d  ||   // -
+                       c2 == 0x002e  ||   // .   (TR 14 class IS)
+                       c2 == 0x0029  ||   // )
+                       c2 == 0x003a  ||   // :
+                       c2 == 0x003b  ||   // ;   (TR 14 class IS)
+                       c2 == 0x005d  ||   // ]
+                       c2 == 0x007c  ||   // |   (TR 14 class BA, rule 15)
+                       c2 == 0x007d  ||   // }
+                       c2 == 0x0903  ||   // Devanagari sign visarga, combining, what's it doing in this test?
+                       c2 == 0x093E  ||   // Devanagari , combining, what's it doing in this test?
+                       c2 == 0x093F  ||   // Devanagari , combining, what's it doing in this test?
+                       c2 == 0x0940  ||   // Devanagari , combining, what's it doing in this test?
+                       c2 == 0x0949  ||   // Devanagari , combining, what's it doing in this test?
+                       c2 == 0x0f3b  ||   // Tibetan closing bracket
+                       c2 == 0x3001  ||   // CJK closing bracket
+                       c2 == 0x3002       // CJK closing bracket
+                      )) {
+                    continue;
+                }
+
+                e->setText(work);
+                UBool saw2 = FALSE;
+                for (int l = e->first(); l != BreakIterator::DONE; l = e->next()) {
+                    if (l == 2) {
+                        saw2 = TRUE;
+                        break;
+                    }
+                }
+                if (!saw2) {
+                    // TODO:  This test is completely out of sync with the spec.  Fix it.
+                    // errln("Didn't get break between U+" + UCharToUnicodeString(work[1]) + 
+                    //    " and U+" + UCharToUnicodeString(work[2]));
+                    // errCount++;
+                    // if (errCount >= 75)
+                    //    return;
+                }
+            }
+        }
+    }
+    delete e;
+}
+
+
+
+void RBBITest::doBreakInvariantTest(BreakIterator& tb, UnicodeString& testChars)
+{
+    UnicodeString work("aaa");
+    int32_t errCount = 0, testCharsLen = testChars.length(), breaksLen;
+
+    // a break should always occur after CR (unless followed by LF), LF, PS, and LS
+    UnicodeString breaks = CharsToUnicodeString("\r\n\\u2029\\u2028");
+    int32_t i, j;
+
+    breaksLen = breaks.length();
+    for (i = 0; i < breaksLen; i++) {
+        UChar c1 = work[1] = breaks[i];
+        for (j = 0; j < testCharsLen; j++) {
+            UChar c0 = work[0] = testChars[j];
+            for (int k = 0; k < testCharsLen; k++) {
+                UChar c2 = work[2] = testChars[k];
+
+                // if a cr is followed by lf, ps, ls or etx, don't do the check (that's
+                // not supposed to work)
+                if (c1 == '\r' && (c2 == '\n' || c2 == 0x2029
+                        || c2 == 0x2028 || c2 == 0x0003))
+                    continue;
+
+                if (u_charType(c1) == U_CONTROL_CHAR &&  
+                    (u_charType(c2) == U_NON_SPACING_MARK ||
+                     u_charType(c2) == U_ENCLOSING_MARK ||
+                     u_charType(c2) == U_COMBINING_SPACING_MARK)
+                    ) {
+                    // Combining marks don't combine with controls.
+                    //  TODO:  enhance test to verify that the break actually occurs,
+                    //         not just ignore the case.
+                    continue;
+                }
+
+
+                tb.setText(work);
+                UBool seen2 = FALSE;
+                for (int l = tb.first(); l != BreakIterator::DONE; l = tb.next()) {
+                    if (l == 2) {
+                        seen2 = TRUE;
+                        break;
+                    }
+                }
+                if (!seen2) {
+                    errln("No break between U+" + UCharToUnicodeString(c1)
+                                + " and U+" + UCharToUnicodeString(c2));
+                    errCount++;
+                    if (errCount >= 75)
+                        return;
+                }
+            }
+        }
+    }
+}
+
+
+
+void RBBITest::doOtherInvariantTest(BreakIterator& tb, UnicodeString& testChars)
+{
+    UnicodeString work("a\r\na");
+    int32_t errCount = 0, testCharsLen = testChars.length();
+    int32_t i, j;
+    int8_t type;
+
+    // a break should never occur between CR and LF
+    for (i = 0; i < testCharsLen; i++) {
+        work[0] = testChars[i];
+        for (j = 0; j < testCharsLen; j++) {
+            work[3] = testChars[j];
+            tb.setText(work);
+            for (int32_t k = tb.first(); k != BreakIterator::DONE; k = tb.next())
+                if (k == 2) {
+                    errln("Break between CR and LF in string U+" + UCharToUnicodeString(work[0]) + 
+                        ", U+d U+a U+" + UCharToUnicodeString(work[3]));
+                    errCount++;
+                    if (errCount >= 75)
+                        return;
+                }
+        }
+    }
+
+    // a break should never occur before a non-spacing mark, unless the preceding
+    // character is CR, LF, PS, or LS
+    //   Or the general category == Control.
+    work.remove();
+    work += "aaaa";
+    for (i = 0; i < testCharsLen; i++) {
+        UChar c1 = testChars[i];
+        if (c1 == '\n' || c1 == '\r' || c1 == 0x2029 || c1 == 0x2028 || c1 == 0x0003 ||
+            u_charType(c1) == U_CONTROL_CHAR  ||  u_charType(c1) == U_FORMAT_CHAR) {
+            continue;
+        }
+        work[1] = c1;
+        for (j = 0; j < testCharsLen; j++) {
+            UChar c2 = testChars[j];
+            type = u_charType(c2);
+            if ((type != U_NON_SPACING_MARK) && 
+                (type != U_ENCLOSING_MARK)) {
+                continue;
+            }
+            work[2] = c2;
+            tb.setText(work);
+            for (int k = tb.first(); k != BreakIterator::DONE; k = tb.next())
+                if (k == 2) {
+                    errln("Break between U+" + UCharToUnicodeString(work[1])
+                            + " and U+" + UCharToUnicodeString(work[2]));
+                    errCount++;
+                    if (errCount >= 75)
+                        return;
+                }
+        }
+    }
+}
+
+
+
+
+//---------------------------------------------
+//
+//     other tests
+//
+//---------------------------------------------
+void RBBITest::TestEmptyString()
+{
+    UnicodeString text = "";
+    UErrorCode status = U_ZERO_ERROR;
+
+    BITestData x(status);
+    ADD_DATACHUNK(x, "", 0, status);           // Break at start of data
+    RuleBasedBreakIterator* bi = (RuleBasedBreakIterator *)BreakIterator::createLineInstance(Locale::getDefault(), status);
+    if (U_FAILURE(status))
+    {
+        errln("Failed to create the BreakIterator for default locale in TestEmptyString.\n");
+        return;
+    }
+    generalIteratorTest(*bi, x);
+    delete bi;
+}
+
+void RBBITest::TestGetAvailableLocales()
+{
+    int32_t locCount = 0;
+    const Locale* locList = BreakIterator::getAvailableLocales(locCount);
+
+    if (locCount == 0)
+        errln("getAvailableLocales() returned an empty list!");
+    // Just make sure that it's returning good memory.
+    for (int32_t i = 0; i < locCount; ++i) {
+        logln(locList[i].getName());
+    }
+}
+
+//Testing the BreakIterator::getDisplayName() function 
+void RBBITest::TestGetDisplayName()
+{
+    UnicodeString   result;
+    
+    BreakIterator::getDisplayName(Locale::getUS(), result);
+    if (Locale::getDefault() == Locale::getUS() && result != "English (United States)")
+        errln("BreakIterator::getDisplayName() failed: expected \"English (United States)\", got \""
+                + result);
+
+    BreakIterator::getDisplayName(Locale::getFrance(), Locale::getUS(), result);
+    if (result != "French (France)")
+        errln("BreakIterator::getDisplayName() failed: expected \"French (France)\", got \""
+                + result);
+}
+/**
+ * Test End Behaviour
+ * @bug 4068137
+ */
+void RBBITest::TestEndBehaviour()
+{
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString testString("boo.");
+    BreakIterator *wb = BreakIterator::createWordInstance(Locale::getDefault(), status);
+    if (U_FAILURE(status))
+    {
+        errln("Failed to create the BreakIterator for default locale in TestEndBehaviour.\n");
+        return;
+    }
+    wb->setText(testString);
+
+    if (wb->first() != 0)
+        errln("Didn't get break at beginning of string.");
+    if (wb->next() != 3)
+        errln("Didn't get break before period in \"boo.\"");
+    if (wb->current() != 4 && wb->next() != 4)
+        errln("Didn't get break at end of string.");
+    delete wb;
+}
+/*
+ * @bug 4153072
+ */
+void RBBITest::TestBug4153072() {
+    UErrorCode status = U_ZERO_ERROR;
+    BreakIterator *iter = BreakIterator::createWordInstance(Locale::getDefault(), status);
+    if (U_FAILURE(status))
+    {
+        errln("Failed to create the BreakIterator for default locale in TestBug4153072\n");
+        return;
+    }
+    UnicodeString str("...Hello, World!...");
+    int32_t begin = 3;
+    int32_t end = str.length() - 3;
+    UBool dummy;
+
+    StringCharacterIterator* textIterator = new StringCharacterIterator(str, begin, end, begin);
+    iter->adoptText(textIterator);
+    for (int index = -1; index < begin + 1; ++index) {
+        dummy = iter->isBoundary(index);
+        if (index < begin && dummy == TRUE) {
+            errln((UnicodeString)"Didn't handle preceeding correctly with offset = " + index +
+                            " and begin index = " + begin);
+        }
+    }
+    delete iter;
+}
+
+
+/**
+ * Test Japanese Line Break
+ * @bug 4095322
+ */
+void RBBITest::TestJapaneseLineBreak()
+{
+    // Change for Unicode TR 14:  Punctuation characters with categories Pi and Pf do not count
+    //        as opening and closing punctuation for line breaking.
+    //        Also, \u30fc and \u30fe are not counted as hyphens.   Remove these chars
+    //        from these tests.    6-13-2002  
+    //
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString testString = CharsToUnicodeString("\\u4e00x\\u4e8c");
+    UnicodeString precedingChars = CharsToUnicodeString(
+        //"([{\\u00ab$\\u00a5\\u00a3\\u00a4\\u2018\\u201a\\u201c\\u201e\\u201b\\u201f");
+        "([{$\\u00a5\\u00a3\\u00a4\\u201a\\u201e");
+    UnicodeString followingChars = CharsToUnicodeString(
+        // ")]}\\u00bb!%,.\\u3001\\u3002\\u3063\\u3083\\u3085\\u3087\\u30c3\\u30e3\\u30e5\\u30e7\\u30fc"
+        ")]}!%,.\\u3001\\u3002\\u3063\\u3083\\u3085\\u3087\\u30c3\\u30e3\\u30e5\\u30e7"
+        // ":;\\u309b\\u309c\\u3005\\u309d\\u309e\\u30fd\\u30fe\\u2019\\u201d\\u00b0\\u2032\\u2033\\u2034"
+        ":;\\u309b\\u309c\\u3005\\u309d\\u309e\\u30fd\\u00b0\\u2032\\u2033\\u2034"
+        "\\u2030\\u2031\\u2103\\u2109\\u00a2\\u0300\\u0301\\u0302");
+    BreakIterator *iter = BreakIterator::createLineInstance(Locale::getJapan(), status);
+
+    int32_t i;
+    if (U_FAILURE(status))
+    {
+        errln("Failed to create the BreakIterator for Japanese locale in TestJapaneseLineBreak.\n");
+        return;
+    }
+
+    for (i = 0; i < precedingChars.length(); i++) {
+        testString[1] = precedingChars[i];
+        iter->setText(testString);
+        int32_t j = iter->first();
+        if (j != 0)
+            errln("ja line break failure: failed to start at 0");
+        j = iter->next();
+        if (j != 1)
+            errln("ja line break failure: failed to stop before '" + UCharToUnicodeString(precedingChars[i])
+                        + "' (" + ((int)(precedingChars[i])) + ")");
+        j = iter->next();
+        if (j != 3)
+            errln("ja line break failure: failed to skip position after '" + UCharToUnicodeString(precedingChars[i])
+                        + "' (" + ((int)(precedingChars[i])) + ")");
+    }
+
+    for (i = 0; i < followingChars.length(); i++) {
+        testString[1] = followingChars[i];
+        iter->setText(testString);
+        int j = iter->first();
+        if (j != 0)
+            errln("ja line break failure: failed to start at 0");
+        j = iter->next();
+        if (j != 2)
+            errln("ja line break failure: failed to skip position before '" + UCharToUnicodeString(followingChars[i])
+                        + "' (" + ((int)(followingChars[i])) + ")");
+        j = iter->next();
+        if (j != 3)
+            errln("ja line break failure: failed to stop after '" + UCharToUnicodeString(followingChars[i])
+                        + "' (" + ((int)(followingChars[i])) + ")");
+    }
+    delete iter;
+}
+
+
+//--------------------------------------------------------------------------------------------
+//
+//     Exhaustive Tests, using Unicode Data Files.
+//
+//--------------------------------------------------------------------------------------------
 
 //
 //  Token level scanner for the Unicode Line Break Test Data file.

@@ -306,10 +306,6 @@ SOURCE=.\ittrans.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\ittxtbd.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\itutil.cpp
 # End Source File
 # Begin Source File
@@ -680,10 +676,6 @@ SOURCE=.\itrbnfrt.h
 # Begin Source File
 
 SOURCE=.\ittrans.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\ittxtbd.h
 # End Source File
 # Begin Source File
 
