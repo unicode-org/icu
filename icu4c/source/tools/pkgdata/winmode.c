@@ -18,7 +18,7 @@
 
 #include "unicode/utypes.h"
 
-#ifdef WIN32
+#ifdef U_MAKE_IS_NMAKE
 
 #include "unicode/putil.h"
 #include "cmemory.h"

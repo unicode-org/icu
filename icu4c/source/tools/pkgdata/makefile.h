@@ -41,9 +41,9 @@ pkg_mak_writeFooter(FileStream *f, const UPKGOptions *o);
 
 
 
-#ifdef WIN32
+#ifdef U_MAKE_IS_NMAKE
 extern void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status);
-#else /*#ifdef WIN32*/
+#else /*#ifdef U_MAKE_IS_NMAKE*/
 /**
  * Write stanzas for generating .o (and .c) files for each data file in 'o->filePaths'.
  * @param o Package options struct
