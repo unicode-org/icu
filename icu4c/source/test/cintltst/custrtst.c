@@ -35,6 +35,7 @@ static void TestStringCopy(void);
 static void TestStringFunctions(void);
 static void TestStringSearching(void);
 static void TestUnescape(void);
+static void TestCountChar32(void);
 
 void addUStringTest(TestNode** root)
 {
@@ -42,6 +43,7 @@ void addUStringTest(TestNode** root)
     addTest(root, &TestStringFunctions, "tsutil/custrtst/TestStringFunctions");
     addTest(root, &TestStringSearching, "tsutil/custrtst/TestStringSearching");
     addTest(root, &TestUnescape, "tsutil/custrtst/TestUnescape");
+    addTest(root, &TestCountChar32, "tsutil/custrtst/TestCountChar32");
 
     /* cstrcase.c functions, declared in cucdtst.h */
     addTest(root, &TestCaseLower, "tsutil/custrtst/TestCaseLower");
@@ -804,4 +806,68 @@ TestUnescape() {
     }
 
     /* ### TODO: test u_unescapeAt() */
+}
+
+/* test code point counting functions --------------------------------------- */
+
+/* reference implementation of u_strHasMoreChar32Than() */
+static int32_t
+_refStrHasMoreChar32Than(const UChar *s, int32_t length, int32_t number) {
+    int32_t count=u_countChar32(s, length);
+    return count>number;
+}
+
+/* compare the real function against the reference */
+static void
+_testStrHasMoreChar32Than(const UChar *s, int32_t i, int32_t length, int32_t number) {
+    if(u_strHasMoreChar32Than(s, length, number)!=_refStrHasMoreChar32Than(s, length, number)) {
+        log_err("u_strHasMoreChar32Than(s+%d, %d, %d)=%hd is wrong\n",
+                i, length, number, u_strHasMoreChar32Than(s, length, number));
+    }
+}
+
+static void
+TestCountChar32() {
+    static const UChar string[]={
+        0x61, 0x62, 0xd800, 0xdc00,
+        0xd801, 0xdc01, 0x63, 0xd802,
+        0x64, 0xdc03, 0x65, 0x66,
+        0xd804, 0xdc04, 0xd805, 0xdc05,
+        0x67
+    };
+    UChar buffer[100];
+    int32_t i, length, number;
+
+    /* test u_strHasMoreChar32Than() with length>=0 */
+    length=LENGTHOF(string);
+    while(length>=0) {
+        for(i=0; i<=length; ++i) {
+            for(number=-1; number<=((length-i)+2); ++number) {
+                _testStrHasMoreChar32Than(string+i, i, length-i, number);
+            }
+        }
+        --length;
+    }
+
+    /* test u_strHasMoreChar32Than() with NUL-termination (length=-1) */
+    length=LENGTHOF(string);
+    u_memcpy(buffer, string, length);
+    while(length>=0) {
+        buffer[length]=0;
+        for(i=0; i<=length; ++i) {
+            for(number=-1; number<=((length-i)+2); ++number) {
+                _testStrHasMoreChar32Than(string+i, i, -1, number);
+            }
+        }
+        --length;
+    }
+
+    /* test u_strHasMoreChar32Than() with NULL string (bad input) */
+    for(length=-1; length<=1; ++length) {
+        for(i=0; i<=length; ++i) {
+            for(number=-2; number<=2; ++number) {
+                _testStrHasMoreChar32Than(NULL, 0, length, number);
+            }
+        }
+    }
 }
