@@ -18,7 +18,10 @@
 #include "unicode/utypes.h"
 
 /** Simple declaration for u_strToTitle() to avoid including unicode/ubrk.h. */
-typedef void *UBreakIterator;
+#ifndef UBRK_TYPEDEF_UBREAK_ITERATOR
+#   define UBRK_TYPEDEF_UBREAK_ITERATOR
+    typedef void *UBreakIterator;
+#endif
 
 /**
  * \file
@@ -703,6 +706,9 @@ u_strToLower(UChar *dest, int32_t destCapacity,
  * opening and closing one for each string.
  * The standard titlecase iterator for the root locale implements the
  * algorithm of Unicode TR 21.
+ *
+ * This function uses only the first() and next() methods of the
+ * provided break iterator.
  *
  * The result may be longer or shorter than the original.
  * The source string and the destination buffer are allowed to overlap.
