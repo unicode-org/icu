@@ -289,6 +289,18 @@ public:
                                     UErrorCode& status) const;
 
     /**
+     * Redeclared DateFormat method.
+     */
+    UnicodeString& format(const Formattable& obj,
+                          UnicodeString& result,
+                          UErrorCode& status) const;
+
+    /**
+     * Redeclared DateFormat method.
+     */
+    UnicodeString& format(UDate date, UnicodeString& result) const;
+
+    /**
      * Parse a date/time string starting at the given parse position. For
      * example, a time text "07/10/96 4:5 PM, PDT" will be parsed into a Date
      * that is equivalent to Date(837039928046).
@@ -707,6 +719,18 @@ inline UDate
 SimpleDateFormat::get2DigitYearStart(UErrorCode& status) const
 {
     return fDefaultCenturyStart;
+}
+
+inline UnicodeString&
+SimpleDateFormat::format(const Formattable& obj,
+                         UnicodeString& result,
+                         UErrorCode& status) const {
+    return DateFormat::format(obj, result, status);
+}
+
+inline UnicodeString&
+SimpleDateFormat::format(UDate date, UnicodeString& result) const {
+    return DateFormat::format(date, result);
 }
 
 #endif // _SMPDTFMT
