@@ -34,7 +34,7 @@ FINAL_SO_TARGET = $(SO_TARGET)
 MIDDLE_SO_TARGET = 
 
 ###  How ICU libraries are named...  ex. $(LIBICU)uc$(SO)
-## Prefix for the ICU library names [Note - no hyphen for 400]
+## Prefix for the ICU library names
 LIBICU = libicu
 ##  object suffix
 TO=		o
