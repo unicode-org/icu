@@ -589,7 +589,9 @@ U_CAPI int32_t U_EXPORT2 ucnv_countAvailable (void);
 /**
  * returns the current default converter name.
  *
- * @return returns the current default converter name
+ * @return returns the current default converter name;
+ *         if a default converter name cannot be determined,
+ *         then <code>NULL</code> is returned
  * @see ucnv_setDefaultName
  */
 U_CAPI const char * U_EXPORT2 ucnv_getDefaultName (void);
