@@ -593,7 +593,7 @@ CalendarAstronomer::Equatorial* CalendarAstronomer::getSunPosition() {
      * @internal
      * @deprecated ICU 2.4. This class may be removed or modified.
      */
-const CalendarAstronomer::SolarLongitude CalendarAstronomer::VERNAL_EQUINOX  =  SolarLongitude(0);
+const CalendarAstronomer::SolarLongitude CalendarAstronomer::VERNAL_EQUINOX  =  CalendarAstronomer::SolarLongitude(0);
     
 /**
      * Constant representing the summer solstice.
@@ -602,7 +602,7 @@ const CalendarAstronomer::SolarLongitude CalendarAstronomer::VERNAL_EQUINOX  =  
      * @internal
      * @deprecated ICU 2.4. This class may be removed or modified.
      */
-const CalendarAstronomer::SolarLongitude CalendarAstronomer::SUMMER_SOLSTICE =  SolarLongitude(PI/2);
+const CalendarAstronomer::SolarLongitude CalendarAstronomer::SUMMER_SOLSTICE =  CalendarAstronomer::SolarLongitude(PI/2);
     
 /**
      * Constant representing the autumnal equinox.
@@ -611,7 +611,7 @@ const CalendarAstronomer::SolarLongitude CalendarAstronomer::SUMMER_SOLSTICE =  
      * @internal
      * @deprecated ICU 2.4. This class may be removed or modified.
      */
-const CalendarAstronomer::SolarLongitude CalendarAstronomer::AUTUMN_EQUINOX  =  SolarLongitude(PI);
+const CalendarAstronomer::SolarLongitude CalendarAstronomer::AUTUMN_EQUINOX  =  CalendarAstronomer::SolarLongitude(PI);
     
 /**
      * Constant representing the winter solstice.
@@ -620,7 +620,7 @@ const CalendarAstronomer::SolarLongitude CalendarAstronomer::AUTUMN_EQUINOX  =  
      * @internal
      * @deprecated ICU 2.4. This class may be removed or modified.
      */
-const CalendarAstronomer::SolarLongitude CalendarAstronomer::WINTER_SOLSTICE =  SolarLongitude((PI*3)/2);
+const CalendarAstronomer::SolarLongitude CalendarAstronomer::WINTER_SOLSTICE =  CalendarAstronomer::SolarLongitude((PI*3)/2);
     
 /**
      * Find the next time at which the sun's ecliptic longitude will have
@@ -1101,7 +1101,7 @@ double CalendarAstronomer::getMoonPhase() {
  * @internal
  * @deprecated ICU 2.4. This class may be removed or modified.
  */
-const CalendarAstronomer::MoonAge CalendarAstronomer::NEW_MOON      =  MoonAge(0);
+const CalendarAstronomer::MoonAge CalendarAstronomer::NEW_MOON      =  CalendarAstronomer::MoonAge(0);
 
 /**
  * Constant representing the moon's first quarter.
@@ -1109,7 +1109,7 @@ const CalendarAstronomer::MoonAge CalendarAstronomer::NEW_MOON      =  MoonAge(0
  * @internal
  * @deprecated ICU 2.4. This class may be removed or modified.
  */
-const CalendarAstronomer::MoonAge CalendarAstronomer::FIRST_QUARTER =  MoonAge(CalendarAstronomer::PI/2);
+const CalendarAstronomer::MoonAge CalendarAstronomer::FIRST_QUARTER =  CalendarAstronomer::MoonAge(CalendarAstronomer::PI/2);
     
 /**
  * Constant representing a full moon.
@@ -1117,7 +1117,7 @@ const CalendarAstronomer::MoonAge CalendarAstronomer::FIRST_QUARTER =  MoonAge(C
  * @internal
  * @deprecated ICU 2.4. This class may be removed or modified.
  */
-const CalendarAstronomer::MoonAge CalendarAstronomer::FULL_MOON     =  MoonAge(CalendarAstronomer::PI);
+const CalendarAstronomer::MoonAge CalendarAstronomer::FULL_MOON     =  CalendarAstronomer::MoonAge(CalendarAstronomer::PI);
     
 /**
  * Constant representing the moon's last quarter.
@@ -1131,7 +1131,7 @@ public:
   virtual double eval(CalendarAstronomer&a) { return a.getMoonAge(); }
 };
 
-const CalendarAstronomer::MoonAge CalendarAstronomer::LAST_QUARTER  =  MoonAge((CalendarAstronomer::PI*3)/2);
+const CalendarAstronomer::MoonAge CalendarAstronomer::LAST_QUARTER  =  CalendarAstronomer::MoonAge((CalendarAstronomer::PI*3)/2);
 
 /**
  * Find the next or previous time at which the Moon's ecliptic
