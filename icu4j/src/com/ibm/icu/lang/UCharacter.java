@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2003/02/21 01:19:43 $ 
-* $Revision: 1.68 $
+* $Date: 2003/04/03 22:52:43 $ 
+* $Revision: 1.69 $
 *
 *******************************************************************************
 */
@@ -108,6 +108,12 @@ public final class UCharacter
     {
         // blocks objects ---------------------------------------------------
         
+        /** 
+         * @draft ICU 2.4
+         */
+        public static final UnicodeBlock NO_BLOCK 
+                                        = new UnicodeBlock("NO_BLOCK", 0);
+
         /** 
          * @draft ICU 2.4
          */
@@ -669,6 +675,86 @@ public final class UCharacter
          */
         public static final UnicodeBlock SUPPLEMENTARY_PRIVATE_USE_AREA_B 
                     = new UnicodeBlock("SUPPLEMENTARY_PRIVATE_USE_AREA_B", 110);
+   
+        /** 
+         * @draft ICU 2.6 
+         */
+        public static final UnicodeBlock LIMBU 
+                    = new UnicodeBlock("LIMBU", 111);
+        /** 
+         * @draft ICU 2.6 
+         */
+        public static final UnicodeBlock TAI_LE 
+                    = new UnicodeBlock("TAI LE", 112);
+        /** 
+         * @draft ICU 2.6 
+         */
+        public static final UnicodeBlock KHMER_SYMBOLS 
+                    = new UnicodeBlock("KHMER SYMBOLS", 113);
+
+        /** 
+         * @draft ICU 2.6 
+         */
+        public static final UnicodeBlock PHONETIC_EXTENSIONS 
+                    = new UnicodeBlock("PHONETIC EXTENSIONS", 114);
+
+        /** 
+         * @draft ICU 2.6 
+         */
+        public static final UnicodeBlock MISCELLANEOUS_SYMBOLS_AND_ARROWS 
+                    = new UnicodeBlock("MISCELLANEOUS_SYMBOLS_AND_ARROWS", 115);
+        /** 
+         * @draft ICU 2.6 
+         */
+        public static final UnicodeBlock YIJING_HEXAGRAM_SYMBOLS 
+                    = new UnicodeBlock("YIJING_HEXAGRAM_SYMBOLS", 116);
+        /** 
+         * @draft ICU 2.6 
+         */
+        public static final UnicodeBlock LINEAR_B_SYLLABARY 
+                    = new UnicodeBlock("LINEAR_B_SYLLABARY", 117);
+        /** 
+         * @draft ICU 2.6 
+         */
+        public static final UnicodeBlock LINEAR_B_IDEOGRAMS 
+                    = new UnicodeBlock("LINEAR_B_IDEOGRAMS", 118);
+        /** 
+         * @draft ICU 2.6 
+         */
+        public static final UnicodeBlock AEGEAN_NUMBERS 
+                    = new UnicodeBlock("AEGEAN_NUMBERS", 119);                                               
+        /** 
+         * @draft ICU 2.6 
+         */
+        public static final UnicodeBlock UGARITIC 
+                    = new UnicodeBlock("UGARITIC", 120);
+        /** 
+         * @draft ICU 2.6 
+         */
+        public static final UnicodeBlock SHAVIAN 
+                    = new UnicodeBlock("SHAVIAN", 121);
+        /** 
+         * @draft ICU 2.6 
+         */
+        public static final UnicodeBlock OSMANYA 
+                    = new UnicodeBlock("OSMANYA", 122);
+        /** 
+         * @draft ICU 2.6 
+         */
+        public static final UnicodeBlock CYPRIOT_SYLLABARY 
+                    = new UnicodeBlock("CYPRIOT_SYLLABARY", 123);
+        /** 
+         * @draft ICU 2.6 
+         */
+        public static final UnicodeBlock TAI_XUAN_JING_SYMBOLS 
+                    = new UnicodeBlock("TAI_XUAN_JING_SYMBOLS", 124);
+        
+        /** 
+         * @draft ICU 2.6 
+         */
+        public static final UnicodeBlock VARIATION_SELECTORS_SUPPLEMENT 
+                    = new UnicodeBlock("VARIATION_SELECTORS_SUPPLEMENT", 125);                                      
+
         /** 
          * @draft ICU 2.4 
          */
@@ -1143,10 +1229,40 @@ public final class UCharacter
          */
         public static final int SUPPLEMENTARY_PRIVATE_USE_AREA_B_ID = 110;
         
+	    /** @draft ICU 2.6 */
+	    public static final int LIMBU_ID = 111; /*[1900]*/
+	    /** @draft ICU 2.6 */
+	    public static final int TAI_LE_ID = 112; /*[1950]*/
+	    /** @draft ICU 2.6 */
+	    public static final int KHMER_SYMBOLS_ID = 113; /*[19E0]*/
+	    /** @draft ICU 2.6 */
+	    public static final int PHONETIC_EXTENSIONS_ID = 114; /*[1D00]*/
+	    /** @draft ICU 2.6 */
+	    public static final int MISCELLANEOUS_SYMBOLS_AND_ARROWS_ID = 115; /*[2B00]*/
+	    /** @draft ICU 2.6 */
+	    public static final int YIJING_HEXAGRAM_SYMBOLS_ID = 116; /*[4DC0]*/
+	    /** @draft ICU 2.6 */
+	    public static final int LINEAR_B_SYLLABARY_ID = 117; /*[10000]*/
+	    /** @draft ICU 2.6 */
+	    public static final int LINEAR_B_IDEOGRAMS_ID = 118; /*[10080]*/
+	    /** @draft ICU 2.6 */
+	    public static final int AEGEAN_NUMBERS_ID = 119; /*[10100]*/
+	    /** @draft ICU 2.6 */
+	    public static final int UGARITIC_ID = 120; /*[10380]*/
+	    /** @draft ICU 2.6 */
+	    public static final int SHAVIAN_ID = 121; /*[10450]*/
+	    /** @draft ICU 2.6 */
+	    public static final int OSMANYA_ID = 122; /*[10480]*/
+	    /** @draft ICU 2.6 */
+	    public static final int CYPRIOT_SYLLABARY_ID = 123; /*[10800]*/
+	    /** @draft ICU 2.6 */
+	    public static final int TAI_XUAN_JING_SYMBOLS_ID = 124; /*[1D300]*/
+	    /** @draft ICU 2.6 */
+	    public static final int VARIATION_SELECTORS_SUPPLEMENT_ID = 125; /*[E0100]*/
         /** 
          * @draft ICU 2.4 
          */
-        public static final int COUNT = 111;
+        public static final int COUNT = 126;
         
         // public methods --------------------------------------------------
         
@@ -1161,7 +1277,7 @@ public final class UCharacter
          */
         public static UnicodeBlock getInstance(int id)
         {
-            if (id > 0 && id < BLOCKS_.length) {
+            if (id >= 0 && id < BLOCKS_.length) {
                 return BLOCKS_[id];
             }
             return INVALID_CODE;
@@ -1200,7 +1316,7 @@ public final class UCharacter
          * Array of UnicodeBlocks, for easy access in getInstance(int)
          */
         private final static UnicodeBlock BLOCKS_[] = {
-                null, BASIC_LATIN, 
+                NO_BLOCK, BASIC_LATIN, 
                 LATIN_1_SUPPLEMENT, LATIN_EXTENDED_A, 
                 LATIN_EXTENDED_B, IPA_EXTENSIONS, 
                 SPACING_MODIFIER_LETTERS, COMBINING_DIACRITICAL_MARKS,
@@ -1813,7 +1929,45 @@ public final class UCharacter
          */
         public static final int COUNT = 4;
     }; 
-           
+    
+    /**
+	 * Hangul Syllable Type constants.
+	 *
+	 * @see UCHAR_HANGUL_SYLLABLE_TYPE
+	 * @draft ICU 2.6
+	 */
+	public static interface HangulSyllableType 
+	{
+		/**
+         * @draft ICU 2.6
+         */
+	    public static final int NOT_APPLICABLE 	= 0;   /*[NA]*/ /*See note !!*/
+	    /**
+         * @draft ICU 2.6
+         */
+	    public static final int LEADING_JAMO	= 1;   /*[L]*/
+	    /**
+         * @draft ICU 2.6
+         */
+	    public static final int VOWEL_JAMO		= 2;   /*[V]*/
+	    /**
+         * @draft ICU 2.6
+         */
+	    public static final int TRAILING_JAMO	= 3;   /*[T]*/
+	    /**
+         * @draft ICU 2.6
+         */
+	    public static final int LV_SYLLABLE		= 4;   /*[LV]*/
+	    /**
+         * @draft ICU 2.6
+         */
+	    public static final int LVT_SYLLABLE	= 5;   /*[LVT]*/
+	    /**
+         * @draft ICU 2.6
+         */
+	    public static final int COUNT			= 6;
+	}
+
     // public data members -----------------------------------------------
   
     /** 
@@ -3702,7 +3856,8 @@ public final class UCharacter
 	{
 		return hasBinaryProperty(ch, UProperty.WHITE_SPACE);
 	}
-    
+
+
     /**
      * <p>Gets the property value for an Unicode property type of a code point. 
      * Also returns binary and mask property values.</p>
@@ -3774,11 +3929,13 @@ public final class UCharacter
                 return (PROPERTY_.getAdditional(ch, 2) 
                        & JOINING_GROUP_MASK_) >> JOINING_GROUP_SHIFT_;
             case UProperty.JOINING_TYPE:
+            	return (int)(PROPERTY_.getAdditional(ch, 2)& JOINING_TYPE_MASK_)>> JOINING_TYPE_SHIFT_;
                 // ArabicShaping.txt:
                 // Note: Characters of joining type T and most characters of 
                 // joining type U are not explicitly listed in this file.
                 // Characters of joining type T can [be] derived by the following formula:
                 //   T = Mn + Cf - ZWNJ - ZWJ
+                /*
                 result = (PROPERTY_.getAdditional(ch, 2) 
                          & JOINING_TYPE_MASK_) >> JOINING_TYPE_SHIFT_;
                 if (result == 0 && ch != ZERO_WIDTH_NON_JOINER_ 
@@ -3790,7 +3947,9 @@ public final class UCharacter
                     }
                 }
                 return result;
+                */
             case UProperty.LINE_BREAK:
+            	return (int)(PROPERTY_.getAdditional(ch, 0)& LINE_BREAK_MASK_)>>LINE_BREAK_SHIFT_;
                 /*
                  * LineBreak.txt:
                  *  - Assigned characters that are not listed explicitly are given the value
@@ -3801,6 +3960,7 @@ public final class UCharacter
                  * F0000..FFFFD;XX # <Plane 15 Private Use, First>..<Plane 15 Private Use, Last>
                  * 100000..10FFFD;XX # <Plane 16 Private Use, First>..<Plane 16 Private Use, Last>
                  */
+                 /*
                 result = (PROPERTY_.getAdditional(ch, 0) 
                              & LINE_BREAK_MASK_) >> LINE_BREAK_SHIFT_;
                 if (result == 0) {
@@ -3811,10 +3971,44 @@ public final class UCharacter
                     }
                 }
                 return result;
+                */
             case UProperty.NUMERIC_TYPE:
                 return getNumericType(PROPERTY_.getProperty(ch));
             case UProperty.SCRIPT:
                 return UScript.getScript(ch);
+            case UProperty.HANGUL_SYLLABLE_TYPE:
+               /* purely algorithmic; hardcode known characters, check for assigned new ones */ 
+               if(ch<NormalizerImpl.JAMO_L_BASE) { 
+                   /* NA */ 
+               } else if(ch<=0x11ff) { 
+                   /* Jamo range */ 
+                   if(ch<=0x115f) { 
+                       /* Jamo L range, HANGUL CHOSEONG ... */ 
+                       if(ch==0x115f || ch<=0x1159 || getType(ch)==UCharacterCategory.OTHER_LETTER) { 
+                           return HangulSyllableType.LEADING_JAMO; 
+                       } 
+                   } else if(ch<=0x11a7) { 
+                       /* Jamo V range, HANGUL JUNGSEONG ... */ 
+                       if(ch<=0x11a2 || getType(ch)==UCharacterCategory.OTHER_LETTER) { 
+                           return HangulSyllableType.VOWEL_JAMO; 
+                       } 
+                   } else { 
+                       /* Jamo T range */ 
+                       if(ch<=0x11f9 || getType(ch)==UCharacterCategory.OTHER_LETTER) { 
+                           return HangulSyllableType.TRAILING_JAMO; 
+                       } 
+                   } 
+               } else if((ch-=NormalizerImpl.HANGUL_BASE)<0) { 
+                   /* NA */ 
+               } else if(ch<NormalizerImpl.HANGUL_COUNT) { 
+                   /* Hangul syllable */ 
+                   return ch%NormalizerImpl.JAMO_T_COUNT==0 ? HangulSyllableType.LV_SYLLABLE : HangulSyllableType.LVT_SYLLABLE; 
+               } 
+               return 0; /* NA */ 
+            
+            default:
+               
+				return 0; /* undefined */
             }
         } else if (type == UProperty.GENERAL_CATEGORY_MASK) {
             return UCharacterProperty.getMask(getType(ch));
@@ -3842,10 +4036,7 @@ public final class UCharacter
      */
     public static int getIntPropertyMinValue(int type)
     {
-        switch (type) {
-            case UProperty.BLOCK:
-                return UnicodeBlock.INVALID_CODE.getID();
-        }
+
         return 0; // undefined; and: all other properties have a minimum value 
                   // of 0
     }
@@ -3892,7 +4083,7 @@ public final class UCharacter
             case UProperty.BIDI_CLASS:
                 return UCharacterDirection.CHAR_DIRECTION_COUNT - 1;
             case UProperty.BLOCK:
-                max = (PROPERTY_.getMaxBlockScriptValues()
+                max = (PROPERTY_.getMaxBlockScriptValues(0)
                       & BLOCK_MASK_) >> BLOCK_SHIFT_;
                 if (max == 0) {
                     max = UnicodeBlock.COUNT - 1;
@@ -3916,12 +4107,13 @@ public final class UCharacter
             case UProperty.NUMERIC_TYPE:
                 return NumericType.COUNT - 1;
             case UProperty.SCRIPT:
-                max = PROPERTY_.getMaxBlockScriptValues() & SCRIPT_MASK_;
+                max = PROPERTY_.getMaxBlockScriptValues(0) & SCRIPT_MASK_;
                 if (max == 0) {
                     max = UScript.CODE_LIMIT - 1;
                 }
                 return max;
             }
+
         }
         return -1; // undefined
     }

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $
-* $Date: 2003/02/11 00:47:00 $
-* $Revision: 1.50 $
+* $Date: 2003/04/03 22:55:36 $
+* $Revision: 1.51 $
 *
 *******************************************************************************
 */
@@ -27,9 +27,13 @@ import com.ibm.icu.util.ValueIterator;
 import com.ibm.icu.util.VersionInfo;
 import com.ibm.icu.impl.UCharacterName;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.impl.USerializedSet;
+import com.ibm.icu.impl.NormalizerImpl;
+import com.ibm.icu.text.Normalizer;
 
 import java.io.BufferedReader;
 import java.util.Arrays;
+
 /**
 * Testing class for UCharacter
 * Mostly following the test cases for ICU
@@ -43,7 +47,7 @@ public final class UCharacterTest extends TestFmwk
     /**
     * ICU4J data version number
     */
-    private final VersionInfo VERSION_ = VersionInfo.getInstance("3.2.0.0");
+    private final VersionInfo VERSION_ = VersionInfo.getInstance("4.0.0.0");
 
     // constructor ===================================================
 
@@ -94,6 +98,47 @@ public final class UCharacterTest extends TestFmwk
             if (!UCharacter.isLetterOrDigit(i))
                 errln("FAIL \\u" + hex(i) +
                     "expected to be either a letter or a digit");
+        
+        /*
+         * The following checks work only starting from Unicode 4.0.
+         * Check the version number here.
+         */
+        VersionInfo version =	UCharacter.getUnicodeVersion();
+        if(version.getMajor()<4) {
+            return;
+        }
+
+
+
+        /*
+         * Sanity check:
+         * Verify that exactly the digit characters have decimal digit values.
+         * This assumption is used in the implementation of u_digit()
+         * (which checks nt=de)
+         * compared with the parallel java.lang.Character.digit()
+         * (which checks Nd).
+         *
+         * This was not true in Unicode 3.2 and earlier.
+         * The following characters had decimal digit values but were No not Nd.
+         * (from DerivedNumericType-3.2.0.txt)
+00B2..00B3    ; decimal # No   [2] SUPERSCRIPT TWO..SUPERSCRIPT THREE
+00B9          ; decimal # No       SUPERSCRIPT ONE
+2070          ; decimal # No       SUPERSCRIPT ZERO
+2074..2079    ; decimal # No   [6] SUPERSCRIPT FOUR..SUPERSCRIPT NINE
+2080..2089    ; decimal # No  [10] SUBSCRIPT ZERO..SUBSCRIPT NINE
+         */
+        String digitsPattern = "[:Nd:]";
+        String decimalValuesPattern = "[:Numeric_Type=Decimal:]";
+
+        UnicodeSet digits, decimalValues;
+
+        digits= new UnicodeSet(digitsPattern);
+        decimalValues=new UnicodeSet(decimalValuesPattern);
+
+    
+        compareUSets(digits, decimalValues, "[:Nd:]", "[:Numeric_Type=Decimal:]", true);
+
+
     }
 
     /**
@@ -287,7 +332,7 @@ public final class UCharacterTest extends TestFmwk
     public void TestVersion()
     {
         if (!UCharacter.getUnicodeVersion().equals(VERSION_))
-            errln("FAIL expected " + VERSION_);
+            errln("FAIL expected: " + VERSION_ + "got: " + UCharacter.getUnicodeVersion());
     }
 
     /**
@@ -407,7 +452,8 @@ public final class UCharacterTest extends TestFmwk
             if (ch == 0x7f) {
                 ch = 0xa0;
             }
-            if (!UCharacter.isPrintable(ch)) {
+            if (!UCharacter.isPrintable(ch) 
+            	&& ch != 0x00AD/* Unicode 4.0 changed the defintion of soft hyphen to be a Cf*/) {
                 errln("Fail \\u" + hex(ch) +
                       " is a Latin-1 graphic character\n");
             }
@@ -1328,328 +1374,260 @@ public final class UCharacterTest extends TestFmwk
     {
         // test data for hasBinaryProperty()
         int props[][] = { // code point, property
-            { 0x0627, UProperty.ALPHABETIC },
-            { 0x1034a, UProperty.ALPHABETIC },
-            { 0x2028, UProperty.ALPHABETIC },
+	        { 0x0627, UProperty.ALPHABETIC, 1 },
+	        { 0x1034a, UProperty.ALPHABETIC, 1 },
+	        { 0x2028, UProperty.ALPHABETIC, 0 },
+	
+	        { 0x0066, UProperty.ASCII_HEX_DIGIT, 1 },
+	        { 0x0067, UProperty.ASCII_HEX_DIGIT, 0 },
+	
+	        { 0x202c, UProperty.BIDI_CONTROL, 1 },
+	        { 0x202f, UProperty.BIDI_CONTROL, 0 },
+	
+	        { 0x003c, UProperty.BIDI_MIRRORED, 1 },
+	        { 0x003d, UProperty.BIDI_MIRRORED, 0 },
+	
+	        { 0x058a, UProperty.DASH, 1 },
+	        { 0x007e, UProperty.DASH, 0 },
+	
+	        { 0x0c4d, UProperty.DIACRITIC, 1 },
+	        { 0x3000, UProperty.DIACRITIC, 0 },
+	
+	        { 0x0e46, UProperty.EXTENDER, 1 },
+	        { 0x0020, UProperty.EXTENDER, 0 },
+	
+	        { 0xfb1d, UProperty.FULL_COMPOSITION_EXCLUSION, 1 },
+	        { 0x1d15f, UProperty.FULL_COMPOSITION_EXCLUSION, 1 },
+	        { 0xfb1e, UProperty.FULL_COMPOSITION_EXCLUSION, 0 },
+	
+	        { 0x0044, UProperty.HEX_DIGIT, 1 },
+	        { 0xff46, UProperty.HEX_DIGIT, 1 },
+	        { 0x0047, UProperty.HEX_DIGIT, 0 },
+	
+	        { 0x30fb, UProperty.HYPHEN, 1 },
+	        { 0xfe58, UProperty.HYPHEN, 0 },
+	
+	        { 0x2172, UProperty.ID_CONTINUE, 1 },
+	        { 0x0307, UProperty.ID_CONTINUE, 1 },
+	        { 0x005c, UProperty.ID_CONTINUE, 0 },
+	
+	        { 0x2172, UProperty.ID_START, 1 },
+	        { 0x007a, UProperty.ID_START, 1 },
+	        { 0x0039, UProperty.ID_START, 0 },
+	
+	        { 0x4db5, UProperty.IDEOGRAPHIC, 1 },
+	        { 0x2f999, UProperty.IDEOGRAPHIC, 1 },
+	        { 0x2f99, UProperty.IDEOGRAPHIC, 0 },
+	
+	        { 0x200c, UProperty.JOIN_CONTROL, 1 },
+	        { 0x2029, UProperty.JOIN_CONTROL, 0 },
+	
+	        { 0x1d7bc, UProperty.LOWERCASE, 1 },
+	        { 0x0345, UProperty.LOWERCASE, 1 },
+	        { 0x0030, UProperty.LOWERCASE, 0 },
+	
+	        { 0x1d7a9, UProperty.MATH, 1 },
+	        { 0x2135, UProperty.MATH, 1 },
+	        { 0x0062, UProperty.MATH, 0 },
+	
+	        { 0xfde1, UProperty.NONCHARACTER_CODE_POINT, 1 },
+	        { 0x10ffff, UProperty.NONCHARACTER_CODE_POINT, 1 },
+	        { 0x10fffd, UProperty.NONCHARACTER_CODE_POINT, 0 },
+	
+	        { 0x0022, UProperty.QUOTATION_MARK, 1 },
+	        { 0xff62, UProperty.QUOTATION_MARK, 1 },
+	        { 0xd840, UProperty.QUOTATION_MARK, 0 },
+	
+	        { 0x061f, UProperty.TERMINAL_PUNCTUATION, 1 },
+	        { 0xe003f, UProperty.TERMINAL_PUNCTUATION, 0 },
+	
+	        { 0x1d44a, UProperty.UPPERCASE, 1 },
+	        { 0x2162, UProperty.UPPERCASE, 1 },
+	        { 0x0345, UProperty.UPPERCASE, 0 },
+	
+	        { 0x0020, UProperty.WHITE_SPACE, 1 },
+	        { 0x202f, UProperty.WHITE_SPACE, 1 },
+	        { 0x3001, UProperty.WHITE_SPACE, 0 },
+	
+	        { 0x0711, UProperty.XID_CONTINUE, 1 },
+	        { 0x1d1aa, UProperty.XID_CONTINUE, 1 },
+	        { 0x007c, UProperty.XID_CONTINUE, 0 },
+	
+	        { 0x16ee, UProperty.XID_START, 1 },
+	        { 0x23456, UProperty.XID_START, 1 },
+	        { 0x1d1aa, UProperty.XID_START, 0 },
+	
+	        /*
+	         * Version break:
+	         * The following properties are only supported starting with the
+	         * Unicode version indicated in the second field.
+	         */
+	        { -1, 0x32, 0 },
+	
+	        { 0x180c, UProperty.DEFAULT_IGNORABLE_CODE_POINT, 1 },
+	        { 0xfe02, UProperty.DEFAULT_IGNORABLE_CODE_POINT, 1 },
+	        { 0x1801, UProperty.DEFAULT_IGNORABLE_CODE_POINT, 0 },
+	
+	        { 0x0341, UProperty.DEPRECATED, 1 },
+	        { 0xe0041, UProperty.DEPRECATED, 0 },
+	
+	        { 0x00a0, UProperty.GRAPHEME_BASE, 1 },
+	        { 0x0a4d, UProperty.GRAPHEME_BASE, 0 },
+	        { 0xff9f, UProperty.GRAPHEME_BASE, 1 },      /* changed from Unicode 3.2 to 4 */
+	
+	        { 0x0300, UProperty.GRAPHEME_EXTEND, 1 },
+	        { 0xff9f, UProperty.GRAPHEME_EXTEND, 0 },   /* changed from Unicode 3.2 to 4 */
+	        { 0x0603, UProperty.GRAPHEME_EXTEND, 0 },
+	
+	        { 0x0a4d, UProperty.GRAPHEME_LINK, 1 },
+	        { 0xff9f, UProperty.GRAPHEME_LINK, 0 },
+	
+	        { 0x2ff7, UProperty.IDS_BINARY_OPERATOR, 1 },
+	        { 0x2ff3, UProperty.IDS_BINARY_OPERATOR, 0 },
+	
+	        { 0x2ff3, UProperty.IDS_TRINARY_OPERATOR, 1 },
+	        { 0x2f03, UProperty.IDS_TRINARY_OPERATOR, 0 },
+	
+	        { 0x0ec1, UProperty.LOGICAL_ORDER_EXCEPTION, 1 },
+	        { 0xdcba, UProperty.LOGICAL_ORDER_EXCEPTION, 0 },
+	
+	        { 0x2e9b, UProperty.RADICAL, 1 },
+	        { 0x4e00, UProperty.RADICAL, 0 },
+	
+	        { 0x012f, UProperty.SOFT_DOTTED, 1 },
+	        { 0x0049, UProperty.SOFT_DOTTED, 0 },
+	
+	        { 0xfa11, UProperty.UNIFIED_IDEOGRAPH, 1 },
+	        { 0xfa12, UProperty.UNIFIED_IDEOGRAPH, 0 },
+	
+	        /* enum/integer type properties */
+	
+	        { 0x02AF, UProperty.BLOCK, UCharacter.UnicodeBlock.IPA_EXTENSIONS.getID() },
+	        { 0x0C4E, UProperty.BLOCK, UCharacter.UnicodeBlock.TELUGU.getID()},
+	        { 0x155A, UProperty.BLOCK, UCharacter.UnicodeBlock.UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS.getID() },
+	        { 0x1717, UProperty.BLOCK, UCharacter.UnicodeBlock.TAGALOG.getID() },
+	        { 0x1AFF, UProperty.BLOCK, UCharacter.UnicodeBlock.NO_BLOCK.getID()},
+	        { 0x3040, UProperty.BLOCK, UCharacter.UnicodeBlock.HIRAGANA.getID()},
+	        { 0x1D0FF, UProperty.BLOCK, UCharacter.UnicodeBlock.BYZANTINE_MUSICAL_SYMBOLS.getID()},
+	        { 0x10D0FF, UProperty.BLOCK, UCharacter.UnicodeBlock.SUPPLEMENTARY_PRIVATE_USE_AREA_B.getID() },
+	        { 0xEFFFF, UProperty.BLOCK, UCharacter.UnicodeBlock.NO_BLOCK.getID() },
+	
+	        /* UProperty.CANONICAL_COMBINING_CLASS tested for assigned characters in TestUnicodeData() */
+	        { 0xd7d7, UProperty.CANONICAL_COMBINING_CLASS, 0 },
+	
+	        { 0x00A0, UProperty.DECOMPOSITION_TYPE, UCharacter.DecompositionType.NOBREAK },
+	        { 0x00A8, UProperty.DECOMPOSITION_TYPE, UCharacter.DecompositionType.COMPAT },
+	        { 0x00bf, UProperty.DECOMPOSITION_TYPE, UCharacter.DecompositionType.NONE },
+	        { 0x00c0, UProperty.DECOMPOSITION_TYPE, UCharacter.DecompositionType.CANONICAL },
+	        { 0x1E9B, UProperty.DECOMPOSITION_TYPE, UCharacter.DecompositionType.CANONICAL },
+	        { 0xBCDE, UProperty.DECOMPOSITION_TYPE, UCharacter.DecompositionType.CANONICAL },
+	        { 0xFB5D, UProperty.DECOMPOSITION_TYPE, UCharacter.DecompositionType.MEDIAL },
+	        { 0x1D736, UProperty.DECOMPOSITION_TYPE, UCharacter.DecompositionType.FONT },
+	        { 0xe0033, UProperty.DECOMPOSITION_TYPE, UCharacter.DecompositionType.NONE },
+	
+	        { 0x0009, UProperty.EAST_ASIAN_WIDTH, UCharacter.EastAsianWidth.NEUTRAL },
+	        { 0x0020, UProperty.EAST_ASIAN_WIDTH, UCharacter.EastAsianWidth.NARROW },
+	        { 0x00B1, UProperty.EAST_ASIAN_WIDTH, UCharacter.EastAsianWidth.AMBIGUOUS },
+	        { 0x20A9, UProperty.EAST_ASIAN_WIDTH, UCharacter.EastAsianWidth.HALFWIDTH },
+	        { 0x2FFB, UProperty.EAST_ASIAN_WIDTH, UCharacter.EastAsianWidth.WIDE },
+	        { 0x3000, UProperty.EAST_ASIAN_WIDTH, UCharacter.EastAsianWidth.FULLWIDTH },
+	        { 0x35bb, UProperty.EAST_ASIAN_WIDTH, UCharacter.EastAsianWidth.WIDE },
+	        { 0x58bd, UProperty.EAST_ASIAN_WIDTH, UCharacter.EastAsianWidth.WIDE },
+	        { 0xD7A3, UProperty.EAST_ASIAN_WIDTH, UCharacter.EastAsianWidth.WIDE },
+	        { 0xEEEE, UProperty.EAST_ASIAN_WIDTH, UCharacter.EastAsianWidth.AMBIGUOUS },
+	        { 0x1D198, UProperty.EAST_ASIAN_WIDTH, UCharacter.EastAsianWidth.NEUTRAL },
+	        { 0x20000, UProperty.EAST_ASIAN_WIDTH, UCharacter.EastAsianWidth.WIDE },
+	        { 0x2F8C7, UProperty.EAST_ASIAN_WIDTH, UCharacter.EastAsianWidth.WIDE },
+	        { 0x3a5bd, UProperty.EAST_ASIAN_WIDTH, UCharacter.EastAsianWidth.NEUTRAL },
+	        { 0xFEEEE, UProperty.EAST_ASIAN_WIDTH, UCharacter.EastAsianWidth.AMBIGUOUS },
+	        { 0x10EEEE, UProperty.EAST_ASIAN_WIDTH, UCharacter.EastAsianWidth.AMBIGUOUS },
+	
+	        /* UProperty.GENERAL_CATEGORY tested for assigned characters in TestUnicodeData() */
+	        { 0xd7d7, UProperty.GENERAL_CATEGORY, 0 },
+	
+	        { 0x0444, UProperty.JOINING_GROUP, UCharacter.JoiningGroup.NO_JOINING_GROUP },
+	        { 0x0639, UProperty.JOINING_GROUP, UCharacter.JoiningGroup.AIN },
+	        { 0x072A, UProperty.JOINING_GROUP, UCharacter.JoiningGroup.DALATH_RISH },
+	        { 0x0647, UProperty.JOINING_GROUP, UCharacter.JoiningGroup.HEH },
+	        { 0x06C1, UProperty.JOINING_GROUP, UCharacter.JoiningGroup.HEH_GOAL },
+	        { 0x06C3, UProperty.JOINING_GROUP, UCharacter.JoiningGroup.HAMZA_ON_HEH_GOAL },
+	
+	        { 0x200C, UProperty.JOINING_TYPE, UCharacter.JoiningType.NON_JOINING },
+	        { 0x200D, UProperty.JOINING_TYPE, UCharacter.JoiningType.JOIN_CAUSING },
+	        { 0x0639, UProperty.JOINING_TYPE, UCharacter.JoiningType.DUAL_JOINING },
+	        { 0x0640, UProperty.JOINING_TYPE, UCharacter.JoiningType.JOIN_CAUSING },
+	        { 0x06C3, UProperty.JOINING_TYPE, UCharacter.JoiningType.RIGHT_JOINING },
+	        { 0x0300, UProperty.JOINING_TYPE, UCharacter.JoiningType.TRANSPARENT },
+	        { 0x070F, UProperty.JOINING_TYPE, UCharacter.JoiningType.TRANSPARENT },
+	        { 0xe0033, UProperty.JOINING_TYPE, UCharacter.JoiningType.TRANSPARENT },
+	
+	        /* TestUnicodeData() verifies that no assigned character has "XX" (unknown) */
+	        { 0xe7e7, UProperty.LINE_BREAK, UCharacter.LineBreak.UNKNOWN },
+	        { 0x10fffd, UProperty.LINE_BREAK, UCharacter.LineBreak.UNKNOWN },
+	        { 0x0028, UProperty.LINE_BREAK, UCharacter.LineBreak.OPEN_PUNCTUATION },
+	        { 0x232A, UProperty.LINE_BREAK, UCharacter.LineBreak.CLOSE_PUNCTUATION },
+	        { 0x3401, UProperty.LINE_BREAK, UCharacter.LineBreak.IDEOGRAPHIC },
+	        { 0x4e02, UProperty.LINE_BREAK, UCharacter.LineBreak.IDEOGRAPHIC },
+	        { 0xac03, UProperty.LINE_BREAK, UCharacter.LineBreak.IDEOGRAPHIC },
+	        { 0x20004, UProperty.LINE_BREAK, UCharacter.LineBreak.IDEOGRAPHIC },
+	        { 0xf905, UProperty.LINE_BREAK, UCharacter.LineBreak.IDEOGRAPHIC },
+	        { 0xdb7e, UProperty.LINE_BREAK, UCharacter.LineBreak.SURROGATE },
+	        { 0xdbfd, UProperty.LINE_BREAK, UCharacter.LineBreak.SURROGATE },
+	        { 0xdffc, UProperty.LINE_BREAK, UCharacter.LineBreak.SURROGATE },
+	        { 0x2762, UProperty.LINE_BREAK, UCharacter.LineBreak.EXCLAMATION },
+	        { 0x002F, UProperty.LINE_BREAK, UCharacter.LineBreak.BREAK_SYMBOLS },
+	        { 0x1D49C, UProperty.LINE_BREAK, UCharacter.LineBreak.ALPHABETIC },
+	        { 0x1731, UProperty.LINE_BREAK, UCharacter.LineBreak.ALPHABETIC },
+	
+	        /* UProperty.NUMERIC_TYPE tested in TestNumericProperties() */
+	
+	        /* UProperty.SCRIPT tested in TestUScriptCodeAPI() */
+	
+	        { 0x1100, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.LEADING_JAMO },
+	        { 0x1111, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.LEADING_JAMO },
+	        { 0x1159, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.LEADING_JAMO },
+	        { 0x115f, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.LEADING_JAMO },
+	
+	        { 0x1160, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.VOWEL_JAMO },
+	        { 0x1161, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.VOWEL_JAMO },
+	        { 0x1172, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.VOWEL_JAMO },
+	        { 0x11a2, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.VOWEL_JAMO },
+	
+	        { 0x11a8, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.TRAILING_JAMO },
+	        { 0x11b8, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.TRAILING_JAMO },
+	        { 0x11c8, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.TRAILING_JAMO },
+	        { 0x11f9, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.TRAILING_JAMO },
+	
+	        { 0x115a, UProperty.HANGUL_SYLLABLE_TYPE, 0 },
+	        { 0x115e, UProperty.HANGUL_SYLLABLE_TYPE, 0 },
+	        { 0x11a3, UProperty.HANGUL_SYLLABLE_TYPE, 0 },
+	        { 0x11a7, UProperty.HANGUL_SYLLABLE_TYPE, 0 },
+	        { 0x11fa, UProperty.HANGUL_SYLLABLE_TYPE, 0 },
+	        { 0x11ff, UProperty.HANGUL_SYLLABLE_TYPE, 0 },
+	
+	        { 0xac00, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.LV_SYLLABLE },
+	        { 0xac1c, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.LV_SYLLABLE },
+	        { 0xc5ec, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.LV_SYLLABLE },
+	        { 0xd788, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.LV_SYLLABLE },
+	
+	        { 0xac01, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.LVT_SYLLABLE },
+	        { 0xac1b, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.LVT_SYLLABLE },
+	        { 0xac1d, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.LVT_SYLLABLE },
+	        { 0xc5ee, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.LVT_SYLLABLE },
+	        { 0xd7a3, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.LVT_SYLLABLE },
+	
+	        { 0xd7a4, UProperty.HANGUL_SYLLABLE_TYPE, 0 },
+	
+	        /* undefined UProperty values */
+	        { 0x61, 0x4a7, 0 },
+	        { 0x234bc, 0x15ed, 0 }
+	    };
 
-            { 0x0066, UProperty.ASCII_HEX_DIGIT },
-            { 0x0067, UProperty.ASCII_HEX_DIGIT },
-
-            { 0x202c, UProperty.BIDI_CONTROL },
-            { 0x202f, UProperty.BIDI_CONTROL },
-
-            { 0x003c, UProperty.BIDI_MIRRORED },
-            { 0x003d, UProperty.BIDI_MIRRORED },
-
-            { 0x058a, UProperty.DASH },
-            { 0x007e, UProperty.DASH },
-
-            { 0x0c4d, UProperty.DIACRITIC },
-            { 0x3000, UProperty.DIACRITIC },
-
-            { 0x0e46, UProperty.EXTENDER },
-            { 0x0020, UProperty.EXTENDER },
-
-            { 0xfb1d, UProperty.FULL_COMPOSITION_EXCLUSION },
-            { 0x1d15f, UProperty.FULL_COMPOSITION_EXCLUSION },
-            { 0xfb1e, UProperty.FULL_COMPOSITION_EXCLUSION },
-
-            { 0x0044, UProperty.HEX_DIGIT },
-            { 0xff46, UProperty.HEX_DIGIT },
-            { 0x0047, UProperty.HEX_DIGIT },
-
-            { 0x30fb, UProperty.HYPHEN },
-            { 0xfe58, UProperty.HYPHEN },
-
-            { 0x2172, UProperty.ID_CONTINUE },
-            { 0x0307, UProperty.ID_CONTINUE },
-            { 0x005c, UProperty.ID_CONTINUE },
-
-            { 0x2172, UProperty.ID_START },
-            { 0x007a, UProperty.ID_START },
-            { 0x0039, UProperty.ID_START },
-
-            { 0x4db5, UProperty.IDEOGRAPHIC },
-            { 0x2f999, UProperty.IDEOGRAPHIC },
-            { 0x2f99, UProperty.IDEOGRAPHIC },
-
-            { 0x200c, UProperty.JOIN_CONTROL },
-            { 0x2029, UProperty.JOIN_CONTROL },
-
-            { 0x1d7bc, UProperty.LOWERCASE },
-            { 0x0345, UProperty.LOWERCASE },
-            { 0x0030, UProperty.LOWERCASE },
-
-            { 0x1d7a9, UProperty.MATH },
-            { 0x2135, UProperty.MATH },
-            { 0x0062, UProperty.MATH },
-
-            { 0xfde1, UProperty.NONCHARACTER_CODE_POINT },
-            { 0x10ffff, UProperty.NONCHARACTER_CODE_POINT },
-            { 0x10fffd, UProperty.NONCHARACTER_CODE_POINT },
-
-            { 0x0022, UProperty.QUOTATION_MARK },
-            { 0xff62, UProperty.QUOTATION_MARK },
-            { 0xd840, UProperty.QUOTATION_MARK },
-
-            { 0x061f, UProperty.TERMINAL_PUNCTUATION },
-            { 0xe003f, UProperty.TERMINAL_PUNCTUATION },
-
-            { 0x1d44a, UProperty.UPPERCASE },
-            { 0x2162, UProperty.UPPERCASE },
-            { 0x0345, UProperty.UPPERCASE },
-
-            { 0x0020, UProperty.WHITE_SPACE },
-            { 0x202f, UProperty.WHITE_SPACE },
-            { 0x3001, UProperty.WHITE_SPACE },
-
-            { 0x0711, UProperty.XID_CONTINUE },
-            { 0x1d1aa, UProperty.XID_CONTINUE },
-            { 0x007c, UProperty.XID_CONTINUE },
-
-            { 0x16ee, UProperty.XID_START },
-            { 0x23456, UProperty.XID_START },
-            { 0x1d1aa, UProperty.XID_START },
-
-            // Version break:
-            // The following properties are only supported starting with the
-            // UProperty.Unicode version indicated in the second field.
-
-            { -1, 0x32, 0 },
-
-            { 0x180c, UProperty.DEFAULT_IGNORABLE_CODE_POINT },
-            { 0xfe02, UProperty.DEFAULT_IGNORABLE_CODE_POINT },
-            { 0x1801, UProperty.DEFAULT_IGNORABLE_CODE_POINT },
-
-            { 0x0341, UProperty.DEPRECATED },
-            { 0xe0041, UProperty.DEPRECATED },
-
-            { 0x00a0, UProperty.GRAPHEME_BASE },
-            { 0x0a4d, UProperty.GRAPHEME_BASE },
-            { 0xff9f, UProperty.GRAPHEME_BASE },
-
-            { 0x0300, UProperty.GRAPHEME_EXTEND },
-            { 0xff9f, UProperty.GRAPHEME_EXTEND },
-            { 0x0a4d, UProperty.GRAPHEME_EXTEND },
-
-            { 0x0a4d, UProperty.GRAPHEME_LINK },
-            { 0xff9f, UProperty.GRAPHEME_LINK },
-
-            { 0x2ff7, UProperty.IDS_BINARY_OPERATOR },
-            { 0x2ff3, UProperty.IDS_BINARY_OPERATOR },
-
-            { 0x2ff3, UProperty.IDS_TRINARY_OPERATOR },
-            { 0x2f03, UProperty.IDS_TRINARY_OPERATOR },
-
-            { 0x0ec1, UProperty.LOGICAL_ORDER_EXCEPTION },
-            { 0xdcba, UProperty.LOGICAL_ORDER_EXCEPTION },
-
-            { 0x2e9b, UProperty.RADICAL },
-            { 0x4e00, UProperty.RADICAL },
-
-            { 0x012f, UProperty.SOFT_DOTTED },
-            { 0x0049, UProperty.SOFT_DOTTED },
-
-            { 0xfa11, UProperty.UNIFIED_IDEOGRAPH },
-            { 0xfa12, UProperty.UNIFIED_IDEOGRAPH },
-
-            { 0x02AF, UProperty.BLOCK},
-            { 0x0C4E, UProperty.BLOCK},
-            { 0x155A, UProperty.BLOCK},
-            { 0x1717, UProperty.BLOCK},
-            { 0x1AFF, UProperty.BLOCK},
-            { 0x3040, UProperty.BLOCK},
-            { 0x1D0FF, UProperty.BLOCK},
-            { 0x10D0FF, UProperty.BLOCK},
-            { 0xEFFFF, UProperty.BLOCK},
-
-            // UProperty.CANONICAL_COMBINING_CLASS tested for assigned
-            // characters in TestUnicodeData()
-            { 0xd7d7, UProperty.CANONICAL_COMBINING_CLASS},
-
-            { 0x00A0, UProperty.DECOMPOSITION_TYPE},
-            { 0x00A8, UProperty.DECOMPOSITION_TYPE},
-            { 0x00bf, UProperty.DECOMPOSITION_TYPE},
-            { 0x00c0, UProperty.DECOMPOSITION_TYPE},
-            { 0x1E9B, UProperty.DECOMPOSITION_TYPE},
-            { 0xBCDE, UProperty.DECOMPOSITION_TYPE},
-            { 0xFB5D, UProperty.DECOMPOSITION_TYPE},
-            { 0x1D736, UProperty.DECOMPOSITION_TYPE},
-            { 0xe0033, UProperty.DECOMPOSITION_TYPE},
-
-            { 0x0009, UProperty.EAST_ASIAN_WIDTH},
-            { 0x0020, UProperty.EAST_ASIAN_WIDTH},
-            { 0x00B1, UProperty.EAST_ASIAN_WIDTH},
-            { 0x20A9, UProperty.EAST_ASIAN_WIDTH},
-            { 0x2FFB, UProperty.EAST_ASIAN_WIDTH},
-            { 0x3000, UProperty.EAST_ASIAN_WIDTH},
-            { 0x35bb, UProperty.EAST_ASIAN_WIDTH},
-            { 0x58bd, UProperty.EAST_ASIAN_WIDTH},
-            { 0xD7A3, UProperty.EAST_ASIAN_WIDTH},
-            { 0xEEEE, UProperty.EAST_ASIAN_WIDTH},
-            { 0x1D198, UProperty.EAST_ASIAN_WIDTH},
-            { 0x20000, UProperty.EAST_ASIAN_WIDTH},
-            { 0x2F8C7, UProperty.EAST_ASIAN_WIDTH},
-            { 0x3a5bd, UProperty.EAST_ASIAN_WIDTH},
-            { 0xFEEEE, UProperty.EAST_ASIAN_WIDTH},
-            { 0x10EEEE, UProperty.EAST_ASIAN_WIDTH},
-
-            // UProperty.GENERAL_CATEGORY tested for assigned characters in
-            // TestUnicodeData()
-            { 0xd7d7, UProperty.GENERAL_CATEGORY},
-
-            { 0x0444, UProperty.JOINING_GROUP},
-            { 0x0639, UProperty.JOINING_GROUP},
-            { 0x072A, UProperty.JOINING_GROUP},
-            { 0x0647, UProperty.JOINING_GROUP},
-            { 0x06C1, UProperty.JOINING_GROUP},
-            { 0x06C3, UProperty.JOINING_GROUP},
-
-            { 0x200C, UProperty.JOINING_TYPE},
-            { 0x200D, UProperty.JOINING_TYPE},
-            { 0x0639, UProperty.JOINING_TYPE},
-            { 0x0640, UProperty.JOINING_TYPE},
-            { 0x06C3, UProperty.JOINING_TYPE},
-            { 0x0300, UProperty.JOINING_TYPE},
-            { 0x070F, UProperty.JOINING_TYPE},
-            { 0xe0033, UProperty.JOINING_TYPE},
-
-            // TestUnicodeData() verifies that no assigned character has "XX"
-            // (unknown)
-            { 0xe7e7, UProperty.LINE_BREAK},
-            { 0x10fffd, UProperty.LINE_BREAK},
-            { 0x0028, UProperty.LINE_BREAK},
-            { 0x232A, UProperty.LINE_BREAK},
-            { 0x3401, UProperty.LINE_BREAK},
-            { 0x4e02, UProperty.LINE_BREAK},
-            { 0xac03, UProperty.LINE_BREAK},
-            { 0x20004, UProperty.LINE_BREAK},
-            { 0xf905, UProperty.LINE_BREAK},
-            { 0xdb7e, UProperty.LINE_BREAK},
-            { 0xdbfd, UProperty.LINE_BREAK},
-            { 0xdffc, UProperty.LINE_BREAK},
-            { 0x2762, UProperty.LINE_BREAK},
-            { 0x002F, UProperty.LINE_BREAK},
-            { 0x1D49C, UProperty.LINE_BREAK},
-            { 0x1731, UProperty.LINE_BREAK},
-
-            // UCHAR_NUMERIC_TYPE tested in TestNumericProperties()
-
-            // UCHAR_SCRIPT tested in TestUScriptCodeAPI()
-
-            // undefined UProperty values
-            { 0x61, 0x4a7},
-            { 0x234bc, 0x15ed}
-        };
-
-        int expected[] = { 1, 1, 0, 1, 0,
-                           1, 0, 1, 0, 1,
-                           0, 1, 0, 1, 0,
-                           1, 1, 0, 1, 1,
-                           0, 1, 0, 1, 1,
-                           0, 1, 1, 0, 1,
-                           1, 0, 1, 0, 1,
-                           1, 0, 1, 1, 0,
-                           1, 1, 0, 1, 1,
-                           0, 1, 0, 1, 1,
-                           0, 1, 1, 0, 1,
-                           1, 0, 1, 1, 0,
-                           0, 1, 1, 0, 1,
-                           0, 1, 0, 0, 1,
-                           1, 0, 1, 0, 1,
-                           0, 1, 0, 1, 0,
-                           1, 0, 1, 0, 1,
-                           0,
-                           UCharacter.UnicodeBlock.IPA_EXTENSIONS_ID,
-                           UCharacter.UnicodeBlock.TELUGU_ID,
-                           UCharacter.UnicodeBlock.UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS_ID,
-                           UCharacter.UnicodeBlock.TAGALOG_ID,
-                           UCharacter.UnicodeBlock.INVALID_CODE_ID,
-                           UCharacter.UnicodeBlock.HIRAGANA_ID,
-                           UCharacter.UnicodeBlock.BYZANTINE_MUSICAL_SYMBOLS_ID,
-                           UCharacter.UnicodeBlock.SUPPLEMENTARY_PRIVATE_USE_AREA_B_ID,
-                           UCharacter.UnicodeBlock.INVALID_CODE_ID,
-                           // UProperty.CANONICAL_COMBINING_CLASS tested for
-                           // assigned characters in TestUnicodeData()
-                           0,
-                           UCharacter.DecompositionType.NOBREAK,
-                           UCharacter.DecompositionType.COMPAT,
-                           UCharacter.DecompositionType.NONE,
-                           UCharacter.DecompositionType.CANONICAL,
-                           UCharacter.DecompositionType.CANONICAL,
-                           UCharacter.DecompositionType.CANONICAL,
-                           UCharacter.DecompositionType.MEDIAL,
-                           UCharacter.DecompositionType.FONT,
-                           UCharacter.DecompositionType.NONE,
-
-                           UCharacter.EastAsianWidth.NEUTRAL,
-                           UCharacter.EastAsianWidth.NARROW,
-                           UCharacter.EastAsianWidth.AMBIGUOUS,
-                           UCharacter.EastAsianWidth.HALFWIDTH,
-                           UCharacter.EastAsianWidth.WIDE,
-                           UCharacter.EastAsianWidth.FULLWIDTH,
-                           UCharacter.EastAsianWidth.WIDE,
-                           UCharacter.EastAsianWidth.WIDE,
-                           UCharacter.EastAsianWidth.WIDE,
-                           UCharacter.EastAsianWidth.AMBIGUOUS,
-                           UCharacter.EastAsianWidth.NEUTRAL,
-                           UCharacter.EastAsianWidth.WIDE,
-                           UCharacter.EastAsianWidth.WIDE,
-                           UCharacter.EastAsianWidth.NEUTRAL,
-                           UCharacter.EastAsianWidth.AMBIGUOUS,
-                           UCharacter.EastAsianWidth.AMBIGUOUS,
-
-                           // UProperty.GENERAL_CATEGORY tested for assigned
-                           // characters in TestUnicodeData()
-                           0,
-                           UCharacter.JoiningGroup.NO_JOINING_GROUP,
-                           UCharacter.JoiningGroup.AIN,
-                           UCharacter.JoiningGroup.DALATH_RISH,
-                           UCharacter.JoiningGroup.HEH,
-                           UCharacter.JoiningGroup.HEH_GOAL,
-                           UCharacter.JoiningGroup.HAMZA_ON_HEH_GOAL,
-                           UCharacter.JoiningType.NON_JOINING,
-                           UCharacter.JoiningType.JOIN_CAUSING,
-                           UCharacter.JoiningType.DUAL_JOINING,
-                           UCharacter.JoiningType.JOIN_CAUSING,
-                           UCharacter.JoiningType.RIGHT_JOINING,
-                           UCharacter.JoiningType.TRANSPARENT,
-                           UCharacter.JoiningType.TRANSPARENT,
-                           UCharacter.JoiningType.TRANSPARENT,
-
-                           // TestUnicodeData() verifies that no assigned
-                           // character has "XX" (unknown)
-                           UCharacter.LineBreak.UNKNOWN,
-                           UCharacter.LineBreak.UNKNOWN,
-                           UCharacter.LineBreak.OPEN_PUNCTUATION,
-                           UCharacter.LineBreak.CLOSE_PUNCTUATION,
-                           UCharacter.LineBreak.IDEOGRAPHIC,
-                           UCharacter.LineBreak.IDEOGRAPHIC,
-                           UCharacter.LineBreak.IDEOGRAPHIC,
-                           UCharacter.LineBreak.IDEOGRAPHIC,
-                           UCharacter.LineBreak.IDEOGRAPHIC,
-                           UCharacter.LineBreak.SURROGATE,
-                           UCharacter.LineBreak.SURROGATE,
-                           UCharacter.LineBreak.SURROGATE,
-                           UCharacter.LineBreak.EXCLAMATION,
-                           UCharacter.LineBreak.BREAK_SYMBOLS,
-                           UCharacter.LineBreak.ALPHABETIC,
-                           UCharacter.LineBreak.ALPHABETIC,
-
-                           // UCHAR_NUMERIC_TYPE tested in
-                           // TestNumericProperties()
-                           // UCHAR_SCRIPT tested in TestUScriptCodeAPI()
-
-                           0,
-                           0
-        };
 
         if (UCharacter.getIntPropertyMinValue(UProperty.DASH) != 0
             || UCharacter.getIntPropertyMinValue(UProperty.BIDI_CLASS) != 0
-            || UCharacter.getIntPropertyMinValue(UProperty.BLOCK)
-                            != UCharacter.UnicodeBlock.INVALID_CODE_ID
-            || UCharacter.getIntPropertyMinValue(UProperty.SCRIPT)
-                            != 0 /* JB#2410 */
+            || UCharacter.getIntPropertyMinValue(UProperty.BLOCK)!= 0  /* j2478 */
+            || UCharacter.getIntPropertyMinValue(UProperty.SCRIPT)!= 0 /* JB#2410 */
             || UCharacter.getIntPropertyMinValue(0x2345) != 0) {
             errln("error: UCharacter.getIntPropertyMinValue() wrong");
         }
@@ -1662,10 +1640,16 @@ public final class UCharacterTest extends TestFmwk
             || UCharacter.getIntPropertyMaxValue(UProperty.BLOCK)
                                         != UCharacter.UnicodeBlock.COUNT - 1
             || UCharacter.getIntPropertyMaxValue(UProperty.LINE_BREAK)
-                                        != UCharacter.LineBreak.COUNT - 1
+                                        != UCharacter.LineBreak.COUNT - 1 
             || UCharacter.getIntPropertyMaxValue(UProperty.SCRIPT)
                                         != UScript.CODE_LIMIT - 1
-            || UCharacter.getIntPropertyMaxValue(0x2345) != -1 /*JB#2410*/ ) {
+            || UCharacter.getIntPropertyMaxValue(0x2345) != -1 //JB#2410 
+        	|| UCharacter.getIntPropertyMaxValue(UProperty.DECOMPOSITION_TYPE) != (UCharacter.DecompositionType.COUNT - 1) 
+        	|| UCharacter.getIntPropertyMaxValue(UProperty.JOINING_GROUP) !=  (UCharacter.JoiningGroup.COUNT -1) 
+        	|| UCharacter.getIntPropertyMaxValue(UProperty.JOINING_TYPE) !=  (UCharacter.JoiningType.COUNT -1) 
+        	|| UCharacter.getIntPropertyMaxValue(UProperty.EAST_ASIAN_WIDTH) !=  (UCharacter.EastAsianWidth.COUNT -1)
+           	
+           ) {
             errln("error: UCharacter.getIntPropertyMaxValue() wrong");
         }
 
@@ -1682,7 +1666,7 @@ public final class UCharacterTest extends TestFmwk
                 continue;
             }
             boolean expect = true;
-            if (expected[i] == 0) {
+            if (props[i][2] == 0) {
                 expect = false;
             }
             if (props[i][1] < UProperty.INT_START) {
@@ -1691,16 +1675,16 @@ public final class UCharacterTest extends TestFmwk
                     errln("error: UCharacter.hasBinaryProperty(\\u" +
                           Integer.toHexString(props[i][0]) + ", " +
                           Integer.toHexString(props[i][1])
-                          + ") has an error expected " + expected[i]);
+                          + ") has an error expected " + props[i][2]);
                 }
             }
-
-            if (UCharacter.getIntPropertyValue(props[i][0], props[i][1])
-                != expected[i]) {
+            
+			int retVal = UCharacter.getIntPropertyValue(props[i][0], props[i][1]);
+            if (retVal != props[i][2]) {
                 errln("error: UCharacter.getIntPropertyValue(\\u" +
                       Utility.hex(props[i][0], 4) +
                       ", " + props[i][1] + " is wrong, should be "
-                      + expected[i]);
+                      + props[i][2] + " not " + retVal);
             }
 
             // test separate functions, too
@@ -1709,28 +1693,28 @@ public final class UCharacterTest extends TestFmwk
                 if (UCharacter.isUAlphabetic(props[i][0]) != expect) {
                     errln("error: UCharacter.isUAlphabetic(\\u" +
                           Integer.toHexString(props[i][0]) +
-                          ") is wrong expected " + expected[i]);
+                          ") is wrong expected " + props[i][2]);
                 }
                 break;
             case UProperty.LOWERCASE:
                 if (UCharacter.isULowercase(props[i][0]) != expect) {
                     errln("error: UCharacter.isULowercase(\\u" +
                           Integer.toHexString(props[i][0]) +
-                          ") is wrong expected " + expected[i]);
+                          ") is wrong expected " +props[i][2]);
                 }
                 break;
             case UProperty.UPPERCASE:
                 if (UCharacter.isUUppercase(props[i][0]) != expect) {
                     errln("error: UCharacter.isUUppercase(\\u" +
                           Integer.toHexString(props[i][0]) +
-                          ") is wrong expected " + expected[i]);
+                          ") is wrong expected " + props[i][2]);
                 }
                 break;
             case UProperty.WHITE_SPACE:
                 if (UCharacter.isUWhiteSpace(props[i][0]) != expect) {
                     errln("error: UCharacter.isUWhiteSpace(\\u" +
                           Integer.toHexString(props[i][0]) +
-                          ") is wrong expected " + expected[i]);
+                          ") is wrong expected " + props[i][2]);
                 }
                 break;
             default:
@@ -1750,7 +1734,7 @@ public final class UCharacterTest extends TestFmwk
             { 0x0031, UCharacter.NumericType.DECIMAL },
             { 0x10320, UCharacter.NumericType.NUMERIC },
             { 0x0F2B, UCharacter.NumericType.NUMERIC },
-            { 0x00B2, UCharacter.NumericType.DECIMAL },
+            { 0x00B2, UCharacter.NumericType.DIGIT }, /* Unicode 4.0 change */
             { 0x1813, UCharacter.NumericType.DECIMAL },
             { 0x2173, UCharacter.NumericType.NUMERIC },
             { 0x278E, UCharacter.NumericType.DIGIT },
@@ -1774,7 +1758,21 @@ public final class UCharacterTest extends TestFmwk
             { 0xfffe, UCharacter.NumericType.NONE },
             { 0x10301, UCharacter.NumericType.NONE },
             { 0xe0033, UCharacter.NumericType.NONE },
-            { 0x10ffff, UCharacter.NumericType.NONE }
+            { 0x10ffff, UCharacter.NumericType.NONE },
+            /* Unicode 4.0 Changes */
+            { 0x96f6,  UCharacter.NumericType.NUMERIC },
+            { 0x4e00,  UCharacter.NumericType.NUMERIC },
+            { 0x58f1,  UCharacter.NumericType.NUMERIC },
+            { 0x5f10,  UCharacter.NumericType.NUMERIC },
+            { 0x5f0e,  UCharacter.NumericType.NUMERIC },
+            { 0x8086,  UCharacter.NumericType.NUMERIC },
+            { 0x7396,  UCharacter.NumericType.NUMERIC },
+            { 0x5345,  UCharacter.NumericType.NUMERIC },
+            { 0x964c,  UCharacter.NumericType.NUMERIC },
+            { 0x4edf,  UCharacter.NumericType.NUMERIC },
+            { 0x4e07,  UCharacter.NumericType.NUMERIC },
+            { 0x4ebf,  UCharacter.NumericType.NUMERIC },
+            { 0x5146,  UCharacter.NumericType.NUMERIC }
         };
 
         double expected[] = {-1/(double)2,
@@ -1808,7 +1806,20 @@ public final class UCharacterTest extends TestFmwk
                              UCharacter.NO_NUMERIC_VALUE,
                              UCharacter.NO_NUMERIC_VALUE,
                              UCharacter.NO_NUMERIC_VALUE,
-                             UCharacter.NO_NUMERIC_VALUE
+                             UCharacter.NO_NUMERIC_VALUE,
+                             0 ,
+							 1 , 
+							 1 , 
+							 2 ,
+							 3 ,
+							 4 ,
+							 9 ,
+							 30 ,
+							 100 ,
+							 1000 ,
+							 10000 , 
+							 100000000 , 
+							 1000000000000.00
         };
 
 
@@ -1890,4 +1901,187 @@ public final class UCharacterTest extends TestFmwk
             } catch (IllegalArgumentException e) {}
         }
     }
+	/* add characters from a serialized set to a normal one */ 
+	private static void _setAddSerialized(UnicodeSet set, USerializedSet sset) { 
+	   int start, end; 
+	   int i, count; 
+	
+	   count=sset.countSerializedRanges(); 
+	   int[] range = new int[2];
+	   for(i=0; i<count; ++i) { 
+	       sset.getSerializedRange(i,range); 
+	       set.add(range[0],range[1]); 
+	   } 
+	} 
+
+	private boolean showADiffB(UnicodeSet a, UnicodeSet b,
+							            String a_name, String b_name,
+							            boolean expect,
+							            boolean diffIsError){
+		int i, start, end, length;
+		boolean equal;
+		equal=true;
+		i=0;
+		for(;;) {
+			start  = a.getRangeStart(i);
+		    length = (i < a.getRangeCount()) ? 0 : a.getRangeCount();
+		    end    = a.getRangeEnd(i);
+
+		    if(length!=0) {
+		        return equal; /* done with code points, got a string or -1 */
+		    }
+		
+		    if(expect!=b.contains(start, end)) {
+		        equal=false;
+		        while(start<=end) {
+		            if(expect!=b.contains(start)) {
+		                if(diffIsError) {
+		                    if(expect) {
+		                        errln("error: "+ a_name +" contains "+ hex(start)+" but "+ b_name +" does not");
+		                    } else {
+		                        errln("error: "+a_name +" and "+ b_name+" both contain "+hex(start) +" but should not intersect");
+		                    }
+		                } else {
+		                    if(expect) {
+		                        logln("info: "+a_name +" contains "+hex(start)+ "but " + b_name +" does not");
+		                    } else {
+		                        logln("info: "+a_name +" and "+b_name+" both contain "+hex(start)+" but should not intersect");
+		                    }
+		                }
+		            }
+		            ++start;
+		        }
+		    }
+		
+		    ++i;
+		}
+	}
+	private boolean showAMinusB(UnicodeSet a, UnicodeSet b,
+							            String a_name, String b_name,
+							            boolean diffIsError) {
+
+	    return showADiffB(a, b, a_name, b_name, true, diffIsError);
+	}
+	
+	private boolean showAIntersectB(UnicodeSet a, UnicodeSet b,
+							                String a_name, String b_name,
+							                boolean diffIsError) {
+	    return showADiffB(a, b, a_name, b_name, false, diffIsError);
+	}
+	
+	private boolean compareUSets(UnicodeSet a, UnicodeSet b,
+							             String a_name, String b_name,
+							             boolean diffIsError) {
+	    return
+	        showAMinusB(a, b, a_name, b_name, diffIsError) &&
+	        showAMinusB(b, a, b_name, a_name, diffIsError);
+	}
+
+   /* various tests for consistency of UCD data and API behavior */ 
+   public void TestConsistency() { 
+       char[] buffer16 = new char[300]; 
+       char[] buffer   = new char[300]; 
+       UnicodeSet set1, set2, set3, set4; 
+    
+       USerializedSet sset; 
+       int start, end; 
+       int i, length; 
+    
+       String hyphenPattern = "[:Hyphen:]"; 
+       String dashPattern = "[:Dash:]"; 
+       String lowerPattern = "[:Lowercase:]"; 
+       String formatPattern = "[:Cf:]"; 
+       String alphaPattern  =  "[:Alphabetic:]"; 
+     
+       /* 
+        * It used to be that UCD.html and its precursors said 
+        * "Those dashes used to mark connections between pieces of words, 
+        *  plus the Katakana middle dot." 
+        * 
+        * Unicode 4 changed 00AD Soft Hyphen to Cf and removed it from Dash 
+        * but not from Hyphen. 
+        * UTC 94 (2003mar) decided to leave it that way and to changed UCD.html. 
+        * Therefore, do not show errors when testing the Hyphen property. 
+        */ 
+       logln("Starting with Unicode 4, inconsistencies with [:Hyphen:] are\n" 
+                   + "known to the UTC and not considered errors.\n"); 
+    
+       set1=new UnicodeSet(hyphenPattern); 
+       set2=new UnicodeSet(dashPattern); 
+ 
+           /* remove the Katakana middle dot(s) from set1 */ 
+           set1.remove(0x30fb); 
+           set2.remove (0xff65); /* halfwidth variant */ 
+           showAMinusB(set1, set2, "[:Hyphen:]", "[:Dash:]", false); 
+
+    
+       /* check that Cf is neither Hyphen nor Dash nor Alphabetic */ 
+       set3=new UnicodeSet(formatPattern); 
+       set4=new UnicodeSet(alphaPattern); 
+ 
+       showAIntersectB(set3, set1, "[:Cf:]", "[:Hyphen:]", false); 
+       showAIntersectB(set3, set2, "[:Cf:]", "[:Dash:]", true); 
+       showAIntersectB(set3, set4, "[:Cf:]", "[:Alphabetic:]", true); 
+       /* 
+        * Check that each lowercase character has "small" in its name 
+        * and not "capital". 
+        * There are some such characters, some of which seem odd. 
+        * Use the verbose flag to see these notices. 
+        */ 
+       set1=new UnicodeSet(lowerPattern); 
+
+       for(i=0;; ++i) { 
+       		try{
+           		//length=set1.getItem(set1, i, &start, &end, NULL, 0, &errorCode); 
+       		}catch(Exception e){
+       			break;
+       		} 
+ 		   start = set1.getRangeStart(i);
+ 		   end = set1.getRangeEnd(i);
+ 		   length = i<set1.getRangeCount() ? set1.getRangeCount() : 0;
+           if(length!=0) { 
+               break; /* done with code points, got a string or -1 */ 
+           } 
+
+           while(start<=end) { 
+               String name=UCharacter.getName(start); 
+
+               if( (name.indexOf("SMALL")< 0 || name.indexOf("CAPITAL")<-1) && 
+                   name.indexOf("SMALL CAPITAL")==-1 
+               ) { 
+                   logln("info: [:Lowercase:] contains U+"+hex(start) + " whose name does not suggest lowercase: " + name); 
+               } 
+               ++start; 
+           } 
+       } 
+
+    
+       /* 
+        * Test for an example that unorm_getCanonStartSet() delivers 
+        * all characters that compose from the input one, 
+        * even in multiple steps. 
+        * For example, the set for "I" (0049) should contain both 
+        * I-diaeresis (00CF) and I-diaeresis-acute (1E2E). 
+        * In general, the set for the middle such character should be a subset 
+        * of the set for the first. 
+        */ 
+       set1=new UnicodeSet(); 
+       set2=new UnicodeSet(); 
+       sset = new USerializedSet();
+       NormalizerImpl.getCanonStartSet(0x49,sset); 
+       _setAddSerialized(set1, sset); 
+    
+       /* enumerate all characters that are plausible to be latin letters */ 
+       for(start=0xa0; start<0x2000; ++start) { 
+           if(NormalizerImpl.getDecomposition(start, false, buffer16,0,buffer16.length) > 1 && buffer[0]==0x0049) { 
+               set2.add(start); 
+           } 
+       } 
+    
+       compareUSets(set1, set2, 
+                    "[canon start set of 0049]", "[all c with canon decomp with 0049]", 
+                    false); 
+
+   } 
+
 }
