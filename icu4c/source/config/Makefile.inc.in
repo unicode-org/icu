@@ -2,7 +2,7 @@
 #******************************************************************************
 #   Copyright (C) 1999, International Business Machines
 #   Corporation and others.  All Rights Reserved.
-# $Revision: 1.2 $
+# $Revision: 1.3 $
 #******************************************************************************
 # This Makefile is designed to be included into projects which make use
 # of the ICU.
@@ -52,7 +52,7 @@ host_vendor=@host_vendor@
 host_os=@host_os@
 LIB_M=@LIB_M@
 CPP=@CPP@
-HAVE_INTTYPES_H=@HAVE_INTTYPES_H@
+U_HAVE_INTTYPES_H=@U_HAVE_INTTYPES_H@
 U_IS_BIG_ENDIAN=@U_IS_BIG_ENDIAN@
 HAVE_INT8_T=@HAVE_INT8_T@
 HAVE_UINT8_T=@HAVE_UINT8_T@

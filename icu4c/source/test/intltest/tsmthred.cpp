@@ -16,7 +16,7 @@
 #define POSIX 1
 #endif
 
-#if defined(POSIX)||defined(SOLARIS)||defined(AIX)||defined(HPUX)
+#if defined(POSIX)||defined(U_SOLARIS)||defined(AIX)||defined(HPUX)
 #define HAVE_IMP
 
 #include <pthread.h>
@@ -180,7 +180,7 @@ SimpleThread::sleep(int32_t millis)
 #endif
 
 
-#if defined(POSIX)||defined(SOLARIS)||defined(AIX)||defined(HPUX)
+#if defined(POSIX)||defined(U_SOLARIS)||defined(AIX)||defined(HPUX)
 #define HAVE_IMP
 
 struct PosixThreadImplementation
@@ -227,7 +227,7 @@ void SimpleThread::start()
 
 void SimpleThread::sleep(int32_t millis)
 {
-#ifdef SOLARIS
+#ifdef U_SOLARIS
    sigignore(SIGALRM);
 #endif
 

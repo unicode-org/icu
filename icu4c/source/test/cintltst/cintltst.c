@@ -134,7 +134,7 @@ ctest_getTestDirectory()
 {
     if (_testDirectory == NULL) 
     {
-#if defined(_AIX) || defined(SOLARIS) || defined(LINUX) || defined(HPUX) || defined(POSIX) || defined(OS390)
+#if defined(_AIX) || defined(U_SOLARIS) || defined(U_LINUX) || defined(HPUX) || defined(POSIX) || defined(OS390)
         ctest_setTestDirectory("source|test|testdata|");
 #else
         ctest_setTestDirectory("icu|source|test|testdata|");

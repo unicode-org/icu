@@ -34,7 +34,7 @@
 #undef SIZEOF_WCHAR_T
 
 /* Define if you have the <inttypes.h> header file.  */
-#undef HAVE_INTTYPES_H
+#undef U_HAVE_INTTYPES_H
 
 /* Define if you have the cma library (-lcma).  */
 #undef HAVE_LIBCMA
