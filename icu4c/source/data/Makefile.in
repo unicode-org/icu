@@ -110,17 +110,12 @@ ifneq ($(ENABLE_STATIC),)
 endif
 
 ## Install ICU data.
-install-local:  $(BUILDDIR)/icudata.lst ./icupkg.inc install-convrtrstxt $(OS390INSTALL)
+install-local:  $(BUILDDIR)/icudata.lst ./icupkg.inc $(OS390INSTALL)
 	$(MKINSTALLDIRS) $(TMPDATADIR) $(DESTDIR)$(ICUPKGDATA_DIR)
 	$(PKGDATA_INVOKE) $(PKGDATA) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) -e $(ICUDATA_ENTRY_POINT) -T $(BUILDDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(BUILDDIR)/icudata.lst -I $(DESTDIR)$(ICUPKGDATA_DIR)
 ifneq ($(ENABLE_STATIC),)
 	$(PKGDATA_INVOKE) $(PKGDATA) -m static -e $(ICUDATA_ENTRY_POINT) -T $(BUILDDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(BUILDDIR)/icudata.lst -I $(DESTDIR)$(ICUPKGDATA_DIR)
 endif
-
-install-convrtrstxt: $(DESTDIR)$(pkgsysconfdir)/convrtrs.txt
-$(DESTDIR)$(pkgsysconfdir)/convrtrs.txt: $(UCMSRCDIR)/convrtrs.txt
-	$(MKINSTALLDIRS) $(DESTDIR)$(pkgsysconfdir)
-	$(INSTALL_DATA) $< $@
 
 ####
 ####
