@@ -320,9 +320,12 @@ void Entry::setFactory(Transliterator::Factory factory) {
 }
 
 // UObjectDeleter for Hashtable::setValueDeleter
-static void deleteEntry(void* obj) {
+U_CDECL_BEGIN
+static void U_CALLCONV
+deleteEntry(void* obj) {
     delete (Entry*) obj;
 }
+U_CDECL_END
 
 //----------------------------------------------------------------------
 // class TransliteratorRegistry: Basic public API
@@ -810,10 +813,10 @@ Entry* TransliteratorRegistry::find(const UnicodeString& ID) {
  * 
  *     repeat with t = tt_TT_TTT, tt_TT, tt, and tscript
  *
- *     ss_SS_SSS-t/*
- *     ss_SS-t/*
- *     ss-t/*
- *     sscript-t/*
+ *     ss_SS_SSS-t/ *
+ *     ss_SS-t/ *
+ *     ss-t/ *
+ *     sscript-t/ *
  *
  * Here * matches the first variant listed.
  *
