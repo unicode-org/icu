@@ -599,8 +599,7 @@ ResourceBundle::getDataForTag(const char *tag,
     
     if(fData[i] != 0) {
       const ResourceBundleData* s = 
-	(const ResourceBundleData*)uhash_OLD_get(fData[i], 
-					     UnicodeString(tag, "").hashCode() & 0x7FFFFFFF);
+	(const ResourceBundleData*)uhash_get(fData[i], &UnicodeString(tag, ""));
       if(s != 0) {
 	err = fDataStatus[i];  /* restore the error from the original lookup. */
 	return s;
@@ -952,7 +951,7 @@ ResourceBundle::listInstalledLocales(const UnicodeString& path,
   if(h != 0) {
     UnicodeString ukIndexTag = UnicodeString(kIndexTag,"");
     ResourceBundleData *data = 
-      (ResourceBundleData*) uhash_OLD_get(h, ukIndexTag.hashCode() & 0x7FFFFFFF);
+      (ResourceBundleData*) uhash_get(h, &ukIndexTag);
     if(data != 0 
        && data->getDynamicClassID() == StringList::getStaticClassID()) {
       numInstalledLocales = ((StringList*)data)->fCount;
