@@ -232,7 +232,6 @@ class DefaultCalendarFactory : public ICUResourceBundleFactory {
 
     if(!loc.getKeywordValue("calendar", keyword, sizeof(keyword)-1, status)) {
       // fetch default calendar id
-      const char *defaultCal = NULL;
       char funcEquiv[256];
       ures_getFunctionalEquivalent(funcEquiv, sizeof(funcEquiv)-1,
                                    NULL, "calendar", "calendar",
