@@ -855,11 +855,11 @@ void readFinalZonesAndRules(istream& in) {
 void ZoneInfo::print(ostream& os, const string& id) const {
     // Implement compressed format #2:
 
-    os << "  " << id;
+  os << "  /* " << id << " */ ";
 
     if (aliasTo >= 0) {
         assert(aliases.size() == 0);
-        os << ":int { " << aliasTo << " }" << endl;
+        os << ":int { " << aliasTo << " } "; // No endl - save room for comment.
         return;
     }
 
@@ -911,17 +911,49 @@ void ZoneInfo::print(ostream& os, const string& id) const {
         os << " }" << endl;
     }
 
-    os << "  }" << endl;
+    os << "  } "; // no trailing 'endl', so comments can be placed.
 }
 
 inline ostream&
 operator<<(ostream& os, const ZoneMap& zoneinfo) {
+    int c = 0;
     for (ZoneMapIter it = zoneinfo.begin();
          it != zoneinfo.end();
          ++it) {
+        if(c)  os << ",";
         it->second.print(os, it->first);
+        os << "//Z#" << c++ << endl;
     }
     return os;
+}
+
+// print the string list 
+ostream& printStringList( ostream& os, const ZoneMap& zoneinfo) {
+  int n = 0; // count
+  int col = 0; // column
+  os << " Names {" << endl
+     << "    ";
+  for (ZoneMapIter it = zoneinfo.begin();
+       it != zoneinfo.end();
+       ++it) {
+    if(n) {
+      os << ",";
+      col ++;
+    }
+    const string& id = it->first;
+    os << "\"" << id << "\"";
+    col += id.length() + 2;
+    if(col >= 50) {
+      os << " // " << n << endl
+         << "    ";
+      col = 0;
+    }
+    n++;
+  }
+  os << " // " << (n-1) << endl
+     << " }" << endl;
+
+  return os;
 }
 
 //--------------------------------------------------------------------
@@ -1335,18 +1367,6 @@ int main(int argc, char *argv[]) {
     }
     countryMap[""] = nocountry;
 
-    // NOTE: The following code assumes that genrb reorders the keys
-    // using a strcmp comparison (true in ICU 2.8).
-    
-    // Find the starting positions of zones, rules ("_..."), and
-    // countries ("%...").  There is an empty country "%" that
-    // contains all non-country zones.  That counts as an ordinary
-    // country.  There is also a meta-data entry named "_" which does
-    // NOT count as a rule.
-    int32_t zoneCount=ZONEINFO.size(),
-            ruleCount=finalRules.size() + 1, // include meta '_' for now
-            countryCount=countryMap.size();
-
     // Get local time & year for below
     time_t sec;
     time(&sec);
@@ -1374,27 +1394,42 @@ int main(int argc, char *argv[]) {
              << "//---------------------------------------------------------" << endl
              << endl
              << ICU_TZ_RESOURCE " {" << endl
-             << ZONEINFO;
+             << " Zones:array { " << endl
+             << ZONEINFO // Zones (the actual data)
+             << " }" << endl;
 
+        // Names correspond to the Zones list, used for binary searching.
+        printStringList ( file, ZONEINFO ); // print the Names list
+
+        // Final Rules are used if requested by the zone
+        file << " Rules { " << endl;
         // Emit final rules
+        int frc = 0;
         for(map<string,FinalRule>::iterator i=finalRules.begin();
             i!=finalRules.end(); ++i) {
             const string& id = i->first;
             const FinalRule& r = i->second;
-            file << "  _" << id << ":intvector {" << endl;
+            file << "  " << id << ":intvector {" << endl;
             r.print(file);
-            file << "  }" << endl;
+            file << "  } //_#" << frc++ << endl;
         }
+        file << " }" << endl;
 
-        // Emit country map.  Emitting the string zone IDs results
+        // Emit country (region) map.  Emitting the string zone IDs results
         // in a 188 kb binary resource; emitting the zone index numbers
         // trims this to 171 kb.  More work for the runtime code, but
         // a smaller data footprint.
+        file << " Regions { " << endl;
+        int  rc = 0;
         for (map<string, set<string> >::const_iterator i=countryMap.begin();
              i != countryMap.end(); ++i) {
             string country = i->first;
             const set<string>& zones(i->second);
-            file << "  %" << country << ":intvector { ";
+            file << "  ";
+            if(country[0]==0) {
+              file << "Default";
+            }
+            file << country << ":intvector { ";
             bool first = true;
             for (set<string>::const_iterator j=zones.begin();
                  j != zones.end(); ++j) {
@@ -1406,13 +1441,9 @@ int main(int argc, char *argv[]) {
                 }
                 file << zoneIDs[*j]; // emit the zone's index number
             }
-            file << " }" << endl;
+            file << " } //R#" << rc++ << endl;
         }
-
-        // Emit meta-data.
-        file << "  _:intvector { "
-             << zoneCount << ", " << ruleCount << ", " << countryCount
-             << " } // zone, rule, country counts" << endl;
+        file << " }" << endl;
 
         file << "}" << endl;
     }
