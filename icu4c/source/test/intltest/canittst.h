@@ -30,6 +30,7 @@ public:
     void TestCanonicalIterator(void);
     void TestExhaustive(void);
     void TestBasic();
+    void TestAPI();
     UnicodeString collectionToString(Hashtable *col);
     //static UnicodeString collectionToString(Collection col);
 private:
