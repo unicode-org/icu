@@ -234,7 +234,7 @@ u_printf_char_handler(const u_printf_stream_handler  *handler,
 {
     UChar s[UTF_MAX_CHAR_LENGTH+1];
     int32_t len = 1, written;
-    unsigned char arg = (unsigned char)(args[0].intValue);
+    unsigned char arg = (unsigned char)(args[0].int64Value);
 
     /* convert from default codepage to Unicode */
     ufmt_defaultCPToUnicode((const char *)&arg, 2, s, sizeof(s)/sizeof(UChar));
@@ -342,7 +342,7 @@ u_printf_integer_handler(const u_printf_stream_handler  *handler,
                          const u_printf_spec_info       *info,
                          const ufmt_args                *args)
 {
-    long            num         = (long) (args[0].intValue);
+    int64_t         num        = args[0].int64Value;
     UNumberFormat   *format;
     UChar           result[UPRINTF_BUFFER_SIZE];
     UChar           prefixBuffer[UPRINTF_BUFFER_SIZE];
@@ -353,9 +353,139 @@ u_printf_integer_handler(const u_printf_stream_handler  *handler,
     prefixBuffer[0] = 0;
 
     /* mask off any necessary bits */
-    if(info->fIsShort)
+    if (info->fIsShort)
+        num = (int16_t)num;
+    else if (!info->fIsLongLong)
+        num = (int32_t)num;
+
+    /* get the formatter */
+    format = u_locbund_getNumberFormat(formatBundle, UNUM_DECIMAL);
+
+    /* handle error */
+    if(format == 0)
+        return 0;
+
+    /* set the appropriate flags on the formatter */
+
+    /* set the minimum integer digits */
+    if(info->fPrecision != -1) {
+        /* set the minimum # of digits */
+        minDigits = unum_getAttribute(format, UNUM_MIN_INTEGER_DIGITS);
+        unum_setAttribute(format, UNUM_MIN_INTEGER_DIGITS, info->fPrecision);
+    }
+
+    /* set whether to show the sign */
+    if(info->fShowSign) {
+        u_printf_set_sign(format, info, prefixBuffer, &prefixBufferLen, &status);
+    }
+
+    /* format the number */
+    unum_formatInt64(format, num, result, UPRINTF_BUFFER_SIZE, 0, &status);
+
+    /* restore the number format */
+    if (minDigits != -1) {
+        unum_setAttribute(format, UNUM_MIN_INTEGER_DIGITS, minDigits);
+    }
+
+    if (info->fShowSign) {
+        /* Reset back to original value regardless of what the error was */
+        UErrorCode localStatus = U_ZERO_ERROR;
+        u_printf_reset_sign(format, info, prefixBuffer, &prefixBufferLen, &localStatus);
+    }
+
+    return handler->pad_and_justify(context, info, result, u_strlen(result));
+}
+
+static int32_t
+u_printf_hex_handler(const u_printf_stream_handler  *handler,
+                     void                           *context,
+                     ULocaleBundle                  *formatBundle,
+                     const u_printf_spec_info       *info,
+                     const ufmt_args                *args)
+{
+    int64_t         num        = args[0].int64Value;
+    UChar           result[UPRINTF_BUFFER_SIZE];
+    int32_t         len        = UPRINTF_BUFFER_SIZE;
+
+
+    /* mask off any necessary bits */
+    if (info->fIsShort)
         num &= UINT16_MAX;
-    else if(! info->fIsLong || ! info->fIsLongLong)
+    else if (!info->fIsLongLong)
+        num &= UINT32_MAX;
+
+    /* format the number, preserving the minimum # of digits */
+    ufmt_64tou(result, &len, num, 16,
+        (UBool)(info->fSpec == 0x0078),
+        (info->fPrecision == -1 && info->fZero) ? info->fWidth : info->fPrecision);
+
+    /* convert to alt form, if desired */
+    if(num != 0 && info->fAlt && len < UPRINTF_BUFFER_SIZE - 2) {
+        /* shift the formatted string right by 2 chars */
+        memmove(result + 2, result, len * sizeof(UChar));
+        result[0] = 0x0030;
+        result[1] = info->fSpec;
+        len += 2;
+    }
+
+    return handler->pad_and_justify(context, info, result, len);
+}
+
+static int32_t
+u_printf_octal_handler(const u_printf_stream_handler  *handler,
+                       void                           *context,
+                       ULocaleBundle                  *formatBundle,
+                       const u_printf_spec_info       *info,
+                       const ufmt_args                *args)
+{
+    int64_t         num        = args[0].int64Value;
+    UChar           result[UPRINTF_BUFFER_SIZE];
+    int32_t         len        = UPRINTF_BUFFER_SIZE;
+
+
+    /* mask off any necessary bits */
+    if (info->fIsShort)
+        num &= UINT16_MAX;
+    else if (!info->fIsLongLong)
+        num &= UINT32_MAX;
+
+    /* format the number, preserving the minimum # of digits */
+    ufmt_64tou(result, &len, num, 8,
+        FALSE, /* doesn't matter for octal */
+        info->fPrecision == -1 && info->fZero ? info->fWidth : info->fPrecision);
+
+    /* convert to alt form, if desired */
+    if(info->fAlt && result[0] != 0x0030 && len < UPRINTF_BUFFER_SIZE - 1) {
+        /* shift the formatted string right by 1 char */
+        memmove(result + 1, result, len * sizeof(UChar));
+        result[0] = 0x0030;
+        len += 1;
+    }
+
+    return handler->pad_and_justify(context, info, result, len);
+}
+
+static int32_t
+u_printf_uinteger_handler(const u_printf_stream_handler *handler,
+                          void                          *context,
+                          ULocaleBundle                 *formatBundle,
+                          const u_printf_spec_info      *info,
+                          const ufmt_args               *args)
+{
+    int64_t         num        = args[0].int64Value;
+    UNumberFormat   *format;
+    UChar           result[UPRINTF_BUFFER_SIZE];
+    UChar           prefixBuffer[UPRINTF_BUFFER_SIZE];
+    int32_t         prefixBufferLen = sizeof(prefixBuffer);
+    int32_t         minDigits     = -1;
+    UErrorCode      status        = U_ZERO_ERROR;
+
+    prefixBuffer[0] = 0;
+
+    /* TODO: Fix this once uint64_t can be formatted. */
+    if (info->fIsShort)
+        num &= UINT16_MAX;
+    else if (!info->fIsLongLong)
         num &= UINT32_MAX;
 
     /* get the formatter */
@@ -380,7 +510,7 @@ u_printf_integer_handler(const u_printf_stream_handler  *handler,
     }
 
     /* format the number */
-    unum_format(format, num, result, UPRINTF_BUFFER_SIZE, 0, &status);
+    unum_formatInt64(format, num, result, UPRINTF_BUFFER_SIZE, 0, &status);
 
     /* restore the number format */
     if (minDigits != -1) {
@@ -397,110 +527,19 @@ u_printf_integer_handler(const u_printf_stream_handler  *handler,
 }
 
 static int32_t
-u_printf_hex_handler(const u_printf_stream_handler  *handler,
-                     void                           *context,
-                     ULocaleBundle                  *formatBundle,
-                     const u_printf_spec_info       *info,
-                     const ufmt_args                *args)
-{
-    long            num         = (long) (args[0].intValue);
-    UChar           result[UPRINTF_BUFFER_SIZE];
-    int32_t         len        = UPRINTF_BUFFER_SIZE;
-
-
-    /* mask off any necessary bits */
-    if(info->fIsShort)
-        num &= UINT16_MAX;
-    else if(! info->fIsLong || ! info->fIsLongLong)
-        num &= UINT32_MAX;
-
-    /* format the number, preserving the minimum # of digits */
-    ufmt_ltou(result, &len, num, 16,
-        (UBool)(info->fSpec == 0x0078),
-        (info->fPrecision == -1 && info->fZero) ? info->fWidth : info->fPrecision);
-
-    /* convert to alt form, if desired */
-    if(num != 0 && info->fAlt && len < UPRINTF_BUFFER_SIZE - 2) {
-        /* shift the formatted string right by 2 chars */
-        memmove(result + 2, result, len * sizeof(UChar));
-        result[0] = 0x0030;
-        result[1] = info->fSpec;
-        len += 2;
-    }
-
-    return handler->pad_and_justify(context, info, result, len);
-}
-
-static int32_t
-u_printf_octal_handler(const u_printf_stream_handler  *handler,
-                       void                           *context,
-                       ULocaleBundle                  *formatBundle,
-                       const u_printf_spec_info       *info,
-                       const ufmt_args                *args)
-{
-    long            num         = (long) (args[0].intValue);
-    UChar           result[UPRINTF_BUFFER_SIZE];
-    int32_t         len        = UPRINTF_BUFFER_SIZE;
-
-
-    /* mask off any necessary bits */
-    if(info->fIsShort)
-        num &= UINT16_MAX;
-    else if(! info->fIsLong || ! info->fIsLongLong)
-        num &= UINT32_MAX;
-
-    /* format the number, preserving the minimum # of digits */
-    ufmt_ltou(result, &len, num, 8,
-        FALSE, /* doesn't matter for octal */
-        info->fPrecision == -1 && info->fZero ? info->fWidth : info->fPrecision);
-
-    /* convert to alt form, if desired */
-    if(info->fAlt && result[0] != 0x0030 && len < UPRINTF_BUFFER_SIZE - 1) {
-        /* shift the formatted string right by 1 char */
-        memmove(result + 1, result, len * sizeof(UChar));
-        result[0] = 0x0030;
-        len += 1;
-    }
-
-    return handler->pad_and_justify(context, info, result, len);
-}
-
-static int32_t
-u_printf_uinteger_handler(const u_printf_stream_handler *handler,
-                          void                          *context,
-                          ULocaleBundle                 *formatBundle,
-                          const u_printf_spec_info      *info,
-                          const ufmt_args               *args)
-{
-    u_printf_spec_info uint_info;
-    ufmt_args uint_args;
-
-    memcpy(&uint_info, info, sizeof(u_printf_spec_info));
-    memcpy(&uint_args, args, sizeof(ufmt_args));
-
-    uint_info.fPrecision = 0;
-    uint_info.fAlt  = FALSE;
-
-    /* Get around int32_t limitations */
-    uint_args.doubleValue = ((double) ((uint32_t) (uint_args.intValue)));
-
-    return u_printf_double_handler(handler, context, formatBundle, &uint_info, &uint_args);
-}
-
-static int32_t
 u_printf_pointer_handler(const u_printf_stream_handler  *handler,
                          void                           *context,
                          ULocaleBundle                  *formatBundle,
                          const u_printf_spec_info       *info,
                          const ufmt_args                *args)
 {
-    long            num         = (long) (args[0].intValue);
+    int64_t         num        = args[0].int64Value;
     UChar           result[UPRINTF_BUFFER_SIZE];
     int32_t         len        = UPRINTF_BUFFER_SIZE;
 
 
     /* format the pointer in hex */
-    ufmt_ltou(result, &len, num, 16, TRUE, info->fPrecision);
+    ufmt_64tou(result, &len, num, 16, TRUE, info->fPrecision);
 
     return handler->pad_and_justify(context, info, result, len);
 }
@@ -732,7 +771,7 @@ u_printf_uchar_handler(const u_printf_stream_handler  *handler,
                        const ufmt_args                *args)
 {
     int32_t written = 0;
-    UChar arg = (UChar)(args[0].intValue);
+    UChar arg = (UChar)(args[0].int64Value);
 
 
     /* width = minimum # of characters to write */
@@ -1262,7 +1301,12 @@ u_printf_print_spec(const u_printf_stream_handler *streamHandler,
             case ufmt_char:
             case ufmt_uchar:
             case ufmt_int:
-                args.intValue = va_arg(*ap, int);
+                if (info->fIsLongLong) {
+                    args.int64Value = va_arg(*ap, int64_t);
+                }
+                else {
+                    args.int64Value = va_arg(*ap, int);
+                }
                 break;
             case ufmt_float:
                 args.floatValue = (float) va_arg(*ap, double);
