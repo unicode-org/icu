@@ -89,6 +89,10 @@ SOURCE=.\toolutil.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\ucbuf.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\ucmpwrit.c
 # End Source File
 # Begin Source File
@@ -110,6 +114,10 @@ SOURCE=.\uparse.c
 # Begin Source File
 
 SOURCE=.\toolutil.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucbuf.h
 # End Source File
 # Begin Source File
 

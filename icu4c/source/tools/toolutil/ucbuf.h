@@ -12,6 +12,8 @@
 *
 *   Date        Name        Description
 *   05/10/01    Ram         Creation.
+*
+* This API reads in files and returns UChars
 *******************************************************************************
 */
 
@@ -28,7 +30,6 @@ struct UCHARBUF {
     UChar* buffer;
     UChar* currentPos;
     UChar* bufLimit;
-    int32_t fileLen;
     int32_t remaining;
     FileStream* in;
     UConverter* conv;
@@ -36,29 +37,29 @@ struct UCHARBUF {
 
 typedef struct UCHARBUF UCHARBUF;
 #define U_EOF 0xFFFF
-
-UChar32 
+  
+U_CAPI UChar32 U_EXPORT2
 ucbuf_getc(UCHARBUF* buf,UErrorCode* err);
 
-UChar32 
+U_CAPI UChar32 U_EXPORT2
 ucbuf_getcx(UCHARBUF* buf,UErrorCode* err);
 
-void 
+U_CAPI void U_EXPORT2
 ucbuf_rewind(UCHARBUF* buf);
 
-UCHARBUF* 
+U_CAPI UCHARBUF* U_EXPORT2
 ucbuf_open(FileStream* in,const char* cp,UErrorCode* err);
 
-void 
+U_CAPI void U_EXPORT2
 ucbuf_close(UCHARBUF* buf);
 
-void 
+U_CAPI void U_EXPORT2
 ucbuf_ungetc(UChar32 ungetChar,UCHARBUF* buf);
 
-void 
+U_CAPI void U_EXPORT2
 ucbuf_closebuf(UCHARBUF* buf);
 
-UBool 
+U_CAPI UBool U_EXPORT2
 ucbuf_autodetect(FileStream* in,const char** cp);
 
 #endif

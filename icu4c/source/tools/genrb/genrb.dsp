@@ -125,10 +125,6 @@ SOURCE=.\reslist.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\ucbuf.c
-# End Source File
-# Begin Source File
-
 SOURCE=.\ustr.c
 # End Source File
 # Begin Source File
@@ -154,10 +150,6 @@ SOURCE=.\read.h
 # Begin Source File
 
 SOURCE=.\reslist.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\ucbuf.h
 # End Source File
 # Begin Source File
 
