@@ -372,6 +372,14 @@ SOURCE=.\ucaconf.h
 # Begin Group "collections"
 
 # PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\v32test.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\v32test.h
+# End Source File
 # End Group
 # Begin Group "configuration"
 
@@ -762,10 +770,6 @@ SOURCE=.\testidna.cpp
 
 SOURCE=.\testidna.h
 # End Source File
-# Begin Source File
-
-SOURCE=.\v32test.h
-# End Source File
 # End Group
 # Begin Group "misc"
 
@@ -1027,9 +1031,5 @@ SOURCE=.\unhxtrts.cpp
 SOURCE=.\unhxtrts.h
 # End Source File
 # End Group
-# Begin Source File
-
-SOURCE=.\v32test.cpp
-# End Source File
 # End Target
 # End Project
