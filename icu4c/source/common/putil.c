@@ -40,6 +40,10 @@
 #    include<sys/types.h>
 #endif
 
+#ifdef __QNXNTO__
+#include <sys/neutrino.h>
+#endif
+
 #ifndef PTX
 
 /* Define _XOPEN_SOURCE for Solaris and friends. */
