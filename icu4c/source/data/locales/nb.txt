@@ -50,6 +50,8 @@ nb {
 	"l\u00F8rdag",
     }
     Languages {
+        nb { "bokm\u00E5l" }
+        nn { "nynorsk" }
         no { "norsk" }
     }
     LocaleID { "14" }
