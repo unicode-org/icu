@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2003, International Business Machines
+*   Copyright (C) 1997-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -84,19 +84,19 @@
  *
  */ 
 
-
 #define  MAX_MUTEXES  30
-static char              gMutexesInUse[MAX_MUTEXES];   
-static UBool             gMutexPoolInitialized = FALSE;
 static UMTX              gGlobalMutex          = NULL;
 static UMTX              gIncDecMutex          = NULL;       
+#if (ICU_USE_THREADS == 1)
+static UBool             gMutexPoolInitialized = FALSE;
+static char              gMutexesInUse[MAX_MUTEXES];   
 
+#if defined(WIN32) 
 /*-------------------------------------------------------------
  *
  *   WINDOWS  platform variable declarations
  *
  *-------------------------------------------------------------*/
-#if defined(WIN32) 
 static CRITICAL_SECTION  gMutexes[MAX_MUTEXES];
 static CRITICAL_SECTION  gGlobalWinMutex;
 
@@ -106,13 +106,12 @@ static int32_t gRecursionCount = 0;
 #endif
 
 
+#elif defined(POSIX) 
 /*-------------------------------------------------------------
  *
  *   POSIX   platform variable declarations
  *
  *-------------------------------------------------------------*/
-#elif defined(POSIX) 
-#if (ICU_USE_THREADS == 1)
 static pthread_mutex_t   gMutexes[MAX_MUTEXES] = {
     PTHREAD_MUTEX_INITIALIZER, PTHREAD_MUTEX_INITIALIZER, PTHREAD_MUTEX_INITIALIZER,
     PTHREAD_MUTEX_INITIALIZER, PTHREAD_MUTEX_INITIALIZER, PTHREAD_MUTEX_INITIALIZER,
@@ -122,7 +121,13 @@ static pthread_mutex_t   gMutexes[MAX_MUTEXES] = {
     PTHREAD_MUTEX_INITIALIZER, PTHREAD_MUTEX_INITIALIZER, PTHREAD_MUTEX_INITIALIZER,
     PTHREAD_MUTEX_INITIALIZER, PTHREAD_MUTEX_INITIALIZER
 };
-#else
+
+#else 
+/*-------------------------------------------------------------
+ *
+ *   UNKNOWN   platform  declarations
+ *
+ *-------------------------------------------------------------*/
 static void *gMutexes[MAX_MUTEXES] = {
 	NULL, NULL, NULL,
 	NULL, NULL, NULL,
@@ -131,15 +136,7 @@ static void *gMutexes[MAX_MUTEXES] = {
 	NULL, NULL, NULL,
 	NULL, NULL, NULL,
 	NULL, NULL };
-#endif  
 
-
-/*-------------------------------------------------------------
- *
- *   UNKNOWN   platform  declarations
- *
- *-------------------------------------------------------------*/
-#else 
 /* Unknown platform.  OK so long as ICU_USE_THREAD is not set.  
                       Note that user can still set mutex functions at run time,
                       and that the global mutex variable is still needed in that case. */
@@ -147,6 +144,7 @@ static void *gMutexes[MAX_MUTEXES] = {
 #error no ICU mutex implementation for this platform
 #endif
 #endif
+#endif /* ICU_USE_THREADS==1 */
 
 
 
@@ -193,10 +191,10 @@ umtx_lock(UMTX *mutex)
     }
 
 #if defined(WIN32) && defined(_DEBUG) && (ICU_USE_THREADS==1)
-        if (mutex == &gGlobalMutex) {         /* Detect Reentrant locking of the global mutex.      */
-            gRecursionCount++;                /* Recursion causes deadlocks on Unixes.              */
-            U_ASSERT(gRecursionCount == 1);   /* Detection works on Windows.  Debug problems there. */
-        }
+    if (mutex == &gGlobalMutex) {         /* Detect Reentrant locking of the global mutex.      */
+        gRecursionCount++;                /* Recursion causes deadlocks on Unixes.              */
+        U_ASSERT(gRecursionCount == 1);   /* Detection works on Windows.  Debug problems there. */
+    }
 #endif /*_DEBUG*/
 }
 
@@ -247,8 +245,6 @@ umtx_unlock(UMTX* mutex)
  *                      without the use of another mutex.
  */
 static void initGlobalMutex() {
-    int i;
-
     /*
      * If User Supplied mutex functions are in use
      *    init the icu global mutex using them.  
@@ -273,22 +269,24 @@ static void initGlobalMutex() {
      *  for Windows, init the pool of critical sections that we
      *    will use as needed for ICU mutexes.
      */
-    #if defined (WIN32)
+#if defined (WIN32)
     if (gMutexPoolInitialized == FALSE) {
+        int i;
         for (i=0; i<MAX_MUTEXES; i++) {
             InitializeCriticalSection(&gMutexes[i]);
         }
+        gMutexPoolInitialized = TRUE;
     }
-    gMutexPoolInitialized = TRUE;
 #elif defined (POSIX)
     /*  TODO:  experimental code.  Shouldn't need to explicitly init the mutexes. */
     if (gMutexPoolInitialized == FALSE) {
+        int i;
         for (i=0; i<MAX_MUTEXES; i++) {
             pthread_mutex_init(&gMutexes[i], NULL);
         }
+        gMutexPoolInitialized = TRUE;
     }
-    gMutexPoolInitialized = TRUE;
-    #endif 
+#endif 
 
     /*
      * for both Windows & POSIX, the first mutex in the array is used
@@ -298,10 +296,10 @@ static void initGlobalMutex() {
     gMutexesInUse[0] = 1;
 
 #else  /* ICU_USE_THREADS */
-        gGlobalMutex = &gGlobalMutex;  /* With no threads, we must still set the mutex to
-                                        * some non-null value to make the rest of the
-                                        *   (not ifdefed) mutex code think that it is initialized.
-                                        */
+    gGlobalMutex = &gGlobalMutex;  /* With no threads, we must still set the mutex to
+                                    * some non-null value to make the rest of the
+                                    *   (not ifdefed) mutex code think that it is initialized.
+                                    */
 #endif /* ICU_USE_THREADS */
 }
 
@@ -315,7 +313,6 @@ umtx_init(UMTX *mutex)
     if (mutex == NULL || mutex == &gGlobalMutex) {
         initGlobalMutex();
     } else {
-        int i;
         umtx_lock(NULL);
         if (*mutex != NULL) {
             /* Another thread initialized this mutex first. */
@@ -330,15 +327,19 @@ umtx_init(UMTX *mutex)
             umtx_unlock(NULL);
             return;
         }
-
-        /*  Search through our pool of pre-allocated mutexes for one that is not
-         *  already in use.    */
-        for (i=0; i<MAX_MUTEXES; i++) {
-            if (gMutexesInUse[i] == 0) {
-                gMutexesInUse[i] = 1;
-                *mutex = &gMutexes[i];
-                break;
+        else {
+#if (ICU_USE_THREADS == 1)
+            /*  Search through our pool of pre-allocated mutexes for one that is not
+            *  already in use.    */
+            int i;
+            for (i=0; i<MAX_MUTEXES; i++) {
+                if (gMutexesInUse[i] == 0) {
+                    gMutexesInUse[i] = 1;
+                    *mutex = &gMutexes[i];
+                    break;
+                }
             }
+#endif
         }
         umtx_unlock(NULL);
 
@@ -374,7 +375,9 @@ umtx_destroy(UMTX *mutex) {
     if (pMutexDestroyFn != NULL) {
         /* Mutexes are being managed by the app.  Call back to it for the destroy. */
         (*pMutexDestroyFn)(gMutexContext, mutex);
-    } else {
+    }
+    else {
+#if (ICU_USE_THREADS == 1)
         /* Return this mutex to the pool of available mutexes, if it came from the
          *  pool in the first place.
          */
@@ -385,6 +388,7 @@ umtx_destroy(UMTX *mutex) {
                 break;
             }
         }
+#endif
     }
 
     *mutex = NULL;
@@ -520,7 +524,6 @@ u_setAtomicIncDecFunctions(const void *context, UMtxAtomicFn *ip, UMtxAtomicFn *
  *      Destroy the global mutex(es), and reset the mutex function callback pointers.
  */
 U_CFUNC UBool umtx_cleanup(void) {
-    int i;
     umtx_destroy(NULL);
     pMutexInitFn    = NULL;
     pMutexDestroyFn = NULL;
@@ -528,25 +531,22 @@ U_CFUNC UBool umtx_cleanup(void) {
     pMutexUnlockFn  = NULL;
     gMutexContext   = NULL;
     gGlobalMutex    = NULL;
-    pIncFn         = NULL;
-    pDecFn         = NULL;
+    pIncFn          = NULL;
+    pDecFn          = NULL;
     gIncDecMutex    = NULL;
 
-#if defined (WIN32)
+#if (ICU_USE_THREADS == 1)
     if (gMutexPoolInitialized) {
+        int i;
         for (i=0; i<MAX_MUTEXES; i++) {
-            DeleteCriticalSection(&gMutexes[i]);
-            gMutexesInUse[i] = 0;
-        }
-    }
-    gMutexPoolInitialized = FALSE;
-
+            if (gMutexesInUse[i]) {
+#if defined (WIN32)
+                DeleteCriticalSection(&gMutexes[i]);
 #elif defined (POSIX)
-    gIncDecMutex    = NULL;
-    for (i=0; i<MAX_MUTEXES; i++) {
-        if (gMutexesInUse[i]) {
-            pthread_mutex_destroy(&gMutexes[i]);
-            gMutexesInUse[i] = 0;
+                pthread_mutex_destroy(&gMutexes[i]);
+#endif
+                gMutexesInUse[i] = 0;
+            }
         }
     }
     gMutexPoolInitialized = FALSE;
