@@ -703,7 +703,7 @@ public final class RuleBasedCollator extends Collator
      *         in the UCA.
      * @exception ParseException thrown when argument rules have an
      *            invalid syntax. IOException
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     public UnicodeSet getTailoredSet()
     {

@@ -2122,7 +2122,7 @@ public final class UTF16
      *               against the 'number' parameter.
      * @return boolean value for whether the string contains more Unicode code 
      *         points than 'number'. 
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     public static boolean hasMoreCodePointsThan(String source, int number)
     {
@@ -2190,7 +2190,7 @@ public final class UTF16
      * @return boolean value for whether the string contains more Unicode code 
      *         points than 'number'.
      * @exception IndexOutOfBoundsException thrown when limit &lt; start
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     public static boolean hasMoreCodePointsThan(char source[], int start, 
                                                 int limit, int number)
@@ -2258,7 +2258,7 @@ public final class UTF16
      *               against the 'number' parameter.
      * @return boolean value for whether the string buffer contains more 
      *         Unicode code points than 'number'.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     public static boolean hasMoreCodePointsThan(StringBuffer source, int number)
     {
@@ -2399,7 +2399,7 @@ public final class UTF16
          * @see #FOLD_CASE_DEFAULT
          * @see #FOLD_CASE_EXCLUDE_SPECIAL_I
          * @throws IllegalArgumentException if foldcaseoption is out of range
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public StringComparator(boolean codepointcompare, 
                                 boolean ignorecase,
@@ -2422,7 +2422,7 @@ public final class UTF16
          * mappings defined in Unicode data file CaseFolding.txt, before 
          * comparison. 
          * </p>
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int FOLD_CASE_DEFAULT = 0;
         /**
@@ -2440,7 +2440,7 @@ public final class UTF16
          * <p>Unicode 3.2 CaseFolding.txt instead contains mappings marked with 
          * 'T' that are to be excluded for default mappings and included for 
          * the Turkic-specific mappings.</p>
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public static final int FOLD_CASE_EXCLUDE_SPECIAL_I = 1;
         
@@ -2452,7 +2452,7 @@ public final class UTF16
          * Sets the comparison mode to code point compare if flag is true.
          * Otherwise comparison mode is set to code unit compare
          * @param flag true for code point compare, false for code unit compare
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public void setCodePointCompare(boolean flag)
         {
@@ -2475,7 +2475,7 @@ public final class UTF16
          *        is ignored.
          * @see #FOLD_CASE_DEFAULT
          * @see #FOLD_CASE_EXCLUDE_SPECIAL_I
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public void setIgnoreCase(boolean ignorecase, int foldcaseoption) 
         {
@@ -2492,7 +2492,7 @@ public final class UTF16
         /**
          * Checks if the comparison mode is code point compare.
          * @return true for code point compare, false for code unit compare
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public boolean getCodePointCompare()
         {
@@ -2503,7 +2503,7 @@ public final class UTF16
          * Checks if Comparator is in the case insensitive mode.
          * @return true if Comparator performs case insensitive comparison, 
          *         false otherwise
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public boolean getIgnoreCase() 
         {
@@ -2516,7 +2516,7 @@ public final class UTF16
          * @return either FOLD_CASE_DEFAULT or FOLD_CASE_EXCLUDE_SPECIAL_I
          * @see #FOLD_CASE_DEFAULT
          * @see #FOLD_CASE_EXCLUDE_SPECIAL_I
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public int getIgnoreCaseOption() 
         {
@@ -2534,7 +2534,7 @@ public final class UTF16
          *         Otherwise if a > b, a positive value is returned.
          * @exception ClassCastException thrown when either a or b is not a 
          *            String object
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public int compare(Object a, Object b) 
         {

@@ -1466,7 +1466,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * East Asian Width constants.
      * @see UProperty#EAST_ASIAN_WIDTH
      * @see UCharacter#getIntPropertyValue
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     public static interface EastAsianWidth 
     {

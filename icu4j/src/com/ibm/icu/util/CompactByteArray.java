@@ -26,20 +26,20 @@ import com.ibm.icu.impl.Utility;
  *
  * @see                CompactCharArray
  * @author             Helena Shih
- * @draft ICU 2.4
+ * @internal
  */
 public final class CompactByteArray implements Cloneable {
 
     /**
      * The total number of Unicode characters.
-     * @draft ICU 2.4
+     * @internal
      */
     public static  final int UNICODECOUNT =65536;
 
     /**
      * Default constructor for CompactByteArray, the default value of the
      * compact array is 0.
-     * @draft ICU 2.4
+     * @internal
      */
     public CompactByteArray()
     {
@@ -49,7 +49,7 @@ public final class CompactByteArray implements Cloneable {
     /**
      * Constructor for CompactByteArray.
      * @param defaultValue the default value of the compact array.
-     * @draft ICU 2.4
+     * @internal
      */
     public CompactByteArray(byte defaultValue)
     {
@@ -74,7 +74,7 @@ public final class CompactByteArray implements Cloneable {
      * @param indexArray the indicies of the compact array.
      * @param newValues the values of the compact array.
      * @exception IllegalArgumentException If the index is out of range.
-     * @draft ICU 2.4
+     * @internal
      */
     public CompactByteArray(char indexArray[],
                             byte newValues[])
@@ -100,7 +100,7 @@ public final class CompactByteArray implements Cloneable {
      *
      * @throws IllegalArgumentException if the index or value array is
      *          the wrong size.
-     * @draft ICU 2.4
+     * @internal
      */
     public CompactByteArray(String indexArray,
                             String valueArray)
@@ -113,7 +113,7 @@ public final class CompactByteArray implements Cloneable {
      * Get the mapped value of a Unicode character.
      * @param index the character to get the mapped value with
      * @return the mapped value of the given character
-     * @draft ICU 2.4
+     * @internal
      */
     public byte elementAt(char index)
     {
@@ -126,7 +126,7 @@ public final class CompactByteArray implements Cloneable {
      * Set automatically expands the array if it is compacted.
      * @param index the character to set the mapped value with
      * @param value the new mapped value
-     * @draft ICU 2.4
+     * @internal
      */
     public void setElementAt(char index, byte value)
     {
@@ -142,7 +142,7 @@ public final class CompactByteArray implements Cloneable {
      * @param start the starting offset of the range
      * @param end the ending offset of the range
      * @param value the new mapped value
-     * @draft ICU 2.4
+     * @internal
      */
     public void setElementAt(char start, char end, byte value)
     {
@@ -157,7 +157,7 @@ public final class CompactByteArray implements Cloneable {
     }
     /**
      * Compact the array.
-     * @draft ICU 2.4
+     * @internal
      */
     public void compact() {
         compact(false);
@@ -165,7 +165,7 @@ public final class CompactByteArray implements Cloneable {
 
     /**
      * Compact the array.
-     * @draft ICU 2.4
+     * @internal
      */
     public void compact(boolean exhaustive)
     {
@@ -257,7 +257,7 @@ public final class CompactByteArray implements Cloneable {
     /**
      * For internal use only.  Do not modify the result, the behavior of
      * modified results are undefined.
-     * @draft ICU 2.4
+     * @internal
      */
     public char[] getIndexArray()
     {
@@ -267,7 +267,7 @@ public final class CompactByteArray implements Cloneable {
     /**
      * For internal use only.  Do not modify the result, the behavior of
      * modified results are undefined.
-     * @draft ICU 2.4
+     * @internal
      */
     public byte[] getValueArray()
     {
@@ -276,7 +276,7 @@ public final class CompactByteArray implements Cloneable {
 
     /**
      * Overrides Cloneable
-     * @draft ICU 2.4
+     * @internal
      */
     public Object clone()
     {
@@ -296,7 +296,7 @@ public final class CompactByteArray implements Cloneable {
      * @param obj the compact array object to be compared with this.
      * @return true if the current compact array object is the same
      * as the compact array object obj; false otherwise.
-     * @draft ICU 2.4
+     * @internal
      */
     public boolean equals(Object obj) {
         if (obj == null) return false;
@@ -315,7 +315,7 @@ public final class CompactByteArray implements Cloneable {
 
     /**
      * Generates the hash code for the compact array object
-     * @draft ICU 2.4
+     * @internal
      */
     public int hashCode() {
         int result = 0;

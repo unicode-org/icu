@@ -81,7 +81,7 @@ public interface RangeValueIterator
         
         /**
          * Empty default constructor to make javadoc happy
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         public Element() 
         {
