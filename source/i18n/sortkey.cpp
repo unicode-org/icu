@@ -22,6 +22,9 @@
 //  7/31/98      erm           hashCode: minimum inc should be 2 not 1,
 //                             Cleaned up operator=
 // 07/12/99      helena        HPUX 11 CC port.
+// 03/06/01      synwee        Modified compareTo, to handle the result of  
+//                             2 string similar in contents, but one is longer
+//                             than the other
 //===============================================================================
 
 #ifndef _SORTKEY
@@ -184,39 +187,78 @@ CollationKey::operator=(const CollationKey& other)
 Collator::EComparisonResult
 CollationKey::compareTo(const CollationKey& target) const
 {
-    int count = (this->fCount < target.fCount) ? this->fCount : target.fCount;
+  uint8_t *src = this->fBytes;
+  uint8_t *tgt = target.fBytes;
 
-    if (count == 0)
-    {
-        // If count is 0, at least one of the keys is empty.
-        // An empty key is always LESS than a non-empty one
-        // and EQUAL to another empty
-        if (this->fCount < target.fCount)
-        {
-            return Collator::LESS;
-        }
-
-        if (this->fCount > target.fCount)
-        {
-            return Collator::GREATER;
-        }
-
-        return Collator::EQUAL;
-    }
-
-    int result = uprv_memcmp(this->fBytes, target.fBytes, count);
-
-    if (result < 0)
-    {
-        return Collator::LESS;
-    }
-
-    if (result > 0)
-    {
-        return Collator::GREATER;
-    }
-
+  // are we comparing the same string
+  if (src == tgt)
     return Collator::EQUAL;
+
+  /*
+  int count = (this->fCount < target.fCount) ? this->fCount : target.fCount;
+  if (count == 0)
+  {
+    // If count is 0, at least one of the keys is empty.
+    // An empty key is always LESS than a non-empty one
+    // and EQUAL to another empty
+    if (this->fCount < target.fCount)
+    {
+      return Collator::LESS;
+    }
+
+    if (this->fCount > target.fCount)
+    {
+      return Collator::GREATER;
+    }
+    return Collator::EQUAL;
+  }
+  */
+
+  int                         minLength;
+  Collator::EComparisonResult result;
+
+  // are we comparing different lengths?
+  if (this->fCount != target.fCount) {
+    if (this->fCount < target.fCount) {
+      minLength = this->fCount;
+      result    = Collator::LESS;
+    } 
+    else {
+      minLength = target.fCount;
+      result    = Collator::GREATER;
+    }
+  } 
+  else {
+    minLength = target.fCount;
+    result    = Collator::EQUAL;
+  }
+
+  if (minLength > 0) {
+    uint8_t diff;
+    do {
+      diff = *(src ++) - *(tgt ++);
+      if (diff > 0) {
+        return Collator::GREATER;
+      }
+      else if (diff < 0) {
+        return Collator::LESS;
+      }
+    } while (-- minLength > 0);
+  }
+
+  return result;
+  /*
+  if (result < 0)
+  {
+    return Collator::LESS;
+  }
+
+  if (result > 0)
+  {
+    return Collator::GREATER;
+  }
+  return Collator::EQUAL;
+  */
 }
 
 CollationKey&
