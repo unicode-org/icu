@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCollationData.java,v $ 
-* $Date: 2002/06/15 02:47:12 $ 
-* $Revision: 1.19 $
+* $Date: 2002/06/15 03:15:55 $ 
+* $Revision: 1.20 $
 *
 *******************************************************************************
 */
@@ -1514,7 +1514,6 @@ F900..FAFF; CJK Compatibility Ideographs
               || collator.getPrimary(lastCE) == 0 && collator.getPrimary(ce) != 0
               || collator.getSecondary(lastCE) == 0 && collator.getSecondary(ce) != 0
               || collator.getTertiary(lastCE) == 0 && collator.getTertiary(ce) != 0) {
-                firstTime = false;
                 if (collator.getPrimary(ce) != 0) {
                     reset = "[top]";
                 } else {
@@ -1587,18 +1586,20 @@ F900..FAFF; CJK Compatibility Ideographs
                 */
                 
                 if (xmlReset == 2) {
-                    log.print("<reset>" + Utility.quoteXML(reset) + "</reset>");
+                    log.print("<reset/>" + Utility.quoteXML(reset));
+                }
+                if (!firstTime) {
+                    log.print("  <" + XML_RELATION_NAMES[relation] + "/>");
+                    log.print(Utility.quoteXML(chr));
+                    //log.print("</" + XML_RELATION_NAMES[relation] + ">");
                 }
                 if (expansion.length() > 0) {
-                    log.print("<x>" + Utility.quoteXML(expansion) + "</x>");
+                    log.print("<x/>" + Utility.quoteXML(expansion));
                 }
-                log.print("  <" + XML_RELATION_NAMES[relation] + ">");
-                log.print(Utility.quoteXML(chr));
-                log.print("</" + XML_RELATION_NAMES[relation] + ">");
             } else {
                 if (reset.length() != 0) log.println("& " + reset 
                 	+ (resetComment.length() != 0 ? "\t\t# " + resetComment : ""));
-                log.print(RELATION_NAMES[relation] + " " + quoteOperand(chr));
+                if (!firstTime) log.print(RELATION_NAMES[relation] + " " + quoteOperand(chr));
                 if (expansion.length() > 0) log.print(" / " + quoteOperand(expansion));
                 if (option == WITH_NAMES) {
                     log.print("\t# " 
@@ -1608,6 +1609,7 @@ F900..FAFF; CJK Compatibility Ideographs
                 }
                 log.println();
             }
+            firstTime = false;
         }
         // log.println("& [top]"); // RESET
         if (option == IN_XML) log.println("</uca>");
@@ -1616,7 +1618,8 @@ F900..FAFF; CJK Compatibility Ideographs
         Utility.fixDot();
     }
     
-    static long getPrimary(int[] ces) {
+    static long getPrimary(int[] ces, int len) {
+        if (len <= 0) return 0;
     	if (UCA.isImplicitLeadCE(ces[0])) {
     		return (UCA.getPrimary(ces[0]) << 16) + UCA.getPrimary(ces[1]);
     	} else {
@@ -1624,7 +1627,8 @@ F900..FAFF; CJK Compatibility Ideographs
     	}
     }
     
-    static long getSecondary(int[] ces) {
+    static long getSecondary(int[] ces, int len) {
+        if (len <= 0) return 0;
     	if (UCA.isImplicitLeadCE(ces[0])) {
     		return (UCA.getSecondary(ces[0]) << 16) + UCA.getSecondary(ces[1]);
     	} else {
@@ -1632,7 +1636,8 @@ F900..FAFF; CJK Compatibility Ideographs
     	}
     }
     
-    static long getTertiary(int[] ces) {
+    static long getTertiary(int[] ces, int len) {
+        if (len <= 0) return 0;
     	if (UCA.isImplicitLeadCE(ces[0])) {
     		return (UCA.getTertiary(ces[0]) << 16) + UCA.getTertiary(ces[1]);
     	} else {
@@ -1649,11 +1654,11 @@ F900..FAFF; CJK Compatibility Ideographs
 	static int getStrengthDifference(int[] ces, int len, int[] lastCes, int lastLen) {
 		
         int relation = QUARTERNARY_DIFF;
-        if (getPrimary(ces) != getPrimary(lastCes)) {
+        if (getPrimary(ces, len) != getPrimary(lastCes, lastLen)) {
             relation = PRIMARY_DIFF;
-        } else if (getSecondary(ces) != getSecondary(lastCes)) {
+        } else if (getSecondary(ces, len) != getSecondary(lastCes, lastLen)) {
             relation = SECONDARY_DIFF;
-        } else if (getTertiary(ces) != getTertiary(lastCes)) {
+        } else if (getTertiary(ces, len) != getTertiary(lastCes, lastLen)) {
             relation = TERTIARY_DIFF;
         } else if (len > lastLen) {
             relation = TERTIARY_DIFF; // HACK
