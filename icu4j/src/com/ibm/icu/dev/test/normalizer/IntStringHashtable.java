@@ -3,12 +3,17 @@ package com.ibm.icu.dev.test.normalizer;
 import java.util.Hashtable;
 
 /**
+ *******************************************************************************
+ * Copyright (C) 1998-2003, International Business Machines Corporation and    *
+ * Unicode, Inc. All Rights Reserved.                                          *
+ *******************************************************************************
+ *
  * Integer-String hash table. Uses Java Hashtable for now.
  * @author Mark Davis
  */
  
 public class IntStringHashtable {
-    static final String copyright = "Copyright (C) 1998-1999 Unicode, Inc.";
+    static final String copyright = "Copyright (C) 1998-2003 International Business Machines Corporation and Unicode, Inc.";
     
     public IntStringHashtable (String defaultValue) {
         this.defaultValue = defaultValue;

@@ -3,13 +3,18 @@ package com.ibm.icu.dev.test.normalizer;
 import java.util.Hashtable;
 
 /**
+ *******************************************************************************
+ * Copyright (C) 2002-2003, International Business Machines Corporation and    *
+ * Unicode, Inc. All Rights Reserved.                                          *
+ *******************************************************************************
+ *
  * Hashtable storing ints addressed by longs. Used
  * for storing of composition data. Uses Java Hashtable
  * for now.
  * @author Vladimir Weinstein
  */
 public class LongHashtable {
-    static final String copyright = "Copyright (C) 2002 Unicode, Inc.";
+    static final String copyright = "Copyright (C) 2002-2003 International Business Machines Corporation and Unicode, Inc.";
     
     public LongHashtable (int defaultValue) {
         this.defaultValue = defaultValue;
