@@ -165,7 +165,7 @@ public class UOption {
                         }
                         if(option==null) {
                             /* no option matches */
-                            return -i;
+                            syntaxError("Unknown option " + argv[i]);
                         }
                         option.doesOccur=true;
 
@@ -176,7 +176,7 @@ public class UOption {
                                 option.value=argv[++i];
                             } else if(option.hasArg==REQUIRES_ARG) {
                                 /* there is no argument, but one is required: return with error */
-                                return -i;
+                                syntaxError("Option " + argv[i] + " lacks required argument");
                             }
                         }
                     }
@@ -193,7 +193,7 @@ public class UOption {
                         }
                         if(option==null) {
                             /* no option matches */
-                            return -i;
+                            syntaxError("Unknown option '" + c + "' in " + argv[i]);
                         }
                         option.doesOccur=true;
 
@@ -211,7 +211,7 @@ public class UOption {
                                 break;
                             } else if(option.hasArg==REQUIRES_ARG) {
                                 /* there is no argument, but one is required: return with error */
-                                return -i;
+                                syntaxError("Option -" + c + " lacks required argument");
                             }
                         }
 
@@ -225,7 +225,7 @@ public class UOption {
 
                 if(option!=null && option.optionFn!=null && option.optionFn.handle(option)<0) {
                     /* the option function was called and returned an error */
-                    return -i;
+                    syntaxError("Option handler failed for " + argv[i]);
                 }
 
                 /* go to next argv[] */
@@ -255,5 +255,12 @@ public class UOption {
         longName = aLongName;
         shortName = aShortName;
         hasArg = hasArgument;
+    }
+
+    /**
+     * Throw an exception indicating a syntax error.
+     */
+    private static void syntaxError(String message) {
+        throw new IllegalArgumentException("Error in argument list: " + message);
     }
 }
