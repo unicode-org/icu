@@ -57,9 +57,6 @@ Package=<4>
     Project_Dep_Name genprops
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name makedata
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name ustdio
     End Project Dependency
     Begin Project Dependency
@@ -70,6 +67,9 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name pkgdata
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name makedata
     End Project Dependency
 }}}
 
@@ -402,7 +402,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "makedata"=..\tools\makedata.dsp - Package Owner=<4>
+Project: "makedata"=..\data\build\makedata.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -420,13 +420,16 @@ Package=<4>
     Project_Dep_Name gencnval
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name gencol
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name gennames
     End Project Dependency
     Begin Project Dependency
+    Project_Dep_Name genprops
+    End Project Dependency
+    Begin Project Dependency
     Project_Dep_Name genrb
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name gentest
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name gentz
@@ -435,19 +438,13 @@ Package=<4>
     Project_Dep_Name makeconv
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name gentest
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name common
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name genprops
+    Project_Dep_Name pkgdata
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name toolutil
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name pkgdata
+    Project_Dep_Name ustdio
     End Project Dependency
 }}}
 
@@ -487,9 +484,6 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name i18n
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name makedata
     End Project Dependency
 }}}
 
