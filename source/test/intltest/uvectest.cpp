@@ -102,10 +102,10 @@ void UVectorTest::UVector_API() {
 
     status = U_ZERO_ERROR;
     a = new UVector(status);
-    a->sortedInsert(10, UVectorTest_compareInt32, status);
-    a->sortedInsert(20, UVectorTest_compareInt32, status);
-    a->sortedInsert(30, UVectorTest_compareInt32, status);
-    a->sortedInsert(15, UVectorTest_compareInt32, status);
+    a->sortedInsert((int32_t)10, UVectorTest_compareInt32, status);
+    a->sortedInsert((int32_t)20, UVectorTest_compareInt32, status);
+    a->sortedInsert((int32_t)30, UVectorTest_compareInt32, status);
+    a->sortedInsert((int32_t)15, UVectorTest_compareInt32, status);
     TEST_CHECK_STATUS(status);
     TEST_ASSERT(a->elementAti(0) == 10);
     TEST_ASSERT(a->elementAti(1) == 15);
