@@ -55,6 +55,7 @@
 */
 
 #include "ucol_imp.h"
+#include "uresimp.h"
 #include "unicode/tblcoll.h"
 #include "unicode/coleitr.h"
 #include "uhash.h"
@@ -724,7 +725,8 @@ RuleBasedCollator::RuleBasedCollator(const Locale& desiredLocale,
   {
     status = U_ZERO_ERROR;
 
-    setUCollator(ResourceBundle::kDefaultFilename, status);
+    // TODO: 
+    setUCollator(kRootLocaleName, status);
     if (U_FAILURE(status))
     {
       status = U_ZERO_ERROR;

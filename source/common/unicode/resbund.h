@@ -379,22 +379,7 @@ private:
     UResourceBundle *resource;
     void constructForLocale(const UnicodeString& path, const Locale& locale, UErrorCode& error);
     void constructForLocale(const wchar_t* path, const Locale& locale, UErrorCode& error);
-
-    friend class RuleBasedCollator;
-
-    /**
-     * This constructor is used by Collation to load a resource bundle from a specific
-     * file, without trying other files. This is used by the Collation caching
-     * mechanism.
-     */
-    ResourceBundle( const UnicodeString&    path,
-                    const char *localeName,
-                    UErrorCode&              status);
-
-private:
     Locale                      fRealLocale;
-
-    static const char*          kDefaultFilename;
 };
 
 #endif
