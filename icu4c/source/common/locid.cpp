@@ -29,8 +29,6 @@
 */
 
 
-
-#include "uhash.h"
 #include "unicode/locid.h"
 #include "unicode/uloc.h"
 #include "unicode/resbund.h"
@@ -39,6 +37,10 @@
 #include "unicode/unicode.h"
 #include "cmemory.h"
 #include "cstring.h"
+
+#ifdef ICU_LOCID_USE_DEPRECATES
+#include "uhash.h"
+#endif
 
 /**
  * static variables
@@ -84,6 +86,7 @@ const Locale  Locale::US        ("en", "US");
 const Locale  Locale::CANADA    ("en", "CA");
 const Locale  Locale::CANADA_FRENCH("fr", "CA");
 
+#ifdef ICU_LOCID_USE_DEPRECATES
 
 /**
  * Table mapping ISO country codes to the ISO language codes of the languages spoken
@@ -113,6 +116,7 @@ const UnicodeString Locale::compressedCtry2LangMapping(
     "TWzhTZenswUAukruUGenswUMenUSenesUYesUZuzruVAlaitVCenVEesVGenVIenVNvizhfr"
     "VUenfrbiWFfrWSensmYEarYTfrmgswYUsrshmkhuZAafenZMenZRfrswZWensn",
     "");
+#endif
 
 /*Used for stack allocation of temporary buffers
  *can be tweaked  for speed and likelihood of resorting to heap allocation*/ 
@@ -848,7 +852,6 @@ Locale::getISOLanguages(int32_t& count)
   count = isoLanguagesCount;
   return isoLanguages;
 }
-#endif
 
 /**
  * Given an ISO country code, returns an array of Strings containing the ISO
@@ -914,6 +917,7 @@ Locale::getLanguagesForCountry(const UnicodeString& country, int32_t& count)
 
     return result;
 }
+#endif
 
 
 // ================= privates =====================================
