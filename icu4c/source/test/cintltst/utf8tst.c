@@ -314,7 +314,7 @@ void TestFwdBack(){
     static uint8_t input[]={0x61, 0xF0, 0x90, 0x90, 0x81, 0xff, 0x62, 0xc0, 0x80, 0x7f, 0x8f, 0xc0, 0x63, 0x81, 0x90, 0x90, 0xF0, 0x00};
     static uint16_t fwd_unsafe[] ={1, 5, 6, 7,  9, 10, 11, 13, 14, 15, 16,  20, };
     static uint16_t fwd_safe[]   ={1, 5, 6, 7, 9, 10, 11,  12, 13, 14, 15, 16, 17, 18};
-    static uint16_t back_unsafe[]={17, 16, 12, 11, 9, 7, 6, 5, 1};
+    static uint16_t back_unsafe[]={17, 16, 12, 11, 9, 7, 6, 5, 1, 0};
     static uint16_t back_safe[]  ={17, 16, 15, 14, 13, 12, 11, 10, 9, 7, 6, 5, 1, 0};
 
     static uint16_t Nvalue[]= {0, 1, 2, 3, 1, 2, 1, 5};
