@@ -219,7 +219,8 @@ U_CAPI UResourceBundle*  U_EXPORT2 ures_open(const char*    path,   /* NULL if n
 
 
 /** This function does not care what kind of localeID is passed in. It simply opens a bundle with 
- *  that name                                                                                     
+ *  that name. Fallback mechanism is disabled for the new bundle. If the requested bundle contains
+ *  an %%ALIAS directive, the results are undefined.
  * @param path  : string containing the full path pointing to the directory
  *                where the resources reside followed by the package name
  *                e.g. "/usr/resource/my_app/resources/guimessages" on a Unix system.
