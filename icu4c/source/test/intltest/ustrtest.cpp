@@ -806,4 +806,9 @@ void UnicodeStringTest::TestUnescape(void) {
               prettify(result) + ", expected " +
               prettify(OUT));
     }
+
+    // test that an empty string is returned in case of an error
+    if (!UNICODE_STRING("wrong \\u sequence", 17).unescape().empty()) {
+        errln("FAIL: unescaping of a string with an illegal escape sequence did not return an empty string");
+    }
 }
