@@ -304,7 +304,7 @@ void *ucol_getABuffer(const UCollator *coll, uint32_t size);
 
 /* worker function for generating sortkeys */
 U_CFUNC
-int32_t
+int32_t U_CALLCONV
 ucol_calcSortKey(const    UCollator    *coll,
         const    UChar        *source,
         int32_t        sourceLength,
@@ -314,7 +314,7 @@ ucol_calcSortKey(const    UCollator    *coll,
         UErrorCode *status);
 
 U_CFUNC
-int32_t
+int32_t U_CALLCONV
 ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
         const    UChar        *source,
         int32_t        sourceLength,
