@@ -1642,7 +1642,7 @@ The leftmost codepage (.xxx) wins.
 
         if ((q = uprv_strchr(p, '.')) != NULL) {
             /* How big will the resulting string be? */
-            len = uprv_strlen(correctedPOSIXLocale) + (q-p);
+            len = (int32_t)(uprv_strlen(correctedPOSIXLocale) + (q-p));
             uprv_strncat(correctedPOSIXLocale, p, q-p);
             correctedPOSIXLocale[len] = 0;
         }
