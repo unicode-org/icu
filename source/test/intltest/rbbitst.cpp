@@ -553,38 +553,10 @@ void RBBITest::TestThaiWordBreak() {
 void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* params )
 {
     if (exec) logln("TestSuite RuleBasedBreakIterator: ");
+    
     switch (index) {
-        case 0: name = "TestJapaneseLineBreak";
-            if(exec) TestJapaneseLineBreak();                 break;
-        case 1: name = "TestStatusReturn";
-            if(exec) TestStatusReturn();                       break;
-
-        case 2: name = "TestLineBreakData";
-            if(exec) TestLineBreakData();                      break;
-        case 3: name = "TestEmptyString";
-            if(exec) TestEmptyString();                        break;
-
-        case 4: name = "TestGetAvailableLocales";
-            if(exec) TestGetAvailableLocales();                break;
-
-        case 5: name = "TestGetDisplayName";
-            if(exec) TestGetDisplayName();                     break;
-
-        case 6: name = "TestEndBehaviour";
-            if(exec) TestEndBehaviour();                       break;
-        case 7: name = "TestBug4153072";
+        case 0: name = "TestBug4153072";
             if(exec) TestBug4153072();                         break;
-        case 8: name = "TestWordBreaks";
-             if(exec) TestWordBreaks();                   break;
-        case 9: name = "TestWordBoundary";
-             if(exec) TestWordBoundary();                 break;
-        default: name = ""; break; //needed to end loop
-    }
-
-    /***
-    switch (index) {
-        case 0: name = "TestExtended";
-             if(exec) TestExtended();                          break;
         case 1: name = "TestJapaneseLineBreak";
             if(exec) TestJapaneseLineBreak();                 break;
         case 2: name = "TestStatusReturn";
@@ -603,9 +575,26 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
 
         case 7: name = "TestEndBehaviour";
             if(exec) TestEndBehaviour();                       break;
-        case 8: name = "TestBug4153072";
-            if(exec) TestBug4153072();                         break;
-        case 9: name = "TestMonkey";
+        case 8: name = "TestMixedThaiLineBreak";
+             if(exec) TestMixedThaiLineBreak();                break;
+        case 9: name = "TestThaiWordBreak";
+             if(exec) TestThaiWordBreak();                     break;
+        case 10: name = "TestThaiLineBreak";
+             if(exec) TestThaiLineBreak();                     break;
+        case 11: name = "TestMaiyamok";
+             if(exec) TestMaiyamok();                          break;
+        case 12: name = "TestWordBreaks";
+             if(exec) TestWordBreaks();                   break;
+        case 13: name = "TestWordBoundary";
+             if(exec) TestWordBoundary();                 break;
+/***
+        case 14: name = "TestLineBreaks";
+             if(exec) TestLineBreaks();                   break;
+        case 15: name = "TestSentBreaks";
+             if(exec) TestSentBreaks();                 break;
+        case 16: name = "TestExtended";
+             if(exec) TestExtended();                          break;
+        case 17: name = "TestMonkey";
              if(exec) {
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS
                TestMonkey(params);
@@ -613,26 +602,10 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
                logln("skipping TestMonkey (UCONFIG_NO_REGULAR_EXPRESSIONS)");
 #endif
              }
+***/
              break;
-
-        case 10: name = "TestThaiLineBreak";
-             if(exec) TestThaiLineBreak();                     break;
-        case 11: name = "TestMixedThaiLineBreak";
-             if(exec) TestMixedThaiLineBreak();                break;
-        case 12: name = "TestMaiyamok";
-             if(exec) TestMaiyamok();                          break;
-        case 13: name = "TestThaiWordBreak";
-             if(exec) TestThaiWordBreak();                     break;
-        case 14: name = "TestWordBreaks";
-             if(exec) TestWordBreaks();                   break;
-        case 15: name = "TestLineBreaks";
-             if(exec) TestLineBreaks();                   break;
-        case 16: name = "TestWordBoundary";
-             if(exec) TestWordBoundary();                 break;
-        case 17: name = "TestSentBreaks";
-             if(exec) TestSentBreaks();                 break;
         default: name = ""; break; //needed to end loop
-    } ***/
+    }
 }
 
 
