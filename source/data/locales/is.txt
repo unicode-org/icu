@@ -49,8 +49,6 @@ is {
     Languages { 
         is { "\u00EDslenska" }
     }
-    LocaleID:int { 0x0f }
-//    LocaleString { "is" }
     MonthAbbreviations { 
         "jan.",
         "feb.",
@@ -93,7 +91,6 @@ is {
         "\uFFFD",
         ",",
     }
-//    ShortLanguage { "isl" }
     zoneStrings { 
         {
             "Africa/Casablanca",

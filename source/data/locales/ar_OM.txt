@@ -7,7 +7,4 @@
 
 ar_OM {
     Version{"2.0"}
-//    LocaleString { "ar_OM" }
-//    ShortCountry { "OMN" }
-    LocaleID:int { 0x2001 }
 }

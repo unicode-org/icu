@@ -7,15 +7,6 @@
 
 en_GB {
     Version { "2.0" }
-//    Duplicated in parent
-//    Countries { 
-//        US { "United States" }
-//        GB { "United Kingdom" }
-//        CA { "Canada" }
-//        IE { "Ireland" }
-//        AU { "Australia" }
-//        NZ { "New Zealand" }
-//    }
     DateTimeElements:intvector {
         2,
         1,
@@ -31,13 +22,6 @@ en_GB {
         "dd/MM/yyyy",
         "{1} {0}",
     }
-//    Duplicated in parent
-//    Languages { 
-//        en { "English" }
-//    }
-    LocaleID:int { 0x0809 }
-//    LocaleString { "en_GB" }
-//    ShortCountry { "GBR" }
     zoneStrings { 
         {
             "Europe/London",
@@ -64,13 +48,13 @@ en_GB {
 //         * value is sometimes called a "milliard," but this word seems to have
 //         * fallen into disuse.)
 
-        // Could someone please correct me if I'm wrong about "milliard" falling
-        // into disuse, or have missed any other details of how large numbers
-        // are rendered.  Also, could someone please provide me with information
-        // on which other English-speaking countries use which system?  Right now,
-        // I'm assuming that the U.S. system is used in Canada and that all the
-        // other English-speaking countries follow the British system.  Can
-        // someone out there confirm this?
+    // Could someone please correct me if I'm wrong about "milliard" falling
+    // into disuse, or have missed any other details of how large numbers
+    // are rendered.  Also, could someone please provide me with information
+    // on which other English-speaking countries use which system?  Right now,
+    // I'm assuming that the U.S. system is used in Canada and that all the
+    // other English-speaking countries follow the British system.  Can
+    // someone out there confirm this?
 
     SpelloutRules {
         "%simplified:\n"

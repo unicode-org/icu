@@ -73,7 +73,6 @@ id {
         "#,##0%",
         "#E0",
     }
-    LocaleID:int { 0x21 }
 //    LocaleScript{ 
 //        "Latn",  // ISO 15924 Name 
 //    }

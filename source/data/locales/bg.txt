@@ -54,8 +54,6 @@ bg {
     Languages { 
         bg { "\u0431\u044A\u043B\u0433\u0430\u0440\u0441\u043A\u0438" }
     }
-    LocaleID:int { 0x02 }
-//    LocaleString { "bg" }
     MonthAbbreviations { 
         "\u044f\u043d.",
         "\u0444\u0435\u0432.",
@@ -98,7 +96,6 @@ bg {
         "\uFFFD",
         ",",
     }
-//    ShortLanguage { "bul" }
     localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
     zoneStrings { 
         {

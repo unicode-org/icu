@@ -28,8 +28,6 @@ de_CH {
         ZW { "Zimbabwe" }
         GB { "Grossbritannien" }
     }
-    LocaleID:int { 0x0807 }
-//    LocaleString { "de_CH" }
     NumberElements { 
         ".",
         "'",
@@ -50,7 +48,6 @@ de_CH {
         "#,##0%",
         "#E0",
     }
-//    ShortCountry { "CHE" }
     zoneStrings { 
         {
             "Africa/Casablanca",

@@ -304,8 +304,6 @@ sh {
         //ji { "Jidi\u0161" }  // Use "yi" instead
         yi { "Jidi\u0161" }
     }
-    LocaleID:int { 0x081a }
-//    LocaleString { "sh" }
     MonthAbbreviations { 
         "jan",
         "feb",
@@ -348,7 +346,6 @@ sh {
         "\uFFFD",
         ",",
     }
-//    ShortLanguage { "srp" }
     localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
     zoneStrings { 
         {

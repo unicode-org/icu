@@ -1689,8 +1689,6 @@ ja {
         za { "\u30c1\u30ef\u30f3\u8a9e" }
         zu { "\u30ba\u30fc\u30eb\u30fc\u8a9e" }
     }
-    LocaleID:int { 0x11 }
-//    LocaleString { "ja" }
     MonthAbbreviations { 
         "1",
         "2",
@@ -1732,7 +1730,6 @@ ja {
 //        "\u221E",
 //        "\uFFFD",
 //    }
-//    ShortLanguage { "jpn" }
     localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
     zoneStrings { 
         {

@@ -7,15 +7,12 @@
 
 ko_KR {
     Version { "2.0" }
-//    LocaleString { "ko_KR" }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",
         "\u00A4#,##0.00;-\u00A4#,##0.00",
         "#,##0%",
         "#E0",
     }
-//    ShortCountry { "KOR" }
-    LocaleID:int { 0x0412 }
 //    Countries {
         //KR { "\uB300\uD55C\uBBFC\uAD6D" }
         //KP { "\uC870\uC120 \uBBFC\uC8FC\uC8FC\uC758 \uC778\uBBFC \uACF5\uD654\uAD6D" }

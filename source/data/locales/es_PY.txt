@@ -38,7 +38,4 @@ es_PY {
         "#,##0%",
         "#E0",
     }
-    LocaleID:int { 0x3c0a }
-//    LocaleString { "es_PY" }
-//    ShortCountry { "PRY" }
 }

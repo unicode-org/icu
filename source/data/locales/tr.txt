@@ -57,8 +57,6 @@ tr {
     Languages { 
         tr { "T\u00FCrk\u00E7e" }
     }
-    LocaleID:int { 0x1f }
-//    LocaleString { "tr" }
     MonthAbbreviations { 
         "Oca",
         "\u015Eub",
@@ -101,7 +99,6 @@ tr {
         "\uFFFD",
         ",",
     }
-//    ShortLanguage { "tur" }
     localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
     zoneStrings { 
         {

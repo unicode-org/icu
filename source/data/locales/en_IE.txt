@@ -7,15 +7,6 @@
 
 en_IE {
     Version { "2.0" }
-//    Duplicated in parent
-//    Countries { 
-//        US { "United States" }
-//        GB { "United Kingdom" }
-//        CA { "Canada" }
-//        IE { "Ireland" }
-//        AU { "Australia" }
-//        NZ { "New Zealand" }
-//    }
     DateTimeElements:intvector { 
         2,
         1,
@@ -37,13 +28,6 @@ en_IE {
         "#,##0%",
         "#E0",
     }
-//    Duplicated in parent
-//    Languages { 
-//        en { "English" }
-//    }
-    LocaleID:int { 0x1809 }
-//    LocaleString { "en_IE" }
-//    ShortCountry { "IRL" }
     zoneStrings { 
         {
             "Europe/London",

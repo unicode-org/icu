@@ -282,7 +282,7 @@ fr {
         ka { "ge\u00e9orgien" }
         kl { "groe\u00e9nlandais" }
         qu { "que\u00e9chua" }
-	rn { "roundi" }
+        rn { "roundi" }
         sr { "serbe" }
         sh { "serbo-croate" }
         st { "sotho du sud" }
@@ -356,13 +356,10 @@ fr {
         "samedi",
     }
 
-
     Eras { 
         "av. J.-C.",
         "ap. J.-C.",
     }
-    LocaleID:int { 0x0c }
-//    LocaleString { "fr" }
     MonthAbbreviations { 
         "janv.",
         "f\u00E9vr.",
@@ -411,7 +408,6 @@ fr {
         "#,##0%",
         "#E0",
     }
-//    ShortLanguage { "fra" }
     localPatternChars { "GaMjkHmsSEDFwWxhKzAe" }
     zoneStrings { 
         {

@@ -6,10 +6,10 @@
 // ***************************************************************************
 
 mk {
-     Version { "2.0"}
-     // We use UCA collation table optimized for Cyrillic
-     // as defined in the Russian locale
-     CollationElements:alias { "ru" }
+    Version { "2.0"}
+    // We use UCA collation table optimized for Cyrillic
+    // as defined in the Russian locale
+    CollationElements:alias { "ru" }
 
     Countries { 
         MK { "\u041C\u0430\u043A\u0435\u0434\u043E\u043D\u0438\u0458\u0430" }
@@ -50,8 +50,6 @@ mk {
     Languages { 
         mk { "\u043C\u0430\u043A\u0435\u0434\u043E\u043D\u0441\u043A\u0438" }
     }
-    LocaleID:int { 0x2f }
-//    LocaleString { "mk" }
     MonthAbbreviations { 
         "\u0458\u0430\u043D.",
         "\u0444\u0435\u0432.",
@@ -94,7 +92,6 @@ mk {
         "\uFFFD",
         ",",
     }
-//    ShortLanguage { "mkd" }
     localPatternChars { "GuMtkHmsSEDFwWahKzUe" }
     zoneStrings { 
         {

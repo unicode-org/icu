@@ -18,7 +18,6 @@ es_SV {
         "dd/MM/yy",
         "{1} {0}",
     }
-//    LocaleString { "es_SV" }
 //    NumberElements { 
 //        ".",
 //        ",",
@@ -32,6 +31,4 @@ es_SV {
 //        "\u221E",
 //        "\uFFFD",
 //    }
-//    ShortCountry { "SLV" }
-    LocaleID:int { 0x440a }
 }

@@ -8,16 +8,12 @@
 
 mr_IN {
     Version { "2.0" }
-    LocaleID:int { 0x044e }
-//    ShortCountry { IND }
-
     NumberPatterns {
         "##,##,##0.###;-##,##,##0.###",
         "\u00A4 ##,##,##0.00;-\u00A4 ##,##,##0.00",
         "##,##,##0%",
         "#E0",
     }
-//    LocaleString { "mr_IN" }
     DateTimePatterns {
         "h:mm:ss a z",
         "h:mm:ss a z",

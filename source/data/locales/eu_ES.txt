@@ -28,5 +28,4 @@ eu_ES {
         "#,##0%",
         "#E0",
     }
-    LocaleID:int { 0x042D }
 }
