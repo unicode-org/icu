@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/StringPrep.java,v $
- * $Date: 2003/08/27 21:12:04 $
- * $Revision: 1.1 $ 
+ * $Date: 2003/08/28 23:03:47 $
+ * $Revision: 1.2 $ 
  *
  *****************************************************************************************
  */
@@ -24,7 +24,8 @@ import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterDirection;
 
 /**
- * StringPrep API implements the StingPrep framework as described by RFC 3454.
+ * StringPrep API implements the StingPrep framework as described by 
+ * <a href="http://www.ietf.org/rfc/rfc3454.txt">RFC 3454</a>.
  * StringPrep prepares Unicode strings for use in network protocols.
  * Profiles of StingPrep are set of rules and data according to which the
  * Unicode Strings are prepared. Each profiles contains tables which describe
@@ -104,7 +105,7 @@ public final class StringPrep {
     
     /* Wrappers for Trie implementations */ 
     private static final class StringPrepTrieImpl implements Trie.DataManipulate{
-        static CharTrie sprepTrie = null;
+        private CharTrie sprepTrie = null;
        /**
         * Called by com.ibm.icu.util.Trie to extract from a lead surrogate's 
         * data the index array offset of the indexes for that lead surrogate.
@@ -117,23 +118,30 @@ public final class StringPrep {
         }
     }
     
-    private static StringPrepTrieImpl sprepTrieImpl;
-    private static int[] indexes;
-    private static char[] mappingData;
-    private static byte[] formatVersion;
+    // CharTrie implmentation for reading the trie data
+    private StringPrepTrieImpl sprepTrieImpl;
+    // Indexes read from the data file
+    private int[] indexes;
+    // mapping data read from the data file
+    private char[] mappingData;
+    // format version of the data file
+    private byte[] formatVersion;
+    // the version of Unicode supported by the data file
+    private VersionInfo unicodeVersion;
+    // the Unicode version of last entry in the
+    // NormalizationCorrections.txt file if normalization
+    // is turned on 
+    private VersionInfo normVersion;
+    // Option to turn on Normalization
+    private boolean doNFKC;
+    // Option to turn on checking for BiDi rules
+    private boolean checkBiDi;
+
     
     private char getCodePointValue(int ch){
-        return StringPrepTrieImpl.sprepTrie.getCodePointValue(ch);
+        return sprepTrieImpl.sprepTrie.getCodePointValue(ch);
     }
-    
-    //protected 
-    private boolean doNFKC = false;
-    private boolean checkBiDi = false;
-    
-    private VersionInfo unicodeVersion;
-    private VersionInfo normVersion;
-    
-
+  
     private static VersionInfo getVersionInfo(int comp){
         int micro = comp & 0xFF;
         int milli =(comp >> 8)  & 0xFF;
@@ -147,8 +155,17 @@ public final class StringPrep {
         }
         return VersionInfo.getInstance((int)version[0],(int) version[1],(int) version[2],(int) version[3]);
     }
-    
-    private StringPrep(InputStream inputStream) throws IOException{
+    /**
+     * Creates an StringPrep object after reading the input stream.
+     * The object does not hold a reference to the input steam, so the stream can be
+     * closed after the method returns.
+     * 
+     * @param inputStream The stream for reading the StringPrep profile binary
+     * @return StringPrep object created from the input stream
+     * @throws IOException
+     * @draft ICU 2.8
+     */
+    public StringPrep(InputStream inputStream) throws IOException{
 
         BufferedInputStream b = new BufferedInputStream(inputStream,DATA_BUFFER_SIZE);
   
@@ -159,14 +176,15 @@ public final class StringPrep {
    
         byte[] sprepBytes = new byte[indexes[INDEX_TRIE_SIZE]];
    
-        sprepTrieImpl = new StringPrepTrieImpl();
+
         //indexes[INDEX_MAPPING_DATA_SIZE] store the size of mappingData in bytes           
         mappingData = new char[indexes[INDEX_MAPPING_DATA_SIZE]/2]; 
         // load the rest of the data data and initialize the data members
         reader.read(sprepBytes,mappingData);
                                    
-        StringPrepTrieImpl.sprepTrie   = new CharTrie( new ByteArrayInputStream(sprepBytes),sprepTrieImpl  );
-               
+        sprepTrieImpl           = new StringPrepTrieImpl();
+        sprepTrieImpl.sprepTrie = new CharTrie( new ByteArrayInputStream(sprepBytes),sprepTrieImpl  );
+              
         // get the data format version                           
         formatVersion = reader.getDataFormatVersion();
  
@@ -180,38 +198,24 @@ public final class StringPrep {
         }
         b.close();
     }
-    /**
-     * Returns the StringPrep instance created after reading the input stream.
-     * The object does not hold a reference to the input steam, so the stream can be
-     * closed after the method returns.
-     * 
-     * @param inputStream The stream for reading the StringPrep profile binary
-     * @return StringPrep object created from the input stream
-     * @throws IOException
-     * @draft ICU 2.8
-     */
-    public static final StringPrep getInstance(InputStream inputStream)
-        throws IOException{
-            
-        StringPrep prep = null;
-        // load the file and create the object
-        prep = new StringPrep(inputStream);
-       
-        return prep;
-    }
-    
-    private class Values{
+ 
+    private static final class Values{
         boolean isIndex;
         int value;
         int type;
+        public void reset(){
+            isIndex = false;
+            value = 0;
+            type = -1;
+        }
     }
 
     private static final void getValues(char trieWord,Values values){
-       
+        values.reset();
         if(trieWord == 0){
             /* 
              * Initial value stored in the mapping table 
-             * just return USPREP_TYPE_LIMIT .. so that
+             * just return TYPE_LIMIT .. so that
              * the source codepoint is copied to the destination
              */
             values.type = TYPE_LIMIT;

@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/IDNA.java,v $
- * $Date: 2003/08/27 21:12:04 $
- * $Revision: 1.1 $ 
+ * $Date: 2003/08/28 23:03:47 $
+ * $Revision: 1.2 $ 
  *
  *****************************************************************************************
  */
@@ -18,17 +18,16 @@ import com.ibm.icu.impl.LocaleUtility;
 
 /**
  *
- * IDNA API implements the IDNA protocol as defined in the IDNA draft 
- * (http://www.ietf.org/rfc/rfc3490.txt).
+ * IDNA API implements the IDNA protocol as defined in the <a href="(http://www.ietf.org/rfc/rfc3490.txt">IDNA RFC</a>.
  * The draft defines 2 operations: ToASCII and ToUnicode. Domain labels 
  * containing non-ASCII code points are required to be processed by
  * ToASCII operation before passing it to resolver libraries. Domain names
  * that are obtained from resolver libraries are required to be processed by
  * ToUnicode operation before displaying the domain name to the user.
- * IDNA requires that implementations process input strings with Nameprep
- * (http://www.ietf.org/rfc/rfc3491.txt), 
- * which is a profile of Stringprep (http://www.ietf.org/rfc/rfc3454.txt), 
- * and then with Punycode (http://www.ietf.org/rfc/rfc3492.txt). 
+ * IDNA requires that implementations process input strings with 
+ * <a href="http://www.ietf.org/rfc/rfc3491.txt">Nameprep</a>, 
+ * which is a profile of <a href="http://www.ietf.org/rfc/rfc3454.txt">Stringprep</a> , 
+ * and then with <a href="http://www.ietf.org/rfc/rfc3492.txt">Punycode</a>. 
  * Implementations of IDNA MUST fully implement Nameprep and Punycode; 
  * neither Nameprep nor Punycode are optional.
  * The input and output of ToASCII and ToUnicode operations are Unicode 
@@ -89,7 +88,7 @@ public final class IDNA {
     private IDNA(){
         try{
            InputStream stream = LocaleUtility.getImplDataResourceAsStream("uidna.spp");
-           namePrep = StringPrep.getInstance(stream);
+           namePrep = new StringPrep(stream);
            stream.close();
         }catch (IOException e){
             throw new RuntimeException(e.toString());

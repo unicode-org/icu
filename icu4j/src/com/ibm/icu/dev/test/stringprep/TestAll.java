@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/stringprep/TestAll.java,v $
- * $Date: 2003/08/21 23:42:25 $
- * $Revision: 1.1 $
+ * $Date: 2003/08/28 23:03:06 $
+ * $Revision: 1.2 $
  *
  *******************************************************************************
 */
@@ -28,12 +28,13 @@ public class TestAll extends TestGroup {
 
     public TestAll() {
         super(
-              new String[] { 
-                  "TestIDNA", 
-                  "TestStringPrep",
-                  "TestIDNARef" 
-              },
-              "StringPrep and IDNA test");
+                  new String[] { 
+                      "TestIDNA", 
+                      "TestStringPrep",
+                      "TestIDNARef" 
+                  },
+                  "StringPrep and IDNA test"
+              );
     }
 
     public static final String CLASS_TARGET_NAME = "StringPrep";
