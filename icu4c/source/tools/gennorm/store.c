@@ -82,7 +82,6 @@ utm_open(const char *name, uint32_t count, uint32_t size) {
     return mem;
 }
 
-#if 0
 /* we don't use this - we don't clean up memory here... */
 static void
 utm_close(UToolMemory *mem) {
@@ -90,7 +89,8 @@ utm_close(UToolMemory *mem) {
         uprv_free(mem);
     }
 }
-#endif
+
+
 
 static void *
 utm_getStart(UToolMemory *mem) {
@@ -105,7 +105,7 @@ utm_alloc(UToolMemory *mem) {
         return p;
     } else {
         fprintf(stderr, "error: %s - trying to use more than %ld preallocated units\n",
-                mem->name, mem->count);
+                mem->name, (long)mem->count);
         exit(U_MEMORY_ALLOCATION_ERROR);
     }
 }
@@ -118,7 +118,7 @@ utm_allocN(UToolMemory *mem, int32_t n) {
         return p;
     } else {
         fprintf(stderr, "error: %s - trying to use more than %ld preallocated units\n",
-                mem->name, mem->count);
+                mem->name, (long)mem->count);
         exit(U_MEMORY_ALLOCATION_ERROR);
     }
 }
@@ -342,7 +342,7 @@ addCombiningCP(uint32_t code, uint8_t flags) {
     /* not found or modified, insert it */
     if(combineBackTop>=sizeof(combiningCPs)/4) {
         fprintf(stderr, "error: gennorm combining code points - trying to use more than %ld units\n",
-                sizeof(combiningCPs)/4);
+                (long)(sizeof(combiningCPs)/4));
         exit(U_MEMORY_ALLOCATION_ERROR);
     }
 
@@ -476,7 +476,7 @@ processCombining() {
     /* it must be tableTop<=0x7fff because bit 15 is used in combiningTable as an end-for-this-lead marker */
     if(tableTop>=sizeof(combiningTable)/4) {
         fprintf(stderr, "error: gennorm combining table - trying to use %u units, more than the %ld units available\n",
-                tableTop, sizeof(combiningTable)/4);
+                tableTop, (long)(sizeof(combiningTable)/4));
         exit(U_MEMORY_ALLOCATION_ERROR);
     }
 
@@ -918,10 +918,10 @@ postParseFn(void *context, uint32_t code, Norm *norm) {
 
     /* verify that code has a decomposition if and only if the quick check flags say "no" on NF(K)D */
     if((norm->lenNFD!=0) != ((norm->qcFlags&_NORM_QC_NFD)!=0)) {
-        printf("U+%04lx has NFD[%d] but quick check 0x%02x\n", code, norm->lenNFD, norm->qcFlags);
+        printf("U+%04lx has NFD[%d] but quick check 0x%02x\n", (long)code, norm->lenNFD, norm->qcFlags);
     }
     if(((norm->lenNFD|norm->lenNFKD)!=0) != ((norm->qcFlags&(_NORM_QC_NFD|_NORM_QC_NFKD))!=0)) {
-        printf("U+%04lx has NFD[%d] NFKD[%d] but quick check 0x%02x\n", code, norm->lenNFD, norm->lenNFKD, norm->qcFlags);
+        printf("U+%04lx has NFD[%d] NFKD[%d] but quick check 0x%02x\n", (long)code, norm->lenNFD, norm->lenNFKD, norm->qcFlags);
     }
 
     /* ### see which combinations of combiningFlags and qcFlags are used for NFC/NFKC */
@@ -930,22 +930,22 @@ postParseFn(void *context, uint32_t code, Norm *norm) {
     if(norm->combiningFlags&1) {
         if(norm->udataCC!=0) {
             /* illegal - data-derivable composition exclusion */
-            printf("U+%04lx combines forward but udataCC==%u\n", code, norm->udataCC);
+            printf("U+%04lx combines forward but udataCC==%u\n", (long)code, norm->udataCC);
         }
     }
     if(norm->combiningFlags&2) {
         if((norm->qcFlags&0x11)==0) {
-            printf("U+%04lx combines backward but qcNF?C==0\n", code);
+            printf("U+%04lx combines backward but qcNF?C==0\n", (long)code);
         }
 #if 0
         /* occurs sometimes */
         if(norm->udataCC==0) {
-            printf("U+%04lx combines backward but udataCC==0\n", code);
+            printf("U+%04lx combines backward but udataCC==0\n", (long)code);
         }
 #endif
     }
     if((norm->combiningFlags&3)==3) {
-        printf("U+%04lx combines both ways\n", code);
+        printf("U+%04lx combines both ways\n", (long)code);
     }
 }
 
@@ -1043,7 +1043,7 @@ makeAll32() {
     norm32Table=(uint32_t *)uprv_malloc((norm32TableTop+1024)*4);
     if(norm32Table==NULL) {
         fprintf(stderr, "error: gennorm - unable to allocate %ld 32-bit words for norm32Table\n",
-                norm32TableTop+1024);
+                (long)(norm32TableTop+1024));
         exit(U_MEMORY_ALLOCATION_ERROR);
     }
 
@@ -1061,9 +1061,10 @@ makeAll32() {
         }
     }
 
-    printf("count of 16-bit extra data: %lu\n", extraMem->index);
-    printf("count of (uncompacted) non-zero 32-bit words: %lu\n", count);
-    printf("count CC frequencies: same %lu  trail %lu  two %lu\n", countCCSame, countCCTrail, countCCTwo);
+    printf("count of 16-bit extra data: %lu\n", (long)extraMem->index);
+    printf("count of (uncompacted) non-zero 32-bit words: %lu\n", (long)count);
+    printf("count CC frequencies: same %lu  trail %lu  two %lu\n",
+            (long)countCCSame, (long)countCCTrail, (long)countCCTwo);
 }
 
 /*
@@ -1085,7 +1086,7 @@ makeFCD() {
     fcdTable=(uint32_t *)uprv_malloc((fcdTableTop+1024)*4);
     if(fcdTable==NULL) {
         fprintf(stderr, "error: gennorm - unable to allocate %ld 32-bit words for fcdTable\n",
-                fcdTableTop+1024);
+                (long)(fcdTableTop+1024));
         exit(U_MEMORY_ALLOCATION_ERROR);
     }
 
@@ -1149,7 +1150,7 @@ foldLeadSurrogate(uint16_t *parent, uint16_t parentCount,
     uint32_t i, j, s2;
     uint32_t leadSurrogate=0xd7c0+(base>>10);
 
-    printf("supplementary data for lead surrogate U+%04lx\n", leadSurrogate);
+    printf("supplementary data for lead surrogate U+%04lx\n", (long)leadSurrogate);
 
     /* calculate the 32-bit data word for the lead surrogate */
     for(i=0; i<_NORM_SURROGATE_BLOCK_COUNT; ++i) {
@@ -1243,7 +1244,7 @@ foldSupplementary(uint16_t *parent, uint16_t parentCount,
     }
 
     printf("trie index count: BMP %u  all Unicode %lu  folded %u\n",
-           _NORM_STAGE_1_BMP_COUNT, _NORM_STAGE_1_MAX_COUNT, parentCount);
+           _NORM_STAGE_1_BMP_COUNT, (long)_NORM_STAGE_1_MAX_COUNT, parentCount);
     return parentCount;
 }
 
@@ -1295,7 +1296,8 @@ compact(uint16_t *parent, uint16_t parentCount,
     }
 
     /* we saved some space */
-    printf("compacting trie: count of 32-bit words %lu->%lu\n", stageCount, newStart);
+    printf("compacting trie: count of 32-bit words %lu->%lu\n",
+            (long)stageCount, (long)newStart);
     return newStart;
 }
 
@@ -1372,7 +1374,7 @@ generateData(const char *dataDir) {
         fcdStage1Top*2+
         fcdTableTop*2;
 
-    printf("size of " DATA_NAME "." DATA_TYPE " contents: %lu bytes\n", size);
+    printf("size of " DATA_NAME "." DATA_TYPE " contents: %lu bytes\n", (long)size);
 
     indexes[_NORM_INDEX_COUNT]=_NORM_INDEX_TOP;
     indexes[_NORM_INDEX_TRIE_SHIFT]=_NORM_TRIE_SHIFT;
@@ -1431,9 +1433,21 @@ generateData(const char *dataDir) {
 
     if(dataLength!=size) {
         fprintf(stderr, "gennorm: data length %lu != calculated size %lu\n",
-            dataLength, size);
+            (long)dataLength, (long)size);
         exit(U_INTERNAL_PROGRAM_ERROR);
     }
+}
+
+extern void
+cleanUpData(void) {
+    uprv_free(norm32Table);
+    uprv_free(fcdTable);
+
+    utm_close(stage2Mem);
+    utm_close(normMem);
+    utm_close(utf32Mem);
+    utm_close(extraMem);
+    utm_close(combiningTriplesMem);
 }
 
 /*

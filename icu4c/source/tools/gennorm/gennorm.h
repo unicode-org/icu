@@ -59,5 +59,8 @@ processData(void);
 extern void
 generateData(const char *dataDir);
 
+extern void
+cleanUpData(void);
+
 #endif
 
