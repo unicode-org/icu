@@ -147,4 +147,13 @@ public class CurrencyTest extends TestFmwk {
         
         // TODO add more tests later
     }
+
+    public void TestCurrencyKeyword() {
+	ULocale locale = new ULocale("th_TH@collation=traditional;currency=QQQ");
+	Currency currency = Currency.getInstance(locale);
+	String result = currency.getCurrencyCode();
+	if (!"QQQ".equals(result)) {
+	    errln("got unexpected currency: " + result);
+	}
+    }
 }

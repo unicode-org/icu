@@ -106,6 +106,11 @@ public class Currency extends MeasureUnit implements Serializable {
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static Currency getInstance(ULocale locale) {
+	String currency = locale.getKeywordValue("currency");
+	if (currency != null) {
+	    return getInstance(currency);
+	}
+
         if (shim == null) {
             return createCurrency(locale);
         }
