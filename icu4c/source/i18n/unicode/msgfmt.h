@@ -9,7 +9,7 @@
 *   Date        Name        Description
 *   02/19/97    aliu        Converted from java.
 *   03/20/97    helena      Finished first cut of implementation.
-*    07/22/98    stephen        Removed operator!= (defined in Format)
+*   07/22/98    stephen     Removed operator!= (defined in Format)
 ********************************************************************************
 */
 // *****************************************************************************
@@ -22,6 +22,8 @@
 #include "unicode/utypes.h"
 #include "unicode/format.h"
 #include "unicode/locid.h"
+#include "unicode/parseerr.h"
+
 class NumberFormat;
 
 /**
@@ -189,7 +191,7 @@ class NumberFormat;
  */
 class U_I18N_API MessageFormat : public Format {
 public:
-    enum EFormatNumber { kMaxFormat = 10 };
+    static enum EFormatNumber { kMaxFormat = 10 };
     /**
      * Construct a new MessageFormat using the given pattern.
      *
@@ -212,7 +214,20 @@ public:
     MessageFormat(const UnicodeString& pattern,
                   const Locale& newLocale,
                         UErrorCode& success);
-
+    /**
+     * Constructor that allows locale specification.
+     * @param pattern   Pattern used to construct object.
+     * @param newLocale The locale to use for formatting dates and numbers.
+     * @param parseError Struct to recieve information on position 
+     *                   of error if an error is encountered
+     * @param status    Output param to receive success code.  If the
+     *                  pattern cannot be parsed, set to failure code.
+     * @stable
+     */
+    MessageFormat(const UnicodeString& pattern,
+                  const Locale& newLocale,
+                  UParseError& parseError,
+                  UErrorCode& success);
     /**
      * Copy constructor.
      * @stable
@@ -270,6 +285,19 @@ public:
      */
     virtual void applyPattern(const UnicodeString& pattern,
                               UErrorCode& status);
+    /**
+     * Sets the pattern.
+     * @param pattern    The pattern to be applied.
+     * @param parseError Struct to recieve information on position 
+     *                   of error if an error is encountered
+     * @param status     Output param set to success/failure code on
+     *                   exit. If the pattern is invalid, this will be
+     *                   set to a failure result.
+     * @draft
+     */
+    virtual void applyPattern(const UnicodeString& pattern,
+                             UParseError& parseError,
+                             UErrorCode& status);
 
     /**
      * Gets the pattern. See the class description.
@@ -480,10 +508,28 @@ public:
      * @stable
      */
     static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
+    
+    /**
+     * Returns array of formattable types in the parsed pattern 
+     * for use in C API
+     * @param count Output parameter to receive the size of array
+     * @return The array of formattable types in the pattern
+     * @internal
+     */
+    const Formattable::Type* getFormatTypeList(int32_t& listCount){
+        listCount=fListCount;
+        return fFormatTypeList; 
+    }
 
 private:
     static char fgClassID;
-    static NumberFormat* fgNumberFormat;
+    //static NumberFormat* fgNumberFormat;
+
+    /* stores types of formattable objects in the pattern
+     * is for umsg_* CAPI 
+     */
+    Formattable::Type fFormatTypeList[kMaxFormat];
+    int32_t fListCount;
 
     // fgNumberFormat is held in a cache of one.
 
@@ -537,6 +583,7 @@ private:
     void            makeFormat( /*int32_t position, */
                                 int32_t offsetNumber,
                                 UnicodeString* segments,
+                                UParseError& parseError,
                                 UErrorCode& success);
 
     /**

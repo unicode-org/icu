@@ -13,7 +13,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/umisc.h"
-
+#include "unicode/parseerr.h"
 /**
  * \file
  * \brief C API: NumberFormat
@@ -115,8 +115,9 @@ typedef void* UNumberFormat;
 
 /** The possible number format styles. */
 enum UNumberFormatStyle {
+    UNUM_IGNORE=0,
     /** Decimal format */
-    UNUM_DECIMAL,
+    UNUM_DECIMAL=1,
     /** Currency format */
     UNUM_CURRENCY,
     /** Percent format */
@@ -159,7 +160,8 @@ typedef enum UNumberFormatPadPosition UNumberFormatPadPosition;
 * an error occurred.
 * @see unum_openPattern
 * @stable
-*/
+* @deprecated
+* /
 U_CAPI UNumberFormat*
 unum_open(UNumberFormatStyle    style,
       const   char*        locale,
@@ -176,13 +178,37 @@ unum_open(UNumberFormatStyle    style,
 * @return A pointer to a UNumberFormat to use for formatting numbers, or 0 if
 * an error occurred.
 * @see unum_open
-* @draft
-*/
+* @deprecated
+* /
 U_CAPI UNumberFormat*
 unum_openPattern(    const    UChar*        pattern,
             int32_t            patternLength,
             const    char*        locale,
             UErrorCode*        status);
+
+/**
+* Open a new UNumberFormat for formatting and parsing numbers.
+* A UNumberFormat may be used to format numbers in calls to \Ref{unum_format},
+* and to parse numbers in calls to \Ref{unum_parse}.
+* @param style The type of number format to open: one of UNUM_DECIMAL, UNUM_CURRENCY,
+* UNUM_PERCENT, UNUM_SPELLOUT, or UNUM_DEFAULT
+* @param pattern A pattern specifying the format to use.
+* @param patternLength The number of characters in the pattern, or -1 if null-terminated.
+* @param locale The locale specifying the formatting conventions
+* @param status A pointer to an UErrorCode to receive any errors
+* @return A pointer to a UNumberFormat to use for formatting numbers, or 0 if
+* an error occurred.
+* @see unum_open
+* @draft
+*/
+U_CAPI UNumberFormat*
+unum_open(  UNumberFormatStyle    style,
+            const    UChar*    pattern,
+            int32_t            patternLength,
+            const    char*     locale,
+            UParseError*       parseErr,
+            UErrorCode*        status);
+
 
 /**
 * Close a UNumberFormat.
@@ -312,12 +338,36 @@ unum_parseDouble(    const   UNumberFormat*  fmt,
 * @param patternLength The length of pattern, or -1 if null-terminated.
 * @see unum_toPattern
 * @draft
+* /
+U_CAPI void
+unum_applyPattern(          UNumberFormat  *format,
+                            UBool          localized,
+                    const   UChar          *pattern,
+                            int32_t        patternLength
+                            );
+
+
+/**
+* Set the pattern used by an UNumberFormat.
+* The pattern should follow the pattern syntax rules.
+* @param fmt The formatter to set.
+* @param localized TRUE if the pattern is localized, FALSE otherwise.
+* @param pattern The new pattern
+* @param parseError  A pointer to UParseError to recieve information about errors
+*                    occurred during parsing.
+* @param patternLength The length of pattern, or -1 if null-terminated.
+* @see unum_toPattern
+* @draft
 */
 U_CAPI void
 unum_applyPattern(          UNumberFormat  *format,
                             UBool          localized,
                     const   UChar          *pattern,
-                            int32_t         patternLength);
+                            int32_t         patternLength,
+                            UParseError    *parseError,
+                            UErrorCode     *status
+                                    );
+
 /**
 * Get a locale for which number formatting patterns are available.
 * A UNumberFormat in a locale returned by this function will perform the correct
@@ -693,5 +743,21 @@ unum_setSymbol(UNumberFormat *fmt,
                const UChar *value,
                int32_t length,
                UErrorCode *status);
+
+
+/******************* Deprecated API ***************************/
+#ifdef U_USE_DEPRECATED_FORMAT_API
+
+static UNumberFormat* 
+unum_openPattern(UChar* pattern, int32_t patternLength,char* locale,UErrorCode* status) 
+{
+    return unum_open(0,pattern,patternLength,locale,NULL,status);
+}
+
+#define unum_open_1_9(style,locale,status) unum_open(style, NULL, 0, locale, NULL, status)
+#define unum_applyPattern_1_9(format,localized,pattern,patternLength) unum_applyPattern(format,localized,pattern,patternLength,NULL,NULL)
+
+#endif
+/******************** End ************************************/
 
 #endif

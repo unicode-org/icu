@@ -120,7 +120,10 @@ enum UDateFormatStyle {
     /** Default style */
     UDAT_DEFAULT = UDAT_MEDIUM,
     /** No style */
-    UDAT_NONE = -1
+    UDAT_NONE = -1,
+    /** for internal API use only */
+    UDAT_IGNORE = -2
+
 };
 typedef enum UDateFormatStyle UDateFormatStyle;
 
@@ -141,7 +144,7 @@ typedef enum UDateFormatStyle UDateFormatStyle;
      * an error occurred.
      * @see udat_openPattern
      * @draft
-     */
+     * /
 U_CAPI UDateFormat*
 udat_open(UDateFormatStyle  timeStyle,
           UDateFormatStyle  dateStyle,
@@ -162,13 +165,42 @@ udat_open(UDateFormatStyle  timeStyle,
 * an error occurred.
 * @see udat_open
 * @draft
-*/
+* /
 U_CAPI UDateFormat*
 udat_openPattern(    const   UChar           *pattern,
             int32_t         patternLength,
             const   char         *locale,
             UErrorCode      *status);
-
+/**
+ * Open a new UDateFormat for formatting and parsing dates and times.
+ * A UDateFormat may be used to format dates in calls to \Ref{udat_format},
+ * and to parse dates in calls to \Ref{udat_parse}.
+ * @param timeStyle The style used to format times; one of UDAT_FULL_STYLE, UDAT_LONG_STYLE,
+ * UDAT_MEDIUM_STYLE, UDAT_SHORT_STYLE, or UDAT_DEFAULT_STYLE
+ * @param dateStyle The style used to format dates; one of UDAT_FULL_STYLE, UDAT_LONG_STYLE,
+ * UDAT_MEDIUM_STYLE, UDAT_SHORT_STYLE, or UDAT_DEFAULT_STYLE
+ * @param locale The locale specifying the formatting conventions
+ * @param tzID A timezone ID specifying the timezone to use.  If 0, use
+ * the default timezone.
+ * @param tzIDLength The length of tzID, or -1 if null-terminated.
+ * @param status A pointer to an UErrorCode to receive any errors
+ * @param pattern A pattern specifying the format to use.
+ * @param patternLength The number of characters in the pattern, or -1 if null-terminated.
+ * @param locale The locale specifying the formatting conventions
+ * @param status A pointer to an UErrorCode to receive any errors
+ * @return A pointer to a UDateFormat to use for formatting dates and times, or 0 if
+ * an error occurred.
+ * @draft
+ */
+U_CAPI UDateFormat*
+udat_open(UDateFormatStyle  timeStyle,
+          UDateFormatStyle  dateStyle,
+          const char        *locale,
+	      const UChar       *tzID,
+	      int32_t           tzIDLength,
+          const UChar       *pattern,
+          int32_t           patternLength,
+          UErrorCode        *status);
 /**
 * Close a UDateFormat.
 * Once closed, a UDateFormat may no longer be used.
@@ -489,4 +521,14 @@ udat_setSymbols(    UDateFormat             *format,
                     int32_t                 valueLength,
                     UErrorCode              *status);
 
+/********************* Deprecated API ************************************/
+#ifdef U_USE_DEPRECATED_FORMAT_API
+static UDateFormat*
+udat_openPattern(UChar* pattern,int32_t patternLength,const char* locale,UErrorCode *status)
+{
+    return udat_open(UDAT_IGNORE,UDAT_IGNORE,locale,NULL,0,pattern,patternLength,status);
+}
+#define udat_open_1_9(timeStyle,dateStyle,locale,tzId,tzIdLength,status) udat_open(timeStyle,dateStyle,locale,tzId,tzIdLength,NULL,0,status)
+#endif
+/********************* End **********************************************/
 #endif

@@ -1,6 +1,7 @@
 /*
 *******************************************************************************
-* Copyright (c) {1996-2001}, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (c) {1996-2001}, International Business Machines Corporation and others.
+* All Rights Reserved.
 *******************************************************************************
 */
 
@@ -9,6 +10,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/unorm.h"
+#include "unicode/parseerr.h"
 
 /**
  * \file
@@ -274,16 +276,19 @@ ucol_openVersion(const char *loc,
  * @param strength The collation strength; one of UCOL_PRIMARY, UCOL_SECONDARY,
  * UCOL_TERTIARY, UCOL_IDENTICAL,UCOL_DEFAULT_STRENGTH
  * @param status A pointer to an UErrorCode to receive any errors
+ * @param parseError  A pointer to UParseError to recieve information about errors
+ *                    occurred during parsing.
  * @return A pointer to a UCollator, or 0 if an error occurred.
  * @see ucol_open
  * @stable
  */
 U_CAPI UCollator*
-ucol_openRules(    const    UChar        *rules,
-        int32_t                 rulesLength,
-        UNormalizationMode      mode,
-        UCollationStrength      strength,
-        UErrorCode              *status);
+ucol_openRules( const UChar        *rules,
+                int32_t            rulesLength,
+                UNormalizationMode mode,
+                UCollationStrength strength,
+                UParseError        *parseError,
+                UErrorCode         *status);
 
 /** 
  * Close a UCollator.
@@ -658,5 +663,12 @@ void ucol_checkState (const uint8_t *state, UErrorCode *status);
  * @draft
  */
 UCollator *ucol_openState(const uint8_t *state, UErrorCode *status);
+
+
+/********************************* Deprecated API ********************************/
+#ifdef U_USE_DEPRECATED_FORMAT_API
+#define ucol_openRules_1_9(rules,rulesLength,modes,strength,status) ucol_openRules(rules,rulesLength,modes,strength,NULL,status)
+#endif
+/********************************* End *******************************************/
 
 #endif
