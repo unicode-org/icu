@@ -2248,8 +2248,14 @@ int32_t RBBIWordMonkey::next(int32_t prevPos) {
     // Loop runs once per position in the munged test text, until a break position
     //  is found.
     int32_t mpos = fOrigPositions[prevPos];
-    for (; mpos<fMungedLen; mpos++) {
+    for (; ; mpos++) {
         UChar32 letter = fMungedText[mpos];
+
+        // Break at end of text.
+        if (mpos >= fMungedLen-1) {
+            mpos = fMungedLen;
+            break;
+        }
 
         // Rule (5).   ALetter x ALetter
         if (fALetterSet->contains(fMungedText[mpos]) &&
