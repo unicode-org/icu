@@ -1421,7 +1421,7 @@ TestLMBCS() {
        UChar * pOut = Out;
        UChar * OutLimit = Out + sizeof(Out);
 
-       int off [sizeof(offsets)];
+       int32_t off [sizeof(offsets)];
 
       /* last 'offset' in expected results is just the final size. 
          (Makes other tests easier). Compensate here: */
@@ -1499,7 +1499,7 @@ TestLMBCS() {
       UConverter *cnv16jp = ucnv_open("LMBCS-16,locale=ja_JP", &errorCode);
       UConverter *cnv01us = ucnv_open("LMBCS-1,locale=us_EN", &errorCode);
       UChar uniString [] = {0x0192}; /* Latin Small letter f with hook */
-      UChar * pUni = uniString;
+      const UChar * pUni = uniString;
       char lmbcsString [4];
       char * pLMBCS = lmbcsString;
 

@@ -46,6 +46,10 @@ ustr_initChars(struct UString *s, const char* source, int32_t length, UErrorCode
     }
     for (; i < length; i++)
     {
+      UChar charToAppend;
+      u_charsToUChars(source+i, &charToAppend, 1);
+      ustr_ucat(s, charToAppend, status);
+      /*
 #if U_CHARSET_FAMILY==U_ASCII_FAMILY
         ustr_ucat(s, (UChar)(uint8_t)(source[i]), status);
 #elif U_CHARSET_FAMILY==U_EBCDIC_FAMILY
@@ -53,6 +57,7 @@ ustr_initChars(struct UString *s, const char* source, int32_t length, UErrorCode
 #else
 #   error U_CHARSET_FAMILY is not valid
 #endif
+      */
     }
 }
 
