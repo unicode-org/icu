@@ -41,7 +41,7 @@ UBool beVerbose=FALSE, haveCopyright=TRUE;
 /* prototypes --------------------------------------------------------------- */
 
 static void
-parseMirror(const char *filename, UErrorCode *pErrorCode);
+parseBidiMirroring(const char *filename, UErrorCode *pErrorCode);
 
 static void
 parseSpecialCasing(const char *filename, UErrorCode *pErrorCode);
@@ -126,7 +126,7 @@ main(int argc, char* argv[]) {
     /* initialize */
     initStore();
 
-    /* process Mirror.txt */
+    /* process BidiMirroring.txt */
     if(suffix==NULL) {
         uprv_strcpy(basename, "BidiMirroring.txt");
     } else {
@@ -135,7 +135,7 @@ main(int argc, char* argv[]) {
         uprv_strcpy(basename+7, suffix);
         uprv_strcat(basename+7, ".txt");
     }
-    parseMirror(filename, &errorCode);
+    parseBidiMirroring(filename, &errorCode);
 
     /* process SpecialCasing.txt */
     if(suffix==NULL) {
@@ -247,7 +247,7 @@ parseCodePoints(const char *s,
     }
 }
 
-/* parser for Mirror.txt ---------------------------------------------------- */
+/* parser for BidiMirroring.txt --------------------------------------------- */
 
 #define MAX_MIRROR_COUNT 2000
 
@@ -263,14 +263,14 @@ mirrorLineFn(void *context,
 
     mirrorMappings[mirrorCount][0]=(uint32_t)uprv_strtoul(fields[0][0], &end, 16);
     if(end<=fields[0][0] || end!=fields[0][1]) {
-        fprintf(stderr, "genprops: syntax error in Mirror.txt field 0 at %s\n", fields[0][0]);
+        fprintf(stderr, "genprops: syntax error in BidiMirroring.txt field 0 at %s\n", fields[0][0]);
         *pErrorCode=U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
     }
 
     mirrorMappings[mirrorCount][1]=(uint32_t)uprv_strtoul(fields[1][0], &end, 16);
     if(end<=fields[1][0] || end!=fields[1][1]) {
-        fprintf(stderr, "genprops: syntax error in Mirror.txt field 1 at %s\n", fields[1][0]);
+        fprintf(stderr, "genprops: syntax error in BidiMirroring.txt field 1 at %s\n", fields[1][0]);
         *pErrorCode=U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
     }
@@ -293,7 +293,7 @@ mirrorLineFn(void *context,
 }
 
 static void
-parseMirror(const char *filename, UErrorCode *pErrorCode) {
+parseBidiMirroring(const char *filename, UErrorCode *pErrorCode) {
     char *fields[2][2];
 
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
