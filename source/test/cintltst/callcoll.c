@@ -40,6 +40,8 @@
 #include "ccolltst.h"
 #include "callcoll.h"
 #include "unicode/ustring.h"
+#include "cmemory.h"
+#include "unicode/ucoleitr.h"
 
 /* perform test with strength PRIMARY */
 static void TestPrimary(void);
@@ -58,6 +60,12 @@ static void TestExtra(void);
 
 /* Test jitterbug 581 */
 static void TestJB581(void);
+
+/* Test [variable top] in the rule syntax */
+static void TestVariableTop(void);
+
+/* Test surrogates */
+static void TestSurrogates(void);
 
 #endif
 
@@ -218,6 +226,8 @@ void addAllCollTest(TestNode** root)
     addTest(root, &TestIdentical, "tscoll/callcoll/TestIdentical");
     addTest(root, &TestExtra, "tscoll/callcoll/TestExtra");
     addTest(root, &TestJB581, "tscoll/callcoll/TestJB581");      
+    addTest(root, &TestVariableTop, "tscoll/callcoll/TestVariableTop");      
+    addTest(root, &TestSurrogates, "tscoll/callcoll/TestSurrogates");      
 }
 
 void doTestVariant(UCollator* myCollation, const UChar source[], const UChar target[], UCollationResult result)
@@ -472,4 +482,143 @@ static void TestJB581(void)
     }
     ucol_close(myCollator);
 }
+
+/**
+* Tests the [variable top] tag in rule syntax. Since the default [alternate]
+* tag has the value shifted, any codepoints before [variable top] should give
+* a primary ce of 0.
+*/
+static void TestVariableTop(void)
+{
+    const char       *str          = "&z = [variable top]";
+          int         len          = strlen(str);
+          UChar      *rules;
+          UCollator  *myCollation;
+          UCollator  *enCollation;
+          UErrorCode  status       = U_ZERO_ERROR;
+          UChar       source[1];
+          UChar       ch;
+          uint8_t     result[20];
+          uint8_t     expected[20];
+
+    rules = (UChar*)malloc(sizeof(UChar*) * (len + 1));
+    u_uastrcpy(rules, str);
+
+    enCollation = ucol_open("en_US", &status);
+    myCollation = ucol_openRules(rules, len, UCOL_NO_NORMALIZATION, 
+                                 UCOL_PRIMARY, &status);
+    if (U_FAILURE(status)) {
+        log_err("ERROR: in creation of rule based collator :%s\n", 
+                myErrorName(status));
+        return;
+    }
+
+    ucol_setStrength(enCollation, UCOL_PRIMARY);
+    ucol_setAttribute(enCollation, UCOL_ALTERNATE_HANDLING, UCOL_SHIFTED,
+                      &status);
+    ucol_setAttribute(myCollation, UCOL_ALTERNATE_HANDLING, UCOL_SHIFTED,
+                      &status);
+        
+    if (ucol_getAttribute(myCollation, UCOL_ALTERNATE_HANDLING, &status) !=
+        UCOL_SHIFTED || U_FAILURE(status)) {
+        log_err("ERROR: ALTERNATE_HANDLING value can not be set to SHIFTED\n");
+    }
+
+    uprv_memset(expected, 0, 20);
+
+    /* space is supposed to be a variable */
+    source[0] = ' ';
+    len = ucol_getSortKey(enCollation, source, 1, result, 
+                          sizeof(result));
+
+    if (uprv_memcmp(expected, result, len) != 0) {
+        log_err("ERROR: SHIFTED alternate does not return 0 for primary of space\n");
+    }
+
+    ch = 'a';
+    while (ch < 'z') {
+        source[0] = ch;
+        len = ucol_getSortKey(myCollation, source, 1, result,
+                              sizeof(result));
+        if (uprv_memcmp(expected, result, len) != 0) {
+            log_err("ERROR: SHIFTED alternate does not return 0 for primary of %c\n", 
+                    ch);
+        }
+        ch ++;
+    }
+  
+    free(rules);
+    ucol_close(enCollation);
+    ucol_close(myCollation);
+    enCollation = NULL;
+    myCollation = NULL;
+}
+
+/**
+* Tests surrogate support.
+*/
+static void TestSurrogates(void)
+{
+    const char       *str          = 
+                              "&z<'\\uD800\\uDC00'<'\\uD801\\uDC01\\u0308'<A";
+          int         len          = strlen(str);
+          int         rlen         = 0;
+          UChar      *rules;
+          UCollator  *myCollation;
+          UCollator  *enCollation;
+          UErrorCode  status       = U_ZERO_ERROR;
+          UChar       source[][4]    = 
+          {{'z', 0, 0}, {0xD800, 0xDC00, 0}, {0xD801, 0xDC01, 0x0308, 0}};
+          UChar       target[][4]    = 
+          {{0xD800, 0xDC00, 0}, {0xD801, 0xDC01, 0x0308, 0}, {'A', 0, 0}};
+          int         count        = 0;
+          uint8_t enresult[20], myresult[20];
+          int enlen, mylen;
+          
+    /* tests for open rules with surrogate rules */
+    rules = (UChar*)malloc(sizeof(UChar*) * (len + 1));
+    rlen = u_unescape(str, rules, len);
+    
+    enCollation = ucol_open("en_US", &status);
+    myCollation = ucol_openRules(rules, rlen - 1, UCOL_NO_NORMALIZATION, 
+                                 UCOL_TERTIARY, &status);
+    if (U_FAILURE(status)) {
+        log_err("ERROR: in creation of rule based collator :%s\n", 
+                myErrorName(status));
+        return;
+    }
+
+    /* 
+    this test is to verify the supplementary sort key order in the english 
+    collator
+    */
+    log_verbose("start of english collation supplementary characters test\n");
+    while (count < 2) {
+        doTest(enCollation, source[count], target[count], UCOL_LESS);
+        count ++;
+    }
+    doTest(enCollation, source[count], target[count], UCOL_GREATER);
+        
+    log_verbose("start of tailored collation supplementary characters test\n");
+    count = 0;
+    /* tests getting collation elements for surrogates for tailored rules */
+    while (count < 3) {
+        doTest(myCollation, source[count], target[count], UCOL_LESS);
+        count ++;
+    }
+
+    /* tests that \uD801\uDC01 still has the same value, not changed */
+    enlen = ucol_getSortKey(enCollation, source[2], 2, enresult, 20);
+    mylen = ucol_getSortKey(myCollation, source[2], 2, myresult, 20);
+    if (uprv_strcmp(enresult, myresult) != 0) {
+        log_verbose("Failed : non-tailored supplementary characters should have the same value\n");
+    }
+
+    free(rules);
+    ucol_close(enCollation);
+    ucol_close(myCollation);
+    enCollation = NULL;
+    myCollation = NULL;
+}
+
 #endif
