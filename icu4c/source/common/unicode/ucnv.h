@@ -16,7 +16,10 @@
  */
 
 /**
- * @name Character Conversion C API
+ * \file
+ * \brief Description of character convrersion C API
+ *
+ * <h2>Character Conversion C API </h2>
  *
  * Character Conversion C API documentation is still under construction. 
  * Please check for updates soon.

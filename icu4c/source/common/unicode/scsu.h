@@ -21,6 +21,14 @@
 
 #include "unicode/utypes.h"
 
+
+/**
+ * \file
+ * \brief Description of Standard Compression for Unicode C API
+ *
+ * <h2> Standard Compression for Unicode </h2>
+ */
+
 /* Number of windows */
 #define USCSU_NUM_WINDOWS 8
 #define USCSU_NUM_STATIC_WINDOWS 8

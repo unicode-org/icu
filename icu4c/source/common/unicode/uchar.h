@@ -30,7 +30,11 @@
 #define U_UNICODE_VERSION "3.0.0"
 
 /**
- * @name The Unicode C API allows you to query the properties associated with individual 
+ * \file
+ * \brief  Description of ICU's Unicode Char C API
+ *
+ * <h2> Unicode C API </h2>
+ * The Unicode C API allows you to query the properties associated with individual 
  * Unicode character values.  
  * <p>
  * The Unicode character information, provided implicitly by the 

@@ -31,11 +31,12 @@
  * The following #define trick allows us to do it all in one file
  * and still be able to compile it.
  */
-#define DOCXX_TAG
-#define BIDI_SAMPLE_CODE
+/*#define DOCXX_TAG*/
+/*#define BIDI_SAMPLE_CODE*/
 
 /**
- * @name BIDI algorithm for ICU
+ *\file
+ * \brief Description of BIDI algorithm for ICU C API
  *
  * <h2>BIDI algorithm for ICU</h2>
  *
@@ -52,18 +53,247 @@
  * the function call. Otherwise, the function returns immediately.
  * After the function call, the value indicates success or failure.<p>
  *
- * The <quote>limit</quote> of a sequence of characters is the position just after their
+ * The &quot;limit&quot; of a sequence of characters is the position just after their
  * last character, i.e., one more than that position.<p>
  *
- * Some of the API functions provide access to <quote>runs</quote>.
- * Such a <quote>run</quote> is defined as a sequence of characters
+ * Some of the API functions provide access to &quot;runs&quot;.
+ * Such a &quot;run&quot; is defined as a sequence of characters
  * that are at the same embedding level
  * after performing the BIDI algorithm.<p>
  *
  * @author Markus W. Scherer
  * @version 1.0
+ *
+ *
+ * <h4> Sample code for the ICU BIDI API </h4>
+ *
+ * <h5>Rendering a paragraph with the ICU BiDi API</h5>
+ *
+ * This is (hypothetical) sample code that illustrates
+ * how the ICU BiDi API could be used to render a paragraph of text.
+ * Rendering code depends highly on the graphics system,
+ * therefore this sample code must make a lot of assumptions,
+ * which may or may not match any existing graphics system's properties.
+ *
+ * <p>The basic assumptions are:</p>
+ * <ul>
+ * <li>Rendering is done from left to right on a horizontal line.</li>
+ * <li>A run of single-style, unidirectional text can be rendered at once.</li>
+ * <li>Such a run of text is passed to the graphics system with
+ *     characters (code units) in logical order.</li>
+ * <li>The line-breaking algorithm is very complicated
+ *     and Locale-dependent -
+ *     and therefore its implementation omitted from this sample code.</li>
+ * </ul>
+ *
+ * <pre>
+ * \code
+ *#include "unicode/ubidi.h"
+ *
+ *typedef enum {
+ *     styleNormal=0, styleSelected=1,
+ *     styleBold=2, styleItalics=4,
+ *     styleSuper=8, styleSub=16
+ *} Style;
+ *
+ *typedef struct { UTextOffset limit; Style style; } StyleRun;
+ *
+ *int getTextWidth(const UChar *text, UTextOffset start, UTextOffset limit,
+ *                  const StyleRun *styleRuns, int styleRunCount);
+ *
+ * // set *pLimit and *pStyleRunLimit for a line
+ * // from text[start] and from styleRuns[styleRunStart]
+ * // using ubidi_getLogicalRun(para, ...)
+ *void getLineBreak(const UChar *text, UTextOffset start, UTextOffset *pLimit,
+ *                  UBiDi *para,
+ *                  const StyleRun *styleRuns, int styleRunStart, int *pStyleRunLimit,
+ *                  int *pLineWidth);
+ *
+ * // render runs on a line sequentially, always from left to right
+ *
+ * // prepare rendering a new line
+ *void startLine(UBiDiDirection textDirection, int lineWidth);
+ *
+ * // render a run of text and advance to the right by the run width
+ * // the text[start..limit-1] is always in logical order
+ *void renderRun(const UChar *text, UTextOffset start, UTextOffset limit,
+ *               UBiDiDirection textDirection, Style style);
+ *
+ * // We could compute a cross-product
+ * // from the style runs with the directional runs
+ * // and then reorder it.
+ * // Instead, here we iterate over each run type
+ * // and render the intersections -
+ * // with shortcuts in simple (and common) cases.
+ * // renderParagraph() is the main function.
+ *
+ * // render a directional run with
+ * // (possibly) multiple style runs intersecting with it
+ *void renderDirectionalRun(const UChar *text,
+ *                           UTextOffset start, UTextOffset limit,
+ *                           UBiDiDirection direction,
+ *                           const StyleRun *styleRuns, int styleRunCount) {
+ *     int i;
+ *
+ *     // iterate over style runs
+ *     if(direction==UBIDI_LTR) {
+ *         int styleLimit;
+ *
+ *         for(i=0; i<styleRunCount; ++i) {
+ *             styleLimit=styleRun[i].limit;
+ *             if(start<styleLimit) {
+ *                 if(styleLimit>limit) { styleLimit=limit; }
+ *                 renderRun(text, start, styleLimit,
+ *                           direction, styleRun[i].style);
+ *                 if(styleLimit==limit) { break; }
+ *                 start=styleLimit;
+ *             }
+ *         }
+ *     } else {
+ *         int styleStart;
+ *
+ *         for(i=styleRunCount-1; i>=0; --i) {
+ *             if(i>0) {
+ *                 styleStart=styleRun[i-1].limit;
+ *             } else {
+ *                 styleStart=0;
+ *             }
+ *             if(limit>=styleStart) {
+ *                 if(styleStart<start) { styleStart=start; }
+ *                 renderRun(text, styleStart, limit,
+ *                           direction, styleRun[i].style);
+ *                 if(styleStart==start) { break; }
+ *                 limit=styleStart;
+ *             }
+ *         }
+ *     }
+ * }
+ *
+ * // the line object represents text[start..limit-1]
+ * void renderLine(UBiDi *line, const UChar *text,
+ *                 UTextOffset start, UTextOffset limit,
+ *                 const StyleRun *styleRuns, int styleRunCount) {
+ *     UBiDiDirection direction=ubidi_getDirection(line);
+ *     if(direction!=UBIDI_MIXED) {
+ *         // unidirectional
+ *         if(styleRunCount<=1) {
+ *             renderRun(text, start, limit, direction, styleRuns[0].style);
+ *         } else {
+ *             renderDirectionalRun(text, start, limit,
+ *                                  direction, styleRuns, styleRunCount);
+ *         }
+ *     } else {
+ *         // mixed-directional
+ *         UTextOffset count, i, length;
+ *         UBiDiLevel level;
+ *
+ *         count=ubidi_countRuns(para, pErrorCode);
+ *         if(U_SUCCESS(*pErrorCode)) {
+ *             if(styleRunCount<=1) {
+ *                 Style style=styleRuns[0].style;
+ *
+ *                 // iterate over directional runs
+ *                for(i=0; i<count; ++i) {
+ *                    direction=ubidi_getVisualRun(para, i, &start, &length);
+ *                     renderRun(text, start, start+length, direction, style);
+ *                }
+ *             } else {
+ *                 UTextOffset j;
+ *
+ *                 // iterate over both directional and style runs
+ *                 for(i=0; i<count; ++i) {
+ *                     direction=ubidi_getVisualRun(line, i, &start, &length);
+ *                     renderDirectionalRun(text, start, start+length,
+ *                                          direction, styleRuns, styleRunCount);
+ *                 }
+ *             }
+ *         }
+ *     }
+ * }
+ *
+ *void renderParagraph(const UChar *text, UTextOffset length,
+ *                     UBiDiDirection textDirection,
+ *                      const StyleRun *styleRuns, int styleRunCount,
+ *                      int lineWidth,
+ *                      UErrorCode *pErrorCode) {
+ *     UBiDi *para;
+ *
+ *     if(pErrorCode==NULL || U_FAILURE(*pErrorCode) || length&lt;=0) {
+ *         return;
+ *     }
+ *
+ *     para=ubidi_openSized(length, 0, pErrorCode);
+ *     if(para==NULL) { return; }
+ *
+ *     ubidi_setPara(para, text, length,
+ *                   textDirection ? UBIDI_DEFAULT_RTL : UBIDI_DEFAULT_LTR,
+ *                   NULL, pErrorCode);
+ *     if(U_SUCCESS(*pErrorCode)) {
+ *         UBiDiLevel paraLevel=1&ubidi_getParaLevel(para);
+ *         StyleRun styleRun={ length, styleNormal };
+ *         int width;
+ *
+ *         if(styleRuns==NULL || styleRunCount&lt;=0) {
+ *            styleRunCount=1;
+ *             styleRuns=&styleRun;
+ *         }
+ *
+ *        // assume styleRuns[styleRunCount-1].limit>=length
+ *
+ *         width=getTextWidth(text, 0, length, styleRuns, styleRunCount);
+ *         if(width&lt;=lineWidth) {
+ *             // everything fits onto one line
+ *
+ *            // prepare rendering a new line from either left or right
+ *             startLine(paraLevel, width);
+ *
+ *             renderLine(para, text, 0, length,
+ *                        styleRuns, styleRunCount);
+ *         } else {
+ *             UBiDi *line;
+ *
+ *             // we need to render several lines
+ *             line=ubidi_openSized(length, 0, pErrorCode);
+ *             if(line!=NULL) {
+ *                 UTextOffset start=0, limit;
+ *                 int styleRunStart=0, styleRunLimit;
+ *
+ *                 for(;;) {
+ *                     limit=length;
+ *                     styleRunLimit=styleRunCount;
+ *                     getLineBreak(text, start, &limit, para,
+ *                                  styleRuns, styleRunStart, &styleRunLimit,
+ *                                 &width);
+ *                     ubidi_setLine(para, start, limit, line, pErrorCode);
+ *                     if(U_SUCCESS(*pErrorCode)) {
+ *                         // prepare rendering a new line
+ *                         // from either left or right
+ *                         startLine(paraLevel, width);
+ *
+ *                         renderLine(line, text, start, limit,
+ *                                    styleRuns+styleRunStart,
+ *                                    styleRunLimit-styleRunStart);
+ *                     }
+ *                     if(limit==length) { break; }
+ *                     start=limit;
+ *                     styleRunStart=styleRunLimit-1;
+ *                     if(start>=styleRuns[styleRunStart].limit) {
+ *                         ++styleRunStart;
+ *                     }
+ *                 }
+ *
+ *                 ubidi_close(line);
+ *             }
+ *        }
+ *    }
+ *
+ *     ubidi_close(para);
+ *}
+ *\endcode
+ * </pre>
  */
-DOCXX_TAG
+ 
+/*DOCXX_TAG*/
 /*@{*/
 
 /**
@@ -552,20 +782,22 @@ ubidi_countRuns(UBiDi *pBiDi, UErrorCode *pErrorCode);
  *
  * Example:
  * <pre>
- *&nbsp; UTextOffset i, count=ubidi_countRuns(pBiDi),
- *&nbsp;         logicalStart, visualIndex=0, length;
- *&nbsp; for(i=0; i&lt;count; ++i) {
- *&nbsp;     if(UBIDI_LTR==ubidi_getVisualRun(pBiDi, i, &logicalStart, &length)) {
- *&nbsp;         do { // LTR
- *&nbsp;             show_char(text[logicalStart++], visualIndex++);
- *&nbsp;         } while(--length>0);
- *&nbsp;     } else {
- *&nbsp;         logicalStart+=length;  // logicalLimit
- *&nbsp;         do { // RTL
- *&nbsp;             show_char(text[--logicalStart], visualIndex++);
- *&nbsp;         } while(--length>0);
- *&nbsp;     }
- *&nbsp; }
+ * \code
+ * UTextOffset i, count=ubidi_countRuns(pBiDi),
+ *         logicalStart, visualIndex=0, length;
+ * for(i=0; i<count; ++i) {
+ *    if(UBIDI_LTR==ubidi_getVisualRun(pBiDi, i, &logicalStart, &length)) {
+ *         do { // LTR
+ *             show_char(text[logicalStart++], visualIndex++);
+ *         } while(--length>0);
+ *     } else {
+ *         logicalStart+=length;  // logicalLimit
+ *         do { // RTL
+ *             show_char(text[--logicalStart], visualIndex++);
+ *         } while(--length>0);
+ *     }
+ * }
+ *\endcode
  * </pre>
  *
  * Note that in right-to-left runs, code like this places
@@ -890,235 +1122,9 @@ ubidi_writeReverse(const UChar *src, int32_t srcLength,
                    UChar *dest, int32_t destSize,
                    uint16_t options,
                    UErrorCode *pErrorCode);
+/*#define BIDI_SAMPLE_CODE*/
+/*@}*/
 
-/**
- * @name Sample code for the ICU BIDI API
- *
- * <h2>Rendering a paragraph with the ICU BiDi API</h2>
- *
- * This is (hypothetical) sample code that illustrates
- * how the ICU BiDi API could be used to render a paragraph of text.
- * Rendering code depends highly on the graphics system,
- * therefore this sample code must make a lot of assumptions,
- * which may or may not match any existing graphics system's properties.
- *
- * <p>The basic assumptions are:</p>
- * <ul>
- * <li>Rendering is done from left to right on a horizontal line.</li>
- * <li>A run of single-style, unidirectional text can be rendered at once.</li>
- * <li>Such a run of text is passed to the graphics system with
- *     characters (code units) in logical order.</li>
- * <li>The line-breaking algorithm is very complicated
- *     and Locale-dependent -
- *     and therefore its implementation omitted from this sample code.</li>
- * </ul>
- *
- * <pre>
- *&nbsp; #include "unicode/ubidi.h"
- *&nbsp; 
- *&nbsp; typedef enum {
- *&nbsp;     styleNormal=0, styleSelected=1,
- *&nbsp;     styleBold=2, styleItalics=4,
- *&nbsp;     styleSuper=8, styleSub=16
- *&nbsp; } Style;
- *&nbsp; 
- *&nbsp; typedef struct { UTextOffset limit; Style style; } StyleRun;
- *&nbsp; 
- *&nbsp; int getTextWidth(const UChar *text, UTextOffset start, UTextOffset limit,
- *&nbsp;                  const StyleRun *styleRuns, int styleRunCount);
- *&nbsp; 
- *&nbsp; // set *pLimit and *pStyleRunLimit for a line
- *&nbsp; // from text[start] and from styleRuns[styleRunStart]
- *&nbsp; // using ubidi_getLogicalRun(para, ...)
- *&nbsp; void getLineBreak(const UChar *text, UTextOffset start, UTextOffset *pLimit,
- *&nbsp;                   UBiDi *para,
- *&nbsp;                   const StyleRun *styleRuns, int styleRunStart, int *pStyleRunLimit,
- *&nbsp;                   int *pLineWidth);
- *&nbsp; 
- *&nbsp; // render runs on a line sequentially, always from left to right
- *&nbsp; 
- *&nbsp; // prepare rendering a new line
- *&nbsp; void startLine(UBiDiDirection textDirection, int lineWidth);
- *&nbsp; 
- *&nbsp; // render a run of text and advance to the right by the run width
- *&nbsp; // the text[start..limit-1] is always in logical order
- *&nbsp; void renderRun(const UChar *text, UTextOffset start, UTextOffset limit,
- *&nbsp;                UBiDiDirection textDirection, Style style);
- *&nbsp; 
- *&nbsp; // We could compute a cross-product
- *&nbsp; // from the style runs with the directional runs
- *&nbsp; // and then reorder it.
- *&nbsp; // Instead, here we iterate over each run type
- *&nbsp; // and render the intersections -
- *&nbsp; // with shortcuts in simple (and common) cases.
- *&nbsp; // renderParagraph() is the main function.
- *&nbsp; 
- *&nbsp; // render a directional run with
- *&nbsp; // (possibly) multiple style runs intersecting with it
- *&nbsp; void renderDirectionalRun(const UChar *text,
- *&nbsp;                           UTextOffset start, UTextOffset limit,
- *&nbsp;                           UBiDiDirection direction,
- *&nbsp;                           const StyleRun *styleRuns, int styleRunCount) {
- *&nbsp;     int i;
- *&nbsp; 
- *&nbsp;     // iterate over style runs
- *&nbsp;     if(direction==UBIDI_LTR) {
- *&nbsp;         int styleLimit;
- *&nbsp; 
- *&nbsp;         for(i=0; i&lt;styleRunCount; ++i) {
- *&nbsp;             styleLimit=styleRun[i].limit;
- *&nbsp;             if(start&lt;styleLimit) {
- *&nbsp;                 if(styleLimit>limit) { styleLimit=limit; }
- *&nbsp;                 renderRun(text, start, styleLimit,
- *&nbsp;                           direction, styleRun[i].style);
- *&nbsp;                 if(styleLimit==limit) { break; }
- *&nbsp;                 start=styleLimit;
- *&nbsp;             }
- *&nbsp;         }
- *&nbsp;     } else {
- *&nbsp;         int styleStart;
- *&nbsp; 
- *&nbsp;         for(i=styleRunCount-1; i>=0; --i) {
- *&nbsp;             if(i>0) {
- *&nbsp;                 styleStart=styleRun[i-1].limit;
- *&nbsp;             } else {
- *&nbsp;                 styleStart=0;
- *&nbsp;             }
- *&nbsp;             if(limit>=styleStart) {
- *&nbsp;                 if(styleStart&lt;start) { styleStart=start; }
- *&nbsp;                 renderRun(text, styleStart, limit,
- *&nbsp;                           direction, styleRun[i].style);
- *&nbsp;                 if(styleStart==start) { break; }
- *&nbsp;                 limit=styleStart;
- *&nbsp;             }
- *&nbsp;         }
- *&nbsp;     }
- *&nbsp; }
- *&nbsp; 
- *&nbsp; // the line object represents text[start..limit-1]
- *&nbsp; void renderLine(UBiDi *line, const UChar *text,
- *&nbsp;                 UTextOffset start, UTextOffset limit,
- *&nbsp;                 const StyleRun *styleRuns, int styleRunCount) {
- *&nbsp;     UBiDiDirection direction=ubidi_getDirection(line);
- *&nbsp;     if(direction!=UBIDI_MIXED) {
- *&nbsp;         // unidirectional
- *&nbsp;         if(styleRunCount&lt;=1) {
- *&nbsp;             renderRun(text, start, limit, direction, styleRuns[0].style);
- *&nbsp;         } else {
- *&nbsp;             renderDirectionalRun(text, start, limit, 
- *&nbsp;                                  direction, styleRuns, styleRunCount);
- *&nbsp;         }
- *&nbsp;     } else {
- *&nbsp;         // mixed-directional
- *&nbsp;         UTextOffset count, i, length;
- *&nbsp;         UBiDiLevel level;
- *&nbsp; 
- *&nbsp;         count=ubidi_countRuns(para, pErrorCode);
- *&nbsp;         if(U_SUCCESS(*pErrorCode)) {
- *&nbsp;             if(styleRunCount&lt;=1) {
- *&nbsp;                 Style style=styleRuns[0].style;
- *&nbsp; 
- *&nbsp;                 // iterate over directional runs
- *&nbsp;                 for(i=0; i&lt;count; ++i) {
- *&nbsp;                     direction=ubidi_getVisualRun(para, i, &start, &length);
- *&nbsp;                     renderRun(text, start, start+length, direction, style);
- *&nbsp;                 }
- *&nbsp;             } else {
- *&nbsp;                 UTextOffset j;
- *&nbsp; 
- *&nbsp;                 // iterate over both directional and style runs
- *&nbsp;                 for(i=0; i&lt;count; ++i) {
- *&nbsp;                     direction=ubidi_getVisualRun(line, i, &start, &length);
- *&nbsp;                     renderDirectionalRun(text, start, start+length, 
- *&nbsp;                                          direction, styleRuns, styleRunCount);
- *&nbsp;                 }
- *&nbsp;             }
- *&nbsp;         }
- *&nbsp;     }
- *&nbsp; }
- *&nbsp; 
- *&nbsp; void renderParagraph(const UChar *text, UTextOffset length,
- *&nbsp;                      UBiDiDirection textDirection,
- *&nbsp;                      const StyleRun *styleRuns, int styleRunCount,
- *&nbsp;                      int lineWidth,
- *&nbsp;                      UErrorCode *pErrorCode) {
- *&nbsp;     UBiDi *para;
- *&nbsp; 
- *&nbsp;     if(pErrorCode==NULL || U_FAILURE(*pErrorCode) || length&lt;=0) {
- *&nbsp;         return;
- *&nbsp;     }
- *&nbsp; 
- *&nbsp;     para=ubidi_openSized(length, 0, pErrorCode);
- *&nbsp;     if(para==NULL) { return; }
- *&nbsp; 
- *&nbsp;     ubidi_setPara(para, text, length,
- *&nbsp;                   textDirection ? UBIDI_DEFAULT_RTL : UBIDI_DEFAULT_LTR,
- *&nbsp;                   NULL, pErrorCode);
- *&nbsp;     if(U_SUCCESS(*pErrorCode)) {
- *&nbsp;         UBiDiLevel paraLevel=1&ubidi_getParaLevel(para);
- *&nbsp;         StyleRun styleRun={ length, styleNormal };
- *&nbsp;         int width;
- *&nbsp; 
- *&nbsp;         if(styleRuns==NULL || styleRunCount&lt;=0) {
- *&nbsp;             styleRunCount=1;
- *&nbsp;             styleRuns=&styleRun;
- *&nbsp;         }
- *&nbsp; 
- *&nbsp;         // assume styleRuns[styleRunCount-1].limit>=length
- *&nbsp; 
- *&nbsp;         width=getTextWidth(text, 0, length, styleRuns, styleRunCount);
- *&nbsp;         if(width&lt;=lineWidth) {
- *&nbsp;             // everything fits onto one line
- *&nbsp; 
- *&nbsp;             // prepare rendering a new line from either left or right
- *&nbsp;             startLine(paraLevel, width);
- *&nbsp; 
- *&nbsp;             renderLine(para, text, 0, length,
- *&nbsp;                        styleRuns, styleRunCount);
- *&nbsp;         } else {
- *&nbsp;             UBiDi *line;
- *&nbsp; 
- *&nbsp;             // we need to render several lines
- *&nbsp;             line=ubidi_openSized(length, 0, pErrorCode);
- *&nbsp;             if(line!=NULL) {
- *&nbsp;                 UTextOffset start=0, limit;
- *&nbsp;                 int styleRunStart=0, styleRunLimit;
- *&nbsp; 
- *&nbsp;                 for(;;) {
- *&nbsp;                     limit=length;
- *&nbsp;                     styleRunLimit=styleRunCount;
- *&nbsp;                     getLineBreak(text, start, &limit, para,
- *&nbsp;                                  styleRuns, styleRunStart, &styleRunLimit,
- *&nbsp;                                  &width);
- *&nbsp;                     ubidi_setLine(para, start, limit, line, pErrorCode);
- *&nbsp;                     if(U_SUCCESS(*pErrorCode)) {
- *&nbsp;                         // prepare rendering a new line
- *&nbsp;                         // from either left or right
- *&nbsp;                         startLine(paraLevel, width);
- *&nbsp; 
- *&nbsp;                         renderLine(line, text, start, limit,
- *&nbsp;                                    styleRuns+styleRunStart,
- *&nbsp;                                    styleRunLimit-styleRunStart);
- *&nbsp;                     }
- *&nbsp;                     if(limit==length) { break; }
- *&nbsp;                     start=limit;
- *&nbsp;                     styleRunStart=styleRunLimit-1;
- *&nbsp;                     if(start>=styleRuns[styleRunStart].limit) {
- *&nbsp;                         ++styleRunStart;
- *&nbsp;                     }
- *&nbsp;                 }
- *&nbsp; 
- *&nbsp;                 ubidi_close(line);
- *&nbsp;             }
- *&nbsp;         }
- *&nbsp;     }
- *&nbsp; 
- *&nbsp;     ubidi_close(para);
- *&nbsp; }
- * </pre>
- */
-BIDI_SAMPLE_CODE
-/*@{*/
 /*@}*/
 
 /*@}*/

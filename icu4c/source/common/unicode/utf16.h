@@ -12,7 +12,12 @@
 *
 *   created on: 1999sep09
 *   created by: Markus W. Scherer
-*
+*/
+
+/**
+* \file
+* \brief Description of UTF-16 macros
+* 
 *   This file defines macros to deal with UTF-16 code units and code points.
 *   "Safe" macros check for length overruns and illegal sequences, and
 *   also for irregular sequences when the strict option is set.
