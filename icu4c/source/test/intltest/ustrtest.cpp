@@ -727,7 +727,7 @@ UnicodeStringTest::TestFindAndReplace()
     expectedValue = "One MISSISSIPPI, two MISSISSIPPI, three MISSISSIPPI, four\n";
     if (test1 != expectedValue)
         errln("findAndReplace failed: expected \"" + expectedValue + "\", got \"" + test1 + "\".");
-    test1.findAndReplace(test3, test2, 2, 32);
+    test1.findAndReplace(2, 32, test3, test2);
     expectedValue = "One potato, two potato, three MISSISSIPPI, four\n";
     if (test1 != expectedValue)
         errln("findAndReplace failed: expected \"" + expectedValue + "\", got \"" + test1 + "\".");
