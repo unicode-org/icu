@@ -4,8 +4,8 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliteratorParser.java,v $
-* $Date: 2001/11/09 00:51:53 $
-* $Revision: 1.9 $
+* $Date: 2001/11/12 18:25:46 $
+* $Revision: 1.10 $
 **********************************************************************
 */
 package com.ibm.text;
@@ -435,6 +435,7 @@ class TransliteratorParser {
                     if (escaped == -1) {
                         syntaxError("Malformed escape", rule, start);
                     }
+                    parser.checkVariableRange(escaped, rule, start);
                     UTF16.append(buf, escaped);
                     continue;
                 }
@@ -467,9 +468,15 @@ class TransliteratorParser {
                             }
                         }
                         quoteLimit = buf.length();
+                        
+                        for (iq=quoteStart; iq<quoteLimit; ++iq) {
+                            parser.checkVariableRange(buf.charAt(iq), rule, start);
+                        }
                     }
                     continue;
                 }
+
+                parser.checkVariableRange(c, rule, start);
 
                 switch (c) {
                     
@@ -1145,11 +1152,23 @@ class TransliteratorParser {
     }
 
     /**
+     * Assert that the given character is NOT within the variable range.
+     * If it is, signal an error.  This is neccesary to ensure that the
+     * variable range does not overlap characters used in a rule.
+     */
+    private void checkVariableRange(int ch, String rule, int start) {
+        if (ch >= data.variablesBase && ch < variableLimit) {
+            syntaxError("Variable range character in rule", rule, start);
+        }
+    }
+
+    /**
      * Set the maximum backup to 'backup', in response to a pragma
      * statement.
      */
     private void pragmaMaximumBackup(int backup) {
         //TODO Finish
+        throw new IllegalArgumentException("use maximum backup pragma not implemented yet");
     }
 
     /**
@@ -1158,6 +1177,7 @@ class TransliteratorParser {
      */
     private void pragmaNormalizeRules(Normalizer.Mode mode) {
         //TODO Finish
+        throw new IllegalArgumentException("use normalize rules pragma not implemented yet");
     }
 
     /**
