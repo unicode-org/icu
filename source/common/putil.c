@@ -1250,11 +1250,12 @@ mac_lc_rec mac_lc_recs[] = {
 
 #endif
 
-const char* 
-uprv_getDefaultLocaleID()
-{
 #ifdef POSIX
+/* Return just the POSIX id, whatever happens to be in it */
+static const char *uprv_getPOSIXID()
+{
   const char* posixID = getenv("LC_ALL");
+  char *p;
   if (posixID == 0) posixID = getenv("LANG");
   if (posixID == 0) posixID = setlocale(LC_ALL, NULL);
 
@@ -1262,6 +1263,68 @@ uprv_getDefaultLocaleID()
        (uprv_strncmp("C ", posixID, 2) == 0) ) {  /* HPUX returns 'C C C C C C C' */
     posixID = "en_US";
   }
+  return posixID;
+}
+#endif
+
+const char* 
+uprv_getDefaultLocaleID()
+{
+#ifdef POSIX
+  char *correctedPOSIXLocale = 0;
+  const char* posixID = uprv_getPOSIXID();
+  char *p;
+
+  /* Format: (no spaces)
+     ll [ _CC ] [ . MM ] [ @ VV]
+
+     l = lang, C = ctry, M = charmap, V = variant
+  */
+
+  if((p = uprv_strchr(posixID, '.')) != NULL)
+  {
+    /* assume new locale can't be larger than old one? */
+    correctedPOSIXLocale = uprv_malloc(uprv_strlen(posixID));
+    uprv_strncpy(correctedPOSIXLocale, posixID, p-posixID);
+    correctedPOSIXLocale[p-posixID] = 0;
+
+    posixID = correctedPOSIXLocale;
+  }
+  
+  if((p = uprv_strchr(posixID, '@')) != NULL)
+  {
+    if(correctedPOSIXLocale == NULL) {
+      correctedPOSIXLocale = uprv_malloc(uprv_strlen(posixID));
+      uprv_strncpy(correctedPOSIXLocale, posixID, p-posixID);
+      correctedPOSIXLocale[p-posixID] = 0;
+    }
+    p++;
+
+    /* Take care of any special cases here.. */
+    if(!uprv_strcmp(p, "nynorsk"))
+      {
+        p = "NY";
+        
+        /*      Should we assume no_NO_NY instead of possible no__NY?
+         * if(!uprv_strcmp(correctedPOSIXLocale, "no")) {
+         *         uprv_strcpy(correctedPOSIXLocale, "no_NO");
+         *         }
+         */
+      }
+
+    if(uprv_strchr(correctedPOSIXLocale,'_') == NULL)
+      uprv_strcat(correctedPOSIXLocale, "__"); /* aa@b -> aa__b */
+    else
+      uprv_strcat(correctedPOSIXLocale, "_"); /* aa_CC@b -> aa_CC_b */
+    uprv_strcat(correctedPOSIXLocale, p);
+
+    /* Should there be a map from 'no@nynorsk' -> no_NO_NY here?
+       How about 'russian' -> 'ru'?
+    */
+
+    posixID = correctedPOSIXLocale;
+  }
+  
   return posixID;
 #endif
 
@@ -1456,6 +1519,29 @@ const char* uprv_getDefaultCodepage()
     char *localeName = NULL;
     const char *defaultTable = NULL;
  
+    uprv_memset(codesetName, 0, 100);
+    localeName = uprv_getPOSIXID();
+    if (localeName != NULL) 
+    {
+        uprv_strcpy(codesetName, localeName);
+        if  ((name = (uprv_strchr(codesetName, (int) '.'))) != NULL) 
+        {
+            /* strip the locale name and look at the suffix only */
+            name++;
+            if ((euro  = (uprv_strchr(name, (int)'@'))) != NULL)
+            {
+               *euro  = 0;
+            }
+            /* if we can find the codset name from setlocale, return that. */
+            if (uprv_strlen(name) != 0) 
+            {
+                return name;
+            }
+        } 
+    }
+
+    /* otherwise, try CTYPE */
+
     uprv_memset(codesetName, 0, 100);
     localeName = setlocale(LC_CTYPE, "");
     if (localeName != NULL) 
