@@ -1,0 +1,189 @@
+#--------------------------------------------------------------------
+# Copyright (c) 1999-2001, International Business Machines
+# Corporation and others.  All Rights Reserved.
+#--------------------------------------------------------------------
+# Date: Tue Jan 23 2001
+#--------------------------------------------------------------------
+
+# To Do: finish adding shadda, add sokoon
+# [Is this done?  Can someone finish this?]
+
+### $alefmadda=آ;
+### $alefuhamza=أ;
+### $wauuhamza=ؤ;
+### $alefhamza=إ;
+### $yehuhamza=ئ;
+### $alef=ا;
+### $beh=ب;
+### $tehmarbuta=ة;
+### $teh=ت;
+### $theh=ث;
+### $geem=ج;
+### $hah=ح;
+### $kha=خ;
+### $dal=د;
+### $dhal=ذ;
+### $reh=ر;
+### $zain=ز;
+### $seen=س;
+### $sheen=ش;
+### $sad=ص;
+### $dad=ض;
+### $tah=ط;
+### $zah=ظ;
+### $ein=ع;
+### $ghein=غ;
+### $feh=ف;
+### $qaaf=ق;
+### $kaf=ك;
+### $lam=ل;
+### $meem=م;
+### $noon=ن;
+### $heh=ه;
+### $wau=و;
+### $yehmaqsura=ى;
+### $yeh=ي;
+### $peh=ڤ;
+
+### $hamza=ء;
+### $fathatein=ً;
+### $dammatein=ٌ;
+### $kasratein=ٍ;
+### $fatha=َ;
+### $damma=ُ;
+### $kasra=ِ;
+### $shadda=ّ;
+### $sokoon=ْ;
+
+# Doubles - liu
+t'' < {ت} [تثةط];
+h'' < {ه} [هح];
+s'' < {س} ش;
+
+# A few pathological special cases to make round
+# trip work. - liu
+d'~'d   <> د د;
+dh'~'dh <> ذ ذ;
+dd'~'dd <> ض ض;
+
+# Shadda:  Map x ّ to x x, where x is dh, dd, or
+# d (that is, ذ, ض, or د).  If x is d, d'd is
+# output.  Net effect is to map s.th. like ض ّ
+# to dd'dd. - liu
+ذ {dh} <> dh {ّ};
+ض  {dd} <> dd {ّ};
+د {''d} [^dh] <> d {ّ}; # Avoid d'dd or d'dh
+
+# [This should be removed, but it's good for demos]
+Arabic> \
+تتمتع' ' \
+اللغة' ' \
+العرببية' ' \
+ببنظم' ' \
+كتاببية' ' \
+جميلة;
+
+# Main rules              
+''ai<a{آ;
+ai<>آ;
+''ae<a{أ;
+ae<>أ;
+''ao<a{إ;
+ao<>إ;
+''aa<a{ا;
+aa<>ا;
+''an<a{ً;
+an<>ً;
+''a<a{َ;
+a<>َ;
+b<>ب;
+''dh<d{ذ;
+dh<>ذ;
+''dd<d{ض;
+dd<>ض;
+''d<d{د;
+d<>د;
+''e<a{ع;
+''e<w{ع;
+''e<y{ع;
+e<>ع;
+f<>ف;
+gh<>غ;
+''hh<d{ح;
+''hh<t{ح;
+''hh<k{ح;
+''hh<s{ح;
+hh<>ح;
+''h<d{ه;
+''h<t{ه;
+''h<k{ه;
+''h<s{ه;
+h<>ه;
+''ii<i{ٍ;
+ii<>ٍ;
+''i<i{ِ;
+i<>ِ;
+j<>ج;
+kh<>خ;
+k<>ك;
+l<>ل;
+''m<y{م;
+''m<t{م;
+m<>م;
+n<>ن;
+''o<a{ء;
+o<>ء;
+p<>ڤ;
+q<>ق;
+r<>ر;
+sh<>ش;
+''ss<s{ص;
+ss<>ص;
+''s<s{س;
+s<>س;
+th<>ث;
+tm<>ة;
+''tt<t{ط;
+tt<>ط;
+''t<t{ت;
+t<>ت;
+''uu<u{ٌ;
+uu<>ٌ;
+''u<u{ُ;
+u<>ُ;
+we<>ؤ;
+w<>و;
+ye<>ئ;
+ym<>ى;
+''y<y{ي;
+y<>ي;
+''zz<z{ظ;
+zz<>ظ;
+''z<z{ز;
+z<>ز;
+
+# One-way Latin-Arabic compatability rules
+c>ك;
+g>ج;
+x>كّس;
+v>ب;
+
+# Digits
+0<>٠; # Arabic digit 0
+1<>١; # Arabic digit 1
+2<>٢; # Arabic digit 2
+3<>٣; # Arabic digit 3
+4<>٤; # Arabic digit 4
+5<>٥; # Arabic digit 5
+6<>٦; # Arabic digit 6
+7<>٧; # Arabic digit 7
+8<>٨; # Arabic digit 8
+9<>٩; # Arabic digit 9
+'%'<>٪; # Arabic %
+'.'<>٫; # Arabic decimal separator
+','<>٬; # Arabic thousands separator
+'*'<>٭; # Arabic five-pointed star
+
+''>;
+
+# eof

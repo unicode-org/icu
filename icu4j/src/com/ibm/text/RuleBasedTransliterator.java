@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/RuleBasedTransliterator.java,v $ 
- * $Date: 2000/08/31 17:11:42 $ 
- * $Revision: 1.39 $
+ * $Date: 2001/02/03 00:46:21 $ 
+ * $Revision: 1.40 $
  *
  *****************************************************************************************
  */
@@ -16,6 +16,7 @@ import java.util.Hashtable;
 import java.util.Vector;
 import java.text.ParsePosition;
 import com.ibm.util.Utility;
+import com.ibm.text.resources.ResourceReader;
 
 /**
  * <code>RuleBasedTransliterator</code> is a transliterator
@@ -278,7 +279,7 @@ import com.ibm.util.Utility;
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
  * 
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.39 $ $Date: 2000/08/31 17:11:42 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.40 $ $Date: 2001/02/03 00:46:21 $
  */
 public class RuleBasedTransliterator extends Transliterator {
 
@@ -327,6 +328,10 @@ public class RuleBasedTransliterator extends Transliterator {
 
     static Data parse(String rules, int direction) {
         return parse(new String[] { rules }, direction);
+    }
+
+    static Data parse(ResourceReader rules, int direction) {
+        return new Parser(rules, direction).getData();
     }
 
     /**
@@ -598,6 +603,86 @@ public class RuleBasedTransliterator extends Transliterator {
         private static final char SEGMENT_CLOSE       = ')';
 
         /**
+         * A private abstract class representing the interface to rule
+         * source code that is broken up into lines.  Handles the
+         * folding of lines terminated by a backslash.  This folding
+         * is limited; it does not account for comments, quotes, or
+         * escapes, so its use to be limited.
+         */
+        private abstract class RuleBody {
+
+            /**
+             * Retrieve the next line of the source, or return null if
+             * none.  Folds lines terminated by a backslash into the
+             * next line, without regard for comments, quotes, or
+             * escapes.
+             */
+            String nextLine() {
+                String s = handleNextLine();
+                if (s != null &&
+                    s.length() > 0 &&
+                    s.charAt(s.length() - 1) == '\\') {
+
+                    StringBuffer b = new StringBuffer(s);
+                    do {
+                        b.deleteCharAt(b.length()-1);
+                        s = handleNextLine();
+                        if (s == null) {
+                            break;
+                        }
+                        b.append(s);
+                    } while (s.length() > 0 &&
+                             s.charAt(s.length() - 1) == '\\');
+
+                    s = b.toString();
+                }
+                return s;
+            }
+
+            /**
+             * Reset to the first line of the source.
+             */
+            abstract void reset();
+
+            /**
+             * Subclass method to return the next line of the source.
+             */
+            abstract String handleNextLine();
+        };
+
+        /**
+         * RuleBody subclass for a String[] array.
+         */
+        private class RuleArray extends RuleBody {
+            String[] array;
+            int i;
+            public RuleArray(String[] array) { this.array = array; i = 0; }
+            public String handleNextLine() {
+                return (i < array.length) ? array[i++] : null;
+            }
+            public void reset() {
+                i = 0;
+            }
+        };
+
+        /**
+         * RuleBody subclass for a ResourceReader.
+         */
+        private class RuleReader extends RuleBody {
+            ResourceReader reader;
+            public RuleReader(ResourceReader reader) { this.reader = reader; }
+            public String handleNextLine() {
+                try {
+                    return reader.readLine();
+                } catch (java.io.IOException e) {}
+                return null;
+            }
+            public void reset() {
+                reader.reset();
+            }
+        };
+
+        /**
          * @param rules list of rules, separated by semicolon characters
          * @exception IllegalArgumentException if there is a syntax error in the
          * rules
@@ -605,7 +690,16 @@ public class RuleBasedTransliterator extends Transliterator {
         public Parser(String[] ruleArray, int direction) {
             this.direction = direction;
             data = new Data();
-            parseRules(ruleArray);
+            parseRules(new RuleArray(ruleArray));
+        }
+
+        /**
+         * @param rules resource reader for the rules
+         */
+        public Parser(ResourceReader rules, int direction) {
+            this.direction = direction;
+            data = new Data();
+            parseRules(new RuleReader(rules));
         }
 
         public Data getData() {
@@ -622,7 +716,7 @@ public class RuleBasedTransliterator extends Transliterator {
          * @exception IllegalArgumentException if there is a syntax error in the
          * rules
          */
-        private void parseRules(String[] ruleArray) {
+        private void parseRules(RuleBody ruleArray) {
             determineVariableRange(ruleArray);
             setVariablesVector = new Vector();
             parseData = new ParseData();
@@ -630,9 +724,13 @@ public class RuleBasedTransliterator extends Transliterator {
             StringBuffer errors = null;
             int errorCount = 0;
 
+            ruleArray.reset();
         main:
-            for (int i=0; i<ruleArray.length; ++i) {
-                String rule = ruleArray[i];
+            for (;;) {
+                String rule = ruleArray.nextLine();
+                if (rule == null) {
+                    break;
+                }
                 int pos = 0;
                 int limit = rule.length();
                 while (pos < limit) {
@@ -1192,7 +1290,7 @@ public class RuleBasedTransliterator extends Transliterator {
          * When done, everything not in the hash is available for use.  In practice,
          * this method may employ some other algorithm for improved speed.
          */
-        private final void determineVariableRange(String[] ruleArray) {
+        private final void determineVariableRange(RuleBody ruleArray) {
             // As an initial implementation, we just run through all the
             // characters, ignoring any quoting.  This works since the quote
             // mechanisms are outside the private use area.
@@ -1309,12 +1407,16 @@ public class RuleBasedTransliterator extends Transliterator {
              * characters in this range, then this range itself is
              * returned.
              */
-            Range largestUnusedSubrange(String[] strings) {
+            Range largestUnusedSubrange(RuleBody strings) {
                 Vector v = new Vector(1);
                 v.addElement(clone());
 
-                for (int k=0; k<strings.length; ++k) {
-                    String str = strings[k];
+                strings.reset();
+                for (;;) {
+                    String str = strings.nextLine();
+                    if (str == null) {
+                        break;
+                    }
                     int n = str.length();
                     for (int i=0; i<n; ++i) {
                         char c = str.charAt(i);
@@ -1349,6 +1451,9 @@ public class RuleBasedTransliterator extends Transliterator {
 
 /**
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.40  2001/02/03 00:46:21  alan4j
+ * Load RuleBasedTransliterator files from UTF8 files instead of ResourceBundles
+ *
  * Revision 1.39  2000/08/31 17:11:42  alan4j
  * Implement anchors.
  *

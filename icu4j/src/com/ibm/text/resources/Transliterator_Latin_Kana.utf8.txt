@@ -1,0 +1,969 @@
+#--------------------------------------------------------------------
+# Copyright (c) 1999-2001, International Business Machines
+# Corporation and others.  All Rights Reserved.
+#--------------------------------------------------------------------
+# Date: Tue Jan 23 12:18:46 2001
+#--------------------------------------------------------------------
+
+# Latin-Kana
+
+
+# Japanese hiragana and katakana to and from latin
+# (romaji).  Lower case latin corresponds to hiragana;
+# upper case latin to katakana.  The handling of
+# Hiragana and Katakana is largely the same.  The bulk
+# of the transliterator consists of two identical sets
+# of rules, differing only in case.
+
+# Because of minor differences between the two blocks
+# (e.g., the existence of small katakana ka and ke, but
+# no corresponding hiragana), some rules exist for only
+# one script.
+
+# Uses modified Hepburn. Small changes to make
+# unambiguous.
+
+#| Kunrei-shiki: Hepburn/MHepburn
+#| ------------------------------
+#| si:     shi
+#| si ~ya: sha
+#| si ~yu: shu
+#| si ~yo: sho
+#| zi:     ji
+#| zi ~ya: ja
+#| zi ~yu: ju
+#| zi ~yo: jo
+#| ti:     chi
+#| ti ~ya: cha
+#| ti ~yu: chu
+#| ti ~yu: cho
+#| tu:     tsu
+#| di:     ji/dji
+#| du:     zu/dzu
+#| hu:     fu
+
+#| For foreign words:
+#| -----------------
+#| se ~i   si
+#| si ~e   she
+#|
+#| ze ~i   zi
+#| zi ~e   je
+#|
+#| te ~i   ti
+#| ti ~e   che
+#| te ~u   tu
+#|
+#| de ~i   di
+#| de ~u   du
+#| de ~i   di
+#|
+#| he ~u:  hu
+#| hu ~a   fa
+#| hu ~i   fi
+#| hu ~e   he
+#| hu ~o   ho
+
+# Most small forms are generated, but if necessary
+# explicit small forms are given with ~a, ~ya, etc.
+
+#------------------------------------------------------
+# Variables
+
+$vowel=[aeiou];
+### $QUOTE='';
+
+# Hiragana block
+
+### $a2=ぁ;
+### $a=あ;
+### $i2=ぃ;
+### $i=い;
+### $u2=ぅ;
+### $u=う;
+### $e2=ぇ;
+### $e=え;
+### $o2=ぉ;
+### $o=お;
+
+### $ka=か;
+### $ga=が;
+### $ki=き;
+### $gi=ぎ;
+### $ku=く;
+### $gu=ぐ;
+### $ke=け;
+### $ge=げ;
+### $ko=こ;
+### $go=ご;
+
+### $sa=さ;
+### $za=ざ;
+### $si=し;
+### $zi=じ;
+### $su=す;
+### $zu=ず;
+### $se=せ;
+### $ze=ぜ;
+### $so=そ;
+### $zo=ぞ;
+
+### $ta=た;
+### $da=だ;
+### $ti=ち;
+### $di=ぢ;
+### $tu2=っ;
+### $tu=つ;
+### $du=づ;
+### $te=て;
+### $de=で;
+### $to=と;
+### $do=ど;
+
+### $na=な;
+### $ni=に;
+### $nu=ぬ;
+### $ne=ね;
+### $no=の;
+
+### $ha=は;
+### $ba=ば;
+### $pa=ぱ;
+### $hi=ひ;
+### $bi=び;
+### $pi=ぴ;
+### $hu=ふ;
+### $bu=ぶ;
+### $pu=ぷ;
+### $he=へ;
+### $be=べ;
+### $pe=ぺ;
+### $ho=ほ;
+### $bo=ぼ;
+### $po=ぽ;
+
+### $ma=ま;
+### $mi=み;
+### $mu=む;
+### $me=め;
+### $mo=も;
+
+### $ya2=ゃ;
+### $ya=や;
+### $yu2=ゅ;
+### $yu=ゆ;
+### $yo2=ょ;
+### $yo=よ;
+
+### $ra=ら;
+### $ri=り;
+### $ru=る;
+### $re=れ;
+### $ro=ろ;
+
+### $wa2=ゎ;
+### $wa=わ;
+### $wi=ゐ;
+### $we=ゑ;
+### $wo=を;
+
+### $n=ん;
+### $vu=ゔ;
+
+# Alternates, just to make the rules easier
+### $yi2=ぃ;
+### $yi=い;
+### $ye2=ぇ;
+### $ye=え;
+### $wu=$u;
+# End alternates
+
+# Katakana block
+
+### $A2=ァ;
+### $A=ア;
+### $I2=ィ;
+### $I=イ;
+### $U2=ゥ;
+### $U=ウ;
+### $E2=ェ;
+### $E=エ;
+### $O2=ォ;
+### $O=オ;
+
+### $KA=カ;
+### $GA=ガ;
+### $KI=キ;
+### $GI=ギ;
+### $KU=ク;
+### $GU=グ;
+### $KE=ケ;
+### $GE=ゲ;
+### $KO=コ;
+### $GO=ゴ;
+
+### $KA2=ヵ; # Small Katakana KA; no Hiragana equiv.
+### $KE2=ヶ; # Small Katakana KE; no Hiragana equiv.
+
+### $SA=サ;
+### $ZA=ザ;
+### $SI=シ;
+### $ZI=ジ;
+### $SU=ス;
+### $ZU=ズ;
+### $SE=セ;
+### $ZE=ゼ;
+### $SO=ソ;
+### $ZO=ゾ;
+
+### $TA=タ;
+### $DA=ダ;
+### $TI=チ;
+### $DI=ヂ;
+### $TU2=ッ;
+### $TU=ツ;
+### $DU=ヅ;
+### $TE=テ;
+### $DE=デ;
+### $TO=ト;
+### $DO=ド;
+
+### $NA=ナ;
+### $NI=ニ;
+### $NU=ヌ;
+### $NE=ネ;
+### $NO=ノ;
+
+### $HA=ハ;
+### $BA=バ;
+### $PA=パ;
+### $HI=ヒ;
+### $BI=ビ;
+### $PI=ピ;
+### $HU=フ;
+### $BU=ブ;
+### $PU=プ;
+### $HE=ヘ;
+### $BE=ベ;
+### $PE=ペ;
+### $HO=ホ;
+### $BO=ボ;
+### $PO=ポ;
+
+### $MA=マ;
+### $MI=ミ;
+### $MU=ム;
+### $ME=メ;
+### $MO=モ;
+
+### $YA2=ャ;
+### $YA=ヤ;
+### $YU2=ュ;
+### $YU=ユ;
+### $YO2=ョ;
+### $YO=ヨ;
+### $WA2=ヮ;
+
+# Alternates, just to make the rules easier
+### $YI2=ィ;
+### $YI=イ;
+### $YE2=ェ;
+### $YE=エ;
+### $WU=$U;
+# End alternates
+
+### $RA=ラ;
+### $RI=リ;
+### $RU=ル;
+### $RE=レ;
+### $RO=ロ;
+
+### $VA=ヷ;
+### $VI=ヸ;
+### $VU=ヴ;
+### $VE=ヹ;
+### $VO=ヺ;
+
+### $WA=ワ;
+### $WI=ヰ;
+### $WE=ヱ;
+### $WO=ヲ;
+
+### $N=ン;
+### $LONG=ー;
+
+# Variables used for doubled-consonants with tsu
+
+$K_START=[カキクケコかきくけこ];
+$G_START=[ガギグゲゴがぎぐげご];
+
+$S_START=[サシスセソさしすせそ];
+$Z_START=[ザズゼゾざずぜぞ];
+$J_START=[ジじ];
+
+$T_START=[タチツテトたちつてと];
+$D_START=[ダヂヅデドだぢづでど];
+
+$N_START=[ナニヌネノなにぬねの];
+
+$H_START=[ハヒヘホはひへほ];
+$F_START=[フふ];
+$B_START=[バビブベボばびぶべぼ];
+$P_START=[パピプペポぱぴぷぺぽ];
+
+$M_START=[マミムメモまみむめも];
+
+$Y_START=[ヤユヨやゆよ];
+
+$R_START=[ラリルレロらりるれろ];
+
+$W_START=[ワヰヱヲわゐゑを];
+
+$V_START=[ヷヸヴヹヺゔ];
+
+# If ン is followed by $N_QUOTER, then it needs an
+# apostrophe after its romaji form to disambiguate it.
+# E.g., ン ア != ナ, so represent as "n'a", not "na".
+
+$N_QUOTER = [ア イ ウ エ オ ナ ニ ヌ ネ ノ \
+             ヤ ユ ヨ ン];
+
+$n_quoter = [あ い う え お な に ぬ ね の \
+             や ゆ よ ん];
+
+# Lowercase copies for convenience in making hiragana
+# rule set copy
+
+### $long = $LONG;
+### $quote = $QUOTE;
+### $k_start=$K_START;
+### $g_start=$G_START;
+### $s_start=$S_START;
+### $z_start=$Z_START;
+### $j_start=$J_START;
+### $t_start=$T_START;
+### $d_start=$D_START;
+### $n_start=$N_START;
+### $h_start=$H_START;
+### $f_start=$F_START;
+### $b_start=$B_START;
+### $p_start=$P_START;
+### $m_start=$M_START;
+### $y_start=$Y_START;
+### $r_start=$R_START;
+### $w_start=$W_START;
+### $v_start=$V_START;
+
+#------------------------------------------------------
+# Katakana rules
+
+# The rules immediately following are not shared.  That
+# is, they exist only for katakana, not for hiragana.
+
+VA<>ヷ;
+VI<>ヸ;
+VE<>ヹ;
+VO<>ヺ;
+'~KA'<>ヵ;
+'~KE'<>ヶ;
+
+# ~~~ BEGIN shared rules ~~~
+
+# The shared rules are copied from katakana to hiragana
+# and then mechanically lowercased.
+
+A<>ア;
+
+BA<>バ;
+BYA<ビャ;
+BYI<ビィ;
+BYU<ビュ;
+BYE<ビェ;
+BYO<ビョ;
+BI<>ビ;
+BU<>ブ;
+BE<>ベ;
+BO<>ボ;
+BY>ビ|'~Y';
+
+CHA<チャ;
+CHI'~I'<チィ; # Liu
+CHU<チュ;
+CHE<チェ;
+CHO<チョ;
+CHI<>チ;
+CH>チ|'~Y';
+
+C}I>|S;
+C}E>|S;
+
+DA<>ダ;
+DI<>ディ;
+DU<>デゥ;
+DE<>デ;
+DO<>ド;
+DZU<>ヅ;
+DJA<ヂャ;
+DJI'~I'<ヂィ; # Liu
+DJU<ヂュ;
+DJE<ヂェ;
+DJO<ヂョ;
+DJI<>ヂ;
+DJ>ヂ|'~Y';
+
+E<>エ;
+
+FA<ファ;
+FI<フィ;
+FE<フェ;
+FO<フォ;
+FU<>フ;
+
+GA<>ガ;
+GYA<ギャ;
+GYI<ギィ;
+GYU<ギュ;
+GYE<ギェ;
+GYO<ギョ;
+GI<>ギ;
+GU<>グ;
+GE<>ゲ;
+GO<>ゴ;
+GY>ギ|'~Y';
+
+HA<>ハ;
+HI<>ヒ;
+HU<>ヘゥ;
+HE<>ヘ;
+HO<>ホ;
+
+I<>イ;
+
+JA<ジャ;
+JI'~I'<ジィ; # Liu
+JU<ジュ;
+JE<ジェ;
+JO<ジョ;
+JI<>ジ;
+
+KA<>カ;
+KYA<キャ;
+KYI<キィ;
+KYU<キュ;
+KYE<キェ;
+KYO<キョ;
+KI<>キ;
+KU<>ク;
+KE<>ケ;
+KO<>コ;
+KY>キ|'~Y';
+
+MA<>マ;
+MYA<ミャ;
+MYI<ミィ;
+MYU<ミュ;
+MYE<ミェ;
+MYO<ミョ;
+MI<>ミ;
+MU<>ム;
+ME<>メ;
+MO<>モ;
+MY>ミ|'~Y';
+
+M}P>ン;
+M}B>ン;
+M}F>ン;
+M}V>ン;
+
+NA<>ナ;
+NYA<ニャ;
+NYI<ニィ;
+NYU<ニュ;
+NYE<ニェ;
+NYO<ニョ;
+NI<>ニ;
+NU<>ヌ;
+NE<>ネ;
+NO<>ノ;
+NY>ニ|'~Y';
+
+O<>オ;
+
+PA<>パ;
+PYA<ピャ;
+PYI<ピィ;
+PYU<ピュ;
+PYE<ピェ;
+PYO<ピョ;
+PI<>ピ;
+PU<>プ;
+PE<>ペ;
+PO<>ポ;
+PY>ピ|'~Y';
+
+RA<>ラ;
+RYA<リャ;
+RYI<リィ;
+RYU<リュ;
+RYE<リェ;
+RYO<リョ;
+RI<>リ;
+RU<>ル;
+RE<>レ;
+RO<>ロ;
+RY>リ|'~Y';
+
+SA<>サ;
+SI<>セィ;
+SU<>ス;
+SE<>セ;
+SO<>ソ;
+
+SHA<シャ;
+SHI'~I'<シィ; # Liu
+SHU<シュ;
+SHE<シェ;
+SHO<ショ;
+SHI<>シ;
+SH>シ|'~Y';
+
+TA<>タ;
+TI<>ティ;
+TU<>テゥ;
+TE<>テ;
+TO<>ト;
+
+# Double consonants
+
+B}B<>ッ}$B_START;
+C}K>ッ;
+C}C>ッ;
+C}Q>ッ;
+D}D<>ッ}$D_START;
+F}F<>ッ}$F_START;
+G}G<>ッ}$G_START;
+H}H<>ッ}$H_START;
+J}J<>ッ}$J_START;
+K}K<>ッ}$K_START;
+L}L>ッ;
+M}M<>ッ}$M_START;
+N}N<>ッ}$N_START;
+P}P<>ッ}$P_START;
+Q}Q>ッ;
+R}R<>ッ}$R_START;
+S}SH>ッ;
+S}S<>ッ}$S_START;
+T}CH>ッ;
+T}T<>ッ}$T_START;
+V}V<>ッ}$V_START;
+W}W<>ッ}$W_START;
+X}X>ッ;
+Y}Y<>ッ}$Y_START;
+Z}Z<>ッ}$Z_START;
+
+TSU<>ツ;
+
+U<>ウ;
+
+'V~A'<ヴァ; # Liu
+'V~I'<ヴィ; # Liu
+'V~E'<ヴェ; # Liu
+'V~O'<ヴォ; # Liu
+VU<>ヴ;
+
+WA<>ワ;
+WI<>ヰ;
+WU>ウ;
+WE<>ヱ;
+WO<>ヲ;
+
+YA<>ヤ;
+YI>イ;
+YU<>ユ;
+YE>エ;
+YO<>ヨ;
+
+ZA<>ザ;
+ZI<>ゼィ;
+ZU<>ズ;
+ZE<>ゼ;
+ZO<>ゾ;
+
+# Prolonged vowel mark. This indicates a doubling of
+# the preceding vowel sound in both katakana and
+# hiragana.
+
+A<A{ー; # Liu
+E<E{ー; # Liu
+I<I{ー; # Liu
+O<O{ー; # Liu
+U<U{ー; # Liu
+
+# Small forms
+
+'~A'<>ァ;
+'~I'<>ィ;
+'~U'<>ゥ;
+'~E'<>ェ;
+'~O'<>ォ;
+'~TSU'<>ッ;
+'~WA'<>ヮ;
+'~YA'<>ャ;
+'~YI'>ィ;
+'~YU'<>ュ;
+'~YE'>ェ;
+'~YO'<>ョ;
+
+# One-way latin->kana rules.  These do not occur in
+# well-formed romaji representing actual Japanese text.
+# Their purpose is to make all romaji map to kana of
+# some sort.
+
+# The following are not really necessary, but produce
+# slightly more natural results.
+
+CY>セィ;
+DY>ディ;
+HY>ヒ;
+SY>セィ;
+TY>ティ;
+ZY>ゼィ;
+
+# Simple substitutions using backup
+
+C>|K;
+F>フ|'~';
+J>ジ|'~Y';
+L>|R;
+Q>|K;
+V>ヴ|'~';
+W>ウ|'~';
+X>|KS;
+
+# Isolated consonants listed here so as not to mask
+# longer rules above.
+
+B>ブ;
+D>デ;
+G>グ;
+H>ヘ;
+K>ク;
+M>ン;
+N''<ン}$N_QUOTER;
+N<>ン;
+P>プ;
+R>ル;
+S>ス;
+T>テ;
+Y>イ;
+Z>ズ;
+
+# ~~~ END shared rules ~~~
+
+#------------------------------------------------------
+# Hiragana rules
+
+# Currently, there are no hiragana rules other than the
+# shared rules.
+
+# ~~~ BEGIN shared rules ~~~
+
+# The shared rules are copied from katakana to hiragana
+# and then mechanically lowercased.
+
+a<>あ;
+
+ba<>ば;
+bya<びゃ;
+byi<びぃ;
+byu<びゅ;
+bye<びぇ;
+byo<びょ;
+bi<>び;
+bu<>ぶ;
+be<>べ;
+bo<>ぼ;
+by>び|'~y';
+
+cha<ちゃ;
+chi'~i'<ちぃ; # liu
+chu<ちゅ;
+che<ちぇ;
+cho<ちょ;
+chi<>ち;
+ch>ち|'~y';
+
+c}i>|s;
+c}e>|s;
+
+da<>だ;
+di<>でぃ;
+du<>でぅ;
+de<>で;
+do<>ど;
+dzu<>づ;
+dja<ぢゃ;
+dji'~i'<ぢぃ; # liu
+dju<ぢゅ;
+dje<ぢぇ;
+djo<ぢょ;
+dji<>ぢ;
+dj>ぢ|'~y';
+
+e<>え;
+
+fa<ふぁ;
+fi<ふぃ;
+fe<ふぇ;
+fo<ふぉ;
+fu<>ふ;
+
+ga<>が;
+gya<ぎゃ;
+gyi<ぎぃ;
+gyu<ぎゅ;
+gye<ぎぇ;
+gyo<ぎょ;
+gi<>ぎ;
+gu<>ぐ;
+ge<>げ;
+go<>ご;
+gy>ぎ|'~y';
+
+ha<>は;
+hi<>ひ;
+hu<>へぅ;
+he<>へ;
+ho<>ほ;
+
+i<>い;
+
+ja<じゃ;
+ji'~i'<じぃ; # liu
+ju<じゅ;
+je<じぇ;
+jo<じょ;
+ji<>じ;
+
+ka<>か;
+kya<きゃ;
+kyi<きぃ;
+kyu<きゅ;
+kye<きぇ;
+kyo<きょ;
+ki<>き;
+ku<>く;
+ke<>け;
+ko<>こ;
+ky>き|'~y';
+
+ma<>ま;
+mya<みゃ;
+myi<みぃ;
+myu<みゅ;
+mye<みぇ;
+myo<みょ;
+mi<>み;
+mu<>む;
+me<>め;
+mo<>も;
+my>み|'~y';
+
+m}p>ん;
+m}b>ん;
+m}f>ん;
+m}v>ん;
+
+na<>な;
+nya<にゃ;
+nyi<にぃ;
+nyu<にゅ;
+nye<にぇ;
+nyo<にょ;
+ni<>に;
+nu<>ぬ;
+ne<>ね;
+no<>の;
+ny>に|'~y';
+
+o<>お;
+
+pa<>ぱ;
+pya<ぴゃ;
+pyi<ぴぃ;
+pyu<ぴゅ;
+pye<ぴぇ;
+pyo<ぴょ;
+pi<>ぴ;
+pu<>ぷ;
+pe<>ぺ;
+po<>ぽ;
+py>ぴ|'~y';
+
+ra<>ら;
+rya<りゃ;
+ryi<りぃ;
+ryu<りゅ;
+rye<りぇ;
+ryo<りょ;
+ri<>り;
+ru<>る;
+re<>れ;
+ro<>ろ;
+ry>り|'~y';
+
+sa<>さ;
+si<>せぃ;
+su<>す;
+se<>せ;
+so<>そ;
+
+sha<しゃ;
+shi'~i'<しぃ; # liu
+shu<しゅ;
+she<しぇ;
+sho<しょ;
+shi<>し;
+sh>し|'~y';
+
+ta<>た;
+ti<>てぃ;
+tu<>てぅ;
+te<>て;
+to<>と;
+
+# double consonants
+
+b}b<>っ}$B_START;
+c}k>っ;
+c}c>っ;
+c}q>っ;
+d}d<>っ}$D_START;
+f}f<>っ}$F_START;
+g}g<>っ}$G_START;
+h}h<>っ}$H_START;
+j}j<>っ}$J_START;
+k}k<>っ}$K_START;
+l}l>っ;
+m}m<>っ}$M_START;
+n}n<>っ}$N_START;
+p}p<>っ}$P_START;
+q}q>っ;
+r}r<>っ}$R_START;
+s}sh>っ;
+s}s<>っ}$S_START;
+t}ch>っ;
+t}t<>っ}$T_START;
+v}v<>っ}$V_START;
+w}w<>っ}$W_START;
+x}x>っ;
+y}y<>っ}$Y_START;
+z}z<>っ}$Z_START;
+
+tsu<>つ;
+
+u<>う;
+
+'v~a'<ゔぁ; # liu
+'v~i'<ゔぃ; # liu
+'v~e'<ゔぇ; # liu
+'v~o'<ゔぉ; # liu
+vu<>ゔ;
+
+wa<>わ;
+wi<>ゐ;
+wu>う;
+we<>ゑ;
+wo<>を;
+
+ya<>や;
+yi>い;
+yu<>ゆ;
+ye>え;
+yo<>よ;
+
+za<>ざ;
+zi<>ぜぃ;
+zu<>ず;
+ze<>ぜ;
+zo<>ぞ;
+
+# prolonged vowel mark. this indicates a doubling of
+# the preceding vowel sound in both katakana and
+# hiragana.
+
+a<a{ー; # liu
+e<e{ー; # liu
+i<i{ー; # liu
+o<o{ー; # liu
+u<u{ー; # liu
+
+# small forms
+
+'~a'<>ぁ;
+'~i'<>ぃ;
+'~u'<>ぅ;
+'~e'<>ぇ;
+'~o'<>ぉ;
+'~tsu'<>っ;
+'~wa'<>ゎ;
+'~ya'<>ゃ;
+'~yi'>ぃ;
+'~yu'<>ゅ;
+'~ye'>ぇ;
+'~yo'<>ょ;
+
+# one-way latin->kana rules.  these do not occur in
+# well-formed romaji representing actual japanese text.
+# their purpose is to make all romaji map to kana of
+# some sort.
+
+# the following are not really necessary, but produce
+# slightly more natural results.
+
+cy>せぃ;
+dy>でぃ;
+hy>ひ;
+sy>せぃ;
+ty>てぃ;
+zy>ぜぃ;
+
+# simple substitutions using backup
+
+c>|k;
+f>ふ|'~';
+j>じ|'~y';
+l>|r;
+q>|k;
+v>ゔ|'~';
+w>う|'~';
+x>|ks;
+
+# isolated consonants listed here so as not to mask
+# longer rules above.
+
+b>ぶ;
+d>で;
+g>ぐ;
+h>へ;
+k>く;
+m>ん;
+n''<ん}$n_quoter;
+n<>ん;
+p>ぷ;
+r>る;
+s>す;
+t>て;
+y>い;
+z>ず;
+
+# ~~~ END shared rules ~~~
+
+#------------------------------------------------------
+# Final cleanup
+
+'~'>; # delete stray tildes
+''>; # delete stray quotes
+'-'>ー;
+
+# eof

@@ -1,0 +1,77 @@
+#--------------------------------------------------------------------
+# Copyright (c) 1999-2001, International Business Machines
+# Corporation and others.  All Rights Reserved.
+#--------------------------------------------------------------------
+# Date: Tue Jan 23 12:42:07 2001
+#--------------------------------------------------------------------
+
+# StraightQuotes-CurlyQuotes
+
+# Rewritten using character codes [LIU]
+$white=[[:Zs:][:Zl:][:Zp:]];
+$black=[^$white];
+$open=[:Ps:];
+### $dquote='\"';
+
+### $lAng=〈;
+### $ldAng=《;
+### $lBrk='[';
+### $lBrc='{';
+
+### $lquote=‘;
+### $rquote=’;
+### $ldquote=“;
+### $rdquote=”;
+
+### $ldguill=«;
+### $rdguill=»;
+### $lguill=‹;
+### $rguill=›;
+
+### $mdash=—;
+
+########################################
+# Conversions from input
+########################################
+
+# join single quotes
+‘''>“;
+‘‘>“;
+’''>”;
+’’>”;
+
+#smart single quotes
+$white{''>‘;
+$open{''>‘;
+$black{''>’;
+''>‘;
+
+#smart doubles
+$white{'\"'>“;
+$open{'\"'>“;
+$black{'\"'>”;
+'\"'>“;
+
+# join single guillemets
+››>»;
+'>>'>»;
+‹‹>«;
+'<<'>«;
+
+# prevent double spaces
+\\ {\\ >;
+
+# join hyphens into dash ### BIDIRECTIONAL ###
+'--'<>—;
+
+########################################
+# Conversions back to input
+########################################
+
+#smart quotes
+''<‘;
+''<’;
+'\"'<“;
+'\"'<”;
+
+# eof

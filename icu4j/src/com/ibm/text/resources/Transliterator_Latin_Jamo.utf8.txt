@@ -1,0 +1,742 @@
+#--------------------------------------------------------------------
+# Copyright (c) 1999-2001, International Business Machines
+# Corporation and others.  All Rights Reserved.
+#--------------------------------------------------------------------
+# Date: Tue Jan 23 12:18:45 2001
+#--------------------------------------------------------------------
+
+# Latin-Jamo
+
+
+# VARIABLES
+
+$initial=[ᄀ-ᅟ];
+$INITIAL=[bcdghjklmnpst];
+$medial=[ᅠ-ᆧ];
+$MEDIAL=[aeiou]; # as a left context
+$comp_med=[ᅠᅶ-ᆧ]; # compound medials and filler
+$final=[ᆨ-ᇹ]; # added - aliu
+$vowel=[aeiouwy$medial];
+# following line used to read "..$medial$final]"
+# assume this was a typo - liu
+$consonant=[bcdfghjklmnpqrstvxz$initial$final];
+$ye_=[yeYE];
+$ywe_=[yweYWE];
+$yw_=[ywYW];
+$nl_=[nlNL];
+$gnl_=[gnlGNL];
+$lsgb_=[lsgbLSGB];
+$ywao_=[ywaoYWAO];
+$bl_=[blBL];
+
+### $ieung = ᄋ;
+
+# RULES
+
+# Hangul structure is IMF or IM
+# So you can have, because of adjacent sequences
+# IM, but not II or IF
+# MF or MI, but not MM
+# FI, but not FF or FM
+
+# For English, we just have C or V.
+# To generate valid Hangul:
+# Vowels:
+# We insert IEUNG between VV, and otherwise map V to M
+# We also insert IEUNG if there is no
+# Consonants:
+# We don't break doubles
+# Cases like lmgg, we have to break at lm
+# So to guess whether a consonant is I or F
+# we map all C's to F, except when followed by a vowel, e.g.
+# X[{vowel}>CHOSEONG (initial)
+# X>JONGSEONG (final)
+
+# Below, insert an empty consonant in front of a vowel, if there is no Initial in front.
+
+
+# General strategy.
+#
+# 1. We support both the normal Jamo block, 1100 - 117F, and the
+# compatibility block, 3130 - 318F.  The former uses lowercase latin;
+# the latter uses uppercase.  See notes below for details of the
+# compatibility block.  Remaining items in this list pertain to the
+# normal Jamo block.
+#
+# 2. Canonical syllables should transliterate without special
+# characters.  Canonical syllables are either IMF or IM.
+#
+# 3. We want to support round-trip integrity from jamo to latin and back
+# to Jamo.  To do this we have to mark the jamo with special characters
+# when they occur in non-canonical positions.
+#
+# 4. When initial jamo occur in a non-canonical position, they are
+# marked with a leading '['.
+#
+# 5. When final jamo occur in a non-canonical position, they are marked
+# with a trailing ']'.
+#
+# 6. When medial jamo occur in a non-canonical position, they are marked
+# with a leading '~'.
+#
+# 7. Compound jamo characters are handled by enclosing them in
+# parentheses.  Initials are '((x)', medials are '(x)', and finals are
+# '(x))'.
+#
+# 8. Disambiguation of 'g' + 'g' vs. 'gg' is accomplished by inserting a
+# '' character between them.
+#
+# 9. IEUNG is used to mark medials not occuring after initials.
+# Isolated IEUNG is transliterated as a back tick.
+#
+# 10. Some old special case and completeness rules have been commented
+# out.  These can be reintroduced (and the existing rules modified as
+# needed) so long as round-trip integrity is maintained.
+
+# We use the uppercase latin letters for the compatibility Jamo
+# U+3130 - U+318F.  The following rules are generated
+# programmatically by a perl script that analyzes the Unicode
+# database.  These rules are much simpler because there are no
+# separate code points for initial vs. final consonants, so no
+# contextual rules are needed.  The one wrinkle is, as usual, the
+# need to distinguish doubles from two singles, that is, GG vs G G.
+# The perl script finds these special cases by exhaustive search and
+# adds only the minimal rules needed to resolve these cases.  The one
+# modification that is made by hand is to replace '' with '/' so as
+# not to conflict with the normal IEUNG in the standard Jamo range. -
+# liu
+A '' <> {ㅏ} [ㅓㅡㅔ];
+B '' <> {ㅂ} [ㅂㅃ];
+D '' <> {ㄷ} [ㄷㄸ];
+E '' <> {ㅔ} [ㅚㅗㅜ];
+G '' <> {ㄱ} [ㄲㄳㄱㅆㅅ];
+J '' <> {ㅈ} [ㅉㅈ];
+L '' <> {ㄹ} [ㄲㄳㄱㅁㅂㅃㅆㅅㅌㅍ];
+N '' <> {ㄴ} [ㅉㅈㅎ];
+O '' <> {ㅗ} [ㅓㅡㅔ];
+S '' <> {ㅅ} [ㅆㅅ];
+WA '' <> {ㅘ} [ㅓㅡㅔ];
+WE '' <> {ㅞ} [ㅚㅗ];
+YA '' <> {ㅑ} [ㅓㅡㅔ];
+YE '' <> {ㅖ} [ㅚㅗ];
+YU <> ㅠ;
+YO <> ㅛ;
+YI <> ㅢ;
+YEO <> ㅕ;
+YE <> ㅖ;
+YAE <> ㅒ;
+YA <> ㅑ;
+WI <> ㅟ;
+WEO <> ㅝ;
+WE <> ㅞ;
+WAE <> ㅙ;
+WA <> ㅘ;
+U <> ㅜ;
+T <> ㅌ;
+S S <> ㅆ;
+S <> ㅅ;
+P <> ㅍ;
+OE <> ㅚ;
+O <> ㅗ;
+N J <> ㄵ;
+N H <> ㄶ;
+N <> ㄴ;
+M <> ㅁ;
+L T <> ㄾ;
+L S <> ㄽ;
+L P <> ㄿ;
+L M <> ㄻ;
+L G <> ㄺ;
+L B <> ㄼ;
+L <> ㄹ;
+K <> ㅋ;
+J J <> ㅉ;
+J <> ㅈ;
+I <> ㅣ;
+H <> ㅎ;
+G S <> ㄳ;
+G G <> ㄲ;
+G <> ㄱ;
+EU <> ㅡ;
+EO <> ㅓ;
+E <> ㅔ;
+D D <> ㄸ;
+D <> ㄷ;
+C <> ㅊ;
+B B <> ㅃ;
+B <> ㅂ;
+AE <> ㅐ;
+A <> ㅏ;
+'/' <> ㅇ;
+'(' YU YEO ')' <> ㆊ;
+'(' YU YE ')' <> ㆋ;
+'(' YU I ')' <> ㆌ;
+'(' YR ')' <> ㆆ;
+'(' YO YAE ')' <> ㆈ;
+'(' YO YA ')' <> ㆇ;
+'(' YO I ')' <> ㆉ;
+'(' YES S ')' <> ㆂ;
+'(' YES PAN ')' <> ㆃ;
+'(' YES ')' <> ㆁ;
+'(' S N ')' <> ㅻ;
+'(' S J ')' <> ㅾ;
+'(' S G ')' <> ㅺ;
+'(' S D ')' <> ㅼ;
+'(' S B ')' <> ㅽ;
+'(' PAN ')' <> ㅿ;
+'(' P '' ')' <> ㆄ;
+'(' N S ')' <> ㅧ;
+'(' N PAN ')' <> ㅨ;
+'(' N N ')' <> ㅥ;
+'(' N D ')' <> ㅦ;
+'(' M S ')' <> ㅯ;
+'(' M PAN ')' <> ㅰ;
+'(' M B ')' <> ㅮ;
+'(' M '' ')' <> ㅱ;
+'(' L YR ')' <> ㅭ;
+'(' L PAN ')' <> ㅬ;
+'(' L H ')' <> ㅀ;
+'(' L G S ')' <> ㅩ;
+'(' L D ')' <> ㅪ;
+'(' L B S ')' <> ㅫ;
+'(' HJF ')' <> ㅤ;
+'(' H H ')' <> ㆅ;
+'(' B T ')' <> ㅷ;
+'(' B S G ')' <> ㅴ;
+'(' B S D ')' <> ㅵ;
+'(' B S ')' <> ㅄ;
+'(' B J ')' <> ㅶ;
+'(' B G ')' <> ㅲ;
+'(' B D ')' <> ㅳ;
+'(' B B '' ')' <> ㅹ;
+'(' B '' ')' <> ㅸ;
+'(' AR I ')' <> ㆎ;
+'(' AR ')' <> ㆍ;
+'(' '' '' ')' <> ㆀ;
+
+# APOSTROPHE
+
+# As always, an apostrophe is used to separate digraphs into
+# singles. That is, if you really wanted [KAN][GGAN], instead
+# of [KANG][GAN] you would write "kan'ggan".
+
+# Rules for inserting ' when mapping separated digraphs back
+# from Hangul to Latin. Catch every letter that can be the
+# LAST of a digraph (or multigraph) AND first of an initial
+
+# special insertion for funny sequences of vowels, and for empty consonant
+
+#  + "'' < l{ }ᇀ;"      // hangul jongseong thieuth
+#  + "'' < $lsgb_{}ᆺ;" // hangul jongseong sios
+#  + "'' < l{ }ᇁ;"      // hangul jongseong phieuph
+#  + "'' < l{ }ᆷ;"      // hangul jongseong mieum
+#  + "'' < n{ }ᆽ;"      // hangul jongseong cieuc
+#  + "'' < $nl_{}ᇂ;"   // hangul jongseong hieuh
+#  + "'' < $gnl_{}ᆩ;"  // hangul jongseong ssangkiyeok
+#  + "'' < $bl_{}ᆸ;"   // hangul jongseong pieup
+#  + "'' < d{ }ᆮ;"      // hangul jongseong tikeut
+#
+#  + "'' < $ye_{}ᅮ;"   // hangul jungseong u
+#  + "'' < $ywe_{}ᅩ;"  // hangul jungseong o
+#  + "'' < $yw_{}ᅵ;"   // hangul jungseong i
+#  + "'' < $ywao_{}ᅦ;" // hangul jungseong e
+#  + "'' < $yw_{}ᅡ;"   // hangul jungseong a
+#
+#  + "'' < l{ }ᄐ;"      // hangul choseong thieuth
+#  + "'' < $lsgb_{}ᄊ;" // hangul choseong ssangsios
+#  + "'' < $lsgb_{}ᄉ;" // hangul choseong sios
+#  + "'' < l{ }ᄑ;"      // hangul choseong phieuph
+#  + "'' < l{ }ᄆ;"      // hangul choseong mieum
+#  + "'' < n{ }ᄌ;"      // hangul choseong cieuc
+#  + "'' < n{ }ᄍ;"
+#  + "'' < $nl_{}ᄒ;"   // hangul choseong hieuh
+#  + "'' < $gnl_{}ᄁ;"  // hangul choseong ssangkiyeok
+#  + "'' < $gnl_{}ᄀ;"  // hangul choseong kiyeok
+#  + "'' < d{ }ᄃ;"      // hangul choseong tikeut
+#  + "'' < d{ }ᄄ;"
+#  + "'' < $bl_{}ᄇ;"   // hangul choseong pieup
+#  + "'' < $bl_{}ᄈ;"
+
+# We transliterate the compound Jamo code points using ((x) for
+# initials, (x) for medials, and (x)) for finals. - liu
+ '((' n g ')' <> ᄓ;
+ '((' n n ')' <> ᄔ;
+ '((' n d ')' <> ᄕ;
+ '((' n b ')' <> ᄖ;
+ '((' d g ')' <> ᄗ;
+ '((' l n ')' <> ᄘ;
+ '((' l l ')' <> ᄙ;
+ '((' l h ')' <> ᄚ;
+ '((' l '' ')' <> ᄛ;
+ '((' m b ')' <> ᄜ;
+ '((' m '' ')' <> ᄝ;
+ '((' b g ')' <> ᄞ;
+ '((' b n ')' <> ᄟ;
+ '((' b d ')' <> ᄠ;
+ '((' b s ')' <> ᄡ;
+ '((' b s g ')' <> ᄢ;
+ '((' b s d ')' <> ᄣ;
+ '((' b s b ')' <> ᄤ;
+ '((' b s s ')' <> ᄥ;
+ '((' b s j ')' <> ᄦ;
+ '((' b j ')' <> ᄧ;
+ '((' b c ')' <> ᄨ;
+ '((' b t ')' <> ᄩ;
+ '((' b p ')' <> ᄪ;
+ '((' b '' ')' <> ᄫ;
+ '((' b b '' ')' <> ᄬ;
+ '((' s g ')' <> ᄭ;
+ '((' s n ')' <> ᄮ;
+ '((' s d ')' <> ᄯ;
+ '((' s l ')' <> ᄰ;
+ '((' s m ')' <> ᄱ;
+ '((' s b ')' <> ᄲ;
+ '((' s b g ')' <> ᄳ;
+ '((' s s s ')' <> ᄴ;
+ '((' s '' ')' <> ᄵ;
+ '((' s j ')' <> ᄶ;
+ '((' s c ')' <> ᄷ;
+ '((' s k ')' <> ᄸ;
+ '((' s t ')' <> ᄹ;
+ '((' s p ')' <> ᄺ;
+ '((' s h ')' <> ᄻ;
+ '((' chs ')' <> ᄼ;
+ '((' chs chs ')' <> ᄽ;
+ '((' ces ')' <> ᄾ;
+ '((' ces ces ')' <> ᄿ;
+ '((' pan ')' <> ᅀ;
+ '((' '' g ')' <> ᅁ;
+ '((' '' d ')' <> ᅂ;
+ '((' '' m ')' <> ᅃ;
+ '((' '' b ')' <> ᅄ;
+ '((' '' s ')' <> ᅅ;
+ '((' '' pan ')' <> ᅆ;
+ '((' '' '' ')' <> ᅇ;
+ '((' '' j ')' <> ᅈ;
+ '((' '' c ')' <> ᅉ;
+ '((' '' t ')' <> ᅊ;
+ '((' '' p ')' <> ᅋ;
+ '((' yes ')' <> ᅌ;
+ '((' j '' ')' <> ᅍ;
+ '((' chc ')' <> ᅎ;
+ '((' chc chc ')' <> ᅏ;
+ '((' cec ')' <> ᅐ;
+ '((' cec cec ')' <> ᅑ;
+ '((' c k ')' <> ᅒ;
+ '((' c h ')' <> ᅓ;
+ '((' cch ')' <> ᅔ;
+ '((' ceh ')' <> ᅕ;
+ '((' p b ')' <> ᅖ;
+ '((' p '' ')' <> ᅗ;
+ '((' h h ')' <> ᅘ;
+ '((' yr ')' <> ᅙ;
+ '((' hcf ')' <> ᅟ;
+ '(' ahjf ')' <> ᅠ; # must start with vowel, hence 'a' + hjf
+ '(' a o ')' <> ᅶ;
+ '(' a u ')' <> ᅷ;
+ '(' ya o ')' <> ᅸ;
+ '(' ya yo ')' <> ᅹ;
+ '(' eo o ')' <> ᅺ;
+ '(' eo u ')' <> ᅻ;
+ '(' eo eu ')' <> ᅼ;
+ '(' yeo o ')' <> ᅽ;
+ '(' yeo u ')' <> ᅾ;
+ '(' o eo ')' <> ᅿ;
+ '(' o e ')' <> ᆀ;
+ '(' o ye ')' <> ᆁ;
+ '(' o o ')' <> ᆂ;
+ '(' o u ')' <> ᆃ;
+ '(' yo ya ')' <> ᆄ;
+ '(' yo yae ')' <> ᆅ;
+ '(' yo yeo ')' <> ᆆ;
+ '(' yo o ')' <> ᆇ;
+ '(' yo i ')' <> ᆈ;
+ '(' u a ')' <> ᆉ;
+ '(' u ae ')' <> ᆊ;
+ '(' u eo eu ')' <> ᆋ;
+ '(' u ye ')' <> ᆌ;
+ '(' u u ')' <> ᆍ;
+ '(' yu a ')' <> ᆎ;
+ '(' yu eo ')' <> ᆏ;
+ '(' yu e ')' <> ᆐ;
+ '(' yu yeo ')' <> ᆑ;
+ '(' yu ye ')' <> ᆒ;
+ '(' yu u ')' <> ᆓ;
+ '(' yu i ')' <> ᆔ;
+ '(' eu u ')' <> ᆕ;
+ '(' eu eu ')' <> ᆖ;
+ '(' yi u ')' <> ᆗ;
+ '(' i a ')' <> ᆘ;
+ '(' i ya ')' <> ᆙ;
+ '(' i o ')' <> ᆚ;
+ '(' i u ')' <> ᆛ;
+ '(' i eu ')' <> ᆜ;
+ '(' i ar ')' <> ᆝ;
+ '(' ar ')' <> ᆞ;
+ '(' ar eo ')' <> ᆟ;
+ '(' ar u ')' <> ᆠ;
+ '(' ar i ')' <> ᆡ;
+ '(' ar ar ')' <> ᆢ;
+ '(' g l '))' <> ᇃ;
+ '(' g s g '))' <> ᇄ;
+ '(' n g '))' <> ᇅ;
+ '(' n d '))' <> ᇆ;
+ '(' n s '))' <> ᇇ;
+ '(' n pan '))' <> ᇈ;
+ '(' n t '))' <> ᇉ;
+ '(' d g '))' <> ᇊ;
+ '(' d l '))' <> ᇋ;
+ '(' l g s '))' <> ᇌ;
+ '(' l n '))' <> ᇍ;
+ '(' l d '))' <> ᇎ;
+ '(' l d h '))' <> ᇏ;
+ '(' l l '))' <> ᇐ;
+ '(' l m g '))' <> ᇑ;
+ '(' l m s '))' <> ᇒ;
+ '(' l b s '))' <> ᇓ;
+ '(' l b h '))' <> ᇔ;
+ '(' l b ng '))' <> ᇕ;
+ '(' l s s '))' <> ᇖ;
+ '(' l pan '))' <> ᇗ;
+ '(' l k '))' <> ᇘ;
+ '(' l yr '))' <> ᇙ;
+ '(' m g '))' <> ᇚ;
+ '(' m l '))' <> ᇛ;
+ '(' m b '))' <> ᇜ;
+ '(' m s '))' <> ᇝ;
+ '(' m s s '))' <> ᇞ;
+ '(' m pan '))' <> ᇟ;
+ '(' m c '))' <> ᇠ;
+ '(' m h '))' <> ᇡ;
+ '(' m ng '))' <> ᇢ;
+ '(' b l '))' <> ᇣ;
+ '(' b p '))' <> ᇤ;
+ '(' b h '))' <> ᇥ;
+ '(' b ng '))' <> ᇦ;
+ '(' s g '))' <> ᇧ;
+ '(' s d '))' <> ᇨ;
+ '(' s l '))' <> ᇩ;
+ '(' s b '))' <> ᇪ;
+ '(' pan '))' <> ᇫ;
+ '(' ng g '))' <> ᇬ;
+ '(' ng g g '))' <> ᇭ;
+ '(' ng ng '))' <> ᇮ;
+ '(' ng k '))' <> ᇯ;
+ '(' yes '))' <> ᇰ;
+ '(' yes s '))' <> ᇱ;
+ '(' yes pan '))' <> ᇲ;
+ '(' p b '))' <> ᇳ;
+ '(' p ng '))' <> ᇴ;
+ '(' h n '))' <> ᇵ;
+ '(' h l '))' <> ᇶ;
+ '(' h m '))' <> ᇷ;
+ '(' h b '))' <> ᇸ;
+ '(' yr '))' <> ᇹ;
+
+
+# INITIALS
+
+# Added }$vowel post context - liu
+bb}$vowel<>ᄈ } $vowel;
+jj}$vowel<>ᄍ } $vowel;
+dd}$vowel<>ᄄ } $vowel;
+t }$vowel<>ᄐ } $vowel; # hangul choseong thieuth
+ss}$vowel<>ᄊ } $vowel; # hangul choseong ssangsios
+s }$vowel<>ᄉ } $vowel; # hangul choseong sios
+p }$vowel<>ᄑ } $vowel; # hangul choseong phieuph
+n }$vowel<>ᄂ } $vowel; # hangul choseong nieun
+m }$vowel<>ᄆ } $vowel; # hangul choseong mieum
+l }$vowel<>ᄅ } $vowel; # hangul choseong rieul
+k }$vowel<>ᄏ } $vowel; # hangul choseong khieukh
+j }$vowel<>ᄌ } $vowel; # hangul choseong cieuc
+h }$vowel<>ᄒ } $vowel; # hangul choseong hieuh
+gg}$vowel<>ᄁ } $vowel; # hangul choseong ssangkiyeok
+g }$vowel<>ᄀ } $vowel; # hangul choseong kiyeok
+d }$vowel<>ᄃ } $vowel; # hangul choseong tikeut
+c }$vowel<>ᄎ } $vowel; # hangul choseong chieuch
+b }$vowel<>ᄇ } $vowel; # hangul choseong pieup
+
+# Take care of initial-compound medial - '(' $vowel - liu
+bb} '(' $vowel <> ᄈ } $comp_med;
+jj} '(' $vowel <> ᄍ } $comp_med;
+dd} '(' $vowel <> ᄄ } $comp_med;
+t } '(' $vowel <> ᄐ } $comp_med; # hangul choseong thieuth
+ss} '(' $vowel <> ᄊ } $comp_med; # hangul choseong ssangsios
+s } '(' $vowel <> ᄉ } $comp_med; # hangul choseong sios
+p } '(' $vowel <> ᄑ } $comp_med; # hangul choseong phieuph
+n } '(' $vowel <> ᄂ } $comp_med; # hangul choseong nieun
+m } '(' $vowel <> ᄆ } $comp_med; # hangul choseong mieum
+l } '(' $vowel <> ᄅ } $comp_med; # hangul choseong rieul
+k } '(' $vowel <> ᄏ } $comp_med; # hangul choseong khieukh
+j } '(' $vowel <> ᄌ } $comp_med; # hangul choseong cieuc
+h } '(' $vowel <> ᄒ } $comp_med; # hangul choseong hieuh
+gg} '(' $vowel <> ᄁ } $comp_med; # hangul choseong ssangkiyeok
+g } '(' $vowel <> ᄀ } $comp_med; # hangul choseong kiyeok
+d } '(' $vowel <> ᄃ } $comp_med; # hangul choseong tikeut
+c } '(' $vowel <> ᄎ } $comp_med; # hangul choseong chieuch
+b } '(' $vowel <> ᄇ } $comp_med; # hangul choseong pieup
+
+# Mark non-canonical initials with '[' - liu
+'[' bb <> ᄈ;
+'[' jj <> ᄍ;
+'[' dd <> ᄄ;
+'[' t  <> ᄐ; # hangul choseong thieuth
+'[' ss <> ᄊ; # hangul choseong ssangsios
+'[' s  <> ᄉ; # hangul choseong sios
+'[' p  <> ᄑ; # hangul choseong phieuph
+'[' n  <> ᄂ; # hangul choseong nieun
+'[' m  <> ᄆ; # hangul choseong mieum
+'[' l  <> ᄅ; # hangul choseong rieul
+'[' k  <> ᄏ; # hangul choseong khieukh
+'[' j  <> ᄌ; # hangul choseong cieuc
+'[' h  <> ᄒ; # hangul choseong hieuh
+'[' gg <> ᄁ; # hangul choseong ssangkiyeok
+'[' g  <> ᄀ; # hangul choseong kiyeok
+'[' d  <> ᄃ; # hangul choseong tikeut
+'[' c  <> ᄎ; # hangul choseong chieuch
+'[' b  <> ᄇ; # hangul choseong pieup
+
+
+# If we have gotten through to these rules, and we start with
+# a consonant, then the remaining mappings would be to F,
+# because must have CC (or C<non-letter>), not CV.
+# If we have F before us, then
+# we would end up with FF, which is wrong. The simplest fix is
+# to still make it an initial, but also insert an "u",
+# so we end up with F, I, u, and then continue with the C
+
+# special, only initial
+#  + "bb > 뿌;"  // bb u hangul choseong ssangpieup
+#  + "jj > 쭈;"  // jj u hangul choseong ssangcieuc
+#  + "dd > 뚜;"  // dd u hangul choseong ssangtikeut
+
+#  + "$final{ t > 투;"   // hangul choseong thieuth
+#  + "$final{ ss> 쑤;"   // hangul choseong ssangsios
+#  + "$final{ s > 수;"   // hangul choseong sios
+#  + "$final{ p > 푸;"   // hangul choseong phieuph
+#  + "$final{ n > 누;"   // hangul choseong nieun
+#  + "$final{ m > 무;"   // hangul choseong mieum
+#  + "$final{ l > 루;"   // hangul choseong rieul
+#  + "$final{ k > 쿠;"   // hangul choseong khieukh
+#  + "$final{ j > 주;"   // hangul choseong cieuc
+#  + "$final{ h > 후;"   // hangul choseong hieuh
+#  + "$final{ gg> 꾸;"   // hangul choseong ssangkiyeok
+#  + "$final{ g > 구;"   // hangul choseong kiyeok
+#  + "$final{ d > 두;"   // hangul choseong tikeut
+#  + "$final{ c > 추;"   // hangul choseong chieuch
+#  + "$final{ b > 부;"   // hangul choseong pieup
+
+# MEDIALS after INITIALS
+
+# MEDIALS (vowels) not after INITIALs
+# Added left $initial context - liu
+$initial{ yu <> $INITIAL{ ᅲ; # hangul jungseong yu
+$initial{ yo <> $INITIAL{ ᅭ; # hangul jungseong yo
+$initial{ yi <> $INITIAL{ ᅴ; # hangul jungseong yi
+$initial{ yeo<> $INITIAL{ ᅧ; # hangul jungseong yeo
+$initial{ ye <> $INITIAL{ ᅨ; # hangul jungseong ye
+$initial{ yae<> $INITIAL{ ᅤ; # hangul jungseong yae
+$initial{ ya <> $INITIAL{ ᅣ; # hangul jungseong ya
+$initial{ wi <> $INITIAL{ ᅱ; # hangul jungseong wi
+$initial{ weo<> $INITIAL{ ᅯ; # hangul jungseong weo
+$initial{ we <> $INITIAL{ ᅰ; # hangul jungseong we
+$initial{ wae<> $INITIAL{ ᅫ; # hangul jungseong wae
+$initial{ wa <> $INITIAL{ ᅪ; # hangul jungseong wa
+$initial{ u  <> $INITIAL{ ᅮ; # hangul jungseong u
+$initial{ oe <> $INITIAL{ ᅬ; # hangul jungseong oe
+$initial{ o  <> $INITIAL{ ᅩ; # hangul jungseong o
+$initial{ i  <> $INITIAL{ ᅵ; # hangul jungseong i
+$initial{ eu <> $INITIAL{ ᅳ; # hangul jungseong eu
+$initial{ eo <> $INITIAL{ ᅥ; # hangul jungseong eo
+$initial{ e  <> $INITIAL{ ᅦ; # hangul jungseong e
+$initial{ ae <> $INITIAL{ ᅢ; # hangul jungseong ae
+$initial{ a  <> $INITIAL{ ᅡ; # hangul jungseong a
+
+# Handle non-canonical isolated jungseong - liu
+'~'yu <> ᅲ; # hangul jungseong yu
+'~'yo <> ᅭ; # hangul jungseong yo
+'~'yi <> ᅴ; # hangul jungseong yi
+'~'yeo<> ᅧ; # hangul jungseong yeo
+'~'ye <> ᅨ; # hangul jungseong ye
+'~'yae<> ᅤ; # hangul jungseong yae
+'~'ya <> ᅣ; # hangul jungseong ya
+'~'wi <> ᅱ; # hangul jungseong wi
+'~'weo<> ᅯ; # hangul jungseong weo
+'~'we <> ᅰ; # hangul jungseong we
+'~'wae<> ᅫ; # hangul jungseong wae
+'~'wa <> ᅪ; # hangul jungseong wa
+'~'u  <> ᅮ; # hangul jungseong u
+'~'oe <> ᅬ; # hangul jungseong oe
+'~'o  <> ᅩ; # hangul jungseong o
+'~'i  <> ᅵ; # hangul jungseong i
+'~'eu <> ᅳ; # hangul jungseong eu
+'~'eo <> ᅥ; # hangul jungseong eo
+'~'e  <> ᅦ; # hangul jungseong e
+'~'ae <> ᅢ; # hangul jungseong ae
+'~'a  <> ᅡ; # hangul jungseong a
+
+# MEDIALS (vowels) not after INITIALs
+# Changed from > to <> - liu
+yu <> ᄋ ᅲ; # hangul jungseong yu
+yo <> ᄋ ᅭ; # hangul jungseong yo
+yi <> ᄋ ᅴ; # hangul jungseong yi
+yeo<> ᄋ ᅧ; # hangul jungseong yeo
+ye <> ᄋ ᅨ; # hangul jungseong ye
+yae<> ᄋ ᅤ; # hangul jungseong yae
+ya <> ᄋ ᅣ; # hangul jungseong ya
+wi <> ᄋ ᅱ; # hangul jungseong wi
+weo<> ᄋ ᅯ; # hangul jungseong weo
+we <> ᄋ ᅰ; # hangul jungseong we
+wae<> ᄋ ᅫ; # hangul jungseong wae
+wa <> ᄋ ᅪ; # hangul jungseong wa
+u  <> ᄋ ᅮ; # hangul jungseong u
+oe <> ᄋ ᅬ; # hangul jungseong oe
+o  <> ᄋ ᅩ; # hangul jungseong o
+i  <> ᄋ ᅵ; # hangul jungseong i
+eu <> ᄋ ᅳ; # hangul jungseong eu
+eo <> ᄋ ᅥ; # hangul jungseong eo
+e  <> ᄋ ᅦ; # hangul jungseong e
+ae <> ᄋ ᅢ; # hangul jungseong ae
+a  <> ᄋ ᅡ; # hangul jungseong a
+
+\` <> ᄋ;
+# Moved down so as not to mask above rules - liu
+# + "'' < $consonant{ᄋ;" // insert a break between any consonant and the empty consonant.
+#  + "$medial{}$vowel<>ᄋ;"  // HANGUL CHOSEONG IEUNG
+
+
+# FINALS
+
+ '' t  <> $consonant { ᇀ; # hangul jongseong thieuth
+ '' ss <> $consonant { ᆻ; # hangul jongseong ssangsios
+ '' s  <> $consonant { ᆺ; # hangul jongseong sios
+ '' p  <> $consonant { ᇁ; # hangul jongseong phieuph
+ '' nj <> $consonant { ᆬ; # hangul jongseong nieun-cieuc
+ '' nh <> $consonant { ᆭ; # hangul jongseong nieun-hieuh
+ '' ng <> $consonant { ᆼ; # hangul jongseong ieung
+ '' n  <> $consonant { ᆫ; # hangul jongseong nieun
+ '' m  <> $consonant { ᆷ; # hangul jongseong mieum
+ '' lt <> $consonant { ᆴ; # hangul jongseong rieul-thieuth
+ '' ls <> $consonant { ᆳ; # hangul jongseong rieul-sios
+ '' lp <> $consonant { ᆵ; # hangul jongseong rieul-phieuph
+ '' lm <> $consonant { ᆱ; # hangul jongseong rieul-mieum
+ '' lh <> $consonant { ᆶ; # hangul jongseong rieul-hieuh
+ '' lg <> $consonant { ᆰ; # hangul jongseong rieul-kiyeok
+ '' lb <> $consonant { ᆲ; # hangul jongseong rieul-pieup
+ '' l  <> $consonant { ᆯ; # hangul jongseong rieul
+ '' k  <> $consonant { ᆿ; # hangul jongseong khieukh
+ '' j  <> $consonant { ᆽ; # hangul jongseong cieuc
+ '' h  <> $consonant { ᇂ; # hangul jongseong hieuh
+ '' gs <> $consonant { ᆪ; # hangul jongseong kiyeok-sios
+ '' gg <> $consonant { ᆩ; # hangul jongseong ssangkiyeok
+ '' g  <> $consonant { ᆨ; # hangul jongseong kiyeok
+ '' d  <> $consonant { ᆮ; # hangul jongseong tikeut
+ '' c  <> $consonant { ᆾ; # hangul jongseong chieuch
+ '' bs <> $consonant { ᆹ; # hangul jongseong pieup-sios
+ '' b  <> $consonant { ᆸ; # hangul jongseong pieup
+
+t  ']'> ᇀ; # hangul jongseong thieuth
+ss ']'> ᆻ; # hangul jongseong ssangsios
+s  ']'> ᆺ; # hangul jongseong sios
+p  ']'> ᇁ; # hangul jongseong phieuph
+nj ']'> ᆬ; # hangul jongseong nieun-cieuc
+nh ']'> ᆭ; # hangul jongseong nieun-hieuh
+ng ']'> ᆼ; # hangul jongseong ieung
+n  ']'> ᆫ; # hangul jongseong nieun
+m  ']'> ᆷ; # hangul jongseong mieum
+lt ']'> ᆴ; # hangul jongseong rieul-thieuth
+ls ']'> ᆳ; # hangul jongseong rieul-sios
+lp ']'> ᆵ; # hangul jongseong rieul-phieuph
+lm ']'> ᆱ; # hangul jongseong rieul-mieum
+lh ']'> ᆶ; # hangul jongseong rieul-hieuh
+lg ']'> ᆰ; # hangul jongseong rieul-kiyeok
+lb ']'> ᆲ; # hangul jongseong rieul-pieup
+l  ']'> ᆯ; # hangul jongseong rieul
+k  ']'> ᆿ; # hangul jongseong khieukh
+j  ']'> ᆽ; # hangul jongseong cieuc
+h  ']'> ᇂ; # hangul jongseong hieuh
+gs ']'> ᆪ; # hangul jongseong kiyeok-sios
+gg ']'> ᆩ; # hangul jongseong ssangkiyeok
+g  ']'> ᆨ; # hangul jongseong kiyeok
+d  ']'> ᆮ; # hangul jongseong tikeut
+c  ']'> ᆾ; # hangul jongseong chieuch
+bs ']'> ᆹ; # hangul jongseong pieup-sios
+b  ']'> ᆸ; # hangul jongseong pieup
+
+$medial{ t  <> $MEDIAL{ ᇀ; # hangul jongseong thieuth
+$medial{ ss <> $MEDIAL{ ᆻ; # hangul jongseong ssangsios
+$medial{ s  <> $MEDIAL{ ᆺ; # hangul jongseong sios
+$medial{ p  <> $MEDIAL{ ᇁ; # hangul jongseong phieuph
+$medial{ nj <> $MEDIAL{ ᆬ; # hangul jongseong nieun-cieuc
+$medial{ nh <> $MEDIAL{ ᆭ; # hangul jongseong nieun-hieuh
+$medial{ ng <> $MEDIAL{ ᆼ; # hangul jongseong ieung
+$medial{ n  <> $MEDIAL{ ᆫ; # hangul jongseong nieun
+$medial{ m  <> $MEDIAL{ ᆷ; # hangul jongseong mieum
+$medial{ lt <> $MEDIAL{ ᆴ; # hangul jongseong rieul-thieuth
+$medial{ ls <> $MEDIAL{ ᆳ; # hangul jongseong rieul-sios
+$medial{ lp <> $MEDIAL{ ᆵ; # hangul jongseong rieul-phieuph
+$medial{ lm <> $MEDIAL{ ᆱ; # hangul jongseong rieul-mieum
+$medial{ lh <> $MEDIAL{ ᆶ; # hangul jongseong rieul-hieuh
+$medial{ lg <> $MEDIAL{ ᆰ; # hangul jongseong rieul-kiyeok
+$medial{ lb <> $MEDIAL{ ᆲ; # hangul jongseong rieul-pieup
+$medial{ l  <> $MEDIAL{ ᆯ; # hangul jongseong rieul
+$medial{ k  <> $MEDIAL{ ᆿ; # hangul jongseong khieukh
+$medial{ j  <> $MEDIAL{ ᆽ; # hangul jongseong cieuc
+$medial{ h  <> $MEDIAL{ ᇂ; # hangul jongseong hieuh
+$medial{ gs <> $MEDIAL{ ᆪ; # hangul jongseong kiyeok-sios
+$medial{ gg <> $MEDIAL{ ᆩ; # hangul jongseong ssangkiyeok
+$medial{ g  <> $MEDIAL{ ᆨ; # hangul jongseong kiyeok
+$medial{ d  <> $MEDIAL{ ᆮ; # hangul jongseong tikeut
+$medial{ c  <> $MEDIAL{ ᆾ; # hangul jongseong chieuch
+$medial{ bs <> $MEDIAL{ ᆹ; # hangul jongseong pieup-sios
+$medial{ b  <> $MEDIAL{ ᆸ; # hangul jongseong pieup
+
+t  ']'< ᇀ; # hangul jongseong thieuth
+ss ']'< ᆻ; # hangul jongseong ssangsios
+s  ']'< ᆺ; # hangul jongseong sios
+p  ']'< ᇁ; # hangul jongseong phieuph
+nj ']'< ᆬ; # hangul jongseong nieun-cieuc
+nh ']'< ᆭ; # hangul jongseong nieun-hieuh
+ng ']'< ᆼ; # hangul jongseong ieung
+n  ']'< ᆫ; # hangul jongseong nieun
+m  ']'< ᆷ; # hangul jongseong mieum
+lt ']'< ᆴ; # hangul jongseong rieul-thieuth
+ls ']'< ᆳ; # hangul jongseong rieul-sios
+lp ']'< ᆵ; # hangul jongseong rieul-phieuph
+lm ']'< ᆱ; # hangul jongseong rieul-mieum
+lh ']'< ᆶ; # hangul jongseong rieul-hieuh
+lg ']'< ᆰ; # hangul jongseong rieul-kiyeok
+lb ']'< ᆲ; # hangul jongseong rieul-pieup
+l  ']'< ᆯ; # hangul jongseong rieul
+k  ']'< ᆿ; # hangul jongseong khieukh
+j  ']'< ᆽ; # hangul jongseong cieuc
+h  ']'< ᇂ; # hangul jongseong hieuh
+gs ']'< ᆪ; # hangul jongseong kiyeok-sios
+gg ']'< ᆩ; # hangul jongseong ssangkiyeok
+g  ']'< ᆨ; # hangul jongseong kiyeok
+d  ']'< ᆮ; # hangul jongseong tikeut
+c  ']'< ᆾ; # hangul jongseong chieuch
+bs ']'< ᆹ; # hangul jongseong pieup-sios
+b  ']'< ᆸ; # hangul jongseong pieup
+
+# extra English letters
+
+#  + "z > |s;"
+#  //{ + "Z > |s;" } masked
+#  + "x > |ks;"
+#  + "X > |ks;"
+#  + "v > |b;"
+#  + "V > |b;"
+#  + "r > |l;"
+#  + "R > |l;"
+#  + "q > |k;"
+#  + "Q > |k;"
+#  + "f > |p;"
+#  + "F > |p;"
+#  //{ + "c > |k;" } masked
+#  + "C > |k;"
+
+#  + "y > ᅲ;"   // hangul jungseong yu
+#  + "w > ᅱ;"   // hangul jungseong wi
+
+# eof
