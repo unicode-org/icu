@@ -1129,8 +1129,8 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
                  (UCharOffset - coll->contractionIndex)); 
           if (CE == UCOL_NOT_FOUND && firstCE != UCOL_NOT_FOUND) {
             CE          = firstCE;
-            /* firstCE     = UCOL_NOT_FOUND;
-            source->pos = firstUChar; */
+            /* firstCE     = UCOL_NOT_FOUND;*/
+            source->pos = firstUChar; 
           }
 
           break;
