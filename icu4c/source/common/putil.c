@@ -2171,6 +2171,8 @@ uprv_ebcdicFromAscii(const UDataSwapper *ds,
     while(count>0) {
         c=*s++;
         if(!CHAR_IS_INVARIANT(c)) {
+            udata_printError(ds, "uprv_ebcdicFromAscii() string[%] contains a variant character in position %d\n",
+                             length, length-count);
             *pErrorCode=U_INVALID_CHAR_FOUND;
             return 0;
         }
@@ -2206,6 +2208,8 @@ uprv_asciiFromEbcdic(const UDataSwapper *ds,
     while(count>0) {
         c=*s++;
         if(c!=0 && ((c=asciiFromEbcdic[c])==0 || !CHAR_IS_INVARIANT(c))) {
+            udata_printError(ds, "uprv_asciiFromEbcdic() string[%] contains a variant character in position %d\n",
+                             length, length-count);
             *pErrorCode=U_INVALID_CHAR_FOUND;
             return 0;
         }
