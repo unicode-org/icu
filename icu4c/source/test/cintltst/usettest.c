@@ -4,8 +4,6 @@
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/test/cintltst/usettest.c,v $ 
-* $Date: 2002/07/25 18:32:03 $ 
-* $Revision: 1.3 $
 **********************************************************************
 */
 #include "unicode/uset.h"
