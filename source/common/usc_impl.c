@@ -19,6 +19,8 @@
 
 #define ARRAY_SIZE(array) (sizeof array  / sizeof array[0])
 
+#define PAREN_STACK_DEPTH 128
+
 struct ParenStackEntry
 {
     int32_t pairIndex;
@@ -34,7 +36,7 @@ struct UScriptRun
     int32_t scriptLimit;
     UScriptCode scriptCode;
 
-    struct ParenStackEntry parenStack[128];
+    struct ParenStackEntry parenStack[PAREN_STACK_DEPTH];
     int32_t parenSP;
 };
 
@@ -59,12 +61,6 @@ static const UChar32 pairedChars[] = {
     0x3018, 0x3019,
     0x301a, 0x301b
 };
-
-#if 0
-static const int32_t pairedCharCount = ARRAY_SIZE(pairedChars);
-static const int32_t pairedCharPower = 1 << highBit(pairedCharCount);
-static const int32_t pairedCharExtra = pairedCharCount - pairedCharPower;
-#endif
 
 static int8_t
 highBit(int32_t value)
@@ -226,8 +222,7 @@ uscript_nextRun(UScriptRun *scriptRun, int32_t *pRunStart, int32_t *pRunLimit, U
          * if the character is a high surrogate and it's not the last one
          * in the text, see if it's followed by a low surrogate
          */
-        if (high >= 0xD800 && high <= 0xDBFF && scriptRun->scriptLimit < scriptRun->textLength - 1)
-        {
+        if (high >= 0xD800 && high <= 0xDBFF && scriptRun->scriptLimit < scriptRun->textLength - 1) {
             UChar low = scriptRun->textArray[scriptRun->scriptLimit + 1];
 
             /*
@@ -253,7 +248,19 @@ uscript_nextRun(UScriptRun *scriptRun, int32_t *pRunStart, int32_t *pRunLimit, U
          */
         if (pairIndex >= 0) {
             if ((pairIndex & 1) == 0) {
-                scriptRun->parenStack[++scriptRun->parenSP].pairIndex = pairIndex;
+
+                /*
+                 * If the paren stack is full, empty it. This
+                 * means that deeply nested paired punctuation
+                 * characters will be ignored, but that's an unusual
+                 * case, and it's better to ignore them than to
+                 * write off the end of the stack...
+                 */
+                if (++scriptRun->parenSP >= PAREN_STACK_DEPTH) {
+                    scriptRun->parenSP = 0;
+                }
+
+                scriptRun->parenStack[scriptRun->parenSP].pairIndex = pairIndex;
                 scriptRun->parenStack[scriptRun->parenSP].scriptCode  = scriptRun->scriptCode;
             } else if (scriptRun->parenSP >= 0) {
                 int32_t pi = pairIndex & ~1;
