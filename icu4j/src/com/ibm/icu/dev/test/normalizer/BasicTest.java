@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/normalizer/BasicTest.java,v $
- * $Date: 2002/10/29 18:59:05 $
- * $Revision: 1.18 $
+ * $Date: 2002/10/31 01:02:42 $
+ * $Revision: 1.19 $
  *
  *****************************************************************************************
  */
@@ -1254,123 +1254,126 @@ public class BasicTest extends TestFmwk {
     }
 
 	// test APIs that are not otherwise used - improve test coverage
-	public void TestNormalizerAPI() {
-	    // instantiate a Normalizer from a CharacterIterator
-	    String s=Utility.unescape("a\u0308\uac00\\U0002f800");
-	    // make s a bit longer and more interesting
-	    UCharacterIterator iter = UCharacterIterator.getInstance(s+s);
-	    Normalizer norm = new Normalizer(iter, Normalizer.NFC);
-	    if(norm.next()!=0xe4) {
-	        errln("error in Normalizer(CharacterIterator).next()");
-	    }
-
-
-	    // test clone(), ==, and hashCode()
-	    Normalizer clone=(Normalizer)norm.clone();
-	    if(clone.equals(norm)) {
-	        errln("error in Normalizer(Normalizer(CharacterIterator)).clone()!=norm");
-	    }
-
-        
-        if(clone.getLength()!= norm.getLength()){
-           errln("error in Normalizer.getBeginIndex()");
-        } 
-	    // clone must have the same hashCode()
-	    //if(clone.hashCode()!=norm.hashCode()) {
-	    //    errln("error in Normalizer(Normalizer(CharacterIterator)).clone().hashCode()!=copy.hashCode()");
-	    //}
-        if(clone.next()!=0xac00) {
-            errln("error in Normalizer(Normalizer(CharacterIterator)).next()");
+	public void TestNormalizerAPI() throws Exception {
+        try{
+            // instantiate a Normalizer from a CharacterIterator
+            String s=Utility.unescape("a\u0308\uac00\\U0002f800");
+            // make s a bit longer and more interesting
+            UCharacterIterator iter = UCharacterIterator.getInstance(s+s);
+            Normalizer norm = new Normalizer(iter, Normalizer.NFC);
+            if(norm.next()!=0xe4) {
+                errln("error in Normalizer(CharacterIterator).next()");
+            }   
+    
+            // test clone(), ==, and hashCode()
+            Normalizer clone=(Normalizer)norm.clone();
+            if(clone.equals(norm)) {
+                errln("error in Normalizer(Normalizer(CharacterIterator)).clone()!=norm");
+            }
+    
+            
+            if(clone.getLength()!= norm.getLength()){
+               errln("error in Normalizer.getBeginIndex()");
+            } 
+            // clone must have the same hashCode()
+            //if(clone.hashCode()!=norm.hashCode()) {
+            //    errln("error in Normalizer(Normalizer(CharacterIterator)).clone().hashCode()!=copy.hashCode()");
+            //}
+            if(clone.next()!=0xac00) {
+                errln("error in Normalizer(Normalizer(CharacterIterator)).next()");
+            }
+            int ch = clone.next();
+            if(ch!=0x4e3d) {
+                errln("error in Normalizer(Normalizer(CharacterIterator)).clone().next()");
+            }
+            // position changed, must change hashCode()
+            if(clone.hashCode()==norm.hashCode()) {
+                errln("error in Normalizer(Normalizer(CharacterIterator)).clone().next().hashCode()==copy.hashCode()");
+            }
+    
+            // test compose() and decompose()
+            StringBuffer tel;
+            String nfkc, nfkd;
+            tel=new StringBuffer("\u2121\u2121\u2121\u2121\u2121\u2121\u2121\u2121\u2121\u2121");
+            tel.insert(1,(char)0x0301);
+    
+            nfkc=Normalizer.compose(tel.toString(), true);
+            nfkd=Normalizer.decompose(tel.toString(), true);
+            if(
+                !nfkc.equals(Utility.unescape("TE\u0139TELTELTELTELTELTELTELTELTEL"))||
+                !nfkd.equals(Utility.unescape("TEL\u0301TELTELTELTELTELTELTELTELTEL"))
+            ) {
+                errln("error in Normalizer::(de)compose(): wrong result(s)");
+            }
+    
+            // test setIndex()
+            ch=norm.setIndex(3);
+            if(ch!=0x4e3d) {
+                errln("error in Normalizer(CharacterIterator).setIndex(3)");
+            }
+    
+            // test setText(CharacterIterator) and getText()
+            String out, out2;
+            clone.setText(iter);
+    
+            out = clone.getText();
+            out2 = iter.getText();
+            if( !out.equals(out2) ||
+                clone.startIndex()!=0||
+                clone.endIndex()!=iter.getLength()
+            ) {
+                errln("error in Normalizer::setText() or Normalizer::getText()");
+            }
+     
+            char[] fillIn1 = new char[clone.getLength()];
+            char[] fillIn2 = new char[iter.getLength()];
+            int len = clone.getText(fillIn1);
+            iter.getText(fillIn2,0);
+            if(!Utility.arrayRegionMatches(fillIn1,0,fillIn2,0,len)){
+                errln("error in Normalizer.getText(). Normalizer: "+
+                                Utility.hex(new String(fillIn1))+ 
+                                " Iter: " + Utility.hex(new String(fillIn2)));
+            }
+            
+            clone.setText(fillIn1);
+            len = clone.getText(fillIn2);
+            if(!Utility.arrayRegionMatches(fillIn1,0,fillIn2,0,len)){
+                errln("error in Normalizer.setText() or Normalizer.getText()"+
+                                Utility.hex(new String(fillIn1))+ 
+                                " Iter: " + Utility.hex(new String(fillIn2)));
+            }
+    
+            // test setText(UChar *), getUMode() and setMode()
+            clone.setText(s);
+            clone.setIndexOnly(1);
+            clone.setMode(Normalizer.NFD);
+            if(clone.getMode()!=Normalizer.NFD) {
+                errln("error in Normalizer::setMode() or Normalizer::getMode()");
+            }
+            if(clone.next()!=0x308 || clone.next()!=0x1100) {
+                errln("error in Normalizer::setText() or Normalizer::setMode()");
+            }
+    
+            // test last()/previous() with an internal buffer overflow
+            StringBuffer buf = new StringBuffer("aaaaaaaaaa");
+            buf.setCharAt(10-1,'\u0308');
+            clone.setText(buf);
+            if(clone.last()!=0x308) {
+                errln("error in Normalizer(10*U+0308).last()");
+            }
+    
+            // test UNORM_NONE
+            norm.setMode(Normalizer.NONE);
+            if(norm.first()!=0x61 || norm.next()!=0x308 || norm.last()!=0x2f800) {
+                errln("error in Normalizer(UNORM_NONE).first()/next()/last()");
+            }
+            out=Normalizer.normalize(s, Normalizer.NONE);
+            if(!out.equals(s)) {
+                errln("error in Normalizer::normalize(UNORM_NONE)");
+            }
+        }catch(Exception e){
+            throw e;
         }
-        int ch = clone.next();
-	    if(ch!=0x4e3d) {
-	        errln("error in Normalizer(Normalizer(CharacterIterator)).clone().next()");
-	    }
-	    // position changed, must change hashCode()
-	    if(clone.hashCode()==norm.hashCode()) {
-	        errln("error in Normalizer(Normalizer(CharacterIterator)).clone().next().hashCode()==copy.hashCode()");
-	    }
-
-	    // test compose() and decompose()
-	    StringBuffer tel;
-        String nfkc, nfkd;
-	    tel=new StringBuffer("\u2121\u2121\u2121\u2121\u2121\u2121\u2121\u2121\u2121\u2121");
-	    tel.insert(1,(char)0x0301);
-
-	    nfkc=Normalizer.compose(tel.toString(), true);
-	    nfkd=Normalizer.decompose(tel.toString(), true);
-	    if(
-	        !nfkc.equals(Utility.unescape("TE\u0139TELTELTELTELTELTELTELTELTEL"))||
-	        !nfkd.equals(Utility.unescape("TEL\u0301TELTELTELTELTELTELTELTELTEL"))
-	    ) {
-	        errln("error in Normalizer::(de)compose(): wrong result(s)");
-	    }
-
-	    // test setIndex()
-        ch=norm.setIndex(3);
-	    if(ch!=0x4e3d) {
-	        errln("error in Normalizer(CharacterIterator).setIndex(3)");
-	    }
-
-	    // test setText(CharacterIterator) and getText()
-	    String out, out2;
-	    clone.setText(iter);
-
-        out = clone.getText();
-        out2 = iter.getText();
-        if( !out.equals(out2) ||
-            clone.startIndex()!=0||
-            clone.endIndex()!=iter.getLength()
-        ) {
-            errln("error in Normalizer::setText() or Normalizer::getText()");
-        }
- 
-        char[] fillIn1 = new char[clone.getLength()];
-        char[] fillIn2 = new char[iter.getLength()];
-        int len = clone.getText(fillIn1);
-        iter.getText(fillIn2,0);
-        if(!Utility.arrayRegionMatches(fillIn1,0,fillIn2,0,len)){
-            errln("error in Normalizer.getText(). Normalizer: "+
-                            Utility.hex(new String(fillIn1))+ 
-                            " Iter: " + Utility.hex(new String(fillIn2)));
-        }
-        
-        clone.setText(fillIn1);
-        len = clone.getText(fillIn2);
-        if(!Utility.arrayRegionMatches(fillIn1,0,fillIn2,0,len)){
-            errln("error in Normalizer.setText() or Normalizer.getText()"+
-                            Utility.hex(new String(fillIn1))+ 
-                            " Iter: " + Utility.hex(new String(fillIn2)));
-        }
-
-	    // test setText(UChar *), getUMode() and setMode()
-	    clone.setText(s);
-        clone.setIndexOnly(1);
-	    clone.setMode(Normalizer.NFD);
-	    if(clone.getMode()!=Normalizer.NFD) {
-	        errln("error in Normalizer::setMode() or Normalizer::getMode()");
-	    }
-	    if(clone.next()!=0x308 || clone.next()!=0x1100) {
-	        errln("error in Normalizer::setText() or Normalizer::setMode()");
-	    }
-
-	    // test last()/previous() with an internal buffer overflow
-	    StringBuffer buf = new StringBuffer("aaaaaaaaaa");
-        buf.setCharAt(10-1,'\u0308');
-        clone.setText(buf);
-	    if(clone.last()!=0x308) {
-	        errln("error in Normalizer(10*U+0308).last()");
-	    }
-
-	    // test UNORM_NONE
-	    norm.setMode(Normalizer.NONE);
-	    if(norm.first()!=0x61 || norm.next()!=0x308 || norm.last()!=0x2f800) {
-	        errln("error in Normalizer(UNORM_NONE).first()/next()/last()");
-	    }
-	    out=Normalizer.normalize(s, Normalizer.NONE);
-	    if(!out.equals(s)) {
-	        errln("error in Normalizer::normalize(UNORM_NONE)");
-	    }
 	}
 
 	public void TestConcatenate() {
