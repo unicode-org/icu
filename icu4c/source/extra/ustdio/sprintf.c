@@ -101,7 +101,6 @@ u_sprintf_pad_and_justify(void                        *context,
 
 U_CAPI int32_t U_EXPORT2
 u_sprintf(UChar       *buffer,
-          const char    *locale,
           const char    *patternSpecification,
           ... )
 {
@@ -109,7 +108,7 @@ u_sprintf(UChar       *buffer,
     int32_t written;
 
     va_start(ap, patternSpecification);
-    written = u_vsnprintf(buffer, INT32_MAX, locale, patternSpecification, ap);
+    written = u_vsnprintf(buffer, INT32_MAX, patternSpecification, ap);
     va_end(ap);
 
     return written;
@@ -117,7 +116,6 @@ u_sprintf(UChar       *buffer,
 
 U_CAPI int32_t U_EXPORT2
 u_sprintf_u(UChar     *buffer,
-            const char     *locale,
             const UChar    *patternSpecification,
             ... )
 {
@@ -125,7 +123,7 @@ u_sprintf_u(UChar     *buffer,
     int32_t written;
 
     va_start(ap, patternSpecification);
-    written = u_vsnprintf_u(buffer, INT32_MAX, locale, patternSpecification, ap);
+    written = u_vsnprintf_u(buffer, INT32_MAX, patternSpecification, ap);
     va_end(ap);
 
     return written;
@@ -133,17 +131,15 @@ u_sprintf_u(UChar     *buffer,
 
 U_CAPI int32_t U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_vsprintf(UChar       *buffer,
-           const char     *locale,
            const char     *patternSpecification,
            va_list         ap)
 {
-    return u_vsnprintf(buffer, INT32_MAX, locale, patternSpecification, ap);
+    return u_vsnprintf(buffer, INT32_MAX, patternSpecification, ap);
 }
 
 U_CAPI int32_t U_EXPORT2
 u_snprintf(UChar       *buffer,
            int32_t         count,
-           const char    *locale,
            const char    *patternSpecification,
            ... )
 {
@@ -151,7 +147,7 @@ u_snprintf(UChar       *buffer,
     int32_t written;
 
     va_start(ap, patternSpecification);
-    written = u_vsnprintf(buffer, count, locale, patternSpecification, ap);
+    written = u_vsnprintf(buffer, count, patternSpecification, ap);
     va_end(ap);
 
     return written;
@@ -160,7 +156,6 @@ u_snprintf(UChar       *buffer,
 U_CAPI int32_t U_EXPORT2
 u_snprintf_u(UChar     *buffer,
              int32_t        count,
-             const char     *locale,
              const UChar    *patternSpecification,
              ... )
 {
@@ -168,7 +163,7 @@ u_snprintf_u(UChar     *buffer,
     int32_t written;
 
     va_start(ap, patternSpecification);
-    written = u_vsnprintf_u(buffer, count, locale, patternSpecification, ap);
+    written = u_vsnprintf_u(buffer, count, patternSpecification, ap);
     va_end(ap);
 
     return written;
@@ -177,7 +172,6 @@ u_snprintf_u(UChar     *buffer,
 U_CAPI int32_t  U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_vsnprintf(UChar       *buffer,
             int32_t         count,
-            const char     *locale,
             const char     *patternSpecification,
             va_list         ap)
 {
@@ -199,7 +193,7 @@ u_vsnprintf(UChar       *buffer,
     u_charsToUChars(patternSpecification, pattern, size);
 
     /* do the work */
-    written = u_vsnprintf_u(buffer, count, locale, pattern, ap);
+    written = u_vsnprintf_u(buffer, count, pattern, ap);
 
     /* clean up */
     if (pattern != patBuffer) {
@@ -211,11 +205,10 @@ u_vsnprintf(UChar       *buffer,
 
 U_CAPI int32_t U_EXPORT2 
 u_vsprintf_u(UChar       *buffer, 
-             const char  *locale, 
              const UChar *patternSpecification, 
              va_list     ap) 
 { 
-    return u_vsnprintf_u(buffer, INT32_MAX, locale, patternSpecification, ap); 
+    return u_vsnprintf_u(buffer, INT32_MAX, patternSpecification, ap); 
 } 
 
 static const u_printf_stream_handler g_sprintf_stream_handler = {
@@ -226,7 +219,6 @@ static const u_printf_stream_handler g_sprintf_stream_handler = {
 U_CAPI int32_t  U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_vsnprintf_u(UChar    *buffer,
               int32_t        count,
-              const char     *locale,
               const UChar    *patternSpecification,
               va_list        ap)
 {
@@ -245,7 +237,7 @@ u_vsnprintf_u(UChar    *buffer,
     outStr.len = count;
     outStr.available = count;
 
-    if(u_locbund_init(&outStr.fBundle, locale) == 0) {
+    if(u_locbund_init(&outStr.fBundle, "en_US_POSIX") == 0) {
         return 0;
     }
 

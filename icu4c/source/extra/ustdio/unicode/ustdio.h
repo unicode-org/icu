@@ -553,7 +553,6 @@ u_fsettransliterator(UFILE *file, UFileDirection direction,
  */
 U_CAPI int32_t U_EXPORT2
 u_sprintf(UChar       *buffer,
-        const char    *locale,
         const char    *patternSpecification,
         ... );
 
@@ -578,7 +577,6 @@ u_sprintf(UChar       *buffer,
 U_CAPI int32_t U_EXPORT2
 u_snprintf(UChar      *buffer,
         int32_t       count,
-        const char    *locale,
         const char    *patternSpecification,
         ... );
 
@@ -599,7 +597,6 @@ u_snprintf(UChar      *buffer,
  */
 U_CAPI int32_t U_EXPORT2
 u_vsprintf(UChar      *buffer,
-        const char    *locale,
         const char    *patternSpecification,
         va_list        ap);
 
@@ -627,7 +624,6 @@ u_vsprintf(UChar      *buffer,
 U_CAPI int32_t U_EXPORT2
 u_vsnprintf(UChar     *buffer,
         int32_t       count,
-        const char    *locale,
         const char    *patternSpecification,
         va_list        ap);
 
@@ -644,7 +640,6 @@ u_vsnprintf(UChar     *buffer,
  */
 U_CAPI int32_t U_EXPORT2
 u_sprintf_u(UChar      *buffer,
-        const char     *locale,
         const UChar    *patternSpecification,
         ... );
 
@@ -668,7 +663,6 @@ u_sprintf_u(UChar      *buffer,
 U_CAPI int32_t U_EXPORT2
 u_snprintf_u(UChar     *buffer,
         int32_t        count,
-        const char     *locale,
         const UChar    *patternSpecification,
         ... );
 
@@ -690,7 +684,6 @@ u_snprintf_u(UChar     *buffer,
  */
 U_CAPI int32_t U_EXPORT2
 u_vsprintf_u(UChar     *buffer,
-        const char    *locale,
         const UChar    *patternSpecification,
         va_list        ap);
 
@@ -717,7 +710,6 @@ u_vsprintf_u(UChar     *buffer,
 U_CAPI int32_t U_EXPORT2
 u_vsnprintf_u(UChar *buffer,
         int32_t         count,
-        const char     *locale,
         const UChar     *patternSpecification,
         va_list         ap);
 
@@ -737,7 +729,6 @@ u_vsnprintf_u(UChar *buffer,
  */
 U_CAPI int32_t U_EXPORT2
 u_sscanf(const UChar   *buffer,
-        const char     *locale,
         const char     *patternSpecification,
         ... );
 
@@ -759,7 +750,6 @@ u_sscanf(const UChar   *buffer,
  */
 U_CAPI int32_t U_EXPORT2
 u_vsscanf(const UChar  *buffer,
-        const char     *locale,
         const char     *patternSpecification,
         va_list        ap);
 
@@ -777,7 +767,6 @@ u_vsscanf(const UChar  *buffer,
  */
 U_CAPI int32_t U_EXPORT2
 u_sscanf_u(const UChar  *buffer,
-        const char      *locale,
         const UChar     *patternSpecification,
         ... );
 
@@ -799,7 +788,6 @@ u_sscanf_u(const UChar  *buffer,
  */
 U_CAPI int32_t U_EXPORT2
 u_vsscanf_u(const UChar *buffer,
-        const char      *locale,
         const UChar     *patternSpecification,
         va_list         ap);
 

@@ -53,156 +53,156 @@ static void TestString(void) {
     }
 
     /* Test sprintf */
-    u_sprintf(uStringBuf, NULL, "Signed decimal integer d: %d", *n);
+    u_sprintf(uStringBuf, "Signed decimal integer d: %d", *n);
     *newValuePtr = 1;
-    u_sscanf(uStringBuf, NULL, "Signed decimal integer d: %d", newValuePtr);
+    u_sscanf(uStringBuf, "Signed decimal integer d: %d", newValuePtr);
     if (*n != *newValuePtr) {
         log_err("%%d Got: %d, Expected: %d\n", *newValuePtr, *n);
     }
 
-    u_sprintf(uStringBuf, NULL, "Signed decimal integer i: %i", *n);
+    u_sprintf(uStringBuf, "Signed decimal integer i: %i", *n);
     *newValuePtr = 1;
-    u_sscanf(uStringBuf, NULL, "Signed decimal integer i: %i", newValuePtr);
+    u_sscanf(uStringBuf, "Signed decimal integer i: %i", newValuePtr);
     if (*n != *newValuePtr) {
         log_err("%%i Got: %i, Expected: %i\n", *newValuePtr, *n);
     }
 
-    u_sprintf(uStringBuf, NULL, "Unsigned octal integer o: %o", *n);
+    u_sprintf(uStringBuf, "Unsigned octal integer o: %o", *n);
     *newValuePtr = 1;
-    u_sscanf(uStringBuf, NULL, "Unsigned octal integer o: %o", newValuePtr);
+    u_sscanf(uStringBuf, "Unsigned octal integer o: %o", newValuePtr);
     if (*n != *newValuePtr) {
         log_err("%%o Got: %o, Expected: %o\n", *newValuePtr, *n);
     }
 
-    u_sprintf(uStringBuf, NULL, "Unsigned decimal integer %%u: %u", *n);
+    u_sprintf(uStringBuf, "Unsigned decimal integer %%u: %u", *n);
     *newValuePtr = 1;
-    u_sscanf(uStringBuf, NULL, "Unsigned decimal integer %%u: %u", newValuePtr);
+    u_sscanf(uStringBuf, "Unsigned decimal integer %%u: %u", newValuePtr);
     if (*n != *newValuePtr) {
         log_err("%%u Got: %u, Expected: %u\n", *newValuePtr, *n);
     }
 
-    u_sprintf(uStringBuf, NULL, "Lowercase unsigned hexadecimal integer x: %x", *n);
+    u_sprintf(uStringBuf, "Lowercase unsigned hexadecimal integer x: %x", *n);
     *newValuePtr = 1;
-    u_sscanf(uStringBuf, NULL, "Lowercase unsigned hexadecimal integer x: %x", newValuePtr);
+    u_sscanf(uStringBuf, "Lowercase unsigned hexadecimal integer x: %x", newValuePtr);
     if (*n != *newValuePtr) {
         log_err("%%x Got: %x, Expected: %x\n", *newValuePtr, *n);
     }
 
-    u_sprintf(uStringBuf, NULL, "Uppercase unsigned hexadecimal integer X: %X", *n);
+    u_sprintf(uStringBuf, "Uppercase unsigned hexadecimal integer X: %X", *n);
     *newValuePtr = 1;
-    u_sscanf(uStringBuf, NULL, "Uppercase unsigned hexadecimal integer X: %X", newValuePtr);
+    u_sscanf(uStringBuf, "Uppercase unsigned hexadecimal integer X: %X", newValuePtr);
     if (*n != *newValuePtr) {
         log_err("%%X Got: %X, Expected: %X\n", *newValuePtr, *n);
     }
 
-    u_sprintf(uStringBuf, NULL, "Float f: %f", myFloat);
+    u_sprintf(uStringBuf, "Float f: %f", myFloat);
     *newDoubleValuePtr = -1.0;
-    u_sscanf(uStringBuf, NULL, "Float f: %f", newDoubleValuePtr);
+    u_sscanf(uStringBuf, "Float f: %f", newDoubleValuePtr);
     if (myFloat != *newDoubleValuePtr) {
         log_err("%%f Got: %f, Expected: %f\n", *newDoubleValuePtr, myFloat);
     }
 
-    u_sprintf(uStringBuf, NULL, "Lowercase float e: %e", myFloat);
+    u_sprintf(uStringBuf, "Lowercase float e: %e", myFloat);
     *newDoubleValuePtr = -1.0;
-    u_sscanf(uStringBuf, NULL, "Lowercase float e: %e", newDoubleValuePtr);
+    u_sscanf(uStringBuf, "Lowercase float e: %e", newDoubleValuePtr);
     if (myFloat != *newDoubleValuePtr) {
         log_err("%%e Got: %e, Expected: %e\n", *newDoubleValuePtr, myFloat);
     }
 
-    u_sprintf(uStringBuf, NULL, "Uppercase float E: %E", myFloat);
+    u_sprintf(uStringBuf, "Uppercase float E: %E", myFloat);
     *newDoubleValuePtr = -1.0;
-    u_sscanf(uStringBuf, NULL, "Uppercase float E: %E", newDoubleValuePtr);
+    u_sscanf(uStringBuf, "Uppercase float E: %E", newDoubleValuePtr);
     if (myFloat != *newDoubleValuePtr) {
         log_err("%%E Got: %E, Expected: %E\n", *newDoubleValuePtr, myFloat);
     }
 
-    u_sprintf(uStringBuf, NULL, "Lowercase float g: %g", myFloat);
+    u_sprintf(uStringBuf, "Lowercase float g: %g", myFloat);
     *newDoubleValuePtr = -1.0;
-    u_sscanf(uStringBuf, NULL, "Lowercase float g: %g", newDoubleValuePtr);
+    u_sscanf(uStringBuf, "Lowercase float g: %g", newDoubleValuePtr);
     if (myFloat != *newDoubleValuePtr) {
         log_err("%%g Got: %g, Expected: %g\n", *newDoubleValuePtr, myFloat);
     }
 
-    u_sprintf(uStringBuf, NULL, "Uppercase float G: %G", myFloat);
+    u_sprintf(uStringBuf, "Uppercase float G: %G", myFloat);
     *newDoubleValuePtr = -1.0;
-    u_sscanf(uStringBuf, NULL, "Uppercase float G: %G", newDoubleValuePtr);
+    u_sscanf(uStringBuf, "Uppercase float G: %G", newDoubleValuePtr);
     if (myFloat != *newDoubleValuePtr) {
         log_err("%%G Got: %G, Expected: %G\n", *newDoubleValuePtr, myFloat);
     }
 
     ptr = NULL;
-    u_sprintf(uStringBuf, NULL, "Pointer %%p: %p\n", origPtr);
-    u_sscanf(uStringBuf, NULL, "Pointer %%p: %p\n", &ptr);
+    u_sprintf(uStringBuf, "Pointer %%p: %p\n", origPtr);
+    u_sscanf(uStringBuf, "Pointer %%p: %p\n", &ptr);
     if (ptr != origPtr || u_strlen(uStringBuf) != 13+(sizeof(void*)*2)) {
         log_err("%%p Got: %p, Expected: %p\n", ptr, origPtr);
     }
 
-    u_sprintf(uStringBuf, NULL, "Char c: %c", 'A');
-    u_sscanf(uStringBuf, NULL, "Char c: %c", myString);
+    u_sprintf(uStringBuf, "Char c: %c", 'A');
+    u_sscanf(uStringBuf, "Char c: %c", myString);
     if (*myString != 'A') {
         log_err("%%c Got: %c, Expected: A\n", *myString);
     }
 
-    u_sprintf(uStringBuf, NULL, "UChar %%C: %C", (UChar)0x0041); /*'A'*/
-    u_sscanf(uStringBuf, NULL, "UChar %%C: %C", myUString);
+    u_sprintf(uStringBuf, "UChar %%C: %C", (UChar)0x0041); /*'A'*/
+    u_sscanf(uStringBuf, "UChar %%C: %C", myUString);
     if (*myUString != (UChar)0x0041) { /*'A'*/
         log_err("%%C Got: %C, Expected: A\n", *myUString);
     }
 
-    u_sprintf(uStringBuf, NULL, "String %%s: %s", "My-String");
-    u_sscanf(uStringBuf, NULL, "String %%s: %s", myString);
+    u_sprintf(uStringBuf, "String %%s: %s", "My-String");
+    u_sscanf(uStringBuf, "String %%s: %s", myString);
     if (strcmp(myString, "My-String")) {
         log_err("%%s Got: %s, Expected: My-String\n", myString);
     }
     if (uStringBuf[20] != 0) {
         log_err("String not terminated. Got %c\n", uStringBuf[20] );
     }
-    u_sprintf(uStringBuf, NULL, "NULL String %%s: %s", NULL);
-    u_sscanf(uStringBuf, NULL, "NULL String %%s: %s", myString);
+    u_sprintf(uStringBuf, "NULL String %%s: %s", NULL);
+    u_sscanf(uStringBuf, "NULL String %%s: %s", myString);
     if (strcmp(myString, "(null)")) {
         log_err("%%s Got: %s, Expected: My-String\n", myString);
     }
 
-    u_sprintf(uStringBuf, NULL, "Unicode String %%S: %S", myStringOrig);
-    u_sscanf(uStringBuf, NULL, "Unicode String %%S: %S", myUString);
+    u_sprintf(uStringBuf, "Unicode String %%S: %S", myStringOrig);
+    u_sscanf(uStringBuf, "Unicode String %%S: %S", myUString);
     u_austrncpy(myString, myUString, sizeof(myString)/sizeof(*myString));
     if (strcmp(myString, "My-String")) {
         log_err("%%S Got: %s, Expected: My String\n", myString);
     }
 
-    u_sprintf(uStringBuf, NULL, "NULL Unicode String %%S: %S", NULL);
-    u_sscanf(uStringBuf, NULL, "NULL Unicode String %%S: %S", myUString);
+    u_sprintf(uStringBuf, "NULL Unicode String %%S: %S", NULL);
+    u_sscanf(uStringBuf, "NULL Unicode String %%S: %S", myUString);
     u_austrncpy(myString, myUString, sizeof(myString)/sizeof(*myString));
     if (strcmp(myString, "(null)")) {
         log_err("%%S Got: %s, Expected: (null)\n", myString);
     }
 
-    u_sprintf(uStringBuf, NULL, "Percent %%P (non-ANSI): %P", myFloat);
+    u_sprintf(uStringBuf, "Percent %%P (non-ANSI): %P", myFloat);
     *newDoubleValuePtr = -1.0;
-    u_sscanf(uStringBuf, NULL, "Percent %%P (non-ANSI): %P", newDoubleValuePtr);
+    u_sscanf(uStringBuf, "Percent %%P (non-ANSI): %P", newDoubleValuePtr);
     if (myFloat != *newDoubleValuePtr) {
         log_err("%%P Got: %P, Expected: %P\n", *newDoubleValuePtr, myFloat);
     }
 
-    u_sprintf(uStringBuf, NULL, "Spell Out %%V (non-ANSI): %V", myFloat);
+    u_sprintf(uStringBuf, "Spell Out %%V (non-ANSI): %V", myFloat);
     *newDoubleValuePtr = -1.0;
-    u_sscanf(uStringBuf, NULL, "Spell Out %%V (non-ANSI): %V", newDoubleValuePtr);
+    u_sscanf(uStringBuf, "Spell Out %%V (non-ANSI): %V", newDoubleValuePtr);
     if (myFloat != *newDoubleValuePtr) {
         log_err("%%V Got: %f, Expected: %f\n", *newDoubleValuePtr, myFloat);
     }
 
     *newValuePtr = 1;
-    u_sprintf(uStringBuf, NULL, "\t\nPointer to integer (Count) %%n: n=%d %n n=%d\n", *newValuePtr, newValuePtr, *newValuePtr);
+    u_sprintf(uStringBuf, "\t\nPointer to integer (Count) %%n: n=%d %n n=%d\n", *newValuePtr, newValuePtr, *newValuePtr);
     if (*newValuePtr != 37) {
         log_err("%%V Got: %f, Expected: %f\n", *newDoubleValuePtr, myFloat);
     }
 
-/*  u_sscanf(uStringBuf, NULL, "Pointer %%p: %p\n", myFile);*/
+/*  u_sscanf(uStringBuf, "Pointer %%p: %p\n", myFile);*/
 
     {
         static const char longStr[] = "This is a long test12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890";
 
-        retVal = u_sprintf(uStringBuf, NULL, longStr);
+        retVal = u_sprintf(uStringBuf, longStr);
         u_austrncpy(myString, uStringBuf, sizeof(uStringBuf)/sizeof(*uStringBuf));
         if (strcmp(myString, longStr)) {
             log_err("%%S Got: %s, Expected: %s\n", myString, longStr);
@@ -211,7 +211,7 @@ static void TestString(void) {
             log_err("%%S returned different sizes. Got: %d  Expected: %d\n", retVal, strlen(longStr));
         }
 
-        retVal = u_sprintf(uStringBuf, NULL, "%s", longStr);
+        retVal = u_sprintf(uStringBuf, "%s", longStr);
         u_austrncpy(myString, uStringBuf, sizeof(uStringBuf)/sizeof(*uStringBuf));
         if (strcmp(myString, longStr)) {
             log_err("%%S Got: %s, Expected: %s\n", myString, longStr);
@@ -221,13 +221,13 @@ static void TestString(void) {
         }
 
         u_uastrncpy(myUString, longStr, sizeof(longStr)/sizeof(*longStr));
-        u_sprintf_u(uStringBuf, NULL, myUString);
+        u_sprintf_u(uStringBuf, myUString);
         if (u_strcmp(myUString, uStringBuf)) {
             log_err("%%S Long strings differ. Expected: %s\n", longStr);
         }
 
         u_uastrncpy(myUString, longStr, sizeof(longStr)/sizeof(*longStr));
-        retVal = u_sprintf_u(uStringBuf, NULL, myUString+10);
+        retVal = u_sprintf_u(uStringBuf, myUString+10);
         if (u_strcmp(myUString+10, uStringBuf)) {
             log_err("%%S Long strings differ. Expected: %s\n", longStr + 10);
         }
@@ -237,7 +237,7 @@ static void TestString(void) {
 
         u_memset(uStringBuf, 1, sizeof(longStr)/sizeof(*longStr));
         u_uastrncpy(myUString, longStr, sizeof(longStr)/sizeof(*longStr));
-        retVal = u_snprintf_u(uStringBuf, 10, NULL, myUString);
+        retVal = u_snprintf_u(uStringBuf, 10, myUString);
         if (u_strncmp(myUString, uStringBuf, 10) || uStringBuf[10] != 1 || retVal != 10) {
             log_err("%%S Long strings differ. Expected the first 10 characters of %s\n", longStr);
         }
@@ -247,7 +247,7 @@ static void TestString(void) {
 
 #define Test_u_snprintf(limit, format, value, expectedSize, expectedStr) \
     u_uastrncpy(testStr, "xxxxxxxxxxxxxx", sizeof(testStr)/sizeof(testStr[0]));\
-    size = u_snprintf(testStr, limit, "en_US_POSIX", format, value);\
+    size = u_snprintf(testStr, limit, format, value);\
     u_austrncpy(cTestResult, testStr, sizeof(cTestResult)/sizeof(cTestResult[0]));\
     if (size != expectedSize || strcmp(cTestResult, expectedStr) != 0) {\
         log_err("Unexpected formatting. size=%d expectedSize=%d cTestResult=%s expectedStr=%s\n",\
@@ -292,7 +292,7 @@ static void TestSnprintf(void) {
     u_memset(uBuffer, 0x2a, sizeof(uBuffer)/sizeof(*uBuffer));\
     memset(buffer, 0x2a, sizeof(buffer)/sizeof(*buffer));\
     \
-    uNumPrinted = u_sprintf(uBuffer, "en_US_POSIX", uFormat, uValue);\
+    uNumPrinted = u_sprintf(uBuffer, uFormat, uValue);\
     u_austrncpy(compBuffer, uBuffer, sizeof(uBuffer)/sizeof(uBuffer[0]));\
     cNumPrinted = sprintf(buffer, cFormat, cValue);\
     if (strcmp(buffer, compBuffer) != 0) {\
@@ -310,7 +310,7 @@ static void TestSnprintf(void) {
     u_memset(uBuffer, 0x2a, sizeof(uBuffer)/sizeof(*uBuffer));\
     memset(buffer, 0x2a, sizeof(buffer)/sizeof(*buffer));\
     \
-    uNumPrinted = u_sprintf(uBuffer, "en_US_POSIX", format, precision, value);\
+    uNumPrinted = u_sprintf(uBuffer, format, precision, value);\
     u_austrncpy(compBuffer, uBuffer, sizeof(uBuffer)/sizeof(uBuffer[0]));\
     cNumPrinted = sprintf(buffer, format, precision, value);\
     if (strcmp(buffer, compBuffer) != 0) {\
@@ -453,21 +453,21 @@ static void TestStringCompatibility(void) {
     /* Compare against C API compatibility */
     for (num = -STANDARD_TEST_NUM_RANGE; num < STANDARD_TEST_NUM_RANGE; num++) {
         sprintf(testBuf, "%x", num);
-        u_sprintf(uStringBuf, NULL, "%x", num);
+        u_sprintf(uStringBuf, "%x", num);
         u_austrncpy(myString, uStringBuf, sizeof(myString)/sizeof(myString[0]));
         if (strcmp(myString, testBuf) != 0) {
             log_err("%%x Got: \"%s\", Expected: \"%s\"\n", myString, testBuf);
         }
 
         sprintf(testBuf, "%X", num);
-        u_sprintf(uStringBuf, NULL, "%X", num);
+        u_sprintf(uStringBuf, "%X", num);
         u_austrncpy(myString, uStringBuf, sizeof(myString)/sizeof(myString[0]));
         if (strcmp(myString, testBuf) != 0) {
             log_err("%%X Got: \"%s\", Expected: \"%s\"\n", myString, testBuf);
         }
 
         sprintf(testBuf, "%o", num);
-        u_sprintf(uStringBuf, NULL, "%o", num);
+        u_sprintf(uStringBuf, "%o", num);
         u_austrncpy(myString, uStringBuf, sizeof(myString)/sizeof(myString[0]));
         if (strcmp(myString, testBuf) != 0) {
             log_err("%%o Got: \"%s\", Expected: \"%s\"\n", myString, testBuf);
@@ -475,49 +475,49 @@ static void TestStringCompatibility(void) {
 
         /* sprintf is not compatible on all platforms e.g. the iSeries*/
         sprintf(testBuf, "%d", num);
-        u_sprintf(uStringBuf, "en_US_POSIX", "%d", num);
+        u_sprintf(uStringBuf, "%d", num);
         u_austrncpy(myString, uStringBuf, sizeof(myString)/sizeof(myString[0]));
         if (strcmp(myString, testBuf) != 0) {
             log_err("%%d Got: \"%s\", Expected: \"%s\"\n", myString, testBuf);
         }
 
         sprintf(testBuf, "%i", num);
-        u_sprintf(uStringBuf, "en_US_POSIX", "%i", num);
+        u_sprintf(uStringBuf, "%i", num);
         u_austrncpy(myString, uStringBuf, sizeof(myString)/sizeof(myString[0]));
         if (strcmp(myString, testBuf) != 0) {
             log_err("%%i Got: \"%s\", Expected: \"%s\"\n", myString, testBuf);
         }
 
         sprintf(testBuf, "%f", (double)num);
-        u_sprintf(uStringBuf, "en_US_POSIX", "%f", (double)num);
+        u_sprintf(uStringBuf, "%f", (double)num);
         u_austrncpy(myString, uStringBuf, sizeof(myString)/sizeof(myString[0]));
         if (strcmp(myString, testBuf) != 0) {
             log_err("%%f Got: \"%s\", Expected: \"%s\"\n", myString, testBuf);
         }
 
 /*        sprintf(testBuf, "%e", (double)num);
-        u_sprintf(uStringBuf, "en_US_POSIX", "%e", (double)num);
+        u_sprintf(uStringBuf, "%e", (double)num);
         u_austrncpy(myString, uStringBuf, sizeof(myString)/sizeof(myString[0]));
         if (strcmp(myString, testBuf) != 0) {
             log_err("%%e Got: \"%s\", Expected: \"%s\"\n", myString, testBuf);
         }
 
         sprintf(testBuf, "%E", (double)num);
-        u_sprintf(uStringBuf, "en_US_POSIX", "%E", (double)num);
+        u_sprintf(uStringBuf, "%E", (double)num);
         u_austrncpy(myString, uStringBuf, sizeof(myString)/sizeof(myString[0]));
         if (strcmp(myString, testBuf) != 0) {
             log_err("%%E Got: \"%s\", Expected: \"%s\"\n", myString, testBuf);
         }*/
 
         sprintf(testBuf, "%g", (double)num);
-        u_sprintf(uStringBuf, "en_US_POSIX", "%g", (double)num);
+        u_sprintf(uStringBuf, "%g", (double)num);
         u_austrncpy(myString, uStringBuf, sizeof(myString)/sizeof(myString[0]));
         if (strcmp(myString, testBuf) != 0) {
             log_err("%%g Got: \"%s\", Expected: \"%s\"\n", myString, testBuf);
         }
 
         sprintf(testBuf, "%G", (double)num);
-        u_sprintf(uStringBuf, "en_US_POSIX", "%G", (double)num);
+        u_sprintf(uStringBuf, "%G", (double)num);
         u_austrncpy(myString, uStringBuf, sizeof(myString)/sizeof(myString[0]));
         if (strcmp(myString, testBuf) != 0) {
             log_err("%%G Got: \"%s\", Expected: \"%s\"\n", myString, testBuf);
@@ -528,7 +528,7 @@ static void TestStringCompatibility(void) {
         testBuf[0] = (char)0xFF;
         uStringBuf[0] = (UChar)0xfffe;
         sprintf(testBuf, "%c", num);
-        u_sprintf(uStringBuf, NULL, "%c", num);
+        u_sprintf(uStringBuf, "%c", num);
         u_austrncpy(myString, uStringBuf, sizeof(myString)/sizeof(myString[0]));
         if (testBuf[0] != uStringBuf[0] || uStringBuf[0] != num) {
             log_err("%%c Got: 0x%x, Expected: 0x%x\n", myString[0], testBuf[0]);
@@ -549,7 +549,7 @@ static void TestSScanSetFormat(const char *format, const UChar *uValue, const ch
     memset(buffer, 0x2a, sizeof(buffer)/sizeof(*buffer));
     buffer[sizeof(buffer)/sizeof(*buffer)-1] = 0;
 
-    uNumScanned = u_sscanf(uValue, NULL, format, uBuffer);
+    uNumScanned = u_sscanf(uValue, format, uBuffer);
     if (expectedToPass) {
         u_austrncpy(compBuffer, uBuffer, sizeof(uBuffer)/sizeof(uBuffer[0]));
         cNumScanned = sscanf(cValue, format, buffer);
@@ -588,7 +588,7 @@ static void TestArgumentSkipping(void) {
     strcpy(buffer, "123456789");
     u_uastrcpy(uBuffer, "123456789");
     uNumScanned = sscanf(buffer, "%*c%c", &ch1, &ch2);
-    uNumScanned = u_sscanf(uBuffer, NULL, "%*c%c", &ch1, &ch2);
+    uNumScanned = u_sscanf(uBuffer, "%*c%c", &ch1, &ch2);
 #endif
 }
 static void TestSScanset(void) {
