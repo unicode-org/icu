@@ -169,48 +169,46 @@ static uint32_t mirrorMappings[MAX_MIRROR_COUNT][2];
 static int32_t mirrorCount=0;
 
 static void
-MirrorCode(void *context, char *start, char *limit, int32_t fieldNr, UErrorCode *pErrorCode) {
+mirrorLineFn(void *context,
+             char *fields[][2], int32_t fieldCount,
+             UErrorCode *pErrorCode) {
     char *end;
 
-    mirrorMappings[mirrorCount][fieldNr]=uprv_strtoul(start, &end, 16);
-    if((end-start)<1 || end!=limit) {
-        fprintf(stderr, "genprops: syntax error in Mirror.txt field %d at %s\n", fieldNr, start);
+    mirrorMappings[mirrorCount][0]=uprv_strtoul(fields[0][0], &end, 16);
+    if(end<=fields[0][0] || end!=fields[0][1]) {
+        fprintf(stderr, "genprops: syntax error in Mirror.txt field 0 at %s\n", fields[0][0]);
         exit(U_PARSE_ERROR);
     }
-}
 
-static void
-MirrorFinish(void *context, char *start, char *limit, int32_t fieldNr, UErrorCode *pErrorCode) {
+    mirrorMappings[mirrorCount][1]=uprv_strtoul(fields[1][0], &end, 16);
+    if(end<=fields[1][0] || end!=fields[1][1]) {
+        fprintf(stderr, "genprops: syntax error in Mirror.txt field 1 at %s\n", fields[1][0]);
+        exit(U_PARSE_ERROR);
+    }
+
     if(++mirrorCount==MAX_MIRROR_COUNT) {
         fprintf(stderr, "genprops: too many mirror mappings\n");
         exit(U_INDEX_OUTOFBOUNDS_ERROR);
     }
 }
 
-static UParseFieldFn *mirrorFields[4]={
-    NULL,
-    MirrorCode,
-    MirrorCode,
-    MirrorFinish
-};
-
 static void
 parseMirror(const char *filename, UErrorCode *pErrorCode) {
+    char *fields[2][2];
+
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return;
     }
 
-    u_parseDelimitedFile(filename, ';', mirrorFields, 2, NULL, pErrorCode);
+    u_parseDelimitedFile(filename, ';', fields, 2, mirrorLineFn, NULL, pErrorCode);
 }
 
 /* parser for UnicodeData.txt ----------------------------------------------- */
 
-#define NO_NUMERIC_VALUE ((uint32_t)15821005)
-
 /* general categories */
 extern const char *const
 genCategoryNames[U_CHAR_CATEGORY_COUNT]={
-        NULL,
+    NULL,
     "Lu", "Ll", "Lt", "Lm", "Lo", "Mn", "Me",
     "Mc", "Nd", "Nl", "No",
     "Zs", "Zl", "Zp",
@@ -223,7 +221,7 @@ genCategoryNames[U_CHAR_CATEGORY_COUNT]={
 
 extern const char *const
 bidiNames[U_CHAR_DIRECTION_COUNT]={
-        "L", "R", "EN", "ES", "ET", "AN", "CS", "B", "S",
+    "L", "R", "EN", "ES", "ET", "AN", "CS", "B", "S",
     "WS", "ON", "LRE", "LRO", "AL", "RLE", "RLO", "PDF", "NSM", "BN"
 };
 
@@ -245,209 +243,168 @@ static const struct {
 };
 
 static void
-UnicodeDataInit(void *context, char *start, char *limit, int32_t fieldNr, UErrorCode *pErrorCode) {
-    Props *p=(Props *)context;
+unicodeDataLineFn(void *context,
+                  char *fields[][2], int32_t fieldCount,
+                  UErrorCode *pErrorCode) {
+    static int32_t mirrorIndex=0;
+    Props p;
+    char *end;
+    uint32_t value;
+    int i;
+    bool_t hasNumericValue=FALSE;
 
     /* reset the properties */
-    uprv_memset(p, 0, sizeof(Props));
-    p->numericValue=NO_NUMERIC_VALUE;
-}
-
-static void
-UnicodeDataCode(void *context, char *start, char *limit, int32_t fieldNr, UErrorCode *pErrorCode) {
-    Props *p=(Props *)context;
-    char *end;
+    uprv_memset(&p, 0, sizeof(Props));
 
     /* get the character code, field 0 */
-    p->code=uprv_strtoul(start, &end, 16);
-    if((end-start)<1 || end!=limit) {
-        fprintf(stderr, "genprops: syntax error in field 0 at %s\n", start);
+    p.code=uprv_strtoul(fields[0][0], &end, 16);
+    if(end<=fields[0][0] || end!=fields[0][1]) {
+        fprintf(stderr, "genprops: syntax error in field 0 at %s\n", fields[0][0]);
         exit(U_PARSE_ERROR);
     }
-}
-
-static void
-UnicodeDataCategory(void *context, char *start, char *limit, int32_t fieldNr, UErrorCode *pErrorCode) {
-    Props *p=(Props *)context;
-    int i;
-    char c;
 
     /* get general category, field 2 */
-    c=*limit;
-    *limit=0;
+    *fields[2][1]=0;
     for(i=1;;) {
-        if(uprv_strcmp(start, genCategoryNames[i])==0) {
-            p->generalCategory=(uint8_t)i;
+        if(uprv_strcmp(fields[2][0], genCategoryNames[i])==0) {
+            p.generalCategory=(uint8_t)i;
             break;
         }
         if(++i==U_CHAR_CATEGORY_COUNT) {
-            fprintf(stderr, "genprops: unknown general category \"%s\" at code 0x%lx\n", start, p->code);
+            fprintf(stderr, "genprops: unknown general category \"%s\" at code 0x%lx\n", fields[2][0], p.code);
             exit(U_PARSE_ERROR);
         }
     }
-    *limit=c;
-}
-
-static void
-UnicodeDataCombining(void *context, char *start, char *limit, int32_t fieldNr, UErrorCode *pErrorCode) {
-    Props *p=(Props *)context;
-    char *end;
 
     /* get canonical combining class, field 3 */
-    p->canonicalCombining=(uint8_t)uprv_strtoul(start, &end, 10);
-    if(start>=end || end!=limit) {
-        fprintf(stderr, "genprops: syntax error in field 3 at code 0x%lx\n", p->code);
+    p.canonicalCombining=(uint8_t)uprv_strtoul(fields[3][0], &end, 10);
+    if(end<=fields[3][0] || end!=fields[3][1]) {
+        fprintf(stderr, "genprops: syntax error in field 3 at code 0x%lx\n", p.code);
         exit(U_PARSE_ERROR);
     }
-}
-
-static void
-UnicodeDataBiDi(void *context, char *start, char *limit, int32_t fieldNr, UErrorCode *pErrorCode) {
-    Props *p=(Props *)context;
-    int i;
-    char c;
 
     /* get BiDi category, field 4 */
-    c=*limit;
-    *limit=0;
+    *fields[4][1]=0;
     for(i=0;;) {
-        if(uprv_strcmp(start, bidiNames[i])==0) {
-            p->bidi=(uint8_t)i;
+        if(uprv_strcmp(fields[4][0], bidiNames[i])==0) {
+            p.bidi=(uint8_t)i;
             break;
         }
         if(++i==U_CHAR_DIRECTION_COUNT) {
-            fprintf(stderr, "genprops: unknown BiDi category \"%s\" at code 0x%lx\n", start, p->code);
+            fprintf(stderr, "genprops: unknown BiDi category \"%s\" at code 0x%lx\n", fields[4][0], p.code);
             exit(U_PARSE_ERROR);
         }
     }
-    *limit=c;
-}
-
-static void
-UnicodeDataNumeric(void *context, char *start, char *limit, int32_t fieldNr, UErrorCode *pErrorCode) {
-    Props *p=(Props *)context;
-    uint32_t value;
-    char *end;
 
     /* decimal digit value, field 6 */
-    /* digit value, field 7 */
-    /* numeric value, field 8 */
-    value=uprv_strtoul(start, &end, 10);
-    if(fieldNr==8 && value>0 && *end=='/') {
-        /* field 8 may contain a fractional value, get the denominator */
-        p->denominator=uprv_strtoul(end+1, &end, 10);
-    }
-    if(end!=limit) {
-        fprintf(stderr, "genprops: syntax error in field 6 at code 0x%lx\n", p->code);
-        exit(U_PARSE_ERROR);
-    }
-    if(start<end) {
-        if(p->numericValue!=NO_NUMERIC_VALUE && p->numericValue!=value) {
-            fprintf(stderr, "genprops: more than one numeric value at code 0x%lx\n", p->code);
+    if(fields[6][0]<fields[6][1]) {
+        value=uprv_strtoul(fields[6][0], &end, 10);
+        if(end!=fields[6][1]) {
+            fprintf(stderr, "genprops: syntax error in field 6 at code 0x%lx\n", p.code);
             exit(U_PARSE_ERROR);
         }
-        p->numericValue=value;
+        p.numericValue=value;
+        hasNumericValue=TRUE;
     }
-}
 
-static void
-UnicodeDataMirrored(void *context, char *start, char *limit, int32_t fieldNr, UErrorCode *pErrorCode) {
-    Props *p=(Props *)context;
+    /* digit value, field 7 */
+    if(fields[7][0]<fields[7][1]) {
+        value=uprv_strtoul(fields[7][0], &end, 10);
+        if(end!=fields[7][1]) {
+            fprintf(stderr, "genprops: syntax error in field 7 at code 0x%lx\n", p.code);
+            exit(U_PARSE_ERROR);
+        }
+        if(hasNumericValue) {
+            if(p.numericValue!=value) {
+                fprintf(stderr, "genprops: more than one numeric value at code 0x%lx\n", p.code);
+                exit(U_PARSE_ERROR);
+            }
+        } else {
+            p.numericValue=value;
+            hasNumericValue=TRUE;
+        }
+    }
+
+    /* numeric value, field 8 */
+    if(fields[8][0]<fields[8][1]) {
+        value=uprv_strtoul(fields[8][0], &end, 10);
+        if(value>0 && *end=='/') {
+            /* field 8 may contain a fractional value, get the denominator */
+            p.denominator=uprv_strtoul(end+1, &end, 10);
+        }
+        if(end!=fields[8][1]) {
+            fprintf(stderr, "genprops: syntax error in field 8 at code 0x%lx\n", p.code);
+            exit(U_PARSE_ERROR);
+        }
+        if(hasNumericValue) {
+            if(p.numericValue!=value) {
+                fprintf(stderr, "genprops: more than one numeric value at code 0x%lx\n", p.code);
+                exit(U_PARSE_ERROR);
+            }
+        } else {
+            p.numericValue=value;
+            hasNumericValue=TRUE;
+        }
+    }
 
     /* get Mirrored flag, field 9 */
-    if(*start=='Y') {
-        p->isMirrored=1;
-    } else if(limit-start!=1 || *start!='N') {
-        fprintf(stderr, "genprops: syntax error in field 9 at code 0x%lx\n", p->code);
+    if(*fields[9][0]=='Y') {
+        p.isMirrored=1;
+    } else if(fields[9][1]-fields[9][0]!=1 || *fields[9][0]!='N') {
+        fprintf(stderr, "genprops: syntax error in field 9 at code 0x%lx\n", p.code);
         exit(U_PARSE_ERROR);
     }
-}
-
-static void
-UnicodeDataCase(void *context, char *start, char *limit, int32_t fieldNr, UErrorCode *pErrorCode) {
-    Props *p=(Props *)context;
-    char *end;
-    uint32_t mapping;
 
     /* get uppercase mapping, field 12 */
-    /* get lowercase mapping, field 13 */
-    /* get titlecase mapping, field 14 */
-    mapping=uprv_strtoul(start, &end, 16);
-    if(end!=limit) {
-        fprintf(stderr, "genprops: syntax error in field %d at code 0x%lx\n", fieldNr, p->code);
+    value=uprv_strtoul(fields[12][0], &end, 16);
+    if(end!=fields[12][1]) {
+        fprintf(stderr, "genprops: syntax error in field 12 at code 0x%lx\n", p.code);
         exit(U_PARSE_ERROR);
     }
-    switch(fieldNr) {
-    case 12:
-        p->upperCase=mapping;
-        break;
-    case 13:
-        p->lowerCase=mapping;
-        break;
-    case 14:
-        p->titleCase=mapping;
-        break;
-    }
-}
+    p.upperCase=value;
 
-static void
-UnicodeDataFinish(void *context, char *start, char *limit, int32_t fieldNr, UErrorCode *pErrorCode) {
-    static int32_t mirrorIndex=0;
-    Props *p=(Props *)context;
-    int16_t i;
-
-    if(p->numericValue==NO_NUMERIC_VALUE) {
-        p->numericValue=0;
+    /* get lowercase value, field 13 */
+    value=uprv_strtoul(fields[13][0], &end, 16);
+    if(end!=fields[13][1]) {
+        fprintf(stderr, "genprops: syntax error in field 13 at code 0x%lx\n", p.code);
+        exit(U_PARSE_ERROR);
     }
+    p.lowerCase=value;
+
+    /* get titlecase value, field 14 */
+    value=uprv_strtoul(fields[14][0], &end, 16);
+    if(end!=fields[14][1]) {
+        fprintf(stderr, "genprops: syntax error in field 14 at code 0x%lx\n", p.code);
+        exit(U_PARSE_ERROR);
+    }
+    p.titleCase=value;
 
     /* override properties for some common control characters */
-    if(p->generalCategory==U_CONTROL_CHAR) {
+    if(p.generalCategory==U_CONTROL_CHAR) {
         for(i=0; i<sizeof(controlProps)/sizeof(controlProps[0]); ++i) {
-            if(controlProps[i].code==p->code) {
-                p->generalCategory=controlProps[i].generalCategory;
+            if(controlProps[i].code==p.code) {
+                p.generalCategory=controlProps[i].generalCategory;
             }
         }
     }
 
     /* set additional properties from previously parsed files */
-    if(mirrorIndex<mirrorCount && p->code==mirrorMappings[mirrorIndex][0]) {
-        p->mirrorMapping=mirrorMappings[mirrorIndex++][1];
+    if(mirrorIndex<mirrorCount && p.code==mirrorMappings[mirrorIndex][0]) {
+        p.mirrorMapping=mirrorMappings[mirrorIndex++][1];
     }
 
-    addProps(p);
+    addProps(&p);
 }
-
-static UParseFieldFn *unicodeDBFields[17]={
-    UnicodeDataInit,
-
-    UnicodeDataCode,
-    NULL,                   /* 1: character name */
-    UnicodeDataCategory,
-    UnicodeDataCombining,
-    UnicodeDataBiDi,
-    NULL,                   /* 5: character decomposition mapping */
-    UnicodeDataNumeric,
-    UnicodeDataNumeric,
-    UnicodeDataNumeric,
-    UnicodeDataMirrored,
-    NULL,                   /* 10: Unicode 1.0 character name */
-    NULL,                   /* 11: comment */
-    UnicodeDataCase,
-    UnicodeDataCase,
-    UnicodeDataCase,
-
-    UnicodeDataFinish
-};
 
 static void
 parseDB(const char *filename, UErrorCode *pErrorCode) {
-    Props p;
+    char *fields[15][2];
 
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return;
     }
 
-    u_parseDelimitedFile(filename, ';', unicodeDBFields, 15, &p, pErrorCode);
+    u_parseDelimitedFile(filename, ';', fields, 15, unicodeDataLineFn, NULL, pErrorCode);
 }
 
 /*
