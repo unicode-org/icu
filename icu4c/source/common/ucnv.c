@@ -793,6 +793,11 @@ _fromUnicodeWithCallback(UConverterFromUnicodeArgs *pArgs, UErrorCode *err) {
     if(cnv->preFromULength>=0) {
         /* normal mode */
         realSource=NULL;
+
+        /* avoid compiler warnings - not otherwise necessary, and the values do not matter */
+        realSourceLimit=NULL;
+        realFlush=FALSE;
+        realSourceIndex=0;
     } else {
         /*
          * Previous m:n conversion stored source units from a partial match
@@ -1183,6 +1188,11 @@ _toUnicodeWithCallback(UConverterToUnicodeArgs *pArgs, UErrorCode *err) {
     if(cnv->preToULength>=0) {
         /* normal mode */
         realSource=NULL;
+
+        /* avoid compiler warnings - not otherwise necessary, and the values do not matter */
+        realSourceLimit=NULL;
+        realFlush=FALSE;
+        realSourceIndex=0;
     } else {
         /*
          * Previous m:n conversion stored source units from a partial match
