@@ -2648,6 +2648,7 @@ void TransliteratorTest::TestGurmukhiDevanagari(){
         expected.setCharAt(0,(UChar) (nvIter.getCodepoint()+0x0100));
         expect(*trans,src,expected);
     }
+    delete trans;
 }
 /**
  * Test instantiation from a locale.
