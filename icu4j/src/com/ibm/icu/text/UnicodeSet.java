@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2001/12/03 02:10:24 $
- * $Revision: 1.51 $
+ * $Date: 2001/12/03 20:26:24 $
+ * $Revision: 1.52 $
  *
  *****************************************************************************************
  */
@@ -204,7 +204,7 @@ import com.ibm.util.Utility;
  * Unicode property
  * </table>
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.51 $ $Date: 2001/12/03 02:10:24 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.52 $ $Date: 2001/12/03 20:26:24 $
  */
 public class UnicodeSet extends UnicodeFilter {
 
@@ -908,11 +908,11 @@ public class UnicodeSet extends UnicodeFilter {
     
     // TODO: Make this public
     /**
-     * Some character in s is in the set.
+     * Return TRUE if one or more characters in s is in this set.
      */
     boolean containsSome(String s) {
         int cp;
-        for (int i = 0; i < s.length(); i += UTF16.getCharCount(i)) {
+        for (int i = 0; i < s.length(); i += UTF16.getCharCount(cp)) {
             cp = UTF16.charAt(s, i);
             if (contains(cp)) return true;
         }
@@ -921,11 +921,11 @@ public class UnicodeSet extends UnicodeFilter {
         
     // TODO: Make this public
     /**
-     * Every character in s is in the set.
+     * Return TRUE if every character in s is in this set.
      */
     boolean containsAll(String s) {
         int cp;
-        for (int i = 0; i < s.length(); i += UTF16.getCharCount(i)) {
+        for (int i = 0; i < s.length(); i += UTF16.getCharCount(cp)) {
             cp = UTF16.charAt(s, i);
             if (!contains(cp)) return false;
         }
