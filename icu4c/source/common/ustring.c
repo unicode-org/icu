@@ -241,6 +241,7 @@ u_strtok_r(UChar    *src,
 
     if (src != NULL) {
         tokSource = src;
+        *saveState = src; /* Set to "src" in case there are no delimiters */
     }
     else if (saveState && *saveState) {
         tokSource = *saveState;
