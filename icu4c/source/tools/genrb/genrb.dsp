@@ -50,7 +50,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
-# ADD LINK32 ..\..\..\lib\release\icui18n.lib ..\..\..\lib\release\icuuc.lib toolutil.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /libpath:"..\toolutil\Release"
+# ADD LINK32 icuin17.lib icuuc17.lib icuio17.lib icutu17.lib /nologo /subsystem:console /machine:I386 /libpath:"..\toolutil\Release" /libpath:"..\..\..\lib"
 
 !ELSEIF  "$(CFG)" == "genrb - Win32 Debug"
 
@@ -74,7 +74,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 icui18n.lib icuuc.lib ustdio.lib toolutil.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /libpath:"..\toolutil\Debug" /libpath:"..\..\..\lib\debug\\"
+# ADD LINK32 icuin17d.lib icuuc17d.lib icuio17d.lib icutu17d.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /libpath:"..\toolutil\Debug" /libpath:"..\..\..\lib"
 
 !ENDIF 
 
