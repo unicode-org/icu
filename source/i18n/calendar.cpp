@@ -173,68 +173,81 @@ private:
  */
 
 class DefaultCalendarFactory : public ICUResourceBundleFactory {
-public:
+ public:
   DefaultCalendarFactory():  ICUResourceBundleFactory() { } 
-protected:
+ protected:
   virtual UObject* create(const ICUServiceKey& key, const ICUService* /*service*/, UErrorCode& status) const  {
-
-  LocaleKey &lkey = (LocaleKey&)key;
-  Locale loc;
-  lkey.currentLocale(loc);
-
+    
+    LocaleKey &lkey = (LocaleKey&)key;
+    Locale loc;
+    lkey.currentLocale(loc);
+    
+    UnicodeString myString;
+    
+    // attempt keyword lookup
+    char keyword[128];
+    if(loc.getKeywordValue("calendar", keyword, sizeof(keyword)-1, status)) {
 #ifdef U_DEBUG_CALSVC
-  fprintf(stderr, "DefaultCalendar factory %p: looking up %s\n", 
-          this, (const char*)loc.getName());
+      fprintf(stderr, "DefaultCalendar factory %p: looking up %s, keyword: %s\n", 
+              this, (const char*)loc.getName(), keyword);
 #endif
-
-  UErrorCode resStatus = U_ZERO_ERROR;
-
-  UResourceBundle *rb = ures_open(NULL, (const char*)loc.getName(), &resStatus);
-
+      return new UnicodeString(keyword,"");
+    } else {
 #ifdef U_DEBUG_CALSVC
-  fprintf(stderr, "... ures_open -> %s\n", u_errorName(resStatus));
+      fprintf(stderr, "DefaultCalendar factory %p: looking up %s\n", 
+              this, (const char*)loc.getName());
 #endif
-  if(U_FAILURE(resStatus) || 
-     (resStatus == U_USING_DEFAULT_WARNING) || (resStatus==U_USING_FALLBACK_WARNING)) { //Don't want to handle fallback data.
-    ures_close(rb);
-    status = resStatus; // propagate err back to caller
+      
+      
+      UErrorCode resStatus = U_ZERO_ERROR;
+      
+      UResourceBundle *rb = ures_open(NULL, (const char*)loc.getName(), &resStatus);
+      
 #ifdef U_DEBUG_CALSVC
-    fprintf(stderr, "... exitting (NULL)\n");
+      fprintf(stderr, "... ures_open -> %s\n", u_errorName(resStatus));
 #endif
-
-    return NULL;
+      if(U_FAILURE(resStatus) || 
+         (resStatus == U_USING_DEFAULT_WARNING) || (resStatus==U_USING_FALLBACK_WARNING)) { //Don't want to handle fallback data.
+        ures_close(rb);
+        status = resStatus; // propagate err back to caller
+#ifdef U_DEBUG_CALSVC
+        fprintf(stderr, "... exitting (NULL)\n");
+#endif
+        
+        return NULL;
+      }
+      
+      UnicodeString myString = ures_getUnicodeStringByKey(rb, Calendar::kDefaultCalendar, &status);
+      
+#ifdef U_DEBUG_CALSVC
+      int32_t len = 0;
+      UErrorCode debugStatus = U_ZERO_ERROR;
+      const UChar *defCal = ures_getStringByKey(rb, Calendar::kDefaultCalendar, &len,  &debugStatus);
+      fprintf(stderr, "... get string(%d) -> %s\n", len, u_errorName(debugStatus));
+#endif
+      
+      ures_close(rb);
+      
+      if(U_FAILURE(status)) {
+        return NULL;
+      }
+      
+      
+#ifdef U_DEBUG_CALSVC
+      {
+        char defCalStr[200];
+        if(len > 199) {
+          len = 199;
+        }
+        u_UCharsToChars(defCal, defCalStr, len);
+        defCalStr[len]=0;
+        fprintf(stderr, "DefaultCalendarFactory: looked up %s, got DefaultCalendar= %s\n",  (const char*)loc.getName(), defCalStr);
+      }
+#endif
+      
+      return myString.clone();
+    }
   }
-
-  UnicodeString myString = ures_getUnicodeStringByKey(rb, Calendar::kDefaultCalendar, &status);
-
-#ifdef U_DEBUG_CALSVC
-  int32_t len = 0;
-  UErrorCode debugStatus = U_ZERO_ERROR;
-  const UChar *defCal = ures_getStringByKey(rb, Calendar::kDefaultCalendar, &len,  &debugStatus);
-  fprintf(stderr, "... get string(%d) -> %s\n", len, u_errorName(debugStatus));
-#endif
-
-  ures_close(rb);
-  
-   if(U_FAILURE(status)) {
-    return NULL;
-  }
- 
-
-#ifdef U_DEBUG_CALSVC
-   {
-     char defCalStr[200];
-     if(len > 199) {
-       len = 199;
-     }
-     u_UCharsToChars(defCal, defCalStr, len);
-     defCalStr[len]=0;
-     fprintf(stderr, "DefaultCalendarFactory: looked up %s, got DefaultCalendar= %s\n",  (const char*)loc.getName(), defCalStr);
-   }
-#endif
-
-   return myString.clone();
- }
 };
 
 // -------------------------------------
