@@ -56,12 +56,12 @@ udata_create(const char *dir, const char *type, const char *name,
     if(dir==NULL) {
         dir=u_getDataDirectory();
     }
-    if(dir!=NULL && *dir) {
-        char *p = filename + strlen(dir) - 1;
+    if(dir!=NULL && *dir!=0) {
+        char *p=filename+strlen(dir);
         uprv_strcpy(filename, dir);
-        if (*p != U_FILE_SEP_CHAR) {
-            *++p = U_FILE_SEP_CHAR;
-            *p = 0;
+        if (*(p-1)!=U_FILE_SEP_CHAR) {
+            *p++=U_FILE_SEP_CHAR;
+            *p=0;
         }
     } else {
         filename[0]=0;
