@@ -45,22 +45,6 @@
  *   + IBM Egypt has proposed to encode the tail in Unicode among Arabic Presentation Forms
  */
 
-/*
- * ### TODO
- *
- * The option U_SHAPE_LETTERS_EXCEPT_TASHKEEL was removed from ushape.h for
- * ICU 1.8 because its semantics were not clear:
- * It is not clear if the transformation of legacy codepage data might
- * need an option to
- * - ignore tashkeel characters, which would always leave them as is, or
- * - always shape to a certain form them regardless of other letter shaping options
- */
-/**
- * Letter shaping option: replace abstract letter characters by "shaped" ones,
- * but do not process Tashkeel characters.
- */
-#define U_SHAPE_LETTERS_EXCEPT_TASHKEEL         0x18
-
 /* definitions for Arabic letter shaping ------------------------------------ */
 
 #define IRRELEVANT 4
@@ -951,7 +935,6 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
     if( source==NULL || sourceLength<-1 ||
         (dest==NULL && destSize!=0) || destSize<0 ||
         options>=U_SHAPE_DIGIT_TYPE_RESERVED ||
-        (options&U_SHAPE_LETTERS_MASK)==U_SHAPE_LETTERS_RESERVED ||
         (options&U_SHAPE_DIGITS_MASK)>=U_SHAPE_DIGITS_RESERVED
     ) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
@@ -1016,7 +999,7 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
             /* Call the shaping function with tashkeel flag == 1 */
             outputSize = shapeUnicode(tempbuffer,sourceLength,destSize,options,pErrorCode,1);
             break;
-        case U_SHAPE_LETTERS_EXCEPT_TASHKEEL :
+        case U_SHAPE_LETTERS_SHAPE_TASHKEEL_ISOLATED :
             /* Call the shaping function with tashkeel flag == 0 */
             outputSize = shapeUnicode(tempbuffer,sourceLength,destSize,options,pErrorCode,0);
             break;
