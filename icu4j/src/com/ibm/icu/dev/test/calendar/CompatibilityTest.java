@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/CompatibilityTest.java,v $
- * $Date: 2002/08/13 21:53:38 $
- * $Revision: 1.8 $
+ * $Date: 2003/03/17 17:14:48 $
+ * $Revision: 1.9 $
  *
  *******************************************************************************
  */
@@ -295,7 +295,7 @@ public class CompatibilityTest extends com.ibm.icu.dev.test.TestFmwk {
             if (cal.getFirstDayOfWeek() != i) errln("FAIL: set/getFirstDayOfWeek failed");
         }
 
-        for (i=0; i<=7; ++i) {
+        for (i=1; i<=7; ++i) {
             cal.setMinimalDaysInFirstWeek(i);
             if (cal.getMinimalDaysInFirstWeek() != i) errln("FAIL: set/getFirstDayOfWeek failed");
         }

@@ -3224,7 +3224,13 @@ public abstract class Calendar implements Serializable, Cloneable {
      */
     public void setFirstDayOfWeek(int value)
     {
-        firstDayOfWeek = value;
+        if (firstDayOfWeek != value) {
+            if (value < SUNDAY || value > SATURDAY) {
+                throw new IllegalArgumentException("Invalid day of week");
+            }
+            firstDayOfWeek = value;
+            areFieldsSet = false;
+        }
     }
 
     /**
@@ -3249,7 +3255,13 @@ public abstract class Calendar implements Serializable, Cloneable {
      */
     public void setMinimalDaysInFirstWeek(int value)
     {
-        minimalDaysInFirstWeek = value;
+        if (minimalDaysInFirstWeek != value) {
+            if (value < 1 || value > 7) {
+                throw new IllegalArgumentException("Invalid days in first week");
+            }
+            minimalDaysInFirstWeek = value;
+            areFieldsSet = false;
+        }
     }
 
     /**
@@ -3655,8 +3667,8 @@ public abstract class Calendar implements Serializable, Cloneable {
         /* cache update */
         cachedLocaleData.put(desiredLocale, data);
     }
-    firstDayOfWeek = data[0];
-    minimalDaysInFirstWeek = data[1];
+    setFirstDayOfWeek(data[0]);
+    setMinimalDaysInFirstWeek(data[1]);
     }
 
     /**

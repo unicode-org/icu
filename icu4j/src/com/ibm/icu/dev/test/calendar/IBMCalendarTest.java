@@ -4,8 +4,8 @@
  * others. All Rights Reserved.
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/IBMCalendarTest.java,v $ 
- * $Date: 2003/02/18 21:11:22 $ 
- * $Revision: 1.13 $
+ * $Date: 2003/03/17 17:14:48 $ 
+ * $Revision: 1.14 $
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.calendar;
@@ -340,6 +340,75 @@ public class IBMCalendarTest extends CalendarTest {
     public void TestMalaysianInstance() {
         Locale loc = new Locale("ms", "MY");  // Malay (Malaysia)
         Calendar cal = Calendar.getInstance(loc);
+    }
+
+    /**
+     * setFirstDayOfWeek and setMinimalDaysInFirstWeek may change the
+     * field <=> time mapping, since they affect the interpretation of
+     * the WEEK_OF_MONTH or WEEK_OF_YEAR fields.
+     */
+    public void TestWeekShift() {
+        Calendar cal = new GregorianCalendar(
+                             TimeZone.getTimeZone("America/Los_Angelese"),
+                             new Locale("en", "US"));
+        cal.setTime(new Date(997257600000L)); // Wed Aug 08 01:00:00 PDT 2001
+        // In pass one, change the first day of week so that the weeks
+        // shift in August 2001.  In pass two, change the minimal days
+        // in the first week so that the weeks shift in August 2001.
+        //     August 2001     
+        // Su Mo Tu We Th Fr Sa
+        //           1  2  3  4
+        //  5  6  7  8  9 10 11
+        // 12 13 14 15 16 17 18
+        // 19 20 21 22 23 24 25
+        // 26 27 28 29 30 31   
+        for (int pass=0; pass<2; ++pass) {
+            if (pass==0) {
+                cal.setFirstDayOfWeek(Calendar.WEDNESDAY);
+                cal.setMinimalDaysInFirstWeek(4);
+            } else {
+                cal.setFirstDayOfWeek(Calendar.SUNDAY);
+                cal.setMinimalDaysInFirstWeek(4);
+            }
+            cal.add(Calendar.DATE, 1); // Force recalc
+            cal.add(Calendar.DATE, -1);
+
+            Date time1 = cal.getTime(); // Get time -- should not change
+
+            // Now change a week parameter and then force a recalc.
+            // The bug is that the recalc should not be necessary --
+            // calendar should do so automatically.
+            if (pass==0) {
+                cal.setFirstDayOfWeek(Calendar.THURSDAY);
+            } else {
+                cal.setMinimalDaysInFirstWeek(5);
+            }
+
+            int woy1 = cal.get(Calendar.WEEK_OF_YEAR);
+            int wom1 = cal.get(Calendar.WEEK_OF_MONTH);
+
+            cal.add(Calendar.DATE, 1); // Force recalc
+            cal.add(Calendar.DATE, -1);
+
+            int woy2 = cal.get(Calendar.WEEK_OF_YEAR);
+            int wom2 = cal.get(Calendar.WEEK_OF_MONTH);
+
+            Date time2 = cal.getTime();
+
+            if (!time1.equals(time2)) {
+                errln("FAIL: shifting week should not alter time");
+            } else {
+                logln(time1.toString());
+            }
+            if (woy1 == woy2 && wom1 == wom2) {
+                logln("Ok: WEEK_OF_YEAR: " + woy1 +
+                      ", WEEK_OF_MONTH: " + wom1);
+            } else {
+                errln("FAIL: WEEK_OF_YEAR: " + woy1 + " => " + woy2 +
+                      ", WEEK_OF_MONTH: " + wom1 + " => " + wom2 +
+                      " after week shift");
+            }
+        }
     }
 
     /**
