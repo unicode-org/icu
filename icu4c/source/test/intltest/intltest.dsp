@@ -733,7 +733,7 @@ SOURCE=.\restsnew.h
 # End Group
 # Begin Group "idna"
 
-# PROP Default_Filter "*.c,*.h"
+# PROP Default_Filter ""
 # Begin Source File
 
 SOURCE=.\idnaref.cpp
