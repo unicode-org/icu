@@ -204,7 +204,7 @@ public:
      * @param result output parameter to receive a string
      * representation of this object
      */
-    UnicodeString& toString(UnicodeString& result) const;
+//    UnicodeString& toString(UnicodeString& result) const;
     
 private:
     /**
