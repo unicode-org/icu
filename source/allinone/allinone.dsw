@@ -81,9 +81,6 @@ Package=<4>
     Project_Dep_Name gensprep
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name icuswap
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name iotest
     End Project Dependency
     Begin Project Dependency
@@ -142,6 +139,9 @@ Package=<4>
 {{{
     Begin Project Dependency
     Project_Dep_Name common
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name toolutil
     End Project Dependency
 }}}
 
@@ -412,27 +412,6 @@ Package=<4>
 {{{
     Begin Project Dependency
     Project_Dep_Name common
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "icuswap"=..\tools\icuswap\icuswap.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name common
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name i18n
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name toolutil
     End Project Dependency
 }}}
 
