@@ -357,7 +357,7 @@ uprv_strtod(const char *start, char **end) {
     }
     rv = strtod(buf, &myEnd);
     if(end) {
-      *end = start+(myEnd-buf);
+      *end = (char*)(start+(myEnd-buf)); /* cast away const (to follow uprv_strtod API.) */
     }
     return rv;
   }
