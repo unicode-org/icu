@@ -157,9 +157,9 @@ void TitlecaseTransliterator::handleTransliterate(
             if (doTitle) {
                 newLen = u_internalTitleCase(cp, buffer, u_getMaxCaseExpansion(), loc.getName());
             } else {
-                u_strToLower(buffer, u_getMaxCaseExpansion(), original.getBuffer()+s, i-s, loc.getName(), &status);
-                UTF_GET_CHAR(buffer, 0, s, u_strlen(buffer), bufferCH);
-                newLen = bufferCH == original.char32At(s) ? -1 : u_strlen(buffer);
+                int32_t len = u_strToLower(buffer, u_getMaxCaseExpansion(), original.getBuffer()+s, i-s, loc.getName(), &status);
+                UTF_GET_CHAR(buffer, 0, 0, len, bufferCH);
+                newLen = (bufferCH == original.char32At(s) ? -1 : len);
             }
             doTitle = !CASED->contains(cp);
             if (newLen >= 0) {
