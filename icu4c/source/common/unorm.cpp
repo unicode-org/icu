@@ -2828,7 +2828,7 @@ unorm_concatenate(const UChar *left, int32_t leftLength,
     if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
         if(!u_growBufferFromStatic(stackBuffer, &buffer, &bufferCapacity, 2*bufferLength, 0)) {
             *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
-            return NULL;
+            return 0;
         }
 
         /* just copy from the left string: we know the boundary already */
@@ -2852,7 +2852,7 @@ unorm_concatenate(const UChar *left, int32_t leftLength,
     if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
         if(!u_growBufferFromStatic(stackBuffer, &buffer, &bufferCapacity, bufferLength+rightBoundary, 0)) {
             *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
-            return NULL;
+            return 0;
         }
 
         /* just copy from the right string: we know the boundary already */
