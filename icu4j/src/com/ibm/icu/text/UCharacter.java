@@ -5,14 +5,16 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Attic/UCharacter.java,v $ 
-* $Date: 2000/12/26 22:41:10 $ 
-* $Revision: 1.2 $
+* $Date: 2001/02/26 23:45:37 $ 
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
 
 
 package com.ibm.icu.text;
+
+import java.util.Locale;
 
 /**
 * A static class designed to be a generic code point information source that 
@@ -84,8 +86,8 @@ package com.ibm.icu.text;
 *        com.ibm.icu.test.text.UCharacterTest</a>
 * @author Syn Wee Quek
 * @since oct 06 2000
-* @see com.ibm.icu.text.UCharacterCategoryEnum
-* @see com.ibm.icu.text.UCharacterDirectionEnum
+* @see com.ibm.icu.text.UCharacterCategory
+* @see com.ibm.icu.text.UCharacterDirection
 * @see com.ibm.icu.test.text.UCharacterCompare
 * @see com.ibm.icu.test.text.UCharacterTest
 */
@@ -161,10 +163,24 @@ public final class UCharacter
   private static final int SURROGATE_MAX_VALUE_ = 0xDFFF;
   
   /**
-  * For isLegal() use, checks if code point is not a character
+  * To get the last character out from a data type
   */
   private static final int LAST_CHAR_MASK_ = 0xFFFF;
-  private static final int NOT_A_CHAR_ = 0xFFFE;
+  
+  /**
+  * To get the last byte out from a data type
+  */
+  private static final int LAST_BYTE_MASK_ = 0xFF;
+  
+  /**
+  * Shift 16 bits
+  */
+  private static final int SHIFT_16_ = 16;
+  
+  /**
+  * Minimum value that indicates if a character is not-a-character
+  */
+  private static final int NOT_A_CHAR_SUFFIX_MIN_ = 0xFFFE;
   
   /**
   * Decimal radix
@@ -250,6 +266,62 @@ public final class UCharacter
   * Delete code point
   */
   private static final int DELETE_ = 0x007F;
+  
+  /**
+  * Turkish ISO 639 2 character code
+  */
+  private static final String TURKISH_ = "tr";
+  
+  /**
+  * Azerbaijani ISO 639 2 character code
+  */
+  private static final String AZERBAIJANI_ = "az";
+  
+  /**
+  * Lithuanian ISO 639 2 character code
+  */
+  private static final String LITHUANIAN_ = "lt";
+  
+  /**
+  * Latin owercase i
+  */
+  private static final char LATIN_SMALL_LETTER_I_ = 0x69;
+  
+  /**
+  * Latin uppercase I
+  */
+  private static final char LATIN_CAPITAL_LETTER_I_ = 0x49;
+  
+  /**
+  * Latin capital letter i with dot above
+  */ 
+  private static final char LATIN_CAPITAL_LETTER_I_WITH_DOT_ABOVE_ = 0x130;
+  
+  /**
+  * Latin small letter i with dot above
+  */ 
+  private static final char LATIN_SMALL_LETTER_DOTLESS_I_ = 0x131;
+  
+  /**
+  * Combining dot above
+  */
+  private static final char COMBINING_DOT_ABOVE_ = 0x307;
+  
+  /**
+  * Greek capital letter sigma
+  */
+  private static final char GREEK_CAPITAL_LETTER_SIGMA_ = 0x3a3;
+  
+  /**
+  * Greek small letter sigma
+  */
+  private static final char GREEK_SMALL_LETTER_SIGMA_ = 0x3c3;
+  
+  /**
+  * Greek small letter rho
+  */
+  private static final char GREEK_SMALL_LETTER_RHO_ = 0x3c2;
+  
     
   // constructor ====================================================
   
@@ -286,7 +358,7 @@ public final class UCharacter
     {
       // not contained in exception data
       if (UCharacterPropertyDB.getPropType(props) == 
-          UCharacterCategoryEnum.DECIMAL_DIGIT_NUMBER)
+          UCharacterCategory.DECIMAL_DIGIT_NUMBER)
         result = UCharacterPropertyDB.getSignedValue(props);
     }
     else 
@@ -296,14 +368,15 @@ public final class UCharacter
       if (PROPERTY_DB_.hasExceptionValue(index, 
                                       UCharacterPropertyDB.EXC_DIGIT_VALUE_)) 
         result  = PROPERTY_DB_.getException(index, 
-                                        UCharacterPropertyDB.EXC_DIGIT_VALUE_); 
+                                      UCharacterPropertyDB.EXC_DIGIT_VALUE_) & 
+                                      LAST_CHAR_MASK_; 
       else 
         if (!PROPERTY_DB_.hasExceptionValue(index, 
-                                   UCharacterPropertyDB.EXC_DENOMINATOR_VALUE_)
+                                  UCharacterPropertyDB.EXC_DENOMINATOR_VALUE_)
             && PROPERTY_DB_.hasExceptionValue(index, 
-                                      UCharacterPropertyDB.EXC_NUMERIC_VALUE_))
+                                     UCharacterPropertyDB.EXC_NUMERIC_VALUE_))
         result  = PROPERTY_DB_.getException(index, 
-                                      UCharacterPropertyDB.EXC_NUMERIC_VALUE_); 
+                                     UCharacterPropertyDB.EXC_NUMERIC_VALUE_); 
     }
     
     if (result < 0)
@@ -345,9 +418,9 @@ public final class UCharacter
     int type = UCharacterPropertyDB.getPropType(props);
     
     // if props == 0, it will just fall through and return -1
-    if (type != UCharacterCategoryEnum.DECIMAL_DIGIT_NUMBER &&
-        type != UCharacterCategoryEnum.LETTER_NUMBER &&
-        type != UCharacterCategoryEnum.OTHER_NUMBER)
+    if (type != UCharacterCategory.DECIMAL_DIGIT_NUMBER &&
+        type != UCharacterCategory.LETTER_NUMBER &&
+        type != UCharacterCategory.OTHER_NUMBER)
       return -1;
       
     int result = -1;
@@ -384,9 +457,9 @@ public final class UCharacter
   * Up-to-date Unicode implementation of java.lang.Character.getType() except 
   * for the above mentioned code points that had their category changed.<br>
   * Return results are constants from the interface 
-  * <a href=UCharacterCategoryEnum.html>UCharacterCategoryEnum</a>
+  * <a href=UCharacterCategory.html>UCharacterCategory</a>
   * @param ch code point whose type is to be determined
-  * @return category which is a value of UCharacterCategoryEnum
+  * @return category which is a value of UCharacterCategory
   */
   public static int getType(int ch)
   {
@@ -419,9 +492,9 @@ public final class UCharacter
   {
     int cat = getType(ch);
     // if props == 0, it will just fall through and return false
-    return cat == UCharacterCategoryEnum.DECIMAL_DIGIT_NUMBER || 
-           cat == UCharacterCategoryEnum.OTHER_NUMBER ||
-           cat == UCharacterCategoryEnum.LETTER_NUMBER;
+    return cat == UCharacterCategory.DECIMAL_DIGIT_NUMBER || 
+           cat == UCharacterCategory.OTHER_NUMBER ||
+           cat == UCharacterCategory.LETTER_NUMBER;
   }
                                 
   /**
@@ -449,11 +522,11 @@ public final class UCharacter
   {
     int cat = getType(ch);
     // if props == 0, it will just fall through and return false
-    return cat == UCharacterCategoryEnum.UPPERCASE_LETTER || 
-           cat == UCharacterCategoryEnum.LOWERCASE_LETTER || 
-           cat == UCharacterCategoryEnum.TITLECASE_LETTER || 
-           cat == UCharacterCategoryEnum.MODIFIER_LETTER ||
-           cat == UCharacterCategoryEnum.OTHER_LETTER;
+    return cat == UCharacterCategory.UPPERCASE_LETTER || 
+           cat == UCharacterCategory.LOWERCASE_LETTER || 
+           cat == UCharacterCategory.TITLECASE_LETTER || 
+           cat == UCharacterCategory.MODIFIER_LETTER ||
+           cat == UCharacterCategory.OTHER_LETTER;
   }
             
   /**
@@ -482,7 +555,7 @@ public final class UCharacter
   public static boolean isLowerCase(int ch)
   {
     // if props == 0, it will just fall through and return false
-    return getType(ch) == UCharacterCategoryEnum.LOWERCASE_LETTER;
+    return getType(ch) == UCharacterCategory.LOWERCASE_LETTER;
   }
    
   /**
@@ -504,9 +577,9 @@ public final class UCharacter
     int cat = getType(ch);
     // exclude no-break spaces
     // if props == 0, it will just fall through and return false
-    return (cat == UCharacterCategoryEnum.SPACE_SEPARATOR || 
-            cat == UCharacterCategoryEnum.LINE_SEPARATOR ||
-            cat == UCharacterCategoryEnum.PARAGRAPH_SEPARATOR) && 
+    return (cat == UCharacterCategory.SPACE_SEPARATOR || 
+            cat == UCharacterCategory.LINE_SEPARATOR ||
+            cat == UCharacterCategory.PARAGRAPH_SEPARATOR) && 
             (ch != NO_BREAK_SPACE_) && (ch != NARROW_NO_BREAK_SPACE_) && 
             (ch != ZERO_WIDTH_NO_BREAK_SPACE_);
   }
@@ -522,9 +595,9 @@ public final class UCharacter
   {
     int cat = getType(ch);
     // if props == 0, it will just fall through and return false
-    return cat == UCharacterCategoryEnum.SPACE_SEPARATOR || 
-           cat == UCharacterCategoryEnum.LINE_SEPARATOR ||
-           cat == UCharacterCategoryEnum.PARAGRAPH_SEPARATOR;
+    return cat == UCharacterCategory.SPACE_SEPARATOR || 
+           cat == UCharacterCategory.LINE_SEPARATOR ||
+           cat == UCharacterCategory.PARAGRAPH_SEPARATOR;
   }
                                 
   /**
@@ -543,7 +616,7 @@ public final class UCharacter
   {
     int cat = getType(ch);
     // if props == 0, it will just fall through and return false
-    return cat == UCharacterCategoryEnum.TITLECASE_LETTER;
+    return cat == UCharacterCategory.TITLECASE_LETTER;
   }
    
   /**
@@ -575,17 +648,17 @@ public final class UCharacter
   {
     int cat = getType(ch);
     // if props == 0, it will just fall through and return false
-    return cat == UCharacterCategoryEnum.UPPERCASE_LETTER || 
-           cat == UCharacterCategoryEnum.LOWERCASE_LETTER || 
-           cat == UCharacterCategoryEnum.TITLECASE_LETTER || 
-           cat == UCharacterCategoryEnum.MODIFIER_LETTER ||
-           cat == UCharacterCategoryEnum.OTHER_LETTER || 
-           cat == UCharacterCategoryEnum.LETTER_NUMBER ||
-           cat == UCharacterCategoryEnum.CONNECTOR_PUNCTUATION ||
-           cat == UCharacterCategoryEnum.DECIMAL_DIGIT_NUMBER ||
-           cat == UCharacterCategoryEnum.COMBINING_SPACING_MARK || 
-           cat == UCharacterCategoryEnum.NON_SPACING_MARK || 
-           cat == UCharacterCategoryEnum.FORMAT;
+    return cat == UCharacterCategory.UPPERCASE_LETTER || 
+           cat == UCharacterCategory.LOWERCASE_LETTER || 
+           cat == UCharacterCategory.TITLECASE_LETTER || 
+           cat == UCharacterCategory.MODIFIER_LETTER ||
+           cat == UCharacterCategory.OTHER_LETTER || 
+           cat == UCharacterCategory.LETTER_NUMBER ||
+           cat == UCharacterCategory.CONNECTOR_PUNCTUATION ||
+           cat == UCharacterCategory.DECIMAL_DIGIT_NUMBER ||
+           cat == UCharacterCategory.COMBINING_SPACING_MARK || 
+           cat == UCharacterCategory.NON_SPACING_MARK || 
+           cat == UCharacterCategory.FORMAT;
   }
                    
   /**
@@ -611,12 +684,12 @@ public final class UCharacter
   {
     int cat = getType(ch);
     // if props == 0, it will just fall through and return false
-    return cat == UCharacterCategoryEnum.UPPERCASE_LETTER || 
-           cat == UCharacterCategoryEnum.LOWERCASE_LETTER || 
-           cat == UCharacterCategoryEnum.TITLECASE_LETTER || 
-           cat == UCharacterCategoryEnum.MODIFIER_LETTER ||
-           cat == UCharacterCategoryEnum.OTHER_LETTER || 
-           cat == UCharacterCategoryEnum.LETTER_NUMBER;
+    return cat == UCharacterCategory.UPPERCASE_LETTER || 
+           cat == UCharacterCategory.LOWERCASE_LETTER || 
+           cat == UCharacterCategory.TITLECASE_LETTER || 
+           cat == UCharacterCategory.MODIFIER_LETTER ||
+           cat == UCharacterCategory.OTHER_LETTER || 
+           cat == UCharacterCategory.LETTER_NUMBER;
   }
 
   /**
@@ -635,7 +708,7 @@ public final class UCharacter
   {
     int cat = getType(ch);
     // if props == 0, it will just fall through and return false
-    return cat == UCharacterCategoryEnum.FORMAT;
+    return cat == UCharacterCategory.FORMAT;
   }
                   
   /**
@@ -643,6 +716,10 @@ public final class UCharacter
   * UnicodeData only contains case mappings for code point where they are 
   * one-to-one mappings; it also omits information about context-sensitive 
   * case mappings.<br> 
+  * For language specific case conversion behavior, use 
+  * toUpperCase(locale, str). <br>
+  * For example, the case conversion for dot-less i and dotted I in Turkish,
+  * or for final sigma in Greek.
   * For more information about Unicode case mapping please refer to the 
   * <a href=http://www.unicode.org/unicode/reports/tr21/>
   * Technical report #21</a>.<br>
@@ -654,7 +731,7 @@ public final class UCharacter
   {
     int cat = getType(ch);
     // if props == 0, it will just fall through and return false
-    return cat == UCharacterCategoryEnum.UPPERCASE_LETTER;
+    return cat == UCharacterCategory.UPPERCASE_LETTER;
   }
                    
   /**
@@ -663,6 +740,10 @@ public final class UCharacter
   * UnicodeData only contains case mappings for code point where they are 
   * one-to-one mappings; it also omits information about context-sensitive 
   * case mappings.<br> 
+  * For language specific case conversion behavior, use 
+  * toLowerCase(locale, str). <br>
+  * For example, the case conversion for dot-less i and dotted I in Turkish,
+  * or for final sigma in Greek.
   * For more information about Unicode case mapping please refer to the 
   * <a href=http://www.unicode.org/unicode/reports/tr21/>
   * Technical report #21</a>.<br>
@@ -677,8 +758,8 @@ public final class UCharacter
     if(!UCharacterPropertyDB.isExceptionIndicator(props)) 
     {
       int cat = UCharacterPropertyDB.getPropType(props);
-      if (cat == UCharacterCategoryEnum.UPPERCASE_LETTER || 
-          cat == UCharacterCategoryEnum.TITLECASE_LETTER) 
+      if (cat == UCharacterCategory.UPPERCASE_LETTER || 
+          cat == UCharacterCategory.TITLECASE_LETTER) 
         return ch + UCharacterPropertyDB.getSignedValue(props);
     } 
     else 
@@ -723,11 +804,13 @@ public final class UCharacter
   * UnicodeData only contains case mappings for code points where they are 
   * one-to-one mappings; it also omits information about context-sensitive 
   * case mappings.<br> 
+  * There are only four Unicode characters that are truly titlecase forms
+  * that are distinct from uppercase forms.
   * For more information about Unicode case mapping please refer
   * to the <a href=http://www.unicode.org/unicode/reports/tr21/>
   * Technical report #21</a>.<br>
-  * If no titlecase is available, the uppercase is returned. If no uppercase is
-  * available, the code point itself is returned.<br>
+  * If no titlecase is available, the uppercase is returned. If no uppercase 
+  * is available, the code point itself is returned.<br>
   * Up-to-date Unicode implementation of java.lang.Character.toTitleCase()
   * @param ch code point  whose title case is to be retrieved
   * @return titlecase code point
@@ -739,7 +822,7 @@ public final class UCharacter
     if (!UCharacterPropertyDB.isExceptionIndicator(props)) 
     {
       if (UCharacterPropertyDB.getPropType(props) == 
-          UCharacterCategoryEnum.LOWERCASE_LETTER) 
+          UCharacterCategory.LOWERCASE_LETTER) 
         // here, titlecase is same as uppercase
         return ch - UCharacterPropertyDB.getSignedValue(props);
     } 
@@ -780,7 +863,7 @@ public final class UCharacter
     if (!UCharacterPropertyDB.isExceptionIndicator(props)) 
     {
       if (UCharacterPropertyDB.getPropType(props) == 
-          UCharacterCategoryEnum.LOWERCASE_LETTER) 
+          UCharacterCategory.LOWERCASE_LETTER) 
         // here, titlecase is same as uppercase */
         return ch - UCharacterPropertyDB.getSignedValue(props);
     }
@@ -818,7 +901,7 @@ public final class UCharacter
   */
   public static boolean isBMP(int ch) 
   {
-    return (ch >= 0 && ch < 0xFFFF);
+    return (ch >= 0 && ch < LAST_CHAR_MASK_);
   }
 
   /**
@@ -838,10 +921,10 @@ public final class UCharacter
   {
     int cat = getType(ch);
     // if props == 0, it will just fall through and return false
-    return cat == UCharacterCategoryEnum.CONTROL || 
-           cat == UCharacterCategoryEnum.FORMAT || 
-           cat == UCharacterCategoryEnum.LINE_SEPARATOR || 
-           cat == UCharacterCategoryEnum.PARAGRAPH_SEPARATOR;
+    return cat == UCharacterCategory.CONTROL || 
+           cat == UCharacterCategory.FORMAT || 
+           cat == UCharacterCategory.LINE_SEPARATOR || 
+           cat == UCharacterCategory.PARAGRAPH_SEPARATOR;
   }
 
   /**
@@ -854,29 +937,29 @@ public final class UCharacter
   {
     int cat = getType(ch);
     // if props == 0, it will just fall through and return false
-    return cat == UCharacterCategoryEnum.DECIMAL_DIGIT_NUMBER || 
-           cat == UCharacterCategoryEnum.OTHER_NUMBER ||
-           cat == UCharacterCategoryEnum.LETTER_NUMBER || 
-           cat == UCharacterCategoryEnum.UPPERCASE_LETTER || 
-           cat == UCharacterCategoryEnum.LOWERCASE_LETTER || 
-           cat == UCharacterCategoryEnum.TITLECASE_LETTER ||
-           cat == UCharacterCategoryEnum.MODIFIER_LETTER || 
-           cat == UCharacterCategoryEnum.OTHER_LETTER ||
-           cat == UCharacterCategoryEnum.NON_SPACING_MARK || 
-           cat == UCharacterCategoryEnum.ENCLOSING_MARK ||
-           cat == UCharacterCategoryEnum.COMBINING_SPACING_MARK || 
-           cat == UCharacterCategoryEnum.SPACE_SEPARATOR ||
-           cat == UCharacterCategoryEnum.LINE_SEPARATOR || 
-           cat == UCharacterCategoryEnum.PARAGRAPH_SEPARATOR ||
-           cat == UCharacterCategoryEnum.DASH_PUNCTUATION || 
-           cat == UCharacterCategoryEnum.START_PUNCTUATION ||
-           cat == UCharacterCategoryEnum.END_PUNCTUATION || 
-           cat == UCharacterCategoryEnum.CONNECTOR_PUNCTUATION ||
-           cat == UCharacterCategoryEnum.OTHER_PUNCTUATION || 
-           cat == UCharacterCategoryEnum.MATH_SYMBOL ||
-           cat == UCharacterCategoryEnum.CURRENCY_SYMBOL || 
-           cat == UCharacterCategoryEnum.MODIFIER_SYMBOL ||
-           cat == UCharacterCategoryEnum.OTHER_SYMBOL;
+    return cat == UCharacterCategory.DECIMAL_DIGIT_NUMBER || 
+           cat == UCharacterCategory.OTHER_NUMBER ||
+           cat == UCharacterCategory.LETTER_NUMBER || 
+           cat == UCharacterCategory.UPPERCASE_LETTER || 
+           cat == UCharacterCategory.LOWERCASE_LETTER || 
+           cat == UCharacterCategory.TITLECASE_LETTER ||
+           cat == UCharacterCategory.MODIFIER_LETTER || 
+           cat == UCharacterCategory.OTHER_LETTER ||
+           cat == UCharacterCategory.NON_SPACING_MARK || 
+           cat == UCharacterCategory.ENCLOSING_MARK ||
+           cat == UCharacterCategory.COMBINING_SPACING_MARK || 
+           cat == UCharacterCategory.SPACE_SEPARATOR ||
+           cat == UCharacterCategory.LINE_SEPARATOR || 
+           cat == UCharacterCategory.PARAGRAPH_SEPARATOR ||
+           cat == UCharacterCategory.DASH_PUNCTUATION || 
+           cat == UCharacterCategory.START_PUNCTUATION ||
+           cat == UCharacterCategory.END_PUNCTUATION || 
+           cat == UCharacterCategory.CONNECTOR_PUNCTUATION ||
+           cat == UCharacterCategory.OTHER_PUNCTUATION || 
+           cat == UCharacterCategory.MATH_SYMBOL ||
+           cat == UCharacterCategory.CURRENCY_SYMBOL || 
+           cat == UCharacterCategory.MODIFIER_SYMBOL ||
+           cat == UCharacterCategory.OTHER_SYMBOL;
   }
 
   /**
@@ -890,17 +973,17 @@ public final class UCharacter
   {
     int cat = getType(ch);
     // if props == 0, it will just fall through and return false
-    return cat == UCharacterCategoryEnum.DECIMAL_DIGIT_NUMBER || 
-           cat == UCharacterCategoryEnum.OTHER_NUMBER || 
-           cat == UCharacterCategoryEnum.LETTER_NUMBER || 
-           cat == UCharacterCategoryEnum.UPPERCASE_LETTER || 
-           cat == UCharacterCategoryEnum.LOWERCASE_LETTER || 
-           cat == UCharacterCategoryEnum.TITLECASE_LETTER ||
-           cat == UCharacterCategoryEnum.MODIFIER_LETTER || 
-           cat == UCharacterCategoryEnum.OTHER_LETTER || 
-           cat == UCharacterCategoryEnum.NON_SPACING_MARK || 
-           cat == UCharacterCategoryEnum.ENCLOSING_MARK ||
-           cat == UCharacterCategoryEnum.COMBINING_SPACING_MARK;
+    return cat == UCharacterCategory.DECIMAL_DIGIT_NUMBER || 
+           cat == UCharacterCategory.OTHER_NUMBER || 
+           cat == UCharacterCategory.LETTER_NUMBER || 
+           cat == UCharacterCategory.UPPERCASE_LETTER || 
+           cat == UCharacterCategory.LOWERCASE_LETTER || 
+           cat == UCharacterCategory.TITLECASE_LETTER ||
+           cat == UCharacterCategory.MODIFIER_LETTER || 
+           cat == UCharacterCategory.OTHER_LETTER || 
+           cat == UCharacterCategory.NON_SPACING_MARK || 
+           cat == UCharacterCategory.ENCLOSING_MARK ||
+           cat == UCharacterCategory.COMBINING_SPACING_MARK;
   }
 
   /**
@@ -908,10 +991,10 @@ public final class UCharacter
   * For example, 0x0041 (letter A) has the LEFT_TO_RIGHT directional 
   * property.<br>
   * Result returned belongs to the interface 
-  * <a href=UCharacterDirectionEnum.html>UCharacterDirectionEnum</a>
+  * <a href=UCharacterDirection.html>UCharacterDirection</a>
   * @param ch the code point to be determined its direction
-  * @return direction constant from UCharacterDirectionEnum. Otherwise is 
-  *         character is not defined, UCharacterDirectionEnum.BOUNDARY_NEUTRAL
+  * @return direction constant from UCharacterDirection. Otherwise is 
+  *         character is not defined, UCharacterDirection.BOUNDARY_NEUTRAL
   *         will be returned.
   */
   public static int getDirection(int ch)
@@ -919,7 +1002,7 @@ public final class UCharacter
     int props = getProps(ch);
     if (props != 0) 
       return UCharacterPropertyDB.getDirection(props);
-    return UCharacterDirectionEnum.LEFT_TO_RIGHT;
+    return UCharacterDirection.LEFT_TO_RIGHT;
   }
 
   /**
@@ -970,6 +1053,27 @@ public final class UCharacter
   }
   
   /**
+  * Gets the combining class of the argument codepoint
+  * @param ch code point whose combining is to be retrieved
+  * @return the combining class of the codepoint
+  */
+  public static byte getCombiningClass(int ch)
+  {
+    int props = getProps(ch);
+    if(!UCharacterPropertyDB.isExceptionIndicator(props)) 
+      if (UCharacterPropertyDB.getPropType(props) == 
+                                     UCharacterCategory.NON_SPACING_MARK)
+        return (byte)(PROPERTY_DB_.getUnsignedValue(props));
+      else
+        return 0;
+    else
+      // the combining class is in bits 23..16 of the first exception value
+      return (byte)((PROPERTY_DB_.getException(PROPERTY_DB_.getExceptionIndex(
+                            props), UCharacterPropertyDB.EXC_COMBINING_CLASS_)
+                    >> SHIFT_16_) & LAST_BYTE_MASK_);
+  }
+  
+  /**
   * A code point is illegal if and only if
   * <ul>
   * <li> Out of bounds, less than 0 or greater than UCharacter.MAX_VALUE
@@ -986,9 +1090,38 @@ public final class UCharacter
     if (ch < SURROGATE_MIN_VALUE_) return true;
     if (ch <= SURROGATE_MAX_VALUE_) return false;
     
-    if ((ch & LAST_CHAR_MASK_) >= NOT_A_CHAR_) 
+    if ((ch & LAST_CHAR_MASK_) >= NOT_A_CHAR_SUFFIX_MIN_) 
       return false;
     return (ch <= MAX_VALUE);
+  }
+  
+  /**
+  * A string is legal iff all its code points are legal.
+  * A code point is illegal if and only if
+  * <ul>
+  * <li> Out of bounds, less than 0 or greater than UCharacter.MAX_VALUE
+  * <li> A surrogate value, 0xD800 to 0xDFFF
+  * <li> Not-a-character, having the form 0x xxFFFF or 0x xxFFFE
+  * </ul>
+  * Note: legal does not mean that it is assigned in this version of Unicode.
+  * @param ch code point to determine if it is a legal code point by itself
+  * @return true if and only if legal. 
+  */
+  public static boolean isLegal(String str) 
+  {
+    int size = str.length();
+    char lead,
+         trail;
+    int codepoint;
+    for (int i = 0; i < size; i ++)
+    {
+      codepoint = UTF16.charAt(str, i);
+      if (!isLegal(codepoint))
+        return false;
+      if (isSupplementary(codepoint))
+        i ++;
+    }
+    return true;
   }
 
   /**
@@ -1010,7 +1143,7 @@ public final class UCharacter
   public static String getName(int ch)
   {
     return UCharacterName.getName(ch, 
-                                 UCharacterNameChoiceEnum.U_UNICODE_CHAR_NAME);
+                                 UCharacterNameChoice.U_UNICODE_CHAR_NAME);
   }
   
   /**
@@ -1024,7 +1157,7 @@ public final class UCharacter
   public static String getName1_0(int ch)
   {
     return UCharacterName.getName(ch, 
-                              UCharacterNameChoiceEnum.U_UNICODE_10_CHAR_NAME);
+                              UCharacterNameChoice.U_UNICODE_10_CHAR_NAME);
   }
   
   /**
@@ -1039,7 +1172,7 @@ public final class UCharacter
   public static int getCharFromName(String name)
   {
     return UCharacterName.getCharFromName(
-                           UCharacterNameChoiceEnum.U_UNICODE_CHAR_NAME, name);
+                           UCharacterNameChoice.U_UNICODE_CHAR_NAME, name);
   }
   
   /**
@@ -1054,7 +1187,7 @@ public final class UCharacter
   public static int getCharFromName1_0(String name)
   {
     return UCharacterName.getCharFromName(
-                        UCharacterNameChoiceEnum.U_UNICODE_10_CHAR_NAME, name);
+                        UCharacterNameChoice.U_UNICODE_10_CHAR_NAME, name);
   }
   
   /**
@@ -1080,12 +1213,130 @@ public final class UCharacter
   * @param char16 the UTF16 character
   * @return code point or UCharacter.REPLACEMENT_CHAR if argument is not a 
   *         invalid character.
+  * @exception IllegalArgumentException thrown when char16 is not a valid
+  *            codepoint
   */
   public static int getCodePoint(char char16) 
   {
     if (UCharacter.isLegal(char16))
       return char16;
-    return UCharacter.REPLACEMENT_CHAR;
+    throw new IllegalArgumentException("Illegal codepoint");
+  }
+  
+  /**
+  * Gets uppercase version of the argument string. 
+  * Casing is dependent on the default locale and context-sensitive.
+  * @param str source string to be performed on
+  * @return uppercase version of the argument string
+  */
+  public static String toUpperCase(String str)
+  {
+    return toUpperCase(Locale.getDefault(), str);
+  }
+  
+  /**
+  * Gets lowercase version of the argument string. 
+  * Casing is dependent on the default locale and context-sensitive
+  * @param str source string to be performed on
+  * @return lowercase version of the argument string
+  */
+  public static String toLowerCase(String str)
+  {
+    return toLowerCase(Locale.getDefault(), str);
+  }
+  
+  /**
+  * Gets uppercase version of the argument string. 
+  * Casing is dependent on the argument locale and context-sensitive.
+  * @param locale which string is to be converted in
+  * @param str source string to be performed on
+  * @return uppercase version of the argument string
+  */
+  public static String toUpperCase(Locale locale, String str)
+  {
+    int size = UTF16.countCP(str);
+    StringBuffer result = new StringBuffer(size << 1); // initial buffer
+    int props;
+    int exception;
+    int ch;
+    int index;
+    String lang = locale.getLanguage();
+    boolean tr_az = lang.equals(TURKISH_) || lang.equals(AZERBAIJANI_);
+    boolean lt = lang.equals(LITHUANIAN_);
+    
+    for (int i = 0; i < size; i ++)
+    {
+      ch = UTF16.charAtCPOffset(str, i);
+      props = PROPERTY_DB_.getProperty(ch);
+      if (!UCharacterPropertyDB.isExceptionIndicator(props)) 
+      {
+        if (UCharacterPropertyDB.getPropType(props) == 
+            UCharacterCategory.LOWERCASE_LETTER) 
+          ch -= UCharacterPropertyDB.getSignedValue(props);
+        UTF16.append(result, ch);
+      }
+      else 
+      {
+        index = UCharacterPropertyDB.getExceptionIndex(props);
+        if (PROPERTY_DB_.hasExceptionValue(index, 
+                                   UCharacterPropertyDB.EXC_SPECIAL_CASING_)) 
+          getSpecialUpperCase(ch, index, result, str, i, tr_az, lt);                            
+        else 
+          if (PROPERTY_DB_.hasExceptionValue(index, 
+                                      UCharacterPropertyDB.EXC_UPPERCASE_)) 
+            UTF16.append(result, PROPERTY_DB_.getException(index, 
+                                      UCharacterPropertyDB.EXC_UPPERCASE_)); 
+      }
+    }
+    return result.toString();
+  }
+  
+  /**
+  * Gets lowercase version of the argument string. 
+  * Casing is dependent on the argument locale and context-sensitive
+  * @param locale which string is to be converted in
+  * @param str source string to be performed on
+  * @return lowercase version of the argument string
+  */
+  public static String toLowerCase(Locale locale, String str)
+  {
+    int size = UTF16.countCP(str);
+    StringBuffer result = new StringBuffer(size << 1); // initial buffer
+    int props;
+    int exception;
+    int ch;
+    int index;
+    String lang = locale.getLanguage();
+    boolean tr_az = lang.equals(TURKISH_) || lang.equals(AZERBAIJANI_);
+    boolean lt = lang.equals(LITHUANIAN_);
+    int type;
+    
+    for (int i = 0; i < size; i ++)
+    {
+      ch = UTF16.charAtCPOffset(str, i);
+      props = PROPERTY_DB_.getProperty(ch);
+      if (!UCharacterPropertyDB.isExceptionIndicator(props)) 
+      {
+        type = UCharacterPropertyDB.getPropType(props);
+        if (type == UCharacterCategory.UPPERCASE_LETTER ||
+            type == UCharacterCategory.TITLECASE_LETTER) 
+          ch += UCharacterPropertyDB.getSignedValue(props);
+        UTF16.append(result, ch);
+      }
+      else 
+      {
+        index = UCharacterPropertyDB.getExceptionIndex(props);
+        if (PROPERTY_DB_.hasExceptionValue(index, 
+                                   UCharacterPropertyDB.EXC_SPECIAL_CASING_)) 
+          getSpecialLowerCase(ch, index, result, str, i, tr_az, lt);                            
+        else 
+          if (PROPERTY_DB_.hasExceptionValue(index, 
+                                      UCharacterPropertyDB.EXC_LOWERCASE_)) 
+            UTF16.append(result, PROPERTY_DB_.getException(index, 
+                                      UCharacterPropertyDB.EXC_LOWERCASE_)); 
+      }
+    }
+    return result.toString();
   }
   
   // protected methods ====================================================
@@ -1148,6 +1399,120 @@ public final class UCharacter
         return 9; // Han Nine
     }
     return -1; // no value
+  }
+  
+  /**
+  * Special casing uppercase management
+  * @param ch code point to convert
+  * @param index of exception containing special case information
+  * @param buffer to add uppercase
+  * @param str original string
+  * @param chindex index of ch in str
+  * @param tr_az if uppercase is to be made with TURKISH or AZERBAIJANI 
+  *        in mind
+  * @param lt if uppercase is to be made with LITHUANIAN in mind
+  */
+  private static void getSpecialUpperCase(int ch, int index, 
+                                          StringBuffer buffer, String str, 
+                                          int chindex, boolean tr_az, 
+                                          boolean lt)
+  {
+    int exception = PROPERTY_DB_.getException(index, 
+                                    UCharacterPropertyDB.EXC_SPECIAL_CASING_);
+    if (exception < 0) 
+    {
+      // use hardcoded conditions and mappings
+      if (ch == LATIN_SMALL_LETTER_I_) 
+      {
+        if (tr_az)
+          // turkish and azerbaijani : i maps to dotted I
+          buffer.append(LATIN_CAPITAL_LETTER_I_WITH_DOT_ABOVE_);
+        else
+          // other languages: i maps to I
+          buffer.append(LATIN_CAPITAL_LETTER_I_);
+      } 
+      else 
+        if (ch == COMBINING_DOT_ABOVE_ && lt) 
+        {
+          // lithuanian: remove DOT ABOVE after U+0069 "i" with upper 
+          // or titlecase
+          for (int j = chindex; j > 0; j ++)
+          {
+            ch = UTF16.charAtCPOffset(str, j);
+            if (getType(ch) != UCharacterCategory.NON_SPACING_MARK)
+              break;
+          }
+                
+          // if the base letter is not an 'i' (U+0069)? keep the dot
+          if (ch != LATIN_SMALL_LETTER_I_) 
+            buffer.append(COMBINING_DOT_ABOVE_);
+       } 
+       else 
+         // no known conditional special case mapping, output the code 
+         // point itself
+         UTF16.append(buffer, ch);
+    } 
+    else 
+    {
+      // get the special case mapping string from the data file
+      index = exception & LAST_CHAR_MASK_;
+      PROPERTY_DB_.getUpperCase(index, buffer);
+    }
+  }
+  
+  /**
+  * Special casing lowercase management
+  * @param ch code point to convert
+  * @param index of exception containing special case information
+  * @param buffer to add lowercase
+  * @param str original string
+  * @param chindex index of ch in str
+  * @param tr_az if uppercase is to be made with TURKISH or AZERBAIJANI 
+  *        in mind
+  * @param lt if uppercase is to be made with LITHUANIAN in mind
+  */
+  private static void getSpecialLowerCase(int ch, int index, 
+                                          StringBuffer buffer, String str, 
+                                          int chindex, boolean tr_az, 
+                                          boolean lt)
+  {
+    int exception = PROPERTY_DB_.getException(index, 
+                                    UCharacterPropertyDB.EXC_SPECIAL_CASING_);
+    if (exception < 0) 
+    {
+      // use hardcoded conditions and mappings
+      if (ch == LATIN_CAPITAL_LETTER_I_) 
+      {
+        if (tr_az)
+          // turkish and azerbaijani : I maps to dotless i
+          buffer.append(LATIN_SMALL_LETTER_DOTLESS_I_);
+        else
+          // other languages: I maps to i
+          buffer.append(LATIN_SMALL_LETTER_I_);
+      } 
+      else 
+        if (ch == GREEK_CAPITAL_LETTER_SIGMA_) 
+        {
+          // greek capital sigma maps depending on whether the following 
+          // character is a letter
+          chindex ++;
+          if (chindex != str.length() && 
+              isLetter(UTF16.charAtCPOffset(str, chindex)))
+            buffer.append(GREEK_SMALL_LETTER_SIGMA_);
+          else
+            buffer.append(GREEK_SMALL_LETTER_RHO_);
+        } 
+        else 
+          // no known conditional special case mapping, output the code 
+          // point itself
+          UTF16.append(buffer, ch);
+    } 
+    else 
+    {
+      // get the special case mapping string from the data file
+      index = exception & LAST_CHAR_MASK_;
+      PROPERTY_DB_.getLowerCase(index, buffer);
+    }
   }
 }
 

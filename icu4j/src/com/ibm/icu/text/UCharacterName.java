@@ -6,8 +6,8 @@
 *
 * $Source: 
 *     /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterName.java $ 
-* $Date: 2000/12/26 20:00:56 $ 
-* $Revision: 1.1 $
+* $Date: 2001/02/26 23:45:37 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -75,7 +75,7 @@ final class UCharacterName
   protected static String getName(int ch, int choice)
   {
     if (ch < 0 || ch > 0x1ffff || 
-        choice >= UCharacterNameChoiceEnum.U_CHAR_NAME_CHOICE_COUNT)
+        choice >= UCharacterNameChoice.U_CHAR_NAME_CHOICE_COUNT)
       return null;
       
     String result = "";
@@ -84,7 +84,7 @@ final class UCharacterName
     // the same as the modern ones, extension A was only introduced with 
     // Unicode 3.0, and the Hangul syllable block was moved and changed around 
     // Unicode 1.1.5.
-    if (choice == UCharacterNameChoiceEnum.U_UNICODE_CHAR_NAME) 
+    if (choice == UCharacterNameChoice.U_UNICODE_CHAR_NAME) 
       // try getting algorithmic name first
       result = getAlgName(ch);
     
@@ -105,7 +105,7 @@ final class UCharacterName
   protected static int getCharFromName(int choice, String name)
   {
     // checks for illegal arguments
-    if (choice >= UCharacterNameChoiceEnum.U_CHAR_NAME_CHOICE_COUNT || 
+    if (choice >= UCharacterNameChoice.U_CHAR_NAME_CHOICE_COUNT || 
         name == null || name.length() == 0) 
         return -1;
    
@@ -145,7 +145,7 @@ final class UCharacterName
   private static int getAlgorithmChar(int choice, String name) 
   {
     // 1.0 has no algorithmic names
-    if (choice != UCharacterNameChoiceEnum.U_UNICODE_CHAR_NAME)
+    if (choice != UCharacterNameChoice.U_UNICODE_CHAR_NAME)
       return -1;
     int result;
     for (int count = NAME_DB_.countAlgorithm() - 1; count >= 0; count --) 

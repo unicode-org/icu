@@ -5,14 +5,15 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Attic/UGenPropReader.java,v $ 
-* $Date: 2000/12/26 20:00:56 $ 
-* $Revision: 1.1 $
+* $Date: 2001/02/26 23:45:37 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
 package com.ibm.icu.text;
 
 import java.io.DataInputStream;
+import java.util.Arrays;
 
 /**
 * Internal reader class reading binary data from uprops.dat created by ICU 
@@ -49,6 +50,7 @@ final class UGenPropReader extends UGenReader
   private int m_exception_;
   private char m_stage3_;
   private int m_prop_;
+  private int m_case_;
   private char m_end_;
                               
   /**
@@ -63,7 +65,7 @@ final class UGenPropReader extends UGenReader
   private static final byte DATA_FORMAT_ID_[] = {(byte)0x55, (byte)0x50, 
                                                  (byte)0x72, (byte)0x6F};
   private static final byte DATA_FORMAT_VERSION_[] = 
-                                  {(byte)0x1, (byte)0x1, (byte)0x0, (byte)0x0};
+                                  {(byte)0x1, (byte)0x2, (byte)0x0, (byte)0x0};
      
   // constructor =============================================
   
@@ -87,20 +89,18 @@ final class UGenPropReader extends UGenReader
   protected boolean read(DataInputStream input, UCharacterPropertyDB data)
                     throws Exception
   {
-    if (super.read(input, data))
-    {
+    if (super.read(input, data) &&
       // read the indexes
-      if (readIndex(input, data) && 
-        // read the stages block
-        readStage(input, data) && 
-        // read the property data
-        readProperty(input, data) &&
-        // read the exception data
-        readException(input, data))
-      {
+      readIndex(input, data) && 
+      // read the stages block
+      readStage(input, data) && 
+      // read the property data
+      readProperty(input, data) &&
+      // read the exception data
+      readException(input, data) &&
+      // read the case data
+      readCase(input,data))
         return true;
-      }
-    }
     return false;
   }
   
@@ -113,16 +113,8 @@ final class UGenPropReader extends UGenReader
   protected boolean authenticate(byte dataformatid[],
                                  byte dataformatversion[])
   {
-    int size = DATA_FORMAT_ID_.length;
-    for (int i = 0; i < size; i ++)
-      if (DATA_FORMAT_ID_[i] != dataformatid[i])
-        return false;
-    
-    size = DATA_FORMAT_VERSION_.length;
-    for (int i = 0; i < size; i ++)
-      if (DATA_FORMAT_VERSION_[i] != dataformatversion[i])
-        return false;
-    return true;
+    return Arrays.equals(DATA_FORMAT_ID_, dataformatid) &&
+           Arrays.equals(DATA_FORMAT_VERSION_, dataformatversion);
   }
   
   /**
@@ -166,6 +158,8 @@ final class UGenPropReader extends UGenReader
     m_stage3_ = input.readChar();
     count --;
     m_prop_ = input.readChar();
+    count --;
+    m_case_ = input.readChar();
     count --;
     m_end_ = input.readChar();
     count --;
@@ -242,6 +236,27 @@ final class UGenPropReader extends UGenReader
   }
   
   /**
+  * Read the character case data block and updates the instance of 
+  * UCharacterPropertyDB with the data
+  * @param input data stream
+  * @param data instance of UCharacterPropertyDB
+  * @return true if successfully read
+  * @exception thrown when data reading fails
+  */
+  private boolean readCase(DataInputStream input, 
+                           UCharacterPropertyDB data) throws Exception
+  {  
+    // getting size of the case block
+    int size = (m_end_ - m_case_) << 1;
+    char casetable[] = new char[size];
+    for (int i = 0; i < size; i ++)
+      casetable[i] = input.readChar();     
+         
+    // setting up the case block in the instance of UCharacterPropertyDB
+    return data.setCase(casetable);
+  }
+  
+  /**
   * Read the exception data block and updates the instance of 
   * UCharacterPropertyDB with the data
   * @param input data stream
@@ -252,7 +267,7 @@ final class UGenPropReader extends UGenReader
   private boolean readException(DataInputStream input, 
                                 UCharacterPropertyDB data) throws Exception
   {  
-    int size = m_end_ - m_exception_;
+    int size = m_case_ - m_exception_;
     int exception[] = new int[size];
     for (int i = 0; i < size; i ++)
       exception[i] = input.readInt();     

@@ -6,8 +6,8 @@
 *
 * $Source: 
 *         /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterPropertyDB.java $ 
-* $Date: 2000/12/26 20:00:56 $ 
-* $Revision: 1.1 $
+* $Date: 2001/02/26 23:45:37 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -50,6 +50,9 @@ final class  UCharacterPropertyDB extends UCharacterDB
   protected static final int EXC_NUMERIC_VALUE_ = EXC_DIGIT_VALUE_ + 1;
   protected static final int EXC_DENOMINATOR_VALUE_ = EXC_NUMERIC_VALUE_ + 1;
   protected static final int EXC_MIRROR_MAPPING_ = EXC_DENOMINATOR_VALUE_ + 1;
+  protected static final int EXC_SPECIAL_CASING_ = EXC_MIRROR_MAPPING_ + 1;
+  // EXC_COMBINING_CLASS_ is not found in ICU
+  protected static final int EXC_COMBINING_CLASS_ = EXC_SPECIAL_CASING_ + 1;
 
 
   // private variables ==================================================
@@ -77,6 +80,11 @@ final class  UCharacterPropertyDB extends UCharacterDB
   * Character property table
   */
   private int m_property_[];
+  
+  /**
+  * Case table
+  */
+  private char m_case_[];
   
   /**
   * Exception property table
@@ -140,12 +148,6 @@ final class  UCharacterPropertyDB extends UCharacterDB
   */
   private static final int VALUE_SHIFT_ = 20;
   
-  /** 
-  * Since character information data are packed together.
-	* This is the category mask for getting the category information
-	*/
-  private static final int CATEGORY_MASK_ = 0x1F;
-  
   /**
   * Exception test mask
   */
@@ -170,6 +172,16 @@ final class  UCharacterPropertyDB extends UCharacterDB
   * Mask to be applied after shifting to get bidi bits
   */
   private static final int BIDI_MASK_AFTER_SHIFT_ = 0x1F;
+  
+  /**
+  * To get the last 5 bits out from a data type
+  */
+  private static final int LAST_5_BIT_MASK_ = 0x1F;
+  
+  /**
+  * Shift 5 bits
+  */
+  private static final int SHIFT_5_ = 5;
   
   // constructor ======================================================
   
@@ -271,6 +283,19 @@ final class  UCharacterPropertyDB extends UCharacterDB
   }
   
   /**
+  * Set the case block data. 
+  * @param case array containing data regarding the case properties
+  * @return true if stages data is set successfully
+  */
+  protected boolean setCase(char casetable[])
+  {
+    if (casetable == null || casetable.length <= 0)
+      return false;
+    m_case_ = casetable;
+    return true;
+  }
+  
+  /**
   * Set the exception block data. 
   * @param exception array containing extra character properties not found in
   *        property array
@@ -303,6 +328,38 @@ final class  UCharacterPropertyDB extends UCharacterDB
   }
   
   /**
+  * Gets the upper case value at the index
+  * @param index of the case value to be retrieved
+  * @param buffer string buffer to add result to
+  */
+  protected void getUpperCase(int index, StringBuffer buffer)
+  {
+    int count = m_case_[index];
+    // last 5 bits of the first char in m_case_ gives the position of the 
+    // alternate uppercase characters
+    index += (count & LAST_5_BIT_MASK_) + 1;
+    count = (count >> SHIFT_5_) & LAST_5_BIT_MASK_;
+            
+    for (int j = 0; j < count; j ++)
+      buffer.append(m_case_[index + j]);
+  }
+  
+  /**
+  * Gets the lower case value at the index
+  * @param index of the case value to be retrieved
+  * @param buffer string buffer to add result to
+  */
+  protected void getLowerCase(int index, StringBuffer buffer)
+  {
+    int count = m_case_[index] & LAST_5_BIT_MASK_;
+    // last 5 bits of the first char in m_case_ gives the size of the 
+    // lowercase characters
+    index ++;
+    for (int j = 0; j < count; j ++)
+      buffer.append(m_case_[index + j]);
+  }
+  
+  /**
   * Determines if the exception value passed in has the kind of information
   * which the indicator wants, e.g if the exception value contains the digit
   * value of the character
@@ -327,11 +384,16 @@ final class  UCharacterPropertyDB extends UCharacterDB
   {
     // contained in exception data
     int evalue = m_exception_[index];
-    index ++;
-    // contained in the exception digit address
-    index = addExceptionOffset(evalue, etype, index);
-    if (etype == EXC_DIGIT_VALUE_)
-      return m_exception_[index] & EXC_DIGIT_MASK_; 
+    
+    switch (etype)
+    {
+      case EXC_COMBINING_CLASS_ :
+        return evalue;
+      default :
+        index ++;
+        // contained in the exception digit address
+        index = addExceptionOffset(evalue, etype, index);
+    }
     return m_exception_[index];
   }
   
@@ -343,7 +405,9 @@ final class  UCharacterPropertyDB extends UCharacterDB
   */
   protected static int getPropType(int prop)
   {
-    int result = prop & CATEGORY_MASK_;
+    // Since character information data are packed together.
+	  // This is the category mask for getting the category information
+    int result = prop & LAST_5_BIT_MASK_;
     return result;
   }
   
@@ -366,7 +430,7 @@ final class  UCharacterPropertyDB extends UCharacterDB
   */
   protected static int getExceptionIndex(int prop)
   {
-    return getSignedValue(prop) & UNSIGNED_VALUE_MASK_AFTER_SHIFT_;
+    return (prop >> VALUE_SHIFT_) & UNSIGNED_VALUE_MASK_AFTER_SHIFT_;
   }
   
   /**
@@ -378,6 +442,17 @@ final class  UCharacterPropertyDB extends UCharacterDB
   protected static int getSignedValue(int prop)
   {
     return (prop >> VALUE_SHIFT_);
+  }
+  
+  /**
+  * Getting the unsigned numeric value of a character embedded in the property
+  * argument
+  * @param prop the character
+  * @return unsigned numberic value
+  */
+  protected static int getUnsignedValue(int prop)
+  {
+    return (prop >> VALUE_SHIFT_) & UNSIGNED_VALUE_MASK_AFTER_SHIFT_;
   }
   
   /**
