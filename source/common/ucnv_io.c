@@ -1091,16 +1091,16 @@ typedef char * U_CALLCONV StripForCompareFn(char *dst, const char *name);
  * after sorting this array by strings, the actual arrays are permutated
  * according to the sorting indexes
  */
-typedef struct Row {
+typedef struct TempRow {
     uint16_t strIndex, sortIndex;
-} Row;
+} TempRow;
 
-typedef struct TempTable {
+typedef struct TempAliasTable {
     const char *chars;
-    Row *rows;
+    TempRow *rows;
     uint16_t *resort;
     StripForCompareFn *stripForCompare;
-} TempTable;
+} TempAliasTable;
 
 enum {
     STACK_ROW_CAPACITY=500
@@ -1111,11 +1111,11 @@ io_compareRows(const void *context, const void *left, const void *right) {
     char strippedLeft[UCNV_MAX_CONVERTER_NAME_LENGTH],
          strippedRight[UCNV_MAX_CONVERTER_NAME_LENGTH];
 
-    TempTable *tempTable=(TempTable *)context;
+    TempAliasTable *tempTable=(TempAliasTable *)context;
     const char *chars=tempTable->chars;
 
-    return (int32_t)uprv_strcmp(tempTable->stripForCompare(strippedLeft, chars+2*((const Row *)left)->strIndex),
-                                tempTable->stripForCompare(strippedRight, chars+2*((const Row *)right)->strIndex));
+    return (int32_t)uprv_strcmp(tempTable->stripForCompare(strippedLeft, chars+2*((const TempRow *)left)->strIndex),
+                                tempTable->stripForCompare(strippedRight, chars+2*((const TempRow *)right)->strIndex));
 }
 
 U_CAPI int32_t U_EXPORT2
@@ -1130,9 +1130,9 @@ ucnv_swapAliases(const UDataSwapper *ds,
     uint32_t offsets[offsetsCount]; /* 16-bit-addressed offsets from inTable/outTable */
     uint32_t i, count, tocLength, topOffset;
 
-    Row rows[STACK_ROW_CAPACITY];
+    TempRow rows[STACK_ROW_CAPACITY];
     uint16_t resort[STACK_ROW_CAPACITY];
-    TempTable tempTable;
+    TempAliasTable tempTable;
 
     /* udata_swapDataHeader checks the arguments */
     headerSize=udata_swapDataHeader(ds, inData, length, outData, pErrorCode);
@@ -1232,7 +1232,7 @@ ucnv_swapAliases(const UDataSwapper *ds,
                 tempTable.rows=rows;
                 tempTable.resort=resort;
             } else {
-                tempTable.rows=(Row *)uprv_malloc(count*sizeof(Row)+count*2);
+                tempTable.rows=(TempRow *)uprv_malloc(count*sizeof(TempRow)+count*2);
                 if(tempTable.rows==NULL) {
                     udata_printError(ds, "ucnv_swapAliases(): unable to allocate memory for sorting tables (max length: %u)\n",
                                      count);
@@ -1268,7 +1268,7 @@ ucnv_swapAliases(const UDataSwapper *ds,
                 tempTable.rows[i].sortIndex=(uint16_t)i;
             }
 
-            uprv_sortArray(tempTable.rows, (int32_t)count, sizeof(Row),
+            uprv_sortArray(tempTable.rows, (int32_t)count, sizeof(TempRow),
                            io_compareRows, &tempTable,
                            FALSE, pErrorCode);
 

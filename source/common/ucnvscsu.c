@@ -1944,7 +1944,7 @@ _SCSUWriteSub(UConverterFromUnicodeArgs *pArgs,
 }
 
 /* structure for SafeClone calculations */
-struct cloneStruct
+struct cloneSCSUStruct
 {
     UConverter cnv;
     SCSUData mydata;
@@ -1956,8 +1956,8 @@ _SCSUSafeClone(const UConverter *cnv,
                int32_t *pBufferSize, 
                UErrorCode *status)
 {
-    struct cloneStruct * localClone;
-    int32_t bufferSizeNeeded = sizeof(struct cloneStruct);
+    struct cloneSCSUStruct * localClone;
+    int32_t bufferSizeNeeded = sizeof(struct cloneSCSUStruct);
 
     if (U_FAILURE(*status)){
         return 0;
@@ -1968,7 +1968,7 @@ _SCSUSafeClone(const UConverter *cnv,
         return 0;
     }
 
-    localClone = (struct cloneStruct *)stackBuffer;
+    localClone = (struct cloneSCSUStruct *)stackBuffer;
     /* ucnv.c/ucnv_safeClone() copied the main UConverter already */
 
     uprv_memcpy(&localClone->mydata, cnv->extraInfo, sizeof(SCSUData));
