@@ -25,6 +25,7 @@
 #include "cstring.h"
 #include "filestrm.h"
 #include "unewdata.h"
+#include "uoptions.h"
 
 #define STRING_STORE_SIZE 100000
 #define MAX_ALIAS_COUNT 2000
@@ -44,7 +45,7 @@ static const UDataInfo dataInfo={
 
     0x43, 0x76, 0x41, 0x6c,     /* dataFormat="CvAl" */
     2, 0, 0, 0,                 /* formatVersion */
-    1, 3, 1, 0                  /* dataVersion */
+    1, 4, 2, 0                  /* dataVersion */
 };
 
 static char stringStore[STRING_STORE_SIZE];
@@ -67,8 +68,6 @@ static Converter converters[MAX_ALIAS_COUNT];
 static uint16_t converterCount=0;
 
 /* prototypes --------------------------------------------------------------- */
-static void
-usage(char *progname);
 
 static void
 parseLine(const char *line);
@@ -90,54 +89,60 @@ compareConverters(const void *converter1, const void *converter2);
 
 /* -------------------------------------------------------------------------- */
 
+static UOption options[]={
+    UOPTION_HELP_H,
+    UOPTION_HELP_QUESTION_MARK,
+    UOPTION_COPYRIGHT,
+    UOPTION_DESTDIR,
+    UOPTION_SOURCEDIR
+};
+
 extern int
 main(int argc, char *argv[]) {
     char line[512];
-    const char *path, *arg, *convfile = 0;
-    const char *destdir = 0;
+    const char *path;
     FileStream *in;
     UNewDataMemory *out;
     char *s;
     UErrorCode errorCode=U_ZERO_ERROR;
     int i;
     uint16_t stringOffset;
-    bool_t haveCopyright=TRUE;
 
-    for(i=1; i<argc; ++i) {
-        arg=argv[i];
-        if(arg[0]=='-') {
-            switch(arg[1]) {
-            case 'c':
-                haveCopyright= arg[2]=='+';
-                break;
-            case 'h':
-                usage(argv[0]);
-                exit(0);
-                break;
-            default:
-                fprintf(stderr, "gencnval: invalid option\n");
-                usage(argv[0]);
-                exit(-1);
-                break;
-            }
-        } else if (!convfile) {
-	    convfile = arg;
-	} else {
-	   usage(argv[0]);
- 	}
+    /* preset then read command line options */
+    options[3].value=options[4].value=u_getDataDirectory();
+    argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
+
+    /* error handling, printing usage message */
+    if(argc<0) {
+        fprintf(stderr,
+            "error in command line argument \"%s\"\n",
+            argv[-argc]);
+    }
+    if(argc<0 || options[0].doesOccur || options[1].doesOccur) {
+        fprintf(stderr,
+            "usage: %s [-options] [convrtrs.txt]\n"
+            "\tread convrtrs.txt and create " DATA_NAME "." DATA_TYPE "\n"
+            "\toptions:\n"
+            "\t\t-h or -? or --help  this usage text\n"
+            "\t\t-c or --copyright   include a copyright notice\n"
+            "\t\t-d or --destdir     destination directory, followed by the path\n"
+            "\t\t-s or --sourcedir   source directory, followed by the path\n",
+            argv[0]);
+        return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
 
-    if (!destdir) {
-	destdir = u_getDataDirectory();
-    }
-
-    if (convfile) {
-	path = convfile;
+    if(argc>=2) {
+        path=argv[1];
     } else {
-        path=u_getDataDirectory();
-        if(path!=NULL) {
+        path=options[4].value;
+        if(path!=NULL && *path!=0) {
             uprv_strcpy(line, path);
-            uprv_strcat(line, "convrtrs.txt");
+            path=line+uprv_strlen(line);
+            if(*(path-1)!=U_FILE_SEP_CHAR) {
+                *((char *)path)=U_FILE_SEP_CHAR;
+                ++path;
+            }
+            uprv_strcpy((char *)path, "convrtrs.txt");
             path=line;
         } else {
             path="convrtrs.txt";
@@ -170,8 +175,8 @@ main(int argc, char *argv[]) {
     qsort(aliases, aliasCount, sizeof(Alias), compareAliases);
 
     /* create the output file */
-    out=udata_create(destdir, DATA_TYPE, DATA_NAME, &dataInfo,
-                     haveCopyright ? U_COPYRIGHT_STRING : NULL, &errorCode);
+    out=udata_create(options[3].value, DATA_TYPE, DATA_NAME, &dataInfo,
+                     options[2].doesOccur ? U_COPYRIGHT_STRING : NULL, &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "gencnval: unable to open output file - error %s\n", u_errorName(errorCode));
         exit(errorCode);
@@ -207,15 +212,6 @@ main(int argc, char *argv[]) {
     }
 
     return 0;
-}
-
-static void
-usage(char *progname) {
-    fprintf(stderr,
-        "usage: %s [-c[+|-]] [convrtrs.txt]\n"
-        "\tread convrtrs.txt and create " DATA_NAME "." DATA_TYPE "\n"
-        "\t\t-c[+|-]  do (not) include a copyright notice\n",
-        progname);
 }
 
 static void
