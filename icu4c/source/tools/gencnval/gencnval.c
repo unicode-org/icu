@@ -298,7 +298,43 @@ parseLine(const char *line) {
     cnv=addConverter(converter);
 
     /* add the converter as its own alias to the alias table */
-    addAlias(converter, cnv);
+    addAlias(alias = converter, cnv);
+
+    /* skip white space */
+    while(line[pos]!=0 && isspace((unsigned char)line[pos])) {
+        ++pos;
+    }
+
+    /* handle tags if they are present; sloppy, shouldn't copy/paste this */
+    if (line[pos] == '{') {
+        ++pos;
+        do {
+            start = pos;
+            while (line[pos] && line[pos] != '}' && line[pos] != '#' && !isspace((unsigned char) line[pos])) {
+                ++pos;
+            }
+            limit = pos;
+            
+            if (start != limit) {
+                uint16_t tag;
+                
+                /* add the tag to the tag table */
+                tag = getTagNumber(line + start, limit - start);
+                addTaggedAlias(tag, alias, cnv);
+            }
+            
+            while (line[pos] && isspace((unsigned char)line[pos])) {
+                ++pos;
+            }
+        } while (line[pos] && line[pos] != '}' && line[pos] != '#');
+        
+        if (line[pos] == '}') {
+            ++pos;
+        } else {
+            fprintf(stderr, "unterminated tag list in: %s\n", line);
+            exit(U_PARSE_ERROR);
+        }
+    }
 
     /* get all the real aliases */
     for(;;) {
