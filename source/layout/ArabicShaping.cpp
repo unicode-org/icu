@@ -22,8 +22,8 @@ const ArabicShaping::ShapeType ArabicShaping::shapeTypes[] =
 {
    _n_, _r_, _r_, _r_, _r_, _d_, _r_, _d_, _r_, _d_, _d_, _d_, _d_, _d_, _r_, _r_,   // 0x621 - 0x630
    _r_, _r_, _d_, _d_, _d_, _d_, _d_, _d_, _d_, _d_, _x_, _x_, _x_, _x_, _x_, _c_,   // 0x631 - 0x640
-   _d_, _d_, _d_, _d_, _d_, _d_, _d_, _r_, _r_, _d_, _t_, _t_, _t_, _t_, _t_, _t_,   // 0x641 - 0x650
-   _t_, _t_, _x_, _x_, _x_, _x_, _x_, _x_, _x_, _x_, _x_, _x_, _x_, _x_, _x_, _n_,   // 0x651 - 0x660
+   _d_, _d_, _d_, _d_, _d_, _d_, _d_, _r_, _d_, _d_, _t_, _t_, _t_, _t_, _t_, _t_,   // 0x641 - 0x650
+   _t_, _t_, _t_, _t_, _t_, _x_, _x_, _x_, _x_, _x_, _x_, _x_, _x_, _x_, _x_, _n_,   // 0x651 - 0x660
    _n_, _n_, _n_, _n_, _n_, _n_, _n_, _n_, _n_, _n_, _n_, _n_, _n_, _x_, _x_, _t_,   // 0x661 - 0x670
    _r_, _r_, _r_, _x_, _r_, _r_, _r_, _d_, _d_, _d_, _d_, _d_, _d_, _d_, _d_, _d_,   // 0x671 - 0x680
    _d_, _d_, _d_, _d_, _d_, _d_, _d_, _r_, _r_, _r_, _r_, _r_, _r_, _r_, _r_, _r_,   // 0x681 - 0x690
@@ -31,7 +31,7 @@ const ArabicShaping::ShapeType ArabicShaping::shapeTypes[] =
    _d_, _d_, _d_, _d_, _d_, _d_, _d_, _d_, _d_, _d_, _d_, _d_, _d_, _d_, _d_, _d_,   // 0x6a1 - 0x6b0
    _d_, _d_, _d_, _d_, _d_, _d_, _d_, _x_, _x_, _d_, _d_, _d_, _d_, _d_, _x_, _r_,   // 0x6b1 - 0x6c0
    _d_, _r_, _r_, _r_, _r_, _r_, _r_, _r_, _r_, _r_, _r_, _d_, _r_, _d_, _x_, _d_,   // 0x6c1 - 0x6d0
-   _d_, _r_, _r_, _x_, _x_, _n_, _t_, _t_, _t_, _t_, _t_, _t_, _t_, _t_, _t_, _t_,   // 0x6d1 - 0x6e0
+   _d_, _r_, _r_, _x_, _x_, _t_, _t_, _t_, _t_, _t_, _t_, _t_, _t_, _t_, _t_, _t_,   // 0x6d1 - 0x6e0
    _t_, _t_, _t_, _t_, _n_, _n_, _t_, _t_, _n_, _t_, _t_, _t_, _t_, _x_, _x_, _n_,   // 0x6e1 - 0x6f0
    _n_, _n_, _n_, _n_, _n_, _n_, _n_, _n_, _n_, _x_, _x_, _x_, _x_, _x_, _x_         // 0x6f1 - 0x6ff
 };
@@ -39,7 +39,7 @@ const ArabicShaping::ShapeType ArabicShaping::shapeTypes[] =
 /*
     shaping array holds types for arabic chars between 0621 and 0700
     other values are either unshaped, or transparent if a mark or format
-    coce, except for format codes 200c (zero-width non-joiner) and 200d 
+    code, except for format codes 200c (zero-width non-joiner) and 200d 
     (dual-width joiner) which are both unshaped and non_joining or
     dual-joining, respectively.
 */
