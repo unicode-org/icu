@@ -24,6 +24,7 @@ U_NAMESPACE_BEGIN
 enum Regex_PatternParseAction {
     doExprOrOperator,
     doCloseParen,
+    doProperty,
     doTagValue,
     doOrOperator,
     doOpenCaptureParen,
@@ -95,7 +96,7 @@ static const struct RegexTableEl gRuleParseStateTable[] = {
     , {doDotAny, 46 /* . */, 18,0,  TRUE}     //  7 
     , {doNOP, 92 /* \ */, 59,0,  TRUE}     //  8 
     , {doNOP, 253, 2,0,  FALSE}     //  9 
-    , {doRuleError, 255, 69,0,  FALSE}     //  10 
+    , {doRuleError, 255, 71,0,  FALSE}     //  10 
     , {doStringChar, 254, 11,0,  TRUE}     //  11      string
     , {doStringChar, 130, 11,0,  TRUE}     //  12 
     , {doSplitString, 63 /* ? */, 18,0,  FALSE}     //  13 
@@ -117,10 +118,10 @@ static const struct RegexTableEl gRuleParseStateTable[] = {
     , {doOpenLookAhead, 61 /* = */, 3, 22, TRUE}     //  29 
     , {doOpenLookAheadNeg, 33 /* ! */, 3, 22, TRUE}     //  30 
     , {doNOP, 60 /* < */, 33,0,  TRUE}     //  31 
-    , {doBadOpenParenType, 255, 69,0,  FALSE}     //  32 
+    , {doBadOpenParenType, 255, 71,0,  FALSE}     //  32 
     , {doOpenLookBehind, 61 /* = */, 3, 22, TRUE}     //  33      open-paren-lookbehind
     , {doOpenLookBehindNeg, 33 /* ! */, 3, 22, TRUE}     //  34 
-    , {doBadOpenParenType, 255, 69,0,  FALSE}     //  35 
+    , {doBadOpenParenType, 255, 71,0,  FALSE}     //  35 
     , {doNGStar, 63 /* ? */, 22,0,  TRUE}     //  36      quant-star
     , {doPossesiveStar, 43 /* + */, 22,0,  TRUE}     //  37 
     , {doStar, 255, 22,0,  FALSE}     //  38 
@@ -132,14 +133,14 @@ static const struct RegexTableEl gRuleParseStateTable[] = {
     , {doOpt, 255, 22,0,  FALSE}     //  44 
     , {doNOP, 129, 45,0,  TRUE}     //  45      interval-open
     , {doIntervalMinValue, 128, 48,0,  FALSE}     //  46 
-    , {doNumberExpectedError, 255, 69,0,  FALSE}     //  47 
+    , {doNumberExpectedError, 255, 71,0,  FALSE}     //  47 
     , {doNOP, 129, 52,0,  TRUE}     //  48      interval-value
     , {doNOP, 125 /* } */, 52,0,  FALSE}     //  49 
     , {doIntervalDigit, 128, 48,0,  TRUE}     //  50 
-    , {doNumberExpectedError, 255, 69,0,  FALSE}     //  51 
+    , {doNumberExpectedError, 255, 71,0,  FALSE}     //  51 
     , {doNOP, 129, 52,0,  TRUE}     //  52      interval-close
     , {doTagValue, 125 /* } */, 55,0,  TRUE}     //  53 
-    , {doNumberExpectedError, 255, 69,0,  FALSE}     //  54 
+    , {doNumberExpectedError, 255, 71,0,  FALSE}     //  54 
     , {doNOP, 254, 3,0,  FALSE}     //  55      expr-cont-no-interval
     , {doExprOrOperator, 124 /* | */, 3,0,  TRUE}     //  56 
     , {doExprRParen, 41 /* ) */, 255,0,  TRUE}     //  57 
@@ -148,13 +149,15 @@ static const struct RegexTableEl gRuleParseStateTable[] = {
     , {doBackslashB, 66 /* B */, 3,0,  TRUE}     //  60 
     , {doBackslashb, 98 /* b */, 3,0,  TRUE}     //  61 
     , {doBackslashG, 71 /* G */, 3,0,  TRUE}     //  62 
-    , {doBackslashW, 87 /* W */, 3,0,  TRUE}     //  63 
-    , {doBackslashw, 119 /* w */, 3,0,  TRUE}     //  64 
-    , {doBackslashX, 88 /* X */, 3,0,  TRUE}     //  65 
-    , {doBackslashZ, 90 /* Z */, 3,0,  TRUE}     //  66 
-    , {doBackslashz, 122 /* z */, 3,0,  TRUE}     //  67 
-    , {doStartString, 255, 11,0,  TRUE}     //  68 
-    , {doExit, 255, 69,0,  TRUE}     //  69      errorDeath
+    , {doProperty, 112 /* p */, 18,0,  FALSE}     //  63 
+    , {doProperty, 80 /* P */, 18,0,  FALSE}     //  64 
+    , {doBackslashW, 87 /* W */, 3,0,  TRUE}     //  65 
+    , {doBackslashw, 119 /* w */, 3,0,  TRUE}     //  66 
+    , {doBackslashX, 88 /* X */, 3,0,  TRUE}     //  67 
+    , {doBackslashZ, 90 /* Z */, 3,0,  TRUE}     //  68 
+    , {doBackslashz, 122 /* z */, 3,0,  TRUE}     //  69 
+    , {doStartString, 255, 11,0,  TRUE}     //  70 
+    , {doExit, 255, 71,0,  TRUE}     //  71      errorDeath
  };
 static const char *RegexStateNames[] = {    0,
      "start",
@@ -216,6 +219,8 @@ static const char *RegexStateNames[] = {    0,
     0,
     0,
      "backslash",
+    0,
+    0,
     0,
     0,
     0,

@@ -463,17 +463,7 @@ UBool RegexCompile::doParseActions(EParseAction action)
         //     3.   jmp 1
         //     4.   ...
         {
-            int32_t   topLoc;        // location of item #1, the start of the stuff to repeat
-
-            if (fRXPat->fCompiledPat->size() == fMatchCloseParen)    
-            {
-                // The thing being repeated (item 1) is a parenthesized block.
-                //   Pick up the location of the top of the block.
-                topLoc = fMatchOpenParen+1;   
-            } else {
-                // Repeating just a single item, the last thing in the compiled patternn so far.
-                topLoc = fRXPat->fCompiledPat->size()-1;
-            }
+            int32_t   topLoc = blockTopLoc(FALSE);        // location of item #1
 
             // Locate the position in the compiled pattern where the match will continue
             //   after completing the +   (4 in the comment above)
@@ -506,7 +496,7 @@ UBool RegexCompile::doParseActions(EParseAction action)
         // Normal (greedy) ? quantifier.
         //  Compiles to
         //     1. state save 3
-        //     2.    body of optional stuff
+        //     2.    body of optional block
         //     3. ...
         // Insert the state save into the compiled pattern, and we're done.
         {
@@ -520,11 +510,26 @@ UBool RegexCompile::doParseActions(EParseAction action)
         // Non-greedy ?? quantifier
         //   compiles to
         //    1.  jmp   4
-        //    2.     body of optional stuff
+        //    2.     body of optional block
         //    3   jmp   5
         //    4.  state save 2
         //    5    ...
+        //  This code is less than ideal, with two jmps instead of one, because we can only
+        //  insert one instruction at the top of the block being iterated.
+        {
+            int32_t  jmp1_loc = blockTopLoc(TRUE);
+            int32_t  jmp2_loc = fRXPat->fCompiledPat->size();
 
+            int32_t  jmp1_op  = URX_BUILD(URX_JMP, jmp2_loc+1);
+            fRXPat->fCompiledPat->setElementAt(jmp1_op, jmp1_loc);
+
+            int32_t  jmp2_op  = URX_BUILD(URX_JMP, jmp2_loc+2);
+            fRXPat->fCompiledPat->addElement(jmp2_op, *fStatus);
+
+            int32_t  save_op  = URX_BUILD(URX_STATE_SAVE, jmp1_loc+1);
+            fRXPat->fCompiledPat->addElement(save_op, *fStatus);
+        }
+        break;
 
 
     case doStar:
@@ -708,37 +713,21 @@ UBool RegexCompile::doParseActions(EParseAction action)
         returnVal = FALSE;
         break;
 
-    case doScanUnicodeSet:
+    case doProperty:
         {
-            UnicodeSet *theSet = scanSet();
-            if (theSet == NULL) {
-                break;
-            }
-            if (theSet->size() > 1) {
-                //  The set contains two or more chars.
-                //  Put it into the compiled pattern as a set.
-                int32_t setNumber = fRXPat->fSets->size();
-                fRXPat->fSets->addElement(theSet, *fStatus);
-                int32_t setOp = URX_BUILD(URX_SETREF, setNumber);
-                fRXPat->fCompiledPat->addElement(setOp, *fStatus);
-            }
-            else
-            {
-                // The set contains only a single code point.  Put it into
-                //   the compiled pattern as a single char operation rather
-                //   than a set, and discard the set itself.
-                UChar32  c = theSet->charAt(0);
-                if (c == -1) {
-                    // Set contained no chars.  Stuff an invalid char that can't match.
-                    c = 0x1fffff;
-                }
-                int32_t  charToken = URX_BUILD(URX_ONECHAR, c);
-                fRXPat->fCompiledPat->addElement(charToken, *fStatus);
-                delete theSet;
-            }
+            UnicodeSet *theSet = scanProp();
+            compileSet(theSet);
         }
         break;
 
+
+    case doScanUnicodeSet:
+        {
+            UnicodeSet *theSet = scanSet();
+            compileSet(theSet);
+        }
+        break;
+            
     default:
         error(U_BRK_INTERNAL_ERROR);
         returnVal = FALSE;
@@ -860,6 +849,43 @@ void  RegexCompile::handleCloseParen() {
 }
 
 
+
+//----------------------------------------------------------------------------------------
+//
+//   compileSet       Compile the pattern operations for a reference to a
+//                    UnicodeSet.
+//
+//----------------------------------------------------------------------------------------
+void        RegexCompile::compileSet(UnicodeSet *theSet)
+{
+    if (theSet == NULL) {
+        return;
+    }
+    if (theSet->size() > 1) {
+        //  The set contains two or more chars.
+        //  Put it into the compiled pattern as a set.
+        int32_t setNumber = fRXPat->fSets->size();
+        fRXPat->fSets->addElement(theSet, *fStatus);
+        int32_t setOp = URX_BUILD(URX_SETREF, setNumber);
+        fRXPat->fCompiledPat->addElement(setOp, *fStatus);
+    }
+    else
+    {
+        // The set contains only a single code point.  Put it into
+        //   the compiled pattern as a single char operation rather
+        //   than a set, and discard the set itself.
+        UChar32  c = theSet->charAt(0);
+        if (c == -1) {
+            // Set contained no chars.  Stuff an invalid char that can't match.
+            c = 0x1fffff;
+        }
+        int32_t  charToken = URX_BUILD(URX_ONECHAR, c);
+        fRXPat->fCompiledPat->addElement(charToken, *fStatus);
+        delete theSet;
+    }
+}
+
+
 //----------------------------------------------------------------------------------------
 //
 //  Error         Report a rule parse error.
@@ -898,6 +924,11 @@ static const UChar      chPound     = 0x23;      // '#', introduces a comment.
 static const UChar      chBackSlash = 0x5c;      // '\'  introduces a char escape
 static const UChar      chLParen    = 0x28;
 static const UChar      chRParen    = 0x29;
+static const UChar      chLBracket  = 0x5b;
+static const UChar      chRBracket  = 0x5d;
+static const UChar      chRBrace    = 0x7d;
+static const UChar      chLowerP    = 0x70;
+static const UChar      chUpperP    = 0x50;
 
 
 //----------------------------------------------------------------------------------------
@@ -1073,6 +1104,57 @@ UnicodeSet *RegexCompile::scanSet() {
         nextCharLL();
     }
 
+    return uset;
+};
+
+
+//---------------------------------------------------------------------------------
+//
+//  scanProp   Construct a UnicodeSet from the text at the current scan
+//             position, which will be of the form \p{whaterver} 
+//
+//             The scan position will be at the 'p' or 'P'.  On return
+//             the scan position should be just after the '}'
+//
+//             Return a UnicodeSet, constructed from the \P pattern,
+//             or NULL if the pattern is invalid.
+//
+//---------------------------------------------------------------------------------
+UnicodeSet *RegexCompile::scanProp() {
+    UnicodeSet    *uset = NULL;
+
+    if (U_FAILURE(*fStatus)) {
+        return NULL;
+    }
+
+    U_ASSERT(fC.fChar == chLowerP || fC.fChar == chUpperP);
+
+    // enclose the \p{property} from the regex pattern source in  [brackets]
+    UnicodeString setPattern;
+    setPattern.append(chLBracket);
+    setPattern.append(chBackSlash);
+    for (;;) {
+        setPattern.append(fC.fChar);
+        if (fC.fChar == chRBrace) {
+            break;
+        }
+        nextChar(fC);
+        if (fC.fChar == -1) {
+            // Hit the end of the input string without finding the closing '}'
+            *fStatus = U_REGEX_PROPERTY_SYNTAX;
+            return NULL;
+        }
+    }
+    setPattern.append(chRBracket);
+
+    // Build the UnicodeSet from the set pattern we just built up in a string.
+    uset = new UnicodeSet(setPattern, *fStatus);
+    if (U_FAILURE(*fStatus)) {
+        delete uset;
+        uset =  NULL;
+    }
+
+    nextChar(fC);      // Continue overall regex pattern processing with char after the '}'
     return uset;
 };
 
