@@ -383,15 +383,43 @@ _decompose(uint32_t norm32, int32_t &length,
     return p;
 }
 
-/* get the canonical decomposition for one code point */
-static inline const UChar *
-_decompose(UChar32 c, int32_t &length) {
+/**
+ * Get the canonical decomposition for one code point.
+ * @param c code point
+ * @param buffer out-only buffer for algorithmic decompositions of Hangul
+ * @param length out-only, takes the length of the decomposition, if any
+ * @return pointer to decomposition, or 0 if none
+ * @internal
+ */
+static const UChar *
+_decompose(UChar32 c, UChar buffer[4], int32_t &length) {
     uint32_t norm32;
 
     UTRIE_GET32(&normTrie, c, norm32);
     if(norm32&_NORM_QC_NFD) {
-        uint8_t cc, trailCC;
-        return _decompose(norm32, length, cc, trailCC);
+        if(isNorm32HangulOrJamo(norm32)) {
+            /* Hangul syllable: decompose algorithmically */
+            UChar c2;
+
+            c-=HANGUL_BASE;
+
+            c2=(UChar)(c%JAMO_T_COUNT);
+            c/=JAMO_T_COUNT;
+            if(c2>0) {
+                buffer[2]=(UChar)(JAMO_T_BASE+c2);
+                length=3;
+            } else {
+                length=2;
+            }
+
+            buffer[1]=(UChar)(JAMO_V_BASE+c%JAMO_V_COUNT);
+            buffer[0]=(UChar)(JAMO_L_BASE+c/JAMO_V_COUNT);
+            return buffer;
+        } else {
+            /* normal decomposition */
+            uint8_t cc, trailCC;
+            return _decompose(norm32, length, cc, trailCC);
+        }
     } else {
         return 0;
     }
@@ -3272,6 +3300,9 @@ unorm_cmpEquivFold(const UChar *s1, int32_t length1,
     // stacks of previous-level start/current/limit
     CmpEquivLevel stack1[2], stack2[2];
 
+    // decomposition buffers for Hangul
+    UChar decomp1[4], decomp2[4];
+
     // case folding buffers, only use current-level start/limit
     UChar fold1[32], fold2[32];
 
@@ -3417,7 +3448,7 @@ unorm_cmpEquivFold(const UChar *s1, int32_t length1,
         // continue with the main loop as soon as there is a real change
 
         if( level1==0 && (options&_COMPARE_EQUIV) &&
-            0!=(p=_decompose((UChar32)cp1, length))
+            0!=(p=_decompose((UChar32)cp1, decomp1, length))
         ) {
             // cp1 decomposes into p[length]
             if(UTF_IS_SURROGATE(c1)) {
@@ -3449,7 +3480,7 @@ unorm_cmpEquivFold(const UChar *s1, int32_t length1,
         }
 
         if( level2==0 && (options&_COMPARE_EQUIV) &&
-            0!=(p=_decompose((UChar32)cp2, length))
+            0!=(p=_decompose((UChar32)cp2, decomp2, length))
         ) {
             // cp2 decomposes into p[length]
             if(UTF_IS_SURROGATE(c2)) {
@@ -3564,12 +3595,14 @@ unorm_cmpEquivFold(const UChar *s1, int32_t length1,
         // cp1-cp2>0 but c1-c2<0 and in fact in UTF-32 it is { d800 10001 } < { 10000 }
 
         // therefore, use same fix-up as in ustring.c/uprv_strCompare()
+        // except: uprv_strCompare() fetches c=*s while this functions fetches c=*s++
+        // so we have slightly different pointer/start/limit comparisons here
 
         if(c1>=0xd800 && c2>=0xd800 && (options&U_COMPARE_CODE_POINT_ORDER)) {
             /* subtract 0x2800 from BMP code points to make them smaller than supplementary ones */
             if(
-                (c1<=0xdbff && (s1+1)!=limit1 && UTF_IS_TRAIL(*(s1+1))) ||
-                (UTF_IS_TRAIL(c1) && start1!=s1 && UTF_IS_LEAD(*(s1-1)))
+                (c1<=0xdbff && s1!=limit1 && UTF_IS_TRAIL(*s1)) ||
+                (UTF_IS_TRAIL(c1) && start1!=(s1-1) && UTF_IS_LEAD(*(s1-2)))
             ) {
                 /* part of a surrogate pair, leave >=d800 */
             } else {
@@ -3578,8 +3611,8 @@ unorm_cmpEquivFold(const UChar *s1, int32_t length1,
             }
 
             if(
-                (c2<=0xdbff && (s2+1)!=limit2 && UTF_IS_TRAIL(*(s2+1))) ||
-                (UTF_IS_TRAIL(c2) && start2!=s2 && UTF_IS_LEAD(*(s2-1)))
+                (c2<=0xdbff && s2!=limit2 && UTF_IS_TRAIL(*s2)) ||
+                (UTF_IS_TRAIL(c2) && start2!=(s2-1) && UTF_IS_LEAD(*(s2-2)))
             ) {
                 /* part of a surrogate pair, leave >=d800 */
             } else {
@@ -3633,7 +3666,9 @@ unorm_compare(const UChar *s1, int32_t length1,
                                   s1, length1,
                                   FALSE, FALSE,
                                   trailCC);
-            if(fcdLength1>sizeof(fcd1)/U_SIZEOF_UCHAR) {
+            if(fcdLength1<=sizeof(fcd1)/U_SIZEOF_UCHAR) {
+                s1=fcd1;
+            } else {
                 dest=(UChar *)uprv_malloc(fcdLength1*U_SIZEOF_UCHAR);
                 if(dest==0) {
                     *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
@@ -3647,14 +3682,16 @@ unorm_compare(const UChar *s1, int32_t length1,
                                       trailCC);
 
                 s1=dest;
-                length1=fcdLength1;
             }
+            length1=fcdLength1;
 
             fcdLength2=_decompose(fcd2, sizeof(fcd2)/U_SIZEOF_UCHAR,
                                   s2, length2,
                                   FALSE, FALSE,
                                   trailCC);
-            if(fcdLength2>sizeof(fcd2)/U_SIZEOF_UCHAR) {
+            if(fcdLength2<=sizeof(fcd2)/U_SIZEOF_UCHAR) {
+                s2=fcd2;
+            } else {
                 dest=(UChar *)uprv_malloc(fcdLength2*U_SIZEOF_UCHAR);
                 if(dest==0) {
                     if(didAlloc1) {
@@ -3671,8 +3708,8 @@ unorm_compare(const UChar *s1, int32_t length1,
                                       trailCC);
 
                 s2=dest;
-                length2=fcdLength2;
             }
+            length2=fcdLength2;
 
             // compare NFD strings
             options&=~_COMPARE_EQUIV;
@@ -3683,7 +3720,9 @@ unorm_compare(const UChar *s1, int32_t length1,
                 fcdLength1=unorm_makeFCD(fcd1, sizeof(fcd1)/U_SIZEOF_UCHAR,
                                          s1, length1,
                                          pErrorCode);
-                if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
+                if(*pErrorCode!=U_BUFFER_OVERFLOW_ERROR) {
+                    s1=fcd1;
+                } else {
                     dest=(UChar *)uprv_malloc(fcdLength1*U_SIZEOF_UCHAR);
                     if(dest==0) {
                         *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
@@ -3701,15 +3740,17 @@ unorm_compare(const UChar *s1, int32_t length1,
                     }
 
                     s1=dest;
-                    length1=fcdLength1;
                 }
+                length1=fcdLength1;
             }
 
             if(!isFCD2) {
                 fcdLength2=unorm_makeFCD(fcd2, sizeof(fcd2)/U_SIZEOF_UCHAR,
                                          s2, length2,
                                          pErrorCode);
-                if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
+                if(*pErrorCode!=U_BUFFER_OVERFLOW_ERROR) {
+                    s2=fcd2;
+                } else {
                     dest=(UChar *)uprv_malloc(fcdLength2*U_SIZEOF_UCHAR);
                     if(dest==0) {
                         if(didAlloc1) {
@@ -3733,8 +3774,8 @@ unorm_compare(const UChar *s1, int32_t length1,
                     }
 
                     s2=dest;
-                    length2=fcdLength2;
                 }
+                length2=fcdLength2;
             }
         }
     }
