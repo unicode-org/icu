@@ -393,83 +393,28 @@ void CompoundTransliterator::handleTransliterate(Replaceable& text, UTransPositi
         return; // Short circuit for empty compound transliterators
     }
 
-    const UnicodeFilter *filter = getFilter();
-
     // compoundLimit is the limit value for the entire compound
     // operation.  We overwrite index.limit with the previous
     // index.start.  After each transliteration, we update
     // compoundLimit for insertions or deletions that have happened.
     int32_t compoundLimit = index.limit;
 
-    // For compounds with filters, the limit of each unfiltered
-    // segment.  If filter == 0 then this is not used.
-    int32_t filteredLimit = 0;
-
-    // If we have a compound filter (a filter on this object, as
-    // oppposed to filtered on trans[i]), then we break the input text
-    // up.  Say the input text has the form:
-    //   xxxabcxxdefxx
-    // where 'x' represents a filtered character.  Then we break this
-    // up into:
-    //   xxxabc xxdef xx
-    // Each pass through the loop consumes a run of filtered
-    // characters (which are ignored) and a subsequent run of
-    // unfiltered characters.  If, at any point, we fail to consume
-    // our entire segment, we stop.
-    do {
-        // compoundStart is the start for the entire compound
-        // operation.
-        int32_t compoundStart = index.start;
-
-        // If there is a compound filter, then narrow the range to be
-        // transliterated to the first segment of unfiltered
-        // characters at or after index.start.
-        if (filter != 0) {
-            int32_t l;
-            // Advance compoundStart past filtered chars
-            while (compoundStart < compoundLimit &&
-                   !filter->contains(text.charAt(compoundStart))) {
-                ++compoundStart;
-            }
-            l = compoundStart;
-            // Find the end of this run of unfiltered chars
-            while (l < compoundLimit &&
-                   filter->contains(text.charAt(l))) {
-                ++l;
-            }
-            // Check to see if the unfiltered run is empty.  This only
-            // happens at the end of the string when all the remaining
-            // characters are filtered.
-            if (l == compoundStart) {
-                // assert(compoundStart == compoundLimit);
-                index.start = compoundStart;
-                break;
-            }
-            // Keep track of the end of the unfiltered run in
-            // filteredLimit to determine if we processed the run
-            // completely.
-            index.limit = filteredLimit = l;
-        }
-
-        // Give each transliterator a crack at the run of characters.
-        // See comments at the top of the method for more detail.
-        for (int32_t i=0; i<count; ++i) {
-            index.start = compoundStart; // Reset start
-            int32_t limit = index.limit;
-            
-            trans[i]->handleTransliterate(text, index, incremental);
-            
-            // Adjust overall limit for insertions/deletions
-            compoundLimit += index.limit - limit;
-            index.limit = index.start; // Move limit to end of committed text
-        }
-
-        // If there is no filter then we are done.  If there is a
-        // filter and we failed to complete transliterate this
-        // segment, then we are done.  If we did completely
-        // transliterate this segment, then look for another
-        // unfiltered segment by looping back up to the top.
-    } while (filter != 0 && index.start == filteredLimit);
+    // compoundStart is the start for the entire compound
+    // operation.
+    int32_t compoundStart = index.start;
+    
+    // Give each transliterator a crack at the run of characters.
+    // See comments at the top of the method for more detail.
+    for (int32_t i=0; i<count; ++i) {
+        index.start = compoundStart; // Reset start
+        int32_t limit = index.limit;
+        
+        trans[i]->filteredTransliterate(text, index, incremental);
+        
+        // Adjust overall limit for insertions/deletions
+        compoundLimit += index.limit - limit;
+        index.limit = index.start; // Move limit to end of committed text
+    }
 
     // Start is good where it is -- where the last transliterator left
     // it.  Limit needs to be put back where it was, modulo

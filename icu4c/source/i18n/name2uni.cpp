@@ -98,7 +98,7 @@ void NameUnicodeTransliterator::handleTransliterate(Replaceable& text, UTransPos
     UnicodeConverter converter; // default converter
 
     for (; cursor < limit; ++cursor) {
-        UChar c = filteredCharAt(text, cursor);
+        UChar c = text.charAt(cursor);
 
         switch (mode) {
         case 0: // looking for open delimiter
