@@ -14,6 +14,9 @@
 #include "unicode/strenum.h"
 #include "hash.h"
 
+#include "ucol_imp.h" // internal api needed to test ucollator equality
+#include "cstring.h" // internal api used to compare locale strings
+
 void CollationServiceTest::TestRegister() 
 {
   // register a singleton
@@ -72,16 +75,18 @@ void CollationServiceTest::TestRegister()
   // recreate frcol
   frcol = Collator::createInstance(FR, status);
 
+  UCollator* frFR = ucol_open("fr_FR", &status);
+
   { // try create collator for new locale
-      Locale fu_FU("fu", "FU", "FOO");
+      Locale fu_FU_FOO("fu", "FU", "FOO");
+	  Locale fu_FU("fu", "FU", "");
 
     Collator* fucol = Collator::createInstance(fu_FU, status);
     URegistryKey key = Collator::registerInstance(frcol, fu_FU, status);
-    Collator* ncol = Collator::createInstance(fu_FU, status);
+    Collator* ncol = Collator::createInstance(fu_FU_FOO, status);
     if (*frcol != *ncol) {
       errln("register of fr collator for fu_FU failed");
     }
-    delete ncol; ncol = NULL;
 
     UnicodeString locName = fu_FU.getName();
     StringEnumeration* localeEnum = Collator::getAvailableLocales();
@@ -103,20 +108,45 @@ void CollationServiceTest::TestRegister()
             
     UnicodeString displayName;
     Collator::getDisplayName(fu_FU, displayName);
-    if (displayName != "fu (FU, FOO)") {
+    if (displayName != "fu (FU)") {
       errln(UnicodeString("found ") + displayName + " for fu_FU");
     }
 
     Collator::getDisplayName(fu_FU, fu_FU, displayName);
-    if (displayName != "fu (FU, FOO)") {
+    if (displayName != "fu (FU)") {
       errln(UnicodeString("found ") + displayName + " for fu_FU");
     }
+
+	// test ucol_open
+	UCollator* fufu = ucol_open("fu_FU_FOO", &status);
+	if (!fufu) {
+	  errln("could not open fu_FU_FOO with ucol_open");
+	} else {
+		if (!ucol_equals(fufu, frFR)) {
+			errln("collator fufu != collator frFR");
+		}
+	}
 
     if (!Collator::unregister(key, status)) {
       errln("failed to unregister french collator");
     }
     // !!! note frcoll invalid again, but we're no longer using it
  
+	// other collators should still work ok
+	Locale nloc = ncol->getLocale(ULOC_VALID_LOCALE, status);
+	if (nloc != fu_FU) {
+		errln(UnicodeString("asked for nloc valid locale after close and got") + nloc.getName());
+	}
+    delete ncol; ncol = NULL;
+
+	if (fufu) {
+		const char* nlocstr = ucol_getLocale(fufu, ULOC_VALID_LOCALE, &status);
+		if (uprv_strcmp(nlocstr, "fu_FU") != 0) {
+			errln(UnicodeString("asked for uloc valid locale after close and got ") + nlocstr);
+	}
+	ucol_close(fufu);
+  }
+	
     ncol = Collator::createInstance(fu_FU, status);
     if (*fucol != *ncol) {
       errln("collator after unregister does not match original fu_FU");
