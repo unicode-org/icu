@@ -54,7 +54,8 @@ static UBool ucbuf_autodetect_nrw(FileStream* in, const char** cp,int* numRead){
            *cp ="SCSU";
            *numRead-=1;
            autodetect = TRUE;
-       }else if(start[0] == '\x00' && start[1] == '\x00' && start[2] == '\xFF' && start[3]=='\xFE'){
+       }else if(start[0] == '\x00' && start[1] == '\x00' && 
+                start[2] == '\xFF' && start[3]=='\xFE'){
             *cp = "UTF32_BigEndian";
             autodetect =TRUE;
        }else{
@@ -112,7 +113,9 @@ ucbuf_fillucbuf( UCHARBUF* buf,UErrorCode* err){
         /* since state is saved in the converter we add offset to source*/
         target = pTarget+offset;
         source = cbuf;
-        ucnv_toUnicode(buf->conv,&target,target+(MAX_U_BUF-offset),&source,source+numRead,NULL,(UBool)(buf->remaining==0),err);
+        ucnv_toUnicode(buf->conv,&target,target+(MAX_U_BUF-offset),
+                        &source,source+numRead,NULL,
+                        (UBool)(buf->remaining==0),err);
         numRead= target-pTarget;
         if(U_FAILURE(*err)){
             return NULL;
@@ -167,24 +170,14 @@ ucbuf_getcx(UCHARBUF* buf,UErrorCode* err) {
     } else {
         c1 = U_EOF;
     }
+    
+    c2 = *(buf->currentPos);
 
     /* If it isn't a backslash, return it */
     if (c1 != 0x005C) {
         return c1;
     }
-
-    c2 = *(buf->currentPos);
-
-    /* Check if the sequence is valid */
-    switch(c2){
-    default:     /* falls through */    
-    case 0x005C: /* '\\' */
-        return c1;
-    case 0x0055: /* '\U' */
-    case 0x0075: /* '\u' */
-    case 0x0078: /* '\x' */
-        break;
-    }
+    
     /* Determine the amount of data in the buffer */
     length = buf->bufLimit-buf->currentPos;
     
@@ -201,8 +194,21 @@ ucbuf_getcx(UCHARBUF* buf,UErrorCode* err) {
     offset = 0;
     c32 = u_unescapeAt(_charAt, &offset, length, (void*)buf);
 
-    /* Update the current buffer position */
-    buf->currentPos += offset;
+    /* check if u_unescapeAt unescaped and converted
+     * to c32 or not
+     */
+    if(c32!=c2){
+        /* Update the current buffer position */
+        buf->currentPos += offset;
+    }else{
+        /* unescaping failed so we just return 
+         * c1 and not consume the buffer
+         * this is useful for rules with escapes
+         * in resouce bundles
+         * eg: \' \\ \"
+         */
+        return c1;
+    }
 
     return c32;
 }
