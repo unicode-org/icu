@@ -114,7 +114,7 @@ static void
 version()
 {
   printf("rbdump version %s (ICU version %s).\n", 
-	 RBDUMP_VERSION, ICU_VERSION);
+	 RBDUMP_VERSION, U_ICU_VERSION);
   puts(U_COPYRIGHT_STRING);
 }
 
