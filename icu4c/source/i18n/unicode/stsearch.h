@@ -249,7 +249,7 @@ public:
      * and iterate over the same text, as the one passed in.
      * @param that instance to be copied.
      */
-    virtual StringSearch & operator=(const StringSearch &that);
+    StringSearch & operator=(const StringSearch &that);
 
     /**
      * Equality operator. 

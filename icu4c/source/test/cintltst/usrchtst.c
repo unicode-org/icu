@@ -32,7 +32,7 @@ static void open()
     if (TOCLOSE_) {
         UErrorCode  status = U_ZERO_ERROR;
         UChar      rules[1024];
-        int        rulelength = 0;
+        int32_t    rulelength = 0;
 
         EN_US_ = ucol_open("en_US", &status);
         FR_FR_ = ucol_open("fr_FR", &status);
@@ -172,8 +172,8 @@ static void TestOpenClose()
 {
           UErrorCode      status    = U_ZERO_ERROR;
           UStringSearch  *result;
-    const UChar           pattern[32];
-    const UChar           text[128] ;
+    const UChar           pattern[] = {0x61, 0x62, 0x63, 0x64, 0x65, 0x66};
+    const UChar           text[] = {0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67};
           UBreakIterator *breakiter = ubrk_open(UBRK_WORD, "en_US", 
                                                 text, 6, &status);
     /* testing null arguments */
@@ -253,10 +253,10 @@ static void TestOpenClose()
 
 static void TestInitialization() 
 {
-          UErrorCode      status    = U_ZERO_ERROR;
+          UErrorCode      status = U_ZERO_ERROR;
           UChar           pattern[512];
-    const UChar           text[128];
-          UStringSearch  *result;
+    const UChar           text[] = {0x61, 0x62, 0x63, 0x64, 0x65, 0x66};
+    UStringSearch  *result;
 
     /* simple test on the pattern ce construction */
     pattern[0] = 0x41;
@@ -1049,10 +1049,10 @@ static void TestGetSetOffset()
 
 static void TestGetSetAttribute() 
 {
-          UErrorCode      status    = U_ZERO_ERROR;
-          UChar           pattern[32];
-    const UChar           text[128];
-          UStringSearch  *strsrch;
+    UErrorCode      status    = U_ZERO_ERROR;
+    UChar           pattern[32];
+    UChar           text[128];
+    UStringSearch  *strsrch;
           
     open();
     if (usearch_getAttribute(NULL, USEARCH_OVERLAP) != USEARCH_DEFAULT ||
