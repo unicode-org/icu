@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $ 
-* $Date: 2002/10/25 22:05:19 $ 
-* $Revision: 1.22 $
+* $Date: 2002/11/20 19:14:08 $ 
+* $Revision: 1.23 $
 *
 *******************************************************************************
 */
@@ -1651,7 +1651,8 @@ public final class RuleBasedCollator extends Collator
                 }
             }
             catch (Exception e) {
-                 // if failed use UCA.
+                e.printStackTrace();
+                // if failed use UCA.
             }
 	    }
 	    setWithUCAData();
@@ -1767,7 +1768,7 @@ public final class RuleBasedCollator extends Collator
 	 * Minimum size required for the binary collation data in bytes.
 	 * Size of UCA header + size of options to 4 bytes
 	 */
-	private static final int MIN_BINARY_DATA_SIZE_ = (42 + 8) << 2;     
+	private static final int MIN_BINARY_DATA_SIZE_ = (42 + 24) << 2;     
 	
 	/**
 	 * If this collator is to generate only simple tertiaries for fast path
