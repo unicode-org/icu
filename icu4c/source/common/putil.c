@@ -755,20 +755,138 @@ u_setDataDirectory(const char *directory) {
 #ifndef ICU_DATA_DIR
 
 # if defined(XP_MAC)
-/*
-  We need FSpGetFullPath() from Apple Sample Code's "MoreFiles". Look in:
-    http://developer.apple.com/samplecode/Sample_Code/Files/MoreFiles.htm
-  and replace the following function..
-*/
 
- /* Dummy FSpGetFullPath */
-pascal OSErr FSpGetFullPath(const FSSpec *spec,
-                            short *fullPathLength,
-                            Handle *fullPath)
+/* Kouichi added the following internal functions for MAC porting */
+
+pascal  OSErr   FSMakeFSSpecCompat(short vRefNum,
+                                   long dirID,
+                                   ConstStr255Param fileName,
+                                   FSSpec *spec)
 {
-    *fullPath = NULL;
+    OSErr   result;
+    
+    /* Let the file system create the FSSpec if it can since it does the job */
+    /* much more efficiently than I can. */
+    result = FSMakeFSSpec(vRefNum, dirID, fileName, spec);
+    
+    /* Fix a bug in Macintosh PC Exchange's MakeFSSpec code where 0 is */
+    /* returned in the parID field when making an FSSpec to the volume's */
+    /* root directory by passing a full pathname in MakeFSSpec's */
+    /* fileName parameter. Fixed in Mac OS 8.1 */
+    if ( (result == noErr) && (spec->parID == 0) )
+        spec->parID = fsRtParID;
+    
+    return ( result );
+}
+
+
+/* FSpGetFullPath */
+pascal  OSErr   FSpGetFullPath(const FSSpec *spec,
+                               short *fullPathLength,
+                               Handle *fullPath)
+{
+    OSErr       result;
+    OSErr       realResult;
+    FSSpec      tempSpec;
+    CInfoPBRec  pb;
+    
     *fullPathLength = 0;
-    return fnfErr; 
+    *fullPath = NULL;
+    
+    
+    /* Default to noErr */
+    realResult = result = noErr;
+    
+    /* work around Nav Services "bug" (it returns invalid FSSpecs with empty names) */
+    if ( spec->name[0] == 0 )
+    {
+        result = FSMakeFSSpecCompat(spec->vRefNum, spec->parID, spec->name, &tempSpec);
+    }
+    else
+    {
+        /* Make a copy of the input FSSpec that can be modified */
+        BlockMoveData(spec, &tempSpec, sizeof(FSSpec));
+    }
+    
+    if ( result == noErr )
+    {
+        if ( tempSpec.parID == fsRtParID )
+        {
+            /* The object is a volume */
+            
+            /* Add a colon to make it a full pathname */
+            ++tempSpec.name[0];
+            tempSpec.name[tempSpec.name[0]] = ':';
+            
+            /* We're done */
+            result = PtrToHand(&tempSpec.name[1], fullPath, tempSpec.name[0]);
+        }
+        else
+        {
+            /* The object isn't a volume */
+            
+            /* Is the object a file or a directory? */
+            pb.dirInfo.ioNamePtr = tempSpec.name;
+            pb.dirInfo.ioVRefNum = tempSpec.vRefNum;
+            pb.dirInfo.ioDrDirID = tempSpec.parID;
+            pb.dirInfo.ioFDirIndex = 0;
+            result = PBGetCatInfoSync(&pb);
+            /* Allow file/directory name at end of path to not exist. */
+            realResult = result;
+            if ( (result == noErr) || (result == fnfErr) )
+            {
+                /* if the object is a directory, append a colon so full pathname ends with colon */
+                if ( (result == noErr) && (pb.hFileInfo.ioFlAttrib & kioFlAttribDirMask) != 0 )
+                {
+                    ++tempSpec.name[0];
+                    tempSpec.name[tempSpec.name[0]] = ':';
+                }
+                
+                /* Put the object name in first */
+                result = PtrToHand(&tempSpec.name[1], fullPath, tempSpec.name[0]);
+                if ( result == noErr )
+                {
+                    /* Get the ancestor directory names */
+                    pb.dirInfo.ioNamePtr = tempSpec.name;
+                    pb.dirInfo.ioVRefNum = tempSpec.vRefNum;
+                    pb.dirInfo.ioDrParID = tempSpec.parID;
+                    do  /* loop until we have an error or find the root directory */
+                    {
+                        pb.dirInfo.ioFDirIndex = -1;
+                        pb.dirInfo.ioDrDirID = pb.dirInfo.ioDrParID;
+                        result = PBGetCatInfoSync(&pb);
+                        if ( result == noErr )
+                        {
+                            /* Append colon to directory name */
+                            ++tempSpec.name[0];
+                            tempSpec.name[tempSpec.name[0]] = ':';
+                            
+                            /* Add directory name to beginning of fullPath */
+                            (void) Munger(*fullPath, 0, NULL, 0, &tempSpec.name[1], tempSpec.name[0]);
+                            result = MemError();
+                        }
+                    } while ( (result == noErr) && (pb.dirInfo.ioDrDirID != fsRtDirID) );
+                }
+            }
+        }
+    }
+    
+    if ( result == noErr )
+    {
+        /* Return the length */
+        *fullPathLength = GetHandleSize(*fullPath);
+        result = realResult;    /* return realResult in case it was fnfErr */
+    }
+    else
+    {
+        /* Dispose of the handle and return NULL and zero length */
+        if ( *fullPath != NULL )
+        {
+            DisposeHandle(*fullPath);
+        }
+    }
+    
+    return result;
 }
 # endif /* XP_MAC */
 
@@ -781,9 +899,12 @@ pascal OSErr FSpGetFullPath(const FSSpec *spec,
 static int
 getSystemPath(char *path, int size) {
 #if defined(XP_MAC)
+    int32_t dirID;
+    OSErr err
     int16_t volNum;
+
     path[0]=0;
-    OSErr err=GetVol((unsigned char*)path, &volNum);
+    err=HGetVol((unsigned char*)path, &volNum, &dirID);
     if(err==noErr) {
         int length=(uint8_t)path[0];
         if(length>0) {
@@ -1082,15 +1203,7 @@ u_getDataDirectory(void) {
 #       if !defined(XP_MAC)
             /* first try to get the environment variable */
             path=getenv("ICU_DATA");
-/*         fprintf(stderr, " ******** ICU_DATA=%s ********** \n", path); */
-/*         { */
-/*           int i; */
-/*           fprintf(stderr, "E=%08X\n", __environ); */
-/*           if(__environ) */
-/*           for(i=0;__environ[i] && __environ[i][0];i++) */
-/*         puts(__environ[i]); */
-/*         } */
-#else    /* XP_MAC */
+#       else    /* XP_MAC */
         {
             OSErr myErr;
             short vRef;
@@ -1103,10 +1216,10 @@ u_getDataDirectory(void) {
 
             xpath[0]=0;
 
-            myErr = GetVol(xpath, &volNum);
+            myErr = HGetVol(xpath, &volNum, &dir);
 
             if(myErr == noErr) {
-                myErr = FindFolder(volNum, kApplicationSupportFolderType, TRUE, & vRef, &dir);
+                myErr = FindFolder(volNum, kApplicationSupportFolderType, TRUE, &vRef, &dir);
                 newDir=-1;
                 if (myErr == noErr) {
                     myErr = DirCreate(volNum,
@@ -1218,103 +1331,104 @@ uprv_isOS390BatchMode() {
 /* Macintosh-specific locale information ------------------------------------ */
 #ifdef XP_MAC
 
-struct mac_lc_rec {
-  int32_t script;
-  int32_t region;
-  int32_t lang;
-  int32_t date_region;
-  char* posixID;
-};
-/* To do: This will be updated with a newer version from www.unicode.org web
+typedef struct {
+    int32_t script;
+    int32_t region;
+    int32_t lang;
+    int32_t date_region;
+    char* posixID;
+} mac_lc_rec;
+
+/* Todo: This will be updated with a newer version from www.unicode.org web
    page when it's available.*/
 #define MAC_LC_MAGIC_NUMBER -5
 #define MAC_LC_INIT_NUMBER -9
 
 mac_lc_rec mac_lc_recs[] = {
-  MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 0, "en_US",  
-  /* United States*/
-  MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 1, "fr_FR",  
-  /* France*/
-  MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 2, "en_GB",  
-  /* Great Britain*/
-  MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 3, "de_DE",  
-  /* Germany*/
-  MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 4, "it_IT",  
-  /* Italy*/
-  MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 5, "nl_NL", 
-  /* Metherlands*/
-  MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 6, "fr_BE", 
-  /* French for Belgium or Lxembourg*/
-  MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 7, "sv_SE", 
-  /* Sweden*/
-  MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 9, "da_DK", 
-  /* Denmark*/
-  MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 10, "pt_PT", 
-  /* Portugal*/
-  MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 11, "fr_CA", 
-  /* French Canada*/
-  MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 13, "is_IS", 
-  /* Israel*/
-  MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 14, "ja_JP", 
-  /* Japan*/
-  MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 15, "en_AU", 
-  /* Australia*/
-  MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 16, "ar_AE", 
-  /* the Arabic world (?)*/
-  MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 17, "fi_FI", 
-  /* Finland*/
-  MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 18, "fr_CH", 
-  /* French for Switzerland*/
-  MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 19, "de_CH", 
-  /* German for Switzerland*/
-  MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 20, "EL_GR", 
-  /* Greece*/
-  MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 21, "is_IS", 
-  /* Iceland ===*/
-  /*MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 22, "", 
-    // Malta ===*/
-  /*MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 23, "", 
-    // Cyprus ===*/
-  MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 24, "tr_TR", 
-  /* Turkey ===*/
-  MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 25, "sh_YU", 
-  /* Croatian system for Yugoslavia*/
-  /*MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 33, "", 
-    // Hindi system for India*/
-  /*MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 34, "", 
-    // Pakistan*/
-  MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 41, "lt_LT", 
-  /* Lithuania*/
-  MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 42, "pl_PL", 
-  /* Poland*/
-  MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 43, "hu_HU", 
-  /* Hungary*/
-  MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 44, "et_EE", 
-  /* Estonia*/
-  MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 45, "lv_LV", 
-  /* Latvia*/
-  /*MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 46, "", 
-    // Lapland  [Ask Rich for the data. HS]*/
-  /*MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 47, "", 
-    // Faeroe Islands*/
-  MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 48, "fa_IR", 
-  /* Iran*/
-  MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 49, "ru_RU", 
-  /* Russia*/
-  MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 50, "en_IE", 
-  /* Ireland*/
-  MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 51, "ko_KR", 
-  /* Korea*/
-  MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 52, "zh_CN", 
-  /* People's Republic of China*/
-  MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 53, "zh_TW", 
-  /* Taiwan*/
-  MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 54, "th_TH", 
-  /* Thailand*/
-  
-  /* fallback is en_US*/
-  MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 
-  MAC_LC_MAGIC_NUMBER, "en_US"
+    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 0, "en_US",
+    /* United States*/
+    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 1, "fr_FR",
+    /* France*/
+    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 2, "en_GB",
+    /* Great Britain*/
+    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 3, "de_DE",
+    /* Germany*/
+    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 4, "it_IT",
+    /* Italy*/
+    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 5, "nl_NL",
+    /* Metherlands*/
+    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 6, "fr_BE",
+    /* French for Belgium or Lxembourg*/
+    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 7, "sv_SE",
+    /* Sweden*/
+    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 9, "da_DK",
+    /* Denmark*/
+    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 10, "pt_PT",
+    /* Portugal*/
+    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 11, "fr_CA",
+    /* French Canada*/
+    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 13, "is_IS",
+    /* Israel*/
+    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 14, "ja_JP",
+    /* Japan*/
+    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 15, "en_AU",
+    /* Australia*/
+    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 16, "ar_AE",
+    /* the Arabic world (?)*/
+    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 17, "fi_FI",
+    /* Finland*/
+    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 18, "fr_CH",
+    /* French for Switzerland*/
+    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 19, "de_CH",
+    /* German for Switzerland*/
+    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 20, "EL_GR",
+    /* Greece*/
+    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 21, "is_IS",
+    /* Iceland ===*/
+    /*MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 22, "",*/
+    /* Malta ===*/
+    /*MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 23, "",*/
+    /* Cyprus ===*/
+    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 24, "tr_TR",
+    /* Turkey ===*/
+    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 25, "sh_YU",
+    /* Croatian system for Yugoslavia*/
+    /*MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 33, "",*/
+    /* Hindi system for India*/
+    /*MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 34, "",*/
+    /* Pakistan*/
+    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 41, "lt_LT",
+    /* Lithuania*/
+    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 42, "pl_PL",
+    /* Poland*/
+    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 43, "hu_HU",
+    /* Hungary*/
+    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 44, "et_EE",
+    /* Estonia*/
+    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 45, "lv_LV",
+    /* Latvia*/
+    /*MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 46, "",*/
+    /* Lapland  [Ask Rich for the data. HS]*/
+    /*MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 47, "",*/
+    /* Faeroe Islands*/
+    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 48, "fa_IR",
+    /* Iran*/
+    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 49, "ru_RU",
+    /* Russia*/
+    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 50, "en_IE",
+    /* Ireland*/
+    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 51, "ko_KR",
+    /* Korea*/
+    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 52, "zh_CN",
+    /* People's Republic of China*/
+    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 53, "zh_TW",
+    /* Taiwan*/
+    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 54, "th_TH",
+    /* Thailand*/
+
+    /* fallback is en_US*/
+    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER,
+    MAC_LC_MAGIC_NUMBER, "en_US"
 };
 
 #endif
@@ -1418,14 +1532,15 @@ uprv_getDefaultLocaleID()
   /* = GetScriptManagerVariable(smScriptLang);*/
   int32_t date_region = MAC_LC_INIT_NUMBER;
   char* posixID = 0;
+  int32_t count = sizeof(mac_lc_recs) / sizeof(mac_lc_rec);
+  int32_t i;
   Intl1Hndl ih;
   
   ih = (Intl1Hndl) GetIntlResource(1);
   if (ih)
     date_region = ((uint16_t)(*ih)->intl1Vers) >> 8;
   
-  int32_t count = sizeof(mac_lc_recs) / sizeof(mac_lc_rec);
-  for (int32_t i = 0; i < count; i++) {
+  for (i = 0; i < count; i++) {
     if ( ((mac_lc_recs[i].script == MAC_LC_MAGIC_NUMBER)      
       || (mac_lc_recs[i].script == script))
      && ((mac_lc_recs[i].region == MAC_LC_MAGIC_NUMBER)
