@@ -21,6 +21,10 @@
 #include "cstring.h"
 #include "unicode/udata.h"
 
+#if OS390
+#include <stdlib.h>
+#endif
+
 /* configuration ------------------------------------------------------------ */
 
 #if !defined(HAVE_DLOPEN)
@@ -725,6 +729,9 @@ openCommonData(UDataMemory *pData,
 #   endif
     const char *inBasename;
     char *basename, *suffix;
+#ifdef OS390
+    char *batchmode=getenv("OS390BATCH");
+#endif
 
     /* "mini-cache" for common ICU data */
     if(isICUData && IS_DATA_MEMORY_LOADED(&commonICUData)) {
@@ -763,7 +770,8 @@ openCommonData(UDataMemory *pData,
         uprv_strcpy(suffix, LIB_SUFFIX);
 
         /* try path/basename first */
-#       ifdef OS390BATCH
+#       ifdef OS390
+        if (batchmode) {
             /* ### hack: we still need to get u_getDataDirectory() fixed
                for OS/390 (batch mode - always return "//"? )
                and this here straightened out with LIB_PREFIX and LIB_SUFFIX (both empty?!)
@@ -779,9 +787,10 @@ openCommonData(UDataMemory *pData,
                 /*lib=LOAD_LIBRARY("//" U_ICUDATA_NAME, "//" U_ICUDATA_NAME);*/
                 lib=LOAD_LIBRARY("//IXMICUDA", "//IXMICUDA"); /*390port*/
             }
-#       else
-            lib=LOAD_LIBRARY(pathBuffer, basename);
+        }
+        else
 #       endif
+            lib=LOAD_LIBRARY(pathBuffer, basename);
         if(!IS_LIBRARY(lib) && basename!=pathBuffer) {
             /* try basename only next */
             lib=LOAD_LIBRARY(basename, basename);
