@@ -23,6 +23,7 @@ TestDataModule *TestDataModule::getTestDataModule(const char* name, TestLog& log
   if(U_SUCCESS(status)) {
     return result;
   } else {
+    delete result;
     return NULL;
   }
 }
@@ -94,16 +95,25 @@ TestData* RBTestDataModule::createTestData(int32_t index, UErrorCode &status) co
   TestData *result = NULL;
   UErrorCode intStatus = U_ZERO_ERROR;
 
-  // Both of these resources get adopted by a TestData object.
-  UResourceBundle *DataFillIn = ures_getByIndex(fTestData, index, NULL, &status); 
-  UResourceBundle *headers = ures_getByKey(info, "Headers", NULL, &intStatus);
+  if(fDataTestValid == TRUE) {
+    // Both of these resources get adopted by a TestData object.
+    UResourceBundle *DataFillIn = ures_getByIndex(fTestData, index, NULL, &status); 
+    UResourceBundle *headers = ures_getByKey(info, "Headers", NULL, &intStatus);
   
-  if(U_SUCCESS(status)) {
-    result = new RBTestData(DataFillIn, headers, status);
-
     if(U_SUCCESS(status)) {
-      return result;
+      result = new RBTestData(DataFillIn, headers, status);
+
+      if(U_SUCCESS(status)) {
+        return result;
+      } else {
+        delete result;
+      }
+    } else {
+      ures_close(DataFillIn);
+      ures_close(headers);
     }
+  } else {
+    status = U_MISSING_RESOURCE_ERROR;
   }
   return NULL;
 }
@@ -113,15 +123,24 @@ TestData* RBTestDataModule::createTestData(const char* name, UErrorCode &status)
   TestData *result = NULL;
   UErrorCode intStatus = U_ZERO_ERROR;
 
-  // Both of these resources get adopted by a TestData object.
-  UResourceBundle *DataFillIn = ures_getByKey(fTestData, name, NULL, &status); 
-  UResourceBundle *headers = ures_getByKey(info, "Headers", NULL, &intStatus);
+  if(fDataTestValid == TRUE) {
+    // Both of these resources get adopted by a TestData object.
+    UResourceBundle *DataFillIn = ures_getByKey(fTestData, name, NULL, &status); 
+    UResourceBundle *headers = ures_getByKey(info, "Headers", NULL, &intStatus);
    
-  if(U_SUCCESS(status)) {
-    result = new RBTestData(DataFillIn, headers, status);
     if(U_SUCCESS(status)) {
-      return result;
+      result = new RBTestData(DataFillIn, headers, status);
+      if(U_SUCCESS(status)) {
+        return result;
+      } else {
+        delete result;
+      }
+    } else {
+      ures_close(DataFillIn);
+      ures_close(headers);
     }
+  } else {
+    status = U_MISSING_RESOURCE_ERROR;
   }
   return NULL;
 }
