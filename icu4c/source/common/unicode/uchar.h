@@ -514,6 +514,37 @@ U_CAPI bool_t U_EXPORT2
 u_isspace(UChar32 c);
 
 /**
+ * Determines if the specified character is white space according to ICU.
+ * A character is considered to be an ICU whitespace character if and only
+ * if it satisfies one of the following criteria:
+ * <ul>
+ * <li> It is a Unicode space separator (category "Zs"), but is not
+ *      a no-break space (&#92;u00A0 or &#92;uFEFF).
+ * <li> It is a Unicode line separator (category "Zl").
+ * <li> It is a Unicode paragraph separator (category "Zp").
+ * <li> It is &#92;u0009, HORIZONTAL TABULATION.
+ * <li> It is &#92;u000A, LINE FEED.
+ * <li> It is &#92;u000B, VERTICAL TABULATION.
+ * <li> It is &#92;u000C, FORM FEED.
+ * <li> It is &#92;u000D, CARRIAGE RETURN.
+ * <li> It is &#92;u001C, FILE SEPARATOR.
+ * <li> It is &#92;u001D, GROUP SEPARATOR.
+ * <li> It is &#92;u001E, RECORD SEPARATOR.
+ * <li> It is &#92;u001F, UNIT SEPARATOR.
+ * </ul>
+ * Note: This method corresponds to the Java method
+ * <tt>java.lang.Character.isWhitespace()</tt>.
+ *
+ * @param   ch	the character to be tested.
+ * @return  true if the character is an ICU whitespace character;
+ *          false otherwise.
+ * @see     #isspace
+ * @draft
+ */
+U_CAPI bool_t U_EXPORT2
+u_isWhitespace(UChar32 c);
+
+/**
  * Determines whether the specified character is a control character or not.
  *
  * @param ch    the character to be tested
