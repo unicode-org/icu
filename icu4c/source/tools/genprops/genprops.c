@@ -500,8 +500,6 @@ unicodeDataLineFn(void *context,
 
     /* reset the properties */
     uprv_memset(&p, 0, sizeof(Props));
-    p.decimalDigitValue=p.digitValue=-1;
-    p.numericValue=0x80000000;
 
     /* get the character code, field 0 */
     p.code=(uint32_t)uprv_strtoul(fields[0][0], &end, 16);
@@ -518,15 +516,6 @@ unicodeDataLineFn(void *context,
     } else {
         fprintf(stderr, "genprops: unknown general category \"%s\" at code 0x%lx\n",
             fields[2][0], (unsigned long)p.code);
-        *pErrorCode=U_PARSE_ERROR;
-        exit(U_PARSE_ERROR);
-    }
-
-    /* get canonical combining class, field 3 */
-    p.canonicalCombining=(uint8_t)uprv_strtoul(fields[3][0], &end, 10);
-    if(end<=fields[3][0] || end!=fields[3][1]) {
-        fprintf(stderr, "genprops: syntax error in field 3 at code 0x%lx\n",
-            (unsigned long)p.code);
         *pErrorCode=U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
     }
@@ -551,7 +540,7 @@ unicodeDataLineFn(void *context,
             *pErrorCode=U_PARSE_ERROR;
             exit(U_PARSE_ERROR);
         }
-        p.decimalDigitValue=(int16_t)value;
+        p.numericValue=(int32_t)value;
         p.numericType=1;
     }
 
@@ -564,9 +553,14 @@ unicodeDataLineFn(void *context,
             *pErrorCode=U_PARSE_ERROR;
             exit(U_PARSE_ERROR);
         }
-        p.digitValue=(int16_t)value;
         if(p.numericType==0) {
+            p.numericValue=(int32_t)value;
             p.numericType=2;
+        } else if((int32_t)value!=p.numericValue) {
+            fprintf(stderr, "genprops error: numeric values in fields 6 & 7 different at code 0x%lx\n",
+                (unsigned long)p.code);
+            *pErrorCode=U_PARSE_ERROR;
+            exit(U_PARSE_ERROR);
         }
     }
 
@@ -586,6 +580,13 @@ unicodeDataLineFn(void *context,
         value=(uint32_t)uprv_strtoul(s, &end, 10);
         if(value>0 && *end=='/') {
             /* field 8 may contain a fractional value, get the denominator */
+            if(p.numericType>0) {
+                fprintf(stderr, "genprops error: numeric values in fields 6..8 different at code 0x%lx\n",
+                    (unsigned long)p.code);
+                *pErrorCode=U_PARSE_ERROR;
+                exit(U_PARSE_ERROR);
+            }
+
             p.denominator=(uint32_t)uprv_strtoul(end+1, &end, 10);
             if(p.denominator==0) {
                 fprintf(stderr, "genprops: denominator is 0 in field 8 at code 0x%lx\n",
@@ -601,13 +602,18 @@ unicodeDataLineFn(void *context,
             exit(U_PARSE_ERROR);
         }
 
-        if(isNegative) {
-            p.numericValue=-(int32_t)value;
-        } else {
-            p.numericValue=(int32_t)value;
-        }
         if(p.numericType==0) {
+            if(isNegative) {
+                p.numericValue=-(int32_t)value;
+            } else {
+                p.numericValue=(int32_t)value;
+            }
             p.numericType=3;
+        } else if((int32_t)value!=p.numericValue) {
+            fprintf(stderr, "genprops error: numeric values in fields 6..8 different at code 0x%lx\n",
+                (unsigned long)p.code);
+            *pErrorCode=U_PARSE_ERROR;
+            exit(U_PARSE_ERROR);
         }
     }
 
