@@ -80,9 +80,16 @@ ContractionTable *addATableElement(CntTable *table, uint32_t *key, UErrorCode *s
 
     *key = table->size++;
 
-    if(table->size > table->capacity) {
+    if(table->size == table->capacity) {
         // do realloc
-        *status = U_MEMORY_ALLOCATION_ERROR;
+        table->elements = (ContractionTable **)realloc(table->elements, table->capacity*2*sizeof(ContractionTable *));
+        memset(table->elements+table->capacity, 0, table->capacity*sizeof(ContractionTable *));
+        if(table->elements == NULL) {
+          fprintf(stderr, "out of memory for contraction parts\n");
+          *status = U_MEMORY_ALLOCATION_ERROR;
+        } else {
+          table->capacity *= 2;
+        }
     }
 
     return el;
