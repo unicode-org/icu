@@ -44,6 +44,7 @@ static void TestJ1968(void);
 static void TestLMBCSMaxChar(void);
 static void TestConvertSafeCloneCallback(void);
 static void TestEBCDICSwapLFNL(void);
+static void TestConvertEx(void);
 
 void addTestConvert(TestNode** root);
 
@@ -61,6 +62,7 @@ void addTestConvert(TestNode** root)
     addTest(root, &TestJ1968,   "tsconv/ccapitst/TestJ1968");
     addTest(root, &TestLMBCSMaxChar,   "tsconv/ccapitst/TestLMBCSMaxChar");
     addTest(root, &TestEBCDICSwapLFNL,   "tsconv/ccapitst/TestEBCDICSwapLFNL");
+    addTest(root, &TestConvertEx,   "tsconv/ccapitst/TestConvertEx");
 }
 
 static void ListNames(void) {
@@ -1739,7 +1741,7 @@ static void TestCCSID() {
 /* jitterbug 932: ucnv_convert() bugs --------------------------------------- */
 
 /* CHUNK_SIZE defined in common\ucnv.c: */
-#define CHUNK_SIZE 5*1024
+#define CHUNK_SIZE 1024
 
 static void bug1(void);
 static void bug2(void);
@@ -1937,6 +1939,239 @@ static void bug3()
          * bug2 would lead us to expect 0x2805, but it isn't that either, it is 0x3c05:
          */
         log_data_err("error j932 bug 3b: expected 0x%04x, got 0x%04x\n", sizeof(char_in) * 2, size);
+    }
+}
+
+static void
+convertExStreaming(UConverter *srcCnv, UConverter *targetCnv,
+                   const char *src, int32_t srcLength,
+                   const char *expectTarget, int32_t expectTargetLength,
+                   int32_t chunkSize,
+                   const char *testName,
+                   UErrorCode expectCode) {
+    UChar pivotBuffer[CHUNK_SIZE];
+    UChar *pivotSource, *pivotTarget;
+    const UChar *pivotLimit;
+
+    char targetBuffer[CHUNK_SIZE];
+    char *target;
+    const char *srcLimit, *finalSrcLimit, *targetLimit;
+
+    int32_t targetLength;
+
+    UBool flush;
+
+    UErrorCode errorCode;
+
+    /* setup */
+    if(chunkSize>CHUNK_SIZE) {
+        chunkSize=CHUNK_SIZE;
+    }
+
+    pivotSource=pivotTarget=pivotBuffer;
+    pivotLimit=pivotBuffer+chunkSize;
+
+    finalSrcLimit=src+srcLength;
+    target=targetBuffer;
+    targetLimit=targetBuffer+chunkSize;
+
+    ucnv_resetToUnicode(srcCnv);
+    ucnv_resetFromUnicode(targetCnv);
+
+    errorCode=U_ZERO_ERROR;
+    flush=FALSE;
+
+    /* convert, streaming-style (both converters and pivot keep state) */
+    for(;;) {
+        /* for testing, give ucnv_convertEx() at most <chunkSize> input/pivot/output units at a time */
+        if(src+chunkSize<=finalSrcLimit) {
+            srcLimit=src+chunkSize;
+        } else {
+            srcLimit=finalSrcLimit;
+        }
+        ucnv_convertEx(targetCnv, srcCnv,
+                       &target, targetLimit,
+                       &src, srcLimit,
+                       pivotBuffer, &pivotSource, &pivotTarget, pivotLimit,
+                       FALSE, flush, &errorCode);
+        targetLength=(int32_t)(target-targetBuffer);
+        if(errorCode==U_BUFFER_OVERFLOW_ERROR) {
+            /* continue converting another chunk */
+            errorCode=U_ZERO_ERROR;
+            if(targetLength+chunkSize<=sizeof(targetBuffer)) {
+                targetLimit=target+chunkSize;
+            } else {
+                targetLimit=targetBuffer+sizeof(targetBuffer);
+            }
+        } else if(U_FAILURE(errorCode)) {
+            /* failure */
+            break;
+        } else if(flush) {
+            /* all done */
+            break;
+        } else if(src==finalSrcLimit && pivotSource==pivotTarget) {
+            /* all consumed, now flush without input (separate from conversion for testing) */
+            flush=TRUE;
+        }
+    }
+
+    if(!(errorCode==expectCode || (expectCode==U_ZERO_ERROR && errorCode==U_STRING_NOT_TERMINATED_WARNING))) {
+        log_err("ucnv_convertEx(%s) chunk[%d] results in %s instead of %s\n",
+                testName, chunkSize, u_errorName(errorCode), u_errorName(expectCode));
+    } else if(targetLength!=expectTargetLength) {
+        log_err("ucnv_convertEx(%s) chunk[%d] writes %d bytes instead of %d\n",
+                testName, chunkSize, targetLength, expectTargetLength);
+    } else if(memcmp(targetBuffer, expectTarget, targetLength)!=0) {
+        log_err("ucnv_convertEx(%s) chunk[%d] writes different bytes than expected\n",
+                testName, chunkSize);
+    }
+}
+
+static void
+convertExMultiStreaming(UConverter *srcCnv, UConverter *targetCnv,
+                        const char *src, int32_t srcLength,
+                        const char *expectTarget, int32_t expectTargetLength,
+                        const char *testName,
+                        UErrorCode expectCode) {
+    convertExStreaming(srcCnv, targetCnv,
+                       src, srcLength,
+                       expectTarget, expectTargetLength,
+                       1, testName, expectCode);
+    convertExStreaming(srcCnv, targetCnv,
+                       src, srcLength,
+                       expectTarget, expectTargetLength,
+                       3, testName, expectCode);
+    convertExStreaming(srcCnv, targetCnv,
+                       src, srcLength,
+                       expectTarget, expectTargetLength,
+                       7, testName, expectCode);
+}
+
+static void TestConvertEx() {
+    static const uint8_t
+    utf8[]={
+        /* 4e00           30a1              ff61              0410 */
+        0xe4, 0xb8, 0x80, 0xe3, 0x82, 0xa1, 0xef, 0xbd, 0xa1, 0xd0, 0x90
+    },
+    shiftJIS[]={
+        0x88, 0xea, 0x83, 0x40, 0xa1, 0x84, 0x40
+    },
+    errorTarget[]={
+        /*
+         * expected output when converting shiftJIS[] from UTF-8 to Shift-JIS:
+         * SUB, SUB, 0x40, SUB, SUB, 0x40
+         */
+        0x81, 0xa1, 0x81, 0xa1, 0x40, 0x81, 0xa1, 0x81, 0xa1, 0x40
+    };
+
+    char srcBuffer[100], targetBuffer[100];
+
+    const char *src;
+    char *target;
+
+    UChar pivotBuffer[100];
+    UChar *pivotSource, *pivotTarget;
+
+    UConverter *cnv1, *cnv2;
+    UErrorCode errorCode;
+
+    errorCode=U_ZERO_ERROR;
+    cnv1=ucnv_open("UTF-8", &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("unable to open a UTF-8 converter - %s\n", u_errorName(errorCode));
+    }
+
+    cnv2=ucnv_open("Shift-JIS", &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_data_err("unable to open a Shift-JIS converter - %s\n", u_errorName(errorCode));
+        ucnv_close(cnv1);
+    }
+
+    /* test ucnv_convertEx() with streaming conversion style */
+    convertExMultiStreaming(cnv1, cnv2,
+        (const char *)utf8, sizeof(utf8), (const char *)shiftJIS, sizeof(shiftJIS),
+        "UTF-8 -> Shift-JIS", U_ZERO_ERROR);
+
+    convertExMultiStreaming(cnv2, cnv1,
+        (const char *)shiftJIS, sizeof(shiftJIS), (const char *)utf8, sizeof(utf8),
+        "Shift-JIS -> UTF-8", U_ZERO_ERROR);
+
+    /* U_ZERO_ERROR because by default the SUB callbacks are set */
+    convertExMultiStreaming(cnv1, cnv2,
+        (const char *)shiftJIS, sizeof(shiftJIS), (const char *)errorTarget, sizeof(errorTarget),
+        "shiftJIS[] UTF-8 -> Shift-JIS", U_ZERO_ERROR);
+
+    /* test some simple conversions */
+
+    /* NUL-terminated source and target */
+    errorCode=U_STRING_NOT_TERMINATED_WARNING;
+    memcpy(srcBuffer, utf8, sizeof(utf8));
+    srcBuffer[sizeof(utf8)]=0;
+    src=srcBuffer;
+    target=targetBuffer;
+    ucnv_convertEx(cnv2, cnv1, &target, targetBuffer+sizeof(targetBuffer), &src, NULL,
+                   NULL, NULL, NULL, NULL, TRUE, TRUE, &errorCode);
+    if( errorCode!=U_ZERO_ERROR ||
+        target-targetBuffer!=sizeof(shiftJIS) ||
+        *target!=0 ||
+        memcmp(targetBuffer, shiftJIS, sizeof(shiftJIS))!=0
+    ) {
+        log_err("ucnv_convertEx(simple UTF-8 -> Shift_JIS) fails: %s - writes %d bytes, expect %d\n",
+                u_errorName(errorCode), target-targetBuffer, sizeof(shiftJIS));
+    }
+
+    /* NUL-terminated source and U_STRING_NOT_TERMINATED_WARNING */
+    errorCode=U_AMBIGUOUS_ALIAS_WARNING;
+    memset(targetBuffer, 0xff, sizeof(targetBuffer));
+    src=srcBuffer;
+    target=targetBuffer;
+    ucnv_convertEx(cnv2, cnv1, &target, targetBuffer+sizeof(shiftJIS), &src, NULL,
+                   NULL, NULL, NULL, NULL, TRUE, TRUE, &errorCode);
+    if( errorCode!=U_STRING_NOT_TERMINATED_WARNING ||
+        target-targetBuffer!=sizeof(shiftJIS) ||
+        *target!=(char)0xff ||
+        memcmp(targetBuffer, shiftJIS, sizeof(shiftJIS))!=0
+    ) {
+        log_err("ucnv_convertEx(simple UTF-8 -> Shift_JIS) fails: %s, expect U_STRING_NOT_TERMINATED_WARNING - writes %d bytes, expect %d\n",
+                u_errorName(errorCode), target-targetBuffer, sizeof(shiftJIS));
+    }
+
+    /* bad arguments */
+    errorCode=U_MESSAGE_PARSE_ERROR;
+    src=srcBuffer;
+    target=targetBuffer;
+    ucnv_convertEx(cnv2, cnv1, &target, targetBuffer+sizeof(targetBuffer), &src, NULL,
+                   NULL, NULL, NULL, NULL, TRUE, TRUE, &errorCode);
+    if(errorCode!=U_MESSAGE_PARSE_ERROR) {
+        log_err("ucnv_convertEx(U_MESSAGE_PARSE_ERROR) sets %s\n", u_errorName(errorCode));
+    }
+
+    /* pivotLimit==pivotStart */
+    errorCode=U_ZERO_ERROR;
+    pivotSource=pivotTarget=pivotBuffer;
+    ucnv_convertEx(cnv2, cnv1, &target, targetBuffer+sizeof(targetBuffer), &src, NULL,
+                   pivotBuffer, &pivotSource, &pivotTarget, pivotBuffer, TRUE, TRUE, &errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("ucnv_convertEx(pivotLimit==pivotStart) sets %s\n", u_errorName(errorCode));
+    }
+
+    /* *pivotSource==NULL */
+    errorCode=U_ZERO_ERROR;
+    pivotSource=NULL;
+    ucnv_convertEx(cnv2, cnv1, &target, targetBuffer+sizeof(targetBuffer), &src, NULL,
+                   pivotBuffer, &pivotSource, &pivotTarget, pivotBuffer+1, TRUE, TRUE, &errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("ucnv_convertEx(*pivotSource==NULL) sets %s\n", u_errorName(errorCode));
+    }
+
+    /* *source==NULL */
+    errorCode=U_ZERO_ERROR;
+    src=NULL;
+    pivotSource=pivotBuffer;
+    ucnv_convertEx(cnv2, cnv1, &target, targetBuffer+sizeof(targetBuffer), &src, NULL,
+                   pivotBuffer, &pivotSource, &pivotTarget, pivotBuffer+1, TRUE, TRUE, &errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("ucnv_convertEx(*source==NULL) sets %s\n", u_errorName(errorCode));
     }
 }
 
