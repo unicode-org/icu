@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/DecimalFormat.java,v $ 
- * $Date: 2000/06/01 01:21:34 $ 
- * $Revision: 1.7 $
+ * $Date: 2000/06/01 23:52:17 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -121,9 +121,19 @@ import java.util.Hashtable;
  * <p>The grouping separator is commonly used for thousands, but in some
  * countries it separates ten-thousands. The grouping size is a constant number
  * of digits between the grouping characters, such as 3 for 100,000,000 or 4 for
- * 1,0000,0000.  If you supply a pattern with multiple grouping characters, the
- * interval between the last one and the end of the integer is the one that is
- * used. So "#,##,###,####" == "######,####" == "##,####,####".
+ * 1,0000,0000.
+ * If you supply a pattern with multiple grouping characters, the interval
+ * between the last one and the end of the integer determines the primary
+ * grouping size, and the interval between the last two determines
+ * the secondary grouping size (see below); all others are ignored.
+ * So "#,##,###,####" == "###,###,####" == "##,#,###,####".
+ *
+ * <P>Some locales have two different grouping intervals:  One used for the
+ * least significant integer digits (the primary grouping size), and
+ * one used for all others (the secondary grouping size).  For example,
+ * if the primary grouping interval is 3, and the secondary is 2, then
+ * this corresponds to the pattern "#,##,##0", and the number 123456789
+ * is formatted as "12,34,56,789".
  *
  * <p><code>DecimalFormat</code> parses all Unicode characters that represent
  * decimal digits, as defined by <code>Character.digit()</code>.  In addition,
@@ -680,6 +690,28 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
+     * Return true if a grouping separator belongs at the given
+     * position, based on whether grouping is in use and the values of
+     * the primary and secondary grouping interval.
+     * @param pos the number of integer digits to the right of
+     * the current position.  Zero indicates the position after the
+     * rightmost integer digit.
+     * @return true if a grouping character belongs at the current
+     * position.
+     */
+    private boolean isGroupingPosition(int pos) {
+        boolean result = false;
+        if (isGroupingUsed() && (pos > 0) && (groupingSize > 0)) {
+            if ((groupingSize2 > 0) && (pos > groupingSize)) {
+                result = ((pos - groupingSize) % groupingSize2) == 0;
+            } else {
+                result = pos % groupingSize == 0;
+            }
+        }
+        return result;
+    }
+
+    /**
      * Complete the formatting of a finite number.  On entry, the digitList must
      * be filled in with the correct digits.
      */
@@ -873,19 +905,9 @@ public class DecimalFormat extends NumberFormat {
                     result.append(zero);
                 }
 
-                // Output grouping separator if necessary.  Don't output a
-                // grouping separator if i==0 though; that's at the end of
-                // the integer part.
-                if (isGroupingUsed() && i>0 && (groupingSize != 0)) {
-                    boolean group;
-                    if ((groupingSize2 > 0) && (i > groupingSize)) {
-                        group = ((i - groupingSize) % groupingSize2) == 0;
-                    } else {
-                        group = i % groupingSize == 0;
-                    }
-                    if (group) {
-                        result.append(grouping);
-                    }
+                // Output grouping separator if necessary.
+                if (isGroupingPosition(i)) {
+                    result.append(grouping);
                 }
             }
 
@@ -1774,15 +1796,19 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Return the secondary grouping size. This is usually equal to
-     * the primary grouping size returned by
-     * <code>getGroupingSize()</code>, but in some locales it is
-     * different.  If the primary and secondary grouping sizes differ,
-     * then the primary grouping applies to the first group, and the
-     * secondary grouping applies to all other groups.  E.g., a
-     * primary grouping of 3 and a secondary grouping of 2 yields the
-     * number "12,34,567".
+     * Return the secondary grouping size. In some locales one
+     * grouping interval is used for the least significant integer
+     * digits (the primary grouping size), and another is used for all
+     * others (the secondary grouping size).  A formatter supporting a
+     * secondary grouping size will return a positive integer unequal
+     * to the primary grouping size returned by
+     * <code>getGroupingSize()</code>.  For example, if the primary
+     * grouping size is 4, and the secondary grouping size is 2, then
+     * the number 123456789 formats as "1,23,45,6789", and the pattern
+     * appears as "#,##,###0".
      * [NEW]
+     * @return the secondary grouping size, or a value less than
+     * one if there is none
      * @see #setSecondaryGroupingSize
      * @see NumberFormat#isGroupingUsed
      * @see DecimalFormatSymbols#getGroupingSeparator
@@ -1793,7 +1819,8 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * Set the secondary grouping size. If set to a value less than 1,
-     * then secondary grouping is turned off.
+     * then secondary grouping is turned off, and the primary grouping
+     * size is used for all intervals, not just the least significant.
      * [NEW]
      * @see #getSecondaryGroupingSize
      * @see NumberFormat#setGroupingUsed
@@ -1848,6 +1875,7 @@ public class DecimalFormat extends NumberFormat {
             && negativeSuffix.equals(other.negativeSuffix)
             && multiplier == other.multiplier
             && groupingSize == other.groupingSize
+            && groupingSize2 == other.groupingSize2
             && decimalSeparatorAlwaysShown == other.decimalSeparatorAlwaysShown
             && useExponentialNotation == other.useExponentialNotation
             && (!useExponentialNotation ||
@@ -1964,13 +1992,9 @@ public class DecimalFormat extends NumberFormat {
                 (Math.max(Math.max(g, getMinimumIntegerDigits()),
                           roundingDecimalPos) + 1);
             for (i = maxIntDig; i > 0; --i) {
-                if (isGroupingUsed() && groupingSize != 0 &&
-                    i < maxIntDig && !useExponentialNotation) {
-                    if ((groupingSize2 > 0 && i > groupingSize) ?
-                        ((i - groupingSize) % groupingSize2) == 0 :
-                        i % groupingSize == 0) {
-                        result.append(group);
-                    }
+                if (!useExponentialNotation && i<maxIntDig &&
+                    isGroupingPosition(i)) {
+                    result.append(group);
                 }
                 if (roundingDigits != null) {
                     int pos = roundingDecimalPos - i;
@@ -2014,12 +2038,14 @@ public class DecimalFormat extends NumberFormat {
                        : negativePrefix.length() + negativeSuffix.length());
                 while (add > 0) {
                     result.insert(sub0Start, digit);
+                    ++maxIntDig;
                     --add;
-                    if (isGroupingUsed() && groupingSize != 0
-                        && ++maxIntDig % groupingSize == 0
-                        && add > 1) {
+                    // Only add a grouping separator if we have at least
+                    // 2 additional characters to be added, so we don't
+                    // end up with ",###".
+                    if (add>1 && isGroupingPosition(maxIntDig)) {
                         result.insert(sub0Start, group);
-                        --add;
+                        --add;                        
                     }
                 }
             }
@@ -2404,7 +2430,7 @@ public class DecimalFormat extends NumberFormat {
                 (decimalPos >= 0 &&
                  (decimalPos < digitLeftCount ||
                   decimalPos > (digitLeftCount + zeroDigitCount))) ||
-                groupingCount == 0 ||
+                groupingCount == 0 || groupingCount2 == 0 ||
                 subpart > 2) { // subpart > 2 == unmatched quote
                 throw new IllegalArgumentException("Malformed pattern \"" +
                                                    pattern + '"');
