@@ -1123,26 +1123,35 @@ static char * getCEs(char *str, uint32_t *ces, UErrorCode *status) {
 */
 static FileStream * getFractionalUCA(void)
 {
-    char  dir[250];
-    char *pDir = dir;
-    
-    uprv_strcpy(pDir, getenv("ICU_DATA"));
-    pDir += uprv_strlen(pDir);
-    if (*(pDir - 1) != U_FILE_SEP_CHAR) {
-        *pDir = U_FILE_SEP_CHAR;
-        pDir ++;
-    }
+    char        newPath[256];
+    char        backupPath[256];
+    FileStream *result = NULL;
 
-    /* dirty : because some platforms might not return the full path */
-#ifdef XP_MAC
-    uprv_strcpy(pDir, "..:..:data:unidata:FractionalUCA.txt");
-#elif defined(WIN32) || defined(OS2)
-    uprv_strcpy(pDir, "..\\..\\data\\unidata\\FractionalUCA.txt");
-#else 
-    uprv_strcpy(pDir, "../../data/unidata/FractionalUCA.txt");
+    /* Look inside ICU_DATA first */
+    uprv_strcpy(newPath, u_getDataDirectory());
+    uprv_strcat(newPath, "unidata" U_FILE_SEP_STRING );
+    uprv_strcat(newPath, "FractionalUCA.txt");
+
+#if defined (U_SRCDATADIR) /* points to the icu/data directory */
+    /* If defined, we'll try an alternate directory second */
+    uprv_strcpy(backupPath, U_SRCDATADIR);
+#else
+    uprv_strcpy(backupPath, u_getDataDirectory());
+    uprv_strcat(backupPath, ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING "data");
+    uprv_strcat(backupPath, U_FILE_SEP_STRING);
 #endif
-    
-    return T_FileStream_open(dir, "r");
+    uprv_strcat(backupPath, "unidata" U_FILE_SEP_STRING );
+    uprv_strcat(backupPath, "FractionalUCA.txt");
+      
+    result = T_FileStream_open(newPath, "rb");
+
+    if (result == NULL) {
+        result = T_FileStream_open(backupPath, "rb");
+        if (result == NULL) {
+            log_err("Failed to open either %s or %s\n", newPath, backupPath);
+        }
+    }
+    return result;
 }
 
 /**
@@ -1175,7 +1184,7 @@ static void TestCEs() {
         /* skip this line if it is empty or a comment or is a return value 
         or start of some variable section */
         if(line[0] == 0 || line[0] == '#' || line[0] == '\n' || 
-            line[0] == '[') {
+            line[0] == 0x000D || line[0] == '[') {
             continue;
         }
 
@@ -1516,7 +1525,7 @@ static void TestCEValidity()
 
     while (T_FileStream_readLine(file, line, sizeof(line)) != NULL) {
         if(line[0] == 0 || line[0] == '#' || line[0] == '\n' || 
-            line[0] == '[') {
+            line[0] == 0x000D || line[0] == '[') {
             continue;
         }
 
@@ -1684,7 +1693,7 @@ static void TestSortKeyValidity(void)
 
     while (T_FileStream_readLine(file, line, sizeof(line)) != NULL) {
         if(line[0] == 0 || line[0] == '#' || line[0] == '\n' || 
-            line[0] == '[') {
+            line[0] == 0x000D || line[0] == '[') {
             continue;
         }
 
