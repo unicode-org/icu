@@ -173,10 +173,12 @@ Each 32-bit properties word contains:
             exception index;
         } else switch(general category) {
         case Ll: delta to uppercase; -- same as titlecase
-        case Lu: delta to lowercase; -- titlecase is same as c
-        case Lt: delta to lowercase; -- uppercase is same as c
+        case Lu: -delta to lowercase; -- titlecase is same as c
+        case Lt: -delta to lowercase; -- uppercase is same as c
         case Mn: combining class;
-        case N*: numeric value;
+        case Nd: value=numeric value==decimal digit value=digit value;
+        case Nl:
+        case No: value=numeric value - but decimal digit value and digit value are not defined;
         default:
             if(is mirrored) {
                 delta to mirror
@@ -197,9 +199,10 @@ bit
  0      has uppercase mapping
  1      has lowercase mapping
  2      has titlecase mapping
- 3      has numeric value (numerator)
- 4      has denominator value
- 5      has a mirror-image Unicode code point
+ 3      has digit value(s)
+ 4      has numeric value (numerator)
+ 5      has denominator value
+ 6      has a mirror-image Unicode code point
 
 According to the flags in this word, one or more uint32_t words follow it
 in the sequence of the bit flags in the flags word; if a flag is not set,
@@ -207,10 +210,20 @@ then the value is missing or 0:
 
 For the case mappings and the mirror-image Unicode code point,
 one uint32_t or UChar32 each is the code point.
+If the titlecase mapping is missing, then it is the same as the uppercase mapping.
+
+For the digit values, bits 31..16 contain the decimal digit value, and
+bits 15..0 contain the digit value. A value of -1 indicates that
+this value is missing.
 
 For the numeric/numerator value, an int32_t word contains the value directly,
 except for when there is no numerator but a denominator, then the numerator
-is 1.
+is implicitly 1. This means:
+    numerator denominator result
+    none      none        none
+    x         none        x
+    none      y           1/y
+    x         y           x/y
 
 For the denominator value, a uint32_t word contains the value directly.
 
@@ -381,7 +394,7 @@ addProps(Props *p) {
     uint32_t x;
     int32_t value;
     uint16_t count;
-    bool_t isMn, isNumber;
+    bool_t isNumber;
 
     /*
      * Simple ideas for reducing the number of bits for one character's
@@ -424,12 +437,11 @@ addProps(Props *p) {
     x=0;
     value=0;
     count=0;
-    isMn= p->generalCategory==U_NON_SPACING_MARK;
     isNumber= genCategoryNames[p->generalCategory][0]=='N';
 
     if(p->upperCase!=0) {
         /* verify that no numbers and no Mn have case mappings */
-        if(!(isMn || isNumber)) {
+        if(p->generalCategory==U_LOWERCASE_LETTER) {
             value=(int32_t)p->code-(int32_t)p->upperCase;
         } else {
             x=EXCEPTION_BIT;
@@ -438,7 +450,7 @@ addProps(Props *p) {
     }
     if(p->lowerCase!=0) {
         /* verify that no numbers and no Mn have case mappings */
-        if(!(isMn || isNumber)) {
+        if(p->generalCategory==U_UPPERCASE_LETTER || p->generalCategory==U_TITLECASE_LETTER) {
             value=(int32_t)p->lowerCase-(int32_t)p->code;
         } else {
             x=EXCEPTION_BIT;
@@ -446,35 +458,45 @@ addProps(Props *p) {
         ++count;
     }
     if(p->upperCase!=p->titleCase) {
-        /* verify that no numbers and no Mn have case mappings */
-        if(!(isMn || isNumber)) {
-            value=(int32_t)p->code-(int32_t)p->titleCase;
-        } else {
-            x=EXCEPTION_BIT;
-        }
+        x=EXCEPTION_BIT;
         ++count;
     }
     if(p->canonicalCombining>0) {
         /* verify that only Mn has a canonical combining class */
-        if(isMn) {
+        if(p->generalCategory==U_NON_SPACING_MARK) {
             value=p->canonicalCombining;
         } else {
             x=EXCEPTION_BIT;
         }
         ++count;
     }
-    if(p->numericValue!=0) {
-        /* verify that only numeric categories have numeric values */
-        if(isNumber) {
+    if(p->generalCategory==U_DECIMAL_DIGIT_NUMBER) {
+        /* verify that all numeric fields contain the same value */
+        if(p->decimalDigitValue!=-1 && p->digitValue==p->decimalDigitValue &&
+           p->hasNumericValue && p->numericValue==p->decimalDigitValue &&
+           p->denominator==0
+        ) {
+            value=p->decimalDigitValue;
+        } else {
+            x=EXCEPTION_BIT;
+        }
+        ++count;
+    } else if(p->generalCategory==U_LETTER_NUMBER || p->generalCategory==U_OTHER_NUMBER) {
+        /* verify that only the numeric value field itself contains a value */
+        if(p->decimalDigitValue==-1 && p->digitValue==-1 && p->hasNumericValue) {
             value=p->numericValue;
         } else {
             x=EXCEPTION_BIT;
         }
         ++count;
+    } else if(p->decimalDigitValue!=-1 || p->digitValue!=-1 || p->hasNumericValue) {
+        /* verify that only numeric categories have numeric values */
+        x=EXCEPTION_BIT;
+        ++count;
     }
     if(p->denominator!=0) {
         /* verification for numeric category covered by the above */
-        value=p->denominator;
+        x=EXCEPTION_BIT;
         ++count;
     }
     if(p->isMirrored) {
@@ -522,23 +544,33 @@ addProps(Props *p) {
             }
             if(p->upperCase!=p->titleCase) {
                 first|=4;
-                exceptions[value+length++]=p->titleCase;
+                if(p->titleCase!=0) {
+                    exceptions[value+length++]=p->titleCase;
+                } else {
+                    exceptions[value+length++]=p->code;
+                }
             }
-            if(p->denominator==0) {
-                if(p->numericValue!=0) {
-                    first|=8;
-                    exceptions[value+length++]=p->numericValue;
+            if(p->decimalDigitValue!=-1 || p->digitValue!=-1) {
+                first|=8;
+                exceptions[value+length++]=
+                    (uint32_t)p->decimalDigitValue<<16|
+                    (uint16_t)p->digitValue;
+            }
+            if(p->hasNumericValue) {
+                if(p->denominator==0) {
+                    first|=0x10;
+                    exceptions[value+length++]=(uint32_t)p->numericValue;
+                } else {
+                    if(p->numericValue!=1) {
+                        first|=0x10;
+                        exceptions[value+length++]=(uint32_t)p->numericValue;
+                    }
+                    first|=0x20;
+                    exceptions[value+length++]=p->denominator;
                 }
-            } else {
-                if(p->numericValue!=1) {
-                    first|=8;
-                    exceptions[value+length++]=p->numericValue;
-                }
-                first|=0x10;
-                exceptions[value+length++]=p->denominator;
             }
             if(p->isMirrored) {
-                first|=0x20;
+                first|=0x40;
                 exceptions[value+length++]=p->mirrorMapping;
             }
 
