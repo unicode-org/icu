@@ -200,6 +200,15 @@ public class BuddhistCalendar extends GregorianCalendar {
         }
         return super.handleGetLimit(field, limitType);
     }
+    
+    /**
+     * Return the current Calendar type.
+     * @return type of calendar (gregorian, etc.)
+     * @internal ICU 3.0
+     */
+    public String getType() {
+        return "buddhist";
+    }
 
     /*
     private static CalendarFactory factory;

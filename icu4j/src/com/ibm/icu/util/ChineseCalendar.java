@@ -798,6 +798,14 @@ public class ChineseCalendar extends Calendar {
         return julianDay - 1;
     }
 
+    /**
+     * Return the current Calendar type.
+     * @return type of calendar (gregorian, etc.)
+     * @internal ICU 3.0
+     */
+    public String getType() {
+        return "chinese";
+    }
 
     /*
     private static CalendarFactory factory;

@@ -10,6 +10,7 @@ import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.ICUService.Factory;
 import com.ibm.icu.impl.ICULocaleService;
 import com.ibm.icu.impl.ICULocaleService.LocaleKeyFactory;
+import com.ibm.icu.impl.CalendarData;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DateFormatSymbols;
 import com.ibm.icu.text.SimpleDateFormat;
@@ -2857,13 +2858,10 @@ public abstract class Calendar implements Serializable, Cloneable {
         // See if there are any custom resources for this calendar
         // If not, just use the default DateFormat
         DateFormat result = null;
-
-        ResourceBundle bundle = DateFormatSymbols.getDateFormatBundle(cal, loc);
-
-        if (bundle != null) {
-
+ 
             try {
-                String[] patterns = bundle.getStringArray("DateTimePatterns");
+                CalendarData calData = new CalendarData(new ULocale(loc), cal.getType());
+               String[] patterns = calData.get("DateTimePatterns").getStringArray();
 
                 String pattern = null;
                 if ((timeStyle >= 0) && (dateStyle >= 0)) {
@@ -2887,9 +2885,6 @@ public abstract class Calendar implements Serializable, Cloneable {
                 DateFormatSymbols symbols = new DateFormatSymbols(cal, loc);
                 ((SimpleDateFormat) result).setDateFormatSymbols(symbols); // aliu
             }
-        } else {
-            result = SimpleDateFormat.getDateTimeInstance(dateStyle, timeStyle, loc);
-        }
         result.setCalendar(cal);
         return result;
     }
@@ -3691,15 +3686,15 @@ public abstract class Calendar implements Serializable, Cloneable {
         WeekData data = (WeekData) cachedLocaleData.get(locale);
         
         if (data == null) {  /* cache miss */
-            ICUResourceBundle dateRes = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME,locale);
-            int[] dateTimeElements = dateRes.get("DateTimeElements").getIntVector();
-            String[] weekend = UResourceBundle.getBundleInstance("CalendarData", locale).getStringArray("Weekend");
+            CalendarData calData = new CalendarData(new ULocale(locale), getType());
+            int[] dateTimeElements = calData.get("DateTimeElements").getIntVector();
+            int[] weekend = calData.get("weekend").getIntVector();
             data = new WeekData(dateTimeElements[0],dateTimeElements[1],
-                                Integer.parseInt(weekend[0]),
-                                Integer.parseInt(weekend[1]),
-                                Integer.parseInt(weekend[2]),
-                                Integer.parseInt(weekend[3]),
-                                dateRes.getULocale());
+                                weekend[0],
+                                weekend[1],
+                                weekend[2],
+                                weekend[3],
+                                calData.getULocale());
             /* cache update */
             cachedLocaleData.put(locale, data);
         }
@@ -4888,6 +4883,16 @@ public abstract class Calendar implements Serializable, Cloneable {
      */
     protected final long internalGetTimeInMillis() {
         return time;
+    }
+    
+    /**
+     * Return the current Calendar type.
+     * Note, in 3.0 this function will return 'gregorian' in Calendar to emulate legacy behavior
+     * @return type of calendar (gregorian, etc)
+     * @internal ICU 3.0
+     */
+    public String getType() {
+        return "gregorian";
     }
     
     // -------- BEGIN ULocale boilerplate --------

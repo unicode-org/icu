@@ -1,5 +1,5 @@
 /*
-*   Copyright (C) 1996-2003, International Business Machines
+*   Copyright (C) 1996-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 */
 package com.ibm.icu.util;
@@ -842,6 +842,15 @@ public class GregorianCalendar extends Calendar {
         }
 
         return julianDay;
+    }
+
+    /**
+     * Return the current Calendar type.
+     * @return type of calendar (gregorian, etc.)
+     * @internal ICU 3.0
+     */
+    public String getType() {
+        return "gregorian";
     }
 
     /*
