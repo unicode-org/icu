@@ -182,7 +182,7 @@ protected:
       return FALSE;
     }
     for(int32_t i=0;gBasicCalendars[i] != NULL;i++) {
-      UnicodeString ourId(gBasicCalendars[i],"");
+      UnicodeString ourId(gBasicCalendars[i],-1, US_INV);
       if(ourId == id) {
         return TRUE;
       }
@@ -194,7 +194,7 @@ protected:
   {
     if (U_SUCCESS(status)) {
       for(int32_t i=0;gBasicCalendars[i] != NULL;i++) {
-        UnicodeString id(gBasicCalendars[i],"");
+        UnicodeString id(gBasicCalendars[i], -1, US_INV);
         result.put(id, (void*)this, status);
       }
     }
@@ -223,7 +223,7 @@ protected:
     if(len > actLen) {
       len = actLen;
     }
-    str.extract(0,len,tmp);
+    str.extract(0,len,tmp, sizeof(tmp), US_INV);
     tmp[len]=0;
 
 #ifdef U_DEBUG_CALSVC
@@ -296,7 +296,7 @@ class DefaultCalendarFactory : public ICUResourceBundleFactory {
 class CalendarService : public ICULocaleService {
 public:
   CalendarService()
-    : ICULocaleService("Calendar")
+    : ICULocaleService(UNICODE_STRING_SIMPLE("Calendar"))
   {
     UErrorCode status = U_ZERO_ERROR;
     registerFactory(new DefaultCalendarFactory(), status);
@@ -655,7 +655,7 @@ Calendar::createInstance(TimeZone* zone, const Locale& aLocale, UErrorCode& succ
     if(len > actLen) {
       len = actLen;
     }
-    str.extract(0,len,tmp);
+    str.extract(0,len,tmp,sizeof(tmp),US_INV);
     tmp[len]=0;
     
 #ifdef U_DEBUG_CALSVC

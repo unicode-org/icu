@@ -416,7 +416,7 @@ RuleBasedNumberFormat::setDefaultRuleSet(const UnicodeString& ruleSetName, UErro
     if (U_SUCCESS(status)) {
         if (ruleSetName.isEmpty()) {
             initDefaultRuleSet();
-        } else if (ruleSetName.startsWith("%%")) {
+        } else if (ruleSetName.startsWith(UNICODE_STRING_SIMPLE("%%"))) {
             status = U_ILLEGAL_ARGUMENT_ERROR;
         } else {
             NFRuleSet* result = findRuleSet(ruleSetName, status);
