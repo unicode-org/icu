@@ -49,55 +49,141 @@ void IntlTestRBNF::runIndexedTest(int32_t index, UBool exec, const char* &name, 
 
 void 
 IntlTestRBNF::TestAPI() {
+  // This test goes through the APIs that were not tested before. 
+  // These tests are too small to have separate test classes/functions
+
   UErrorCode status = U_ZERO_ERROR;
   RuleBasedNumberFormat* formatter
       = new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale::US, status);
+
   logln("RBNF API test starting");
   // test clone
-  logln("Testing Clone");
-  RuleBasedNumberFormat* rbnfClone = (RuleBasedNumberFormat *)formatter->clone();
-  if(rbnfClone != NULL) {
-    if(!(*rbnfClone == *formatter)) {
-      errln("Clone should be semantically equivalent to the original!");
+  {
+    logln("Testing Clone");
+    RuleBasedNumberFormat* rbnfClone = (RuleBasedNumberFormat *)formatter->clone();
+    if(rbnfClone != NULL) {
+      if(!(*rbnfClone == *formatter)) {
+        errln("Clone should be semantically equivalent to the original!");
+      }
+      delete rbnfClone;
+    } else {
+      errln("Cloning failed!");
     }
-    delete rbnfClone;
-  } else {
-    errln("Cloning failed!");
   }
 
   // test assignment
-  logln("Testing assignment operator");
-  RuleBasedNumberFormat assignResult(URBNF_SPELLOUT, Locale("es", "ES", ""), status);
-  assignResult = *formatter;
-  if(!(assignResult == *formatter)) {
-    errln("Assignment result should be semantically equivalent to the original!");
+  {
+    logln("Testing assignment operator");
+    RuleBasedNumberFormat assignResult(URBNF_SPELLOUT, Locale("es", "ES", ""), status);
+    assignResult = *formatter;
+    if(!(assignResult == *formatter)) {
+      errln("Assignment result should be semantically equivalent to the original!");
+    }
   }
 
   // test rule constructor
-  logln("Testing rule constructor");
-  UResourceBundle *en = ures_open(NULL, "en", &status);
-  if(U_FAILURE(status)) {
-    errln("Unable to access resource bundle with data!");
-  } else {
-    int32_t ruleLen = 0;
-    const UChar *spelloutRules = ures_getStringByKey(en, "SpelloutRules", &ruleLen, &status);
-    if(U_FAILURE(status) || ruleLen == 0 || spelloutRules == NULL) {
-      errln("Unable to access the rules string!");
+  {
+    logln("Testing rule constructor");
+    UResourceBundle *en = ures_open(NULL, "en", &status);
+    if(U_FAILURE(status)) {
+      errln("Unable to access resource bundle with data!");
     } else {
-      UParseError perror;
-      RuleBasedNumberFormat ruleCtorResult(spelloutRules, Locale::US, perror, status);
-      if(!(ruleCtorResult == *formatter)) {
-        errln("Result of the copy constructor should be semantically equivalent to the original!");
+      int32_t ruleLen = 0;
+      const UChar *spelloutRules = ures_getStringByKey(en, "SpelloutRules", &ruleLen, &status);
+      if(U_FAILURE(status) || ruleLen == 0 || spelloutRules == NULL) {
+        errln("Unable to access the rules string!");
+      } else {
+        UParseError perror;
+        RuleBasedNumberFormat ruleCtorResult(spelloutRules, Locale::US, perror, status);
+        if(!(ruleCtorResult == *formatter)) {
+          errln("Formatter constructed from the original rules should be semantically equivalent to the original!");
+        }
       }
+      ures_close(en);
     }
-    ures_close(en);
   }
 
+  // test getRules
+  {
+    logln("Testing getRules function");
+    UnicodeString rules = formatter->getRules();
+    UParseError perror;
+    RuleBasedNumberFormat fromRulesResult(rules, Locale::US, perror, status);
+
+    if(!(fromRulesResult == *formatter)) {
+      errln("Formatter constructed from rules obtained by getRules should be semantically equivalent to the original!");
+    }
+  }
+
+
   // test copy constructor
-  logln("Testing copy constructor");
-  RuleBasedNumberFormat copyCtorResult(*formatter);
-  if(!(copyCtorResult == *formatter)) {
-    errln("Copy constructor result result should be semantically equivalent to the original!");
+  {
+    logln("Testing copy constructor");
+    RuleBasedNumberFormat copyCtorResult(*formatter);
+    if(!(copyCtorResult == *formatter)) {
+      errln("Copy constructor result result should be semantically equivalent to the original!");
+    }
+  }
+
+  // test ruleset names
+  {
+    logln("Testing getNumberOfRuleSetNames, getRuleSetName and format using rule set names");
+    int32_t noOfRuleSetNames = formatter->getNumberOfRuleSetNames();
+    if(noOfRuleSetNames == 0) {
+      errln("Number of rule set names should be more than zero");
+    }
+    UnicodeString ruleSetName;
+    int32_t i = 0;
+    int32_t intFormatNum = 34567;
+    double doubleFormatNum = 893411.234;
+    logln("number of rule set names is %i", noOfRuleSetNames);
+    for(i = 0; i < noOfRuleSetNames; i++) {
+      FieldPosition pos1, pos2;
+      UnicodeString intFormatResult, doubleFormatResult; 
+      Formattable intParseResult, doubleParseResult;
+
+      ruleSetName = formatter->getRuleSetName(i);
+      log("Rule set name %i is ", i);
+      log(ruleSetName);
+      logln(". Format results are: ");
+      intFormatResult = formatter->format(intFormatNum, ruleSetName, intFormatResult, pos1, status);
+      doubleFormatResult = formatter->format(doubleFormatNum, ruleSetName, doubleFormatResult, pos2, status);
+      if(U_FAILURE(status)) {
+        errln("Format using a rule set failed");
+        break;
+      }
+      logln(intFormatResult);
+      logln(doubleFormatResult);
+      formatter->setLenient(TRUE);
+      formatter->parse(intFormatResult, intParseResult, status);
+      formatter->parse(doubleFormatResult, doubleParseResult, status);
+
+      logln("Parse results for lenient = TRUE, %i, %f", intParseResult.getLong(), doubleParseResult.getDouble());
+
+      formatter->setLenient(FALSE);
+      formatter->parse(intFormatResult, intParseResult, status);
+      formatter->parse(doubleFormatResult, doubleParseResult, status);
+
+      logln("Parse results for lenient = FALSE, %i, %f", intParseResult.getLong(), doubleParseResult.getDouble());
+
+      if(U_FAILURE(status)) {
+        errln("Error during parsing");
+      }
+
+      intFormatResult = formatter->format(intFormatNum, "BLABLA", intFormatResult, pos1, status);
+      if(U_SUCCESS(status)) {
+        errln("Using invalid rule set name should have failed");
+        break;
+      }
+      status = U_ZERO_ERROR;
+      doubleFormatResult = formatter->format(doubleFormatNum, "TRUC", doubleFormatResult, pos2, status);
+      if(U_SUCCESS(status)) {
+        errln("Using invalid rule set name should have failed");
+        break;
+      }
+      status = U_ZERO_ERROR;
+    }   
+    status = U_ZERO_ERROR;
   }
 
   // clean up
