@@ -21,6 +21,7 @@
 #include "uarrsort.h"
 
 enum {
+    MIN_QSORT=9, /* from Knuth */
     STACK_ITEM_SIZE=200
 };
 
@@ -53,28 +54,15 @@ uprv_uint32Comparator(const void *context, const void *left, const void *right) 
 /* Straight insertion sort from Knuth vol. III, pg. 81 ---------------------- */
 
 static void
-insertionSort(char *array, int32_t length, int32_t itemSize,
-              UComparator *cmp, const void *context, UErrorCode *pErrorCode) {
-    UAlignedMemory v[STACK_ITEM_SIZE/sizeof(UAlignedMemory)+1];
-    void *pv;
+doInsertionSort(char *array, int32_t start, int32_t limit, int32_t itemSize,
+                UComparator *cmp, const void *context, void *pv) {
     int32_t i, j;
 
-    /* allocate an intermediate item variable (v) */
-    if(itemSize<=STACK_ITEM_SIZE) {
-        pv=v;
-    } else {
-        pv=uprv_malloc(itemSize);
-        if(pv==NULL) {
-            *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
-            return;
-        }
-    }
-
-    for(j=1; j<length; ++j) {
+    for(j=start+1; j<limit; ++j) {
         /* v=array[j] */
         uprv_memcpy(pv, array+j*itemSize, itemSize);
 
-        for(i=j; i>0; --i) {
+        for(i=j; i>start; --i) {
             if(/* v>=array[i-1] */ cmp(context, pv, array+(i-1)*itemSize)>=0) {
                 break;
             }
@@ -88,6 +76,26 @@ insertionSort(char *array, int32_t length, int32_t itemSize,
             uprv_memcpy(array+i*itemSize, pv, itemSize);
         }
     }
+}
+
+static void
+insertionSort(char *array, int32_t length, int32_t itemSize,
+              UComparator *cmp, const void *context, UErrorCode *pErrorCode) {
+    UAlignedMemory v[STACK_ITEM_SIZE/sizeof(UAlignedMemory)+1];
+    void *pv;
+
+    /* allocate an intermediate item variable (v) */
+    if(itemSize<=STACK_ITEM_SIZE) {
+        pv=v;
+    } else {
+        pv=uprv_malloc(itemSize);
+        if(pv==NULL) {
+            *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
+    }
+
+    doInsertionSort(array, 0, length, itemSize, cmp, context, pv);
 
     if(pv!=v) {
         uprv_free(pv);
@@ -109,6 +117,11 @@ subQuickSort(char *array, int32_t start, int32_t limit, int32_t itemSize,
 
     /* start and left are inclusive, limit and right are exclusive */
     do {
+        if((start+MIN_QSORT)>=limit) {
+            doInsertionSort(array, start, limit, itemSize, cmp, context, px);
+            break;
+        }
+
         left=start;
         right=limit;
 
@@ -207,10 +220,10 @@ uprv_sortArray(void *array, int32_t length, int32_t itemSize,
 
     if(length<=1) {
         return;
-    } else if(length<=10 || sortStable) {
+    } else if(length<MIN_QSORT || sortStable) {
         insertionSort((char *)array, length, itemSize, cmp, context, pErrorCode);
+        /* could add heapSort or similar for stable sorting of longer arrays */
     } else {
-        /* quickSort */
         quickSort((char *)array, length, itemSize, cmp, context, pErrorCode);
     }
 }
