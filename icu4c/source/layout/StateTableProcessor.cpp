@@ -55,7 +55,7 @@ void StateTableProcessor::process(LEGlyphID *glyphs, le_int32 *charIndices, le_i
             // XXX: How do we handle EOT vs. EOL?
             classCode = classCodeEOT;
         } else {
-            TTGlyphID glyphCode = LE_GET_GLYPH(glyphs[currGlyph]);
+            TTGlyphID glyphCode = (TTGlyphID) LE_GET_GLYPH(glyphs[currGlyph]);
 
             if (glyphCode == 0xFFFF) {
                 classCode = classCodeDEL;
