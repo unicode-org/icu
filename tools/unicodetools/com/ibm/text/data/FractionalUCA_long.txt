@@ -1,5 +1,5 @@
 # Fractional UCA Table, generated from standard UCA
-# 2002-06-27,18:40:40 GMT [MD]
+# 2002-07-02,08:35:54 GMT [MD]
 # VERSION: UCA=3.1.1d5, UCD=3.2.0
 
 # Generated processed version, as described in ICU design document.
@@ -186,6 +186,32 @@ D834 DDAA; [,,]	# [0000.0000.0000]	* MUSICAL SYMBOL COMBINING DOWN BOW
 D834 DDAB; [,,]	# [0000.0000.0000]	* MUSICAL SYMBOL COMBINING UP BOW
 D834 DDAC; [,,]	# [0000.0000.0000]	* MUSICAL SYMBOL COMBINING HARMONIC
 D834 DDAD; [,,]	# [0000.0000.0000]	* MUSICAL SYMBOL COMBINING SNAP PIZZICATO
+D83F DFFE; [,,]	# [0000.0000.0000]	* <noncharacter-1FFFE>
+D83F DFFF; [,,]	# [0000.0000.0000]	* <noncharacter-1FFFF>
+D87F DFFE; [,,]	# [0000.0000.0000]	* <noncharacter-2FFFE>
+D87F DFFF; [,,]	# [0000.0000.0000]	* <noncharacter-2FFFF>
+D8BF DFFE; [,,]	# [0000.0000.0000]	* <noncharacter-3FFFE>
+D8BF DFFF; [,,]	# [0000.0000.0000]	* <noncharacter-3FFFF>
+D8FF DFFE; [,,]	# [0000.0000.0000]	* <noncharacter-4FFFE>
+D8FF DFFF; [,,]	# [0000.0000.0000]	* <noncharacter-4FFFF>
+D93F DFFE; [,,]	# [0000.0000.0000]	* <noncharacter-5FFFE>
+D93F DFFF; [,,]	# [0000.0000.0000]	* <noncharacter-5FFFF>
+D97F DFFE; [,,]	# [0000.0000.0000]	* <noncharacter-6FFFE>
+D97F DFFF; [,,]	# [0000.0000.0000]	* <noncharacter-6FFFF>
+D9BF DFFE; [,,]	# [0000.0000.0000]	* <noncharacter-7FFFE>
+D9BF DFFF; [,,]	# [0000.0000.0000]	* <noncharacter-7FFFF>
+D9FF DFFE; [,,]	# [0000.0000.0000]	* <noncharacter-8FFFE>
+D9FF DFFF; [,,]	# [0000.0000.0000]	* <noncharacter-8FFFF>
+DA3F DFFE; [,,]	# [0000.0000.0000]	* <noncharacter-9FFFE>
+DA3F DFFF; [,,]	# [0000.0000.0000]	* <noncharacter-9FFFF>
+DA7F DFFE; [,,]	# [0000.0000.0000]	* <noncharacter-AFFFE>
+DA7F DFFF; [,,]	# [0000.0000.0000]	* <noncharacter-AFFFF>
+DABF DFFE; [,,]	# [0000.0000.0000]	* <noncharacter-BFFFE>
+DABF DFFF; [,,]	# [0000.0000.0000]	* <noncharacter-BFFFF>
+DAFF DFFE; [,,]	# [0000.0000.0000]	* <noncharacter-CFFFE>
+DAFF DFFF; [,,]	# [0000.0000.0000]	* <noncharacter-CFFFF>
+DB3F DFFE; [,,]	# [0000.0000.0000]	* <noncharacter-DFFFE>
+DB3F DFFF; [,,]	# [0000.0000.0000]	* <noncharacter-DFFFF>
 DB40 DC01; [,,]	# [0000.0000.0000]	* LANGUAGE TAG
 DB40 DC20; [,,]	# [0000.0000.0000]	* TAG SPACE
 DB40 DC21; [,,]	# [0000.0000.0000]	* TAG EXCLAMATION MARK
@@ -283,11 +309,49 @@ DB40 DC7C; [,,]	# [0000.0000.0000]	* TAG VERTICAL LINE
 DB40 DC7D; [,,]	# [0000.0000.0000]	* TAG RIGHT CURLY BRACKET
 DB40 DC7E; [,,]	# [0000.0000.0000]	* TAG TILDE
 DB40 DC7F; [,,]	# [0000.0000.0000]	* CANCEL TAG
-DBFF; [,,]	# [0000.0000.0000]	* <surrogate-DBFF>
+DB7F DFFE; [,,]	# [0000.0000.0000]	* <noncharacter-EFFFE>
+DB7F DFFF; [,,]	# [0000.0000.0000]	* <noncharacter-EFFFF>
+DBBF DFFE; [,,]	# [0000.0000.0000]	* <noncharacter-FFFFE>
+DBBF DFFF; [,,]	# [0000.0000.0000]	* <noncharacter-FFFFF>
+DBFF DFFE; [,,]	# [0000.0000.0000]	* <noncharacter-10FFFE>
+FDD0; [,,]	# [0000.0000.0000]	* <noncharacter-FDD0>
+FDD1; [,,]	# [0000.0000.0000]	* <noncharacter-FDD1>
+FDD2; [,,]	# [0000.0000.0000]	* <noncharacter-FDD2>
+FDD3; [,,]	# [0000.0000.0000]	* <noncharacter-FDD3>
+FDD4; [,,]	# [0000.0000.0000]	* <noncharacter-FDD4>
+FDD5; [,,]	# [0000.0000.0000]	* <noncharacter-FDD5>
+FDD6; [,,]	# [0000.0000.0000]	* <noncharacter-FDD6>
+FDD7; [,,]	# [0000.0000.0000]	* <noncharacter-FDD7>
+FDD8; [,,]	# [0000.0000.0000]	* <noncharacter-FDD8>
+FDD9; [,,]	# [0000.0000.0000]	* <noncharacter-FDD9>
+FDDA; [,,]	# [0000.0000.0000]	* <noncharacter-FDDA>
+FDDB; [,,]	# [0000.0000.0000]	* <noncharacter-FDDB>
+FDDC; [,,]	# [0000.0000.0000]	* <noncharacter-FDDC>
+FDDD; [,,]	# [0000.0000.0000]	* <noncharacter-FDDD>
+FDDE; [,,]	# [0000.0000.0000]	* <noncharacter-FDDE>
+FDDF; [,,]	# [0000.0000.0000]	* <noncharacter-FDDF>
+FDE0; [,,]	# [0000.0000.0000]	* <noncharacter-FDE0>
+FDE1; [,,]	# [0000.0000.0000]	* <noncharacter-FDE1>
+FDE2; [,,]	# [0000.0000.0000]	* <noncharacter-FDE2>
+FDE3; [,,]	# [0000.0000.0000]	* <noncharacter-FDE3>
+FDE4; [,,]	# [0000.0000.0000]	* <noncharacter-FDE4>
+FDE5; [,,]	# [0000.0000.0000]	* <noncharacter-FDE5>
+FDE6; [,,]	# [0000.0000.0000]	* <noncharacter-FDE6>
+FDE7; [,,]	# [0000.0000.0000]	* <noncharacter-FDE7>
+FDE8; [,,]	# [0000.0000.0000]	* <noncharacter-FDE8>
+FDE9; [,,]	# [0000.0000.0000]	* <noncharacter-FDE9>
+FDEA; [,,]	# [0000.0000.0000]	* <noncharacter-FDEA>
+FDEB; [,,]	# [0000.0000.0000]	* <noncharacter-FDEB>
+FDEC; [,,]	# [0000.0000.0000]	* <noncharacter-FDEC>
+FDED; [,,]	# [0000.0000.0000]	* <noncharacter-FDED>
+FDEE; [,,]	# [0000.0000.0000]	* <noncharacter-FDEE>
+FDEF; [,,]	# [0000.0000.0000]	* <noncharacter-FDEF>
 FEFF; [,,]	# [0000.0000.0000]	* ZERO WIDTH NO-BREAK SPACE
 FFF9; [,,]	# [0000.0000.0000]	* INTERLINEAR ANNOTATION ANCHOR
 FFFA; [,,]	# [0000.0000.0000]	* INTERLINEAR ANNOTATION SEPARATOR
 FFFB; [,,]	# [0000.0000.0000]	* INTERLINEAR ANNOTATION TERMINATOR
+FFFE; [,,]	# [0000.0000.0000]	* <noncharacter-FFFE>
+FFFF; [,,]	# [0000.0000.0000]	* <noncharacter-FFFF>
 0332; [, 87, 05]	# [0000.0021.0002]	* COMBINING LOW LINE
 0313; [, 89, 05]	# [0000.0022.0002]	* COMBINING COMMA ABOVE
 0343; [, 89, 05]	# [0000.0022.0002]	* COMBINING GREEK KORONIS
