@@ -220,14 +220,15 @@ void RTTest::test2() {
     UChar c;
     UnicodeString cs, targ, reverse;
     int8_t *type = new int8_t[0xFFFF];
-
-    Transliterator* sourceToTarget = Transliterator::createInstance(transliteratorID);
+    UParseError parseError;
+    UErrorCode status = U_ZERO_ERROR;
+    Transliterator* sourceToTarget = Transliterator::createInstance(transliteratorID, UTRANS_FORWARD, parseError, status);
     if (sourceToTarget == NULL) {
         log->errln("Fail: createInstance(" + transliteratorID +
                    ") returned NULL");
         return;
     }
-    Transliterator* targetToSource = sourceToTarget->createInverse();
+    Transliterator* targetToSource = sourceToTarget->createInverse(status);
     if (targetToSource == NULL) {
         log->errln("Fail: " + transliteratorID +
                    ".createInverse() returned NULL");

@@ -54,6 +54,10 @@ public:
 
     void TestRegisterUnregister(void);
 
+    void TestLatinDevanagari(void);
+    
+    void TestDevanagariLatinRT(void);
+
     /*Internal functions used*/
     void doTest(const UnicodeString& , const UnicodeString& , const UnicodeString& );
 

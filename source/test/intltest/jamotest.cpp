@@ -36,14 +36,16 @@ JamoTest::runIndexedTest(int32_t index, UBool exec,
 
 void
 JamoTest::TestJamo() {
-    Transliterator* latinJamo = Transliterator::createInstance("Latin-Jamo");
+    UParseError parseError;
+    UErrorCode status = U_ZERO_ERROR;
+    Transliterator* latinJamo = Transliterator::createInstance("Latin-Jamo", UTRANS_FORWARD, parseError, status);
 
-    if (latinJamo == 0) {
+    if (latinJamo == 0 || U_FAILURE(status)) {
         errln("FAIL: createInstance() returned 0");
         return;
     }
 
-    Transliterator* jamoLatin = latinJamo->createInverse();
+    Transliterator* jamoLatin = latinJamo->createInverse(status);
 
     if (jamoLatin == 0) {
         delete latinJamo;
@@ -232,16 +234,18 @@ JamoTest::TestRealText() {
 
     enum { WHAT_IS_UNICODE_length = sizeof(WHAT_IS_UNICODE) / sizeof(WHAT_IS_UNICODE[0]) };
 
-    Transliterator* latinJamo = Transliterator::createInstance("Latin-Jamo");
-    Transliterator* jamoHangul = Transliterator::createInstance("Jamo-Hangul");
-    if (latinJamo == 0 || jamoHangul == 0) {
+    UParseError parseError;
+    UErrorCode status = U_ZERO_ERROR;
+    Transliterator* latinJamo = Transliterator::createInstance("Latin-Jamo", UTRANS_FORWARD, parseError, status);
+    Transliterator* jamoHangul = Transliterator::createInstance("Jamo-Hangul", UTRANS_FORWARD, parseError, status);
+    if (latinJamo == 0 || jamoHangul == 0 || U_FAILURE(status)) {
         delete latinJamo;
         delete jamoHangul;
         errln("FAIL: createInstance returned NULL");
         return;
     }
-    Transliterator* jamoLatin = latinJamo->createInverse();
-    Transliterator* hangulJamo = jamoHangul->createInverse();
+    Transliterator* jamoLatin = latinJamo->createInverse(status);
+    Transliterator* hangulJamo = jamoHangul->createInverse(status);
     if (jamoLatin == 0 || hangulJamo == 0) {
         errln("FAIL: createInverse returned NULL");
 		delete latinJamo;

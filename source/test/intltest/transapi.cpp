@@ -55,7 +55,7 @@ void TransliteratorAPITest::runIndexedTest( int32_t index, UBool exec, const cha
         case 10: name = "TestGetAdoptFilter"; if (exec) TestGetAdoptFilter(); break;
         case 11: name = "TestClone"; if (exec) TestClone(); break;
         case 12: name = "TestNullTransliterator"; if (exec) TestNullTransliterator(); break;
-        case 13: name = "TestRegisterUnregister"; if(exec) TestRegisterUnregister(); break;        
+        case 13: name = "TestRegisterUnregister"; if(exec) TestRegisterUnregister(); break;
         default: name = ""; break; /*needed to end loop*/
     }
 }
@@ -64,10 +64,13 @@ void TransliteratorAPITest::runIndexedTest( int32_t index, UBool exec, const cha
 void TransliteratorAPITest::TestgetID() {
     UnicodeString trans="Latin-Greek";
     UnicodeString ID;
-    Transliterator* t= Transliterator::createInstance(trans);
-    if(t==0)
+    UParseError parseError;
+    UErrorCode status = U_ZERO_ERROR;
+    Transliterator* t= Transliterator::createInstance(trans, UTRANS_FORWARD, parseError, status);
+    if(t==0 || U_FAILURE(status)){
         errln("FAIL: construction");
-    else{
+        status = U_ZERO_ERROR;
+    }else{
         ID= t->getID();
         if(ID != trans)
             errln("FAIL: getID returned " + ID + " instead of Latin-Greek");
@@ -75,7 +78,7 @@ void TransliteratorAPITest::TestgetID() {
     int i;
     for (i=0; i<Transliterator::countAvailableIDs(); i++){
        ID = (UnicodeString) Transliterator::getAvailableID(i);
-       t = Transliterator::createInstance(ID);
+       t = Transliterator::createInstance(ID, UTRANS_FORWARD, parseError, status);
        if(t == 0){
            errln("FAIL: " + ID);
           continue;
@@ -90,8 +93,8 @@ void TransliteratorAPITest::TestgetID() {
 
     delete t;
 
-    Transliterator* t1=Transliterator::createInstance("Latin-Devanagari");
-    Transliterator* t2=Transliterator::createInstance("Latin-Hebrew");
+    Transliterator* t1=Transliterator::createInstance("Latin-Devanagari", UTRANS_FORWARD, parseError, status);
+    Transliterator* t2=Transliterator::createInstance("Latin-Hebrew", UTRANS_FORWARD, parseError, status);
     if(t1 ==0 || t2 == 0){
         errln("FAIL: construction");
         return;
@@ -105,7 +108,7 @@ void TransliteratorAPITest::TestgetID() {
             errln("FAIL: getID or clone failed");
 
 
-    Transliterator* t5=Transliterator::createInstance("Latin-Devanagari");
+    Transliterator* t5=Transliterator::createInstance("Latin-Devanagari", UTRANS_FORWARD, parseError, status);
     if(t5 == 0)
         errln("FAIL: construction");
     if(t1->getID() != t5->getID() || t5->getID() != t3->getID() || t1->getID() != t3->getID())
@@ -120,17 +123,19 @@ void TransliteratorAPITest::TestgetID() {
 }
 
 void TransliteratorAPITest::TestgetInverse() {
-     Transliterator* t1    = Transliterator::createInstance("Kana-Latin");
-     Transliterator* invt1 = Transliterator::createInstance("Latin-Kana");
-     Transliterator* t2    = Transliterator::createInstance("Latin-Devanagari");
-     Transliterator* invt2 = Transliterator::createInstance("Devanagari-Latin");
+     UErrorCode status = U_ZERO_ERROR;
+     UParseError parseError;
+     Transliterator* t1    = Transliterator::createInstance("Kana-Latin", UTRANS_FORWARD, parseError, status);
+     Transliterator* invt1 = Transliterator::createInstance("Latin-Kana", UTRANS_FORWARD, parseError, status);
+     Transliterator* t2    = Transliterator::createInstance("Latin-Devanagari", UTRANS_FORWARD, parseError, status);
+     Transliterator* invt2 = Transliterator::createInstance("Devanagari-Latin", UTRANS_FORWARD, parseError, status);
      if(t1 == 0 || invt1 == 0 || t2 == 0 || invt2 == 0) {
          errln("FAIL: in instantiation");
          return;
      }
 
-     Transliterator* inverse1=t1->createInverse();
-     Transliterator* inverse2=t2->createInverse();
+     Transliterator* inverse1=t1->createInverse(status);
+     Transliterator* inverse2=t2->createInverse(status);
      if(inverse1->getID() != invt1->getID() || inverse2->getID() != invt2->getID()
         || inverse1->getID() == invt2->getID() || inverse2->getID() == invt1->getID() ) 
         errln("FAIL: getInverse() ");
@@ -154,12 +159,12 @@ void TransliteratorAPITest::TestgetInverse() {
        "Hex-Any"
      };
      for(uint32_t i=0; i<sizeof(TransID)/sizeof(TransID[0]); i=i+2){
-         t1=Transliterator::createInstance(TransID[i]);
+         t1=Transliterator::createInstance(TransID[i], UTRANS_FORWARD, parseError, status);
          if(t1 == 0){
            errln("FAIL: in instantiation for" + TransID[i]);
            continue;
          }
-         inverse1=t1->createInverse();
+         inverse1=t1->createInverse(status);
          if(inverse1->getID() != TransID[i+1] )
              errln("FAIL :getInverse() for " + TransID[i] + " returned " + inverse1->getID() + " instead of " + TransID[i+1]);
      }
@@ -172,8 +177,10 @@ void TransliteratorAPITest::TestgetInverse() {
 
 void TransliteratorAPITest::TestClone(){
     Transliterator *t1, *t2, *t3, *t4;
-    t1=Transliterator::createInstance("Latin-Devanagari");
-    t2=Transliterator::createInstance("Latin-Hebrew");
+    UErrorCode status = U_ZERO_ERROR;
+    UParseError parseError;
+    t1=Transliterator::createInstance("Latin-Devanagari", UTRANS_FORWARD, parseError, status);
+    t2=Transliterator::createInstance("Latin-Hebrew", UTRANS_FORWARD, parseError, status);
     if(t1 == 0 || t2 == 0){
         errln("FAIL: construction");
         return;
@@ -211,10 +218,13 @@ void TransliteratorAPITest::TestGetDisplayName() {
     UnicodeString name="";
     Transliterator* t;
     UnicodeString message;
+    UErrorCode status = U_ZERO_ERROR;
+    UParseError parseError;
     for (uint32_t i=0; i<sizeof(dispNames)/sizeof(dispNames[0]); i=i+2 ) {
-        t = Transliterator::createInstance(dispNames[i+0]);
+        t = Transliterator::createInstance(dispNames[i+0], UTRANS_FORWARD, parseError, status);
         if(t==0){
              errln("FAIL: construction: " + dispNames[i+0]);
+             status = U_ZERO_ERROR;
              continue;
         }
         t->getDisplayName(t->getID(), name);
@@ -239,10 +249,11 @@ void TransliteratorAPITest::TestTransliterate1(){
 
     UnicodeString Data[]={ 
          //ID, input string, transliterated string
-         "Any-Hex",         "hello",                                                  UnicodeString("\\u0068\\u0065\\u006C\\u006C\\u006F", "") ,
+         "Any-Hex",         "hello",    UnicodeString("\\u0068\\u0065\\u006C\\u006C\\u006F", "") ,
          "Hex-Any",         UnicodeString("\\u0068\\u0065\\u006C\\u006C\\u006F", ""), "hello"  ,
-         "Latin-Devanagari",    "bhaarata",                                                CharsToUnicodeString("\\u092D\\u093E\\u0930\\u0924") ,
-         "Devanagari-Latin",    CharsToUnicodeString("\\u092D\\u093E\\u0930\\u0924"),        "bhaarata" ,
+         "Latin-Devanagari","bhaarata", CharsToUnicodeString("\\u092D\\u093E\\u0930\\u0924") ,
+
+         "Devanagari-Latin",    CharsToUnicodeString("\\u092D\\u093E\\u0930\\u0924"),        UnicodeString("bhaarata"),
      //  "Contracted-Expanded", CharsToUnicodeString("\\u00C0\\u00C1\\u0042"),               CharsToUnicodeString("\\u0041\\u0300\\u0041\\u0301\\u0042") ,
      //  "Expanded-Contracted", CharsToUnicodeString("\\u0041\\u0300\\u0041\\u0301\\u0042"), CharsToUnicodeString("\\u00C0\\u00C1\\u0042") ,
          "Latin-Arabic",        "aap",                                 CharsToUnicodeString("\\u0627\\u06A4")     ,
@@ -254,16 +265,20 @@ void TransliteratorAPITest::TestTransliterate1(){
     UnicodeString message;
     Transliterator* t;
     logln("Testing transliterate");
+    UErrorCode status = U_ZERO_ERROR;
+    UParseError parseError;
 
     for(uint32_t i=0;i<sizeof(Data)/sizeof(Data[0]); i=i+3){
-        t=Transliterator::createInstance(Data[i+0]);
+        t=Transliterator::createInstance(Data[i+0], UTRANS_FORWARD, parseError, status);
         if(t==0){
-            errln("FAIL: construction: " + Data[i+0]);
+            errln("FAIL: construction: " + Data[i+0] + " Error: "  + u_errorName(status));
+            errln("PreContext: " + prettify(parseError.preContext) + " PostContext: " + prettify( parseError.postContext) );
+            status = U_ZERO_ERROR;
             continue;
         }
         gotResult = Data[i+1];
         t->transliterate(gotResult);
-        message=t->getID() + "->transliterate(UnicodeString, UnicodeString) for\n\t Source:" + Data[i+1];
+        message=t->getID() + "->transliterate(UnicodeString, UnicodeString) for\n\t Source:" + prettify(Data[i+1]);
         doTest(message, gotResult, Data[i+2]);
 
         //doubt here
@@ -296,10 +311,13 @@ void TransliteratorAPITest::TestTransliterate2(){
     UnicodeString gotResBuf;
     UnicodeString temp;
     int32_t start, limit;
+    UErrorCode status = U_ZERO_ERROR;
+    UParseError parseError;
+
     for(uint32_t i=0; i<sizeof(Data2)/sizeof(Data2[0]); i=i+6){
-        t=Transliterator::createInstance(Data2[i+0]);
+        t=Transliterator::createInstance(Data2[i+0], UTRANS_FORWARD, parseError, status);
         if(t==0){
-            errln("FAIL: construction: " + Data2[i+0]);
+            errln("FAIL: construction: " + prettify(Data2[i+0]));
             continue;
         }
         start=getInt(Data2[i+2]);
@@ -307,16 +325,17 @@ void TransliteratorAPITest::TestTransliterate2(){
         Data2[i+1].extractBetween(start, limit, gotResBuf);
         t->transliterate(gotResBuf);
         //  errln("FAIL: calling transliterate on " + t->getID());
-        doTest(t->getID() + ".transliterate(UnicodeString, int32_t, int32_t, UnicodeString):(" + start + "," + limit + ")  for \n\t source: " + Data2[i+1], gotResBuf, Data2[i+4]);
+        doTest(t->getID() + ".transliterate(UnicodeString, int32_t, int32_t, UnicodeString):(" + start + "," + limit + ")  for \n\t source: " + prettify(Data2[i+1]), gotResBuf, Data2[i+4]);
 
         temp=Data2[i+1];
         t->transliterate(temp, start, limit);
-        doTest(t->getID() + ".transliterate(Replaceable, int32_t, int32_t, ):(" + start + "," + limit + ")  for \n\t source: " + Data2[i+1], temp, Data2[i+5]);
+        doTest(t->getID() + ".transliterate(Replaceable, int32_t, int32_t, ):(" + start + "," + limit + ")  for \n\t source: " + prettify(Data2[i+1]), temp, Data2[i+5]);
+        status = U_ZERO_ERROR;
     }
 
-
+    status = U_ZERO_ERROR;
     logln("\n   Try calling transliterate with illegal start and limit values");
-    t=Transliterator::createInstance("Any-Hex");
+    t=Transliterator::createInstance("Any-Hex", UTRANS_FORWARD, parseError, status);
     gotResBuf = temp = "try start greater than limit";
     t->transliterate(gotResBuf, 10, 5);
     if(gotResBuf == temp)
@@ -337,7 +356,9 @@ void TransliteratorAPITest::TestTransliterate3(){
     };
     int start, limit;
     UnicodeString message;
-    Transliterator *t=Transliterator::createInstance("Any-Hex");
+    UParseError parseError;
+    UErrorCode status = U_ZERO_ERROR;
+    Transliterator *t=Transliterator::createInstance("Any-Hex", UTRANS_FORWARD, parseError, status);
     if(t == 0)
         errln("FAIL : construction");
     for(uint32_t i=0; i<sizeof(Data)/sizeof(Data[0]); i=i+3){
@@ -352,7 +373,8 @@ void TransliteratorAPITest::TestTransliterate3(){
 void TransliteratorAPITest::TestSimpleKeyboardTransliterator(){
     logln("simple call to transliterate");
     UErrorCode status=U_ZERO_ERROR;
-    Transliterator* t=Transliterator::createInstance("Any-Hex");
+    UParseError parseError;
+    Transliterator* t=Transliterator::createInstance("Any-Hex", UTRANS_FORWARD, parseError, status);
     if(t == 0)
         errln("FAIL : construction");
     UTransPosition index={19,20,20,20};
@@ -400,10 +422,11 @@ void TransliteratorAPITest::TestKeyboardTransliterator1(){
         "",    UnicodeString("\\u0061\\u0062\\u007A", "")                              
 
     };
-    Transliterator* t=Transliterator::createInstance("Any-Hex");
+    UParseError parseError;
+    UErrorCode status = U_ZERO_ERROR;
+    Transliterator* t=Transliterator::createInstance("Any-Hex", UTRANS_FORWARD, parseError, status);
     //keyboardAux(t, Data);
     UTransPosition index={0, 0, 0, 0};
-    UErrorCode status=U_ZERO_ERROR;
     UnicodeString s;
     uint32_t i;
     logln("Testing transliterate(Replaceable, int32_t, UnicodeString, UErrorCode)");
@@ -471,9 +494,10 @@ void TransliteratorAPITest::TestKeyboardTransliterator2(){
     UnicodeString rs;
     UnicodeString dataStr;
     logln("Testing transliterate(Replaceable, int32_t, UnicodeString, UErrorCode)");       
-
+    UErrorCode status = U_ZERO_ERROR;
+    UParseError parseError;
     rs="Initial String: add--";
-    t=Transliterator::createInstance("Any-Hex");
+    t=Transliterator::createInstance("Any-Hex", UTRANS_FORWARD, parseError, status);
     if(t == 0)
         errln("FAIL : construction");
     else {
@@ -482,7 +506,7 @@ void TransliteratorAPITest::TestKeyboardTransliterator2(){
     }
 
     rs="Hindi --";
-    t=Transliterator::createInstance("Latin-Devanagari");
+    t=Transliterator::createInstance("Latin-Devanagari", UTRANS_FORWARD, parseError, status);
     if(t == 0)
         errln("FAIL : construction");
     else
@@ -506,9 +530,10 @@ void TransliteratorAPITest::TestKeyboardTransliterator3(){
     };
 
     UErrorCode status=U_ZERO_ERROR;
+    UParseError parseError;
     UTransPosition index={0, 0, 0, 0};
     logln("Testing transliterate(Replaceable, int32_t, UErrorCode)");
-    Transliterator *t=Transliterator::createInstance("Any-Hex");
+    Transliterator *t=Transliterator::createInstance("Any-Hex", UTRANS_FORWARD, parseError, status);
     if(t == 0)
         errln("FAIL : construction");
     for(uint32_t i=0; i<sizeof(Data)/sizeof(Data[0]); i=i+4){
@@ -560,9 +585,9 @@ void TransliteratorAPITest::TestNullTransliterator(){
 void TransliteratorAPITest::TestRegisterUnregister(){
    
    UErrorCode status=U_ZERO_ERROR;
-
+   UParseError parseError;
     /* Make sure it doesn't exist */
-   if (Transliterator::createInstance("TestA-TestB") != NULL) {
+   if (Transliterator::createInstance("TestA-TestB", UTRANS_FORWARD, parseError, status) != NULL) {
       errln("FAIL: TestA-TestB already registered\n");
       return;
    }
@@ -573,6 +598,7 @@ void TransliteratorAPITest::TestRegisterUnregister(){
       return;
    }
    */
+   status =U_ZERO_ERROR;
 
    /* Create it */
    Transliterator *t = new RuleBasedTransliterator("TestA-TestB",
@@ -582,7 +608,7 @@ void TransliteratorAPITest::TestRegisterUnregister(){
    Transliterator::registerInstance(t);
 
    /* Now check again -- should exist now*/
-   Transliterator *s = Transliterator::createInstance("TestA-TestB");
+   Transliterator *s = Transliterator::createInstance("TestA-TestB", UTRANS_FORWARD, parseError, status);
    if (s == NULL) {
       errln("FAIL: TestA-TestB not registered\n");
       return;
@@ -602,7 +628,7 @@ void TransliteratorAPITest::TestRegisterUnregister(){
    /*unregister the instance*/
    Transliterator::unregister("TestA-TestB");
    /* now Make sure it doesn't exist */
-   if (Transliterator::createInstance("TestA-TestB") != NULL) {
+   if (Transliterator::createInstance("TestA-TestB", UTRANS_FORWARD, parseError, status) != NULL) {
       errln("FAIL: TestA-TestB isn't unregistered\n");
       return;
    }
@@ -650,7 +676,9 @@ class TestFilter3 : public UnicodeFilter {
 
 
 void TransliteratorAPITest::TestGetAdoptFilter(){
-    Transliterator *t=Transliterator::createInstance("Any-Hex");
+    UErrorCode status;
+    UParseError parseError;
+    Transliterator *t=Transliterator::createInstance("Any-Hex", UTRANS_FORWARD, parseError, status);
     if(t == 0)
         errln("FAIL : construction");
     const UnicodeFilter *u=t->getFilter();
@@ -764,7 +792,7 @@ void TransliteratorAPITest::displayOutput(const UnicodeString& got, const Unicod
 
 /*Internal Functions used*/
 void TransliteratorAPITest::doTest(const UnicodeString& message, const UnicodeString& result, const UnicodeString& expected){
-    if (result == expected) 
+    if (prettify(result) == prettify(expected)) 
         logln((UnicodeString)"Ok: " + prettify(message) + " passed \"" + prettify(expected) + "\"");
     else 
         errln((UnicodeString)"FAIL:" + message + " failed  Got-->" + prettify(result)+ ", Expected--> " + prettify(expected) );
