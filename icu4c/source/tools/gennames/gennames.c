@@ -390,7 +390,7 @@ lineFn(void *context,
     }
 
     /* check for non-character code points */
-    if((code&0xfffe)==0xfffe || (uint32_t)(code-0xfdd0)<0x20) {
+    if(!UTF_IS_UNICODE_CHAR(code)) {
         fprintf(stderr, "gennames: error - properties for non-character code point U+%04lx\n",
                 (unsigned long)code);
         *pErrorCode=U_PARSE_ERROR;
@@ -487,7 +487,12 @@ skipNoise(char *line, int16_t start, int16_t limit) {
     char c;
 
     /* skip anything that is not part of a word in this sense */
-    while(start<limit && !(('A'<=(c=line[start]) && c<='Z') || ('0'<=c && c<='9'))) {
+    while(start<limit &&
+          !(('A'<=(c=line[start]) && c<='I') || /* EBCDIC-safe check for letters */
+            ('J'<=c && c<='R') ||
+            ('S'<=c && c<='Z') ||
+            ('0'<=c && c<='9'))
+    ) {
         ++start;
     }
 
@@ -499,7 +504,12 @@ getWord(char *line, int16_t start, int16_t limit) {
     char c=0; /* initialize to avoid a compiler warning although the code was safe */
 
     /* a unicode character name word consists of A-Z0-9 */
-    while(start<limit && (('A'<=(c=line[start]) && c<='Z') || ('0'<=c && c<='9'))) {
+    while(start<limit &&
+          (('A'<=(c=line[start]) && c<='I') || /* EBCDIC-safe check for letters */
+           ('J'<=c && c<='R') ||
+           ('S'<=c && c<='Z') ||
+           ('0'<=c && c<='9'))
+    ) {
         ++start;
     }
 
@@ -574,6 +584,13 @@ compress() {
 
         /* how many tokens and lead bytes do we have now? */
         tokenCount=wordCount+letterCount+(LEADBYTE_LIMIT-1);
+        /*
+         * adjust upwards to take into account that
+         * double-byte tokens must not
+         * use NAME_SEPARATOR_CHAR as a second byte
+         */
+        tokenCount+=(tokenCount-256+254)/255;
+
         leadByteCount=(int16_t)(tokenCount>>8);
         if(leadByteCount<LEADBYTE_LIMIT) {
             /* adjust for the real number of lead bytes */
@@ -583,6 +600,8 @@ compress() {
             leadByteCount=LEADBYTE_LIMIT-1;
             tokenCount=LEADBYTE_LIMIT*256;
             wordCount=tokenCount-letterCount-(LEADBYTE_LIMIT-1);
+            /* adjust again to skip double-byte tokens with ';' */
+            wordCount-=(tokenCount-256+254)/255;
         }
 
         /* set token 0 to word 0 */
@@ -601,6 +620,7 @@ compress() {
 
         /* set the tokens */
         for(; i<256; ++i) {
+            /* if store10Names then the parser set tokens[NAME_SEPARATOR_CHAR]=-1 */
             if(tokens[i]!=-1) {
                 tokens[i]=wordNumber;
                 if(beVerbose) {
@@ -613,15 +633,20 @@ compress() {
         }
 
         /* continue above 255 where there are no letters */
-        for(; i<tokenCount; ++i) {
-            tokens[i]=wordNumber;
-            if(beVerbose) {
-                printf("tokens[0x%03x]: word%8ld \"%.*s\"\n",
-                        i, (long)words[wordNumber].weight,
-                        words[wordNumber].length, words[wordNumber].s);
+        for(; (uint32_t)wordNumber<wordCount; ++i) {
+            if((i&0xff)==NAME_SEPARATOR_CHAR) {
+                tokens[i]=-1; /* do not use NAME_SEPARATOR_CHAR as a second token byte */
+            } else {
+                tokens[i]=wordNumber;
+                if(beVerbose) {
+                    printf("tokens[0x%03x]: word%8ld \"%.*s\"\n",
+                            i, (long)words[wordNumber].weight,
+                            words[wordNumber].length, words[wordNumber].s);
+                }
+                ++wordNumber;
             }
-            ++wordNumber;
         }
+        tokenCount=i; /* should be already tokenCount={i or i+1} */
     }
 
     if(!beQuiet) {
