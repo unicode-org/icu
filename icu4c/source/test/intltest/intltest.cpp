@@ -498,6 +498,78 @@ IntlTest::setTestDirectory(const char* newDir)
     strcpy(_testDirectory, newTestDir);
 }
 
+
+
+/*  IntlTest::setICU_DATA  - if the ICU_DATA environment variable is not already
+ *                       set, try to deduce the directory in which ICU was built,
+ *                       and set ICU_DATA to "icu/source/data" in that location.
+ *                       The intent is to allow the tests to have a good chance
+ *                       of running without requiring that the user manually set
+ *                       ICU_DATA.  Common data isn't a problem, since it is
+ *                       picked up via a static (build time) reference, but the
+ *                       tests dynamically load some data.
+ *
+ *                       TODO:  The use of ICU_DATA can be eliminated once the proposed
+ *                              udata_setApplicationData() API exists.
+ */
+void IntlTest::setICU_DATA() {
+    const char *original_ICU_DATA;
+
+    original_ICU_DATA = getenv("ICU_DATA");
+    if (original_ICU_DATA != NULL) {
+        /*  If the user set ICU_DATA, don't second-guess him. */
+        return;
+    }
+
+    /* U_SRCDATADIR is set by the makefiles on UNIXes when building cintltst and intltst 
+     *              to point to the right place, "wherever/icu/source/data"              
+     *   The value is complete with quotes, so it can be used as-is as a string constant.
+     */
+#if defined (U_SRCDATADIR) 
+    {
+        static const char env_string = "ICU_DATA=" U_SRCDATADIR;
+        putenv(env_string);
+        return
+    }
+#endif
+
+    /* On Windows, the file name obtained from __FILE__ includes a full path.      
+     *             This file is "wherever\icu\source\test\cintltst\cintltst.c"  
+     *             Change to    "wherever\icu\source\data"     
+     */
+    {
+        char *p;
+        char *pBackSlash;
+        int i;
+        
+        p = new char [strlen("ICU_DATA=\\data") + strlen(__FILE__) + 1];  //  <<< LEAK
+        strcpy(p, "ICU_DATA=");
+        strcat(p, __FILE__);
+        /* We want to back over three '\' chars.                            */
+        /*   Only Windows should end up here, so looking for '\' is safe.   */
+        for (i=1; i<=3; i++) {
+            pBackSlash = strrchr(p, '\\');
+            if (pBackSlash != NULL) {
+                *pBackSlash = 0;        /* Truncate the string at the '\'   */
+            }
+        }
+
+        if (pBackSlash != NULL) {
+            /* We found and truncated three names from the path.         
+             *  Now append "source\data" and set the environment
+             */
+            strcpy(pBackSlash, "\\data");
+            putenv(p);     /*  p is "ICU_DATA=wherever\icu\source\data"    */
+            return;
+        }
+    }
+
+    /* No location for the data dir was identifiable.
+     *   Add other fallbacks for the test data location here if the need arises
+     */
+}
+
+
 //--------------------------------------------------------------------------------------
 
 static const int32_t indentLevel_offset = 3;
@@ -949,6 +1021,9 @@ main(int argc, char* argv[])
     UBool quick = TRUE;
     UBool name = FALSE;
     UBool leaks = FALSE;
+
+    // If user didn't set ICU_DATA, attempt to generate one.
+    IntlTest::setICU_DATA();
 
     /* ### TODO: remove when the new normalization implementation is finished */
     if(argc>1 && argv[1][0]=='N') {
