@@ -14,11 +14,12 @@ TESTDT=$(TESTPKG)_
 ALL : "$(TESTDATAOUT)\testdata.dat" 
 	@echo Test data is built.
 
-"$(TESTDATAOUT)\testdata.dat" : "$(TESTDATABLD)\casing.res" "$(TESTDATABLD)\root.res" "$(TESTDATABLD)\te.res" "$(TESTDATABLD)\te_IN.res" "$(TESTDATABLD)\testaliases.res" "$(TESTDATABLD)\testtypes.res" "$(TESTDATABLD)\testempty.res" "$(TESTDATABLD)\iscii.res" "$(TESTDATABLD)\idna_rules.res" "$(TESTDATABLD)\DataDrivenCollationTest.res" $(TESTDATABLD)\testdata_test.icu "$(TESTDATABLD)\testdata_test1.cnv" "$(TESTDATABLD)\testdata_test3.cnv" "$(TESTDATABLD)\testdata_test4.cnv"
+"$(TESTDATAOUT)\testdata.dat" : "$(TESTDATABLD)\casing.res" "$(TESTDATABLD)\mc.res" "$(TESTDATABLD)\root.res" "$(TESTDATABLD)\te.res" "$(TESTDATABLD)\te_IN.res" "$(TESTDATABLD)\testaliases.res" "$(TESTDATABLD)\testtypes.res" "$(TESTDATABLD)\testempty.res" "$(TESTDATABLD)\iscii.res" "$(TESTDATABLD)\idna_rules.res" "$(TESTDATABLD)\DataDrivenCollationTest.res" $(TESTDATABLD)\testdata_test.icu "$(TESTDATABLD)\testdata_test1.cnv" "$(TESTDATABLD)\testdata_test3.cnv" "$(TESTDATABLD)\testdata_test4.cnv"
 	@echo Building test data
 	@copy "$(TESTDATABLD)\testdata_te.res" "$(TESTDATAOUT)\testdata_nam.typ"
 	@"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -f -v -m common -c -p"$(TESTPKG)"  -O "$(PKGOPT)" -d "$(TESTDATAOUT)" -T "$(TESTDATABLD)" -s "$(TESTDATABLD)" <<
 testdata_casing.res
+testdata_mc.res
 testdata_root.res
 testdata_te.res
 testdata_te_IN.res
