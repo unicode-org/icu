@@ -403,6 +403,7 @@ if test x"$mapped" != x; then
     if test x"$datapackaging" != x -a x"$mapped" != x"$datapackaging"; then
 	AC_MSG_ERROR(conflicting values used for --with-data-packaging and deprecated --enable-mapped)
     fi
+    datapackaging=$mapped
 fi
 
 if test x"$datapackaging" = x -o x"$datapackaging" = xauto; then
