@@ -102,14 +102,19 @@ U_NAMESPACE_BEGIN
  * The Olson data is stored the "zoneinfo" resource bundle.
  * Sub-resources are organized into three ranges of data: Zones, final
  * rules, and country tables.  There is also a meta-data resource
- * which has six integers: The start and count values for the three
- * ranges.  E.g., 10, 15, 3, 7, 0, 3 means that sub resources at index
- * 0..2 are country maps, 3..9 are final rules, and 10..24 are zones.
- *
- * We currently only need to know the zone range.
+ * which has 3 integers: The number of zones, rules, and countries,
+ * respectively.  The country count includes the non-country '%' and
+ * the rule count includes the non-rule '_' (the metadata).
  */
 static int32_t OLSON_ZONE_START = -1; // starting index of zones
 static int32_t OLSON_ZONE_COUNT = 0;  // count of zones
+
+/* We could compute all of the following, but we don't need them
+static int32_t OLSON_RULE_START = 0;  // starting index of rules
+static int32_t OLSON_RULE_COUNT = 0;  // count of zones
+static int32_t OLSON_COUNTRY_START = 0; // starting index of countries
+static int32_t OLSON_COUNTRY_COUNT = 0; // count of zones
+*/
 
 /**
  * Given a pointer to an open "zoneinfo" resource, load up the Olson
@@ -123,11 +128,26 @@ static UBool getOlsonMeta(const UResourceBundle* top) {
         ures_getByKey(top, "_", &res, &ec);
         int32_t len;
         const int32_t* v = ures_getIntVector(&res, &len, &ec);
-        if (U_SUCCESS(ec) && len == 6) {
-            OLSON_ZONE_START = v[0];
-            OLSON_ZONE_COUNT = v[1];
-            // We don't use the rule start/count @ v[2..3]
-            // We don't use the country start/count @ v[4..5]
+        if (U_SUCCESS(ec) && len == 3) {
+            OLSON_ZONE_COUNT = v[0];
+            // Note: Remove the following `int32_t' declarations if you
+            //       uncomment the declarations above!
+            int32_t OLSON_RULE_COUNT = v[1];
+            int32_t OLSON_COUNTRY_COUNT = v[2];
+
+            // Try to figure out how strcmp in genrb is going to sort
+            // things.  This has to be done here, dynamically, rather
+            // than at build time.
+            char zoneCh='A', ruleCh='_', countryCh='%'; // [sic]
+            OLSON_ZONE_START = ((ruleCh < zoneCh) ? OLSON_RULE_COUNT : 0) +
+                               ((countryCh < zoneCh) ? OLSON_COUNTRY_COUNT : 0);
+
+            /* We could compute the following, but we don't need them -- yet
+            OLSON_RULE_START = ((zoneCh < ruleCh) ? OLSON_ZONE_COUNT : 0) +
+                               ((countryCh < ruleCh) ? OLSON_COUNTRY_COUNT : 0);
+            OLSON_COUNTRY_START = ((ruleCh < countryCh) ? OLSON_RULE_COUNT : 0) +
+                                  ((zoneCh < countryCh) ? OLSON_ZONE_COUNT : 0);
+            */
         }
         ures_close(&res);
     }
