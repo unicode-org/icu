@@ -182,15 +182,6 @@ unorm_normalize(const UChar *source, int32_t sourceLength,
                 UChar *result, int32_t resultLength,
                 UErrorCode *status);
 
-#ifdef ICU_UNORM_USE_DEPRECATES
-/**
- * The function u_normalize() has been renamed to unorm_normalize()
- * for consistency. The old name is obsolete.
- * @obsolete ICU 2.2. Use unorm_normalize instead since this API will be removed in that release.
- */
-#define u_normalize unorm_normalize
-#endif /* ICU_UNORM_USE_DEPRECATES */
-
 /**
  * Result values for unorm_quickCheck().
  * For details see Unicode Technical Report 15.

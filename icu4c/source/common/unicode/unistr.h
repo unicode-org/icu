@@ -2745,48 +2745,6 @@ public:
   /* Miscellaneous operations */
 
   /**
-   * Returns the number of display cells occupied by the range
-   * [<TT>start</TT>, <TT>length</TT>).
-   * This function is designed for Asian text and properly takes into account
-   * halfwidth and fullwidth variants of various CJK characters and the 
-   * combining behavior of the Hangul Jamo characters (with some limitations;
-   * see documentation for Unicode::getCellWidth()).<BR>
-   * In order to avoid dealing with fractions, this function can either be
-   * construed to return twice the actual number of display cells or to 
-   * treat a "cell" as the width of a halfwidth character rather than the
-   * width of a fullwidth character.
-   * @param start the start of the range
-   * @param length the number of characters to measure
-   * @param asian The <TT>asian</TT> parameter controls whether characters
-   * considered NEUTRAL by the Unicode class are treated as halfwidth or 
-   * fullwidth here.  If you set <TT>asian</TT> to FALSE, neutrals are 
-   * treated as halfwidth, and this function returns a close approximation
-   * of how many Latin display cells the text will take up in a monospaced
-   * font.
-   * @return the number of display cells occupied by the specified substring.
-   * @obsolete ICU 2.6. Use UCHAR_EAST_ASIAN_WIDTH instead since this API will be removed in that release.
-   */
-  int32_t numDisplayCells(int32_t start = 0,
-              int32_t length = INT32_MAX,
-              UBool asian = TRUE) const;
-
-#ifdef U_USE_DEPRECATED_UCHAR_REFERENCE
-  /**
-   * Return a modifiable reference to a code unit of the string.
-   * This is unsafe because copying the UCharReference can leave it with
-   * a dangling pointer to this UnicodeString object.
-   * It also causes inefficient code because in most cases, the r-value
-   * operator[] const is intended to be used instead of creating
-   * a UCharReference object.
-   *
-   * @param pos The index of the code unit to refer to.
-   * @return A modifiable UCharReference to that code unit.
-   * @obsolete ICU 2.4. Use charAt(), setCharAt(), and operator[] const instead since this API will be removed in that release.
-   */
-  UCharReference operator[] (int32_t pos);
-#endif
-
-  /**
    * Unescape a string of characters and return a string containing
    * the result.  The following escape sequences are recognized:
    *
@@ -4046,88 +4004,6 @@ UnicodeString::reverse(int32_t start,
                int32_t _length)
 { return doReverse(start, _length); }
 
-
-#ifdef U_USE_DEPRECATED_UCHAR_REFERENCE
-
-//========================================
-// class UCharReference
-//========================================
-
-/**
- * A proxy class to allow the UnicodeString::operator[] function to
- * work as a readable and a writable operator.
- * @obsolete ICU 2.4. Use charAt(), setCharAt(), and operator[] const instead since this API will be removed in that release.
- */
-class U_COMMON_API UCharReference : public UObject {
-public:
-  UCharReference();
-  inline UCharReference(UnicodeString *string,
-         int32_t pos);
-  inline UCharReference(const UCharReference& that);
-  ~UCharReference();
-
-  inline UCharReference& operator= (const UCharReference& that);
-  inline UCharReference& operator= (UChar c);
-
-  inline operator UChar();
-
-  /**
-   * ICU "poor man's RTTI", returns a UClassID for the actual class.
-   *
-   * @draft ICU 2.2
-   */
-  virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
-
-  /**
-   * ICU "poor man's RTTI", returns a UClassID for this class.
-   *
-   * @draft ICU 2.2
-   */
-  static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
-
-private:
-  UnicodeString *fString;
-  int32_t fPos;
-
-  /**
-   * The address of this static class variable serves as this class's ID
-   * for ICU "poor man's RTTI".
-   */
-  static const char fgClassID;
-};
-
-
-//========================================
-// Inline members
-//========================================
-inline
-UCharReference::UCharReference(UnicodeString *string, 
-                   int32_t pos)
-  : UObject(), fString(string), fPos(pos)
-{}
-
-inline
-UCharReference::UCharReference(const UCharReference& that)
-: UObject(that)
-{ this->operator=(that); }
-
-inline
-UCharReference::~UCharReference()
-{}
-
-inline UCharReference&
-UCharReference::operator= (const UCharReference& that)
-{ fString->setCharAt(fPos, that.fString->charAt(that.fPos)); return *this; }
-
-inline UCharReference& 
-UCharReference::operator= (UChar c)
-{ fString->setCharAt(fPos, c); return *this; }
-
-inline
-UCharReference::operator UChar()
-{ return fString->charAt(fPos); }
-
-#endif
 
 U_NAMESPACE_END
 

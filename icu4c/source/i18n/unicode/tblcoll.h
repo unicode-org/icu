@@ -555,57 +555,6 @@ public:
   */
   virtual void setStrength(ECollationStrength newStrength);
 
-#ifdef ICU_NORMALIZER_USE_DEPRECATES
-  // obsolete functions ---------------------------------------------------
-
-  /**
-   * RuleBasedCollator constructor. This takes the table rules and builds a
-   * collation table out of them. Please see RuleBasedCollator class
-   * description for more details on the collation rule syntax.
-   * @param rules the collation rules to build the collation table from.
-   * @param decompositionMode the normalisation mode
-   * @param status reporting a success or an error.
-   * @see Locale
-   * @obsolete ICU 2.4. Specify the decomposition mode with a UColAttributeValue instead since this API will be removed in that release.
-   */
-  RuleBasedCollator(const UnicodeString& rules,
-                    Normalizer::EMode decompositionMode,
-                    UErrorCode& status);
-
-  /**
-   * RuleBasedCollator constructor. This takes the table rules and builds a
-   * collation table out of them. Please see RuleBasedCollator class
-   * description for more details on the collation rule syntax.
-   * @param rules the collation rules to build the collation table from.
-   * @param collationStrength default strength for comparison
-   * @param decompositionMode the normalisation mode
-   * @param status reporting a success or an error.
-   * @see Locale
-   * @obsolete ICU 2.4. Specify the decomposition mode with a UColAttributeValue instead since this API will be removed in that release.
-   */
-  RuleBasedCollator(const UnicodeString& rules,
-                    ECollationStrength collationStrength,
-                    Normalizer::EMode decompositionMode,
-                    UErrorCode& status);
-
-  /**
-  * Set the decomposition mode of the Collator object. success is equal to
-  * U_ILLEGAL_ARGUMENT_ERROR if error occurs.
-  * @param the new decomposition mode
-  * @see Collator#getDecomposition
-  * @obsolete ICU 2.4. Use setAttribute() instead since this API will be removed in that release.
-  */
-  virtual void setDecomposition(Normalizer::EMode  mode);
-
-  /**
-  * Get the decomposition mode of the Collator object.
-  * @return the decomposition mode
-  * @see Collator#setDecomposition
-  * @obsolete ICU 2.4. Use getAttribute() instead since this API will be removed in that release.
-  */
-  virtual Normalizer::EMode getDecomposition(void) const;
-#endif /* ICU_NORMALIZER_USE_DEPRECATES */
-
 private:
 
   // private static constants -----------------------------------------------

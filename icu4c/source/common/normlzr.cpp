@@ -48,56 +48,6 @@ Normalizer::Normalizer(const CharacterIterator& iter, UNormalizationMode mode) :
     init(iter.clone());
 }
 
-// deprecated constructors
-
-#ifdef ICU_NORMALIZER_USE_DEPRECATES
-Normalizer::Normalizer(const UnicodeString& str, 
-                       EMode mode) :
-    UObject(), fUMode(getUMode(mode)), fOptions(0),
-    currentIndex(0), nextIndex(0),
-    buffer(), bufferPos(0)
-{
-    init(new StringCharacterIterator(str));
-}
-
-Normalizer::Normalizer(const UnicodeString& str, 
-                       EMode mode, 
-                       int32_t options) :
-    UObject(), fUMode(getUMode(mode)), fOptions(options),
-    currentIndex(0), nextIndex(0),
-    buffer(), bufferPos(0)
-{
-    init(new StringCharacterIterator(str));
-}
-
-Normalizer::Normalizer(const UChar *str, int32_t length, EMode mode) :
-    UObject(), fUMode(getUMode(mode)), fOptions(0),
-    currentIndex(0), nextIndex(0),
-    buffer(), bufferPos(0)
-{
-    init(new UCharCharacterIterator(str, length));
-}
-
-Normalizer::Normalizer(const CharacterIterator& iter, 
-                       EMode mode) :
-    UObject(), fUMode(getUMode(mode)), fOptions(0),
-    currentIndex(0), nextIndex(0),
-    buffer(), bufferPos(0)
-{
-    init(iter.clone());
-}
-
-Normalizer::Normalizer(const CharacterIterator& iter, 
-                       EMode mode, 
-                       int32_t options) :
-    UObject(), fUMode(getUMode(mode)), fOptions(options),
-    currentIndex(0), nextIndex(0),
-    buffer(), bufferPos(0)
-{
-    init(iter.clone());
-}
-#endif /* ICU_NORMALIZER_USE_DEPRECATES */
-
 Normalizer::Normalizer(const Normalizer &copy) :
     UObject(copy), fUMode(copy.fUMode), fOptions(copy.fOptions),
     currentIndex(copy.currentIndex), nextIndex(copy.nextIndex),
@@ -409,32 +359,6 @@ Normalizer::setIndexOnly(int32_t index) {
     currentIndex=nextIndex=text->move(text, index, UITER_ZERO); // validates index
     clearBuffer();
 }
-
-#ifdef ICU_NORMALIZER_USE_DEPRECATES
-/**
- * Set the iteration position in the input text that is being normalized
- * and return the first normalized character at that position.
- * <p>
- * <b>Note:</b> This method sets the position in the <em>input</em> text,
- * while {@link #next} and {@link #previous} iterate through characters
- * in the normalized <em>output</em>.  This means that there is not
- * necessarily a one-to-one correspondence between characters returned
- * by <tt>next</tt> and <tt>previous</tt> and the indices passed to and
- * returned from <tt>setIndex</tt> and {@link #getIndex}.
- * <p>
- * @param index the desired index in the input text->
- *
- * @return      the first normalized character that is the result of iterating
- *              forward starting at the given index.
- *
- * @throws IllegalArgumentException if the given index is less than
- *          {@link #getBeginIndex} or greater than {@link #getEndIndex}.
- */
-UChar32 Normalizer::setIndex(int32_t index) {
-    setIndexOnly(index);
-    return current();
-}
-#endif  /* ICU_NORMALIZER_USE_DEPRECATES */
 
 /**
  * Return the first character in the normalized text->  This resets
