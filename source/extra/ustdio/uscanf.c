@@ -29,7 +29,6 @@
 #include "unicode/uset.h"
 #include "uscanf.h"
 #include "ufile.h"
-#include "uscanf_p.h"
 #include "locbund.h"
 
 #include "cmemory.h"
@@ -438,7 +437,6 @@ u_scanf_scidbl_handler(UFILE             *input,
     /* mask off any necessary bits */
     /*  if(! info->fIsLong_double)
     num &= DBL_MAX;*/
-
 
     /* we converted 1 arg */
     return 1;
@@ -876,6 +874,7 @@ u_scanf_scanset_handler(UFILE             *input,
     /* we converted 1 arg */
     return 1;
 }
+
 
 U_CAPI int32_t U_EXPORT2
 u_fscanf(UFILE        *f,

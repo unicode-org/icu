@@ -26,8 +26,8 @@
 #include "unicode/unum.h"
 #include "unicode/udat.h"
 #include "unicode/uset.h"
+#include "uscanf.h"
 #include "ufile.h"
-#include "uscanf_p.h"
 #include "locbund.h"
 
 #include "cmemory.h"
@@ -284,6 +284,9 @@ u_scanf_double_handler(UFILE    *input,
     /* skip all ws in the input */
     u_scanf_skip_leading_ws(input, info->fPadChar);
 
+    /* fill the input's internal buffer */
+    ufile_fill_uchar_buffer(input);
+
     /* determine the size of the input's buffer */
     len = input->str.fLimit - input->str.fPos;
 
@@ -328,6 +331,9 @@ u_scanf_scientific_handler(UFILE    *input,
 
     /* skip all ws in the input */
     u_scanf_skip_leading_ws(input, info->fPadChar);
+
+    /* fill the input's internal buffer */
+    ufile_fill_uchar_buffer(input);
 
     /* determine the size of the input's buffer */
     len = input->str.fLimit - input->str.fPos;
@@ -382,6 +388,9 @@ u_scanf_scidbl_handler(UFILE    *input,
 
     /* skip all ws in the input */
     u_scanf_skip_leading_ws(input, info->fPadChar);
+
+    /* fill the input's internal buffer */
+    ufile_fill_uchar_buffer(input);
 
     /* determine the size of the input's buffer */
     len = input->str.fLimit - input->str.fPos;
@@ -445,6 +454,9 @@ u_scanf_integer_handler(UFILE    *input,
 
     /* skip all ws in the input */
     u_scanf_skip_leading_ws(input, info->fPadChar);
+
+    /* fill the input's internal buffer */
+    ufile_fill_uchar_buffer(input);
 
     /* determine the size of the input's buffer */
     len = input->str.fLimit - input->str.fPos;
@@ -514,6 +526,9 @@ u_scanf_percent_handler(UFILE    *input,
 
     /* skip all ws in the input */
     u_scanf_skip_leading_ws(input, info->fPadChar);
+
+    /* fill the input's internal buffer */
+    ufile_fill_uchar_buffer(input);
 
     /* determine the size of the input's buffer */
     len = input->str.fLimit - input->str.fPos;
@@ -617,6 +632,9 @@ u_scanf_spellout_handler(UFILE    *input,
     /* skip all ws in the input */
     u_scanf_skip_leading_ws(input, info->fPadChar);
 
+    /* fill the input's internal buffer */
+    ufile_fill_uchar_buffer(input);
+
     /* determine the size of the input's buffer */
     len = input->str.fLimit - input->str.fPos;
 
@@ -656,9 +674,11 @@ u_scanf_hex_handler(UFILE    *input,
     void           *num         = (void*) (args[0].ptrValue);
     int64_t         result;
 
-
     /* skip all ws in the input */
     u_scanf_skip_leading_ws(input, info->fPadChar);
+
+    /* fill the input's internal buffer */
+    ufile_fill_uchar_buffer(input);
 
     /* determine the size of the input's buffer */
     len = input->str.fLimit - input->str.fPos;
@@ -708,6 +728,9 @@ u_scanf_octal_handler(UFILE    *input,
     /* skip all ws in the input */
     u_scanf_skip_leading_ws(input, info->fPadChar);
 
+    /* fill the input's internal buffer */
+    ufile_fill_uchar_buffer(input);
+
     /* determine the size of the input's buffer */
     len = input->str.fLimit - input->str.fPos;
 
@@ -747,6 +770,9 @@ u_scanf_pointer_handler(UFILE    *input,
     /* skip all ws in the input */
     u_scanf_skip_leading_ws(input, info->fPadChar);
 
+    /* fill the input's internal buffer */
+    ufile_fill_uchar_buffer(input);
+
     /* determine the size of the input's buffer */
     len = input->str.fLimit - input->str.fPos;
 
@@ -778,6 +804,10 @@ u_scanf_scanset_handler(UFILE    *input,
     UChar           *s     = (UChar*) (args[0].ptrValue);
     UChar           *alias, *limit;
 
+
+    /* fill the input's internal buffer */
+    ufile_fill_uchar_buffer(input);
+
     /* Create an empty set */
     scanset = uset_open(0, -1);
 
@@ -800,6 +830,7 @@ u_scanf_scanset_handler(UFILE    *input,
 
     /* verify that the parse was successful */
     if (U_SUCCESS(status)) {
+        c=0;
 
         /* grab characters one at a time and make sure they are in the scanset */
         while(alias < limit) {
