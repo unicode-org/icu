@@ -371,7 +371,7 @@ public:
     * @param status the error code status.
     * @return the transformed key.
     * @see CollationKey
-    * @stable ICU 2.0
+    * @deprecated ICU 2.8 Use getSortKey(...) instead
     */
     virtual CollationKey& getCollationKey(const UnicodeString& source,
                                           CollationKey& key,
@@ -388,7 +388,7 @@ public:
     * @param status the error code status.
     * @return the transformed key.
     * @see CollationKey
-    * @stable ICU 2.0
+    * @deprecated ICU 2.8 Use getSortKey(...) instead
     */
     virtual CollationKey& getCollationKey(const UChar *source,
                                           int32_t sourceLength,
