@@ -497,9 +497,69 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
  */
 static void entryClose(UResourceDataEntry *resB);
 /* INTERNAL: */
-static UResourceBundle *init_resb_result(const ResourceData *rdata, const Resource r, const char *key, UResourceDataEntry *realData, UResourceBundle *resB, UErrorCode *status) {
+static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r, const char *key, UResourceDataEntry *realData, UResourceBundle *resB, UErrorCode *status) {
     if(status == NULL || U_FAILURE(*status)) {
         return resB;
+    }
+    if(RES_GET_TYPE(r) == RES_ALIAS) { /* This is an alias, need to exchange with real data */
+      int32_t len = 0;
+      const UChar *alias = res_getAlias(rdata, r, &len);   
+      if(len > 0) {
+        /* we have an alias, now let's cut it up */
+        int32_t i = 0;
+        char *chAlias = NULL, *path = NULL, *locale = NULL, *keyPath = NULL;
+        int32_t pathLen = 0, localeLen = 0, keyPathLen = 0;
+        chAlias = (char *)uprv_malloc((len+1)*sizeof(char));
+        u_UCharsToChars(alias, chAlias, len);
+        chAlias[len] = 0;
+
+        locale = uprv_strchr(chAlias, '|');
+        if(locale == NULL) {
+          locale = chAlias;
+        } else {
+          *locale = 0;
+          locale++;
+          path = chAlias;
+        }
+
+        keyPath = uprv_strchr(locale, '/');
+        if(keyPath == NULL) {
+          *status = U_ILLEGAL_ARGUMENT_ERROR;
+        } else {
+          *keyPath = 0;
+          keyPath++;
+        }
+
+        {
+          char *kp = NULL;
+          /* got almost everything, let's try to open */
+          UResourceBundle *res = ures_open(path, locale, status);
+          UResourceBundle *res2 = resB;
+          while(kp=uprv_strchr(keyPath, '/')) {
+            *kp = 0;
+            res2 = ures_getByKey(res, keyPath, res2, status);
+            ures_close(res);
+            res = res2;
+            keyPath = kp+1;
+          }
+          res2 = ures_getByKey(res, keyPath, res2, status);
+          ures_close(res);
+          /*res = res2;*/
+
+          /* here we have the wanted resource */
+          /*
+          rdata = &(res->fResData);
+          r = res->fRes;
+          realData = res->fData;
+          */
+          uprv_free(chAlias);
+          return res2;
+        }
+      } else {
+        /* bad alias, should be an error */ 
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return resB;
+      }
     }
     if(resB == NULL) {
         resB = (UResourceBundle *)uprv_malloc(sizeof(UResourceBundle));
