@@ -269,6 +269,7 @@ InputPath=.\bidi.h
 
 "..\..\include\bidi.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy      bidi.h      ..\..\include
+
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "common - Win32 Debug"
@@ -278,6 +279,7 @@ InputPath=.\bidi.h
 
 "..\..\include\bidi.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy      bidi.h      ..\..\include
+
 # End Custom Build
 
 !ENDIF 
@@ -294,6 +296,7 @@ InputPath=.\chariter.h
 
 "..\..\include\chariter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy                           chariter.h                            ..\..\include
+
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "common - Win32 Debug"
@@ -303,6 +306,7 @@ InputPath=.\chariter.h
 
 "..\..\include\chariter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy                           chariter.h                            ..\..\include
+
 # End Custom Build
 
 !ENDIF 
@@ -331,6 +335,7 @@ InputPath=.\convert.h
 
 "..\..\include\convert.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy                           convert.h                            ..\..\include
+
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "common - Win32 Debug"
@@ -340,6 +345,7 @@ InputPath=.\convert.h
 
 "..\..\include\convert.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy                           convert.h                            ..\..\include
+
 # End Custom Build
 
 !ENDIF 
@@ -376,6 +382,7 @@ InputPath=.\locid.h
 
 "..\..\include\locid.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy                           locid.h                            ..\..\include
+
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "common - Win32 Debug"
@@ -385,6 +392,7 @@ InputPath=.\locid.h
 
 "..\..\include\locid.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy                           locid.h                            ..\..\include
+
 # End Custom Build
 
 !ENDIF 
@@ -409,6 +417,7 @@ InputPath=.\normlzr.h
 
 "..\..\include\normlzr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy                           normlzr.h                            ..\..\include
+
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "common - Win32 Debug"
@@ -418,6 +427,7 @@ InputPath=.\normlzr.h
 
 "..\..\include\normlzr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy                           normlzr.h                            ..\..\include
+
 # End Custom Build
 
 !ENDIF 
@@ -434,6 +444,7 @@ InputPath=.\putil.h
 
 "..\..\include\putil.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy                            putil.h                            ..\..\include
+
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "common - Win32 Debug"
@@ -443,6 +454,7 @@ InputPath=.\putil.h
 
 "..\..\include\putil.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy                            putil.h                            ..\..\include
+
 # End Custom Build
 
 !ENDIF 
@@ -459,6 +471,7 @@ InputPath=.\pwin32.h
 
 "..\..\include\pwin32.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy                       pwin32.h                        ..\..\include
+
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "common - Win32 Debug"
@@ -468,6 +481,7 @@ InputPath=.\pwin32.h
 
 "..\..\include\pwin32.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy                       pwin32.h                        ..\..\include
+
 # End Custom Build
 
 !ENDIF 
@@ -496,6 +510,7 @@ InputPath=.\resbund.h
 
 "..\..\include\resbund.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy                             resbund.h                            ..\..\include
+
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "common - Win32 Debug"
@@ -505,6 +520,7 @@ InputPath=.\resbund.h
 
 "..\..\include\resbund.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy                             resbund.h                            ..\..\include
+
 # End Custom Build
 
 !ENDIF 
@@ -521,6 +537,7 @@ InputPath=.\schriter.h
 
 "..\..\include\schriter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy                            schriter.h                            ..\..\include
+
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "common - Win32 Debug"
@@ -530,6 +547,7 @@ InputPath=.\schriter.h
 
 "..\..\include\schriter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy                            schriter.h                            ..\..\include
+
 # End Custom Build
 
 !ENDIF 
@@ -546,6 +564,7 @@ InputPath=.\scsu.h
 
 "..\..\include\scsu.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy       scsu.h       ..\..\include
+
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "common - Win32 Debug"
@@ -555,6 +574,7 @@ InputPath=.\scsu.h
 
 "..\..\include\scsu.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy       scsu.h       ..\..\include
+
 # End Custom Build
 
 !ENDIF 
@@ -571,6 +591,7 @@ InputPath=.\ubidi.h
 
 "..\..\include\ubidi.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy      ubidi.h      ..\..\include
+
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "common - Win32 Debug"
@@ -580,6 +601,7 @@ InputPath=.\ubidi.h
 
 "..\..\include\ubidi.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy      ubidi.h      ..\..\include
+
 # End Custom Build
 
 !ENDIF 
@@ -600,6 +622,7 @@ InputPath=.\uchar.h
 
 "..\..\include\uchar.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy                             uchar.h                            ..\..\include
+
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "common - Win32 Debug"
@@ -609,6 +632,7 @@ InputPath=.\uchar.h
 
 "..\..\include\uchar.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy                             uchar.h                            ..\..\include
+
 # End Custom Build
 
 !ENDIF 
@@ -625,6 +649,7 @@ InputPath=.\uchriter.h
 
 "..\..\include\uchriter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy                           uchriter.h                            ..\..\include
+
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "common - Win32 Debug"
@@ -634,6 +659,7 @@ InputPath=.\uchriter.h
 
 "..\..\include\uchriter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy                           uchriter.h                            ..\..\include
+
 # End Custom Build
 
 !ENDIF 
@@ -662,6 +688,7 @@ InputPath=.\ucnv.h
 
 "..\..\include\ucnv.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy                           ucnv.h                            ..\..\include
+
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "common - Win32 Debug"
@@ -671,6 +698,7 @@ InputPath=.\ucnv.h
 
 "..\..\include\ucnv.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy                           ucnv.h                            ..\..\include
+
 # End Custom Build
 
 !ENDIF 
@@ -687,6 +715,7 @@ InputPath=.\ucnv_bld.h
 
 "..\..\include\ucnv_bld.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy                           ucnv_bld.h                            ..\..\include
+
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "common - Win32 Debug"
@@ -696,6 +725,7 @@ InputPath=.\ucnv_bld.h
 
 "..\..\include\ucnv_bld.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy                           ucnv_bld.h                            ..\..\include
+
 # End Custom Build
 
 !ENDIF 
@@ -716,6 +746,7 @@ InputPath=.\ucnv_err.h
 
 "..\..\include\ucnv_err.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy                           ucnv_err.h                            ..\..\include
+
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "common - Win32 Debug"
@@ -725,6 +756,7 @@ InputPath=.\ucnv_err.h
 
 "..\..\include\ucnv_err.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy                           ucnv_err.h                            ..\..\include
+
 # End Custom Build
 
 !ENDIF 
@@ -753,6 +785,7 @@ InputPath=.\uloc.h
 
 "..\..\include\uloc.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy                              uloc.h                            ..\..\include
+
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "common - Win32 Debug"
@@ -762,6 +795,7 @@ InputPath=.\uloc.h
 
 "..\..\include\uloc.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy                              uloc.h                            ..\..\include
+
 # End Custom Build
 
 !ENDIF 
@@ -813,6 +847,7 @@ InputPath=.\unicode.h
 
 "..\..\include\unicode.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy                             unicode.h                            ..\..\include
+
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "common - Win32 Debug"
@@ -822,6 +857,7 @@ InputPath=.\unicode.h
 
 "..\..\include\unicode.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy                             unicode.h                            ..\..\include
+
 # End Custom Build
 
 !ENDIF 
@@ -838,6 +874,7 @@ InputPath=.\unistr.h
 
 "..\..\include\unistr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy                              unistr.h                            ..\..\include
+
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "common - Win32 Debug"
@@ -847,6 +884,7 @@ InputPath=.\unistr.h
 
 "..\..\include\unistr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy                              unistr.h                            ..\..\include
+
 # End Custom Build
 
 !ENDIF 
@@ -867,6 +905,7 @@ InputPath=.\ures.h
 
 "..\..\include\ures.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy                              ures.h                            ..\..\include
+
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "common - Win32 Debug"
@@ -876,6 +915,7 @@ InputPath=.\ures.h
 
 "..\..\include\ures.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy                              ures.h                            ..\..\include
+
 # End Custom Build
 
 !ENDIF 
@@ -892,6 +932,7 @@ InputPath=.\ustring.h
 
 "..\..\include\ustring.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy                             ustring.h                            ..\..\include
+
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "common - Win32 Debug"
@@ -901,6 +942,7 @@ InputPath=.\ustring.h
 
 "..\..\include\ustring.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy                             ustring.h                            ..\..\include
+
 # End Custom Build
 
 !ENDIF 
@@ -917,6 +959,7 @@ InputPath=.\utypes.h
 
 "..\..\include\utypes.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy                              utypes.h                            ..\..\include
+
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "common - Win32 Debug"
@@ -926,6 +969,7 @@ InputPath=.\utypes.h
 
 "..\..\include\utypes.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy                              utypes.h                            ..\..\include
+
 # End Custom Build
 
 !ENDIF 
