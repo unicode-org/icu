@@ -1,5 +1,5 @@
 TARGETS = en.res root.res sr.res
-GENRB = $(MAKEDIR)\..\..\tools\genrb\debug\genrb.exe
+GENRB = ..\..\..\bin\genrb.exe
 GENRBOPT = -s. -d.
 
 all : $(TARGETS)

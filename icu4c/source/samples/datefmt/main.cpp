@@ -1,6 +1,7 @@
 #include "unicode/unistr.h"
 #include "unicode/calendar.h"
 #include "unicode/datefmt.h"
+#include "unicode/uclean.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include "util.h"
@@ -54,5 +55,6 @@ int main(int argc, char **argv) {
     }
 
     printf("Exiting successfully\n");
+    u_cleanup();
     return 0;
 }

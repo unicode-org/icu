@@ -21,6 +21,7 @@
 #include "unicode/ucal.h"
 #include "unicode/ures.h"
 #include "unicode/ustring.h"
+#include "unicode/uclean.h"
 
 #include "uprint.h"
 
@@ -153,6 +154,9 @@ main(int argc,
     /* print the cal */
     cal(month, year, useLongNames, &status);
     
+    /* ICU cleanup.  Deallocate any memory ICU may be holding.  */
+    u_cleanup();
+
     return (U_FAILURE(status) ? 1 : 0);
 }
 
