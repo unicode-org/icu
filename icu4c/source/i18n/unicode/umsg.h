@@ -22,6 +22,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "unicode/uloc.h"
 #include "unicode/parseerr.h"
 #include <stdarg.h>
 /**
@@ -593,6 +594,18 @@ umsg_vparse(UMessageFormat *fmt,
             int32_t        *count,
             va_list        ap,
             UErrorCode     *status);
+
+
+/** Get the locale for this message format object. You can choose between valid and actual locale.
+ *  @param cal The calendar object
+ *  @param type type of the locale we're looking for (valid or actual) 
+ *  @param status error code for the operation
+ *  @return the locale name
+ */
+U_CAPI const char* U_EXPORT2
+umsg_getLocaleByType(const UMessageFormat *fmt,
+                     ULocDataLocaleType type,
+                     UErrorCode* status); 
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 

@@ -573,4 +573,11 @@ udat_setSymbols(    UDateFormat             *format,
   }
 }
 
+U_CAPI const char* U_EXPORT2
+udat_getLocaleByType(const UDateFormat *fmt,
+                     ULocDataLocaleType type,
+                     UErrorCode* status)
+{
+  return NULL;
+}
 #endif /* #if !UCONFIG_NO_FORMATTING */
