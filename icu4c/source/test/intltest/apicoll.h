@@ -150,6 +150,11 @@ public:
     void TestGetTailoredSet();
 
 	/**
+    * Tests the subclassability
+    */
+    void TestSubclass();
+
+	/**
     * Tests the dynamic and static ids of collation classes
     */
     void TestUClassID();

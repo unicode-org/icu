@@ -134,8 +134,8 @@ void StringSearchTest::runIndexedTest(int32_t index, UBool exec,
         CASE(30, TestGetSetOffsetCanonical)
         CASE(31, TestSupplementaryCanonical)
         CASE(32, TestContractionCanonical)
-        CASE(33, TestSearchIterator)
-		CASE(34, TestUClassID)
+        CASE(33, TestUClassID)
+		CASE(34, TestSubclass)
         default: name = ""; break;
     }
 }
@@ -2041,13 +2041,32 @@ void StringSearchTest::TestContractionCanonical()
     delete collator;
 }
 
-class TempSearch : public SearchIterator
+void StringSearchTest::TestUClassID()
+{
+	char id = *((char *)StringSearch::getStaticClassID());
+	if (id != 0) {
+		errln("Static class id for StringSearch should be 0");
+	}
+	UErrorCode     status    = U_ZERO_ERROR;
+    UnicodeString  text("text");
+    UnicodeString  pattern("pattern");
+    StringSearch  *strsrch = new StringSearch(pattern, text, m_en_us_, NULL, 
+                                              status);
+    id = *((char *)strsrch->getDynamicClassID());
+	if (id != 0) {
+		errln("Dynamic class id for StringSearch should be 0");
+	}
+	delete strsrch;
+}
+
+class TestSearch : public SearchIterator
 {
 public:
-    TempSearch();
-    TempSearch(TempSearch &search);
-    ~TempSearch();
-    void            setOffset(int32_t position, UErrorCode &status);
+    TestSearch(const UnicodeString &text, 
+		       BreakIterator *breakiter,
+			   const UnicodeString &pattern);
+    ~TestSearch();
+    void        setOffset(int32_t position, UErrorCode &status);
     int32_t     getOffset() const;
     SearchIterator* safeClone() const;
 
@@ -2065,6 +2084,8 @@ public:
      */
     static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
 
+	UnicodeString m_pattern_;
+
 protected:
     int32_t     handleNext(int32_t position, UErrorCode &status);
     int32_t     handlePrev(int32_t position, UErrorCode &status);
@@ -2076,112 +2097,102 @@ private:
      * for ICU "poor man's RTTI".
      */
     static const char fgClassID;
+	uint32_t m_offset_;
 };
 
-const char TempSearch::fgClassID=0;
+const char TestSearch::fgClassID=0;
 
-TempSearch::TempSearch() : SearchIterator()
+TestSearch::TestSearch(const UnicodeString &text, 
+					   BreakIterator *breakiter,
+					   const UnicodeString &pattern) : SearchIterator(text, breakiter)
+{
+	m_offset_ = 0;
+	m_pattern_ = pattern;
+}
+
+TestSearch::~TestSearch()
 {
 }
 
-TempSearch::TempSearch(TempSearch &search) : SearchIterator(search) 
+void TestSearch::setOffset(int32_t position, UErrorCode &status)
 {
-}
-
-TempSearch::~TempSearch()
-{
-}
-
-void TempSearch::setOffset(int32_t /*position*/, UErrorCode &/*status*/)
-{
-}
-
-int32_t TempSearch::getOffset() const
-{
-    return USEARCH_DONE;
-}
-
-SearchIterator * TempSearch::safeClone() const 
-{
-    return NULL;
-}
-
-int32_t TempSearch::handleNext(int32_t /*position*/, UErrorCode &/*status*/)
-{
-    return USEARCH_DONE;
-}
-
-int32_t TempSearch::handlePrev(int32_t /*position*/, UErrorCode &/*status*/)
-{
-    return USEARCH_DONE;
-}
-
-void StringSearchTest::TestSearchIterator()
-{
-    TempSearch search;
-    if (search.getBreakIterator() != NULL || 
-        search.getAttribute(USEARCH_OVERLAP) != USEARCH_OFF || 
-        search.getAttribute(USEARCH_CANONICAL_MATCH) != USEARCH_OFF ||
-        search.getMatchedStart() != USEARCH_DONE ||
-        search.getMatchedLength() != 0 || search.getText().length() != 0) {
-        errln("Error subclassing SearchIterator, default constructor failed");
-        return;
-    }
-    if (search.getAttribute(USEARCH_ATTRIBUTE_COUNT) != USEARCH_DEFAULT) {
-        errln("Error getting illegal attribute failed");
-        return;
-    }
-    UnicodeString           text("abc");
-    StringCharacterIterator striter(text);
-    UErrorCode              status = U_ZERO_ERROR;
-    search.setText(text, status);
-    TempSearch search2;
-    search2.setText(striter, status);
-    if (U_FAILURE(status) || search != search2) {
-        errln("Error setting text");
-        return;
-    }
-    if (search != search) {
-        errln("Error: search object has to be equals to itself");
-        return;
-    }
-    TempSearch search3(search);
-    if (search != search3) {
-        errln("Error: search object has to be equals to its copy");
-        return;
-    }
-    search.setAttribute(USEARCH_OVERLAP, USEARCH_ON, status);
-    if (U_FAILURE(status) || 
-        search.getAttribute(USEARCH_OVERLAP) != USEARCH_ON) {
-        errln("Error setting overlap attribute");
-    }
-    search.reset();
-    if (search.getAttribute(USEARCH_OVERLAP) != USEARCH_OFF) {
-        errln("Error resetting search");
-    }
-    search2 = search3;
-    if (search2 != search3) {
-        errln("Error: search object has to be equals to its assignment copy");
-        return;
-    }
-}
-
-void StringSearchTest::TestUClassID()
-{
-	char id = *((char *)StringSearch::getStaticClassID());
-	if (id != 0) {
-		errln("Static class id for StringSearch should be 0");
+	if (position >= 0 && position <= m_text_.length()) {
+		m_offset_ = position;
 	}
-	UErrorCode     status    = U_ZERO_ERROR;
-    UnicodeString  text("text");
-    UnicodeString  pattern("pattern");
-    StringSearch  *strsrch = new StringSearch(pattern, text, m_en_us_, NULL, 
-                                              status);
-    id = *((char *)strsrch->getDynamicClassID());
-	if (id != 0) {
-		errln("Dynamic class id for StringSearch should be 0");
+	else {
+		status = U_INDEX_OUTOFBOUNDS_ERROR;
 	}
-	delete strsrch;
+}
+
+int32_t TestSearch::getOffset() const
+{
+    return m_offset_;
+}
+
+SearchIterator * TestSearch::safeClone() const 
+{
+    return new TestSearch(m_text_, m_breakiterator_, m_pattern_);
+}
+
+int32_t TestSearch::handleNext(int32_t start, UErrorCode &status)
+{
+    int match = m_text_.indexOf(m_pattern_, start);
+    if (match < 0) {
+        m_offset_ = m_text_.length();
+		setMatchStart(m_offset_);
+		setMatchLength(0);
+        return USEARCH_DONE;
+    }
+	setMatchStart(match);
+    m_offset_ = match;
+    setMatchLength(m_pattern_.length());
+    return match;
+}
+
+int32_t TestSearch::handlePrev(int32_t start, UErrorCode &status)
+{
+    int match = m_text_.lastIndexOf(m_pattern_, 0, start);
+    if (match < 0) {
+        m_offset_ = 0;
+		setMatchStart(m_offset_);
+		setMatchLength(0);
+        return USEARCH_DONE;
+    }
+	setMatchStart(match);
+    m_offset_ = match;
+    setMatchLength(m_pattern_.length());
+    return match;
+}
+
+void StringSearchTest::TestSubclass()
+{    
+	UnicodeString text("abc abcd abc");
+	UnicodeString pattern("abc");
+	TestSearch search(text, NULL, pattern);
+    int expected[] = {0, 4, 9};
+	UErrorCode status = U_ZERO_ERROR;
+    for (int i = 0; i < sizeof(expected) / sizeof(int); i ++) {
+        if (search.next(status) != expected[i]) {
+            errln("Error getting next match");
+        }
+        if (search.getMatchedLength() != search.m_pattern_.length()) {
+            errln("Error getting next match length");
+        }
+    }
+    if (search.next(status) != USEARCH_DONE) {
+        errln("Error should have reached the end of the iteration");
+    }
+    for (int i = sizeof(expected) / sizeof(int) - 1; i >= 0; i --) {
+        if (search.previous(status) != expected[i]) {
+            errln("Error getting previous match");
+        }
+        if (search.getMatchedLength() != search.m_pattern_.length()) {
+            errln("Error getting previous match length");
+        }
+    }
+    if (search.previous(status) != USEARCH_DONE) {
+        errln("Error should have reached the start of the iteration");
+    }
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
