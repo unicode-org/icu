@@ -135,7 +135,7 @@ pkg_mak_writeStanza(FileStream *f, const UPKGOptions *o,
 void
 pkg_mak_writeFooter(FileStream *f, const UPKGOptions *o)
 {
-  /* nothing */
+  T_FileStream_writeLine(f, "\nrebuild: clean all\n");
 }
 
 
@@ -151,6 +151,8 @@ pkg_mak_writeObjRules(UPKGOptions *o,  FileStream *makefile, CharList **objects,
   CharList *infiles;
   CharList *parents = NULL, *commands = NULL;
   int32_t genFileOffset = 0;  /* offset from beginning of .c and .o file name, use to chop off package name for AS/400 */
+  static int serNo = 0; /* counter for numeric file names */
+  char serName[100];
 
   infiles = o->filePaths;
 
@@ -171,17 +173,23 @@ pkg_mak_writeObjRules(UPKGOptions *o,  FileStream *makefile, CharList **objects,
       continue;
     }
 
-    uprv_strncpy(tmp, baseName, p-baseName);
-    p++;
-
-    uprv_strcpy(tmp+(p-1-baseName), "_"); /* to append */
-    uprv_strcat(tmp, p);
-    uprv_strcat(tmp, objSuffix );
-
-    /* iSeries cannot have '-' in the .o objects. */
-    for( tmpPtr = tmp; *tmpPtr; tmpPtr++ ) {
-      if ( *tmpPtr == '-' ) {
-        *tmpPtr = '_';
+    if(o->numeric) {
+      sprintf(serName, "t%04x", serNo++);
+      uprv_strcpy(tmp,serName);
+      uprv_strcat(tmp, objSuffix);
+    } else {
+      uprv_strncpy(tmp, baseName, p-baseName);
+      p++;
+      
+      uprv_strcpy(tmp+(p-1-baseName), "_"); /* to append */
+      uprv_strcat(tmp, p);
+      uprv_strcat(tmp, objSuffix );
+    
+      /* iSeries cannot have '-' in the .o objects. */
+      for( tmpPtr = tmp; *tmpPtr; tmpPtr++ ) {
+        if ( *tmpPtr == '-' ) {
+          *tmpPtr = '_';
+        }
       }
     }
 
@@ -196,6 +204,12 @@ pkg_mak_writeObjRules(UPKGOptions *o,  FileStream *makefile, CharList **objects,
 
     /* make up commands.. */
     sprintf(stanza, "@$(INVOKE) $(GENCCODE) -n $(ENTRYPOINT) -d $(TEMP_DIR) $<");
+
+    if(o->numeric) {
+      strcat(stanza, " -f ");
+      strcat(stanza,serName);
+    }
+
     commands = pkg_appendToList(commands, NULL, uprv_strdup(stanza));
 
     if(genFileOffset > 0) {    /* for AS/400 */
