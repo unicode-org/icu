@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/VersionInfo.java,v $ 
- * $Date: 2002/08/02 23:13:11 $ 
- * $Revision: 1.8 $
+ * $Date: 2002/08/21 00:06:39 $ 
+ * $Revision: 1.9 $
  *
  * jitterbug 1741
  *****************************************************************************************
@@ -352,7 +352,7 @@ public final class VersionInfo
         UNICODE_3_1_0 = getInstance(3, 1, 0, 0);
         UNICODE_3_1_1 = getInstance(3, 1, 1, 0);
         UNICODE_3_2   = getInstance(3, 2, 0, 0);
-        ICU_VERSION = getInstance(2, 2, 0, 0);
+        ICU_VERSION = getInstance(2, 4, 0, 0);
     }
     
     // private constructor -----------------------------------------------
