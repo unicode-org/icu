@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationParsedRuleBuilder.java,v $ 
-* $Date: 2003/05/14 22:45:59 $ 
-* $Revision: 1.18 $
+* $Date: 2003/05/15 21:42:12 $ 
+* $Revision: 1.19 $
 *
 *******************************************************************************
 */
@@ -376,7 +376,7 @@ final class CollationParsedRuleBuilder
         try
         {
             String invdat = "/com/ibm/icu/impl/data/invuca.icu";
-            InputStream i = invdat.getClass().getResourceAsStream(invdat);
+            InputStream i = CollationParsedRuleBuilder.class.getResourceAsStream(invdat);
             BufferedInputStream b = new BufferedInputStream(i, 110000);
             INVERSE_UCA_ = CollatorReader.readInverseUCA(b);
             b.close();
