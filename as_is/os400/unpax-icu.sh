@@ -15,7 +15,7 @@
 #binary_suffixes='ico ICO bmp BMP jpg JPG gif GIF brk BRK'
 #ICU specific binary files
 binary_suffixes='brk BRK bin BIN'
-data_files='icu/source/data/locales/* icu/source/data/mappings/* icu/source/data/misc/* icu/source/data/translit/* icu/source/data/unidata/* icu/source/test/testdata/*'
+data_files='icu/source/data/brkitr/* icu/source/data/locales/* icu/source/data/mappings/* icu/source/data/misc/* icu/source/data/translit/* icu/source/data/unidata/* icu/source/test/testdata/*'
 
 usage()
 {
