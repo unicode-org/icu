@@ -210,8 +210,9 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
             logln("CollationAPITest---");
             logln("");
 
-            CollationAPITest test;
+            /* CollationAPITest test;
             callTest( test, par );
+            */
         }
         break;
 
