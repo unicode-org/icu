@@ -1306,7 +1306,10 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
               uint32_t baseCE = ucolIndirectBoundaries[src->parsedToken.indirectIndex].startCE;
               uint32_t baseContCE = ucolIndirectBoundaries[src->parsedToken.indirectIndex].startContCE;//&0xFFFFFF3F;
               uint32_t CE = UCOL_NOT_FOUND, SecondCE = UCOL_NOT_FOUND;
-              int32_t invPos = ucol_inv_getPrevCE(baseCE, baseContCE, &CE, &SecondCE, strength);
+
+              /*int32_t invPos = ucol_inv_getPrevCE(baseCE, baseContCE, &CE, &SecondCE, strength);*/
+              ucol_inv_getPrevCE(baseCE, baseContCE, &CE, &SecondCE, strength);
+
               ListList[src->resultLen].baseCE = CE;
               ListList[src->resultLen].baseContCE = SecondCE;
               ListList[src->resultLen].nextCE = 0;

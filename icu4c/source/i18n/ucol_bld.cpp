@@ -1035,7 +1035,7 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
   }
 
   UChar decomp[256];
-  uint32_t noOfDec = 0, CE = UCOL_NOT_FOUND;
+  uint32_t CE = UCOL_NOT_FOUND;
   UChar u = 0;
   UCAElements el;
   el.isThai = FALSE;
