@@ -72,6 +72,14 @@ U_CFUNC void
 ucnv_io_fillAvailableConverters(const char **aliases, UErrorCode *pErrorCode);
 
 /**
+ * Return the (n)th converter name in mixed case, or NULL
+ * if there is none (typically, if the data cannot be loaded).
+ * 0<=index<ucnv_io_countAvailableConverters().
+ */
+U_CFUNC void
+ucnv_io_flushAvailableConverterCache(void);
+
+/**
  * Return the number of all aliases (and converter names).
  */
 U_CFUNC uint16_t
