@@ -123,7 +123,7 @@ LDFLAGSICUTOOLUTIL=	/base:"0x4ac00000"# Same as layout. Layout and tools probabl
 # Current full path directory.
 CURR_FULL_DIR=$(subst \,/,$(shell cygpath -da .))#M# -m isn't used because it doesn't work on Win98
 # Current full path directory for use in source code in a -D compiler option.
-CURR_SRCCODE_FULL_DIR=$(subst \,\\\\,$(shell cygpath -da .))#M#
+CURR_SRCCODE_FULL_DIR=$(subst \,\\,$(shell cygpath -da .))#M#
 
 ifeq ($(srcdir),.)
 SOURCE_FILE=$<
