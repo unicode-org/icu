@@ -1060,9 +1060,8 @@ DecimalFormat::subformat(UnicodeString& appendTo,
 
         // Determine whether or not there are any printable fractional
         // digits.  If we've used up the digits we know there aren't.
-        UBool fractionPresent = (getMinimumFractionDigits() > 0) ||
-            (!isInteger && digitIndex < digits.fCount) ||
-            sigCount < minSigDig;
+        UBool fractionPresent = (!isInteger && digitIndex < digits.fCount) ||
+            (useSigDig ? (sigCount < minSigDig) : (getMinimumFractionDigits() > 0));
 
         // If there is no fraction present, and we haven't printed any
         // integer digits, then print a zero.  Otherwise we won't print
