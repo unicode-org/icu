@@ -1296,7 +1296,7 @@ u_scanf_parse(UFILE     *f,
 
                 /* if the handler encountered an error condition, break */
                 if(argConsumed < 0) {
-                    converted = -converted;
+                    converted = -1;
                     break;
                 }
 
