@@ -58,7 +58,7 @@ typedef enum UCharIteratorOrigin {
  *
  * @param iter the UCharIterator structure ("this pointer")
  * @param origin get the 0, start, limit, length, or current index
- * @return the requested index, or -1 in an error condition
+ * @return the requested index, or U_SENTINEL in an error condition
  *
  * @see UCharIteratorOrigin
  * @see UCharIterator
@@ -81,7 +81,7 @@ UCharIteratorGetIndex(UCharIterator *iter, UCharIteratorOrigin origin);
  * @param iter the UCharIterator structure ("this pointer")
  * @param delta can be positive, zero, or negative
  * @param origin move relative to the 0, start, limit, length, or current index
- * @return the new index, or -1 on an error condition.
+ * @return the new index, or U_SENTINEL on an error condition.
  *
  * @see UCharIteratorOrigin
  * @see UCharIterator
@@ -123,7 +123,7 @@ UCharIteratorHasPrevious(UCharIterator *iter);
  * Function type declaration for UCharIterator.current().
  *
  * Return the code unit at the current position,
- * or -1 if there is none (index is at the limit).
+ * or U_SENTINEL if there is none (index is at the limit).
  *
  * @param iter the UCharIterator structure ("this pointer")
  * @return the current code unit
@@ -131,7 +131,7 @@ UCharIteratorHasPrevious(UCharIterator *iter);
  * @see UCharIterator
  * @draft ICU 2.1
  */
-typedef int32_t U_CALLCONV
+typedef UChar32 U_CALLCONV
 UCharIteratorCurrent(UCharIterator *iter);
 
 /**
@@ -139,7 +139,7 @@ UCharIteratorCurrent(UCharIterator *iter);
  *
  * Return the code unit at the current index and increment
  * the index (post-increment, like s[i++]),
- * or return -1 if there is none (index is at the limit).
+ * or return U_SENTINEL if there is none (index is at the limit).
  *
  * @param iter the UCharIterator structure ("this pointer")
  * @return the current code unit (and post-increment the current index)
@@ -147,7 +147,7 @@ UCharIteratorCurrent(UCharIterator *iter);
  * @see UCharIterator
  * @draft ICU 2.1
  */
-typedef int32_t U_CALLCONV
+typedef UChar32 U_CALLCONV
 UCharIteratorNext(UCharIterator *iter);
 
 /**
@@ -155,7 +155,7 @@ UCharIteratorNext(UCharIterator *iter);
  *
  * Decrement the index and return the code unit from there
  * (pre-decrement, like s[--i]),
- * or return -1 if there is none (index is at the start).
+ * or return U_SENTINEL if there is none (index is at the start).
  *
  * @param iter the UCharIterator structure ("this pointer")
  * @return the previous code unit (after pre-decrementing the current index)
@@ -163,7 +163,7 @@ UCharIteratorNext(UCharIterator *iter);
  * @see UCharIterator
  * @draft ICU 2.1
  */
-typedef int32_t U_CALLCONV
+typedef UChar32 U_CALLCONV
 UCharIteratorPrevious(UCharIterator *iter);
 
 /**
@@ -197,8 +197,7 @@ UCharIteratorReserved(UCharIterator *iter, int32_t something);
  * fields directly.
  *
  * UCharIterator functions return code unit values 0..0xffff,
- * or -1 if the iteration bounds are reached.
- * Therefore, the return type is int32_t.
+ * or U_SENTINEL if the iteration bounds are reached.
  *
  * @draft ICU 2.1
  */
@@ -273,7 +272,7 @@ struct UCharIterator {
 
     /**
      * (public) Return the code unit at the current position,
-     * or -1 if there is none (index is at the limit).
+     * or U_SENTINEL if there is none (index is at the limit).
      *
      * @see UCharIteratorCurrent
      */
@@ -282,7 +281,7 @@ struct UCharIterator {
     /**
      * (public) Return the code unit at the current index and increment
      * the index (post-increment, like s[i++]),
-     * or return -1 if there is none (index is at the limit).
+     * or return U_SENTINEL if there is none (index is at the limit).
      *
      * @see UCharIteratorNext
      */
@@ -291,7 +290,7 @@ struct UCharIterator {
     /**
      * (public) Decrement the index and return the code unit from there
      * (pre-decrement, like s[--i]),
-     * or return -1 if there is none (index is at the start).
+     * or return U_SENTINEL if there is none (index is at the start).
      *
      * @see UCharIteratorPrevious
      */
@@ -310,7 +309,7 @@ struct UCharIterator {
  * at the current index.
  *
  * Return the code point that includes the code unit at the current position,
- * or -1 if there is none (index is at the limit).
+ * or U_SENTINEL if there is none (index is at the limit).
  * If the current code unit is a lead or trail surrogate,
  * then the following or preceding surrogate is used to form
  * the code point value.
@@ -319,11 +318,11 @@ struct UCharIterator {
  * @return the current code point
  *
  * @see UCharIterator
- * @see UTF_GET_CHAR
+ * @see U16_GET
  * @see UnicodeString::char32At()
  * @draft ICU 2.1
  */
-U_CAPI int32_t U_EXPORT2
+U_CAPI UChar32 U_EXPORT2
 uiter_current32(UCharIterator *iter);
 
 /**
@@ -331,16 +330,16 @@ uiter_current32(UCharIterator *iter);
  *
  * Return the code point at the current index and increment
  * the index (post-increment, like s[i++]),
- * or return -1 if there is none (index is at the limit).
+ * or return U_SENTINEL if there is none (index is at the limit).
  *
  * @param iter the UCharIterator structure ("this pointer")
  * @return the current code point (and post-increment the current index)
  *
  * @see UCharIterator
- * @see UTF_NEXT_CHAR
+ * @see U16_NEXT
  * @draft ICU 2.1
  */
-U_CAPI int32_t U_EXPORT2
+U_CAPI UChar32 U_EXPORT2
 uiter_next32(UCharIterator *iter);
 
 /**
@@ -348,16 +347,16 @@ uiter_next32(UCharIterator *iter);
  *
  * Decrement the index and return the code point from there
  * (pre-decrement, like s[--i]),
- * or return -1 if there is none (index is at the start).
+ * or return U_SENTINEL if there is none (index is at the start).
  *
  * @param iter the UCharIterator structure ("this pointer")
  * @return the previous code point (after pre-decrementing the current index)
  *
  * @see UCharIterator
- * @see UTF_PREV_CHAR
+ * @see U16_PREV
  * @draft ICU 2.1
  */
-U_CAPI int32_t U_EXPORT2
+U_CAPI UChar32 U_EXPORT2
 uiter_previous32(UCharIterator *iter);
 
 /**
