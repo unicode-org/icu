@@ -1,10 +1,10 @@
 /**************************************************************************
 *
-*   Copyright (C) 2000-2003, International Business Machines
+*   Copyright (C) 2000-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ***************************************************************************
-*   file name:  nmake.c
+*   file name:  make.c
 *   encoding:   ANSI X3.4 (1968)
 *   tab size:   8 (not used)
 *   indentation:4
@@ -49,6 +49,7 @@ pkg_mak_writeHeader(FileStream *f, const UPKGOptions *o)
     
     sprintf(linebuf, "NAME=%s%s\n"
                     "CNAME=%s\n"
+                    "LIBNAME=%s\n"
                     "SRCDIR=%s\n"
                     "TARGETDIR=%s\n"
                     "TEMP_DIR=%s\n"
@@ -60,13 +61,14 @@ pkg_mak_writeHeader(FileStream *f, const UPKGOptions *o)
                     o->shortName,
                     (appendVersion ? appendVersion : ""),
                     o->cShortName,
+                    o->libName,
                     o->srcDir,
                     o->targetDir,
                     o->tmpDir,
                     o->mode,
                     o->makeFile,
                     o->entryName,
-                    (appendVersion ? appendVersion : ""));
+                    o->version);
     T_FileStream_writeLine(f, linebuf);
     
     sprintf(linebuf, "## List files [%d] containing data files to process (note: - means stdin)\n"
