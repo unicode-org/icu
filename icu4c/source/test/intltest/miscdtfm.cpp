@@ -1,13 +1,8 @@
-/*
-********************************************************************
-* COPYRIGHT: 
-* (C) Copyright International Business Machines Corporation, 1998
-* Licensed Material - Program-Property of IBM - All Rights Reserved. 
-* US Government Users Restricted Rights - Use, duplication, or disclosure 
-* restricted by GSA ADP Schedule Contract with IBM Corp. 
-*
-********************************************************************
-*/
+/********************************************************************
+ * COPYRIGHT: 
+ * Copyright (c) 1997-1999, International Business Machines Corporation and
+ * others. All Rights Reserved.
+ ********************************************************************/
  
 #include "miscdtfm.h"
 
@@ -53,7 +48,7 @@ DateFormatMiscTests::failure(UErrorCode status, const char* msg)
 }
 
 /*
- * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.6 $ $Date: 1999/12/28 23:56:59 $
+ * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.7 $ $Date: 2000/01/15 01:58:57 $
  *
  * @bug 4097450
  */
@@ -145,7 +140,7 @@ DateFormatMiscTests::test4097450()
 }
 
 /*
- * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.6 $ $Date: 1999/12/28 23:56:59 $
+ * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.7 $ $Date: 2000/01/15 01:58:57 $
  *
  * @bug 4099975
  */

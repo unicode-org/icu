@@ -1,3 +1,8 @@
+/********************************************************************
+ * COPYRIGHT: 
+ * Copyright (c) 1999, International Business Machines Corporation and
+ * others. All Rights Reserved.
+ ********************************************************************/
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
 #include "ctest.h"
