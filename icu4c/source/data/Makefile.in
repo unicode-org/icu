@@ -104,7 +104,7 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 		&& CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 packagedata: build/icudata.lst $(top_builddir)/tools/pkgdata/icupkg.inc
-	( cd build ; $(INVOKE) $(PKGDATA) -e icudata -s . -T . -p lib$(ICUDATA_NAME) icudata.lst )
+	( cd build ; $(INVOKE) $(PKGDATA) -e icudata -s . -T . -p $(ICUDATA_NAME) icudata.lst )
 
 packagetest: $(TESTDATAOBJDIR)/testdata.lst $(top_builddir)/tools/pkgdata/icupkg.inc
 	( cd $(TESTDATAOBJDIR) ; $(INVOKE) $(PKGDATA) -T . -s . -p testdata testdata.lst )
