@@ -7,7 +7,7 @@
 
 es_PA {
     CurrencyElements { 
-            "B",
+            "B/",
             "PAB",
             ".",
     }

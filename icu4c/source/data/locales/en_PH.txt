@@ -13,7 +13,7 @@ en_PH {
 
     CurrencyElements { 
             "Php",
-            "PHP ",
+            "PHP",
             ".",
     }
     DateTimePatterns { 
@@ -23,8 +23,8 @@ en_PH {
             "h:mm a",
             "EEEE, MMMM d, yyyy",
             "MMMM d, yyyy",
-            "d-MMM-yy",
-            "dd/MM/yy",
+            "MM d, yy",
+            "M/d/yy",
             "{1} {0}",
     }
     NumberElements { 

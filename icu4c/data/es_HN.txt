@@ -7,7 +7,7 @@
 
 es_HN {
     CurrencyElements { 
-            "L",
+            "L.",
             "HNL",
             ".",
     }
@@ -18,8 +18,8 @@ es_HN {
             "hh:mm a",
             "EEEE dd' de 'MMMM' de 'yyyy",
             "dd' de 'MMMM' de 'yyyy",
-            "MM-dd-yyyy",
-            "MM-dd-yy",
+            "MM/dd/yyyy",
+            "MM/dd/yy",
             "{1} {0}",
     }
     LocaleID { "480a" }

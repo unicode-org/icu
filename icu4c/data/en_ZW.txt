@@ -10,7 +10,7 @@ en_ZW {
     ///* Discarding duplicate data for tag: AmPmMarkers */
     CurrencyElements {
             "Z$",
-            "ZWD ",
+            "ZWD",
             ".",
     }
     DateTimePatterns {
@@ -20,8 +20,8 @@ en_ZW {
             "h:mm a",
             "EEEE dd MMMM yyyy",
             "dd MMMM yyyy",
-            "MMM dd,yy",
-            "dd/MM/yy",
+            "dd MMM,yy",
+            "d/M/yyyy",
             "{1} {0}",
     }
     NumberPatterns {

@@ -7,9 +7,9 @@
 
 es_CO {
     CurrencyElements { 
-            "C$",
+            "$",
             "COP",
-            ".",
+            ",",
     }
     DateTimePatterns { 
             "hh:mm:ss a z",
@@ -25,8 +25,8 @@ es_CO {
     LocaleID { "240a" }
     LocaleString { "es_CO" }
     NumberElements { 
-            ".",
             ",",
+            ".",
             ";",
             "%",
             "0",
