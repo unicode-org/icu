@@ -6,11 +6,11 @@
 */
 package com.ibm.icu.dev.test.perf;
 import com.ibm.icu.text.*;
-import java.util.HashSet;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
+import java.text.BreakIterator;
 
 /**
  * A class for testing UnicodeSet performance.
@@ -20,9 +20,10 @@ import java.io.IOException;
  */
 public class RBBIPerf extends PerfTest {
 
-    String dataFileName;
-    RuleBasedBreakIterator bi;
-    String testString;
+    String                  dataFileName;
+    RuleBasedBreakIterator  bi;
+    BreakIterator           jdkbi;
+    String                  testString;
 
     public static void main(String[] args) throws Exception {
         new RBBIPerf().run(args);
@@ -30,8 +31,8 @@ public class RBBIPerf extends PerfTest {
 
     protected void setup(String[] args) {
         // We only take one argument, the pattern
-        if (args.length != 1) {
-            throw new RuntimeException("Please supply utf-8 encoded text data file");
+        if (args.length != 2) {
+            throw new RuntimeException("RBBITest params:  data_file_name break_iterator_type ");
         }
 
         try {
@@ -53,8 +54,23 @@ public class RBBIPerf extends PerfTest {
         	throw new RuntimeException(e.toString());   
         }
         
-        bi = (RuleBasedBreakIterator)BreakIterator.getLineInstance();
-        bi.setText(testString);
+        if (args.length >= 2) {
+            if (args[1].equals("char")) {
+                bi  = (RuleBasedBreakIterator)com.ibm.icu.text.BreakIterator.getCharacterInstance();  
+            } else if (args[1].equals("word")) {
+                bi  = (RuleBasedBreakIterator)com.ibm.icu.text.BreakIterator.getWordInstance();
+            } else if (args[1].equals("line")) {
+                bi  = (RuleBasedBreakIterator)com.ibm.icu.text.BreakIterator.getLineInstance();
+            } else if (args[1].equals("jdkline")) {
+                jdkbi  = BreakIterator.getLineInstance();
+            }
+        }
+        if (bi!=null ) {
+        	bi.setText(testString);
+        }
+        if (jdkbi != null) {
+            jdkbi.setText(testString);   
+        }
         
     }
 
@@ -64,29 +80,40 @@ public class RBBIPerf extends PerfTest {
         return new PerfTest.Function() {
             
         	public void call() {
-                int n;
-        		n = bi.first();
-        		for (; n != BreakIterator.DONE; n=bi.next()) {
-        		}   
+        		int n;
+        		if (bi != null) {
+        			n = bi.first();
+        			for (; n != BreakIterator.DONE; n=bi.next()) {
+        			}   
+        		} else {
+        			n = jdkbi.first();
+        			for (; n != BreakIterator.DONE; n=jdkbi.next()) {
+        			}   
+        		}
         	}
+        
         	
-        	
-            public long getOperationsPerIteration() {
-                int n;
-                int count = 0;
-                for (n=bi.first(); n != BreakIterator.DONE; n=bi.next()) {
-                    count++;
-                }   
-                System.out.println(count);
-                return count;
-            }
+        	public long getOperationsPerIteration() {
+        		int n;
+        		int count = 0;
+        		if (bi != null) {
+        			for (n=bi.first(); n != BreakIterator.DONE; n=bi.next()) {
+        				count++;
+        			}
+        		} else {      			
+        			for (n=jdkbi.first(); n != BreakIterator.DONE; n=jdkbi.next()) {
+        				count++;
+        			}
+        		}
+        		return count;
+        	}
         };
     }
-
-
+    
+    
     PerfTest.Function testRBBIPrevious() {
-        return new PerfTest.Function() {
-            
+    	return new PerfTest.Function() {
+    		
             public void call() {
                 bi.first();
                 int n=0;
@@ -101,8 +128,26 @@ public class RBBIPerf extends PerfTest {
                 for (n=bi.last(); n != BreakIterator.DONE; n=bi.previous()) {
                     count++;
                 }   
-                System.out.println(count);
                 return count;
+            }
+        };
+    }
+
+
+    PerfTest.Function testRBBIIsBoundary() {
+        return new PerfTest.Function() {
+            
+            public void call() {
+                int n=testString.length();
+                int i;
+                for (i=0; i<n; i++) {
+                    bi.isBoundary(i);
+                }   
+            }
+            
+            public long getOperationsPerIteration() {
+                int n = testString.length();
+                return n;
             }
         };
     }
