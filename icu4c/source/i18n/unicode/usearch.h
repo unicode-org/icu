@@ -15,6 +15,9 @@
 #include "unicode/ubrk.h"
 
 /**
+ * \file
+ * \brief C API: StringSearch
+ *
  * C Apis for an engine that provides language-sensitive text searching based 
  * on the comparison rules defined in a <tt>UCollator</tt> data struct,
  * see <tt>ucol.h</tt>. This ensures that language eccentricity can be 
