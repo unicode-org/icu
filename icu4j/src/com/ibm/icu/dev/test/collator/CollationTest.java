@@ -5,14 +5,15 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/collator/CollationTest.java,v $
- * $Date: 2003/01/28 18:55:33 $
- * $Revision: 1.8 $
+ * $Date: 2003/02/01 00:52:32 $
+ * $Revision: 1.9 $
  *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.collator;
 
 import com.ibm.icu.dev.test.ModuleTest;
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.text.RuleBasedCollator;
 import com.ibm.icu.text.Collator;
@@ -71,7 +72,7 @@ public class CollationTest extends ModuleTest
                 Locale l = LocaleUtility.getLocaleFromName(locale);
                 col = (RuleBasedCollator)Collator.getInstance(l);
             }catch (MissingResourceException e){
-                if(TestUtil.isModularBuild()){
+                if(isModularBuild()){
                     infoln("Could not load the locale data");
                 }else{
                     throw e;
@@ -90,7 +91,7 @@ public class CollationTest extends ModuleTest
             try {
                 col = new RuleBasedCollator(rules);
             }catch (MissingResourceException e){
-                if(TestUtil.isModularBuild()){
+                if(isModularBuild()){
                     infoln("Could not load the locale data");
                 }else{
                     throw e;
@@ -133,7 +134,7 @@ public class CollationTest extends ModuleTest
                 i ++;
             }
             else {
-                if(!TestUtil.isModularBuild()){
+                if(!isModularBuild()){
                     errln("Error in collation arguments, missing ["); // no opening '['
                 }
                 printInfo=true;
@@ -170,7 +171,7 @@ public class CollationTest extends ModuleTest
                 }
             }
         }
-        if(printInfo == true && TestUtil.isModularBuild()){
+        if(printInfo == true && isModularBuild()){
             infoln("Could not load the locale data. Skipping...");
         }
 
@@ -313,7 +314,7 @@ public class CollationTest extends ModuleTest
         int compareResult  = myCollation.compare(source, target);
         if (compareResult != result) {
             printInfo = true;
-            if(!TestUtil.isModularBuild()){
+            if(!isModularBuild()){
                 errln("Comparing \"" + Utility.hex(source) + "\" with \""
                       + Utility.hex(target) + "\" expected " + result
                       + " but got " + compareResult);
@@ -324,13 +325,13 @@ public class CollationTest extends ModuleTest
         compareResult = ssk.compareTo(tsk);
         if (compareResult != result) {
             printInfo = true;
-            if(!TestUtil.isModularBuild()){
+            if(!isModularBuild()){
                 errln("Comparing sortkeys of \"" + Utility.hex(source) + "\" with \""
                       + Utility.hex(target) + "\" expected " + result
                       + " but got " + compareResult);
            }
         }
-        if(printInfo == true && TestUtil.isModularBuild()){
+        if(printInfo == true && isModularBuild()){
             infoln("Could not load locale data skipping.");
         }
     }
