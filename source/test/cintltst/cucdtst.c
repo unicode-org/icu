@@ -674,7 +674,7 @@ static void TestStringFunctions()
     UChar temp[40];
     char test[40];
 
-setUpDataTable();
+    setUpDataTable();
 
     log_verbose("Testing u_strlen()\n");
     if( u_strlen(dataTable[0][0])!= u_strlen(dataTable[0][3]) || u_strlen(dataTable[0][0]) == u_strlen(dataTable[0][2]))
@@ -833,7 +833,25 @@ setUpDataTable();
 
     }
 
-cleanUpDataTable();
+    cleanUpDataTable();
+
+    /* test u_strcmpCodePointOrder() */
+    {
+        /* these strings are in ascending order */
+        static const UChar strings[5][3]={
+            { 0x61, 0 },            /* U+0061 */
+            { 0x20ac, 0 },          /* U+20ac */
+            { 0xff61, 0 },          /* U+ff61 */
+            { 0xd800, 0xdc02, 0 },  /* U+10002 */
+            { 0xd84d, 0xdc56, 0 }   /* U+23456 */
+        };
+
+        for(i=0; i<4; ++i) {
+            if(u_strcmpCodePointOrder(strings[i], strings[i+1])>=0) {
+                log_err("error: u_strcmpCodePointOrder() fails for string %d and the following one\n", i);
+            }
+        }
+    }
 }
 
 /* test u_charName() -------------------------------------------------------- */
