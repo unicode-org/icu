@@ -30,8 +30,8 @@
  *   -sourcepath c:/doug/cvsproj/icu4j/src 
  *   -name "ICU4J 3.0"
  *   -output icu4j30.api
- *   -zip
- *   com.ibm.icu.text
+ *   -gzip
+ *   com.ibm.icu.lang com.ibm.icu.math com.ibm.icu.text com.ibm.icu.util
  *
  * todo: separate generation of data files (which requires taglet) from 
  * comparison and report generation (which does not require it)
@@ -47,6 +47,7 @@ package com.ibm.icu.dev.tool.docs;
 import com.sun.javadoc.*;
 import java.io.*;
 import java.util.*;
+import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -58,6 +59,7 @@ public class GatherAPIData {
     String base; // strip this prefix
     String filter; // filter classes by name
     boolean zip;
+    boolean gzip;
 
     public static int optionLength(String option) {
         if (option.equals("-name")) {
@@ -69,6 +71,8 @@ public class GatherAPIData {
 	} else if (option.equals("-filter")) {
 	    return 2;
 	} else if (option.equals("-zip")) {
+	    return 1;
+	} else if (option.equals("-gzip")) {
 	    return 1;
 	}
         return 0;
@@ -94,6 +98,8 @@ public class GatherAPIData {
 		this.filter = options[i][1];
 	    } else if (opt.equals("-zip")) {
 		this.zip = true;
+	    } else if (opt.equals("-gzip")) {
+		this.gzip = true;
 	    }
         }
 
@@ -110,6 +116,8 @@ public class GatherAPIData {
 		    ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(output + ".zip"));
 		    zos.putNextEntry(new ZipEntry(output));
 		    os = zos;
+		} else if (gzip) {
+		    os = new GZIPOutputStream(new FileOutputStream(output + ".gz"));
 		} else {
 		    os = new FileOutputStream(output);
 		}

@@ -74,6 +74,9 @@ public class ReportAPI {
 		} else {
 		    File f = new File(fileName);
 		    is = new FileInputStream(f);
+		    if (fileName.endsWith(".gz")) {
+			is = new GZIPInputStream(is);
+		    }
 		}
 		InputStreamReader isr = new InputStreamReader(is);
 		return read(new BufferedReader(isr));
