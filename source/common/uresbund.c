@@ -1296,6 +1296,7 @@ ures_getByKeyWithFallback(const UResourceBundle *resB,
     Resource res = RES_BOGUS;
     /*UResourceDataEntry *realData = NULL;*/
     const char *key = inKey;
+    UResourceBundle *helper = NULL;
 
     if (status==NULL || U_FAILURE(*status)) {
         return fillIn;
@@ -1320,30 +1321,31 @@ ures_getByKeyWithFallback(const UResourceBundle *resB,
                     uprv_strcpy(path+resB->fResPathLen, inKey);
                     myPath = path;
                     key = inKey;
-                    res = res_findResource(&(dataEntry->fData), dataEntry->fData.rootRes, &myPath, &key);
-                    /*res = res_getTableItemByKey(&(resB->fData), resB->fData.rootRes, &indexR, resTag);*/
-                    if (RES_GET_TYPE(res) == URES_ALIAS && *myPath) {
-                        /* We hit an alias, but we didn't finish following the path. */
-                        /* TODO: Fix this so that complete fallback occurs with aliases. */
-                        res = RES_BOGUS;
-                        break;
-                    }
+                    do {
+                        res = res_findResource(&(dataEntry->fData), dataEntry->fData.rootRes, &myPath, &key);
+                        if (RES_GET_TYPE(res) == URES_ALIAS && *myPath) {
+                            /* We hit an alias, but we didn't finish following the path. */
+                            helper = init_resb_result(&(dataEntry->fData), res, inKey, -1, dataEntry, resB, 0, helper, status);
+                            dataEntry = helper->fData;
+                        }
+                    } while(uprv_strlen(myPath));
                 }
             }
             /*const ResourceData *rd = getFallbackData(resB, &key, &realData, &res, status);*/
             if(res != RES_BOGUS) {
               /* check if resB->fResPath gives the right name here */
-                return init_resb_result(&(dataEntry->fData), res, inKey, -1, dataEntry, resB, 0, fillIn, status);
+                fillIn = init_resb_result(&(dataEntry->fData), res, inKey, -1, dataEntry, resB, 0, fillIn, status);
             } else {
                 *status = U_MISSING_RESOURCE_ERROR;
             }
         } else {
-            return init_resb_result(&(resB->fResData), res, key, -1, resB->fData, resB, 0, fillIn, status);
+            fillIn = init_resb_result(&(resB->fResData), res, key, -1, resB->fData, resB, 0, fillIn, status);
         }
     } 
     else {
         *status = U_RESOURCE_TYPE_MISMATCH;
     }
+    ures_close(helper);
     return fillIn;
 }
 
