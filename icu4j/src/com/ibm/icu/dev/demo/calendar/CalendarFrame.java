@@ -1,5 +1,5 @@
 /**
- * $RCSfile: CalendarFrame.java,v $ $Revision: 1.1 $ $Date: 2000/02/10 06:25:48 $
+ * $RCSfile: CalendarFrame.java,v $ $Revision: 1.2 $ $Date: 2000/02/28 04:09:23 $
  *
  * (C) Copyright IBM Corp. 1998.  All Rights Reserved.
  *
@@ -16,22 +16,22 @@
 package com.ibm.demo.calendar;
 
 import com.ibm.demo.*;
+import com.ibm.text.*;
+import com.ibm.util.*;
 
 import java.applet.Applet;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.*;
+//import java.util.*;
 import java.net.*;
 import java.io.*;
 
 import java.text.DateFormat;
-//import java.text.SimpleDateFormat;
-//import java.text.DateFormatSymbols;
 import java.util.SimpleTimeZone;
-import java.util.*;
-
-import com.ibm.util.*;
-import com.ibm.text.*;
+import java.util.Locale;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * A Frame is a top-level window with a title. The default layout for a frame
