@@ -226,20 +226,24 @@ void doTestVariant(UCollator* myCollation, const UChar source[], const UChar tar
     int temp=0, gSortklen1=0,gSortklen2=0;
     UCollationResult compareResult, keyResult, incResult;
     uint8_t *sortKey1, *sortKey2;
+    uint32_t sLen = u_strlen(source);
+    uint32_t tLen = u_strlen(target);
+
     
-    compareResult = ucol_strcoll(myCollation, source, u_strlen(source), target, u_strlen(target));
-    incResult = ctst_strcollTestIncremental(myCollation, source, u_strlen(source), target, u_strlen(target));
-    sortklen1=ucol_getSortKey(myCollation, source, u_strlen(source),  NULL, 0);
-    sortklen2=ucol_getSortKey(myCollation, target, u_strlen(target),  NULL, 0);
+    compareResult = ucol_strcoll(myCollation, source, sLen, target, tLen);
+    compareResult = ucol_strcoll(myCollation, source, sLen, target, tLen);
+    incResult = ctst_strcollTestIncremental(myCollation, source, sLen, target, tLen);
+    sortklen1=ucol_getSortKey(myCollation, source, sLen,  NULL, 0);
+    sortklen2=ucol_getSortKey(myCollation, target, tLen,  NULL, 0);
 
     sortklenmax = (sortklen1>sortklen2?sortklen1:sortklen2);
     sortklenmin = (sortklen1<sortklen2?sortklen1:sortklen2);
 
     sortKey1=(uint8_t*)malloc(sizeof(uint8_t) * (sortklenmax+1));
-    ucol_getSortKey(myCollation, source, u_strlen(source), sortKey1, sortklen1+1);
+    ucol_getSortKey(myCollation, source, sLen, sortKey1, sortklen1+1);
     
     sortKey2=(uint8_t*)malloc(sizeof(uint8_t) * (sortklenmax+1));
-    ucol_getSortKey(myCollation, target, u_strlen(target), sortKey2, sortklen2+1);
+    ucol_getSortKey(myCollation, target, tLen, sortKey2, sortklen2+1);
     
     /*memcmp(sortKey1, sortKey2,sortklenmax);*/
     temp= uprv_strcmp((const char *)sortKey1, (const char *)sortKey2);

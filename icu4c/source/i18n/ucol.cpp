@@ -510,8 +510,11 @@ uint32_t ucol_getFirstCE(const UCollator *coll, UChar u, UErrorCode *status) {
   collIterate colIt;
   uint32_t order;
   init_collIterate(coll, &u, 1, &colIt, FALSE);
+#ifdef _DEBUG
   order = ucol_getNextCE(coll, &colIt, status);
-  /*UCOL_GETNEXTCE(order, coll, colIt, status);*/
+#else 
+  UCOL_GETNEXTCE(order, coll, colIt, status);
+#endif
   return order;
 }
 
@@ -1309,8 +1312,11 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
     
 
     for(;;) {
-          /*order = ucol_getNextCE(coll, s, &status);*/
+#ifdef _DEBUG
+          order = ucol_getNextCE(coll, s, &status);
+#else
           UCOL_GETNEXTCE(order, coll, *s, &status);
+#endif
           
           if(order == UCOL_NO_MORE_CES) {
               break;
@@ -1580,8 +1586,11 @@ ucol_calcSortKey(const    UCollator    *coll,
     for(;;) {
         for(i=prevBuffSize; i<minBufferSize; ++i) {
 
-            /*order = ucol_getNextCE(coll, &s, status);*/
+#ifdef _DEBUG
+            order = ucol_getNextCE(coll, &s, status);
+#else
             UCOL_GETNEXTCE(order, coll, s, status);
+#endif
 
             if(order == UCOL_NO_MORE_CES) {
                 finished = TRUE;
@@ -2081,8 +2090,11 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
     for(;;) {
         for(i=prevBuffSize; i<minBufferSize; ++i) {
 
-            /*order = ucol_getNextCE(coll, &s, status);*/
+#ifdef _DEBUG
+            order = ucol_getNextCE(coll, &s, status);
+#else
             UCOL_GETNEXTCE(order, coll, s, status);
+#endif
 
             if(isCEIgnorable(order)) {
               continue;
@@ -3035,16 +3047,22 @@ ucol_strcoll(    const    UCollator    *coll,
         /* Get the next collation element in each of the strings, unless */
         /* we've been requested to skip it. */
         while(sOrder == 0) {
+#ifdef _DEBUG
+          sOrder = ucol_getNextCE(coll, &sColl, &status);
+#else
           UCOL_GETNEXTCE(sOrder, coll, sColl, &status);
-          /*sOrder = ucol_getNextCE(coll, &sColl, &status);*/
+#endif
           sOrder ^= caseSwitch;
           *(sCEs++) = sOrder;
           sOrder &= 0xFFFF0000;
         }
 
         while(tOrder == 0) {
+#ifdef _DEBUG
+          tOrder = ucol_getNextCE(coll, &tColl, &status);
+#else
           UCOL_GETNEXTCE(tOrder, coll, tColl, &status);
-          /*tOrder = ucol_getNextCE(coll, &tColl, &status);*/
+#endif
           tOrder ^= caseSwitch;
           *(tCEs++) = tOrder;
           tOrder &= 0xFFFF0000;
@@ -3075,8 +3093,11 @@ ucol_strcoll(    const    UCollator    *coll,
 
 /* This is where abridged version for shifted should go */
         for(;;) {
+#ifdef _DEBUG
+          sOrder = ucol_getNextCE(coll, &sColl, &status);
+#else
           UCOL_GETNEXTCE(sOrder, coll, sColl, &status);
-          /*sOrder = ucol_getNextCE(coll, &sColl, &status);*/
+#endif
           if(sOrder == UCOL_NO_MORE_CES) {
             *(sCEs++) = sOrder;
             break;
@@ -3124,8 +3145,11 @@ ucol_strcoll(    const    UCollator    *coll,
         sInShifted = FALSE;
 
         for(;;) {
+#ifdef _DEBUG
+          tOrder = ucol_getNextCE(coll, &tColl, &status);
+#else
           UCOL_GETNEXTCE(tOrder, coll, tColl, &status);
-          /*tOrder = ucol_getNextCE(coll, &tColl, &status);*/
+#endif
           if(tOrder == UCOL_NO_MORE_CES) {
             *(tCEs++) = tOrder;
             break;
