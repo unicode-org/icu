@@ -144,6 +144,23 @@ u_writeIdenticalLevelRun(const UChar *s, int32_t length, uint8_t *p) {
     return (int32_t)(p-p0);
 }
 
+U_CFUNC int32_t
+u_writeIdenticalLevelRunTwoChars(UChar32 first, UChar32 second, uint8_t *p) {
+    uint8_t *p0 = p;
+    if(first<0x4e00 || first>=0xa000) {
+        first=(first&~0x7f)-SLOPE_REACH_NEG_1;
+    } else {
+        /*
+         * Unihan U+4e00..U+9fa5:
+         * double-bytes down from the upper end
+         */
+        first=0x9fff-SLOPE_REACH_POS_2;
+    }
+
+    p=u_writeDiff(second-first, p);
+    return (int32_t)(p-p0);
+}
+
 /* How many bytes would writeIdenticalLevelRun() write? */
 U_CFUNC int32_t
 u_lengthOfIdenticalLevelRun(const UChar *s, int32_t length) {
