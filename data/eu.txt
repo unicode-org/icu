@@ -1,0 +1,82 @@
+﻿  // -*- Coding: utf-8; -*-
+// *******************************************************************************
+// *
+// *   Copyright (C) 1997-2000, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// *******************************************************************************
+
+eu {
+   Version { "x0.0" }
+
+    DayAbbreviations { 
+            "igandea",
+            "astelehena",
+            "asteartea",
+            "asteazkena",
+            "osteguna",
+            "ostirala",
+            "larunbata",
+    }
+    DayNames { 
+            "igandea",
+            "astelehena",
+            "asteartea",
+            "asteazkena",
+            "osteguna",
+            "ostirala",
+            "larunbata",
+    }
+    MonthAbbreviations { 
+            "urt",
+            "ots",
+            "mar",
+            "api",
+            "mai",
+            "eka",
+            "uzt",
+            "abu",
+            "ira",
+            "urr",
+            "aza",
+            "abe",
+            "",
+    }
+    MonthNames { 
+            "urtarrila",
+            "otsaila",
+            "martxoa",
+            "apirila",
+            "maiatza",
+            "ekaina",
+            "uztaila",
+            "abuztua",
+            "iraila",
+            "urria",
+            "azaroa",
+            "abendua",
+            "",
+    }
+    NumberElements { 
+            ",",
+            ".", // even if not used
+            ";",
+            "%",
+            "0",
+            "#",
+            "-",
+            "E",
+            "‰",
+            "∞",
+            "�",
+    }
+    LocaleID{ "2D"}
+            // /**************** Info Below is needed ****************/
+            // CollationElements{}
+            // Countries{}
+            // Eras{}
+            // Languages{}
+            // ShortLanguage { }
+            // localPatternChars{}
+            //
+}

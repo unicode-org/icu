@@ -1,0 +1,6 @@
+debian
+build
+*-stamp
+bin
+include
+lib
