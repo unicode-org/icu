@@ -46,26 +46,31 @@ public class TestUScript extends TestFmwk {
         };
         int i =0;
         int numErrors =0;
-        try{
-            for( ; i<testNames.length; i++){
-                int[] code = UScript.getCode(testNames[i]);
-                if(code == null && expected[i]==UScript.INVALID_CODE){
-                    // getCode returns null if the code could not be found
-                    continue;
-                }
-                if((code[0] != expected[i])){
-                    logln("Error getting script code Got: " +code[0] + " Expected: " +expected[i] +" for name "+testNames[i]);
+
+        for( ; i<testNames.length; i++){
+            int[] code = UScript.getCode(testNames[i]);
+
+            if(code==null){
+                if(expected[i]!=UScript.INVALID_CODE){
+                    logln("Error getting script code Got: null" + " Expected: " +expected[i] +" for name "+testNames[i]);
                     numErrors++;
                 }
+                // getCode returns null if the code could not be found
+                continue;
             }
-            if(numErrors >0 ){
-                errln("Number of Errors in UScript.getCode() : " + numErrors);
-            }
-        }catch(MissingResourceException e){
-            if (!noData()) {
-                warnln("Could not find locale data: " + e.getMessage());
+            if((code[0] != expected[i])){
+                logln("Error getting script code Got: " +code[0] + " Expected: " +expected[i] +" for name "+testNames[i]);
+                numErrors++;
             }
         }
+        if(numErrors >0 ){
+            if(noData()){
+                errln("Number of Errors in UScript.getCode() : " + numErrors);
+            }else{
+                warnln("Could not find locale data");
+            }
+        }
+
     }
     public void TestMultipleCode(){
         final String[] testNames = { "ja" ,"ko_KR","zh","zh_TW"};
@@ -75,30 +80,30 @@ public class TestUScript extends TestFmwk {
                                 {UScript.HAN},
                                 {UScript.HAN,UScript.BOPOMOFO}
                               };
-        try{
-            int numErrors = 0;
-            for(int i=0; i<testNames.length;i++){
-                int[] code = UScript.getCode(testNames[i]);
-                int[] expt = (int[]) expected[i];
-                if(code!=null){
-                    for(int j =0; j< code.length;j++){
-                        if(code[j]!=expt[j]){
-                            numErrors++;
-                            logln("Error getting script code Got: " +code[j] + " Expected: " +expt[j] +" for name "+testNames[i]);
-                        }
+
+        int numErrors = 0;
+        for(int i=0; i<testNames.length;i++){
+            int[] code = UScript.getCode(testNames[i]);
+            int[] expt = (int[]) expected[i];
+            if(code!=null){
+                for(int j =0; j< code.length;j++){
+                    if(code[j]!=expt[j]){
+                        numErrors++;
+                        logln("Error getting script code Got: " +code[j] + " Expected: " +expt[j] +" for name "+testNames[i]);
                     }
-                }else{
-                    numErrors++;
                 }
-            }
-            if(numErrors >0 ){
-                errln("Number of Errors in UScript.getCode() : " + numErrors);
-            }
-        }catch(MissingResourceException e){
-            if (!noData()) {
-                warnln("Could not find locale data: " + e.getMessage());
+            }else{
+                numErrors++;
             }
         }
+        if(numErrors >0 ){
+            if(noData()){
+                errln("Number of Errors in UScript.getCode() : " + numErrors);
+            }else{
+                warnln("Could not find locale data");
+            }
+        }
+
     }
     public void TestGetCode(){
 
@@ -145,32 +150,32 @@ public class TestUScript extends TestFmwk {
         };
         int i =0;
         int numErrors =0;
-        try{
-            for( ; i<testNames.length; i++){
-                int[] code = UScript.getCode(testNames[i]);
-                if(code == null){
-                    if(expected[i]==UScript.INVALID_CODE){
-                        // getCode returns null if the code could not be found
-                        continue;
-                    }
-                    // currently commented out until jitterbug#2678 is fixed
-                    // logln("Error getting script code Got: null" + " Expected: " +expected[i] +" for name "+testNames[i]);
-                    // numErrors++;
+
+        for( ; i<testNames.length; i++){
+            int[] code = UScript.getCode(testNames[i]);
+            if(code == null){
+                if(expected[i]==UScript.INVALID_CODE){
+                    // getCode returns null if the code could not be found
                     continue;
                 }
-                if((code[0] != expected[i])){
-                    logln("Error getting script code Got: " +code[0] + " Expected: " +expected[i] +" for name "+testNames[i]);
-                    numErrors++;
-                }
+                // currently commented out until jitterbug#2678 is fixed
+                logln("Error getting script code Got: null" + " Expected: " +expected[i] +" for name "+testNames[i]);
+                numErrors++;
+                continue;
             }
-            if(numErrors >0 ){
-                errln("Number of Errors in UScript.getCode() : " + numErrors);
-            }
-        }catch(MissingResourceException e){
-            if (!noData()) {
-                warnln("Could not find locale data: " + e.getMessage());
+            if((code[0] != expected[i])){
+                logln("Error getting script code Got: " +code[0] + " Expected: " +expected[i] +" for name "+testNames[i]);
+                numErrors++;
             }
         }
+        if(numErrors >0 ){
+            if (!noData()) {
+                warnln("Could not find locale data");
+            }else{
+                errln("Number of Errors in UScript.getCode() : " + numErrors);
+            }
+        }
+
 
     }
     public void TestGetName(){
