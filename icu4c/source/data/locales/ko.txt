@@ -1875,7 +1875,7 @@ ko {
         DJ { "\uc9c0\ubd80\ud2f0" }
         DM { "\ub3c4\ubbf8\ub2c8\uce74" }
         DO { "\ub3c4\ubbf8\ub2c8\uce74 \uacf5\ud654\uad6d" }
-        TP { "\ub3d9\ud2f0\ubaa8\ub974" }
+        TL { "\ub3d9\ud2f0\ubaa8\ub974" }
         EC { "\uc5d0\ucfe0\uc544\ub3c4\ub974" }
         EG { "\uc774\uc9d1\ud2b8" }
         SV { "\uc5d8\uc0b4\ubc14\ub3c4\ub974" }

@@ -296,12 +296,12 @@ static const char * const _countries[] = {
     "SB",  "SC",  "SD",  "SE",  "SG",  "SH",  "SI",  "SJ",
     "SK",  "SL",  "SM",  "SN",  "SO",  "SR",  "ST",  "SV",
     "SY",  "SZ",  "TC",  "TD",  "TF",  "TG",  "TH",  "TJ",
-    "TK",  "TM",  "TN",  "TO",  "TP",  "TR",  "TT",  "TV",
+    "TK",  "TL",  "TM",  "TN",  "TO",  "TR",  "TT",  "TV",
     "TW",  "TZ",  "UA",  "UG",  "UM",  "US",  "UY",  "UZ",
     "VA",  "VC",  "VE",  "VG",  "VI",  "VN",  "VU",  "WF",
     "WS",  "YE",  "YT",  "YU",  "ZA",  "ZM",  "ZW",  
 NULL,
-    "FX",  "RO",  "ZR",   /* obsolete country codes */
+    "FX",  "RO",  "TP",  "ZR",   /* obsolete country codes */
 NULL
 };
 
@@ -360,8 +360,8 @@ static const char * const _countries3[] = {
     "SVK", "SLE", "SMR", "SEN", "SOM", "SUR", "STP", "SLV",
 /*  "SY",  "SZ",  "TC",  "TD",  "TF",  "TG",  "TH",  "TJ",     */
     "SYR", "SWZ", "TCA", "TCD", "ATF", "TGO", "THA", "TJK",
-/*  "TK",  "TM",  "TN",  "TO",  "TP",  "TR",  "TT",  "TV",     */
-    "TKL", "TKM", "TUN", "TON", "TMP", "TUR", "TTO", "TUV",
+/*  "TK",  "TL",  "TM",  "TN",  "TO",  "TR",  "TT",  "TV",     */
+    "TKL", "TLS", "TKM", "TUN", "TON", "TUR", "TTO", "TUV",
 /*  "TW",  "TZ",  "UA",  "UG",  "UM",  "US",  "UY",  "UZ",     */
     "TWN", "TZA", "UKR", "UGA", "UMI", "USA", "URY", "UZB",
 /*  "VA",  "VC",  "VE",  "VG",  "VI",  "VN",  "VU",  "WF",     */
@@ -369,8 +369,8 @@ static const char * const _countries3[] = {
 /*  "WS",  "YE",  "YT",  "YU",  "ZA",  "ZM",  "ZW",            */
     "WSM", "YEM", "MYT", "YUG", "ZAF", "ZMB", "ZWE",
 NULL,
-/*  "FX",  "RO",  "ZR",   */
-    "FXX", "ROM", "ZAR",
+/*  "FX",  "RO",  "TP",  "ZR",   */
+    "FXX", "ROM", "TMP", "ZAR",
 NULL
 };
 
