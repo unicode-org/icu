@@ -2310,6 +2310,7 @@ TestConvertAlgorithmic() {
     if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
         log_err("ucnv_fromAlgorithmic(illegal alg. type) sets %s\n", u_errorName(errorCode));
     }
+    ucnv_close(cnv);
 }
 
 static void TestLMBCSMaxChar(void) {
