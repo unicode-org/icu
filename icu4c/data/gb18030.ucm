@@ -34,8 +34,10 @@
 <icu:state> 30-35:5, 36:2, 37-39:5, 40-7e, 80-fe
 <icu:state> 30-31:2, 32-39:5, 40-7e, 80-fe
 
-# GB 18030 BMP mappings that are not handled algorithmically;
-# generated using gbmake4 and gbtoucm tools, see icu/source/tools/makeconv/gb18030/gb18030.html
+# GB 18030 BMP mappings that are not handled algorithmically are
+# generated using gbmake4 and gbtoucm tools. Please see charset/source/gb18030/gb18030.html
+# or http://oss.software.ibm.com/cvs/icu/~checkout~/charset/source/gb18030/gb18030.html
+# for more information.
 
 CHARMAP
 
