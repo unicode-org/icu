@@ -592,7 +592,7 @@ static void TestFileStream(void){
 	int32_t bufLen =uprv_strlen(testline)+10;
 	char* buf = (char*) uprv_malloc(bufLen);
 	int32_t retLen = 0;
-
+    
 	uprv_strcpy(fileName,testdatapath);
 	uprv_strcat(fileName,".dat");
 	stream = T_FileStream_open(fileName, "r");
@@ -603,11 +603,11 @@ static void TestFileStream(void){
 		log_data_err("T_FileStream_file_exists failed to verify existence of %s \n",fileName);
 	}
 
-	T_FileStream_read(stream,&c,1);
-	if(c==0){
+	retLen=T_FileStream_read(stream,&c,1);
+	if(retLen==0){
 		log_data_err("T_FileStream_read failed to read from %s \n",fileName);
 	}
-
+    retLen=0;
 	T_FileStream_rewind(stream);
 	T_FileStream_read(stream,&c1,1);
 	if(c!=c1){
