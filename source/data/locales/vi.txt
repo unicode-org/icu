@@ -1,36 +1,38 @@
 // ***************************************************************************
 // *
-// *   Copyright (C) 1997-2003, International Business Machines
+// *   Copyright (C) 1997-2004, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
 
 vi {
-    Version { "2.0" }
+    Version { "2.1" }
     AmPmMarkers { 
         "SA",
         "CH",
     }
     collations {
         standard { 
-            Version { "3.0" }
-              Sequence { "[normalization on]"
-                  // accented letters are actually ordered like this:
-                  // grave, hook above, tilde, acute, dot below.
-                  "&\u0300<<\u0309<<\u0303<<\u0301<<\u0323"
-                  // primary differences
-                  "&a<\u0103<<<\u0102<\u00E2<<<\u00C2"
-                  "&c<ch<<<Ch<<<CH"
-                  "&d<\u0111<<<\u0110"
-                  "&e<\u00EA<<<\u00CA"
-                  "&g<gi<<<Gi<<<GI"
-                  "&k<kh<<<Kh<<<KH"
-                  "&n<ng<<<Ng<<<NG<nh<<<Nh<<<NH"
-                  "&o<\u00F4<<<\u00D4<\u01A1<<<\u01A0"
-                  "&p<ph<<<Ph<<<PH"
-                  "&t<th<<<Th<<<TH<tr<<<Tr<<<TR"
-                  "&u<\u01B0<<<\u01AF"
-              }
+            Version { "3.1" }
+            Sequence { "[normalization on]"
+                // accented letters are actually ordered like this:
+                // grave, hook above, tilde, acute, dot below.
+                "&\u0300<<\u0309<<\u0303<<\u0301<<\u0323"
+                // primary differences
+                "&a<\u0103<<<\u0102<\u00E2<<<\u00C2"
+                "&d<\u0111<<<\u0110"
+                "&e<\u00EA<<<\u00CA"
+                "&o<\u00F4<<<\u00D4<\u01A1<<<\u01A0"
+                "&u<\u01B0<<<\u01AF"
+
+                // These are the older rules, and they are not in modern vietnamese.
+                //"&c<ch<<<Ch<<<CH"
+                //"&g<gi<<<Gi<<<GI"
+                //"&k<kh<<<Kh<<<KH"
+                //"&n<ng<<<Ng<<<NG<nh<<<Nh<<<NH"
+                //"&p<ph<<<Ph<<<PH"
+                //"&t<th<<<Th<<<TH<tr<<<Tr<<<TR"
+            }
         }
     }
     // Note many of the country names have dashes in the name. This seems to be correct.
@@ -45,7 +47,7 @@ vi {
         AO { "\u0102ng-g\u00f4-la" }
         AR { "\u00c1c-hen-ti-na" }
         AT { "\u00c1o" } // \u00c1o Qu\u1ed1c ?
-        AU { "\u00dac \u00d0\u1ea1i L\u1ee3i" }
+        AU { "\u00dac \u0110\u1ea1i L\u1ee3i" }
         AZ { "Ai-d\u00e9c-bai-gian" }
 
         BA { "B\u00f4-xni-a H\u00e9c-x\u00ea-g\u00f4-vi-na" }
@@ -80,9 +82,9 @@ vi {
         CY { "S\u00edp" }
         CZ { "C\u1ed9ng h\u00f2a S\u00e9c" }
 
-        DE { "\u00d0\u1ee9c" }
+        DE { "\u0110\u1ee9c" }
         DJ { "Gi-bu-ti" }
-        DK { "\u0110an M\u1ea1c" }
+        DK { "\u0110an M\u1ea1ch" }
         DZ { "An-gi\u00ea-ri" }
 
         EC { "\u00ca-cu-a-\u0111o" }
@@ -119,7 +121,7 @@ vi {
         ID { "Nam D\u01b0\u01a1ng" } // or maybe also In-\u0111\u00f4-n\u00ea-xi-a
         IE { "Ai-len" }
         IL { "I-xra-en" }
-        IN { "\u1ea4n \u00d0\u1ed9" }
+        IN { "\u1ea4n \u0110\u1ed9" }
         IQ { "I-r\u1eafc" }
         IR { "I-ran" }
         IS { "Ai-x\u01a1-len" }
@@ -187,7 +189,7 @@ vi {
         PH { "Phi-lip-pin" }
         PK { "Pa-ki-xtan" }
         PL { "Ba Lan" }
-        PT { "B\u1ed3 \u00d0\u00e0o Nha" }
+        PT { "B\u1ed3 \u0110\u00e0o Nha" }
         PY { "Pa-ra-goay" }
 
         QA { "Ca-ta" }
@@ -225,12 +227,12 @@ vi {
         TR { "Th\u1ed5 Nh\u0129 K\u1ef3" }
         TT { "Tri-ni-\u0111\u00e1t v\u00e0 T\u00f4-ba-g\u00f4" }
         TV { "Tu-va-lu" }
-        TW { "\u00d0\u00e0i Loan" }
+        TW { "\u0110\u00e0i Loan" }
         TZ { "Tan-da-ni-a" }
 
         UA { "U-crai-na" }
         UG { "U-gan-\u0111a" }
-        US { "H\u1ee3p ch\u00fang qu\u1ed1c Hoa k\u1ef3" } // M\u1ef9 = slang abbreviated form of US; Hoa K\u1ef3 = US; H\u1ee3p ch\u00fang qu\u1ed1c Hoa k\u1ef3 = USA 
+        US { "Hoa K\u1ef3" } // M\u1ef9 = slang abbreviated form of US; Hoa K\u1ef3 = US; H\u1ee3p ch\u00fang qu\u1ed1c Hoa k\u1ef3 = USA 
         UY { "U-ru-goay" }
         UZ { "U-d\u01a1-b\u00ea-ki-xtan" }
 
@@ -249,7 +251,7 @@ vi {
         ZW { "Dim-ba-bu-\u00ea" }
     }
     Currencies {
-        VND { "\u0111", "\u00d0\u00f4ng" } // Vietnamese Dong. More people use \u0111 rather than \u20AB
+        VND { "\u0111", "\u0111\u1ED3ng" } // Vietnamese Dong. More people use \u0111 rather than \u20AB
     }
     DateTimeElements:intvector { 
         2,
@@ -260,8 +262,8 @@ vi {
         "HH:mm:ss z",
         "HH:mm:ss",
         "HH:mm",
-        "EEEE, 'ng\u00E0y' d 'th\u00E1ng' M 'n\u0103m' yyyy",    // Should this be "EEEE dd MMMM n\u0103m yyyy"?
-        "'ng\u00E0y' d 'th\u00E1ng' M 'n\u0103m' yyyy",         // Should this be "dd MMMM n\u0103m yyyy"?
+        "EEEE, 'ng\u00E0y' dd MMMM 'n\u0103m' yyyy",
+        "'Ng\u00E0y' dd MMM 'n\u0103m' yyyy",
         "dd-MM-yyyy",
         "dd/MM/yyyy",
         "{0} {1}",
@@ -316,32 +318,32 @@ vi {
     }
     ExemplarCharacters{ "[a-z\u1EA0-\u1Ef9\u0111\u01A1\u00E0-\u00E3\u00E8-\u00EA\u00EC\u00ED\u00F2-\u00F5\u00F9\u00FA\u00FD\u0103\u0129\u0169\u01B0]" }
     MonthAbbreviations {
-        "Thg 1",
-        "Thg 2",
-        "Thg 3",
-        "Thg 4",
-        "Thg 5",
-        "Thg 6",
-        "Thg 7",
-        "Thg 8",
-        "Thg 9",
-        "Thg 10",
-        "Thg 11",
-        "Thg 12",
+        "th 1",
+        "th 2",
+        "th 3",
+        "th 4",
+        "th 5",
+        "th 6",
+        "th 7",
+        "th 8",
+        "th 9",
+        "th 10",
+        "th 11",
+        "th 12",
     }
     MonthNames {
-        "Th\u00E1ng m\u1ED9t",
-        "Th\u00E1ng hai",
-        "Th\u00E1ng ba",
-        "Th\u00E1ng t\u01B0",
-        "Th\u00E1ng n\u0103m",
-        "Th\u00E1ng s\u00E1u",
-        "Th\u00E1ng b\u1EA3y",
-        "Th\u00E1ng t\u00E1m",
-        "Th\u00E1ng ch\u00EDn",
-        "Th\u00E1ng m\u01B0\u1EDDi",
-        "Th\u00E1ng m\u01B0\u1EDDi m\u1ED9t",
-        "Th\u00E1ng m\u01B0\u1EDDi hai",
+        "th\u00E1ng m\u1ED9t",
+        "th\u00E1ng hai",
+        "th\u00E1ng ba",
+        "th\u00E1ng t\u01B0",
+        "th\u00E1ng n\u0103m",
+        "th\u00E1ng s\u00E1u",
+        "th\u00E1ng b\u1EA3y",
+        "th\u00E1ng t\u00E1m",
+        "th\u00E1ng ch\u00EDn",
+        "th\u00E1ng m\u01B0\u1EDDi",
+        "th\u00E1ng m\u01B0\u1EDDi m\u1ED9t",
+        "th\u00E1ng m\u01B0\u1EDDi hai",
     }
     NumberElements {
         ",",
@@ -365,3 +367,5 @@ vi {
         "#E0",
     }
 }
+
+
