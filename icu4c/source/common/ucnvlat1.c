@@ -15,6 +15,7 @@
 #include "unicode/utypes.h"
 #include "unicode/ucnv.h"
 #include "unicode/ucnv_err.h"
+#include "unicode/uset.h"
 #include "ucnv_bld.h"
 #include "ucnv_cnv.h"
 
@@ -425,6 +426,14 @@ getTrail:
     pArgs->offsets=offsets;
 }
 
+static void
+_Latin1GetUnicodeSet(const UConverter *cnv,
+                     USet *set,
+                     UConverterUnicodeSet which,
+                     UErrorCode *pErrorCode) {
+    uset_addRange(set, 0, 0xff);
+}
+
 static const UConverterImpl _Latin1Impl={
     UCNV_LATIN_1,
 
@@ -442,7 +451,10 @@ static const UConverterImpl _Latin1Impl={
     _Latin1GetNextUChar,
 
     NULL,
-    NULL
+    NULL,
+    NULL,
+    NULL,
+    _Latin1GetUnicodeSet
 };
 
 static const UConverterStaticData _Latin1StaticData={
@@ -713,6 +725,14 @@ _ASCIIGetNextUChar(UConverterToUnicodeArgs *pArgs,
     return 0xffff;
 }
 
+static void
+_ASCIIGetUnicodeSet(const UConverter *cnv,
+                    USet *set,
+                    UConverterUnicodeSet which,
+                    UErrorCode *pErrorCode) {
+    uset_addRange(set, 0, 0x7f);
+}
+
 static const UConverterImpl _ASCIIImpl={
     UCNV_US_ASCII,
 
@@ -730,7 +750,10 @@ static const UConverterImpl _ASCIIImpl={
     _ASCIIGetNextUChar,
 
     NULL,
-    NULL
+    NULL,
+    NULL,
+    NULL,
+    _ASCIIGetUnicodeSet
 };
 
 static const UConverterStaticData _ASCIIStaticData={

@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2000-2001, International Business Machines
+*   Copyright (C) 2000-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -17,8 +17,9 @@
 
 #include "unicode/utypes.h"
 #include "unicode/ucnv_err.h"
-#include "ucnv_cnv.h"
 #include "unicode/ucnv.h"
+#include "unicode/uset.h"
+#include "ucnv_cnv.h"
 #include "cmemory.h"
 
 /*Empties the internal unicode output buffer */
@@ -238,4 +239,21 @@ ucnv_getNextUCharFromToUImpl(UConverterToUnicodeArgs *pArgs,
     /* no output because of empty input or only state changes and skipping callbacks */
     *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
     return 0xffff;
+}
+
+U_CFUNC void
+ucnv_getCompleteUnicodeSet(const UConverter *cnv,
+                   USet *set,
+                   UConverterUnicodeSet which,
+                   UErrorCode *pErrorCode) {
+    uset_addRange(set, 0, 0x10ffff);
+}
+
+U_CFUNC void
+ucnv_getNonSurrogateUnicodeSet(const UConverter *cnv,
+                               USet *set,
+                               UConverterUnicodeSet which,
+                               UErrorCode *pErrorCode) {
+    uset_addRange(set, 0, 0xd7ff);
+    uset_addRange(set, 0xe000, 0x10ffff);
 }

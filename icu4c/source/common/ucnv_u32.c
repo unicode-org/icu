@@ -551,7 +551,10 @@ static const UConverterImpl _UTF32BEImpl = {
     T_UConverter_getNextUChar_UTF32_BE,
 
     NULL,
-    NULL
+    NULL,
+    NULL,
+    NULL,
+    ucnv_getCompleteUnicodeSet
 };
 
 /* The 1232 CCSID refers to any version of Unicode with any endianess of UTF-32 */
@@ -1035,7 +1038,10 @@ static const UConverterImpl _UTF32LEImpl = {
     T_UConverter_getNextUChar_UTF32_LE,
 
     NULL,
-    NULL
+    NULL,
+    NULL,
+    NULL,
+    ucnv_getCompleteUnicodeSet
 };
 
 /* The 1232 CCSID refers to any version of Unicode with any endianess of UTF-32 */
@@ -1292,7 +1298,8 @@ static const UConverterImpl _UTF32Impl = {
     NULL, /* ### TODO implement getStarters for all Unicode encodings?! */
     NULL,
     NULL,
-    NULL
+    NULL,
+    ucnv_getCompleteUnicodeSet
 };
 
 static const UConverterStaticData _UTF32StaticData = {

@@ -439,7 +439,10 @@ static const UConverterImpl _UTF16BEImpl={
     T_UConverter_getNextUChar_UTF16_BE,
 
     NULL,
-    NULL
+    NULL,
+    NULL,
+    NULL,
+    ucnv_getCompleteUnicodeSet
 };
 
 /* The 1200 CCSID refers to any version of Unicode with any endianess of UTF-16 */
@@ -532,7 +535,10 @@ static const UConverterImpl _UTF16LEImpl={
     T_UConverter_getNextUChar_UTF16_LE,
 
     NULL,
-    NULL
+    NULL,
+    NULL,
+    NULL,
+    ucnv_getCompleteUnicodeSet
 };
 
 
@@ -761,7 +767,8 @@ static const UConverterImpl _UTF16Impl = {
     NULL, /* ### TODO implement getStarters for all Unicode encodings?! */
     NULL,
     NULL,
-    NULL
+    NULL,
+    ucnv_getCompleteUnicodeSet
 };
 
 static const UConverterStaticData _UTF16StaticData = {

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2001, International Business Machines Corporation and
+ * Copyright (c) 1997-2003, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -16,9 +16,10 @@
 #include "cmemory.h"
 #include "unicode/uloc.h"
 #include "unicode/ucnv.h"
-#include "cintltst.h"
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
+#include "unicode/uset.h"
+#include "cintltst.h"
 
 #define MAX_LENGTH 999
 
@@ -31,7 +32,7 @@ static int32_t  gOutBufferSize = 0;
 static char     gNuConvTestName[1024];
 
 #define nct_min(x,y)  ((x<y) ? x : y)
-#define LENGTHOF(array) (sizeof(array)/sizeof((array)[0]))
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
 static void printSeq(const unsigned char* a, int len);
 static void printSeqErr(const unsigned char* a, int len);
@@ -67,6 +68,7 @@ static void TestAvailableConverters(void);
 static void TestFlushInternalBuffer(void);  /*for improved code coverage in ucnv_cnv.c*/
 static void TestResetBehaviour(void);
 static void TestTruncated(void);
+static void TestUnicodeSet(void);
 
 static void TestWithBufferSize(int32_t osize, int32_t isize);
 
@@ -120,6 +122,7 @@ void addExtraTests(TestNode** root)
      addTest(root, &TestRegressionUTF8,             "tsconv/ncnvtst/TestRegressionUTF8");
      addTest(root, &TestRegressionUTF32,            "tsconv/ncnvtst/TestRegressionUTF32");
      addTest(root, &TestTruncated,                  "tsconv/ncnvtst/TestTruncated");
+     addTest(root, &TestUnicodeSet,                 "tsconv/ncnvtst/TestUnicodeSet");
 }
 
 /*test surrogate behaviour*/
@@ -1808,5 +1811,138 @@ TestTruncated() {
 
     for(i=0; i<LENGTHOF(testCases); ++i) {
         doTestTruncated(testCases[i].cnvName, testCases[i].bytes, testCases[i].length);
+    }
+}
+
+typedef struct NameRange {
+    const char *name;
+    UChar32 start, end, start2, end2, notStart, notEnd;
+} NameRange;
+
+static void
+TestUnicodeSet() {
+    UErrorCode errorCode;
+    UConverter *cnv;
+    USet *set;
+    const char *name;
+    int32_t i, count;
+
+    static const char *const completeSetNames[]={
+        "UTF-7",
+        "UTF-8",
+        "UTF-16",
+        "UTF-16BE",
+        "UTF-16LE",
+        "UTF-32",
+        "UTF-32BE",
+        "UTF-32LE",
+        "SCSU",
+        "BOCU-1",
+        "CESU-8",
+        "gb18030",
+        "IMAP-mailbox-name",
+        "LMBCS-1",
+        "LMBCS-2",
+        "LMBCS-3",
+        "LMBCS-4",
+        "LMBCS-5",
+        "LMBCS-6",
+        "LMBCS-8",
+        "LMBCS-11",
+        "LMBCS-16",
+        "LMBCS-17",
+        "LMBCS-18",
+        "LMBCS-19"
+    };
+
+    static const NameRange nameRanges[]={
+        { "US-ASCII", 0, 0x7f, -1, -1, 0x80, 0x10ffff },
+        { "ibm-367", 0, 0x7f, -1, -1, 0x80, 0x10ffff },
+        { "ISO-8859-1", 0, 0x7f, -1, -1, 0x100, 0x10ffff },
+        { "UTF-8", 0, 0xd7ff, 0xe000, 0x10ffff, 0xd800, 0xdfff },
+        { "windows-1251", 0, 0x7f, 0x410, 0x44f, 0x3000, 0xd7ff },
+        { "HZ", 0x410, 0x44f, 0x4e00, 0x4eff, 0xac00, 0xd7ff },
+        { "shift-jis", 0x3041, 0x3093, 0x30a1, 0x30f3, 0x900, 0x1cff }
+    };
+
+    /* open an empty set */
+    set=uset_open(1, 0);
+
+    count=ucnv_countAvailable();
+    for(i=0; i<count; ++i) {
+        errorCode=U_ZERO_ERROR;
+        name=ucnv_getAvailableName(i);
+        cnv=ucnv_open(name, &errorCode);
+        if(U_FAILURE(errorCode)) {
+            log_err("error: unable to open converter %s - %s\n",
+                    name, u_errorName(errorCode));
+            continue;
+        }
+
+        uset_clear(set);
+        ucnv_getUnicodeSet(cnv, set, UCNV_ROUNDTRIP_SET, &errorCode);
+        if(U_FAILURE(errorCode)) {
+            log_err("error: ucnv_getUnicodeSet(%s) failed - %s\n",
+                    name, u_errorName(errorCode));
+        } else if(uset_size(set)==0) {
+            log_err("error: ucnv_getUnicodeSet(%s) returns an empty set\n", name);
+        }
+
+        ucnv_close(cnv);
+    }
+
+    /* test converters that are known to convert all of Unicode (except maybe for surrogates) */
+    for(i=0; i<LENGTHOF(completeSetNames); ++i) {
+        errorCode=U_ZERO_ERROR;
+        name=completeSetNames[i];
+        cnv=ucnv_open(name, &errorCode);
+        if(U_FAILURE(errorCode)) {
+            log_err("error: unable to open converter %s - %s\n",
+                    name, u_errorName(errorCode));
+            continue;
+        }
+
+        uset_clear(set);
+        ucnv_getUnicodeSet(cnv, set, UCNV_ROUNDTRIP_SET, &errorCode);
+        if(U_FAILURE(errorCode)) {
+            log_err("error: ucnv_getUnicodeSet(%s) failed - %s\n",
+                    name, u_errorName(errorCode));
+        } else if(!uset_containsRange(set, 0, 0xd7ff) || !uset_containsRange(set, 0xe000, 0x10ffff)) {
+            log_err("error: ucnv_getUnicodeSet(%s) does not return an all-Unicode set\n", name);
+        }
+
+        ucnv_close(cnv);
+    }
+
+    /* test specific sets */
+    for(i=0; i<LENGTHOF(nameRanges); ++i) {
+        errorCode=U_ZERO_ERROR;
+        name=nameRanges[i].name;
+        cnv=ucnv_open(name, &errorCode);
+        if(U_FAILURE(errorCode)) {
+            log_data_err("error: unable to open converter %s - %s\n",
+                         name, u_errorName(errorCode));
+            continue;
+        }
+
+        uset_clear(set);
+        ucnv_getUnicodeSet(cnv, set, UCNV_ROUNDTRIP_SET, &errorCode);
+        if(U_FAILURE(errorCode)) {
+            log_err("error: ucnv_getUnicodeSet(%s) failed - %s\n",
+                    name, u_errorName(errorCode));
+        } else if(
+            !uset_containsRange(set, nameRanges[i].start, nameRanges[i].end) ||
+            nameRanges[i].start2>=0 && !uset_containsRange(set, nameRanges[i].start2, nameRanges[i].end2)
+        ) {
+            log_err("error: ucnv_getUnicodeSet(%s) does not contain the expected ranges\n", name);
+        } else if(nameRanges[i].notStart>=0) {
+            /* simulate containsAny() with the C API */
+            uset_complement(set);
+            if(!uset_containsRange(set, nameRanges[i].notStart, nameRanges[i].notEnd)) {
+                log_err("error: ucnv_getUnicodeSet(%s) contains part of the unexpected range\n", name);
+            }
+        }
+
+        ucnv_close(cnv);
     }
 }

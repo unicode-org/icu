@@ -1597,7 +1597,8 @@ static const UConverterImpl _Bocu1Impl={
     NULL,
     NULL,
     NULL,
-    NULL
+    NULL,
+    ucnv_getCompleteUnicodeSet
 };
 
 static const UConverterStaticData _Bocu1StaticData={
