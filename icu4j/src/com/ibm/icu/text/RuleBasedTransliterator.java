@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedTransliterator.java,v $
- * $Date: 2002/06/26 18:12:39 $
- * $Revision: 1.55 $
+ * $Date: 2002/06/28 19:15:52 $
+ * $Revision: 1.56 $
  *
  *****************************************************************************************
  */
@@ -279,7 +279,7 @@ import com.ibm.icu.impl.data.ResourceReader;
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
  *
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.55 $ $Date: 2002/06/26 18:12:39 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.56 $ $Date: 2002/06/28 19:15:52 $
  */
 public class RuleBasedTransliterator extends Transliterator {
 
@@ -454,7 +454,7 @@ public class RuleBasedTransliterator extends Transliterator {
      * Transliterator, ignoring the effect of our filter.
      */
     protected UnicodeSet handleGetSourceSet() {
-        return data.ruleSet.getSourceSet();
+        return data.ruleSet.getSourceTargetSet(false);
     }
 
     /**
@@ -462,12 +462,15 @@ public class RuleBasedTransliterator extends Transliterator {
      * replacement text by this transliterator.
      */
     public UnicodeSet getTargetSet() {
-        return data.ruleSet.getTargetSet();
+        return data.ruleSet.getSourceTargetSet(true);
     }
 }
 
 /**
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.56  2002/06/28 19:15:52  alan
+ * jitterbug 1434: improve method names; minor cleanup
+ *
  * Revision 1.55  2002/06/26 18:12:39  alan
  * jitterbug 1434: initial public implementation of getSourceSet and getTargetSet
  *

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2002/04/26 00:00:36 $
- * $Revision: 1.67 $
+ * $Date: 2002/06/28 19:15:53 $
+ * $Revision: 1.68 $
  *
  *****************************************************************************************
  */
@@ -209,7 +209,7 @@ import java.util.Iterator;
  * </table>
  * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.67 $ $Date: 2002/04/26 00:00:36 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.68 $ $Date: 2002/06/28 19:15:53 $
  */
 public class UnicodeSet extends UnicodeFilter {
 
@@ -797,11 +797,9 @@ public class UnicodeSet extends UnicodeFilter {
      * characters that may be matched by this object into the given
      * set.
      * @param toUnionTo the set into which to union the source characters
-     * @return a reference to toUnionTo
      */
-    public UnicodeSet getMatchSet(UnicodeSet toUnionTo) {
+    public void addMatchSetTo(UnicodeSet toUnionTo) {
         toUnionTo.addAll(this);
-        return toUnionTo;
     }
 
     /**

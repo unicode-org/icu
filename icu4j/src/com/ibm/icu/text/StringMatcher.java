@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/StringMatcher.java,v $ 
- * $Date: 2002/06/28 00:13:23 $ 
- * $Revision: 1.11 $
+ * $Date: 2002/06/28 19:18:05 $ 
+ * $Revision: 1.12 $
  *
  *****************************************************************************************
  */
@@ -220,20 +220,18 @@ class StringMatcher implements UnicodeMatcher, UnicodeReplacer {
      * characters that may be matched by this object into the given
      * set.
      * @param toUnionTo the set into which to union the source characters
-     * @return a reference to toUnionTo
      */
-    public UnicodeSet getMatchSet(UnicodeSet toUnionTo) {
-	int ch;
+    public void addMatchSetTo(UnicodeSet toUnionTo) {
+        int ch;
         for (int i=0; i<pattern.length(); i+=UTF16.getCharCount(ch)) {
             ch = UTF16.charAt(pattern, i);
             UnicodeMatcher matcher = data.lookupMatcher(ch);
             if (matcher == null) {
                 toUnionTo.add(ch);
             } else {
-                matcher.getMatchSet(toUnionTo);
+                matcher.addMatchSetTo(toUnionTo);
             }
         }
-        return toUnionTo;
     }
 
     /**
@@ -284,15 +282,13 @@ class StringMatcher implements UnicodeMatcher, UnicodeReplacer {
      * Union the set of all characters that may output by this object
      * into the given set.
      * @param toUnionTo the set into which to union the output characters
-     * @return a reference to toUnionTo
      */
-    public UnicodeSet getReplacementSet(UnicodeSet toUnionTo) {
+    public void addReplacementSetTo(UnicodeSet toUnionTo) {
         // The output of this replacer varies; it is the source text between
         // matchStart and matchLimit.  Since this varies depending on the
         // input text, we can't compute it here.  We can either do nothing
         // or we can add ALL characters to the set.  It's probably more useful
         // to do nothing.
-        return toUnionTo;
     }
 }
 

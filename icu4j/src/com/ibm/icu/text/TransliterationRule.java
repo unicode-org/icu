@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliterationRule.java,v $
- * $Date: 2002/06/26 18:12:39 $
- * $Revision: 1.46 $
+ * $Date: 2002/06/28 19:15:53 $
+ * $Revision: 1.47 $
  *
  *****************************************************************************************
  */
@@ -46,7 +46,7 @@ import com.ibm.icu.impl.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.46 $ $Date: 2002/06/26 18:12:39 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.47 $ $Date: 2002/06/28 19:15:53 $
  */
 class TransliterationRule {
 
@@ -565,7 +565,7 @@ class TransliterationRule {
      * Union the set of all characters that may be modified by this rule
      * into the given set.
      */
-    UnicodeSet getSourceSet(UnicodeSet toUnionTo) {
+    void addSourceSetTo(UnicodeSet toUnionTo) {
         int limit = anteContextLength + keyLength;
         for (int i=anteContextLength; i<limit; ) {
             int ch = UTF16.charAt(pattern, i);
@@ -574,23 +574,25 @@ class TransliterationRule {
             if (matcher == null) {
                 toUnionTo.add(ch);
             } else {
-                matcher.getMatchSet(toUnionTo);
+                matcher.addMatchSetTo(toUnionTo);
             }
         }
-        return toUnionTo;
     }
 
     /**
      * Union the set of all characters that may be emitted by this rule
      * into the given set.
      */
-    UnicodeSet getTargetSet(UnicodeSet toUnionTo) {
-        return output.getReplacementSet(toUnionTo);
+    void addTargetSetTo(UnicodeSet toUnionTo) {
+        output.addReplacementSetTo(toUnionTo);
     }
 }
 
 /**
  * $Log: TransliterationRule.java,v $
+ * Revision 1.47  2002/06/28 19:15:53  alan
+ * jitterbug 1434: improve method names; minor cleanup
+ *
  * Revision 1.46  2002/06/26 18:12:39  alan
  * jitterbug 1434: initial public implementation of getSourceSet and getTargetSet
  *
