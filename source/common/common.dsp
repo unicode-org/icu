@@ -472,6 +472,10 @@ SOURCE=.\uresdata.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\usc_impl.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\uscript.c
 # End Source File
 # Begin Source File
@@ -2573,6 +2577,10 @@ SOURCE=.\uresdata.h
 # Begin Source File
 
 SOURCE=.\uresimp.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\usc_impl.h
 # End Source File
 # Begin Source File
 
