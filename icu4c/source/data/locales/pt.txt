@@ -285,7 +285,7 @@ pt {
         FJD { "FJD", "D\u00F3lar das Fiji" }
         FKP { "FKP", "Libra das Maldivas" }
         FRF { "FRF", "Franco Franc\u00EAs" }
-        GBP { "GBP", "Libra Brit\u00E2nica" }
+        GBP { "\u00A3", "Libra Brit\u00E2nica" }
         GEK { "GEK", "Kupon da Ge\u00F3rgia" }
         GHC { "GHC", "Cedi do Ghana" }
         GIP { "GIP", "Libra de Gibraltar" }
@@ -307,16 +307,16 @@ pt {
         IQD { "IQD", "Dinar Iraquiano" }
         IRR { "IRR", "Rial Iraniano" }
         ISK { "ISK", "Coroa Islandesa" }
-        ITL { "ITL", "Lira Italiana" }
+        ITL { "\u20A4", "Lira Italiana" }
         JMD { "JMD", "D\u00F3lar Jamaicano" }
         JOD { "JOD", "Dinar Jordano" }
-        JPY { "\uFFE5", "Yen Japon\u00EAs" }
+        JPY { "\u00A5", "Yen Japon\u00EAs" }
         KES { "KES", "Shilling Queniano" }
         KHR { "KHR", "Riel Cambodjano" }
         // KIS { "KIS", "Som do Kirghizst\u00E3o" } -- invalid
         KMF { "KMF", "Franco dos Comoros" }
         KPW { "KPW", "Won Norte-Coreano" }
-        KRW { "\u20A9", "Won Sul-Coreano" }
+        KRW { "KRW", "Won Sul-Coreano" }
         KWD { "KWD", "Dinar do Kuwait" }
         KYD { "KYD", "D\u00F3lar das Caim\u00E3o" }
         KZT { "KZT", "Tenge do Kasaquist\u00E3o" }
@@ -343,7 +343,7 @@ pt {
         MXP { "MXP", "Peso Mexicano (antigo)" }
         MYR { "MYR", "Ringgit da Mal\u00E1sia" }
         MZM { "MZM", "Metical Mo\u00E7ambicano" }
-        NGN { "\u20A6", "Naira Nigeriana" }
+        NGN { "NGN", "Naira Nigeriana" }
         //NIC { "NIC", "Cordoba de Nicar\u00E1gua" }
         NIO { "NIO", "Cordoba de Nicar\u00E1gua" }
         // NIS { "NIS", "Novo Shekel Israelita" } -- invalid
@@ -396,10 +396,10 @@ pt {
         TZS { "TZS", "Shilling da Tanz\u00E2nia" }
         UAK { "UAK", "Karbowanez Ucraniano" }
         UGS { "UGS", "Shilling do Uganda" }
-        USD { "USD", "D\u00F3lar Americano" }
+        USD { "$", "D\u00F3lar Americano" }
         UYP { "UYP", "Novo Peso Uruguaio" }
         VEB { "VEB", "Bolivar Venezuelano" }
-        VND { "VND", "Dong Vietnamita" }
+        VND { "\u20AB", "Dong Vietnamita" }
         VUV { "VUV", "Vatu do Vanuatu" }
         WST { "WST", "Tala de Samoa" }
         XAF { "XAF", "Franco do Gab\u00E3o C.f.A" }

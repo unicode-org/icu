@@ -606,7 +606,7 @@ de {
         BMD { "BMD", "Bermuda-Dollar" }
         BND { "BND", "Brunei-Dollar" }
         BOB { "BOB", "Boliviano" }
-        // BOV { "BOV", "MVDOL" } -- don't know what this is; MVDOL does not make sense to me -- markus 20030424
+        BOV { "BOV", "Mvdol" } // financial instrument
         BRL { "BRL", "Real" }
         BSD { "BSD", "Bahama-Dollar" }
         BTN { "BTN", "Ngultrum" }
@@ -643,7 +643,7 @@ de {
         FJD { "FJD", "Fidschi Dollar" }
         FKP { "FKP", "Falkland Pfund" }
         FRF { "FF",  "Franz\u00F6sischer Franc" }
-        GBP { "GBP", "Pfund Sterling" }
+        GBP { "\u00A3", "Pfund Sterling" }
         GEL { "GEL", "Georgischer Lari" }
         GHC { "GHC", "Cedi" }
         GIP { "GIP", "Gibraltar Pfund" }
@@ -665,7 +665,7 @@ de {
         IQD { "IQD", "Irak Dinar" }
         IRR { "IRR", "Rial" }
         ISK { "ISK", "Isl\u00E4ndische Krone" }
-        ITL { "ITL", "Italienische Lire" }
+        ITL { "\u20A4", "Italienische Lire" }
         JMD { "JMD", "Jamaika Dollar" }
         JOD { "JOD", "Jordanischer Dinar" }
         JPY { "\u00A5", "Yen" }
@@ -674,7 +674,7 @@ de {
         KHR { "KHR", "Riel" }
         KMF { "KMF", "Komoren Franc" }
         KPW { "KPW", "Nordkoreanischer Won" }
-        KRW { "\u20A9", "S\u00FCdkoreanischer Won" }
+        KRW { "KRW", "S\u00FCdkoreanischer Won" }
         KWD { "KWD", "Kuwait Dinar" }
         KYD { "KYD", "Kaiman-Dollar" }
         KZT { "KZT", "Tenge" }
@@ -704,7 +704,7 @@ de {
         MYR { "MYR", "Malaysischer Ringgit" }
         MZM { "MZM", "Metical" }
         NAD { "NAD", "Namibia Dollar" }
-        NGN { "\u20A6", "Naira" }
+        NGN { "NGN", "Naira" }
         NIO { "NIO", "Gold-Cordoba" }
         NLG { "NLG", "Holl\u00e4ndischer Gulden" }
         NOK { "NOK", "Norwegische Krone" }
@@ -752,7 +752,7 @@ de {
         TZS { "TZS", "Tansania Schilling" }
         UAH { "UAH", "Hryvnia" }
         UGX { "UGX", "Uganda Schilling" }
-        USD { "USD", "US Dollar" }
+        USD { "$", "US Dollar" }
         UYU { "UYU", "Uruguayischer Peso" }
         UZS { "UZS", "Usbekistan Sum" }
         VEB { "VEB", "Bolivar" }

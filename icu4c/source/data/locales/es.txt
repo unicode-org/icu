@@ -387,14 +387,14 @@ es {
         // ECU { "ECU", "Moenda \u00DAnica Europea (EURO)" } -- invalid
         EEK { "EEK", "Corona de Estonia" }
         EGP { "EGP", "Libra Egipcia" }
-        ESP { "Pts", "Peseta Espa\u00F1ola" }
+        ESP { "\u20A7", "Peseta Espa\u00F1ola" }
         ETB { "ETB", "Birr de Etiop\u00EDa" }
         EUR { "\u20AC", "Moneda de los estados miembros de EMU" }
         FIM { "FIM", "Marco Finland\u00E9s" }
         FJD { "FJD", "D\u00F3lar de Fiji" }
         FKP { "FKP", "Libra de Falkland" }
         FRF { "FRF", "Franco Franc\u00E9s" }
-        GBP { "GBP", "Libra Brit\u00E1nica" }
+        GBP { "\u00A3", "Libra Brit\u00E1nica" }
         GEK { "GEK", "Kupon de Georgia" }
         GHC { "GHC", "Cedi de Ghana" }
         GIP { "GIP", "Libra de Gibraltar" }
@@ -416,16 +416,16 @@ es {
         IQD { "IQD", "Dinar Iraqu\u00ED" }
         IRR { "IRR", "Rial Iran\u00ED" }
         ISK { "ISK", "Corona Islandesa" }
-        ITL { "ITL", "Lira Italiana" }
+        ITL { "\u20A4", "Lira Italiana" }
         JMD { "JMD", "D\u00F3lar de Jamaica" }
         JOD { "JOD", "Dinar de Jordania" }
-        JPY { "\uFFE5", "Yen Japon\u00E9s" }
+        JPY { "\u00A5", "Yen Japon\u00E9s" }
         KES { "KES", "Chel\u00EDn de Kenya" }
         KHR { "KHR", "Riel de Camboya" }
         // KIS { "KIS", "Som de Kirghizstan" } -- invalid
         KMF { "KMF", "Franco de Comoros" }
         KPW { "KPW", "Won de Corea del Norte" }
-        KRW { "\u20A9", "Won de Corea del Sur" }
+        KRW { "KRW", "Won de Corea del Sur" }
         KWD { "KWD", "Dinar de Kuwait" }
         KYD { "KYD", "D\u00F3lar de las Caim\u00E1n" }
         KZT { "KZT", "Tenge de Kazakhst\u00E1n" }
@@ -452,7 +452,7 @@ es {
         MXP { "MXP", "Peso Mexicano (viejo)" }
         MYR { "MYR", "Ringgit de Malaysia" }
         MZM { "MZM", "Metical de Mozambique" }
-        NGN { "\u20A6", "Naira de Nigeria" }
+        NGN { "NGN", "Naira de Nigeria" }
         NIO { "C$", "Cordoba de Nicaragua" }
         NLG { "NLG", "Guilder de Holanda" }
         NOK { "NOK", "C\u00F3rona Noruega" }
@@ -503,11 +503,11 @@ es {
         TZS { "TZS", "Chell\u00EDn de Tanzania" }
         UAK { "UAK", "karbowanez de Ucrainia" }
         UGS { "UGS", "Chell\u00EDn de Uganda" }
-        USD { "USD", "D\u00F3lar Americano" }
+        USD { "$", "D\u00F3lar Americano" }
         UYP { "UYP", "Nuevo Peso de Uruguay" }
         UYU { "NU$", "UYU" }
         VEB { "Bs", "Bolivar de Venezuela" }
-        VND { "VND", "Dong de Vietn\u00E1m" }
+        VND { "\u20AB", "Dong de Vietn\u00E1m" }
         VUV { "VUV", "Vatu de Vanuatu" }
         WST { "WST", "Tala de Samoa" }
         XAF { "XAF", "Franco de Gab\u00F3n" }

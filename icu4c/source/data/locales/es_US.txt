@@ -41,9 +41,4 @@ es_US {
         "#,##0%",
         "#E0",
     }
-
-    // Currency display names
-    Currencies {
-        USD { "$", "USD" }
-    }
 }

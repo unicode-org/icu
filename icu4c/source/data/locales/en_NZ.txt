@@ -38,5 +38,6 @@ en_NZ {
     // Currency display names
     Currencies {
         NZD { "$", "New Zealand Dollar" }
+        USD { "US$", "US Dollar" }
     }
 }

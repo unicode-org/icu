@@ -119,6 +119,7 @@ tr {
 
     // Currency display names
     Currencies {
-        TRL { "TL", "TRL" }
+        ITL { "ITL", "ITL" } // Italian Lira
+        TRL { "\u20A4", "TRL" } // Turkish Lira
     }
 }

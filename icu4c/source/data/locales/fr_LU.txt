@@ -31,6 +31,7 @@ fr_LU {
 
     // Currency display names
     Currencies {
-        LUF { "F", "LUF" }
+        FRF { "FRF", "franc fran\u00E7ais" } // French Franc
+        LUF { "F", "franc luxembourgeois" }
     }
 }
