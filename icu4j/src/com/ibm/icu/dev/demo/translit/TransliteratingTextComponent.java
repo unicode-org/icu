@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/translit/TransliteratingTextComponent.java,v $ 
- * $Date: 2001/11/28 19:27:09 $ 
- * $Revision: 1.1 $
+ * $Date: 2001/11/28 22:24:29 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -25,7 +25,7 @@ import com.ibm.text.*;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliteratingTextComponent.java,v $ $Revision: 1.1 $ $Date: 2001/11/28 19:27:09 $
+ * @version $RCSfile: TransliteratingTextComponent.java,v $ $Revision: 1.2 $ $Date: 2001/11/28 22:24:29 $
  */
 public class TransliteratingTextComponent extends DumbTextComponent {
 
@@ -72,6 +72,7 @@ public class TransliteratingTextComponent extends DumbTextComponent {
         char ch = e.getKeyChar();
         
         if (translit == null) {
+            setKeyStart(-1);
             super.handleKeyTyped(e);
             return;
         }
@@ -123,15 +124,21 @@ public class TransliteratingTextComponent extends DumbTextComponent {
         Transliterator.Position index = new Transliterator.Position();
         index.contextLimit = buf.length();
         index.contextStart = 0;
-        index.start = 0;
-        index.limit = buf.length();;
+        index.start = getKeyStart();
+        if (index.start == -1) index.start = getSelectionStart();
+        index.limit = buf.length();
 
         StringBuffer log = null;
         if (DEBUG) {
             System.out.println("Transliterator: " + translit.getID());
             System.out.println("From:\t" + '"' + buf.toString() + '"'
-                + "; {cs: " + index.contextStart + ", cl: " + index.contextLimit + ", s: " + index.start + ", l: " + index.limit + "}"
-                + "; '" + ch + "'");
+                + "; {cs: " + index.contextStart
+                + ", s: " + index.start
+                + ", l: " + index.limit
+                + ", cl: " + index.contextLimit 
+                + "}" + "; '" + ch + "'"
+                + " " + getKeyStart()
+            );
         }
 
         if (flush) {
@@ -142,7 +149,11 @@ public class TransliteratingTextComponent extends DumbTextComponent {
         
         if (DEBUG) {
             System.out.println("To:\t" + '"' + buf.toString() + '"'
-                + "; {cs: " + index.contextStart + ", cl: " + index.contextLimit + ", s: " + index.start + ", l: " + index.limit + "}"
+                + "; {cs: " + index.contextStart
+                + ", s: " + index.start
+                + ", l: " + index.limit
+                + ", cl: " + index.contextLimit 
+                + "}"
                 );
             System.out.println();
         }
@@ -155,6 +166,8 @@ public class TransliteratingTextComponent extends DumbTextComponent {
         //if (result.equals(sourceText + ch)) return;
         
         replaceRange(result, 0, getSelectionEnd());
+        setKeyStart(index.start);
+        
         // At this point start has been changed by the callback to
         // resetTransliteratorStart() via replaceRange() -- so use our
         // local copy, saveStart.
