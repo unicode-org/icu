@@ -84,9 +84,9 @@ int main ( int argc, const char **argv )
     nerrors = processArgs(root, argc, (const char**)argv);
     cleanUpTestTree(root);
     cleanUpDataTable();
+#if 0
     ctst_freeAll();
 
-#if 0
     /* To check for leaks */
 
     ucnv_flushCache();
