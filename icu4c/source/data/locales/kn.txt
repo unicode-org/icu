@@ -1,21 +1,36 @@
 // ***************************************************************************
 // *
-// *   Copyright (C) 2001-2003, International Business Machines
+// *   Copyright (C) 2001-2004, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
 
 kn {
     Version{ "2.0" }
-    Countries {
-        IN { "\u0cad\u0cbe\u0cb0\u0ca4" }
-    }
-    Languages {
-        kn { "\u0c95\u0ca8\u0ccd\u0ca8\u0ca1" }
-    }
     AmPmMarkers{
         "\u0CAA\u0CC2\u0CB0\u0CCD\u0CB5\u0CBE\u0CB9\u0CCD\u0CA8",
         "\u0C85\u0CAA\u0CB0\u0CBE\u0CB9\u0CCD\u0CA8"
+    }
+    collations {
+        standard { 
+            Version { "1.0" }
+            Sequence { 
+                "[normalization on]"
+            }
+        }
+    }
+    Countries {
+        AU { "\u0c86\u0cb8\u0ccd\u0c9f\u0ccd\u0cb0\u0cc6\u0cb2\u0cbf\u0caf" }
+        CN { "\u0c9a\u0cc0\u0ca8" }
+        EE { "\u0c8e\u0cb8\u0ccd\u0ca4\u0cca\u0ca8\u0cbf\u0caf" }
+        IN { "\u0cad\u0cbe\u0cb0\u0ca4" }
+        MV { "\u0cae\u0cbe\u0cb2\u0ccd\u0ca1\u0cbf\u0cb5 \u0ca6\u0ccd\u0cb5\u0cc0\u0caa\u0c97\u0cb3\u0cc1" }
+        NP { "\u0ca8\u0cc6\u0caa\u0cbe\u0cb3" }
+        SG { "\u0cb8\u0cbf\u0c82\u0c97\u0caa\u0cc1\u0cb0" }
+        TR { "\u0ca4\u0cc1\u0cb0\u0ccd\u0c95\u0cbf" }
+    }
+    Currencies {
+        INR { "\u0930\u0941", "INR" }
     }
     DayNames{
         "\u0CB0\u0CB5\u0CBF\u0CB5\u0CBE\u0CB0",
@@ -35,7 +50,11 @@ kn {
         "\u0CB6\u0CC1.",
         "\u0CB6\u0CA8\u0CBF."
     }
-
+    Languages {
+        kn { "\u0c95\u0ca8\u0ccd\u0ca8\u0ca1" }
+    }
+    LocaleScript:array { "Knda" }
+    ExemplarCharacters { "[:Knda:]" }
     MonthNames{
         "\u0C9C\u0CA8\u0CB5\u0CB0\u0CC0",
         "\u0CAB\u0CC6\u0CAC\u0CCD\u0CB0\u0CB5\u0CB0\u0CC0",
@@ -64,7 +83,6 @@ kn {
         "\u0CA8\u0CB5\u0CC6\u0C82\u0CAC\u0CB0\u0CCD",
         "\u0CA1\u0CBF\u0CB8\u0CC6\u0C82\u0CAC\u0CB0\u0CCD",
     }
-
 //    NumberElements {
 //        ".",
 //        ",",
@@ -78,19 +96,4 @@ kn {
 //        "\u221e",
 //        "\ufffd",
 //    }
-    LocaleScript:array { "Knda" }
-    ExemplarCharacters { "[:Knda:]" }
-    collations {
-      standard { 
-        Version { "1.0" }
-        Sequence { 
-            "[normalization on]"
-        }
-      }
-    }
-
-    // Currency display names
-    Currencies {
-        INR { "\u0930\u0941", "INR" }
-    }
 }
