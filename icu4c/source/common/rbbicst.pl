@@ -1,7 +1,7 @@
-#*********************************************************************
-#   Copyright (C) 2002 International Business Machines Corporation   *
-#   and others. All rights reserved.                                 *
-#*********************************************************************
+#**************************************************************************
+#   Copyright (C) 2002-2003 International Business Machines Corporation   *
+#   and others. All rights reserved.                                      *
+#**************************************************************************
 #
 #  rbbicst   Compile the RBBI rule paser state table data into initialized C data.
 #            Usage:
@@ -205,8 +205,8 @@ if ($javaOutput) {
     print " *******************************************************************************\n";
     print " *\n";
     print " * \$Source: /xsrl/Nsvn/icu/icu/source/common/rbbicst.pl,v $\n";
-    print " * \$Date: 2003/02/11 23:30:08 $\n";
-    print " * \$Revision: 1.7 $\n";
+    print " * \$Date: 2003/06/02 22:21:58 $\n";
+    print " * \$Revision: 1.8 $\n";
     print " *\n";
     print " *******************************************************************************\n";
     print " */\n";
