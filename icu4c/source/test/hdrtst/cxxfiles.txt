@@ -35,6 +35,7 @@ search.h
 simpletz.h
 smpdtfmt.h
 sortkey.h
+strenum.h
 stsearch.h
 tblcoll.h
 timezone.h
