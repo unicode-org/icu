@@ -86,8 +86,8 @@ PortableFontInstance::PortableFontInstance(char *fileName, float pointSize, LEEr
     fread(&tempDir, sizeof tempDir, 1, fFile);
 
     le_int32 dirSize = sizeof tempDir + ((SWAPW(tempDir.numTables) - ANY_NUMBER) * sizeof(DirectoryEntry));
-    const LETag headTag = 0x68656164; // 'head'
-    const LETag hheaTag = 0x68686561; // 'hhea'
+    const LETag headTag = LE_MAKE_TAG('h', 'e', 'a', 'd');
+    const LETag hheaTag = LE_MAKE_TAG('h', 'h', 'e', 'a');
     const HEADTable *headTable = NULL;
     const HHEATable *hheaTable = NULL;
     le_uint16 numTables = 0;
@@ -128,9 +128,9 @@ PortableFontInstance::PortableFontInstance(char *fileName, float pointSize, LEEr
         goto error_exit;
     }
 
-    fAscent  = (le_int32) yUnitsToPoints(SWAPW(hheaTable->ascent));
-    fDescent = (le_int32) yUnitsToPoints(SWAPW(hheaTable->descent));
-    fLeading = (le_int32) yUnitsToPoints(SWAPW(hheaTable->lineGap));
+    fAscent  = (le_int32) yUnitsToPoints((float) SWAPW(hheaTable->ascent));
+    fDescent = (le_int32) yUnitsToPoints((float) SWAPW(hheaTable->descent));
+    fLeading = (le_int32) yUnitsToPoints((float) SWAPW(hheaTable->lineGap));
 
     fNumLongHorMetrics = SWAPW(hheaTable->numOfLongHorMetrics);
 
@@ -230,7 +230,7 @@ const void *PortableFontInstance::readFontTable(LETag tableTag) const
 
 CMAPMapper *PortableFontInstance::findUnicodeMapper()
 {
-    LETag cmapTag = 0x636D6170; // 'cmap'
+    LETag cmapTag = LE_MAKE_TAG('c', 'm', 'a', 'p');
     const CMAPTable *cmap = (CMAPTable *) readFontTable(cmapTag);
 
     if (cmap == NULL) {
@@ -246,8 +246,8 @@ void PortableFontInstance::getGlyphAdvance(LEGlyphID glyph, LEPoint &advance) co
     TTGlyphID ttGlyph = (TTGlyphID) LE_GET_GLYPH(glyph);
 
     if (fHMTXTable == NULL) {
-        LETag maxpTag = 0x6D617870; // 'maxp'
-        LETag hmtxTag = 0x686D7478; // 'hmtx'
+        LETag maxpTag = LE_MAKE_TAG('m', 'a', 'x', 'p');
+        LETag hmtxTag = LE_MAKE_TAG('h', 'm', 't', 'x');
         const MAXPTable *maxpTable = (MAXPTable *) readFontTable(maxpTag);
         PortableFontInstance *realThis = (PortableFontInstance *) this;
 
