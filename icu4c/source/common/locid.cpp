@@ -39,6 +39,8 @@
 #include "uhash.h"
 #include "ucln_cmn.h"
 
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
+
 static Locale*  availableLocaleList = NULL;
 static int32_t  availableLocaleListCount;
 typedef enum ELocalePos {
@@ -423,6 +425,11 @@ Locale &Locale::operator=(const Locale &other)
     variantBegin = other.variantBegin;
     fIsBogus = other.fIsBogus;
     return *this;
+}
+
+Locale *
+Locale::clone() const {
+    return new Locale(*this);
 }
 
 UBool
@@ -1105,7 +1112,7 @@ class KeywordEnumeration : public StringEnumeration {
 private:
   char *keywords;
   char *current;
-  UChar currUKey[256];
+  int32_t length;
   UnicodeString currUSKey;
   static const char fgClassID;
 
@@ -1113,15 +1120,29 @@ public:
     static inline UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
     virtual UClassID getDynamicClassID(void) const { return getStaticClassID(); }
 public:
-  KeywordEnumeration(const char *keys, int32_t keywordLen, UErrorCode &status) {
-    keywords = (char *)uprv_malloc(keywordLen+1);
-    uprv_memcpy(keywords, keys, keywordLen);
-    keywords[keywordLen] = 0;
-    current = keywords;
+  KeywordEnumeration(const char *keys, int32_t keywordLen, int32_t currentIndex, UErrorCode &status)
+      : keywords((char *)&fgClassID), current((char *)&fgClassID), length(0) {
+    if(U_SUCCESS(status) && keywordLen != 0) {
+      if(keys == NULL || keywordLen < 0) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+      } else {
+        keywords = (char *)uprv_malloc(keywordLen+1);
+        uprv_memcpy(keywords, keys, keywordLen);
+        keywords[keywordLen] = 0;
+        current = keywords + currentIndex;
+        length = keywordLen;
+      }
+    }
   }
 
   ~KeywordEnumeration() {
     uprv_free(keywords);
+  }
+
+  virtual StringEnumeration *
+  clone() const {
+    UErrorCode status = U_ZERO_ERROR;
+    return new KeywordEnumeration(keywords, length, (int32_t)(current - keywords), status);
   }
 
   int32_t count(UErrorCode &status) const {
@@ -1135,34 +1156,47 @@ public:
   }
 
   const char* next(int32_t* resultLength, UErrorCode& status) {
-    const char* result = current;
-    if(*result) {
-      *resultLength = uprv_strlen(current);
-      current += *resultLength+1;
+    const char* result;
+    int32_t len;
+    if(U_SUCCESS(status) && *current != 0) {
+      result = current;
+      len = uprv_strlen(current);
+      current += len+1;
+      if(resultLength != NULL) {
+        *resultLength = len;
+      }
     } else {
-      *resultLength = 0;
+      if(resultLength != NULL) {
+        *resultLength = 0;
+      }
       result = NULL;
     }
     return result;
   }
 
-  const UChar* unext(int32_t* resultLength, UErrorCode& status) {
-    const char* starter = next(resultLength, status);
-    if(starter) {
-      u_charsToUChars(starter, currUKey, *resultLength);
-      currUKey[*resultLength] = 0;
-      return currUKey;
-    } else {
-      return NULL;
-    }
-  }
-
   const UnicodeString* snext(UErrorCode& status) {
     int32_t resultLength = 0;
-    const UChar* starter = unext(&resultLength, status);
-    if(starter) {
-      currUSKey.setTo(TRUE, starter, resultLength);
-      return &currUSKey;
+    const char* starter = next(&resultLength, status);
+    if(starter != NULL) {
+      UChar *buffer = currUSKey.getBuffer(resultLength+1);
+      if(buffer != NULL) {
+        u_charsToUChars(starter, buffer, resultLength);
+        buffer[resultLength] = 0;
+        currUSKey.releaseBuffer(resultLength);
+        return &currUSKey;
+      } else {
+        status = U_MEMORY_ALLOCATION_ERROR;
+      }
+    }
+    return NULL;
+  }
+
+  const UChar* unext(int32_t* resultLength, UErrorCode& status) {
+    if(snext(status) != NULL) {
+      if(resultLength != NULL) {
+        *resultLength = currUSKey.length();
+      }
+      return currUSKey.getTerminatedBuffer();
     } else {
       return NULL;
     }
@@ -1171,8 +1205,6 @@ public:
   void reset(UErrorCode& /*status*/) {
       current = keywords;
   }
-
-
 };
 
 const char KeywordEnumeration::fgClassID = '\0';
@@ -1190,7 +1222,7 @@ Locale::getKeywords(UErrorCode &status) const
     if(assignment) { 
       int32_t keyLen = locale_getKeywords(variantStart+1, '@', keywords, keywordCapacity, NULL, 0, NULL, FALSE, &status);
       if(keyLen) {
-        result = new KeywordEnumeration(keywords, keyLen, status);
+        result = new KeywordEnumeration(keywords, keyLen, 0, status);
       }
     } else {
       status = U_INVALID_FORMAT_ERROR;

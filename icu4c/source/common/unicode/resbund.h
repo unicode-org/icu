@@ -169,6 +169,19 @@ public:
     ~ResourceBundle();
 
     /**
+     * Clone this object.
+     * Clones can be used concurrently in multiple threads.
+     * If an error occurs, then NULL is returned.
+     * The caller must delete the clone.
+     *
+     * @return a clone of this object
+     *
+     * @see getDynamicClassID
+     * @draft ICU 2.8
+     */
+    ResourceBundle *clone() const;
+
+    /**
      * Returns the size of a resource. Size for scalar types is always 1, and for vector/table types is
      * the number of child resources.
      *

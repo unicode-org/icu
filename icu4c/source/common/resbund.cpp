@@ -250,6 +250,11 @@ ResourceBundle::~ResourceBundle()
     }
 }
 
+ResourceBundle *
+ResourceBundle::clone() const {
+    return new ResourceBundle(*this);
+}
+
 void 
 ResourceBundle::constructForLocale(const UnicodeString& path,
                                    const Locale& locale,

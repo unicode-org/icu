@@ -100,6 +100,19 @@ public:
     UBool              operator!=(const ParsePosition& that) const;
 
     /**
+     * Clone this object.
+     * Clones can be used concurrently in multiple threads.
+     * If an error occurs, then NULL is returned.
+     * The caller must delete the clone.
+     *
+     * @return a clone of this object
+     *
+     * @see getDynamicClassID
+     * @draft ICU 2.8
+     */
+    ParsePosition *clone() const;
+
+    /**
      * Retrieve the current parse position.  On input to a parse method, this
      * is the index of the character at which parsing will begin; on output, it
      * is the index of the character following the last character parsed.
