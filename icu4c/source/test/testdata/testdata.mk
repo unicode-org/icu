@@ -14,13 +14,14 @@
 ALL : "$(DLL_OUTPUT)\testdata.dll" 
 	@echo Test data is built.
 
-"$(DLL_OUTPUT)\testdata.dll" :  "$(TESTDATA)\root.res" "$(TESTDATA)\te.res" "$(TESTDATA)\te_IN.res" "$(TESTDATA)\testtypes.res" test.dat
+"$(DLL_OUTPUT)\testdata.dll" :  "$(TESTDATA)\root.res" "$(TESTDATA)\te.res" "$(TESTDATA)\te_IN.res" "$(TESTDATA)\testtypes.res" "$(TESTDATA)\empty.res" test.dat
 	@echo Building test data
  	@"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -v -m dll -c -p testdata -O "$(PKGOPT)" -d "$(DLL_OUTPUT)" -T "$(TESTDATAOUT)" -s "$(TESTDATA)" <<
 root.res
 te.res
 te_IN.res
 testtypes.res
+empty.res
 test.dat
 <<
 
