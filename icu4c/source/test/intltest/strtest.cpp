@@ -36,12 +36,16 @@ void StringTest::TestSizeofWCharT(void) {
 }
 
 void StringTest::TestSizeofInt64(void) {
+#ifdef U_INT64_T_UNAVAILABLE
+    errln("int64_t and uint64_t are undefined.");
+#else
     if(8!=sizeof(int64_t)) {
         errln("TestSizeofInt64: 8!=sizeof(int64_t) - int64_t needs to be fixed in platform.h");
     }
     if(8!=sizeof(uint64_t)) {
         errln("TestSizeofInt64: 8!=sizeof(uint64_t) - uint64_t needs to be fixed in platform.h");
     }
+#endif
 }
 
 void StringTest::TestCharsetFamily(void) {
