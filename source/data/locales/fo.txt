@@ -7,6 +7,9 @@
 
 fo {
     Version { "1.0" }
+    Languages {
+        fo { "føroyskt" }
+    }
     DayAbbreviations { 
         "sun",
         "mán",

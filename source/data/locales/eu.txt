@@ -7,6 +7,9 @@
 
 eu {
     Version { "1.0" }
+    Languages {
+        eu { "euskara" }
+    }
     DayAbbreviations {
         "ig",
         "al",
