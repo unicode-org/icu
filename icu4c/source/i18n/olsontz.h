@@ -286,12 +286,12 @@ OlsonTimeZone::zoneOffset(int16_t index) const {
 
 inline int32_t
 OlsonTimeZone::rawOffset(int16_t index) const {
-    return typeOffsets[index << 1];
+    return typeOffsets[(uint32_t)(index << 1)];
 }
 
 inline int32_t
 OlsonTimeZone::dstOffset(int16_t index) const {
-    return typeOffsets[(index << 1) + 1];
+    return typeOffsets[(uint32_t)((index << 1) + 1)];
 }
 
 U_NAMESPACE_END
