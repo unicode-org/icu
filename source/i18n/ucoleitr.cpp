@@ -207,12 +207,9 @@ U_CAPI int32_t
 ucol_getMaxExpansion(const UCollationElements *elems,
                            int32_t            order)
 {
-  /* 
-  synwee : requested this implementation from vladimir, need discussion. so 
-  hang on.
-  */
-  /* return ((CollationElementIterator*)elems)->getMaxExpansion(order); */
-  return -1;
+  uint8_t result;
+  UCOL_GETMAXEXPANSION(elems->collator_, order, result);
+  return result;
 }
 
 U_CAPI void
