@@ -9,8 +9,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/Attic/releasenotes.html,v $
-* $Date: 2002/08/16 15:51:35 $
-* $Revision: 1.7 $
+* $Date: 2002/12/05 06:06:25 $
+* $Revision: 1.8 $
 *
 *******************************************************************************
 -->
@@ -19,18 +19,18 @@
 <body bgcolor="#FFFFFF">
 <!--#include virtual="/icu/ssi/header.html" --> 
     <h2>International Components for Unicode for Java</h2>
-    <h3>Release Notes for ICU4J 2.2</h3>
+    <h3>Release Notes for ICU4J 2.4</h3>
 
 <hr size="2" width="100%" align="center">
     <p><b>Release Date</b><br>
-    August 15th, 2002</p>
+    December 15th, 2002</p>
 
 <p>For the most recent
       release, see the <a href="http://oss.software.ibm.com/icu4j/download/index.html">
       ICU4J download site</a>.
     </P>
 
-    <p><B>What's new in Release 2.2</B></p>
+    <p><B>What's new in Release 2.4</B></p>
 
 <ul>
   <li><b>Unicode 3.2 support</b>
@@ -80,26 +80,12 @@
 
      <P><B>Reference Platforms</B></P>
       <p>
-      The reference platforms for version 2.2 are:<ul>
+      The reference platforms for version 2.4 are:<ul>
 <li> Win2000, IBM JDK 1.3
 <li> Solaris 2.7, Sun JDK 1.3.1
 <li> AIX 5.1, IBM JDK 1.3
 </ul>
       </p>
-      <P>
-      In release 2.2, there are 2 known non-reference platform compilers that fail compiling ICU4J source code, IBM JDK 1.3.1_02 and Jikes 1.16. Use ICU4J on unsupported JVMs and non-reference platform compilers at your own risk.</P>
-
-      <p><b>Warnings</b></p>
-      <p>
-         In release 2.2, there is a limitation with pattern handling with DecimalFormat when a percent or permille sign is included.
-      </p>
-      <p>
-      <ul>
-          <li> Quoted percent or permille signs, which should be treated as literals, are instead treated as if they were unquoted.
-          <li> Patterns involving percent or permille signs will be generated with localized pattern characters for those signs, when a non-localized pattern is requested.  If such a pattern is subsequently applied to a DecimalFormat as a non-localized pattern, the percent or permille signs will not be recognized if they differ from the non-localized signs in the locale being used.
-      </ul>
-      </p>
-      <p>These problems will be fixed in the next release.</p>
 
 <p><b>For More Information</b></p>
 
