@@ -1622,6 +1622,11 @@ void TestIDNA::testCompareReferenceImpl(const UChar* src, int32_t srcLen){
     }
 
 }
+const char* failures[] ={
+    "\\uAA42\\U0001F8DD\\U00019D01\\U000149A3\\uD385\\U000EE0F5\\U00018B92\\U000179D1\\U00018624\\U0002227F\\U000E83C0\\U000E8DCD\\u5460\\U00017F34\\U0001570B\\u43D1\\U0002C9C9\\U000281EC\\u2105\\U000180AE\\uC5D4",
+    "\\U0002F5A6\\uD638\\u0D0A\\u9E9C\\uFE5B\\U0001FCCB\\u66C4",
+};
+
 void TestIDNA::TestIDNAMonkeyTest(){
     UnicodeString source;
     UErrorCode status = U_ZERO_ERROR;
@@ -1639,14 +1644,16 @@ void TestIDNA::TestIDNAMonkeyTest(){
     }
     
     /* for debugging */
-    source.truncate(0);
-    source.append( "\\U0002F5A6\\uD638\\u0D0A\\u9E9C\\uFE5B\\U0001FCCB\\u66C4" );
-    source = source.unescape();
-    source.append((UChar)0x0000);
-    const UChar *src = source.getBuffer();
-    testCompareReferenceImpl(src,source.length()-1);
-    //debug(source.getBuffer(),source.length(),UIDNA_ALLOW_UNASSIGNED);
-    source.releaseBuffer();
+    for (int i=0; i<(sizeof(failures)/sizeof(failures[0])); i++){
+        source.truncate(0);
+        source.append( failures[i] );
+        source = source.unescape();
+        source.append((UChar)0x0000);
+        const UChar *src = source.getBuffer();
+        testCompareReferenceImpl(src,source.length()-1);
+        //debug(source.getBuffer(),source.length(),UIDNA_ALLOW_UNASSIGNED);
+        source.releaseBuffer();
+    }
 
     
     source.truncate(0);
