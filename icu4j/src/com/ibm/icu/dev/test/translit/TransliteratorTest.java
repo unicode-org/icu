@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2001/12/03 20:49:11 $
- * $Revision: 1.91 $
+ * $Date: 2001/12/03 23:08:50 $
+ * $Revision: 1.92 $
  *
  *****************************************************************************************
  */
@@ -1220,6 +1220,38 @@ public class TransliteratorTest extends TestFmwk {
                                     "{$a} [^\\u0000-\\uFFFF] > y;"),
                CharsToUnicodeString("kax\\U00010300xm"),
                CharsToUnicodeString("ky\\U00010400y\\U00010400m"));
+
+        expect(Transliterator.getInstance("Any-Name"),
+               CharsToUnicodeString("\\U00010330\\U000E0061\\u00A0"),
+               "{GOTHIC LETTER AHSA}{TAG LATIN SMALL LETTER A}{NO-BREAK SPACE}");
+
+        expect(Transliterator.getInstance("Any-Hex/Unicode"),
+               CharsToUnicodeString("\\U00010330\\U0010FF00\\U000E0061\\u00A0"),
+               "U+10330U+10FF00U+E0061U+00A0");
+  
+        expect(Transliterator.getInstance("Any-Hex/C"),
+               CharsToUnicodeString("\\U00010330\\U0010FF00\\U000E0061\\u00A0"),
+               "\\U00010330\\U0010FF00\\U000E0061\\u00A0");
+
+        expect(Transliterator.getInstance("Any-Hex/Perl"),
+               CharsToUnicodeString("\\U00010330\\U0010FF00\\U000E0061\\u00A0"),
+               "\\x{10330}\\x{10FF00}\\x{E0061}\\x{A0}");
+
+        expect(Transliterator.getInstance("Any-Hex/Java"),
+               CharsToUnicodeString("\\U00010330\\U0010FF00\\U000E0061\\u00A0"),
+               "\\uD800\\uDF30\\uDBFF\\uDF00\\uDB40\\uDC61\\u00A0");
+
+        expect(Transliterator.getInstance("Any-Hex/XML"),
+               CharsToUnicodeString("\\U00010330\\U0010FF00\\U000E0061\\u00A0"),
+               "&#x10330;&#x10FF00;&#xE0061;&#xA0;");
+
+        expect(Transliterator.getInstance("Any-Hex/XML10"),
+               CharsToUnicodeString("\\U00010330\\U0010FF00\\U000E0061\\u00A0"),
+               "&#66352;&#1113856;&#917601;&#160;");
+
+        expect(Transliterator.getInstance("[\\U000E0000-\\U000E0FFF] Remove"),
+               CharsToUnicodeString("\\U00010330\\U0010FF00\\U000E0061\\u00A0"),
+               CharsToUnicodeString("\\U00010330\\U0010FF00\\u00A0"));
     }
 
     public void TestQuantifier() {
@@ -2166,11 +2198,6 @@ public class TransliteratorTest extends TestFmwk {
         }
     }
 
-    //======================================================================
-    // These tests are not mirrored (yet) in icu4c at
-    // source/test/intltest/transtst.cpp
-    //======================================================================
-
     /**
      * Test anchor masking
      */
@@ -2370,6 +2397,11 @@ public class TransliteratorTest extends TestFmwk {
             gotError = true;
         }
     }
+
+    //======================================================================
+    // These tests are not mirrored (yet) in icu4c at
+    // source/test/intltest/transtst.cpp
+    //======================================================================
 
     //======================================================================
     // Support methods

@@ -317,6 +317,10 @@ class TransliteratorTest : public IntlTest {
     // Support methods
     //======================================================================
  protected:
+    void expectT(const UnicodeString& id,
+                 const UnicodeString& source,
+                 const UnicodeString& expectedResult);
+
     void expect(const UnicodeString& rules,
                 const UnicodeString& source,
                 const UnicodeString& expectedResult,
