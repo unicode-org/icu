@@ -179,7 +179,6 @@ RegexMatcher &RegexMatcher::appendReplacement(UnicodeString &dest,
                 UChar32 escapedChar = replacement.unescapeAt(replIdx);
                 if (escapedChar != (UChar32)0xFFFFFFFF) {
                     dest.append(escapedChar);
-                    replIdx += (c==0x55? 9: 5); 
                     // TODO:  Report errors for mal-formed \u escapes?
                     //        As this is, the original sequence is output, which may be OK.
                     continue;

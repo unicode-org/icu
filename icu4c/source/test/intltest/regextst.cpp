@@ -1035,7 +1035,28 @@ void RegexTest::API_Replace() {
     REGEX_ASSERT_FAIL(matcher2->replaceFirst("bad capture group number $5...",status), U_INDEX_OUTOFBOUNDS_ERROR);
     
     
-    
+    //
+    // Replacement String with \u hex escapes
+    //
+    {
+        UnicodeString  src = "abc 1 abc 2 abc 3";
+        UnicodeString  substitute = "--\\u0043--";
+        matcher->reset(src);
+        UnicodeString  result = matcher->replaceAll(substitute, status);
+        REGEX_CHECK_STATUS;
+        REGEX_ASSERT(result == "--C-- 1 --C-- 2 --C-- 3"); 
+    }
+    {
+        UnicodeString  src = "abc !";
+        UnicodeString  substitute = "--\\U00010000--";
+        matcher->reset(src);
+        UnicodeString  result = matcher->replaceAll(substitute, status);
+        REGEX_CHECK_STATUS;
+        UnicodeString expected = UnicodeString("--");
+        expected.append((UChar32)0x10000);
+        expected.append("-- !");
+        REGEX_ASSERT(result == expected); 
+    }
     // TODO:  need more through testing of capture substitutions.
     
     
