@@ -82,6 +82,7 @@ typedef enum {
     UCNV_ISCII,
     UCNV_US_ASCII,
     UCNV_UTF7,
+    UCNV_BOCU1,
 
     /* Number of converter types for which we have conversion routines. */
     UCNV_NUMBER_OF_SUPPORTED_CONVERTER_TYPES
