@@ -4,8 +4,8 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/i18n/Attic/upropset.cpp,v $
-* $Date: 2001/10/17 19:20:41 $
-* $Revision: 1.1 $
+* $Date: 2001/10/23 02:00:50 $
+* $Revision: 1.2 $
 **********************************************************************
 */
 #include "upropset.h"
@@ -272,12 +272,15 @@ UnicodeSet* UnicodePropertySet::createCategorySet(const UnicodeString& valueName
 UnicodeSet* UnicodePropertySet::createScriptSet(const UnicodeString& valueName) {
     _CharString cvalueName(valueName);
     UErrorCode ec = U_ZERO_ERROR;
-    UScriptCode script = uscript_getCode(cvalueName, &ec);
-    if (script == USCRIPT_INVALID_CODE || U_FAILURE(ec)) {
+    const int32_t capacity = 10;
+    UScriptCode script[capacity]={USCRIPT_INVALID_CODE};
+    int32_t num = uscript_getCode(cvalueName,script,capacity, &ec);
+
+    if (script[0] == USCRIPT_INVALID_CODE || U_FAILURE(ec)) {
         // Syntax error; unknown short name
         return NULL;
     }
-    return new UnicodeSet(getScriptSet(script));
+    return new UnicodeSet(getScriptSet(script[0]));
 }
 
 //----------------------------------------------------------------
