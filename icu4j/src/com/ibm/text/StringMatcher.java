@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/StringMatcher.java,v $ 
- * $Date: 2001/12/03 21:33:58 $ 
- * $Revision: 1.5 $
+ * $Date: 2001/12/11 17:43:56 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -60,7 +60,7 @@ class StringMatcher implements UnicodeMatcher {
                 char keyChar = pattern.charAt(i); // OK; see note (1) above
                 UnicodeMatcher subm = data.lookup(keyChar);
                 if (subm == null) {
-                    if (cursor[0] >= limit &&
+                    if (cursor[0] > limit &&
                         keyChar == text.charAt(cursor[0])) { // OK; see note (1) above
                         --cursor[0];
                     } else {
