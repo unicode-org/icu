@@ -417,11 +417,11 @@ unum_setDoubleAttribute(    UNumberFormat*          fmt,
 }
 
 U_CAPI int32_t
-unum_getTextAttribute(    const    UNumberFormat*                    fmt,
+unum_getTextAttribute(const UNumberFormat*  fmt,
             UNumberFormatTextAttribute      tag,
-            UChar*                            result,
-            int32_t                            resultLength,
-            UErrorCode*                        status)
+            UChar*                          result,
+            int32_t                         resultLength,
+            UErrorCode*                     status)
 {
   if(U_FAILURE(*status))
       return -1;
@@ -448,7 +448,6 @@ unum_getTextAttribute(    const    UNumberFormat*                    fmt,
   case UNUM_PADDING_CHARACTER:
     *result = ((DecimalFormat*)fmt)->getPadCharacter();
     return 1;
-    break;
 
   default:
     *status = U_UNSUPPORTED_ERROR;
