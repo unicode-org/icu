@@ -14,7 +14,7 @@ TESTDT=$(TESTPKG)_
 ALL : "$(TESTDATAOUT)\testdata.dat" 
 	@echo Test data is built.
 
-"$(TESTDATAOUT)\testdata.dat" : "$(TESTDATABLD)\casing.res" "$(TESTDATABLD)\root.res" "$(TESTDATABLD)\te.res" "$(TESTDATABLD)\te_IN.res" "$(TESTDATABLD)\testaliases.res" "$(TESTDATABLD)\testtypes.res" "$(TESTDATABLD)\testempty.res" "$(TESTDATABLD)\ja_data.res" "$(TESTDATABLD)\DataDrivenCollationTest.res" $(TESTDATABLD)\testdata_test.icu "$(TESTDATABLD)\testdata_test1.cnv" "$(TESTDATABLD)\testdata_test3.cnv" "$(TESTDATABLD)\testdata_test4.cnv" 
+"$(TESTDATAOUT)\testdata.dat" : "$(TESTDATABLD)\casing.res" "$(TESTDATABLD)\root.res" "$(TESTDATABLD)\te.res" "$(TESTDATABLD)\te_IN.res" "$(TESTDATABLD)\testaliases.res" "$(TESTDATABLD)\testtypes.res" "$(TESTDATABLD)\testempty.res" "$(TESTDATABLD)\iscii.res" "$(TESTDATABLD)\DataDrivenCollationTest.res" $(TESTDATABLD)\testdata_test.icu "$(TESTDATABLD)\testdata_test1.cnv" "$(TESTDATABLD)\testdata_test3.cnv" "$(TESTDATABLD)\testdata_test4.cnv" 
 	@echo Building test data
 	@copy "$(TESTDATABLD)\testdata_te.res" "$(TESTDATAOUT)\testdata_nam.typ"
 	@"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -f -v -m common -c -p"$(TESTPKG)"  -O "$(PKGOPT)" -d "$(TESTDATAOUT)" -T "$(TESTDATABLD)" -s "$(TESTDATABLD)" <<
@@ -25,7 +25,7 @@ testdata_te_IN.res
 testdata_testtypes.res
 testdata_testempty.res
 testdata_testaliases.res
-testdata_ja_data.res
+testdata_iscii.res
 testdata_DataDrivenCollationTest.res
 testdata_test.icu
 testdata_test1.cnv
@@ -41,9 +41,9 @@ testdata_test4.cnv
 	@echo Making Test Resource Bundle files $<
 	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -t -p"$(TESTPKG)" -q -s"$(TESTDATA)" -d"$(TESTDATABLD)" $<
 
-"$(TESTDATABLD)\ja_data.res":
-	@echo Making Test Resource Bundle file with encoding ISO-2022-JP
-	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -t -p"$(TESTPKG)" -q -s"$(TESTDATA)" -eISO_2022_JP -d"$(TESTDATABLD)" ja_data.bin 
+"$(TESTDATABLD)\iscii.res":
+	@echo Making Test Resource Bundle file with encoding x-iscii-de
+	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -t -p"$(TESTPKG)" -q -s"$(TESTDATA)" -ex-iscii-de -d"$(TESTDATABLD)" iscii.bin 
 
 $(TESTDATABLD)\testdata_test.icu : {"$(ICUTOOLS)\gentest\$(CFG)"}gentest.exe
 	"$(ICUTOOLS)\gentest\$(CFG)\gentest" -d"$(TESTDATABLD)"
