@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/timezone/TimeZoneBoundaryTest.java,v $
- * $Date: 2003/10/02 20:50:59 $
- * $Revision: 1.10 $
+ * $Date: 2003/10/16 06:28:47 $
+ * $Revision: 1.11 $
  *
  *******************************************************************************
  */
@@ -237,12 +237,15 @@ public class TimeZoneBoundaryTest extends TestFmwk
      * Given a date, a TimeZone, and expected values for inDaylightTime,
      * useDaylightTime, zone and DST offset, verify that this is the case.
      */
-    void verifyDST(Date d, TimeZone time_zone,
+    void verifyDST(String tag, Calendar cal, TimeZone time_zone,
                    boolean expUseDaylightTime, boolean expInDaylightTime,
-                   int expZoneOffset, int expDSTOffset)
+                   int expRawOffset, int expOffset)
     {
-        logln("-- Verifying time " + d +
-              " in zone " + time_zone.getID());
+        Date d = cal.getTime();
+
+        logln("-- " + tag + ": " + d +
+              " in zone " + time_zone.getID() + " (" +
+              d.getTime()/3600000.0 + ")");
 
         if (time_zone.inDaylightTime(d) == expInDaylightTime)
             logln("PASS: inDaylightTime = " + time_zone.inDaylightTime(d));
@@ -254,47 +257,179 @@ public class TimeZoneBoundaryTest extends TestFmwk
         else
             errln("FAIL: useDaylightTime = " + time_zone.useDaylightTime());
 
-        if (time_zone.getRawOffset() == expZoneOffset)
-            logln("PASS: getRawOffset() = " + expZoneOffset/(double)ONE_HOUR);
+        if (time_zone.getRawOffset() == expRawOffset)
+            logln("PASS: getRawOffset() = " + expRawOffset/(double)ONE_HOUR);
         else
             errln("FAIL: getRawOffset() = " + time_zone.getRawOffset()/(double)ONE_HOUR +
-                  "; expected " + expZoneOffset/(double)ONE_HOUR);
+                  "; expected " + expRawOffset/(double)ONE_HOUR);
 
-        GregorianCalendar gc = new GregorianCalendar(time_zone);
-        gc.setTime(d);
-        int offset = time_zone.getOffset(gc.get(Calendar.ERA), gc.get(Calendar.YEAR), gc.get(Calendar.MONTH),
-                                         gc.get(Calendar.DAY_OF_MONTH), gc.get(Calendar.DAY_OF_WEEK),
-                                         ((gc.get(Calendar.HOUR_OF_DAY) * 60 +
-                                           gc.get(Calendar.MINUTE)) * 60 +
-                                          gc.get(Calendar.SECOND)) * 1000 +
-                                         gc.get(Calendar.MILLISECOND));
-        if (offset == expDSTOffset)
+        //GregorianCalendar gc = new GregorianCalendar(time_zone);
+        //gc.setTime(d);
+        int offset = time_zone.getOffset(cal.get(Calendar.ERA), cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
+                                         cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.DAY_OF_WEEK),
+                                         ((cal.get(Calendar.HOUR_OF_DAY) * 60 +
+                                           cal.get(Calendar.MINUTE)) * 60 +
+                                          cal.get(Calendar.SECOND)) * 1000 +
+                                         cal.get(Calendar.MILLISECOND));
+        if (offset == expOffset)
             logln("PASS: getOffset() = " + offset/(double)ONE_HOUR);
-        else
+        else {
+            logln("era=" + cal.get(Calendar.ERA) +
+                  ", year=" + cal.get(Calendar.YEAR) +
+                  ", month=" + cal.get(Calendar.MONTH) +
+                  ", dom=" + cal.get(Calendar.DAY_OF_MONTH) +
+                  ", dow=" + cal.get(Calendar.DAY_OF_WEEK) +
+                  ", time-of-day=" + (((cal.get(Calendar.HOUR_OF_DAY) * 60 +
+                               cal.get(Calendar.MINUTE)) * 60 +
+                              cal.get(Calendar.SECOND)) * 1000 +
+                             cal.get(Calendar.MILLISECOND)) / 3600000.0 +
+                            " hours");
             errln("FAIL: getOffset() = " + offset/(double)ONE_HOUR +
-                  "; expected " + expDSTOffset/(double)ONE_HOUR);
+                  "; expected " + expOffset/(double)ONE_HOUR);
+        }
     }
+
+    /**
+     * Check that the given year/month/dom/hour maps to and from the
+     * given epochHours.  This verifies the functioning of the
+     * calendar and time zone in conjunction with one another,
+     * including the calendar time->fields and fields->time and
+     * the time zone getOffset method.
+     *
+     * @param epochHours hours after Jan 1 1970 0:00 GMT.
+     */
+    void verifyMapping(Calendar cal, int year, int month, int dom, int hour,
+                       double epochHours) {
+        double H = 3600000.0;
+        cal.clear();
+        cal.set(year, month, dom, hour, 0, 0);
+        Date d = cal.getTime();
+        double e = d.getTime() / H;
+        Date ed = new Date((long)(epochHours * H));
+        if (e == epochHours) {
+            logln("Ok: " + year + "/" + (month+1) + "/" + dom + " " + hour + ":00 => " +
+                  e + " (" + ed + ")");
+        } else {
+            errln("FAIL: " + year + "/" + (month+1) + "/" + dom + " " + hour + ":00 => " +
+                  e + " (" + new Date((long)(e * H)) + ")" +
+                  ", expected " + epochHours + " (" + ed + ")");
+        }
+        cal.setTime(ed);
+        if (cal.get(Calendar.YEAR) == year &&
+            cal.get(Calendar.MONTH) == month &&
+            cal.get(Calendar.DATE) == dom &&
+            cal.get(Calendar.MILLISECONDS_IN_DAY) == hour * 3600000) {
+            logln("Ok: " + epochHours + " (" + ed + ") => " +
+                  cal.get(Calendar.YEAR) + "/" +
+                  (cal.get(Calendar.MONTH)+1) + "/" +
+                  cal.get(Calendar.DATE) + " " +
+                  cal.get(Calendar.MILLISECONDS_IN_DAY)/H);
+        } else {
+            errln("FAIL: " + epochHours + " (" + ed + ") => " +
+                  cal.get(Calendar.YEAR) + "/" +
+                  (cal.get(Calendar.MONTH)+1) + "/" +
+                  cal.get(Calendar.DATE) + " " +
+                  cal.get(Calendar.MILLISECONDS_IN_DAY)/H +
+                  ", expected " + year + "/" + (month+1) + "/" + dom +
+                  " " + hour);
+        }
+    }
+
+// NOTE: Enable this code to check the behavior of the underlying JDK,
+// using a JDK Calendar object.
+//
+//    int millisInDay(java.util.Calendar cal) {
+//        return ((cal.get(Calendar.HOUR_OF_DAY) * 60 +
+//                 cal.get(Calendar.MINUTE)) * 60 +
+//                cal.get(Calendar.SECOND)) * 1000 +
+//            cal.get(Calendar.MILLISECOND);
+//    }
+//
+//    void verifyMapping(java.util.Calendar cal, int year, int month, int dom, int hour,
+//                       double epochHours) {
+//        cal.clear();
+//        cal.set(year, month, dom, hour, 0, 0);
+//        Date d = cal.getTime();
+//        double e = d.getTime() / 3600000.0;
+//        Date ed = new Date((long)(epochHours * 3600000));
+//        if (e == epochHours) {
+//            logln("Ok: " + year + "/" + (month+1) + "/" + dom + " " + hour + ":00 => " +
+//                  e + " (" + ed + ")");
+//        } else {
+//            errln("FAIL: " + year + "/" + (month+1) + "/" + dom + " " + hour + ":00 => " +
+//                  e + " (" + new Date((long)(e * 3600000)) + ")" +
+//                  ", expected " + epochHours + " (" + ed + ")");
+//        }
+//        cal.setTime(ed);
+//        if (cal.get(Calendar.YEAR) == year &&
+//            cal.get(Calendar.MONTH) == month &&
+//            cal.get(Calendar.DATE) == dom &&
+//            millisInDay(cal) == hour * 3600000) {
+//            logln("Ok: " + epochHours + " (" + ed + ") => " +
+//                  cal.get(Calendar.YEAR) + "/" +
+//                  (cal.get(Calendar.MONTH)+1) + "/" +
+//                  cal.get(Calendar.DATE) + " " +
+//                  millisInDay(cal)/3600000.0);
+//        } else {
+//            errln("FAIL: " + epochHours + " (" + ed + ") => " +
+//                  cal.get(Calendar.YEAR) + "/" +
+//                  (cal.get(Calendar.MONTH)+1) + "/" +
+//                  cal.get(Calendar.DATE) + " " +
+//                  millisInDay(cal)/3600000.0 +
+//                  ", expected " + year + "/" + (month+1) + "/" + dom +
+//                  " " + hour);
+//        }
+//    }
 
     public void TestBoundaries()
     {
-        TimeZone pst = safeGetTimeZone("PST");
         TimeZone save = TimeZone.getDefault();
-        java.util.Calendar tempcal = java.util.Calendar.getInstance();
+
+        // Check basic mappings.  We had a problem with this for ICU
+        // 2.8 after migrating to using pass-through time zones.  The
+        // problem appeared only on JDK 1.3.
+        TimeZone pst = safeGetTimeZone("PST");
+        Calendar tempcal = Calendar.getInstance(pst);
+        verifyMapping(tempcal, 1997, Calendar.APRIL, 3,  0, 238904.0);
+        verifyMapping(tempcal, 1997, Calendar.APRIL, 4,  0, 238928.0);
+        verifyMapping(tempcal, 1997, Calendar.APRIL, 5,  0, 238952.0);
+        verifyMapping(tempcal, 1997, Calendar.APRIL, 5, 23, 238975.0);
+        verifyMapping(tempcal, 1997, Calendar.APRIL, 6,  0, 238976.0);
+        verifyMapping(tempcal, 1997, Calendar.APRIL, 6,  1, 238977.0);
+        verifyMapping(tempcal, 1997, Calendar.APRIL, 6,  3, 238978.0);
+        
+        TimeZone utc = safeGetTimeZone("UTC");
+        Calendar utccal = Calendar.getInstance(utc);
+        verifyMapping(utccal, 1997, Calendar.APRIL, 6, 0, 238968.0);
+
+// NOTE: Enable this code to check the behavior of the underlying JDK,
+// using a JDK Calendar object.
+//
+//        java.util.TimeZone jdkpst = java.util.TimeZone.getTimeZone("PST");
+//        java.util.Calendar jdkcal = java.util.Calendar.getInstance(jdkpst);
+//        verifyMapping(jdkcal, 1997, Calendar.APRIL, 5,  0, 238952.0);
+//        verifyMapping(jdkcal, 1997, Calendar.APRIL, 5, 23, 238975.0);
+//        verifyMapping(jdkcal, 1997, Calendar.APRIL, 6,  0, 238976.0);
+//        verifyMapping(jdkcal, 1997, Calendar.APRIL, 6,  1, 238977.0);
+//        verifyMapping(jdkcal, 1997, Calendar.APRIL, 6,  3, 238978.0);
+
         tempcal.clear();
+        tempcal.set(1997, Calendar.APRIL, 6);
+        Date d = tempcal.getTime();
+
         try {
             TimeZone.setDefault(pst);
 
             // DST changeover for PST is 4/6/1997 at 2 hours past midnight
-            tempcal.set(1997, Calendar.APRIL, 6);
-            Date d = tempcal.getTime();
+            // at 238978.0 epoch hours.
 
             // i is minutes past midnight standard time
-            for (int i=60; i<=180; i+=15)
+            for (int i=-120; i<=180; i+=60)
             {
                 boolean inDST = (i >= 120);
-                Date e = tempcal.getTime();
-                e.setTime(d.getTime() + i*60*1000);
-                verifyDST(e, pst, true, inDST, -8*ONE_HOUR,
+                tempcal.setTimeInMillis(d.getTime() + i*60*1000);
+                verifyDST("hour=" + i/60,
+                          tempcal, pst, true, inDST, -8*ONE_HOUR,
                           inDST ? -7*ONE_HOUR : -8*ONE_HOUR);
             }
         } finally {
