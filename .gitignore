@@ -1,0 +1,16 @@
+/bin
+/include
+/lib
+source/Doxyfile
+source/Makefile
+source/README
+source/bin
+source/config.cache
+source/config.log
+source/config.status
+source/data/*.plg
+source/data/Makefile
+source/data/icupkg.inc
+source/data/out
+source/icudefs.mk
+source/lib
