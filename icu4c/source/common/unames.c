@@ -932,9 +932,9 @@ enumAlgNames(AlgorithmicRange *range,
         while(++start<limit) {
             /* increment the hexadecimal number on a character-basis */
             s=end;
-            do {
+            for (;;) {
                 c=*--s;
-                if('0'<=c && c<'9' || 'A'<=c && c<'F') {
+                if(('0'<=c && c<'9') || ('A'<=c && c<'F')) {
                     *s=c+1;
                     break;
                 } else if(c=='9') {
@@ -943,7 +943,7 @@ enumAlgNames(AlgorithmicRange *range,
                 } else if(c=='F') {
                     *s='0';
                 }
-            } while(1);
+            }
 
             if(!fn(context, start, nameChoice, buffer, length)) {
                 return FALSE;
@@ -987,13 +987,14 @@ enumAlgNames(AlgorithmicRange *range,
         while(++start<limit) {
             /* increment the indexes in lexical order bound by the factors */
             i=count;
-            do {
+            for (;;) {
                 index=indexes[--i]+1;
                 if(index<factors[i]) {
                     /* skip one index and its element string */
                     indexes[i]=index;
                     s=elements[i];
-                    while(*s++!=0) {}
+                    while(*s++!=0) {
+                    }
                     elements[i]=s;
                     break;
                 } else {
@@ -1001,7 +1002,7 @@ enumAlgNames(AlgorithmicRange *range,
                     indexes[i]=0;
                     elements[i]=elementBases[i];
                 }
-            } while(1);
+            }
 
             /* to make matters a little easier, just append all elements to the suffix */
             t=suffix;
@@ -1115,7 +1116,7 @@ findAlgName(AlgorithmicRange *range, UCharNameChoice nameChoice, const char *oth
         while(++start<limit) {
             /* increment the indexes in lexical order bound by the factors */
             i=count;
-            do {
+            for (;;) {
                 index=indexes[--i]+1;
                 if(index<factors[i]) {
                     /* skip one index and its element string */
@@ -1129,7 +1130,7 @@ findAlgName(AlgorithmicRange *range, UCharNameChoice nameChoice, const char *oth
                     indexes[i]=0;
                     elements[i]=elementBases[i];
                 }
-            } while(1);
+            }
 
             /* to make matters a little easier, just compare all elements of the suffix */
             t=otherName;
