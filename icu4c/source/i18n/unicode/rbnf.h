@@ -793,7 +793,7 @@ public:
    * @return the name of the current default rule set
    * @draft ICU 3.0
    */
-  virtual UnicodeString getDefaultRuleSetName();
+  virtual UnicodeString getDefaultRuleSetName() const;
 
 public:
     /**

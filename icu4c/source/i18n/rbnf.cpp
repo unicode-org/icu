@@ -423,7 +423,7 @@ RuleBasedNumberFormat::setDefaultRuleSet(const UnicodeString& ruleSetName, UErro
 }
 
 UnicodeString
-RuleBasedNumberFormat::getDefaultRuleSetName() {
+RuleBasedNumberFormat::getDefaultRuleSetName() const {
   UnicodeString result;
   if (defaultRuleSet && defaultRuleSet->isPublic()) {
     defaultRuleSet->getName(result);
