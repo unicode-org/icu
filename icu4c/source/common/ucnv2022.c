@@ -688,7 +688,7 @@ static const UConverterImpl _ISO2022Impl={
 };
 
 extern const UConverterSharedData _ISO2022Data={
-    sizeof(UConverterSharedData), ~0,
+    sizeof(UConverterSharedData), ~((uint32_t) 0),
     NULL, NULL, &_ISO2022Impl, "ISO_2022",
     2022, UCNV_IBM, UCNV_ISO_2022, 1, 4,
     { 0, 1, 0x1a, 0, 0, 0 }

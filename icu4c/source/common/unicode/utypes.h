@@ -115,7 +115,9 @@ updates come out.  */
 
 /* Maximum value of a (void*) - use to indicate the limit of
    an 'infinite' buffer.  */
+#ifndef U_MAX_PTR
 #define U_MAX_PTR ((void*)-1)
+#endif
 
 /*===========================================================================*/
 /* Calendar/TimeZone data types                                              */

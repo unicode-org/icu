@@ -481,7 +481,7 @@ DecimalFormat::format(int32_t number,
 
         if (number < 0) // This can only happen if number == Long.MIN_VALUE
         {
-            int32_t cutoff = LONG_MIN / fMultiplier;
+            int32_t cutoff = T_INT32_MIN / fMultiplier;
             useDouble = (number < cutoff);
         }
         else

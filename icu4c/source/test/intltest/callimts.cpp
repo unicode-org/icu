@@ -335,7 +335,7 @@ CalendarLimitTest::timeToFields(UDate theTime, int32_t* fields)
         // Compute the Julian calendar day number for January 1, rawYear
         //double january1 = 365 * (rawYear - 1) + floorDivide(rawYear - 1, 4);
         double january1 = 365 * (rawYear - 1) + floorDivide(rawYear - 1, 4L);
-        dayOfYear = (int32_t)(julianEpochDay - january1); // 0-based
+        dayOfYear = (int32_t)uprv_fmod(julianEpochDay - january1, 365.0);
         
         // Julian leap years occurred historically every 4 years starting
         // with 8 AD.  Before 8 AD the spacing is irregular; every 3 years

@@ -19,8 +19,8 @@ RuleBasedBreakIteratorTables::RuleBasedBreakIteratorTables(const void* image)
 : refCount(0),
   ownTables(FALSE)
 {
-    const void** im = (const void**)(image);
-    const int8_t* base = (const int8_t*)(image);
+    const int32_t* im = (const int32_t*)(image);
+    const int8_t*  base = (const int8_t*)(image);
 
     // the memory image begins with an index that gives the offsets into the
     // image for each of the fields in the BreakIteratorTables object--

@@ -430,7 +430,7 @@ ResourceBundleTest::testTag(const char* frag,
         if (U_SUCCESS(status))
         {
             CONFIRM_GE(count,1);
-            CONFIRM_NE((int32_t)array,(int32_t)0);
+            CONFIRM_NE((int32_t)(unsigned long)array,(int32_t)0);
 
             for (j=0; j<count; ++j)
             {
@@ -443,7 +443,7 @@ ResourceBundleTest::testTag(const char* frag,
         else
         {
             CONFIRM_EQ(count,kERROR_COUNT);
-            CONFIRM_EQ((int32_t)array,(int32_t)0);
+            CONFIRM_EQ((int32_t)(unsigned long)array,(int32_t)0);
             count = 0;
         }
 
@@ -497,7 +497,7 @@ ResourceBundleTest::testTag(const char* frag,
         {
             CONFIRM_GE(row_count,1);
             CONFIRM_GE(column_count,(int32_t)0);
-            CONFIRM_NE((int32_t)array,(int32_t)0);
+            CONFIRM_NE((int32_t)(unsigned long)array,(int32_t)0);
 
             for (row=0; row<row_count; ++row)
             {
@@ -515,7 +515,7 @@ ResourceBundleTest::testTag(const char* frag,
         {
             CONFIRM_EQ(row_count,kERROR_COUNT);
             CONFIRM_EQ(column_count,kERROR_COUNT);
-            CONFIRM_EQ((int32_t)array,(int32_t)0);
+            CONFIRM_EQ((int32_t)(unsigned long)array,(int32_t)0);
             row_count = column_count = 0;
         }
 
@@ -574,8 +574,8 @@ ResourceBundleTest::testTag(const char* frag,
 
         if (U_SUCCESS(status)) {
             CONFIRM_GE((int32_t)expected_count, (int32_t)0);
-            CONFIRM_NE((int32_t)tags, (int32_t)0);
-            CONFIRM_NE((int32_t)items, (int32_t)0);
+            CONFIRM_NE((int32_t)(unsigned long)tags, (int32_t)0);
+            CONFIRM_NE((int32_t)(unsigned long)items, (int32_t)0);
 
             for (index = 0; index < expected_count; index++) {
                 logln("tag = " + tags[index] + ", value = " + items[index]);
@@ -639,3 +639,4 @@ ResourceBundleTest::record_fail()
   ++fail;
 }
 //eof
+

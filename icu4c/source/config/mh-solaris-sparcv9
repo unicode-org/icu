@@ -1,0 +1,55 @@
+## -*-makefile-*-
+## Solaris-specific setup using Sun's workshop compilers
+## Copyright (c) 1999-2000, International Business Machines Corporation and
+## others. All Rights Reserved.
+
+## Commands to generate dependency files
+GEN_DEPS.c=	$(CC) -xtarget=ultra -xarch=v9 -xM $(DEFS) $(CPPFLAGS)
+GEN_DEPS.cc=	$(CXX) -xtarget=ultra -xarch=v9 -xM $(DEFS) $(CPPFLAGS)
+
+## Commands to compile
+COMPILE.c=	$(CC) -xtarget=ultra -xarch=v9 -mt $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
+COMPILE.cc=	$(CXX) -xtarget=ultra -xarch=v9 -mt $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c
+
+## Commands to link
+## For Sun Workshop, use CC to link to bring in C++ runtime
+LINK.c=		$(CXX) -xtarget=ultra -xarch=v9 -mt $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+LINK.cc=	$(CXX) -xtarget=ultra -xarch=v9 -mt $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+
+## Commands to make a shared library
+SHLIB.c=	$(CC) -xtarget=ultra -xarch=v9 $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -G
+SHLIB.cc=	$(CXX) -xtarget=ultra -xarch=v9 $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -G
+
+## Compiler switch to embed a runtime search path
+LD_RPATH=	-R
+LD_RPATH_PRE=	
+
+## Shared object suffix
+SO=		so
+
+## Link commands to link to ICU libs
+LIBICU-UC= 	-L$(top_builddir)/common -licu-uc
+LIBICU-I18N= 	-L$(top_builddir)/i18n -licu-i18n
+LIBCTESTFW= 	-L$(top_builddir)/tools/ctestfw -lctestfw
+LIBICU-TOOLUTIL=-L$(top_builddir)/tools/toolutil -licu-toolutil
+
+## Compilation rules
+%.o : $(srcdir)/%.c
+	$(COMPILE.c) -o $@ $<
+
+%.o : $(srcdir)/%.cpp
+	$(COMPILE.cc) -o $@ $<
+
+../data/%.o : ../data/%.c
+	$(COMPILE.c) -o $@ $<
+
+## Dependency rules
+%.d : $(srcdir)/%.c
+	@echo "Generating dependency information for $<"
+	@$(GEN_DEPS.c) $< > $@
+
+%.d : $(srcdir)/%.cpp
+	@echo "Generating dependency information for $<"
+	@$(GEN_DEPS.cc) $< > $@
+
+## End Solaris-specific setup
