@@ -38,6 +38,7 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
         TESTCASE(15,TestLocaleDateFormat);
         TESTCASE(16,TestWallyWedel);
         TESTCASE(17,TestDateFormatCalendar);
+        TESTCASE(18,TestSpaceParsing);
         default: name = ""; break;
     }
 }
@@ -998,6 +999,62 @@ void DateFormatTest::TestDateFormatCalendar() {
     delete time;
     delete full;
     delete cal;
+}
+
+/**
+ * Test DateFormat's parsing of space characters.  See jitterbug 1916.
+ */
+void DateFormatTest::TestSpaceParsing() {
+    const char* PARSE_FAILURE = "parse failure";
+    const char* DATA[] = {
+        // pattern, input, expexted output (in quotes)
+        "MMMM d yy", " 04 05 06", PARSE_FAILURE, // MMMM wants Apr/April
+        "MMMM d yy", "04 05 06", PARSE_FAILURE,
+        "MM d yy", " 04 05 06", "\"2006 04 05\"",
+        "MM d yy", "04 05 06", "\"2006 04 05\"",
+        "MMMM d yy", " Apr 05 06", "\"2006 04 05\"",
+        "MMMM d yy", "Apr 05 06", "\"2006 04 05\"",
+    };
+    const int32_t DATA_len = sizeof(DATA)/sizeof(DATA[0]);
+
+    UErrorCode ec = U_ZERO_ERROR;
+    Locale en("en");
+    SimpleDateFormat sdfObj("", en, ec);
+    if (U_FAILURE(ec)) {
+        errln("FAIL: SimpleDateFormat constructor");
+        return;
+    }
+
+    int32_t i;
+    for (i=0; i<DATA_len; i+=3) {
+        sdfObj.applyPattern(DATA[i]);
+        ParsePosition pp(0);
+        UDate udDate = sdfObj.parse(DATA[i+1], pp);
+        UnicodeString output;
+        if (pp.getErrorIndex() == -1) {
+            ec = U_ZERO_ERROR;
+            SimpleDateFormat formatter("yyyy MM dd", en, ec);
+            if (U_FAILURE(ec)) {
+                errln("FAIL: SimpleDateFormat constructor");
+                return;
+            }
+            FieldPosition fp(0);
+            formatter.format(udDate, output, fp);
+            output.insert(0, (UChar)34);
+            output.append((UChar)34);
+        } else {
+            output = UnicodeString(PARSE_FAILURE, "");
+        }
+        UnicodeString exp(DATA[i+2], "");
+        if (output == exp) {
+            logln((UnicodeString)"Ok: Parse of \"" + DATA[i+1] + "\" with \"" +
+                  DATA[i] + "\" => " + output);
+        } else {
+            errln((UnicodeString)"FAIL: Parse of \"" + DATA[i+1] + "\" with \"" +
+                  DATA[i] + "\" => " +
+                  output + ", expected " + exp);
+        }
+    }
 }
 
 //eof

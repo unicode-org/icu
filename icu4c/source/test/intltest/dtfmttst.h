@@ -143,6 +143,8 @@ public: // package
     virtual void TestLocaleDateFormat(void);
 
     virtual void TestDateFormatCalendar(void);
+
+    virtual void TestSpaceParsing(void);
 };
  
 #endif // _DATEFORMATTEST_

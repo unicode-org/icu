@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/DateFormatTest.java,v $ 
- * $Date: 2002/04/09 23:33:13 $ 
- * $Revision: 1.8 $
+ * $Date: 2002/08/22 21:55:51 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -834,6 +834,49 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             logln("Ok: Parsed result: " + str);
         } else {
             errln("FAIL: Parsed result: " + str + ", exp 4/5/2001 5:45 PM");
+        }
+    }
+
+    /**
+     * Test DateFormat's parsing of space characters.  See jitterbug 1916.
+     */
+    public void TestSpaceParsing() {
+
+        String PARSE_FAILURE = "parse failure";
+        String DATA[] = {
+            // pattern, input, expexted output (in quotes)
+            "MMMM d yy", " 04 05 06", PARSE_FAILURE, // MMMM wants Apr/April
+            "MMMM d yy", "04 05 06", PARSE_FAILURE,
+            "MM d yy", " 04 05 06", "\"2006 04 05\"",
+            "MM d yy", "04 05 06", "\"2006 04 05\"",
+            "MMMM d yy", " Apr 05 06", "\"2006 04 05\"",
+            "MMMM d yy", "Apr 05 06", "\"2006 04 05\"",
+        };
+
+        Locale en = new Locale("en", "", "");
+        SimpleDateFormat sdfObj = new SimpleDateFormat("", en);
+
+        int i;
+        for (i=0; i<DATA.length; i+=3) {
+            sdfObj.applyPattern(DATA[i]);
+            ParsePosition pp = new ParsePosition(0);
+            Date udDate = sdfObj.parse(DATA[i+1], pp);
+            String output;
+            if (pp.getErrorIndex() == -1) {
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy MM dd", en);
+                output = "\"" + formatter.format(udDate) + "\"";
+            } else {
+                output = PARSE_FAILURE;
+            }
+            String exp = DATA[i+2];
+            if (output.equals(exp)) {
+                logln("Ok: Parse of \"" + DATA[i+1] + "\" with \"" +
+                      DATA[i] + "\" => " + output);
+            } else {
+                errln("FAIL: Parse of \"" + DATA[i+1] + "\" with \"" +
+                      DATA[i] + "\" => " +
+                      output + ", expected " + exp);
+            }
         }
     }
 }

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/SimpleDateFormat.java,v $ 
- * $Date: 2002/03/20 05:11:16 $ 
- * $Revision: 1.13 $
+ * $Date: 2002/08/22 21:55:29 $ 
+ * $Revision: 1.14 $
  *
  *****************************************************************************************
  */
@@ -18,6 +18,7 @@ import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.SimpleTimeZone;
 import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.lang.UCharacter;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -1007,18 +1008,21 @@ public class SimpleDateFormat extends DateFormat {
         if ((patternCharIndex=formatData.patternChars.indexOf(ch)) == -1)
             return -start;
 
-        pos.setIndex(start);
-
         int field = PATTERN_INDEX_TO_CALENDAR_FIELD[patternCharIndex];
 
         // If there are any spaces here, skip over them.  If we hit the end
         // of the string, then fail.
         for (;;) {
-            if (pos.getIndex() >= text.length()) return -start;
-            char c = text.charAt(pos.getIndex());
-            if (c != ' ' && c != '\t') break;
-            pos.setIndex(pos.getIndex()+1);
+            if (start >= text.length()) {
+                return -start;
+            }
+            int c = UTF16.charAt(text, start);
+            if (!UCharacter.isUWhiteSpace(c)) {
+                break;
+            }
+            start += UTF16.getCharCount(c);
         }
+        pos.setIndex(start);
 
         // We handle a few special cases here where we need to parse
         // a number value.  We handle further, more generic cases below.  We need
