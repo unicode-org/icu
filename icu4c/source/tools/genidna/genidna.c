@@ -257,14 +257,6 @@ normalizationCorrectionsLineFn(void *context,
     UVersionInfo version;
     UVersionInfo thisVersion;
 
-    /* ignore First and Last entries for ranges */
-    if( fields[1][0] != NULL && *fields[1][0]=='<' &&
-        (length=(int32_t)(fields[1][1]-fields[1][0]))>=9 &&
-        (0==uprv_memcmp(", First>", fields[1][1]-8, 8) || 0==uprv_memcmp(", Last>", fields[1][1]-7, 7))
-    ) {
-        return;
-    }
-
     /* get the character code, field 0 */
     code=(uint32_t)uprv_strtoul(fields[0][0], &end, 16);
     if(U_FAILURE(*pErrorCode)) {
@@ -329,13 +321,6 @@ caseMapLineFn(void *context,
     int32_t length;
     UBool* mapWithNorm = (UBool*) context;
 
-    /* ignore First and Last entries for ranges */
-    if( fields[1][0] != NULL && *fields[1][0]=='<' &&
-        (length=(int32_t)(fields[1][1]-fields[1][0]))>=9 &&
-        (0==uprv_memcmp(", First>", fields[1][1]-8, 8) || 0==uprv_memcmp(", Last>", fields[1][1]-7, 7))
-    ) {
-        return;
-    }
 
     /* get the character code, field 0 */
     code=(uint32_t)uprv_strtoul(fields[0][0], &end, 16);
@@ -441,17 +426,8 @@ static void U_CALLCONV
 unicodeDataLineFn(void *context,
                   char *fields[][2], int32_t fieldCount,
                   UErrorCode *pErrorCode) {
-    int32_t length;
     uint32_t rangeStart=0,rangeEnd =0;
     UBool* isUnassigned = (UBool*) context;
-
-    /* ignore First and Last entries for ranges */
-    if( fields[1][0] != NULL &&  *fields[1][0]=='<' &&
-        (length=(int32_t)(fields[1][1]-fields[1][0]))>=9 &&
-        (0==uprv_memcmp(", First>", fields[1][1]-8, 8) || 0==uprv_memcmp(", Last>", fields[1][1]-7, 7))
-    ) {
-        return;
-    }
 
 
     u_parseCodePointRange(fields[0][0], &rangeStart,&rangeEnd, pErrorCode);
