@@ -21,7 +21,7 @@ class SimpleThread
 public:
     SimpleThread();
     virtual ~SimpleThread();
-    void start(void); // start the thread
+    int32_t start(void); // start the thread
 public: // should be private, but then we couldn't be asocial.
     virtual void run(void) = 0; // Override this to provide some real implementation
 private:
