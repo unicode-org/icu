@@ -1320,7 +1320,7 @@ static void initImplicitConstants(int minPrimary, int maxPrimary,
 U_CAPI void U_EXPORT2
 uprv_uca_initImplicitConstants(int32_t minPrimary, int32_t maxPrimary, UErrorCode *status) {
     // 13 is the largest 4-byte gap we can use without getting 2 four-byte forms.
-    initImplicitConstants(minPrimary, maxPrimary, 0x03, 0xFE, 1, 1, status);
+    initImplicitConstants(minPrimary, maxPrimary, 0x04, 0xFE, 1, 1, status);
 }
 
 /* do not close UCA returned by ucol_initUCA! */
@@ -2115,17 +2115,17 @@ inline uint32_t ucol_IGetPrevCE(const UCollator *coll, collIterate *data,
                 }
             else if (ch <= 0xFF) {
               result = coll->latinOneMapping[ch];
-              if (result > UCOL_NOT_FOUND) {
-                result = ucol_prv_getSpecialPrevCE(coll, ch, result, data, status);
-              }
+              //if (result > UCOL_NOT_FOUND) {
+                //result = ucol_prv_getSpecialPrevCE(coll, ch, result, data, status);
+              //}
             }
                 else {
                     /*result = ucmpe32_get(coll->mapping, ch);*/
                     result = UTRIE_GET32_FROM_LEAD(coll->mapping, ch);
                 }
-                if (result > UCOL_NOT_FOUND) {
-                    result = ucol_prv_getSpecialPrevCE(coll, ch, result, data, status);
-                }
+                    if (result > UCOL_NOT_FOUND) {
+                        result = ucol_prv_getSpecialPrevCE(coll, ch, result, data, status);
+                    }
                 if (result == UCOL_NOT_FOUND) {
                   if (!isAtStartPrevIterate(data) &&
                       ucol_contractionEndCP(ch, data->coll)) {
@@ -3445,10 +3445,10 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
 
 		/*
 			We want to skip over the first two slots in the buffer. The first slot
-			is reserved for the header byte 0x1B. The second slot is for the
+			is reserved for the header byte UCOL_CODAN_PLACEHOLDER. The second slot is for the
 			sign/exponent byte: 0x80 + (decimalPos/2) & 7f.
 		*/
-		numTempBuf[0] = 0x1B;
+        numTempBuf[0] = UCOL_CODAN_PLACEHOLDER;
 		numTempBuf[1] = (uint8_t)(0x80 + ((digIndx/2) & 0x7F));
 
 		// Now transfer the collation key to our collIterate struct.
@@ -4116,10 +4116,10 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
 
 		/*
 			We want to skip over the first two slots in the buffer. The first slot
-			is reserved for the header byte 0x1B. The second slot is for the
+			is reserved for the header byte UCOL_CODAN_PLACEHOLDER. The second slot is for the
 			sign/exponent byte: 0x80 + (decimalPos/2) & 7f.
 		*/
-		numTempBuf[0] = 0x1B;
+		numTempBuf[0] = UCOL_CODAN_PLACEHOLDER;
 		numTempBuf[1] = (uint8_t)(0x80 + ((digIndx/2) & 0x7F));
 
 		// Now transfer the collation key to our collIterate struct.
