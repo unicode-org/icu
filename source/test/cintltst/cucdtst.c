@@ -43,6 +43,7 @@ static void TestCharNames(void);
 static void TestMirroring(void);
 static void TestUnescape(void);
 static void TestUScriptCodeAPI(void);
+static void TestUScriptRunAPI(void);
 static void TestAdditionalProperties(void);
 
 /* internal methods used */
@@ -133,6 +134,7 @@ void addUnicodeTest(TestNode** root)
     addTest(root, &TestCaseFolding, "tsutil/cucdtst/TestCaseFolding");
     addTest(root, &TestCaseCompare, "tsutil/cucdtst/TestCaseCompare");
     addTest(root, &TestUScriptCodeAPI, "tsutil/cucdtst/TestUScriptCodeAPI");
+    addTest(root, &TestUScriptRunAPI, "tsutil/cucdtst/TestUScriptRunAPI");
 }
 
 /*==================================================== */
@@ -1970,6 +1972,81 @@ static void TestUScriptCodeAPI(){
                 
 
  }
+
+static void
+TestUScriptRunAPI()
+{
+    struct RunResult
+    {
+        int32_t start;
+        int32_t limit;
+        UScriptCode code;
+    };
+
+    UChar testChars[] = {
+        0x0020, 0x0946, 0x0939, 0x093F, 0x0928, 0x094D, 0x0926, 0x0940, 0x0020,
+        0x0627, 0x0644, 0x0639, 0x0631, 0x0628, 0x064A, 0x0629, 0x0020,
+        0x0420, 0x0443, 0x0441, 0x0441, 0x043A, 0x0438, 0x0439, 0x0020,
+        'E', 'n', 'g', 'l', 'i', 's', 'h',  ' ', '(',
+        0x0E44, 0x0E17, 0x0E22,
+        ')',
+        0x6F22, 0x5B75, 0x3068, 0x3072, 0x3089, 0x304C, 0x306A, 0x3068, 
+        0x30AB, 0x30BF, 0x30AB, 0x30CA,
+        0xD801, 0xDC00, 0xD801, 0xDC01, 0xD801, 0xDC02, 0xD801, 0xDC03
+    };
+
+    int32_t testLength = sizeof testChars / sizeof testChars[0];
+
+    struct RunResult expected[] = {
+        { 0,  9, USCRIPT_DEVANAGARI},
+        { 9, 17, USCRIPT_ARABIC},
+        {17, 25, USCRIPT_CYRILLIC},
+        {25, 34, USCRIPT_LATIN},
+        {34, 37, USCRIPT_THAI},
+        {37, 38, USCRIPT_LATIN},
+        {38, 40, USCRIPT_HAN},
+        {40, 46, USCRIPT_HIRAGANA},
+        {46, 50, USCRIPT_KATAKANA},
+        {50, 58, USCRIPT_DESERET}
+    };
+
+    int32_t resultLength = sizeof expected / sizeof expected[0];
+
+    int32_t run = 0, runStart, runLimit;
+    UScriptCode runCode;
+    UErrorCode err = U_ZERO_ERROR;
+
+    UScriptRun *scriptRun = uscript_openRun(testChars, testLength, &err);
+
+    while (uscript_nextRun(scriptRun, &runStart, &runLimit, &runCode)) {
+        if (runStart != expected[run].start) {
+            log_err("Incorrect start offset for run %d: expected %d, got %d\n",
+                run, expected[run].start, runStart);
+        }
+
+        if (runLimit != expected[run].limit) {
+            log_err("Incorrect limit offset for run %d: expected %d, got %d\n",
+                run, expected[run].limit, runLimit);
+        }
+
+        if (runCode != expected[run].code) {
+            log_err("Incorrect script for run %d: expected \"%s\", got \"%s\"\n",
+                run, uscript_getName(expected[run].code), uscript_getName(runCode));
+        }
+
+        run += 1;
+
+        if (run >= resultLength) {
+            break;
+        }
+    }
+
+    uscript_closeRun(scriptRun);
+
+    if (run != resultLength) {
+        log_err("Incorrect number of runs: expected %d, got %d\n", run, resultLength);
+    }
+}
 
 /* test additional, non-core properties */
 static void
