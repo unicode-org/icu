@@ -13,17 +13,17 @@ usage()
     then
         uletter=U
     else
- 	uletter=u
+        uletter=u
     fi
-    
+
     echo "${uletter}sage: $me [ -h, --help ]  [ --enable-debug | --disable-release ] platform [ configurearg ... ]"
     if test $ec -eq 0
     then
-	cat <<EOE
+        cat <<EOE
 
 Options: -h, --help         Print this message and exit
-         --enable-debug	    Enable support for debugging
-	 --disable-release  Disable presetting optimization flags
+         --enable-debug     Enable support for debugging
+         --disable-release  Disable presetting optimization flags
 
 The following names can be supplied as the argument for platform:
 
@@ -39,10 +39,10 @@ The following names can be supplied as the argument for platform:
     LinuxRedHat             Use the GNU C++ compiler on Linux
     CygWin                  Use the GNU C++ compiler on CygWin
     MacOSX                  Use the GNU C++ compiler on MacOS X (Darwin)
-    SOLARISCC               Use Sun's CC compiler on Solaris 
+    SOLARISCC               Use Sun's CC compiler on Solaris
     SOLARISGCC              Use the GNU C++ compiler on Solaris
     SOLARISX86              Use Sun's CC compiler on Solaris x86
-    TRU64V5.1/CXX           Use Copmaq's cxx compiler on Tru64 (OSF) 
+    TRU64V5.1/CXX           Use Compaq's cxx compiler on Tru64 (OSF)
     zOS/cxx                 Use IBM's cxx compiler on z/OS (os/390)
 EOE
     fi
@@ -199,7 +199,7 @@ case $platform in
         CC=ccc; export CC
         CXX=cxx; export CXX
         RELEASE_CFLAGS='-O4'
-        RELEASE_CXXFLAGS='-O4'       
+        RELEASE_CXXFLAGS='-O4'
         ;;
     TRU64V5.1/CXX)
         THE_OS="OSF1"
@@ -226,6 +226,8 @@ case $platform in
     MacOSX)
         THE_OS="MacOS X (Darwin)"
         THE_COMP="the GNU C++"
+        RELEASE_CFLAGS='-O2'
+        RELEASE_CXXFLAGS='-O2'
         ;;
     *BSD)
         THE_OS="BSD"
