@@ -61,12 +61,12 @@ static void InitStrings( void )
         return;
 
     for (i=0; i < cnt_testCases; i++ ) {
-        uint32_t strSize = strlen(txt_testCasePatterns[i]) + 1;
+        uint32_t strSize = (uint32_t)strlen(txt_testCasePatterns[i]) + 1;
         testCasePatterns[i]=(UChar*)malloc(sizeof(UChar) * strSize);
         u_uastrncpy(testCasePatterns[i], txt_testCasePatterns[i], strSize);
     }
     for (i=0; i < cnt_testCases; i++ ) {
-        uint32_t strSize = strlen(txt_testResultStrings[i]) + 1;
+        uint32_t strSize = (uint32_t)strlen(txt_testResultStrings[i]) + 1;
         testResultStrings[i] = (UChar*)malloc(sizeof(UChar) * strSize);
         u_uastrncpy(testResultStrings[i], txt_testResultStrings[i], strSize);
     }

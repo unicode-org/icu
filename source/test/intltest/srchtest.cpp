@@ -194,33 +194,19 @@ BreakIterator * StringSearchTest::getBreakIterator(const char *breaker)
 
 char * StringSearchTest::toCharString(const UnicodeString &text)
 {
-           UChar  unichars[512];
     static char   result[1024];
-           int    count  = 0;
            int    index  = 0;
+           int    count  = 0;
            int    length = text.length();
 
-    text.extract(0, text.length(), unichars, 0);
-
     for (; count < length; count ++) {
-        UChar ch = unichars[count];
+        UChar ch = text[count];
         if (ch >= 0x20 && ch <= 0x7e) {
             result[index ++] = (char)ch;
         }
         else {
-            char digit[5];
-            int  zerosize;
-            result[index ++] = '\\';
-            result[index ++] = 'u';
-            sprintf(digit, "%x", ch);
-            zerosize = 4 - strlen(digit);
-            while (zerosize != 0) {
-                result[index ++] = '0';
-                zerosize --;
-            }
-            result[index] = 0;
-            strcat(result, digit);
-            index += strlen(digit);
+            sprintf(result+index, "\\u%04x", ch);
+            index += 6; /* \uxxxx */
         }
     }
     result[index] = 0;

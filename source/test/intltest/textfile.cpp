@@ -50,7 +50,7 @@ TextFile::TextFile(const char* _name, const char* _encoding, UErrorCode& ec) :
     if (U_FAILURE(ec)) {
         return;
     }
-    if (!ensureCapacity(uprv_strlen(testDir) + uprv_strlen(name) + 1)) {
+    if (!ensureCapacity((int32_t)(uprv_strlen(testDir) + uprv_strlen(name) + 1))) {
         ec = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
