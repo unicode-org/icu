@@ -499,47 +499,6 @@ void it_errln( UnicodeString message )
         IntlTest::gTest->errln( message );
 }
 
-IntlTest& operator<<(IntlTest& test, const UnicodeString&   string)
-{
-/* NULL shouldn't happen */
-//    if (&test == NULL)
-//        return *((IntlTest*) NULL);
-    test.log( string );
-    return test;
-}
-
-IntlTest& operator<<(IntlTest& test, const char*    string)
-{
-/* NULL shouldn't happen */
-//    if (&test == NULL)
-//        return *((IntlTest*) NULL);
-    test.log( string );
-    return test;
-}
-
-IntlTest& operator<<(IntlTest& test, const int32_t num)
-{
-/* NULL shouldn't happen */
-//    if (&test == NULL)
-//        return *((IntlTest*) NULL);
-    char convert[20];
-    sprintf(convert, "%li", (long)num);
-    test.log(convert);
-    return test;
-}
-
-IntlTest& endl( IntlTest& test )
-{
-    test.logln();
-    return test;
-}
-
-IntlTest& operator<<(IntlTest& test,  IntlTest& ( * _f)(IntlTest&))
-{
-    (*_f)(test);
-    return test;
-}
-
 
 IntlTest::IntlTest()
 {
@@ -894,7 +853,7 @@ void IntlTest::LL_message( UnicodeString message, UBool newline )
     // stream out the indentation string first if necessary
     length = indent.extract(1, indent.length(), buffer, sizeof(buffer));
     if (length > 0) {
-        fwrite(buffer, sizeof(*buffer), length, testoutfp);
+        fwrite(buffer, sizeof(*buffer), length, (FILE *)testoutfp);
     }
 
     // replace each LineFeed by the indentation string
@@ -903,17 +862,17 @@ void IntlTest::LL_message( UnicodeString message, UBool newline )
     // stream out the message
     length = message.extract(0, message.length(), buffer, sizeof(buffer));
     if (length > 0) {
-        fwrite(buffer, sizeof(*buffer), length, testoutfp);
+        fwrite(buffer, sizeof(*buffer), length, (FILE *)testoutfp);
     }
 
     if (newline) {
         char newLine = '\n';
-        fwrite(&newLine, sizeof(newLine), 1, testoutfp);
+        fwrite(&newLine, sizeof(newLine), 1, (FILE *)testoutfp);
     }
 
     // A newline usually flushes the buffer, but
     // flush the message just in case of a core dump.
-    fflush(testoutfp);
+    fflush((FILE *)testoutfp);
 }
 
 /**

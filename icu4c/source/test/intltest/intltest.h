@@ -11,10 +11,7 @@
 #ifndef _INTLTEST
 #define _INTLTEST
 
-#include <stdio.h>
-
-#include "unicode/utypes.h"
-#include "unicode/unistr.h"
+// The following includes utypes.h, uobject.h and unistr.h
 #include "unicode/fmtable.h"
 
 U_NAMESPACE_USE
@@ -24,8 +21,6 @@ U_NAMESPACE_USE
 // this must be after including utypes.h so that OS390 is actually defined
 #pragma map(IntlTest::log( const UnicodeString &message ),"logos390")
 #endif
-
-#define it_out (*IntlTest::gTest)
 
 //-----------------------------------------------------------------------------
 //convenience classes to ease porting code that uses the Java
@@ -117,8 +112,6 @@ public:
         
     virtual void usage( void ) ;
 
-    FILE *testoutfp;
-
     /**
      * Returns a uniform random value x, with 0.0 <= x < 1.0.  Use
      * with care: Does not return all possible values; returns one of
@@ -157,6 +150,9 @@ private:
     int32_t     errorCount;
     IntlTest*   caller;
     char*       path;           // specifies subtests
+
+    //FILE *testoutfp;
+    void *testoutfp;
 
 protected:
 
@@ -197,13 +193,6 @@ void it_infoln( void );
 void it_err(void);
 void it_err( UnicodeString message );
 void it_errln( UnicodeString message );
-
-IntlTest& operator<<(IntlTest& test, const UnicodeString& string);
-IntlTest& operator<<(IntlTest& test, const char* string);
-IntlTest& operator<<(IntlTest& test, const int32_t num);
-
-IntlTest& endl( IntlTest& test );
-IntlTest& operator<<(IntlTest& test,  IntlTest& ( * _f)(IntlTest&));
 
 /**
  * This is a variant of cintltst/ccolltst.c:CharsToUChars().

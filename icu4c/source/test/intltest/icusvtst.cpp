@@ -12,8 +12,8 @@
 #if !UCONFIG_NO_SERVICE
 
 #include "icusvtst.h"
-
 #include "iculserv.h"
+#include <stdio.h>
 
 
 class MyListener : public EventListener {

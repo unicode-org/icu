@@ -156,8 +156,7 @@ int32_t randi(int32_t n)
 */
 ResourceBundleTest::ResourceBundleTest()
 : pass(0),
-  fail(0),
-  OUT(it_out)
+  fail(0)
 {
     if (param[5].locale == NULL) {
         param[0].locale = new Locale("root");

@@ -11,6 +11,7 @@
 #include "numrgts.h"
 
 #include <float.h> // DBL_MIN, DBL_MAX
+#include <stdio.h>
 
 #include "unicode/dcfmtsym.h"
 #include "unicode/decimfmt.h"
