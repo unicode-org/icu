@@ -34,6 +34,49 @@
  * - it uses lower-level APIs and buffers more text and states,
  *   hopefully resulting in higher performance
  *
+ * Usage example:
+ * \code
+ * function(UCharIterator *srcIter) {
+ *     UNormIterator *uni;
+ *     UCharIterator *iter;
+ *     UErrorCode errorCode;
+ * 
+ *     errorCode=U_ZERO_ERROR;
+ *     uni=unorm_openIter(&errorCode);
+ *     if(U_FAILURE(errorCode)) {
+ *         // report error
+ *         return;
+ *     }
+ * 
+ *     iter=unorm_setIter(uni, srcIter, UNORM_FCD, &errorCode);
+ *     if(U_FAILURE(errorCode)) {
+ *         // report error
+ *     } else {
+ *         // use iter to iterate over the canonically ordered
+ *         // version of srcIter's text
+ *         uint32_t state;
+ * 
+ *         ...
+ * 
+ *         state=uiter_getState(iter);
+ *         if(state!=UITER_NO_STATE) {
+ *             // use valid state, store it, use iter some more
+ *             ...
+ * 
+ *             // later restore iter to the saved state:
+ *             uiter_setState(iter, state, &errorCode);
+ * 
+ *             ...
+ *         }
+ * 
+ *         ...
+ *     }
+ *     unorm_closeIter(uni);
+ * }
+ * \endcode
+ *
+ * See also the ICU test suites.
+ *
  * @internal
  */
 struct UNormIterator;
