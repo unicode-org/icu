@@ -31,6 +31,9 @@ static UCollator *myCollation;
 static void
 TestAPI(void);
 
+static void
+TestNormCoverage();
+
 const static char* canonTests[][3] = {
     /* Input*/                    /*Decomposed*/                /*Composed*/
     { "cat",                    "cat",                        "cat"                    },
@@ -100,6 +103,7 @@ void addNormTest(TestNode** root)
     addTest(root, &TestNull, "tscoll/cnormtst/TestNull");
     addTest(root, &TestQuickCheck, "tscoll/cnormtst/TestQuickCheck");
     addTest(root, &TestCheckFCD, "tscoll/cnormtst/TestCheckFCD");
+    addTest(root, &TestNormCoverage, "tscoll/cnormtst/TestNormCoverage");
 }
 
 void TestDecomp() 
@@ -678,5 +682,223 @@ TestAPI() {
     if(length!=3 || out[2]!=0x308 || out[3]!=0xffff) {
         log_err("unorm_normalize(NFD ma<umlaut>)=%ld failed with out[]=U+%04x U+%04x U+%04x U+%04x\n", length, out[0], out[1], out[2], out[3]);
         return;
+    }
+}
+
+/* test cases to improve test code coverage */
+enum {
+    HANGUL_K_KIYEOK=0x3131,         /* NFKD->Jamo L U+1100 */
+    HANGUL_K_WEO=0x315d,            /* NFKD->Jamo V U+116f */
+    HANGUL_K_KIYEOK_SIOS=0x3133,    /* NFKD->Jamo T U+11aa */
+
+    HANGUL_KIYEOK=0x1100,           /* Jamo L U+1100 */
+    HANGUL_WEO=0x116f,              /* Jamo V U+116f */
+    HANGUL_KIYEOK_SIOS=0x11aa,      /* Jamo T U+11aa */
+
+    HANGUL_AC00=0xac00,             /* Hangul syllable = Jamo LV U+ac00 */
+    HANGUL_SYLLABLE=0xac00+14*28+3, /* Hangul syllable = U+1100 * U+116f * U+11aa */
+
+    MUSICAL_VOID_NOTEHEAD=0x1d157,
+    MUSICAL_HALF_NOTE=0x1d15e,  /* NFC/NFD->Notehead+Stem */
+    MUSICAL_STEM=0x1d165,       /* cc=216 */
+    MUSICAL_STACCATO=0x1d17c    /* cc=220 */
+};
+
+static void
+TestNormCoverage() {
+    static UChar input[2000], expect[3000], output[3000];
+    UErrorCode errorCode;
+    int32_t i, length, inLength, expectLength, hangulPrefixLength, preflightLength;
+
+    /* create a long and nasty string with NFKC-unsafe characters */
+    inLength=0;
+
+    /* 3 Jamos L/V/T, all 8 combinations normal/compatibility */
+    input[inLength++]=HANGUL_KIYEOK;
+    input[inLength++]=HANGUL_WEO;
+    input[inLength++]=HANGUL_KIYEOK_SIOS;
+
+    input[inLength++]=HANGUL_KIYEOK;
+    input[inLength++]=HANGUL_WEO;
+    input[inLength++]=HANGUL_K_KIYEOK_SIOS;
+
+    input[inLength++]=HANGUL_KIYEOK;
+    input[inLength++]=HANGUL_K_WEO;
+    input[inLength++]=HANGUL_KIYEOK_SIOS;
+
+    input[inLength++]=HANGUL_KIYEOK;
+    input[inLength++]=HANGUL_K_WEO;
+    input[inLength++]=HANGUL_K_KIYEOK_SIOS;
+
+    input[inLength++]=HANGUL_K_KIYEOK;
+    input[inLength++]=HANGUL_WEO;
+    input[inLength++]=HANGUL_KIYEOK_SIOS;
+
+    input[inLength++]=HANGUL_K_KIYEOK;
+    input[inLength++]=HANGUL_WEO;
+    input[inLength++]=HANGUL_K_KIYEOK_SIOS;
+
+    input[inLength++]=HANGUL_K_KIYEOK;
+    input[inLength++]=HANGUL_K_WEO;
+    input[inLength++]=HANGUL_KIYEOK_SIOS;
+
+    input[inLength++]=HANGUL_K_KIYEOK;
+    input[inLength++]=HANGUL_K_WEO;
+    input[inLength++]=HANGUL_K_KIYEOK_SIOS;
+
+    /* Hangul LV with normal/compatibility Jamo T */
+    input[inLength++]=HANGUL_AC00;
+    input[inLength++]=HANGUL_KIYEOK_SIOS;
+
+    input[inLength++]=HANGUL_AC00;
+    input[inLength++]=HANGUL_K_KIYEOK_SIOS;
+
+    /* compatibility Jamo L, V */
+    input[inLength++]=HANGUL_K_KIYEOK;
+    input[inLength++]=HANGUL_K_WEO;
+
+    hangulPrefixLength=inLength;
+
+    input[inLength++]=UTF16_LEAD(MUSICAL_HALF_NOTE);
+    input[inLength++]=UTF16_TRAIL(MUSICAL_HALF_NOTE);
+    for(i=0; i<200; ++i) {
+        input[inLength++]=UTF16_LEAD(MUSICAL_STACCATO);
+        input[inLength++]=UTF16_TRAIL(MUSICAL_STACCATO);
+        input[inLength++]=UTF16_LEAD(MUSICAL_STEM);
+        input[inLength++]=UTF16_TRAIL(MUSICAL_STEM);
+    }
+
+    /* (compatibility) Jamo L, T do not compose */
+    input[inLength++]=HANGUL_K_KIYEOK;
+    input[inLength++]=HANGUL_K_KIYEOK_SIOS;
+
+    /* quick checks */
+    errorCode=U_ZERO_ERROR;
+    if(UNORM_NO!=unorm_quickCheck(input, inLength, UNORM_NFD, &errorCode) || U_FAILURE(errorCode)) {
+        log_err("error unorm_quickCheck(long input, UNORM_NFD)!=NO (%s)\n", u_errorName(errorCode));
+    }
+    errorCode=U_ZERO_ERROR;
+    if(UNORM_NO!=unorm_quickCheck(input, inLength, UNORM_NFKD, &errorCode) || U_FAILURE(errorCode)) {
+        log_err("error unorm_quickCheck(long input, UNORM_NFKD)!=NO (%s)\n", u_errorName(errorCode));
+    }
+    errorCode=U_ZERO_ERROR;
+    if(UNORM_NO!=unorm_quickCheck(input, inLength, UNORM_NFC, &errorCode) || U_FAILURE(errorCode)) {
+        log_err("error unorm_quickCheck(long input, UNORM_NFC)!=NO (%s)\n", u_errorName(errorCode));
+    }
+    errorCode=U_ZERO_ERROR;
+    if(UNORM_NO!=unorm_quickCheck(input, inLength, UNORM_NFKC, &errorCode) || U_FAILURE(errorCode)) {
+        log_err("error unorm_quickCheck(long input, UNORM_NFKC)!=NO (%s)\n", u_errorName(errorCode));
+    }
+    errorCode=U_ZERO_ERROR;
+    if(UNORM_NO!=unorm_quickCheck(input, inLength, UNORM_FCD, &errorCode) || U_FAILURE(errorCode)) {
+        log_err("error unorm_quickCheck(long input, UNORM_FCD)!=NO (%s)\n", u_errorName(errorCode));
+    }
+
+    /* NFKC */
+    expectLength=0;
+    expect[expectLength++]=HANGUL_SYLLABLE;
+
+    expect[expectLength++]=HANGUL_SYLLABLE;
+
+    expect[expectLength++]=HANGUL_SYLLABLE;
+
+    expect[expectLength++]=HANGUL_SYLLABLE;
+
+    expect[expectLength++]=HANGUL_SYLLABLE;
+
+    expect[expectLength++]=HANGUL_SYLLABLE;
+
+    expect[expectLength++]=HANGUL_SYLLABLE;
+
+    expect[expectLength++]=HANGUL_SYLLABLE;
+
+    expect[expectLength++]=HANGUL_AC00+3;
+
+    expect[expectLength++]=HANGUL_AC00+3;
+
+    expect[expectLength++]=HANGUL_AC00+14*28;
+
+    expect[expectLength++]=UTF16_LEAD(MUSICAL_VOID_NOTEHEAD);
+    expect[expectLength++]=UTF16_TRAIL(MUSICAL_VOID_NOTEHEAD);
+    expect[expectLength++]=UTF16_LEAD(MUSICAL_STEM);
+    expect[expectLength++]=UTF16_TRAIL(MUSICAL_STEM);
+    for(i=0; i<200; ++i) {
+        expect[expectLength++]=UTF16_LEAD(MUSICAL_STEM);
+        expect[expectLength++]=UTF16_TRAIL(MUSICAL_STEM);
+    }
+    for(i=0; i<200; ++i) {
+        expect[expectLength++]=UTF16_LEAD(MUSICAL_STACCATO);
+        expect[expectLength++]=UTF16_TRAIL(MUSICAL_STACCATO);
+    }
+
+    expect[expectLength++]=HANGUL_KIYEOK;
+    expect[expectLength++]=HANGUL_KIYEOK_SIOS;
+
+    /* try destination overflow first */
+    errorCode=U_ZERO_ERROR;
+    preflightLength=unorm_normalize(input, inLength,
+                           UNORM_NFKC, 0,
+                           output, 100, /* too short */
+                           &errorCode);
+    if(errorCode!=U_BUFFER_OVERFLOW_ERROR) {
+        log_err("error unorm_normalize(long input, output too short, UNORM_NFKC) did not overflow but %s\n", u_errorName(errorCode));
+    }
+
+    /* real NFKC */
+    errorCode=U_ZERO_ERROR;
+    length=unorm_normalize(input, inLength,
+                           UNORM_NFKC, 0,
+                           output, sizeof(output)/U_SIZEOF_UCHAR,
+                           &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("error unorm_normalize(long input, UNORM_NFKC) failed with %s\n", u_errorName(errorCode));
+    } else if(length!=expectLength || u_memcmp(output, expect, length)!=0) {
+        log_err("error unorm_normalize(long input, UNORM_NFKC) produced wrong result\n");
+        for(i=0; i<length; ++i) {
+            if(output[i]!=expect[i]) {
+                log_err("    NFKC[%d]==U+%04lx expected U+%04lx\n", i, output[i], expect[i]);
+                break;
+            }
+        }
+    }
+    if(length!=preflightLength) {
+        log_err("error unorm_normalize(long input, UNORM_NFKC)==%ld but preflightLength==%ld\n", length, preflightLength);
+    }
+
+    /* FCD */
+    u_memcpy(expect, input, hangulPrefixLength);
+    expectLength=hangulPrefixLength;
+
+    expect[expectLength++]=UTF16_LEAD(MUSICAL_VOID_NOTEHEAD);
+    expect[expectLength++]=UTF16_TRAIL(MUSICAL_VOID_NOTEHEAD);
+    expect[expectLength++]=UTF16_LEAD(MUSICAL_STEM);
+    expect[expectLength++]=UTF16_TRAIL(MUSICAL_STEM);
+    for(i=0; i<200; ++i) {
+        expect[expectLength++]=UTF16_LEAD(MUSICAL_STEM);
+        expect[expectLength++]=UTF16_TRAIL(MUSICAL_STEM);
+    }
+    for(i=0; i<200; ++i) {
+        expect[expectLength++]=UTF16_LEAD(MUSICAL_STACCATO);
+        expect[expectLength++]=UTF16_TRAIL(MUSICAL_STACCATO);
+    }
+
+    expect[expectLength++]=HANGUL_K_KIYEOK;
+    expect[expectLength++]=HANGUL_K_KIYEOK_SIOS;
+
+    errorCode=U_ZERO_ERROR;
+    length=unorm_normalize(input, inLength,
+                           UNORM_FCD, 0,
+                           output, sizeof(output)/U_SIZEOF_UCHAR,
+                           &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("error unorm_normalize(long input, UNORM_FCD) failed with %s\n", u_errorName(errorCode));
+    } else if(length!=expectLength || u_memcmp(output, expect, length)!=0) {
+        log_err("error unorm_normalize(long input, UNORM_FCD) produced wrong result\n");
+        for(i=0; i<length; ++i) {
+            if(output[i]!=expect[i]) {
+                log_err("    FCD[%d]==U+%04lx expected U+%04lx\n", i, output[i], expect[i]);
+                break;
+            }
+        }
     }
 }
