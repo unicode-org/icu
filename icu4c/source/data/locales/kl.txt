@@ -1,4 +1,4 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
 // *   Copyright (C) 1997-2003, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
@@ -7,6 +7,19 @@
 
 kl{
     Version { "2.0" }
+    collations {
+      standard { 
+        Version { "1.0" }
+        Sequence { 
+            "&D<<đ<<<Đ<<ð<<<Ð"
+            "&Q<<ĸ<<<K''"	// Greenland only
+            "&t<<<þ/h"
+            "&T<<<Þ/H"
+            "&Y<<ü<<<Ü<<ű<<<Ű"
+            "&[before 1]ʒ<æ<<<Æ<<ä<<<Ä<<ę<<<Ę<ø<<<Ø<<ö<<<Ö<<ő<<<Ő<<œ<<<Œ<å<<<Å"
+        }
+      }
+    }
 
     DayAbbreviations { 
         "sab",
@@ -76,7 +89,6 @@ kl{
     }
 
             // /**************** Info Below is needed ****************/
-            // collation{}
             // Countries{}
             // Eras{}
             // Languages{}
