@@ -86,7 +86,7 @@ fr_CH {
         "    60: soixante[->%%alt-ones>];\n"
                // notice new words for 70, 80, and 90
         "    70: septante[->%%alt-ones>];\n"
-        "    80: octante[->%%alt-ones>];\n"
+        "    80: huitante[->%%alt-ones>];\n"
         "    90: nonante[->%%alt-ones>];\n"
         "    100: cent[ >>];\n"
         "    200: << cents[ >>];\n"
