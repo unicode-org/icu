@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationRuleParser.java,v $ 
-* $Date: 2002/11/21 23:48:37 $ 
-* $Revision: 1.10 $
+* $Date: 2003/02/27 00:51:02 $ 
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */
@@ -1597,6 +1597,13 @@ final class CollationRuleParser
 	 */
 	private int initAReset(int expand, Token targetToken) throws ParseException
 	{
+        if (m_resultLength_ == m_listHeader_.length - 1) {
+            // Unfortunately, this won't work, as we store addresses of lhs in 
+            // token
+            TokenListHeader temp[] = new TokenListHeader[m_resultLength_ << 1];
+            System.arraycopy(m_listHeader_, 0, temp, 0, m_resultLength_ + 1);
+            m_listHeader_ = temp;
+        }
 	    // do the reset thing
 	    targetToken.m_rules_ = m_source_;
 	    targetToken.m_source_ = m_parsedToken_.m_charsLen_ << 24 
