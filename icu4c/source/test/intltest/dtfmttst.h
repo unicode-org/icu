@@ -141,6 +141,8 @@ public: // package
      * Test the formatting of dates in different locales.
      */
     virtual void TestLocaleDateFormat(void);
+
+    virtual void TestDateFormatCalendar(void);
 };
  
 #endif // _DATEFORMATTEST_
