@@ -27,6 +27,8 @@
 #include "unicode/uchar.h"
 #include "unormimp.h"
 #include "cmemory.h"
+#include "unicode/unistr.h"
+#include "unicode/caniter.h"
 
 U_NAMESPACE_BEGIN
 
@@ -997,9 +999,22 @@ uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode *status)
     uprv_free(composed);
   }
 
-  CE = uprv_uca_finalizeAddition(t, element, status);
-
+  // We need to use the canonical iterator here
+  // the way we do it is to generate the canonically equivalent strings 
+  // for the contraction and then add the sequences that pass FCD check
   if(element->cSize > 1 && !(element->cSize==2 && UTF16_IS_LEAD(element->cPoints[0]) && UTF16_IS_TRAIL(element->cPoints[1]))) { // this is a contraction, we should check whether a composed form should also be included
+    UnicodeString source(element->cPoints, element->cSize);
+    CanonicalIterator it(source, *status);
+    source = it.next();
+    while(source.length() > 0) {
+      if(Normalizer::quickCheck(source, UNORM_FCD, *status) != UNORM_NO) {
+        element->cSize = source.extract(element->cPoints, 128, *status);
+        uprv_uca_finalizeAddition(t, element, status);
+      }
+      source = it.next();
+    }
+#if 0
+    CE = uprv_uca_finalizeAddition(t, element, status);  
     UChar composed[256];
     uint32_t compLen = unorm_normalize(element->cPoints, element->cSize, UNORM_NFC, 0, composed, 256, status);;
 
@@ -1013,6 +1028,9 @@ uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode *status)
       uprv_memcpy(element->cPoints, composed, element->cSize*sizeof(UChar));
       uprv_uca_finalizeAddition(t, element, status);
     }
+#endif
+  } else {
+      CE = uprv_uca_finalizeAddition(t, element, status);  
   }
 
   return CE;
