@@ -40,9 +40,14 @@ endif
 ifneq ($(ENABLE_SHARED),)
 SO_TARGET = $(LIBICU)uc.$(SO)
 ALL_SO_TARGETS = $(SO_TARGET) $(MIDDLE_SO_TARGET) $(FINAL_SO_TARGET)
-endif
 
-ALL_TARGETS = $(TARGET) $(ALL_SO_TARGETS)
+ifeq ($(OS390BATCH),1)
+BATCH_TARGET = "//'${LOADMOD}(IXMICUUC)'"
+endif   # OS390BATCH
+
+endif   # ENABLE_SHARED
+
+ALL_TARGETS = $(TARGET) $(ALL_SO_TARGETS) $(BATCH_TARGET)
 
 DYNAMICCPPFLAGS = $(SHAREDLIBCPPFLAGS)
 DYNAMICCFLAGS = $(SHAREDLIBCFLAGS)
@@ -62,14 +67,14 @@ LIBS = @LIBS@
 # Data packaging options are set at configure time with --with-data-packaging.
 CPPFLAGS += @DATA_PACKAGING_CPPFLAGS@
 
-OBJECTS = chariter.o umutex.o compdata.o compitr.o convert.o		\
-cpputils.o cstring.o dcmpdata.o digitlst.o filestrm.o umemstrm.o locid.o locmap.o	\
-mutex.o normlzr.o putil.o resbund.o schriter.o scsu.o		\
-uchar.o uchriter.o ucmp8.o ucmp16.o ucmp32.o ucnv.o ucnv_bld.o ucnv_cb.o		\
-ucnv_cnv.o ucnv_err.o ucnv_io.o uhash.o uhash_us.o uloc.o unicode.o unistr.o	\
-uresbund.o uresdata.o ustring.o rbdata.o ubidi.o ubidiwrt.o ubidiln.o \
-bidi.o ushape.o uvector.o udata.o unames.o utf_impl.o unorm.o \
-ucnv2022.o ucnvlat1.o ucnv_utf.o  ucnvhz.o ucnvmbcs.o ucnv_lmb.o ucnvscsu.o
+OBJECTS = compdata.o dcmpdata.o normlzr.o unorm.o bidi.o ubidi.o \
+ubidiwrt.o ubidiln.o chariter.o compitr.o schriter.o uchriter.o \
+cpputils.o digitlst.o filestrm.o ushape.o umemstrm.o locid.o locmap.o uloc.o \
+mutex.o umutex.o putil.o udata.o uresbund.o uresdata.o rbdata.o resbund.o \
+uchar.o ucmp8.o ucmp16.o ucmp32.o uvector.o uhash.o uhash_us.o \
+unames.o unicode.o unistr.o ustring.o cstring.o utf_impl.o \
+scsu.o ucnv.o ucnv_bld.o ucnv_cb.o ucnv_cnv.o ucnv_err.o ucnv_io.o convert.o \
+ucnvlat1.o ucnvmbcs.o ucnv_utf.o ucnv2022.o ucnvhz.o ucnv_lmb.o ucnvscsu.o
 
 STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
 
@@ -145,7 +150,13 @@ endif
 ifneq ($(ENABLE_SHARED),)
 $(FINAL_SO_TARGET): $(OBJECTS)
 	$(SHLIB.cc) $(LD_SONAME) -o $@ $^ $(LIBS)
-endif
+
+ifeq ($(OS390BATCH),1)
+$(BATCH_TARGET): $(OBJECTS)
+    $(SHLIB.cc) $(LD_SONAME) -o $@ $^ $(LIBS)
+endif   # OS390BATCH
+
+endif   # ENABLE_SHARED
 
 ifeq (,$(MAKECMDGOALS))
 -include $(DEPS)
