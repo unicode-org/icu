@@ -51,14 +51,14 @@ ThaiLayoutEngine::~ThaiLayoutEngine()
 // NOTE: this assumes that ThaiShaping::compose will allocate the outChars array...
 le_int32 ThaiLayoutEngine::computeGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft, LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success)
 {
-	if (LE_FAILURE(success)) {
-		return 0;
-	}
+    if (LE_FAILURE(success)) {
+        return 0;
+    }
 
-	if (chars == NULL || offset < 0 || count < 0 || max < 0 || offset >= max || offset + count > max) {
-		success = LE_ILLEGAL_ARGUMENT_ERROR;
-		return 0;
-	}
+    if (chars == NULL || offset < 0 || count < 0 || max < 0 || offset >= max || offset + count > max) {
+        success = LE_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
 
     LEUnicode *outChars;
     le_int32 glyphCount;
@@ -67,18 +67,18 @@ le_int32 ThaiLayoutEngine::computeGlyphs(const LEUnicode chars[], le_int32 offse
     // (it says here...)
     outChars = new LEUnicode[count * 2];
 
-	if (outChars == NULL) {
-		success = LE_MEMORY_ALLOCATION_ERROR;
-		return 0;
-	}
+    if (outChars == NULL) {
+        success = LE_MEMORY_ALLOCATION_ERROR;
+        return 0;
+    }
 
     charIndices = new le_int32[count * 2];
 
-	if (charIndices == NULL) {
-		delete[] outChars;
-		success = LE_MEMORY_ALLOCATION_ERROR;
-		return 0;
-	}
+    if (charIndices == NULL) {
+        delete[] outChars;
+        success = LE_MEMORY_ALLOCATION_ERROR;
+        return 0;
+    }
 
     glyphCount = ThaiShaping::compose(chars, offset, count, fGlyphSet, fErrorChar, outChars, charIndices);
     mapCharsToGlyphs(outChars, 0, glyphCount, false, false, glyphs, charIndices, success);

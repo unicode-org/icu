@@ -25,22 +25,22 @@ struct LangSysTable
 
 struct ScriptTable
 {
-    Offset				defaultLangSysTableOffset;
-    le_uint16			langSysCount;
-    LangSysRecord		langSysRecordArray[ANY_NUMBER];
+    Offset              defaultLangSysTableOffset;
+    le_uint16           langSysCount;
+    LangSysRecord       langSysRecordArray[ANY_NUMBER];
 
-    const LangSysTable	*findLanguage(LETag languageTag) const;
+    const LangSysTable  *findLanguage(LETag languageTag) const;
 };
 
 typedef TagAndOffsetRecord ScriptRecord;
 
 struct ScriptListTable
 {
-    le_uint16			scriptCount;
-    ScriptRecord		scriptRecordArray[ANY_NUMBER];
+    le_uint16           scriptCount;
+    ScriptRecord        scriptRecordArray[ANY_NUMBER];
 
-    const ScriptTable	*findScript(LETag scriptTag) const;
-    const LangSysTable	*findLanguage(LETag scriptTag, LETag languageTag) const;
+    const ScriptTable   *findScript(LETag scriptTag) const;
+    const LangSysTable  *findLanguage(LETag scriptTag, LETag languageTag) const;
 };
 
 U_NAMESPACE_END
