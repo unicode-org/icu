@@ -79,25 +79,25 @@ le_int32 IndicOpenTypeLayoutEngine::characterProcessing(const LEUnicode chars[],
 
     le_int32 worstCase = count * IndicReordering::getWorstCaseExpansion(fScriptCode);
 
-    outChars = new LEUnicode[worstCase];
+    outChars = (LEUnicode *)uprv_malloc(worstCase * sizeof(LEUnicode));
 
     if (outChars == NULL) {
         success = LE_MEMORY_ALLOCATION_ERROR;
         return 0;
     }
 
-    charIndices = new le_int32[worstCase];
+    charIndices = (le_int32 *)uprv_malloc(worstCase * sizeof(le_int32));
     if (charIndices == NULL) {
-        delete[] outChars;
+        uprv_free(outChars);
         success = LE_MEMORY_ALLOCATION_ERROR;
         return 0;
     }
 
-    featureTags = new const LETag*[worstCase];
+    featureTags = (const LETag **)uprv_malloc(worstCase * sizeof(const LETag *));
 
     if (featureTags == NULL) {
-        delete[] charIndices;
-        delete[] outChars;
+        uprv_free(charIndices);
+        uprv_free(outChars);
         success = LE_MEMORY_ALLOCATION_ERROR;
         return 0;
     }
