@@ -1009,15 +1009,11 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         
 		Locale foo = new Locale("fu", "FU", "BAR");
         rb = null;
-        sym = new DateFormatSymbols(rb, foo);        
         sym = new DateFormatSymbols(GregorianCalendar.class, foo);
-        sym = new DateFormatSymbols((Class)null, foo);
-        sym = new DateFormatSymbols((Calendar)null, foo);
         sym.equals(null);
         
         sym = new ChineseDateFormatSymbols();
-        sym = new ChineseDateFormatSymbols(cal, foo);
-        sym = new ChineseDateFormatSymbols(null, foo);
+        sym = new ChineseDateFormatSymbols(new ChineseCalendar(), foo);
         
         StringBuffer buf = new StringBuffer();
         FieldPosition pos = new FieldPosition(0);
