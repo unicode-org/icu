@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Utility.java,v $
- * $Date: 2002/07/24 01:30:39 $
- * $Revision: 1.28 $
+ * $Date: 2002/07/25 22:30:37 $
+ * $Revision: 1.29 $
  *
  *****************************************************************************************
  */
@@ -18,7 +18,7 @@ public final class Utility {
 
     private static final char APOSTROPHE = '\'';
     private static final char BACKSLASH  = '\\';
-
+    
     /**
      * Convenience utility to compare two Object[]s.
      * Ought to be in System
@@ -1446,7 +1446,11 @@ public final class Utility {
                 if (quoteBuf.length() > 0) {
                     rule.append(APOSTROPHE);
                     // jdk 1.3.1 does not have append(StringBuffer) yet
-                    rule.append(quoteBuf.toString());
+                    if(ICUDebug.isJDK14OrHigher){
+                        rule.append(quoteBuf);
+                    }else{
+                        rule.append(quoteBuf.toString());
+                    }
                     rule.append(APOSTROPHE);
                     quoteBuf.setLength(0);
                 }

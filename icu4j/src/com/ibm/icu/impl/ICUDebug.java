@@ -2,8 +2,6 @@ package com.ibm.icu.impl;
 
 import com.ibm.icu.util.VersionInfo;
 
-import java.util.ResourceBundle;
-
 public final class ICUDebug {
     private static String params;
     static {
@@ -24,20 +22,23 @@ public final class ICUDebug {
 
     public static final String javaVersionString = System.getProperty("java.version");
 
+    public static final boolean isJDK14OrHigher;
     public static final VersionInfo javaVersion;
     static {
-	String vs = javaVersionString;
-	int index = vs.indexOf('-');
-	if (index != -1) {
-	    vs = vs.substring(0, index);
-	}
-	index = vs.indexOf('b'); // 'beta'
-	if (index != -1) {
-	    vs = vs.substring(0, index);
-	}
-
-	vs = vs.replace('_', '.');
-	javaVersion = VersionInfo.getInstance(vs);
+		String vs = javaVersionString;
+		int index = vs.indexOf('-');
+		if (index != -1) {
+		    vs = vs.substring(0, index);
+		}
+		index = vs.indexOf('b'); // 'beta'
+		if (index != -1) {
+		    vs = vs.substring(0, index);
+		}
+	
+		vs = vs.replace('_', '.');
+		javaVersion = VersionInfo.getInstance(vs);
+        VersionInfo java14Version = VersionInfo.getInstance("1.4.0");
+        isJDK14OrHigher = javaVersion.compareTo(java14Version) >= 0;
     }
 
     public static boolean enabled() {
