@@ -71,9 +71,8 @@ public final class StringPrep {
     private static final int UNASSIGNED        = 0x0000; 
     private static final int MAP               = 0x0001; 
     private static final int PROHIBITED        = 0x0002; 
-    private static final int LABEL_SEPARATOR   = 0x0003;
-    private static final int DELETE            = 0x0004;
-    private static final int TYPE_LIMIT        = 0x0005;
+    private static final int DELETE            = 0x0003;
+    private static final int TYPE_LIMIT        = 0x0004;
     
     private static final int NORMALIZATION_ON  = 0x0001;
     private static final int CHECK_BIDI_ON     = 0x0002;
@@ -123,11 +122,11 @@ public final class StringPrep {
     // format version of the data file
     private byte[] formatVersion;
     // the version of Unicode supported by the data file
-    private VersionInfo unicodeVersion;
+    private VersionInfo sprepUniVer;
     // the Unicode version of last entry in the
     // NormalizationCorrections.txt file if normalization
     // is turned on 
-    private VersionInfo normVersion;
+    private VersionInfo normCorrVer;
     // Option to turn on Normalization
     private boolean doNFKC;
     // Option to turn on checking for BiDi rules
@@ -186,9 +185,13 @@ public final class StringPrep {
         // get the options
         doNFKC            = ((indexes[OPTIONS] & NORMALIZATION_ON) > 0);
         checkBiDi         = ((indexes[OPTIONS] & CHECK_BIDI_ON) > 0);
-        unicodeVersion    = getVersionInfo(reader.getUnicodeVersion());
-        normVersion       = getVersionInfo(indexes[NORM_CORRECTNS_LAST_UNI_VERSION]);
-        if(normVersion.compareTo(UCharacter.getUnicodeVersion())>0){
+        sprepUniVer   = getVersionInfo(reader.getUnicodeVersion());
+        normCorrVer   = getVersionInfo(indexes[NORM_CORRECTNS_LAST_UNI_VERSION]);
+        VersionInfo normUniVer = Normalizer.getUnicodeVersion();
+        if(normUniVer.compareTo(sprepUniVer) < 0 && /* the Unicode version of SPREP file must be less than the Unicode Vesion of the normalization data */
+           normUniVer.compareTo(normCorrVer) < 0 && /* the Unicode version of the NormalizationCorrections.txt file should be less than the Unicode Vesion of the normalization data */
+           ((indexes[OPTIONS] & NORMALIZATION_ON) > 0) /* normalization turned on*/
+           ){
             throw new IOException("Normalization Correction version not supported");
         }
         b.close();
@@ -248,7 +251,7 @@ public final class StringPrep {
         char result = 0;
         int ch  = UCharacterIterator.DONE;
         StringBuffer dest = new StringBuffer();
-        boolean allowUnassigned = (boolean) ((options & ALLOW_UNASSIGNED)>0);
+        boolean allowUnassigned = ((options & ALLOW_UNASSIGNED)>0);
         
         while((ch=iter.nextCodePoint())!= UCharacterIterator.DONE){
             

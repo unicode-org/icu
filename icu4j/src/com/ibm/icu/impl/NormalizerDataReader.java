@@ -309,7 +309,7 @@ final class NormalizerDataReader implements ICUBinary.Authenticate {
                                         throws IOException{
         if(debug) System.out.println("Bytes in inputStream " + inputStream.available());
         
-        ICUBinary.readHeader(inputStream, DATA_FORMAT_ID, this);
+        unicodeVersion = ICUBinary.readHeader(inputStream, DATA_FORMAT_ID, this);
         
         if(debug) System.out.println("Bytes left in inputStream " +inputStream.available());
         
@@ -404,6 +404,9 @@ final class NormalizerDataReader implements ICUBinary.Authenticate {
                && version[3] == DATA_FORMAT_VERSION[3];
     }
     
+    public byte[] getUnicodeVersion(){
+        return unicodeVersion;    
+    }
     // private data members -------------------------------------------------
       
 
@@ -411,6 +414,8 @@ final class NormalizerDataReader implements ICUBinary.Authenticate {
     * ICU data file input stream
     */
     private DataInputStream dataInputStream;
+    
+    private byte[] unicodeVersion;
                                        
     /**
     * File format version that this class understands.

@@ -8,6 +8,7 @@ package com.ibm.icu.text;
 import com.ibm.icu.impl.NormalizerImpl;
 import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.util.VersionInfo;
 
 import java.text.CharacterIterator;
 import com.ibm.icu.impl.Utility;
@@ -2753,5 +2754,15 @@ public final class Normalizer implements Cloneable{
 	    result=NormalizerImpl.cmpEquivFold(s1, s1Start, s1Limit, 
                                 s2, s2Start, s2Limit, options);
 	    return result;
-	}          
+	}    
+    
+    /**
+     * Fetches the Unicode version burned into the Normalization data file
+     * @return VersionInfo version information of the normalizer
+     * @internal
+     * @author ram
+     */
+    static VersionInfo getUnicodeVersion(){
+        return NormalizerImpl.getUnicodeVersion();
+    }
 }

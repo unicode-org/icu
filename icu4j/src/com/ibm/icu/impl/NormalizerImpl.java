@@ -16,6 +16,7 @@ import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSetIterator;
 import com.ibm.icu.util.RangeValueIterator;
+import com.ibm.icu.util.VersionInfo;
 import com.ibm.icu.lang.UCharacter;
 
 /**
@@ -219,17 +220,19 @@ public final class NormalizerImpl {
 	/****************************************************/
 	
 	
-	static FCDTrieImpl fcdTrieImpl;
-	static NormTrieImpl normTrieImpl;
-	static AuxTrieImpl auxTrieImpl;
+	private static FCDTrieImpl fcdTrieImpl;
+	private static NormTrieImpl normTrieImpl;
+	private static AuxTrieImpl auxTrieImpl;
 	private static int[] indexes;
-	static char[] combiningTable;
-	static char[] extraData;
-	static Object[] canonStartSets;
+	private static char[] combiningTable;
+	private static char[] extraData;
+	private static Object[] canonStartSets;
 	
-	static boolean isDataLoaded;
-	static boolean isFormatVersion_2_1;
-    static boolean isFormatVersion_2_2;
+	private static boolean isDataLoaded;
+	private static boolean isFormatVersion_2_1;
+    private static boolean isFormatVersion_2_2;
+    private static byte[] unicodeVersion;
+    
 	/**
      * Default buffer size of datafile
      */
@@ -325,7 +328,7 @@ public final class NormalizerImpl {
                                     ||
                                    (formatVersion[0]==2 && formatVersion[1]>=2)
                                  );
-            
+            unicodeVersion = reader.getUnicodeVersion();
             b.close();
         }
     }
@@ -429,7 +432,10 @@ public final class NormalizerImpl {
 	    }
 	    return norm32;
 	}
-
+    public static VersionInfo getUnicodeVersion(){
+        return VersionInfo.getInstance(unicodeVersion[0], unicodeVersion[1],
+                                       unicodeVersion[2], unicodeVersion[3]);
+    }
 	public static char	getFCD16(char c) {
 	    return  FCDTrieImpl.fcdTrie.getLeadValue(c);
 	}
