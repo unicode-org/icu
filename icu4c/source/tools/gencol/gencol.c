@@ -124,6 +124,6 @@ static void
 version()
 {
   printf("gencol version %s (ICU version %s).\n", 
-	 GENCOL_VERSION, ICU_VERSION);
+	 GENCOL_VERSION, U_ICU_VERSION);
   puts(U_COPYRIGHT_STRING);
 }
