@@ -403,6 +403,10 @@ int32_t Paragraph::drawRun(void *surface, const RenderingFontInstance *fontInsta
         fontInstance->drawGlyphs(surface, &fGlyphs[dyStart], dyEnd - dyStart,
             &fDX[dyStart], x, y + fDY[dyStart], fWidth, fHeight);
 
+        for (int32_t i = dyStart; i < dyEnd; i += 1) {
+            x += fDX[i];
+        }
+
         dyStart = dyEnd;
     }
 
