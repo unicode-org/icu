@@ -575,7 +575,7 @@ void TransliterationRule::appendToRule(UnicodeString& rule,
     // quotes.  \u and \U are not recognized within quotes.  The same
     // logic applies to literals, but literals are never escaped.
     if (isLiteral ||
-        (escapeUnprintable && Utility::isUnprintable(c))) {
+        (escapeUnprintable && ICU_Utility::isUnprintable(c))) {
         if (quoteBuf.length() > 0) {
             // We prefer backslash APOSTROPHE to double APOSTROPHE
             // (more readable, less similar to ") so if there are
@@ -610,7 +610,7 @@ void TransliterationRule::appendToRule(UnicodeString& rule,
             }
         }
         if (c != (UChar32)-1) {
-            if (!escapeUnprintable || !Utility::escapeUnprintable(rule, c)) {
+            if (!escapeUnprintable || !ICU_Utility::escapeUnprintable(rule, c)) {
                 rule.append(c);
             }
         }

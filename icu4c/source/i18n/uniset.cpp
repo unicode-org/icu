@@ -388,7 +388,7 @@ void UnicodeSet::_appendToPat(UnicodeString& buf, UChar32 c, UBool useHexEscape)
     if (useHexEscape) {
         // Use hex escape notation (\uxxxx or \Uxxxxxxxx) for anything
         // unprintable
-        if (Utility::escapeUnprintable(buf, c)) {
+        if (ICU_Utility::escapeUnprintable(buf, c)) {
             return;
         }
     }
@@ -440,7 +440,7 @@ UnicodeString& UnicodeSet::_toPattern(UnicodeString& result,
         for (i=0; i<pat.length(); ) {
             UChar32 c = pat.char32At(i);
             i += UTF_CHAR_LENGTH(c);
-            if (escapeUnprintable && Utility::isUnprintable(c)) {
+            if (escapeUnprintable && ICU_Utility::isUnprintable(c)) {
                 // If the unprintable character is preceded by an odd
                 // number of backslashes, then it has been escaped.
                 // Before unescaping it, we delete the final
@@ -448,7 +448,7 @@ UnicodeString& UnicodeSet::_toPattern(UnicodeString& result,
                 if ((backslashCount % 2) == 1) {
                     result.truncate(result.length() - 1);
                 }
-                Utility::escapeUnprintable(result, c);
+                ICU_Utility::escapeUnprintable(result, c);
                 backslashCount = 0;
             } else {
                 result.append(c);
