@@ -413,7 +413,12 @@ public class SimpleDateFormat extends DateFormat {
             dateTimePatterns = calData.getStringArray("DateTimePatterns");
             /* update cache */
             cachedLocaleData.put(loc, dateTimePatterns);
-        }
+        } else {
+	    // for now, just assume this is correct, so we have non-null locale info.
+	    // we may have to cache the result of calData.getULocale with the pattern strings
+	    // and set the locale with that.
+	    setLocale(loc, loc);
+	}
         formatData = new DateFormatSymbols(loc);
         if ((timeStyle >= 0) && (dateStyle >= 0)) {
             Object[] dateTimeArgs = {dateTimePatterns[timeStyle],
