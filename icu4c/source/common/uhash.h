@@ -451,6 +451,22 @@ U_CAPI void*
 uhash_removeElement(UHashtable *hash, const UHashElement* e);
 
 /********************************************************************
+ * UHashTok convenience
+ ********************************************************************/
+
+/**
+ * Return a UHashTok for an integer.
+ */
+U_CAPI UHashTok
+uhash_toki(int32_t i);
+
+/**
+ * Return a UHashTok for a pointer.
+ */
+U_CAPI UHashTok
+uhash_tokp(void* p);
+
+/********************************************************************
  * UChar* and char* Support Functions
  ********************************************************************/
 
