@@ -15,9 +15,12 @@ import java.util.*;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.2 $ $Date: 1999/12/22 00:01:36 $
+ * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.3 $ $Date: 1999/12/22 01:05:54 $
  *
  * $Log: TransliterationRuleSet.java,v $
+ * Revision 1.3  1999/12/22 01:05:54  Alan
+ * Improve masking checking; turn it off by default, for better performance
+ *
  * Revision 1.2  1999/12/22 00:01:36  Alan
  * Detect a>x masking a>y
  *
@@ -74,18 +77,6 @@ class TransliterationRuleSet {
      * @param rule the rule to add
      */
     public void addRule(TransliterationRule rule) {
-        
-        // Build time, no checking  : 3562 ms
-        // Build time, with checking: 6234 ms
-
-        for (int i=0; i<rules.size(); ++i) {
-            TransliterationRule r = (TransliterationRule) rules.elementAt(i);
-            if (r.masks(rule)) {
-                throw new IllegalArgumentException("Rule " + r +
-                                                   " masks " + rule);
-            }
-        }
-
         rules.addElement(rule);
         int len;
         if ((len = rule.getAnteContextLength()) > maxContextLength) {
@@ -93,9 +84,17 @@ class TransliterationRuleSet {
         }
     }
 
+    public final int size() {
+        return rules.size();
+    }
+
+    public final TransliterationRule elementAt(int i) {
+        return (TransliterationRule) rules.elementAt(i);
+    }
+
     /**
-     * Free up space.  Once this method is called, addRule() must NOT
-     * be called again.
+     * Free up space.  Once this method is called, the maskKey is
+     * invalid.
      */
     public void freeze() {
         for (int i=0; i<rules.size(); ++i) {
