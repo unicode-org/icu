@@ -81,10 +81,12 @@ CompactShortArray* ucmp16_open(int16_t defaultValue)
   CompactShortArray* this_obj = (CompactShortArray*) icu_malloc(sizeof(CompactShortArray));
   if (this_obj == NULL) return NULL;
   
+  this_obj->fStructSize = sizeof(CompactShortArray);
   this_obj->fCount = UCMP16_kUnicodeCount;
   this_obj->fCompact = FALSE; 
   this_obj->fBogus = FALSE;
   this_obj->fArray = NULL;
+  this_obj->fAlias = FALSE;
   this_obj->fIndex = NULL;
   this_obj->fHashes = NULL; 
   this_obj->fDefaultValue = defaultValue;
@@ -145,11 +147,13 @@ CompactShortArray* ucmp16_openAdopt(uint16_t *indexArray,
   this_obj->fArray = newValues;
   this_obj->fIndex = indexArray;
   this_obj->fCompact = count < UCMP16_kUnicodeCount;
+  this_obj->fStructSize = sizeof(CompactShortArray);
   this_obj->kBlockShift = UCMP16_kBlockShift;
   this_obj->kBlockMask = UCMP16_kBlockMask;
-
+  this_obj->fAlias = FALSE;
   return this_obj;
 }
+
 
 CompactShortArray* ucmp16_openAdoptWithBlockShift(uint16_t *indexArray,
                           int16_t *newValues,
@@ -169,12 +173,37 @@ CompactShortArray* ucmp16_openAdoptWithBlockShift(uint16_t *indexArray,
   return this_obj;
 }
 
+
+CompactShortArray* ucmp16_openAlias(uint16_t *indexArray,
+                    int16_t *newValues, 
+                    int32_t count,
+                    int16_t defaultValue)
+{
+  CompactShortArray* this_obj = (CompactShortArray*) icu_malloc(sizeof(CompactShortArray));
+  if (this_obj == NULL) return NULL;
+  this_obj->fHashes = NULL;
+  this_obj->fCount = count; 
+  this_obj->fDefaultValue = defaultValue;
+  this_obj->fBogus = FALSE;
+  this_obj->fArray = newValues;
+  this_obj->fIndex = indexArray;
+  this_obj->fCompact = count < UCMP16_kUnicodeCount;
+  this_obj->fStructSize = sizeof(CompactShortArray);
+  this_obj->kBlockShift = UCMP16_kBlockShift;
+  this_obj->kBlockMask = UCMP16_kBlockMask;
+  this_obj->fAlias = TRUE;
+  return this_obj;
+}
+
 /*=======================================================*/
  
 void ucmp16_close(CompactShortArray* this_obj)
 {
-  icu_free(this_obj->fArray);
-  icu_free(this_obj->fIndex);
+  if(this_obj->fAlias == FALSE)
+  {
+      icu_free(this_obj->fArray);
+      icu_free(this_obj->fIndex);
+  }
   icu_free(this_obj->fHashes);
   icu_free(this_obj);
 
@@ -344,13 +373,13 @@ void ucmp16_compact(CompactShortArray* this_obj)
     int16_t *result = (int16_t*) icu_malloc(sizeof(int16_t) * newSize);
     
     icu_memcpy(result, this_obj->fArray, newSize * sizeof(int16_t));
-    
+
     icu_free(this_obj->fArray);
     this_obj->fArray = result;
     this_obj->fCount = newSize;
     icu_free(this_obj->fHashes);
     this_obj->fHashes = NULL;
-    
+
     this_obj->fCompact = TRUE;
       }
     }
@@ -392,6 +421,44 @@ const int16_t* ucmp16_getArray(const CompactShortArray* this_obj)
 const uint16_t* ucmp16_getIndex(const CompactShortArray* this_obj)
 {
     return this_obj->fIndex;
+}
+
+
+/* We use sizeof(*array), etc so that this code can be as portable as 
+   possible between the ucmpX_ family.  Check lines marked 'SIZE'.
+*/
+
+U_CAPI  CompactShortArray * U_EXPORT2 ucmp16_cloneFromData(const uint8_t **source,  UErrorCode *status)
+{
+  CompactShortArray *array;
+  const CompactShortArray *oldArray;
+
+  if(U_FAILURE(*status))
+    return NULL;
+
+  oldArray= (const CompactShortArray*)*source;
+
+  if(oldArray->fStructSize != sizeof(*oldArray))
+    {
+      *status = U_INVALID_TABLE_FORMAT; /* ? */
+      return NULL;
+    }
+  array = (CompactShortArray*)malloc(sizeof(*array));
+  
+  icu_memcpy(array,*source, sizeof(*array));
+
+  *source += array->fStructSize;
+
+  array->fArray = (int16_t*)*source;         /* SIZE */
+  *source +=  (sizeof(int16_t)*array->fCount);     /* SIZE */
+
+  array->fIndex = (uint16_t*)*source;
+  *source += (sizeof(uint16_t)*UCMP16_kIndexCount); /* SIZE*/
+  
+  array->fAlias = TRUE;
+  
+  return array;
+
 }
 
 

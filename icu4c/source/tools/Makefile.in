@@ -32,7 +32,7 @@ pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
 
 ICUDATADIR=$(pkgdatadir)/$(VERSION)
-SRCDATADIR=$(top_builddir)/../data/
+SRCDATADIR=$(top_builddir)/../data
 
 ## Build directory information
 top_builddir = ..
@@ -57,7 +57,7 @@ VERSION = @VERSION@
 CLEANFILES = *~
 
 SUBDIRS = ctestfw makeconv genrb gencol rbdump \
-toolutil genccode gennames gencmn gencnval
+toolutil genccode gennames gencmn gencnval gentz
 
 ## List of phony targets
 .PHONY : all all-local all-recursive install install-local install-everything install-files install-dlls build-data build-cmnfile build-dll		\
@@ -96,9 +96,28 @@ all-recursive install-recursive clean-recursive distclean-recursive dist-recursi
 
 all-local: build-local
 
-DATAFILES=$(SRCDATADIR)/unames.dat $(SRCDATADIR)/cnvalias.dat
-SRCDATAFILES=$(DATAFILES:.dat=_dat.c)
-OBJDATAFILES=$(SRCDATAFILES:.c=.o)
+DAT_FILES=unames.dat cnvalias.dat tz.dat
+
+DATAFILESD=$(DAT_FILES:%=$(SRCDATADIR)/%)
+
+include makeconv/ucmfiles.mk
+-include makeconv/ucmlocal.mk
+ALL_UCM_SOURCE= $(UCM_SOURCE) $(UCM_SOURCE_LOCAL)
+
+
+UCM_FILES = $(ALL_UCM_SOURCE:%=$(top_srcdir)/../data/%)
+CNV_FILES = $(UCM_FILES:.ucm=.cnv)
+DATAFILESC=$(CNV_FILES)
+
+
+DATAFILES=$(DATAFILESD) $(DATAFILESC)
+
+SRCDATAFILESD=$(DATAFILESD:.dat=_dat.c)
+SRCDATAFILESC=$(DATAFILESC:%.cnv=%_cnv.c)
+SRCDATAFILES=$(SRCDATAFILESD) $(SRCDATAFILESC)
+
+
+OBJDATAFILES=$(SRCDATAFILES:%.c=%.o)
 COMMONFILE=$(SRCDATADIR)/icudata.dat
 COMMONDLL=$(SRCDATADIR)/libicudata.$(SO)
 
@@ -106,37 +125,54 @@ COMMONDLL=$(SRCDATADIR)/libicudata.$(SO)
 UDATA_FILES=icudata.dat
 UDATA_DLLS=libicudata.$(SO)
 
-build-local: build-data build-cmnfile build-dll
+### use the "--enable-mapped=" option to configure, to get mapped file behavior.
+# the case where '--enable-mapped=yes'
+@USE_MAPPED_TRUE@build-local: build-data build-cmnfile
+
+# the case where '--enable-mapped=no'  (DEFAULT)
+@USE_MAPPED_FALSE@build-local: build-data build-dll
+###
 
 # check for any other generated data here
 install-data: $(DATAFILES)
 
 build-cmnfile:  $(COMMONFILE)
 
-# argh!  the -Wpath [etc] has relative DLL paths in it
+# the -Wpath [etc] has relative DLL paths in it
 # so we have to cd into the other dir..
 
 gencmn/mkmap.tmp: Makefile
-	-rm -f gencmn/mkmap.tmp
-	for file in $(DATAFILES); do \
+
+
+$(COMMONFILE):	$(DATAFILES)
+	@-rm -f gencmn/mkmap.tmp
+	@for file in $(DATAFILES); do \
 	  echo `pwd`/$$file >> gencmn/mkmap.tmp; \
 	done;
-
-
-$(COMMONFILE):	$(DATAFILES) gencmn/mkmap.tmp
+	@echo -n Generating common file $(COMMONFILE).  Number of files:
+	-@wc -l gencmn/mkmap.tmp
 	-rm -f $(COMMONFILE)
-	(cd gencmn ; ICU_DATA=../$(SRCDATADIR)	./gencmn 1000000 mkmap.tmp )
+	@(cd gencmn ; ICU_DATA=../$(SRCDATADIR)	./gencmn 1000000 mkmap.tmp )
+	-@ls -l $(COMMONFILE)
 
 build-dll: $(COMMONDLL)
 
 %_dat.c: %.dat
 	(cd genccode ; ./genccode ../$< )
 
+%_cnv.c: %.cnv
+	(cd genccode ; ./genccode ../$< )
+
+
 # strip is optional 
+#	-$(STRIP) $@
+
 $(COMMONDLL): $(OBJDATAFILES)
 	$(SHLIB.c) -o $@ $^
-	-$(STRIP) $@
 	-ls -l $@
+
+srcs: $(SRCDATAFILES)
+
 
 
 ### use the "--enable-mapped=" option to configure, to get mapped file behavior.

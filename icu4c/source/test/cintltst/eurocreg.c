@@ -91,7 +91,7 @@ void TestEuroRegression()
     {
       UErrorCode err = U_ZERO_ERROR;
       UConverter* myConv =  ucnv_open(convertersToCheck[i], &err);
-      if (U_FAILURE(err)&&convertersToCheck[i][0]) log_err("%s  \tMISSING\n", convertersToCheck[i]);
+      if (U_FAILURE(err)&&convertersToCheck[i][0]) log_err("%s  \tMISSING [%s]\n", convertersToCheck[i], errorName(err));
       else 
 	{
 	  if (isEuroAware(myConv)) log_verbose("%s  \tsupports euro\n", convertersToCheck[i]);

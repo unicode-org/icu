@@ -26,6 +26,9 @@
 #include "cmemory.h"
 #include "filestrm.h"
 
+#include "udata.h"
+#include "unewdata.h"
+#include "ucmpwrit.h"
 
 /*Reads the header of the table file and fills in basic knowledge about the converter
  *in "converter"
@@ -61,6 +64,9 @@ static void writeCompactByteArrayToFile(FileStream* outfile, const CompactByteAr
 static void writeUConverterSharedDataToFile(const char* filename, 
 						  UConverterSharedData* mySharedData, 
 						  UErrorCode* err);
+
+
+static void WriteConverterSharedData(UNewDataMemory *pData, const UConverterSharedData* data);
 
 static UConverterPlatform getPlatformFromName(char* name);
 static int32_t getCodepageNumberFromName(char* name);
@@ -139,6 +145,50 @@ char *
   return line + i;
 }
 
+static const UDataInfo dataInfo={
+    sizeof(UDataInfo),
+    0,
+
+    U_IS_BIG_ENDIAN,
+    U_CHARSET_FAMILY,
+    sizeof(UChar),
+    0,
+
+    0x63, 0x6e, 0x76, 0x74,     /* dataFormat="cnvt" */
+    1, 0, 0, 0,                 /* formatVersion */
+    1, 3, 1, 0                  /* dataVersion */
+};
+
+
+void writeConverterData(UConverterSharedData *mySharedData, const char *cName, UErrorCode *status)
+{
+  UNewDataMemory *mem;
+  void *data;
+  const char *cnvName;
+
+  uint32_t sz ;
+  uint32_t sz2, sz3;
+
+  cnvName = icu_strrchr(cName, '/');
+  if(cnvName)
+    {
+      cnvName++;
+    }
+  else
+    cnvName = cName;
+  
+  
+  mem = udata_create("cnv", cnvName, &dataInfo, UCNV_COPYRIGHT_STRING, status);
+  
+  WriteConverterSharedData(mem, mySharedData);
+
+  udata_writeBlock(mem, data, sz);
+
+  sz2 = udata_finish(mem, status);
+  
+/*  printf("Done. Wrote %d bytes.\n", sz2); */
+}
+
 
 int main(int argc, char** argv)
 {
@@ -146,7 +196,7 @@ int main(int argc, char** argv)
   UErrorCode err = U_ZERO_ERROR;
   char outFileName[UCNV_MAX_FULL_FILE_NAME_LENGTH];
   char* dot = NULL;
-
+  char cnvName[UCNV_MAX_FULL_FILE_NAME_LENGTH];
   
   if (argc == 1)
     {
@@ -162,9 +212,12 @@ int main(int argc, char** argv)
 	  *dot = '\0';
 	}
       /*Adds the target extension*/
+      icu_strcpy(cnvName, outFileName);
+      
       icu_strcat(outFileName, CONVERTER_FILE_EXTENSION);
       
       mySharedData = createConverterFromTableFile(argv[argc], &err);
+
       if (U_FAILURE(err) || (mySharedData == NULL))
 	{
 	  /* in an error is found, print out a error msg and keep going*/
@@ -173,7 +226,8 @@ int main(int argc, char** argv)
 	}
       else
 	{
-	  writeUConverterSharedDataToFile(outFileName, mySharedData, &err);
+/*  	  writeUConverterSharedDataToFile(outFileName, mySharedData, &err); */
+	  writeConverterData(mySharedData, cnvName, &err);
 	  deleteSharedConverterData(mySharedData);
 	  puts(outFileName);
 	}
@@ -490,6 +544,7 @@ void loadSBCSTableFromFile(FileStream* convFile, UConverter* myConverter, UError
       return;
     } 
   
+  myUConverterTable->sbcs.toUnicode = malloc(sizeof(UChar)*256);
   /*fills in the toUnicode array with the Unicode Replacement Char*/
   for (i=0;i<255;i++) myUConverterTable->sbcs.toUnicode[i] = unicodeValue;
 
@@ -547,6 +602,14 @@ void loadMBCSTableFromFile(FileStream* convFile, UConverter* myConverter, UError
       *err = U_MEMORY_ALLOCATION_ERROR;
       return;
     }
+  
+  myUConverterTable->mbcs.starters = icu_malloc(sizeof(bool_t)*256);
+  if (myUConverterTable->mbcs.starters == NULL) 
+    {
+      *err = U_MEMORY_ALLOCATION_ERROR;
+      return;
+    }
+  
 
   /*Initializes the mbcs.starters to FALSE*/
 
@@ -717,6 +780,8 @@ void loadDBCSTableFromFile(FileStream* convFile, UConverter* myConverter, UError
   ucmp16_compact(myToUnicode);
   myUConverterTable->dbcs.fromUnicode = myFromUnicode;
   myUConverterTable->dbcs.toUnicode = myToUnicode;
+
+
   myConverter->sharedData->referenceCounter = 1;
   myConverter->sharedData->table = myUConverterTable;
   
@@ -781,6 +846,9 @@ UConverterSharedData* createConverterFromTableFile(const char* converterName, UE
       T_FileStream_close(convFile);
     }
   
+  mySharedData->structSize = sizeof(UConverterSharedData);
+  mySharedData->dataMemory = NULL; /* for init */
+
   myConverter.sharedData = mySharedData;
   readHeaderFromFile(&myConverter, convFile, err);
 
@@ -813,5 +881,51 @@ UConverterSharedData* createConverterFromTableFile(const char* converterName, UE
     };
 
   T_FileStream_close(convFile);
+
+  
   return mySharedData;
 }
+
+
+
+static void WriteConverterSharedData(UNewDataMemory *pData, const UConverterSharedData* data)
+{
+  udata_writeBlock(pData, data, sizeof(UConverterSharedData));
+
+  switch (data->conversionType)
+    {
+    case UCNV_SBCS:
+      {
+	udata_writeBlock(pData, (void*)data->table->sbcs.toUnicode, sizeof(UChar)*256);
+	udata_write_ucmp8(pData, data->table->sbcs.fromUnicode);
+      }
+      break;
+
+    case UCNV_DBCS:
+    case UCNV_EBCDIC_STATEFUL:
+      {
+	udata_write_ucmp16(pData,data->table->dbcs.toUnicode);
+	udata_write_ucmp16(pData,data->table->dbcs.fromUnicode);
+      }
+      break;
+
+    case UCNV_MBCS:
+      {
+	udata_writeBlock(pData, data->table->mbcs.starters, 256*sizeof(bool_t));
+	udata_write_ucmp16(pData,data->table->mbcs.toUnicode);
+	udata_write_ucmp16(pData,data->table->mbcs.fromUnicode);
+      }
+      break;
+
+    default:
+      {
+	/*If it isn't any of the above, the file is invalid */
+	fprintf(stderr, "Error: bad converter type, can't write!!\n");
+	exit(1);
+	return; /* 0; */
+      }
+    }
+  
+}
+
+

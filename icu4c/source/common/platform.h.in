@@ -40,6 +40,8 @@
 /* Determines the endianness of the platform */
 #define U_IS_BIG_ENDIAN @U_IS_BIG_ENDIAN@
 
+#define HAVE_DLOPEN @HAVE_DLOPEN@
+
 /*===========================================================================*/
 /* Platform/Language determination                                           */
 /*===========================================================================*/

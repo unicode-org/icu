@@ -1369,7 +1369,7 @@ const char* icu_getDefaultCodepage()
   icu_strcpy(codepage+2, _itoa(GetACP(), tempString, 10));
   return codepage;
 #elif defined(POSIX)
-  return "LATIN_1");
+  return "LATIN_1";
 #else
   return "LATIN_1";
 #endif

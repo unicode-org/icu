@@ -59,11 +59,13 @@ CompactByteArray* ucmp8_open(int8_t defaultValue)
   
   if (this_obj == NULL) return NULL;
 
+  this_obj->fStructSize = sizeof(CompactByteArray);
   this_obj->fArray = NULL; 
   this_obj->fIndex = NULL;
   this_obj->fCount = UCMP8_kUnicodeCount;
   this_obj->fCompact = FALSE; 
   this_obj->fBogus = FALSE;
+  this_obj->fAlias = FALSE;
 
 
   this_obj->fArray = (int8_t*) icu_malloc(sizeof(int8_t) * UCMP8_kUnicodeCount);
@@ -103,11 +105,32 @@ CompactByteArray* ucmp8_openAdopt(uint16_t *indexArray,
   this_obj->fIndex = NULL; 
   this_obj->fCount = count;
   this_obj->fBogus = FALSE;
+  this_obj->fStructSize = sizeof(CompactByteArray);
   
   this_obj->fArray = newValues;
   this_obj->fIndex = indexArray;
   this_obj->fCompact = (count < UCMP8_kUnicodeCount) ? TRUE : FALSE;
+  this_obj->fAlias = FALSE;
+  return this_obj;
+}
 
+CompactByteArray* ucmp8_openAlias(uint16_t *indexArray,
+                  int8_t *newValues,
+                  int32_t count)
+{
+  CompactByteArray* this_obj = (CompactByteArray*) icu_malloc(sizeof(CompactByteArray));
+  if (!this_obj) return NULL;
+  
+  this_obj->fArray = NULL;
+  this_obj->fIndex = NULL; 
+  this_obj->fCount = count;
+  this_obj->fBogus = FALSE;
+  this_obj->fStructSize = sizeof(CompactByteArray);
+  
+  this_obj->fArray = newValues;
+  this_obj->fIndex = indexArray;
+  this_obj->fCompact = (count < UCMP8_kUnicodeCount) ? TRUE : FALSE;
+  this_obj->fAlias = TRUE;
   return this_obj;
 }
 
@@ -115,12 +138,17 @@ CompactByteArray* ucmp8_openAdopt(uint16_t *indexArray,
  
 void ucmp8_close(CompactByteArray* this_obj) 
 {
-  icu_free(this_obj->fArray);
+  if(this_obj->fAlias == FALSE)
+  {
+      icu_free(this_obj->fArray);
+      icu_free(this_obj->fIndex);
+  }
+
   this_obj->fArray = NULL;
-  icu_free(this_obj->fIndex);
   this_obj->fIndex = NULL;
   this_obj->fCount = 0;
   this_obj->fCompact = FALSE;
+  this_obj->fAlias = TRUE;
   icu_free(this_obj);
 }
 
@@ -142,27 +170,28 @@ void ucmp8_expand(CompactByteArray* this_obj)
    * INDEX  0   4   8   12  16 ...
    * ARRAY  abcdeababcedzyabcdea...
    */
-  int32_t i;
-  if (this_obj->fCompact) 
+    int32_t i;
+    if (this_obj->fCompact) 
     {
       int8_t* tempArray;
       tempArray = (int8_t*) icu_malloc(sizeof(int8_t) * UCMP8_kUnicodeCount);
       if (!tempArray) 
-    {
-      this_obj->fBogus = TRUE;
-      return;
-    }
+      {
+          this_obj->fBogus = TRUE;
+          return;
+      }
       for (i = 0; i < UCMP8_kUnicodeCount; ++i) 
-    {
-      tempArray[i] = ucmp8_get(this_obj,(UChar)i);  /* HSYS : How expand?*/
-        }
+      {
+          tempArray[i] = ucmp8_get(this_obj,(UChar)i);  /* HSYS : How expand?*/
+      }
       for (i = 0; i < UCMP8_kIndexCount; ++i) 
-    {
-      this_obj->fIndex[i] = (uint16_t)(i<< UCMP8_kBlockShift);
-        }
+      {
+          this_obj->fIndex[i] = (uint16_t)(i<< UCMP8_kBlockShift);
+      }
       icu_free(this_obj->fArray);
       this_obj->fArray = tempArray;
       this_obj->fCompact = FALSE;
+      this_obj->fAlias = FALSE;
     }
 }
  
@@ -357,4 +386,48 @@ ucmp8_compact(CompactByteArray* this_obj,
       this_obj->fCompact = TRUE;
     } /* endif (!this_obj->fCompact)*/
 }
+
+/* We use sizeof(*array), etc so that this code can be as portable as 
+   possible between the ucmpX_ family. 
+*/
+
+U_CAPI  CompactByteArray * U_EXPORT2 ucmp8_cloneFromData(const uint8_t **source,  UErrorCode *status)
+{
+    CompactByteArray *array;
+    const CompactByteArray *oldArray;
+    
+    if(U_FAILURE(*status))
+        return NULL;
+    
+    oldArray= (const CompactByteArray*)*source;
+    
+    if(oldArray->fStructSize != sizeof(*oldArray))
+    {
+        *status = U_INVALID_TABLE_FORMAT; /* ? */
+        return NULL;
+    }
+    array = (CompactByteArray*)malloc(sizeof(*array));
+    
+    icu_memcpy(array,*source, sizeof(*array));
+
+    array->fAlias = TRUE;
+    
+    *source += array->fStructSize;
+
+    array->fArray = (const int8_t*)*source;
+    *source +=  (sizeof(int8_t)*array->fCount);
+
+    array->fIndex = (const uint16_t*)*source;
+    *source += (sizeof(uint16_t)*UCMP8_kIndexCount);
+    
+    return array;
+}
+
+
+
+
+
+
+
+
 
