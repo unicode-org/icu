@@ -108,6 +108,8 @@ class NumberFormatTest: public CalendarTimeZoneTest {
 
     void TestIllegalPatterns(void);
 
+    void TestCases(void);
+
  private:
 
     static UBool equalValue(const Formattable& a, const Formattable& b);

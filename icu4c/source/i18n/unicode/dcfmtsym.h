@@ -112,6 +112,9 @@ public:
         kInfinitySymbol,
         /** Nan symbol */
         kNaNSymbol,
+        /** Significant digit symbol
+         * @draft ICU 3.0 */
+        kSignificantDigitSymbol,
         /** count symbol constants */
         kFormatSymbolCount
     };

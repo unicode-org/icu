@@ -1384,6 +1384,56 @@ public:
     virtual void setMinimumFractionDigits(int32_t newValue);
 
     /**
+     * Returns the minimum number of significant digits that will be
+     * displayed.
+     * @return the fewest significant digits that will be shown, or a
+     * non-positive value if significant digits are not in use
+     * @draft ICU 3.0
+     */
+    int32_t getMinimumSignificantDigits() const;
+
+    /**
+     * Returns the maximum number of significant digits that will be
+     * displayed.
+     * @return the most significant digits that will be shown, or a
+     * non-positive value if significant digits are not in use
+     * @draft ICU 3.0
+     */
+    int32_t getMaximumSignificantDigits() const;
+
+    /**
+     * Sets the minimum number of significant digits that will be
+     * displayed.  If <code>min</code> is less than one then it is set
+     * to one.  If the maximum significant digits count is less than
+     * <code>min</code>, then it is set to <code>min</code>.  If
+     * significant digits were not in use before this call, then the
+     * maximum significant digits count will be set to
+     * <code>min</code>.
+     * @param min the fewest significant digits to be shown 
+     * @draft ICU 3.0
+     */
+    void setMinimumSignificantDigits(int32_t min);
+
+    /**
+     * Sets the maximum number of significant digits that will be
+     * displayed.  If <code>max</code> is less than one then it is set
+     * to one.  If the minimum significant digits count is greater
+     * than <code>max</code>, then it is set to <code>max</code>.  If
+     * significant digits were not in use before this call, then the
+     * minimum significant digits count will be set to one.
+     * @param min the most significant digits to be shown 
+     * @draft ICU 3.0
+     */
+    void setMaximumSignificantDigits(int32_t max);
+
+ private:
+    /**
+     * Returns true if significant digits are in use.
+     */
+    UBool useSignificantDigits() const;
+
+ public:
+    /**
      * Sets the currency used to display currency
      * amounts.  This takes effect immediately, if this format is a
      * currency format.  If this format is not a currency format, then

@@ -199,7 +199,7 @@ DecimalFormatSymbols::initialize(const UnicodeString* numberElements, int32_t nu
     fSymbols[kMinusSignSymbol].fastCopyFrom(numberElements[6]);
     fSymbols[kExponentialSymbol].fastCopyFrom(numberElements[7]);
     fSymbols[kPerMillSymbol].fastCopyFrom(numberElements[8]);
-    fSymbols[kPadEscapeSymbol] = (UChar)0x002a; // '*' Hard coded for now; get from resource later
+    fSymbols[kPadEscapeSymbol] = (UChar)0x002a; // TODO: '*' Hard coded for now; get from resource later
     fSymbols[kInfinitySymbol].fastCopyFrom(numberElements[9]);
     fSymbols[kNaNSymbol].fastCopyFrom(numberElements[10]);
 
@@ -216,6 +216,8 @@ DecimalFormatSymbols::initialize(const UnicodeString* numberElements, int32_t nu
     // Default values until it's set later on.
     fSymbols[kCurrencySymbol] = (UChar)0xa4;            // 'OX' currency symbol
     fSymbols[kIntlCurrencySymbol] = INTL_CURRENCY_SYMBOL_STR;
+    // TODO: read from locale data, if this makes it into CLDR
+    fSymbols[kSignificantDigitSymbol] = (UChar)0x0040;  // '@' significant digit
 }
 
 // initialize with default values
@@ -242,6 +244,7 @@ DecimalFormatSymbols::initialize() {
     fSymbols[kPadEscapeSymbol] = (UChar)0x2a;           // '*' pad escape symbol
     fSymbols[kInfinitySymbol] = (UChar)0x221e;          // 'oo' infinite
     fSymbols[kNaNSymbol] = (UChar)0xfffd;               // SUB NaN
+    fSymbols[kSignificantDigitSymbol] = (UChar)0x0040;  // '@' significant digit
 }
 
 Locale 
