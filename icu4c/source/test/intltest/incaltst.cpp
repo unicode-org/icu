@@ -51,6 +51,10 @@ static UnicodeString escape( const UnicodeString&src)
 // *****************************************************************************
 // class IntlCalendarTest
 // *****************************************************************************
+//--- move to CalendarTest?
+
+static const double JULIAN_EPOCH = -210866760000000.;
+
 
 // Turn this on to dump the calendar fields 
 #define U_DEBUG_DUMPCALS  
@@ -69,6 +73,7 @@ void IntlCalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &n
     CASE(3,TestJapanese);
     CASE(4,TestBuddhistFormat);
     CASE(5,TestJapaneseFormat);
+    CASE(6,TestIslamicCivilCases);
     default: name = ""; break;
     }
 }
@@ -558,6 +563,63 @@ void IntlCalendarTest::simpleTest(const Locale& loc, const UnicodeString& expect
     }
     delete fmt0;
 }
+
+void IntlCalendarTest::TestIslamicCivilCases()
+{
+#if 0
+  static const CalendarTest::TestCase tests[] = {
+    //
+    // Most of these test cases were taken from the back of
+    // "Calendrical Calculations", with some extras added to help
+    // debug a few of the problems that cropped up in development.
+    //
+    // The months in this table are 1-based rather than 0-based,
+    // because it's easier to edit that way.
+    //                       Islamic
+    //          Julian Day  Era  Year  Month Day  WkDay Hour Min Sec
+      {1507231.5,  0, -1245,   12,   9,  SUN,   0,  0,  0},
+      { 1660037.5,  0,  -813,    2,  23,  WED,   0,  0,  0},
+      { 1746893.5,  0,  -568,    4,   1,  WED,   0,  0,  0},
+      { 1770641.5,  0,  -501,    4,   6,  SUN,   0,  0,  0},
+      { 1892731.5,  0,  -157,   10,  17,  WED,   0,  0,  0},
+      { 1931579.5,  0,   -47,    6,   3,  MON,   0,  0,  0},
+      { 1974851.5,  0,    75,    7,  13,  SAT,   0,  0,  0},
+      { 2091164.5,  0,   403,   10,   5,  SUN,   0,  0,  0},
+      { 2121509.5,  0,   489,    5,  22,  SUN,   0,  0,  0},
+      { 2155779.5,  0,   586,    2,   7,  FRI,   0,  0,  0},
+      { 2174029.5,  0,   637,    8,   7,  SAT,   0,  0,  0},
+      { 2191584.5,  0,   687,    2,  20,  FRI,   0,  0,  0},
+      { 2195261.5,  0,   697,    7,   7,  SUN,   0,  0,  0},
+      { 2229274.5,  0,   793,    7,   1,  SUN,   0,  0,  0},
+      { 2245580.5,  0,   839,    7,   6,  WED,   0,  0,  0},
+      { 2266100.5,  0,   897,    6,   1,  SAT,   0,  0,  0},
+      { 2288542.5,  0,   960,    9,  30,  SAT,   0,  0,  0},
+      { 2290901.5,  0,   967,    5,  27,  SAT,   0,  0,  0},
+      { 2323140.5,  0,  1058,    5,  18,  WED,   0,  0,  0},
+      { 2334848.5,  0,  1091,    6,   2,  SUN,   0,  0,  0},
+      { 2348020.5,  0,  1128,    8,   4,  FRI,   0,  0,  0},
+      { 2366978.5,  0,  1182,    2,   3,  SUN,   0,  0,  0},
+      { 2385648.5,  0,  1234,   10,  10,  MON,   0,  0,  0},
+      { 2392825.5,  0,  1255,    1,  11,  WED,   0,  0,  0},
+      { 2416223.5,  0,  1321,    1,  21,  SUN,   0,  0,  0},
+      { 2425848.5,  0,  1348,    3,  19,  SUN,   0,  0,  0},
+      { 2430266.5,  0,  1360,    9,   8,  MON,   0,  0,  0},
+      { 2430833.5,  0,  1362,    4,  13,  MON,   0,  0,  0},
+      { 2431004.5,  0,  1362,   10,   7,  THU,   0,  0,  0},
+      { 2448698.5,  0,  1412,    9,  13,  TUE,   0,  0,  0},
+      { 2450138.5,  0,  1416,   10,   5,  SUN,   0,  0,  0},
+      { 2465737.5,  0,  1460,   10,  12,  WED,   0,  0,  0},
+      { 2486076.5,  0,  1518,    3,   5,  SUN,   0,  0,  0},
+      { -1,-1,-1,-1,-1,-1,-1,-1,-1 }
+  };
+
+  UErrorCode status = U_ZERO_ERROR;
+  Calendar *c = Calendar::createInstance("@calendar=islamic-civil", status);
+  c->setLenient(TRUE);
+  doTestCases(tests, c);
+#endif
+}
+
 
 #undef CHECK
 

@@ -39,6 +39,7 @@
 #include "pptest.h"         // ParsePositionTest
 #include "calregts.h"       // CalendarRegressionTest
 #include "tzregts.h"        // TimeZoneRegressionTest
+#include "astrotst.h"       // AstroTest
 #include "incaltst.h"       // IntlCalendarTest
 
 #define TESTCLASS(id, TestClass)          \
@@ -96,7 +97,8 @@ void IntlTestFormat::runIndexedTest( int32_t index, UBool exec, const char* &nam
         TESTCLASS(23,ParsePositionTest);
         TESTCLASS(24,CalendarRegressionTest);
         TESTCLASS(25,TimeZoneRegressionTest);
-        TESTCLASS(26,IntlCalendarTest);
+        TESTCLASS(26,AstroTest);
+        TESTCLASS(27,IntlCalendarTest);
 
         //TESTCLASS(0,IntlTestDateFormatSymbolsC);
         //TESTCLASS(0,IntlTestDecimalFormatSymbolsC);
