@@ -1,0 +1,305 @@
+#--------------------------------------------------------------------
+# Copyright (c) 1999-2001, International Business Machines
+# Corporation and others.  All Rights Reserved.
+#--------------------------------------------------------------------
+# Date: Tue Jan 23 12:42:05 2001
+#--------------------------------------------------------------------
+
+# Latin-Cyrillic
+
+
+# These rules provide general Latin-Cyrillic
+# transliteration. The standard Russian transliterations
+# are generally used for the letters from Russian,
+# with additional Cyrillic characters given consistent
+# mappings.
+
+### $S_hacek=Š;
+### $s_hacek=š;
+
+### $YO=Ё;
+### $J=Ј;
+### $A=А;
+### $B=Б;
+### $V=В;
+### $G=Г;
+### $D=Д;
+### $YE=Е;
+### $ZH=Ж;
+### $Z=З;
+### $YI=И;
+### $Y=Й;
+### $K=К;
+### $L=Л;
+### $M=М;
+### $N=Н;
+### $O=О;
+### $P=П;
+### $R=Р;
+### $S=С;
+### $T=Т;
+### $U=У;
+### $F=Ф;
+### $KH=Х;
+### $TS=Ц;
+### $CH=Ч;
+### $SH=Ш;
+### $SHCH=Щ;
+### $HARD=Ъ;
+### $I=Ы;
+### $SOFT=Ь;
+### $E=Э;
+### $YU=Ю;
+### $YA=Я;
+
+# Lowercase
+
+### $a=а;
+### $b=б;
+### $v=в;
+### $g=г;
+### $d=д;
+### $ye=е;
+### $zh=ж;
+### $z=з;
+### $yi=и;
+### $y=й;
+### $k=к;
+### $l=л;
+### $m=м;
+### $n=н;
+### $o=о;
+### $p=п;
+### $r=р;
+### $s=с;
+### $t=т;
+### $u=у;
+### $f=ф;
+### $kh=х;
+### $ts=ц;
+### $ch=ч;
+### $sh=ш;
+### $shch=щ;
+### $hard=ъ;
+### $i=ы;
+### $soft=ь;
+### $e=э;
+### $yu=ю;
+### $ya=я;
+
+### $yo=ё;
+### $j=ј;
+
+# variables
+# some are duplicated so lowercasing works
+
+$csoft=[eiyEIY];
+$CSOFT=[eiyEIY];
+
+$BECOMES_H=[Ъъ];
+$becomes_h=[Ъъ];
+
+$BECOMES_S=[Сс];
+$becomes_s=[Сс];
+
+$BECOMES_C=[Чч];
+$becomes_c=[Чч];
+
+$BECOMES_VOWEL=[АЭЫОУаэыоу];
+$becomes_vowel=[АЭЫОУаэыоу];
+
+$letter=[[:Lu:][:Ll:]];
+$lower=[[:Ll:]];
+
+# Modified to combine display transliterator and typing transliterator.
+# The display mapping uses accents for the "soft" vowels.
+# It does not, although it could, use characters like š instead of digraphs
+# like sh.
+
+# #############################################
+# Special titlecase forms, not duplicated
+# #############################################
+
+Sh''ch<>Шч; # LIU Distinguish Шч from Щ
+
+Ch   <> {Ч}  $lower;
+Kh   <> {Х}  $lower;
+Shch <> {Щ}$lower;
+Sh   <> {Ш}  $lower;
+Ts   <> {Ц}  $lower;
+Zh   <> {Ж}  $lower;
+Yi>И;
+Ye>Е;
+Yo>Ё;
+Yu>Ю;
+Ya>Я;
+
+# #############################################
+# Rules to Duplicate
+# To get the lowercase versions, copy these and lowercase
+# #############################################
+
+# variant spellings in English
+
+SHTCH>Щ;
+TCH>Ч;
+TH>З;
+Q>К;
+WH>В;
+W>В;
+X>КС; #+ "X<КС;"
+
+# Separate letters that would otherwise join
+
+SH''<Ш}$BECOMES_C;
+T''<Т}$BECOMES_S;
+T''<Т}[ЧЩщ]; # LIU add special cases
+
+K''<К}$BECOMES_H;
+S''<С}$BECOMES_H;
+T''<Т}$BECOMES_H;
+Z''<З}$BECOMES_H;
+
+Y''<Й}$BECOMES_VOWEL;
+
+# Main letters
+
+A<>А;
+B<>Б;
+CH<>Ч;
+D<>Д;
+E<>Э;
+F<>Ф;
+G<>Г;
+Ì<>И;
+I<>Ы;
+KH<>Х;
+K<>К;
+L<>Л;
+M<>М;
+N<>Н;
+O<>О;
+P<>П;
+R<>Р;
+SHCH<>Щ;
+SH>Ш; #+ "SH<Ш;"
+Š<>Ш;
+S<>С;
+TS<>Ц;
+T<>Т;
+U<>У;
+V<>В;
+#ÌÀÈÒÙ
+YE>Е; #+ "YE<Е;"
+È<>Е;
+YO>Ё; #+ "YO<Ё;"
+Ò<>Ё;
+YU>Ю; #+ "YU<Ю;"
+Ù<>Ю;
+YA>Я; #+ "YA<Я;"
+À<>Я;
+Y<>Й;
+ZH<>Ж;
+Z<>З;
+
+H<>Ъ;
+Ÿ<>Ь;
+
+# Non-russian
+
+J<>Ј;
+
+# variant spellings in English
+
+C}$csoft>С;
+C>К;
+
+# #############################################
+# Duplicated Rules
+# Copy and lowercase the above rules
+# #############################################
+
+# variant spellings in english
+
+shtch>щ;
+tch>ч;
+th>з;
+q>к;
+wh>в;
+w>в;
+x>кс; #+ "x<кс;"
+
+# separate letters that would otherwise join
+
+sh''<ш}$becomes_c;
+t''<т}$becomes_s;
+t''<т}[чщ]; # LIU add special cases
+
+k''<к}$becomes_h;
+s''<с}$becomes_h;
+t''<т}$becomes_h;
+z''<з}$becomes_h;
+
+y''<й}$becomes_vowel;
+
+# main letters
+
+a<>а;
+b<>б;
+ch<>ч;
+d<>д;
+e<>э;
+f<>ф;
+g<>г;
+ì<>и;
+i<>ы;
+kh<>х;
+k<>к;
+l<>л;
+m<>м;
+n<>н;
+o<>о;
+p<>п;
+r<>р;
+shch<>щ;
+sh>ш; #+ "sh<ш;"
+š<>ш;
+s<>с;
+ts<>ц;
+t<>т;
+u<>у;
+v<>в;
+#ìàèòù
+ye>е; #+ "ye<е;"
+è<>е;
+yo>ё; #+ "yo<ё;"
+ò<>ё;
+yu>ю; #+ "yu<ю;"
+ù<>ю;
+ya>я; #+ "ya<я;"
+à<>я;
+y<>й;
+zh<>ж;
+z<>з;
+
+h<>ъ;
+ÿ<>ь;
+
+# non-russian
+
+j<>ј;
+
+# variant spellings in english
+
+c}$csoft>с;
+c>к;
+
+
+# #############################################
+# End of Duplicated Rules
+# #############################################
+
+#generally the last rule
+''>;
+
+# eof
