@@ -271,15 +271,23 @@ void DateFormatRoundTripTest::test(DateFormat *fmt, const Locale &origLocale, UB
                 else if(fmt->getTimeZone().inDaylightTime(d[0], status) && ! failure(status, "foo") &&
                          pat.indexOf(UnicodeString("yyyy")) == -1)
                     maxSmatch = 2;
-                // Two digit year with zone and year change and zone in pattern
-                else if (hasZone &&
-                         fmt->getTimeZone().inDaylightTime(d[0], status) !=
-                         fmt->getTimeZone().inDaylightTime(d[dmatch], status) && ! failure(status, "foo") &&
-                         getField(d[0], Calendar::YEAR) !=
-                         getField(d[dmatch], Calendar::YEAR) &&
-                         pat.indexOf(UnicodeString("y")) != -1 &&
-                         pat.indexOf(UnicodeString("yyyy")) == -1)
+                // Two digit year with no time zone change,
+                // unless timezone isn't used or we aren't close to the DST changover
+                else if (pat.indexOf(UnicodeString("y")) != -1
+                        && pat.indexOf(UnicodeString("yyyy")) == -1
+                        && getField(d[0], Calendar::YEAR)
+                            != getField(d[dmatch], Calendar::YEAR)
+                        && !failure(status, "foo")
+                        && ((hasZone
+                         && (fmt->getTimeZone().inDaylightTime(d[0], status)
+                                == fmt->getTimeZone().inDaylightTime(d[dmatch], status)
+                            || getField(d[0], Calendar::MONTH) == Calendar::APRIL
+                            || getField(d[0], Calendar::MONTH) == Calendar::OCTOBER))
+                         || !hasZone)
+                         )
+                {
                     maxSmatch = 2;
+                }
             }
             
             if(dmatch > maxDmatch || smatch > maxSmatch) {
@@ -352,7 +360,7 @@ UDate DateFormatRoundTripTest::generateDate()
     
     // Now scale up to ms
     a *= 365.25 * 24 * 60 * 60 * 1000;
-    
+
     //return new Date((long)a);
     return a;
 }
