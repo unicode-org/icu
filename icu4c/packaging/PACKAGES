@@ -69,7 +69,7 @@ effort.
 + The ICU libraries package
 
 The ICU libraries package is typically named `libicuXX' where XX is
-the major number of ICU's libraries. This numer is ICU's version
+the major number of ICU's libraries. This number is ICU's version
 number multiplied by 10 and rounded down to the nearest integer (it is
 also the value of the LIB_VERSION_MAJOR configure substitution
 variable). For example, for ICU 1.6.0.1, it is 16, so the package name
