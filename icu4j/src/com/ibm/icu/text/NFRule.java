@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NFRule.java,v $ 
- * $Date: 2003/06/11 16:31:31 $ 
- * $Revision: 1.8 $
+ * $Date: 2004/03/16 15:44:58 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -20,7 +20,7 @@ import java.text.*;
  * A class represnting a single rule in a RuleBasedNumberFormat.  A rule
  * inserts its text into the result string and then passes control to its
  * substitutions, which do the same thing.
- * $RCSfile: NFRule.java,v $ $Revision: 1.8 $ $Date: 2003/06/11 16:31:31 $
+ * $RCSfile: NFRule.java,v $ $Revision: 1.9 $ $Date: 2004/03/16 15:44:58 $
  */
 final class NFRule {
     //-----------------------------------------------------------------------
@@ -66,7 +66,7 @@ final class NFRule {
      * The rule's radix (the radix to the power of the exponent equals
      * the rule's divisor)
      */
-    private short radix = 10;
+    private int radix = 10;
 
     /**
      * The rule's exponent (the radx rased to the power of the exponsnt
@@ -332,10 +332,10 @@ final class NFRule {
 
                     // tempValue now contain's the rule's radix.  Set it
                     // accordingly, and recalculate the rule's exponent
-                    radix = Short.parseShort(tempValue.toString());
+                    radix = Integer.parseInt(tempValue.toString());
                     if (radix == 0) {
                         throw new IllegalArgumentException("Rule can't have radix of 0");
-                    }
+		    }
                     exponent = expectedExponent();
                 }
 
