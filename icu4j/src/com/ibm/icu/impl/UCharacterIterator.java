@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Attic/UCharacterIterator.java,v $ 
- * $Date: 2002/06/20 01:18:09 $ 
- * $Revision: 1.6 $
+ * $Date: 2002/06/21 01:16:06 $ 
+ * $Revision: 1.7 $
  *
  *******************************************************************************
  */
@@ -204,7 +204,7 @@ public abstract class UCharacterIterator
             if(UTF16.isTrailSurrogate((char)ch2)){
                 return UCharacterProperty.getRawSupplementary((char)ch1,
                                                               (char)ch2);
-            }else{
+            }else if (ch2 != DONE) {
                 // unmatched surrogate so back out
                 previous();
             }
@@ -240,7 +240,7 @@ public abstract class UCharacterIterator
             if(UTF16.isLeadSurrogate((char)ch2)){
                 return UCharacterProperty.getRawSupplementary((char)ch2,
                                                               (char)ch1);
-            }else{
+            }else if (ch2 != DONE) {
                 //unmatched trail surrogate so back out
                 next();
             }   
