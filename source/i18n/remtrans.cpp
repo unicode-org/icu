@@ -7,7 +7,7 @@
 *   04/02/2001  aliu        Creation.
 **********************************************************************
 */
-#include "unicode/remtrans.h"
+#include "remtrans.h"
 
 U_NAMESPACE_BEGIN
 

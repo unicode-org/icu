@@ -8,7 +8,7 @@
 **********************************************************************
 */
 
-#include "unicode/name2uni.h"
+#include "name2uni.h"
 #include "unicode/unifilt.h"
 #include "unicode/uchar.h"
 

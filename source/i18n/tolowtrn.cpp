@@ -8,7 +8,7 @@
 **********************************************************************
 */
 
-#include "unicode/tolowtrn.h"
+#include "tolowtrn.h"
 
 U_NAMESPACE_BEGIN
 

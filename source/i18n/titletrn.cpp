@@ -9,7 +9,7 @@
 */
 
 #include "unicode/uchar.h"
-#include "unicode/titletrn.h"
+#include "titletrn.h"
 #include "unicode/uniset.h"
 #include "mutex.h"
 #include "ucln_in.h"
