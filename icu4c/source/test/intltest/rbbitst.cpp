@@ -587,9 +587,9 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
              if(exec) TestWordBreaks();                   break;
         case 13: name = "TestWordBoundary";
              if(exec) TestWordBoundary();                 break;
-/***
         case 14: name = "TestLineBreaks";
              if(exec) TestLineBreaks();                   break;
+        /***
         case 15: name = "TestSentBreaks";
              if(exec) TestSentBreaks();                 break;
         case 16: name = "TestExtended";
@@ -602,8 +602,8 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
                logln("skipping TestMonkey (UCONFIG_NO_REGULAR_EXPRESSIONS)");
 #endif
              }
-***/
              break;
+        ***/
         default: name = ""; break; //needed to end loop
     }
 }
@@ -2735,6 +2735,7 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
         if (fSP->contains(thisChar)) {
             continue;
         }
+
         if (fZW->contains(thisChar)) {
             continue;
         }
@@ -2745,11 +2746,16 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
         }
 
         // LB 6, LB 7
+        int32_t oldpos = pos;
         rule67Adjust(prevPos, &prevChar, &pos,     &thisChar);
-
+        
         nextCPPos = fText->moveIndex32(pos, 1);
         nextPos   = nextCPPos;
         c = fText->char32At(nextPos);
+        // another percularity of lb4
+        if (fSP->contains(thisChar)) {
+            continue;
+        }
         rule67Adjust(pos,     &thisChar, &nextPos, &c);
 
         // If the loop is still warming up - if we haven't shifted the initial
@@ -2785,11 +2791,16 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
         }
 
         // LB 9  Don't break after OP SP*
+        /// UBool cmFlag = FALSE;
         for (tPos=prevPos; ; tPos=fCharBI->preceding(tPos)) {
             if (fOP->contains(fText->char32At(tPos))) {
                 break;
             }
-            if (fSP->contains(fText->char32At(tPos)) == FALSE || tPos == 0) {
+            if (fSP->contains(prevChar) == FALSE
+                || fSP->contains(fText->char32At(tPos)) == FALSE 
+                || tPos == 0) {
+                /// || cmFlag == TRUE) {
+                // if we have $SP$CM+ which is an $ID
                 goto fall_through_9;
             }
         }
@@ -3164,7 +3175,13 @@ void RBBITest::TestLineBreaks(void)
     BreakIterator *bi = BreakIterator::createLineInstance(locale, status);
     UChar         str[20]; 
     char          *strlist[] = 
-    {"\\uffe6\\u00a0\\u200b\\u0085\\u2116\\u255b\\U0001d7f7\\u178c\\ufffc",
+    {
+     "\\u99ab\\u0027\\u003b\\u2026\\ueaf0\\u0020\\u0020\\u0313\\u0020\\u3099\\uff09\\u208e\\u2011\\u2007\\u2060\\u000a\\u0020\\u0020\\u300b\\u0bf9",
+     "\\u1806\\u060d\\u30f5\\u00b4\\u17e9\\u2544\\u2028\\u2024\\u2011\\u20a3\\u002d\\u09cc\\u1782\\u000d\\uff6f\\u0025",
+     "\\u002f\\uf22e\\u1944\\ufe3d\\u0020\\u206f\\u31b3\\u2014\\u002d\\u2025\\u0f0c\\u0085\\u2763",
+     "\\u002f\\u2563\\u202f\\u0085\\u17d5\\u200b\\u0020\\U000e0043\\u2014\\u058a\\u3d0a\\ufe57\\u2035\\u2028\\u2029",
+     "\\u20ae\\U0001d169\\u9293\\uff1f\\uff1f\\u0021\\u2012\\u2039\\u0085\\u02cc\\u00a2\\u0020\\U000e01ab\\u3085\\u0f3a\\u1806\\u0f0c\\u1945\\u000a\\U0001d7e7",
+     "\\uffe6\\u00a0\\u200b\\u0085\\u2116\\u255b\\U0001d7f7\\u178c\\ufffc",
      "\\u02cc\\ufe6a\\u00a0\\u0021\\u002d\\u7490\\uec2e\\u200b\\u000a",
      "\\uec2e\\u200b\\u000a\\u0020\\u2028\\u2014\\u8945",
      "\\u7490\\uec2e\\u200b\\u000a\\u0020\\u2028\\u2014",
@@ -3184,10 +3201,9 @@ void RBBITest::TestLineBreaks(void)
     };
     int loop;
     for (loop = 0; loop < (sizeof(strlist) / sizeof(char *)); loop ++) {
-        printf("looping %d\n", loop);
+        // printf("looping %d\n", loop);
         u_unescape(strlist[loop], str, 20);
         UnicodeString ustr(str);
-        // RBBICharMonkey monkey;
         RBBILineMonkey monkey;
 
         int expected[20];
@@ -3214,8 +3230,9 @@ void RBBITest::TestLineBreaks(void)
             printStringBreaks(ustr, expected, expectedcount);
             errln("happy break test failed: missed %d match", 
                   expectedcount - count);
+            break;
         }
-        for (i = bi->last(); i != BreakIterator::DONE; i = bi->previous()) {
+         for (i = bi->last(); i != BreakIterator::DONE; i = bi->previous()) {
             count --;
             if (forward[count] != i) {
                 printStringBreaks(ustr, expected, expectedcount);
@@ -3226,6 +3243,7 @@ void RBBITest::TestLineBreaks(void)
         }
         if (count != 0) {
             errln("happy break test failed: missed a match");
+            break;
         }
     }
 }
