@@ -161,13 +161,11 @@
 /*
  * \def UCONFIG_NO_SERVICE
  * This switch turns off service registration.
- * note: NOT implemented in ICU 3.0. 
- * note: Change this back to a .doc comment when this is implemented!
  *
- * @internal ICU 3.0
+ * @draft ICU 3.2
  */
-/* #ifndef UCONFIG_NO_SERVICE */
-/* #   define UCONFIG_NO_SERVICE 0 */
-/* #endif */
+#ifndef UCONFIG_NO_SERVICE
+#   define UCONFIG_NO_SERVICE 0
+#endif
 
 #endif

@@ -319,6 +319,7 @@ BreakIterator::~BreakIterator()
 // Registration
 //
 //-------------------------------------------
+#if !UCONFIG_NO_SERVICE
 
 static ICULocaleService* gService = NULL;
 
@@ -393,39 +394,6 @@ hasService(void)
 
 // -------------------------------------
 
-BreakIterator*
-BreakIterator::createInstance(const Locale& loc, UBreakIteratorType kind, UErrorCode& status)
-{
-    if (U_FAILURE(status)) {
-        return NULL;
-    }
-    
-    u_init(&status);
-    if (hasService()) {
-        Locale actualLoc;
-        BreakIterator *result = (BreakIterator*)gService->get(loc, kind, &actualLoc, status);
-        // TODO: The way the service code works in ICU 2.8 is that if
-        // there is a real registered break iterator, the actualLoc
-        // will be populated, but if the handleDefault path is taken
-        // (because nothing is registered that can handle the
-        // requested locale) then the actualLoc comes back empty.  In
-        // that case, the returned object already has its actual/valid
-        // locale data populated (by makeInstance, which is what
-        // handleDefault calls), so we don't touch it.  YES, A COMMENT
-        // THIS LONG is a sign of bad code -- so the action item is to
-        // revisit this in ICU 3.0 and clean it up/fix it/remove it.
-        if (U_SUCCESS(status) && (result != NULL) && *actualLoc.getName() != 0) {
-            U_LOCALE_BASED(locBased, *result);
-            locBased.setLocaleIDs(actualLoc.getName(), actualLoc.getName());
-        }
-        return result;
-    } else {
-        return makeInstance(loc, kind, status);
-    }
-}
-
-// -------------------------------------
-
 URegistryKey
 BreakIterator::registerInstance(BreakIterator* toAdopt, const Locale& locale, UBreakIteratorType kind, UErrorCode& status) 
 {
@@ -452,6 +420,44 @@ StringEnumeration*
 BreakIterator::getAvailableLocales(void)
 {
   return getService()->getAvailableLocales();
+}
+#endif /* UCONFIG_NO_SERVICE */
+
+// -------------------------------------
+
+BreakIterator*
+BreakIterator::createInstance(const Locale& loc, UBreakIteratorType kind, UErrorCode& status)
+{
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
+    
+    u_init(&status);
+#if !UCONFIG_NO_SERVICE
+    if (hasService()) {
+        Locale actualLoc;
+        BreakIterator *result = (BreakIterator*)gService->get(loc, kind, &actualLoc, status);
+        // TODO: The way the service code works in ICU 2.8 is that if
+        // there is a real registered break iterator, the actualLoc
+        // will be populated, but if the handleDefault path is taken
+        // (because nothing is registered that can handle the
+        // requested locale) then the actualLoc comes back empty.  In
+        // that case, the returned object already has its actual/valid
+        // locale data populated (by makeInstance, which is what
+        // handleDefault calls), so we don't touch it.  YES, A COMMENT
+        // THIS LONG is a sign of bad code -- so the action item is to
+        // revisit this in ICU 3.0 and clean it up/fix it/remove it.
+        if (U_SUCCESS(status) && (result != NULL) && *actualLoc.getName() != 0) {
+            U_LOCALE_BASED(locBased, *result);
+            locBased.setLocaleIDs(actualLoc.getName(), actualLoc.getName());
+        }
+        return result;
+    }
+    else
+#endif
+    {
+        return makeInstance(loc, kind, status);
+    }
 }
 
 // -------------------------------------
@@ -519,10 +525,12 @@ U_NAMESPACE_END
  * Release all static memory held by breakiterator.  
  */
 U_CFUNC UBool breakiterator_cleanup(void) {
+#if !UCONFIG_NO_SERVICE
     if (gService) {
         delete gService;
         gService = NULL;
     }
+#endif
     return TRUE;
 }
 

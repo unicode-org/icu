@@ -45,11 +45,13 @@ U_NAMESPACE_END
 
 U_NAMESPACE_BEGIN
 
+#if !UCONFIG_NO_SERVICE
 /**
  * Opaque type returned by registerInstance.
  * @stable
  */
 typedef const void* URegistryKey;
+#endif
 
 /**
  * The BreakIterator class implements methods for finding the location
@@ -473,7 +475,8 @@ public:
     /**
      * Get the set of Locales for which TextBoundaries are installed.
      * <p><b>Note:</b> this will not return locales added through the register
-     * call.</p>
+     * call. To see the registered locales too, use the getAvailableLocales
+     * function that returns a StringEnumeration object </p>
      * @param count the output parameter of number of elements in the locale list
      * @return available locales
      * @stable ICU 2.0
@@ -533,6 +536,7 @@ public:
      */
     inline UBool isBufferClone(void);
 
+#if !UCONFIG_NO_SERVICE
     /**
      * Register a new break iterator of the indicated kind, to use in the given locale.
      * The break iterator will be adopted.  Clones of the iterator will be returned
@@ -565,6 +569,7 @@ public:
      * @stable ICU 2.4
      */
     static StringEnumeration* getAvailableLocales(void);
+#endif
 
     /**
      * Returns the locale for this break iterator. Two flavors are available: valid and 
