@@ -850,11 +850,10 @@ static void TestStringFunctions()
 
     }
 
-    log_verbose("Testing u_strncpy()\n");
+    log_verbose("Testing u_strncpy() and u_uastrcpy()\n");
     for(i=0,j=0;j<4; ++j)
     {
         k=u_strlen(dataTable[i][j]);
-        u_uastrcpy(temp,"");
         u_strncpy(temp,dataTable[i+2][j],k);
         temp[k] = 0xa4;
 
@@ -863,6 +862,14 @@ static void TestStringFunctions()
 
         if(temp[k] != 0xa4)
             log_err("something threw an error in u_strncpy()\n");
+
+        u_memset(temp, 0x3F, (sizeof(temp) / sizeof(UChar)) - 1);
+        u_uastrncpy(temp, raw[i+2][j], k-1);
+        if(u_strncmp(temp,dataTable[i][j],k-1)!=0)
+            log_err("something threw an error in u_uastrncpy()\n");
+
+        if(temp[k] != 0x3F)
+            log_err("something threw an error in u_uastrncpy()\n");
     }
 
     log_verbose("Testing u_strchr() and u_memchr()\n");
