@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/TrieIterator.java,v $
-* $Date: 2002/11/16 01:49:26 $
-* $Revision: 1.8 $
+* $Date: 2003/08/20 00:19:19 $
+* $Revision: 1.9 $
 *
 ******************************************************************************
 */
@@ -131,7 +131,7 @@ public class TrieIterator implements RangeValueIterator
         }
         if (m_nextCodepoint_ < UCharacter.SUPPLEMENTARY_MIN_VALUE &&
             calculateNextBMPElement(element)) {
-                return true;
+            return true;
         }    
         calculateNextSupplementaryElement(element);
         return true;
@@ -268,22 +268,26 @@ public class TrieIterator implements RangeValueIterator
         m_nextCodepoint_ ++;
         m_nextBlockIndex_ ++;
         
-        if (!checkNullNextTrailIndex() && !checkBlockDetail(currentValue)) {
-            setResult(element, m_currentCodepoint_, m_nextCodepoint_, 
-                      currentValue);
-            m_currentCodepoint_ = m_nextCodepoint_;
-            return;
+        if (UTF16.getTrailSurrogate(m_nextCodepoint_) 
+                                        != UTF16.TRAIL_SURROGATE_MIN_VALUE) { 
+            // this piece is only called when we are in the middle of a lead
+            // surrogate block
+            if (!checkNullNextTrailIndex() && !checkBlockDetail(currentValue)) {
+                setResult(element, m_currentCodepoint_, m_nextCodepoint_, 
+                          currentValue);
+                m_currentCodepoint_ = m_nextCodepoint_;
+                return;
+            }
+    		// we have cleared one block
+    		m_nextIndex_ ++;
+    		m_nextTrailIndexOffset_ ++;
+    		if (!checkTrailBlock(currentBlock, currentValue)) {
+    			setResult(element, m_currentCodepoint_, m_nextCodepoint_, 
+    			          currentValue);
+                m_currentCodepoint_ = m_nextCodepoint_;
+                return;
+    		}
         }
-		// we have cleared one block
-		m_nextIndex_ ++;
-		m_nextTrailIndexOffset_ ++;
-		if (!checkTrailBlock(currentBlock, currentValue)) {
-			setResult(element, m_currentCodepoint_, m_nextCodepoint_, 
-			          currentValue);
-            m_currentCodepoint_ = m_nextCodepoint_;
-            return;
-		}
-		
         int nextLead  = UTF16.getLeadSurrogate(m_nextCodepoint_);
 		// enumerate supplementary code points
         while (nextLead < TRAIL_SURROGATE_MIN_VALUE_) {
@@ -293,10 +297,25 @@ public class TrieIterator implements RangeValueIterator
                                                    Trie.INDEX_STAGE_2_SHIFT_;
             if (leadBlock == m_trie_.m_dataOffset_) {
                 // no entries for a whole block of lead surrogates
+                if (currentValue != m_initialValue_) {
+                    m_nextValue_      = m_initialValue_;
+                    m_nextBlock_      = 0;
+                    m_nextBlockIndex_ = 0;
+                    setResult(element, m_currentCodepoint_, m_nextCodepoint_, 
+                              currentValue);
+                    m_currentCodepoint_ = m_nextCodepoint_;
+                    return;
+                }
+
                 nextLead += DATA_BLOCK_LENGTH_;
                 // number of total affected supplementary codepoints in one
                 // block
-                m_nextCodepoint_ += DATA_BLOCK_SUPPLEMENTARY_LENGTH_;
+                // this is not a simple addition of 
+                // DATA_BLOCK_SUPPLEMENTARY_LENGTH since we need to consider
+                // that we might have moved some of the codepoints
+                m_nextCodepoint_ = UCharacterProperty.getRawSupplementary(
+                                     (char)nextLead, 
+                                     (char)UTF16.TRAIL_SURROGATE_MIN_VALUE);
                 continue;
             }
             if (m_trie_.m_dataManipulate_ == null) {
