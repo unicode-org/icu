@@ -26,7 +26,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include "unicode/utypes.h"
-#include "unicode/ucnv.h" /* ucnv_aliasNameCmp() */
+#include "unicode/ucnv.h" /* ucnv_compareNames() */
 #include "cmemory.h"
 #include "cstring.h"
 #include "filestrm.h"
@@ -488,7 +488,7 @@ allocString(StringBlock *block, uint32_t length) {
 
 static int
 compareAliases(const void *alias1, const void *alias2) {
-    return ucnv_aliasNameCmp(((Alias*)alias1)->alias, ((Alias*)alias2)->alias);
+    return ucnv_compareNames(((Alias*)alias1)->alias, ((Alias*)alias2)->alias);
 }
 
 /*
