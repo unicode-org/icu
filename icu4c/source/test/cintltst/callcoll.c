@@ -454,8 +454,11 @@ static void TestTertiary()
     u_uastrcpy(newRules, str);
     len=u_strlen(DEFAULTRULEARRAY) + u_strlen(newRules);
     rules=(UChar*)malloc(sizeof(UChar) * (len+1));
+/*
     u_strcpy(rules, DEFAULTRULEARRAY);
     u_strcat(rules, newRules);
+*/
+    u_strcpy(rules, newRules);
     myCollation=ucol_openRules(rules, u_strlen(rules), UCOL_NO_NORMALIZATION, UCOL_DEFAULT_STRENGTH, &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator :%s\n", myErrorName(status));
@@ -485,8 +488,11 @@ static void TestPrimary( )
     
     len=u_strlen(DEFAULTRULEARRAY) + u_strlen(newRules);
     rules=(UChar*)malloc(sizeof(UChar) * (len+1));
+/*
     u_strcpy(rules, DEFAULTRULEARRAY);
     u_strcat(rules, newRules);
+*/
+    u_strcpy(rules, newRules);
     myCollation=ucol_openRules(rules, u_strlen(rules), UCOL_NO_NORMALIZATION, UCOL_DEFAULT_STRENGTH, &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator :%s\n", myErrorName(status));
@@ -518,9 +524,11 @@ static void TestSecondary()
     
     len=u_strlen(DEFAULTRULEARRAY) + u_strlen(newRules);
     rules=(UChar*)malloc(sizeof(UChar) * (len+1));
+/*
     u_strcpy(rules, DEFAULTRULEARRAY);
     u_strcat(rules, newRules);
-    
+*/
+    u_strcpy(rules, newRules);
     myCollation=ucol_openRules(rules, u_strlen(rules), UCOL_NO_NORMALIZATION, UCOL_DEFAULT_STRENGTH, &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator :%s\n", myErrorName(status));
@@ -549,9 +557,11 @@ static void TestIdentical()
    
     len=u_strlen(DEFAULTRULEARRAY) + u_strlen(newRules);
     rules=(UChar*)malloc(sizeof(UChar) * (len+1));
+/*
     u_strcpy(rules, DEFAULTRULEARRAY);
     u_strcat(rules, newRules);
-    
+*/
+    u_strcpy(rules, newRules);
     myCollation=ucol_openRules(rules, u_strlen(rules), UCOL_NO_NORMALIZATION, UCOL_IDENTICAL, &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator :%s\n", myErrorName(status));
@@ -578,10 +588,11 @@ static void TestExtra()
     log_verbose("Testing extra\n");
     len=u_strlen(DEFAULTRULEARRAY) + u_strlen(newRules);
     rules=(UChar*)malloc(sizeof(UChar) * (len+1));
+/*
     u_strcpy(rules, DEFAULTRULEARRAY);
     u_strcat(rules, newRules);
-    
-
+*/
+    u_strcpy(rules, newRules);
     myCollation=ucol_openRules(rules, u_strlen(rules), UCOL_NO_NORMALIZATION, UCOL_DEFAULT_STRENGTH, &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator :%s\n", myErrorName(status));
