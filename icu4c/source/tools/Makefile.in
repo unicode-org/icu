@@ -66,7 +66,7 @@ genccode gennames gencmn gencnval gentz gentest
 .PHONY : all all-local all-recursive install install-local install-everything install-files install-dlls build-data build-cmnfile build-dll		\
 install-recursive clean clean-local clean-recursive distclean		\
 distclean-local distclean-recursive dist dist-local dist-recursive	\
-check check-local check-recursive build-testdll
+check check-local check-recursive build-testdlls build-basetestdata
 
 ## Clear suffix list
 .SUFFIXES :
@@ -144,24 +144,31 @@ TESTDATAD=$(TESTDATAFILE:%=$(SRCDATADIR)/%)
 TESTDATAFILEC=$(TESTDATAD:.dat=_dat.c)
 OBJTESTFILE=$(TESTDATAFILEC:%.c=%.o)
 TESTDATADLL=$(SRCDATADIR)/libtest_dat.$(SO)
+BASEDATADLL=$(SRCDATADIR)/libbase_dat.$(SO)
+BASETESTDATADLL=$(SRCDATADIR)/libbase_test_dat.$(SO)
 
-
+BASETESTDATA=base_test.dat
+build-basetestdata: 
+	@echo Generating the base test data file (base_test.dat) from (test.dat)
+	@cp $(TESTDATAD) $(SRCDATADIR)/$(BASETESTDATA)
+	@ls -l $(SRCDATADIR)/$(BASETESTDATA)
+	
 # the files to be installed -- the COMMON ones + any stragglers
 UDATA_FILES=icudata.dat
 UDATA_DLLS=libicudata.$(SO)
 
 ### use the "--enable-mapped=" option to configure, to get mapped file behavior.
 # the case where '--enable-mapped=yes'
-@USE_MAPPED_TRUE@build-local: build-data build-cmnfile
+@USE_MAPPED_TRUE@build-local: build-data build-cmnfile build-basetestdata
 
 # the case where '--enable-mapped=no'  (DEFAULT)
-@USE_MAPPED_FALSE@build-local: build-data build-dll build-testdll
+@USE_MAPPED_FALSE@build-local: build-data build-dll build-testdlls 
 ###
 
 # check for any other generated data here
 install-data: $(DATAFILES)
 
-build-cmnfile:  $(COMMONFILE)
+build-cmnfile:  $(COMMONFILE) 
 
 # the -Wpath [etc] has relative DLL paths in it
 # so we have to cd into the other dir..
@@ -182,7 +189,7 @@ $(COMMONFILE):	$(DATAFILES)
 
 build-dll: $(COMMONDLL)
 
-build-testdll: $(TESTDATADLL)
+build-testdlls: $(TESTDATADLL) $(BASEDATADLL) $(BASETESTDATADLL)
 
 %_dat.c: %.dat
 	(cd genccode ; ./genccode ../$< )
@@ -201,7 +208,7 @@ $(COMMONDLL): $(OBJDATAFILES)
 	$(SHLIB.c) -o $@ $^
 	-ls -l $@
 
-$(TESTDATADLL) : $(OBJTESTFILE) $(HPUX_JUNK_OBJ)
+$(TESTDATADLL) $(BASEDATADLL) $(BASETESTDATADLL): $(OBJTESTFILE) $(HPUX_JUNK_OBJ)
 	$(SHLIB.c) -o $@ $^
 	-ls -l $@
 
