@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/SymbolTable.java,v $ 
- * $Date: 2000/04/25 01:42:58 $ 
- * $Revision: 1.4 $
+ * $Date: 2000/05/18 22:49:20 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -29,7 +29,7 @@ public interface SymbolTable {
     /**
      * The character preceding a symbol reference name.
      */
-    final char SYMBOL_REF = '$';
+    static final char SYMBOL_REF = '$';
 
     /**
      * Lookup the characters associated with this string and return it.
