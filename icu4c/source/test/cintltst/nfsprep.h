@@ -20,8 +20,6 @@
 
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
-#include "ustr_imp.h"
-#include "cintltst.h"
 #include "unicode/usprep.h"
 #include <stdlib.h>
 #include <string.h>
