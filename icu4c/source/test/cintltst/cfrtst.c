@@ -66,13 +66,13 @@ const static UCollationResult results[] =
 {
     UCOL_LESS,
     UCOL_LESS,
-    UCOL_GREATER,
+    UCOL_LESS, /*UCOL_GREATER,*/
     UCOL_LESS,
     UCOL_GREATER,
     UCOL_GREATER,
     UCOL_LESS,
     UCOL_GREATER,
-    UCOL_GREATER,
+    UCOL_LESS, /*UCOL_GREATER,*/
     UCOL_GREATER,
     UCOL_LESS,
     UCOL_LESS
