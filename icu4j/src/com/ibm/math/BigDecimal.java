@@ -2,6 +2,7 @@
 /* Options: Binary Comments Crossref Format Java Logo Strictargs Strictcase Trace2 Verbose3 */
 package com.ibm.math;
 import java.math.BigInteger;
+import com.ibm.util.Utility;
 
 /* ------------------------------------------------------------------ */
 /* BigDecimal -- Decimal arithmetic for Java                          */
@@ -3424,7 +3425,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
       sb.append('E').append(csign).append(euse);
      }
     rec=new char[sb.length()];
-    sb.getChars(0,sb.length(),rec,0);
+    Utility.getChars(sb, 0,sb.length(),rec,0);
     return rec;
    }
   

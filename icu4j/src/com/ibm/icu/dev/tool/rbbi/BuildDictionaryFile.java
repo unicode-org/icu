@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/rbbi/BuildDictionaryFile.java,v $ 
- * $Date: 2000/09/22 18:58:26 $ 
- * $Revision: 1.1 $
+ * $Date: 2001/12/04 20:09:08 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -14,6 +14,7 @@ package com.ibm.tools.rbbi;
 
 import com.ibm.util.CompactByteArray;
 import com.ibm.text.UnicodeSet;
+import com.ibm.util.Utility;
 import java.io.*;
 import java.util.Enumeration;
 import java.util.Vector;
@@ -114,7 +115,7 @@ int totalChars = 0;
 
 //System.out.println(tempReverseMap.toString());
         reverseColumnMap = new char[p];
-        tempReverseMap.getChars(0, p, reverseColumnMap, 0);
+        Utility.getChars(tempReverseMap, 0, p, reverseColumnMap, 0);
 
         System.out.println("total columns = " + p);
         numCols = p;

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2001/12/03 20:59:00 $ 
-* $Revision: 1.19 $
+* $Date: 2001/12/04 20:09:07 $ 
+* $Revision: 1.20 $
 *
 *******************************************************************************
 */
@@ -15,6 +15,7 @@
 package com.ibm.text;
 
 import java.util.Locale;
+import com.ibm.util.Utility;
 
 /**
 * <p>
@@ -1222,7 +1223,7 @@ public final class UCharacter
                 StringBuffer buf = new StringBuffer();
                 getSpecialLowerCase(ch, index, buf, str, offset, 
                                     locale);
-                buf.getChars(0, buf.length(), result, 0);
+                Utility.getChars(buf, 0, buf.length(), result, 0);
                 return buf.length();
             } else if (PROPERTY_DB_.hasExceptionValue(index, 
                                     UCharacterPropertyDB.EXC_LOWERCASE_)) {
@@ -1264,7 +1265,7 @@ public final class UCharacter
                 StringBuffer buf = new StringBuffer();
                 getSpecialUpperCase(ch, index, buf, str, offset, 
                                     locale);
-                buf.getChars(0, buf.length(), result, 0);
+                Utility.getChars(buf, 0, buf.length(), result, 0);
                 return buf.length();
             } else if (PROPERTY_DB_.hasExceptionValue(index, 
                                     UCharacterPropertyDB.EXC_UPPERCASE_)) {
@@ -1313,7 +1314,7 @@ public final class UCharacter
                 StringBuffer buf = new StringBuffer();
                 getSpecialUpperCase(ch, index, buf, str, offset, 
                                     locale);
-                buf.getChars(0, buf.length(), result, 0);
+                Utility.getChars(buf, 0, buf.length(), result, 0);
                 return buf.length();
             } else if (PROPERTY_DB_.hasExceptionValue(index, 
                                     UCharacterPropertyDB.EXC_UPPERCASE_)) {
