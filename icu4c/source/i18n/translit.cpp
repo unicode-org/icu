@@ -106,6 +106,12 @@ const char* Transliterator::RB_RULE_BASED_IDS =
 const char* Transliterator::RB_RULE = "Rule";
 
 /**
+ * Class identifier for subclasses of Transliterator that do not
+ * define their class (anonymous subclasses).
+ */
+char Transliterator::fgClassID = 0; // Value is irrelevant
+
+/**
  * Default constructor.
  * @param theID the string identifier for this transliterator
  * @param theFilter the filter.  Any character for which
