@@ -49,12 +49,6 @@ case "$1" in
 	    ICU_DATA=@libdir@/@PACKAGE@/@VERSION@
 	    export ICU_DATA
 
-	    if test ! -f $ICU_DATA/cnvalias.dat -o @sysconfdir@/icu/convrtrs.txt -nt $ICU_DATA/cnvalias.dat
-	    then
-	        echo Compiling converters and aliases list from @sysconfdir@/@PACKAGE@/convrtrs.txt
-	        @sbindir@/gencnval @sysconfdir@/@PACKAGE@/convrtrs.txt
-	    fi
-
 	fi
     ;;
 
