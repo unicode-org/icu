@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/TestBagFormatter.java,v $
- * $Date: 2004/02/18 03:08:57 $
- * $Revision: 1.9 $
+ * $Date: 2004/02/25 01:44:45 $
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -14,19 +14,17 @@ package com.ibm.icu.dev.test.util;
 
 // TODO integrate this into the test framework
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.TreeSet;
-import java.util.Iterator;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.Collator;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.Set;
+import java.util.TreeSet;
 
-import com.ibm.icu.lang.UScript;
 import com.ibm.icu.lang.UProperty;
+import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.Transliterator;
 import com.ibm.icu.text.UnicodeSet;
 
@@ -109,7 +107,7 @@ public class TestBagFormatter {
             UnicodeProperty.Factory ups = ICUPropertyFactory.make();
             us = ups.getSet("gc=mn", null, null); 
             BagFormatter.CONSOLE.println("gc=mn");
-            bf.showSetNames(bf.CONSOLE, us);
+            bf.showSetNames(BagFormatter.CONSOLE, us);
             
             if (true) return;
             //showNames("Name", ".*MARK.*");
