@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollatorReader.java,v $ 
-* $Date: 2002/11/14 20:53:06 $ 
-* $Revision: 1.9 $
+* $Date: 2002/11/20 19:14:09 $ 
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
@@ -44,7 +44,7 @@ final class CollatorReader
     */
     protected CollatorReader(InputStream inputStream) throws IOException
     {
-        ICUBinary.readHeader(inputStream, DATA_FORMAT_ID_, AUTHENTICATE_);
+        ICUBinary.readHeader(inputStream, DATA_FORMAT_ID_, UCA_AUTHENTICATE_);
         m_dataInputStream_ = new DataInputStream(inputStream);
     }
     
@@ -59,7 +59,8 @@ final class CollatorReader
     														throws IOException
     {
     	if (readICUHeader) {
-        	ICUBinary.readHeader(inputStream, DATA_FORMAT_ID_, AUTHENTICATE_);
+        	ICUBinary.readHeader(inputStream, DATA_FORMAT_ID_, 
+                                 UCA_AUTHENTICATE_);
     	}
         m_dataInputStream_ = new DataInputStream(inputStream);
     }
@@ -168,6 +169,7 @@ final class CollatorReader
     	rbc.m_defaultStrength_ = m_dataInputStream_.readInt();
     	rbc.m_defaultIsHiragana4_ = (m_dataInputStream_.readInt() 
     	                             == RuleBasedCollator.AttributeValue.ON_);
+        m_dataInputStream_.skip(64); // reserved for future use
     }
     
     /**
@@ -342,8 +344,8 @@ final class CollatorReader
                                                       InputStream inputStream)
                                                       throws IOException
     {
-        ICUBinary.readHeader(inputStream, INVERSE_UCA_DATA_FORMAT_ID_, 
-                             AUTHENTICATE_);
+         ICUBinary.readHeader(inputStream, INVERSE_UCA_DATA_FORMAT_ID_, 
+                              INVERSE_UCA_AUTHENTICATE_);
         CollationParsedRuleBuilder.InverseUCA result = 
                                   new CollationParsedRuleBuilder.InverseUCA();
         DataInputStream input = new DataInputStream(inputStream);        
@@ -371,9 +373,9 @@ final class CollatorReader
     // private variables -------------------------------------------------
     
     /**
-     * Authenticate data format version
+     * Authenticate uca data format version
      */
-    private static final ICUBinary.Authenticate AUTHENTICATE_ 
+    private static final ICUBinary.Authenticate UCA_AUTHENTICATE_ 
                 = new ICUBinary.Authenticate() {
                         public boolean isDataVersionAcceptable(byte version[])
                         {
@@ -383,6 +385,20 @@ final class CollatorReader
                                    //&& version[1] == DATA_FORMAT_VERSION_[1]
                                    //&& version[2] == DATA_FORMAT_VERSION_[2] 
                                    //&& version[3] == DATA_FORMAT_VERSION_[3];
+                        }
+                };
+                
+    /**
+     * Authenticate uca data format version
+     */
+    private static final ICUBinary.Authenticate INVERSE_UCA_AUTHENTICATE_ 
+                = new ICUBinary.Authenticate() {
+                        public boolean isDataVersionAcceptable(byte version[])
+                        {
+                            return version[0] 
+                                    == INVERSE_UCA_DATA_FORMAT_VERSION_[0] 
+                                && version[1] 
+                                    >= INVERSE_UCA_DATA_FORMAT_VERSION_[1];
                         }
                 };
   
@@ -396,13 +412,15 @@ final class CollatorReader
     * No guarantees are made if a older version is used
     */
     private static final byte DATA_FORMAT_VERSION_[] = 
-                                   {(byte)0x2, (byte)0x0, (byte)0x0, (byte)0x0};
+                                   {(byte)0x2, (byte)0x1, (byte)0x0, (byte)0x0};
     private static final byte DATA_FORMAT_ID_[] = {(byte)0x55, (byte)0x43,  
                                                     (byte)0x6f, (byte)0x6c};
     /**
     * Inverse UCA file format version and id that this class understands.
     * No guarantees are made if a older version is used
     */
+    private static final byte INVERSE_UCA_DATA_FORMAT_VERSION_[] = 
+                                   {(byte)0x2, (byte)0x0, (byte)0x0, (byte)0x0};
     private static final byte INVERSE_UCA_DATA_FORMAT_ID_[] = {(byte)0x49, 
                                                                (byte)0x6e,  
                                                                (byte)0x76, 
