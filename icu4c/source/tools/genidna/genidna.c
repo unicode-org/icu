@@ -288,7 +288,7 @@ normalizationCorrectionsLineFn(void *context,
         ){
         storeMapping(code,mapping, length, TRUE, pErrorCode);
         if(printRules){
-            printMapping(code,mapping,length);
+            printMapping(code,(UChar32*)mapping,length);
         }
     }
 }
@@ -344,7 +344,7 @@ caseMapLineFn(void *context,
 
     storeMapping(code,mapping, length, *mapWithNorm, pErrorCode);
     if(printRules){
-        printMapping(code,mapping,length);
+        printMapping(code,(UChar32*)mapping,length);
     }
 }
 
