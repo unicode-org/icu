@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: MConstText.java,v $ $Revision: 1.2 $ $Date: 2002/02/16 03:06:35 $
+ * @(#)$RCSfile: MConstText.java,v $ $Revision: 1.3 $ $Date: 2002/03/20 05:11:17 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -79,7 +79,7 @@ public abstract class MConstText {
 /**
 * Return the character at offset <code>pos</code>.
 * @param pos a valid offset into the text
-* @returns the character at offset <code>pos</code>
+* @return the character at offset <code>pos</code>
 */
     public abstract char at(int pos);
 
@@ -143,7 +143,7 @@ public abstract class MConstText {
 * Return the index of the first character in the character style run
 * containing pos.  All characters in a style run have the same character
 * style.
-* @returns the style at offset <code>pos</code>
+* @return the style at offset <code>pos</code>
 */
     public abstract int characterStyleStart(int pos);
 
@@ -151,14 +151,14 @@ public abstract class MConstText {
 * Return the index after the last character in the character style run
 * containing pos.  All characters in a style run have the same character
 * style.
-* @returns the style at offset <code>pos</code>
+* @return the style at offset <code>pos</code>
 */
     public abstract int characterStyleLimit(int pos);
 
 /**
 * Return the style applied to the character at offset <code>pos</code>.
 * @param pos a valid offset into the text
-* @returns the style at offset <code>pos</code>
+* @return the style at offset <code>pos</code>
 */
     public abstract AttributeMap characterStyleAt(int pos);
 
@@ -168,21 +168,21 @@ public abstract class MConstText {
 /**
 * Return the start of the paragraph containing the character at offset <code>pos</code>.
 * @param pos a valid offset into the text
-* @returns the start of the paragraph containing the character at offset <code>pos</code>
+* @return the start of the paragraph containing the character at offset <code>pos</code>
 */
     public abstract int paragraphStart(int pos);
 
 /**
 * Return the limit of the paragraph containing the character at offset <code>pos</code>.
 * @param pos a valid offset into the text
-* @returns the limit of the paragraph containing the character at offset <code>pos</code>
+* @return the limit of the paragraph containing the character at offset <code>pos</code>
 */
     public abstract int paragraphLimit(int pos);
 
 /**
 * Return the paragraph style applied to the paragraph containing offset <code>pos</code>.
 * @param pos a valid offset into the text
-* @returns the paragraph style in effect at <code>pos</code>
+* @return the paragraph style in effect at <code>pos</code>
 */
     public abstract AttributeMap paragraphStyleAt(int pos);
 

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/BreakIterator.java,v $ 
- * $Date: 2002/03/10 19:40:16 $ 
- * $Revision: 1.7 $
+ * $Date: 2002/03/20 05:11:15 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -433,7 +433,7 @@ public abstract class BreakIterator implements Cloneable
      * Returns a new instance of BreakIterator that locates legal line-
      * wrapping positions.  This function assumes the text being broken
      * is in the default locale's language.
-     * @returns A new instance of BreakIterator that locates legal
+     * @return A new instance of BreakIterator that locates legal
      * line-wrapping positions.
      */
     public static BreakIterator getLineInstance()

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NumberFormat.java,v $ 
- * $Date: 2002/03/10 19:40:16 $ 
- * $Revision: 1.12 $
+ * $Date: 2002/03/20 05:11:15 $ 
+ * $Revision: 1.13 $
  *
  *****************************************************************************************
  */
@@ -151,7 +151,7 @@ import java.util.ResourceBundle;
  *
  * see          DecimalFormat
  * see          java.text.ChoiceFormat
- * @version      $Revision: 1.12 $
+ * @version      $Revision: 1.13 $
  * @author       Mark Davis
  * @author       Helena Shih
  * @author       Alan Liu
@@ -529,7 +529,7 @@ public abstract class NumberFormat extends Format{
 
     /**
      * Sets the maximum number of digits allowed in the integer portion of a
-     * number. maximumIntegerDigits must be >= minimumIntegerDigits.  If the
+     * number. MaximumIntegerDigits must be >= minimumIntegerDigits.  If the
      * new value for maximumIntegerDigits is less than the current value
      * of minimumIntegerDigits, then minimumIntegerDigits will also be set to
      * the new value.
@@ -555,7 +555,7 @@ public abstract class NumberFormat extends Format{
 
     /**
      * Sets the minimum number of digits allowed in the integer portion of a
-     * number. minimumIntegerDigits must be <= maximumIntegerDigits.  If the
+     * number.  MinimumIntegerDigits must be <= maximumIntegerDigits.  If the
      * new value for minimumIntegerDigits exceeds the current value
      * of maximumIntegerDigits, then maximumIntegerDigits will also be set to
      * the new value
@@ -581,7 +581,7 @@ public abstract class NumberFormat extends Format{
 
     /**
      * Sets the maximum number of digits allowed in the fraction portion of a
-     * number. maximumFractionDigits must be >= minimumFractionDigits.  If the
+     * number. MaximumFractionDigits must be >= minimumFractionDigits.  If the
      * new value for maximumFractionDigits is less than the current value
      * of minimumFractionDigits, then minimumFractionDigits will also be set to
      * the new value.
@@ -607,10 +607,10 @@ public abstract class NumberFormat extends Format{
 
     /**
      * Sets the minimum number of digits allowed in the fraction portion of a
-     * number. minimumFractionDigits must be <= maximumFractionDigits.  If the
+     * number. MinimumFractionDigits must be <= maximumFractionDigits.  If the
      * new value for minimumFractionDigits exceeds the current value
      * of maximumFractionDigits, then maximumIntegerDigits will also be set to
-     * the new value
+     * the new value.
      * @param newValue the minimum number of fraction digits to be shown; if
      * less than zero, then zero is used. The concrete subclass may enforce an
      * upper limit to this value appropriate to the numeric type being formatted.

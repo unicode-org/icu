@@ -644,7 +644,7 @@ import java.util.ResourceBundle;
  * @see          GregorianCalendar
  * @see          TimeZone
  * @see          DateFormat
- * @version      $Revision: 1.24 $ $Date: 2002/03/10 19:40:16 $
+ * @version      $Revision: 1.25 $ $Date: 2002/03/20 05:11:17 $
  * @author Mark Davis, David Goldsmith, Chen-Lieh Huang, Alan Liu, Laura Werner
  * @since JDK1.1
  */
@@ -2950,6 +2950,7 @@ public abstract class Calendar implements Serializable, Cloneable {
     };
 
     /**
+     * Subclass API for defining limits of different types.
      * Subclasses must implement this method to return limits for the
      * following fields:
      *

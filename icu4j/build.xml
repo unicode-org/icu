@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $ 
-* $Date: 2002/03/18 21:27:45 $ 
-* $Revision: 1.49 $
+* $Date: 2002/03/20 05:11:14 $ 
+* $Revision: 1.50 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -35,10 +35,15 @@
         <property name="richedit.manifest" value="${richedit.dist.dir}/manifest.stub"/>
 
         <mkdir dir="${build.dir}"/>
-		<uptodate property="icu4j.resources" targetfile="${src.dir}/com/ibm/icu/impl/data/ICULocaleData.jar">
-		    <!-- note must not have '/' before 'com' in srcfiles includes arg! -->
-			<srcfiles dir="${build.dir}" includes="com/ibm/icu/impl/data/LocaleElements_index.class"/>
-		</uptodate>
+	<uptodate property="icu4j.resources" targetfile="${src.dir}/com/ibm/icu/impl/data/ICULocaleData.jar">
+	    <!-- note must not have '/' before 'com' in srcfiles includes arg! -->
+	    <srcfiles dir="${build.dir}" includes="com/ibm/icu/impl/data/LocaleElements_index.class"/>
+	</uptodate>
+	<property name="doc.params" value=""/>
+	<condition property="doc.params" 
+	    value="-breakiterator -tag draft:a:&quot;Draft&quot; -tag internal:X:&quot;Internal&quot;">
+	    <equals arg1="${ant.java.version}" arg2="1.4"/>
+	</condition>
     </target>
 
     <target name="all" depends="core,tests,tools,richtext,demos,jar,docs"/>
@@ -108,11 +113,12 @@
             sourcepath="${src.dir}"
             destdir="${doc.dir}"
             nodeprecatedlist="true"
-	        windowtitle="icu4j"
-	        doctitle="icu4j"
-	        encoding="iso-8859-1"
-	        docencoding="iso-8859-1"
-	        bottom="&lt;font size=-1>Copyright (c) 2001 IBM Corporation and others.&lt;/font>"
+	    windowtitle="icu4j"
+	    doctitle="icu4j"
+	    encoding="iso-8859-1"
+	    docencoding="iso-8859-1"
+	    bottom="&lt;font size=-1>Copyright (c) 2001 IBM Corporation and others.&lt;/font>"
+	    additionalparam="${doc.params}"
         />    	
     </target>
 

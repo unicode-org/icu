@@ -17,7 +17,7 @@ import java.util.MissingResourceException;
 /**
  * A class to reflect UTR #24: Script Names
  * (based on ISO 15924:2000, "Code for the representation of names of
- * scripts".)  UTR #24 describes the basis for a new Unicode data file,
+ * scripts").  UTR #24 describes the basis for a new Unicode data file,
  * Scripts.txt.
  */
 public final class UScript {

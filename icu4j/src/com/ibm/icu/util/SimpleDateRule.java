@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/SimpleDateRule.java,v $ 
- * $Date: 2002/02/16 03:06:29 $ 
- * $Revision: 1.6 $
+ * $Date: 2002/03/20 05:11:17 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -35,7 +35,7 @@ public class SimpleDateRule implements DateRule
     }
 
     /**
-     * Construct a rule for a weekday within a month, e.g. the first Monday
+     * Construct a rule for a weekday within a month, e.g. the first Monday.
      *
      * @param month         The month in which this rule occurs (0-based).
      * @param dayOfMonth    A date within that month (1-based).

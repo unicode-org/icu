@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: StyledText.java,v $ $Revision: 1.2 $ $Date: 2002/02/16 03:06:37 $
+ * @(#)$RCSfile: StyledText.java,v $ $Revision: 1.3 $ $Date: 2002/03/20 05:11:17 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -170,7 +170,7 @@ public final class StyledText extends MText implements Externalizable
 /**
 * Return the character at offset <code>pos</code>.
 * @param pos a valid offset into the text
-* @returns the character at offset <code>pos</code>
+* @return the character at offset <code>pos</code>
 */
     public char at(int pos)
     {
@@ -236,7 +236,7 @@ public final class StyledText extends MText implements Externalizable
 * Create a <code>CharacterIterator</code> over the range [<code>start</code>, <code>limit</code>).
 * @param start the beginning of the iterator's range
 * @param limit the limit of the iterator's range
-* @returns a valid <code>CharacterIterator</code> over the specified range
+* @return a valid <code>CharacterIterator</code> over the specified range
 * @see java.text.CharacterIterator
 */
     public CharacterIterator createCharacterIterator(int start, int limit)
@@ -252,7 +252,7 @@ public final class StyledText extends MText implements Externalizable
 * Return the index of the first character in the character style run
 * containing pos.  All characters in a style run have the same character
 * style.
-* @returns the style at offset <code>pos</code>
+* @return the style at offset <code>pos</code>
 */
     public int characterStyleStart(int pos) {
 
@@ -264,7 +264,7 @@ public final class StyledText extends MText implements Externalizable
 * Return the index after the last character in the character style run
 * containing pos.  All characters in a style run have the same character
 * style.
-* @returns the style at offset <code>pos</code>
+* @return the style at offset <code>pos</code>
 */
     public int characterStyleLimit(int pos) {
 
@@ -275,7 +275,7 @@ public final class StyledText extends MText implements Externalizable
 /**
 * Return the style applied to the character at offset <code>pos</code>.
 * @param pos a valid offset into the text
-* @returns the style at offset <code>pos</code>
+* @return the style at offset <code>pos</code>
 */
     public AttributeMap characterStyleAt(int pos)
     {
@@ -289,7 +289,7 @@ public final class StyledText extends MText implements Externalizable
 /**
 * Return the start of the paragraph containing the character at offset <code>pos</code>.
 * @param pos a valid offset into the text
-* @returns the start of the paragraph containing the character at offset <code>pos</code>
+* @return the start of the paragraph containing the character at offset <code>pos</code>
 */
     public int paragraphStart(int pos)
     {
@@ -300,7 +300,7 @@ public final class StyledText extends MText implements Externalizable
 /**
 * Return the limit of the paragraph containing the character at offset <code>pos</code>.
 * @param pos a valid offset into the text
-* @returns the limit of the paragraph containing the character at offset <code>pos</code>
+* @return the limit of the paragraph containing the character at offset <code>pos</code>
 */
     public int paragraphLimit(int pos)
     {
@@ -311,7 +311,7 @@ public final class StyledText extends MText implements Externalizable
 /**
 * Return the paragraph style applied to the paragraph containing offset <code>pos</code>.
 * @param pos a valid offset into the text
-* @returns the paragraph style in effect at <code>pos</code>
+* @return the paragraph style in effect at <code>pos</code>
 */
     public AttributeMap paragraphStyleAt(int pos)
     {

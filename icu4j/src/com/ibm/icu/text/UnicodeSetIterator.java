@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSetIterator.java,v $ 
- * $Date: 2002/03/19 00:11:52 $ 
- * $Revision: 1.7 $
+ * $Date: 2002/03/20 05:11:17 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -35,7 +35,7 @@ public final class UnicodeSetIterator {
 
     /**
      * Create an iterator
-     * @set set to iterate over
+     * @param set set to iterate over
      */
     public UnicodeSetIterator(UnicodeSet set) {
         reset(set);

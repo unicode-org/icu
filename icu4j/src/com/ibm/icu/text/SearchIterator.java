@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/SearchIterator.java,v $ 
- * $Date: 2002/03/10 19:40:16 $ 
- * $Revision: 1.4 $
+ * $Date: 2002/03/20 05:11:16 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -124,8 +124,7 @@ public abstract class SearchIterator {
     
     /**
      * Return the index of the next point at which the text matches the
-     * search pattern, starting from the current position
-     * <p>
+     * search pattern, starting from the current position.
      * @return The index of the next match after the current position,
      *          or <code>DONE</code> if there are no more matches.
      *
@@ -311,7 +310,7 @@ public abstract class SearchIterator {
     //-------------------------------------------------------------------
 
     /**
-     * Constructor for use by subclasses
+     * Constructor for use by subclasses.
      * <p>
      * @param target    The target text to be searched.  This is for internal
      *                  use by this class.  Subclasses need to maintain their
