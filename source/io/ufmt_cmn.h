@@ -86,7 +86,7 @@ ufmt_isdigit(UChar     c,
          int32_t     radix);
 
 /**
- * Convert a long to a UChar* in a specified radix
+ * Convert an int64_t to a UChar* in a specified radix
  * @param buffer The target buffer
  * @param len On input, the size of <TT>buffer</TT>.  On output,
  * the number of UChars written to <TT>buffer</TT>.
@@ -116,7 +116,7 @@ ufmt_ptou(UChar    *buffer,
           UBool     uselower);
 
 /**
- * Convert a UChar* in a specified radix to a long.
+ * Convert a UChar* in a specified radix to an int64_t.
  * @param buffer The target buffer
  * @param len On input, the size of <TT>buffer</TT>.  On output,
  * the number of UChars read from <TT>buffer</TT>.
@@ -127,6 +127,18 @@ int64_t
 ufmt_uto64(const UChar     *buffer, 
       int32_t     *len,
       int8_t     radix);
+
+/**
+ * Convert a UChar* in a specified radix to a pointer,
+ * @param buffer The target buffer
+ * @param len On input, the size of <TT>buffer</TT>.  On output,
+ * the number of UChars read from <TT>buffer</TT>.
+ * @param radix The desired radix
+ * @return The pointer value.
+ */
+void *
+ufmt_utop(const UChar     *buffer,
+      int32_t     *len);
 
 /**
  * Convert a string from the default codepage to Unicode.
