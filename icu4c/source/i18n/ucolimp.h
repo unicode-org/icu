@@ -78,15 +78,6 @@ struct incrementalContext {
     UBool panic; /* can't handle it any more - we have to call the cavalry */
 };
 
-/* Fixup table a la Markus */
-/* see http://www.ibm.com/software/developer/library/utf16.html for further explanation */
-static uint8_t utf16fixup[32] = {
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0x20, 0xf8, 0xf8, 0xf8, 0xf8
-};
-
 /* from coleiterator */
 #define UCOL_UNMAPPEDCHARVALUE 0x7fff0000     
 
