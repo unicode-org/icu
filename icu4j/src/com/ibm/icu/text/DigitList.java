@@ -161,18 +161,40 @@ final class DigitList {
      */
     public BigInteger getBigInteger(boolean isPositive) {
         if (isZero()) return BigInteger.valueOf(0);
-        StringBuffer stringRep = new StringBuffer(count);
+//          StringBuffer stringRep = new StringBuffer(count);
+//          if (!isPositive) {
+//              stringRep.append('-');
+//          }
+//          for (int i=0; i<count; ++i) {
+//              stringRep.append((char) digits[i]);
+//          }
+//          int d = decimalAt;
+//          while (d-- > count) {
+//              stringRep.append('0');
+//          }
+//          return new BigInteger(stringRep.toString());
+        int len = decimalAt ? count ? decimalAt : count;
         if (!isPositive) {
-            stringRep.append('-');
+            len += 1;
         }
-        for (int i=0; i<count; ++i) {
-            stringRep.append((char) digits[i]);
+        char[] text = new char[len];
+        int n = 0;
+        if (!isPositive) {
+            text[0] = '-';
+            for (int i = 0; i < count; ++i) {
+                text[i+1] = (char)digits[i];
+            }
+            n = count+1;
+        } else {
+            for (int i = 0; i < count; ++i) {
+                text[i] = (char)digits[i];
+            }
+            n = count;
         }
-        int d = decimalAt;
-        while (d-- > count) {
-            stringRep.append('0');
-        }
-        return new BigInteger(stringRep.toString());
+        for (int i = n; i < text.length; ++i) {
+            text[i] = '0';
+        } 
+        return new BigInteger(new String(text));
     }
 
     /**
