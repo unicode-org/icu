@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationParsedRuleBuilder.java,v $ 
-* $Date: 2003/07/16 05:52:08 $ 
-* $Revision: 1.22 $
+* $Date: 2003/08/20 00:20:37 $ 
+* $Revision: 1.23 $
 *
 *******************************************************************************
 */
@@ -848,7 +848,7 @@ final class CollationParsedRuleBuilder
 		    	boolean inBlockZero = m_mapping_.isInZeroBlock(cp);
 			    int tag = getCETag(value);
 			    if (inBlockZero == true) {
-			        cp += TrieBuilder.DATA_BLOCK_LENGTH_;
+			        cp += TrieBuilder.DATA_BLOCK_LENGTH;
 			    } 
 			    else if (!(isSpecial(value) && (tag == CE_IMPLICIT_TAG_ 
 			                                    || tag == CE_NOT_FOUND_TAG_))) {
@@ -882,10 +882,10 @@ final class CollationParsedRuleBuilder
 	        m_expansions_ = new Vector();
 	        // Do your own mallocs for the structure, array and have linear 
 	        // Latin 1
-	        m_mapping_ = new IntTrieBuilder(null, 0x100000, 
-	                                      RuleBasedCollator.CE_SPECIAL_FLAG_
-                                          | (CE_NOT_FOUND_TAG_ << 24), 
-	                                      true); 
+            int trieinitialvalue = RuleBasedCollator.CE_SPECIAL_FLAG_
+                                   | (CE_NOT_FOUND_TAG_ << 24);
+	        m_mapping_ = new IntTrieBuilder(null, 0x100000, trieinitialvalue, 
+                                            trieinitialvalue, true); 
 	        m_prefixLookup_ = new Hashtable();
 	        // uhash_open(prefixLookupHash, prefixLookupComp);
 	        m_contractions_ = new ContractionTable(m_mapping_);

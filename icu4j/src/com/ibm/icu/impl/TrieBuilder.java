@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/TrieBuilder.java,v $ 
-* $Date: 2002/09/06 01:50:43 $ 
-* $Revision: 1.8 $
+* $Date: 2003/08/20 00:19:20 $ 
+* $Revision: 1.9 $
 *
 ******************************************************************************
 */
@@ -31,7 +31,7 @@ import java.util.Arrays;
  *     <LI>Smaller memory footprint.
  * </UL>
  * This is a direct port from the ICU4C version
- * @version            $Revision: 1.8 $
+ * @version            $Revision: 1.9 $
  * @author             Syn Wee Quek
  */
 public class TrieBuilder
@@ -42,7 +42,7 @@ public class TrieBuilder
 	 * Number of data values in a stage 2 (data array) block. 2, 4, 8, .., 
 	 * 0x200 
 	 */
-    public static final int DATA_BLOCK_LENGTH_ = 1 << Trie.INDEX_STAGE_1_SHIFT_;
+    public static final int DATA_BLOCK_LENGTH = 1 << Trie.INDEX_STAGE_1_SHIFT_;
     
 	// public class declaration ----------------------------------------
     
@@ -141,7 +141,7 @@ public class TrieBuilder
     protected static final int SURROGATE_BLOCK_COUNT_ = 1 << (10 - SHIFT_);
 	/**
     * Mask for getting the lower bits from the input index.
-    * DATA_BLOCK_LENGTH_ - 1.
+    * DATA_BLOCK_LENGTH - 1.
     */
     protected static final int MASK_ = Trie.INDEX_STAGE_3_MASK_;
     /**
@@ -253,10 +253,10 @@ public class TrieBuilder
 	
 	/**
 	 * Maximum length of the build-time data (stage 2) array.
-	 * The maximum length is 0x110000 + DATA_BLOCK_LENGTH_ + 0x400.
+	 * The maximum length is 0x110000 + DATA_BLOCK_LENGTH + 0x400.
 	 * (Number of Unicode code points + one all-initial-value block +
 	 *  possible duplicate entries for 1024 lead surrogates.)
 	 */
 	private static final int MAX_BUILD_TIME_DATA_LENGTH_ = 
-	                                    0x110000 + DATA_BLOCK_LENGTH_ + 0x400;
+	                                    0x110000 + DATA_BLOCK_LENGTH + 0x400;
 }
