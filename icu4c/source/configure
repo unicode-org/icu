@@ -2385,7 +2385,7 @@ if test $ac_cv_header_inttypes_h = no; then
 else
  U_HAVE_INTTYPES_H=1
 fi
-if test $CC = ccc; then
+if test "$CC" = ccc; then
  echo "$ac_t"""C compiler set to CCC ${CC}" " 1>&6
  case "${host}" in
         alpha*-*-*) U_HAVE_INTTYPES_H=0;
