@@ -1166,7 +1166,7 @@ inline UColToken *getVirginBefore(UColTokenParser *src, UColToken *sourceToken, 
     baseContCE = 0;
   }
 
-  invPos = ucol_inv_getPrevCE(baseCE, baseContCE, &CE, &SecondCE, strength);
+  invPos = ucol_inv_getPrevCE(src, baseCE, baseContCE, &CE, &SecondCE, strength);
 
   uint32_t *CETable = (uint32_t *)((uint8_t *)src->invUCA+src->invUCA->table);
   uint32_t ch = CETable[3*invPos+2];
@@ -1494,7 +1494,7 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
             uint32_t CE = UCOL_NOT_FOUND, SecondCE = UCOL_NOT_FOUND;
 
             /*int32_t invPos = ucol_inv_getPrevCE(baseCE, baseContCE, &CE, &SecondCE, strength);*/
-            ucol_inv_getPrevCE(baseCE, baseContCE, &CE, &SecondCE, strength);
+            ucol_inv_getPrevCE(src, baseCE, baseContCE, &CE, &SecondCE, strength);
 
             ListList[src->resultLen].baseCE = CE;
             ListList[src->resultLen].baseContCE = SecondCE;
@@ -1575,7 +1575,7 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
   return src->resultLen;
 }
 
-void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint32_t rulesLength, UCollator *UCA, UErrorCode *status) {
+void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint32_t rulesLength, const UCollator *UCA, UErrorCode *status) {
   uint32_t nSize = 0;
   uint32_t estimatedSize = (2*rulesLength+UCOL_TOK_EXTRA_RULE_SPACE_SIZE);
   if(U_FAILURE(*status)) {

@@ -61,8 +61,11 @@ U_NAMESPACE_USE
 
 #define ZERO_CC_LIMIT_            0xC0
 
-static UCollator* UCA = NULL;
-static UCAConstants *UCAconsts = NULL; 
+// static UCA. There is only one. Collators don't use it.
+// It is referenced only in ucol_initUCA and ucol_cleanup
+static UCollator* _staticUCA = NULL;
+// static pointer to udata memory. Inited in ucol_initUCA
+// used for cleanup in ucol_cleanup
 static UDataMemory* UCA_DATA_MEM = NULL;
 
 
@@ -362,7 +365,7 @@ U_CFUNC UCollator*
 ucol_open_internal(const char *loc,
 		           UErrorCode *status)
 {
-  ucol_initUCA(status);
+  const UCollator* UCA = ucol_initUCA(status);
 
   /* New version */
   if(U_FAILURE(*status)) return 0;
@@ -375,7 +378,7 @@ ucol_open_internal(const char *loc,
 
   if(*status == U_MISSING_RESOURCE_ERROR) { /* We didn't find the tailoring data, we fallback to the UCA */
     *status = U_USING_DEFAULT_WARNING;
-    result = ucol_initCollator(UCA->image, result, status);
+    result = ucol_initCollator(UCA->image, result, UCA, status);
     // if we use UCA, real locale is root
     result->rb = ures_open(NULL, "", status);
     result->elements = ures_open(NULL, "", status);
@@ -407,13 +410,13 @@ ucol_open_internal(const char *loc,
           goto clean;
         }
         if((uint32_t)len > (paddedsize(sizeof(UCATableHeader)) + paddedsize(sizeof(UColOptionSet)))) {
-          result = ucol_initCollator((const UCATableHeader *)inData, result, status);
+          result = ucol_initCollator((const UCATableHeader *)inData, result, UCA, status);
           if(U_FAILURE(*status)){
             goto clean;
           }
           result->hasRealData = TRUE;
         } else {
-          result = ucol_initCollator(UCA->image, result, status);
+          result = ucol_initCollator(UCA->image, result, UCA, status);
           ucol_setOptionsFromHeader(result, (UColOptionSet *)(inData+((const UCATableHeader *)inData)->options), status);
           if(U_FAILURE(*status)){
             goto clean;
@@ -566,7 +569,7 @@ ucol_openRules( const UChar        *rules,
     return 0;
   }
 
-  ucol_initUCA(status);
+  UCollator *UCA = ucol_initUCA(status);
 
   if(U_FAILURE(*status)){
     return NULL;
@@ -604,14 +607,14 @@ ucol_openRules( const UChar        *rules,
       u_getUnicodeVersion(table->UCDVersion);
       // set UCA version
       uprv_memcpy(table->UCAVersion, UCA->image->UCAVersion, sizeof(UVersionInfo));
-      result = ucol_initCollator(table,0,status);
+      result = ucol_initCollator(table, 0, UCA, status);
       result->hasRealData = TRUE;
       result->freeImageOnClose = TRUE;
     }
   } else { /* no rules, but no error either */
     // must be only options
     // We will init the collator from UCA   
-    result = ucol_initCollator(UCA->image,0,status);
+    result = ucol_initCollator(UCA->image, 0, UCA, status);
     // And set only the options
     UColOptionSet *opts = (UColOptionSet *)uprv_malloc(sizeof(UColOptionSet));
     /* test for NULL */
@@ -820,7 +823,7 @@ inline uint8_t i_getCombiningClass(UChar c, const UCollator *coll) {
 }
 
 
-UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UErrorCode *status) {
+UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, const UCollator *UCA, UErrorCode *status) {
     UChar c;
     UCollator *result = fillIn;
     if(U_FAILURE(*status) || image == NULL) {
@@ -934,6 +937,7 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UEr
 
     result->latinOneRegenTable = FALSE;
     result->latinOneFailed = FALSE;
+    result->UCA = UCA;
 
     ucol_updateInternalState(result, status);
 
@@ -948,9 +952,9 @@ ucol_cleanup(void)
         udata_close(UCA_DATA_MEM);
         UCA_DATA_MEM = NULL;
     }
-    if (UCA) {
-        ucol_close(UCA);
-        UCA = NULL;
+    if (_staticUCA) {
+        ucol_close(_staticUCA);
+        _staticUCA = NULL;
     }
     return TRUE;
 }
@@ -1119,7 +1123,7 @@ ucol_initUCA(UErrorCode *status) {
         return NULL;
     }
     umtx_lock(NULL);
-    UBool f = (UCA == NULL);
+    UBool f = (_staticUCA == NULL);
     umtx_unlock(NULL);
     
     if(f) {
@@ -1134,7 +1138,7 @@ ucol_initUCA(UErrorCode *status) {
         }
         
         if(result != NULL) { /* It looks like sometimes we can fail to find the data file */
-            newUCA = ucol_initCollator((const UCATableHeader *)udata_getMemory(result), newUCA, status);
+            newUCA = ucol_initCollator((const UCATableHeader *)udata_getMemory(result), newUCA, newUCA, status);
             if(U_SUCCESS(*status)){
                 newUCA->rb = NULL;
 				newUCA->elements = NULL;
@@ -1143,8 +1147,8 @@ ucol_initUCA(UErrorCode *status) {
 				newUCA->hasRealData = FALSE; // real data lives in .dat file...
                 newUCA->freeImageOnClose = FALSE;
                 umtx_lock(NULL);
-                if(UCA == NULL) {
-                    UCA = newUCA;
+                if(_staticUCA == NULL) {
+                    _staticUCA = newUCA;
                     UCA_DATA_MEM = result;
                     result = NULL;
                     newUCA = NULL;
@@ -1159,17 +1163,17 @@ ucol_initUCA(UErrorCode *status) {
                     ucln_i18n_registerCleanup();
                 }
                 // Initalize variables for implicit generation
-                UCAconsts = (UCAConstants *)((uint8_t *)UCA->image + UCA->image->UCAConsts);
+                const UCAConstants *UCAconsts = (UCAConstants *)((uint8_t *)_staticUCA->image + _staticUCA->image->UCAConsts);
                 uprv_uca_initImplicitConstants(UCAconsts->UCA_PRIMARY_IMPLICIT_MIN);
-                UCA->mapping->getFoldingOffset = _getFoldingOffset;
+                _staticUCA->mapping->getFoldingOffset = _getFoldingOffset;
             }else{
                 udata_close(result);
                 uprv_free(newUCA);
-                UCA= NULL;
+                _staticUCA= NULL;
             }
         }
     }
-    return UCA;
+    return _staticUCA;
 }
 
 
@@ -1508,10 +1512,10 @@ inline uint32_t ucol_IGetNextCE(const UCollator *coll, collIterate *collationSou
           }
           if(order == UCOL_NOT_FOUND) {   /* We couldn't find a good CE in the tailoring */
             /* if we got here, the codepoint MUST be over 0xFF - so we look directly in the trie */
-            order = UTRIE_GET32_FROM_LEAD(UCA->mapping, ch);
+            order = UTRIE_GET32_FROM_LEAD(coll->UCA->mapping, ch);
 
             if(order > UCOL_NOT_FOUND) { /* UCA also gives us a special CE */
-              order = ucol_prv_getSpecialCE(UCA, ch, order, collationSource, status);
+              order = ucol_prv_getSpecialCE(coll->UCA, ch, order, collationSource, status);
             }
           }
       }
@@ -1916,11 +1920,11 @@ inline uint32_t ucol_IGetPrevCE(const UCollator *coll, collIterate *data,
                   }
                   else {
                         /*result = ucmpe32_get(UCA->mapping, ch);*/
-                        result = UTRIE_GET32_FROM_LEAD(UCA->mapping, ch);
+                        result = UTRIE_GET32_FROM_LEAD(coll->UCA->mapping, ch);
                   }
 
                   if (result > UCOL_NOT_FOUND) {
-                    result = ucol_prv_getSpecialPrevCE(UCA, ch, result, data, status);
+                    result = ucol_prv_getSpecialPrevCE(coll->UCA, ch, result, data, status);
                   }
                 }
             }
@@ -4329,6 +4333,7 @@ ucol_getSortKeyWithAllocation(const UCollator *coll,
 /* or if we run out of space while making a sortkey and want to return ASAP                                   */
 int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t currentSize, UColAttributeValue strength, int32_t len) {
     UErrorCode status = U_ZERO_ERROR;
+    const UCAConstants *UCAconsts = (UCAConstants *)((uint8_t *)coll->UCA->image + coll->image->UCAConsts);
     uint8_t compareSec   = (uint8_t)((strength >= UCOL_SECONDARY)?0:0xFF);
     uint8_t compareTer   = (uint8_t)((strength >= UCOL_TERTIARY)?0:0xFF);
     uint8_t compareQuad  = (uint8_t)((strength >= UCOL_QUATERNARY)?0:0xFF);
@@ -4669,6 +4674,8 @@ ucol_calcSortKey(const    UCollator    *coll,
         UBool allocateSKBuffer,
         UErrorCode *status)
 {
+    const UCAConstants *UCAconsts = (UCAConstants *)((uint8_t *)coll->UCA->image + coll->image->UCAConsts);
+
     uint32_t i = 0; /* general purpose counter */
 
     /* Stack allocated buffers for buffers we use */
@@ -5272,6 +5279,8 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
         UErrorCode *status)
 {
     U_ALIGN_CODE(16);
+
+    const UCAConstants *UCAconsts = (UCAConstants *)((uint8_t *)coll->UCA->image + coll->image->UCAConsts);
     uint32_t i = 0; /* general purpose counter */
 
     /* Stack allocated buffers for buffers we use */
@@ -6760,7 +6769,7 @@ ucol_setUpLatinOne(UCollator *coll, UErrorCode *status) {
     } else {
       CE = UTRIE_GET32_FROM_LEAD(coll->mapping, ch);
       if(CE == UCOL_NOT_FOUND) {
-        CE = UTRIE_GET32_FROM_LEAD(UCA->mapping, ch);
+        CE = UTRIE_GET32_FROM_LEAD(coll->UCA->mapping, ch);
       }
     }
     if(CE < UCOL_NOT_FOUND) {
@@ -7321,7 +7330,7 @@ ucol_getVersion(const UCollator* coll,
     versionInfo[0] = (uint8_t)(cmbVersion>>8);
     versionInfo[1] = (uint8_t)cmbVersion;
     versionInfo[2] = coll->image->version[1];
-    versionInfo[3] = UCA->image->UCAVersion[0];
+    versionInfo[3] = coll->UCA->image->UCAVersion[0];
 }
 
 
@@ -7331,11 +7340,11 @@ ucol_isTailored(const UCollator *coll, const UChar u, UErrorCode *status) {
   uint32_t CE = UCOL_NOT_FOUND;
   const UChar *ContractionStart = NULL;
   if(U_SUCCESS(*status) && coll != NULL) {
-    if(coll == UCA) {
+    if(coll == coll->UCA) {
       return FALSE;
     } else if(u < 0x100) { /* latin-1 */
       CE = coll->latinOneMapping[u];
-      if(CE == UCA->latinOneMapping[u]) {
+      if(CE == coll->UCA->latinOneMapping[u]) {
         return FALSE;
       }
     } else { /* regular */
@@ -8803,7 +8812,7 @@ ucol_getTailoredSet(const UCollator *coll, UErrorCode *status)
 
   // The idea is to tokenize the rule set. For each non-reset token,
   // we add all the canonicaly equivalent FCD sequences 
-  ucol_tok_initTokenList(&src, rules, rulesLen, UCA, status);
+  ucol_tok_initTokenList(&src, rules, rulesLen, coll->UCA, status);
   while ((current = ucol_tok_parseNextToken(&src, startOfRules, &parseError, status)) != NULL) {
     startOfRules = FALSE;
     if(src.parsedToken.strength != UCOL_TOK_RESET) {
@@ -8850,8 +8859,8 @@ ucol_equals(const UCollator *source, const UCollator *target) {
   UParseError parseError;
   UColTokenParser sourceParser, targetParser;
   int32_t sourceListLen = 0, targetListLen = 0;
-  ucol_tok_initTokenList(&sourceParser, sourceRules, sourceRulesLen, UCA, &status);
-  ucol_tok_initTokenList(&targetParser, targetRules, targetRulesLen, UCA, &status);
+  ucol_tok_initTokenList(&sourceParser, sourceRules, sourceRulesLen, source->UCA, &status);
+  ucol_tok_initTokenList(&targetParser, targetRules, targetRulesLen, target->UCA, &status);
   sourceListLen = ucol_tok_assembleTokenList(&sourceParser, &parseError, &status);
   targetListLen = ucol_tok_assembleTokenList(&targetParser, &parseError, &status);
 

@@ -1563,7 +1563,7 @@ uprv_uca_canonicalClosure(tempUCATable *t, UErrorCode *status)
     tempUCATable *tempTable = uprv_uca_cloneTempTable(t, status);
 
     UCATableHeader *tempData = uprv_uca_assembleTable(tempTable, status);
-    tempColl = ucol_initCollator(tempData, 0, status);
+    tempColl = ucol_initCollator(tempData, 0, t->UCA, status);
     uprv_uca_closeTempTable(tempTable);    
 
     if(U_SUCCESS(*status)) {

@@ -1083,7 +1083,7 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
 
   rules = ucol_getRules(coll, &ruleLen);
 
-  ucol_initInverseUCA(status);
+  src.invUCA = ucol_initInverseUCA(status);
 
   if(indirectBoundariesSet == FALSE) {
     /* UCOL_RESET_TOP_VALUE */
@@ -1178,7 +1178,7 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
               nextCE = UCOL_NEXT_TOP_VALUE;
               nextContCE = UCOL_NEXT_TOP_CONT;
           } else {
-            result = ucol_inv_getNextCE(baseCE & 0xFFFFFF3F, baseContCE, &nextCE, &nextContCE, maxStrength);
+            result = ucol_inv_getNextCE(&src, baseCE & 0xFFFFFF3F, baseContCE, &nextCE, &nextContCE, maxStrength);
           }
           if(result < 0) {
             if(ucol_isTailored(coll, *(rulesCopy+oldOffset), status)) {

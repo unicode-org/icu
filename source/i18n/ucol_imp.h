@@ -931,6 +931,7 @@ struct UCollator {
     uint8_t tertiaryBottomCount;
 
     UDataInfo dataInfo;               /* Data info of UCA table */
+    const UCollator *UCA;
 
 };
 
@@ -943,7 +944,7 @@ U_CFUNC
 UCollator* ucol_initUCA(UErrorCode *status);
 
 U_CFUNC
-UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UErrorCode *status);
+UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, const UCollator *UCA, UErrorCode *status);
 
 U_CFUNC
 void ucol_setOptionsFromHeader(UCollator* result, UColOptionSet * opts, UErrorCode *status);
@@ -964,12 +965,7 @@ U_CAPI char* U_EXPORT2 ucol_sortKeyToString(const UCollator *coll, const uint8_t
 U_CAPI UBool U_EXPORT2 ucol_isTailored(const UCollator *coll, const UChar u, UErrorCode *status);
 
 U_CAPI const InverseUCATableHeader* U_EXPORT2 ucol_initInverseUCA(UErrorCode *status);
-U_CAPI int32_t U_EXPORT2 ucol_inv_getNextCE(uint32_t CE, uint32_t contCE,
-                                            uint32_t *nextCE, uint32_t *nextContCE,
-                                            uint32_t strength);
-U_CAPI int32_t U_EXPORT2 ucol_inv_getPrevCE(uint32_t CE, uint32_t contCE,
-                                            uint32_t *prevCE, uint32_t *prevContCE,
-                                            uint32_t strength);
+
 U_CAPI void U_EXPORT2 
 uprv_uca_initImplicitConstants(uint32_t baseByte);
 
