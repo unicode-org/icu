@@ -31,10 +31,10 @@ public class TestUScript extends TestFmwk{
         };
         final int[] expected ={
                 /* locales should return */
-                UScript.USCRIPT_LATIN, UScript.USCRIPT_LATIN, 
-                UScript.USCRIPT_CYRILLIC, UScript.USCRIPT_TAMIL, 
-                UScript.USCRIPT_TELUGU,UScript.USCRIPT_DEVANAGARI, 
-                UScript.USCRIPT_HEBREW, UScript.USCRIPT_ARABIC,
+                UScript.LATIN, UScript.LATIN, 
+                UScript.CYRILLIC, UScript.TAMIL, 
+                UScript.TELUGU,UScript.DEVANAGARI, 
+                UScript.HEBREW, UScript.ARABIC,
         };
         int i =0;
         int numErrors =0;
@@ -75,24 +75,24 @@ public class TestUScript extends TestFmwk{
         };
         final int[] expected ={
             /* locales should return */
-            UScript.USCRIPT_LATIN, UScript.USCRIPT_LATIN, 
-            UScript.USCRIPT_CYRILLIC, UScript.USCRIPT_TAMIL, 
-            UScript.USCRIPT_TELUGU,UScript.USCRIPT_DEVANAGARI, 
-            UScript.USCRIPT_HEBREW, UScript.USCRIPT_ARABIC,
+            UScript.LATIN, UScript.LATIN, 
+            UScript.CYRILLIC, UScript.TAMIL, 
+            UScript.TELUGU,UScript.DEVANAGARI, 
+            UScript.HEBREW, UScript.ARABIC,
             /* abbr should return */
-            UScript.USCRIPT_HAN, UScript.USCRIPT_HANGUL, UScript.USCRIPT_HEBREW, UScript.USCRIPT_HIRAGANA,
-            UScript.USCRIPT_KANNADA, UScript.USCRIPT_KATAKANA, UScript.USCRIPT_KHMER, UScript.USCRIPT_LAO,
-            UScript.USCRIPT_LATIN,/* UScript.USCRIPT_LATIN, UScript.USCRIPT_LATIN,*/ 
-            UScript.USCRIPT_MALAYALAM, UScript.USCRIPT_MONGOLIAN,
+            UScript.HAN, UScript.HANGUL, UScript.HEBREW, UScript.HIRAGANA,
+            UScript.KANNADA, UScript.KATAKANA, UScript.KHMER, UScript.LAO,
+            UScript.LATIN,/* UScript.LATIN, UScript.LATIN,*/ 
+            UScript.MALAYALAM, UScript.MONGOLIAN,
             /* names should return */
-            UScript.USCRIPT_CYRILLIC, UScript.USCRIPT_DESERET, UScript.USCRIPT_DEVANAGARI, UScript.USCRIPT_ETHIOPIC, UScript.USCRIPT_GEORGIAN,
-            UScript.USCRIPT_GOTHIC, UScript.USCRIPT_GREEK, UScript.USCRIPT_GUJARATI,
+            UScript.CYRILLIC, UScript.DESERET, UScript.DEVANAGARI, UScript.ETHIOPIC, UScript.GEORGIAN,
+            UScript.GOTHIC, UScript.GREEK, UScript.GUJARATI,
             /* lower case names should return */    
-            UScript.USCRIPT_MALAYALAM, UScript.USCRIPT_MONGOLIAN, UScript.USCRIPT_MYANMAR, UScript.USCRIPT_OGHAM, UScript.USCRIPT_OLD_ITALIC,
-            UScript.USCRIPT_ORIYA, UScript.USCRIPT_RUNIC, UScript.USCRIPT_SINHALA, UScript.USCRIPT_SYRIAC, UScript.USCRIPT_TAMIL,
-            UScript.USCRIPT_TELUGU, UScript.USCRIPT_THAANA, UScript.USCRIPT_THAI, UScript.USCRIPT_TIBETAN,
+            UScript.MALAYALAM, UScript.MONGOLIAN, UScript.MYANMAR, UScript.OGHAM, UScript.OLD_ITALIC,
+            UScript.ORIYA, UScript.RUNIC, UScript.SINHALA, UScript.SYRIAC, UScript.TAMIL,
+            UScript.TELUGU, UScript.THAANA, UScript.THAI, UScript.TIBETAN,
             /* bounds */
-            UScript.USCRIPT_UCAS, UScript.USCRIPT_ARABIC,
+            UScript.UCAS, UScript.ARABIC,
         };
         int i =0;
         int numErrors =0;
@@ -112,8 +112,8 @@ public class TestUScript extends TestFmwk{
         
         final int[] testCodes={
             /* names should return */
-            UScript.USCRIPT_CYRILLIC, UScript.USCRIPT_DESERET, UScript.USCRIPT_DEVANAGARI, UScript.USCRIPT_ETHIOPIC, UScript.USCRIPT_GEORGIAN,
-            UScript.USCRIPT_GOTHIC, UScript.USCRIPT_GREEK, UScript.USCRIPT_GUJARATI,
+            UScript.CYRILLIC, UScript.DESERET, UScript.DEVANAGARI, UScript.ETHIOPIC, UScript.GEORGIAN,
+            UScript.GOTHIC, UScript.GREEK, UScript.GUJARATI,
         };
 
         final String[] expectedNames={
@@ -143,10 +143,10 @@ public class TestUScript extends TestFmwk{
     public void TestGetShortName(){
         final int[] testCodes={
             /* abbr should return */
-            UScript.USCRIPT_HAN, UScript.USCRIPT_HANGUL, UScript.USCRIPT_HEBREW, UScript.USCRIPT_HIRAGANA,
-            UScript.USCRIPT_KANNADA, UScript.USCRIPT_KATAKANA, UScript.USCRIPT_KHMER, UScript.USCRIPT_LAO,
-            UScript.USCRIPT_LATIN, 
-            UScript.USCRIPT_MALAYALAM, UScript.USCRIPT_MONGOLIAN,
+            UScript.HAN, UScript.HANGUL, UScript.HEBREW, UScript.HIRAGANA,
+            UScript.KANNADA, UScript.KATAKANA, UScript.KHMER, UScript.LAO,
+            UScript.LATIN, 
+            UScript.MALAYALAM, UScript.MONGOLIAN,
         };
 
         final String[] expectedAbbr={
@@ -201,46 +201,46 @@ public class TestUScript extends TestFmwk{
         };
 
         int expected[] = {
-                UScript.USCRIPT_KATAKANA ,
-                UScript.USCRIPT_HANGUL ,
-                UScript.USCRIPT_HANGUL ,
-                UScript.USCRIPT_HANGUL ,
-                UScript.USCRIPT_HANGUL ,
-                UScript.USCRIPT_HANGUL ,
-                UScript.USCRIPT_OLD_ITALIC, 
-                UScript.USCRIPT_GOTHIC ,
-                UScript.USCRIPT_GOTHIC ,
-                UScript.USCRIPT_DESERET ,
-                UScript.USCRIPT_DESERET ,
-                UScript.USCRIPT_INHERITED,
-                UScript.USCRIPT_INHERITED,
-                UScript.USCRIPT_INHERITED,
-                UScript.USCRIPT_INHERITED,
-                UScript.USCRIPT_HAN ,
-                UScript.USCRIPT_MALAYALAM,
-                UScript.USCRIPT_INVALID_CODE,
-                UScript.USCRIPT_COMMON,
-                UScript.USCRIPT_INHERITED ,
-                UScript.USCRIPT_INHERITED ,
-                UScript.USCRIPT_INHERITED ,
-                UScript.USCRIPT_INHERITED ,
+                UScript.KATAKANA ,
+                UScript.HANGUL ,
+                UScript.HANGUL ,
+                UScript.HANGUL ,
+                UScript.HANGUL ,
+                UScript.HANGUL ,
+                UScript.OLD_ITALIC, 
+                UScript.GOTHIC ,
+                UScript.GOTHIC ,
+                UScript.DESERET ,
+                UScript.DESERET ,
+                UScript.INHERITED,
+                UScript.INHERITED,
+                UScript.INHERITED,
+                UScript.INHERITED,
+                UScript.HAN ,
+                UScript.MALAYALAM,
+                UScript.INVALID_CODE,
+                UScript.COMMON,
+                UScript.INHERITED ,
+                UScript.INHERITED ,
+                UScript.INHERITED ,
+                UScript.INHERITED ,
         };
         int i =0;
-        int code = UScript.USCRIPT_INVALID_CODE;
+        int code = UScript.INVALID_CODE;
         boolean passed = true;
 
         while(i< codepoints.length){
             code = UScript.getScript(codepoints[i]);
 
             if(code != expected[i]){
-                logln("UScript.USCRIPT_getScript for codepoint 0x"+ hex(codepoints[i])+" failed\n");
+                logln("UScript.getScript for codepoint 0x"+ hex(codepoints[i])+" failed\n");
                 passed = false;
             }
 
             i++;
         }
         if(!passed){
-           errln("UScript.USCRIPT_getScript failed.");
+           errln("UScript.getScript failed.");
         }      
     }
  }
