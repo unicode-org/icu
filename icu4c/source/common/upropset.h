@@ -28,9 +28,12 @@ class Hashtable;
  *
  * [:foo:] [:^foo:] - white space not allowed within "[:" or ":]"
  * \p{foo} \P{foo}  - white space not allowed within "\p" or "\P"
+ * \N{name}         - white space not allowed within "\N"
  *
  * Other than the above restrictions, white space is ignored.  Case
- * is ignored except in "\p" and "\P".
+ * is ignored except in "\p" and "\P" and "\N".  In 'name' leading
+ * and trailing space is deleted, and internal runs of whitespace
+ * are collapsed to a single space.
  *
  * This class cannot be instantiated.  It has a public static method,
  * createPropertySet(), with takes a pattern to be parsed and returns
@@ -53,6 +56,7 @@ class Hashtable;
  *      JoiningType
  *    + Script
  *    + Binary properties
+ *    + Name
  *
  * '+' indicates a supported property.
  *
@@ -70,7 +74,7 @@ class UnicodePropertySet /* not : public UObject because all methods are static 
     /**
      * Return true if the given position, in the given pattern, appears
      * to be the start of a property set pattern [:foo:], \p{foo}, or
-     * \P{foo}.
+     * \P{foo}, or \N{name}.
      */
     static UBool resemblesPattern(const UnicodeString& pattern, int32_t pos);
 
@@ -80,10 +84,10 @@ class UnicodePropertySet /* not : public UObject because all methods are static 
      *
      * @param pattern the pattern string
      * @param ppos on entry, the position at which to begin parsing.
-     * This shold be one of the locations marked '^':
+     * This should be one of the locations marked '^':
      *
-     *   [:blah:]     \p{blah}     \P{blah}
-     *   ^       %    ^       %    ^       %
+     *   [:blah:]     \p{blah}     \P{blah}     \N{name}
+     *   ^       %    ^       %    ^       %    ^       %
      *
      * On return, the position after the last character parsed, that is,
      * the locations marked '%'.  If the parse fails, ppos is returned
@@ -115,6 +119,9 @@ class UnicodePropertySet /* not : public UObject because all methods are static 
 
     static UnicodeSet* createNumericValueSet(const UnicodeString& valueName,
                                              UErrorCode &status);
+
+    static UnicodeSet* createNameSet(const UnicodeString& valueName,
+                                     UErrorCode& status);
 
     /**
      * Given a combining class name, or number, create a corresponding
@@ -180,12 +187,20 @@ class UnicodePropertySet /* not : public UObject because all methods are static 
                                           UErrorCode &status);
 
     /**
-     * Given a string, munge it to upper case and lose the whitespace.
-     * So "General Category " becomes "GENERALCATEGORY".  We munge all
-     * type and value strings, and store all type and value keys
-     * pre-munged.
+     * Given a string, munge it to lose the whitespace, underscores, and hyphens.
+     * So "General  Category " or "General_Category" or " General-Category"
+     * become "GENERALCATEGORY". We munge all type and value
+     * strings, and store all type and value keys pre-munged.  NOTE:
+     * Unlike the Java version, we do not modify the case, since we use a
+     * case-insensitive compare function.
+     * @param keepSpace if false, completely delete white space.
+     * Otherwise compress runs of whitespace to a single space,
+     * and delete leading and trailing whitespace.  If keepSpace
+     * is true, we also keep underscores and hyphens.
      */
-    static UnicodeString munge(const UnicodeString& str, int32_t start, int32_t limit);
+    static UnicodeString munge(const UnicodeString& str,
+                               int32_t start, int32_t limit,
+                               UBool keepSpace);
 
     /**
      * Skip over a sequence of zero or more white space characters

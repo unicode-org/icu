@@ -4,8 +4,8 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Attic/UnicodePropertySet.java,v $
-* $Date: 2002/07/26 21:12:36 $
-* $Revision: 1.15 $
+* $Date: 2002/08/28 20:21:42 $
+* $Revision: 1.16 $
 **********************************************************************
 */
 package com.ibm.icu.text;
@@ -27,9 +27,12 @@ import com.ibm.icu.impl.UCharacterProperty;
  *
  * [:foo:] [:^foo:] - white space not allowed within "[:" or ":]"
  * \p{foo} \P{foo}  - white space not allowed within "\p" or "\P"
+ * \N{name}         - white space not allowed within "\N"
  *
  * Other than the above restrictions, white space is ignored.  Case
- * is ignored except in "\p" and "\P".
+ * is ignored except in "\p" and "\P" and "\N".  In 'name' leading
+ * and trailing space is deleted, and internal runs of whitespace
+ * are collapsed to a single space.
  *
  * This class cannot be instantiated.  It has a public static method,
  * createPropertySet(), with takes a pattern to be parsed and returns
@@ -52,11 +55,12 @@ import com.ibm.icu.impl.UCharacterProperty;
  *      JoiningType
  *    + Script
  *    + Binary properties
+ *    + Name
  *
  * '+' indicates a supported property.
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodePropertySet.java,v $ $Revision: 1.15 $ $Date: 2002/07/26 21:12:36 $
+ * @version $RCSfile: UnicodePropertySet.java,v $ $Revision: 1.16 $ $Date: 2002/08/28 20:21:42 $
  */
 class UnicodePropertySet {
 
@@ -140,8 +144,8 @@ class UnicodePropertySet {
 
     /**
      * Return true if the given position, in the given pattern, appears
-     * to be the start of a property set pattern [:foo:], \p{foo}, or
-     * \P{foo}.
+     * to be the start of a property set pattern [:foo:], \p{foo},
+     * \P{foo}, or \N{name}.
      */
     public static boolean resemblesPattern(String pattern, int pos) {
         // Patterns are at least 5 characters long
@@ -151,7 +155,8 @@ class UnicodePropertySet {
 
         // Look for an opening [:, [:^, \p, or \P
         return pattern.regionMatches(pos, "[:", 0, 2) ||
-            pattern.regionMatches(true, pos, "\\p", 0, 2);
+            pattern.regionMatches(true, pos, "\\p", 0, 2) ||
+            pattern.regionMatches(pos, "\\N", 0, 2);
     }
 
     /**
@@ -160,10 +165,10 @@ class UnicodePropertySet {
      *
      * @param pattern the pattern string
      * @param ppos on entry, the position at which to begin parsing.
-     * This shold be one of the locations marked '^':
+     * This should be one of the locations marked '^':
      *
-     *   [:blah:]     \p{blah}     \P{blah}
-     *   ^       %    ^       %    ^       %
+     *   [:blah:]     \p{blah}     \P{blah}     \N{name}
+     *   ^       %    ^       %    ^       %    ^       %
      *
      * On return, the position after the last character parsed, that is,
      * the locations marked '%'.  If the parse fails, ppos is returned
@@ -185,7 +190,8 @@ class UnicodePropertySet {
             return null;
         }
 
-        boolean posix = false; // true for [:pat:], false for \p{pat} \P{pat}
+        boolean posix = false; // true for [:pat:], false for \p{pat} \P{pat} \N{pat}
+        boolean isName = false; // true for \N{pat}, o/w false
         boolean invert = false;
 
         // Look for an opening [:, [:^, \p, or \P
@@ -196,8 +202,11 @@ class UnicodePropertySet {
                 ++pos;
                 invert = true;
             }
-        } else if (pattern.regionMatches(true, pos, "\\p", 0, 2)) {
-            invert = (pattern.charAt(pos+1) == 'P');
+        } else if (pattern.regionMatches(true, pos, "\\p", 0, 2) ||
+                   pattern.regionMatches(pos, "\\N", 0, 2)) {
+            char c = pattern.charAt(pos+1);
+            invert = (c == 'P');
+            isName = (c == 'N');
             pos = Utility.skipWhitespace(pattern, pos+2);
             if (pos == pattern.length() || pattern.charAt(pos++) != '{') {
                 // Syntax error; "\p" or "\P" not followed by "{"
@@ -219,16 +228,16 @@ class UnicodePropertySet {
         // medium \p{gc=Cf} or long \p{GeneralCategory=Format}
         // pattern.
         int equals = pattern.indexOf('=', pos);
-        if (equals >= 0 && equals < close) {
+        if (equals >= 0 && equals < close && !isName) {
             // Equals seen; parse medium/long pattern
-            String typeName = munge(pattern, pos, equals);
-            String valueName = munge(pattern, equals+1, close);
+            String typeName = munge(pattern, pos, equals, false);
             SetFactory factory;
             factory = (SetFactory) NAME_MAP.get(typeName);
             if (factory == null) {
                 // Not a factory; try a binary property of the form
                 // \p{foo=true}, where the value can be 'true', 't',
                 // 'false', or 'f'.
+                String valueName = munge(pattern, equals+1, close, false);
                 Integer v = (Integer) BOOLEAN_VALUE_MAP.get(valueName);
                 if (v != null) {
                     set = createBinaryPropertySet(typeName);
@@ -240,24 +249,39 @@ class UnicodePropertySet {
                     return null;
                 }
             } else {
+                String valueName = munge(pattern, equals+1, close,
+                                         factory.needsWhitespace());
                 set = factory.create(valueName);
             }
         } else {
+            // Handle case where no '=' is seen, and \N{}
+            String shortName = munge(pattern, pos, close, isName);
+
+            // Handle \N{name}
+            if (isName) {
+                set = NameFactory._create(shortName);
+            }
+
             // No equals seen; parse short format \p{Cf}
-            String shortName = munge(pattern, pos, close);
-
-            // First try general category
-            set = createCategorySet(shortName);
-
-            // If this fails, try script
-            if (set == null) {
-                set = createScriptSet(shortName);
+            else {
+                // First try general category
+                set = createCategorySet(shortName);
+                
+                // If this fails, try script
+                if (set == null) {
+                    set = createScriptSet(shortName);
+                }
+                
+                // If this fails, try binary property
+                if (set == null) {
+                    set = createBinaryPropertySet(shortName);
+                }
             }
+        }
 
-            // If this fails, try binary property
-            if (set == null) {
-                set = createBinaryPropertySet(shortName);
-            }
+        // Upon failure, return NULL with ppos unchanged
+        if (set == null) {
+            return set;
         }
 
         if (invert) {
@@ -276,12 +300,18 @@ class UnicodePropertySet {
     // based property retrieval.
     //----------------------------------------------------------------
 
-    static interface SetFactory {
+    static abstract class SetFactory {
 
-        UnicodeSet create(String valueName);
+        public abstract UnicodeSet create(String valueName);
+
+        // Most factories don't want whitespace in their value strings.
+        // Those that do show override this method to return true.
+        public boolean needsWhitespace() {
+            return false;
+        }
     }
 
-    static class NumericValueFactory implements SetFactory {
+    static class NumericValueFactory extends SetFactory {
         NumericValueFactory() {}
         public UnicodeSet create(String valueName) {
             double value = Double.parseDouble(valueName);
@@ -299,20 +329,37 @@ class UnicodePropertySet {
         }
     }
 
-    static class CombiningClassFactory implements SetFactory {
+    static class NameFactory extends SetFactory {
+        NameFactory() {}
+        public UnicodeSet create(String valueName) {
+            return _create(valueName);
+        }
+        public static UnicodeSet _create(String valueName) {
+            int ch = UCharacter.getCharFromExtendedName(valueName);
+            if (ch == -1) {
+                return null;
+            }
+            return new UnicodeSet(ch, ch);
+        }
+        public boolean needsWhitespace() {
+            return true;
+        }
+    }
+
+    static class CombiningClassFactory extends SetFactory {
         CombiningClassFactory() {}
         public UnicodeSet create(String valueName) {
             int ivalue = -1;
             try {
                 ivalue = Integer.parseInt(valueName);
-            } catch (NumberFormatException e) {}
-            if (ivalue < 0) {
-                // We have a negative value, or non-numeric text.
-                // Try to lookup a symbolic combining class name
+            } catch (NumberFormatException e) {
+                // We have non-numeric text.  Try to lookup a symbolic
+                // combining class name
                 Integer obj = (Integer) COMBINING_CLASS_MAP.get(valueName);
-                if (obj != null) {
-                    ivalue = obj.intValue();
+                if (obj == null) {
+                    return null; // Neither a number nor a name
                 }
+                ivalue = obj.intValue();
             }
             final int fivalue = ivalue;
             return createSetFromFilter(new Filter() {
@@ -323,7 +370,7 @@ class UnicodePropertySet {
         }
     }
 
-    static class BidiClassFactory implements SetFactory {
+    static class BidiClassFactory extends SetFactory {
         BidiClassFactory() {}
         public UnicodeSet create(String valueName) {
             Integer obj = (Integer) BIDI_CLASS_MAP.get(valueName);
@@ -450,18 +497,31 @@ class UnicodePropertySet {
     /**
      * Given a string, munge it to lose the whitespace, underscores,
      * and hyphens.  So "General Category " or "General_Category" or "
-     * General-Category" become "GeneralCategory". We munge all type
+     * General-Category" become "GENERALCATEGORY". We munge all type
      * and value strings, and store all type and value keys
      * pre-munged.
+     * @param keepSpace if false, completely delete white space.
+     * Otherwise compress runs of whitespace to a single space,
+     * and delete leading and trailing whitespace.  If keepSpace
+     * is true, we also keep underscores and hyphens.
      */
-    private static String munge(String str, int start, int limit) {
+    private static String munge(String str, int start, int limit,
+                                boolean keepSpace) {
         StringBuffer buf = new StringBuffer();
         for (int i=start; i<limit; ) {
             int c = UTF16.charAt(str, i);
             i += UTF16.getCharCount(c);
-            if (c != '_' && c != '-' && !UCharacterProperty.isRuleWhiteSpace(c)) {
+            if (UCharacterProperty.isRuleWhiteSpace(c)) {
+                if (keepSpace &&
+                    buf.length() > 0 && buf.charAt(buf.length()-1) != ' ') {
+                    buf.append(' ');
+                }
+            } else if (keepSpace || (c != '_' && c != '-')) {
                 UTF16.append(buf, UCharacter.toUpperCase(c));
             }
+        }
+        if (buf.length() > 0 && buf.charAt(buf.length()-1) == ' ') {
+            buf.deleteCharAt(buf.length()-1);
         }
         return buf.toString();
     }
@@ -609,6 +669,8 @@ class UnicodePropertySet {
         //addType("DT", "DECOMPOSITIONTYPE", DECOMPOSITION_TYPE);
 
         addType("NV", "NUMERICVALUE", new NumericValueFactory());
+
+        addType("NA", "NAME", new NameFactory());
 
         //addType("NT", "NUMERICTYPE", NUMERIC_TYPE);
         //addType("EA", "EASTASIANWIDTH", EAST_ASIAN_WIDTH);
