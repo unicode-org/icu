@@ -48,18 +48,9 @@
 
 #include "unicode/utypes.h"
 #include "unicode/resbund.h"
-#include "mutex.h"
 
 #include "rbdata.h"
-#include "filestrm.h"
-#include "cstring.h"
 #include "uresimp.h"
-
-#include "cmemory.h"
-
-#ifdef ICU_RESBUND_USE_DEPRECATES
-#include "uhash.h"
-#endif
 
 /*-----------------------------------------------------------------------------
  * Implementation Notes
@@ -175,12 +166,7 @@
  */
 //-----------------------------------------------------------------------------
 
-const char* ResourceBundle::kDefaultSuffix      = ".res";
-const int32_t ResourceBundle::kDefaultSuffixLen = 4;
 const char* ResourceBundle::kDefaultFilename    = "root";
-const char* ResourceBundle::kDefaultLocaleName  = "root";
-
-
 
 //-----------------------------------------------------------------------------
 
@@ -188,24 +174,20 @@ ResourceBundle::ResourceBundle( const UnicodeString&    path,
                                 const Locale&           locale,
                                 UErrorCode&              error)
 {
-  constructForLocale(path, locale, error);
+    constructForLocale(path, locale, error);
 }
 
 ResourceBundle::ResourceBundle(UErrorCode &err) {
-#ifdef ICU_RESBUND_USE_DEPRECATES
-  fItemCache = 0;
-#endif
-  resource = ures_open(0, Locale::getDefault().getName(), &err);
-  if(U_SUCCESS(err)) {
-    fRealLocale = Locale(ures_getRealLocale(resource, &err));
-  }
+    resource = ures_open(0, Locale::getDefault().getName(), &err);
+    if(U_SUCCESS(err)) {
+        fRealLocale = Locale(ures_getRealLocale(resource, &err));
+    }
 }
 
 ResourceBundle::ResourceBundle( const UnicodeString&    path,
                                 UErrorCode&              error)
 {
-  constructForLocale(path, 
-                     Locale::getDefault(), error);
+    constructForLocale(path, Locale::getDefault(), error);
 }
 
 /**
@@ -219,9 +201,6 @@ ResourceBundle::ResourceBundle( const UnicodeString&    path,
                                 UErrorCode&              status)
   :   fRealLocale(localeName)
 {
-#ifdef ICU_RESBUND_USE_DEPRECATES
-    fItemCache = 0;
-#endif
     int32_t patlen = path.length();
 
     if(patlen > 0) {
@@ -242,7 +221,7 @@ ResourceBundle::ResourceBundle(const wchar_t* path,
                                const Locale& locale, 
                                UErrorCode& err)
 {
-        constructForLocale(path, locale, err);
+    constructForLocale(path, locale, err);
 }
 
 ResourceBundle::ResourceBundle(const ResourceBundle &other) {
@@ -252,9 +231,6 @@ ResourceBundle::ResourceBundle(const ResourceBundle &other) {
         if(other.resource->fIsTopLevel == TRUE) {
             constructForLocale(ures_getPath(other.resource), Locale(ures_getName(other.resource)), status);
         } else {
-#ifdef ICU_RESBUND_USE_DEPRECATES
-            fItemCache = 0;
-#endif
             resource = copyResb(0, other.resource, &status);
         }
     } else {
@@ -264,16 +240,10 @@ ResourceBundle::ResourceBundle(const ResourceBundle &other) {
 }
 
 ResourceBundle::ResourceBundle(UResourceBundle *res, UErrorCode& err) {
-#ifdef ICU_RESBUND_USE_DEPRECATES
-    fItemCache = 0;
-#endif
     resource = copyResb(0, res, &err);
 }
 
 ResourceBundle::ResourceBundle( const char* path, const Locale& locale, UErrorCode& err) {
-#ifdef ICU_RESBUND_USE_DEPRECATES
-    fItemCache = 0;
-#endif
     resource = ures_open(path, locale.getName(), &err);
     if(U_SUCCESS(err)) {
         fRealLocale = Locale(ures_getRealLocale(resource, &err));
@@ -281,18 +251,11 @@ ResourceBundle::ResourceBundle( const char* path, const Locale& locale, UErrorCo
 }
 
 
-
 ResourceBundle& ResourceBundle::operator=(const ResourceBundle& other)
 {
     if(this == &other) {
         return *this;
     }
-#ifdef ICU_RESBUND_USE_DEPRECATES
-    if(fItemCache != 0) {
-        uhash_close(fItemCache);
-        fItemCache = 0;
-    }
-#endif
     if(resource != 0) {
         ures_close(resource);
         resource = 0;
@@ -308,29 +271,10 @@ ResourceBundle& ResourceBundle::operator=(const ResourceBundle& other)
 
 ResourceBundle::~ResourceBundle()
 {
-#ifdef ICU_RESBUND_USE_DEPRECATES
-    if(fItemCache != 0) {
-        uhash_close(fItemCache);
-    }
-#endif
     if(resource != 0) {
         ures_close(resource);
     }
 }
-
-#ifdef ICU_RESBUND_USE_DEPRECATES
-void
-ResourceBundle::deleteValue(UHashKey value) {
-    delete (ResourceBundleData *)value.pointer;
-}
-
-void ResourceBundle::initItemCache(UErrorCode& error) {
-    if(fItemCache == 0) {
-        fItemCache = uhash_open(uhash_hashChars, uhash_compareChars, &error);
-        uhash_setValueDeleter(fItemCache, deleteValue);
-    }
-}
-#endif
 
 void 
 ResourceBundle::constructForLocale(const UnicodeString& path,
@@ -339,10 +283,6 @@ ResourceBundle::constructForLocale(const UnicodeString& path,
 {
     char name[128];
     int32_t patlen = path.length();
-
-#ifdef ICU_RESBUND_USE_DEPRECATES
-    fItemCache = 0;
-#endif
 
     if(patlen > 0) {
         path.extract(0, patlen, name);
@@ -361,10 +301,6 @@ ResourceBundle::constructForLocale(const wchar_t* path,
                                    const Locale& locale,
                                    UErrorCode& error)
 {
-#ifdef ICU_RESBUND_USE_DEPRECATES
-    fItemCache = 0;
-#endif
-
     if(path != 0) {
         resource = ures_openW(path, locale.getName(), &error);
     } else {
@@ -383,11 +319,11 @@ UnicodeString ResourceBundle::getString(UErrorCode& status) const {
 }
 
 const uint8_t *ResourceBundle::getBinary(int32_t& len, UErrorCode& status) const {
-  return ures_getBinary(resource, &len, &status);
+    return ures_getBinary(resource, &len, &status);
 }
 
 const char *ResourceBundle::getName(void) {
-  return ures_getName(resource);
+    return ures_getName(resource);
 }
 
 const char *ResourceBundle::getKey(void) {
@@ -461,283 +397,16 @@ UnicodeString ResourceBundle::getStringEx(const char* key, UErrorCode& status) c
 const char*
 ResourceBundle::getVersionNumber()  const
 {
-  return ures_getVersionNumber(resource);
+    return ures_getVersionNumber(resource);
 }
 
 void ResourceBundle::getVersion(UVersionInfo versionInfo) const {
-  ures_getVersion(resource, versionInfo);
+    ures_getVersion(resource, versionInfo);
 }
 
 const Locale &ResourceBundle::getLocale(void) const
 {
-        return fRealLocale;
+    return fRealLocale;
 }
-
-#ifdef ICU_RESBUND_USE_DEPRECATES
-// Start deprecated API
-const UnicodeString*
-ResourceBundle::getString(  const char              *resourceTag,
-                            UErrorCode&              err) const
-{
-    StringList *sldata;
-
-
-    if(U_FAILURE(err)) {
-        return 0;
-    }
-
-    ((ResourceBundle &)(*this)).initItemCache(err); // Semantically const
-
-    sldata = (StringList *)uhash_get(fItemCache, resourceTag);
-
-    if(sldata == 0) {
-        const UChar *result = ures_get(resource, resourceTag, &err);
-        if(result != 0) {
-            UnicodeString *t = new UnicodeString[1];
-            t->setTo(TRUE, result, -1);
-            sldata = new StringList(t, 1);
-        } else {
-            err = U_MISSING_RESOURCE_ERROR;
-            return 0;
-        }
-        sldata->fCreationStatus = err;
-        uhash_put(fItemCache, (void *)resourceTag, sldata, &err);
-    } else {
-        err = sldata->fCreationStatus;
-    }
-    return sldata->fStrings;
-}
-
-const UnicodeString*
-ResourceBundle::getStringArray( const char             *resourceTag,
-                                int32_t&                count,
-                                UErrorCode&              err) const
-{
-    UnicodeString *result;
-    StringList *sldata;
-    int32_t len=0;
-
-    if(U_FAILURE(err)) {
-        return 0;
-    }
-
-    ((ResourceBundle &)(*this)).initItemCache(err); // Semantically const
-
-    sldata = (StringList *)uhash_get(fItemCache, resourceTag);
-
-    if(sldata == 0) {
-        UResourceBundle array;
-        ures_setIsStackObject(&array, TRUE);
-        UErrorCode fallbackInfo = U_ZERO_ERROR;
-        ures_getByKey(resource, resourceTag, &array, &fallbackInfo);
-        if(U_SUCCESS(fallbackInfo)) {
-            count = ures_getSize(&array);
-            result = new UnicodeString[count];
-            const UChar *string = 0;
-            for(int32_t i=0; i<count; i++) {
-                string = ures_getStringByIndex(&array, i, &len, &err);
-                (result+i)->setTo(TRUE, string, len);
-            }
-            ures_close(&array);
-            sldata = new StringList(result, count);
-        } else {
-            err = U_MISSING_RESOURCE_ERROR;
-            return 0;
-        }
-        sldata->fCreationStatus = fallbackInfo;
-        uhash_put(fItemCache, (void *)resourceTag, sldata, &err);
-        err = fallbackInfo;
-    } else {
-        count = sldata->fCount;
-        err = sldata->fCreationStatus;
-    }
-    return sldata->fStrings;
-}
-
-const UnicodeString*
-ResourceBundle::getArrayItem(   const char             *resourceTag,
-                                int32_t                 indexS,
-                                UErrorCode&              err) const
-{
-    int32_t num;
-    const UnicodeString *array = getStringArray(resourceTag, num, err);
-
-    if(U_FAILURE(err) || indexS<0 || indexS>=num) {
-        err = U_MISSING_RESOURCE_ERROR;
-        return 0;
-    } else {
-        return &array[indexS];
-    }
-}
-
-const UnicodeString** 
-ResourceBundle::get2dArray(const char *resourceTag,
-                           int32_t&             rowCount,
-                           int32_t&             columnCount,
-                           UErrorCode&           err) const
-{
-    //UnicodeString **result = 0;
-    UnicodeString **result;
-    String2dList *sldata = 0;
-    int32_t len=0;
-
-    if(U_FAILURE(err)) {
-        return 0;
-    }
-
-    ((ResourceBundle &)(*this)).initItemCache(err); // Semantically const
-
-    sldata = (String2dList *)uhash_get(fItemCache, resourceTag);
-
-    if(sldata == 0) {
-        UResourceBundle array;
-        ures_setIsStackObject(&array, TRUE);
-        UErrorCode fallbackInfo = U_ZERO_ERROR;
-        ures_getByKey(resource, resourceTag, &array, &fallbackInfo);
-        if(U_SUCCESS(fallbackInfo)) {
-            rowCount = ures_getSize(&array);
-            if(rowCount > 0) {
-                result = new UnicodeString*[rowCount];
-                UResourceBundle row;
-                ures_setIsStackObject(&row, TRUE);
-                ures_getByIndex(&array, 0, &row, &err);
-                columnCount = ures_getSize(&row);
-                const UChar* string = 0;
-                for(int32_t i=0; i<rowCount; i++) {
-                    *(result+i) = new UnicodeString[columnCount];                    
-                    ures_getByIndex(&array, i, &row, &err);
-                    for(int32_t j=0; j<columnCount; j++) {
-                        string = ures_getStringByIndex(&row, j, &len, &err);
-                        (*(result+i)+j)->setTo(TRUE, string, len);
-                    }
-                    ures_close(&row);
-                }
-                sldata = new String2dList(result, rowCount, columnCount);
-                sldata->fCreationStatus = fallbackInfo;
-                uhash_put(fItemCache, (void *)resourceTag, sldata, &err);
-                err = fallbackInfo;
-            }
-            ures_close(&array);
-        } else {
-            err = U_MISSING_RESOURCE_ERROR;
-            return 0;
-        }
-    } else {
-        rowCount = sldata->fRowCount;
-        columnCount = sldata->fColCount;
-        err = sldata->fCreationStatus;
-    }
-
-    return (const UnicodeString**)sldata->fStrings;
-}
-
-
-const UnicodeString*
-ResourceBundle::get2dArrayItem(const char *resourceTag,
-                               int32_t              rowIndex,
-                               int32_t              columnIndex,
-                               UErrorCode&           err) const
-{ 
-    int32_t rows = 0;
-    int32_t columns = 0;
-
-    const UnicodeString** array= get2dArray(resourceTag, rows, columns, err);
-
-    if(array == 0 || rowIndex < 0 || columnIndex < 0 || rowIndex >= rows || columnIndex >= columns) {
-        err = U_MISSING_RESOURCE_ERROR;
-        return 0;
-    } else {
-        return &array[rowIndex][columnIndex];
-    }
-}
-
-const UnicodeString*
-ResourceBundle::getTaggedArrayItem( const char             *resourceTag,
-                                    const UnicodeString&    itemTag,
-                                    UErrorCode&              err) const
-{
-    StringList *sldata = 0;
-    int32_t len = 0;
-
-    if(U_FAILURE(err)) {
-        return 0;
-    }
-
-    char item[256];
-    char key[256];
-    int32_t taglen = itemTag.length();
-    itemTag.extract(0, taglen, key, "");
-    key[taglen] = '\0';
-    itemTag.extract(0, taglen, item, "");
-    item[taglen] = '\0';
-    uprv_strcat(key, resourceTag);
-
-    ((ResourceBundle &)(*this)).initItemCache(err); // Semantically const
-
-    sldata = (StringList *)uhash_get(fItemCache, key);
-
-    if(sldata == 0) {
-        UResourceBundle table;
-        ures_setIsStackObject(&table, TRUE);
-        UErrorCode fallbackInfo = U_ZERO_ERROR;
-        ures_getByKey(resource, resourceTag, &table, &fallbackInfo);
-        if(U_SUCCESS(fallbackInfo)) {
-            const UChar *result = ures_getStringByKey(&table, item, &len, &err);
-            if(result != 0) {
-                UnicodeString *t = new UnicodeString[1];
-                t->setTo(TRUE, result, len);
-                sldata = new StringList(t, 1);
-            } else {
-                err = U_MISSING_RESOURCE_ERROR;
-                return 0;
-            }
-            ures_close(&table);
-            sldata->fCreationStatus = fallbackInfo;
-            uhash_put(fItemCache, key, sldata, &err);
-            err = fallbackInfo;
-        } else {
-            err = U_MISSING_RESOURCE_ERROR;
-            return 0;
-        }
-    } else {
-        err = sldata->fCreationStatus;
-    }
-    return sldata->fStrings;
-}
-
-void
-ResourceBundle::getTaggedArray( const char             *resourceTag,
-                                UnicodeString*&         itemTags,
-                                UnicodeString*&         items,
-                                int32_t&                numItems,
-                                UErrorCode&              err) const
-{
-    if(U_FAILURE(err)) {
-        return;
-    }
-    UResourceBundle table;
-    ures_setIsStackObject(&table, TRUE);
-    ures_getByKey(resource, resourceTag, &table, &err);
-    if(U_SUCCESS(err)) {
-        numItems = ures_getSize(&table);
-        itemTags = new UnicodeString[numItems];
-        items = new UnicodeString[numItems];
-        const UChar *value = 0;
-        const char *key = 0;
-        int32_t len = 0;
-        int16_t indexR = -1;
-        res_getNextStringTableItem(&(table.fResData), table.fRes, &value, &key, &len, &indexR);
-        while(value != 0) {
-            items[indexR-1].setTo(value);
-            itemTags[indexR-1].setTo(key);
-            res_getNextStringTableItem(&(table.fResData), table.fRes, &value, &key, &len, &indexR);
-        }
-    } else {
-        err = U_MISSING_RESOURCE_ERROR;
-        return;
-    }
-}
-#endif
 
 //eof
-
