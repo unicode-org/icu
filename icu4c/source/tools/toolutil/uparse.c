@@ -68,6 +68,18 @@ u_parseDelimitedFile(const char *filename, char delimiter,
             continue;
         }
 
+        /* remove in-line comments */
+        limit=uprv_strchr(line, '#');
+        if(limit!=NULL) {
+            /* get white space before the pound sign */
+            while(limit>line && (*(limit-1)==' ' || *(limit-1)=='\t')) {
+                --limit;
+            }
+
+            /* truncate the line */
+            *limit=0;
+        }
+
         /* for each field, call the corresponding field function */
         start=line;
         for(i=0; i<fieldCount; ++i) {
