@@ -133,8 +133,8 @@ protected:
     // commented out because UObject is abstract (see getDynamicClassID)
     // inline UObject(const UObject &other) {}
 
-#if U_ICU_VERSION_MAJOR_NUM>2 || (U_ICU_VERSION_MAJOR_NUM==2 && U_ICU_VERSION_MINOR_NUM>2)
-    // TODO post ICU 2.2
+#if U_ICU_VERSION_MAJOR_NUM>2 || (U_ICU_VERSION_MAJOR_NUM==2 && U_ICU_VERSION_MINOR_NUM>4)
+    // TODO post ICU 2.4  (This comment inserted in 2.2)
     // some or all of the following "boilerplate" functions may be made public
     // in a future ICU4C release when all subclasses implement them
 
