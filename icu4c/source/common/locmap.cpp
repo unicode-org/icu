@@ -4,7 +4,7 @@
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
 */
-// $Revision: 1.15 $
+// $Revision: 1.16 $
 //
 // Provides functionality for mapping between
 // LCID and Posix IDs.
@@ -299,9 +299,7 @@ static const ILcidPosixElement sv[] = {
     {0x041d, "sv_SE"}
 };
 
-// The MSJDK documentation says the default country is Kenya.
-ILCID_POSIX_ELEMENT_ARRAY(0x0441, sw, sw_KE)    //Todo: Data does not exist
-
+ILCID_POSIX_ELEMENT_ARRAY(0x0441, sw, sw_KE)    // The MSJDK documentation says the default country is Kenya.
 ILCID_POSIX_ELEMENT_ARRAY(0x0449, ta, ta_IN)
 ILCID_POSIX_ELEMENT_ARRAY(0x044a, te, te_IN)    //Todo: Data does not exist
 ILCID_POSIX_ELEMENT_ARRAY(0x041e, th, th_TH)
