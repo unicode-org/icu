@@ -1770,6 +1770,7 @@ static void TestCEValidity()
         ucol_close(coll);
         count ++;
     }
+    T_FileStream_close(file);
 }
 
 static void printSortKeyError(const UChar   *codepoints, int length,
@@ -1943,4 +1944,5 @@ static void TestSortKeyValidity(void)
         ucol_close(coll);
         count ++;
     }
+    T_FileStream_close(file);
 }
