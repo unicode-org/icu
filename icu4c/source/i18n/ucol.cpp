@@ -5761,9 +5761,9 @@ ucol_getBound(const uint8_t       *source,
       noOfLevels--;
     }
   } while (noOfLevels > 0 
-    && (source[sourceIndex] != 0 || sourceIndex == sourceLength));
+    && (source[sourceIndex] != 0 || sourceIndex < sourceLength));
 
-  if((source[sourceIndex] != 0 || sourceIndex == sourceLength)
+  if((source[sourceIndex] == 0 || sourceIndex == sourceLength)
     && noOfLevels > 0) {
     *status = U_SORT_KEY_TOO_SHORT_WARNING;
   }
