@@ -1071,6 +1071,29 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
             }
             break;
 
+        case URX_BACKREF:
+            {
+                U_ASSERT(opValue < frameSize);
+                int32_t groupStartIdx = fp->fExtra[opValue];
+                int32_t groupEndIdx   = fp->fExtra[opValue+1];
+                U_ASSERT(groupStartIdx <= groupEndIdx);
+                int32_t len = groupEndIdx-groupStartIdx;
+                if (groupStartIdx < 0 || len == 0) {
+                    // This capture group has not participated in the match thus far,
+                    //   or the match was of an empty string.
+                    //   Verified by testing:  Perl matches succeed in these cases, so
+                    //   we do too.
+                    break;
+                }
+                if ((fp->fInputIdx + len > inputLen) || 
+                    u_strncmp(fInputUC+groupStartIdx, fInputUC+fp->fInputIdx, len) != 0) {
+                    fp = (REStackFrame *)fStack->popFrame(frameSize);   // FAIL, no match.
+                } else {
+                    fp->fInputIdx += len;     // Match.  Advance current input position.
+                }
+            }
+            break;
+
 
         default:
             // Trouble.  The compiled pattern contains an entry with an
