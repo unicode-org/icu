@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2001, International Business Machines
+*   Copyright (C) 1997-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -842,25 +842,17 @@ _startsWith(const char *s, const char *possiblePrefix) {
 }
 
 /*
- * TODO check fallback semantics - fall back through default??
- * Needs discussion!
+ * Lookup a resource bundle table item with fallback on the table level.
+ * Regular resource bundle lookups perform fallback to parent locale bundles
+ * and eventually the root bundle, but only for top-level items.
+ * This function takes the name of a top-level table and of an item in that table
+ * and performs a lookup of both, falling back until a bundle contains a table
+ * with this item.
  *
- * Regular resource bundle lookup falls back through default only when a bundle
- * is opened. Once open, the lookup for an item in that bundle follows only
- * the bundle's chain, without going through default.
- *
- * This lookup for the display strings does go through the default locale
- * for the sub-item.
- * It seems to be inconsistent with how the resource bundle mechanism is documented.
- *
- * Note also that using this mechanism (with itemKey=NULL) for the variant's
- * display string, which is a top-level item and should always be available
- * at least in root, is effectively the same as opening the displayLocale's
- * bundle and getting the string directly from there - the fallback is the same
- * (right?!).
- * So, for variant's strings, one could either do that, or if the above elaborate
- * mechanism is desired, one could move variant display strings into their
- * own table "Variants" like the Languages and Countries tables.
+ * Note: Only the opening of entire bundles falls back through the default locale
+ * before root. Once a bundle is open, item lookups do not go through the
+ * default locale because that would result in a mix of languages that is
+ * unpredictable to the programmer and most likely useless.
  */
 static const UChar *
 _res_getTableStringWithFallback(const char *path, const char *locale,
@@ -868,148 +860,111 @@ _res_getTableStringWithFallback(const char *path, const char *locale,
                               int32_t *pLength,
                               UErrorCode *pErrorCode)
 {
-    char localeBuffer[200];
+    char localeBuffer[80];
     UResourceBundle *rb, table;
     const UChar *item;
-    const char *defaultLocale;
-    UBool lookedAtDefault;
-
-    lookedAtDefault=FALSE;
-    defaultLocale=uloc_getDefault();
-
-    /* normalize the input locale name */
-    if(locale==NULL) {
-        locale=defaultLocale;
-        lookedAtDefault=TRUE;
-    } else {
-        uloc_getName(locale, localeBuffer, sizeof(localeBuffer), pErrorCode);
-        if(U_FAILURE(*pErrorCode) || *pErrorCode==U_STRING_NOT_TERMINATED_WARNING) {
-            *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
-            return NULL;
-        }
-        locale=localeBuffer;
-
-        /* is the requested locale the root locale, or part of the default locale? */
-        if(*locale==0 || 0==uprv_strcmp(locale, "root") || _startsWith(defaultLocale, locale)) {
-            lookedAtDefault=TRUE;
-        }
-    }
+    UErrorCode errorCode;
 
     for(;;) {
         /*
          * open the bundle for the current locale
-         * this falls back through the locale's chain to the default locale's chain to root
+         * this falls back through the locale's chain to root
          */
-        *pErrorCode=U_ZERO_ERROR;
-        rb=ures_open(path, locale, pErrorCode);
-        if(U_FAILURE(*pErrorCode)) {
+        errorCode=U_ZERO_ERROR;
+        rb=ures_open(path, locale, &errorCode);
+        if(U_FAILURE(errorCode)) {
+            /* total failure, not even root could be opened */
+            *pErrorCode=errorCode;
             return NULL;
-        } else if(*pErrorCode==U_USING_DEFAULT_WARNING) {
-            lookedAtDefault=TRUE;
-        }
-
-        /* get the real locale ID for this bundle in case of aliases & fallbacks */
-        locale=ures_getLocale(rb, pErrorCode);
-        if(U_FAILURE(*pErrorCode)) {
-            /* error getting the locale ID for an open RB - should never happen */
-            *pErrorCode=U_INTERNAL_PROGRAM_ERROR;
-            ures_close(rb);
-            return NULL;
-        }
-        if(!lookedAtDefault && _startsWith(defaultLocale, locale)) {
-            lookedAtDefault=TRUE;
+        } else if(errorCode==U_USING_DEFAULT_WARNING ||
+                  (errorCode==U_USING_FALLBACK_WARNING && *pErrorCode!=U_USING_DEFAULT_WARNING)
+        ) {
+            /* set the "strongest" error code (success->fallback->default->failure) */
+            *pErrorCode=errorCode;
         }
 
         /*
          * try to open the requested table
          * this falls back through the locale's chain to root, but not through the default locale
          */
-        *pErrorCode=U_ZERO_ERROR;
+        errorCode=U_ZERO_ERROR;
         ures_initStackObject(&table);
-        ures_getByKey(rb, tableKey, &table, pErrorCode);
-        if(U_FAILURE(*pErrorCode)) {
+        ures_getByKey(rb, tableKey, &table, &errorCode);
+        if(U_FAILURE(errorCode)) {
             /* no such table anywhere in this fallback chain */
             ures_close(rb);
-            if(lookedAtDefault) {
-                return NULL;
-            }
-
-            /* try fallback through the default locale */
-            locale=defaultLocale;
-            lookedAtDefault=TRUE;
-            continue;
+            *pErrorCode=errorCode;
+            return NULL;
+        } else if(errorCode==U_USING_DEFAULT_WARNING ||
+                  (errorCode==U_USING_FALLBACK_WARNING && *pErrorCode!=U_USING_DEFAULT_WARNING)
+        ) {
+            /* set the "strongest" error code (success->fallback->default->failure) */
+            *pErrorCode=errorCode;
         }
 
-        /*
-         * Disable (#if 0) the following check:
-         * Assume that only the language that is the same as the root language does not
-         * have its own override of this item.
-         * Therefore, we _do_ want to use the item even if it is from root before default,
-         * because for the languages where this happens, it is exactly what we need.
-         * Markus Scherer 2001-oct-02
-         */
-#if 0
-        /* do not use the root bundle if we did not look at the default locale yet */
-        if(*pErrorCode==U_USING_DEFAULT_WARNING && !lookedAtDefault) {
-            ures_close(table);
-            ures_close(rb);
-
-            /* try fallback through the default locale */
-            locale=defaultLocale;
-            lookedAtDefault=TRUE;
-            continue;
-        }
-#endif
-
-        /* get the real locale ID for this table in case of aliases & fallbacks */
-        locale=ures_getLocale(&table, pErrorCode);
-        if(U_FAILURE(*pErrorCode)) {
-            /* error getting the locale ID for an open RB - should never happen */
-            *pErrorCode=U_INTERNAL_PROGRAM_ERROR;
+        /* try to open the requested item in the table */
+        errorCode=U_ZERO_ERROR;
+        item=ures_getStringByKey(&table, itemKey, pLength, &errorCode);
+        if(U_SUCCESS(errorCode)) {
+            /* we got the requested item! */
             ures_close(&table);
             ures_close(rb);
-            return NULL;
-        }
 
-        if(itemKey!=NULL) {
-            /* try to open the requested item in the table */
-            item=ures_getStringByKey(&table, itemKey, pLength, pErrorCode);
-            if(U_SUCCESS(*pErrorCode)) {
-                /* we got the requested item! */
-                ures_close(&table);
-                ures_close(rb);
-                return item;
+            if(errorCode==U_USING_DEFAULT_WARNING ||
+               (errorCode==U_USING_FALLBACK_WARNING && *pErrorCode!=U_USING_DEFAULT_WARNING)
+            ) {
+                /* set the "strongest" error code (success->fallback->default->failure) */
+                *pErrorCode=errorCode;
             }
-        } else {
-            /* return the "table" resource itself, not an item from it */
-            item=ures_getString(&table, pLength, pErrorCode);
-            ures_close(&table); /* we will not need the table any more */
-            ures_close(rb);
+
+            /*
+             * It is safe to close the bundle and still return the
+             * string pointer because resource bundles are
+             * cached until u_cleanup().
+             */
             return item;
         }
 
-        ures_close(&table);
-        ures_close(rb);
-        if(lookedAtDefault && (*locale==0 || 0==uprv_strcmp(locale, "root"))) {
-            /* end of fallback, default and root do not have the requested item either */
+        /*
+         * We get here if the item was not found.
+         * We will follow the chain to the parent locale bundle and look in
+         * the table there.
+         */
+
+        /* get the real locale ID for this table */
+        errorCode=U_ZERO_ERROR;
+        locale=ures_getLocale(&table, &errorCode);
+        /* keep table and rb open until we are done using the locale string owned by the table bundle */
+        if(U_FAILURE(errorCode)) {
+            /* error getting the locale ID for an open RB - should never happen */
+            ures_close(&table);
+            ures_close(rb);
+            *pErrorCode=U_INTERNAL_PROGRAM_ERROR;
+            return NULL;
+        }
+
+        if(*locale==0 || 0==uprv_strcmp(locale, "root")) {
+            /* end of fallback; even root does not have the requested item either */
+            ures_close(&table);
+            ures_close(rb);
+            *pErrorCode=U_MISSING_RESOURCE_ERROR;
             return NULL;
         }
 
         /* could not find the table, or its item, try to fall back to a different RB and table */
-        *pErrorCode=U_ZERO_ERROR;
-        uloc_getParent(locale, localeBuffer, sizeof(localeBuffer), pErrorCode);
-        if(U_FAILURE(*pErrorCode) || *pErrorCode==U_STRING_NOT_TERMINATED_WARNING) {
+        errorCode=U_ZERO_ERROR;
+        uloc_getParent(locale, localeBuffer, sizeof(localeBuffer), &errorCode);
+        /* done with the locale string - ready to close table and rb */
+        ures_close(&table);
+        ures_close(rb);
+        if(U_FAILURE(errorCode) || errorCode==U_STRING_NOT_TERMINATED_WARNING) {
+            /* error getting the parent locale ID - should never happen */
             *pErrorCode=U_INTERNAL_PROGRAM_ERROR;
             return NULL;
         }
-        locale=localeBuffer;
 
-        /* parent==root? try the default locale if not done so already */
-        if(!lookedAtDefault && (*locale==0 || 0==uprv_strcmp(locale, "root"))) {
-            /* try fallback through the default locale */
-            locale=defaultLocale;
-            lookedAtDefault=TRUE;
-        }
+        /* continue the fallback lookup with the parent locale ID */
+        locale=localeBuffer;
     }
 }
 
@@ -1022,25 +977,33 @@ _getStringOrCopyKey(const char *path, const char *locale,
     const UChar *s;
     int32_t length;
 
-    length=-1;
-    s=_res_getTableStringWithFallback(path, locale,
-                                       tableKey, itemKey,
-                                       &length,
-                                       pErrorCode);
-    if(U_SUCCESS(*pErrorCode) && s) {
+    if(itemKey==NULL) {
+        /* top-level item: normal resource bundle access */
+        UResourceBundle *rb;
+
+        rb=ures_open(path, locale, pErrorCode);
+        if(U_SUCCESS(*pErrorCode)) {
+            s=ures_getStringByKey(rb, tableKey, &length, pErrorCode);
+            /* see comment about closing rb near "return item;" in _res_getTableStringWithFallback() */
+            ures_close(rb);
+        }
+    } else {
+        /* second-level item, use special fallback */
+        s=_res_getTableStringWithFallback(path, locale,
+                                           tableKey, itemKey,
+                                           &length,
+                                           pErrorCode);
+    }
+    if(U_SUCCESS(*pErrorCode)) {
         int32_t copyLength=uprv_min(length, destCapacity);
         if(copyLength>0) {
             u_memcpy(dest, s, copyLength);
         }
     } else {
-        length=-1;
-    }
-
-    /* no string from a resource bundle: convert the substitute */
-    if(length==-1) {
+        /* no string from a resource bundle: convert the substitute */
         length=(int32_t)uprv_strlen(substitute);
         u_charsToUChars(substitute, dest, uprv_min(length, destCapacity));
-        *pErrorCode=U_ZERO_ERROR;
+        *pErrorCode=U_USING_DEFAULT_WARNING;
     }
 
     return u_terminateUChars(dest, destCapacity, length, pErrorCode);

@@ -84,7 +84,7 @@ private:
     /**
      * routine to perform subtests, used by TestDisplayNames
      **/
-    void doTestDisplayNames(Locale& inLocale, int32_t compareIndex, UBool defaultIsFrench);
+    void doTestDisplayNames(Locale& inLocale, int32_t compareIndex);
     /**
      * additional intialization for datatables storing expected values
      **/
