@@ -714,6 +714,44 @@ unorm_getCanonStartSet(UChar32 c, USerializedSet *fillSet) {
     return FALSE; /* not found */
 }
 
+U_CAPI int32_t U_EXPORT2
+u_getFC_NFKC_Closure(UChar32 c, UChar *dest, int32_t destCapacity, UErrorCode *pErrorCode) {
+    uint16_t aux;
+
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+    if(destCapacity<0 || (dest==NULL && destCapacity>0)) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+    if(!_haveData(*pErrorCode) || !formatVersion_2_1) {
+        return 0;
+    }
+
+    UTRIE_GET16(&auxTrie, c, aux);
+    aux&=_NORM_AUX_FNC_MASK;
+    if(aux!=0) {
+        const UChar *s;
+        int32_t length;
+
+        s=extraData+aux;
+        if(*s<0xff00) {
+            /* s points to the single-unit string */
+            length=1;
+        } else {
+            length=*s&0xff;
+            ++s;
+        }
+        if(0<length && length<=destCapacity) {
+            uprv_memcpy(dest, s, length*U_SIZEOF_UCHAR);
+        }
+        return u_terminateUChars(dest, destCapacity, length, pErrorCode);
+    } else {
+        return 0;
+    }
+}
+
 /* reorder UTF-16 in-place -------------------------------------------------- */
 
 /*
