@@ -1357,7 +1357,10 @@ uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
     myData->magic = UCOL_HEADER_MAGIC;
     myData->isBigEndian = U_IS_BIG_ENDIAN;
     myData->charSetFamily = U_CHARSET_FAMILY;
-    uprv_memcpy(myData->formatVersion, ucaDataInfo.formatVersion, sizeof(UVersionInfo));
+    myData->formatVersion[0] = UCA_FORMAT_VERSION_0;
+    myData->formatVersion[1] = UCA_FORMAT_VERSION_1;
+    myData->formatVersion[2] = UCA_FORMAT_VERSION_2;
+    myData->formatVersion[3] = UCA_FORMAT_VERSION_3;
     myData->jamoSpecial = t->image->jamoSpecial;
 
     // Don't copy stuff from UCA header!

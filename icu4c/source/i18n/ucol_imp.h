@@ -170,42 +170,28 @@
 #define UCOL_HEADER_MAGIC 0x20030618
 
 /* UDataInfo for UCA mapping table */
-static const UDataInfo ucaDataInfo={
-    sizeof(UDataInfo),
-    0,
+/* dataFormat="UCol"            */
+#define UCA_DATA_FORMAT_0 ((uint8_t)0x55)
+#define UCA_DATA_FORMAT_1 ((uint8_t)0x43)
+#define UCA_DATA_FORMAT_2 ((uint8_t)0x6f)
+#define UCA_DATA_FORMAT_3 ((uint8_t)0x6c)
 
-    U_IS_BIG_ENDIAN,
-    U_CHARSET_FAMILY,
-    sizeof(UChar),
-    0,
-
-    {0x55, 0x43, 0x6f, 0x6c},     /* dataFormat="UCol"            */
-    /* 03/26/2002 bumped up version since format has changed */
-    /* 09/16/2002 bumped up version since we went from UColAttributeValue */
-    /*            to int32_t in UColOptionSet */
-    /* 05/13/2003 This one also updated since we added UCA and UCD versions */
-    /*            to header */
-    /* 09/11/2003 Adding information required by data swapper */
-    {2, 3, 0, 0},                 /* formatVersion                */
-    {3, 0, 0, 0}                  /* dataVersion = Unicode Version*/
-};
+#define UCA_FORMAT_VERSION_0 ((uint8_t)2)
+#define UCA_FORMAT_VERSION_1 ((uint8_t)3)
+#define UCA_FORMAT_VERSION_2 ((uint8_t)0)
+#define UCA_FORMAT_VERSION_3 ((uint8_t)0)
 
 /* UDataInfo for inverse UCA table */
-static const UDataInfo invUcaDataInfo={
-    sizeof(UDataInfo),
-    0,
+/* dataFormat="InvC"            */
+#define INVUCA_DATA_FORMAT_0 ((uint8_t)0x49)
+#define INVUCA_DATA_FORMAT_1 ((uint8_t)0x6E)
+#define INVUCA_DATA_FORMAT_2 ((uint8_t)0x76)
+#define INVUCA_DATA_FORMAT_3 ((uint8_t)0x43)
 
-    U_IS_BIG_ENDIAN,
-    U_CHARSET_FAMILY,
-    sizeof(UChar),
-    0,
-
-    {0x49, 0x6E, 0x76, 0x43},     /* dataFormat="InvC"            */
-    /* 03/26/2002 bumped up version since format has changed */
-    /* 04/29/2003 2.1 format - we have added UCA version to header */
-    {2, 1, 0, 0},                 /* formatVersion                */
-    {3, 0, 0, 0}                  /* dataVersion = Unicode Version*/
-};
+#define INVUCA_FORMAT_VERSION_0 ((uint8_t)2)
+#define INVUCA_FORMAT_VERSION_1 ((uint8_t)1)
+#define INVUCA_FORMAT_VERSION_2 ((uint8_t)0)
+#define INVUCA_FORMAT_VERSION_3 ((uint8_t)0)
 
 /* This is the size of the stack allocated buffer for sortkey generation and similar operations */
 /* if it is too small, heap allocation will occur.*/

@@ -40,15 +40,15 @@ isAcceptableInvUCA(void * /*context*/,
     if( pInfo->size>=20 &&
         pInfo->isBigEndian==U_IS_BIG_ENDIAN &&
         pInfo->charsetFamily==U_CHARSET_FAMILY &&
-        pInfo->dataFormat[0]==invUcaDataInfo.dataFormat[0] &&   /* dataFormat="InvC" */
-        pInfo->dataFormat[1]==invUcaDataInfo.dataFormat[1] &&
-        pInfo->dataFormat[2]==invUcaDataInfo.dataFormat[2] &&
-        pInfo->dataFormat[3]==invUcaDataInfo.dataFormat[3] &&
-        pInfo->formatVersion[0]==invUcaDataInfo.formatVersion[0] &&
-        pInfo->formatVersion[1]>=invUcaDataInfo.formatVersion[1] //&&
-        //pInfo->formatVersion[1]==invUcaDataInfo.formatVersion[1] &&
-        //pInfo->formatVersion[2]==invUcaDataInfo.formatVersion[2] &&
-        //pInfo->formatVersion[3]==invUcaDataInfo.formatVersion[3] &&
+        pInfo->dataFormat[0]==INVUCA_DATA_FORMAT_0 &&   /* dataFormat="InvC" */
+        pInfo->dataFormat[1]==INVUCA_DATA_FORMAT_1 &&
+        pInfo->dataFormat[2]==INVUCA_DATA_FORMAT_2 &&
+        pInfo->dataFormat[3]==INVUCA_DATA_FORMAT_3 &&
+        pInfo->formatVersion[0]==INVUCA_FORMAT_VERSION_0 &&
+        pInfo->formatVersion[1]>=INVUCA_FORMAT_VERSION_1 //&&
+        //pInfo->formatVersion[1]==INVUCA_FORMAT_VERSION_1 &&
+        //pInfo->formatVersion[2]==INVUCA_FORMAT_VERSION_2 &&
+        //pInfo->formatVersion[3]==INVUCA_FORMAT_VERSION_3 &&
         ) {
         UVersionInfo UCDVersion;
         u_getUnicodeVersion(UCDVersion);
