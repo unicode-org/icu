@@ -650,7 +650,7 @@ UnicodeString& TransliterationRule::toRule(UnicodeString& rule,
             UChar segRef[4] = {
                 0x0020 /* */,
                 0x0024 /*$*/,
-                (0x0031 + seg) /*0..9*/,
+                (UChar) (0x0031 + seg) /*0..9*/,
                 0x0020 /* */
             };
             _appendToRule(rule, UnicodeString(FALSE, segRef, 4), TRUE, escapeUnprintable, quoteBuf);
