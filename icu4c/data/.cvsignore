@@ -1,0 +1,13 @@
+*.cnv
+*.dat
+*.lst
+*.res
+icupkg.inc
+char.brk
+icudata.dll
+libicudata*
+line.brk
+line_th.brk
+sent.brk
+word.brk
+word_th.brk
