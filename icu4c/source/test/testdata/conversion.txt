@@ -445,6 +445,20 @@ conversion {
     fromUnicode {
       Headers { "charset", "unicode", "bytes", "offsets", "flush", "fallbacks", "errorCode", "callback", "invalidUChars" }
       Cases {
+        // Improve ucnv_ext.c code coverage:
+        // There will be a partial match up to the lead surrogate of U+603ff
+        // which then results in one more unit in the prefetch buffer
+        // than the match length when converting one code unit at a time.
+        // See ucnv_extContinueMatchFromU() comment
+        // "the match did not use all of preFromU[] - keep the rest for replay"
+        {
+          "*test3",
+          "\U00101234\U00101234\U00050005\U000603ff",
+          :bin{ 07070001020e05ff },
+          :intvector{ 0, 2, 2, 2, 2, 2, 2, 6 },
+          :int{1}, :int{0}, "", "?", ""
+        }
+
         // test that ISO-2022-JP encodes ASCII as itself
         {
           "ISO-2022-JP",
