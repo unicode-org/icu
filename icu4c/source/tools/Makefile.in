@@ -15,7 +15,7 @@ exec_prefix = @exec_prefix@
 CC = @CC@
 CXX = @CXX@
 
-CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/common
+CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/common -I$(top_builddir)/common
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 
