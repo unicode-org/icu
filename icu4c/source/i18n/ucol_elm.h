@@ -76,7 +76,7 @@ U_CAPI void U_EXPORT2 uprv_uca_closeTempTable(tempUCATable *t);
 U_CAPI uint32_t U_EXPORT2 uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode *status);
 U_CAPI UCATableHeader U_EXPORT2 *uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status);
 
-uint32_t uprv_uca_processContraction(CntTable *contractions, UCAElements *element, uint32_t existingCE, UBool forward, UErrorCode *status);
+uint32_t uprv_uca_processContraction(CntTable *contractions, UCAElements *element, uint32_t existingCE, UErrorCode *status);
 int32_t uprv_uca_addExpansion(ExpansionTable *expansions, uint32_t value, UErrorCode *status);
 void uprv_uca_reverseElement(UCAElements *el);
 

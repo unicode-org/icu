@@ -438,17 +438,11 @@ uint32_t uprv_uca_addContraction(tempUCATable *t, uint32_t CE, UCAElements *elem
     /* we could aready have something in table - or we might not */
     /* The fact is that we want to add or modify an existing contraction */
     /* and add it backwards then */
-    uint32_t result = uprv_uca_processContraction(t->contractions, element, CE, TRUE, status);
+    uint32_t result = uprv_uca_processContraction(t->contractions, element, CE, status);
     if(CE == UCOL_NOT_FOUND || !isContraction(CE)) {
       ucmp32_set(t->mapping, element->cPoints[0], result);
     }
-    /* add the reverse order */
-    uprv_uca_reverseElement(element);
-    CE = ucmp32_get(t->mapping, element->cPoints[0]);
-    uint32_t rev_result = uprv_uca_processContraction(t->contractions, element, CE, FALSE, status);
-    if(CE == UCOL_NOT_FOUND || !isContraction(CE)) {
-      ucmp32_set(t->mapping, element->cPoints[0], rev_result);
-    }
+
     return result;
 }
 
@@ -520,9 +514,9 @@ uint32_t uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode
   } else { /* easy case, */
     if( CE != UCOL_NOT_FOUND) {
         if(isContraction(CE)) { /* adding a non contraction element (thai, expansion, single) to already existing contraction */
-            uprv_cnttab_setContraction(contractions, CE, 0, 0, element->mapCE, TRUE, status);
+            uprv_cnttab_setContraction(contractions, CE, 0, 0, element->mapCE, status);
             /* This loop has to change the CE at the end of contraction REDO!*/
-            uprv_cnttab_changeLastCE(contractions, CE, element->mapCE, TRUE, status);
+            uprv_cnttab_changeLastCE(contractions, CE, element->mapCE, status);
         } else {
           ucmp32_set(mapping, element->cPoints[0], element->mapCE);
 #ifdef UCOL_DEBUG
@@ -539,7 +533,7 @@ uint32_t uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode
   return CE;
 }
 
-uint32_t uprv_uca_processContraction(CntTable *contractions, UCAElements *element, uint32_t existingCE, UBool forward, UErrorCode *status) {
+uint32_t uprv_uca_processContraction(CntTable *contractions, UCAElements *element, uint32_t existingCE, UErrorCode *status) {
     int32_t firstContractionOffset = 0;
     int32_t contractionOffset = 0;
     uint32_t contractionElement = UCOL_NOT_FOUND;
@@ -551,8 +545,8 @@ uint32_t uprv_uca_processContraction(CntTable *contractions, UCAElements *elemen
     /* end of recursion */
     if(element->cSize == 1) {
       if(isContraction(existingCE)) {
-        uprv_cnttab_changeContraction(contractions, existingCE, 0, element->mapCE, forward, status);
-        uprv_cnttab_changeContraction(contractions, existingCE, 0xFFFF, element->mapCE, forward, status);
+        uprv_cnttab_changeContraction(contractions, existingCE, 0, element->mapCE, status);
+        uprv_cnttab_changeContraction(contractions, existingCE, 0xFFFF, element->mapCE, status);
         return existingCE;
       } else {
         return element->mapCE; /*can't do just that. existingCe might be a contraction, meaning that we need to do another step */
@@ -566,35 +560,31 @@ uint32_t uprv_uca_processContraction(CntTable *contractions, UCAElements *elemen
     /* this means we are constructing a new contraction sequence */
     if(existingCE == UCOL_NOT_FOUND || !isContraction(existingCE)) { 
       /* if it wasn't contraction, we wouldn't end up here*/
-      firstContractionOffset = uprv_cnttab_addContraction(contractions, UPRV_CNTTAB_NEWELEMENT, 0, existingCE, forward, status);
-      if(forward == FALSE) {
-          uprv_cnttab_addContraction(contractions, firstContractionOffset, 0, existingCE, TRUE, status);
-          uprv_cnttab_addContraction(contractions, firstContractionOffset, 0xFFFF, existingCE, TRUE, status);
-      } 
+      firstContractionOffset = uprv_cnttab_addContraction(contractions, UPRV_CNTTAB_NEWELEMENT, 0, existingCE, status);
 
       UChar toAdd = element->cPoints[1];
       element->cPoints++;
       element->cSize--;
-      uint32_t newCE = uprv_uca_processContraction(contractions, element, UCOL_NOT_FOUND, forward, status);
+      uint32_t newCE = uprv_uca_processContraction(contractions, element, UCOL_NOT_FOUND, status);
       element->cPoints--;
       element->cSize++;
-      contractionOffset = uprv_cnttab_addContraction(contractions, firstContractionOffset, toAdd, newCE, forward, status);
-      contractionOffset = uprv_cnttab_addContraction(contractions, firstContractionOffset, 0xFFFF, existingCE, forward, status);
+      contractionOffset = uprv_cnttab_addContraction(contractions, firstContractionOffset, toAdd, newCE, status);
+      contractionOffset = uprv_cnttab_addContraction(contractions, firstContractionOffset, 0xFFFF, existingCE, status);
       contractionElement =  constructContractCE(firstContractionOffset);
       return contractionElement;
     } else { /* we are adding to existing contraction */
       /* there were already some elements in the table, so we need to add a new contraction */
       /* Two things can happen here: either the codepoint is already in the table, or it is not */
-      uint32_t position = uprv_cnttab_findCP(contractions, existingCE, *(element->cPoints+1), forward, status);
+      uint32_t position = uprv_cnttab_findCP(contractions, existingCE, *(element->cPoints+1), status);
       element->cPoints++;
       element->cSize--;
       if(position != 0) {       /* if it is we just continue down the chain */
-        uint32_t eCE = uprv_cnttab_getCE(contractions, existingCE, position, forward, status);
-        uint32_t newCE = uprv_uca_processContraction(contractions, element, eCE, forward, status);
-        uprv_cnttab_setContraction(contractions, existingCE, position, *(element->cPoints), newCE, forward, status);
+        uint32_t eCE = uprv_cnttab_getCE(contractions, existingCE, position, status);
+        uint32_t newCE = uprv_uca_processContraction(contractions, element, eCE, status);
+        uprv_cnttab_setContraction(contractions, existingCE, position, *(element->cPoints), newCE, status);
       } else {                  /* if it isn't, we will have to create a new sequence */
-        uint32_t newCE = uprv_uca_processContraction(contractions, element, UCOL_NOT_FOUND, forward, status);
-        uprv_cnttab_insertContraction(contractions, existingCE, *(element->cPoints), newCE, forward, status);
+        uint32_t newCE = uprv_uca_processContraction(contractions, element, UCOL_NOT_FOUND, status);
+        uprv_cnttab_insertContraction(contractions, existingCE, *(element->cPoints), newCE, status);
       }
       element->cPoints--;
       element->cSize++;
