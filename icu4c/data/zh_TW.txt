@@ -1150,7 +1150,7 @@ zh_TW {
         "<\u7229<\u864B<\u8B9F<\u9483<\u9C79<\u9EB7<\u7675<\u9A6B<\u9C7A<\u9E1D<\u7069<\u706A"
         "<\u9EA4<\u9F7E<\u9F49<\u9F98" }
     Countries { 
-        CN { "\u4E2D\u534E\u4EBA\u6C11\u5171\u548C\u56FD" }
+        CN { "\u4E2D\u83EF\u4EBA\u6C11\u5171\u548C\u570B" }
         TW { "\u4E2D\u83EF\u6C11\u570B" }
         HK { "\u9999\u6E2F" }
     }
