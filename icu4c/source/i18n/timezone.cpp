@@ -52,11 +52,13 @@ char                TimeZone::fgClassID = 0; // Value is irrelevant
 
 TimeZone*           TimeZone::fgDefaultZone = NULL;
 
-const UnicodeString TimeZone::GMT_ID        = UNICODE_STRING("GMT", 3);
+static const UnicodeString _internalTimeZoneGMT_ID = UNICODE_STRING("GMT", 3);
+const UnicodeString TimeZone::GMT_ID        = ::_internalTimeZoneGMT_ID;
 const int32_t       TimeZone::GMT_ID_LENGTH = 3;
 const UnicodeString TimeZone::CUSTOM_ID     = UNICODE_STRING("Custom", 6);
 
-const TimeZone*     TimeZone::GMT = new SimpleTimeZone(0, GMT_ID);
+static const SimpleTimeZone _internalTimeZoneGMT(0, ::_internalTimeZoneGMT_ID);
+const TimeZone*     TimeZone::GMT = &::_internalTimeZoneGMT;
 
 // See header file for documentation of the following
 const TZHeader *    TimeZone::DATA = 0;
