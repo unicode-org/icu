@@ -17,6 +17,7 @@
 #include "unicode/gregocal.h"
 #include "cmemory.h"
 #include "uassert.h"
+#include <float.h> // DBL_MAX
 
 U_NAMESPACE_BEGIN
 
@@ -133,7 +134,8 @@ static void dayToFields(double day, int32_t& year, int32_t& month,
  * Default constructor.  Creates a time zone with an empty ID and
  * a fixed GMT offset of zero.
  */
-OlsonTimeZone::OlsonTimeZone() : finalZone(0), finalYear(INT32_MAX) {
+OlsonTimeZone::OlsonTimeZone() : finalZone(0), finalYear(INT32_MAX),
+                                 finalMillis(DBL_MAX) {
     constructEmpty();
 }
 
@@ -158,7 +160,7 @@ void OlsonTimeZone::constructEmpty() {
 OlsonTimeZone::OlsonTimeZone(const UResourceBundle* top,
                              const UResourceBundle* res,
                              UErrorCode& ec) :
-    finalZone(0), finalYear(INT32_MAX) {
+    finalZone(0), finalYear(INT32_MAX), finalMillis(DBL_MAX) {
     if ((top == NULL || res == NULL) && U_SUCCESS(ec)) {
         ec = U_ILLEGAL_ARGUMENT_ERROR;
     }
@@ -222,6 +224,9 @@ OlsonTimeZone::OlsonTimeZone(const UResourceBundle* top,
                     // years, including INT32_MAX.
                     U_ASSERT(data[1] > INT32_MIN);
                     finalYear = data[1] - 1;
+                    // Also compute the millis for Jan 1, 0:00 GMT of the
+                    // finalYear.  This reduces runtime computations.
+                    finalMillis = fieldsToDay(data[1], 0, 1) * U_MILLIS_PER_DAY;
                     char key[64];
                     key[0] = '_';
                     ruleid.extract(0, sizeof(key)-2, key+1, sizeof(key)-1, "");
@@ -273,6 +278,7 @@ OlsonTimeZone& OlsonTimeZone::operator=(const OlsonTimeZone& other) {
     typeOffsets = other.typeOffsets;
     typeData = other.typeData;
     finalYear = other.finalYear;
+    finalMillis = other.finalMillis;
     delete finalZone;
     finalZone = (other.finalZone != 0) ?
         (SimpleTimeZone*) other.finalZone->clone() : 0;
@@ -300,6 +306,7 @@ UBool OlsonTimeZone::operator==(const TimeZone& other) const {
          // If the pointers are not equal, the zones may still
          // be equal if their rules and transitions are equal
          (finalYear == z->finalYear &&
+          // Don't compare finalMillis; if finalYear is ==, so is finalMillis
           ((finalZone == 0 && z->finalZone == 0) ||
            (finalZone != 0 && z->finalZone != 0 &&
             *finalZone == *z->finalZone)) &&
@@ -385,41 +392,21 @@ int32_t OlsonTimeZone::getOffset(uint8_t era, int32_t year, int32_t month,
 /**
  * TimeZone API.
  */
-void OlsonTimeZone::setRawOffset(int32_t /*offsetMillis*/) {
-    // We don't support this operation, since OlsonTimeZones are
-    // immutable (except for the ID, which is in the base class).
-
-    // Nothing to do!
-}
-
-/**
- * TimeZone API.
- */
-int32_t OlsonTimeZone::getRawOffset() const {
-    UErrorCode ec = U_ZERO_ERROR;
-    int32_t raw, dst;
-    getOffset((double) uprv_getUTCtime() * U_MILLIS_PER_SECOND,
-              FALSE, raw, dst, ec);
-    return raw;
-}
-
-/**
- * TimeZone API.
- */
 void OlsonTimeZone::getOffset(UDate date, UBool local, int32_t& rawoff,
                               int32_t& dstoff, UErrorCode& ec) const {
     if (U_FAILURE(ec)) {
         return;
     }
 
-    int32_t year, month, dom, dow;
-    double secs = uprv_floor(date / U_MILLIS_PER_SECOND);
-    double days = uprv_floor(date / U_MILLIS_PER_DAY);
+    // The check against finalMillis will suffice most of the time, except
+    // for the case in which finalMillis == DBL_MAX, date == DBL_MAX,
+    // and finalZone == 0.  For this case we add "&& finalZone != 0".
+    if (date >= finalMillis && finalZone != 0) {
+        int32_t year, month, dom, dow;
+        double days = uprv_floor(date / U_MILLIS_PER_DAY);
+        
+        dayToFields(days, year, month, dom, dow);
 
-    dayToFields(days, year, month, dom, dow);
-
-    if (year > finalYear) { // [sic] >, not >=; see above
-        U_ASSERT(finalZone != 0);
         int32_t millis = (int32_t) (date - days * U_MILLIS_PER_DAY);
         rawoff = finalZone->getRawOffset();
 
@@ -439,9 +426,31 @@ void OlsonTimeZone::getOffset(UDate date, UBool local, int32_t& rawoff,
         return;
     }
 
+    double secs = uprv_floor(date / U_MILLIS_PER_SECOND);
     int16_t i = findTransition(secs, local);
     rawoff = rawOffset(i) * U_MILLIS_PER_SECOND;
     dstoff = dstOffset(i) * U_MILLIS_PER_SECOND;
+}
+
+/**
+ * TimeZone API.
+ */
+void OlsonTimeZone::setRawOffset(int32_t /*offsetMillis*/) {
+    // We don't support this operation, since OlsonTimeZones are
+    // immutable (except for the ID, which is in the base class).
+
+    // Nothing to do!
+}
+
+/**
+ * TimeZone API.
+ */
+int32_t OlsonTimeZone::getRawOffset() const {
+    UErrorCode ec = U_ZERO_ERROR;
+    int32_t raw, dst;
+    getOffset((double) uprv_getUTCtime() * U_MILLIS_PER_SECOND,
+              FALSE, raw, dst, ec);
+    return raw;
 }
 
 /**
