@@ -1176,30 +1176,7 @@ public:
 
   const UnicodeString* snext(UErrorCode& status) {
     int32_t resultLength = 0;
-    const char* starter = next(&resultLength, status);
-    if(starter != NULL) {
-      UChar *buffer = currUSKey.getBuffer(resultLength+1);
-      if(buffer != NULL) {
-        u_charsToUChars(starter, buffer, resultLength);
-        buffer[resultLength] = 0;
-        currUSKey.releaseBuffer(resultLength);
-        return &currUSKey;
-      } else {
-        status = U_MEMORY_ALLOCATION_ERROR;
-      }
-    }
-    return NULL;
-  }
-
-  const UChar* unext(int32_t* resultLength, UErrorCode& status) {
-    if(snext(status) != NULL) {
-      if(resultLength != NULL) {
-        *resultLength = currUSKey.length();
-      }
-      return currUSKey.getTerminatedBuffer();
-    } else {
-      return NULL;
-    }
+    return setChars(next(&resultLength, status), resultLength, status);
   }
 
   void reset(UErrorCode& /*status*/) {

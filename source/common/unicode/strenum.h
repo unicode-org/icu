@@ -11,10 +11,9 @@
 #define STRENUM_H
 
 #include "unicode/uobject.h"
+#include "unicode/unistr.h"
 
 U_NAMESPACE_BEGIN
-
-class UnicodeString;
 
 /**
  * Base class for 'pure' C++ implementations of uenum api.  Adds a
@@ -42,6 +41,9 @@ class UnicodeString;
  * <p>The pointers returned by next, unext, and snext become invalid
  * upon any subsequent call to the enumeration's destructor, next,
  * unext, snext, or reset.</p>
+ *
+ * ICU 2.8 adds some default implementations and helper functions
+ * for subclasses.
  *
  * @draft ICU 2.4 
  */
@@ -109,13 +111,16 @@ public:
      * status is set to U_INVARIANT_CONVERSION_ERROR and the return
      * value is undefined (though not NULL).</p>
      *
+     * Starting with ICU 2.8, the default implementation calls snext()
+     * and handles the conversion.
+     *
      * @param status the error code.
      * @param resultLength a pointer to receive the length, can be NULL.
      * @return a pointer to the string, or NULL.
      *
      * @draft ICU 2.4 
      */
-    virtual const char* next(int32_t *resultLength, UErrorCode& status) = 0;
+    virtual const char* next(int32_t *resultLength, UErrorCode& status);
 
     /**
      * <p>Returns the next element as a NUL-terminated UChar*.  If there
@@ -131,13 +136,16 @@ public:
      * <p>If the iterator is out of sync with its service, status is set
      * to U_ENUM_OUT_OF_SYNC_ERROR and NULL is returned.</p>
      *
+     * Starting with ICU 2.8, the default implementation calls snext()
+     * and handles the conversion.
+     *
      * @param status the error code.
      * @param resultLength a ponter to receive the length, can be NULL.
      * @return a pointer to the string, or NULL.
      *
      * @draft ICU 2.4 
      */
-    virtual const UChar* unext(int32_t *resultLength, UErrorCode& status) = 0;
+    virtual const UChar* unext(int32_t *resultLength, UErrorCode& status);
 
     /**
      * <p>Returns the next element a UnicodeString*.  If there are no
@@ -170,6 +178,68 @@ public:
      * @draft ICU 2.4 
      */
     virtual void reset(UErrorCode& status) = 0;
+
+protected:
+    /**
+     * UnicodeString field for use with default implementations and subclasses.
+     * @draft ICU 2.8
+     */
+    UnicodeString unistr;
+    /**
+     * char * default buffer for use with default implementations and subclasses.
+     * @draft ICU 2.8
+     */
+    char charsBuffer[32];
+    /**
+     * char * buffer for use with default implementations and subclasses.
+     * Allocated in constructor and in ensureCharsCapacity().
+     * @draft ICU 2.8
+     */
+    char *chars;
+    /**
+     * Capacity of chars, for use with default implementations and subclasses.
+     * @draft ICU 2.8
+     */
+    int32_t charsCapacity;
+
+    /**
+     * Default constructor for use with default implementations and subclasses.
+     * @draft ICU 2.8
+     */
+    StringEnumeration();
+
+    /**
+     * Ensures that chars is at least as large as the requested capacity.
+     * For use with default implementations and subclasses.
+     *
+     * @param capacity Requested capacity.
+     * @param status ICU in/out error code.
+     * @draft ICU 2.8
+     */
+    void ensureCharsCapacity(int32_t capacity, UErrorCode &status);
+
+    /**
+     * Converts s to Unicode and sets unistr to the result.
+     * For use with default implementations and subclasses,
+     * especially for implementations of snext() in terms of next().
+     * This is provided with a helper function instead of a default implementation
+     * of snext() to avoid potential infinite loops between next() and snext().
+     *
+     * For example:
+     * \code
+     * const UnicodeString* snext(UErrorCode& status) {
+     *   int32_t resultLength=0;
+     *   return setChars(next(&resultLength, status), resultLength, status);
+     * }
+     * \endcode
+     *
+     * @param s String to be converted to Unicode.
+     * @param length Length of the string.
+     * @param status ICU in/out error code.
+     * @return A pointer to unistr.
+     * @draft ICU 2.8
+     */
+    UnicodeString *setChars(const char *s, int32_t length, UErrorCode &status);
 };
 
 U_NAMESPACE_END
