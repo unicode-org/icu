@@ -42,7 +42,7 @@ void addCollAPITest(TestNode** root)
 static void doAssert(int condition, const char *message)
 {
     if (condition==0) {
-        log_err("ERROR :  %c\n", message);
+        log_err("ERROR :  %s\n", message);
     }
 }
 
@@ -69,11 +69,12 @@ void TestProperty()
     source=(UChar*)malloc(sizeof(UChar) * 12);
     target=(UChar*)malloc(sizeof(UChar) * 12);
     
+
     u_uastrcpy(source, "ab");
     u_uastrcpy(target, "abc");
-
     
     doAssert((ucol_strcoll(col, source, u_strlen(source), target, u_strlen(target)) == UCOL_LESS), "ab < abc comparison failed");
+
     u_uastrcpy(source, "ab");
     u_uastrcpy(target, "AB");
 
@@ -287,8 +288,12 @@ void TestCompare()
 */
 void TestSortKey()
 {   
-    uint8_t *sortk1, *sortk2, *sortk3;
-    int32_t sortklen;
+    uint8_t *sortk1 = NULL, *sortk2 = NULL, *sortk3 = NULL;
+    uint8_t sortk2_compat[] = { 
+      0x00, 0x53, 0x00, 0x54, 0x00, 0x55, 0x00, 0x56, 0x00, 0x53, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00
+    };
+
+    int32_t sortklen, osortklen;
     UCollator *col;
     UChar *test1, *test2, *test3;
     UErrorCode status = U_ZERO_ERROR;
@@ -299,27 +304,76 @@ void TestSortKey()
         return;
     }
 
+    if(ucol_getNormalization(col) != UCOL_DEFAULT_NORMALIZATION)
+      {
+	log_err("ERROR: default collation did not have UCOL_DEFAULT_NORMALIZATION !\n");
+      }
+
+
+    if(ucol_getStrength(col) != UCOL_DEFAULT_STRENGTH)
+      {
+	log_err("ERROR: default collation did not have UCOL_DEFAULT_STRENGTH !\n");
+      }
+
     test1=(UChar*)malloc(sizeof(UChar) * 6);
     test2=(UChar*)malloc(sizeof(UChar) * 6);
     test3=(UChar*)malloc(sizeof(UChar) * 6);
+    
+    memset(test1,0xFE, sizeof(UChar)*6);
+    memset(test2,0xFE, sizeof(UChar)*6);
+    memset(test3,0xFE, sizeof(UChar)*6);
+
+
     u_uastrcpy(test1, "Abcda");
     u_uastrcpy(test2, "abcda");
     u_uastrcpy(test3, "abcda");
 
     log_verbose("Use tertiary comparison level testing ....\n");
+
     sortklen=ucol_getSortKey(col, test1, u_strlen(test1),  NULL, 0);
     sortk1=(uint8_t*)malloc(sizeof(uint8_t) * (sortklen+1));
+    memset(sortk1,0xFE, sortklen);
     ucol_getSortKey(col, test1, u_strlen(test1), sortk1, sortklen+1);
+
     sortklen=ucol_getSortKey(col, test2, u_strlen(test2),  NULL, 0);
     sortk2=(uint8_t*)malloc(sizeof(uint8_t) * (sortklen+1));
+    memset(sortk2,0xFE, sortklen);
     ucol_getSortKey(col, test2, u_strlen(test2), sortk2, sortklen+1);
+
+    osortklen = sortklen;
     sortklen=ucol_getSortKey(col, test2, u_strlen(test3),  NULL, 0);
     sortk3=(uint8_t*)malloc(sizeof(uint8_t) * (sortklen+1));
+    memset(sortk3,0xFE, sortklen);
     ucol_getSortKey(col, test2, u_strlen(test2), sortk3, sortklen+1);
+
+    doAssert( (sortklen == osortklen), "Sortkey length should be the same (abcda, abcda)");
 
     doAssert( (memcmp(sortk1, sortk2, sortklen) > 0), "Result should be \"Abcda\" > \"abcda\"");
     doAssert( (memcmp(sortk2, sortk1, sortklen) < 0), "Result should be \"abcda\" < \"Abcda\"");
     doAssert( (memcmp(sortk2, sortk3, sortklen) == 0), "Result should be \"abcda\" ==  \"abcda\"");
+
+    doAssert( (memcmp(sortk2, sortk2_compat, sortklen) == 0), "Binary format for 'abcda' sortkey different!");
+
+#if 1 /* verobse log of sortkeys */
+    {
+      char junk2[1000];
+      char junk3[1000];
+      int i;
+
+      strcpy(junk2, "abcda[2] ");
+      strcpy(junk3, " abcda[3] ");
+
+      for(i=0;i<sortklen;i++)
+	{
+	  sprintf(junk2+strlen(junk2), "%02X ",(int)( 0xFF & sortk2[i]));
+	  sprintf(junk3+strlen(junk3), "%02X ",(int)( 0xFF & sortk3[i]));
+	}
+      
+      log_verbose("%s\n", junk2);
+      log_verbose("%s\n", junk3);
+    }
+#endif
+
     free(sortk1);
     free(sortk2);
     free(sortk3);
@@ -337,7 +391,7 @@ void TestSortKey()
     doAssert( !(memcmp(sortk2, sortk1, sortklen) < 0), "Result should be \"abcda\" == \"Abcda\"");
     doAssert( (memcmp(sortk1, sortk2, sortklen) == 0), "Result should be \"abcda\" ==  \"abcda\"");
     
-    
+ 
     log_verbose("testing sortkey ends...\n");
     ucol_close(col);
     free(test1);
