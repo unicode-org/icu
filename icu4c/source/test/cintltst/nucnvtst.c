@@ -1462,7 +1462,7 @@ TestLMBCS() {
       const char * sourceStart;
       const char *source=(const char *)pszLMBCS;
       const char *limit=(const char *)pszLMBCS+sizeof(pszLMBCS);
-      const uint32_t *results= pszUnicode32;
+      const UChar32 *results= pszUnicode32;
       const int *off = offsets32;
 
       UErrorCode errorCode=U_ZERO_ERROR;
@@ -1499,14 +1499,16 @@ TestLMBCS() {
       UConverter *cnv16jp = ucnv_open("LMBCS-16,locale=ja_JP", &errorCode);
       UConverter *cnv01us = ucnv_open("LMBCS-1,locale=us_EN", &errorCode);
       UChar uniString [] = {0x0192}; /* Latin Small letter f with hook */
-      const UChar * pUni = uniString;
+      const UChar * pUniOut = uniString;
+      UChar * pUniIn = uniString;
       char lmbcsString [4];
-      char * pLMBCS = lmbcsString;
+      const char * pLMBCSOut = lmbcsString;
+      char * pLMBCSIn = lmbcsString;
 
       /* 0192 (hook) converts to both group 3 & group 1. input locale should differentiate */
       ucnv_fromUnicode (cnv16he, 
-                        &pLMBCS, pLMBCS + sizeof(lmbcsString)/sizeof(lmbcsString[0]), 
-                        &pUni, pUni + sizeof(uniString)/sizeof(uniString[0]), 
+                        &pLMBCSIn, pLMBCSIn + sizeof(lmbcsString)/sizeof(lmbcsString[0]), 
+                        &pUniOut, pUniOut + sizeof(uniString)/sizeof(uniString[0]), 
                         NULL, 1, &errorCode);
 
       if (lmbcsString[0] != (char)0x3 || lmbcsString[1] != (char)0x83)
@@ -1514,11 +1516,11 @@ TestLMBCS() {
          log_err("LMBCS-16,locale=he gives unexpected translation\n");
       }
 			 
-	  pLMBCS=lmbcsString;
-      pUni = uniString;
+	  pLMBCSIn=lmbcsString;
+      pUniOut = uniString;
       ucnv_fromUnicode (cnv01us, 
-                        &pLMBCS, lmbcsString + sizeof(lmbcsString)/sizeof(lmbcsString[0]), 
-                        &pUni, pUni + sizeof(uniString)/sizeof(uniString[0]),
+                        &pLMBCSIn, lmbcsString + sizeof(lmbcsString)/sizeof(lmbcsString[0]), 
+                        &pUniOut, pUniOut + sizeof(uniString)/sizeof(uniString[0]),
                         NULL, 1, &errorCode);
       
       if (lmbcsString[0] != (char)0x9F)
@@ -1528,45 +1530,45 @@ TestLMBCS() {
 
       /* single byte char from mbcs char set */
       lmbcsString[0] = (char)0xAE;  /* 1/2 width katakana letter small Yo */
-      pLMBCS = lmbcsString;
-      pUni = uniString;
+      pLMBCSOut = lmbcsString;
+      pUniIn = uniString;
       ucnv_toUnicode (cnv16jp, 
-                        &pUni, pUni + 1,
-                        &pLMBCS, pLMBCS + 1, 
+                        &pUniIn, pUniIn + 1,
+                        &pLMBCSOut, pLMBCSOut + 1, 
                         NULL, 1, &errorCode);
-      if (U_FAILURE(errorCode) || pLMBCS != lmbcsString+1 || pUni != uniString+1 || uniString[0] != 0xFF6E)
+      if (U_FAILURE(errorCode) || pLMBCSOut != lmbcsString+1 || pUniIn != uniString+1 || uniString[0] != 0xFF6E)
       {
            log_err("Unexpected results from LMBCS-16 single byte char\n");
       }
       /* convert to group 1: should be 3 bytes */
-      pLMBCS = lmbcsString;
-      pUni = uniString;
+      pLMBCSIn = lmbcsString;
+      pUniOut = uniString;
       ucnv_fromUnicode (cnv01us, 
-                        &pLMBCS, pLMBCS + 3, 
-                        &pUni, pUni + 1,
+                        &pLMBCSIn, pLMBCSIn + 3, 
+                        &pUniOut, pUniOut + 1,
                         NULL, 1, &errorCode);
-      if (U_FAILURE(errorCode) || pLMBCS != lmbcsString+3 || pUni != uniString+1 
+      if (U_FAILURE(errorCode) || pLMBCSIn != lmbcsString+3 || pUniOut != uniString+1 
          || lmbcsString[0] != 0x10 || lmbcsString[1] != 0x10 || lmbcsString[2] != (char)0xAE)
       {
            log_err("Unexpected results to LMBCS-1 single byte mbcs char\n");
       }
-      pLMBCS = lmbcsString;
-      pUni = uniString;
+      pLMBCSOut = lmbcsString;
+      pUniIn = uniString;
       ucnv_toUnicode (cnv01us, 
-                        &pUni, pUni + 1,
-                        &pLMBCS, pLMBCS + 3, 
+                        &pUniIn, pUniIn + 1,
+                        &pLMBCSOut, pLMBCSOut + 3, 
                         NULL, 1, &errorCode);
-      if (U_FAILURE(errorCode) || pLMBCS != lmbcsString+3 || pUni != uniString+1 || uniString[0] != 0xFF6E)
+      if (U_FAILURE(errorCode) || pLMBCSOut != lmbcsString+3 || pUniIn != uniString+1 || uniString[0] != 0xFF6E)
       {
            log_err("Unexpected results from LMBCS-1 single byte mbcs char\n");
       }
-      pLMBCS = lmbcsString;
-      pUni = uniString;
+      pLMBCSIn = lmbcsString;
+      pUniOut = uniString;
       ucnv_fromUnicode (cnv16jp, 
-                        &pLMBCS, pLMBCS + 1, 
-                        &pUni, pUni + 1,
+                        &pLMBCSIn, pLMBCSIn + 1, 
+                        &pUniOut, pUniOut + 1,
                         NULL, 1, &errorCode);
-      if (U_FAILURE(errorCode) || pLMBCS != lmbcsString+1 || pUni != uniString+1 || lmbcsString[0] != (char)0xAE)
+      if (U_FAILURE(errorCode) || pLMBCSIn != lmbcsString+1 || pUniOut != uniString+1 || lmbcsString[0] != (char)0xAE)
       {
            log_err("Unexpected results to LMBCS-16 single byte mbcs char\n");
       }
@@ -1701,7 +1703,7 @@ TestLMBCS() {
 
          pLIn = pszLMBCS;
          ucnv_toUnicode(cnv, &pUOut,pUOut+4,&pLIn,pLIn+sizeof(pszLMBCS),off,FALSE, &errorCode);
-         if (errorCode != U_INDEX_OUTOFBOUNDS_ERROR || pUOut != UOut + 4 || pLIn != pszLMBCS+offsets[4])
+         if (errorCode != U_INDEX_OUTOFBOUNDS_ERROR || pUOut != UOut + 4 || pLIn != (const char *)pszLMBCS+offsets[4])
          {
             log_err("Unexpected results on out of target room to ucnv_toUnicode\n");
          }
