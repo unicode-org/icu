@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCollationData.java,v $ 
-* $Date: 2002/06/04 19:01:51 $ 
-* $Revision: 1.16 $
+* $Date: 2002/06/04 23:56:29 $ 
+* $Revision: 1.17 $
 *
 *******************************************************************************
 */
@@ -368,7 +368,7 @@ public class WriteCollationData implements UCD_Types {
             if (!shortPrint) {
                 log.print(Utility.hex(source));
                 log.print(
-                    ";\t#" + ucd.getName(clipped)+ "\t" + UCA.toString(key));
+                    ";\t#" + ucd.getName(clipped) + "\t" + UCA.toString(key));
             } else {
                 log.print(source + "\t" + Utility.hex(clipped));
             }
@@ -2278,7 +2278,7 @@ F900..FAFF; CJK Compatibility Ideographs
                             summary.println("[variable top = " + Utility.hex(primaryDelta[firstPrimary]) + "] # END OF VARIABLE SECTION!!!");
                             summary.println();
                         }
-                        summary.println("First: " + Utility.hex(np & 0xFFFFFFFFL) + " " + ucd.getName(UTF16.charAt(chr,0)));
+                        summary.println("First: " + Utility.hex(np & 0xFFFFFFFFL) + ", " + ucd.getCodeAndName(UTF16.charAt(chr,0)));
                     }
                     lastNp = np;
                     isFirst = false;
@@ -2296,7 +2296,7 @@ F900..FAFF; CJK Compatibility Ideographs
             log.println();
             lastChr = chr;
         }
-        summary.println("Last:  " + Utility.hex(lastNp) + " " + ucd.getName(UTF16.charAt(lastChr, 0)));
+        summary.println("Last:  " + Utility.hex(lastNp) + ", " + ucd.getCodeAndName(UTF16.charAt(lastChr, 0)));
         
         /*
         String sample = "\u3400\u3401\u4DB4\u4DB5\u4E00\u4E01\u9FA4\u9FA5\uAC00\uAC01\uD7A2\uD7A3";
@@ -2312,7 +2312,7 @@ F900..FAFF; CJK Compatibility Ideographs
         summary.println("# First CJK: " + Utility.hex(0xFFFFFFFFL & getImplicitPrimary(0x4E00)));
         summary.println("# Last CJK: " + Utility.hex(0xFFFFFFFFL & getImplicitPrimary(0xFA2F)));
         summary.println("# First CJK_A: " + Utility.hex(0xFFFFFFFFL & getImplicitPrimary(0x3400)));
-        summary.println("# Last CJK: " + Utility.hex(0xFFFFFFFFL & getImplicitPrimary(0x4DBF)));
+        summary.println("# Last CJK_A: " + Utility.hex(0xFFFFFFFFL & getImplicitPrimary(0x4DBF)));
         
         boolean lastOne = false;
         for (int i = 0; i < 0x10FFFF; ++i) {
@@ -2405,37 +2405,59 @@ F900..FAFF; CJK Compatibility Ideographs
     }
     */
     
-    /**
-     * Function used to collapse the two different Han blocks from UCA into one.
-     * It does this by reversing the order of the two groups A and B in the BMP below.
-     * NOTE: MUST NOT BE CALLED EXCEPT FOR CJK CHARACTERS
-     * A:
-	 *	4E00..9FFF; CJK Unified Ideographs
-	 *	F900..FAFF; CJK Compatibility Ideographs
-	 * B:
-	 *	3400..4DBF; CJK Unified Ideographs Extension A
-	 * As long as
-	 *	no new B characters are allocated between 4E00 and FAFF, and
-	 *	no new A characters are outside of this range,
-	 * (very high probability) this simple code will work.
-	 * Block1 is CJK
-	 * Block2 is CJK_COMPAT_USED
-	 * Block3 is CJK_A
-	 */
-    static int swapCJK(int i) {
-    	if (i >= UCA.CJK_COMPAT_USED_BASE) return i - UCA.CJK_COMPAT_USED_BASE + (UCA.CJK_LIMIT - UCA.CJK_BASE);
-    	if (i >= UCA.CJK_BASE) return i - UCA.CJK_BASE;
-    	// remainder must be CJK_A
-    	return i - UCA.CJK_A_BASE + (UCA.CJK_LIMIT - UCA.CJK_BASE) + (UCA.CJK_COMPAT_USED_LIMIT - UCA.CJK_COMPAT_USED_BASE);
-    }
+/**
+    * Function used to: 
+    * a) collapse the 2 different Han ranges from UCA into one (in the right order), and
+    * b) bump any non-CJK characters by 10FFFF.
+    * The relevant blocks are:
+    * A:	4E00..9FFF; CJK Unified Ideographs
+	*		F900..FAFF; CJK Compatibility Ideographs
+	* B:	3400..4DBF; CJK Unified Ideographs Extension A
+	*		20000..XX;	CJK Unified Ideographs Extension B (and others later on)
+	* As long as
+	*	no new B characters are allocated between 4E00 and FAFF, and
+	*	no new A characters are outside of this range,
+	* (very high probability) this simple code will work.
+	* The reordered blocks are:
+	* Block1 is CJK
+	* Block2 is CJK_COMPAT_USED
+	* Block3 is CJK_A
+	* Any other CJK gets its normal code point
+	* Any non-CJK gets +10FFFF
+	* When we reorder Block1, we make sure that it is at the very start,
+	* so that it will use a 3-byte form.
+	*/
+static int swapCJK(int i) {
+    	
+	if (i >= UCA.CJK_BASE) {
+		if (i < UCA.CJK_LIMIT)				return i - UCA.CJK_BASE;
+			
+		if (i < UCA.CJK_COMPAT_USED_BASE)	return i + NON_CJK_OFFSET;
+    		
+		if (i < UCA.CJK_COMPAT_USED_LIMIT)	return i - UCA.CJK_COMPAT_USED_BASE
+												+ (UCA.CJK_LIMIT - UCA.CJK_BASE);
+		if (i < UCA.CJK_B_BASE)				return i + NON_CJK_OFFSET;
+    		
+		if (i < UCA.CJK_B_LIMIT)			return i; // non-BMP-CJK
+    		
+		return i + NON_CJK_OFFSET;	// non-CJK
+	}
+	if (i < UCA.CJK_A_BASE)					return i + NON_CJK_OFFSET;
+		
+	if (i < UCA.CJK_A_LIMIT)				return i - UCA.CJK_A_BASE
+												+ (UCA.CJK_LIMIT - UCA.CJK_BASE) 
+												+ (UCA.CJK_COMPAT_USED_LIMIT - UCA.CJK_COMPAT_USED_BASE);
+    return i + NON_CJK_OFFSET; // non-CJK
+}
     
     // CONSTANTS
     
-    static final int 
+    static final int
+    	NON_CJK_OFFSET = 0x110000,
         BYTES_TO_AVOID = 3,
         OTHER_COUNT = 256 - BYTES_TO_AVOID,
         LAST_COUNT = OTHER_COUNT / 2,
-        LAST_COUNT2 = OTHER_COUNT / 20, // room for intervening, without expanding to 5 bytes
+        LAST_COUNT2 = OTHER_COUNT / 21, // room for intervening, without expanding to 5 bytes
         IMPLICIT_3BYTE_COUNT = 1,
         IMPLICIT_BASE_BYTE = 0xE0,
         
@@ -2452,21 +2474,26 @@ F900..FAFF; CJK Compatibility Ideographs
     // Return value is left justified primary key
     
     static int getImplicitPrimary(int cp) {
+
+        if (DEBUG) System.out.println("Incoming: " + Utility.hex(cp));
+        
+        cp = swapCJK(cp);
+        
+        if (DEBUG) System.out.println("CJK swapped: " + Utility.hex(cp));
+        
+        // we now have a range of numbers from 0 to 21FFFF.
+        
+        return getImplicitPrimaryFromSwapped(cp);
+    }
+        
+	static int getImplicitPrimaryFromSwapped(int cp) {
+        
         // we must skip all 00, 01, 02 bytes, so most bytes have 253 values
         // we must leave a gap of 01 between all values of the last byte, so the last byte has 126 values (3 byte case)
         // we shift so that HAN all has the same first primary, for compression.
         // for the 4 byte case, we make the gap as large as we can fit.
         // Three byte forms are EC xx xx, ED xx xx, EE xx xx (with a gap of 1)
         // Four byte forms (most supplementaries) are EF xx xx xx (with a gap of LAST2_MULTIPLIER == 14)
-        
-        if (DEBUG) System.out.println("Incoming: " + Utility.hex(cp));
-        
-        if (!UCA.isCJK(cp) && !UCA.isCJK_AB(cp)) cp += 0x10FFFF; // space everything else after CJK
-        else cp = swapCJK(cp);
-        
-        if (DEBUG) System.out.println("CJK swapped: " + Utility.hex(cp));
-        
-        // we now have a range of numbers from 0 to 21FFFF.
         
         int last0 = cp - IMPLICIT_4BYTE_BOUNDARY;
         if (last0 < 0) {
@@ -2506,22 +2533,45 @@ F900..FAFF; CJK Compatibility Ideographs
     
     
     static void showImplicit(String title, int cp) {
-    	if (DEBUG) {
-        	System.out.println(title + "-1: " + Utility.hex(cp-1) + " => "
-        		+ Utility.hex(0xFFFFFFFFL & getImplicitPrimary(cp-1)));
-        	System.out.println(title + ": " + Utility.hex(cp) + " => "
-        		+ Utility.hex(0xFFFFFFFFL & getImplicitPrimary(cp)));
-        	System.out.println(title + "+1: " + Utility.hex(cp+1) + " => "
-        		+ Utility.hex(0xFFFFFFFFL & getImplicitPrimary(cp+1)));
-        }
+    	if (DEBUG) showImplicit2(title + "-1", cp-1);
+    	
+    	showImplicit2(title + "00", cp);
+    	
+    	if (DEBUG) showImplicit2(title + "+1", cp+1);
+    }
+    
+    static void showImplicit2(String title, int cp) {
+        System.out.println(title + ":\t" + Utility.hex(cp)
+        	+ " => " + Utility.hex(swapCJK(cp))
+        	+ " => " + Utility.hex(0xFFFFFFFFL & getImplicitPrimary(cp)));
+    }
+    
+    static void showImplicit3(String title, int cp) {
+        System.out.println("*" + title + ":\t" + Utility.hex(cp)
+        	+ " => " + Utility.hex(0xFFFFFFFFL & getImplicitPrimaryFromSwapped(cp)));
     }
     
     // TEST PROGRAM
     
     static void checkImplicit() {
-        long oldPrimary = 0;
         System.out.println("Starting Implicit Check");
         
+        long oldPrimary = 0;
+        int oldChar = -1;
+        int oldSwap = -1;
+    	
+    	// test monotonically increasing
+    	
+    	for (int i = 0; i < 0x21FFFF; ++i) {
+    		long newPrimary = 0xFFFFFFFFL & getImplicitPrimaryFromSwapped(i);
+            if (newPrimary < oldPrimary) {
+                throw new IllegalArgumentException(Utility.hex(i) + ": overlap: "
+                	+ Utility.hex(oldChar) + " (" + Utility.hex(oldPrimary) + ")"
+                	+ " > " + Utility.hex(i) + "(" + Utility.hex(newPrimary) + ")");
+            }
+            oldPrimary = newPrimary;
+    	}
+    	
         showImplicit("# First CJK", UCA.CJK_BASE);
         showImplicit("# Last CJK", UCA.CJK_LIMIT-1);
         showImplicit("# First CJK-compat", UCA.CJK_COMPAT_USED_BASE);
@@ -2532,30 +2582,47 @@ F900..FAFF; CJK Compatibility Ideographs
         showImplicit("# Last CJK_B", UCA.CJK_B_LIMIT-1);
         showImplicit("# First Other Implicit", 0);
         showImplicit("# Last Other Implicit", 0x10FFFF);
-        showImplicit("# Boundary", IMPLICIT_4BYTE_BOUNDARY);
         
+        showImplicit3("# FIRST", 0);
+        showImplicit3("# Boundary-1", IMPLICIT_4BYTE_BOUNDARY-1);
+        showImplicit3("# Boundary00", IMPLICIT_4BYTE_BOUNDARY);
+        showImplicit3("# Boundary+1", IMPLICIT_4BYTE_BOUNDARY+1);
+        showImplicit3("# LAST", 0x21FFFF);
         
-        int oldChar = -1;
+    	oldPrimary = 0;
+        oldChar = -1;
+        
         for (int batch = 0; batch < 3; ++batch) {
         	for (int i = 0; i <= 0x10FFFF; ++i) {
         		
         		// separate the three groups
         		
-        		if (UCA.isCJK(i)) {
+        		if (UCA.isCJK(i) || UCA.CJK_COMPAT_USED_BASE <= i && i < UCA.CJK_COMPAT_USED_LIMIT) {
         			if (batch != 0) continue;
         		} else if (UCA.isCJK_AB(i)) {
         			if (batch != 1) continue;
         		} else if (batch != 2) continue;
+        		
+        		
+        		// test swapping
+        		
+        		int currSwap = swapCJK(i);
+        		if (currSwap < oldSwap) {
+                	throw new IllegalArgumentException(Utility.hex(i) + ": overlap: "
+                		+ Utility.hex(oldChar) + " (" + Utility.hex(oldSwap) + ")"
+                		+ " > " + Utility.hex(i) + "(" + Utility.hex(currSwap) + ")");
+        		}
+        	
         		
             	long newPrimary = 0xFFFFFFFFL & getImplicitPrimary(i);
 	            
             	// test correct values
 	            
 	            
-            	if ((newPrimary) < (oldPrimary)) {
+            	if (newPrimary < oldPrimary) {
                 	throw new IllegalArgumentException(Utility.hex(i) + ": overlap: "
-                		+ Utility.hex(oldChar) + ", " + Utility.hex(oldPrimary)
-                		+ Utility.hex(i) + ", " + " > " + Utility.hex(newPrimary));
+                		+ Utility.hex(oldChar) + " (" + Utility.hex(oldPrimary) + ")"
+                		+ " > " + Utility.hex(i) + "(" + Utility.hex(newPrimary) + ")");
             	}
 	            
 	            
