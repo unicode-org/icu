@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * Copyright (c) 1997-2004, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -30,7 +30,7 @@
 #include "unormimp.h"
 #include "cucdapi.h"
 
-#define LENGTHOF(array) (sizeof(array)/sizeof((array)[0]))
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
 /* prototypes --------------------------------------------------------------- */
 
@@ -57,8 +57,6 @@ static void TestConsistency(void);
 /* internal methods used */
 static int32_t MakeProp(char* str);
 static int32_t MakeDir(char* str);
-
-#define LENGTHOF(array) (sizeof(array)/sizeof((array)[0]))
 
 /* test data ---------------------------------------------------------------- */
 
@@ -1040,6 +1038,36 @@ enumTypeRange(const void *context, UChar32 start, UChar32 limit, UCharCategory t
         {0xeffff, U_UNASSIGNED}
     };
 
+    int32_t i, count;
+
+    if(0!=strcmp((const char *)context, "a1")) {
+        log_err("error: u_enumCharTypes() passes on an incorrect context pointer\n");
+        return FALSE;
+    }
+
+    count=LENGTHOF(test);
+    for(i=0; i<count; ++i) {
+        if(start<=test[i][0] && test[i][0]<limit) {
+            if(type!=(UCharCategory)test[i][1]) {
+                log_err("error: u_enumCharTypes() has range [U+%04lx, U+%04lx[ with %ld instead of U+%04lx with %ld\n",
+                        start, limit, (long)type, test[i][0], test[i][1]);
+            }
+            /* stop at the range that includes the last test code point (increases code coverage for enumeration) */
+            return i==(count-1) ? FALSE : TRUE;
+        }
+    }
+
+    if(start>test[count-1][0]) {
+        log_err("error: u_enumCharTypes() has range [U+%04lx, U+%04lx[ with %ld after it should have stopped\n",
+                start, limit, (long)type);
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
+static UBool U_CALLCONV
+enumDefaultsRange(const void *context, UChar32 start, UChar32 limit, UCharCategory type) {
     /* default Bidi classes for unassigned code points */
     static const int32_t defaultBidi[][2]={ /* { limit, class } */
         { 0x0590, U_LEFT_TO_RIGHT },
@@ -1057,30 +1085,8 @@ enumTypeRange(const void *context, UChar32 start, UChar32 limit, UCharCategory t
     };
 
     UChar32 c;
-    int i, count;
-
-    if(0!=strcmp((const char *)context, "a1")) {
-        log_err("error: u_enumCharTypes() passes on an incorrect context pointer\n");
-        return FALSE;
-    }
-
-    count=sizeof(test)/sizeof(test[0]);
-    for(i=0; i<count; ++i) {
-        if(start<=test[i][0] && test[i][0]<limit) {
-            if(type!=(UCharCategory)test[i][1]) {
-                log_err("error: u_enumCharTypes() has range [U+%04lx, U+%04lx[ with %ld instead of U+%04lx with %ld\n",
-                        start, limit, (long)type, test[i][0], test[i][1]);
-            }
-            /* stop at the range that includes the last test code point */
-            return i==(count-1) ? FALSE : TRUE;
-        }
-    }
-
-    if(start>test[count-1][0]) {
-        log_err("error: u_enumCharTypes() has range [U+%04lx, U+%04lx[ with %ld after it should have stopped\n",
-                start, limit, (long)type);
-        return FALSE;
-    }
+    int32_t i;
+    UCharDirection shouldBeDir;
 
     /*
      * LineBreak.txt specifies:
@@ -1103,10 +1109,20 @@ enumTypeRange(const void *context, UChar32 start, UChar32 limit, UCharCategory t
 
     /*
      * Verify default Bidi classes.
+     * For recent Unicode versions, see UCD.html.
+     *
+     * For older Unicode versions:
      * See table 3-7 "Bidirectional Character Types" in UAX #9.
      * http://www.unicode.org/reports/tr9/
      *
      * See also DerivedBidiClass.txt for Cn code points!
+     *
+     * Unicode 4.0.1/Public Review Issue #28 (http://www.unicode.org/review/resolved-pri.html)
+     * changed some default values.
+     * In particular, non-characters and unassigned Default Ignorable Code Points
+     * change from L to BN.
+     *
+     * UCD.html version 4.0.1 does not yet reflect these changes.
      */
     if(type==U_UNASSIGNED || type==U_PRIVATE_USE_CHAR) {
         /* enumerate the intersections of defaultBidi ranges with [start..limit[ */
@@ -1114,11 +1130,17 @@ enumTypeRange(const void *context, UChar32 start, UChar32 limit, UCharCategory t
         for(i=0; i<LENGTHOF(defaultBidi) && c<limit; ++i) {
             if((int32_t)c<defaultBidi[i][0]) {
                 while(c<limit && (int32_t)c<defaultBidi[i][0]) {
-                    if( u_charDirection(c)!=(UCharDirection)defaultBidi[i][1] ||
-                        u_getIntPropertyValue(c, UCHAR_BIDI_CLASS)!=defaultBidi[i][1]
+                    if(U_IS_UNICODE_NONCHAR(c) || u_hasBinaryProperty(c, UCHAR_DEFAULT_IGNORABLE_CODE_POINT)) {
+                        shouldBeDir=U_BOUNDARY_NEUTRAL;
+                    } else {
+                        shouldBeDir=(UCharDirection)defaultBidi[i][1];
+                    }
+
+                    if( u_charDirection(c)!=shouldBeDir ||
+                        u_getIntPropertyValue(c, UCHAR_BIDI_CLASS)!=shouldBeDir
                     ) {
                         log_err("error: u_charDirection(unassigned/PUA U+%04lx)=%s should be %s\n",
-                            c, dirStrings[u_charDirection(c)], dirStrings[defaultBidi[i][1]]);
+                            c, dirStrings[u_charDirection(c)], dirStrings[shouldBeDir]);
                     }
                     ++c;
                 }
@@ -1221,6 +1243,9 @@ static void TestUnicodeData()
 
     /* test u_enumCharTypes() */
     u_enumCharTypes(enumTypeRange, "a1");
+
+    /* check default properties */
+    u_enumCharTypes(enumDefaultsRange, NULL);
 }
 
 static void TestCodeUnit(){
