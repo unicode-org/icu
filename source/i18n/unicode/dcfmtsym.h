@@ -183,7 +183,7 @@ public:
      * @return    the format symbols by the param 'symbol'
      * @stable ICU 2.0
      */
-    UnicodeString getSymbol(ENumberFormatSymbol symbol) const;
+    inline UnicodeString getSymbol(ENumberFormatSymbol symbol) const;
 
     /**
      * Set one of the format symbols by its enum constant.
@@ -207,14 +207,14 @@ public:
      *
      * @draft ICU 2.2
      */
-    virtual inline UClassID getDynamicClassID() const;
+    virtual UClassID getDynamicClassID() const;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
      * @draft ICU 2.2
      */
-    static inline UClassID getStaticClassID();
+    static UClassID getStaticClassID();
 
 private:
     DecimalFormatSymbols(); // default constructor not implemented
@@ -287,22 +287,7 @@ private:
 
     Locale locale;
 
-    static const char fgNumberElements[];
-
-    /**
-     * The address of this static class variable serves as this class's ID
-     * for ICU "poor man's RTTI".
-     */
-    static const char fgClassID;
 };
-
-inline UClassID
-DecimalFormatSymbols::getStaticClassID()
-{ return (UClassID)&fgClassID; }
-
-inline UClassID
-DecimalFormatSymbols::getDynamicClassID() const
-{ return DecimalFormatSymbols::getStaticClassID(); }
 
 // -------------------------------------
 
@@ -311,7 +296,7 @@ DecimalFormatSymbols::getSymbol(ENumberFormatSymbol symbol) const {
     if(symbol<kFormatSymbolCount) {
         return fSymbols[symbol];
     } else {
-        return UnicodeString();
+        return fNoSymbol;
     }
 }
 
