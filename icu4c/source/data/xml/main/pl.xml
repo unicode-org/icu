@@ -8,7 +8,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-03" />
+		<generation date="2003-12-17" />
 		<language type="pl" /> 
 	</identity>
 	<localeDisplayNames>
@@ -287,155 +287,155 @@
 			<territory type="ZM">Zambia</territory>
 			<territory type="ZW">Zimbabwe</territory>
 		</territories>
-</localeDisplayNames>
-<characters>
-	<exemplarCharacters>[a-z ó ą ę ć ń ś ź ł ż]</exemplarCharacters>
+	</localeDisplayNames>
+	<characters>
+		<exemplarCharacters>[a-z ó ą ę ć ń ś ź ł ż]</exemplarCharacters>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Latn</icu:script>
+			</icu:scripts>
+		</special>
+	</characters>
+	<dates>
+		<calendars>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">styczeń</month>
+					<month type="2">luty</month>
+					<month type="3">marzec</month>
+					<month type="4">kwiecień</month>
+					<month type="5">maj</month>
+					<month type="6">czerwiec</month>
+					<month type="7">lipiec</month>
+					<month type="8">sierpień</month>
+					<month type="9">wrzesień</month>
+					<month type="10">październik</month>
+					<month type="11">listopad</month>
+					<month type="12">grudzień</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">sty</month>
+					<month type="2">lut</month>
+					<month type="3">mar</month>
+					<month type="4">kwi</month>
+					<month type="5">maj</month>
+					<month type="6">cze</month>
+					<month type="7">lip</month>
+					<month type="8">sie</month>
+					<month type="9">wrz</month>
+					<month type="10">paź</month>
+					<month type="11">lis</month>
+					<month type="12">gru</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">niedziela</day>
+					<day type="mon">poniedziałek</day>
+					<day type="tue">wtorek</day>
+					<day type="wed">środa</day>
+					<day type="thu">czwartek</day>
+					<day type="fri">piątek</day>
+					<day type="sat">sobota</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">N</day>
+					<day type="mon">Pn</day>
+					<day type="tue">Wt</day>
+					<day type="wed">Śr</day>
+					<day type="thu">Cz</day>
+					<day type="fri">Pt</day>
+					<day type="sat">So</day>
+				</dayAbbr>
+				<week>
+					<minDays count="1"/>
+					<firstDay day="mon"/>
+				</week>
+				<eras>
+					<eraAbbr>
+						<era type="1">p.n.e.</era>
+						<era type="2">n.e.</era>
+					</eraAbbr>
+				</eras>
+				<dateFormats>
+					<default type="medium"/>
+					<dateFormatLength type="full">
+						<dateFormat >
+							<pattern>EEEE, d MMMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="long">
+						<dateFormat >
+							<pattern>d MMMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="medium">
+						<dateFormat >
+							<pattern>yyyy-MM-dd</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="short">
+						<dateFormat >
+							<pattern>yy-MM-dd</pattern>
+						</dateFormat>
+					</dateFormatLength >
+				</dateFormats>
+				<timeFormats>
+					<default type="medium"/>
+					<timeFormatLength type="full">
+						<timeFormat >
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="long">
+						<timeFormat >
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="medium">
+						<timeFormat >
+							<pattern>HH:mm:ss</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="short">
+						<timeFormat >
+							<pattern>HH:mm</pattern>
+						</timeFormat>
+					</timeFormatLength >
+				</timeFormats>
+				<dateTimeFormats>
+					<dateTimeFormatLength >
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength >
+				</dateTimeFormats>
+			</calendar>
+		</calendars>
+	</dates>
+	<numbers>
+		<symbols>
+			<decimal>,</decimal>
+			<group> </group>
+			<list>;</list>
+			<percentSign>%</percentSign>
+			<nativeZeroDigit>0</nativeZeroDigit>
+			<patternDigit>#</patternDigit>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>E</exponential>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>�</nan>
+		</symbols>
+		<currencies>
+			<currency type="PLN">
+				<displayName>PLN</displayName>
+				<symbol>zł</symbol>
+			</currency>
+		</currencies>
+	</numbers>
 	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-		<icu:scripts>
-			<icu:script type="1">Latn</icu:script>
-		</icu:scripts>
-	</special>
-</characters>
-<dates>
-	<calendars>
-		<calendar type="gregorian">
-			<monthNames>
-				<month type="1">styczeń</month>
-				<month type="2">luty</month>
-				<month type="3">marzec</month>
-				<month type="4">kwiecień</month>
-				<month type="5">maj</month>
-				<month type="6">czerwiec</month>
-				<month type="7">lipiec</month>
-				<month type="8">sierpień</month>
-				<month type="9">wrzesień</month>
-				<month type="10">październik</month>
-				<month type="11">listopad</month>
-				<month type="12">grudzień</month>
-			</monthNames>
-			<monthAbbr>
-				<month type="1">sty</month>
-				<month type="2">lut</month>
-				<month type="3">mar</month>
-				<month type="4">kwi</month>
-				<month type="5">maj</month>
-				<month type="6">cze</month>
-				<month type="7">lip</month>
-				<month type="8">sie</month>
-				<month type="9">wrz</month>
-				<month type="10">paź</month>
-				<month type="11">lis</month>
-				<month type="12">gru</month>
-			</monthAbbr>
-			<dayNames>
-				<day type="sun">niedziela</day>
-				<day type="mon">poniedziałek</day>
-				<day type="tue">wtorek</day>
-				<day type="wed">środa</day>
-				<day type="thu">czwartek</day>
-				<day type="fri">piątek</day>
-				<day type="sat">sobota</day>
-			</dayNames>
-			<dayAbbr>
-				<day type="sun">N</day>
-				<day type="mon">Pn</day>
-				<day type="tue">Wt</day>
-				<day type="wed">Śr</day>
-				<day type="thu">Cz</day>
-				<day type="fri">Pt</day>
-				<day type="sat">So</day>
-			</dayAbbr>
-			<week>
-				<minDays count="1"/>
-				<firstDay day="mon"/>
-			</week>
-			<eras>
-				<eraAbbr>
-					<era type="1">p.n.e.</era>
-					<era type="2">n.e.</era>
-				</eraAbbr>
-			</eras>
-			<dateFormats>
-				<default type="medium"/>
-				<dateFormatLength type="full">
-					<dateFormat >
-						<pattern>EEEE, d MMMM yyyy</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="long">
-					<dateFormat >
-						<pattern>d MMMM yyyy</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="medium">
-					<dateFormat >
-						<pattern>yyyy-MM-dd</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="short">
-					<dateFormat >
-						<pattern>yy-MM-dd</pattern>
-					</dateFormat>
-				</dateFormatLength >
-			</dateFormats>
-			<timeFormats>
-				<default type="medium"/>
-				<timeFormatLength type="full">
-					<timeFormat >
-						<pattern>HH:mm:ss z</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="long">
-					<timeFormat >
-						<pattern>HH:mm:ss z</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="medium">
-					<timeFormat >
-						<pattern>HH:mm:ss</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="short">
-					<timeFormat >
-						<pattern>HH:mm</pattern>
-					</timeFormat>
-				</timeFormatLength >
-			</timeFormats>
-			<dateTimeFormats>
-				<dateTimeFormatLength >
-					<dateTimeFormat>
-						<pattern>{1} {0}</pattern>
-					</dateTimeFormat>
-				</dateTimeFormatLength >
-			</dateTimeFormats>
-		</calendar>
-	</calendars>
-</dates>
-<numbers>
-	<symbols>
-		<decimal>,</decimal>
-		<group> </group>
-		<list>;</list>
-		<percentSign>%</percentSign>
-		<nativeZeroDigit>0</nativeZeroDigit>
-		<patternDigit>#</patternDigit>
-		<plusSign>+</plusSign>
-		<minusSign>-</minusSign>
-		<exponential>E</exponential>
-		<perMille>‰</perMille>
-		<infinity>∞</infinity>
-		<nan>�</nan>
-	</symbols>
-	<currencies>
-		<currency type="PLN">
-			<displayName>PLN</displayName>
-			<symbol>zł</symbol>
-		</currency>
-	</currencies>
-</numbers>
-<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-	<icu:ruleBasedNumberFormats>
-		<icu:ruleBasedNumberFormat type="spellout">
+		<icu:ruleBasedNumberFormats>
+			<icu:ruleBasedNumberFormat type="spellout">
 -x: minus &gt;&gt;;
 zero; jeden; dwa; trzy; cztery; pięć;
 sześć; siedem; osiem; dziewięć; dziesięć;
@@ -467,7 +467,7 @@ szesnaście; siedemnaście; osiemnaście; dziewiętnaście;
 1,000,000,000,000: trylion[ &gt;&gt;];
 2,000,000,000,000: &lt;&lt; tryliony[ &gt;&gt;];
 1,000,000,000,000,000: =#,##0=;
-		</icu:ruleBasedNumberFormat>
-	</icu:ruleBasedNumberFormats>
-</special>
+			</icu:ruleBasedNumberFormat>
+		</icu:ruleBasedNumberFormats>
+	</special>
 </ldml>

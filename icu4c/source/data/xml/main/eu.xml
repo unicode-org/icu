@@ -8,94 +8,94 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-03" />
+		<generation date="2003-12-17" />
 		<language type="eu" /> 
 	</identity>
 	<localeDisplayNames>
 		<languages>
 			<language type="eu">euskara</language>
 		</languages>
-</localeDisplayNames>
-<characters>
-	<exemplarCharacters>[a-z ñ ç]</exemplarCharacters>
-	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-		<icu:scripts>
-			<icu:script type="1">Latn</icu:script>
-		</icu:scripts>
-	</special>
-</characters>
-<dates>
-	<calendars>
-		<calendar type="gregorian">
-			<monthNames>
-				<month type="1">urtarrila</month>
-				<month type="2">otsaila</month>
-				<month type="3">martxoa</month>
-				<month type="4">apirila</month>
-				<month type="5">maiatza</month>
-				<month type="6">ekaina</month>
-				<month type="7">uztaila</month>
-				<month type="8">abuztua</month>
-				<month type="9">iraila</month>
-				<month type="10">urria</month>
-				<month type="11">azaroa</month>
-				<month type="12">abendua</month>
-			</monthNames>
-			<monthAbbr>
-				<month type="1">urt</month>
-				<month type="2">ots</month>
-				<month type="3">mar</month>
-				<month type="4">api</month>
-				<month type="5">mai</month>
-				<month type="6">eka</month>
-				<month type="7">uzt</month>
-				<month type="8">abu</month>
-				<month type="9">ira</month>
-				<month type="10">urr</month>
-				<month type="11">aza</month>
-				<month type="12">abe</month>
-			</monthAbbr>
-			<dayNames>
-				<day type="sun">igandea</day>
-				<day type="mon">astelehena</day>
-				<day type="tue">asteartea</day>
-				<day type="wed">asteazkena</day>
-				<day type="thu">osteguna</day>
-				<day type="fri">ostirala</day>
-				<day type="sat">larunbata</day>
-			</dayNames>
-			<dayAbbr>
-				<day type="sun">ig</day>
-				<day type="mon">al</day>
-				<day type="tue">as</day>
-				<day type="wed">az</day>
-				<day type="thu">og</day>
-				<day type="fri">or</day>
-				<day type="sat">lr</day>
-			</dayAbbr>
-		</calendar>
-	</calendars>
-</dates>
-<numbers>
-	<symbols>
-		<decimal>,</decimal>
-		<group>.</group>
-		<list>;</list>
-		<percentSign>%</percentSign>
-		<nativeZeroDigit>0</nativeZeroDigit>
-		<patternDigit>#</patternDigit>
-		<plusSign>+</plusSign>
-		<minusSign>-</minusSign>
-		<exponential>E</exponential>
-		<perMille>‰</perMille>
-		<infinity>∞</infinity>
-		<nan>�</nan>
-	</symbols>
-	<currencies>
-		<currency type="ESP">
-			<displayName>ESP</displayName>
-			<symbol>₧</symbol>
-		</currency>
-	</currencies>
-</numbers>
+	</localeDisplayNames>
+	<characters>
+		<exemplarCharacters>[a-z ñ ç]</exemplarCharacters>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Latn</icu:script>
+			</icu:scripts>
+		</special>
+	</characters>
+	<dates>
+		<calendars>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">urtarrila</month>
+					<month type="2">otsaila</month>
+					<month type="3">martxoa</month>
+					<month type="4">apirila</month>
+					<month type="5">maiatza</month>
+					<month type="6">ekaina</month>
+					<month type="7">uztaila</month>
+					<month type="8">abuztua</month>
+					<month type="9">iraila</month>
+					<month type="10">urria</month>
+					<month type="11">azaroa</month>
+					<month type="12">abendua</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">urt</month>
+					<month type="2">ots</month>
+					<month type="3">mar</month>
+					<month type="4">api</month>
+					<month type="5">mai</month>
+					<month type="6">eka</month>
+					<month type="7">uzt</month>
+					<month type="8">abu</month>
+					<month type="9">ira</month>
+					<month type="10">urr</month>
+					<month type="11">aza</month>
+					<month type="12">abe</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">igandea</day>
+					<day type="mon">astelehena</day>
+					<day type="tue">asteartea</day>
+					<day type="wed">asteazkena</day>
+					<day type="thu">osteguna</day>
+					<day type="fri">ostirala</day>
+					<day type="sat">larunbata</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">ig</day>
+					<day type="mon">al</day>
+					<day type="tue">as</day>
+					<day type="wed">az</day>
+					<day type="thu">og</day>
+					<day type="fri">or</day>
+					<day type="sat">lr</day>
+				</dayAbbr>
+			</calendar>
+		</calendars>
+	</dates>
+	<numbers>
+		<symbols>
+			<decimal>,</decimal>
+			<group>.</group>
+			<list>;</list>
+			<percentSign>%</percentSign>
+			<nativeZeroDigit>0</nativeZeroDigit>
+			<patternDigit>#</patternDigit>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>E</exponential>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>�</nan>
+		</symbols>
+		<currencies>
+			<currency type="ESP">
+				<displayName>ESP</displayName>
+				<symbol>₧</symbol>
+			</currency>
+		</currencies>
+	</numbers>
 </ldml>

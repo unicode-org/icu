@@ -8,56 +8,38 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-03" />
+		<generation date="2003-12-17" />
 		<language type="de" /> 
 		<territory type="DE" /> 
 	</identity>
-<numbers>
-	<decimalFormats>
-		<decimalFormatLength >
-			<decimalFormat >
-				<pattern>#,##0.###;-#,##0.###</pattern>
-			</decimalFormat>
-		</decimalFormatLength >
-	</decimalFormats>
-	<scientificFormats>
-		<scientificFormatLength >
-			<scientificFormat >
-				<pattern>#E0</pattern>
-			</scientificFormat>
-		</scientificFormatLength >
-	</scientificFormats>
-	<percentFormats>
-		<percentFormatLength >
-			<percentFormat >
-				<pattern>#,##0%</pattern>
-			</percentFormat>
-		</percentFormatLength >
-	</percentFormats>
-	<currencyFormats>
-		<currencyFormatLength >
-			<currencyFormat >
-				<pattern>#,##0.00 ¤;-#,##0.00 ¤</pattern>
-			</currencyFormat>
-		</currencyFormatLength >
-	</currencyFormats>
-</numbers>
-<collations version="3.1.1">
-	<collation type="PHONEBOOK" >
-		<rules>
-			<reset>ae</reset>
-			<t>ä</t>
-			<reset>AE</reset>
-			<t>Ä</t>
-			<reset>oe</reset>
-			<t>ö</t>
-			<reset>OE</reset>
-			<t>Ö</t>
-			<reset>ue</reset>
-			<t>ü</t>
-			<reset>UE</reset>
-		</rules>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
-	</collation  >
-</collations >
+	<numbers>
+		<decimalFormats>
+			<decimalFormatLength >
+				<decimalFormat >
+					<pattern>#,##0.###;-#,##0.###</pattern>
+				</decimalFormat>
+			</decimalFormatLength >
+		</decimalFormats>
+		<scientificFormats>
+			<scientificFormatLength >
+				<scientificFormat >
+					<pattern>#E0</pattern>
+				</scientificFormat>
+			</scientificFormatLength >
+		</scientificFormats>
+		<percentFormats>
+			<percentFormatLength >
+				<percentFormat >
+					<pattern>#,##0%</pattern>
+				</percentFormat>
+			</percentFormatLength >
+		</percentFormats>
+		<currencyFormats>
+			<currencyFormatLength >
+				<currencyFormat >
+					<pattern>#,##0.00 ¤;-#,##0.00 ¤</pattern>
+				</currencyFormat>
+			</currencyFormatLength >
+		</currencyFormats>
+	</numbers>
 </ldml>

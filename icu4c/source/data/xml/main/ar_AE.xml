@@ -8,11 +8,11 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-03" />
+		<generation date="2003-12-17" />
 		<language type="ar" /> 
 		<territory type="AE" /> 
 	</identity>
-<layout>
-	<orientation lines="top-to-bottom" characters="right-to-left" />
-</layout>
+	<layout>
+		<orientation lines="top-to-bottom" characters="right-to-left" />
+	</layout>
 </ldml>

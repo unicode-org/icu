@@ -8,7 +8,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-03" />
+		<generation date="2003-12-17" />
 		<language type="he" /> 
 	</identity>
 	<localeDisplayNames>
@@ -285,141 +285,141 @@
 			<territory type="ZM">זמביה</territory>
 			<territory type="ZW">זימבבווה</territory>
 		</territories>
-</localeDisplayNames>
-<layout>
-	<orientation lines="top-to-bottom" characters="right-to-left" />
-</layout>
-<characters>
-	<exemplarCharacters>[[:Hebr:]‏‎]</exemplarCharacters>
+	</localeDisplayNames>
+	<layout>
+		<orientation lines="top-to-bottom" characters="right-to-left" />
+	</layout>
+	<characters>
+		<exemplarCharacters>[[:Hebr:]‏‎]</exemplarCharacters>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Hebr</icu:script>
+			</icu:scripts>
+		</special>
+	</characters>
+	<dates>
+		<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
+		<calendars>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">ינואר</month>
+					<month type="2">פברואר</month>
+					<month type="3">מרץ</month>
+					<month type="4">אפריל</month>
+					<month type="5">מאי</month>
+					<month type="6">יוני</month>
+					<month type="7">יולי</month>
+					<month type="8">אוגוסט</month>
+					<month type="9">ספטמבר</month>
+					<month type="10">אוקטובר</month>
+					<month type="11">נובמבר</month>
+					<month type="12">דצמבר</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">ינו</month>
+					<month type="2">פבר</month>
+					<month type="3">מרץ</month>
+					<month type="4">אפר</month>
+					<month type="5">מאי</month>
+					<month type="6">יונ</month>
+					<month type="7">יול</month>
+					<month type="8">אוג</month>
+					<month type="9">ספט</month>
+					<month type="10">אוק</month>
+					<month type="11">נוב</month>
+					<month type="12">דצמ</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">יום ראשון</day>
+					<day type="mon">יום שני</day>
+					<day type="tue">יום שלישי</day>
+					<day type="wed">יום רביעי</day>
+					<day type="thu">יום חמישי</day>
+					<day type="fri">יום שישי</day>
+					<day type="sat">שבת</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">א</day>
+					<day type="mon">ב</day>
+					<day type="tue">ג</day>
+					<day type="wed">ד</day>
+					<day type="thu">ה</day>
+					<day type="fri">ו</day>
+					<day type="sat">ש</day>
+				</dayAbbr>
+				<eras>
+					<eraAbbr>
+						<era type="1">לסה"נ</era>
+						<era type="2">לפסה"נ</era>
+					</eraAbbr>
+				</eras>
+				<dateFormats>
+					<default type="medium"/>
+					<dateFormatLength type="full">
+						<dateFormat >
+							<pattern>EEEE d MMMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="long">
+						<dateFormat >
+							<pattern>d MMMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="medium">
+						<dateFormat >
+							<pattern>dd/MM/yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="short">
+						<dateFormat >
+							<pattern>dd/MM/yy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+				</dateFormats>
+				<timeFormats>
+					<default type="medium"/>
+					<timeFormatLength type="full">
+						<timeFormat >
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="long">
+						<timeFormat >
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="medium">
+						<timeFormat >
+							<pattern>HH:mm:ss</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="short">
+						<timeFormat >
+							<pattern>HH:mm</pattern>
+						</timeFormat>
+					</timeFormatLength >
+				</timeFormats>
+				<dateTimeFormats>
+					<dateTimeFormatLength >
+						<dateTimeFormat>
+							<pattern>{0} {1}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength >
+				</dateTimeFormats>
+			</calendar>
+		</calendars>
+	</dates>
+	<numbers>
+		<currencies>
+			<currency type="ILS">
+				<displayName>ש"ח</displayName>
+				<symbol>₪</symbol>
+			</currency>
+		</currencies>
+	</numbers>
 	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-		<icu:scripts>
-			<icu:script type="1">Hebr</icu:script>
-		</icu:scripts>
-	</special>
-</characters>
-<dates>
-	<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
-	<calendars>
-		<calendar type="gregorian">
-			<monthNames>
-				<month type="1">ינואר</month>
-				<month type="2">פברואר</month>
-				<month type="3">מרץ</month>
-				<month type="4">אפריל</month>
-				<month type="5">מאי</month>
-				<month type="6">יוני</month>
-				<month type="7">יולי</month>
-				<month type="8">אוגוסט</month>
-				<month type="9">ספטמבר</month>
-				<month type="10">אוקטובר</month>
-				<month type="11">נובמבר</month>
-				<month type="12">דצמבר</month>
-			</monthNames>
-			<monthAbbr>
-				<month type="1">ינו</month>
-				<month type="2">פבר</month>
-				<month type="3">מרץ</month>
-				<month type="4">אפר</month>
-				<month type="5">מאי</month>
-				<month type="6">יונ</month>
-				<month type="7">יול</month>
-				<month type="8">אוג</month>
-				<month type="9">ספט</month>
-				<month type="10">אוק</month>
-				<month type="11">נוב</month>
-				<month type="12">דצמ</month>
-			</monthAbbr>
-			<dayNames>
-				<day type="sun">יום ראשון</day>
-				<day type="mon">יום שני</day>
-				<day type="tue">יום שלישי</day>
-				<day type="wed">יום רביעי</day>
-				<day type="thu">יום חמישי</day>
-				<day type="fri">יום שישי</day>
-				<day type="sat">שבת</day>
-			</dayNames>
-			<dayAbbr>
-				<day type="sun">א</day>
-				<day type="mon">ב</day>
-				<day type="tue">ג</day>
-				<day type="wed">ד</day>
-				<day type="thu">ה</day>
-				<day type="fri">ו</day>
-				<day type="sat">ש</day>
-			</dayAbbr>
-			<eras>
-				<eraAbbr>
-					<era type="1">לסה"נ</era>
-					<era type="2">לפסה"נ</era>
-				</eraAbbr>
-			</eras>
-			<dateFormats>
-				<default type="medium"/>
-				<dateFormatLength type="full">
-					<dateFormat >
-						<pattern>EEEE d MMMM yyyy</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="long">
-					<dateFormat >
-						<pattern>d MMMM yyyy</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="medium">
-					<dateFormat >
-						<pattern>dd/MM/yyyy</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="short">
-					<dateFormat >
-						<pattern>dd/MM/yy</pattern>
-					</dateFormat>
-				</dateFormatLength >
-			</dateFormats>
-			<timeFormats>
-				<default type="medium"/>
-				<timeFormatLength type="full">
-					<timeFormat >
-						<pattern>HH:mm:ss z</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="long">
-					<timeFormat >
-						<pattern>HH:mm:ss z</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="medium">
-					<timeFormat >
-						<pattern>HH:mm:ss</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="short">
-					<timeFormat >
-						<pattern>HH:mm</pattern>
-					</timeFormat>
-				</timeFormatLength >
-			</timeFormats>
-			<dateTimeFormats>
-				<dateTimeFormatLength >
-					<dateTimeFormat>
-						<pattern>{0} {1}</pattern>
-					</dateTimeFormat>
-				</dateTimeFormatLength >
-			</dateTimeFormats>
-		</calendar>
-	</calendars>
-</dates>
-<numbers>
-	<currencies>
-		<currency type="ILS">
-			<displayName>ש"ח</displayName>
-			<symbol>₪</symbol>
-		</currency>
-	</currencies>
-</numbers>
-<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-	<icu:ruleBasedNumberFormats>
-		<icu:ruleBasedNumberFormat type="spellout">
+		<icu:ruleBasedNumberFormats>
+			<icu:ruleBasedNumberFormat type="spellout">
 zero (incomplete data); אהד; שגיים; שלושה;
 4: אדבצה; חגוישה; ששה;
 7: שבצה; שמוגה; תשצה;
@@ -437,7 +437,7 @@ zero (incomplete data); אהד; שגיים; שלושה;
 1000: אלף[ &gt;&gt;];
 2000: &lt;&lt; אלף[ &gt;&gt;];
 1,000,000: =#,##0= (incomplete data);
-		</icu:ruleBasedNumberFormat>
-	</icu:ruleBasedNumberFormats>
-</special>
+			</icu:ruleBasedNumberFormat>
+		</icu:ruleBasedNumberFormats>
+	</special>
 </ldml>

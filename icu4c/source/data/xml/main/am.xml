@@ -8,7 +8,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-03" />
+		<generation date="2003-12-17" />
 		<language type="am" /> 
 	</identity>
 	<localeDisplayNames>
@@ -288,75 +288,75 @@
 			<territory type="ZA">ደቡብ አፍሪካ</territory>
 			<territory type="ZM">ዛምቢያ</territory>
 		</territories>
-</localeDisplayNames>
-<characters>
-	<exemplarCharacters>[:Ethi:]</exemplarCharacters>
-	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-		<icu:scripts>
-			<icu:script type="1">Ethi</icu:script>
-		</icu:scripts>
-	</special>
-</characters>
-<dates>
-	<calendars>
-		<calendar type="gregorian">
-			<monthNames>
-				<month type="1">ጃንዩወሪ</month>
-				<month type="2">ፌብሩወሪ</month>
-				<month type="3">ማርች</month>
-				<month type="4">ኤፕረል</month>
-				<month type="5">ሜይ</month>
-				<month type="6">ጁን</month>
-				<month type="7">ጁላይ</month>
-				<month type="8">ኦገስት</month>
-				<month type="9">ሴፕቴምበር</month>
-				<month type="10">ኦክተውበር</month>
-				<month type="11">ኖቬምበር</month>
-				<month type="12">ዲሴምበር</month>
-			</monthNames>
-			<monthAbbr>
-				<month type="1">ጃንዩ</month>
-				<month type="2">ፌብሩ</month>
-				<month type="3">ማርች</month>
-				<month type="4">ኤፕረ</month>
-				<month type="5">ሜይ</month>
-				<month type="6">ጁን</month>
-				<month type="7">ጁላይ</month>
-				<month type="8">ኦገስ</month>
-				<month type="9">ሴፕቴ</month>
-				<month type="10">ኦክተ</month>
-				<month type="11">ኖቬም</month>
-				<month type="12">ዲሴም</month>
-			</monthAbbr>
-			<dayNames>
-				<day type="sun">እሑድ</day>
-				<day type="mon">ሰኞ</day>
-				<day type="tue">ማክሰኞ</day>
-				<day type="wed">ረቡዕ</day>
-				<day type="thu">ሐሙስ</day>
-				<day type="fri">ዓርብ</day>
-				<day type="sat">ቅዳሜ</day>
-			</dayNames>
-			<dayAbbr>
-				<day type="sun">እሑድ</day>
-				<day type="mon">ሰኞ</day>
-				<day type="tue">ማክሰ</day>
-				<day type="wed">ረቡዕ</day>
-				<day type="thu">ሐሙስ</day>
-				<day type="fri">ዓርብ</day>
-				<day type="sat">ቅዳሜ</day>
-			</dayAbbr>
-			<week>
-				<minDays count="1"/>
-				<firstDay day="sat"/>
-			</week>
-			<eras>
-				<eraAbbr>
-					<era type="1">ዓ/ዓ</era>
-					<era type="2">ዓ/ም</era>
-				</eraAbbr>
-			</eras>
-		</calendar>
-	</calendars>
-</dates>
+	</localeDisplayNames>
+	<characters>
+		<exemplarCharacters>[:Ethi:]</exemplarCharacters>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Ethi</icu:script>
+			</icu:scripts>
+		</special>
+	</characters>
+	<dates>
+		<calendars>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">ጃንዩወሪ</month>
+					<month type="2">ፌብሩወሪ</month>
+					<month type="3">ማርች</month>
+					<month type="4">ኤፕረል</month>
+					<month type="5">ሜይ</month>
+					<month type="6">ጁን</month>
+					<month type="7">ጁላይ</month>
+					<month type="8">ኦገስት</month>
+					<month type="9">ሴፕቴምበር</month>
+					<month type="10">ኦክተውበር</month>
+					<month type="11">ኖቬምበር</month>
+					<month type="12">ዲሴምበር</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">ጃንዩ</month>
+					<month type="2">ፌብሩ</month>
+					<month type="3">ማርች</month>
+					<month type="4">ኤፕረ</month>
+					<month type="5">ሜይ</month>
+					<month type="6">ጁን</month>
+					<month type="7">ጁላይ</month>
+					<month type="8">ኦገስ</month>
+					<month type="9">ሴፕቴ</month>
+					<month type="10">ኦክተ</month>
+					<month type="11">ኖቬም</month>
+					<month type="12">ዲሴም</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">እሑድ</day>
+					<day type="mon">ሰኞ</day>
+					<day type="tue">ማክሰኞ</day>
+					<day type="wed">ረቡዕ</day>
+					<day type="thu">ሐሙስ</day>
+					<day type="fri">ዓርብ</day>
+					<day type="sat">ቅዳሜ</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">እሑድ</day>
+					<day type="mon">ሰኞ</day>
+					<day type="tue">ማክሰ</day>
+					<day type="wed">ረቡዕ</day>
+					<day type="thu">ሐሙስ</day>
+					<day type="fri">ዓርብ</day>
+					<day type="sat">ቅዳሜ</day>
+				</dayAbbr>
+				<week>
+					<minDays count="1"/>
+					<firstDay day="sat"/>
+				</week>
+				<eras>
+					<eraAbbr>
+						<era type="1">ዓ/ዓ</era>
+						<era type="2">ዓ/ም</era>
+					</eraAbbr>
+				</eras>
+			</calendar>
+		</calendars>
+	</dates>
 </ldml>

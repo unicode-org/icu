@@ -8,67 +8,75 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-03" />
+		<generation date="2003-12-17" />
 		<language type="gv" /> 
 	</identity>
-<characters>
-	<exemplarCharacters>[a-z]</exemplarCharacters>
-	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-		<icu:scripts>
-			<icu:script type="1">Latn</icu:script>
-		</icu:scripts>
-	</special>
-</characters>
-<dates>
-	<calendars>
-		<calendar type="gregorian">
-			<monthNames>
-				<month type="1">Jerrey-geuree</month>
-				<month type="2">Toshiaght-arree</month>
-				<month type="3">Mayrnt</month>
-				<month type="4">Averil</month>
-				<month type="5">Boaldyn</month>
-				<month type="6">Mean-souree</month>
-				<month type="7">Jerrey-souree</month>
-				<month type="8">Luanistyn</month>
-				<month type="9">Mean-fouyir</month>
-				<month type="10">Jerrey-fouyir</month>
-				<month type="11">Mee Houney</month>
-				<month type="12">Mee ny Nollick</month>
-			</monthNames>
-			<monthAbbr>
-				<month type="1">J-guer</month>
-				<month type="2">T-arree</month>
-				<month type="3">Mayrnt</month>
-				<month type="4">Avrril</month>
-				<month type="5">Boaldyn</month>
-				<month type="6">M-souree</month>
-				<month type="7">J-souree</month>
-				<month type="8">Luanistyn</month>
-				<month type="9">M-fouyir</month>
-				<month type="10">J-fouyir</month>
-				<month type="11">M.Houney</month>
-				<month type="12">M.Nollick</month>
-			</monthAbbr>
-			<dayNames>
-				<day type="sun">Jedoonee</day>
-				<day type="mon">Jelhein</day>
-				<day type="tue">Jemayrt</day>
-				<day type="wed">Jercean</day>
-				<day type="thu">Jerdein</day>
-				<day type="fri">Jeheiney</day>
-				<day type="sat">Jesarn</day>
-			</dayNames>
-			<dayAbbr>
-				<day type="sun">Jed</day>
-				<day type="mon">Jel</day>
-				<day type="tue">Jem</day>
-				<day type="wed">Jerc</day>
-				<day type="thu">Jerd</day>
-				<day type="fri">Jeh</day>
-				<day type="sat">Jes</day>
-			</dayAbbr>
-		</calendar>
-	</calendars>
-</dates>
+	<characters>
+		<exemplarCharacters>[a-z ç]</exemplarCharacters>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Latn</icu:script>
+			</icu:scripts>
+		</special>
+	</characters>
+	<dates>
+		<calendars>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">Jerrey-geuree</month>
+					<month type="2">Toshiaght-arree</month>
+					<month type="3">Mayrnt</month>
+					<month type="4">Averil</month>
+					<month type="5">Boaldyn</month>
+					<month type="6">Mean-souree</month>
+					<month type="7">Jerrey-souree</month>
+					<month type="8">Luanistyn</month>
+					<month type="9">Mean-fouyir</month>
+					<month type="10">Jerrey-fouyir</month>
+					<month type="11">Mee Houney</month>
+					<month type="12">Mee ny Nollick</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">J-guer</month>
+					<month type="2">T-arree</month>
+					<month type="3">Mayrnt</month>
+					<month type="4">Avrril</month>
+					<month type="5">Boaldyn</month>
+					<month type="6">M-souree</month>
+					<month type="7">J-souree</month>
+					<month type="8">Luanistyn</month>
+					<month type="9">M-fouyir</month>
+					<month type="10">J-fouyir</month>
+					<month type="11">M.Houney</month>
+					<month type="12">M.Nollick</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">Jedoonee</day>
+					<day type="mon">Jelhein</day>
+					<day type="tue">Jemayrt</day>
+					<day type="wed">Jercean</day>
+					<day type="thu">Jerdein</day>
+					<day type="fri">Jeheiney</day>
+					<day type="sat">Jesarn</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">Jed</day>
+					<day type="mon">Jel</day>
+					<day type="tue">Jem</day>
+					<day type="wed">Jerc</day>
+					<day type="thu">Jerd</day>
+					<day type="fri">Jeh</day>
+					<day type="sat">Jes</day>
+				</dayAbbr>
+				<am>a.m.</am>
+				<pm>p.m.</pm>
+				<eras>
+					<eraAbbr>
+						<era type="1">RC</era>
+						<era type="2">AD</era>
+					</eraAbbr>
+				</eras>
+			</calendar>
+		</calendars>
+	</dates>
 </ldml>

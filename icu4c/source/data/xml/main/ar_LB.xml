@@ -8,54 +8,54 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-03" />
+		<generation date="2003-12-17" />
 		<language type="ar" /> 
 		<territory type="LB" /> 
 	</identity>
-<layout>
-	<orientation lines="top-to-bottom" characters="right-to-left" />
-</layout>
-<dates>
-	<calendars>
-		<calendar type="gregorian">
-			<monthNames>
-				<month type="1">كانون الثاني</month>
-				<month type="2">شباط</month>
-				<month type="3">آذار</month>
-				<month type="4">نيسان</month>
-				<month type="5">نوار</month>
-				<month type="6">حزيران</month>
-				<month type="7">تموز</month>
-				<month type="8">آب</month>
-				<month type="9">أيلول</month>
-				<month type="10">تشرين الأول</month>
-				<month type="11">تشرين الثاني</month>
-				<month type="12">كانون الأول</month>
-			</monthNames>
-			<monthAbbr>
-				<month type="1">كانون الثاني</month>
-				<month type="2">شباط</month>
-				<month type="3">آذار</month>
-				<month type="4">نيسان</month>
-				<month type="5">نوار</month>
-				<month type="6">حزيران</month>
-				<month type="7">تموز</month>
-				<month type="8">آب</month>
-				<month type="9">أيلول</month>
-				<month type="10">تشرين الأول</month>
-				<month type="11">تشرين الثاني</month>
-				<month type="12">كانون الأول</month>
-			</monthAbbr>
-			<dayAbbr>
-				<day type="sun">الأحد</day>
-				<day type="mon">الاثنين</day>
-				<day type="tue">الثلاثاء</day>
-				<day type="wed">الأربعاء</day>
-				<day type="thu">الخميس</day>
-				<day type="fri">الجمعة</day>
-				<day type="sat">السبت</day>
-			</dayAbbr>
-		</calendar>
-	</calendars>
-</dates>
+	<layout>
+		<orientation lines="top-to-bottom" characters="right-to-left" />
+	</layout>
+	<dates>
+		<calendars>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">كانون الثاني</month>
+					<month type="2">شباط</month>
+					<month type="3">آذار</month>
+					<month type="4">نيسان</month>
+					<month type="5">نوار</month>
+					<month type="6">حزيران</month>
+					<month type="7">تموز</month>
+					<month type="8">آب</month>
+					<month type="9">أيلول</month>
+					<month type="10">تشرين الأول</month>
+					<month type="11">تشرين الثاني</month>
+					<month type="12">كانون الأول</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">كانون الثاني</month>
+					<month type="2">شباط</month>
+					<month type="3">آذار</month>
+					<month type="4">نيسان</month>
+					<month type="5">نوار</month>
+					<month type="6">حزيران</month>
+					<month type="7">تموز</month>
+					<month type="8">آب</month>
+					<month type="9">أيلول</month>
+					<month type="10">تشرين الأول</month>
+					<month type="11">تشرين الثاني</month>
+					<month type="12">كانون الأول</month>
+				</monthAbbr>
+				<dayAbbr>
+					<day type="sun">الأحد</day>
+					<day type="mon">الاثنين</day>
+					<day type="tue">الثلاثاء</day>
+					<day type="wed">الأربعاء</day>
+					<day type="thu">الخميس</day>
+					<day type="fri">الجمعة</day>
+					<day type="sat">السبت</day>
+				</dayAbbr>
+			</calendar>
+		</calendars>
+	</dates>
 </ldml>

@@ -8,7 +8,7 @@
 <ldml>
 	<identity>
 		<version number="1.0"/>
-		<generation date="2003-12-03" />
+		<generation date="2003-12-17" />
 		<language type="mt" /> 
 	</identity>
 	<localeDisplayNames>
@@ -19,6 +19,7 @@
 			<language type="ace">Aċiniż</language>
 			<language type="ach">Akoli</language>
 			<language type="ada">Adangme</language>
+			<language type="ady">Adyghe</language>
 			<language type="ae">Avestan</language>
 			<language type="af">Afrikans</language>
 			<language type="afa">Afro-Asjatiku (Oħra)</language>
@@ -28,6 +29,7 @@
 			<language type="ale">Aleut</language>
 			<language type="alg">Lingwi Algonqwinjani</language>
 			<language type="am">Amħariku</language>
+			<language type="an">Aragonese</language>
 			<language type="ang">Ingliż, Antik (ca.450-1100)</language>
 			<language type="apa">Lingwi Apaċi</language>
 			<language type="ar">Għarbi</language>
@@ -73,6 +75,7 @@
 			<language type="btk">Batak</language>
 			<language type="bua">Burjat</language>
 			<language type="bug">Buginiż</language>
+			<language type="byn">Blin</language>
 			<language type="ca">Katalan</language>
 			<language type="cad">Kaddo</language>
 			<language type="cai">Amerika Ċentrali (Oħra)</language>
@@ -98,8 +101,10 @@
 			<language type="cpf">Kreoli u Piġini, Bbażat fuq il-Franċiż (Oħra)</language>
 			<language type="cpp">Creoles and pidgins, Portuguese-based (Other)</language>
 			<language type="cr">Krij</language>
+			<language type="crh">Crimean Turkish; Crimean Tatar</language>
 			<language type="crp">Kreoli u Piġini (Oħra)</language>
 			<language type="cs">Ċek</language>
+			<language type="csb">Kashubian</language>
 			<language type="cu">Slaviku tal-Knisja</language>
 			<language type="cus">Kuxtiku (Oħra)</language>
 			<language type="cv">Ċuvax</language>
@@ -115,6 +120,7 @@
 			<language type="din">Dinka</language>
 			<language type="doi">Dogri</language>
 			<language type="dra">Dravidjan (Oħra)</language>
+			<language type="dsb">Lower Sorbian</language>
 			<language type="dua">Dwala</language>
 			<language type="dum">Olandiż, Medjevali (ca. 1050-1350)</language>
 			<language type="dv">Diveħi</language>
@@ -156,7 +162,6 @@
 			<language type="gez">Geez</language>
 			<language type="gil">Gilbertjan</language>
 			<language type="gl">Gallegjan</language>
-			<language type="gla">Galliku (Skoċċiż)</language>
 			<language type="gmh">Ġermaniku, Medjevali Pulit (ca. 1050-1500)</language>
 			<language type="gn">Gwarani</language>
 			<language type="goh">Ġermaniku, Antik Pulit (ca. 750-1050)</language>
@@ -179,6 +184,7 @@
 			<language type="hmn">Ħmong</language>
 			<language type="ho">Ħiri Motu</language>
 			<language type="hr">Kroat</language>
+			<language type="hsb">Upper Sorbian</language>
 			<language type="ht">Haitian</language>
 			<language type="hu">Ungeriż</language>
 			<language type="hup">Ħupa</language>
@@ -203,6 +209,7 @@
 			<language type="it">Taljan</language>
 			<language type="iu">Inuktitut</language>
 			<language type="ja">Ġappuniż</language>
+			<language type="jbo">Lojban</language>
 			<language type="jpr">Lhudi-Persjan</language>
 			<language type="jrb">Lhudi-Għarbi</language>
 			<language type="jv">Ġavaniż</language>
@@ -230,6 +237,7 @@
 			<language type="kos">Kosrejan</language>
 			<language type="kpe">Kpelle</language>
 			<language type="kr">Kanuri</language>
+			<language type="krc">Karachay-Balkar</language>
 			<language type="kro">Kru</language>
 			<language type="kru">Kurusk</language>
 			<language type="ks">Kaxmiri</language>
@@ -247,8 +255,6 @@
 			<language type="lez">Leżgjan</language>
 			<language type="lg">Ganda</language>
 			<language type="li">Limburgish</language>
-			<language type="lin">Lingaljan</language>
-			<language type="lit">Litwanjan</language>
 			<language type="ln">Lingaljan</language>
 			<language type="lo">Lao</language>
 			<language type="lol">Mongo</language>
@@ -268,6 +274,7 @@
 			<language type="man">Mandingwan</language>
 			<language type="map">Awstronesjan</language>
 			<language type="mas">Masaj</language>
+			<language type="mdf">Moksha</language>
 			<language type="mdr">Mandar</language>
 			<language type="men">Mende</language>
 			<language type="mg">Malagażi</language>
@@ -296,6 +303,7 @@
 			<language type="mwr">Marwari</language>
 			<language type="my">Burmiż</language>
 			<language type="myn">Majan</language>
+			<language type="myv">Erzya</language>
 			<language type="na">Nawuru</language>
 			<language type="nah">Naħwatil</language>
 			<language type="nai">Indjan tal-Amerika ta' Fuq (Oħra)</language>
@@ -312,6 +320,7 @@
 			<language type="nl">Olandiż</language>
 			<language type="nn">Ninorsk Norveġiż</language>
 			<language type="no">Norveġiż</language>
+			<language type="nog">Nogai</language>
 			<language type="non">Skandinav, Antik</language>
 			<language type="nr">Ndebele, t'Isfel</language>
 			<language type="nso">Soto, ta' Fuq</language>
@@ -435,12 +444,12 @@
 			<language type="tt">Tatar</language>
 			<language type="tum">Tumbuka</language>
 			<language type="tup">Tupi languages</language>
-			<language type="tur">Tork</language>
 			<language type="tut">Altajk (Oħra)</language>
 			<language type="tvl">Tuvalu</language>
 			<language type="tw">Twi</language>
 			<language type="ty">Taħitjan</language>
 			<language type="tyv">Tuvinjan</language>
+			<language type="udm">Udmurt</language>
 			<language type="ug">Wigur</language>
 			<language type="uga">Ugaritiku</language>
 			<language type="uk">Ukranjan</language>
@@ -460,6 +469,7 @@
 			<language type="was">Waxo</language>
 			<language type="wen">Lingwi Sorbjani</language>
 			<language type="wo">Wolof</language>
+			<language type="xal">Kalmyk</language>
 			<language type="xh">Ħoża</language>
 			<language type="yao">Jao</language>
 			<language type="yap">Japese</language>
@@ -717,137 +727,149 @@
 			<territory type="ZM">Żambja</territory>
 			<territory type="ZW">Żimbabwe</territory>
 		</territories>
-</localeDisplayNames>
-<characters>
-	<exemplarCharacters>[[a-z à ì ù è ò ċ ġ ħ {għ} ż]-[cy]]</exemplarCharacters>
+	</localeDisplayNames>
+	<characters>
+		<exemplarCharacters>[[a-z à ì ù è ò ċ ġ ħ {għ} ż]-[cy]]</exemplarCharacters>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Latn</icu:script>
+			</icu:scripts>
+		</special>
+	</characters>
+	<dates>
+		<calendars>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">Jannar</month>
+					<month type="2">Frar</month>
+					<month type="3">Marzu</month>
+					<month type="4">April</month>
+					<month type="5">Mejju</month>
+					<month type="6">Ġunju</month>
+					<month type="7">Lulju</month>
+					<month type="8">Awissu</month>
+					<month type="9">Settembru</month>
+					<month type="10">Ottubru</month>
+					<month type="11">Novembru</month>
+					<month type="12">Diċembru</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">Jan</month>
+					<month type="2">Fra</month>
+					<month type="3">Mar</month>
+					<month type="4">Apr</month>
+					<month type="5">Mej</month>
+					<month type="6">Ġun</month>
+					<month type="7">Lul</month>
+					<month type="8">Awi</month>
+					<month type="9">Set</month>
+					<month type="10">Ott</month>
+					<month type="11">Nov</month>
+					<month type="12">Diċ</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">Il-Ħadd</day>
+					<day type="mon">It-Tnejn</day>
+					<day type="tue">It-Tlieta</day>
+					<day type="wed">L-Erbgħa</day>
+					<day type="thu">Il-Ħamis</day>
+					<day type="fri">Il-Ġimgħa</day>
+					<day type="sat">Is-Sibt</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">Ħad</day>
+					<day type="mon">Tne</day>
+					<day type="tue">Tli</day>
+					<day type="wed">Erb</day>
+					<day type="thu">Ħam</day>
+					<day type="fri">Ġim</day>
+					<day type="sat">Sib</day>
+				</dayAbbr>
+				<eras>
+					<eraAbbr>
+						<era type="1">QK</era>
+						<era type="2">WK</era>
+					</eraAbbr>
+				</eras>
+				<dateFormats>
+					<default type="medium"/>
+					<dateFormatLength type="full">
+						<dateFormat >
+							<pattern>EEEE, d 'ta''' MMMM, yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="long">
+						<dateFormat >
+							<pattern>d 'ta''' MMMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="medium">
+						<dateFormat >
+							<pattern>dd-MMM-yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="short">
+						<dateFormat >
+							<pattern>dd/MM/yy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+				</dateFormats>
+				<timeFormats>
+					<default type="medium"/>
+					<timeFormatLength type="full">
+						<timeFormat >
+							<pattern>h:mm:ss a z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="long">
+						<timeFormat >
+							<pattern>h:mm:ss a z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="medium">
+						<timeFormat >
+							<pattern>h:mm:ss a</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="short">
+						<timeFormat >
+							<pattern>h:mm a</pattern>
+						</timeFormat>
+					</timeFormatLength >
+				</timeFormats>
+				<dateTimeFormats>
+					<dateTimeFormatLength >
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength >
+				</dateTimeFormats>
+			</calendar>
+		</calendars>
+		<timeZoneNames>
+			<zone type="CET">
+				<long>
+				<standard>Ħin ta' L-Ewropa Ċentrali</standard>
+				<daylight>Ħin tas-Sajf fl-Ewropa Ċentrali</daylight>
+				</long>
+				<short>
+					<standard>CET</standard>
+					<daylight>CEST</daylight>
+				</short>
+			</zone>
+		</timeZoneNames>
+	</dates>
+	<numbers>
+		<currencies>
+			<currency type="MTL">
+				<displayName>MTL</displayName>
+				<symbol>Lm</symbol>
+			</currency>
+		</currencies>
+	</numbers>
 	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-		<icu:scripts>
-			<icu:script type="1">Latn</icu:script>
-		</icu:scripts>
-	</special>
-</characters>
-<dates>
-	<calendars>
-		<calendar type="gregorian">
-			<monthNames>
-				<month type="1">Jannar</month>
-				<month type="2">Frar</month>
-				<month type="3">Marzu</month>
-				<month type="4">April</month>
-				<month type="5">Mejju</month>
-				<month type="6">Ġunju</month>
-				<month type="7">Lulju</month>
-				<month type="8">Awissu</month>
-				<month type="9">Settembru</month>
-				<month type="10">Ottubru</month>
-				<month type="11">Novembru</month>
-				<month type="12">Diċembru</month>
-			</monthNames>
-			<monthAbbr>
-				<month type="1">Jan</month>
-				<month type="2">Fra</month>
-				<month type="3">Mar</month>
-				<month type="4">Apr</month>
-				<month type="5">Mej</month>
-				<month type="6">Ġun</month>
-				<month type="7">Lul</month>
-				<month type="8">Awi</month>
-				<month type="9">Set</month>
-				<month type="10">Ott</month>
-				<month type="11">Nov</month>
-				<month type="12">Diċ</month>
-			</monthAbbr>
-			<dayNames>
-				<day type="sun">Il-Ħadd</day>
-				<day type="mon">It-Tnejn</day>
-				<day type="tue">It-Tlieta</day>
-				<day type="wed">L-Erbgħa</day>
-				<day type="thu">Il-Ħamis</day>
-				<day type="fri">Il-Ġimgħa</day>
-				<day type="sat">Is-Sibt</day>
-			</dayNames>
-			<dayAbbr>
-				<day type="sun">Ħad</day>
-				<day type="mon">Tne</day>
-				<day type="tue">Tli</day>
-				<day type="wed">Erb</day>
-				<day type="thu">Ħam</day>
-				<day type="fri">Ġim</day>
-				<day type="sat">Sib</day>
-			</dayAbbr>
-			<eras>
-				<eraAbbr>
-					<era type="1">QK</era>
-					<era type="2">WK</era>
-				</eraAbbr>
-			</eras>
-			<dateFormats>
-				<default type="medium"/>
-				<dateFormatLength type="full">
-					<dateFormat >
-						<pattern>EEEE, d 'ta''' MMMM, yyyy</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="long">
-					<dateFormat >
-						<pattern>d 'ta''' MMMM yyyy</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="medium">
-					<dateFormat >
-						<pattern>dd-MMM-yyyy</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="short">
-					<dateFormat >
-						<pattern>dd/MM/yy</pattern>
-					</dateFormat>
-				</dateFormatLength >
-			</dateFormats>
-			<timeFormats>
-				<default type="medium"/>
-				<timeFormatLength type="full">
-					<timeFormat >
-						<pattern>h:mm:ss a z</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="long">
-					<timeFormat >
-						<pattern>h:mm:ss a z</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="medium">
-					<timeFormat >
-						<pattern>h:mm:ss a</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="short">
-					<timeFormat >
-						<pattern>h:mm a</pattern>
-					</timeFormat>
-				</timeFormatLength >
-			</timeFormats>
-			<dateTimeFormats>
-				<dateTimeFormatLength >
-					<dateTimeFormat>
-						<pattern>{1} {0}</pattern>
-					</dateTimeFormat>
-				</dateTimeFormatLength >
-			</dateTimeFormats>
-		</calendar>
-	</calendars>
-</dates>
-<numbers>
-	<currencies>
-		<currency type="MTL">
-			<displayName>MTL</displayName>
-			<symbol>Lm</symbol>
-		</currency>
-	</currencies>
-</numbers>
-<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-	<icu:ruleBasedNumberFormats>
-		<icu:ruleBasedNumberFormat type="spellout">
+		<icu:ruleBasedNumberFormats>
+			<icu:ruleBasedNumberFormat type="spellout">
 %simplified:
 -x: minus &gt;&gt;;
 x.x: &lt;&lt; punt &gt;&gt;;
@@ -900,8 +922,8 @@ u =%default=;
 1,000,000: , =%default=;%%lenient-parse:
 &amp;<cp hex="0000" /> &lt;&lt; ' ' &lt;&lt; ',' &lt;&lt; '-'; 
 
-		</icu:ruleBasedNumberFormat>
-		<icu:ruleBasedNumberFormat type="duration">
+			</icu:ruleBasedNumberFormat>
+			<icu:ruleBasedNumberFormat type="duration">
 %with-words:
 0 sekondi; 1 sekonda; =0= sekondi;
 60/60: &lt;%%min&lt;[, &gt;&gt;];
@@ -924,7 +946,7 @@ u =%default=;
 %%lenient-parse:
 &amp; ':' = '.' = ' ' = '-';
 
-		</icu:ruleBasedNumberFormat>
-	</icu:ruleBasedNumberFormats>
-</special>
+			</icu:ruleBasedNumberFormat>
+		</icu:ruleBasedNumberFormats>
+	</special>
 </ldml>

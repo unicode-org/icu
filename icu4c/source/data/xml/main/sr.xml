@@ -8,7 +8,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-03" />
+		<generation date="2003-12-17" />
 		<language type="sr" /> 
 	</identity>
 	<localeDisplayNames>
@@ -261,147 +261,163 @@
 			<territory type="ZM">Замбија</territory>
 			<territory type="ZW">Зимбабве</territory>
 		</territories>
-</localeDisplayNames>
-<characters>
-	<exemplarCharacters>[а-и к-ш ђ ј љ њ ћ џ]</exemplarCharacters>
-	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-		<icu:scripts>
-			<icu:script type="1">Cyrl</icu:script>
-		</icu:scripts>
-	</special>
-</characters>
-<dates>
-	<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
-	<calendars>
-		<calendar type="gregorian">
-			<monthNames>
-				<month type="1">јануар</month>
-				<month type="2">фебруар</month>
-				<month type="3">март</month>
-				<month type="4">април</month>
-				<month type="5">мај</month>
-				<month type="6">јуни</month>
-				<month type="7">јули</month>
-				<month type="8">август</month>
-				<month type="9">септембар</month>
-				<month type="10">октобар</month>
-				<month type="11">новембар</month>
-				<month type="12">децембар</month>
-			</monthNames>
-			<monthAbbr>
-				<month type="1">јан</month>
-				<month type="2">феб</month>
-				<month type="3">мар</month>
-				<month type="4">апр</month>
-				<month type="5">мај</month>
-				<month type="6">јун</month>
-				<month type="7">јул</month>
-				<month type="8">авг</month>
-				<month type="9">сеп</month>
-				<month type="10">окт</month>
-				<month type="11">нов</month>
-				<month type="12">дец</month>
-			</monthAbbr>
-			<dayNames>
-				<day type="sun">недеља</day>
-				<day type="mon">понедељак</day>
-				<day type="tue">уторак</day>
-				<day type="wed">среда</day>
-				<day type="thu">четвртак</day>
-				<day type="fri">петак</day>
-				<day type="sat">субота</day>
-			</dayNames>
-			<dayAbbr>
-				<day type="sun">нед</day>
-				<day type="mon">пон</day>
-				<day type="tue">уто</day>
-				<day type="wed">сре</day>
-				<day type="thu">чет</day>
-				<day type="fri">пет</day>
-				<day type="sat">суб</day>
-			</dayAbbr>
-			<eras>
-				<eraAbbr>
-					<era type="1">п. н. е.</era>
-					<era type="2">н. е</era>
-				</eraAbbr>
-			</eras>
-			<dateFormats>
-				<default type="medium"/>
-				<dateFormatLength type="full">
-					<dateFormat >
-						<pattern>EEEE, dd.MMMM.yyyy.</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="long">
-					<dateFormat >
-						<pattern>dd.MM.yyyy.</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="medium">
-					<dateFormat >
-						<pattern>dd.MM.yyyy.</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="short">
-					<dateFormat >
-						<pattern>d.M.yy.</pattern>
-					</dateFormat>
-				</dateFormatLength >
-			</dateFormats>
-			<timeFormats>
-				<default type="medium"/>
-				<timeFormatLength type="full">
-					<timeFormat >
-						<pattern>HH.mm.ss z</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="long">
-					<timeFormat >
-						<pattern>HH.mm.ss z</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="medium">
-					<timeFormat >
-						<pattern>HH.mm.ss</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="short">
-					<timeFormat >
-						<pattern>HH.mm</pattern>
-					</timeFormat>
-				</timeFormatLength >
-			</timeFormats>
-			<dateTimeFormats>
-				<dateTimeFormatLength >
-					<dateTimeFormat>
-						<pattern>{1} {0}</pattern>
-					</dateTimeFormat>
-				</dateTimeFormatLength >
-			</dateTimeFormats>
-		</calendar>
-	</calendars>
-</dates>
-<numbers>
-	<symbols>
-		<decimal>,</decimal>
-		<group>.</group>
-		<list>;</list>
-		<percentSign>%</percentSign>
-		<nativeZeroDigit>0</nativeZeroDigit>
-		<patternDigit>#</patternDigit>
-		<plusSign>+</plusSign>
-		<minusSign>-</minusSign>
-		<exponential>E</exponential>
-		<perMille>‰</perMille>
-		<infinity>∞</infinity>
-		<nan>�</nan>
-	</symbols>
-	<currencies>
-		<currency type="YUN">
-			<displayName>YUN</displayName>
-			<symbol>Дин</symbol>
-		</currency>
-	</currencies>
-</numbers>
+	</localeDisplayNames>
+	<characters>
+		<exemplarCharacters>[а-и к-ш ђ ј љ њ ћ џ]</exemplarCharacters>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Cyrl</icu:script>
+			</icu:scripts>
+		</special>
+	</characters>
+	<dates>
+		<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
+		<calendars>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">јануар</month>
+					<month type="2">фебруар</month>
+					<month type="3">март</month>
+					<month type="4">април</month>
+					<month type="5">мај</month>
+					<month type="6">јуни</month>
+					<month type="7">јули</month>
+					<month type="8">август</month>
+					<month type="9">септембар</month>
+					<month type="10">октобар</month>
+					<month type="11">новембар</month>
+					<month type="12">децембар</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">јан</month>
+					<month type="2">феб</month>
+					<month type="3">мар</month>
+					<month type="4">апр</month>
+					<month type="5">мај</month>
+					<month type="6">јун</month>
+					<month type="7">јул</month>
+					<month type="8">авг</month>
+					<month type="9">сеп</month>
+					<month type="10">окт</month>
+					<month type="11">нов</month>
+					<month type="12">дец</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">недеља</day>
+					<day type="mon">понедељак</day>
+					<day type="tue">уторак</day>
+					<day type="wed">среда</day>
+					<day type="thu">четвртак</day>
+					<day type="fri">петак</day>
+					<day type="sat">субота</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">нед</day>
+					<day type="mon">пон</day>
+					<day type="tue">уто</day>
+					<day type="wed">сре</day>
+					<day type="thu">чет</day>
+					<day type="fri">пет</day>
+					<day type="sat">суб</day>
+				</dayAbbr>
+				<week>
+					<minDays count="1"/>
+					<firstDay day="mon"/>
+				</week>
+				<eras>
+					<eraAbbr>
+						<era type="1">п. н. е.</era>
+						<era type="2">н. е</era>
+					</eraAbbr>
+				</eras>
+				<dateFormats>
+					<default type="medium"/>
+					<dateFormatLength type="full">
+						<dateFormat >
+							<pattern>EEEE, dd.MMMM.yyyy.</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="long">
+						<dateFormat >
+							<pattern>dd.MM.yyyy.</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="medium">
+						<dateFormat >
+							<pattern>dd.MM.yyyy.</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="short">
+						<dateFormat >
+							<pattern>d.M.yy.</pattern>
+						</dateFormat>
+					</dateFormatLength >
+				</dateFormats>
+				<timeFormats>
+					<default type="medium"/>
+					<timeFormatLength type="full">
+						<timeFormat >
+							<pattern>HH.mm.ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="long">
+						<timeFormat >
+							<pattern>HH.mm.ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="medium">
+						<timeFormat >
+							<pattern>HH.mm.ss</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="short">
+						<timeFormat >
+							<pattern>HH.mm</pattern>
+						</timeFormat>
+					</timeFormatLength >
+				</timeFormats>
+				<dateTimeFormats>
+					<dateTimeFormatLength >
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength >
+				</dateTimeFormats>
+			</calendar>
+		</calendars>
+		<timeZoneNames>
+			<zone type="Europe/Belgrade">
+				<long>
+				<standard>Централно Европско Време</standard>
+				<daylight>Централно Европско Време</daylight>
+				</long>
+				<short>
+					<standard>CET</standard>
+					<daylight>CET</daylight>
+				</short>
+			</zone>
+		</timeZoneNames>
+	</dates>
+	<numbers>
+		<symbols>
+			<decimal>,</decimal>
+			<group>.</group>
+			<list>;</list>
+			<percentSign>%</percentSign>
+			<nativeZeroDigit>0</nativeZeroDigit>
+			<patternDigit>#</patternDigit>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>E</exponential>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>�</nan>
+		</symbols>
+		<currencies>
+			<currency type="YUN">
+				<displayName>YUN</displayName>
+				<symbol>Дин</symbol>
+			</currency>
+		</currencies>
+	</numbers>
 </ldml>

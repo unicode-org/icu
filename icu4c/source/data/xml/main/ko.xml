@@ -8,7 +8,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-03" />
+		<generation date="2003-12-17" />
 		<language type="ko" /> 
 	</identity>
 	<localeDisplayNames>
@@ -401,7 +401,6 @@
 			<territory type="ZW">짐바브웨</territory>
 		</territories>
 		<variants>
-			<variant type="EURO">유로</variant>
 			<variant type="REVISED">개정</variant>
 		</variants>
 		<types>
@@ -530,6 +529,18 @@
 				</dateTimeFormats>
 			</calendar>
 		</calendars>
+		<timeZoneNames>
+			<zone type="Asia/Seoul">
+				<long>
+				<standard>한국표준시</standard>
+				<daylight>한국표준시</daylight>
+				</long>
+				<short>
+					<standard>KST</standard>
+					<daylight>KST</daylight>
+				</short>
+			</zone>
+		</timeZoneNames>
 	</dates>
 	<numbers>
 		<currencies>

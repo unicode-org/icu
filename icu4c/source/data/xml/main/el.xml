@@ -8,7 +8,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-03" />
+		<generation date="2003-12-17" />
 		<language type="el" /> 
 	</identity>
 	<localeDisplayNames>
@@ -289,153 +289,197 @@
 			<territory type="ZM">Ζάμπια</territory>
 			<territory type="ZW">Ζιμπάμπουε</territory>
 		</territories>
-</localeDisplayNames>
-<characters>
-	<exemplarCharacters>[ά-ώ]</exemplarCharacters>
-	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-		<icu:scripts>
-			<icu:script type="1">Grek</icu:script>
-		</icu:scripts>
-	</special>
-</characters>
-<dates>
-	<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
-	<calendars>
-		<calendar type="gregorian">
-			<monthNames>
-				<month type="1">Ιανουάριος</month>
-				<month type="2">Φεβρουάριος</month>
-				<month type="3">Μάρτιος</month>
-				<month type="4">Απρίλιος</month>
-				<month type="5">Μάιος</month>
-				<month type="6">Ιούνιος</month>
-				<month type="7">Ιούλιος</month>
-				<month type="8">Αύγουστος</month>
-				<month type="9">Σεπτέμβριος</month>
-				<month type="10">Οκτώβριος</month>
-				<month type="11">Νοέμβριος</month>
-				<month type="12">Δεκέμβριος</month>
-			</monthNames>
-			<monthAbbr>
-				<month type="1">Ιαν</month>
-				<month type="2">Φεβ</month>
-				<month type="3">Μαρ</month>
-				<month type="4">Απρ</month>
-				<month type="5">Μαϊ</month>
-				<month type="6">Ιουν</month>
-				<month type="7">Ιουλ</month>
-				<month type="8">Αυγ</month>
-				<month type="9">Σεπ</month>
-				<month type="10">Οκτ</month>
-				<month type="11">Νοε</month>
-				<month type="12">Δεκ</month>
-			</monthAbbr>
-			<dayNames>
-				<day type="sun">Κυριακή</day>
-				<day type="mon">Δευτέρα</day>
-				<day type="tue">Τρίτη</day>
-				<day type="wed">Τετάρτη</day>
-				<day type="thu">Πέμπτη</day>
-				<day type="fri">Παρασκευή</day>
-				<day type="sat">Σάββατο</day>
-			</dayNames>
-			<dayAbbr>
-				<day type="sun">Κυρ</day>
-				<day type="mon">Δευ</day>
-				<day type="tue">Τρι</day>
-				<day type="wed">Τετ</day>
-				<day type="thu">Πεμ</day>
-				<day type="fri">Παρ</day>
-				<day type="sat">Σαβ</day>
-			</dayAbbr>
-			<week>
-				<minDays count="1"/>
-				<firstDay day="mon"/>
-			</week>
-			<am>πμ</am>
-			<pm>μμ</pm>
-			<eras>
-				<eraAbbr>
-					<era type="1">π.Χ.</era>
-					<era type="2">μ.Χ.</era>
-				</eraAbbr>
-			</eras>
-			<dateFormats>
-				<default type="medium"/>
-				<dateFormatLength type="full">
-					<dateFormat >
-						<pattern>EEEE, d MMMM yyyy</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="long">
-					<dateFormat >
-						<pattern>d MMMM yyyy</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="medium">
-					<dateFormat >
-						<pattern>d MMM yyyy</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="short">
-					<dateFormat >
-						<pattern>d/M/yyyy</pattern>
-					</dateFormat>
-				</dateFormatLength >
-			</dateFormats>
-			<timeFormats>
-				<default type="medium"/>
-				<timeFormatLength type="full">
-					<timeFormat >
-						<pattern>h:mm:ss a z</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="long">
-					<timeFormat >
-						<pattern>h:mm:ss a z</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="medium">
-					<timeFormat >
-						<pattern>h:mm:ss a</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="short">
-					<timeFormat >
-						<pattern>h:mm a</pattern>
-					</timeFormat>
-				</timeFormatLength >
-			</timeFormats>
-			<dateTimeFormats>
-				<dateTimeFormatLength >
-					<dateTimeFormat>
-						<pattern>{1} {0}</pattern>
-					</dateTimeFormat>
-				</dateTimeFormatLength >
-			</dateTimeFormats>
-		</calendar>
-	</calendars>
-</dates>
-<numbers>
-	<symbols>
-		<decimal>,</decimal>
-		<group>.</group>
-		<list>;</list>
-		<percentSign>%</percentSign>
-		<nativeZeroDigit>0</nativeZeroDigit>
-		<patternDigit>#</patternDigit>
-		<plusSign>+</plusSign>
-		<minusSign>-</minusSign>
-		<exponential>E</exponential>
-		<perMille>‰</perMille>
-		<infinity>∞</infinity>
-		<nan>�</nan>
-	</symbols>
-	<currencies>
-		<currency type="GRD">
-			<displayName>GRD</displayName>
-			<symbol>Δρχ</symbol>
-		</currency>
-	</currencies>
-</numbers>
+	</localeDisplayNames>
+	<characters>
+		<exemplarCharacters>[ά-ώ]</exemplarCharacters>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Grek</icu:script>
+			</icu:scripts>
+		</special>
+	</characters>
+	<dates>
+		<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
+		<calendars>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">Ιανουάριος</month>
+					<month type="2">Φεβρουάριος</month>
+					<month type="3">Μάρτιος</month>
+					<month type="4">Απρίλιος</month>
+					<month type="5">Μάιος</month>
+					<month type="6">Ιούνιος</month>
+					<month type="7">Ιούλιος</month>
+					<month type="8">Αύγουστος</month>
+					<month type="9">Σεπτέμβριος</month>
+					<month type="10">Οκτώβριος</month>
+					<month type="11">Νοέμβριος</month>
+					<month type="12">Δεκέμβριος</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">Ιαν</month>
+					<month type="2">Φεβ</month>
+					<month type="3">Μαρ</month>
+					<month type="4">Απρ</month>
+					<month type="5">Μαϊ</month>
+					<month type="6">Ιουν</month>
+					<month type="7">Ιουλ</month>
+					<month type="8">Αυγ</month>
+					<month type="9">Σεπ</month>
+					<month type="10">Οκτ</month>
+					<month type="11">Νοε</month>
+					<month type="12">Δεκ</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">Κυριακή</day>
+					<day type="mon">Δευτέρα</day>
+					<day type="tue">Τρίτη</day>
+					<day type="wed">Τετάρτη</day>
+					<day type="thu">Πέμπτη</day>
+					<day type="fri">Παρασκευή</day>
+					<day type="sat">Σάββατο</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">Κυρ</day>
+					<day type="mon">Δευ</day>
+					<day type="tue">Τρι</day>
+					<day type="wed">Τετ</day>
+					<day type="thu">Πεμ</day>
+					<day type="fri">Παρ</day>
+					<day type="sat">Σαβ</day>
+				</dayAbbr>
+				<week>
+					<minDays count="1"/>
+					<firstDay day="mon"/>
+				</week>
+				<am>ΠΜ</am>
+				<pm>ΜΜ</pm>
+				<eras>
+					<eraAbbr>
+						<era type="1">π.Χ.</era>
+						<era type="2">μ.Χ.</era>
+					</eraAbbr>
+				</eras>
+				<dateFormats>
+					<default type="medium"/>
+					<dateFormatLength type="full">
+						<dateFormat >
+							<pattern>EEEE, dd MMMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="long">
+						<dateFormat >
+							<pattern>dd MMMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="medium">
+						<dateFormat >
+							<pattern>dd MMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="short">
+						<dateFormat >
+							<pattern>dd/MM/yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+				</dateFormats>
+				<timeFormats>
+					<default type="medium"/>
+					<timeFormatLength type="full">
+						<timeFormat >
+							<pattern>h:mm:ss a z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="long">
+						<timeFormat >
+							<pattern>h:mm:ss a z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="medium">
+						<timeFormat >
+							<pattern>h:mm:ss a</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="short">
+						<timeFormat >
+							<pattern>h:mm a</pattern>
+						</timeFormat>
+					</timeFormatLength >
+				</timeFormats>
+				<dateTimeFormats>
+					<dateTimeFormatLength >
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength >
+				</dateTimeFormats>
+			</calendar>
+		</calendars>
+	</dates>
+	<numbers>
+		<symbols>
+			<decimal>,</decimal>
+			<group>.</group>
+			<list>;</list>
+			<percentSign>%</percentSign>
+			<nativeZeroDigit>0</nativeZeroDigit>
+			<patternDigit>#</patternDigit>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>E</exponential>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>�</nan>
+		</symbols>
+		<currencies>
+			<currency type="AUD">
+				<displayName>ΔΟΛΑΡΙΟ ΑΥΣΤΡΑΛΙΑΣ</displayName>
+				<symbol>AUD</symbol>
+			</currency>
+			<currency type="CAD">
+				<displayName>ΔΟΛΑΡΙΟ ΚΑΝΑΔΑ</displayName>
+				<symbol>CAD</symbol>
+			</currency>
+			<currency type="CHF">
+				<displayName>ΦΡΑΓΚΟ ΕΛΒΕΤΙΑΣ</displayName>
+				<symbol>CHF</symbol>
+			</currency>
+			<currency type="CYP">
+				<displayName>ΛΙΡΑ ΚΥΠΡΟΥ</displayName>
+				<symbol>CYP</symbol>
+			</currency>
+			<currency type="DKK">
+				<displayName>ΚΟΡΟΝΑ ΔΑΝΙΑΣ</displayName>
+				<symbol>DKK</symbol>
+			</currency>
+			<currency type="EUR">
+				<displayName>ΕΥΡΩ</displayName>
+				<symbol>€</symbol>
+			</currency>
+			<currency type="GBP">
+				<displayName>ΛΙΡΑ ΑΓΓΛΙΑΣ</displayName>
+				<symbol>£</symbol>
+			</currency>
+			<currency type="GRD">
+				<displayName>Δρχ</displayName>
+				<symbol>Δρχ</symbol>
+			</currency>
+			<currency type="JPY">
+				<displayName>ΓΙΕΝ ΙΑΠΩΝΙΑΣ</displayName>
+				<symbol>¥</symbol>
+			</currency>
+			<currency type="NOK">
+				<displayName>ΚΟΡΟΝΑ ΝΟΡΒΗΓΙΑΣ</displayName>
+				<symbol>NOK</symbol>
+			</currency>
+			<currency type="SEK">
+				<displayName>ΚΟΡΟΝΑ ΣΟΥΗΔΙΑΣ</displayName>
+				<symbol>SEK</symbol>
+			</currency>
+			<currency type="USD">
+				<displayName>ΔΟΛΑΡΙΟ ΗΠΑ</displayName>
+				<symbol>USD</symbol>
+			</currency>
+		</currencies>
+	</numbers>
 </ldml>

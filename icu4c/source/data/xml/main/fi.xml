@@ -8,7 +8,7 @@
 <ldml>
 	<identity>
 		<version number="3.0"/>
-		<generation date="2003-12-03" />
+		<generation date="2003-12-17" />
 		<language type="fi" /> 
 	</identity>
 	<localeDisplayNames>
@@ -337,145 +337,145 @@
 			<territory type="ZM">Sambia</territory>
 			<territory type="ZW">Zimbabwe</territory>
 		</territories>
-</localeDisplayNames>
-<characters>
-	<exemplarCharacters>[a-z ä ö]</exemplarCharacters>
-	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-		<icu:scripts>
-			<icu:script type="1">Latn</icu:script>
-		</icu:scripts>
-	</special>
-</characters>
-<dates>
-	<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
-	<calendars>
-		<calendar type="gregorian">
-			<monthNames>
-				<month type="1">tammikuu</month>
-				<month type="2">helmikuu</month>
-				<month type="3">maaliskuu</month>
-				<month type="4">huhtikuu</month>
-				<month type="5">toukokuu</month>
-				<month type="6">kesäkuu</month>
-				<month type="7">heinäkuu</month>
-				<month type="8">elokuu</month>
-				<month type="9">syyskuu</month>
-				<month type="10">lokakuu</month>
-				<month type="11">marraskuu</month>
-				<month type="12">joulukuu</month>
-			</monthNames>
-			<monthAbbr>
-				<month type="1">tammi</month>
-				<month type="2">helmi</month>
-				<month type="3">maalis</month>
-				<month type="4">huhti</month>
-				<month type="5">touko</month>
-				<month type="6">kesä</month>
-				<month type="7">heinä</month>
-				<month type="8">elo</month>
-				<month type="9">syys</month>
-				<month type="10">loka</month>
-				<month type="11">marras</month>
-				<month type="12">joulu</month>
-			</monthAbbr>
-			<dayNames>
-				<day type="sun">sunnuntai</day>
-				<day type="mon">maanantai</day>
-				<day type="tue">tiistai</day>
-				<day type="wed">keskiviikko</day>
-				<day type="thu">torstai</day>
-				<day type="fri">perjantai</day>
-				<day type="sat">lauantai</day>
-			</dayNames>
-			<dayAbbr>
-				<day type="sun">su</day>
-				<day type="mon">ma</day>
-				<day type="tue">ti</day>
-				<day type="wed">ke</day>
-				<day type="thu">to</day>
-				<day type="fri">pe</day>
-				<day type="sat">la</day>
-			</dayAbbr>
-			<week>
-				<minDays count="4"/>
-				<firstDay day="mon"/>
-			</week>
-			<dateFormats>
-				<default type="medium"/>
-				<dateFormatLength type="full">
-					<dateFormat >
-						<pattern>d. MMMM'ta 'yyyy</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="long">
-					<dateFormat >
-						<pattern>d. MMMM'ta 'yyyy</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="medium">
-					<dateFormat >
-						<pattern>d.M.yyyy</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="short">
-					<dateFormat >
-						<pattern>d.M.yyyy</pattern>
-					</dateFormat>
-				</dateFormatLength >
-			</dateFormats>
-			<timeFormats>
-				<default type="medium"/>
-				<timeFormatLength type="full">
-					<timeFormat >
-						<pattern>HH:mm:ss z</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="long">
-					<timeFormat >
-						<pattern>HH:mm:ss z</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="medium">
-					<timeFormat >
-						<pattern>HH:mm:ss</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="short">
-					<timeFormat >
-						<pattern>HH:mm</pattern>
-					</timeFormat>
-				</timeFormatLength >
-			</timeFormats>
-			<dateTimeFormats>
-				<dateTimeFormatLength >
-					<dateTimeFormat>
-						<pattern>{1} {0}</pattern>
-					</dateTimeFormat>
-				</dateTimeFormatLength >
-			</dateTimeFormats>
-		</calendar>
-	</calendars>
-</dates>
-<numbers>
-	<symbols>
-		<decimal>,</decimal>
-		<group> </group>
-		<list>;</list>
-		<percentSign>%</percentSign>
-		<nativeZeroDigit>0</nativeZeroDigit>
-		<patternDigit>#</patternDigit>
-		<plusSign>+</plusSign>
-		<minusSign>-</minusSign>
-		<exponential>E</exponential>
-		<perMille>‰</perMille>
-		<infinity>∞</infinity>
-		<nan>�</nan>
-	</symbols>
-	<currencies>
-		<currency type="FIM">
-			<displayName>FIM</displayName>
-			<symbol>mk</symbol>
-		</currency>
-	</currencies>
-</numbers>
+	</localeDisplayNames>
+	<characters>
+		<exemplarCharacters>[a-z ä ö]</exemplarCharacters>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Latn</icu:script>
+			</icu:scripts>
+		</special>
+	</characters>
+	<dates>
+		<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
+		<calendars>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">tammikuu</month>
+					<month type="2">helmikuu</month>
+					<month type="3">maaliskuu</month>
+					<month type="4">huhtikuu</month>
+					<month type="5">toukokuu</month>
+					<month type="6">kesäkuu</month>
+					<month type="7">heinäkuu</month>
+					<month type="8">elokuu</month>
+					<month type="9">syyskuu</month>
+					<month type="10">lokakuu</month>
+					<month type="11">marraskuu</month>
+					<month type="12">joulukuu</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">tammi</month>
+					<month type="2">helmi</month>
+					<month type="3">maalis</month>
+					<month type="4">huhti</month>
+					<month type="5">touko</month>
+					<month type="6">kesä</month>
+					<month type="7">heinä</month>
+					<month type="8">elo</month>
+					<month type="9">syys</month>
+					<month type="10">loka</month>
+					<month type="11">marras</month>
+					<month type="12">joulu</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">sunnuntai</day>
+					<day type="mon">maanantai</day>
+					<day type="tue">tiistai</day>
+					<day type="wed">keskiviikko</day>
+					<day type="thu">torstai</day>
+					<day type="fri">perjantai</day>
+					<day type="sat">lauantai</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">su</day>
+					<day type="mon">ma</day>
+					<day type="tue">ti</day>
+					<day type="wed">ke</day>
+					<day type="thu">to</day>
+					<day type="fri">pe</day>
+					<day type="sat">la</day>
+				</dayAbbr>
+				<week>
+					<minDays count="4"/>
+					<firstDay day="mon"/>
+				</week>
+				<dateFormats>
+					<default type="medium"/>
+					<dateFormatLength type="full">
+						<dateFormat >
+							<pattern>d. MMMM'ta 'yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="long">
+						<dateFormat >
+							<pattern>d. MMMM'ta 'yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="medium">
+						<dateFormat >
+							<pattern>d.M.yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="short">
+						<dateFormat >
+							<pattern>d.M.yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+				</dateFormats>
+				<timeFormats>
+					<default type="medium"/>
+					<timeFormatLength type="full">
+						<timeFormat >
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="long">
+						<timeFormat >
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="medium">
+						<timeFormat >
+							<pattern>HH:mm:ss</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="short">
+						<timeFormat >
+							<pattern>HH:mm</pattern>
+						</timeFormat>
+					</timeFormatLength >
+				</timeFormats>
+				<dateTimeFormats>
+					<dateTimeFormatLength >
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength >
+				</dateTimeFormats>
+			</calendar>
+		</calendars>
+	</dates>
+	<numbers>
+		<symbols>
+			<decimal>,</decimal>
+			<group> </group>
+			<list>;</list>
+			<percentSign>%</percentSign>
+			<nativeZeroDigit>0</nativeZeroDigit>
+			<patternDigit>#</patternDigit>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>E</exponential>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>�</nan>
+		</symbols>
+		<currencies>
+			<currency type="FIM">
+				<displayName>FIM</displayName>
+				<symbol>mk</symbol>
+			</currency>
+		</currencies>
+	</numbers>
 </ldml>

@@ -8,7 +8,7 @@
 <ldml>
 	<identity>
 		<version number="3.0"/>
-		<generation date="2003-12-03" />
+		<generation date="2003-12-17" />
 		<language type="fa" /> 
 	</identity>
 	<localeDisplayNames>
@@ -116,7 +116,6 @@
 			<language type="ky">قرقیزی</language>
 			<language type="la">لاتینی</language>
 			<language type="lb">لتسه‌بورگیش</language>
-			<language type="lit">لیتوانیایی</language>
 			<language type="ln">لینگالا</language>
 			<language type="lo">لائوسی</language>
 			<language type="lt">لیتوانیایی</language>
@@ -203,7 +202,6 @@
 			<language type="tr">ترکی</language>
 			<language type="ts">تسونگایی</language>
 			<language type="tt">تاتاری</language>
-			<language type="tur">ترکی استانبولی</language>
 			<language type="tw">توی‌یایی</language>
 			<language type="ty">تاهیتیایی</language>
 			<language type="ug">اویغوری</language>
@@ -498,161 +496,159 @@
 			<territory type="ZM">زامبیا</territory>
 			<territory type="ZW">زیمبابوه</territory>
 		</territories>
-</localeDisplayNames>
-<layout>
-	<orientation lines="top-to-bottom" characters="right-to-left" />
-</layout>
-<characters>
-	<exemplarCharacters>[ء-ؤئ-غفقل-وً-ْٰٔپچژکگی‌‍‏‎]</exemplarCharacters>
-	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-		<icu:scripts>
-			<icu:script type="1">Arab</icu:script>
-		</icu:scripts>
-	</special>
-</characters>
-<dates>
-	<calendars>
-		<calendar type="gregorian">
-			<monthNames>
-				<month type="1">ژانویه</month>
-				<month type="2">فوریه</month>
-				<month type="3">مارس</month>
-				<month type="4">آوریل</month>
-				<month type="5">مه</month>
-				<month type="6">ژوئن</month>
-				<month type="7">ژوئیه</month>
-				<month type="8">اوت</month>
-				<month type="9">سپتامبر</month>
-				<month type="10">اکتبر</month>
-				<month type="11">نوامبر</month>
-				<month type="12">دسامبر</month>
-			</monthNames>
-			<monthAbbr>
-				<month type="1">ژان</month>
-				<month type="2">فور</month>
-				<month type="3">مار</month>
-				<month type="4">آور</month>
-				<month type="5">مـه</month>
-				<month type="6">ژون</month>
-				<month type="7">ژوی</month>
-				<month type="8">اوت</month>
-				<month type="9">سپت</month>
-				<month type="10">اکت</month>
-				<month type="11">نوا</month>
-				<month type="12">دسا</month>
-			</monthAbbr>
-			<dayNames>
-				<day type="sun">یک‌شنبه</day>
-				<day type="mon">دوشنبه</day>
-				<day type="tue">سه‌شنبه</day>
-				<day type="wed">چهارشنبه</day>
-				<day type="thu">پنج‌شنبه</day>
-				<day type="fri">جمعه</day>
-				<day type="sat">شنبه</day>
-			</dayNames>
-			<dayAbbr>
-				<day type="sun">ی.</day>
-				<day type="mon">د.</day>
-				<day type="tue">س.</day>
-				<day type="wed">چ.</day>
-				<day type="thu">پ.</day>
-				<day type="fri">ج.</day>
-				<day type="sat">ش.</day>
-			</dayAbbr>
-			<am>ق.ظ.</am>
-			<pm>ب.ظ.</pm>
-			<eras>
-				<eraAbbr>
-					<era type="1">ق.م.</era>
-					<era type="2">م.</era>
-				</eraAbbr>
-			</eras>
-			<dateFormats>
-				<default type="medium"/>
-				<dateFormatLength type="full">
-					<dateFormat >
-						<pattern>EEEE، d MMMM yyyy</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="long">
-					<dateFormat >
-						<pattern>d MMMM yyyy</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="medium">
-					<dateFormat >
-						<pattern>yyyy/MM/d</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="short">
-					<dateFormat >
-						<pattern>yyyy/MM/d</pattern>
-					</dateFormat>
-				</dateFormatLength >
-			</dateFormats>
-			<timeFormats>
-				<default type="medium"/>
-				<timeFormatLength type="full">
-					<timeFormat >
-						<pattern>HH:mm:ss (z)</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="long">
-					<timeFormat >
-						<pattern>HH:mm:ss (z)</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="medium">
-					<timeFormat >
-						<pattern>HH:mm:ss</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="short">
-					<timeFormat >
-						<pattern>HH:mm</pattern>
-					</timeFormat>
-				</timeFormatLength >
-			</timeFormats>
-			<dateTimeFormats>
-				<dateTimeFormatLength >
-					<dateTimeFormat>
-						<pattern>{1} {0}</pattern>
-					</dateTimeFormat>
-				</dateTimeFormatLength >
-			</dateTimeFormats>
-		</calendar>
-	</calendars>
-	<timeZoneNames>
-		<zone type="تهران">
-			<long>
-				<generic>وقت استاندارد تهران</generic>
+	</localeDisplayNames>
+	<layout>
+		<orientation lines="top-to-bottom" characters="right-to-left" />
+	</layout>
+	<characters>
+		<exemplarCharacters>[ء-ؤئ-غفقل-وً-ْٰٔپچژکگی‌‍‏‎]</exemplarCharacters>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Arab</icu:script>
+			</icu:scripts>
+		</special>
+	</characters>
+	<dates>
+		<calendars>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">ژانویه</month>
+					<month type="2">فوریه</month>
+					<month type="3">مارس</month>
+					<month type="4">آوریل</month>
+					<month type="5">مه</month>
+					<month type="6">ژوئن</month>
+					<month type="7">ژوئیه</month>
+					<month type="8">اوت</month>
+					<month type="9">سپتامبر</month>
+					<month type="10">اکتبر</month>
+					<month type="11">نوامبر</month>
+					<month type="12">دسامبر</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">ژان</month>
+					<month type="2">فور</month>
+					<month type="3">مار</month>
+					<month type="4">آور</month>
+					<month type="5">مـه</month>
+					<month type="6">ژون</month>
+					<month type="7">ژوی</month>
+					<month type="8">اوت</month>
+					<month type="9">سپت</month>
+					<month type="10">اکت</month>
+					<month type="11">نوا</month>
+					<month type="12">دسا</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">یک‌شنبه</day>
+					<day type="mon">دوشنبه</day>
+					<day type="tue">سه‌شنبه</day>
+					<day type="wed">چهارشنبه</day>
+					<day type="thu">پنج‌شنبه</day>
+					<day type="fri">جمعه</day>
+					<day type="sat">شنبه</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">ی.</day>
+					<day type="mon">د.</day>
+					<day type="tue">س.</day>
+					<day type="wed">چ.</day>
+					<day type="thu">پ.</day>
+					<day type="fri">ج.</day>
+					<day type="sat">ش.</day>
+				</dayAbbr>
+				<am>ق.ظ.</am>
+				<pm>ب.ظ.</pm>
+				<eras>
+					<eraAbbr>
+						<era type="1">ق.م.</era>
+						<era type="2">م.</era>
+					</eraAbbr>
+				</eras>
+				<dateFormats>
+					<default type="medium"/>
+					<dateFormatLength type="full">
+						<dateFormat >
+							<pattern>EEEE، d MMMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="long">
+						<dateFormat >
+							<pattern>d MMMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="medium">
+						<dateFormat >
+							<pattern>yyyy/MM/d</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="short">
+						<dateFormat >
+							<pattern>yyyy/MM/d</pattern>
+						</dateFormat>
+					</dateFormatLength >
+				</dateFormats>
+				<timeFormats>
+					<default type="medium"/>
+					<timeFormatLength type="full">
+						<timeFormat >
+							<pattern>HH:mm:ss (z)</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="long">
+						<timeFormat >
+							<pattern>HH:mm:ss (z)</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="medium">
+						<timeFormat >
+							<pattern>HH:mm:ss</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="short">
+						<timeFormat >
+							<pattern>HH:mm</pattern>
+						</timeFormat>
+					</timeFormatLength >
+				</timeFormats>
+				<dateTimeFormats>
+					<dateTimeFormatLength >
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength >
+				</dateTimeFormats>
+			</calendar>
+		</calendars>
+		<timeZoneNames>
+			<zone type="Asia/Tehran">
+				<long>
 				<standard>وقت استاندارد تهران</standard>
 				<daylight>وقت تابستانی تهران</daylight>
-			</long>
-			<short>
-				<generic>Asia/Tehran</generic>
-				<standard>IRST</standard>
-				<daylight>IRDT</daylight>
-			</short>
-			<exemplarCity>تهران</exemplarCity>
-		</zone>
-	</timeZoneNames>
-</dates>
-<numbers>
-	<currencies>
-		<currency type="AFA">
-			<displayName>افغانی</displayName>
-			<symbol>افغانی</symbol>
-		</currency>
-		<currency type="IRR">
-			<displayName>IRR</displayName>
-			<symbol>﷼</symbol>
-		</currency>
-	</currencies>
-</numbers>
-<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-	<icu:ruleBasedNumberFormats>
-		<icu:ruleBasedNumberFormat type="spellout">
+				</long>
+				<short>
+					<standard>IRST</standard>
+					<daylight>IRDT</daylight>
+				</short>
+				<exemplarCity>تهران</exemplarCity>
+			</zone>
+		</timeZoneNames>
+	</dates>
+	<numbers>
+		<currencies>
+			<currency type="AFA">
+				<displayName>افغانی</displayName>
+				<symbol>افغانی</symbol>
+			</currency>
+			<currency type="IRR">
+				<displayName>IRR</displayName>
+				<symbol>﷼</symbol>
+			</currency>
+		</currencies>
+	</numbers>
+	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+		<icu:ruleBasedNumberFormats>
+			<icu:ruleBasedNumberFormat type="spellout">
 %main:
 -x: منفی &gt;&gt;;
 x.x: &lt;&lt; ممیز &gt;&gt;;
@@ -681,7 +677,7 @@ x.x: &lt;&lt; ممیز &gt;&gt;;
 1,000,000,000: &lt;&lt; میلیارد[ و &gt;&gt;];
 1,000,000,000,000: =#,##0=;
 
-		</icu:ruleBasedNumberFormat>
-	</icu:ruleBasedNumberFormats>
-</special>
+			</icu:ruleBasedNumberFormat>
+		</icu:ruleBasedNumberFormats>
+	</special>
 </ldml>

@@ -8,7 +8,7 @@
 <ldml>
 	<identity>
 		<version number="5.0"/>
-		<generation date="2003-12-03" />
+		<generation date="2003-12-17" />
 		<language type="" /> 
 	</identity>
 	<localeDisplayNames>
@@ -19,6 +19,7 @@
 			<language type="ace">ace</language>
 			<language type="ach">ach</language>
 			<language type="ada">ada</language>
+			<language type="ady">ady</language>
 			<language type="ae">ae</language>
 			<language type="af">af</language>
 			<language type="afa">afa</language>
@@ -28,6 +29,7 @@
 			<language type="ale">ale</language>
 			<language type="alg">alg</language>
 			<language type="am">am</language>
+			<language type="an">an</language>
 			<language type="ang">ang</language>
 			<language type="apa">apa</language>
 			<language type="ar">ar</language>
@@ -99,8 +101,10 @@
 			<language type="cpf">cpf</language>
 			<language type="cpp">cpp</language>
 			<language type="cr">cr</language>
+			<language type="crh">crh</language>
 			<language type="crp">crp</language>
 			<language type="cs">cs</language>
+			<language type="csb">csb</language>
 			<language type="cu">cu</language>
 			<language type="cus">cus</language>
 			<language type="cv">cv</language>
@@ -116,6 +120,7 @@
 			<language type="din">din</language>
 			<language type="doi">doi</language>
 			<language type="dra">dra</language>
+			<language type="dsb">dsb</language>
 			<language type="dua">dua</language>
 			<language type="dum">dum</language>
 			<language type="dv">dv</language>
@@ -157,7 +162,6 @@
 			<language type="gez">gez</language>
 			<language type="gil">gil</language>
 			<language type="gl">gl</language>
-			<language type="gla">gla</language>
 			<language type="gmh">gmh</language>
 			<language type="gn">gn</language>
 			<language type="goh">goh</language>
@@ -180,6 +184,7 @@
 			<language type="hmn">hmn</language>
 			<language type="ho">ho</language>
 			<language type="hr">hr</language>
+			<language type="hsb">hsb</language>
 			<language type="ht">ht</language>
 			<language type="hu">hu</language>
 			<language type="hup">hup</language>
@@ -204,6 +209,7 @@
 			<language type="it">it</language>
 			<language type="iu">iu</language>
 			<language type="ja">ja</language>
+			<language type="jbo">jbo</language>
 			<language type="jpr">jpr</language>
 			<language type="jrb">jrb</language>
 			<language type="jv">jv</language>
@@ -231,6 +237,7 @@
 			<language type="kos">kos</language>
 			<language type="kpe">kpe</language>
 			<language type="kr">kr</language>
+			<language type="krc">krc</language>
 			<language type="kro">kro</language>
 			<language type="kru">kru</language>
 			<language type="ks">ks</language>
@@ -248,8 +255,6 @@
 			<language type="lez">lez</language>
 			<language type="lg">lg</language>
 			<language type="li">li</language>
-			<language type="lin">lin</language>
-			<language type="lit">lit</language>
 			<language type="ln">ln</language>
 			<language type="lo">lo</language>
 			<language type="lol">lol</language>
@@ -269,6 +274,7 @@
 			<language type="man">man</language>
 			<language type="map">map</language>
 			<language type="mas">mas</language>
+			<language type="mdf">mdf</language>
 			<language type="mdr">mdr</language>
 			<language type="men">men</language>
 			<language type="mg">mg</language>
@@ -297,6 +303,7 @@
 			<language type="mwr">mwr</language>
 			<language type="my">my</language>
 			<language type="myn">myn</language>
+			<language type="myv">myv</language>
 			<language type="na">na</language>
 			<language type="nah">nah</language>
 			<language type="nai">nai</language>
@@ -313,6 +320,7 @@
 			<language type="nl">nl</language>
 			<language type="nn">nn</language>
 			<language type="no">no</language>
+			<language type="nog">nog</language>
 			<language type="non">non</language>
 			<language type="nr">nr</language>
 			<language type="nso">nso</language>
@@ -436,12 +444,12 @@
 			<language type="tt">tt</language>
 			<language type="tum">tum</language>
 			<language type="tup">tup</language>
-			<language type="tur">tur</language>
 			<language type="tut">tut</language>
 			<language type="tvl">tvl</language>
 			<language type="tw">tw</language>
 			<language type="ty">ty</language>
 			<language type="tyv">tyv</language>
+			<language type="udm">udm</language>
 			<language type="ug">ug</language>
 			<language type="uga">uga</language>
 			<language type="uk">uk</language>
@@ -461,6 +469,7 @@
 			<language type="was">was</language>
 			<language type="wen">wen</language>
 			<language type="wo">wo</language>
+			<language type="xal">xal</language>
 			<language type="xh">xh</language>
 			<language type="yao">yao</language>
 			<language type="yap">yap</language>
@@ -777,9 +786,7 @@
 			<territory type="ZW">ZW</territory>
 		</territories>
 		<variants>
-			<variant type="EURO">EURO</variant>
 			<variant type="Fallback"></variant>
-			<variant type="NY">NY</variant>
 			<variant type="POSIX">POSIX</variant>
 			<variant type="REVISED">REVISED</variant>
 		</variants>
@@ -795,6 +802,7 @@
 			<type type="gregorian" key="calendar">GREGORIAN</type>
 			<type type="hebrew" key="calendar">HEBREW</type>
 			<type type="islamic" key="calendar">ISLAMIC</type>
+			<type type="islamic-civil" key="calendar">ISLAMIC-CIVIL</type>
 			<type type="japanese" key="calendar">JAPANESE</type>
 			<type type="traditional" key="calendar">TRADITIONAL</type>
 			<type type="Fallback" key="collation"></type>
@@ -936,12 +944,10 @@
 		<timeZoneNames>
 			<zone type="">
 				<long>
-					<generic></generic>
-					<standard></standard>
-					<daylight></daylight>
+				<standard></standard>
+				<daylight></daylight>
 				</long>
 				<short>
-					<generic></generic>
 					<standard></standard>
 					<daylight></daylight>
 				</short>
