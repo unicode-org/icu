@@ -1031,7 +1031,7 @@ void IntlTestTextBoundary::runIndexedTest( int32_t index, bool_t exec, char* &na
             name = "BreakIteratorCAPI"; 
             if (exec) {
                 logln("BreakIterator C API test---"); logln("");
-                IntlTestBreakIteratorFormatCAPI test;
+                IntlTestBreakIteratorFormatU_CAPI test;
                 callTest( test, par );
             }
             break;

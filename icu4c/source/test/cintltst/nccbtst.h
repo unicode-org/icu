@@ -41,11 +41,11 @@ static void TestLegalAndOthers(int32_t inputsize, int32_t outputsize);
 static void TestSingleByte(int32_t inputsize, int32_t outputsize);
 
 bool_t testConvertFromUnicode(const UChar *source, int sourceLen,  const char *expect, int expectLen, 
-			    const char *codepage, UCNV_FromUCallBack callback, int32_t *expectOffsets);
+			    const char *codepage, UConverterFromUCallback callback, int32_t *expectOffsets);
 
 
 bool_t testConvertToUnicode( const char *source, int sourcelen, const UChar *expect, int expectlen, 
-		       const char *codepage, UCNV_ToUCallBack callback, int32_t *expectOffsets);
+		       const char *codepage, UConverterToUCallback callback, int32_t *expectOffsets);
 
 
 static void printSeq(const char* a, int len);
