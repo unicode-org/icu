@@ -70,4 +70,17 @@ ucnv_io_getAvailableAlias(uint16_t index, UErrorCode *pErrorCode);
 U_CFUNC void
 ucnv_io_fillAvailableAliases(const char **aliases, UErrorCode *pErrorCode);
 
+/**
+ * Get the name of the default converter.
+ * This name is already resolved by <code>ucnv_io_getConverterName()</code>.
+ */
+U_CFUNC const char *
+ucnv_io_getDefaultConverterName();
+
+/**
+ * Set the name of the default converter.
+ */
+U_CFUNC void
+ucnv_io_setDefaultConverterName(const char *name);
+
 #endif /* _UCNV_IO */

@@ -91,7 +91,6 @@ static int32_t uhash_hashSharedData (void *sharedData);
 UHashtable *SHARED_DATA_HASHTABLE = NULL;
 UHashtable *ALGORITHMIC_CONVERTERS_HASHTABLE = NULL;
 
-
 /*Returns uppercased string */
 char *
   strtoupper (char *name)
@@ -114,7 +113,7 @@ bool_t
   while (setOfChars[i] != '\0')
     {
       if (c == setOfChars[i++])
-	return TRUE;
+        return TRUE;
     }
 
   return FALSE;
@@ -213,7 +212,7 @@ CompactShortArray*  createCompactShortArrayFromFile (FileStream * infile, UError
 }
 
 CompactByteArray*  createCompactByteArrayFromFile (FileStream * infile,
-						   UErrorCode * err)
+                                                   UErrorCode * err)
 {
   int32_t i = 0;
   int8_t *myByteArray = NULL;
@@ -334,57 +333,57 @@ UConverter*  createConverterFromFile (const char *fileName, UErrorCode * err)
     {
     case UCNV_SBCS:
       {
-	myConverter->sharedData->table = (UConverterTable *) icu_malloc (sizeof (UConverterSBCSTable));
-	if (myConverter->sharedData->table == NULL)
-	  {
-	    icu_free (myConverter->sharedData);
-	    icu_free (myConverter);
-	    *err = U_MEMORY_ALLOCATION_ERROR;
-	    break;
-	  }
-	T_FileStream_read (infile, myConverter->sharedData->table->sbcs.toUnicode, 256 * sizeof (UChar));
-	myConverter->sharedData->table->sbcs.fromUnicode = createCompactByteArrayFromFile (infile, err);
+        myConverter->sharedData->table = (UConverterTable *) icu_malloc (sizeof (UConverterSBCSTable));
+        if (myConverter->sharedData->table == NULL)
+          {
+            icu_free (myConverter->sharedData);
+            icu_free (myConverter);
+            *err = U_MEMORY_ALLOCATION_ERROR;
+            break;
+          }
+        T_FileStream_read (infile, myConverter->sharedData->table->sbcs.toUnicode, 256 * sizeof (UChar));
+        myConverter->sharedData->table->sbcs.fromUnicode = createCompactByteArrayFromFile (infile, err);
       }
       break;
 
     case UCNV_DBCS:
     case UCNV_EBCDIC_STATEFUL:
       {
-	myConverter->sharedData->table = (UConverterTable *) icu_malloc (sizeof (UConverterDBCSTable));
-	if (myConverter->sharedData->table == NULL)
-	  {
-	    icu_free (myConverter->sharedData);
-	    icu_free (myConverter);
-	    *err = U_MEMORY_ALLOCATION_ERROR;
-	    break;
-	  }
-	myConverter->sharedData->table->dbcs.toUnicode = createCompactShortArrayFromFile (infile, err);
-	myConverter->sharedData->table->dbcs.fromUnicode = createCompactShortArrayFromFile (infile, err);
+        myConverter->sharedData->table = (UConverterTable *) icu_malloc (sizeof (UConverterDBCSTable));
+        if (myConverter->sharedData->table == NULL)
+          {
+            icu_free (myConverter->sharedData);
+            icu_free (myConverter);
+            *err = U_MEMORY_ALLOCATION_ERROR;
+            break;
+          }
+        myConverter->sharedData->table->dbcs.toUnicode = createCompactShortArrayFromFile (infile, err);
+        myConverter->sharedData->table->dbcs.fromUnicode = createCompactShortArrayFromFile (infile, err);
       }
       break;
 
     case UCNV_MBCS:
       {
-	myConverter->sharedData->table = (UConverterTable *) icu_malloc (sizeof (UConverterMBCSTable));
-	if (myConverter->sharedData->table == NULL)
-	  {
-	    icu_free (myConverter->sharedData);
-	    icu_free (myConverter);
-	    *err = U_MEMORY_ALLOCATION_ERROR;
-	    break;
-	  }
-	T_FileStream_read (infile, myConverter->sharedData->table->mbcs.starters, 256 * sizeof (bool_t));
-	myConverter->sharedData->table->mbcs.toUnicode = createCompactShortArrayFromFile (infile, err);
-	myConverter->sharedData->table->mbcs.fromUnicode = createCompactShortArrayFromFile (infile, err);
+        myConverter->sharedData->table = (UConverterTable *) icu_malloc (sizeof (UConverterMBCSTable));
+        if (myConverter->sharedData->table == NULL)
+          {
+            icu_free (myConverter->sharedData);
+            icu_free (myConverter);
+            *err = U_MEMORY_ALLOCATION_ERROR;
+            break;
+          }
+        T_FileStream_read (infile, myConverter->sharedData->table->mbcs.starters, 256 * sizeof (bool_t));
+        myConverter->sharedData->table->mbcs.toUnicode = createCompactShortArrayFromFile (infile, err);
+        myConverter->sharedData->table->mbcs.fromUnicode = createCompactShortArrayFromFile (infile, err);
       }
       break;
 
     default:
       {
-	/*If it isn't any of the above, the file is invalid */
-	*err = U_INVALID_TABLE_FILE;
-	icu_free (myConverter->sharedData);
-	icu_free (myConverter);
+        /*If it isn't any of the above, the file is invalid */
+        *err = U_INVALID_TABLE_FILE;
+        icu_free (myConverter->sharedData);
+        icu_free (myConverter);
       }
     };
 
@@ -411,13 +410,13 @@ void
     {
     case UCNV_IBM:
       {
-	icu_strcpy (platformString, "ibm");
-	break;
+        icu_strcpy (platformString, "ibm");
+        break;
       }
     default:
       {
-	icu_strcpy (platformString, "");
-	break;
+        icu_strcpy (platformString, "");
+        break;
       }
     };
 
@@ -504,8 +503,8 @@ void   shareConverterData (UConverterSharedData * data)
   if (SHARED_DATA_HASHTABLE == NULL)
     {
       UHashtable* myHT = uhash_openSize ((UHashFunction) uhash_hashSharedData, 
-					 ucnv_io_countAvailableAliases(&err),
-					 &err);
+                                         ucnv_io_countAvailableAliases(&err),
+                                         &err);
       if (U_FAILURE (err)) return;
       umtx_lock (NULL);
       if (SHARED_DATA_HASHTABLE == NULL) SHARED_DATA_HASHTABLE = myHT;
@@ -515,8 +514,8 @@ void   shareConverterData (UConverterSharedData * data)
     }
   umtx_lock (NULL);
   uhash_put(SHARED_DATA_HASHTABLE,
-	    data,
-	    &err);
+            data,
+            &err);
   umtx_unlock (NULL);
 
   return;
@@ -547,28 +546,28 @@ bool_t   deleteSharedConverterData (UConverterSharedData * deadSharedData)
 
     case UCNV_SBCS:
       {
-	ucmp8_close (deadSharedData->table->sbcs.fromUnicode);
-	icu_free (deadSharedData->table);
-	icu_free (deadSharedData);
+        ucmp8_close (deadSharedData->table->sbcs.fromUnicode);
+        icu_free (deadSharedData->table);
+        icu_free (deadSharedData);
       };
       break;
 
     case UCNV_MBCS:
       {
-	ucmp16_close (deadSharedData->table->mbcs.fromUnicode);
-	ucmp16_close (deadSharedData->table->mbcs.toUnicode);
-	icu_free (deadSharedData->table);
-	icu_free (deadSharedData);
+        ucmp16_close (deadSharedData->table->mbcs.fromUnicode);
+        ucmp16_close (deadSharedData->table->mbcs.toUnicode);
+        icu_free (deadSharedData->table);
+        icu_free (deadSharedData);
       };
       break;
 
     case UCNV_DBCS:
     case UCNV_EBCDIC_STATEFUL:
       {
-	ucmp16_close (deadSharedData->table->dbcs.fromUnicode);
-	ucmp16_close (deadSharedData->table->dbcs.toUnicode);
-	icu_free (deadSharedData->table);
-	icu_free (deadSharedData);
+        ucmp16_close (deadSharedData->table->dbcs.fromUnicode);
+        ucmp16_close (deadSharedData->table->dbcs.toUnicode);
+        icu_free (deadSharedData->table);
+        icu_free (deadSharedData);
       };
       break;
 
@@ -591,23 +590,23 @@ bool_t   isDataBasedConverter (const char *name)
       UHashtable* myHT;
       
       {
-	  myHT = uhash_open (uhash_hashIString, &err);
-	  
-	  if (U_FAILURE (err)) return FALSE;
-	  while (algorithmicConverterNames[i][0] != '\0')
-	    {
-	      /*Stores in the hashtable a pointer to the statically init'ed array containing
-	       *the names
-	       */
-	      
-	      uhash_put (myHT,
-			 (void *) algorithmicConverterNames[i],
-			 &err);
-	      i++;			/*Some Compilers (Solaris WSpro and MSVC-Release Mode
-					 *don't differentiate between i++ and ++i
-					 *so we have to increment in a line by itself
-					 */
-	    }
+          myHT = uhash_open (uhash_hashIString, &err);
+          
+          if (U_FAILURE (err)) return FALSE;
+          while (algorithmicConverterNames[i][0] != '\0')
+            {
+              /*Stores in the hashtable a pointer to the statically init'ed array containing
+               *the names
+               */
+              
+              uhash_put (myHT,
+                         (void *) algorithmicConverterNames[i],
+                         &err);
+              i++;                      /*Some Compilers (Solaris WSpro and MSVC-Release Mode
+                                         *don't differentiate between i++ and ++i
+                                         *so we have to increment in a line by itself
+                                         */
+            }
       }
       
       umtx_lock (NULL);
@@ -620,7 +619,7 @@ bool_t   isDataBasedConverter (const char *name)
     
   
   if (uhash_get (ALGORITHMIC_CONVERTERS_HASHTABLE,
-		 uhash_hashIString (name)) == NULL)
+                 uhash_hashIString (name)) == NULL)
     {
       result = TRUE;
     }
@@ -642,62 +641,84 @@ UConverter *
   UConverter *myUConverter = NULL;
   UConverterSharedData *mySharedConverterData = NULL;
   UErrorCode internalErrorCode = U_ZERO_ERROR;
+  bool_t isDefaultConverter;
 
   if (U_FAILURE (*err))
     return NULL;
 
-  realName = ucnv_io_getConverterName(converterName, &internalErrorCode);
-  if (U_FAILURE(internalErrorCode) || realName == NULL) {
-    /*
-     * set the input name in case the converter was added
-     * without updating the alias table, or when there is no alias table
-     */
-    realName = converterName;
+  /* In case "name" is NULL we want to open the default converter. */
+  if (converterName == NULL) {
+    converterName = ucnv_io_getDefaultConverterName();
+    if (converterName == NULL) {
+      *err = U_MISSING_RESOURCE_ERROR;
+      return NULL;
+    } else {
+      isDefaultConverter = TRUE;
+    }
+  } else {
+    isDefaultConverter = FALSE;
   }
 
+  if (*converterName == 0) {
+    /* Use the PlatformInvariant algorithmic converter. */
+    realName = "PlatformInvariant";
+  } else if(isDefaultConverter) {
+    /* the default converter name is already canonical */
+    realName = converterName;
+  } else {
+    /* get the canonical converter name */
+    realName = ucnv_io_getConverterName(converterName, &internalErrorCode);
+    if (U_FAILURE(internalErrorCode) || realName == NULL) {
+      /*
+       * set the input name in case the converter was added
+       * without updating the alias table, or when there is no alias table
+       */
+      realName = converterName;
+    }
+  }
 
   if (isDataBasedConverter (realName))
     {
       mySharedConverterData = getSharedConverterData (realName);
 
       if (mySharedConverterData == NULL)
-	{
-	  /*Not cached, we need to stream it in from file */
-	  myUConverter = createConverterFromFile (realName, err);
+        {
+          /*Not cached, we need to stream it in from file */
+          myUConverter = createConverterFromFile (realName, err);
 
-	  if (U_FAILURE (*err) || (myUConverter == NULL))
-	    {
-	      return myUConverter;
-	    }
-	  else
-	    {
-	      /*shared it with other library clients */
+          if (U_FAILURE (*err) || (myUConverter == NULL))
+            {
+              return myUConverter;
+            }
+          else
+            {
+              /*shared it with other library clients */
 
 
-	      shareConverterData (myUConverter->sharedData);
-	      return myUConverter;
-	    }
-	}
+              shareConverterData (myUConverter->sharedData);
+              return myUConverter;
+            }
+        }
       else
-	{
-	  /*Is already cached, point to an existing one */
-	  myUConverter = (UConverter *) icu_malloc (sizeof (UConverter));
-	  if (myUConverter == NULL)
-	    {
-	      *err = U_MEMORY_ALLOCATION_ERROR;
-	      return NULL;
-	    }
+        {
+          /*Is already cached, point to an existing one */
+          myUConverter = (UConverter *) icu_malloc (sizeof (UConverter));
+          if (myUConverter == NULL)
+            {
+              *err = U_MEMORY_ALLOCATION_ERROR;
+              return NULL;
+            }
 
-	  /*update the reference counter: one more client */
-	  umtx_lock (NULL);
-	  mySharedConverterData->referenceCounter++;
-	  umtx_unlock (NULL);
+          /*update the reference counter: one more client */
+          umtx_lock (NULL);
+          mySharedConverterData->referenceCounter++;
+          umtx_unlock (NULL);
 
-	  myUConverter->sharedData = mySharedConverterData;
-	  initializeDataConverter (myUConverter);
+          myUConverter->sharedData = mySharedConverterData;
+          initializeDataConverter (myUConverter);
 
-	  return myUConverter;
-	}
+          return myUConverter;
+        }
     }
   else
     {
@@ -706,39 +727,39 @@ UConverter *
 
       /*Non cached */
       if (mySharedConverterData == NULL)
-	{
-	  myUConverter = createConverterFromAlgorithmicType (realName, err);
-	  if (U_FAILURE (*err) || (myUConverter == NULL))
-	    {
-	      icu_free (myUConverter);
-	      return NULL;
-	    }
-	  else
-	    {
-	      /* put the shared object in shared table */
-	      shareConverterData (myUConverter->sharedData);
-	      return myUConverter;
-	    }
-	}
+        {
+          myUConverter = createConverterFromAlgorithmicType (realName, err);
+          if (U_FAILURE (*err) || (myUConverter == NULL))
+            {
+              icu_free (myUConverter);
+              return NULL;
+            }
+          else
+            {
+              /* put the shared object in shared table */
+              shareConverterData (myUConverter->sharedData);
+              return myUConverter;
+            }
+        }
       else
-	{
-	  myUConverter = (UConverter *) icu_malloc (sizeof (UConverter));
-	  if (myUConverter == NULL)
-	    {
-	      *err = U_MEMORY_ALLOCATION_ERROR;
-	      return NULL;
-	    }
+        {
+          myUConverter = (UConverter *) icu_malloc (sizeof (UConverter));
+          if (myUConverter == NULL)
+            {
+              *err = U_MEMORY_ALLOCATION_ERROR;
+              return NULL;
+            }
 
-	  /*Increase the reference counter */
-	  umtx_lock (NULL);
-	  mySharedConverterData->referenceCounter++;
-	  umtx_unlock (NULL);
+          /*Increase the reference counter */
+          umtx_lock (NULL);
+          mySharedConverterData->referenceCounter++;
+          umtx_unlock (NULL);
 
-	  /*initializes the converter */
-	  myUConverter->sharedData = mySharedConverterData;
-	  initializeAlgorithmicConverter (myUConverter);
-	  return myUConverter;
-	}
+          /*initializes the converter */
+          myUConverter->sharedData = mySharedConverterData;
+          initializeAlgorithmicConverter (myUConverter);
+          return myUConverter;
+        }
 
       return myUConverter;
     }
@@ -757,8 +778,8 @@ void   initializeDataConverter (UConverter * myUConverter)
   myUConverter->charErrorBufferLength = 0;
   myUConverter->subCharLen = myUConverter->sharedData->defaultConverterValues.subCharLen;
   icu_memcpy (myUConverter->subChar,
-	      myUConverter->sharedData->defaultConverterValues.subChar,
-	      myUConverter->subCharLen);
+              myUConverter->sharedData->defaultConverterValues.subChar,
+              myUConverter->subCharLen);
   myUConverter->toUnicodeStatus = 0x00;
   myUConverter->fromUnicodeStatus = 0x00;
   myUConverter->sharedData->defaultConverterValues.toUnicodeStatus = 0x00;
@@ -799,128 +820,128 @@ void
     {
     case UCNV_UTF8:
       {
-	myConverter->sharedData->minBytesPerChar = 1;
-	myConverter->sharedData->maxBytesPerChar = 4;
-	myConverter->sharedData->defaultConverterValues.toUnicodeStatus = 0;
-	myConverter->sharedData->defaultConverterValues.subCharLen = 3;
-	myConverter->subCharLen = 3;
-	myConverter->toUnicodeStatus = 0;
+        myConverter->sharedData->minBytesPerChar = 1;
+        myConverter->sharedData->maxBytesPerChar = 4;
+        myConverter->sharedData->defaultConverterValues.toUnicodeStatus = 0;
+        myConverter->sharedData->defaultConverterValues.subCharLen = 3;
+        myConverter->subCharLen = 3;
+        myConverter->toUnicodeStatus = 0;
     myConverter->fromUnicodeStatus = 0; /* srl */ 
-	myConverter->sharedData->platform = UCNV_IBM;
-	myConverter->sharedData->codepage = 1208;
-	icu_strcpy(myConverter->sharedData->name, "UTF8");
-	icu_memcpy (myConverter->subChar, UTF8_subChar, 3);
-	icu_memcpy (myConverter->sharedData->defaultConverterValues.subChar, UTF8_subChar, 3);
+        myConverter->sharedData->platform = UCNV_IBM;
+        myConverter->sharedData->codepage = 1208;
+        icu_strcpy(myConverter->sharedData->name, "UTF8");
+        icu_memcpy (myConverter->subChar, UTF8_subChar, 3);
+        icu_memcpy (myConverter->sharedData->defaultConverterValues.subChar, UTF8_subChar, 3);
 
-	break;
+        break;
       }
     case UCNV_LATIN_1:
       {
-	myConverter->sharedData->minBytesPerChar = 1;
-	myConverter->sharedData->maxBytesPerChar = 1;
-	myConverter->sharedData->defaultConverterValues.toUnicodeStatus = 0;
-	myConverter->sharedData->defaultConverterValues.subCharLen = 1;
-	myConverter->subCharLen = 1;
-	myConverter->toUnicodeStatus = 0;
-	myConverter->sharedData->platform = UCNV_IBM;
-	myConverter->sharedData->codepage = 819;
-	icu_strcpy(myConverter->sharedData->name, "LATIN_1");
-	*(myConverter->subChar) = LATIN1_subChar;
-	*(myConverter->sharedData->defaultConverterValues.subChar) = LATIN1_subChar;
-	break;
+        myConverter->sharedData->minBytesPerChar = 1;
+        myConverter->sharedData->maxBytesPerChar = 1;
+        myConverter->sharedData->defaultConverterValues.toUnicodeStatus = 0;
+        myConverter->sharedData->defaultConverterValues.subCharLen = 1;
+        myConverter->subCharLen = 1;
+        myConverter->toUnicodeStatus = 0;
+        myConverter->sharedData->platform = UCNV_IBM;
+        myConverter->sharedData->codepage = 819;
+        icu_strcpy(myConverter->sharedData->name, "LATIN_1");
+        *(myConverter->subChar) = LATIN1_subChar;
+        *(myConverter->sharedData->defaultConverterValues.subChar) = LATIN1_subChar;
+        break;
       }
 
     case UCNV_UTF16_BigEndian:
       {
-	myConverter->sharedData->minBytesPerChar = 2;
-	myConverter->sharedData->maxBytesPerChar = 2;
-	myConverter->sharedData->defaultConverterValues.toUnicodeStatus = 0;
-	myConverter->sharedData->defaultConverterValues.subCharLen = 2;
-	myConverter->subCharLen = 2;
-	myConverter->toUnicodeStatus = 0;
-	myConverter->fromUnicodeStatus = 0; 
-	icu_strcpy(myConverter->sharedData->name, "UTF_16BE");
-	myConverter->sharedData->platform = UCNV_IBM;
-	myConverter->sharedData->codepage = 1200;
-	icu_memcpy (myConverter->subChar, UTF16BE_subChar, 2);
-	icu_memcpy (myConverter->sharedData->defaultConverterValues.subChar, UTF16BE_subChar, 2);
+        myConverter->sharedData->minBytesPerChar = 2;
+        myConverter->sharedData->maxBytesPerChar = 2;
+        myConverter->sharedData->defaultConverterValues.toUnicodeStatus = 0;
+        myConverter->sharedData->defaultConverterValues.subCharLen = 2;
+        myConverter->subCharLen = 2;
+        myConverter->toUnicodeStatus = 0;
+        myConverter->fromUnicodeStatus = 0; 
+        icu_strcpy(myConverter->sharedData->name, "UTF_16BE");
+        myConverter->sharedData->platform = UCNV_IBM;
+        myConverter->sharedData->codepage = 1200;
+        icu_memcpy (myConverter->subChar, UTF16BE_subChar, 2);
+        icu_memcpy (myConverter->sharedData->defaultConverterValues.subChar, UTF16BE_subChar, 2);
 
-	break;
+        break;
       }
 
     case UCNV_UTF16_LittleEndian:
       {
-	myConverter->sharedData->minBytesPerChar = 2;
-	myConverter->sharedData->maxBytesPerChar = 2;
-	myConverter->sharedData->defaultConverterValues.toUnicodeStatus = 0;
-	myConverter->sharedData->defaultConverterValues.subCharLen = 2;
-	myConverter->subCharLen = 2;
-	myConverter->toUnicodeStatus = 0;
-	myConverter->fromUnicodeStatus = 0; 
-	myConverter->sharedData->platform = UCNV_IBM;
-	myConverter->sharedData->codepage = 1200;
-	icu_strcpy(myConverter->sharedData->name, "UTF_16LE");
-	icu_memcpy (myConverter->subChar, UTF16LE_subChar, 2);
-	icu_memcpy (myConverter->sharedData->defaultConverterValues.subChar, UTF16LE_subChar, 2);
-	break;
+        myConverter->sharedData->minBytesPerChar = 2;
+        myConverter->sharedData->maxBytesPerChar = 2;
+        myConverter->sharedData->defaultConverterValues.toUnicodeStatus = 0;
+        myConverter->sharedData->defaultConverterValues.subCharLen = 2;
+        myConverter->subCharLen = 2;
+        myConverter->toUnicodeStatus = 0;
+        myConverter->fromUnicodeStatus = 0; 
+        myConverter->sharedData->platform = UCNV_IBM;
+        myConverter->sharedData->codepage = 1200;
+        icu_strcpy(myConverter->sharedData->name, "UTF_16LE");
+        icu_memcpy (myConverter->subChar, UTF16LE_subChar, 2);
+        icu_memcpy (myConverter->sharedData->defaultConverterValues.subChar, UTF16LE_subChar, 2);
+        break;
       }
     case UCNV_EUC:
       {
-	myConverter->sharedData->minBytesPerChar = 1;
-	myConverter->sharedData->maxBytesPerChar = 2;
-	myConverter->sharedData->defaultConverterValues.toUnicodeStatus = 0;
-	myConverter->sharedData->defaultConverterValues.subCharLen = 2;
-	myConverter->subCharLen = 2;
-	myConverter->toUnicodeStatus = 0;
-	icu_memcpy (myConverter->subChar, EUC_subChar, 2);
-	icu_memcpy (myConverter->sharedData->defaultConverterValues.subChar, EUC_subChar, 2);
-	break;
+        myConverter->sharedData->minBytesPerChar = 1;
+        myConverter->sharedData->maxBytesPerChar = 2;
+        myConverter->sharedData->defaultConverterValues.toUnicodeStatus = 0;
+        myConverter->sharedData->defaultConverterValues.subCharLen = 2;
+        myConverter->subCharLen = 2;
+        myConverter->toUnicodeStatus = 0;
+        icu_memcpy (myConverter->subChar, EUC_subChar, 2);
+        icu_memcpy (myConverter->sharedData->defaultConverterValues.subChar, EUC_subChar, 2);
+        break;
       }
     case UCNV_ISO_2022:
       {
-	myConverter->charErrorBuffer[0] = 0x1b;
-	myConverter->charErrorBuffer[1] = 0x25;
-	myConverter->charErrorBuffer[2] = 0x42;
-	myConverter->charErrorBufferLength = 3;
-	myConverter->sharedData->minBytesPerChar = 1;
-	myConverter->sharedData->maxBytesPerChar = 3;
-	myConverter->sharedData->defaultConverterValues.toUnicodeStatus = 0;
-	myConverter->sharedData->defaultConverterValues.subCharLen = 1;
-	myConverter->subCharLen = 1;
-	myConverter->toUnicodeStatus = 0;
+        myConverter->charErrorBuffer[0] = 0x1b;
+        myConverter->charErrorBuffer[1] = 0x25;
+        myConverter->charErrorBuffer[2] = 0x42;
+        myConverter->charErrorBufferLength = 3;
+        myConverter->sharedData->minBytesPerChar = 1;
+        myConverter->sharedData->maxBytesPerChar = 3;
+        myConverter->sharedData->defaultConverterValues.toUnicodeStatus = 0;
+        myConverter->sharedData->defaultConverterValues.subCharLen = 1;
+        myConverter->subCharLen = 1;
+        myConverter->toUnicodeStatus = 0;
     myConverter->fromUnicodeStatus = 0; /* srl */ 
-	myConverter->sharedData->codepage = 2022;
-	icu_strcpy(myConverter->sharedData->name, "ISO_2022");
-	*(myConverter->subChar) = LATIN1_subChar;
-	*(myConverter->sharedData->defaultConverterValues.subChar) = LATIN1_subChar;
-	myConverter->extraInfo = icu_malloc (sizeof (UConverterDataISO2022));
-	((UConverterDataISO2022 *) myConverter->extraInfo)->currentConverter = NULL;
-	((UConverterDataISO2022 *) myConverter->extraInfo)->escSeq2022Length = 0;
-	break;
+        myConverter->sharedData->codepage = 2022;
+        icu_strcpy(myConverter->sharedData->name, "ISO_2022");
+        *(myConverter->subChar) = LATIN1_subChar;
+        *(myConverter->sharedData->defaultConverterValues.subChar) = LATIN1_subChar;
+        myConverter->extraInfo = icu_malloc (sizeof (UConverterDataISO2022));
+        ((UConverterDataISO2022 *) myConverter->extraInfo)->currentConverter = NULL;
+        ((UConverterDataISO2022 *) myConverter->extraInfo)->escSeq2022Length = 0;
+        break;
       }
     case UCNV_GB:
       {
-	myConverter->sharedData->minBytesPerChar = 2;
-	myConverter->sharedData->maxBytesPerChar = 2;
-	myConverter->sharedData->defaultConverterValues.toUnicodeStatus = 0;
-	myConverter->sharedData->defaultConverterValues.subCharLen = 2;
-	myConverter->subCharLen = 2;
-	myConverter->toUnicodeStatus = 0;
-	icu_memcpy (myConverter->subChar, GB_subChar, 2);
-	icu_memcpy (myConverter->sharedData->defaultConverterValues.subChar, GB_subChar, 2);
-	break;
+        myConverter->sharedData->minBytesPerChar = 2;
+        myConverter->sharedData->maxBytesPerChar = 2;
+        myConverter->sharedData->defaultConverterValues.toUnicodeStatus = 0;
+        myConverter->sharedData->defaultConverterValues.subCharLen = 2;
+        myConverter->subCharLen = 2;
+        myConverter->toUnicodeStatus = 0;
+        icu_memcpy (myConverter->subChar, GB_subChar, 2);
+        icu_memcpy (myConverter->sharedData->defaultConverterValues.subChar, GB_subChar, 2);
+        break;
       }
     case UCNV_JIS:
       {
-	myConverter->sharedData->minBytesPerChar = 2;
-	myConverter->sharedData->maxBytesPerChar = 2;
-	myConverter->sharedData->defaultConverterValues.toUnicodeStatus = 0;
-	myConverter->sharedData->defaultConverterValues.subCharLen = 2;
-	myConverter->subCharLen = 2;
-	myConverter->toUnicodeStatus = 0;
-	icu_memcpy (myConverter->subChar, JIS_subChar, 2);
-	icu_memcpy (myConverter->sharedData->defaultConverterValues.subChar, JIS_subChar, 2);
-	break;
+        myConverter->sharedData->minBytesPerChar = 2;
+        myConverter->sharedData->maxBytesPerChar = 2;
+        myConverter->sharedData->defaultConverterValues.toUnicodeStatus = 0;
+        myConverter->sharedData->defaultConverterValues.subCharLen = 2;
+        myConverter->subCharLen = 2;
+        myConverter->toUnicodeStatus = 0;
+        icu_memcpy (myConverter->subChar, JIS_subChar, 2);
+        icu_memcpy (myConverter->sharedData->defaultConverterValues.subChar, JIS_subChar, 2);
+        break;
       }
     default:
       break;
