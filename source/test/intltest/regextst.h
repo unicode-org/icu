@@ -25,8 +25,9 @@ public:
     virtual void API_Pattern();
     virtual void API_Replace();
     virtual void Basic();
+    virtual void Extended();
 
     virtual UBool doRegexLMTest(char *pat, char *text, UBool looking, UBool match, int line);
-
+    virtual void regex_find(char *pat, char *input, UErrorCode expectedStatus, int line);
 };
 #endif

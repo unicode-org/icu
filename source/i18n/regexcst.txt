@@ -212,6 +212,15 @@ expr-cont-no-interval:
 #                                  some of them already; those won't come here.
 backslash:
    'A'                   n  term                                    doBackslashA
+   'B'                   n  term                                    doBackslashB
+   'b'                   n  term                                    doBackslashb
+   'G'                   n  term                                    doBackslashG
+   'W'                   n  term                                    doBackslashW
+   'w'                   n  term                                    doBackslashw
+   'X'                   n  term                                    doBackslashX
+   'Z'                   n  term                                    doBackslashZ
+   'z'                   n  term                                    doBackslashz
+   
    default               n  string				    doStartString   
 
     
