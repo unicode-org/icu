@@ -63,8 +63,11 @@ NamePrepTransform::NamePrepTransform(UParseError& parseError, UErrorCode& status
         // create the mapping transliterator
         int32_t ruleLen = 0;
         const UChar* ruleUChar = ures_getStringByKey(bundle, "MapNFKC",&ruleLen, &status);
-        UnicodeString rule(ruleUChar, ruleLen);
-        
+        int32_t mapRuleLen = 0;
+        const UChar *mapRuleUChar = ures_getStringByKey(bundle, "MapNoNormalization", &mapRuleLen, &status);
+        UnicodeString rule(mapRuleUChar, mapRuleLen);
+        rule.append(ruleUChar, ruleLen);
+
         mapping = Transliterator::createFromRules(UnicodeString("NamePrepTransform", ""), rule,
                                                    UTRANS_FORWARD, parseError,status);
         if(U_FAILURE(status)) {

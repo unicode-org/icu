@@ -146,8 +146,8 @@ static UChar unicodeIn[][41] ={
         0x043e, 0x043d, 0x0438, 0x043d, 0x0435, 0x0433, 0x043e, 0x0432,
         0x043e, 0x0440, 0x044f, 0x0442, 0x043f, 0x043e, 0x0440, 0x0443,
         0x0441, 0x0441, 0x043a, 0x0438
-    }
-   
+    },
+
 };
 
 static const char *asciiIn[] = {
@@ -174,7 +174,6 @@ static const char *asciiIn[] = {
     "xn--hxargifdar",                       // Greek
     "xn--bonusaa-5bb1da",                   // Maltese
     "xn--b1abfaaepdrnnbgefbadotcwatmq2g4l", // Russian (Cyrillic)
-
 };
 
 static const char *domainNames[] = {
@@ -1573,6 +1572,27 @@ void TestIDNA::TestIDNAMonkeyTest(){
     source.append("\\uCF18\\U00021161\\U000EEF11\\U0002BB82\\U0001D63C");
     debug(source.getBuffer(),source.length(),UIDNA_ALLOW_UNASSIGNED);
     source.releaseBuffer();
+    
+    { // test deletion of code points
+        UnicodeString source("\\u043f\\u00AD\\u034f\\u043e\\u0447\\u0435\\u043c\\u0443\\u0436\\u0435\\u043e\\u043d\\u0438\\u043d\\u0435\\u0433\\u043e\\u0432\\u043e\\u0440\\u044f\\u0442\\u043f\\u043e\\u0440\\u0443\\u0441\\u0441\\u043a\\u0438\\u0000");
+        source = source.unescape();
+        UnicodeString expected("\\u043f\\u043e\\u0447\\u0435\\u043c\\u0443\\u0436\\u0435\\u043e\\u043d\\u0438\\u043d\\u0435\\u0433\\u043e\\u0432\\u043e\\u0440\\u044f\\u0442\\u043f\\u043e\\u0440\\u0443\\u0441\\u0441\\u043a\\u0438\\u0000");
+        expected = expected.unescape();
+        UnicodeString ascii("xn--b1abfaaepdrnnbgefbadotcwatmq2g4l");
+        ascii.append((UChar)0x0000);
+        testAPI(source.getBuffer(),ascii.getBuffer(), "uidna_toASCII", FALSE, U_ZERO_ERROR, TRUE, TRUE, uidna_toASCII);
+        source.releaseBuffer();
+        ascii.releaseBuffer();
+        
+        testAPI(source.getBuffer(),ascii.getBuffer(), "idnaref_toASCII", FALSE, U_ZERO_ERROR, TRUE, TRUE, idnaref_toASCII);
+        source.releaseBuffer();
+        ascii.releaseBuffer();
+
+
+        testCompareReferenceImpl(source.getBuffer(), source.length()-1);
+        source.releaseBuffer();
+
+    }
 
 }
 
