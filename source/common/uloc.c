@@ -74,97 +74,93 @@ static char** _installedLocales = NULL;
 static int32_t _installedLocalesCount = 0;
 
 
-static const char _languages[] =
-"aa\0ab\0af\0am\0ar\0as\0ay\0az\0"
-"ba\0be\0bg\0bh\0bi\0bn\0bo\0br\0"
-"ca\0co\0cs\0cy\0da\0de\0dz\0"
-"el\0en\0eo\0es\0et\0eu\0fa\0fi\0fj\0fo\0fr\0fy\0"
-"ga\0gd\0gl\0gn\0gu\0ha\0he\0hi\0hr\0hu\0hy\0"
-"ia\0id\0ie\0ik\0in\0is\0it\0iu\0iw\0"
-"ja\0ji\0jw\0ka\0kk\0kl\0km\0kn\0ko\0ks\0ku\0ky\0"
-"la\0ln\0lo\0lt\0lv\0"
-"mg\0mi\0mk\0ml\0mn\0mo\0mr\0ms\0mt\0my\0"
-"na\0ne\0nl\0no\0oc\0om\0or\0"
-"pa\0pl\0ps\0pt\0qu\0rm\0rn\0ro\0ru\0rw\0"
-"sa\0sd\0sg\0sh\0si\0sk\0sl\0sm\0sn\0so\0sq\0sr\0ss\0st\0su\0sv\0sw\0"
-"ta\0te\0tg\0th\0ti\0tk\0tl\0tn\0to\0tr\0ts\0tt\0tw\0"
-"ug\0uk\0ur\0uz\0vi\0vo\0wo\0xh\0yi\0yo\0za\0zh\0zu";
+static const char * const _languages[] = {
+"aa","ab","af","am","ar","as","ay","az",
+"ba","be","bg","bh","bi","bn","bo","br",
+"ca","co","cs","cy","da","de","dz",
+"el","en","eo","es","et","eu","fa","fi","fj","fo","fr","fy",
+"ga","gd","gl","gn","gu","ha","he","hi","hr","hu","hy",
+"ia","id","ie","ik","in","is","it","iu","iw",
+"ja","ji","jw","ka","kk","kl","km","kn","ko","ks","ku","ky",
+"la","ln","lo","lt","lv",
+"mg","mi","mk","ml","mn","mo","mr","ms","mt","my",
+"na","ne","nl","no","oc","om","or",
+"pa","pl","ps","pt","qu","rm","rn","ro","ru","rw",
+"sa","sd","sg","sh","si","sk","sl","sm","sn","so","sq","sr","ss","st","su","sv","sw",
+"ta","te","tg","th","ti","tk","tl","tn","to","tr","ts","tt","tw",
+"ug","uk","ur","uz","vi","vo","wo","xh","yi","yo","za","zh","zu",
+NULL
+};
 /* This list MUST be in sorted order, and MUST contain only two-letter codes! */
 
-static const char _languages3[] =
-"aar\0abk\0afr\0amh\0ara\0asm\0aym\0aze\0"
-"bak\0bel\0bul\0bih\0bis\0ben\0bod\0bre\0"
-"cat\0cos\0ces\0cym\0dan\0deu\0dzo\0"
-"ell\0eng\0epo\0spa\0est\0eus\0fas\0fin\0fij\0fao\0fra\0fry\0"
-"gai\0gdh\0glg\0grn\0guj\0hau\0heb\0hin\0hrv\0hun\0hye\0"
-"ina\0ind\0ile\0ipk\0ind\0isl\0ita\0iku\0heb\0"
-"jpn\0yid\0jaw\0kat\0kaz\0kal\0khm\0kan\0kor\0kas\0kur\0kir\0"
-"lat\0lin\0lao\0lit\0lav\0"
-    "mlg\0mri\0mkd\0mal\0mon\0mol\0mar\0msa\0mlt\0mya\0"
-"nau\0nep\0nld\0nor\0oci\0orm\0ori\0"
-"pan\0pol\0pus\0por\0que\0roh\0run\0ron\0rus\0kin\0"
-"san\0snd\0sag\0srp\0sin\0slk\0slv\0smo\0sna\0som\0sqi\0srp\0ssw\0sot\0sun\0swe\0swa\0"
-"tat\0tel\0tgk\0tha\0tir\0tuk\0tgl\0tsn\0ton\0tur\0tsn\0tat\0twi\0"
-"uig\0ukr\0urd\0uzb\0vie\0vol\0wol\0xho\0yid\0yor\0zha\0zho\0zul";
+static const char * const _languages3[] = {
+"aar","abk","afr","amh","ara","asm","aym","aze",
+"bak","bel","bul","bih","bis","ben","bod","bre",
+"cat","cos","ces","cym","dan","deu","dzo",
+"ell","eng","epo","spa","est","eus","fas","fin","fij","fao","fra","fry",
+"gai","gdh","glg","grn","guj","hau","heb","hin","hrv","hun","hye",
+"ina","ind","ile","ipk","ind","isl","ita","iku","heb",
+"jpn","yid","jaw","kat","kaz","kal","khm","kan","kor","kas","kur","kir",
+"lat","lin","lao","lit","lav",
+"mlg","mri","mkd","mal","mon","mol","mar","msa","mlt","mya",
+"nau","nep","nld","nor","oci","orm","ori",
+"pan","pol","pus","por","que","roh","run","ron","rus","kin",
+"san","snd","sag","srp","sin","slk","slv","smo","sna","som","sqi","srp","ssw","sot","sun","swe","swa",
+"tat","tel","tgk","tha","tir","tuk","tgl","tsn","ton","tur","tsn","tat","twi",
+"uig","ukr","urd","uzb","vie","vol","wol","xho","yid","yor","zha","zho","zul",
+NULL
+};
 /* This list MUST contain a three-letter code for every two-letter code in the
    list above, and they MUST ne in the same order (i.e., the same language must
    be in the same place in both lists)! */
 
-static const char _countries[] =
-"AD\0AE\0AF\0AG\0AI\0AL\0AM\0AN\0AO\0AQ\0AR\0AS\0AT\0AU\0AW\0AZ\0"
-"BA\0BB\0BD\0BE\0BF\0BG\0BH\0BI\0BJ\0BM\0BN\0BO\0BR\0BS\0BT\0BV\0BW\0BY\0BZ\0"
-"CA\0CC\0CF\0CG\0CH\0CI\0CK\0CL\0CM\0CN\0CO\0CR\0CU\0CV\0CX\0CY\0CZ\0"
-"DE\0DJ\0DK\0DM\0DO\0DZ\0EC\0EE\0EG\0EH\0ER\0ES\0ET\0"
-"FI\0FJ\0FK\0FM\0FO\0FR\0FX\0"
-"GA\0GB\0GD\0GE\0GF\0GH\0GI\0GL\0GM\0GN\0GP\0GQ\0GR\0GS\0GT\0GU\0GW\0GY\0"
-"HK\0HM\0HN\0HR\0HT\0HU\0ID\0IE\0IL\0IN\0IO\0IQ\0IR\0IS\0IT\0"
-"JM\0JO\0JP\0KE\0KG\0KH\0KI\0KM\0KN\0KP\0KR\0KW\0KY\0KZ\0"
-"LA\0LB\0LC\0LI\0LK\0LR\0LS\0LT\0LU\0LV\0LY\0"
-"MA\0MC\0MD\0MG\0MH\0MK\0ML\0MM\0MN\0MO\0MP\0MQ\0MR\0MS\0MT\0MU\0MV\0MW\0MX\0MY\0MZ\0"
-"NA\0NC\0NE\0NF\0NG\0NI\0NL\0NO\0NP\0NR\0NU\0NZ\0OM\0"
-"PA\0PE\0PF\0PG\0PH\0PK\0PL\0PM\0PN\0PR\0PT\0PW\0PY\0QA\0RE\0RO\0RU\0RW\0"
-"SA\0SB\0SC\0SD\0SE\0SG\0SH\0SI\0SJ\0SK\0SL\0SM\0SN\0SO\0SR\0ST\0SV\0SY\0SZ\0"
-"TC\0TD\0TF\0TG\0TH\0TJ\0TK\0TM\0TN\0TO\0TP\0TR\0TT\0TV\0TW\0TZ\0"
-"UA\0UG\0UM\0US\0UY\0UZ\0VA\0VC\0VE\0VG\0VI\0VN\0VU\0"
-"WF\0WS\0YE\0YT\0YU\0ZA\0ZM\0ZR\0ZW";
+static const char * const _countries[] = {
+"AD","AE","AF","AG","AI","AL","AM","AN","AO","AQ","AR","AS","AT","AU","AW","AZ",
+"BA","BB","BD","BE","BF","BG","BH","BI","BJ","BM","BN","BO","BR","BS","BT","BV","BW","BY","BZ",
+"CA","CC","CF","CG","CH","CI","CK","CL","CM","CN","CO","CR","CU","CV","CX","CY","CZ",
+"DE","DJ","DK","DM","DO","DZ","EC","EE","EG","EH","ER","ES","ET",
+"FI","FJ","FK","FM","FO","FR","FX",
+"GA","GB","GD","GE","GF","GH","GI","GL","GM","GN","GP","GQ","GR","GS","GT","GU","GW","GY",
+"HK","HM","HN","HR","HT","HU","ID","IE","IL","IN","IO","IQ","IR","IS","IT",
+"JM","JO","JP","KE","KG","KH","KI","KM","KN","KP","KR","KW","KY","KZ",
+"LA","LB","LC","LI","LK","LR","LS","LT","LU","LV","LY",
+"MA","MC","MD","MG","MH","MK","ML","MM","MN","MO","MP","MQ","MR","MS","MT","MU","MV","MW","MX","MY","MZ",
+"NA","NC","NE","NF","NG","NI","NL","NO","NP","NR","NU","NZ","OM",
+"PA","PE","PF","PG","PH","PK","PL","PM","PN","PR","PT","PW","PY","QA","RE","RO","RU","RW",
+"SA","SB","SC","SD","SE","SG","SH","SI","SJ","SK","SL","SM","SN","SO","SR","ST","SV","SY","SZ",
+"TC","TD","TF","TG","TH","TJ","TK","TM","TN","TO","TP","TR","TT","TV","TW","TZ",
+"UA","UG","UM","US","UY","UZ","VA","VC","VE","VG","VI","VN","VU",
+"WF","WS","YE","YT","YU","ZA","ZM","ZR","ZW",
+NULL
+};
 /* This list MUST be in sorted order, and MUST contain only two-letter codes! */
 
-static const char _countries3[] =
-"AND\0ARE\0AFG\0ATG\0AIA\0ALB\0ARM\0ANT\0AGO\0ATA\0ARG\0ASM\0AUT\0AUS\0ABW\0AZE\0"
-"BIH\0BRB\0BGD\0BEL\0BFA\0BGR\0BHR\0BDI\0BEN\0BMU\0BRN\0BOL\0BRA\0BHS\0BTN\0BVT\0BWA"
-"\0BLR\0BLZ\0"
-"CAN\0CCK\0CAF\0COG\0CHE\0CIV\0COK\0CHL\0CMR\0CHN\0COL\0CRI\0CUB\0CPV\0CXR\0CYP\0CZE\0"
-"DEU\0DJI\0DNK\0DMA\0DOM\0DZA\0ECU\0EST\0EGY\0ESH\0ERI\0ESP\0ETH\0"
-"FIN\0FJI\0FLK\0FSM\0FRO\0FRA\0FXX\0"
-"GAB\0GBR\0GRD\0GEO\0GUF\0GHA\0GIB\0GRL\0GMB\0GIN\0GLP\0GNQ\0GRC\0SGS\0GTM\0GUM"
-"\0GNB\0GUY\0"
-"HKG\0HMD\0HND\0HRV\0HTI\0HUN\0IDN\0IRL\0ISR\0IND\0IOT\0IRQ\0IRN\0ISL\0ITA\0"
-"JAM\0JOR\0JPN\0KEN\0KGZ\0KHM\0KIR\0COM\0KNA\0PRK\0KOR\0KWT\0CYM\0KAZ\0"
-"LAO\0LBN\0LCA\0LIE\0LKA\0LBR\0LSO\0LTU\0LUX\0LVA\0LBY\0"
-"MAR\0MCO\0MDA\0MDG\0MHL\0MKD\0MLI\0MMR\0MNG\0MAC\0MNP\0MTQ\0MRT\0MSR\0MLT\0MUS\0"
-"MDV\0MWI\0MEX\0MYS\0MOZ\0"
-"NAM\0NCL\0NER\0NFK\0NGA\0NIC\0NLD\0NOR\0NPL\0NRU\0NIU\0NZL\0OMN\0"
-"PAN\0PER\0PYF\0PNG\0PHL\0PAK\0POL\0SPM\0PCN\0PRI\0PRT\0PLW\0PRY\0QAT\0REU\0ROM"
-"\0RUS\0RWA\0"
-"SAU\0SLB\0SYC\0SDN\0SWE\0SGP\0SHN\0SVN\0SJM\0SVK\0SLE\0SMR\0SEN\0SOM\0SUR\0STP"
-"\0SLV\0SYR\0SWZ\0"
-"TCA\0TCD\0ATF\0TGO\0THA\0TJK\0TKL\0TKM\0TUN\0TON\0TMP\0TUR\0TTO\0TUV\0TWN\0TZA\0"
-"UKR\0UGA\0UMI\0USA\0URY\0UZB\0VAT\0VCT\0VEN\0VGB\0VIR\0VNM\0VUT\0"
-"WLF\0WSM\0YEM\0MYT\0YUG\0ZAF\0ZMB\0ZAR\0ZWE";
+static const char * const _countries3[] = {
+"AND","ARE","AFG","ATG","AIA","ALB","ARM","ANT","AGO","ATA","ARG","ASM","AUT","AUS","ABW","AZE",
+"BIH","BRB","BGD","BEL","BFA","BGR","BHR","BDI","BEN","BMU","BRN","BOL","BRA","BHS","BTN","BVT","BWA","BLR","BLZ",
+"CAN","CCK","CAF","COG","CHE","CIV","COK","CHL","CMR","CHN","COL","CRI","CUB","CPV","CXR","CYP","CZE",
+"DEU","DJI","DNK","DMA","DOM","DZA","ECU","EST","EGY","ESH","ERI","ESP","ETH",
+"FIN","FJI","FLK","FSM","FRO","FRA","FXX",
+"GAB","GBR","GRD","GEO","GUF","GHA","GIB","GRL","GMB","GIN","GLP","GNQ","GRC","SGS","GTM","GUM","GNB","GUY",
+"HKG","HMD","HND","HRV","HTI","HUN","IDN","IRL","ISR","IND","IOT","IRQ","IRN","ISL","ITA",
+"JAM","JOR","JPN","KEN","KGZ","KHM","KIR","COM","KNA","PRK","KOR","KWT","CYM","KAZ",
+"LAO","LBN","LCA","LIE","LKA","LBR","LSO","LTU","LUX","LVA","LBY",
+"MAR","MCO","MDA","MDG","MHL","MKD","MLI","MMR","MNG","MAC","MNP","MTQ","MRT","MSR","MLT","MUS",
+"MDV","MWI","MEX","MYS","MOZ",
+"NAM","NCL","NER","NFK","NGA","NIC","NLD","NOR","NPL","NRU","NIU","NZL","OMN",
+"PAN","PER","PYF","PNG","PHL","PAK","POL","SPM","PCN","PRI","PRT","PLW","PRY","QAT","REU","ROM","RUS","RWA",
+"SAU","SLB","SYC","SDN","SWE","SGP","SHN","SVN","SJM","SVK","SLE","SMR","SEN","SOM","SUR","STP","SLV","SYR","SWZ",
+"TCA","TCD","ATF","TGO","THA","TJK","TKL","TKM","TUN","TON","TMP","TUR","TTO","TUV","TWN","TZA",
+"UKR","UGA","UMI","USA","URY","UZB","VAT","VCT","VEN","VGB","VIR","VNM","VUT",
+"WLF","WSM","YEM","MYT","YUG","ZAF","ZMB","ZAR","ZWE",
+NULL
+};
 /* This list MUST contain a three-letter code for every two-letter code in
    the above list, and they MUST be listed in the same order! */
-
-static char** _isoLanguages = NULL;
-static char** _isoCountries = NULL;
 
 /*******************************************************************************
   Implementation function definitions
 *******************************************************************************/
-
-static int16_t _findIndex(const char* list, int32_t listLength, const char* key);
-
-/*Works like strchr with '_' pr '-'*/
-static const char* _findCharSeparator(const char* string);
 
 /*Lazy evaluated the list of installed locales*/
 static void _lazyEvaluate_installedLocales(void);
@@ -189,40 +185,35 @@ static void _lazyEvaluate_installedLocales(void);
 *******************************************************************************/
 
 
+/*Works like strchr with '_' pr '-'*/
 static const char* _findCharSeparator(const char* string)
 {
-    if (string == NULL)
-        return NULL;
-    /*Keeps iterating until an ID separator is found*/
-    while (*string && !_isIDSeparator(*string))
-        string++;
-    if (*string)
-        return string;
-    else
-        return NULL;
+    if (string != NULL) {
+        /*Keeps iterating until an ID separator is found*/
+        while (*string) {
+            if (_isIDSeparator(*string)) {
+                return string;
+            }
+            string++;
+        }
+    }
+    return NULL;
 }
 
 
-static int16_t _findIndex(const char* list, int32_t listLength, const char* key)
+static int16_t _findIndex(const char* const* list, const char* key)
 {
-    const char* anchor = list;
-    const char* listEnd = anchor + listLength;
-    UBool found = FALSE;
-    int tokenSize = uprv_strlen(list)+1; /*gets the size of the tokens*/
+    const char* const* anchor = list;
     
-    while (!found && list<listEnd)
+    while (*list)
     {
-        if (uprv_strcmp(key, list) == 0) 
+        if (uprv_strcmp(key, *list) == 0) 
         {
-            found = TRUE;
-            break;
+            return (int16_t)(list - anchor);
         }
-        list += tokenSize;
+        list++;
     }
-    if (found == TRUE)
-        return (int16_t)((list - anchor)/tokenSize);
-    else
-        return -1;
+    return -1;
 }
 
 const char* uloc_getDefault()
@@ -529,12 +520,9 @@ int32_t uloc_getName(const char* localeID,
     {
         i+= 2;  /* if theres a variant, it will ALWAYS contain two underscores. */
     }
-    else
+    else if (cntSze)
     {
-        if (cntSze)
-        {
-            i++; /* Otherwise - only language _ country. */
-        }
+        i++; /* Otherwise - only language _ country. */
     }
     
     /* Update i (total req'd size) */
@@ -617,10 +605,10 @@ const char* uloc_getISO3Language(const char* localeID)
   uloc_getLanguage(localeID, lang, TEMPBUFSIZE, &err);
   if (U_FAILURE(err))
       return "";
-  offset = _findIndex(_languages, sizeof(_languages),lang);
+  offset = _findIndex(_languages, lang);
   if (offset < 0)
       return "";
-  return &(_languages3[offset * 4]);
+  return _languages3[offset];
 }
 
 const char* uloc_getISO3Country(const char* localeID) 
@@ -636,11 +624,11 @@ const char* uloc_getISO3Country(const char* localeID)
     uloc_getCountry(localeID, cntry, TEMPBUFSIZE, &err);
     if (U_FAILURE(err))
         return "";
-    offset = _findIndex(_countries, sizeof(_countries), cntry);
+    offset = _findIndex(_countries, cntry);
     if (offset < 0)
         return "";
     
-    return &(_countries3[offset * 4]);
+    return _countries3[offset];
 }
 
 uint32_t uloc_getLCID(const char* localeID) 
@@ -1243,14 +1231,6 @@ UBool uloc_cleanup(void) {
         }
         uprv_free(temp);
     }
-    if (_isoCountries) {
-        uprv_free(_isoCountries);
-        _isoCountries = NULL;
-    }
-    if (_isoLanguages) {
-        uprv_free(_isoLanguages);
-        _isoLanguages = NULL;
-    }
     return TRUE;
 }
 
@@ -1309,35 +1289,7 @@ static void _lazyEvaluate_installedLocales()
  */
 const char* const* uloc_getISOLanguages() 
 {
-    const char *from, *end;
-    char **to;
-    
-    if (_isoLanguages == NULL) 
-    {
-        
-        {
-            umtx_lock(NULL);
-            
-            if (_isoLanguages == NULL) 
-            {
-                _isoLanguages = (char**) uprv_malloc(sizeof(char*)*(1+(sizeof(_languages) / 3)));
-                
-                end = _languages + (sizeof(_languages));
-                from = _languages; 
-                to = _isoLanguages;
-                
-                while (from < end) 
-                {
-                    *to = (char*)from;
-                    ++to;
-                    from += 3;
-                }
-                *to = NULL;
-            }
-            umtx_unlock(NULL);
-        }
-    }
-    return (const char* const*)_isoLanguages;
+    return _languages;
 }
 
 /**
@@ -1348,31 +1300,5 @@ const char* const* uloc_getISOLanguages()
  */
 const char* const* uloc_getISOCountries() 
 {
-    if (_isoCountries == NULL) 
-    {
-        const char *from, *end;
-        char **to;
-        {
-            umtx_lock(NULL);
-            
-            if (_isoCountries == NULL) 
-            {
-                _isoCountries = (char**) uprv_malloc(sizeof(char*)*(1+(sizeof(_countries) / 3)));
-                
-                end = _countries + (sizeof(_countries));
-                from = _countries;
-                to = _isoCountries;
-                
-                while (from < end) 
-                {
-                    *to = (char*)from;
-                    ++to;
-                    from += 3;
-                }
-                *to = NULL;
-            }
-            umtx_unlock(NULL);
-        }
-    }
-    return (const char* const*)_isoCountries;
+    return _countries;
 }
