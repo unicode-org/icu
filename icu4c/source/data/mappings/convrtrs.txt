@@ -406,7 +406,7 @@ ibm-942_P12A-1999 { UTR22* }    # ibm-942_P120 is a rarely used alternate mappin
                         ibm-932_VSUB_VPUA
                         # Is this "JIS_C6226-1978"?
 
-ibm-943_P14A-1999 { UTR22* }
+ibm-943_P15A-2003 { UTR22* }
                         ibm-943 # Leave untagged because this isn't the default
                         Shift_JIS { IANA* MIME* WINDOWS JAVA }
                         MS_Kanji { IANA WINDOWS JAVA }
