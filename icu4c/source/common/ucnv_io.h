@@ -18,6 +18,7 @@
 #define UCNV_AMBIGUOUS_ALIAS_MAP_BIT 0x8000
 #define UCNV_CONVERTER_INDEX_MASK 0xFFF
 #define UCNV_NUM_RESERVED_TAGS 2
+#define UCNV_NUM_HIDDEN_TAGS 1
 
 /**
  * Remove the underscores, dashes and spaces from the name, and convert

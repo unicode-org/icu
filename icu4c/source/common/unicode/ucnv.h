@@ -1060,6 +1060,20 @@ U_CAPI const char* U_EXPORT2
 ucnv_getAvailableName (int32_t n);
 
 /**
+ * Returns a UEnumeration to enumerate all of the canonical converter
+ * names, as per the alias file, regardless of the ability to open each
+ * converter.
+ *
+ * @return A UEnumeration object for getting all the recognized canonical
+ *   converter names.
+ * @see ucnv_getAvailableName
+ * @see uenum_close
+ * @see uenum_next
+ */
+U_CAPI UEnumeration * U_EXPORT2
+ucnv_openAllNames(UErrorCode *pErrorCode);
+
+/**
  * Gives the number of aliases for a given converter or alias name.
  * If the alias is ambiguous, then the preferred converter is used
  * and the status is set to U_AMBIGUOUS_ALIAS_WARNING.
@@ -1163,6 +1177,20 @@ ucnv_getStandard(uint16_t n, UErrorCode *pErrorCode);
  */
 U_CAPI const char * U_EXPORT2
 ucnv_getStandardName(const char *name, const char *standard, UErrorCode *pErrorCode);
+
+/**
+ * This function will return the internal canonical converter name of the
+ * tagged alias. This is the opposite of ucnv_openStandardNames, which
+ * returns the tagged alias given the canonical name.
+ *
+ * @return returns the canonical converter name;
+ *         if a standard or alias name cannot be determined,
+ *         then <code>NULL</code> is returned. The returned string is
+ *         owned by the library.
+ * @see ucnv_getStandardName
+ */
+U_CAPI const char * U_EXPORT2
+ucnv_getCanonicalName(const char *alias, const char *standard, UErrorCode *pErrorCode);
 
 /**
  * returns the current default converter name.
