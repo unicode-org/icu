@@ -15,30 +15,77 @@ public class TransliterationRule$Latin$Kana extends ListResourceBundle {
     public Object[][] getContents() {
         return new Object[][] {
             { "Description",
-                "Lowercase Latin to Hiragana; Uppercase Latin to Katakana" },
+                "Lowercase Latin to hiragana; "
+                + "Uppercase Latin to katakana" },
 
-            {   "Rule",
+            { "Rule", ""
+                //# $Revision: 1.4 $
+                // Transliteration rules for Japanese Hiragana and Katakana to
+                // romaji
+                // lower case roman generates hiragana.
+                // upper case roman generates katakana.
+                // Uses modified Hepburn. Small changes to make unambiguous.
+                // Kunrei-shiki: Hepburn/MHepburn
+                /*
+                si:     shi
+                si ~ya: sha
+                si ~yu: shu
+                si ~yo: sho
+                zi:     ji
+                zi ~ya: ja
+                zi ~yu: ju
+                zi ~yo: jo
+                ti:     chi
+                ti ~ya: cha
+                ti ~yu: chu
+                ti ~yu: cho
+                tu:     tsu
+                di:     ji/dji
+                du:     zu/dzu
+                hu:     fu
+                // for foreign words
+                se ~i   si
+                si ~e   she
+                
+                ze ~i   zi
+                zi ~e   je
+                
+                te ~i   ti
+                ti ~e   che
+                te ~u   tu
+                
+                de ~i   di
+                de ~u   du
+                de ~i   di
+                
+                he ~u:  hu
+                hu ~a   fa
+                hu ~i   fi
+                hu ~e   he
+                hu ~o   ho
+                // Most small forms are generated, but if necessary
+                // explicit small forms are given with ~a, ~ya, etc.
+                */
+                //#######################################
+                // Definitions of variables to be substituted
+                //#######################################
+                
+                + "vowel=[aeiou];"
+                + "quote='';"
 
-                //------------------------------------------------------------
-                // Variables
-                //------------------------------------------------------------
+                // now the kana
+                + "long=\u30FC;"
 
-                // Hiragana.  These are named according to the
-                // regularized Nippon romanization (the naming system
-                // used by Unicode).  Thus \u3062 is called "di", not
-                // "ji".  "x_" is the small form of "_", e.g. "xa" is
-                // small "a".
-
-                "xa=\u3041;"
-                + "a=\u3042;"
-                + "xi=\u3043;"
-                + "i=\u3044;"
-                + "xu=\u3045;"
-                + "u=\u3046;"
-                + "xe=\u3047;"
-                + "e=\u3048;"
-                + "xo=\u3049;"
-                + "o=\u304A;"
+                + "~a=\u3041;"
+                + "^a=\u3042;"
+                + "~i=\u3043;"
+                + "^i=\u3044;"
+                + "~u=\u3045;"
+                + "^u=\u3046;"
+                + "~e=\u3047;"
+                + "^e=\u3048;"
+                + "~o=\u3049;"
+                + "^o=\u304A;"
 
                 + "ka=\u304B;"
                 + "ga=\u304C;"
@@ -50,6 +97,10 @@ public class TransliterationRule$Latin$Kana extends ListResourceBundle {
                 + "ge=\u3052;"
                 + "ko=\u3053;"
                 + "go=\u3054;"
+
+                //these are small katakana
+                + "~ka=\u30F5;"
+                + "~ke=\u30F6;"
 
                 + "sa=\u3055;"
                 + "za=\u3056;"
@@ -66,7 +117,7 @@ public class TransliterationRule$Latin$Kana extends ListResourceBundle {
                 + "da=\u3060;"
                 + "ti=\u3061;"
                 + "di=\u3062;"
-                + "xtu=\u3063;"
+                + "~tu=\u3063;"
                 + "tu=\u3064;"
                 + "du=\u3065;"
                 + "te=\u3066;"
@@ -102,41 +153,48 @@ public class TransliterationRule$Latin$Kana extends ListResourceBundle {
                 + "me=\u3081;"
                 + "mo=\u3082;"
 
-                + "xya=\u3083;"
+                + "~ya=\u3083;"
                 + "ya=\u3084;"
-                + "xyu=\u3085;"
+                + "~yu=\u3085;"
                 + "yu=\u3086;"
-                + "xyo=\u3087;"
+                + "~yo=\u3087;"
                 + "yo=\u3088;"
-
+                
                 + "ra=\u3089;"
                 + "ri=\u308A;"
                 + "ru=\u308B;"
                 + "re=\u308C;"
                 + "ro=\u308D;"
 
-                + "xwa=\u308E;"
+                + "~wa=\u308E;"
                 + "wa=\u308F;"
                 + "wi=\u3090;"
                 + "we=\u3091;"
                 + "wo=\u3092;"
 
-                + "n=\u3093;"
+                + "^n=\u3093;"
                 + "vu=\u3094;"
+                
+                // alternates, just to make the rules easier
+                + "~yi=\u3043;"
+                + "yi=\u3044;"
+                + "~ye=\u3047;"
+                + "ye=\u3048;"
+                + "wu={^u};"
+                // end alternates
 
-                // Katakana.  "X_" is the small form of "_", e.g. "XA"
-                // is small "A".
+                // Katakana
 
-                + "XA=\u30A1;"
-                + "A=\u30A2;"
-                + "XI=\u30A3;"
-                + "I=\u30A4;"
-                + "XU=\u30A5;"
-                + "U=\u30A6;"
-                + "XE=\u30A7;"
-                + "E=\u30A8;"
-                + "XO=\u30A9;"
-                + "O=\u30AA;"
+                + "~A=\u30A1;"
+                + "^A=\u30A2;"
+                + "~I=\u30A3;"
+                + "^I=\u30A4;"
+                + "~U=\u30A5;"
+                + "^U=\u30A6;"
+                + "~E=\u30A7;"
+                + "^E=\u30A8;"
+                + "~O=\u30A9;"
+                + "^O=\u30AA;"
 
                 + "KA=\u30AB;"
                 + "GA=\u30AC;"
@@ -148,6 +206,10 @@ public class TransliterationRule$Latin$Kana extends ListResourceBundle {
                 + "GE=\u30B2;"
                 + "KO=\u30B3;"
                 + "GO=\u30B4;"
+
+                //these generate small katakana
+                + "~KA=\u30F5;"
+                + "~KE=\u30F6;"
 
                 + "SA=\u30B5;"
                 + "ZA=\u30B6;"
@@ -164,7 +226,7 @@ public class TransliterationRule$Latin$Kana extends ListResourceBundle {
                 + "DA=\u30C0;"
                 + "TI=\u30C1;"
                 + "DI=\u30C2;"
-                + "XTU=\u30C3;"
+                + "~TU=\u30C3;"
                 + "TU=\u30C4;"
                 + "DU=\u30C5;"
                 + "TE=\u30C6;"
@@ -200,12 +262,21 @@ public class TransliterationRule$Latin$Kana extends ListResourceBundle {
                 + "ME=\u30E1;"
                 + "MO=\u30E2;"
 
-                + "XYA=\u30E3;"
+                + "~YA=\u30E3;"
                 + "YA=\u30E4;"
-                + "XYU=\u30E5;"
+                + "~YU=\u30E5;"
                 + "YU=\u30E6;"
-                + "XYO=\u30E7;"
+                + "~YO=\u30E7;"
                 + "YO=\u30E8;"
+                + "~WA=\u30EE;"
+                
+                // alternates, just to make the rules easier
+                + "~YI=\u30A3;"
+                + "YI=\u30A4;"
+                + "~YE=\u30A7;"
+                + "YE=\u30A8;"
+                + "WU={^U};"
+                // end alternates
 
                 + "RA=\u30E9;"
                 + "RI=\u30EA;"
@@ -213,540 +284,940 @@ public class TransliterationRule$Latin$Kana extends ListResourceBundle {
                 + "RE=\u30EC;"
                 + "RO=\u30ED;"
 
-                + "XWA=\u30EE;"
+                + "VA=\u30F7;"
+                + "VI=\u30F8;"
+                + "VU=\u30F4;"
+                + "VE=\u30F9;"
+                + "VO=\u30FA;"
+
                 + "WA=\u30EF;"
                 + "WI=\u30F0;"
                 + "WE=\u30F1;"
                 + "WO=\u30F2;"
 
-                + "N=\u30F3;"
-                + "VU=\u30F4;"
-
-                + "XKA=\u30F5;"
-                + "XKE=\u30F6;"
-
-                + "VA=\u30F7;"
-                + "VI=\u30F8;"
-                + "VE=\u30F9;"
-                + "VO=\u30FA;"
-
-                + "DOT=\u30FB;"  // Middle dot
-                + "LONG=\u30FC;" // Prolonged sound mark
- 
-                // Categories and programmatic variables
+                + "^N=\u30F3;"
+                + "LONG=\u30FC;"
+                + "QUOTE='';"
                 
-                + "vowel=[aiueo];"
-                + "small=\uE000;"
-                + "hvr=\uE001;"
-                + "hv=[{xya}{xi}{xyu}{xe}{xyo}];"
+                // Variables used for double-letters with tsu
+                
+                + "K-START=[{KA}{KI}{KU}{KE}{KO}{ka}{ki}{ku}{ke}{ko}];"
+                + "G-START=[{GA}{GI}{GU}{GE}{GO}{ga}{gi}{gu}{ge}{go}];"
+                
+                + "S-START=[{SA}{SI}{SU}{SE}{SO}{sa}{si}{su}{se}{so}];"
+                + "Z-START=[{ZA}{ZU}{ZE}{ZO}{za}{zu}{ze}{zo}];"
+                + "J-START=[{ZI}{zi}];"
+                
+                + "T-START=[{TA}{TI}{TU}{TE}{TO}{ta}{ti}{tu}{te}{to}];"
+                + "D-START=[{DA}{DI}{DU}{DE}{DO}{da}{di}{du}{de}{do}];"
+                
+                + "N-START=[{NA}{NI}{NU}{NE}{NO}{na}{ni}{nu}{ne}{no}];"
+                
+                + "H-START=[{HA}{HI}{HE}{HO}{ha}{hi}{he}{ho}];"
+                + "F-START=[{HU}{hu}];"
+                + "B-START=[{BA}{BI}{BU}{BE}{BO}{ba}{bi}{bu}{be}{bo}];"
+                + "P-START=[{PA}{PI}{PU}{PE}{PO}{pa}{pi}{pu}{pe}{po}];"
+                
+                + "M-START=[{MA}{MI}{MU}{ME}{MO}{ma}{mi}{mu}{me}{mo}];"
+                
+                + "Y-START=[{YA}{YU}{YO}{ya}{yu}{yo}];"
+                
+                + "R-START=[{RA}{RI}{RU}{RE}{RO}{ra}{ri}{ru}{re}{ro}];"
+                
+                + "W-START=[{WA}{WI}{WE}{WO}{wa}{wi}{we}{wo}];"
+                
+                + "V-START=[{VA}{VI}{VU}{VE}{VO}{vu}];"
+                
+                // lowercase copies for convenience in making hiragana
 
-                //------------------------------------------------------------
-                // Rules
-                //------------------------------------------------------------
+                + "k-start={K-START};"
+                + "g-start={G-START};"
+                + "s-start={S-START};"
+                + "z-start={Z-START};"
+                + "j-start={J-START};"
+                + "t-start={T-START};"
+                + "d-start={D-START};"
+                + "n-start={N-START};"
+                + "h-start={H-START};"
+                + "f-start={F-START};"
+                + "b-start={B-START};"
+                + "p-start={P-START};"
+                + "m-start={M-START};"
+                + "y-start={Y-START};"
+                + "r-start={R-START};"
+                + "w-start={W-START};"
+                + "v-start={V-START};"
+ 
+                // remember that the order is very significant:
+                // always put longer before shorter elements
+                
+                //#######################################
+                // KATAKANA
+                //#######################################
+
+                + "VA>{VA};"
+                + "VI>{VI};"
+                + "VE>{VE};"
+                + "VO>{VO};"
+
+                + "VA<{VA};"
+                + "VI<{VI};"
+                + "VE<{VE};"
+                + "VO<{VO};"
+
+                //#######################################
+                // KATAKANA SHARED
+                // These are also used to produce hiragana, by lowercasing
+                //#######################################
+                
+                + "A>{^A};"
+
+                + "BA>{BA};"
+                + "BI>{BI};"
+                + "BU>{BU};"
+                + "BE>{BE};"
+                + "BO>{BO};"
+                + "BY>{BI}|~Y;"
+
+                + "CHI>{TI};"
+                + "CH>{TI}|~Y;"
+
+                + "C[I>|S;"
+                + "C[E>|S;"
+
+                + "DA>{DA};"
+                + "DI>{DE}{~I};"
+                + "DU>{DE}{~U};"
+                + "DE>{DE};"
+                + "DO>{DO};"
+                + "DZU>{DU};"
+                + "DJI>{DI};"
+                + "DJ>{DI}|~Y;"
+
+                + "E>{^E};"
+
+                + "FU>{HU};"
+
+                + "GA>{GA};"
+                + "GI>{GI};"
+                + "GU>{GU};"
+                + "GE>{GE};"
+                + "GO>{GO};"
+                + "GY>{GI}|~Y;"
+
+                + "HA>{HA};"
+                + "HI>{HI};"
+                + "HU>{HE}{~U};"
+                + "HE>{HE};"
+                + "HO>{HO};"
+
+                + "I>{^I};"
+
+                + "JI>{ZI};"
+
+                + "KA>{KA};"
+                + "KI>{KI};"
+                + "KU>{KU};"
+                + "KE>{KE};"
+                + "KO>{KO};"
+                + "KY>{KI}|~Y;"
+
+                + "MA>{MA};"
+                + "MI>{MI};"
+                + "MU>{MU};"
+                + "ME>{ME};"
+                + "MO>{MO};"
+                + "MY>{MI}|~Y;"
+                
+                + "M[P>{^N};"
+                + "M[B>{^N};"
+                + "M[F>{^N};"
+                + "M[V>{^N};"
+
+                + "NA>{NA};"
+                + "NI>{NI};"
+                + "NU>{NU};"
+                + "NE>{NE};"
+                + "NO>{NO};"
+                + "NY>{NI}|~Y;"
+
+                + "O>{^O};"
+
+                + "PA>{PA};"
+                + "PI>{PI};"
+                + "PU>{PU};"
+                + "PE>{PE};"
+                + "PO>{PO};"
+                + "PY>{PI}|~Y;"
+
+                + "RA>{RA};"
+                + "RI>{RI};"
+                + "RU>{RU};"
+                + "RE>{RE};"
+                + "RO>{RO};"
+                + "RY>{RI}|~Y;"
+
+                + "SA>{SA};"
+                + "SI>{SE}{~I};"
+                + "SU>{SU};"
+                + "SE>{SE};"
+                + "SO>{SO};"
+
+                + "SHI>{SI};"
+                + "SH>{SI}|~Y;"
+                
+                + "TA>{TA};"
+                + "TI>{TE}{~I};"
+                + "TU>{TE}{~U};"
+                + "TE>{TE};"
+                + "TO>{TO};"
+                
+                + "TSU>{TU};"
+                //+ "TS>{TU}|~;"
+
+                + "U>{^U};"
+
+                + "VU>{VU};"
+
+                + "WA>{WA};"
+                + "WI>{WI};"
+                + "WU>{WU};"
+                + "WE>{WE};"
+                + "WO>{WO};"
+
+                + "YA>{YA};"
+                + "YI>{YI};"
+                + "YU>{YU};"
+                + "YE>{YE};"
+                + "YO>{YO};"
+
+                + "ZA>{ZA};"
+                + "ZI>{ZE}{~I};"
+                + "ZU>{ZU};"
+                + "ZE>{ZE};"
+                + "ZO>{ZO};"
+
+                // SMALL FORMS
+                
+                + "~A>{~A};"
+                + "~I>{~I};"
+                + "~U>{~U};"
+                + "~E>{~E};"
+                + "~O>{~O};"
+                + "~KA>{~KA};"
+                + "~KE>{~KE};"
+                + "~TSU>{~TU};"
+                + "~WA>{~WA};"
+                + "~YA>{~YA};"
+                + "~YI>{~YI};"
+                + "~YU>{~YU};"
+                + "~YE>{~YE};"
+                + "~YO>{~YO};"
+
+                // DOUBLE CONSONANTS
+                
+                + "B[B>{~TU};"
+                + "C[K>{~TU};"
+                + "C[C>{~TU};"
+                + "C[Q>{~TU};"
+                + "D[D>{~TU};"
+                + "F[F>{~TU};"
+                + "G[G>{~TU};"
+                + "H[H>{~TU};"
+                + "J[J>{~TU};"
+                + "K[K>{~TU};"
+                + "L[L>{~TU};"
+                + "M[M>{~TU};"
+                + "N[N>{~TU};"
+                + "P[P>{~TU};"
+                + "Q[Q>{~TU};"
+                + "R[R>{~TU};"
+                + "S[SH>{~TU};"
+                + "S[S>{~TU};"
+                + "T[CH>{~TU};"
+                + "T[T>{~TU};"
+                + "V[V>{~TU};"
+                + "W[W>{~TU};"
+                + "X[X>{~TU};"
+                + "Y[Y>{~TU};"
+                + "Z[Z>{~TU};"
+                
+                // ########################################
+                // CATCH MISSING VOWELS!
+                // THESE ARE TO INSURE COMPLETENESS, THAT
+                // ALL ROMAJI MAPS TO KANA
+                // ########################################
+
                 /*
-// Hepburn equivalents
-
-shi>|si
-ji>|zi
-chi>|ti
-// ji>|di // By default we use the ji-zi mapping
-tsu>|tu
-fu>|hu
-
-sh[{vowel}>|sy
-ja>|zya
-// ji = zi
-ju>|zyu
-je>|zye
-jo>|zyo
-cha>|tya
-// chi = ti
-chu>|tyu
-che>|tye
-cho>|tyo
-// j[{vowel} = dy{vowel}, but we use zy{vowel} by default
-
-// Historically, m preceded b, p, or m; now n is used
-// in all cases
-m[b>n
-m[p>n
-m[m>n
-
-// Compatibility
-
-// 'f' group
-fa>{fu}{xa}
-fi>{fu}{xi}
-// fu = hu
-fe>{fu}{xe}
-fo>{fu}{xo}
-
-// 'jy' group; these will not round-trip, except for "jyi"
-// See also the 'j' group.
-jya>|zya
-jyi>{zi}{xyi}
-jyu>|zyu
-jye>|zye
-jyo>|zyo
-
-// Nippon romanized forms
-
-a>{a}
-i>{i}
-u>{u}
-e>{e}
-o>{o}
-ka>{ka}
-ki>{ki}
-ku>{ku}
-ke>{ke}
-ko>{ko}
-ga>{ga}
-gi>{gi}
-gu>{gu}
-ge>{ge}
-go>{go}
-sa>{sa}
-si>{si}
-su>{su}
-se>{se}
-so>{so}
-za>{za}
-zi>{zi}
-zu>{zu}
-ze>{ze}
-zo>{zo}
-ta>{ta}
-ti>{ti}
-tu>{tu}
-te>{te}
-to>{to}
-da>{da}
-di>{di}
-du>{du}
-de>{de}
-do>{do}
-na>{na}
-ni>{ni}
-nu>{nu}
-ne>{ne}
-no>{no}
-ha>{ha}
-hi>{hi}
-hu>{hu}
-he>{he}
-ho>{ho}
-ba>{ba}
-bi>{bi}
-bu>{bu}
-be>{be}
-bo>{bo}
-pa>{pa}
-pi>{pi}
-pu>{pu}
-pe>{pe}
-po>{po}
-ma>{ma}
-mi>{mi}
-mu>{mu}
-me>{me}
-mo>{mo}
-ya>{ya}
-yu>{yu}
-yo>{yo}
-ra>{ra}
-ri>{ri}
-ru>{ru}
-re>{re}
-ro>{ro}
-wa>{wa}
-wi>{wi}
-// No "wu"
-we>{we}
-wo>{wo} // Reverse {wo} to "o", not "wo"
-n''>{n}
-n>{n}
-
-// Palatized Nippon romanized syllables
-
-ky[{vowel}>{ki}|{small}
-gy[{vowel}>{gi}|{small}
-sy[{vowel}>{si}|{small}
-zy[{vowel}>{zi}|{small}
-ty[{vowel}>{ti}|{small}
-dy[{vowel}>{di}|{small}
-ny[{vowel}>{ni}|{small}
-my[{vowel}>{mi}|{small}
-hy[{vowel}>{hi}|{small}
-by[{vowel}>{bi}|{small}
-py[{vowel}>{pi}|{small}
-ry[{vowel}>{ri}|{small}
-
-// Doubled consonants
-
-c[c>{xtu}
-k[k>{xtu}
-g[g>{xtu}
-s[s>{xtu}
-z[z>{xtu}
-j[j>{xtu}
-t[t>{xtu}
-d[d>{xtu}
-h[h>{xtu}
-f[f>{xtu}
-p[p>{xtu}
-b[b>{xtu}
-m[m>{xtu}
-y[y>{xtu}
-r[r>{xtu}
-w[w>{xtu}
+                + "SH>{SI};"
+                + "TS>{TU};"
+                + "CH>{TI};"
+                + "DJ>{DI};"
+                + "DZ>{DU};"
                 */
+                
+                // THE FOLLOWING ARE NOT REALLY NECESSARY, BUT PRODUCE
+                // SLIGHTLY MORE NATURAL RESULTS.
+                
+                + "BY>{BI};"
+                + "CY>{SE}{~I};"
+                + "DY>{DE}{~I};"
+                + "GY>{GI};"
+                + "HY>{HI};"
+                + "KY>{KI};"
+                + "MY>{MI};"
+                + "PY>{PI};"
+                + "RY>{RI};"
+                + "SY>{SE}{~I};"
+                + "TY>{TE}{~I};"
+                + "ZY>{ZE}{~I};"
 
-                + "a>{a};"
+                // SIMPLE SUBSTITUTIONS USING BACKUP
+                
+                + "C>|K;"
+                + "F>{HU}|~;"
+                + "J>{ZI}|~Y;"
+                + "L>|R;"
+                + "Q>|K;" // BACKUP AND REDO
+                + "V>{VU}|~;"
+                + "W>{^U}|~;"
+                + "X>|KS;"
+
+                // WE HAD TO LIST THE LONGER ONES FIRST,
+                // SO HERE ARE THE ISOLATED CONSONANTS
+                
+                + "B>{BU};"
+                + "D>{DE};"
+                + "F>{HU};"
+                + "G>{GU};"
+                + "H>{HE};"
+                + "J>{ZI};"
+                + "K>{KU};"
+                + "M>{^N};"
+                + "N>{^N};"
+                + "P>{PU};"
+                + "R>{RU};"
+                + "S>{SU};"
+                + "T>{TE};"
+                + "V>{BU};"
+                + "W>{^U};"
+                + "X>{KU}{SU};"
+                + "Y>{^I};"
+                + "Z>{ZU};"
+                
+                // NOW KANA TO ROMAN
+
+                + "GYA<{GI}{~YA};"
+                + "GYI<{GI}{~I};"
+                + "GYU<{GI}{~YU};"
+                + "GYE<{GI}{~E};"
+                + "GYO<{GI}{~YO};"
+                
+                + "GA<{GA};"
+                + "GI<{GI};"
+                + "GU<{GU};"
+                + "GE<{GE};"
+                + "GO<{GO};"
+
+                + "KYA<{KI}{~YA};"
+                + "KYI<{KI}{~I};"
+                + "KYU<{KI}{~YU};"
+                + "KYE<{KI}{~E};"
+                + "KYO<{KI}{~YO};"
+
+                + "KA<{KA};"
+                + "KI<{KI};"
+                + "KU<{KU};"
+                + "KE<{KE};"
+                + "KO<{KO};"
+
+                + "JA<{ZI}{~YA};"
+                + "JI<{ZI}{~I};"
+                + "JU<{ZI}{~YU};"
+                + "JE<{ZI}{~E};"
+                + "JO<{ZI}{~YO};"
+                + "JI<{ZI};"
+                
+                + "ZA<{ZA};"
+                + "ZI<{ZE}{~I};"
+                + "ZU<{ZU};"
+                + "ZE<{ZE};"
+                + "ZO<{ZO};"
+
+                + "SHA<{SI}{~YA};"
+                + "SHI<{SI}{~I};"
+                + "SHU<{SI}{~YU};"
+                + "SHE<{SI}{~E};"
+                + "SHO<{SI}{~YO};"
+                + "SHI<{SI};"
+                
+                + "SA<{SA};"
+                + "SI<{SE}{~I};"
+                + "SU<{SU};"
+                + "SE<{SE};"
+                + "SO<{SO};"
+
+                + "DJA<{DI}{~YA};"
+                + "DJI<{DI}{~I};"
+                + "DJU<{DI}{~YU};"
+                + "DJE<{DI}{~E};"
+                + "DJO<{DI}{~YO};"
+                + "DJI<{DI};"
+                
+                + "DZU<{DU};"
+                
+                + "DA<{DA};"
+                + "DI<{DE}{~I};"
+                + "DU<{DE}{~U};"
+                + "DE<{DE};"
+                + "DO<{DO};"
+
+                + "CHA<{TI}{~YA};"
+                + "CHI<{TI}{~I};"
+                + "CHU<{TI}{~YU};"
+                + "CHE<{TI}{~E};"
+                + "CHO<{TI}{~YO};"
+                + "CHI<{TI};"
+                
+                + "TSU<{TU};"
+                
+                + "TA<{TA};"
+                + "TI<{TE}{~I};"
+                + "TU<{TE}{~U};"
+                + "TE<{TE};"
+                + "TO<{TO};"
+
+                + "NYA<{NI}{~YA};"
+                + "NYI<{NI}{~I};"
+                + "NYU<{NI}{~YU};"
+                + "NYE<{NI}{~E};"
+                + "NYO<{NI}{~YO};"
+                
+                + "NA<{NA};"
+                + "NI<{NI};"
+                + "NU<{NU};"
+                + "NE<{NE};"
+                + "NO<{NO};"
+
+                + "BYA<{BI}{~YA};"
+                + "BYI<{BI}{~I};"
+                + "BYU<{BI}{~YU};"
+                + "BYE<{BI}{~E};"
+                + "BYO<{BI}{~YO};"
+                
+                + "BA<{BA};"
+                + "BI<{BI};"
+                + "BU<{BU};"
+                + "BE<{BE};"
+                + "BO<{BO};"
+
+                + "PYA<{PI}{~YA};"
+                + "PYI<{PI}{~I};"
+                + "PYU<{PI}{~YU};"
+                + "PYE<{PI}{~E};"
+                + "PYO<{PI}{~YO};"
+                
+                + "PA<{PA};"
+                + "PI<{PI};"
+                + "PU<{PU};"
+                + "PE<{PE};"
+                + "PO<{PO};"
+
+                + "FA<{HU}{~A};"
+                + "FI<{HU}{~I};"
+                + "FE<{HU}{~E};"
+                + "FO<{HU}{~O};"
+                + "FU<{HU};"
+                
+                + "HA<{HA};"
+                + "HI<{HI};"
+                + "HU<{HE}{~U};"
+                + "HE<{HE};"
+                + "HO<{HO};"
+
+                + "MYA<{MI}{~YA};"
+                + "MYI<{MI}{~I};"
+                + "MYU<{MI}{~YU};"
+                + "MYE<{MI}{~E};"
+                + "MYO<{MI}{~YO};"
+                
+                + "MA<{MA};"
+                + "MI<{MI};"
+                + "MU<{MU};"
+                + "ME<{ME};"
+                + "MO<{MO};"
+
+                + "YA<{YA};"
+                //+ "YE<{YI};"
+                + "YU<{YU};"
+                //+ "YE<{YE};"
+                + "YO<{YO};"
+
+                + "RYA<{RI}{~YA};"
+                + "RYI<{RI}{~I};"
+                + "RYU<{RI}{~YU};"
+                + "RYE<{RI}{~E};"
+                + "RYO<{RI}{~YO};"
+                
+                + "RA<{RA};"
+                + "RI<{RI};"
+                + "RU<{RU};"
+                + "RE<{RE};"
+                + "RO<{RO};"
+
+                + "WA<{WA};"
+                + "WI<{WI};"
+                + "WE<{WE};"
+                + "WO<{WO};"
+                //+ "WU<{WU};"
+
+                + "VA<{VU}{~A};"
+                + "VI<{VU}{~I};"
+                + "VE<{VU}{~E};"
+                + "VO<{VU}{~O};"
+                + "VU<{VU};"
+                
+                // DOUBLED LETTERS
+
+                + "N''<{^N}[{^A};"
+                + "N''<{^N}[{^I};"
+                + "N''<{^N}[{^U};"
+                + "N''<{^N}[{^E};"
+                + "N''<{^N}[{^O};"
+                + "N''<{^N}[{NA};"
+                + "N''<{^N}[{NI};"
+                + "N''<{^N}[{NU};"
+                + "N''<{^N}[{NE};"
+                + "N''<{^N}[{NO};"
+                + "N''<{^N}[{YA};"
+                + "N''<{^N}[{YU};"
+                + "N''<{^N}[{YO};"
+                + "N''<{^N}[{^N};"
+                + "N<{^N};"
+                
+                + "N<{~TU}[{N-START};"
+                + "M<{~TU}[{M-START};"
+                + "W<{~TU}[{W-START};"
+                + "Y<{~TU}[{Y-START};"
+                + "G<{~TU}[{G-START};"
+                + "K<{~TU}[{K-START};"
+                + "Z<{~TU}[{Z-START};"
+                + "J<{~TU}[{J-START};"
+                + "S<{~TU}[{S-START};"
+                + "D<{~TU}[{D-START};"
+                + "T<{~TU}[{T-START};"
+                + "B<{~TU}[{B-START};"
+                + "P<{~TU}[{P-START};"
+                + "H<{~TU}[{H-START};"
+                + "F<{~TU}[{F-START};"
+                + "R<{~TU}[{R-START};"
+                + "V<{~TU}[{V-START};"
+
+                + "A<{^A};" // MOVED THIS BLOCK DOWN [LIU]
+                + "I<{^I};"
+                + "U<{^U};"
+                + "E<{^E};"
+                + "O<{^O};"
+                
+                // SMALL FORMS
+                
+                + "~A<{~A};"
+                + "~I<{~I};"
+                + "~U<{~U};"
+                + "~E<{~E};"
+                + "~O<{~O};"
+                + "~KA<{~KA};"
+                + "~KE<{~KE};"
+                + "~YA<{~YA};"
+                + "~YU<{~YU};"
+                + "~YO<{~YO};"
+                + "~TSU<{~TU};"
+                + "~WA<{~WA};"
+                
+                // LENGTH MARK. LATER, COULD USE CIRCUMFLEX
+
+                + "A<A]{LONG};" // LIU
+                + "E<E]{LONG};" // LIU
+                + "I<I]{LONG};" // LIU
+                + "O<O]{LONG};" // LIU
+                + "U<U]{LONG};" // LIU
+
+                //#######################################
+                // HIRAGANA
+                // These are derived from the above by lowercasing
+                //#######################################
+
+                + "a>{^a};"
 
                 + "ba>{ba};"
                 + "bi>{bi};"
                 + "bu>{bu};"
                 + "be>{be};"
                 + "bo>{bo};"
-                + "by[{vowel}>{bi}|{small};"
-                + "b[b>{xtu};"
+                + "by>{bi}|~y;"
+
+                + "chi>{ti};"
+                + "ch>{ti}|~y;"
+
+                + "c[i>|s;"
+                + "c[e>|s;"
 
                 + "da>{da};"
-                + "di>{di};"
-                + "du>{du};"
+                + "di>{de}{~i};"
+                + "du>{de}{~u};"
                 + "de>{de};"
                 + "do>{do};"
-                + "dy[{vowel}>{di}|{small};"
-                + "dh[{vowel}>{de}|{small};"
-                + "d[d>{xtu};"
+                + "dzu>{du};"
+                + "dji>{di};"
+                + "dj>{di}|~y;"
 
-                + "e>{e};"
+                + "e>{^e};"
 
-                + "fa>{hu}{xa};"
-                + "fi>{hu}{xi};"
-                + "fe>{hu}{xe};"
-                + "fo>{hu}{xo};"
-                + "fya>{hu}{xya};"
-                + "fyu>{hu}{xyu};"
-                + "fyo>{hu}{xyo};"
-                + "f[f>{xtu};"
+                + "fu>{hu};"
 
                 + "ga>{ga};"
                 + "gi>{gi};"
                 + "gu>{gu};"
                 + "ge>{ge};"
                 + "go>{go};"
-                + "gy[{vowel}>{gi}|{small};"
-                + "gwa>{gu}{xwa};"
-                + "gwi>{gu}{xi};"
-                + "gwu>{gu}{xu};"
-                + "gwe>{gu}{xe};"
-                + "gwo>{gu}{xo};"
-                + "g[g>{xtu};"
+                + "gy>{gi}|~y;"
 
                 + "ha>{ha};"
                 + "hi>{hi};"
-                + "hu>{hu};"
+                + "hu>{he}{~u};"
                 + "he>{he};"
                 + "ho>{ho};"
-                + "hy[{vowel}>{hi}|{small};"
-                + "h[h>{xtu};"
 
-                + "i>{i};"
+                + "i>{^i};"
+
+                + "ji>{zi};"
 
                 + "ka>{ka};"
                 + "ki>{ki};"
                 + "ku>{ku};"
                 + "ke>{ke};"
                 + "ko>{ko};"
-                + "kwa>{ku}{xwa};"
-                + "kwi>{ku}{xi};"
-                + "kwu>{ku}{xu};"
-                + "kwe>{ku}{xe};"
-                + "kwo>{ku}{xo};"
-                + "ky[{vowel}>{ki}|{small};"
-                + "k[k>{xtu};"
+                + "ky>{ki}|~y;"
 
                 + "ma>{ma};"
                 + "mi>{mi};"
                 + "mu>{mu};"
                 + "me>{me};"
                 + "mo>{mo};"
-                + "my[{vowel}>{mi}|{small};"
-                + "m[b>{n};"
-                + "m[f>{n};"
-                + "m[m>{n};"
-                + "m[p>{n};"
-                + "m[v>{n};"
-                + "m''>{n};"
+                + "my>{mi}|~y;"
+                
+                + "m[p>{^n};"
+                + "m[b>{^n};"
+                + "m[f>{^n};"
+                + "m[v>{^n};"
 
                 + "na>{na};"
                 + "ni>{ni};"
                 + "nu>{nu};"
                 + "ne>{ne};"
                 + "no>{no};"
-                + "ny[{vowel}>{ni}|{small};"
-                + "nn>{n};"
-                + "n''>{n};"
-                + "n>{n};"
+                + "ny>{ni}|~y;"
 
-                + "o>{o};"
+                + "o>{^o};"
 
                 + "pa>{pa};"
                 + "pi>{pi};"
                 + "pu>{pu};"
                 + "pe>{pe};"
                 + "po>{po};"
-                + "py[{vowel}>{pi}|{small};"
-                + "p[p>{xtu};"
-
-                + "qa>{ku}{xa};"
-                + "qi>{ku}{xi};"
-                + "qu>{ku}{xu};"
-                + "qe>{ku}{xe};"
-                + "qo>{ku}{xo};"
-                + "qy[{vowel}>{ku}|{small};"
-                + "q[q>{xtu};"
+                + "py>{pi}|~y;"
 
                 + "ra>{ra};"
                 + "ri>{ri};"
                 + "ru>{ru};"
                 + "re>{re};"
                 + "ro>{ro};"
-                + "ry[{vowel}>{ri}|{small};"
-                + "r[r>{xtu};"
+                + "ry>{ri}|~y;"
 
                 + "sa>{sa};"
-                + "si>{si};"
+                + "si>{se}{~i};"
                 + "su>{su};"
                 + "se>{se};"
                 + "so>{so};"
-                + "sy[{vowel}>{si}|{small};"
-                + "s[sh>{xtu};"
-                + "s[s>{xtu};"
 
+                + "shi>{si};"
+                + "sh>{si}|~y;"
+                
                 + "ta>{ta};"
-                + "ti>{ti};"
-                + "tu>{tu};"
+                + "ti>{te}{~i};"
+                + "tu>{te}{~u};"
                 + "te>{te};"
                 + "to>{to};"
-                + "th[{vowel}>{te}|{small};"
-                + "tsa>{tu}{xa};"
-                + "tsi>{tu}{xi};"
-                + "tse>{tu}{xe};"
-                + "tso>{tu}{xo};"
-                + "ty[{vowel}>{ti}|{small};"
-                + "t[ts>{xtu};"
-                + "t[ch>{xtu};"
-                + "t[t>{xtu};"
+                
+                + "tsu>{tu};"
+                //+ "ts>{tu}|~;"
 
-                + "u>{u};"
+                + "u>{^u};"
 
-                + "va>{VA};"
-                + "vi>{VI};"
                 + "vu>{vu};"
-                + "ve>{VE};"
-                + "vo>{VO};"
-                + "vy[{vowel}>{VI}|{small};"
-                + "v[v>{xtu};"
 
                 + "wa>{wa};"
                 + "wi>{wi};"
+                + "wu>{wu};"
                 + "we>{we};"
                 + "wo>{wo};"
-                + "w[w>{xtu};"
 
                 + "ya>{ya};"
+                + "yi>{yi};"
                 + "yu>{yu};"
-                + "ye>{i}{xe};"
+                + "ye>{ye};"
                 + "yo>{yo};"
-                + "y[y>{xtu};"
 
                 + "za>{za};"
-                + "zi>{zi};"
+                + "zi>{ze}{~i};"
                 + "zu>{zu};"
                 + "ze>{ze};"
                 + "zo>{zo};"
-                + "zy[{vowel}>{zi}|{small};"
-                + "z[z>{xtu};"
 
-                + "xa>{xa};"
-                + "xi>{xi};"
-                + "xu>{xu};"
-                + "xe>{xe};"
-                + "xo>{xo};"
-                + "xka>{XKA};"
-                + "xke>{XKE};"
-                + "xtu>{xtu};"
-                + "xwa>{xwa};"
-                + "xya>{xya};"
-                + "xyu>{xyu};"
-                + "xyo>{xyo};"
+                // small forms
+                
+                + "~a>{~a};"
+                + "~i>{~i};"
+                + "~u>{~u};"
+                + "~e>{~e};"
+                + "~o>{~o};"
+                + "~ka>{~ka};"
+                + "~ke>{~ke};"
+                + "~tsu>{~tu};"
+                + "~wa>{~wa};"
+                + "~ya>{~ya};"
+                + "~yi>{~yi};"
+                + "~yu>{~yu};"
+                + "~ye>{~ye};"
+                + "~yo>{~yo};"
 
-                // optional mappings
-                + "wu>{u};"
+                // Double Consonants
+                
+                + "b[b>{~tu};"
+                + "c[k>{~tu};"
+                + "c[c>{~tu};"
+                + "c[q>{~tu};"
+                + "d[d>{~tu};"
+                + "f[f>{~tu};"
+                + "g[g>{~tu};"
+                + "h[h>{~tu};"
+                + "j[j>{~tu};"
+                + "k[k>{~tu};"
+                + "l[l>{~tu};"
+                + "m[m>{~tu};"
+                + "n[n>{~tu};"
+                + "p[p>{~tu};"
+                + "q[q>{~tu};"
+                + "r[r>{~tu};"
+                + "s[sh>{~tu};"
+                + "s[s>{~tu};"
+                + "t[ch>{~tu};"
+                + "t[t>{~tu};"
+                + "v[v>{~tu};"
+                + "w[w>{~tu};"
+                + "x[x>{~tu};"
+                + "y[y>{~tu};"
+                + "z[z>{~tu};"
+                
+                // ########################################
+                // catch missing vowels!
+                // These are to insure completeness, that
+                // all romaji maps to kana
+                // ########################################
 
-                + "ca>{ka};"
-                + "ci>{si};"
-                + "cu>{ku};"
-                + "ce>{se};"
-                + "co>{ko};"
-                + "cha>{ti}{xya};"
-                + "chi>{ti};"
-                + "chu>{ti}{xyu};"
-                + "che>{ti}{xe};"
-                + "cho>{ti}{xyo};"
-                + "cy[{vowel}>{ti}|{small};"
-                + "c[k>{xtu};"
-                + "c[c>{xtu};"
+                /*
+                + "sh>{si};"
+                + "ts>{tu};"
+                + "ch>{ti};"
+                + "dj>{di};"
+                + "dz>{du};"
+                */
+                
+                // the following are not really necessary, but produce
+                // slightly more natural results.
+                
+                + "by>{bi};"
+                + "cy>{se}{~i};"
+                + "dy>{de}{~i};"
+                + "gy>{gi};"
+                + "hy>{hi};"
+                + "ky>{ki};"
+                + "my>{mi};"
+                + "py>{pi};"
+                + "ry>{ri};"
+                + "sy>{se}{~i};"
+                + "ty>{te}{~i};"
+                + "zy>{ze}{~i};"
 
-                + "fu>{hu};"
+                // simple substitutions using backup
+                
+                + "c>|k;"
+                + "f>{hu}|~;"
+                + "j>{zi}|~y;"
+                + "l>|r;"
+                + "q>|k;" // backup and redo
+                + "v>{vu}|~;"
+                + "w>{^u}|~;"
+                + "x>|ks;"
 
-                + "ja>{zi}{xya};"
-                + "ji>{zi};"
-                + "ju>{zi}{xyu};"
-                + "je>{zi}{xe};"
-                + "jo>{zi}{xyo};"
-                + "jy[{vowel}>{zi}|{small};"
-                + "j[j>{xtu};"
+                // We had to list the longer ones first,
+                // so here are the isolated consonants
+                
+                + "b>{bu};"
+                + "d>{de};"
+                + "f>{hu};"
+                + "g>{gu};"
+                + "h>{he};"
+                + "j>{zi};"
+                + "k>{ku};"
+                + "m>{^n};"
+                + "n>{^n};"
+                + "p>{pu};"
+                + "r>{ru};"
+                + "s>{su};"
+                + "t>{te};"
+                + "v>{bu};"
+                + "w>{^u};"
+                + "x>{ku}{su};"
+                + "y>{^i};"
+                + "z>{zu};"
+                
+                // NOW KANA TO ROMAN
 
-                + "la>{ra};"
-                + "li>{ri};"
-                + "lu>{ru};"
-                + "le>{re};"
-                + "lo>{ro};"
-                + "ly[{vowel}>{ri}|{small};"
-                + "l[l>{xtu};"
-
-                + "sha>{si}{xya};"
-                + "shi>{si};"
-                + "shu>{si}{xyu};"
-                + "she>{si}{xe};"
-                + "sho>{si}{xyo};"
-
-                + "tsu>{tu};"
-
-                + "yi>{i};"
-
-                + "xtsu>{xtu};"
-                + "xyi>{xi};"
-                + "xye>{xe};"
-
-
-
-
-
-
-
-                // Convert vowels to small form
-                + "{small}a>{xya};"
-                + "{small}i>{xi};"
-                + "{small}u>{xyu};"
-                + "{small}e>{xe};"
-                + "{small}o>{xyo};"
-
-
-
-
-                + "gy|{hvr}<{gi}[{hv};"
-                + "gwa<{gu}{xwa};"
-                + "gwi<{gu}{xi};"
-                + "gwu<{gu}{xu};"
-                + "gwe<{gu}{xe};"
-                + "gwo<{gu}{xo};"
+                + "gya<{gi}{~ya};"
+                + "gyi<{gi}{~i};"
+                + "gyu<{gi}{~yu};"
+                + "gye<{gi}{~e};"
+                + "gyo<{gi}{~yo};"
+                
                 + "ga<{ga};"
                 + "gi<{gi};"
                 + "gu<{gu};"
                 + "ge<{ge};"
                 + "go<{go};"
 
-                + "ky|{hvr}<{ki}[{hv};"
-                + "kwa<{ku}{xwa};"
-                + "kwi<{ku}{xi};"
-                + "kwu<{ku}{xu};"
-                + "kwe<{ku}{xe};"
-                + "kwo<{ku}{xo};"
-                + "qa<{ku}{xa};"
-                + "qya<{ku}{xya};"
-                + "qyu<{ku}{xyu};"
-                + "qyo<{ku}{xyo};"
+                + "kya<{ki}{~ya};"
+                + "kyi<{ki}{~i};"
+                + "kyu<{ki}{~yu};"
+                + "kye<{ki}{~e};"
+                + "kyo<{ki}{~yo};"
+
                 + "ka<{ka};"
                 + "ki<{ki};"
                 + "ku<{ku};"
                 + "ke<{ke};"
                 + "ko<{ko};"
 
-                + "j|{hvr}<{zi}[{hv};" // Hepburn
+                + "ja<{zi}{~ya};"
+                + "ji<{zi}{~i};"
+                + "ju<{zi}{~yu};"
+                + "je<{zi}{~e};"
+                + "jo<{zi}{~yo};"
+                + "ji<{zi};"
+                
                 + "za<{za};"
-                + "ji<{zi};" // Hepburn
+                + "zi<{ze}{~i};"
                 + "zu<{zu};"
                 + "ze<{ze};"
                 + "zo<{zo};"
 
-                + "sh|{hvr}<{si}[{hv};" // Hepburn
-                + "sa<{sa};"
+                + "sha<{si}{~ya};"
+                + "shi<{si}{~i};"
+                + "shu<{si}{~yu};"
+                + "she<{si}{~e};"
+                + "sho<{si}{~yo};"
                 + "shi<{si};"
+                
+                + "sa<{sa};"
+                + "si<{se}{~i};"
                 + "su<{su};"
                 + "se<{se};"
                 + "so<{so};"
 
-                + "j|{hvr}<{di}[{hv};" // Hepburn
-                + "dh|{hvr}<{de}[{hv};" 
+                + "dja<{di}{~ya};"
+                + "dji<{di}{~i};"
+                + "dju<{di}{~yu};"
+                + "dje<{di}{~e};"
+                + "djo<{di}{~yo};"
+                + "dji<{di};"
+                
+                + "dzu<{du};"
+                
                 + "da<{da};"
-                + "ji<{di};" // Hepburn
+                + "di<{de}{~i};"
+                + "du<{de}{~u};"
                 + "de<{de};"
                 + "do<{do};"
-                + "zu<{du};" // Hepburn
 
-                + "ch|{hvr}<{ti}[{hv};" // Hepburn
-                + "tsa<{tu}{xa};"
-                + "tsi<{tu}{xi};"
-                + "tse<{tu}{xe};"
-                + "tso<{tu}{xo};"
-                + "th|{hvr}<{te}[{hv};"
+                + "cha<{ti}{~ya};"
+                + "chi<{ti}{~i};"
+                + "chu<{ti}{~yu};"
+                + "che<{ti}{~e};"
+                + "cho<{ti}{~yo};"
+                + "chi<{ti};"
+                
+                + "tsu<{tu};"
+                
                 + "ta<{ta};"
-                + "chi<{ti};" // Hepburn
-                + "tsu<{tu};" // Hepburn
+                + "ti<{te}{~i};"
+                + "tu<{te}{~u};"
                 + "te<{te};"
                 + "to<{to};"
 
-                + "ny|{hvr}<{ni}[{hv};"
+                + "nya<{ni}{~ya};"
+                + "nyi<{ni}{~i};"
+                + "nyu<{ni}{~yu};"
+                + "nye<{ni}{~e};"
+                + "nyo<{ni}{~yo};"
+                
                 + "na<{na};"
                 + "ni<{ni};"
                 + "nu<{nu};"
                 + "ne<{ne};"
                 + "no<{no};"
 
-                + "by|{hvr}<{bi}[{hv};"
+                + "bya<{bi}{~ya};"
+                + "byi<{bi}{~i};"
+                + "byu<{bi}{~yu};"
+                + "bye<{bi}{~e};"
+                + "byo<{bi}{~yo};"
+                
                 + "ba<{ba};"
                 + "bi<{bi};"
                 + "bu<{bu};"
                 + "be<{be};"
                 + "bo<{bo};"
 
-                + "py|{hvr}<{pi}[{hv};"
+                + "pya<{pi}{~ya};"
+                + "pyi<{pi}{~i};"
+                + "pyu<{pi}{~yu};"
+                + "pye<{pi}{~e};"
+                + "pyo<{pi}{~yo};"
+                
                 + "pa<{pa};"
                 + "pi<{pi};"
                 + "pu<{pu};"
                 + "pe<{pe};"
                 + "po<{po};"
 
-                + "hy|{hvr}<{hi}[{hv};"
-                + "fa<{hu}{xa};"
-                + "fi<{hu}{xi};"
-                + "fe<{hu}{xe};"
-                + "fo<{hu}{xo};"
-                + "fya<{hu}{xya};"
-                + "fyu<{hu}{xyu};"
-                + "fyo<{hu}{xyo};"
+                + "fa<{hu}{~a};"
+                + "fi<{hu}{~i};"
+                + "fe<{hu}{~e};"
+                + "fo<{hu}{~o};"
+                + "fu<{hu};"
+                
                 + "ha<{ha};"
                 + "hi<{hi};"
-                + "fu<{hu};" // Hepburn
+                + "hu<{he}{~u};"
                 + "he<{he};"
                 + "ho<{ho};"
 
-                + "my|{hvr}<{mi}[{hv};"
+                + "mya<{mi}{~ya};"
+                + "myi<{mi}{~i};"
+                + "myu<{mi}{~yu};"
+                + "mye<{mi}{~e};"
+                + "myo<{mi}{~yo};"
+                
                 + "ma<{ma};"
                 + "mi<{mi};"
                 + "mu<{mu};"
@@ -754,14 +1225,17 @@ w[w>{xtu}
                 + "mo<{mo};"
 
                 + "ya<{ya};"
+                //+ "ye<{yi};"
                 + "yu<{yu};"
-                + "ye<{i}{xe};"
+                //+ "ye<{ye};"
                 + "yo<{yo};"
-                + "xya<{xya};"
-                + "xyu<{xyu};"
-                + "xyo<{xyo};"
 
-                + "ry|{hvr}<{ri}[{hv};"
+                + "rya<{ri}{~ya};"
+                + "ryi<{ri}{~i};"
+                + "ryu<{ri}{~yu};"
+                + "rye<{ri}{~e};"
+                + "ryo<{ri}{~yo};"
+                
                 + "ra<{ra};"
                 + "ri<{ri};"
                 + "ru<{ru};"
@@ -772,108 +1246,87 @@ w[w>{xtu}
                 + "wi<{wi};"
                 + "we<{we};"
                 + "wo<{wo};"
+                //+ "wu<{wu};"
 
+                + "va<{vu}{~a};"
+                + "vi<{vu}{~i};"
+                + "ve<{vu}{~e};"
+                + "vo<{vu}{~o};"
                 + "vu<{vu};"
-                + "vy|{hvr}<{VI}[{hv};"
-                + "v<{xtu}[{vu};"
+                
+                // Doubled letters
 
-                + "xa<{xa};"
-                + "xi<{xi};"
-                + "xu<{xu};"
-                + "xe<{xe};"
-                + "xo<{xo};"
+                + "n''<{^n}[{^a};"
+                + "n''<{^n}[{^i};"
+                + "n''<{^n}[{^u};"
+                + "n''<{^n}[{^e};"
+                + "n''<{^n}[{^o};"
+                + "n''<{^n}[{na};"
+                + "n''<{^n}[{ni};"
+                + "n''<{^n}[{nu};"
+                + "n''<{^n}[{ne};"
+                + "n''<{^n}[{no};"
+                + "n''<{^n}[{ya};"
+                + "n''<{^n}[{yu};"
+                + "n''<{^n}[{yo};"
+                + "n''<{^n}[{^n};"
+                + "n<{^n};"
+                
+                + "n<{~tu}[{n-start};"
+                + "m<{~tu}[{m-start};"
+                + "w<{~tu}[{w-start};"
+                + "y<{~tu}[{y-start};"
+                + "g<{~tu}[{g-start};"
+                + "k<{~tu}[{k-start};"
+                + "z<{~tu}[{z-start};"
+                + "j<{~tu}[{j-start};"
+                + "s<{~tu}[{s-start};"
+                + "d<{~tu}[{d-start};"
+                + "t<{~tu}[{t-start};"
+                + "b<{~tu}[{b-start};"
+                + "p<{~tu}[{p-start};"
+                + "h<{~tu}[{h-start};"
+                + "f<{~tu}[{f-start};"
+                + "r<{~tu}[{r-start};"
+                + "v<{~tu}[{v-start};"
 
-                + "n''<{n}[{a};"
-                + "n''<{n}[{i};"
-                + "n''<{n}[{u};"
-                + "n''<{n}[{e};"
-                + "n''<{n}[{o};"
-                + "n''<{n}[{na};"
-                + "n''<{n}[{ni};"
-                + "n''<{n}[{nu};"
-                + "n''<{n}[{ne};"
-                + "n''<{n}[{no};"
-                + "n''<{n}[{ya};"
-                + "n''<{n}[{yu};"
-                + "n''<{n}[{yo};"
-                + "n''<{n}[{n};"
-                + "n<{n};"
+                + "a<{^a};" // Moved this block down [LIU]
+                + "i<{^i};"
+                + "u<{^u};"
+                + "e<{^e};"
+                + "o<{^o};"
+                
+                // small forms
+                
+                + "~a<{~a};"
+                + "~i<{~i};"
+                + "~u<{~u};"
+                + "~e<{~e};"
+                + "~o<{~o};"
+                + "~ka<{~ka};"
+                + "~ke<{~ke};"
+                + "~ya<{~ya};"
+                + "~yu<{~yu};"
+                + "~yo<{~yo};"
+                + "~tsu<{~tu};"
+                + "~wa<{~wa};"
+                
+                // length mark. Later, could use circumflex
 
+                + "a<a]{long};" // Liu
+                + "e<e]{long};" // Liu
+                + "i<i]{long};" // Liu
+                + "o<o]{long};" // Liu
+                + "u<u]{long};" // Liu
 
-                + "g<{xtu}[{ga};"
-                + "g<{xtu}[{gi};"
-                + "g<{xtu}[{gu};"
-                + "g<{xtu}[{ge};"
-                + "g<{xtu}[{go};"
-                + "k<{xtu}[{ka};"
-                + "k<{xtu}[{ki};"
-                + "k<{xtu}[{ku};"
-                + "k<{xtu}[{ke};"
-                + "k<{xtu}[{ko};"
+                //#######################################
+                // Non-shared stuff goes here
+                
+                + "~>;"        // remove if not used
+                + "{quote}>;"  // remove if not used
+                //+ "<{quote};"
+                + "->{long};"
 
-                + "z<{xtu}[{za};"
-                + "z<{xtu}[{zi};"
-                + "z<{xtu}[{zu};"
-                + "z<{xtu}[{ze};"
-                + "z<{xtu}[{zo};"
-                + "s<{xtu}[{sa};"
-                + "s<{xtu}[{si};"
-                + "s<{xtu}[{su};"
-                + "s<{xtu}[{se};"
-                + "s<{xtu}[{so};"
-
-                + "d<{xtu}[{da};"
-                + "d<{xtu}[{di};"
-                + "d<{xtu}[{du};"
-                + "d<{xtu}[{de};"
-                + "d<{xtu}[{do};"
-                + "t<{xtu}[{ta};"
-                + "t<{xtu}[{ti};"
-                + "t<{xtu}[{tu};"
-                + "t<{xtu}[{te};"
-                + "t<{xtu}[{to};"
-
-
-                + "b<{xtu}[{ba};"
-                + "b<{xtu}[{bi};"
-                + "b<{xtu}[{bu};"
-                + "b<{xtu}[{be};"
-                + "b<{xtu}[{bo};"
-                + "p<{xtu}[{pa};"
-                + "p<{xtu}[{pi};"
-                + "p<{xtu}[{pu};"
-                + "p<{xtu}[{pe};"
-                + "p<{xtu}[{po};"
-                + "h<{xtu}[{ha};"
-                + "h<{xtu}[{hi};"
-                + "h<{xtu}[{hu};"
-                + "h<{xtu}[{he};"
-                + "h<{xtu}[{ho};"
-
-
-                + "r<{xtu}[{ra};"
-                + "r<{xtu}[{ri};"
-                + "r<{xtu}[{ru};"
-                + "r<{xtu}[{re};"
-                + "r<{xtu}[{ro};"
-
-                + "w<{xtu}[{wa};"
-                + "xtu<{xtu};"
-
-                + "a<{a};"
-                + "i<{i};"
-                + "u<{u};"
-                + "e<{e};"
-                + "o<{o};"
-
-
-
-                // Convert small forms to vowels
-                + "a<{hvr}{xya};"
-                + "i<{hvr}{xi};"
-                + "u<{hvr}{xyu};"
-                + "e<{hvr}{xe};"
-                + "o<{hvr}{xyo};"              
             }
         };
     }
