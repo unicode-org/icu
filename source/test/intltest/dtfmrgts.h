@@ -49,6 +49,7 @@ public:
     void Test4182066(void);
     void Test4210209(void);
     void Test714(void);
+    void Test1684(void);
  };
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
