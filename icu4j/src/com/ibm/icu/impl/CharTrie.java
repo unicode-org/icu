@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/CharTrie.java,v $
-* $Date: 2002/04/02 21:00:09 $
-* $Revision: 1.4 $
+* $Date: 2002/04/25 22:19:25 $
+* $Revision: 1.5 $
 *
 ******************************************************************************
 */
@@ -137,6 +137,18 @@ public class CharTrie extends Trie
  		                                (char)(trail & SURROGATE_MASK_))];
         }
         return m_initialValue_;
+    }
+    
+    /**
+     * <p>Gets the latin 1 fast path value.</p>
+     * <p>Note this only works if latin 1 characters have their own linear 
+     * array.</p>
+     * @param ch latin 1 characters
+     * @return value associated with latin character
+     */
+    public final char getLatin1LinearValue(char ch) 
+    {
+    	return m_data_[INDEX_STAGE_3_MASK_ + 1 + ch];
     }
 
     // protected methods -----------------------------------------------
