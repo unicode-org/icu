@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/topleveltest/Attic/TestAll.java,v $ 
- * $Date: 2000/03/14 19:54:51 $ 
- * $Revision: 1.9 $
+ * $Date: 2000/04/24 21:33:07 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -71,5 +71,9 @@ public class TestAll extends TestFmwk {
 	
 	public void TestSearch() throws Exception {
 		run(new com.ibm.test.search.SearchTest());
+	}
+	
+	public void TestRichEdit() throws Exception {
+	    run(new com.ibm.test.richtext.TestAll());
 	}
 }
