@@ -18,8 +18,6 @@
 #include "GlyphDefinitionTables.h"
 #include "GlyphPositioningTables.h"
 
-#include <string.h>
-
 U_NAMESPACE_BEGIN
 
 class MPreFixups;
