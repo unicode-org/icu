@@ -627,7 +627,7 @@ ucol_getRules(    const    UCollator    *coll,
  *  @param locale locale for the collator. If NULL, collator's real locale will be used
  *  @param buffer space to hold the resulting string
  *  @param capacity capacity of the buffer
- *  @status for returning errors. All the preflighting errors are featured
+ *  @param status for returning errors. All the preflighting errors are featured
  *  @return length of the resulting string
  *  @see ucol_openFromShortString
  *  @see ucol_normalizeShortDefinitionString

@@ -414,6 +414,7 @@ public:
      * maximum would be 28; for "Feb 3, 1996" it s 29.  Similarly for a Hebrew calendar,
      * for some years the actual maximum for MONTH is 12, and for others 13.
      * @param field    the time field.
+     * @param status   returns any errors that may result from this function call.
      * @return         the maximum value that this field could have, given the current date.
      * @draft ICU 2.6
      */
@@ -494,7 +495,7 @@ protected:
      * @param useMonth if false, compute the day before the first day of
      * the given year, otherwise, compute the day before the first day of
      * the given month
-     * @param return the Julian day number of the day before the first
+     * @return the Julian day number of the day before the first
      * day of the given month and year
      * @internal
      */

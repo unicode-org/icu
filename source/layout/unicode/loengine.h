@@ -95,7 +95,7 @@ public:
      * @param chars - the input character context
      * @param startOffset - the starting offset of the characters to process
      * @param endOffset - the ending offset of the characters to process
-     * @param max - the number of characters in the input context
+     * @param maxOffset - the number of characters in the input context
      * @param rightToLeft - TRUE if the characers are in a right to left directional run
      * @param x - the initial X position
      * @param y - the initial Y position
@@ -197,7 +197,7 @@ public:
      * X and Y position for each glyph, plus an extra X and Y for the
      * advance of the last glyph.
      *
-     * @param glyphs - the destiniation position array
+     * @param positions - the destiniation position array
      * @param success - output parameter set to an error code if the operation fails
      *
      * @obsolete ICU 3.0. Use LayoutEngine.h instead since this API will be removed in that release.

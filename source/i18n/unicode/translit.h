@@ -74,7 +74,7 @@ class TransliteratorIDParser;
  *
  * will transliterate it and return the result.  Other methods allow
  * the client to specify a substring to be transliterated and to use
- * {@link Replaceable} objects instead of strings, in order to
+ * {@link Replaceable } objects instead of strings, in order to
  * preserve out-of-band information (such as text styles).
  *
  * <p><b>Keyboard transliteration</b>
@@ -196,26 +196,26 @@ class TransliteratorIDParser;
  *
  * <p>In addition to programmatic IDs, transliterator objects have
  * display names for presentation in user interfaces, returned by
- * {@link #getDisplayName()}.
+ * {@link #getDisplayName() }.
  *
  * <p><b>Factory methods and registration</b>
  *
  * <p>In general, client code should use the factory method
- * {@link #createInstance()} to obtain an instance of a
+ * {@link #createInstance() } to obtain an instance of a
  * transliterator given its ID.  Valid IDs may be enumerated using
  * <code>getAvailableIDs()</code>.  Since transliterators are mutable,
- * multiple calls to {@link #createInstance()} with the same ID will
+ * multiple calls to {@link #createInstance() } with the same ID will
  * return distinct objects.
  *
  * <p>In addition to the system transliterators registered at startup,
  * user transliterators may be registered by calling
  * <code>registerInstance()</code> at run time.  A registered instance
- * acts a template; future calls to {@link #createInstance()} with the ID
+ * acts a template; future calls to {@link #createInstance() } with the ID
  * of the registered object return clones of that object.  Thus any
  * object passed to <tt>registerInstance()</tt> must implement
  * <tt>clone()</tt> propertly.  To register a transliterator subclass
  * without instantiating it (until it is needed), users may call
- * <code>registerClass()</code>.  In this case, the objects are
+ * {@link registerFactory() }.  In this case, the objects are
  * instantiated by invoking the zero-argument public constructor of
  * the class.
  *
@@ -706,7 +706,7 @@ public:
      * will return this object, if it has been registered.
      * @return a programmatic identifier for this transliterator.
      * @see #registerInstance
-     * @see #registerClass
+     * @see #registerFactory
      * @see #getAvailableIDs
      * @stable ICU 2.0
      */
@@ -984,7 +984,7 @@ public:
      * @param adoptedObj an instance of subclass of
      * <code>Transliterator</code> that defines <tt>clone()</tt>
      * @see #createInstance
-     * @see #registerClass
+     * @see #registerFactory
      * @see #unregister
      * @stable ICU 2.0
      */
@@ -1059,7 +1059,7 @@ public:
      * @return the <code>Object</code> that was registered with
      * <code>ID</code>, or <code>null</code> if none was
      * @see #registerInstance
-     * @see #registerClass
+     * @see #registerFactory
      * @stable ICU 2.0
      */
     static void unregister(const UnicodeString& ID);

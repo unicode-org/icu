@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2003 IBM and others. All rights reserved.
+*   Copyright (C) 2001-2004 IBM and others. All rights reserved.
 **********************************************************************
 *   Date        Name        Description
 *  03/22/2000   helena      Creation.
@@ -434,10 +434,10 @@ protected:
     /**
      * Search forward for matching text, starting at a given location.
      * Clients should not call this method directly; instead they should 
-     * call {@link SearchIterator#next}.
+     * call {@link SearchIterator#next }.
      * <p>
      * If a match is found, this method returns the index at which the match
-     * starts and calls {@link SearchIterator#setMatchLength} with the number 
+     * starts and calls {@link SearchIterator#setMatchLength } with the number 
      * of characters in the target text that make up the match. If no match 
      * is found, the method returns <tt>USEARCH_DONE</tt>.
      * <p>
@@ -461,12 +461,12 @@ protected:
      * <tt>SearchIterator.previous()</tt>, which this method overrides.
      * <p>
      * If a match is found, this method returns the index at which the match
-     * starts and calls {@link SearchIterator#setMatchLength} with the number 
+     * starts and calls {@link SearchIterator#setMatchLength } with the number 
      * of characters in the target text that make up the match. If no match 
      * is found, the method returns <tt>USEARCH_DONE</tt>.
      * <p>
      * The <tt>StringSearch</tt> is adjusted so that its current index 
-     * (as returned by {@link #getOffset()}) is the match position if one was 
+     * (as returned by {@link #getOffset() }) is the match position if one was 
      * found.
      * If a match is not found, <tt>USEARCH_DONE</tt> will be returned and
      * the <tt>StringSearch</tt> will be adjusted to the index USEARCH_DONE.

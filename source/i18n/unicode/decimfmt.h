@@ -1583,7 +1583,7 @@ public:
     /**
      * Sets whether significant digits are in use, or integer and
      * fraction digit counts are in use.
-     * @param useSignficantDigits true to use significant digits, or
+     * @param useSignificantDigits true to use significant digits, or
      * false to use integer and fraction digit counts
      * @draft ICU 3.0
      */
