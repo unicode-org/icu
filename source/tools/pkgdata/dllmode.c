@@ -68,7 +68,7 @@ void writeObjRules(UPKGOptions *o,  FileStream *makefile, CharList **objects)
     sprintf(stanza, "$(TOOL) $(GENCCODE) -d $(TEMP_DIR) $<");
     commands = pkg_appendToList(commands, NULL, uprv_strdup(stanza));
 
-    sprintf(stanza, "$(COMPILE.cc) -o $@ $(TEMP_DIR)/%s", cfile);
+    sprintf(stanza, "$(COMPILE.c) -o $@ $(TEMP_DIR)/%s", cfile);
     commands = pkg_appendToList(commands, NULL, uprv_strdup(stanza));
 
     sprintf(stanza, "$(TEMP_DIR)/%s", tmp);
@@ -141,7 +141,7 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
   }
 
   T_FileStream_writeLine(makefile, "$(TEMP_DIR)/icudata_dat.o : $(TEMP_DIR)/icudata_dat.c\n"
-                         "\t$(COMPILE.cc) -o $@ $<\n\n");
+                         "\t$(COMPILE.c) -o $@ $<\n\n");
 
   T_FileStream_writeLine(makefile, "# 'TOCOBJ' contains C Table of Contents objects [if any]\n");
   if(!strcmp(o->shortName, "icudata")) {
@@ -170,13 +170,13 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
     char sourcefile[200];
     strcpy(sourcefile,iter->str);
     strcpy(sourcefile+strlen(sourcefile)-strlen(OBJ_SUFFIX), ".c" );
-    sprintf(tmp, "$(TEMP_DIR)/%s: $(TEMP_DIR)/%s\n\t$(COMPILE.cc) -o $@ $<\n\n",
+    sprintf(tmp, "$(TEMP_DIR)/%s: $(TEMP_DIR)/%s\n\t$(COMPILE.c) -o $@ $<\n\n",
             iter->str,sourcefile);
     T_FileStream_writeLine(makefile, tmp);
   }
 #endif
 
-  T_FileStream_writeLine(makefile,"$(TEMP_DIR)/%.o: $(TEMP_DIR)/%.c\n\t  $(COMPILE.cc) -o $@ $<\n\n");
+  T_FileStream_writeLine(makefile,"$(TEMP_DIR)/%.o: $(TEMP_DIR)/%.c\n\t  $(COMPILE.c) -o $@ $<\n\n");
 
   T_FileStream_writeLine(makefile,"build-objs: $(SOURCES) $(OBJECTS)\n\n$(OBJECTS): $(SOURCES)\n\n");
   
@@ -188,7 +188,7 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
                                    "	echo \"void to_emit_cxx_stuff_in_the_linker(){}\" >> $(TEMP_DIR)/hpux_junk_obj.cpp\n"
                                    "\n"
                                    "$(TEMP_DIR)/hpux_junk_obj.o: $(TEMP_DIR)/hpux_junk_obj.cpp\n"
-                                   "	$(COMPILE.cc) -o $@ $<\n"
+                                   "	$(COMPILE.c) -o $@ $<\n"
                                    "\n");
 
   T_FileStream_writeLine(makefile, "CLEANFILES= $(OBJECTS) $(HPUX_JUNK_OBJ) $(TARGETDIR)/$(TARGET)\n\nclean:\n\t-$(RMV) $(CLEANFILES) $(MAKEFILE)");
