@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2001/11/21 00:07:29 $
- * $Revision: 1.76 $
+ * $Date: 2001/11/21 02:16:07 $
+ * $Revision: 1.77 $
  *
  *****************************************************************************************
  */
@@ -2156,6 +2156,30 @@ public class TransliteratorTest extends TestFmwk {
             errln("FAIL: " + rule + " => " + e);
         }
     }
+    
+    static final String[][] testCases = {
+        {"Greek-Latin/UNGEGN", "(\u03BC\u03C0)", "(b)"}, // mp -> b BUG
+        {"Greek-Latin/UNGEGN", "\u03C3 \u03C3\u03C2 \u03C2\u03C3", "s ss s\u0331s\u0331"}, // FORMS OF S
+        {"Latin-Greek/UNGEGN", "s ss s\u0331s\u0331", "\u03C3 \u03C3\u03C2 \u03C2\u03C3"}, // FORMS OF S
+        {"Greek-Latin", "\u03C3 \u03C3\u03C2 \u03C2\u03C3", "s ss s\u0331s\u0331"}, // FORMS OF S
+        {"Latin-Greek", "s ss s\u0331s\u0331", "\u03C3 \u03C3\u03C2 \u03C2\u03C3"}, // FORMS OF S
+    };
+    
+    public void TestSpecialCases() {
+        for (int i = 0; i < testCases.length; ++i) {
+            Transliterator t = Transliterator.getInstance(testCases[i][0]);
+            String result = t.transliterate(testCases[i][1]);
+            if (!result.equals(testCases[i][2])) {
+                errln(testCases[i][0] 
+                    + "\tconverts '" 
+                    + testCases[i][1]
+                    + "' to '" + result
+                    + "'; should be '" + testCases[i][2] + "'");
+            }
+        }
+    }
+            
+         
 
     //======================================================================
     // Support methods
