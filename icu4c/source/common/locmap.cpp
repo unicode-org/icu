@@ -4,7 +4,7 @@
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
 */
-// $Revision: 1.24 $
+// $Revision: 1.25 $
 //
 // Provides functionality for mapping between
 // LCID and Posix IDs.
@@ -71,14 +71,14 @@ struct ILcidPosixMap
      *               no equivalent Windows LCID.
      * @return the LCID
      */
-    uint32_t hostID(const char* fromPosixID) const;
+    uint32_t hostID(const char* fromPosixID, UErrorCode* status) const;
 
     /**
      * Do not call this function. It is called by hostID.
      * The function is not private because this struct must stay as a C struct,
      * and this is an internal class.
      */
-    uint32_t searchPosixIDmap(const char* posixID, UErrorCode* status) const;
+    static int32_t idCmp(const char* id1, const char* id2);
 
     uint32_t numRegions;
     const ILcidPosixElement* regionMaps;
@@ -238,6 +238,8 @@ IGlobalLocales::initializeMapRegions()
     // This LCID is really three different locales.
     static const ILcidPosixElement hr[] = {
         {0x1a,   "hr"},
+//        {0x1a,   "sh"},     // You could put this in, but we only map from LCID
+//        {0x1a,   "sr"},     // You could put this in, but we only map from LCID
         {0x041a, "hr_HR"},  // Croatian
         {0x081a, "sh_YU"},  // Serbo-Croatian
         {0x0c1a, "sr_YU"},  // Serbian
@@ -296,11 +298,12 @@ IGlobalLocales::initializeMapRegions()
         {0x0413, "nl_NL"}
     };
 
-    // The no locale split into nb and nn.  By default in ICU, no is nb.
+    // The "no" locale split into nb and nn.  By default in ICU, "no" is nb.
     static const ILcidPosixElement no[] = {
-        {0x14,   "nb"},         // really nb
-        {0x0414, "nb_NO"},      // really nb_NO
-        {0x0814, "nn_NO_NY"}    // really nn_NO
+        {0x14,   "nb"},     // really nb
+//        {0x14,   "nn"},     // You could put this in, but we only map from LCID
+        {0x0414, "nb_NO"},  // really nb_NO
+        {0x0814, "nn_NO"}   // really nn_NO
     };
 
     // Declared as or_IN to get around compiler errors
@@ -368,7 +371,7 @@ IGlobalLocales::initializeMapRegions()
         {0x0404, "zh_TW"}
     };
 
-    // This must be static
+    // This must be static and grouped by LCID.
     static const ILcidPosixMap localPosixIDmap[] = {
         ILCID_POSIX_MAP(af),    //  af  Afrikaans                 0x36
         ILCID_POSIX_MAP(ar),    //  ar  Arabic                    0x01
@@ -509,16 +512,21 @@ IGlobalLocales::convertToLCID(const char* posixID, UErrorCode* status)
     int32_t    compVal;
     char       langID[ULOC_FULLNAME_CAPACITY];
 
+    uint32_t   value         = 0;
+    uint32_t   fallbackValue = (uint32_t)-1;
+    UErrorCode myStatus;
+
     // Check for incomplete id.
-    if (!posixID || uprv_strlen(posixID) < 2)
+    if (!posixID || uprv_strlen(posixID) < 2) {
         return 0;
+    }
 
     uloc_getLanguage(posixID, langID, sizeof(langID), status);
     if (U_FAILURE(*status)) {
         return 0;
     }
 
-    //Binary search for the map entry
+    //Binary search for the map entry for normal cases
     while (low <= high) {
 
         mid = (low + high) / 2;
@@ -530,10 +538,30 @@ IGlobalLocales::convertToLCID(const char* posixID, UErrorCode* status)
         else if (compVal > 0)
             low = mid + 1;
         else  // found match!
-            return PosixIDmap[mid].hostID(posixID);
+            return PosixIDmap[mid].hostID(posixID, status);
 
         if (mid == 0)  // not found
             break;
+    }
+
+    /*
+     * Sometimes we can't do a binary search on posixID because some LCIDs
+     * go to different locales.  We hit one of those special cases.
+     */
+    for (uint32_t idx = 0; idx < LocaleCount; idx++ ) {
+        myStatus = U_ZERO_ERROR;
+        value = PosixIDmap[idx].hostID(posixID, &myStatus);
+        if (myStatus == U_ZERO_ERROR) {
+            return value;
+        }
+        else if (myStatus == U_USING_FALLBACK_WARNING) {
+            fallbackValue = value;
+        }
+    }
+
+    if (fallbackValue != (uint32_t)-1) {
+        *status = U_USING_FALLBACK_WARNING;
+        return fallbackValue;
     }
 
     // no match found
@@ -541,77 +569,6 @@ IGlobalLocales::convertToLCID(const char* posixID, UErrorCode* status)
     return 0;   // return international (root)
 }
 
-
-/* Assumes Posix IDs are sorted alphabetically
- */
-uint32_t
-ILcidPosixMap::hostID(const char* posixID) const
-{
-    UErrorCode status = U_ZERO_ERROR;
-    char     hostID[ULOC_FULLNAME_CAPACITY];
-    char    *hostPtr = hostID;
-    uint32_t value;
-    int32_t hostLen = (int32_t)(strlen(posixID));
-    int32_t  size, hostSize;
-
-    // Check for incomplete id. All LCIDs have a default country,
-    // and a 0x0400 in 0xFC00 indicates a default country.
-    // So Windows may not like hostLangID without a default
-    // country.
-    if (!numRegions || hostLen < 5)
-        return regionMaps->hostID;
-    if (hostLen >= ULOC_FULLNAME_CAPACITY)
-        hostLen = ULOC_FULLNAME_CAPACITY - 1;
-
-    // We do this because the posixID may have a '-' separator and
-    // incorrect string case
-    hostSize = uloc_getLanguage(posixID,
-                                hostID,
-                                ULOC_LANG_CAPACITY + 1,
-                                &status);
-    if (U_SUCCESS(status))
-    {
-        hostPtr += hostSize;
-        hostPtr[-1] = '_';
-        size = uloc_getCountry(posixID,
-                               hostPtr,
-                               ULOC_COUNTRY_CAPACITY + 1,
-                               &status);
-        hostSize += size - 1;
-        if (U_SUCCESS(status) && hostSize < hostLen)
-        {
-            hostPtr += size;
-            hostPtr[-1] = '_';
-            uloc_getVariant(posixID, hostPtr, hostLen - size, &status);
-        }
-    }
-
-    // Try to find it the first time.
-    value = searchPosixIDmap(hostID, &status);
-    if (U_SUCCESS(status)) {
-        return value;
-    }
-
-    // Couldn't find it. Cut off the last part of the locale
-    while (hostPtr > hostID && *hostPtr != '_')
-    {
-        hostPtr--;
-    }
-    if (*hostPtr == '_')
-    {
-        *hostPtr = 0;
-    }
-
-    // Try it again without the last part of the locale
-    status = U_ZERO_ERROR;
-    value = searchPosixIDmap(hostID, &status);
-    if (U_SUCCESS(status)) {
-        return value;
-    }
-
-    // No match found. Return the language
-    return regionMaps->hostID;
-}
 
 /**
  * Searches for a Windows LCID
@@ -622,28 +579,26 @@ ILcidPosixMap::hostID(const char* posixID) const
  * @return the LCID
  */
 uint32_t
-ILcidPosixMap::searchPosixIDmap(const char* posixID, UErrorCode* status) const
+ILcidPosixMap::hostID(const char* posixID, UErrorCode* status) const
 {
-    uint32_t low  = 1;
-    uint32_t mid;
-    uint32_t high = numRegions - 1;
-    int32_t  compVal;
+    int32_t bestIdx = 0;
+    int32_t bestIdxDiff = 0;
+    int32_t posixIDlen = (int32_t)uprv_strlen(posixID) + 1;
 
-    // Binary search for the map entry
-    // The element at index 0 is always the POSIX wild card,
-    // so start search at index 1.
-    while (low <= high) {
-
-        mid = (low + high) / 2;
-
-        compVal = uprv_strcmp(posixID, regionMaps[mid].posixID);
-
-        if (compVal < 0)
-            high = mid - 1;
-        else if (compVal > 0)
-            low = mid + 1;
-        else  // found match!
-            return regionMaps[mid].hostID;
+    for (uint32_t idx = 0; idx < numRegions; idx++ ) {
+        int32_t sameChars = idCmp(posixID, regionMaps[idx].posixID);
+        if (sameChars > bestIdxDiff && regionMaps[idx].posixID[sameChars] == 0) {
+            if (posixIDlen == sameChars) {
+                // Exact match
+                return regionMaps[idx].hostID;
+            }
+            bestIdxDiff = sameChars;
+            bestIdx = idx;
+        }
+    }
+    if (regionMaps[bestIdx].posixID[bestIdxDiff] == 0) {
+        *status = U_USING_FALLBACK_WARNING;
+        return regionMaps[bestIdx].hostID;
     }
 
     //no match found
@@ -651,6 +606,17 @@ ILcidPosixMap::searchPosixIDmap(const char* posixID, UErrorCode* status) const
     return regionMaps->hostID;
 }
 
+int32_t
+ILcidPosixMap::idCmp(const char* id1, const char* id2)
+{
+    int32_t diffIdx = 0;
+    while (*id1 == *id2 && *id1 != 0) {
+        diffIdx++;
+        id1++;
+        id2++;
+    }
+    return diffIdx;
+}
 
 const char*
 ILcidPosixMap::posixID(uint32_t hostID) const
