@@ -406,7 +406,7 @@ NumberFormat::createInstance(const Locale& desiredLocale,
         return NULL;
     }
 
-    ResourceBundle resource(Locale::getDataDirectory(), desiredLocale, status);
+    ResourceBundle resource(u_getDataDirectory(), desiredLocale, status);
     if (U_FAILURE(status))
     {
         // We don't appear to have resource data available -- use the last-resort data

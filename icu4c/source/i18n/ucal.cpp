@@ -87,7 +87,7 @@ ucal_open(    const    UChar*          zoneID,
     return 0;
   }
   
-  return (UCalendar*)Calendar::createInstance(zone, Locale().init(locale), *status);
+  return (UCalendar*)Calendar::createInstance(zone, Locale(locale), *status);
 }
 
 U_CAPI void
@@ -138,19 +138,19 @@ ucal_getTimeZoneDisplayName(    const     UCalendar*                 cal,
 
   switch(type) {
   case UCAL_STANDARD:
-    tz.getDisplayName(FALSE, TimeZone::LONG, Locale().init(locale), id);
+    tz.getDisplayName(FALSE, TimeZone::LONG, Locale(locale), id);
     break;
 
   case UCAL_SHORT_STANDARD:
-    tz.getDisplayName(FALSE, TimeZone::SHORT, Locale().init(locale), id);
+    tz.getDisplayName(FALSE, TimeZone::SHORT, Locale(locale), id);
     break;
 
   case UCAL_DST:
-    tz.getDisplayName(TRUE, TimeZone::LONG, Locale().init(locale), id);
+    tz.getDisplayName(TRUE, TimeZone::LONG, Locale(locale), id);
     break;
 
   case UCAL_SHORT_DST:
-    tz.getDisplayName(TRUE, TimeZone::SHORT, Locale().init(locale), id);
+    tz.getDisplayName(TRUE, TimeZone::SHORT, Locale(locale), id);
     break;
   }
 

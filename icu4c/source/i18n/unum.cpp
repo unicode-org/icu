@@ -34,7 +34,7 @@ unum_open(    UNumberFormatStyle    style,
     if(locale == 0)
       retVal = (UNumberFormat*)NumberFormat::createInstance(*status);
     else
-      retVal = (UNumberFormat*)NumberFormat::createInstance(Locale().init(locale),
+      retVal = (UNumberFormat*)NumberFormat::createInstance(Locale(locale),
                                 *status);
     break;
 
@@ -42,7 +42,7 @@ unum_open(    UNumberFormatStyle    style,
     if(locale == 0)
       retVal = (UNumberFormat*)NumberFormat::createCurrencyInstance(*status);
     else
-      retVal = (UNumberFormat*)NumberFormat::createCurrencyInstance(Locale().init(locale),
+      retVal = (UNumberFormat*)NumberFormat::createCurrencyInstance(Locale(locale),
                                     *status);
     break;
 
@@ -50,7 +50,7 @@ unum_open(    UNumberFormatStyle    style,
     if(locale == 0)
       retVal = (UNumberFormat*)NumberFormat::createPercentInstance(*status);
     else
-      retVal = (UNumberFormat*)NumberFormat::createPercentInstance(Locale().init(locale),
+      retVal = (UNumberFormat*)NumberFormat::createPercentInstance(Locale(locale),
                                 *status);
     break;
 
@@ -85,7 +85,7 @@ unum_openPattern(    const    UChar*            pattern,
   if(locale == 0)
     syms = new DecimalFormatSymbols(*status);
   else
-    syms = new DecimalFormatSymbols(Locale().init(locale),
+    syms = new DecimalFormatSymbols(Locale(locale),
                     *status);
   
   if(syms == 0) {

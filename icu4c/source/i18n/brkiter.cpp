@@ -22,7 +22,7 @@
 #include "unicode/brkiter.h"
 #include "unicode/udata.h"
 #include "unicode/resbund.h"
-
+#include "cstring.h"
 #include <string.h>
 
 // *****************************************************************************
@@ -48,7 +48,8 @@ BreakIterator::createWordInstance(const Locale& key, UErrorCode& status)
 
     UnicodeString temp;
     if (U_FAILURE(status)) return NULL;
-    if (key.getLanguage(temp) == UnicodeString("th", (char*)0)) {
+    if (!uprv_strcmp(key.getLanguage(), "th"))
+    {
         filename = "word_th";
     }
 
@@ -58,7 +59,7 @@ BreakIterator::createWordInstance(const Locale& key, UErrorCode& status)
         const void* image = udata_getMemory(file);
 
         if (image != NULL) {
-            if (key.getLanguage(temp) == UnicodeString("th", (char*)0)) {
+            if(!uprv_strcmp(filename, "word_th")) {
                 const char* dataDir = u_getDataDirectory();
                 filename = "thaidict.brk";
                 char* fullPath = new char[strlen(dataDir) + strlen(filename) + 1];
@@ -91,7 +92,8 @@ BreakIterator::createLineInstance(const Locale& key, UErrorCode& status)
 
     UnicodeString temp;
     if (U_FAILURE(status)) return NULL;
-    if (key.getLanguage(temp) == UnicodeString("th", (char*)0)) {
+    if (!uprv_strcmp(key.getLanguage(), "th"))
+    {
         filename = "line_th";
     }
 
@@ -101,7 +103,7 @@ BreakIterator::createLineInstance(const Locale& key, UErrorCode& status)
         const void* image = udata_getMemory(file);
 
         if (image != NULL) {
-            if (key.getLanguage(temp) == UnicodeString("th", (char*)0)) {
+          if (!uprv_strcmp(key.getLanguage(), "th")) {
                 const char* dataDir = u_getDataDirectory();
                 filename = "thaidict.brk";
                 char* fullPath = new char[strlen(dataDir) + strlen(filename) + 1];

@@ -172,7 +172,7 @@ DecimalFormatSymbols::initialize(const Locale& locale, UErrorCode& status,
 {
     if (U_FAILURE(status)) return;
 
-    ResourceBundle resource(Locale::getDataDirectory(), locale, status);
+    ResourceBundle resource(u_getDataDirectory(), locale, status);
     if (U_FAILURE(status))
     {
         // Initializes with last resort data if necessary.

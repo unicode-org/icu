@@ -706,7 +706,7 @@ Calendar::setWeekCountData(const Locale& desiredLocale, UErrorCode& status)
     int32_t count;
 
     if (U_FAILURE(status)) return;
-    ResourceBundle resource(Locale::getDataDirectory(), desiredLocale, status);
+    ResourceBundle resource(u_getDataDirectory(), desiredLocale, status);
 
     // If the resource data doesn't seem to be present at all, then use last-resort
     // hard-coded data.
