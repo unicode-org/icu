@@ -233,6 +233,10 @@ U_CAPI UCollator*
 ucol_open(    const    char         *loc,
         UErrorCode      *status);
 
+U_CAPI UCollatorNew*
+ucol_openNew(    const    char         *loc,
+        UErrorCode      *status);
+
 /**
  * Open a UCollator for comparing strings.
  * The UCollator may be used in calls to \Ref{ucol_strcoll}.
@@ -263,6 +267,9 @@ ucol_openRules(    const    UChar        *rules,
  */
 U_CAPI void
 ucol_close(UCollator *coll);
+
+U_CAPI void
+ucol_closeNew(UCollatorNew *coll);
 
 /**
  * Compare two strings.
