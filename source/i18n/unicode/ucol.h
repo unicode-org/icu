@@ -137,7 +137,7 @@ enum UNormalizationMode {
   /** Compatibility decomposition followed by canonical composition */
   UCOL_DECOMP_COMPAT_COMP_CAN,
   /** Default normalization */
-  UCOL_DEFAULT_NORMALIZATION = UCOL_DECOMP_COMPAT
+  UCOL_DEFAULT_NORMALIZATION = UCOL_DECOMP_CAN
 };
 typedef enum UNormalizationMode UNormalizationMode;
 

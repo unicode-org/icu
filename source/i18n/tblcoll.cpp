@@ -79,6 +79,7 @@
 
 #include "cmemory.h"
 
+const uint32_t tblcoll_StackBufferLen = 1024;
 
 class RuleBasedCollatorStreamer
 {
@@ -1194,6 +1195,24 @@ RuleBasedCollator::compare(const   UChar* source,
                       const   UChar*  target,
                       int32_t targetLength) const
 {
+	UCollationResult strcoll_result = ucol_strcoll((UCollator *)this, source, sourceLength, target, targetLength);
+	
+	if(strcoll_result == UCOL_LESS) {
+		return Collator::LESS;
+	} else if(strcoll_result == UCOL_GREATER) {
+		return Collator::GREATER;
+	} else {
+		return Collator::EQUAL;
+	}
+}
+
+Collator::EComparisonResult   
+RuleBasedCollator::compareEx(const   UChar* source, 
+                      int32_t sourceLength,
+                      const   UChar*  target,
+                      int32_t targetLength) const
+{
+
     // check if source and target are valid strings
     if (((source == 0) && (target == 0)) ||
         ((sourceLength == 0) && (targetLength == 0)))
@@ -1515,7 +1534,6 @@ RuleBasedCollator::compare(const   UChar* source,
     return result;
 }
 
-
 int32_t
 RuleBasedCollator::nextContractChar(NormalizerIterator *cursor, 
                                     UChar ch,
@@ -1555,7 +1573,29 @@ Collator::EComparisonResult
 RuleBasedCollator::compare(const UnicodeString& source,
                         const UnicodeString& target) const
 {
-    return compare(source.getUChars(), source.length(), target.getUChars(), target.length());
+	UChar uSstart[tblcoll_StackBufferLen];
+	UChar uTstart[tblcoll_StackBufferLen];
+	UChar *uSource = uSstart;
+	UChar *uTarget = uTstart;
+	uint32_t sourceLen = source.length();
+	uint32_t targetLen = target.length();
+	if(sourceLen > tblcoll_StackBufferLen) {
+		uSource = new UChar[sourceLen];
+	}
+	if(targetLen > tblcoll_StackBufferLen) {
+		uTarget = new UChar[targetLen];
+	}
+    source.extract(0, sourceLen, uSource);
+    target.extract(0, targetLen, uTarget);
+	Collator::EComparisonResult result = compare(uSource, sourceLen, uTarget, targetLen);
+
+	if(uSstart != uSource) {
+		delete[] uSource;
+	}
+	if(uTstart != uTarget) {
+		delete[] uTarget;
+	}
+	return result;
 }
 
 // Retrieve a collation key for the specified string
@@ -1596,11 +1636,55 @@ RuleBasedCollator::getCollationKey( const   UnicodeString&  source,
                                     CollationKey&   sortkey,
                                     UErrorCode&      status) const
 {
-    return RuleBasedCollator::getCollationKey(source.getUChars(), source.length(), sortkey, status);
+	UChar sStart[tblcoll_StackBufferLen];
+	UChar *uSource = sStart;
+	uint32_t sourceLen = source.length();
+	if(sourceLen > tblcoll_StackBufferLen) {
+		uSource = new UChar[sourceLen];
+	}
+    source.extract(0, sourceLen, uSource);
+	CollationKey& result = RuleBasedCollator::getCollationKey(uSource, sourceLen, sortkey, status);
+	if(sStart != uSource) {
+		delete[] uSource;
+	}
+	return result;
 }
 
 CollationKey&
 RuleBasedCollator::getCollationKey( const   UChar*  source,
+                                    int32_t sourceLen,
+                                    CollationKey&   sortkey,
+                                    UErrorCode&      status) const
+{
+    if (U_FAILURE(status))
+    {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return sortkey.setToBogus();
+    }
+    
+    if ((!source) || (sourceLen == 0))
+    {
+        return sortkey.reset();
+    }
+
+	uint8_t result[tblcoll_StackBufferLen];
+	uint8_t *allocRes = result;
+	int32_t resLen = ucol_getSortKey((UCollator *)this, source, sourceLen, allocRes, tblcoll_StackBufferLen);
+	// if the result is too big
+	if(resLen > tblcoll_StackBufferLen) {
+		allocRes = new uint8_t[resLen];
+	}
+	resLen = ucol_getSortKey((UCollator *)this, source, sourceLen, allocRes, tblcoll_StackBufferLen);
+	sortkey = CollationKey(allocRes, resLen);
+	if(allocRes != result) {
+		delete[] allocRes;
+	}
+
+	return sortkey;
+}
+
+CollationKey&
+RuleBasedCollator::getCollationKeyEx( const   UChar*  source,
                                     int32_t sourceLen,
                                     CollationKey&   sortkey,
                                     UErrorCode&      status) const
@@ -2816,11 +2900,68 @@ RuleBasedCollator::cloneRuleData(int32_t &length, UErrorCode &status)
 }
 
 void RuleBasedCollator::setAttribute(UColAttribute attr, UColAttributeValue value, UErrorCode &status) {
-	status = U_UNSUPPORTED_ERROR;
+	switch(attr) {
+	case UCOL_FRENCH_COLLATION: /* attribute for direction of secondary weights*/
+		if(value == UCOL_ATTR_ON) {
+			data->isFrenchSec = TRUE;
+		} else if (value == UCOL_ATTR_OFF) {
+			data->isFrenchSec = FALSE;
+		} else if (value == UCOL_ATTR_DEFAULT) {
+		} else {
+			status = U_ILLEGAL_ARGUMENT_ERROR  ;
+		}
+		break;
+    case UCOL_ALTERNATE_HANDLING: /* attribute for handling variable elements*/
+		status = U_UNSUPPORTED_ERROR;
+		break;
+	case UCOL_CASE_FIRST: /* who goes first, lower case or uppercase */
+		status = U_UNSUPPORTED_ERROR;
+		break;
+	case UCOL_CASE_LEVEL: /* do we have an extra case level */
+		status = U_UNSUPPORTED_ERROR;
+		break;
+	case UCOL_NORMALIZATION_MODE: /* attribute for normalization */
+		status = U_UNSUPPORTED_ERROR;
+		break;
+	case UCOL_STRENGTH:         /* attribute for strength */
+		status = U_UNSUPPORTED_ERROR;
+		break;
+	case UCOL_ATTRIBUTE_COUNT:
+	default:
+		status = U_ILLEGAL_ARGUMENT_ERROR;
+		break;
+	}
 }
 
 UColAttributeValue RuleBasedCollator::getAttribute(UColAttribute attr, UErrorCode &status) {
-	status = U_UNSUPPORTED_ERROR;
+	switch(attr) {
+	case UCOL_FRENCH_COLLATION: /* attribute for direction of secondary weights*/
+		if(data->isFrenchSec == TRUE) {
+			return UCOL_ATTR_ON;
+		} else {
+			return UCOL_ATTR_OFF;
+		}
+		break;
+    case UCOL_ALTERNATE_HANDLING: /* attribute for handling variable elements*/
+		status = U_UNSUPPORTED_ERROR;
+		break;
+	case UCOL_CASE_FIRST: /* who goes first, lower case or uppercase */
+		status = U_UNSUPPORTED_ERROR;
+		break;
+	case UCOL_CASE_LEVEL: /* do we have an extra case level */
+		status = U_UNSUPPORTED_ERROR;
+		break;
+	case UCOL_NORMALIZATION_MODE: /* attribute for normalization */
+		status = U_UNSUPPORTED_ERROR;
+		break;
+	case UCOL_STRENGTH:         /* attribute for strength */
+		status = U_UNSUPPORTED_ERROR;
+		break;
+	case UCOL_ATTRIBUTE_COUNT:
+	default:
+		status = U_ILLEGAL_ARGUMENT_ERROR;
+		break;
+	}
 	return UCOL_ATTR_DEFAULT;
 }
 
@@ -2837,14 +2978,26 @@ Collator::EComparisonResult RuleBasedCollator::compare(ForwardCharacterIterator 
 int32_t RuleBasedCollator::getSortKey(const   UnicodeString&  source,
 						  uint8_t *result,
 						  int32_t resultLength) const {
-	return 0;
+	UChar sStart[tblcoll_StackBufferLen];
+	UChar *uSource = sStart;
+	uint32_t sourceLen = source.length();
+	if(sourceLen > tblcoll_StackBufferLen) {
+		uSource = new UChar[sourceLen];
+	}
+    source.extract(0, sourceLen, uSource);
+	int32_t resLen = ucol_getSortKey((UCollator *)this, uSource, sourceLen, result, resultLength);
+	if(sStart != uSource) {
+		delete[] uSource;
+	}
+	return resLen;
 }
 
 int32_t RuleBasedCollator::getSortKey(const   UChar *source,
 						  int32_t sourceLength,
 						  uint8_t *result,
 						  int32_t resultLength) const {
-	return 0;
+	int32_t resLen = ucol_getSortKey((UCollator *)this, source, sourceLength, result, resultLength);
+	return resLen;
 }
 
 //eof
