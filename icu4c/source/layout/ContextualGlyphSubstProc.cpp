@@ -1,5 +1,5 @@
 /*
- * @(#)ContextualGlyphSubstitutionProcessor.cpp	1.6 00/03/15
+ * @(#)ContextualGlyphSubstProc.cpp	1.6 00/03/15
  *
  * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
  *
@@ -11,7 +11,7 @@
 #include "MorphStateTables.h"
 #include "SubtableProcessor.h"
 #include "StateTableProcessor.h"
-#include "ContextualGlyphSubstitutionProcessor.h"
+#include "ContextualGlyphSubstProc.h"
 #include "LESwaps.h"
 
 ContextualGlyphSubstitutionProcessor::ContextualGlyphSubstitutionProcessor(MorphSubtableHeader *morphSubtableHeader)

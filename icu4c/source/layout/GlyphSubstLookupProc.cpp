@@ -1,5 +1,5 @@
 /*
- * @(#)GlyphSubstitutionLookupProcessor.cpp	1.6 00/03/15
+ * @(#)GlyphSubstLookupProc.cpp	1.6 00/03/15
  *
  * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
  *
@@ -16,11 +16,11 @@
 #include "GlyphSubstitutionTables.h"
 #include "SingleSubstitutionSubtables.h"
 #include "MultipleSubstitutionSubtables.h"
-#include "AlternateSubstitutionSubtables.h"
+#include "AlternateSubstSubtables.h"
 #include "LigatureSubstitutionSubtables.h"
-#include "ContextualSubstitutionSubtables.h"
+#include "ContextualSubstSubtables.h"
 #include "LookupProcessor.h"
-#include "GlyphSubstitutionLookupProcessor.h"
+#include "GlyphSubstLookupProc.h"
 #include "LESwaps.h"
 
 GlyphSubstitutionLookupProcessor::GlyphSubstitutionLookupProcessor(

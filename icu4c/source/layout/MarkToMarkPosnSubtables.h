@@ -1,5 +1,5 @@
 /*
- * @(#)MarkToMarkPositioningSubtables.h	1.5 00/03/15
+ * @(#)MarkToMarkPosnSubtables.h	1.5 00/03/15
  *
  * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
  *
@@ -12,7 +12,7 @@
 #include "LEFontInstance.h"
 #include "OpenTypeTables.h"
 #include "GlyphPositioningTables.h"
-#include "AttachmentPositioningSubtables.h"
+#include "AttachmentPosnSubtables.h"
 #include "GlyphIterator.h"
 
 struct MarkToMarkPositioningSubtable : AttachmentPositioningSubtable
