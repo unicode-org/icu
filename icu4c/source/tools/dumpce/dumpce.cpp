@@ -1277,7 +1277,7 @@ void outputHTMLHeader(const char *locale, UScriptCode script[],
     fprintf(OUTPUT_, "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n");
     fprintf(OUTPUT_, "<meta http-equiv=\"Content-Language\" content=\"en-us\">\n");
     fprintf(OUTPUT_, "<link rel=\"stylesheet\" href=\"charts.css\" type=\"text/css\">\n");
-    fprintf(OUTPUT_, "<title>Collation charts</title>\n");
+    fprintf(OUTPUT_, "<title>ICU Collation charts</title>\n");
     fprintf(OUTPUT_, "<base target=\"main\">\n");
     fprintf(OUTPUT_, "</head>\n");
 
@@ -1316,7 +1316,7 @@ void outputHTMLHeader(const char *locale, UScriptCode script[],
     }
     fprintf(OUTPUT_, "</td></tr>\n");
     
-    fprintf(OUTPUT_, "<tr><th>Rules</th><td class='noborder'><a href=http://oss.software.ibm.com/cvs/icu/~checkout~/icu/data/%s.txt>%s.txt</a></td></tr>\n", locale, locale);
+    fprintf(OUTPUT_, "<tr><th>Rules</th><td class='noborder'><a href=http://oss.software.ibm.com/cvs/icu/~checkout~/icu/source/data/locales/%s.txt>%s.txt</a></td></tr>\n", locale, locale);
     
     UVersionInfo version;
     ucol_getVersion(COLLATOR_, version);
@@ -1379,13 +1379,13 @@ void outputListHTMLHeader(FILE *file)
     fprintf(file, "<head>\n");
     fprintf(file, "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n");
     fprintf(file, "<meta http-equiv=\"Content-Language\" content=\"en-us\">\n");
-    fprintf(file, "<title>Collation Charts</title>\n");
+    fprintf(file, "<title>ICU Collation Charts</title>\n");
     fprintf(file, "<base target=\"main\">\n");
     fprintf(file, "</head>\n");
     fprintf(file, "<body bgcolor=#FFFFFF>\n");
-    fprintf(file, "<h2 align=center>Collation Charts</h2>\n");
+    fprintf(file, "<h2 align=center>ICU Collation Charts</h2>\n");
     fprintf(file, "<p align=center>\n");
-    fprintf(file, "<a href=http://www.unicode.org/charts/collation/ target=new>UCA Charts</a> | ");
+    fprintf(file, "<a href=http://www.unicode.org/charts/collation/ target=new>UCA Charts</a><br>");
 }
 
 /**
@@ -1395,6 +1395,7 @@ void outputListHTMLHeader(FILE *file)
 void outputListHTMLFooter(FILE *file)
 {
     fprintf(file, "</p>\n");
+	fprintf(file, "<center><image src=http://oss.software.ibm.com/icu/images/w24.gif></center>\n");
     fprintf(file, "</body>\n");
     fprintf(file, "</html>\n");
 }
@@ -1427,7 +1428,7 @@ void serializeScripts() {
     }
 
     outputListHTMLHeader(list);
-
+    int count = 0;
     while (TRUE) {
         UErrorCode error = U_ZERO_ERROR;
         COLLATOR_ = ucol_open(locale, &error);
@@ -1439,7 +1440,11 @@ void serializeScripts() {
         if ((error != U_USING_FALLBACK_WARNING && // not tailored
             error != U_USING_DEFAULT_WARNING) ||
             checkLocaleForLanguage(locale)) {
-            fprintf(list, "<a href=%s.html>%s</a> | ", locale, locale);
+            fprintf(list, "<a href=%s.html>%s</a> ", locale, locale);
+			count ++;
+			if (count % 3 == 0) {
+                fprintf(list, "<br>\n");
+			}
             setAttributes(COLLATOR_, &error);
             setNormalization(COLLATOR_);
             if (U_FAILURE(error)) {
@@ -1476,7 +1481,7 @@ void serializeScripts() {
         }
         locale = ucol_getAvailable(localelist);
     }
-    fprintf(list, "<a href=help.html>help</a>");
+    fprintf(list, "<br><a href=help.html>help</a><br>");
     outputListHTMLFooter(list);
     fclose(list);
 }
@@ -1520,7 +1525,7 @@ int main(int argc, char *argv[]) {
                         "    Only 200 Han script characters will be displayed with the use of --scripts.\n\n");
 
         fprintf(stdout, "Example to generate *.txt files : dumpce --serialize --locale af --destdir /temp --attribute UCOL_STRENGTH=UCOL_DEFAULT_STRENGTH,4=17\n\n");
-        fprintf(stdout, "Example to generate *.html files for oss web display: dumpce --scripts --serialize --locale all --destdir /temp --reducehan\n");
+        fprintf(stdout, "Example to generate *.html files for oss web display: dumpce --scripts --destdir /temp --reducehan\n");
         return argc < 0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
 
