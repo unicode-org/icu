@@ -1782,20 +1782,7 @@ ja {
         //zh_tw { "\u4E2D\u56FD\u8A9E (\u7E41\u4F53\u5B57)" }
         zu { "\u30ba\u30fc\u30eb\u30fc\u8a9e" }
     }
-    MonthAbbreviations { 
-        "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "7",
-        "8",
-        "9",
-        "10",
-        "11",
-        "12",
-    }
+
     MonthNames { 
         "1\u6708",
         "2\u6708",

@@ -365,9 +365,9 @@ nl {
         ",",
         "+",
     }
-//    LocaleScript{ 
-//        "Latn",  // ISO 15924 Name 
-//    }
+    LocaleScript{ 
+        "Latn",  // ISO 15924 Name 
+    }
 
     //------------------------------------------------------------
     // Rule Based Number Format Support

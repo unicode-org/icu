@@ -10,13 +10,6 @@ eu {
     Languages {
         eu { "euskara" }
     }
-
-    Variants{
-        Fallback{"en"}
-    }
-    Keys{
-       Fallback{"en"}
-    }
     DayAbbreviations {
         "ig",
         "al",
@@ -78,9 +71,9 @@ eu {
         ",",
         "+",
     }
-//    LocaleScript{  
-//        "Latn",  // ISO 15924 Name 
-//    }
+    LocaleScript{  
+        "Latn",  // ISO 15924 Name 
+    }
     ExemplarCharacters { "[a-z \u00f1 \u00e7]" }
 
     // /**************** Info Below is needed ****************/

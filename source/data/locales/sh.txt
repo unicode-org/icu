@@ -359,9 +359,9 @@ sh {
             "CET",
         }
     }
-//    LocaleScript{ 
-//                "Latn",  // ISO 15924 Name 
-//    }
+    LocaleScript{ 
+         "Latn",  // ISO 15924 Name 
+    }
     ExemplarCharacters { "[a-p r-v z \u0111 \u0107 \u010d \u017e \u0161 {lj} {nj} {d\u017e}]" }
 
     // Currency display names

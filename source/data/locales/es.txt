@@ -11,12 +11,6 @@ es {
         Version { "1.0" }
         Sequence { "& N < n\u0303<<< N\u0303" }
     }
-    Variants{
-        Fallback{"en"}
-    }
-    Keys{
-       Fallback{"en"}
-    }
     /* Duplicates from root commented out. */
     Countries { 
         Fallback{ "en"}
@@ -430,9 +424,9 @@ es {
             "GMT",
         }
     }
-//    LocaleScript{ 
-//        "Latn",  // ISO 15924 Name 
-//    }
+    LocaleScript{ 
+        "Latn",  // ISO 15924 Name 
+    }
     // u umlaut \u00fc is a rare character.
     // It can be found in words like multilig\u00fce, ag\u00fcita and Itag\u00fc\u00ed
     ExemplarCharacters { "[a-z \u00f1 \u00e1 \u00e9 \u00ed \u00f3 \u00fa \u00fc]" }

@@ -15,14 +15,7 @@ eo {
         Sequence { "&C<\u0109<<<\u0108 &G<\u011d<<<\u011c &H<\u0125<<<\u0124"
                    "&J<\u0135<<<\u0134 &S<\u015d<<<\u015c &U<\u016d<<<\u016c" }
     }
-    Variants{
-        Fallback{"en"}
-    }
-    Keys{
-       Fallback{"en"}
-   }
     Countries { 
-        Fallback{ "en"}
         AT { "A\u016dstrujo" }
         BE { "Belgujo" }
         CA { "Kanado" }
@@ -83,7 +76,6 @@ eo {
         "pK",
     }
     Languages { 
-        Fallback{ "en"}
         da { "dana" }
         de { "germana" }
         el { "greka" }
@@ -143,9 +135,9 @@ eo {
         "+",
     }
     localPatternChars { "GjMtkHmslTDUSnahKzJd" }
-//    LocaleScript{ 
-//        "Latn",  // ISO 15924 Name 
-//    }
+    LocaleScript:array{ 
+        "Latn",  // ISO 15924 Name 
+    }
     ExemplarCharacters { "[a-z \u016d \u0109 \u011d \u0125 \u0135 \u015d]" }
     //------------------------------------------------------------
     // Rule Based Number Format Support
