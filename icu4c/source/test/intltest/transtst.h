@@ -332,6 +332,8 @@ private:
 
     void TestSourceTargetSet(void);
 
+    void TestRuleWhitespace(void);
+
     //======================================================================
     // Support methods
     //======================================================================
