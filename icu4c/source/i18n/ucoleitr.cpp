@@ -142,7 +142,7 @@ ucol_previous(UCollationElements *elems,
 
     result = ucol_getPrevCE(elems->iteratordata_.coll, &(elems->iteratordata_), 
                             status);
-    
+
     if (result == UCOL_NO_MORE_CES) {
       result = UCOL_NULLORDER;
     }
@@ -169,7 +169,7 @@ ucol_setText(      UCollationElements *elems,
   if (U_FAILURE(*status)) {
     return;
   }
-  
+
   /* gets the correct length of the null-terminated string */
   if (textLength == -1) {
     textLength = u_strlen(text);
