@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TestAll.java,v $ $Revision: 1.3 $ $Date: 2002/02/16 03:06:39 $
+ * @(#)$RCSfile: TestAll.java,v $ $Revision: 1.4 $ $Date: 2003/02/05 06:48:52 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -14,9 +14,9 @@
  */
 package com.ibm.richtext.test.unit;
 
-import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.TestFmwk.TestGroup;
 
-public class TestAll extends TestFmwk {
+public class TestAll extends TestGroup {
 
     static final String COPYRIGHT =
                 "(C) Copyright IBM Corp. 1998-1999 - All Rights Reserved";
@@ -25,31 +25,16 @@ public class TestAll extends TestFmwk {
         new TestAll().run(args);
     }
     
-    public void TestAttributeSet() throws Exception {
-        run(new TestAttributeSet());
-    }
-    
-    public void TestAttributeMap() throws Exception {
-        run(new TestAttributeMap());
-    }
-    
-    public void TestFormatter() throws Exception {
-        run(new TestFormatter());
-    }
-    
-    public void TestMText() throws Exception {
-        run(new TestMText());
-    }
-    
-    public void TestParagraphStyles() throws Exception {
-        run(new TestParagraphStyles());
-    }
-    
-    public void TestMTextStreaming() throws Exception {
-        run(new TestMTextStreaming());
-    }
-    
-    public void TestTextPanel() throws Exception {
-        run(new FmwkTestTextPanel());
+    public TestAll() {
+        super(new String[] {
+            "TestAttributeSet",
+            "TestAttributeMap",
+            "TestFormatter",
+            "TestMText",
+            "TestParagraphStyles",
+            "TestMTextStreaming",
+            "FmwkTestTextPanel",
+        },
+              "Richtext Unit Tests");
     }
 }
