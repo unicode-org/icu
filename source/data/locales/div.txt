@@ -51,7 +51,7 @@ div {
   ""
  }
 
- MonthAbbreviation{
+ MonthAbbreviations{
   "\u0796\u07AC\u0782\u07AA\u0787\u07A6\u0783\u07A9",
   "\u078A\u07AC\u0784\u07AA\u0783\u07AA\u0787\u07A6\u0783\u07A9",
   "\u0789\u07A7\u0797\u07B0",

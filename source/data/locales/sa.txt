@@ -50,7 +50,7 @@ sa {
   ""
  }
 
- MonthAbbreviation{
+ MonthAbbreviations{
   "\u091C\u0928\u0935\u0930\u0940",
   "\u092B\u0930\u0935\u0930\u0940",
   "\u092E\u093E\u0930\u094D\u091A",
