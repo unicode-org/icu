@@ -25,6 +25,7 @@
 #include "unicode/resbund.h"
 #include "unicode/decimfmt.h"
 #include "unicode/ucurr.h"
+#include "unicode/choicfmt.h"
 
 // *****************************************************************************
 // class DecimalFormatSymbols
@@ -168,7 +169,20 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
                                           &isChoiceFormat, &len, &ec);
     if (U_SUCCESS(ec)) {
         fSymbols[kIntlCurrencySymbol] = curriso;
-        fSymbols[kCurrencySymbol] = UnicodeString(isChoiceFormat? curriso: currname);
+
+        // If this is a ChoiceFormat currency, then format an
+        // arbitrary value; pick something != 1; more common.
+        fSymbols[kCurrencySymbol].truncate(0);
+        if (isChoiceFormat) {
+            ChoiceFormat f(currname, ec);
+            if (U_SUCCESS(ec)) {
+                f.format(2.0, fSymbols[kCurrencySymbol]);
+            } else {
+                fSymbols[kCurrencySymbol] = fSymbols[kIntlCurrencySymbol];
+            }
+        } else {
+            fSymbols[kCurrencySymbol] = UnicodeString(currname);
+        }
     }
     /* else use the default values. */
 }

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecimalFormatSymbols.java,v $ 
- * $Date: 2003/04/19 05:52:45 $ 
- * $Revision: 1.9 $
+ * $Date: 2003/05/23 19:35:29 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -20,6 +20,7 @@ import java.io.Serializable;
 import java.util.Hashtable;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.text.ChoiceFormat;
 
 /**
  * This class represents the set of symbols (such as the decimal separator, the
@@ -514,12 +515,16 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
         String currname = null;
         Currency curr = Currency.getInstance(locale);
         if (curr != null) {
+            intlCurrencySymbol = curr.getCurrencyCode();
             boolean[] isChoiceFormat = new boolean[1];
             currname = curr.getName(locale,
-                                     Currency.SYMBOL_NAME,
-                                     isChoiceFormat);
-            intlCurrencySymbol = curr.getCurrencyCode();
-            currencySymbol = isChoiceFormat[0] ? intlCurrencySymbol : currname;
+                                    Currency.SYMBOL_NAME,
+                                    isChoiceFormat);
+            // If this is a ChoiceFormat currency, then format an
+            // arbitrary value; pick something != 1; more common.
+            currencySymbol = isChoiceFormat[0]
+                ? new ChoiceFormat(currname).format(2.0)
+                : currname;
         } else {
             intlCurrencySymbol = "XXX";
             currencySymbol = "\u00A4"; // 'OX' currency symbol
