@@ -16,40 +16,42 @@
 #*  Used to generate renaming headers.
 #*  Run on UNIX platforms (linux) in order to catch all the exports
 
-#if($ARGV[0] == "--v") {
-#    @VERBOSE = STDOUT;
-#    splice @ARGV, 0, 1;
-#} else {
-#    print "use --v for VERBOSE";
-#}
-
-#foreach $a (@ARGV) {
-#    print "argument is $a\n";
-#}
-
+$headername = 'urename.h';
 $U_ICU_VERSION_SUFFIX = "_1_8";
 
-@NMRESULT = `nm -Cg -f p $ARGV[0]`;
 
-$HEADERNAME = join('', ("uren", substr($ARGV[0], 6, index(".", $ARGV[0])-7),".h"));
+while($ARGV[0] =~ /^-/) { # detects whether there are any arguments
+    $_ = shift @ARGV;      # extracts the argument for processing
+    /^-v/ && ($VERBOSE++, next);                      # verbose
+    /^-h/ && (&printHelpMsgAndExit, next);               # help
+    /^-o/ && (($headername = shift (@ARGV)), next);   # output file
+    /^-S/ && (($U_ICU_VERSION_SUFFIX = shift(@ARGV)), next); # pick the suffix
+    warn("Invalid option $_\n");
+    &printHelpMsgAndExit;
+}
 
-$_ = $HEADERNAME;
-s/\./_/;
-$HEADERDEF = uc($_);
+unless(@ARGV > 0) {
+    warn "No libraries, exiting...\n";
+    &printHelpMsgAndExit;
+}
 
-print VERBOSE substr($ARGV[0], 6, 2), ", $HEADERNAME, $HEADERDEF\n";
+#$headername = "uren".substr($ARGV[0], 6, index(".", $ARGV[0])-7).".h";
+    
+$HEADERDEF = uc($headername);  # this is building the constant for #define
+$HEADERDEF =~ s/\./_/;
 
-open HEADER, ">$HEADERNAME"; # opening a header file
+    
+    open HEADER, ">$headername"; # opening a header file
 
 #We will print our copyright here + warnings
-print HEADER "
+print HEADER <<"EndOfHeaderComment";
 /*
 *******************************************************************************
 *   Copyright (C) 2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *
-*   file name:  $HEADERNAME
+*   file name:  $headername
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
@@ -62,37 +64,70 @@ print HEADER "
 *  THIS FILE IS MACHINE-GENERATED, DON'T PLAY WITH IT IF YOU DON'T KNOW WHAT
 *  YOU ARE DOING, OTHERWISE VERY BAD THINGS WILL HAPPEN!
 */
-";
 
-print HEADER "
 #ifndef $HEADERDEF
-#define $HEADERDEF\n\n";
+#define $HEADERDEF
 
-#print HEADER "#include \"unicode/uversion.h\"\n\n";
+EndOfHeaderComment
 
-print HEADER "\n/* C exports renaming data */\n\n";
-
-foreach (@NMRESULT) { # Process every line of result and stuff it in $_
-    if(/@@/ or /\./ or /\(/ ) { # These would be imports
-        print VERBOSE "Import: $_";
-    } elsif (/::/) { # C++ methods, stuff class name in associative array
-        print VERBOSE "C++ method: $_";
-        @CppName = split(/::/);
-        $CppClasses{$CppName[0]}++;
-    } else {
-        print VERBOSE "C func: $_";
-        @funcname = split(/\s+/);
-        print HEADER "#define $funcname[0] $funcname[0]$U_ICU_VERSION_SUFFIX\n";
+for(;@ARGV; shift(@ARGV)) {
+    @NMRESULT = `nm -Cg -f p $ARGV[0]`;
+    if($?) {
+        warn "Couldn't do 'nm' for $ARGV[0], continuing...\n";
+        next; # Couldn't do nm for the file
+    }
+    
+    foreach (@NMRESULT) { # Process every line of result and stuff it in $_
+        if(/@@/ or /\./ or /\(/ ) { # These would be imports
+            &verbose( "Import: $_");
+        } elsif (/::/) { # C++ methods, stuff class name in associative array
+            &verbose( "C++ method: $_");
+            @CppName = split(/::/);
+            $CppClasses{$CppName[0]}++;
+        } else { # This is regular C function 
+            &verbose( "C func: $_");
+            @funcname = split(/\s+/);
+            $CFuncs{$funcname[0]}++;
+        }
     }
 }
 
-print HEADER "\n/* C++ class names renaming defines */\n\n";
+print HEADER "\n/* C exports renaming data */\n";
+foreach(sort keys(%CFuncs)) {
+    print HEADER "#define $_ $_$U_ICU_VERSION_SUFFIX\n";
+}
 
-foreach(keys(%CppClasses)) {
+print HEADER "\n/* C++ class names renaming defines */\n";
+foreach(sort keys(%CppClasses)) {
     print HEADER "#define $_ $_$U_ICU_VERSION_SUFFIX\n";
 }
 
 print HEADER "#endif\n";
+
+close HEADER;
+
+sub verbose {
+    if($VERBOSE) {
+        print STDERR @_;
+    }
+}
+
+
+sub printHelpMsgAndExit {
+    print STDERR <<"EndHelpText";
+Usage: $0 [OPTIONS] LIBRARY_FILES
+  Options: 
+    -v - verbose
+    -h - help
+    -o - output file name (defaults to 'urename.h'
+    -S - suffix (defaults to _MAJOR_MINOR of current ICU version)
+Will produce a renaming .h file
+
+EndHelpText
+
+    exit 0;
+
+}
 
 
 
