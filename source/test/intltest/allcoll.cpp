@@ -87,16 +87,46 @@ const Collator::EComparisonResult CollationDummyTest::results[] = {
     Collator::LESS 
 };
 
+void 
+CollationDummyTest::doTestVariant(const UnicodeString source, const UnicodeString target, Collator::EComparisonResult result)
+{   
+  UErrorCode status = U_ZERO_ERROR;
+  SimpleFwdCharIterator srciterator(source);
+  SimpleFwdCharIterator tgtiterator(target);
+
+  Collator::EComparisonResult compareResult = myCollation->compare(source, target);
+  Collator::EComparisonResult incResult = myCollation->compare(srciterator, 
+                                                                 tgtiterator);
+  CollationKey srckey, tgtkey;
+  myCollation->getCollationKey(source, srckey, status);
+  myCollation->getCollationKey(target, tgtkey, status);
+  if (U_FAILURE(status)){
+    errln("Creation of collation keys failed\n");
+  }
+  Collator::EComparisonResult keyResult = srckey.compareTo(tgtkey);
+
+  if (compareResult != result) {
+    errln("String comparison failed in variant test\n");
+  }
+  if (incResult != result) {
+    errln("Incremental comparison failed in variant test\n");
+  }
+  if (keyResult != result) {
+    errln("Collation key comparison failed in variant test\n");
+  }
+}
+
 void CollationDummyTest::doTest( UnicodeString source, UnicodeString target, Collator::EComparisonResult result)
 {
+    /*
     Collator::EComparisonResult compareResult = myCollation->compare(source, target);
     SimpleFwdCharIterator src(source);
     SimpleFwdCharIterator trg(target);
     Collator::EComparisonResult incResult = myCollation->compare(src, trg);
     CollationKey sortKey1, sortKey2;
     UErrorCode key1status = U_ZERO_ERROR, key2status = U_ZERO_ERROR; //nos
-    myCollation->getCollationKey(source, /*nos*/ sortKey1, key1status );
-    myCollation->getCollationKey(target, /*nos*/ sortKey2, key2status );
+    myCollation->getCollationKey(source, sortKey1, key1status );
+    myCollation->getCollationKey(target, sortKey2, key2status );
     if (U_FAILURE(key1status) || U_FAILURE(key2status))
     {
         errln("SortKey generation Failed.\n");
@@ -105,6 +135,15 @@ void CollationDummyTest::doTest( UnicodeString source, UnicodeString target, Col
 
     Collator::EComparisonResult keyResult = sortKey1.compareTo(sortKey2);
     reportCResult( source, target, sortKey1, sortKey2, compareResult, keyResult, incResult, result );
+    */
+  doTestVariant(source, target, result);
+  if(result == Collator::EComparisonResult::LESS) {
+    doTestVariant(target, source, Collator::EComparisonResult::GREATER);
+  } else if (result == Collator::EComparisonResult::GREATER) {
+    doTestVariant(target, source, Collator::EComparisonResult::LESS);
+  } else {
+    doTestVariant(target, source, Collator::EComparisonResult::EQUAL);
+  }
 }
 
 void CollationDummyTest::TestTertiary(/* char* par */)

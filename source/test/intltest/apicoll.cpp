@@ -175,6 +175,11 @@ CollationAPITest::TestProperty(/* char* par */)
     doAssert((name == UnicodeString("English (United States)")), "getDisplayName failed if this is an English machine");
 #endif
     delete col; col = 0;
+    RuleBasedCollator *rcol = (RuleBasedCollator *)Collator::createInstance("da_DK", 
+                                                                            success);
+    doAssert(rcol->getRules().length() != 0, "da_DK rules does not have length 0");
+    delete rcol;
+
     col = Collator::createInstance(Locale::FRENCH, success);
     if (U_FAILURE(success))
     {
@@ -254,6 +259,137 @@ CollationAPITest::TestProperty(/* char* par */)
 }
 
 void 
+CollationAPITest::TestRuleBasedColl()
+{
+  RuleBasedCollator *col1, *col2, *col3, *col4;
+  UErrorCode status = U_ZERO_ERROR;
+    
+  UnicodeString ruleset1("&9 < a, A < b, B < c, C; ch, cH, Ch, CH < d, D, e, E");
+  UnicodeString ruleset2("&9 < a, A < b, B < c, C < d, D, e, E");
+    
+  col1 = new RuleBasedCollator(ruleset1, status);
+  if (U_FAILURE(status)) {
+    errln("RuleBased Collator creation failed.\n");
+    return;
+  }
+  else {
+    logln("PASS: RuleBased Collator creation passed\n");
+  }
+    
+  status = U_ZERO_ERROR;
+  col2 = new RuleBasedCollator(ruleset2, status);
+  if (U_FAILURE(status)) {
+    errln("RuleBased Collator creation failed.\n");
+    return;
+  }
+  else {
+    logln("PASS: RuleBased Collator creation passed\n");
+  }
+    
+  status = U_ZERO_ERROR;
+  col3 = (RuleBasedCollator *)Collator::createInstance(status);
+  if (U_FAILURE(status)) {
+    errln("Default Collator creation failed.: %s\n");
+    return;
+  }
+  else {
+    logln("PASS: Default Collator creation passed\n");
+  }
+    
+  UnicodeString rule1 = col1->getRules();
+  UnicodeString rule2 = col2->getRules();
+  UnicodeString rule3 = col3->getRules();
+
+  doAssert(rule1 != rule2, "Default collator getRules failed");
+  doAssert(rule2 != rule3, "Default collator getRules failed");
+  doAssert(rule1 != rule3, "Default collator getRules failed");
+    
+  col4 = new RuleBasedCollator(rule2, status);
+  if (U_FAILURE(status)) {
+    errln("RuleBased Collator creation failed.\n");
+    return;
+  }
+  
+  UnicodeString rule4 = col4->getRules();
+  doAssert(rule2 == rule4, "Default collator getRules failed");
+
+  delete col1;
+  delete col2;
+  delete col3;
+  delete col4;
+}
+
+void 
+CollationAPITest::TestDecomposition() {
+  UErrorCode status = U_ZERO_ERROR;
+  Collator *en_US = Collator::createInstance("en_US", status),
+    *el_GR = Collator::createInstance("el_GR", status),
+    *vi_VN = Collator::createInstance("vi_VN", status);
+
+  if (U_FAILURE(status)) {
+    errln("ERROR: collation creation failed.\n");
+    return;
+  }
+
+  /* there is no reason to have canonical decomposition in en_US OR default locale */
+  if (vi_VN->getDecomposition() != Normalizer::EMode::DECOMP)
+  {
+    errln("ERROR: vi_VN collation did not have cannonical decomposition for normalization!\n");
+  }
+
+  if (el_GR->getDecomposition() != Normalizer::EMode::DECOMP)
+  {
+    errln("ERROR: el_GR collation did not have cannonical decomposition for normalization!\n");
+  }
+
+  if (en_US->getDecomposition() != Normalizer::EMode::NO_OP)
+  {
+    errln("ERROR: en_US collation had cannonical decomposition for normalization!\n");
+  }
+
+  delete en_US;
+  delete el_GR;
+  delete vi_VN;
+}
+
+void 
+CollationAPITest::TestSafeClone() {
+  static const int CLONETEST_COLLATOR_COUNT = 3;
+  Collator *someCollators [CLONETEST_COLLATOR_COUNT];
+	Collator *col;
+  UErrorCode err = U_ZERO_ERROR;
+	int index;
+    
+  UnicodeString test1("abCda");
+  UnicodeString test2("abcda");
+    
+  /* one default collator & two complex ones */
+  someCollators[0] = Collator::createInstance(err);
+  someCollators[1] = Collator::createInstance("ko", err);
+  someCollators[2] = Collator::createInstance("ja_JP", err);
+
+	/* change orig & clone & make sure they are independent */
+
+	for (index = 0; index < CLONETEST_COLLATOR_COUNT; index++)
+	{
+		col = someCollators[index]->safeClone();
+    if (col == 0) {
+      errln("SafeClone of collator should not return null\n");
+      break;
+    }
+    col->setStrength(Collator::ECollationStrength::TERTIARY);
+    someCollators[index]->setStrength(Collator::ECollationStrength::PRIMARY);
+    col->setAttribute(UCOL_CASE_LEVEL, UCOL_OFF, err);
+    someCollators[index]->setAttribute(UCOL_CASE_LEVEL, UCOL_OFF, err);
+        
+    doAssert(col->greater(test1, test2), "Result should be \"abCda\" >>> \"abcda\" ");
+    doAssert(someCollators[index]->equals(test1, test2), "Result should be \"abcda\" == \"abCda\"");
+    delete col;
+		delete someCollators[index];
+	}
+}
+
+void 
 CollationAPITest::TestHashCode(/* char* par */)
 {
     logln("hashCode tests begin.");
@@ -292,6 +428,20 @@ CollationAPITest::TestHashCode(/* char* par */)
     logln("hashCode tests end.");
     delete col1;
     delete col2;
+
+    UnicodeString test1("Abcda");
+    UnicodeString test2("abcda");
+    
+    CollationKey sortk1, sortk2, sortk3;
+    UErrorCode status = U_ZERO_ERROR;
+                
+    col3->getCollationKey(test1, sortk1, status);
+    col3->getCollationKey(test2, sortk2, status); 
+    col3->getCollationKey(test2, sortk3, status); 
+    
+    doAssert(sortk1.hashCode() != sortk2.hashCode(), "Hash test1 result incorrect");               
+    doAssert(sortk2.hashCode() == sortk3.hashCode(), "Hash result not equal" );
+
     delete col3;
 }
 
@@ -305,6 +455,7 @@ CollationAPITest::TestCollationKey(/* char* par */)
     Collator *col = 0;
     UErrorCode success=U_ZERO_ERROR;
     col = Collator::createInstance(Locale::ENGLISH, success);
+    col->setStrength(Collator::ECollationStrength::TERTIARY);
     if (U_FAILURE(success))
     {
         errln("Default collation creation failed.");
@@ -343,6 +494,10 @@ CollationAPITest::TestCollationKey(/* char* par */)
     uint8_t* byteArray2 = 0;
     
     byteArray2 = sortk2.toByteArray(cnt2);
+    const char sortk2_compat[] = { 
+        /*this is a 1.8 sortkey */
+        0x17, 0x19, 0x1B, 0x1D, 0x17, 0x01, 0x08, 0x01, 0x08, 0x00
+    };
 
     const uint8_t* byteArray3 = 0;
     byteArray3 = sortk1.getByteArray(cnt3);
@@ -353,6 +508,8 @@ CollationAPITest::TestCollationKey(/* char* par */)
     CollationKey sortk4(byteArray1, cnt1), sortk5(byteArray2, cnt2);
     CollationKey sortk6(byteArray3, cnt3), sortk7(byteArray4, cnt4);
 
+    doAssert(memcmp(byteArray2, sortk2_compat, strlen(sortk2_compat)) == 0, 
+             "Binary format for 'abcda' sortkey different!");
     doAssert(sortk1.compareTo(sortk4) == Collator::EQUAL, "CollationKey::toByteArray(sortk1) Failed.");
     doAssert(sortk2.compareTo(sortk5) == Collator::EQUAL, "CollationKey::toByteArray(sortk2) Failed.");
     doAssert(sortk4.compareTo(sortk5) == Collator::GREATER, "sortk4 >>> sortk5 Failed");
@@ -375,6 +532,12 @@ CollationAPITest::TestCollationKey(/* char* par */)
     doAssert(sortk1 == sortk3, "sortk1 = sortk3 assignment Failed.");
     doAssert(sortk2 != sortk3, "sortk2 != sortk3 Failed.");
     logln("testing sortkey ends...");
+
+    col->setStrength(Collator::ECollationStrength::SECONDARY);
+    doAssert(col->getCollationKey(test1, sortk1, key1Status).compareTo(
+                                  col->getCollationKey(test2, sortk2, key2Status)) 
+                                  == Collator::EQUAL, 
+                                  "Result should be \"Abcda\" == \"abcda\"");
     delete col;
 }
 
@@ -404,8 +567,16 @@ CollationAPITest::TestElemIter(/* char* par */)
     CollationElementIterator *coliter=((RuleBasedCollator*)col)->createCollationElementIterator(*chariter);
     
     // copy ctor
-    CollationElementIterator *iterator2 = new CollationElementIterator(*iterator1);
+    CollationElementIterator *iterator2 = ((RuleBasedCollator*)col)->createCollationElementIterator(testString1);
     CollationElementIterator *iterator3 = ((RuleBasedCollator*)col)->createCollationElementIterator(testString2);
+
+    UTextOffset offset = iterator1->getOffset();
+    iterator1->setOffset(6, success);
+    if (U_FAILURE(success)) {
+        errln("Error in setOffset for collation element iterator\n");
+        return;
+    }
+    iterator1->setOffset(0, success);
     int32_t order1, order2, order3;
     doAssert((*iterator1 == *iterator2), "The two iterators should be the same"); 
     doAssert((*iterator1 != *iterator3), "The two iterators should be different");
@@ -422,6 +593,8 @@ CollationAPITest::TestElemIter(/* char* par */)
     }
     
     doAssert((*iterator1 != *iterator2), "The first iterator advance failed");
+    order2 = iterator2->getOffset();
+    doAssert((order1 != order2), "The order result should not be the same");
     order2 = iterator2->next(success);
     if (U_FAILURE(success))
     {
@@ -721,6 +894,9 @@ void CollationAPITest::runIndexedTest( int32_t index, UBool exec, const char* &n
         case 5: name = "TestCollationKey";  if (exec)   TestCollationKey(/* par */); break;
         case 6: name = "TestElemIter";  if (exec)   TestElemIter(/* par */); break;
         case 7: name = "TestGetAll";    if (exec)   TestGetAll(/* par */); break;
+        case 8: name = "TestRuleBasedColl"; if (exec)   TestRuleBasedColl(/* par */); break;
+        case 9: name = "TestDecomposition"; if (exec)   TestDecomposition(/* par */); break;
+        case 10: name = "TestSafeClone"; if (exec)   TestSafeClone(/* par */); break;
         default: name = ""; break;
     }
 }
