@@ -218,6 +218,7 @@ typedef unsigned short uint16_t;
 #define U_TZNAME        @U_TZNAME@
 
 #define U_HAVE_MMAP     @HAVE_MMAP@
+#define U_HAVE_POPEN    @U_HAVE_POPEN@
 
 /*===========================================================================*/
 /* Symbol import-export control                                              */
