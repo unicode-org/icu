@@ -28,11 +28,9 @@ goto endofperl
 #
 # Alan Liu 5/19/00 2/27/01
 
-if (scalar @ARGV < 1) {
-    usage();
-}
-$DIR = shift;
+$DIR = shift || "../../text/resources";
 if (! -d $DIR) {
+    print STDERR "$DIR is not a directory\n";
     usage();
 }
 $ID = shift;
@@ -52,46 +50,86 @@ sub usage {
 
 $JAVA_ONLY = '-';
 
+$OUTDIR = "icu4c";
+mkdir($OUTDIR,0777);
+
 # Mapping from Java file names to ICU file names
 %NAME_MAP = (
-             "Fullwidth_Halfwidth" =>        "fullhalf",
-             "Hiragana_Katakana" =>          "kana",
-             "KeyboardEscape_Latin1" =>      "kbdescl1",
-             "Latin_Arabic" =>               "larabic",
-             "Latin_Cyrillic" =>             "lcyril",
-             "Latin_Devanagari" =>           "ldevan",
-             "Latin_Greek" =>                "lgreek",
-             "Latin_Hebrew" =>               "lhebrew",
-             "Latin_Jamo" =>                 "ljamo",
-             "Latin_Kana" =>                 "lkana",
-             "StraightQuotes_CurlyQuotes" => "quotes",
-             "UnicodeName_UnicodeChar" =>    "ucname",
-             
              # An ICU name of "" means the ICU name == the ID
-             "Bengali_InterIndic" =>         "",
-             "Devanagari_InterIndic" =>      "",
-             "Gujarati_InterIndic" =>        "",
-             "Gurmukhi_InterIndic" =>        "",
-             "Kannada_InterIndic" =>         "",
-             "Malayalam_InterIndic" =>       "",
-             "Oriya_InterIndic" =>           "",
-             "Tamil_InterIndic" =>           "",
-             "Telugu_InterIndic" =>          "",
-             "InterIndic_Bengali" =>         "",
-             "InterIndic_Devanagari" =>      "",
-             "InterIndic_Gujarati" =>        "",
-             "InterIndic_Gurmukhi" =>        "",
-             "InterIndic_Kannada" =>         "",
-             "InterIndic_Malayalam" =>       "",
-             "InterIndic_Oriya" =>           "",
-             "InterIndic_Tamil" =>           "",
-             "InterIndic_Telugu" =>          "",
+
+             "Any_Accents" => "",
+             "Any_Publishing" => "",
+             "Bengali_InterIndic" => "",
+             "Cyrillic_Latin" => "",
+             "Devanagari_InterIndic" => "",
+             "Fullwidth_Halfwidth" => "",
+             "Greek_Latin" => "",
+             "Gujarati_InterIndic" => "",
+             "Gurmukhi_InterIndic" => "",
+             "Hiragana_Katakana" => "",
+             "Hiragana_Latin" => "",
+             "InterIndic_Bengali" => "",
+             "InterIndic_Devanagari" => "",
+             "InterIndic_Gujarati" => "",
+             "InterIndic_Gurmukhi" => "",
+             "InterIndic_Kannada" => "",
+             "InterIndic_Latin" => "",
+             "InterIndic_Malayalam" => "",
+             "InterIndic_Oriya" => "",
+             "InterIndic_Tamil" => "",
+             "InterIndic_Telugu" => "",
+             "Kannada_InterIndic" => "",
+             "Latin_InterIndic" => "",
+             "Latin_Jamo" => "",
+             "Latin_Katakana" => "",
+             "Malayalam_InterIndic" => "",
+             "Oriya_InterIndic" => "",
+             "Tamil_InterIndic" => "",
+             "Telugu_InterIndic" => "",
              
-             # These files are large, so ICU doesn't want them
              "Han_Pinyin" => $JAVA_ONLY,
              "Kanji_English" => $JAVA_ONLY,
              "Kanji_OnRomaji" => $JAVA_ONLY,
              );
+
+#             "Fullwidth_Halfwidth" =>        "fullhalf",
+#             "Hiragana_Katakana" =>          "kana",
+#             "KeyboardEscape_Latin1" =>      "kbdescl1",
+#             "Latin_Arabic" =>               "larabic",
+#             "Latin_Cyrillic" =>             "lcyril",
+#             "Latin_Devanagari" =>           "ldevan",
+#             "Latin_Greek" =>                "lgreek",
+#             "Latin_Hebrew" =>               "lhebrew",
+#             "Latin_Jamo" =>                 "ljamo",
+#             "Latin_Kana" =>                 "lkana",
+#             "StraightQuotes_CurlyQuotes" => "quotes",
+#             "UnicodeName_UnicodeChar" =>    "ucname",
+#             
+#             # An ICU name of "" means the ICU name == the ID
+#             "Bengali_InterIndic" =>         "",
+#             "Devanagari_InterIndic" =>      "",
+#             "Gujarati_InterIndic" =>        "",
+#             "Gurmukhi_InterIndic" =>        "",
+#             "Kannada_InterIndic" =>         "",
+#             "Malayalam_InterIndic" =>       "",
+#             "Oriya_InterIndic" =>           "",
+#             "Tamil_InterIndic" =>           "",
+#             "Telugu_InterIndic" =>          "",
+#             "InterIndic_Bengali" =>         "",
+#             "InterIndic_Devanagari" =>      "",
+#             "InterIndic_Gujarati" =>        "",
+#             "InterIndic_Gurmukhi" =>        "",
+#             "InterIndic_Kannada" =>         "",
+#             "InterIndic_Malayalam" =>       "",
+#             "InterIndic_Oriya" =>           "",
+#             "InterIndic_Tamil" =>           "",
+#             "InterIndic_Telugu" =>          "",
+#             
+#             # These files are large, so ICU doesn't want them
+#             "Han_Pinyin" => $JAVA_ONLY,
+#             "Kanji_English" => $JAVA_ONLY,
+#             "Kanji_OnRomaji" => $JAVA_ONLY,
+#             );
 
 # Header blocks of text written at start of ICU output files
 $HEADER1 = <<END;
@@ -108,8 +146,9 @@ END
 $TOOL = $0;
 
 # Iterate over all Java RBT rule files
-foreach (<$DIR/Transliterator_*.utf8.txt>) {
+foreach (<$DIR/Transliterator_*.txt>) {
     next if (/~$/);
+    next if (/_index\.txt$/);
     next if ($ID && !/$ID/);
     my ($out, $id) = convertFileName($_);
     if ($out) {
@@ -132,7 +171,8 @@ convertIndex();
 sub convertFileName {
     local $_ = shift;
     my $id;
-    if (m|Transliterator_(.+)\.utf8\.txt$|) {
+    if (m|Transliterator_(.+)\.utf8\.txt$| ||
+        m|Transliterator_(.+)\.txt$|) {
         $id = $1;
     } else { die "Can't parse Java file name $_"; }
     if (!exists $NAME_MAP{$id}) {
@@ -143,6 +183,9 @@ sub convertFileName {
     if ($out eq '') {
         $out = $id;
     }
+    if ($out ne $JAVA_ONLY) {
+        $out = 'translit_' . $out;
+    }
     return ($out, $id);
 }
 
@@ -152,7 +195,7 @@ sub convertIndex {
     $JAVA_INDEX = "Transliterator_index.txt";
     $C_INDEX = "translit_index.txt";
     open(JAVA_INDEX, "$DIR/$JAVA_INDEX") or die;
-    open(C_INDEX, ">$C_INDEX") or die;
+    open(C_INDEX, ">$OUTDIR/$C_INDEX") or die;
     
     header(\*C_INDEX, $JAVA_INDEX);
     
@@ -248,7 +291,7 @@ sub file {
     print "$id (", -s $IN, ") -> $OUT (";
 
     # Write output file header
-    open(OUT, ">$OUT") or die;
+    open(OUT, ">$OUTDIR/$OUT") or die;
     binmode OUT; # Must do this so we can write our UTF8 marker
     
     # Write UTF8 marker
@@ -264,13 +307,32 @@ sub file {
     open(IN, $IN) or die;
     binmode IN; # IN is a UTF8 file
 
+    my $first = 1;
+    my $BOM = pack("C3", 239, 187, 191); # a UTF8 byte order mark
+
     # Process each line by changing # comments to // comments
     # and taking other text and enclosing it in double quotes
     while (<IN>) {
         my $raw = $_;
+
+        # Look for and delete BOM
+        if ($first) {
+            s/^$BOM//;
+            $first = 0;
+        }
         
         # Clean the eol junk up
         s/[\x0D\x0A]+$//;
+
+        # If there is a trailing backslash, then delete it -- we don't
+        # need line continuation in C, since adjacent strings are
+        # concatenated.  Count trailing backslashes; if they are odd,
+        # one is trailing.
+        if (m|(\\+)$|) {
+            if ((length($1) % 2) == 1) {
+                s|\\$||;
+            }
+        }
 
         # Transform escaped characters
         hideEscapes();
@@ -325,7 +387,7 @@ sub file {
     close(OUT);
 
     # Write output file size for sanity check
-    print -s $OUT, ")\n";
+    print -s "$OUTDIR/$OUT", ")\n";
 }
 
 ######################################################################
