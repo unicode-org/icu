@@ -19,7 +19,7 @@
 #include "cintltst.h"
 #include "umemstrm.h"
 
-static void TestMemoryStreamAPI();
+static void TestMemoryStreamAPI(void);
 static void printUSeqErr(const uint8_t *a, int len);
 
 static void printUSeqErr(const uint8_t *a, int len)
