@@ -320,86 +320,11 @@ void seekUntilEndOfComment(UFILE *f,
 static UChar unescape(UFILE *f,
 		      UErrorCode *status)
 {
-  UChar c;
-  UChar out;
-  int16_t maxChars;
-  
   if(U_FAILURE(*status)) return U_EOF;
-  
-    c = u_fgetc(f);
-    /*	c = u_fgetc(f, status);*/
-  if(c == (UChar)U_EOF || U_FAILURE(*status)) return U_EOF;
-
-  switch (c) {
-    
-    /* '\t' or '\T' causes a tab character to be written to the output */
-  case 0x0074: case 0x0054:
-    return 0x0009;
-    
-    /* '\n' or '\N' causes a line feed to be written to the output */
-  case 0x006E: case 0x004E:
-    return 0x000A;
-    
-    /* \x## and \u#### allow characters to be specified by character
-     code.  The characters following \x or \u (up to two after \x or
-     four after \u) are treated as hexadecimal digits, and the
-     hexadecimal number they represent is the numeric character code
-     (Latin1 for \x and Unicode for \u) of the character that is
-     written to the output.  A character that isn't a valid
-     hexadecimal digit terminates the escape sequence (but still gets
-     treated independently).  If the sequence evaluates to zero (i.e.,
-     either '\x' or '\u' by itself, or '\x00' or '\u0000'), nothing is
-     written to the output, which effectively means you can't have
-     null characters in the file. */
-  case 0x0078: case 0x0058: case 0x0075: case 0x0055:
-    if(c == 0x0078 || c == 0x0058)
-      maxChars = 2;
-    else
-      maxChars = 4;
-    out = 0;
-    while(maxChars != 0 && *status == U_ZERO_ERROR) {
-    c = u_fgetc(f);
-    /*	c = u_fgetc(f, status);*/
-      if(c == (UChar)U_EOF || U_FAILURE(*status)) return U_EOF;
-      
-      switch(c) {
-	/* '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' */
-      case 0x0030: case 0x0031: case 0x0032: case 0x0033: case 0x0034:
-      case 0x0035: case 0x0036: case 0x0037: case 0x0038: case 0x0039:
-	out = (out << 4) + (c - 0x0030);
-	break;
-	
-	/* 'A', 'B', 'C', 'D', 'E', 'F' */
-      case 0x0041: case 0x0042: case 0x0043: case 0x0044: case 0x0045: 
-      case 0x0046:
-	out = (out << 4) + (c - 0x0041 + 10);
-	break;
-
-	/* 'a', 'b', 'c', 'd', 'e', 'f' */
-      case 0x0061: case 0x0062: case 0x0063: case 0x0064: case 0x0065: 
-      case 0x0066:
-	out = (out << 4) + (c - 0x0061 + 10);
-	break;
-	
-      default:
-	    u_fungetc(c, f);
-	    /*u_fungetc(c, f, status);*/
-	maxChars = 1;   /* so we fall out of the loop */
-	break;
-      }
-      --maxChars;
-    }
-    return out;
-    
-    /* if a backslash preceds any character other than x, u, t, or n,
-     that character is just copied to the output as-is (meaning it's
-     deprived of any special meaning it otherwise would have had:
-     ESCAPE puts a literal backslash in the output stream, for
-     example, and QUOTE puts a literal double quote in the output
-     stream. */
-  default:
-    return c;
-  }
+  /* We expect to be called after the ESCAPE has been seen, but
+   * u_fgetcx needs an ESCAPE to do its magic. */
+  u_fungetc(ESCAPE, f);
+  return (UChar) u_fgetcx(f);
 }
 
 static UBool isWhitespace(UChar c)
