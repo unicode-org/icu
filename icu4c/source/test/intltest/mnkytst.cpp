@@ -44,7 +44,7 @@ CollationMonkeyTest::CollationMonkeyTest()
 : myCollator(0)
 {
     UErrorCode status = U_ZERO_ERROR;
-    myCollator = Collator::createInstance(status);
+    myCollator = Collator::createInstance("en_US", status);
 }
 
 CollationMonkeyTest::~CollationMonkeyTest()
@@ -229,7 +229,7 @@ void CollationMonkeyTest::TestRules(/* char* par */){
     int i=0;
     logln("Demo Test 1 : Create a new table collation with rules \"& z < 0x00e4\"");
     UErrorCode status = U_ZERO_ERROR;
-    Collator *col = Collator::createInstance(status);
+    Collator *col = Collator::createInstance("en_US", status);
     const UnicodeString baseRules = ((RuleBasedCollator*)col)->getRules();
     UnicodeString newRules(" & z < ");
     newRules.append((UChar)0x00e4);

@@ -180,7 +180,7 @@ void G7CollationTest::TestDemo1(/* char* par */)
 {
     logln("Demo Test 1 : Create a new table collation with rules \"& Z < p, P\"");
     UErrorCode status = U_ZERO_ERROR;
-    Collator *col = Collator::createInstance(status);
+    Collator *col = Collator::createInstance("en_US", status);
     const UnicodeString baseRules = ((RuleBasedCollator*)col)->getRules();
     UnicodeString newRules(" & Z < p, P");
     newRules.insert(0, baseRules);
@@ -209,7 +209,7 @@ void G7CollationTest::TestDemo2(/* char* par */)
 {
     logln("Demo Test 2 : Create a new table collation with rules \"& C < ch , cH, Ch, CH\"");
     UErrorCode status = U_ZERO_ERROR;
-    Collator *col = Collator::createInstance(status);
+    Collator *col = Collator::createInstance("en_US", status);
     const UnicodeString baseRules = ((RuleBasedCollator*)col)->getRules();
     UnicodeString newRules("& C < ch , cH, Ch, CH");
     newRules.insert(0, baseRules);
@@ -238,7 +238,7 @@ void G7CollationTest::TestDemo3(/* char* par */)
 {
     logln("Demo Test 3 : Create a new table collation with rules \"& Question'-'mark ; '?' & Hash'-'mark ; '#' & Ampersand ; '&'\"");
     UErrorCode status = U_ZERO_ERROR;
-    Collator *col = Collator::createInstance(status);
+    Collator *col = Collator::createInstance("en_US", status);
     const UnicodeString baseRules = ((RuleBasedCollator*)col)->getRules();
     UnicodeString newRules = "& Question'-'mark ; '?' & Hash'-'mark ; '#' & Ampersand ; '&'";
     newRules.insert(0, baseRules);
@@ -267,7 +267,7 @@ void G7CollationTest::TestDemo4(/* char* par */)
 {
     logln("Demo Test 4 : Create a new table collation with rules \" & aa ; a'-' & ee ; e'-' & ii ; i'-' & oo ; o'-' & uu ; u'-' \"");
     UErrorCode status = U_ZERO_ERROR;
-    Collator *col = Collator::createInstance(status);
+    Collator *col = Collator::createInstance("en_US", status);
     const UnicodeString baseRules = ((RuleBasedCollator*)col)->getRules();
     UnicodeString newRules = " & aa ; a'-' & ee ; e'-' & ii ; i'-' & oo ; o'-' & uu ; u'-' ";
     newRules.insert(0, baseRules);
