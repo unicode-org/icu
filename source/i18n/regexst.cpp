@@ -147,7 +147,7 @@ static const UChar gIsWordPattern[] = {
 //    l     a     b     l     e     _     T     y     p     e     =     L     V     T     }     ]
     0x6c, 0x61, 0x62, 0x6c, 0x65, 0x5f, 0x54, 0x79, 0x70, 0x65, 0x3d, 0x4c, 0x56, 0x54, 0x7d, 0x5d, 0}; 
 
-
+RegexStaticSets *RegexStaticSets::gStaticSets = NULL;
 
 RegexStaticSets::RegexStaticSets(UErrorCode *status) {
     // First zero out everything  
@@ -229,9 +229,9 @@ RegexStaticSets::~RegexStaticSets() {
 };
 
 
-void RegexStaticSets::initGlobals(RegexStaticSets **globals, UErrorCode *status) {
+void RegexStaticSets::initGlobals(UErrorCode *status) {
     umtx_lock(NULL);
-    RegexStaticSets *p = *globals;
+    RegexStaticSets *p = gStaticSets;
     umtx_unlock(NULL);
     if (p == NULL) {
         p = new RegexStaticSets(status);
@@ -239,12 +239,14 @@ void RegexStaticSets::initGlobals(RegexStaticSets **globals, UErrorCode *status)
             return;
         }
         umtx_lock(NULL);
-        if (*globals == NULL) {
-            *globals = p;
+        if (gStaticSets == NULL) {
+            gStaticSets = p;
             p = NULL;
         }
         umtx_unlock(NULL);
-        delete p;
+        if (p) {
+            delete p;
+        }
         ucln_i18n_registerCleanup();
     }
 }
