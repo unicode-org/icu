@@ -116,9 +116,11 @@ class U_COMMON_API Normalizer
 
 
 
-  /** */
-  static const UChar DONE;
-  
+  /** If DONE is returned, then there are no more normalization results available. */
+  enum {
+      DONE=0xffff
+  };
+
   /** The mode of a Normalizer object */
   enum EMode {
 
@@ -444,14 +446,14 @@ class U_COMMON_API Normalizer
    * Return the current character in the normalized text.
    * @draft
    */
-  UChar                current(void) const;
+  UChar32              current(void) const;
   
   /**
    * Return the first character in the normalized text.  This resets
    * the <tt>Normalizer's</tt> position to the beginning of the text.
    * @draft
    */
-  UChar                first(void);
+  UChar32              first(void);
 
   /**
    * Return the last character in the normalized text.  This resets
@@ -459,7 +461,7 @@ class U_COMMON_API Normalizer
    * the input text corresponding to that normalized character.
    * @draft
    */
-  UChar                last(void);
+  UChar32              last(void);
   
   /**
    * Return the next character in the normalized text and advance
@@ -467,7 +469,7 @@ class U_COMMON_API Normalizer
    * of the text has already been reached, {@link #DONE} is returned.
    * @draft
    */
-  UChar                next(void);
+  UChar32              next(void);
   
   /**
    * Return the previous character in the normalized text and decrement
@@ -475,7 +477,7 @@ class U_COMMON_API Normalizer
    * of the text has already been reached, {@link #DONE} is returned.
    * @draft
    */
-  UChar                previous(void);
+  UChar32              previous(void);
   
   /**
    * Set the iteration position in the input text that is being normalized
@@ -494,7 +496,7 @@ class U_COMMON_API Normalizer
    *              forward starting at the given index.
    * @draft
    */
-  UChar                setIndex(UTextOffset index);
+  UChar32              setIndex(UTextOffset index);
   
   /**
    * Reset the iterator so that it is in the same state that it was just after
@@ -751,16 +753,18 @@ private:
     STR_INDEX_SHIFT = 2, //Must agree with the constants used in NormalizerBuilder
     STR_LENGTH_MASK = 0x0003
   };
-  
-  static const UChar    HANGUL_BASE;
-  static const UChar    HANGUL_LIMIT;
-  static const UChar    JAMO_LBASE;
-  static const UChar    JAMO_VBASE;
-  static const UChar    JAMO_TBASE;
-  static const int16_t    JAMO_LCOUNT;
-  static const int16_t    JAMO_VCOUNT;
-  static const int16_t    JAMO_TCOUNT;
-  static const int16_t    JAMO_NCOUNT;
+
+  enum {
+    HANGUL_BASE = 0xac00,
+    HANGUL_LIMIT = 0xd7a4,
+    JAMO_LBASE = 0x1100,
+    JAMO_VBASE = 0x1161,
+    JAMO_TBASE = 0x11a7,
+    JAMO_LCOUNT = 19,
+    JAMO_VCOUNT = 21,
+    JAMO_TCOUNT = 28,
+    JAMO_NCOUNT = JAMO_VCOUNT * JAMO_TCOUNT
+  };
   
   friend class ComposedCharIter;
 };
@@ -770,7 +774,3 @@ Normalizer::operator!= (const Normalizer& other) const
 { return ! operator==(other); }
 
 #endif // _NORMLZR
-
-
-
-

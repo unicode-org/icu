@@ -28,19 +28,6 @@ inline static void insert(UnicodeString& dest,
   dest.replace(pos, 0, &ch, 1);
 }
 
-const UChar     Normalizer::DONE     = 0xFFFF;
-const UChar    Normalizer::HANGUL_BASE = 0xac00;
-const UChar    Normalizer::HANGUL_LIMIT= 0xd7a4;
-const UChar    Normalizer::JAMO_LBASE  = 0x1100;
-const UChar    Normalizer::JAMO_VBASE  = 0x1161;
-const UChar    Normalizer::JAMO_TBASE  = 0x11a7;
-const int16_t    Normalizer::JAMO_LCOUNT = 19;
-const int16_t    Normalizer::JAMO_VCOUNT = 21;
-const int16_t    Normalizer::JAMO_TCOUNT = 28;
-const int16_t    Normalizer::JAMO_NCOUNT = JAMO_VCOUNT * JAMO_TCOUNT;
-
-
-
 //-------------------------------------------------------------------------
 // Constructors and other boilerplate
 //-------------------------------------------------------------------------
@@ -798,7 +785,7 @@ void Normalizer::fixCanonical(UnicodeString& result) {
 /**
  * Return the current character in the normalized text.
  */
-UChar Normalizer:: current() const
+UChar32 Normalizer:: current() const
 {
   // TODO: make this method const and guarantee that currentChar is always set?
   Normalizer *nonConst = (Normalizer*)this;
@@ -825,7 +812,7 @@ UChar Normalizer:: current() const
  * Return the first character in the normalized text.  This resets
  * the <tt>Normalizer's</tt> position to the beginning of the text.
  */
-UChar Normalizer::first() {
+UChar32 Normalizer::first() {
     return setIndex(text->startIndex());
 }
 
@@ -834,7 +821,7 @@ UChar Normalizer::first() {
  * the <tt>Normalizer's</tt> position to be just before the
  * the input text corresponding to that normalized character.
  */
-UChar Normalizer::last() {
+UChar32 Normalizer::last() {
   text->setIndex(text->endIndex());
   
   currentChar = DONE;                     // The current char hasn't been processed
@@ -847,7 +834,7 @@ UChar Normalizer::last() {
  * the iteration position by one.  If the end
  * of the text has already been reached, {@link #DONE} is returned.
  */
-UChar Normalizer::next() {
+UChar32 Normalizer::next() {
   if (bufferPos < bufferLimit) {
     // There are output characters left in the buffer
     currentChar = buffer[++bufferPos];
@@ -876,7 +863,7 @@ UChar Normalizer::next() {
  * the iteration position by one.  If the beginning
  * of the text has already been reached, {@link #DONE} is returned.
  */
-UChar Normalizer::previous()
+UChar32 Normalizer::previous()
 {
   if (bufferPos > 0) {
     // There are output characters left in the buffer
@@ -927,7 +914,7 @@ void Normalizer::reset()
  * @throws IllegalArgumentException if the given index is less than
  *          {@link #getBeginIndex} or greater than {@link #getEndIndex}.
  */
-UChar Normalizer::setIndex(UTextOffset index)
+UChar32 Normalizer::setIndex(UTextOffset index)
 {
     text->setIndex(index);   // Checks range
     currentChar = DONE;     // The current char hasn't been processed
