@@ -37,7 +37,7 @@
 #include "chnsecal.h"
 #include "unicode/calendar.h"
 #include "cpputils.h"
-#include "iculserv.h"
+#include "servloc.h"
 #include "ucln_in.h"
 #include "cstring.h"
 #include "locbased.h"

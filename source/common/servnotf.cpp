@@ -9,7 +9,7 @@
 
 #if !UCONFIG_NO_SERVICE
 
-#include "icunotif.h"
+#include "servnotf.h"
 #ifdef NOTIFIER_DEBUG
 #include <stdio.h>
 #endif

@@ -29,7 +29,7 @@
 #include "ucln_cmn.h"
 #include "cstring.h"
 #include "mutex.h"
-#include "iculserv.h"
+#include "servloc.h"
 #include "locbased.h"
 #include "uresimp.h"
 

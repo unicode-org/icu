@@ -122,9 +122,13 @@ UObject *UObjectTest::testClass(UObject *obj,
 #include "unicode/utypes.h"
 
 // Things we Patch
+#if UOBJTEST_TEST_INTERNALS
 #define protected public   /* to access private factory function */
-#include "iculserv.h"
+#endif
+#include "servloc.h"
+#if UOBJTEST_TEST_INTERNALS
 #undef protected
+#endif
 
 // Internal Things (woo)
 #include "cpdtrans.h"
@@ -135,8 +139,8 @@ UObject *UObjectTest::testClass(UObject *obj,
 #include "digitlst.h"
 #include "esctrn.h"
 #include "funcrepl.h"
-#include "icunotif.h"
-#include "icuserv.h"
+#include "servnotf.h"
+#include "serv.h"
 #include "name2uni.h"
 #include "nfsubs.h"
 #include "nortrans.h"
@@ -156,6 +160,7 @@ UObject *UObjectTest::testClass(UObject *obj,
 #include "islamcal.h"
 #include "japancal.h"
 #include "hebrwcal.h"
+#include "ustrenum.h"
 
 // External Things
 #include "unicode/brkiter.h"
@@ -228,6 +233,7 @@ void UObjectTest::testIDs()
     //TESTCLASSID_DEFAULT(CollationElementIterator);
 #if !UCONFIG_NO_COLLATION
     TESTCLASSID_DEFAULT(CollationKey);
+    TESTCLASSID_FACTORY(UStringEnumeration, Collator::getKeywords(status));
 #endif
     //TESTCLASSID_FACTORY(CompoundTransliterator, Transliterator::createInstance(UnicodeString("Any-Jex;Hangul-Jamo"), UTRANS_FORWARD, parseError, status));
     
@@ -335,12 +341,14 @@ void UObjectTest::testIDs()
 #if !UCONFIG_NO_SERVICE
     TESTCLASSID_CTOR(SimpleFactory, (NULL, UnicodeString("foo")));
     TESTCLASSID_DEFAULT(EventListener);
-#if UOBJTEST_TEST_INTERNALS
     TESTCLASSID_DEFAULT(ICUResourceBundleFactory);
-    //TESTCLASSID_DEFAULT(Key); // does ont exist?
-    TESTCLASSID_CTOR(LocaleKey, (UnicodeString("baz"), UnicodeString("bat"), NULL, 92));
-    TESTCLASSID_CTOR(LocaleKeyFactory, (42));
+    //TESTCLASSID_DEFAULT(Key); // does not exist?
+    UnicodeString baz("baz");
+    UnicodeString bat("bat");
+    TESTCLASSID_FACTORY(LocaleKey, LocaleKey::createWithCanonicalFallback(&baz, &bat, LocaleKey::KIND_ANY, status));
     TESTCLASSID_CTOR(SimpleLocaleKeyFactory, (NULL, UnicodeString("bar"), 8, 12) );
+#if UOBJTEST_TEST_INTERNALS
+    TESTCLASSID_CTOR(LocaleKeyFactory, (42));
 #endif
 #endif
 

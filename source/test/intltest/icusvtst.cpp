@@ -12,7 +12,7 @@
 #if !UCONFIG_NO_SERVICE
 
 #include "icusvtst.h"
-#include "iculserv.h"
+#include "servloc.h"
 #include <stdio.h>
 
 

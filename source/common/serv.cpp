@@ -9,7 +9,7 @@
 
 #if !UCONFIG_NO_SERVICE
 
-#include "icuserv.h"
+#include "serv.h"
 #include "umutex.h"
 
 #undef SERVICE_REFCOUNT
