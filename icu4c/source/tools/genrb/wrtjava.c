@@ -40,8 +40,8 @@ static const char copyRight[] =
     " *\n"
     " *******************************************************************************\n"
     " * $Source: /xsrl/Nsvn/icu/icu/source/tools/genrb/wrtjava.c,v $ \n"
-    " * $Date: 2002/04/30 19:07:18 $ \n"
-    " * $Revision: 1.11 $ \n"
+    " * $Date: 2002/05/21 23:29:56 $ \n"
+    " * $Revision: 1.12 $ \n"
     " *******************************************************************************\n"
     " */\n\n";
 static const char warningMsg[] = 
@@ -254,50 +254,59 @@ static void
 str_write_java( uint16_t* src, int32_t srcLen, UErrorCode *status){
 
     uint32_t length = srcLen*8;
-    uint32_t retVal = 0;
+    uint32_t bufLen = 0;
     char* buf = (char*) malloc(sizeof(char)*length);
     memset(buf,0,length);
   
-    retVal = uCharsToChars(buf,length,src,srcLen,status);
+    bufLen = uCharsToChars(buf,length,src,srcLen,status);
     write_tabs(out);
     if(U_FAILURE(*status)){
         return;
     }
     
-    if(retVal+(tabCount*4) > 70  ){
+    if(bufLen+(tabCount*4) > 70  ){
         uint32_t len = 0;
         char* current = buf;
         uint32_t add;
-        uint32_t index;
-        while(len < retVal){
-            index =0;
+        while(len < bufLen){
             add = 70-(tabCount*4)-5/* for ", +\n */;
             current = buf +len;
-            index = strrch(current,add,'\\');
-            if(current[index+1]=='u'){
-                if((add-index)<6){
-                    add+= (6-(add-index));
-                }
-            }else{
-                if(current[index-1]!='\\'){
-                    if((add-index)<2){
-                        add+= (2-(add-index));
+            if (add < (bufLen-len)) {
+                uint32_t index = strrch(current,add,'\\');
+                if (index > add) {
+                    index = add;
+                } else {
+                    int32_t num =index-1;
+                    uint32_t seqLen;
+                    while(num>0){
+                        if(current[num]=='\\'){
+                            num--;
+                        }else{
+                            break;
+                        }
+                    }
+                    if ((index-num)%2==0) {
+                        index--;
+                    }
+                    seqLen = (current[index+1]=='u') ? 6 : 2;
+                    if ((add-index) < seqLen) {
+                        add = index + seqLen;
                     }
                 }
             }
             T_FileStream_write(out,"\"",1);
-            if(len+add<retVal){
+            if(len+add<bufLen){
                 T_FileStream_write(out,current,add);
                 T_FileStream_write(out,"\" +\n",4);
                 write_tabs(out);
             }else{
-                T_FileStream_write(out,current,retVal-len);
+                T_FileStream_write(out,current,bufLen-len);
             }
             len+=add;
         }
     }else{
         T_FileStream_write(out,"\"",1);
-        T_FileStream_write(out, buf,retVal);
+        T_FileStream_write(out, buf,bufLen);
     }
     T_FileStream_write(out,"\",\n",3);
 
