@@ -302,7 +302,9 @@ UBool RBBIRuleScanner::doParseActions(EParseAction action)
         if (U_FAILURE(*fRB->fStatus)) {       //   parse tree rooted in TOS node.
             break;
         }
+#ifdef RBBI_DEBUG
         if (fRB->fDebugEnv && uprv_strstr(fRB->fDebugEnv, "rtree")) {printNodeStack("end of rule");}
+#endif
         U_ASSERT(fNodeStackPtr == 1);
 
         // If this rule includes a look-ahead '/', add a endMark node to the
@@ -939,7 +941,9 @@ void RBBIRuleScanner::parse() {
         #endif
 
         for (;;) {
-            if (fRB->fDebugEnv && uprv_strstr(fRB->fDebugEnv, "scan")) { RBBIDebugPrintf(".");}
+            #ifdef RBBI_DEBUG
+                if (fRB->fDebugEnv && uprv_strstr(fRB->fDebugEnv, "scan")) { RBBIDebugPrintf(".");}
+            #endif
             if (tableEl->fCharClass < 127 && fC.fEscaped == FALSE &&   tableEl->fCharClass == fC.fChar) {
                 // Table row specified an individual character, not a set, and
                 //   the input character is not escaped, and
@@ -978,7 +982,7 @@ void RBBIRuleScanner::parse() {
             // No match on this row, advance to the next  row for this state,
             tableEl++;
         }
-        if (fRB->fDebugEnv && uprv_strstr(fRB->fDebugEnv, "scan")) { RBBIDebugPrintf("\n");}
+        if (fRB->fDebugEnv && uprv_strstr(fRB->fDebugEnv, "scan")) { RBBIDebugPuts("");}
 
         //
         // We've found the row of the state table that matches the current input
@@ -1062,8 +1066,6 @@ void RBBIRuleScanner::parse() {
 //
 //---------------------------------------------------------------------------------
 #ifdef RBBI_DEBUG
-void RBBIRuleScanner::printNodeStack(const char *) {}
-#else
 void RBBIRuleScanner::printNodeStack(const char *title) {
     int i;
     RBBIDebugPrintf("%s.  Dumping node stack...\n", title);
@@ -1130,7 +1132,9 @@ void RBBIRuleScanner::scanSet() {
     if (U_FAILURE(localStatus)) {
         //  TODO:  Get more accurate position of the error from UnicodeSet's return info.
         //         UnicodeSet appears to not be reporting correctly at this time.
-        RBBIDebugPrintf("UnicodeSet parse postion.ErrorIndex = %d\n", pos.getIndex());
+        #ifdef RBBI_DEBUG
+            RBBIDebugPrintf("UnicodeSet parse postion.ErrorIndex = %d\n", pos.getIndex());
+        #endif
         error(localStatus);
         delete uset;
         return;
