@@ -187,6 +187,7 @@ void addNEWResourceBundleTest(TestNode** root)
     addTest(root, &TestGetKeywordValues,      "tsutil/creststn/TestGetKeywordValues"); 
     addTest(root, &TestGetFunctionalEquivalent,"tsutil/creststn/TestGetFunctionalEquivalent");
     addTest(root, &TestJB3763,                "tsutil/creststn/TestJB3763");
+    addTest(root, &TestXPath,                 "tsutil/creststn/TestXPath");
 
 }
 
@@ -1029,7 +1030,8 @@ static void TestAPI() {
     }
     key=ures_getKey(teFillin);
     /*if(strcmp(key, "%%CollationBin") != 0){*/
-    if(strcmp(key, "array_2d_in_Root_te") != 0){
+    /*if(strcmp(key, "array_2d_in_Root_te") != 0){*/ /* added "aliasClient" that goes first */
+    if(strcmp(key, "aliasClient") != 0){
         log_err("ERROR: ures_getNextResource() failed\n");
     }
 #endif
@@ -2514,3 +2516,39 @@ static void TestGetFunctionalEquivalent(void) {
 #endif
 }
 
+static void TestXPath(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    UResourceBundle *rb = NULL, *alias = NULL;
+    int32_t len = 0;
+    const UChar* result = NULL;
+    const UChar expResult[] = { 0x0074, 0x0065, 0x0069, 0x006E, 0x0064, 0x0065, 0x0073, 0x0074, 0x0000 }; /*teindest*/
+    
+    const char *testdatapath=loadTestData(&status);
+    if(U_FAILURE(status))
+    {
+        log_err("Could not load testdata.dat %s \n",myErrorName(status));
+        return;
+    }
+    
+    log_verbose("Testing ures_open()......\n");
+
+    rb = ures_open(testdatapath, "te_IN", &status);
+    if(U_FAILURE(status)) {
+      log_err("Could not open te_IN (%s)\n", myErrorName(status));
+      return;
+    }
+    alias = ures_getByKey(rb, "aliasClient", NULL, &status);
+    if(U_FAILURE(status)) {
+      log_err("Couldn't find the aliased resource (%s)\n", myErrorName(status));
+      ures_close(rb);
+      return;
+    }
+
+    result = ures_getString(alias, &len, &status);
+    if(U_FAILURE(status) || result == NULL || u_strcmp(result, expResult)) {
+      log_err("Couldn't get correct string value (%s)\n", myErrorName(status));
+    }
+
+    ures_close(alias);
+    ures_close(rb);
+}
