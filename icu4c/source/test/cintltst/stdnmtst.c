@@ -39,10 +39,10 @@ static int dotestname(const char *name, const char *standard, const char *expect
     tag = ucnv_getStandardName(name, standard, &error);
     if (!tag) {
         log_err("FAIL: could not find %s standard name for %s\n", standard, name);
-	res = 0;
+        res = 0;
     } else if (expected && uprv_strcmp(expected, tag)) {
         log_err("FAIL: expected %s for %s standard name for %s, got %s\n", expected, standard, name, tag);
-	res = 0;
+        res = 0;
     }
 
     return res;
@@ -52,11 +52,11 @@ void TestStandardNames()
 {
     int res = 1;
 
-    int i, count;
+    uint16_t i, count;
     UErrorCode err;
 
     /* Iterate over all standards. */
- 
+
     for (i = 0, count = ucnv_countStandards(); i < count; ++i) {
         const char *std;
 
