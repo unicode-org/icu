@@ -159,30 +159,6 @@ public:
                         UErrorCode& status);
 
     /**
-     * Construct a new rule with the given input, output text, and other
-     * attributes.  A cursor position may be specified for the output text.
-     * @param input input string, including key and optional ante and
-     * post context
-     * @param anteContextPos offset into input to end of ante context, or -1 if
-     * none.  Must be <= input.length() if not -1.
-     * @param postContextPos offset into input to start of post context, or -1
-     * if none.  Must be <= input.length() if not -1, and must be >=
-     * anteContextPos.
-     * @param output output string
-     * @param cursorPosition offset into output at which cursor is located, or -1 if
-     * none.  If less than zero, then the cursor is placed after the
-     * <code>output</code>; that is, -1 is equivalent to
-     * <code>output.length()</code>.  If greater than
-     * <code>output.length()</code> then an exception is thrown.
-     */
-    TransliterationRule(const UnicodeString& input,
-                        int32_t anteContextPos, int32_t postContextPos,
-                        const UnicodeString& outputStr,
-                        int32_t cursorPosition,
-                        const TransliterationRuleData& data,
-                        UErrorCode& status);
-
-    /**
      * Copy constructor.
      */
     TransliterationRule(TransliterationRule& other);
@@ -268,16 +244,6 @@ public:
      */
     virtual UnicodeString& toRule(UnicodeString& pat,
                                   UBool escapeUnprintable) const;
- private:
-
-    void init(const UnicodeString& input,
-              int32_t anteContextPos, int32_t postContextPos,
-              const UnicodeString& output,
-              int32_t cursorPos, int32_t cursorOffset,
-              int32_t* adoptedSegs,
-              UBool anchorStart, UBool anchorEnd,
-              UErrorCode& status);
-
  private:
 
     friend class StringMatcher;
