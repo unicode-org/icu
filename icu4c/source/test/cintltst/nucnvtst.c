@@ -3097,7 +3097,7 @@ TestSCSU() {
         UErrorCode status = U_ZERO_ERROR;
         int32_t cSrcLen,srcLen;
         UChar* src;
-        //UConverter* cnv = ucnv_open("SCSU",&status);
+        /* UConverter* cnv = ucnv_open("SCSU",&status); */
         cSrcLen= srcLen =  uprv_strlen(fTestCases[i]);
         src = (UChar*) uprv_malloc(sizeof(UChar) * srcLen);
         srcLen=unescape(src,srcLen,cSrc,cSrcLen,&status);
