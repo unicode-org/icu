@@ -91,7 +91,8 @@ th.txt th_TH.txt\
 tr.txt tr_TR.txt\
 uk.txt uk_UA.txt\
 vi.txt vi_VN.txt\
-zh.txt zh_CN.txt zh_HK.txt zh_SG.txt zh_TW.txt
+zh.txt zh_CN.txt zh_HK.txt zh_SG.txt zh_TW.txt\
+nn.txt nn_NO.txt nb.txt nb_NO.txt
 
 TRANSLIT_SOURCE=fullhalf.txt translit_index.txt kana.txt kbdescl1.txt\
 larabic.txt lcyril.txt ldevan.txt\
