@@ -638,7 +638,7 @@ U_CAPI UCharDirection U_EXPORT2
 u_charDirection(UChar32 c) {   
     uint32_t props=GET_PROPS(c);
     if(props!=0) {
-        return (UCharDirection)(props>>BIDI_SHIFT)&0x1f;
+        return (UCharDirection)((props>>BIDI_SHIFT)&0x1f);
     } else {
         return U_BOUNDARY_NEUTRAL;
     }

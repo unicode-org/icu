@@ -59,7 +59,7 @@ _SBCSUnload(UConverterSharedData *sharedData) {
     uprv_free (sharedData->table);
 }
 
-void T_UConverter_toUnicode_SBCS (UConverterToUnicodeArgs * args,
+U_CFUNC void T_UConverter_toUnicode_SBCS (UConverterToUnicodeArgs * args,
                                   UErrorCode * err)
 {
   char *mySource = (char *) args->source;
@@ -408,7 +408,7 @@ _DBCSUnload(UConverterSharedData *sharedData) {
     uprv_free (sharedData->table);
 }
 
-void   T_UConverter_toUnicode_DBCS (UConverterToUnicodeArgs * args,
+U_CFUNC void   T_UConverter_toUnicode_DBCS (UConverterToUnicodeArgs * args,
                                     UErrorCode * err)
 {
   const char *mySource = ( char *) args->source;
