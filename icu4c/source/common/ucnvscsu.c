@@ -1295,6 +1295,30 @@ callback:
 
 /* miscellaneous ------------------------------------------------------------ */
 
+U_CFUNC void
+_SCSUWriteSub(UConverterFromUnicodeArgs *pArgs,
+               int32_t offsetIndex,
+               UErrorCode *pErrorCode) {
+    static const char squ_fffd[]={ (char)SQU, (char)0xff, (char)0xfd };
+
+    /*
+     * The substitution character is U+fffd={ ff, fd }.
+     * If the SCSU converter is in Unicode mode, then these two bytes just need to
+     * be written. Otherwise, this character is quoted.
+     */
+    if(((SCSUData *)pArgs->converter->extraInfo)->fromUIsSingleByteMode) {
+        /* single-byte mode: quote Unicode */
+        ucnv_cbFromUWriteBytes(pArgs,
+                               squ_fffd, 3,
+                               offsetIndex, pErrorCode);
+    } else {
+        /* Unicode mode: just write U+fffd */
+        ucnv_cbFromUWriteBytes(pArgs,
+                               squ_fffd+1, 2,
+                               offsetIndex, pErrorCode);
+    }
+}
+
 static const UConverterImpl _SCSUImpl={
     UCNV_SCSU,
 
@@ -1312,7 +1336,8 @@ static const UConverterImpl _SCSUImpl={
     _SCSUGetNextUChar,
 
     NULL,
-    NULL
+    NULL,
+    _SCSUWriteSub
 };
 
 static const UConverterStaticData _SCSUStaticData={
