@@ -20,6 +20,8 @@ CLEANFILES = *~ $(DEPS)
 TARGET = intltest$(EXEEXT)
 
 BUILDDIR := $(shell pwd)/../../
+BUILDDIR := $(BUILDDIR:test/intltest/../../=)
+
 CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/tools/toolutil
 DEFS += -D'U_TOPSRCDIR="$(top_srcdir)/"' -D'U_TOPBUILDDIR="$(BUILDDIR)"'
 LIBS = $(LIBICUI18N) $(LIBICUUC) $(LIBICUTOOLUTIL) $(DEFAULT_LIBS) $(LIB_M)

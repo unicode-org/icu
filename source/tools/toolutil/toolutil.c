@@ -61,6 +61,15 @@ findBasename(const char *filename) {
     if(basename!=NULL) {
         return basename+1;
     } else {
+#ifdef WIN32
+        /* Use lenient matching on Windows, which can accept either \ or /
+           This is useful for CygWin environments which has both
+        */
+        basename=uprv_strrchr(filename, '/');
+        if(basename!=NULL) {
+            return basename+1;
+        }
+#endif
         return filename;
     }
 }
