@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.1/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="2.0"/>
-		<generation date="2004-05-14" />
+		<version number="1.1"/>
+		<generation date="2004-05-27" />
 		<language type="pl" /> 
 	</identity>
 	<localeDisplayNames>
@@ -290,11 +285,6 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[a-z ó ą ę ć ń ś ź ł ż]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Latn</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
 		<calendars>
@@ -302,18 +292,32 @@
 				<months>
 					<monthContext type="format">
 						<monthWidth type="abbreviated">
-							<month type="1">sty</month>
+							<month type="1">st</month>
 							<month type="2">lut</month>
-							<month type="3">mar</month>
-							<month type="4">kwi</month>
+							<month type="3">mrz</month>
+							<month type="4">kw</month>
 							<month type="5">maj</month>
-							<month type="6">cze</month>
+							<month type="6">cz</month>
 							<month type="7">lip</month>
-							<month type="8">sie</month>
+							<month type="8">sier</month>
 							<month type="9">wrz</month>
 							<month type="10">paź</month>
 							<month type="11">lis</month>
-							<month type="12">gru</month>
+							<month type="12">gr</month>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<month type="1">s</month>
+							<month type="2">l</month>
+							<month type="3">m</month>
+							<month type="4">k</month>
+							<month type="5">m</month>
+							<month type="6">c</month>
+							<month type="7">l</month>
+							<month type="8">s</month>
+							<month type="9">w</month>
+							<month type="10">p</month>
+							<month type="11">l</month>
+							<month type="12">g</month>
 						</monthWidth>
 						<monthWidth type="wide">
 							<month type="1">styczeń</month>
@@ -328,6 +332,50 @@
 							<month type="10">październik</month>
 							<month type="11">listopad</month>
 							<month type="12">grudzień</month>
+						</monthWidth>
+					</monthContext>
+					<monthContext type="stand-alone">
+						<monthWidth type="abbreviated">
+							<month type="1">st</month>
+							<month type="2">lut</month>
+							<month type="3">mrz</month>
+							<month type="4">kw</month>
+							<month type="5">maj</month>
+							<month type="6">cz</month>
+							<month type="7">lip</month>
+							<month type="8">sier</month>
+							<month type="9">wrz</month>
+							<month type="10">paź</month>
+							<month type="11">lis</month>
+							<month type="12">gr</month>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<month type="1">s</month>
+							<month type="2">l</month>
+							<month type="3">m</month>
+							<month type="4">k</month>
+							<month type="5">m</month>
+							<month type="6">c</month>
+							<month type="7">l</month>
+							<month type="8">s</month>
+							<month type="9">w</month>
+							<month type="10">p</month>
+							<month type="11">l</month>
+							<month type="12">g</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">Styczeń</month>
+							<month type="2">Luty</month>
+							<month type="3">Marzec</month>
+							<month type="4">Kwiecień</month>
+							<month type="5">Maj</month>
+							<month type="6">Czerwiec</month>
+							<month type="7">Lipiec</month>
+							<month type="8">Sierpień</month>
+							<month type="9">Wrzesień</month>
+							<month type="10">Październik</month>
+							<month type="11">Listopad</month>
+							<month type="12">Grudzień</month>
 						</monthWidth>
 					</monthContext>
 				</months>
@@ -441,41 +489,4 @@
 			</currency>
 		</currencies>
 	</numbers>
-	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-		<icu:ruleBasedNumberFormats>
-			<icu:ruleBasedNumberFormat type="spellout">
--x: minus &gt;&gt;;
-zero; jeden; dwa; trzy; cztery; pięć;
-sześć; siedem; osiem; dziewięć; dziesięć;
-jedenaście; dwanaście; trzynaście; czternaście; piętnaście;
-szesnaście; siedemnaście; osiemnaście; dziewiętnaście;
-20: dwadzieścia[ &gt;&gt;];
-30: trzydzieści[ &gt;&gt;];
-40: czterdzieści[ &gt;&gt;];
-50: pięćdziesiąt[ &gt;&gt;];
-60: sześćdziesiąt[ &gt;&gt;];
-70: siedemdziesiąt[ &gt;&gt;];
-80: osiemdziesiąt[ &gt;&gt;];
-90: dziewięćdziesiąt[ &gt;&gt;];
-100: sto[ &gt;&gt;];
-200: dwieście[ &gt;&gt;];
-300: trzysta[ &gt;&gt;];
-400: czterysta[ &gt;&gt;];
-500: pięćset[ &gt;&gt;];
-600: sześćset[ &gt;&gt;];
-700: siedemset[ &gt;&gt;];
-800: osiemset[ &gt;&gt;];
-900: dziewięćset[ &gt;&gt;];
-1000: tysiąc[ &gt;&gt;];
-2000: &lt;&lt; tysiący[ &gt;&gt;];
-1,000,000: milion[ &gt;&gt;];
-2,000,000: &lt;&lt; miliony[ &gt;&gt;];
-1,000,000,000: bilion[ &gt;&gt;];
-2,000,000,000: &lt;&lt; biliony[ &gt;&gt;];
-1,000,000,000,000: trylion[ &gt;&gt;];
-2,000,000,000,000: &lt;&lt; tryliony[ &gt;&gt;];
-1,000,000,000,000,000: =#,##0=;
-			</icu:ruleBasedNumberFormat>
-		</icu:ruleBasedNumberFormats>
-	</special>
 </ldml>

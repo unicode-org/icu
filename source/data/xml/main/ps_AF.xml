@@ -1,20 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.1/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="1.0"/>
-		<generation date="2004-05-14" />
+		<version number="1.1"/>
+		<generation date="2004-05-27" />
 		<language type="ps" /> 
 		<territory type="AF" /> 
 	</identity>
 	<layout>
 		<orientation lines="top-to-bottom" characters="right-to-left" />
 	</layout>
+	<dates>
+		<calendars>
+			<calendar type="gregorian">
+				<week>
+					<minDays count="1"/>
+					<firstDay day="sat"/>
+				</week>
+			</calendar>
+		</calendars>
+	</dates>
 	<numbers>
 		<symbols>
 			<decimal>٫</decimal>

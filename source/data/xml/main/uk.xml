@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.1/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="2.0"/>
-		<generation date="2004-05-14" />
+		<version number="1.1"/>
+		<generation date="2004-05-27" />
 		<language type="uk" /> 
 	</identity>
 	<localeDisplayNames>
@@ -142,7 +137,7 @@
 			<language type="uk">Українська</language>
 			<language type="ur">Урду</language>
 			<language type="uz">Узбецька</language>
-			<language type="vi">В'єтнамська</language>
+			<language type="vi">Вʼєтнамська</language>
 			<language type="vo">Волапак</language>
 			<language type="wo">Волоф</language>
 			<language type="xh">Кхоса</language>
@@ -194,7 +189,7 @@
 			<territory type="CF">Центрально-Африканська Республіка</territory>
 			<territory type="CG">Конго</territory>
 			<territory type="CH">Швейцарія</territory>
-			<territory type="CI">Кот-д'Івуар</territory>
+			<territory type="CI">Кот-д’Івуар</territory>
 			<territory type="CK">Кука, острови</territory>
 			<territory type="CL">Чилі</territory>
 			<territory type="CM">Камерун</territory>
@@ -290,7 +285,7 @@
 			<territory type="MH">Маршалові Острови</territory>
 			<territory type="MK">Македонія</territory>
 			<territory type="ML">Малі</territory>
-			<territory type="MM">М'янмар</territory>
+			<territory type="MM">Мʼянмар</territory>
 			<territory type="MN">Монголія</territory>
 			<territory type="MO">Макао</territory>
 			<territory type="MP">Північна Маріана, острови</territory>
@@ -324,7 +319,7 @@
 			<territory type="PH">Філіппіни</territory>
 			<territory type="PK">Пакистан</territory>
 			<territory type="PL">Польща</territory>
-			<territory type="PM">Св. П'єр і Мікулон</territory>
+			<territory type="PM">Св. Пʼєр і Мікулон</territory>
 			<territory type="PN">Піткаїрн</territory>
 			<territory type="PR">Пуерто-Ріко</territory>
 			<territory type="PS">Палестина</territory>
@@ -370,7 +365,7 @@
 			<territory type="TT">Тринідад і Табаго</territory>
 			<territory type="TV">Тувалу</territory>
 			<territory type="TW">Тайвань</territory>
-			<territory type="TZ">Танзанія, Об'єднана Республіка</territory>
+			<territory type="TZ">Танзанія, Обʼєднана Республіка</territory>
 			<territory type="UA">Україна</territory>
 			<territory type="UG">Уганда</territory>
 			<territory type="UM">Віддалені Острови США</territory>
@@ -382,7 +377,7 @@
 			<territory type="VE">Венесуела</territory>
 			<territory type="VG">Віргінські острови (Британія)</territory>
 			<territory type="VI">Віргінські острови (США)</territory>
-			<territory type="VN">В'єтнам</territory>
+			<territory type="VN">Вʼєтнам</territory>
 			<territory type="VU">Вануату</territory>
 			<territory type="WF">Валліс і Футуна, острови</territory>
 			<territory type="WS">Самоа</territory>
@@ -396,11 +391,6 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[а-щюьяєіїґ]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Cyrl</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
 		<localizedPatternChars>GanjkHmsSEDFwWxhKzAeugXZ</localizedPatternChars>
@@ -409,18 +399,32 @@
 				<months>
 					<monthContext type="format">
 						<monthWidth type="abbreviated">
-							<month type="1">січ</month>
-							<month type="2">лют</month>
-							<month type="3">бер</month>
-							<month type="4">квіт</month>
-							<month type="5">трав</month>
-							<month type="6">черв</month>
-							<month type="7">лип</month>
-							<month type="8">серп</month>
-							<month type="9">вер</month>
-							<month type="10">жовт</month>
-							<month type="11">лист</month>
-							<month type="12">груд</month>
+							<month type="1">Січ</month>
+							<month type="2">Лют</month>
+							<month type="3">Бер</month>
+							<month type="4">Кві</month>
+							<month type="5">Тра</month>
+							<month type="6">Чер</month>
+							<month type="7">Лип</month>
+							<month type="8">Сер</month>
+							<month type="9">Вер</month>
+							<month type="10">Жов</month>
+							<month type="11">Лис</month>
+							<month type="12">Гру</month>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<month type="1">С</month>
+							<month type="2">Л</month>
+							<month type="3">Б</month>
+							<month type="4">К</month>
+							<month type="5">Т</month>
+							<month type="6">Ч</month>
+							<month type="7">Л</month>
+							<month type="8">С</month>
+							<month type="9">В</month>
+							<month type="10">Ж</month>
+							<month type="11">Л</month>
+							<month type="12">Г</month>
 						</monthWidth>
 						<monthWidth type="wide">
 							<month type="1">січня</month>
@@ -435,6 +439,50 @@
 							<month type="10">жовтня</month>
 							<month type="11">листопада</month>
 							<month type="12">грудня</month>
+						</monthWidth>
+					</monthContext>
+					<monthContext type="stand-alone">
+						<monthWidth type="abbreviated">
+							<month type="1">Січ</month>
+							<month type="2">Лют</month>
+							<month type="3">Бер</month>
+							<month type="4">Кві</month>
+							<month type="5">Тра</month>
+							<month type="6">Чер</month>
+							<month type="7">Лип</month>
+							<month type="8">Сер</month>
+							<month type="9">Вер</month>
+							<month type="10">Жов</month>
+							<month type="11">Лис</month>
+							<month type="12">Гру</month>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<month type="1">С</month>
+							<month type="2">Л</month>
+							<month type="3">Б</month>
+							<month type="4">К</month>
+							<month type="5">Т</month>
+							<month type="6">Ч</month>
+							<month type="7">Л</month>
+							<month type="8">С</month>
+							<month type="9">В</month>
+							<month type="10">Ж</month>
+							<month type="11">Л</month>
+							<month type="12">Г</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">Січень</month>
+							<month type="2">Лютий</month>
+							<month type="3">Березень</month>
+							<month type="4">Квітень</month>
+							<month type="5">Травень</month>
+							<month type="6">Червень</month>
+							<month type="7">Липень</month>
+							<month type="8">Серпень</month>
+							<month type="9">Вересень</month>
+							<month type="10">Жовтень</month>
+							<month type="11">Листопад</month>
+							<month type="12">Грудень</month>
 						</monthWidth>
 					</monthContext>
 				</months>
@@ -455,7 +503,7 @@
 							<day type="tue">Вівторок</day>
 							<day type="wed">Середа</day>
 							<day type="thu">Четвер</day>
-							<day type="fri">П'ятниця</day>
+							<day type="fri">Пʼятниця</day>
 							<day type="sat">Субота</day>
 						</dayWidth>
 					</dayContext>
@@ -464,6 +512,12 @@
 					<minDays count="1"/>
 					<firstDay day="mon"/>
 				</week>
+				<eras>
+					<eraAbbr>
+						<era type="1">до н.е.</era>
+						<era type="2">н.е.</era>
+					</eraAbbr>
+				</eras>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">
@@ -542,38 +596,4 @@
 			</currency>
 		</currencies>
 	</numbers>
-	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-		<icu:ruleBasedNumberFormats>
-			<icu:ruleBasedNumberFormat type="spellout">
-нуль; один; два; три; чотири; п'ять; шість; сім; вісім; дев'ять;
-10: десять; одинадцять;
-дванадцять; тринадцять; чотирнадцять;
-15: п'ятнадцять; шістнадцять; сімнадцять; вісімнадцять; дев'ятнадцять;
-20: двадцять[ &gt;&gt;];
-30: тридцять[ &gt;&gt;];
-40: сорок[ &gt;&gt;];
-50: п'ятдесят[ &gt;&gt;];
-60: шістдесят[ &gt;&gt;];
-70: сімдесят[ &gt;&gt;];
-80: вісімдесят[ &gt;&gt;];
-90: дев'яносто[ &gt;&gt;];
-100: сто[ &gt;&gt;];
-200: двісті[ &gt;&gt;];
-300: триста[ &gt;&gt;];
-400: чотириста[ &gt;&gt;];
-500: п'ятсот[ &gt;&gt;];
-600: шістсот[ &gt;&gt;];
-700: сімсот[ &gt;&gt;];
-800: вісімсот[ &gt;&gt;];
-900: дев'ятсот[ &gt;&gt;];
-1000: тисяча[ &gt;&gt;];
-2000: &lt;&lt; тисячі[ &gt;&gt;];
-5000: &lt;&lt; тисяч[ &gt;&gt;];
-1,000,000: мільйон[ &gt;&gt;];
-2,000,000: &lt;&lt; мільйони[ &gt;&gt;];
-5,000,000: &lt;&lt; мільйонів[ &gt;&gt;];
-1,000,000,000: &lt;&lt; мільярд[ &gt;&gt;];
-			</icu:ruleBasedNumberFormat>
-		</icu:ruleBasedNumberFormats>
-	</special>
 </ldml>

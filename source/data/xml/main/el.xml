@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.1/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="2.0"/>
-		<generation date="2004-05-14" />
+		<version number="1.1"/>
+		<generation date="2004-05-27" />
 		<language type="el" /> 
 	</identity>
 	<localeDisplayNames>
@@ -292,11 +287,6 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[ά-ώ]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Grek</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
 		<localizedPatternChars>GanjkHmsSEDFwWxhKzAeugXZ</localizedPatternChars>
@@ -317,6 +307,64 @@
 							<month type="10">Οκτ</month>
 							<month type="11">Νοε</month>
 							<month type="12">Δεκ</month>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<month type="1">Ι</month>
+							<month type="2">Φ</month>
+							<month type="3">Μ</month>
+							<month type="4">Α</month>
+							<month type="5">Μ</month>
+							<month type="6">Ι</month>
+							<month type="7">Ι</month>
+							<month type="8">Α</month>
+							<month type="9">Σ</month>
+							<month type="10">Ο</month>
+							<month type="11">Ν</month>
+							<month type="12">Δ</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">Ιανουάριος</month>
+							<month type="2">Φεβρουάριος</month>
+							<month type="3">Μάρτιος</month>
+							<month type="4">Απρίλιος</month>
+							<month type="5">Μάιος</month>
+							<month type="6">Ιούνιος</month>
+							<month type="7">Ιούλιος</month>
+							<month type="8">Αύγουστος</month>
+							<month type="9">Σεπτέμβριος</month>
+							<month type="10">Οκτώβριος</month>
+							<month type="11">Νοέμβριος</month>
+							<month type="12">Δεκέμβριος</month>
+						</monthWidth>
+					</monthContext>
+					<monthContext type="stand-alone">
+						<monthWidth type="abbreviated">
+							<month type="1">Ιαν</month>
+							<month type="2">Φεβ</month>
+							<month type="3">Μαρ</month>
+							<month type="4">Απρ</month>
+							<month type="5">Μαϊ</month>
+							<month type="6">Ιουν</month>
+							<month type="7">Ιουλ</month>
+							<month type="8">Αυγ</month>
+							<month type="9">Σεπ</month>
+							<month type="10">Οκτ</month>
+							<month type="11">Νοε</month>
+							<month type="12">Δεκ</month>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<month type="1">Ι</month>
+							<month type="2">Φ</month>
+							<month type="3">Μ</month>
+							<month type="4">Α</month>
+							<month type="5">Μ</month>
+							<month type="6">Ι</month>
+							<month type="7">Ι</month>
+							<month type="8">Α</month>
+							<month type="9">Σ</month>
+							<month type="10">Ο</month>
+							<month type="11">Ν</month>
+							<month type="12">Δ</month>
 						</monthWidth>
 						<monthWidth type="wide">
 							<month type="1">Ιανουάριος</month>

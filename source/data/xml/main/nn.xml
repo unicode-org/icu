@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.1/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="2.0"/>
-		<generation date="2004-05-14" />
+		<version number="1.1"/>
+		<generation date="2004-05-27" />
 		<language type="nn" /> 
 	</identity>
 	<localeDisplayNames>
@@ -76,8 +71,8 @@
 			<territory type="KH">Kambodsja</territory>
 			<territory type="KM">Komorene</territory>
 			<territory type="KN">St. Christopher og Nevis</territory>
-			<territory type="KP">Korea (Nord)</territory>
-			<territory type="KR">Korea (Sør)</territory>
+			<territory type="KP">Nord-Korea</territory>
+			<territory type="KR">Sør-Korea</territory>
 			<territory type="KY">Caymanøyene</territory>
 			<territory type="KZ">Kasakhstan</territory>
 			<territory type="LA">Laos, Den folkedemokratiske republikken</territory>
@@ -119,11 +114,12 @@
 			<territory type="TT">Trinidad og Tobago</territory>
 			<territory type="UA">Ukraina</territory>
 			<territory type="UM">USAs mindre øyer</territory>
-			<territory type="US">Sambandsstatane</territory>
+			<territory type="US">USA</territory>
 			<territory type="UZ">Usbekistan</territory>
 			<territory type="VA">Vatikanstaten</territory>
 			<territory type="VC">St. Vincent og Grenadinene</territory>
 			<territory type="VG">Jomfruøyene (britisk)</territory>
+			<territory type="VI">Jomfruøyene (USA)</territory>
 			<territory type="WF">Wallis og Futuna</territory>
 			<territory type="YU">Jugoslavia</territory>
 			<territory type="ZA">Sør-Afrika</territory>
@@ -131,11 +127,6 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[a-zæåøéóôàüǎ]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Latn</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
 		<calendars>

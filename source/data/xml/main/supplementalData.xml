@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE supplementalData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldmlSupplemental.dtd" >
+<!DOCTYPE supplementalData SYSTEM "http://www.unicode.org/cldr/dtd/1.1/ldmlSupplemental.dtd" >
 <supplementalData>
     <currencyData>
         <fractions>
