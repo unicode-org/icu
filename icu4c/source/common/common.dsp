@@ -261,6 +261,10 @@ SOURCE=.\ures.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\uresdata.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\ustring.c
 # End Source File
 # Begin Source File
@@ -987,6 +991,10 @@ InputPath=.\ures.h
 
 !ENDIF 
 
+# End Source File
+# Begin Source File
+
+SOURCE=.\uresdata.h
 # End Source File
 # Begin Source File
 
