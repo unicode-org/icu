@@ -204,4 +204,12 @@ CalendarTimeZoneTest::dateToFields(UDate date, int32_t& y, int32_t& m, int32_t& 
     releaseCalendar(cal);
 }
 
+void CalendarTimeZoneTest::cleanup()
+{
+    delete fgDateFormat;
+    fgDateFormat = 0;
+    delete fgCalendar;
+    fgCalendar   = 0;
+}
+
 //eof

@@ -19,6 +19,8 @@ class Calendar;
  **/
 class CalendarTimeZoneTest : public IntlTest
 {
+public:
+    static void cleanup();
 protected:
     // Return true if the given status indicates failure.  Also has the side effect
     // of calling errln().  Msg should be of the form "Class::Method" in general.
