@@ -56,7 +56,7 @@ U_NAMESPACE_BEGIN
  *     error.  
  *
  * Some StringPrep profiles:
- * IDN: "Nameprep" http://www.ietf.org/internet-drafts/draft-ietf-idn-nameprep-11.txt
+ * IDN: "Nameprep" http://www.ietf.org/rfc/rfc3491.txt
  * XMPP Node Identifiers: "Nodeprep" http://www.ietf.org/internet-drafts/draft-ietf-xmpp-nodeprep-01.txt
  * XMPP Resource Identifiers: "Resourceprep" http://www.ietf.org/internet-drafts/draft-ietf-xmpp-resourceprep-01.txt
  * ANONYMOUS SASL tokens: "plain" http://www.ietf.org/internet-drafts/draft-ietf-sasl-anon-00.txt
