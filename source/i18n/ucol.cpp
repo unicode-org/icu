@@ -43,6 +43,9 @@ u_normalize(const UChar*            source,
   case UCOL_DECOMP_COMPAT_COMP_CAN:
     normMode = Normalizer::COMPOSE_COMPAT;
     break;
+  default:
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
+    return -1;
   }
 
   int32_t len = (sourceLength == -1 ? u_strlen(source) : sourceLength);
@@ -104,6 +107,9 @@ ucol_openRules(    const    UChar                  *rules,
   case UCOL_DECOMP_COMPAT_COMP_CAN:
     normMode = Normalizer::COMPOSE_COMPAT;
     break;
+  default:
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
+    return 0;
   }
 
   RuleBasedCollator *col = 0;
@@ -201,8 +207,6 @@ ucol_getNormalization(const UCollator* coll)
   case Normalizer::DECOMP_COMPAT:
     return UCOL_DECOMP_COMPAT;
 
-  default:
-    break;
   }
   return UCOL_NO_NORMALIZATION;
 }
@@ -228,6 +232,10 @@ ucol_setNormalization(  UCollator            *coll,
   case UCOL_DECOMP_CAN_COMP_COMPAT:
     normMode = Normalizer::COMPOSE_COMPAT;
     break;
+  default:
+    /* Shouldn't get here. */
+    /* *status = U_ILLEGAL_ARGUMENT_ERROR; */
+    return;
   }
 
   ((Collator*)coll)->setDecomposition(normMode);
