@@ -30,7 +30,7 @@
      <abbr title="International Components for Unicode">ICU</abbr> 2.8
     ReadMe</h1>
 
-    <p>Version: 2003-Oct-14<br>
+    <p>Version: 2003-Nov-04<br>
      Copyright &copy; 1997-2003 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -1809,10 +1809,31 @@ del common/libicuuc.so
 
     <p>If you are using ICU's Makefiles to build ICU on a new platform, there
     are a few places where you will need to add or modify some files. If you
-    need more help, you can always ask the icu4c-support mailing list. Once you
+    need more help, you can always ask the
+    <a href="http://oss.software.ibm.com/icu/archives/">icu4c-support mailing list</a>.
+    Once you
     have finished porting ICU to a new platform, it is recommended that you
     contribute your changes back to ICU via the icu4c-support mailing list.
     This will make it easier for everyone to benefit from your work.</p>
+
+    <h4>Data For a New Platform</h4>
+
+    <p>It may not be necessary for your use of ICU to make a full ICU build work.
+    Most of the makefiles and build targets are for tools that are used for building
+    ICU's data &mdash; and an application's data if the application uses ICU
+    resource bundles and similar for its data.</p>
+
+    <p>Data files can be built on a different platform if both platforms share the
+    same endianness and the same charset family, and if memory-mappable, binary
+    data files are used instead of DLLs/shared libraries.
+    For details see the User Guide <a href="http://oss.software.ibm.com/icu/userguide/icudata.html">ICU Data</a> chapter.</p>
+
+    <p>ICU 2.8 eliminates the first condition:
+    It adds the icuswap tool which can be run on any platform to turn binary ICU data files
+    from any one of the three formats into any one of the other.
+    This allows to use ICU data built anywhere to be used for any target platform.</p>
+
+    <h4>Adapting Makefiles For a New Platform</h4>
 
     <p>Try to follow the build steps from the <a href=
     "#HowToBuildUNIX">UNIX</a> build instructions. If the configure script
