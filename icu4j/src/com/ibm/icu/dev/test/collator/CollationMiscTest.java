@@ -26,8 +26,8 @@ import java.util.Locale;
 public class CollationMiscTest extends TestFmwk{
 
     public static void main(String[] args) throws Exception {
-        // new CollationMiscTest().run(args);
-        new CollationMiscTest().TestLocaleRuleBasedCollators();
+        new CollationMiscTest().run(args);
+        // new CollationMiscTest().TestLocaleRuleBasedCollators();
     }
     
     public void TestRuleOptions() {

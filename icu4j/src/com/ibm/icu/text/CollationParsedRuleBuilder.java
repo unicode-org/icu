@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationParsedRuleBuilder.java,v $ 
-* $Date: 2002/09/06 01:53:18 $ 
-* $Revision: 1.5 $
+* $Date: 2002/09/10 22:19:31 $ 
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -465,7 +465,6 @@ final class CollationParsedRuleBuilder
 		    }
 		}
 		
-		
 		BuildTable t = new BuildTable(m_parser_);
 		
         // After this, we have assigned CE values to all regular CEs now we 
@@ -478,10 +477,7 @@ final class CollationParsedRuleBuilder
 		    createElements(t, m_parser_.m_listHeader_[i]);
 		}
 		
-        Elements el = new Elements();
-        el.m_isThai_ = false;
-		el.m_prefixChars_ = null;
-		int ce[] = new int[256];
+        m_utilElement_.clear();
         StringBuffer str = new StringBuffer();
         
 		// add latin-1 stuff
@@ -497,20 +493,19 @@ final class CollationParsedRuleBuilder
                    && getCE(t.m_contractions_, CE, 0) == CE_NOT_FOUND_)) {
                 str.delete(0, str.length());
                 str.append(u);
-		        el.m_uchars_ = str.toString();
-		        el.m_cPoints_ = el.m_uchars_;
-		        el.m_prefix_ = 0;
-                int ceoffset = 0;
-                m_utilColEIter_.setText(el.m_uchars_);
+		        m_utilElement_.m_uchars_ = str.toString();
+		        m_utilElement_.m_cPoints_ = m_utilElement_.m_uchars_;
+		        m_utilElement_.m_prefix_ = 0;
+                m_utilElement_.m_CELength_ = 0;
+                m_utilColEIter_.setText(m_utilElement_.m_uchars_);
 		        while (CE != CollationElementIterator.NULLORDER) {
 		            CE = m_utilColEIter_.next();
 		            if (CE != CollationElementIterator.NULLORDER) {
-		                ce[ceoffset ++] = CE;
+		                m_utilElement_.m_CEs_[m_utilElement_.m_CELength_ ++] 
+                        = CE;
 		            }
 		        }
-                el.m_CEs_ = new int[ceoffset];
-                System.arraycopy(ce, 0, el.m_CEs_, 0, ceoffset);
-                addAnElement(t, el);
+                addAnElement(t, m_utilElement_);
 		    }
 		}
         
@@ -530,30 +525,29 @@ final class CollationParsedRuleBuilder
 		        }
                 if (needToAdd == true) { 
                     // we need to add if this contraction is not tailored.
-		            el.m_prefix_ = 0;
-		            el.m_prefixChars_ = null;
-		            el.m_cPoints_ = el.m_uchars_;
+		            m_utilElement_.m_prefix_ = 0;
+		            m_utilElement_.m_prefixChars_ = null;
+		            m_utilElement_.m_cPoints_ = m_utilElement_.m_uchars_;
                     str.delete(0, str.length());
                     str.append(conts[offset]);
                     str.append(conts[offset + 1]);
 		            if (conts[offset + 2] != 0) {
     		            str.append(conts[offset + 2]);
     		        } 
-                    el.m_uchars_ = str.toString();
-                    int ceoffset = 0;
-                    m_utilColEIter_.setText(el.m_uchars_);
+                    m_utilElement_.m_uchars_ = str.toString();
+                    m_utilElement_.m_CELength_ = 0;
+                    m_utilColEIter_.setText(m_utilElement_.m_uchars_);
                     while (true) {
                         int CE = m_utilColEIter_.next();
                         if (CE != CollationElementIterator.NULLORDER) {
-                            ce[ceoffset ++] = CE;
+                            m_utilElement_.m_CEs_[m_utilElement_.m_CELength_ 
+                                                   ++] = CE;
                         }
                         else {
                             break;
                         }
                     }
-                    el.m_CEs_ = new int[ceoffset];
-                    System.arraycopy(ce, 0, el.m_CEs_, 0, ceoffset);
-		            addAnElement(t, el);
+                    addAnElement(t, m_utilElement_);
                 }
 		    }
 		    offset += 3;
@@ -621,6 +615,19 @@ final class CollationParsedRuleBuilder
             return -1;
         }
         
+        /**
+         * Initialize 
+         */
+        public void clear()
+        {
+            m_start_ = 0;
+            m_end_ = 0;
+            m_length_ = 0; 
+            m_count_ = 0;
+            m_length2_ = 0;
+            m_count2_ = 0;
+        }
+        
         // package private data members --------------------------------------
         
 	    int m_start_;
@@ -634,12 +641,22 @@ final class CollationParsedRuleBuilder
         
         WeightRange()
         {
-            m_start_ = 0;
-            m_end_ = 0;
-            m_length_ = 0; 
-            m_count_ = 0;
-            m_length2_ = 0;
-            m_count2_ = 0;
+            clear();
+        }
+        
+        /**
+         * Copy constructor.
+         * Cloneable is troublesome, needs to check for exception
+         * @param source to clone
+         */
+        WeightRange(WeightRange source)
+        {
+            m_start_ = source.m_start_;
+            m_end_ = source.m_end_;
+            m_length_ = source.m_length_; 
+            m_count_ = source.m_count_;
+            m_length2_ = source.m_length2_;
+            m_count2_ = source.m_count2_;
         }
 	};
 	
@@ -763,7 +780,7 @@ final class CollationParsedRuleBuilder
 	    int m_currentTag_;
 	};
 
-	private static class BuildTable implements TrieBuilder.DataManipulate
+	private static final class BuildTable implements TrieBuilder.DataManipulate
 	{
 		// package private methods ------------------------------------------
 		
@@ -776,7 +793,7 @@ final class CollationParsedRuleBuilder
 		 * @return data offset or 0 
 		 * @draft 2.2
 		 */
-		public final int getFoldedValue(int cp, int offset)
+		public int getFoldedValue(int cp, int offset)
 		{
 		    int limit = cp + 0x400;
 		    while (cp < limit) {
@@ -902,6 +919,7 @@ final class CollationParsedRuleBuilder
 	     * case of expansion 
 	     */    
 	    int m_CEs_[];      
+        int m_CELength_;
 	    /** 
 	     * This is the value element maps in original table   
 	     */
@@ -923,6 +941,8 @@ final class CollationParsedRuleBuilder
 			m_sizePrim_ = new int[128];	
 		    m_sizeSec_ = new int[128];	
 		    m_sizeTer_ = new int[128];	
+            m_CEs_ = new int[256];
+            m_CELength_ = 0;
 		}
 
         /**
@@ -936,6 +956,7 @@ final class CollationParsedRuleBuilder
             m_cPoints_ = element.m_cPoints_;    
             m_cPointsOffset_ = element.m_cPointsOffset_;    
             m_CEs_ = element.m_CEs_;
+            m_CELength_ = element.m_CELength_;
             m_mapCE_ = element.m_mapCE_;
 		    m_sizePrim_ = element.m_sizePrim_;
 		    m_sizeSec_ = element.m_sizeSec_;
@@ -946,6 +967,27 @@ final class CollationParsedRuleBuilder
 		}
 
         // package private methods -------------------------------------------
+        
+        /**
+         * Initializing the elements
+         */
+        public void clear()
+        {
+            m_prefixChars_ = null;
+            m_prefix_ = 0;
+            m_uchars_ = null;
+            m_cPoints_ = null;    
+            m_cPointsOffset_ = 0;  
+            m_CELength_ = 0;
+            m_mapCE_ = 0;
+            Arrays.fill(m_sizePrim_, 0);
+            Arrays.fill(m_sizeSec_, 0);
+            Arrays.fill(m_sizeTer_, 0);
+            m_variableTop_ = false;
+            m_caseBit_ = false;
+            m_isThai_ = false;
+        }
+
         
         /**
          * Hashcode calculation for token
@@ -1084,6 +1126,31 @@ final class CollationParsedRuleBuilder
      * Utility UCA collation element iterator
      */
     private CollationElementIterator m_utilColEIter_;
+    /**
+     * Utility data members
+     */
+    private CEGenerator m_utilGens_[] = {new CEGenerator(), new CEGenerator(),
+                                         new CEGenerator()};
+    private int m_utilCEBuffer_[] = new int[CE_BASIC_STRENGTH_LIMIT_];
+    private int m_utilIntBuffer_[] = new int[CE_STRENGTH_LIMIT_];
+    private Elements m_utilElement_ = new Elements();
+    private Elements m_utilElement2_ = new Elements();
+    private CollationRuleParser.Token m_utilToken_ 
+                                             = new CollationRuleParser.Token();
+    private int m_utilCountBuffer_[] = new int[6];     
+    private long m_utilLongBuffer_[] = new long[5];
+    private WeightRange m_utilLowerWeightRange_[] = 
+                              {new WeightRange(), new WeightRange(), 
+                               new WeightRange(), new WeightRange(), 
+                               new WeightRange()}; 
+    private WeightRange m_utilUpperWeightRange_[] = 
+                              {new WeightRange(), new WeightRange(), 
+                               new WeightRange(), new WeightRange(), 
+                               new WeightRange()}; 
+    private WeightRange m_utilWeightRange_ = new WeightRange();
+    private char m_utilCharBuffer_[] = new char[256];
+    private CanonicalIterator m_utilCanIter_ = new CanonicalIterator("");
+    private StringBuffer m_utilStringBuffer_ = new StringBuffer("");
     
     // private methods -------------------------------------------------------
     
@@ -1094,47 +1161,42 @@ final class CollationParsedRuleBuilder
     private void initBuffers(CollationRuleParser.TokenListHeader listheader) 
                                                             throws Exception
     {
-        CEGenerator gens[] = {new CEGenerator(), new CEGenerator(),
-                              new CEGenerator()};
-		int ceparts[] = new int[CE_BASIC_STRENGTH_LIMIT_];
-		CollationRuleParser.Token token = listheader.m_last_;
-		int t[] = new int[CE_STRENGTH_LIMIT_];
-		Arrays.fill(t, 0, CE_STRENGTH_LIMIT_, 0);
+        CollationRuleParser.Token token = listheader.m_last_;
+        Arrays.fill(m_utilIntBuffer_, 0, CE_STRENGTH_LIMIT_, 0);
 		
 		token.m_toInsert_ = 1;
-		t[token.m_strength_] = 1;
-		
+		m_utilIntBuffer_[token.m_strength_] = 1;
 		while (token.m_previous_ != null) {
 		    if (token.m_previous_.m_strength_ < token.m_strength_) { 
                 // going up
-		        t[token.m_strength_] = 0;
-		        t[token.m_previous_.m_strength_] ++;
+		        m_utilIntBuffer_[token.m_strength_] = 0;
+		        m_utilIntBuffer_[token.m_previous_.m_strength_] ++;
 		    } 
             else if (token.m_previous_.m_strength_ > token.m_strength_) { 
                 // going down
-		        t[token.m_previous_.m_strength_] = 1;
+		        m_utilIntBuffer_[token.m_previous_.m_strength_] = 1;
 		    } 
             else {
-		        t[token.m_strength_] ++;
+		        m_utilIntBuffer_[token.m_strength_] ++;
 		    }
 		    token = token.m_previous_;
-		    token.m_toInsert_ = t[token.m_strength_];
+		    token.m_toInsert_ = m_utilIntBuffer_[token.m_strength_];
 		} 
 		
-		token.m_toInsert_ = t[token.m_strength_];
+		token.m_toInsert_ = m_utilIntBuffer_[token.m_strength_];
 		INVERSE_UCA_.getInverseGapPositions(listheader);
 		
 		token = listheader.m_first_;
 		int fstrength = Collator.IDENTICAL;
 		int initstrength = Collator.IDENTICAL;
 		
-		ceparts[Collator.PRIMARY] = mergeCE(listheader.m_baseCE_, 
+		m_utilCEBuffer_[Collator.PRIMARY] = mergeCE(listheader.m_baseCE_, 
                                             listheader.m_baseContCE_,
                                             Collator.PRIMARY);
-		ceparts[Collator.SECONDARY] = mergeCE(listheader.m_baseCE_, 
+		m_utilCEBuffer_[Collator.SECONDARY] = mergeCE(listheader.m_baseCE_, 
                                               listheader.m_baseContCE_,
                                               Collator.SECONDARY);
-		ceparts[Collator.TERTIARY] = mergeCE(listheader.m_baseCE_, 
+		m_utilCEBuffer_[Collator.TERTIARY] = mergeCE(listheader.m_baseCE_, 
                                              listheader.m_baseContCE_,
                                              Collator.TERTIARY);
 		while (token != null) {
@@ -1152,75 +1214,77 @@ final class CollationParsedRuleBuilder
 		        }
 		        if (initstrength == Collator.TERTIARY) { 
                     // starting with tertiary
-			        ceparts[Collator.PRIMARY] 
+			        m_utilCEBuffer_[Collator.PRIMARY] 
                                          = listheader.m_gapsLo_[fstrength * 3];
-			        ceparts[Collator.SECONDARY] 
+			        m_utilCEBuffer_[Collator.SECONDARY] 
                                      = listheader.m_gapsLo_[fstrength * 3 + 1];
-			        ceparts[Collator.TERTIARY] = getCEGenerator(
-                                                       gens[Collator.TERTIARY], 
-                                                       listheader.m_gapsLo_, 
-                                                       listheader.m_gapsHi_, 
-                                                       token, fstrength); 
+			        m_utilCEBuffer_[Collator.TERTIARY] = getCEGenerator(
+                                                m_utilGens_[Collator.TERTIARY], 
+                                                listheader.m_gapsLo_, 
+                                                listheader.m_gapsHi_, 
+                                                token, fstrength); 
 		        } 
                 else if (initstrength == Collator.SECONDARY) { 
                     // secondaries
-		            ceparts[Collator.PRIMARY] 
+		            m_utilCEBuffer_[Collator.PRIMARY] 
                                          = listheader.m_gapsLo_[fstrength * 3];
-		            ceparts[Collator.SECONDARY] 
-                                     = getCEGenerator(gens[Collator.SECONDARY], 
-                                                      listheader.m_gapsLo_, 
-                                                      listheader.m_gapsHi_, 
-                                                      token, 
-                                                      fstrength);
-		            ceparts[Collator.TERTIARY] = getSimpleCEGenerator(
-                                                       gens[Collator.TERTIARY], 
-                                                       token, 
-                                                       Collator.TERTIARY);
+		            m_utilCEBuffer_[Collator.SECONDARY] 
+                                     = getCEGenerator(
+                                         m_utilGens_[Collator.SECONDARY], 
+                                         listheader.m_gapsLo_, 
+                                         listheader.m_gapsHi_, 
+                                         token, fstrength);
+		            m_utilCEBuffer_[Collator.TERTIARY] 
+                                     = getSimpleCEGenerator(
+                                                m_utilGens_[Collator.TERTIARY], 
+                                                token, Collator.TERTIARY);
 		        } 
                 else { 
                     // primaries 
-		            ceparts[Collator.PRIMARY] = getCEGenerator(
-                                                        gens[Collator.PRIMARY], 
-                                                        listheader.m_gapsLo_, 
-                                                        listheader.m_gapsHi_, 
-                                                        token, fstrength);
-		            ceparts[Collator.SECONDARY] = getSimpleCEGenerator(
-                                                      gens[Collator.SECONDARY], 
-                                                      token, 
-                                                      Collator.SECONDARY);
-		            ceparts[Collator.TERTIARY] = getSimpleCEGenerator(
-                                                       gens[Collator.TERTIARY], 
-                                                       token, 
-                                                       Collator.TERTIARY);
+		            m_utilCEBuffer_[Collator.PRIMARY] 
+                                     = getCEGenerator(
+                                               m_utilGens_[Collator.PRIMARY], 
+                                               listheader.m_gapsLo_, 
+                                               listheader.m_gapsHi_, 
+                                               token, fstrength);
+		            m_utilCEBuffer_[Collator.SECONDARY] 
+                                     = getSimpleCEGenerator(
+                                               m_utilGens_[Collator.SECONDARY], 
+                                               token, Collator.SECONDARY);
+		            m_utilCEBuffer_[Collator.TERTIARY] 
+                                     = getSimpleCEGenerator(
+                                               m_utilGens_[Collator.TERTIARY], 
+                                               token, Collator.TERTIARY);
 		        }
 		    } 
             else {
 		        if (token.m_strength_ == Collator.TERTIARY) {
-		            ceparts[Collator.TERTIARY] = getNextGenerated(
-                                                      gens[Collator.TERTIARY]);
+		            m_utilCEBuffer_[Collator.TERTIARY] 
+                            = getNextGenerated(m_utilGens_[Collator.TERTIARY]);
 		        } 
                 else if (token.m_strength_ == Collator.SECONDARY) {
-		            ceparts[Collator.SECONDARY] = getNextGenerated(
-                                                     gens[Collator.SECONDARY]);
-		            ceparts[Collator.TERTIARY] = getSimpleCEGenerator(
-                                                       gens[Collator.TERTIARY], 
-                                                       token, 
-                                                       Collator.TERTIARY);
+		            m_utilCEBuffer_[Collator.SECONDARY] 
+                            = getNextGenerated(m_utilGens_[Collator.SECONDARY]);
+		            m_utilCEBuffer_[Collator.TERTIARY] 
+                            = getSimpleCEGenerator(
+                                              m_utilGens_[Collator.TERTIARY], 
+                                              token, Collator.TERTIARY);
 		        } 
                 else if (token.m_strength_ == Collator.PRIMARY) {
-		            ceparts[Collator.PRIMARY] = getNextGenerated(
-                                                       gens[Collator.PRIMARY]);
-		            ceparts[Collator.SECONDARY] = getSimpleCEGenerator(
-                                                      gens[Collator.SECONDARY], 
-                                                      token, 
-                                                      Collator.SECONDARY);
-		            ceparts[Collator.TERTIARY] = getSimpleCEGenerator(
-                                                      gens[Collator.TERTIARY], 
-                                                      token, 
-                                                      Collator.TERTIARY);
+		            m_utilCEBuffer_[Collator.PRIMARY] 
+                                          = getNextGenerated(
+                                                 m_utilGens_[Collator.PRIMARY]);
+		            m_utilCEBuffer_[Collator.SECONDARY] 
+                                          = getSimpleCEGenerator(
+                                                m_utilGens_[Collator.SECONDARY], 
+                                                token, Collator.SECONDARY);
+		            m_utilCEBuffer_[Collator.TERTIARY] 
+                                          = getSimpleCEGenerator(
+                                                m_utilGens_[Collator.TERTIARY], 
+                                                token, Collator.TERTIARY);
 		        }
 		    }
-		    doCE(ceparts, token);
+		    doCE(m_utilCEBuffer_, token);
 		    token = token.m_next_;
 	    }
 	}
@@ -1388,31 +1452,32 @@ final class CollationParsedRuleBuilder
     private void doCE(int ceparts[], CollationRuleParser.Token token) 
     {
         // this one makes the table and stuff
-	    int noofbytes[] = new int[3];
+	    // int noofbytes[] = new int[3];
 	    for (int i = 0; i < 3; i ++) {
-	        noofbytes[i] = countBytes(ceparts[i]);
+	        // noofbytes[i] = countBytes(ceparts[i]);
+            m_utilIntBuffer_[i] = countBytes(ceparts[i]);
 	    }
 	
 	    // Here we have to pack CEs from parts
 	    int cei = 0;
 	    int value = 0;
 	
-	    while ((cei << 1) < noofbytes[0] || cei < noofbytes[1] 
-               || cei <noofbytes[2]) {
+	    while ((cei << 1) < m_utilIntBuffer_[0] || cei < m_utilIntBuffer_[1] 
+               || cei < m_utilIntBuffer_[2]) {
 	        if (cei > 0) {
 	            value = RuleBasedCollator.CE_CONTINUATION_MARKER_;
 		    } else {
 		        value = 0;
 		    }
 		
-		    if ((cei << 1) < noofbytes[0]) {
+		    if ((cei << 1) < m_utilIntBuffer_[0]) {
 		        value |= ((ceparts[0] >> (32 - ((cei + 1) << 4))) & 0xFFFF) 
                                                                         << 16;
 		    }
-		    if (cei < noofbytes[1]) {
+		    if (cei < m_utilIntBuffer_[1]) {
 		        value |= ((ceparts[1] >> (32 - ((cei + 1) << 3))) & 0xFF) << 8;
 		    }
-		    if (cei < noofbytes[2]) {
+		    if (cei < m_utilIntBuffer_[2]) {
 		        value |= ((ceparts[2] >> (32 - ((cei+1) << 3))) & 0x3F);
 		    }
 		    token.m_CE_[cei] = value;
@@ -1456,7 +1521,7 @@ final class CollationParsedRuleBuilder
 	                            throws Exception
     {
 	    CollationRuleParser.Token tok = lh.m_first_;
-	    Elements el = new Elements();
+	    m_utilElement_.clear();
 	    while (tok != null) {
 	    	// first, check if there are any expansions
 	    	// if there are expansions, we need to do a little bit more 
@@ -1466,18 +1531,17 @@ final class CollationParsedRuleBuilder
 	            int len = tok.m_expansion_ >>> 24;
 	            int currentSequenceLen = len;
 	            int expOffset = tok.m_expansion_ & 0x00FFFFFF;
-	            CollationRuleParser.Token exp 
-	                                         = new CollationRuleParser.Token();
-	            exp.m_source_ = currentSequenceLen | expOffset;
-	            exp.m_rules_ = m_parser_.m_source_;
+	            m_utilToken_.m_source_ = currentSequenceLen | expOffset;
+	            m_utilToken_.m_rules_ = m_parser_.m_source_;
 	
 	            while (len > 0) {
 			        currentSequenceLen = len;
 			        while (currentSequenceLen > 0) {
-			            exp.m_source_ = (currentSequenceLen << 24) | expOffset;
+			            m_utilToken_.m_source_ = (currentSequenceLen << 24) 
+                                                                   | expOffset;
 			            CollationRuleParser.Token expt = 
-			                                   (CollationRuleParser.Token)
-			                                   m_parser_.m_hashTable_.get(exp);
+	                                  (CollationRuleParser.Token)
+                                       m_parser_.m_hashTable_.get(m_utilToken_);
 			            if (expt != null 
 			                && expt.m_strength_ 
 			                   != CollationRuleParser.TOKEN_RESET_) { 
@@ -1522,18 +1586,20 @@ final class CollationParsedRuleBuilder
 	        }
 	
 	        // set the ucaelement with obtained values
-	        el.m_CEs_ = new int[tok.m_CELength_ + tok.m_expCELength_];
+            m_utilElement_.m_CELength_ = tok.m_CELength_ + tok.m_expCELength_;
+            
 	        // copy CEs
-	        System.arraycopy(tok.m_CE_, 0, el.m_CEs_, 0, tok.m_CELength_);
-	        System.arraycopy(tok.m_expCE_, 0, el.m_CEs_, tok.m_CELength_, 
-                             tok.m_expCELength_);
+	        System.arraycopy(tok.m_CE_, 0, m_utilElement_.m_CEs_, 0, 
+                             tok.m_CELength_);
+	        System.arraycopy(tok.m_expCE_, 0, m_utilElement_.m_CEs_, 
+                             tok.m_CELength_, tok.m_expCELength_);
 	
 	        // copy UChars 
 	        // We kept prefix and source kind of together, as it is a kind of a 
 	        // contraction. 
 	        // However, now we have to slice the prefix off the main thing - 
-	        el.m_prefix_ = 0;// el.m_prefixChars_;
-	        el.m_cPointsOffset_ = 0; //el.m_uchars_;
+	        m_utilElement_.m_prefix_ = 0;// el.m_prefixChars_;
+	        m_utilElement_.m_cPointsOffset_ = 0; //el.m_uchars_;
 	        if (tok.m_prefix_ != 0) { 
 	        	// we will just copy the prefix here, and adjust accordingly in 
 	        	// the addPrefix function in ucol_elm. The reason is that we 
@@ -1541,45 +1607,48 @@ final class CollationParsedRuleBuilder
 	        	// unsafe table.
 		        int size = tok.m_prefix_ >> 24;
 		        int offset = tok.m_prefix_ & 0x00FFFFFF;
-		        el.m_prefixChars_ = m_parser_.m_source_.substring(offset, 
-		                                                       offset + size);
+		        m_utilElement_.m_prefixChars_ 
+                        = m_parser_.m_source_.substring(offset, offset + size);
 		        size = (tok.m_source_ >> 24) - (tok.m_prefix_ >> 24); 
 		        offset = (tok.m_source_ & 0x00FFFFFF) + (tok.m_prefix_ >> 24);
-		        el.m_uchars_ = m_parser_.m_source_.substring(offset, 
-		                                                     offset + size);
+		        m_utilElement_.m_uchars_ 
+                     = m_parser_.m_source_.substring(offset, offset + size);
 		    } 
 		    else {
-	            el.m_prefixChars_ = null;
+	            m_utilElement_.m_prefixChars_ = null;
 	            int offset = tok.m_source_ & 0x00FFFFFF;
 	            int size = tok.m_source_ >>> 24;
-	            el.m_uchars_ = m_parser_.m_source_.substring(offset, 
-	                                                         offset + size);
+	            m_utilElement_.m_uchars_ = m_parser_.m_source_.substring(offset, 
+	                                                             offset + size);
 	        }
-	        el.m_cPoints_ = el.m_uchars_;
-	        el.m_isThai_ = CollationElementIterator.isThaiPreVowel(
-	                                                  el.m_cPoints_.charAt(0));
-	        for (int i = 0; i < el.m_cPoints_.length() - el.m_cPointsOffset_; 
-	             i ++) {
-		         if (isJamo(el.m_cPoints_.charAt(i))) {
+	        m_utilElement_.m_cPoints_ = m_utilElement_.m_uchars_;
+	        m_utilElement_.m_isThai_ = CollationElementIterator.isThaiPreVowel(
+                                          m_utilElement_.m_cPoints_.charAt(0));
+	        for (int i = 0; i < m_utilElement_.m_cPoints_.length() 
+                                - m_utilElement_.m_cPointsOffset_; i ++) {
+		         if (isJamo(m_utilElement_.m_cPoints_.charAt(i))) {
 		             t.m_collator_.m_isJamoSpecial_ = true;
 		             break;
 		        }
 		    }
 	
 	        // Case bits handling 
-	        el.m_CEs_[0] &= 0xFFFFFF3F; // Clean the case bits field
-	        if (el.m_cPoints_.length() - el.m_cPointsOffset_ > 1) {
+	        m_utilElement_.m_CEs_[0] &= 0xFFFFFF3F; 
+            // Clean the case bits field
+	        if (m_utilElement_.m_cPoints_.length() 
+                - m_utilElement_.m_cPointsOffset_ > 1) {
 	            // Do it manually
-	            el.m_CEs_[0] |= getCaseBits(el.m_cPoints_);
+	            m_utilElement_.m_CEs_[0] 
+                                     |= getCaseBits(m_utilElement_.m_cPoints_);
 	        } 
 	        else {
 	            // Copy it from the UCA
-	            int caseCE = getFirstCE(el.m_cPoints_.charAt(0));
-	            el.m_CEs_[0] |= (caseCE & 0xC0);
+	            int caseCE = getFirstCE(m_utilElement_.m_cPoints_.charAt(0));
+	            m_utilElement_.m_CEs_[0] |= (caseCE & 0xC0);
 	        }
 	
 	        // and then, add it
-	        addAnElement(t, el);
+	        addAnElement(t, m_utilElement_);
 	        tok = tok.m_next_;
 	    }   
 	}
@@ -1713,7 +1782,7 @@ final class CollationParsedRuleBuilder
     /**
      * This should be connected to special Jamo handling.
      */
-    private final int getFirstCE(char ch) 
+    private int getFirstCE(char ch) 
     {
     	m_utilColEIter_.setText(UCharacter.toString(ch));
 	    return m_utilColEIter_.next();
@@ -1725,10 +1794,10 @@ final class CollationParsedRuleBuilder
 	 * @param element 
 	 * @return ce
 	 */
-    private static int addAnElement(BuildTable t, Elements element) 
+    private int addAnElement(BuildTable t, Elements element) 
     {
   		Vector expansions = t.m_expansions_;
-        if (element.m_CEs_.length == 1) {
+        if (element.m_CELength_ == 1) {
 	    	if (element.m_isThai_ == false) {
 	            element.m_mapCE_ = element.m_CEs_[0];
 	        } 
@@ -1753,7 +1822,7 @@ final class CollationParsedRuleBuilder
 	        // of only primary differences (like east Asian tailorings) also, 
 	        // it should not be an expansion, as expansions would break with 
 	        // this
-	        if (element.m_CEs_.length == 2 // a two CE expansion 
+	        if (element.m_CELength_ == 2 // a two CE expansion 
 	            && RuleBasedCollator.isContinuation(element.m_CEs_[1]) 
 	            && (element.m_CEs_[1] 
 	             & (~(0xFF << 24 | RuleBasedCollator.CE_CONTINUATION_MARKER_))) 
@@ -1781,25 +1850,25 @@ final class CollationParsedRuleBuilder
 	                        | (addExpansion(expansions, element.m_CEs_[0])
                                 << 4) & 0xFFFFF0;
 	
-	            for (int i = 1; i < element.m_CEs_.length; i ++) {
+	            for (int i = 1; i < element.m_CELength_; i ++) {
 	                 addExpansion(expansions, element.m_CEs_[i]);
 	            }
-			    if (element.m_CEs_.length <= 0xF) {
-			        expansion |= element.m_CEs_.length;
+			    if (element.m_CELength_ <= 0xF) {
+			        expansion |= element.m_CELength_;
 			    } 
 			    else {
 			        addExpansion(expansions, 0);
 			    }
 			    element.m_mapCE_ = expansion;
-			    setMaxExpansion(element.m_CEs_[element.m_CEs_.length - 1],
-			                    (byte)element.m_CEs_.length, 
+			    setMaxExpansion(element.m_CEs_[element.m_CELength_ - 1],
+			                    (byte)element.m_CELength_, 
 			                    t.m_maxExpansions_);
 			    if (isJamo(element.m_cPoints_.charAt(0))){
 			        t.m_collator_.m_isJamoSpecial_ = true;
 			        setMaxJamoExpansion(element.m_cPoints_.charAt(0),
-			                            element.m_CEs_[element.m_CEs_.length 
+			                            element.m_CEs_[element.m_CELength_ 
                                                                           - 1],
-			                            (byte)element.m_CEs_.length,
+			                            (byte)element.m_CELength_,
 			                            t.m_maxJamoExpansions_);
 			    }
 		    }
@@ -1814,12 +1883,22 @@ final class CollationParsedRuleBuilder
 		    // We keep the seen prefix starter elements in a hashtable we need 
             // it to be able to distinguish between the simple codepoints and 
             // prefix starters. Also, we need to use it for canonical closure.
-		    Elements composed = new Elements(element);
-		    composed.m_prefix_ = 0;
-		    composed.m_uchars_ = Normalizer.compose(element.m_prefixChars_, 
-                                                    false);
-            composed.m_cPoints_ = composed.m_uchars_;                         
-            composed.m_cPointsOffset_ = 0;
+		    m_utilElement2_.m_caseBit_ = element.m_caseBit_;
+            m_utilElement2_.m_CELength_ = element.m_CELength_;
+            m_utilElement2_.m_CEs_ = element.m_CEs_;
+            m_utilElement2_.m_isThai_ = element.m_isThai_;
+            m_utilElement2_.m_mapCE_ = element.m_mapCE_;
+            m_utilElement2_.m_prefixChars_ = element.m_prefixChars_;
+            m_utilElement2_.m_sizePrim_ = element.m_sizePrim_;
+            m_utilElement2_.m_sizeSec_ = element.m_sizeSec_;
+            m_utilElement2_.m_sizeTer_ = element.m_sizeTer_;
+            m_utilElement2_.m_variableTop_ = element.m_variableTop_;
+            m_utilElement2_.m_prefix_ = 0;
+            m_utilElement2_.m_uchars_ 
+                           = Normalizer.compose(element.m_prefixChars_, false);
+            m_utilElement2_.m_cPoints_ = m_utilElement2_.m_uchars_;
+            m_utilElement2_.m_cPointsOffset_ = 0;
+            
 		    if (t.m_prefixLookup_ != null) {
 		        Elements uCE = (Elements)t.m_prefixLookup_.get(element);
 		        if (uCE != null) { 
@@ -1832,14 +1911,14 @@ final class CollationParsedRuleBuilder
 		            uCE.m_cPoints_ = uCE.m_uchars_;
 		            t.m_prefixLookup_.put(uCE, uCE);
 		        }
-		        if (composed.m_prefixChars_.length() 
+		        if (m_utilElement2_.m_prefixChars_.length() 
                         != element.m_prefixChars_.length() - element.m_prefix_
-                    || !composed.m_prefixChars_.regionMatches(0,
+                    || !m_utilElement2_.m_prefixChars_.regionMatches(0,
                                     element.m_prefixChars_, element.m_prefix_,
-                                    composed.m_prefixChars_.length())) {
+                                    m_utilElement2_.m_prefixChars_.length())) {
 		            // do it!
-		            composed.m_mapCE_ = addPrefix(t, element.m_mapCE_, 
-                                                  composed);
+                    m_utilElement2_.m_mapCE_ = addPrefix(t, element.m_mapCE_, 
+                                                         m_utilElement2_);
 		        }
 		    }
 	    }
@@ -1853,8 +1932,8 @@ final class CollationParsedRuleBuilder
             && UTF16.isTrailSurrogate(element.m_cPoints_.charAt(1)))) { 
             // this is a contraction, we should check whether a composed form 
             // should also be included
-	        CanonicalIterator it = new CanonicalIterator(element.m_cPoints_);
-		    String source = it.next();
+	        m_utilCanIter_.setSource(element.m_cPoints_);
+		    String source = m_utilCanIter_.next();
 		    while (source != null && source.length() > 0) {
 		        if (Normalizer.quickCheck(source, Normalizer.FCD) 
                     != Normalizer.NO) {
@@ -1862,7 +1941,7 @@ final class CollationParsedRuleBuilder
 		            element.m_cPoints_ = element.m_uchars_;
 		            finalizeAddition(t, element);
 		        }
-		        source = it.next();
+		        source = m_utilCanIter_.next();
 		    }
 		
 		    return element.m_mapCE_;
@@ -2017,7 +2096,7 @@ final class CollationParsedRuleBuilder
 	 * @param element rule element to add
 	 * @return modified ce
 	 */
-	private static int addPrefix(BuildTable t, int CE, Elements element) 
+	private int addPrefix(BuildTable t, int CE, Elements element) 
 	{
 	    // currently the longest prefix we're supporting in Japanese is two 
 	    // characters long. Although this table could quite easily mimic 
@@ -2040,14 +2119,15 @@ final class CollationParsedRuleBuilder
 	        }
 	    }
 	    
-	    StringBuffer reversed = new StringBuffer();
+	    // StringBuffer reversed = new StringBuffer();
+        m_utilStringBuffer_.delete(0, m_utilStringBuffer_.length());
 	    for (int j = 0; j < size; j ++) { 
 	    	// prefixes are going to be looked up backwards
 	        // therefore, we will promptly reverse the prefix buffer...
 	        int offset = element.m_prefixChars_.length() - j - 1;
-	        reversed.append(element.m_prefixChars_.charAt(offset));
+	        m_utilStringBuffer_.append(element.m_prefixChars_.charAt(offset));
 	    }
-	    element.m_prefixChars_ = reversed.toString();
+	    element.m_prefixChars_ = m_utilStringBuffer_.toString();
 	    element.m_prefix_ = 0;
 	
 	    // the first codepoint is also unsafe, as it forms a 'contraction' with 
@@ -2776,21 +2856,19 @@ final class CollationParsedRuleBuilder
      * @param ranges
      * @return
      */
-    private static int allocateWeights(int lowerLimit, int upperLimit, int n,
-                                       int maxByte, WeightRange ranges[]) 
+    private int allocateWeights(int lowerLimit, int upperLimit, int n,
+                                int maxByte, WeightRange ranges[]) 
     {
         // number of usable byte values 3..maxByte
         int countBytes = maxByte - RuleBasedCollator.BYTE_FIRST_TAILORED_ + 1;
-        // [0] unused, [5] to make index checks unnecessary 
-        int lengthCounts[] = new int[6];     
-        // countBytes to the power of index 
-        long powers[] = new long[5]; // for unsignedness
+        // [0] unused, [5] to make index checks unnecessary, m_utilCountBuffer_
+        // countBytes to the power of index, m_utilLongBuffer_ for unsignedness
         // gcc requires explicit initialization 
-        powers[0] = 1;
-        powers[1] = countBytes;
-        powers[2] = powers[1] * countBytes;
-        powers[3] = powers[2] * countBytes;
-        powers[4] = powers[3] * countBytes;
+        m_utilLongBuffer_[0] = 1;
+        m_utilLongBuffer_[1] = countBytes;
+        m_utilLongBuffer_[2] = m_utilLongBuffer_[1] * countBytes;
+        m_utilLongBuffer_[3] = m_utilLongBuffer_[2] * countBytes;
+        m_utilLongBuffer_[4] = m_utilLongBuffer_[3] * countBytes;
         int rangeCount = getWeightRanges(lowerLimit, upperLimit, maxByte, 
                                          countBytes, ranges);
         if (rangeCount <= 0) {
@@ -2800,7 +2878,7 @@ final class CollationParsedRuleBuilder
         long maxCount = 0;
         for (int i = 0; i < rangeCount; ++ i) {
             maxCount += (long)ranges[i].m_count_ 
-                        * powers[4 - ranges[i].m_length_];
+                        * m_utilLongBuffer_[4 - ranges[i].m_length_];
         }
         if (maxCount < n) {
             return 0;
@@ -2816,12 +2894,13 @@ final class CollationParsedRuleBuilder
             int minLength = ranges[0].m_length2_;
             // sum up the number of elements that fit into ranges of each byte 
             // length
-            Arrays.fill(lengthCounts, 0);
+            Arrays.fill(m_utilCountBuffer_, 0);
             for (int i = 0; i < rangeCount; ++ i) {
-                lengthCounts[ranges[i].m_length2_] += ranges[i].m_count2_;
+                m_utilCountBuffer_[ranges[i].m_length2_] += ranges[i].m_count2_;
             }
             // now try to allocate n elements in the available short ranges 
-            if (n <= lengthCounts[minLength] + lengthCounts[minLength + 1]) {
+            if (n <= m_utilCountBuffer_[minLength] 
+                                          + m_utilCountBuffer_[minLength + 1]) {
                 // trivial cases, use the first few ranges
                 maxCount = 0;
                 rangeCount = 0;
@@ -2837,7 +2916,8 @@ final class CollationParsedRuleBuilder
                 rangeCount = 1;
                 // calculate how to split the range between maxLength-1 
                 // (count1) and maxLength (count2) 
-                long power_1 = powers[minLength - ranges[0].m_length_];
+                long power_1 
+                           = m_utilLongBuffer_[minLength - ranges[0].m_length_];
                 long power = power_1 * countBytes;
                 int count2 = (int)((n + power - 1) / power);
                 int count1 = ranges[0].m_count_ - count2;
@@ -2955,9 +3035,8 @@ final class CollationParsedRuleBuilder
      * @param ranges
      * @return weight ranges
      */
-    private static int getWeightRanges(int lowerLimit, int upperLimit, 
-                                       int maxByte, int countBytes,
-                                       WeightRange ranges[]) 
+    private int getWeightRanges(int lowerLimit, int upperLimit, int maxByte, 
+                                int countBytes, WeightRange ranges[]) 
     {
         // assume that both lowerLimit & upperLimit are not 0 
         // get the lengths of the limits 
@@ -2989,74 +3068,80 @@ final class CollationParsedRuleBuilder
         // Some of them will typically overlap, so we will then have to merge 
         // and eliminate ranges.
         int weight = lowerLimit;
-        WeightRange lower[] = {new WeightRange(), new WeightRange(), 
-                               new WeightRange(), new WeightRange(), 
-                               new WeightRange()}; 
         for (int length = lowerLength; length >= 2; -- length) {
+            m_utilLowerWeightRange_[length].clear();
             int trail = getWeightByte(weight, length);
             if (trail < maxByte) {
-                lower[length].m_start_ = incWeightTrail(weight, length);
-                lower[length].m_end_ = setWeightTrail(weight, length, maxByte);
-                lower[length].m_length_ = length;
-                lower[length].m_count_ = maxByte - trail;
+                m_utilLowerWeightRange_[length].m_start_ 
+                                              = incWeightTrail(weight, length);
+                m_utilLowerWeightRange_[length].m_end_ 
+                                     = setWeightTrail(weight, length, maxByte);
+                m_utilLowerWeightRange_[length].m_length_ = length;
+                m_utilLowerWeightRange_[length].m_count_ = maxByte - trail;
             }
             weight = truncateWeight(weight, length - 1);
         }
-        WeightRange middle = new WeightRange(); 
-        middle.m_start_ = incWeightTrail(weight, 1);
+        m_utilWeightRange_.clear();
+        m_utilWeightRange_.m_start_ = incWeightTrail(weight, 1);
     
         weight = upperLimit;
-        // [0] and [1] are not used - this simplifies indexing 
-        WeightRange upper[] = {new WeightRange(), new WeightRange(), 
-                               new WeightRange(), new WeightRange(), 
-                               new WeightRange()}; 
+        // [0] and [1] are not used - this simplifies indexing, 
+        // m_utilUpperWeightRange_
+        
         for (int length = upperLength; length >= 2; length --) {
             int trail = getWeightByte(weight, length);
             if (trail > RuleBasedCollator.BYTE_FIRST_TAILORED_) {
-                upper[length].m_start_ = setWeightTrail(weight, length, 
+                m_utilUpperWeightRange_[length].m_start_ 
+                      = setWeightTrail(weight, length, 
                                        RuleBasedCollator.BYTE_FIRST_TAILORED_);
-                upper[length].m_end_ = decWeightTrail(weight, length);
-                upper[length].m_length_ = length;
-                upper[length].m_count_ = trail
+                m_utilUpperWeightRange_[length].m_end_ 
+                                              = decWeightTrail(weight, length);
+                m_utilUpperWeightRange_[length].m_length_ = length;
+                m_utilUpperWeightRange_[length].m_count_ = trail
                                      - RuleBasedCollator.BYTE_FIRST_TAILORED_;
             }
             weight = truncateWeight(weight, length - 1);
         }
-        middle.m_end_ = decWeightTrail(weight, 1);
+        m_utilWeightRange_.m_end_ = decWeightTrail(weight, 1);
     
         // set the middle range
-        middle.m_length_ = 1;
-        if (middle.m_end_ >= middle.m_start_) {
-            middle.m_count_ = ((middle.m_end_ - middle.m_start_) >> 24) + 1;
+        m_utilWeightRange_.m_length_ = 1;
+        if (m_utilWeightRange_.m_end_ >= m_utilWeightRange_.m_start_) {
+            m_utilWeightRange_.m_count_ 
+                   = ((m_utilWeightRange_.m_end_ - m_utilWeightRange_.m_start_) 
+                      >> 24) + 1;
         } 
         else {
             // eliminate overlaps
             // remove the middle range
-            middle.m_count_ = 0;
+            m_utilWeightRange_.m_count_ = 0;
             // reduce or remove the lower ranges that go beyond upperLimit
             for (int length = 4; length >= 2; -- length) {
-                if (lower[length].m_count_>0 && upper[length].m_count_ > 0) {
-                    int start = upper[length].m_start_;
-                    int end = lower[length].m_end_;
+                if (m_utilLowerWeightRange_[length].m_count_ > 0 
+                    && m_utilUpperWeightRange_[length].m_count_ > 0) {
+                    int start = m_utilUpperWeightRange_[length].m_start_;
+                    int end = m_utilLowerWeightRange_[length].m_end_;
                     if (end >= start || incWeight(end, length, maxByte) 
                                         == start) {
                         // lower and upper ranges collide or are directly 
                         // adjacent: merge these two and remove all shorter 
                         // ranges
-                        start = lower[length].m_start_;
-                        end = lower[length].m_end_ = upper[length].m_end_;
+                        start = m_utilLowerWeightRange_[length].m_start_;
+                        end = m_utilLowerWeightRange_[length].m_end_ 
+                            = m_utilUpperWeightRange_[length].m_end_;
                         // merging directly adjacent ranges needs to subtract 
                         // the 0/1 gaps in between;
                         // it may result in a range with count>countBytes
-                        lower[length].m_count_ = getWeightByte(end, length)
+                        m_utilLowerWeightRange_[length].m_count_ 
+                                  = getWeightByte(end, length)
                                   - getWeightByte(start, length) + 1 
                                   + countBytes * (getWeightByte(end, length - 1)
                                                   - getWeightByte(start, 
                                                                   length - 1));
-                        upper[length].m_count_=0;
+                        m_utilUpperWeightRange_[length].m_count_ = 0;
                         while (-- length >= 2) {
-                            lower[length].m_count_ = upper[length].m_count_ 
-                                                                           = 0;
+                            m_utilLowerWeightRange_[length].m_count_ 
+                                = m_utilUpperWeightRange_[length].m_count_ = 0;
                         }
                         break;
                     }
@@ -3066,19 +3151,21 @@ final class CollationParsedRuleBuilder
     
         // copy the ranges, shortest first, into the result array 
         int rangeCount = 0;
-        if (middle.m_count_ > 0) {
-            ranges[0] = middle;
+        if (m_utilWeightRange_.m_count_ > 0) {
+            ranges[0] = new WeightRange(m_utilWeightRange_);
             rangeCount = 1;
         }
         for (int length = 2; length <= 4; ++ length) {
             // copy upper first so that later the middle range is more likely 
             // the first one to use
-            if (upper[length].m_count_ > 0) {
-                ranges[rangeCount] = upper[length];
+            if (m_utilUpperWeightRange_[length].m_count_ > 0) {
+                ranges[rangeCount] 
+                        = new WeightRange(m_utilUpperWeightRange_[length]);
                 ++ rangeCount;
             }
-            if (lower[length].m_count_ > 0) {
-                ranges[rangeCount] = lower[length];
+            if (m_utilLowerWeightRange_[length].m_count_ > 0) {
+                ranges[rangeCount] 
+                        = new WeightRange(m_utilLowerWeightRange_[length]);
                 ++ rangeCount;
             }
         }
@@ -3269,13 +3356,13 @@ final class CollationParsedRuleBuilder
         // expansion offset
         // omitting expansion offset in builder
         collator.m_expansionOffset_ = 0; 
-        size = maxexpansion.m_endExpansionCE_.size() - 1;
-        collator.m_expansionEndCE_ = new int[size];
+        size = maxexpansion.m_endExpansionCE_.size();
+        collator.m_expansionEndCE_ = new int[size - 1];
         for (int i = 1; i < size; i ++) {
             collator.m_expansionEndCE_[i - 1] = ((Integer)
                              maxexpansion.m_endExpansionCE_.get(i)).intValue();
         }
-        collator.m_expansionEndCEMaxSize_ = new byte[size];
+        collator.m_expansionEndCEMaxSize_ = new byte[size - 1];
         for (int i = 1; i < size; i ++) {
             collator.m_expansionEndCEMaxSize_[i - 1] 
                  = ((Byte)maxexpansion.m_expansionCESize_.get(i)).byteValue();
@@ -3500,7 +3587,7 @@ final class CollationParsedRuleBuilder
      * @param type character type
      * @return 
      */
-    private static boolean enumCategoryRangeClosureCategory(BuildTable t, 
+    private boolean enumCategoryRangeClosureCategory(BuildTable t, 
                                              RuleBasedCollator collator, 
                                              CollationElementIterator colEl, 
                                              int start, int limit, int type) 
@@ -3508,44 +3595,40 @@ final class CollationParsedRuleBuilder
         if (type != UCharacterCategory.UNASSIGNED 
             && type != UCharacterCategory.PRIVATE_USE) { 
             // if the range is assigned - we might ommit more categories later
-            Elements el = new Elements();
-            char dec[] = new char[256];
+            
             for (int u32 = start; u32 < limit; u32 ++) {
                 int noOfDec = NormalizerImpl.getDecomposition(u32, false,
-                                                              dec, 0, 256);
+                                                              m_utilCharBuffer_, 
+                                                              0, 256);
                 if (noOfDec > 0) {
                     // if we're positive, that means there is no decomposition
                     String comp = UCharacter.toString(u32);
-                    String decomp = new String(dec, 0, noOfDec);
+                    String decomp = new String(m_utilCharBuffer_, 0, noOfDec);
                     if (!collator.equals(comp, decomp)) {
-                        el.m_cPoints_ = decomp;
-                        el.m_prefix_ = 0;
-                        Vector cevector = new Vector();
-                        Elements prefix = (Elements)t.m_prefixLookup_.get(el);
+                        m_utilElement_.m_cPoints_ = decomp;
+                        m_utilElement_.m_prefix_ = 0;
+                        Elements prefix 
+                             = (Elements)t.m_prefixLookup_.get(m_utilElement_);
                         if (prefix == null) {
-                            el.m_cPoints_ = comp;
-                            el.m_prefix_ = 0;
-                            el.m_prefixChars_ = null;
-                            el.m_CEs_ = null;
+                            m_utilElement_.m_cPoints_ = comp;
+                            m_utilElement_.m_prefix_ = 0;
+                            m_utilElement_.m_prefixChars_ = null;
                             colEl.setText(decomp);
                             int ce = colEl.next();
+                            m_utilElement_.m_CELength_ = 0;
                             while (ce != CollationElementIterator.NULLORDER) {
-                                cevector.add(new Integer(ce));
+                                m_utilElement_.m_CEs_[
+                                                 m_utilElement_.m_CELength_ ++] 
+                                                 = ce;
                                 ce = colEl.next();
-                            }
-                            int size = cevector.size();
-                            el.m_CEs_ = new int[size];
-                            for (int i = 0; i < size; i ++) {
-                                el.m_CEs_[i] 
-                                       = ((Integer)cevector.get(i)).intValue();
                             }
                         } 
                         else {
-                            el.m_cPoints_ = comp;
-                            el.m_prefix_ = 0;
-                            el.m_prefixChars_ = null;
-                            el.m_CEs_ = new int[1];
-                            el.m_CEs_[0] = prefix.m_mapCE_;
+                            m_utilElement_.m_cPoints_ = comp;
+                            m_utilElement_.m_prefix_ = 0;
+                            m_utilElement_.m_prefixChars_ = null;
+                            m_utilElement_.m_CELength_ = 1;
+                            m_utilElement_.m_CEs_[0] = prefix.m_mapCE_;
                             // This character uses a prefix. We have to add it 
                             // to the unsafe table, as it decomposed form is 
                             // already in. In Japanese, this happens for \u309e 
@@ -3553,11 +3636,11 @@ final class CollationParsedRuleBuilder
                             // Since unsafeCPSet is static in ucol_elm, we are 
                             // going to wrap it up in the unsafeCPAddCCNZ 
                             // function
-                            el.m_isThai_ 
+                            m_utilElement_.m_isThai_ 
                                     = CollationElementIterator.isThaiPreVowel(
-                                                   el.m_cPoints_.charAt(0));
+                                          m_utilElement_.m_cPoints_.charAt(0));
                         }
-                        addAnElement(t, el);
+                        addAnElement(t, m_utilElement_);
                     }
                 }
             }
@@ -3596,7 +3679,7 @@ final class CollationParsedRuleBuilder
         }
     }
     
-    private static void processUCACompleteIgnorables(BuildTable t) 
+    private void processUCACompleteIgnorables(BuildTable t) 
     {
         TrieIterator trieiterator 
                             = new TrieIterator(RuleBasedCollator.UCA_.m_trie_);
@@ -3608,15 +3691,14 @@ final class CollationParsedRuleBuilder
                 while (start < limit) {
                     int CE = t.m_mapping_.getValue(start);
                     if (CE == CE_NOT_FOUND_) {
-                        Elements el = new Elements();
-                        el.m_isThai_ = false;
-                        el.m_prefix_ = 0;
-                        el.m_uchars_ = UCharacter.toString(start);
-                        el.m_cPoints_ = el.m_uchars_;
-                        el.m_cPointsOffset_ = 0;
-                        el.m_CEs_ = new int[1];
-                        el.m_CEs_[0] = 0;
-                        addAnElement(t, el);
+                        m_utilElement_.m_isThai_ = false;
+                        m_utilElement_.m_prefix_ = 0;
+                        m_utilElement_.m_uchars_ = UCharacter.toString(start);
+                        m_utilElement_.m_cPoints_ = m_utilElement_.m_uchars_;
+                        m_utilElement_.m_cPointsOffset_ = 0;
+                        m_utilElement_.m_CELength_ = 1;
+                        m_utilElement_.m_CEs_[0] = 0;
+                        addAnElement(t, m_utilElement_);
                     }
                     start ++;
                 }
