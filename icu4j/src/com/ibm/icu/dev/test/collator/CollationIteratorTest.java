@@ -426,9 +426,20 @@ public class CollationIteratorTest extends TestFmwk {
         //now use the overloaded setText(ChracterIterator&, UErrorCode) function to set the text
         CharacterIterator chariter = new StringCharacterIterator(test1);
         try {
-        iter2.setText(chariter);
+            iter2.setText(chariter);
         } catch (Exception e ) {
             errln("call to iter2->setText(chariter(test1)) failed.");
+            return;
+        }
+        assertEqual(iter1, iter2);
+        
+        iter1.reset();
+        //now use the overloaded setText(ChracterIterator&, UErrorCode) function to set the text
+        UCharacterIterator uchariter = UCharacterIterator.getInstance(test1);
+        try {
+            iter2.setText(uchariter);
+        } catch (Exception e ) {
+            errln("call to iter2->setText(uchariter(test1)) failed.");
             return;
         }
         assertEqual(iter1, iter2);

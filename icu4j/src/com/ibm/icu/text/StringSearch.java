@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/StringSearch.java,v $ 
- * $Date: 2003/07/31 19:51:12 $ 
- * $Revision: 1.25 $
+ * $Date: 2003/10/08 21:51:44 $ 
+ * $Revision: 1.26 $
  *
  *****************************************************************************************
  */
@@ -17,6 +17,7 @@ import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import java.util.Locale;
 import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.impl.CharacterIteratorWrapper;
 import com.ibm.icu.impl.NormalizerImpl;
 
 /**
@@ -1088,7 +1089,8 @@ public final class StringSearch extends SearchIterator
 	        				 	 || breakIterator.following(end - 1) == end);
 	        if (result) {
 	            // iterates the individual ces
-	            m_utilColEIter_.setText(targetText, start);
+	            m_utilColEIter_.setText(
+                    new CharacterIteratorWrapper(targetText), start);
 	            for (int count = 0; count < m_pattern_.m_CELength_;
 	                 count ++) {
                     int ce = getCE(m_utilColEIter_.next());
