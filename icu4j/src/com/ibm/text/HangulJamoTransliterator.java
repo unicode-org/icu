@@ -7,7 +7,7 @@ import java.util.*;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Mark Davis
- * @version $RCSfile: HangulJamoTransliterator.java,v $ $Revision: 1.2 $ $Date: 2000/01/18 17:51:09 $
+ * @version $RCSfile: HangulJamoTransliterator.java,v $ $Revision: 1.3 $ $Date: 2000/01/27 18:59:19 $
  */
 public class HangulJamoTransliterator extends Transliterator {
     private static final String COPYRIGHT =
@@ -29,9 +29,9 @@ public class HangulJamoTransliterator extends Transliterator {
      * Implements {@link Transliterator#handleTransliterate}.
      */
     protected void handleTransliterate(Replaceable text,
-                                       int[] offsets) {
-        int cursor = offsets[CURSOR];
-        int limit = offsets[LIMIT];
+                                       Position offsets, boolean incremental) {
+        int cursor = offsets.cursor;
+        int limit = offsets.limit;
 
         StringBuffer replacement = new StringBuffer();
         while (cursor < limit) {
@@ -45,8 +45,8 @@ public class HangulJamoTransliterator extends Transliterator {
             }
         }
 
-        offsets[LIMIT] = limit;
-        offsets[CURSOR] = cursor;
+        offsets.limit = limit;
+        offsets.cursor = cursor;
     }
 
 

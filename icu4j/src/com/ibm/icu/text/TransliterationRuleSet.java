@@ -15,9 +15,12 @@ import java.util.*;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.6 $ $Date: 2000/01/18 20:36:17 $
+ * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.7 $ $Date: 2000/01/27 18:59:19 $
  *
  * $Log: TransliterationRuleSet.java,v $
+ * Revision 1.7  2000/01/27 18:59:19  Alan
+ * Use Position rather than int[] and move all subclass overrides to one method (handleTransliterate)
+ *
  * Revision 1.6  2000/01/18 20:36:17  Alan
  * Make UnicodeSet inherit from UnicodeFilter
  *
@@ -185,51 +188,6 @@ class TransliterationRuleSet {
         if (errors != null) {
             throw new IllegalArgumentException(errors.toString());
         }
-    }
-
-    /**
-     * Attempt to find a matching rule at the specified point in the text.  The
-     * text being matched occupies a virtual buffer consisting of the contents
-     * of <code>result</code> concatenated to a substring of <code>text</code>.
-     * The substring is specified by <code>start</code> and <code>limit</code>.
-     * The value of <code>cursor</code> is an index into this virtual buffer,
-     * from 0 to the length of the buffer.  In terms of the parameters,
-     * <code>cursor</code> must be between 0 and <code>result.length() + limit -
-     * start</code>.
-     * @param text the untranslated text
-     * @param start the beginning index, inclusive; <code>0 <= start
-     * <= limit</code>.
-     * @param limit the ending index, exclusive; <code>start <= limit
-     * <= text.length()</code>.
-     * @param result tranlated text
-     * @param cursor position at which to translate next, an offset into result.
-     * If greater than or equal to result.length(), represents offset start +
-     * cursor - result.length() into text.
-     * @param variables a dictionary mapping variables to the sets they
-     * represent (maps <code>Character</code> to <code>UnicodeSet</code>)
-     * @param filter the filter.  Any character for which
-     * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
-     * altered by this transliterator.  If <tt>filter</tt> is
-     * <tt>null</tt> then no filtering is applied.
-     * @return the matching rule, or null if none found.
-
-     */
-    public TransliterationRule findMatch(String text, int start, int limit,
-                                         StringBuffer result, int cursor,
-                                         Dictionary variables,
-                                         UnicodeFilter filter) {
-        /* We only need to check our indexed bin of the rule table,
-         * based on the low byte of the first key character.
-         */
-        int rlen = result.length();
-        int x = 0xFF & (cursor < rlen ? result.charAt(cursor)
-                        : text.charAt(cursor - rlen + start));
-        for (int i=index[x]; i<index[x+1]; ++i) {
-            if (rules[i].matches(text, start, limit, result, cursor, variables, filter)) {
-                return rules[i];
-            }
-        }
-        return null;
     }
 
     /**

@@ -1,5 +1,5 @@
 package com.ibm.text;
-
+import com.ibm.Utility;
 import java.util.Enumeration;
 import java.util.Vector;
 
@@ -23,7 +23,7 @@ import java.util.Vector;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.4 $ $Date: 2000/01/18 20:36:16 $
+ * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.5 $ $Date: 2000/01/27 18:59:19 $
  */
 public class CompoundTransliterator extends Transliterator {
 
@@ -157,26 +157,10 @@ public class CompoundTransliterator extends Transliterator {
     }
 
     /**
-     * Transliterates a segment of a string.  <code>Transliterator</code> API.
-     * @param text the string to be transliterated
-     * @param start the beginning index, inclusive; <code>0 <= start
-     * <= limit</code>.
-     * @param limit the ending index, exclusive; <code>start <= limit
-     * <= text.length()</code>.
-     * @return the new limit index
-     */
-    public int transliterate(Replaceable text, int start, int limit) {
-        for (int i=0; i<trans.length; ++i) {
-            limit = trans[i].transliterate(text, start, limit);
-        }
-        return limit;
-    }
-
-    /**
      * Implements {@link Transliterator#handleTransliterate}.
      */
     protected void handleTransliterate(Replaceable text,
-                                       int[] index) {
+                                       Position index, boolean incremental) {
         /* Call each transliterator with the same start value and
          * initial cursor index, but with the limit index as modified
          * by preceding transliterators.  The cursor index must be
@@ -253,43 +237,43 @@ public class CompoundTransliterator extends Transliterator {
         }
 
         try {
-            int cursor = index[CURSOR];
-            int limit = index[LIMIT];
+            int cursor = index.cursor;
+            int limit = index.limit;
             int globalLimit = limit;
             /* globalLimit is the overall limit.  We keep track of this
-             * since we overwrite index[LIMIT] with the previous
-             * index[CURSOR].  After each transliteration, we update
+             * since we overwrite index.limit with the previous
+             * index.cursor.  After each transliteration, we update
              * globalLimit for insertions or deletions that have happened.
              */
 
             for (int i=0; i<trans.length; ++i) {
-                index[CURSOR] = cursor; // Reset cursor
-                index[LIMIT] = limit;
+                index.cursor = cursor; // Reset cursor
+                index.limit = limit;
 
                 if (DEBUG) {
-                    System.out.print(escape(i + ": \"" +
-                        substring(text, index[START], index[CURSOR]) + '|' +
-                        substring(text, index[CURSOR], index[LIMIT]) +
+                    System.out.print(Utility.escape(i + ": \"" +
+                        substring(text, index.start, index.cursor) + '|' +
+                        substring(text, index.cursor, index.limit) +
                         "\" -> \""));
                 }
 
-                trans[i].handleTransliterate(text, index);
+                trans[i].handleTransliterate(text, index, incremental);
 
                 if (DEBUG) {
-                    System.out.println(escape(
-                        substring(text, index[START], index[CURSOR]) + '|' +
-                        substring(text, index[CURSOR], index[LIMIT]) +
+                    System.out.println(Utility.escape(
+                        substring(text, index.start, index.cursor) + '|' +
+                        substring(text, index.cursor, index.limit) +
                         '"'));
                 }
             
                 // Adjust overall limit for insertions/deletions
-                globalLimit += index[LIMIT] - limit;
-                limit = index[CURSOR]; // Move limit to end of committed text
+                globalLimit += index.limit - limit;
+                limit = index.cursor; // Move limit to end of committed text
             }
             // Cursor is good where it is -- where the last
             // transliterator left it.  Limit needs to be put back
             // where it was, modulo adjustments for deletions/insertions.
-            index[LIMIT] = globalLimit;
+            index.limit = globalLimit;
 
         } finally {
             // Fixup the transliterator filters, if we had to modify them.
@@ -324,33 +308,6 @@ public class CompoundTransliterator extends Transliterator {
         StringBuffer buf = new StringBuffer();
         while (start < limit) {
             buf.append(str.charAt(start++));
-        }
-        return buf.toString();
-    }
-
-    /**
-     * DEBUG
-     * Escapes non-ASCII characters as Unicode.
-     */
-    private static final String escape(String s) {
-        StringBuffer buf = new StringBuffer();
-        for (int i=0; i<s.length(); ++i) {
-            char c = s.charAt(i);
-            if (c >= ' ' && c <= 0x007F) {
-                buf.append(c);
-            } else {
-                buf.append("\\u");
-                if (c < 0x1000) {
-                    buf.append('0');
-                    if (c < 0x100) {
-                        buf.append('0');
-                        if (c < 0x10) {
-                            buf.append('0');
-                        }
-                    }
-                }
-                buf.append(Integer.toHexString(c));
-            }
         }
         return buf.toString();
     }

@@ -90,20 +90,20 @@ import java.text.MessageFormat;
  * <p>Keyboard transliteration methods maintain a set of three indices
  * that are updated with each call to
  * <code>transliterate()</code>, including the cursor, start,
- * and limit.  Since these indices are changed by the method, they are
- * passed in an <code>int[]</code> array. The <code>START</code> index
+ * and limit.  These indices are changed by the method, and they are
+ * passed in and out via a Position object. The <code>start</code> index
  * marks the beginning of the substring that the transliterator will
  * look at.  It is advanced as text becomes committed (but it is not
- * the committed index; that's the <code>CURSOR</code>).  The
- * <code>CURSOR</code> index, described above, marks the point at
+ * the committed index; that's the <code>cursor</code>).  The
+ * <code>cursor</code> index, described above, marks the point at
  * which the transliterator last stopped, either because it reached
  * the end, or because it required more characters to disambiguate
- * between possible inputs.  The <code>CURSOR</code> can also be
+ * between possible inputs.  The <code>cursor</code> can also be
  * explicitly set by rules in a <code>RuleBasedTransliterator</code>.
- * Any characters before the <code>CURSOR</code> index are frozen;
+ * Any characters before the <code>cursor</code> index are frozen;
  * future keyboard transliteration calls within this input sequence
  * will not change them.  New text is inserted at the
- * <code>LIMIT</code> index, which marks the end of the substring that
+ * <code>limit</code> index, which marks the end of the substring that
  * the transliterator looks at.
  *
  * <p>Because keyboard transliteration assumes that more characters
@@ -198,7 +198,7 @@ import java.text.MessageFormat;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.10 $ $Date: 2000/01/18 21:39:27 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.11 $ $Date: 2000/01/27 18:59:19 $
  */
 public abstract class Transliterator {
     /**
@@ -222,26 +222,50 @@ public abstract class Transliterator {
     public static final int REVERSE = 1;    
 
     /**
-     * In the <code>transliterate()</code>
-     * <code>index[]</code> array, the beginning index, inclusive
-     * @see #transliterate
+     * start <= tstart <= cursor <= tlimit <= limit
      */
-    public static final int START  = 0;
+    public static class Position {
+        /**
+         * The beginning index, inclusive
+         */
+        public int start;
 
-    /**
-     * In the <code>transliterate()</code>
-     * <code>index[]</code> array, the ending index, exclusive
-     * @see #transliterate
-     */
-    public static final int LIMIT  = 1;
+        /**
+         * The ending index, exclusive
+         */
+        public int limit;
 
-    /**
-     * In the <code>transliterate()</code>
-     * <code>index[]</code> array, the next character to be considered
-     * for transliteration
-     * @see #transliterate
-     */
-    public static final int CURSOR = 2;
+        /**
+         * The next character to be considered for transliteration.
+         */
+        public int cursor;
+
+        /**
+         * The beginning index to be transliterated, inclusive
+         */
+        public int tstart;
+
+        /**
+         * The ending index to be transliterated, exclusive
+         */
+        public int tlimit;
+
+        public Position() {
+            this(0, 0, 0, 0, 0);
+        }
+
+        public Position(int start, int limit, int cursor) {
+            this(start, limit, cursor, start, limit);
+        }
+
+        public Position(int start, int limit, int cursor, int tstart, int tlimit) {
+            this.start = start;
+            this.limit = limit;
+            this.cursor = cursor;
+            this.tstart = tstart;
+            this.tlimit = tlimit;
+        }
+    }
 
     /**
      * Programmatic name, e.g., "Latin-Arabic".
@@ -377,36 +401,7 @@ public abstract class Transliterator {
     }
 
     /**
-     * Transliterates the segment of a string that begins at the
-     * character at offset <code>start</code> and extends to the
-     * character at offset <code>limit - 1</code>, with optional
-     * filtering.  A default implementaion is provided here;
-     * subclasses should provide a more efficient implementation if
-     * possible.
-     * @param text the string to be transliterated
-     * @param start the beginning index, inclusive; <code>0 <= start
-     * <= limit</code>.
-     * @param limit the ending index, exclusive; <code>start <= limit
-     * <= text.length()</code>.
-     * @param result buffer to receive the transliterated text; previous
-     * contents are discarded
-     */
-    public void transliterate(String text, int start, int limit,
-                              StringBuffer result) {
-        /* This is a default implementation that should be replaced by
-         * a more efficient subclass implementation if possible.
-         */
-        result.setLength(0);
-        result.append(text.substring(start, limit));
-        transliterate(new ReplaceableString(result),
-                      0, result.length());
-    }
-
-    /**
      * Transliterates a segment of a string, with optional filtering.
-     * The default implementation simply calls <code>handleTransliterate</code>.
-     * Subclasses that can supply a more efficient implementation should
-     * override this method.
      *
      * @param text the string to be transliterated
      * @param start the beginning index, inclusive; <code>0 <= start
@@ -422,35 +417,10 @@ public abstract class Transliterator {
      * length, at <code>[start, </code><em>new-limit</em><code>)</code>, where
      * <em>new-limit</em> is the return value.
      */
-    public int transliterate(Replaceable text, int start, int limit) {
-        /* This is a default implementation that should be replaced by
-         * a more efficient subclass implementation if possible.
-         */
-        int[] offsets = { start, limit, start };
-        handleTransliterate(text, offsets);
-        return offsets[LIMIT];
-    }
-
-    /**
-     * Transliterates an entire string. Convenience method.
-     * @param text the string to be transliterated
-     * @param result buffer to receive the transliterated text; previous
-     * contents are discarded
-     */
-    public final void transliterate(String text, StringBuffer result) {
-        transliterate(text, 0, text.length(), result);
-    }
-
-    /**
-     * Transliterate an entire string and returns the result. Convenience method.
-     *
-     * @param text the string to be transliterated
-     * @return The transliterated text
-     */
-    public final String transliterate(String text) {
-        StringBuffer result = new StringBuffer();
-        transliterate(text, 0, text.length(), result);
-        return result.toString();
+    public final int transliterate(Replaceable text, int start, int limit) {
+        Position pos = new Position(start, limit, start);
+        handleTransliterate(text, pos, false);
+        return pos.limit;
     }
 
     /**
@@ -462,29 +432,41 @@ public abstract class Transliterator {
     }
 
     /**
+     * Transliterate an entire string and returns the result. Convenience method.
+     *
+     * @param text the string to be transliterated
+     * @return The transliterated text
+     */
+    public final String transliterate(String text) {
+        ReplaceableString result = new ReplaceableString(text);
+        transliterate(result);
+        return result.toString();
+    }
+
+    /**
      * Transliterates the portion of the text buffer that can be
      * transliterated unambiguosly after new text has been inserted,
      * typically as a result of a keyboard event.  The new text in
      * <code>insertion</code> will be inserted into <code>text</code>
-     * at <code>index[LIMIT]</code>, advancing
-     * <code>index[LIMIT]</code> by <code>insertion.length()</code>.
+     * at <code>index.limit</code>, advancing
+     * <code>index.limit</code> by <code>insertion.length()</code>.
      * Then the transliterator will try to transliterate characters of
-     * <code>text</code> between <code>index[CURSOR]</code> and
-     * <code>index[LIMIT]</code>.  Characters before
-     * <code>index[CURSOR]</code> will not be changed.
+     * <code>text</code> between <code>index.cursor</code> and
+     * <code>index.limit</code>.  Characters before
+     * <code>index.cursor</code> will not be changed.
      *
-     * <p>Upon return, values in <code>index[]</code> will be updated.
-     * <code>index[START]</code> will be advanced to the first
+     * <p>Upon return, values in <code>index</code> will be updated.
+     * <code>index.start</code> will be advanced to the first
      * character that future calls to this method will read.
-     * <code>index[CURSOR]</code> and <code>index[LIMIT]</code> will
+     * <code>index.cursor</code> and <code>index.limit</code> will
      * be adjusted to delimit the range of text that future calls to
      * this method may change.
      *
      * <p>Typical usage of this method begins with an initial call
-     * with <code>index[START]</code> and <code>index[LIMIT]</code>
+     * with <code>index.start</code> and <code>index.limit</code>
      * set to indicate the portion of <code>text</code> to be
-     * transliterated, and <code>index[CURSOR] == index[START]</code>.
-     * Thereafter, <code>index[]</code> can be used without
+     * transliterated, and <code>index.cursor == index.start</code>.
+     * Thereafter, <code>index</code> can be used without
      * modification in future calls, provided that all changes to
      * <code>text</code> are made via this method.
      *
@@ -500,51 +482,47 @@ public abstract class Transliterator {
      * @param text the buffer holding transliterated and untransliterated text
      * @param index an array of three integers.
      *
-     * <ul><li><code>index[START]</code>: the beginning index,
-     * inclusive; <code>0 <= index[START] <= index[LIMIT]</code>.
+     * <ul><li><code>index.start</code>: the beginning index,
+     * inclusive; <code>0 <= index.start <= index.limit</code>.
      *
-     * <li><code>index[LIMIT]</code>: the ending index, exclusive;
-     * <code>index[START] <= index[LIMIT] <= text.length()</code>.
+     * <li><code>index.limit</code>: the ending index, exclusive;
+     * <code>index.start <= index.limit <= text.length()</code>.
      * <code>insertion</code> is inserted at
-     * <code>index[LIMIT]</code>.
+     * <code>index.limit</code>.
      *
-     * <li><code>index[CURSOR]</code>: the next character to be
-     * considered for transliteration; <code>index[START] <=
-     * index[CURSOR] <= index[LIMIT]</code>.  Characters before
-     * <code>index[CURSOR]</code> will not be changed by future calls
+     * <li><code>index.cursor</code>: the next character to be
+     * considered for transliteration; <code>index.start <=
+     * index.cursor <= index.limit</code>.  Characters before
+     * <code>index.cursor</code> will not be changed by future calls
      * to this method.</ul>
      *
      * @param insertion text to be inserted and possibly
      * transliterated into the translation buffer at
-     * <code>index[LIMIT]</code>.  If <code>null</code> then no text
+     * <code>index.limit</code>.  If <code>null</code> then no text
      * is inserted.
-     * @see #START
-     * @see #LIMIT
-     * @see #CURSOR
      * @see #handleTransliterate
-     * @exception IllegalArgumentException if <code>index[]</code>
+     * @exception IllegalArgumentException if <code>index</code>
      * is invalid
      */
-    public final void transliterate(Replaceable text, int[] index,
+    public final void transliterate(Replaceable text, Position index,
                                     String insertion) {
-        if (index.length < 3 ||
-            index[START] < 0 ||
-            index[LIMIT] > text.length() ||
-            index[CURSOR] < index[START] ||
-            index[CURSOR] > index[LIMIT]) {
-            throw new IllegalArgumentException("Invalid index array");
+        if (index.start < 0 ||
+            index.limit > text.length() ||
+            index.cursor < index.start ||
+            index.cursor > index.limit) {
+            throw new IllegalArgumentException("Invalid index");
         }
 
-        int originalStart = index[START];
+        int originalStart = index.start;
         if (insertion != null) {
-            text.replace(index[LIMIT], index[LIMIT], insertion);
-            index[LIMIT] += insertion.length();
+            text.replace(index.limit, index.limit, insertion);
+            index.limit += insertion.length();
         }
 
-        handleTransliterate(text, index);
+        handleTransliterate(text, index, true);
 
-        index[START] = Math.max(index[CURSOR] - getMaximumContextLength(),
-                                originalStart);
+        index.start = Math.max(index.cursor - getMaximumContextLength(),
+                               originalStart);
     }
 
     /**
@@ -552,17 +530,17 @@ public abstract class Transliterator {
      * transliterated unambiguosly after a new character has been
      * inserted, typically as a result of a keyboard event.  This is a
      * convenience method; see {@link
-     * #transliterate(Replaceable, int[], String)} for details.
+     * #transliterate(Replaceable, Position, String)} for details.
      * @param text the buffer holding transliterated and
      * untransliterated text
      * @param index an array of three integers.  See {@link
-     * #transliterate(Replaceable, int[], String)}.
+     * #transliterate(Replaceable, Position, String)}.
      * @param insertion text to be inserted and possibly
      * transliterated into the translation buffer at
-     * <code>index[LIMIT]</code>.
-     * @see #transliterate(Replaceable, int[], String)
+     * <code>index.limit</code>.
+     * @see #transliterate(Replaceable, Position, String)
      */
-    public final void transliterate(Replaceable text, int[] index,
+    public final void transliterate(Replaceable text, Position index,
                                     char insertion) {
         transliterate(text, index, String.valueOf(insertion));
     }
@@ -570,15 +548,15 @@ public abstract class Transliterator {
     /**
      * Transliterates the portion of the text buffer that can be
      * transliterated unambiguosly.  This is a convenience method; see
-     * {@link #transliterate(Replaceable, int[], String)} for
+     * {@link #transliterate(Replaceable, Position, String)} for
      * details.
      * @param text the buffer holding transliterated and
      * untransliterated text
      * @param index an array of three integers.  See {@link
-     * #transliterate(Replaceable, int[], String)}.
-     * @see #transliterate(Replaceable, int[], String)
+     * #transliterate(Replaceable, Position, String)}.
+     * @see #transliterate(Replaceable, Position, String)
      */
-    public final void transliterate(Replaceable text, int[] index) {
+    public final void transliterate(Replaceable text, Position index) {
         transliterate(text, index, null);
     }
 
@@ -593,35 +571,47 @@ public abstract class Transliterator {
      * #transliterate}
      */
     public final void finishTransliteration(Replaceable text,
-                                            int[] index) {
-        transliterate(text, index[START], index[LIMIT]);
+                                            Position index) {
+        if (index.start < 0 ||
+            index.limit > text.length() ||
+            index.cursor < index.start ||
+            index.cursor > index.limit) {
+            throw new IllegalArgumentException("Invalid index");
+        }
+
+        int originalStart = index.start;
+
+        handleTransliterate(text, index, false);
+
+        index.start = Math.max(index.cursor - getMaximumContextLength(),
+                               originalStart);
     }
 
     /**
      * Abstract method that concrete subclasses define to implement
      * keyboard transliteration.  This method should transliterate all
-     * characters between <code>index[CURSOR]</code> and
-     * <code>index[LIMIT]</code> that can be unambiguously
+     * characters between <code>index.cursor</code> and
+     * <code>index.limit</code> that can be unambiguously
      * transliterated, regardless of future insertions of text at
-     * <code>index[LIMIT]</code>.  <code>index[CURSOR]</code> should
+     * <code>index.limit</code>.  <code>index.cursor</code> should
      * be advanced past committed characters (those that will not
      * change in future calls to this method).
-     * <code>index[LIMIT]</code> should be updated to reflect text
+     * <code>index.limit</code> should be updated to reflect text
      * replacements that shorten or lengthen the text between
-     * <code>index[CURSOR]</code> and <code>index[LIMIT]</code>.  Upon
-     * return, neither <code>index[CURSOR]</code> nor
-     * <code>index[LIMIT]</code> should be less than the initial value
-     * of <code>index[CURSOR]</code>.  <code>index[START]</code>
+     * <code>index.cursor</code> and <code>index.limit</code>.  Upon
+     * return, neither <code>index.cursor</code> nor
+     * <code>index.limit</code> should be less than the initial value
+     * of <code>index.cursor</code>.  <code>index.start</code>
      * should <em>not</em> be changed.
      *
      * @param text the buffer holding transliterated and
      * untransliterated text
      * @param index an array of three integers.  See {@link
-     * #transliterate(Replaceable, int[], String)}.
+     * #transliterate(Replaceable, Position, String)}.
      * @see #transliterate
      */
     protected abstract void handleTransliterate(Replaceable text,
-                                                int[] index);
+                                                Position pos, boolean incremental);
 
     /**
      * Returns the length of the longest context required by this transliterator.
@@ -789,6 +779,39 @@ public abstract class Transliterator {
     public static final Transliterator getInstance(String ID) {
         return getInstance(ID, FORWARD);
     }
+
+    /*
+    foo(String pattern, ParsePosition pos, int direction) {
+        String id;
+        UnicodeSet filter = null;
+        int start = pos.getIndex();
+        int limit = pattern.length();
+        int i = pattern.indexOf(';', start);
+        if (i >= 0) {
+            limit = i;
+        }
+        i = pattern.indexOf('[', start);
+        if (i >= 0 && i < limit) {
+            limit = i;
+            pos.setIndex(i);
+            filter = new UnicodeSet(pattern, pos, null, null);
+        } else {
+            pos.setIndex(limit);
+        }
+        id = pattern.substring(start, limit);
+        if (direction == REVERSE) {
+            i = id.indexOf('-');
+            if (i < 0) {
+                throw new IllegalArgumentException("No inverse for: " + id);
+            }
+            id = id.substring(i+1) + '-' + id.substring(0, i);
+        }
+        Transliterator t = internalGetInstance(ID);
+        if (filter != null) {
+            t.setFilter(filter);
+        }
+    }
+    */
 
     /**
      * Returns this transliterator's inverse.  See the class

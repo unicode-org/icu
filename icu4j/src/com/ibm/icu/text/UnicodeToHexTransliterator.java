@@ -10,7 +10,7 @@ import java.util.*;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeToHexTransliterator.java,v $ $Revision: 1.3 $ $Date: 2000/01/18 20:36:17 $
+ * @version $RCSfile: UnicodeToHexTransliterator.java,v $ $Revision: 1.4 $ $Date: 2000/01/27 18:59:20 $
  */
 public class UnicodeToHexTransliterator extends Transliterator {
 
@@ -94,14 +94,14 @@ public class UnicodeToHexTransliterator extends Transliterator {
      * Implements {@link Transliterator#handleTransliterate}.
      */
     protected void handleTransliterate(Replaceable text,
-                                       int[] offsets) {
+                                       Position offsets, boolean incremental) {
         /**
          * Performs transliteration changing all characters to
          * Unicode hexadecimal escapes.  For example, '@' -> "U+0040",
          * assuming the prefix is "U+". 
          */
-        int cursor = offsets[CURSOR];
-        int limit = offsets[LIMIT];
+        int cursor = offsets.cursor;
+        int limit = offsets.limit;
 
         UnicodeFilter filter = getFilter();
 
@@ -120,8 +120,8 @@ public class UnicodeToHexTransliterator extends Transliterator {
             limit += len;
         }
 
-        offsets[LIMIT] = limit;
-        offsets[CURSOR] = cursor;
+        offsets.limit = limit;
+        offsets.cursor = cursor;
     }
 
     /**
