@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/perl 
 #*
 #*******************************************************************************
 #*   Copyright (C) 2001, International Business Machines
@@ -23,6 +23,7 @@ $path = substr($0, 0, rindex($0, "/")+1)."../../common/unicode/uversion.h";
 (-e $path) || die "Cannot find uversion.h";
 
 open(UVERSION, $path);
+
 while(<UVERSION>) {
     if(/\#define U_ICU_VERSION_SUFFIX/) {
         chop;
@@ -71,7 +72,7 @@ print HEADER <<"EndOfHeaderComment";
 *   Created by: Perl script written by Vladimir Weinstein
 *
 *  Contains data for renaming ICU exports in the $ARGV[0] library
-*  Gets included by utypes.h
+*  Gets included by umachine.h
 *
 *  THIS FILE IS MACHINE-GENERATED, DON'T PLAY WITH IT IF YOU DON'T KNOW WHAT
 *  YOU ARE DOING, OTHERWISE VERY BAD THINGS WILL HAPPEN!
@@ -92,14 +93,23 @@ for(;@ARGV; shift(@ARGV)) {
     
     foreach (@NMRESULT) { # Process every line of result and stuff it in $_
         ($_, $address, $type) = split(/\|/);
-
-        if(!($type =~ /[UA]/)) {
+        &verbose( "type: \"$type\" ");
+        if(!($type =~ /[UAw]/)) {
             if(/@@/) { # These would be imports
                 &verbose( "Import: $_ \"$type\"\n");
             } elsif (/::/) { # C++ methods, stuff class name in associative array
                 &verbose( "C++ method: $_\n");
-                @CppName = split(/::/);
+                ## icu_2_0::CharString::~CharString(void) -> CharString
+                @CppName = split(/::/); ## remove scope stuff
+                if(@CppName>1) {
+                    ## MessageFormat virtual table -> MessageFormat
+                    @CppName = split(/ /, $CppName[1]); ## remove debug stuff
+                }
+                ## ures_getUnicodeStringByIndex(UResourceBundle -> ures_getUnicodeStringByIndex
+                @CppName = split(/\(/, $CppName[0]); ## remove function args
                 $CppClasses{$CppName[0]}++;
+            } elsif ( /\(/) { # These are strange functions
+                print STDOUT "$_\n";
             } else { # This is regular C function 
                 &verbose( "C func: $_\n");
                 @funcname = split(/[\(\s+]/);
@@ -117,10 +127,12 @@ foreach(sort keys(%CFuncs)) {
 }
 
 print HEADER "\n/* C++ class names renaming defines */\n";
-print HEADER "#ifdef __cplusplus\n";
+print HEADER "#ifdef XP_CPLUSPLUS\n";
+print HEADER "#if !U_HAVE_NAMESPACE\n";
 foreach(sort keys(%CppClasses)) {
     print HEADER "#define $_ $_$U_ICU_VERSION_SUFFIX\n";
 }
+print HEADER "#endif\n";
 print HEADER "#endif\n";
 print HEADER "#endif\n";
 
