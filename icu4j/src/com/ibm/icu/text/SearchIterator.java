@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/SearchIterator.java,v $ 
- * $Date: 2002/03/20 05:11:16 $ 
- * $Revision: 1.5 $
+ * $Date: 2002/04/03 19:13:56 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -424,14 +424,4 @@ public abstract class SearchIterator {
     private boolean             overlap = true; // Return overlapping matches?
     private CharacterIterator   target;         // Target text to be searched
     private BreakIterator       breaker;        // Break iterator to constrain matches
-
-    //-------------------------------------------------------------------------
-    // Debugging support...
-    //-------------------------------------------------------------------------
-
-    static private final boolean DEBUG = false;
-
-    static void debug(String str) {
-        System.err.println(str);
-    }
 };

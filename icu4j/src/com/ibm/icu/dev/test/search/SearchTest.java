@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/search/SearchTest.java,v $ 
- * $Date: 2002/03/10 19:40:14 $ 
- * $Revision: 1.13 $
+ * $Date: 2002/04/03 19:13:56 $ 
+ * $Revision: 1.14 $
  *
  *****************************************************************************************
  */
@@ -491,6 +491,11 @@ public class SearchTest extends TestFmwk {
 	    while (textoffset != SearchIterator.DONE && count < offset.length) {
 	        if (textoffset != offset[count]) {
 		        errln( "Found match not found at offset " + offset[count]);
+		    }
+		    if (searcher.getMatchLength() != pattern.length() ||
+		        !searcher.getMatchedText().equals(pattern)) {
+		        errln("Failed finding match for pattern " + pattern + " got " +
+		              searcher.getMatchedText()); 
 		    }
 		    count ++;
 		    textoffset = searcher.next();
