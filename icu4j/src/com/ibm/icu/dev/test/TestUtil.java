@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestUtil.java,v $
- * $Date: 2004/02/06 21:54:05 $
- * $Revision: 1.11 $
+ * $Date: 2004/03/04 22:01:55 $
+ * $Revision: 1.12 $
  *
  *******************************************************************************
  */
@@ -67,8 +67,10 @@ public final class TestUtil {
 			} catch (Throwable t) {
 				IOException ex =
 					new IOException("data resource '" + name + "' not found");
-				ex.initCause(t);
-				throw ex;
+				//initCause API was introduced in JDK 1.4
+                //ex.initCause(t);
+                t.printStackTrace();
+                throw ex;
 			}
 		}
 		return is;
