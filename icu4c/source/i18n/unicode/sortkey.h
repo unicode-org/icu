@@ -183,7 +183,7 @@ public:
     * otherwise.
     * @stable ICU 2.0
     */
-    UCollationResult compareTo(const CollationKey& target) const;
+    Collator::EComparisonResult compareTo(const CollationKey& target) const;
 
     /**
     * Creates an integer that is unique to the collation key.  NOTE: this

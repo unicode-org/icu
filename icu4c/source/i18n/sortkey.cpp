@@ -177,7 +177,7 @@ CollationKey::operator=(const CollationKey& other)
 // NOTE: this is somewhat messy 'cause we can't count
 // on memcmp returning the exact values which match
 // Collator::EComparisonResult
-UCollationResult
+Collator::EComparisonResult
 CollationKey::compareTo(const CollationKey& target) const
 {
     uint8_t *src = this->fBytes;
@@ -185,7 +185,7 @@ CollationKey::compareTo(const CollationKey& target) const
 
     // are we comparing the same string
     if (src == tgt)
-        return UCOL_EQUAL;
+        return  Collator::EQUAL;
 
         /*
         int count = (this->fCount < target.fCount) ? this->fCount : target.fCount;
@@ -208,32 +208,32 @@ CollationKey::compareTo(const CollationKey& target) const
     */
 
     int                         minLength;
-    UCollationResult result;
+    Collator::EComparisonResult result;
 
     // are we comparing different lengths?
     if (this->fCount != target.fCount) {
         if (this->fCount < target.fCount) {
             minLength = this->fCount;
-            result    = UCOL_LESS;
+            result    =  Collator::LESS;
         }
         else {
             minLength = target.fCount;
-            result    = UCOL_GREATER;
+            result    =  Collator::GREATER;
         }
     }
     else {
         minLength = target.fCount;
-        result    = UCOL_EQUAL;
+        result    =  Collator::EQUAL;
     }
 
     if (minLength > 0) {
         int diff = uprv_memcmp(src, tgt, minLength);
         if (diff > 0) {
-            return UCOL_GREATER;
+            return Collator::GREATER;
         }
         else
             if (diff < 0) {
-                return UCOL_LESS;
+                return Collator::LESS;
             }
     }
 

@@ -545,9 +545,9 @@ void CollationRegressionTest::Test4078588(/* char *par */)
         return;
     }
 
-    UCollationResult result = rbc->compare("a","bb");
+    Collator::EComparisonResult result = rbc->compare("a","bb");
 
-    if (result != UCOL_LESS)
+    if (result != Collator::LESS)
     {
         errln((UnicodeString)"Compare(a,bb) returned " + (int)result
             + (UnicodeString)"; expected -1");
@@ -1072,7 +1072,7 @@ void CollationRegressionTest::compareArray(Collator &c,
                                            int32_t testCount)
 {
     int32_t i;
-    UCollationResult expectedResult = UCOL_EQUAL;
+    Collator::EComparisonResult expectedResult = Collator::EQUAL;
 
     for (i = 0; i < testCount; i += 3)
     {
@@ -1082,15 +1082,15 @@ void CollationRegressionTest::compareArray(Collator &c,
 
         if (comparison == "<")
         {
-            expectedResult = UCOL_LESS;
+            expectedResult = Collator::LESS;
         }
         else if (comparison == ">")
         {
-            expectedResult = UCOL_GREATER;
+            expectedResult = Collator::GREATER;
         }
         else if (comparison == "=")
         {
-            expectedResult = UCOL_EQUAL;
+            expectedResult = Collator::EQUAL;
         }
         else
         {
@@ -1099,7 +1099,7 @@ void CollationRegressionTest::compareArray(Collator &c,
             errln(bogus1 + comparison + bogus2);
         }
 
-        UCollationResult compareResult = c.compare(source, target);
+        Collator::EComparisonResult compareResult = c.compare(source, target);
 
         CollationKey sourceKey, targetKey;
         UErrorCode status = U_ZERO_ERROR;
@@ -1120,7 +1120,7 @@ void CollationRegressionTest::compareArray(Collator &c,
             continue;
         }
 
-        UCollationResult keyResult = sourceKey.compareTo(targetKey);
+        Collator::EComparisonResult keyResult = sourceKey.compareTo(targetKey);
 
         reportCResult( source, target, sourceKey, targetKey, compareResult, keyResult, compareResult, expectedResult );
 

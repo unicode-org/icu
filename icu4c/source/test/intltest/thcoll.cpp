@@ -155,7 +155,7 @@ void CollationThaiTest::TestNamesList(void) {
         }
 
         if (lastWord.length() > 0) {
-            UCollationResult result = coll->compare(lastWord, word);
+            Collator::EComparisonResult result = coll->compare(lastWord, word);
             doTest(coll, lastWord, word, result);
         }
         lastWord = word;
@@ -222,7 +222,7 @@ void CollationThaiTest::TestDictionary(void) {
 
         if (lastWord.length() > 0) {
             // line enabled for j2720 
-            doTest(coll, lastWord, word, UCOL_LESS);
+            doTest(coll, lastWord, word, Collator::LESS);
             int32_t result = coll->compare(lastWord, word);
 
             if (result >= 0) {
