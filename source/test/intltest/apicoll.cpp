@@ -2096,7 +2096,7 @@ void CollationAPITest::TestSubclass()
     TestCollator col3(UCOL_TERTIARY, UNORM_NONE);
     UnicodeString a("a");
     UnicodeString b("b");
-    UCollationResult result = UCollationResult(a.compare(b));
+    Collator::EComparisonResult result = Collator::EComparisonResult(a.compare(b));
     if(col1.compare(a, b) != result) {
       errln("Collator doesn't give default result");
     }
