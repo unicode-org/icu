@@ -318,41 +318,6 @@ private:
         void setFactory(Factory factory);
     };
 
-    /**
-     * Prefix for resource bundle key for the display name for a
-     * transliterator.  The ID is appended to this to form the key.
-     * The resource bundle value should be a String.
-     */
-    static const char* RB_DISPLAY_NAME_PREFIX;
-
-    /**
-     * Prefix for resource bundle key for the display name for a
-     * transliterator SCRIPT.  The ID is appended to this to form the key.
-     * The resource bundle value should be a String.
-     */
-    static const char* RB_SCRIPT_DISPLAY_NAME_PREFIX;
-
-    /**
-     * Resource bundle key for display name pattern.
-     * The resource bundle value should be a String forming a
-     * MessageFormat pattern, e.g.:
-     * "{0,choice,0#|1#{1} Transliterator|2#{1} to {2} Transliterator}".
-     */
-    static const char* RB_DISPLAY_NAME_PATTERN;
-
-    /**
-     * Resource bundle key for the list of RuleBasedTransliterator IDs.
-     * The resource bundle value should be a String[] with each element
-     * being a valid ID.  The ID will be appended to RB_RULE_BASED_PREFIX
-     * to obtain the class name in which the RB_RULE key will be sought.
-     */
-    static const char* RB_RULE_BASED_IDS;
-
-    /**
-     * Resource bundle key for the RuleBasedTransliterator rule.
-     */
-    static const char* RB_RULE;
-
 protected:
 
     /**
