@@ -163,7 +163,7 @@ ibm-5104               cp1008          # 8-bit Arabic (w/ euro update)
 ibm-9238               cp1046          # PC Arabic Extended (w/ euro update)
 #ibm-1161              cp9066          # PC Thailand (IBM "version) (w/ euro update)
 ibm-1362               cp1362          # Korean Windows DBCS (w/ euro update)
-ibm-1363               cp1363          # Korean Windows MBCS (w/ euro update)
+ibm-1363               cp1363 cp949 ksc korean # Korean KSC Korean Windows MBCS (w/ euro update)
 ibm-5210               cp1114          # PC SBCS Big-5 (w/ euro update)
 ibm-21427              cp947           # PC DBCS Big-5 (w/ euro update)
 
