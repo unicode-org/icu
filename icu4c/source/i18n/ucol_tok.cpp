@@ -23,7 +23,6 @@
  
 #include "cmemory.h"
 #include "ucol_tok.h"
-#include "ucmp32.h"
 
 const UChar *rulesToParse;
 

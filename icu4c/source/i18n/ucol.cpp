@@ -32,7 +32,6 @@
 #include "unormimp.h"
 #include "cpputils.h"
 #include "cstring.h"
-#include "ucmp32.h"
 #include "umutex.h"
 #include "uhash.h"
 #include "ucln_in.h" 
