@@ -51,16 +51,6 @@ UnicodeString
 UCharToUnicodeString(UChar c)
 { return UnicodeString(c); }
 
-// [LIU] Just to get things working
-UnicodeString
-operator+(const UnicodeString& left,
-      const UnicodeString& right)
-{
-    UnicodeString str(left);
-    str += right;
-    return str;
-}
-
 // [rtg] Just to get things working
 UnicodeString
 operator+(const UnicodeString& left,

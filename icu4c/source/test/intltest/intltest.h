@@ -26,7 +26,6 @@ U_NAMESPACE_USE
 //convenience classes to ease porting code that uses the Java
 //string-concatenation operator (moved from findword test by rtg)
 UnicodeString UCharToUnicodeString(UChar c);
-UnicodeString operator+(const UnicodeString& left, const UnicodeString& right);
 UnicodeString operator+(const UnicodeString& left, long num);
 UnicodeString operator+(const UnicodeString& left, unsigned long num);
 UnicodeString operator+(const UnicodeString& left, double num);
