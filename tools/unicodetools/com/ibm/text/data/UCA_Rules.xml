@@ -2,12 +2,12 @@
 <!--
 UCA Rules
 This file contains the UCA tables for the given version, but transformed into rule syntax.
-Generated:   2002-06-27,15:51:32 GMT [MD]
+Generated:   2002-06-27,18:40:47 GMT [MD]
 NOTE: Since UCA handles canonical equivalents, no composites are necessary
 (except in extensions).
 For syntax description, see: http://oss.software.ibm.com/icu/userguide/Collate_Intro.html
 -->
-<base uca='3.1.1d3/3.2.0'/>
+<base uca='3.1.1d5/3.2.0'/>
 <rules>
 <reset/><position at="last tertiary ignorable"/>
   <eq/><codepoint hex="1"/>

@@ -3,8 +3,8 @@
 <style>.bottom { border-bottom-style: solid; border-bottom-color: #0000FF }</style>
 </head><body bgcolor='#FFFFFF'>
 <h1>Collation Validity Checks</h1>
-<table><tr><td>Generated: </td><td>2002-06-27,15:51:18 GMT [MD]</td></tr>
-<tr><td>File Version: </td><td>3.1.1d3/3.2.0</td></tr></table>
+<table><tr><td>Generated: </td><td>2002-06-27,18:40:35 GMT [MD]</td></tr>
+<tr><td>File Version: </td><td>3.1.1d5/3.2.0</td></tr></table>
 <h2>1. Mismatches when NFD is OFF</h2>
 <p>Alternate Handling = NON_IGNORABLE</p>
 <p>NOTE: NFD form is used by UCA,so if other forms are different there are <i>ignored</i>. This may indicate a problem, e.g. missing contraction.</p>
@@ -40,8 +40,13 @@
 <p>Warning: only checking characters defined in base: 3.1.1</p>
 <table border='1' cellspacing='0' cellpadding='2'>
 <tr><th>Code</td><th>Sort Key</th><th>Decomposed Sort Key</th><th>Name</th></tr>
+<tr><td>337B</td><td>[FB40 DE73 FB40 E210 | 0020 0020 | 001C 001F]</td><td>[FB40 DE73 FB40 E210 | 0020 0020 | 001C 001C]</td><td>SQUARE ERA NAME HEISEI</td></tr>
+<tr><td>337C</td><td>[FB40 E62D FB40 D48C | 0020 0020 | 001C 001F]</td><td>[FB40 E62D FB40 D48C | 0020 0020 | 001C 001C]</td><td>SQUARE ERA NAME SYOUWA</td></tr>
+<tr><td>337D</td><td>[FB40 D927 FB40 EB63 | 0020 0020 | 001C 001F]</td><td>[FB40 D927 FB40 EB63 | 0020 0020 | 001C 001C]</td><td>SQUARE ERA NAME TAISYOU</td></tr>
+<tr><td>337E</td><td>[FB40 E60E FB40 ECBB | 0020 0020 | 001C 001F]</td><td>[FB40 E60E FB40 ECBB | 0020 0020 | 001C 001C]</td><td>SQUARE ERA NAME MEIZI</td></tr>
+<tr><td>337F</td><td>[FB40 E82A FB40 DF0F FB40 CF1A FB40 F93E | 0020 0020 0020 0020 | 001C 001F 001F 001F]</td><td>[FB40 E82A FB40 DF0F FB40 CF1A FB40 F93E | 0020 0020 0020 0020 | 001C 001C 001F 001F]</td><td>SQUARE CORPORATION</td></tr>
 </table>
-<p>Errors: 0</p>
+<p>Errors: 5</p>
 <p>Space/Tatweel exceptions: [\u00A0\u00A8\u00AF\u00B4\u00B8\u02D8-\u02DD\u037A\u0384-\u0385\u1FBD\u1FBF-\u1FC1\u1FCD-\u1FCF\u1FDD-\u1FDF\u1FED-\u1FEE\u1FFD-\u1FFE\u2000-\u200A\u2017\u202F\u203E\u3000\u309B-\u309C\uFC5E-\uFC63\uFCF2-\uFCF4\uFE49-\uFE4C\uFE70-\uFE72\uFE74\uFE76-\uFE7F\uFFE3]</p>
 <p>Note: characters with decompositions to space + X, and tatweel + X are excluded, as are a few special characters: [\u017F\u0CCB\u0DDD\u1E9B\uFB05]</p>
 <h2>6. Checking for well-formedness</h2>
