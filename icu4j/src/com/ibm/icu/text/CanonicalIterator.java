@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CanonicalIterator.java,v $ 
- * $Date: 2002/03/14 15:33:25 $ 
- * $Revision: 1.6 $
+ * $Date: 2002/03/14 22:43:03 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -39,7 +39,8 @@ import java.util.*;
  *<br>Note: the code is intended for use with small strings, and is not suitable for larger ones,
  * since it has not been optimized for that situation.
  *@author M. Davis
- *@draft
+ *@draft 2.2
+ *@internal -- not for public use: the API may change without warning.
  */
 
 public class CanonicalIterator {
@@ -70,6 +71,7 @@ public class CanonicalIterator {
     /**
      *@return the next string that is canonically equivalent. The value null is returned when
      * the iteration is done.
+	 *<br><b>Warning: The strings are not guaranteed to be in any particular order.</b>
      */
     public String next() {
         if (done) return null;
@@ -140,6 +142,7 @@ public class CanonicalIterator {
     
     /**
      * Simple implementation of permutation. 
+	 *<br><b>Warning: The strings are not guaranteed to be in any particular order.</b>
      * @param source the string to find permutations for
      * @return the results in a set.
      * @internal
