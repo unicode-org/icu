@@ -153,136 +153,46 @@ static UBool checkISOCountry(char* country) {
     return FALSE;
 }
 
+static void strnrepchr(char* src, int32_t srcLen, char s, char r){
+    int32_t i = 0;
+    for(i=0;i<srcLen;i++){
+        if(src[i]==s){
+            src[i]=r;
+        }
+    }
+}
 /* Parse the filename, and get its language information.
  * If it fails to get the language information from the filename,
  * use "en" as the default value for language
  */
-static char* parseFilename(const char* fileName, char* lang) {
-    char* pos;
-    char* pos2;
-    int32_t first;
-    int32_t second;
-    char* str0 = NULL;
-    char* str1 = NULL;
-    char* str2 = NULL;
-    char* str3 = NULL;
-    int32_t index = 0;
-    UBool ISO_tag = TRUE;
+static char* parseFilename(const char* id, char* lang) {
+    int idLen = uprv_strlen(id);
+    char* localeID = (char*) uprv_malloc(idLen);
+    int pos = 0;
+    int canonCapacity = 0;
+    char* canon = NULL;
+    int canonLen = 0;
+    /*int i;*/
+    UErrorCode status = U_ZERO_ERROR;
+    char *ext = uprv_strchr(id, '.');
+    if(ext!=NULL){
+        pos = ext-id;
+    }else{
+        pos = idLen;
+    }
+    uprv_memcpy(localeID, id, pos);
+    localeID[pos]=0; /* NUL terminate the string */
+    
+    canonCapacity =pos*3;
+    canon = (char*) uprv_malloc(canonCapacity);
+    canonLen = uloc_canonicalize(localeID, canon, canonCapacity, &status);
 
-    ISOLanguages = uloc_getISOLanguages();
-    ISOCountries = uloc_getISOCountries();
-
-    pos = uprv_strrchr(fileName, U_FILE_SEP_CHAR);
-    pos2 = uprv_strrchr(fileName, '.');
-
-    if(pos == NULL) {
-        first = -1;
-    }else {
-        first = (int32_t)(pos - fileName);
+    if(U_FAILURE(status)){
+        fprintf(stderr, "Could not canonicalize the locale ID: %s. Error: %s\n", localeID, u_errorName(status));
+        exit(status);
     }
-    if(pos2 == NULL) {
-        second = (int32_t)uprv_strlen(fileName);
-    } else {
-        second = (int32_t)(pos2 - fileName);
-    }
-    index = (int32_t)(second - first - 1);
-    str0 = uprv_malloc(sizeof(char) * index + 1);
-    uprv_memset(str0, 0, sizeof(char) * index + 1);
-    uprv_strncpy(str0, fileName + first + 1, index);
-
-    pos = uprv_strchr( str0, '_' );
-    first = (int32_t)(pos - str0);
-    if (pos == NULL) {
-        str1 = uprv_malloc(sizeof(char)*uprv_strlen(str0)+1);
-        uprv_memset(str1, 0, sizeof(char)*uprv_strlen(str0)+1);
-        uprv_strcpy(str1, str0);
-    } else {
-        str1 = uprv_malloc(sizeof(char)*first+1);
-        uprv_memset(str1, 0, sizeof(char)*first+1);
-        uprv_strncpy(str1, str0, first);
-        pos = uprv_strrchr( str0, '_' );
-        second = (int32_t)(pos - str0);
-        if(first != second && second-first != 1) {
-            index = second - first-1;
-            str2 = uprv_malloc(sizeof(char)*index+1);
-            uprv_memset(str2, 0, sizeof(char)*index+1);
-            uprv_strncpy(str2, str0 + first + 1, index );
-            index = (int32_t)(uprv_strlen(str0) - second -1);
-            str3 = uprv_malloc(sizeof(char)*index+1);
-            uprv_memset(str3, 0, sizeof(char)*index+1);
-            uprv_strncpy(str3, str0 + second + 1, index);
-        } else if(first == second) {
-            index = first;
-            str1 = uprv_malloc(sizeof(char)*first+1);
-            uprv_memset(str1, 0, sizeof(char)*first+1);
-            uprv_strncpy(str1, str0, index );
-            index = (int32_t)(uprv_strlen(str0) - second -1);
-            str2 = uprv_malloc(sizeof(char)*index+1);
-            uprv_memset(str2, 0, sizeof(char)*index+1);
-            uprv_strncpy(str2, str0 + second + 1, index );
-        }
-    }
-
-    if (str2 == NULL && str3 == NULL) {
-        ISO_tag = checkISOLanguage(str1);
-        if(ISO_tag) {
-            lang = uprv_malloc(sizeof(char)*uprv_strlen(str1)+1);
-            uprv_memset(lang, 0, sizeof(char)*uprv_strlen(str1)+1);
-            uprv_strcpy(lang, str1);
-        }
-    } else if(str3 == NULL){
-        ISO_tag = checkISOLanguage(str1);
-        if (ISO_tag) {
-            ISO_tag = checkISOCountry(str2);
-            if (ISO_tag) {
-                lang = uprv_malloc(sizeof(char)*uprv_strlen(str1)+1);
-                uprv_memset(lang, 0, sizeof(char)*uprv_strlen(str1)+1);
-                uprv_strcpy(lang, str1);
-            }
-        } else {
-            ISO_tag = checkISOLanguage(str2);
-            if (ISO_tag) {
-                lang = uprv_malloc(sizeof(char)*uprv_strlen(str2)+1);
-                uprv_memset(lang, 0, sizeof(char)*uprv_strlen(str2)+1);
-                uprv_strcpy(lang, str2);
-            }
-        }
-    } else {
-        ISO_tag = checkISOLanguage(str1);
-        if(ISO_tag) {
-            ISO_tag = checkISOCountry(str2);
-            if (ISO_tag) {
-                lang = uprv_malloc(sizeof(char)*uprv_strlen(str1)+1);
-                uprv_memset(lang, 0, sizeof(char)*uprv_strlen(str1)+1);
-                uprv_strcpy(lang, str1);
-            }
-        } else {
-            ISO_tag = checkISOLanguage(str2);
-            if(ISO_tag) {
-                ISO_tag = checkISOCountry(str3);
-                if (ISO_tag) {
-                    lang = uprv_malloc(sizeof(char)*uprv_strlen(str2)+1);
-                    uprv_memset(lang, 0, sizeof(char)*uprv_strlen(str2)+1);
-                    uprv_strcpy(lang, str2);
-                }
-            }
-        }
-    }
-
-    if(str0 != NULL){
-        uprv_free(str0);
-    }
-
-    if(str1 != NULL){
-        uprv_free(str1);
-    }
-    if(str2 != NULL){
-        uprv_free(str2);
-    }
-    if(str3 != NULL){
-        uprv_free(str3);
-    }
-    return lang;
+    strnrepchr(canon, canonLen, '_', '-');
+    return canon;
 }
 
 static const char* xmlHeader = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
@@ -291,7 +201,7 @@ static const char* xmlHeader = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
 static const char* bundleStart = "<xliff version = \"1.0\">\n";
 static const char* bundleEnd   = "</xliff>\n";
 
-void res_write_xml(struct SResource *res, const char* id, const char* language, UErrorCode *status);
+void res_write_xml(struct SResource *res, const char* id, const char* language, UBool isTopLevel, UErrorCode *status);
 
 static char* convertAndEscape(char** pDest, int32_t destCap, int32_t* destLength,
                               const UChar* src, int32_t srcLen, UErrorCode* status){
@@ -597,7 +507,7 @@ string_write_xml(struct SResource *res, const char* id, const char* language, UE
 
     char* sid = NULL;
     const char* strStart = "<trans-unit xml:space = \"preserve\" id = \"";
-    const char* valStrStart = "<source xml:lang = \"";
+    const char* valStrStart = "<source ";
     const char* valStrEnd = "</source>\n";
     const char* strEnd = "</trans-unit>\n";
 
@@ -622,7 +532,7 @@ string_write_xml(struct SResource *res, const char* id, const char* language, UE
         write_tabs(out);
 
         T_FileStream_write(out,valStrStart, (int32_t)uprv_strlen(valStrStart));
-        T_FileStream_write(out,language, (int32_t)uprv_strlen(language));
+       /* T_FileStream_write(out,language, (int32_t)uprv_strlen(language)); */
         T_FileStream_write(out,"\">", 2);
 
         buf = convertAndEscape(&buf,0,&bufLen,res->u.fString.fChars,res->u.fString.fLength,status);
@@ -662,7 +572,7 @@ string_write_xml(struct SResource *res, const char* id, const char* language, UE
         write_tabs(out);
         T_FileStream_write(out,valStrStart, (int32_t)uprv_strlen(valStrStart));
 
-        T_FileStream_write(out,language, (int32_t)uprv_strlen(language));
+        /*T_FileStream_write(out,language, (int32_t)uprv_strlen(language));*/
         T_FileStream_write(out,"\">", 2);
 
         buf = convertAndEscape(&buf,0,&bufLen,res->u.fString.fChars,res->u.fString.fLength,status);
@@ -802,7 +712,7 @@ array_write_xml( struct SResource *res, const char* id, const char* language, UE
         index++;
         subId = getID(sid, c, subId);
 
-        res_write_xml(current, subId, language, status);
+        res_write_xml(current, subId, language, FALSE, status);
         uprv_free(subId);
         subId = NULL;
         if(U_FAILURE(*status)){
@@ -823,7 +733,7 @@ intvector_write_xml( struct SResource *res, const char* id, const char* language
     const char* end   = "</group>\n";
     const char* startKey= "resname=\"";
 
-    const char* intStart = "<trans-unit restype = \"int\" xml:space = \"preserve\" translate=\"no\" id = \"";
+    const char* intStart = "<trans-unit restype = \"int\" xml:space = \"preserve\"  id = \"";
     const char* valIntStart = "<source>";
     const char* valIntEnd = "</source>\n";
     const char* intEnd = "</trans-unit>\n";
@@ -1116,7 +1026,7 @@ bin_write_xml( struct SResource *res, const char* id, const char* language, UErr
 
 
 static void
-table_write_xml(struct SResource *res, const char* id, const char* language, UErrorCode *status) {
+table_write_xml(struct SResource *res, const char* id, const char* language, UBool isTopLevel, UErrorCode *status) {
 
     uint32_t  i         = 0;
 
@@ -1140,6 +1050,13 @@ table_write_xml(struct SResource *res, const char* id, const char* language, UEr
         if(res->fKey<0 || uprv_strcmp(srBundle->fKeys+res->fKey ,"")==0){
             T_FileStream_write(out, start, (int32_t)uprv_strlen(start));
 
+            if(isTopLevel){
+                int32_t len = uprv_strlen(id);
+                T_FileStream_write(out, idstr, (int32_t)uprv_strlen(idstr));
+                T_FileStream_write(out, id,len);
+                T_FileStream_write(out, "\" ", 2);
+                id="";
+            }
             sid = getID(id, NULL, sid);
             /* only write the id if the sid!="" */
             if(sid[0]!='\0'){
@@ -1148,6 +1065,7 @@ table_write_xml(struct SResource *res, const char* id, const char* language, UEr
                 T_FileStream_write(out, "\" ", 2);
 
             }
+
 
             if(res->fComment!=NULL && res->fComment->fChars != NULL){
                 printComments(res->fComment, sid, FALSE, status);
@@ -1181,7 +1099,7 @@ table_write_xml(struct SResource *res, const char* id, const char* language, UEr
         save = current = res->u.fTable.fFirst;
         i       = 0;
         while (current != NULL) {
-            res_write_xml(current, sid, language, status);
+            res_write_xml(current, sid, language, FALSE, status);
 
             if(U_FAILURE(*status)){
                 return;
@@ -1228,7 +1146,7 @@ table_write_xml(struct SResource *res, const char* id, const char* language, UEr
 }
 
 void
-res_write_xml(struct SResource *res, const char* id, const char* language, UErrorCode *status) {
+res_write_xml(struct SResource *res, const char* id,  const char* language, UBool isTopLevel, UErrorCode *status) {
 
     if (U_FAILURE(*status)) {
         return ;
@@ -1256,7 +1174,7 @@ res_write_xml(struct SResource *res, const char* id, const char* language, UErro
              return;
         case URES_TABLE:
         case URES_TABLE32:
-             table_write_xml     (res, id, language, status);
+             table_write_xml     (res, id, language, isTopLevel, status);
              return;
 
         default:
@@ -1275,7 +1193,7 @@ bundle_write_xml(struct SRBRoot *bundle, const char *outputDir,const char* outpu
     char* xmlfileName = NULL;
     char* outputFileName = NULL;
     char* originalFileName = NULL;
-    const char* fileStart = "<file xml:space = \"preserve\" source-language = \"";
+    const char* fileStart = "<file xml:space = \"preserve\" datatype=\"ICUResourceBundle\" source-language = \"";
     const char* file1 = "\" datatype = \"text\" ";
     const char* file2 = "original = \"";
     const char* file3 = "\" tool = \"genrb\" ";
@@ -1321,10 +1239,10 @@ bundle_write_xml(struct SRBRoot *bundle, const char *outputDir,const char* outpu
     uprv_free(temp);
     temp = NULL;
 
-    /*check file name*/
+
     if (language == NULL) {
-        lang = parseFilename(filename, lang);
-        if (lang == NULL) {
+/*        lang = parseFilename(filename, lang);
+        if (lang == NULL) {*/
             /* now check if locale name is valid or not
              * this is to cater for situation where
              * pegasusServer.txt contains
@@ -1348,7 +1266,7 @@ bundle_write_xml(struct SRBRoot *bundle, const char *outputDir,const char* outpu
                  fprintf(stderr, "Error: The file name and table name do not contain a valid language code. Please use -l option to specify it.\n");
                  exit(U_ILLEGAL_ARGUMENT_ERROR);
              }
-        }
+       /* }*/
     } else {
         lang = uprv_malloc(sizeof(char)*uprv_strlen(language) +1);
         uprv_memset(lang, 0, sizeof(char)*uprv_strlen(language) +1);
@@ -1435,7 +1353,7 @@ bundle_write_xml(struct SRBRoot *bundle, const char *outputDir,const char* outpu
     T_FileStream_write(out,bodyStart, (int32_t)uprv_strlen(bodyStart));
 
 
-    res_write_xml(bundle->fRoot, srBundle->fLocale, lang, status);
+    res_write_xml(bundle->fRoot, bundle->fLocale, lang, TRUE, status);
 
     tabCount--;
     write_tabs(out);
