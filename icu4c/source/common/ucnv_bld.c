@@ -842,3 +842,217 @@ ucnv_flushCache ()
     return tableDeletedNum;
 }
 
+/* data swapping ------------------------------------------------------------ */
+
+/* most of this might belong more properly into ucnvmbcs.c, but that is so large */
+
+#if !UCONFIG_NO_LEGACY_CONVERSION
+
+U_CAPI int32_t U_EXPORT2
+ucnv_swap(const UDataSwapper *ds,
+          const void *inData, int32_t length, void *outData,
+          UErrorCode *pErrorCode) {
+    const UDataInfo *pInfo;
+    int32_t headerSize;
+
+    const uint8_t *inBytes;
+    uint8_t *outBytes;
+
+    uint32_t offset, count, staticDataSize;
+    int32_t size;
+
+    const UConverterStaticData *inStaticData;
+    UConverterStaticData *outStaticData;
+
+    const _MBCSHeader *inMBCSHeader;
+    _MBCSHeader *outMBCSHeader;
+    _MBCSHeader mbcsHeader;
+    uint8_t outputType;
+
+    /* udata_swapDataHeader checks the arguments */
+    headerSize=udata_swapDataHeader(ds, inData, length, outData, pErrorCode);
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+
+    /* check data format and format version */
+    pInfo=(const UDataInfo *)((const char *)inData+4);
+    if(!(
+        pInfo->dataFormat[0]==0x63 &&   /* dataFormat="cnvt" */
+        pInfo->dataFormat[1]==0x6e &&
+        pInfo->dataFormat[2]==0x76 &&
+        pInfo->dataFormat[3]==0x74 &&
+        pInfo->formatVersion[0]==6 &&
+        pInfo->formatVersion[1]>=2
+    )) {
+        udata_printError(ds, "ucnv_swap(): data format %02x.%02x.%02x.%02x (format version %02x.%02x) is not recognized as an ICU .cnv conversion table\n",
+                         pInfo->dataFormat[0], pInfo->dataFormat[1],
+                         pInfo->dataFormat[2], pInfo->dataFormat[3],
+                         pInfo->formatVersion[0], pInfo->formatVersion[1]);
+        *pErrorCode=U_UNSUPPORTED_ERROR;
+        return 0;
+    }
+
+    inBytes=(const uint8_t *)inData+headerSize;
+    outBytes=(uint8_t *)outData+headerSize;
+
+    /* read the initial UConverterStaticData structure after the UDataInfo header */
+    inStaticData=(const UConverterStaticData *)inBytes;
+    outStaticData=(UConverterStaticData *)outBytes;
+
+    if(length<0) {
+        staticDataSize=ds->readUInt32(inStaticData->structSize);
+    } else {
+        length-=headerSize;
+        if( length<sizeof(UConverterStaticData) ||
+            (uint32_t)length<(staticDataSize=ds->readUInt32(inStaticData->structSize))
+        ) {
+            udata_printError(ds, "ucnv_swap(): too few bytes (%d after header) for an ICU .cnv conversion table\n",
+                             length);
+            *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+            return 0;
+        }
+    }
+
+    if(length>=0) {
+        /* swap the static data */
+        if(inStaticData!=outStaticData) {
+            uprv_memcpy(outStaticData, inStaticData, staticDataSize);
+        }
+
+        ds->swapArray32(ds, &inStaticData->structSize, 4,
+                           &outStaticData->structSize, pErrorCode);
+        ds->swapArray32(ds, &inStaticData->codepage, 4,
+                           &outStaticData->codepage, pErrorCode);
+
+        ds->swapInvChars(ds, inStaticData->name, uprv_strlen(inStaticData->name),
+                            outStaticData->name, pErrorCode);
+        if(U_FAILURE(*pErrorCode)) {
+            udata_printError(ds, "ucnv_swap(): error swapping converter name - %s\n",
+                             u_errorName(*pErrorCode));
+            return 0;
+        }
+    }
+
+    inBytes+=staticDataSize;
+    outBytes+=staticDataSize;
+    if(length>=0) {
+        length-=(int32_t)staticDataSize;
+    }
+
+    /* check for supported conversionType values */
+    if(inStaticData->conversionType==UCNV_MBCS) {
+        /* swap MBCS data */
+        inMBCSHeader=(const _MBCSHeader *)inBytes;
+        outMBCSHeader=(_MBCSHeader *)outBytes;
+
+        if(!(inMBCSHeader->version[0]==4 || inMBCSHeader->version[1]>=1)) {
+            udata_printError(ds, "ucnv_swap(): unsupported _MBCSHeader.version %d.%d\n",
+                             inMBCSHeader->version[0], inMBCSHeader->version[1]);
+            *pErrorCode=U_UNSUPPORTED_ERROR;
+            return 0;
+        }
+
+        uprv_memcpy(mbcsHeader.version, inMBCSHeader->version, 4);
+        mbcsHeader.countStates=         ds->readUInt32(inMBCSHeader->countStates);
+        mbcsHeader.countToUFallbacks=   ds->readUInt32(inMBCSHeader->countToUFallbacks);
+        mbcsHeader.offsetToUCodeUnits=  ds->readUInt32(inMBCSHeader->offsetToUCodeUnits);
+        mbcsHeader.offsetFromUTable=    ds->readUInt32(inMBCSHeader->offsetFromUTable);
+        mbcsHeader.offsetFromUBytes=    ds->readUInt32(inMBCSHeader->offsetFromUBytes);
+        mbcsHeader.flags=               ds->readUInt32(inMBCSHeader->flags);
+        mbcsHeader.fromUBytesLength=    ds->readUInt32(inMBCSHeader->fromUBytesLength);
+
+        outputType=(uint8_t)mbcsHeader.flags;
+
+        /* calculate the length of the MBCS data */
+        size=(int32_t)(mbcsHeader.offsetFromUBytes+mbcsHeader.fromUBytesLength);
+
+        if(length>=0) {
+            if(length<size) {
+                udata_printError(ds, "ucnv_swap(): too few bytes (%d after headers) for an ICU MBCS .cnv conversion table\n",
+                                 length);
+                *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+                return 0;
+            }
+
+            /* copy the data for inaccessible bytes */
+            if(inBytes!=outBytes) {
+                uprv_memcpy(outBytes, inBytes, size);
+            }
+
+            /* swap the _MBCSHeader */
+            ds->swapArray32(ds, &inMBCSHeader->countStates, 7*4,
+                               &outMBCSHeader->countStates, pErrorCode);
+
+            /* swap the state table, 1kB per state */
+            ds->swapArray32(ds, inMBCSHeader+1, (int32_t)(mbcsHeader.countStates*1024),
+                               outMBCSHeader+1, pErrorCode);
+
+            /* swap the toUFallbacks[] */
+            offset=sizeof(_MBCSHeader)+mbcsHeader.countStates*1024;
+            ds->swapArray32(ds, inBytes+offset, (int32_t)(mbcsHeader.countToUFallbacks*8),
+                               outBytes+offset, pErrorCode);
+
+            /* swap the unicodeCodeUnits[] */
+            offset=mbcsHeader.offsetToUCodeUnits;
+            count=mbcsHeader.offsetFromUTable-offset;
+            ds->swapArray16(ds, inBytes+offset, (int32_t)count,
+                               outBytes+offset, pErrorCode);
+
+            /* offset to the stage 1 table, independent of the outputType */
+            offset=mbcsHeader.offsetFromUTable;
+
+            if(outputType==MBCS_OUTPUT_1) {
+                /* SBCS: swap the fromU tables, all 16 bits wide */
+                count=(mbcsHeader.offsetFromUBytes-offset)+mbcsHeader.fromUBytesLength;
+                ds->swapArray16(ds, inBytes+offset, (int32_t)count,
+                                   outBytes+offset, pErrorCode);
+            } else {
+                /* otherwise: swap the stage tables separately */
+
+                /* stage 1 table: uint16_t[0x440 or 0x40] */
+                if(inStaticData->unicodeMask&UCNV_HAS_SUPPLEMENTARY) {
+                    count=0x440*2; /* for all of Unicode */
+                } else {
+                    count=0x40*2; /* only BMP */
+                }
+                ds->swapArray16(ds, inBytes+offset, (int32_t)count,
+                                   outBytes+offset, pErrorCode);
+
+                /* stage 2 table: uint32_t[] */
+                offset+=count;
+                count=mbcsHeader.offsetFromUBytes-offset;
+                ds->swapArray32(ds, inBytes+offset, (int32_t)count,
+                                   outBytes+offset, pErrorCode);
+
+                /* stage 3/result bytes: sometimes uint16_t[] or uint32_t[] */
+                offset=mbcsHeader.offsetFromUBytes;
+                count=mbcsHeader.fromUBytesLength;
+                switch(outputType) {
+                case MBCS_OUTPUT_2:
+                case MBCS_OUTPUT_3_EUC:
+                case MBCS_OUTPUT_2_SISO:
+                    ds->swapArray16(ds, inBytes+offset, (int32_t)count,
+                                       outBytes+offset, pErrorCode);
+                    break;
+                case MBCS_OUTPUT_4:
+                    ds->swapArray32(ds, inBytes+offset, (int32_t)count,
+                                       outBytes+offset, pErrorCode);
+                    break;
+                default:
+                    /* just uint8_t[], nothing to swap */
+                    break;
+                }
+            }
+        }
+    } else {
+        udata_printError(ds, "ucnv_swap(): unknown conversionType=%d!=UCNV_MBCS\n",
+                         inStaticData->conversionType);
+        *pErrorCode=U_UNSUPPORTED_ERROR;
+        return 0;
+    }
+
+    return headerSize+(int32_t)staticDataSize+size;
+}
+
+#endif /* #if !UCONFIG_NO_LEGACY_CONVERSION */
