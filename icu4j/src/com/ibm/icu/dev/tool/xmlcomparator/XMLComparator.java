@@ -20,9 +20,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.BufferedReader;
 import java.util.Calendar;
-import java.util.Locale;
+//import java.util.Locale;
 
 // DOM imports
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -41,6 +42,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 import com.ibm.icu.text.Normalizer;
+import com.ibm.icu.util.ULocale;
 import com.ibm.icu.lang.UCharacter;
 
 
@@ -70,9 +72,9 @@ public class XMLComparator {
     private static final String ICU         = "icu";    
     private static final String IBM_TOR     = "ibm_tor";
     private static final String WINDOWS     = "windows";    
-    private static final String SUNJDK      = "sun_jdk";    
-    private static final String IBMJDK      = "ibm_jdk";    
-    private static final String HPUX        = "hpux";      
+    private static final String SUNJDK      = "sunjdk";    
+    private static final String IBMJDK      = "ibmjdk";    
+    private static final String HPUX        = "hp";      
     private static final String APPLE       = "apple";      
     private static final String SOLARIS     = "solaris";    
     private static final String OPEN_OFFICE = "open_office";
@@ -132,6 +134,9 @@ public class XMLComparator {
     private TreeMap compareMap = new TreeMap();
     private Hashtable doesNotExist = new Hashtable();
     private Hashtable requested = new Hashtable();
+    private Hashtable deprecatedLanguageCodes = new Hashtable();
+    private Hashtable deprecatedCountryCodes = new Hashtable();
+     
     private String  encoding   = "UTF-8"; // default encoding
     
     private class CompareElement{
@@ -155,34 +160,19 @@ public class XMLComparator {
         colorHash.put( OPEN_OFFICE, "#FFFF33");
         colorHash.put( AIX,         "#EB97FE");
         colorHash.put( LINUX,       "#1191F1");
+        // TODO
+        //deprecatedLanguageCodes.put("sh", "what ever the new one is");
+        deprecatedLanguageCodes.put("iw", "he");
+        deprecatedLanguageCodes.put("in", "id");
+        deprecatedLanguageCodes.put("ji", "yi");
+        deprecatedLanguageCodes.put("jw", "jv"); // this does not even exist, JDK think jw is javanese!!
+        
+        //country codes
+        deprecatedCountryCodes.put("TP", "TL");
+        deprecatedCountryCodes.put("ZR", "CD");
     }
     
-    /**
-     * A helper function to convert a string of the form
-     * aa_BB_CC to a locale object.  Why isn't this in Locale?
-     */
-    public static Locale getLocaleFromName(String name) {
-        String language = "";
-        String country = "";
-        String variant = "";
 
-        int i1 = name.indexOf('_');
-        if (i1 < 0) {
-            language = name;
-        } else {
-            language = name.substring(0, i1);
-            ++i1;
-            int i2 = name.indexOf('_', i1);
-            if (i2 < 0) {
-                country = name.substring(i1);
-            } else {
-                country = name.substring(i1, i2);
-                variant = name.substring(i2+1);
-            }
-        }
-
-        return new Locale(language, country, variant);
-    }
     
     private void processArgs(String[] args){
         short options = identifyOptions(args);
@@ -192,7 +182,7 @@ public class XMLComparator {
         }
         boolean warning[] = new boolean[1];
         warning[0] = false;
-        Enumeration en = optionTable.keys();
+        Enumeration enum = optionTable.keys();
         
         try{
                         
@@ -200,11 +190,12 @@ public class XMLComparator {
        
             String fileName = destFolder+File.separator+localeStr+".html";
             OutputStreamWriter os = new OutputStreamWriter(new FileOutputStream(fileName),encoding);
-            System.out.println("INFO: Creating file named: " + fileName);
+            String curDir = System.getProperty("user.dir");
+            System.out.println("INFO: Creating file named: " + fileName +" in directory: " + curDir);
             
             addToCompareMap(goldFileName, goldKey);
-            for(;en.hasMoreElements();){
-                String key = (String)en.nextElement();
+            for(;enum.hasMoreElements();){
+                String key = (String)enum.nextElement();
                 String compFile = (String) optionTable.get(key);
                 addToCompareMap(compFile,key);
                 
@@ -281,12 +272,25 @@ public class XMLComparator {
             
             Object obj = requested.get(name);
             if(obj!=null && doesNotExist.get(name)==null ){
-                folder = name+"/xml/";
-                writer.print("                <th bgcolor=\""+
-                               (String)colorHash.get(name)+ "\">" +
-                               name.toUpperCase()+
-                               " (<a href=\"../"+folder+localeStr+".xml\">xml</a>)"+
-                               "</th>\n");
+                folder = name+"/main/";
+                if(name.equals("icu")|| name.equals("common")|| name.indexOf("jdk")>=0){
+                    int index = localeStr.indexOf("_");
+                    String parent = localeStr.substring(0,index);
+                    writer.print("                <th bgcolor=\""+
+                                   (String)colorHash.get(name)+ "\">" +
+                                   name.toUpperCase()+
+                                   " (<a href=\"../../"+folder+localeStr+".xml\">"+localeStr+"</a>,"+
+                                   " <a href=\"../../"+folder+parent+".xml\">"+parent+"</a>,"+
+                                   " <a href=\"../../"+folder+"root.xml\">root</a>)"+
+                                   "</th>\n");
+                }else{
+                    writer.print("                <th bgcolor=\""+
+                                   (String)colorHash.get(name)+ "\">" +
+                                   name.toUpperCase()+
+                                   " (<a href=\"../../"+folder+localeStr+".xml\">"+localeStr+"</a>)"+
+                                   "</th>\n");
+                }
+
                 numPlatforms++;
                
             }
@@ -322,6 +326,9 @@ public class XMLComparator {
                     String compareTo = (String)element.platformData.get(PLATFORM_PRINT_ORDER[j]);
                     if(compareTo==null){
                         continue;
+                    }else if(value.equals("")){
+                        color = "#FFFFFF";
+                        break;
                     }else if(Normalizer.compare(compareTo,value,0)==0){
                         color = (String)colorHash.get(PLATFORM_PRINT_ORDER[j]);
                         isEqual = true;
@@ -362,16 +369,11 @@ public class XMLComparator {
 
     private void   printHTML(PrintWriter writer, String localeStr){
         System.out.println("INFO: Creating the comparison chart ");
-        Locale locale = getLocaleFromName(localeStr);
+        ULocale locale = new ULocale(localeStr);
         String displayLang = locale.getDisplayLanguage();
         String dispCountry = locale.getDisplayCountry();
         String dispVariant = locale.getDisplayVariant();
-        String displayName = localeStr+" ("+displayLang+"_"+dispCountry;
-        if(dispVariant.length()>0){
-            displayName += "_"+dispVariant+") ";
-        }else{
-            displayName += ") ";
-        }
+        String displayName = localeStr+" ("+locale.getDisplayName()+") ";
         
         writer.print("<html>\n"+
                            "    <head>\n"+
@@ -389,9 +391,9 @@ public class XMLComparator {
                            "     <body bgcolor=\"#FFFFFF\">\n"+
                            "        <p><b>"+displayName+
                                     "<a href=\"http://oss.software.ibm.com/cgi-bin/icu/lx/en/?_="+localeStr+"\">Demo</a>, "+
-                                    "<a href=\"../comparison_charts.html\">Cover Page</a>, "+
+                                    "<a href=\"../../comparison_charts.html\">Cover Page</a>, "+
                                     "<a href=\"./index.html\">Index</a>, "+
-                                    "<a href=\"../collation_diff/"+localeStr+"_collation.html\">Collation</a> "+
+                                    "<a href=\"../collation/"+localeStr+".html\">Collation</a> "+
                                     "</b></p>\n"+
                            "        <table>\n");
         
@@ -445,6 +447,14 @@ public class XMLComparator {
                      Document parentDoc = parse(temp);
                      if(parentDoc!=null && doc!=null){
                         mergeElements(doc.getDocumentElement(),parentDoc.getDocumentElement());
+                        //print the merged Node
+                        try{
+                            FileOutputStream out = new FileOutputStream(localeName+".xml");
+                            PrintWriter stream = new PrintWriter(out, true);
+                            printDOMTree(doc, stream);
+                        }catch(IOException e){
+                           
+                        }
                      }
                  }
              }
@@ -461,14 +471,14 @@ public class XMLComparator {
                      mergeElements(doc.getDocumentElement(),rootDoc.getDocumentElement());
                     /*
                      * debugging code
-                     
+                     */
                     try{
-                        OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(destFolder+File.separator+locale+"_debug.xml"),encoding);
-                        print(new PrintWriter(writer),doc);
+                        OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(destFolder+File.separator+localeName+"_debug.xml"),encoding);
+                        printDOMTree(doc,new PrintWriter(writer));
                     }catch( Exception e){
                         //throw the exception away .. this is for debugging
                     }
-                    */
+                    
                  } 
              }   
          }
@@ -486,8 +496,8 @@ public class XMLComparator {
              return false;
          }
          return extractMergeData(testDoc,key);
-     }
 
+     }
     // ---------------------------------------------------------------------------
     //
     //   Merge element nodes.  dest and source are Element nodes of the same type.
@@ -504,59 +514,37 @@ public class XMLComparator {
         childOfSource = source.getFirstChild();
         childOfDest = dest.getFirstChild();
         
-        if(childOfSource != null){
-            for (childOfSource = source.getFirstChild(); childOfSource != null; childOfSource = childOfSource.getNextSibling()) {
-                //String dNodeVal = dest.getFirstChild().getNodeValue();
-                //String sNodeVal = childOfSource.getNodeValue();
-                if (childOfSource.getNodeType() != Node.ELEMENT_NODE) {
-                    continue;
-                }
-               
-                boolean didMerge = false;
-                for (childOfDest = dest.getFirstChild(); childOfDest != null; childOfDest = childOfDest.getNextSibling()) {
-                    String childNodeName = childOfDest.getNodeName();
-                    String childOfSourceNN = childOfSource.getNodeName();
-                    if (childOfDest.getNodeType() == Node.ELEMENT_NODE  &&
-                           childOfDest.getNodeName().equals(childOfSource.getNodeName())) {
-                        // The destination document already has an element of this type at this level.
-                        //   Recurse to pick up any extra children that the source node may have.
-                        
-                        // is the type attribute same on 
-                        mergeElements(childOfDest, childOfSource);
-                        didMerge = true;
-                        break;
-                    }
-                }
-        
-                if (didMerge == false) {
-                    // destination document had no corresponding node to the current childOfSource.  Add it.
-                    Node importedNode = destDoc.importNode(childOfSource, true);
-                    dest.appendChild(spaces);
-                    dest.appendChild(importedNode);
+
+        for (childOfSource = source.getFirstChild(); childOfSource != null; childOfSource = childOfSource.getNextSibling()) {
+            //String dNodeVal = dest.getFirstChild().getNodeValue();
+            //String sNodeVal = childOfSource.getNodeValue();
+            if (childOfSource.getNodeType() != Node.ELEMENT_NODE) {
+                continue;
+            }
+           
+            boolean didMerge = false;
+            for (childOfDest = dest.getFirstChild(); childOfDest != null; childOfDest = childOfDest.getNextSibling()) {
+                String childOfDestNN = childOfDest.getNodeName();
+                String childOfSourceNN = childOfSource.getNodeName();
+
+                if (childOfDest.getNodeType() == Node.ELEMENT_NODE  &&
+                        childOfDestNN.equals(childOfSourceNN)) {
+                    // The destination document already has an element of this type at this level.
+                    //   Recurse to pick up any extra children that the source node may have.
+                
+                    
+                    mergeElements(childOfDest, childOfSource);
+                    didMerge = true;
+                    break;
+                    
                 }
             }
-        }else{
-            // now we have an element node with data .. get the attributes of source and dest and check
-            // and then get the node value and merge if they are not equal
-            if(childOfSource != null){
-            
-                NamedNodeMap childOfSourceAttr = childOfSource.getAttributes();
-                Node childOfSourceTypeNode = childOfSourceAttr.getNamedItem("type");
-                String type = childOfSourceTypeNode.getNodeValue();
-                
-                Node node = childOfDest.getParentNode();
-                boolean foundNodeInDest = false;
-                for (node = source.getFirstChild(); node != null; node = node.getNextSibling()) {
-                    //String dNodeVal = dest.getFirstChild().getNodeValue();
-                    //String sNodeVal = childOfSource.getNodeValue();
-                    if (node.getNodeType() != Node.ELEMENT_NODE) {
-                        continue;
-                    }
-
-                }
+            if(didMerge == false) {
+                // destination document had no corresponding node to the current childOfSource.  Add it.
+                Node importedNode = destDoc.importNode(childOfSource, true);
+                dest.appendChild(spaces);
+                dest.appendChild(importedNode);
             }
-                
-
         }
     }
     
@@ -598,9 +586,10 @@ public class XMLComparator {
         }
       
     }
+
     private void addElement(String childNode, String parentNode, String id, String index, 
                             String platformValue, String platformName){
-                                
+       
         Object obj = compareMap.get(id);
         CompareElement element;
         if(obj==null){
@@ -638,6 +627,122 @@ public class XMLComparator {
         }
         return false;  
     }
+    private String getTag(String childNodeName, String index){
+        
+        //for months make index a,b,c,d etc
+        if(childNodeName.indexOf("month")>-1){
+            int i = Integer.parseInt(index);
+            StringBuffer temp = new StringBuffer();
+            temp.append((char)('a'+i));
+            return temp.toString();
+        }else if(childNodeName.indexOf("day")>-1){
+            if (index.equals("sun")){
+               return "a";
+           }else if(index.equals("mon")){
+               return "b";
+           }else if( index.equals("tue")){
+               return "c";
+           }else if (index.equals("wed")){
+               return "d";
+           }else if (index.equals("thu")){
+               return "e";
+           }else if (index.equals("fri")){
+               return "f";
+           }else if (index.equals("sat")){
+               return "g";
+           }
+        }else{
+            return index;
+        }
+        return "";
+    }
+    
+    /** Prints the specified node, recursively. */
+    public void printDOMTree(Node node, PrintWriter out) 
+    {
+      int type = node.getNodeType();
+      switch (type)
+      {
+        // print the document element
+        case Node.DOCUMENT_NODE: 
+          {
+            printDOMTree(((Document)node).getDocumentElement(), out);
+            break;
+          }
+
+          // print element with attributes
+        case Node.ELEMENT_NODE: 
+          {
+            out.print("<");
+            out.print(node.getNodeName());
+            NamedNodeMap attrs = node.getAttributes();
+            for (int i = 0; i < attrs.getLength(); i++)
+            {
+              Node attr = attrs.item(i);
+              out.print(" " + attr.getNodeName() + 
+                        "=\"" + attr.getNodeValue() + 
+                        "\"");
+            }
+            out.print(">");
+
+            NodeList children = node.getChildNodes();
+            if (children != null)
+            {
+              int len = children.getLength();
+              for (int i = 0; i < len; i++)
+                printDOMTree(children.item(i), out);
+            }
+
+            break;
+          }
+
+          // handle entity reference nodes
+        case Node.ENTITY_REFERENCE_NODE: 
+          {
+            out.print("&");
+            out.print(node.getNodeName());
+            out.print(";");
+            break;
+          }
+
+          // print cdata sections
+        case Node.CDATA_SECTION_NODE: 
+          {
+            out.print("<![CDATA[");
+            out.print(node.getNodeValue());
+            out.print("]]>");
+            break;
+          }
+
+          // print text
+        case Node.TEXT_NODE: 
+          {
+            out.print(node.getNodeValue());
+            break;
+          }
+
+          // print processing instruction
+        case Node.PROCESSING_INSTRUCTION_NODE: 
+          {
+            out.print("<?");
+            out.print(node.getNodeName());
+            String data = node.getNodeValue();
+            {
+              out.print(" ");
+              out.print(data);
+            }
+            out.print("?>");
+            break;
+          }
+      }
+
+      if (type == Node.ELEMENT_NODE)
+      {
+        out.print("</");
+        out.print(node.getNodeName());
+        out.print('>');
+      }
+    } // printDOMTree(Node, PrintWriter)
     private boolean extractMergeData(Node node,String key){
         Node childOfSource;
 
@@ -685,7 +790,37 @@ public class XMLComparator {
                          }
                      }
                  }
-                 if(childNodeName.equals("pattern") ||grandParentNodeName.equals("zone")){
+                 if(grandParentNodeName.equals("monthContext")|| grandParentNodeName.equals("dayContext")){
+                    
+                    NamedNodeMap gpa = grandParentNode.getAttributes();
+                    Node gptNode = gpa.getNamedItem("type");
+                    if(gptNode!=null){
+                        String gptType = gptNode.getNodeValue();
+                        if(!gptType.equals("standard")){
+                            parentNodeName = parentNodeName+ "\u200b_"+gptType;
+                        }
+                    }
+                    NamedNodeMap pa = parentNode.getAttributes();
+                    Node ptNode = pa.getNamedItem("type");
+                    if(ptNode!=null){
+                        String ptType = ptNode.getNodeValue();
+                        if(!ptType.equals("standard")){
+                            childNodeName = childNodeName+ "\u200b_"+ptType;
+                        }    
+                    }
+                    
+                    Node calendar = grandParentNode.getParentNode().getParentNode();
+                    NamedNodeMap ggpa = calendar.getAttributes();
+                    Node ggptNode = ggpa.getNamedItem("type");
+                    if(ggptNode!=null){
+                        String ggptType = ggptNode.getNodeValue();
+                        if(!ggptType.equals("standard")){
+                            grandParentNodeName = grandParentNodeName+ "\u200b_"+ggptType;
+                        }
+                    }
+                    
+                 }
+                 if(childNodeName.equals("pattern") ||grandParentNodeName.equals("zone") ){
                      NamedNodeMap at = grandParentNode.getAttributes();
                      Node mytypeNode = at.getNamedItem("type");
                      if(mytypeNode!=null){
@@ -710,7 +845,20 @@ public class XMLComparator {
                      if(grandParentNodeName.equals("zone")){
                         parentNodeName = grandParentNodeName+"\u200b_"+parentNodeName;    
                      } 
-                     String id = parentNodeName+"_"+childNodeName+"_"+type+"_"+index+"_"+grandParentNodeName;
+                     // for country codes and language codes
+                     // replace the deprecated codes with the latest ones
+                     if(childNodeName.equals("language")){
+                         String temp = (String)deprecatedLanguageCodes.get(index);
+                         if(temp!=null){
+                             index = temp;
+                         }
+                     }else if( childNodeName.equals("territory")){
+                         String temp = (String)deprecatedCountryCodes.get(index);
+                         if(temp!=null){
+                             index = temp;
+                         }
+                     }
+                     String id = parentNodeName+"_"+childNodeName+"_"+type+"_"+getTag(childNodeName, index)+"_"+grandParentNodeName;
                            
                      if(!index.equals("")){
                          if(!index.equals(nodeValue) && !index.equals("Fallback")){

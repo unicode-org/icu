@@ -218,7 +218,7 @@ class PosixCollationBuilder {
         rules.put(ignoreSymbol, ignoreRule);
         lastRule = ignoreRule;
             //{{INIT_CONTROLS
-		//}}
+//}}
 }
 
     public String defineWeightSymbol(String symbol) {
@@ -392,5 +392,5 @@ class PosixCollationBuilder {
     static final char[] HEX_DIGIT = {'0','1','2','3','4','5','6','7',
                      '8','9','A','B','C','D','E','F'};
     //{{DECLARE_CONTROLS
-	//}}
+//}}
 }

@@ -32,7 +32,7 @@ public final class Lex {
     public Lex(final Transition[][] states) {
         this.states = states;
             //{{INIT_CONTROLS
-		//}}
+//}}
 }
 
         /** Construct a new machine. */
@@ -409,5 +409,5 @@ public final class Lex {
     }
 
     //{{DECLARE_CONTROLS
-	//}}
+//}}
 }

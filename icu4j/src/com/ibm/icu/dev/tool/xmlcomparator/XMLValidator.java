@@ -1,9 +1,9 @@
 /*
-******************************************************************************
-* Copyright (C) 2003-2004, International Business Machines Corporation and   *
-* others. All Rights Reserved.                                               *
-******************************************************************************
-*/
+ ******************************************************************************
+ * Copyright (C) 2003-2004, International Business Machines Corporation and   *
+ * others. All Rights Reserved.                                               *
+ ******************************************************************************
+ */
 
 package com.ibm.icu.dev.tool.xmlcomparator;
 
@@ -17,19 +17,13 @@ package com.ibm.icu.dev.tool.xmlcomparator;
  */
 /**
  * @author ram
- *
+ * 
  * This tool validates xml against DTD ... IE 6 does not do a good job
  */
 import java.io.*;
 import java.io.File;
 import java.io.FileReader;
 import java.io.BufferedReader;
-
-
-// DOM imports
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Text;
 
 // Needed JAXP classes
 import javax.xml.parsers.DocumentBuilder;
@@ -40,6 +34,10 @@ import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
+//DOM imports
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Text;
 
 public class XMLValidator {
 	public static void main(String[] args) {
@@ -48,30 +46,29 @@ public class XMLValidator {
 			return;
 		}
 		for (int i = 0; i < args.length; i++) {
-			/*Document doc =*/ parse(args[i]);
+			/* Document doc = */parse(args[i]);
 			System.out.println("Processing file " + args[i]);
 		}
-        
+
 	}
 	/**
-	 * Utility method to translate a String filename to URL.  
-	 *
-	 * Note: This method is not necessarily proven to get the 
-	 * correct URL for every possible kind of filename; it should 
-	 * be improved.  It handles the most common cases that we've 
-	 * encountered when running Conformance tests on Xalan.
-	 * Also note, this method does not handle other non-file:
-	 * flavors of URLs at all.
-	 *
-	 * If the name is null, return null.
-	 * If the name starts with a common URI scheme (namely the ones 
-	 * found in the examples of RFC2396), then simply return the 
-	 * name as-is (the assumption is that it's already a URL)
+	 * Utility method to translate a String filename to URL.
+	 * 
+	 * Note: This method is not necessarily proven to get the correct URL for
+	 * every possible kind of filename; it should be improved. It handles the
+	 * most common cases that we've encountered when running Conformance tests
+	 * on Xalan. Also note, this method does not handle other non-file: flavors
+	 * of URLs at all.
+	 * 
+	 * If the name is null, return null. If the name starts with a common URI
+	 * scheme (namely the ones found in the examples of RFC2396), then simply
+	 * return the name as-is (the assumption is that it's already a URL)
 	 * Otherwise we attempt (cheaply) to convert to a file:/// URL.
 	 * 
-	 * @param filename a local path/filename of a file
-	 * @return a file:/// URL, the same string if it appears to 
-	 * already be a URL, or null if error
+	 * @param filename
+	 *            a local path/filename of a file
+	 * @return a file:/// URL, the same string if it appears to already be a
+	 *         URL, or null if error
 	 */
 	public static String filenameToURL(String filename) {
 		// null begets null - something like the commutative property
@@ -79,13 +76,12 @@ public class XMLValidator {
 			return null;
 
 		// Don't translate a string that already looks like a URL
-		if (filename.startsWith("file:")
-			|| filename.startsWith("http:")
-			|| filename.startsWith("ftp:")
-			|| filename.startsWith("gopher:")
-			|| filename.startsWith("mailto:")
-			|| filename.startsWith("news:")
-			|| filename.startsWith("telnet:"))
+		if (filename.startsWith("file:") || filename.startsWith("http:")
+				|| filename.startsWith("ftp:")
+				|| filename.startsWith("gopher:")
+				|| filename.startsWith("mailto:")
+				|| filename.startsWith("news:")
+				|| filename.startsWith("telnet:"))
 			return filename;
 
 		File f = new File(filename);
@@ -94,7 +90,7 @@ public class XMLValidator {
 			// This normally gives a better path
 			tmp = f.getCanonicalPath();
 		} catch (IOException ioe) {
-			// But this can be used as a backup, for cases 
+			// But this can be used as a backup, for cases
 			//  where the file does not exist, etc.
 			tmp = f.getAbsolutePath();
 		}
@@ -104,7 +100,7 @@ public class XMLValidator {
 			tmp = tmp.replace('\\', '/');
 		}
 		// Note the presumption that it's a file reference
-		// Ensure we have the correct number of slashes at the 
+		// Ensure we have the correct number of slashes at the
 		//  start: we always want 3 /// if it's absolute
 		//  (which we should have forced above)
 		if (tmp.startsWith("/"))
@@ -114,7 +110,8 @@ public class XMLValidator {
 
 	}
 	static Document parse(String filename) {
-		// Force filerefs to be URI's if needed: note this is independent of any other files
+		// Force filerefs to be URI's if needed: note this is independent of any
+		// other files
 		String docURI = filenameToURL(filename);
 		return parse(new InputSource(docURI), filename);
 	}
@@ -133,11 +130,13 @@ public class XMLValidator {
 		ErrorHandler nullHandler = new ErrorHandler() {
 			public void warning(SAXParseException e) throws SAXException {
 				System.err.println("Warning: " + e.getMessage());
-			
+
 			}
 			public void error(SAXParseException e) throws SAXException {
-				System.err.println("Element " +e.getPublicId() + " is not valid because "+ e.getMessage()); 
-				System.err.println("Error: " +"at line "+e.getLineNumber()+", column "+e.getColumnNumber());
+				System.err.println("Element " + e.getPublicId()
+						+ " is not valid because " + e.getMessage());
+				System.err.println("Error: " + "at line " + e.getLineNumber()
+						+ ", column " + e.getColumnNumber());
 			}
 			public void fatalError(SAXParseException e) throws SAXException {
 				throw e;
@@ -150,12 +149,18 @@ public class XMLValidator {
 			DocumentBuilder docBuilder = dfactory.newDocumentBuilder();
 			docBuilder.setErrorHandler(nullHandler);
 			//if(docBuilder.isValidating()){
-			//	System.out.println("The parser is a validating parser");
+			//System.out.println("The parser is a validating parser");
 			//}
 			doc = docBuilder.parse(docSrc);
 		} catch (Throwable se) {
 			// ... if we couldn't parse as XML, attempt parse as HTML...
 			System.out.println("ERROR :" + se.toString());
+			if (se instanceof SAXParseException) {
+				SAXParseException pe = (SAXParseException) se;
+				System.out.println("At line: " + pe.getLineNumber()
+						+ " column: " + pe.getColumnNumber());
+
+			}
 			try {
 				// @todo need to find an HTML to DOM parser we can use!!!
 				// doc = someHTMLParser.parse(new InputSource(filename));
@@ -166,7 +171,7 @@ public class XMLValidator {
 					try {
 
 						// Parse as text, line by line
-						//   Since we already know it should be text, this should 
+						//   Since we already know it should be text, this should
 						//   work better than parsing by bytes.
 						FileReader fr = new FileReader(filename);
 						BufferedReader br = new BufferedReader(fr);
@@ -182,13 +187,14 @@ public class XMLValidator {
 							buffer.append("\n"); // Put in the newlines as well
 						}
 
-						DocumentBuilder docBuilder =
-							dfactory.newDocumentBuilder();
+						DocumentBuilder docBuilder = dfactory
+								.newDocumentBuilder();
 						doc = docBuilder.newDocument();
 						Element outElem = doc.createElement("out");
 						Text textNode = doc.createTextNode(buffer.toString());
 
-						// Note: will this always be a valid node?  If we're parsing 
+						// Note: will this always be a valid node? If we're
+						// parsing
 						//    in as text, will there ever be cases where the diff that's 
 						//    done later on will fail becuase some really garbage-like 
 						//    text has been put into a node?

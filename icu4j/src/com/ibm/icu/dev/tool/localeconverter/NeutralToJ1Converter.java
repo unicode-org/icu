@@ -180,7 +180,7 @@ public class NeutralToJ1Converter extends LocaleConverter {
         defaultData =
             ResourceBundle.getBundle("com.ibm.icu.dev.tool.localeconverter.myLocaleElements", parentLocale);
             //{{INIT_CONTROLS
-		//}}
+//}}
 }
     
     /** convert the source table to the result */
@@ -198,5 +198,5 @@ public class NeutralToJ1Converter extends LocaleConverter {
         result.put("LocaleElements", localeElements);
     }
     //{{DECLARE_CONTROLS
-	//}}
+//}}
 }

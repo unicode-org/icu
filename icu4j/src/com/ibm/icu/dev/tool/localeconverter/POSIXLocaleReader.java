@@ -52,7 +52,7 @@ public class POSIXLocaleReader {
         this.localeDataPath = localeDataPath;
         this.locale = locale;
             //{{INIT_CONTROLS
-		//}}
+//}}
 }
     
     public Hashtable parse(String fileName, byte flags) throws IOException {
@@ -403,5 +403,5 @@ public class POSIXLocaleReader {
         }
     }
     //{{DECLARE_CONTROLS
-	//}}
+//}}
 }
