@@ -1,0 +1,125 @@
+﻿ // -*- Coding: utf-8; -*-
+//--------------------------------------------------------------------
+// Copyright (c) 1999-2001, International Business Machines
+// Corporation and others.  All Rights Reserved.
+//--------------------------------------------------------------------
+// THIS IS A MACHINE-GENERATED FILE
+// Tool: dumpICUrules.bat
+// Source: \icu4j\src\com\ibm\text\resources/Transliterator_InterIndic_Telugu.utf8.txt
+// Date: Thu Mar  1 20:03:55 2001
+//--------------------------------------------------------------------
+
+// InterIndic_Telugu
+
+InterIndic_Telugu {
+  Rule {
+//--------------------------------------------------------------------
+// Copyright (c) 1999-2001, International Business Machines
+// Corporation and others.  All Rights Reserved.
+//--------------------------------------------------------------------
+// Date: Tue Jan 23 12:42:01 2001
+//--------------------------------------------------------------------
+
+// InterIndic-Telugu
+
+"\uE001>ఁ;" // SIGN CANDRABINDU
+"\uE002>ం;" // SIGN ANUSVARA
+"\uE003>ః;" // SIGN VISARGA
+"\uE005>అ;" // LETTER A
+"\uE006>ఆ;" // LETTER AA
+"\uE007>ఇ;" // LETTER I
+"\uE008>ఈ;" // LETTER II
+"\uE009>ఉ;" // LETTER U
+"\uE00A>ఊ;" // LETTER UU
+"\uE00B>ఋ;" // LETTER VOCALIC R
+"\uE00C>ఌ;" // LETTER VOCALIC L
+"\uE00F>ఏ;" // LETTER EE
+"\uE010>ఐ;" // LETTER AI
+"\uE013>ఓ;" // LETTER OO
+"\uE014>ఔ;" // LETTER AU
+"\uE015>క;" // LETTER KA
+"\uE016>ఖ;" // LETTER KHA
+"\uE017>గ;" // LETTER GA
+"\uE018>ఘ;" // LETTER GHA
+"\uE019>ఙ;" // LETTER NGA
+"\uE01A>చ;" // LETTER CA
+"\uE01B>ఛ;" // LETTER CHA
+"\uE01C>జ;" // LETTER JA
+"\uE01D>ఝ;" // LETTER JHA
+"\uE01E>ఞ;" // LETTER NYA
+"\uE01F>ట;" // LETTER TTA
+"\uE020>ఠ;" // LETTER TTHA
+"\uE021>డ;" // LETTER DDA
+"\uE022>ఢ;" // LETTER DDHA
+"\uE023>ణ;" // LETTER NNA
+"\uE024>త;" // LETTER TA
+"\uE025>థ;" // LETTER THA
+"\uE026>ద;" // LETTER DA
+"\uE027>ధ;" // LETTER DHA
+"\uE028>న;" // LETTER NA
+"\uE029>న;" // REMAP (indicExceptions.txt): ఩>న = LETTER NNNA>LETTER NA
+"\uE02A>ప;" // LETTER PA
+"\uE02B>ఫ;" // LETTER PHA
+"\uE02C>బ;" // LETTER BA
+"\uE02D>భ;" // LETTER BHA
+"\uE02E>మ;" // LETTER MA
+"\uE02F>య;" // LETTER YA
+"\uE030>ర;" // LETTER RA
+"\uE032>ల;" // LETTER LA
+"\uE033>ళ;" // LETTER LLA
+"\uE034>ళ;" // REMAP (indicExceptions.txt): ఴ>ళ = LETTER LLLA>LETTER LLA
+"\uE035>వ;" // LETTER VA
+"\uE036>శ;" // LETTER SHA
+"\uE037>ష;" // LETTER SSA
+"\uE038>స;" // LETTER SA
+"\uE039>హ;" // LETTER HA
+// \uE03C>; // UNMAPPED InterIndic-Telugu: SIGN NUKTA
+// \uE03D>; // UNMAPPED InterIndic-Telugu: SIGN AVAGRAHA
+"\uE03E>ా;" // VOWEL SIGN AA
+"\uE03F>ి;" // VOWEL SIGN I
+"\uE040>ీ;" // VOWEL SIGN II
+"\uE041>ు;" // VOWEL SIGN U
+"\uE042>ూ;" // VOWEL SIGN UU
+"\uE043>ృ;" // VOWEL SIGN VOCALIC R
+"\uE044>ౄ;" // VOWEL SIGN VOCALIC RR
+"\uE045>ె;" // REMAP (indicExceptions.txt): ౅>ె = VOWEL SIGN CANDRA E>VOWEL SIGN E
+"\uE047>ే;" // VOWEL SIGN EE
+"\uE048>ై;" // VOWEL SIGN AI
+"\uE049>ొ;" // REMAP (indicExceptions.txt): ౉>ొ = VOWEL SIGN CANDRA O>VOWEL SIGN O
+"\uE04B>ో;" // VOWEL SIGN OO
+"\uE04C>ౌ;" // VOWEL SIGN AU
+"\uE04D>్;" // SIGN VIRAMA
+"\uE050>ఓం;" // REMAP (indicExceptions.txt): ౐>ఓం = OM>LETTER OO.SIGN ANUSVARA
+"\uE055>ౕ;" // LENGTH MARK
+"\uE056>ౖ;" // AI LENGTH MARK
+"\uE057>ౌ;" // REMAP (indicExceptions.txt): ౗>ౌ = AU LENGTH MARK>VOWEL SIGN AU
+"\uE059>ఖ;" // REMAP (indicExceptions.txt): ౙ>ఖ = LETTER KHHA>LETTER KHA
+"\uE05A>గ;" // REMAP (indicExceptions.txt): ౚ>గ = LETTER GHHA>LETTER GA
+"\uE05B>జ;" // REMAP (indicExceptions.txt): ౛>జ = LETTER ZA>LETTER JA
+"\uE05D>ఢ;" // REMAP (indicExceptions.txt): ౝ>ఢ = LETTER RHA>LETTER DDHA
+"\uE05E>ఫ;" // REMAP (indicExceptions.txt): ౞>ఫ = LETTER FA>LETTER PHA
+"\uE05F>య;" // REMAP (indicExceptions.txt): ౟>య = LETTER YYA>LETTER YA
+"\uE060>ౠ;" // LETTER VOCALIC RR
+"\uE061>ౡ;" // LETTER VOCALIC LL
+"\uE062>ి;" // REMAP (indicExceptions.txt): ౢ>ి = VOWEL SIGN VOCALIC L>VOWEL SIGN I
+"\uE063>ీ;" // REMAP (indicExceptions.txt): ౣ>ీ = VOWEL SIGN VOCALIC LL>VOWEL SIGN II
+"\uE066>౦;" // DIGIT ZERO
+"\uE067>౧;" // DIGIT ONE
+"\uE068>౨;" // DIGIT TWO
+"\uE069>౩;" // DIGIT THREE
+"\uE06A>౪;" // DIGIT FOUR
+"\uE06B>౫;" // DIGIT FIVE
+"\uE06C>౬;" // DIGIT SIX
+"\uE06D>౭;" // DIGIT SEVEN
+"\uE06E>౮;" // DIGIT EIGHT
+"\uE06F>౯;" // DIGIT NINE
+// \uE080>; // UNMAPPED InterIndic-Telugu: ISSHAR
+"\uE081>ఎ;" // LETTER E
+"\uE082>ఒ;" // LETTER O
+"\uE083>ఱ;" // LETTER RRA
+"\uE084>ె;" // VOWEL SIGN E
+"\uE085>ొ;" // VOWEL SIGN O
+
+// eof
+  }
+}

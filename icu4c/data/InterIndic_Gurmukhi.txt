@@ -1,0 +1,125 @@
+﻿ // -*- Coding: utf-8; -*-
+//--------------------------------------------------------------------
+// Copyright (c) 1999-2001, International Business Machines
+// Corporation and others.  All Rights Reserved.
+//--------------------------------------------------------------------
+// THIS IS A MACHINE-GENERATED FILE
+// Tool: dumpICUrules.bat
+// Source: \icu4j\src\com\ibm\text\resources/Transliterator_InterIndic_Gurmukhi.utf8.txt
+// Date: Thu Mar  1 20:03:55 2001
+//--------------------------------------------------------------------
+
+// InterIndic_Gurmukhi
+
+InterIndic_Gurmukhi {
+  Rule {
+//--------------------------------------------------------------------
+// Copyright (c) 1999-2001, International Business Machines
+// Corporation and others.  All Rights Reserved.
+//--------------------------------------------------------------------
+// Date: Tue Jan 23 12:42:00 2001
+//--------------------------------------------------------------------
+
+// InterIndic-Gurmukhi
+
+"\uE001>ਂ;" // REMAP (indicExceptions.txt): ਁ>ਂ = SIGN CANDRABINDU>SIGN BINDI
+// \uE002>; // UNMAPPED InterIndic-Gurmukhi: SIGN ANUSVARA (ਂ = SIGN BINDI)
+// \uE003>; // UNMAPPED InterIndic-Gurmukhi: SIGN VISARGA
+"\uE005>ਅ;" // LETTER A
+"\uE006>ਆ;" // LETTER AA
+"\uE007>ਇ;" // LETTER I
+"\uE008>ਈ;" // LETTER II
+"\uE009>ਉ;" // LETTER U
+"\uE00A>ਊ;" // LETTER UU
+"\uE00B>ਰਿ;" // REMAP (indicExceptions.txt): ਋>ਰਿ = LETTER VOCALIC R>LETTER RA.VOWEL SIGN I
+"\uE00C>ਇ;" // REMAP (indicExceptions.txt): ਌>ਇ = LETTER VOCALIC L>LETTER I
+"\uE00F>ਏ;" // LETTER EE
+"\uE010>ਐ;" // LETTER AI
+"\uE013>ਓ;" // LETTER OO
+"\uE014>ਔ;" // LETTER AU
+"\uE015>ਕ;" // LETTER KA
+"\uE016>ਖ;" // LETTER KHA
+"\uE017>ਗ;" // LETTER GA
+"\uE018>ਘ;" // LETTER GHA
+"\uE019>ਙ;" // LETTER NGA
+"\uE01A>ਚ;" // LETTER CA
+"\uE01B>ਛ;" // LETTER CHA
+"\uE01C>ਜ;" // LETTER JA
+"\uE01D>ਝ;" // LETTER JHA
+"\uE01E>ਞ;" // LETTER NYA
+"\uE01F>ਟ;" // LETTER TTA
+"\uE020>ਠ;" // LETTER TTHA
+"\uE021>ਡ;" // LETTER DDA
+"\uE022>ਢ;" // LETTER DDHA
+"\uE023>ਣ;" // LETTER NNA
+"\uE024>ਤ;" // LETTER TA
+"\uE025>ਥ;" // LETTER THA
+"\uE026>ਦ;" // LETTER DA
+"\uE027>ਧ;" // LETTER DHA
+"\uE028>ਨ;" // LETTER NA
+"\uE029>ਨ;" // REMAP (indicExceptions.txt): ਩>ਨ = LETTER NNNA>LETTER NA
+"\uE02A>ਪ;" // LETTER PA
+"\uE02B>ਫ;" // LETTER PHA
+"\uE02C>ਬ;" // LETTER BA
+"\uE02D>ਭ;" // LETTER BHA
+"\uE02E>ਮ;" // LETTER MA
+"\uE02F>ਯ;" // LETTER YA
+"\uE030>ਰ;" // LETTER RA
+"\uE032>ਲ;" // LETTER LA
+"\uE033>ਲ਼;" // LETTER LLA
+"\uE034>ਲ਼;" // REMAP (indicExceptions.txt): ਴>ਲ਼ = LETTER LLLA>LETTER LLA
+"\uE035>ਵ;" // LETTER VA
+"\uE036>ਸ਼;" // LETTER SHA
+"\uE037>ਸ਼;" // REMAP (indicExceptions.txt): ਷>ਸ਼ = LETTER SSA>LETTER SHA
+"\uE038>ਸ;" // LETTER SA
+"\uE039>ਹ;" // LETTER HA
+"\uE03C>਼;" // SIGN NUKTA
+// \uE03D>; // UNMAPPED InterIndic-Gurmukhi: SIGN AVAGRAHA
+"\uE03E>ਾ;" // VOWEL SIGN AA
+"\uE03F>ਿ;" // VOWEL SIGN I
+"\uE040>ੀ;" // VOWEL SIGN II
+"\uE041>ੁ;" // VOWEL SIGN U
+"\uE042>ੂ;" // VOWEL SIGN UU
+// \uE043>; // UNMAPPED InterIndic-Gurmukhi: VOWEL SIGN VOCALIC R
+// \uE044>; // UNMAPPED InterIndic-Gurmukhi: VOWEL SIGN VOCALIC RR
+"\uE045>ੈ;" // REMAP (indicExceptions.txt): ੅>ੈ = VOWEL SIGN CANDRA E>VOWEL SIGN AI
+"\uE047>ੇ;" // VOWEL SIGN EE
+"\uE048>ੈ;" // VOWEL SIGN AI
+"\uE049>ੌ;" // REMAP (indicExceptions.txt): ੉>ੌ = VOWEL SIGN CANDRA O>VOWEL SIGN AU
+"\uE04B>ੋ;" // VOWEL SIGN OO
+"\uE04C>ੌ;" // VOWEL SIGN AU
+"\uE04D>੍;" // SIGN VIRAMA
+// \uE050>; // UNMAPPED InterIndic-Gurmukhi: OM
+// \uE055>; // UNMAPPED InterIndic-Gurmukhi: LENGTH MARK
+"\uE056>ੈ;" // REMAP (indicExceptions.txt): ੖>ੈ = AI LENGTH MARK>VOWEL SIGN AI
+"\uE057>ੌ;" // REMAP (indicExceptions.txt): ੗>ੌ = AU LENGTH MARK>VOWEL SIGN AU
+"\uE059>ਖ਼;" // LETTER KHHA
+"\uE05A>ਗ਼;" // LETTER GHHA
+"\uE05B>ਜ਼;" // LETTER ZA
+"\uE05D>ਢ਼;" // REMAP (indicExceptions.txt): ੝>ਢ਼ = LETTER RHA>LETTER DDHA.SIGN NUKTA
+"\uE05E>ਫ਼;" // LETTER FA
+"\uE05F>ਯ;" // REMAP (indicExceptions.txt): ੟>ਯ = LETTER YYA>LETTER YA
+"\uE060>ਰਿ;" // REMAP (indicExceptions.txt): ੠>ਰਿ = LETTER VOCALIC RR>LETTER RA.VOWEL SIGN I
+"\uE061>ਈ਼;" // REMAP (indicExceptions.txt): ੡>ਈ਼ = LETTER VOCALIC LL>LETTER II.SIGN NUKTA
+"\uE062>ਿ਼;" // REMAP (indicExceptions.txt): ੢>ਿ਼ = VOWEL SIGN VOCALIC L>VOWEL SIGN I.SIGN NUKTA
+"\uE063>ੀ਼;" // REMAP (indicExceptions.txt): ੣>ੀ਼ = VOWEL SIGN VOCALIC LL>VOWEL SIGN II.SIGN NUKTA
+"\uE066>੦;" // DIGIT ZERO
+"\uE067>੧;" // DIGIT ONE
+"\uE068>੨;" // DIGIT TWO
+"\uE069>੩;" // DIGIT THREE
+"\uE06A>੪;" // DIGIT FOUR
+"\uE06B>੫;" // DIGIT FIVE
+"\uE06C>੬;" // DIGIT SIX
+"\uE06D>੭;" // DIGIT SEVEN
+"\uE06E>੮;" // DIGIT EIGHT
+"\uE06F>੯;" // DIGIT NINE
+// \uE080>; // UNMAPPED InterIndic-Gurmukhi: ISSHAR
+// \uE081>; // UNMAPPED InterIndic-Gurmukhi: LETTER E
+// \uE082>; // UNMAPPED InterIndic-Gurmukhi: LETTER O (ਂ = SIGN BINDI)
+"\uE083>ੜ;" // LETTER RRA
+// \uE084>; // UNMAPPED InterIndic-Gurmukhi: VOWEL SIGN E
+// \uE085>; // UNMAPPED InterIndic-Gurmukhi: VOWEL SIGN O (ਅ = LETTER A)
+
+// eof
+  }
+}

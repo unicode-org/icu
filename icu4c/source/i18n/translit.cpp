@@ -31,26 +31,19 @@ const UChar Transliterator::ID_SEP   = 0x002D; /*-*/
 const UChar Transliterator::ID_DELIM = 0x003B; /*;*/
 
 static Hashtable _cache;
+static Hashtable _internalCache;
 
 /**
- * Dictionary of known transliterators.  Keys are <code>String</code>
- * names, values are one of the following:
- *
- * <ul><li><code>Transliterator</code> objects
- *
- * <li><code>RULE_BASED_PLACEHOLDER</code>, in which case the ID
- * will have its first ID_SEP removed and be appended to
- * RB_RULE_BASED_PREFIX to form a resource bundle name from which
- * the RB_RULE key is looked up to obtain the rule.
- *
- * <li><code>REVERSE_RULE_BASED_PLACEHOLDER</code>.  Like
- * <code>RULE_BASED_PLACEHOLDER</code>, except the entity names in
- * the ID are reversed, and the argument
- * RuleBasedTransliterator::REVERSE is pased to the
- * RuleBasedTransliterator constructor.
- * </ul>
+ * Cache of public system transliterators.  Keys are UnicodeString
+ * names, values are CacheEntry objects.
  */
 Hashtable* Transliterator::cache = &_cache;
+
+/**
+ * Like 'cache', but IDs are not public.  Internal transliterators are
+ * combined together and aliased to public IDs.
+ */
+Hashtable* Transliterator::internalCache = &_internalCache;
 
 /**
  * The mutex controlling access to the cache.
@@ -592,6 +585,9 @@ Transliterator* Transliterator::_createInstance(const UnicodeString& ID,
     Mutex lock(&cacheMutex);
 
     CacheEntry* entry = (CacheEntry*) cache->get(ID);
+    if (entry == 0) {
+        entry = (CacheEntry*) internalCache->get(ID);
+    }
 
     TransliterationRuleData* data = 0;
 
@@ -604,12 +600,16 @@ Transliterator* Transliterator::_createInstance(const UnicodeString& ID,
         // Fall through to construct transliterator from cached Data object.
     } else if (entry->entryType == CacheEntry::PROTOTYPE) {
         return entry->u.prototype->clone();
+    } else if (entry->entryType == CacheEntry::ALIAS) {
+        Transliterator *t = createInstance(entry->stringArg);
+        if (t != 0) {
+            t->setID(ID);
+        }
+        return t;
     } else {
-        // At this point entry type must be either RULE_BASED_PLACEHOLDER
-        // or REVERSE_RULE_BASED_PLACEHOLDER.
-        UBool isReverse =
-            (entry->entryType ==
-             CacheEntry::REVERSE_RULE_BASED_PLACEHOLDER);
+        // At this point entry type must be either RULES_FORWARD
+        // or RULES_REVERSE
+        UBool isReverse = (entry->entryType == CacheEntry::RULES_REVERSE);
         
         // We use the file name, taken from another resource bundle
         // 2-d array at static init time, as a locale language.  We're
@@ -617,8 +617,8 @@ Transliterator* Transliterator::_createInstance(const UnicodeString& ID,
         // name; this in no way represents an actual locale.
 
         char *ch;
-        ch = new char[entry->rbFile.size() + 1];
-        ch[entry->rbFile.extract(0, 0x7fffffff, ch, "")] = 0;
+        ch = new char[entry->stringArg.size() + 1];
+        ch[entry->stringArg.extract(0, 0x7fffffff, ch, "")] = 0;
         Locale fakeLocale(ch);
         delete [] ch;
 
@@ -824,18 +824,31 @@ void Transliterator::initializeCache(void) {
     // Before looking for the resource, construct our cache.
     // That way if the resource is absent, we will at least
     // have a valid cache object.
-//    cache = new Hashtable(status); // TODO: What if this call fails?
     cacheIDs.setComparer(compareIDs);
 
     /* The following code parses the index table located in
-     * icu/data/translit/index.txt.  The index is an n x 3 table
-     * that looks like this:
+     * icu/data/translit_index.txt.  The index is an n x 4 table
+     * that follows this format:
      *
-     * RuleBasedTransliteratorIDs {
-     *     { "Latin-Arabic", "Arabic-Latin", "larabic" }
-     *     { "KeyboardEscape-Latin1", "", "keyescl1" }
-     *     ...
-     * }
+     *   <id>:file:<resource>:<direction>
+     *   <id>:internal:<resource>:<direction>
+     *   <id>:alias:<getInstanceArg>:
+     *  
+     * <id> is the ID of the system transliterator being defined.  These
+     * are public IDs enumerated by Transliterator.getAvailableIDs(),
+     * unless the second field is "internal".
+     * 
+     * <resource> is a ResourceReader resource name.  Currently these refer
+     * to file names under com/ibm/text/resources.  This string is passed
+     * directly to ResourceReader, together with <encoding>.
+     * 
+     * <direction> is either "FORWARD" or "REVERSE".
+     * 
+     * <getInstanceArg> is a string to be passed directly to
+     * Transliterator.getInstance().  The returned Transliterator object
+     * then has its ID changed to <id> and is returned.
+     *
+     * The extra blank field on "alias" lines is to make the array square.
      */
 
     Locale indexLoc("translit_index");
@@ -844,34 +857,30 @@ void Transliterator::initializeCache(void) {
                           indexLoc, status);
 
     int32_t rows, cols;
-    const UnicodeString** ruleBasedIDs =
+    const UnicodeString** index =
         bundle.get2dArray(RB_RULE_BASED_IDS, rows, cols, status);
         
-    if (U_SUCCESS(status) && (cols == 3)) {
+    if (U_SUCCESS(status) && (cols == 4)) {
         for (int32_t i=0; i<rows; ++i) {
-            const UnicodeString* row = ruleBasedIDs[i];
-            for (int32_t col=0; col<2; ++col) {
-                
-                if (row[col].length() > 0) {
-                    CacheEntry* entry = new CacheEntry();
-                    entry->entryType = (col == 0) ?
-                        CacheEntry::RULE_BASED_PLACEHOLDER :
-                        CacheEntry::REVERSE_RULE_BASED_PLACEHOLDER;
-                    entry->rbFile = UnicodeString(row[2]);
-                    //uhash_putKey(cache, hash(row[col]), entry, &status);
-                    cache->put(row[col], entry, status);
-
-                    /* It's okay to take the address of the string
-                     * from the resource bundle under the assumption
-                     * that the RB is caching these, and that they
-                     * stay around forever.  If this changes, what we
-                     * need to do is change the id vector so that it
-                     * owns its strings and create a copy here.
-                     */
-                    /*cacheIDs.addElement((void*) &row[col]);*/
-                    cacheIDs.addElement((void*) new UnicodeString(row[col]));
-                }
+            const UnicodeString* row = index[i];
+            UChar type = row[1].charAt(0);
+            CacheEntry* entry = new CacheEntry();
+            if (type == 0x0066 || type == 0x0069) { // 'f', 'i'
+                // 'file' or 'internal'; row[2]=resource, row[3]=direction
+                UBool isReverse = (row[3].charAt(0) == 0x0052); // 'R'
+                entry->entryType = isReverse ?
+                    CacheEntry::RULES_REVERSE :
+                    CacheEntry::RULES_FORWARD;
+            } else { // assert(type == 0x0061 /*a*/)
+                // 'alias'; row[2]=createInstance argument
+                entry->entryType = CacheEntry::ALIAS;
             }
+            entry->stringArg = UnicodeString(row[2]);
+            // Use internalCache for 'internal' entries
+            Hashtable* c = (type == 0x0069/*i*/) ? internalCache : cache;
+            c->put(row[0], entry, status);
+            // cacheIDs owns & should delete the following string
+            cacheIDs.addElement((void*) new UnicodeString(row[0]));
         }
     }
 
