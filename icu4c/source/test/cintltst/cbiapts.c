@@ -149,8 +149,8 @@ static void TestBreakIteratorCAPI()
     /* Use french for fun */
     word         = ubrk_open(UBRK_WORD, "en_US", text, u_strlen(text), &status);
     if(status == U_FILE_ACCESS_ERROR) {
-      log_data_err("Check your data - it doesn't seem to be around\n");
-      return;
+        log_data_err("Check your data - it doesn't seem to be around\n");
+        return;
     } else if(U_FAILURE(status)){
         log_err("FAIL: Error in ubrk_open() for word breakiterator: %s\n", myErrorName(status));
     }
@@ -161,6 +161,7 @@ static void TestBreakIteratorCAPI()
     sentence     = ubrk_open(UBRK_SENTENCE, "en_US", text, u_strlen(text), &status);
     if(U_FAILURE(status)){
         log_err("FAIL: Error in ubrk_open() for sentence breakiterator: %s\n", myErrorName(status));
+        return;
     }
     else{
         log_verbose("PASS: Successfully opened  sentence breakiterator\n");
@@ -169,6 +170,7 @@ static void TestBreakIteratorCAPI()
     line         = ubrk_open(UBRK_LINE, "en_US", text, u_strlen(text), &status);
     if(U_FAILURE(status)){
         log_err("FAIL: Error in ubrk_open() for line breakiterator: %s\n", myErrorName(status));
+        return;
     }
     else{
         log_verbose("PASS: Successfully opened  line breakiterator\n");
@@ -177,6 +179,7 @@ static void TestBreakIteratorCAPI()
     character     = ubrk_open(UBRK_CHARACTER, "en_US", text, u_strlen(text), &status);
     if(U_FAILURE(status)){
         log_err("FAIL: Error in ubrk_open() for character breakiterator: %s\n", myErrorName(status));
+        return;
     }
     else{
         log_verbose("PASS: Successfully opened  character breakiterator\n");
