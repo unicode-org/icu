@@ -2750,7 +2750,7 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
         nextCPPos = fText->moveIndex32(pos, 1);
         nextPos   = nextCPPos;
         c = fText->char32At(nextPos);
-        // another percularity of lb4
+        // another percularity of LB 4 - Dont break before space
         if (fSP->contains(thisChar)) {
             continue;
         }
@@ -2789,48 +2789,25 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
         }
 
         // LB 9  Don't break after OP SP*
-        /// UBool cmFlag = FALSE;
-        for (tPos=prevPos; ; tPos=fCharBI->preceding(tPos)) {
-            while (tPos > 0 && fCM->contains(fText->char32At(tPos))) {
+        //       Scan backwards, checking for this sequence.
+        //       The OP char could include combining marks, so we acually check for
+        //           OP CM* SP*
+        //       Another Twist: The Rule 67 fixes may have changed a CP CM
+        //       sequence into a ID char, so before scanning back through spaces,
+        //       verify that prevChar is indeed a space.  The prevChar variable
+        //       may differ from fText[prevPos]
+        tPos = prevPos;
+        if (fSP->contains(prevChar)) {
+            while (tPos > 0 && fSP->contains(fText->char32At(tPos))) {
                 tPos=fText->moveIndex32(tPos, -1);
             }
-            if (fOP->contains(fText->char32At(tPos))) {
-                break;
-            }
-            if (fSP->contains(fText->char32At(tPos)) == TRUE) {
-                int32_t temp = fText->moveIndex32(tPos, 1);
-                if (fCM->contains(fText->char32At(temp))) {
-                    // if we have $SP$CM+ which is an $ID
-                    goto fall_through_9;
-                }
-            }
-            // fSP->contains(prevChar) == FALSE || 
-            if (fSP->contains(fText->char32At(tPos)) == FALSE 
-                || tPos == 0) {
-                /// || cmFlag == TRUE) {
-                // if we have $SP$CM+ which is an $ID
-                goto fall_through_9;
-            }
         }
-        /***
-        for (tPos=prevPos; ; tPos = fText->moveIndex32(tPos, -1)) {
-            if (fOP->contains(fText->char32At(tPos))) {
-                break;
-            }
-            if ((fSP->contains(fText->char32At(tPos)) || 
-                fCM->contains(fText->char32At(tPos))) == FALSE 
-                || tPos == 0) {
-                goto fall_through_9;
-            }
-            
+        while (tPos > 0 && fCM->contains(fText->char32At(tPos))) {
+            tPos=fText->moveIndex32(tPos, -1);
         }
-        ***/
-        // We match OP SP* x
-        //   No break at this postion.
-        //   Continue the outer loop.
-        continue;
-
-fall_through_9:
+        if (fOP->contains(fText->char32At(tPos))) {
+            continue;
+        }
 
 
         // LB 11a        B2 x B2
