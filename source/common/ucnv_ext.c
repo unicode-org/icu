@@ -134,7 +134,7 @@ ucnv_extMatchToU(const int32_t *cx, int8_t sisoState,
     int32_t i, j, index, length, matchLength;
     uint8_t b;
 
-    if(cx==NULL) {
+    if(cx==NULL || cx[UCNV_EXT_TO_U_LENGTH]<=0) {
         return 0; /* no extension data, no match */
     }
 
