@@ -5,25 +5,38 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Replaceable.java,v $ 
- * $Date: 2002/07/02 23:50:34 $ 
- * $Revision: 1.7 $
+ * $Date: 2002/07/03 00:30:54 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.text;
 
 /**
- * <code>Replaceable</code> is an interface that supports the
- * operation of replacing a substring with another piece of text.
- * <code>Replaceable</code> is needed in order to change a piece of
- * text while retaining metadata.  Metadata is data other than the
- * Unicode characters returned by char32At().  One example of metadata
- * is style tags; another is an edit history, marking each character
- * with an author and revision number.  For example, if the string
- * "the <b>bold</b> font" has range (4, 8) replaced with "strong",
- * then it becomes "the <b>strong</b> font".
+ * <code>Replaceable</code> is an interface representing a
+ * string of characters that supports the replacement of a range of
+ * itself with a new string of characters.  It is used by APIs that
+ * change a piece of text while retaining metadata.  Metadata is data
+ * other than the Unicode characters returned by char32At().  One
+ * example of metadata is style attributes; another is an edit
+ * history, marking each character with an author and revision number.
  *
- * <p>If a subclass supports metadata, then typically the behavior of
+ * <p>An implicit aspect of the <code>Replaceable</code> API is that
+ * during a replace operation, new characters take on the metadata of
+ * the old characters.  For example, if the string "the <b>bold</b>
+ * font" has range (4, 8) replaced with "strong", then it becomes "the
+ * <b>strong</b> font".
+ *
+ * <p><code>Replaceable</code> specifies ranges using a start
+ * offset and a limit offset.  The range of characters thus specified
+ * includes the characters at offset start..limit-1.  That is, the
+ * start offset is inclusive, and the limit offset is exclusive.
+ *
+ * <p><code>Replaceable</code> also includes API to access characters
+ * in the string: <code>length()</code>, <code>charAt()</code>,
+ * <code>char32At()</code>, and <code>extractBetween()</code>.
+ *
+ * <p>For a subclass to support metadata, typical behavior of
  * <code>replace()</code> is the following:
  * <ul>
  *   <li>Set the metadata of the new text to the metadata of the first
@@ -41,7 +54,7 @@ package com.ibm.icu.text;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Replaceable.java,v $ $Revision: 1.7 $ $Date: 2002/07/02 23:50:34 $
+ * @version $RCSfile: Replaceable.java,v $ $Revision: 1.8 $ $Date: 2002/07/03 00:30:54 $
  */
 public interface Replaceable {
     /**
@@ -137,7 +150,7 @@ public interface Replaceable {
     // and System.arraycopy.
 
     /**
-     * Copies a substring of this object, retaining metadata
+     * Copies a substring of this object, retaining metadata.
      * This method is used to duplicate or reorder substrings.
      * The destination index must not overlap the source range.
      * If <code>hasMetaData()</code> returns false, subclasses
@@ -164,6 +177,7 @@ public interface Replaceable {
      * must be made so as to preserve metadata.  If it does not, calls
      * to the Replaceable API may be optimized to improve performance.
      * @return true if this object contains metadata
+     * @since ICU 2.2
      */
     boolean hasMetaData();
 }
