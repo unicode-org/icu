@@ -35,6 +35,25 @@ haw {
       }
     }
     Countries {
+        AU { "\u02bbAukekulelia" }
+        CA { "Kanaka" }
+        CN { "P\u0101k\u0113" }
+        DE { "Kelem\u0101nia" }
+        DK { "Kenemaka" }
+        ES { "Kepania" }
+        FR { "Palani" }
+        GB { "Pelekania" }
+        GR { "Helene" }
+        IE { "\u02bbIlelani" }
+        IL { "Ielukalema" }
+        IN { "\u02bb\u012Ania" }
+        IT { "Ikalia" }
+        JP { "I\u0101pana" }
+        MX { "Mekiko" }
+        NL { "H\u014Dlani" }
+        NZ { "Nuk\u012Blani" }
+        PH { "\u02bb\u0100ina Pilipino" }
+        RU { "Lukia" }
         US { "\u02bbAmelika Hui P\u016b \u02bbIa" }
     }
     DayAbbreviations {
