@@ -4,6 +4,7 @@ decmn_win32_Debug
 decmn_win32_Release
 Makefile
 *.d
+*.o
 *.pdb
 gencmn
 gencmn.[0-9]
