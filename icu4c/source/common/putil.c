@@ -825,10 +825,6 @@ u_setDataDirectory(const char *directory) {
     length=uprv_strlen(directory);
     newDataDir = (char *)uprv_malloc(length + 2);
     uprv_strcpy(newDataDir, directory);
-    if(newDataDir[length-1]!=U_FILE_SEP_CHAR) {
-        newDataDir[length++]=U_FILE_SEP_CHAR;
-        newDataDir[length] = 0;
-    }
 
     umtx_lock(NULL);
     if (gDataDirectory) {
