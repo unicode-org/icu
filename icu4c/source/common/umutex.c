@@ -81,7 +81,8 @@ static int32_t gRecursionCount = 0;       /* Detect Recursive entries.  For debu
 static CRITICAL_SECTION gPlatformMutex;
 
 #elif defined(POSIX)
-static pthread_mutex_t gPlatformMutex;
+static pthread_mutex_t gPlatformMutex;    /* The global ICU mutex   */
+static pthread_mutex_t gIncDecMutex;      /* For use by atomic inc/dec, on Unixes only */    
 
 #endif
 #endif /* ICU_USE_THREADS==1 */
@@ -246,6 +247,10 @@ umtx_init(UMTX *mutex)
            gRecursionCount = 0;
        #endif
 
+       #ifdef POSIX
+       umtx_raw_init(&gIncDecMutex);
+       #endif
+
     } else {
         /* Not the global mutex.
          *  Thread safe initialization, using the global mutex.
@@ -331,6 +336,8 @@ umtx_atomic_dec(int32_t *p)
 /*
  * POSIX platforms without specific atomic operations.  Use a posix mutex
  *   to protect the increment and decrement.
+ *   The IncDecMutex is in static storage so we don't have to come back and delete it
+ *   when the process exits.
  */
 
 U_CAPI int32_t U_EXPORT2
@@ -338,9 +345,9 @@ umtx_atomic_inc(int32_t *p)
 {
     int32_t    retVal;
 
-    pthread_mutex_lock(&gPlatformMutex);
+    pthread_mutex_lock(&gIncDecMutex);
     retVal = ++(*p);
-    pthread_mutex_unlock(&gPlatformMutex);
+    pthread_mutex_unlock(&gIncDecMutex);
     return retVal;
 }
 
@@ -350,9 +357,9 @@ umtx_atomic_dec(int32_t *p)
 {
     int32_t    retVal;
 
-    pthread_mutex_lock(&gPlatformMutex);
+    pthread_mutex_lock(&gIncDecMutex);
     retVal = --(*p);
-    pthread_mutex_unlock(&gPlatformMutex);
+    pthread_mutex_unlock(&gIncDecMutex);
     return retVal;
 }
 
