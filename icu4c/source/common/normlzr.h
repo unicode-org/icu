@@ -1,16 +1,10 @@
 /*
-*******************************************************************************
-*                                                                             *
-* COPYRIGHT:                                                                  *
-*   IBM Open Class Library                                                    *
-*   (C) Copyright Taligent, Inc.,  1996                                       *
-*   (C) Copyright International Business Machines Corporation,  1996-1999     *
-*   Licensed Material - Program-Property of IBM - All Rights Reserved.        *
-*   US Government Users Restricted Rights - Use, duplication, or disclosure   *
-*   restricted by GSA ADP Schedule Contract with IBM Corp.                    *
-*                                                                             *
-*******************************************************************************
-*/
+ ********************************************************************
+ * COPYRIGHT: 
+ * Copyright (c) 1996-1999, International Business Machines Corporation and
+ * others. All Rights Reserved.
+ ********************************************************************
+ */
 
 #ifndef NORMLZR_H
 #define NORMLZR_H
@@ -262,6 +256,20 @@ class U_COMMON_API Normalizer
          EMode mode, 
          int32_t opt);
   
+  /**
+   * Creates a new <tt>Normalizer</tt> object for iterating over the
+   * normalized form of a given UChar string.
+   * <p>
+   * @param str   The string to be normalized.  The normalization
+   *              will start at the beginning of the string.
+   *
+   * @param length Lenght of the string
+   *
+   */
+  Normalizer(const UChar* str,
+         int32_t length,
+         EMode mode);
+
   /**
    * Creates a new <tt>Normalizer</tt> object for iterating over the
    * normalized form of the given text.
@@ -593,6 +601,13 @@ class U_COMMON_API Normalizer
   void setText(const CharacterIterator& newText, 
            UErrorCode &status);
   
+  /**
+   * Set the input text over which this <tt>Normalizer</tt> will iterate.
+   * The iteration position is set to the beginning.
+   */
+  void setText(const UChar* newText,
+                    int32_t length,
+            UErrorCode &status);
   /**
    * Copies the text under iteration into the UnicodeString referred to by 
    * "result".

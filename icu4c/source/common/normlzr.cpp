@@ -1,17 +1,10 @@
 /*
-*******************************************************************************
-*                                                                             *
-* COPYRIGHT:                                                                  *
-*   IBM Open Class Library                                                    *
-*   (C) Copyright Taligent, Inc.,  1996                                       *
-*   (C) Copyright International Business Machines Corporation,  1996-1998     *
-*   Licensed Material - Program-Property of IBM - All Rights Reserved.        *
-*   US Government Users Restricted Rights - Use, duplication, or disclosure   *
-*   restricted by GSA ADP Schedule Contract with IBM Corp.                    *
-*                                                                             *
-*******************************************************************************
-*/
-
+ ********************************************************************
+ * COPYRIGHT: 
+ * Copyright (c) 1996-1999, International Business Machines Corporation and
+ * others. All Rights Reserved.
+ ********************************************************************
+ */
 
 #include "ucmp16.h"
 #include "dcmpdata.h"
@@ -63,6 +56,11 @@ Normalizer::Normalizer(const UnicodeString& str,
                int32_t opt)
 {
   init(new StringCharacterIterator(str), mode, opt);
+}
+
+Normalizer::Normalizer(const UChar* str, int32_t length, EMode mode) 
+{
+  init(new StringCharacterIterator(UnicodeString(str, length)), mode, 0);
 }
 
 Normalizer::Normalizer(const CharacterIterator& iter, 
@@ -1046,6 +1044,13 @@ Normalizer::setText(const CharacterIterator& newText,
   reset();
 }
 
+void
+Normalizer::setText(const UChar* newText,
+                    int32_t length,
+            UErrorCode &status)
+{
+    setText(UnicodeString(newText, length), status);
+}
 
 /**
  * Copies the text under iteration into the UnicodeString referred to by "result".
