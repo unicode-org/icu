@@ -105,6 +105,36 @@ void TestGetDefaultRules(){
 }
 #endif
 
+/*
+ * Test ucol_openVersion for some locale. Called by TestProperty().
+ */
+static void
+TestOpenVersion(const char *locale) {
+    UVersionInfo version1, version2;
+    UCollator *collator1, *collator2;
+    UErrorCode errorCode;
+
+    errorCode=U_ZERO_ERROR;
+    collator1=ucol_open(locale, &errorCode);
+    if(U_SUCCESS(errorCode)) {
+        /* get the current version */
+        ucol_getVersion(collator1, version1);
+        ucol_close(collator1);
+
+        /* try to get that same version again */
+        collator2=ucol_openVersion(locale, version1, &errorCode);
+        if(U_SUCCESS(errorCode)) {
+            ucol_getVersion(collator2, version2);
+            if(0!=uprv_memcmp(version1, version2, sizeof(UVersionInfo))) {
+                log_err("error: ucol_openVersion(\"%s\", ucol_getVersion(%s collator)) returns a different collator\n", locale, locale);
+            }
+            ucol_close(collator2);
+        } else {
+            log_err("error: ucol_openVersion(\"%s\", ucol_getVersion(%s collator)) fails: %s\n", locale, locale, u_errorName(errorCode));
+        }
+    }
+}
+
 /* Collator Properties
  ucol_open, ucol_strcoll,  getStrength/setStrength
  getDecomposition/setDecomposition, getDisplayName*/
@@ -261,12 +291,25 @@ void TestProperty()
         return;
     }
     log_verbose("Default collation getDisplayName ended.\n");
-    
 
-       
-    
+    /* test ucol_openVersion */
+    TestOpenVersion("");
+    TestOpenVersion("da");
+    TestOpenVersion("fr");
+    TestOpenVersion("ja");
 
+    /* try some bogus version */
+    versionArray[0]=0;
+    versionArray[1]=0x99;
+    versionArray[2]=0xc7;
+    versionArray[3]=0xfe;
+    col=ucol_openVersion("", versionArray, &status);
+    if(U_SUCCESS(status)) {
+        log_err("error: ucol_openVersion(bogus version) succeeded\n");
+        ucol_close(col);
+    }
 }
+
 /* Test RuleBasedCollator and getRules*/
 void TestRuleBasedColl()
 {
