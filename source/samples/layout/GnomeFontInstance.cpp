@@ -177,7 +177,7 @@ void GnomeFontInstance::getGlyphAdvance(LEGlyphID glyph, LEPoint &advance) const
     advance.fX = 0;
     advance.fY = 0;
 
-    if (glyph == 0xFFFF) {
+    if (glyph >= 0xFFFE) {
         return;
     }
 
