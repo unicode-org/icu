@@ -1078,7 +1078,10 @@ void uprv_uca_getMaxExpansionJamo(UNewTrie       *mapping,
   }
 }
 
-static inline uint32_t getFoldedValue(UNewTrie *trie, UChar32 start, int32_t offset) {
+U_CDECL_BEGIN
+static inline uint32_t U_CALLCONV
+getFoldedValue(UNewTrie *trie, UChar32 start, int32_t offset)
+{
   uint32_t value;
   uint32_t tag;
   UChar32 limit;
@@ -1102,7 +1105,7 @@ static inline uint32_t getFoldedValue(UNewTrie *trie, UChar32 start, int32_t off
   }
   return 0;
 }
-
+U_CDECL_END
 
 #ifdef UCOL_DEBUG
 // This is a debug function to print the contents of a trie.
