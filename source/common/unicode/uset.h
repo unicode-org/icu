@@ -392,19 +392,19 @@ uset_getItem(const USet* set, int32_t itemIndex,
 /**
  * @internal
  */
-U_CAPI UBool U_EXPORT2
+U_INTERNAL UBool U_EXPORT2
 uset_containsAll(const USet* set1, const USet* set2);
 
 /**
  * @internal
  */
-U_CAPI UBool U_EXPORT2
+U_INTERNAL UBool U_EXPORT2
 uset_containsNone(const USet* set1, const USet* set2);
 
 /**
  * @internal
  */
-U_CAPI UBool U_EXPORT2
+U_INTERNAL UBool U_EXPORT2
 uset_equals(const USet* set1, const USet* set2);
 
 /*********************************************************************

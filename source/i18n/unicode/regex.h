@@ -70,7 +70,7 @@ class  RegexCImpl;
  *   @internal
  */
 #ifdef REGEX_DEBUG
-U_STABLE void U_EXPORT2
+U_INTERNAL void U_EXPORT2
     RegexPatternDump(const RegexPattern *pat);
 #else
     #define RegexPatternDump(pat)
