@@ -67,6 +67,8 @@ static Converter converters[MAX_ALIAS_COUNT];
 static uint16_t converterCount=0;
 
 /* prototypes --------------------------------------------------------------- */
+static void
+usage(char *progname);
 
 static void
 parseLine(const char *line);
@@ -100,12 +102,6 @@ main(int argc, char *argv[]) {
     uint16_t stringOffset;
     bool_t haveCopyright=TRUE;
 
-    fprintf(stderr,
-        "usage: %s [-c[+|-]]\n"
-        "\tread convrtrs.txt and create " DATA_NAME "." DATA_TYPE "\n"
-        "\t\t-c[+|-]  do (not) include a copyright notice\n",
-        argv[0]);
-
     for(i=1; i<argc; ++i) {
         arg=argv[i];
         if(arg[0]=='-') {
@@ -113,7 +109,14 @@ main(int argc, char *argv[]) {
             case 'c':
                 haveCopyright= arg[2]=='+';
                 break;
+            case 'h':
+                usage(argv[0]);
+                exit(0);
+                break;
             default:
+                fprintf(stderr, "gencnval: invalid option\n");
+                usage(argv[0]);
+                exit(-1);
                 break;
             }
         }
@@ -191,6 +194,15 @@ main(int argc, char *argv[]) {
     }
 
     return 0;
+}
+
+static void
+usage(char *progname) {
+    fprintf(stderr,
+        "usage: %s [-c[+|-]]\n"
+        "\tread convrtrs.txt and create " DATA_NAME "." DATA_TYPE "\n"
+        "\t\t-c[+|-]  do (not) include a copyright notice\n",
+        progname);
 }
 
 static void
