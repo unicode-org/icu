@@ -338,6 +338,7 @@ public final class ArabicShaping {
     /**
      * @stable ICU 2.0
      */
+     ///CLOVER:OFF
     public int hashCode() {
         return options;
     }
@@ -379,6 +380,7 @@ public final class ArabicShaping {
 
         return buf.toString();
     }
+    ///CLOVER:ON
 
     //
     // ported api
