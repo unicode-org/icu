@@ -30,6 +30,7 @@
 #include "unicode/parseerr.h"
 
 #define MAX_TOKEN_LEN 16
+#define RULE_BUFFER_LEN 8192
 
 typedef int tst_strcoll(void *collator, const int object,
                         const UChar *source, const int sLen,
@@ -1364,8 +1365,8 @@ static void genericLocaleStarter(const char *locale, const char *s[], uint32_t s
 
 static void genericRulesStarterWithOptions(const char *rules, const char *s[], uint32_t size, const UColAttribute *attrs, const UColAttributeValue *values, uint32_t attsize) {
   UErrorCode status = U_ZERO_ERROR;
-  UChar rlz[2048] = { 0 };
-  uint32_t rlen = u_unescape(rules, rlz, 2048);
+  UChar rlz[RULE_BUFFER_LEN] = { 0 };
+  uint32_t rlen = u_unescape(rules, rlz, RULE_BUFFER_LEN);
   uint32_t i;
 
   UCollator *coll = ucol_openRules(rlz, rlen, UCOL_DEFAULT, UCOL_DEFAULT,NULL, &status);
@@ -1387,19 +1388,19 @@ static void genericRulesStarterWithOptions(const char *rules, const char *s[], u
 
 static void genericRulesStarter(const char *rules, const char *s[], uint32_t size) {
   UErrorCode status = U_ZERO_ERROR;
-  UChar rlz[2048] = { 0 };
-  uint32_t rlen = u_unescape(rules, rlz, 2048);
+  UChar rlz[RULE_BUFFER_LEN] = { 0 };
+  uint32_t rlen = u_unescape(rules, rlz, RULE_BUFFER_LEN);
 
-  UCollator *coll = ucol_openRules(rlz, rlen, UCOL_DEFAULT, UCOL_DEFAULT,NULL, &status);
-
+  UCollator *coll = NULL;
+  coll = ucol_openRules(rlz, rlen, UCOL_DEFAULT, UCOL_DEFAULT,NULL, &status);
   log_verbose("Rules starter for %s\n", rules);
 
   if(U_SUCCESS(status)) {
     genericOrderingTest(coll, s, size);
+    ucol_close(coll);
   } else {
     log_err("Unable to open collator with rules %s\n", rules);
   }
-  ucol_close(coll);
 }
 
 const static char chTest[][20] = {
@@ -2936,12 +2937,310 @@ static void TestNewJapanese() {
         /*UCollator *coll = ucol_open("ja_JP_JIS", &status);  */
   /*"&\u304b\u3099<<<\u304c|\u309d=\u304b|\u309d\u3099=\u304c|\u309d\u3099"*/
 
-  static const char *rules = "&z <<< z|a";
+  static const char *rules = 		
+    		"&\\u30A1=\\u3041"
+		"&\\u30A2=\\u3042"
+		"&\\u30A3=\\u3043"
+		"&\\u30A4=\\u3044"
+		"&\\u30A5=\\u3045"
+		"&\\u30A6=\\u3046"
+		"&\\u30A7=\\u3047"
+		"&\\u30A8=\\u3048"
+		"&\\u30A9=\\u3049"
+		"&\\u30AA=\\u304A"
+		"&\\u30AB=\\u304B"
+		"&\\u30AB\\u3099=\\u304B\\u3099"
+		"&\\u30AD=\\u304D"
+		"&\\u30AD\\u3099=\\u304D\\u3099"
+		"&\\u30AF=\\u304F"
+		"&\\u30AF\\u3099=\\u304F\\u3099"
+		"&\\u30B1=\\u3051"
+		"&\\u30B1\\u3099=\\u3051\\u3099"
+		"&\\u30B3=\\u3053"
+		"&\\u30B3\\u3099=\\u3053\\u3099"
+		"&\\u30B5=\\u3055"
+		"&\\u30B5\\u3099=\\u3055\\u3099"
+		"&\\u30B7=\\u3057"
+		"&\\u30B7\\u3099=\\u3057\\u3099"
+		"&\\u30B9=\\u3059"
+		"&\\u30B9\\u3099=\\u3059\\u3099"
+		"&\\u30BB=\\u305B"
+		"&\\u30BB\\u3099=\\u305B\\u3099"
+		"&\\u30BD=\\u305D"
+		"&\\u30BD\\u3099=\\u305D\\u3099"
+		"&\\u30BF=\\u305F"
+		"&\\u30BF\\u3099=\\u305F\\u3099"
+		"&\\u30C1=\\u3061"
+		"&\\u30C1\\u3099=\\u3061\\u3099"
+		"&\\u30C3=\\u3063"
+		"&\\u30C4=\\u3064"
+		"&\\u30C4\\u3099=\\u3064\\u3099"
+		"&\\u30C6=\\u3066"
+		"&\\u30C6\\u3099=\\u3066\\u3099"
+		"&\\u30C8=\\u3068"
+		"&\\u30C8\\u3099=\\u3068\\u3099"
+		"&\\u30CA=\\u306A"
+		"&\\u30CB=\\u306B"
+		"&\\u30CC=\\u306C"
+		"&\\u30CD=\\u306D"
+		"&\\u30CE=\\u306E"
+		"&\\u30CF=\\u306F"
+		"&\\u30CF\\u3099=\\u306F\\u3099"
+		"&\\u30CF\\u309A=\\u306F\\u309A"
+		"&\\u30D2=\\u3072"
+		"&\\u30D2\\u3099=\\u3072\\u3099"
+		"&\\u30D2\\u309A=\\u3072\\u309A"
+		"&\\u30D5=\\u3075"
+		"&\\u30D5\\u3099=\\u3075\\u3099"
+		"&\\u30D5\\u309A=\\u3075\\u309A"
+		"&\\u30D8=\\u3078"
+		"&\\u30D8\\u3099=\\u3078\\u3099"
+		"&\\u30D8\\u309A=\\u3078\\u309A"
+		"&\\u30DB=\\u307B"
+		"&\\u30DB\\u3099=\\u307B\\u3099"
+		"&\\u30DB\\u309A=\\u307B\\u309A"
+		"&\\u30DE=\\u307E"
+		"&\\u30DF=\\u307F"
+		"&\\u30E0=\\u3080"
+		"&\\u30E1=\\u3081"
+		"&\\u30E2=\\u3082"
+		"&\\u30E3=\\u3083"
+		"&\\u30E4=\\u3084"
+		"&\\u30E5=\\u3085"
+		"&\\u30E6=\\u3086"
+		"&\\u30E7=\\u3087"
+		"&\\u30E8=\\u3088"
+		"&\\u30E9=\\u3089"
+		"&\\u30EA=\\u308A"
+		"&\\u30EB=\\u308B"
+		"&\\u30EC=\\u308C"
+		"&\\u30ED=\\u308D"
+		"&\\u30EE=\\u308E"
+		"&\\u30EF=\\u308F"
+		"&\\u30F0=\\u3090"
+		"&\\u30F1=\\u3091"
+		"&\\u30F2=\\u3092"
+		"&\\u30F3=\\u3093"
+		"&\\u30A6\\u3099=\\u3046\\u3099"
+        "&[before 3]\\u30a2"
+        "<<<\\u30a1|\\u30fc=\\u30a2|\\u30fc=\\u30ab|\\u30fc=\\u30f5|\\u30fc"
+          "=\\u30b5|\\u30fc=\\u30bf|\\u30fc=\\u30ca|\\u30fc=\\u30cf|\\u30fc"
+          "=\\u30de|\\u30fc=\\u30e3|\\u30fc=\\u30e4|\\u30fc=\\u30e9|\\u30fc"
+          "=\\u30ef|\\u30fc=\\u30ee|\\u30fc"
+          "=\\u30ab\\u3099|\\u30fc=\\u30b5\\u3099|\\u30fc=\\u30bf\\u3099|\\u30fc=\\u30cf\\u3099|\\u30fc"
+          "=\\u30cf\\u309a|\\u30fc"
+        "&[before 3]\\u30a4"
+        "<<<\\u30a3|\\u30fc=\\u30a4|\\u30fc=\\u30ad|\\u30fc=\\u30b7|\\u30fc"
+          "=\\u30c1|\\u30fc=\\u30cb|\\u30fc=\\u30d2|\\u30fc=\\u30df|\\u30fc"
+          "=\\u30ea|\\u30fc=\\u30f0|\\u30fc"
+          "=\\u30ad\\u3099|\\u30fc=\\u30b7\\u3099|\\u30fc=\\u30c1\\u3099|\\u30fc"
+          "=\\u30d2\\u3099|\\u30fc=\\u30f0\\u3099\\u30fc"
+          "=\\u30d2\\u309a\\u30fc"
+        "&[before 3]\\u30a6"
+        "<<<\\u30a5|\\u30fc=\\u30a6|\\u30fc=\\u30af|\\u30fc=\\u30b9|\\u30fc"
+          "=\\u30c4|\\u30fc=\\u30c3|\\u30fc=\\u30cc|\\u30fc=\\u30d5|\\u30fc"
+          "=\\u30e0|\\u30fc=\\u30e5|\\u30fc=\\u30e6|\\u30fc=\\u30eb|\\u30fc"
+          "=\\u30af\\u3099|\\u30fc=\\u30b9\\u3099|\\u30fc=\\u30c4\\u3099|\\u30fc"
+          "=\\u30d5\\u3099|\\u30fc=\\u30a6\\u3099|\\u30fc"
+          "=\\u30d5\\u309a\\u30fc"
+        "&[before 3]\\u30a8"
+        "<<<\\u30a7|\\u30fc=\\u30a8|\\u30fc=\\u30b1|\\u30fc=\\u30f6|\\u30fc"
+          "=\\u30bb|\\u30fc=\\u30c6|\\u30fc=\\u30cd|\\u30fc=\\u30d8|\\u30fc"
+          "=\\u30e1|\\u30fc=\\u30ec|\\u30fc=\\u30f1|\\u30fc"
+          "=\\u30b1\\u3099|\\u30fc=\\u30bb\\u3099|\\u30fc\\u30c6\\u3099|\\u30fc"
+          "\\u30d8\\u3099|\\u30fc=\\u30f1\\u3099|\\u30fc"
+          "=\\u30d8\\u309a|\\u30fc"
+        "&[before 3]\\u30aa"
+        "<<<\\u30a9|\\u30fc=\\u30aa|\\u30fc=\\u30b3|\\u30fc=\\u30bd|\\u30fc"
+          "=\\u30c8|\\u30fc=\\u30ce|\\u30fc=\\u30db|\\u30fc=\\u30e2|\\u30fc"
+          "=\\u30e7|\\u30fc=\\u30e8|\\u30fc=\\u30ed|\\u30fc=\\u30f2|\\u30fc"
+          "=\\u30b3\\u3099|\\u30fc=\\u30bd\\u3099|\\u30fc=\\u30c8\\u3099|\\u30fc"
+          "=\\u30db\\u3099|\\u30fc=\\u30f2\\u3099|\\u30fc"
+          "=\\u30db\\u309a|\\u30aa=\\u30db\\u309a|\\u30fc"
+		"&\\u3041<<<\\u3041|\\u309d"
+		"&[before 3]\\u3042<<<\\u3042|\\u309d"
+		"&\\u3043<<<\\u3043|\\u309d"
+		"&[before 3]\\u3044<<<\\u3044|\\u309d"
+		"&\\u3045<<<\\u3045|\\u309d"
+		"&[before 3]\\u3046<<<\\u3046|\\u309d"
+		"&\\u3047<<<\\u3047|\\u309d"
+		"&[before 3]\\u3048<<<\\u3048|\\u309d"
+		"&\\u3049<<<\\u3049|\\u309d"
+		"&[before 3]\\u304a<<<\\u304a|\\u309d"
+		"&[before 3]\\u304b<<<\\u304b|\\u309d"
+		"&[before 3]\\u304b\\u3099<<<\\u304b\\u3099|\\u309d=\\u304b|\\u309e=\\u304b\\u3099|\\u309e"
+		"&[before 3]\\u304d<<<\\u304d|\\u309d"
+		"&[before 3]\\u304d\\u3099<<<\\u304d\\u3099|\\u309d=\\u304d|\\u309e=\\u304d\\u3099|\\u309e"
+		"&[before 3]\\u304f<<<\\u304f|\\u309d"
+		"&[before 3]\\u304f\\u3099<<<\\u304f\\u3099|\\u309d=\\u304f|\\u309e=\\u304f\\u3099|\\u309e"
+		"&[before 3]\\u3051<<<\\u3051|\\u309d"
+		"&[before 3]\\u3051\\u3099<<<\\u3051\\u3099|\\u309d=\\u3051|\\u309e=\\u3051\\u3099|\\u309e"
+		"&[before 3]\\u3053<<<\\u3053|\\u309d"
+		"&[before 3]\\u3053\\u3099<<<\\u3053\\u3099|\\u309d=\\u3053|\\u309e=\\u3053\\u3099|\\u309e"
+		"&[before 3]\\u3055<<<\\u3055|\\u309d"
+		"&[before 3]\\u3055\\u3099<<<\\u3055\\u3099|\\u309d=\\u3055|\\u309e=\\u3055\\u3099|\\u309e"
+		"&[before 3]\\u3057<<<\\u3057|\\u309d"
+		"&[before 3]\\u3057\\u3099<<<\\u3057\\u3099|\\u309d=\\u3057|\\u309e=\\u3057\\u3099|\\u309e"
+		"&[before 3]\\u3059<<<\\u3059|\\u309d"
+		"&[before 3]\\u3059\\u3099<<<\\u3059\\u3099|\\u309d=\\u3059|\\u309e=\\u3059\\u3099|\\u309e"
+		"&[before 3]\\u305b<<<\\u305b|\\u309d"
+		"&[before 3]\\u305b\\u3099<<<\\u305b\\u3099|\\u309d=\\u305b|\\u309e=\\u305b\\u3099|\\u309e"
+		"&[before 3]\\u305d<<<\\u305d|\\u309d"
+		"&[before 3]\\u305d\\u3099<<<\\u305d\\u3099|\\u309d=\\u305d|\\u309e=\\u305d\\u3099|\\u309e"
+		"&[before 3]\\u305f<<<\\u305f|\\u309d"
+		"&[before 3]\\u305f\\u3099<<<\\u305f\\u3099|\\u309d=\\u305f|\\u309e=\\u305f\\u3099|\\u309e"
+		"&[before 3]\\u3061<<<\\u3061|\\u309d"
+		"&[before 3]\\u3061\\u3099<<<\\u3061\\u3099|\\u309d=\\u3061|\\u309e=\\u3061\\u3099|\\u309e"
+		"&\\u3063<<<\\u3063|\\u309d"
+		"&[before 3]\\u3064<<<\\u3064|\\u309d"
+		"&[before 3]\\u3064\\u3099<<<\\u3064\\u3099|\\u309d=\\u3064|\\u309e=\\u3064\\u3099|\\u309e"
+		"&[before 3]\\u3066<<<\\u3066|\\u309d"
+		"&[before 3]\\u3066\\u3099<<<\\u3066\\u3099|\\u309d=\\u3066|\\u309e=\\u3066\\u3099|\\u309e"
+		"&[before 3]\\u3068<<<\\u3068|\\u309d"
+		"&[before 3]\\u3068\\u3099<<<\\u3068\\u3099|\\u309d=\\u3068|\\u309e=\\u3068\\u3099|\\u309e"
+		"&[before 3]\\u306a<<<\\u306a|\\u309d"
+		"&[before 3]\\u306b<<<\\u306b|\\u309d"
+		"&[before 3]\\u306c<<<\\u306c|\\u309d"
+		"&[before 3]\\u306d<<<\\u306d|\\u309d"
+		"&[before 3]\\u306e<<<\\u306e|\\u309d"
+		"&[before 3]\\u306f<<<\\u306f|\\u309d"
+		"&[before 3]\\u306f\\u3099<<<\\u306f\\u3099|\\u309d=\\u306f|\\u309e=\\u306f\\u309a|\\u309e=\\u306f\\u3099|\\u309e"
+		"&[before 3]\\u306f\\u309a<<<\\u306f\\u309a|\\u309d"
+		"&[before 3]\\u3072<<<\\u3072|\\u309d"
+		"&[before 3]\\u3072\\u3099<<<\\u3072\\u3099|\\u309d=\\u3072|\\u309e=\\u3072\\u309a|\\u309e=\\u3072\\u3099|\\u309e"
+		"&[before 3]\\u3072\\u309a<<<\\u3072\\u309a|\\u309d"
+		"&[before 3]\\u3075<<<\\u3075|\\u309d"
+		"&[before 3]\\u3075\\u3099<<<\\u3075\\u3099|\\u309d=\\u3075|\\u309e=\\u3075\\u309a|\\u309e=\\u3075\\u3099|\\u309e"
+		"&[before 3]\\u3075\\u309a<<<\\u3075\\u309a|\\u309d"
+		"&[before 3]\\u3078<<<\\u3078|\\u309d"
+		"&[before 3]\\u3078\\u3099<<<\\u3078\\u3099|\\u309d=\\u3078|\\u309e=\\u3078\\u309a|\\u309e=\\u3078\\u3099|\\u309e"
+		"&[before 3]\\u3078\\u309a<<<\\u3078\\u309a|\\u309d"
+		"&[before 3]\\u307b<<<\\u307b|\\u309d"
+		"&[before 3]\\u307b\\u3099<<<\\u307b\\u3099|\\u309d=\\u307b|\\u309e=\\u307b\\u309a|\\u309e=\\u307b\\u3099|\\u309e"
+		"&[before 3]\\u307b\\u309a<<<\\u307b\\u309a|\\u309d"
+		"&[before 3]\\u307e<<<\\u307e|\\u309d"
+		"&[before 3]\\u307f<<<\\u307f|\\u309d"
+		"&[before 3]\\u3080<<<\\u3080|\\u309d"
+		"&[before 3]\\u3081<<<\\u3081|\\u309d"
+		"&[before 3]\\u3082<<<\\u3082|\\u309d"
+		"&\\u3083<<<\\u3083|\\u309d"
+		"&[before 3]\\u3084<<<\\u3084|\\u309d"
+		"&\\u3085<<<\\u3085|\\u309d"
+		"&[before 3]\\u3086<<<\\u3086|\\u309d"
+		"&\\u3087<<<\\u3087|\\u309d"
+		"&[before 3]\\u3088<<<\\u3088|\\u309d"
+		"&[before 3]\\u3089<<<\\u3089|\\u309d"
+		"&[before 3]\\u308a<<<\\u308a|\\u309d"
+		"&[before 3]\\u308b<<<\\u308b|\\u309d"
+		"&[before 3]\\u308c<<<\\u308c|\\u309d"
+		"&[before 3]\\u308d<<<\\u308d|\\u309d"
+		"&\\u308e<<<\\u308e|\\u309d"
+		"&[before 3]\\u308f<<<\\u308f|\\u309d"
+		"&[before 3]\\u3090<<<\\u3090|\\u309d"
+		"&[before 3]\\u3091<<<\\u3091|\\u309d"
+		"&[before 3]\\u3092<<<\\u3092|\\u309d"
+		"&[before 3]\\u3093<<<\\u3093|\\u309d"
+		"&[before 3]\\u3046\\u3099<<<\\u3046\\u3099|\\u309d=\\u3046|\\u309e=\\u3046\\u3099|\\u309e"
+		"&\\u30a1<<<\\u30a1|\\u30fd"
+		"&[before 3]\\u30a2<<<\\u30a2|\\u30fd"
+		"&\\u30a3<<<\\u30a3|\\u30fd"
+		"&[before 3]\\u30a4<<<\\u30a4|\\u30fd"
+		"&\\u30a5<<<\\u30a5|\\u30fd"
+		"&[before 3]\\u30a6<<<\\u30a6|\\u30fd"
+		"&\\u30a7<<<\\u30a7|\\u30fd"
+		"&[before 3]\\u30a8<<<\\u30a8|\\u30fd"
+		"&\\u30a9<<<\\u30a9|\\u30fd"
+		"&[before 3]\\u30aa<<<\\u30aa|\\u30fd"
+		"&[before 3]\\u30ab<<<\\u30ab|\\u30fd"
+		"&[before 3]\\u30ab\\u3099<<<\\u30ab\\u3099|\\u30fd=\\u30ab|\\u30fe=\\u30ab\\u3099|\\u30fe"
+		"&[before 3]\\u30ad<<<\\u30ad|\\u30fd"
+		"&[before 3]\\u30ad\\u3099<<<\\u30ad\\u3099|\\u30fd=\\u30ad|\\u30fe=\\u30ad\\u3099|\\u30fe"
+		"&[before 3]\\u30af<<<\\u30af|\\u30fd"
+		"&[before 3]\\u30af\\u3099<<<\\u30af\\u3099|\\u30fd=\\u30af|\\u30fe=\\u30af\\u3099|\\u30fe"
+		"&[before 3]\\u30b1<<<\\u30b1|\\u30fd"
+		"&[before 3]\\u30b1\\u3099<<<\\u30b1\\u3099|\\u30fd=\\u30b1|\\u30fe=\\u30b1\\u3099|\\u30fe"
+		"&[before 3]\\u30b3<<<\\u30b3|\\u30fd"
+		"&[before 3]\\u30b3\\u3099<<<\\u30b3\\u3099|\\u30fd=\\u30b3|\\u30fe=\\u30b3\\u3099|\\u30fe"
+		"&[before 3]\\u30b5<<<\\u30b5|\\u30fd"
+		"&[before 3]\\u30b5\\u3099<<<\\u30b5\\u3099|\\u30fd=\\u30b5|\\u30fe=\\u30b5\\u3099|\\u30fe"
+		"&[before 3]\\u30b7<<<\\u30b7|\\u30fd"
+		"&[before 3]\\u30b7\\u3099<<<\\u30b7\\u3099|\\u30fd=\\u30b7|\\u30fe=\\u30b7\\u3099|\\u30fe"
+		"&[before 3]\\u30b9<<<\\u30b9|\\u30fd"
+		"&[before 3]\\u30b9\\u3099<<<\\u30b9\\u3099|\\u30fd=\\u30b9|\\u30fe=\\u30b9\\u3099|\\u30fe"
+		"&[before 3]\\u30bb<<<\\u30bb|\\u30fd"
+		"&[before 3]\\u30bb\\u3099<<<\\u30bb\\u3099|\\u30fd=\\u30bb|\\u30fe=\\u30bb\\u3099|\\u30fe"
+		"&[before 3]\\u30bd<<<\\u30bd|\\u30fd"
+		"&[before 3]\\u30bd\\u3099<<<\\u30bd\\u3099|\\u30fd=\\u30bd|\\u30fe=\\u30bd\\u3099|\\u30fe"
+		"&[before 3]\\u30bf<<<\\u30bf|\\u30fd"
+		"&[before 3]\\u30bf\\u3099<<<\\u30bf\\u3099|\\u30fd=\\u30bf|\\u30fe=\\u30bf\\u3099|\\u30fe"
+		"&[before 3]\\u30c1<<<\\u30c1|\\u30fd"
+		"&[before 3]\\u30c1\\u3099<<<\\u30c1\\u3099|\\u30fd=\\u30c1|\\u30fe=\\u30c1\\u3099|\\u30fe"
+		"&\\u30c3<<<\\u30c3|\\u30fd"
+		"&[before 3]\\u30c4<<<\\u30c4|\\u30fd"
+		"&[before 3]\\u30c4\\u3099<<<\\u30c4\\u3099|\\u30fd=\\u30c4|\\u30fe=\\u30c4\\u3099|\\u30fe"
+		"&[before 3]\\u30c6<<<\\u30c6|\\u30fd"
+		"&[before 3]\\u30c6\\u3099<<<\\u30c6\\u3099|\\u30fd=\\u30c6|\\u30fe=\\u30c6\\u3099|\\u30fe"
+		"&[before 3]\\u30c8<<<\\u30c8|\\u30fd"
+		"&[before 3]\\u30c8\\u3099<<<\\u30c8\\u3099|\\u30fd=\\u30c8|\\u30fe=\\u30c8\\u3099|\\u30fe"
+		"&[before 3]\\u30ca<<<\\u30ca|\\u30fd"
+		"&[before 3]\\u30cb<<<\\u30cb|\\u30fd"
+		"&[before 3]\\u30cc<<<\\u30cc|\\u30fd"
+		"&[before 3]\\u30cd<<<\\u30cd|\\u30fd"
+		"&[before 3]\\u30ce<<<\\u30ce|\\u30fd"
+		"&[before 3]\\u30cf<<<\\u30cf|\\u30fd"
+		"&[before 3]\\u30cf\\u3099<<<\\u30cf\\u3099|\\u30fd=\\u30cf|\\u30fe=\\u30cf\\u309a|\\u30fe=\\u30cf\\u3099|\\u30fe"
+		"&[before 3]\\u30cf\\u309a<<<\\u30cf\\u309a|\\u30fd"
+		"&[before 3]\\u30d2<<<\\u30d2|\\u30fd"
+		"&[before 3]\\u30d2\\u3099<<<\\u30d2\\u3099|\\u30fd=\\u30d2|\\u30fe=\\u30d2\\u309a|\\u30fe=\\u30d2\\u3099|\\u30fe"
+		"&[before 3]\\u30d2\\u309a<<<\\u30d2\\u309a|\\u30fd"
+		"&[before 3]\\u30d5<<<\\u30d5|\\u30fd"
+		"&[before 3]\\u30d5\\u3099<<<\\u30d5\\u3099|\\u30fd=\\u30d5|\\u30fe=\\u30d5\\u309a|\\u30fe=\\u30d5\\u3099|\\u30fe"
+		"&[before 3]\\u30d5\\u309a<<<\\u30d5\\u309a|\\u30fd"
+		"&[before 3]\\u30d8<<<\\u30d8|\\u30fd"
+		"&[before 3]\\u30d8\\u3099<<<\\u30d8\\u3099|\\u30fd=\\u30d8|\\u30fe=\\u30d8\\u309a|\\u30fe=\\u30d8\\u3099|\\u30fe"
+		"&[before 3]\\u30d8\\u309a<<<\\u30d8\\u309a|\\u30fd"
+		"&[before 3]\\u30db<<<\\u30db|\\u30fd"
+		"&[before 3]\\u30db\\u3099<<<\\u30db\\u3099|\\u30fd=\\u30db|\\u30fe=\\u30db\\u309a|\\u30fe=\\u30db\\u3099|\\u30fe"
+		"&[before 3]\\u30db\\u309a<<<\\u30db\\u309a|\\u30fd"
+		"&[before 3]\\u30de<<<\\u30de|\\u30fd"
+		"&[before 3]\\u30df<<<\\u30df|\\u30fd"
+		"&[before 3]\\u30e0<<<\\u30e0|\\u30fd"
+		"&[before 3]\\u30e1<<<\\u30e1|\\u30fd"
+		"&[before 3]\\u30e2<<<\\u30e2|\\u30fd"
+		"&\\u30e3<<<\\u30e3|\\u30fd"
+		"&[before 3]\\u30e4<<<\\u30e4|\\u30fd"
+		"&\\u30e5<<<\\u30e5|\\u30fd"
+		"&[before 3]\\u30e6<<<\\u30e6|\\u30fd"
+		"&\\u30e7<<<\\u30e7|\\u30fd"
+		"&[before 3]\\u30e8<<<\\u30e8|\\u30fd"
+		"&[before 3]\\u30e9<<<\\u30e9|\\u30fd"
+		"&[before 3]\\u30ea<<<\\u30ea|\\u30fd"
+		"&[before 3]\\u30eb<<<\\u30eb|\\u30fd"
+		"&[before 3]\\u30ec<<<\\u30ec|\\u30fd"
+		"&[before 3]\\u30ed<<<\\u30ed|\\u30fd"
+		"&\\u30ee<<<\\u30ee|\\u30fd"
+		"&[before 3]\\u30ef<<<\\u30ef|\\u30fd"
+		"&[before 3]\\u30f0<<<\\u30f0|\\u30fd"
+		"&[before 3]\\u30f1<<<\\u30f1|\\u30fd"
+		"&[before 3]\\u30f2<<<\\u30f2|\\u30fd"
+		"&[before 3]\\u30f3<<<\\u30f3|\\u30fd"
+		"&[before 3]\\u30a6\\u3099<<<\\u30a6\\u3099|\\u30fd=\\u30a6|\\u30fe=\\u30a6\\u3099|\\u30fe"
+		"&\\u30f5<<<\\u30f5|\\u30fd"
+		"&\\u30f6<<<\\u30f6|\\u30fd"
+		"&[before 3]\\u30ef\\u3099<<<\\u30ef\\u3099|\\u30fd=\\u30ef|\\u30fe=\\u30ef\\u3099|\\u30fe"
+		"&[before 3]\\u30f0\\u3099<<<\\u30f0\\u3099|\\u30fd=\\u30f0|\\u30fe=\\u30f0\\u3099|\\u30fe"
+		"&[before 3]\\u30f1\\u3099<<<\\u30f1\\u3099|\\u30fd=\\u30f1|\\u30fe=\\u30f1\\u3099|\\u30fe"
+		"&[before 3]\\u30f2\\u3099<<<\\u30f2\\u3099|\\u30fd=\\u30f2|\\u30fe=\\u30f2\\u3099|\\u30fe";
+
+        /*"&z <<< z|a";*/
     /* this should yield in zz<<< za */
-    static const char *testaz[] = { "zz", "za" };
+    static const char *testaz[] = {       "\\u30d7\\u30fd",
+      "\\u3077\\u3075",
+/*"zz", "za"*/ };
 
   static const char *test[] = {
-      "\\u30b7\\u30e3\\u30fc\\u30ec",
+/*
+    "\\u30b7\\u30e3\\u30fc\\u30ec",
       "\\u30b7\\u30e3\\u30a4",
       "\\u30b7\\u30e4\\u30a3",
       "\\u30b7\\u30e3\\u30ec",
@@ -3017,19 +3316,24 @@ static void TestNewJapanese() {
       "\\u3077\\u309d",
       "\\u30d7\\u30fd",
       "\\u3077\\u3075",
+*/
+
+"\\u3042\\u30fc",
+"\\u3042\\u3041",
+"\\u3042\\u309d",
+"\\u3042\\u3042",
+
   };
 
   uint32_t i = 0;
   UCollationElements *it = NULL;
   uint32_t CE;
-
   genericRulesStarter(rules, testaz, 2);
 
   genericLocaleStarter("ja_JP_JIS", test, sizeof(test)/sizeof(test[0]));
 
 
-
-  uStringLen = u_unescape(rules, string, 256);
+  /*uStringLen = u_unescape(rules, string, 256);*/
   coll = ucol_open("ja_JP_JIS", &status);
   it = ucol_openElements(coll, string, 0, &status);
 
@@ -3051,7 +3355,7 @@ static void TestNewJapanese() {
 
 void addMiscCollTest(TestNode** root)
 {
-    /*addTest(root, &TestNewJapanese, "tscoll/cmsccoll/TestNewJapanese");   */
+    /*addTest(root, &TestNewJapanese, "tscoll/cmsccoll/TestNewJapanese"); */
     /*addTest(root, &TestLimitations, "tscoll/cmsccoll/TestLimitations");*/
     addTest(root, &TestNonChars, "tscoll/cmsccoll/TestNonChars");
     addTest(root, &TestExtremeCompression, "tscoll/cmsccoll/TestExtremeCompression");
