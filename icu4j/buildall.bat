@@ -8,7 +8,7 @@ REM math packages
 javac -d classes -classpath classes; src/com/ibm/math/*.java 
 
 REM text and util packages, they are tightly dependent on each other
-c:\work\jdk1.3\bin\javac -d classes -classpath classes src/com/ibm/text/*.java src/com/ibm/text/resources/*.java src/com/ibm/util/*.java src/com/ibm/util/resources/*.java 
+javac -d classes -classpath classes src/com/ibm/text/*.java src/com/ibm/text/resources/*.java src/com/ibm/util/*.java src/com/ibm/util/resources/*.java 
 
 REM textlayout packages 
 javac -d classes -classpath classes src/com/ibm/textlayout/*.java src/com/ibm/textlayout/attributes/*.java 
