@@ -1030,6 +1030,17 @@ UnicodeString::handleReplaceBetween(UTextOffset start,
     replaceBetween(start, limit, text);
 }
 
+/**
+ * Replaceable API
+ */
+void 
+UnicodeString::copy(int32_t start, int32_t limit, int32_t dest) {
+    UChar* text = new UChar[limit - start];
+    extractBetween(start, limit, text, 0);
+    insert(dest, text, 0, limit - start);    
+    delete[] text;
+}
+
 UnicodeString&
 UnicodeString::doReverse(UTextOffset start,
              int32_t length)
