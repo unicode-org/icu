@@ -1,7 +1,6 @@
-﻿
 // *******************************************************************************
 // *
-// *   Copyright (C) 1997-2000, International Business Machines
+// *   Copyright (C) 1997-2001, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
 // *******************************************************************************
@@ -66,9 +65,9 @@ kl{
             "#",
             "-",
             "E",
-            "‰",
-            "∞",
-            "�",
+            "\u2030",
+            "\u221e",
+            "\ufffd",
     }
 
             // /**************** Info Below is needed ****************/
