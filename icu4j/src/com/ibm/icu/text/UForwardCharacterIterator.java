@@ -53,7 +53,7 @@ package com.ibm.icu.text;
  *  }
  * </code>
  * </p>
- * @draft ICU 2.4
+ * @stable ICU 2.4
  *
  */
 
@@ -61,7 +61,7 @@ public interface UForwardCharacterIterator {
       
     /**
      * Indicator that we have reached the ends of the UTF16 text.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     public static final int DONE = -1;
     /**
@@ -71,7 +71,7 @@ public interface UForwardCharacterIterator {
      * of the text.
      * @return the next UTF16 code unit, or DONE if the index is at the limit
      *         of the text.
-     * @draft ICU 2.4  
+     * @stable ICU 2.4  
      */
     public int next();
 
@@ -84,7 +84,7 @@ public interface UForwardCharacterIterator {
      * is returned.
      * @return the next codepoint in text, or DONE if the index is at
      *         the limit of the text.
-     * @draft ICU 2.4  
+     * @stable ICU 2.4  
      */
     public int nextCodePoint();
 

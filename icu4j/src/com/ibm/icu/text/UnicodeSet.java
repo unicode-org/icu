@@ -2760,7 +2760,7 @@ public class UnicodeSet extends UnicodeFilter {
      *
      * @return a reference to this set
      *
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     public UnicodeSet applyIntPropertyValue(int prop, int value) {
         if (prop == UProperty.GENERAL_CATEGORY_MASK) {
@@ -2796,7 +2796,7 @@ public class UnicodeSet extends UnicodeFilter {
      *
      * @return a reference to this set
      *
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     public UnicodeSet applyPropertyAlias(String propertyAlias,
                                          String valueAlias) {

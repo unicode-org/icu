@@ -33,14 +33,14 @@ import com.ibm.icu.impl.Utility;
  *<br>Note: the code is intended for use with small strings, and is not suitable for larger ones,
  * since it has not been optimized for that situation.
  * @author M. Davis
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 
 public final class CanonicalIterator {
     /**
      * Construct a CanonicalIterator object
      * @param source string to get results for
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     public CanonicalIterator(String source) {
         setSource(source);
@@ -49,7 +49,7 @@ public final class CanonicalIterator {
     /**
      * Gets the NFD form of the current source we are iterating over.
      * @return gets the source: NOTE: it is the NFD form of the source originally passed in
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     public String getSource() {
       return source;
@@ -57,7 +57,7 @@ public final class CanonicalIterator {
 
     /**
      * Resets the iterator so that one can start again from the beginning.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     public void reset() {
         done = false;
@@ -71,7 +71,7 @@ public final class CanonicalIterator {
      * <br><b>Warning: The strings are not guaranteed to be in any particular order.</b>
      * @return the next string that is canonically equivalent. The value null is returned when
      * the iteration is done.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     public String next() {
         if (done) return null;
@@ -102,7 +102,7 @@ public final class CanonicalIterator {
      * Set a new source for this iterator. Allows object reuse.
      * @param newSource the source string to iterate against. This allows the same iterator to be used
      * while changing the source string, saving object creation.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     public void setSource(String newSource) {
         source = Normalizer.normalize(newSource, Normalizer.NFD);

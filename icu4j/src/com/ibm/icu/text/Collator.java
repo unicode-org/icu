@@ -490,7 +490,7 @@ public abstract class Collator implements Comparator, Cloneable
      * @return the list of locales in which collators are installed.
      * This list includes any that have been registered, in addition to
      * those that are installed with ICU4J.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     public static Locale[] getAvailableLocales() {
         // TODO make this wrap getAvailableULocales later
@@ -591,7 +591,7 @@ public abstract class Collator implements Comparator, Cloneable
                                                         ULocale locID,
                                                         boolean isAvailable[]) {
         return ICUResourceBundle.getFunctionalEquivalent(
-                   BASE, RESOURCE, keyword, locID, isAvailable);
+                                                         BASE, RESOURCE, keyword, locID, isAvailable);
     }
     
     /**
@@ -724,7 +724,7 @@ public abstract class Collator implements Comparator, Cloneable
      * @return a pointer to a UnicodeSet object containing all the
      *         code points and sequences that may sort differently than
      *         in the UCA.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     public UnicodeSet getTailoredSet()
     {
@@ -852,23 +852,23 @@ public abstract class Collator implements Comparator, Cloneable
      */
     public abstract void setVariableTop(int varTop);
 
-        /** Get the version of this collator object.
-         *  @return the version object associated with this collator
-         * @draft ICU 2.8
-         */
-        public abstract VersionInfo getVersion();
+    /** Get the version of this collator object.
+     *  @return the version object associated with this collator
+     * @draft ICU 2.8
+     */
+    public abstract VersionInfo getVersion();
         
-        /** Get the UCA version of this collator object.
-         *  @return the version object associated with this collator
-         * @draft ICU 2.8
-         */
-        public abstract VersionInfo getUCAVersion();
+    /** Get the UCA version of this collator object.
+     *  @return the version object associated with this collator
+     * @draft ICU 2.8
+     */
+    public abstract VersionInfo getUCAVersion();
         
-        // protected constructor -------------------------------------------------
+    // protected constructor -------------------------------------------------
 
     /**
      * Empty default constructor to make javadocs happy
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     protected Collator()
     {

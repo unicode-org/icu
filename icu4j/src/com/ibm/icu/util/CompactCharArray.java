@@ -27,20 +27,20 @@ import com.ibm.icu.impl.Utility;
  * array contains the indicies of Unicode characters to the value array.
  * @see                CompactByteArray
  * @author             Helena Shih
- * @draft ICU 2.4
+ * @internal
  */
 public final class CompactCharArray implements Cloneable {
 
     /**
      * The total number of Unicode characters.
-     * @draft ICU 2.4
+     * @internal
      */
     public static  final int UNICODECOUNT = 65536;
 
     /**
      * Default constructor for CompactCharArray, the default value of the
      * compact array is 0.
-     * @draft ICU 2.4
+     * @internal
      */
     public CompactCharArray()
     {
@@ -50,7 +50,7 @@ public final class CompactCharArray implements Cloneable {
     /**
      * Constructor for CompactCharArray.
      * @param defaultValue the default value of the compact array.
-     * @draft ICU 2.4
+     * @internal
      */
     public CompactCharArray(char defaultValue)
     {
@@ -75,7 +75,7 @@ public final class CompactCharArray implements Cloneable {
      * @param indexArray the indicies of the compact array.
      * @param newValues the values of the compact array.
      * @exception IllegalArgumentException If the index is out of range.
-     * @draft ICU 2.4
+     * @internal
      */
     public CompactCharArray(char indexArray[],
                              char newValues[])
@@ -101,7 +101,7 @@ public final class CompactCharArray implements Cloneable {
      *
      * @throws IllegalArgumentException if the index or value array is
      *          the wrong size.
-     * @draft ICU 2.4
+     * @internal
      */
     public CompactCharArray(String indexArray,
 			    String valueArray)
@@ -114,7 +114,7 @@ public final class CompactCharArray implements Cloneable {
      * Get the mapped value of a Unicode character.
      * @param index the character to get the mapped value with
      * @return the mapped value of the given character
-     * @draft ICU 2.4
+     * @internal
      */
     public char elementAt(char index)
     {
@@ -128,7 +128,7 @@ public final class CompactCharArray implements Cloneable {
      * Set automatically expands the array if it is compacted.
      * @param index the character to set the mapped value with
      * @param value the new mapped value
-     * @draft ICU 2.4
+     * @internal
      */
     public void setElementAt(char index, char value)
     {
@@ -144,7 +144,7 @@ public final class CompactCharArray implements Cloneable {
      * @param start the starting offset of the range
      * @param end the ending offset of the range
      * @param value the new mapped value
-     * @draft ICU 2.4
+     * @internal
      */
     public void setElementAt(char start, char end, char value)
     {
@@ -159,7 +159,7 @@ public final class CompactCharArray implements Cloneable {
     }
     /**
      * Compact the array
-     * @draft ICU 2.4
+     * @internal
      */
     public void compact() {
         compact(true);
@@ -167,7 +167,7 @@ public final class CompactCharArray implements Cloneable {
 
     /**
      * Compact the array.
-     * @draft ICU 2.4
+     * @internal
      */
     public void compact(boolean exhaustive)
     {
@@ -281,7 +281,7 @@ public final class CompactCharArray implements Cloneable {
     /**
      * For internal use only.  Do not modify the result, the behavior of
      * modified results are undefined.
-     * @draft ICU 2.4
+     * @internal
      */
     public char[] getIndexArray()
     {
@@ -291,7 +291,7 @@ public final class CompactCharArray implements Cloneable {
     /**
      * For internal use only.  Do not modify the result, the behavior of
      * modified results are undefined.
-     * @draft ICU 2.4
+     * @internal
      */
     public char[] getValueArray()
     {
@@ -300,7 +300,7 @@ public final class CompactCharArray implements Cloneable {
 
     /**
      * Overrides Cloneable
-     * @draft ICU 2.4
+     * @internal
      */
     public Object clone()
     {
@@ -320,7 +320,7 @@ public final class CompactCharArray implements Cloneable {
      * @param obj the compact array object to be compared with this.
      * @return true if the current compact array object is the same
      * as the compact array object obj; false otherwise.
-     * @draft ICU 2.4
+     * @internal
      */
     public boolean equals(Object obj) {
         if (obj == null) return false;
@@ -339,7 +339,7 @@ public final class CompactCharArray implements Cloneable {
 
     /**
      * Generates the hash code for the compact array object
-     * @draft ICU 2.4
+     * @internal
      */
     public int hashCode() {
         int result = 0;
@@ -377,7 +377,7 @@ public final class CompactCharArray implements Cloneable {
         }
     }
     /**
-     * @draft ICU 2.4
+     * @internal
      */
     public static  final int BLOCKSHIFT = 5; // NormalizerBuilder needs - liu
     static  final int BLOCKCOUNT =(1<<BLOCKSHIFT);
