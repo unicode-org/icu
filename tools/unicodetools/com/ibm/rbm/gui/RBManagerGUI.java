@@ -466,8 +466,10 @@ public class RBManagerGUI extends JFrame implements ActionListener, MouseListene
 					String user = JOptionPane.showInputDialog(this,
 						Resources.getTranslation("dialog_user_name"), Resources.getTranslation("dialog_title_user_name"),
 						JOptionPane.QUESTION_MESSAGE);
-					if (user != null && !(user.equals(""))) setUser(user);
-				} else rbm.setUser(oldUser);
+					if (user != null && !(user.equals("")))
+						setUser(user);
+				} else
+					rbm.setUser(oldUser);
 			} else if (ev.getActionCommand().equals(Resources.getTranslation("menu_file_save"))) {
 																					   // Menu -> File -> Save Resource Bundle
 				saveResources();
@@ -484,7 +486,8 @@ public class RBManagerGUI extends JFrame implements ActionListener, MouseListene
 				RBJavaImporter importer = new RBJavaImporter(Resources.getTranslation("import_java_title"), rbm, this);
 			} else if (ev.getActionCommand().equals(Resources.getTranslation("menu_file_import_TMX"))) {
 																					   // Menu -> File -> Import -> TMX
-				if (rbm == null || rbm.getBundles() == null) return;
+				if (rbm == null || rbm.getBundles() == null)
+					return;
 				RBTMXImporter importer = new RBTMXImporter(Resources.getTranslation("import_TMX_title"), rbm, this);
 			} else if (ev.getActionCommand().equals(Resources.getTranslation("menu_file_import_XLF"))) {
 				   // Menu -> File -> Import -> XLIFF
@@ -495,7 +498,8 @@ public class RBManagerGUI extends JFrame implements ActionListener, MouseListene
 																					   // Menu -> File -> Export -> Properties
 				RBPropertiesExporter exp = new RBPropertiesExporter();
 				try {
-					if (rbm != null && rbm.getBundles() != null) exp.export(rbm);
+					if (rbm != null && rbm.getBundles() != null)
+						exp.export(rbm);
 				} catch (IOException ioe) {
 					JOptionPane.showMessageDialog(this, Resources.getTranslation("error_export"),
 												  Resources.getTranslation("error"), JOptionPane.ERROR_MESSAGE);
@@ -706,7 +710,8 @@ public class RBManagerGUI extends JFrame implements ActionListener, MouseListene
 		Bundle bundle = null;
 		if (activeNode == null) return;
 		Object o = activeNode.getUserObject();
-		if (o == null) return;
+		if (o == null)
+			return;
 		if (o instanceof String) {
 			// A node that is not a root was selected.... I need to do something here
 			String str = (String)o;
@@ -724,13 +729,16 @@ public class RBManagerGUI extends JFrame implements ActionListener, MouseListene
 				jPanelSearch.removeElements();
 			}
 			//return;
-		} else if (o instanceof Bundle) {
+		}
+		else if (o instanceof Bundle) {
 			bundle = (Bundle) activeNode.getUserObject();
 			jPanelStats.setBundle(bundle);
 			jPanelUntrans.setBundle(bundle);
 			jPanelGroups.setBundle(bundle);
 			jPanelSearch.setBundle(bundle);
-		} else RBManagerGUI.debugMsg(o.toString());
+		}
+		else
+			RBManagerGUI.debugMsg(o.toString());
 		
 		jPanelStats.updateComponents();
 		jPanelUntrans.updateComponents();
@@ -740,7 +748,7 @@ public class RBManagerGUI extends JFrame implements ActionListener, MouseListene
 		validateTree();
 	}
 	
-	protected void updateProjectTree() {
+	public void updateProjectTree() {
 		debugMsg("Updating Project Trees");
 		
 		DefaultMutableTreeNode root = null;
