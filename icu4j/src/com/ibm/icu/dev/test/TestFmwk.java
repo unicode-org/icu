@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestFmwk.java,v $
- * $Date: 2003/11/14 21:56:53 $
- * $Revision: 1.55 $
+ * $Date: 2004/01/10 22:45:44 $
+ * $Revision: 1.56 $
  *
  *****************************************************************************************
  */
@@ -331,7 +331,7 @@ public class TestFmwk extends AbstractTestLog {
                 } catch( IllegalAccessException e ) {
                     errln("Can't access test method " + testMethod.getName());
                 } catch( InvocationTargetException e ) {
-                    String msg = "Uncaught exception \"" + e
+                    String msg = "Uncaught exception \"" + e.getTargetException().getStackTrace()
                         +"\" thrown in test method " + testMethod.getName()
                         +" accessed under name " + name;
                     if (params.nothrow) {
