@@ -1,6 +1,6 @@
-diff --unified --recursive ../tzcode.orig/Makefile ./Makefile
---- ../tzcode.orig/Makefile	2003-02-14 10:09:05.000000000 -0800
-+++ ./Makefile	2003-08-18 13:16:32.000000000 -0700
+diff -u -r ../tzcode.orig/Makefile ./Makefile
+--- ../tzcode.orig/Makefile	2003-12-15 06:33:34.000000000 -0800
++++ ./Makefile	2004-05-24 14:30:31.659356800 -0700
 @@ -40,7 +40,7 @@
  # (and subdirectories).
  # Use an absolute path name for TZDIR unless you're just testing the software.
@@ -23,16 +23,19 @@ diff --unified --recursive ../tzcode.orig/Makefile ./Makefile
  TZCSRCS=	zic.c localtime.c asctime.c scheck.c ialloc.c
  TZCOBJS=	zic.o localtime.o asctime.o scheck.o ialloc.o
  TZDSRCS=	zdump.c localtime.c asctime.c ialloc.c
-@@ -275,7 +277,7 @@
+@@ -275,7 +277,10 @@
  
  SHELL=		/bin/sh
  
 -all:		tzselect zic zdump $(LIBOBJS)
++LS=		/usr/bin/ls
++SED=		/usr/bin/sed
++
 +all:		tzselect zic zdump $(LIBOBJS) tz2icu
  
  ALL:		all date
  
-@@ -308,9 +310,12 @@
+@@ -308,9 +313,12 @@
  zdump:		$(TZDOBJS)
  		$(CC) $(CFLAGS) $(LFLAGS) $(TZDOBJS) $(LDLIBS) -o $@
  
@@ -46,20 +49,20 @@ diff --unified --recursive ../tzcode.orig/Makefile ./Makefile
  yearistype:	yearistype.sh
  		cp yearistype.sh yearistype
  		chmod +x yearistype
-@@ -321,6 +326,9 @@
+@@ -321,6 +329,9 @@
  right_only:	zic leapseconds $(TDATA)
  		$(ZIC) -y $(YEARISTYPE) -d $(TZDIR) -L leapseconds $(TDATA)
  
 +icu_data:	tz2icu posix_only
-+		./tz2icu zoneinfo zone.tab
++		./tz2icu zoneinfo zone.tab `$(LS) tzdata*.tar.gz | $(SED) -e "s/^tzdata//;s/\.tar\.gz$$//"`
 +
  # In earlier versions of this makefile, the other two directories were
  # subdirectories of $(TZDIR).  However, this led to configuration errors.
  # For example, with posix_right under the earlier scheme,
-diff --unified --recursive ../tzcode.orig/zic.c ./zic.c
---- ../tzcode.orig/zic.c	2003-02-24 08:09:14.000000000 -0800
-+++ ./zic.c	2003-08-18 09:16:02.000000000 -0700
-@@ -17,6 +17,20 @@
+diff -u -r ../tzcode.orig/zic.c ./zic.c
+--- ../tzcode.orig/zic.c	2003-12-15 06:36:35.000000000 -0800
++++ ./zic.c	2004-05-24 14:03:43.937566400 -0700
+@@ -13,6 +13,20 @@
  #define MKDIR_UMASK 0755
  #endif
  
@@ -80,7 +83,7 @@ diff --unified --recursive ../tzcode.orig/zic.c ./zic.c
  /*
  ** On some ancient hosts, predicates like `isspace(C)' are defined
  ** only if isascii(C) || C == EOF.  Modern hosts obey the C Standard,
-@@ -90,8 +104,14 @@
+@@ -86,8 +100,14 @@
  extern int	optind;
  
  static void	addtt P((time_t starttime, int type));
@@ -95,7 +98,7 @@ diff --unified --recursive ../tzcode.orig/zic.c ./zic.c
  static void	leapadd P((time_t t, int positive, int rolling, int count));
  static void	adjleap P((void));
  static void	associate P((void));
-@@ -260,6 +280,18 @@
+@@ -256,6 +276,18 @@
  	const int	l_value;
  };
  
@@ -114,7 +117,7 @@ diff --unified --recursive ../tzcode.orig/zic.c ./zic.c
  static struct lookup const *	byword P((const char * string,
  					const struct lookup * lp));
  
-@@ -342,6 +374,11 @@
+@@ -338,6 +370,11 @@
  	unsigned char	type;
  }			attypes[TZ_MAX_TIMES];
  static long		gmtoffs[TZ_MAX_TYPES];
@@ -126,7 +129,7 @@ diff --unified --recursive ../tzcode.orig/zic.c ./zic.c
  static char		isdsts[TZ_MAX_TYPES];
  static unsigned char	abbrinds[TZ_MAX_TYPES];
  static char		ttisstds[TZ_MAX_TYPES];
-@@ -451,6 +488,62 @@
+@@ -447,6 +484,62 @@
  	(void) exit(EXIT_FAILURE);
  }
  
@@ -189,7 +192,7 @@ diff --unified --recursive ../tzcode.orig/zic.c ./zic.c
  static const char *	psxrules;
  static const char *	lcltime;
  static const char *	directory;
-@@ -553,6 +646,14 @@
+@@ -554,6 +647,14 @@
  		adjleap();
  	}
  
@@ -204,7 +207,7 @@ diff --unified --recursive ../tzcode.orig/zic.c ./zic.c
  	for (i = optind; i < argc; ++i)
  		infile(argv[i]);
  	if (errors)
-@@ -572,6 +673,9 @@
+@@ -573,6 +674,9 @@
  	for (i = 0; i < nlinks; ++i) {
  		eat(links[i].l_filename, links[i].l_linenum);
  		dolink(links[i].l_from, links[i].l_to);
@@ -214,7 +217,7 @@ diff --unified --recursive ../tzcode.orig/zic.c ./zic.c
  	}
  	if (lcltime != NULL) {
  		eat("command line", 1);
-@@ -581,6 +685,11 @@
+@@ -582,6 +686,11 @@
  		eat("command line", 1);
  		dolink(psxrules, TZDEFRULES);
  	}
@@ -226,7 +229,7 @@ diff --unified --recursive ../tzcode.orig/zic.c ./zic.c
  	return (errors == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
  }
  
-@@ -641,7 +750,9 @@
+@@ -642,7 +751,9 @@
  			(void) fprintf(stderr,
  				_("%s: Can't link from %s to %s: %s\n"),
  				progname, fromname, toname, e);
@@ -236,7 +239,7 @@ diff --unified --recursive ../tzcode.orig/zic.c ./zic.c
  		}
  	}
  	ifree(fromname);
-@@ -1499,7 +1610,12 @@
+@@ -1503,7 +1614,12 @@
  	convert(eitol(timecnt), tzh.tzh_timecnt);
  	convert(eitol(typecnt), tzh.tzh_typecnt);
  	convert(eitol(charcnt), tzh.tzh_charcnt);
@@ -249,7 +252,7 @@ diff --unified --recursive ../tzcode.orig/zic.c ./zic.c
  #define DO(field)	(void) fwrite((void *) tzh.field, (size_t) sizeof tzh.field, (size_t) 1, fp)
  	DO(tzh_magic);
  	DO(tzh_reserved);
-@@ -1523,7 +1639,12 @@
+@@ -1527,7 +1643,12 @@
  		(void) fwrite((void *) types, (size_t) sizeof types[0],
  			(size_t) timecnt, fp);
  	for (i = 0; i < typecnt; ++i) {
@@ -262,7 +265,7 @@ diff --unified --recursive ../tzcode.orig/zic.c ./zic.c
  		(void) putc(isdsts[i], fp);
  		(void) putc(abbrinds[i], fp);
  	}
-@@ -1579,6 +1700,24 @@
+@@ -1583,6 +1704,24 @@
  	}
  }
  
@@ -287,7 +290,7 @@ diff --unified --recursive ../tzcode.orig/zic.c ./zic.c
  static void
  outzone(zpfirst, zonecount)
  const struct zone * const	zpfirst;
-@@ -1597,6 +1736,11 @@
+@@ -1601,6 +1740,11 @@
  	register int			startttisgmt;
  	register int			type;
  	char				startbuf[BUFSIZ];
@@ -299,7 +302,7 @@ diff --unified --recursive ../tzcode.orig/zic.c ./zic.c
  
  	INITIALIZE(untiltime);
  	INITIALIZE(starttime);
-@@ -1626,11 +1770,55 @@
+@@ -1630,11 +1774,55 @@
  		eat(zp->z_filename, zp->z_linenum);
  		*startbuf = '\0';
  		startoff = zp->z_gmtoff;
@@ -355,7 +358,7 @@ diff --unified --recursive ../tzcode.orig/zic.c ./zic.c
  				startbuf, stdoff != 0, startttisstd,
  				startttisgmt);
  			if (usestart) {
-@@ -1704,6 +1892,15 @@
+@@ -1708,6 +1896,15 @@
  					break;	/* go on to next year */
  				rp = &zp->z_rules[k];
  				rp->r_todo = FALSE;
@@ -371,7 +374,7 @@ diff --unified --recursive ../tzcode.orig/zic.c ./zic.c
  				if (useuntil && ktime >= untiltime)
  					break;
  				stdoff = rp->r_stdoff;
-@@ -1731,8 +1928,14 @@
+@@ -1735,8 +1932,14 @@
  				doabbr(buf, zp->z_format, rp->r_abbrvar,
  					rp->r_stdoff != 0);
  				offset = oadd(zp->z_gmtoff, rp->r_stdoff);
@@ -386,7 +389,7 @@ diff --unified --recursive ../tzcode.orig/zic.c ./zic.c
  				addtt(ktime, type);
  			}
  		}
-@@ -1746,10 +1949,19 @@
+@@ -1750,10 +1953,19 @@
  			if (*startbuf == '\0')
  error(_("can't determine time zone abbreviation to use just after until time"));
  			else	addtt(starttime,
@@ -406,7 +409,7 @@ diff --unified --recursive ../tzcode.orig/zic.c ./zic.c
  		}
  		/*
  		** Now we may get to set starttime for the next zone line.
-@@ -1775,6 +1987,10 @@
+@@ -1779,6 +1991,10 @@
  	if (starttime <= min_time ||
  		(timecnt == 1 && attypes[0].at < min_time)) {
  		gmtoffs[0] = gmtoffs[type];
@@ -417,7 +420,7 @@ diff --unified --recursive ../tzcode.orig/zic.c ./zic.c
  		isdsts[0] = isdsts[type];
  		ttisstds[0] = ttisstds[type];
  		ttisgmts[0] = ttisgmts[type];
-@@ -1796,8 +2012,15 @@
+@@ -1800,8 +2016,15 @@
  }
  
  static int
@@ -433,7 +436,7 @@ diff --unified --recursive ../tzcode.orig/zic.c ./zic.c
  const char * const	abbr;
  const int		isdst;
  const int		ttisstd;
-@@ -1817,12 +2040,25 @@
+@@ -1821,12 +2044,25 @@
  		error(_("internal error - addtype called with bad ttisgmt"));
  		(void) exit(EXIT_FAILURE);
  	}
@@ -459,7 +462,7 @@ diff --unified --recursive ../tzcode.orig/zic.c ./zic.c
  			strcmp(abbr, &chars[abbrinds[i]]) == 0 &&
  			ttisstd == ttisstds[i] &&
  			ttisgmt == ttisgmts[i])
-@@ -1837,6 +2073,10 @@
+@@ -1841,6 +2077,10 @@
  		(void) exit(EXIT_FAILURE);
  	}
  	gmtoffs[i] = gmtoff;
