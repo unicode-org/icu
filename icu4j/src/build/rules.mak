@@ -9,8 +9,13 @@ FILES_java=  $(FILES_java:/=\)
 
 !endif
 FILES_class= $(FILES_java:.java=.class)
-
+CLASSDIR= $(CLASSDIR:/=\)
 CLASSLIST= classes.list
+
+CLASS_DEST_DIR= $(CLASSDIR)/$(PKGPATH)
+
+$(CLASSDIR) :
+	mkdir $@
 
 {$(SRCDIR)\$(PKGPATH)}.java{$(CLASSDIR)\$(PKGPATH)}.class:
 	@echo $(?) >> $(CLASSLIST)
@@ -21,7 +26,7 @@ SRC_FILES_dict= $(FILES_dict:classes=src)
 
 !endif
 
-classes: delete.classlist $(FILES_class) $(FILES_dics)
+classes: delete.classlist $(CLASSDIR) $(FILES_class) $(FILES_dics)
 	@if exist $(CLASSLIST) echo Compiling {
 	@if exist $(CLASSLIST) cat $(CLASSLIST)
 	if exist $(CLASSLIST) $(JAVAC) @$(CLASSLIST)
