@@ -293,11 +293,11 @@ _decompose(uint32_t norm32, uint32_t qcMask, int32_t &length,
 
     if((norm32&qcMask&_NORM_QC_NFKD)!=0 && length>=0x100) {
         /* use compatibility decomposition, skip canonical data */
-        p+=((length>>7)&1)+(length&0x7f);
+        p+=((length>>7)&1)+(length&_NORM_DECOMP_LENGTH_MASK);
         length>>=8;
     }
 
-    if(length&0x80) { /* ### TODO make 0x80 a const */
+    if(length&_NORM_DECOMP_FLAG_LENGTH_HAS_CC) {
         /* get the lead and trail cc's */
         UChar bothCCs=*p++;
         cc=(uint8_t)(bothCCs>>8);
@@ -307,7 +307,7 @@ _decompose(uint32_t norm32, uint32_t qcMask, int32_t &length,
         cc=trailCC=0;
     }
 
-    length&=0x7f;
+    length&=_NORM_DECOMP_LENGTH_MASK;
     return p;
 }
 
@@ -318,7 +318,7 @@ _decompose(uint32_t norm32, int32_t &length,
     const UChar *p=(const UChar *)_getExtraData(norm32);
     length=*p++;
 
-    if(length&0x80) {
+    if(length&_NORM_DECOMP_FLAG_LENGTH_HAS_CC) {
         /* get the lead and trail cc's */
         UChar bothCCs=*p++;
         cc=(uint8_t)(bothCCs>>8);
@@ -328,7 +328,7 @@ _decompose(uint32_t norm32, int32_t &length,
         cc=trailCC=0;
     }
 
-    length&=0x7f;
+    length&=_NORM_DECOMP_LENGTH_MASK;
     return p;
 }
 
@@ -869,16 +869,10 @@ unorm_decompose(UChar *dest, int32_t destCapacity,
                                                     destCapacity+length+2*(limit-src)+20,
                                                 destIndex))!=FALSE)
             ) {
-                /* ### TODO use uprv_memcpy() in such loops */
-                do {
-                    dest[destIndex++]=*prevSrc++;
-                } while(src!=prevSrc);
-                reorderStart=dest+destIndex;
-            } else {
-                /* buffer overflow */
-                /* keep incrementing the destIndex for preflighting */
-                destIndex+=length;
+                uprv_memcpy(dest+destIndex, prevSrc, length*U_SIZEOF_UCHAR);
             }
+            destIndex+=length;
+            reorderStart=dest+destIndex; /* not valid if dest==NULL */
         }
 
         /* end of source reached? */
@@ -1298,15 +1292,10 @@ unorm_makeFCD(UChar *dest, int32_t destCapacity,
                                                     destCapacity+length+2*(limit-src)+20,
                                                 destIndex))!=FALSE)
             ) {
-                do {
-                    dest[destIndex++]=*prevSrc++;
-                } while(src!=prevSrc);
-            } else {
-                /* buffer overflow */
-                /* keep incrementing the destIndex for preflighting */
-                destIndex+=length;
-                prevSrc=src;
+                uprv_memcpy(dest+destIndex, prevSrc, length*U_SIZEOF_UCHAR);
             }
+            destIndex+=length;
+            prevSrc=src;
         }
         /* now prevSrc==src - used later to adjust destIndex before decomposition */
 
@@ -1983,6 +1972,13 @@ _composePart(UChar *stackBuffer, UChar *&buffer, int32_t &bufferCapacity, int32_
         starter=prevSrc;
         firstStarterIndex=startIndex;
     } else {
+        /*
+         * ### TODO
+         * - verify that prevStarter is indeed at the _last_ starter before prevSrc
+         * - if that is so, then perform a normal decomposition on [prevStarter..src[
+         *   instead of this special, incremental one
+         */
+
         /* decompose backwards and look for a starter */
         firstStarterIndex=0;
         starter=prevSrc;
@@ -2119,7 +2115,12 @@ unorm_compose(UChar *dest, int32_t destCapacity,
     buffer=stackBuffer;
     bufferCapacity=_STACK_BUFFER_CAPACITY;
 
+    /*
+     * prevStarter points to the last character before the current one
+     * that is a "true" starter with cc==0 and quick check "yes".
+     */
     prevStarter=src;
+
     reorderStart=dest;
     ccOrQCMask=_NORM_CC_MASK|qcMask;
     destIndex=0;
@@ -2168,18 +2169,19 @@ unorm_compose(UChar *dest, int32_t destCapacity,
                                                     destCapacity+length+2*(limit-src)+20,
                                                 destIndex))!=FALSE)
             ) {
-                do {
-                    dest[destIndex++]=*prevSrc++;
-                } while(src!=prevSrc);
-                reorderStart=dest+destIndex;
-            } else {
-                /* buffer overflow */
-                /* keep incrementing the destIndex for preflighting */
-                destIndex+=length;
-                prevSrc=src;
+                uprv_memcpy(dest+destIndex, prevSrc, length*U_SIZEOF_UCHAR);
             }
+            destIndex+=length;
+            reorderStart=dest+destIndex; /* not valid if dest==NULL */
+
+            /* set prevStarter to the last character in the quick check loop */
+            prevStarter=src-1;
+            if(UTF_IS_SECOND_SURROGATE(*prevStarter) && prevSrc<prevStarter && UTF_IS_FIRST_SURROGATE(*(prevStarter-1))) {
+                --prevStarter;
+            }
+
+            prevSrc=src;
         }
-        /* now prevSrc==src - used later to separate the current character from the previous text */
 
         /* end of source reached? */
         if(limit==NULL ? c==0 : src==limit) {
@@ -2188,6 +2190,28 @@ unorm_compose(UChar *dest, int32_t destCapacity,
 
         /* c already contains *src and norm32 is set for it, increment src */
         ++src;
+
+        /*
+         * source buffer pointers:
+         *
+         *  all done      quick check   current char  not yet
+         *                "yes" but     (c, c2)       processed
+         *                may combine
+         *                forward
+         * [-------------[-------------[-------------[-------------[
+         * |             |             |             |             |
+         * start         prevStarter   prevSrc       src           limit
+         *
+         *
+         * destination buffer pointers and indexes:
+         *
+         *  all done      might take    not filled yet
+         *                characters for
+         *                reordering
+         * [-------------[-------------[-------------[
+         * |             |             |             |
+         * dest          reorderStart  destIndex     destCapacity
+         */
 
         /* check one above-minimum, relevant code unit */
         /*
@@ -2260,7 +2284,8 @@ unorm_compose(UChar *dest, int32_t destCapacity,
 
                 /* ### TODO use sidebuffer because intermediate result might not fit but end result might - also rework some of dest buffer */
                 p=_composePart(stackBuffer, buffer, bufferCapacity, length,
-                               prevStarter, prevSrc, src, limit,
+                               prevStarter,     /* in/out, will be set to the following true starter */
+                               prevSrc, src, limit,
                                norm32,
                                qcMask,
                                prevCC,          /* output */
@@ -2322,11 +2347,6 @@ unorm_compose(UChar *dest, int32_t destCapacity,
             /* keep incrementing the destIndex for preflighting */
             destIndex+=length;
             prevCC=cc;
-        }
-
-        if(prevCC==0) {
-            prevStarter=prevSrc;
-            reorderStart=dest+destIndex;
         }
     }
 
