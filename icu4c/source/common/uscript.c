@@ -30,6 +30,7 @@ static const char * const scriptNames[]={
         "BOPOMOFO",             /* USCRIPT_BOPOMOFO   */
         "CANADIAN-ABORIGINAL",  /* USCRIPT_UCAS       */
         "CHEROKEE",             /* USCRIPT_CHEROKEE   */
+        "COMMON",               /* USCRIPT_COMMON     */
         "CYRILLIC",             /* USCRIPT_CYRILLIC   */
         "DESERET",              /* USCRIPT_DESERET    */
         "DEVANAGARI",           /* USCRIPT_DEVANAGARI */
@@ -129,6 +130,7 @@ static const UScriptCode scriptNameCodes[]= {
          USCRIPT_BOPOMOFO   ,
          USCRIPT_UCAS       ,
          USCRIPT_CHEROKEE   ,
+         USCRIPT_COMMON     ,
          USCRIPT_CYRILLIC   ,
          USCRIPT_DESERET    ,
          USCRIPT_DEVANAGARI ,
