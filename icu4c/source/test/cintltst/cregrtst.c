@@ -1048,6 +1048,7 @@ void TestBackwardLineIndexSelection()
     free(testLineText);
     /*free(lineSelectionData);*/
 }
+
 void TestLineInvariants()
 {
     int errorCount,l;
@@ -1059,8 +1060,9 @@ void TestLineInvariants()
     UBool saw2;
     UChar work[5];
     UChar *s, *ustr;
+    int32_t sLen;
 
-AllocateTextBoundary();   
+AllocateTextBoundary();
     s=(UChar*)malloc(sizeof(UChar) * (u_strlen(cannedTestChars) + 20));
     u_strcpy(s, cannedTestChars);
     ustr = CharsToUChars(".,;:\\u3001\\u3002\\u3041\\u3042\\u3043\\u3044\\u3045\\u30a3\\u4e00\\u4e01\\u4e02");
@@ -1073,6 +1075,7 @@ AllocateTextBoundary();
 
 
 
+    u_uastrcpy(work, "aaa");
     /* in addition to the other invariants, a line-break iterator should make sure that:
        it doesn't break around the non-breaking characters */
     e = ubrk_open(UBRK_LINE, "en_US", work, u_strlen(work), &status);
@@ -1081,15 +1084,15 @@ AllocateTextBoundary();
     ustr = CharsToUChars("\\u00a0\\u2007\\u2011\\ufeff");
     u_strcpy(noBreak, ustr);
     free(ustr);
-    u_uastrcpy(work, "aaa");
-    for (i = 0; i < u_strlen(s); i++) {
-         c = s[i];
+    sLen = u_strlen(s);
+    for (i = 0; i < sLen; i++) {
+        c = s[i];
         if (c == '\r' || c == '\n' || c == 0x2029 || c == 0x2028 || c == 0x0003)
             continue;
         work[0] = c;
         for (j = 0; j < u_strlen(noBreak); j++) {
             work[1] = noBreak[j];
-            for (k = 0; k < u_strlen(s); k++) {
+            for (k = 0; k < sLen; k++) {
                 work[2] = s[k];                
                 ubrk_setText(e, work, u_strlen(work), &status);
                 if(U_FAILURE(status)){
@@ -1115,12 +1118,12 @@ AllocateTextBoundary();
     u_strcpy(dashes, ustr);
     free(ustr);
 
-    for (i = 0; i < u_strlen(s); i++) {
+    for (i = 0; i < sLen; i++) {
         work[0] = s[i];
         for (j = 0; j < u_strlen(dashes); j++) {
             work[1] = dashes[j];
-            for (k = 0; k < u_strlen(s); k++) {
-                 c = s[k];
+            for (k = 0; k < sLen; k++) {
+                c = s[k];
                 if (u_charType(c) == U_DECIMAL_DIGIT_NUMBER ||
                     u_charType(c) == U_OTHER_NUMBER ||
                     u_charType(c) == U_NON_SPACING_MARK ||
@@ -1137,8 +1140,8 @@ AllocateTextBoundary();
                 work[2] = c;
                 ubrk_setText(e, work, u_strlen(work), &status);
                 if(U_FAILURE(status)){
-                log_err("FAIL: Error in setting text on the word break Iterator in testLineInvaiants:\n %s \n", myErrorName(status));
-                return;
+                    log_err("FAIL: Error in setting text on the word break Iterator in testLineInvaiants:\n %s \n", myErrorName(status));
+                    return;
                 }
                 saw2 = FALSE;
                 for (l = ubrk_first(e); l != UBRK_DONE; l = ubrk_next(e))
