@@ -615,7 +615,9 @@ void TestIDNA::debug(const UChar* src, int32_t srcLength, int32_t options){
         errln("Failed. Expected: " + prettify(UnicodeString(transOut, transOutLength))
               + " Got: " + prettify(UnicodeString(prepOut,prepOutLength)));
     }
-
+    uprv_free(transOut);
+    uprv_free(prepOut);
+    delete trans;
 
 }
 
@@ -1572,8 +1574,6 @@ void TestIDNA::TestIDNAMonkeyTest(){
     debug(source.getBuffer(),source.length(),UIDNA_ALLOW_UNASSIGNED);
     source.releaseBuffer();
 
-    delete TestIDNA::prep;
-    TestIDNA::prep = NULL;
 }
 
 void TestIDNA::TestCompareReferenceImpl(){
@@ -1617,12 +1617,30 @@ void TestIDNA::TestRefIDNA(){
                             "idnaref_IDNToUnicode",idnaref_IDNToUnicode
                             );
     testChaining("idnaref_toASCII",idnaref_toASCII, "idnaref_toUnicode", idnaref_toUnicode);
-    delete TestIDNA::prep;
-    TestIDNA::prep = NULL;
 }
 
 void TestIDNA::TestDataFile(){
      testData(*this);
 }
+TestIDNA::~TestIDNA(){
+    if(prep!=NULL){
+        delete prep;
+        prep = NULL;
+    }
+}
 
+NamePrepTransform* TestIDNA::prep = NULL;
+
+NamePrepTransform* TestIDNA::getInstance(UErrorCode& status){
+    if(TestIDNA::prep == NULL){
+        UParseError parseError;
+        TestIDNA::prep = NamePrepTransform::createInstance(parseError, status);
+        if(TestIDNA::prep ==NULL){
+           //status = U_MEMORY_ALLOCATION_ERROR;
+           return NULL;
+        }
+    }
+    return TestIDNA::prep;
+
+}
 #endif /* #if !UCONFIG_NO_IDNA */
