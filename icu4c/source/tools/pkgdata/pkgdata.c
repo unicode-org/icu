@@ -432,7 +432,7 @@ static int executeMakefile(const UPKGOptions *o)
     }
 
     /*getcwd(pwd, 1024);*/
-#ifdef WIN32
+#ifdef U_WINDOWS
     sprintf(cmd, "%s %s%s -f \"%s\" %s %s %s %s",
         make,
         o->install ? "INSTALLTO=" : "",
@@ -664,7 +664,7 @@ static void fillInMakefileFromICUConfig(UOption *option)
     option->doesOccur = TRUE;
 #else  /* ! U_HAVE_POPEN */
 
-#ifdef WIN32
+#ifdef U_WINDOWS
     char pathbuffer[_MAX_PATH] = {0};
     char *fullEXEpath = NULL;
     char *pathstuff = NULL;

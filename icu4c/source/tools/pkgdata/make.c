@@ -133,7 +133,7 @@ pkg_mak_writeFooter(FileStream *f, const UPKGOptions *o)
     T_FileStream_write(f, buf, (int32_t)uprv_strlen(buf));
 }
 
-#else   /* #ifdef WIN32 */
+#else   /* #ifdef U_MAKE_IS_NMAKE */
 
 #include "cmemory.h"
 #include "filestrm.h"
@@ -410,7 +410,7 @@ pkg_mak_writeObjRules(UPKGOptions *o,  FileStream *makefile, CharList **objects,
     }   
 }
 
-#endif  /* #ifdef WIN32 */
+#endif  /* #ifdef U_MAKE_IS_NMAKE */
 
 void
 pkg_mak_writeAssemblyHeader(FileStream *f, const UPKGOptions *o)

@@ -32,7 +32,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#ifdef WIN32
+#ifdef U_WINDOWS
 #include <io.h>
 #else
 #include <unistd.h>
@@ -355,7 +355,7 @@ static void TestUDataSetAppData(){
 
     log_verbose("Testing udata_setAppData() with %s\n", filePath);
 
-#if defined(WIN32) || defined(U_CYGWIN)
+#if defined(U_WINDOWS) || defined(U_CYGWIN)
     fileHandle = open( filePath, O_RDONLY | O_BINARY );
 #else
     fileHandle = open( filePath, O_RDONLY);

@@ -76,7 +76,7 @@
 #include <time.h>
 
 /* include system headers */
-#ifdef WIN32
+#ifdef U_WINDOWS
 #   define WIN32_LEAN_AND_MEAN
 #   define VC_EXTRALEAN
 #   define NOUSER
@@ -112,7 +112,7 @@
 #include <sys/neutrino.h>
 #endif
 
-#ifndef WIN32
+#ifndef U_WINDOWS
 #include <sys/time.h> 
 #endif
 
@@ -180,7 +180,7 @@ static double * fgInf = &gInf;
   functions).
   ---------------------------------------------------------------------------*/
 
-#if defined(_WIN32) || defined(XP_MAC) || defined(OS400)
+#if defined(U_WINDOWS) || defined(XP_MAC) || defined(OS400)
 #   undef U_POSIX_LOCALE
 #else
 #   define U_POSIX_LOCALE    1
@@ -209,7 +209,7 @@ u_bottomNBytesOfDouble(double* d, int n)
 #endif
 }
 
-#if defined(WIN32)
+#if defined(U_WINDOWS)
 typedef union {
     uint64_t int64;
     FILETIME fileTime;
@@ -246,7 +246,7 @@ uprv_getUTCtime()
     uprv_memcpy( &tmrec, gmtime(&t), sizeof(tmrec) );
     t2 = mktime(&tmrec);    /* seconds of current GMT*/
     return (UDate)(t2 - t1) * U_MILLIS_PER_SECOND;         /* GMT (or UTC) in seconds since 1970*/
-/*#elif defined(WIN32)
+/*#elif defined(U_WINDOWS)
 
     FileTimeConversion winTime;
     GetSystemTimeAsFileTime(&winTime.fileTime);
@@ -683,7 +683,7 @@ uprv_digitsAfterDecimal(double x)
 
 /* Win32 time zone detection ------------------------------------------------ */
 
-#ifdef WIN32
+#ifdef U_WINDOWS
 
 /*
   This code attempts to detect the Windows time zone, as set in the
@@ -1160,7 +1160,7 @@ static const char* detectWindowsTimeZone() {
     return ZONE_MAP[firstMatch].icuid;
 }
 
-#endif /*WIN32*/
+#endif /*U_WINDOWS*/
 
 /* Generic time zone layer -------------------------------------------------- */
 
@@ -1218,7 +1218,7 @@ static char *gTimeZoneBuffer = NULL; /* Heap allocated */
 U_CAPI const char* U_EXPORT2
 uprv_tzname(int n)
 {
-#ifdef WIN32
+#ifdef U_WINDOWS
     char* id = (char*) detectWindowsTimeZone();
     if (id != NULL) {
         return id;
@@ -1341,7 +1341,7 @@ uprv_pathIsAbsolute(const char *path)
   }
 #endif
 
-#if defined(WIN32)
+#if defined(U_WINDOWS)
   if( (((path[0] >= 'A') && (path[0] <= 'Z')) ||
        ((path[0] >= 'a') && (path[0] <= 'z'))) &&
       path[1] == ':' ) {
@@ -1664,7 +1664,7 @@ The leftmost codepage (.xxx) wins.
 
     return posixID;
 
-#elif defined(WIN32)
+#elif defined(U_WINDOWS)
     UErrorCode status = U_ZERO_ERROR;
     LCID id = GetThreadLocale();
     const char* locID = uprv_convertToPosix(id, &status);
@@ -1834,7 +1834,7 @@ int_getDefaultCodepage()
 #elif defined(XP_MAC)
     return "ibm-1275"; /* TODO: Macintosh Roman. There must be a better way. fixme! */
 
-#elif defined(WIN32)
+#elif defined(U_WINDOWS)
     static char codepage[64];
     sprintf(codepage, "windows-%d", GetACP());
     return codepage;

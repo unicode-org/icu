@@ -26,7 +26,7 @@
 #include "ccapitst.h"
 
 /* for not including "cstring.h" -begin*/    
-#ifdef WIN32
+#ifdef U_WINDOWS
 #   define ctest_stricmp(str1, str2) U_STANDARD_CPP_NAMESPACE _stricmp(str1, str2)
 #elif defined(POSIX) 
 #   define ctest_stricmp(str1, str2) U_STANDARD_CPP_NAMESPACE strcasecmp(str1, str2) 

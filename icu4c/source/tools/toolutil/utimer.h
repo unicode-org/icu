@@ -1,6 +1,6 @@
 /*
 ************************************************************************
-* Copyright (c) 1997-2004, International Business Machines
+* Copyright (c) 1997-2005, International Business Machines
 * Corporation and others.  All Rights Reserved.
 ************************************************************************
 */
@@ -8,7 +8,9 @@
 #ifndef _UTIMER_H
 #define _UTIMER_H
 
-#if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
+#include "unicode/utypes.h"
+
+#if defined(U_WINDOWS)
 #   define VC_EXTRALEAN
 #   define WIN32_LEAN_AND_MEAN
 #   include <windows.h>
@@ -57,62 +59,62 @@
  * ii) Measure the time taken
  *     Example:
  *     <code>
- *          double perfNormalization(NormFn fn,const char* mode,Line* fileLines,int32_t loopCount){
- *              int  line;
- *              int  loops;
- *              UErrorCode error = U_ZERO_ERROR;
- *              UChar* dest=NULL;
- *              int32_t destCapacity=0;
- *              int len =-1;
- *              double elapsedTime = 0; 
- *              int retVal=0;
+ *      double perfNormalization(NormFn fn,const char* mode,Line* fileLines,int32_t loopCount){
+ *          int  line;
+ *          int  loops;
+ *          UErrorCode error = U_ZERO_ERROR;
+ *          UChar* dest=NULL;
+ *          int32_t destCapacity=0;
+ *          int len =-1;
+ *          double elapsedTime = 0; 
+ *          int retVal=0;
  *
- *              UChar arr[5000];
- *              dest=arr;
- *              destCapacity = 5000;
- *              UTimer start;
+ *          UChar arr[5000];
+ *          dest=arr;
+ *          destCapacity = 5000;
+ *          UTimer start;
  *
- *              // Initialize cache and ensure the data is loaded.
- *              // This loop checks for errors in Normalization. Once we pass the initialization
- *              // without errors we can safelly assume that there are no errors while timing the 
- *              // funtion
- *              for (loops=0; loops<10; loops++) {
- *                  for (line=0; line < gNumFileLines; line++) {
- *                      if (opt_uselen) {
- *                          len = fileLines[line].len;
- *                      }
- *
- *                      retVal= fn(fileLines[line].name,len,dest,destCapacity,&error);
- *          #if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
- *                      if(retVal==0 ){
- *                          fprintf(stderr,"Normalization of string in Windows API failed for mode %s. ErrorNo: %i at line number %i\n",mode,GetLastError(),line);
- *                          return 0;
- *                      }
- *          #endif
- *                      if(U_FAILURE(error)){
- *                          fprintf(stderr,"Normalization of string in ICU API failed for mode %s. Error: %s at line number %i\n",mode,u_errorName(error),line);
- *                          return 0;
- *                      }
- *            
+ *          // Initialize cache and ensure the data is loaded.
+ *          // This loop checks for errors in Normalization. Once we pass the initialization
+ *          // without errors we can safelly assume that there are no errors while timing the 
+ *          // funtion
+ *          for (loops=0; loops<10; loops++) {
+ *              for (line=0; line < gNumFileLines; line++) {
+ *                  if (opt_uselen) {
+ *                      len = fileLines[line].len;
  *                  }
- *              }
  *
- *              //compute the time
- *
- *              utimer_getTime(&start);
- *              for (loops=0; loops<loopCount; loops++) {
- *                  for (line=0; line < gNumFileLines; line++) {
- *                      if (opt_uselen) {
- *                          len = fileLines[line].len;
- *                      }
- *
- *                      retVal= fn(fileLines[line].name,len,dest,destCapacity,&error);
- *           
+ *                  retVal= fn(fileLines[line].name,len,dest,destCapacity,&error);
+ *      #if defined(U_WINDOWS)
+ *                  if(retVal==0 ){
+ *                      fprintf(stderr,"Normalization of string in Windows API failed for mode %s. ErrorNo: %i at line number %i\n",mode,GetLastError(),line);
+ *                      return 0;
  *                  }
+ *      #endif
+ *                  if(U_FAILURE(error)){
+ *                      fprintf(stderr,"Normalization of string in ICU API failed for mode %s. Error: %s at line number %i\n",mode,u_errorName(error),line);
+ *                      return 0;
+ *                  }
+ *        
  *              }
- *
- *              return utimer_getElapsedSeconds(&start);
  *          }
+ *
+ *          //compute the time
+ *
+ *          utimer_getTime(&start);
+ *          for (loops=0; loops<loopCount; loops++) {
+ *              for (line=0; line < gNumFileLines; line++) {
+ *                  if (opt_uselen) {
+ *                      len = fileLines[line].len;
+ *                  }
+ *
+ *                  retVal= fn(fileLines[line].name,len,dest,destCapacity,&error);
+ *       
+ *              }
+ *          }
+ *
+ *          return utimer_getElapsedSeconds(&start);
+ *      }
  *      </code>
  *
  * iii) Let a higher level function do the calculation of confidence levels etc.
@@ -155,7 +157,7 @@ typedef struct UTimer UTimer;
 typedef void FuntionToBeTimed(void* param);
 
 
-#if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
+#if defined(U_WINDOWS)
 
     struct UTimer{
         LARGE_INTEGER start;
