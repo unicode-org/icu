@@ -76,7 +76,7 @@ void pkg_mode_common(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
   T_FileStream_writeLine(makefile, tmp);
   
   T_FileStream_writeLine(makefile, "$(TARGET): $(CMNLIST) $(DATAFILEPATHS)\n"
-               "\t$(INVOKE) $(GENCMN) -n $(NAME) -c -d $(TARGETDIR) 0 $(CMNLIST)\n\n");
+               "\t$(INVOKE) $(GENCMN) -n $(CNAME) -c -d $(TARGETDIR) 0 $(CMNLIST)\n\n");
 
   if(o->hadStdin == FALSE) { /* shortcut */
     T_FileStream_writeLine(makefile, "$(CMNLIST): $(LISTFILES)\n"

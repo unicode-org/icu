@@ -66,7 +66,7 @@ writeObjRules(UPKGOptions *o,  FileStream *makefile, CharList **objects)
     parents = pkg_appendToList(parents, NULL, uprv_strdup(infiles->str));
 
     /* make up commands.. */
-    sprintf(stanza, "$(INVOKE) $(GENCCODE) -n %s -d $(TEMP_DIR) %s%s $<", o->shortName,
+    sprintf(stanza, "$(INVOKE) $(GENCCODE) -n $(CNAME) -d $(TEMP_DIR) %s%s $<",
             (o->version)?"-r ":"",
             o->version?o->version:"");
 
@@ -96,9 +96,7 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
     return;
   }
 
-  uprv_strcpy(tmp, LIB_PREFIX);
-  uprv_strcat(tmp, o->shortName);
-  uprv_strcat(tmp, UDATA_SO_SUFFIX);
+  uprv_strcpy(tmp, LIB_PREFIX "$(NAME)" UDATA_SO_SUFFIX);
 
   /* We should be the only item. So we don't care about the order. */
   o->outFiles = pkg_appendToList(o->outFiles, &tail, uprv_strdup(tmp));
@@ -171,10 +169,9 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
   writeObjRules(o, makefile, &objects);
 
   sprintf(tmp, "# List file for gencmn:\n"
-          "CMNLIST=%s%s%s_dll.lst\n\n",
+          "CMNLIST=%s%s$(CNAME)_dll.lst\n\n",
           o->tmpDir,
-          U_FILE_SEP_STRING,
-          o->shortName);
+          U_FILE_SEP_STRING);
   T_FileStream_writeLine(makefile, tmp);
 
   if(o->hadStdin == FALSE) { /* shortcut */
@@ -189,21 +186,19 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
                                    "\tdone;\n\n");
   }
 
-  sprintf(tmp,"$(TEMP_DIR)/%s_dat.o : $(TEMP_DIR)/%s_dat.c\n"
-                         "\t$(COMPILE.c) -o $@ $<\n\n",
-          o->shortName,
-          o->shortName);
+  sprintf(tmp,"$(TEMP_DIR)/$(CNAME)_dat.o : $(TEMP_DIR)/$(CNAME)_dat.c\n"
+                         "\t$(COMPILE.c) -o $@ $<\n\n");
   T_FileStream_writeLine(makefile, tmp);
 
   T_FileStream_writeLine(makefile, "# 'TOCOBJ' contains C Table of Contents objects [if any]\n");
 
-  sprintf(tmp, "$(TEMP_DIR)/%s_dat.c: $(CMNLIST)\n"
-                         "\t$(INVOKE) $(GENCMN) -e %s -n %s -S -d $(TEMP_DIR) %s%s 0 $(CMNLIST)\n\n", o->shortName, o->entryName, o->shortName,
+  sprintf(tmp, "$(TEMP_DIR)/$(CNAME)_dat.c: $(CMNLIST)\n"
+                         "\t$(INVOKE) $(GENCMN) -e $(ENTRYPOINT) -n $(CNAME) -S -d $(TEMP_DIR) %s%s 0 $(CMNLIST)\n\n",
          (o->version)?"-r ":"",
           o->version?o->version:"");
 
   T_FileStream_writeLine(makefile, tmp);
-  sprintf(tmp, "TOCOBJ= %s_dat%s \n\n", o->shortName,OBJ_SUFFIX);
+  sprintf(tmp, "TOCOBJ= $(CNAME)_dat%s \n\n", OBJ_SUFFIX);
   T_FileStream_writeLine(makefile, tmp);
   sprintf(tmp, "TOCSYM= %s_dat \n\n", o->entryName); /* entrypoint not always shortname! */
   T_FileStream_writeLine(makefile, tmp);
