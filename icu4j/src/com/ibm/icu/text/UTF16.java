@@ -2156,23 +2156,22 @@ public final class UTF16
      */
     public static StringBuffer reverse(StringBuffer source)      
     {
-        StringBuffer result = source.reverse();
-        int resultLength  = result.length();
-        int maxLeadLength = resultLength - 2;
-        int i = 0;
-        while (i < resultLength) {
-            if (i <= maxLeadLength && isTrailSurrogate(result.charAt(i)) &&
-                isLeadSurrogate(result.charAt(i + 1))) {
-                char trail = result.charAt(i);
-                result.deleteCharAt(i);
-                result.insert(i + 1, trail);
-                i += 2;
-            }
-            else {
-                i ++;
-            }
-        }
-        return result;
+	int length = source.length();
+	StringBuffer result = new StringBuffer(length);
+	for (int i = length; i-- > 0;) {
+	    char ch = source.charAt(i);
+	    if (isTrailSurrogate(ch) && i > 0) {
+		char ch2 = source.charAt(i-1);
+		if (isLeadSurrogate(ch2)) {
+		    result.append(ch2);
+		    result.append(ch);
+		    --i;
+		    continue;
+		}
+	    }
+	    result.append(ch);
+	}
+	return result;
     }
     
     /**
