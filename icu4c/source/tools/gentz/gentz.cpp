@@ -226,7 +226,7 @@ int32_t gentz::writeTzDatFile(const char *destdir) {
     *(uint16_t*)&(dataInfo.dataVersion[0]) = header.versionYear;
     *(uint16_t*)&(dataInfo.dataVersion[2]) = header.versionSuffix;
 
-    pdata = udata_create(TZ_DATA_TYPE, TZ_DATA_NAME, destdir, &dataInfo,
+    pdata = udata_create(destdir, TZ_DATA_TYPE, TZ_DATA_NAME, &dataInfo,
                          useCopyright ? U_COPYRIGHT_STRING : 0, &status);
     if (U_FAILURE(status)) {
         die("Unable to create data memory");

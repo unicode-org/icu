@@ -252,7 +252,7 @@ void writeConverterData(UConverterSharedData_1_4 *mySharedData, const char *cnvN
   UNewDataMemory *mem;
   uint32_t sz2;
 
-  mem = udata_create("cnv", cnvName, cnvDir, &dataInfo, U_COPYRIGHT_STRING, status);
+  mem = udata_create(cnvDir, "cnv", cnvName, &dataInfo, U_COPYRIGHT_STRING, status);
   
   WriteConverterSharedData(mem, mySharedData);
 

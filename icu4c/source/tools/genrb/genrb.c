@@ -376,3 +376,9 @@ static void make_col(const char *filename, UErrorCode *status)
       ucol_close(coll);
     }
 }
+
+/*
+ * Local Variables:
+ * indent-tabs-mode: nil
+ * End:
+ */

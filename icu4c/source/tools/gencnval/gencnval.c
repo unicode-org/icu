@@ -170,7 +170,7 @@ main(int argc, char *argv[]) {
     qsort(aliases, aliasCount, sizeof(Alias), compareAliases);
 
     /* create the output file */
-    out=udata_create(DATA_TYPE, DATA_NAME, destdir, &dataInfo,
+    out=udata_create(destdir, DATA_TYPE, DATA_NAME, &dataInfo,
                      haveCopyright ? U_COPYRIGHT_STRING : NULL, &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "gencnval: unable to open output file - error %s\n", u_errorName(errorCode));
