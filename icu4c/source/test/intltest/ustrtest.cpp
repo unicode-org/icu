@@ -202,6 +202,9 @@ UnicodeStringTest::TestBasicManipulation()
         if(0!=s.caseCompare(buffer, -1, U_FOLD_CASE_DEFAULT)) {
             errln("UnicodeString.caseCompare(const UChar *, length, options) does not work with length==-1");
         }
+        if(0!=s.caseCompare(0, s.length(), buffer, U_FOLD_CASE_DEFAULT)) {
+            errln("UnicodeString.caseCompare(start, _length, const UChar *, options) does not work");
+        }
 
         buffer[u_strlen(buffer)]=0xe4;
         UnicodeString u(buffer, -1, LENGTHOF(buffer));
