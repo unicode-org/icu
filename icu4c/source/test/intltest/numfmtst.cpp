@@ -12,7 +12,10 @@
 #include "unicode/dcfmtsym.h"
 #include "unicode/decimfmt.h"
 #include "unicode/ucurr.h"
+#include "unicode/ustring.h"
 #include <float.h>
+
+static const UChar EUR[] = {69,85,82,0}; // "EUR"
  
 // *****************************************************************************
 // class NumberFormatTest
@@ -44,6 +47,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
         CASE(13,TestAPI);
 
         CASE(14,TestCurrencyObject);
+        CASE(15,TestCurrencyPatterns);
 
         default: name = ""; break;
     }
@@ -1187,4 +1191,48 @@ void NumberFormatTest::TestSurrogateSupport(void) {
     status = U_ZERO_ERROR;
     expect(new DecimalFormat(patternStr, custom, status),
            int32_t(-20), expStr, status);
+}
+
+void NumberFormatTest::TestCurrencyPatterns(void) {
+    UnicodeString dot00(".00", "");
+    int32_t i, locCount;
+    const Locale* locs = NumberFormat::getAvailableLocales(locCount);
+    for (i=0; i<locCount; ++i) {
+        UErrorCode ec = U_ZERO_ERROR;
+        NumberFormat* nf = NumberFormat::createCurrencyInstance(locs[i], ec);
+        if (U_FAILURE(ec)) {
+            errln("FAIL: Can't create NumberFormat");
+        } else {
+            // Make sure currency formats do not have a variable number
+            // of fraction digits
+            int32_t min = nf->getMinimumFractionDigits();
+            int32_t max = nf->getMaximumFractionDigits();
+            if (min != max) {
+                UnicodeString a, b;
+                nf->format(1.0, a);
+                nf->format(1.125, b);
+                errln((UnicodeString)"FAIL: " + locs[i].getName() +
+                      " min fraction digits != max fraction digits; "
+                      "x 1.0 => " + escape(a) +
+                      "; x 1.125 => " + escape(b));
+            }
+
+            // Make sure EURO currency formats have exactly 2 fraction digits
+            if (nf->getDynamicClassID() == DecimalFormat::getStaticClassID()) {
+                DecimalFormat* df = (DecimalFormat*) nf;
+                if (u_strcmp(EUR, df->getCurrency()) == 0) {
+                    if (min != 2 || max != 2) {
+                        UnicodeString a;
+                        nf->format(1.0, a);
+                        errln((UnicodeString)"FAIL: " + locs[i].getName() +
+                              " is a EURO format but it does not have 2 fraction digits; "
+                              "x 1.0 => " +
+                              escape(a));
+                    }
+                    logln(locs[i].getName());
+                }
+            }
+        }
+        delete nf;
+    }
 }
