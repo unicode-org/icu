@@ -684,12 +684,14 @@ static void TestVariableTop(void)
 }
 
 /**
-* Tests surrogate support.
-*/
+  * Tests surrogate support.
+  * NOTE: This test used \\uD801\\uDC01 pair, which is now assigned to Desseret
+  * Therefore, another (unassigned) code point was used for this test.
+  */
 static void TestSurrogates(void)
 {
     const char       *str          = 
-                              "&z<'\\uD800\\uDC00'<'\\uD801\\uDC01\\u0308'<A";
+                              "&z<'\\uD800\\uDC00'<'\\uD800\\uDC0A\\u0308'<A";
           int         len          = strlen(str);
           int         rlen         = 0;
           UChar      *rules;
@@ -697,9 +699,9 @@ static void TestSurrogates(void)
           UCollator  *enCollation;
           UErrorCode  status       = U_ZERO_ERROR;
           UChar       source[][4]    = 
-          {{'z', 0, 0}, {0xD800, 0xDC00, 0}, {0xD801, 0xDC01, 0x0308, 0}};
+          {{'z', 0, 0}, {0xD800, 0xDC00, 0}, {0xD800, 0xDC0A, 0x0308, 0}, {0xD800, 0xDC02}};
           UChar       target[][4]    = 
-          {{0xD800, 0xDC00, 0}, {0xD801, 0xDC01, 0x0308, 0}, {'A', 0, 0}};
+          {{0xD800, 0xDC00, 0}, {0xD800, 0xDC0A, 0x0308, 0}, {'A', 0, 0}, {0xD800, 0xDC03}};
           int         count        = 0;
           uint8_t enresult[20], myresult[20];
           int enlen, mylen;
@@ -731,14 +733,14 @@ static void TestSurrogates(void)
     log_verbose("start of tailored collation supplementary characters test\n");
     count = 0;
     /* tests getting collation elements for surrogates for tailored rules */
-    while (count < 3) {
+    while (count < 4) {
         doTest(myCollation, source[count], target[count], UCOL_LESS);
         count ++;
     }
 
-    /* tests that \uD801\uDC01 still has the same value, not changed */
-    enlen = ucol_getSortKey(enCollation, source[2], 2, enresult, 20);
-    mylen = ucol_getSortKey(myCollation, source[2], 2, myresult, 20);
+    /* tests that \uD800\uDC02 still has the same value, not changed */
+    enlen = ucol_getSortKey(enCollation, source[3], 2, enresult, 20);
+    mylen = ucol_getSortKey(myCollation, source[3], 2, myresult, 20);
     if (enlen != mylen ||
         uprv_memcmp(enresult, myresult, enlen) != 0) {
         log_verbose("Failed : non-tailored supplementary characters should have the same value\n");
