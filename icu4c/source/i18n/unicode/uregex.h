@@ -127,12 +127,13 @@ uregex_open( const  UChar          *pattern,
   *
   * @draft ICU 3.0
   */
+#if !UCONFIG_NO_CONVERSION
 U_DRAFT URegularExpression * U_EXPORT2
 uregex_openC( const char           *pattern,
                     uint32_t        flags,
                     UParseError    *pe,
                     UErrorCode     *status);
-
+#endif
 
 
 
