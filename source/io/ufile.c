@@ -114,6 +114,25 @@ u_fopen(const char    *filename,
     return result;
 }
 
+U_CAPI UFILE* U_EXPORT2
+u_fstropen(UChar *stringBuf,
+           int32_t      capacity,
+           const char  *locale)
+{
+    UFILE *result;
+
+    if (capacity < 0) {
+        return NULL;
+    }
+
+    result = (UFILE*) uprv_malloc(sizeof(UFILE));
+    uprv_memset(result, 0, sizeof(UFILE));
+    result->str.fBuffer = stringBuf;
+    result->str.fPos    = stringBuf;
+    result->str.fLimit  = stringBuf+capacity;
+    return result;
+}
+
 U_CAPI UBool U_EXPORT2
 u_feof(UFILE  *f)
 {
@@ -132,7 +151,12 @@ U_CAPI void U_EXPORT2
 u_fflush(UFILE *file)
 {
     ufile_flush_translit(file);
-    fflush(file->fFile);
+    if (file->fFile) {
+        fflush(file->fFile);
+    }
+    else if (file->str.fPos < file->str.fLimit) {
+        *(file->str.fPos++) = 0;
+    }
     /* TODO: flush input */
 }
 
@@ -140,10 +164,15 @@ U_CAPI void
 u_frewind(UFILE *file)
 {
     u_fflush(file);
-    rewind(file->fFile);
     ucnv_reset(file->fConverter);
-    file->str.fPos   = file->fUCBuffer;
-    file->str.fLimit = file->fUCBuffer;
+    if (file->fFile) {
+        rewind(file->fFile);
+        file->str.fLimit = file->fUCBuffer;
+        file->str.fPos   = file->fUCBuffer;
+    }
+    else {
+        file->str.fPos = file->str.fBuffer;
+    }
 }
 
 U_CAPI void U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */

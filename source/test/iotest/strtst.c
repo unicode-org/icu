@@ -245,6 +245,29 @@ static void TestString(void) {
 
 }
 
+static void TestLocalizedString(void) {
+    UChar testStr[256];
+    UChar uBuffer[256];
+    int32_t numResult = -1;
+    UFILE *strFile = u_fstropen(testStr, sizeof(testStr)/sizeof(testStr[0]), "en_US");
+
+    if (!strFile) {
+        log_err("u_fstropen failed to work\n");
+        return;
+    }
+    u_fprintf(strFile, "%d", 1234);
+    u_frewind(strFile);
+    u_fscanf(strFile, "%d", &numResult);
+    u_fclose(strFile);
+    u_uastrcpy(uBuffer,"1,234");
+    if (u_strcmp(testStr, uBuffer) != 0) {
+        log_err("u_fprintf failed to work on a string\n");
+    }
+    if (numResult != 1234) {
+        log_err("u_fscanf failed to work on a string\n");
+    }
+}
+
 #define Test_u_snprintf(limit, format, value, expectedSize, expectedStr) \
     u_uastrncpy(testStr, "xxxxxxxxxxxxxx", sizeof(testStr)/sizeof(testStr[0]));\
     size = u_snprintf(testStr, limit, format, value);\
@@ -638,6 +661,7 @@ static void TestBadScanfFormat(void) {
 U_CFUNC void
 addStringTest(TestNode** root) {
     addTest(root, &TestString, "string/TestString");
+    addTest(root, &TestLocalizedString, "string/TestLocalizedString");
     addTest(root, &TestSprintfFormat, "string/TestSprintfFormat");
     addTest(root, &TestSnprintf, "string/TestSnprintf");
     addTest(root, &TestSScanset, "string/TestSScanset");

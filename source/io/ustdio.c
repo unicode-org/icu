@@ -314,6 +314,17 @@ u_file_write_flush(    const UChar     *chars,
     int32_t     written      = 0;
     int32_t     numConverted = 0;
 
+    if (!f->fFile) {
+        int32_t charsLeft = f->str.fLimit - f->str.fPos;
+        if (flush && charsLeft > count) {
+            count++;
+        }
+        written = ufmt_min(count, charsLeft);
+        u_strncpy(f->str.fPos, chars, written);
+        f->str.fPos += written;
+        return written;
+    }
+
     if (count < 0) {
         count = u_strlen(chars);
     }
