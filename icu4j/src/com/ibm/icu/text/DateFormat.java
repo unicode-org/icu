@@ -485,7 +485,7 @@ public abstract class DateFormat extends Format {
     public final static DateFormat getDateTimeInstance(int dateStyle,
                                                        int timeStyle)
     {
-        return get(timeStyle, dateStyle, Locale.getDefault());
+        return get(dateStyle, timeStyle, Locale.getDefault());
     }
 
     /**
@@ -499,7 +499,7 @@ public abstract class DateFormat extends Format {
     public final static DateFormat
         getDateTimeInstance(int dateStyle, int timeStyle, Locale aLocale)
     {
-        return get(timeStyle, dateStyle, aLocale);
+        return get(dateStyle, timeStyle, aLocale);
     }
 
     /**
