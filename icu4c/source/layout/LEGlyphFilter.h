@@ -21,7 +21,7 @@ class LEGlyphFilter /* not : public UObject because this is an interface/mixin c
 public:
     /**
      * Destructor.
-     * @draft ICU 2.4
+     * @internal
      */
     virtual ~LEGlyphFilter();
 

@@ -50,7 +50,7 @@ public:
      * @see ParagraphLayout
      * @see ParagraphLayout::VisualRun
      *
-     * @draft ICU 2.6
+     * @stable ICU 3.2
      */
     class U_LAYOUTEX_API Line : public UObject
     {
@@ -61,7 +61,7 @@ public:
          * clients responsibility to destroy the objects, so the destructor
          * is public.
         *
-        * @draft ICU 2.6
+        * @stable ICU 3.2
          */
         ~Line();
 
@@ -70,7 +70,7 @@ public:
          *
          * @return the number of visual runs.
          *
-         * @draft ICU 2.6
+         * @stable ICU 3.2
          */
         le_int32 countRuns() const;
 
@@ -80,7 +80,7 @@ public:
          *
          * @return the ascent of the line.
          *
-         * @draft ICU 2.6
+         * @stable ICU 3.2
          */
         le_int32 getAscent() const;
 
@@ -90,7 +90,7 @@ public:
          *
          * @return the descent of the line.
          *
-         * @draft ICU 2.6
+         * @stable ICU 3.2
          */
         le_int32 getDescent() const;
 
@@ -100,7 +100,7 @@ public:
          *
          * @return the leading of the line.
          *
-         * @draft ICU 2.6
+         * @stable ICU 3.2
          */
         le_int32 getLeading() const;
 
@@ -128,21 +128,21 @@ public:
          *
          * @see ParagraphLayout::VisualRun
          *
-         * @draft ICU 2.6
+         * @stable ICU 3.2
          */
         const VisualRun *getVisualRun(le_int32 runIndex) const;
 
         /**
          * ICU "poor man's RTTI", returns a UClassID for the actual class.
          *
-         * @draft ICU 2.6
+         * @stable ICU 3.2
          */
         virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
 
         /**
          * ICU "poor man's RTTI", returns a UClassID for this class.
          *
-         * @draft ICU 2.6
+         * @stable ICU 3.2
          */
         static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
 
@@ -188,7 +188,7 @@ public:
      *
      * @see ParagraphLayout::Line
      *
-     * @draft ICU 2.6
+     * @stable ICU 3.2
      */
     class U_LAYOUTEX_API VisualRun : public UObject
     {
@@ -203,7 +203,7 @@ public:
          *
          * @see LEFontInstance
          *
-         * @draft ICU 2.6
+         * @stable ICU 3.2
          */
         const LEFontInstance *getFont() const;
 
@@ -213,7 +213,7 @@ public:
          * @return the direction of the run. This will be UBIDI_LTR if the
          *         run is left-to-right and UBIDI_RTL if the line is right-to-left.
          *
-         * @draft ICU 2.6
+         * @stable ICU 3.2
          */
         UBiDiDirection getDirection() const;
 
@@ -222,7 +222,7 @@ public:
          *
          * @return the number of glyphs.
          *
-         * @draft ICU 2.6
+         * @stable ICU 3.2
          */
         le_int32 getGlyphCount() const;
 
@@ -234,7 +234,7 @@ public:
          *         is owned by the <code>VisualRun</code> object and must not be deleted.
          *         It will remain valid as long as the <code>VisualRun</code> object is valid.
          *
-         * @draft ICU 2.6
+         * @stable ICU 3.2
          */
         const LEGlyphID *getGlyphs() const;
 
@@ -249,7 +249,7 @@ public:
          *         is owned by the <code>VisualRun</code> object and must not be deleted.
          *         It will remain valid as long as the <code>VisualRun</code> object is valid.
          *
-         * @draft ICU 2.6
+         * @stable ICU 3.2
          */
         const float *getPositions() const;
 
@@ -261,7 +261,7 @@ public:
          *         is owned by the <code>VisualRun</code> object and must not be deleted.
          *         It will remain valid as long as the <code>VisualRun</code> object is valid.
          *
-         * @draft ICU 2.6
+         * @stable ICU 3.2
          */
         const le_int32 *getGlyphToCharMap() const;
 
@@ -271,7 +271,7 @@ public:
          *
          * @return the ascent value of this run's font.
          *
-         * @draft ICU 2.6
+         * @stable ICU 3.2
          */
         le_int32 getAscent() const;
 
@@ -281,7 +281,7 @@ public:
          *
          * @return the descent value of this run's font.
          *
-         * @draft ICU 2.6
+         * @stable ICU 3.2
          */
         le_int32 getDescent() const;
 
@@ -291,21 +291,21 @@ public:
          *
          * @return the leading value of this run's font.
          *
-         * @draft ICU 2.6
+         * @stable ICU 3.2
          */
         le_int32 getLeading() const;
 
         /**
          * ICU "poor man's RTTI", returns a UClassID for the actual class.
          *
-         * @draft ICU 2.6
+         * @stable ICU 3.2
          */
         virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
 
         /**
          * ICU "poor man's RTTI", returns a UClassID for this class.
          *
-         * @draft ICU 2.6
+         * @stable ICU 3.2
          */
         static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
 
@@ -393,7 +393,7 @@ public:
      * The destructor. Virtual so that it works correctly with
      * sublcasses.
      *
-     * @draft ICU 2.6
+     * @stable ICU 3.2
      */
     ~ParagraphLayout();
 
@@ -414,7 +414,7 @@ public:
      *
      * @return <code>TRUE</code> if the paragraph contains complex text.
      *
-     * @draft ICU 2.6
+     * @stable ICU 3.2
      */
     static le_bool isComplex(const LEUnicode chars[], le_int32 count, const FontRuns *fontRuns);
 #else
@@ -428,7 +428,7 @@ public:
      *
      * @return <code>TRUE</code> if any of the text requires complex processing.
      *
-     * @draft ICU 2.6
+     * @stable ICU 3.2
      */
     static le_bool isComplex(const LEUnicode chars[], le_int32 count);
 
@@ -441,7 +441,7 @@ public:
      *
      * @return the resolved paragraph level.
      *
-     * @draft ICU 2.6
+     * @stable ICU 3.2
      */
     UBiDiLevel getParagraphLevel();
 
@@ -452,7 +452,7 @@ public:
      *         <code>UBIDI_RTL</code> if the text is all right to left,
      *         or <code>UBIDI_MIXED</code> if the text has mixed direction.
      *
-     * @draft ICU 2.6
+     * @stable ICU 3.2
      */
     UBiDiDirection getTextDirection();
 
@@ -462,7 +462,7 @@ public:
      *
      * @return the ascent value.
      *
-     * @draft ICU 2.6
+     * @stable ICU 3.2
      */
     virtual le_int32 getAscent() const;
 
@@ -472,7 +472,7 @@ public:
      *
      * @return the decent value.
      *
-     * @draft ICU 2.6
+     * @stable ICU 3.2
      */
     virtual le_int32 getDescent() const;
 
@@ -482,7 +482,7 @@ public:
      *
      * @return the leading value.
      *
-     * @draft ICU 2.6
+     * @stable ICU 3.2
      */
     virtual le_int32 getLeading() const;
 
@@ -490,7 +490,7 @@ public:
      * Reset line breaking to start from the beginning of the paragraph.
      *
      *
-     * @draft ICU 2.6
+     * @stable ICU 3.2
      */
     void reflow();
 
@@ -509,21 +509,21 @@ public:
      *
      * @see ParagraphLayout::Line
      *
-     * @draft ICU 2.6
+     * @stable ICU 3.2
      */
     Line *nextLine(float width);
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
-     * @draft ICU 2.6
+     * @stable ICU 3.2
      */
     virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
-     * @draft ICU 2.6
+     * @stable ICU 3.2
      */
     static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
 
