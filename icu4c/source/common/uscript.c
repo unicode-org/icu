@@ -283,7 +283,11 @@ uscript_getCode(const char* nameOrAbbrOrLocale,
     int32_t numFilled=0;
     int32_t len=0;
     /* check arguments */
-    if(U_FAILURE(*err)){
+    if(err==NULL ||U_FAILURE(*err)){
+        return numFilled;
+    }
+    if(nameOrAbbrOrLocale==NULL || fillIn == NULL || capacity<0){
+        *err = U_ILLEGAL_ARGUMENT_ERROR;
         return numFilled;
     }
     /* try the Names array first */
