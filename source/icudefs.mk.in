@@ -52,7 +52,7 @@ ICUDATA_DIR = $(pkgdatadir)
 ICUPKGDATA_DIR = $(ICUDATA_DIR)
 else
 ifeq ($(PKGDATA_MODE),dll)
-ICUDATA_DIR = $(pkgdatadir)
+ICUDATA_DIR = $(pkglibdir)
 ICUPKGDATA_DIR = $(libdir)
 else
 ICUDATA_DIR = $(pkglibdir)
