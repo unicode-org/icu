@@ -37,7 +37,7 @@
 
 
 /* Check our settings... */
-#include "platform.h"
+#include "utypes.h"
 
 /* APP_NO_THREADS is an old symbol. We'll honour it if present. */
 #ifdef APP_NO_THREADS
