@@ -107,22 +107,11 @@
  *
  * unorm_normalize(UNORM_FCD) may be implemented with UNORM_NFD.
  *
- * For more details on FCD see the collation design document: http://oss.software.ibm.com/icu/develop/collation/
+ * For more details on FCD see the collation design document:
+ * http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/design/collation/ICU_collation_design.htm
  */
 
 typedef enum {
-  /** No decomposition/composition */
-  UCOL_NO_NORMALIZATION = 1,
-  /** Canonical decomposition */
-  UCOL_DECOMP_CAN = 2,
-  /** Compatibility decomposition */
-  UCOL_DECOMP_COMPAT = 3,
-  /** Default normalization */
-  UCOL_DEFAULT_NORMALIZATION = UCOL_DECOMP_COMPAT, 
-  /** Canonical decomposition followed by canonical composition */
-  UCOL_DECOMP_CAN_COMP_COMPAT = 4,
-  /** Compatibility decomposition followed by canonical composition */
-  UCOL_DECOMP_COMPAT_COMP_CAN =5,
   /** No decomposition/composition */
   UNORM_NONE = 1, 
   /** Canonical decomposition */
@@ -140,6 +129,39 @@ typedef enum {
 
   UNORM_MODE_COUNT,
 
+  /* *** The rest of this enum is entirely deprecated. *** */
+
+  /**
+   * No decomposition/composition
+   * @deprecated To be removed after 2002-sep-30, use UNORM_NONE.
+   */
+  UCOL_NO_NORMALIZATION = 1,
+  /**
+   * Canonical decomposition
+   * @deprecated To be removed after 2002-sep-30, use UNORM_NFD.
+   */
+  UCOL_DECOMP_CAN = 2,
+  /**
+   * Compatibility decomposition
+   * @deprecated To be removed after 2002-sep-30, use UNORM_NFKD.
+   */
+  UCOL_DECOMP_COMPAT = 3,
+  /**
+   * Default normalization
+   * @deprecated To be removed after 2002-sep-30, use UNORM_NFKD or UNORM_DEFAULT.
+   */
+  UCOL_DEFAULT_NORMALIZATION = UCOL_DECOMP_COMPAT, 
+  /**
+   * Canonical decomposition followed by canonical composition
+   * @deprecated To be removed after 2002-sep-30, use UNORM_NFC.
+   */
+  UCOL_DECOMP_CAN_COMP_COMPAT = 4,
+  /**
+   * Compatibility decomposition followed by canonical composition
+   * @deprecated To be removed after 2002-sep-30, use UNORM_NFKC.
+   */
+  UCOL_DECOMP_COMPAT_COMP_CAN =5,
+
   /**
    * Do not normalize Hangul.
    * @deprecated To be removed without replacement after 2002-mar-31.
@@ -151,9 +173,6 @@ typedef enum {
    */
   UNORM_IGNORE_HANGUL    = 16
 } UNormalizationMode;
-
-/** Possible normalization options */
-typedef UNormalizationMode UNormalizationOption;
 
 /**
  * Normalize a string.
@@ -173,13 +192,10 @@ typedef UNormalizationMode UNormalizationOption;
  * @stable
  */
 U_CAPI int32_t
-unorm_normalize(const UChar*           source,
-        int32_t                 sourceLength, 
-        UNormalizationMode      mode, 
-        int32_t            options,
-        UChar*                  result,
-        int32_t                 resultLength,
-        UErrorCode*             status);    
+unorm_normalize(const UChar *source, int32_t sourceLength,
+                UNormalizationMode mode, int32_t options,
+                UChar *result, int32_t resultLength,
+                UErrorCode *status);
 
 /**
  * The function u_normalize() has been renamed to unorm_normalize()
@@ -221,9 +237,8 @@ typedef enum UNormalizationCheckResult {
  * @return UNORM_YES, UNORM_NO or UNORM_MAYBE
  */
 U_CAPI UNormalizationCheckResult U_EXPORT2
-unorm_quickCheck(const UChar*       source,
-             int32_t            sourcelength, 
-             UNormalizationMode mode, 
-             UErrorCode*        status);
+unorm_quickCheck(const UChar *source, int32_t sourcelength,
+                 UNormalizationMode mode,
+                 UErrorCode *status);
 
 #endif
