@@ -272,7 +272,7 @@ void HexToUniTransliteratorTest::TestTransliterate(){
         UnicodeString("*##00*", ""),    UnicodeString("hell*6F**74**68**65*re", ""),  "1", "20", "4", UnicodeString("hellothere", ""), 
 
     };
-    int i;
+    uint32_t i;
     for(i=0;i<sizeof(Data)/sizeof(Data[0]);i=i+6){
         HexToUnicodeTransliterator *trans1=new HexToUnicodeTransliterator(Data[i+0], NULL, status);
         if(U_FAILURE(status)){
