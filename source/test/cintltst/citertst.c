@@ -124,8 +124,10 @@ static void TestPrevious()
     /* Test with a contracting character sequence */
     u_uastrcpy(rule, " < a,A < b,B < c,C, d,D < z,Z < ch,cH,Ch,CH");
     c1 = ucol_openRules(rule, u_strlen(rule), UCOL_NO_NORMALIZATION, UCOL_DEFAULT_STRENGTH, &status);
-    // synwee : temporarily changed
-    // c1 = ucol_open("es_ES", &status);
+
+    /* synwee : temporarily changed
+       c1 = ucol_open("es_ES", &status); */
+
     if (c1 == NULL || U_FAILURE(status))
     {
         log_err("Couldn't create a RuleBasedCollator with a contracting sequence\n %s\n", 
