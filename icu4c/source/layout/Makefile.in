@@ -44,7 +44,7 @@ DYNAMICCFLAGS = $(SHAREDLIBCFLAGS)
 DYNAMICCXXFLAGS = $(SHAREDLIBCXXFLAGS)
 
 DEFS = @DEFS@
-CPPFLAGS = @CPPFLAGS@ $(LIBCPPFLAGS) -I$(srcdir) -I$(top_builddir)/common -I$(srcdir)/aat -I$(srcdir)/opentype -I$(top_builddir)/common -I$(top_srcdir)/common
+CPPFLAGS = @CPPFLAGS@ $(LIBCPPFLAGS) -I$(srcdir) -I$(top_builddir)/common -I$(srcdir)/unicode -I$(srcdir)/.. -I$(top_builddir)/common -I$(top_srcdir)/common
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 ENABLE_RPATH = @ENABLE_RPATH@
@@ -56,7 +56,8 @@ LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
 LIBS= @LIBS@
 
 
-OBJECTS =  OpenTypeLayoutEngine.o \
+OBJECTS =  loengine.o \
+OpenTypeLayoutEngine.o \
 ThaiLayoutEngine.o \
 ThaiShaping.o \
 ThaiStateTables.o \
@@ -118,7 +119,8 @@ STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
 DEPS = $(LAYOUT_OBJS:.o=.d)
 
 ## Header files to install
-HEADERS= $(srcdir)/LayoutEngine.h $(srcdir)/LE*.h
+HEADERS= $(srcdir)/*LayoutEngine.h $(srcdir)/LE*.h
+LOHEADERS= $(srcdir)/unicode/loengine.h
 
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local	\
@@ -159,13 +161,17 @@ install-headers:
 	 echo " $(INSTALL_DATA) $$file $(DESTDIR)$(includedir)/layout"; \
 	 $(INSTALL_DATA) $$file $(DESTDIR)$(includedir)/layout || exit; \
 	done
+	@for file in $(LOHEADERS); do \
+	 echo " $(INSTALL_DATA) $$file $(DESTDIR)$(includedir)/unicode"; \
+	 $(INSTALL_DATA) $$file $(DESTDIR)$(includedir)/unicode || exit; \
+	done
 
 dist-local:
 
 clean-local:
 	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
-	$(RMV) $(LAYOUT_OBJS) $(ALL_TARGETS)
-#	$(RMV) $(LAYOUT_OBJS) $(STATIC_OBJECTS) $(ALL_TARGETS)
+	$(RMV) $(OBJECTS) $(ALL_TARGETS)
+#	$(RMV) $(OBJECTS) $(STATIC_OBJECTS) $(ALL_TARGETS)
 
 distclean-local: clean-local
 	$(RMV) Makefile
