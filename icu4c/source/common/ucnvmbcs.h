@@ -19,7 +19,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/ucnv.h"
-#include "ucnv_bld.h"
+#include "ucnv_cnv.h"
 
 /**
  * ICU conversion (.cnv) data file structure, following the usual UDataInfo
@@ -201,7 +201,9 @@ enum {
 
     MBCS_OUTPUT_EXT_ONLY,   /* e */
 
-    MBCS_OUTPUT_COUNT
+    MBCS_OUTPUT_COUNT,
+
+    MBCS_OUTPUT_DBCS_ONLY=0xdb  /* runtime-only type for DBCS-only handling of SISO tables */
 };
 
 /**
@@ -219,7 +221,7 @@ typedef struct {
  */
 typedef struct UConverterMBCSTable {
     /* toUnicode */
-    uint8_t countStates;
+    uint8_t countStates, dbcsOnlyState;
     uint32_t countToUFallbacks;
 
     const int32_t (*stateTable)/*[countStates]*/[256];
@@ -238,6 +240,7 @@ typedef struct UConverterMBCSTable {
     char *swapLFNLName;
 
     /* extension data */
+    struct UConverterSharedData *baseSharedData;
     const int32_t *extIndexes;
 } UConverterMBCSTable;
 
@@ -288,7 +291,7 @@ _MBCSSingleSimpleGetNextUChar(UConverterSharedData *sharedData,
  * returns fallback values.
  */
 #define _MBCS_SINGLE_SIMPLE_GET_NEXT_BMP(sharedData, b) \
-    (UChar)MBCS_ENTRY_FINAL_VALUE_16((sharedData)->table->mbcs.stateTable[0][(uint8_t)(b)])
+    (UChar)MBCS_ENTRY_FINAL_VALUE_16((sharedData)->mbcs.stateTable[0][(uint8_t)(b)])
 
 /**
  * This is an internal function that allows other converter implementations
@@ -299,7 +302,7 @@ _MBCSIsLeadByte(UConverterSharedData *sharedData, char byte);
 
 /** This is a macro version of _MBCSIsLeadByte(). */
 #define _MBCS_IS_LEAD_BYTE(sharedData, byte) \
-    (UBool)MBCS_ENTRY_IS_TRANSITION((sharedData)->table->mbcs.stateTable[0][(uint8_t)(byte)])
+    (UBool)MBCS_ENTRY_IS_TRANSITION((sharedData)->mbcs.stateTable[0][(uint8_t)(byte)])
 
 /**
  * This is another simple conversion function for internal use by other

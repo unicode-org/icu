@@ -439,7 +439,7 @@ ucnv_extGetUnicodeSet(const UConverter *cnv,
 #define UCNV_EXT_FROM_U_MASK_ROUNDTRIP(value) ((value)&~UCNV_EXT_FROM_U_ROUNDTRIP_FLAG)
 
 /* use after masking off the roundtrip flag */
-#define UCNV_EXT_FROM_U_GET_LENGTH(value) (((value)>>UCNV_EXT_FROM_U_LENGTH_SHIFT)&UCNV_EXT_MAX_BYTES)
+#define UCNV_EXT_FROM_U_GET_LENGTH(value) (int32_t)(((value)>>UCNV_EXT_FROM_U_LENGTH_SHIFT)&UCNV_EXT_MAX_BYTES)
 
 /* get bytes or bytes index */
 #define UCNV_EXT_FROM_U_GET_DATA(value) ((value)&UCNV_EXT_FROM_U_DATA_MASK)
