@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/UnicodeSetTest.java,v $ 
- * $Date: 2003/06/03 18:49:31 $ 
- * $Revision: 1.49 $
+ * $Date: 2003/06/11 20:00:11 $ 
+ * $Revision: 1.50 $
  *
  *****************************************************************************************
  */
@@ -509,6 +509,33 @@ public class UnicodeSetTest extends TestFmwk {
         set.retain((char)0x73);
         exp.applyPattern("[s]");
         if (!set.equals(exp)) { errln("FAIL: retain('s')"); return; }
+
+        // ICU 2.6 coverage tests
+        // public final UnicodeSet retain(String s);
+        // public final UnicodeSet remove(int c);
+        // public final UnicodeSet remove(String s);
+        // public int hashCode();
+        set.applyPattern("[a-z{ab}{cd}]");
+        set.retain("cd");
+        exp.applyPattern("[{cd}]");
+        if (!set.equals(exp)) { errln("FAIL: retain(\"cd\")"); return; }
+        
+        set.applyPattern("[a-z{ab}{cd}]");
+        set.remove((char)0x63);
+        exp.applyPattern("[abd-z{ab}{cd}]");
+        if (!set.equals(exp)) { errln("FAIL: remove('c')"); return; }
+        
+        set.remove("cd");
+        exp.applyPattern("[abd-z{ab}]");
+        if (!set.equals(exp)) { errln("FAIL: remove(\"cd\")"); return; }
+
+        if (set.hashCode() != exp.hashCode()) {
+            errln("FAIL: hashCode() unequal");
+        }
+        exp.clear();
+        if (set.hashCode() == exp.hashCode()) {
+            errln("FAIL: hashCode() equal");
+        }
     }
     
     public void TestStrings() {

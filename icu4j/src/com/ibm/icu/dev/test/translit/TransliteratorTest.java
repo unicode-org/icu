@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2003/06/03 18:49:31 $
- * $Revision: 1.125 $
+ * $Date: 2003/06/11 20:00:12 $
+ * $Revision: 1.126 $
  *
  *****************************************************************************************
  */
@@ -2881,6 +2881,16 @@ public class TransliteratorTest extends TestFmwk {
         // NullTransliterator
         Transliterator t = Transliterator.getInstance("Null", Transliterator.FORWARD);
         expect(t, "a", "a");
+
+        // Source, target set
+        t = Transliterator.getInstance("Latin-Greek", Transliterator.FORWARD);
+        t.setFilter(new UnicodeSet("[A-Z]"));
+        logln("source = " + t.getSourceSet());
+        logln("target = " + t.getTargetSet());
+
+        t = Transliterator.createFromRules("x", "(.) > &Any-Hex($1);", Transliterator.FORWARD);
+        logln("source = " + t.getSourceSet());
+        logln("target = " + t.getTargetSet());
     }
 
     //======================================================================
