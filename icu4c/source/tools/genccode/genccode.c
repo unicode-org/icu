@@ -158,9 +158,17 @@ static const struct AssemblyType {
 
         ".long "
     },
+    {"gcc-cygwin",
+        ".globl _%s\n"
+        "\t.section .rodata\n"
+        "\t.align 8\n" /* Either align 8 bytes or 2^8 (256) bytes. 8 bytes is needed. */
+        "_%s:\n\n",
+
+        ".long "
+    },
     {"sun",
         "\t.section \".rodata\"\n"
-        "\t.align   16\n"
+        "\t.align   8\n"
         ".globl     %s\n"
         "%s:\n",
 

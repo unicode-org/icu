@@ -3,7 +3,7 @@
 ## Copyright (c) 2001-2003, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-cygwin,v 1.14 2004/02/27 22:54:23 grhoten-oss Exp $
+## $Id: mh-cygwin,v 1.15 2004/03/10 18:31:04 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -E -MM $(DEFS) $(CPPFLAGS)
@@ -94,7 +94,7 @@ BIR_DEPS=
 LDLIBRARYPATH_ENVVAR = PATH
 
 # The type of assembly to write for generating an object file
-GENCCODE_ASSEMBLY=-a gcc
+GENCCODE_ASSEMBLY=-a gcc-cygwin
 
 ## End Cygwin-specific setup
 
