@@ -1194,7 +1194,6 @@ void NumberFormatTest::TestSurrogateSupport(void) {
 }
 
 void NumberFormatTest::TestCurrencyPatterns(void) {
-    UnicodeString dot00(".00", "");
     int32_t i, locCount;
     const Locale* locs = NumberFormat::getAvailableLocales(locCount);
     for (i=0; i<locCount; ++i) {
