@@ -151,7 +151,7 @@ u_fopen(const char    *filename,
     const char    *codepage)
 {
   UErrorCode     status = U_ZERO_ERROR;
-  UBool     useSysCP = (locale == 0 && codepage == 0);
+  UBool     useSysCP = (UBool)(locale == 0 && codepage == 0);
   UFILE     *result = (UFILE*) malloc(sizeof(UFILE));
   if(result == 0)
     return 0;
@@ -206,7 +206,7 @@ u_finit(FILE        *f,
     const char    *codepage)
 {
   UErrorCode     status         = U_ZERO_ERROR;
-  UBool     useSysCP     = (locale == NULL && codepage == NULL);
+  UBool     useSysCP     = (UBool)(locale == NULL && codepage == NULL);
   UFILE     *result     = (UFILE*) malloc(sizeof(UFILE));
   if(result == 0)
     return 0;

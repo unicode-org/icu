@@ -35,7 +35,7 @@ ufmt_isdigit(UChar     c,
 {
   int digitVal = ufmt_digitvalue(c);
   
-  return (digitVal < radix && digitVal >= 0);
+  return (UBool)(digitVal < radix && digitVal >= 0);
 }
 
 #define TO_UC_DIGIT(a) a <= 9 ? (0x0030 + a) : (0x0030 + a + 7)
@@ -118,7 +118,7 @@ ufmt_utol(const UChar     *buffer,
 UBool
 ufmt_isws(UChar c)
 {
-  return (c == 0x0020 || /* space */
+  return (UBool)(c == 0x0020 || /* space */
       c == 0x0009 || /* tab */
       c == 0x000D || /* CR */
       c == 0x000A || /* LF */
