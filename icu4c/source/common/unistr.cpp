@@ -432,6 +432,30 @@ UnicodeString::operator[] (UTextOffset pos)
   return UCharReference(this, pos);
 }
 
+UnicodeString UnicodeString::unescape() const {
+    UnicodeString result;
+    for (int32_t i=0; i<length(); ) {
+        UChar32 c = char32At(i++);
+        if (c == 0x005C /*'\\'*/) {
+            c = unescapeAt(i); // advances i
+            if (c == (UChar32)0xFFFFFFFF) {
+                break; // invalid escape sequence
+            }
+        }
+        result.append(c);
+    }
+    return result;
+}
+
+// u_unescapeAt() callback to get a UChar from a UnicodeString
+static UChar _charAt(int32_t offset, void *context) {
+    return ((UnicodeString*) context)->charAt(offset);
+}
+
+UChar32 UnicodeString::unescapeAt(int32_t &offset) const {
+    return u_unescapeAt(_charAt, &offset, length(), (void*)this);
+}
+
 //========================================
 // Read-only implementation
 //========================================

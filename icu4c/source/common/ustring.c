@@ -327,9 +327,206 @@ releaseDefaultConverter(UConverter *converter)
   }
 }
 
+/* u_unescape & support fns ------------------------------------------------- */
+
+static const UChar UNESCAPE_MAP[] = {
+    /*"   0x22, 0x22 */
+    /*'   0x27, 0x27 */
+    /*?   0x3F, 0x3F */
+    /*\   0x5C, 0x5C */
+    /*a*/ 0x61, 0x07,
+    /*b*/ 0x62, 0x08,
+    /*f*/ 0x66, 0x0c,
+    /*n*/ 0x6E, 0x0a,
+    /*r*/ 0x72, 0x0d,
+    /*t*/ 0x74, 0x09,
+    /*v*/ 0x76, 0x0b
+};
+enum { UNESCAPE_MAP_LENGTH = sizeof(UNESCAPE_MAP) / sizeof(UNESCAPE_MAP[0]) };
+
+/* Convert one octal digit to a numeric value 0..7, or -1 on failure */
+static int8_t _digit8(UChar c) {
+    if (c >= 0x0030 && c <= 0x0037) {
+        return c - 0x0030;
+    }
+    return -1;
+}
+
+/* Convert one hex digit to a numeric value 0..F, or -1 on failure */
+static int8_t _digit16(UChar c) {
+    if (c >= 0x0030 && c <= 0x0039) {
+        return c - 0x0030;
+    }
+    if (c >= 0x0041 && c <= 0x0046) {
+        return c - (0x0041 - 10);
+    }
+    if (c >= 0x0061 && c <= 0x0066) {
+        return c - (0x0061 - 10);
+    }
+    return -1;
+}
+
+/* Parse a single escape sequence.  Although this method deals in
+ * UChars, it does not use C++ or UnicodeString.  This allows it to
+ * be used from C contexts. */
 U_CAPI int32_t U_EXPORT2
-u_unescapeChars(const char *s,
-                UChar *dest, int32_t destSize) {
-  /* ### TBD */
-  return 0;
+u_unescapeAt(UNESCAPE_CHAR_AT charAt,
+             int32_t *offset,
+             int32_t length,
+             void *context) {
+
+    int32_t start = *offset;
+    UChar c;
+    UChar32 result = 0;
+    int8_t n = 0;
+    int8_t minDig = 0;
+    int8_t maxDig = 0;
+    int8_t bitsPerDigit = 4; 
+    int8_t dig;
+    int32_t i;
+
+    /* Check that offset is in range */
+    if (*offset < 0 || *offset >= length) {
+        goto err;
+    }
+
+    /* Fetch first UChar after '\\' */
+    c = charAt((*offset)++, context);
+
+    /* Convert hexadecimal and octal escapes */
+    switch (c) {
+    case 0x0075 /*'u'*/:
+        minDig = maxDig = 4;
+        break;
+    case 0x0055 /*'U'*/:
+        minDig = maxDig = 8;
+        break;
+    case 0x0078 /*'x'*/:
+        minDig = 1;
+        maxDig = 2;
+        break;
+    default:
+        dig = _digit8(c);
+        if (dig >= 0) {
+            minDig = 1;
+            maxDig = 3;
+            n = 1; /* Already have first octal digit */
+            bitsPerDigit = 3;
+            result = dig;
+        }
+        break;
+    }
+    if (minDig != 0) {
+        while (*offset < length && n < maxDig) {
+            c = charAt(*offset, context);
+            dig = (bitsPerDigit == 3) ? _digit8(c) : _digit16(c);
+            if (dig < 0) {
+                break;
+            }
+            result = (result << bitsPerDigit) | dig;
+            ++(*offset);
+            ++n;
+        }
+        if (n < minDig) {
+            goto err;
+        }
+        return result;
+    }
+
+    /* Convert C-style escapes in table */
+    for (i=0; i<UNESCAPE_MAP_LENGTH; i+=2) {
+        if (c == UNESCAPE_MAP[i]) {
+            return UNESCAPE_MAP[i+1];
+        } else if (c > UNESCAPE_MAP[i]) {
+            break;
+        }
+    }
+
+    /* If no special forms are recognized, then consider
+     * the backslash to generically escape the next character. */
+    return c;
+
+ err:
+    /* Invalid escape sequence */
+    *offset = start; /* Reset to initial value */
+    return (UChar32)0xFFFFFFFF;
+}
+
+/* u_unescapeAt() callback to return a UChar from a char* */
+static UChar _charPtr_charAt(int32_t offset, void *context) {
+    UChar c16;
+    /* It would be more efficient to access the invariant tables
+     * directly but there is no API for that. */
+    u_charsToUChars(((char*) context) + offset, &c16, 1);
+    return c16;
+}
+
+/* Append an escape-free segment of the text; used by u_unescape() */
+static void _appendUChars(UChar *dest, int32_t destCapacity,
+                          const char *src, int32_t srcLen) {
+    if (destCapacity < 0) {
+        destCapacity = 0;
+    }
+    if (srcLen > destCapacity) {
+        srcLen = destCapacity;
+    }
+    u_charsToUChars(src, dest, srcLen);
+}
+
+/* Do an invariant conversion of char* -> UChar*, with escape parsing */
+U_CAPI int32_t U_EXPORT2
+u_unescape(const char *src, UChar *dest, int32_t destCapacity) {
+    const char *segment = src;
+    UChar *destStart = dest;
+    UChar *destLimit;
+    char c;
+
+    if (dest == NULL) {
+        destCapacity = 0;
+    }
+
+    destLimit = dest + destCapacity;
+
+    while ((c=*src) != 0) {
+        /* '\\' intentionally written as compiler-specific
+         * character constant to correspond to compiler-specific
+         * char* constants. */
+        if (c == '\\') {
+            int32_t lenParsed = 0;
+            UChar32 c32;
+            if (src != segment) {
+                _appendUChars(dest, destLimit - dest,
+                              segment, src - segment);
+                dest += src - segment;
+            }
+            ++src; /* advance past '\\' */
+            c32 = u_unescapeAt(_charPtr_charAt, &lenParsed, uprv_strlen(src), (void*)src);
+            if (lenParsed == 0) {
+                goto err;
+            }
+            src += lenParsed; /* advance past escape seq. */
+            if (destStart != NULL) {
+                *dest = (UChar) c32;
+            }
+            dest++;
+            segment = src;
+        } else {
+            ++src;
+        }
+    }
+    if (src != segment) {
+        _appendUChars(dest, destLimit - dest,
+                      segment, src - segment);
+        dest += src - segment;
+    }
+    if (dest < destLimit) {
+        *dest = 0;
+    }
+    return dest - destStart + 1; /* add 1 for zero term */
+
+ err:
+    if (destStart != NULL && destCapacity > 0) {
+        *destStart = 0;
+    }
+    return 0;
 }

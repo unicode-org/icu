@@ -237,12 +237,87 @@ U_CAPI char* U_EXPORT2 u_austrcpy(char *s1,
 #endif
 
 /**
- * Unescape a string of invariant characters and write
- * the resulting Unicode characters to the destination.
- * ### TBD
+ * Unescape a string of characters and write the resulting
+ * Unicode characters to the destination buffer.  The following escape
+ * sequences are recognized:
+ *
+ * \uhhhh       4 hex digits; h in [0-9A-Fa-f]
+ * \Uhhhhhhhh   8 hex digits
+ * \xhh         1-2 hex digits
+ * \ooo         1-3 octal digits; o in [0-7]
+ *
+ * as well as the standard ANSI C escapes:
+ *
+ * \a => U+0007, \b => U+0008, \t => U+0009, \n => U+000A,
+ * \v => U+000B, \f => U+000C, \r => U+000D,
+ * \" => U+0022, \' => U+0027, \? => U+003F, \\ => U+005C
+ *
+ * Anything else following a backslash is generically escaped.  For
+ * example, "[a\-z]" returns "[a-z]".
+ *
+ * If an escape sequence is ill-formed, this method returns an empty
+ * string.  An example of an ill-formed sequence is "\u" followed by
+ * fewer than 4 hex digits.
+ *
+ * The above characters are recognized in the compiler's codepage,
+ * that is, they are coded as 'u', '\\', etc.  Characters that are
+ * not parts of escape sequences are converted using u_charsToUChars().
+ *
+ * This function is similar to UnicodeString::unescape() but not
+ * identical to it.  The latter takes a source UnicodeString, so it
+ * does escape recognition but no conversion.  It also recognizes a
+ * wider variety of hexadecimal and octal digit characters.
+ *
+ * @param src a zero-terminated string of invariant characters
+ * @param dest pointer to buffer to receive converted and unescaped
+ * text and, if there is room, a zero terminator.  May be NULL for
+ * preflighting, in which case no UChars will be written, but the
+ * return value will still be valid.  On error, an empty string is
+ * stored here (if possible).
+ * @param destCapacity the number of UChars that may be written at
+ * dest.  Ignored if dest == NULL.
+ * @return the capacity required to fully convert all of the source
+ * text, including the zero terminator, or 0 on error.
+ * @see UnicodeString::unescape()
  */
 U_CAPI int32_t U_EXPORT2
-u_unescapeChars(const char *s,
-                UChar *dest, int32_t destSize);
+u_unescape(const char *src,
+           UChar *dest, int32_t destCapacity);
 
+/**
+ * Callback function for u_unescapeAt() that returns a character of
+ * the source text given an offset and a context pointer.  The context
+ * pointer will be whatever is passed into u_unescapeAt().
+ */
+typedef UChar (*UNESCAPE_CHAR_AT)(int32_t offset, void *context);
+
+/**
+ * Unescape a single sequence. The character at offset-1 is assumed
+ * (without checking) to be a backslash.  This method takes a callback
+ * pointer to a function that returns the UChar at a given offset.  By
+ * varying this callback, ICU functions are able to unescape char*
+ * strings, UnicodeString objects, and UFILE pointers.
+ *
+ * If offset is out of range, or if the escape sequence is ill-formed,
+ * (UChar32)0xFFFFFFFF is returned.  See documentation of u_unescape()
+ * for a list of recognized sequences.
+ *
+ * @param charAt callback function that returns a UChar of the source
+ * text given an offset and a context pointer.
+ * @param offset pointer to the offset that will be passed to charAt.
+ * The offset value will be updated upon return to point after the
+ * last parsed character of the escape sequence.  On error the offset
+ * is unchanged.
+ * @param length the number of characters in the source text.  The
+ * last character of the source text is considered to be at offset
+ * length-1.
+ * @param context an opaque pointer passed directly into charAt.
+ * @return the character represented by the escape sequence at
+ * offset, or (UChar32)0xFFFFFFFF on error.
+ */
+U_CAPI int32_t U_EXPORT2
+u_unescapeAt(UNESCAPE_CHAR_AT charAt,
+             int32_t *offset,
+             int32_t length,
+             void *context);
 #endif
