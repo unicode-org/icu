@@ -24,12 +24,74 @@
 	<characters>
 		<exemplarCharacters>[:Knda:]</exemplarCharacters>
 	</characters>
-<numbers>
-	<currencies>
-		<currency type="INR">
-			<displayName>INR</displayName>
-			<symbol>रु</symbol>
-		</currency>
-	</currencies>
-</numbers>
+	<dates>
+		<calendars>
+			<calendar type="gregorian">
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">ಜನವರೀ</month>
+							<month type="2">ಫೆಬ್ರವರೀ</month>
+							<month type="3">ಮಾರ್ಚ್</month>
+							<month type="4">ಎಪ್ರಿಲ್</month>
+							<month type="5">ಮೆ</month>
+							<month type="6">ಜೂನ್</month>
+							<month type="7">ಜುಲೈ</month>
+							<month type="8">ಆಗಸ್ಟ್</month>
+							<month type="9">ಸಪ್ಟೆಂಬರ್</month>
+							<month type="10">ಅಕ್ಟೋಬರ್</month>
+							<month type="11">ನವೆಂಬರ್</month>
+							<month type="12">ಡಿಸೆಂಬರ್</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">ಜನವರೀ</month>
+							<month type="2">ಫೆಬ್ರವರೀ</month>
+							<month type="3">ಮಾರ್ಚ್</month>
+							<month type="4">ಎಪ್ರಿಲ್</month>
+							<month type="5">ಮೆ</month>
+							<month type="6">ಜೂನ್</month>
+							<month type="7">ಜುಲೈ</month>
+							<month type="8">ಆಗಸ್ಟ್</month>
+							<month type="9">ಸಪ್ಟೆಂಬರ್</month>
+							<month type="10">ಅಕ್ಟೋಬರ್</month>
+							<month type="11">ನವೆಂಬರ್</month>
+							<month type="12">ಡಿಸೆಂಬರ್</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">ರ.</day>
+							<day type="mon">ಸೋ.</day>
+							<day type="tue">ಮಂ.</day>
+							<day type="wed">ಬು.</day>
+							<day type="thu">ಗು.</day>
+							<day type="fri">ಶು.</day>
+							<day type="sat">ಶನಿ.</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun">ರವಿವಾರ</day>
+							<day type="mon">ಸೋಮವಾರ</day>
+							<day type="tue">ಮಂಗಳವಾರ</day>
+							<day type="wed">ಬುಧವಾರ</day>
+							<day type="thu">ಗುರುವಾರ</day>
+							<day type="fri">ಶುಕ್ರವಾರ</day>
+							<day type="sat">ಶನಿವಾರ</day>
+						</dayWidth>
+					</dayContext>
+				</days>
+				<am>ಪೂರ್ವಾಹ್ನ</am>
+				<pm>ಅಪರಾಹ್ನ</pm>
+			</calendar>
+		</calendars>
+	</dates>
+	<numbers>
+		<currencies>
+			<currency type="INR">
+				<displayName>INR</displayName>
+				<symbol>रु</symbol>
+			</currency>
+		</currencies>
+	</numbers>
 </ldml>

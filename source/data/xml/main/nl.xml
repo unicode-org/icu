@@ -354,6 +354,11 @@
 						</monthWidth>
 					</monthContext>
 				</months>
+				<eras>
+					<eraAbbr>
+						<era type="1">Sa'na Hizjria</era>
+					</eraAbbr>
+				</eras>
 			</calendar>
 			<calendar type="arabic-civil">
 				<months>
@@ -388,6 +393,11 @@
 						</monthWidth>
 					</monthContext>
 				</months>
+				<eras>
+					<eraAbbr>
+						<era type="1">Sa'na Hizjria</era>
+					</eraAbbr>
+				</eras>
 			</calendar>
 			<calendar type="gregorian">
 				<months>
@@ -467,6 +477,16 @@
 						</dayWidth>
 					</dayContext>
 				</days>
+				<week>
+					<minDays count="4"/>
+					<firstDay day="mon"/>
+				</week>
+				<eras>
+					<eraAbbr>
+						<era type="1">v. Chr.</era>
+						<era type="2">n. Chr.</era>
+					</eraAbbr>
+				</eras>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">

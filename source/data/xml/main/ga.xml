@@ -435,6 +435,12 @@
 				</days>
 				<am>a.m.</am>
 				<pm>p.m.</pm>
+				<eras>
+					<eraAbbr>
+						<era type="1">RC</era>
+						<era type="2">AD</era>
+					</eraAbbr>
+				</eras>
 			</calendar>
 		</calendars>
 		<timeZoneNames>

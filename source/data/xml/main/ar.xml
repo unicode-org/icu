@@ -290,6 +290,11 @@
 						</monthWidth>
 					</monthContext>
 				</months>
+				<eras>
+					<eraAbbr>
+						<era type="1">ه‍</era>
+					</eraAbbr>
+				</eras>
 			</calendar>
 			<calendar type="arabic-civil">
 				<months>
@@ -324,6 +329,18 @@
 						</monthWidth>
 					</monthContext>
 				</months>
+				<eras>
+					<eraAbbr>
+						<era type="1">ه‍</era>
+					</eraAbbr>
+				</eras>
+			</calendar>
+			<calendar type="buddhist">
+				<eras>
+					<eraAbbr>
+						<era type="1">التقويم البوذي</era>
+					</eraAbbr>
+				</eras>
 			</calendar>
 			<calendar type="gregorian">
 				<months>
@@ -380,8 +397,18 @@
 						</dayWidth>
 					</dayContext>
 				</days>
+				<week>
+					<minDays count="1"/>
+					<firstDay day="sat"/>
+				</week>
 				<am>ص</am>
 				<pm>م</pm>
+				<eras>
+					<eraAbbr>
+						<era type="1">ق.م</era>
+						<era type="2">م</era>
+					</eraAbbr>
+				</eras>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">

@@ -364,6 +364,15 @@
 				</months>
 				<days>
 					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">रवि</day>
+							<day type="mon">सोम</day>
+							<day type="tue">मंगल</day>
+							<day type="wed">बुध</day>
+							<day type="thu">गुरु</day>
+							<day type="fri">शुक्र</day>
+							<day type="sat">शनि</day>
+						</dayWidth>
 						<dayWidth type="wide">
 							<day type="sun">रविवार</day>
 							<day type="mon">सोमवार</day>
@@ -377,6 +386,12 @@
 				</days>
 				<am>पूर्वाह्न</am>
 				<pm>अपराह्न</pm>
+				<eras>
+					<eraAbbr>
+						<era type="1">ईसापूर्व</era>
+						<era type="2">सन</era>
+					</eraAbbr>
+				</eras>
 			</calendar>
 		</calendars>
 		<timeZoneNames>

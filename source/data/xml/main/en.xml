@@ -862,6 +862,12 @@
 						</dayWidth>
 					</dayContext>
 				</days>
+				<eras>
+					<eraAbbr>
+						<era type="1">BC</era>
+						<era type="2">AD</era>
+					</eraAbbr>
+				</eras>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">

@@ -605,6 +605,12 @@
 				</days>
 				<am>上午</am>
 				<pm>下午</pm>
+				<eras>
+					<eraAbbr>
+						<era type="1">公元前</era>
+						<era type="2">公元</era>
+					</eraAbbr>
+				</eras>
 			</calendar>
 		</calendars>
 	</dates>

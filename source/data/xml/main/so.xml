@@ -173,8 +173,18 @@
 						</dayWidth>
 					</dayContext>
 				</days>
+				<week>
+					<minDays count="1"/>
+					<firstDay day="sat"/>
+				</week>
 				<am>sn</am>
 				<pm>gn</pm>
+				<eras>
+					<eraAbbr>
+						<era type="1">Ciise ka hor</era>
+						<era type="2">Ciise ka dib</era>
+					</eraAbbr>
+				</eras>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">

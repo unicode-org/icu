@@ -569,8 +569,18 @@
 						</dayWidth>
 					</dayContext>
 				</days>
+				<week>
+					<minDays count="4"/>
+					<firstDay day="mon"/>
+				</week>
 				<am>vorm.</am>
 				<pm>nachm.</pm>
+				<eras>
+					<eraAbbr>
+						<era type="1">v. Chr.</era>
+						<era type="2">n. Chr.</era>
+					</eraAbbr>
+				</eras>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">

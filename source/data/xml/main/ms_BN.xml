@@ -7,30 +7,30 @@
 		<language type="ms" /> 
 		<territory type="BN" /> 
 	</identity>
-<numbers>
-	<symbols>
-		<decimal>,</decimal>
-		<group>.</group>
-		<list>;</list>
-		<percentSign>%</percentSign>
-		<nativeZeroDigit>0</nativeZeroDigit>
-		<patternDigit>#</patternDigit>
-		<plusSign>+</plusSign>
-		<minusSign>-</minusSign>
-		<exponential>E</exponential>
-		<perMille>‰</perMille>
-		<infinity>∞</infinity>
-		<nan>�</nan>
-	</symbols>
-	<currencies>
-		<currency type="BND">
-			<displayName>BND</displayName>
-			<symbol>$</symbol>
-		</currency>
-		<currency type="USD">
-			<displayName>USD</displayName>
-			<symbol>US$</symbol>
-		</currency>
-	</currencies>
-</numbers>
+	<numbers>
+		<symbols>
+			<decimal>,</decimal>
+			<group>.</group>
+			<list>;</list>
+			<percentSign>%</percentSign>
+			<nativeZeroDigit>0</nativeZeroDigit>
+			<patternDigit>#</patternDigit>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>E</exponential>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>�</nan>
+		</symbols>
+		<currencies>
+			<currency type="BND">
+				<displayName>BND</displayName>
+				<symbol>$</symbol>
+			</currency>
+			<currency type="USD">
+				<displayName>USD</displayName>
+				<symbol>US$</symbol>
+			</currency>
+		</currencies>
+	</numbers>
 </ldml>

@@ -605,6 +605,12 @@
 				</days>
 				<am>오전</am>
 				<pm>오후</pm>
+				<eras>
+					<eraAbbr>
+						<era type="1">기원전</era>
+						<era type="2">서기</era>
+					</eraAbbr>
+				</eras>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">
@@ -1488,7 +1494,7 @@
 				<symbol>MGA</symbol>
 			</currency>
 			<currency type="MGF">
-				<displayName>마다가스카르 프랑</displayName>
+				<displayName>마다가스카르 프랑</displayName>
 				<symbol>MGF</symbol>
 			</currency>
 			<currency type="MHD">

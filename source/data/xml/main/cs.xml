@@ -453,8 +453,18 @@
 						</dayWidth>
 					</dayContext>
 				</days>
+				<week>
+					<minDays count="1"/>
+					<firstDay day="mon"/>
+				</week>
 				<am>dop.</am>
 				<pm>odp.</pm>
+				<eras>
+					<eraAbbr>
+						<era type="1">př.Kr.</era>
+						<era type="2">po Kr.</era>
+					</eraAbbr>
+				</eras>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">
