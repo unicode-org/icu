@@ -418,7 +418,10 @@ void TestRounding487()
 {
   UNumberFormat *nnf;
   UErrorCode status = U_ZERO_ERROR;
-  nnf = unum_open(UNUM_DEFAULT, NULL, &status);
+  /* this is supposed to open default date format, but later on it treats it like it is "en_US" 
+     - very bad if you try to run the tests on machine where default locale is NOT "en_US" */
+  /* nnf = unum_open(UNUM_DEFAULT, NULL, &status); */
+  nnf = unum_open(UNUM_DEFAULT, "en_US", &status);
   if(U_FAILURE(status)){
     log_err("FAIL: failure in the construction of number format: %s\n", myErrorName(status));
   }
