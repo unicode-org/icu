@@ -63,12 +63,11 @@ static UOption options[]={
 /* 3 */    { "to-stdout", NULL, NULL, NULL, 'c', UOPT_NO_ARG, 0 } ,
 /* 4 */    { "truncate", NULL, NULL, NULL, 't', UOPT_OPTIONAL_ARG, 0 },
 /* 5 */    UOPTION_VERBOSE,
-/* 6 */    { "locale", NULL, NULL, NULL, 'l', UOPT_REQUIRES_ARG, 0 },
-/* 7 */    UOPTION_DESTDIR,
-/* 8 */    UOPTION_SOURCEDIR,
-/* 9 */    { "bom", NULL, NULL, NULL, 0, UOPT_NO_ARG, 0 },
-/* 10 */   UOPTION_ICUDATADIR,
-/* 11 */   UOPTION_VERSION
+/* 6 */    UOPTION_DESTDIR,
+/* 7 */    UOPTION_SOURCEDIR,
+/* 8 */    { "bom", NULL, NULL, NULL, 0, UOPT_NO_ARG, 0 },
+/* 9 */    UOPTION_ICUDATADIR,
+/* 10 */   UOPTION_VERSION
 };
 
 static UBool verbose = FALSE;
@@ -88,7 +87,6 @@ main(int argc, char* argv[]) {
     int32_t i = 0;
 
     UConverter *converter;
-    const char *locale = 0;
 
     const char* arg;
 
@@ -118,7 +116,7 @@ main(int argc, char* argv[]) {
         fprintf(argc < 0 ? stderr : stdout,
             "%csage: %s [ -h, -?, --help ] [ -V, --version ]"
             " [ -v, --verbose ] [ -e, --encoding encoding ] [ --bom ]"
-            " [ -l, --locale locale ] [ -t, --truncate [ size ] ]"
+            " [ -t, --truncate [ size ] ]"
             " [ -s, --sourcedir source ] [ -d, --destdir destination ]"
             " [ -i, --icudatadir directory ] [ -c, --to-stdout ]"
             " bundle ...\n", argc < 0 ? 'u' : 'U',
@@ -126,7 +124,7 @@ main(int argc, char* argv[]) {
         return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
 
-    if(options[11].doesOccur) {
+    if(options[10].doesOccur) {
         fprintf(stderr,
                 "%s version %s (ICU version %s).\n"
                 "%s\n",
@@ -137,28 +135,8 @@ main(int argc, char* argv[]) {
         encoding = options[2].value;
     }
 
-    if (options[7].doesOccur) {
-        outputDir = options[7].value;
-    }
-
-    if (options[6].doesOccur) {
-        locale = options[6].value;
-    }
-
     if (options[3].doesOccur) {
         tostdout = 1;
-    }
-
-    if (options[10].doesOccur) {
-        u_setDataDirectory(options[10].value);
-    }
-
-    if(options[8].doesOccur) {
-        inputDir = options[8].value; /* we'll use users resources */
-    }
-
-    if (options[9].doesOccur) {
-        prbom = 1;
     }
 
     if(options[4].doesOccur) {
@@ -173,7 +151,23 @@ main(int argc, char* argv[]) {
     }
 
     if(options[5].doesOccur) {
-      verbose = TRUE;
+        verbose = TRUE;
+    }
+
+    if (options[6].doesOccur) {
+        outputDir = options[6].value;
+    }
+
+    if(options[7].doesOccur) {
+        inputDir = options[7].value; /* we'll use users resources */
+    }
+
+    if (options[8].doesOccur) {
+        prbom = 1;
+    }
+
+    if (options[9].doesOccur) {
+        u_setDataDirectory(options[9].value);
     }
 
     converter = ucnv_open(encoding, &status);
@@ -638,7 +632,8 @@ static void printOutBundle(FILE *out, UConverter *converter, UResourceBundle *re
             if(trunc && len > truncsize) {
                 char msg[128];
                 printIndent(out, converter, indent);
-                sprintf(msg, "// WARNING: this resource, size %li is truncated to %li\n", len, truncsize/2);
+                sprintf(msg, "// WARNING: this resource, size %li is truncated to %li\n",
+                    (long)len, (long)truncsize/2);
                 printCString(out, converter, msg, -1);
                 len = truncsize;
             }
