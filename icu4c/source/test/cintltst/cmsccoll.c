@@ -3518,7 +3518,7 @@ Mark	NON-IGNOREABLE: #1 > #2
     const char *data[50];
     const uint32_t len;
     const UColAttribute att[2];
-    const UColAttribute value[2];
+    const UColAttributeValue value[2];
   } tests[] = {     
     {
       { "a \\u0300b", "a b", "A \\u0300b", "A b", "a\\u0300b", "A\\u0300b"}, 5,
