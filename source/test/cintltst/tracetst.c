@@ -24,6 +24,9 @@ static void TestTraceAPI(void);
 
 
 void
+addUTraceTest(TestNode** root);
+
+void
 addUTraceTest(TestNode** root)
 {
     addTest(root, &TestTraceAPI,            "tsutil/TraceTest/TestTraceAPI"  );
@@ -91,14 +94,14 @@ static void test_format(const char *format, int32_t bufCap, int32_t indent,
 /*
  *  define trace functions for use in this test.
  */
-void testTraceEntry(const void *context, int32_t fnNumber) {
+static void testTraceEntry(const void *context, int32_t fnNumber) {
 }
 
-void testTraceExit(const void *context, int32_t fnNumber,
+static void testTraceExit(const void *context, int32_t fnNumber,
                    const char *fmt, va_list args) {
 }
 
-void testTraceData(const void *context, int32_t fnNumber, int32_t level,
+static void testTraceData(const void *context, int32_t fnNumber, int32_t level,
                    const char *fmt, va_list args) {
 }
 

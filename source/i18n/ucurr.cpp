@@ -287,68 +287,68 @@ U_CAPI int32_t U_EXPORT2
 ucurr_forLocale(const char* locale,                 
                 UChar* buff,
                 int32_t buffCapacity,
-                UErrorCode* ec) {
+                UErrorCode* ec)
+{
     int32_t resLen = 0;
     const UChar* s = NULL;
     if (ec != NULL && U_SUCCESS(*ec)) {
-      if((buff && buffCapacity) || !buffCapacity) {
-        UErrorCode localStatus = U_ZERO_ERROR;
-        char id[ULOC_FULLNAME_CAPACITY];
-        int32_t currLen = 0;
-        if(resLen = uloc_getKeywordValue(locale, "currency", id, ULOC_FULLNAME_CAPACITY, &localStatus)) {
-          // there is a currency keyword. Try to see if it's valid
-          if(buffCapacity > resLen) {
-            u_charsToUChars(id, buff, resLen);
-          }
-        } else {
-          uint32_t variantType = idForLocale(locale, id, sizeof(id), ec);
-
-          if (U_FAILURE(*ec)) {
-              return 0;
-          }
-        
-          const UChar* result = CReg::get(id);
-          if (result) {
-              if(buffCapacity > u_strlen(result)) {
-                u_strcpy(buff, result);
-              }
-              return u_strlen(result);
-          }
-        
-          // Look up the CurrencyMap element in the root bundle.
-          UResourceBundle *rb = ures_open(NULL, "", &localStatus);
-          UResourceBundle *cm = ures_getByKey(rb, CURRENCY_MAP, NULL, &localStatus);
-          s = ures_getStringByKey(cm, id, &resLen, &localStatus);
-
-          if ((s == NULL || U_FAILURE(localStatus)) && variantType != VARIANT_IS_EMPTY
-              && (id[0] != 0))
-          {
-              // We don't know about it.  Check to see if we support the variant.
-              if (variantType & VARIANT_IS_EURO) {
-                  s = ures_getStringByKey(cm, VAR_DELIM_EURO, &resLen, ec);
-              }
-              else {
-                  uloc_getParent(locale, id, sizeof(id), ec);
-                  *ec = U_USING_FALLBACK_WARNING;
-                  return ucurr_forLocale(id, buff, buffCapacity, ec);
-              }
-          }
-          else if (*ec == U_ZERO_ERROR || localStatus != U_ZERO_ERROR) {
-              // There is nothing to fallback to. Report the failure/warning if possible.
-              *ec = localStatus;
-          }
-          if (U_SUCCESS(*ec)) {
-            if(buffCapacity > resLen) {
-              u_strcpy(buff, s);
+        if ((buff && buffCapacity) || !buffCapacity) {
+            UErrorCode localStatus = U_ZERO_ERROR;
+            char id[ULOC_FULLNAME_CAPACITY];
+            if ((resLen = uloc_getKeywordValue(locale, "currency", id, ULOC_FULLNAME_CAPACITY, &localStatus))) {
+                // there is a currency keyword. Try to see if it's valid
+                if(buffCapacity > resLen) {
+                    u_charsToUChars(id, buff, resLen);
+                }
+            } else {
+                uint32_t variantType = idForLocale(locale, id, sizeof(id), ec);
+                
+                if (U_FAILURE(*ec)) {
+                    return 0;
+                }
+                
+                const UChar* result = CReg::get(id);
+                if (result) {
+                    if(buffCapacity > u_strlen(result)) {
+                        u_strcpy(buff, result);
+                    }
+                    return u_strlen(result);
+                }
+                
+                // Look up the CurrencyMap element in the root bundle.
+                UResourceBundle *rb = ures_open(NULL, "", &localStatus);
+                UResourceBundle *cm = ures_getByKey(rb, CURRENCY_MAP, NULL, &localStatus);
+                s = ures_getStringByKey(cm, id, &resLen, &localStatus);
+                
+                if ((s == NULL || U_FAILURE(localStatus)) && variantType != VARIANT_IS_EMPTY
+                    && (id[0] != 0))
+                {
+                    // We don't know about it.  Check to see if we support the variant.
+                    if (variantType & VARIANT_IS_EURO) {
+                        s = ures_getStringByKey(cm, VAR_DELIM_EURO, &resLen, ec);
+                    }
+                    else {
+                        uloc_getParent(locale, id, sizeof(id), ec);
+                        *ec = U_USING_FALLBACK_WARNING;
+                        return ucurr_forLocale(id, buff, buffCapacity, ec);
+                    }
+                }
+                else if (*ec == U_ZERO_ERROR || localStatus != U_ZERO_ERROR) {
+                    // There is nothing to fallback to. Report the failure/warning if possible.
+                    *ec = localStatus;
+                }
+                if (U_SUCCESS(*ec)) {
+                    if(buffCapacity > resLen) {
+                        u_strcpy(buff, s);
+                    }
+                }
+                ures_close(cm);
+                ures_close(rb);
             }
-          }
-          ures_close(cm);
-          ures_close(rb);
+            return u_terminateUChars(buff, buffCapacity, resLen, ec);
+        } else {
+            *ec = U_ILLEGAL_ARGUMENT_ERROR;
         }
-        return u_terminateUChars(buff, buffCapacity, resLen, ec);
-      } else {
-        *ec = U_ILLEGAL_ARGUMENT_ERROR;
-      }
     }
     return resLen;
 }

@@ -26,11 +26,11 @@
 
 /* for not including "cstring.h" -begin*/    
 #ifdef WIN32
-#   define stricmp(str1, str2) U_STANDARD_CPP_NAMESPACE _stricmp(str1, str2)
+#   define ctest_stricmp(str1, str2) U_STANDARD_CPP_NAMESPACE _stricmp(str1, str2)
 #elif defined(POSIX) 
-#   define stricmp(str1, str2) U_STANDARD_CPP_NAMESPACE strcasecmp(str1, str2) 
+#   define ctest_stricmp(str1, str2) U_STANDARD_CPP_NAMESPACE strcasecmp(str1, str2) 
 #else
-#   define stricmp(str1, str2) T_CString_stricmp(str1, str2)
+#   define ctest_stricmp(str1, str2) T_CString_stricmp(str1, str2)
 #endif
 
 static int U_EXPORT2
@@ -578,7 +578,7 @@ static void TestConvert()
         {
             log_verbose("getName o.k. %s\n", ucnv_getName(myConverter, &err));
         }
-        if (stricmp(ucnv_getName(myConverter, &err), CodePagesToTest[codepage_index]))
+        if (ctest_stricmp(ucnv_getName(myConverter, &err), CodePagesToTest[codepage_index]))
             log_err("getName failed\n");
         else 
             log_verbose("getName ok\n");
