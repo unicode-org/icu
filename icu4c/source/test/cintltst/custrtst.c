@@ -40,6 +40,7 @@ static void TestSurrogateSearching(void);
 static void TestUnescape(void);
 static void TestCountChar32(void);
 static void TestUCharIterator(void);
+static void TestUNormIterator(void);
 
 void addUStringTest(TestNode** root)
 {
@@ -50,6 +51,7 @@ void addUStringTest(TestNode** root)
     addTest(root, &TestUnescape, "tsutil/custrtst/TestUnescape");
     addTest(root, &TestCountChar32, "tsutil/custrtst/TestCountChar32");
     addTest(root, &TestUCharIterator, "tsutil/custrtst/TestUCharIterator");
+    addTest(root, &TestUNormIterator, "tsutil/custrtst/TestUNormIterator");
 
     /* cstrcase.c functions, declared in cucdtst.h */
     addTest(root, &TestCaseLower, "tsutil/custrtst/TestCaseLower");
@@ -1520,3 +1522,239 @@ TestUCharIterator() {
 
     /* ### TODO test other iterators: CharacterIterator, Replaceable */
 }
+
+#if UCONFIG_NO_COLLATION
+
+static void
+TestUNormIterator() {
+    /* test nothing */
+}
+
+#else
+
+#include "unicode/unorm.h"
+#include "unorm_it.h"
+
+/*
+ * Compare results from two iterators, should be same.
+ * Assume that the text is not empty and that
+ * iteration start==0 and iteration limit==length.
+ *
+ * Modified version of compareIterators() but does not assume that indexes
+ * are available.
+ */
+static void
+compareIterNoIndexes(UCharIterator *iter1, const char *n1,
+                     UCharIterator *iter2, const char *n2,
+                     int32_t middle) {
+    uint32_t state;
+    int32_t i;
+    UChar32 c1, c2;
+    UErrorCode errorCode;
+
+    /* set into the middle */
+    iter1->move(iter1, middle, UITER_ZERO);
+    iter2->move(iter2, middle, UITER_ZERO);
+
+    /* test current() */
+    c1=iter1->current(iter1);
+    c2=iter2->current(iter2);
+    if(c1!=c2) {
+        log_err("%s->current()=U+%04x != U+%04x=%s->current() at middle=%d\n", n1, c1, c2, n2, middle);
+        return;
+    }
+
+    /* move forward 3 UChars */
+    for(i=0; i<3; ++i) {
+        c1=iter1->next(iter1);
+        c2=iter2->next(iter2);
+        if(c1!=c2) {
+            log_err("%s->next()=U+%04x != U+%04x=%s->next() at %d (started in middle)\n", n1, c1, c2, n2, iter1->getIndex(iter1, UITER_CURRENT));
+            return;
+        }
+    }
+
+    /* move backward 5 UChars */
+    for(i=0; i<5; ++i) {
+        c1=iter1->previous(iter1);
+        c2=iter2->previous(iter2);
+        if(c1!=c2) {
+            log_err("%s->previous()=U+%04x != U+%04x=%s->previous() at %d (started in middle)\n", n1, c1, c2, n2, iter1->getIndex(iter1, UITER_CURRENT));
+            return;
+        }
+    }
+
+    /* iterate forward from the beginning */
+    iter1->move(iter1, 0, UITER_START);
+    if(!iter1->hasNext(iter1)) {
+        log_err("%s->hasNext() at the start returns FALSE\n", n1);
+        return;
+    }
+
+    iter2->move(iter2, 0, UITER_START);
+    if(!iter2->hasNext(iter2)) {
+        log_err("%s->hasNext() at the start returns FALSE\n", n2);
+        return;
+    }
+
+    do {
+        c1=iter1->next(iter1);
+        c2=iter2->next(iter2);
+        if(c1!=c2) {
+            log_err("%s->next()=U+%04x != U+%04x=%s->next() at %d\n", n1, c1, c2, n2, iter1->getIndex(iter1, UITER_CURRENT));
+            return;
+        }
+    } while(c1>=0);
+
+    if(iter1->hasNext(iter1)) {
+        log_err("%s->hasNext() at the end returns TRUE\n", n1);
+        return;
+    }
+    if(iter2->hasNext(iter2)) {
+        log_err("%s->hasNext() at the end returns TRUE\n", n2);
+        return;
+    }
+
+    /* back to the middle */
+    iter1->move(iter1, middle, UITER_ZERO);
+    iter2->move(iter2, middle, UITER_ZERO);
+
+    /* try get/set state */
+    while((state=uiter_getState(iter2))==UITER_NO_STATE) {
+        if(!iter2->hasNext(iter2)) {
+            log_err("%s has no known state from middle=%d to the end\n", n2, middle);
+            return;
+        }
+        iter2->next(iter2);
+    }
+
+    errorCode=U_ZERO_ERROR;
+
+    c2=iter2->current(iter2);
+    iter2->move(iter2, 0, UITER_ZERO);
+    uiter_setState(iter2, state, &errorCode);
+    c1=iter2->current(iter2);
+    if(U_FAILURE(errorCode) || c1!=c2) {
+        log_err("%s->current() differs across get/set state, U+%04x vs. U+%04x\n", n2, c2, c1);
+        return;
+    }
+
+    c2=iter2->previous(iter2);
+    iter2->move(iter2, 0, UITER_ZERO);
+    uiter_setState(iter2, state, &errorCode);
+    c1=iter2->previous(iter2);
+    if(U_FAILURE(errorCode) || c1!=c2) {
+        log_err("%s->previous() differs across get/set state, U+%04x vs. U+%04x\n", n2, c2, c1);
+        return;
+    }
+
+    /* iterate backward from the end */
+    iter1->move(iter1, 0, UITER_LIMIT);
+    if(!iter1->hasPrevious(iter1)) {
+        log_err("%s->hasPrevious() at the end returns FALSE\n", n1);
+        return;
+    }
+
+    iter2->move(iter2, 0, UITER_LIMIT);
+    if(!iter2->hasPrevious(iter2)) {
+        log_err("%s->hasPrevious() at the end returns FALSE\n", n2);
+        return;
+    }
+
+    do {
+        c1=iter1->previous(iter1);
+        c2=iter2->previous(iter2);
+        if(c1!=c2) {
+            log_err("%s->previous()=U+%04x != U+%04x=%s->previous() at %d\n", n1, c1, c2, n2, iter1->getIndex(iter1, UITER_CURRENT));
+            return;
+        }
+    } while(c1>=0);
+
+    if(iter1->hasPrevious(iter1)) {
+        log_err("%s->hasPrevious() at the start returns TRUE\n", n1);
+        return;
+    }
+    if(iter2->hasPrevious(iter2)) {
+        log_err("%s->hasPrevious() at the start returns TRUE\n", n2);
+        return;
+    }
+}
+
+static void
+TestUNormIterator() {
+    static const UChar text[]={ /* must contain <00C5 0327> see u_strchr() below */
+        0x61,                                                   /* 'a' */
+        0xe4, 0x61, 0x308,                                      /* variations of 'a'+umlaut */
+        0xc5, 0x327, 0x41, 0x30a, 0x327, 0x41, 0x327, 0x30a,    /* variations of 'A'+ring+cedilla */
+        0xfb03, 0xfb00, 0x69, 0x66, 0x66, 0x69, 0x66, 0xfb01,   /* variations of 'ffi' */
+        0
+    };
+
+    UChar longText[300], buffer[300];
+    char *name1, name2[40]="UNormIter0";
+
+    UCharIterator iter1, iter2, *iter;
+    UNormIterator *uni;
+
+    UNormalizationMode mode;
+    UErrorCode errorCode;
+    int32_t i, middle, length, loops;
+
+    /* open a normalizing iterator */
+    errorCode=U_ZERO_ERROR;
+    uni=unorm_openIter(&errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("unorm_openIter() fails: %s\n", u_errorName(errorCode));
+        return;
+    }
+
+    /* set iterator 2 to the original text */
+    uiter_setString(&iter2, text, LENGTHOF(text)-1);
+
+    name1="UCharIter";
+
+    /* loop twice */
+    for(loops=0; /* break in the loop body */; ++loops) {
+        /* test the normalizing iterator for each mode */
+        for(mode=UNORM_NONE; mode<UNORM_MODE_COUNT; ++mode) {
+            length=unorm_normalize(text, LENGTHOF(text)-1, mode, 0, buffer, LENGTHOF(buffer), &errorCode);
+            if(U_FAILURE(errorCode)) {
+                log_err("unorm_normalize(mode %d) failed: %s\n", mode, u_errorName(errorCode));
+                goto cleanup;
+            }
+
+            /* set iterator 1 to the normalized text  */
+            uiter_setString(&iter1, buffer, length);
+
+            /* set the normalizing iterator to use iter2 */
+            iter=unorm_setIter(uni, &iter2, mode, &errorCode);
+            if(U_FAILURE(errorCode)) {
+                log_err("unorm_setIter(mode %d) failed: %s\n", mode, u_errorName(errorCode));
+                goto cleanup;
+            }
+
+            compareIterNoIndexes(&iter1, name1, iter, name2, LENGTHOF(text)/2);
+            ++name2[strlen(name2)-1];
+        }
+
+        if(loops==1) {
+            break;
+        }
+
+        /* test again, this time with an insane string to cause internal buffer overflows */
+        middle=u_strchr(text, 0x327)-text; /* see comment at text[] */
+        memcpy(longText, text, middle*U_SIZEOF_UCHAR);
+        for(i=0; i<150; ++i) {
+            longText[middle+i]=0x30a; /* insert many rings between 'A-ring' and cedilla */
+        }
+        memcpy(longText+middle+i, text+middle, (LENGTHOF(text)-middle)*U_SIZEOF_UCHAR);
+
+        name1="UCharIterLong";
+        strcpy(name2, "UNormIterLong0");
+    }
+
+cleanup:
+    unorm_closeIter(uni);
+}
+
+#endif
