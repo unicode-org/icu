@@ -121,7 +121,7 @@ STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
 DEPS = $(OBJECTS:.o=.d)
 
 ## Header files to install
-HEADERS= $(srcdir)/*LayoutEngine.h $(srcdir)/LE*.h
+HEADERS= $(srcdir)/LayoutEngine.h $(srcdir)/LE*.h
 LOHEADERS= $(srcdir)/unicode/loengine.h
 
 ## List of phony targets
