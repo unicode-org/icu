@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2002/03/08 02:04:00 $ 
-* $Revision: 1.28 $
+* $Date: 2002/03/13 05:44:14 $ 
+* $Revision: 1.29 $
 *
 *******************************************************************************
 */
@@ -19,7 +19,9 @@ import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.impl.Utility; 
 import com.ibm.icu.util.RangeValueIterator;
 import com.ibm.icu.util.ValueIterator;
+import com.ibm.icu.util.VersionInfo;
 import com.ibm.icu.text.BreakIterator;
+import com.ibm.icu.impl.NormalizerImpl;
 
 /**
 * <p>
@@ -139,14 +141,23 @@ public final class UCharacter
     */
     public static int digit(int ch, int radix)
     {
-        int props = getProps(ch);
+        int props       = getProps(ch);
+        int numericType = UCharacterProperty.getNumericType(props);
+        
         int result = -1;
-        // if props == 0, it will just fall through and return -1
-        if (!UCharacterProperty.isExceptionIndicator(props)) {
-            // not contained in exception data
-            if (UCharacterProperty.getPropType(props) == 
-                UCharacterCategory.DECIMAL_DIGIT_NUMBER) {
-                result = UCharacterProperty.getSignedValue(props);
+        if (numericType == UCharacterProperty.GENERAL_NUMERIC_TYPE_) {
+        	// if props == 0, it will just fall through and return -1
+        	if (!UCharacterProperty.isExceptionIndicator(props)) {
+            	// not contained in exception data
+            	result = UCharacterProperty.getSignedValue(props);
+            }
+            else {
+            	int index = UCharacterProperty.getExceptionIndex(props);
+            	if (PROPERTY_.hasExceptionValue(index, 
+                                   UCharacterProperty.EXC_NUMERIC_VALUE_)) {
+                	return PROPERTY_.getException(index, 
+                                      UCharacterProperty.EXC_NUMERIC_VALUE_); 
+                }
             }
         }
         
@@ -677,7 +688,7 @@ public final class UCharacter
     */
     public static boolean isBMP(int ch) 
     {
-        return (ch >= 0 && ch < LAST_CHAR_MASK_);
+        return (ch >= 0 && ch <= LAST_CHAR_MASK_);
     }
 
     /**
@@ -739,7 +750,7 @@ public final class UCharacter
         if (props != 0) {
             return UCharacterProperty.getDirection(props);
         }
-        return UCharacterDirection.LEFT_TO_RIGHT;
+        return UCharacterDirection.BOUNDARY_NEUTRAL;
     }
 
     /**
@@ -798,23 +809,10 @@ public final class UCharacter
     */
     public static int getCombiningClass(int ch)
     {
-        int props = getProps(ch);
-        if(!UCharacterProperty.isExceptionIndicator(props)) {
-        	if (UCharacterProperty.getPropType(props) == 
-                                        UCharacterCategory.NON_SPACING_MARK) {
-         	   return PROPERTY_.getUnsignedValue(props);
-        	}
-        	else {
-         	   return 0;
-        	}
-        }
-        else {
-            // the combining class is in bits 23..16 of the first exception value
-            return (PROPERTY_.getException(
-                                    PROPERTY_.getExceptionIndex(props), 
-                                    UCharacterProperty.EXC_COMBINING_CLASS_)
-                                    >> SHIFT_16_) & LAST_BYTE_MASK_;
-        }
+    	if (ch < MIN_VALUE || ch > MAX_VALUE) {
+    		throw new IllegalArgumentException("Codepoint out of bounds");
+    	}
+    	return NormalizerImpl.getCombiningClass(ch);
     }
       
     /**
@@ -878,9 +876,9 @@ public final class UCharacter
     * Gets the version of Unicode data used. 
     * @return the unicode version number used
     */
-    public static String getUnicodeVersion()
+    public static VersionInfo getUnicodeVersion()
     {
-        return PROPERTY_.m_unicodeVersion_.toString();
+        return PROPERTY_.m_unicodeVersion_;
     }
       
     /**
@@ -1376,6 +1374,8 @@ public final class UCharacter
     *                        " has the name " + (String)element.value);
     * }
     * </pre>
+    * <p>The maximal range which the name iterator iterates is from 
+    * UCharacter.MIN_VALUE to UCharacter.MAX_VALUE.</p>
     * @return an iterator 
     * @draft 2.1
     */
@@ -1433,6 +1433,108 @@ public final class UCharacter
                                  UCharacterNameChoice.U_EXTENDED_CHAR_NAME);
     }
     
+    /**
+     * <p>Get the "age" of the code point.</p>
+     * <p>The "age" is the Unicode version when the code point was first
+     * designated (as a non-character or for Private Use) or assigned a 
+     * character.</p>
+     * <p>This can be useful to avoid emitting code points to receiving 
+     * processes that do not accept newer characters.</p>
+     * <p>The data is from the UCD file DerivedAge.txt.</p>
+     * @param ch The code point.
+     * @return the Unicode version number
+     * @draft ICU 2.1
+     */
+    public static VersionInfo getAge(int ch) 
+    {
+    	if (ch < MIN_VALUE || ch > MAX_VALUE) {
+    		throw new IllegalArgumentException("Codepoint out of bounds");
+    	}
+    	return PROPERTY_.getAge(ch);
+    }
+    
+    /**
+	 * <p>Check a binary Unicode property for a code point.</p> 
+	 * <p>Unicode, especially in version 3.2, defines many more properties 
+	 * than the original set in UnicodeData.txt.</p>
+	 * <p>This API is intended to reflect Unicode properties as defined in 
+	 * the Unicode Character Database (UCD) and Unicode Technical Reports 
+	 * (UTR).</p>
+	 * <p>For details about the properties see 
+	 * <a href=http://www.unicode.org/>http://www.unicode.org/</a>.</p>
+	 * <p>For names of Unicode properties see the UCD file 
+	 * PropertyAliases.txt.</p>
+	 * <p>This API does not check the validity of the codepoint.</p>
+	 * <p>Important: If ICU is built with UCD files from Unicode versions 
+	 * below 3.2, then properties marked with "new" are not or 
+	 * not fully available.</p>
+	 * @param codepoint Code point to test.
+	 * @param property selector constant from com.ibm.icu.lang.UProperty, 
+	 *        identifies which binary property to check.
+	 * @return true or false according to the binary Unicode property value 
+	 *         for ch. Also false if property is out of bounds or if the 
+	 *         Unicode version does not have data for the property at all, or 
+	 *         not for this code point.
+	 * @see com.ibm.icu.lang.UProperty
+	 * @draft ICU 2.1
+	 */
+	public static boolean hasBinaryProperty(int ch, int property) 
+	{
+		if (ch < MIN_VALUE || ch > MAX_VALUE) {
+    		throw new IllegalArgumentException("Codepoint out of bounds");
+    	}
+    	return PROPERTY_.hasBinaryProperty(ch, property);
+	}
+	
+	/**
+	 * <p>Check if a code point has the Alphabetic Unicode property.</p> 
+	 * <p>Same as UCharacter.hasBinaryProperty(ch, UProperty.ALPHABETIC).</p>
+	 * <p>Different from UCharacter.isLetter(ch)!</p> 
+	 * @draft ICU 2.1
+	 * @param ch codepoint to be tested
+	 */
+	public static boolean isUAlphabetic(int ch)
+	{
+		return hasBinaryProperty(ch, UProperty.ALPHABETIC);
+	}
+
+	/**
+	 * <p>Check if a code point has the Lowercase Unicode property.</p>
+	 * <p>Same as UCharacter.hasBinaryProperty(ch, UProperty.LOWERCASE).</p>
+	 * <p>This is different from UCharacter.isLowerCase(ch)!</p>
+	 * @param ch codepoint to be tested
+	 * @draft ICU 2.1
+	 */
+	public static boolean isULowercase(int ch) 
+	{
+		return hasBinaryProperty(ch, UProperty.LOWERCASE);;
+	}
+
+	/**
+	 * <p>Check if a code point has the Uppercase Unicode property.</p>
+	 * <p>Same as UCharacter.hasBinaryProperty(ch, UProperty.UPPERCASE).</p>
+	 * <p>This is different from UCharacter.isUpperCase(ch)!</p>
+	 * @param ch codepoint to be tested
+	 * @draft ICU 2.1
+	 */
+	public static boolean isUUppercase(int ch) 
+	{
+		return hasBinaryProperty(ch, UProperty.UPPERCASE);
+	}
+
+	/**
+	 * <p>Check if a code point has the White_Space Unicode property.</p>
+	 * <p>Same as UCharacter.hasBinaryProperty(ch, UProperty.WHITE_SPACE).</p>
+	 * <p>This is different from both UCharacter.isSpace(ch) and 
+	 * UCharacter.isWhiteSpace(ch)!</p>
+	 * @param ch codepoint to be tested
+	 * @draft ICU 2.1
+	 */
+	public static boolean isUWhiteSpace(int ch) 
+	{
+		return hasBinaryProperty(ch, UProperty.WHITE_SPACE);
+	}
+
     // protected data members --------------------------------------------
     
     /**
@@ -1698,42 +1800,32 @@ public final class UCharacter
     
     private static int getNumericValueInternal(int ch, boolean useEuropean)
     {
-        int props = getProps(ch);
-        int type = UCharacterProperty.getPropType(props);
+        int props       = getProps(ch);
+        int numericType = UCharacterProperty.getNumericType(props);
         
-        // if props == 0, it will just fall through and return -1
-        if (type != UCharacterCategory.DECIMAL_DIGIT_NUMBER &&
-            type != UCharacterCategory.LETTER_NUMBER &&
-            type != UCharacterCategory.OTHER_NUMBER) {
-
-            return useEuropean ? getEuropeanDigit(ch) : -1;
-        }
-          
         int result = -1;
-        if (!UCharacterProperty.isExceptionIndicator(props)) {
-            // not contained in exception data
-            result = UCharacterProperty.getSignedValue(props);
-        }
-        else {
-            // contained in exception data
-            int index = UCharacterProperty.getExceptionIndex(props);
-            if (PROPERTY_.hasExceptionValue(index, 
-                                       UCharacterProperty.EXC_DIGIT_VALUE_)) {
-                result  = PROPERTY_.getException(index, 
-                                        UCharacterProperty.EXC_DIGIT_VALUE_) &
-                    LAST_CHAR_MASK_; 
+        if (numericType == UCharacterProperty.GENERAL_NUMERIC_TYPE_) {
+        	// if props == 0, it will just fall through and return -1
+        	if (!UCharacterProperty.isExceptionIndicator(props)) {
+            	// not contained in exception data
+            	result = UCharacterProperty.getSignedValue(props);
             }
             else {
-                if (PROPERTY_.hasExceptionValue(index, 
+            	int index = UCharacterProperty.getExceptionIndex(props);
+            	if (PROPERTY_.hasExceptionValue(index, 
                                UCharacterProperty.EXC_DENOMINATOR_VALUE_)) {
                     return -2;
                 }
-                if (PROPERTY_.hasExceptionValue(index, 
+            	if (PROPERTY_.hasExceptionValue(index, 
                                    UCharacterProperty.EXC_NUMERIC_VALUE_)) {
-                    result = PROPERTY_.getException(index, 
+                	result = PROPERTY_.getException(index, 
                                       UCharacterProperty.EXC_NUMERIC_VALUE_); 
                 }
             }
+        }
+        
+        if (result < 0 && useEuropean) {
+            result = getEuropeanDigit(ch);
         }
         
         return result;

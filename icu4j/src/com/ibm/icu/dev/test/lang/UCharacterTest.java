@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $ 
-* $Date: 2002/03/10 19:40:14 $ 
-* $Revision: 1.32 $
+* $Date: 2002/03/13 05:44:14 $ 
+* $Revision: 1.33 $
 *
 *******************************************************************************
 */
@@ -19,15 +19,16 @@ import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterCategory;
 import com.ibm.icu.lang.UCharacterDirection;
+import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.util.RangeValueIterator;
 import com.ibm.icu.util.ValueIterator;
+import com.ibm.icu.util.VersionInfo;
 
 import java.io.BufferedReader;
 import java.util.Locale;
 import java.util.Vector;
-
 /**
 * Testing class for UCharacter
 * Mostly following the test cases for ICU
@@ -41,7 +42,7 @@ public final class UCharacterTest extends TestFmwk
   /**
   * ICU4J data version number
   */
-  private final String VERSION_ = "3.1.1.0";
+  private final VersionInfo VERSION_ = VersionInfo.getInstance("3.1.1.0");
   
   // constructor ===================================================
   
@@ -59,9 +60,9 @@ public final class UCharacterTest extends TestFmwk
     try
     {
       UCharacterTest test = new UCharacterTest();
-      UCharacter.getName1_0(0x1d18b);
-      // {dlf} need to fix test fmwk so have params even without calling run(String[])
-      test.run(arg);
+      //test.run(arg);
+      //test.TestGetAge();
+      test.TestAdditionalProperties();
     }
     catch (Exception e)
     {
@@ -290,8 +291,7 @@ public final class UCharacterTest extends TestFmwk
   */
   public void TestVersion()
   {
-    String version = UCharacter.getUnicodeVersion();
-    if (!version.equals(VERSION_))
+    if (!UCharacter.getUnicodeVersion().equals(VERSION_))
       errln("FAIL expected " + VERSION_);
   }
   
@@ -466,7 +466,6 @@ public final class UCharacterTest extends TestFmwk
       while (ch != LASTUNICODECHAR)
       {
         String s = input.readLine();
-        
         // geting the unicode character, its type and its direction
         ch = Integer.parseInt(s.substring(0, 4), 16);
         index = s.indexOf(';', 5);
@@ -518,9 +517,10 @@ public final class UCharacterTest extends TestFmwk
     }
     
     if (UCharacter.getDirection(0x10001) != 
-                                         UCharacterDirection.LEFT_TO_RIGHT) 
-      errln("FAIL 0x10001 expected direction " + 
-      UCharacterDirection.toString(UCharacterDirection.LEFT_TO_RIGHT));
+                                  UCharacterDirection.BOUNDARY_NEUTRAL) {
+  		errln("FAIL 0x10001 expected direction " + 
+          UCharacterDirection.toString(UCharacterDirection.BOUNDARY_NEUTRAL));
+    }
   }
   
   
@@ -787,16 +787,13 @@ public final class UCharacterTest extends TestFmwk
         0x5ffff,0x5ffff,0x5ffff
     };
     
-    boolean isUnicode31 = UCharacter.getUnicodeVersion().compareTo("3.1") >= 0;           
-	    
     // test simple case folding
     for (int i = 0; i < simple.length; i += 3) {
         if (UCharacter.foldCase(simple[i], true) != simple[i + 1]) {
             errln("FAIL: foldCase(\\u" + hex(simple[i]) + 
                   ", true) should be \\u" + hex(simple[i + 1]));
         }
-        if (isUnicode31 && 
-            UCharacter.foldCase(simple[i], false) != simple[i + 2]) {
+        if (UCharacter.foldCase(simple[i], false) != simple[i + 2]) {
             errln("FAIL: foldCase(\\u" + hex(simple[i]) + 
                   ", false) should be \\u" + hex(simple[i + 2]));
         }
@@ -813,11 +810,9 @@ public final class UCharacterTest extends TestFmwk
               foldedDefault);
     }
     
-    if (isUnicode31) {
-        if (!UCharacter.foldCase(mixed, false).equals(foldedExcludeSpecialI)) {
-        	errln("FAIL: foldCase(" + hex(mixed) + ", true) should be " + 
-                  foldedExcludeSpecialI);
-        }
+	if (!UCharacter.foldCase(mixed, false).equals(foldedExcludeSpecialI)) {
+      	errln("FAIL: foldCase(" + hex(mixed) + ", true) should be " + 
+              foldedExcludeSpecialI);
     }
     
     String str1 = "A\u00df\u00b5\ufb03\uD801\uDC0C\u0131",
@@ -926,6 +921,7 @@ public final class UCharacterTest extends TestFmwk
 	  // reading in the SpecialCasing file
 	  BufferedReader input = TestUtil.getDataReader("unicode/SpecialCasing.txt");
 	    
+	  int i = 0;
       while (true)
       {
         String s = input.readLine();
@@ -1070,7 +1066,7 @@ public final class UCharacterTest extends TestFmwk
       RangeValueIterator.Element result = new RangeValueIterator.Element();
       while (iterator.next(result)) {
           if (result.start != limit) {
-              errln("UCharacterEnumeration failed: Ranges not continuous " + 
+              errln("UCharacterIteration failed: Ranges not continuous " + 
                     "0x" + Integer.toHexString(result.start));
           }
           
@@ -1079,16 +1075,13 @@ public final class UCharacterTest extends TestFmwk
               errln("Type of the next set of enumeration should be different");
           }
           prevtype = result.value;
-          /*
-          System.out.println("start and end " + Integer.toHexString(start) + 
-                             " " + Integer.toHexString(end));
-                             */
+          
 		  for (int i = result.start; i < limit; i ++) {
               int temptype = UCharacter.getType(i);
               if (temptype != result.value) {
-                  errln("UCharacterEnumeration failed: Codepoint \\u" + 
+                  errln("UCharacterIteration failed: Codepoint \\u" + 
                         Integer.toHexString(i) + " should be of type " +
-                        UCharacter.getType(i) + " not " + result.value);
+                        temptype + " not " + result.value);
               }
           }
       }
@@ -1096,9 +1089,250 @@ public final class UCharacterTest extends TestFmwk
       iterator.reset();
       if (iterator.next(result) == false || result.start != 0) {
           System.out.println("result " + result.start);
-          errln("UCharacterEnumeration reset() failed");
+          errln("UCharacterIteration reset() failed");
       }
   }
+  
+  	/**
+  	 * Testing getAge
+   	 */
+  	public void TestGetAge() 
+  	{
+  		int ages[] = {0x41,    1, 1, 0, 0,
+					  0xffff,  1, 1, 0, 0,
+                      0x20ab,  2, 0, 0, 0,
+                      0x2fffe, 2, 0, 0, 0,
+                      0x20ac,  2, 1, 0, 0,
+        			  0xfb1d,  3, 0, 0, 0,
+        			  0x3f4,   3, 1, 0, 0,
+        			  0x10300, 3, 1, 0, 0,
+        			  0x220,   3, 2, 0, 0,
+        			  0xff60,  3, 2, 0, 0};
+  		for (int i = 0; i < ages.length; i += 5) {
+  			System.out.println(i);
+        	VersionInfo age = UCharacter.getAge(ages[i]);
+        	if (age != VersionInfo.getInstance(ages[i + 1], ages[i + 2],
+        	                                   ages[i + 3], ages[i + 4])) {
+            	errln("error: getAge(\\u" + Integer.toHexString(ages[i]) +
+            	      ") == " + age.toString() + " instead of " + 
+					  ages[i + 1] + "." + ages[i + 2] + "." + ages[i + 3] + 
+					  "." + ages[i + 4]);
+        	}
+        }
+	}
+  
+  	/**
+  	 * Test binary non core properties
+  	 */
+  	public void TestAdditionalProperties() 
+  	{
+    	// test data for hasBinaryProperty()
+    	int props[][] = { // code point, property
+	        { 0x0627, UProperty.ALPHABETIC },
+	        { 0x1034a, UProperty.ALPHABETIC },
+	        { 0x2028, UProperty.ALPHABETIC },
+	
+	        { 0x0066, UProperty.ASCII_HEX_DIGIT },
+	        { 0x0067, UProperty.ASCII_HEX_DIGIT },
+	
+	        { 0x202c, UProperty.BIDI_CONTROL },
+	        { 0x202f, UProperty.BIDI_CONTROL },
+	
+	        { 0x003c, UProperty.BIDI_MIRRORED },
+	        { 0x003d, UProperty.BIDI_MIRRORED },
+	
+	        { 0x058a, UProperty.DASH },
+	        { 0x007e, UProperty.DASH },
+	
+	        { 0x0c4d, UProperty.DIACRITIC },
+	        { 0x3000, UProperty.DIACRITIC },
+	
+	        { 0x0e46, UProperty.EXTENDER },
+	        { 0x0020, UProperty.EXTENDER },
+	
+	        { 0xfb1d, UProperty.FULL_COMPOSITION_EXCLUSION },
+	        { 0x1d15f, UProperty.FULL_COMPOSITION_EXCLUSION },
+	        { 0xfb1e, UProperty.FULL_COMPOSITION_EXCLUSION },
+	
+	        { 0x0044, UProperty.HEX_DIGIT },
+	        { 0xff46, UProperty.HEX_DIGIT },
+	        { 0x0047, UProperty.HEX_DIGIT },
+	
+	        { 0x30fb, UProperty.HYPHEN },
+	        { 0xfe58, UProperty.HYPHEN },
+	
+	        { 0x2172, UProperty.ID_CONTINUE },
+	        { 0x0307, UProperty.ID_CONTINUE },
+	        { 0x005c, UProperty.ID_CONTINUE },
+	
+	        { 0x2172, UProperty.ID_START },
+	        { 0x007a, UProperty.ID_START },
+	        { 0x0039, UProperty.ID_START },
+	
+	        { 0x4db5, UProperty.IDEOGRAPHIC },
+	        { 0x2f999, UProperty.IDEOGRAPHIC },
+	        { 0x2f99, UProperty.IDEOGRAPHIC },
+	
+	        { 0x200c, UProperty.JOIN_CONTROL },
+	        { 0x2029, UProperty.JOIN_CONTROL },
+	
+	        { 0x1d7bc, UProperty.LOWERCASE },
+	        { 0x0345, UProperty.LOWERCASE },
+	        { 0x0030, UProperty.LOWERCASE },
+	
+	        { 0x1d7a9, UProperty.MATH },
+	        { 0x2135, UProperty.MATH },
+	        { 0x0062, UProperty.MATH },
+	
+	        { 0xfde1, UProperty.NONCHARACTER_CODE_POINT },
+	        { 0x10ffff, UProperty.NONCHARACTER_CODE_POINT },
+	        { 0x10fffd, UProperty.NONCHARACTER_CODE_POINT },
+	
+	        { 0x0022, UProperty.QUOTATION_MARK },
+	        { 0xff62, UProperty.QUOTATION_MARK },
+	        { 0xd840, UProperty.QUOTATION_MARK },
+	
+	        { 0x061f, UProperty.TERMINAL_PUNCTUATION },
+	        { 0xe003f, UProperty.TERMINAL_PUNCTUATION },
+	
+	        { 0x1d44a, UProperty.UPPERCASE },
+	        { 0x2162, UProperty.UPPERCASE },
+	        { 0x0345, UProperty.UPPERCASE },
+	
+	        { 0x0020, UProperty.WHITE_SPACE },
+	        { 0x202f, UProperty.WHITE_SPACE },
+	        { 0x3001, UProperty.WHITE_SPACE },
+	
+	        { 0x0711, UProperty.XID_CONTINUE },
+	        { 0x1d1aa, UProperty.XID_CONTINUE },
+	        { 0x007c, UProperty.XID_CONTINUE },
+	
+	        { 0x16ee, UProperty.XID_START },
+	        { 0x23456, UProperty.XID_START },
+	        { 0x1d1aa, UProperty.XID_START },
+	
+	        // Version break:
+	        // The following properties are only supported starting with the
+	        // UProperty.Unicode version indicated in the second field.
+	         
+	        { -1, 0x32, 0 },
+	
+	        { 0x180c, UProperty.DEFAULT_IGNORABLE_CODE_POINT },
+	        { 0xfe02, UProperty.DEFAULT_IGNORABLE_CODE_POINT },
+	        { 0x1801, UProperty.DEFAULT_IGNORABLE_CODE_POINT },
+	
+	        { 0x0341, UProperty.DEPRECATED },
+	        { 0xe0041, UProperty.DEPRECATED },
+	
+	        { 0x00a0, UProperty.GRAPHEME_BASE },
+	        { 0x0a4d, UProperty.GRAPHEME_BASE },
+	        { 0xff9f, UProperty.GRAPHEME_BASE },
+	
+	        { 0x0300, UProperty.GRAPHEME_EXTEND },
+	        { 0xff9f, UProperty.GRAPHEME_EXTEND },
+	        { 0x0a4d, UProperty.GRAPHEME_EXTEND },
+	
+	        { 0x0a4d, UProperty.GRAPHEME_LINK },
+	        { 0xff9f, UProperty.GRAPHEME_LINK },
+	
+	        { 0x2ff7, UProperty.IDS_BINARY_OPERATOR },
+	        { 0x2ff3, UProperty.IDS_BINARY_OPERATOR },
+	
+	        { 0x2ff3, UProperty.IDS_TRINARY_OPERATOR },
+	        { 0x2f03, UProperty.IDS_TRINARY_OPERATOR },
+	
+	        { 0x0ec1, UProperty.LOGICAL_ORDER_EXCEPTION },
+	        { 0xdcba, UProperty.LOGICAL_ORDER_EXCEPTION },
+	
+	        { 0x2e9b, UProperty.RADICAL },
+	        { 0x4e00, UProperty.RADICAL },
+	
+	        { 0x012f, UProperty.SOFT_DOTTED },
+	        { 0x0049, UProperty.SOFT_DOTTED },
+	
+	        { 0xfa11, UProperty.UNIFIED_IDEOGRAPH },
+	        { 0xfa12, UProperty.UNIFIED_IDEOGRAPH }
+	    };
+	    
+	    boolean expected[] = { true, true, false, true, false, 
+	    	                   true, false, true, false, true, 
+	    	                   false, true, false, true, false, 
+	    	                   true, true, false, true, true, 
+	    	                   false, true, false, true, true, 
+	    	                   false, true, true, false, true, 
+	    	                   true, false, true, false, true, 
+	    	                   true, false, true, true, false, 
+	    	                   true, true, false, true, true, 
+	    	                   false, true, false, true, true, 
+	    	                   false, true, true, false, true, 
+	    	                   true, false, true, true, false,
+	    	                   false, true, true, false, true, 
+	    	                   false, true, false, false, true, 
+	    	                   true, false, true, false, true, 
+	    	                   false, true, false, true, false, 
+	    	                   true, false, true, false, true, 
+	    	                   false};
+
+	    VersionInfo version = UCharacter.getUnicodeVersion();
+	    
+	    // test hasBinaryProperty() 
+	    for (int i = 0; i < props.length; ++ i) {
+	    	if (props[i][0] < 0) {
+				if (version.compareTo(VersionInfo.getInstance(props[i][1] >> 4, 
+	    	                                              props[i][1] & 0xF, 
+	    	                                              0, 0)) < 0) {
+	    	    	break;
+	    	    }
+	    	    continue;
+	        }
+	        
+	        // synwee: todo to be removed
+	        if (props[i][1] == UProperty.FULL_COMPOSITION_EXCLUSION) {
+	        	continue;
+	        }
+	        if (UCharacter.hasBinaryProperty(props[i][0], props[i][1])
+	            != expected[i]) {
+	            errln("error: UCharacter.hasBinaryProperty(\\u" + 
+	                  Integer.toHexString(props[i][0]) + ", " + 
+	                  Integer.toHexString(props[i][1]) + ") has an error expected " +
+	                  expected[i]);
+	        }
+	
+	        // test separate functions, too 
+	        switch (props[i][1]) {
+	        case UProperty.ALPHABETIC:
+	            if (UCharacter.isUAlphabetic(props[i][0]) != expected[i]) {
+	                errln("error: UCharacter.isUAlphabetic(\\u" + 
+	                      Integer.toHexString(props[i][0]) + 
+	                      ") is wrong expected " + expected[i]);
+	            }
+	            break;
+	        case UProperty.LOWERCASE:
+	            if (UCharacter.isULowercase(props[i][0]) != expected[i]) {
+	                errln("error: UCharacter.isULowercase(\\u" + 
+	                      Integer.toHexString(props[i][0]) + 
+	                      ") is wrong expected " + expected[i]);
+	            }
+	            break;
+	        case UProperty.UPPERCASE:
+	            if (UCharacter.isUUppercase(props[i][0]) != expected[i]) {
+	                errln("error: UCharacter.isUUppercase(\\u" + 
+	                      Integer.toHexString(props[i][0]) + 
+	                      ") is wrong expected " + expected[i]);
+	            }
+	            break;
+	        case UProperty.WHITE_SPACE:
+	            if (UCharacter.isUWhiteSpace(props[i][0]) != expected[i]) {
+	                errln("error: UCharacter.isUWhiteSpace(\\u" + 
+	                      Integer.toHexString(props[i][0]) + 
+	                      ") is wrong expected " + expected[i]);
+	            }
+	            break;
+	        default:
+	            break;
+	        }
+	    }
+    }
   
   /**
   * Converting the hex numbers represented betwee                             n ';' to Unicode strings

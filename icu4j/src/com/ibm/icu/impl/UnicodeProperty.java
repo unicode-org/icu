@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Attic/UnicodeProperty.java,v $ 
-* $Date: 2002/03/12 17:49:15 $ 
-* $Revision: 1.3 $
+* $Date: 2002/03/13 05:44:14 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -867,27 +867,6 @@ public final class UnicodeProperty
     }
     
     /**
-    * <p>Gets the combining class of the argument codepoint</p>
-    * <p>This method does not check for the codepoint validity</p>
-    * @param ch code point whose combining is to be retrieved
-    * @return the combining class of the codepoint
-    */
-    private static int getCombiningClass(int ch)
-    {
-        int props = PROPERTY.getProperty(ch);
-        if(!UCharacterProperty.isExceptionIndicator(props)) {
-			return NormalizerImpl.getCombiningClass(ch);
-        }
-        else {
-            // the combining class is in bits 23..16 of the first exception value
-            return (PROPERTY.getException(
-                                    PROPERTY.getExceptionIndex(props), 
-                                    UCharacterProperty.EXC_COMBINING_CLASS_)
-                                    >> SHIFT_16_) & LAST_BYTE_MASK_;
-        }
-    }
-    
-    /**
     * Determines if a string at offset is preceded by any base characters 
     * { 'i', 'j', U+012f, U+1e2d, U+1ecb } with no intervening character with
     * combining class = 230
@@ -911,7 +890,7 @@ public final class UnicodeProperty
                 return true; // preceded by TYPE_i
             }
     
-            int cc = getCombiningClass(ch);
+            int cc = NormalizerImpl.getCombiningClass(ch);
             if (cc == 0 || cc == COMBINING_MARK_ABOVE_CLASS_) {
                 // preceded by different base character not TYPE_i), or 
                 // intervening cc == 230
@@ -943,7 +922,7 @@ public final class UnicodeProperty
                 return true; // preceded by I
             }
 
-            int cc = getCombiningClass(ch);
+            int cc = NormalizerImpl.getCombiningClass(ch);
             if (cc == 0 || cc == COMBINING_MARK_ABOVE_CLASS_) {
                 // preceded by different base character (not I), or 
                 // intervening cc == 230
@@ -1031,7 +1010,7 @@ public final class UnicodeProperty
         int ch = uchariter.nextCodepoint();
         
         while (ch != UCharacterIterator.DONE_CODEPOINT) {
-            int cc = getCombiningClass(ch);
+            int cc = NormalizerImpl.getCombiningClass(ch);
             if (cc == COMBINING_MARK_ABOVE_CLASS_) {
                 return true; // at least one cc==230 following 
             }
@@ -1063,7 +1042,7 @@ public final class UnicodeProperty
             if (ch == COMBINING_DOT_ABOVE_) {
                 return true;
             }
-            int cc = getCombiningClass(ch);
+            int cc = NormalizerImpl.getCombiningClass(ch);
             if (cc == 0 || cc == COMBINING_MARK_ABOVE_CLASS_) {
                 return false; // next base character or cc==230 in between
             }

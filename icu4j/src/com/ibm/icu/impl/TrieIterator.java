@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/TrieIterator.java,v $
-* $Date: 2002/03/06 19:28:32 $
-* $Revision: 1.4 $
+* $Date: 2002/03/13 05:44:14 $
+* $Revision: 1.5 $
 *
 ******************************************************************************
 */
@@ -163,6 +163,7 @@ public class TrieIterator implements RangeValueIterator
                       currentValue);
             return true;
         }
+        // synwee check that next block index == 0 here 
         // enumerate BMP - the main loop enumerates data blocks
         while (m_nextCodepoint_ < UCharacter.SUPPLEMENTARY_MIN_VALUE) {
             m_nextIndex_ ++;
@@ -326,10 +327,11 @@ public class TrieIterator implements RangeValueIterator
     {
         m_nextBlock_ = m_trie_.m_index_[m_nextIndex_] << 
                                                   Trie.INDEX_STAGE_2_SHIFT_;
-        if (m_nextBlock_ == currentBlock) {
+        if (m_nextBlock_ == currentBlock &&
+            (m_nextCodepoint_ - m_currentCodepoint_) >= DATA_BLOCK_LENGTH_) {
             // the block is the same as the previous one, filled with 
             // currentValue
-            m_nextCodepoint_ += DATA_BLOCK_LENGTH_;
+			m_nextCodepoint_ += DATA_BLOCK_LENGTH_;
         }
         else if (m_nextBlock_ == 0) {
             // this is the all-initial-value block
