@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: MenuBuilder.java,v $ $Revision: 1.5 $ $Date: 2003/06/03 18:49:38 $
+ * @(#)$RCSfile: MenuBuilder.java,v $ $Revision: 1.6 $ $Date: 2003/12/01 21:55:24 $
  *
  * (C) Copyright IBM Corp. 1998-2003.  All Rights Reserved.
  *
@@ -210,17 +210,23 @@ public abstract class MenuBuilder {
         handleAddMenu(FrameResources.STYLE);
 
         Object[] keys =    { TextAttribute.WEIGHT,
-                            TextAttribute.POSTURE,
-                            TextAttribute.UNDERLINE,
-                            TextAttribute.STRIKETHROUGH };
+                             TextAttribute.POSTURE,
+                             TextAttribute.UNDERLINE,
+                             TextAttribute.STRIKETHROUGH,
+                             TextAttribute.SUPERSCRIPT,
+                             TextAttribute.SUPERSCRIPT};
         Object[] values =  { TextAttribute.WEIGHT_BOLD,
-                            TextAttribute.POSTURE_OBLIQUE,
-                            TextAttribute.UNDERLINE_ON,
-                            TextAttribute.STRIKETHROUGH_ON };
+                             TextAttribute.POSTURE_OBLIQUE,
+                             TextAttribute.UNDERLINE_ON,
+                             TextAttribute.STRIKETHROUGH_ON, 
+                             new Integer(1),
+                             new Integer(-1)};
         MenuData[] mData = { ResourceUtils.getMenuData(FrameResources.BOLD),
-                            ResourceUtils.getMenuData(FrameResources.ITALIC),
-                            ResourceUtils.getMenuData(FrameResources.UNDERLINE),
-                            ResourceUtils.getMenuData(FrameResources.STRIKETHROUGH) };
+                             ResourceUtils.getMenuData(FrameResources.ITALIC),
+                             ResourceUtils.getMenuData(FrameResources.UNDERLINE),
+                             ResourceUtils.getMenuData(FrameResources.STRIKETHROUGH),
+                             ResourceUtils.getMenuData(FrameResources.SUPERSCRIPT),
+                             ResourceUtils.getMenuData(FrameResources.SUBSCRIPT)};
 
         new SubtractStyleMenuItem(keys, 
                                     ResourceUtils.getMenuData(FrameResources.PLAIN),
