@@ -499,6 +499,14 @@ SOURCE=.\dtfmttst.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\incaltst.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\incaltst.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\itformat.cpp
 # End Source File
 # Begin Source File
