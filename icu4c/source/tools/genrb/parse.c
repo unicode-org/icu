@@ -278,7 +278,8 @@ parse(FileStream *f, const char *cp, const char *inputDir,
 
     /* iterate through the stream */
     for(;;) {
-
+        /* Collation tailoring rules version */
+        UVersionInfo version;
         /* get next token from stream */
         type = getNextToken(file, &token, status);
         if(U_FAILURE(*status)) {
@@ -606,6 +607,7 @@ parse(FileStream *f, const char *cp, const char *inputDir,
             temp1 = string_open(bundle, cSubTag, token.fChars, token.fLength, status);
             table_add(temp, temp1, status);
             temp1 = NULL;
+
             if(U_FAILURE(*status)) {
                 goto finish;
             }
@@ -618,6 +620,15 @@ parse(FileStream *f, const char *cp, const char *inputDir,
                 } else {
                     colOverride = FALSE;
                 }
+            }
+            if(colEl && (uprv_strcmp(cSubTag, "Version") == 0)){
+                char tVer[40];
+                int32_t length=u_strlen(token.fChars);
+                if(length>=(int32_t)sizeof(tVer)) {
+                    length=(int32_t)sizeof(tVer)-1;
+                }
+                u_UCharsToChars(token.fChars, tVer, length);
+                u_versionFromString(version,tVer);
             }
             if (colEl && (uprv_strcmp(cSubTag, "Sequence") == 0))
             {
@@ -635,6 +646,8 @@ parse(FileStream *f, const char *cp, const char *inputDir,
                 if(U_SUCCESS(intStatus) && coll !=NULL) {
                     ucol_setNormalization(coll, UCOL_NO_NORMALIZATION);
                     binColData = ucol_cloneRuleData(coll, &len, &intStatus);
+                    coll->dataInfo.dataVersion[0] = UCOL_BUILDER_VERSION; /* builder version */
+                    coll->dataInfo.dataVersion[1] = version[0]; /*tailoring rules version*/
                     if(U_SUCCESS(*status) && data != NULL) {
                         temp1 = bin_open(bundle, "%%CollationNew", len, binColData, status);
                         table_add(rootTable, temp1, status);
@@ -661,7 +674,7 @@ parse(FileStream *f, const char *cp, const char *inputDir,
                 }
             }
             break;
-      
+            
           /* Record the last string as the subtag */
         case eSubtag:
             u_UCharsToChars(token.fChars, cSubTag, u_strlen(token.fChars)+1);
