@@ -422,6 +422,17 @@ RuleBasedNumberFormat::setDefaultRuleSet(const UnicodeString& ruleSetName, UErro
     }
 }
 
+UnicodeString
+RuleBasedNumberFormat::getDefaultRuleSetName() {
+  UnicodeString result;
+  if (defaultRuleSet && defaultRuleSet->isPublic()) {
+    defaultRuleSet->getName(result);
+  } else {
+    result.setToBogus();
+  }
+  return result;
+}
+
 void 
 RuleBasedNumberFormat::initDefaultRuleSet()
 {

@@ -38,6 +38,11 @@
      **/
     static void TestInt64Format(void);
 
+    /**
+     * Test RBNF access through unumfmt APIs.
+     **/
+    static void TestRBNFFormat(void);
+
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif
