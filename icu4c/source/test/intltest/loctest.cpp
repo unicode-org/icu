@@ -1791,6 +1791,12 @@ void LocaleTest::TestGetLocale(void) {
         } else {
             _checklocs("Calendar", req, valid, actual);
         }
+        /* Make sure that it fails correctly */
+        ec = U_FILE_ACCESS_ERROR;
+        if (cal->getLocale(ULOC_VALID_LOCALE, ec).getName()[0] != 0) {
+            errln("FAIL: Calendar::getLocale() failed to fail correctly. It should have returned \"\"");
+        }
+        ec = U_ZERO_ERROR;
     }
     delete cal;
 #endif
