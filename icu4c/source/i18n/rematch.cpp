@@ -86,17 +86,23 @@ RegexMatcher &RegexMatcher::appendReplacement(UnicodeString &dest,
     
 
     // scan the replacement text, looking for substitutions ($n) and \escapes.
+    //  TODO:  optimize this loop by efficiently scanning for '$' or '\'
     int32_t  replLen = replacement.length();
-    int32_t  replIdx;
-    for (replIdx = 0; replIdx<replLen; replIdx++) {
+    int32_t  replIdx = 0;
+    while (replIdx<replLen) {
         UChar  c = replacement.charAt(replIdx);
+        replIdx++;
         if (c == BACKSLASH) {
             // Backslash Escape.  Copy the following char out without further checks.
-            replIdx++;
+            //                    Note:  Surrogate pairs don't need any special handling
+            //                           The second half wont be a '$' or a '\', and
+            //                           will move to the dest normally on the next
+            //                           loop iteration.
             if (replIdx >= replLen) {
                 break;
             }
             c = replacement.charAt(replIdx);
+            replIdx++;
             dest.append(c);
             continue;
         }
@@ -110,32 +116,26 @@ RegexMatcher &RegexMatcher::appendReplacement(UnicodeString &dest,
         // We've got a $.  Pick up a capture group number if one follows.
         // Consume at most the number of digits necessary for the largest capture
         // number that is valid for this pattern.
-        if (++replIdx >= replLen) {
-            // $ was at the end of the replacement string.  Dump it out and be done.
-            dest.append(c);
-            break;
-        }
 
         int32_t numDigits = 0;
         int32_t groupNum  = 0;
+        UChar32 digitC;
         for (;;) {
-            c = replacement.charAt(replIdx);
-            if (u_isdigit(c) == FALSE) {
+            if (replIdx >= replLen) {
                 break;
             }
-            groupNum=groupNum*10 + u_charDigitValue(c);
+            digitC = replacement.char32At(replIdx);
+            if (u_isdigit(digitC) == FALSE) {
+                break;
+            }
+            replIdx = replacement.moveIndex32(replIdx, 1);
+            groupNum=groupNum*10 + u_charDigitValue(digitC);
             numDigits++;
-            if (++replIdx >= replLen) {
-                break;
-            }
             if (numDigits >= fPattern->fMaxCaptureDigits) {
                 break;
             }
         }
 
-        // We've scanned one char ahead in the pattern.  Back up so the
-        //  next iteration of the loop picks the char again.
-        --replIdx;
 
         if (numDigits == 0) {
             // The $ didn't introduce a group number at all.
@@ -148,7 +148,7 @@ RegexMatcher &RegexMatcher::appendReplacement(UnicodeString &dest,
         dest.append(group(groupNum, status));
         if (U_FAILURE(status)) {
             // Can fail if group number is out of range.
-            return *this;
+            break;
         }
 
     }
@@ -227,7 +227,7 @@ UBool RegexMatcher::find() {
     UErrorCode status = U_ZERO_ERROR;
 
     int32_t  startPos;
-    for (startPos=fMatchEnd; startPos < fInputLength; startPos++) {
+    for (startPos=fMatchEnd; startPos < fInputLength; startPos = fInput->moveIndex32(startPos, 1)) {
         MatchAt(startPos, status);
         if (U_FAILURE(status)) {
             return FALSE;
@@ -255,7 +255,7 @@ UBool RegexMatcher::find(int32_t start, UErrorCode &status) {
     // TODO:  optimize the search for a leading literal string.
     // TODO:  optimize based on the minimum length of a possible match
     int32_t  startPos;
-    for (startPos=start; startPos < fInputLength; startPos++) {
+    for (startPos=start; startPos < fInputLength; startPos=fInput->moveIndex32(startPos, 1)) {
         MatchAt(startPos, status);
         if (U_FAILURE(status)) {
             return FALSE;
@@ -283,15 +283,18 @@ UnicodeString RegexMatcher::group(UErrorCode &status) const {
 UnicodeString RegexMatcher::group(int32_t group, UErrorCode &status) const {
     int32_t  s = start(group, status);
     int32_t  e = end(group, status);
+
+    // Note:  calling start() and end() above will do all necessary checking that
+    //        the group number is OK and that a match exists.  status will be set.
     if (U_FAILURE(status)) {
         return UnicodeString();
     }
 
-    if (s < 0 || s >= e) {
-        // Possible cases when a capture group didn't match 
-        // TODO:  firgure out what non-matching capture groups really are supposed to do.
+    if (s < 0) {
+        // A capture group wasn't part of the match 
         return UnicodeString();
     }
+    U_ASSERT(s <= e);
     return UnicodeString(*fInput, s, e-s);
 }
 
@@ -353,6 +356,9 @@ UnicodeString RegexMatcher::replaceAll(const UnicodeString &replacement, UErrorC
     UnicodeString destString;
     for (reset(); find(); ) {
         appendReplacement(destString, replacement, status);
+        if (U_FAILURE(status)) {
+            break;
+        }
     }
     appendTail(destString);
     return destString;
@@ -539,7 +545,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
     }
 
     // Clear out capture results from any previous match.
-    // Needed to clear capture groups in patterns with | operations that may not match at all,
+    // Required for capture groups in patterns with | operations that may not match at all,
     //   although the pattern as a whole does match.
     int i;
     for (i=0; i<=fPattern->fNumCaptureGroups; i++) {
@@ -576,11 +582,12 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
         case URX_ONECHAR:
             {
                 UChar32 inputChar = fInput->char32At(inputIdx);
-                if (inputChar == opValue) {
-                    // TODO: handle the bogus 0xffff return from char32At for index out of range.
+                if (inputChar == opValue &&                             // if (match &&
+                    !(inputChar == 0xffff && inputIdx >= fInputLength)) //    ! end-of-input)
+                {
                     inputIdx = fInput->moveIndex32(inputIdx, 1);
                 } else {
-                    // No match.  Back up matching to a saved state
+                    // No match.  Back up to a saved state
                     backTrack(inputIdx, patIdx);
                 }
                 break;
@@ -589,6 +596,9 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
 
         case URX_STRING:
             {
+                // Test input against a literal string.
+                // Strings require two slots in the compiled pattern, one for the
+                //   offset to the string text, and one for the length.
                 int32_t stringStartIdx, stringLen;
                 stringStartIdx = opValue;
 
@@ -605,6 +615,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
                                             stringStartIdx,
                                             stringStartIdx+stringLen) == 0)
                 {
+                    // Success.  Advance the current input position.
                     inputIdx += stringLen;
                 } else {
                     // No match.  Back up matching to a saved state
@@ -639,12 +650,12 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
         case URX_START_CAPTURE:
             U_ASSERT(opValue > 0 && opValue <= fPattern->fNumCaptureGroups);
             fCaptureStarts->setElementAt(inputIdx,   opValue);
-            fCaptureEnds  ->setElementAt((int32_t)0, opValue);
             break;
 
 
         case URX_END_CAPTURE:
             U_ASSERT(opValue > 0 && opValue <= fPattern->fNumCaptureGroups);
+            U_ASSERT(fCaptureStarts->elementAti(opValue) >= 0);
             fCaptureEnds->setElementAt(inputIdx, opValue);
             break;
 
@@ -705,7 +716,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
             break;
 
 
-        case URX_BACKSLASH_D:
+        case URX_BACKSLASH_D:            // Test for decimal digit
             {
                 if (inputIdx >= fInputLength) {
                     backTrack(inputIdx, patIdx);
@@ -715,7 +726,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
                 UChar32 c = fInput->char32At(inputIdx);   
                 int8_t ctype = u_charType(c);
                 UBool success = (ctype == U_DECIMAL_DIGIT_NUMBER);
-                success ^= (opValue != 0);
+                success ^= (opValue != 0);        // flip sense for \D
                 if (success) {
                     inputIdx = fInput->moveIndex32(inputIdx, 1);
                 } else {
@@ -735,7 +746,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
 
 
         case URX_BACKSLASH_X:          // Match combining character sequence
-            {
+            {                          //  Closer to Grapheme cluster than to Perl \X
                 // Fail if at end of input
                 if (inputIdx >= fInputLength) {
                     backTrack(inputIdx, patIdx);
