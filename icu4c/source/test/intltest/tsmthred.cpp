@@ -1406,7 +1406,7 @@ void MultithreadTest::TestCollators()
 
 //-------------------------------------------------------------------------------------------
 //
-//   StringThreadTest 
+//   StringThreadTest2 
 //
 //-------------------------------------------------------------------------------------------
 
@@ -1415,20 +1415,20 @@ const int kStringThreadThreads    = 10;  // # of threads to spawn
 const int kStringThreadPatience   = 60;  // time in seconds to wait for all threads
 
 
-class StringThreadTest : public ThreadWithStatus
+class StringThreadTest2 : public ThreadWithStatus
 {
 public:
     int                 fNum;
     int                 fTraceInfo;
     const UnicodeString *fSharedString;
 
-    StringThreadTest(const UnicodeString *sharedString, int num) // constructor is NOT multithread safe.
+    StringThreadTest2(const UnicodeString *sharedString, int num) // constructor is NOT multithread safe.
         : ThreadWithStatus(),
         fNum(num),
         fTraceInfo(0),
         fSharedString(sharedString)
     {
-    }
+    };
 
 
     virtual void run()
@@ -1466,9 +1466,9 @@ void MultithreadTest::TestString()
 
     UnicodeString *testString = new UnicodeString("This is the original test string.");
 
-    StringThreadTest  *tests[kStringThreadThreads];
+    StringThreadTest2  *tests[kStringThreadThreads];
     for(j = 0; j < kStringThreadThreads; j++) {
-        tests[j] = new StringThreadTest(testString, j);
+        tests[j] = new StringThreadTest2(testString, j);
     }
  
     logln(UnicodeString("Spawning: ") + kStringThreadThreads + " threads * " + kStringThreadIterations + " iterations each.");
