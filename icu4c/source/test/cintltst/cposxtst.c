@@ -36,12 +36,17 @@ void TestMessageCatalog(void) {
     u_nl_catd catd;
     const char* DATA[] = {
         /* set_num, msg_num, expected string result, expected error code */
-        "1", "1", "FAIL", "U_MISSING_RESOURCE_ERROR",
-        "19006", "4", "Miranda", "U_ZERO_ERROR",
-        "19006", "24", "Laura", "U_ZERO_ERROR",
-        "19006", "99", "FAIL", "U_MISSING_RESOURCE_ERROR",
-        "20014", "5", "Ava", "U_ZERO_ERROR",
-        "20014", "99", "FAIL", "U_MISSING_RESOURCE_ERROR",
+        "1", "4", "Good morning.", "U_ZERO_ERROR",
+        "1", "5", "Good afternoon.", "U_ZERO_ERROR",
+        "1", "6", "FAIL", "U_MISSING_RESOURCE_ERROR",
+        "1", "7", "Good evening.", "U_ZERO_ERROR",
+        "1", "8", "Good night.", "U_ZERO_ERROR",
+        "1", "9", "FAIL", "U_MISSING_RESOURCE_ERROR",
+        "3", "1", "FAIL", "U_MISSING_RESOURCE_ERROR",
+        "4", "14", "Please ", "U_ZERO_ERROR",
+        "4", "15", "FAIL", "U_MISSING_RESOURCE_ERROR",
+        "4", "19", "Thank you.", "U_ZERO_ERROR",
+        "4", "20", "Sincerely,", "U_ZERO_ERROR",
         NULL
     };
     const UChar FAIL[] = {0x46, 0x41, 0x49, 0x4C, 0x00}; /* "FAIL" */
@@ -75,22 +80,22 @@ void TestMessageCatalog(void) {
         u_austrcpy(str, ustr);
         err = u_errorName(ec);
         
-        log_verbose("u_catgets(%d, %d) => %s, len=%d, %s\n",
+        log_verbose("u_catgets(%d, %d) => \"%s\", len=%d, %s\n",
                     set_num, msg_num, str, len, err);
 
-        if (uprv_strcmp(err, DATA[i+3]) != 0) {
-            log_err("FAIL: u_catgets => %s, exp. %s\n",
-                    err, DATA[i+3]);
-        }
-
         if (u_strcmp(ustr, exp) != 0) {
-            log_err("FAIL: u_catgets => %s, exp. %s\n",
+            log_err("FAIL: u_catgets => \"%s\", exp. \"%s\"\n",
                     str, DATA[i+2]);
         }
 
         if (len != (int32_t) uprv_strlen(DATA[i+2])) {
-            log_err("FAIL: u_catgets => len=%s, exp. %s\n",
+            log_err("FAIL: u_catgets => len=%d, exp. %d\n",
                     len, uprv_strlen(DATA[i+2]));
+        }
+
+        if (uprv_strcmp(err, DATA[i+3]) != 0) {
+            log_err("FAIL: u_catgets => %s, exp. %s\n",
+                    err, DATA[i+3]);
         }
     }
 

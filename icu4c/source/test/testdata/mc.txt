@@ -12,16 +12,14 @@
 
 mc
 {
-    "%cat%19006"
-    {
-        "4" { "Miranda" }
-        "24" { "Laura" }
-    }
+    1%4  { "Good morning." }
+    1%5  { "Good afternoon." }
+    1%7  { "Good evening." }
+    1%8  { "Good night." }
 
-    "%cat%20014"
-    {
-        "5" { "Ava" }
-    }
+    4%14 { "Please " }
+    4%19 { "Thank you." }
+    4%20 { "Sincerely," }
 }
 
 //eof
