@@ -1,33 +1,15 @@
 /*
- * $RCSfile: CompactByteArray.java,v $ $Revision: 1.4 $ $Date: 2000/02/24 19:42:38 $
+ *******************************************************************************
+ * Copyright (C) 1996-2000, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
  *
- * (C) Copyright Taligent, Inc. 1996 - All Rights Reserved
- * (C) Copyright IBM Corp. 1996-1998 - All Rights Reserved
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/CompactByteArray.java,v $ 
+ * $Date: 2000/03/10 04:17:57 $ 
+ * $Revision: 1.5 $
  *
- * Portions copyright (c) 1996-1998 Sun Microsystems, Inc. All Rights Reserved.
- *
- *   The original version of this source code and documentation is copyrighted
- * and owned by Taligent, Inc., a wholly-owned subsidiary of IBM. These
- * materials are provided under terms of a License Agreement between Taligent
- * and Sun. This technology is protected by multiple US and International
- * patents. This notice and attribution to Taligent may not be removed.
- *   Taligent is a registered trademark of Taligent, Inc.
- *
- * Permission to use, copy, modify, and distribute this software
- * and its documentation for NON-COMMERCIAL purposes and without
- * fee is hereby granted provided that this copyright notice
- * appears in all copies. Please refer to the file "copyright.html"
- * for further important copyright and licensing information.
- *
- * SUN MAKES NO REPRESENTATIONS OR WARRANTIES ABOUT THE SUITABILITY OF
- * THE SOFTWARE, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
- * TO THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
- * PARTICULAR PURPOSE, OR NON-INFRINGEMENT. SUN SHALL NOT BE LIABLE FOR
- * ANY DAMAGES SUFFERED BY LICENSEE AS A RESULT OF USING, MODIFYING OR
- * DISTRIBUTING THIS SOFTWARE OR ITS DERIVATIVES.
- *
+ *****************************************************************************************
  */
-
 package com.ibm.util;
 
 
@@ -49,7 +31,7 @@ package com.ibm.util;
  * array contains the indicies of Unicode characters to the value array.
  *
  * @see                CompactCharArray
- * @version            $Revision: 1.4 $
+ * @version            $Revision: 1.5 $
  * @author             Helena Shih
  */
 public final class CompactByteArray implements Cloneable {

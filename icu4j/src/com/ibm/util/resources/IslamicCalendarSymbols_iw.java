@@ -1,19 +1,15 @@
 /*
- * $RCSfile: IslamicCalendarSymbols_iw.java,v $ $Revision: 1.1 $ $Date: 2000/02/10 06:25:56 $
+ *******************************************************************************
+ * Copyright (C) 1996-2000, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
  *
- * (C) Copyright IBM Corp. 1998 - All Rights Reserved
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/util/resources/Attic/IslamicCalendarSymbols_iw.java,v $ 
+ * $Date: 2000/03/10 04:18:06 $ 
+ * $Revision: 1.2 $
  *
- * The program is provided "as is" without any warranty express or
- * implied, including the warranty of non-infringement and the implied
- * warranties of merchantibility and fitness for a particular purpose.
- * IBM will not be liable for any damages suffered by you as a result
- * of using the Program. In no event will IBM be liable for any
- * special, indirect or consequential damages or lost profits even if
- * IBM has been advised of the possibility of their occurrence. IBM
- * will not be liable for any third party claims against you.
- *
+ *****************************************************************************************
  */
-
 package com.ibm.util.resources;
 
 import java.util.ListResourceBundle;

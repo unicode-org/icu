@@ -1,3 +1,15 @@
+/*
+ *******************************************************************************
+ * Copyright (C) 1996-2000, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ *
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/tools/normalizer/Attic/CPPWriter.java,v $ 
+ * $Date: 2000/03/10 04:17:56 $ 
+ * $Revision: 1.2 $
+ *
+ *****************************************************************************************
+ */
 package com.ibm.tools.normalizer;
 
 import com.ibm.text.*;
@@ -170,7 +182,7 @@ class CPPWriter extends SourceWriter {
 
     static final String kHeader =
          "/*\n"
-        +" * @(#)$RCSFile$ $Revision: 1.1 $ $Date: 2000/02/10 06:25:54 $\n"
+        +" * @(#)$RCSFile$ $Revision: 1.2 $ $Date: 2000/03/10 04:17:56 $\n"
         +" *\n"
         +" * (C) Copyright IBM Corp. 1997-1998 - All Rights Reserved\n"
         +" *\n"
