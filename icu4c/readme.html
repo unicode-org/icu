@@ -9,7 +9,8 @@
 
 <H4>Late breaking news:</H4>
 <UL>
-  <LI> <A HREF="#hpux_data_note">HP/UX shared library loading</A>
+  <LI><A HREF="#hpux_data_note">HP/UX shared library loading</A></LI>
+  <li><a href="#buffer_overflow">Important change of error codes from streaming conversion functions</a></li>
 </UL>
 
 <HR>
@@ -1242,6 +1243,36 @@ style='margin-top:0in;margin-right:.5in;margin-bottom:0in;margin-left:.5in;
 margin-bottom:.0001pt'><span style='font-size:7.5pt'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; int32_t maxResultSize,<o:p></o:p></span></pre><pre
 style='margin-top:0in;margin-right:.5in;margin-bottom:0in;margin-left:.5in;
 margin-bottom:.0001pt'><span style='font-size:7.5pt'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; UErrorCode* err);</span></pre>
+
+
+<h3><a name="buffer_overflow"></a>Important change of error codes from streaming conversion functions</h3>
+
+<p>We have decided to make a semantic change to the conversion API
+which affects applications using ICU that are migrated to use ICU version 1.6 compared to earlier ICU versions:<br>
+
+The error code that is set from streaming conversion like
+<pre>
+ucnv_fromUnicode() - ucnv_toUnicode()
+ucnv_fromUChars()  - ucnv_toUChars()
+scsu_compress()    - scsu_decompress()
+</pre>
+when the target buffer is full but the source not empty is changed from
+<code>U_INDEX_OUTOFBOUNDS_ERROR</code> to <code>U_BUFFER_OVERFLOW_ERROR</code>.
+This change makes the error codes more consistent with their names and
+with their use in other icu APIs.</p>
+
+<p>You need to test for this new error code if your code uses ICU for conversion
+and used the old error code. ucnv.h and scsu.h are updated with this information.
+Please search in your source code for <code>U_INDEX_OUTOFBOUNDS_ERROR</code>.
+If it is used with the above functions (<em>not</em> with <code>ucnv_getNextUChar()</code>),
+then you need to change it to <code>U_BUFFER_OVERFLOW_ERROR</code> in order to
+get your code to work with icu 1.6.</p>
+
+<p>See the updated sample code in <code>icu/source/samples</code>. All samples are updated.
+See <a href="http://oss.software.ibm.com/developerworks/opensource/icu/bugs?findid=516">jitterbug 516</a> for details.
+This was discussed in july 2000 on the icu mailing list.
+Please see the list archive for the <a href="http://oss.software.ibm.com/icu/archives/icu/icu.0007/msg00142.html">discussion</a>.</p>
+
 
 <h3><a name=WhereToFindMore></a><u>Where to Find More Information</u></h3>
 
