@@ -22,7 +22,6 @@
 
 #include "ucnv_io.h"
 #include "uhash.h"
-#include "ucmp16.h"
 #include "ucnv_bld.h"
 #include "unicode/ucnv_err.h"
 #include "ucnv_cnv.h"
@@ -45,9 +44,9 @@ extern void UCNV_DEBUG_LOG(char *what, char *who, void *p, int l);
 
 static const UConverterSharedData *
 converterData[UCNV_NUMBER_OF_SUPPORTED_CONVERTER_TYPES]={
-    &_SBCSData, &_DBCSData, &_MBCSData, &_Latin1Data,
+    NULL, NULL, &_MBCSData, &_Latin1Data,
     &_UTF8Data, &_UTF16BEData, &_UTF16LEData, &_UTF32BEData, &_UTF32LEData,
-    &_EBCDICStatefulData, &_ISO2022Data, 
+    NULL, &_ISO2022Data, 
     &_LMBCSData1,&_LMBCSData2, &_LMBCSData3, &_LMBCSData4, &_LMBCSData5, &_LMBCSData6,
     &_LMBCSData8,&_LMBCSData11,&_LMBCSData16,&_LMBCSData17,&_LMBCSData18,&_LMBCSData19,
     &_HZData, &_SCSUData, &_ASCIIData
@@ -263,19 +262,6 @@ UBool   deleteSharedConverterData (UConverterSharedData * deadSharedData)
     if (deadSharedData->referenceCounter > 0)
         return FALSE;
     
-    /* Note: if we have a dataMemory, then that means that all ucmp's came
-       from udata, and their tables will go away at the end
-       of this function. So, we need to simply dealloc the UCMP8's themselves.
-       We're guaranteed that they do not allocate any further memory.
-       
-       When we have an API to simply 'init' a ucmp8, then no action at all will
-       need to happen.   --srl 
-
-       This means that the compact arrays would have to be static fields in
-       UConverterSharedData, not pointers to allocated structures.
-       Markus
-    */
-
     if (deadSharedData->impl->unload != NULL) {
         deadSharedData->impl->unload(deadSharedData);
     }
@@ -487,6 +473,7 @@ UConverterSharedData* ucnv_data_unFlattenClone(UDataMemory *pData, UErrorCode *s
         return NULL;
 
     if( (uint16_t)type >= UCNV_NUMBER_OF_SUPPORTED_CONVERTER_TYPES ||
+        converterData[type] == NULL ||
         converterData[type]->referenceCounter != 1 ||
         source->structSize != sizeof(UConverterStaticData))
     {
