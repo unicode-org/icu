@@ -42,8 +42,8 @@ class Hashtable;
  * indicates which properties are supported.
  *
  *    + GeneralCategory
- *      CombiningClass
- *      BidiClass
+ *    + CombiningClass
+ *    + BidiClass
  *      DecompositionType
  *    + NumericValue
  *      NumericType
@@ -51,6 +51,7 @@ class Hashtable;
  *      LineBreak
  *      JoiningType
  *    + Script
+ *    + Binary properties
  *
  * '+' indicates a supported property.
  *
@@ -106,6 +107,20 @@ class UnicodePropertySet {
     static UnicodeSet* createNumericValueSet(const UnicodeString& valueName);
 
     /**
+     * Given a combining class name, or number, create a corresponding
+     * set and return it.  The name may be numeric, as in \p{cc=0}, or
+     * symbolic, as in \p{cc=Below Left}.  If the name is invalid,
+     * return an empty set.
+     */
+    static UnicodeSet* createCombiningClassSet(const UnicodeString& valueName);
+
+    /**
+     * Given a bidi class name create a corresponding set and return
+     * it.  If the name is invalid, return NULL.
+     */
+    static UnicodeSet* createBidiClassSet(const UnicodeString& valueName);
+
+    /**
      * Given a general category value name, create a corresponding
      * set and return it, or return null if the name is invalid.
      * @param valueName a pre-munged general category value name
@@ -118,6 +133,13 @@ class UnicodePropertySet {
      * @param valueName a pre-munged script value name
      */
     static UnicodeSet* createScriptSet(const UnicodeString& valueName);
+
+    /**
+     * Given a binary property name, create a corresponding
+     * set and return it, or return null if the name is invalid.
+     * @param valueName a pre-munged binary property name
+     */
+    static UnicodeSet* createBinaryPropertySet(const UnicodeString& valueName);
 
     //----------------------------------------------------------------
     // Utility methods
