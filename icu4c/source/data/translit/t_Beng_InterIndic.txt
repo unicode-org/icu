@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_Bengali_InterIndic.txt
-// Date: Thu Oct 25 22:17:21 2001
+// Date: Sat Nov 10 17:25:41 2001
 //--------------------------------------------------------------------
 
 // Bengali_InterIndic
@@ -104,8 +104,8 @@ translit_Bengali_InterIndic {
 "\u09ed>\ue06d;" // DIGIT SEVEN
 "\u09ee>\ue06e;" // DIGIT EIGHT
 "\u09ef>\ue06f;" // DIGIT NINE
-// \u09f0>; # UNMAPPED Bengali-InterIndic: LETTER RA WITH MIDDLE DIAGONAL
-// \u09f1>; # UNMAPPED Bengali-InterIndic: LETTER RA WITH LOWER DIAGONAL
+"\u09f0>\ue0f0;" // UNMAPPED Bengali-InterIndic: LETTER RA WITH MIDDLE DIAGONAL
+"\u09f1>\ue0f1;" // UNMAPPED Bengali-InterIndic: LETTER RA WITH LOWER DIAGONAL
 // \u09f2>; # UNMAPPED Bengali-InterIndic: RUPEE MARK
 // \u09f3>; # UNMAPPED Bengali-InterIndic: RUPEE SIGN
 // \u09f4>; # UNMAPPED Bengali-InterIndic: CURRENCY NUMERATOR ONE

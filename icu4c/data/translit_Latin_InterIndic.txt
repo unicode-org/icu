@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_Latin_InterIndic.txt
-// Date: Thu Oct 25 22:17:21 2001
+// Date: Sat Nov 10 17:25:41 2001
 //--------------------------------------------------------------------
 
 // Latin_InterIndic
@@ -102,7 +102,7 @@ translit_Latin_InterIndic {
     "$virama=\ue04d;"
 // \u094e Reserved
 // \u094f Reserved
-//\u0950>\ue050; # OM
+   "$om = \ue050;" // OM
 // \u0951>;        # UNMAPPED STRESS SIGN UDATTA
 // \u0952>;        # UNMAPPED STRESS SIGN ANUDATTA
 // \u0953>;        # UNMAPPED GRAVE ACCENT
@@ -166,19 +166,19 @@ translit_Latin_InterIndic {
     "'-'h\u0323>$visarga;"
     "mm>$anusvara;"
     "x>$visarga;"
-    "aa>$waa;"
+// convert to independent forms at start of word or syllable:
+// e.g. keai -> {ka}{e}{wai}; k'ai -> {ka}{wai}; (ai) -> ({wai})
     "a\u0304>$waa;"
     "ai>$wai;"
     "au>$wau;"
-    "ii>$wii;"
     "i\u0304>$wii;"
     "i>$wi;"
-    "uu>$wuu;"
+    //uu>$wuu;
     "u\u0304>$wuu;"
     "u>$wu;"
-    "rrh>$wrr;"
+    //rrh>$wrr;
     "r\u0325\u0304>$wrr;"
-    "rh>$wr;"
+    //rh>$wr;
     "r\u0325>$wr;"
     "l\u0325\u0304>$wll;"
     "lh>$wl;l\u0325>$wl;"
@@ -188,6 +188,7 @@ translit_Latin_InterIndic {
     "e\u0306>$wce;"
     "o\u0306>$wco;"
     "e>$wse;"
+    "''om>$om;"
     "o>$wso;"
     "n}na                > $na|$virama;"
     "n\u0307}[kg]        > $anusvara;"
@@ -199,6 +200,15 @@ translit_Latin_InterIndic {
     "m}[pbm]             > $anusvara;"
     "n} [yrlvsh]         > $anusvara;"
     "'-'m\u0307          > $anusvara;"
+    
+    //urdu compatibility
+    "q>$uka|$virama;"
+    "k\u0331h\u0331>$ukha |$virama;"
+    "g\u0307> $ugha | $virama;"
+    "z > $ujha |$virama;"
+    "f > $ufa|$virama;"
+    
+    // dev
     "y\u0307>$uya|$virama;"
     "l\u0331>$ela|$virama;"
     "n\u0331>$ena|$virama;"
@@ -213,7 +223,6 @@ translit_Latin_InterIndic {
     "d\u0323>$dda|$virama;"
     "kh>$kha|$virama;"
     "k>$ka|$virama;"
-    "q>$ka|$virama;"
     "gh>$gha|$virama;"
     "g>$ga|$virama;"
     "ch>$cha|$virama;"
@@ -234,36 +243,37 @@ translit_Latin_InterIndic {
     "b>$ba|$virama;"
     "m>$ma|$virama;"
     "y>$ya|$virama;"
+    "r\u0331>$rra|$virama;"
     "r>$ra|$virama;"
     "l\u0323a>$lla;"
     "l>$la|$virama;"
     "v>$va|$virama;"
-    "f>$va|$virama;"
     "w>$va|$virama;"
     "sh>$sha|$virama;"
     "ss>$ssa|$virama;"
     "s\u0323>$ssa|$virama;"
     "s\u0301>$sha|$virama;"
     "s>$sa|$virama;"
-    "z>$sa|$virama;"
     "h>$ha|$virama;"
     "'.'>$danda;"
     "$danda'.'>$doubleDanda;"
     "$depVowelAbove{'~'>$anusvara;"
     "$depVowelBelow{'~'>$chandrabindu;"
-    "$virama aa>$aa;"
+// convert to dependent forms after consonant with no vowel:
+// e.g. kai -> {ka}{virama}ai -> {ka}{ai}
+    //$virama aa>$aa;
     "$virama a\u0304>$aa;"
     "$virama ai>$ai;"
     "$virama au>$au;"
     "$virama ii>$ii;"
     "$virama i\u0304>$ii;"
     "$virama i>$i;"
-    "$virama uu>$uu;"
+    //$virama uu>$uu;
     "$virama u\u0304>$uu;"
     "$virama u>$u;"
-    "$virama rrh>$rrh;"
+    //$virama rrh>$rrh;
     "$virama r\u0325\u0304>$rrh;"
-    "$virama rh>$rh;"
+    //$virama rh>$rh;
     "$virama r\u0325a>$rh;"
     "$virama r\u0325>$rh;"
     "$virama l\u0325\u0304>$llh;"
@@ -276,22 +286,23 @@ translit_Latin_InterIndic {
     "$virama o\u0306>$co;"
     "$virama e>$se;"
     "$virama o>$so;"
-    "$virama''aa>$waa;"
+// otherwise convert independent forms when separated by ': k'ai -> {ka}{virama}{wai}
+    //$virama''aa>$waa;
     "$virama''a\u0304>$waa;"
     "$virama''ai>$wai;"
     "$virama''au>$wau;"
-    "$virama''ii>$wii;"
+    //$virama''ii>$wii;
     "$virama''i\u0304>$wii;"
     "$virama''i>$wi;"
-    "$virama''uu>$wuu;"
+    //$virama''uu>$wuu;
     "$virama''u\u0304>$wuu;"
     "$virama''u>$wu;"
-    "$virama''rrh>$wrr;"
+    //$virama''rrh>$wrr;
     "$virama''r\u0325\u0304>$wrr;"
-    "$virama''rh>$wr;"
+    //$virama''rh>$wr;
     "$virama''r\u0325>$wr;"
     "$virama''l\u0325\u0304>$wll;"
-    "$virama''lh>$wl;"
+    //$virama''lh>$wl;
     "$virama''l\u0325>$wl;"
     "$virama''e\u0304>$we;"
     "$virama''o\u0304>$wo;"
