@@ -375,7 +375,14 @@ getOutFilename(const char *inFilename, const char *destdir, char *outFilename, c
     } else {
         /* copy basename */
         while(inFilename<suffix) {
-            *outFilename++=*entryName++=*inFilename++;
+            if(*inFilename=='-') {
+                /* iSeries cannot have '-' in the .o objects. */
+                *outFilename++=*entryName++='_';
+                inFilename++;
+            }
+            else {
+                *outFilename++=*entryName++=*inFilename++;
+            }
         }
 
         /* replace '.' by '_' */
