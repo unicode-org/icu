@@ -275,6 +275,21 @@ U_CDECL_END
 static int8_t
 loadNormData(UErrorCode &errorCode) {
     /* load Unicode normalization data from file */
+
+    /*
+     * This lazy intialization with double-checked locking (without mutex protection for
+     * haveNormData==0) is transiently unsafe under certain circumstances.
+     * Check the readme and use u_init() if necessary.
+     *
+     * While u_init() initializes the main normalization data via this functions,
+     * it does not do so for exclusion sets (which are fully mutexed).
+     * This is because
+     * - there can be many exclusion sets
+     * - they are rarely used
+     * - they are not usually used in execution paths that are
+     *   as performance-sensitive as others
+     *   (e.g., IDNA takes more time than unorm_quickCheck() anyway)
+     */
     if(haveNormData==0) {
         UTrie _normTrie={ 0,0,0,0,0,0,0 }, _fcdTrie={ 0,0,0,0,0,0,0 }, _auxTrie={ 0,0,0,0,0,0,0 };
         UDataMemory *data;
@@ -437,7 +452,14 @@ static const UnicodeSet *
 internalGetNXHangul(UErrorCode &errorCode) {
     /* internal function, does not check for incoming U_FAILURE */
 
-    if(nxCache[UNORM_NX_HANGUL]==NULL) {
+    UBool isCached;
+
+    /* do this because double-checked locking is broken */
+    umtx_lock(NULL);
+    isCached=nxCache[UNORM_NX_HANGUL]!=NULL;
+    umtx_unlock(NULL);
+
+    if(!isCached) {
         UnicodeSet *set=new UnicodeSet(0xac00, 0xd7a3);
         if(set==NULL) {
             errorCode=U_MEMORY_ALLOCATION_ERROR;
@@ -461,7 +483,14 @@ static const UnicodeSet *
 internalGetNXCJKCompat(UErrorCode &errorCode) {
     /* internal function, does not check for incoming U_FAILURE */
 
-    if(nxCache[UNORM_NX_CJK_COMPAT]==NULL) {
+    UBool isCached;
+
+    /* do this because double-checked locking is broken */
+    umtx_lock(NULL);
+    isCached=nxCache[UNORM_NX_CJK_COMPAT]!=NULL;
+    umtx_unlock(NULL);
+
+    if(!isCached) {
         /* build a set from [CJK Ideographs]&[has canonical decomposition] */
         UnicodeSet *set, *hasDecomp;
 
@@ -524,7 +553,14 @@ internalGetNXUnicode(uint32_t options, UErrorCode &errorCode) {
         return NULL;
     }
 
-    if(nxCache[options]==NULL) {
+    UBool isCached;
+
+    /* do this because double-checked locking is broken */
+    umtx_lock(NULL);
+    isCached=nxCache[options]!=NULL;
+    umtx_unlock(NULL);
+
+    if(!isCached) {
         /* build a set with all code points that were not designated by the specified Unicode version */
         UnicodeSet *set;
 
@@ -564,7 +600,14 @@ static const UnicodeSet *
 internalGetNX(int32_t options, UErrorCode &errorCode) {
     options&=_NORM_OPTIONS_SETS_MASK;
 
-    if(nxCache[options]==NULL) {
+    UBool isCached;
+
+    /* do this because double-checked locking is broken */
+    umtx_lock(NULL);
+    isCached=nxCache[options]!=NULL;
+    umtx_unlock(NULL);
+
+    if(!isCached) {
         /* return basic sets */
         if(options==UNORM_NX_HANGUL) {
             return internalGetNXHangul(errorCode);
