@@ -132,13 +132,13 @@ DecimalFormat::DecimalFormat(UErrorCode& status)
   fGroupingSize(0),
   fGroupingSize2(0),
   fSymbols(0),
+  fUseSignificantDigits(FALSE),
+  fMinSignificantDigits(1),
+  fMaxSignificantDigits(6),
   fMinExponentDigits(0),
   fRoundingIncrement(0),
   fPad(0),
-  fFormatWidth(0),
-  fMinSignificantDigits(1),
-  fMaxSignificantDigits(6),
-  fUseSignificantDigits(FALSE)
+  fFormatWidth(0)
 {
     UParseError parseError;
     construct(status, parseError);
@@ -160,13 +160,13 @@ DecimalFormat::DecimalFormat(const UnicodeString& pattern,
   fGroupingSize(0),
   fGroupingSize2(0),
   fSymbols(0),
+  fUseSignificantDigits(FALSE),
+  fMinSignificantDigits(1),
+  fMaxSignificantDigits(6),
   fMinExponentDigits(0),
   fRoundingIncrement(0),
   fPad(0),
-  fFormatWidth(0),
-  fMinSignificantDigits(1),
-  fMaxSignificantDigits(6),
-  fUseSignificantDigits(FALSE)
+  fFormatWidth(0)
 {
     UParseError parseError;
     construct(status, parseError, &pattern);
@@ -190,13 +190,13 @@ DecimalFormat::DecimalFormat(const UnicodeString& pattern,
   fGroupingSize(0),
   fGroupingSize2(0),
   fSymbols(0),
+  fUseSignificantDigits(FALSE),
+  fMinSignificantDigits(1),
+  fMaxSignificantDigits(6),
   fMinExponentDigits(0),
   fRoundingIncrement(0),
   fPad(0),
-  fFormatWidth(0),
-  fMinSignificantDigits(1),
-  fMaxSignificantDigits(6),
-  fUseSignificantDigits(FALSE)
+  fFormatWidth(0)
 {
     UParseError parseError;
     if (symbolsToAdopt == NULL)
@@ -218,13 +218,13 @@ DecimalFormat::DecimalFormat(  const UnicodeString& pattern,
   fGroupingSize(0),
   fGroupingSize2(0),
   fSymbols(0),
+  fUseSignificantDigits(FALSE),
+  fMinSignificantDigits(1),
+  fMaxSignificantDigits(6),
   fMinExponentDigits(0),
   fRoundingIncrement(0),
   fPad(0),
-  fFormatWidth(0),
-  fMinSignificantDigits(1),
-  fMaxSignificantDigits(6),
-  fUseSignificantDigits(FALSE)
+  fFormatWidth(0)
 {
     if (symbolsToAdopt == NULL)
         status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -248,13 +248,13 @@ DecimalFormat::DecimalFormat(const UnicodeString& pattern,
   fGroupingSize(0),
   fGroupingSize2(0),
   fSymbols(0),
+  fUseSignificantDigits(FALSE),
+  fMinSignificantDigits(1),
+  fMaxSignificantDigits(6),
   fMinExponentDigits(0),
   fRoundingIncrement(0),
   fPad(0),
-  fFormatWidth(0),
-  fMinSignificantDigits(1),
-  fMaxSignificantDigits(6),
-  fUseSignificantDigits(FALSE)
+  fFormatWidth(0)
 {
     UParseError parseError;
     construct(status, parseError, &pattern, new DecimalFormatSymbols(symbols));
@@ -2718,7 +2718,7 @@ UnicodeString&
 DecimalFormat::toPattern(UnicodeString& result, UBool localized) const
 {
     result.remove();
-    UChar32 zero, sigDigit;
+    UChar32 zero, sigDigit = kPatternSignificantDigit;
     UnicodeString digit, group;
     int32_t i;
     int32_t roundingDecimalPos = 0; // Pos of decimal in roundingDigits
@@ -2726,15 +2726,14 @@ DecimalFormat::toPattern(UnicodeString& result, UBool localized) const
     int32_t padPos = (fFormatWidth > 0) ? fPadPosition : -1;
     UnicodeString padSpec;
     UBool useSigDig = areSignificantDigitsUsed();
-    if (useSigDig) {
-        sigDigit = localized ? getConstSymbol(DecimalFormatSymbols::kSignificantDigitSymbol).char32At(0) :
-                               kPatternSignificantDigit;
-    }
 
     if (localized) {
         digit.append(getConstSymbol(DecimalFormatSymbols::kDigitSymbol));
         group.append(getConstSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol));
         zero = getConstSymbol(DecimalFormatSymbols::kZeroDigitSymbol).char32At(0);
+        if (useSigDig) {
+            sigDigit = getConstSymbol(DecimalFormatSymbols::kSignificantDigitSymbol).char32At(0);
+        }
     }
     else {
         digit.append((UChar)kPatternDigit);
@@ -3681,7 +3680,7 @@ void DecimalFormat::setCurrency(const UChar* theCurrency, UErrorCode& ec) {
     }
 }
 
-void DecimalFormat::getEffectiveCurrency(UChar* result, UErrorCode& ec) const {
+void DecimalFormat::getEffectiveCurrency(UChar* result, UErrorCode& /*ec*/) const {
     const UChar* c = getCurrency();
     if (*c == 0) {
         const UnicodeString &intl =
