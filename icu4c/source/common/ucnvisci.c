@@ -11,6 +11,8 @@
 *   created on: 2001JUN26
 *   created by: Ram Viswanadha
 *   
+*   Date        Name        Description
+*   24/7/2001   Ram         Added support for EXT character handling
 */
 
 #include "unicode/utypes.h"
@@ -44,6 +46,9 @@
 #define ASCII_END           0x9f
 #define NO_CHAR_MARKER      0xFFFE
 #define TELUGU_DELTA        DELTA * TELUGU
+#define DEV_ABBR_SIGN       0x0970
+#define DEV_ANUDATTA        0x0952
+
 /* TODO: 
  * Add getName() function.
  */
@@ -466,7 +471,7 @@ static const uint16_t fromUnicodeTable[128]={
     0x00ec ,/* 0x094e */ 
     0x00ed ,/* 0x094f */ 
     0xA1E9 ,/* 0x0950 */ /* OM Symbol */
-    0xF0B5 ,/* 0x0951 */ 
+    0xFFFF ,/* 0x0951 */ 
     0xF0B8 ,/* 0x0952 */ 
     0xFFFF ,/* 0x0953 */ 
     0xFFFF ,/* 0x0954 */ 
@@ -497,7 +502,7 @@ static const uint16_t fromUnicodeTable[128]={
     0x00f8 ,/* 0x096d */ 
     0x00f9 ,/* 0x096e */ 
     0x00fa ,/* 0x096f */ 
-    0xFFFF ,/* 0x0970 */ 
+    0xF0BF ,/* 0x0970 */ 
   
 };
 static const uint16_t toUnicodeTable[256]={
@@ -1131,7 +1136,8 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
     uint32_t targetUniChar = 0x0000;
     uint32_t sourceChar = 0x0000;
     UConverterDataISCII* data;
-
+    UConverterCallbackReason reason;
+    
     if ((args->converter == NULL) || (target < args->target) || (source < args->source)){
         *err = U_ILLEGAL_ARGUMENT_ERROR;
         return;
@@ -1146,11 +1152,15 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
         if(target < args->targetLimit){
             sourceChar = (unsigned char)*(source)++;
 
-            if(sourceChar!=ATR && data->contextCharToUnicode  == NO_CHAR_MARKER){
+            if(sourceChar!=ATR &&
+                    sourceChar!=EXT && 
+                    data->contextCharToUnicode  == NO_CHAR_MARKER){
+                
                 /* get the mapping */
                 GET_MAPPING(sourceChar, targetUniChar,data);
                 if(targetUniChar==missingCharMarker){
                     *err = U_INVALID_CHAR_FOUND;
+                    reason=UCNV_UNASSIGNED;
                     goto CALLBACK;
                 }else{
                     /* save the mapping in contextCharToUnicode */
@@ -1179,9 +1189,40 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                 /* reset */
                 data->contextCharToUnicode=NO_CHAR_MARKER;              
                 continue;
+            }else if(data->contextCharToUnicode==EXT){
+                /* check if sourceChar is in 0xA1-0xEE range */
+                if((uint8_t) (0xEE-sourceChar) <= (0xEE-0xA1)){
+                    /* We currently support only Anudatta and Devanagari abbreviation sign */
+                    if(sourceChar==0xBF || sourceChar == 0xB8){
+                        targetUniChar = (sourceChar==0xBF) ? DEV_ABBR_SIGN : DEV_ANUDATTA;
+                        
+                        /* find out if the mapping is valid in this state */                                            
+                        if(validityTable[(uint8_t)targetUniChar] & data->currentMaskToUnicode){
+                            
+                            targetUniChar += data->currentDeltaToUnicode;
+                            data->contextCharToUnicode= NO_CHAR_MARKER;
+
+                            /* write to target */
+                            WRITE_TO_TARGET_ToU(args,source,target,args->offsets,(source-args->source -2),
+                                (UChar)targetUniChar,err);
+
+                            continue;
+                        }
+                    }
+                    /* byte unit is unassigned */
+                    targetUniChar = missingCharMarker;
+                    *err= U_INVALID_CHAR_FOUND;
+                    reason = UCNV_UNASSIGNED;
+                }else{
+                    /* only 0xA1 - 0xEE are legal after EXT char */
+                    reason= UCNV_ILLEGAL;
+                    *err = U_ILLEGAL_CHAR_FOUND;
+                }
+                goto CALLBACK;
             }
 
             switch(sourceChar){
+            case EXT: /*falls through*/
             case ATR:
                 /* if there is a mapping in contextCharToUnicode write it
                  * to target 
@@ -1243,9 +1284,8 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                         }
                     }
                     if(found){
-                        /* find out if the mapping is valid in this state */
-                        int valid = validityTable[(uint8_t)targetUniChar] & data->currentMaskToUnicode;                                            
-                        if(valid){       
+                        /* find out if the mapping is valid in this state */                                            
+                        if(validityTable[(uint8_t)targetUniChar] & data->currentMaskToUnicode){       
                             targetUniChar += data->currentDeltaToUnicode ;
                             data->contextCharToUnicode= NO_CHAR_MARKER;
                             break;
@@ -1281,13 +1321,18 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
             if(targetUniChar != missingCharMarker ){
                 /* now write the targetUniChar */
                 data->contextCharToUnicode = (UChar) targetUniChar;
-            }else{  
+            }else{
+            
+                /* we reach here only if targetUniChar == missingCharMarker 
+                 * so assign codes to reason and err
+                 */
+                reason = UCNV_UNASSIGNED;
+                *err = U_INVALID_CHAR_FOUND;
 CALLBACK:
                  {
                     const char *saveSource = args->source;
                     UChar *saveTarget = args->target;
                     int32_t *saveOffsets = NULL;
-                    UConverterCallbackReason reason;
                     int32_t currentOffset;
                     int32_t saveIndex = target - args->target;
 
@@ -1296,17 +1341,11 @@ CALLBACK:
                     if(data->contextCharToUnicode < NO_CHAR_MARKER){
                         args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = 
                             (char) data->contextCharToUnicode;
+                        data->contextCharToUnicode = NO_CHAR_MARKER;
                     }
                     
                     args->converter->invalidCharBuffer[args->converter->invalidCharLength++] =
                         (char) sourceChar;
-
-                    /* we reach here only if targetUniChar == missingCharMarker 
-                     * so assign codes to reason and err
-                     */
-                    reason = UCNV_UNASSIGNED;
-                    *err = U_INVALID_CHAR_FOUND;
-                    
 
                     if(args->offsets){
                         saveOffsets=args->offsets;
@@ -1349,7 +1388,7 @@ CALLBACK:
             && (source == sourceLimit) 
             && data->contextCharToUnicode !=0){
         /* if we have ATR in context it is an error */
-        if(data->contextCharToUnicode==ATR){
+        if(data->contextCharToUnicode==ATR || data->contextCharToUnicode==EXT){
             *err = U_TRUNCATED_CHAR_FOUND;
         }else{
             /* add offset to current Indic Block */
