@@ -41,6 +41,7 @@ UnicodeString operator+(const UnicodeString& left, unsigned int num);
 UnicodeString operator+(const UnicodeString& left, float num);
 #if !UCONFIG_NO_FORMATTING
 UnicodeString toString(const Formattable& f); // liu
+UnicodeString toString(int32_t n);
 #endif
 //-----------------------------------------------------------------------------
 
