@@ -134,6 +134,7 @@ static double fgInf;
 /* protos */
 static char* u_topNBytesOfDouble(double* d, int n);
 static char* u_bottomNBytesOfDouble(double* d, int n);
+static void  uprv_longBitsFromDouble(double d, int32_t *hi, uint32_t *lo);
 
 
 /*---------------------------------------------------------------------------
@@ -370,6 +371,12 @@ uprv_ceil(double x)
 }
 
 double
+uprv_round(double x)
+{
+    return uprv_floor(x + 0.5);
+}
+
+double
 uprv_fabs(double x)
 {
     return fabs(x);
@@ -388,126 +395,17 @@ uprv_fmod(double x, double y)
 }
 
 double
-uprv_pow10(int32_t x)
+uprv_pow(double x, double y)
 {
     /* This is declared as "double pow(double x, double y)" */
+    return pow(x, y);
+}
+
+double
+uprv_pow10(int32_t x)
+{
     return pow(10.0, (double)x);
 }
-
-/**
- * Computes the remainder of an implied division of its operands, as
- * defined by the IEEE 754 standard.  Commonly used to bring a value
- * into range without losing accuracy; e.g., bringing a large argument
- * to sin() into range.
- *
- * Returns r, where x = n * p + r.  Here n is the integer nearest to
- * x / p.  If two integers are equidistant from x / p, n is the even
- * integer.  If r is zero, then it should have the same sign as the
- * dividend x.
- *
- * The IEEE remainder may be negative or positive.
- * IEEEremainder(5,3) = -1.  IEEEremainder(4,3) = 1.
- *
- * The IEEE remainder r is always less than or equal to p/2 in
- * absolute value.  That is, |r| <= |p/2|.  By comparison, fmod()
- * returns a remainder r such that |r| <= |p|.
- *
- * Some floating point processors can compute this value in hardware.
- * We provide two implementations here, one that manipulates the IEEE
- * bit pattern directly, and one that is built upon other floating
- * point operations.  The former implementation has superior accuracy
- * and is preferred; the latter may work on platforms where the former
- * fails, but will introduce inaccuracies.
- */
-#if 0
-/* Several compilers can't optimize this properly, and no one uses it. */
-double
-uprv_IEEEremainder(double x, double p)
-{
-#if IEEE_754
-    int32_t hx, hp;
-    uint32_t sx, lx, lp;
-    double p_half;
-
-    hx = *(int32_t*)u_topNBytesOfDouble(&x, sizeof(int32_t));
-    lx = *(uint32_t*)u_bottomNBytesOfDouble(&x, sizeof(uint32_t));
-
-    hp = *(int32_t*)u_topNBytesOfDouble(&p, sizeof(int32_t));
-    lp = *(uint32_t*)u_bottomNBytesOfDouble(&p, sizeof(uint32_t));
-
-    sx = hx & SIGN;
-
-    hp &= 0x7fffffff;
-    hx &= 0x7fffffff;
-
-    /* purge off exception values */
-    if((hp|lp) == 0)
-    {
-        return (x*p) / (x*p);     /* p = 0 */
-    }
-    if((hx >= 0x7ff00000)||        /* x not finite */
-      ((hp>=0x7ff00000) &&    /* p is NaN */
-      (((hp-0x7ff00000)|lp) != 0)))
-    {
-        return uprv_getNaN();
-    }
-
-    if(hp <= 0x7fdfffff)
-    {
-        x = uprv_fmod(x, p + p);    /* now x < 2p */
-    }
-    if(((hx-hp)|(lx-lp)) == 0)
-    {
-        return 0.0 * x;
-    }
-    x = uprv_fabs(x);
-    p = uprv_fabs(p);
-    if (hp < 0x00200000) {
-        if(x + x > p) {
-            x -= p;
-            if(x + x >= p)
-                x -= p;
-        }
-    }
-    else {
-        p_half = 0.5 * p;
-        if(x > p_half) {
-            x -= p;
-            if(x >= p_half)
-                x -= p;
-        }
-    }
-
-    *(int32_t*)u_topNBytesOfDouble(&x, sizeof(int32_t)) ^= sx;
-
-    return x;
-
-#else
-    /* INACCURATE but portable implementation of IEEEremainder.  This
-     * implementation should work on platforms that do not have IEEE
-     * bit layouts.  Deficiencies of this implementation are its
-     * inaccuracy and that it does not attempt to handle NaN or
-     * infinite parameters and it returns the dividend if the divisor
-     * is zero.  This is probably not an issue on non-IEEE
-     * platforms. - aliu
-     */
-    if (p != 0.0) { /* exclude zero divisor */
-        double a = x / p;
-        double aint = uprv_floor(a);
-        double afrac = a - aint;
-        if (afrac > 0.5) {
-            aint += 1.0;
-        } else if (!(afrac < 0.5)) { /* avoid == comparison */
-            if (uprv_modf(aint / 2.0, &a) > 0.0) {
-                aint += 1.0;
-            }
-        }
-        x -= (p * aint);
-    }
-    return x;
-#endif
-}
-#endif
 
 double
 uprv_fmax(double x, double y)
@@ -524,12 +422,10 @@ uprv_fmax(double x, double y)
     if(x == 0.0 && y == 0.0 && (lowBits & SIGN))
         return y;
 
-    return (x > y ? x : y);
-#else
+#endif
 
     /* this should work for all flt point w/o NaN and Infpecial cases */
     return (x > y ? x : y);
-#endif
 }
 
 int32_t
@@ -553,12 +449,10 @@ uprv_fmin(double x, double y)
     if(x == 0.0 && y == 0.0 && (lowBits & SIGN))
         return y;
 
-    return (x > y ? y : x);
-#else
+#endif
 
     /* this should work for all flt point w/o NaN and Inf special cases */
     return (x > y ? y : x);
-#endif
 }
 
 int32_t
@@ -593,18 +487,27 @@ uprv_trunc(double d)
         return floor(d);
 
 #else
-  return d >= 0 ? floor(d) : ceil(d);
+    return d >= 0 ? floor(d) : ceil(d);
 
 #endif
 }
 
-void
+static void
 uprv_longBitsFromDouble(double d, int32_t *hi, uint32_t *lo)
 {
     *hi = *(int32_t*)u_topNBytesOfDouble(&d, sizeof(int32_t));
     *lo = *(uint32_t*)u_bottomNBytesOfDouble(&d, sizeof(uint32_t));
 }
 
+/**
+ * Return the largest positive number that can be represented by an integer
+ * type of arbitrary bit length.
+ */
+double
+uprv_maxMantissa(void)
+{
+    return pow(2.0, DBL_MANT_DIG + 1.0) - 1.0;
+}
 
 /**
  * Return the floor of the log base 10 of a given double.
@@ -638,6 +541,12 @@ uprv_log10(double d)
 
     return ailog10;
 #endif
+}
+
+double
+uprv_log(double d)
+{
+    return log(d);
 }
 
 int32_t
