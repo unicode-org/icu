@@ -65,7 +65,8 @@ ucln_cmn.o uscript.o usc_impl.o umemstrm.o ucmp8.o uvector.o digitlst.o \
 brkiter.o brkdict.o ubrk.o dbbi.o dbbi_tbl.o \
 rbbi.o rbbidata.o rbbinode.o rbbirb.o rbbiscan.o rbbisetb.o rbbistbl.o rbbitblb.o \
 unicode.o convert.o utrie.o uset.o cmemory.o caniter.o \
-unifilt.o unifunct.o uniset.o usetiter.o util.o uenum.o
+unifilt.o unifunct.o uniset.o usetiter.o util.o uenum.o \
+icuserv.o iculserv.o icunotif.o
 
 STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
 
