@@ -36,6 +36,8 @@ const char DecimalFormatSymbols::fgClassID=0;
 
 const char DecimalFormatSymbols::fgNumberElements[] = "NumberElements";
 
+static const UChar INTL_CURRENCY_SYMBOL_STR[] = {0xa4, 0xa4, 0};
+
 // -------------------------------------
 // Initializes this with the decimal format symbols in the default locale.
  
@@ -134,17 +136,6 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
     int32_t i = 0;
     ResourceBundle numberElementsRes = resource.get(fgNumberElements, status);
     int32_t numberElementsLength = numberElementsRes.getSize();
-    UnicodeString* numberElements = new UnicodeString[numberElementsLength];
-    /* test for NULL */
-    if (numberElements == 0) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return;
-    }
-    for(i = 0; i<numberElementsLength; i++) {
-        numberElements[i].fastCopyFrom(numberElementsRes.getStringEx(i, status));
-    }
-
-    if (U_FAILURE(status)) return;
 
     // If the array size is too small, something is wrong with the resource
     // bundle, returns the failure error code.
@@ -153,9 +144,17 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
         return;
     }
 
+    UnicodeString numberElements[kFormatSymbolCount];
+    for(i = 0; i<numberElementsLength; i++) {
+        numberElements[i].fastCopyFrom(numberElementsRes.getStringEx(i, status));
+    }
+
+    if (U_FAILURE(status)) {
+        return;
+    }
+
     initialize(numberElements, numberElementsLength);
 
-    delete[] numberElements;
 
     // Obtain currency data from the currency API.  This is strictly
     // for backward compatibility; we don't use DecimalFormatSymbols
@@ -170,10 +169,8 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
     if (U_SUCCESS(ec)) {
         fSymbols[kIntlCurrencySymbol] = curriso;
         fSymbols[kCurrencySymbol] = UnicodeString(isChoiceFormat? curriso: currname);
-    } else {
-        fSymbols[kCurrencySymbol] = (UChar)0xa4; // 'OX' currency symbol
-        (fSymbols[kIntlCurrencySymbol] = (UChar)0x58).append((UChar)0x58).append((UChar)0x58); // "XXX"
     }
+    /* else use the default values. */
 }
 
 // Initializes the DecimalFormatSymbol instance with the data obtained
@@ -190,15 +187,18 @@ DecimalFormatSymbols::initialize(const UnicodeString* numberElements, int32_t nu
     fSymbols[kDigitSymbol].fastCopyFrom(numberElements[5]);
     fSymbols[kMinusSignSymbol].fastCopyFrom(numberElements[6]);
     fSymbols[kPlusSignSymbol] = (UChar)0x002b; // '+' Hard coded for now; get from resource later
-
-    // If there is a currency decimal, use it.
-    fSymbols[kMonetarySeparatorSymbol].fastCopyFrom(numberElements[numberElementsLength >= 12 ? 11 : 0]);
-
     fSymbols[kExponentialSymbol].fastCopyFrom(numberElements[7]);
     fSymbols[kPerMillSymbol].fastCopyFrom(numberElements[8]);
     fSymbols[kPadEscapeSymbol] = (UChar)0x002a; // '*' Hard coded for now; get from resource later
     fSymbols[kInfinitySymbol].fastCopyFrom(numberElements[9]);
     fSymbols[kNaNSymbol].fastCopyFrom(numberElements[10]);
+
+    // If there is a currency decimal, use it.
+    fSymbols[kMonetarySeparatorSymbol].fastCopyFrom(numberElements[numberElementsLength >= 12 ? 11 : 0]);
+
+    // Default values until it's set later on.
+    fSymbols[kCurrencySymbol] = (UChar)0xa4;            // 'OX' currency symbol
+    fSymbols[kIntlCurrencySymbol] = INTL_CURRENCY_SYMBOL_STR;
 }
 
 // initialize with default values
@@ -218,7 +218,7 @@ DecimalFormatSymbols::initialize() {
     fSymbols[kMinusSignSymbol] = (UChar)0x2d;           // '-' minus sign
     fSymbols[kPlusSignSymbol] = (UChar)0x002b;          // '+' plus sign
     fSymbols[kCurrencySymbol] = (UChar)0xa4;            // 'OX' currency symbol
-    (fSymbols[kIntlCurrencySymbol] = (UChar)0xa4).append((UChar)0xa4);
+    fSymbols[kIntlCurrencySymbol] = INTL_CURRENCY_SYMBOL_STR;
     fSymbols[kMonetarySeparatorSymbol] = (UChar)0x2e;   // '.' monetary decimal separator
     fSymbols[kExponentialSymbol] = (UChar)0x45;         // 'E' exponential
     fSymbols[kPerMillSymbol] = (UChar)0x2030;           // '%o' per mill
