@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2002, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-hpux-acc,v 1.30 2002/07/29 23:33:12 grhoten-oss Exp $
+## $Id: mh-hpux-acc,v 1.31 2002/07/31 22:01:38 srl Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	:
@@ -83,5 +83,8 @@ STATIC_O = o
 	$(RM) $@ && ln -s $< $@
 %.$(SO): %.$(SO).$(SO_TARGET_VERSION_MAJOR)
 	$(RM) $@ && ln -s $*.$(SO).$(SO_TARGET_VERSION) $@
+
+## Install libraries as executable
+INSTALL-L=$(INSTALL_PROGRAM)
 
 ## End HP/UX-specific setup
