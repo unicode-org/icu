@@ -230,7 +230,7 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
   ucbuf = ucbuf_open(in,cp,status);
 
   /* Parse the data into an SRBRoot */
-  data = parse(ucbuf, cp, inputDir, status);
+  data = parse(ucbuf, inputDir, status);
 
   /* Determine the target rb filename */
   rbname = make_res_filename(filename, outputDir,  status);
