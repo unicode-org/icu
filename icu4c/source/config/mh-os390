@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2001, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-os390,v 1.37 2002/05/23 23:09:19 grhoten-oss Exp $
+## $Id: mh-os390,v 1.38 2002/05/24 17:44:00 grhoten-oss Exp $
 
 ###################################################################
 #                    IMPORTANT NOTE                               #
@@ -19,6 +19,11 @@
 # To build a version of ICU which uses IEEE Floating point        #
 #                                                                 #
 #   export IEEE390=1                                              #
+#                                                                 #
+# To build a version of ICU which uses a two common libraries     #
+# where the smaller one is loaded first.                          #
+#                                                                 #
+#   export OS390_STUBDATA=1                                       #
 #                                                                 #
 ###################################################################
 
@@ -65,8 +70,8 @@ LD_RPATH=	-I
 LDLIBRARYPATH_ENVVAR = LIBPATH
 
 ## Versioned target for a shared library.
-FINAL_SO_TARGET = $(basename $(SO_TARGET))$(SO_TARGET_VERSION).$(SO)
-MIDDLE_SO_TARGET = $(basename $(SO_TARGET).$(SO))
+FINAL_SO_TARGET=  $(basename $(SO_TARGET))$(SO_TARGET_VERSION)$(ICULIBSUFFIX).$(SO)
+MIDDLE_SO_TARGET= $(basename $(SO_TARGET))$(SO_TARGET_VERSION_MAJOR)$(ICULIBSUFFIX).$(SO)
 
 ## Shared object suffix (switch to dll for shared library build)
 SO = dll
@@ -74,7 +79,7 @@ SO = dll
 STATIC_O = o
 
 ifeq ($(OS390_STUBDATA),1)
-## Suffix of the subset data library for batch mode
+## Suffix of the subset data library for dual common library support
 STUB_SUFFIX=_390_
 endif
 
@@ -127,7 +132,9 @@ LIBUSTDIO=	$(top_builddir)/extra/ustdio/libustdio$(ICULIBSUFFIX)$(SO_TARGET_VERS
 	@$(SHELL) -ec '$(GEN_DEPS.cc)  -f $*.u $< > /dev/null 2>&1'
 
 ## Versioned libraries rules
-%.$(SO): %.$(SO_TARGET_VERSION).$(SO)
-	$(RM) $@ && ln -s $*.$(SO_TARGET_VERSION).$(SO) $@
+%$(SO_TARGET_VERSION_MAJOR).$(SO): %$(SO_TARGET_VERSION)$(ICULIBSUFFIX).$(SO)
+	$(RM) $@ && ln -s $*$(SO_TARGET_VERSION)$(ICULIBSUFFIX).$(SO) $@
+%.$(SO): %$(SO_TARGET_VERSION)$(ICULIBSUFFIX).$(SO)
+	$(RM) $@ && ln -s $*$(SO_TARGET_VERSION)$(ICULIBSUFFIX).$(SO) $@
 
 ## End 390-specific setup
