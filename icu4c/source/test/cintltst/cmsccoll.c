@@ -1031,8 +1031,8 @@ static indirectBoundaries ucolIndirectBoundaries[15];
 static UBool indirectBoundariesSet = FALSE;
 static void setIndirectBoundaries(uint32_t indexR, uint32_t *start, uint32_t *end) { 
   
-  // Set values for the top - TODO: once we have values for all the indirects, we are going
-  // to initalize here.
+  /* Set values for the top - TODO: once we have values for all the indirects, we are going */
+  /* to initalize here. */
   ucolIndirectBoundaries[indexR].startCE = start[0];
   ucolIndirectBoundaries[indexR].startContCE = start[1];
   if(end) {
@@ -1086,35 +1086,35 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
   ucol_initInverseUCA(status);
 
   if(indirectBoundariesSet == FALSE) {
-    // UCOL_RESET_TOP_VALUE
+    /* UCOL_RESET_TOP_VALUE */
     setIndirectBoundaries(0, consts->UCA_LAST_NON_VARIABLE, consts->UCA_FIRST_IMPLICIT); 
-    // UCOL_FIRST_PRIMARY_IGNORABLE
+    /* UCOL_FIRST_PRIMARY_IGNORABLE */
     setIndirectBoundaries(1, consts->UCA_FIRST_PRIMARY_IGNORABLE, 0);
-    // UCOL_LAST_PRIMARY_IGNORABLE
+    /* UCOL_LAST_PRIMARY_IGNORABLE */
     setIndirectBoundaries(2, consts->UCA_LAST_PRIMARY_IGNORABLE, 0);
-    // UCOL_FIRST_SECONDARY_IGNORABLE
+    /* UCOL_FIRST_SECONDARY_IGNORABLE */
     setIndirectBoundaries(3, consts->UCA_FIRST_SECONDARY_IGNORABLE, 0);
-    // UCOL_LAST_SECONDARY_IGNORABLE
+    /* UCOL_LAST_SECONDARY_IGNORABLE */
     setIndirectBoundaries(4, consts->UCA_LAST_SECONDARY_IGNORABLE, 0);
-    // UCOL_FIRST_TERTIARY_IGNORABLE
+    /* UCOL_FIRST_TERTIARY_IGNORABLE */
     setIndirectBoundaries(5, consts->UCA_FIRST_TERTIARY_IGNORABLE, 0);
-    // UCOL_LAST_TERTIARY_IGNORABLE
+    /* UCOL_LAST_TERTIARY_IGNORABLE */
     setIndirectBoundaries(6, consts->UCA_LAST_TERTIARY_IGNORABLE, 0);
-    // UCOL_FIRST_VARIABLE
+    /* UCOL_FIRST_VARIABLE */
     setIndirectBoundaries(7, consts->UCA_FIRST_VARIABLE, 0);
-    // UCOL_LAST_VARIABLE
+    /* UCOL_LAST_VARIABLE */
     setIndirectBoundaries(8, consts->UCA_LAST_VARIABLE, 0);
-    // UCOL_FIRST_NON_VARIABLE
+    /* UCOL_FIRST_NON_VARIABLE */
     setIndirectBoundaries(9, consts->UCA_FIRST_NON_VARIABLE, 0);
-    // UCOL_LAST_NON_VARIABLE
+    /* UCOL_LAST_NON_VARIABLE */
     setIndirectBoundaries(10, consts->UCA_LAST_NON_VARIABLE, consts->UCA_FIRST_IMPLICIT);
-    // UCOL_FIRST_IMPLICIT
+    /* UCOL_FIRST_IMPLICIT */
     setIndirectBoundaries(11, consts->UCA_FIRST_IMPLICIT, 0);
-    // UCOL_LAST_IMPLICIT
+    /* UCOL_LAST_IMPLICIT */
     setIndirectBoundaries(12, consts->UCA_LAST_IMPLICIT, consts->UCA_FIRST_TRAILING);
-    // UCOL_FIRST_TRAILING
+    /* UCOL_FIRST_TRAILING */
     setIndirectBoundaries(13, consts->UCA_FIRST_TRAILING, 0);
-    // UCOL_LAST_TRAILING
+    /* UCOL_LAST_TRAILING */
     setIndirectBoundaries(14, consts->UCA_LAST_TRAILING, 0);
     ucolIndirectBoundaries[14].limitCE = (consts->UCA_PRIMARY_SPECIAL_MIN<<24);
     indirectBoundariesSet = TRUE;
