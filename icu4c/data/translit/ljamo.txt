@@ -10,9 +10,11 @@ ljamo {
     Rule {
   // VARIABLES
 
+  "initial=[\u1100-\u115F];"
   "medial=[\u1160-\u11A7];"
   "final=[\u11A8-\u11F9];" // added - aliu
   "vowel=[aeiouwyAEIOUWY\u1160-\u11A7];"
+  "consonant=[bcdfghjklmnpqrstvxzBCDFGHJKLMNPQRSTVXZ{medial}{final}];"
   "ye=[yeYE];"
   "ywe=[yweYWE];"
   "yw=[ywYW];"
@@ -43,10 +45,13 @@ ljamo {
   // X[{vowel}>CHOSEONG (initial)
   // X>JONGSEONG (final)
 
-  // special insertion for funny sequences of vowels
+  // special insertion for funny sequences of vowels, and for empty consonant
 
-  "({medial}) ({vowel}) > \u110B;"  // HANGUL CHOSEONG IEUNG
-
+  "'' < ({consonant}) \u110B;" // insert a break between any consonant and the empty consonant.
+  "({medial}) ({vowel}) <> \u110B;"  // HANGUL CHOSEONG IEUNG
+  
+  // Below, insert an empty consonant in front of a vowel, if there is no Initial in front.
+  
   // Fix casing.
   // Because Korean is caseless, we just want to treat everything as
   // lowercase.
@@ -168,7 +173,7 @@ ljamo {
   "c ({vowel}) <> \u110e;"   // hangul choseong chieuch
   "bb ({vowel}) <> \u1108;"  // hangul choseong ssangpieup
   "b ({vowel}) <> \u1107;"   // hangul choseong pieup
-
+  
   // If we have gotten through to these rules, and we start with
   // a consonant, then the remaining mappings would be to F,
   // because must have CC (or C<non-letter>), not CV.
@@ -194,27 +199,61 @@ ljamo {
   "({final}) bb > \u1108\u116e;"  // hangul choseong ssangpieup
   "({final}) b > \u1107\u116e;"   // hangul choseong pieup
 
-  // MEDIALS (vowels) and FINALS
+  // MEDIALS after INITIALS
+  
+  "({initial}) yu <> \u1172;"   // hangul jungseong yu
+  "({initial}) yo <> \u116d;"   // hangul jungseong yo
+  "({initial}) yi <> \u1174;"   // hangul jungseong yi
+  "({initial}) yeo <> \u1167;"  // hangul jungseong yeo
+  "({initial}) ye <> \u1168;"   // hangul jungseong ye
+  "({initial}) yae <> \u1164;"  // hangul jungseong yae
+  "({initial}) ya <> \u1163;"   // hangul jungseong ya
+  "({initial}) wi <> \u1171;"   // hangul jungseong wi
+  "({initial}) weo <> \u116f;"  // hangul jungseong weo
+  "({initial}) we <> \u1170;"   // hangul jungseong we
+  "({initial}) wae <> \u116b;"  // hangul jungseong wae
+  "({initial}) wa <> \u116a;"   // hangul jungseong wa
+  "({initial}) u <> \u116e;"    // hangul jungseong u
+  "({initial}) oe <> \u116c;"   // hangul jungseong oe
+  "({initial}) o <> \u1169;"    // hangul jungseong o
+  "({initial}) i <> \u1175;"    // hangul jungseong i
+  "({initial}) eu <> \u1173;"   // hangul jungseong eu
+  "({initial}) eo <> \u1165;"   // hangul jungseong eo
+  "({initial}) e <> \u1166;"    // hangul jungseong e
+  "({initial}) ae <> \u1162;"   // hangul jungseong ae
+  "({initial}) a <> \u1161;"    // hangul jungseong a
+  
+  // MEDIALS (vowels) not after INITIALs
+  
+  "yu > \u110B\u1172;"   // hangul jungseong yu
+  "yo > \u110B\u116d;"   // hangul jungseong yo
+  "yi > \u110B\u1174;"   // hangul jungseong yi
+  "yeo > \u110B\u1167;"  // hangul jungseong yeo
+  "ye > \u110B\u1168;"   // hangul jungseong ye
+  "yae > \u110B\u1164;"  // hangul jungseong yae
+  "ya > \u110B\u1163;"   // hangul jungseong ya
+  "wi > \u110B\u1171;"   // hangul jungseong wi
+  "weo > \u110B\u116f;"  // hangul jungseong weo
+  "we > \u110B\u1170;"   // hangul jungseong we
+  "wae > \u110B\u116b;"  // hangul jungseong wae
+  "wa > \u110B\u116a;"   // hangul jungseong wa
+  "u > \u110B\u116e;"    // hangul jungseong u
+  "oe > \u110B\u116c;"   // hangul jungseong oe
+  "o > \u110B\u1169;"    // hangul jungseong o
+  "i > \u110B\u1175;"    // hangul jungseong i
+  "eu > \u110B\u1173;"   // hangul jungseong eu
+  "eo > \u110B\u1165;"   // hangul jungseong eo
+  "e > \u110B\u1166;"    // hangul jungseong e
+  "ae > \u110B\u1162;"   // hangul jungseong ae
+  "a > \u110B\u1161;"    // hangul jungseong a
+  
 
-  "yu <> \u1172;"   // hangul jungseong yu
-  "yo <> \u116d;"   // hangul jungseong yo
-  "yi <> \u1174;"   // hangul jungseong yi
-  "yeo <> \u1167;"  // hangul jungseong yeo
-  "ye <> \u1168;"   // hangul jungseong ye
-  "yae <> \u1164;"  // hangul jungseong yae
-  "ya <> \u1163;"   // hangul jungseong ya
-  "wi <> \u1171;"   // hangul jungseong wi
-  "weo <> \u116f;"  // hangul jungseong weo
-  "we <> \u1170;"   // hangul jungseong we
-  "wae <> \u116b;"  // hangul jungseong wae
-  "wa <> \u116a;"   // hangul jungseong wa
-  "u <> \u116e;"    // hangul jungseong u
+  // FINALS
+  
   "t <> \u11c0;"    // hangul jongseong thieuth
   "ss <> \u11bb;"   // hangul jongseong ssangsios
   "s <> \u11ba;"    // hangul jongseong sios
   "p <> \u11c1;"    // hangul jongseong phieuph
-  "oe <> \u116c;"   // hangul jungseong oe
-  "o <> \u1169;"    // hangul jungseong o
   "nj <> \u11ac;"   // hangul jongseong nieun-cieuc
   "nh <> \u11ad;"   // hangul jongseong nieun-hieuh
   "ng <> \u11bc;"   // hangul jongseong ieung
@@ -231,21 +270,15 @@ ljamo {
   "k <> \u11bf;"    // hangul jongseong khieukh
   "jj <> \u110d;"   // hangul choseong ssangcieuc
   "j <> \u11bd;"    // hangul jongseong cieuc
-  "i <> \u1175;"    // hangul jungseong i
   "h <> \u11c2;"    // hangul jongseong hieuh
   "gs <> \u11aa;"   // hangul jongseong kiyeok-sios
   "gg <> \u11a9;"   // hangul jongseong ssangkiyeok
   "g <> \u11a8;"    // hangul jongseong kiyeok
-  "eu <> \u1173;"   // hangul jungseong eu
-  "eo <> \u1165;"   // hangul jungseong eo
-  "e <> \u1166;"    // hangul jungseong e
   "dd <> \u1104;"   // hangul choseong ssangtikeut
   "d <> \u11ae;"    // hangul jongseong tikeut
   "c <> \u11be;"     // hangul jongseong chieuch
   "bs <> \u11b9;"   // hangul jongseong pieup-sios
   "b <> \u11b8;"    // hangul jongseong pieup
-  "ae <> \u1162;"   // hangul jungseong ae
-  "a <> \u1161;"    // hangul jungseong a
 
   // extra English letters
   // {moved to bottom - aliu}
@@ -264,6 +297,10 @@ ljamo {
   "F > |p;"
   //{ "c > |k;" } masked
   "C > |k;"
+  
+  "y > \u1172;"   // hangul jungseong yu
+  "w > \u1171;"   // hangul jungseong wi
+  
 
   // ====================================
   // Normal final rule: remove '
