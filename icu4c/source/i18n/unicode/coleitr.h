@@ -251,7 +251,7 @@ protected:
   
   // CollationElementIterator protected constructors --------------------------
 
-  friend RuleBasedCollator;
+  friend class RuleBasedCollator;
 
   /**
   * CollationElementIterator constructor. This takes the source string and the 
