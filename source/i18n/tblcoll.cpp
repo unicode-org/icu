@@ -876,9 +876,9 @@ RuleBasedCollator::RuleBasedCollator(   const Locale& desiredLocale,
   // data exists, step 5 is repeated with hardcoded default rules.
 
   const char *locName = constructFromBundle(desiredLocale, status);  /*!*/
-  data->desiredLocale = desiredLocale;
   
   if (U_SUCCESS(status)) {
+    data->desiredLocale = desiredLocale;
     data->realLocaleName = locName;
     if(status != U_USING_DEFAULT_ERROR) {
       setDecomposition(Normalizer::NO_OP);

@@ -196,7 +196,7 @@ void TableCollationData::streamIn(UMemoryStream* is)
             // Slight ugliness: We are a friend of TableCollation solely so
             // we can access the constant UNMAPPED here.  In fact, this code
             // path shouldn't really happen, because mapping should always != 0.
-            if (mapping == 0) mapping = ucmp32_open(RuleBasedCollator::UNMAPPED);
+            if (mapping == 0) mapping = ucmp32_openAlias(NULL, NULL, 0);
             if (mapping->fBogus ){
                 fBogus = TRUE;
                 return;
