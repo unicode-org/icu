@@ -7,7 +7,7 @@
 use strict;
 
 my $icuSource = $ARGV[0];
-my $ignore = "CVS|\\~|\\#|Debug|Release|dsp|dsw|opt|ncb|vcproj|sln|suo|cvsignore|cnv|res|\\.icu|exe|\\.out|build|plg|positions|unidata";
+my $ignore = "CVS|\\~|\\#|Debug|Release|\\.dsp|\\.dsw|\\.opt|\\.ncb|\\.vcproj|\\.sln|\\.suo|\\.cvsignore|\\.cnv|\\.res|\\.icu|\\.exe|\\.out|build|\\.plg|positions|unidata|\\.jar|\\.spp|\\.stub|\\.policy";
 
 my ($sec, $min, $hour, , $day, $mon, $year, $wday, $yday, $isdst) = localtime;
 $year += 1900;
