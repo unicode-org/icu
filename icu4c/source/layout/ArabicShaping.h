@@ -1,5 +1,5 @@
 /*
- * @(#)ArabicShaping.h	1.6 00/03/15
+ * @(#)ArabicShaping.h  1.6 00/03/15
  *
  * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
  *
@@ -97,7 +97,7 @@ public:
 private:
     LEUnicode *chars;
     
-    static LEUnicode isolateShapes[];
+    static const LEUnicode isolateShapes[];
 
     static LEUnicode getToIsolateShape(LEUnicode ch);
 };

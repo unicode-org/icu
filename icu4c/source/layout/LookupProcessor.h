@@ -22,8 +22,8 @@ U_NAMESPACE_BEGIN
 class LookupProcessor
 {
 public:
-    static LETag notSelected;
-    static LETag defaultFeature;
+    static const LETag notSelected;
+    static const LETag defaultFeature;
 
     void process(LEGlyphID *glyphs, GlyphPositionAdjustment *glyphPositionAdjustments, const LETag **glyphTags, le_int32 glyphCount,
                  le_bool rightToLeft, const GlyphDefinitionTableHeader *glyphDefinitionTableHeader, const LEFontInstance *fontInstance) const;
@@ -46,11 +46,11 @@ protected:
 
     le_int32 selectLookups(const FeatureTable *featureTable, LETag featureTag, le_int32 order);
 
-    const LookupListTable	*lookupListTable;
-    const FeatureListTable	*featureListTable;
+    const LookupListTable   *lookupListTable;
+    const FeatureListTable  *featureListTable;
 
-    LETag					*lookupSelectArray;
-    LETag					requiredFeatureTag;
+    LETag                   *lookupSelectArray;
+    LETag                   requiredFeatureTag;
 
     le_uint16               *lookupOrderArray;
     le_uint32               lookupOrderCount;

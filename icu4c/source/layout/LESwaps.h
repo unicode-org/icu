@@ -33,44 +33,43 @@ class LESwaps
 {
 public:
 
-	/**
-	 * This method detects the endian-ness of the platform by
-	 * casting a pointer to a word to a pointer to a byte. On
-	 * big endian platforms the FF will be in the byte with the
-	 * lowest address. On little endian platforms, the FF will
-	 * be in the byte with the highest address.
-	 *
-	 * @return true if the platform is big endian
-	 */
+    /**
+     * This method detects the endian-ness of the platform by
+     * casting a pointer to a word to a pointer to a byte. On
+     * big endian platforms the FF will be in the byte with the
+     * lowest address. On little endian platforms, the FF will
+     * be in the byte with the highest address.
+     *
+     * @return true if the platform is big endian
+     */
     static le_bool isBigEndian()
     {
-        static le_uint16 word = 0xFF00;
-        static le_uint8 *byte = (le_uint8 *) &word;
+        static const le_uint16 word = 0xFF00;
 
-        return *byte;
+        return *((le_uint8 *) &word);
     };
 
-	/**
-	 * This method the byte swap required on little endian platforms
-	 * to correctly access a word.
-	 *
-	 * @param value - the word to be byte swapped
-	 *
-	 * @return the byte swapped word
-	 */
+    /**
+     * This method the byte swap required on little endian platforms
+     * to correctly access a word.
+     *
+     * @param value - the word to be byte swapped
+     *
+     * @return the byte swapped word
+     */
     static le_uint16 swapWord(le_uint16 value)
     {
         return (((le_uint8) (value >> 8)) | (value << 8));
     };
 
-	/**
-	 * This method does the byte swapping required on little endian platforms
-	 * to correctly access a long.
-	 *
-	 * @param value - the long to be byte swapped
-	 *
-	 * @return the byte swapped long
-	 */
+    /**
+     * This method does the byte swapping required on little endian platforms
+     * to correctly access a long.
+     *
+     * @param value - the long to be byte swapped
+     *
+     * @return the byte swapped long
+     */
     static le_uint32 swapLong(le_uint32 value)
     {
         return swapWord((le_uint16) (value >> 16)) | (swapWord((le_uint16) value) << 16);
