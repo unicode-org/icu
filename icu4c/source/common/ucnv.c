@@ -38,112 +38,6 @@
 static int32_t ucnv_getAmbiguousCCSID (const UConverter* cnv);
 /* Internal function : end */
 
-typedef void (*T_ToUnicodeFunction) (UConverter *,
-				     UChar **,
-				     const UChar *,
-				     const char **,
-				     const char *,
-				     int32_t* offsets,
-				     bool_t,
-				     UErrorCode *);
-
-typedef void (*T_FromUnicodeFunction) (UConverter *,
-				       char **,
-				       const char *,
-				       const UChar **,
-				       const UChar *,
-				       int32_t* offsets,
-				       bool_t,
-				       UErrorCode *);
-
-typedef UChar (*T_GetNextUCharFunction) (UConverter *,
-					 const char **,
-					 const char *,
-					 UErrorCode *);
-
-static T_ToUnicodeFunction TO_UNICODE_FUNCTIONS[UCNV_NUMBER_OF_SUPPORTED_CONVERTER_TYPES] =
-
-{
-  T_UConverter_toUnicode_SBCS,
-  T_UConverter_toUnicode_DBCS,
-  T_UConverter_toUnicode_MBCS,
-  T_UConverter_toUnicode_LATIN_1,
-  T_UConverter_toUnicode_UTF8,
-  T_UConverter_toUnicode_UTF16_BE,
-  T_UConverter_toUnicode_UTF16_LE,
-  T_UConverter_toUnicode_EBCDIC_STATEFUL,
-  T_UConverter_toUnicode_ISO_2022
-};
-
-static T_ToUnicodeFunction TO_UNICODE_FUNCTIONS_OFFSETS_LOGIC[UCNV_NUMBER_OF_SUPPORTED_CONVERTER_TYPES] =
-
-{
-  NULL, /*UCNV_SBCS*/
-  NULL, /*UCNV_DBCS*/
-  T_UConverter_toUnicode_MBCS_OFFSETS_LOGIC,
-  NULL, /*UCNV_LATIN_1*/
-  T_UConverter_toUnicode_UTF8_OFFSETS_LOGIC,
-  NULL, /*UTF16_BE*/
-  NULL, /*UTF16_LE*/
-  T_UConverter_toUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC,
-  T_UConverter_toUnicode_ISO_2022_OFFSETS_LOGIC
-};
-
-static T_FromUnicodeFunction FROM_UNICODE_FUNCTIONS_OFFSETS_LOGIC[UCNV_NUMBER_OF_SUPPORTED_CONVERTER_TYPES] =
-
-{
-  NULL, /*UCNV_SBCS*/
-  NULL, /*UCNV_DBCS*/
-  T_UConverter_fromUnicode_MBCS_OFFSETS_LOGIC,
-  NULL, /*UCNV_LATIN_1*/
-  T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC,
-  NULL, /*UTF16_BE*/
-  NULL, /*UTF16_LE*/
-  T_UConverter_fromUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC,
-  T_UConverter_fromUnicode_ISO_2022_OFFSETS_LOGIC
-};
-
-static T_FromUnicodeFunction FROM_UNICODE_FUNCTIONS[UCNV_NUMBER_OF_SUPPORTED_CONVERTER_TYPES] =
-{
-  T_UConverter_fromUnicode_SBCS,
-  T_UConverter_fromUnicode_DBCS,
-  T_UConverter_fromUnicode_MBCS,
-  T_UConverter_fromUnicode_LATIN_1,
-  T_UConverter_fromUnicode_UTF8,
-  T_UConverter_fromUnicode_UTF16_BE,
-  T_UConverter_fromUnicode_UTF16_LE,
-  T_UConverter_fromUnicode_EBCDIC_STATEFUL,
-  T_UConverter_fromUnicode_ISO_2022
-};
-
-static T_GetNextUCharFunction GET_NEXT_UChar_FUNCTIONS[UCNV_NUMBER_OF_SUPPORTED_CONVERTER_TYPES] =
-{
-  T_UConverter_getNextUChar_SBCS,
-  T_UConverter_getNextUChar_DBCS,
-  T_UConverter_getNextUChar_MBCS,
-  T_UConverter_getNextUChar_LATIN_1,
-  T_UConverter_getNextUChar_UTF8,
-  T_UConverter_getNextUChar_UTF16_BE,
-  T_UConverter_getNextUChar_UTF16_LE,
-  T_UConverter_getNextUChar_EBCDIC_STATEFUL,
-  T_UConverter_getNextUChar_ISO_2022
-};
-
-void flushInternalUnicodeBuffer (UConverter * _this,
-				 UChar * myTarget,
-				 int32_t * myTargetIndex,
-				 int32_t targetLength,
-				 int32_t** offsets,
-				 UErrorCode * err);
-
-void flushInternalCharBuffer (UConverter * _this,
-			      char *myTarget,
-			      int32_t * myTargetIndex,
-			      int32_t targetLength,
-			      int32_t** offsets,
-			      UErrorCode * err);
-
-
 static void T_UConverter_fromCodepageToCodepage (UConverter * outConverter,
 						 UConverter * inConverter,
 						 char **target,
@@ -219,6 +113,7 @@ void ucnv_close (UConverter * converter)
 {
   if (converter == NULL)
     return;
+  /* ### this cleanup would be cleaner in a function in UConverterImpl */
   if ((converter->sharedData->conversionType == UCNV_ISO_2022) &&
       (converter->mode == UCNV_SO))
     {
@@ -226,9 +121,13 @@ void ucnv_close (UConverter * converter)
       uprv_free (converter->extraInfo);
     }
 
-  umtx_lock (NULL);
-  converter->sharedData->referenceCounter--;
-  umtx_unlock (NULL);
+  if (converter->sharedData->referenceCounter != ~0) {
+    umtx_lock (NULL);
+    if (converter->sharedData->referenceCounter != 0) {
+      converter->sharedData->referenceCounter--;
+    }
+    umtx_unlock (NULL);
+  }
   uprv_free (converter);
 
   return;
@@ -597,8 +496,7 @@ void   ucnv_fromUnicode (UConverter * _this,
 	   }
 	 default:
 	   {
-	     
-	     FROM_UNICODE_FUNCTIONS_OFFSETS_LOGIC[(int) myConvType] (_this,
+	     _this->sharedData->impl->fromUnicodeWithOffsets(_this,
 								     target,
 								     targetLimit,
 								     source,
@@ -611,7 +509,7 @@ void   ucnv_fromUnicode (UConverter * _this,
 	 };    
     }
   /*calls the specific conversion routines */
-  FROM_UNICODE_FUNCTIONS[(int)myConvType] (_this,
+  _this->sharedData->impl->fromUnicode(_this,
 					   target,
 					   targetLimit,
 					   source,
@@ -687,8 +585,7 @@ void   ucnv_toUnicode (UConverter * _this,
 	  }
 	default:
 	  {
-	    
-	    TO_UNICODE_FUNCTIONS_OFFSETS_LOGIC[(int) myConvType] (_this,
+	    _this->sharedData->impl->toUnicodeWithOffsets(_this,
 								  target,
 								  targetLimit,
 								  source,
@@ -701,7 +598,7 @@ void   ucnv_toUnicode (UConverter * _this,
 	};
     }
   /*calls the specific conversion routines */
-  TO_UNICODE_FUNCTIONS[(int) myConvType] (_this,
+  _this->sharedData->impl->toUnicode(_this,
 					  target,
 					  targetLimit,
 					  source,
@@ -959,7 +856,7 @@ UChar ucnv_getNextUChar (UConverter * converter,
     }
   /*calls the specific conversion routines */
   /*as dictated in a code review, avoids a switch statement */
-  return GET_NEXT_UChar_FUNCTIONS[(int) (converter->sharedData->conversionType)] (converter,
+  return converter->sharedData->impl->getNextUChar(converter,
 										  source,
 										  sourceLimit,
 										  err);

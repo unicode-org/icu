@@ -211,6 +211,10 @@ SOURCE=.\ucnv.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\ucnv_2022.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\ucnv_bld.c
 # End Source File
 # Begin Source File
@@ -224,6 +228,18 @@ SOURCE=.\ucnv_err.c
 # Begin Source File
 
 SOURCE=.\ucnv_io.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucnv_mbcs.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucnv_sbcs.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucnv_utf.c
 # End Source File
 # Begin Source File
 

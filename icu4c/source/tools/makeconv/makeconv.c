@@ -28,28 +28,115 @@
 #include "unewdata.h"
 #include "ucmpwrit.h"
 
+/*Defines the struct of a UConverterSharedData the immutable, shared part of
+ *UConverter -
+ * This is the definition from ICU 1.4, necessary to read converter data
+ * version 1 because the structure is directly embedded in the data.
+ * See udata.html for why this is bad (pointers, enums, padding...).
+ */
+typedef struct
+  {
+    uint32_t structSize;        /* Size of this structure */
+    void *dataMemory;
+    uint32_t referenceCounter;	/*used to count number of clients */
+    char name[UCNV_MAX_CONVERTER_NAME_LENGTH];	/*internal name of the converter */
+    UConverterPlatform platform;	/*platform of the converter (only IBM now) */
+    int32_t codepage;		/*codepage # (now IBM-$codepage) */
+    UConverterType conversionType;	/*conversion type */
+    int8_t minBytesPerChar;	/*Minimum # bytes per char in this codepage */
+    int8_t maxBytesPerChar;	/*Maximum # bytes per char in this codepage */
+    struct
+      {				/*initial values of some members of the mutable part of object */
+	uint32_t toUnicodeStatus;
+	int8_t subCharLen;
+	unsigned char subChar[UCNV_MAX_SUBCHAR_LEN];
+      }
+    defaultConverterValues;
+    UConverterTable *table;	/*Pointer to conversion data */
+  }
+UConverterSharedData_1_4;
+
+struct UConverter_1_4
+  {
+    int32_t toUnicodeStatus;	/*Used to internalize stream status information */
+    int32_t fromUnicodeStatus;
+    int8_t invalidCharLength;
+    int8_t invalidUCharLength;
+    int8_t pad;
+    int32_t mode;
+    int8_t subCharLen;		/*length of the codepage specific character sequence */
+    unsigned char subChar[UCNV_MAX_SUBCHAR_LEN];	/*codepage specific character sequence */
+    UChar UCharErrorBuffer[UCNV_ERROR_BUFFER_LENGTH];	/*used to store unicode data meant for 
+							   *output stream  by the Error function pointers 
+							 */
+    unsigned char charErrorBuffer[UCNV_ERROR_BUFFER_LENGTH];	/*used to store codepage data meant for
+							   * output stream by the Error function pointers 
+							 */
+    int8_t UCharErrorBufferLength;	/*used to indicate the number of valid UChars
+					   *in charErrorBuffer
+					 */
+    int8_t charErrorBufferLength;	/*used to indicate the number of valid bytes
+					   *in charErrorBuffer
+					 */
+
+    UChar invalidUCharBuffer[3];
+    char invalidCharBuffer[UCNV_MAX_SUBCHAR_LEN];
+    /*Error function pointer called when conversion issues
+     *occur during a T_UConverter_fromUnicode call
+     */
+    void (*fromUCharErrorBehaviour) (struct UConverter_1_4 *,
+				     char **,
+				     const char *,
+				     const UChar **,
+				     const UChar *,
+				     int32_t* offsets,
+				     bool_t,
+				     UErrorCode *);
+    /*Error function pointer called when conversion issues
+     *occur during a T_UConverter_toUnicode call
+     */
+    void (*fromCharErrorBehaviour) (struct UConverter_1_4 *,
+				    UChar **,
+				    const UChar *,
+				    const char **,
+				    const char *,
+				    int32_t* offsets,
+				    bool_t,
+				    UErrorCode *);
+
+    UConverterSharedData_1_4 *sharedData;	/*Pointer to the shared immutable part of the
+					 *converter object
+					 */
+    void *extraInfo;		/*currently only used to point to a struct containing UConverter_1_4 used by iso 2022
+				   Could be used by clients writing their own call back function to
+				   pass context to them
+				 */
+  };
+
+typedef struct UConverter_1_4 UConverter_1_4;
+
 /*Reads the header of the table file and fills in basic knowledge about the converter
  *in "converter"
  */
-static void readHeaderFromFile(UConverter* myConverter, FileStream* convFile, UErrorCode* err);
+static void readHeaderFromFile(UConverter_1_4* myConverter, FileStream* convFile, UErrorCode* err);
 
 /*Reads the rest of the file, and fills up the shared objects if necessary*/
-static void loadMBCSTableFromFile(FileStream* convFile, UConverter* converter, UErrorCode* err);
+static void loadMBCSTableFromFile(FileStream* convFile, UConverter_1_4* converter, UErrorCode* err);
 
 /*Reads the rest of the file, and fills up the shared objects if necessary*/
-static void loadEBCDIC_STATEFULTableFromFile(FileStream* convFile, UConverter* converter, UErrorCode* err);
+static void loadEBCDIC_STATEFULTableFromFile(FileStream* convFile, UConverter_1_4* converter, UErrorCode* err);
 
 /*Reads the rest of the file, and fills up the shared objects if necessary*/
-static void loadSBCSTableFromFile(FileStream* convFile, UConverter* converter, UErrorCode* err);
+static void loadSBCSTableFromFile(FileStream* convFile, UConverter_1_4* converter, UErrorCode* err);
 
 /*Reads the rest of the file, and fills up the shared objects if necessary*/
-static void loadDBCSTableFromFile(FileStream* convFile, UConverter* converter, UErrorCode* err);
+static void loadDBCSTableFromFile(FileStream* convFile, UConverter_1_4* converter, UErrorCode* err);
 
-/* creates a UConverterSharedData from a mapping file, fills in necessary links to it the 
+/* creates a UConverterSharedData_1_4 from a mapping file, fills in necessary links to it the 
  * appropriate function pointers
  * if the data tables are already in memory
  */
-static UConverterSharedData* createConverterFromTableFile(const char* realName, UErrorCode* err);
+static UConverterSharedData_1_4* createConverterFromTableFile(const char* realName, UErrorCode* err);
 
 
 /*writes a CompactShortArray to a file*/
@@ -60,11 +147,13 @@ static void writeCompactByteArrayToFile(FileStream* outfile, const CompactByteAr
 
 /*writes a binary to a file*/
 static void writeUConverterSharedDataToFile(const char* filename, 
-						  UConverterSharedData* mySharedData, 
+						  UConverterSharedData_1_4* mySharedData, 
 						  UErrorCode* err);
 
 
-static void WriteConverterSharedData(UNewDataMemory *pData, const UConverterSharedData* data);
+static void WriteConverterSharedData(UNewDataMemory *pData, const UConverterSharedData_1_4* data);
+
+bool_t makeconv_deleteSharedConverterData(UConverterSharedData_1_4* deadSharedData);
 
 static UConverterPlatform getPlatformFromName(char* name);
 static int32_t getCodepageNumberFromName(char* name);
@@ -158,7 +247,7 @@ static const UDataInfo dataInfo={
 };
 
 
-void writeConverterData(UConverterSharedData *mySharedData, const char *cName, UErrorCode *status)
+void writeConverterData(UConverterSharedData_1_4 *mySharedData, const char *cName, UErrorCode *status)
 {
   UNewDataMemory *mem;
   const char *cnvName, *cnvName2;
@@ -192,7 +281,7 @@ void writeConverterData(UConverterSharedData *mySharedData, const char *cName, U
 
 int main(int argc, char** argv)
 {
-  UConverterSharedData* mySharedData = NULL; 
+  UConverterSharedData_1_4* mySharedData = NULL; 
   UErrorCode err = U_ZERO_ERROR;
   char outFileName[UCNV_MAX_FULL_FILE_NAME_LENGTH];
   char* dot = NULL, *arg;
@@ -232,7 +321,7 @@ int main(int argc, char** argv)
 	{
 /*  	  writeUConverterSharedDataToFile(outFileName, mySharedData, &err); */
 	  writeConverterData(mySharedData, cnvName, &err);
-	  deleteSharedConverterData(mySharedData);
+	  makeconv_deleteSharedConverterData(mySharedData);
 
 	  if(U_FAILURE(err))
 	  {
@@ -289,7 +378,7 @@ int32_t getCodepageNumberFromName(char* name)
 }
 
 /*Reads the header of the table file and fills in basic knowledge about the converter in "converter"*/
-void readHeaderFromFile(UConverter* myConverter,
+void readHeaderFromFile(UConverter_1_4* myConverter,
 			FileStream* convFile,
 			UErrorCode* err)
 {
@@ -412,7 +501,7 @@ void readHeaderFromFile(UConverter* myConverter,
   
   
 
-void loadSBCSTableFromFile(FileStream* convFile, UConverter* myConverter, UErrorCode* err)
+void loadSBCSTableFromFile(FileStream* convFile, UConverter_1_4* myConverter, UErrorCode* err)
 {
   char storageLine[UCNV_MAX_LINE_TEXT];
   char* line = NULL;
@@ -479,7 +568,7 @@ void loadSBCSTableFromFile(FileStream* convFile, UConverter* myConverter, UError
   return;
 }
 
-void loadMBCSTableFromFile(FileStream* convFile, UConverter* myConverter, UErrorCode* err)
+void loadMBCSTableFromFile(FileStream* convFile, UConverter_1_4* myConverter, UErrorCode* err)
 {
   char storageLine[UCNV_MAX_LINE_TEXT];
   char* line = NULL;
@@ -560,7 +649,7 @@ void loadMBCSTableFromFile(FileStream* convFile, UConverter* myConverter, UError
   return;
 }
 
-void loadEBCDIC_STATEFULTableFromFile(FileStream* convFile, UConverter* myConverter, UErrorCode* err)
+void loadEBCDIC_STATEFULTableFromFile(FileStream* convFile, UConverter_1_4* myConverter, UErrorCode* err)
 {
   char storageLine[UCNV_MAX_LINE_TEXT];
   char* line = NULL;
@@ -627,7 +716,7 @@ void loadEBCDIC_STATEFULTableFromFile(FileStream* convFile, UConverter* myConver
 }
 
 
-void loadDBCSTableFromFile(FileStream* convFile, UConverter* myConverter, UErrorCode* err)
+void loadDBCSTableFromFile(FileStream* convFile, UConverter_1_4* myConverter, UErrorCode* err)
 {
   char storageLine[UCNV_MAX_LINE_TEXT];
   char* line = NULL;
@@ -688,7 +777,7 @@ void loadDBCSTableFromFile(FileStream* convFile, UConverter* myConverter, UError
 }
 
 /*deletes the "shared" type object*/
-bool_t deleteSharedConverterData(UConverterSharedData* deadSharedData)
+bool_t makeconv_deleteSharedConverterData(UConverterSharedData_1_4* deadSharedData)
 {
   if (deadSharedData->conversionType == UCNV_SBCS)
     {
@@ -719,13 +808,13 @@ bool_t deleteSharedConverterData(UConverterSharedData* deadSharedData)
 
 
 
-/*creates a UConverter, fills in necessary links to it the appropriate function pointers*/
-UConverterSharedData* createConverterFromTableFile(const char* converterName, UErrorCode* err)
+/*creates a UConverter_1_4, fills in necessary links to it the appropriate function pointers*/
+UConverterSharedData_1_4* createConverterFromTableFile(const char* converterName, UErrorCode* err)
 {
   FileStream* convFile = NULL;
   int32_t i = 0;
-  UConverterSharedData* mySharedData = NULL;
-  UConverter myConverter;
+  UConverterSharedData_1_4* mySharedData = NULL;
+  UConverter_1_4 myConverter;
 
 
   if (U_FAILURE(*err)) return NULL;
@@ -738,14 +827,14 @@ UConverterSharedData* createConverterFromTableFile(const char* converterName, UE
     }
   
   
-  mySharedData = (UConverterSharedData*) uprv_malloc(sizeof(UConverterSharedData));
+  mySharedData = (UConverterSharedData_1_4*) uprv_malloc(sizeof(UConverterSharedData_1_4));
   if (mySharedData == NULL)
     {
       *err = U_MEMORY_ALLOCATION_ERROR;
       T_FileStream_close(convFile);
     }
   
-  mySharedData->structSize = sizeof(UConverterSharedData);
+  mySharedData->structSize = sizeof(UConverterSharedData_1_4);
   mySharedData->dataMemory = NULL; /* for init */
 
   myConverter.sharedData = mySharedData;
@@ -787,13 +876,13 @@ UConverterSharedData* createConverterFromTableFile(const char* converterName, UE
 
 
 
-static void WriteConverterSharedData(UNewDataMemory *pData, const UConverterSharedData* data)
+static void WriteConverterSharedData(UNewDataMemory *pData, const UConverterSharedData_1_4* data)
 {
     uint32_t size = 0;
     
-    udata_writeBlock(pData, data, sizeof(UConverterSharedData));
+    udata_writeBlock(pData, data, sizeof(UConverterSharedData_1_4));
 
-    size += sizeof(UConverterSharedData); /* Is 4-aligned- it ends with a pointer */
+    size += sizeof(UConverterSharedData_1_4); /* Is 4-aligned- it ends with a pointer */
 
     switch (data->conversionType)
     {
