@@ -3,43 +3,84 @@
 # runConfigureICU: This script will run the "configure" script for the appropriate platform
 # Only supported platforms are recognized
 
+me=`basename $0`
+
 usage()
 {
-    echo "runConfigure: Helper script to run \"configure\" for one of the supported platforms"
-    echo "Usage: runConfigure \"<platform_name>\" [ args .. ] "
-    echo "       where <platform is the platform you want"
-    echo "       valid choices are :"
-    echo "          1. 'AIX4.1.5xlC' if you are using xlC on AIX4.1.5"
-    echo "          2. 'SOLARISCC' if you are using native CC compiler on Solaris"
-    echo "          3. 'SOLARISGCC' if you are using GNU C++ compiler on Solaris"
-    echo "          4. 'LinuxRedHat5.2 or LinuxRedHat6.0' if you are using GNU C++ compiler on Linux"
-    echo "          5. 'HP/UX10.2CC' if you are using native C++ compiler on HP-UX10.2"
-    echo "          6. 'HP/UX10.2ACC' if you are using Advanced C++ compiler on HP-UX10.2"
-    echo "          7. 'HP/UX11CC' if you are using native C++ compiler on HP-UX11"
-    echo "          8. 'HP/UX11ACC' if you are using Advanced C++ compiler on HP-UX11"
-    echo "          9. 'AIX4.3xlC' if you are using xlC on AIX4.3"
-    echo "          10. 'SOL2.7CC'if you are using native CC compiler on Solaris"
-    echo "          11. 'PTX' if you are using c++ on Dynix/PTX v4.5"
-    echo "          12. 'SOLARISX86' if you are using the native CC compiler on Solarisx86"
-    echo "          13. 'AIX4.3VA' if you are using VA compiler on AIX4.3"
-    echo
-    echo "Any other options will be passed on to configure. (see 'configure --help')"
+    ec=0$1
+    if test $ec -eq 0
+    then
+        uletter=U
+    else
+ 	uletter=u
+    fi
+    
+    echo "${uletter}sage: $me [ -h, --help ]  [ --enable-debug | --disable-release ] platform [ configurearg ... ]"
+    if test $ec -eq 0
+    then
+	cat <<EOE
 
- }
+Options: -h, --help         Print this message and exit
+         --enable-debug	    Enable support for debugging
+	 --disable-release  Disable presetting optimization flags
 
-if test ${1}o = "o"; then
-   usage
-   exit 0
+The following names can be supplied as the argument for platform:
+
+    AIX4.1.5xlC             Use xlC on AIX 4.1.5
+    AIX4.3xlC               Use xlC on AIX 4.3
+    AIX4.3VA                Use the VA compiler on AIX 4.3
+    SOLARISCC               Use Sun's CC compiler on Solaris 
+    SOL2.7CC                Same as above
+    SOLARISGCC              Use the GNU C++ compiler on Solaris
+    SOLARISX86              Use Sun's CC compiler on Solaris x86
+    LinuxRedHat5.2          Use the GNU C++ compiler on Linux
+    LinuxRedHat6.0          Same as above
+    HP/UX10.2CC             Use HP's C++ compiler on HP-UX 10.2
+    HP/UX10.2ACC            Use the Advanced C++ compiler on HP-UX 10.2
+    HP/UX11CC               Use HP's C++ compiler on HP-UX 11
+    HP/UX11ACC              Use the Advanced C++ compiler on HP-UX 11
+    PTX                     Use C++ on Dynix/PTX v4.5
+EOE
+    fi
+
+    exit $ec
+}
+
+# Parse arguments
+
+platform=
+debug=0
+release=1
+
+while test $# -ne 0
+do
+    case "$1" in
+	-h|--help)
+	    usage 0
+	    ;;
+	--enable-debug)
+	    debug=1
+	    release=0
+	    ;;
+	--disable-release)
+	    debug=0
+	    release=0
+	    ;;
+	*)
+	    platform="$1"
+	    shift
+	    break
+	    ;;
+    esac
+    shift
+done
+
+if test x$platform = x
+then
+   usage 1
 fi
 
-if test $1 = "-h"; then
-   usage
-   exit 0
-fi
-
-platform=${1};
-
-shift
+# Go.
 
 rm -f config.cache
 rm -f config.log
@@ -68,92 +109,175 @@ fi
 
 case $platform in
         AIX4.1.5xlC)
-                echo Running configure "$@"  for AIX using xlC compiler ...
+		THE_OS=AIX
+		THE_COMP=xlC
                 CC=/usr/lpp/xlC/bin/xlc; export CC
                 CXX=/usr/lpp/xlC/bin/xlC_r; export CXX
+		RELEASE_CFLAGS=-O4
+		RELEASE_CXXFLAGS=-O4
                 #CPPFLAGS=-I/usr/lpp/xlC/include; export CPPFLAGS
                 #LDFLAGS=-L/usr/lpp/xlC/lib; export LDFLAGS
-                $configure "$@"  ;;
+		;;
         AIX4.3xlC)
-                echo Running configure "$@"  for AIX using xlC compiler ...
+		THE_OS=AIX
+		THE_COMP=xlC
                 CC=/usr/ibmcxx/bin/xlc; export CC
                 CXX=/usr/ibmcxx/bin/xlC_r; export CXX
+		RELEASE_CFLAGS=-O4
+		RELEASE_CXXFLAGS=-O4
                 #CPPFLAGS=-I/usr/lpp/xlC/include; export CPPFLAGS
                 #LDFLAGS=-L/usr/lpp/xlC/lib; export LDFLAGS
-                $configure "$@"  ;;
+		;;
         AIX4.3VA)
-                echo Running configure "$@"  for AIX using xlC compiler ...
+		THE_OS=AIX
+		THE_COMP=xlC
                 CC=/usr/vacpp/bin/xlc; export CC
                 CXX=/usr/vacpp/bin/xlC_r; export CXX
+		RELEASE_CFLAGS=-O4
+		RELEASE_CXXFLAGS=-O4
                 #CPPFLAGS=-I/usr/lpp/xlC/include; export CPPFLAGS
                 #LDFLAGS=-L/usr/lpp/xlC/lib; export LDFLAGS
-                $configure "$@"  ;;
+                ;;
         SOLARISCC)
-                echo Running configure "$@"  for SOLARIS using native CC compiler ...
+		THE_OS=SOLARIS
+		THE_COMP="Sun's CC"
                 CC=/usr/local/SUNWspro/bin/cc; export CC
                 CXX=/usr/local/SUNWspro/bin/CC; export CXX
-                $configure "$@"  ;;
+		RELEASE_CFLAGS=-xO5
+		RELEASE_CXXFLAGS=-O5
+                ;;
         SOLARISGCC)
-                echo Running configure "$@"  for Solaris using gcc compiler ...
+		THE_OS=SOLARIS
+		THE_COMP="the GNU C++"
                 CXXFLAGS=-I/usr/local/include/g++; export CXXFLAGS
-				LDFLAGS=-R/usr/local/lib; export LDFLAGS
-                $configure "$@"  ;;
+		LDFLAGS=-R/usr/local/lib; export LDFLAGS
+                ;;
         SOL2.7CC)
-                echo Running configure "$@"  for SOLARIS2.7cc using native CC compiler
+		THE_OS="SOLARIS 2.7"
+		THE_COMP="Sun's CC"
                 CC=/usr/local/SUNWspro/bin/cc; export CC
                 CXX=/usr/local/SUNWspro/bin/CC; export CXX 
-                $configure "$@"  ;;
-
+		RELEASE_CFLAGS=-xO5
+		RELEASE_CXXFLAGS=-O5
+                ;;
         SOLARISX86)
-                echo Running configure "$@" for SOLARISX86 using native CC compiler
+		THE_OS="SOLARIS X86"
+		THE_COMP="Sun's CC"
                 CC=cc; export CC
                 CXX=CC; export CXX
                 CXX_FLAGS="-w -O";export CXX_FLAGS
                 C_FLAGS="-w -O";export C_FLAGS
                 LDFLAGS="-L -lCrun";export LDFLAGS
-                $configure "$@" ;;
-
+		RELEASE_CFLAGS=-xO5
+		RELEASE_CXXFLAGS=-O5
+                ;;
         LinuxRedHat*)
-                echo Running configure "$@"  for Linux using gcc compiler ...
+		THE_OS=Linux
+		THE_COMP="the GNU C++"
                 CXX=g++; export CXX 
-		        CC=gcc; export CC
-                CXXFLAGS=-g; export CXXFLAGS
-		        CFLAGS=-g; export CFLAGS
-                $configure "$@"  ;;
+		CC=gcc; export CC
+		;;
         HP/UX10.2CC)
-                echo Running configure "$@"  for HP10.2 using native CC compiler ...
-				CC=cc; export CC
-				CXX=CC; export CXX
-			    $configure "$@" ;;
+		THE_OS="HP-UX 10.2"
+		THE_COMP="HP's CC"
+		CC=cc; export CC
+		CXX=CC; export CXX
+		RELEASE_CFLAGS=+O4
+		RELEASE_CXXFLAGS=+O4
+		;;
         HP/UX10.2ACC)
-                echo Running configure "$@"  for HP10.2 using aCC compiler ...
-				CC=cc; export CC
-				CXX=aCC; export CXX
-                $configure "$@" ;;
+		THE_OS="HP-UX 10.2"
+		THE_COMP="aCC"
+		CC=cc; export CC
+		CXX=aCC; export CXX
+		RELEASE_CFLAGS=+O4
+		RELEASE_CXXFLAGS=+O4
+		;;
         HP/UX11CC)
-                echo Running configure "$@"  for HP11 using native CC compiler ...
+		THE_OS="HP-UX 11"
+		THE_COMP="HP's CC"
                 CC=cc; export CC
-				CXX=/opt/CC/bin/CC; export CXX
-                $configure "$@" ;;
+		CXX=/opt/CC/bin/CC; export CXX
+		RELEASE_CFLAGS=+O4
+		RELEASE_CXXFLAGS=+O4
+                ;;
         HP/UX11ACC)
-                echo Running configure "$@"  for HP11 using aCC compiler ...
+		THE_OS="HP-UX 11"
+		THE_COMP="aCC"
                 CC=cc; export CC
-				CXX=/opt/aCC/bin/aCC; export CXX
-			    $configure "$@" ;;
+		CXX=/opt/aCC/bin/aCC; export CXX
+		RELEASE_CFLAGS=+O4
+		RELEASE_CXXFLAGS=+O4
+		;;
         PTX)
-                echo Running configure "$@"  for PTX using c++ compiler ...
+		THE_OS="PTX"
+		THE_COMP="C++"
                 CC=cc; export CC
-				CXX=c++; export CXX
+		CXX=c++; export CXX
 		if test ${XMLINSTALL}o = "o"; then 
-			XMLINSTALL=/usr/local; export XMLINSTALL
+		    XMLINSTALL=/usr/local; export XMLINSTALL
 		fi
-		$configure --prefix=$XMLINSTALL "$@" ;;
+		configure="$configure --prefix=$XMLINSTALL"
+		;;
         *)
-                echo I do not recognize the option \"$platform\". Please type ${0} -h for help.
-                exit 0;;
+                >&2 echo "$me: unrecognized platform \"$platform\" (use --help for help)"
+                exit 1;;
 esac
 
+# Tweak flags
+
+if test $release -eq 1
+then
+    if test x$RELEASE_CFLAGS = x
+    then
+	case $CC in
+	    gcc|*/gcc|*-gcc-*|*/*-gcc-*)
+		RELEASE_CFLAGS=-O3
+		;;
+	esac
+    fi
+    if test x$RELEASE_CFLAGS != x
+    then
+	CFLAGS="$CFLAGS $RELEASE_CFLAGS"
+    fi
+    export CFLAGS
+    if test x$RELEASE_CXXFLAGS = x
+    then
+	case $CXX in
+	    g++|*/g++|*-g++-*|*/*-g++-*)
+		RELEASE_CXXFLAGS=-O
+		;;
+	esac
+    fi
+    CXXFLAGS="$CXXFLAGS $RELEASE_CXXFLAGS"
+    if test x$RELEASE_CXXFLAGS != x
+    then
+	CXXFLAGS="$CXXFLAGS $RELEASE_CXXFLAGS"
+    fi
+    export CXXFLAGS
+fi
+
+if test $debug -eq 1
+then
+    if test x$DEBUG_CFLAGS != x
+    then
+	CFLAGS="$CFLAGS $DEBUG_CFLAGS"
+    fi
+    export CFLAGS
+    if test x$DEBUG_CXXFLAGS != x
+    then
+	CXXFLAGS="$CXXFLAGS $DEBUG_CXXFLAGS"
+    fi
+    export CXXFLAGS
+fi
+
+# Run configure
+
+echo Running ./configure "$@" for $THE_OS using $THE_COMP compiler
 echo
-echo If the result of the above commands look OK to you, go to the directory
-echo $icu/source to build the icu.
+./configure "$@"
+echo
+echo If the result of the above commands looks okay to you, go to the directory
+echo source in the ICU distribution to build ICU. Please remember that ICU needs
+echo GNU make to build properly...
 

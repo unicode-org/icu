@@ -550,7 +550,7 @@ void ucol_initUCA(UErrorCode *status) {
 /* This is the first function that tries to fetch a collation element  */
 /* If it's not succesfull or it encounters a more difficult situation  */
 /* some more sofisticated and slower functions are invoked             */
-inline  uint32_t ucol_getNextCE(const UCollator *coll, collIterate *collationSource, UErrorCode *status) {
+uint32_t ucol_getNextCE(const UCollator *coll, collIterate *collationSource, UErrorCode *status) {
     uint32_t order;
     if (collationSource->CEpos > collationSource->toReturn) {       /* Are there any CEs from previous expansions? */
       order = *(collationSource->toReturn++);                         /* if so, return them */
@@ -803,7 +803,7 @@ inline void collPrevIterFCD(collIterate *data)
 * @param data collation iterator struct
 * @param status error status
 */
-inline uint32_t ucol_getPrevCE(const UCollator *coll, collIterate *data, 
+uint32_t ucol_getPrevCE(const UCollator *coll, collIterate *data, 
                                UErrorCode *status) 
 {
     uint32_t result = UCOL_NULLORDER;
