@@ -1996,8 +1996,10 @@ static void TestCase(void)
     };
     int32_t i,j,k;
     UErrorCode status = U_ZERO_ERROR;
+    UCollationElements *iter;
     UCollator  *myCollation;
     myCollation = ucol_open("en_US", &status);
+
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
         return;
@@ -2024,7 +2026,7 @@ static void TestCase(void)
     }
     log_verbose("Testing different case settings with custom rules\n");
     ucol_setStrength(myCollation, UCOL_TERTIARY);
-
+    
     for(k = 0; k<4; k++) {
       ucol_setAttribute(myCollation, UCOL_CASE_FIRST, caseTestAttributes[k][0], &status);
       ucol_setAttribute(myCollation, UCOL_CASE_LEVEL, caseTestAttributes[k][1], &status);
@@ -2032,6 +2034,12 @@ static void TestCase(void)
         for(j = i+1; j<4; j++) {
           log_verbose("k:%d, i:%d, j:%d\n", k, i, j);
           doTest(myCollation, testCase[i], testCase[j], caseTestResults[k][3*i+j-1]);
+          iter=ucol_openElements(myCollation, testCase[i], u_strlen(testCase[i]), &status);
+          backAndForth(iter);
+          ucol_closeElements(iter);
+          iter=ucol_openElements(myCollation, testCase[j], u_strlen(testCase[j]), &status);
+          backAndForth(iter);
+          ucol_closeElements(iter);
         }
       }
     }
@@ -4127,6 +4135,32 @@ static void TestNumericCollation(void)
     ucol_close(coll);
 }
 
+static void TestTibetanConformance(void) 
+{  
+    const char* test[] = { 
+        "\\u0FB2\\u0591\\u0F71\\u0061",  
+        "\\u0FB2\\u0F71\\u0061"
+    };
+    
+    UErrorCode status = U_ZERO_ERROR;
+    UCollator *coll = ucol_open("", &status);
+    UChar source[100];
+    UChar target[100];
+    int result;
+    ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
+    if (U_SUCCESS(status)) {
+        u_unescape(test[0], source, 100);
+        u_unescape(test[1], target, 100);
+        result = ucol_strcoll(coll, source, -1,   target, -1);
+        printf("result %d\n", result);
+        if (UCOL_EQUAL != result) {
+            log_err("Tibetan comparison error\n"); 
+        }
+    }
+    ucol_close(coll);
+
+    genericLocaleStarterWithResult("", test, 2, UCOL_EQUAL);
+}
 
 #define TEST(x) addTest(root, &x, "tscoll/cmsccoll/" # x)
 
@@ -4183,6 +4217,7 @@ void addMiscCollTest(TestNode** root)
     TEST(TestJ2726);
     TEST(NullRule);
     TEST(TestNumericCollation);
+    TEST(TestTibetanConformance);
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */

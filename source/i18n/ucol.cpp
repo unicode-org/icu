@@ -2928,6 +2928,17 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
             break;
         }
 
+        uint32_t tempCE = *(coll->contractionCEs + (ContractionStart - coll->contractionIndex));
+        if(tempCE != UCOL_NOT_FOUND && wasIgnorable == FALSE) {
+            // We have scanned a a section of source string for which there is a
+            // non-ignorable CE from the contraction table.  
+            // Remember the CE and scan position, so 
+            // that we can return to this point if further scanning fails to
+            // match a longer contraction sequence.
+            firstCE = tempCE;
+            backupState(source, &state);
+        }
+
         uint8_t maxCC = (uint8_t)(*(UCharOffset)&0xFF); /*get the discontiguos stuff */ /* skip the backward offset, see above */
         uint8_t allSame = (uint8_t)(*(UCharOffset++)>>8);
 
@@ -3039,31 +3050,6 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
         // The source string char was in the contraction table, and the corresponding
         //   CE is IS  a contraction CE.  We will continue looping to check the source
         //   string for the remaining chars in the contraction.
-        uint32_t tempCE = *(coll->contractionCEs + (ContractionStart - coll->contractionIndex));
-        if(tempCE != UCOL_NOT_FOUND) {
-            // We have scanned a a section of source string for which there is a
-            //  CE from the contraction table.  Remember the CE and scan position, so 
-            //  that we can return to this point if further scanning fails to
-            //  match a longer contraction sequence.
-            firstCE = tempCE;
-
-            goBackOne(source);
-            backupState(source, &state);
-            getNextNormalizedChar(source);
-
-            // Another way to do this is:
-            //collIterateState tempState;
-            //backupState(source, &tempState);
-            //goBackOne(source);
-            //backupState(source, &state);
-            //loadState(source, &tempState, TRUE);
-
-            // The problem is that for incomplete contractions we have to remember the previous
-            // position. Before, the only thing I needed to do was state.pos--; 
-            // After iterator introduction and especially after introduction of normalizing
-            // iterators, it became much more difficult to decrease the saved state. 
-            // I'm not yet sure which of the two methods above is faster.
-        }
       } // for(;;)
       break;
       } // case CONTRACTION_TAG:
