@@ -98,10 +98,10 @@
 /*===========================================================================*/
 
 /** The current ICU library version as a dotted-decimal string. */
-#define U_ICU_VERSION "1.7"
+#define U_ICU_VERSION "1.8"
 
 /** The current ICU library major/minor version as a string without dots, for library name suffixes. */
-#define U_ICU_VERSION_SHORT "17"
+#define U_ICU_VERSION_SHORT "18"
 
 /** An ICU version consists of up to 4 numbers from 0..255. */
 #define U_MAX_VERSION_LENGTH 4
