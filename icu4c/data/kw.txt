@@ -1,14 +1,12 @@
-﻿
 // *******************************************************************************
 // *
-// *   Copyright (C) 1997-2000, International Business Machines
+// *   Copyright (C) 1997-2001, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
 // *******************************************************************************
 
 kw{
-   Version { "x0.0" }
-
+    Version { "x0.0" }
     DayAbbreviations { 
             "Sul",
             "Lun",
@@ -66,11 +64,11 @@ kw{
             "#",
             "-",
             "E",
-            "‰",
-            "∞",
-            "�",
+            "\u2030",
+            "\u221e",
+            "\ufffd",
     }
-	            
+
             // /**************** Info Below is needed ****************/
             // CollationElements{}
             // Countries{}
