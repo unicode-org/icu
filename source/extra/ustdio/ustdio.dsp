@@ -182,7 +182,9 @@ SOURCE=.\unicode\ustdio.h
 InputPath=.\unicode\ustdio.h
 
 "..\..\..\include\unicode\ustdio.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy                   unicode\ustdio.h                   ..\..\..\include\unicode
+	copy unicode\ustdio.h ..\..\..\include\unicode
+
+# End Custom Build
 
 !ELSEIF  "$(CFG)" == "ustdio - Win32 Debug"
 
@@ -190,7 +192,7 @@ InputPath=.\unicode\ustdio.h
 InputPath=.\unicode\ustdio.h
 
 "..\..\..\include\unicode\ustdio.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy                   unicode\ustdio.h                   ..\..\..\include\unicode
+	copy unicode\ustdio.h ..\..\..\include\unicode
 
 # End Custom Build
 
