@@ -58,7 +58,7 @@
 
 #   define GET_LIBRARY_ENTRY(lib, entryName) GetProcAddress(lib, entryName)
 
-#elif HAVE_DLOPEN && (defined(LINUX) || defined(POSIX) || defined(SOLARIS) || defined(AIX) || defined(HPUX) || defined(OS390))
+#elif HAVE_DLOPEN  /* POSIX-y shared library environment. dlopen() or equivalent.. */
 #   ifndef UDATA_SO_SUFFIX
 #       error Please define UDATA_SO_SUFFIX to the shlib suffix (i.e. '.so' )
 #   endif
@@ -67,8 +67,10 @@
 #   define LIB_PREFIX_LENGTH 3
 #   define LIB_SUFFIX UDATA_SO_SUFFIX
 
-#   ifdef ICU_USE_SHL_LOAD
-        /* HPUX compatibility stubs:  shl_load, etc.. */
+#   ifdef ICU_USE_SHL_LOAD  /* Some sort of compatibility stub:
+                             * HPUX shl_load
+                             * OS390 dllload */
+
 #       define  RTLD_LAZY 0
 #       define  RTLD_GLOBAL 0
 
@@ -106,7 +108,7 @@
 #               endif
                 return dllfree((dllhandle*)handle);
             }
-#       else /* not OS390 */
+#       else /* not OS390:  HPUX shl_load  */
 #           include <dl.h>
 
             void *dlopen (const char *filename, int flag) {
@@ -141,7 +143,7 @@
 #               endif
 	            return shl_unload((shl_t)handle);
             }
-#       endif
+#       endif /* HPUX shl_load */
 #   else /* not ICU_USE_SHL_LOAD */
         /* 'de facto standard' dlopen etc. */
 #       include <dlfcn.h>
@@ -155,6 +157,7 @@
 #   define UNLOAD_LIBRARY(lib) dlclose(lib)
 
 #   define GET_LIBRARY_ENTRY(lib, entryName) dlsym(lib, entryName)
+  /* End of dlopen or compatible functions */
 
 #else /* unknown platform, no DLL implementation */
 #   ifndef UDATA_NO_DLL
@@ -191,7 +194,7 @@
 
 #   define MAP_IMPLEMENTATION MAP_WIN32
 
-#elif defined(LINUX) || defined(POSIX) || defined(SOLARIS) || defined(AIX) || defined(HPUX)
+#elif defined(LINUX) || defined(POSIX) || defined(SOLARIS) || defined(AIX) || defined(HPUX) /* Todo: auto detect mmap(). Until then, just add your platform here. */
     typedef size_t MemoryMap;
 
 #   define NO_MAP 0
@@ -359,7 +362,11 @@ typedef struct {
         data=mmap(0, length, PROT_READ, MAP_SHARED, fd, 0);
         close(fd); /* no longer needed */
         if(data==MAP_FAILED) {
+
+#       ifdef UDATA_DEBUG
             perror("mmap");
+#       endif
+
             return FALSE;
         }
 
