@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2001/10/26 22:59:26 $
- * $Revision: 1.57 $
+ * $Date: 2001/10/30 18:08:19 $
+ * $Revision: 1.58 $
  *
  *****************************************************************************************
  */
@@ -1268,9 +1268,11 @@ public class TransliteratorTest extends TestFmwk {
                "c abc ababc",
                "d d abd");
 
+        // NOTE: The (ab)+ when referenced just yields a single "ab",
+        // not the full sequence of them.  This accords with perl behavior.
         expect("(ab)+ {x} > '(' $1 ')';",
                "x abx ababxy",
-               "x ab(ab) abab(abab)y");
+               "x ab(ab) abab(ab)y");
 
         expect("b+ > x;",
                "ac abc abbc abbbc",
@@ -1288,12 +1290,11 @@ public class TransliteratorTest extends TestFmwk {
                "qa qab qaba qababc",
                "xa x xa xc");
 
-        // Oddity -- "(foo)* > $1" causes $1 to match the run of "foo"s
-        // In perl, it only matches the first occurrence, so the output
-        // is "()a (ab) (ab)a (ab)c".
+        // NOTE: The (ab)+ when referenced just yields a single "ab",
+        // not the full sequence of them.  This accords with perl behavior.
         expect("q(ab)* > '(' $1 ')';",
                "qa qab qaba qababc",
-               "()a (ab) (ab)a (abab)c");
+               "()a (ab) (ab)a (ab)c");
 
         // 'foo'+ and 'foo'* -- the quantifier should apply to the entire
         // quoted string
@@ -1572,6 +1573,46 @@ public class TransliteratorTest extends TestFmwk {
             "$rough <> h ;";
             
         expect(gr, "\u03B1\u0314", "ha");
+    }
+
+    /**
+     * Test quantified segment behavior.  We want:
+     * ([abc])+ > x $1 x; applied to "cba" produces "xax"
+     */
+    public void TestQuantifiedSegment() {
+        // The normal case
+        expect("([abc]+) > x $1 x;", "cba", "xcbax");
+
+        // The tricky case; the quantifier is around the segment
+        expect("([abc])+ > x $1 x;", "cba", "xax");
+
+        // Tricky case in reverse direction
+        expect("([abc])+ { q > x $1 x;", "cbaq", "cbaxax");
+
+        // Check post-context segment
+        expect("{q} ([a-d])+ > '(' $1 ')';", "ddqcba", "dd(a)cba");
+
+        // Test toRule/toPattern for non-quantified segment.
+        // Careful with spacing here.
+        String r = "([a-c]){q} > x $1 x;";
+        Transliterator t = Transliterator.createFromRules("ID", r, Transliterator.FORWARD);
+        String rr = t.toRules(true);
+        if (!r.equals(rr)) {
+            errln("FAIL: \"" + r + "\" x toRules() => \"" + rr + "\"");
+        } else {
+            logln("Ok: \"" + r + "\" x toRules() => \"" + rr + "\"");
+        }
+
+        // Test toRule/toPattern for quantified segment.
+        // Careful with spacing here.
+        r = "([a-c])+{q} > x $1 x;";
+        t = Transliterator.createFromRules("ID", r, Transliterator.FORWARD);
+        rr = t.toRules(true);
+        if (!r.equals(rr)) {
+            errln("FAIL: \"" + r + "\" x toRules() => \"" + rr + "\"");
+        } else {
+            logln("Ok: \"" + r + "\" x toRules() => \"" + rr + "\"");
+        }
     }
 
     //======================================================================

@@ -33,6 +33,16 @@ class TransliterationRuleData;
  * Variables are detected by looking up each character in a supplied
  * variable list to see if it has been so defined.
  *
+ * <p>A rule may contain segments in its input string and segment
+ * references in its output string.  A segment is a substring of the
+ * input pattern, indicated by an offset and limit.  The segment may
+ * be in the preceding or following context.  It may not span a
+ * context boundary.  A segment reference is a special character in
+ * the output string that causes a segment of the input string (not
+ * the input pattern) to be copied to the output string.  The range of
+ * special characters that represent segment references is defined by
+ * RuleBasedTransliterator.Data.
+ *
  * @author Alan Liu
  */
 class TransliterationRule {
@@ -65,20 +75,20 @@ private:
     UnicodeString output;
 
     /**
-     * An array of integers encoding the position of the segments.
-     * See rbt_pars.cpp::Segments for more details.
+     * An array of matcher objects corresponding to the input pattern
+     * segments.  If there are no segments this is null.  N.B. This is
+     * a UnicodeMatcher for generality, but in practice it is always a
+     * StringMatcher.  In the future we may generalize this, but for
+     * now we sometimes cast down to StringMatcher.
+     *
+     * The array is owned, but the pointers within it are not.
      */
-    int32_t* segments;
+    UnicodeMatcher** segments;
 
     /**
-     * A value we compute from segments.  The first index into segments[]
-     * that is >= anteContextLength.  That is, the first one that is within
-     * the forward scanned part of the pattern -- the key or the postContext.
-     * If there are no segments, this has the value -1.  This index is relative
-     * to FIRST_SEG_POS_INDEX; that is, it should be used as follows:
-     * segments[FIRST_SEG_POS_INDEX + firstKeySeg].
+     * The number of elements in segments[] or zero if segments is NULL.
      */
-    int32_t firstKeySeg;
+    int32_t segmentsCount;
 
     /**
      * The length of the string that must match before the key.  If
@@ -143,11 +153,10 @@ public:
      * 0.  For example, the rule "abc{def} > | @@@ xyz;" changes "def" to
      * "xyz" and moves the cursor to before "a".  It would have a cursorOffset
      * of -3.
-     * @param adoptedSegs array of 2n integers.  Each of n pairs consists of offset,
-     * limit for a segment of the input string.  Characters in the output string
-     * refer to these segments if they are in a special range determined by the
-     * associated RuleBasedTransliterator.Data object.  May be null if there are
-     * no segments.
+     * @param segs array of UnicodeMatcher corresponding to input pattern
+     * segments, or null if there are none.  The array itself is adopted,
+     * but the pointers within it are not.
+     * @param segsCount number of elements in segs[]
      * @param anchorStart TRUE if the the rule is anchored on the left to
      * the context start
      * @param anchorEnd TRUE if the rule is anchored on the right to the
@@ -157,7 +166,8 @@ public:
                         int32_t anteContextPos, int32_t postContextPos,
                         const UnicodeString& outputStr,
                         int32_t cursorPosition, int32_t cursorOffset,
-                        int32_t* adoptedSegs,
+                        UnicodeMatcher** segs,
+                        int32_t segsCount,
                         UBool anchorStart, UBool anchorEnd,
                         const TransliterationRuleData* data,
                         UErrorCode& status);

@@ -18,7 +18,9 @@ StringMatcher::StringMatcher(const UnicodeString& theString,
                              UBool isSeg,
                              const TransliterationRuleData& theData) :
     data(theData),
-    isSegment(isSeg)
+    isSegment(isSeg),
+    matchStart(-1),
+    matchLimit(-1)
 {
     theString.extractBetween(start, limit, pattern);
 }
@@ -27,7 +29,9 @@ StringMatcher::StringMatcher(const StringMatcher& o) :
     UnicodeMatcher(o),
     pattern(o.pattern),
     data(o.data),
-    isSegment(o.isSegment)
+    isSegment(o.isSegment),
+    matchStart(o.matchStart),
+    matchLimit(o.matchStart)
 {
 }
 
@@ -54,6 +58,7 @@ UMatchDegree StringMatcher::matches(const Replaceable& text,
     int32_t i;
     int32_t cursor = offset;
     if (limit < cursor) {
+        // Match in the reverse direction
         for (i=pattern.length()-1; i>=0; --i) {
             UChar keyChar = pattern.charAt(i);
             const UnicodeMatcher* subm = data.lookup(keyChar);
@@ -71,6 +76,14 @@ UMatchDegree StringMatcher::matches(const Replaceable& text,
                     return m;
                 }
             }
+        }
+        // Record the match position, but adjust for a normal
+        // forward start, limit, and only if a prior match does not
+        // exist -- we want the rightmost match.
+        if (matchStart < 0) {
+            // cast away const -- should modify method to be non-const
+            ((StringMatcher*)this)->matchStart = cursor+1;
+            ((StringMatcher*)this)->matchLimit = offset+1;
         }
     } else {
         for (i=0; i<pattern.length(); ++i) {
@@ -99,6 +112,10 @@ UMatchDegree StringMatcher::matches(const Replaceable& text,
                 }
             }
         }
+        // Record the match position
+        // cast away const -- should modify method to be non-const
+        ((StringMatcher*)this)->matchStart = offset;
+        ((StringMatcher*)this)->matchLimit = cursor;
     }
 
     offset = cursor;
@@ -128,8 +145,8 @@ UnicodeString& StringMatcher::toPattern(UnicodeString& result,
         result.append((UChar)41); /*)*/
     }
     // Flush quoteBuf out to result
-    TransliterationRule::appendToRule(result, (UChar32)(isSegment?41/*)*/:-1),
-                                          TRUE, escapeUnprintable, quoteBuf);
+    TransliterationRule::appendToRule(result, -1,
+                                      TRUE, escapeUnprintable, quoteBuf);
     return result;
 }
 
@@ -143,6 +160,32 @@ UBool StringMatcher::matchesIndexValue(uint8_t v) const {
     UChar32 c = pattern.char32At(0);
     const UnicodeMatcher *m = data.lookup(c);
     return (m == 0) ? ((c & 0xFF) == v) : m->matchesIndexValue(v);
+}
+
+/**
+ * Remove any match data.  This must be called before performing a
+ * set of matches with this segment.
+ */
+ void StringMatcher::resetMatch() {
+    matchStart = matchLimit = -1;
+}
+
+/**
+ * Return the start offset, in the match text, of the <em>rightmost</em>
+ * match.  This method may get moved up into the UnicodeMatcher if
+ * it turns out to be useful to generalize this.
+ */
+int32_t StringMatcher::getMatchStart() const {
+    return matchStart;
+}
+
+/**
+ * Return the limit offset, in the match text, of the <em>rightmost</em>
+ * match.  This method may get moved up into the UnicodeMatcher if
+ * it turns out to be useful to generalize this.
+ */
+int32_t StringMatcher::getMatchLimit() const {
+    return matchLimit;
 }
 
 U_NAMESPACE_END
