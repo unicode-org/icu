@@ -209,7 +209,7 @@ void TransliteratorTest::TestInstantiation() {
                                     rules, UTRANS_FORWARD, parseError,status);
             if (u == 0) {
                 errln(UnicodeString("FAIL: ") + id +
-                      ".toRules() => bad rules" +
+                      ".createFromRules() => bad rules" +
                       /*", parse error " + parseError.code +*/
                       ", line " + parseError.line +
                       ", offset " + parseError.offset +
@@ -2967,7 +2967,7 @@ void TransliteratorTest::TestAnchorMasking(){
     Transliterator* t = Transliterator::createFromRules("ID", rule, UTRANS_FORWARD,parseError,status);
     if(U_FAILURE(status)){
         errln(UnicodeString("FAIL: ") + "ID" +
-              ".toRules() => bad rules" +
+              ".createFromRules() => bad rules" +
               /*", parse error " + parseError.code +*/
               ", line " + parseError.line +
               ", offset " + parseError.offset +

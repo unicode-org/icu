@@ -495,29 +495,8 @@ unicodeDataLineFn(void *context,
     }
 
     /* get general category, field 2 */
-    /* we override the general category of some control characters */
-    switch(c) {
-    case 9:
-    case 0xb:
-    case 0x1f:
-        type = U_SPACE_SEPARATOR;
-        break;
-    case 0xc:
-        type = U_LINE_SEPARATOR;
-        break;
-    case 0xa:
-    case 0xd:
-    case 0x1c:
-    case 0x1d:
-    case 0x1e:
-    case 0x85:
-        type = U_PARAGRAPH_SEPARATOR;
-        break;
-    default:
-        *fields[2][1]=0;
-        type = (int8_t)tagValues[MakeProp(fields[2][0])];
-        break;
-    }
+    *fields[2][1]=0;
+    type = (int8_t)tagValues[MakeProp(fields[2][0])];
     if(u_charType(c)!=type) {
         log_err("error: u_charType(U+%04lx)==%u instead of %u\n", c, u_charType(c), type);
     }

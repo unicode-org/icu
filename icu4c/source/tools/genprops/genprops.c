@@ -525,23 +525,6 @@ bidiNames[U_CHAR_DIRECTION_COUNT]={
     "WS", "ON", "LRE", "LRO", "AL", "RLE", "RLO", "PDF", "NSM", "BN"
 };
 
-/* control code properties */
-static const struct {
-    uint32_t code;
-    uint8_t generalCategory;
-} controlProps[]={
-    /* TAB */   {0x9, U_SPACE_SEPARATOR},
-    /* VT */    {0xb, U_SPACE_SEPARATOR},
-    /* LF */    {0xa, U_PARAGRAPH_SEPARATOR},
-    /* FF */    {0xc, U_LINE_SEPARATOR},
-    /* CR */    {0xd, U_PARAGRAPH_SEPARATOR},
-    /* FS */    {0x1c, U_PARAGRAPH_SEPARATOR},
-    /* GS */    {0x1d, U_PARAGRAPH_SEPARATOR},
-    /* RS */    {0x1e, U_PARAGRAPH_SEPARATOR},
-    /* US */    {0x1f, U_SPACE_SEPARATOR},
-    /* NL */    {0x85, U_PARAGRAPH_SEPARATOR}
-};
-
 static struct {
     uint32_t first, last, props;
     char name[80];
@@ -713,15 +696,6 @@ unicodeDataLineFn(void *context,
         exit(U_PARSE_ERROR);
     }
     p.titleCase=value;
-
-    /* override properties for some common control characters */
-    if(p.generalCategory==U_CONTROL_CHAR) {
-        for(i=0; i<sizeof(controlProps)/sizeof(controlProps[0]); ++i) {
-            if(controlProps[i].code==p.code) {
-                p.generalCategory=controlProps[i].generalCategory;
-            }
-        }
-    }
 
     /* set additional properties from previously parsed files */
     if(mirrorIndex<mirrorCount && p.code==mirrorMappings[mirrorIndex][0]) {

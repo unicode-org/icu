@@ -30,17 +30,11 @@
 #include "utrie.h"
 #include "ustr_imp.h"
 
-/*
- * Since genprops overrides the general category for some control codes,
- * we need to hardcode ISO 8 controls for u_iscntrl(), u_isprint(), etc.
- */
-#define IS_ISO_8_CONTROL(c) ((uint32_t)(c)<0x20 || (uint32_t)((c)-0x7f)<=0x20)
-
 /* dynamically loaded Unicode character properties -------------------------- */
 
 /* fallback properties for the ASCII range if the data cannot be loaded */
 /* these are printed by genprops in verbose mode */
-static const uint32_t staticProps32Table[]={
+static uint32_t staticProps32Table[0xa0]={
     /* 0x00 */ 0x48f,
     /* 0x01 */ 0x48f,
     /* 0x02 */ 0x48f,
@@ -50,11 +44,11 @@ static const uint32_t staticProps32Table[]={
     /* 0x06 */ 0x48f,
     /* 0x07 */ 0x48f,
     /* 0x08 */ 0x48f,
-    /* 0x09 */ 0x20c,
-    /* 0x0a */ 0x1ce,
-    /* 0x0b */ 0x20c,
-    /* 0x0c */ 0x24d,
-    /* 0x0d */ 0x1ce,
+    /* 0x09 */ 0x20f,
+    /* 0x0a */ 0x1cf,
+    /* 0x0b */ 0x20f,
+    /* 0x0c */ 0x24f,
+    /* 0x0d */ 0x1cf,
     /* 0x0e */ 0x48f,
     /* 0x0f */ 0x48f,
     /* 0x10 */ 0x48f,
@@ -69,10 +63,10 @@ static const uint32_t staticProps32Table[]={
     /* 0x19 */ 0x48f,
     /* 0x1a */ 0x48f,
     /* 0x1b */ 0x48f,
-    /* 0x1c */ 0x1ce,
-    /* 0x1d */ 0x1ce,
-    /* 0x1e */ 0x1ce,
-    /* 0x1f */ 0x20c,
+    /* 0x1c */ 0x1cf,
+    /* 0x1d */ 0x1cf,
+    /* 0x1e */ 0x1cf,
+    /* 0x1f */ 0x20f,
     /* 0x20 */ 0x24c,
     /* 0x21 */ 0x297,
     /* 0x22 */ 0x297,
@@ -114,8 +108,8 @@ static const uint32_t staticProps32Table[]={
     /* 0x46 */ 0x2000001,
     /* 0x47 */ 0x2000001,
     /* 0x48 */ 0x2000001,
-    /* 0x49 */ 0x2000001,
-    /* 0x4a */ 0x2000001,
+    /* 0x49 */ 0x1, /* has exception */
+    /* 0x4a */ 0x300001, /* has exception */
     /* 0x4b */ 0x2000001,
     /* 0x4c */ 0x2000001,
     /* 0x4d */ 0x2000001,
@@ -146,7 +140,7 @@ static const uint32_t staticProps32Table[]={
     /* 0x66 */ 0x2000002,
     /* 0x67 */ 0x2000002,
     /* 0x68 */ 0x2000002,
-    /* 0x69 */ 0x2000002,
+    /* 0x69 */ 0x600002, /* has exception */
     /* 0x6a */ 0x2000002,
     /* 0x6b */ 0x2000002,
     /* 0x6c */ 0x2000002,
@@ -174,7 +168,7 @@ static const uint32_t staticProps32Table[]={
     /* 0x82 */ 0x48f,
     /* 0x83 */ 0x48f,
     /* 0x84 */ 0x48f,
-    /* 0x85 */ 0x1ce,
+    /* 0x85 */ 0x1cf,
     /* 0x86 */ 0x48f,
     /* 0x87 */ 0x48f,
     /* 0x88 */ 0x48f,
@@ -200,7 +194,7 @@ static const uint32_t staticProps32Table[]={
     /* 0x9c */ 0x48f,
     /* 0x9d */ 0x48f,
     /* 0x9e */ 0x48f,
-    /* 0x9f */ 0x48f
+    /* 0x9f */ 0x48f,
 };
 
 /*
@@ -424,18 +418,6 @@ u_charType(UChar32 c) {
     return (int8_t)GET_CATEGORY(props);
 }
 
-/* Gets the Unicode character's general category, as per the UCD.*/
-U_CAPI int8_t U_EXPORT2
-u_charUCDType(UChar32 c) {
-    if (IS_ISO_8_CONTROL(c)) {
-        return U_CONTROL_CHAR;
-    } else {
-        uint32_t props;
-        GET_PROPS(c, props);
-        return (int8_t)GET_CATEGORY(props);
-    }
-}
-
 /* Enumerate all code points with their general categories. */
 struct _EnumTypeCallback {
     UCharEnumTypeRange *enumRange;
@@ -547,26 +529,26 @@ u_isbase(UChar32 c) {
 /* Checks if the Unicode character is a control character.*/
 U_CAPI UBool U_EXPORT2
 u_iscntrl(UChar32 c) {
-    if(IS_ISO_8_CONTROL(c)) {
-        return TRUE;
-    } else {
-        uint32_t props;
-        GET_PROPS(c, props);
-        return (UBool)(
-               ((1UL<<GET_CATEGORY(props))&
-                (1UL<<U_CONTROL_CHAR|1UL<<U_FORMAT_CHAR|1UL<<U_LINE_SEPARATOR|1UL<<U_PARAGRAPH_SEPARATOR)
-               )!=0);
-    }
+    uint32_t props;
+    GET_PROPS(c, props);
+    return (UBool)(
+           ((1UL<<GET_CATEGORY(props))&
+            (1UL<<U_CONTROL_CHAR|1UL<<U_FORMAT_CHAR|1UL<<U_LINE_SEPARATOR|1UL<<U_PARAGRAPH_SEPARATOR)
+           )!=0);
 }
+
+/* Some control characters that are used as space. */
+#define IS_THAT_CONTROL_SPACE(c) \
+    ((c>=0x09 && c <= 0x0d) || (c>=0x1c && c <=0x1f) || c==0x85)
 
 /* Checks if the Unicode character is a space character.*/
 U_CAPI UBool U_EXPORT2
 u_isspace(UChar32 c) {
     uint32_t props;
     GET_PROPS(c, props);
-    return (UBool)(((1UL<<GET_CATEGORY(props))&
+    return (UBool)((((1UL<<GET_CATEGORY(props))&
             (1UL<<U_SPACE_SEPARATOR|1UL<<U_LINE_SEPARATOR|1UL<<U_PARAGRAPH_SEPARATOR)
-           )!=0);
+           )!=0) || IS_THAT_CONTROL_SPACE(c));
 }
 
 /* Checks if the Unicode character is a whitespace character.*/
@@ -574,27 +556,24 @@ U_CAPI UBool U_EXPORT2
 u_isWhitespace(UChar32 c) {
     uint32_t props;
     GET_PROPS(c, props);
-    return (UBool)(((1UL<<GET_CATEGORY(props))&
+    return (UBool)((((1UL<<GET_CATEGORY(props))&
             (1UL<<U_SPACE_SEPARATOR|1UL<<U_LINE_SEPARATOR|1UL<<U_PARAGRAPH_SEPARATOR)
            )!=0 &&
-           c!=0xa0 && c!=0x202f && c!=0xfeff); /* exclude no-break spaces */
+           c!=0xa0 && c!=0x202f && c!=0xfeff) || /* exclude no-break spaces */
+           IS_THAT_CONTROL_SPACE(c));
 }
 
 /* Checks if the Unicode character is printable.*/
 U_CAPI UBool U_EXPORT2
 u_isprint(UChar32 c) {
-    if(IS_ISO_8_CONTROL(c)) {
-        return FALSE;
-    } else {
-        uint32_t props;
-        GET_PROPS(c, props);
-        return (UBool)(
-                ((1UL<<GET_CATEGORY(props))&
-                ~(1UL<<U_UNASSIGNED|
-                  1UL<<U_CONTROL_CHAR|1UL<<U_FORMAT_CHAR|1UL<<U_PRIVATE_USE_CHAR|1UL<<U_SURROGATE|
-                  1UL<<U_GENERAL_OTHER_TYPES|1UL<<31)
-               )!=0);
-    }
+    uint32_t props;
+    GET_PROPS(c, props);
+    return (UBool)(
+            ((1UL<<GET_CATEGORY(props))&
+            ~(1UL<<U_UNASSIGNED|
+              1UL<<U_CONTROL_CHAR|1UL<<U_FORMAT_CHAR|1UL<<U_PRIVATE_USE_CHAR|1UL<<U_SURROGATE|
+              1UL<<U_GENERAL_OTHER_TYPES|1UL<<31)
+           )!=0);
 }
 
 /* Checks if the Unicode character can start a Unicode identifier.*/
@@ -1091,9 +1070,6 @@ u_charCellWidth(UChar32 ch)
 
     /* these Unicode character types are scattered throughout the Unicode range, so
      special-case for them*/
-    if(IS_ISO_8_CONTROL(ch)) {
-        return U_ZERO_WIDTH;
-    }
     switch (type) {
         case U_UNASSIGNED:
         case U_NON_SPACING_MARK:
