@@ -43,6 +43,7 @@ void TestISO_2022(void);
 void TestISO_2022_JP(void);
 void TestISO_2022_KR(void);
 void TestISO_2022_CN(void);
+void TestHZ(void);
 void TestISO_2022_JP_Next(void);
 void TestEBCDIC_STATEFUL(void);
 void TestLMBCS(void);
@@ -170,6 +171,7 @@ void addTestNewConvert(TestNode** root)
    addTest(root, &TestISO_2022_JP, "tsconv/nucnvtst/TestISO_2022_JP");
    addTest(root, &TestISO_2022_KR, "tsconv/nucnvtst/TestISO_2022_KR");
    addTest(root, &TestISO_2022_CN, "tsconv/nucnvtst/TestISO_2022_CN");
+   addTest(root, &TestHZ, "tsconv/nucnvtst/TestHZ");
    addTest(root, &TestISO_2022_JP_Next, "tsconv/nucnvtst/TestISO_2022_JP_Next");
    addTest(root, &TestEBCDIC_STATEFUL, "tsconv/nucnvtst/TestEBCDIC_STATEFUL");
    addTest(root, &TestLMBCS, "tsconv/nucnvtst/TestLMBCS");
@@ -1305,6 +1307,78 @@ TestISO_2022_JP_Next() {
         
    
 }
+void
+TestHZ() {
+    /* test input */
+    static const uint16_t in[]={
+            0x3000, 0x3001, 0x3002, 0x30FB, 0x02C9, 0x02C7, 0x00A8, 0x3003, 0x3005, 0x2015,
+            0xFF5E, 0x2016, 0x2026, 0x007E, 0x997C, 0x70B3, 0x75C5, 0x5E76, 0x73BB, 0x83E0, 
+            0x64AD, 0x62E8, 0x94B5, 0x000A, 0x6CE2, 0x535A, 0x52C3, 0x640F, 0x94C2, 0x7B94, 
+            0x4F2F, 0x5E1B, 0x8236, 0x000A, 0x8116, 0x818A, 0x6E24, 0x6CCA, 0x9A73, 0x6355, 
+            0x535C, 0x54FA, 0x8865, 0x000A, 0x57E0, 0x4E0D, 0x5E03, 0x6B65, 0x7C3F, 0x90E8, 
+            0x6016, 0x248F, 0x2490, 0x000A, 0x2491, 0x2492, 0x2493, 0x2494, 0x2495, 0x2496, 
+            0x2497, 0x2498, 0x2499, 0x000A, 0x249A, 0x249B, 0x2474, 0x2475, 0x2476, 0x2477, 
+            0x2478, 0x2479, 0x247A, 0x000A, 0x247B, 0x247C, 0x247D, 0x247E, 0x247F, 0x2480, 
+            0x2481, 0x2482, 0x2483, 0x000A, 0x0041, 0x0043, 0x0044, 0x0045, 0x0046, 0x007E, 
+            0x0048, 0x0049, 0x004A, 0x000A, 0x004B, 0x004C, 0x004D, 0x004E, 0x004F, 0x0050, 
+            0x0051, 0x0052, 0x0053, 0x000A, 0x0054, 0x0055, 0x0056, 0x0057, 0x0058, 0x0059, 
+            0x005A, 0x005B, 0x005C, 0x000A  
+      };
+	const UChar* uSource;
+	const UChar* uSourceLimit;
+	const char* cSource;
+	const char* cSourceLimit;
+	UChar *uTargetLimit =NULL;
+	UChar *uTarget;
+	char *cTarget;
+	const char *cTargetLimit;
+	char *cBuf; 
+	UChar *uBuf,*test;
+    int32_t uBufSize = 120;
+    UErrorCode errorCode=U_ZERO_ERROR;
+    UConverter *cnv;
+
+    cnv=ucnv_open("HZ", &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("Unable to open HZ converter: %s\n", u_errorName(errorCode));
+        return;
+    }
+
+	uBuf =  (UChar*)malloc(uBufSize * sizeof(UChar)*5);
+	cBuf =(char*)malloc(uBufSize * sizeof(char) * 5);
+	uSource = (const UChar*)&in[0];
+	uSourceLimit=(const UChar*)&in[sizeof(in)/2];
+	cTarget = cBuf;
+	cTargetLimit = cBuf +uBufSize*5;
+	uTarget = uBuf;
+	uTargetLimit = uBuf+ uBufSize*5;
+	ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&uSource,uSourceLimit,NULL,TRUE, &errorCode);
+    if(U_FAILURE(errorCode)){
+        log_err("ucnv_fromUnicode conversion failed reason %s\n", u_errorName(errorCode));
+        return;
+    }
+    cSource = cBuf;
+	cSourceLimit =cTarget;
+	test =uBuf;
+	ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,NULL,TRUE,&errorCode);
+	if(U_FAILURE(errorCode)){
+        log_err("ucnv_toUnicode conversion failed reason %s\n", u_errorName(errorCode));
+        return;
+    }
+    uSource = (const UChar*)&in[0];
+	while(uSource<uSourceLimit){
+		if(*test!=*uSource){
+  
+			log_err("Expected : \\u%04X \t Got: \\u%04X\n",*uSource,(int)*test) ;
+		}
+		*uSource++;
+		*test++;
+	}
+
+	ucnv_close(cnv);
+	free(uBuf);
+	free(cBuf);
+}
 
 void
 TestISO_2022_JP() {
@@ -1521,10 +1595,9 @@ TestISO_2022_CN() {
 		if(*test!=*uSource){
 			log_err("Expected : \\u%04X \t Got: \\u%04X\n",*uSource,(int)*test) ;
 		}
-                else
-                {
+        else{
 			log_verbose("      Got: \\u%04X\n",(int)*test) ;
-                }
+        }
 		*uSource++;
 		*test++;
 	}
