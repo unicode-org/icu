@@ -28,43 +28,35 @@ enum {
     UPPER_A   =((UChar)0x0041)  /*A*/
 };
 
-#define CASE(id,test) case id:                          \
-                          name = #test;                 \
-                          if (exec) {                   \
-                              logln(#test "---");       \
-                              logln((UnicodeString)""); \
-                              test();                   \
-                          }                             \
-                          break
-
 void
 TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
                                    const char* &name, char* /*par*/) {
     switch (index) {
-        CASE(0,TestInstantiation);
-        CASE(1,TestSimpleRules);
-        CASE(2,TestRuleBasedInverse);
-        CASE(3,TestKeyboard);
-        CASE(4,TestKeyboard2);
-        CASE(5,TestKeyboard3);
-        CASE(6,TestArabic);
-        CASE(7,TestCompoundKana);
-        CASE(8,TestCompoundHex);
-        CASE(9,TestFiltering);
-        CASE(10,TestInlineSet);
-        CASE(11,TestPatternQuoting);
-        CASE(12,TestJ277);
-        CASE(13,TestJ243);
-        CASE(14,TestJ329);
-        CASE(15,TestSegments);
-        CASE(16,TestCursorOffset);
-        CASE(17,TestArbitraryVariableValues);
-        CASE(18,TestPositionHandling);
-        CASE(19,TestHiraganaKatakana);
-        CASE(20,TestCopyJ476);
-        CASE(21,TestAnchors);
-        CASE(22,TestInterIndic);
-        CASE(23,TestFilterIDs);
+        TESTCASE(0,TestInstantiation);
+        TESTCASE(1,TestSimpleRules);
+        TESTCASE(2,TestRuleBasedInverse);
+        TESTCASE(3,TestKeyboard);
+        TESTCASE(4,TestKeyboard2);
+        TESTCASE(5,TestKeyboard3);
+        TESTCASE(6,TestArabic);
+        TESTCASE(7,TestCompoundKana);
+        TESTCASE(8,TestCompoundHex);
+        TESTCASE(9,TestFiltering);
+        TESTCASE(10,TestInlineSet);
+        TESTCASE(11,TestPatternQuoting);
+        TESTCASE(12,TestJ277);
+        TESTCASE(13,TestJ243);
+        TESTCASE(14,TestJ329);
+        TESTCASE(15,TestSegments);
+        TESTCASE(16,TestCursorOffset);
+        TESTCASE(17,TestArbitraryVariableValues);
+        TESTCASE(18,TestPositionHandling);
+        TESTCASE(19,TestHiraganaKatakana);
+        TESTCASE(20,TestCopyJ476);
+        TESTCASE(21,TestAnchors);
+        TESTCASE(22,TestInterIndic);
+        TESTCASE(23,TestFilterIDs);
+        TESTCASE(24,TestCaseMap);
         default: name = ""; break;
     }
 }
@@ -958,6 +950,36 @@ void TransliteratorTest::TestFilterIDs(void) {
         delete t;
         delete u;
     }
+}
+
+/**
+ * Test the case mapping transliterators.
+ */
+void TransliteratorTest::TestCaseMap(void) {
+    Transliterator* toUpper =
+        Transliterator::createInstance("Any-Upper[^xyzXYZ]");
+    Transliterator* toLower =
+        Transliterator::createInstance("Any-Lower[^xyzXYZ]");
+    Transliterator* toTitle =
+        Transliterator::createInstance("Any-Title[^xyzXYZ]");
+    if (toUpper==0 || toLower==0 || toTitle==0) {
+        errln("FAIL: createInstance returned NULL");
+        delete toUpper;
+        delete toLower;
+        delete toTitle;
+        return;
+    }
+
+    expect(*toUpper, "The quick brown fox jumped over the lazy dogs.",
+           "THE QUICK BROWN FOx JUMPED OVER THE LAzy DOGS.");
+    expect(*toLower, "The quIck brown fOX jUMPED OVER THE LAzY dogs.",
+           "the quick brown foX jumped over the lazY dogs.");
+    expect(*toTitle, "the quick brown foX jumped over the laZy dogs.",
+           "The Quick Brown FoX Jumped Over The LaZy Dogs.");
+
+    delete toUpper;
+    delete toLower;
+    delete toTitle;
 }
 
 //======================================================================
