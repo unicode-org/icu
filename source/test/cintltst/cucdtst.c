@@ -111,7 +111,9 @@ void addUnicodeTest(TestNode** root)
     addTest(root, &TestControlPrint, "tsutil/cucdtst/TestControlPrint");
     addTest(root, &TestIdentifier, "tsutil/cucdtst/TestIdentifier");
     addTest(root, &TestUnicodeData, "tsutil/cucdtst/TestUnicodeData");
+    addTest(root, &TestStringCopy, "tsutil/cucdtst/TestStringCopy");
     addTest(root, &TestStringFunctions, "tsutil/cucdtst/TestStringFunctions");
+    addTest(root, &TestStringSearching, "tsutil/cucdtst/TestStringSearching");
     addTest(root, &TestCharNames, "tsutil/cucdtst/TestCharNames");
     addTest(root, &TestMirroring, "tsutil/cucdtst/TestMirroring");
     addTest(root, &TestUnescape, "tsutil/cucdtst/TestUnescape");
@@ -568,17 +570,17 @@ static void TestUnicodeData()
     u_versionFromString(expectVersionArray, U_UNICODE_VERSION);
     u_getUnicodeVersion(versionArray);
     if(memcmp(versionArray, expectVersionArray, U_MAX_VERSION_LENGTH) != 0)
-      {
+    {
         log_err("Testing u_getUnicodeVersion() - expected " U_UNICODE_VERSION " got %d.%d.%d.%d\n",
         versionArray[0], versionArray[1], versionArray[2], versionArray[3]);
-      }
+    }
 
 #if defined(ICU_UNICODE_VERSION)
     /* test only happens where we have configure.in with UNICODE_VERSION - sanity check. */
     if(strcmp(U_UNICODE_VERSION, ICU_UNICODE_VERSION))
-      {
+    {
          log_err("Testing configure.in's ICU_UNICODE_VERSION - expected " U_UNICODE_VERSION " got " ICU_UNICODE_VERSION "\n");
-      }
+    }
 #endif
 
     if (u_charScript((UChar)0x0041 != U_BASIC_LATIN)) {
@@ -673,6 +675,7 @@ static void TestStringFunctions()
     int32_t i,j,k;
     UChar temp[40];
     char test[40];
+    char tempOut[40];
 
     setUpDataTable();
 
@@ -715,7 +718,7 @@ static void TestStringFunctions()
     }
 
 
-    log_verbose("Testing u_strncat \n");
+    log_verbose("Testing u_strncat\n");
     for(i=0,j=0;j<4; ++j)
     {
         k=u_strlen(dataTable[i][j]);
@@ -738,12 +741,13 @@ static void TestStringFunctions()
             log_err("something threw an error in u_strncpy()\n");
     }
 
-    log_verbose("Testing if u_strchr() works fine\n");
+    log_verbose("Testing u_strchr()\n");
 
     for(i=2,j=0;j<4;j++)
     {
         UChar *findPtr = u_strchr(dataTable[i][j],'_');
-        log_verbose("%s ", austrdup(findPtr));
+
+        log_verbose("%s ", u_austrcpy(tempOut, findPtr));
 
         if (findPtr == NULL || *findPtr != '_') {
             log_err("strchr can't find '_' in the string\n");
@@ -762,97 +766,277 @@ static void TestStringFunctions()
         log_err("There is an error in u_austrcpy()");
 
 
-    log_verbose("Testing u_uastrncpy() and u_uastrcpy()");
-    {
-        UChar *result=0;
-        UChar subString[5];
-        UChar uchars[]={0x61, 0x62, 0x63, 0x00};
-        u_uastrcpy(temp, "abc");
-        if(u_strcmp(temp, uchars) != 0) {
-            log_err("There is an error in u_uastrcpy() Expected %s Got %s\n", austrdup(uchars), austrdup(temp));
-        }
+cleanUpDataTable();
+}
 
-        temp[0] = 0xFB; /* load garbage into it */
-        temp[1] = 0xFB;
-        temp[2] = 0xFB;
-        temp[3] = 0xFB;
+static void TestStringSearching()
+{
+    UChar ucharBuf[255];
+    const UChar testString[] = {0x0061, 0x0062, 0x0063, 0x0064, 0x0064, 0x0061, 0x0000};
+    const UChar testSurrogateString[] = {0xdbff, 0x0061, 0x0062, 0xdbff, 0xdfff, 0x0063, 0x0064, 0x0064, 0xdbff, 0xdfff, 0xdb00, 0xdf00, 0x0061, 0x0000};
+    const UChar surrMatchSet1[] = {0xdbff, 0xdfff, 0x0000};
+    const UChar surrMatchSet2[] = {0x0061, 0x0062, 0xdbff, 0xdfff, 0x0000};
+    const UChar surrMatchSet3[] = {0xdb00, 0xdf00, 0xdbff, 0xdfff, 0x0000};
+    const UChar surrMatchSet4[] = {0x0000};
 
-        u_uastrncpy(temp, "abcabcabc", 3);
-        if(u_strncmp(uchars, temp, 3) != 0){
-            log_err("There is an error in u_uastrncpy() Expected %s Got %s\n", austrdup(uchars), austrdup(temp));
-        }
-        if(temp[3] != 0xFB) {
-            log_err("u_austrncpy wrote past it's bounds. Expected undisturbed byte at 3\n");
-        }
-        /*Testing u_strchr()*/
-        log_verbose("Testing u_strchr\n");
-        temp[0]=0x42;
-        temp[1]=0x62;
-        temp[2]=0x62;
-        temp[3]=0x63;
-        temp[4]=0xd841;
-        temp[5]=0xd841;
-        temp[6]=0xdc02;
-        temp[7]=0;
-        result=u_strchr(temp, (UChar)0x62);
-        if(result != temp+1){
-            log_err("There is an error in u_strchr() Expected match at position 1 Got %ld (pointer 0x%lx)\n", result-temp, result);
-        }
-        /*Testing u_strstr()*/
-        log_verbose("Testing u_strstr\n");
-        subString[0]=0x62;
-        subString[1]=0x63;
-        subString[2]=0;
-        result=u_strstr(temp, subString);
-        if(result != temp+2){
-            log_err("There is an error in u_strstr() Expected match at position 2 Got %ld (pointer 0x%lx)\n", result-temp, result);
-        }
-        result=u_strstr(temp, subString+2); /* subString+2 is an empty string */
-        if(result != temp){
-            log_err("There is an error in u_strstr() Expected match at position 0 Got %ld (pointer 0x%lx)\n", result-temp, result);
-        }
-        result=u_strstr(subString, temp);
-        if(result != NULL){
-            log_err("There is an error in u_strstr() Expected NULL \"not found\" Got non-NULL \"found\" result\n");
-        }
+    log_verbose("Testing u_strpbrk()");
 
-        /*Testing u_strchr32*/
-        log_verbose("Testing u_strchr32\n");
-        result=u_strchr32(temp, (UChar32)0x62);
-        if(result != temp+1){
-            log_err("There is an error in u_strchr32() Expected match at position 1 Got %ld (pointer 0x%lx)\n", result-temp, result);
-        }
-        result=u_strchr32(temp, (UChar32)0xfb);
-        if(result != NULL){
-            log_err("There is an error in u_strchr32() Expected NULL \"not found\" Got non-NULL \"found\" result\n");
-        }
-        result=u_strchr32(temp, (UChar32)0x20402);
-        if(result != temp+5){
-            log_err("There is an error in u_strchr32() Expected match at position 5 Got %ld (pointer 0x%lx)\n", result-temp, result);
-        }
-
+    if (u_strpbrk(testString, u_uastrcpy(ucharBuf, "a")) != &testString[0]) {
+        log_err("u_strpbrk couldn't find first letter a.\n");
+    }
+    if (u_strpbrk(testString, u_uastrcpy(ucharBuf, "dc")) != &testString[2]) {
+        log_err("u_strpbrk couldn't find d or c.\n");
+    }
+    if (u_strpbrk(testString, u_uastrcpy(ucharBuf, "cd")) != &testString[2]) {
+        log_err("u_strpbrk couldn't find c or d.\n");
+    }
+    if (u_strpbrk(testString, u_uastrcpy(ucharBuf, "cdh")) != &testString[2]) {
+        log_err("u_strpbrk couldn't find c, d or h.\n");
+    }
+    if (u_strpbrk(testString, u_uastrcpy(ucharBuf, "f")) != NULL) {
+        log_err("u_strpbrk didn't return NULL for \"f\".\n");
+    }
+    if (u_strpbrk(testString, u_uastrcpy(ucharBuf, "fg")) != NULL) {
+        log_err("u_strpbrk didn't return NULL for \"fg\".\n");
+    }
+    if (u_strpbrk(testString, u_uastrcpy(ucharBuf, "gf")) != NULL) {
+        log_err("u_strpbrk didn't return NULL for \"gf\".\n");
     }
 
-    cleanUpDataTable();
+    log_verbose("Testing u_strpbrk() with surrogates");
 
-    /* test u_strcmpCodePointOrder() */
+    if (u_strpbrk(testSurrogateString, u_uastrcpy(ucharBuf, "a")) != &testSurrogateString[1]) {
+        log_err("u_strpbrk couldn't find first letter a.\n");
+    }
+    if (u_strpbrk(testSurrogateString, u_uastrcpy(ucharBuf, "dc")) != &testSurrogateString[5]) {
+        log_err("u_strpbrk couldn't find d or c.\n");
+    }
+    if (u_strpbrk(testSurrogateString, u_uastrcpy(ucharBuf, "cd")) != &testSurrogateString[5]) {
+        log_err("u_strpbrk couldn't find c or d.\n");
+    }
+    if (u_strpbrk(testSurrogateString, u_uastrcpy(ucharBuf, "cdh")) != &testSurrogateString[5]) {
+        log_err("u_strpbrk couldn't find c, d or h.\n");
+    }
+    if (u_strpbrk(testSurrogateString, u_uastrcpy(ucharBuf, "f")) != NULL) {
+        log_err("u_strpbrk didn't return NULL for \"f\".\n");
+    }
+    if (u_strpbrk(testSurrogateString, u_uastrcpy(ucharBuf, "fg")) != NULL) {
+        log_err("u_strpbrk didn't return NULL for \"fg\".\n");
+    }
+    if (u_strpbrk(testSurrogateString, u_uastrcpy(ucharBuf, "gf")) != NULL) {
+        log_err("u_strpbrk didn't return NULL for \"gf\".\n");
+    }
+    if (u_strpbrk(testSurrogateString, surrMatchSet1) != &testSurrogateString[3]) {
+        log_err("u_strpbrk couldn't find \"0xdbff, 0xdfff\".\n");
+    }
+    if (u_strpbrk(testSurrogateString, surrMatchSet2) != &testSurrogateString[1]) {
+        log_err("u_strpbrk couldn't find \"a, b, 0xdbff, 0xdfff\".\n");
+    }
+    if (u_strpbrk(testSurrogateString, surrMatchSet3) != &testSurrogateString[3]) {
+        log_err("u_strpbrk couldn't find \"0xdb00, 0xdf00, 0xdbff, 0xdfff\".\n");
+    }
+    if (u_strpbrk(testSurrogateString, surrMatchSet4) != NULL) {
+        log_err("u_strpbrk should have returned NULL for empty string.\n");
+    }
+
+    log_verbose("Testing u_strcspn()");
+
+    if (u_strcspn(testString, u_uastrcpy(ucharBuf, "a")) != 0) {
+        log_err("u_strcspn couldn't find first letter a.\n");
+    }
+    if (u_strcspn(testString, u_uastrcpy(ucharBuf, "dc")) != 2) {
+        log_err("u_strcspn couldn't find d or c.\n");
+    }
+    if (u_strcspn(testString, u_uastrcpy(ucharBuf, "cd")) != 2) {
+        log_err("u_strcspn couldn't find c or d.\n");
+    }
+    if (u_strcspn(testString, u_uastrcpy(ucharBuf, "cdh")) != 2) {
+        log_err("u_strcspn couldn't find c, d or h.\n");
+    }
+    if (u_strcspn(testString, u_uastrcpy(ucharBuf, "f")) != u_strlen(testString)) {
+        log_err("u_strcspn didn't return NULL for \"f\".\n");
+    }
+    if (u_strcspn(testString, u_uastrcpy(ucharBuf, "fg")) != u_strlen(testString)) {
+        log_err("u_strcspn didn't return NULL for \"fg\".\n");
+    }
+    if (u_strcspn(testString, u_uastrcpy(ucharBuf, "gf")) != u_strlen(testString)) {
+        log_err("u_strcspn didn't return NULL for \"gf\".\n");
+    }
+
+    log_verbose("Testing u_strcspn() with surrogates");
+
+    if (u_strcspn(testSurrogateString, u_uastrcpy(ucharBuf, "a")) != 1) {
+        log_err("u_strcspn couldn't find first letter a.\n");
+    }
+    if (u_strcspn(testSurrogateString, u_uastrcpy(ucharBuf, "dc")) != 5) {
+        log_err("u_strcspn couldn't find d or c.\n");
+    }
+    if (u_strcspn(testSurrogateString, u_uastrcpy(ucharBuf, "cd")) != 5) {
+        log_err("u_strcspn couldn't find c or d.\n");
+    }
+    if (u_strcspn(testSurrogateString, u_uastrcpy(ucharBuf, "cdh")) != 5) {
+        log_err("u_strcspn couldn't find c, d or h.\n");
+    }
+    if (u_strcspn(testSurrogateString, u_uastrcpy(ucharBuf, "f")) != u_strlen(testSurrogateString)) {
+        log_err("u_strcspn didn't return NULL for \"f\".\n");
+    }
+    if (u_strcspn(testSurrogateString, u_uastrcpy(ucharBuf, "fg")) != u_strlen(testSurrogateString)) {
+        log_err("u_strcspn didn't return NULL for \"fg\".\n");
+    }
+    if (u_strcspn(testSurrogateString, u_uastrcpy(ucharBuf, "gf")) != u_strlen(testSurrogateString)) {
+        log_err("u_strcspn didn't return NULL for \"gf\".\n");
+    }
+    if (u_strcspn(testSurrogateString, surrMatchSet1) != 3) {
+        log_err("u_strcspn couldn't find \"0xdbff, 0xdfff\".\n");
+    }
+    if (u_strcspn(testSurrogateString, surrMatchSet2) != 1) {
+        log_err("u_strcspn couldn't find \"a, b, 0xdbff, 0xdfff\".\n");
+    }
+    if (u_strcspn(testSurrogateString, surrMatchSet3) != 3) {
+        log_err("u_strcspn couldn't find \"0xdb00, 0xdf00, 0xdbff, 0xdfff\".\n");
+    }
+    if (u_strcspn(testSurrogateString, surrMatchSet4) != u_strlen(testSurrogateString)) {
+        log_err("u_strcspn should have returned strlen for empty string.\n");
+    }
+
+
+    log_verbose("Testing u_strspn()");
+
+    if (u_strspn(testString, u_uastrcpy(ucharBuf, "a")) != 1) {
+        log_err("u_strspn couldn't skip first letter a.\n");
+    }
+    if (u_strspn(testString, u_uastrcpy(ucharBuf, "ab")) != 2) {
+        log_err("u_strspn couldn't skip a or b.\n");
+    }
+    if (u_strspn(testString, u_uastrcpy(ucharBuf, "ba")) != 2) {
+        log_err("u_strspn couldn't skip a or b.\n");
+    }
+    if (u_strspn(testString, u_uastrcpy(ucharBuf, "f")) != 0) {
+        log_err("u_strspn didn't return 0 for \"f\".\n");
+    }
+    if (u_strspn(testString, u_uastrcpy(ucharBuf, "dc")) != 0) {
+        log_err("u_strspn couldn't find first letter a (skip d or c).\n");
+    }
+    if (u_strspn(testString, u_uastrcpy(ucharBuf, "abcd")) != u_strlen(testString)) {
+        log_err("u_strspn couldn't skip over the whole string.\n");
+    }
+    if (u_strspn(testString, u_uastrcpy(ucharBuf, "")) != 0) {
+        log_err("u_strspn should have returned 0 for empty string.\n");
+    }
+
+    log_verbose("Testing u_strspn() with surrogates");
     {
-        /* these strings are in ascending order */
-        static const UChar strings[5][3]={
-            { 0x61, 0 },            /* U+0061 */
-            { 0x20ac, 0 },          /* U+20ac */
-            { 0xff61, 0 },          /* U+ff61 */
-            { 0xd800, 0xdc02, 0 },  /* U+10002 */
-            { 0xd84d, 0xdc56, 0 }   /* U+23456 */
-        };
+        const UChar surrogateStringWithoutIllegal[] = {0x0061, 0x0062, 0xdbff, 0xdfff, 0x0063, 0x0064, 0x0064, 0xdbff, 0xdfff, 0xdb00, 0xdf00, 0x0061, 0x0000};
+        const UChar skip1[] = {0x0061, 0x0062, 0xdbff, 0xdfff, 0x0000};
 
-        for(i=0; i<4; ++i) {
-            if(u_strcmpCodePointOrder(strings[i], strings[i+1])>=0) {
-                log_err("error: u_strcmpCodePointOrder() fails for string %d and the following one\n", i);
-            }
+        if (u_strspn(surrogateStringWithoutIllegal, u_uastrcpy(ucharBuf, "a")) != 1) {
+            log_err("u_strspn couldn't skip first letter a.\n");
+        }
+        if (u_strspn(surrogateStringWithoutIllegal, u_uastrcpy(ucharBuf, "ab")) != 2) {
+            log_err("u_strspn couldn't skip 0xdbff or a.\n");
+        }
+        if (u_strspn(surrogateStringWithoutIllegal, u_uastrcpy(ucharBuf, "ba")) != 2) {
+            log_err("u_strspn couldn't skip 0xdbff or a.\n");
+        }
+        if (u_strspn(surrogateStringWithoutIllegal, u_uastrcpy(ucharBuf, "f")) != 0) {
+            log_err("u_strspn couldn't skip d or c (skip first letter).\n");
+        }
+        if (u_strspn(surrogateStringWithoutIllegal, u_uastrcpy(ucharBuf, "dc")) != 0) {
+            log_err("u_strspn couldn't skip d or c (skip first letter).\n");
+        }
+        if (u_strspn(surrogateStringWithoutIllegal, u_uastrcpy(ucharBuf, "cd")) != 0) {
+            log_err("u_strspn couldn't skip d or c (skip first letter).\n");
+        }
+        if (u_strspn(surrogateStringWithoutIllegal, surrogateStringWithoutIllegal) != u_strlen(surrogateStringWithoutIllegal)) {
+            log_err("u_strspn couldn't skip whole string.\n");
+        }
+        if (u_strspn(surrogateStringWithoutIllegal, surrMatchSet1) != 0) {
+            log_err("u_strspn couldn't skip \"0xdbff, 0xdfff\" (get first letter).\n");
+        }
+        if (u_strspn(surrogateStringWithoutIllegal, surrMatchSet2) != 4) {
+            log_err("u_strspn couldn't skip \"a, b, 0xdbff, 0xdfff\".\n");
+        }
+        if (u_strspn(surrogateStringWithoutIllegal, surrMatchSet4) != 0) {
+            log_err("u_strspn should have returned 0 for empty string.\n");
         }
     }
 }
+
+static void TestStringCopy()
+{
+    UChar temp[40];
+    UChar *result=0;
+    UChar subString[5];
+    UChar uchars[]={0x61, 0x62, 0x63, 0x00};
+
+    log_verbose("Testing u_uastrncpy() and u_uastrcpy()");
+
+    u_uastrcpy(temp, "abc");
+    if(u_strcmp(temp, uchars) != 0) {
+        log_err("There is an error in u_uastrcpy() Expected %s Got %s\n", austrdup(uchars), austrdup(temp));
+    }
+
+    temp[0] = 0xFB; /* load garbage into it */
+    temp[1] = 0xFB;
+    temp[2] = 0xFB;
+    temp[3] = 0xFB;
+
+    u_uastrncpy(temp, "abcabcabc", 3);
+    if(u_strncmp(uchars, temp, 3) != 0){
+        log_err("There is an error in u_uastrncpy() Expected %s Got %s\n", austrdup(uchars), austrdup(temp));
+    }
+    if(temp[3] != 0xFB) {
+        log_err("u_austrncpy wrote past it's bounds. Expected undisturbed byte at 3\n");
+    }
+    /*Testing u_strchr()*/
+    log_verbose("Testing u_strchr\n");
+    temp[0]=0x42;
+    temp[1]=0x62;
+    temp[2]=0x62;
+    temp[3]=0x63;
+    temp[4]=0xd841;
+    temp[5]=0xd841;
+    temp[6]=0xdc02;
+    temp[7]=0;
+    result=u_strchr(temp, (UChar)0x62);
+    if(result != temp+1){
+        log_err("There is an error in u_strchr() Expected match at position 1 Got %ld (pointer 0x%lx)\n", result-temp, result);
+    }
+    /*Testing u_strstr()*/
+    log_verbose("Testing u_strstr\n");
+    subString[0]=0x62;
+    subString[1]=0x63;
+    subString[2]=0;
+    result=u_strstr(temp, subString);
+    if(result != temp+2){
+        log_err("There is an error in u_strstr() Expected match at position 2 Got %ld (pointer 0x%lx)\n", result-temp, result);
+    }
+    result=u_strstr(temp, subString+2); /* subString+2 is an empty string */
+    if(result != temp){
+        log_err("There is an error in u_strstr() Expected match at position 0 Got %ld (pointer 0x%lx)\n", result-temp, result);
+    }
+    result=u_strstr(subString, temp);
+    if(result != NULL){
+        log_err("There is an error in u_strstr() Expected NULL \"not found\" Got non-NULL \"found\" result\n");
+    }
+
+    /*Testing u_strchr32*/
+    log_verbose("Testing u_strchr32\n");
+    result=u_strchr32(temp, (UChar32)0x62);
+    if(result != temp+1){
+        log_err("There is an error in u_strchr32() Expected match at position 1 Got %ld (pointer 0x%lx)\n", result-temp, result);
+    }
+    result=u_strchr32(temp, (UChar32)0xfb);
+    if(result != NULL){
+        log_err("There is an error in u_strchr32() Expected NULL \"not found\" Got non-NULL \"found\" result\n");
+    }
+    result=u_strchr32(temp, (UChar32)0x20402);
+    if(result != temp+5){
+        log_err("There is an error in u_strchr32() Expected match at position 5 Got %ld (pointer 0x%lx)\n", result-temp, result);
+    }
+
+}
+
 
 /* test u_charName() -------------------------------------------------------- */
 

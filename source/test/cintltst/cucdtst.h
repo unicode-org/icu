@@ -27,7 +27,9 @@ static void TestMisc(void);
 static void TestControlPrint(void);
 static void TestIdentifier(void);
 static void TestUnicodeData(void);
+static void TestStringCopy(void);
 static void TestStringFunctions(void);
+static void TestStringSearching(void);
 
 /* internal methods used */
 static int32_t MakeProp(char* str);
