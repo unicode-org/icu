@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2001, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-os390,v 1.45 2002/08/12 20:30:23 grhoten-oss Exp $
+## $Id: mh-os390,v 1.46 2003/03/19 01:56:29 grhoten-oss Exp $
 
 ###################################################################
 #                    IMPORTANT NOTE                               #
@@ -72,9 +72,18 @@ LD_RPATH=	-I
 ## Environment variable to set a runtime search path
 LDLIBRARYPATH_ENVVAR = LIBPATH
 
+## An import library (a.k.a. sidedeck) is needed for z/OS and MSVC
+IMPORT_LIB_EXT = .lib
+
 ## Versioned target for a shared library.
 FINAL_SO_TARGET=  $(basename $(SO_TARGET))$(SO_TARGET_VERSION)$(ICULIBSUFFIX).$(SO)
 MIDDLE_SO_TARGET= $(basename $(SO_TARGET))$(SO_TARGET_VERSION_MAJOR)$(ICULIBSUFFIX).$(SO)
+
+## Versioned import library names.
+IMPORT_LIB = $(LIBICU)$(TARGET_STUBNAME)$(ICULIBSUFFIX)$(IMPORT_LIB_EXT)
+IMPORT_STUBDATA_LIB = $(LIBICU)$(TARGET_STUBNAME)$(ICULIBSUFFIX)$(STUB_SUFFIX)$(IMPORT_LIB_EXT)
+FINAL_IMPORT_LIB = $(LIBICU)$(TARGET_STUBNAME)$(SO_TARGET_VERSION_MAJOR)$(ICULIBSUFFIX)$(IMPORT_LIB_EXT)
+FINAL_IMPORT_STUBDATA_LIB = $(LIBICU)$(TARGET_STUBNAME)$(SO_TARGET_VERSION)$(ICULIBSUFFIX)$(STUB_SUFFIX)$(IMPORT_LIB_EXT)
 
 ## Shared object suffix (switch to dll for shared library build)
 SO = dll

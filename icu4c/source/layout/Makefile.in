@@ -145,6 +145,11 @@ ifneq ($(FINAL_SO_TARGET),$(SO_TARGET))
 	cd $(DESTDIR)$(libdir) && $(RM) $(SO_TARGET) && ln -s $(FINAL_SO_TARGET) $(SO_TARGET)
 endif
 endif
+ifneq ($(IMPORT_LIB_EXT),)
+	$(INSTALL-L) $(FINAL_IMPORT_LIB) $(DESTDIR)$(libdir)/$(FINAL_IMPORT_LIB)
+	cd $(DESTDIR)$(libdir) && $(RM) $(IMPORT_LIB) && ln -s $(FINAL_IMPORT_LIB) $(IMPORT_LIB)
+endif
+
 
 install-headers:
 	$(MKINSTALLDIRS) $(DESTDIR)$(includedir)/layout
