@@ -69,11 +69,11 @@ icu4c/source/samples/ucnv/data02.bin -text
 icu4c/source/test/testdata/importtest.bin -text
 icu4c/source/test/testdata/ja_data.bin -text
 icu4c/source/test/testdata/uni-text.bin -text
-icu4j/src/com/ibm/icu/dev/data/ICULocaleData.jar -text
 icu4j/src/com/ibm/icu/dev/data/holidays_jp.ucs -text
 icu4j/src/com/ibm/icu/dev/data/rbbi/english.dict -text
 icu4j/src/com/ibm/icu/dev/data/thai6.ucs -text
 icu4j/src/com/ibm/icu/dev/data/unicode/Draft-TestSuite.txt -text
+icu4j/src/com/ibm/icu/impl/data/ICULocaleData.jar -text
 icu4j/src/com/ibm/icu/impl/data/thai_dict -text
 icu4j/src/com/ibm/icu/impl/data/unames.dat -text
 icu4j/src/com/ibm/icu/impl/data/unorm.dat -text
