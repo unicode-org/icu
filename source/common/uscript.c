@@ -62,6 +62,7 @@ scriptNames[]={
    { "KANNADA",             USCRIPT_KANNADA     },
    { "KATAKANA",            USCRIPT_KATAKANA    },
    { "KHMER",               USCRIPT_KHMER       },
+   { "LAO",                 USCRIPT_LAO         },
    { "LATIN",               USCRIPT_LATIN       },
    { "MALAYALAM",           USCRIPT_MALAYALAM   },
    { "MONGOLIAN",           USCRIPT_MONGOLIAN   },
