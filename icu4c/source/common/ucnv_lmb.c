@@ -521,7 +521,7 @@ const UConverterStaticData _LMBCSStaticData##n={\
     1, { 0x3f, 0, 0, 0 } \
 };\
 const UConverterSharedData _LMBCSData##n={\
-    sizeof(UConverterSharedData), ~0,\
+    sizeof(UConverterSharedData), ~((uint32_t) 0),\
     NULL, NULL, &_LMBCSStaticData##n, FALSE, &_LMBCSImpl##n, \
     0 \
 };
@@ -664,7 +664,7 @@ LMBCSConversionWorker (
 
    ulmbcs_byte_t  mbChar [ULMBCS_CHARSIZE_MAX];
    ulmbcs_byte_t  * pmbChar = mbChar;
-   UBool isDoubleByteGroup = (group >= ULMBCS_DOUBLEOPTGROUP_START) ? TRUE : FALSE;
+   UBool isDoubleByteGroup = (UBool)((group >= ULMBCS_DOUBLEOPTGROUP_START) ? TRUE : FALSE);
    UErrorCode localErr = U_ZERO_ERROR;
    int bytesConverted =0;
 
