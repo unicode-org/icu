@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2003, International Business Machines
+*   Copyright (C) 1999-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************/
@@ -15,7 +15,7 @@
  *         wrapper functions.
  *
  *----------------------------------------------------------------------------*/
-#include "unicode/utypes.h"
+#include "unicode/putil.h"
 
 
 #include "udatamem.h"
