@@ -217,7 +217,7 @@ ucnv_compareNames(const char *name1, const char *name2);
  * also between adjacent options.</p>
  *
  * @param converterName : name of the uconv table, may have options appended
- * @param err outgoing error status <TT>U_MEMORY_ALLOCATION_ERROR, TABLE_NOT_FOUND</TT>
+ * @param err outgoing error status <TT>U_MEMORY_ALLOCATION_ERROR, U_FILE_ACCESS_ERROR</TT>
  * @return the created Unicode converter object, or <TT>NULL</TT> if an error occured
  * @see ucnv_openU
  * @see ucnv_openCCSID
@@ -240,7 +240,7 @@ ucnv_open   (const char *converterName, UErrorCode * err);
  * @param converterName : name of the uconv table in a zero terminated 
  *        Unicode string
  * @param err outgoing error status <TT>U_MEMORY_ALLOCATION_ERROR, 
- *        TABLE_NOT_FOUND</TT>
+ *        U_FILE_ACCESS_ERROR</TT>
  * @return the created Unicode converter object, or <TT>NULL</TT> if an 
  *        error occured
  * @see ucnv_open
@@ -302,7 +302,7 @@ ucnv_openU (const UChar * name,
  *
  * @param codepage codepage number to create
  * @param platform the platform in which the codepage number exists
- * @param err error status <TT>U_MEMORY_ALLOCATION_ERROR, TABLE_NOT_FOUND</TT>
+ * @param err error status <TT>U_MEMORY_ALLOCATION_ERROR, U_FILE_ACCESS_ERROR</TT>
  * @return the created Unicode converter object, or <TT>NULL</TT> if an error
  *   occured.
  * @see ucnv_open
