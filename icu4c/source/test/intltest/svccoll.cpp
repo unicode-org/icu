@@ -491,7 +491,11 @@ int32_t CollationServiceTest::checkStringEnumeration(const char* msg,
         }
     }
     // can't get pesky operator+(const US&, foo) to cooperate; use toString
+#if !UCONFIG_NO_FORMATTING
     logln(UnicodeString() + msg + " = [" + buf + "] (" + toString(i) + ")");
+#else
+    logln(UnicodeString() + msg + " = [" + buf + "] (??? NO_FORMATTING)");
+#endif	
     assertTrue("count verified", i==n);
     // did we see all expected strings?
     if (((1<<expectedCount)-1) != seenMask) {
