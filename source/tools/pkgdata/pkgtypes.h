@@ -98,6 +98,7 @@ typedef struct UPKGOptions_
   const char *comment;     /* comment string */
   const char *makeFile;    /* Makefile path */
   const char *install;     /* Where to install to (NULL = don't install) */
+  const char *icuroot;     /* where does ICU lives */
   bool_t     rebuild;
   bool_t     clean;
   bool_t     nooutput;
