@@ -281,10 +281,22 @@ struct UCharIterator {
     int32_t length;
 
     /**
+     * (protected) Start index or similar.
+     * Not used by caller.
+     */
+    int32_t start;
+
+    /**
      * (protected) Current index or similar.
      * Not used by caller.
      */
     int32_t index;
+
+    /**
+     * (protected) Limit index or similar.
+     * Not used by caller.
+     */
+    int32_t limit;
 
     /**
      * (public) Moves the current position relative to the start or end of the
@@ -340,7 +352,7 @@ struct UCharIterator {
  * Internal API for iterative normalizing - see Normalizer.
  * @internal
  */
-U_CFUNC int32_t
+U_CAPI int32_t U_EXPORT2
 unorm_nextNormalize(UChar *dest, int32_t destCapacity,
                     UCharIterator *src,
                     UNormalizationMode mode, UBool ignoreHangul,
@@ -350,7 +362,7 @@ unorm_nextNormalize(UChar *dest, int32_t destCapacity,
  * Internal API for iterative normalizing - see Normalizer.
  * @internal
  */
-U_CFUNC int32_t
+U_CAPI int32_t U_EXPORT2
 unorm_previousNormalize(UChar *dest, int32_t destCapacity,
                         UCharIterator *src,
                         UNormalizationMode mode, UBool ignoreHangul,

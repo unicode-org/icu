@@ -56,7 +56,7 @@ characterIteratorPrevious(UCharIterator *iter) {
 }
 
 static const UCharIterator characterIteratorWrapper={
-    0, 0, 0,
+    0, 0, 0, 0, 0,
     characterIteratorMove,
     characterIteratorHasNext,
     characterIteratorHasPrevious,
