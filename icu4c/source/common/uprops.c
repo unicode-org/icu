@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002, International Business Machines
+*   Copyright (C) 2002-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -156,8 +156,6 @@ u_hasBinaryProperty(UChar32 c, UProperty which) {
     if(which<UCHAR_BINARY_START || UCHAR_BINARY_LIMIT<=which) {
         /* not a known binary property */
         return FALSE;
-    } else if(which==UCHAR_CASE_SENSITIVE) {
-        return uprv_isCaseSensitive(c);
     } else if(which==UCHAR_FULL_COMPOSITION_EXCLUSION) {
         return unorm_internalIsFullCompositionExclusion(c);
     } else {
