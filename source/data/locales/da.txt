@@ -318,7 +318,7 @@ da {
         he { "Hebraisk" }
         hr { "Kroatisk" }
         hu { "Ungarsk" }
-        in { "Indonesisk" }
+        id { "Indonesisk" }
         it { "Italiensk" }
         ja { "Japansk" }
         ka { "Georgisk" }
