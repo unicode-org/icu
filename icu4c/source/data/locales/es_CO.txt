@@ -38,6 +38,7 @@ es_CO {
 
     // Currency display names
     Currencies {
-        COP { "$", "COP" }
+        COP { "$", "Peso de Colombia" }
+        USD { "US$", "D\u00F3lar Americano" }
     }
 }

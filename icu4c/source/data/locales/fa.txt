@@ -717,7 +717,6 @@ fa {
 
     // Currency display names
     Currencies {
-        INR { "\u20A8", "INR" }
         IRR { "\uFDFC", "IRR" }
     }
 }

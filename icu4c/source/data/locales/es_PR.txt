@@ -37,6 +37,6 @@ es_PR {
 
     // Currency display names
     Currencies {
-        USD { "$", "USD" }
+        USD { "$", "D\u00F3lar Americano" }
     }
 }

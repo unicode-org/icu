@@ -42,8 +42,4 @@ en_IN {
         "##,##,##0%",
         "#E0",
     }
-
-    Currencies {
-        INR { "=0#Rs|1#Re|1<Rs", "=0#Rupees|1#Rupee|1<Rupees" }
-    }
 }

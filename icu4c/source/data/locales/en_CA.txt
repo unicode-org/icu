@@ -181,5 +181,6 @@ en_CA {
     // Currency display names
     Currencies {
         CAD { "$", "Canadian Dollar" }
+        USD { "US$", "US Dollar" }
     }
 }

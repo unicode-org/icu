@@ -2476,7 +2476,7 @@ ja {
         EEK { "EEK", "\u30AF\u30EB\u30FC\u30F3" } // Kroon
         EGP { "EGP", "\u30A8\u30B8\u30D7\u30C8 \u30DD\u30F3\u30C9" } // Egyptian Pound
         EUR { "\u20AC", "\u30E6\u30FC\u30ED" } // Euro
-        GBP { "GBP", "\u82F1\u8CA8\u30DD\u30F3\u30C9" } // Pound Sterling
+        GBP { "\u00A3", "\u82F1\u8CA8\u30DD\u30F3\u30C9" } // Pound Sterling
         GEL { "GEL", "\u30E9\u30EA" } // Lari
         GTQ { "GTQ", "\u30B1\u30C3\u30C4\u30A1\u30EB" } // Quetzal
         HKD { "HKD", "\u9999\u6E2F\u30C9\u30EB" } // Hong Kong Dollar
@@ -2494,7 +2494,7 @@ ja {
         JPY { "\uFFE5", "\u5186" } // Yen: JAPAN (JP)
         KES { "KES", "\u30B1\u30CB\u30A2 \u30B7\u30EA\u30F3\u30B0" } // Kenyan Shilling
         KGS { "KGS", "\u30BD\u30E0" } // Som
-        KRW { "\u20A9", "\u30A6\u30A9\u30F3" } // Won
+        KRW { "\uFFE6", "\u30A6\u30A9\u30F3" } // Won
         KWD { "KWD", "\u30AF\u30A6\u30A7\u30FC\u30C8 \u30C7\u30A3\u30FC\u30CA\u30FC\u30EB" } // Kuwaiti Dinar
         KZT { "KZT", "\u30C6\u30F3\u30B2" } // Tenge
         LBP { "LBP", "\u30EC\u30D0\u30CE\u30F3 \u30DD\u30F3\u30C9" } // Lebanese Pound
@@ -2533,11 +2533,11 @@ ja {
         TTD { "TTD", "\u30C8\u30EA\u30CB\u30C0\u30FC\u30C9\u30C8\u30D0\u30B4 \u30C9\u30EB" } // Trinidad and Tobago Dollar
         TWD { "TWD", "\u65B0\u53F0\u6E7E\u5143" } // New Taiwan Dollar
         UAH { "UAH", "\u30D5\u30EA\u30D6\u30CA" } // Hryvnia
-        USD { "USD", "\u7C73\u30C9\u30EB" } // US Dollar
+        USD { "$", "\u7C73\u30C9\u30EB" } // US Dollar
         UYU { "UYU", "\u30A6\u30EB\u30B0\u30A2\u30A4 \u30DA\u30BD" } // Peso Uruguayo
         UZS { "UZS", "\u30A6\u30BA\u30D9\u30AD\u30B9\u30BF\u30F3 \u30B9\u30E0" } // Uzbekistan Sum
         VEB { "VEB", "\u30DC\u30EA\u30D0\u30EB" } // Bolivar
-        VND { "VND", "\u30C9\u30F3" } // Dong
+        VND { "\u20AB", "\u30C9\u30F3" } // Dong
         YER { "YER", "\u30A4\u30A8\u30E1\u30F3 \u30EA\u30A2\u30EB" } // Yemeni Rial
         YUN { "YUN", "\u30E6\u30FC\u30B4\u30B9\u30E9\u30D3\u30A2\u65B0\u30C7\u30A3\u30FC\u30CA\u30FC\u30EB" }
         ZAR { "ZAR", "\u30E9\u30F3\u30C9" } // Rand

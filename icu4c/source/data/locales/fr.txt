@@ -549,8 +549,8 @@ fr {
         FIM { "FIM", "mark finlandais" } // Markka
         FJD { "FJD", "dollar de Fidji" } // Fiji Dollar
         FKP { "FKP", "livre des Falkland" } // Falkland Islands Pound
-        FRF { "FRF", "franc fran\u00E7ais" } // French Franc
-        GBP { "GBP", "livre sterling" } // Pound Sterling
+        FRF { "F", "franc fran\u00E7ais" } // French Franc
+        GBP { "\u00A3", "livre sterling" } // Pound Sterling
         GHC { "GHC", "cedi" } // Cedi
         GIP { "GIP", "livre de Gibraltar" } // Gibraltar Pound
         GMD { "GMD", "dalasie" } // Dalasi
@@ -572,15 +572,15 @@ fr {
         IQD { "IQD", "dinar irakien" } // Iraqi Dinar
         IRR { "IRR", "rial iranien" } // Iranian Rial
         ISK { "ISK", "couronne islandaise" } // Iceland Krona
-        ITL { "ITL", "lire italienne" } // Lira
+        ITL { "\u20A4", "lire italienne" } // Lira
         JMD { "JMD", "dollar jamaicain" } // Jamaican Dollar
         JOD { "JOD", "dinar jordanien" } // Jordanian Dinar
-        JPY { "\uFFE5", "yen" } // Yen
+        JPY { "\u00A5", "yen" } // Yen
         KES { "KES", "shilling du Kenya" } // Kenyan Shilling
         KHR { "KHR", "riel" } // Riel
         KMF { "KMF", "franc des Comores" } // Comoro Franc
         KPW { "KPW", "won nord-cor\u00E9en" } // North Korean Won
-        KRW { "\u20A9", "won" } // Won
+        KRW { "KRW", "won" } // Won
         KWD { "KWD", "dinar koweitien" } // Kuwaiti Dinar
         KYD { "KYD", "dollar des Caimanes" } // Cayman Islands Dollar
         LAK { "LAK", "kip" } // Kip
@@ -602,7 +602,7 @@ fr {
         MXP { "MXP", "peso mexicain" } // Mexican Peso
         MYR { "MYR", "ringgit" } // Malaysian Ringgit
         MZM { "MZM", "metical" } // Metical
-        NGN { "\u20A6", "naira" } // Naira
+        NGN { "NGN", "naira" } // Naira
         NIC { "NIC", "cordoba" } // Cordoba
         NLG { "NLG", "florin n\u00E9erlandais" } // Netherlands Guilder
         NOK { "NOK", "couronne norv\u00E9gienne" } // Norwegian Krone
@@ -646,7 +646,7 @@ fr {
         TWD { "TWD", "dollar ta\u00EFwanien" } // New Taiwan Dollar
         TZS { "TZS", "shilling de Tanzanie" } // Tanzanian Shilling
         UGS { "UGS", "shilling ougandais" } // Uganda Shilling
-        USD { "USD", "dollar des Etats-Unis" } // US Dollar
+        USD { "$", "dollar des Etats-Unis" } // US Dollar
         UYP { "UYP", "peso uruguayen" } // Uruguayan Peso
         VEB { "VEB", "bolivar" } // Bolivar
         VND { "VND", "dong" } // Dong

@@ -35,9 +35,4 @@ es_CR {
         ",",
     }
 //    ShortCountry { "CRI" }
-
-    // Currency display names
-    Currencies {
-        CRC { "\u20A1", "CRC" }
-    }
 }

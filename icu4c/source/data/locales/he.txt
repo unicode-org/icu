@@ -135,6 +135,6 @@ he {
 
     // Currency display names
     Currencies {
-        ILS { "\u05E9\u0022\u05D7", "ILS" }
+        ILS { "\u20AA", "\u05E9\u0022\u05D7" }
     }
 }

@@ -23,6 +23,6 @@ de_LU {
 
     // Currency display names
     Currencies {
-        LUF { "F", "LUF" }
+        LUF { "F", "Luxemburgischer Franc" }
     }
 }
