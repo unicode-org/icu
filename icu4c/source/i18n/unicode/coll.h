@@ -57,11 +57,10 @@ class CollationKey;
 * comparison.<br>
 * You use this class to build searching and sorting routines for natural 
 * language text.<br>
-* <em>Important: </em>The ICU collation implementation is being reworked.
-* This means that collation results and especially sort keys will change
-* from ICU 1.6 to 1.7 and again to 1.8.
+* <em>Important: </em>The ICU collation service has been reimplemented 
+* in order to achieve better performance and UCA compliance. 
 * For details, see the 
-* <a href="http://oss.software.ibm.com/icu/develop/ICU_collation_design.htm">
+* <a href="http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/design/collation/ICU_collation_design.htm">
 * collation design document</a>.
 * <p>
 * <code>Collator</code> is an abstract base class. Subclasses implement 
@@ -95,8 +94,8 @@ class CollationKey;
 * <p>
 * You can set a <code>Collator</code>'s <em>strength</em> property to 
 * determine the level of difference considered significant in comparisons. 
-* Four strengths are provided: <code>PRIMARY</code>, <code>SECONDARY</code>, 
-* <code>TERTIARY</code>, and <code>IDENTICAL</code>. The exact assignment of 
+* Five strengths are provided: <code>PRIMARY</code>, <code>SECONDARY</code>, 
+* <code>TERTIARY</code>, <code>QUATERNARY</code> and <code>IDENTICAL</code>. The exact assignment of 
 * strengths to language features is locale dependant. For example, in Czech, 
 * "e" and "f" are considered primary differences, while "e" and "\u00EA" are 
 * secondary differences, "e" and "E" are tertiary differences and "e" and "e" 
@@ -138,7 +137,7 @@ class CollationKey;
 * </p>
 * <p>
 * <strong>Note:</strong> <code>Collator</code>s with different Locale,
-* CollationStrength and DecompositionMode settings will return different sort 
+* and CollationStrength settings will return different sort 
 * orders for the same set of strings. Locales have specific collation rules, 
 * and the way in which secondary and tertiary differences are taken into 
 * account, for example, will result in a different sorting order for same 
@@ -149,7 +148,7 @@ class CollationKey;
 * @see         CollationElementIterator
 * @see         Locale
 * @see         Normalizer
-* @version     1.7 1/14/97
+* @version     2.0 11/15/01
 */
 
 class U_I18N_API Collator
