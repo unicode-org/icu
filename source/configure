@@ -3754,8 +3754,12 @@ echo "$ac_t""$msg" 1>&6
 
 if test "$ICULIBSUFFIX" != ""
 then
+    U_HAVE_LIB_SUFFIX=1
     ICULIBSUFFIXCNAME=`echo _$ICULIBSUFFIX | sed 's/[^A-Za-z0-9_]/_/g'`
+else
+    U_HAVE_LIB_SUFFIX=0
 fi
+
 
 
 # Check whether --enable-tests or --disable-tests was given.
@@ -4135,6 +4139,7 @@ s%@thepkgicudatadir@%$thepkgicudatadir%g
 s%@DATA_PACKAGING_CPPFLAGS@%$DATA_PACKAGING_CPPFLAGS%g
 s%@DATA_PACKAGING_MODE@%$DATA_PACKAGING_MODE%g
 s%@ICULIBSUFFIX@%$ICULIBSUFFIX%g
+s%@U_HAVE_LIB_SUFFIX@%$U_HAVE_LIB_SUFFIX%g
 s%@ICULIBSUFFIXCNAME@%$ICULIBSUFFIXCNAME%g
 s%@TESTS_TRUE@%$TESTS_TRUE%g
 s%@TESTS_FALSE@%$TESTS_FALSE%g
