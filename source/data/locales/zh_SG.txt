@@ -10,7 +10,6 @@
 
 zh_SG {
     Version { "2.0" }
-
     NumberPatterns { 
         "#,##0.###;-#,##0.###",
         "\u00A4#,##0.00;-\u00A4#,##0.00",
@@ -34,11 +33,6 @@ zh_SG {
         "dd/MM/yy",
         "{1} {0}"
     }
-
-    LocaleID:int { 0x1004 }
-
-//    ShortCountry { "SIN" } // copied from zh_EN.txt
-
     zoneStrings { 
         {
             "SST",

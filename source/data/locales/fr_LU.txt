@@ -25,9 +25,6 @@ fr_LU {
         "\uFFFD",
         ",",
     }
-//    LocaleString { "fr_LU" }
-//    ShortCountry { "LUX" }
-    LocaleID:int { 0x140c }
 
     // Currency display names
     Currencies {

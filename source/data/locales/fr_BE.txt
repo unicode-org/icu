@@ -22,8 +22,6 @@ fr_BE {
         2,
         1,
     }
-    LocaleID:int { 0x080c }
-//    LocaleString { "fr_BE" }
     NumberElements { 
         ",",
         ".",
@@ -38,16 +36,16 @@ fr_BE {
         "\uFFFD",
         ",",
     }
-//    ShortCountry { "BEL" }
-    zoneStrings { 
-        {
-            "Africa/Casablanca",
-            "GMT",
-            "GMT",
-            "GMT",
-            "GMT",
-        }
-    }
+// Fall back to French
+//    zoneStrings { 
+//        {
+//            "Africa/Casablanca",
+//            "GMT",
+//            "GMT",
+//            "GMT",
+//            "GMT",
+//        }
+//    }
     NumberPatterns {
         "#,##0.###;-#,##0.###",
         "#,##0.00 \u00a4;-#,##0.00 \u00a4",
