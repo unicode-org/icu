@@ -19,6 +19,8 @@
 <uconv_class>                 "MBCS"
 <subchar>                     \xC8\xFE
 #<subchar1>                   \x7F
+<icu:state>                   0-7f, 81-fe:1
+<icu:state>                   40-7e, 81-fe
 #
 CHARMAP
 #
