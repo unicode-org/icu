@@ -500,6 +500,8 @@ static void PrintMarkDavis( )
   char buffer[512];
   uint32_t len = 512;
 
+  log_verbose("PrintMarkDavis");
+
   u_uastrcpy(m, "Mark Davis");
   sizem = u_strlen(m);
 
@@ -547,6 +549,8 @@ static void BillFairmanTest( ) {
   UResourceBundle *lr,*cr;
   UErrorCode              lec = U_ZERO_ERROR;
   const char *lp = "fr_FR_you_ll_never_find_this_locale";
+
+  log_verbose("BillFairmanTest\n");
 
   if ((lr = ures_open(NULL,lp,&lec))) {
     if ((cr = ures_getByKey(lr,"CollationElements",0,&lec))) {
@@ -757,6 +761,8 @@ static void RamsRulesTest( ) {
   UCollator *coll = NULL;
   UChar rule[2048];
   uint32_t ruleLen;
+
+  log_verbose("RamsRulesTest\n");
  
   for(i = 0; i<sizeof(localesToTest)/sizeof(localesToTest[0]); i++) {
     coll = ucol_open(localesToTest[i], &status);
@@ -777,8 +783,42 @@ static void RamsRulesTest( ) {
       ucol_close(coll);
     }
   }
+}
 
+static void IsTailoredTest( ) {
+  UErrorCode status = U_ZERO_ERROR;
+  uint32_t i = 0;
+  UCollator *coll = NULL;
+  UChar rule[2048];
+  UChar tailored[2048];
+  UChar notTailored[2048];
+  uint32_t ruleLen, tailoredLen, notTailoredLen;
 
+  log_verbose("IsTailoredTest\n");
+ 
+  u_uastrcpy(rule, "&Z < A, B, C;c < d");
+  ruleLen = u_strlen(rule);
+
+  u_uastrcpy(tailored, "ABCcd");
+  tailoredLen = u_strlen(tailored);
+
+  u_uastrcpy(notTailored, "ZabD");
+  notTailoredLen = u_strlen(notTailored);
+
+  coll = ucol_openRules(rule, ruleLen, UCOL_NO_NORMALIZATION, UCOL_TERTIARY, &status);
+  if(U_SUCCESS(status)) {
+    for(i = 0; i<tailoredLen; i++) {
+      if(!isTailored(coll, tailored[i], &status)) {
+        log_err("%i: %04X should be tailored - it is reported as not\n", i, tailored[i]);
+      }
+    }
+    for(i = 0; i<notTailoredLen; i++) {
+      if(isTailored(coll, notTailored[i], &status)) {
+        log_err("%i: %04X should not be tailored - it is reported as it is\n", i, notTailored[i]);
+      }
+    }
+    ucol_close(coll);
+  }
 }
 
 void addMiscCollTest(TestNode** root)
@@ -789,6 +829,7 @@ void addMiscCollTest(TestNode** root)
     addTest(root, &FunkyATest, "tscoll/cmsccoll/FunkyATest");
     addTest(root, &BillFairmanTest, "tscoll/cmsccoll/BillFairmanTest");
     addTest(root, &RamsRulesTest, "tscoll/cmsccoll/RamsRulesTest");
+    addTest(root, &IsTailoredTest, "tscoll/cmsccoll/IsTailoredTest");
     /*addTest(root, &PrintMarkDavis, "tscoll/cmsccoll/PrintMarkDavis");*/
 }
 
