@@ -76,8 +76,8 @@ check: check-local
 all-local: $(TARGET)
 
 install-local: all-local
-	$(mkinstalldirs) $(sbindir)
-	$(INSTALL) $(TARGET) $(sbindir)/$(TARGET)
+	$(mkinstalldirs) $(DESTDIR)$(sbindir)
+	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
 
 dist-local:
 
