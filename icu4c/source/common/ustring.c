@@ -1249,7 +1249,7 @@ u_unescape(const char *src, UChar *dest, int32_t destCapacity) {
 
 /* C GrowBuffer implementation ---------------------------------------------- */
 
-U_CAPI UBool U_CALLCONV U_EXPORT2
+U_CAPI UBool /* U_CALLCONV U_EXPORT2 */
 u_growBufferFromStatic(void *context,
                        UChar **pBuffer, int32_t *pCapacity, int32_t reqCapacity,
                        int32_t length) {

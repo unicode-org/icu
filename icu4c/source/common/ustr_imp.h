@@ -44,7 +44,7 @@ GrowBuffer(void *context,       /* opaque pointer for this function */
  * and releases the old one if it is not the same as the one passed as context.
  * @internal
  */
-U_CAPI UBool U_CALLCONV U_EXPORT2
+U_CAPI UBool /* U_CALLCONV U_EXPORT2 */
 u_growBufferFromStatic(void *context,
                        UChar **pBuffer, int32_t *pCapacity, int32_t reqCapacity,
                        int32_t length);
