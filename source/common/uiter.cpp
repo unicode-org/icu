@@ -81,7 +81,7 @@ stringIteratorGetIndex(UCharIterator *iter, UCharIteratorOrigin origin) {
     default:
         /* not a valid origin */
         /* Should never get here! */
-        return 0;
+        return -1;
     }
 }
 
@@ -106,10 +106,7 @@ stringIteratorMove(UCharIterator *iter, int32_t delta, UCharIteratorOrigin origi
         pos=iter->length+delta;
         break;
     default:
-        /* not a valid origin, no move */
-        /* Should never get here! */
-        pos = iter->start;
-        break;
+	return -1;  /* Error */
     }
 
     if(pos<iter->start) {
@@ -213,7 +210,7 @@ characterIteratorGetIndex(UCharIterator *iter, UCharIteratorOrigin origin) {
     default:
         /* not a valid origin */
         /* Should never get here! */
-        return 0;
+        return -1;
     }
 }
 
@@ -233,7 +230,7 @@ characterIteratorMove(UCharIterator *iter, int32_t delta, UCharIteratorOrigin or
     default:
         /* not a valid origin */
         /* Should never get here! */
-        return 0;
+        return -1;
     }
 }
 
