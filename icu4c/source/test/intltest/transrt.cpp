@@ -12,6 +12,8 @@
 #include "unicode/rbt.h"
 #include "unicode/uniset.h"
 #include "unicode/unicode.h"
+#include "unicode/normlzr.h"
+#include "unicode/uchar.h"
 #include "transrt.h"
 #include "testutil.h"
 
@@ -88,6 +90,102 @@ UBool BitSet::get(int32_t x) const {
 }
 
 //--------------------------------------------------------------------
+// Legal
+//--------------------------------------------------------------------
+
+class Legal {
+public:
+    Legal() {}
+    virtual ~Legal() {}
+    virtual UBool is(const UnicodeString& sourceString) const {return TRUE;}
+};
+
+class LegalGreek : public Legal {
+public:
+    LegalGreek() {}
+    virtual ~LegalGreek() {}
+
+    virtual UBool is(const UnicodeString& sourceString) const;
+
+    static UBool isVowel(UChar c);
+    
+    static UBool isRho(UChar c);
+};
+
+UBool LegalGreek::is(const UnicodeString& sourceString) const { 
+    // Legal greek has breathing marks IFF there is a vowel or RHO at the start
+    // IF it has them, it has exactly one.
+    // IF it starts with a RHO, then the breathing mark must come before the second letter.
+    // Since there are no surrogates in greek, don't worry about them
+    UnicodeString decomp;
+    UErrorCode ec = U_ZERO_ERROR;
+    Normalizer::decompose(sourceString, FALSE, 0, decomp, ec);
+    UBool firstIsVowel = FALSE;
+    UBool firstIsRho = FALSE;
+    UBool noLetterYet = TRUE;
+    int32_t breathingCount = 0;
+    int32_t letterCount = 0;
+    for (int32_t i = 0; i < decomp.length(); ++i) {
+        UChar c = decomp.charAt(i);
+        if (u_isalpha(c)) {
+            ++letterCount;
+            if (noLetterYet) {
+                noLetterYet =  FALSE;
+                firstIsVowel = isVowel(c);
+                firstIsRho = isRho(c);
+            }
+            if (firstIsRho && letterCount == 2 && breathingCount == 0) return FALSE;
+        }
+        if (c == 0x0313 || c == 0x0314) {
+            ++breathingCount;
+        }
+    }
+    
+    if (firstIsVowel || firstIsRho) return breathingCount == 1;
+    return breathingCount == 0;
+}
+
+UBool LegalGreek::isVowel(UChar c) {
+    switch (c) {
+    case 0x03B1:
+    case 0x03B5:
+    case 0x03B7:
+    case 0x03B9:
+    case 0x03BF:
+    case 0x03C5:
+    case 0x03C9:
+    case 0x0391:
+    case 0x0395:
+    case 0x0397:
+    case 0x0399:
+    case 0x039F:
+    case 0x03A5:
+    case 0x03A9:
+        return TRUE;
+    }
+    return FALSE;
+}
+
+UBool LegalGreek::isRho(UChar c) {
+    switch (c) {
+    case 0x03C1:
+    case 0x03A1:
+        return TRUE;
+    }
+    return FALSE;
+}
+
+class LegalDeleter {
+    Legal* obj;
+    Legal*& zeroMe;
+public:
+    LegalDeleter(Legal* adopted, Legal*& ptrToClean) :
+        obj(adopted),
+        zeroMe(ptrToClean) {}
+    ~LegalDeleter() { delete obj; zeroMe = NULL; }
+};
+
+//--------------------------------------------------------------------
 // RTTest Interface
 //--------------------------------------------------------------------
 
@@ -104,6 +202,7 @@ class RTTest {
     UnicodeSet sourceRange;
     UnicodeSet targetRange;
     IntlTest* log;
+    Legal* legalSource; // NOT owned
 
 public:
 
@@ -120,7 +219,8 @@ public:
     void setPairLimit(int32_t limit);
 
     void test(const UnicodeString& sourceRange,
-              const UnicodeString& targetRange, IntlTest* log);
+              const UnicodeString& targetRange, IntlTest* log,
+              Legal* adoptedLegal);
 
 private:
 
@@ -178,6 +278,7 @@ RTTest::RTTest(const UnicodeString& transliteratorIDStr,
     this->transliteratorID = transliteratorIDStr;
     this->sourceScript = sourceScriptVal;
     this->targetScript = targetScriptVal;
+    legalSource = NULL;
     errorLimit = (int32_t)0x7FFFFFFFL;
     errorCount = 0;
     pairLimit  = 0x10000;
@@ -195,11 +296,14 @@ void RTTest::setPairLimit(int32_t limit) {
 }
 
 void RTTest::test(const UnicodeString& sourceRangeVal,
-                  const UnicodeString& targetRangeVal, IntlTest* logVal) {
+                  const UnicodeString& targetRangeVal, IntlTest* logVal,
+                  Legal* adoptedLegal) {
 
     UErrorCode status = U_ZERO_ERROR;
 
     this->log = logVal;
+    this->legalSource = adoptedLegal;
+    LegalDeleter cleaner(adoptedLegal, this->legalSource);
 
     if (sourceRangeVal.length() > 0) {
         this->sourceRange.applyPattern(sourceRangeVal, status);
@@ -225,51 +329,18 @@ void RTTest::test(const UnicodeString& sourceRangeVal,
         }
     }
 
-//|     // make a UTF-8 output file we can read with a browser
-//|
-//|     // note: check that every transliterator transliterates the null string correctly!
-//|
-//|     String logFileName = "test_" + transliteratorID + "_"
-//|         + sourceScript + "_" + targetScript + ".html";
-//|
-//|     log.logln("Creating log file " + logFileName);
-//|
-//|     out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(
-//|               new FileOutputStream(logFileName), "UTF8"), 4*1024));
-//|     //out.write('\uFFEF');    // BOM
-//|     out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">");
-//|     out.println("<HTML><HEAD>");
-//|     out.println("<META content=\"text/html; charset=utf-8\" http-equiv=Content-Type></HEAD>");
-//|     out.println("<BODY>");
-//|     out.println("<TABLE>");
-//|     try {
-        test2();
-//|         out.println("</TABLE>");
-//|     } catch (TestTruncated e) {
-//|         out.println("</TABLE>" + e.getMessage());
-//|     }
-//|     out.println("</BODY></HTML>");
-//|     out.close();
+    test2();
 
     if (errorCount > 0) {
         log->errln(transliteratorID + " errors: " + errorCount); // + ", see " + logFileName);
     } else {
         log->logln(transliteratorID + " ok");
-//|         new File(logFileName).delete();
     }
 }
 
 void RTTest::logWrongScript(const UnicodeString& label,
                             const UnicodeString& from,
                             const UnicodeString& to) {
-//|     out.println("<TR><TD>Fail " + label + ":</TD><TD><FONT SIZE=\"6\">" +
-//|                 from + "</FONT></TD><TD>(" +
-//|                 TestUtility::hex(from) + ") =></TD><TD><FONT SIZE=\"6\">" +
-//|                 to + "</FONT></TD><TD>(" +
-//|                 TestUtility::hex(to) + ")</TD></TR>" );
-//|     if (++errorCount >= errorLimit) {
-//|         throw new TestTruncated("Test truncated; too many failures");
-//|     }
     log->errln((UnicodeString)"Fail " +
                label + ": " +
                from + "(" + TestUtility::hex(from) + ") => " +
@@ -280,16 +351,8 @@ void RTTest::logWrongScript(const UnicodeString& label,
 void RTTest::logRoundTripFailure(const UnicodeString& from,
                                  const UnicodeString& to,
                                  const UnicodeString& back) {
-//|     out.println("<TR><TD>Fail Roundtrip:</TD><TD><FONT SIZE=\"6\">" +
-//|                 from + "</FONT></TD><TD>(" +
-//|                 TestUtility::hex(from) + ") =></TD><TD>" +
-//|                 to + "</TD><TD>(" +
-//|                 TestUtility::hex(to) + ") =></TD><TD><FONT SIZE=\"6\">" +
-//|                 back + "</TD><TD>(" +
-//|                 TestUtility::hex(back) + ")</TD></TR>" );
-//|     if (++errorCount >= errorLimit) {
-//|         throw new TestTruncated("Test truncated; too many failures");
-//|     }
+    if (!legalSource->is(from)) return; // skip illegals
+
     log->errln((UnicodeString)"Fail Roundtrip: " +
                from + "(" + TestUtility::hex(from) + ") => " +
                to + "(" + TestUtility::hex(to) + ") => " +
@@ -380,51 +443,51 @@ UBool RTTest::isReceivingTarget(const UnicodeString& s) {
 void TransliteratorRoundTripTest::TestHiragana() {
     RTTest test("Latin-Hiragana",
                 TestUtility::LATIN_SCRIPT, TestUtility::HIRAGANA_SCRIPT);
-    test.test("[a-z]", UnicodeString("[\\u3040-\\u3094]", ""), this);
+    test.test("[a-z]", UnicodeString("[\\u3040-\\u3094]", ""), this, new Legal());
 }
 
 void TransliteratorRoundTripTest::TestKatakana() {
     RTTest test("Latin-Katakana", 
                 TestUtility::LATIN_SCRIPT, TestUtility::KATAKANA_SCRIPT);
-    test.test("[a-z]", UnicodeString("[\\u30A1-\\u30FA\\u30FC]", ""), this);
+    test.test("[a-z]", UnicodeString("[\\u30A1-\\u30FA\\u30FC]", ""), this, new Legal());
 }
 
 void TransliteratorRoundTripTest::TestArabic() {
 //  RTTest test("Latin-Arabic", 
 //              TestUtility::LATIN_SCRIPT, TestUtility::ARABIC_SCRIPT);
-//  test.test("[a-z]", UnicodeString("[\\u0620-\\u065F-[\\u0640]]", ""), this);
+//  test.test("[a-z]", UnicodeString("[\\u0620-\\u065F-[\\u0640]]", ""), this, new Legal());
 }
 
 void TransliteratorRoundTripTest::TestHebrew() {
 //  RTTest test("Latin-Hebrew", 
 //              TestUtility::LATIN_SCRIPT, TestUtility::HEBREW_SCRIPT);
-//  test.test("", UnicodeString("[\\u05D0-\\u05EF]", ""), this);
+//  test.test("", UnicodeString("[\\u05D0-\\u05EF]", ""), this, new Legal());
 }
 
 void TransliteratorRoundTripTest::TestJamo() {
     RTTest t("Latin-Jamo", 
              TestUtility::LATIN_SCRIPT, TestUtility::JAMO_SCRIPT);
     t.setErrorLimit(200); // Don't run full test -- too long
-    t.test("", "", this);
+    t.test("", "", this, new Legal());
 }
 
 void TransliteratorRoundTripTest::TestJamoHangul() {
     RTTest t("Latin-Hangul", 
              TestUtility::LATIN_SCRIPT, TestUtility::HANGUL_SCRIPT);
     t.setErrorLimit(50); // Don't run full test -- too long
-    t.test("", "", this);
+    t.test("", "", this, new Legal());
 }
 
 void TransliteratorRoundTripTest::TestGreek() {
     RTTest test("Latin-Greek", 
                 TestUtility::LATIN_SCRIPT, TestUtility::GREEK_SCRIPT);
-    test.test("", UnicodeString("[\\u003B\\u00B7[:Greek:]-[\\u03D7-\\u03EF]]", ""), this);
+    test.test("", UnicodeString("[\\u003B\\u00B7[:Greek:]-[\\u03D7-\\u03EF]]", ""), this, new LegalGreek());
 }
 
 void TransliteratorRoundTripTest::TestCyrillic() {
     RTTest test("Latin-Cyrillic", 
                 TestUtility::LATIN_SCRIPT, TestUtility::CYRILLIC_SCRIPT);
-    test.test("", UnicodeString("[\\u0400-\\u045F]", ""), this);
+    test.test("", UnicodeString("[\\u0400-\\u045F]", ""), this, new Legal());
 }
 
 void RTTest::test2() {
@@ -537,7 +600,7 @@ void RTTest::test2() {
             return;
         }
         cs.setCharAt(0, c);
-        log->logln(TestUtility::hex(c));
+        log->log(TestUtility::hex(c));
         for (UChar d = 0; d < 0xFFFF; ++d) {
             if (type[d] == U_UNASSIGNED || !isTarget(d))
                 continue;
