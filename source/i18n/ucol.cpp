@@ -1244,7 +1244,11 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
 
 
           order ^= caseSwitch;
-          tertiary = (uint8_t)((order & tertiaryMask)); 
+          if(notIsContinuation) {
+            tertiary = (uint8_t)((order & tertiaryMask)); 
+          } else {
+            tertiary = (uint8_t)((order & UCOL_REMOVE_CASE));
+          }           
           secondary = (uint8_t)((order >>= 8) & 0xFF);
           primary2 = (uint8_t)((order >>= 8) & 0xFF);
           primary1 = (uint8_t)(order >>= 8);
@@ -1299,9 +1303,9 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
             if(doCase) {
               if (caseShift  == 0) {
                 currentSize++;
-                caseShift = 7;
+                caseShift = UCOL_CASE_SHIFT_START;
               }
-              if(tertiary > 0) {
+              if(tertiary > 0 && notIsContinuation) {
                 caseShift--;
               }
             }
@@ -1515,7 +1519,12 @@ ucol_calcSortKey(const    UCollator    *coll,
 
             order ^= caseSwitch;
             caseBit = (order & UCOL_CASE_BIT_MASK);
-            tertiary = (uint8_t)((order & tertiaryMask)); 
+            if(notIsContinuation) {
+              tertiary = (uint8_t)((order & tertiaryMask)); 
+            } else {
+              tertiary = (uint8_t)((order & UCOL_REMOVE_CASE)); 
+            }
+              
             secondary = (uint8_t)((order >>= 8) & UCOL_BYTE_SIZE_MASK);
             primary2 = (uint8_t)((order >>= 8) & UCOL_BYTE_SIZE_MASK);
             primary1 = (uint8_t)(order >>= 8);
@@ -1611,10 +1620,12 @@ ucol_calcSortKey(const    UCollator    *coll,
                   *cases++ = UCOL_CASE_BYTE_START;
                   caseShift = UCOL_CASE_SHIFT_START;
                 }
-                if(tertiary != 0) {
-                  *(cases-1) |= (caseBit!=0) << (caseShift--);
-                } else {
-                  caseShift--;
+                if(notIsContinuation) {
+                  if(tertiary != 0) {
+                    *(cases-1) |= (caseBit!=0) << (--caseShift);
+                  } else {
+                    caseShift--;
+                  }
                 }
               }
 
@@ -2006,7 +2017,11 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
             notIsContinuation = !isContinuation(ce);
 
             order ^= caseSwitch;
-            tertiary = (uint8_t)((order & tertiaryMask)); /* TODO need case bit here this is temporary - removing case bit */         
+            if(notIsContinuation) {
+              tertiary = (uint8_t)((order & tertiaryMask)); 
+            } else {
+              tertiary = (uint8_t)((order & UCOL_REMOVE_CASE));
+            }           
             secondary = (uint8_t)((order >>= 8) & UCOL_BYTE_SIZE_MASK);
             primary2 = (uint8_t)((order >>= 8) & UCOL_BYTE_SIZE_MASK);
             primary1 = (uint8_t)(order >>= 8);
@@ -3121,11 +3136,15 @@ ucol_strcoll(    const    UCollator    *coll,
       tCEs = tCEsArray;
       for(;;) {
         while((secS & UCOL_REMOVE_CASE) == 0) {
-          secS = *(sCEs++) & UCOL_TERT_CASE_MASK;
+          if(!isContinuation(*sCEs++)) {
+            secS =*(sCEs-1) & UCOL_TERT_CASE_MASK;
+          } 
         }
 
         while((secT & UCOL_REMOVE_CASE) == 0) {
-          secT = *(tCEs++) & UCOL_TERT_CASE_MASK;
+          if(!isContinuation(*tCEs++)) {
+            secT = *(tCEs-1) & UCOL_TERT_CASE_MASK;
+          }
         }
 
         if((secS & UCOL_CASE_BIT_MASK) < (secT & UCOL_CASE_BIT_MASK)) {
@@ -3664,11 +3683,15 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
       tCEs = tCEsArray;
       for(;;) {
         while((secS & UCOL_REMOVE_CASE) == 0) {
-          secS = *(sCEs++) & UCOL_TERT_CASE_MASK;
+          if(!isContinuation(*sCEs++)) {
+            secS =*(sCEs-1) & UCOL_TERT_CASE_MASK;
+          } 
         }
 
         while((secT & UCOL_REMOVE_CASE) == 0) {
-          secT = *(tCEs++) & UCOL_TERT_CASE_MASK;
+          if(!isContinuation(*tCEs++)) {
+            secT = *(tCEs-1) & UCOL_TERT_CASE_MASK;
+          }
         }
 
         if((secS & UCOL_CASE_BIT_MASK) < (secT & UCOL_CASE_BIT_MASK)) {
