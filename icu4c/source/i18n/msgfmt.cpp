@@ -975,15 +975,20 @@ MessageFormat::format(const Formattable* arguments,
             }
         }
         // If the obj data type is a number, use a NumberFormat instance.
-        else if ((type == Formattable::kDouble) || (type == Formattable::kLong)) {
+        else if ((type == Formattable::kDouble) || 
+                 (type == Formattable::kLong) ||
+                 (type == Formattable::kInt64)) {
+
             const NumberFormat* nf = getDefaultNumberFormat(success);
             if (nf == NULL) { 
                 return appendTo; 
             }
             if (type == Formattable::kDouble) {
                 nf->format(obj->getDouble(), appendTo);
-            } else {
+            } else if (type == Formattable::kLong) {
                 nf->format(obj->getLong(), appendTo);
+            } else {
+                nf->format(obj->getInt64(), appendTo);
             }
         }
         // If the obj data type is a Date instance, use a DateFormat instance.
@@ -1200,7 +1205,7 @@ MessageFormat::makeFormat(int32_t formatNumber,
             fmt = NumberFormat::createPercentInstance(fLocale, ec);
             break;
         case 3: // integer
-            argType = Formattable::kLong;
+            argType = Formattable::kInt64;
             fmt = createIntegerFormat(fLocale, ec);
             break;
         default: // pattern
