@@ -105,6 +105,11 @@ void TestOtherAPI(void){
     UErrorCode status = U_ZERO_ERROR;
     UHashtable *hash;
     UChar key[10];
+
+    /* Use the correct type when cast to void * */
+    const UChar one[4] = {'o', 'n', 'e', '\0'};
+    const UChar one2[4] = {'o', 'n', 'e', '\0'};/* Get around compiler optimizations */
+    const UChar two[4] = {'t', 'w', 'o', '\0'};
     
 
     hash = uhash_open(uhash_hashUChars, uhash_compareUChars,  &status);
@@ -155,9 +160,10 @@ void TestOtherAPI(void){
     
     status=U_ZERO_ERROR;
     uhash_put(hash, (void*)u_uastrcpy(key, "one"), (void*)1, &status);
-    if(uhash_compareUChars((void*)"one", (void*)"two") == TRUE ||
-        uhash_compareUChars((void*)"one", (void*)"one") != TRUE ||
-        uhash_compareUChars((void*)"one", NULL) == TRUE  )  {
+    if(uhash_compareUChars((void*)one, (void*)two) == TRUE ||
+        uhash_compareUChars((void*)one, (void*)one) != TRUE ||
+        uhash_compareUChars((void*)one, (void*)one2) != TRUE ||
+        uhash_compareUChars((void*)one, NULL) == TRUE  )  {
         log_err("FAIL: compareUChars failed\n");
     }
    
