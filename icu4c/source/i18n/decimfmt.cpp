@@ -43,6 +43,7 @@
 #include "unicode/resbund.h"
 #include "unicode/uchar.h"
 #include "cmemory.h"
+#include "unicode/currency.h"
 
 U_NAMESPACE_BEGIN
 
@@ -189,8 +190,7 @@ void
 DecimalFormat::construct(UErrorCode&             status,
                          UParseError&           parseErr,
                          const UnicodeString*   pattern,
-                         DecimalFormatSymbols*  symbolsToAdopt,
-                         const Locale&          locale)
+                         DecimalFormatSymbols*  symbolsToAdopt)
 {
     fSymbols = symbolsToAdopt; // Do this BEFORE aborting on status failure!!!
 //    fDigitList = new DigitList(); // Do this BEFORE aborting on status failure!!!
@@ -214,7 +214,7 @@ DecimalFormat::construct(UErrorCode&             status,
 
     if (fSymbols == NULL)
     {
-        fSymbols = new DecimalFormatSymbols(locale, status);
+        fSymbols = new DecimalFormatSymbols(Locale::getDefault(), status);
     }
 
     UnicodeString str;
@@ -232,7 +232,13 @@ DecimalFormat::construct(UErrorCode&             status,
     {
         return;
     }
-    
+
+    if (symbolsToAdopt == NULL) {
+        currency = UCurrency::forLocale(Locale::getDefault(), status);
+    } else {
+        setCurrencyForSymbols();
+    }
+
     applyPattern(*pattern, FALSE /*not localized*/,parseErr, status);
 }
 
@@ -1402,9 +1408,43 @@ void
 DecimalFormat::setDecimalFormatSymbols(const DecimalFormatSymbols& symbols)
 {
     adoptDecimalFormatSymbols(new DecimalFormatSymbols(symbols));
+    setCurrencyForSymbols();
     expandAffixes();
 }
  
+/**
+ * Update the currency object to match the symbols.  This method
+ * is used only when the caller has passed in a symbols object
+ * that may not be the default object for its locale.
+ */
+void
+DecimalFormat::setCurrencyForSymbols() {
+    /*Bug 4212072
+      Update the affix strings accroding to symbols in order to keep
+      the affix strings up to date.
+      [Richard/GCL]
+    */
+
+    // With the introduction of the Currency object, the currency
+    // symbols in the DFS object are ignored.  For backward
+    // compatibility, we check any explicitly set DFS object.  If it
+    // is a default symbols object for its locale, we change the
+    // currency object to one for that locale.  If it is custom,
+    // we set the currency to null.
+    UErrorCode ec = U_ZERO_ERROR;
+    DecimalFormatSymbols def(fSymbols->getLocale(), ec);
+
+    if (fSymbols->getSymbol(DecimalFormatSymbols::kCurrencySymbol) ==
+        def.getSymbol(DecimalFormatSymbols::kCurrencySymbol) &&
+        fSymbols->getSymbol(DecimalFormatSymbols::kIntlCurrencySymbol) ==
+        def.getSymbol(DecimalFormatSymbols::kIntlCurrencySymbol)) {
+        currency = UCurrency::forLocale(fSymbols->getLocale(), ec);
+    } else {
+        currency.truncate(0); // Use DFS currency info
+    }
+}
+
+
 //------------------------------------------------------------------------------
 // Gets the positive prefix of the number pattern.
  
@@ -1885,17 +1925,27 @@ void DecimalFormat::expandAffix(const UnicodeString& pattern,
         if (c == kQuote) {
             c = pattern.char32At(i++);
             switch (c) {
-            case kCurrencySign:
-                {
-                    if (i<pattern.length() &&
-                        pattern.char32At(i) == kCurrencySign) {
-                        ++i;
-                        affix += fSymbols->getSymbol(DecimalFormatSymbols::kIntlCurrencySymbol);
-                    } else {
-                        affix += fSymbols->getSymbol(DecimalFormatSymbols::kCurrencySymbol);
-                    }
+            case kCurrencySign: {
+                // As of ICU 2.2 we use the currency object, and
+                // ignore the currency symbols in the DFS, unless
+                // we have a null currency object.  This occurs if
+                // resurrecting a pre-2.2 object or if the user
+                // sets a custom DFS.
+                UBool intl = i<pattern.length() &&
+                    pattern.char32At(i) == kCurrencySign;
+                if (intl) {
+                    ++i;
                 }
-                continue;
+                UnicodeString s;
+                if (currency.length() != 0) {
+                    s = intl ? currency
+                        : UCurrency::getSymbol(currency, fSymbols->getLocale());
+                } else {
+                    s = intl ? fSymbols->getSymbol(DecimalFormatSymbols::kIntlCurrencySymbol)
+                        : fSymbols->getSymbol(DecimalFormatSymbols::kCurrencySymbol);
+                }
+                affix += s; }
+                break;
             case kPatternPercent:
                 affix.append(fSymbols->getSymbol(DecimalFormatSymbols::kPercentSymbol));
                 break;
@@ -2870,6 +2920,48 @@ void DecimalFormat::setMaximumFractionDigits(int32_t newValue) {
  */
 void DecimalFormat::setMinimumFractionDigits(int32_t newValue) {
     NumberFormat::setMinimumFractionDigits(uprv_min(newValue, kDoubleFractionDigits));
+}
+
+/**
+ * Sets the <tt>Currency</tt> object used to display currency
+ * amounts.  This takes effect immediately, if this format is a
+ * currency format.  If this format is not a currency format, then
+ * the currency object is used if and when this object becomes a
+ * currency format through the application of a new pattern.
+ * @param theCurrency new currency object to use.  Must not be
+ * null.
+ * @since ICU 2.2
+ */
+void DecimalFormat::setCurrency(const UnicodeString& theCurrency) {
+    // If we are a currency format, then modify our affixes to
+    // encode the currency symbol for the given currency in our
+    // locale, and adjust the decimal digits and rounding for the
+    // given currency.
+
+    currency = theCurrency;
+
+    if (fIsCurrencyFormat) {
+        setRoundingIncrement(UCurrency::getRoundingIncrement(currency));
+
+        int32_t d = UCurrency::getDefaultFractionDigits(currency);
+        setMinimumFractionDigits(d);
+        setMaximumFractionDigits(d);
+
+        expandAffixes();
+    }
+}
+
+/**
+ * Gets the <tt>Currency</tt> object used to display currency
+ * amounts.  This will be null if a object is resurrected with a
+ * custom DecimalFormatSymbols object, or if the user sets a
+ * custom DecimalFormatSymbols object.  A custom
+ * DecimalFormatSymbols object has currency symbols that are not
+ * the standard ones for its locale.
+ * @since ICU 2.2
+ */
+UnicodeString DecimalFormat::getCurrency() const {
+    return currency;
 }
 
 U_NAMESPACE_END

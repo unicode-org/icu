@@ -55,8 +55,8 @@ cpdtrans.o hextouni.o rbt.o rbt_data.o rbt_pars.o rbt_rule.o rbt_set.o \
 nultrans.o remtrans.o titletrn.o tolowtrn.o toupptrn.o \
 name2uni.o uni2name.o unitohex.o nortrans.o unifilt.o quant.o transreg.o \
 nfrs.o nfrule.o nfsubs.o rbnf.o upropset.o util.o esctrn.o unesctrn.o \
-funcrepl.o strrepl.o tridpars.o unifunct.o caniter.o usetiter.o
-
+funcrepl.o strrepl.o tridpars.o unifunct.o caniter.o usetiter.o \
+currency.o
 
 
 STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
