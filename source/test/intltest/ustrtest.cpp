@@ -939,7 +939,6 @@ UnicodeStringTest::TestMiscellaneous()
     UnicodeString   test1("This is a test");
     UnicodeString   test2("This is a test");
     UnicodeString   test3("Me too!");
-    const UChar*  test4;
 
     if (test1.isBogus() || test2.isBogus() || test3.isBogus())
         errln("A string returned TRUE for isBogus()!");
@@ -952,20 +951,62 @@ UnicodeStringTest::TestMiscellaneous()
     if (test1.hashCode() != test2.hashCode() || test1.hashCode() == test3.hashCode())
         errln("hashCode() failed");
 
-#if 0
-    // ### TODO test new getBuffer()'s and releaseBuffer()
-    test4 = test1.getUChars();
+    // test getBuffer(minCapacity) and releaseBuffer()
+    UChar *p=test1.getBuffer(20);
+    test1.append((UChar)7); // must not be able to modify the string here
+    test1.setCharAt(3, 7);
+    test1.reverse();
 
-    if (test1 != test2)
-        errln("getUChars() affected the string!");
-
-
-    UTextOffset i;
-    for (i = 0; i < test2.length(); i++){
-        if (test2[i] != test4[i])
-            errln(UnicodeString("getUChars() failed: strings differ at position ") + i);
+    if( test1.length()!=0 ||
+        test1.charAt(0)!=0xffff || test1.charAt(3)!=0xffff ||
+        test1.getBuffer(10)!=0 || test1.getBuffer()!=0
+    ) {
+        errln("UnicodeString::getBuffer(minCapacity) allows read or write access to the UnicodeString");
     }
-#endif
+
+    p[0]=1;
+    p[1]=2;
+    p[2]=3;
+    test1.releaseBuffer(3);
+    test1.append((UChar)4);
+
+    if(test1.length()!=4 || test1.charAt(0)!=1 || test1.charAt(1)!=2 || test1.charAt(2)!=3 || test1.charAt(3)!=4) {
+        errln("UnicodeString::releaseBuffer(newLength) does not properly reallow access to the UnicodeString");
+    }
+
+    // test releaseBuffer() without getBuffer(minCapacity) - must not have any effect
+    test1.releaseBuffer(1);
+    if(test1.length()!=4 || test1.charAt(0)!=1 || test1.charAt(1)!=2 || test1.charAt(2)!=3 || test1.charAt(3)!=4) {
+        errln("UnicodeString::releaseBuffer(newLength) without getBuffer(minCapacity) changed the UnicodeString");
+    }
+
+    // test getBuffer(const)
+    const UChar *q=test1.getBuffer(), *r=test1.getBuffer();
+    if( test1.length()!=4 ||
+        q[0]!=1 || q[1]!=2 || q[2]!=3 || q[3]!=4 ||
+        r[0]!=1 || r[1]!=2 || r[2]!=3 || r[3]!=4
+    ) {
+        errln("UnicodeString::getBuffer(const) does not return a usable buffer pointer");
+    }
+
+    // test releaseBuffer() with a NUL-terminated buffer
+    test1.getBuffer(20)[2]=0;
+    test1.releaseBuffer(); // implicit -1
+    if(test1.length()!=2 || test1.charAt(0)!=1 || test1.charAt(1) !=2) {
+        errln("UnicodeString::releaseBuffer(-1) does not properly set the length of the UnicodeString");
+    }
+
+    // test releaseBuffer() with a NUL-terminated buffer
+    enum { capacity=254 };  // assume that this will be the actual UnicodeString capacity - getCapacity() is private
+
+    p=test1.getBuffer(capacity);
+    for(int32_t i=0; i<capacity; ++i) {
+        p[i]=(UChar)1;      // fill the buffer with all non-NUL code units
+    }
+    test1.releaseBuffer();  // implicit -1
+    if(test1.length()!=capacity || test1.charAt(1)!=1 || test1.charAt(100)!=1 || test1.charAt(capacity-1)!=1) {
+        errln("UnicodeString::releaseBuffer(-1 but no NUL) does not properly set the length of the UnicodeString");
+    }
 
 /*
 #if U_IOSTREAM_SOURCE
