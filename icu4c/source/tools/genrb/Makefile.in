@@ -98,7 +98,7 @@ TXT_FILES = $(TXT_SOURCE:%=$(top_srcdir)/../data/%)
 RES_FILES = $(TXT_FILES:$(top_srcdir)/../data/%.txt=@DATABUILDDIR@/%.res)
 #TRANSLIT_FILES = $(TRANSLIT_SOURCE:%=$(top_srcdir)/../data/translit/%)
 #TRANSLIT_RES = $(TRANSLIT_SOURCE:%.txt=@DATABUILDDIR@/translit/%.res)
-TEST_FILES = @DATABUILDDIR@/../source/test/testdata/default.res \
+TEST_FILES = @DATABUILDDIR@/../source/test/testdata/root.res \
 @DATABUILDDIR@/../source/test/testdata/te.res \
 @DATABUILDDIR@/../source/test/testdata/te_IN.res
 
