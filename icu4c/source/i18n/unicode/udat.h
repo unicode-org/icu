@@ -355,8 +355,8 @@ typedef enum UDateFormatField {
 
 /**
  * Open a new UDateFormat for formatting and parsing dates and times.
- * A UDateFormat may be used to format dates in calls to \Ref{udat_format},
- * and to parse dates in calls to \Ref{udat_parse}.
+ * A UDateFormat may be used to format dates in calls to {@link #udat_format },
+ * and to parse dates in calls to {@link #udat_parse }.
  * @param timeStyle The style used to format times; one of UDAT_FULL, UDAT_LONG,
  * UDAT_MEDIUM, UDAT_SHORT, or UDAT_DEFAULT
  * @param dateStyle The style used to format dates; one of UDAT_FULL, UDAT_LONG,
@@ -406,7 +406,7 @@ udat_clone(const UDateFormat *fmt,
 
 /**
 * Format a date using an UDateFormat.
-* The date will be formatted using the conventions specified in \Ref{udat_open}
+* The date will be formatted using the conventions specified in {@link #udat_open }
 * @param format The formatter to use
 * @param dateToFormat The date to format
 * @param result A pointer to a buffer to receive the formatted number.
@@ -432,7 +432,7 @@ udat_format(    const    UDateFormat*    format,
 
 /**
 * Parse a string into an date/time using a UDateFormat.
-* The date will be parsed using the conventions specified in \Ref{udat_open}
+* The date will be parsed using the conventions specified in {@link #udat_open }
 * @param format The formatter to use.
 * @param text The text to parse.
 * @param textLength The length of text, or -1 if null-terminated.
@@ -452,7 +452,7 @@ udat_parse(    const    UDateFormat*    format,
 
 /**
 * Parse a string into an date/time using a UDateFormat.
-* The date will be parsed using the conventions specified in \Ref{udat_open}
+* The date will be parsed using the conventions specified in {@link #udat_open }
 * @param format The formatter to use.
 * @param calendar The calendar in which to store the parsed data.
 * @param text The text to parse.
@@ -561,7 +561,7 @@ udat_getAvailable(int32_t index);
 /**
 * Determine how many locales have date/time  formatting patterns available.
 * This function is most useful as determining the loop ending condition for
-* calls to \Ref{udat_getAvailable}.
+* calls to {@link #udat_getAvailable }.
 * @return The number of locales for which date/time formatting patterns are available.
 * @see udat_getAvailable
 * @stable ICU 2.0
@@ -688,7 +688,7 @@ udat_getSymbols(const   UDateFormat             *fmt,
 /**
 * Count the number of particular symbols for an UDateFormat.
 * This function is most useful as for detemining the loop termination condition
-* for calls to \Ref{udat_getSymbols}.
+* for calls to {@link #udat_getSymbols }.
 * @param fmt The formatter to query.
 * @param type The type of symbols to count.  One of UDAT_ERAS, UDAT_MONTHS, UDAT_SHORT_MONTHS,
 * UDAT_WEEKDAYS, UDAT_SHORT_WEEKDAYS, UDAT_AM_PMS, or UDAT_LOCALIZED_CHARS
