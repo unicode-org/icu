@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2002/11/14 22:26:41 $
- * $Revision: 1.76 $
+ * $Date: 2002/11/15 01:58:29 $
+ * $Revision: 1.77 $
  *
  *****************************************************************************************
  */
@@ -26,6 +26,8 @@ import java.util.Iterator;
  * represent <em>character classes</em> used in regular expressions.
  * A character specifies a subset of Unicode code points.  Legal
  * code points are U+0000 to U+10FFFF, inclusive.
+ *
+ * <p>The UnicodeSet class is not designed to be subclassed.
  *
  * <p><code>UnicodeSet</code> supports two APIs. The first is the
  * <em>operand</em> API that allows the caller to modify the value of
@@ -61,7 +63,107 @@ import java.util.Iterator;
  * <code>applyPattern()</code> methods and returned by the
  * <code>toPattern()</code> method.  These patterns follow a syntax
  * similar to that employed by version 8 regular expression character
- * classes:
+ * classes.  Here are some simple examples:
+ *
+ * <blockquote>
+ *   <table>
+ *     <tr align="top">
+ *       <td nowrap valign="top" align="left"><code>[]</code></td>
+ *       <td valign="top">No characters</td>
+ *     </tr><tr align="top">
+ *       <td nowrap valign="top" align="left"><code>[a]</code></td>
+ *       <td valign="top">The character 'a'</td>
+ *     </tr><tr align="top">
+ *       <td nowrap valign="top" align="left"><code>[ae]</code></td>
+ *       <td valign="top">The characters 'a' and 'e'</td>
+ *     </tr>
+ *     <tr>
+ *       <td nowrap valign="top" align="left"><code>[a-e]</code></td>
+ *       <td valign="top">The characters 'a' through 'e' inclusive, in Unicode code 
+ *       point order</td>
+ *     </tr>
+ *     <tr>
+ *       <td nowrap valign="top" align="left"><code>[\u005Cu4E01]</code></td>
+ *       <td valign="top">The character U+4E01</td>
+ *     </tr>
+ *     <tr>
+ *       <td nowrap valign="top" align="left"><code>[a{ab}{ac}]</code></td>
+ *       <td valign="top">The character 'a' and the multicharacter strings &quot;ab&quot; and 
+ *       &quot;ac&quot;</td>
+ *     </tr>
+ *     <tr>
+ *       <td nowrap valign="top" align="left"><code>[\p{Lu}]</code></td>
+ *       <td valign="top">All characters in the general category Uppercase Letter</td>
+ *     </tr>
+ *   </table>
+ * </blockquote>
+ *
+ * Any character may be preceded by a backslash in order to remove any special
+ * meaning.  White space characters, as defined by UCharacterProperty.isRuleWhiteSpace(), are
+ * ignored, unless they are escaped.
+ *
+ * <p>Property patterns specify a set of characters having a certain
+ * property as defined by the Unicode standard.  Both the POSIX-like
+ * "[:Lu:]" and the Perl-like syntax "\p{Lu}" are recognized.  For a
+ * complete list of supported property patterns, see the User's Guide
+ * for UnicodeSet at
+ * <a href="http://oss.software.ibm.com/icu/userguide/unicodeset.html">
+ * http://oss.software.ibm.com/icu/userguide/unicodeset.html</a>.
+ * Actual determination of property data is defined by the underlying
+ * Unicode database as implemented by UCharacter.
+ *
+ * <p>Patterns specify individual characters, ranges of characters, and
+ * Unicode property sets.  When elements are concatenated, they
+ * specify their union.  To complement a set, place a '^' immediately
+ * after the opening '['.  Property patterns are inverted by modifying
+ * their delimiters; "[:^foo]" and "\P{foo}".  In any other location,
+ * '^' has no special meaning.
+ *
+ * <p>Ranges are indicated by placing two a '-' between two
+ * characters, as in "a-z".  This specifies the range of all
+ * characters from the left to the right, in Unicode order.  If the
+ * left character is greater than or equal to the
+ * right character it is a syntax error.  If a '-' occurs as the first
+ * character after the opening '[' or '[^', or if it occurs as the
+ * last character before the closing ']', then it is taken as a
+ * literal.  Thus "[a\u005C-b]", "[-ab]", and "[ab-]" all indicate the same
+ * set of three characters, 'a', 'b', and '-'.
+ *
+ * <p>Sets may be intersected using the '&' operator or the asymmetric
+ * set difference may be taken using the '-' operator, for example,
+ * "[[:L:]&[\u005Cu0000-\u005Cu0FFF]]" indicates the set of all Unicode letters
+ * with values less than 4096.  Operators ('&' and '|') have equal
+ * precedence and bind left-to-right.  Thus
+ * "[[:L:]-[a-z]-[\u005Cu0100-\u005Cu01FF]]" is equivalent to
+ * "[[[:L:]-[a-z]]-[\u005Cu0100-\u005Cu01FF]]".  This only really matters for
+ * difference; intersection is commutative.
+ *
+ * <table>
+ * <tr valign=top><td nowrap><code>[a]</code><td>The set containing 'a'
+ * <tr valign=top><td nowrap><code>[a-z]</code><td>The set containing 'a'
+ * through 'z' and all letters in between, in Unicode order
+ * <tr valign=top><td nowrap><code>[^a-z]</code><td>The set containing
+ * all characters but 'a' through 'z',
+ * that is, U+0000 through 'a'-1 and 'z'+1 through U+10FFFF
+ * <tr valign=top><td nowrap><code>[[<em>pat1</em>][<em>pat2</em>]]</code>
+ * <td>The union of sets specified by <em>pat1</em> and <em>pat2</em>
+ * <tr valign=top><td nowrap><code>[[<em>pat1</em>]&[<em>pat2</em>]]</code>
+ * <td>The intersection of sets specified by <em>pat1</em> and <em>pat2</em>
+ * <tr valign=top><td nowrap><code>[[<em>pat1</em>]-[<em>pat2</em>]]</code>
+ * <td>The asymmetric difference of sets specified by <em>pat1</em> and
+ * <em>pat2</em>
+ * <tr valign=top><td nowrap><code>[:Lu:] or \p{Lu}</code>
+ * <td>The set of characters having the specified
+ * Unicode property; in
+ * this case, Unicode uppercase letters
+ * <tr valign=top><td nowrap><code>[:^Lu:] or \P{Lu}</code>
+ * <td>The set of characters <em>not</em> having the given
+ * Unicode property
+ * </table>
+ *
+ * <p><b>Warning</b>: you cannot add an empty string ("") to a UnicodeSet.</p>
+ *
+ * <p><b>Formal syntax</b></p>
  *
  * <blockquote>
  *   <table>
@@ -147,71 +249,8 @@ import java.util.Iterator;
  *   </table>
  * </blockquote>
  *
- * Any character may be preceded by a backslash in order to remove any special
- * meaning.  White space characters, as defined by UCharacterProperty.isRuleWhiteSpace(), are
- * ignored, unless they are escaped.
- *
- * <p>Property patterns specify a set of characters having a certain
- * property as defined by the Unicode standard.  Both the POSIX-like
- * "[:Lu:]" and the Perl-like syntax "\p{Lu}" are recognized.  For a
- * complete list of supported property patterns, see the User's Guide
- * for UnicodeSet at
- * <a href="http://oss.software.ibm.com/icu/userguide/unicodeset.html">
- * http://oss.software.ibm.com/icu/userguide/unicodeset.html</a>.
- * Actual determination of property data is defined by the underlying
- * Unicode database as implemented by UCharacter.
- *
- * <p>Patterns specify individual characters, ranges of characters, and
- * Unicode property sets.  When elements are concatenated, they
- * specify their union.  To complement a set, place a '^' immediately
- * after the opening '['.  Property patterns are inverted by modifying
- * their delimiters; "[:^foo]" and "\P{foo}".  In any other location,
- * '^' has no special meaning.
- *
- * <p>Ranges are indicated by placing two a '-' between two
- * characters, as in "a-z".  This specifies the range of all
- * characters from the left to the right, in Unicode order.  If the
- * left character is greater than or equal to the
- * right character it is a syntax error.  If a '-' occurs as the first
- * character after the opening '[' or '[^', or if it occurs as the
- * last character before the closing ']', then it is taken as a
- * literal.  Thus "[a\u005C-b]", "[-ab]", and "[ab-]" all indicate the same
- * set of three characters, 'a', 'b', and '-'.
- *
- * <p>Sets may be intersected using the '&' operator or the asymmetric
- * set difference may be taken using the '-' operator, for example,
- * "[[:L:]&[\u005Cu0000-\u005Cu0FFF]]" indicates the set of all Unicode letters
- * with values less than 4096.  Operators ('&' and '|') have equal
- * precedence and bind left-to-right.  Thus
- * "[[:L:]-[a-z]-[\u005Cu0100-\u005Cu01FF]]" is equivalent to
- * "[[[:L:]-[a-z]]-[\u005Cu0100-\u005Cu01FF]]".  This only really matters for
- * difference; intersection is commutative.
- *
- * <table>
- * <tr valign=top><td nowrap><code>[a]</code><td>The set containing 'a'
- * <tr valign=top><td nowrap><code>[a-z]</code><td>The set containing 'a'
- * through 'z' and all letters in between, in Unicode order
- * <tr valign=top><td nowrap><code>[^a-z]</code><td>The set containing
- * all characters but 'a' through 'z',
- * that is, U+0000 through 'a'-1 and 'z'+1 through U+10FFFF
- * <tr valign=top><td nowrap><code>[[<em>pat1</em>][<em>pat2</em>]]</code>
- * <td>The union of sets specified by <em>pat1</em> and <em>pat2</em>
- * <tr valign=top><td nowrap><code>[[<em>pat1</em>]&[<em>pat2</em>]]</code>
- * <td>The intersection of sets specified by <em>pat1</em> and <em>pat2</em>
- * <tr valign=top><td nowrap><code>[[<em>pat1</em>]-[<em>pat2</em>]]</code>
- * <td>The asymmetric difference of sets specified by <em>pat1</em> and
- * <em>pat2</em>
- * <tr valign=top><td nowrap><code>[:Lu:] or \p{Lu}</code>
- * <td>The set of characters having the specified
- * Unicode property; in
- * this case, Unicode uppercase letters
- * <tr valign=top><td nowrap><code>[:^Lu:] or \P{Lu}</code>
- * <td>The set of characters <em>not</em> having the given
- * Unicode property
- * </table>
- * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.76 $ $Date: 2002/11/14 22:26:41 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.77 $ $Date: 2002/11/15 01:58:29 $
  */
 public class UnicodeSet extends UnicodeFilter {
 

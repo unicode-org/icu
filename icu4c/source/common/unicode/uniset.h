@@ -31,7 +31,7 @@ class UVector;
  * A character specifies a subset of Unicode code points.  Legal
  * code points are U+0000 to U+10FFFF, inclusive.
  *
- * The UnicodeSet class is not suitable for subclassing.
+ * <p>The UnicodeSet class is not designed to be subclassed.
  *
  * <p><code>UnicodeSet</code> supports two APIs. The first is the
  * <em>operand</em> API that allows the caller to modify the value of
@@ -67,92 +67,41 @@ class UVector;
  * <code>applyPattern()</code> methods and returned by the
  * <code>toPattern()</code> method.  These patterns follow a syntax
  * similar to that employed by version 8 regular expression character
- * classes:
+ * classes.  Here are some simple examples:
  *
  * <blockquote>
  *   <table>
  *     <tr align="top">
- *       <td nowrap valign="top" align="right"><code>pattern :=&nbsp; </code></td>
- *       <td valign="top"><code>('[' '^'? item* ']') |
- *       property</code></td>
- *     </tr>
- *     <tr align="top">
- *       <td nowrap valign="top" align="right"><code>item :=&nbsp; </code></td>
- *       <td valign="top"><code>char | (char '-' char) | pattern-expr<br>
- *       </code></td>
- *     </tr>
- *     <tr align="top">
- *       <td nowrap valign="top" align="right"><code>pattern-expr :=&nbsp; </code></td>
- *       <td valign="top"><code>pattern | pattern-expr pattern |
- *       pattern-expr op pattern<br>
- *       </code></td>
- *     </tr>
- *     <tr align="top">
- *       <td nowrap valign="top" align="right"><code>op :=&nbsp; </code></td>
- *       <td valign="top"><code>'&amp;' | '-'<br>
- *       </code></td>
- *     </tr>
- *     <tr align="top">
- *       <td nowrap valign="top" align="right"><code>special :=&nbsp; </code></td>
- *       <td valign="top"><code>'[' | ']' | '-'<br>
- *       </code></td>
- *     </tr>
- *     <tr align="top">
- *       <td nowrap valign="top" align="right"><code>char :=&nbsp; </code></td>
- *       <td valign="top"><em>any character that is not</em><code> special<br>
- *       | ('\u005C' </code><em>any character</em><code>)<br>
- *       | ('\u005Cu' hex hex hex hex)<br>
- *       </code></td>
- *     </tr>
- *     <tr align="top">
- *       <td nowrap valign="top" align="right"><code>hex :=&nbsp; </code></td>
- *       <td valign="top"><em>any character for which
- *       </em><code>Character.digit(c, 16)</code><em>
- *       returns a non-negative result</em></td>
+ *       <td nowrap valign="top" align="left"><code>[]</code></td>
+ *       <td valign="top">No characters</td>
+ *     </tr><tr align="top">
+ *       <td nowrap valign="top" align="left"><code>[a]</code></td>
+ *       <td valign="top">The character 'a'</td>
+ *     </tr><tr align="top">
+ *       <td nowrap valign="top" align="left"><code>[ae]</code></td>
+ *       <td valign="top">The characters 'a' and 'e'</td>
  *     </tr>
  *     <tr>
- *       <td nowrap valign="top" align="right"><code>property :=&nbsp; </code></td>
- *       <td valign="top"><em>a Unicode property set pattern</td>
+ *       <td nowrap valign="top" align="left"><code>[a-e]</code></td>
+ *       <td valign="top">The characters 'a' through 'e' inclusive, in Unicode code 
+ *       point order</td>
  *     </tr>
- *   </table>
- *   <br>
- *   <table border="1">
  *     <tr>
- *       <td>Legend: <table>
- *         <tr>
- *           <td nowrap valign="top"><code>a := b</code></td>
- *           <td width="20" valign="top">&nbsp; </td>
- *           <td valign="top"><code>a</code> may be replaced by <code>b</code> </td>
- *         </tr>
- *         <tr>
- *           <td nowrap valign="top"><code>a?</code></td>
- *           <td valign="top"></td>
- *           <td valign="top">zero or one instance of <code>a</code><br>
- *           </td>
- *         </tr>
- *         <tr>
- *           <td nowrap valign="top"><code>a*</code></td>
- *           <td valign="top"></td>
- *           <td valign="top">one or more instances of <code>a</code><br>
- *           </td>
- *         </tr>
- *         <tr>
- *           <td nowrap valign="top"><code>a | b</code></td>
- *           <td valign="top"></td>
- *           <td valign="top">either <code>a</code> or <code>b</code><br>
- *           </td>
- *         </tr>
- *         <tr>
- *           <td nowrap valign="top"><code>'a'</code></td>
- *           <td valign="top"></td>
- *           <td valign="top">the literal string between the quotes </td>
- *         </tr>
- *       </table>
- *       </td>
+ *       <td nowrap valign="top" align="left"><code>[\u4E01]</code></td>
+ *       <td valign="top">The character U+4E01</td>
+ *     </tr>
+ *     <tr>
+ *       <td nowrap valign="top" align="left"><code>[a{ab}{ac}]</code></td>
+ *       <td valign="top">The character 'a' and the multicharacter strings &quot;ab&quot; and 
+ *       &quot;ac&quot;</td>
+ *     </tr>
+ *     <tr>
+ *       <td nowrap valign="top" align="left"><code>[\p{Lu}]</code></td>
+ *       <td valign="top">All characters in the general category Uppercase Letter</td>
  *     </tr>
  *   </table>
  * </blockquote>
- *
+ * 
  * Any character may be preceded by a backslash in order to remove any special
  * meaning.  White space characters, as defined by UCharacter.isWhitespace(), are
  * ignored, unless they are escaped.
@@ -215,7 +164,95 @@ class UVector;
  * <td>The set of characters <em>not</em> having the given
  * Unicode property
  * </table>
- * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
+ *
+ * <p><b>Warning</b>: you cannot add an empty string ("") to a UnicodeSet.</p>
+ *
+ * <p><b>Formal syntax</b></p>
+ *
+ * <blockquote>
+ *   <table>
+ *     <tr align="top">
+ *       <td nowrap valign="top" align="right"><code>pattern :=&nbsp; </code></td>
+ *       <td valign="top"><code>('[' '^'? item* ']') |
+ *       property</code></td>
+ *     </tr>
+ *     <tr align="top">
+ *       <td nowrap valign="top" align="right"><code>item :=&nbsp; </code></td>
+ *       <td valign="top"><code>char | (char '-' char) | pattern-expr<br>
+ *       </code></td>
+ *     </tr>
+ *     <tr align="top">
+ *       <td nowrap valign="top" align="right"><code>pattern-expr :=&nbsp; </code></td>
+ *       <td valign="top"><code>pattern | pattern-expr pattern |
+ *       pattern-expr op pattern<br>
+ *       </code></td>
+ *     </tr>
+ *     <tr align="top">
+ *       <td nowrap valign="top" align="right"><code>op :=&nbsp; </code></td>
+ *       <td valign="top"><code>'&amp;' | '-'<br>
+ *       </code></td>
+ *     </tr>
+ *     <tr align="top">
+ *       <td nowrap valign="top" align="right"><code>special :=&nbsp; </code></td>
+ *       <td valign="top"><code>'[' | ']' | '-'<br>
+ *       </code></td>
+ *     </tr>
+ *     <tr align="top">
+ *       <td nowrap valign="top" align="right"><code>char :=&nbsp; </code></td>
+ *       <td valign="top"><em>any character that is not</em><code> special<br>
+ *       | ('\' </code><em>any character</em><code>)<br>
+ *       | ('\u' hex hex hex hex)<br>
+ *       </code></td>
+ *     </tr>
+ *     <tr align="top">
+ *       <td nowrap valign="top" align="right"><code>hex :=&nbsp; </code></td>
+ *       <td valign="top"><em>any character for which
+ *       </em><code>Character.digit(c, 16)</code><em>
+ *       returns a non-negative result</em></td>
+ *     </tr>
+ *     <tr>
+ *       <td nowrap valign="top" align="right"><code>property :=&nbsp; </code></td>
+ *       <td valign="top"><em>a Unicode property set pattern</td>
+ *     </tr>
+ *   </table>
+ *   <br>
+ *   <table border="1">
+ *     <tr>
+ *       <td>Legend: <table>
+ *         <tr>
+ *           <td nowrap valign="top"><code>a := b</code></td>
+ *           <td width="20" valign="top">&nbsp; </td>
+ *           <td valign="top"><code>a</code> may be replaced by <code>b</code> </td>
+ *         </tr>
+ *         <tr>
+ *           <td nowrap valign="top"><code>a?</code></td>
+ *           <td valign="top"></td>
+ *           <td valign="top">zero or one instance of <code>a</code><br>
+ *           </td>
+ *         </tr>
+ *         <tr>
+ *           <td nowrap valign="top"><code>a*</code></td>
+ *           <td valign="top"></td>
+ *           <td valign="top">one or more instances of <code>a</code><br>
+ *           </td>
+ *         </tr>
+ *         <tr>
+ *           <td nowrap valign="top"><code>a | b</code></td>
+ *           <td valign="top"></td>
+ *           <td valign="top">either <code>a</code> or <code>b</code><br>
+ *           </td>
+ *         </tr>
+ *         <tr>
+ *           <td nowrap valign="top"><code>'a'</code></td>
+ *           <td valign="top"></td>
+ *           <td valign="top">the literal string between the quotes </td>
+ *         </tr>
+ *       </table>
+ *       </td>
+ *     </tr>
+ *   </table>
+ * </blockquote>
+ *
  * @author Alan Liu
  * @stable
  */
