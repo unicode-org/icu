@@ -4,9 +4,9 @@
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpICUrules.bat
+// Tool: dumpicurules.bat
 // Source: ../../text/resources/Transliterator_Cyrillic_Latin.txt
-// Date: Thu Oct 25 22:17:21 2001
+// Date: Mon Nov  5 12:28:37 2001
 //--------------------------------------------------------------------
 
 // Cyrillic_Latin
@@ -18,8 +18,8 @@ translit_Cyrillic_Latin {
 // Corporation and others. All Rights Reserved.
 //--------------------------------------------------------------------
 // $Source: /xsrl/Nsvn/icu/icu/data/Attic/translit_Cyrillic_Latin.txt,v $
-// $Date: 2001/10/26 05:41:16 $
-// $Revision: 1.1 $
+// $Date: 2001/11/05 20:38:59 $
+// $Revision: 1.2 $
 //--------------------------------------------------------------------
 // TODO: add remaining characters
 // Should add variants for Russian-English, Russian-German
@@ -38,6 +38,7 @@ translit_Cyrillic_Latin {
 "$dot = \u0307 ;"
 "$caron = \u030C ;"
 "$comma = \u0326 ;"
+"$under = \u0331 ;"
 
 // move up so not masked
 
@@ -217,12 +218,14 @@ translit_Cyrillic_Latin {
 // Ҿ <> XXX ; # CYRILLIC CAPITAL LETTER ABKHASIAN CHE WITH DESCENDER
 
 
-"ъ <>  [:Ll:] { $modprime2 ;" // CYRILLIC SMALL LETTER HARD SIGN
-"Ъ <> $modprime2 ;" // CYRILLIC CAPITAL LETTER HARD SIGN
+"Ъ <> $modprime2 $under ;" // CYRILLIC CAPITAL LETTER HARD SIGN
+"ъ <>  $modprime2 ;" // CYRILLIC SMALL LETTER HARD SIGN
+"Ь <> $modprime $under ;" // CYRILLIC CAPITAL LETTER SOFT SIGN
+"ь <>  $modprime ;" // CYRILLIC SMALL LETTER SOFT SIGN
+
 "ы <> y ;" // CYRILLIC SMALL LETTER YERU
 "Ы <> Y ;" // CYRILLIC CAPITAL LETTER YERU
-"ь <>  [:Ll:] { $modprime ;" // CYRILLIC SMALL LETTER SOFT SIGN
-"Ь <> $modprime ;" // CYRILLIC CAPITAL LETTER SOFT SIGN
+
 // ҍ <> XXX ; # CYRILLIC SMALL LETTER SEMISOFT SIGN
 // Ҍ <> XXX ; # CYRILLIC CAPITAL LETTER SEMISOFT SIGN
 // ѣ <> XXX ; # CYRILLIC SMALL LETTER YAT
