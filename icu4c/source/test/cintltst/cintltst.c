@@ -215,7 +215,7 @@ ctest_setTestDirectory(const char* newDir)
 void ctest_setICU_DATA() {
     const char *original_ICU_DATA = getenv("ICU_DATA");
 
-    if (original_ICU_DATA != NULL) {
+    if (original_ICU_DATA != NULL && *original_ICU_DATA != 0) {
         /*  If the user set ICU_DATA, don't second-guess the person. */
         return;
     }
