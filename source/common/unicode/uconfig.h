@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 2002-2003, International Business Machines
+*   Copyright (C) 2002-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  uconfig.h
@@ -158,6 +158,15 @@
 #   define UCONFIG_NO_REGULAR_EXPRESSIONS 0
 #endif
 
+/**
+ * \def UCONFIG_NO_SERVICE
+ * This switch turns off service registration.
+ *
+ * @draft ICU 2.8
+ */
+#ifndef UCONFIG_NO_SERVICE
+#   define UCONFIG_NO_SERVICE 0
+#endif
 
 
 #endif
