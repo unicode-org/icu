@@ -256,6 +256,10 @@ nb {
         //ZM { "Zambia" }
         //ZW { "Zimbabwe" }
     }
+    // Currency display names
+    Currencies {
+        NOK { "kr", "NOK" }
+    }
     DateTimeElements:intvector {
         2,
         4,
@@ -289,42 +293,86 @@ nb {
         "fredag",
         "l\u00F8rdag",
     }
+    Eras {
+        "f.Kr.",
+        "e.Kr.",
+    }
     Languages {
         Fallback{ "en"}
-        ar { "Arabisk" }
-        bg { "Bulgarsk" }
-        cs { "Tsjekkisk" }
-        da { "Dansk" }
-        de { "Tysk" }
-        el { "Gresk" }
-        en { "Engelsk" }
-        es { "Spansk" }
-        et { "Estisk" }
-        fi { "Finsk" }
-        fr { "Fransk" }
-        he { "Hebraisk" }
-        hr { "Kroatisk" }
-        hu { "Ungarsk" }
-        it { "Italiensk" }
-        ja { "Japansk" }
-        ko { "Koreansk" }
-        lt { "Litauisk" }
-        lv { "Latvisk" }
-        nb { "Norsk bokm\u00E5l" }
-        nl { "Nederlandsk" }
-        nn { "Norsk nynorsk" }
-        no { "Norsk" }
-        pl { "Polsk" }
-        pt { "Portugisisk" }
-        ro { "Rumensk" }
-        ru { "Russisk" }
-        sk { "Slovakisk" }
-        sl { "Slovensk" }
-        sv { "Svensk" }
-        tr { "Tyrkisk" }
-        zh { "Kinesisk" }
-        //zh_cn { "Kinesisk (forenklet)" }
-        //zh_tw { "Kinesisk (tradisjonell)" }
+        af { "afrikaans" }
+        am { "amharisk" }
+        ar { "arabisk" }
+        be { "hviterussisk" }
+        bg { "bulgarsk" }
+        bn { "bengali" }
+        ca { "katalansk" }
+        cs { "tsjekkisk" }
+        da { "dansk" }
+        de { "tysk" }
+        el { "gresk" }
+        en { "engelsk" }
+        eo { "esperanto" }
+        es { "spansk" }
+        et { "estisk" }
+        eu { "baskisk" }
+        fa { "persisk" }
+        fi { "finsk" }
+        fo { "f\u00e6r\u00F8ysk" }
+        fr { "fransk" }
+        ga { "irsk" }
+        gl { "galicisk" }
+        gu { "gujarati" }
+        gv { "manx" }
+        haw { "hawaiisk" }
+        he { "hebraisk" }
+        hi { "hindi" }
+        hr { "kroatisk" }
+        hu { "ungarsk" }
+        hy { "armensk" }
+        id { "indonesisk" }
+        is { "islandsk" }
+        it { "italiensk" }
+        iu { "inuktitut" }
+        ja { "japansk" }
+        kl { "kalaallisut" }
+        kn { "kannada" }
+        ko { "koreansk" }
+        kw { "kornisk" }
+        lt { "litauisk" }
+        lv { "latvisk" }
+        mk { "makedonsk" }
+        mr { "marathi" }
+        mt { "maltesisk" }
+        nb { "norsk bokm\u00E5l" }
+        nl { "nederlandsk" }
+        nn { "norsk nynorsk" }
+        no { "norsk" }
+        om { "oromo" }
+        pl { "polsk" }
+        pt { "portugisisk" }
+        ro { "rumensk" }
+        ru { "russisk" }
+        sh { "serbokroatisk" }
+        sk { "slovakisk" }
+        sl { "slovensk" }
+        so { "somalisk" }
+        sq { "albansk" }
+        sr { "serbisk" }
+        sv { "svensk" }
+        sw { "swahili" }
+        ta { "tamil" }
+        th { "thai" }
+        ti { "tigrinya" }
+        tr { "tyrkisk" }
+        uk { "ukrainsk" }
+        vi { "vietnamesisk" }
+        zh { "kinesisk" }
+        //zh_cn { "kinesisk (forenklet)" }
+        //zh_tw { "kinesisk (tradisjonell)" }
+    }
+    ExemplarCharacters { "[a-z\u00e6\u00e5\u00f8\u00e9\u00f3\u00f4\u00e0\u00fc\u01ce]" }
+    LocaleScript{  
+        "Latn",  // ISO 15924 Name 
     }
     MonthAbbreviations {
         "jan",
@@ -369,9 +417,14 @@ nb {
         ",",
         "+",
     }
-    Eras {
-        "f.Kr.",
-        "e.Kr.",
+
+    Types{
+        TRADITIONAL { "Tradisjonell" }
+    }
+    Variants{
+        EURO    { "Europeisk" }
+        PREEURO { "F\u00f8r-eruropeisk" }
+        REVISED { "Revidert" }
     }
 
     zoneStrings {
@@ -383,14 +436,5 @@ nb {
             "MET",
             "Oslo"
         }
-    }
-    LocaleScript{  
-        "Latn",  // ISO 15924 Name 
-    }
-    ExemplarCharacters { "[a-z\u00e6\u00e5\u00f8\u00e9\u00f3\u00f4\u00e0\u00fc\u01ce]" }
-
-    // Currency display names
-    Currencies {
-        NOK { "kr", "NOK" }
     }
 }
