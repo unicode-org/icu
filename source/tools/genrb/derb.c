@@ -587,7 +587,7 @@ static void printOutBundle(FILE *out, UConverter *converter, UResourceBundle *re
                 printCString(out, converter, key, -1);
             }
             printString(out, converter, open, (int32_t)(sizeof(open) / sizeof(*open)));
-            uprv_itou(num, ures_getInt(resource, status), 10, 0);
+            uprv_itou(num, 20, ures_getInt(resource, status), 10, 0);
             printString(out, converter, num, u_strlen(num));
             printString(out, converter, close, (int32_t)(sizeof(close) / sizeof(*close)));
 
@@ -645,14 +645,14 @@ static void printOutBundle(FILE *out, UConverter *converter, UResourceBundle *re
                 }
                 printString(out, converter, open, (int32_t)(sizeof(open) / sizeof(*open)));
                 for(i = 0; i < len - 1; i++) {
-                    int32_t numLen =  uprv_itou(num, data[i], 10, 0);
+                    int32_t numLen =  uprv_itou(num, 20, data[i], 10, 0);
                     num[numLen++] = 0x002C; /* ',' */
                     num[numLen++] = 0x0020; /* ' ' */
                     num[numLen] = 0;
                     printString(out, converter, num, u_strlen(num));
                 }
                 if(len > 0) {
-                    uprv_itou(num, data[len - 1], 10, 0);
+                    uprv_itou(num, 20, data[len - 1], 10, 0);
                     printString(out, converter, num, u_strlen(num));
                 }
                 printString(out, converter, close, (int32_t)(sizeof(close) / sizeof(*close)));

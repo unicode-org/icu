@@ -497,8 +497,8 @@ static UBool convertFile(const char *pname,
 
             if (parse.line >= 0) {
                 UChar linebuf[20], offsetbuf[20];
-                uprv_itou(linebuf, parse.line, 10, 0);
-                uprv_itou(offsetbuf, parse.offset, 10, 0);
+                uprv_itou(linebuf, 20, parse.line, 10, 0);
+                uprv_itou(offsetbuf, 20, parse.offset, 10, 0);
                 u_wmsg(stderr, "cantCreateTranslitParseErr", str.getBuffer(),
                     u_wmsg_errorName(err), linebuf, offsetbuf);
             } else {
