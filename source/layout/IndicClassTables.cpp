@@ -69,7 +69,7 @@ enum
 //
 // Character class tables
 //
-const IndicClassTable::CharClass devaCharClasses[] =
+static const IndicClassTable::CharClass devaCharClasses[] =
 {
     _xx, _ma, _ma, _mp, _xx, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _iv, // 0900 - 090F
     _iv, _iv, _iv, _iv, _iv, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, // 0910 - 091F
@@ -81,7 +81,7 @@ const IndicClassTable::CharClass devaCharClasses[] =
     _xx                                                                             // 0970
 };
 
-const IndicClassTable::CharClass bengCharClasses[] =
+static const IndicClassTable::CharClass bengCharClasses[] =
 {
     _xx, _ma, _mp, _mp, _xx, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _xx, _xx, _iv, // 0980 - 098F
     _iv, _xx, _xx, _iv, _iv, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, // 0990 - 099F
@@ -93,7 +93,7 @@ const IndicClassTable::CharClass bengCharClasses[] =
     _ct, _ct, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx                           // 09F0 - 09FA
 };
 
-const IndicClassTable::CharClass punjCharClasses[] =
+static const IndicClassTable::CharClass punjCharClasses[] =
 {
     _xx, _xx, _ma, _xx, _xx, _iv, _iv, _iv, _iv, _iv, _iv, _xx, _xx, _xx, _xx, _iv, // 0A00 - 0A0F
     _iv, _xx, _xx, _iv, _iv, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, // 0A10 - 0A1F
@@ -105,7 +105,7 @@ const IndicClassTable::CharClass punjCharClasses[] =
     _ma, _ma, _ct, _ct, _xx                                                         // 0A70 - 0A74
 };
 
-const IndicClassTable::CharClass gujrCharClasses[] =
+static const IndicClassTable::CharClass gujrCharClasses[] =
 {
     _xx, _ma, _ma, _mp, _xx, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _xx, _iv, _xx, _iv, // 0A80 - 0A8F
     _iv, _iv, _xx, _iv, _iv, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, // 0A90 - 0A9F
@@ -116,7 +116,7 @@ const IndicClassTable::CharClass gujrCharClasses[] =
     _iv, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx  // 0AE0 - 0AEF
 };
 
-const IndicClassTable::CharClass oryaCharClasses[] =
+static const IndicClassTable::CharClass oryaCharClasses[] =
 {
     _xx, _ma, _ma, _mp, _xx, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _xx, _xx, _iv, // 0B00 - 0B0F
     _iv, _xx, _xx, _iv, _iv, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, // 0B10 - 0B1F
@@ -128,7 +128,7 @@ const IndicClassTable::CharClass oryaCharClasses[] =
     _xx                                                                             // 0B70
 };
 
-const IndicClassTable::CharClass tamlCharClasses[] =
+static const IndicClassTable::CharClass tamlCharClasses[] =
 {
     _xx, _xx, _ma, _mp, _xx, _iv, _iv, _iv, _iv, _iv, _iv, _xx, _xx, _xx, _iv, _iv, // 0B80 - 0B8F
     _iv, _xx, _iv, _iv, _iv, _ct, _xx, _xx, _xx, _ct, _ct, _xx, _ct, _xx, _ct, _ct, // 0B90 - 0B9F
@@ -141,7 +141,7 @@ const IndicClassTable::CharClass tamlCharClasses[] =
 };
 
 // FIXME: Should some of the bb's be pb's? (KA, NA, MA, YA, VA, etc. (approx 13))
-const IndicClassTable::CharClass teluCharClasses[] =
+static const IndicClassTable::CharClass teluCharClasses[] =
 {
     _xx, _mp, _mp, _mp, _xx, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _xx, _iv, _iv, // 0C00 - 0C0F
     _iv, _xx, _iv, _iv, _iv, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, // 0C10 - 0C1F
@@ -153,7 +153,7 @@ const IndicClassTable::CharClass teluCharClasses[] =
 };
 
 // FIXME: is 0CD5 a dr or an lm??
-const IndicClassTable::CharClass kndaCharClasses[] =
+static const IndicClassTable::CharClass kndaCharClasses[] =
 {
     _xx, _xx, _mp, _mp, _xx, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _xx, _iv, // 0C80 - 0C8F
     _iv, _xx, _iv, _iv, _iv, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, // 0C90 - 0C9F
@@ -166,7 +166,7 @@ const IndicClassTable::CharClass kndaCharClasses[] =
 
 // FIXME: this is correct for old-style Malayalam (MAL) but not for reformed Malayalam (MLR)
 // FIXME: should there be a REPH for old-style Malayalam?
-const IndicClassTable::CharClass mlymCharClasses[] =
+static const IndicClassTable::CharClass mlymCharClasses[] =
 {
     _xx, _xx, _mp, _mp, _xx, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _xx, _iv, _iv, // 0D00 - 0D0F
     _iv, _xx, _iv, _iv, _iv, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _bb, // 0D10 - 0D1F
@@ -180,18 +180,18 @@ const IndicClassTable::CharClass mlymCharClasses[] =
 //
 // Split matra tables
 //
-const SplitMatra bengSplitTable[] = {{0x09C7, 0x09BE}, {0x09C7, 0x09D7}};
+static const SplitMatra bengSplitTable[] = {{0x09C7, 0x09BE}, {0x09C7, 0x09D7}};
 
-const SplitMatra oryaSplitTable[] = {{0x0B47, 0x0B56}, {0x0B47, 0x0B3E}, {0x0B47, 0x0B57}};
+static const SplitMatra oryaSplitTable[] = {{0x0B47, 0x0B56}, {0x0B47, 0x0B3E}, {0x0B47, 0x0B57}};
 
-const SplitMatra tamlSplitTable[] = {{0x0BC6, 0x0BBE}, {0x0BC7, 0x0BBE}, {0x0BC6, 0x0BD7}};
+static const SplitMatra tamlSplitTable[] = {{0x0BC6, 0x0BBE}, {0x0BC7, 0x0BBE}, {0x0BC6, 0x0BD7}};
 
-const SplitMatra teluSplitTable[] = {{0x0C46, 0x0C56}};
+static const SplitMatra teluSplitTable[] = {{0x0C46, 0x0C56}};
 
-const SplitMatra kndaSplitTable[] = {{0x0CBF, 0x0CD5}, {0x0CC6, 0x0CD5}, {0x0CC6, 0x0CD6}, {0x0CC6, 0x0CC2},
+static const SplitMatra kndaSplitTable[] = {{0x0CBF, 0x0CD5}, {0x0CC6, 0x0CD5}, {0x0CC6, 0x0CD6}, {0x0CC6, 0x0CC2},
                                    {0x0CC6, 0x0CC2, 0x0CD5}};
 
-const SplitMatra mlymSplitTable[] = {{0x0D46, 0x0D3E}, {0x0D47, 0x0D3E}, {0x0D46, 0x0D57}};
+static const SplitMatra mlymSplitTable[] = {{0x0D46, 0x0D3E}, {0x0D47, 0x0D3E}, {0x0D46, 0x0D57}};
 
 //
 // Script Flags
@@ -213,28 +213,28 @@ const SplitMatra mlymSplitTable[] = {{0x0D46, 0x0D3E}, {0x0D47, 0x0D3E}, {0x0D46
 //
 // Indic Class Tables
 //
-const IndicClassTable devaClassTable = {0x0900, 0x0970, 2, DEVA_SCRIPT_FLAGS, devaCharClasses, NULL};
+static const IndicClassTable devaClassTable = {0x0900, 0x0970, 2, DEVA_SCRIPT_FLAGS, devaCharClasses, NULL};
 
-const IndicClassTable bengClassTable = {0x0980, 0x09FA, 3, BENG_SCRIPT_FLAGS, bengCharClasses, bengSplitTable};
+static const IndicClassTable bengClassTable = {0x0980, 0x09FA, 3, BENG_SCRIPT_FLAGS, bengCharClasses, bengSplitTable};
 
-const IndicClassTable punjClassTable = {0x0A00, 0x0A74, 2, PUNJ_SCRIPT_FLAGS, punjCharClasses, NULL};
+static const IndicClassTable punjClassTable = {0x0A00, 0x0A74, 2, PUNJ_SCRIPT_FLAGS, punjCharClasses, NULL};
 
-const IndicClassTable gujrClassTable = {0x0A80, 0x0AEF, 2, GUJR_SCRIPT_FLAGS, gujrCharClasses, NULL};
+static const IndicClassTable gujrClassTable = {0x0A80, 0x0AEF, 2, GUJR_SCRIPT_FLAGS, gujrCharClasses, NULL};
 
-const IndicClassTable oryaClassTable = {0x0B00, 0x0B70, 3, ORYA_SCRIPT_FLAGS, oryaCharClasses, oryaSplitTable};
+static const IndicClassTable oryaClassTable = {0x0B00, 0x0B70, 3, ORYA_SCRIPT_FLAGS, oryaCharClasses, oryaSplitTable};
 
-const IndicClassTable tamlClassTable = {0x0B80, 0x0BF2, 3, TAML_SCRIPT_FLAGS, tamlCharClasses, tamlSplitTable};
+static const IndicClassTable tamlClassTable = {0x0B80, 0x0BF2, 3, TAML_SCRIPT_FLAGS, tamlCharClasses, tamlSplitTable};
 
-const IndicClassTable teluClassTable = {0x0C00, 0x0C6F, 3, TELU_SCRIPT_FLAGS, teluCharClasses, teluSplitTable};
+static const IndicClassTable teluClassTable = {0x0C00, 0x0C6F, 3, TELU_SCRIPT_FLAGS, teluCharClasses, teluSplitTable};
 
-const IndicClassTable kndaClassTable = {0x0C80, 0x0CEF, 4, KNDA_SCRIPT_FLAGS, kndaCharClasses, kndaSplitTable};
+static const IndicClassTable kndaClassTable = {0x0C80, 0x0CEF, 4, KNDA_SCRIPT_FLAGS, kndaCharClasses, kndaSplitTable};
 
-const IndicClassTable mlymClassTable = {0x0D00, 0x0D6F, 3, MLYM_SCRIPT_FLAGS, mlymCharClasses, mlymSplitTable};
+static const IndicClassTable mlymClassTable = {0x0D00, 0x0D6F, 3, MLYM_SCRIPT_FLAGS, mlymCharClasses, mlymSplitTable};
 
 //
 // IndicClassTable addresses
 //
-const IndicClassTable *indicClassTables[] = {
+static const IndicClassTable *indicClassTables[] = {
     NULL,            /* 'zyyy' (COMMON) */
     NULL,            /* 'qaai' (INHERITED) */
     NULL,            /* 'arab' (ARABIC) */
@@ -298,11 +298,11 @@ IndicClassTable::CharClass IndicClassTable::getCharClass(LEUnicode ch) const
 
 const IndicClassTable *IndicClassTable::getScriptClassTable(le_int32 scriptCode)
 {
-	if (scriptCode < 0 || scriptCode >= scriptCodeCount) {
-		return NULL;
-	}
+    if (scriptCode < 0 || scriptCode >= scriptCodeCount) {
+        return NULL;
+    }
 
-	return indicClassTables[scriptCode];
+    return indicClassTables[scriptCode];
 }
 
 le_int32 IndicReordering::getWorstCaseExpansion(le_int32 scriptCode)
