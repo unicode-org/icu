@@ -30,7 +30,7 @@ af_ZA {
         "#,##0%",
         "#E0",
     }
-    LocaleID {"0436"}
+    LocaleID:int { 0x0436 }
 //    LocaleString { "af_ZA" }
 //    ShortCountry{ "ZAK" }
 }

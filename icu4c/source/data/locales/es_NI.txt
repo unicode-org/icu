@@ -23,7 +23,7 @@ es_NI {
         "MM/dd/yy",
         "{1} {0}",
     }
-    LocaleID { "4c0a" }
+    LocaleID:int { 0x4c0a }
 //    LocaleString { "es_NI" }
 //    NumberElements {
 //        ".",

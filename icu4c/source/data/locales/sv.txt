@@ -148,7 +148,7 @@ sv {
         uk { "ukrainska" }
         zh { "kinesiska" }
     }
-    LocaleID { "1d" }
+    LocaleID:int { 0x1d }
 //    LocaleString { "sv" }
     MonthAbbreviations { 
         "jan",

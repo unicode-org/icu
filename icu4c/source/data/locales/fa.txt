@@ -77,7 +77,7 @@ fa {
         "#,##0%",
         "#E0",
     }
-    LocaleID{ "29"}
+    LocaleID:int { 0x29 }
     CollationElements {
         Version { "1.0" }
         Sequence { "[normalization on]" }

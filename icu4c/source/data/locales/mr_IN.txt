@@ -8,7 +8,7 @@
 
 mr_IN {
     Version { "1.2" }
-    LocaleID { "044e" }
+    LocaleID:int { 0x044e }
 //    ShortCountry { IND }
 
     CurrencyElements {

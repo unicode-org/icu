@@ -23,7 +23,7 @@ es_PE {
         "dd/MM/yy",
         "{1} {0}",
     }
-    LocaleID { "280a" }
+    LocaleID:int { 0x280a }
 //    LocaleString { "es_PE" }
 //    NumberElements { 
 //        ".",

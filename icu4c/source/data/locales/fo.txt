@@ -66,7 +66,7 @@ fo {
         "∞",
         "�",
     }
-    LocaleID{ "38" }
+    LocaleID:int { 0x38 }
 //    LocaleScript{ 
 //        "Latn",  // ISO 15924 Name 
 //    }

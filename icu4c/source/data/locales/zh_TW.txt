@@ -1325,7 +1325,7 @@ zh_TW {
         "\u6C11\u570B\u524D",
         "\u6C11\u570B",
     }
-    LocaleID { "0404" }
+    LocaleID:int { 0x0404 }
 //    LocaleString { "zh_TW" }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",

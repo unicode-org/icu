@@ -236,7 +236,7 @@ mr {
         }
     }
 
-    LocaleID { "4e" }
+    LocaleID:int { 0x4e }
     CollationElements {
         Version { "1.0" }
         Sequence { 

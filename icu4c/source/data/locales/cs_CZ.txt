@@ -20,5 +20,5 @@ cs_CZ {
         "#E0",
     }
 //    ShortCountry { "CZE" }
-    LocaleID { "0405" }
+    LocaleID:int { 0x0405 }
 }

@@ -113,7 +113,7 @@ nn{
         "laurdag",
     }
 
-    LocaleID { "814" }
+    LocaleID:int { 0x814 }
 //    LocaleScript{ 
 //        "Latn",  // ISO 15924 Name 
 //    }

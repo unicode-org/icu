@@ -15,5 +15,5 @@ sr_YU {
 //    LocaleString { "sr_YU" }
     /* Discarding duplicate data for tag: NumberPatterns */
 //    ShortCountry { "YUG" }
-    LocaleID { "0c1a" }
+    LocaleID:int { 0x0c1a }
 }

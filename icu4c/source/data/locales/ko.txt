@@ -2193,7 +2193,7 @@ ko {
         za { "\uc8fc\uc559\uc5b4" }
         zu { "\uc904\ub8e8\uc5b4" }
     }
-    LocaleID { "12" }
+    LocaleID:int { 0x12 }
 //    LocaleString { "ko" }
     MonthAbbreviations { 
         "1\uC6D4",

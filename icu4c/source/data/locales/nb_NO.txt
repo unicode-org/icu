@@ -19,5 +19,5 @@ nb_NO {
         "#E0",
     }
 //    ShortCountry { "NOR" }
-    LocaleID { "0414" }
+    LocaleID:int { 0x0414 }
 }

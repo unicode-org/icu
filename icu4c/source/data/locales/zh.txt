@@ -1133,7 +1133,7 @@ zh {
         za { "\u85cf\u6587" }
         zu { "\u7956\u9c81\u6587" }
     }
-    LocaleID { "04" }
+    LocaleID:int { 0x04 }
 //    LocaleString { "zh" }
     MonthAbbreviations { 
         "\u4E00\u6708",

@@ -31,5 +31,5 @@ fo_FO {
         "#,##0%",
         "#E0",
     }
-    LocaleID{ "0438"}
+    LocaleID:int { 0x0438 }
 }

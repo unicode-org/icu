@@ -169,7 +169,7 @@ pt {
         uz { "Usbeque" }
         zh { "Chin\u00eas" }
     }
-    LocaleID { "16" }
+    LocaleID:int { 0x16 }
 //    LocaleString { "pt" }
     MonthAbbreviations { 
         "Jan",

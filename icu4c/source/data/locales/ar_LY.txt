@@ -20,5 +20,5 @@ ar_LY {
     }
 //    LocaleString { "ar_LY" }
 //    ShortCountry { "LBY" }
-    LocaleID { "1001" }
+    LocaleID:int { 0x1001 }
 }

@@ -82,7 +82,7 @@ mk {
     Languages { 
         mk { "\u043C\u0430\u043A\u0435\u0434\u043E\u034D\u0441\u043A\u0438" }
     }
-    LocaleID { "2f" }
+    LocaleID:int { 0x2f }
 //    LocaleString { "mk" }
     MonthAbbreviations { 
         "\u0458\u0430\u043D.",

@@ -36,5 +36,5 @@ hi_IN {
 //        "1",
 //        "1"
 //    }
-    LocaleID { "0439" }
+    LocaleID:int { 0x0439 }
 }

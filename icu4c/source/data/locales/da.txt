@@ -52,7 +52,7 @@ da {
     Languages { 
         da { "dansk" }
     }
-    LocaleID { "06" }
+    LocaleID:int { 0x06 }
 //    LocaleString { "da" }
     MonthAbbreviations { 
         "jan",

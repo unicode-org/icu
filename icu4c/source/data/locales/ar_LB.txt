@@ -51,5 +51,5 @@ ar_LB {
         "\u0643\u0627\u0646\u0648\u0646 \u0627\u0644\u0623\u0648\u0644",
     }
 //    ShortCountry { "LBN" }
-    LocaleID { "3001" }
+    LocaleID:int { 0x3001 }
 }

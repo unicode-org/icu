@@ -20,5 +20,5 @@ en_VI {
         "#E0",
     }
 //    ShortCountry { "VIR" }
-    LocaleID { "2409" }
+    LocaleID:int { 0x2409 }
 }

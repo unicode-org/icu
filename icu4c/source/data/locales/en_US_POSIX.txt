@@ -45,5 +45,5 @@ en_US_POSIX {
         "\uFFFD",
     }
 //    LocaleString { "en_US_POSIX" }
-    LocaleID { "7F" }
+    LocaleID:int { 0x7F }
 }

@@ -29,6 +29,6 @@ gl_ES {
         "dd/MM/yy",
         "{1} {0}",
     }
-    LocaleID {"0456"}
+    LocaleID:int { 0x0456 }
 
 }

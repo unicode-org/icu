@@ -14,5 +14,5 @@ sh_YU {
     }
 //    LocaleString { "sh_YU" }
 //    ShortCountry { "YUG" }
-    LocaleID { "081a" }
+    LocaleID:int { 0x081a }
 }

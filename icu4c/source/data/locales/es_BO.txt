@@ -23,7 +23,7 @@ es_BO {
         "dd/MM/yy",
         "{1} {0}",
     }
-    LocaleID { "400a" }
+    LocaleID:int { 0x400a }
 //    LocaleString { "es_BO" }
     NumberElements { 
         ",",

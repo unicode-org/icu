@@ -54,7 +54,7 @@ he {
         he { "\u05E2\u05D1\u05E8\u05D9\u05EA" }
         //iw { "\u05E2\u05D1\u05E8\u05D9\u05EA" } //Use he instead
     }
-    LocaleID { "0d" }
+    LocaleID:int { 0x0d }
 //    LocaleString { "he" }
     MonthAbbreviations { 
         "\u05D9\u05E0\u05D5",

@@ -25,7 +25,7 @@ zh_CN {
         TW { "\u53F0\u6E7E" }
         HK { "\u9999\u6E2F" }
     }
-    LocaleID { "0804" }
+    LocaleID:int { 0x0804 }
 
     DateTimePatterns { 
         "HH'\u65F6'mm'\u5206'ss'\u79D2' z",

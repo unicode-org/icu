@@ -23,7 +23,7 @@ es_GT {
         "d/MM/yy",
         "{1} {0}",
     }
-    LocaleID { "100a" }
+    LocaleID:int { 0x100a }
 //    LocaleString { "es_GT" }
 //    NumberElements { 
 //        ".",

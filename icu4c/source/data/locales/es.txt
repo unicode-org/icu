@@ -191,7 +191,7 @@ es {
         zh { "chino" }
         zu { "zul\u00FA" }
     }
-    LocaleID { "0a" }
+    LocaleID:int { 0x0a }
 //    LocaleString { "es" }
     MonthAbbreviations { 
         "ene",

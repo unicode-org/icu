@@ -20,5 +20,5 @@ et_EE {
         "#E0",
     }
 //    ShortCountry { "EST" }
-    LocaleID { "0425" }
+    LocaleID:int { 0x0425 }
 }

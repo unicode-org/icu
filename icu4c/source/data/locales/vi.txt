@@ -42,7 +42,7 @@ vi {
         "Th\u01B0\u0301 ba\u0309y",
         "Chu\u0309 nh\u00E2\u0323t",
     }
-    LocaleID { "002A" }
+    LocaleID:int { 0x002A }
 //    LocaleString { "vi" }
     MonthAbbreviations {
         "Thg 1",

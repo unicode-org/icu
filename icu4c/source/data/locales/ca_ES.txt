@@ -20,5 +20,5 @@ ca_ES {
     }
 //    LocaleString { "ca_ES" }
 //    ShortCountry { "ESP" }
-    LocaleID { "0403" }
+    LocaleID:int { 0x0403 }
 }

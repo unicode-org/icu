@@ -20,5 +20,5 @@ th_TH {
         "#E0",
     }
 //    ShortCountry { "THA" }
-    LocaleID { "041e" }
+    LocaleID:int { 0x041e }
 }

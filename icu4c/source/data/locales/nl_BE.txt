@@ -27,7 +27,7 @@ nl_BE {
         "d/MM/yy",
         "{1} {0}",
     }
-    LocaleID { "0813" }
+    LocaleID:int { 0x0813 }
 //    LocaleString { "nl_BE" }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",

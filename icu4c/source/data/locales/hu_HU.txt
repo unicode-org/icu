@@ -20,5 +20,5 @@ hu_HU {
         "#E0",
     }
 //    ShortCountry { "HUN" }
-    LocaleID { "040e" }
+    LocaleID:int { 0x040e }
 }

@@ -23,7 +23,7 @@ es_CO {
         "d/MM/yy",
         "{1} {0}",
     }
-    LocaleID { "240a" }
+    LocaleID:int { 0x240a }
 //    LocaleString { "es_CO" }
     NumberElements { 
         ",",

@@ -7,7 +7,7 @@
 
 sa_IN {
     Version { "x0.2" }
-    LocaleID{ "044F"}
+    LocaleID:int { 0x044F }
 //    ShortCountry { IND }
 
     CurrencyElements {

@@ -20,5 +20,5 @@ sq_AL {
         "#E0",
     }
 //    ShortCountry { "ALB" }
-    LocaleID { "041c" }
+    LocaleID:int { 0x041c }
 }

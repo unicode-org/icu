@@ -4,7 +4,7 @@
 // *   Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
-// $Revision: 1.8 $
+// $Revision: 1.9 $
 //
 // Telugu Locale. Data by Ram [ram@jtcsv.com]
 
@@ -45,6 +45,6 @@ te_IN {
     //    Width { "210" }
     //    Units { "mm" }
     //}
-    LocaleID {"44a"}
+    LocaleID:int { 0x44a }
 }
 

@@ -1,9 +1,9 @@
-// *******************************************************************************
+// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2001, International Business Machines
+// *   Copyright (C) 1997-2002, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
-// *******************************************************************************
+// ***************************************************************************
 
 de__PHONEBOOK {
     Version { "1.0" }
@@ -14,5 +14,5 @@ de__PHONEBOOK {
         "&ue <<< \u00FC &UE <<< \u00DC" }
     }
     // This LCID may be de_DE_PHONEBOOK, but it's unclear in the Microsoft documentation.
-    LocaleID { "10407" }
+    LocaleID:int { 0x10407 }
 }

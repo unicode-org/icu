@@ -14,5 +14,5 @@ ar_MA {
     }
 //    LocaleString { "ar_MA" }
 //    ShortCountry { "MAR" }
-    LocaleID { "1801" }
+    LocaleID:int { 0x1801 }
 }

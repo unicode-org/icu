@@ -36,7 +36,7 @@ es_AR {
         "\u221E",
         "\uFFFD",
     }
-    LocaleID { "2c0a" }
+    LocaleID:int { 0x2c0a }
 //    LocaleString { "es_AR" }
 //    ShortCountry { "ARG" }
 }

@@ -1687,7 +1687,7 @@ ja {
         za { "\u30c1\u30ef\u30f3\u8a9e" }
         zu { "\u30ba\u30fc\u30eb\u30fc\u8a9e" }
     }
-    LocaleID { "11" }
+    LocaleID:int { 0x11 }
 //    LocaleString { "ja" }
     MonthAbbreviations { 
         "1",

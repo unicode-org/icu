@@ -128,7 +128,7 @@ el {
         sr { "\u03a3\u03b5\u03c1\u03b2\u03b9\u03ba\u03ac" }
         sv { "\u03a3\u03bf\u03c5\u03b7\u03b4\u03b9\u03ba\u03ac" }
     }
-    LocaleID { "08" }
+    LocaleID:int { 0x08 }
 //    LocaleString { "el" }
     MonthAbbreviations { 
         "\u0399\u03B1\u03BD",

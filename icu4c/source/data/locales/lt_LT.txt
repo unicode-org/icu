@@ -20,5 +20,5 @@ lt_LT {
         "#E0",
     }
 //    ShortCountry { "LTU" }
-    LocaleID { "0427" }
+    LocaleID:int { 0x0427 }
 }

@@ -38,5 +38,5 @@ es_SV {
 //        "\uFFFD",
 //    }
 //    ShortCountry { "SLV" }
-    LocaleID {"440a"}
+    LocaleID:int { 0x440a }
 }
