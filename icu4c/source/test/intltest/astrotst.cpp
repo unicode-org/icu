@@ -135,7 +135,7 @@ void AstroTest::TestCoordinates(void) {
     
   CalendarAstronomer::Equatorial *result = astro->eclipticToEquatorial(139.686111 * CalendarAstronomer::PI / 180.0, 4.875278* CalendarAstronomer::PI / 180.0);
   logln((UnicodeString)"result is " + result->toString() + (UnicodeString)";  " /* + result->toHmsString()*/ );
-//  delete result;
+  delete result;
   closeAstro(status);
   ASSERT_OK(status);
 }
@@ -177,12 +177,12 @@ void AstroTest::TestCoverage(void) {
     logln((UnicodeString)"   gw sidereal: " + astro->getGreenwichSidereal());
     logln((UnicodeString)"   loc sidereal: " + astro->getLocalSidereal());
     logln((UnicodeString)"   equ ecl: " + (eq=astro->eclipticToEquatorial(*ecl))->toString());
-    //delete eq;
+    delete eq;
     logln((UnicodeString)"   equ long: " + (eq=astro->eclipticToEquatorial(eclLong))->toString());
-    //delete eq;
+    delete eq;
     CalendarAstronomer::Horizon *hor = NULL;
     logln((UnicodeString)"   horiz: " + (hor=astro->eclipticToHorizon(eclLong))->toString());
-    //delete hor;
+    delete hor;
     logln((UnicodeString)"   sunrise: " + (astro->getSunRiseSet(TRUE)));
     logln((UnicodeString)"   sunset: " + (astro->getSunRiseSet(FALSE)));
     logln((UnicodeString)"   moon phase: " + astro->getMoonPhase());
