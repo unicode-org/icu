@@ -50,7 +50,7 @@ ICD=$(ICUDATA)^\
 DATA_PATH=$(ICUP)\data^\
 ICUTOOLS=$(ICUP)\bin
 
-PATH = $(PATH);$(ICUP)\bin
+PATH = $(ICUP)\bin;$(PATH)
 
 # Suffixes for data files
 .SUFFIXES : .ucm .cnv .dll .dat .res .txt .c
