@@ -30,11 +30,17 @@
 /* Define to signed char if not in <sys/types.h> */
 #undef bool_t 
 
-/* The number of bytes in a wchar_t.  */
+/* Define if your system has <wchar.h> */
+#undef HAVE_WCHAR_H
+
+/* Define to the size of wchar_t */
 #undef SIZEOF_WCHAR_T
 
+/* Define if the build is out of source */
+#undef BUILD_OUT_OF_SOURCE
+
 /* Define if you have the <inttypes.h> header file.  */
-#undef U_HAVE_INTTYPES_H
+#undef HAVE_INTTYPES_H
 
 /* Define if you have the cma library (-lcma).  */
 #undef HAVE_LIBCMA

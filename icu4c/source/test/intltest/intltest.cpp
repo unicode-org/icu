@@ -5,18 +5,31 @@
  ********************************************************************/
 
 
+#include "unicode/utypes.h"
+
+#ifdef HAVE_CONFIG_H
+
+#include "icucfg.h"
+
+#undef uint32_t
+#undef uint16_t
+#undef uint8_t
+#undef int32_t
+#undef int16_t
+#undef int8_t
+
+#endif
+
 
 /**
  * IntlTest is a base class for tests.
  */
-
 
 #include <limits.h>
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
 
-#include "unicode/utypes.h"
 #include "unicode/unistr.h"
 #include "unicode/ures.h"
 #include "unicode/coll.h"
@@ -30,6 +43,7 @@
 #include <console.h>
 #include "Files.h"
 #endif
+
 static char* _testDirectory=NULL;
 //-----------------------------------------------------------------------------
 //convenience classes to ease porting code that uses the Java
@@ -453,7 +467,11 @@ IntlTest::getTestDirectory()
     if (_testDirectory == NULL) 
     {
 #if defined(_AIX) || defined(U_SOLARIS) || defined(U_LINUX) || defined(HPUX) || defined(POSIX) || defined(OS390)
+#if BUILD_OUT_OF_SOURCE
+      setTestDirectory("test|testdata|");
+#else
       setTestDirectory("source|test|testdata|");
+#endif
 #else
       setTestDirectory("icu|source|test|testdata|");
 #endif

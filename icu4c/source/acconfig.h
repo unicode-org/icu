@@ -20,3 +20,13 @@
 
 /* Define to signed char if not in <sys/types.h> */
 #undef bool_t 
+
+/* Define if your system has <wchar.h> */
+#undef HAVE_WCHAR_H
+
+/* Define to the size of wchar_t */
+#undef SIZEOF_WCHAR_T
+
+/* Define if the build is out of source */
+#undef BUILD_OUT_OF_SOURCE
+
