@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2002-2003, International Business Machines Corporation and
+ * Copyright (c) 2004-2004, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -10,7 +10,7 @@
 
 #include "uvectest.h"
 #include "uvector.h"
-#include "uhash.h"
+#include "hash.h"
 
 #include "cstring.h"
 
@@ -36,12 +36,15 @@ void UVectorTest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
     switch (index) {
 
         case 0: name = "UVector_API";
-            if (exec) UVector_API(); 
+            if (exec) UVector_API();
             break;
         case 1: name = "UStack_API";
-            if (exec) UStack_API(); 
+            if (exec) UStack_API();
             break;
-        default: name = ""; 
+        case 2: name = "Hashtable_API";
+            if (exec) Hashtable_API();
+            break;
+        default: name = "";
             break; //needed to end loop
     }
 }
@@ -151,3 +154,17 @@ void UVectorTest::UStack_API() {
     TEST_ASSERT(strcmp("abc", (const char *)a->pop()) == 0);
     delete a;
 }
+
+void UVectorTest::Hashtable_API() {
+    UErrorCode status = U_ZERO_ERROR;
+    Hashtable *a = new Hashtable(status);
+    TEST_ASSERT((a->puti("a", 1, status) == 0));
+    TEST_ASSERT((a->find("a") != NULL));
+    TEST_ASSERT((a->find("b") == NULL));
+    TEST_ASSERT((a->puti("b", 2, status) == 0));
+    TEST_ASSERT((a->find("b") != NULL));
+    TEST_ASSERT((a->removei("a") == 1));
+    TEST_ASSERT((a->find("a") == NULL));
+    delete a;
+}
+
