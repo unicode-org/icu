@@ -110,15 +110,15 @@ LMBCS-16
 LMBCS-17
 LMBCS-18
 LMBCS-19
-ISCII,version=0           iscii-dev
-ISCII,version=1           iscii-bng
-ISCII,version=2           iscii-gur
-ISCII,version=3           iscii-guj
-ISCII,version=4           iscii-ori
-ISCII,version=5           iscii-tml
-ISCII,version=6           iscii-tlg
-ISCII,version=7           iscii-knd
-ISCII,version=8           iscii-mlm
+ISCII,version=0           iscii-dev x-iscii-de
+ISCII,version=1           iscii-bng x-iscii-as x-iscii-be
+ISCII,version=2           iscii-gur x-iscii-pa
+ISCII,version=3           iscii-guj x-iscii-gu
+ISCII,version=4           iscii-ori x-iscii-or
+ISCII,version=5           iscii-tml x-iscii-ta
+ISCII,version=6           iscii-tlg x-iscii-te
+ISCII,version=7           iscii-knd x-iscii-ka
+ISCII,version=8           iscii-mlm x-iscii-ma
 
 # Table-based
 
