@@ -374,7 +374,7 @@ typedef enum UErrorCode {
 
     U_STRING_NOT_TERMINATED_WARNING = -124,/**< An output string could not be NUL-terminated because output length==destCapacity. */
 
-    U_SORT_KEY_TOO_SHORT_WARNING = -123,
+    U_SORT_KEY_TOO_SHORT_WARNING = -123, /**< Number of levels requested in getBound is higher than the number of levels in the sort key */
 
     U_AMBIGUOUS_ALIAS_WARNING = -122,   /**< This converter alias can go to different converter implementations */
 
