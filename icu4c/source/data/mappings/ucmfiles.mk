@@ -60,7 +60,7 @@ ibm-1160.ucm ibm-284.ucm ibm-857.ucm ibm-944.ucm\
 ibm-1164.ucm ibm-285.ucm ibm-858.ucm ibm-949.ucm\
 ibm-1250.ucm ibm-290.ucm ibm-859.ucm ibm-950.ucm\
 ibm-1251.ucm ibm-297.ucm ibm-860.ucm ibm-970.ucm\
-ibm-1388.ucm ibm-1162.ucm ibm-939.ucm ibm-941.ucm\
+ibm-1388.ucm ibm-1162.ucm ibm-939.ucm ibm-941.ucm ibm-5050\
 jisx-201.ucm jisx-208.ucm jisx-212.ucm gb18030.ucm gb_2312_80-1.ucm\
 ksc_5601_1.ucm\
 iso-ir-165.ucm cns-11643-1992.ucm ibm-1252.ucm ibm-37-s390.ucm ibm-861.ucm\
