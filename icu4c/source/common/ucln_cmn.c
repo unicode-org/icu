@@ -35,6 +35,10 @@ ucln_registerCleanup(ECleanupLibraryType type,
     }
 }
 
+/************************************************
+ The cleanup order is important in this function.
+ Please be sure that you have read ucln.h
+ ************************************************/
 U_CAPI void U_EXPORT2
 u_cleanup(void)
 {
@@ -48,26 +52,26 @@ u_cleanup(void)
         }
 
     }
-    uset_cleanup();
-    unorm_cleanup();
-    unames_cleanup();
-    uchar_cleanup();
-    pname_cleanup();
-    locale_cleanup();
-    uloc_cleanup();
-    ustring_cleanup();
+    ustrprep_cleanup();
 #if !UCONFIG_NO_BREAK_ITERATION
 	breakiterator_cleanup();
 #endif
 #if !UCONFIG_NO_SERVICE
     service_cleanup();
 #endif
+    ures_cleanup();
+    locale_cleanup();
+    uloc_cleanup();
+    unorm_cleanup();
+    uset_cleanup();
+    unames_cleanup();
+    pname_cleanup();
+    uchar_cleanup();
+    ustring_cleanup();
     ucnv_cleanup();
     ucnv_io_cleanup();
-    ures_cleanup();
     udata_cleanup();
     putil_cleanup();
-    ustrprep_cleanup();
     /*
      * WARNING! Destroying the global mutex can cause synchronization
      * problems.  ICU must be reinitialized from a single thread
