@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/WriteCharts.java,v $
- * $Date: 2002/06/20 01:16:48 $
- * $Revision: 1.15 $
+ * $Date: 2003/05/14 19:03:18 $
+ * $Revision: 1.16 $
  *
  *****************************************************************************************
  */
@@ -14,9 +14,6 @@
 package com.ibm.icu.dev.test.translit;
 import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
-import com.ibm.icu.dev.test.*;
-import com.ibm.icu.impl.Utility;
-//import java.text.*;
 import java.util.*;
 import java.io.*;
 
@@ -177,7 +174,7 @@ public class WriteCharts {
             int end = sourceSet.getRangeEnd(i);
             for (int j = sourceSet.getRangeStart(i); j <= end; ++j) {
             */
-                String flag = "";
+               // String flag = "";
                 String ss = UTF16.valueOf(j);
                 String ts = t.transliterate(ss);
                 char group = 0;
@@ -252,7 +249,7 @@ public class WriteCharts {
                 // if (!decomp.equals(ts)) continue;
                 
                 String rt = inverse.transliterate(ts);
-                String flag = "";
+                // String flag = "";
                 char group = 0x80;
                     
                 if (!sourceSetPlusAnyways.containsAll(rt)) {
@@ -323,7 +320,7 @@ public class WriteCharts {
                     }
                     out.println(tableFooter);
                     
-                    String title = "";
+                    // String title = "";
                     if ((group & 0x100) != 0) out.println("<hr><h2>Duals</h2>");
                     else if ((group & 0x80) != 0) out.println("<hr><h2>Completeness</h2>");
                     else out.println("<hr><h2>Round Trip</h2>");

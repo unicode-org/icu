@@ -1,7 +1,7 @@
 /*****************************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/IntlTestDateFormatSymbols.java,v $ 
- * $Date: 2002/08/01 20:27:21 $ 
- * $Revision: 1.4 $
+ * $Date: 2003/05/14 19:03:16 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  **/
@@ -25,9 +25,7 @@
 
 package com.ibm.icu.dev.test.format;
 
-import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
-import com.ibm.icu.util.*;
 import java.util.Locale;
 
 public class IntlTestDateFormatSymbols extends com.ibm.icu.dev.test.TestFmwk

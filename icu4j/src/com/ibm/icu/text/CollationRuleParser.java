@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationRuleParser.java,v $ 
-* $Date: 2003/04/09 20:03:43 $ 
-* $Revision: 1.12 $
+* $Date: 2003/05/14 19:03:30 $ 
+* $Revision: 1.13 $
 *
 *******************************************************************************
 */
@@ -1687,9 +1687,9 @@ final class CollationRuleParser
         }
         current++;
       }
-      int nextBrace = -1;
+      //int nextBrace = -1;
     
-      if(noOpenBraces != 0 || (nextBrace = source.indexOf("]", start+current) /*']'*/) == -1) {
+      if(noOpenBraces != 0 || (/*nextBrace =*/ source.indexOf("]", start+current) /*']'*/) == -1) {
         throwParseException(m_rules_, start);
       }
       return new UnicodeSet(source.substring(start, start+current)); //uset_openPattern(start, current);
@@ -1878,7 +1878,7 @@ final class CollationRuleParser
         
         m_parsedToken_.m_strength_ = TOKEN_UNSET_; 
         int sourcelimit = m_source_.length();
-        int expandNext = 0;
+        //int expandNext = 0;
         
         while (m_current_ < sourcelimit) {
         m_parsedToken_.m_prefixOffset_ = 0;

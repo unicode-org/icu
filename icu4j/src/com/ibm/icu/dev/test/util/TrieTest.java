@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/TrieTest.java,v $ 
-* $Date: 2002/04/02 21:00:08 $ 
-* $Revision: 1.4 $
+* $Date: 2003/05/14 19:03:17 $ 
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -67,14 +67,14 @@ public final class TrieTest extends TestFmwk
         IntDataManipulate    datamanipulate = new IntDataManipulate();
         // chartrie should fail with int data
         try {
-        	CharTrie chartrie = new CharTrie(inputStream, datamanipulate);
+        	/*CharTrie chartrie = */new CharTrie(inputStream, datamanipulate);
         	errln("CharTrie should fail with Int data during construction");
         } catch (Exception e) {
         }
         // inttrie should pass with int data
         try {
         	inputStream.reset();
-            IntTrie m_trie_ = new IntTrie(inputStream, datamanipulate);
+            /*IntTrie m_trie_ = */new IntTrie(inputStream, datamanipulate);
         } catch (Exception e) {
             errln("Failed reading IntTrie data");
         }	

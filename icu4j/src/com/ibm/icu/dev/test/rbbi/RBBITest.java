@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/rbbi/RBBITest.java,v $ 
- * $Date: 2002/02/16 03:05:15 $ 
- * $Revision: 1.3 $
+ * $Date: 2003/05/14 19:03:18 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -15,9 +15,7 @@ package com.ibm.icu.dev.test.rbbi;
 //Regression testing of RuleBasedBreakIterator
 import com.ibm.icu.dev.test.*;
 import com.ibm.icu.text.RuleBasedBreakIterator;
-import java.util.Locale;
 import java.util.Vector;
-import java.io.*;  
 
 public class RBBITest extends TestFmwk 
 {  

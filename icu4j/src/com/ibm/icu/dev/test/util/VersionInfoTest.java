@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/VersionInfoTest.java,v $ 
-* $Date: 2002/03/27 01:59:46 $ 
-* $Revision: 1.5 $
+* $Date: 2003/05/14 19:03:17 $ 
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -52,7 +52,7 @@ public final class VersionInfoTest extends TestFmwk
      */
     public void TestInstance()
     {
-    	VersionInfo version;
+    	VersionInfo version=null;
     	for (int i = 0; i < INSTANCE_INVALID_STRING_.length; i ++) {
     		try {
     			version = 
@@ -84,6 +84,7 @@ public final class VersionInfoTest extends TestFmwk
 	    		errln("valid ints should not produce an exception");
 	    	}
     	}
+        if(version==null){};
     }
     
     /**

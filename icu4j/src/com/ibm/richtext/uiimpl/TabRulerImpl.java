@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TabRulerImpl.java,v $ $Revision: 1.3 $ $Date: 2002/02/16 03:06:50 $
+ * @(#)$RCSfile: TabRulerImpl.java,v $ $Revision: 1.4 $ $Date: 2003/05/14 19:04:00 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -18,16 +18,12 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
-import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Image;
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
-import java.awt.event.InputEvent;
 
 import com.ibm.richtext.textlayout.attributes.AttributeMap;
 import com.ibm.richtext.textlayout.attributes.TextAttribute;
@@ -227,8 +223,8 @@ public final class TabRulerImpl implements MouseListener, MouseMotionListener
 
             int changeCode = event.getID();
 
-            if (changeCode == event.SELECTION_STYLES_CHANGED ||
-                    changeCode == event.TEXT_CHANGED) {
+            if (changeCode == TextPanelEvent.SELECTION_STYLES_CHANGED ||
+                    changeCode == TextPanelEvent.TEXT_CHANGED) {
 
                 int offset = fTextPanel.getSelectionStart();
                 AttributeMap style = fTextPanel.getText().paragraphStyleAt(offset);
@@ -236,7 +232,7 @@ public final class TabRulerImpl implements MouseListener, MouseMotionListener
                 fTabRuler.set(style, false);
                 fTabRuler.setLeftToRight(leftToRight, true);
             }
-            else if (changeCode == event.FORMAT_WIDTH_CHANGED) {
+            else if (changeCode == TextPanelEvent.FORMAT_WIDTH_CHANGED) {
                 
                 fTabRuler.setFormatWidth(fTextPanel.getFormatWidth(), true);
             }

@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: PrintContext.java,v $ $Revision: 1.2 $ $Date: 2002/02/16 03:06:34 $
+ * @(#)$RCSfile: PrintContext.java,v $ $Revision: 1.3 $ $Date: 2003/05/14 19:04:02 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -53,7 +53,7 @@ final class PrintContext implements Printable {
         if (false)
             throw new PrinterException("save trees");
             
-        if (fPrintable.print(graphics, pageIndex) == fPrintable.PAGE_EXISTS) {
+        if (fPrintable.print(graphics, pageIndex) == MConstTextPrintable.PAGE_EXISTS) {
             return PAGE_EXISTS;
         }
         else {

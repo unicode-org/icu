@@ -5,13 +5,13 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RemoveTransliterator.java,v $ 
- * $Date: 2002/02/16 03:06:12 $ 
- * $Revision: 1.6 $
+ * $Date: 2003/05/14 19:03:30 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.text;
-import java.util.*;
+
 
 /**
  * A transliterator that removes characters.  This is useful in conjunction

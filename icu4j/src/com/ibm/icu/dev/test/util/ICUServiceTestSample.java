@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/ICUServiceTestSample.java,v $
- * $Date: 2003/01/28 18:55:35 $
- * $Revision: 1.3 $
+ * $Date: 2003/05/14 19:03:17 $
+ * $Revision: 1.4 $
  *
  *******************************************************************************
  */
@@ -37,6 +37,8 @@ public class ICUServiceTestSample {
 	catch (InterruptedException e) {
 	}
 	System.out.println("done");
+     if(client==null){
+     }
     }
 
     /**

@@ -5,13 +5,12 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NullTransliterator.java,v $ 
- * $Date: 2002/12/03 18:57:36 $ 
- * $Revision: 1.11 $
+ * $Date: 2003/05/14 19:03:31 $ 
+ * $Revision: 1.12 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.text;
-import java.util.*;
 
 /**
  * A transliterator that leaves text unchanged.

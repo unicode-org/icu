@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/timezone/TimeZoneRegression.java,v $
- * $Date: 2002/08/13 22:04:39 $
- * $Revision: 1.8 $
+ * $Date: 2003/05/14 19:03:18 $
+ * $Revision: 1.9 $
  *
  *******************************************************************************
  */
@@ -20,7 +20,6 @@
 package com.ibm.icu.dev.test.timezone;
 import com.ibm.icu.util.*;
 import java.io.*;
-import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
 import com.ibm.icu.dev.test.*;
 import java.util.Date;
@@ -344,9 +343,8 @@ public class TimeZoneRegression extends TestFmwk {
     public void Test4151429() {
         try {
             TimeZone tz = TimeZone.getTimeZone("GMT");
-            String name = tz.getDisplayName(true, Integer.MAX_VALUE,
+            /*String name =*/ tz.getDisplayName(true, Integer.MAX_VALUE,
                                             Locale.getDefault());
-            name = null;
             errln("IllegalArgumentException not thrown by TimeZone.getDisplayName()");
         } catch(IllegalArgumentException e) {
             System.out.print("");
@@ -500,10 +498,9 @@ public class TimeZoneRegression extends TestFmwk {
 
             ex = null;
             try {
-                SimpleTimeZone temp = new SimpleTimeZone(0, "Z",
+                /*SimpleTimeZone temp =*/ new SimpleTimeZone(0, "Z",
                         month, day, dayOfWeek, time,
                         GOOD_MONTH, GOOD_DAY, GOOD_DAY_OF_WEEK, GOOD_TIME);
-                temp = null;
             } catch (IllegalArgumentException e) {
                 ex = e;
             }
@@ -516,10 +513,10 @@ public class TimeZoneRegression extends TestFmwk {
 
             ex = null;
             try {
-                SimpleTimeZone temp = new SimpleTimeZone(0, "Z",
+                /*SimpleTimeZone temp = */new SimpleTimeZone(0, "Z",
                         GOOD_MONTH, GOOD_DAY, GOOD_DAY_OF_WEEK, GOOD_TIME,
                         month, day, dayOfWeek, time);
-                temp = null;
+               // temp = null;
             } catch (IllegalArgumentException e) {
                 ex = e;
             }
@@ -573,9 +570,9 @@ public class TimeZoneRegression extends TestFmwk {
             boolean good = DATA[i] == GOOD;
             IllegalArgumentException e = null;
             try {
-                int offset = tz.getOffset(DATA[i+1], DATA[i+2], DATA[i+3],
+                /*int offset =*/ tz.getOffset(DATA[i+1], DATA[i+2], DATA[i+3],
                                           DATA[i+4], DATA[i+5], DATA[i+6]); 
-                offset = 0;
+                //offset = 0;
            } catch (IllegalArgumentException ex) {
                 e = ex;
             }
@@ -663,6 +660,9 @@ public class TimeZoneRegression extends TestFmwk {
             errln("FAIL: Null allowed in SimpleTimeZone(11)");
         } catch (NullPointerException e) {
             System.out.print("");
+        }
+        if(s!=null){
+            errln("FAIL: Did not get the expected Exception");
         }
     }
 
@@ -896,16 +896,16 @@ public class TimeZoneRegression extends TestFmwk {
     public void Test4208960 () {
 	SimpleTimeZone tz = (SimpleTimeZone)TimeZone.getTimeZone("PST");
 	try {
-	    int offset = tz.getOffset(GregorianCalendar.AD, 1996, Calendar.FEBRUARY, 29, 
+	    /*int offset =*/ tz.getOffset(GregorianCalendar.AD, 1996, Calendar.FEBRUARY, 29, 
 				      Calendar.THURSDAY, 0);
-        offset = 0;
+        //offset = 0;
 	} catch (IllegalArgumentException e) {
 	    errln("FAILED: to get TimeZone.getOffset(2/29/96)");
 	}
 	try {
-	    int offset = tz.getOffset(GregorianCalendar.AD, 1997, Calendar.FEBRUARY, 29, 
+	    /*int offset =*/ tz.getOffset(GregorianCalendar.AD, 1997, Calendar.FEBRUARY, 29, 
 				      Calendar.THURSDAY, 0);
-	    offset = 0;
+	    //offset = 0;
 	    errln("FAILED: TimeZone.getOffset(2/29/97) expected to throw Exception.");
 	} catch (IllegalArgumentException e) {
 	    logln("got IllegalArgumentException");

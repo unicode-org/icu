@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CanonicalIterator.java,v $
- * $Date: 2003/01/28 18:55:41 $
- * $Revision: 1.13 $
+ * $Date: 2003/05/14 19:03:30 $
+ * $Revision: 1.14 $
  *
  *****************************************************************************************
  */
@@ -315,7 +315,7 @@ public final class CanonicalIterator {
                 // there were some matches, so add all the possibilities to the set.
                 String prefix= segment.substring(0,i);
                 prefix += UTF16.valueOf(cp);
-                int el = -1;
+                //int el = -1;
                 Iterator iter = remainder.iterator();
                 while (iter.hasNext()) {
                     String item = (String) iter.next();

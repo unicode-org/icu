@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/Currency.java,v $
- * $Date: 2003/04/21 21:02:42 $
- * $Revision: 1.13 $
+ * $Date: 2003/05/14 19:03:48 $
+ * $Revision: 1.14 $
  *
  *******************************************************************************
  */
@@ -19,7 +19,6 @@ import java.util.ResourceBundle;
 
 import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.impl.LocaleUtility;
-import com.ibm.icu.text.DecimalFormatSymbols;
 
 /**
  * A class encapsulating a currency, as defined by ISO 4217.  A

@@ -8,10 +8,7 @@
 package com.ibm.icu.dev.test.lang;
 
 import com.ibm.icu.lang.UScript;
-import com.ibm.icu.lang.UScriptRun;
-import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.dev.test.TestUtil;
 
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -313,8 +310,8 @@ public class TestUScript extends TestFmwk{
     }
     public void TestAllCodepoints(){
         int code;
-        String oldId="";
-        String oldAbbrId="";
+        //String oldId="";
+        //String oldAbbrId="";
         for( int i =0; i <= 0x10ffff; i++){
           code =UScript.INVALID_CODE;
           code = UScript.getScript(i);

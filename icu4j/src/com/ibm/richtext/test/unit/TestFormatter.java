@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TestFormatter.java,v $ $Revision: 1.3 $ $Date: 2002/02/16 03:06:40 $
+ * @(#)$RCSfile: TestFormatter.java,v $ $Revision: 1.4 $ $Date: 2003/05/14 19:04:00 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -27,12 +27,9 @@ import com.ibm.richtext.textformat.TextOffset;
 import com.ibm.richtext.textformat.MFormatter;
 
 import java.awt.Color;
-import java.awt.Frame;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 
 import java.util.Hashtable;

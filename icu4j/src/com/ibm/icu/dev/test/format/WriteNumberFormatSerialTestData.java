@@ -4,15 +4,14 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/WriteNumberFormatSerialTestData.java,v $
- * $Date: 2002/02/22 00:28:11 $
- * $Revision: 1.1 $
+ * $Date: 2003/05/14 19:03:16 $
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
  
 package com.ibm.icu.dev.test.format;
 
-import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
 import java.util.Locale;
 import java.io.*;
@@ -28,8 +27,8 @@ public class WriteNumberFormatSerialTestData {
 							   " * others. All Rights Reserved.                                                *\n"+
 							   " *******************************************************************************\n"+
 							   " * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/WriteNumberFormatSerialTestData.java,v $\n"+ 
-							   " * $Date: 2002/02/22 00:28:11 $\n"+ 
-							   " * $Revision: 1.1 $\n"+
+							   " * $Date: 2003/05/14 19:03:16 $\n"+ 
+							   " * $Revision: 1.2 $\n"+
 							   " *\n"+
 							   " *****************************************************************************************\n"+
 							   " */\n\n"+
@@ -71,7 +70,7 @@ public class WriteNumberFormatSerialTestData {
 			os.flush();
 			os.close();
 			byte[] myArr = bts.toByteArray();
-			String temp = new String(myArr);
+			//String temp = new String(myArr);
 			System.out.println("    "+comment+ " :");
 			/*System.out.println("minimumIntegerDigits : "  + (temp.indexOf("minimumIntegerDigits")+"minimumIntegerDigits".length()));
 			System.out.println("maximumIntegerDigits : "  + (temp.indexOf("maximumIntegerDigits")+"maximumIntegerDigits".length()));

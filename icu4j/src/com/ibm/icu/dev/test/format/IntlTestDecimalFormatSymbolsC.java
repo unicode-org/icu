@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/IntlTestDecimalFormatSymbolsC.java,v $ 
- * $Date: 2002/02/16 03:05:11 $ 
- * $Revision: 1.3 $
+ * $Date: 2003/05/14 19:03:16 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -18,9 +18,7 @@
 package com.ibm.icu.dev.test.format;
 
 import java.text.FieldPosition;
-import com.ibm.icu.util.*;
 import java.util.Locale;
-import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
 
 /**

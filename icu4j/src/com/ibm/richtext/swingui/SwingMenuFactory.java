@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: SwingMenuFactory.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:46:22 $
+ * @(#)$RCSfile: SwingMenuFactory.java,v $ $Revision: 1.2 $ $Date: 2003/05/14 19:04:00 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -26,7 +26,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import com.ibm.richtext.uiimpl.resources.MenuData;
-import com.ibm.richtext.uiimpl.EventListener;
 import com.ibm.richtext.uiimpl.MItem;
 import com.ibm.richtext.uiimpl.MItem.ItemFactory;
 

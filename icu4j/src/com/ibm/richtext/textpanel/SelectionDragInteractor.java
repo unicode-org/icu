@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: SelectionDragInteractor.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:51:23 $
+ * @(#)$RCSfile: SelectionDragInteractor.java,v $ $Revision: 1.2 $ $Date: 2003/05/14 19:04:00 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -14,9 +14,6 @@
  */
 package com.ibm.richtext.textpanel;
 
-import java.text.BreakIterator;
-
-import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;

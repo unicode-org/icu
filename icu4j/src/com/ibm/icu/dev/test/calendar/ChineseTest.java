@@ -3,15 +3,13 @@
  * others. All Rights Reserved.
  *********************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/ChineseTest.java,v $
- * $Date: 2003/02/27 21:38:42 $
- * $Revision: 1.10 $
+ * $Date: 2003/05/14 19:02:52 $
+ * $Revision: 1.11 $
  */
 package com.ibm.icu.dev.test.calendar;
 import com.ibm.icu.util.*;
-import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
 import java.util.Date;
-import java.util.Locale;
 
 /**
  * Test of ChineseCalendar.

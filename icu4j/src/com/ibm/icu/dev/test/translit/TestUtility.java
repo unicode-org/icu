@@ -5,16 +5,13 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TestUtility.java,v $
- * $Date: 2002/08/13 22:07:57 $
- * $Revision: 1.10 $
+ * $Date: 2003/05/14 19:03:18 $
+ * $Revision: 1.11 $
  *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.translit;
 
-import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.lang.UCharacterCategory;
-import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
 
 public final class TestUtility {

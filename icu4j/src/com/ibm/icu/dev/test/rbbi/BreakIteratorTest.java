@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/rbbi/BreakIteratorTest.java,v $
- * $Date: 2002/11/22 00:24:31 $
- * $Revision: 1.10 $
+ * $Date: 2003/05/14 19:03:18 $
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */
@@ -14,12 +14,9 @@ package com.ibm.icu.dev.test.rbbi;
 
 import com.ibm.icu.dev.test.*;
 import com.ibm.icu.text.BreakIterator;
-import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import java.util.Locale;
 import java.util.Vector;
-import java.util.Enumeration;
-import java.io.*;
 
 public class BreakIteratorTest extends TestFmwk
 {
@@ -1081,12 +1078,12 @@ lineSelectionData.addElement("(\u0e1b\u0e23\u0e30\u0e40\u0e17\u0e28\u0e44\u0e17\
         int begin = 3;
         int end = str.length() - 3;
         // not used boolean gotException = false;
-        boolean dummy;
+ 
 
         iter.setText(new StringCharacterIterator(str, begin, end, begin));
         for (int index = -1; index < begin + 1; ++index) {
             try {
-                dummy = iter.isBoundary(index);
+                iter.isBoundary(index);
                 if (index < begin)
                     errln("Didn't get exception with offset = " + index +
                                     " and begin index = " + begin);

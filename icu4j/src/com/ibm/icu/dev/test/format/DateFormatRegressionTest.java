@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/DateFormatRegressionTest.java,v $ 
- * $Date: 2002/03/10 19:40:13 $ 
- * $Revision: 1.5 $
+ * $Date: 2003/05/14 19:03:16 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -17,8 +17,6 @@
 
 package com.ibm.icu.dev.test.format;
 
-import com.ibm.icu.impl.ICULocaleData;
-import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
 import com.ibm.icu.util.*;
 
@@ -29,7 +27,6 @@ import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Date;
 import java.util.Locale;
-import java.util.ResourceBundle;
 
 /** 
  * Performs regression test for DateFormat

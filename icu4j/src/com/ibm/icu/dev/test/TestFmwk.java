@@ -5,29 +5,25 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestFmwk.java,v $
- * $Date: 2003/02/24 20:05:14 $
- * $Revision: 1.42 $
+ * $Date: 2003/05/14 19:03:16 $
+ * $Revision: 1.43 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.dev.test;
 
-import java.io.*;
-import java.lang.reflect.*;
-import java.text.*;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.Writer;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 import java.util.TimeZone;
-import java.util.TreeMap;
-import java.util.TreeSet;
-import java.util.Vector;
+
 
 /**
  * TestFmwk is a base class for tests that can be run conveniently from
@@ -500,7 +496,7 @@ public class TestFmwk extends AbstractTestLog {
                     System.out.println();
                 }
 
-                String target = (String)targets.get(i);
+                //String target = (String)targets.get(i);
                 params.init();
                 resolveTarget(params, (String)targets.get(i)).run();
             }

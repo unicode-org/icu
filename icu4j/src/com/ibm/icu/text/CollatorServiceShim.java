@@ -5,22 +5,20 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollatorServiceShim.java,v $
-* $Date: 2003/05/13 16:33:01 $
-* $Revision: 1.3 $
+* $Date: 2003/05/14 19:03:31 $
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
 
 package com.ibm.icu.text;
 
-import java.util.Comparator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
 import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.impl.ICULocaleService;
-import com.ibm.icu.impl.ICULocaleService.ICUResourceBundleFactory;
 import com.ibm.icu.impl.ICULocaleService.LocaleKeyFactory;
 import com.ibm.icu.impl.ICUService;
 import com.ibm.icu.impl.ICUService.Factory;

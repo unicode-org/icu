@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2003/04/24 23:05:02 $
- * $Revision: 1.123 $
+ * $Date: 2003/05/14 19:03:18 $
+ * $Revision: 1.124 $
  *
  *****************************************************************************************
  */
@@ -1598,7 +1598,7 @@ public class TransliteratorTest extends TestFmwk {
     public void TestUndefinedVariable() {
         String rule = "$initial } a <> \u1161;";
         try {
-            Transliterator t = new RuleBasedTransliterator("<ID>", rule);
+            Transliterator t = Transliterator.createFromRules("<ID>", rule,Transliterator.FORWARD);
             t = null;
         } catch (IllegalArgumentException e) {
             logln("OK: Got exception for " + rule + ", as expected: " +
@@ -2102,6 +2102,9 @@ public class TransliteratorTest extends TestFmwk {
             "d << b;";
         try {
             Transliterator t = Transliterator.createFromRules("ID", rule, Transliterator.FORWARD);
+            if(t!=null){
+                errln("FAIL: Did not get expected exception");
+            }
         } catch (IllegalArgumentException e) {
             String err = e.getMessage();
             if (err.indexOf("d << b") >= 0) {
@@ -2122,6 +2125,9 @@ public class TransliteratorTest extends TestFmwk {
         Transliterator t = null;
         try {
             t = Transliterator.createFromRules("ID", rule, Transliterator.FORWARD);
+            if(t!=null){
+                errln("FAIL: Did not get the expected exception");
+            }
         } catch (IllegalArgumentException e) {
             logln("Ok: " + e.getMessage());
             return;
@@ -2138,6 +2144,9 @@ public class TransliteratorTest extends TestFmwk {
         try {
             Transliterator t =
                 Transliterator.createFromRules("ID", rule, Transliterator.FORWARD);
+            if(t!=null){
+                errln("FAIL: Did not get the expected exception");
+            }
         } catch (IllegalArgumentException e) {
             logln("Ok: " + e.getMessage());
             return;
@@ -2152,6 +2161,9 @@ public class TransliteratorTest extends TestFmwk {
         try {
             Transliterator t =
                 Transliterator.createFromRules("ID", "a}b{c>d;", Transliterator.FORWARD);
+            if(t!=null){
+                errln("FAIL: Did not get the expected exception");
+            }
         } catch (IllegalArgumentException e) {
             String msg = e.getMessage();
             if (msg.indexOf("a}b{c") >= 0) {
@@ -2344,6 +2356,9 @@ public class TransliteratorTest extends TestFmwk {
         String rule = "^a > Q; a > q;";
         try {
             Transliterator t = Transliterator.createFromRules("ID", rule, Transliterator.FORWARD);
+            if(t==null){
+                errln("FAIL: Did not get the expected exception");
+            }
         } catch (IllegalArgumentException e) {
             errln("FAIL: " + rule + " => " + e);
         }
@@ -2596,6 +2611,9 @@ public class TransliteratorTest extends TestFmwk {
         if (pos.start != pos.limit) {
             errln("Incomplete, " + t.getID() + ":  " + UtilityExtensions.formatInput(test, pos));
             gotError = true;
+        }
+        if(!gotError){
+            //errln("FAIL: Did not get expected error");
         }
     }
 

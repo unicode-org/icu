@@ -1632,7 +1632,7 @@ public class CollationMiscTest extends TestFmwk{
                     CollationKey key1 = coll.getCollationKey(tokens[i]);
                     for (int j = 0; j < i; j ++) {
                         CollationKey key2 = coll.getCollationKey(tokens[j]);
-                        if (key2.compareTo(key2) < 0) {
+                        if (key2.compareTo(key1) < 0) {
                             errln("Setting variable top shouldn't change the comparison sequence");
                         }
                         byte sortorder[] = key2.toByteArray();
@@ -1644,7 +1644,7 @@ public class CollationMiscTest extends TestFmwk{
                 } catch (Exception e) {
                     CollationElementIterator iter 
                                  = coll.getCollationElementIterator(tokens[i]);
-                    int ce = iter.next();
+                    /*int ce =*/ iter.next();
                     int ce2 = iter.next();
                     if (ce2 == CollationElementIterator.NULLORDER) {
                         errln("Token " + tokens[i] + " not expected to fail");

@@ -1,5 +1,5 @@
 /*
- * $RCSfile: SyntaxColorer.java,v $ $Revision: 1.2 $ $Date: 2002/02/16 03:06:33 $
+ * $RCSfile: SyntaxColorer.java,v $ $Revision: 1.3 $ $Date: 2003/05/14 19:03:59 $
  *
  * (C) Copyright IBM Corp. 1999.  All Rights Reserved.
  *
@@ -216,8 +216,8 @@ public final class SyntaxColorer implements TextPanelListener {
         }
         if (limit < text.length()) {
             fBreakIter.following(limit);
-            int l;
-            if ((l=fBreakIter.previous()) <= limit) {
+            //int l;
+            if ((fBreakIter.previous()) <= limit) {
                 limit = fBreakIter.next();
             }
         }

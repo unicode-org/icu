@@ -4,8 +4,8 @@
  * others. All Rights Reserved.
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/IBMCalendarTest.java,v $ 
- * $Date: 2003/05/09 18:46:44 $ 
- * $Revision: 1.17 $
+ * $Date: 2003/05/14 19:02:51 $ 
+ * $Revision: 1.18 $
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.calendar;
@@ -200,32 +200,50 @@ public class IBMCalendarTest extends CalendarTest {
 	{
 	    // new BuddhistCalendar(TimeZone)
 	    BuddhistCalendar cal = new BuddhistCalendar(TimeZone.getDefault());
-	}
+        if(cal == null){
+            errln("could not create BuddhistCalendar with TimeZone");
+        }
+    }
 	
 	{
 	    // new BuddhistCalendar(Locale)
 	    BuddhistCalendar cal = new BuddhistCalendar(Locale.getDefault());
-	}
+        if(cal == null){
+            errln("could not create BuddhistCalendar with Locale");
+        }
+    }
 
 	{
 	    // new BuddhistCalendar(TimeZone, Locale)
 	    BuddhistCalendar cal = new BuddhistCalendar(TimeZone.getDefault(), Locale.getDefault());
-	}
+        if(cal == null){
+            errln("could not create BuddhistCalendar with TimeZone and Locale");
+        }
+    }
 
 	{
 	    // new BuddhistCalendar(Date)
 	    BuddhistCalendar cal = new BuddhistCalendar(new Date());
+        if(cal == null){
+            errln("could not create BuddhistCalendar with Date");
+        }
 	}
 
 	{
 	    // new BuddhistCalendar(int year, int month, int date)
 	    BuddhistCalendar cal = new BuddhistCalendar(2543, Calendar.MAY, 22);
-	}
+        if(cal == null){
+            errln("could not create BuddhistCalendar with year,month,data");
+        }
+    }
 
 	{
 	    // new BuddhistCalendar(int year, int month, int date, int hour, int minute, int second)
 	    BuddhistCalendar cal = new BuddhistCalendar(2543, Calendar.MAY, 22, 1, 1, 1);
-	}
+        if(cal == null){
+            errln("could not create BuddhistCalendar with year,month,date,hour,minute,second");
+        }
+    }
 
 	{
 	    // data
@@ -340,6 +358,9 @@ public class IBMCalendarTest extends CalendarTest {
     public void TestMalaysianInstance() {
         Locale loc = new Locale("ms", "MY");  // Malay (Malaysia)
         Calendar cal = Calendar.getInstance(loc);
+        if(cal == null){
+            errln("could not create Malaysian instance");
+        }
     }
 
     /**
@@ -453,10 +474,10 @@ public class IBMCalendarTest extends CalendarTest {
     public void TestCoverage() {
         // BuddhistCalendar
         BuddhistCalendar bcal = new BuddhistCalendar();
-        int i = bcal.getMinimum(Calendar.ERA);
+        /*int i =*/ bcal.getMinimum(Calendar.ERA);
         bcal.add(Calendar.YEAR, 1);
         bcal.add(Calendar.MONTH, 1);
-        Date d = bcal.getTime();
+        /*Date d = */bcal.getTime();
 
         // CalendarAstronomer
         // (This class should probably be made package-private.)
@@ -470,6 +491,6 @@ public class IBMCalendarTest extends CalendarTest {
         ccal.add(Calendar.YEAR, 1);
         ccal.roll(Calendar.MONTH, 1);
         ccal.roll(Calendar.YEAR, 1);
-        d = ccal.getTime();
+        ccal.getTime();
     }
 }

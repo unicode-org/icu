@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: Scroller.java,v $ $Revision: 1.4 $ $Date: 2001/10/30 02:42:48 $
+ * @(#)$RCSfile: Scroller.java,v $ $Revision: 1.5 $ $Date: 2003/05/14 19:04:00 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -28,7 +28,6 @@ package com.ibm.richtext.textpanel;
 
 import java.awt.Component;
 import java.awt.Rectangle;
-import java.awt.Dimension;
 
 import java.awt.event.AdjustmentListener;
 import java.awt.event.AdjustmentEvent;

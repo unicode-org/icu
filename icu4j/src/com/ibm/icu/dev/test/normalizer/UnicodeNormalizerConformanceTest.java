@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/normalizer/UnicodeNormalizerConformanceTest.java,v $ 
- * $Date: 2003/01/28 18:55:34 $ 
- * $Revision: 1.2 $
+ * $Date: 2003/05/14 19:03:17 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -146,8 +146,8 @@ public class UnicodeNormalizerConformanceTest extends TestFmwk {
      */
     private boolean checkConformance(String[] field, String line) throws Exception{
         boolean pass = true;
-        StringBuffer buf = new StringBuffer(); // scratch
-        String out,fcd;
+       // StringBuffer buf = new StringBuffer(); // scratch
+        String out;
         int i=0;
         for (i=0; i<5; ++i) {
             if (i<3) {

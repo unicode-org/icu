@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/normalizer/TestCanonicalIterator.java,v $ 
- * $Date: 2003/04/09 21:38:16 $ 
- * $Revision: 1.13 $
+ * $Date: 2003/05/14 19:03:17 $ 
+ * $Revision: 1.14 $
  *
  *****************************************************************************************
  */
@@ -55,8 +55,8 @@ public class TestCanonicalIterator extends TestFmwk {
     	slowIt.SKIP_ZEROS = false;
     	*/
     	//Transliterator name = Transliterator.getInstance("[^\\u0020-\\u007F] name");
-    	Set itSet = new TreeSet();
-    	Set slowItSet = new TreeSet();
+    	//Set itSet = new TreeSet();
+    	//Set slowItSet = new TreeSet();
     	
     	
     	for (int i = 0; i < 0x10FFFF; ++i) {
@@ -206,7 +206,7 @@ public class TestCanonicalIterator extends TestFmwk {
         for (int i = 0; i < testArray.length; ++i) {
             //logln("Results for: " + name.transliterate(testArray[i]));
             CanonicalIterator it = new CanonicalIterator(testArray[i][0]);
-            int counter = 0;
+           // int counter = 0;
             set.clear();
             String first = null;
             while (true) {

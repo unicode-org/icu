@@ -160,7 +160,7 @@ public class CollationPerformanceTest {
     
     public static void main(String[] args) {
         CollationPerformanceTest collPerf = new CollationPerformanceTest();
-        if ( !collPerf.processOptions(args) || opt_help || opt_fName.length()==0) {
+        if ( !CollationPerformanceTest.processOptions(args) || opt_help || opt_fName.length()==0) {
             System.out.println(usageString);
             System.exit(1);
         }
@@ -257,7 +257,7 @@ public class CollationPerformanceTest {
      */
     void doQSort() {
         callGC();
-        String[] sortTests = (String[]) tests.clone();
+        //String[] sortTests = (String[]) tests.clone();
         //Adjust loop count to compensate for file size. QSort should be nlog(n) 
         double dLoopCount = opt_loopCount * 3000 / ((Math.log(tests.length) / Math.log(10)* tests.length));
  
@@ -916,7 +916,7 @@ public class CollationPerformanceTest {
                                     return false;
                                 }
                                 try {
-                                    int value = Integer.parseInt(args[argNum]);
+                                   /* int value =*/ Integer.parseInt(args[argNum]);
                                     options[i].value.delete(0, options[i].value.capacity()).append(args[argNum]);
                                 } catch (NumberFormatException e) {
                                     System.err.println("Expected: a number value");
@@ -1018,14 +1018,14 @@ public class CollationPerformanceTest {
         // recommended by Javasoft.
         try {
             System.gc();
-            Thread.currentThread().sleep(100);
+            Thread.sleep(100);
             System.runFinalization();
-            Thread.currentThread().sleep(100);
+            Thread.sleep(100);
             
             System.gc();
-            Thread.currentThread().sleep(100);
+            Thread.sleep(100);
             System.runFinalization();
-            Thread.currentThread().sleep(100);
+            Thread.sleep(100);
         } catch (InterruptedException e) {}
     }
 

@@ -8,7 +8,6 @@
 **********************************************************************
 */
 package com.ibm.icu.text;
-import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.*;
 
 /**
@@ -20,7 +19,7 @@ import com.ibm.icu.lang.*;
  * variants with the system which are then accessed via their IDs.
  *
  * @author Alan Liu
- * @version $RCSfile: UnescapeTransliterator.java,v $ $Revision: 1.5 $ $Date: 2002/02/25 22:43:58 $
+ * @version $RCSfile: UnescapeTransliterator.java,v $ $Revision: 1.6 $ $Date: 2003/05/14 19:03:30 $
  */
 class UnescapeTransliterator extends Transliterator {
 

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/normalizer/BasicTest.java,v $
- * $Date: 2003/04/10 08:02:00 $
- * $Revision: 1.28 $
+ * $Date: 2003/05/14 19:03:17 $
+ * $Revision: 1.29 $
  *
  *****************************************************************************************
  */
@@ -629,13 +629,13 @@ public class BasicTest extends TestFmwk {
 
         // Run through the iterator forwards and stick it into a StringBuffer
         StringBuffer forward =  new StringBuffer();
-        for (int ch = iter.first(); ch != iter.DONE; ch = iter.next()) {
+        for (int ch = iter.first(); ch != Normalizer.DONE; ch = iter.next()) {
             forward.append(ch);
         }
 
         // Now do it backwards
         StringBuffer reverse = new StringBuffer();
-        for (int ch = iter.last(); ch != iter.DONE; ch = iter.previous()) {
+        for (int ch = iter.last(); ch != Normalizer.DONE; ch = iter.previous()) {
             reverse.insert(0, ch);
         }
 
@@ -657,13 +657,13 @@ public class BasicTest extends TestFmwk {
             // Run through the iterator forwards and stick it into a
             // StringBuffer
             StringBuffer forward =  new StringBuffer();
-            for (int ch = iter.first(); ch != iter.DONE; ch = iter.next()) {
+            for (int ch = iter.first(); ch != Normalizer.DONE; ch = iter.next()) {
                 forward.append(ch);
             }
 
             // Now do it backwards
             StringBuffer reverse = new StringBuffer();
-            for (int ch = iter.last(); ch != iter.DONE; ch = iter.previous()) {
+            for (int ch = iter.last(); ch != Normalizer.DONE; ch = iter.previous()) {
                 reverse.insert(0, ch);
             }
 
@@ -834,7 +834,7 @@ public class BasicTest extends TestFmwk {
         int ch;
         UCharacterIterator cIter =  UCharacterIterator.getInstance(expected);
         
-        while ((ch=iter.next())!= iter.DONE){
+        while ((ch=iter.next())!= Normalizer.DONE){
             if (index >= expected.length()) {
                 errln("FAIL: " + msg + "Unexpected character '" + (char)ch
                         + "' (" + hex(ch) + ")"
@@ -856,7 +856,7 @@ public class BasicTest extends TestFmwk {
         }
         
         cIter.setToLimit();
-        while((ch=iter.previous())!=iter.DONE){
+        while((ch=iter.previous())!=Normalizer.DONE){
             int want = cIter.previousCodePoint();
             if (ch != want ) {
                 errln("FAIL: " + msg + "got '" + (char)ch
@@ -933,7 +933,7 @@ public class BasicTest extends TestFmwk {
         int ch;
         UCharacterIterator cIter =  UCharacterIterator.getInstance(expected);
         
-        while ((ch=iter.next())!= iter.DONE){
+        while ((ch=iter.next())!= Normalizer.DONE){
             if (index >= expected.length()) {
                 errln("FAIL: " +  "Unexpected character '" + (char)ch
                         + "' (" + hex(ch) + ")"
@@ -955,7 +955,7 @@ public class BasicTest extends TestFmwk {
         }
         
         cIter.setToLimit();
-        while((ch=iter.previous())!=iter.DONE){
+        while((ch=iter.previous())!=Normalizer.DONE){
             int want = cIter.previousCodePoint();
             if (ch != want ) {
                 errln("FAIL: " + "got '" + (char)ch
@@ -974,7 +974,7 @@ public class BasicTest extends TestFmwk {
         Normalizer iter = new Normalizer(new StringCharacterIterator(Utility.unescape(input)),
                                                 Normalizer.NFKC,0);
         StringBuffer got = new StringBuffer();
-        for (ch = iter.first();ch!=iter.DONE;ch=iter.next())
+        for (ch = iter.first();ch!=Normalizer.DONE;ch=iter.next())
         {
             if (index >= expected.length()) {
                 errln("FAIL: " +  "Unexpected character '" + (char)ch +
@@ -997,7 +997,7 @@ public class BasicTest extends TestFmwk {
         logln("Reverse Iteration\n");
         iter.setIndexOnly(iter.endIndex());
         got.setLength(0);
-        for(ch=iter.previous();ch!=iter.DONE;ch=iter.previous()){
+        for(ch=iter.previous();ch!=Normalizer.DONE;ch=iter.previous()){
             if (index >= expected.length()) {
                 errln("FAIL: " +  "Unexpected character '" + (char)ch
                                + "' (" + hex(ch) + ")" + " at index " + index);
@@ -1869,7 +1869,7 @@ public class BasicTest extends TestFmwk {
 	
 	    // test all of these precomposed characters
 	    UnicodeSetIterator it = new UnicodeSetIterator(set);
-	    while(it.nextRange() && it.codepoint!=it.IS_STRING) {
+	    while(it.nextRange() && it.codepoint!=UnicodeSetIterator.IS_STRING) {
 	        start=it.codepoint;
 	        end=it.codepointEnd;
 	        while(start<=end) {
@@ -2101,7 +2101,7 @@ public class BasicTest extends TestFmwk {
         for(int i=0x3000; i<0x3100;i++){
             String input = ((char)i)+troublesome;
             try{                            
-                String result = Normalizer.compose(input,false);
+              /*  String result =*/ Normalizer.compose(input,false);
             }catch(IndexOutOfBoundsException e){
                 errln("compose() failed for input: " + Utility.hex(input) + " Exception: " + e.toString());
             }
@@ -2494,7 +2494,7 @@ public class BasicTest extends TestFmwk {
     }
 
     public void TestSkippable() {
-       UnicodeSet starts, diff;
+       UnicodeSet starts;
        UnicodeSet[] skipSets = new UnicodeSet[]{
                                                     new UnicodeSet(), //NFD
                                                     new UnicodeSet(), //NFC
@@ -2512,7 +2512,7 @@ public class BasicTest extends TestFmwk {
                                                     new UnicodeSet(),
                                                };
        StringBuffer s, pattern;
-       int start, limit, rangeStart, rangeEnd;
+       int start, limit, rangeEnd;
        int i, range, count;
        starts = new UnicodeSet();
        /*
@@ -2543,7 +2543,7 @@ public class BasicTest extends TestFmwk {
        count=starts.getRangeCount();
    
        start=limit=0;
-       rangeStart=rangeEnd=0;
+       rangeEnd=0;
        range=0;
        for(;;) {
            if(start<limit) {
@@ -2573,12 +2573,12 @@ public class BasicTest extends TestFmwk {
            start=limit;
            if(++limit>rangeEnd) {
                if(range<count) {
-                   limit=rangeStart=starts.getRangeStart(range);
+                   limit=starts.getRangeStart(range);
                    rangeEnd=starts.getRangeEnd(range);
                    ++range;
                } else if(range==count) {
                    // additional range to complete the Unicode code space 
-                   limit=rangeStart=rangeEnd=0x110000;
+                   limit=rangeEnd=0x110000;
                    ++range;
                } else {
                    break;

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/timezone/TimeZoneTest.java,v $
- * $Date: 2002/12/03 23:15:05 $
- * $Revision: 1.11 $
+ * $Date: 2003/05/14 19:03:18 $
+ * $Revision: 1.12 $
  *
  *******************************************************************************
  */
@@ -21,15 +21,11 @@
 package com.ibm.icu.dev.test.timezone;
 
 import com.ibm.icu.dev.test.*;
-import com.ibm.icu.impl.ICULocaleData;
-import com.ibm.icu.lang.*;
-import com.ibm.icu.text.*;
 import com.ibm.icu.util.*;
 
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Locale;
-import java.util.ResourceBundle;
 
 public class TimeZoneTest extends TestFmwk
 {
@@ -572,9 +568,9 @@ public class TimeZoneTest extends TestFmwk
 
         GregorianCalendar gc = new GregorianCalendar();
         gc.setTime(d);
-        if (time_zone.getOffset(gc.AD, gc.get(gc.YEAR), gc.get(gc.MONTH),
-                                gc.get(gc.DAY_OF_MONTH),
-                                gc.get(gc.DAY_OF_WEEK), 0)
+        if (time_zone.getOffset(GregorianCalendar.AD, gc.get(GregorianCalendar.YEAR), gc.get(GregorianCalendar.MONTH),
+                                gc.get(GregorianCalendar.DAY_OF_MONTH),
+                                gc.get(GregorianCalendar.DAY_OF_WEEK), 0)
             != -7*millisPerHour)
             errln("FAIL: getOffset returned wrong value");
     }

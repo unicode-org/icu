@@ -3,11 +3,10 @@
  * others. All Rights Reserved.
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NameUnicodeTransliterator.java,v $ 
- * $Date: 2002/09/19 23:17:02 $ 
- * $Revision: 1.13 $
+ * $Date: 2003/05/14 19:03:30 $ 
+ * $Revision: 1.14 $
  */
 package com.ibm.icu.text;
-import java.util.*;
 import com.ibm.icu.lang.*;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.UCharacterProperty;

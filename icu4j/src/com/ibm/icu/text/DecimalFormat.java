@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecimalFormat.java,v $ 
- * $Date: 2003/04/24 22:58:04 $ 
- * $Revision: 1.29 $
+ * $Date: 2003/05/14 19:03:31 $ 
+ * $Revision: 1.30 $
  *
  *****************************************************************************************
  */
@@ -1592,7 +1592,7 @@ public class DecimalFormat extends NumberFormat {
                     pos = match(text, pos, getCurrency().getCurrencyCode());
                 } else {
                     ParsePosition ppos = new ParsePosition(pos);
-                    Number n = currencyChoice.parse(text, ppos);
+                   /* Number n = */currencyChoice.parse(text, ppos);
                     pos = (ppos.getIndex() == pos) ? -1 : ppos.getIndex();
                 }
                 continue;

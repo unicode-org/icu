@@ -1,7 +1,7 @@
 /*****************************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberRegression.java,v $ 
- * $Date: 2003/04/19 05:51:09 $ 
- * $Revision: 1.13 $
+ * $Date: 2003/05/14 19:03:14 $ 
+ * $Revision: 1.14 $
  *
  *****************************************************************************************
  **/
@@ -263,9 +263,9 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
     public void Test4068693()
     {
         logln("----- Test Application -----");
-        ParsePosition pos;
+        //ParsePosition pos;
         DecimalFormat df = new DecimalFormat();
-        Number d = df.parse("123.55456", pos=new ParsePosition(0));
+        Number d = df.parse("123.55456", new ParsePosition(0));
         if (!d.toString().equals("123.55456")) {
             errln("Result -> " + d.doubleValue());
         }

@@ -3,13 +3,11 @@
  * others. All Rights Reserved.
  *********************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/ChineseCalendar.java,v $
- * $Date: 2002/12/18 19:35:06 $
- * $Revision: 1.14 $
+ * $Date: 2003/05/14 19:03:48 $
+ * $Revision: 1.15 $
  */
 package com.ibm.icu.util;
-import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
-import java.util.Date;
 import java.util.Locale;
 
 /**

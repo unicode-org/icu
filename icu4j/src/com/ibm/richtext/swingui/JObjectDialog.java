@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: JObjectDialog.java,v $ $Revision: 1.2 $ $Date: 2002/02/16 03:06:37 $
+ * @(#)$RCSfile: JObjectDialog.java,v $ $Revision: 1.3 $ $Date: 2003/05/14 19:04:00 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -35,7 +35,6 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -44,7 +43,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowAdapter;
 
-import com.ibm.richtext.textlayout.attributes.AttributeMap;
 import com.ibm.richtext.textlayout.attributes.AttributeSet;
 import com.ibm.richtext.styledtext.MConstText;
 import com.ibm.richtext.styledtext.StyleModifier;

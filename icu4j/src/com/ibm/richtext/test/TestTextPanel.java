@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TestTextPanel.java,v $ $Revision: 1.8 $ $Date: 2002/02/16 03:06:38 $
+ * @(#)$RCSfile: TestTextPanel.java,v $ $Revision: 1.9 $ $Date: 2003/05/14 19:04:02 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -38,8 +38,6 @@ import com.ibm.richtext.textlayout.attributes.AttributeMap;
 
 import com.ibm.richtext.styledtext.StyleModifier;
 import com.ibm.richtext.textlayout.attributes.AttributeSet;
-import com.ibm.richtext.textlayout.attributes.TextAttribute;
-import com.ibm.richtext.textlayout.attributes.AttributeMap;
 
 // Note:  this used to be a TestFmwk test.  If you add
 // more tests to it, be sure to add them to 

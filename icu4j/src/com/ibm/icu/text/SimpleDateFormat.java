@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/SimpleDateFormat.java,v $ 
- * $Date: 2003/04/04 19:20:52 $ 
- * $Revision: 1.20 $
+ * $Date: 2003/05/14 19:03:31 $ 
+ * $Revision: 1.21 $
  *
  *****************************************************************************************
  */
@@ -22,8 +22,6 @@ import com.ibm.icu.impl.UCharacterProperty;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.lang.ClassNotFoundException;
-import java.lang.StringIndexOutOfBoundsException;
 import java.text.FieldPosition;
 import java.text.MessageFormat;
 import java.text.ParsePosition;
@@ -511,7 +509,7 @@ public class SimpleDateFormat extends DateFormat {
         int     maxIntCount = Integer.MAX_VALUE;
         String  current = "";
 
-        if ((patternCharIndex=formatData.patternChars.indexOf(ch)) == -1) {
+        if ((patternCharIndex=DateFormatSymbols.patternChars.indexOf(ch)) == -1) {
             throw new IllegalArgumentException("Illegal pattern character " +
                                                "'" + ch + "'");
         }
@@ -1027,7 +1025,7 @@ public class SimpleDateFormat extends DateFormat {
         ParsePosition pos = new ParsePosition(0);
         int patternCharIndex = -1;
 
-        if ((patternCharIndex=formatData.patternChars.indexOf(ch)) == -1) {
+        if ((patternCharIndex=DateFormatSymbols.patternChars.indexOf(ch)) == -1) {
             return -start;
         }
 
@@ -1355,7 +1353,7 @@ public class SimpleDateFormat extends DateFormat {
      */
     public String toLocalizedPattern() {
         return translatePattern(pattern,
-                                formatData.patternChars,
+                                DateFormatSymbols.patternChars,
                                 formatData.localPatternChars);
     }
 
@@ -1375,7 +1373,7 @@ public class SimpleDateFormat extends DateFormat {
     public void applyLocalizedPattern(String pattern) {
         this.pattern = translatePattern(pattern,
                                         formatData.localPatternChars,
-                                        formatData.patternChars);
+                                        DateFormatSymbols.patternChars);
     }
 
     /**

@@ -186,6 +186,9 @@ public class TestUScriptRun extends TestFmwk
             errln("new UScriptRun(dummy, -100, 0) did not produce an IllegalArgumentException!");
         } catch (IllegalArgumentException iae) {
         }
+        if(scriptRun!=null){
+            errln("Did not get the expected Exception");
+        }
     }
     
     public void TestReset()

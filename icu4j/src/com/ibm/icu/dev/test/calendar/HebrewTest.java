@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/HebrewTest.java,v $ 
- * $Date: 2003/02/27 18:48:38 $ 
- * $Revision: 1.7 $
+ * $Date: 2003/05/14 19:02:52 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -371,16 +371,25 @@ public class HebrewTest extends CalendarTest {
     	{
     	    // new HebrewCalendar(TimeZone)
     	    HebrewCalendar cal = new HebrewCalendar(TimeZone.getDefault());
-    	}
+    	    if(cal == null){
+                errln("could not create HebrewCalendar with TimeZone");
+    	    }
+        }
     
     	{
     	    // new HebrewCalendar(Locale)
     	    HebrewCalendar cal = new HebrewCalendar(Locale.getDefault());
-    	}
+            if(cal == null){
+                errln("could not create HebrewCalendar with locale");
+            }
+        }
     
     	{
     	    // new HebrewCalendar(Date)
     	    HebrewCalendar cal = new HebrewCalendar(new Date());
+            if(cal == null){
+                errln("could not create HebrewCalendar with date");
+            }
     	}
     
     	{

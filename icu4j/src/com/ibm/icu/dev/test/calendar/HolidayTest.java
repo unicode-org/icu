@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/HolidayTest.java,v $ 
- * $Date: 2002/12/18 21:20:52 $ 
- * $Revision: 1.3 $
+ * $Date: 2003/05/14 19:02:52 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -18,7 +18,6 @@ import java.util.Locale;
 import com.ibm.icu.dev.test.TestFmwk;
 
 import com.ibm.icu.impl.LocaleUtility;
-import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.EasterHoliday;
 import com.ibm.icu.util.GregorianCalendar;
@@ -26,7 +25,6 @@ import com.ibm.icu.util.Holiday;
 import com.ibm.icu.util.RangeDateRule;
 import com.ibm.icu.util.SimpleDateRule;
 import com.ibm.icu.util.SimpleHoliday;
-import com.ibm.icu.util.TimeZone;
 
 /**
  * Tests for the <code>Holiday</code> class.

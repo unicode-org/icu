@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: BidiParagraphRenderer.java,v $ $Revision: 1.3 $ $Date: 2002/02/16 03:06:42 $
+ * @(#)$RCSfile: BidiParagraphRenderer.java,v $ $Revision: 1.4 $ $Date: 2003/05/14 19:04:02 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -20,7 +20,6 @@ import java.awt.Rectangle;
 import java.awt.Shape;
 
 import java.util.Vector;
-import java.util.Hashtable;
 
 import com.ibm.richtext.styledtext.MConstText;
 import com.ibm.richtext.styledtext.MTabRuler;
@@ -1074,7 +1073,7 @@ final class BidiParagraphRenderer extends ParagraphRenderer {
             TextLayout layout = segment.fLayout;
             int offsetInLayout = charOffset - currentStart;
             TextHitInfo hit = TextHitInfo.afterOffset(offsetInLayout);
-            hit = layout.DEFAULT_CARET_POLICY.getStrongCaret(hit, hit.getOtherHit(), layout);
+            hit = TextLayout.DEFAULT_CARET_POLICY.getStrongCaret(hit, hit.getOtherHit(), layout);
             float[] info = layout.getCaretInfo(hit);
             int layoutPos = line.fLeadingMargin + segment.fDistanceFromLeadingMargin;
             if (line.fLeftToRight) {

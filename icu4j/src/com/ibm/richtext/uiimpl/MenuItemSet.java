@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: MenuItemSet.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:52:32 $
+ * @(#)$RCSfile: MenuItemSet.java,v $ $Revision: 1.2 $ $Date: 2003/05/14 19:04:00 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -17,7 +17,6 @@ package com.ibm.richtext.uiimpl;
 import com.ibm.richtext.textpanel.MTextPanel;
 import com.ibm.richtext.textpanel.TextPanelEvent;
 import com.ibm.richtext.textpanel.TextPanelListener;
-import com.ibm.richtext.uiimpl.resources.MenuData;
 
 public abstract class MenuItemSet implements TextPanelListener {
     

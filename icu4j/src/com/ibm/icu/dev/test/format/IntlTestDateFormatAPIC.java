@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/IntlTestDateFormatAPIC.java,v $ 
- * $Date: 2002/02/16 03:05:10 $ 
- * $Revision: 1.2 $
+ * $Date: 2003/05/14 19:03:16 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -17,9 +17,7 @@
 
 package com.ibm.icu.dev.test.format;
 
-import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
-import com.ibm.icu.util.*;
 import java.util.Date;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
@@ -109,6 +107,9 @@ public class IntlTestDateFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
             Number obj = fmt.parse(str, ppos);
             try {
                 obj = fmt.parse(str);
+                if(obj==null){
+                    errln("FAIL: The format object could parse the string : "+str);
+                }
             } catch (java.text.ParseException pe) {
                 System.out.println(pe);
             }

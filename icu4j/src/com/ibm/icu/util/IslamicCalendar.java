@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/IslamicCalendar.java,v $ 
- * $Date: 2002/12/18 19:35:07 $ 
- * $Revision: 1.16 $
+ * $Date: 2003/05/14 19:03:48 $ 
+ * $Revision: 1.17 $
  *
  *****************************************************************************************
  */
@@ -14,9 +14,7 @@ package com.ibm.icu.util;
 
 import com.ibm.icu.util.Calendar;
 import java.util.Date;
-import com.ibm.icu.util.GregorianCalendar;
 import java.util.Locale;
-import com.ibm.icu.util.CalendarAstronomer;
 
 /**
  * <code>IslamicCalendar</code> is a subclass of <code>Calendar</code>

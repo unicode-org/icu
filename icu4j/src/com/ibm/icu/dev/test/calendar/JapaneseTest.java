@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/JapaneseTest.java,v $
- * $Date: 2002/08/08 23:06:09 $
- * $Revision: 1.1 $
+ * $Date: 2003/05/14 19:02:52 $
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -33,50 +33,71 @@ public class JapaneseTest extends CalendarTest {
 	{
 	    // new JapaneseCalendar(TimeZone)
 	    JapaneseCalendar cal = new JapaneseCalendar(TimeZone.getDefault());
-	}
+        if(cal == null){
+            errln("could not create JapaneseCalendar with TimeZone");
+        }
+    }
 	
 	{
 	    // new JapaneseCalendar(Locale)
 	    JapaneseCalendar cal = new JapaneseCalendar(Locale.getDefault());
+        if(cal == null){
+            errln("could not create JapaneseCalendar with Locale");
+        }
 	}
 
 	{
 	    // new JapaneseCalendar(TimeZone, Locale)
 	    JapaneseCalendar cal = new JapaneseCalendar(TimeZone.getDefault(), Locale.getDefault());
+        if(cal == null){
+            errln("could not create JapaneseCalendar with TimeZone Locale");
+        }
 	}
 
 	{
 	    // new JapaneseCalendar(Date)
 	    JapaneseCalendar cal = new JapaneseCalendar(new Date());
-	}
+        if(cal == null){
+            errln("could not create JapaneseCalendar with Date");
+        }
+    }
 
 	{
 	    // new JapaneseCalendar(int year, int month, int date)
 	    JapaneseCalendar cal = new JapaneseCalendar(1868, Calendar.JANUARY, 1);
+        if(cal == null){
+            errln("could not create JapaneseCalendar with year,month,date");
+        }
 	}
 
 	{
 	    // new JapaneseCalendar(int era, int year, int month, int date)
 	    JapaneseCalendar cal = new JapaneseCalendar(JapaneseCalendar.MEIJI, 43, Calendar.JANUARY, 1);
-	}
+        if(cal == null){
+            errln("could not create JapaneseCalendar with era,year,month,date");
+        }
+    }
 
 	{
 	    // new JapaneseCalendar(int year, int month, int date, int hour, int minute, int second)
 	    JapaneseCalendar cal = new JapaneseCalendar(1868, Calendar.JANUARY, 1, 1, 1, 1);
-	}
+        if(cal == null){
+            errln("could not create JapaneseCalendar with year,month,date,hour,min,second");
+        }
+    }
 
 	{
 	    // limits
 	    JapaneseCalendar cal = new JapaneseCalendar();
 	    DateFormat fmt = cal.getDateTimeFormat(DateFormat.FULL, DateFormat.FULL, Locale.ENGLISH);
 
-	    cal.set(cal.ERA, cal.MEIJI);
+	    cal.set(Calendar.ERA, JapaneseCalendar.MEIJI);
 	    logln("date: " + cal.getTime());
-	    logln("min era: " + cal.getMinimum(cal.ERA));
-	    logln("min year: " + cal.getMinimum(cal.YEAR));
-	    cal.set(cal.YEAR, cal.getActualMaximum(cal.YEAR));
+	    logln("min era: " + cal.getMinimum(Calendar.ERA));
+	    logln("min year: " + cal.getMinimum(Calendar.YEAR));
+	    cal.set(Calendar.YEAR, cal.getActualMaximum(Calendar.YEAR));
 	    logln("date: " + fmt.format(cal.getTime()));
-	    cal.add(cal.YEAR, 1);
+	    cal.add(Calendar.YEAR, 1);
 	    logln("date: " + fmt.format(cal.getTime()));
 	}
 	

@@ -5,24 +5,19 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/ModuleTest.java,v $
- * $Date: 2003/02/05 05:45:15 $
- * $Revision: 1.4 $
+ * $Date: 2003/05/14 19:03:16 $
+ * $Revision: 1.5 $
  *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test;
 
 import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import com.ibm.icu.dev.test.TestDataModule.TestData;
 import com.ibm.icu.dev.test.TestDataModule.DataMap;
-import com.ibm.icu.dev.test.TestFmwk.MethodTarget;
-import com.ibm.icu.dev.test.TestFmwk.Target;
 
 /**
  * A convenience extension of TestFmwk for use by data module-driven

@@ -5,14 +5,13 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/ComposedCharIter.java,v $ 
- * $Date: 2002/12/11 23:36:58 $ 
- * $Revision: 1.6 $
+ * $Date: 2003/05/14 19:03:31 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.text;
 import com.ibm.icu.impl.NormalizerImpl;
-import com.ibm.icu.impl.Utility;
 
 /**
  * <tt>ComposedCharIter</tt> is an iterator class that returns all

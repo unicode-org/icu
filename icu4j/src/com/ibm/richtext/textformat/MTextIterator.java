@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: MTextIterator.java,v $ $Revision: 1.5 $ $Date: 2002/12/13 00:19:49 $
+ * @(#)$RCSfile: MTextIterator.java,v $ $Revision: 1.6 $ $Date: 2003/05/14 19:04:02 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -22,7 +22,6 @@ import com.ibm.richtext.textlayout.attributes.AttributeMap;
 
 ///*JDK12IMPORTS
 import java.text.AttributedCharacterIterator;
-import java.text.AttributedCharacterIterator.Attribute;
 import java.util.Map;
 import java.util.Set;
 //JDK12IMPORTS*/

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/RbnfRoundTripTest.java,v $ 
- * $Date: 2002/02/22 03:43:32 $ 
- * $Revision: 1.4 $
+ * $Date: 2003/05/14 19:03:15 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -16,7 +16,6 @@ import com.ibm.icu.text.RuleBasedNumberFormat;
 import com.ibm.icu.dev.test.TestFmwk;
 
 import java.util.Locale;
-import java.text.NumberFormat;
 
 public class RbnfRoundTripTest extends TestFmwk {
     /**

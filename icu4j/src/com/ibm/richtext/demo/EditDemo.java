@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: EditDemo.java,v $ $Revision: 1.3 $ $Date: 2002/02/16 03:06:33 $
+ * @(#)$RCSfile: EditDemo.java,v $ $Revision: 1.4 $ $Date: 2003/05/14 19:03:59 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -16,17 +16,11 @@ package com.ibm.richtext.demo;
 
 import java.awt.FileDialog;
 import java.awt.Frame;
-import java.awt.Menu;
-import java.awt.MenuBar;
 import java.awt.Toolkit;
 
 import java.io.File;
 import java.io.StreamCorruptedException;
-
-import com.ibm.richtext.textlayout.attributes.AttributeMap;
-import com.ibm.richtext.textpanel.MTextPanel;
 import com.ibm.richtext.textpanel.TextPanel;
-import com.ibm.richtext.textpanel.TextPanelSettings;
 
 /**
  * EditDemo is the main class for a simple, multiple-document

@@ -5,13 +5,12 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Attic/HexToUnicodeTransliterator.java,v $ 
- * $Date: 2002/12/03 18:56:44 $ 
- * $Revision: 1.14 $
+ * $Date: 2003/05/14 19:03:31 $ 
+ * $Revision: 1.15 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.text;
-import java.util.*;
 import com.ibm.icu.impl.Utility;
 
 /**

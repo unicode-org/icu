@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/BreakTransliterator.java,v $
- * $Date: 2003/01/28 18:55:41 $
- * $Revision: 1.4 $
+ * $Date: 2003/05/14 19:03:31 $
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -79,7 +79,7 @@ final class BreakTransliterator extends Transliterator {
         // To make things much easier, we will stack the boundaries, and then insert at the end.
         // generally, we won't need too many, since we will be filtered.
 
-        for(boundary = bi.first(); boundary != bi.DONE && boundary < pos.limit; boundary = bi.next()) {
+        for(boundary = bi.first(); boundary != BreakIterator.DONE && boundary < pos.limit; boundary = bi.next()) {
             if (boundary == 0) continue;
             // HACK: Check to see that preceeding item was a letter
 
