@@ -1182,10 +1182,10 @@ void TransliteratorTest::TestCreateInstance(){
     UParseError err;
     UErrorCode status = U_ZERO_ERROR;
     Transliterator* myTrans = Transliterator::createInstance(UnicodeString("Latin-Hangul"),UTRANS_REVERSE,err,status);
-	if (myTrans == 0) {
-		errln("FAIL: createInstance failed");
-		return;
-	}
+    if (myTrans == 0) {
+        errln("FAIL: createInstance failed");
+        return;
+    }
     UnicodeString newID =myTrans->getID();
     if(newID!=UnicodeString("Hangul-Latin")){
         errln(UnicodeString("Test for Jitterbug 912 Transliterator::createInstance(id,UTRANS_REVERSE) failed"));
@@ -1221,8 +1221,8 @@ void TransliteratorTest::TestNormalizationTransliterator() {
         "\\u212b",             "A\\u030a",            "\\u00c5"            , // angstrom_sign
         "\\u00c5",             "A\\u030a",            "\\u00c5"            , // A-ring
 
-        "\\u00fdffin",         "y\\u0301ffin",        "\\u00fdffin"        ,	//updated with 3.0
-        "\\u00fd\\uFB03n",      "y\\u0301\\uFB03n",     "\\u00fd\\uFB03n"     ,	//updated with 3.0
+        "\\u00fdffin",         "y\\u0301ffin",        "\\u00fdffin"        ,    //updated with 3.0
+        "\\u00fd\\uFB03n",      "y\\u0301\\uFB03n",     "\\u00fd\\uFB03n"     , //updated with 3.0
 
         "Henry IV",           "Henry IV",           "Henry IV"          ,
         "Henry \\u2163",       "Henry \\u2163",       "Henry \\u2163"      ,
@@ -1241,7 +1241,7 @@ void TransliteratorTest::TestNormalizationTransliterator() {
         // Input               Decomposed            Composed
         "\\uFB4f",             "\\u05D0\\u05DC",       "\\u05D0\\u05DC"     , // Alef-Lamed vs. Alef, Lamed
 
-        "\\u00fdffin",         "y\\u0301ffin",        "\\u00fdffin"        ,	//updated for 3.0
+        "\\u00fdffin",         "y\\u0301ffin",        "\\u00fdffin"        ,    //updated for 3.0
         "\\u00fd\\uFB03n",      "y\\u0301ffin",        "\\u00fdffin"        , // ffi ligature -> f + f + i
 
         "Henry IV",           "Henry IV",           "Henry IV"          ,
@@ -1461,7 +1461,7 @@ void TransliteratorTest::TestRemove(void) {
 void TransliteratorTest::TestToRules(void) {
     const char* RBT = "rbt";
     const char* SET = "set";
-    const char* DATA[] = {
+    static const char* DATA[] = {
         RBT,
         "$a=\\u4E61; [$a] > A;",
         "[\\u4E61] > A;",
@@ -1510,7 +1510,7 @@ void TransliteratorTest::TestToRules(void) {
         "$a=[:Zs:]; $b=[x$a]; $b{a} > A;",
         "[x[:Zs:]]{a} > A;",
     };
-    const size_t DATA_length = sizeof(DATA) / sizeof(DATA[0]);
+    static const int32_t DATA_length = (int32_t)(sizeof(DATA) / sizeof(DATA[0]));
 
     for (int32_t d=0; d < DATA_length; d+=3) {
         if (DATA[d] == RBT) {
@@ -1842,7 +1842,7 @@ void TransliteratorTest::TestNFDChainRBT() {
 //        "uv\\u0101cr\\u0325",
 //        */
 //        "rmk\\u1E63\\u0113t",
-//		//"dharmak\\u1E63\\u0113tr\\u0113",
+//      //"dharmak\\u1E63\\u0113tr\\u0113",
 //        /*
 //        "kuruk\\u1E63\\u0113tr\\u0113",
 //        "samav\\u0113t\\u0101",
