@@ -1233,7 +1233,9 @@ UnicodeString::caseMap(BreakIterator *titleIter,
     ubrk_close(cTitleIter);
   }
 
-  uprv_free(bufferToDelete);
+  if (bufferToDelete) {
+    uprv_free(bufferToDelete);
+  }
   if(U_FAILURE(errorCode)) {
     setToBogus();
   }
@@ -1324,7 +1326,9 @@ UnicodeString::doReplace(int32_t start,
 
   // delayed delete in case srcChars == fArray when we started, and
   // to keep oldArray alive for the above operations
-  uprv_free(bufferToDelete);
+  if (bufferToDelete) {
+    uprv_free(bufferToDelete);
+  }
 
   return *this;
 }
