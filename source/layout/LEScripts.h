@@ -6,12 +6,14 @@
  * YOU REALLY KNOW WHAT YOU'RE DOING.
  *
  * $Source: /xsrl/Nsvn/icu/icu/source/layout/LEScripts.h,v $
- * $Date: 2003/06/03 20:58:21 $
- * $Revision: 1.9 $
+ * $Date: 2003/12/10 22:30:48 $
+ * $Revision: 1.10 $
  */
 
 #ifndef __LESCRIPTS_H
 #define __LESCRIPTS_H
+
+#include "LETypes.h"
 
 U_NAMESPACE_BEGIN
 
