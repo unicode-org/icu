@@ -45,6 +45,11 @@
  * <a href="http://www.unicode.org/unicode/reports/tr9/">Unicode Technical Report 9</a>,
  * version 5, also described in The Unicode Standard, Version 3.0 .<p>
  *
+ * Note: Libraries that perform a bidirectional algorithm and
+ * reorder strings accordingly are sometimes called "Storage Layout Engines".
+ * ICU's BiDi and shaping (u_shapeArabic()) APIs can be used at the core of such
+ * "Storage Layout Engines".
+ *
  * <h3>General remarks about the API:</h3>
  *
  * In functions with an error code parameter,
