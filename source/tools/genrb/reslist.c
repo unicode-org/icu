@@ -41,7 +41,7 @@ static const UDataInfo dataInfo={
 
 uint8_t calcPadding(uint32_t size) {
     /* returns space we need to pad */
-    return((size%sizeof(uint32_t))?(sizeof(uint32_t)-(size%sizeof(uint32_t))):0);
+    return (uint8_t)((size%sizeof(uint32_t))?(sizeof(uint32_t)-(size%sizeof(uint32_t))):0);
 
 }
 
@@ -79,7 +79,7 @@ uint32_t array_write(UNewDataMemory *mem, struct SResource *res,
             if(current->fType == RES_INT) {
                 *(resources+i) = (current->fType)<<28 | (current->u.fIntValue.fValue & 0xFFFFFFF);
             } else if(current->fType == RES_BINARY) {
-				uint32_t uo = usedOffset;
+                uint32_t uo = usedOffset;
                 usedOffset = res_write(mem, current, usedOffset, status);
                 *(resources+i) = (current->fType)<<28 | (usedOffset>>2) ;
                 usedOffset += (current->fSize) + calcPadding(current->fSize) - (usedOffset-uo);
@@ -112,18 +112,18 @@ uint32_t intvector_write(UNewDataMemory *mem, struct SResource *res,
 
 uint32_t bin_write(UNewDataMemory *mem, struct SResource *res, 
                  uint32_t usedOffset, UErrorCode *status) {
-	uint32_t pad = 0;
-	uint32_t extrapad = calcPadding(res->fSize);
-	uint32_t dataStart = usedOffset+sizeof(res->u.fBinaryValue.fLength);
-	if(dataStart%BIN_ALIGNMENT) {
-		pad = (BIN_ALIGNMENT-dataStart%BIN_ALIGNMENT);
-		udata_writePadding(mem, pad);
-		usedOffset += pad;
-	}
+    uint32_t pad = 0;
+    uint32_t extrapad = calcPadding(res->fSize);
+    uint32_t dataStart = usedOffset+sizeof(res->u.fBinaryValue.fLength);
+    if(dataStart%BIN_ALIGNMENT) {
+        pad = (BIN_ALIGNMENT-dataStart%BIN_ALIGNMENT);
+        udata_writePadding(mem, pad);
+        usedOffset += pad;
+    }
 
     udata_write32(mem, res->u.fBinaryValue.fLength);
     udata_writeBlock(mem, res->u.fBinaryValue.fData, res->u.fBinaryValue.fLength);
-	udata_writePadding(mem, (BIN_ALIGNMENT - pad + extrapad));
+    udata_writePadding(mem, (BIN_ALIGNMENT - pad + extrapad));
     return usedOffset;
 }
 
@@ -166,15 +166,15 @@ uint32_t table_write(UNewDataMemory *mem, struct SResource *res,
         i=0;
 
         while(current != NULL) {
-            *(keys+i) = (current->fKey)+sizeof(uint32_t); /*where the key is plus root pointer*/
+            *(keys+i) = (uint16_t)((current->fKey)+sizeof(uint32_t)); /*where the key is plus root pointer*/
             if(current->fType == RES_INT) {
                 *(resources+i) = (current->fType)<<28 | (current->u.fIntValue.fValue & 0xFFFFFFF);
             } else if(current->fType == RES_BINARY) {
-				uint32_t uo = usedOffset;
+                uint32_t uo = usedOffset;
                 usedOffset = res_write(mem, current, usedOffset, status);
                 *(resources+i) = (current->fType)<<28 | (usedOffset>>2) ;
                 usedOffset += (current->fSize) + calcPadding(current->fSize) - (usedOffset-uo);
-			} else {
+            } else {
                 usedOffset = res_write(mem, current, usedOffset, status);
                 *(resources+i) = (current->fType)<<28 | (usedOffset>>2) ;
                 usedOffset += (current->fSize) + calcPadding(current->fSize);
@@ -238,7 +238,6 @@ void bundle_write(struct SRBRoot *bundle, const char *outputDir, UErrorCode *sta
     UNewDataMemory *mem = NULL;
     uint8_t pad = 0;
     uint32_t root = 0;
-    uint32_t i = 0;
     uint32_t usedOffset = 0;
 
     if(U_FAILURE(*status)) {
@@ -758,11 +757,11 @@ uint16_t bundle_addtag(struct SRBRoot *bundle, char *tag, UErrorCode *status) {
     uint16_t keypos;
 
     if(U_FAILURE(*status)) {
-        return -1;
+        return (uint16_t)-1;
     }
 
     if(tag == NULL) {
-        return -1;
+        return (uint16_t)-1;
     }
 
     keypos = bundle->fKeyPoint;
@@ -771,7 +770,7 @@ uint16_t bundle_addtag(struct SRBRoot *bundle, char *tag, UErrorCode *status) {
 
     if(bundle->fKeyPoint > KEY_SPACE_SIZE) {
         *status = U_MEMORY_ALLOCATION_ERROR;
-        return -1;
+        return (uint16_t)-1;
     }
 
     uprv_strcpy((bundle->fKeys)+keypos, tag);
