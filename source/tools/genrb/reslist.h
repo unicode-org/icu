@@ -48,8 +48,13 @@ void bundle_write_java(struct SRBRoot *bundle, const char *outputDir, const char
                        int writtenFilenameLen, const char* packageName, const char* bundleName, UErrorCode *status);
 
 /* write a xml resource file */
-void bundle_write_xml(struct SRBRoot *bundle, const char *outputDir,const char* outputEnc, 
-                  char *writtenFilename, int writtenFilenameLen,UErrorCode *status); 
+/* commented by Jing*/
+/* void bundle_write_xml(struct SRBRoot *bundle, const char *outputDir,const char* outputEnc, 
+                  char *writtenFilename, int writtenFilenameLen,UErrorCode *status); */
+
+/* added by Jing*/
+void bundle_write_xml(struct SRBRoot *bundle, const char *outputDir,const char* outputEnc, const char* rbname,
+                  char *writtenFilename, int writtenFilenameLen, const char* language, const char* package, UErrorCode *status);
 
 void bundle_close(struct SRBRoot *bundle, UErrorCode *status);
 void bundle_setlocale(struct SRBRoot *bundle, UChar *locale, UErrorCode *status);

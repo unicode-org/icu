@@ -675,6 +675,8 @@ void table_close(struct SResource *table, UErrorCode *status) {
 
         res_close(prev, status);
     }
+
+    table->u.fTable.fFirst = NULL;
 }
 
 void array_close(struct SResource *array, UErrorCode *status) {
@@ -689,23 +691,27 @@ void array_close(struct SResource *array, UErrorCode *status) {
 
         res_close(prev, status);
     }
+    array->u.fArray.fFirst = NULL;
 }
 
 void string_close(struct SResource *string, UErrorCode *status) {
     if (string->u.fString.fChars != NULL) {
         uprv_free(string->u.fString.fChars);
+        string->u.fString.fChars =NULL;
     }
 }
 
 void alias_close(struct SResource *alias, UErrorCode *status) {
     if (alias->u.fString.fChars != NULL) {
         uprv_free(alias->u.fString.fChars);
+        alias->u.fString.fChars =NULL;
     }
 }
 
 void intvector_close(struct SResource *intvector, UErrorCode *status) {
     if (intvector->u.fIntVector.fArray != NULL) {
         uprv_free(intvector->u.fIntVector.fArray);
+        intvector->u.fIntVector.fArray =NULL;
     }
 }
 
@@ -716,6 +722,7 @@ void int_close(struct SResource *intres, UErrorCode *status) {
 void bin_close(struct SResource *binres, UErrorCode *status) {
     if (binres->u.fBinaryValue.fData != NULL) {
         uprv_free(binres->u.fBinaryValue.fData);
+        binres->u.fBinaryValue.fData = NULL;
     }
 }
 
