@@ -651,7 +651,7 @@ enum UBlockCode {
     U_SCRIPT_COUNT=98,
 
     /** @draft ICU 2.0 */
-    UBLOCK_INVALID_CODE=UBLOCK_COUNT,
+    UBLOCK_INVALID_CODE=-1,
 
     /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
     U_CHAR_SCRIPT_COUNT =UBLOCK_COUNT,
