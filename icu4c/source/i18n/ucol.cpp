@@ -336,12 +336,12 @@ int32_t ucol_getState(const UCollator *coll, UColStateEnum contents,
   }
 
   /* Main state structure */
-  size += sizeof(UStateStruct);
+  size += (int32_t)sizeof(UStateStruct);
   if(size < buflen) {
     state = (UStateStruct *)buffer;
     uprv_memset(state, 0, sizeof(UStateStruct));
-    state->sizeLo = (sizeof(UStateStruct)&0xFF);
-    state->sizeHi = ((sizeof(UStateStruct)>>8)&0xFF);
+    state->sizeLo = (uint8_t)(sizeof(UStateStruct)&0xFF);
+    state->sizeHi = (uint8_t)((sizeof(UStateStruct)>>8)&0xFF);
 
     state->isBigEndian = U_IS_BIG_ENDIAN;
     state->charsetFamily = U_CHARSET_FAMILY;
@@ -352,12 +352,12 @@ int32_t ucol_getState(const UCollator *coll, UColStateEnum contents,
   }
 
   /* Collation state structure */
-  size += sizeof(UColStateStruct);
+  size += (int32_t)sizeof(UColStateStruct);
   if(size < buflen) {
     colState = (UColStateStruct *)(buffer+sizeof(UStateStruct));
     uprv_memset(colState, 0, sizeof(UColStateStruct));
-    colState->sizeLo = sizeof(UColStateStruct)&0xFF;
-    colState->sizeHi = (sizeof(UColStateStruct)>>8)&0xFF;;
+    colState->sizeLo = (uint8_t)sizeof(UColStateStruct)&0xFF;
+    colState->sizeHi = (uint8_t)(sizeof(UColStateStruct)>>8)&0xFF;;
     colState->containsTailoring = FALSE;
     colState->containsUCA = FALSE;
     ucol_getVersion(coll, colState->versionInfo);
@@ -626,7 +626,7 @@ ucol_cloneRuleData(const UCollator *coll, int32_t *length, UErrorCode *status)
     result = (uint8_t *)uprv_malloc(*length);
     uprv_memcpy(result, coll->image, *length);
   } else {
-    *length = paddedsize(sizeof(UCATableHeader))+paddedsize(sizeof(UColOptionSet));
+    *length = (uint8_t)paddedsize(sizeof(UCATableHeader))+paddedsize(sizeof(UColOptionSet));
     result = (uint8_t *)uprv_malloc(*length);
     uprv_memcpy(result, UCA->image, sizeof(UCATableHeader));
     uprv_memcpy(result+paddedsize(sizeof(UCATableHeader)), coll->options, sizeof(UColOptionSet));
@@ -2230,8 +2230,8 @@ uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, U
             break;
         }
 
-        uint8_t maxCC = *(UCharOffset)&0xFF; /*get the discontiguos stuff */ /* skip the backward offset, see above */
-        uint8_t allSame = *(UCharOffset++)>>8;
+        uint8_t maxCC = (uint8_t)(*(UCharOffset)&0xFF); /*get the discontiguos stuff */ /* skip the backward offset, see above */
+        uint8_t allSame = (uint8_t)(*(UCharOffset++)>>8);
 
         schar = getNextNormalizedChar(source);
         while(schar > (tchar = *UCharOffset)) { /* since the contraction codepoints should be ordered, we skip all that are smaller */
@@ -3218,7 +3218,7 @@ ucol_calcSortKey(const    UCollator    *coll,
                     *primaries++ = primary2;
                   } else {
                     if(leadPrimary != 0) {
-                      *primaries++ = (primary1 > leadPrimary) ? UCOL_BYTE_UNSHIFTED_MAX : UCOL_BYTE_UNSHIFTED_MIN;
+                      *primaries++ = (uint8_t)((primary1 > leadPrimary) ? UCOL_BYTE_UNSHIFTED_MAX : UCOL_BYTE_UNSHIFTED_MIN);
                     }
                     if(primary2 == UCOL_IGNORABLE) {
                     /* one byter, not compressed */
@@ -3290,7 +3290,7 @@ ucol_calcSortKey(const    UCollator    *coll,
               if(doCase) {
                 doCaseShift(&cases, caseShift);
                 if(notIsContinuation) {
-                  caseBits = (tertiary & 0xC0);
+                  caseBits = (uint8_t)(tertiary & 0xC0);
 
                   if(tertiary != 0) {
                     if(coll->caseFirst == UCOL_UPPER_FIRST) {
@@ -3685,7 +3685,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
                   *primaries++ = primary2;
                 } else {
                   if(leadPrimary != 0) {
-                    *primaries++ = (primary1 > leadPrimary) ? UCOL_BYTE_UNSHIFTED_MAX : UCOL_BYTE_UNSHIFTED_MIN;
+                    *primaries++ = (uint8_t)((primary1 > leadPrimary) ? UCOL_BYTE_UNSHIFTED_MAX : UCOL_BYTE_UNSHIFTED_MIN);
                   }
                   if(primary2 == UCOL_IGNORABLE) {
                   /* one byter, not compressed */
@@ -3876,7 +3876,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
 }
 
 inline void uprv_appendByteToHexString(char *dst, uint8_t val) {
-  uint32_t len = uprv_strlen(dst);
+  uint32_t len = (uint32_t)uprv_strlen(dst);
   *(dst+len) = T_CString_itosOffset((val >> 4));
   *(dst+len+1) = T_CString_itosOffset((val & 0xF));
   *(dst+len+2) = 0;
@@ -3963,9 +3963,9 @@ void ucol_updateInternalState(UCollator *coll) {
       }
 
       /* Set the compression values */
-      uint8_t tertiaryTotal = coll->tertiaryTop - UCOL_COMMON_BOT3-1;
+      uint8_t tertiaryTotal = (uint8_t)(coll->tertiaryTop - UCOL_COMMON_BOT3-1);
       coll->tertiaryTopCount = (uint8_t)(UCOL_PROPORTION3*tertiaryTotal); /* we multilply double with int, but need only int */
-      coll->tertiaryBottomCount = tertiaryTotal - coll->tertiaryTopCount;
+      coll->tertiaryBottomCount = (uint8_t)(tertiaryTotal - coll->tertiaryTopCount);
 
       if(coll->caseLevel == UCOL_OFF && coll->strength == UCOL_TERTIARY
         && coll->frenchCollation == UCOL_OFF && coll->alternateHandling == UCOL_NON_IGNORABLE) {
@@ -4205,7 +4205,7 @@ U_CAPI UCollator *
 ucol_safeClone(const UCollator *coll, void *stackBuffer, int32_t * pBufferSize, UErrorCode *status)
 {
     UCollator * localCollator;
-    int32_t bufferSizeNeeded = sizeof(UCollator);
+    int32_t bufferSizeNeeded = (int32_t)sizeof(UCollator);
 
     if (status == NULL || U_FAILURE(*status)){
         return 0;
