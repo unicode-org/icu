@@ -103,6 +103,19 @@ u_strstr(const UChar *s, const UChar *substring) {
   }
 }
 
+U_CAPI UChar * U_EXPORT2
+u_strchr32(const UChar *s, UChar32 c) {
+  if(!UTF_NEED_MULTIPLE_UCHAR(c)) {
+    return u_strchr(s, (UChar)c);
+  } else {
+    UChar buffer[UTF_MAX_CHAR_LENGTH + 1];
+    UTextOffset i = 0;
+    UTF_APPEND_CHAR_UNSAFE(buffer, i, c);
+    buffer[i] = 0;
+    return u_strstr(s, buffer);
+  }
+}
+
 int32_t  
 u_strcmp(const UChar *s1, 
     const UChar *s2) 
