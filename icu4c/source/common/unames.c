@@ -29,6 +29,7 @@
 #include "cstring.h"
 #include "ucln_cmn.h"
 #include "uprops.h"
+#include "udataswp.h"
 
 /* prototypes ------------------------------------------------------------- */
 
@@ -1777,6 +1778,361 @@ uprv_getISOCommentCharacters(USet* set) {
     charSetToUSet(gISOCommentSet, set);
 }
 #endif
+
+/* data swapping ------------------------------------------------------------ */
+
+/*
+ * The token table contains non-negative entries for token bytes,
+ * and -1 for bytes that represent themselves in the data file's charset.
+ * -2 entries are used for lead bytes.
+ *
+ * Direct bytes (-1 entries) must be translated from the input charset family
+ * to the output charset family.
+ * makeTokenMap() writes a permutation mapping for this.
+ * Use it once for single-/lead-byte tokens and once more for all trail byte
+ * tokens. (';' is an unused trail byte marked with -1.)
+ */
+static void
+makeTokenMap(const UDataSwapper *ds,
+             int16_t tokens[], uint16_t tokenCount,
+             uint8_t map[256],
+             UErrorCode *pErrorCode) {
+    UBool usedOutChar[256];
+    uint16_t i, j;
+    uint8_t c1, c2;
+
+    if(U_FAILURE(*pErrorCode)) {
+        return;
+    }
+
+    if(ds->inCharset==ds->outCharset) {
+        /* Same charset family: identity permutation */
+        for(i=0; i<256; ++i) {
+            map[i]=(uint8_t)i;
+        }
+    } else {
+        uprv_memset(map, 0, 256);
+        uprv_memset(usedOutChar, 0, 256);
+
+        if(tokenCount>256) {
+            tokenCount=256;
+        }
+
+        /* set the direct bytes (byte 0 always maps to itself) */
+        for(i=1; i<tokenCount; ++i) {
+            if(tokens[i]==-1) {
+                /* convert the direct byte character */
+                c1=(uint8_t)i;
+                ds->swapInvChars(ds, &c1, 1, &c2, pErrorCode);
+                if(U_FAILURE(*pErrorCode)) {
+                    udata_printError(ds, "unames/makeTokenMap() finds variant character 0x%02x used (input charset family %d) - %s\n",
+                                     i, ds->inCharset, u_errorName(*pErrorCode));
+                    return;
+                }
+
+                /* enter the converted character into the map and mark it used */
+                map[c1]=c2;
+                usedOutChar[c2]=TRUE;
+            }
+        }
+
+        /* set the mappings for the rest of the permutation */
+        for(i=j=1; i<tokenCount; ++i) {
+            /* set mappings that were not set for direct bytes */
+            if(map[i]==0) {
+                /* set an output byte value that was not used as an output byte above */
+                while(usedOutChar[j]) {
+                    ++j;
+                }
+                map[i]=(uint8_t)j++;
+            }
+        }
+
+        /*
+         * leave mappings at tokenCount and above unset if tokenCount<256
+         * because they won't be used
+         */
+    }
+}
+
+U_CAPI int32_t U_EXPORT2
+uchar_swapNames(const UDataSwapper *ds,
+                const void *inData, int32_t length, void *outData,
+                UErrorCode *pErrorCode) {
+    const UDataInfo *pInfo;
+    int32_t headerSize;
+
+    const uint8_t *inBytes;
+    uint8_t *outBytes;
+
+    uint32_t tokenStringOffset, groupsOffset, groupStringOffset, algNamesOffset,
+             offset, i, count, stringsCount;
+
+    const AlgorithmicRange *inRange;
+    AlgorithmicRange *outRange;
+
+    /* udata_swapDataHeader checks the arguments */
+    headerSize=udata_swapDataHeader(ds, inData, length, outData, pErrorCode);
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+
+    /* check data format and format version */
+    pInfo=(const UDataInfo *)((const char *)inData+4);
+    if(!(
+        pInfo->dataFormat[0]==0x75 &&   /* dataFormat="unam" */
+        pInfo->dataFormat[1]==0x6e &&
+        pInfo->dataFormat[2]==0x61 &&
+        pInfo->dataFormat[3]==0x6d &&
+        pInfo->formatVersion[0]==1
+    )) {
+        udata_printError(ds, "uchar_swapNames(): data format %02x.%02x.%02x.%02x (format version %02x) is not recognized as unames.icu\n",
+                         pInfo->dataFormat[0], pInfo->dataFormat[1],
+                         pInfo->dataFormat[2], pInfo->dataFormat[3],
+                         pInfo->formatVersion[0]);
+        *pErrorCode=U_UNSUPPORTED_ERROR;
+        return 0;
+    }
+
+    inBytes=(const uint8_t *)inData+headerSize;
+    outBytes=(uint8_t *)outData+headerSize;
+    if(length<0) {
+        algNamesOffset=ds->readUInt32(((const uint32_t *)inBytes)[3]);
+    } else {
+        length-=headerSize;
+        if( length<20 ||
+            (uint32_t)length<(algNamesOffset=ds->readUInt32(((const uint32_t *)inBytes)[3]))
+        ) {
+            udata_printError(ds, "uchar_swapNames(): too few bytes (%d after header) for unames.icu\n",
+                             length);
+            *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+            return 0;
+        }
+    }
+
+    if(length<0) {
+        /* preflighting: iterate through algorithmic ranges */
+        offset=algNamesOffset;
+        count=ds->readUInt32(*((const uint32_t *)(inBytes+offset)));
+        offset+=4;
+
+        for(i=0; i<count; ++i) {
+            inRange=(const AlgorithmicRange *)(inBytes+offset);
+            offset+=ds->readUInt16(inRange->size);
+        }
+    } else {
+        /* swap data */
+        const uint16_t *p;
+        uint16_t *q, *temp;
+
+        int16_t tokens[512];
+        uint16_t tokenCount;
+
+        uint8_t map[256], trailMap[256];
+
+        /* the initial 4 offsets first */
+        tokenStringOffset=ds->readUInt32(((const uint32_t *)inBytes)[0]);
+        groupsOffset=ds->readUInt32(((const uint32_t *)inBytes)[1]);
+        groupStringOffset=ds->readUInt32(((const uint32_t *)inBytes)[2]);
+        ds->swapArray32(ds, inBytes, 16, outBytes, pErrorCode);
+
+        /*
+         * now the tokens table
+         * it needs to be permutated along with the compressed name strings
+         */
+        p=(const uint16_t *)(inBytes+16);
+        q=(uint16_t *)(outBytes+16);
+
+        /* read and swap the tokenCount */
+        tokenCount=ds->readUInt16(*p);
+        ds->swapArray16(ds, p, 2, q, pErrorCode);
+        ++p;
+        ++q;
+
+        /* read the first 512 tokens and make the token maps */
+        if(tokenCount<=512) {
+            count=tokenCount;
+        } else {
+            count=512;
+        }
+        for(i=0; i<count; ++i) {
+            tokens[i]=udata_readInt16(ds, p[i]);
+        }
+        for(; i<512; ++i) {
+            tokens[i]=0; /* fill the rest of the tokens array if tokenCount<512 */
+        }
+        makeTokenMap(ds, tokens, tokenCount, map, pErrorCode);
+        makeTokenMap(ds, tokens+256, (uint16_t)(tokenCount>256 ? tokenCount-256 : 0), trailMap, pErrorCode);
+        if(U_FAILURE(*pErrorCode)) {
+            return 0;
+        }
+
+        /*
+         * swap and permutate the tokens
+         * go through a temporary array to support in-place swapping
+         */
+        temp=(uint16_t *)uprv_malloc(tokenCount*2);
+        if(temp==NULL) {
+            udata_printError(ds, "out of memory swapping %u unames.icu tokens\n",
+                             tokenCount);
+            *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
+            return 0;
+        }
+
+        /* swap and permutate single-/lead-byte tokens */
+        for(i=0; i<tokenCount && i<256; ++i) {
+            ds->swapArray16(ds, p+i, 2, temp+map[i], pErrorCode);
+        }
+
+        /* swap and permutate trail-byte tokens */
+        for(; i<tokenCount; ++i) {
+            ds->swapArray16(ds, p+i, 2, temp+(i&0xffffff00)+trailMap[i&0xff], pErrorCode);
+        }
+
+        /* copy the result into the output and free the temporary array */
+        uprv_memcpy(q, temp, tokenCount*2);
+        uprv_free(temp);
+
+        /* swap the token strings */
+        count=groupsOffset-tokenStringOffset;
+        if(count>0 && inBytes[groupsOffset-1]!=0) {
+            /*
+             * do not swap a possible padding byte after
+             * the terminating NUL of the last string
+             */
+            --count;
+        }
+        ds->swapInvChars(ds, inBytes+tokenStringOffset, (int32_t)count,
+                            outBytes+tokenStringOffset, pErrorCode);
+        if(U_FAILURE(*pErrorCode)) {
+            udata_printError(ds, "uchar_swapNames(token strings) failed - %s\n",
+                             u_errorName(*pErrorCode));
+            return 0;
+        }
+
+        /* swap the group table */
+        count=*((const uint16_t *)(inBytes+groupsOffset));
+        ds->swapArray16(ds, inBytes+groupsOffset, (int32_t)((1+count*3)*2),
+                           outBytes+groupsOffset, pErrorCode);
+
+        /*
+         * swap the group strings
+         * swap the string bytes but not the nibble-encoded string lengths
+         */
+        if(ds->inCharset!=ds->outCharset) {
+            uint16_t offsets[LINES_PER_GROUP+1], lengths[LINES_PER_GROUP+1];
+
+            const uint8_t *inStrings, *nextInStrings;
+            uint8_t *outStrings;
+
+            uint8_t c;
+
+            inStrings=inBytes+groupStringOffset;
+            outStrings=outBytes+groupStringOffset;
+
+            stringsCount=algNamesOffset-groupStringOffset;
+
+            /* iterate through string groups until only a few padding bytes are left */
+            while(stringsCount>32) {
+                nextInStrings=expandGroupLengths(inStrings, offsets, lengths);
+
+                /* move past the length bytes */
+                stringsCount-=(uint32_t)(nextInStrings-inStrings);
+                outStrings+=nextInStrings-inStrings;
+                inStrings=nextInStrings;
+
+                count=offsets[31]+lengths[31]; /* total number of string bytes in this group */
+                stringsCount-=count;
+
+                /* swap the string bytes using map[] and trailMap[] */
+                while(count>0) {
+                    c=*inStrings++;
+                    *outStrings++=map[c];
+                    if(tokens[c]!=-2) {
+                        --count;
+                    } else {
+                        /* token lead byte: swap the trail byte, too */
+                        *outStrings++=trailMap[*inStrings++];
+                        count-=2;
+                    }
+                }
+            }
+        }
+
+        /* swap the algorithmic ranges */
+        offset=algNamesOffset;
+        count=ds->readUInt32(*((const uint32_t *)(inBytes+offset)));
+        ds->swapArray32(ds, inBytes+offset, 4, outBytes+offset, pErrorCode);
+        offset+=4;
+
+        for(i=0; i<count; ++i) {
+            if(offset>(uint32_t)length) {
+                udata_printError(ds, "uchar_swapNames(): too few bytes (%d after header) for unames.icu algorithmic range %u\n",
+                                 length, i);
+                *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+                return 0;
+            }
+
+            inRange=(const AlgorithmicRange *)(inBytes+offset);
+            outRange=(AlgorithmicRange *)(outBytes+offset);
+            offset+=ds->readUInt16(inRange->size);
+
+            ds->swapArray32(ds, inRange, 8, outRange, pErrorCode);
+            ds->swapArray16(ds, &inRange->size, 2, &outRange->size, pErrorCode);
+            switch(inRange->type) {
+            case 0:
+                /* swap prefix string */
+                ds->swapInvChars(ds, inRange+1, uprv_strlen((const char *)(inRange+1)),
+                                    outRange+1, pErrorCode);
+                if(U_FAILURE(*pErrorCode)) {
+                    udata_printError(ds, "uchar_swapNames(prefix string of algorithmic range %u) failed - %s\n",
+                                     i, u_errorName(*pErrorCode));
+                    return 0;
+                }
+                break;
+            case 1:
+                {
+                    /* swap factors and the prefix and factor strings */
+                    uint16_t factors[8];
+                    uint32_t j, factorsCount;
+
+                    factorsCount=inRange->variant;
+                    if(factorsCount==0 || factorsCount>LENGTHOF(factors)) {
+                        udata_printError(ds, "uchar_swapNames(): too many factors (%u) in algorithmic range %u\n",
+                                         factorsCount, i);
+                        *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+                        return 0;
+                    }
+
+                    /* read and swap the factors */
+                    p=(const uint16_t *)(inRange+1);
+                    q=(uint16_t *)(outRange+1);
+                    for(j=0; j<factorsCount; ++j) {
+                        factors[j]=ds->readUInt16(p[j]);
+                    }
+                    ds->swapArray16(ds, p, (int32_t)(factorsCount*2), q, pErrorCode);
+
+                    /* swap the strings, up to the last terminating NUL */
+                    p+=factorsCount;
+                    q+=factorsCount;
+                    stringsCount=(uint32_t)((inBytes+offset)-(const uint8_t *)p);
+                    while(stringsCount>0 && ((const uint8_t *)p)[stringsCount-1]!=0) {
+                        --stringsCount;
+                    }
+                    ds->swapInvChars(ds, p, (int32_t)stringsCount, q, pErrorCode);
+                }
+                break;
+            default:
+                udata_printError(ds, "uchar_swapNames(): unknown type %u of algorithmic range %u\n",
+                                 inRange->type, i);
+                *pErrorCode=U_UNSUPPORTED_ERROR;
+                return 0;
+            }
+        }
+    }
+
+    return headerSize+(int32_t)offset;
+}
 
 /*
  * Hey, Emacs, please set the following:
