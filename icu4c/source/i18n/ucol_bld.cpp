@@ -1018,6 +1018,7 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
   UCATableHeader *myData = uprv_uca_assembleTable(t, status);  
 
   uprv_uca_closeTempTable(t);    
+  uprv_free(image);
 
   return myData;
 }
