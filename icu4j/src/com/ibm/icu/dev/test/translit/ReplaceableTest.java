@@ -93,10 +93,18 @@ public class ReplaceableTest extends TestFmwk {
         }
 
         public void replace(int start, int limit, String text) {
+            if (substring(start,limit).equals(text)) return; // NO ACTION!
             chars.replace(start, limit, text);
             fixStyles(start, limit, text.length());
         }
         
+        public void replace(int start, int limit, char[] chars,
+                            int charsStart, int charsLen) {
+            if (substring(start,limit).equals(new String(chars, charsStart, charsLen-charsStart))) return; // NO ACTION!
+            this.chars.replace(start, limit, chars, charsStart, charsLen);
+            fixStyles(start, limit, charsLen-charsStart);
+        }
+
         void fixStyles(int start, int limit, int newLen) {
             char newStyle = defaultStyle;
             if (start != limit) {
@@ -112,12 +120,6 @@ public class ReplaceableTest extends TestFmwk {
                 s.append(newStyle);
             }
             styles.replace(start, limit, s.toString());
-        }
-
-        public void replace(int start, int limit, char[] chars,
-                            int charsStart, int charsLen) {
-            this.chars.replace(start, limit, chars, charsStart, charsLen);
-            fixStyles(start, limit, charsLen-charsStart);
         }
 
         public void copy(int start, int limit, int dest) {
