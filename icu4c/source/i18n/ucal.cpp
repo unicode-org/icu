@@ -132,8 +132,6 @@ ucal_getTimeZoneDisplayName(const     UCalendar*                 cal,
 {
   if(U_FAILURE(*status)) return -1;
 
-  int32_t actLen;
-
   const TimeZone& tz = ((Calendar*)cal)->getTimeZone();
   UnicodeString id(result, 0, resultLength);
 
@@ -155,8 +153,7 @@ ucal_getTimeZoneDisplayName(const     UCalendar*                 cal,
     break;
   }
 
-  T_fillOutputParams(&id, result, resultLength, &actLen, status);
-  return actLen;
+  return uprv_fillOutputString(id, result, resultLength, status);
 }
 
 U_CAPI UBool 

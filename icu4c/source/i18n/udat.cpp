@@ -119,8 +119,6 @@ udat_format(    const    UDateFormat*    format,
 {
   if(U_FAILURE(*status)) return -1;
 
-  int32_t actLen;
-
   UnicodeString res(result, 0, resultLength);
   FieldPosition fp;
   
@@ -128,14 +126,13 @@ udat_format(    const    UDateFormat*    format,
     fp.setField(position->field);
   
   ((DateFormat*)format)->format(dateToFormat, res, fp);
-  T_fillOutputParams(&res, result, resultLength, &actLen, status);
   
   if(position != 0) {
     position->beginIndex = fp.getBeginIndex();
     position->endIndex = fp.getEndIndex();
   }
   
-  return actLen;
+  return uprv_fillOutputString(res, result, resultLength, status);
 }
 
 U_CAPI UDate
@@ -246,8 +243,6 @@ udat_toPattern(    const   UDateFormat     *fmt,
 {
   if(U_FAILURE(*status)) return -1;
 
-  int32_t actLen;
-
   UnicodeString res(result, 0, resultLength);
 
   if(localized)
@@ -255,8 +250,7 @@ udat_toPattern(    const   UDateFormat     *fmt,
   else
     ((SimpleDateFormat*)fmt)->toPattern(res);
 
-  T_fillOutputParams(&res, result, resultLength, &actLen, status);
-  return actLen;
+  return uprv_fillOutputString(res, result, resultLength, status);
 }
 
 // TBD: should this take an UErrorCode?
@@ -286,71 +280,63 @@ udat_getSymbols(const   UDateFormat             *fmt,
 {
   if(U_FAILURE(*status)) return -1;
 
-  int32_t actLen = 0;
-
   const DateFormatSymbols *syms = 
     ((SimpleDateFormat*)fmt)->getDateFormatSymbols();
   int32_t count;
   const UnicodeString *res;
-  UnicodeString res1(result, 0, resultLength);
-
 
   switch(type) {
   case UDAT_ERAS:
     res = syms->getEras(count);
     if(index < count) {
-      T_fillOutputParams(&res[index], result, resultLength, 
-             &actLen, status);
+      return uprv_fillOutputString(res[index], result, resultLength, status);
     }
     break;
 
   case UDAT_MONTHS:
     res = syms->getMonths(count);
     if(index < count) {
-      T_fillOutputParams(&res[index], result, resultLength, 
-             &actLen, status);
+      return uprv_fillOutputString(res[index], result, resultLength, status);
     }
     break;
 
   case UDAT_SHORT_MONTHS:
     res = syms->getShortMonths(count);
     if(index < count) {
-      T_fillOutputParams(&res[index], result, resultLength, 
-             &actLen, status);
+      return uprv_fillOutputString(res[index], result, resultLength, status);
     }
     break;
 
   case UDAT_WEEKDAYS:
     res = syms->getWeekdays(count);
     if(index < count) {
-      T_fillOutputParams(&res[index], result, resultLength, 
-             &actLen, status);
+      return uprv_fillOutputString(res[index], result, resultLength, status);
     }
     break;
 
   case UDAT_SHORT_WEEKDAYS:
     res = syms->getShortWeekdays(count);
     if(index < count) {
-      T_fillOutputParams(&res[index], result, resultLength, 
-             &actLen, status);
+      return uprv_fillOutputString(res[index], result, resultLength, status);
     }
     break;
 
   case UDAT_AM_PMS:
     res = syms->getAmPmStrings(count);
     if(index < count) {
-      T_fillOutputParams(&res[index], result, resultLength, 
-             &actLen, status);
+      return uprv_fillOutputString(res[index], result, resultLength, status);
     }
     break;
 
   case UDAT_LOCALIZED_CHARS:
-    syms->getLocalPatternChars(res1);
-    T_fillOutputParams(&res1, result, resultLength, &actLen, status);
-    break;
+    {
+      UnicodeString res1(result, 0, resultLength);
+      syms->getLocalPatternChars(res1);
+      return uprv_fillOutputString(res1, result, resultLength, status);
+    }
   }
   
-  return actLen;
+  return 0;
 }
 
 U_CAPI int32_t

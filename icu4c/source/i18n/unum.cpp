@@ -141,8 +141,6 @@ unum_format(    const    UNumberFormat*    fmt,
 {
   if(U_FAILURE(*status)) return -1;
 
-  int32_t actSize;
-
   UnicodeString res(result, 0, resultLength);
   FieldPosition fp;
   
@@ -150,14 +148,13 @@ unum_format(    const    UNumberFormat*    fmt,
     fp.setField(pos->field);
   
   ((NumberFormat*)fmt)->format(number, res, fp);
-  T_fillOutputParams(&res, result, resultLength, &actSize, status);
   
   if(pos != 0) {
     pos->beginIndex = fp.getBeginIndex();
     pos->endIndex = fp.getEndIndex();
   }
   
-  return actSize;  
+  return uprv_fillOutputString(res, result, resultLength, status);
 }
 
 U_CAPI int32_t
@@ -170,8 +167,6 @@ unum_formatDouble(    const    UNumberFormat*  fmt,
 {
   if(U_FAILURE(*status)) return -1;
 
-  int32_t actSize;
-
   UnicodeString res(result, 0, resultLength);
   FieldPosition fp;
   
@@ -179,14 +174,13 @@ unum_formatDouble(    const    UNumberFormat*  fmt,
     fp.setField(pos->field);
   
   ((NumberFormat*)fmt)->format(number, res, fp);
-  T_fillOutputParams(&res, result, resultLength, &actSize, status);
   
   if(pos != 0) {
     pos->beginIndex = fp.getBeginIndex();
     pos->endIndex = fp.getEndIndex();
   }
   
-  return actSize;  
+  return uprv_fillOutputString(res, result, resultLength, status);
 }
 
 U_CAPI int32_t
@@ -432,8 +426,6 @@ unum_getTextAttribute(    const    UNumberFormat*                    fmt,
   if(U_FAILURE(*status))
       return -1;
 
-  int32_t actSize = 0;
-
   UnicodeString res(result, 0, resultLength);
 
   switch(tag) {
@@ -455,7 +447,7 @@ unum_getTextAttribute(    const    UNumberFormat*                    fmt,
 
   case UNUM_PADDING_CHARACTER:
     *result = ((DecimalFormat*)fmt)->getPadCharacter();
-    actSize = 1;
+    return 1;
     break;
 
   default:
@@ -463,9 +455,7 @@ unum_getTextAttribute(    const    UNumberFormat*                    fmt,
     return -1;
   }
 
-  if (actSize != 1)
-    T_fillOutputParams(&res, result, resultLength, &actSize, status);
-  return actSize;
+  return uprv_fillOutputString(res, result, resultLength, status);
 }
 
 U_CAPI void
@@ -516,8 +506,6 @@ unum_toPattern(    const    UNumberFormat*          fmt,
 {
   if(U_FAILURE(*status)) return -1;
 
-  int32_t actSize;
-
   UnicodeString pat(result, 0, resultLength);
 
   if(isPatternLocalized)
@@ -525,8 +513,7 @@ unum_toPattern(    const    UNumberFormat*          fmt,
   else
     ((DecimalFormat*)fmt)->toPattern(pat);
 
-  T_fillOutputParams(&pat, result, resultLength, &actSize, status);
-  return actSize;
+  return uprv_fillOutputString(pat, result, resultLength, status);
 }
 
 U_CAPI void

@@ -2567,9 +2567,7 @@ ucol_getDisplayName(    const    char        *objLoc,
   if(U_FAILURE(*status)) return -1;
   UnicodeString dst(result, resultLength, resultLength);
   Collator::getDisplayName(Locale(objLoc), Locale(dispLoc), dst);
-  int32_t actLen;
-  T_fillOutputParams(&dst, result, resultLength, &actLen, status);
-  return actLen;
+  return uprv_fillOutputString(dst, result, resultLength, status);
 }
 
 U_CAPI const char*
