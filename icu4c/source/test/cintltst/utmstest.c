@@ -158,11 +158,10 @@ static void TestEpochOffsets(void)
     int32_t scale;
 
     for (scale = 0; scale < UDTS_MAX_SCALE; scale += 1) {
-        UTimeScaleData data;
+        int64_t units       = utmscale_getTimeScaleValue(scale, UTSV_UNITS_VALUE, &status);
+        int64_t epochOffset = utmscale_getTimeScaleValue(scale, UTSV_EPOCH_OFFSET_VALUE, &status);
         
-        utmscale_getTimeScaleData(scale, &data, &status);
-        
-        epochOffsetTest(data.epochOffset, data.units, scale);
+        epochOffsetTest(epochOffset, units, scale);
     }
 }
 
@@ -172,12 +171,11 @@ static void TestFromLimits(void)
     int32_t scale;
 
     for (scale = 0; scale < UDTS_MAX_SCALE; scale += 1) {
-        UTimeScaleData data;
+        int64_t fromMin = utmscale_getTimeScaleValue(scale, UTSV_FROM_MIN_VALUE, &status);
+        int64_t fromMax = utmscale_getTimeScaleValue(scale, UTSV_FROM_MAX_VALUE, &status);
         
-        utmscale_getTimeScaleData(scale, &data, &status);
-        
-        roundTripTest(data.fromMin, scale);
-        roundTripTest(data.fromMax, scale);
+        roundTripTest(fromMin, scale);
+        roundTripTest(fromMax, scale);
     }
 }
 
@@ -187,12 +185,13 @@ static void TestToLimits(void)
     int32_t scale;
 
     for (scale = 0; scale < UDTS_MAX_SCALE; scale += 1) {
-        UTimeScaleData data;
+        int64_t fromMin = utmscale_getTimeScaleValue(scale, UTSV_FROM_MIN_VALUE, &status);
+        int64_t fromMax = utmscale_getTimeScaleValue(scale, UTSV_FROM_MAX_VALUE, &status);
+        int64_t toMin   = utmscale_getTimeScaleValue(scale, UTSV_TO_MIN_VALUE, &status);
+        int64_t toMax   = utmscale_getTimeScaleValue(scale, UTSV_TO_MAX_VALUE, &status);
         
-        utmscale_getTimeScaleData(scale, &data, &status);
-        
-        toLimitTest(data.toMin, data.fromMin, scale);
-        toLimitTest(data.toMax, data.fromMax, scale);
+        toLimitTest(toMin, fromMin, scale);
+        toLimitTest(toMax, fromMax, scale);
     }
 }
 
@@ -208,15 +207,12 @@ static void TestFromDouble(void)
     }
     
     for (scale = 0; scale < UDTS_MAX_SCALE; scale += 1) {
-        UTimeScaleData data;
         double fromMin, fromMax;
         
         status = U_ZERO_ERROR;
-        utmscale_getTimeScaleData(scale, &data, &status);
+        fromMin = (double) utmscale_getTimeScaleValue(scale, UTSV_FROM_MIN_VALUE, &status);
+        fromMax = (double) utmscale_getTimeScaleValue(scale, UTSV_FROM_MAX_VALUE, &status);
 
-        fromMin = (double) data.fromMin;
-        fromMax = (double) data.fromMax;
-        
         status = U_ZERO_ERROR;
         result = utmscale_fromDouble(0, scale, &status);
         if (status == U_ILLEGAL_ARGUMENT_ERROR) {
@@ -267,10 +263,11 @@ static void TestFromInt64(void)
     }
     
     for (scale = 0; scale < UDTS_MAX_SCALE; scale += 1) {
-        UTimeScaleData data;
+        int64_t fromMin, fromMax;
         
         status = U_ZERO_ERROR;
-        utmscale_getTimeScaleData(scale, &data, &status);
+        fromMin = utmscale_getTimeScaleValue(scale, UTSV_FROM_MIN_VALUE, &status);
+        fromMax = utmscale_getTimeScaleValue(scale, UTSV_FROM_MAX_VALUE, &status);
         
         status = U_ZERO_ERROR;
         result = utmscale_fromInt64(0, scale, &status);
@@ -279,28 +276,28 @@ static void TestFromInt64(void)
         }
         
         status = U_ZERO_ERROR;
-        result = utmscale_fromInt64(data.fromMin, scale, &status);
+        result = utmscale_fromInt64(fromMin, scale, &status);
         if (status == U_ILLEGAL_ARGUMENT_ERROR) {
             log_err("utmscale_fromInt64(fromMin, %d, &status) generated U_ILLEGAL_ARGUMENT_ERROR.\n", scale);
         }
             
-       if (data.fromMin > U_INT64_MIN) {
+       if (fromMin > U_INT64_MIN) {
             status = U_ZERO_ERROR;
-            result = utmscale_fromInt64(data.fromMin - 1, scale, &status);
+            result = utmscale_fromInt64(fromMin - 1, scale, &status);
             if (status != U_ILLEGAL_ARGUMENT_ERROR) {
                 log_err("utmscale_fromInt64(fromMin - 1, %d, &status) did not generate U_ILLEGAL_ARGUMENT_ERROR.\n", scale);
             }
         }
             
         status = U_ZERO_ERROR;
-        result = utmscale_fromInt64(data.fromMax, scale, &status);
+        result = utmscale_fromInt64(fromMax, scale, &status);
         if (status == U_ILLEGAL_ARGUMENT_ERROR) {
             log_err("utmscale_fromInt64(fromMax, %d, &status) generated U_ILLEGAL_ARGUMENT_ERROR.\n", scale);
         }
             
-        if (data.fromMax < U_INT64_MAX) {
+        if (fromMax < U_INT64_MAX) {
             status = U_ZERO_ERROR;
-            result = utmscale_fromInt64(data.fromMax + 1, scale, &status);
+            result = utmscale_fromInt64(fromMax + 1, scale, &status);
             if (status != U_ILLEGAL_ARGUMENT_ERROR) {
                 log_err("utmscale_fromInt64(fromMax + 1, %d, &status) didn't generate U_ILLEGAL_ARGUMENT_ERROR.\n", scale);
             }
@@ -326,11 +323,12 @@ static void TestToDouble(void)
     }
     
     for (scale = 0; scale < UDTS_MAX_SCALE; scale += 1) {
-        UTimeScaleData data;
+        int64_t toMin, toMax;
         
         status = U_ZERO_ERROR;
-        utmscale_getTimeScaleData(scale, &data, &status);
-        
+        toMin = utmscale_getTimeScaleValue(scale, UTSV_TO_MIN_VALUE, &status);
+        toMax = utmscale_getTimeScaleValue(scale, UTSV_TO_MAX_VALUE, &status);
+
         status = U_ZERO_ERROR;
         result = utmscale_toDouble(0, scale, &status);
         if (status == U_ILLEGAL_ARGUMENT_ERROR) {
@@ -338,14 +336,14 @@ static void TestToDouble(void)
         }
         
         status = U_ZERO_ERROR;
-        result = utmscale_toDouble(data.toMin, scale, &status);
+        result = utmscale_toDouble(toMin, scale, &status);
         if (status == U_ILLEGAL_ARGUMENT_ERROR) {
             log_err("utmscale_toDouble(toMin, %d, &status) generated U_ILLEGAL_ARGUMENT_ERROR.\n", scale);
         }
             
-        if (data.toMin > U_INT64_MIN) {
+        if (toMin > U_INT64_MIN) {
             status = U_ZERO_ERROR;
-            result = utmscale_toDouble(data.toMin - 1, scale, &status);
+            result = utmscale_toDouble(toMin - 1, scale, &status);
             if (status != U_ILLEGAL_ARGUMENT_ERROR) {
                 log_err("utmscale_toDouble(toMin - 1, %d, &status) did not generate U_ILLEGAL_ARGUMENT_ERROR.\n", scale);
             }
@@ -353,14 +351,14 @@ static void TestToDouble(void)
 
             
         status = U_ZERO_ERROR;
-        result = utmscale_toDouble(data.toMax, scale, &status);
+        result = utmscale_toDouble(toMax, scale, &status);
         if (status == U_ILLEGAL_ARGUMENT_ERROR) {
             log_err("utmscale_toDouble(toMax, %d, &status) generated U_ILLEGAL_ARGUMENT_ERROR.\n", scale);
         }
             
-        if (data.toMax < U_INT64_MAX) {
+        if (toMax < U_INT64_MAX) {
             status = U_ZERO_ERROR;
-            result = utmscale_toDouble(data.toMax + 1, scale, &status);
+            result = utmscale_toDouble(toMax + 1, scale, &status);
             if (status != U_ILLEGAL_ARGUMENT_ERROR) {
                 log_err("utmscale_toDouble(toMax + 1, %d, &status) did not generate U_ILLEGAL_ARGUMENT_ERROR.\n", scale);
             }
@@ -386,11 +384,12 @@ static void TestToInt64(void)
     }
     
     for (scale = 0; scale < UDTS_MAX_SCALE; scale += 1) {
-        UTimeScaleData data;
+        int64_t toMin, toMax;
         
         status = U_ZERO_ERROR;
-        utmscale_getTimeScaleData(scale, &data, &status);
-        
+        toMin = utmscale_getTimeScaleValue(scale, UTSV_TO_MIN_VALUE, &status);
+        toMax = utmscale_getTimeScaleValue(scale, UTSV_TO_MAX_VALUE, &status);
+
         status = U_ZERO_ERROR;
         result = utmscale_toInt64(0, scale, &status);
         if (status == U_ILLEGAL_ARGUMENT_ERROR) {
@@ -398,14 +397,14 @@ static void TestToInt64(void)
         }
         
         status = U_ZERO_ERROR;
-        result = utmscale_toInt64(data.toMin, scale, &status);
+        result = utmscale_toInt64(toMin, scale, &status);
         if (status == U_ILLEGAL_ARGUMENT_ERROR) {
             log_err("utmscale_toInt64(toMin, %d, &status) generated U_ILLEGAL_ARGUMENT_ERROR.\n", scale);
         }
             
-        if (data.toMin > U_INT64_MIN) {
+        if (toMin > U_INT64_MIN) {
             status = U_ZERO_ERROR;
-            result = utmscale_toInt64(data.toMin - 1, scale, &status);
+            result = utmscale_toInt64(toMin - 1, scale, &status);
             if (status != U_ILLEGAL_ARGUMENT_ERROR) {
                 log_err("utmscale_toInt64(toMin - 1, %d, &status) did not generate U_ILLEGAL_ARGUMENT_ERROR.\n", scale);
             }
@@ -413,14 +412,14 @@ static void TestToInt64(void)
 
             
         status = U_ZERO_ERROR;
-        result = utmscale_toInt64(data.toMax, scale, &status);
+        result = utmscale_toInt64(toMax, scale, &status);
         if (status == U_ILLEGAL_ARGUMENT_ERROR) {
             log_err("utmscale_toInt64(toMax, %d, &status) generated U_ILLEGAL_ARGUMENT_ERROR.\n", scale);
         }
             
-        if (data.toMax < U_INT64_MAX) {
+        if (toMax < U_INT64_MAX) {
             status = U_ZERO_ERROR;
-            result = utmscale_toInt64(data.toMax + 1, scale, &status);
+            result = utmscale_toInt64(toMax + 1, scale, &status);
             if (status != U_ILLEGAL_ARGUMENT_ERROR) {
                 log_err("utmscale_toInt64(toMax + 1, %d, &status) did not generate U_ILLEGAL_ARGUMENT_ERROR.\n", scale);
             }
@@ -455,13 +454,11 @@ static void TestMonkey(void)
     UErrorCode status = U_ZERO_ERROR;
     
     for (scale = 0; scale < UDTS_MAX_SCALE; scale += 1) {
-        UTimeScaleData data;
+        int64_t fromMin = utmscale_getTimeScaleValue(scale, UTSV_FROM_MIN_VALUE, &status);
+        int64_t fromMax = utmscale_getTimeScaleValue(scale, UTSV_FROM_MAX_VALUE, &status);
         int32_t i;
         
-        status = U_ZERO_ERROR;
-        utmscale_getTimeScaleData(scale, &data, &status);
-        
-        initRandom(data.fromMin, data.fromMax);
+        initRandom(fromMin, fromMax);
         
         for (i = 0; i < LOOP_COUNT; i += 1) {
             int64_t value = randomInRange();

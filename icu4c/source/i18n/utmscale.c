@@ -55,28 +55,61 @@ static const InternalTimeScaleData timeScaleTable[] = {
     {days,         INT64_C(693596),             INT64_C(-11368795),            INT64_C(9981603),             U_INT64_MIN,                   INT64_C(9223372036854775807), INT64_C(693597),             INT64_C(693595),             INT64_C(432000000000), INT64_C(-9223371604854775808), INT64_C(9223371604854775807)},
 };
 
-U_CAPI void U_EXPORT2
-utmscale_getTimeScaleData(UDateTimeScale timeScale, UTimeScaleData *data, UErrorCode *status)
+U_CAPI int64_t U_EXPORT2
+utmscale_getTimeScaleValue(UDateTimeScale timeScale, UTimeScaleValue value, UErrorCode *status)
 {
     const InternalTimeScaleData *internalData;
 
     if (status == NULL || U_FAILURE(*status)) {
-        return;
+        return 0;
     }
 
-    if (timeScale < 0 || timeScale >= UDTS_MAX_SCALE || data == NULL) {
+    if (timeScale < 0 || timeScale >= UDTS_MAX_SCALE) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
-        return;
+        return 0;
     }
 
-    internalData      = &timeScaleTable[timeScale];
+    internalData = &timeScaleTable[timeScale];
 
-    data->units       = internalData->units;
-    data->epochOffset = internalData->epochOffset;
-    data->fromMin     = internalData->fromMin;
-    data->fromMax     = internalData->fromMax;
-    data->toMin       = internalData->toMin;
-    data->toMax       = internalData->toMax;
+    switch (value)
+    {
+    case UTSV_UNITS_VALUE:
+        return internalData->units;
+        
+    case UTSV_EPOCH_OFFSET_VALUE:
+        return internalData->epochOffset;
+    
+    case UTSV_FROM_MIN_VALUE:
+        return internalData->fromMin;
+        
+    case UTSV_FROM_MAX_VALUE:
+        return internalData->fromMax;
+        
+    case UTSV_TO_MIN_VALUE:
+        return internalData->toMin;
+        
+    case UTSV_TO_MAX_VALUE:
+        return internalData->toMax;
+        
+    case UTSV_EPOCH_OFFSET_PLUS_1_VALUE:
+        return internalData->epochOffsetP1;
+        
+    case UTSV_EPOCH_OFFSET_MINUS_1_VALUE:
+        return internalData->epochOffsetM1;
+        
+    case UTSV_UNITS_ROUND_VALUE:
+        return internalData->unitsRound;
+    
+    case UTSV_MIN_ROUND_VALUE:
+        return internalData->minRound;
+        
+    case UTSV_MAX_ROUND_VALUE:
+        return internalData->maxRound;
+        
+    default:
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
 }
 
 U_CAPI int64_t U_EXPORT2

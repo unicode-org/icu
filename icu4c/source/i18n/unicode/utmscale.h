@@ -190,7 +190,7 @@
  */
 
 /**
- * UDateTimeScale values are used to specify the time scale used for
+ * <code>UDateTimeScale</code> values are used to specify the time scale used for
  * conversion into or out if the universal time scale.
  *
  * @draft ICU 3.2
@@ -276,78 +276,153 @@ typedef enum UDateTimeScale {
     UDTS_MAX_SCALE
 } UDateTimeScale;
 
+typedef enum UTimeScaleValue {
+    /**
+     * The constant used to select the units vale
+     * for a time scale.
+     * 
+     * @see utms_getTimeScaleValue
+     *
+     * @draft ICU 3.2
+     */
+    UTSV_UNITS_VALUE = 0,
+
+    /**
+     * The constant used to select the epoch offset value
+     * for a time scale.
+     * 
+     * @see utms_getTimeScaleValue
+     *
+     * @draft ICU 3.2
+     */
+    UTSV_EPOCH_OFFSET_VALUE,
+
+    /**
+     * The constant used to select the minimum from value
+     * for a time scale.
+     * 
+     * @see utms_getTimeScaleValue
+     *
+     * @draft ICU 3.2
+     */
+    UTSV_FROM_MIN_VALUE,
+
+    /**
+     * The constant used to select the maximum from value
+     * for a time scale.
+     * 
+     * @see utms_getTimeScaleValue
+     *
+     * @draft ICU 3.2
+     */
+    UTSV_FROM_MAX_VALUE,
+
+    /**
+     * The constant used to select the minimum to value
+     * for a time scale.
+     * 
+     * @see utms_getTimeScaleValue
+     *
+     * @draft ICU 3.2
+     */
+    UTSV_TO_MIN_VALUE,
+
+    /**
+     * The constant used to select the maximum to value
+     * for a time scale.
+     * 
+     * @see utms_getTimeScaleValue
+     *
+     * @draft ICU 3.2
+     */
+    UTSV_TO_MAX_VALUE,
+
+    /**
+     * The constant used to select the epoch plus one value
+     * for a time scale.
+     * 
+     * NOTE: This is an internal value. DO NOT USE IT. May not
+     * actually be equal to the epoch offset value plus one.
+     * 
+     * @see utms_getTimeScaleValue
+     *
+     * @draft ICU 3.2
+     */
+    UTSV_EPOCH_OFFSET_PLUS_1_VALUE,
+
+    /**
+     * The constant used to select the epoch plus one value
+     * for a time scale.
+     * 
+     * NOTE: This is an internal value. DO NOT USE IT. May not
+     * actually be equal to the epoch offset value plus one.
+     * 
+     * @see utms_getTimeScaleValue
+     *
+     * @draft ICU 3.2
+     */
+    UTSV_EPOCH_OFFSET_MINUS_1_VALUE,
+
+    /**
+     * The constant used to select the units round value
+     * for a time scale.
+     * 
+     * NOTE: This is an internal value. DO NOT USE IT.
+     * 
+     * @see utms_getTimeScaleValue
+     *
+     * @internal
+     */
+    UTSV_UNITS_ROUND_VALUE,
+
+    /**
+     * The constant used to select the minimum safe rounding value
+     * for a time scale.
+     * 
+     * NOTE: This is an internal value. DO NOT USE IT.
+     * 
+     * @see utms_getTimeScaleValue
+     *
+     * @internal
+     */
+    UTSV_MIN_ROUND_VALUE,
+
+    /**
+     * The constant used to select the maximum safe rounding value
+     * for a time scale.
+     * 
+     * NOTE: This is an internal value. DO NOT USE IT.
+     * 
+     * @see utms_getTimeScaleValue
+     *
+     * @internal
+     */
+    UTSV_MAX_ROUND_VALUE,
+
+    /**
+     * The number of time scale values.
+     * 
+     * NOTE: This is an internal value. DO NOT USE IT.
+     * 
+     * @see utms_getTimeScaleValue
+     *
+     * @internal
+     */
+    UTSV_MAX_SCALE_VALUE
+} UTimeScaleValue;
+
 /**
- * This structure contains infomration about a particular
- * time scale. Use <code>utmscale_getTimeScaleData</code> to
- * get the data.
- *
- * @see utmscale_getTimeScaleData.
- *
+ * Get a value associated with a particular time scale.
+ * 
+ * @param timeScale The time scale
+ * @param value A constant representing the value to get
+ * 
+ * @return - the value.
+ * 
  * @draft ICU 3.2
  */
-typedef struct
-{
-    /**
-     * The units of the time scale, expressed in ticks.
-     * (One tick == 100 nanseconds)
-     *
-     * @draft ICU 3.2
-     */
-    int64_t units;
-
-    /**
-     * The distance from the universal time scale's epoch to
-     * the time scale's epoch, expressed in the time scale's units.
-     *
-     * @draft ICU 3.2
-     */
-    int64_t epochOffset;
-
-    /**
-     * The minimum time scale value that can be conveted
-     * to the Universal Time Scale without underflowing.
-     * 
-     * @draft ICU 3.2
-     */
-    int64_t fromMin;
-
-    /**
-     * The maximum time scale value that can be conveted
-     * to the Universal Time Scale without overflowing.
-     * 
-     * @draft ICU 3.2
-     */
-    int64_t fromMax;
-
-    /**
-     * The minimum Universal Time Scale value that can
-     * be converted to the time scale without underflowing.
-     * 
-     * @draft ICU 3.2
-     */
-    int64_t toMin;
-    
-    /**
-     * The maximum Universal Time Scale value that can
-     * be converted to the time scale without overflowing.
-     * 
-     * @draft ICU 3.2
-     */
-    int64_t toMax;
-} UTimeScaleData;
-
-    /**
-     * Fill in a <code>UTimeScaleData</code> structure for the given time
-     * scale.
-     * 
-     * @param timeScale - The time scale
-     * @param data      - The address of the <code>UTimeScaleData</code> structure to be filled in.
-     * @param status    - The status code. Set to <code>U_ILLEGAL_ARGUMENT_ERROR</code> if <code>timeScale</code> is out of range.
-     * 
-     * @draft ICU 3.2
-     */
-U_DRAFT void U_EXPORT2
-    utmscale_getTimeScaleData(UDateTimeScale timeScale, UTimeScaleData *data, UErrorCode *status);
+U_DRAFT int64_t U_EXPORT2
+    utmscale_getTimeScaleValue(UDateTimeScale timeScale, UTimeScaleValue value, UErrorCode *status);
 
 /* Conversion to 'universal time scale' */
 
