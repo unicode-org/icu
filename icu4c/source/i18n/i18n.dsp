@@ -1184,6 +1184,14 @@ InputPath=.\unicode\gregocal.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\japancal.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\japancal.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\msgfmt.cpp
 # End Source File
 # Begin Source File
