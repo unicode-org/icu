@@ -1268,8 +1268,10 @@ static const char *uprv_getPOSIXID()
   if (posixID == 0) posixID = getenv("LANG");
   if (posixID == 0) posixID = setlocale(LC_ALL, NULL);
 
-  if ( (uprv_strcmp("C", posixID) == 0) ||
-       (uprv_strncmp("C ", posixID, 2) == 0) ) {  /* HPUX returns 'C C C C C C C' */
+  if ( (posixID==0) || 
+       (uprv_strcmp("C", posixID) == 0) ||
+       (uprv_strncmp("C ", posixID, 2) == 0) )
+  {  /* HPUX returns 'C C C C C C C' */
     posixID = "en_US";
   }
   return posixID;
