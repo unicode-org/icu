@@ -666,33 +666,23 @@ u_file_read(    UChar        *chars,
     UFILE         *f)
 {
     int32_t dataSize;
-    int32_t read;
-    u_localized_string *str;
+    int32_t read = 0;
+    u_localized_string *str = &f->str;
 
-    /* fill the buffer */
-    ufile_fill_uchar_buffer(f);
-
-    /* determine the amount of data in the buffer */
-    str = &f->str;
-    dataSize = (int32_t)(str->fLimit - str->fPos);
-
-    /* if the buffer contains the amount requested, just copy */
-    if(dataSize > count) {
-        memcpy(chars, str->fPos, count * sizeof(UChar));
-
-        /* update the current buffer position */
-        str->fPos += count;
-
-        /* return # of chars read */
-        return count;
-    }
-
-    /* otherwise, iteratively fill the buffer and copy */
-    read = 0;
     do {
 
         /* determine the amount of data in the buffer */
         dataSize = (int32_t)(str->fLimit - str->fPos);
+        if (dataSize <= 0) {
+            /* fill the buffer */
+            ufile_fill_uchar_buffer(f);
+            dataSize = (int32_t)(str->fLimit - str->fPos);
+        }
+
+        /* Make sure that we don't read too much */
+        if (dataSize > (count - read)) {
+            dataSize = count - read;
+        }
 
         /* copy the current data in the buffer */
         memcpy(chars + read, str->fPos, dataSize * sizeof(UChar));
@@ -702,11 +692,8 @@ u_file_read(    UChar        *chars,
 
         /* update the current buffer position */
         str->fPos += dataSize;
-
-        /* refill the buffer */
-        ufile_fill_uchar_buffer(f);
-
-    } while(dataSize != 0 && read < count);
+    }
+    while (dataSize != 0 && read < count);
 
     return read;
 }
