@@ -99,10 +99,12 @@ udata_swapPackage(const UDataSwapper *ds,
                   const void *inData, int32_t length, void *outData,
                   UErrorCode *pErrorCode);
 
+U_CDECL_BEGIN
 static void U_CALLCONV
 printError(void *context, const char *fmt, va_list args) {
     vfprintf((FILE *)context, fmt, args);
 }
+U_CDECL_END
 
 static int
 printUsage(const char *pname, UBool ishelp) {
@@ -393,12 +395,14 @@ struct ToCEntry {
     uint32_t nameOffset, inOffset, outOffset, length;
 };
 
+U_CDECL_BEGIN
 static int32_t
 compareToCEntries(const void *context, const void *left, const void *right) {
     const char *chars=(const char *)context;
     return (int32_t)uprv_strcmp(chars+((const ToCEntry *)left)->nameOffset,
                                 chars+((const ToCEntry *)right)->nameOffset);
 }
+U_CDECL_END
 
 U_CAPI int32_t U_EXPORT2
 udata_swapPackage(const UDataSwapper *ds,
