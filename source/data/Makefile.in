@@ -132,7 +132,7 @@ TEST_DAT_FILES=$(TESTBUILDDIR)/test.dat
 
 ## BRK files
 # ALL of these files can be deleted (the following BRK files) - they are copied
-BRK_FILES=$(BUILDDIR)/char.brk $(BUILDDIR)/line.brk $(BUILDDIR)/line_th.brk $(BUILDDIR)/sent.brk $(BUILDDIR)/word.brk $(BUILDDIR)/word_th.brk
+BRK_FILES=$(BUILDDIR)/char.brk $(BUILDDIR)/line.brk $(BUILDDIR)/line_th.brk $(BUILDDIR)/sent.brk $(BUILDDIR)/word.brk $(BUILDDIR)/title.brk $(BUILDDIR)/word_th.brk
 # don't include thaidict.brk - it goes into a resource bundle - plus it isn't deleted
 
 ## UCM files 

@@ -466,7 +466,12 @@ int32_t RuleBasedBreakIterator::handleNext(void) {
         // to the last saved lookup-state position
         if (tables->isLookaheadState(state)) {
             if (tables->isEndState(state)) {
-                result = lookaheadResult;
+                if (lookaheadResult > 0) {
+                    result = lookaheadResult;
+                }
+                else {
+                    result = text->getIndex() + 1;
+                }
             }
             else {
                 lookaheadResult = text->getIndex() + 1;
@@ -657,6 +662,13 @@ BreakIterator *  RuleBasedBreakIterator::createBufferClone(void *stackBuffer,
  
     return localIterator;    
 }
+
+#ifdef RBBI_DEBUG
+void RuleBasedBreakIterator::debugDumpTables() const {
+    tables->debugDumpTables();
+}
+#endif
+
 
 U_NAMESPACE_END
 

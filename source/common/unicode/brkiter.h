@@ -420,6 +420,26 @@ public:
                                                        UErrorCode& status);
 
     /**
+     * Create BreakIterator for title-casing breaks using the specified locale
+     * Returns an instance of a BreakIterator implementing title breaks.
+     * @param where the locale. 
+     * @return A BreakIterator for title-breaks.  The UErrorCode& status 
+     * parameter is used to return status information to the user.
+     * To check whether the construction succeeded or not, you should check
+     * the value of U_SUCCESS(err).  If you wish more detailed information, you
+     * can check for informational error results which still indicate success.
+     * U_USING_FALLBACK_ERROR indicates that a fall back locale was used.  For
+     * example, 'de_CH' was requested, but nothing was found there, so 'de' was
+     * used.  U_USING_DEFAULT_ERROR indicates that the default locale data was
+     * used; neither the requested locale nor any of its fall back locales
+     * could be found.
+     * The caller owns the returned object and is responsible for deleting it.
+     * @stable
+     */
+    static BreakIterator* createTitleInstance(const Locale& where, 
+                                                       UErrorCode& status);
+
+    /**
      * Get the set of Locales for which TextBoundaries are installed
      * @param count the output parameter of number of elements in the locale list
      * @return available locales

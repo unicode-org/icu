@@ -708,6 +708,33 @@ void RBBITest::TestHindiWordBreak()
     delete e;
     delete hindiWordData;
 }
+
+
+void RBBITest::TestTitleBreak()
+{
+    UErrorCode status= U_ZERO_ERROR;
+    RuleBasedBreakIterator* titleI=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createTitleInstance(Locale::getDefault(), status);
+    if(U_FAILURE(status)){
+          errln("FAIL : in construction");
+          return;
+    }
+    // titleI->debugDumpTables();
+
+    Vector *titleData = new Vector();
+    titleData->addElement("   ");
+    titleData->addElement("This ");
+    titleData->addElement("is ");
+    titleData->addElement("a ");
+    titleData->addElement("simple ");
+    titleData->addElement("sample ");
+    titleData->addElement("sentence. ");
+    titleData->addElement("This ");
+
+    generalIteratorTest(*titleI, titleData);
+    delete titleI;
+    delete titleData;
+}
+
 /*
 //Bug: if there is no word break before and after danda when it is followed by a space
 void RBBITest::TestDanda()
@@ -979,6 +1006,9 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
             if(exec) TestHindiCharacterBreak();                break;
         case 5: name = "TestHindiWordBreak";
             if(exec) TestHindiWordBreak();                     break;
+        case 6: name = "TestTitleBreak";
+            if(exec) TestTitleBreak();                         break;
+
 //      case 6: name = "TestDanda()";
 //           if(exec) TestDanda();                             break;
 //      case 7: name = "TestHindiCharacterWrapping()";
@@ -1069,9 +1099,11 @@ Vector* RBBITest::testFirstAndNext(RuleBasedBreakIterator& bi, UnicodeString& te
     while (p != RuleBasedBreakIterator::DONE) {
         p = bi.next();
         if (p != RuleBasedBreakIterator::DONE) {
-            if (p <= lastP)
+            if (p <= lastP) {
                 errln((UnicodeString)"next() failed to move forward: next() on position "
                                 + lastP + (UnicodeString)" yielded " + p);
+                break;
+            }
 
             text.extractBetween(lastP, p, selection);  
             result->addElement(selection);
@@ -1097,16 +1129,20 @@ Vector* RBBITest::testLastAndPrevious(RuleBasedBreakIterator& bi, UnicodeString&
     while (p != RuleBasedBreakIterator::DONE) {
         p = bi.previous();
         if (p != RuleBasedBreakIterator::DONE) {
-            if (p >= lastP)
+            if (p >= lastP) {
                 errln((UnicodeString)"previous() failed to move backward: previous() on position "
                                 + lastP + (UnicodeString)" yielded " + p);
+                break;
+            }
             text.extractBetween(p, lastP, selection);
             result->insertElementAt(selection, 0);
         }
         else {
-            if (lastP != 0)
+            if (lastP != 0) {
                 errln((UnicodeString)"previous() returned DONE prematurely: offset was "
                                 + lastP + (UnicodeString)" instead of 0");
+                break;
+            }
         }
         lastP = p;
     }

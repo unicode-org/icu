@@ -220,7 +220,7 @@ testdata: ucadata.dat $(TRANSLIT_FILES) $(RB_FILES)  {"$(ICUTOOLS)\genrb\$(CFG)"
 	@echo building testdata...
 	nmake /nologo /f "$(TESTDATA)\testdata.mk" TESTDATA=. ICUTOOLS="$(ICUTOOLS)" PKGOPT="$(PKGOPT)" CFG=$(CFG) TESTDATAOUT="$(TESTDATAOUT)" ICUDATA="$(ICUDATA)" TESTDATABLD="$(TESTDATABLD)"
 
-BRK_FILES = "$(ICUDBLD)\sent.brk" "$(ICUDBLD)\char.brk" "$(ICUDBLD)\line.brk" "$(ICUDBLD)\word.brk" "$(ICUDBLD)\line_th.brk" "$(ICUDBLD)\word_th.brk"
+BRK_FILES = "$(ICUDBLD)\sent.brk" "$(ICUDBLD)\char.brk" "$(ICUDBLD)\line.brk" "$(ICUDBLD)\word.brk" "$(ICUDBLD)\title.brk" "$(ICUDBLD)\line_th.brk" "$(ICUDBLD)\word_th.brk"
 
 #invoke pkgdata for ICU common data
 #  pkgdata will drop all output files (.dat, .dll, .lib) into the target (ICUDBLD) directory.
@@ -265,6 +265,9 @@ $(BRK_FILES:.brk" =.brk"
 
 "$(ICUDBLD)\word.brk" : "$(ICUBRK)\wordLE.brk"
     copy "$(ICUBRK)\wordLE.brk" "$(ICUDBLD)\word.brk"
+
+"$(ICUDBLD)\title.brk" : "$(ICUBRK)\titleLE.brk"
+    copy "$(ICUBRK)\titleLE.brk" "$(ICUDBLD)\title.brk"
 
 "$(ICUDBLD)\line_th.brk" : "$(ICUBRK)\line_thLE.brk"
     copy "$(ICUBRK)\line_thLE.brk" "$(ICUDBLD)\line_th.brk"
