@@ -1583,7 +1583,7 @@ UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
     myData=(UConverterDataISO2022*)(args->converter->extraInfo);
     currentState =  &myData->toUnicodeCurrentState;
     toUnicodeStatus = &args->converter->toUnicodeStatus;
-    while(mySource< args->sourceLimit){
+    while(mySource< mySourceLimit){
 
         targetUniChar = missingCharMarker;
 
@@ -1620,7 +1620,7 @@ UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                 if(*toUnicodeStatus== 0x00){
                         mySource--;
                         changeState_2022(args->converter,&(mySource), 
-                            args->sourceLimit, ISO_2022_JP, err);
+                            mySourceLimit, ISO_2022_JP, err);
                         /*Invalid or illegal escape sequence */
                         if(U_SUCCESS(*err)){
                             continue;
@@ -1769,7 +1769,7 @@ UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args
     UBool useFallback;
     int32_t length =0;
 
-    if ((args->converter == NULL) || (args->targetLimit < args->target) || (args->sourceLimit < args->source)){
+    if ((args->converter == NULL) || (args->targetLimit < args->target) || (sourceLimit < args->source)){
         *err = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
@@ -1923,7 +1923,7 @@ UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC_IBM(UConverterToUnicodeArgs *args
     do{
 
         /*Find the end of the buffer e.g : Next Escape Seq | end of Buffer*/
-        mySourceLimit = getEndOfBuffer_2022(&(args->source), args->sourceLimit, args->flush);
+        mySourceLimit = getEndOfBuffer_2022(&(args->source), mySourceLimit, args->flush);
 
         if (args->converter->mode == UCNV_SO) /*Already doing some conversion*/{
             saveThis = args->converter;
@@ -1941,19 +1941,19 @@ UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC_IBM(UConverterToUnicodeArgs *args
         /*-Done with buffer with entire buffer
         -Error while converting
         */
-        if (U_FAILURE(*err) || (args->source == args->sourceLimit)) 
+        if (U_FAILURE(*err) || (args->source == mySourceLimit)) 
             return;
 
         sourceStart = args->source;
         changeState_2022(args->converter,
                &(args->source), 
-               args->sourceLimit,
+               mySourceLimit,
                ISO_2022_KR,
                err);
         /* args->source = sourceStart; */
 
 
-    }while(args->source < args->sourceLimit);
+    }while(args->source < mySourceLimit);
     /* return*/
 }
 
@@ -1971,7 +1971,7 @@ UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
     UBool useFallback;
 
 
-    if ((args->converter == NULL) || (args->targetLimit < args->target) || (args->sourceLimit < args->source)){
+    if ((args->converter == NULL) || (args->targetLimit < args->target) || (mySourceLimit < args->source)){
         *err = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
@@ -1984,7 +1984,7 @@ UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
       UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC_IBM(args,err);
       return;
     }
-    while(mySource< args->sourceLimit){
+    while(mySource< mySourceLimit){
 
         targetUniChar = missingCharMarker;
 
@@ -2016,7 +2016,7 @@ UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
 
                     mySource--;
                     changeState_2022(args->converter,&(mySource), 
-                                    args->sourceLimit, ISO_2022_KR, err);
+                                    mySourceLimit, ISO_2022_KR, err);
                 /*}*/
                 if(U_FAILURE(*err)){
                     args->target = myTarget;

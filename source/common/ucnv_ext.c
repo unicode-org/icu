@@ -382,7 +382,7 @@ ucnv_extContinueMatchToU(UConverter *cnv,
             cnv->preToULength=0;
         } else {
             /* the match did not use all of preToU[] - keep the rest for replay */
-            int32_t length=cnv->preToULength-match;
+            length=cnv->preToULength-match;
             uprv_memmove(cnv->preToU, cnv->preToU+match, length);
             cnv->preToULength=(int8_t)-length;
         }

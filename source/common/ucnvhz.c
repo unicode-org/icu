@@ -150,12 +150,12 @@ UConverter_toUnicode_HZ_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
     UChar mySourceChar = 0x0000;
     UConverterDataHZ* myData=(UConverterDataHZ*)(args->converter->extraInfo);
        
-    if ((args->converter == NULL) || (args->targetLimit < args->target) || (args->sourceLimit < args->source)){
+    if ((args->converter == NULL) || (args->targetLimit < args->target) || (mySourceLimit < args->source)){
         *err = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
     
-    while(mySource< args->sourceLimit){
+    while(mySource< mySourceLimit){
         
         if(myTarget < args->targetLimit){
             
@@ -288,11 +288,11 @@ static void
 UConverter_fromUnicode_HZ_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
                                                       UErrorCode * err){
     const UChar *mySource = args->source;
-    unsigned char *myTarget = (unsigned char *) args->target;
+    char *myTarget = args->target;
     int32_t* offsets = args->offsets;
     int32_t mySourceIndex = 0;
     int32_t myTargetIndex = 0;
-    int32_t targetLength = (int32_t)(args->targetLimit - args->target);
+    int32_t targetLength = (int32_t)(args->targetLimit - myTarget);
     int32_t mySourceLength = (int32_t)(args->sourceLimit - args->source);
     int32_t length=0;
     uint32_t targetUniChar = 0x0000;
@@ -304,7 +304,7 @@ UConverter_fromUnicode_HZ_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
     int len =0;
     const char* escSeq=NULL;
     
-    if ((args->converter == NULL) || (args->targetLimit < args->target) || (args->sourceLimit < args->source)){
+    if ((args->converter == NULL) || (args->targetLimit < myTarget) || (args->sourceLimit < args->source)){
         *err = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
@@ -316,7 +316,7 @@ UConverter_fromUnicode_HZ_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
         targetUniChar = missingCharMarker;
         if (myTargetIndex < targetLength){
             
-            c=mySourceChar = (UChar) args->source[mySourceIndex++];
+            c=mySourceChar = (UChar) mySource[mySourceIndex++];
             
 
             oldIsTargetUCharDBCS = isTargetUCharDBCS;
@@ -358,12 +358,12 @@ UConverter_fromUnicode_HZ_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
             
                 if(isTargetUCharDBCS){
                     if( myTargetIndex <targetLength){
-                        args->target[myTargetIndex++] =(char) ((targetUniChar >> 8) -0x80);
+                        myTarget[myTargetIndex++] =(char) ((targetUniChar >> 8) -0x80);
                         if(offsets){
                             *(offsets++) = mySourceIndex-1;
                         }
                         if(myTargetIndex < targetLength){
-                            args->target[myTargetIndex++] =(char) ((targetUniChar & 0x00FF) -0x80);
+                            myTarget[myTargetIndex++] =(char) ((targetUniChar & 0x00FF) -0x80);
                             if(offsets){
                                 *(offsets++) = mySourceIndex-1;
                             }
@@ -379,7 +379,7 @@ UConverter_fromUnicode_HZ_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
 
                 }else{
                     if( myTargetIndex <targetLength){
-                        args->target[myTargetIndex++] = (char) (targetUniChar );
+                        myTarget[myTargetIndex++] = (char) (targetUniChar );
                         if(offsets){
                             *(offsets++) = mySourceIndex-1;
                         }
