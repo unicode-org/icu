@@ -22,7 +22,7 @@ mt {
 //    ShortLanguage { mlt }
 
     Variants{
-                PREEURO { "Qabel il-Euro" }
+        PREEURO { "Qabel il-Euro" }
     } 
     // Duplicate data has been commented out.
     Languages {
