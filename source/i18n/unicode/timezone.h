@@ -534,7 +534,6 @@ private:
     static const UChar              GMT_ID[];
     static const int32_t            GMT_ID_LENGTH;
     static const UChar              CUSTOM_ID[];
-    static const TimeZone           GMT_OBJ;
 
     ////////////////////////////////////////////////////////////////
     // Pointers into memory-mapped icudata.  Writing to this memory
