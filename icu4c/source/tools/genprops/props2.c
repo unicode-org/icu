@@ -29,7 +29,7 @@
 #include "uparse.h"
 #include "genprops.h"
 
-#define FLAG(n) ((uint32_t)1<<(n))
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
 /* data --------------------------------------------------------------------- */
 
@@ -37,15 +37,40 @@ static UNewTrie *trie;
 uint32_t *pv;
 static int32_t pvCount;
 
-static uint32_t prevStart=0, prevLimit=0, prevValue=0;
+/* miscellaneous ------------------------------------------------------------ */
 
-/* prototypes --------------------------------------------------------------- */
+static char *
+trimTerminateField(char *s, char *limit) {
+    /* trim leading whitespace */
+    s=(char *)u_skipWhitespace(s);
+
+    /* trim trailing whitespace */
+    while(s<limit && (*(limit-1)==' ' || *(limit-1)=='\t')) {
+        --limit;
+    }
+    *limit=0;
+
+    return s;
+}
 
 static void
 parseTwoFieldFile(char *filename, char *basename,
                   const char *ucdFile, const char *suffix,
                   UParseLineFn *lineFn,
-                  UErrorCode *pErrorCode);
+                  UErrorCode *pErrorCode) {
+    char *fields[2][2];
+
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return;
+    }
+
+    writeUCDFilename(basename, ucdFile, suffix);
+
+    u_parseDelimitedFile(filename, ';', fields, 2, lineFn, NULL, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
+        fprintf(stderr, "error parsing %s.txt: %s\n", ucdFile, u_errorName(*pErrorCode));
+    }
+}
 
 static void
 parseArabicShaping(char *filename, char *basename,
@@ -57,35 +82,263 @@ ageLineFn(void *context,
           char *fields[][2], int32_t fieldCount,
           UErrorCode *pErrorCode);
 
-static void U_CALLCONV
-scriptsLineFn(void *context,
-              char *fields[][2], int32_t fieldCount,
-              UErrorCode *pErrorCode);
+/* parse files with single enumerated properties ---------------------------- */
+
+struct SingleEnum {
+    const char *ucdFile, *propName;
+    UProperty prop;
+    int32_t vecWord, vecShift;
+    uint32_t vecMask;
+};
+typedef struct SingleEnum SingleEnum;
+
+static void
+parseSingleEnumFile(char *filename, char *basename, const char *suffix,
+                    const SingleEnum *sen,
+                    UErrorCode *pErrorCode);
+
+static const SingleEnum scriptSingleEnum={
+    "Scripts", "script",
+    UCHAR_SCRIPT,
+    0, 0, UPROPS_SCRIPT_MASK
+};
+
+static const SingleEnum blockSingleEnum={
+    "Blocks", "block",
+    UCHAR_BLOCK,
+    0, UPROPS_BLOCK_SHIFT, UPROPS_BLOCK_MASK
+};
+
+static const SingleEnum lineBreakSingleEnum={
+    "LineBreak", "line break",
+    UCHAR_LINE_BREAK,
+    0, UPROPS_LB_SHIFT, UPROPS_LB_MASK
+};
+
+static const SingleEnum eawSingleEnum={
+    "EastAsianWidth", "east asian width",
+    UCHAR_EAST_ASIAN_WIDTH,
+    0, UPROPS_EA_SHIFT, UPROPS_EA_MASK
+};
 
 static void U_CALLCONV
-blocksLineFn(void *context,
-             char *fields[][2], int32_t fieldCount,
-             UErrorCode *pErrorCode);
+singleEnumLineFn(void *context,
+                 char *fields[][2], int32_t fieldCount,
+                 UErrorCode *pErrorCode) {
+    const SingleEnum *sen;
+    char *s;
+    uint32_t start, limit, uv;
+    int32_t value;
+
+    sen=(const SingleEnum *)context;
+
+    u_parseCodePointRange(fields[0][0], &start, &limit, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
+        fprintf(stderr, "genprops: syntax error in %s.txt field 0 at %s\n", sen->ucdFile, fields[0][0]);
+        exit(*pErrorCode);
+    }
+    ++limit;
+
+    /* parse property alias */
+    s=trimTerminateField(fields[1][0], fields[1][1]);
+    value=u_getPropertyValueEnum(sen->prop, s);
+    if(value<0) {
+        if(sen->prop==UCHAR_BLOCK) {
+            if(isToken("Greek", s)) {
+                value=UBLOCK_GREEK; /* Unicode 3.2 renames this to "Greek and Coptic" */
+            } else if(isToken("Combining Marks for Symbols", s)) {
+                value=UBLOCK_COMBINING_MARKS_FOR_SYMBOLS; /* Unicode 3.2 renames this to "Combining Diacritical Marks for Symbols" */
+            } else if(isToken("Private Use", s)) {
+                value=UBLOCK_PRIVATE_USE; /* Unicode 3.2 renames this to "Private Use Area" */
+            }
+        }
+    }
+    if(value<0) {
+        fprintf(stderr, "genprops error: unknown %s name in %s.txt field 1 at %s\n",
+                        sen->propName, sen->ucdFile, s);
+        exit(U_PARSE_ERROR);
+    }
+
+    uv=(uint32_t)(value<<sen->vecShift);
+    if((uv&sen->vecMask)!=uv) {
+        fprintf(stderr, "genprops error: %s value overflow (0x%x) at %s\n",
+                        sen->propName, uv, s);
+        exit(U_INTERNAL_PROGRAM_ERROR);
+    }
+
+    if(!upvec_setValue(pv, start, limit, sen->vecWord, (uint32_t)value, sen->vecMask, pErrorCode)) {
+        fprintf(stderr, "genprops error: unable to set %s code: %s\n",
+                        sen->propName, u_errorName(*pErrorCode));
+        exit(*pErrorCode);
+    }
+}
+
+static void
+parseSingleEnumFile(char *filename, char *basename, const char *suffix,
+                    const SingleEnum *sen,
+                    UErrorCode *pErrorCode) {
+    char *fields[2][2];
+
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return;
+    }
+
+    writeUCDFilename(basename, sen->ucdFile, suffix);
+
+    u_parseDelimitedFile(filename, ';', fields, 2, singleEnumLineFn, (void *)sen, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
+        fprintf(stderr, "error parsing %s.txt: %s\n", sen->ucdFile, u_errorName(*pErrorCode));
+    }
+}
+
+/* parse files with multiple binary properties ------------------------------ */
+
+struct Binary {
+    const char *propName;
+    int32_t vecWord, vecShift;
+};
+typedef struct Binary Binary;
+
+struct Binaries {
+    const char *ucdFile;
+    const Binary *binaries;
+    int32_t binariesCount;
+};
+typedef struct Binaries Binaries;
+
+static const Binary
+propListNames[]={
+    { "White_Space",                        1, UPROPS_WHITE_SPACE },
+    { "Bidi_Control",                       1, UPROPS_BIDI_CONTROL },
+    { "Join_Control",                       1, UPROPS_JOIN_CONTROL },
+    { "Dash",                               1, UPROPS_DASH },
+    { "Hyphen",                             1, UPROPS_HYPHEN },
+    { "Quotation_Mark",                     1, UPROPS_QUOTATION_MARK },
+    { "Terminal_Punctuation",               1, UPROPS_TERMINAL_PUNCTUATION },
+    { "Other_Math",                         1, UPROPS_OTHER_MATH },
+    { "Hex_Digit",                          1, UPROPS_HEX_DIGIT },
+    { "ASCII_Hex_Digit",                    1, UPROPS_ASCII_HEX_DIGIT },
+    { "Other_Alphabetic",                   1, UPROPS_OTHER_ALPHABETIC },
+    { "Ideographic",                        1, UPROPS_IDEOGRAPHIC },
+    { "Diacritic",                          1, UPROPS_DIACRITIC },
+    { "Extender",                           1, UPROPS_EXTENDER },
+    { "Other_Lowercase",                    1, UPROPS_OTHER_LOWERCASE },
+    { "Other_Uppercase",                    1, UPROPS_OTHER_UPPERCASE },
+    { "Noncharacter_Code_Point",            1, UPROPS_NONCHARACTER_CODE_POINT },
+    { "Other_Grapheme_Extend",              1, UPROPS_OTHER_GRAPHEME_EXTEND },
+    { "Grapheme_Link",                      1, UPROPS_GRAPHEME_LINK },
+    { "IDS_Binary_Operator",                1, UPROPS_IDS_BINARY_OPERATOR },
+    { "IDS_Trinary_Operator",               1, UPROPS_IDS_TRINARY_OPERATOR },
+    { "Radical",                            1, UPROPS_RADICAL },
+    { "Unified_Ideograph",                  1, UPROPS_UNIFIED_IDEOGRAPH },
+    { "Other_Default_Ignorable_Code_Point", 1, UPROPS_OTHER_DEFAULT_IGNORABLE_CODE_POINT },
+    { "Deprecated",                         1, UPROPS_DEPRECATED },
+    { "Soft_Dotted",                        1, UPROPS_SOFT_DOTTED },
+    { "Logical_Order_Exception",            1, UPROPS_LOGICAL_ORDER_EXCEPTION },
+    { "ID_Start_Exceptions",                1, UPROPS_ID_START_EXCEPTIONS }
+};
+
+static const Binaries
+propListBinaries={
+    "PropList", propListNames, LENGTHOF(propListNames)
+};
+
+static const Binary
+derCorePropsNames[]={
+    { "XID_Start",                          1, UPROPS_XID_START },
+    { "XID_Continue",                       1, UPROPS_XID_CONTINUE }
+};
+
+static const Binaries
+derCorePropsBinaries={
+    "DerivedCoreProperties", derCorePropsNames, LENGTHOF(derCorePropsNames)
+};
+
+static char ignoredProps[100][64];
+static int32_t ignoredPropsCount;
+
+static void
+addIgnoredProp(char *s, char *limit) {
+    int32_t i;
+
+    s=trimTerminateField(s, limit);
+    for(i=0; i<ignoredPropsCount; ++i) {
+        if(0==uprv_strcmp(ignoredProps[i], s)) {
+            return;
+        }
+    }
+    uprv_strcpy(ignoredProps[ignoredPropsCount++], s);
+}
 
 static void U_CALLCONV
-propListLineFn(void *context,
+binariesLineFn(void *context,
                char *fields[][2], int32_t fieldCount,
-               UErrorCode *pErrorCode);
+               UErrorCode *pErrorCode) {
+    const Binaries *bin;
+    char *s;
+    uint32_t start, limit, uv;
+    int32_t i;
 
-static void U_CALLCONV
-derivedPropListLineFn(void *context,
-                      char *fields[][2], int32_t fieldCount,
-                      UErrorCode *pErrorCode);
+    bin=(const Binaries *)context;
 
-static void U_CALLCONV
-eaWidthLineFn(void *context,
-              char *fields[][2], int32_t fieldCount,
-              UErrorCode *pErrorCode);
+    u_parseCodePointRange(fields[0][0], &start, &limit, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
+        fprintf(stderr, "genprops: syntax error in %s.txt field 0 at %s\n", bin->ucdFile, fields[0][0]);
+        exit(*pErrorCode);
+    }
+    ++limit;
 
-static void U_CALLCONV
-lineBreakLineFn(void *context,
-                char *fields[][2], int32_t fieldCount,
-                UErrorCode *pErrorCode);
+    /* parse binary property name */
+    s=(char *)u_skipWhitespace(fields[1][0]);
+    for(i=0;; ++i) {
+        if(i==bin->binariesCount) {
+            /* ignore unrecognized properties */
+            addIgnoredProp(s, fields[1][1]);
+            return;
+        }
+        if(isToken(bin->binaries[i].propName, s)) {
+            break;
+        }
+    }
+
+    if(bin->binaries[i].vecShift>=32) {
+        fprintf(stderr, "genprops error: shift value %d>=32 for %s %s\n",
+                        bin->binaries[i].vecShift, bin->ucdFile, bin->binaries[i].propName);
+        exit(U_INTERNAL_PROGRAM_ERROR);
+    }
+    uv=U_MASK(bin->binaries[i].vecShift);
+
+    if(!upvec_setValue(pv, start, limit, bin->binaries[i].vecWord, uv, uv, pErrorCode)) {
+        fprintf(stderr, "genprops error: unable to set %s code: %s\n",
+                        bin->binaries[i].propName, u_errorName(*pErrorCode));
+        exit(*pErrorCode);
+    }
+}
+
+static void
+parseBinariesFile(char *filename, char *basename, const char *suffix,
+                  const Binaries *bin,
+                  UErrorCode *pErrorCode) {
+    char *fields[2][2];
+    int32_t i;
+
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return;
+    }
+
+    writeUCDFilename(basename, bin->ucdFile, suffix);
+
+    ignoredPropsCount=0;
+
+    u_parseDelimitedFile(filename, ';', fields, 2, binariesLineFn, (void *)bin, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
+        fprintf(stderr, "error parsing %s.txt: %s\n", bin->ucdFile, u_errorName(*pErrorCode));
+    }
+
+    for(i=0; i<ignoredPropsCount; ++i) {
+        printf("genprops: ignoring property %s in %s.txt\n", ignoredProps[i], bin->ucdFile);
+    }
+}
 
 /* -------------------------------------------------------------------------- */
 
@@ -119,15 +372,16 @@ generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pEr
         fprintf(stderr, "genprops error: unable to set script code: %s\n", u_errorName(*pErrorCode));
         exit(*pErrorCode);
     }
-    parseTwoFieldFile(filename, basename, "Scripts", suffix, scriptsLineFn, pErrorCode);
 
-    parseTwoFieldFile(filename, basename, "Blocks", suffix, blocksLineFn, pErrorCode);
+    parseSingleEnumFile(filename, basename, suffix, &scriptSingleEnum, pErrorCode);
 
-    parseTwoFieldFile(filename, basename, "PropList", suffix, propListLineFn, pErrorCode);
+    parseSingleEnumFile(filename, basename, suffix, &blockSingleEnum, pErrorCode);
 
-    parseTwoFieldFile(filename, basename, "DerivedCoreProperties", suffix, derivedPropListLineFn, pErrorCode);
+    parseBinariesFile(filename, basename, suffix, &propListBinaries, pErrorCode);
 
-    parseTwoFieldFile(filename, basename, "LineBreak", suffix, lineBreakLineFn, pErrorCode);
+    parseBinariesFile(filename, basename, suffix, &derCorePropsBinaries, pErrorCode);
+
+    parseSingleEnumFile(filename, basename, suffix, &lineBreakSingleEnum, pErrorCode);
 
     parseArabicShaping(filename, basename, suffix, pErrorCode);
 
@@ -147,14 +401,9 @@ generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pEr
         fprintf(stderr, "genprops: unable to set default East Asian Widths: %s\n", u_errorName(*pErrorCode));
         exit(*pErrorCode);
     }
-    prevStart=prevLimit=prevValue=0;
+
     /* parse EastAsianWidth.txt */
-    parseTwoFieldFile(filename, basename, "EastAsianWidth", suffix, eaWidthLineFn, pErrorCode);
-    /* set last range */
-    if(!upvec_setValue(pv, prevStart, prevLimit, 0, (uint32_t)(prevValue<<UPROPS_EA_SHIFT), UPROPS_EA_MASK, pErrorCode)) {
-        fprintf(stderr, "genprops error: unable to set East Asian Width: %s\n", u_errorName(*pErrorCode));
-        exit(*pErrorCode);
-    }
+    parseSingleEnumFile(filename, basename, suffix, &eawSingleEnum, pErrorCode);
 
     trie=utrie_open(NULL, NULL, 50000, 0, FALSE);
     if(trie==NULL) {
@@ -167,25 +416,6 @@ generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pEr
     if(U_FAILURE(*pErrorCode)) {
         fprintf(stderr, "genprops error: unable to build trie for additional properties: %s\n", u_errorName(*pErrorCode));
         exit(*pErrorCode);
-    }
-}
-
-static void
-parseTwoFieldFile(char *filename, char *basename,
-                  const char *ucdFile, const char *suffix,
-                  UParseLineFn *lineFn,
-                  UErrorCode *pErrorCode) {
-    char *fields[2][2];
-
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
-        return;
-    }
-
-    writeUCDFilename(basename, ucdFile, suffix);
-
-    u_parseDelimitedFile(filename, ';', fields, 2, lineFn, NULL, pErrorCode);
-    if(U_FAILURE(*pErrorCode)) {
-        fprintf(stderr, "error parsing %s.txt: %s\n", ucdFile, u_errorName(*pErrorCode));
     }
 }
 
@@ -233,492 +463,13 @@ ageLineFn(void *context,
     }
 }
 
-/* Scripts.txt -------------------------------------------------------------- */
-
-static void U_CALLCONV
-scriptsLineFn(void *context,
-              char *fields[][2], int32_t fieldCount,
-              UErrorCode *pErrorCode) {
-    char *s, *end;
-    uint32_t start, limit;
-    UScriptCode script;
-
-    u_parseCodePointRange(fields[0][0], &start, &limit, pErrorCode);
-    if(U_FAILURE(*pErrorCode)) {
-        fprintf(stderr, "genprops: syntax error in Scripts.txt field 0 at %s\n", fields[0][0]);
-        exit(*pErrorCode);
-    }
-    ++limit;
-
-    /* parse script name */
-    s=(char *)u_skipWhitespace(fields[1][0]);
-
-    /* trim trailing whitespace */
-    end=fields[1][1];
-    while(s<end && (*(end-1)==' ' || *(end-1)=='\t')) {
-        --end;
-    }
-    *end=0;
-    if( 1!=uscript_getCode(s, &script, 1, pErrorCode) ||
-        U_FAILURE(*pErrorCode) ||
-        script<=USCRIPT_INVALID_CODE
-    ) {
-        fprintf(stderr, "genprops error: unknown script name in Scripts.txt field 1 at %s\n", fields[1][0]);
-        if(U_SUCCESS(*pErrorCode)) {
-            *pErrorCode=U_PARSE_ERROR;
-        }
-        exit(*pErrorCode);
-    }
-
-    if(!upvec_setValue(pv, start, limit, 0, (uint32_t)script, UPROPS_SCRIPT_MASK, pErrorCode)) {
-        fprintf(stderr, "genprops error: unable to set script code: %s\n", u_errorName(*pErrorCode));
-        exit(*pErrorCode);
-    }
-}
-
-/* Blocks.txt --------------------------------------------------------------- */
-
-/* Blocks.txt block names in the order of the parallel UBlockCode constants */
-static const char *const
-blockNames[UBLOCK_COUNT]={
-    NULL,                                       /* 0 */
-    "Basic Latin",
-    "Latin-1 Supplement",
-    "Latin Extended-A",
-    "Latin Extended-B",
-    "IPA Extensions",
-    "Spacing Modifier Letters",
-    "Combining Diacritical Marks",
-    "Greek and Coptic",                         /* used to be just "Greek" before Unicode 3.2 */
-    "Cyrillic",
-    "Armenian",                                 /* 10 */
-    "Hebrew",
-    "Arabic",
-    "Syriac",
-    "Thaana",
-    "Devanagari",
-    "Bengali",
-    "Gurmukhi",
-    "Gujarati",
-    "Oriya",
-    "Tamil",                                    /* 20 */
-    "Telugu",
-    "Kannada",
-    "Malayalam",
-    "Sinhala",
-    "Thai",
-    "Lao",
-    "Tibetan",
-    "Myanmar",
-    "Georgian",
-    "Hangul Jamo",                              /* 30 */
-    "Ethiopic",
-    "Cherokee",
-    "Unified Canadian Aboriginal Syllabics",
-    "Ogham",
-    "Runic",
-    "Khmer",
-    "Mongolian",
-    "Latin Extended Additional",
-    "Greek Extended",
-    "General Punctuation",                      /* 40 */
-    "Superscripts and Subscripts",
-    "Currency Symbols",
-    "Combining Diacritical Marks for Symbols",  /* used to be "Combining Marks for Symbols" before Unicode 3.2 */
-    "Letterlike Symbols",
-    "Number Forms",
-    "Arrows",
-    "Mathematical Operators",
-    "Miscellaneous Technical",
-    "Control Pictures",
-    "Optical Character Recognition",            /* 50 */
-    "Enclosed Alphanumerics",
-    "Box Drawing",
-    "Block Elements",
-    "Geometric Shapes",
-    "Miscellaneous Symbols",
-    "Dingbats",
-    "Braille Patterns",
-    "CJK Radicals Supplement",
-    "Kangxi Radicals",
-    "Ideographic Description Characters",       /* 60 */
-    "CJK Symbols and Punctuation",
-    "Hiragana",
-    "Katakana",
-    "Bopomofo",
-    "Hangul Compatibility Jamo",
-    "Kanbun",
-    "Bopomofo Extended",
-    "Enclosed CJK Letters and Months",
-    "CJK Compatibility",
-    "CJK Unified Ideographs Extension A",       /* 70 */
-    "CJK Unified Ideographs",
-    "Yi Syllables",
-    "Yi Radicals",
-    "Hangul Syllables",
-    "High Surrogates",
-    "High Private Use Surrogates",
-    "Low Surrogates",
-    "Private Use Area",                         /* used to be "Private Use" before Unicode 3.2 */
-    "CJK Compatibility Ideographs",
-    "Alphabetic Presentation Forms",            /* 80 */
-    "Arabic Presentation Forms-A",
-    "Combining Half Marks",
-    "CJK Compatibility Forms",
-    "Small Form Variants",
-    "Arabic Presentation Forms-B",
-    "Specials",
-    "Halfwidth and Fullwidth Forms",
-    "Old Italic",
-    "Gothic",
-    "Deseret",                                  /* 90 */
-    "Byzantine Musical Symbols",
-    "Musical Symbols",
-    "Mathematical Alphanumeric Symbols",
-    "CJK Unified Ideographs Extension B",
-    "CJK Compatibility Ideographs Supplement",
-    "Tags",
-    "Cyrillic Supplementary",                   /* first new block in Unicode 3.2 */
-    "Tagalog",
-    "Hanunoo",
-    "Buhid",                                    /* 100 */
-    "Tagbanwa",
-    "Miscellaneous Mathematical Symbols-A",
-    "Supplemental Arrows-A",
-    "Supplemental Arrows-B",
-    "Miscellaneous Mathematical Symbols-B",
-    "Supplemental Mathematical Operators",
-    "Katakana Phonetic Extensions",
-    "Variation Selectors",
-    "Supplementary Private Use Area-A",
-    "Supplementary Private Use Area-B"          /* 110 */
-};
-
-static void U_CALLCONV
-blocksLineFn(void *context,
-             char *fields[][2], int32_t fieldCount,
-             UErrorCode *pErrorCode) {
-    uint32_t start, limit;
-    int32_t i;
-
-    u_parseCodePointRange(fields[0][0], &start, &limit, pErrorCode);
-    if(U_FAILURE(*pErrorCode)) {
-        fprintf(stderr, "genprops: syntax error in Blocks.txt field 0 at %s\n", fields[0][0]);
-        exit(*pErrorCode);
-    }
-    ++limit;
-
-    /* parse block name */
-    i=getTokenIndex(blockNames, UBLOCK_COUNT, fields[1][0]);
-    if(i<0) {
-        if(isToken("Greek", fields[1][0])) {
-            i=UBLOCK_GREEK; /* Unicode 3.2 renames this to "Greek and Coptic" */
-        } else if(isToken("Combining Marks for Symbols", fields[1][0])) {
-            i=UBLOCK_COMBINING_MARKS_FOR_SYMBOLS; /* Unicode 3.2 renames this to "Combining Diacritical Marks for Symbols" */
-        } else if(isToken("Private Use", fields[1][0])) {
-            i=UBLOCK_PRIVATE_USE; /* Unicode 3.2 renames this to "Private Use Area" */
-        } else {
-            fprintf(stderr, "genprops error: unknown block name \"%s\" in Blocks.txt\n", fields[1][0]);
-            *pErrorCode=U_PARSE_ERROR;
-            exit(U_PARSE_ERROR);
-        }
-    }
-
-    if(!upvec_setValue(pv, start, limit, 0, (uint32_t)i<<UPROPS_BLOCK_SHIFT, UPROPS_BLOCK_MASK, pErrorCode)) {
-        fprintf(stderr, "genprops error: unable to set block code: %s\n", u_errorName(*pErrorCode));
-        exit(*pErrorCode);
-    }
-}
-
-/* PropList.txt ------------------------------------------------------------- */
-
-/*
- * Keep this list of property names in sync with
- * enums in icu/source/common/uprops.h, see UPROPS_BINARY_1_TOP!
- *
- * Careful: Since UPROPS_ also contain derivedPropListNames[] entries,
- * they would need to be skipped here with NULL entries if new properties
- * are added to PropList.txt.
- */
-static const char *const
-propListNames[]={
-    "White_Space",
-    "Bidi_Control",
-    "Join_Control",
-    "Dash",
-    "Hyphen",
-    "Quotation_Mark",
-    "Terminal_Punctuation",
-    "Other_Math",
-    "Hex_Digit",
-    "ASCII_Hex_Digit",
-    "Other_Alphabetic",
-    "Ideographic",
-    "Diacritic",
-    "Extender",
-    "Other_Lowercase",
-    "Other_Uppercase",
-    "Noncharacter_Code_Point",
-    "Other_Grapheme_Extend",
-    "Grapheme_Link",
-    "IDS_Binary_Operator",
-    "IDS_Trinary_Operator",
-    "Radical",
-    "Unified_Ideograph",
-    "Other_Default_Ignorable_Code_Point",
-    "Deprecated",
-    "Soft_Dotted",
-    "Logical_Order_Exception"
-};
-
-static void U_CALLCONV
-propListLineFn(void *context,
-               char *fields[][2], int32_t fieldCount,
-               UErrorCode *pErrorCode) {
-    uint32_t start, limit;
-    int32_t i;
-
-    u_parseCodePointRange(fields[0][0], &start, &limit, pErrorCode);
-    if(U_FAILURE(*pErrorCode)) {
-        fprintf(stderr, "genprops: syntax error in PropList.txt field 0 at %s\n", fields[0][0]);
-        exit(*pErrorCode);
-    }
-    ++limit;
-
-    /* parse binary property name */
-    i=getTokenIndex(propListNames, sizeof(propListNames)/sizeof(*propListNames), fields[1][0]);
-    if(i<0) {
-        if(isToken("White_space", fields[1][0])) {
-            i=0; /* accept misspelled property name in Unicode 3.1.1 */
-        } else {
-            fprintf(stderr, "genprops warning: unknown binary property name \"%s\" in PropList.txt\n", fields[1][0]);
-            return;
-        }
-    }
-    if(!upvec_setValue(pv, start, limit, 1, FLAG(i), FLAG(i), pErrorCode)) {
-        fprintf(stderr, "genprops error: unable to set binary property: %s\n", u_errorName(*pErrorCode));
-        exit(*pErrorCode);
-    }
-}
-
-/* DerivedCoreProperties ---------------------------------------------------- */
-
-static const char *const
-derivedPropListNames[]={
-    "XID_Start",
-    "XID_Continue"
-};
-
-static void U_CALLCONV
-derivedPropListLineFn(void *context,
-                      char *fields[][2], int32_t fieldCount,
-                      UErrorCode *pErrorCode) {
-    uint32_t start, limit;
-    int32_t i;
-
-    u_parseCodePointRange(fields[0][0], &start, &limit, pErrorCode);
-    if(U_FAILURE(*pErrorCode)) {
-        fprintf(stderr, "genprops: syntax error in DerivedCoreProperties.txt field 0 at %s\n", fields[0][0]);
-        exit(*pErrorCode);
-    }
-    ++limit;
-
-    /* parse derived binary property name, ignore unknown names */
-    i=getTokenIndex(derivedPropListNames, sizeof(derivedPropListNames)/sizeof(*derivedPropListNames), fields[1][0]);
-    if(i>=0) {
-        uint32_t flag=FLAG(UPROPS_XID_START+i);
-        if(!upvec_setValue(pv, start, limit, 1, flag, flag, pErrorCode)) {
-            fprintf(stderr, "genprops error: unable to set derived binary property: %s\n", u_errorName(*pErrorCode));
-            exit(*pErrorCode);
-        }
-    }
-}
-
-/* East Asian Width --------------------------------------------------------- */
-
-/* keep this list in sync with UEAWidthCode in uprops.h or uchar.h */
-static const char *const
-eaNames[U_EA_COUNT]={
-    "N",        /* Non-East Asian Neutral, default for unassigned code points */
-    "A",        /* Ambiguous, default for Private Use code points */
-    "H",        /* Half-width */
-    "F",        /* Full-width */
-    "Na",       /* Narrow */
-    "W"         /* Wide, default for plane 2 */
-};
-
-static void U_CALLCONV
-eaWidthLineFn(void *context,
-              char *fields[][2], int32_t fieldCount,
-              UErrorCode *pErrorCode) {
-    uint32_t start, limit;
-    int32_t i;
-
-    u_parseCodePointRange(fields[0][0], &start, &limit, pErrorCode);
-    if(U_FAILURE(*pErrorCode)) {
-        fprintf(stderr, "genprops: syntax error in EastAsianWidth.txt field 0 at %s\n", fields[0][0]);
-        exit(*pErrorCode);
-    }
-    ++limit;
-
-    /* parse binary property name */
-    i=getTokenIndex(eaNames, U_EA_COUNT, fields[1][0]);
-    if(i<0) {
-        fprintf(stderr, "genprops error: unknown width name \"%s\" in EastAsianWidth.txt\n", fields[1][0]);
-        *pErrorCode=U_PARSE_ERROR;
-        exit(U_PARSE_ERROR);
-    }
-
-    /* collect maximum ranges */
-    if(prevLimit==start && (uint32_t)i==prevValue) {
-        prevLimit=limit;
-    } else {
-        if(!upvec_setValue(pv, prevStart, prevLimit, 0, (uint32_t)(prevValue<<UPROPS_EA_SHIFT), UPROPS_EA_MASK, pErrorCode)) {
-            fprintf(stderr, "genprops error: unable to set East Asian Width: %s\n", u_errorName(*pErrorCode));
-            exit(*pErrorCode);
-        }
-        prevStart=start;
-        prevLimit=limit;
-        prevValue=(uint32_t)i;
-    }
-}
-
-/* LineBreak.txt ------------------------------------------------------------ */
-
-/* LineBreak.txt block names in the order of the parallel ULineBreak constants */
-static const char *const
-lbNames[U_LB_COUNT]={
-    "XX",
-    "AI",
-    "AL",
-    "B2",
-    "BA",
-    "BB",
-    "BK",
-    "CB",
-    "CL",
-    "CM",
-    "CR",
-    "EX",
-    "GL",
-    "HY",
-    "ID",
-    "IN",
-    "IS",
-    "LF",
-    "NS",
-    "NU",
-    "OP",
-    "PO",
-    "PR",
-    "QU",
-    "SA",
-    "SG",
-    "SP",
-    "SY",
-    "ZW"
-};
-
-static void U_CALLCONV
-lineBreakLineFn(void *context,
-                char *fields[][2], int32_t fieldCount,
-                UErrorCode *pErrorCode) {
-    uint32_t start, limit;
-    int32_t i;
-
-    u_parseCodePointRange(fields[0][0], &start, &limit, pErrorCode);
-    if(U_FAILURE(*pErrorCode)) {
-        fprintf(stderr, "genprops: syntax error in LineBreak.txt field 0 at %s\n", fields[0][0]);
-        exit(*pErrorCode);
-    }
-    ++limit;
-
-    /* parse block name */
-    i=getTokenIndex(lbNames, U_LB_COUNT, fields[1][0]);
-    if(i<0) {
-        fprintf(stderr, "genprops error: unknown line break name \"%s\" in LineBreak.txt\n", fields[1][0]);
-        *pErrorCode=U_PARSE_ERROR;
-        exit(U_PARSE_ERROR);
-    }
-
-    if(!upvec_setValue(pv, start, limit, 0, (uint32_t)i<<UPROPS_LB_SHIFT, UPROPS_LB_MASK, pErrorCode)) {
-        fprintf(stderr, "genprops error: unable to set line break code: %s\n", u_errorName(*pErrorCode));
-        exit(*pErrorCode);
-    }
-}
-
 /* ArabicShaping.txt -------------------------------------------------------- */
-
-/* Joining Type/Joining Group names in the order of the parallel UJoiningType/UJoiningGroup constants */
-static const char *const
-jtNames[U_JT_COUNT]={
-    "U",
-    "C",
-    "D",
-    "L",
-    "R",
-    "T"
-};
-
-static const char *const
-jgNames[U_JG_COUNT]={
-    "<no shaping>",
-    "AIN",
-    "ALAPH",
-    "ALEF",
-    "BEH",
-    "BETH",
-    "DAL",
-    "DALATH RISH",
-    "E",
-    "FEH",
-    "FINAL SEMKATH",
-    "GAF",
-    "GAMAL",
-    "HAH",
-    "HAMZA ON HEH GOAL",
-    "HE",
-    "HEH",
-    "HEH GOAL",
-    "HETH",
-    "KAF",
-    "KAPH",
-    "KNOTTED HEH",
-    "LAM",
-    "LAMADH",
-    "MEEM",
-    "MIM",
-    "NOON",
-    "NUN",
-    "PE",
-    "QAF",
-    "QAPH",
-    "REH",
-    "REVERSED PE",
-    "SAD",
-    "SADHE",
-    "SEEN",
-    "SEMKATH",
-    "SHIN",
-    "SWASH KAF",
-    "SYRIAC WAW",
-    "TAH",
-    "TAW",
-    "TEH MARBUTA",
-    "TETH",
-    "WAW",
-    "YEH",
-    "YEH BARREE",
-    "YEH WITH TAIL",
-    "YUDH",
-    "YUDH HE",
-    "ZAIN"
-};
 
 static void U_CALLCONV
 arabicShapingLineFn(void *context,
                     char *fields[][2], int32_t fieldCount,
                     UErrorCode *pErrorCode) {
+    char *s;
     uint32_t start, limit;
     int32_t jt, jg;
 
@@ -730,7 +481,7 @@ arabicShapingLineFn(void *context,
     ++limit;
 
     /* parse joining type */
-    jt=getTokenIndex(jtNames, U_JT_COUNT, fields[2][0]);
+    jt=u_getPropertyValueEnum(UCHAR_JOINING_TYPE, trimTerminateField(fields[2][0], fields[2][1]));
     if(jt<0) {
         fprintf(stderr, "genprops error: unknown joining type in \"%s\" in ArabicShaping.txt\n", fields[2][0]);
         *pErrorCode=U_PARSE_ERROR;
@@ -738,9 +489,15 @@ arabicShapingLineFn(void *context,
     }
 
     /* parse joining group */
-    jg=getTokenIndex(jgNames, U_JG_COUNT, fields[3][0]);
+    s=trimTerminateField(fields[3][0], fields[3][1]);
+    jg=u_getPropertyValueEnum(UCHAR_JOINING_GROUP, s);
     if(jg<0) {
-        fprintf(stderr, "genprops error: unknown joining group in \"%s\" in ArabicShaping.txt\n", fields[3][0]);
+        if(isToken("<no shaping>", s)) {
+            jg=0;
+        }
+    }
+    if(jg<0) {
+        fprintf(stderr, "genprops error: unknown joining group in \"%s\" in ArabicShaping.txt\n", s);
         *pErrorCode=U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
     }
