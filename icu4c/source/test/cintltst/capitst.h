@@ -94,6 +94,18 @@
      */
     void TestGetTailoredSet(void);
 
+    /**
+     * Test mergeSortKeys
+     */
+    void TestMergeSortKeys(void);
+
+    /**
+     * utility function, defined in cmsccoll.c
+     */
+    void genericLocaleStarter(const char *locale, const char *s[], uint32_t size);
+    const char * strengthsC[];
+
+
 #endif /* #if !UCONFIG_NO_COLLATION */
 
 #endif

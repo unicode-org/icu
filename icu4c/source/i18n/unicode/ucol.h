@@ -614,6 +614,8 @@ ucol_getVersion(const UCollator* coll, UVersionInfo info);
  * 191B1D 02 1F212301 050505 02 050505 01 910505 02 910505 00
  * This allows for concatenating of first and last names for sorting, among other things.
  * If the destination buffer is not big enough, the results are undefined.
+ * If any of source lengths are zero or any of source pointers are NULL/undefined, 
+ * result is of size zero.
  * @param src1 pointer to the first sortkey
  * @param src1Length length of the first sortkey
  * @param src2 pointer to the second sortkey
