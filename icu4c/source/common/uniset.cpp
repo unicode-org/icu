@@ -160,6 +160,18 @@ static Hashtable* CASE_EQUIV_HASH = NULL; // for closeOver(USET_CASE)
 
 static CompactByteArray* CASE_EQUIV_CBA = NULL; // for closeOver(USET_CASE)
 
+/**
+ * Keep code points in range.
+ */
+inline UChar32 pinCodePoint(UChar32& c) {
+    if (c < 0) {
+        c = 0;
+    } else if (c > 0x10FFFF) {
+        c = 0x10FFFF;
+    }
+    return c;
+}
+
 //----------------------------------------------------------------
 // Debugging
 //----------------------------------------------------------------
@@ -744,6 +756,9 @@ UBool UnicodeSet::contains(UChar32 c) const {
     //for (;;) {
     //    if (c < list[++i]) break;
     //}
+    if (c >= UNICODESET_HIGH) { // Don't need to check LOW bound
+        return FALSE;
+    }
     int32_t i = findCodePoint(c);
     return ((i & 1) != 0); // return true if odd
 }
@@ -765,7 +780,7 @@ int32_t UnicodeSet::findCodePoint(UChar32 c) const {
        []               [110000]         0 0 0 0 0 0
        [\u0000-\u0003]  [0, 4, 110000]   1 1 1 2 2 2
        [\u0004-\u0007]  [4, 8, 110000]   0 0 0 1 1 2
-       [:all:]          [0, 110000]      1 1 1 1 1 1
+       [:Any:]          [0, 110000]      1 1 1 1 1 1
      */
 
     // Return the smallest i such that c < list[i].  Assume
@@ -1154,7 +1169,7 @@ UChar32 UnicodeSet::charAt(int32_t index) const {
  * to this set.
  */
 UnicodeSet& UnicodeSet::add(UChar32 start, UChar32 end) {
-    if (start < end) {
+    if (pinCodePoint(start) < pinCodePoint(end)) {
         UChar32 range[3] = { start, end+1, UNICODESET_HIGH };
         add(range, 2, 0);
     } else if (start == end) {
@@ -1193,7 +1208,7 @@ UnicodeSet& UnicodeSet::add(UChar32 c) {
     // find smallest i such that c < list[i]
     // if odd, then it is IN the set
     // if even, then it is OUT of the set
-    int32_t i = findCodePoint(c);
+    int32_t i = findCodePoint(pinCodePoint(c));
 
     // already in set?
     if ((i & 1) != 0) return *this;
@@ -1440,7 +1455,7 @@ UnicodeSet* UnicodeSet::createFromAll(const UnicodeString& s) {
  * to this set.
  */
 UnicodeSet& UnicodeSet::retain(UChar32 start, UChar32 end) {
-    if (start <= end) {
+    if (pinCodePoint(start) <= pinCodePoint(end)) {
         UChar32 range[3] = { start, end+1, UNICODESET_HIGH };
         retain(range, 2, 0);
     } else {
@@ -1465,7 +1480,7 @@ UnicodeSet& UnicodeSet::retain(UChar32 c) {
  * from this set.
  */
 UnicodeSet& UnicodeSet::remove(UChar32 start, UChar32 end) {
-    if (start <= end) {
+    if (pinCodePoint(start) <= pinCodePoint(end)) {
         UChar32 range[3] = { start, end+1, UNICODESET_HIGH };
         retain(range, 2, 2);
     }
@@ -1512,7 +1527,7 @@ UnicodeSet& UnicodeSet::remove(const UnicodeString& s) {
  * from this set.
  */
 UnicodeSet& UnicodeSet::complement(UChar32 start, UChar32 end) {
-    if (start <= end) {
+    if (pinCodePoint(start) <= pinCodePoint(end)) {
         UChar32 range[3] = { start, end+1, UNICODESET_HIGH };
         exclusiveOr(range, 2, 0);
     }
