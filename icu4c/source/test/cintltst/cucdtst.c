@@ -25,7 +25,7 @@
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
 #include "unicode/uloc.h"
-
+#include "uparse.h"
 
 /* prototypes --------------------------------------------------------------- */
 
@@ -420,27 +420,140 @@ static void TestIdentifier()
     }
 }
 
-/* tests for u_charType(), u_isTitle(), and u_toTitle(),u_charDirection and u_charScript()*/
+/* for each line of UnicodeData.txt, check some of the properties */
+static void
+unicodeDataLineFn(void *context,
+                  char *fields[][2], int32_t fieldCount,
+                  UErrorCode *pErrorCode) {
+    char *end;
+    uint32_t value;
+    UChar32 c;
+    int8_t type;
+
+    /* get the character code, field 0 */
+    c=uprv_strtoul(fields[0][0], &end, 16);
+    if(end<=fields[0][0] || end!=fields[0][1]) {
+        log_err("error: syntax error in field 0 at %s\n", fields[0][0]);
+        return;
+    }
+    if((uint32_t)c>=0x110000) {
+        log_err("error in UnicodeData.txt: code point %lu out of range\n", c);
+        return;
+    }
+
+    /* get general category, field 2 */
+    /* we override the general category of some control characters */
+    switch(c) {
+    case 9:
+    case 0xb:
+    case 0x1f:
+        type = U_SPACE_SEPARATOR;
+        break;
+    case 0xc:
+        type = U_LINE_SEPARATOR;
+        break;
+    case 0xa:
+    case 0xd:
+    case 0x1c:
+    case 0x1d:
+    case 0x1e:
+    case 0x85:
+        type = U_PARAGRAPH_SEPARATOR;
+        break;
+    default:
+        *fields[2][1]=0;
+        type = (int8_t)tagValues[MakeProp(fields[2][0])];
+        break;
+    }
+    if(u_charType(c)!=type) {
+        log_err("error: u_charType(U+%04lx)==%u instead of %u\n", c, u_charType(c), type);
+    }
+
+    /* get canonical combining class, field 3 */
+    value=uprv_strtoul(fields[3][0], &end, 10);
+    if(end<=fields[3][0] || end!=fields[3][1]) {
+        log_err("error: syntax error in field 3 at code 0x%lx\n", c);
+        return;
+    }
+    if(value>255) {
+        log_err("error in UnicodeData.txt: combining class %lu out of range\n", value);
+        return;
+    }
+    if(value!=u_getCombiningClass(c)) {
+        log_err("error: u_getCombiningClass(U+%04lx)==%hu instead of %lu\n", c, u_getCombiningClass(c), value);
+    }
+
+    /* get BiDi category, field 4 */
+    *fields[4][1]=0;
+    if(u_charDirection(c)!=MakeDir(fields[4][0])) {
+        log_err("error: u_charDirection(U+%04lx)==%u instead of %u (%s)\n", c, u_charDirection(c), MakeDir(fields[4][0]), fields[4][0]);
+    }
+
+    /* get uppercase mapping, field 12 */
+    if(fields[12][0]!=fields[12][1]) {
+        value=uprv_strtoul(fields[12][0], &end, 16);
+        if(end!=fields[12][1]) {
+            log_err("error: syntax error in field 12 at code 0x%lx\n", c);
+            return;
+        }
+        if((UChar32)value!=u_toupper(c)) {
+            log_err("error: u_toupper(U+%04lx)==U+%04lx instead of U+%04lx\n", c, u_toupper(c), value);
+        }
+    } else {
+        /* no case mapping: the API must map the code point to itself */
+        if(c!=u_toupper(c)) {
+            log_err("error: U+%04lx does not have an uppercase mapping but u_toupper()==U+%04lx\n", c, u_toupper(c));
+        }
+    }
+
+    /* get lowercase mapping, field 13 */
+    if(fields[13][0]!=fields[13][1]) {
+        value=uprv_strtoul(fields[13][0], &end, 16);
+        if(end!=fields[13][1]) {
+            log_err("error: syntax error in field 13 at code 0x%lx\n", c);
+            return;
+        }
+        if((UChar32)value!=u_tolower(c)) {
+            log_err("error: u_tolower(U+%04lx)==U+%04lx instead of U+%04lx\n", c, u_tolower(c), value);
+        }
+    } else {
+        /* no case mapping: the API must map the code point to itself */
+        if(c!=u_tolower(c)) {
+            log_err("error: U+%04lx does not have a lowercase mapping but u_tolower()==U+%04lx\n", c, u_tolower(c));
+        }
+    }
+
+    /* get titlecase mapping, field 14 */
+    if(fields[14][0]!=fields[14][1]) {
+        value=uprv_strtoul(fields[14][0], &end, 16);
+        if(end!=fields[14][1]) {
+            log_err("error: syntax error in field 14 at code 0x%lx\n", c);
+            return;
+        }
+        if((UChar32)value!=u_totitle(c)) {
+            log_err("error: u_totitle(U+%04lx)==U+%04lx instead of U+%04lx\n", c, u_totitle(c), value);
+        }
+    } else {
+        /* no case mapping: the API must map the code point to itself */
+        if(c!=u_totitle(c)) {
+            log_err("error: U+%04lx does not have a titlecase mapping but u_totitle()==U+%04lx\n", c, u_totitle(c));
+        }
+    }
+}
+
+/* tests for several properties */
 static void TestUnicodeData()
 {
-    FILE*   input = 0;
-    char    buffer[1000];
-    char*   bufferPtr = 0, *dirPtr = 0;
-    int32_t unicode;
-    int8_t  type;
     char newPath[256];
     char backupPath[256];
-    const char *expectVersion = U_UNICODE_VERSION;  /* NOTE: this purposely breaks to force the tests to stay in sync with the unicodedata */
-    /* expectVersionArray must be filled from u_versionFromString(expectVersionArray, U_UNICODE_VERSION)
-       once this function is public. */
     UVersionInfo expectVersionArray;
     UVersionInfo versionArray;
-    char expectString[256];
+    char *fields[15][2];
+    UErrorCode errorCode;
 
     /* Look inside ICU_DATA first */
     strcpy(newPath, u_getDataDirectory());
-    strcat(newPath, "unidata" U_FILE_SEP_STRING "UnicodeData");
-    strcat(newPath, ".txt");
+    strcat(newPath, "unidata" U_FILE_SEP_STRING "UnicodeData.txt");
 
 #if defined (U_SRCDATADIR) /* points to the icu/data directory */
     /* If defined, we'll try an alternate directory second */
@@ -450,124 +563,37 @@ static void TestUnicodeData()
     strcat(backupPath, ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING "data");
     strcat(backupPath, U_FILE_SEP_STRING);
 #endif
-    strcat(backupPath, "unidata" U_FILE_SEP_STRING "UnicodeData");
-    strcat(backupPath, ".txt");
+    strcat(backupPath, "unidata" U_FILE_SEP_STRING "UnicodeData.txt");
 
-    u_versionFromString(expectVersionArray, expectVersion);
-    strcpy(expectString, "Unicode Version ");
-    strcat(expectString, expectVersion);
+    u_versionFromString(expectVersionArray, U_UNICODE_VERSION);
     u_getUnicodeVersion(versionArray);
-
     if(memcmp(versionArray, expectVersionArray, U_MAX_VERSION_LENGTH) != 0)
       {
-        log_err("Testing u_getUnicodeVersion() - expected %s got %d.%d.%d.%d\n", expectString, 
+        log_err("Testing u_getUnicodeVersion() - expected " U_UNICODE_VERSION " got %d.%d.%d.%d\n",
         versionArray[0], versionArray[1], versionArray[2], versionArray[3]);
       }
 
 #if defined(ICU_UNICODE_VERSION)
     /* test only happens where we have configure.in with UNICODE_VERSION - sanity check. */
-    if(strcmp(expectVersion, ICU_UNICODE_VERSION))
+    if(strcmp(U_UNICODE_VERSION, ICU_UNICODE_VERSION))
       {
-         log_err("Testing configure.in's UNICODE_VERSION - expected %s got %s\n",  expectVersion, ICU_UNICODE_VERSION);
+         log_err("Testing configure.in's ICU_UNICODE_VERSION - expected " U_UNICODE_VERSION " got " ICU_UNICODE_VERSION "\n");
       }
 #endif
 
-    input = fopen(newPath, "r");
-
-    if (input == 0) {
-      input = fopen(backupPath, "r");
-      if (input == 0) {
-        log_err("Unicode C API test 'fopen' err. Could not load either (%s) nor (%s) \n", newPath, backupPath);
-        return;
-      }
+    if (u_charScript((UChar)0x0041 != U_BASIC_LATIN)) {
+        log_err("Unicode character script property failed !\n");
     }
 
-        for(;;) {
-            bufferPtr = fgets(buffer, 999, input);
-            if (bufferPtr == NULL) break;
-            if (bufferPtr[0] == '#' || bufferPtr[0] == '\n' || bufferPtr[0] == 0) continue;
-            sscanf(bufferPtr, "%X", &unicode);
-            if (!(0 <= unicode && unicode < 65536)) {
-                log_err("Unicode C API test precondition '(0 <= unicode && unicode < 65536)' failed\n");
-                return;
-            }
-            if (unicode == LAST_CHAR_CODE_IN_FILE)
-                break;
-            bufferPtr = strchr(bufferPtr, ';');
-            if (!(bufferPtr != NULL)) {
-                log_err("Unicode C API test condition '(bufferPtr != NULL)' failed\n");
-                return;
-            }
-            bufferPtr = strchr(bufferPtr + 1, ';'); /* go to start of third field */
-            if (!(bufferPtr != NULL)) {
-                log_err("Unicode C API test condition '(bufferPtr != NULL)' failed\n");
-                return;
-            }
-            dirPtr = bufferPtr;
-            dirPtr = strchr(dirPtr + 1, ';');
-            if (!(dirPtr != NULL)) {
-                log_err("Unicode C API test precondition '(dirPtr != NULL)' failed\n");
-                return;
-            }
-            dirPtr = strchr(dirPtr + 1, ';');
-            if (!(dirPtr != NULL)) {
-                log_err("Unicode C API test precondition '(dirPtr != NULL)' failed\n");
-                return;
-            }
-            bufferPtr++;
-            bufferPtr[2] = 0;
-
-            /* we override the general category of some control characters */
-            switch(unicode) {
-            case 9:
-            case 0xb:
-            case 0x1f:
-                type = U_SPACE_SEPARATOR;
-                break;
-            case 0xc:
-                type = U_LINE_SEPARATOR;
-                break;
-            case 0xa:
-            case 0xd:
-            case 0x1c:
-            case 0x1d:
-            case 0x1e:
-            case 0x85:
-                type = U_PARAGRAPH_SEPARATOR;
-                break;
-            default:
-                type = (int8_t)tagValues[MakeProp(bufferPtr)];
-                break;
-            }
-            if (u_charType((UChar)unicode) != type)
-            {
-                log_err("Unicode character type failed at %d\n",unicode);
-            }
-
-            /* test title case */
-            if ((u_totitle((UChar)unicode) != u_toupper((UChar)unicode)) &&
-                !(u_istitle(u_totitle((UChar)unicode))))
-            {
-                log_err("Title case test failed at %d \n", unicode);
-            }
-            bufferPtr = strchr(dirPtr + 1, ';');
-            dirPtr++;
-            bufferPtr[0] = 0;
-            if (u_charDirection((UChar)unicode) != MakeDir(dirPtr)) 
-            {
-                log_err("Unicode character directionality failed at %d\n", unicode);
-                
-            }
-            
-        }
-
-        if (u_charScript((UChar)0x0041 != U_BASIC_LATIN)) {
-            log_err("Unicode character script property failed !\n");
-        }
-        if (input) 
-            fclose(input);
-
-
+    errorCode=U_ZERO_ERROR;
+    u_parseDelimitedFile(backupPath, ';', fields, 15, unicodeDataLineFn, NULL, &errorCode);
+    if(errorCode==U_FILE_ACCESS_ERROR) {
+        errorCode=U_ZERO_ERROR;
+        u_parseDelimitedFile(newPath, ';', fields, 15, unicodeDataLineFn, NULL, &errorCode);
+    }
+    if(U_FAILURE(errorCode)) {
+        log_err("error parsing UnicodeData.txt: %s\n", u_errorName(errorCode));
+    }
 }
 
 /*internal functions ----*/
