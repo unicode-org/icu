@@ -154,7 +154,7 @@ class U_COMMON_API LocaleKey : public ICUServiceKey {
     /**
      * UObject boilerplate.
      */
-    static UClassID getStaticClassID();
+    static UClassID U_EXPORT2 getStaticClassID();
 
     virtual UClassID getDynamicClassID() const;
 
@@ -274,7 +274,7 @@ public:
     /**
      * UObject boilerplate.
      */
-    static UClassID getStaticClassID();
+    static UClassID U_EXPORT2 getStaticClassID();
 
     virtual UClassID getDynamicClassID() const;
 
@@ -338,7 +338,7 @@ public:
     /**
      * UObject boilerplate.
      */
-    static UClassID getStaticClassID();
+    static UClassID U_EXPORT2 getStaticClassID();
 
     virtual UClassID getDynamicClassID() const;
 
@@ -401,7 +401,7 @@ public:
     /**
      * UObject boilerplate.
      */
-    static UClassID getStaticClassID();
+    static UClassID U_EXPORT2 getStaticClassID();
     virtual UClassID getDynamicClassID() const;
 
 

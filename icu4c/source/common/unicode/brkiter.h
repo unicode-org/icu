@@ -377,8 +377,8 @@ public:
      * The caller owns the returned object and is responsible for deleting it.
      * @stable ICU 2.0
      */
-    static BreakIterator* createWordInstance(const Locale& where,
-                                                   UErrorCode& status);
+    static BreakIterator* U_EXPORT2
+    createWordInstance(const Locale& where, UErrorCode& status);
 
     /**
      * Create BreakIterator for line-breaks using specified locale.
@@ -401,8 +401,8 @@ public:
      * The caller owns the returned object and is responsible for deleting it.
      * @stable ICU 2.0
      */
-    static BreakIterator* createLineInstance(const Locale& where,
-                                                   UErrorCode& status);
+    static BreakIterator* U_EXPORT2
+    createLineInstance(const Locale& where, UErrorCode& status);
 
     /**
      * Create BreakIterator for character-breaks using specified locale
@@ -423,8 +423,8 @@ public:
      * The caller owns the returned object and is responsible for deleting it.
      * @stable ICU 2.0
      */
-    static BreakIterator* createCharacterInstance(const Locale& where,
-                                                        UErrorCode& status);
+    static BreakIterator* U_EXPORT2
+    createCharacterInstance(const Locale& where, UErrorCode& status);
 
     /**
      * Create BreakIterator for sentence-breaks using specified locale
@@ -444,13 +444,13 @@ public:
      * The caller owns the returned object and is responsible for deleting it.
      * @stable ICU 2.0
      */
-    static BreakIterator* createSentenceInstance(const Locale& where,
-                                                       UErrorCode& status);
+    static BreakIterator* U_EXPORT2
+    createSentenceInstance(const Locale& where, UErrorCode& status);
 
     /**
      * Create BreakIterator for title-casing breaks using the specified locale
      * Returns an instance of a BreakIterator implementing title breaks.
-     * The iterator returned locates title boundaries as described for 
+     * The iterator returned locates title boundaries as described for
      * Unicode 3.2 only. For Unicode 4.0 and above title boundary iteration,
      * please use Word Boundary iterator.{@link #createWordInstance }
      *
@@ -469,8 +469,8 @@ public:
      * The caller owns the returned object and is responsible for deleting it.
      * @stable ICU 2.1
      */
-    static BreakIterator* createTitleInstance(const Locale& where,
-                                                       UErrorCode& status);
+    static BreakIterator* U_EXPORT2
+    createTitleInstance(const Locale& where, UErrorCode& status);
 
     /**
      * Get the set of Locales for which TextBoundaries are installed.
@@ -481,7 +481,7 @@ public:
      * @return available locales
      * @stable ICU 2.0
      */
-    static const Locale* getAvailableLocales(int32_t& count);
+    static const Locale* U_EXPORT2 getAvailableLocales(int32_t& count);
 
     /**
      * Get name of the object for the desired Locale, in the desired langauge.
@@ -492,7 +492,7 @@ public:
      * @return user-displayable name
      * @stable ICU 2.0
      */
-    static UnicodeString& getDisplayName(const Locale& objectLocale,
+    static UnicodeString& U_EXPORT2 getDisplayName(const Locale& objectLocale,
                                          const Locale& displayLocale,
                                          UnicodeString& name);
 
@@ -504,7 +504,7 @@ public:
      * @return user-displayable name
      * @stable ICU 2.0
      */
-    static UnicodeString& getDisplayName(const Locale& objectLocale,
+    static UnicodeString& U_EXPORT2 getDisplayName(const Locale& objectLocale,
                                          UnicodeString& name);
 
     /**
@@ -549,7 +549,10 @@ public:
      * @return a registry key that can be used to unregister this instance
      * @stable ICU 2.4
      */
-    static URegistryKey registerInstance(BreakIterator* toAdopt, const Locale& locale, UBreakIteratorType kind, UErrorCode& status);
+    static URegistryKey U_EXPORT2 registerInstance(BreakIterator* toAdopt,
+                                        const Locale& locale,
+                                        UBreakIteratorType kind,
+                                        UErrorCode& status);
 
     /**
      * Unregister a previously-registered BreakIterator using the key returned from the
@@ -560,26 +563,26 @@ public:
      * @return TRUE if the iterator for the key was successfully unregistered
      * @stable ICU 2.4
      */
-    static UBool unregister(URegistryKey key, UErrorCode& status);
+    static UBool U_EXPORT2 unregister(URegistryKey key, UErrorCode& status);
 
     /**
-     * Return a StringEnumeration over the locales available at the time of the call, 
+     * Return a StringEnumeration over the locales available at the time of the call,
      * including registered locales.
      * @return a StringEnumeration over the locales available at the time of the call
      * @stable ICU 2.4
      */
-    static StringEnumeration* getAvailableLocales(void);
+    static StringEnumeration* U_EXPORT2 getAvailableLocales(void);
 #endif
 
     /**
-     * Returns the locale for this break iterator. Two flavors are available: valid and 
-     * actual locale. 
+     * Returns the locale for this break iterator. Two flavors are available: valid and
+     * actual locale.
      * @draft ICU 2.8 likely to change in ICU 3.0, based on feedback
      */
     Locale getLocale(ULocDataLocaleType type, UErrorCode& status) const;
 
     /** Get the locale for this break iterator object. You can choose between valid and actual locale.
-     *  @param type type of the locale we're looking for (valid or actual) 
+     *  @param type type of the locale we're looking for (valid or actual)
      *  @param status error code for the operation
      *  @return the locale
      *  @internal

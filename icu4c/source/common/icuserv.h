@@ -183,7 +183,7 @@ public:
   /**
    * UObject RTTI boilerplate.
    */
-  static UClassID getStaticClassID();
+  static UClassID U_EXPORT2 getStaticClassID();
 
   /**
    * UObject RTTI boilerplate.
@@ -337,7 +337,7 @@ class U_COMMON_API SimpleFactory : public ICUServiceFactory {
  /**
   * UObject RTTI boilerplate.
   */
-  static UClassID getStaticClassID();
+  static UClassID U_EXPORT2 getStaticClassID();
 
  /**
   * UObject RTTI boilerplate.
@@ -378,7 +378,7 @@ public:
     /**
      * UObject RTTI boilerplate.
      */
-    static UClassID getStaticClassID();
+    static UClassID U_EXPORT2 getStaticClassID();
     
     /**
      * UObject RTTI boilerplate.

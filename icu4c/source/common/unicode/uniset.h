@@ -21,7 +21,7 @@ class SymbolTable;
 class UVector;
 class CaseEquivClass;
 class RuleCharacterIterator;
-    
+
 /**
  * A mutable set of Unicode characters and multicharacter strings.  Objects of this class
  * represent <em>character classes</em> used in regular expressions.
@@ -80,7 +80,7 @@ class RuleCharacterIterator;
  *     </tr>
  *     <tr>
  *       <td nowrap valign="top" align="left"><code>[a-e]</code></td>
- *       <td valign="top">The characters 'a' through 'e' inclusive, in Unicode code 
+ *       <td valign="top">The characters 'a' through 'e' inclusive, in Unicode code
  *       point order</td>
  *     </tr>
  *     <tr>
@@ -89,7 +89,7 @@ class RuleCharacterIterator;
  *     </tr>
  *     <tr>
  *       <td nowrap valign="top" align="left"><code>[a{ab}{ac}]</code></td>
- *       <td valign="top">The character 'a' and the multicharacter strings &quot;ab&quot; and 
+ *       <td valign="top">The character 'a' and the multicharacter strings &quot;ab&quot; and
  *       &quot;ac&quot;</td>
  *     </tr>
  *     <tr>
@@ -98,7 +98,7 @@ class RuleCharacterIterator;
  *     </tr>
  *   </table>
  * \htmlonly</blockquote>\endhtmlonly
- * 
+ *
  * Any character may be preceded by a backslash in order to remove any special
  * meaning.  White space characters, as defined by UCharacter.isWhitespace(), are
  * ignored, unless they are escaped.
@@ -617,7 +617,7 @@ public:
      * @stable ICU 2.0
      */
     virtual UBool contains(UChar32 c) const;
-    
+
     /**
      * Returns true if this set contains every character
      * of the given range.
@@ -636,7 +636,7 @@ public:
      * @stable ICU 2.4
      */
     UBool contains(const UnicodeString& s) const;
-    
+
     /**
      * Returns true if this set contains all the characters and strings
      * of the given set.
@@ -645,7 +645,7 @@ public:
      * @stable ICU 2.4
      */
     virtual UBool containsAll(const UnicodeSet& c) const;
-    
+
     /**
      * Returns true if this set contains all the characters
      * of the given string.
@@ -654,7 +654,7 @@ public:
      * @stable ICU 2.4
      */
     UBool containsAll(const UnicodeString& s) const;
-    
+
     /**
      * Returns true if this set contains none of the characters
      * of the given range.
@@ -673,7 +673,7 @@ public:
      * @stable ICU 2.4
      */
     UBool containsNone(const UnicodeSet& c) const;
-    
+
     /**
      * Returns true if this set contains none of the characters
      * of the given string.
@@ -682,7 +682,7 @@ public:
      * @stable ICU 2.4
      */
     UBool containsNone(const UnicodeString& s) const;
-        
+
     /**
      * Returns true if this set contains one or more of the characters
      * in the given range.
@@ -692,7 +692,7 @@ public:
      * @stable ICU 2.4
      */
     inline UBool containsSome(UChar32 start, UChar32 end) const;
-        
+
     /**
      * Returns true if this set contains one or more of the characters
      * and strings of the given set.
@@ -701,7 +701,7 @@ public:
      * @stable ICU 2.4
      */
     inline UBool containsSome(const UnicodeSet& s) const;
-        
+
     /**
      * Returns true if this set contains one or more of the characters
      * of the given string.
@@ -710,7 +710,7 @@ public:
      * @stable ICU 2.4
      */
     inline UBool containsSome(const UnicodeString& s) const;
-        
+
     /**
      * Implement UnicodeMatcher::matches()
      * @stable ICU 2.4
@@ -720,7 +720,7 @@ public:
                          int32_t limit,
                          UBool incremental);
 
- private:    
+ private:
     /**
      * Returns the longest match for s in text at the given position.
      * If limit > start then match forward from start+1 to limit
@@ -745,7 +745,7 @@ public:
     static int32_t matchRest(const Replaceable& text,
                              int32_t start, int32_t limit,
                              const UnicodeString& s);
-    
+
     /**
      * Returns the smallest value i such that c < list[i].  Caller
      * must ensure that c is a legal value or this method will enter
@@ -824,7 +824,7 @@ public:
      */
     UnicodeSet& add(const UnicodeString& s);
 
- private:    
+ private:
     /**
      * @return a code point IF the string consists of a single one.
      * otherwise returns -1.
@@ -833,7 +833,7 @@ public:
     static int32_t getSingleCP(const UnicodeString& s);
 
     void _add(const UnicodeString& s);
-    
+
  public:
     /**
      * Adds each of the characters in this string to the set. Thus "ch" => {"c", "h"}
@@ -879,9 +879,9 @@ public:
      * The caller owns the return object and is responsible for deleting it.
      * @stable ICU 2.4
      */
-    static UnicodeSet* createFrom(const UnicodeString& s);
+    static UnicodeSet* U_EXPORT2 createFrom(const UnicodeString& s);
 
-    
+
     /**
      * Makes a set from each of the characters in the string. Thus "ch" => {"c", "h"}
      * @param s the source string
@@ -889,7 +889,7 @@ public:
      * The caller owns the return object and is responsible for deleting it.
      * @stable ICU 2.4
      */
-    static UnicodeSet* createFromAll(const UnicodeString& s);
+    static UnicodeSet* U_EXPORT2 createFromAll(const UnicodeString& s);
 
     /**
      * Retain only the elements in this set that are contained in the
@@ -1161,7 +1161,7 @@ public:
      * @return          The class ID for all objects of this class.
      * @stable ICU 2.0
      */
-    static UClassID getStaticClassID(void);
+    static UClassID U_EXPORT2 getStaticClassID(void);
 
     /**
      * Implement UnicodeFunctor API.

@@ -45,7 +45,7 @@ const int32_t BreakIterator::DONE = (int32_t)-1;
 // -------------------------------------
 
 // Creates a break iterator for word breaks.
-BreakIterator*
+BreakIterator* U_EXPORT2
 BreakIterator::createWordInstance(const Locale& key, UErrorCode& status)
 {
     return createInstance(key, UBRK_WORD, status);
@@ -98,7 +98,7 @@ BreakIterator::makeWordInstance(const Locale& key, UErrorCode& status)
 // -------------------------------------
 
 // Creates a break iterator  for line breaks.
-BreakIterator*
+BreakIterator* U_EXPORT2
 BreakIterator::createLineInstance(const Locale& key, UErrorCode& status)
 {
     return createInstance(key, UBRK_LINE, status);
@@ -150,7 +150,7 @@ BreakIterator::makeLineInstance(const Locale& key, UErrorCode& status)
 // -------------------------------------
 
 // Creates a break iterator  for character breaks.
-BreakIterator*
+BreakIterator* U_EXPORT2
 BreakIterator::createCharacterInstance(const Locale& key, UErrorCode& status)
 {
     return createInstance(key, UBRK_CHARACTER, status);
@@ -191,7 +191,7 @@ BreakIterator::makeCharacterInstance(const Locale& /* key */, UErrorCode& status
 // -------------------------------------
 
 // Creates a break iterator  for sentence breaks.
-BreakIterator*
+BreakIterator* U_EXPORT2
 BreakIterator::createSentenceInstance(const Locale& key, UErrorCode& status)
 {
     return createInstance(key, UBRK_SENTENCE, status);
@@ -232,7 +232,7 @@ BreakIterator::makeSentenceInstance(const Locale& /*key */, UErrorCode& status)
 // -------------------------------------
 
 // Creates a break iterator for title casing breaks.
-BreakIterator*
+BreakIterator* U_EXPORT2
 BreakIterator::createTitleInstance(const Locale& key, UErrorCode& status)
 {
     return createInstance(key, UBRK_TITLE, status);
@@ -273,7 +273,7 @@ BreakIterator::makeTitleInstance(const Locale& /* key */, UErrorCode& status)
 // -------------------------------------
 
 // Gets all the available locales that has localized text boundary data.
-const Locale*
+const Locale* U_EXPORT2
 BreakIterator::getAvailableLocales(int32_t& count)
 {
     return Locale::getAvailableLocales(count);
@@ -281,7 +281,7 @@ BreakIterator::getAvailableLocales(int32_t& count)
 
 // -------------------------------------
 // Gets the objectLocale display name in the default locale language.
-UnicodeString&
+UnicodeString& U_EXPORT2
 BreakIterator::getDisplayName(const Locale& objectLocale,
                              UnicodeString& name)
 {
@@ -290,7 +290,7 @@ BreakIterator::getDisplayName(const Locale& objectLocale,
 
 // -------------------------------------
 // Gets the objectLocale display name in the displayLocale language.
-UnicodeString&
+UnicodeString& U_EXPORT2
 BreakIterator::getDisplayName(const Locale& objectLocale,
                              const Locale& displayLocale,
                              UnicodeString& name)
@@ -394,7 +394,7 @@ hasService(void)
 
 // -------------------------------------
 
-URegistryKey
+URegistryKey U_EXPORT2
 BreakIterator::registerInstance(BreakIterator* toAdopt, const Locale& locale, UBreakIteratorType kind, UErrorCode& status) 
 {
     return getService()->registerInstance(toAdopt, locale, kind, status);
@@ -402,7 +402,7 @@ BreakIterator::registerInstance(BreakIterator* toAdopt, const Locale& locale, UB
 
 // -------------------------------------
 
-UBool 
+UBool U_EXPORT2
 BreakIterator::unregister(URegistryKey key, UErrorCode& status) 
 {
     if (U_SUCCESS(status)) {
@@ -416,7 +416,7 @@ BreakIterator::unregister(URegistryKey key, UErrorCode& status)
 
 // -------------------------------------
 
-StringEnumeration* 
+StringEnumeration* U_EXPORT2
 BreakIterator::getAvailableLocales(void)
 {
   return getService()->getAvailableLocales();

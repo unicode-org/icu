@@ -57,7 +57,7 @@ class DictionaryBasedBreakIteratorTables;
  * currently making it public.  Contact us for help.
  * <p>
  * <b> NOTE </b>  The DictionaryBasedIterator class is still under development.  The
- * APIs are not in stable condition yet.  
+ * APIs are not in stable condition yet.
  */
 class U_COMMON_API DictionaryBasedBreakIterator : public RuleBasedBreakIterator {
 
@@ -85,11 +85,11 @@ private:
     DictionaryBasedBreakIteratorTables  *fTables;
 
     /**=======================================================================
-     * Create a dictionary based break boundary detection iterator.  
+     * Create a dictionary based break boundary detection iterator.
      * @param tablesImage The location for the dictionary to be loaded into memory
-     * @param dictionaryFilename The name of the dictionary file 
+     * @param dictionaryFilename The name of the dictionary file
      * @param status the error code status
-     * @return A dictionary based break detection iterator.  The UErrorCode& status 
+     * @return A dictionary based break detection iterator.  The UErrorCode& status
      * parameter is used to return status information to the user.
      * To check whether the construction succeeded or not, you should check
      * the value of U_SUCCESS(err).  If you wish more detailed information, you
@@ -127,7 +127,7 @@ public:
      DictionaryBasedBreakIterator(const DictionaryBasedBreakIterator &other);
 
     /**
-     * Assignment operator. 
+     * Assignment operator.
      * @param that The object to be copied.
      * @return the newly set DictionaryBasedBreakIterator.
      * @stable ICU 2.0
@@ -181,7 +181,7 @@ public:
      * @return          The class ID for all objects of this class.
      * @stable ICU 2.0
      */
-    static UClassID getStaticClassID(void);
+    static UClassID U_EXPORT2 getStaticClassID(void);
 
     /**
      * Returns a unique class ID POLYMORPHICALLY.  Pure virtual override.
@@ -224,15 +224,15 @@ protected:
     void init();
 
     /**
-     * @param stackBuffer user allocated space for the new clone. If NULL new memory will be allocated. 
+     * @param stackBuffer user allocated space for the new clone. If NULL new memory will be allocated.
      * If buffer is not large enough, new memory will be allocated.
-     * @param BufferSize reference to size of allocated space. 
-     * If BufferSize == 0, a sufficient size for use in cloning will 
+     * @param BufferSize reference to size of allocated space.
+     * If BufferSize == 0, a sufficient size for use in cloning will
      * be returned ('pre-flighting')
-     * If BufferSize is not enough for a stack-based safe clone, 
+     * If BufferSize is not enough for a stack-based safe clone,
      * new memory will be allocated.
      * @param status to indicate whether the operation went on smoothly or there were errors
-     *  An informational status value, U_SAFECLONE_ALLOCATED_ERROR, is used if any allocations were 
+     *  An informational status value, U_SAFECLONE_ALLOCATED_ERROR, is used if any allocations were
      *  necessary.
      * @return pointer to the new clone
      * @internal

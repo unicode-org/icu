@@ -51,7 +51,7 @@ class UnicodeString;
 class U_COMMON_API UnicodeSetIterator : public UObject {
 
  protected:
-    
+
     /**
      * Value of <tt>codepoint</tt> if the iterator points to a string.
      * If <tt>codepoint == IS_STRING</tt>, then examine
@@ -95,7 +95,7 @@ class U_COMMON_API UnicodeSetIterator : public UObject {
      * @stable ICU 2.4
      */
     UnicodeSetIterator(const UnicodeSet& set);
-        
+
     /**
      * Create an iterator over nothing.  <tt>next()</tt> and
      * <tt>nextRange()</tt> return false. This is a convenience
@@ -103,7 +103,7 @@ class U_COMMON_API UnicodeSetIterator : public UObject {
      * @stable ICU 2.4
      */
     UnicodeSetIterator();
-        
+
     /**
      * Destructor.
      * @stable ICU 2.4
@@ -150,7 +150,7 @@ class U_COMMON_API UnicodeSetIterator : public UObject {
      * false.  If <tt>codepoint == IS_STRING</tt>, the value is a
      * string in the <tt>string</tt> field.  Otherwise the value is a
      * single code point in the <tt>codepoint</tt> field.
-     * 
+     *
      * <p>The order of iteration is all code points in sorted order,
      * followed by all strings sorted order.  <tt>codepointEnd</tt> is
      * undefined after calling this method.  <tt>string</tt> is
@@ -164,7 +164,7 @@ class U_COMMON_API UnicodeSetIterator : public UObject {
      * @stable ICU 2.4
      */
     UBool next();
-        
+
     /**
      * Returns the next element in the set, either a code point range
      * or a string.  If there are no more elements in the set, return
@@ -172,7 +172,7 @@ class U_COMMON_API UnicodeSetIterator : public UObject {
      * string in the <tt>string</tt> field.  Otherwise the value is a
      * range of one or more code points from <tt>codepoint</tt> to
      * <tt>codepointeEnd</tt> inclusive.
-     * 
+     *
      * <p>The order of iteration is all code points ranges in sorted
      * order, followed by all strings sorted order.  Ranges are
      * disjoint and non-contiguous.  <tt>string</tt> is undefined
@@ -186,7 +186,7 @@ class U_COMMON_API UnicodeSetIterator : public UObject {
      * @stable ICU 2.4
      */
     UBool nextRange();
-        
+
     /**
      * Sets this iterator to visit the elements of the given set and
      * resets it to the start of that set.  The iterator is valid only
@@ -195,19 +195,19 @@ class U_COMMON_API UnicodeSetIterator : public UObject {
      * @stable ICU 2.4
      */
     void reset(const UnicodeSet& set);
-        
+
     /**
      * Resets this iterator to the start of the set.
      * @stable ICU 2.4
      */
     void reset();
-    
+
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
      * @stable ICU 2.4
      */
-    static UClassID getStaticClassID();
+    static UClassID U_EXPORT2 getStaticClassID();
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
@@ -217,7 +217,7 @@ class U_COMMON_API UnicodeSetIterator : public UObject {
     virtual UClassID getDynamicClassID() const;
 
     // ======================= PRIVATES ===========================
-    
+
  protected:
 
     // endElement and nextElements are really UChar32's, but we keep

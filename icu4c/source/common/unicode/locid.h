@@ -53,29 +53,29 @@
  * The Locale class is not suitable for subclassing.
  *
  * <P>
- * You create a <code>Locale</code> object using the constructor in
+ * You can create a <code>Locale</code> object using the constructor in
  * this class:
  * \htmlonly<blockquote>\endhtmlonly
  * <pre>
- * .      Locale( const   char*  language, 
- * .              const   char*  country, 
+ * .      Locale( const   char*  language,
+ * .              const   char*  country,
  * .              const   char*  variant);
  * </pre>
  * \htmlonly</blockquote>\endhtmlonly
  * The first argument to the constructors is a valid <STRONG>ISO
  * Language Code.</STRONG> These codes are the lower-case two-letter
  * codes as defined by ISO-639.
- * You can find a full list of these codes at a number of sites, such as:
- * <BR><a href ="http://www.ics.uci.edu/pub/ietf/http/related/iso639.txt">
- * http://www.ics.uci.edu/pub/ietf/http/related/iso639.txt</a>
+ * You can find a full list of these codes at:
+ * <BR><a href ="http://www.loc.gov/standards/iso639-2/">
+ * http://www.loc.gov/standards/iso639-2/</a>
  *
  * <P>
  * The second argument to the constructors is a valid <STRONG>ISO Country
  * Code.</STRONG> These codes are the upper-case two-letter codes
  * as defined by ISO-3166.
  * You can find a full list of these codes at a number of sites, such as:
- * <BR><a href="http://www.chemie.fu-berlin.de/diverse/doc/ISO_3166.html">
- * http://www.chemie.fu-berlin.de/diverse/doc/ISO_3166.html</a>
+ * <BR><a href="http://www.iso.ch/iso/en/prods-services/iso3166ma/index.html">
+ * http://www.iso.ch/iso/en/prods-services/iso3166ma/index.html</a>
  *
  * <P>
  * The third constructor requires a third argument--the <STRONG>Variant.</STRONG>
@@ -123,7 +123,7 @@
  * a language appropriate to that locale.
  *
  * <P>
- * The TIFC provides a number of classes that perform locale-sensitive
+ * ICU provides a number of classes that perform locale-sensitive
  * operations. For example, the <code>NumberFormat</code> class formats
  * numbers, currency, or percentages in a locale-sensitive manner. Classes
  * such as <code>NumberFormat</code> have a number of convenience methods
@@ -135,7 +135,7 @@
  *     UErrorCode success = U_ZERO_ERROR;
  *     Locale myLocale;
  *     NumberFormat *nf;
- * 
+ *
  *     nf = NumberFormat::createInstance( success );          delete nf;
  *     nf = NumberFormat::createCurrencyInstance( success );  delete nf;
  *     nf = NumberFormat::createPercentInstance( success );   delete nf;
@@ -181,48 +181,48 @@ U_NAMESPACE_BEGIN
 class U_COMMON_API Locale : public UObject {
 public:
     /** Useful constant for this language. @stable ICU 2.0 */
-    static const Locale &getEnglish(void);
+    static const Locale &U_EXPORT2 getEnglish(void);
     /** Useful constant for this language. @stable ICU 2.0 */
-    static const Locale &getFrench(void);
+    static const Locale &U_EXPORT2 getFrench(void);
     /** Useful constant for this language. @stable ICU 2.0 */
-    static const Locale &getGerman(void);
+    static const Locale &U_EXPORT2 getGerman(void);
     /** Useful constant for this language. @stable ICU 2.0 */
-    static const Locale &getItalian(void);
+    static const Locale &U_EXPORT2 getItalian(void);
     /** Useful constant for this language. @stable ICU 2.0 */
-    static const Locale &getJapanese(void);
+    static const Locale &U_EXPORT2 getJapanese(void);
     /** Useful constant for this language. @stable ICU 2.0 */
-    static const Locale &getKorean(void);
+    static const Locale &U_EXPORT2 getKorean(void);
     /** Useful constant for this language. @stable ICU 2.0 */
-    static const Locale &getChinese(void);
+    static const Locale &U_EXPORT2 getChinese(void);
     /** Useful constant for this language. @stable ICU 2.0 */
-    static const Locale &getSimplifiedChinese(void);
+    static const Locale &U_EXPORT2 getSimplifiedChinese(void);
     /** Useful constant for this language. @stable ICU 2.0 */
-    static const Locale &getTraditionalChinese(void);
+    static const Locale &U_EXPORT2 getTraditionalChinese(void);
 
     /** Useful constant for this country/region. @stable ICU 2.0 */
-    static const Locale &getFrance(void);
+    static const Locale &U_EXPORT2 getFrance(void);
     /** Useful constant for this country/region. @stable ICU 2.0 */
-    static const Locale &getGermany(void);
+    static const Locale &U_EXPORT2 getGermany(void);
     /** Useful constant for this country/region. @stable ICU 2.0 */
-    static const Locale &getItaly(void);
+    static const Locale &U_EXPORT2 getItaly(void);
     /** Useful constant for this country/region. @stable ICU 2.0 */
-    static const Locale &getJapan(void);
+    static const Locale &U_EXPORT2 getJapan(void);
     /** Useful constant for this country/region. @stable ICU 2.0 */
-    static const Locale &getKorea(void);
+    static const Locale &U_EXPORT2 getKorea(void);
     /** Useful constant for this country/region. @stable ICU 2.0 */
-    static const Locale &getChina(void);
+    static const Locale &U_EXPORT2 getChina(void);
     /** Useful constant for this country/region. @stable ICU 2.0 */
-    static const Locale &getPRC(void);
+    static const Locale &U_EXPORT2 getPRC(void);
     /** Useful constant for this country/region. @stable ICU 2.0 */
-    static const Locale &getTaiwan(void);
+    static const Locale &U_EXPORT2 getTaiwan(void);
     /** Useful constant for this country/region. @stable ICU 2.0 */
-    static const Locale &getUK(void);
+    static const Locale &U_EXPORT2 getUK(void);
     /** Useful constant for this country/region. @stable ICU 2.0 */
-    static const Locale &getUS(void);
+    static const Locale &U_EXPORT2 getUS(void);
     /** Useful constant for this country/region. @stable ICU 2.0 */
-    static const Locale &getCanada(void);
+    static const Locale &U_EXPORT2 getCanada(void);
     /** Useful constant for this country/region. @stable ICU 2.0 */
-    static const Locale &getCanadaFrench(void);
+    static const Locale &U_EXPORT2 getCanadaFrench(void);
 
 
     /**
@@ -232,7 +232,7 @@ public:
      * @see uloc_getDefault
      * @stable ICU 2.0
      */
-    Locale(); 
+    Locale();
 
     /**
      * Construct a locale from language, country, variant.
@@ -245,9 +245,9 @@ public:
      *  This parameter can be NULL; if so,
      *  the locale is initialized to match the current default locale.
      *  (This is the same as using the default constructor.)
-     *  Please note: The Java Locale class does NOT accept the form 
+     *  Please note: The Java Locale class does NOT accept the form
      *  'new Locale("en_US")' but only 'new Locale("en","US")'
-     * 
+     *
      * @param country  Uppercase two-letter ISO-3166 code. (optional)
      * @param variant  Uppercase vendor and browser specific code. See class
      *                 description. (optional)
@@ -259,7 +259,7 @@ public:
      * @stable ICU 2.0
      */
     Locale( const   char * language,
-            const   char * country  = 0, 
+            const   char * country  = 0,
             const   char * variant  = 0,
             const   char * keywordsAndValues = 0);
 
@@ -334,7 +334,7 @@ public:
      * @system
      * @stable ICU 2.0
      */
-    static  const Locale& getDefault(void);
+    static const Locale& U_EXPORT2 getDefault(void);
 
     /**
      * Sets the default. Normally set once at the beginning of a process,
@@ -348,20 +348,19 @@ public:
      * @system
      * @stable ICU 2.0
      */
-    static  void    setDefault(const    Locale&     newLocale,
-                               UErrorCode&  success);
+    static void U_EXPORT2 setDefault(const Locale& newLocale,
+                                     UErrorCode&   success);
 
-    
     /**
-     * Creates a locale which has had minimal canonicalization 
-     * as per uloc_getName(). 
+     * Creates a locale which has had minimal canonicalization
+     * as per uloc_getName().
      * @param name The name to create from.  If name is null,
      *  the default Locale is used.
      * @return new locale object
      * @stable ICU 2.0
      * @see uloc_getName
      */
-    static Locale createFromName(const char *name);
+    static Locale U_EXPORT2 createFromName(const char *name);
 
     /**
      * Creates a locale from the given string after canonicalizing
@@ -371,8 +370,8 @@ public:
      * @draft ICU 3.0
      * @see uloc_canonicalize
      */
-    static Locale createCanonical(const char* name);
-    
+    static Locale U_EXPORT2 createCanonical(const char* name);
+
     /**
      * Returns the locale's ISO-639 language code.
      * @return      An alias to the code
@@ -424,7 +423,7 @@ public:
 
 
     /**
-     * Gets the list of keywords for the specified locale. 
+     * Gets the list of keywords for the specified locale.
      *
      * @return pointer to StringEnumeration class. Client must dispose of it by calling delete.
      * @param status Returns any error information while performing this operation.
@@ -433,8 +432,8 @@ public:
     StringEnumeration * createKeywords(UErrorCode &status) const;
 
     /**
-     * Get the value for a keyword. 
-     * 
+     * Get the value for a keyword.
+     *
      * @param keywordName name of the keyword for which we want the value. Case insensitive.
      * @param status Returns any error information while performing this operation.
      * @param buffer The buffer to receive the keyword value.
@@ -443,7 +442,7 @@ public:
      *
      * @draft ICU 2.8
      */
-     int32_t getKeywordValue(const char* keywordName, char *buffer, int32_t bufferCapacity, UErrorCode &status) const;
+    int32_t getKeywordValue(const char* keywordName, char *buffer, int32_t bufferCapacity, UErrorCode &status) const;
 
     /**
      * returns the locale's three-letter language code, as specified
@@ -573,7 +572,7 @@ public:
                                                 UnicodeString&  dispVar) const;
 
     /**
-     * Fills in "name" with the name of this locale in a format suitable for user display 
+     * Fills in "name" with the name of this locale in a format suitable for user display
      * in the default locale.  This function uses getDisplayLanguage(), getDisplayCountry(),
      * and getDisplayVariant() to do its work, and outputs the display name in the format
      * "language (country[,variant])".  For example, if the default locale is en_US, then
@@ -586,7 +585,7 @@ public:
     UnicodeString&  getDisplayName(         UnicodeString&  name) const;
 
     /**
-     * Fills in "name" with the name of this locale in a format suitable for user display 
+     * Fills in "name" with the name of this locale in a format suitable for user display
      * in the locale specfied by "displayLocale".  This function uses getDisplayLanguage(),
      * getDisplayCountry(), and getDisplayVariant() to do its work, and outputs the display
      * name in the format "language (country[,variant])".  For example, if displayLocale is
@@ -606,12 +605,12 @@ public:
      */
     int32_t         hashCode(void) const;
 
-    /** 
-     * Sets the locale to bogus 
-     * A bogus locale represents a non-existing locale associated 
-     * with services that can be instantiated from non-locale data 
-     * in addition to locale (for example, collation can be 
-     * instantiated from a locale and from a rule set). 
+    /**
+     * Sets the locale to bogus
+     * A bogus locale represents a non-existing locale associated
+     * with services that can be instantiated from non-locale data
+     * in addition to locale (for example, collation can be
+     * instantiated from a locale and from a rule set).
      * @stable ICU 2.1
      */
     void setToBogus();
@@ -631,7 +630,7 @@ public:
      *              get ownership of this list, and must NOT delete it.
      * @stable ICU 2.0
      */
-    static  const   Locale*     getAvailableLocales(int32_t& count);
+    static const Locale* U_EXPORT2 getAvailableLocales(int32_t& count);
 
     /**
      * Gets a list of all available 2-letter country codes defined in ISO 639.  This is a
@@ -641,7 +640,7 @@ public:
      * @return a list of all available country codes
      * @stable ICU 2.0
      */
-    static const char* const* getISOCountries();
+    static const char* const* U_EXPORT2 getISOCountries();
 
     /**
      * Gets a list of all available language codes defined in ISO 639.  This is a pointer
@@ -651,14 +650,14 @@ public:
      * @return a list of all available language codes
      * @stable ICU 2.0
      */
-    static const char* const*  getISOLanguages();
+    static const char* const* U_EXPORT2 getISOLanguages();
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
      * @stable ICU 2.2
      */
-    static UClassID getStaticClassID();
+    static UClassID U_EXPORT2 getStaticClassID();
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
@@ -749,13 +748,13 @@ Locale::getVariant() const
     return &fullName[variantBegin];
 }
 
-inline const char * 
+inline const char *
 Locale::getName() const
 {
     return fullName;
 }
 
-inline UBool 
+inline UBool
 Locale::isBogus(void) const {
     return fIsBogus;
 }

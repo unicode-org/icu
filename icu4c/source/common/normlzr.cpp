@@ -120,7 +120,7 @@ UBool Normalizer::operator==(const Normalizer& that) const
 // Static utility methods
 //-------------------------------------------------------------------------
 
-void 
+void U_EXPORT2
 Normalizer::normalize(const UnicodeString& source, 
                       UNormalizationMode mode, int32_t options,
                       UnicodeString& result, 
@@ -166,7 +166,7 @@ Normalizer::normalize(const UnicodeString& source,
     }
 }
 
-void
+void U_EXPORT2
 Normalizer::compose(const UnicodeString& source, 
                     UBool compat, int32_t options,
                     UnicodeString& result, 
@@ -212,7 +212,7 @@ Normalizer::compose(const UnicodeString& source,
     }
 }
 
-void
+void U_EXPORT2
 Normalizer::decompose(const UnicodeString& source, 
                       UBool compat, int32_t options,
                       UnicodeString& result, 
@@ -258,7 +258,7 @@ Normalizer::decompose(const UnicodeString& source,
     }
 }
 
-UnicodeString &
+UnicodeString & U_EXPORT2
 Normalizer::concatenate(UnicodeString &left, UnicodeString &right,
                         UnicodeString &result,
                         UNormalizationMode mode, int32_t options,
