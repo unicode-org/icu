@@ -301,6 +301,13 @@ public class CheckTags {
                 break;
 
             case DRAFT:
+              if (tag.text().indexOf("ICU 2.0") != -1) {
+                foundRequiredTag = true;
+                tagErr(tag);
+                break;
+              }
+              // fall through
+
             case DEPRECATED:
             case OBSOLETE:
                 if (tag.text().indexOf("ICU") != 0) {
