@@ -844,7 +844,11 @@ isCaseIgnorable(UChar32 c, uint32_t category) {
 /* Is followed by {case-ignorable}* {Ll, Lu, Lt}  ? */
 static UBool
 isFollowedByCasedLetter(UCharIterator *iter, int32_t index) {
-    uint32_t props, category;
+    /* This is volatile because AIX 5.1 Visual Age 5.0 in 32-bit mode can't
+        optimize this correctly. It couldn't optimize (1UL<<category)&0xE
+    */
+    volatile uint32_t category;
+    uint32_t props;
     int32_t c;
 
     if(iter==NULL) {
@@ -873,7 +877,11 @@ isFollowedByCasedLetter(UCharIterator *iter, int32_t index) {
 /* Is preceded by {Ll, Lu, Lt} {case-ignorable}*  ? */
 static UBool
 isPrecededByCasedLetter(UCharIterator *iter, int32_t index) {
-    uint32_t props, category;
+    /* This is volatile because AIX 5.1 Visual Age 5.0 in 32-bit mode can't
+        optimize this correctly. It couldn't optimize (1UL<<category)&0xE
+    */
+    volatile uint32_t category;
+    uint32_t props;
     int32_t c;
 
     if(iter==NULL) {
