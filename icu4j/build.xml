@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $ 
-* $Date: 2000/04/20 21:40:23 $ 
-* $Revision: 1.12 $
+* $Date: 2000/04/21 00:19:24 $ 
+* $Revision: 1.13 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -27,6 +27,12 @@
     <property name="zipsrc.file" value="../icu4jsrc${DSTAMP}.zip"/>
     <property name="classpath" value="${build.dir}"/>
     <property name="build.compiler" value="classic"/>
+    <property name="richedit.dist.dir" value="richeditDist"/>
+    <property name="richedit.cont.dir" value="richedit"/>
+    <property name="richedit.archive.dir" value="${richedit.dist.dir}/${richedit.cont.dir}"/>
+    <property name="richedit.jar.file" value="${richedit.archive.dir}/richedit.jar"/>
+    <property name="richedit.zip.file" value="${richedit.dist.dir}/richedit.zip"/>
+    <property name="richedit.manifest" value="${richedit.dist.dir}/manifest.stub"/>
   </target>
 
   <target name="all" depends="core,tests,tools,demos,jar,docs"/>
@@ -74,7 +80,7 @@
   
   <target name="docs" depends="core">
     <mkdir dir="${doc.dir}"/>
-    <javadoc  packagenames="com.ibm.util,com.ibm.text,com.ibm.math,com.ibm.richtext.*"
+    <javadoc  packagenames="com.ibm.util,com.ibm.text,com.ibm.math,com.ibm.richtext.awtui,com.ibm.richtext.swingui,com.ibm.richtext.textpanel,com.ibm.richtext.styledtext,com.ibm.textlayout.attributes,com.ibm.richtext.print"
               sourcepath="${src.dir}"
     		  destdir="${doc.dir}"
     		  nodeprecatedlist="true"
@@ -88,17 +94,31 @@
 
   <target name="jar" depends="core">
     <jar jarfile="${jar.file}"
-         includes="com/ibm/util/**/*,com/ibm/text/**/*,com/ibm/math/**/*"
+         includes="com/ibm/util/**/*,com/ibm/text/**/*,com/ibm/math/**/*,com/ibm/richtext/**/*"
          basedir="${build.dir}"/>
   </target>
 
+  <target name="richeditJar" depends="core">
+    <jar jarfile="${richedit.jar.file}"
+         includes="com/ibm/richtext/**/*,com/ibm/textlayout/**/*"
+         basedir="${build.dir}"
+         manifest="${richedit.manifest}"/>
+  </target>
+
+  <target name="richeditZip" depends="richeditJar">
+    <!--Create a zip archive of the richedit jar and readme -->
+    <zip zipfile="${richedit.zip.file}"
+         basedir="${richedit.dist.dir}"
+         includes="${richedit.cont.dir}/**/*"/>
+  </target>
+  
   <target name="zip" depends="docs,jar">
     <!--Create a zip archive of the source, docs, and jar file for
     distribution.  The zip file will be created in the directory above
     the root ICU4J directory.-->
     <zip zipfile="${zip.file}"
          basedir="."
-         excludes="${obsolete.dir}/**,**/*~,${src.dir}/**/*.class,${build.dir}/**,**/CVS/**/*"/>
+         excludes="${richedit.dist.dir},${obsolete.dir}/**,**/*~,${src.dir}/**/*.class,${build.dir}/**,**/CVS/**/*"/>
   </target>
 
   <target name="zipsrc">
@@ -107,7 +127,7 @@
     directory.-->
     <zip zipfile="${zipsrc.file}"
          basedir="."
-         excludes="${obsolete.dir}/**,**/*~,${src.dir}/**/*.class,${build.dir}/**,${doc.dir}/**,${jar.file},**/CVS/**/*"/>
+         excludes="${richedit.dist.dir},${obsolete.dir}/**,**/*~,${src.dir}/**/*.class,${build.dir}/**,${doc.dir}/**,${jar.file},**/CVS/**/*"/>
   </target>
 
   <target name="clean">
