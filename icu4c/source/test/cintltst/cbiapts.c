@@ -48,7 +48,7 @@ static void TestBreakIteratorCAPI()
 	UBreakIterator * someClonedIterators [CLONETEST_ITERATOR_COUNT];
 	UBreakIterator * brk;
 	uint8_t buffer [CLONETEST_ITERATOR_COUNT] [U_BRK_SAFECLONE_BUFFERSIZE];
-	uint32_t bufferSize = U_BRK_SAFECLONE_BUFFERSIZE;
+	int32_t bufferSize = U_BRK_SAFECLONE_BUFFERSIZE;
 
     u_uastrcpy(text, "He's from Africa. ""Mr. Livingston, I presume?"" Yeah");
     status  = U_ZERO_ERROR;
