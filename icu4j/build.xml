@@ -191,20 +191,22 @@
     </target>
 
     <target name="one4tools" depends="anthack1,anthack2" if="version.1.4">
-        <javac includes="com/ibm/icu/dev/tool/xmlcomparator/*.java,com/ibm/icu/dev/localeconverter/docs/*.java,com/ibm/icu/dev/tool/docs/*.java"
+        <javac includes="com/ibm/icu/dev/tool/cldr/*.java,com/ibm/icu/dev/localeconverter/docs/*.java,com/ibm/icu/dev/tool/docs/*.java"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
+            source="1.4" 
             debug="on" deprecation="off"/>
     </target>
 
     <target name="tools" depends="core,one4tools" description="build tools">
         <javac includes="com/ibm/icu/dev/tool/**/*.java"
-            excludes="com/ibm/icu/dev/tool/xmlcomparator/*,com/ibm/icu/dev/tool/localeconverter/*,com/ibm/icu/dev/tool/docs/*,**/CVS/**/*"
+            excludes="com/ibm/icu/dev/tool/cldr/*,com/ibm/icu/dev/tool/localeconverter/*,com/ibm/icu/dev/tool/docs/*,**/CVS/**/*"
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
+            source="1.4"
             debug="on" deprecation="off"/>
     </target>
 
