@@ -150,6 +150,8 @@ if "%ICU_DATA%"=="" set ICU_DATA=%2\icu\data\
 %1\genrb %2\icu\data\tr_TR.txt
 %1\genrb %2\icu\data\uk.txt
 %1\genrb %2\icu\data\uk_UA.txt
+%1\genrb %2\icu\data\vi.txt
+%1\genrb %2\icu\data\vi_VN.txt
 %1\genrb %2\icu\data\zh.txt
 %1\genrb %2\icu\data\zh_CN.txt
 %1\genrb %2\icu\data\zh_HK.txt
