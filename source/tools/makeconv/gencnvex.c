@@ -121,7 +121,7 @@ CnvExtWrite(NewConverter *cnvData, const UConverterStaticData *staticData,
         _MBCSHeader header={ { 0, 0, 0, 0 }, 0, 0, 0, 0, 0, 0, 0 };
 
         /* write the header and base table name for an extension-only table */
-        length=uprv_strlen(extData->ucm->baseName)+1;
+        length=(int32_t)uprv_strlen(extData->ucm->baseName)+1;
         while(length&3) {
             /* add padding */
             extData->ucm->baseName[length++]=0;

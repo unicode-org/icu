@@ -290,7 +290,7 @@ writeObjectCode(const char *filename, const char *destdir) {
         char longNames[100];
     } symbolNames;
     FileStream *in, *out;
-    size_t i, entryLength, length, size;
+    DWORD i, entryLength, length, size;
 
     in=T_FileStream_open(filename, "rb");
     if(in==NULL) {
@@ -307,7 +307,7 @@ writeObjectCode(const char *filename, const char *destdir) {
         uprv_strcat(entry, "_dat");
     }
     /* turn dashes in the entry name into underscores */
-    entryLength=uprv_strlen(entry);
+    entryLength=(int32_t)uprv_strlen(entry);
     for(i=0; i<entryLength; ++i) {
         if(entry[i]=='-') {
             entry[i]='_';
@@ -376,7 +376,7 @@ writeObjectCode(const char *filename, const char *destdir) {
         if(length==0) {
             break;
         }
-        T_FileStream_write(out, buffer, length);
+        T_FileStream_write(out, buffer, (int32_t)length);
     }
 
     /* write the symbol table */
