@@ -98,7 +98,17 @@ typedef UConverter * (*UConverterSafeClone) (const UConverter   *cnv,
                                              int32_t            *pBufferSize, 
                                              UErrorCode         *status);
 
-/** ### TODO @draft ICU 2.6 */
+/**
+ * Fills the set of Unicode code points that can be converted by an ICU converter.
+ * The API function ucnv_getUnicodeSet() clears the USet before calling
+ * the converter's getUnicodeSet() implementation; the converter should only
+ * add the appropriate code points to allow recursive use.
+ * For example, the ISO-2022-JP converter will call each subconverter's
+ * getUnicodeSet() implementation to consecutively add code points to
+ * the same USet, which will result in a union of the sets of all subconverters.
+ *
+ * For more documentation, see ucnv_getUnicodeSet() in ucnv.h.
+ */
 typedef void (*UConverterGetUnicodeSet) (const UConverter *cnv,
                                          USet *set,
                                          UConverterUnicodeSet which,
@@ -156,7 +166,7 @@ struct UConverterImpl {
     UConverterGetName getName;
     UConverterWriteSub writeSub;
     UConverterSafeClone safeClone;
-    UConverterGetUnicodeSet getUnicodeSet; /* ### TODO ICU 2.6 */
+    UConverterGetUnicodeSet getUnicodeSet;
 };
 
 extern const UConverterSharedData
