@@ -147,6 +147,9 @@
 			Name="Source Files"
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat">
 			<File
+				RelativePath=".\propsvec.c">
+			</File>
+			<File
 				RelativePath=".\toolutil.c">
 			</File>
 			<File
@@ -177,6 +180,9 @@
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl">
+			<File
+				RelativePath=".\propsvec.h">
+			</File>
 			<File
 				RelativePath=".\toolutil.h">
 			</File>
