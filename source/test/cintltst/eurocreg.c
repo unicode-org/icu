@@ -89,7 +89,7 @@ char convertersToCheck[][15] = {
       "cp13488",*/
   "cpibm4971",
   "cp869",
-  "cp813",
+  /* "cp813",*/
   "cp852",
   "cp855",
   "cp866",
