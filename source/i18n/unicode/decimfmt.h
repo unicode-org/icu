@@ -987,27 +987,26 @@ public:
     virtual void setMinimumFractionDigits(int32_t newValue);
 
     /**
-     * Sets the <tt>Currency</tt> object used to display currency
+     * Sets the currency used to display currency
      * amounts.  This takes effect immediately, if this format is a
      * currency format.  If this format is not a currency format, then
-     * the currency object is used if and when this object becomes a
+     * the currency is used if and when this object becomes a
      * currency format through the application of a new pattern.
-     * @param theCurrency new currency object to use.  Must not be
-     * null.
+     * @param theCurrency new currency to use
      * @since ICU 2.2
      */
-    void setCurrency(const UnicodeString& theCurrency);
+    void setCurrency(const char* theCurrency);
 
     /**
-     * Gets the <tt>Currency</tt> object used to display currency
-     * amounts.  This will be null if a object is resurrected with a
+     * Gets the currency used to display currency
+     * amounts.  This will be an empty string if a object is resurrected with a
      * custom DecimalFormatSymbols object, or if the user sets a
      * custom DecimalFormatSymbols object.  A custom
      * DecimalFormatSymbols object has currency symbols that are not
      * the standard ones for its locale.
      * @since ICU 2.2
      */
-    UnicodeString getCurrency() const;
+    const char* getCurrency() const;
 
     /**
      * The resource tags we use to retrieve decimal format data from
@@ -1169,7 +1168,7 @@ private:
     EPadPosition            fPadPosition;
 
     // ISO currency code
-    UnicodeString           currency;
+    char                    currency[4];
 
     // Constants for characters used in programmatic (unlocalized) patterns.
     static const UChar    kPatternZeroDigit;

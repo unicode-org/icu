@@ -4,8 +4,8 @@
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/i18n/Attic/currency.cpp,v $ 
-* $Date: 2002/05/14 22:18:43 $ 
-* $Revision: 1.2 $
+* $Date: 2002/05/14 23:24:24 $ 
+* $Revision: 1.3 $
 **********************************************************************
 */
 #include "unicode/currency.h"
@@ -56,16 +56,12 @@ static const UCurrencyData DATA[] = {
  * TEMPORARY Internal function to look up currency data.
  */
 static int32_t
-_findData(const UnicodeString& currency) {
+_findData(const char* currency) {
     // TODO Temporary implementation; Redo this
-
-    // Convert currency code to char*
-    char isoCode[4];
-    currency.extract(0, 3, isoCode, "");
 
     // Start from element 1
     for (int32_t i=1; i < (int32_t)ARRAY_SIZE(DATA); ++i) {
-        int32_t c = uprv_strcmp(DATA[i].code, isoCode);
+        int32_t c = uprv_stricmp(DATA[i].code, currency);
         if (c == 0) {
             return i;
         } else if (c > 0) {
@@ -79,8 +75,9 @@ _findData(const UnicodeString& currency) {
  * Returns a currency object for the default currency in the given
  * locale.
  */
-UnicodeString
+void
 UCurrency::forLocale(const Locale& locale,
+                     char* result,
                      UErrorCode& ec) {
     // Look up the CurrencyElements resource for this locale.
     // It contains: [0] = currency symbol, e.g. "$";
@@ -88,9 +85,11 @@ UCurrency::forLocale(const Locale& locale,
     // [2] = monetary decimal separator, e.g. ".".
     if (U_SUCCESS(ec)) {
         ResourceBundle rb((char*)0, locale, ec);
-        return rb.get("CurrencyElements", ec).getStringEx(1, ec);
+        UnicodeString s = rb.get("CurrencyElements", ec).getStringEx(1, ec);
+        s.extract(0, 3, result, "");
+    } else {
+        result[0] = 0;
     }
-    return "";
 }
 
 /**
@@ -99,7 +98,7 @@ UCurrency::forLocale(const Locale& locale,
  * currency object in the en_US locale is "$".
  */
 UnicodeString
-UCurrency::getSymbol(const UnicodeString& currency,
+UCurrency::getSymbol(const char* currency,
                      const Locale& locale) {
     // Look up the Currencies resource for the given locale.  The
     // Currencies locale looks like this in the original C
@@ -113,14 +112,10 @@ UCurrency::getSymbol(const UnicodeString& currency,
     //|}
     UErrorCode ec = U_ZERO_ERROR;
 
-    // Convert currency code to char*
-    char isoCode[4];
-    currency.extract(0, 3, isoCode, "");
-
     ResourceBundle rb((char*)0, locale, ec);
-    UnicodeString result = rb.get("Currencies", ec).getStringEx(isoCode, ec);
-    if (U_SUCCESS(ec) && result.length() > 0) {
-        return result;
+    UnicodeString s = rb.get("Currencies", ec).getStringEx(currency, ec);
+    if (U_SUCCESS(ec) && s.length() > 0) {
+        return s;
     }
 
     // Since the Currencies resource is not fully populated yet,
@@ -128,12 +123,13 @@ UCurrency::getSymbol(const UnicodeString& currency,
     // resource.
     ec = U_ZERO_ERROR;
     ResourceBundle ce = rb.get("CurrencyElements", ec);
-    if (ce.getStringEx(1, ec) == currency) {
+    s = UnicodeString(currency, "");
+    if (ce.getStringEx(1, ec) == s) {
         return ce.getStringEx((int32_t)0, ec);
     }
 
     // If we fail to find a match, use the full ISO code
-    return currency;
+    return s;
 }
 
 /**
@@ -143,7 +139,7 @@ UCurrency::getSymbol(const UnicodeString& currency,
  * displayed
  */
 int32_t
-UCurrency::getDefaultFractionDigits(const UnicodeString& currency) {
+UCurrency::getDefaultFractionDigits(const char* currency) {
     // TODO Temporary implementation; Redo this
     return DATA[_findData(currency)].fractionDigits;
 }
@@ -154,7 +150,7 @@ UCurrency::getDefaultFractionDigits(const UnicodeString& currency) {
  * @return the non-negative rounding increment, or 0.0 if none
  */
 double
-UCurrency::getRoundingIncrement(const UnicodeString& currency) {
+UCurrency::getRoundingIncrement(const char* currency) {
     // TODO Temporary implementation; Redo this
     return DATA[_findData(currency)].rounding;
 }
