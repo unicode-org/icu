@@ -1019,7 +1019,7 @@ uiter_setUTF8(UCharIterator *iter, const char *s, int32_t length) {
             if(length>=0) {
                 iter->limit=length;
             } else {
-                iter->limit=uprv_strlen(s);
+                iter->limit=(int32_t)uprv_strlen(s);
             }
             iter->length= iter->limit<=1 ? iter->limit : -1;
         } else {
