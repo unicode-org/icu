@@ -317,7 +317,9 @@ UnicodeSet::UnicodeSet(const UnicodeSet& o) :
 UnicodeSet::~UnicodeSet() {
     _dbgdt(this); // first!
     uprv_free(list);
-    uprv_free(buffer);
+    if (buffer) {
+        uprv_free(buffer);
+    }
     delete strings;
 }
 
@@ -2072,7 +2074,9 @@ void UnicodeSet::ensureCapacity(int32_t newLen) {
 void UnicodeSet::ensureBufferCapacity(int32_t newLen) {
     if (buffer != NULL && newLen <= bufferCapacity)
         return;
-    uprv_free(buffer);
+    if (buffer) {
+        uprv_free(buffer);
+    }
     bufferCapacity = newLen + GROW_EXTRA;
     buffer = (UChar32*) uprv_malloc(sizeof(UChar32) * bufferCapacity);
 }
