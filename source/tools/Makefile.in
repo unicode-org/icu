@@ -176,7 +176,7 @@ distclean-local: clean-local
 	-@$(RMV) ./tmp/icudata.lst  @DATABUILDDIR@/icupkg.inc @DATABUILDDIR@/*.o @DATABUILDDIR@/*.c @DATABUILDDIR@/*.mak @DATABUILDDIR@/*.lst
 	-@$(RMV) $(TMPDATADIR)
 
-@DATABUILDDIR@/icudata.lst: Makefile genrb/genrbfiles.mk
+@DATABUILDDIR@/icudata.lst: Makefile $(srcdir)/genrb/genrbfiles.mk
 	@echo Generating $@ list of data files
 	@-$(RMV) @DATABUILDDIR@/icudata.lst
 	@for file in $(DATAFILES); do \
