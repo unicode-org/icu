@@ -734,7 +734,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
         /* Data wasn't found.  If we were looking for an ICUData item and there is
          * more data available, load it and try again,
          * otherwise break out of this loop. */
-        if (!(isICUData && extendICUData(pCommonData, &errorCode))) {
+        if (!(isICUData && pCommonData && extendICUData(pCommonData, &errorCode))) {
             break;
         }
     };
