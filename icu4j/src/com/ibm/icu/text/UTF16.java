@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UTF16.java,v $ 
-* $Date: 2002/03/15 22:48:07 $ 
-* $Revision: 1.15 $
+* $Date: 2002/03/15 23:47:10 $ 
+* $Revision: 1.16 $
 *
 *******************************************************************************
 */
@@ -1081,7 +1081,7 @@ public final class UTF16
     * @param limit UTF16 offset which the codepoint will be appended.
     * @param char32 code point to be appended
     * @return offset after char32 in the array.
-    * @exception Exception thrown if there is not enough 
+    * @exception IllegalArgumentException thrown if there is not enough 
     *            space for the append, or when char32 does not lie within
     *            the range of the Unicode codepoints.
     */
