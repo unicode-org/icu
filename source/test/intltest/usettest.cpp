@@ -681,6 +681,15 @@ void UnicodeSetTest::TestPropertySet() {
         "[\\N{ latin small letter  a  }[:name= latin small letter z:]]",
         "az",
         "qrs",
+
+        // JB#2015
+        "[:any:]",
+        "a\\U0010FFFF",
+        "",
+
+        "[:nv=0.5:]",
+        "\\u00BD\\u0F2A",
+        "\\u00BC",
     };
 
     static const int32_t DATA_LEN = sizeof(DATA)/sizeof(DATA[0]);
