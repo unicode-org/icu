@@ -50,6 +50,8 @@ U_NAMESPACE_BEGIN
  * to perform partial formatting or to get information about the
  * formatted output (such as the position of a field).
  *
+ * The FieldPosition class is not suitable for subclassing.
+ *
  * <p>
  * Below is an example of using <code>FieldPosition</code> to aid
  * alignment of an array of formatted floating-point numbers on
@@ -94,7 +96,7 @@ U_NAMESPACE_BEGIN
  *                     1.234
  *  \endcode
  * </pre>
-*/
+ */
 class U_I18N_API FieldPosition : public UObject {
 public:
     /**
@@ -160,6 +162,19 @@ public:
      * @stable ICU 2.0
      */
     UBool              operator!=(const FieldPosition& that) const;
+
+    /**
+     * Clone this object.
+     * Clones can be used concurrently in multiple threads.
+     * If an error occurs, then NULL is returned.
+     * The caller must delete the clone.
+     *
+     * @return a clone of this object
+     *
+     * @see getDynamicClassID
+     * @draft ICU 2.8
+     */
+    FieldPosition *clone() const;
 
     /**
      * Retrieve the field identifier.
