@@ -144,15 +144,16 @@ Locale::Locale( const   UnicodeString&  newLanguage)
 Locale::Locale( const   UnicodeString&  newLanguage, 
                 const   UnicodeString&  newCountry)
 {
-  UnicodeString togo(newLanguage);
-  char myLocaleID[ULOC_FULLNAME_CAPACITY];
+    UnicodeString togo(newLanguage);
+    char myLocaleID[ULOC_FULLNAME_CAPACITY];
   
+    if(newCountry.length()>0) {
+        togo += sep;
+        togo += newCountry;
+    }
 
-  togo += sep;
-  togo += newCountry;
-
-  myLocaleID[togo.extract(0, 0x7fffffff, myLocaleID, "")] = '\0';
-  init(myLocaleID);
+    myLocaleID[togo.extract(0, 0x7fffffff, myLocaleID, "")] = '\0';
+    init(myLocaleID);
 }
 
 
