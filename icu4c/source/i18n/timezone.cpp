@@ -145,9 +145,7 @@ static void loadZoneData() {
     U_NAMESPACE_USE
 
     if (!DATA_LOADED) {
-        umtx_lock(NULL);
         Mutex lock(&LOCK);
-        umtx_unlock(NULL);
         if (!DATA_LOADED) {
             UErrorCode status = U_ZERO_ERROR;
             UDATA_POINTER = udata_openChoice(0, TZ_DATA_TYPE, TZ_DATA_NAME, // THIS IS NOT A LEAK!
@@ -352,7 +350,11 @@ TimeZone::initDefault()
             // on the string ID in tzname[0].
             {
                 // NOTE: Global mutex here; TimeZone mutex above
-                Mutex lock; // mutexed to avoid threading issues in the platform fcns.
+                // mutexed to avoid threading issues in the platform fcns.
+                // Some of the locale/timezone OS functions may not be thread safe, 
+                //  so the intent is that any setting from anywhere within ICU 
+                //  happens with the ICU global mutex held.
+                Mutex lock; 
                 uprv_tzset(); // Initialize tz... system data
                 
                 // get the timezone ID from the host.
