@@ -30,7 +30,7 @@
      <abbr title="International Components for Unicode">ICU</abbr> 2.8
     ReadMe</h1>
 
-    <p>Version: 2003-Sep-09<br>
+    <p>Version: 2003-Oct-07<br>
      Copyright &copy; 1997-2003 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -376,8 +376,8 @@
 
             <li><b>misc/</b> The misc directory contains other data files which
             did not fit into the above categories. Currently it only contains
-            <b>timezone.txt,</b> a generated file, which is compiled into
-            tz.dat. The <b>tz.dat</b> file contains time zone information.</li>
+            time zone information, and a name preperation file for <a href=
+            "http://www.ietf.org/rfc/rfc3490.txt">IDNA</a>.</li>
 
             <li><b>out/</b> This directory contains the assembled memory mapped
             files.</li>
@@ -762,10 +762,6 @@
       included in the <strong>PATH</strong> environment variable. The tests
       will not work without the location of the ICU DLL files in the path.</li>
 
-      <li>Set the <strong>TZ</strong> environment variable to
-      <strong>PST8PDT</strong>. The tests will not work in any other time
-      zone.</li>
-
       <li>Open the "<i>&lt;ICU&gt;</i>\source\allinone\allinone.dsw" workspace
       file in Microsoft Visual C++ 6.0. (This workspace includes all the
       International Components for Unicode libraries, necessary ICU building
@@ -796,9 +792,6 @@
       installed correctly. You can press Ctrl+F5 on the test project to run the
       test and see what error messages were displayed (if any tests
       failed).</li>
-
-      <li>Reset the <strong>TZ</strong> environment variable to its original
-      value, unless you plan on testing ICU any further.</li>
 
       <li>You are now able to develop applications with ICU by using the
       libraries and tools in <i>&lt;ICU&gt;</i>\bin\. The headers are in
@@ -893,7 +886,7 @@
 
       <li>Run the C test suite, "cintltst". There should be no errors.</li>
 
-      <li>Follow the last two steps in the <a href="#HowToBuildWindows">in the
+      <li>Follow the last step in the <a href="#HowToBuildWindows">in the
       previous section</a>.</li>
     </ol>
 
@@ -963,8 +956,7 @@
     <p><a name="HowToTestWithoutGmake"><strong>Running The Tests From The
     Command Line NOTE:</strong></a> You may have to set certain variables if
     you with to run test programs individually, that is apart from "gmake
-    check". The <strong>TZ</strong> environment variable needs to be set to
-    <strong>PST8PDT</strong>. Also, the environment variable
+    check". The environment variable
     <strong>ICU_DATA</strong> can be set to the full pathname of the data
     directory to indicate where the locale data files and conversion mapping
     tables are when you are not using the shared library (e.g. by using the
@@ -1216,23 +1208,6 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
         <br>
       </li>
       <!--li>Add QCXXN, to your build process library list. This results in the resolution of CRTCPPMOD used by the icc compiler</li-->
-
-      <li>
-        In order to get the tests to run correctly, the QUTCOFFSET needs to be
-        set to the Pacific Time Zone offset.<br>
-        <br>
-         To check your QUTCOFFSET: 
-<pre>
-<samp>DSPSYSVAL SYSVAL(QUTCOFFSET)</samp>
-</pre>
-        <br>
-         To change your QUTCOFFSET:<br>
-<pre>
-<samp>CHGSYSVAL SYSVAL(QUTCOFFSET) VALUE('-0800')</samp>
-</pre>
-        You should change -0800 to -0700 for daylight savings.<br>
-        <br>
-      </li>
 
       <li>Run <tt>'CHGJOB CCSID(37)'</tt></li>
 
