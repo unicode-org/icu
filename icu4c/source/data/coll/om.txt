@@ -19,9 +19,5 @@ om{
             }
             Version{"1.1"}
         }
-        validSubLocales{
-            om_ET{""}
-            om_KE{""}
-        }
     }
 }

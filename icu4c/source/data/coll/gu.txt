@@ -16,8 +16,5 @@ gu{
             Sequence{" [normalization on ]&હ<઼<ઁ<ં<ઃ&ઽ<્"}
             Version{"1.0"}
         }
-        validSubLocales{
-            gu_IN{""}
-        }
     }
 }

@@ -22,8 +22,5 @@ nn{
             }
             Version{"2.0"}
         }
-        validSubLocales{
-            nn_NO{""}
-        }
     }
 }

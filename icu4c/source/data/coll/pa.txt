@@ -16,8 +16,5 @@ pa{
             Sequence{" [normalization on ]"}
             Version{"1.0"}
         }
-        validSubLocales{
-            pa_IN{""}
-        }
     }
 }

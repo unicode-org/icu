@@ -16,8 +16,5 @@ or{
             Sequence{" [normalization on ]&ହ<କ୍ଷ<ଡ଼<ଢ଼<ୟ<ୱ<ଵ<ଂ<ଃ<ଁ<୍<଼"}
             Version{"1.0"}
         }
-        validSubLocales{
-            or_IN{""}
-        }
     }
 }

@@ -16,12 +16,5 @@ fr{
             Sequence{" [backwards 2]&ae<<æ<<<Æ"}
             Version{"2.0"}
         }
-        validSubLocales{
-            fr_BE{""}
-            fr_CA{""}
-            fr_CH{""}
-            fr_FR{""}
-            fr_LU{""}
-        }
     }
 }

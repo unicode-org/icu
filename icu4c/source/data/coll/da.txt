@@ -24,8 +24,5 @@ da{
             }
             Version{"3.0"}
         }
-        validSubLocales{
-            da_DK{""}
-        }
     }
 }

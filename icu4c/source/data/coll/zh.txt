@@ -1663,9 +1663,5 @@ zh{
             }
             Version{"1.1"}
         }
-        validSubLocales{
-            zh_CN{""}
-            zh_SG{""}
-        }
     }
 }

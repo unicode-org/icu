@@ -509,8 +509,5 @@ ja{
             }
             Version{"4.0"}
         }
-        validSubLocales{
-            ja_JP{""}
-        }
     }
 }

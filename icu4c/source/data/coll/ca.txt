@@ -16,8 +16,5 @@ ca{
             Sequence{" [backwards 2]&C<ch<<<Ch<<<CH&L<ll<<<l·l<<<Ll<<<L·l<<<LL<<<L·L"}
             Version{"1.0"}
         }
-        validSubLocales{
-            ca_ES{""}
-        }
     }
 }
