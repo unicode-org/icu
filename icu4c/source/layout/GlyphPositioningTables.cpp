@@ -12,7 +12,7 @@
 #include "GlyphDefinitionTables.h"
 #include "GlyphPositionAdjustments.h"
 #include "GlyphPositioningTables.h"
-#include "GlyphPositioningLookupProcessor.h"
+#include "GlyphPosnLookupProc.h"
 
 void GlyphPositioningTableHeader::process(LEGlyphID *glyphs, GlyphPositionAdjustment *glyphPositionAdjustments,
                                           const LETag **glyphTags, le_int32 glyphCount, le_bool rightToLeft,

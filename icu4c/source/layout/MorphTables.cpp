@@ -11,9 +11,9 @@
 #include "MorphTables.h"
 #include "SubtableProcessor.h"
 #include "IndicRearrangementProcessor.h"
-#include "ContextualGlyphSubstitutionProcessor.h"
+#include "ContextualGlyphSubstProc.h"
 #include "LigatureSubstitutionProcessor.h"
-#include "NonContextualGlyphSubstitutionProcessor.h"
+#include "NonContextualGlyphSubstProc.h"
 //#include "ContextualGlyphInsertionProcessor.h"
 #include "LESwaps.h"
 

@@ -12,7 +12,7 @@
 #include "LEFontInstance.h"
 #include "OpenTypeTables.h"
 #include "GlyphPositioningTables.h"
-#include "AttachmentPositioningSubtables.h"
+#include "AttachmentPosnSubtables.h"
 #include "GlyphIterator.h"
 
 struct MarkToBasePositioningSubtable : AttachmentPositioningSubtable
