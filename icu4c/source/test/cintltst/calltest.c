@@ -33,6 +33,8 @@ void addCompactArrayTest(TestNode** root);
 void addTestDeprecatedAPI(TestNode** root);
 void addUCharTransformTest(TestNode** root);
 void addUSetTest(TestNode** root);
+void addUStringPrepTest(TestNode** root);
+void addIDNATest(TestNode** root);
 
 void addAllTests(TestNode** root)
 {
@@ -61,5 +63,9 @@ void addAllTests(TestNode** root)
 #endif
     addUSetTest(root);
     addTestDeprecatedAPI(root);
+#if !UCONFIG_NO_IDNA
+    addUStringPrepTest(root);
+    addIDNATest(root);
+#endif
 }
 

@@ -331,6 +331,14 @@ icu4c/source/tools/genrb/genjp/genjp.positions
 icu4c/source/tools/genrb/genrb
 icu4c/source/tools/genrb/genrb.[0-9]
 icu4c/source/tools/genrb/tmp
+icu4c/source/tools/gensprep/*.d
+icu4c/source/tools/gensprep/*.pdb
+icu4c/source/tools/gensprep/Debug
+icu4c/source/tools/gensprep/Makefile
+icu4c/source/tools/gensprep/Release
+icu4c/source/tools/gensprep/gensprep
+icu4c/source/tools/gensprep/gensprep.8
+icu4c/source/tools/gensprep/gensprep.plg
 icu4c/source/tools/gentest/*.d
 icu4c/source/tools/gentest/*.pdb
 icu4c/source/tools/gentest/Debug

@@ -273,7 +273,9 @@ testTrieRangesWithMalloc(const char *testName,
     storage = (uint8_t*) uprv_malloc(sizeof(uint8_t)*100000);
 
     log_verbose("\ntesting Trie '%s'\n", testName);
-    newTrie=utrie_open(NULL, NULL, 2000, checkRanges[0].value, latin1Linear);
+    newTrie=utrie_open(NULL, NULL, 2000,
+                       checkRanges[0].value, checkRanges[0].value,
+                       latin1Linear);
 
     /* set values from setRanges[] */
     ok=TRUE;
@@ -457,7 +459,9 @@ testTrieRanges(const char *testName,
     UBool overwrite, ok;
 
     log_verbose("\ntesting Trie '%s'\n", testName);
-    newTrie=utrie_open(NULL, NULL, 2000, checkRanges[0].value, latin1Linear);
+    newTrie=utrie_open(NULL, NULL, 2000,
+                       checkRanges[0].value, checkRanges[0].value,
+                       latin1Linear);
 
     /* set values from setRanges[] */
     ok=TRUE;

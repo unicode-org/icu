@@ -162,7 +162,7 @@ int32_t NamePrepTransform::map(const UChar* src, int32_t srcLength,
         for(;bufIndex<bufLen;){
             U16_NEXT(buffer, bufIndex, bufLen, ch);
             if(unassigned.contains(ch)){
-                status = U_IDNA_UNASSIGNED_CODEPOINT_FOUND_ERROR;
+                status = U_IDNA_UNASSIGNED_ERROR;
                 rsource.releaseBuffer();
                 return 0;
             }
@@ -231,7 +231,7 @@ int32_t NamePrepTransform::process( const UChar* src, int32_t srcLength,
         U16_NEXT(b1, b1Index, b1Len, ch);
 
         if(prohibited.contains(ch) && ch!=0x0020){
-            status = U_IDNA_PROHIBITED_CODEPOINT_FOUND_ERROR;
+            status = U_IDNA_PROHIBITED_ERROR;
             goto CLEANUP;
         }
 

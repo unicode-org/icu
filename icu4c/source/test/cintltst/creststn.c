@@ -537,12 +537,14 @@ static void TestNewTypes() {
         UChar* expectedEscaped = (UChar*)malloc(U_SIZEOF_UCHAR * patternLen);
         const UChar* got = ures_getStringByKey(theBundle,"test_unescaping",&len,&status);
         int32_t expectedLen = u_unescape(pattern,expectedEscaped,patternLen);
-        if(u_strncmp(expectedEscaped,got,expectedLen)!=0 || expectedLen != len){
+        if(got==NULL || u_strncmp(expectedEscaped,got,expectedLen)!=0 || expectedLen != len){
             log_err("genrb failed to unescape string\n");
         }
-        for(i=0;i<expectedLen;i++){
-            if(expectedEscaped[i] != got[i]){
-                log_verbose("Expected: 0x%04X Got: 0x%04X \n",expectedEscaped[i], got[i]);
+        if(got != NULL){
+            for(i=0;i<expectedLen;i++){
+                if(expectedEscaped[i] != got[i]){
+                    log_verbose("Expected: 0x%04X Got: 0x%04X \n",expectedEscaped[i], got[i]);
+                }
             }
         }
         free(expectedEscaped);
