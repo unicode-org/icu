@@ -168,43 +168,7 @@ enum {
     UNORM_NX_HANGUL=1,
     /** Options bit 1, do not decompose CJK compatibility characters. @draft ICU 2.6 */
     UNORM_NX_CJK_COMPAT=2,
-
-    /**
-     * Options bit set value to select Unicode 3.2 normalization (except NormalizationCorrections).
-     * At most one Unicode version can be selected at a time.
-     * @draft ICU 2.6
-     */
-    UNORM_UNICODE_3_2=0x20
 };
-
-/**
- * Lowest-order bit number of unorm_compare() options bits corresponding to
- * normalization options bits.
- *
- * The options parameter for unorm_compare() uses most bits for
- * itself and for various comparison and folding flags.
- * The most significant bits, however, are shifted down and passed on
- * to the normalization implementation.
- * (options>>UNORM_COMPARE_NORM_OPTIONS_SHIFT)
- *
- * @draft ICU 2.6
- */
-#define UNORM_COMPARE_NORM_OPTIONS_SHIFT 20
-
-/**
- * ### TODO prototype, see unorm.cpp
- * @draft ICU 2.6
- */
-U_CAPI UNormalizationCheckResult U_EXPORT2
-unorm_quickCheckWithOptions(const UChar *src, int32_t srcLength, 
-                            UNormalizationMode mode, int32_t options,
-                            UErrorCode *pErrorCode);
-
-/** ### TODO @draft ICU 2.6 */
-U_CAPI UBool U_EXPORT2
-unorm_isNormalizedWithOptions(const UChar *src, int32_t srcLength,
-                              UNormalizationMode mode, int32_t options,
-                              UErrorCode *pErrorCode);
 
 /**
  * Is the normalizer data loaded?

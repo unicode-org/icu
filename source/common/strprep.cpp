@@ -21,7 +21,6 @@
 #include "sprpimpl.h"
 #include "nameprep.h"
 #include "ustr_imp.h"
-#include "unormimp.h"
 #include "unicode/unorm.h"
 #include "unicode/udata.h"
 #include "unicode/ustring.h"

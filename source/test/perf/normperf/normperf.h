@@ -12,9 +12,6 @@
 #include "unicode/unorm.h"
 #include "unicode/ustring.h"
 
-// ### currently internal for prototype for unorm_quickCheckTailored()
-#include "unormimp.h"
-
 //  Stubs for Windows API functions when building on UNIXes.
 //
 #if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
