@@ -285,12 +285,16 @@ public:
     union {
         Transliterator* prototype; // For PROTOTYPE
         TransliterationRuleData* data; // For RBT_DATA, COMPOUND_RBT
-        Transliterator::Factory factory; // For FACTORY
+        struct {
+            Transliterator::Factory function;
+            Transliterator::Token   context;
+        } factory; // For FACTORY
     } u;
     Entry();
     ~Entry();
     void adoptPrototype(Transliterator* adopted);
-    void setFactory(Transliterator::Factory factory);
+    void setFactory(Transliterator::Factory factory,
+                    Transliterator::Token context);
 };
 
 Entry::Entry() {
@@ -320,12 +324,14 @@ void Entry::adoptPrototype(Transliterator* adopted) {
     u.prototype = adopted;
 }
 
-void Entry::setFactory(Transliterator::Factory factory) {
+void Entry::setFactory(Transliterator::Factory factory,
+                       Transliterator::Token context) {
     if (entryType == PROTOTYPE) {
         delete u.prototype;
     }
     entryType = FACTORY;
-    u.factory = factory;
+    u.factory.function = factory;
+    u.factory.context = context;
 }
 
 // UObjectDeleter for Hashtable::setValueDeleter
@@ -373,9 +379,10 @@ void TransliteratorRegistry::put(Transliterator* adoptedProto,
 
 void TransliteratorRegistry::put(const UnicodeString& ID,
                                  Transliterator::Factory factory,
+                                 Transliterator::Token context,
                                  UBool visible) {
     Entry *entry = new Entry();
-    entry->setFactory(factory);
+    entry->setFactory(factory, context);
     registerEntry(ID, entry, visible);
 }
 
@@ -909,7 +916,7 @@ Transliterator* TransliteratorRegistry::instantiateEntry(const UnicodeString& ID
             aliasReturn = new TransliteratorAlias(entry->stringArg);
             return 0;
         } else if (entry->entryType == Entry::FACTORY) {
-            return entry->u.factory();
+            return entry->u.factory.function(ID, entry->u.factory.context);
         } else if (entry->entryType == Entry::COMPOUND_RBT) {
             UnicodeString id("_", "");
             Transliterator *t = new RuleBasedTransliterator(id, entry->u.data);

@@ -248,9 +248,35 @@ private:
  public:
 
     /**
-     * A function that creates and returns a Transliterator.
+     * A context integer or pointer for a factory function, passed by
+     * value.
      */
-    typedef Transliterator* (*Factory)(void);
+    union Token {
+        int32_t integer;
+        void*   pointer;
+    };
+
+    /**
+     * Return a token containing an integer.
+     */
+    inline static Token integerToken(int32_t);
+
+    /**
+     * Return a token containing a pointer.
+     */
+    inline static Token pointerToken(void*);
+
+    /**
+     * A function that creates and returns a Transliterator.  When
+     * invoked, it will be passed the ID string that is being
+     * instantiated, together with the context pointer that was passed
+     * in when the factory function was first registered.  Many
+     * factory functions will ignore both parameters, however,
+     * functions that are registered to more than one ID may use the
+     * ID or the context parameter to parameterize the transliterator
+     * they create.
+     */
+    typedef Transliterator* (*Factory)(const UnicodeString& ID, Token context);
 
 protected:
 
@@ -741,9 +767,13 @@ public:
      * @param id the ID being registered
      * @param factory a function pointer that will be copied and
      * called later when the given ID is passed to createInstance()
+     * @param context a context pointer that will be stored and
+     * later passed to the factory function when an ID matching
+     * the registration ID is being instantiated with this factory.
      */
     static void registerFactory(const UnicodeString& id,
-                                Factory factory);
+                                Factory factory,
+                                Token context);
 
     /**
      * Registers a instance <tt>obj</tt> of a subclass of
@@ -769,7 +799,8 @@ private:
     friend class NormalizationTransliterator;
 
     static void _registerFactory(const UnicodeString& id,
-                                 Factory factory);
+                                 Factory factory,
+                                 Token context);
 
 public:
 
@@ -986,6 +1017,18 @@ inline int32_t Transliterator::getMaximumContextLength(void) const {
 
 inline void Transliterator::setID(const UnicodeString& id) {
     ID = id;
+}
+
+inline Transliterator::Token Transliterator::integerToken(int32_t i) {
+    Token t;
+    t.integer = i;
+    return t;
+}
+
+inline Transliterator::Token Transliterator::pointerToken(void* p) {
+    Token t;
+    t.pointer = p;
+    return t;
 }
 
 /**
