@@ -342,12 +342,12 @@ $(TESTBUILDDIR)/$(TESTDT)test.icu: $(TOOLDIR)/gentest/gentest$(EXEEXT)
 	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/gentest/gentest -d $(TESTBUILDDIR) 
 
 # Targets for nfscsi.icu
-$(TESTBUILDDIR)/$(TESTDT)nfscsi.icu: $(TOOLDIR)/gensprep/gensprep$(EXEEXT) $(TESTSRCDATADIR)/nfs4_cs_prep_ci.txt
+$(TESTBUILDDIR)/$(TESTDT)nfscsi.spp: $(TOOLDIR)/gensprep/gensprep$(EXEEXT) $(TESTSRCDATADIR)/nfs4_cs_prep_ci.txt
 	@echo Building nfscsi.icu
 	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/gensprep/gensprep -s $(TESTSRCDATADIR) -d $(TESTBUILDDIR) -b nfscsi -p $(TESTDATA) -u 3.2.0 nfs4_cs_prep_ci.txt
 
 # Targets for nfscss.icu
-$(TESTBUILDDIR)/$(TESTDT)nfscss.icu: $(TOOLDIR)/gensprep/gensprep$(EXEEXT) $(TESTSRCDATADIR)/nfs4_cs_prep_cs.txt
+$(TESTBUILDDIR)/$(TESTDT)nfscss.spp: $(TOOLDIR)/gensprep/gensprep$(EXEEXT) $(TESTSRCDATADIR)/nfs4_cs_prep_cs.txt
 	@echo Building nfscss.icu
 	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/gensprep/gensprep -s $(TESTSRCDATADIR) -d $(TESTBUILDDIR) -b nfscss -p $(TESTDATA) -u 3.2.0 nfs4_cs_prep_cs.txt
 
