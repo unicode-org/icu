@@ -579,7 +579,7 @@ void UnicodeSetTest::TestExhaustive() {
     // exhaustive tests. Simulate UnicodeSets with integers.
     // That gives us very solid tests (except for large memory tests).
 
-    int32_t limit = (UChar32)128;
+    int32_t limit = 128;
 
     UnicodeSet x, y, z;
 
@@ -587,7 +587,7 @@ void UnicodeSetTest::TestExhaustive() {
         bitsToSet(i, x);
         logln((UnicodeString)"Testing " + i + ", " + x);
         _testComplement(i, x, y);
-        for (UChar32 j = 0; j < limit; ++j) {
+        for (int32_t j = 0; j < limit; ++j) {
             _testAdd(i,j,  x,y,z);
             _testXor(i,j,  x,y,z);
             _testRetain(i,j,  x,y,z);
