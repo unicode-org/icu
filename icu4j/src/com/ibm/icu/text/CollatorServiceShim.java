@@ -104,8 +104,12 @@ final class CollatorServiceShim extends Collator.ServiceShim {
             super("Collator");
 
             class CollatorFactory extends ICUResourceBundleFactory {
-                protected Object handleCreate(ULocale loc, int kind, ICUService service) {
-                    return new RuleBasedCollator(loc);
+                protected Object handleCreate(Locale loc, int kind, ICUService service) {
+                    // TODO: fix! This is broken; we need service
+                    // protocol to support ULocale.  Worse, we need
+                    // protocol to support *both* ULocale and Locale while
+                    // we transition over...
+                    return new RuleBasedCollator(new ULocale(loc));
                 }
 
                 protected Set getSupportedIDs() {
