@@ -323,6 +323,173 @@ public:
             UTextOffset srcLimit) const;
 
   /**
+   * Compare two Unicode strings in code point order.
+   * This is different in UTF-16 from how compare(), operator==, startsWith() etc. work
+   * if supplementary characters are present:
+   *
+   * In UTF-16, supplementary characters (with code points U+10000 and above) are
+   * stored with pairs of surrogate code units. These have values from 0xd800 to 0xdfff,
+   * which means that they compare as less than some other BMP characters like U+feff.
+   * This function compares Unicode strings in code point order.
+   * If either of the UTF-16 strings is malformed (i.e., it contains unpaired surrogates), then the result is not defined.
+   *
+   * @param text Another string to compare this one to.
+   * @return a negative/zero/positive integer corresponding to whether
+   * this string is less than/equal to/greater than the second one
+   * in code point order
+   * @draft
+   */
+  inline int8_t compareCodePointOrder(const UnicodeString& text) const;
+
+  /**
+   * Compare two Unicode strings in code point order.
+   * This is different in UTF-16 from how compare(), operator==, startsWith() etc. work
+   * if supplementary characters are present:
+   *
+   * In UTF-16, supplementary characters (with code points U+10000 and above) are
+   * stored with pairs of surrogate code units. These have values from 0xd800 to 0xdfff,
+   * which means that they compare as less than some other BMP characters like U+feff.
+   * This function compares Unicode strings in code point order.
+   * If either of the UTF-16 strings is malformed (i.e., it contains unpaired surrogates), then the result is not defined.
+   *
+   * @param start The start offset in this string at which the compare operation begins.
+   * @param length The number of code units from this string to compare.
+   * @param srcText Another string to compare this one to.
+   * @return a negative/zero/positive integer corresponding to whether
+   * this string is less than/equal to/greater than the second one
+   * in code point order
+   * @draft
+   */
+  inline int8_t compareCodePointOrder(UTextOffset start,
+                                      int32_t length,
+                                      const UnicodeString& srcText) const;
+
+  /**
+   * Compare two Unicode strings in code point order.
+   * This is different in UTF-16 from how compare(), operator==, startsWith() etc. work
+   * if supplementary characters are present:
+   *
+   * In UTF-16, supplementary characters (with code points U+10000 and above) are
+   * stored with pairs of surrogate code units. These have values from 0xd800 to 0xdfff,
+   * which means that they compare as less than some other BMP characters like U+feff.
+   * This function compares Unicode strings in code point order.
+   * If either of the UTF-16 strings is malformed (i.e., it contains unpaired surrogates), then the result is not defined.
+   *
+   * @param start The start offset in this string at which the compare operation begins.
+   * @param length The number of code units from this string to compare.
+   * @param srcText Another string to compare this one to.
+   * @param srcStart The start offset in that string at which the compare operation begins.
+   * @param srcLength The number of code units from that string to compare.
+   * @return a negative/zero/positive integer corresponding to whether
+   * this string is less than/equal to/greater than the second one
+   * in code point order
+   * @draft
+   */
+   inline int8_t compareCodePointOrder(UTextOffset start,
+                                       int32_t length,
+                                       const UnicodeString& srcText,
+                                       UTextOffset srcStart,
+                                       int32_t srcLength) const;
+
+  /**
+   * Compare two Unicode strings in code point order.
+   * This is different in UTF-16 from how compare(), operator==, startsWith() etc. work
+   * if supplementary characters are present:
+   *
+   * In UTF-16, supplementary characters (with code points U+10000 and above) are
+   * stored with pairs of surrogate code units. These have values from 0xd800 to 0xdfff,
+   * which means that they compare as less than some other BMP characters like U+feff.
+   * This function compares Unicode strings in code point order.
+   * If either of the UTF-16 strings is malformed (i.e., it contains unpaired surrogates), then the result is not defined.
+   *
+   * @param srcChars A pointer to another string to compare this one to.
+   * @param srcLength The number of code units from that string to compare.
+   * @return a negative/zero/positive integer corresponding to whether
+   * this string is less than/equal to/greater than the second one
+   * in code point order
+   * @draft
+   */
+  inline int8_t compareCodePointOrder(const UChar *srcChars,
+                                      int32_t srcLength) const;
+
+  /**
+   * Compare two Unicode strings in code point order.
+   * This is different in UTF-16 from how compare(), operator==, startsWith() etc. work
+   * if supplementary characters are present:
+   *
+   * In UTF-16, supplementary characters (with code points U+10000 and above) are
+   * stored with pairs of surrogate code units. These have values from 0xd800 to 0xdfff,
+   * which means that they compare as less than some other BMP characters like U+feff.
+   * This function compares Unicode strings in code point order.
+   * If either of the UTF-16 strings is malformed (i.e., it contains unpaired surrogates), then the result is not defined.
+   *
+   * @param start The start offset in this string at which the compare operation begins.
+   * @param length The number of code units from this string to compare.
+   * @param srcChars A pointer to another string to compare this one to.
+   * @return a negative/zero/positive integer corresponding to whether
+   * this string is less than/equal to/greater than the second one
+   * in code point order
+   * @draft
+   */
+  inline int8_t compareCodePointOrder(UTextOffset start,
+                                      int32_t length,
+                                      const UChar *srcChars) const;
+
+  /**
+   * Compare two Unicode strings in code point order.
+   * This is different in UTF-16 from how compare(), operator==, startsWith() etc. work
+   * if supplementary characters are present:
+   *
+   * In UTF-16, supplementary characters (with code points U+10000 and above) are
+   * stored with pairs of surrogate code units. These have values from 0xd800 to 0xdfff,
+   * which means that they compare as less than some other BMP characters like U+feff.
+   * This function compares Unicode strings in code point order.
+   * If either of the UTF-16 strings is malformed (i.e., it contains unpaired surrogates), then the result is not defined.
+   *
+   * @param start The start offset in this string at which the compare operation begins.
+   * @param length The number of code units from this string to compare.
+   * @param srcChars A pointer to another string to compare this one to.
+   * @param srcStart The start offset in that string at which the compare operation begins.
+   * @param srcLength The number of code units from that string to compare.
+   * @return a negative/zero/positive integer corresponding to whether
+   * this string is less than/equal to/greater than the second one
+   * in code point order
+   * @draft
+   */
+  inline int8_t compareCodePointOrder(UTextOffset start,
+                                      int32_t length,
+                                      const UChar *srcChars,
+                                      UTextOffset srcStart,
+                                      int32_t srcLength) const;
+
+  /**
+   * Compare two Unicode strings in code point order.
+   * This is different in UTF-16 from how compare(), operator==, startsWith() etc. work
+   * if supplementary characters are present:
+   *
+   * In UTF-16, supplementary characters (with code points U+10000 and above) are
+   * stored with pairs of surrogate code units. These have values from 0xd800 to 0xdfff,
+   * which means that they compare as less than some other BMP characters like U+feff.
+   * This function compares Unicode strings in code point order.
+   * If either of the UTF-16 strings is malformed (i.e., it contains unpaired surrogates), then the result is not defined.
+   *
+   * @param start The start offset in this string at which the compare operation begins.
+   * @param limit The offset after the last code unit from this string to compare.
+   * @param srcText Another string to compare this one to.
+   * @param srcStart The start offset in that string at which the compare operation begins.
+   * @param srcLimit The offset after the last code unit from that string to compare.
+   * @return a negative/zero/positive integer corresponding to whether
+   * this string is less than/equal to/greater than the second one
+   * in code point order
+   * @draft
+   */
+  inline int8_t compareCodePointOrderBetween(UTextOffset start,
+                                             UTextOffset limit,
+                                             const UnicodeString& srcText,
+                                             UTextOffset srcStart,
+                                             UTextOffset srcLimit) const;
+
+  /**
    * Determine if this starts with the characters in <TT>text</TT>
    * @param text The text to match.
    * @return TRUE if this starts with the characters in <TT>text</TT>, 
@@ -1931,6 +2098,19 @@ private:
            UTextOffset srcStart,
            int32_t srcLength) const;
 
+  inline int8_t
+  doCompareCodePointOrder(UTextOffset start,
+                          int32_t length,
+                          const UnicodeString& srcText,
+                          UTextOffset srcStart,
+                          int32_t srcLength) const;
+
+  int8_t doCompareCodePointOrder(UTextOffset start,
+                                 int32_t length,
+                                 const UChar *srcChars,
+                                 UTextOffset srcStart,
+                                 int32_t srcLength) const;
+
   UTextOffset doIndexOf(UChar c,
             UTextOffset start,
             int32_t length) const;
@@ -2240,6 +2420,69 @@ UnicodeString::doCompare(UTextOffset start,
     srcChars=0;
   }
   return doCompare(start, length, srcChars, srcStart, srcLength);
+}
+
+inline int8_t 
+UnicodeString::compareCodePointOrder(const UnicodeString& text) const
+{ return doCompareCodePointOrder(0, fLength, text, 0, text.fLength); }
+
+inline int8_t 
+UnicodeString::compareCodePointOrder(UTextOffset start,
+                                     int32_t length,
+                                     const UnicodeString& srcText) const
+{ return doCompareCodePointOrder(start, length, srcText, 0, srcText.fLength); }
+
+inline int8_t 
+UnicodeString::compareCodePointOrder(const UChar *srcChars,
+                                     int32_t srcLength) const
+{ return doCompareCodePointOrder(0, fLength, srcChars, 0, srcLength); }
+
+inline int8_t 
+UnicodeString::compareCodePointOrder(UTextOffset start,
+                                     int32_t length,
+                                     const UnicodeString& srcText,
+                                     UTextOffset srcStart,
+                                     int32_t srcLength) const
+{ return doCompareCodePointOrder(start, length, srcText, srcStart, srcLength); }
+
+inline int8_t
+UnicodeString::compareCodePointOrder(UTextOffset start,
+                                     int32_t length,
+                                     const UChar *srcChars) const
+{ return doCompareCodePointOrder(start, length, srcChars, 0, length); }
+
+inline int8_t 
+UnicodeString::compareCodePointOrder(UTextOffset start,
+                                     int32_t length,
+                                     const UChar *srcChars,
+                                     UTextOffset srcStart,
+                                     int32_t srcLength) const
+{ return doCompareCodePointOrder(start, length, srcChars, srcStart, srcLength); }
+
+inline int8_t
+UnicodeString::compareCodePointOrderBetween(UTextOffset start,
+                                            UTextOffset limit,
+                                            const UnicodeString& srcText,
+                                            UTextOffset srcStart,
+                                            UTextOffset srcLimit) const
+{ return doCompareCodePointOrder(start, limit - start, 
+           srcText, srcStart, srcLimit - srcStart); }
+
+inline int8_t
+UnicodeString::doCompareCodePointOrder(UTextOffset start,
+                                       int32_t length,
+                                       const UnicodeString& srcText,
+                                       UTextOffset srcStart,
+                                       int32_t srcLength) const
+{
+  const UChar *srcChars;
+  if(!srcText.isBogus()) {
+    srcText.pinIndices(srcStart, srcLength);
+    srcChars=srcText.getArrayStart();
+  } else {
+    srcChars=0;
+  }
+  return doCompareCodePointOrder(start, length, srcChars, srcStart, srcLength);
 }
 
 inline UTextOffset 
