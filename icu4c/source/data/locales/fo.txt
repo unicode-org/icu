@@ -1,75 +1,73 @@
-﻿// *******************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2001, International Business Machines
+// *   Copyright (C) 1997-2002, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
-// *******************************************************************************
+// ***************************************************************************
 
 fo {
-    Version { "x0.0" }
+    Version { "1.0" }
     DayAbbreviations { 
-            "sun",
-            "mán",
-            "týs",
-            "mik",
-            "hós",
-            "frí",
-            "ley",
+        "sun",
+        "mán",
+        "týs",
+        "mik",
+        "hós",
+        "frí",
+        "ley",
     }
     DayNames { 
-            "sunnudagur",
-            "mánadagur",
-            "týsdagur",
-            "mikudagur",
-            "hósdagur",
-            "fríggjadagur",
-            "leygardagur",
+        "sunnudagur",
+        "mánadagur",
+        "týsdagur",
+        "mikudagur",
+        "hósdagur",
+        "fríggjadagur",
+        "leygardagur",
     }
     MonthAbbreviations { 
-            "jan",
-            "feb",
-            "mar",
-            "apr",
-            "mai",
-            "jun",
-            "jul",
-            "aug",
-            "sep",
-            "okt",
-            "nov",
-            "des",
-            "",
+        "jan",
+        "feb",
+        "mar",
+        "apr",
+        "mai",
+        "jun",
+        "jul",
+        "aug",
+        "sep",
+        "okt",
+        "nov",
+        "des",
     }
     MonthNames { 
-            "januar",
-            "februar",
-            "mars",
-            "apríl",
-            "mai",
-            "juni",
-            "juli",
-            "august",
-            "september",
-            "oktober",
-            "november",
-            "desember",
-            "",
+        "januar",
+        "februar",
+        "mars",
+        "apríl",
+        "mai",
+        "juni",
+        "juli",
+        "august",
+        "september",
+        "oktober",
+        "november",
+        "desember",
     }
     NumberElements { 
-            ",",
-            ".",
-            ";",
-            "%",
-            "0",
-            "#",
-            "-",
-            "E",
-            "‰",
-            "∞",
-            "�",
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "�",
     }
     LocaleID{ "38" }
-    LocaleScript{ 
-            "Latn",  // ISO 15924 Name 
-    }
+//    LocaleScript{ 
+//        "Latn",  // ISO 15924 Name 
+//    }
 }

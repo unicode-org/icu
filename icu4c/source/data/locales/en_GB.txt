@@ -1,52 +1,55 @@
-// *******************************************************************************
+// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2000, International Business Machines
+// *   Copyright (C) 1997-2002, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
-// *******************************************************************************
+// ***************************************************************************
 
 en_GB {
-    Countries { 
-        US { "United States" }
-        GB { "United Kingdom" }
-        CA { "Canada" }
-        IE { "Ireland" }
-        AU { "Australia" }
-        NZ { "New Zealand" }
-    }
+    Version { "1.0" }
+//    Duplicated in parent
+//    Countries { 
+//        US { "United States" }
+//        GB { "United Kingdom" }
+//        CA { "Canada" }
+//        IE { "Ireland" }
+//        AU { "Australia" }
+//        NZ { "New Zealand" }
+//    }
     CurrencyElements { 
-            "\u00A3",
-            "GBP",
-            ".",
+        "\u00A3",
+        "GBP",
+        ".",
     }
     DateTimeElements { 
-            "2",
-            "1",
+        "2",
+        "1",
     }
     DateTimePatterns { 
-            "HH:mm:ss 'o''clock' z",
-            "HH:mm:ss z",
-            "HH:mm:ss",
-            "HH:mm",
-            "dd MMMM yyyy",
-            "dd MMMM yyyy",
-            "dd-MMM-yy",
-            "dd/MM/yy",
-            "{1} {0}",
+        "HH:mm:ss 'o''clock' z",
+        "HH:mm:ss z",
+        "HH:mm:ss",
+        "HH:mm",
+        "dd MMMM yyyy",
+        "dd MMMM yyyy",
+        "dd-MMM-yy",
+        "dd/MM/yy",
+        "{1} {0}",
     }
-    Languages { 
-        en { "English" }
-    }
+//    Duplicated in parent
+//    Languages { 
+//        en { "English" }
+//    }
     LocaleID { "0809" }
-    LocaleString { "en_GB" }
-    ShortCountry { "GBR" }
+//    LocaleString { "en_GB" }
+//    ShortCountry { "GBR" }
     zoneStrings { 
         {
-                "Europe/London",
-                "Greenwich Mean Time",
-                "GMT",
-                "British Summer Time",
-                "BST",
+            "Europe/London",
+            "Greenwich Mean Time",
+            "GMT",
+            "British Summer Time",
+            "BST",
         }
     }
 
@@ -75,44 +78,44 @@ en_GB {
         // someone out there confirm this?
 
     SpelloutRules {
-            "%simplified:\n"
-            "    -x: minus >>;\n"
-            "    x.x: << point >>;\n"
-            "    zero; one; two; three; four; five; six; seven; eight; nine;\n"
-            "    ten; eleven; twelve; thirteen; fourteen; fifteen; sixteen;\n"
-            "        seventeen; eighteen; nineteen;\n"
-            "    20: twenty[->>];\n"
-            "    30: thirty[->>];\n"
-            "    40: forty[->>];\n"
-            "    50: fifty[->>];\n"
-            "    60: sixty[->>];\n"
-            "    70: seventy[->>];\n"
-            "    80: eighty[->>];\n"
-            "    90: ninety[->>];\n"
-            "    100: << hundred[ >>];\n"
-            "    1000: << thousand[ >>];\n"
-            "    1,000,000: << million[ >>];\n"
-            "    1,000,000,000,000: << billion[ >>];\n"
-            "    1,000,000,000,000,000: =#,##0=;\n"
-            "%default:\n"
-            "    -x: minus >>;\n"
-            "    x.x: << point >>;\n"
-            "    =%simplified=;\n"
-            "    100: << hundred[ >%%and>];\n"
-            "    1000: << thousand[ >%%and>];\n"
-            "    100,000>>: << thousand[>%%commas>];\n"
-            "    1,000,000: << million[>%%commas>];\n"
-            "    1,000,000,000,000: << billion[>%%commas>];\n"
-            "    1,000,000,000,000,000: =#,##0=;\n"
-            "%%and:\n"
-            "    and =%default=;\n"
-            "    100: =%default=;\n"
-            "%%commas:\n"
-            "    ' and =%default=;\n"
-            "    100: , =%default=;\n"
-            "    1000: , <%default< thousand, >%default>;\n"
-            "    1,000,000: , =%default=;"
-            "%%lenient-parse:\n"
-            "    & ' ' , ',' ;\n" 
+        "%simplified:\n"
+        "    -x: minus >>;\n"
+        "    x.x: << point >>;\n"
+        "    zero; one; two; three; four; five; six; seven; eight; nine;\n"
+        "    ten; eleven; twelve; thirteen; fourteen; fifteen; sixteen;\n"
+        "        seventeen; eighteen; nineteen;\n"
+        "    20: twenty[->>];\n"
+        "    30: thirty[->>];\n"
+        "    40: forty[->>];\n"
+        "    50: fifty[->>];\n"
+        "    60: sixty[->>];\n"
+        "    70: seventy[->>];\n"
+        "    80: eighty[->>];\n"
+        "    90: ninety[->>];\n"
+        "    100: << hundred[ >>];\n"
+        "    1000: << thousand[ >>];\n"
+        "    1,000,000: << million[ >>];\n"
+        "    1,000,000,000,000: << billion[ >>];\n"
+        "    1,000,000,000,000,000: =#,##0=;\n"
+        "%default:\n"
+        "    -x: minus >>;\n"
+        "    x.x: << point >>;\n"
+        "    =%simplified=;\n"
+        "    100: << hundred[ >%%and>];\n"
+        "    1000: << thousand[ >%%and>];\n"
+        "    100,000>>: << thousand[>%%commas>];\n"
+        "    1,000,000: << million[>%%commas>];\n"
+        "    1,000,000,000,000: << billion[>%%commas>];\n"
+        "    1,000,000,000,000,000: =#,##0=;\n"
+        "%%and:\n"
+        "    and =%default=;\n"
+        "    100: =%default=;\n"
+        "%%commas:\n"
+        "    ' and =%default=;\n"
+        "    100: , =%default=;\n"
+        "    1000: , <%default< thousand, >%default>;\n"
+        "    1,000,000: , =%default=;"
+        "%%lenient-parse:\n"
+        "    & ' ' , ',' ;\n" 
     }
 }

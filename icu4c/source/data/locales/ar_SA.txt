@@ -1,17 +1,18 @@
-//*******************************************************************************
-//*
-//*   Copyright (C) 1997-2000, International Business Machines
-//*   Corporation and others.  All Rights Reserved.
-//*
-//*******************************************************************************
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
 
 ar_SA {
+    Version{"1.0"}
     CurrencyElements { 
-            "\u0631.\u0633.\u200F",
-            "SAR",
-            ".",
+        "\u0631.\u0633.\u200F",
+        "SAR",
+        ".",
     }
-    LocaleString { "ar_SA" }
-    ShortCountry { "SAU" }
+//    LocaleString { "ar_SA" }
+//    ShortCountry { "SAU" }
     LocaleID { "0401" }
 }

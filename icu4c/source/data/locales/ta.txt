@@ -1,11 +1,14 @@
-// *   Copyright (C) 1997-2001, International Business Machines
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
 
 ta {
-   LocaleID { "49" }
-    Version { "1.1" }
+    Version { "1.2" }
 
-    ShortLanguage { tam }
+//    ShortLanguage { tam }
     Languages {
         root { "\u0ba4\u0bae\u0bbf\u0bb4\u0bcd" }
 
@@ -59,13 +62,10 @@ ta {
         id { "\u0b87\u0ba8\u0bcd\u0ba4\u0bcb\u0ba9\u0bc7\u0bb7\u0bbf\u0baf\u0ba9\u0bcd" }
         ie { "\u0b87\u0ba9\u0bcd\u0b9f\u0bb0\u0bcd\u0bb2\u0bbf\u0b99\u0bcd\u0b95\u0bc1\u0bb5\u0bbe" }
         ik { "\u0b87\u0ba9\u0bc1\u0baa\u0bc6\u0b95\u0bcd" }
-        //in { "\u0b87\u0ba8\u0bcd\u0ba4\u0bcb\u0ba9\u0bc7\u0bb7\u0bbf\u0baf\u0ba9\u0bcd" }  // Use "id" instead
         is { "\u0b90\u0bb8\u0bcd\u0bb2\u0bc6\u0ba9\u0bcd\u0b9f\u0bbf\u0b95\u0bcd" }
         it { "\u0b87\u0ba4\u0bcd\u0ba4\u0bbe\u0bb2\u0bbf\u0baf\u0ba9\u0bcd" }
         iu { "\u0b87\u0ba9\u0bc1\u0b95\u0bbf\u0b9f\u0b9f\u0bcd" }
-        iw { "\u0bb9\u0bc1\u0baa\u0bcd\u0bb0\u0bc1" }
         ja { "\u0b9c\u0bbe\u0baa\u0ba9\u0bc0\u0bb8\u0bcd" }
-        //ji { "\u0b88\u0ba4\u0bcd\u0ba4\u0bbf\u0bb7" }  // Use "yi" instead
         jw { "\u0b9c\u0bbe\u0bb5\u0bbe\u0ba9\u0bc0\u0bb8\u0bcd" }
         ka { "\u0b9c\u0bbe\u0bb0\u0bcd\u0b9c\u0bbf\u0baf\u0ba9\u0bcd" }
         kk { "\u0b95\u0b9a\u0bbe\u0b95\u0bcd" }
@@ -155,100 +155,102 @@ ta {
     }
 
     Countries {
-	IN { "\u0b87\u0ba8\u0bcd\u0ba4\u0bbf\u0baf\u0bbe" }
+        IN { "\u0b87\u0ba8\u0bcd\u0ba4\u0bbf\u0baf\u0bbe" }
     }
     MonthNames {
-            "\u0b9c\u0ba9\u0bb5\u0bb0\u0bbf",
-            "\u0baa\u0bc6\u0baa\u0bcd\u0bb0\u0bb5\u0bb0\u0bbf",
-            "\u0bae\u0bbe\u0bb0\u0bcd\u0b9a\u0bcd",
-            "\u0b8f\u0baa\u0bcd\u0bb0\u0bb2\u0bcd",
-            "\u0bae\u0bc7",
-            "\u0b9c\u0bc2\u0ba9\u0bcd",
-            "\u0b9c\u0bc2\u0bb2\u0bc8",
-            "\u0b86\u0b95\u0bb8\u0bcd\u0b9f\u0bcd",
-            "\u0b9a\u0bc6\u0baa\u0bcd\u0b9f\u0bae\u0bcd\u0baa\u0bb0\u0bcd",
-            "\u0b85\u0b95\u0bcd\u0b9f\u0bcb\u0baa\u0bb0\u0bcd",
-            "\u0ba8\u0bb5\u0bae\u0bcd\u0baa\u0bb0\u0bcd",
-            "\u0b9f\u0bbf\u0b9a\u0bae\u0bcd\u0baa\u0bb0\u0bcd",
-            ""
+        "\u0b9c\u0ba9\u0bb5\u0bb0\u0bbf",
+        "\u0baa\u0bc6\u0baa\u0bcd\u0bb0\u0bb5\u0bb0\u0bbf",
+        "\u0bae\u0bbe\u0bb0\u0bcd\u0b9a\u0bcd",
+        "\u0b8f\u0baa\u0bcd\u0bb0\u0bb2\u0bcd",
+        "\u0bae\u0bc7",
+        "\u0b9c\u0bc2\u0ba9\u0bcd",
+        "\u0b9c\u0bc2\u0bb2\u0bc8",
+        "\u0b86\u0b95\u0bb8\u0bcd\u0b9f\u0bcd",
+        "\u0b9a\u0bc6\u0baa\u0bcd\u0b9f\u0bae\u0bcd\u0baa\u0bb0\u0bcd",
+        "\u0b85\u0b95\u0bcd\u0b9f\u0bcb\u0baa\u0bb0\u0bcd",
+        "\u0ba8\u0bb5\u0bae\u0bcd\u0baa\u0bb0\u0bcd",
+        "\u0b9f\u0bbf\u0b9a\u0bae\u0bcd\u0baa\u0bb0\u0bcd",
     }
     MonthAbbreviations {
-            "\u0b9c\u0ba9.",
-            "\u0baa\u0bc6\u0baa\u0bcd.",
-            "\u0bae\u0bbe\u0bb0\u0bcd.",
-            "\u0b8f\u0baa\u0bcd.",
-            "\u0bae\u0bc7",
-            "\u0b9c\u0bc2\u0ba9\u0bcd",
-            "\u0b9c\u0bc2\u0bb2\u0bc8",
-            "\u0b86\u0b95.",
-            "\u0b9a\u0bc6\u0baa\u0bcd.",
-            "\u0b85\u0b95\u0bcd.",
-            "\u0ba8\u0bb5.",
-            "\u0b9f\u0bbf\u0b9a.",
-            ""
+        "\u0b9c\u0ba9.",
+        "\u0baa\u0bc6\u0baa\u0bcd.",
+        "\u0bae\u0bbe\u0bb0\u0bcd.",
+        "\u0b8f\u0baa\u0bcd.",
+        "\u0bae\u0bc7",
+        "\u0b9c\u0bc2\u0ba9\u0bcd",
+        "\u0b9c\u0bc2\u0bb2\u0bc8",
+        "\u0b86\u0b95.",
+        "\u0b9a\u0bc6\u0baa\u0bcd.",
+        "\u0b85\u0b95\u0bcd.",
+        "\u0ba8\u0bb5.",
+        "\u0b9f\u0bbf\u0b9a.",
     }
     DayNames {
-            "\u0b9e\u0bbe\u0baf\u0bbf\u0bb1\u0bc1",
-            "\u0ba4\u0bbf\u0b99\u0bcd\u0b95\u0bb3\u0bcd",
-            "\u0b9a\u0bc6\u0bb5\u0bcd\u0bb5\u0bbe\u0baf\u0bcd",
-            "\u0baa\u0bc1\u0ba4\u0ba9\u0bcd",
-            "\u0bb5\u0bbf\u0baf\u0bbe\u0bb4\u0ba9\u0bcd",
-            "\u0bb5\u0bc6\u0bb3\u0bcd\u0bb3\u0bbf",
-            "\u0b9a\u0ba9\u0bbf",
-            ""
+        "\u0b9e\u0bbe\u0baf\u0bbf\u0bb1\u0bc1",
+        "\u0ba4\u0bbf\u0b99\u0bcd\u0b95\u0bb3\u0bcd",
+        "\u0b9a\u0bc6\u0bb5\u0bcd\u0bb5\u0bbe\u0baf\u0bcd",
+        "\u0baa\u0bc1\u0ba4\u0ba9\u0bcd",
+        "\u0bb5\u0bbf\u0baf\u0bbe\u0bb4\u0ba9\u0bcd",
+        "\u0bb5\u0bc6\u0bb3\u0bcd\u0bb3\u0bbf",
+        "\u0b9a\u0ba9\u0bbf",
     }
     DayAbbreviations
     {
-            "\u0b9e\u0bbe",
-            "\u0ba4\u0bbf",
-            "\u0b9a\u0bc6",
-            "\u0baa\u0bc1",
-            "\u0bb5\u0bbf",
-            "\u0bb5\u0bc6",
-            "\u0b9a",
-            ""
+        "\u0b9e\u0bbe",
+        "\u0ba4\u0bbf",
+        "\u0b9a\u0bc6",
+        "\u0baa\u0bc1",
+        "\u0bb5\u0bbf",
+        "\u0bb5\u0bc6",
+        "\u0b9a",
     }
 
-    AmPmMarkers { "\u0b95\u0bbe\u0bb2\u0bc8",
-                  "\u0bae\u0bbe\u0bb2\u0bc8" }
-
-    Eras {  "\u0b95\u0bbf\u0bae\u0bc1",
-            "\u0b95\u0bbf\u0baa\u0bbf", }
-
-    NumberElements {
-        ".",
-        ",",
-        ";",
-        "%",
-        "0",
-        "#",
-        "-",
-        E,
-        "\u2030",
-        "\u221e",
-        "\ufffd"
+    AmPmMarkers {
+        "\u0b95\u0bbe\u0bb2\u0bc8",
+        "\u0bae\u0bbe\u0bb2\u0bc8"
     }
+
+    Eras {
+        "\u0b95\u0bbf\u0bae\u0bc1",
+        "\u0b95\u0bbf\u0baa\u0bbf",
+    }
+
+//    NumberElements {
+//        ".",
+//        ",",
+//        ";",
+//        "%",
+//        "0",
+//        "#",
+//        "-",
+//        "E",
+//        "\u2030",
+//        "\u221e",
+//        "\ufffd"
+//    }
 
     NumberPatterns {
         "#,##,##0.###;-#,##,##0.###",
         "\u00A4 #,##,##0.00;-\u00A4 #,##,##0.00",
-        "#,##,##0%"
+        "#,##,##0%",
+        "#E0",
     }
 
     zoneStrings {
-      {
-        "Asia/Calcutta",
-          "\u0b87\u0ba8\u0bcd\u0ba4\u0bbf\u0baf \u0ba8\u0bc7\u0bb0\u0baa\u0bcd\u0baa\u0b9f\u0bbf",
-          "IST",
-          "\u0b87\u0ba8\u0bcd\u0ba4\u0bbf\u0baf \u0ba8\u0bc7\u0bb0\u0baa\u0bcd\u0baa\u0b9f\u0bbf",
-          "IST"
-      }
+        {
+            "Asia/Calcutta",
+            "\u0b87\u0ba8\u0bcd\u0ba4\u0bbf\u0baf \u0ba8\u0bc7\u0bb0\u0baa\u0bcd\u0baa\u0b9f\u0bbf",
+            "IST",
+            "\u0b87\u0ba8\u0bcd\u0ba4\u0bbf\u0baf \u0ba8\u0bc7\u0bb0\u0baa\u0bcd\u0baa\u0b9f\u0bbf",
+            "IST"
+        }
     }
 
     CollationElements {
         Version { "1.0" }
         Sequence { "[normalization on]" }
     }
+    LocaleID { "49" }
     LocaleScript:array {
         "Taml"   // ISO 15924 Name 
     }

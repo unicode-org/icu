@@ -1,91 +1,89 @@
-// *******************************************************************************
+// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2001, International Business Machines
+// *   Copyright (C) 1997-2002, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
-// *******************************************************************************
+// ***************************************************************************
 
-af{
-    Version { "x0.1" }
+af {
+    Version { "1.0" }
 
     AmPmMarkers { 
-            "VM",
-            "NM",
+        "VM",
+        "NM",
     }
     DayAbbreviations { 
-            "So",
-            "Ma",
-            "Di",
-            "Wo",
-            "Do",
-            "Vr",
-            "Sa",
+        "So",
+        "Ma",
+        "Di",
+        "Wo",
+        "Do",
+        "Vr",
+        "Sa",
     }
     DayNames { 
-            "Sondag",
-            "Maandag",
-            "Dinsdag",
-            "Woensdag",
-            "Donderdag",
-            "Vrydag",
-            "Saterdag",
+        "Sondag",
+        "Maandag",
+        "Dinsdag",
+        "Woensdag",
+        "Donderdag",
+        "Vrydag",
+        "Saterdag",
     }
     MonthAbbreviations { 
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "Mei",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-            "Okt",
-            "Nov",
-            "Des",
-            "",
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "Mei",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Okt",
+        "Nov",
+        "Des",
     }
     MonthNames { 
-            "Januarie",
-            "Februarie",
-            "Maart",
-            "April",
-            "Mei",
-            "Junie",
-            "Julie",
-            "Augustus",
-            "September",
-            "Oktober",
-            "November",
-            "Desember",
-            "",
+        "Januarie",
+        "Februarie",
+        "Maart",
+        "April",
+        "Mei",
+        "Junie",
+        "Julie",
+        "Augustus",
+        "September",
+        "Oktober",
+        "November",
+        "Desember",
     }
 
     NumberElements { 
-            ",",
-            ".",
-            ";",
-            "%",
-            "0",
-            "#",
-            "-",
-            "E",
-            "\u2030",
-            "\u221e",
-            "\ufffd",
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221e",
+        "\ufffd",
     }
     LocaleID {"36"}
-    LocaleScript{ 
-                "Latn",  // ISO 15924 Name 
-    }
-    LocaleString{ "af" }
+//    LocaleScript{ 
+//                "Latn",  // ISO 15924 Name 
+//    }
+//    LocaleString{ "af" }
 
-            // /**************** Info Below is needed ****************/
-            // CollationElements{}
-            // Countries{}
-            // Eras{}
-            // Languages{}
-            // ShortLanguage { }
-            // localPatternChars{}
-            //
+    // /**************** Info Below is needed ****************/
+    // CollationElements{}
+    // Countries{}
+    // Eras{}
+    // Languages{}
+    // ShortLanguage { }
+    // localPatternChars{}
+    //
 }

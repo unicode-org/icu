@@ -1,18 +1,23 @@
-// *   Copyright (C) 1997-2001, International Business Machines
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
 // Tamil locale.  Based on Hindi locale
 
 ta_IN {
-    Version { "1.2" }
+    Version { "1.3" }
     LocaleID { "449" }
-    ShortCountry { IND }
+//    ShortCountry { IND }
 
     CurrencyElements {
         "\u0bb0\u0bc2",
         "INR",  // Rs. ? No.
         "."
     }
-    LocaleString { "ta_IN" }
+//    LocaleString { "ta_IN" }
     DateTimePatterns {
         "hh:mm:ss a z",
         "hh:mm:ss a z",
@@ -24,9 +29,9 @@ ta_IN {
         "d-M-yy",
         "{1} {0}"
     }
-    DateTimeElements {
-        "1",
-        "1"
-    }
+//    DateTimeElements {
+//        "1",
+//        "1"
+//    }
 
 }
