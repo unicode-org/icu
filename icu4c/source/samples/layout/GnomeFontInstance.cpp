@@ -46,7 +46,7 @@ void GnomeSurface::drawGlyphs(const LEFontInstance *font, const LEGlyphID *glyph
 
     for (le_int32 g = 0; g < count; g += 1) {
         dx[g] = (le_int32) (positions[g * 2 + 2] - positions[g * 2]);
-        dy[g] = (le_int32) positions[g * 2 + 1];
+        dy[g] = (le_int32) - positions[g * 2 + 1];
     }
 
     raster = gFont->rasterizeGlyphs(glyphs, count, dx, dy, xOffset, yOffset);
