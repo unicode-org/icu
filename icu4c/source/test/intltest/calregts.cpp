@@ -535,10 +535,10 @@ void CalendarRegressionTest::dowTest(UBool lenient)
       return;
     }
 
-    if(cal->getActualMinimum(UCAL_DAY_OF_WEEK) != min) {
+    if(cal->getActualMinimum(UCAL_DAY_OF_WEEK, status) != min) {
         errln("FAIL: actual minimum differs from minimum");
     }
-    if(cal->getActualMinimum(Calendar::DAY_OF_WEEK) != min) {
+    if(cal->getActualMinimum(Calendar::DAY_OF_WEEK, status) != min) {
         errln("FAIL: actual minimum (Calendar::DAY_OF_WEEK) differs from minimum");
     }
     if(((Calendar*)cal)->getActualMinimum(UCAL_DAY_OF_WEEK, status) != min) {
