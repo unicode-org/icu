@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/RemoveTransliterator.java,v $ 
- * $Date: 2001/09/28 20:27:02 $ 
- * $Revision: 1.3 $
+ * $Date: 2001/11/17 20:45:35 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -17,7 +17,7 @@ import java.util.*;
  * A transliterator that removes characters.  This is useful in conjunction
  * with a filter.
  */
-public class RemoveTransliterator extends Transliterator {
+class RemoveTransliterator extends Transliterator {
 
     /**
      * Package accessible ID for this transliterator.

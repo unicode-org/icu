@@ -11,11 +11,11 @@
 package com.ibm.text;
 import java.util.*;
 
-/*
+/**
  * @author Alan Liu
- * @version $RCSfile: NormalizationTransliterator.java,v $ $Revision: 1.7 $ $Date: 2001/11/15 22:12:04 $
+ * @version $RCSfile: NormalizationTransliterator.java,v $ $Revision: 1.8 $ $Date: 2001/11/17 20:45:35 $
  */
-public class NormalizationTransliterator extends Transliterator {
+class NormalizationTransliterator extends Transliterator {
 
     /**
      * The normalization mode of this transliterator.

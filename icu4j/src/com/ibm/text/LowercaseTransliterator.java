@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/LowercaseTransliterator.java,v $ 
- * $Date: 2001/10/17 17:43:03 $ 
- * $Revision: 1.3 $
+ * $Date: 2001/11/17 20:45:35 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -17,7 +17,7 @@ import java.util.*;
  * A transliterator that performs locale-sensitive toLower()
  * case mapping.
  */
-public class LowercaseTransliterator extends TransformTransliterator {
+class LowercaseTransliterator extends TransformTransliterator {
 
     /**
      * Package accessible ID.

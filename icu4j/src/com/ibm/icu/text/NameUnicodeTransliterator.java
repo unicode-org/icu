@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NameUnicodeTransliterator.java,v $ 
- * $Date: 2001/10/17 17:43:03 $ 
- * $Revision: 1.3 $
+ * $Date: 2001/11/17 20:45:35 $ 
+ * $Revision: 1.4 $
  */
 package com.ibm.text;
 import java.util.*;
@@ -13,7 +13,7 @@ import java.util.*;
  * A transliterator that performs name to character mapping.
  * @author Alan Liu
  */
-public class NameUnicodeTransliterator extends Transliterator {
+class NameUnicodeTransliterator extends Transliterator {
 
     char openDelimiter;
     char closeDelimiter;

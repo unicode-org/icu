@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/TransformTransliterator.java,v $ 
- * $Date: 2001/09/28 20:27:02 $ 
- * $Revision: 1.2 $
+ * $Date: 2001/11/17 20:45:35 $ 
+ * $Revision: 1.3 $
  */
 package com.ibm.text;
 import java.util.*;
@@ -17,7 +17,7 @@ import java.util.*;
  * methods.
  * @author Alan Liu
  */
-public abstract class TransformTransliterator extends Transliterator {
+abstract class TransformTransliterator extends Transliterator {
 
     /**
      * Constructs a transliterator.  For use by subclasses.
