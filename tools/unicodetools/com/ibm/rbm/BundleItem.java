@@ -5,8 +5,8 @@
  *****************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/rbm/BundleItem.java,v $ 
- * $Date: 2004/07/11 02:00:30 $ 
- * $Revision: 1.3 $
+ * $Date: 2004/07/14 18:29:00 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************
  */
@@ -235,7 +235,7 @@ public class BundleItem {
     
     /**
      * Sets the last modififcation date of the item given a date formatted string.
-     * The format can be either 'YYYY-MM-DD' (e.g. 20002-02-05) or
+     * The format can be either 'YYYY-MM-DD' (e.g. 2002-02-05) or
      * the format can be 'YYYMMDDTHHMMSSZ' (e.g. 20020205T103000Z)
      */
     
