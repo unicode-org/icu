@@ -1578,7 +1578,7 @@ public final class RuleBasedCollator extends Collator
 //            IMPLICIT_BASE_4BYTE_ = ((IMPLICIT_BASE_BYTE_
 //                                     + IMPLICIT_3BYTE_COUNT_) << 24) + 0x030303;
             UCA_.init();
-            ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_COLLATION_BASE_NAME, ULocale.ENGLISH);
+            ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_COLLATION_BASE_NAME, ULocale.ENGLISH);
             UCA_.m_rules_ = (String)rb.getObject("%%UCARULES");
         }
         catch (Exception e)
@@ -1612,7 +1612,7 @@ public final class RuleBasedCollator extends Collator
      */
     RuleBasedCollator(ULocale locale)
     {
-        ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_COLLATION_BASE_NAME, locale);
+        ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_COLLATION_BASE_NAME, locale);
         initUtility();
         if (rb != null) {
             try {

@@ -1216,7 +1216,7 @@ public abstract class Transliterator {
         //If we ever integrate this with the Sun JDK, the resource bundle
         // root will change to sun.text.resources.LocaleElements
 
-        ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME,inLocale);
+        ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,inLocale);
 
         // Normalize the ID
         String stv[] = TransliteratorIDParser.IDtoSTV(id);

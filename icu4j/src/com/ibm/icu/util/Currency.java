@@ -106,7 +106,7 @@ public class Currency extends MeasureUnit implements Serializable {
         if (variant.equals("PREEURO") || variant.equals("EURO")) {
             country = country + '_' + variant;
         }
-        ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME,"root");
+        ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,"root");
         ICUResourceBundle cm = bundle.get("CurrencyMap");
 
         // Do a linear search
@@ -174,7 +174,7 @@ public class Currency extends MeasureUnit implements Serializable {
      */
     public static Locale[] getAvailableLocales() {
         if (shim == null) {
-            return ICUResourceBundle.getAvailableLocales(UResourceBundle.ICU_BASE_NAME);
+            return ICUResourceBundle.getAvailableLocales(ICUResourceBundle.ICU_BASE_NAME);
         } else {
             return shim.getAvailableLocales();
         }
@@ -262,7 +262,7 @@ public class Currency extends MeasureUnit implements Serializable {
 
         // Multi-level resource inheritance fallback loop
         while (locale != null) {
-            ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME,locale);
+            ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,locale);
             // We can't cast this to String[][]; the cast has to happen later
             try {
                 ICUResourceBundle currencies = rb.get("Currencies");
@@ -369,7 +369,7 @@ public class Currency extends MeasureUnit implements Serializable {
         // Multi-level resource inheritance fallback loop
         
         while (locale != null) {
-            ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME,locale);
+            ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,locale);
             // We can't cast this to String[][]; the cast has to happen later
            
             try {
@@ -513,7 +513,7 @@ public class Currency extends MeasureUnit implements Serializable {
             // Get CurrencyMeta resource out of root locale file.  [This may
             // move out of the root locale file later; if it does, update this
             // code.]
-            ICUResourceBundle root = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME,"root");
+            ICUResourceBundle root = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,"root");
             ICUResourceBundle currencyMeta = root.get("CurrencyMeta");
 
             //Integer[] i = null;

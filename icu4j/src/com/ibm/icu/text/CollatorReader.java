@@ -14,9 +14,9 @@ import java.io.IOException;
 
 import com.ibm.icu.impl.ICUBinary;
 import com.ibm.icu.impl.ICUData;
+import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.IntTrie;
 import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.VersionInfo;
 import com.ibm.icu.text.CollationParsedRuleBuilder.InverseUCA;
 import com.ibm.icu.text.RuleBasedCollator.UCAConstants;
@@ -38,7 +38,7 @@ import com.ibm.icu.text.RuleBasedCollator.UCAConstants;
 final class CollatorReader
 {          
 	static char[] read(RuleBasedCollator rbc, UCAConstants ucac) throws IOException {
-		InputStream i = ICUData.getRequiredStream(UResourceBundle.ICU_BUNDLE+"/ucadata.icu");
+		InputStream i = ICUData.getRequiredStream(ICUResourceBundle.ICU_BUNDLE+"/ucadata.icu");
 		BufferedInputStream b = new BufferedInputStream(i, 90000);
 		CollatorReader reader = new CollatorReader(b);
 		char[] result = reader.readImp(rbc, ucac);
@@ -64,7 +64,7 @@ final class CollatorReader
 	
 	static InverseUCA getInverseUCA() throws IOException {
 		InverseUCA result = null;
-		InputStream i = ICUData.getRequiredStream(UResourceBundle.ICU_BUNDLE+"/invuca.icu");
+		InputStream i = ICUData.getRequiredStream(ICUResourceBundle.ICU_BUNDLE+"/invuca.icu");
 //		try	{
 //			String invdat = "/com/ibm/icu/impl/data/invuca.icu";
 //			InputStream i = CollationParsedRuleBuilder.class.getResourceAsStream(invdat);

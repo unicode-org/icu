@@ -11,6 +11,7 @@ import java.util.Enumeration;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
 /**
@@ -33,8 +34,6 @@ public class ResourceBundleWrapper extends UResourceBundle {
                         localeID);  
             }
         }
-        this.localeID = localeID;
-        this.baseName = baseName;
     }
     protected Object handleGetObject(String key){
        return bundle.getObject(key);   
@@ -42,4 +41,21 @@ public class ResourceBundleWrapper extends UResourceBundle {
     public Enumeration getKeys(){
         return bundle.getKeys();   
     }
+    
+    protected String getLocaleID(){
+        return bundle.getLocale().toString();   
+    }
+ 
+    protected String getBaseName(){
+        return bundle.getClass().getName().replace('.','/');   
+    }
+    
+    public ULocale getULocale(){
+        return new ULocale(bundle.getLocale());   
+    }
+    
+    public UResourceBundle getParent(){
+        return (UResourceBundle)parent;   
+    }
+
 }

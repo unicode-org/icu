@@ -696,7 +696,7 @@ public abstract class DateFormat extends UFormat {
      */
     public static Locale[] getAvailableLocales()
     {
-        return ICUResourceBundle.getAvailableLocales(UResourceBundle.ICU_BASE_NAME);
+        return ICUResourceBundle.getAvailableLocales(ICUResourceBundle.ICU_BASE_NAME);
     }
 
     /**

@@ -41,7 +41,7 @@ public final class LocaleData {
      * @draft ICU 3.0
      */
     public static UnicodeSet getExemplarSet(ULocale locale, int options) {
-        ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME, locale);
+        ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
         String pattern = bundle.getString(EXEMPLAR_CHARS);
         return new UnicodeSet(pattern, UnicodeSet.IGNORE_SPACE | options);
     }
@@ -81,7 +81,7 @@ public final class LocaleData {
      * @draft ICU 3.0
      */
     public static final MeasurementSystem getMeasurementSystem(ULocale locale){
-        ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME, locale);
+        ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
         ICUResourceBundle sysBundle = bundle.get(MEASUREMENT_SYSTEM);
         
         int system = sysBundle.getInt();
@@ -135,7 +135,7 @@ public final class LocaleData {
      * @draft ICU 3.0
      */
     public static final PaperSize getPaperSize(ULocale locale){
-        ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME, locale);
+        ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
         ICUResourceBundle obj = bundle.get(PAPER_SIZE);
         int[] size = obj.getIntVector();
         return new PaperSize(size[0], size[1]);

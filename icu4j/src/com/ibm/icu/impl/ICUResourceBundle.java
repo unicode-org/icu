@@ -28,7 +28,43 @@ import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.UResourceTypeMismatchException;
 import com.ibm.icu.util.VersionInfo;
 
-public class ICUResourceBundle extends UResourceBundle{    
+public abstract class ICUResourceBundle extends UResourceBundle{ 
+    /**
+     * The data path to be used with getBundleInstance API
+     * @draft ICU 3.0
+     */
+    protected static final String ICU_DATA_PATH = "com/ibm/icu/impl/";
+    /**
+     * The data path to be used with getBundleInstance API
+     * @draft ICU 3.0
+     */
+    public static final String ICU_BUNDLE = "data/icudt"+VersionInfo.ICU_DATA_VERSION;    
+    
+    /**
+     * The base name of ICU data to be used with getBundleInstance API
+     * @draft ICU 3.0
+     */
+    public static final String ICU_BASE_NAME= ICU_DATA_PATH+ICU_BUNDLE;
+    
+    /**
+     * The base name of collation data to be used with getBundleInstance API
+     * @draft ICU 3.0
+     */
+    public static final String ICU_COLLATION_BASE_NAME = ICU_BASE_NAME + "/coll";
+    
+    /**
+     * The class loader constant to be used with getBundleInstance API
+     * @draft ICU 3.0
+     */
+    public static final ClassLoader ICU_DATA_CLASS_LOADER = ICUData.class.getClassLoader();
+    
+    /**
+     * The name of the resource containing the installed locales
+     * @draft ICU 3.0
+     */
+    protected static final String INSTALLED_LOCALES = "InstalledLocales";
+    
+
     /** 
      * Resource type constant for "no resource". 
      * @draft ICU 3.0 
@@ -259,8 +295,9 @@ public class ICUResourceBundle extends UResourceBundle{
     public ICUResourceBundle get(int index){
         ICUResourceBundle obj =  handleGet(index);
         if (obj == null) {
-            if (parent != null) {
-                obj = ((ICUResourceBundle)parent).get(index);
+            obj = (ICUResourceBundle)getParent();
+            if ( obj!= null) {
+                obj = obj.get(index);
             }
             if (obj == null)
                 throw new MissingResourceException("Can't find resource for bundle "
@@ -284,11 +321,12 @@ public class ICUResourceBundle extends UResourceBundle{
     public ICUResourceBundle get(String key){
         ICUResourceBundle obj =  handleGet(key);
         if (obj == null) {
-            if (parent != null) {
-                obj = ((ICUResourceBundle)parent).get(key);
+            obj = (ICUResourceBundle)getParent();
+            if ( obj!= null) {
+                obj = obj.get(key);
             }
             if (obj == null){
-                String fullName = ICUResourceBundleReader.getFullName(baseName, localeID);
+                String fullName = ICUResourceBundleReader.getFullName(getBaseName(), getLocaleID());
                 throw new MissingResourceException("Can't find resource for bundle "
                                                    +fullName
                                                    +", key "+key,
@@ -322,9 +360,7 @@ public class ICUResourceBundle extends UResourceBundle{
      * @return UResourceBundle the parent of this bundle. Returns null if none
      * @draft ICU 3.0
      */
-    public UResourceBundle getParent(){
-        return (UResourceBundle)parent;   
-    }
+    public abstract UResourceBundle getParent();
     
     /**
      * Returns a functionally equivalent locale, considering keywords as well, for the specified keyword.
@@ -497,7 +533,7 @@ public class ICUResourceBundle extends UResourceBundle{
     public ICUResourceBundle getWithFallback(String path) throws MissingResourceException {
         ICUResourceBundle result = null;      
         ICUResourceBundle actualBundle = this;
-        
+
         // now recuse to pick up sub levels of the items
         result = findResourceWithFallback(path, actualBundle);
                     
@@ -549,7 +585,7 @@ public class ICUResourceBundle extends UResourceBundle{
      * @param bundlePrefix the prefix of the resource bundles to use.
      */
     public static Set getAvailableLocaleNameSet() {
-        return getAvailableLocaleNameSet(UResourceBundle.ICU_BASE_NAME);
+        return getAvailableLocaleNameSet(ICU_BASE_NAME);
     }
     
 
@@ -621,9 +657,6 @@ public class ICUResourceBundle extends UResourceBundle{
         return keys.elements();
     }
     
-    public ULocale getULocale(){
-        return new ULocale(localeID);   
-    }
     public static ICUResourceBundle createBundle(String baseName, String localeID, ClassLoader root) {
         return ICUResourceBundleImpl.createBundle(baseName, localeID, root);
     }
@@ -645,9 +678,35 @@ public class ICUResourceBundle extends UResourceBundle{
     protected  ICUResourceBundle handleGet(int index, Hashtable table){
         throw new UResourceTypeMismatchException("");   
     }
-    
 
+    /**
+     * Returns the locale of this resource bundle. This method can be used after a
+     * call to getBundle() to determine whether the resource bundle returned really
+     * corresponds to the requested locale or is a fallback.
+     *
+     * @return the locale of this resource bundle
+     */
+    public Locale getLocale() {
+        return getULocale().toLocale();
+    }
+    
     protected Object handleGetObject(String key){
+        Object obj = handleGetObjectImpl(key);
+        if (obj == null) {
+            UResourceBundle parent = getParent();
+            if ( parent!= null) {
+                obj = parent.getObject(key);
+            }
+            if (obj == null)
+                throw new MissingResourceException("Can't find resource for bundle "
+                                                   +this.getClass().getName()
+                                                   +", key "+key,
+                                                   this.getClass().getName(),
+                                                   key);
+        }
+        return obj;
+    }
+    private Object handleGetObjectImpl(String key){
         if(getType()==STRING){
             return getString();   
         }
@@ -666,6 +725,7 @@ public class ICUResourceBundle extends UResourceBundle{
         }
         return obj;        
     }
+
     protected ICUResourceBundle handleGet(int index){
         return null;
     }
@@ -813,8 +873,12 @@ public class ICUResourceBundle extends UResourceBundle{
                 //we found it
                 break;
             }
+            if(actualBundle.resPath.length()!=0){
+                path = resPath+"/"+path;
+            }
             // if not try the parent bundle
-            actualBundle = (ICUResourceBundle) actualBundle.parent;
+            actualBundle = (ICUResourceBundle) actualBundle.getParent();
+            
         }
         return sub;
     }     

@@ -491,14 +491,14 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
         String[] numberElements;
         if (data == null) {  /* cache miss */
             data = new String[1][];
-            ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME,locale);
+            ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,locale);
             data[0] = rb.getStringArray("NumberElements");
             /* update cache */
             cachedLocaleData.put(locale, data);
         }
         numberElements = data[0];
         
-        ICUResourceBundle r = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME,locale);
+        ICUResourceBundle r = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,locale);
         
         // TODO: Determine actual and valid locale correctly.
         ULocale uloc = r.getULocale();

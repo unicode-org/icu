@@ -952,7 +952,7 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
         Locale[] locales = NumberFormat.getAvailableLocales();
         
         for (int i = 0; i < locales.length; i++) {
-            ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME,locales[i]);
+            ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,locales[i]);
 
             //
             // Get the currency pattern for this locale.  We have to fish it

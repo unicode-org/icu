@@ -45,7 +45,7 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
     
     public Locale[] getAvailableLocales() {
         if (service == null) {
-            return ICUResourceBundle.getAvailableLocales(UResourceBundle.ICU_BASE_NAME);
+            return ICUResourceBundle.getAvailableLocales(ICUResourceBundle.ICU_BASE_NAME);
         } else {
             return service.getAvailableLocales();
         }
@@ -125,7 +125,7 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
         	// Open a stream to the .brk file.  Path to the brk files has this form:
         	//      data/icudt30b/line.brk      (30 is version number)
         	try {
-        		String rulesFileName = UResourceBundle.ICU_BUNDLE +"/"+ KIND_NAMES_2[kind] + ".brk";
+        		String rulesFileName = ICUResourceBundle.ICU_BUNDLE +"/"+ KIND_NAMES_2[kind] + ".brk";
         		InputStream is = ICUData.getRequiredStream(rulesFileName);
         		iter = RuleBasedBreakIterator_New.getInstanceFromCompiledRules(is);
         	}

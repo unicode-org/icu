@@ -14,6 +14,7 @@ import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.UTF16;
+import com.ibm.icu.util.Holiday;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
@@ -26,15 +27,15 @@ public final class ICUResourceBundleTest extends TestFmwk {
 
     }
     public void TestResourceBundleWrapper(){
-        UResourceBundle bundle = UResourceBundle.getBundleInstance("com.ibm.icu.impl.data.CalendarData", "ar_AE");
-        Object o = bundle.getObject("Weekend");
-        if(o instanceof String[] ){
+        UResourceBundle bundle = UResourceBundle.getBundleInstance("com.ibm.icu.impl.data.HolidayBundle", "da_DK");
+        Object o = bundle.getObject("holidays");
+        if(o instanceof Holiday[] ){
             logln("wrapper mechanism works for Weekend data");
         }else{
             errln("Did not get the expected output for Weekend data");
         }
        
-        bundle = UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME, "bogus", this.getClass().getClassLoader());   
+        bundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "bogus", this.getClass().getClassLoader());   
         if(bundle instanceof ICUResourceBundle && bundle.getULocale().equals("root")){
             logln("wrapper mechanism works for bogus locale");
         }else{
@@ -53,7 +54,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
         
     }
     public void TestOpen(){
-        ICUResourceBundle bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME, "en_US_POSIX", ICUData.class.getClassLoader());
+        ICUResourceBundle bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "en_US_POSIX", ICUData.class.getClassLoader());
        
         if(bundle==null){
             errln("could not create the resource bundle");   
@@ -103,11 +104,11 @@ public final class ICUResourceBundleTest extends TestFmwk {
         if(bundle==null){
             errln("could not create the resource bundle");   
         }       
-        bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_COLLATION_BASE_NAME, "en_US_POSIX");
+        bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_COLLATION_BASE_NAME, "en_US_POSIX");
         if(bundle==null){
             errln("could not load the stream");   
         }
-        bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME, "my_very_very_very_long_bogus_bundle");   
+        bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "my_very_very_very_long_bogus_bundle");   
         if(!bundle.getULocale().equals(ULocale.getDefault())){
             errln("UResourceBundle did not load the default bundle when bundle was not found");   
         }
@@ -483,14 +484,14 @@ public final class ICUResourceBundleTest extends TestFmwk {
             }
         }
         // should not get an exception
-        rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME,"fr_BE");
+        rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,"fr_BE");
         String str = rb.getString("SpelloutRules");
         if(str !=null || str.length()>0){
             logln("Alias mechanism works");
         }else{
             errln("Alias mechanism failed for fr_BE SpelloutRules");
         }
-        rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(UResourceBundle.ICU_COLLATION_BASE_NAME,"zh_TW");
+        rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_COLLATION_BASE_NAME,"zh_TW");
         ICUResourceBundle b = (ICUResourceBundle) rb.getObject("collations");
         if(b != null){
             if(b.get(0).getKey().equals( "default")){
@@ -505,7 +506,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
     }
     public void TestAlias(){
         logln("Testing %%ALIAS");
-        ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME,"iw_IL");
+        ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,"iw_IL");
         ICUResourceBundle b = rb.get("NumberPatterns");
         if(b != null){
             if(b.getSize()>0){
@@ -531,7 +532,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
     }    
     
     public void TestGetWithFallback(){
-        ICUResourceBundle bundle =(ICUResourceBundle) UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME,"te_IN");
+        ICUResourceBundle bundle =(ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,"te_IN");
         String key = bundle.getStringWithFallback("Keys/collation");
         if(!key.equals("COLLATION")){
             errln("Did not get the expected result from getStringWithFallback method.");
@@ -542,7 +543,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
         }
 
         try{
-            bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(UResourceBundle.ICU_COLLATION_BASE_NAME,ULocale.canonicalize("de__PHONEBOOK"));
+            bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_COLLATION_BASE_NAME,ULocale.canonicalize("de__PHONEBOOK"));
             if(!bundle.getULocale().equals("de")){
                 errln("did not get the expected bundle");   
             }
@@ -556,11 +557,28 @@ public final class ICUResourceBundleTest extends TestFmwk {
         }
 
        
-        bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(UResourceBundle.ICU_COLLATION_BASE_NAME,"fr_FR");
+        bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_COLLATION_BASE_NAME,"fr_FR");
         key = bundle.getStringWithFallback("collations/default");
         if(!key.equals("standard")){
             errln("Did not get the expected result from getStringWithFallback method.");
         }  
+        bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,"fr_FR");
+        ICUResourceBundle b1 = bundle.getWithFallback("calendar");
+        String defaultCal = b1.getStringWithFallback("default");
+        if(!defaultCal.equals("gregorian")){
+            errln("Did not get the expected default calendar string: Expected: gregorian, Got: "+defaultCal);   
+        }
+        ICUResourceBundle b2 = b1.getWithFallback(defaultCal);
+        ICUResourceBundle b3 = b2.getWithFallback("monthNames");
+        String defaultContext = b3.getStringWithFallback("default");
+        ICUResourceBundle b4 = b3.getWithFallback(defaultContext);
+        String defaultWidth  = b4.getStringWithFallback("default");
+        ICUResourceBundle b5 = b4.getWithFallback(defaultWidth);
+        if(b5.getSize()!=12){
+            errln("Did not get the expected size for the default monthNames");   
+        }
+        
+        
     }
     
     private static final String COLLATION_RESNAME = "collations";
@@ -574,7 +592,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
         int n;
         
         logln("Testing getting collation values:");
-        kwVals = ICUResourceBundle.getKeywordValues(UResourceBundle.ICU_COLLATION_BASE_NAME,COLLATION_RESNAME);
+        kwVals = ICUResourceBundle.getKeywordValues(ICUResourceBundle.ICU_COLLATION_BASE_NAME,COLLATION_RESNAME);
         for(n=0;n<kwVals.length;n++) {
             logln(new Integer(n).toString() + ": " + kwVals[n]);
             if(DEFAULT_NAME.equals(kwVals[n])) {
@@ -632,7 +650,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
            logln(new Integer(i/3).toString() + ": " + new Boolean(expectAvail).toString() + "\t\t" + 
                    inLocale.toString() + "\t\t" + expectLocale.toString());
 
-           ULocale equivLocale = ICUResourceBundle.getFunctionalEquivalent(UResourceBundle.ICU_COLLATION_BASE_NAME,COLLATION_RESNAME,
+           ULocale equivLocale = ICUResourceBundle.getFunctionalEquivalent(ICUResourceBundle.ICU_COLLATION_BASE_NAME,COLLATION_RESNAME,
                    COLLATION_KEYWORD, inLocale, isAvail);
            boolean gotAvail = isAvail[0];
            
@@ -645,12 +663,27 @@ public final class ICUResourceBundleTest extends TestFmwk {
        
        logln("Testing error conditions:");
        try {
-           ULocale equivLocale = ICUResourceBundle.getFunctionalEquivalent(UResourceBundle.ICU_COLLATION_BASE_NAME, "calendar",
+           ULocale equivLocale = ICUResourceBundle.getFunctionalEquivalent(ICUResourceBundle.ICU_COLLATION_BASE_NAME, "calendar",
               "calendar", new ULocale("ar_EG@calendar=islamic"), new boolean[1]);
            errln("Err: expected MissingResourceException");
        } catch ( MissingResourceException t ) {
            logln("expected MissingResourceException caught (PASS): " + t.toString());
        }
+    }
+    
+    public void TestNorwegian(){
+        try{
+            ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "no_NO_NY");
+            ICUResourceBundle sub = rb.get("Countries");
+            String s1 = sub.getString(1);
+            if(s1.equals("Noreg")){
+                logln("got expected output ");   
+            }else{
+                errln("did not get the expected result");
+            }
+        }catch(IllegalArgumentException ex){
+            errln("Caught an unexpected expected");   
+        }
     }
 }
 
