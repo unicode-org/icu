@@ -27,6 +27,7 @@
 
 #include "unicode/utypes.h"
 #include "cmemory.h"
+#include "ucol_imp.h"
 #include "ucol_wgt.h"
 
 #if defined(UCOL_DEBUG) && defined(WIN32)
@@ -35,6 +36,9 @@
 #endif
 
 /* collation element weight allocation -------------------------------------- */
+
+/* number of possible byte values in a weight */
+#define UCOL_WEIGHT_BYTE_VALUES_COUNT (256-UCOL_BYTE_FIRST_TAILORED)
 
 /* helper functions for CE weights */
 
@@ -102,8 +106,8 @@ incWeight(uint32_t weight, int32_t length) {
         if(byte<0xff) {
             return setWeightByte(weight, length, byte+1);
         } else {
-            /* roll over, set this byte to 2 and increment the previous one */
-            weight=setWeightByte(weight, length, 2);
+            /* roll over, set this byte to UCOL_BYTE_FIRST_TAILORED and increment the previous one */
+            weight=setWeightByte(weight, length, UCOL_BYTE_FIRST_TAILORED);
             --length;
         }
     }
@@ -114,9 +118,9 @@ lengthenRange(WeightRange *range) {
     int32_t length;
 
     length=range->length2+1;
-    range->start=setWeightTrail(range->start, length, 2);
+    range->start=setWeightTrail(range->start, length, UCOL_BYTE_FIRST_TAILORED);
     range->end=setWeightTrail(range->end, length, 0xff);
-    range->count2*=254;
+    range->count2*=256-UCOL_BYTE_FIRST_TAILORED;
     range->length2=length;
     return length;
 }
@@ -212,11 +216,11 @@ getWeightRanges(uint32_t lowerLimit, uint32_t upperLimit, WeightRange ranges[7])
     weight=upperLimit;
     for(length=upperLength; length>=2; --length) {
         trail=getWeightTrail(weight, length);
-        if(trail>2) {
-            upper[length].start=setWeightTrail(weight, length, 2);
+        if(trail>UCOL_BYTE_FIRST_TAILORED) {
+            upper[length].start=setWeightTrail(weight, length, UCOL_BYTE_FIRST_TAILORED);
             upper[length].end=decWeightTrail(weight, length);
             upper[length].length=length;
-            upper[length].count=trail-2;
+            upper[length].count=trail-UCOL_BYTE_FIRST_TAILORED;
         }
         weight=truncateWeight(weight, length-1);
     }
@@ -233,7 +237,7 @@ getWeightRanges(uint32_t lowerLimit, uint32_t upperLimit, WeightRange ranges[7])
         /* remove the middle range */
         middle.count=0;
 
-        /* reduweight or remove the lower ranges that go beyond upperLimit */
+        /* reduce or remove the lower ranges that go beyond upperLimit */
         for(length=4; length>=2; --length) {
             if(lower[length].count>0 && upper[length].count>0) {
                 start=upper[length].start;
@@ -243,10 +247,13 @@ getWeightRanges(uint32_t lowerLimit, uint32_t upperLimit, WeightRange ranges[7])
                     /* lower and upper ranges collide or are directly adjacent: merge these two and remove all shorter ranges */
                     start=lower[length].start;
                     end=lower[length].end=upper[length].end;
-                    /* merging directly adjacent ranges needs to subtract the 0/1 gaps in between; it may result in a range with count>254 */
+                    /*
+                     * merging directly adjacent ranges needs to subtract the 0/1 gaps in between;
+                     * it may result in a range with count>(256-UCOL_BYTE_FIRST_TAILORED)
+                     */
                     lower[length].count=
                         (int32_t)(getWeightTrail(end, length)-getWeightTrail(start, length)+1+
-                                  254*(getWeightByte(end, length-1)-getWeightByte(start, length-1)));
+                                  (256-UCOL_BYTE_FIRST_TAILORED)*(getWeightByte(end, length-1)-getWeightByte(start, length-1)));
                     upper[length].count=0;
                     while(--length>=2) {
                         lower[length].count=upper[length].count=0;
@@ -301,9 +308,13 @@ getWeightRanges(uint32_t lowerLimit, uint32_t upperLimit, WeightRange ranges[7])
  */
 U_CFUNC int32_t
 ucol_allocWeights(uint32_t lowerLimit, uint32_t upperLimit, uint32_t n, WeightRange ranges[7]) {
-    /* 254 to the power of index */
-    static const uint32_t powers254[5]={
-        1, 254, 254*254, 254UL*254*254, 254UL*254*254*254
+    /* UCOL_WEIGHT_BYTE_VALUES_COUNT to the power of index */
+    static const uint32_t powers[5]={
+        1,
+        UCOL_WEIGHT_BYTE_VALUES_COUNT,
+        UCOL_WEIGHT_BYTE_VALUES_COUNT*UCOL_WEIGHT_BYTE_VALUES_COUNT,
+        (uint32_t)UCOL_WEIGHT_BYTE_VALUES_COUNT*UCOL_WEIGHT_BYTE_VALUES_COUNT*UCOL_WEIGHT_BYTE_VALUES_COUNT,
+        (uint32_t)UCOL_WEIGHT_BYTE_VALUES_COUNT*UCOL_WEIGHT_BYTE_VALUES_COUNT*UCOL_WEIGHT_BYTE_VALUES_COUNT*UCOL_WEIGHT_BYTE_VALUES_COUNT
     };
 
     uint32_t lengthCounts[6]; /* [0] unused, [5] to make index checks unnecessary */
@@ -325,7 +336,7 @@ ucol_allocWeights(uint32_t lowerLimit, uint32_t upperLimit, uint32_t n, WeightRa
     /* what is the maximum number of weights with these ranges? */
     maxCount=0;
     for(i=0; i<rangeCount; ++i) {
-        maxCount+=(uint32_t)ranges[i].count*powers254[4-ranges[i].length];
+        maxCount+=(uint32_t)ranges[i].count*powers[4-ranges[i].length];
     }
     if(maxCount>=n) {
 #ifdef UCOL_DEBUG
@@ -368,17 +379,17 @@ ucol_allocWeights(uint32_t lowerLimit, uint32_t upperLimit, uint32_t n, WeightRa
             printf("take first %ld ranges\n", rangeCount);
 #endif
             break;
-        } else if(n<=ranges[0].count2*254) {
+        } else if(n<=ranges[0].count2*UCOL_WEIGHT_BYTE_VALUES_COUNT) {
             /* easy case, just make this one range large enough by lengthening it once more, possibly split it */
-            uint32_t count1, count2, power254_1, power254;
+            uint32_t count1, count2, power_1, power;
 
             rangeCount=1;
             maxLength=minLength+1;
 
             /* calculate how to split the range between maxLength-1 (count1) and maxLength (count2) */
-            power254_1=powers254[minLength-ranges[0].length];
-            power254=power254_1*254;
-            count2=(n+power254-1)/power254;
+            power_1=powers[minLength-ranges[0].length];
+            power=power_1*UCOL_WEIGHT_BYTE_VALUES_COUNT;
+            count2=(n+power-1)/power;
             count1=ranges[0].count-count2;
 
             /* split the range */
@@ -402,11 +413,11 @@ ucol_allocWeights(uint32_t lowerLimit, uint32_t upperLimit, uint32_t n, WeightRa
                 i=ranges[0].length;
                 byte=getWeightByte(ranges[0].start, i)+count1-1;
 
-                /* ranges[0].count and count1 may be >254 from merging adjacent ranges; byte>0xff is possible */
+                /* ranges[0].count and count1 may be >UCOL_WEIGHT_BYTE_VALUES_COUNT from merging adjacent ranges; byte>0xff is possible */
                 if(byte<=0xff) {
                     ranges[0].end=setWeightByte(ranges[0].start, i, byte);
                 } else /* byte>0xff */ {
-                    ranges[0].end=setWeightByte(incWeight(ranges[0].start, i-1), i, byte-254);
+                    ranges[0].end=setWeightByte(incWeight(ranges[0].start, i-1), i, byte-UCOL_WEIGHT_BYTE_VALUES_COUNT);
                 }
 
                 /* set the bytes in the end weight at length+1..length2 to 0xff */
@@ -419,8 +430,8 @@ ucol_allocWeights(uint32_t lowerLimit, uint32_t upperLimit, uint32_t n, WeightRa
                 ranges[0].count=count1;
                 ranges[1].count=count2;
 
-                ranges[0].count2=count1*power254_1;
-                ranges[1].count2=count2*power254_1; /* will be *254 when lengthened */
+                ranges[0].count2=count1*power_1;
+                ranges[1].count2=count2*power_1; /* will be *UCOL_WEIGHT_BYTE_VALUES_COUNT when lengthened */
 
                 /* lengthen the second range to maxLength */
                 lengthenRange(ranges+1);

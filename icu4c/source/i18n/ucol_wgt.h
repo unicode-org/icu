@@ -17,6 +17,8 @@
 #ifndef UCOL_WGT_H
 #define UCOL_WGT_H
 
+#include "ucol_imp.h"
+
 /* definitions for CE weights */
 
 typedef struct WeightRange {
