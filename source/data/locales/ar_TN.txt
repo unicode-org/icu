@@ -19,7 +19,6 @@ ar_TN {
         "\u2030",
         "\u221E",
         "\ufffd",
-        "\u066B",
         "+",
     }
     NumberPatterns { 

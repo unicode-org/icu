@@ -865,7 +865,6 @@ de {
         "\u2030",
         "\u221E",
         "\uFFFD",
-        ",",
         "+",
     }
     localPatternChars { "GjMtkHmsSEDFwWahKzJeugAZ" }

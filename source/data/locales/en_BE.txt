@@ -31,7 +31,6 @@ en_BE {
         "\u2030",
         "\u221E",
         "\uFFFD",
-        ",",
         "+",
     }
 //    ShortCountry { "BEL" }

@@ -296,7 +296,6 @@ pl {
         "\u2030",
         "\u221E",
         "\uFFFD",
-        ",",
         "+",
     }
     LocaleScript{ 
