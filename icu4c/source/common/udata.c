@@ -394,7 +394,6 @@ typedef struct {
     uprv_mapFile(UDataMemory *pData, const char *path, const char *basename) {
         int fd;
         int length;
-        const char *dataDir;
         struct stat mystat;
         const void *data;
 
