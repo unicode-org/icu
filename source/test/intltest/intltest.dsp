@@ -268,6 +268,10 @@ SOURCE=.\nmfmtrt.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\normconf.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\numfmtst.cpp
 # End Source File
 # Begin Source File
