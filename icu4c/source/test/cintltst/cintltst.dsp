@@ -179,6 +179,10 @@ SOURCE=.\cregrtst.c
 
 SOURCE=.\cregrtst.h
 # End Source File
+# Begin Source File
+
+SOURCE=.\reapits.c
+# End Source File
 # End Group
 # Begin Group "collation"
 
