@@ -290,6 +290,10 @@ UBool UPerfTest::runTestLoop( char* testname, char* par )
                 // Run the test function for specified of passe and iterations
                 for(int32_t ps =0; ps < passes; ps++){
                     t = testFunction->time(n);
+					if(U_FAILURE(testFunction->getStatus())){
+						printf("Performance test failed with error: %s \n", u_errorName(testFunction->getStatus()));
+						break;
+					}
                 }
                 events = testFunction->getEventsPerIteration();
             } else {
@@ -319,6 +323,10 @@ UBool UPerfTest::runTestLoop( char* testname, char* par )
                         }
                         //System.out.println("# " + meth.getName() + " x " + loops);
                         t = testFunction->time(loops);
+						if(U_FAILURE(testFunction->getStatus())){
+							printf("Performance test failed with error: %s \n", u_errorName(testFunction->getStatus()));
+							break;
+						}
                     }
                 }
                 events = testFunction->getEventsPerIteration();
