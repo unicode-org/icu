@@ -656,12 +656,6 @@ private:
    *  the list.
    */
   VectorOfInt*        getExpandValueList(int32_t     order) const;
-  /**
-   *  Gets the comarison order of a character from the collation table.
-   *  @param ch the Unicode character
-   *  @return the comparison order of a character.
-   */
-  int32_t             getUnicodeOrder(UChar     ch) const;
 
   /**
    *  Gets the comarison order of a character from the collation table.
