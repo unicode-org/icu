@@ -273,7 +273,7 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
     }else{
         bundle_write_java(data,outputDir,outputEnc, outputFileName, sizeof(outputFileName), status);
     }
-    if (U_FAILURE(status)) {
+    if (U_FAILURE(*status)) {
         fprintf(stderr, "couldn't write bundle %s\n", outputFileName);
     }
     bundle_close(data, status);
