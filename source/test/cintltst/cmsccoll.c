@@ -3500,25 +3500,68 @@ static void TestMergeSortKeys(void) {
 */
 
 static void TestRuleOptions(void) {
+  /* values here are hardcoded and are correct for the current UCA 
+   * when the UCA changes, one might be forced to change these 
+   * values. (\\u02d0, \\U00010FFFC etc...)
+   */
   static struct {
     const char *rules;
     const char *data[50];
     const uint32_t len;
   } tests[] = {  
+    /* - all befores here amount to zero */
+    { "&[before 1][first tertiary ignorable]<<<a", 
+    { "\\u0000", "a"}, 2}, /* you cannot go before first tertiary ignorable */
+
+    { "&[before 1][last tertiary ignorable]<<<a", 
+    { "\\u0000", "a"}, 2}, /* you cannot go before last tertiary ignorable */
+
+    { "&[before 1][first secondary ignorable]<<<a", 
+    { "\\u0000", "a"}, 2}, /* you cannot go before first secondary ignorable */
+
+    { "&[before 1][last secondary ignorable]<<<a", 
+    { "\\u0000", "a"}, 2}, /* you cannot go before first secondary ignorable */
+
+    /* 'normal' befores */
+
+    { "&[before 1][first primary ignorable]<<<c<<<b &[first primary ignorable]<a", 
+    {  "c", "b", "\\u0332", "a" }, 4},
+
+    /* we don't have a code point that corresponds to  
+     * the last primary ignorable
+     */
+    { "&[before 2][last primary ignorable]<<<c<<<b &[last primary ignorable]<a", 
+    {  "\\u0332", "\\u20e3", "c", "b", "a" }, 5}, 
+
+    { "&[before 1][first variable]<<<c<<<b &[first variable]<a", 
+    {  "c", "b", "\\u0009", "a", "\\u000a" }, 5}, 
+
+    { "&[last variable]<a &[before 1][last variable]<<<c<<<b ", 
+    {  "c", "b", "\\uD800\\uDF23", "a", "\\u02d0" }, 5}, 
+
+    { "&[first regular]<a"
+      "&[before 1][first regular]<b",
+    { "b", "\\u02d0", "a", "\\u02d1"}, 4},
+
+    { "&[before 1][last regular]<b"
+      "&[last regular]<a",
+    { "b", "\\u11f9", "a", "\\u4e00" }, 4},     
+
+    { "&[before 1][first implicit]<b"
+      "&[first implicit]<a",
+    { "b", "\\u4e00", "a", "\\u4e01"}, 4},
+
+    { "&[before 1][last implicit]<b"
+      "&[last implicit]<a",
+    { "b", "\\U0010FFFC", "a" }, 3},     
+
     { "&[last variable]<z"
       "&[last primary ignorable]<x"
       "&[last secondary ignorable]<<y"
       "&[last tertiary ignorable]<<<w"
       "&[top]<u",
-      {"\\ufffb",  "w", "y", "\\u20e3", "x", "\\u137c", "z", "u"}, 7 },
-    { "&[before 1][first tertiary ignorable]<<<k", 
-    { "\\u0000", "k"}, 2}, /* you cannot go before first tertiary ignorable */
-    /* - all befores here amount to zero */
-    /* cannot test this anymore, as [last primary ignorable] doesn't have a 
-     * code point associated to it anymore 
-     */
-    /*{ "&[before 3][last primary ignorable]<<<k",
-    { "k", "\\u20e3"}, 2},*/
+      {"\\ufffb",  "w", "y", "\\u20e3", "x", "\\u137c", "z", "u"}, 7 }
+
   };
   uint32_t i;
 
