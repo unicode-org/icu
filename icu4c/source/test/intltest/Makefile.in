@@ -23,7 +23,7 @@ CLEANFILES = *~ $(DEPS)
 TARGET = intltest
 
 DEFS = @DEFS@
-CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n
+CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n  -DU_SRCDATADIR=\"$(top_srcdir)/../data/\"
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 LDFLAGS = @LDFLAGS@ \
@@ -78,8 +78,10 @@ clean-local:
 distclean-local: clean-local
 	$(RMV) Makefile
 
+-include Makefile.local
+
 check-local: all-local
-	 ICU_DATA=$(top_builddir)/data/ TZ=PST8PDT $(INVOKE) ./$(TARGET) 
+	 ICU_DATA=$(top_builddir)/data/ TZ=PST8PDT $(INVOKE) ./$(TARGET)  $(INTLTESTOPTS)
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \

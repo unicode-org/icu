@@ -313,17 +313,34 @@ void UnicodeTest::TestUnicodeData()
     FILE*   input;
     char    buffer[1000];
     char*   bufferPtr, *dirPtr;
-    char path[256];
-    const char* datafile = "UnicodeData-3.0.0.txt";
+    char newPath[256];
+    char backupPath[256];
   
-    strcpy(path, u_getDataDirectory());
-    strcat(path, datafile);
+    /* Look inside ICU_DATA first */
+    strcpy(newPath, u_getDataDirectory());
+    strcat(newPath, "unidata" U_FILE_SEP_STRING "UnicodeData");
+    strcat(newPath, ".txt");
+
+#if defined (U_SRCDATADIR) /* points to the icu/data directory */
+    /* If defined, we'll try an alternate directory second */
+    strcpy(backupPath, U_SRCDATADIR);
+#else
+    strcpy(backupPath, u_getDataDirectory());
+    strcat(backupPath, ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING "data");
+    strcat(backupPath, U_FILE_SEP_STRING);
+#endif
+    strcat(backupPath, "unidata" U_FILE_SEP_STRING "UnicodeData");
+    strcat(backupPath, ".txt");
+
       
-    input = fopen( path, "r");
-    if (input == 0)
-    {
-        errln("Failed to open: " + UnicodeString(datafile));
+    input = fopen(newPath, "r");
+
+    if (input == 0) {
+      input = fopen(backupPath, "r");
+      if (input == 0) {
+        errln("Failed to open either " + UnicodeString(newPath) + " or " + UnicodeString(backupPath) );
         return;
+      }
     }
 
     int32_t unicode;
