@@ -3365,13 +3365,20 @@ void TransliteratorTest::TestFunction() {
 
 void TransliteratorTest::TestInvalidBackRef(void) {
     UnicodeString rule =  ". > $1;";
-    
+    UnicodeString rule2 =CharsToUnicodeString("(.) <> &hex/unicode($1) &name($1); . > $1; [{}] >\\u0020;");
     UParseError pe;
     UErrorCode ec = U_ZERO_ERROR;
     Transliterator *t = Transliterator::createFromRules("Test", rule, UTRANS_FORWARD, pe, ec);
+    Transliterator *t2 = Transliterator::createFromRules("Test2", rule2, UTRANS_FORWARD, pe, ec);
+
     if (t != NULL) {
         errln("FAIL: createFromRules should have returned NULL");
         delete t;
+    }
+
+    if (t2 != NULL) {
+        errln("FAIL: createFromRules should have returned NULL");
+        delete t2;
     }
 
     if (U_SUCCESS(ec)) {
