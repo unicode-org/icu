@@ -158,3 +158,4 @@ const char* UPerfTest::gUsageString =
                 "\t-l or --bulk-mode        The data file should be processed in file based. Cannot be used with --line-mode\n";
 
 #endif
+
