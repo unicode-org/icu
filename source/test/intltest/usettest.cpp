@@ -827,7 +827,23 @@ void UnicodeSetTest::TestPropertySet() {
 
         "[\\s|\\)|:|$|\\>]", // from regex tests
         "s|):$>",
-        "abc"
+        "abc",
+
+        "[\\uDC00cd]", // JB#2906: isolated trail at start
+        "cd\\uDC00",
+        "ab\\uD800\\U00010000",
+        
+        "[ab\\uD800]", // JB#2906: isolated trail at start
+        "ab\\uD800",
+        "cd\\uDC00\\U00010000",
+        
+        "[ab\\uD800cd]", // JB#2906: isolated lead in middle
+        "abcd\\uD800",
+        "ef\\uDC00\\U00010000",
+        
+        "[ab\\uDC00cd]", // JB#2906: isolated trail in middle
+        "abcd\\uDC00",
+        "ef\\uD800\\U00010000"
     };
 
     static const int32_t DATA_LEN = sizeof(DATA)/sizeof(DATA[0]);
