@@ -310,7 +310,6 @@ void TestDataDirectory()
 
     char            oldDirectory[80];
     const char     *temp,*testValue1,*testValue2,*testValue3;
-    UErrorCode       err = U_ZERO_ERROR;
     const char path[40] ="d:\\icu\\source\\test\\intltest" U_FILE_SEP_STRING; /*give the required path */
 
     log_verbose("Testing getDataDirectory()\n");
