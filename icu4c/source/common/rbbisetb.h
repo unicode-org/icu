@@ -2,7 +2,7 @@
 //  rbbisetb.h
 /*
 **********************************************************************
-*   Copyright (c) 2001-2004, International Business Machines
+*   Copyright (c) 2001-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -79,7 +79,8 @@ public:
     ~RBBISetBuilder();
 
     void     build();
-    void     addValToSets(UVector *sets, uint32_t val);
+    void     addValToSets(UVector *sets,      uint32_t val);
+    void     addValToSet (RBBINode *usetNode, uint32_t val);
     int32_t  getNumCharCategories() const;   // CharCategories are the same as input symbol set to the
                                    //    runtime state machine, which are the same as
                                    //    columns in the DFA state table
@@ -110,8 +111,9 @@ private:
     // Groups correspond to character categories -
     //       groups of ranges that are in the same original UnicodeSets.
     //       fGroupCount is the index of the last used group.
-    //       The value is also the number of columns in the RBBI state table being compiled.
-    //       Index 0 is not used.  Funny counting.
+    //       fGroupCount+1 is also the number of columns in the RBBI state table being compiled.
+    //       State table column 0 is not used.  Column 1 is for end-of-input.
+    //       column 2 is for group 0.  Funny counting.
     int32_t               fGroupCount;
 
     RBBISetBuilder(const RBBISetBuilder &other); // forbid copying of this class

@@ -1,5 +1,5 @@
 #
-#   Copyright (C) 2002-2004, International Business Machines Corporation and others.
+#   Copyright (C) 2002-2005, International Business Machines Corporation and others.
 #       All Rights Reserved.
 #
 #   file:  sent.txt
@@ -111,10 +111,12 @@ $End? $Join [$RULE12 - $Sp - $Close];
 
 # forces a break at the beginning of text "$Sp blah blah blah"
 # remember the break iterators takes the longest match
-$End? $Join $Sp / [^$Term $ATerm $Sp $Close];
+$NOT_T_A_S_C = [^$Term $ATerm $Sp $Close];
+$End? $Join $Sp / [$NOT_T_A_S_C {eof}];
 
 # forces a break at the beginning of text "$Close blah blah blah"
-$End? $Join $Close / [^$Term $ATerm $Close];
+$NOT_T_A_C = [^$Term $ATerm $Close];
+$End? $Join $Close / [$NOT_T_A_C {eof}];
 
 ## -------------------------------------------------
 
