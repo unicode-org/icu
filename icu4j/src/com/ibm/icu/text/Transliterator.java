@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $ 
- * $Date: 2000/07/12 16:32:17 $ 
- * $Revision: 1.20 $
+ * $Date: 2000/08/30 20:40:30 $ 
+ * $Revision: 1.21 $
  *
  *****************************************************************************************
  */
@@ -210,7 +210,7 @@ import java.text.MessageFormat;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.20 $ $Date: 2000/07/12 16:32:17 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.21 $ $Date: 2000/08/30 20:40:30 $
  */
 public abstract class Transliterator {
     /**
@@ -1026,13 +1026,13 @@ public abstract class Transliterator {
     /**
      * Method for subclasses to use to obtain a character in the given
      * string, with filtering.  If the character at the given offset
-     * is excluded by this transliterator's filter, then U+FFFF is returned.
+     * is excluded by this transliterator's filter, then U+FFFE is returned.
      */
     protected char filteredCharAt(Replaceable text, int i) {
         char c;
         UnicodeFilter filter = getFilter();
         return (filter == null) ? text.charAt(i) :
-            (filter.contains(c = text.charAt(i)) ? c : '\uFFFF');
+            (filter.contains(c = text.charAt(i)) ? c : '\uFFFE');
     }
 
     static {

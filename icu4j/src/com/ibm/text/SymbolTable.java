@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/SymbolTable.java,v $ 
- * $Date: 2000/05/18 22:49:20 $ 
- * $Revision: 1.5 $
+ * $Date: 2000/08/30 20:40:30 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -47,14 +47,13 @@ public interface SymbolTable {
     /**
      * Parse a symbol reference name from the given string, starting
      * at the given position.  If no valid symbol reference name is
-     * found, throw an exception.
+     * found, return null and leave pos unchanged.
      * @param text the text to parse for the name
      * @param pos on entry, the index of the first character to parse.
      * This is the character following the SYMBOL_REF character.  On
      * exit, the index after the last parsed character.
      * @param limit the index after the last character to be parsed.
      * @return the parsed name.
-     * @exception IllegalArgumentException if no valid name is found.
      */
     String parseReference(String text, ParsePosition pos, int limit);
 }
