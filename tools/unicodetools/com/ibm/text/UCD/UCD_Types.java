@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Types.java,v $
-* $Date: 2001/12/05 02:41:23 $
-* $Revision: 1.6 $
+* $Date: 2001/12/06 00:05:53 $
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -20,6 +20,15 @@ public interface UCD_Types {
 
 
     static final byte BINARY_FORMAT = 5; // bumped if binary format of UCD changes
+    
+    // Unicode Property Types
+    static final byte 
+        NOT_DERIVED = 1, 
+        DERIVED_CORE = 2, 
+        DERIVED_NORMALIZATION = 4, 
+        DERIVED_ALL = 6, 
+        ALL = (byte)-1;
+    
     /*
   0	Code value in 4-digit hexadecimal format.
   1	Unicode 2.1 Character Name. These names match exactly the
@@ -40,7 +49,7 @@ public interface UCD_Types {
     
     
     // for IDs
-    static final byte SHORT = -1, NORMAL = 0, LONG = 1, BOTH = 2;
+    static final byte NUMBER = -2, SHORT = -1, NORMAL = 0, LONG = 1, BOTH = 2;
 
     // Binary ENUM Grouping
     public static final int

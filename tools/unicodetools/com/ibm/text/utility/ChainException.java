@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/ChainException.java,v $
-* $Date: 2001/08/31 00:19:16 $
-* $Revision: 1.2 $
+* $Date: 2001/12/06 00:05:52 $
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -16,6 +16,7 @@ package com.ibm.text.utility;
 
 import java.text.*;
 import java.io.*;
+
 public class ChainException extends RuntimeException {
     Object[] keyData;
     String messageFormat;

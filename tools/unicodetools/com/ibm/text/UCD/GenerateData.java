@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateData.java,v $
-* $Date: 2001/12/05 02:41:23 $
-* $Revision: 1.11 $
+* $Date: 2001/12/06 00:05:53 $
+* $Revision: 1.12 $
 *
 *******************************************************************************
 */
@@ -30,9 +30,10 @@ public class GenerateData implements UCD_Types {
 
     //static UnifiedBinaryProperty ubp;
     
-    static final String[] ALL = {
-        "CaseFolding",
+    static final String[] ALL_FILES = {
+        // "CaseFolding",
         "CompositionExclusions",
+        "DerivedAge",
         "DerivedBidiClass",
         "DerivedBinaryProperties",
         "DerivedCombiningClass",
@@ -47,9 +48,10 @@ public class GenerateData implements UCD_Types {
         "DerivedNumericType",
         "DerivedNumericValues",
         "NormalizationTest",
+        "PropertyAliases",
         "PropList",
         "Scripts",
-        "DerivedAge",
+        //"OtherDerivedProperties",
     };
         
     
@@ -73,9 +75,9 @@ public class GenerateData implements UCD_Types {
                 partitionProperties();
             } else if (arg.equalsIgnoreCase("All")) {
                 // Append all args at end
-                String[] temp = new String[args.length + ALL.length];
+                String[] temp = new String[args.length + ALL_FILES.length];
                 System.arraycopy(args, 0, temp, 0, args.length);
-                System.arraycopy(ALL, 0, temp, args.length, ALL.length);
+                System.arraycopy(ALL_FILES, 0, temp, args.length, ALL_FILES.length);
                 args = temp;
             } else if (arg.equalsIgnoreCase("PropertyAliases")) {
                 listProperties();                
@@ -92,85 +94,79 @@ public class GenerateData implements UCD_Types {
                 listDifferences();
             } else if (arg.equalsIgnoreCase("DerivedBidiClass")) {
                 generateVerticalSlice(BIDI_CLASS, BIDI_CLASS+NEXT_ENUM, KEEP_SPECIAL, HEADER_DERIVED,
-                    "DerivedData/DerivedBidiClass-" + version );
+                    "DerivedData/", "DerivedBidiClass");
                     
-            } else if (arg.equalsIgnoreCase("DerivedNormalizationProperties")) {
-                mask = Utility.setBits(0, DerivedProperty.FC_NFKC_Closure, DerivedProperty.ExpandsOnNFKC);
-                mask = Utility.clearBit(mask, DerivedProperty.FullCompInclusion);
-                generateDerived(mask, HEADER_DERIVED, "DerivedData/DerivedNormalizationProperties-" + version );
-                
-            } else if (arg.equalsIgnoreCase("DerivedFullNormalization")) {
-                mask = Utility.setBits(0, DerivedProperty.GenNFD, DerivedProperty.GenNFKC);
-                generateDerived(mask, HEADER_DERIVED, "DerivedData/DerivedFullNormalization-" + version );
-                
             } else if (arg.equalsIgnoreCase("DerivedEastAsianWidth")) {
                 generateVerticalSlice(EAST_ASIAN_WIDTH, EAST_ASIAN_WIDTH+NEXT_ENUM, KEEP_SPECIAL, HEADER_DERIVED,
-                    "DerivedData/DerivedEastAsianWidth-" + version );
+                    "DerivedData/", "DerivedEastAsianWidth" );
             } else if (arg.equalsIgnoreCase("DerivedGeneralCategory")) {
                 generateVerticalSlice(CATEGORY, CATEGORY+NEXT_ENUM, KEEP_SPECIAL, HEADER_DERIVED,
-                    "DerivedData/DerivedGeneralCategory-" + version );
+                    "DerivedData/", "DerivedGeneralCategory" );
             } else if (arg.equalsIgnoreCase("DerivedGeneralCategoryTEST")) {
                 generateVerticalSlice(CATEGORY+29, CATEGORY+32, KEEP_SPECIAL, HEADER_DERIVED,
-                    "DerivedData/DerivedGeneralCategory-" + version );
+                    "DerivedData/", "DerivedGeneralCategory" );
             } else if (arg.equalsIgnoreCase("DerivedCombiningClass")) {
                 generateVerticalSlice(COMBINING_CLASS, COMBINING_CLASS+NEXT_ENUM, KEEP_SPECIAL, HEADER_DERIVED,
-                    "DerivedData/DerivedCombiningClass-" + version );
+                    "DerivedData/", "DerivedCombiningClass" );
             } else if (arg.equalsIgnoreCase("DerivedDecompositionType")) {
                 generateVerticalSlice(DECOMPOSITION_TYPE, DECOMPOSITION_TYPE+NEXT_ENUM, KEEP_SPECIAL, HEADER_DERIVED,
-                    "DerivedData/DerivedDecompositionType-" + version );
+                    "DerivedData/", "DerivedDecompositionType" );
             } else if (arg.equalsIgnoreCase("DerivedNumericType")) {
                 generateVerticalSlice(NUMERIC_TYPE, NUMERIC_TYPE+NEXT_ENUM, KEEP_SPECIAL, HEADER_DERIVED,
-                    "DerivedData/DerivedNumericType-" + version );
+                    "DerivedData/", "DerivedNumericType" );
             } else if (arg.equalsIgnoreCase("DerivedEastAsianWidth")) {
                 generateVerticalSlice(EAST_ASIAN_WIDTH, EAST_ASIAN_WIDTH+NEXT_ENUM, KEEP_SPECIAL, HEADER_DERIVED,
-                    "DerivedData/DerivedEastAsianWidth-" + version );
+                    "DerivedData/", "DerivedEastAsianWidth" );
             } else if (arg.equalsIgnoreCase("DerivedJoiningType")) {
                 generateVerticalSlice(JOINING_TYPE, JOINING_TYPE+NEXT_ENUM, KEEP_SPECIAL, HEADER_DERIVED,
-                    "DerivedData/DerivedJoiningType-" + version );
+                    "DerivedData/", "DerivedJoiningType" );
             } else if (arg.equalsIgnoreCase("DerivedJoiningGroup")) {
                 generateVerticalSlice(JOINING_GROUP, JOINING_GROUP+NEXT_ENUM, KEEP_SPECIAL, HEADER_DERIVED,
-                    "DerivedData/DerivedJoiningGroup-" + version );
+                    "DerivedData/", "DerivedJoiningGroup" );
             } else if (arg.equalsIgnoreCase("DerivedBinaryProperties")) {
                 generateVerticalSlice(BINARY_PROPERTIES, BINARY_PROPERTIES+1, KEEP_SPECIAL, HEADER_DERIVED,
-                    "DerivedData/DerivedBinaryProperties-" + version );
+                    "DerivedData/", "DerivedBinaryProperties" );
             } else if (arg.equalsIgnoreCase("DerivedNumericValues")) {
                 generateVerticalSlice(LIMIT_ENUM, LIMIT_ENUM, KEEP_SPECIAL, HEADER_DERIVED,
-                    "DerivedData/DerivedNumericValues-" + version );
+                    "DerivedData/", "DerivedNumericValues" );
                     
+            } else if (arg.equalsIgnoreCase("DerivedNormalizationProperties")) {
+                generateDerived(DERIVED_NORMALIZATION, true, HEADER_DERIVED, "DerivedData/", 
+                    "DerivedNormalizationProperties" );
             } else if (arg.equalsIgnoreCase("DerivedCoreProperties")) {
-                mask = Utility.setBits(0, DerivedProperty.PropMath, DerivedProperty.Mod_ID_Continue_NO_Cf);
-                mask = Utility.setBits(mask, DerivedProperty.DefaultIgnorable, DerivedProperty.FC_NFC_Closure-1);
-                generateDerived(mask, HEADER_DERIVED, "DerivedData/DerivedCoreProperties-" + version );
+                generateDerived(DERIVED_CORE, true, HEADER_DERIVED, "DerivedData/", "DerivedCoreProperties");
                 
+            } else if (arg.equalsIgnoreCase("OtherDerivedProperties")) {
+                //mask = Utility.setBits(0, NFC_Leading, NFC_Resulting);
+                generateDerived(ALL, false, HEADER_DERIVED, "OtherData/", "OtherDerivedProperties");
+            /* 
+            } else if (arg.equalsIgnoreCase("DerivedFullNormalization")) {
+                mask = Utility.setBits(0, DerivedProperty.GenNFD, DerivedProperty.GenNFKC);
+                generateDerived(mask, HEADER_DERIVED, "DerivedData/", "DerivedFullNormalization" );
             } else if (arg.equalsIgnoreCase("caseignorable")) {
                 mask = Utility.setBits(0, DerivedProperty.Other_Case_Ignorable, DerivedProperty.Type_i);
-                generateDerived(mask, HEADER_DERIVED, "CaseIgnorable-" + version );
-                
-            } else if (arg.equalsIgnoreCase("nfcprops")) {
-                mask = Utility.setBits(0, NFC_Leading, NFC_Resulting);
-                generateDerived(mask, HEADER_DERIVED, "NFKC_SafeStart-" + version);
-                
+                generateDerived(mask, HEADER_DERIVED, "OtherData/", "CaseIgnorable" );
             } else if (arg.equalsIgnoreCase("nfunsafestart")) {
                 mask = Utility.setBits(0, NFD_UnsafeStart, NFKC_UnsafeStart);
-                generateDerived(mask, HEADER_DERIVED, "NFUnsafeStart-" + version);
-                
+                generateDerived(mask, HEADER_DERIVED, "OtherData/", "NFUnsafeStart");
+            */
             } else if (arg.equalsIgnoreCase("DerivedAge")) {
-                generateAge("DerivedData/DerivedAge-" + version);
+                generateAge("DerivedData/", "DerivedAge");
                 
             } else if (arg.equalsIgnoreCase("DerivedLineBreak")) {
                 generateVerticalSlice(LINE_BREAK, LINE_BREAK+NEXT_ENUM, KEEP_SPECIAL, HEADER_DERIVED,
-                    "DerivedData/DerivedLineBreak-" + version );
+                    "DerivedData/", "DerivedLineBreak" );
             } else if (arg.equalsIgnoreCase("Scripts")) {
                 generateVerticalSlice(SCRIPT+1, SCRIPT + NEXT_ENUM, 
-                        KEEP_SPECIAL, HEADER_SCRIPTS, "DerivedData/Scripts-" + version);
+                        KEEP_SPECIAL, HEADER_SCRIPTS, "DerivedData/", "Scripts");
             } else if (arg.equalsIgnoreCase("PropList")) {
                 generateVerticalSlice(BINARY_PROPERTIES + White_space, BINARY_PROPERTIES + NEXT_ENUM,
-                        KEEP_SPECIAL, HEADER_EXTEND, "DerivedData/PropList-" + version);
+                        KEEP_SPECIAL, HEADER_EXTEND, "DerivedData/", "PropList");
             } else if (arg.equalsIgnoreCase("AllBinary")) {
                 generateVerticalSlice(BINARY_PROPERTIES, BINARY_PROPERTIES + NEXT_ENUM,
-                        KEEP_SPECIAL, HEADER_EXTEND, "AllBinary-" + version);
+                        KEEP_SPECIAL, HEADER_EXTEND, "OtherDerived/", "AllBinary");
             } else if (arg.equalsIgnoreCase("NormalizationTest")) {
-                writeNormalizerTestSuite("DerivedData/NormalizationTest-" + version + "dX.txt" );
+                writeNormalizerTestSuite("DerivedData/", "NormalizationTest");
             } else if (arg.equalsIgnoreCase("CompositionExclusions")) {
                 generateCompExclusions(version);
             }else {
@@ -184,10 +180,10 @@ public class GenerateData implements UCD_Types {
 
 
                 //generateDerived(Utility.setBits(0, DerivedProperty.PropMath, DerivedProperty.Mod_ID_Continue_NO_Cf),
-                //    HEADER_DERIVED, "DerivedData/DerivedPropData2-" + version );
-            //generateVerticalSlice(SCRIPT, SCRIPT+1, KEEP_SPECIAL, "ScriptCommon-" + version );
-            //listStrings("LowerCase-" + version , 0,0);
-            //generateVerticalSlice(0, LIMIT_ENUM, SKIP_SPECIAL, PROPLIST1, "DerivedData/DerivedPropData1-" + version );
+                //    HEADER_DERIVED, "DerivedData/", "DerivedPropData2" );
+            //generateVerticalSlice(SCRIPT, SCRIPT+1, KEEP_SPECIAL, "ScriptCommon" );
+            //listStrings("LowerCase" , 0,0);
+            //generateVerticalSlice(0, LIMIT_ENUM, SKIP_SPECIAL, PROPLIST1, "DerivedData/", "DerivedPropData1" );
 
             // AGE stuff
             //UCD ucd = UCD.make();
@@ -238,15 +234,16 @@ public class GenerateData implements UCD_Types {
         if (!s.endsWith(".txt")) return s;
         if (s.charAt(len-6) != 'd') return s;
         char c = s.charAt(len-5);
-        if (c < '0' || '9' < c) return s;
-        System.out.println("Fixing File Name");
-        return s.substring(0,len-6) + s.substring(len-4);
+        if (c != 'X' && (c < '0' || '9' < c)) return s;
+        s = s.substring(0,len-6) + s.substring(len-4);
+        System.out.println("Fixing File Name: " + s);
+        return s;
     }
 
     static final int HEADER_EXTEND = 0, HEADER_DERIVED = 1, HEADER_SCRIPTS = 2;
 
     public static void doHeader(String fileName, PrintWriter output, int headerChoice) {
-        output.println("# " + fileName + ".txt");
+        output.println("# " + fileName);
         output.println("#");
         if (headerChoice == HEADER_SCRIPTS) {
             output.println("# For documentation, see UTR #24: Script Names");
@@ -266,11 +263,23 @@ public class GenerateData implements UCD_Types {
         output.println();
     }
 
-    public static void generateDerived (long bitMask, int headerChoice, String fileName) throws IOException {
-        PrintWriter output = Utility.openPrintWriter(fileName + "dX.txt");
-        doHeader(fileName, output, headerChoice);
+    public static String getFileSuffix(boolean withDVersion) {
+        return "-" + ucd.getVersion() + (withDVersion ? "d1.txt" : ".txt");
+    }
+    
+    public static void generateDerived (byte type, boolean checkTypeAndStandard, int headerChoice, String directory, String fileName) throws IOException {
+        PrintWriter output = Utility.openPrintWriter(directory + fileName + getFileSuffix(true));
+        generateBat(directory, fileName, getFileSuffix(true));
+        doHeader(fileName + getFileSuffix(false), output, headerChoice);
         for (int i = 0; i < DERIVED_PROPERTY_LIMIT; ++i) {
-            if ((bitMask & (1L<<i)) == 0) continue;
+            UnicodeProperty up = DerivedProperty.make(i, ucd);
+            boolean keepGoing = true;
+            if (!up.isStandard()) keepGoing = false;
+            if ((up.getType() & type) == 0) keepGoing = false;
+            
+            if (checkTypeAndStandard != keepGoing) continue;
+            //if ((bitMask & (1L<<i)) == 0) continue;
+            
             System.out.print('.');
             output.println(HORIZONTAL_LINE);
             output.println();
@@ -302,8 +311,10 @@ public class GenerateData implements UCD_Types {
     */
 
     public static void generateCompExclusions(String version) throws IOException {
-        PrintWriter output = Utility.openPrintWriter("DerivedData/CompositionExclusions-" + version + "dX.txt" );
-        output.println("# CompositionExclusions-" + version + ".txt");
+        PrintWriter output = Utility.openPrintWriter("DerivedData/CompositionExclusions" + getFileSuffix(true));
+        generateBat("DerivedData/", "CompositionExclusions", getFileSuffix(true));
+        
+        output.println("# CompositionExclusions" + getFileSuffix(false));
         output.println("#");
         output.println("# Composition Exclusions");
         output.println("# This file lists the characters from the UAX #15 Composition Exclusion Table.");
@@ -370,7 +381,7 @@ public class GenerateData implements UCD_Types {
 
         public String optionalComment(int cp) { return ""; }
         /*
-        public String propertyName(int cp) {
+        public String valueName(int cp) {
             return UTF32.length32(ucdData.getDecompositionMapping(cp)) + "";
         }
         */
@@ -594,6 +605,8 @@ public class GenerateData implements UCD_Types {
             if (up == null) continue;
             if (!up.isStandard()) continue;
             
+            System.out.println("At" + Utility.hex(i));
+            
             if (type == i && type != BINARY_PROPERTIES && type != DERIVED) {
                 propAbb = fixGaps(up.getProperty(SHORT), false);
                 prop = fixGaps(up.getProperty(LONG), true);
@@ -603,7 +616,7 @@ public class GenerateData implements UCD_Types {
                 if (!prop.equals(propAbb)) checkDuplicate(duplicates, accumulation, prop, prop);
             }
             
-            
+            if (up.valueVaries()) continue;
             value = up.getValue(LONG);
             if (value.length() == 0) value = "none";
             else if (value.equals("<unused>")) continue;
@@ -654,20 +667,37 @@ public class GenerateData implements UCD_Types {
                 continue;
             }
             
-            sorted.add(propAbb + "; " + valueAbb + spacing + "; " + value);
+            if (type == COMBINING_CLASS) {
+                sorted.add(propAbb + "; " + up.getValue(NUMBER) + "; " + valueAbb + spacing + "; " + value);
+            } else {
+                sorted.add(propAbb + "; " + valueAbb + spacing + "; " + value);
+            }
             checkDuplicate(duplicates, accumulation, value, prop + "=" + value);
-            if (!value.equalsIgnoreCase(valueAbb)) checkDuplicate(duplicates, accumulation, valueAbb, prop + "=" + value);
+            if (!value.equalsIgnoreCase(valueAbb) && !valueAbb.equals("n/a")) {
+                checkDuplicate(duplicates, accumulation, valueAbb, prop + "=" + value);
+            }
         }
         
-        PrintWriter log = Utility.openPrintWriter("PropertyAliases-" + ucd.getVersion() + "dX.txt");
-        Utility.appendFile("PropertyAliasHeader.txt", false, log);
+        String filename = "PropertyAliases-" + ucd.getVersion();
+        PrintWriter log = Utility.openPrintWriter("DerivedData/" + filename + getFileSuffix(true));
+        generateBat("DerivedData/", filename, getFileSuffix(true));
+        
+        log.println("# " + filename + getFileSuffix(false));
+        log.println("#");
         log.println("# Generated: " + new Date() + ", MD");
+        Utility.appendFile("PropertyAliasHeader.txt", false, log);
         log.println(HORIZONTAL_LINE);
         log.println();
         Utility.print(log, sorted, "\r\n", new MyBreaker(true));
         log.close();
         
-        log = Utility.openPrintWriter("PropertyValueAliases-" + ucd.getVersion() + "dX.txt");
+        filename = "PropertyValueAliases-" + ucd.getVersion();
+        log = Utility.openPrintWriter("DerivedData/" + filename + getFileSuffix(true));
+        generateBat("DerivedData/", filename, getFileSuffix(true));
+        
+        log.println("# " + filename + getFileSuffix(false));
+        log.println("#");
+        log.println("# Generated: " + new Date() + ", MD");
         Utility.appendFile("PropertyValueAliasHeader.txt", false, log);
         log.println("# Generated: " + new Date() + ", MD");
         log.println(HORIZONTAL_LINE);
@@ -675,7 +705,9 @@ public class GenerateData implements UCD_Types {
         Utility.print(log, sorted, "\r\n", new MyBreaker(false));
         log.close();
         
-        log = Utility.openPrintWriter("PropertyAliasSummary-" + ucd.getVersion() + "dX.txt");
+        filename = "PropertyAliasSummary-" + ucd.getVersion();
+        log = Utility.openPrintWriter("OtherData/" + filename + getFileSuffix(true));
+        generateBat("OtherData/", filename, getFileSuffix(true));
         log.println();
         log.println(HORIZONTAL_LINE);
         log.println();
@@ -808,24 +840,34 @@ public class GenerateData implements UCD_Types {
     }
     
     static final byte KEEP_SPECIAL = 0, SKIP_SPECIAL = 1;
+    
+    public static void generateBat(String directory, String fileRoot, String suffix) throws IOException {
+        String oldName = Utility.getMostRecentUnicodeDataFile(fixFile(fileRoot), ucd.getVersion(), true);
+        if (oldName == null) {
+            System.out.println("No previous version of: " + fileRoot + ".txt");
+            return;
+        }
+        PrintWriter output = Utility.openPrintWriter(directory + "DIFF/Diff_" + fileRoot + ".bat");
+        String newName = Utility.getOutputName(directory + fileRoot + suffix);
+        System.out.println("Writing BAT to compare " + oldName + " and " + newName);
+        
+        File newFile = new File(newName);
+        File oldFile = new File(oldName);
+        output.println("\"C:\\Program Files\\wincmp.exe\" "
+            + oldFile.getCanonicalFile()
+            + " "
+            + newFile.getCanonicalFile());
+        output.close();
+    }
+        
 
     public static void generateVerticalSlice(int startEnum, int endEnum, byte skipSpecial,
-            int headerChoice, String file) throws IOException {
+            int headerChoice, String directory, String file) throws IOException {
 
-        //System.out.println(ucd.toString(0x1E0A));
-        /*
-        System.out.println(ucd.getData(0xFFFF));
-        System.out.println(ucd.getData(0x100000));
-        System.out.println(ucd.getData(0x100000-1));
-        System.out.println(ucd.getData(0x100000-2));
-        System.out.println(ucd.getData(0x100000-3));
-        if (true) return;
-        String test2 = ucd.getName(0x2A6D6);
-        //*/
-
-
-        PrintWriter output = Utility.openPrintWriter(file + "dX.txt");
-        doHeader(file, output, headerChoice);
+        PrintWriter output = Utility.openPrintWriter(directory + file + getFileSuffix(true));
+        generateBat(directory, file, getFileSuffix(true));
+        
+        doHeader(file + getFileSuffix(false), output, headerChoice);
         int last = -1;
         for (int i = startEnum; i < endEnum; ++i) {
             UnicodeProperty up = UnifiedBinaryProperty.make(i, ucd);
@@ -889,9 +931,9 @@ public class GenerateData implements UCD_Types {
 
     static public Normalizer formC, formD, formKC, formKD;
 
-    static public void writeNormalizerTestSuite(String fileName) throws IOException {
-
-        PrintWriter log = Utility.openPrintWriter(fileName);
+    static public void writeNormalizerTestSuite(String directory, String fileName) throws IOException {
+        PrintWriter log = Utility.openPrintWriter(directory + fileName + getFileSuffix(true));
+        generateBat(directory, fileName, getFileSuffix(true));
 
 	    formC = new Normalizer(Normalizer.NFC);
 	    formD = new Normalizer(Normalizer.NFD);
@@ -900,7 +942,7 @@ public class GenerateData implements UCD_Types {
 
         String[] example = new String[256];
 
-        log.println("# " + fixFile(fileName));
+        log.println("# " + fileName + getFileSuffix(false));
         log.println("#");
         log.println("# Normalization Test Suite");
         log.println("# Date: " + myDateFormat.format(new Date()) + " [MD]");
@@ -1073,11 +1115,15 @@ public class GenerateData implements UCD_Types {
 
     };
     
-    static final void generateAge(String filename) throws IOException {
-        PrintWriter log = Utility.openPrintWriter(filename + "dX.txt");
+    static final void generateAge(String directory, String filename) throws IOException {
+        PrintWriter log = Utility.openPrintWriter(directory + filename + getFileSuffix(true));
+        generateBat(directory, filename, getFileSuffix(true));
         try {
-            log.println("# Derived file showing when various code points were designated in Unicode");
-            log.println("# generated: " + new Date() + ", MD");
+            log.println("# " + filename + getFileSuffix(false));
+            log.println("#");
+            log.println("# Unicode Character Database: Derived Property Data");
+            log.println("# This file shows when various code points were designated in Unicode");
+            log.println("# Generated: " + new Date() + ", MD");
             log.println("# Notes:");
             log.println("# - The term 'designated' means that a previously reserved code point was specified");
             log.println("#   to be a noncharacter or surrogate, or assigned as a character,");
@@ -1088,6 +1134,11 @@ public class GenerateData implements UCD_Types {
             log.println("# - The supplementary private use code points and the non-character code points");
             log.println("#   were designated in version 2.0, but not specifically listed in the UCD");
             log.println("#   until versions 3.0 and 3.1 respectively.");
+            log.println("#");
+            log.println("# For details on the contents of each version, see");
+            log.println("#   http://www.unicode.org/versions/enumeratedversions.html.");
+            
+            http://www.unicode.org/versions/enumeratedversions.html
             
             log.println(HORIZONTAL_LINE);
             log.println();

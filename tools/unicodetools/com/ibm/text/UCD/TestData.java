@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/TestData.java,v $
-* $Date: 2001/12/05 02:41:23 $
-* $Revision: 1.6 $
+* $Date: 2001/12/06 00:05:53 $
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -218,7 +218,7 @@ public class TestData implements UCD_Types {
             oldUCD = UCD.make("3.0.0");
             showOnConsole = true;
         }
-        public String propertyName(int cp) {
+        public String valueName(int cp) {
             return UTF32.length32(ucdData.getDecompositionMapping(cp)) + "";
         }
         public byte status(int cp) {

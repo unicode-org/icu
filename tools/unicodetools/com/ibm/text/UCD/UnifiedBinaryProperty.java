@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UnifiedBinaryProperty.java,v $
-* $Date: 2001/12/05 02:41:22 $
-* $Revision: 1.2 $
+* $Date: 2001/12/06 00:05:53 $
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -67,11 +67,14 @@ final class UnifiedBinaryProperty extends UnicodeProperty {
         ucd = ucdin;
         majorProp = propMask >> 8;
         propValue = propMask & 0xFF;
-        header = UCD_Names.UNIFIED_PROPERTIES[majorProp];
-        name = UCD_Names.ABB_UNIFIED_PROPERTIES[majorProp];
+        
+        header = UCD_Names.UNIFIED_PROPERTY_HEADERS[majorProp];
+        name = UCD_Names.UNIFIED_PROPERTIES[majorProp];
         shortName = UCD_Names.SHORT_UNIFIED_PROPERTIES[majorProp];
+        
         valueName = _getValue(LONG);
         shortValueName = _getValue(SHORT);
+        numberValueName = _getValue(NUMBER);
         defaultValueStyle = _getDefaultStyle();
         System.out.println("Value = " + getValue(defaultValueStyle));
         // System.out.println(majorProp + ", " + propValue + ", " + name);
@@ -199,8 +202,8 @@ final class UnifiedBinaryProperty extends UnicodeProperty {
     public String getFullName(byte style) {
         String pre = "";
         if ((majorProp) != BINARY_PROPERTIES>>8) {
-            String preShort = UCD_Names.ABB_UNIFIED_PROPERTIES[majorProp] + "=";
-            String preLong = UCD_Names.SHORT_UNIFIED_PROPERTIES[majorProp] + "=";
+            String preShort = getProperty(SHORT) + "=";
+            String preLong = getProperty(LONG) + "=";
             if (style < LONG) pre = preShort;
             else if (style == LONG || preShort.equals(preLong)) pre = preLong;
             else pre = preShort + "(" + preLong + ")";
@@ -227,7 +230,7 @@ final class UnifiedBinaryProperty extends UnicodeProperty {
         try {
             switch (majorProp) {
             case CATEGORY>>8: return ucd.getCategoryID_fromIndex((byte)propValue, style);
-            case COMBINING_CLASS>>8: return String.valueOf(propValue);
+            case COMBINING_CLASS>>8: return ucd.getCombiningClassID_fromIndex((byte)propValue, style);
             case BIDI_CLASS>>8: return ucd.getBidiClassID_fromIndex((byte)propValue, style);
             case DECOMPOSITION_TYPE>>8: return ucd.getDecompositionTypeID_fromIndex((byte)propValue, style);
             case NUMERIC_TYPE>>8: if (propValue >= LIMIT_NUMERIC_TYPE) break;
@@ -271,7 +274,7 @@ final class UnifiedBinaryProperty extends UnicodeProperty {
         try {
             switch (majorProp) {
             case CATEGORY>>8: return SHORT;
-            case COMBINING_CLASS>>8: return SHORT;
+            case COMBINING_CLASS>>8: return NUMBER;
             case BIDI_CLASS>>8: return SHORT;
             case DECOMPOSITION_TYPE>>8: return LONG;
             case NUMERIC_TYPE>>8: return LONG;

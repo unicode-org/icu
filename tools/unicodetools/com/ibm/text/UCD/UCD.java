@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD.java,v $
-* $Date: 2001/12/05 02:41:23 $
-* $Revision: 1.7 $
+* $Date: 2001/12/06 00:05:53 $
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -74,11 +74,16 @@ public final class UCD implements UCD_Types {
      */
     public boolean isAllocated(int codePoint) {
         if (getCategory(codePoint) != Cn) return true;
+        if (major >= 2 && codePoint >= 0xF0000 && codePoint <= 0x10FFFD) return true;
+        if (isNoncharacter(codePoint)) return true;
+        return false;
+    }
+    
+    public boolean isNoncharacter(int codePoint) {
         if ((codePoint & 0xFFFE) == 0xFFFE) {
             if (major < 2 && codePoint > 0xFFFF) return false;
-            return true;         // Noncharacter
+            return true;
         }
-        if (major >= 2 && codePoint >= 0xF0000 && codePoint <= 0x10FFFD) return true;
         if (codePoint >= 0xFDD0 && codePoint <= 0xFDEF && major >= 3 && minor >= 1) return true;
         return false;
     }
@@ -550,11 +555,21 @@ public final class UCD implements UCD_Types {
         return (style != LONG) ? UCD_Names.GC[prop] : UCD_Names.LONG_GC[prop];
     }
     
-    public String getCombiningID(int codePoint, byte style) {
-        return getCombiningID_fromIndex(getCombiningClass(codePoint), style);
+    
+    public String getCombiningClassID(int codePoint) {
+        return getCombiningClassID_fromIndex(getCombiningClass(codePoint), NORMAL);
+    }
+
+    public String getCombiningClassID(int codePoint, byte style) {
+        return getCombiningClassID_fromIndex(getCombiningClass(codePoint), style);
     }
     
-    static String getCombiningID_fromIndex (short index, byte style) {
+    public static String getCombiningClassID_fromIndex(short cc) {
+        return getCombiningClassID_fromIndex(cc, NORMAL);
+    }
+
+    static String getCombiningClassID_fromIndex (short index, byte style) {
+        if (style == NORMAL || style == NUMBER) return String.valueOf(index & 0xFF);
         String s = "Fixed";
         switch (index) {
             case 0: s = style < LONG ? "NR" : "NotReordered"; break;
@@ -597,14 +612,6 @@ public final class UCD implements UCD_Types {
     
     public static String getBidiClassID_fromIndex(byte prop, byte style) {
         return style == SHORT ? UCD_Names.BC[prop] : UCD_Names.LONG_BC[prop];
-    }
-
-    public String getCombiningClassID(int codePoint) {
-        return getCombiningClassID_fromIndex(getCombiningClass(codePoint));
-    }
-
-    public static String getCombiningClassID_fromIndex(short cc) {
-        return cc + "";
     }
 
     public String getDecompositionTypeID(int codePoint) {
@@ -905,7 +912,7 @@ to guarantee identifier closure.
           case   0xE000: // Private Use
           case  0xF0000: // Private Use
           case 0x100000: // Private Use
-            if (fixStrings) constructedName = "<private use-" + Utility.hex(codePoint, 4) + ">";
+            if (fixStrings) constructedName = "<private use area-" + Utility.hex(codePoint, 4) + ">";
             break;
           case 0xD800: // Surrogate
           case 0xDB80: // Private Use
@@ -919,7 +926,7 @@ to guarantee identifier closure.
         result = getRaw(rangeStart);
         if (result == null) {
             result = UData.UNASSIGNED;
-            if (fixStrings) result.name = "<unassigned-" + Utility.hex(codePoint, 4) + ">";
+            if (fixStrings) result.name = "<reserved-" + Utility.hex(codePoint, 4) + ">";
             return result;
         }
 
