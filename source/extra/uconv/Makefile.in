@@ -25,7 +25,7 @@ RESDIR=uconvmsg
 RESFILES=$(RESSRC:%.txt=$(RESDIR)/%.res)
 
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~
+CLEANFILES = *~ $(DEPS)
 
 ## Target information
 TARGET = uconv
