@@ -4198,13 +4198,12 @@ static void TestImplicitGeneration(void) {
         return;
     }
     
-    //int x = foo.getRawImplicit(0xF810);
     uprv_uca_getRawFromImplicit(0xE20303E7);
 
     for (i = 0; i <= MAX_INPUT; ++i) {
         current = uprv_uca_getImplicitFromRaw(i) & fourBytes;
     
-        // check that it round-trips AND that all intervening ones are illegal
+        /* check that it round-trips AND that all intervening ones are illegal*/
         roundtrip = uprv_uca_getRawFromImplicit(current);
         if (roundtrip != i) {
             log_err("No roundtrip %08X\n", i); 
@@ -4212,19 +4211,19 @@ static void TestImplicitGeneration(void) {
         if (last != 0) {
             for (j = last + 1; j < current; ++j) {
                 roundtrip = uprv_uca_getRawFromImplicit(j);
-                // raise an error if it *doesn't* find an error
+                /* raise an error if it *doesn't* find an error*/
                 if (roundtrip != -1) {
                     log_err("Fails to recognize illegal %08X\n", j);
                 }
             }
         }
-        // now do other consistency checks
+        /* now do other consistency checks*/
         lastBottom = last & bottomByte;
         currentBottom = current & bottomByte;
         lastTop = last & topByte;
         currentTop = current & topByte;
 
-        // print out some values for spot-checking
+        /* print out some values for spot-checking*/
         if (lastTop != currentTop || i == 0x10000 || i == 0x110000) {
             showImplicit(i-3);
             showImplicit(i-2);
@@ -4232,7 +4231,6 @@ static void TestImplicitGeneration(void) {
             showImplicit(i);
             showImplicit(i+1);
             showImplicit(i+2);
-            //System.out.println("...");
         }
         last = current;
     }
