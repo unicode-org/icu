@@ -247,7 +247,14 @@ static void initGlobalMutex() {
         void              *t;
         CRITICAL_SECTION  *ourCritSec = uprv_malloc(sizeof(CRITICAL_SECTION)); 
         InitializeCriticalSection(ourCritSec);
+#if defined (InterlockedCompareExchangePointer) || defined (_WIN64)
         t = InterlockedCompareExchangePointer(&gGlobalMutex, ourCritSec, NULL);
+#else
+        /* Note that the headers from Microsoft's WIndows SDK define InterlockedCompareExchangePointer
+         * for all platforms, but the old headers included with MSVC 6 do not.
+         */
+        t = (void *)InterlockedCompareExchange(&gGlobalMutex, (long)ourCritSec, NULL);
+#endif
         if (t != NULL) {
             /* Some other thread stored into gGlobalMutex first.  Discard the critical
              *  section we just created; the system will go with the other one.
