@@ -242,23 +242,21 @@ protected:
     UClassID myClass::getDynamicClassID() const \
     { return myClass::getStaticClassID(); }
 
-// Future implementation for RTTI that support subtyping. [alan]
-// 
-// /**
-//  * This macro adds ICU RTTI to an ICU abstract class implementation.
-//  * This macro should be invoked in *.cpp files.  The corresponding
-//  * header should declare getStaticClassID.
-//  *
-//  * @param myClass The name of the class that needs RTTI defined.
-//  * @param myParent The name of the myClass's parent.
-//  * @internal
-//  */
-/* #define UOBJECT_DEFINE_ABSTRACT_RTTI_IMPLEMENTATION(myClass, myParent) \
+
+/**
+ * This macro adds ICU RTTI to an ICU abstract class implementation.
+ * This macro should be invoked in *.cpp files.  The corresponding
+ * header should declare getStaticClassID.
+ *
+ * @param myClass The name of the class that needs RTTI defined.
+ * @internal
+ */
+#define UOBJECT_DEFINE_ABSTRACT_RTTI_IMPLEMENTATION(myClass) \
     UClassID myClass::getStaticClassID() { \
-        static const UClassID CLASS = (UClassID)myParent::getStaticClassID(); \
-        return (UClassID)&CLASS; \
+        static const char classID = 0; \
+        return (UClassID)&classID; \
     }
-*/ 
+
 // /**
 //  * This macro adds ICU RTTI to an ICU concrete class implementation.
 //  * This macro should be invoked in *.cpp files.  The corresponding

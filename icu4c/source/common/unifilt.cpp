@@ -12,7 +12,7 @@
 #include "unicode/rep.h"
 
 U_NAMESPACE_BEGIN
-UOBJECT_DEFINE_RTTI_IMPLEMENTATION(UnicodeFilter)
+UOBJECT_DEFINE_ABSTRACT_RTTI_IMPLEMENTATION(UnicodeFilter)
 
 
 /* Define this here due to the lack of another file.
