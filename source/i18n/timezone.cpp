@@ -70,9 +70,9 @@ static UDataMemory*        UDATA_POINTER = 0;
 static UMTX                LOCK;
 static UBool               DATA_LOADED = FALSE;
 
-const TimeZone*            GMT = NULL;
+static TimeZone*           GMT = NULL;
 
-static void                 loadZoneData(void);
+static void                loadZoneData(void);
 static const TZEquivalencyGroup* lookupEquivalencyGroup(const UnicodeString& id);
 
 // -------------------------------------
