@@ -9,7 +9,7 @@
 #include "unicode/ustring.h"
 #include "hash.h"
 #include "unormimp.h"
-#include "caniter.h"
+#include "unicode/caniter.h"
 #include "unicode/normlzr.h"
 #include "unicode/uchar.h"
 #include "cmemory.h"
@@ -81,7 +81,7 @@ const char CanonicalIterator::fgClassID=0;
 /**
  *@param source string to get results for
  */
-CanonicalIterator::CanonicalIterator(UnicodeString sourceStr, UErrorCode &status) :
+CanonicalIterator::CanonicalIterator(const UnicodeString &sourceStr, UErrorCode &status) :
     pieces(NULL),
     pieces_length(0),
     pieces_lengths(NULL),
@@ -141,12 +141,15 @@ void CanonicalIterator::reset() {
  */
 UnicodeString CanonicalIterator::next() {
     int32_t i = 0;
-    if (done)
-        return "";
+    buffer.truncate(0); //buffer.setLength(0); // delete old contents
+
+    if (done) {
+      buffer.setToBogus();
+      return buffer;
+    }
 
     // construct return value
 
-    buffer.truncate(0); //buffer.setLength(0); // delete old contents
     for (i = 0; i < pieces_length; ++i) {
         buffer.append(pieces[i][current[i]]);
     }
