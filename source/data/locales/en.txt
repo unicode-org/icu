@@ -239,10 +239,10 @@ en {
         TH { "Thailand" }
         TJ { "Tajikistan" }
         TK { "Tokelau" }
+        TL { "Timor-Leste" }    // This was called East Timor
         TM { "Turkmenistan" }
         TN { "Tunisia" }
         TO { "Tonga" }
-        TL { "Timor-Leste" }    // This was called East Timor
         TR { "Turkey" }
         TT { "Trinidad and Tobago" }
         TV { "Tuvalu" }
