@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $
-* $Date: 2002/12/05 21:34:12 $
-* $Revision: 1.60 $
+* $Date: 2002/12/12 23:26:46 $
+* $Revision: 1.61 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -17,7 +17,8 @@
 <project name="ICU4J" default="core" basedir=".">
 
     <!-- ### begin clover setup ### -->
-    <property name="clover.initstring" value="tmp/icu4j.db"/>
+    <property name="icu4j.tempdir" value="tmp"/>
+    <property name="clover.initstring" value="${icu4j.tempdir}/icu4j.db"/>
     <path id="clover.classpath">
 	<!-- ***** you will need to change the paths below to point
 	           to clover.jar and velocity.jar on your filesystem ***** -->
@@ -37,7 +38,7 @@
     <!-- target to generate a Clover html report -->
     <target name="clover.report">
 	<java classname="com.cortexeb.tools.clover.reporters.html.HtmlReporter" fork="yes">
-	    <arg line="--outputdir tmp/icu4j_html --showSrc --initstring ${clover.initstring} --title 'icu4j core'"/>
+	    <arg line="--outputdir ${icu4j.tempdir}/icu4j_html --showSrc --initstring ${clover.initstring} --title 'icu4j core'"/>
 	    <classpath refid="clover.classpath"/>
 	</java>
     </target>
@@ -159,11 +160,13 @@
             debug="on" deprecation="off"/>
     </target>
 
+<!-- use excludefiles below when we move to ant 1.5 -->
+
     <target name="docs" depends="anthack1,anthack2,tools">
         <echo message="doc params: ${doc.params}"/>
         <mkdir dir="${doc.dir}"/>
         <javadoc
-            packagenames="com.ibm.icu.lang,com.ibm.icu.dev.tool.translit,com.ibm.icu.text,com.ibm.icu.impl.data,com.ibm.icu.dev.tool.compression,com.ibm.icu.util,com.ibm.icu.dev.tool.rbbi,com.ibm.icu.math,com.ibm.richtext.textlayout,com.ibm.richtext.textlayout.attributes,com.ibm.richtext.awtui,com.ibm.richtext.print,com.ibm.richtext.styledtext,com.ibm.richtext.swingui,com.ibm.richtext.textapps,com.ibm.richtext.textformat,com.ibm.richtext.textpanel,com.ibm.richtext.uiimpl,com.ibm.richtext.uiimpl.resources,com.ibm.richtext.textapps.resources"
+            packagenames="com.ibm.icu.lang,com.ibm.icu.text,com.ibm.icu.util,com.ibm.icu.math,com.ibm.richtext.demo,com.ibm.richtext.textlayout.attributes,com.ibm.richtext.awtui,com.ibm.richtext.print,com.ibm.richtext.styledtext,com.ibm.richtext.swingui,com.ibm.richtext.textapps,com.ibm.richtext.textformat,com.ibm.richtext.textpanel"
             sourcepath="${src.dir}"
             destdir="${doc.dir}"
             nodeprecatedlist="true"
@@ -202,6 +205,9 @@
     	    destdir="${build.dir}"
     	    classpathref="build.classpath"
             debug="on" deprecation="off"/>
+        <copy todir="${build.dir}/com/ibm/richtext/textapps/resources" overwrite="yes" includeEmptyDirs="no">
+            <fileset dir="${src.dir}/com/ibm/richtext/textapps/resources" includes="*.red"/>
+        </copy>
     </target>
 
     <target name="jar" depends="core">
@@ -232,7 +238,7 @@
     <!-- the 'public' docs for richedit -->
     <target name="richeditDocs" depends="init">
         <mkdir dir="${richedit.doc.dir}"/>
-        <javadoc  packagenames="com.ibm.richtext.awtui,com.ibm.richtext.swingui,com.ibm.richtext.textpanel,com.ibm.richtext.styledtext,com.ibm.richtext.textlayout.attributes,com.ibm.richtext.print"
+        <javadoc  packagenames="com.ibm.richtext.demo,com.ibm.richtext.awtui,com.ibm.richtext.swingui,com.ibm.richtext.textpanel,com.ibm.richtext.styledtext,com.ibm.richtext.textlayout.attributes,com.ibm.richtext.print"
             sourcepath="${src.dir}"
             destdir="${richedit.doc.dir}"
             nodeprecatedlist="true"

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/BreakIterator.java,v $
- * $Date: 2002/12/05 01:21:28 $
- * $Revision: 1.13 $
+ * $Date: 2002/12/12 23:26:56 $
+ * $Revision: 1.14 $
  *
  *****************************************************************************************
  */
@@ -39,7 +39,9 @@ import java.util.Vector;
  * example, to break a piece of text into words, sentences, or logical characters
  * according to the conventions of some language or group of languages.
  *
- * We provide four built-in types of BreakIterator:
+ * We provide five built-in types of BreakIterator:
+ * <ul><li>getTitleInstance() returns a BreakIterator that locates boundaries
+ * between title breaks.</li>
  * <ul><li>getSentenceInstance() returns a BreakIterator that locates boundaries
  * between sentences.  This is useful for triple-click selection, for example.
  * <li>getWordInstance() returns a BreakIterator that locates boundaries between
@@ -420,23 +422,17 @@ public abstract class BreakIterator implements Cloneable
      */
     public abstract void setText(CharacterIterator newText);
 
-    /** @stable ICU 2.0 */
+    /** @draft ICU 2.4 */
     public static final int KIND_CHARACTER = 0;
-    /** @stable ICU 2.0 */
+    /** @draft ICU 2.4 */
     public static final int KIND_WORD = 1;
-    /** @stable ICU 2.0 */
+    /** @draft ICU 2.4 */
     public static final int KIND_LINE = 2;
-    /** @stable ICU 2.0 */
+    /** @draft ICU 2.4 */
     public static final int KIND_SENTENCE = 3;
-    /** @stable ICU 2.0 */
+    /** @draft ICU 2.4 */
     public static final int KIND_TITLE = 4;
-    /*
-    private static final int CHARACTER_INDEX = 0;
-    private static final int WORD_INDEX = 1;
-    private static final int LINE_INDEX = 2;
-    private static final int SENTENCE_INDEX = 3;
-    private static final int TITLE_INDEX = 4;
-    */
+
     /** @internal */
     private static final SoftReference[] iterCache = new SoftReference[5];
 
@@ -540,10 +536,10 @@ public abstract class BreakIterator implements Cloneable
     }
 
     /**
-     * Returns a new instance of BreakIterator that locates sentence boundaries.
+     * Returns a new instance of BreakIterator that locates title boundaries.
      * This function assumes the text being analyzed is in the default locale's
      * language.
-     * @return A new instance of BreakIterator that locates sentence boundaries.
+     * @return A new instance of BreakIterator that locates title boundaries.
      * @stable ICU 2.0
      */
     public static BreakIterator getTitleInstance()
@@ -552,9 +548,9 @@ public abstract class BreakIterator implements Cloneable
     }
 
     /**
-     * Returns a new instance of BreakIterator that locates sentence boundaries.
+     * Returns a new instance of BreakIterator that locates title boundaries.
      * @param where A Locale specifying the language of the text being analyzed.
-     * @return A new instance of BreakIterator that locates sentence boundaries.
+     * @return A new instance of BreakIterator that locates title boundaries.
      * @stable ICU 2.0
      */
     public static BreakIterator getTitleInstance(Locale where)
