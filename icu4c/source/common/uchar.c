@@ -310,7 +310,7 @@ enum {
 };
 
 /* getting a uint32_t properties word from the data */
-#define HAVE_DATA (havePropsData>0 || havePropsData==0 && loadPropsData()>0)
+#define HAVE_DATA (havePropsData>0 || (havePropsData==0 && loadPropsData()>0))
 #define VALIDATE(c) (((uint32_t)(c))<=0x10ffff && HAVE_DATA)
 #define GET_PROPS(c) \
     (((uint32_t)(c))<=0x10ffff ? \
