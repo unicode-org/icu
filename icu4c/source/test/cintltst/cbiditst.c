@@ -30,10 +30,10 @@ static void
 doBiDiTest(void);
 
 static void
-doTests(UBiDi *pBiDi, UBiDi *pLine);
+doTests(UBiDi *pBiDi, UBiDi *pLine, UBool countRunsFirst);
 
 static void
-doTest(UBiDi *pBiDi, int testNumber, BiDiTestData *test, int32_t lineStart);
+doTest(UBiDi *pBiDi, int testNumber, BiDiTestData *test, int32_t lineStart, UBool countRunsFirst);
 
 static void
 testReordering(UBiDi *pBiDi, int testNumber);
@@ -100,7 +100,8 @@ doBiDiTest() {
     if(pBiDi!=NULL) {
         pLine=ubidi_open();
         if(pLine!=NULL) {
-            doTests(pBiDi, pLine);
+            doTests(pBiDi, pLine, FALSE);
+			doTests(pBiDi, pLine, TRUE);
         } else {
             log_err("ubidi_open() returned NULL, out of memory\n");
         }
@@ -119,7 +120,7 @@ doBiDiTest() {
 }
 
 static void
-doTests(UBiDi *pBiDi, UBiDi *pLine) {
+doTests(UBiDi *pBiDi, UBiDi *pLine, UBool countRunsFirst) {
     int i;
     UChar *s;
     UErrorCode errorCode;
@@ -136,13 +137,13 @@ doTests(UBiDi *pBiDi, UBiDi *pLine) {
                     i, paraLevel, ubidi_getDirection(pBiDi), ubidi_getParaLevel(pBiDi));
             lineStart=tests[i].lineStart;
             if(lineStart==-1) {
-                doTest(pBiDi, i, tests+i, 0);
+                doTest(pBiDi, i, tests+i, 0, countRunsFirst);
             } else {
                 ubidi_setLine(pBiDi, lineStart, tests[i].lineLimit, pLine, &errorCode);
                 if(U_SUCCESS(errorCode)) {
                     log_verbose("ubidi_setLine(%d, %d) ok, direction %d paraLevel=%d\n",
                             lineStart, tests[i].lineLimit, ubidi_getDirection(pLine), ubidi_getParaLevel(pLine));
-                    doTest(pLine, i, tests+i, lineStart);
+                    doTest(pLine, i, tests+i, lineStart, countRunsFirst);
                 } else {
                     log_err("ubidi_setLine(tests[%d], %d, %d) failed with errorCode %s\n",
                             i, lineStart, tests[i].lineLimit, myErrorName(errorCode));
@@ -432,13 +433,26 @@ static void TestReorder(){
 }
 
 static void
-doTest(UBiDi *pBiDi, int testNumber, BiDiTestData *test, int32_t lineStart) {
+doTest(UBiDi *pBiDi, int testNumber, BiDiTestData *test, int32_t lineStart, UBool countRunsFirst) {
     const uint8_t *dirProps=test->text+lineStart;
     const UBiDiLevel *levels=test->levels;
     const uint8_t *visualMap=test->visualMap;
     int32_t i, len=ubidi_getLength(pBiDi), logicalIndex, runCount;
     UErrorCode errorCode=U_ZERO_ERROR;
     UBiDiLevel level, level2;
+
+	if (countRunsFirst) {
+		log_verbose("Calling ubidi_countRuns() first.\n");
+
+		runCount = ubidi_countRuns(pBiDi, &errorCode);
+
+		if(U_FAILURE(errorCode)) {
+			log_err("ubidi_countRuns(tests[%d]): error %s\n", testNumber, myErrorName(errorCode));
+			return;
+		}
+	} else {
+		log_verbose("Calling ubidi_getLogicalMap() first.\n");
+	}
 
     testReordering(pBiDi, testNumber);
 
@@ -493,11 +507,13 @@ doTest(UBiDi *pBiDi, int testNumber, BiDiTestData *test, int32_t lineStart) {
         }
     }
 
-    runCount=ubidi_countRuns(pBiDi, &errorCode);
-    if(U_FAILURE(errorCode)) {
-        log_err("ubidi_countRuns(tests[%d]): error %s\n", testNumber, myErrorName(errorCode));
-        return;
-    }
+	if (! countRunsFirst) {
+		runCount=ubidi_countRuns(pBiDi, &errorCode);
+		if(U_FAILURE(errorCode)) {
+			log_err("ubidi_countRuns(tests[%d]): error %s\n", testNumber, myErrorName(errorCode));
+			return;
+		}
+	}
 
     for(logicalIndex=0; logicalIndex<len;) {
         level=ubidi_getLevelAt(pBiDi, logicalIndex);
