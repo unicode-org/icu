@@ -29,6 +29,7 @@
 #include "cmemory.h"
 #include "ucnv_io.h"
 #include "unicode/udata.h"
+#include "ucln_cmn.h"
 
 /* Format of cnvalias.dat ------------------------------------------------------
  *
@@ -161,7 +162,6 @@ isAlias(const char *alias, UErrorCode *pErrorCode) {
 U_CAPI UBool U_EXPORT2
 ucnv_io_cleanup()
 {
-    umtx_lock(NULL);
     if (aliasData) {
         udata_close(aliasData);
     }
@@ -171,7 +171,6 @@ ucnv_io_cleanup()
 
     converterTable = NULL;
     tagTable = NULL;
-    umtx_unlock(NULL);
 
     return TRUE;                   /* Everything was cleaned up */
 }
