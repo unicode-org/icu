@@ -98,7 +98,7 @@ void TransliteratorTest::TestInstantiation() {
         Transliterator::getDisplayName(id, name);
         if (t == 0) {
             errln(UnicodeString("FAIL: Couldn't create ") + id +
-                  ", parse error " + parseError.code +
+                  /*", parse error " + parseError.code +*/
                   ", line " + parseError.line +
                   ", offset " + parseError.offset +
                   ", context " + prettify(parseError.preContext, TRUE));
@@ -121,7 +121,7 @@ void TransliteratorTest::TestInstantiation() {
             if (u == 0) {
                 errln(UnicodeString("FAIL: ") + id +
                       ".toRules() => bad rules" +
-                      ", parse error " + parseError.code +
+                      /*", parse error " + parseError.code +*/
                       ", line " + parseError.line +
                       ", offset " + parseError.offset +
                       ", context " + prettify(parseError.preContext, TRUE) +
@@ -686,7 +686,7 @@ void TransliteratorTest::TestJ329(void) {
         UnicodeString desc(DATA[i].rule);
         desc.append(gotError ? " -> error" : " -> no error");
         if (gotError) {
-            desc = desc + ", ParseError code=" + parseError.code +
+            desc = desc + ", ParseError code=" + u_errorName(status) +
                 " line=" + parseError.line +
                 " offset=" + parseError.offset +
                 " context=" + parseError.preContext;

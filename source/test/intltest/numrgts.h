@@ -152,6 +152,9 @@ public:
                 UnicodeString& foo, 
                 FieldPosition&) const
     { return foo.remove(); }
+
+    virtual void applyPattern(const UnicodeString&, UParseError& parseError, UErrorCode& status){
+    }
 };
 
 #endif // _NUMBERFORMATREGRESSIONTEST_
