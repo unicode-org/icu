@@ -21,6 +21,8 @@
 #include "unicode/uiter.h"
 #include "cstring.h"
 
+#define IS_POINTER_EVEN(p) (((size_t)p&1)==0)
+
 U_CDECL_BEGIN
 
 /* No-Op UCharIterator implementation for illegal input --------------------- */
@@ -255,7 +257,7 @@ static const UCharIterator utf16BEIterator={
  */
 static int32_t
 utf16BE_strlen(const char *s) {
-    if(((int32_t)s&1)==0) {
+    if(IS_POINTER_EVEN(s)) {
         /*
          * even-aligned, call u_strlen(s)
          * we are probably on a little-endian machine, but searching for UChar NUL
@@ -278,7 +280,7 @@ uiter_setUTF16BE(UCharIterator *iter, const char *s, int32_t length) {
     if(iter!=0) {
         /* allow only even-length strings (the input length counts bytes) */
         if(s!=0 && length==-1 || (length>=0 && (length&1)==0)) {
-            if(U_IS_BIG_ENDIAN && ((int32_t)s&1)==0) {
+            if(U_IS_BIG_ENDIAN && IS_POINTER_EVEN(s)) {
                 /* big-endian machine and 2-aligned UTF-16BE string: use normal UChar iterator */
                 uiter_setString(iter, (const UChar *)s, length/2);
                 return;
