@@ -57,7 +57,7 @@
 #include "ucolimp.h"
 #include "unicode/tblcoll.h"
 #include "unicode/coleitr.h"
-#include "../common/uhash.h"
+#include "uhash.h"
 #include "unicode/resbund.h"
 
 #ifdef _DEBUG
