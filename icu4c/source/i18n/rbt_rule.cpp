@@ -523,11 +523,11 @@ void TransliterationRule::_appendToRule(UnicodeString& rule,
         }
     }
 
-    // Double ' and '\' and don't begin a quote just for them
+    // Escape ' and '\' and don't begin a quote just for them
     else  if (quoteBuf.length() == 0 &&
               (c == (UChar) 0x0027 /*'*/ ||
                c == (UChar) 0x005C /*\*/)) {
-        rule.append(c);
+        rule.append((UChar) 0x005C);
         rule.append(c);
     }
 
