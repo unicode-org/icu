@@ -46,7 +46,7 @@ U_NAMESPACE_BEGIN
  * @see LayoutEngine.h
  * @see LEFontInstance.h
  *
- * @draft ICU 2.2
+ * @obsolete ICU 3.0. Use LayoutEngine.h instead since this API will be removed in that release.
  */
 class U_LAYOUT_API ICULayoutEngine : public UObject {
 private:
@@ -85,7 +85,7 @@ public:
      *
      * @see createInstance
      *
-     * @draft ICU 2.2
+     * @obsolete ICU 3.0. Use LayoutEngine.h instead since this API will be removed in that release.
      */
     virtual ~ICULayoutEngine();
 
@@ -107,7 +107,7 @@ public:
      * Note; the glyph, character index and position array can be accessed
      * using the getter method below.
      *
-     * @draft ICU 2.2
+     * @obsolete ICU 3.0. Use LayoutEngine.h instead since this API will be removed in that release.
      */
     int32_t layoutChars(const UChar chars[],
                         int32_t startOffset,
@@ -135,7 +135,7 @@ public:
      * Note; the glyph, character index and position array can be accessed
      * using the getter method below.
      *
-     * @draft ICU 2.2
+     * @obsolete ICU 3.0. Use LayoutEngine.h instead since this API will be removed in that release.
      */
     int32_t layoutString(const UnicodeString &str,
                          int32_t startOffset,
@@ -151,7 +151,7 @@ public:
      *
      * @return the number of glyphs in the glyph array
      *
-     * @draft ICU 2.2
+     * @obsolete ICU 3.0. Use LayoutEngine.h instead since this API will be removed in that release.
      */
     int32_t countGlyphs() const;
 
@@ -163,7 +163,7 @@ public:
      * @param glyphs - the destiniation glyph array
      * @param success - output parameter set to an error code if the operation fails
      *
-     * @draft ICU 2.2
+     * @obsolete ICU 3.0. Use LayoutEngine.h instead since this API will be removed in that release.
      */
     void getGlyphs(uint32_t glyphs[], UErrorCode &success);
 
@@ -175,7 +175,7 @@ public:
      * @param charIndices - the destiniation character index array
      * @param success - output parameter set to an error code if the operation fails
      *
-     * @draft ICU 2.2
+     * @obsolete ICU 3.0. Use LayoutEngine.h instead since this API will be removed in that release.
      */
     void getCharIndices(int32_t charIndices[], UErrorCode &success);
 
@@ -188,7 +188,7 @@ public:
      * @param indexBase - an offset which will be added to each index
      * @param success - output parameter set to an error code if the operation fails
      *
-     * @draft ICU 2.2
+     * @obsolete ICU 3.0. Use LayoutEngine.h instead since this API will be removed in that release.
      */
     void getCharIndices(int32_t charIndices[], int32_t indexBase, UErrorCode &success);
 
@@ -201,7 +201,7 @@ public:
      * @param glyphs - the destiniation position array
      * @param success - output parameter set to an error code if the operation fails
      *
-     * @draft ICU 2.2
+     * @obsolete ICU 3.0. Use LayoutEngine.h instead since this API will be removed in that release.
      */
     void getGlyphPositions(float positions[], UErrorCode &success);
 
@@ -217,7 +217,7 @@ public:
      * @param y - the glyph's Y position
      * @param success - output parameter set to an error code if the operation fails
      *
-     * @draft ICU 2.2
+     * @obsolete ICU 3.0. Use LayoutEngine.h instead since this API will be removed in that release.
      */
     void getGlyphPosition(int32_t glyphIndex, float &x, float &y, UErrorCode &success);
 
@@ -236,7 +236,7 @@ public:
      *
      * @see LEFontInstance
      *
-     * @draft ICU 2.2
+     * @obsolete ICU 3.0. Use LayoutEngine.h instead since this API will be removed in that release.
      */
     static ICULayoutEngine *createInstance(const LEFontInstance *fontInstance,
                                            UScriptCode scriptCode, Locale &locale,
@@ -245,14 +245,14 @@ public:
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
-     * @draft ICU 2.2
+     * @obsolete ICU 3.0. Use LayoutEngine.h instead since this API will be removed in that release.
      */
     virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
-     * @draft ICU 2.2
+     * @obsolete ICU 3.0. Use LayoutEngine.h instead since this API will be removed in that release.
      */
     static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
 
