@@ -74,7 +74,7 @@ all-local: $(TARGET) $(ALL_MAN_FILES) build-data
 
 install-local: all-local build-data install-man
 	$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
-	$(SHELL) $(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
+	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
 
 
 dist-local:
@@ -99,10 +99,10 @@ $(TARGET) : $(OBJECTS)
 install-man: install-man5 install-manx
 install-man5: $(MAN5_FILES)
 	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man5
-	$(SHELL) $(INSTALL_DATA) $? $(DESTDIR)$(mandir)/man5
+	$(INSTALL_DATA) $? $(DESTDIR)$(mandir)/man5
 install-manx: $(MANX_FILES)
 	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man$(SECTION)
-	$(SHELL) $(INSTALL_DATA) $? $(DESTDIR)$(mandir)/man$(SECTION)
+	$(INSTALL_DATA) $? $(DESTDIR)$(mandir)/man$(SECTION)
 
 %.$(SECTION): $(srcdir)/%.$(SECTION).in
 	cd $(top_builddir) \
