@@ -570,10 +570,10 @@ ChoiceFormat::getFormats(int32_t& cnt) const
 
 UnicodeString&
 ChoiceFormat::format(int32_t number, 
-                     UnicodeString& toAppendTo, 
+                     UnicodeString& appendTo, 
                      FieldPosition& status) const
 {
-    return format((double) number, toAppendTo, status);
+    return format((double) number, appendTo, status);
 }
 
 // -------------------------------------
@@ -581,7 +581,7 @@ ChoiceFormat::format(int32_t number,
 
 UnicodeString&
 ChoiceFormat::format(double number, 
-                     UnicodeString& toAppendTo, 
+                     UnicodeString& appendTo, 
                      FieldPosition& /*pos*/) const
 {
     // find the number
@@ -602,8 +602,8 @@ ChoiceFormat::format(double number,
         i = 0;
     }
     // return either a formatted number, or a string
-    toAppendTo += fChoiceFormats[i];
-    return toAppendTo;
+    appendTo += fChoiceFormats[i];
+    return appendTo;
 }
 
 // -------------------------------------
@@ -613,13 +613,13 @@ ChoiceFormat::format(double number,
 UnicodeString&
 ChoiceFormat::format(const Formattable* objs,
                      int32_t cnt,
-                     UnicodeString& toAppendTo,
+                     UnicodeString& appendTo,
                      FieldPosition& pos,
                      UErrorCode& status) const
 {
     if(cnt < 0) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
-        return toAppendTo;
+        return appendTo;
     }
 
     UnicodeString buffer;
@@ -627,10 +627,10 @@ ChoiceFormat::format(const Formattable* objs,
         double objDouble = (objs[i].getType() == Formattable::kLong) ?
             ((double) objs[i].getLong()) : objs[i].getDouble();
         buffer.remove();
-        toAppendTo += format(objDouble, buffer, pos);
+        appendTo += format(objDouble, buffer, pos);
     }
 
-    return toAppendTo;
+    return appendTo;
 }
 
 // -------------------------------------
@@ -639,11 +639,11 @@ ChoiceFormat::format(const Formattable* objs,
 
 UnicodeString&
 ChoiceFormat::format(const Formattable& obj, 
-                     UnicodeString& toAppendTo, 
+                     UnicodeString& appendTo, 
                      FieldPosition& pos,
                      UErrorCode& status) const
 {
-    return NumberFormat::format(obj, toAppendTo, pos, status);
+    return NumberFormat::format(obj, appendTo, pos, status);
 }
 // -------------------------------------
 

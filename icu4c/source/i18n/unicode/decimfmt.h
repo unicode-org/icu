@@ -339,48 +339,48 @@ public:
      */
     virtual UBool operator==(const Format& other) const;
 
-   /**
-    * Format a double or long number using base-10 representation.
-    *
-    * @param number     The value to be formatted.
-    * @param toAppendTo The string to append the formatted string to.
-    *                   This is an output parameter.
-    * @param pos        On input: an alignment field, if desired.
-    *                   On output: the offsets of the alignment field.
-    * @return           A reference to 'toAppendTo'.
-    * @stable
+    /**
+     * Format a double or long number using base-10 representation.
+     *
+     * @param number    The value to be formatted.
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
+     * @param pos       On input: an alignment field, if desired.
+     *                  On output: the offsets of the alignment field.
+     * @return          Reference to 'appendTo' parameter.
+     * @stable
     */
     virtual UnicodeString& format(double number,
-                                  UnicodeString& toAppendTo,
+                                  UnicodeString& appendTo,
                                   FieldPosition& pos) const;
-   /**
-    * Format a long number using base-10 representation.
-    *
-    * @param number     The value to be formatted.
-    * @param toAppendTo The string to append the formatted string to.
-    *                   This is an output parameter.
-    * @param pos        On input: an alignment field, if desired.
-    *                   On output: the offsets of the alignment field.
-    * @return           A reference to 'toAppendTo'.
-    * @stable
-    */
+    /**
+     * Format a long number using base-10 representation.
+     *
+     * @param number    The value to be formatted.
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
+     * @param pos       On input: an alignment field, if desired.
+     *                  On output: the offsets of the alignment field.
+     * @return          Reference to 'appendTo' parameter.
+     * @stable
+     */
     virtual UnicodeString& format(int32_t number,
-                                  UnicodeString& toAppendTo,
+                                  UnicodeString& appendTo,
                                   FieldPosition& pos) const;
-   /**
-    * Format a Formattable using base-10 representation.
-    *
-    * @param obj        The value to be formatted.
-    * @param toAppendTo The string to append the formatted string to.
-    *                   This is an output parameter.
-    * @param pos        On input: an alignment field, if desired.
-    *                   On output: the offsets of the alignment field.
-    * @param status     Error code indicating success or failure.
-    * @return           A reference to 'toAppendTo'.
-    * @stable
-    */
+    /**
+     * Format a Formattable using base-10 representation.
+     *
+     * @param obj       The value to be formatted.
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
+     * @param pos       On input: an alignment field, if desired.
+     *                  On output: the offsets of the alignment field.
+     * @param status    Error code indicating success or failure.
+     * @return          Reference to 'appendTo' parameter.
+     * @stable
+     */
     virtual UnicodeString& format(const Formattable& obj,
-                                  UnicodeString& toAppendTo,
+                                  UnicodeString& appendTo,
                                   FieldPosition& pos,
                                   UErrorCode& status) const;
 
@@ -389,14 +389,14 @@ public:
      * Formats an object to produce a string.
      *
      * @param obj       The object to format.
-     * @param result    Output parameter which will be filled in with the
-     *                  formatted string.
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
      * @param status    Output parameter filled in with success or failure status.
-     * @return          Reference to 'result' parameter.
+     * @return          Reference to 'appendTo' parameter.
      * @stable
      */
     UnicodeString& format(const Formattable& obj,
-                          UnicodeString& result,
+                          UnicodeString& appendTo,
                           UErrorCode& status) const;
 
     /**
@@ -404,12 +404,13 @@ public:
      * Format a double number.
      *
      * @param number    The value to be formatted.
-     * @param output    Output param with the formatted string.
-     * @return          A reference to 'output' param.
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
+     * @return          Reference to 'appendTo' parameter.
      * @stable
      */
     UnicodeString& format(double number,
-                          UnicodeString& output) const;
+                          UnicodeString& appendTo) const;
 
     /**
      * Redeclared NumberFormat method.
@@ -417,12 +418,13 @@ public:
      * pure virtual format() methods with the default FieldPosition.
      *
      * @param number    The value to be formatted.
-     * @param output    Output param with the formatted string.
-     * @return          A reference to 'output' param.
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
+     * @return          Reference to 'appendTo' parameter.
      * @stable
      */
     UnicodeString& format(int32_t number,
-                          UnicodeString& output) const;
+                          UnicodeString& appendTo) const;
 
    /**
     * Parse the given string using this object's choices. The method
@@ -892,6 +894,7 @@ public:
      * of this Format object.
      *
      * @param result    Output param which will receive the pattern.
+     *                  Previous contents are deleted.
      * @return          A reference to 'result'.
      * @see applyPattern
      * @stable
@@ -903,6 +906,7 @@ public:
      * state of this Format object.
      *
      * @param result    Output param which will receive the localized pattern.
+     *                  Previous contents are deleted.
      * @return          A reference to 'result'.
      * @see applyPattern
      * @stable
@@ -1119,6 +1123,7 @@ private:
      * Does the real work of generating a pattern.
      *
      * @param result     Output param which will receive the pattern.
+     *                   Previous contents are deleted.
      * @param localized  TRUE return localized pattern.
      * @return           A reference to 'result'.
      */
@@ -1141,14 +1146,15 @@ private:
     /**
      * Do the work of formatting a number, either a double or a long.
      *
-     * @param result         Output param which will receive the formatted string.
+     * @param appendTo       Output parameter to receive result.
+     *                       Result is appended to existing contents.
      * @param fieldPosition  On input: an alignment field, if desired.
      *                       On output: the offsets of the alignment field.
      * @param digits         the digits to be formatted.
      * @param isInteger      if TRUE format the digits as Integer.
-     * @return               A reference to 'result'.
+     * @return               Reference to 'appendTo' parameter.
      */
-    UnicodeString& subformat(UnicodeString& result,
+    UnicodeString& subformat(UnicodeString& appendTo,
                              FieldPosition& fieldPosition,
                              DigitList& digits,
                              UBool         isInteger) const;
@@ -1181,14 +1187,14 @@ private:
     inline const UnicodeString &getConstSymbol(DecimalFormatSymbols::ENumberFormatSymbol symbol) const;
 
     /**
-     * Append an affix to the given StringBuffer, using quotes if
+     * Append an affix to the given UnicodeString, using quotes if
      * there are special characters.  Single quotes themselves must be
      * escaped in either case.
      */
-    void appendAffix(UnicodeString& buffer, const UnicodeString& affix, 
+    void appendAffix(UnicodeString& appendTo, const UnicodeString& affix, 
                      UBool localized) const;
 
-    void appendAffix(UnicodeString& buffer,
+    void appendAffix(UnicodeString& appendTo,
                      const UnicodeString* affixPattern,
                      const UnicodeString& expAffix, UBool localized) const;
 
@@ -1199,7 +1205,7 @@ private:
     
     static double round(double a, ERoundingMode mode, UBool isNegative);
 
-    void addPadding(UnicodeString& result,
+    void addPadding(UnicodeString& appendTo,
                     FieldPosition& fieldPosition,
                     UBool hasAffixes,
                     UBool isNegative) const;
@@ -1281,25 +1287,25 @@ protected:
 
 inline UnicodeString&
 DecimalFormat::format(const Formattable& obj,
-                      UnicodeString& result,
+                      UnicodeString& appendTo,
                       UErrorCode& status) const {
     // Don't use Format:: - use immediate base class only,
     // in case immediate base modifies behavior later.
-    return NumberFormat::format(obj, result, status);
+    return NumberFormat::format(obj, appendTo, status);
 }
 
 inline UnicodeString&
 DecimalFormat::format(double number,
-                      UnicodeString& output) const {
+                      UnicodeString& appendTo) const {
     FieldPosition pos(0);
-    return format(number, output, pos);
+    return format(number, appendTo, pos);
 }
 
 inline UnicodeString&
 DecimalFormat::format(int32_t number,
-                      UnicodeString& output) const {
+                      UnicodeString& appendTo) const {
     FieldPosition pos(0);
-    return format(number, output, pos);
+    return format(number, appendTo, pos);
 }
 
 inline const UnicodeString &

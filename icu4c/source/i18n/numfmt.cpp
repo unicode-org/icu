@@ -140,22 +140,22 @@ NumberFormat::operator==(const Format& that) const
 
 UnicodeString&
 NumberFormat::format(const Formattable& obj,
-                        UnicodeString& toAppendTo,
+                        UnicodeString& appendTo,
                         FieldPosition& pos,
                         UErrorCode& status) const
 {
-    if (U_FAILURE(status)) return toAppendTo;
+    if (U_FAILURE(status)) return appendTo;
 
     if (obj.getType() == Formattable::kDouble) {
-        return format(obj.getDouble(), toAppendTo, pos);
+        return format(obj.getDouble(), appendTo, pos);
     }
     else if (obj.getType() == Formattable::kLong) {
-        return format(obj.getLong(), toAppendTo, pos);
+        return format(obj.getLong(), appendTo, pos);
     }
     // can't try to format a non-numeric object
     else {
         status = U_INVALID_FORMAT_ERROR;
-        return toAppendTo;
+        return appendTo;
     }
 }
 
@@ -175,20 +175,20 @@ NumberFormat::parseObject(const UnicodeString& source,
 // Formats a double number and save the result in a string.
 
 UnicodeString&
-NumberFormat::format(double number, UnicodeString& toAppendTo) const
+NumberFormat::format(double number, UnicodeString& appendTo) const
 {
     FieldPosition pos(0);
-    return format(number, toAppendTo, pos);
+    return format(number, appendTo, pos);
 }
 
 // -------------------------------------
 // Formats a long number and save the result in a string.
 
 UnicodeString&
-NumberFormat::format(int32_t number, UnicodeString& toAppendTo) const
+NumberFormat::format(int32_t number, UnicodeString& appendTo) const
 {
     FieldPosition pos(0);
-    return format(number, toAppendTo, pos);
+    return format(number, appendTo, pos);
 }
 
 // -------------------------------------
