@@ -199,7 +199,7 @@ endif
 $(TESTOBJDATADIR)/%.res: $(TESTSRCDATADIR)/%.txt $(TOOLDIR)/genrb/genrb
 	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/genrb/genrb -q -s $(TESTSRCDATADIR) -d $(TESTOBJDATADIR) $(<F)
 
-ja_data.txt:  $(TESTSRCDATADIR)/ja_data.txt $(TOOLDIR)/genrb/genrb
+ja_data.bin:  $(TESTSRCDATADIR)/ja_data.bin $(TOOLDIR)/genrb/genrb
 	echo  Creating $@
 	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/genrb/genrb -q -s $(TESTSRCDATADIR)  -eISO_2022_JP -d $(TESTOBJDATADIR) $(<F) >/dev/null  
 
