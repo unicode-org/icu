@@ -160,7 +160,6 @@ typedef enum UNumberFormatPadPosition UNumberFormatPadPosition;
 * @return A pointer to a UNumberFormat to use for formatting numbers, or 0 if
 * an error occurred.
 * @see unum_openPattern
-* @stable
 * @deprecated
 */
 U_CAPI UNumberFormat*
@@ -201,7 +200,7 @@ unum_openPattern(    const    UChar*        pattern,
 * @return A pointer to a UNumberFormat to use for formatting numbers, or 0 if
 * an error occurred.
 * @see unum_open
-* @draft
+* @draft ICU 2.0
 */
 U_CAPI UNumberFormat*
 unum_open(  UNumberFormatStyle    style,
@@ -250,7 +249,7 @@ unum_clone(const UNumberFormat *fmt,
 * @see unum_parse
 * @see unum_parseDouble
 * @see UFieldPosition
-* @draft
+* @stable
 */
 U_CAPI int32_t
 unum_format(    const    UNumberFormat*    fmt,
@@ -277,7 +276,7 @@ unum_format(    const    UNumberFormat*    fmt,
 * @see unum_parse
 * @see unum_parseDouble
 * @see UFieldPosition
-* @draft
+* @stable
 */
 U_CAPI int32_t
 unum_formatDouble(    const    UNumberFormat*  fmt,
@@ -300,7 +299,7 @@ unum_formatDouble(    const    UNumberFormat*  fmt,
 * @see unum_parseDouble
 * @see unum_format
 * @see unum_formatDouble
-* @draft
+* @stable
 */
 U_CAPI int32_t
 unum_parse(    const   UNumberFormat*  fmt,
@@ -322,7 +321,7 @@ unum_parse(    const   UNumberFormat*  fmt,
 * @see unum_parse
 * @see unum_format
 * @see unum_formatDouble
-* @draft
+* @stable
 */
 U_CAPI double
 unum_parseDouble(    const   UNumberFormat*  fmt,
@@ -339,7 +338,7 @@ unum_parseDouble(    const   UNumberFormat*  fmt,
 * @param pattern The new pattern
 * @param patternLength The length of pattern, or -1 if null-terminated.
 * @see unum_toPattern
-* @draft
+* @deprecated
 U_CAPI void
 unum_applyPattern(          UNumberFormat  *format,
                             UBool          localized,
@@ -359,7 +358,7 @@ unum_applyPattern(          UNumberFormat  *format,
 *                    occurred during parsing.
 * @param patternLength The length of pattern, or -1 if null-terminated.
 * @see unum_toPattern
-* @draft
+* @draft ICU 2.0
 */
 U_CAPI void
 unum_applyPattern(          UNumberFormat  *format,
@@ -546,7 +545,7 @@ typedef enum UNumberFormatTextAttribute UNumberFormatTextAttribute;
 * @see unum_setTextAttribute
 * @see unum_getAttribute
 * @see unum_setAttribute
-* @draft
+* @stable
 */
 U_CAPI int32_t
 unum_getTextAttribute(    const    UNumberFormat*                    fmt,
@@ -567,7 +566,7 @@ unum_getTextAttribute(    const    UNumberFormat*                    fmt,
 * @see unum_getTextAttribute
 * @see unum_getAttribute
 * @see unum_setAttribute
-* @draft
+* @stable
 */
 U_CAPI void
 unum_setTextAttribute(    UNumberFormat*                    fmt,
@@ -585,7 +584,7 @@ unum_setTextAttribute(    UNumberFormat*                    fmt,
 * @param resultLength The maximum size of result.
 * @param status A pointer to an UErrorCode to receive any errors
 * @return The total buffer size needed; if greater than resultLength, the output was truncated.
-* @draft
+* @stable
 */
 U_CAPI int32_t
 unum_toPattern(    const    UNumberFormat*          fmt,
@@ -668,7 +667,7 @@ unum_setSymbols(    UNumberFormat*          fmt,
 
 /**
  * Constants for specifying a number format symbol.
- * @draft
+ * @stable
  */
 enum UNumberFormatSymbol {
   /** The decimal separator */
@@ -720,7 +719,7 @@ typedef enum UNumberFormatSymbol UNumberFormatSymbol;
 * @return The length of the symbol; the buffer is not modified if
 *         <code>length&gt;=size</code>
 * @see unum_setSymbol
-* @draft
+* @stable
 */
 U_CAPI int32_t U_EXPORT2
 unum_getSymbol(UNumberFormat *fmt,
@@ -739,7 +738,7 @@ unum_getSymbol(UNumberFormat *fmt,
 * @param length The length of the string, or -1 for a zero-terminated string
 * @param status A pointer to an UErrorCode to receive any errors.
 * @see unum_getSymbol
-* @draft
+* @stable
 */
 U_CAPI void U_EXPORT2
 unum_setSymbol(UNumberFormat *fmt,

@@ -268,7 +268,7 @@ public:
      * @param parseError        Output param to receive errors occured during parsing 
      * @param status            Output param set to success/failure code. If the
      *                          pattern is invalid this will be set to a failure code.
-     * @stable
+     * @draft ICU 2.0
      */
     DecimalFormat(  const UnicodeString& pattern,
                     DecimalFormatSymbols* symbolsToAdopt,
@@ -341,9 +341,32 @@ public:
     virtual UnicodeString& format(double number,
                                   UnicodeString& toAppendTo,
                                   FieldPosition& pos) const;
+   /**
+    * Format a long number using base-10 representation.
+    *
+    * @param number     The value to be formatted.
+    * @param toAppendTo The string to append the formatted string to.
+    *                   This is an output parameter.
+    * @param pos        On input: an alignment field, if desired.
+    *                   On output: the offsets of the alignment field.
+    * @return           A reference to 'toAppendTo'.
+    * @stable
+    */
     virtual UnicodeString& format(int32_t number,
                                   UnicodeString& toAppendTo,
                                   FieldPosition& pos) const;
+   /**
+    * Format a Formattable using base-10 representation.
+    *
+    * @param obj        The value to be formatted.
+    * @param toAppendTo The string to append the formatted string to.
+    *                   This is an output parameter.
+    * @param pos        On input: an alignment field, if desired.
+    *                   On output: the offsets of the alignment field.
+    * @param status     Error code indicating success or failure.
+    * @return           A reference to 'toAppendTo'.
+    * @stable
+    */
     virtual UnicodeString& format(const Formattable& obj,
                                   UnicodeString& toAppendTo,
                                   FieldPosition& pos,
@@ -395,6 +418,7 @@ public:
                        ParsePosition& parsePosition) const;
 
     // Declare here again to get rid of function hiding problems.
+    /** @stable */
     virtual void parse(const UnicodeString& text, 
                        Formattable& result, 
                        UErrorCode& error) const;
@@ -507,6 +531,7 @@ public:
      * For a permill, set the suffixes to have "\u2031" and the multiplier to be 1000.
      *
      * Examples: with 100, 1.23 -> "123", and "123" -> 1.23
+     * @stable
      */
     virtual void setMultiplier(int32_t newValue);
 
@@ -589,7 +614,7 @@ public:
      * @see #setPadCharacter
      * @see #getPadPosition
      * @see #setPadPosition
-     * @deprecated remove after 2000-dec-31. See the other getPadCharacter() function
+     * @deprecated remove after 2000-dec-31. See getPadCharacterString().
      */
     inline UChar getPadCharacter(void);
 
@@ -604,7 +629,7 @@ public:
      * @see #setPadCharacter
      * @see #getPadPosition
      * @see #setPadPosition
-     * @draft
+     * @stable
      */
     virtual UnicodeString getPadCharacterString();
 
@@ -617,7 +642,7 @@ public:
      * @see #getPadCharacter
      * @see #getPadPosition
      * @see #setPadPosition
-     * @deprecated remove after 2000-dec-31. See the other setPadCharacter() function
+     * @deprecated remove after 2000-dec-31. See setPadCharacter(UnicodeString).
      */
     inline void setPadCharacter(UChar padChar);
 
@@ -633,7 +658,7 @@ public:
      * @see #getPadCharacter
      * @see #getPadPosition
      * @see #setPadPosition
-     * @draft
+     * @stable
      */
     virtual void setPadCharacter(UnicodeString padChar);
 
@@ -873,7 +898,7 @@ public:
      * @param status     Output param set to success/failure code on
      *                   exit. If the pattern is invalid, this will be
      *                   set to a failure result.
-     * @stable
+     * @draft ICU 2.0
      */
     virtual void applyPattern(const UnicodeString& pattern,
                              UParseError& parseError,
@@ -915,15 +940,18 @@ public:
      * @param status    Output param set to success/failure code on
      *                  exit. If the pattern is invalid, this will be
      *                  set to a failure result.
-     * @stable
+     * @draft ICU 2.0
      */
     virtual void applyLocalizedPattern(const UnicodeString& pattern,
                                        UParseError& parseError,
                                        UErrorCode& status);
 
+    /*
+     * Apply the given pattern to this Format object.
+     * @stable
+     */
     virtual void applyLocalizedPattern(const UnicodeString& pattern,
                                        UErrorCode& status);
-
 
 
     /**

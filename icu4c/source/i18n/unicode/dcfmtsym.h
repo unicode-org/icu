@@ -100,7 +100,7 @@ public:
         kMonetarySeparatorSymbol,
         /** The exponential symbol */
         kExponentialSymbol,
-        /** Per mill symbol */
+        /** Per mill symbol - replaces kPermillSymbol */
         kPerMillSymbol,
         /** Escape padding character */
         kPadEscapeSymbol,
@@ -168,7 +168,7 @@ public:
      * Get one of the format symbols by its enum constant.
      * Each symbol is stored as a string so that graphemes
      * (characters with modifyer letters) can be used.
-     * @draft
+     * @stable
      */
     UnicodeString getSymbol(ENumberFormatSymbol symbol) const;
 
@@ -176,7 +176,7 @@ public:
      * Set one of the format symbols by its enum constant.
      * Each symbol is stored as a string so that graphemes
      * (characters with modifyer letters) can be used.
-     * @draft
+     * @stable
      */
     void setSymbol(ENumberFormatSymbol symbol, UnicodeString value);
 
