@@ -15,10 +15,10 @@
 *   maintained by: Yves Arrouye <yves@realnames.com>
 */
 
-#include "unicode/ures.h"
 #include "unicode/ucnv.h"
 #include "unicode/ustring.h"
 
+#include "uresimp.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "uoptions.h"
@@ -203,7 +203,7 @@ main(int argc, char* argv[]) {
         arg = getLongPathname(argv[i]);
 
         if (verbose) {
-            printf("processing bundle \"%s\"\n", argv);
+            printf("processing bundle \"%s\"\n", argv[i]);
         }
 
         p = uprv_strrchr(arg, U_FILE_SEP_CHAR);
@@ -437,6 +437,21 @@ static void printHex(FILE *out, UConverter *converter, uint8_t what) {
 
     printString(out, converter, hex, (int32_t)(sizeof(hex)/sizeof(*hex)));
 }
+static const UChar *
+derb_getString(const ResourceData *pResData, const Resource res, int32_t *pLength) {
+    if(res!=RES_BOGUS) {
+        int32_t *p=(int32_t *)RES_GET_POINTER(pResData->pRoot, res);
+        if (pLength) {
+            *pLength=*p;
+        }
+        return (UChar *)++p;
+    } else {
+        if (pLength) {
+            *pLength=0;
+        }
+        return NULL;
+    }
+}
 
 static void printOutBundle(FILE *out, UConverter *converter, UResourceBundle *resource, int32_t indent, const char *pname, UErrorCode *status)
 {
@@ -599,9 +614,14 @@ static void printOutBundle(FILE *out, UConverter *converter, UResourceBundle *re
             }
             printString(out, converter, cr, (int32_t)(sizeof(cr) / sizeof(*cr)));
 
-            while(ures_hasNext(resource)) {
+            while(U_SUCCESS(*status) && ures_hasNext(resource)) {
                 t = ures_getNextResource(resource, t, status);
-                printOutBundle(out, converter, t, indent+indentsize, pname, status);
+                if(U_SUCCESS(*status)) {
+                  printOutBundle(out, converter, t, indent+indentsize, pname, status);
+                } else {
+                  reportError(pname, status, "While processing table");
+                  *status = U_ZERO_ERROR;
+                }
             }
 
             printIndent(out, converter, indent);
@@ -609,6 +629,39 @@ static void printOutBundle(FILE *out, UConverter *converter, UResourceBundle *re
             ures_close(t);
         }
         break;
+    case RES_ALIAS :
+        {
+            int32_t len = 0;
+            const UChar* thestr = derb_getString(&(resource->fResData), resource->fRes, &len); 
+            /*ures_getString(resource, &len, status);*/
+                        UChar *string = quotedString(thestr);
+            if(trunc && len > truncsize) {
+                char msg[128];
+                printIndent(out, converter, indent);
+                sprintf(msg, "// WARNING: this resource, size %li is truncated to %li\n", len, truncsize/2);
+                printCString(out, converter, msg, -1);
+                len = truncsize;
+            }
+            if(U_SUCCESS(*status)) {
+                static const UChar open[] = { 0x003A, 0x0061, 0x006C, 0x0069, 0x0061, 0x0073, 0x0020, 0x007B, 0x0020 }; /* ":binary { " */
+                static const UChar close[] = { 0x0020, 0x007D, 0x0020 }; /* " } " */
+                printIndent(out, converter, indent);
+                if(key != NULL) {
+                    printCString(out, converter, key, -1);
+                }
+                printString(out, converter, open, (int32_t)(sizeof(open) / sizeof(*open)));
+                printString(out, converter, string, len);
+                printString(out, converter, close, (int32_t)(sizeof(close) / sizeof(*close)));
+                if(verbose) {
+                    printCString(out, converter, " // BINARY", -1);
+                }
+                printString(out, converter, cr, (int32_t)(sizeof(cr) / sizeof(*cr)));
+            } else {
+                reportError(pname, status, "getting binary value");
+            }
+        }
+        break;
+
     default:
         break;
     }
