@@ -318,7 +318,7 @@ const void *GDIFontInstance::readFontTable(LETag tableTag) const
     void *result = NULL;
 
     if (len != GDI_ERROR) {
-        result = new char[len];
+        result = LE_NEW_ARRAY(char, len);
         GetFontData(hdc, stag, 0, result, len);
     }
 
