@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2001, International Business Machines
+*   Copyright (C) 1997-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -25,6 +25,53 @@
 #include "unicode/utypes.h"
 #include "cmemory.h"
 #include "cstring.h"
+
+/*
+ * We hardcode case conversion for invariant characters to match our expectation
+ * and the compiler execution charset.
+ * This prevents problems on systems
+ * - with non-default casing behavior, like Turkish system locales where
+ *   tolower('I') maps to dotless i and toupper('i') maps to dotted I
+ * - where there are no lowercase Latin characters at all, or using different
+ *   codes (some old EBCDIC codepages)
+ *
+ * This works because the compiler usually runs on a platform where the execution
+ * charset includes all of the invariant characters at their expected
+ * code positions, so that the char * string literals in ICU code match
+ * the char literals here.
+ *
+ * Note that the set of lowercase Latin letters is discontiguous in EBCDIC
+ * and the set of uppercase Latin letters is discontiguous as well.
+ */
+
+U_CAPI char U_EXPORT2
+uprv_toupper(char c) {
+#if U_CHARSET_FAMILY==U_EBCDIC_FAMILY
+    if(('a'<=c && c<='i') || ('j'<=c && c<='r') || ('s'<=c && c<='z')) {
+        c=(char)(c+('A'-'a'));
+    }
+#else
+    if('a'<=c && c<='z') {
+        c=(char)(c+('A'-'a'));
+    }
+#endif
+    return c;
+}
+
+U_CAPI char U_EXPORT2
+uprv_tolower(char c) {
+#if U_CHARSET_FAMILY==U_EBCDIC_FAMILY
+    if(('A'<=c && c<='I') || ('J'<=c && c<='R') || ('S'<=c && c<='Z')) {
+        c=(char)(c+('a'-'A'));
+    }
+#else
+    if('A'<=c && c<='Z') {
+        c=(char)(c+('a'-'A'));
+    }
+#endif
+    return c;
+}
+
 
 U_CAPI char* U_EXPORT2
 T_CString_toLowerCase(char* str)

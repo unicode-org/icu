@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2001, International Business Machines
+*   Copyright (C) 1997-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -41,8 +41,13 @@
 #define uprv_strchr(s, c) U_STANDARD_CPP_NAMESPACE strchr(s, c)
 #define uprv_strstr(s, c) U_STANDARD_CPP_NAMESPACE strstr(s, c)
 #define uprv_strrchr(s, c) U_STANDARD_CPP_NAMESPACE strrchr(s, c)
-#define uprv_toupper(c) U_STANDARD_CPP_NAMESPACE toupper(c)
-#define uprv_tolower(c) U_STANDARD_CPP_NAMESPACE tolower(c)
+
+U_CAPI char U_EXPORT2
+uprv_toupper(char c);
+
+U_CAPI char U_EXPORT2
+uprv_tolower(char c);
+
 #define uprv_strtoul(str, end, base) U_STANDARD_CPP_NAMESPACE strtoul(str, end, base)
 #define uprv_strtol(str, end, base) U_STANDARD_CPP_NAMESPACE strtol(str, end, base)
 #ifdef WIN32

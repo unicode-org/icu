@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (C) 1998-2001, International Business Machines Corporation 
+* Copyright (C) 1998-2003, International Business Machines Corporation 
 * and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -29,11 +29,41 @@ void addCStringTest(TestNode** root) {
 
 static void TestAPI(void)
 {
-
     int32_t intValue=0;
-    char src[30]="HELLO THERE";
+    char src[30]="HELLO THERE", dest[30];
+    static const char *const abc="abcdefghijklmnopqrstuvwxyz", *const ABC="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const char *temp;
-    
+    int32_t i;
+
+    log_verbose("Testing uprv_tolower() and uprv_toupper()\n");
+    for(i=0; i<=26; ++i) {
+        dest[i]=uprv_tolower(abc[i]);
+    }
+    if(0!=strcmp(abc, dest)) {
+        log_err("uprv_tolower(abc) failed\n");
+    }
+
+    for(i=0; i<=26; ++i) {
+        dest[i]=uprv_tolower(ABC[i]);
+    }
+    if(0!=strcmp(abc, dest)) {
+        log_err("uprv_tolower(ABC) failed\n");
+    }
+
+    for(i=0; i<=26; ++i) {
+        dest[i]=uprv_toupper(abc[i]);
+    }
+    if(0!=strcmp(ABC, dest)) {
+        log_err("uprv_toupper(abc) failed\n");
+    }
+
+    for(i=0; i<=26; ++i) {
+        dest[i]=uprv_toupper(ABC[i]);
+    }
+    if(0!=strcmp(ABC, dest)) {
+        log_err("uprv_toupper(ABC) failed\n");
+    }
+
     log_verbose("Testing the API in cstring\n");
     T_CString_toLowerCase(src);
     if(uprv_strcmp(src, "hello there") != 0){
