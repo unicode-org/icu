@@ -399,7 +399,7 @@ RuleBasedBreakIterator(const void* image);
      *                  given class have the same class ID.  Objects of
      *                  other classes have different class IDs.
      */
-    virtual UClassID getDynamicClassID() const;
+    inline virtual UClassID getDynamicClassID() const;
 
     /**
      * Returns the class ID for this class.  This is useful only for
@@ -411,7 +411,7 @@ RuleBasedBreakIterator(const void* image);
      *
      * @return          The class ID for all objects of this class.
      */
-    static UClassID getStaticClassID();
+    inline static UClassID getStaticClassID();
 
 protected:
     //=======================================================================
