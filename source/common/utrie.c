@@ -922,7 +922,9 @@ utrie_enum(UTrie *trie,
             /* this is the all-initial-value block */
             if(prevValue!=initialValue) {
                 if(prev<c) {
-                    enumRange(context, prev, c, prevValue);
+                    if(!enumRange(context, prev, c, prevValue)) {
+                        return;
+                    }
                 }
                 prevBlock=0;
                 prev=c;
@@ -935,7 +937,9 @@ utrie_enum(UTrie *trie,
                 value=enumValue(context, data32!=NULL ? data32[block+j] : index[block+j]);
                 if(value!=prevValue) {
                     if(prev<c) {
-                        enumRange(context, prev, c, prevValue);
+                        if(!enumRange(context, prev, c, prevValue)) {
+                            return;
+                        }
                     }
                     if(j>0) {
                         prevBlock=-1;
@@ -976,7 +980,9 @@ utrie_enum(UTrie *trie,
             /* no data for this lead surrogate */
             if(prevValue!=initialValue) {
                 if(prev<c) {
-                    enumRange(context, prev, c, prevValue);
+                    if(!enumRange(context, prev, c, prevValue)) {
+                        return;
+                    }
                 }
                 prevBlock=0;
                 prev=c;
@@ -999,7 +1005,9 @@ utrie_enum(UTrie *trie,
                     /* this is the all-initial-value block */
                     if(prevValue!=initialValue) {
                         if(prev<c) {
-                            enumRange(context, prev, c, prevValue);
+                            if(!enumRange(context, prev, c, prevValue)) {
+                                return;
+                            }
                         }
                         prevBlock=0;
                         prev=c;
@@ -1012,7 +1020,9 @@ utrie_enum(UTrie *trie,
                         value=enumValue(context, data32!=NULL ? data32[block+j] : index[block+j]);
                         if(value!=prevValue) {
                             if(prev<c) {
-                                enumRange(context, prev, c, prevValue);
+                                if(!enumRange(context, prev, c, prevValue)) {
+                                    return;
+                                }
                             }
                             if(j>0) {
                                 prevBlock=-1;
