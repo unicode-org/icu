@@ -9,7 +9,7 @@ ibm-1364_P110-2000.ucm ibm-1371.ucm ibm-1388_P103-2001.ucm\
 ibm-1390.ucm ibm-1399.ucm ibm-870_P100-2000.ucm\
 ibm-875_P100-2000.ucm ibm-9030_P100-2000.ucm ibm-918_P100-2000.ucm\
 ibm-918_X100-2000.ucm ibm-930.ucm ibm-935.ucm ibm-937.ucm ibm-939.ucm\
-ibm-1047.ucm ibm-1123.ucm ibm-1140.ucm ibm-1141.ucm ibm-1142.ucm\
+ibm-1123.ucm ibm-1140.ucm ibm-1141.ucm ibm-1142.ucm\
 ibm-1143.ucm ibm-1144.ucm ibm-1145.ucm ibm-1146.ucm ibm-1147.ucm\
 ibm-1148.ucm ibm-1149.ucm ibm-1153.ucm ibm-1154.ucm ibm-1155.ucm\
 ibm-1156.ucm ibm-1157.ucm ibm-1158.ucm ibm-1159.ucm ibm-1160.ucm\
