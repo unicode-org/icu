@@ -124,7 +124,7 @@ public:
     UBool isEmpty(void) const;
 
     // Inline.  Use this one for speedy size check.
-    UBool ensureCapacity(int32_t minimumCapacity, UErrorCode &status);
+    inline UBool ensureCapacity(int32_t minimumCapacity, UErrorCode &status);
 
     // Out-of-line, handles actual growth.  Called by ensureCapacity() when necessary.
     UBool expandCapacity(int32_t minimumCapacity, UErrorCode &status);
@@ -162,18 +162,18 @@ public:
     int32_t *getBuffer() const;
 
     /**
-     * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     *
-     * @draft ICU 2.2
-     */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
-
-    /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
      * @draft ICU 2.2
      */
     static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for the actual class.
+     *
+     * @draft ICU 2.2
+     */
+    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
 
 private:
     void _init(int32_t initialCapacity, UErrorCode &status);
@@ -205,10 +205,18 @@ public:
 
     int32_t *reserveBlock(int32_t size, UErrorCode &status);
     int32_t *popFrame(int32_t size);
-    };
+};
 
 
 // UVector32 inlines
+
+inline UBool UVector32::ensureCapacity(int32_t minimumCapacity, UErrorCode &status) {
+    if (capacity >= minimumCapacity) {
+        return TRUE;
+    } else {
+        return expandCapacity(minimumCapacity, status);
+    }
+}
 
 inline int32_t UVector32::elementAti(int32_t index) const {
     return (0 <= index && index < count) ? elements[index] : 0;
@@ -219,14 +227,6 @@ inline void UVector32::addElement(int32_t elem, UErrorCode &status) {
     if (ensureCapacity(count + 1, status)) {
         elements[count] = elem;
         count++;
-    }
-}
-
-inline UBool UVector32::ensureCapacity(int32_t minimumCapacity, UErrorCode &status) {
-    if (capacity >= minimumCapacity) {
-        return TRUE;
-    } else {
-        return expandCapacity(minimumCapacity, status);
     }
 }
 
