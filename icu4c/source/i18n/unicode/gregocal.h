@@ -438,11 +438,6 @@ protected:
 
 private: 
     /**
-     * Calculate day of year and year if we have only DOW_LOCAL, WEEK_OF_YEAR and 
-     * YEAR_WOY
-     */
-    void calculateFromYear_Woy(void);
-    /**
      * Return the year that corresponds to the <code>WEEK_OF_YEAR</code> field.
      * This may be one year before or after the calendar year stored
      * in the <code>YEAR</code> field.  For example, January 1, 1999 is considered
