@@ -146,30 +146,30 @@ static void TestSingleByteCallBack()
 
 static void TestSkip(int32_t inputsize, int32_t outputsize)
 {
-    UChar   sampleText[] =  { 0x0000, 0xAC00, 0xAC01, 0xEF67, 0xD700 };
-    UChar  sampleText2[] =  { 0x6D63, 0x6D64, 0x6D65, 0x6D66 };
+    static const UChar   sampleText[] =  { 0x0000, 0xAC00, 0xAC01, 0xEF67, 0xD700 };
+    static const UChar  sampleText2[] =  { 0x6D63, 0x6D64, 0x6D65, 0x6D66 };
 
-    const uint8_t expskipIBM_949[]= { 
+    static const uint8_t expskipIBM_949[]= { 
         0x00, 0xb0, 0xa1, 0xb0, 0xa2, 0xc8, 0xd3 };
 
-    const uint8_t expskipIBM_943[] = { 
+    static const uint8_t expskipIBM_943[] = { 
         0x9f, 0xaf, 0x9f, 0xb1, 0x89, 0x59 };
 
-    const uint8_t expskipIBM_930[] = { 
+    static const uint8_t expskipIBM_930[] = { 
         0x0e, 0x5d, 0x5f, 0x5d, 0x63, 0x46, 0x6b };
 
-    UChar IBM_949skiptoUnicode[]= {0x0000, 0xAC00, 0xAC01, 0xD700 };
-    UChar IBM_943skiptoUnicode[]= { 0x6D63, 0x6D64, 0x6D66 };
-    UChar IBM_930skiptoUnicode[]= { 0x6D63, 0x6D64, 0x6D66 };
+    static const UChar IBM_949skiptoUnicode[]= {0x0000, 0xAC00, 0xAC01, 0xD700 };
+    static const UChar IBM_943skiptoUnicode[]= { 0x6D63, 0x6D64, 0x6D66 };
+    static const UChar IBM_930skiptoUnicode[]= { 0x6D63, 0x6D64, 0x6D66 };
 
 
-    int32_t  toIBM949Offsskip [] = { 0, 1, 1, 2, 2, 4, 4};
-    int32_t  toIBM943Offsskip [] = { 0, 0, 1, 1, 3, 3};
-    int32_t  toIBM930Offsskip [] = { 0, 0, 0, 1, 1, 3, 3};
+    static const int32_t  toIBM949Offsskip [] = { 0, 1, 1, 2, 2, 4, 4};
+    static const int32_t  toIBM943Offsskip [] = { 0, 0, 1, 1, 3, 3};
+    static const int32_t  toIBM930Offsskip [] = { 0, 0, 0, 1, 1, 3, 3};
 
-    int32_t  fromIBM949Offs [] = { 0, 1, 3, 5};
-    int32_t  fromIBM943Offs [] = { 0, 2, 4};
-    int32_t  fromIBM930Offs [] = { 1, 3, 5};
+    static const int32_t  fromIBM949Offs [] = { 0, 1, 3, 5};
+    static const int32_t  fromIBM943Offs [] = { 0, 2, 4};
+    static const int32_t  fromIBM930Offs [] = { 1, 3, 5};
 
     gInBufferSize = inputsize;
     gOutBufferSize = outputsize;
@@ -257,81 +257,81 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
     }
 
     {
-        UChar inputTest[] = { 0x0061, 0xd801, 0xdc01, 0xd801, 0x0061 };
-        const uint8_t toIBM943[]= { 0x61, 0x61 };
-        int32_t offset[]= {0, 4};
+        static const UChar inputTest[] = { 0x0061, 0xd801, 0xdc01, 0xd801, 0x0061 };
+        static const uint8_t toIBM943[]= { 0x61, 0x61 };
+        static const int32_t offset[]= {0, 4};
 
          /* EUC_JP*/
-        UChar euc_jp_inputText[]={ 0x0061, 0x4edd, 0x5bec, 0xd801, 0xdc01, 0xd801, 0x0061, 0x00a2 };
-        const uint8_t to_euc_jp[]={ 0x61, 0xa1, 0xb8, 0x8f, 0xf4, 0xae,
+        static const UChar euc_jp_inputText[]={ 0x0061, 0x4edd, 0x5bec, 0xd801, 0xdc01, 0xd801, 0x0061, 0x00a2 };
+        static const uint8_t to_euc_jp[]={ 0x61, 0xa1, 0xb8, 0x8f, 0xf4, 0xae,
             0x61, 0x8e, 0xe0,
         };
-        int32_t fromEUC_JPOffs [] ={ 0, 1, 1, 2, 2, 2, 6, 7, 7};
+        static const int32_t fromEUC_JPOffs [] ={ 0, 1, 1, 2, 2, 2, 6, 7, 7};
 
         /*EUC_TW*/
-        UChar euc_tw_inputText[]={ 0x0061, 0x2295, 0x5BF2, 0xd801, 0xdc01, 0xd801, 0x0061, 0x8706, 0x8a, };
-        const uint8_t to_euc_tw[]={ 
+        static const UChar euc_tw_inputText[]={ 0x0061, 0x2295, 0x5BF2, 0xd801, 0xdc01, 0xd801, 0x0061, 0x8706, 0x8a, };
+        static const uint8_t to_euc_tw[]={ 
             0x61, 0xa2, 0xd3, 0x8e, 0xa2, 0xdc, 0xe5,
             0x61, 0xe6, 0xca, 0x8a,
         };
-        int32_t from_euc_twOffs [] ={ 0, 1, 1, 2, 2, 2, 2, 6, 7, 7, 8,};
+        static const int32_t from_euc_twOffs [] ={ 0, 1, 1, 2, 2, 2, 2, 6, 7, 7, 8,};
 
         /*ISO-2022-JP*/
-        UChar iso_2022_jp_inputText[]={0x0041, 0x00E9/*unassigned*/,0x0042, };
-        const uint8_t to_iso_2022_jp[]={ 
+        static const UChar iso_2022_jp_inputText[]={0x0041, 0x00E9/*unassigned*/,0x0042, };
+        static const uint8_t to_iso_2022_jp[]={ 
             0x41,       
             0x42,
 
         };
-        int32_t from_iso_2022_jpOffs [] ={0,2};
+        static const int32_t from_iso_2022_jpOffs [] ={0,2};
 
-        UChar iso_2022_jp_inputText1[]={0x3000, 0x00E9, 0x3001, };
-        const uint8_t to_iso_2022_jp1[]={ 
+        static const UChar iso_2022_jp_inputText1[]={0x3000, 0x00E9, 0x3001, };
+        static const uint8_t to_iso_2022_jp1[]={ 
             0x1b,   0x24,   0x42,   0x21, 0x21,       
             0x21,   0x22,
 
         };
-        int32_t from_iso_2022_jpOffs1 [] ={0,0,0,0,0,2,2,};
+        static const int32_t from_iso_2022_jpOffs1 [] ={0,0,0,0,0,2,2,};
 
         /*ISO-2022-JP*/
-        UChar iso_2022_jp_inputText2[]={0x0041, 0x00E9/*unassigned*/,0x43,0xd800/*illegal*/,0x0042, };
-        const uint8_t to_iso_2022_jp2[]={ 
+        UChar const iso_2022_jp_inputText2[]={0x0041, 0x00E9/*unassigned*/,0x43,0xd800/*illegal*/,0x0042, };
+        static const uint8_t to_iso_2022_jp2[]={ 
             0x41,       
             0x43,
 
         };
-        int32_t from_iso_2022_jpOffs2 [] ={0,2};
+        static const int32_t from_iso_2022_jpOffs2 [] ={0,2};
 
         /*ISO-2022-cn*/
-        UChar iso_2022_cn_inputText[]={ 0x0041, 0x3712/*unassigned*/, 0x0042, };
-        const uint8_t to_iso_2022_cn[]={  
+        static const UChar iso_2022_cn_inputText[]={ 0x0041, 0x3712/*unassigned*/, 0x0042, };
+        static const uint8_t to_iso_2022_cn[]={  
             0x0F,   0x41,   
             0x0F,   0x42, 
         };
-        int32_t from_iso_2022_cnOffs [] ={ 
+        static const int32_t from_iso_2022_cnOffs [] ={ 
             0,0,
             2,2,
         };
         
         /*ISO-2022-CN*/
-        UChar iso_2022_cn_inputText1[]={0x0041, 0x3712/*unassigned*/,0x43,0xd800/*illegal*/,0x0042, };
-        const uint8_t to_iso_2022_cn1[]={ 
+        static const UChar iso_2022_cn_inputText1[]={0x0041, 0x3712/*unassigned*/,0x43,0xd800/*illegal*/,0x0042, };
+        static const uint8_t to_iso_2022_cn1[]={ 
             0x0F,   0x41,   
             0x0F,   0x43, 
 
         };
-        int32_t from_iso_2022_cnOffs1 [] ={0,0,2,2};
+        static const int32_t from_iso_2022_cnOffs1 [] ={0,0,2,2};
 
         /*ISO-2022-kr*/
-        UChar iso_2022_kr_inputText[]={ 0x0041, 0x03A0,0x3712/*unassigned*/,0x03A0, 0x0042, };
-        const uint8_t to_iso_2022_kr[]={  
+        static const UChar iso_2022_kr_inputText[]={ 0x0041, 0x03A0,0x3712/*unassigned*/,0x03A0, 0x0042, };
+        static const uint8_t to_iso_2022_kr[]={  
             0x1b,   0x24,   0x29,   0x43,   
             0x41,   
             0x0e,   0x25,   0x50,   
             0x25,   0x50, 
             0x0f,   0x42, 
         };
-        int32_t from_iso_2022_krOffs [] ={ 
+        static const int32_t from_iso_2022_krOffs [] ={ 
             -1,-1,-1,-1,
             0,
             1,1,1,
@@ -340,15 +340,15 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
         };
 
         /*ISO-2022-kr*/
-        UChar iso_2022_kr_inputText1[]={ 0x0041, 0x03A0,0x3712/*unassigned*/,0x03A0,0xd801/*illegal*/, 0x0042, };
-        const uint8_t to_iso_2022_kr1[]={  
+        static const UChar iso_2022_kr_inputText1[]={ 0x0041, 0x03A0,0x3712/*unassigned*/,0x03A0,0xd801/*illegal*/, 0x0042, };
+        static const uint8_t to_iso_2022_kr1[]={  
             0x1b,   0x24,   0x29,   0x43,   
             0x41,   
             0x0e,   0x25,   0x50,   
             0x25,   0x50, 
  
         };
-        int32_t from_iso_2022_krOffs1 [] ={ 
+        static const int32_t from_iso_2022_krOffs1 [] ={ 
             -1,-1,-1,-1,
             0,
             1,1,1,
@@ -356,32 +356,32 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
 
         };
         /* HZ encoding */       
-        UChar hz_inputText[]={ 0x0041, 0x03A0,0x0662/*unassigned*/,0x03A0, 0x0042, };
+        static const UChar hz_inputText[]={ 0x0041, 0x03A0,0x0662/*unassigned*/,0x03A0, 0x0042, };
 
-        const uint8_t to_hz[]={    
+        static const uint8_t to_hz[]={    
             0x7e,   0x7d,   0x41,   
             0x7e,   0x7b,   0x26,   0x30,   
             0x26,   0x30,
             0x7e,   0x7d,   0x42, 
            
         };
-        int32_t from_hzOffs [] ={ 
+        static const int32_t from_hzOffs [] ={ 
             0,0,0,
             1,1,1,1,
             3,3,
             4,4,4,4
         };
 
-        UChar hz_inputText1[]={ 0x0041, 0x03A0,0x0662/*unassigned*/,0x03A0,0xd801/*illegal*/, 0x0042, };
+        static const UChar hz_inputText1[]={ 0x0041, 0x03A0,0x0662/*unassigned*/,0x03A0,0xd801/*illegal*/, 0x0042, };
 
-        const uint8_t to_hz1[]={    
+        static const uint8_t to_hz1[]={    
             0x7e,   0x7d,   0x41,   
             0x7e,   0x7b,   0x26,   0x30,   
             0x26,   0x30,
 
            
         };
-        int32_t from_hzOffs1 [] ={ 
+        static const int32_t from_hzOffs1 [] ={ 
             0,0,0,
             1,1,1,1,
             3,3,
@@ -389,37 +389,37 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
         };
 
 
-        UChar SCSU_inputText[]={ 0x0041, 0xd801/*illegal*/, 0x0042, };
+        static const UChar SCSU_inputText[]={ 0x0041, 0xd801/*illegal*/, 0x0042, };
 
-        const uint8_t to_SCSU[]={    
+        static const uint8_t to_SCSU[]={    
             0x41,   
             0x42
 
            
         };
-        int32_t from_SCSUOffs [] ={ 
+        static const int32_t from_SCSUOffs [] ={ 
             0,
             2,
 
         };
         /* ISCII */
-        UChar iscii_inputText[]={ 0x0041, 0x3712/*unassigned*/, 0x0042, };
-        const uint8_t to_iscii[]={  
+        static const UChar iscii_inputText[]={ 0x0041, 0x3712/*unassigned*/, 0x0042, };
+        static const uint8_t to_iscii[]={  
             0x41,   
             0x42, 
         };
-        int32_t from_isciiOffs [] ={ 
+        static const int32_t from_isciiOffs [] ={ 
             0,2,
 
         };
         /*ISCII*/
-        UChar iscii_inputText1[]={0x0044, 0x3712/*unassigned*/,0x43,0xd800/*illegal*/,0x0042, };
-        const uint8_t to_iscii1[]={ 
+        static const UChar iscii_inputText1[]={0x0044, 0x3712/*unassigned*/,0x43,0xd800/*illegal*/,0x0042, };
+        static const uint8_t to_iscii1[]={ 
             0x44,   
             0x43, 
 
         };
-        int32_t from_isciiOffs1 [] ={0,2};
+        static const int32_t from_isciiOffs1 [] ={0,2};
 
         if(!testConvertFromUnicode(inputTest, sizeof(inputTest)/sizeof(inputTest[0]),
                 toIBM943, sizeof(toIBM943), "ibm-943",
@@ -758,30 +758,30 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
 
 static void TestStop(int32_t inputsize, int32_t outputsize)
 {
-    UChar   sampleText[] =  { 0x0000, 0xAC00, 0xAC01, 0xEF67, 0xD700 };
-    UChar  sampleText2[] =  { 0x6D63, 0x6D64, 0x6D65, 0x6D66 };
+    static const UChar   sampleText[] =  { 0x0000, 0xAC00, 0xAC01, 0xEF67, 0xD700 };
+    static const UChar  sampleText2[] =  { 0x6D63, 0x6D64, 0x6D65, 0x6D66 };
 
-    const uint8_t expstopIBM_949[]= { 
+    static const uint8_t expstopIBM_949[]= { 
         0x00, 0xb0, 0xa1, 0xb0, 0xa2};
 
-    const uint8_t expstopIBM_943[] = { 
+    static const uint8_t expstopIBM_943[] = { 
         0x9f, 0xaf, 0x9f, 0xb1};
 
-    const uint8_t expstopIBM_930[] = { 
+    static const uint8_t expstopIBM_930[] = { 
         0x0e, 0x5d, 0x5f, 0x5d, 0x63};
 
-    UChar IBM_949stoptoUnicode[]= {0x0000, 0xAC00, 0xAC01};
-    UChar IBM_943stoptoUnicode[]= { 0x6D63, 0x6D64};
-    UChar IBM_930stoptoUnicode[]= { 0x6D63, 0x6D64};
+    static const UChar IBM_949stoptoUnicode[]= {0x0000, 0xAC00, 0xAC01};
+    static const UChar IBM_943stoptoUnicode[]= { 0x6D63, 0x6D64};
+    static const UChar IBM_930stoptoUnicode[]= { 0x6D63, 0x6D64};
 
 
-    int32_t  toIBM949Offsstop [] = { 0, 1, 1, 2, 2};
-    int32_t  toIBM943Offsstop [] = { 0, 0, 1, 1};
-    int32_t  toIBM930Offsstop [] = { 0, 0, 0, 1, 1};
+    static const int32_t  toIBM949Offsstop [] = { 0, 1, 1, 2, 2};
+    static const int32_t  toIBM943Offsstop [] = { 0, 0, 1, 1};
+    static const int32_t  toIBM930Offsstop [] = { 0, 0, 0, 1, 1};
 
-    int32_t  fromIBM949Offs [] = { 0, 1, 3};
-    int32_t  fromIBM943Offs [] = { 0, 2};
-    int32_t  fromIBM930Offs [] = { 1, 3};
+    static const int32_t  fromIBM949Offs [] = { 0, 1, 3};
+    static const int32_t  fromIBM943Offs [] = { 0, 2};
+    static const int32_t  fromIBM930Offs [] = { 1, 3};
 
     gInBufferSize = inputsize;
     gOutBufferSize = outputsize;
@@ -801,72 +801,72 @@ static void TestStop(int32_t inputsize, int32_t outputsize)
 
     log_verbose("Testing fromUnicode with UCNV_FROM_U_CALLBACK_STOP  \n");
     {
-        UChar inputTest[] = { 0x0061, 0xd801, 0xdc01, 0xd801, 0x0061 };
-        const uint8_t toIBM943[]= { 0x61,};
-        int32_t offset[]= {0,} ;
+        static const UChar inputTest[] = { 0x0061, 0xd801, 0xdc01, 0xd801, 0x0061 };
+        static const uint8_t toIBM943[]= { 0x61,};
+        static const int32_t offset[]= {0,} ;
 
          /*EUC_JP*/
-        UChar euc_jp_inputText[]={ 0x0061, 0x4edd, 0x5bec, 0xd801, 0xdc01, 0xd801, 0x0061, 0x00a2 };
-        const uint8_t to_euc_jp[]={ 0x61, 0xa1, 0xb8, 0x8f, 0xf4, 0xae,};
-        int32_t fromEUC_JPOffs [] ={ 0, 1, 1, 2, 2, 2,};
+        static const UChar euc_jp_inputText[]={ 0x0061, 0x4edd, 0x5bec, 0xd801, 0xdc01, 0xd801, 0x0061, 0x00a2 };
+        static const uint8_t to_euc_jp[]={ 0x61, 0xa1, 0xb8, 0x8f, 0xf4, 0xae,};
+        static const int32_t fromEUC_JPOffs [] ={ 0, 1, 1, 2, 2, 2,};
 
         /*EUC_TW*/
-        UChar euc_tw_inputText[]={ 0x0061, 0x2295, 0x5BF2, 0xd801, 0xdc01, 0xd801, 0x0061, 0x8706, 0x8a, };
-        const uint8_t to_euc_tw[]={ 
+        static const UChar euc_tw_inputText[]={ 0x0061, 0x2295, 0x5BF2, 0xd801, 0xdc01, 0xd801, 0x0061, 0x8706, 0x8a, };
+        static const uint8_t to_euc_tw[]={ 
             0x61, 0xa2, 0xd3, 0x8e, 0xa2, 0xdc, 0xe5,};
-        int32_t from_euc_twOffs [] ={ 0, 1, 1, 2, 2, 2, 2,};
+        static const int32_t from_euc_twOffs [] ={ 0, 1, 1, 2, 2, 2, 2,};
         
         /*ISO-2022-JP*/
-        UChar iso_2022_jp_inputText[]={0x0041, 0x00E9, 0x0042, };
-        const uint8_t to_iso_2022_jp[]={ 
+        static const UChar iso_2022_jp_inputText[]={0x0041, 0x00E9, 0x0042, };
+        static const uint8_t to_iso_2022_jp[]={ 
              0x41,   
 
         };
-        int32_t from_iso_2022_jpOffs [] ={0,};
+        static const int32_t from_iso_2022_jpOffs [] ={0,};
 
         /*ISO-2022-cn*/
-        UChar iso_2022_cn_inputText[]={ 0x0041, 0x3712, 0x0042, };
-        const uint8_t to_iso_2022_cn[]={  
+        static const UChar iso_2022_cn_inputText[]={ 0x0041, 0x3712, 0x0042, };
+        static const uint8_t to_iso_2022_cn[]={  
             0x0F,   0x41,   
 
         };
-        int32_t from_iso_2022_cnOffs [] ={ 
+        static const int32_t from_iso_2022_cnOffs [] ={ 
             0,0,
             2,2,
         };
         
         /*ISO-2022-kr*/
-        UChar iso_2022_kr_inputText[]={ 0x0041, 0x03A0,0x3712/*unassigned*/,0x03A0, 0x0042, };
-        const uint8_t to_iso_2022_kr[]={  
+        static const UChar iso_2022_kr_inputText[]={ 0x0041, 0x03A0,0x3712/*unassigned*/,0x03A0, 0x0042, };
+        static const uint8_t to_iso_2022_kr[]={  
             0x1b,   0x24,   0x29,   0x43,   
             0x41,   
             0x0e,   0x25,   0x50,   
         };
-        int32_t from_iso_2022_krOffs [] ={ 
+        static const int32_t from_iso_2022_krOffs [] ={ 
             -1,-1,-1,-1,
              0,
             1,1,1,
         };
 
         /* HZ encoding */       
-        UChar hz_inputText[]={ 0x0041, 0x03A0,0x0662/*unassigned*/,0x03A0, 0x0042, };
+        static const UChar hz_inputText[]={ 0x0041, 0x03A0,0x0662/*unassigned*/,0x03A0, 0x0042, };
 
-        const uint8_t to_hz[]={    
+        static const uint8_t to_hz[]={    
             0x7e,   0x7d, 0x41,   
             0x7e,   0x7b,   0x26,   0x30,   
            
         };
-        int32_t from_hzOffs [] ={ 
+        static const int32_t from_hzOffs [] ={ 
             0, 0,0,
             1,1,1,1,
         };
 
         /*ISCII*/
-        UChar iscii_inputText[]={ 0x0041, 0x3712, 0x0042, };
-        const uint8_t to_iscii[]={  
+        static const UChar iscii_inputText[]={ 0x0041, 0x3712, 0x0042, };
+        static const uint8_t to_iscii[]={  
             0x41,   
         };
-        int32_t from_isciiOffs [] ={ 
+        static const int32_t from_isciiOffs [] ={ 
             0,           
         };
 
