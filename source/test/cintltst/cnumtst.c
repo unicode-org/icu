@@ -768,6 +768,7 @@ static void TestSignificantDigits()
     else
         log_err("FAIL: Error in number formatting using unum_formatDouble()\n");
     free(result);
+    unum_close(fmt);
 }
 
 static void TestNumberFormatPadding()
