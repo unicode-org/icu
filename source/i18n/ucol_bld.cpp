@@ -283,9 +283,9 @@ U_CFUNC void ucol_inv_getGapPositions(UColTokenParser *src, UColTokListHeader *l
     lh->pos[0] = 0;
     t1 = lh->baseCE;
     t2 = lh->baseContCE;
-    lh->gapsLo[0] = (t1 & UCOL_PRIMARYMASK);
-    lh->gapsLo[1] = (t1 & UCOL_SECONDARYMASK) << 16;
-    lh->gapsLo[2] = (UCOL_TERTIARYORDER(t1)) << 24;
+    lh->gapsLo[0] = (t1 & UCOL_PRIMARYMASK) | (t2 & UCOL_PRIMARYMASK) >> 16;
+    lh->gapsLo[1] = (t1 & UCOL_SECONDARYMASK) << 16 | (t2 & UCOL_SECONDARYMASK) << 8;
+    lh->gapsLo[2] = (UCOL_TERTIARYORDER(t1)) << 24 | (UCOL_TERTIARYORDER(t2)) << 16;
     if(lh->baseCE < 0xEF000000) {
     /* first implicits have three byte primaries, with a gap of one */
     /* so we esentially need to add 2 to the top byte in lh->baseContCE */
@@ -296,9 +296,9 @@ U_CFUNC void ucol_inv_getGapPositions(UColTokenParser *src, UColTokListHeader *l
     /* around, we'll assume that the gap is 1 */
       t2 += 0x00020000;
     }
-    lh->gapsHi[0] = (t1 & UCOL_PRIMARYMASK);
-    lh->gapsHi[1] = (t1 & UCOL_SECONDARYMASK) << 16;
-    lh->gapsHi[2] = (UCOL_TERTIARYORDER(t1)) << 24;
+    lh->gapsHi[0] = (t1 & UCOL_PRIMARYMASK) | (t2 & UCOL_PRIMARYMASK) >> 16;
+    lh->gapsHi[1] = (t1 & UCOL_SECONDARYMASK) << 16 | (t2 & UCOL_SECONDARYMASK) << 8;
+    lh->gapsHi[2] = (UCOL_TERTIARYORDER(t1)) << 24 | (UCOL_TERTIARYORDER(t2)) << 16;
   } else if(lh->baseCE == UCOL_RESET_TOP_VALUE && lh->baseContCE == 0) {
     lh->pos[0] = 0;
     t1 = UCOL_RESET_TOP_VALUE;
@@ -1050,7 +1050,6 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
     }
   }
 
-  UCATableHeader *myData = NULL;
   {
     UChar decomp[256];
     uint32_t noOfDec = 0, CE = UCOL_NOT_FOUND;
@@ -1058,37 +1057,13 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
     UCAElements el;
     el.isThai = FALSE;
     collIterate colIt;
-    /*uint32_t decompCE[256];*/
-    uint32_t compCE[256];
     uint32_t compRes = 0;
 
+    /* add latin-1 stuff */
     if(U_SUCCESS(*status)) {
-      /* produce canonical closure */
-      for(u = 0; u < 0xFFFF; u++) {
-        if((noOfDec = unorm_normalize(&u, 1, UNORM_NFD, 0, decomp, 256, status)) > 1
-          || (noOfDec == 1 && *decomp != (UChar)u))
-        /*if((noOfDec = uprv_ucol_decompose ((UChar)u, decomp)) > 1 || (noOfDec == 1 && *decomp != (UChar)u))*/
-        {
-          compRes = ucol_getDynamicCEs(src, t, (UChar *)&u, 1, compCE, 256, status);
-          el.noOfCEs = ucol_getDynamicCEs(src, t, decomp, noOfDec, el.CEs, 128, status);
 
-          if((compRes != el.noOfCEs) || (uprv_memcmp(compCE, el.CEs, compRes*sizeof(uint32_t)) != 0)) {
-              el.uchars[0] = (UChar)u;
-              el.cPoints = el.uchars;
-              el.cSize = 1;
-
-              uprv_uca_addAnElement(t, &el, status);
-          }
-        }
-      }
-    }
-
-    /* still need to produce compatibility closure */
-
-  /* add latin-1 stuff */
-    if(U_SUCCESS(*status)) {
       for(u = 0; u<0x100; u++) {
-        if((CE = ucmp32_get(t->mapping, u)) == UCOL_NOT_FOUND /*) {*/
+        if((CE = ucmp32_get(t->mapping, u)) == UCOL_NOT_FOUND 
           /* this test is for contractions that are missing the starting element. Looks like latin-1 should be done before assembling */
           /* the table, even if it results in more false closure elements */
           || ((isContraction(CE)) &&
@@ -1111,9 +1086,56 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
         }
       }
     }
+
+    tempUCATable *tempTable = uprv_uca_cloneTempTable(t, status);
+
+    UCATableHeader *tempData = uprv_uca_assembleTable(tempTable, status);
+    UCollator *tempColl = ucol_initCollator(tempData, 0, status);
+
+    if(U_SUCCESS(*status)) {
+      tempColl->rb = NULL;
+      tempColl->hasRealData = TRUE;
+    }
+
+
+    if(U_SUCCESS(*status)) {
+      /* produce canonical closure */
+      for(u = 0; u < 0xFFFF; u++) {
+        if((noOfDec = unorm_normalize(&u, 1, UNORM_NFD, 0, decomp, 256, status)) > 1
+          || (noOfDec == 1 && *decomp != (UChar)u))
+        {
+          //el.noOfCEs = ucol_getDynamicCEs(src, t, decomp, noOfDec, el.CEs, 128, status);
+
+          if(ucol_strcoll(tempColl, (UChar *)&u, 1, decomp, noOfDec) != UCOL_EQUAL) {
+            el.uchars[0] = (UChar)u;
+            el.cPoints = el.uchars;
+            el.cSize = 1;
+            el.noOfCEs = 0;
+            //uint32_t noOfCEs = 0;
+            //uint32_t currCE = 0;
+            UCollationElements* colEl = ucol_openElements(tempColl, decomp, noOfDec, status);
+
+            while((el.CEs[el.noOfCEs] = ucol_next(colEl, status)) != UCOL_NULLORDER) {
+            //while((currCE = ucol_next(colEl, status)) != UCOL_NULLORDER) {
+              //if(currCE != el.CEs[noOfCEs]) {
+                //fprintf(stderr, "%04X[%d] %08X vs %08X\n", u, noOfCEs, currCE, el.CEs[noOfCEs]);
+              //}
+              el.noOfCEs++;
+              //noOfCEs++;
+            }
+
+            uprv_uca_addAnElement(t, &el, status);
+          }
+        }
+      }
+      uprv_uca_closeTempTable(tempTable);    
+      ucol_close(tempColl);
+    }
   }
 
-  myData = uprv_uca_assembleTable(t, status);  
+    /* still need to produce compatibility closure */
+
+  UCATableHeader *myData = uprv_uca_assembleTable(t, status);  
 
   uhash_close(tailored);
   uprv_uca_closeTempTable(t);    
