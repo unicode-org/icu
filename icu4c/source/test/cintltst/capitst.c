@@ -29,7 +29,7 @@ void addCollAPITest(TestNode** root)
 {
     /* WEIVTODO: return tests here */
     addTest(root, &TestProperty,      "tscoll/capitst/TestProperty");
-    /*addTest(root, &TestRuleBasedColl, "tscoll/capitst/TestRuleBasedColl");*/
+    addTest(root, &TestRuleBasedColl, "tscoll/capitst/TestRuleBasedColl");
     addTest(root, &TestCompare,       "tscoll/capitst/TestCompare");
     addTest(root, &TestSortKey,       "tscoll/capitst/TestSortKey");
     addTest(root, &TestHashCode,      "tscoll/capitst/TestHashCode");

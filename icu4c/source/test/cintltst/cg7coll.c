@@ -261,8 +261,11 @@ static void TestDemo1()
 
     len=rlen + u_strlen(temp);
     newRules=(UChar*)malloc(sizeof(UChar) * (len+1));
+/*
     my_strncpy(newRules, baseRules, rlen);
     my_strcat(newRules, temp, rlen);
+*/
+    my_strncpy(newRules, temp, len);
     myCollation = ucol_openRules(newRules, len, UCOL_NO_NORMALIZATION, 
                                                     UCOL_DEFAULT_STRENGTH, &status);
 
@@ -307,8 +310,12 @@ static void TestDemo2()
 
     len=rlen + u_strlen(temp);
     newRules=(UChar*)malloc(sizeof(UChar) * (len+1));
+/*
     my_strncpy(newRules, baseRules, rlen);
     my_strcat(newRules, temp, rlen);
+*/
+    my_strncpy(newRules, temp, len);
+
     myCollation = ucol_openRules(newRules, len, UCOL_NO_NORMALIZATION, 
                                                     UCOL_DEFAULT_STRENGTH, &status);
 
@@ -352,8 +359,11 @@ static void TestDemo3()
     
     len=rlen + u_strlen(temp);
     newRules=(UChar*)malloc(sizeof(UChar) * (len+1));
+/*
     my_strncpy(newRules, baseRules, rlen);
     my_strcat(newRules, temp, rlen);
+*/
+    my_strncpy(newRules, temp, len);
     myCollation = ucol_openRules(newRules, len, UCOL_NO_NORMALIZATION, 
                                                     UCOL_DEFAULT_STRENGTH, &status);
 
@@ -398,8 +408,11 @@ static void TestDemo4()
     
     len=rlen + u_strlen(temp);
     newRules=(UChar*)malloc(sizeof(UChar) * (len+1));
+/*
     my_strncpy(newRules, baseRules, rlen);
     my_strcat(newRules, temp, rlen);
+*/
+    my_strncpy(newRules, temp, len);
     myCollation = ucol_openRules(newRules, len, UCOL_NO_NORMALIZATION, 
                                                     UCOL_DEFAULT_STRENGTH, &status);
 

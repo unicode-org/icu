@@ -49,9 +49,9 @@ void addCollTest(TestNode** root)
     addEnglishCollTest(root);
     
     /* WEIVTODO: return tests here */
-    /*addRuleBasedCollTest(root);*/
-    /*addCollIterTest(root);*/
-    /*addAllCollTest(root);*/
+    addRuleBasedCollTest(root);
+    addCollIterTest(root);
+    addAllCollTest(root);
 }
 
 
