@@ -78,8 +78,8 @@ COMPILE.c=    $(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
 COMPILE.cc=   $(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c
 
 # Commands to link
-LINK.c=       $(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
-LINK.cc=      $(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+LINK.c=       $(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -Wl,-rpath-link $(top_builddir)/data
+LINK.cc=      $(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -Wl,-rpath-link $(top_builddir)/data
 
 # Commands to make a shared library
 SHLIB.c=      $(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -shared
@@ -106,7 +106,7 @@ INSTALL-L = $(INSTALL_DATA)
 # Link commands to link to ICU libs
 LIBICUDT=       -L$(top_builddir)/data -L$(top_builddir)/stubdata -l$(ICUPREFIX)data
 LIBICUUC=       -L$(top_builddir)/common -l$(ICUPREFIX)uc$(ICULIBSUFFIX) $(LIBICUDT)
-LIBICUI18N=     -L$(top_builddir)/i18n -l$(ICUPREFIX)i18n$(ICULIBSUFFIX) -Wl,-rpath-link $(top_builddir)/data
+LIBICUI18N=     -L$(top_builddir)/i18n -l$(ICUPREFIX)i18n$(ICULIBSUFFIX)
 LIBICULE=       -L$(top_builddir)/layout -l$(ICUPREFIX)le$(ICULIBSSUFFIX)
 LIBCTESTFW=     -L$(top_builddir)/tools/ctestfw -l$(ICUPREFIX)ctestfw$(ICULIBSUFFIX)
 LIBICUTOOLUTIL= -L$(top_builddir)/tools/toolutil -l$(ICUPREFIX)toolutil$(ICULIBSUFFIX)
