@@ -32,17 +32,19 @@
  *   for more information see Unicode Strandard 2.0 , Transformation Formats Appendix A-9
  */
 /*static const uint32_t REPLACEMENT_CHARACTER = 0x0000FFFD;*/
-static const uint32_t MAXIMUM_UCS2 = 0x0000FFFF;
-static const uint32_t MAXIMUM_UTF = 0x0010FFFF;
-static const uint32_t MAXIMUM_UCS4 = 0x7FFFFFFF;
-static const int8_t HALF_SHIFT = 10;
-static const uint32_t HALF_BASE = 0x0010000;
-static const uint32_t HALF_MASK = 0x3FF;
-static const uint32_t SURROGATE_HIGH_START = 0xD800;
-static const uint32_t SURROGATE_HIGH_END = 0xDBFF;
-static const uint32_t SURROGATE_LOW_START = 0xDC00;
-static const uint32_t SURROGATE_LOW_END = 0xDFFF;
-static const uint32_t SURROGATE_LOW_BASE = 9216; /* -SURROGATE_LOW_START + HALF_BASE */
+#define MAXIMUM_UCS2            0x0000FFFF
+#define MAXIMUM_UTF             0x0010FFFF
+#define MAXIMUM_UCS4            0x7FFFFFFF
+#define HALF_SHIFT              10
+#define HALF_BASE               0x0010000
+#define HALF_MASK               0x3FF
+#define SURROGATE_HIGH_START    0xD800
+#define SURROGATE_HIGH_END      0xDBFF
+#define SURROGATE_LOW_START     0xDC00
+#define SURROGATE_LOW_END       0xDFFF
+
+/* -SURROGATE_LOW_START + HALF_BASE */
+#define SURROGATE_LOW_BASE      9216
 
 static const uint32_t offsetsFromUTF8[7] = {0,
   (uint32_t) 0x00000000, (uint32_t) 0x00003080, (uint32_t) 0x000E2080,
