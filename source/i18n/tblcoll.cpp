@@ -495,7 +495,9 @@ int32_t RuleBasedCollator::hashCode() const
 const Locale RuleBasedCollator::getLocale(UErrorCode &status) const {
   const char *result = ucol_getLocale(ucollator, &status);
   if(result == NULL) {
-    return Locale("");
+    Locale res("");
+    res.setBogus(TRUE);
+    return res;
   } else {
     return Locale(result);
   }
