@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterCaseTest.java,v $ 
-* $Date: 2002/07/09 05:30:38 $ 
-* $Revision: 1.4 $
+* $Date: 2002/07/11 21:25:24 $ 
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -383,26 +383,87 @@ public final class UCharacterCaseTest extends TestFmwk
 	        	}
                 
                 String chstr[] = getUnicodeStrings(s);
-	        	if (chstr.length >= 5) {
-	            	// conditional casing tested in other tests
-                    break;
+                StringBuffer strbuffer   = new StringBuffer(chstr[0]);
+                StringBuffer lowerbuffer = new StringBuffer(chstr[1]); 
+                StringBuffer upperbuffer = new StringBuffer(chstr[3]); 
+                Locale locale = null;
+                for (int i = 4; i < chstr.length; i ++) {
+                    String condition = chstr[i];
+                    if (Character.isLowerCase(chstr[i].charAt(0))) {
+                        // specified locale
+                        locale = new Locale(chstr[i], "");
+                    }
+                    else if (condition.compareToIgnoreCase("Not_Before_Dot") 
+                                                      == 0) {
+                        // turns I into dotless i
+                    }    
+                    else if (condition.compareToIgnoreCase(
+                                                      "More_Above") == 0) {
+                            strbuffer.append((char)0x300);
+                            lowerbuffer.append((char)0x300);
+                            upperbuffer.append((char)0x300);
+                    }
+                    else if (condition.compareToIgnoreCase(
+                                                "After_Soft_Dotted") == 0) {
+                            strbuffer.insert(0, 'i');
+                            lowerbuffer.insert(0, 'i');
+                            String lang = "";
+                            if (locale != null) {
+                                lang = locale.getLanguage();
+                            }
+                            if (lang.equals("tr") || lang.equals("az")) {
+                                upperbuffer.insert(0, '\u0130');
+                            }
+                            else {
+                                upperbuffer.insert(0, 'I');
+                            }
+                    }
+                    else if (condition.compareToIgnoreCase(
+                                                      "Final_Sigma") == 0) {
+                            strbuffer.insert(0, 'c');
+                            lowerbuffer.insert(0, 'c');
+                            upperbuffer.insert(0, 'C');
+                    }
 	        	}
-	        	else {
-	            	if (!UCharacter.toLowerCase(chstr[0]).equals(chstr[1])) {
-	                	errln(s);
-	                	errln("Fail: toLowerCase for character " + 
-	                      	Utility.escape(chstr[0]) + ", expected "
-	                      	+ Utility.escape(chstr[1]) + " but resulted in " + 
-	                      	Utility.escape(UCharacter.toLowerCase(chstr[0])));
-	            	}
-	            	if (!UCharacter.toUpperCase(chstr[0]).equals(chstr[3])) {
-	                	errln(s);
-	                	errln("Fail: toUpperCase for character " + 
-	                      	Utility.escape(chstr[0]) + ", expected "
-	                      	+ Utility.escape(chstr[3]) + " but resulted in " + 
-	                      	Utility.escape(UCharacter.toUpperCase(chstr[0])));
-	            	}
-	        	}
+                chstr[0] = strbuffer.toString();
+                chstr[1] = lowerbuffer.toString();
+                chstr[3] = upperbuffer.toString();
+                if (locale == null) {
+                    if (!UCharacter.toLowerCase(chstr[0]).equals(chstr[1])) {
+    	               	errln(s);
+    	               	errln("Fail: toLowerCase for character " + 
+    	                      Utility.escape(chstr[0]) + ", expected "
+    	                      + Utility.escape(chstr[1]) + " but resulted in " + 
+    	                      Utility.escape(UCharacter.toLowerCase(chstr[0])));
+    	            }
+    	            if (!UCharacter.toUpperCase(chstr[0]).equals(chstr[3])) {
+    	                errln(s);
+    	                errln("Fail: toUpperCase for character " + 
+    	                      Utility.escape(chstr[0]) + ", expected "
+    	                      + Utility.escape(chstr[3]) + " but resulted in " + 
+    	                      Utility.escape(UCharacter.toUpperCase(chstr[0])));
+    	            }
+                }
+                else {
+                    if (!UCharacter.toLowerCase(locale, chstr[0]).equals(
+                                                                   chstr[1])) {
+                        errln(s);
+                        errln("Fail: toLowerCase for character " + 
+                              Utility.escape(chstr[0]) + ", expected "
+                              + Utility.escape(chstr[1]) + " but resulted in " + 
+                              Utility.escape(UCharacter.toLowerCase(locale, 
+                                                                    chstr[0])));
+                    }
+                    if (!UCharacter.toUpperCase(locale, chstr[0]).equals(
+                                                                   chstr[3])) {
+                        errln(s);
+                        errln("Fail: toUpperCase for character " + 
+                              Utility.escape(chstr[0]) + ", expected "
+                              + Utility.escape(chstr[3]) + " but resulted in " + 
+                              Utility.escape(UCharacter.toUpperCase(locale, 
+                                                                    chstr[0])));
+                    }
+                }
 	      	}
 	      	input.close();
 	    }
@@ -604,8 +665,11 @@ public final class UCharacterCaseTest extends TestFmwk
             start = end + 2;
             v.add(buffer.toString());
         }
-        int comments = str.indexOf('#', start);
+        int comments = str.indexOf(" #", start);
         if (comments != -1 && comments != start) {
+            if (str.charAt(comments - 1) == ';') {
+                comments --;
+            }
             String conditions = str.substring(start, comments);
             int offset = 0;
     	    while (offset < conditions.length()) {
