@@ -57,6 +57,9 @@ main(int argc,
   char *arg;
   UErrorCode status;
 
+  if(argc == 1)
+      printUsage = 1;
+
 
   /* parse the options */
   for(optind = 1; optind < argc; ++optind) {
