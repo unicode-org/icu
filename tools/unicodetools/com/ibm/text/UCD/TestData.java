@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/TestData.java,v $
-* $Date: 2005/03/30 17:19:32 $
-* $Revision: 1.20 $
+* $Date: 2005/04/06 08:48:17 $
+* $Revision: 1.21 $
 *
 *******************************************************************************
 */
@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import com.ibm.icu.dev.test.util.BagFormatter;
 import com.ibm.icu.dev.test.util.ICUPropertyFactory;
 import com.ibm.icu.dev.test.util.UnicodeLabel;
+import com.ibm.icu.dev.test.util.UnicodeMap;
 import com.ibm.icu.dev.test.util.UnicodeProperty;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
@@ -153,17 +154,23 @@ public class TestData implements UCD_Types {
 	static class GenStringPrep {
 		UnicodeSet[] coreChars = new UnicodeSet[100];
 		UnicodeSet decomposable = new UnicodeSet();
+		UnicodeMap suspect = new UnicodeMap();
 		
 		ToolUnicodePropertySource ups = ToolUnicodePropertySource.make("");
 		//UnicodeSet id_continue = ups.getSet("ID_Continue=true");
-		UnicodeSet wordChars = ups.getSet("name=.*MODIFIER LETTER.*", new RegexMatcher())
-		.retainAll(ups.getSet("gc=Sk"))
-		.addAll(new UnicodeSet("[\u0027 \u002D \u002E \u003A \u00B7 \u058A \u05F3" +
-		" \u05F4 \u200C \u200D \u2010 \u2019 \u2027 \u30A0]"));
+		UnicodeSet xid_continue = ups.getSet("XID_Continue=true");
+		UnicodeSet wordChars = ups.getSet("name=.*MODIFIER LETTER.*", new RegexMatcher());
+		{
+			wordChars.retainAll(ups.getSet("gc=Sk"));
+			wordChars.addAll(new UnicodeSet("[\\u0027 \\u002D \\u002E \\u003A \\u00B7 \\u058A \\u05F3" +
+			" \\u05F4 \\u200C \\u200D \\u2010 \\u2019 \\u2027 \\u30A0 \\u04C0]"));
+			//wordChars.removeAll(xid_continue);
+		}
 		
 		UnicodeSet patternProp = ups.getSet("Pattern_Syntax=true").removeAll(wordChars);
+		UnicodeSet isNFKC = ups.getSet("NFKC_Quickcheck=NO").complement();
 		
-		UnicodeSet not_xid_continue = ups.getSet("XID_Continue=true").complement().removeAll(wordChars);
+		UnicodeSet not_xid_continue = new UnicodeSet(xid_continue).complement().removeAll(wordChars);
 		
 		//UnicodeSet[] decompChars = new UnicodeSet[100];
 		UCD ucd = Default.ucd();
@@ -180,7 +187,8 @@ public class TestData implements UCD_Types {
 				"[[:Bidi_Class=AL:][:Bidi_Class=R:]]");
 
 		UnicodeSet bidiL = new UnicodeSet("[:Bidi_Class=l:]");
-		UnicodeSet hasUpper = new UnicodeSet();
+		UnicodeSet hasNoUpper = new UnicodeSet();
+		UnicodeSet hasNoUpperMinus = new UnicodeSet();
 		BagFormatter bf = new BagFormatter();
 		UnicodeSet inIDN = new UnicodeSet();
 
@@ -200,16 +208,16 @@ public class TestData implements UCD_Types {
 				if (!Default.nfd().isNormalized(cp)) decomposable.add(cp);
 				int idnaType = getIDNAType(cp);
 				idnaTypeSet[idnaType].add(cp);
+				String str = UTF16.valueOf(cp);
+				if (str.equals(ucd.getCase(str, FULL, UPPER))) hasNoUpper.add(cp);
 				int script = ucd.getScript(cp);
 				if (coreChars[script] == null)
 					coreChars[script] = new UnicodeSet();
 				coreChars[script].add(cp);
 			}
-			// find characters with no uppercase
-			for (UnicodeSetIterator it = new UnicodeSetIterator(lowercase); it.next();) {
-				String str = UTF16.valueOf(it.codepoint);
-				if (!str.equals(ucd.getCase(str, FULL, UPPER))) hasUpper.add(it.codepoint);
-			}
+			// fix characters with no uppercase
+			hasNoUpperMinus = new UnicodeSet(hasNoUpper).removeAll(wordChars);
+			System.out.println(bf.showSetNames(hasNoUpper));
 			
 			Utility.fixDot();
 			PrintWriter htmlOut = BagFormatter.openUTF8Writer(GEN_DIR, "idn-chars.html");
@@ -245,6 +253,23 @@ public class TestData implements UCD_Types {
 			showCodes(htmlOut, textOut, INHERITED_SCRIPT);
 			htmlOut.println("</table></body></html>");
 			htmlOut.close();
+			bf.setMergeRanges(false);
+
+			textOut.println();
+			textOut.println("# *** WORD CHARACTERS ADDED ***");
+			bf.setValueSource("word-chars");
+			bf.showSetNames(textOut, wordChars);
+			
+			textOut.println();
+			textOut.println("# *** FOR REVIEW (collected from above) ***");
+			bf.setLabelSource(UnicodeLabel.NULL);
+			for (Iterator it = new TreeSet(suspect.getAvailableValues()).iterator(); it.hasNext();) {
+				textOut.println();
+				String value = (String)it.next();
+				bf.setValueSource(value);
+				bf.showSetNames(textOut, suspect.getSet(value));
+			}
+			textOut.close();
 		}
 		
 		UnicodeSet idnaTypeSet[] = new UnicodeSet[IDNA_TYPE_LIMIT];
@@ -302,25 +327,38 @@ public class TestData implements UCD_Types {
 			UnicodeSet illegal = extract(idnaTypeSet[ILLEGAL], core);
 			UnicodeSet remapped = extract(idnaTypeSet[REMAPPED], core);
 			
+			UnicodeSet remappedIsNFKC = extract(isNFKC, remapped);
+			UnicodeSet remappedIsNFKCDecomp = extract(decomposable, remappedIsNFKC);
+			
 			UnicodeSet decomp = extract(decomposable, core);
 			UnicodeSet pattern = extract(patternProp, core);
 			UnicodeSet non_id = extract(not_xid_continue, core);
 			
-			UnicodeSet otherCore = new UnicodeSet(core).removeAll(hasUpper);
-			core.removeAll(otherCore);
-			if (core.size() == 0) {
-				UnicodeSet temp = core;
-				core = otherCore;
-				otherCore = temp;
+			UnicodeSet bicameralNoupper = new UnicodeSet();
+			if (!hasNoUpper.containsAll(core)) {
+				bicameralNoupper = extract(hasNoUpperMinus, core);
+			}
+
+			UnicodeSet foo = new UnicodeSet(bicameralNoupper).addAll(non_id);
+			for (UnicodeSetIterator it = new UnicodeSetIterator(foo); it.next(); ) {
+				String cat = Default.ucd().getCategoryID(it.codepoint);
+				String name = Default.ucd().getName(it.codepoint);
+				if (name.indexOf("MUSICAL SYMBOL") >= 0 
+						|| name.indexOf("DINGBA") >= 0 
+						|| name.indexOf("RADICAL ") >= 0 
+						 						) cat = "XX";
+				suspect.put(it.codepoint, cat);
 			}
 			
 			if (core.size() != 0) printlnSet(htmlOut, textOut, script, "Atomic", core, scriptCode);
-			if (otherCore.size() != 0) printlnSet(htmlOut, textOut, script, "Atomic-no-uppercase", otherCore, scriptCode);
+			if (bicameralNoupper.size() != 0) printlnSet(htmlOut, textOut, script, "Atomic-no-uppercase", bicameralNoupper, scriptCode);
 			if (pattern.size() != 0) printlnSet(htmlOut, textOut, script, "Pattern_Syntax", pattern, scriptCode);
 			if (non_id.size() != 0) printlnSet(htmlOut, textOut, script, "Non-XID", non_id, scriptCode);
 			if (decomp.size() != 0) printlnSet(htmlOut, textOut, script, "Decomposable", decomp, scriptCode);
 
-			if (remapped.size() != 0) printlnSet(htmlOut, textOut, script, "IDN-Remapped", remapped, scriptCode);
+			if (remappedIsNFKC.size() != 0) printlnSet(htmlOut, textOut, script, "IDN-Remapped-Case-Atomic", remappedIsNFKC, scriptCode);
+			if (remappedIsNFKCDecomp.size() != 0) printlnSet(htmlOut, textOut, script, "IDN-Remapped-Case-Decomposable", remappedIsNFKCDecomp, scriptCode);
+			if (remapped.size() != 0) printlnSet(htmlOut, textOut, script, "IDN-Remapped-Compat", remapped, scriptCode);
 			if (deleted.size() != 0) printlnSet(htmlOut, textOut, script, "IDN-Deleted", deleted, scriptCode);
 			if (illegal.size() != 0) printlnSet(htmlOut, textOut, script, "IDN-Illegal", illegal, scriptCode);
 		}

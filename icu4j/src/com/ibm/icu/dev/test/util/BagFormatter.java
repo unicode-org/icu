@@ -46,7 +46,10 @@ public class BagFormatter {
         "'>' > '&gt;' ;";
 
     private static final String HTML_RULES = BASE_RULES + CONTENT_RULES + 
-	    "'\"' > '&quot;' ; ";
+    "'\"' > '&quot;' ; ";
+
+    private static final String HTML_RULES_CONTROLS = HTML_RULES + 
+    "([[:C:][:Z:][:whitespace:][:Default_Ignorable_Code_Point:]]) > &hex/unicode($1) ; ";
 
     private static final String XML_RULES = HTML_RULES +
 	    "'' > '&apos;' ; ";
@@ -94,6 +97,8 @@ the double-quote character (") as "&quot;".
 
     public static final Transliterator toHTML = Transliterator.createFromRules(
             "any-html", HTML_RULES, Transliterator.FORWARD);
+    public static final Transliterator toHTMLControl = Transliterator.createFromRules(
+            "any-html", HTML_RULES_CONTROLS, Transliterator.FORWARD);
     public static final Transliterator fromHTML = Transliterator.createFromRules(
             "html-any", HTML_RULES, Transliterator.REVERSE);
 
@@ -151,6 +156,14 @@ the double-quote character (") as "&quot;".
         return result.getBuffer().toString();
     }
 
+    public void showSetDifferences(
+            PrintWriter pw,
+            String name1,
+            UnicodeSet set1,
+            String name2,
+            UnicodeSet set2) {
+    	showSetDifferences(pw, name1, set1, name2, set2, -1);
+    }
     /**
      * Compare two UnicodeSets, and show the differences
      * @param name1 name of first set to be compared
@@ -164,24 +177,37 @@ the double-quote character (") as "&quot;".
         String name1,
         UnicodeSet set1,
         String name2,
-        UnicodeSet set2) {
+        UnicodeSet set2,
+		int flags) 
+    {
         if (pw == null) pw = CONSOLE;
         String[] names = { name1, name2 };
 
-        UnicodeSet temp = new UnicodeSet(set1).removeAll(set2);
-        pw.println();
-        pw.println(inOut.format(names));
-        showSetNames(pw, temp);
+        UnicodeSet temp;
+        
+        if ((flags&1) != 0) {
+        	temp = new UnicodeSet(set1).removeAll(set2);
+	        pw.print(lineSeparator);
+	        pw.print(inOut.format(names));
+	        pw.print(lineSeparator);
+	        showSetNames(pw, temp);
+        }
 
-        temp = new UnicodeSet(set2).removeAll(set1);
-        pw.println();
-        pw.println(outIn.format(names));
-        showSetNames(pw, temp);
+        if ((flags&2) != 0) {
+        	temp = new UnicodeSet(set2).removeAll(set1);
+	        pw.print(lineSeparator);
+	        pw.print(outIn.format(names));
+	        pw.print(lineSeparator);
+	        showSetNames(pw, temp);
+	    }
 
-        temp = new UnicodeSet(set2).retainAll(set1);
-        pw.println();
-        pw.println(inIn.format(names));
-        showSetNames(pw, temp);
+        if ((flags&4) != 0) {
+	        temp = new UnicodeSet(set2).retainAll(set1);
+	        pw.print(lineSeparator);
+	        pw.print(inIn.format(names));
+	        pw.print(lineSeparator);
+	        showSetNames(pw, temp);
+        }
         pw.flush();
     }
 
@@ -397,12 +423,14 @@ the double-quote character (") as "&quot;".
 
     // refactored
     public String getName(int codePoint, boolean withCodePoint) {
-        return getNameSource().getValue(codePoint, !withCodePoint);
+    	String result = getNameSource().getValue(codePoint, !withCodePoint);
+        return fixName == null ? result : fixName.transliterate(result);
     }
 
     public String getName(String s, boolean withCodePoint) {
-        return getNameSource().getValue(s, separator, !withCodePoint);
-    }
+       	String result = getNameSource().getValue(s, separator, !withCodePoint);
+        return fixName == null ? result : fixName.transliterate(result);
+     }
 
     public String hex(String s) {
         return hex(s,separator);
@@ -445,6 +473,7 @@ the double-quote character (") as "&quot;".
 
     private boolean mergeRanges = true;
     private Transliterator showLiteral = null;
+    private Transliterator fixName = null;
     private boolean showSetAlso = false;
 
     private RangeFinder rf = new RangeFinder();
@@ -580,10 +609,16 @@ the double-quote character (") as "&quot;".
                 doAt((Visitor.CodePointRange) o);
             } else {
                 String thing = o.toString();
+                String value = getValueSource() == UnicodeLabel.NULL ? "" : getValueSource().getValue(thing, ",", true);
+                if (value.length() != 0) value = "\t; " + value;
+                String label = getLabelSource(true).getValue(thing, ",", true);
+                if (label.length() != 0) label = " " + label;
                 output.print(
                     myTabber.process(
                         hex(thing)
+							+ value
                             + commentSeparator
+							+ label
                             + insertLiteral(thing)
                             + "\t"
                             + getName(thing))
@@ -1095,4 +1130,16 @@ the double-quote character (") as "&quot;".
         return this;
     }
 
+	/**
+	 * @return Returns the fixName.
+	 */
+	public Transliterator getFixName() {
+		return fixName;
+	}
+	/**
+	 * @param fixName The fixName to set.
+	 */
+	public void setFixName(Transliterator fixName) {
+		this.fixName = fixName;
+	}
 }

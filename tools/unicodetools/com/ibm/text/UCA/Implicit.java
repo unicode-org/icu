@@ -168,7 +168,7 @@ public class Implicit implements UCD_Types {
      */
     public Implicit(int minPrimary, int maxPrimary) {
         // 13 is the largest 4-byte gap we can use without getting 2 four-byte forms.
-        this(minPrimary, maxPrimary, 0x03, 0xFE, 1, 1);
+        this(minPrimary, maxPrimary, 0x04, 0xFE, 1, 1);
     }
     
     /**
@@ -181,6 +181,14 @@ public class Implicit implements UCD_Types {
      * @param primaries3count number of 3-byte primarys we can use (normally 1)
      */
     public Implicit(int minPrimary, int maxPrimary, int minTrail, int maxTrail, int gap3, int primaries3count) {
+    	if (DEBUG) {
+    		System.out.println("minPrimary: " + Utility.hex(minPrimary));
+	    	System.out.println("maxPrimary: " + Utility.hex(maxPrimary));
+	    	System.out.println("minTrail: " + Utility.hex(minTrail));
+	    	System.out.println("maxTrail: " + Utility.hex(maxTrail));
+	    	System.out.println("gap3: " + Utility.hex(gap3));
+	    	System.out.println("primaries3count: " + primaries3count);
+    	}
         // some simple parameter checks
         if (minPrimary < 0 || minPrimary >= maxPrimary || maxPrimary > 0xFF) throw new IllegalArgumentException("bad lead bytes");
         if (minTrail < 0 || minTrail >= maxTrail || maxTrail > 0xFF) throw new IllegalArgumentException("bad trail bytes");

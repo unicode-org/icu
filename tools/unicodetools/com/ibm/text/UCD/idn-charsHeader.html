@@ -14,7 +14,9 @@
 .Non-XID       { background-color: #FFCCCC }
 .Decomposable       { background-color: #FFFFCC }
 .Pattern_Syntax       { background-color: #FFCCFF }
-.IDN-Remapped       { background-color: #FF6666 }
+.IDN-Remapped-Case-Atomic       { background-color: #CCFFFF }
+.IDN-Remapped-Case-Decomposable       { background-color: #66FFFF }
+.IDN-Remapped-Compat       { background-color: #FF6666 }
 .IDN-Deleted       { background-color: #66FF66 }
 .IDN-Illegal       { background-color: #6666FF }
 th           { text-align: left }
@@ -25,7 +27,7 @@ th           { text-align: left }
 <body style="margin: 2em">
 
 <h1>IDN Character Categorization</h1>
-<p><i>$Date: 2005/03/30 17:19:32 $, MED</i></p>
+<p><i>$Date: 2005/04/06 08:48:17 $, MED</i></p>
 <p>This page lists all of the valid output IDN characters broken down by category. By &quot;output&quot; IDN 
 characters, we mean ones that can result from nameprep. Characters are grouped first by script, and 
 then by subcategory. Within each subcategory characters are sorted according to the default
@@ -69,8 +71,17 @@ and name (in enabled browsers).</p>
       <td>Characters with NFC decompositions.</td>
     </tr>
     <tr>
-      <td class="IDN-Remapped">IDN-Remapped</td>
-      <td>Characters remapped by IDN.</td>
+      <td class="IDN-Remapped-Case-Atomic">IDN-Remapped</td>
+      <td>Characters remapped by IDN due to case folding</td>
+    </tr>
+    <tr>
+      <td class="IDN-Remapped-Case-Decomposable">IDN-Remapped</td>
+      <td>Characters remapped by IDN due to case folding, that are decomposable.</td>
+    </tr>
+    IDN-Remapped-Case-Decomposable
+    <tr>
+      <td class="IDN-Remapped-Compat">IDN-Remapped</td>
+      <td>Characters remapped by IDN due to compatibility mapping.</td>
     </tr>
     <tr>
       <td class="IDN-Deleted">IDN-Deleted</td>
