@@ -170,6 +170,7 @@ static void TestDecodedBundle(void);
 
 void addNEWResourceBundleTest(TestNode** root)
 {
+    addTest(root, &TestErrorCodes,            "tsutil/creststn/TestErrorCodes");
     addTest(root, &TestEmptyBundle,           "tsutil/creststn/TestEmptyBundle");
     addTest(root, &TestConstruction1,         "tsutil/creststn/TestConstruction1");
     addTest(root, &TestResourceBundles,       "tsutil/creststn/TestResourceBundle");
@@ -211,6 +212,52 @@ static const char* norwayLocales[] = {
     "nb_NO",
     "nb"
 };
+
+static void checkStatus(UErrorCode expected, UErrorCode status) {
+  if(status != expected) {
+    log_err("Expected error code %s, got error code %s\n", u_errorName(expected), u_errorName(status));
+  }
+}
+
+static void TestErrorCodes(void) {
+  UErrorCode status = U_USING_DEFAULT_WARNING;
+
+  UResourceBundle *r = NULL, *r2 = NULL;
+
+  /* first bundle should return fallback warning */
+  r = ures_open(NULL, "sr_YU_VOJVODINA", &status);
+  checkStatus(U_USING_FALLBACK_WARNING, status);
+  ures_close(r);
+
+  /* this bundle should return zero error, so it shouldn't change the status*/
+  status = U_USING_DEFAULT_WARNING;
+  r = ures_open(NULL, "sr_YU", &status);
+  checkStatus(U_USING_DEFAULT_WARNING, status);
+
+  /* we look up the resource which is aliased, but it lives in fallback */
+  status = U_USING_DEFAULT_WARNING; 
+  r2 = ures_getByKey(r, "CollationElements", NULL, &status);
+  checkStatus(U_USING_FALLBACK_WARNING, status);
+  ures_close(r);
+
+  /* this bundle should return zero error, so it shouldn't change the status*/
+  status = U_USING_DEFAULT_WARNING;
+  r = ures_open(NULL, "sr", &status);
+  checkStatus(U_USING_DEFAULT_WARNING, status);
+
+  /* we look up the resource which is aliased and at our level */
+  status = U_USING_DEFAULT_WARNING; 
+  r2 = ures_getByKey(r, "CollationElements", NULL, &status);
+  checkStatus(U_USING_DEFAULT_WARNING, status);
+  ures_close(r);
+
+  ures_close(r2);
+
+  status = U_USING_FALLBACK_WARNING;
+  r = ures_open(NULL, "nolocale", &status);
+  checkStatus(U_USING_DEFAULT_WARNING, status);
+  ures_close(r);
+}
 
 static void TestAliasConflict(void) {
     UErrorCode status = U_ZERO_ERROR;

@@ -279,7 +279,11 @@ static UResourceDataEntry *init_entry(const char *localeID, const char *path, UE
 
     if(r != NULL) { /* if the entry is already in the hash table */
         r->fCountExisting++; /* we just increase it's reference count */
-        *status = r->fBogus; /* and set returning status */
+        /* if the resource has a warning */
+        /* we don't want to overwrite a status with no error */
+        if(r->fBogus != U_ZERO_ERROR) {
+          *status = r->fBogus; /* set the returning status */
+        } 
     } else { /* otherwise, we'll try to construct a new entry */
         UBool result = FALSE;
 
@@ -485,7 +489,9 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
     umtx_unlock(&resbMutex);
 
     if(U_SUCCESS(*status)) {
-      *status = intStatus;
+      if(intStatus != U_ZERO_ERROR) {
+        *status = intStatus;  
+      }
       return r;
     } else {
       return NULL;
@@ -546,8 +552,9 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
             /* first, open the bundle with real data */
             UResourceBundle *result = resB;
             const char* temp = NULL;
-            UResourceBundle *mainRes = ures_openDirect(path, locale, status); 
-            if(U_SUCCESS(*status)) {
+            UErrorCode intStatus = U_ZERO_ERROR;
+            UResourceBundle *mainRes = ures_openDirect(path, locale, &intStatus); 
+            if(U_SUCCESS(intStatus)) {
               if(keyPath == NULL) {
                 /* no key path. This means that we are going to 
                  * to use the corresponding resource from
@@ -603,6 +610,8 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
                   result = resB;
                 }
               }
+            } else { /* we failed to open the resource we're aliasing to */
+              *status = intStatus;
             }
             uprv_free(chAlias);
             ures_close(mainRes);
