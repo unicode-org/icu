@@ -184,6 +184,7 @@ const UnicodeString &RBBIDataWrapper::getRuleSourceString() {
 //
 //-----------------------------------------------------------------------------
 void  RBBIDataWrapper::printData() {
+#ifdef RBBI_DEBUG
     uint32_t c, s;
 
     RBBIDebugPrintf("RBBI Data at %p\n", (void *)fHeader);
@@ -216,6 +217,7 @@ void  RBBIDataWrapper::printData() {
         c++;
     }
     RBBIDebugPrintf("\n\n");
+#endif
 }
 
 

@@ -339,6 +339,7 @@ int32_t  RBBISetBuilder::getNumCharCategories() {
 //
 //------------------------------------------------------------------------
 void RBBISetBuilder::printRanges() {
+#ifdef RBBI_DEBUG
     RangeDescriptor       *rlRange;
     int                    i;
 
@@ -360,6 +361,7 @@ void RBBISetBuilder::printRanges() {
         }
         RBBIDebugPrintf("\n");
     }
+#endif
 }
 
 
@@ -421,6 +423,7 @@ void RBBISetBuilder::printRangeGroups() {
 //
 //------------------------------------------------------------------------
 void RBBISetBuilder::printSets() {
+#ifdef RBBI_DEBUG
     int                   i;
 
     RBBIDebugPrintf("\n\nUnicode Sets List\n------------------\n");
@@ -453,6 +456,7 @@ void RBBISetBuilder::printSets() {
         }
     }
     RBBIDebugPrintf("\n");
+#endif
 }
 
 
