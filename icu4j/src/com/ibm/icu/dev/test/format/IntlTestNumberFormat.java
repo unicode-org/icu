@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/IntlTestNumberFormat.java,v $ 
- * $Date: 2003/05/14 19:03:16 $ 
- * $Revision: 1.4 $
+ * $Date: 2003/05/19 21:08:58 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -16,7 +16,7 @@
  **/
 
 package com.ibm.icu.dev.test.format;
-
+import java.util.Locale;
 import com.ibm.icu.text.*;
 
 /**
@@ -25,67 +25,55 @@ import com.ibm.icu.text.*;
  */
 public class IntlTestNumberFormat extends com.ibm.icu.dev.test.TestFmwk {
     
-    public NumberFormat fNumberFormat = NumberFormat.getInstance();
+    public NumberFormat fNumberFormat;
 
     public static void main(String[] args) throws Exception {
         new IntlTestNumberFormat().run(args);
     }
     
-    /*
+    /**
      * Internal use
-     **/
-    public void _testLocale(java.util.Locale locale, String localeName) {
-        String name;
-    //    locale = java.util.Locale.getDefault();
-    //    localeName = locale.getDisplayName();
+     */
+    public void _testLocale(Locale locale) {
+        String localeName = locale + " (" + locale.getDisplayName() + ")";
             
-        name = "Number test";
-        logln(name + " ( " + localeName + " ) ");
+        logln("Number test " + localeName);
         fNumberFormat = NumberFormat.getInstance(locale);
-        TestFormat();
+        _testFormat();
     
-        name = "Currency test";
-        logln(name + " (" + localeName + ")");
+        logln("Currency test " + localeName);
         fNumberFormat = NumberFormat.getCurrencyInstance(locale);
-        TestFormat(/* par */);
+        _testFormat();
     
-        name = "Percent test";
-        logln(name + " (" + localeName + ")");
+        logln("Percent test " + localeName);
         fNumberFormat = NumberFormat.getPercentInstance(locale);
-        TestFormat(/* par */);
-        
+        _testFormat();
     }
     
     /**
-     *  call TestFormat for currency, percent and plain number instances
-     **/
+     * call _testFormat for currency, percent and plain number instances
+     */
     public void TestLocale() {
-        String name;
-        String localeName;    
-        java.util.Locale locale = java.util.Locale.getDefault();
-        localeName = locale.getDisplayName();
+        Locale locale = Locale.getDefault();
+        String localeName = locale + " (" + locale.getDisplayName() + ")";
             
-        name = "Number test";
-        logln(name + " ( " + localeName + " ) ");
-        fNumberFormat = NumberFormat.getInstance();
-        TestFormat();
+        logln("Number test " + localeName);
+        fNumberFormat = NumberFormat.getInstance(locale);
+        _testFormat();
     
-        name = "Currency test";
-        logln(name + " (" + localeName + ")");
-        fNumberFormat = NumberFormat.getCurrencyInstance();
-        TestFormat(/* par */);
+        logln("Currency test " + localeName);
+        fNumberFormat = NumberFormat.getCurrencyInstance(locale);
+        _testFormat();
     
-        name = "Percent test";
-        logln(name + " (" + localeName + ")");
-        fNumberFormat = NumberFormat.getPercentInstance();
-        TestFormat(/* par */);
-        
+        logln("Percent test " + localeName);
+        fNumberFormat = NumberFormat.getPercentInstance(locale);
+        _testFormat();
     }
     
     /**
-     *  call tryIt with many variations, called by testLocale
-     **/
-    public void TestFormat() {
+     * call tryIt with many variations, called by testLocale
+     */
+    public void _testFormat() {
         
         if (fNumberFormat == null){
             errln("**** FAIL: Null format returned by createXxxInstance.");
@@ -156,8 +144,8 @@ public class IntlTestNumberFormat extends com.ibm.icu.dev.test.TestFmwk {
     }
     
     /**
-     *  perform tests using aNumber and fNumberFormat, called in many variations
-     **/
+     * Perform tests using aNumber and fNumberFormat, called in many variations
+     */
     public void tryIt(double aNumber) {    
         final int DEPTH = 10;
         double[] number = new double[DEPTH];
@@ -248,7 +236,7 @@ public class IntlTestNumberFormat extends com.ibm.icu.dev.test.TestFmwk {
      *  test NumberFormat::getAvailableLocales
      **/
     public void TestAvailableLocales() {
-        final java.util.Locale[] locales = NumberFormat.getAvailableLocales();
+        final Locale[] locales = NumberFormat.getAvailableLocales();
         int count = locales.length;
         logln(count + " available locales");
         if (count != 0)
@@ -272,16 +260,29 @@ public class IntlTestNumberFormat extends com.ibm.icu.dev.test.TestFmwk {
     public void TestMonster() {
         final String SEP = "============================================================\n";
         int count;
-        final java.util.Locale[] locales = NumberFormat.getAvailableLocales();
+        final Locale[] allLocales = NumberFormat.getAvailableLocales();
+        Locale[] locales = allLocales;
         count = locales.length;
         if (count != 0)
         {
-            count = 3; //  just test 3 locales 
+            if (getInclusion() < 10 && count > 6) {
+                count = 6;
+                locales = new Locale[6];
+                locales[0] = allLocales[0];
+                locales[1] = allLocales[1];
+                locales[2] = allLocales[2];
+                // In a quick test, make sure we test locales that use
+                // currency prefix, currency suffix, and choice currency
+                // logic.  Otherwise bugs in these areas can slip through.
+                locales[3] = new Locale("ar", "AE", "");
+                locales[4] = new Locale("cs", "CZ", "");
+                locales[5] = new Locale("en", "IN", "");
+            }
             for (int i=0; i<count; ++i)
             {
                 String name = locales[i].getDisplayName();
                 logln(SEP);
-                _testLocale(/* par, */locales[i], name);
+                _testLocale(locales[i]);
             }
         }
     
