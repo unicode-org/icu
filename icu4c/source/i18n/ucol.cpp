@@ -35,9 +35,6 @@
 #include "umutex.h"
 #include "uhash.h"
 
-// This one is ALWAYS needed, as INT_MAX is used in fractionalFCD check
-#include <limits.h>
-
 #ifdef UCOL_DEBUG
 #include <stdio.h>
 #endif
@@ -749,8 +746,8 @@ void collIterNormalize(collIterate *collationSource)
 inline UBool collIterFCD(collIterate *collationSource) {
     UChar32     codepoint;
     UChar       *srcP;
-    int         length;
-    int         count = 0;
+    int32_t     length;
+    int32_t     count = 0;
     uint8_t     leadingCC;
     uint8_t     prevTrailingCC = 0;
     uint16_t    fcd;
@@ -760,7 +757,7 @@ inline UBool collIterFCD(collIterate *collationSource) {
 
     // If the source string is null terminated, use a fake too-long string length
     //    (needed for UTF_NEXT_CHAR).  null will stop everything OK.)
-    length = (collationSource->flags & UCOL_ITER_HASLEN) ? collationSource->endp - srcP : INT_MAX;
+    length = (collationSource->flags & UCOL_ITER_HASLEN) ? collationSource->endp - srcP : INT32_MAX;
 
     // Get the trailing combining class of the current character.  If it's zero,
     //   we are OK.
@@ -780,7 +777,7 @@ inline UBool collIterFCD(collIterate *collationSource) {
             if (count >= length) {
                 break;
             }
-            int savedCount = count;
+            int32_t savedCount = count;
             UTF_NEXT_CHAR(srcP, count, length, codepoint);
 
             /* trie access */
@@ -1030,7 +1027,7 @@ inline UBool collPrevIterFCD(collIterate *data)
     uint8_t     trailingCC = 0;
     uint16_t    fcd;
     UBool       result = FALSE;
-    int         length;
+    int32_t         length;
 
     length = (data->pos + 1) - data->string;
 
@@ -1624,7 +1621,7 @@ inline UChar * insertBufferEnd(collIterate *data, UChar *pNull, UChar ch)
 * @return the position of the new addition
 */
 inline UChar * insertBufferEnd(collIterate *data, UChar *pNull, UChar *str,
-                               int length)
+                               int32_t length)
 {
     uint32_t  size = pNull - data->writableBuffer;
     UChar    *newbuffer;
@@ -1786,7 +1783,7 @@ inline UChar getNextNormalizedChar(collIterate *data)
             /* fcdposition shifted even when there's no normalization, if we
             don't input the rest into this, we'll get the wrong position when
             we reach the end of the writableBuffer */
-            int length = data->fcdPosition - data->pos + 1;
+            int32_t length = data->fcdPosition - data->pos + 1;
             data->pos = insertBufferEnd(data, pEndWritableBuffer,
                                         data->pos - 1, length);
             return *(data->pos ++);
@@ -2431,7 +2428,7 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
             source->pos --;
             if (UCharOffset + 1 == buffer) {
                 /* we have exhausted the buffer */
-                int newsize = source->pos - source->string + 1;
+                int32_t newsize = source->pos - source->string + 1;
                 strbuffer = (UChar *)uprv_malloc(sizeof(UChar) * 
                                              (newsize + UCOL_MAX_BUFFER));
                 UCharOffset = strbuffer + newsize;
@@ -3656,6 +3653,13 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
     return sortKeySize;
 }
 
+inline void uprv_appendByteToHexString(char *dst, uint8_t val) {
+  uint32_t len = uprv_strlen(dst);
+  *(dst+len) = T_CString_itosOffset((val >> 4));
+  *(dst+len+1) = T_CString_itosOffset((val & 0xF));
+  *(dst+len+2) = 0;
+}
+
 /* this function makes a string with representation of a sortkey */
 U_CAPI char U_EXPORT2 *ucol_sortKeyToString(const UCollator *coll, const uint8_t *sortkey, char *buffer, uint32_t *len) {
   int32_t strength = UCOL_PRIMARY;
@@ -3665,58 +3669,43 @@ U_CAPI char U_EXPORT2 *ucol_sortKeyToString(const UCollator *coll, const uint8_t
   char *current = buffer;
   const uint8_t *currentSk = sortkey;
 
-  sprintf(current, "[");
-  current++;
+  uprv_strcpy(current, "[");
 
   while(strength <= UCOL_QUATERNARY && strength <= coll->strength) {
     if(strength > UCOL_PRIMARY) {
-      sprintf(current, " . ");
-      current += 3;
+      strcat(current, " . ");
     }
     while(*currentSk != 0x01 && *currentSk != 0x00) { /* print a level */
-      sprintf(current, "%02X ", *currentSk++);
-      current+=3;
+      uprv_appendByteToHexString(current, *currentSk++);
+      uprv_strcat(current, " ");
     }
     if(coll->caseLevel == UCOL_ON && strength == UCOL_SECONDARY && doneCase == FALSE) {
         doneCase = TRUE;
     } else if(coll->caseLevel == UCOL_OFF || doneCase == TRUE || strength != UCOL_SECONDARY) {
       strength ++;
     }
-    sprintf(current, "%02X", *(currentSk++)); /* This should print '01' */
-    current +=2;
+    uprv_appendByteToHexString(current, *currentSk++); /* This should print '01' */
     if(strength == UCOL_QUATERNARY && coll->alternateHandling == UCOL_NON_IGNORABLE) {
       break;
     }
   }
 
   if(coll->strength == UCOL_IDENTICAL) {
-    sprintf(current, " . ");
-    current += 3;
+    uprv_strcat(current, " . ");
     while(*currentSk != 0) {
-      if(*currentSk == 0x01) {
-        sprintf(current, "%02X", *(currentSk++));
-        current +=2;
-      }
-
-      sprintf(current, "%02X%02X ", *currentSk, *(currentSk+1));
-      current +=5;
-      currentSk+=2;
+      uprv_appendByteToHexString(current, *currentSk++);
+      uprv_strcat(current, " ");
     }
 
-  sprintf(current, "%02X", *(currentSk++)); /* This should print '00' */
-  current += 2;
-
+    uprv_appendByteToHexString(current, *currentSk++);
   }
-  sprintf(current, "]");
-  current += 3;
+  uprv_strcat(current, "]");
 
   if(res_size > *len) {
     return NULL;
   }
 
   return buffer;
-
-
 }
 
 
