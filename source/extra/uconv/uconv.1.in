@@ -194,7 +194,7 @@ callbacks actually supported by
 is displayed when it is called with
 .BR "\-h\fP, \fB\-\-help" .
 .PP
-.TP \w'\fBescape-unicode+3n
+.TP \w'\fBescape-unicode'u+3n
 .B substitute
 Write the the encoding's substitute sequence, or the Unicode
 replacement character
