@@ -16,7 +16,6 @@
 #define __USTR_IMP_H__
 
 #include "unicode/utypes.h"
-#include "unicode/ucnv.h"
 #include "unicode/uiter.h"
 
 /** Simple declaration for u_strToTitle() to avoid including unicode/ubrk.h. */
@@ -196,27 +195,6 @@ U_CAPI int32_t U_EXPORT2
 u_internalFoldCase(UChar32 c,
                    UChar *dest, int32_t destCapacity,
                    uint32_t options);
-
-#if !UCONFIG_NO_CONVERSION
-
-/**
- * Get the default converter. This is a commonly used converter
- * that is used for the ustring and UnicodeString API.
- * Remember to use the u_releaseDefaultConverter when you are done.
- * @internal
- */
-U_CAPI UConverter* U_EXPORT2
-u_getDefaultConverter(UErrorCode *status);
-
-
-/**
- * Release the default converter to the converter cache.
- * @internal
- */
-U_CAPI void U_EXPORT2
-u_releaseDefaultConverter(UConverter *converter);
-
-#endif
 
 /**
  * NUL-terminate a UChar * string if possible.
