@@ -1091,8 +1091,12 @@ int32_t TransliteratorParser::parseRule(int32_t pos, int32_t limit) {
     if (right->ante >= 0 || right->post >= 0 || left->cursor >= 0 ||
         right->segments != NULL || left->maxRef >= 0 ||
         (right->cursorOffset != 0 && right->cursor < 0) ||
-        (right->cursorOffset > (left->text.length() - left->post)) ||
-        (-right->cursorOffset > left->ante) ||
+        // - The following two checks were used to ensure that the
+        // - the cursor offset stayed within the ante- or postcontext.
+        // - However, with the addition of quantifiers, we have to
+        // - allow arbitrary cursor offsets and do runtime checking.
+        //(right->cursorOffset > (left->text.length() - left->post)) ||
+        //(-right->cursorOffset > left->ante) ||
         right->anchorStart || right->anchorEnd) {
 
         return syntaxError(RuleBasedTransliterator::MALFORMED_RULE, rule, start);
