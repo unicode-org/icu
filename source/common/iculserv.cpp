@@ -559,6 +559,7 @@ ICULocaleService::ICULocaleService()
   : fallbackLocale(Locale::getDefault())
   , llock(0)
 {
+  umtx_init(&llock);
 }
 
 ICULocaleService::ICULocaleService(const UnicodeString& dname)
@@ -566,6 +567,7 @@ ICULocaleService::ICULocaleService(const UnicodeString& dname)
   , fallbackLocale(Locale::getDefault())
   , llock(0)
 {
+  umtx_init(&llock);
 }
 
 ICULocaleService::~ICULocaleService()
