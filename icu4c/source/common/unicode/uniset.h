@@ -544,7 +544,7 @@ public:
      * @return the smallest integer i in the range 0..len-1,
      * inclusive, such that c < list[i]
      */
-    int32_t UnicodeSet::findCodePoint(UChar32 c) const;
+    int32_t findCodePoint(UChar32 c) const;
 
  public:
 
