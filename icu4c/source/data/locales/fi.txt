@@ -533,39 +533,7 @@ fi {
         ZRZ { "ZRZ", "Zairen zaire" } // 10/27/1971-11/01/1993
         ZWD { "Z$",  "Zimbabwen dollari" } // 04/18/1980-
     }
-    DateTimeElements:intvector { 
-        2,
-        4,
-    }
-    DateTimePatterns { 
-        "HH:mm:ss z",
-        "HH:mm:ss z",
-        "HH:mm:ss",
-        "HH:mm",
-        "d. MMMM'ta 'yyyy",
-        "d. MMMM'ta 'yyyy",
-        "d.M.yyyy",
-        "d.M.yyyy",
-        "{1} {0}",
-    }
-    DayAbbreviations { 
-        "su",
-        "ma",
-        "ti",
-        "ke",
-        "to",
-        "pe",
-        "la",
-    }
-    DayNames { 
-        "sunnuntai",
-        "maanantai",
-        "tiistai",
-        "keskiviikko",
-        "torstai",
-        "perjantai",
-        "lauantai",
-    }
+
     Languages { 
         ab  { "abhaasi" }
         ae  { "avesta" }
@@ -724,82 +692,6 @@ fi {
     LocaleScript{ 
         "Latn",  // ISO 15924 Name 
     }
-    MonthAbbreviations { 
-        "tammi",
-        "helmi",
-        "maalis",
-        "huhti",
-        "touko",
-        "kes\u00E4",
-        "hein\u00E4",
-        "elo",
-        "syys",
-        "loka",
-        "marras",
-        "joulu",
-    }
-    MonthNames { 
-        "tammikuu",
-        "helmikuu",
-        "maaliskuu",
-        "huhtikuu",
-        "toukokuu",
-        "kes\u00E4kuu",
-        "hein\u00E4kuu",
-        "elokuu",
-        "syyskuu",
-        "lokakuu",
-        "marraskuu",
-        "joulukuu",
-    }
-    // International Calendars Data.
-    // NOTE (ICU 2.6) - the format of this data WILL CHANGE in future releases.
-    MonthNames_islamic {
-        "Muh\u00E1rram",                // Muharram
-        "S\u00E1far",                   // Safar
-        "Rab\u00ED' al-\u00E1wwal",     // Rabi' al-awwal
-        "Rab\u00ED' al-\u00E1khir",     // Rabi' al-thani
-        "D\u017Eumada-l-\u00FAla",      // Jumada al-awwal
-        "D\u017Eumada-l-\u00E1khira",   // Jumada al-thani
-        "Rad\u017Eab",                  // Rajab
-        "\u0160a'b\u00E1n",             // Sha'ban
-        "Ramad\u00E1n",                 // Ramadan
-        "\u0160awwal",                  // Shawwal
-        "Dhu-l-qada",                   // Dhu al-Qi'dah
-        "Dhu-l-hidd\u017Ea"            // Dhu al-Hijjah
-    }
-    //Eras_islamic {
-    //    "AH"   // Anno Hid\u017Era (in root)
-    //}
-    MonthAbbreviations_islamic:alias {  // same as MonthNames (no data)
-        "fi/MonthNames_islamic"
-    }   
-    // Civil is identical other than in calculations
-    MonthNames_islamic-civil:alias {
-        "fi/MonthNames_islamic"
-    }
-    MonthAbbreviations_islamic-civil:alias {
-        "fi/MonthAbbreviations_islamic"
-    }
-
-    MonthNames_hebrew {
-        "Ti\u0161r\u00ECkuu",       // Tishri
-        "He\u0161v\u00E1nkuu",      // Heshvan
-        "Kisl\u00E9vkuu",           // Kislev
-        "Tev\u00E9tkuu",            // Tevet
-        "\u0160evatkuu",            // Shevat
-        "Ad\u00E1rkuu",             // Adar I
-        "Ad\u00E1rkuu II",          // Adar
-        "Nis\u00E1nkuu",            // Nisan
-        "Ijj\u00E1rkuu",            // Iyar
-        "Siv\u00E1nkuu",            // Sivan
-        "Tamm\u00FAzkuu",           // Tamuz
-        "Abkuu",                    // Av
-        "El\u00FAlkuu",             // Elul
-    }
-    MonthAbbreviations_hebrew:alias {
-       "fi/MonthNames_hebrew" // no data
-    }
     Scripts {
         Arab { "Arabialainen" }
         Armn { "Armenialainen" }
@@ -859,6 +751,157 @@ fi {
             hebrew        { "Juutalainen kalenteri" }
             chinese       { "Kiinalainen kalenteri" }
             gregorian     { "Gregoriaaninen kalenteri" }
+        }
+    }
+    calendar{
+        islamic{
+            //eras {
+            //    "AH"   // Anno Hid\u017Era (in root)
+            //}          
+            monthNames{
+                format{
+                    abbreviated:alias {  // same as MonthNames (no data)
+                        "fi/calendar/islamic/monthNames/format/wide"
+                    }
+                    wide {
+                        "Muh\u00E1rram",                // Muharram
+                        "S\u00E1far",                   // Safar
+                        "Rab\u00ED' al-\u00E1wwal",     // Rabi' al-awwal
+                        "Rab\u00ED' al-\u00E1khir",     // Rabi' al-thani
+                        "D\u017Eumada-l-\u00FAla",      // Jumada al-awwal
+                        "D\u017Eumada-l-\u00E1khira",   // Jumada al-thani
+                        "Rad\u017Eab",                  // Rajab
+                        "\u0160a'b\u00E1n",             // Sha'ban
+                        "Ramad\u00E1n",                 // Ramadan
+                        "\u0160awwal",                  // Shawwal
+                        "Dhu-l-qada",                   // Dhu al-Qi'dah
+                        "Dhu-l-hidd\u017Ea"            // Dhu al-Hijjah
+                    }
+                }
+            }
+        }
+        islamic-civil{
+            monthNames:alias{
+                "fi/calendar/islamic/monthNames"
+            }   
+        }
+        hebrew{
+            monthNames{
+                format{
+                    wide {
+                        "Ti\u0161r\u00ECkuu",       // Tishri
+                        "He\u0161v\u00E1nkuu",      // Heshvan
+                        "Kisl\u00E9vkuu",           // Kislev
+                        "Tev\u00E9tkuu",            // Tevet
+                        "\u0160evatkuu",            // Shevat
+                        "Ad\u00E1rkuu",             // Adar I
+                        "Ad\u00E1rkuu II",          // Adar
+                        "Nis\u00E1nkuu",            // Nisan
+                        "Ijj\u00E1rkuu",            // Iyar
+                        "Siv\u00E1nkuu",            // Sivan
+                        "Tamm\u00FAzkuu",           // Tamuz
+                        "Abkuu",                    // Av
+                        "El\u00FAlkuu",             // Elul
+                    }
+                    abbreviated:alias {
+                        "fi/calendar/hebrew/monthNames/format/wide" // no data
+                    }
+                }
+           }
+        }
+        gregorian{
+            DateTimeElements:intvector {
+                2,
+                4,
+            }
+            DateTimePatterns{
+                "HH:mm:ss z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "d. MMMM'ta 'yyyy",
+                "d. MMMM'ta 'yyyy",
+                "d.M.yyyy",
+                "d.M.yyyy",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "su",
+                        "ma",
+                        "ti",
+                        "ke",
+                        "to",
+                        "pe",
+                        "la",
+                    }
+                    narrow{
+		                "S",
+		                "M",
+		                "T",
+		                "K",
+		                "T",
+		                "P",
+		                "L",
+                    }
+                    wide{
+                        "sunnuntai",
+                        "maanantai",
+                        "tiistai",
+                        "keskiviikko",
+                        "torstai",
+                        "perjantai",
+                        "lauantai",
+                    }
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "tammi",
+                        "helmi",
+                        "maalis",
+                        "huhti",
+                        "touko",
+                        "kes\u00E4",
+                        "hein\u00E4",
+                        "elo",
+                        "syys",
+                        "loka",
+                        "marras",
+                        "joulu",
+                    }
+                    narrow{
+		                "T"
+		                "H"
+		                "M"
+		                "H"
+		                "T"
+		                "K"
+		                "H"
+		                "E"
+		                "S"
+		                "L"
+		                "M"
+		                "J"
+                    }
+                    wide{
+                        "tammikuu",
+                        "helmikuu",
+                        "maaliskuu",
+                        "huhtikuu",
+                        "toukokuu",
+                        "kes\u00E4kuu",
+                        "hein\u00E4kuu",
+                        "elokuu",
+                        "syyskuu",
+                        "lokakuu",
+                        "marraskuu",
+                        "joulukuu",
+                    }
+                }
+            }
         }
     }
 }

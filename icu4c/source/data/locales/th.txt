@@ -6,7 +6,7 @@
 // ***************************************************************************
 
 th {
-    BreakDictionaryData:import { "../brkitr/thaidict.brk" }
+    //BreakDictionaryData:import { "../brkitr/thaidict.brk" }
     Version{ "2.0" }
     Countries { 
         AF { "\u0e2d\u0e31\u0e1f\u0e01\u0e32\u0e19\u0e34\u0e2a\u0e16\u0e32\u0e19" }
@@ -209,46 +209,6 @@ th {
         ZM { "\u0e41\u0e0b\u0e21\u0e40\u0e1a\u0e35\u0e22" }
         ZW { "\u0e0b\u0e34\u0e21\u0e1a\u0e32\u0e1a\u0e40\u0e27" }
     }
-    DateTimePatterns { 
-        "H' \u0E19\u0E32\u0E2C\u0E34\u0E01\u0E32 'm' \u0E19\u0E32\u0E17\u0E35 'ss' \u0E27"
-        "\u0E34\u0E19\u0E32\u0E17\u0E35'",
-        "H' \u0E19\u0E32\u0E2C\u0E34\u0E01\u0E32 'm' \u0E19\u0E32\u0E17\u0E35'",
-        "H:mm:ss",
-        "H:mm",
-        "EEEE'\u0E17\u0E35\u0E48 'd MMMM G yyyy",
-        "d MMMM yyyy",
-        "d MMM yyyy",
-        "d/M/yyyy",
-        "{1}, {0}",
-    }
-    DayAbbreviations { 
-        "\u0E2D\u0E32.",
-        "\u0E08.",
-        "\u0E2D.",
-        "\u0E1E.",
-        "\u0E1E\u0E24.",
-        "\u0E28.",
-        "\u0E2A.",
-    }
-    DayNames { 
-        "\u0E27\u0E31\u0E19\u0E2D\u0E32\u0E17\u0E34\u0E15\u0E22\u0E4C",
-        "\u0E27\u0E31\u0E19\u0E08\u0E31\u0E19\u0E17\u0E23\u0E4C",
-        "\u0E27\u0E31\u0E19\u0E2D\u0E31\u0E07\u0E04\u0E32\u0E23",
-        "\u0E27\u0E31\u0E19\u0E1E\u0E38\u0E18",
-        "\u0E27\u0E31\u0E19\u0E1E\u0E24\u0E2B\u0E31\u0E2A\u0E1A\u0E14\u0E35",
-        "\u0E27\u0E31\u0E19\u0E28\u0E38\u0E01\u0E23\u0E4C",
-        "\u0E27\u0E31\u0E19\u0E40\u0E2A\u0E32\u0E23\u0E4C",
-    }
-    AmPmMarkers { 
-        "\u0E01\u0E48\u0E2D\u0E19\u0E40\u0E17\u0E35\u0E48\u0E22\u0E07",
-        "\u0E2B\u0E25\u0E31\u0E07\u0E40\u0E17\u0E35\u0E48\u0E22\u0E07",
-    }
-    Eras { 
-        "\u0E1B\u0E35\u0E01\u0E48\u0E2D\u0E19\u0E04\u0E23\u0E34\u0E2A\u0E15\u0E4C\u0E01\u0E32"
-        "\u0E25\u0E17\u0E35\u0E48",
-
-        "\u0E04.\u0E28.",
-    }
     Languages { 
         ab { "\u0e41\u0e2d\u0e1a\u0e01\u0e32\u0e40\u0e0b\u0e35\u0e22" }
         aa { "\u0e2d\u0e32\u0e1f\u0e32" }
@@ -391,34 +351,6 @@ th {
         za { "\u0e08\u0e27\u0e07" }
         zu { "\u0e0b\u0e39\u0e25\u0e39" }
     }
-    MonthAbbreviations { 
-        "\u0E21.\u0E04.",
-        "\u0E01.\u0E1E.",
-        "\u0E21\u0E35.\u0E04.",
-        "\u0E40\u0E21.\u0E22.",
-        "\u0E1E.\u0E04.",
-        "\u0E21\u0E34.\u0E22.",
-        "\u0E01.\u0E04.",
-        "\u0E2A.\u0E04.",
-        "\u0E01.\u0E22.",
-        "\u0E15.\u0E04.",
-        "\u0E1E.\u0E22.",
-        "\u0E18.\u0E04.",
-    }
-    MonthNames { 
-        "\u0E21\u0E01\u0E23\u0E32\u0E04\u0E21",
-        "\u0E01\u0E38\u0E21\u0E20\u0E32\u0E1E\u0E31\u0E19\u0E18\u0E4C",
-        "\u0E21\u0E35\u0E19\u0E32\u0E04\u0E21",
-        "\u0E40\u0E21\u0E29\u0E32\u0E22\u0E19",
-        "\u0E1E\u0E24\u0E29\u0E20\u0E32\u0E04\u0E21",
-        "\u0E21\u0E34\u0E16\u0E38\u0E19\u0E32\u0E22\u0E19",
-        "\u0E01\u0E23\u0E01\u0E0E\u0E32\u0E04\u0E21",
-        "\u0E2A\u0E34\u0E07\u0E2B\u0E32\u0E04\u0E21",
-        "\u0E01\u0E31\u0E19\u0E22\u0E32\u0E22\u0E19",
-        "\u0E15\u0E38\u0E25\u0E32\u0E04\u0E21",
-        "\u0E1E\u0E24\u0E28\u0E08\u0E34\u0E01\u0E32\u0E22\u0E19",
-        "\u0E18\u0E31\u0E19\u0E27\u0E32\u0E04\u0E21",
-    }
     localPatternChars { "GanjkHmsSEDFwWxhKzAeugXZ" }
     /*
     zoneStrings { 
@@ -481,18 +413,99 @@ th {
     }
 
     // (ICU 2.6) International Calendar Data.  Note, THE FORMAT OF THIS DATA WILL CHANGE IN FUTURE RELEASES.
-    Eras_buddhist:array { "\u0e1e.\u0e28." }
 
-    DateTimePatterns_buddhist { 
-        "H' \u0E19\u0E32\u0E2C\u0E34\u0E01\u0E32 'm' \u0E19\u0E32\u0E17\u0E35 'ss' \u0E27\u0E34\u0E19\u0E32\u0E17\u0E35'",
-        "H' \u0E19\u0E32\u0E2C\u0E34\u0E01\u0E32 'm' \u0E19\u0E32\u0E17\u0E35'",
-        "H:mm:ss",
-        "H:mm",
-        "EEEE'\u0E17\u0E35\u0E48 'd MMMM G yyyy",
-        "d MMMM yyyy",
-        "d MMM yyyy",
-        "d/M/yyyy",
-        "{1}, {0}",
+    calendar{
+        buddhist{
+            eras:array { "\u0e1e.\u0e28." }
+            DateTimePatterns { 
+                "H' \u0E19\u0E32\u0E2C\u0E34\u0E01\u0E32 'm' \u0E19\u0E32\u0E17\u0E35 'ss' \u0E27\u0E34\u0E19\u0E32\u0E17\u0E35'",
+                "H' \u0E19\u0E32\u0E2C\u0E34\u0E01\u0E32 'm' \u0E19\u0E32\u0E17\u0E35'",
+                "H:mm:ss",
+                "H:mm",
+                "EEEE'\u0E17\u0E35\u0E48 'd MMMM G yyyy",
+                "d MMMM yyyy",
+                "d MMM yyyy",
+                "d/M/yyyy",
+                "{1}, {0}",
+            }
+        }
+        gregorian{
+            AmPmMarkers{
+                "\u0E01\u0E48\u0E2D\u0E19\u0E40\u0E17\u0E35\u0E48\u0E22\u0E07",
+                "\u0E2B\u0E25\u0E31\u0E07\u0E40\u0E17\u0E35\u0E48\u0E22\u0E07",
+            }
+            DateTimePatterns{
+                "H' \u0E19\u0E32\u0E2C\u0E34\u0E01\u0E32 'm' \u0E19\u0E32\u0E17\u0E35 'ss' \u0E27"
+                "\u0E34\u0E19\u0E32\u0E17\u0E35'",
+                "H' \u0E19\u0E32\u0E2C\u0E34\u0E01\u0E32 'm' \u0E19\u0E32\u0E17\u0E35'",
+                "H:mm:ss",
+                "H:mm",
+                "EEEE'\u0E17\u0E35\u0E48 'd MMMM G yyyy",
+                "d MMMM yyyy",
+                "d MMM yyyy",
+                "d/M/yyyy",
+                "{1}, {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "\u0E2D\u0E32.",
+                        "\u0E08.",
+                        "\u0E2D.",
+                        "\u0E1E.",
+                        "\u0E1E\u0E24.",
+                        "\u0E28.",
+                        "\u0E2A.",
+                    }
+                    wide{
+                        "\u0E27\u0E31\u0E19\u0E2D\u0E32\u0E17\u0E34\u0E15\u0E22\u0E4C",
+                        "\u0E27\u0E31\u0E19\u0E08\u0E31\u0E19\u0E17\u0E23\u0E4C",
+                        "\u0E27\u0E31\u0E19\u0E2D\u0E31\u0E07\u0E04\u0E32\u0E23",
+                        "\u0E27\u0E31\u0E19\u0E1E\u0E38\u0E18",
+                        "\u0E27\u0E31\u0E19\u0E1E\u0E24\u0E2B\u0E31\u0E2A\u0E1A\u0E14\u0E35",
+                        "\u0E27\u0E31\u0E19\u0E28\u0E38\u0E01\u0E23\u0E4C",
+                        "\u0E27\u0E31\u0E19\u0E40\u0E2A\u0E32\u0E23\u0E4C",
+                    }
+                }
+            }
+            eras{
+                "\u0E1B\u0E35\u0E01\u0E48\u0E2D\u0E19\u0E04\u0E23\u0E34\u0E2A\u0E15\u0E4C\u0E01\u0E32"
+                "\u0E25\u0E17\u0E35\u0E48",
+        
+                "\u0E04.\u0E28.",
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "\u0E21.\u0E04.",
+                        "\u0E01.\u0E1E.",
+                        "\u0E21\u0E35.\u0E04.",
+                        "\u0E40\u0E21.\u0E22.",
+                        "\u0E1E.\u0E04.",
+                        "\u0E21\u0E34.\u0E22.",
+                        "\u0E01.\u0E04.",
+                        "\u0E2A.\u0E04.",
+                        "\u0E01.\u0E22.",
+                        "\u0E15.\u0E04.",
+                        "\u0E1E.\u0E22.",
+                        "\u0E18.\u0E04.",
+                    }
+                    wide{
+                        "\u0E21\u0E01\u0E23\u0E32\u0E04\u0E21",
+                        "\u0E01\u0E38\u0E21\u0E20\u0E32\u0E1E\u0E31\u0E19\u0E18\u0E4C",
+                        "\u0E21\u0E35\u0E19\u0E32\u0E04\u0E21",
+                        "\u0E40\u0E21\u0E29\u0E32\u0E22\u0E19",
+                        "\u0E1E\u0E24\u0E29\u0E20\u0E32\u0E04\u0E21",
+                        "\u0E21\u0E34\u0E16\u0E38\u0E19\u0E32\u0E22\u0E19",
+                        "\u0E01\u0E23\u0E01\u0E0E\u0E32\u0E04\u0E21",
+                        "\u0E2A\u0E34\u0E07\u0E2B\u0E32\u0E04\u0E21",
+                        "\u0E01\u0E31\u0E19\u0E22\u0E32\u0E22\u0E19",
+                        "\u0E15\u0E38\u0E25\u0E32\u0E04\u0E21",
+                        "\u0E1E\u0E24\u0E28\u0E08\u0E34\u0E01\u0E32\u0E22\u0E19",
+                        "\u0E18\u0E31\u0E19\u0E27\u0E32\u0E04\u0E21",
+                    }
+                }
+            }
+        }
     }
-
 }

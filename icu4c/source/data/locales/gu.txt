@@ -7,10 +7,6 @@
 
 gu {
     Version{ "2.0" }
-    AmPmMarkers{
-        "\u0AAA\u0AC2\u0AB0\u0ACD\u0AB5\u00A0\u0AAE\u0AA7\u0ACD\u0AAF\u0ABE\u0AB9\u0ACD\u0AA8",
-        "\u0A89\u0AA4\u0ACD\u0AA4\u0AB0\u00A0\u0AAE\u0AA7\u0ACD\u0AAF\u0ABE\u0AB9\u0ACD\u0AA8"
-    }
     Countries {
         CN { "\u0a9a\u0ac0\u0aa8" }
         DE { "\u0a9c\u0aae\u0abf\u0aa8\u0ac0" }
@@ -27,58 +23,12 @@ gu {
     Currencies {
         INR { "\u0AB0\u0AC1", "INR" }
     }
-    DayNames{
-        "\u0AB0\u0AB5\u0ABF\u0AB5\u0ABE\u0AB0",
-        "\u0AB8\u0ACB\u0AAE\u0AB5\u0ABE\u0AB0",
-        "\u0AAE\u0A82\u0A97\u0AB3\u0AB5\u0ABE\u0AB0",
-        "\u0AAC\u0AC1\u0AA7\u0AB5\u0ABE\u0AB0",
-        "\u0A97\u0AC1\u0AB0\u0AC1\u0AB5\u0ABE\u0AB0",
-        "\u0AB6\u0AC1\u0A95\u0ACD\u0AB0\u0AB5\u0ABE\u0AB0",
-        "\u0AB6\u0AA8\u0ABF\u0AB5\u0ABE\u0AB0"
-    }
-    DayAbbreviations{
-        "\u0AB0\u0AB5\u0ABF",
-        "\u0AB8\u0ACB\u0AAE",
-        "\u0AAE\u0A82\u0A97\u0AB3",
-        "\u0AAC\u0AC1\u0AA7",
-        "\u0A97\u0AC1\u0AB0\u0AC1",
-        "\u0AB6\u0AC1\u0A95\u0ACD\u0AB0",
-        "\u0AB6\u0AA8\u0ABF"
-    }
     ExemplarCharacters { "[[:Gujr:]\u200c\u200d]" }
     LocaleScript:array { "Gujr" }
     Languages {
         gu { "\u0A97\u0AC1\u0A9C\u0AB0\u0ABE\u0AA4\u0AC0" }
     }
-    MonthNames{
-        "\u0A9C\u0ABE\u0AA8\u0ACD\u0AAF\u0AC1\u0A86\u0AB0\u0AC0",
-        "\u0AAB\u0AC7\u0AAC\u0ACD\u0AB0\u0AC1\u0A86\u0AB0\u0AC0",
-        "\u0AAE\u0ABE\u0AB0\u0ACD\u0A9A",
-        "\u0A8F\u0AAA\u0ACD\u0AB0\u0ABF\u0AB2",
-        "\u0AAE\u0AC7",
-        "\u0A9C\u0AC2\u0AA8",
-        "\u0A9C\u0AC1\u0AB2\u0ABE\u0A88",
-        "\u0A91\u0A97\u0AB8\u0ACD\u0A9F",
-        "\u0AB8\u0AAA\u0ACD\u0A9F\u0AC7\u0AAE\u0ACD\u0AAC\u0AB0",
-        "\u0A91\u0A95\u0ACD\u0A9F\u0ACD\u0AAC\u0AB0",
-        "\u0AA8\u0AB5\u0AC7\u0AAE\u0ACD\u0AAC\u0AB0",
-        "\u0AA1\u0ABF\u0AB8\u0AC7\u0AAE\u0ACD\u0AAC\u0AB0"
-    }
 
-    MonthAbbreviations {
-        "\u0A9C\u0ABE\u0AA8\u0ACD\u0AAF\u0AC1",
-        "\u0AAB\u0AC7\u0AAC\u0ACD\u0AB0\u0AC1",
-        "\u0AAE\u0ABE\u0AB0\u0ACD\u0A9A",
-        "\u0A8F\u0AAA\u0ACD\u0AB0\u0ABF\u0AB2",
-        "\u0AAE\u0AC7",
-        "\u0A9C\u0AC2\u0AA8",
-        "\u0A9C\u0AC1\u0AB2\u0ABE\u0A88",
-        "\u0A91\u0A97\u0AB8\u0ACD\u0A9F",
-        "\u0AB8\u0AAA\u0ACD\u0A9F\u0AC7",
-        "\u0A91\u0A95\u0ACD\u0A9F\u0ACB",
-        "\u0AA8\u0AB5\u0AC7",
-        "\u0AA1\u0ABF\u0AB8\u0AC7"
-    }
 
     NumberElements{
         ".",
@@ -94,5 +44,67 @@ gu {
         "\uFFFD",
         ".",
         "+",
+    }
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "\u0AAA\u0AC2\u0AB0\u0ACD\u0AB5\u00A0\u0AAE\u0AA7\u0ACD\u0AAF\u0ABE\u0AB9\u0ACD\u0AA8",
+                "\u0A89\u0AA4\u0ACD\u0AA4\u0AB0\u00A0\u0AAE\u0AA7\u0ACD\u0AAF\u0ABE\u0AB9\u0ACD\u0AA8"
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "\u0AB0\u0AB5\u0ABF",
+                        "\u0AB8\u0ACB\u0AAE",
+                        "\u0AAE\u0A82\u0A97\u0AB3",
+                        "\u0AAC\u0AC1\u0AA7",
+                        "\u0A97\u0AC1\u0AB0\u0AC1",
+                        "\u0AB6\u0AC1\u0A95\u0ACD\u0AB0",
+                        "\u0AB6\u0AA8\u0ABF"
+                    }
+                    wide{
+                        "\u0AB0\u0AB5\u0ABF\u0AB5\u0ABE\u0AB0",
+                        "\u0AB8\u0ACB\u0AAE\u0AB5\u0ABE\u0AB0",
+                        "\u0AAE\u0A82\u0A97\u0AB3\u0AB5\u0ABE\u0AB0",
+                        "\u0AAC\u0AC1\u0AA7\u0AB5\u0ABE\u0AB0",
+                        "\u0A97\u0AC1\u0AB0\u0AC1\u0AB5\u0ABE\u0AB0",
+                        "\u0AB6\u0AC1\u0A95\u0ACD\u0AB0\u0AB5\u0ABE\u0AB0",
+                        "\u0AB6\u0AA8\u0ABF\u0AB5\u0ABE\u0AB0"
+                    }
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "\u0A9C\u0ABE\u0AA8\u0ACD\u0AAF\u0AC1",
+                        "\u0AAB\u0AC7\u0AAC\u0ACD\u0AB0\u0AC1",
+                        "\u0AAE\u0ABE\u0AB0\u0ACD\u0A9A",
+                        "\u0A8F\u0AAA\u0ACD\u0AB0\u0ABF\u0AB2",
+                        "\u0AAE\u0AC7",
+                        "\u0A9C\u0AC2\u0AA8",
+                        "\u0A9C\u0AC1\u0AB2\u0ABE\u0A88",
+                        "\u0A91\u0A97\u0AB8\u0ACD\u0A9F",
+                        "\u0AB8\u0AAA\u0ACD\u0A9F\u0AC7",
+                        "\u0A91\u0A95\u0ACD\u0A9F\u0ACB",
+                        "\u0AA8\u0AB5\u0AC7",
+                        "\u0AA1\u0ABF\u0AB8\u0AC7"
+                    }
+                    wide{
+                        "\u0A9C\u0ABE\u0AA8\u0ACD\u0AAF\u0AC1\u0A86\u0AB0\u0AC0",
+                        "\u0AAB\u0AC7\u0AAC\u0ACD\u0AB0\u0AC1\u0A86\u0AB0\u0AC0",
+                        "\u0AAE\u0ABE\u0AB0\u0ACD\u0A9A",
+                        "\u0A8F\u0AAA\u0ACD\u0AB0\u0ABF\u0AB2",
+                        "\u0AAE\u0AC7",
+                        "\u0A9C\u0AC2\u0AA8",
+                        "\u0A9C\u0AC1\u0AB2\u0ABE\u0A88",
+                        "\u0A91\u0A97\u0AB8\u0ACD\u0A9F",
+                        "\u0AB8\u0AAA\u0ACD\u0A9F\u0AC7\u0AAE\u0ACD\u0AAC\u0AB0",
+                        "\u0A91\u0A95\u0ACD\u0A9F\u0ACD\u0AAC\u0AB0",
+                        "\u0AA8\u0AB5\u0AC7\u0AAE\u0ACD\u0AAC\u0AB0",
+                        "\u0AA1\u0ABF\u0AB8\u0AC7\u0AAE\u0ACD\u0AAC\u0AB0"
+                    }
+                }
+            }
+        }
     }
 }

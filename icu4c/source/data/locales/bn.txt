@@ -8,10 +8,6 @@
 
 bn {
     Version{ "2.0" }
-    AmPmMarkers { 
-        "\u09AA\u09C2\u09B0\u09CD\u09AC\u09BE\u09B9\u09CD\u09A3",
-        "\u0985\u09AA\u09B0\u09BE\u09B9\u09CD\u09A3"
-    }
     Countries {
         AF { "\u0986\u09ab\u0997\u09be\u09a8\u09bf\u09b8\u09cd\u09a4\u09be\u09a8" }
         AL { "\u0986\u09b2\u09ac\u09cd\u09af\u09be\u09a8\u09bf\u09df\u09be" }
@@ -147,57 +143,73 @@ bn {
         INR { "\u099F\u09BE\u0995\u09BE", "INR" }
         BDT { "\u09F3", "BDT" } // Bangladesh Taka
     }
-    DayAbbreviations { 
-        "\u09B0\u09AC\u09BF",
-        "\u09B8\u09CB\u09AE",
-        "\u09ae\u0999\u09cd\u0997\u09b2",
-        "\u09AC\u09C1\u09A7",
-        "\u09AC\u09C3\u09B9\u09B8\u09CD\u09AA\u09A4\u09BF",
-        "\u09B6\u09C1\u0995\u09CD\u09B0",
-        "\u09B6\u09A8\u09BF",
-    }
-    DayNames { 
-        "\u09B0\u09AC\u09BF\u09AC\u09BE\u09B0",
-        "\u09B8\u09CB\u09AE\u09AC\u09BE\u09B0",
-        "\u09ae\u0999\u09cd\u0997\u09b2\u09ac\u09be\u09b0",
-        "\u09AC\u09C1\u09A7\u09AC\u09BE\u09B0",
-        "\u09ac\u09c3\u09b9\u09b7\u09cd\u09aa\u09a4\u09bf\u09ac\u09be\u09b0",
-        "\u09B6\u09C1\u0995\u09CD\u09B0\u09AC\u09BE\u09B0",
-        "\u09B6\u09A8\u09BF\u09AC\u09BE\u09B0"
-    }
     Languages {
         bn { "\u09ac\u09be\u0982\u09b2\u09be" }
-    }
-    MonthAbbreviations { 
-        "\u099C\u09BE\u09A8\u09C1\u09DF\u09BE\u09B0\u09C0",
-        "\u09AB\u09C7\u09AC\u09CD\u09B0\u09C1\u09DF\u09BE\u09B0\u09C0",
-        "\u09AE\u09BE\u09B0\u09CD\u099A",
-        "\u098F\u09AA\u09CD\u09B0\u09BF\u09B2",
-        "\u09AE\u09C7",
-        "\u099C\u09C1\u09A8",
-        "\u099C\u09C1\u09B2\u09BE\u0987",
-        "\u0986\u0997\u09B8\u09CD\u099F",
-        "\u09B8\u09C7\u09AA\u09CD\u099F\u09C7\u09AE\u09CD\u09AC\u09B0",
-        "\u0985\u0995\u09CD\u099F\u09CB\u09AC\u09B0",
-        "\u09A8\u09AD\u09C7\u09AE\u09CD\u09AC\u09B0",
-        "\u09A1\u09BF\u09B8\u09C7\u09AE\u09CD\u09AC\u09B0"
-    }
-    MonthNames { 
-        "\u099C\u09BE\u09A8\u09C1\u09DF\u09BE\u09B0\u09C0",
-        "\u09AB\u09C7\u09AC\u09CD\u09B0\u09C1\u09DF\u09BE\u09B0\u09C0",
-        "\u09AE\u09BE\u09B0\u09CD\u099A",
-        "\u098F\u09AA\u09CD\u09B0\u09BF\u09B2",
-        "\u09AE\u09C7",
-        "\u099C\u09C1\u09A8",
-        "\u099C\u09C1\u09B2\u09BE\u0987",
-        "\u0986\u0997\u09B8\u09CD\u099F",
-        "\u09B8\u09C7\u09AA\u09CD\u099F\u09C7\u09AE\u09CD\u09AC\u09B0",
-        "\u0985\u0995\u09CD\u099F\u09CB\u09AC\u09B0",
-        "\u09A8\u09AD\u09C7\u09AE\u09CD\u09AC\u09B0",
-        "\u09A1\u09BF\u09B8\u09C7\u09AE\u09CD\u09AC\u09B0"
     }
     LocaleScript:array{
         "Beng"
     }
     ExemplarCharacters{"[[:Beng:]\u200c\u200d]"}
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "\u09AA\u09C2\u09B0\u09CD\u09AC\u09BE\u09B9\u09CD\u09A3",
+                "\u0985\u09AA\u09B0\u09BE\u09B9\u09CD\u09A3"
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "\u09B0\u09AC\u09BF",
+                        "\u09B8\u09CB\u09AE",
+                        "\u09ae\u0999\u09cd\u0997\u09b2",
+                        "\u09AC\u09C1\u09A7",
+                        "\u09AC\u09C3\u09B9\u09B8\u09CD\u09AA\u09A4\u09BF",
+                        "\u09B6\u09C1\u0995\u09CD\u09B0",
+                        "\u09B6\u09A8\u09BF",
+                    }
+                    wide{
+                        "\u09B0\u09AC\u09BF\u09AC\u09BE\u09B0",
+                        "\u09B8\u09CB\u09AE\u09AC\u09BE\u09B0",
+                        "\u09ae\u0999\u09cd\u0997\u09b2\u09ac\u09be\u09b0",
+                        "\u09AC\u09C1\u09A7\u09AC\u09BE\u09B0",
+                        "\u09ac\u09c3\u09b9\u09b7\u09cd\u09aa\u09a4\u09bf\u09ac\u09be\u09b0",
+                        "\u09B6\u09C1\u0995\u09CD\u09B0\u09AC\u09BE\u09B0",
+                        "\u09B6\u09A8\u09BF\u09AC\u09BE\u09B0"
+                    }
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "\u099C\u09BE\u09A8\u09C1\u09DF\u09BE\u09B0\u09C0",
+                        "\u09AB\u09C7\u09AC\u09CD\u09B0\u09C1\u09DF\u09BE\u09B0\u09C0",
+                        "\u09AE\u09BE\u09B0\u09CD\u099A",
+                        "\u098F\u09AA\u09CD\u09B0\u09BF\u09B2",
+                        "\u09AE\u09C7",
+                        "\u099C\u09C1\u09A8",
+                        "\u099C\u09C1\u09B2\u09BE\u0987",
+                        "\u0986\u0997\u09B8\u09CD\u099F",
+                        "\u09B8\u09C7\u09AA\u09CD\u099F\u09C7\u09AE\u09CD\u09AC\u09B0",
+                        "\u0985\u0995\u09CD\u099F\u09CB\u09AC\u09B0",
+                        "\u09A8\u09AD\u09C7\u09AE\u09CD\u09AC\u09B0",
+                        "\u09A1\u09BF\u09B8\u09C7\u09AE\u09CD\u09AC\u09B0"
+                    }
+                    wide{
+                        "\u099C\u09BE\u09A8\u09C1\u09DF\u09BE\u09B0\u09C0",
+                        "\u09AB\u09C7\u09AC\u09CD\u09B0\u09C1\u09DF\u09BE\u09B0\u09C0",
+                        "\u09AE\u09BE\u09B0\u09CD\u099A",
+                        "\u098F\u09AA\u09CD\u09B0\u09BF\u09B2",
+                        "\u09AE\u09C7",
+                        "\u099C\u09C1\u09A8",
+                        "\u099C\u09C1\u09B2\u09BE\u0987",
+                        "\u0986\u0997\u09B8\u09CD\u099F",
+                        "\u09B8\u09C7\u09AA\u09CD\u099F\u09C7\u09AE\u09CD\u09AC\u09B0",
+                        "\u0985\u0995\u09CD\u099F\u09CB\u09AC\u09B0",
+                        "\u09A8\u09AD\u09C7\u09AE\u09CD\u09AC\u09B0",
+                        "\u09A1\u09BF\u09B8\u09C7\u09AE\u09CD\u09AC\u09B0"
+                    }
+                }
+            }
+        }
+    }
 }

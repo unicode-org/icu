@@ -598,43 +598,6 @@ da {
         ZRZ { "ZRZ", "Zairisk naire"        } // 10/27/1971-11/01/1993
         ZWD { "Z$",  "Zimbabwisk dollar"      } // 04/18/1980-
     }
-    DateTimeElements:intvector { 
-        2,
-        4,
-    }
-    DateTimePatterns { 
-        "HH:mm:ss z",
-        "HH:mm:ss z",
-        "HH:mm:ss",
-        "HH:mm",
-        "EEEE dd MMMM yyyy",
-        "d. MMM yyyy",
-        "dd-MM-yyyy",
-        "dd-MM-yy",
-        "{1} {0}",
-    }
-    DayAbbreviations { 
-        "s\u00F8n",
-        "man",
-        "tir",
-        "ons",
-        "tor",
-        "fre",
-        "l\u00F8r",
-    }
-    DayNames { 
-        "s\u00F8ndag",
-        "mandag",
-        "tirsdag",
-        "onsdag",
-        "torsdag",
-        "fredag",
-        "l\u00F8rdag",
-    }
-    Eras { 
-        "f.Kr.",
-        "e.Kr.",
-    }
     Languages {
         ab  { "Abkhasisk" }
         am  { "Amharisk" }
@@ -743,34 +706,6 @@ da {
         //zh_tw { "Kinesisk (Uforkortet)" }
     }
     localPatternChars { "GuMtkHmsSEDFwWahKzUeygAZ" }
-    MonthAbbreviations { 
-        "jan",
-        "feb",
-        "mar",
-        "apr",
-        "maj",
-        "jun",
-        "jul",
-        "aug",
-        "sep",
-        "okt",
-        "nov",
-        "dec",
-    }
-    MonthNames { 
-        "januar",
-        "februar",
-        "marts",
-        "april",
-        "maj",
-        "juni",
-        "juli",
-        "august",
-        "september",
-        "oktober",
-        "november",
-        "december",
-    }
     NumberElements { 
         ",",
         ".",
@@ -857,7 +792,7 @@ da {
         calendar{
             japanese      { "Japansk kalender"  } 
             buddhist      { "Buddhistisk kalender"  } 
-            islamic       { "Islamisk kalender"   } 
+            islamic       { "Islamisk kalender"   }
             islamic-civil { "Verdslig islamisk kalender" }
             hebrew        { "J\u00F8disk kalender"    } 
             chinese       { "Kinesisk kalender"   } 
@@ -865,4 +800,104 @@ da {
         }
     }
 
+    calendar{
+        gregorian{
+            DateTimeElements:intvector {
+                2,
+                4,
+            }
+            DateTimePatterns{
+                "HH:mm:ss z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE dd MMMM yyyy",
+                "d. MMM yyyy",
+                "dd-MM-yyyy",
+                "dd-MM-yy",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "s\u00F8n",
+                        "man",
+                        "tir",
+                        "ons",
+                        "tor",
+                        "fre",
+                        "l\u00F8r",
+                    }
+                    narrow{
+		                "S",
+		                "M",
+		                "T",
+		                "O",
+		                "T",
+		                "F",
+		                "L",
+                    }
+                    wide{
+                        "s\u00F8ndag",
+                        "mandag",
+                        "tirsdag",
+                        "onsdag",
+                        "torsdag",
+                        "fredag",
+                        "l\u00F8rdag",
+                    }
+                }
+            }
+            eras{
+                "f.Kr.",
+                "e.Kr.",
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "jan",
+                        "feb",
+                        "mar",
+                        "apr",
+                        "maj",
+                        "jun",
+                        "jul",
+                        "aug",
+                        "sep",
+                        "okt",
+                        "nov",
+                        "dec",
+                    }
+                    narrow{
+		                "J",
+		                "F",
+		                "M",
+		                "A",
+		                "M",
+		                "J",
+		                "J",
+		                "A",
+		                "S",
+		                "O",
+		                "N",
+ 		                "D",
+                    }
+                    wide{
+                        "januar",
+                        "februar",
+                        "marts",
+                        "april",
+                        "maj",
+                        "juni",
+                        "juli",
+                        "august",
+                        "september",
+                        "oktober",
+                        "november",
+                        "december",
+                    }
+                }
+            }
+        }
+    }
 }

@@ -10,10 +10,6 @@
 ga{
     Version { "2.0" }
 
-    AmPmMarkers { 
-        "a.m.",
-        "p.m.",
-    }
     Countries {
         AD { "Andóra" }
         AE { "Aontas na nÉimíríochtaí Arabacha" }
@@ -670,52 +666,6 @@ ga{
         ZRZ { "ZRZ", "Zaire Sáíreach"        } // 10/27/1971-11/01/1993
         ZWD { "Z$",  "Dollar Siombábach"      } // 04/18/1980-
     }
-    DayAbbreviations { 
-        "Domh",
-        "Luan",
-        "Máirt",
-        "Céad",
-        "Déar",
-        "Aoine",
-        "Sath",
-    }
-    DayNames { 
-        "Dé Domhnaigh",
-        "Dé Luain",
-        "Dé Máirt",
-        "Dé Céadaoin",
-        "Déardaoin",
-        "Dé hAoine",
-        "Dé Sathairn",
-    }
-    MonthAbbreviations { 
-        "Ean",
-        "Feabh",
-        "Márta",
-        "Aib",
-        "Beal",
-        "Meith",
-        "Iúil",
-        "Lún",
-        "MFómh",
-        "DFómh",
-        "Samh",
-        "Noll",
-    }
-    MonthNames { 
-        "Eanáir",
-        "Feabhra",
-        "Márta",
-        "Aibreán",
-        "Bealtaine",
-        "Meitheamh",
-        "Iúil",
-        "Lúnasa",
-        "Meán Fómhair",
-        "Deireadh Fómhair",
-        "Samhain",
-        "Nollaig",
-    }
 
 //    NumberElements { 
 //        ".",
@@ -734,10 +684,6 @@ ga{
         "Latn",  // ISO 15924 Name 
     }
 
-    Eras { 
-        "RC",
-        "AD",
-    }
     ExemplarCharacters { "[a-z \u00e1 \u00e9 \u00ed \u00f3 \u00fa]" }
     Languages {
         // ones needing work are marked //??
@@ -1229,5 +1175,70 @@ ga{
         }
        // many others could go in here if desired
     }
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "a.m.",
+                "p.m.",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Domh",
+                        "Luan",
+                        "Máirt",
+                        "Céad",
+                        "Déar",
+                        "Aoine",
+                        "Sath",
+                    }
+                    wide{
+                        "Dé Domhnaigh",
+                        "Dé Luain",
+                        "Dé Máirt",
+                        "Dé Céadaoin",
+                        "Déardaoin",
+                        "Dé hAoine",
+                        "Dé Sathairn",
+                    }
+                }
+            }
+            eras{
+                "RC",
+                "AD",
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Ean",
+                        "Feabh",
+                        "Márta",
+                        "Aib",
+                        "Beal",
+                        "Meith",
+                        "Iúil",
+                        "Lún",
+                        "MFómh",
+                        "DFómh",
+                        "Samh",
+                        "Noll",
+                    }
+                    wide{
+                        "Eanáir",
+                        "Feabhra",
+                        "Márta",
+                        "Aibreán",
+                        "Bealtaine",
+                        "Meitheamh",
+                        "Iúil",
+                        "Lúnasa",
+                        "Meán Fómhair",
+                        "Deireadh Fómhair",
+                        "Samhain",
+                        "Nollaig",
+                    }
+                }
+            }
+        }
+    }
 }
-

@@ -12,15 +12,19 @@ it_IT {
 //        "\u00A4 #,##0.00;-\u00A4 #,##0.00",
 //        "#,##0%",
 //    }
-    DateTimePatterns { 
-        "HH:mm:ss z",
-        "H:mm:ss z",
-        "HH:mm:ss",
-        "HH:mm",
-        "EEEE d MMMM yyyy",
-        "dd MMMM yyyy",
-        "dd/MMM/yy",
-        "dd/MM/yy",
-        "{1} {0}",
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "HH:mm:ss z",
+                "H:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE d MMMM yyyy",
+                "dd MMMM yyyy",
+                "dd/MMM/yy",
+                "dd/MM/yy",
+                "{1} {0}",
+            }
+        }
     }
 }

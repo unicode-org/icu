@@ -249,43 +249,7 @@ tr {
         ZM { "Zambiya" }
         //ZW { "Zimbabwe" }
     }
-    DateTimeElements:intvector { 
-        2,
-        1,
-    }
-    DateTimePatterns { 
-        "HH:mm:ss z",
-        "HH:mm:ss z",
-        "HH:mm:ss",
-        "HH:mm",
-        "dd MMMM yyyy EEEE",
-        "dd MMMM yyyy EEEE",
-        "dd.MMM.yyyy",
-        "dd.MM.yyyy",
-        "{1} {0}",
-    }
-    DayAbbreviations { 
-        "Paz",
-        "Pzt",
-        "Sal",
-        "\u00C7ar",
-        "Per",
-        "Cum",
-        "Cmt",
-    }
-    DayNames { 
-        "Pazar",
-        "Pazartesi",
-        "Sal\u0131",
-        "\u00C7ar\u015Famba",
-        "Per\u015Fembe",
-        "Cuma",
-        "Cumartesi",
-    }
-    Eras { 
-        "M\u00D6",
-        "MS",
-    }
+
     Languages {
         aa { "Afar" }
         ab { "Abazca" }
@@ -429,34 +393,6 @@ tr {
         //zh_cn { "\u00C7ince (Basitle\u015Ftirilmi\u015F)" }
         //zh_tw { "\u00C7ince (Geleneksel)" }
     }
-    MonthAbbreviations { 
-        "Oca",
-        "\u015Eub",
-        "Mar",
-        "Nis",
-        "May",
-        "Haz",
-        "Tem",
-        "A\u011Fu",
-        "Eyl",
-        "Eki",
-        "Kas",
-        "Ara",
-    }
-    MonthNames { 
-        "Ocak",
-        "\u015Eubat",
-        "Mart",
-        "Nisan",
-        "May\u0131s",
-        "Haziran",
-        "Temmuz",
-        "A\u011Fustos",
-        "Eyl\u00FCl",
-        "Ekim",
-        "Kas\u0131m",
-        "Aral\u0131k",
-    }
     NumberElements { 
         ",",
         ".",
@@ -484,5 +420,82 @@ tr {
         ITL { "ITL", "ITL" } // Italian Lira
 //        TRL { "\u20A4", "TRL" } // Turkish Lira (Rarely used)
         TRL { "TL", "TRL" } // Turkish Lira
+    }
+    calendar{
+        gregorian{    
+            DateTimeElements:intvector { 
+                2,
+                1,
+            }
+            DateTimePatterns{
+                "HH:mm:ss z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "dd MMMM yyyy EEEE",
+                "dd MMMM yyyy EEEE",
+                "dd.MMM.yyyy",
+                "dd.MM.yyyy",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Paz",
+                        "Pzt",
+                        "Sal",
+                        "\u00C7ar",
+                        "Per",
+                        "Cum",
+                        "Cmt",
+                    }
+                    wide{
+                        "Pazar",
+                        "Pazartesi",
+                        "Sal\u0131",
+                        "\u00C7ar\u015Famba",
+                        "Per\u015Fembe",
+                        "Cuma",
+                        "Cumartesi",
+                    }
+                }
+            }
+            eras{
+                "M\u00D6",
+                "MS",
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Oca",
+                        "\u015Eub",
+                        "Mar",
+                        "Nis",
+                        "May",
+                        "Haz",
+                        "Tem",
+                        "A\u011Fu",
+                        "Eyl",
+                        "Eki",
+                        "Kas",
+                        "Ara",
+                    }
+                    wide{
+                        "Ocak",
+                        "\u015Eubat",
+                        "Mart",
+                        "Nisan",
+                        "May\u0131s",
+                        "Haziran",
+                        "Temmuz",
+                        "A\u011Fustos",
+                        "Eyl\u00FCl",
+                        "Ekim",
+                        "Kas\u0131m",
+                        "Aral\u0131k",
+                    }
+                }
+            }
+        }
     }
 }

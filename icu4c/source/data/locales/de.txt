@@ -21,10 +21,6 @@ de {
     // This shouldn't be used, but valid data should be here.
     // vorm. -> vormittags -> in the morning
     // nachm. -> nachmittags -> in the afternoon
-    AmPmMarkers {
-        "vorm.",
-        "nachm.",
-    }
     // Currency display names
 
     // See for example "W\u00e4hrungscodes" at
@@ -630,44 +626,6 @@ de {
         SP { "Serbien" }
         TL { "Osttimor" }
     }
-    DateTimeElements:intvector { 
-        2,
-        4,
-    }
-    DateTimePatterns { 
-        "H:mm' Uhr 'z",
-        "HH:mm:ss z",
-        "HH:mm:ss",
-        "HH:mm",
-        "EEEE, d. MMMM yyyy",
-        "d. MMMM yyyy",
-        "dd.MM.yyyy",
-        "dd.MM.yy",
-        "{1} {0}",
-    }
-    DayAbbreviations { 
-        "So",
-        "Mo",
-        "Di",
-        "Mi",
-        "Do",
-        "Fr",
-        "Sa",
-    }
-    DayNames { 
-        "Sonntag",
-        "Montag",
-        "Dienstag",
-        "Mittwoch",
-        "Donnerstag",
-        "Freitag",
-        "Samstag",
-    }
-    Eras { 
-        "v. Chr.",
-        "n. Chr.",
-    }
-
     // For the languages, I am trying to use the adjective list in the
     // official list of country names.
     // Sometimes I am guessing.
@@ -851,34 +809,6 @@ de {
         zu  { "Zulu" }
     }
 
-    MonthAbbreviations { 
-        "Jan",
-        "Feb",
-        "Mrz",
-        "Apr",
-        "Mai",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Okt",
-        "Nov",
-        "Dez",
-    }
-    MonthNames { 
-        "Januar",
-        "Februar",
-        "M\u00E4rz",
-        "April",
-        "Mai",
-        "Juni",
-        "Juli",
-        "August",
-        "September",
-        "Oktober",
-        "November",
-        "Dezember",
-    }
     NumberElements {
         ",",
         ".",
@@ -1056,6 +986,110 @@ de {
             "Mitteleurop\u00E4ische Sommerzeit", 
             "MESZ",
             "Berlin",
+        }
+    }
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "vorm.",
+                "nachm.",
+            }
+            DateTimeElements:intvector {
+                2,
+                4,
+            }
+            DateTimePatterns{
+                "H:mm' Uhr 'z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, d. MMMM yyyy",
+                "d. MMMM yyyy",
+                "dd.MM.yyyy",
+                "dd.MM.yy",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "So",
+                        "Mo",
+                        "Di",
+                        "Mi",
+                        "Do",
+                        "Fr",
+                        "Sa",
+                    }
+                    narrow{
+		                "S"
+		                "M"
+		                "D"
+		                "M"
+		                "D"
+		                "F"
+		                "S"
+                    }
+                    wide{
+                        "Sonntag",
+                        "Montag",
+                        "Dienstag",
+                        "Mittwoch",
+                        "Donnerstag",
+                        "Freitag",
+                        "Samstag",
+                    }
+                }
+            }
+            eras{
+                "v. Chr.",
+                "n. Chr.",
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Jan",
+                        "Feb",
+                        "Mrz",
+                        "Apr",
+                        "Mai",
+                        "Jun",
+                        "Jul",
+                        "Aug",
+                        "Sep",
+                        "Okt",
+                        "Nov",
+                        "Dez",
+                    }
+                    narrow{
+		                "J",
+		                "F",
+		                "M",
+		                "A",
+		                "M",
+		                "J",
+		                "J",
+		                "A",
+		                "S",
+		                "O",
+		                "N",
+		                "D",
+                    }
+                    wide{
+                        "Januar",
+                        "Februar",
+                        "M\u00E4rz",
+                        "April",
+                        "Mai",
+                        "Juni",
+                        "Juli",
+                        "August",
+                        "September",
+                        "Oktober",
+                        "November",
+                        "Dezember",
+                    }
+                }
+            }
         }
     }
 }

@@ -250,21 +250,6 @@ zh_TW {
         ZM { "\u5C1A\u6BD4\u4E9E" }
         ZW { "\u8F9B\u5DF4\u5A01" }
     }
-    DateTimePatterns { 
-        "ahh'\u6642'mm'\u5206'ss'\u79D2' z",
-        "ahh'\u6642'mm'\u5206'ss'\u79D2'",
-        "a h:mm:ss",
-        "a h:mm",
-        "yyyy'\u5E74'M'\u6708'd'\u65E5'EEEE",
-        "yyyy'\u5E74'M'\u6708'd'\u65E5'",
-        "yyyy/M/d",
-        "yyyy/M/d",
-        "{1} {0}",
-    }
-    Eras { 
-        "\u6C11\u570B\u524D",
-        "\u6C11\u570B",
-    }
     Languages {
         //aa  { "\u963F\u6CD5\u6587" } // Same as zh
         ab { "\u963F\u5E03\u54C8\u897F\u4E9E\u6587" }
@@ -713,4 +698,23 @@ zh_TW {
         REVISED { "\u5DF2\u4FEE\u8A02" }
     }
 
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "ahh'\u6642'mm'\u5206'ss'\u79D2' z",
+                "ahh'\u6642'mm'\u5206'ss'\u79D2'",
+                "a h:mm:ss",
+                "a h:mm",
+                "yyyy'\u5E74'M'\u6708'd'\u65E5'EEEE",
+                "yyyy'\u5E74'M'\u6708'd'\u65E5'",
+                "yyyy/M/d",
+                "yyyy/M/d",
+                "{1} {0}",
+            }
+            eras{
+                "\u6C11\u570B\u524D",
+                "\u6C11\u570B",
+            }
+        }
+    }
 }

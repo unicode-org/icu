@@ -7,20 +7,24 @@
 
 en_AU {
     Version { "2.0" }
-    DateTimePatterns { 
-        "h:mm:ss a z",
-        "h:mm:ss a",
-        "h:mm:ss a",
-        "h:mm a",
-        "EEEE, d MMMM yyyy",
-        "d MMMM yyyy",
-        "dd/MM/yyyy",
-        "d/MM/yy",
-        "{1} {0}",
-    }
     // Currency display names
     Currencies {
         AUD { "$", "Australian Dollar" }
         USD { "US$", "US Dollar" }
+    }
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE, d MMMM yyyy",
+                "d MMMM yyyy",
+                "dd/MM/yyyy",
+                "d/MM/yy",
+                "{1} {0}",
+            }
+        }
     }
 }

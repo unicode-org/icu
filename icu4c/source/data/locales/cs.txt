@@ -7,10 +7,6 @@
 
 cs {
     Version{ "3.0" }
-    AmPmMarkers { 
-        "dop.",
-        "odp.",
-    }
     Countries {
         Fallback{"en"}
         //AD { "Andorra" }
@@ -253,43 +249,6 @@ cs {
         ZM { "Zambie" }
         //ZW { "Zimbabwe" }
     }
-    DateTimePatterns { 
-        "H:mm:ss z",
-        "H:mm:ss z",
-        "H:mm:ss",
-        "H:mm",
-        "EEEE, d. MMMM yyyy",
-        "d. MMMM yyyy",
-        "d.M.yyyy",
-        "d.M.yy",
-        "{1} {0}",
-    }
-    DateTimeElements:intvector {
-        2,
-        1, // "Minimal Days in First Week" is unknown. Root value used instead
-    }
-    DayAbbreviations { 
-        "ne",
-        "po",
-        "\u00FAt",
-        "st",
-        "\u010dt",
-        "p\u00E1",
-        "so",
-    }
-    DayNames { 
-        "ned\u011Ble",
-        "pond\u011Bl\u00ED",
-        "\u00FAter\u00FD",
-        "st\u0159eda",
-        "\u010dtvrtek",
-        "p\u00E1tek",
-        "sobota",
-    }
-    Eras { 
-        "p\u0159.Kr.",
-        "po Kr.",
-    }
     Languages {
         aa { "Afar\u0161tina" }
         ab { "Abch\u00E1z\u0161tina" }
@@ -359,7 +318,7 @@ cs {
         ja { "Japon\u0161tina" }
         //ji { "Jidi\u0161" }
         jv { "Jav\u00E1n\u0161tina" }
-        
+
 
         ka { "Gruz\u00EDn\u0161tina" }
         kk { "Kazach\u0161tina" }
@@ -462,34 +421,6 @@ cs {
         zh { "\u010C\u00EDn\u0161tina" }
        
     }
-    MonthAbbreviations { 
-        "I",
-        "II",
-        "III",
-        "IV",
-        "V",
-        "VI",
-        "VII",
-        "VIII",
-        "IX",
-        "X",
-        "XI",
-        "XII",
-    }
-    MonthNames { 
-        "leden",
-        "\u00FAnor",
-        "b\u0159ezen",
-        "duben",
-        "kv\u011Bten",
-        "\u010Derven",
-        "\u010Dervenec",
-        "srpen",
-        "z\u00E1\u0159\u00ED",
-        "\u0159\u00EDjen",
-        "listopad",
-        "prosinec",
-    }
     NumberElements { 
         ",",
         "\u00A0",
@@ -515,5 +446,86 @@ cs {
     // Currency display names
     Currencies {
         CZK { "K\u010D", "CZK" }
+    }
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "dop.",
+                "odp.",
+            }
+            DateTimeElements:intvector {
+                2,
+                1, // "Minimal Days in First Week" is unknown. Root value used instead
+            }
+            DateTimePatterns{
+                "H:mm:ss z",
+                "H:mm:ss z",
+                "H:mm:ss",
+                "H:mm",
+                "EEEE, d. MMMM yyyy",
+                "d. MMMM yyyy",
+                "d.M.yyyy",
+                "d.M.yy",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "ne",
+                        "po",
+                        "\u00FAt",
+                        "st",
+                        "\u010dt",
+                        "p\u00E1",
+                        "so",
+                    }
+                    wide{
+                        "ned\u011Ble",
+                        "pond\u011Bl\u00ED",
+                        "\u00FAter\u00FD",
+                        "st\u0159eda",
+                        "\u010dtvrtek",
+                        "p\u00E1tek",
+                        "sobota",
+                    }
+                }
+            }
+            eras{
+                "p\u0159.Kr.",
+                "po Kr.",
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "I",
+                        "II",
+                        "III",
+                        "IV",
+                        "V",
+                        "VI",
+                        "VII",
+                        "VIII",
+                        "IX",
+                        "X",
+                        "XI",
+                        "XII",
+                    }
+                    wide{
+                        "leden",
+                        "\u00FAnor",
+                        "b\u0159ezen",
+                        "duben",
+                        "kv\u011Bten",
+                        "\u010Derven",
+                        "\u010Dervenec",
+                        "srpen",
+                        "z\u00E1\u0159\u00ED",
+                        "\u0159\u00EDjen",
+                        "listopad",
+                        "prosinec",
+                    }
+                }
+            }
+        }
     }
 }

@@ -13,9 +13,13 @@ de_LU {
         "#,##0%",
         "#E0",
     }
-    DateTimeElements:intvector {
-        2,
-        1,
+    calendar{
+        gregorian{
+            DateTimeElements:intvector {
+                2,
+                1,
+            }
+        }
     }
 
     // Currency display names

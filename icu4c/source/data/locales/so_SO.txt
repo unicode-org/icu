@@ -43,4 +43,4 @@ so_SO {
     Currencies {
         SOS { "$", "SOS" }
     }
- }
+}

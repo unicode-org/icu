@@ -7,15 +7,19 @@
 
 id_ID {
     Version { "2.0" }
-    DateTimePatterns {
-        "H:mm:ss",
-        "H:mm:ss",
-        "H:mm:ss",
-        "H:mm",
-        "EEEE dd MMMM yyyy",
-        "dd MMMM yyyy",
-        "dd MMM yy",
-        "dd/MM/yy",
-        "{1} {0}",
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "H:mm:ss",
+                "H:mm:ss",
+                "H:mm:ss",
+                "H:mm",
+                "EEEE dd MMMM yyyy",
+                "dd MMMM yyyy",
+                "dd MMM yy",
+                "dd/MM/yy",
+                "{1} {0}",
+            }
+        }
     }
 }

@@ -44,4 +44,4 @@ so_DJ {
     Currencies {
         DJF { "$", "DJF" }
     }
- }
+}

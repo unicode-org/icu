@@ -19,27 +19,29 @@ en_MT {
         "#E0",
     }
 
-    DateTimePatterns {
-        "HH:mm:ss z",
-        "HH:mm:ss z",
-        "HH:mm:ss",
-        "HH:mm",
-        "EEEE, d MMMM yyyy",
-        "dd MMMM yyyy",
-        "dd MMM yyyy",
-        "dd/MM/yyyy",
-        "{1} {0}",
-    }
 
     Currencies{
         //MTP { "\u00A3", "Maltese Pound"}  (Obsolete)
         GBP { "GBP", "British Pound Sterling" } // British Pound Sterling.  (Entered here to prevent GBP from showing up with the pound symbol, and being confused with MTL.)
     }
-
-    DateTimeElements:intvector {
-        1,       // Sunday (il-Hadd) is first day of calendar week
-        4        // four days minimal in first week for week numbering  [MSA 200:2003 4.5.5, referencing 8601?]
-        //       Monday is first day of workweek. [MSA 200:2003 4.5.5]
+    calendar{
+        gregorian{
+            DateTimeElements:intvector {
+                1,       // Sunday (il-Hadd) is first day of calendar week
+                4        // four days minimal in first week for week numbering  [MSA 200:2003 4.5.5, referencing 8601?]
+                //       Monday is first day of workweek. [MSA 200:2003 4.5.5]
+            }
+            DateTimePatterns{
+                "HH:mm:ss z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, d MMMM yyyy",
+                "dd MMMM yyyy",
+                "dd MMM yyyy",
+                "dd/MM/yyyy",
+                "{1} {0}",
+            }
+        }
     }
-
 }

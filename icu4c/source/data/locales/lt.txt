@@ -249,43 +249,7 @@ lt {
         ZM { "Zambija" }
         ZW { "Zimbabv\u0117" }
     }
-    DateTimePatterns { 
-        "HH:mm:ss z",
-        "HH:mm:ss z",
-        "HH:mm:ss",
-        "HH:mm",
-        "yyyy 'm.' MMMM d 'd.',EEEE",
-        "yyyy 'm.' MMMM d 'd.'",
-        "yyyy.MM.dd",
-        "yyyy.MM.dd",
-        "{1} {0}",
-    }
-    DateTimeElements:intvector {
-        2,
-        4, // "Minimal Days in First Week"   Lithuania follows ISO 8601 
-    }
-    DayAbbreviations { 
-        "Sk",
-        "Pr",
-        "An",
-        "Tr",
-        "Kt",
-        "Pn",
-        "\u0160t",
-    }
-    DayNames { 
-        "Sekmadienis",
-        "Pirmadienis",
-        "Antradienis",
-        "Tre\u010Diadienis",
-        "Ketvirtadienis",
-        "Penktadienis",
-        "\u0160e\u0161tadienis",
-    }
-    Eras { 
-        "pr.Kr.",
-        "po.Kr.",
-    }
+
     Languages { 
         ar { "Arab\u0173" }
         bg { "Bulgar\u0173" }
@@ -320,34 +284,6 @@ lt {
         //zh_cn { "Kin\u0173 (supaprastinta)" }
         //zh_tw { "Kin\u0173 (tadicin\u0117)" }
     }
-    MonthAbbreviations { 
-        "Sau",
-        "Vas",
-        "Kov",
-        "Bal",
-        "Geg",
-        "Bir",
-        "Lie",
-        "Rgp",
-        "Rgs",
-        "Spa",
-        "Lap",
-        "Grd",
-    }
-    MonthNames { 
-        "Sausio",
-        "Vasario",
-        "Kovo",
-        "Baland\u017Eio",
-        "Gegu\u017E\u0117s",
-        "Bir\u017Eelio",
-        "Liepos",
-        "Rugpj\u016B\u010Dio",
-        "Rugs\u0117jo",
-        "Spalio",
-        "Lapkri\u010Dio",
-        "Gruod\u017Eio",
-    }
     NumberElements { 
         ",",
         ".",
@@ -373,5 +309,82 @@ lt {
     // Currency display names
     Currencies {
         LTL { "Lt", "LTL" }
+    }
+    calendar{
+        gregorian{
+            DateTimeElements:intvector {
+                2,
+                4, // "Minimal Days in First Week"   Lithuania follows ISO 8601 
+            }
+            DateTimePatterns{
+                "HH:mm:ss z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "yyyy 'm.' MMMM d 'd.',EEEE",
+                "yyyy 'm.' MMMM d 'd.'",
+                "yyyy.MM.dd",
+                "yyyy.MM.dd",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Sk",
+                        "Pr",
+                        "An",
+                        "Tr",
+                        "Kt",
+                        "Pn",
+                        "\u0160t",
+                    }
+                    wide{
+                        "Sekmadienis",
+                        "Pirmadienis",
+                        "Antradienis",
+                        "Tre\u010Diadienis",
+                        "Ketvirtadienis",
+                        "Penktadienis",
+                        "\u0160e\u0161tadienis",
+                    }
+                }
+            }
+            eras{
+                "pr.Kr.",
+                "po.Kr.",
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Sau",
+                        "Vas",
+                        "Kov",
+                        "Bal",
+                        "Geg",
+                        "Bir",
+                        "Lie",
+                        "Rgp",
+                        "Rgs",
+                        "Spa",
+                        "Lap",
+                        "Grd",
+                    }
+                    wide{
+                        "Sausio",
+                        "Vasario",
+                        "Kovo",
+                        "Baland\u017Eio",
+                        "Gegu\u017E\u0117s",
+                        "Bir\u017Eelio",
+                        "Liepos",
+                        "Rugpj\u016B\u010Dio",
+                        "Rugs\u0117jo",
+                        "Spalio",
+                        "Lapkri\u010Dio",
+                        "Gruod\u017Eio",
+                    }
+                }
+            }
+        }
     }
 }
