@@ -21,6 +21,46 @@
 
 #include "sfnt.h"
 
+//
+// Finds the high bit by binary searching
+// through the bits in n.
+//
+le_int8 PortableFontInstance::highBit(le_int32 value)
+{
+    if (value <= 0) {
+        return -32;
+    }
+
+    le_uint8 bit = 0;
+
+    if (value >= 1 << 16) {
+        value >>= 16;
+        bit += 16;
+    }
+
+    if (value >= 1 << 8) {
+        value >>= 8;
+        bit += 8;
+    }
+
+    if (value >= 1 << 4) {
+        value >>= 4;
+        bit += 4;
+    }
+
+    if (value >= 1 << 2) {
+        value >>= 2;
+        bit += 2;
+    }
+
+    if (value >= 1 << 1) {
+        value >>= 1;
+        bit += 1;
+    }
+
+    return bit;
+}
+
 PortableFontInstance::PortableFontInstance(char *fileName, float pointSize, PFIErrorCode &status)
     : fFile(NULL), fUnitsPerEM(0), fPointSize(pointSize), fDirectory(NULL), fCMAPMapper(NULL),
 	  fHMTXTable(NULL), fNumGlyphs(0), fNumLongHorMetrics(0)
@@ -47,6 +87,7 @@ PortableFontInstance::PortableFontInstance(char *fileName, float pointSize, PFIE
 	le_int32 dirSize = sizeof tempDir + ((SWAPW(tempDir.numTables) - ANY_NUMBER) * sizeof(DirectoryEntry));
 	const LETag headTag = 0x68656164; // 'head'
 	const HEADTable *headTable = NULL;
+    le_uint16 numTables = 0;
 
 	fDirectory = (const SFNTDirectory *) new char[dirSize];
 
@@ -57,6 +98,14 @@ PortableFontInstance::PortableFontInstance(char *fileName, float pointSize, PFIE
 
 	fseek(fFile, 0L, SEEK_SET);
 	fread((void *) fDirectory, sizeof(char), dirSize, fFile);
+
+    //
+    // We calculate these numbers 'cause some fonts
+    // have bogus values for them in the directory header.
+    //
+    numTables = SWAPW(fDirectory->numTables);
+    fDirPower = 1 << highBit(numTables);
+    fDirExtra = numTables - fDirPower;
 
 	// read unitsPerEm from 'head' table
 	headTable = (const HEADTable *) readTable(headTag, &length);
@@ -103,11 +152,10 @@ const DirectoryEntry *PortableFontInstance::findTable(LETag tag) const
 {
     if (fDirectory != NULL) {
 	    le_uint16 table = 0;
-	    le_uint16 probe = 1 << SWAPW(fDirectory->entrySelector);
-	    le_uint16 rangeShift = SWAPW(fDirectory->rangeShift) >> 4;
+	    le_uint16 probe = fDirPower;
 
-	    if (SWAPL(fDirectory->tableDirectory[rangeShift].tag) <= tag) {
-		    table = rangeShift;
+	    if (SWAPL(fDirectory->tableDirectory[fDirExtra].tag) <= tag) {
+		    table = fDirExtra;
 	    }
 
 	    while (probe > (1 << 0)) {
