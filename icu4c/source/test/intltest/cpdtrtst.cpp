@@ -184,6 +184,10 @@ void CompoundTransliteratorTest::TestCloneEqual(){
     delete ct2;
     delete copyct1;
     delete copyct2;
+    delete clonect1a;
+    delete clonect1b;
+    delete clonect2a;
+    delete clonect2b;
 
 }
 
@@ -221,7 +225,6 @@ void CompoundTransliteratorTest::TestGetSetAdoptTransliterator(){
     CompoundTransliterator *ct1=new CompoundTransliterator(ID, parseError, status);
     if(U_FAILURE(status)){
         errln("CompoundTransliterator construction failed");
-        delete ct1;
         return;
     }
     int32_t count=ct1->getCount();
@@ -235,7 +238,7 @@ void CompoundTransliteratorTest::TestGetSetAdoptTransliterator(){
             logln("OK: getTransliterator() passed: Expected->" + *(array+i) + " Got->" + child);
         }
     }
-
+    delete []array;
 
     logln("Testing setTransliterator() API of CompoundTransliterator");
     UnicodeString ID2("Hex-Any;Any-Hex;Latin-Cyrillic;Cyrillic-Latin;Halfwidth-Fullwidth;Fullwidth-Halfwidth");
@@ -250,6 +253,7 @@ void CompoundTransliteratorTest::TestGetSetAdoptTransliterator(){
         }
         status = U_ZERO_ERROR;
     }
+
     /*setTransliterator and adoptTransliterator */
 
     ct1->setTransliterators(transarray, count);
@@ -274,7 +278,8 @@ void CompoundTransliteratorTest::TestGetSetAdoptTransliterator(){
     }*/
     logln("Testing adoptTransliterator() API of CompoundTransliterator");
     UnicodeString ID3("Latin-Kana");
-    Transliterator *transarray2[]={Transliterator::createInstance(ID3,UTRANS_FORWARD,parseError,status)};
+    Transliterator **transarray2=new Transliterator*[1];
+    transarray2[0] = Transliterator::createInstance(ID3,UTRANS_FORWARD,parseError,status);
     if (transarray2[0] != 0) {
         ct1->adoptTransliterators(transarray2, 1);
     }
@@ -285,8 +290,12 @@ void CompoundTransliteratorTest::TestGetSetAdoptTransliterator(){
     else{
         logln("OK: adoptTranslterator() passed");
     }
-    delete transarray;
- 
+    delete ct1;
+    for(i=0;i<count;i++){
+        delete transarray[i];
+    }
+    delete []transarray;
+    delete []array;
 }
 
 /**
