@@ -74,13 +74,13 @@ gu {
         "%",
         "\u0AE6",
         "#",
-        "+",
         "-",
         "E",
         "\u2030",
         "\u221E",
         "\uFFFD",
         ".",
+        "+",
     }
     LocaleScript:array { "Gujr" }
     ExemplarCharacters { "[[:Gujr:]\u200c\u200d]" }
