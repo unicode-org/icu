@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/search/Attic/SearchTest.java,v $ 
- * $Date: 2000/03/10 03:47:47 $ 
- * $Revision: 1.2 $
+ * $Date: 2000/05/18 19:11:27 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -381,7 +381,7 @@ public class SearchTest extends com.ibm.test.TestFmwk {
             errln("Caught exception: " + e.toString());
         }
 
-        System.out.println("end");
+        logln("end");
     }
     
     //-------------------------------------------------------------------------
