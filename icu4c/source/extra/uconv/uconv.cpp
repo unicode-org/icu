@@ -7,7 +7,6 @@
 //
 // uconv demonstration example of ICU and codepage conversion
 // Purpose is to be a similar tool as the UNIX iconv program.
-// Shows the usage of the ICU classes: UnicodeConverter, UnicodeString
 //
 // Usage: uconv [flag] [file]
 // -f [codeset]  Convert file from this codeset
@@ -55,62 +54,97 @@ static void initMsg(const char *pname) {
     static int ps = 0;
 
     if (!ps) {
-	char dataPath[500];
-	UErrorCode err = U_ZERO_ERROR;
+        char dataPath[500];
+        UErrorCode err = U_ZERO_ERROR;
 
-	ps = 1;
+        ps = 1;
 
-	/* Get messages. */
-	
-	strcpy(dataPath, u_getDataDirectory());
-	strcat(dataPath, "uconvmsg");
-	
-	gBundle = u_wmsg_setPath(dataPath, &err);
-	if(U_FAILURE(err))
-	    {
-		fprintf(stderr, "%s: warning: couldn't open resource bundle %s: %s\n", 
-			pname,
-			dataPath,
-			u_errorName(err));
-	    }
+        /* Get messages. */
+        
+        strcpy(dataPath, u_getDataDirectory());
+        strcat(dataPath, "uconvmsg");
+        
+        gBundle = u_wmsg_setPath(dataPath, &err);
+        if(U_FAILURE(err))
+            {
+                fprintf(stderr, "%s: warning: couldn't open resource bundle %s: %s\n", 
+                        pname,
+                        dataPath,
+                        u_errorName(err));
+            }
     }
 }
 
 // Print all available codepage converters
-static void printAllConverters(const char *pname)
+static void printAllConverters(const char *pname, int allinfo)
 {
     UErrorCode err = U_ZERO_ERROR;
-    int32_t num;
+    int32_t num = ucnv_countAvailable();
+    uint16_t num_stds = ucnv_countStandards();
+
 #if 0
     size_t numprint = 0;
-#endif
     static const size_t maxline = 70;
+#endif
 
-    // getAvailable returns a string-table with all available codepages
-    const char* const* convtable = UnicodeConverter::getAvailableNames(num, err);
-    if (U_FAILURE(err))
+    if (num <= 0)
     {
-      initMsg(pname);	
-      u_wmsg("cantGetNames", u_wmsg_errorName(err));
+      initMsg(pname);   
+      u_wmsg("cantGetNames");
       return;
     }
 
-    for (int32_t i = 0; i<num-1; i++)
+    for (int32_t i = 0; i<num; i++)
     {
         // ucnv_getAvailableName gets the codepage name at a specific
         // index
+
+        const char *name = ucnv_getAvailableName(i);
 #if 0
-        numprint += printf("%-20s", convtable[i]);
+        numprint += printf("%-20s", name);
         if (numprint>maxline)
         {
             putchar('\n');
             numprint = 0;
         }
 #else
-	printf("%s ", convtable[i]);
+        printf("%s ", name);
+        if (allinfo) {
+            uint16_t num_aliases;
+
+            err = U_ZERO_ERROR;
+            num_aliases = ucnv_countAliases(name, &err);
+            if (U_FAILURE(err)) {
+                UnicodeString str(name);
+                putchar('\t');
+                u_wmsg("cantGetAliases", str.getBuffer(), u_wmsg_errorName(err));
+            } else if (num_aliases > 1) {
+                uint16_t a;
+
+                putchar('\t');
+
+                for (a = 1; a < num_aliases; ++a) {
+                    const char *alias = ucnv_getAlias(name, a, &err);
+
+                    if (U_FAILURE(err)) {
+                        UnicodeString str(name);
+                        putchar('\t');
+                        u_wmsg("cantGetAliases", str.getBuffer(), u_wmsg_errorName(err));
+                        break;
+                    }
+
+                    printf("%s", alias);
+
+                    
+                    if (a < num_aliases) {
+                        putchar(' ');
+                    }
+                }
+                putchar('\n');
+            }
+        }
 #endif
     }
-    puts(convtable[num-1]);
 }
 
 // Convert a file from one encoding to another
@@ -334,7 +368,11 @@ int main(int argc, char** argv)
         }
         else if (strcmp("-l", *iter) == 0 || !strcmp("--list", *iter))
         {
-            printAllConverters(pname);
+            printAllConverters(pname, 0);
+            goto normal_exit;
+        }
+        else if (strcmp("--list-converters", *iter) == 0) {
+            printAllConverters(pname, 1);
             goto normal_exit;
         }
         else if (strcmp("-h", *iter) == 0 || !strcmp("-?", *iter) == 0 || !strcmp("--help", *iter))
@@ -342,12 +380,12 @@ int main(int argc, char** argv)
             usage(pname, 0);
         }
         else if (**iter == '-' && (*iter)[1]) {
-	    usage(pname, 1);
-	} else if (!infilestr) {
+            usage(pname, 1);
+        } else if (!infilestr) {
             infilestr = *iter;
         } else {
-	    usage(pname, 1);
-	}
+            usage(pname, 1);
+        }
     }
 
     if (fromcpage==0 && tocpage==0)
@@ -413,3 +451,13 @@ int main(int argc, char** argv)
         fclose(file);
     return ret;
 }
+
+
+/*
+ * Hey, Emacs, please set the following:
+ *
+ * Local Variables:
+ * indent-tabs-mode: nil
+ * End:
+ *
+ */

@@ -19,7 +19,10 @@
 .BI "\-l\fP, \fB\-\-list"
 ]
 [
-.BI "\-L\fP, \fB\-\-list-transliterators"
+.BI "\-\-list\-converters\"
+]
+[
+.BI "\-L\fP, \fB\-\-list\-transliterators"
 ]
 [
 .BI "\-x" " trasnsliterator
@@ -42,22 +45,30 @@ Print help about usage and exit.
 .TP
 .BI "\-l\fP, \fB\-\-list"
 List all the available encodings and exit.
+.BI "\-\-list\-converters"
+List all the available encodings and their aliases in a format compatible
+with
+.BR convrtrs.txt (5).
 .TP
-.BI "\-L\fP, \fB\-\-list-transliterators"
+.BI "\-L\fP, \fB\-\-list\-transliterators"
 List all the available transliterators and exit.
 .TP
 .BI "\-x" " transliterator"
 Run the transcoding through the given
 .IR transliterator .
 .TP
-.BI "\-f\fP, \fB\-\-from-code" " encoding"
+.BI "\-f\fP, \fB\-\-from\-code" " encoding"
 Set the original encoding of the data to 
 .IR encoding .
 .TP
-.BI "\-t\fP, \fB\-\-to-code" " encoding"
+.BI "\-t\fP, \fB\-\-to\-code" " encoding"
 Transcode the data to
 .IR encoding .
 .SH CAVEATS AND BUGS
+The
+.BI "\-\-list-converters"
+option does not yet list tags after the converter names.
+.PP
 The
 .BI "\-L\fP, \fB\-\-list-transliterators"
 option is not implemented at this point and
@@ -68,4 +79,5 @@ of 1 if it is used.
 @VERSION@
 .SH COPYRIGHT
 Copyright (C) 2001 IBM, Inc. and others.
-
+.SH SEE ALSO
+.BR convrtrs.txt (5)
