@@ -337,7 +337,7 @@ el {
     LocaleScript:array { 
         "Grek"  // ISO 15924 Name 
     }
-    ExemplarCharacters{"[\u03ac-\u03ce]"}
+    ExemplarCharacters{"[\u0390\u03ac-\u03ce]"}
 
     //------------------------------------------------------------
     // Rule Based Number Format Support
