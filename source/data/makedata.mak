@@ -212,7 +212,6 @@ COLLATION_SOURCE=$(COLLATION_SOURCE) $(COLLATION_SOURCE_LOCAL)
 
 COL_FILES = root.res $(COLLATION_ALIAS_SOURCE:.txt=.res) $(COLLATION_SOURCE:.txt=.res)
 COL_COL_FILES=$(COL_FILES:.res=.crs)
-
 # Read list of transliterator resource bundle files
 !IF EXISTS("$(ICUSRCDATA)\$(ICUTRNS)\trnsfiles.mk")
 !INCLUDE "$(ICUSRCDATA)\$(ICUTRNS)\trnsfiles.mk"
@@ -295,7 +294,7 @@ $(CNV_FILES:.cnv =.cnv
 )
 $(ALL_RES:.res =.res
 )
-$(COL_FILES:.res =.crs
+$(COL_COL_FILES:.crs =.crs
 )
 res_index.crs
 $(BRK_FILES:.brk =.brk
