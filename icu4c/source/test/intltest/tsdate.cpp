@@ -234,7 +234,7 @@ double IntlTestDateFormat::randDouble()
         }
     // While this is not a real normalized number make another one.
     } while (uprv_isNaN(d) || uprv_isInfinite(d)
-        || !((-DBL_MAX < d && d < DBL_MAX) || (-DBL_MIN < d && d < DBL_MIN)));
+        || !((-DBL_MAX < d && d < DBL_MAX) || (d < -DBL_MIN && DBL_MIN < d)));
     return d;
 }
 
