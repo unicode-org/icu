@@ -66,7 +66,6 @@ static void TestConvert()
     UChar*                ucs_file_buffer_use;
     UChar*                my_ucs_file_buffer; /*    [MAX_FILE_LEN] */
     UChar*                my_ucs_file_buffer_1;
-    int32_t             i                   =   0;
     int8_t                ii                  =   0;
     int32_t             j                   =   0;
     uint16_t            codepage_index      =   0;
@@ -225,16 +224,16 @@ static void TestConvert()
         } else if(uprv_strcmp("UTF8", alias) != 0) {
             log_err("FAILURE! ucnv_getAlias(\"utf-8\", 0) -> %s instead of UTF8\n", alias);
         } else {
-            uint16_t i;
-            for(i = 0; i < count; ++i) {
-                alias = ucnv_getAlias("utf-8", i, &err);
+            uint16_t aliasNum;
+            for(aliasNum = 0; aliasNum < count; ++aliasNum) {
+                alias = ucnv_getAlias("utf-8", aliasNum, &err);
                 if(U_FAILURE(err)) {
-                    log_err("FAILURE! ucnv_getAlias(\"utf-8\", %d) -> %s\n", i, myErrorName(err));
+                    log_err("FAILURE! ucnv_getAlias(\"utf-8\", %d) -> %s\n", aliasNum, myErrorName(err));
                 } else if(uprv_strlen(alias) > 20) {
                     /* sanity check */
-                    log_err("FAILURE! ucnv_getAlias(\"utf-8\", %d) -> alias %s insanely long, corrupt?!\n", i, alias);
+                    log_err("FAILURE! ucnv_getAlias(\"utf-8\", %d) -> alias %s insanely long, corrupt?!\n", aliasNum, alias);
                 } else {
-                    log_verbose("alias %d for utf-8: %s\n", i, alias);
+                    log_verbose("alias %d for utf-8: %s\n", aliasNum, alias);
                 }
             }
             if(U_SUCCESS(err)) {
@@ -246,13 +245,13 @@ static void TestConvert()
                     if(U_FAILURE(err)) {
                         log_err("FAILURE! ucnv_getAliases(\"utf-8\") -> %s\n", myErrorName(err));
                     } else {
-                        for(i = 0; i < count; ++i) {
+                        for(aliasNum = 0; aliasNum < count; ++aliasNum) {
                             /* compare the pointers with the ones returned individually */
-                            alias = ucnv_getAlias("utf-8", i, &err);
+                            alias = ucnv_getAlias("utf-8", aliasNum, &err);
                             if(U_FAILURE(err)) {
-                                log_err("FAILURE! ucnv_getAlias(\"utf-8\", %d) -> %s\n", i, myErrorName(err));
-                            } else if(aliases[i] != alias) {
-                                log_err("FAILURE! ucnv_getAliases(\"utf-8\")[%d] != ucnv_getAlias(\"utf-8\", %d)\n", i, i);
+                                log_err("FAILURE! ucnv_getAlias(\"utf-8\", %d) -> %s\n", aliasNum, myErrorName(err));
+                            } else if(aliases[aliasNum] != alias) {
+                                log_err("FAILURE! ucnv_getAliases(\"utf-8\")[%d] != ucnv_getAlias(\"utf-8\", %d)\n", aliasNum, aliasNum);
                             }
                         }
                     }
@@ -475,7 +474,7 @@ static void TestConvert()
        
     for (codepage_index=0; codepage_index <  NUM_CODEPAGE; ++codepage_index)
     {
-        i = 0;  
+        int32_t i = 0;  
     
         strcpy(ucs_file_name, ctest_getTestDirectory());
         strcat(ucs_file_name, CodePagesTestFiles[codepage_index]);
@@ -973,6 +972,7 @@ static void TestConvert()
     free((void*)my_ucs_file_buffer);
 }
 
+#if 0
 static void WriteToFile(const UChar *a, FILE *myfile)
 {
     uint32_t  size    = u_strlen(a);
@@ -987,6 +987,7 @@ static void WriteToFile(const UChar *a, FILE *myfile)
         fwrite(&b, sizeof(UChar), 1, myfile);
     }
 }
+#endif
 
 static int32_t strCaseIcmp(const char* a1, const char * a2)
 {
