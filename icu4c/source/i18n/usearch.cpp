@@ -962,22 +962,24 @@ UBool checkNextExactMatch(UStringSearch *strsrch, UTextOffset *textoffset,
 inline UTextOffset getPreviousBaseOffset(const UChar       *text, 
                                                UTextOffset  textoffset)
 {
-    UChar32     codepoint; 
-    UTextOffset result;
-    UTextOffset temp;
-    while (TRUE) {
-        if (textoffset == 0) {
-            return 0;
-        }
-        result = textoffset;
-        UTF_PREV_CHAR(text, 0, textoffset, codepoint);
-        temp = textoffset;
-        uint16_t fcd = getFCD(text, &temp, result);
-        if ((fcd >> SECOND_LAST_BYTE_SHIFT_) == 0) {
-            if (fcd & LAST_BYTE_MASK_) {
-                return textoffset;
+    if (textoffset > 0) {
+        UChar32     codepoint; 
+        UTextOffset result;
+        UTextOffset temp;
+        while (TRUE) {
+            if (textoffset == 0) {
+                return 0;
             }
-            return result;
+            result = textoffset;
+            UTF_PREV_CHAR(text, 0, textoffset, codepoint);
+            temp = textoffset;
+            uint16_t fcd = getFCD(text, &temp, result);
+            if ((fcd >> SECOND_LAST_BYTE_SHIFT_) == 0) {
+                if (fcd & LAST_BYTE_MASK_) {
+                    return textoffset;
+                }
+                return result;
+            }
         }
     }
     return 0;
