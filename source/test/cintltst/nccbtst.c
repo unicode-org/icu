@@ -180,6 +180,37 @@ void TestSkip(int32_t inputsize, int32_t outputsize)
 	        (UConverterToUCallback)UCNV_TO_U_CALLBACK_SKIP, fromIBM930Offs ))
 		log_err("ibm-930->u with skip did not match.\n");
 
+   log_verbose("Testing toUnicode with UCNV_TO_U_CALLBACK_SKIP \n");
+    {
+         /*ibm-954*/
+        const char sampleTxt_UC_JP[]={ (char)0x61, (char)0xa1, (char)0xb8, (char)0x8f, (char)0xf4, (char)0xae,
+            (char)0x8f, (char)0xda, (char)0xa1,  /*unassigned*/
+           (char)0x8e, (char)0xe0,
+        };
+        UChar UC_JPtoUnicode[]={ 0x0061, 0x4edd, 0x5bec, 0x00a2};
+        int32_t fromUC_JPOffs [] ={ 0, 1, 3, 9};
+
+        /*LMBCS*/
+        const char sampleTxtLMBCS[]={ (char)0x12, (char)0xc9, (char)0x50, 
+            (char)0x12, (char)0x92, (char)0xa0, /*unassigned*/
+            (char)0x12, (char)0x92, (char)0xA1,
+        };
+        UChar LMBCSToUnicode[]={ 0x4e2e, 0xe5c4};
+        int32_t fromLMBCS[] = {0, 6};
+
+
+        if(!testConvertToUnicode(sampleTxt_UC_JP, sizeof(sampleTxt_UC_JP),
+			     UC_JPtoUnicode, sizeof(UC_JPtoUnicode)/sizeof(UC_JPtoUnicode[0]),"ibm-954",
+	            (UConverterToUCallback)UCNV_TO_U_CALLBACK_SKIP, fromUC_JPOffs ))
+		    log_err("ibm-954->u with skip did not match.\n");
+
+        if(!testConvertToUnicode(sampleTxtLMBCS, sizeof(sampleTxtLMBCS),
+			    LMBCSToUnicode, sizeof(LMBCSToUnicode)/sizeof(LMBCSToUnicode[0]),"LMBCS-1",
+	            (UConverterToUCallback)UCNV_TO_U_CALLBACK_SKIP, fromLMBCS ))
+		    log_err("LMBCS->u with skip did not match.\n");
+
+    }
+
 }
 void TestStop(int32_t inputsize, int32_t outputsize)
 {
@@ -226,7 +257,7 @@ void TestStop(int32_t inputsize, int32_t outputsize)
 
 	/*to Unicode*/
 	if(!testConvertToUnicode(expstopIBM_949, sizeof(expstopIBM_949),
-			 IBM_949stoptoUnicode, sizeof(IBM_949stoptoUnicode)/sizeof(IBM_949stoptoUnicode),"ibm-949",
+			 IBM_949stoptoUnicode, sizeof(IBM_949stoptoUnicode)/sizeof(IBM_949stoptoUnicode[0]),"ibm-949",
 	        (UConverterToUCallback)UCNV_TO_U_CALLBACK_STOP, fromIBM949Offs ))
 		log_err("ibm-949->u with stop did not match.\n");
     if(!testConvertToUnicode(expstopIBM_943, sizeof(expstopIBM_943),
@@ -237,6 +268,22 @@ void TestStop(int32_t inputsize, int32_t outputsize)
 			 IBM_930stoptoUnicode, sizeof(IBM_930stoptoUnicode)/sizeof(IBM_930stoptoUnicode[0]),"ibm-930",
 	        (UConverterToUCallback)UCNV_TO_U_CALLBACK_STOP, fromIBM930Offs ))
 		log_err("ibm-930->u with stop did not match.\n");
+
+     log_verbose("Testing toUnicode with UCNV_TO_U_CALLBACK_STOP \n");
+    {
+         /*ibm-954*/
+        const char sampleTxt_UC_JP[]={ (char)0x61, (char)0xa1, (char)0xb8, (char)0x8f, (char)0xf4, (char)0xae,
+            (char)0x8f, (char)0xda, (char)0xa1,  /*unassigned*/
+           (char)0x8e, (char)0xe0,
+        };
+        UChar UC_JPtoUnicode[]={ 0x0061, 0x4edd, 0x5bec};
+        int32_t fromUC_JPOffs [] ={ 0, 1, 3};
+
+        if(!testConvertToUnicode(sampleTxt_UC_JP, sizeof(sampleTxt_UC_JP),
+			 UC_JPtoUnicode, sizeof(UC_JPtoUnicode)/sizeof(UC_JPtoUnicode[0]),"ibm-954",
+	        (UConverterToUCallback)UCNV_TO_U_CALLBACK_STOP, fromUC_JPOffs ))
+		log_err("ibm-954->u with stop did not match.\n");
+    }
 
 }
 void TestSub(int32_t inputsize, int32_t outputsize)
@@ -296,19 +343,30 @@ void TestSub(int32_t inputsize, int32_t outputsize)
 	        (UConverterToUCallback)UCNV_TO_U_CALLBACK_SUBSTITUTE, fromIBM930Offs ))
 		log_err("ibm-930->u with substitute did not match.\n");
 
+    log_verbose("Testing toUnicode with UCNV_TO_U_CALLBACK_SUBSTITUTE \n");
+    {
+        /*ibm-954*/
+        const char sampleTxt_UC_JP[]={ (char)0x61, (char)0xa1, (char)0xb8, (char)0x8f, (char)0xf4, (char)0xae,
+            (char)0x8f, (char)0xda, (char)0xa1,  /*unassigned*/
+           (char)0x8e, (char)0xe0,
+        };
+        UChar UC_JPtoUnicode[]={ 0x0061, 0x4edd, 0x5bec, 0xfffd, 0x00a2 };
+        int32_t fromUC_JPOffs [] ={ 0, 1, 3, 6,  9,
+        };
+        if(!testConvertToUnicode(sampleTxt_UC_JP, sizeof(sampleTxt_UC_JP),
+			 UC_JPtoUnicode, sizeof(UC_JPtoUnicode)/sizeof(UC_JPtoUnicode[0]),"ibm-954",
+	        (UConverterToUCallback)UCNV_TO_U_CALLBACK_SUBSTITUTE, fromUC_JPOffs ))
+		log_err("ibm-954->u with substitute with value did not match.\n");
+
+    }
+
+
 }
 
 void TestSubWithValue(int32_t inputsize, int32_t outputsize)
 {
     UChar	sampleText[] =  { 0x0000, 0xAC00, 0xAC01, 0xEF67, 0xD700 };
 	UChar  sampleText2[] =  { 0x6D63, 0x6D64, 0x6D65, 0x6D66 };
-	
-	const char sampleTxtToU[]= { (char)0x00, (char)0x9f, (char)0xaf, (char)0xff, (char)0x89, (char)0xd3 };
-	
-	UChar IBM_943toUnicode[] = { 0x0000, 0x6D63, 0x25, 0x58, 0x46, 0x46, 0x6D66};
-	
-	int32_t  fromIBM943Offs [] = 	{ 0, 1, 3, 3, 3, 3, 4};
-    
 	
 	const char expsubwvalIBM_949[]=	{ 
         (char)0x00, (char)0xb0, (char)0xa1, (char)0xb0, (char)0xa2,
@@ -344,11 +402,64 @@ void TestSubWithValue(int32_t inputsize, int32_t outputsize)
 			(UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, toIBM930Offs ))
 		log_err("u-> ibm-930 with subst with value did not match.\n(needs fix for j344 and general callback cleanup.)\n");
   
-	/*to Unicode*/
-	if(!testConvertToUnicode(sampleTxtToU, sizeof(sampleTxtToU),
-			 IBM_943toUnicode, sizeof(IBM_943toUnicode)/sizeof(IBM_943toUnicode),"ibm-943",
-	        (UConverterToUCallback)UCNV_TO_U_CALLBACK_ESCAPE, fromIBM943Offs ))
-		log_err("ibm-943->u with substitute did not match.\n");
+	log_verbose("Testing toUnicode with UCNV_FROM_U_CALLBACK_ESCAPE \n");
+    /*to Unicode*/
+    {
+        const char sampleTxtToU[]= { (char)0x00, (char)0x9f, (char)0xaf, 
+            (char)0x81, (char)0xad, /*unassigned*/
+            (char)0x89, (char)0xd3 };
+	    UChar IBM_943toUnicode[] = { 0x0000, 0x6D63, 
+            0x25, 0x58, 0x38, 0x31, 0x25, 0x58, 0x41, 0x44,
+            0x7B87};
+        int32_t  fromIBM943Offs [] = 	{ 0, 1, 3, 3, 3, 3, 3, 3, 3, 3, 5};
+
+        /*ibm-954*/
+        const char sampleTxt_UC_JP[]={ (char)0x61, (char)0xa1, (char)0xb8, (char)0x8f, (char)0xf4, (char)0xae,
+            (char)0x8f, (char)0xda, (char)0xa1,  /*unassigned*/
+           (char)0x8e, (char)0xe0,
+        };
+        UChar UC_JPtoUnicode[]={ 0x0061, 0x4edd, 0x5bec,
+            0x25, 0x58, 0x38, 0x46, 0x25, 0x58, 0x44, 0x41, 0x25, 0x58, 0x41, 0x31, 
+            0x00a2 };
+        int32_t fromUC_JPOffs [] ={ 0, 1, 3, 
+            6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+            9,
+        };
+       
+        /*LMBCS*/
+        const char sampleTxtLMBCS[]={ (char)0x12, (char)0xc9, (char)0x50, 
+            (char)0x12, (char)0x92, (char)0xa0, /*unassigned*/
+            (char)0x12, (char)0x92, (char)0xa1,
+        };
+        UChar LMBCSToUnicode[]={ 0x4e2e, 
+            0x25, 0x58, 0x31, 0x32, 0x25, 0x58, 0x39, 0x32, 0x25, 0x58, 0x41, 0x30, 
+            0xe5c4, };
+        int32_t fromLMBCS[] = {0, 
+            3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+            6, };
+       
+        
+        if(!testConvertToUnicode(sampleTxtToU, sizeof(sampleTxtToU),
+		         IBM_943toUnicode, sizeof(IBM_943toUnicode)/sizeof(IBM_943toUnicode[0]),"ibm-943",
+	            (UConverterToUCallback)UCNV_TO_U_CALLBACK_ESCAPE, fromIBM943Offs ))
+		    log_err("ibm-943->u with substitute with value did not match.\n");
+
+        if(!testConvertToUnicode(sampleTxt_UC_JP, sizeof(sampleTxt_UC_JP),
+		         UC_JPtoUnicode, sizeof(UC_JPtoUnicode)/sizeof(UC_JPtoUnicode[0]),"ibm-954",
+	            (UConverterToUCallback)UCNV_TO_U_CALLBACK_ESCAPE, fromUC_JPOffs))
+		    log_err("ibm-954->u with substitute with value did not match.\n");
+
+        /*got to confirm this*/
+#if 0        
+        if(!testConvertToUnicode(sampleTxtLMBCS, sizeof(sampleTxtLMBCS),
+			    LMBCSToUnicode, sizeof(LMBCSToUnicode)/sizeof(LMBCSToUnicode[0]),"LMBCS",
+	            (UConverterToUCallback)UCNV_TO_U_CALLBACK_ESCAPE, fromLMBCS ))
+		    log_err("LMBCS->u with substitute with value did not match.\n"); 
+            
+#endif
+
+
+    }
 }
 void TestLegalAndOthers(int32_t inputsize, int32_t outputsize)
 {
@@ -506,7 +617,9 @@ UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const char *ex
       /*check for an INVALID character for testing the call back function STOP*/
 	 if(status == U_INVALID_CHAR_FOUND || status == U_ILLEGAL_CHAR_FOUND  )
      {
-		for(p = junkout;p<targ;p++)
+		junk[0] = 0;
+		offset_str[0] = 0;
+        for(p = junkout;p<targ;p++)
 		  sprintf(junk + strlen(junk), "0x%02x, ", (0xFF) & (unsigned int)*p);
 		/*		printSeqErr(junkout, expectlen);*/
 		if(!memcmp(junkout, expect, expectLen))
@@ -530,7 +643,7 @@ UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const char *ex
 	
 	if(U_FAILURE(status))
 	{
-		log_err("Problem doing toUnicode, errcode %d %s\n", myErrorName(status), gNuConvTestName);
+		log_err("Problem doing toUnicode, errcode %s %s\n", myErrorName(status), gNuConvTestName);
 		return FALSE;
 	}
    	
@@ -695,7 +808,9 @@ UBool testConvertToUnicode( const char *source, int sourcelen, const UChar *expe
          /*check for an INVALID character for testing the call back function STOP*/
 	if(status == U_INVALID_CHAR_FOUND || status == U_ILLEGAL_CHAR_FOUND )
 	{
-		for(p = junkout;p<targ;p++)
+		junk[0] = 0;
+		offset_str[0] = 0;
+        for(p = junkout;p<targ;p++)
 		  sprintf(junk + strlen(junk), "0x%04x, ", (0xFFFF) & (unsigned int)*p);
 		/*		printUSeqErr(junkout, expectlen);*/
 		if(!memcmp(junkout, expect, expectlen*2))
@@ -708,8 +823,8 @@ UBool testConvertToUnicode( const char *source, int sourcelen, const UChar *expe
 		{	
 		log_err("String does not match. %s\n", gNuConvTestName);
 		log_verbose("String does not match. %s\n", gNuConvTestName);
-		printUSeq(junkout, expectlen);
-		printUSeq(expect, expectlen);
+		printUSeqErr(junkout, expectlen);
+		printUSeqErr(expect, expectlen);
     	ucnv_close(conv);
 		return FALSE;
 		}
@@ -738,12 +853,12 @@ UBool testConvertToUnicode( const char *source, int sourcelen, const UChar *expe
            }
         }
      }
-  } while ( (status == U_INDEX_OUTOFBOUNDS_ERROR) || (srcLimit < realSourceEnd) ); /* while we just need another buffer */
+  } while ( (status == U_INDEX_OUTOFBOUNDS_ERROR) || (U_SUCCESS(status) && (srcLimit < realSourceEnd)) ); /* while we just need another buffer */
 
     
 	if(U_FAILURE(status))
 	{
-		log_err("Problem doing toUnicode, errcode %d %s\n", myErrorName(status), gNuConvTestName);
+		log_err("Problem doing toUnicode, errcode %s %s\n", myErrorName(status), gNuConvTestName);
 		return FALSE;
 	}
 
@@ -804,8 +919,8 @@ UBool testConvertToUnicode( const char *source, int sourcelen, const UChar *expe
 	{	
 		log_err("String does not match. %s\n", gNuConvTestName);
 		log_verbose("String does not match. %s\n", gNuConvTestName);
-		printUSeq(junkout, expectlen);
-		printUSeq(expect, expectlen);
+		printUSeqErr(junkout, expectlen);
+		printUSeqErr(expect, expectlen);
 		return FALSE;
 	}
 }
