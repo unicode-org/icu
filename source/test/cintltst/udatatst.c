@@ -1380,6 +1380,11 @@ static const struct {
 };
 #endif
 
+static const UChar gOffsetTOCGarbage[] = { /* "I have been very naughty!" */
+    0x49, 0x20, 0x68, 0x61, 0x76, 0x65, 0x20, 0x62, 0x65, 0x65, 0x6E,
+    0x20, 0x76, 0x65, 0x72, 0x79, 0x20, 0x6E, 0x61, 0x75, 0x67, 0x68, 0x74, 0x79, 0x21
+};
+
 /* Original source: icu/source/tools/genccode */
 static const struct {
     uint16_t headerSize;
@@ -1390,7 +1395,7 @@ static const struct {
     const struct {
         const char *const name; 
         const void *const data;
-    } toc[1];
+    } toc[2];
 } gOffsetTOCAppData_dat = {
     32,          /* headerSize */
     0xda,        /* magic1,  (see struct MappedData in udata.c)  */
@@ -1408,10 +1413,11 @@ static const struct {
            {0, 0, 0, 0}    /* dataVersion   */
     },
     {0,0,0,0,0,0,0,0},  /* Padding[8]   */ 
-    1,                  /* count        */
+    2,                  /* count        */
     0,                  /* Reserved     */
     {                   /*  TOC structure */
-        { "OffsetTOCAppData/gOffsetTOCAppDataItem1", &gOffsetTOCAppDataItem1 }
+        { "OffsetTOCAppData/gOffsetTOCAppDataItem1", &gOffsetTOCAppDataItem1 },
+        { "OffsetTOCAppData/gOffsetTOCGarbage", &gOffsetTOCGarbage }
     }
 };
 
@@ -1434,7 +1440,7 @@ static void PointerTableOfContents() {
 
     dataItem = udata_open("OffsetTOCAppData", "", "gOffsetTOCAppDataItem1", &status);
     if (U_FAILURE(status)) {
-        log_err("FAIL: OffsetTOCAppData could not be opened. status = %s\n", u_errorName(status));
+        log_err("FAIL: gOffsetTOCAppDataItem1 could not be opened. status = %s\n", u_errorName(status));
     }
     if (udata_getMemory(dataItem) != NULL) {
         log_verbose("FAIL: udata_getMemory(dataItem) passed\n");
@@ -1443,6 +1449,15 @@ static void PointerTableOfContents() {
         log_err("FAIL: udata_getMemory returned NULL\n", u_errorName(status));
     }
     udata_close(dataItem);
+
+    dataItem = udata_open("OffsetTOCAppData", "", "gOffsetTOCGarbage", &status);
+    if (U_SUCCESS(status)) {
+        log_err("FAIL: gOffsetTOCGarbage should not be opened. status = %s\n", u_errorName(status));
+    }
+    dataItem = udata_open("OffsetTOCAppData", "", "gOffsetTOCNonExistent", &status);
+    if (U_SUCCESS(status)) {
+        log_err("FAIL: gOffsetTOCNonExistent should not be found. status = %s\n", u_errorName(status));
+    }
 
 }
 
