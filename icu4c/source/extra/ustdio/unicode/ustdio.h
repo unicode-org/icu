@@ -52,7 +52,8 @@
  * This library does buffering. The OS should do this for us already. Check on
     this, and remove it from this library, if this is the case. Double buffering
     wastes a lot of time and space.
- * Make sure that surrogates are supported.
+ * Make sure that surrogates are supported. It doesn't look like %[], %s or %U
+    properly handle surrogates in both scanf()'s.
  * The ustream header should also include operator<< and
     operator>> for UDate (not double). This may not work on some compilers
     that use these operators on a double.
@@ -81,11 +82,23 @@
     is put back, when its called multiple times in a row, or when
     a its called without a read operation.
  * u_fflush() and u_fclose should return an int32_t like C99 functions.
-   0 is returned if the operation was successful and EOF otherwise.
+    0 is returned if the operation was successful and EOF otherwise.
  * u_fsettransliterator does not support U_READ side of transliteration.
  * The format specifier should limit the size of a format or honor it in
-   order to prevent buffer overruns.  (e.g. %1000.1000d).
+    order to prevent buffer overruns.  (e.g. %1000.1000d).
  * u_fgets is different from stdio. The UChar and UFile arguments are swapped.
+ * u_fread and u_fwrite don't exist. They're needed for reading and writing
+    data structures without any conversion.
+ * u_file_read and u_file_write are used for writing strings. u_fgets and
+    u_fputs or u_fread and u_fwrite should be used to do this.
+ * u_fgetcx isn't really needed anymore because the transliterator is a
+    part of the file API. It allows multiple kinds of escape sequences
+    to be unescaped.
+ * We should consider using a UnicodeSet for scanset.
+ * scanset has a buffer overflow and underflow bug for both string and file
+    APIs.
+ * The width '*' parameter for all scanf formats, including scanset, needs
+    better testing. This prevents buffer overflows.
  * More testing is needed.
 */
 
