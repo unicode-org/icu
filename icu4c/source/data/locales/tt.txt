@@ -47,7 +47,7 @@ tt{
   ""
  }
 
- MonthAbbreviation{
+ MonthAbbreviations{
   "\u0413\u044B\u0439\u043D\u0432",
   "\u0424\u0435\u0432",
   "\u041C\u0430\u0440",

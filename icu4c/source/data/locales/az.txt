@@ -47,7 +47,7 @@ az{
   ""
  }
 
- MonthAbbreviation{
+ MonthAbbreviations{
   "\u0408\u0430\u043D",
   "\u0424\u0435\u0432",
   "\u041C\u0430\u0440",
