@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/demo/components/Attic/DumbTextComponent.java,v $ 
- * $Date: 2001/11/29 01:21:13 $ 
- * $Revision: 1.3 $
+ * $Date: 2001/11/29 17:28:37 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -143,7 +143,7 @@ public class DumbTextComponent extends Canvas
 	}
 
     public void select(MouseEvent e, boolean first) {
-        activeStart = -1;
+        setKeyStart(-1);
 	    point2Offset(e.getPoint(), tempSelection);
         if (first) {
             if ((e.getModifiers() & InputEvent.SHIFT_MASK) == 0) {
@@ -169,7 +169,7 @@ public class DumbTextComponent extends Canvas
         switch (code) {
         case KeyEvent.VK_Q:
             if (!ctrl || !editable) break;
-            activeStart = -1;
+            setKeyStart(-1);
             fixHex();
             break;
         case KeyEvent.VK_V:
@@ -195,23 +195,23 @@ public class DumbTextComponent extends Canvas
             break;
         case KeyEvent.VK_A:
             if (!ctrl) break;
-            activeStart = -1;
+            setKeyStart(-1);
             select(Integer.MAX_VALUE, 0, false);
             break;
         case KeyEvent.VK_RIGHT:
-            activeStart = -1;
+            setKeyStart(-1);
             tempSelection.set(selection);
             tempSelection.nextBound(ctrl ? wordBreaker : charBreaker, +1, shift);
             select(tempSelection);
             break;
         case KeyEvent.VK_LEFT:
-            activeStart = -1;
+            setKeyStart(-1);
             tempSelection.set(selection);
             tempSelection.nextBound(ctrl ? wordBreaker : charBreaker, -1, shift);
             select(tempSelection);
             break;
         case KeyEvent.VK_UP: // LIU: Add support for up arrow
-            activeStart = -1;
+            setKeyStart(-1);
             tempSelection.set(selection);
             tempSelection.caret = lineDelta(tempSelection.caret, -1);
             if (!shift) {
@@ -220,7 +220,7 @@ public class DumbTextComponent extends Canvas
             select(tempSelection);
             break;
         case KeyEvent.VK_DOWN: // LIU: Add support for down arrow
-            activeStart = -1;
+            setKeyStart(-1);
             tempSelection.set(selection);
             tempSelection.caret = lineDelta(tempSelection.caret, +1);
             if (!shift) {
@@ -230,7 +230,7 @@ public class DumbTextComponent extends Canvas
             break;
         case KeyEvent.VK_DELETE: // LIU: Add delete key support
             if (!editable) break;
-            activeStart = -1;
+            setKeyStart(-1);
             if (contents.length() == 0) break;
             start = selection.getStart();
             end = selection.getEnd();
@@ -308,7 +308,7 @@ public class DumbTextComponent extends Canvas
         case KeyEvent.CHAR_UNDEFINED:
             break;
         case KeyEvent.VK_BACK_SPACE:
-            activeStart = -1;
+            setKeyStart(-1);
             if (!editable) break;
             if (contents.length() == 0) break;
             start = selection.getStart();
@@ -323,7 +323,7 @@ public class DumbTextComponent extends Canvas
             replaceRange("", start, end);
             break;        
         case KeyEvent.VK_DELETE:
-            activeStart = -1;
+            setKeyStart(-1);
             if (!editable) break;
             if (contents.length() == 0) break;
             start = selection.getStart();
@@ -351,7 +351,10 @@ public class DumbTextComponent extends Canvas
     }
     
     protected void setKeyStart(int keyStart) {
-        activeStart = keyStart;
+        if (activeStart != keyStart) {
+            activeStart = keyStart;
+            repaint(10);
+        }
     }
     
     protected int getKeyStart() {
