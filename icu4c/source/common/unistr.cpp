@@ -137,7 +137,7 @@ UnicodeString::UnicodeString(int32_t capacity, UChar32 c, int32_t count)
         // 1 is handled above
         while(i < length) {
           int32_t unitIdx = 0;
-          while(unitIdx < UTF_MAX_CHAR_LENGTH) {
+          while(unitIdx < unitCount) {
             fArray[i++]=units[unitIdx++];
           }
         }
