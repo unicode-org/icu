@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateCaseFolding.java,v $
-* $Date: 2002/03/20 00:21:43 $
-* $Revision: 1.7 $
+* $Date: 2002/03/22 22:08:53 $
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -85,11 +85,15 @@ public class GenerateCaseFolding implements UCD_Types {
             if (rFull != null && rFull.equals(rSimple) 
               || (PICK_SHORT && UTF16.countCodePoint(rFull) == 1)) {
                 String type = "C";
-                if (ch == 0x130) {
+                if (ch == 0x49) {
+                	drawLine(out, ch, "C", "i");
+                	drawLine(out, ch, "T", "\u0131");
+                } else if (ch == 0x130) {
                 	drawLine(out, ch, "F", "i\u0307");
-                	drawLine(out, ch, "I", "\u0130");
+                	drawLine(out, ch, "T", "i");
                 } else if (ch == 0x131) {
-                	drawLine(out, ch, "I", "i");
+                	// do nothing
+                	//drawLine(out, ch, "I", "i");
                 } else {
                 	drawLine(out, ch, type, rFull);
                 }
@@ -106,6 +110,15 @@ public class GenerateCaseFolding implements UCD_Types {
         log.close();
         Utility.renameIdentical(mostRecent, Utility.getOutputName(newFile));
     }
+    
+/* Goal is following (with no entries for 0131 or 0069)
+    
+0049; C; 0069; # LATIN CAPITAL LETTER I
+0049; T; 0131; # LATIN CAPITAL LETTER I
+
+0130; F; 0069 0307; # LATIN CAPITAL LETTER I WITH DOT ABOVE
+0130; T; 0069; # LATIN CAPITAL LETTER I WITH DOT ABOVE
+*/
 
     static void drawLine(PrintWriter out, int ch, String type, String result) {
         String comment = "";
