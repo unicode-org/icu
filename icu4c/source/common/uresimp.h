@@ -19,8 +19,6 @@
 #include "umutex.h"
 
 #define kRootLocaleName         "root"
-#define kIndexLocaleName        "index"
-#define kIndexTag               "InstalledLocales"
 
 /*
  The default minor version and the version separator must be exactly one

@@ -18,6 +18,8 @@
 #define U_SCRIPT_NAMES_ARRAY_SIZE 38
 #define U_SCRIPT_ABBR_ARRAY_SIZE 41
 
+static const char kLocaleScript[] = "LocaleScript";
+
 static const char * const scriptNames[]={
         "ARABIC",     /* U_ARABIC     */
         "ARMENIAN",   /* U_ARMENIAN   */
@@ -337,7 +339,7 @@ uchar_getScriptCode(const char* nameOrAbbrOrLocale, UErrorCode* err){
         UResourceBundle* resB = ures_open(u_getDataDirectory(),nameOrAbbrOrLocale,err);
         if(U_SUCCESS(*err)&& *err != U_USING_DEFAULT_ERROR){
             int32_t len=0;
-            UResourceBundle* resD = ures_getByKey(resB,"LocaleScript",NULL,err);
+            UResourceBundle* resD = ures_getByKey(resB,kLocaleScript,NULL,err);
             int index =0;
             const UChar* name = ures_getStringByIndex(resD,0,&len,err);
             if(U_SUCCESS(*err) ){
