@@ -18,6 +18,8 @@
 #                                   x      free spacing and comments
 #                                   s      dot-matches-all mode
 #                                   m      multi-line mode.  $ and ^ match at embedded new-lines
+#                                   v      If icu configured without break iteration, this
+#                                          regex test pattern should not compile.
 #                                   d      dump the compiled pattern
 #                                   t      trace operation of match engine.
 #                                 White space must be present between the flags and the match string.
@@ -83,14 +85,14 @@
 #
 #  Unicode word boundary mode
 #
-"(?w).*?\b"                          "<0></0>hello, world"
-"(?w).*?(\b.+?\b).*"                 "<0><1> </1> 123.45   </0>"
-"(?w).*?(\b\d.*?\b).*"               "<0>  <1>123.45</1>   </0>"
+"(?w).*?\b"                      v   "<0></0>hello, world"
+"(?w).*?(\b.+?\b).*"             v   "<0><1> </1> 123.45   </0>"
+"(?w).*?(\b\d.*?\b).*"           v   "<0>  <1>123.45</1>   </0>"
 ".*?(\b.+?\b).*"                     "<0>  <1>123</1>.45   </0>"
-"(?w:.*?(\b\d.*?\b).*)"              "<0>  <1>123.45</1>   </0>"
-"(?w:.*?(\b.+?\b).*)"                "<0><1>don't</1>   </0>"
-"(?w:.+?(\b\S.+?\b).*)"              "<0>  <1>don't</1>   </0>"
-"(?w:(\b.+?)(\b.+?)(\b.+?)(\b.+?)(\b.+?)(\b.+?)(\b.+?).*)"       "<0><1>.</1><2> </2><3>,</3><4>:</4><5>$</5><6>37,000.50</6><7> </7>   </0>"
+"(?w:.*?(\b\d.*?\b).*)"          v   "<0>  <1>123.45</1>   </0>"
+"(?w:.*?(\b.+?\b).*)"            v   "<0><1>don't</1>   </0>"
+"(?w:.+?(\b\S.+?\b).*)"          v   "<0>  <1>don't</1>   </0>"
+"(?w:(\b.+?)(\b.+?)(\b.+?)(\b.+?)(\b.+?)(\b.+?)(\b.+?).*)"     v "<0><1>.</1><2> </2><3>,</3><4>:</4><5>$</5><6>37,000.50</6><7> </7>   </0>"
 
 
 # . does not match new-lines
