@@ -401,16 +401,23 @@ import java.io.ObjectInputStream;
  * notation</em>, in which the exponent is a multiple of three, e.g.,
  * "##0.###E0".  The number 12345 is formatted using "##0.####E0" as "12.345E3".
  *
- * <li>If significant digits are not being used, then the number of significant
- * digits is the sum of the <em>minimum integer</em> and <em>maximum
- * fraction</em> digits, and is unaffected by the maximum integer digits.  If
- * this sum is zero, then all significant digits are shown.  The number of
- * significant digits limits the total number of integer and fraction digits
- * that will be shown in the mantissa; it does not affect parsing.  For example,
- * 12345 formatted with "##0.##E0" is "12.3E3".
+ * <li>When using scientific notation, the formatter controls the
+ * digit counts using significant digits logic.  The maximum number of
+ * significant digits limits the total number of integer and fraction
+ * digits that will be shown in the mantissa; it does not affect
+ * parsing.  For example, 12345 formatted with "##0.##E0" is "12.3E3".
+ * See the section on significant digits for more details.
  *
- * <li>If significant digits are being used, then the number of significant
- * digits is specified directly by the pattern. In this case, the number of
+ * <li>The number of significant digits shown is determined as
+ * follows: If areSignificantDigitsUsed() returns false, then the
+ * minimum number of significant digits shown is one, and the maximum
+ * number of significant digits shown is the sum of the <em>minimum
+ * integer</em> and <em>maximum fraction</em> digits, and is
+ * unaffected by the maximum integer digits.  If this sum is zero,
+ * then all significant digits are shown.  If
+ * areSignificantDigitsUsed() returns true, then the significant digit
+ * counts are specified by getMinimumSignificantDigits() and
+ * getMaximumSignificantDigits().  In this case, the number of
  * integer digits is fixed at one, and there is no exponent grouping.
  *
  * <li>Exponential patterns may not contain grouping separators.
@@ -420,38 +427,71 @@ import java.io.ObjectInputStream;
  * <strong><font face=helvetica color=red>NEW</font></strong>
  * Significant Digits</h4></a>
  *
- * <p><code>DecimalFormat</code> supports significant digits patterns.
- * Rather than specifying integer and fraction digit counts, these specify
- * a minimum and maximum number of significant digits.  These are indicated
- * by the <code>'@'</code> and <code>'#'</code> characters. Each formatter
- * object is in one of two modes, in this regard. Either (a) it uses
- * significant digits, or (b) it uses the integer and fraction digit
- * counts.
+ * <code>DecimalFormat</code> has two ways of controlling how many
+ * digits are shows: (a) significant digits counts, or (b) integer and
+ * fraction digit counts.  Integer and fraction digit counts are
+ * described above.  When a formatter is using significant digits
+ * counts, the number of integer and fraction digits is not specified
+ * directly, and the formatter settings for these counts are ignored.
+ * Instead, the formatter uses however many integer and fraction
+ * digits are required to display the specified number of significant
+ * digits.  Examples:
+ *
+ * <blockquote>
+ * <table border=0 cellspacing=3 cellpadding=0>
+ *   <tr bgcolor="#ccccff">
+ *     <th align=left>Pattern
+ *     <th align=left>Minimum significant digits
+ *     <th align=left>Maximum significant digits
+ *     <th align=left>Number
+ *     <th align=left>Output of format()
+ *   <tr valign=top>
+ *     <td><code>@@@</code>
+ *     <td>3
+ *     <td>3
+ *     <td>12345
+ *     <td><code>12300</code>
+ *   <tr valign=top bgcolor="#eeeeff">
+ *     <td><code>@@@</code>
+ *     <td>3
+ *     <td>3
+ *     <td>0.12345
+ *     <td><code>0.123</code>
+ *   <tr valign=top>
+ *     <td><code>@@##</code>
+ *     <td>2
+ *     <td>4
+ *     <td>3.14159
+ *     <td><code>3.142</code>
+ *   <tr valign=top bgcolor="#eeeeff">
+ *     <td><code>@@##</code>
+ *     <td>2
+ *     <td>4
+ *     <td>1.23004
+ *     <td><code>1.23</code>
+ * </table>
+ * </blockquote>
  *
  * <ul>
- * <li>In order to enable significant digits formatting, use a pattern
- * containing the <code>'@'</code> pattern character.  Alternatively,
- * call {@link #setSignificantDigitsUsed setSignificantDigitsUsed(true)}.
- *
- * <li>In order to disable significant digits formatting, use a
- * pattern containing the <code>'0'</code> pattern
- * character. Alternatively, call {@link #setSignificantDigitsUsed
- * setSignificantDigitsUsed(false)}.
- *
- * <li>If a pattern uses significant digits, it may not contain
- * the <code>'0'</code> character, nor may it include a fraction
- * element.  Patterns such as <code>'@00'</code> or
- * <code>'@.###'</code> are disallowed.
- *
- * <li>The minimum number of significant digits is the number of
- * <code>'@'</code> characters.  The maximum number of significant
+ * <li>Significant digit counts may be expressed using patterns that
+ * specify a minimum and maximum number of significant digits.  These
+ * are indicated by the <code>'@'</code> and <code>'#'</code>
+ * characters.  The minimum number of significant digits is the number
+ * of <code>'@'</code> characters.  The maximum number of significant
  * digits is the number of <code>'@'</code> characters plus the number
  * of <code>'#'</code> characters following on the right.  For
- * example, the pattern <code>'@@@'</code> indicates exactly 3
- * significant digits.  The pattern <code>'@##'</code> indicates from
- * 1 to 3 significant digits.  Trailing zero digits are suppressed
- * after the minimum number of significant digits have been shown.
- * This is similar to the behavior of fraction digits.
+ * example, the pattern <code>"@@@"</code> indicates exactly 3
+ * significant digits.  The pattern <code>"@##"</code> indicates from
+ * 1 to 3 significant digits.  Trailing zero digits to the right of
+ * the decimal separator are suppressed after the minimum number of
+ * significant digits have been shown.  For example, the pattern
+ * <code>"@##"</code> formats the number 0.1203 as
+ * <code>"0.12"</code>.
+ *
+ * <li>If a pattern uses significant digits, it may not contain a
+ * decimal separator, nor the <code>'0'</code> pattern character.
+ * Patterns such as <code>"@00"</code> or <code>"@.###"</code> are
+ * disallowed.
  *
  * <li>Any number of <code>'#'</code> characters may be prepended to
  * the left of the leftmost <code>'@'</code> character.  These have no
@@ -459,6 +499,15 @@ import java.io.ObjectInputStream;
  * may be used to position grouping separators.  For example,
  * <code>"#,#@#"</code> indicates a minimum of one significant digits,
  * a maximum of two significant digits, and a grouping size of three.
+ *
+ * <li>In order to enable significant digits formatting, use a pattern
+ * containing the <code>'@'</code> pattern character.  Alternatively,
+ * call {@link #setSignificantDigitsUsed setSignificantDigitsUsed(true)}.
+ *
+ * <li>In order to disable significant digits formatting, use a
+ * pattern that does not contain the <code>'@'</code> pattern
+ * character. Alternatively, call {@link #setSignificantDigitsUsed
+ * setSignificantDigitsUsed(false)}.
  *
  * <li>The number of significant digits has no effect on parsing.
  *
@@ -470,7 +519,9 @@ import java.io.ObjectInputStream;
  * pattern <code>"@@###E0"</code> is equivalent to <code>"0.0###E0"</code>.
  *
  * <li>If signficant digits are in use, then the integer and fraction
- * digit counts are ignored.
+ * digit counts, as set via the API, are ignored.  If significant
+ * digits are not in use, then the signficant digit counts, as set via
+ * the API, are ignored.
  *
  * </ul>
  * 
