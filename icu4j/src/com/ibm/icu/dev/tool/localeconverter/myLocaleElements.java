@@ -517,9 +517,10 @@ public class myLocaleElements extends ListResourceBundle {
             { "CountryNumber" , ""},
             { "CountryISBNNumber" , ""},
             { "LanguageLibraryUse" , ""},
-            { "PaperSize", new Object[][]{
-                            {"Height",new Integer(0)},
-                            {"Width",new Integer(0)},
+            { "PaperSize", new String[][]{
+                            {"Height",""},
+                            {"Width",""},
+                            {"Units", ""}
                         }
             },
           
