@@ -249,15 +249,15 @@ le_bool GlyphIterator::hasFeatureTag() const
         return true;
     }
 
-	if (glyphTags != NULL) {
-		const LETag *tagList = glyphTags[position];
+    if (glyphTags != NULL) {
+        const LETag *tagList = glyphTags[position];
 
-		for (le_int32 tag = 0; tagList[tag] != emptyTag; tag += 1) {
-			if (tagList[tag] == featureTag) {
-				return true;
-			}
-		}
-	}
+        for (le_int32 tag = 0; tagList[tag] != emptyTag; tag += 1) {
+            if (tagList[tag] == featureTag) {
+                return true;
+            }
+        }
+    }
 
     return false;
 }

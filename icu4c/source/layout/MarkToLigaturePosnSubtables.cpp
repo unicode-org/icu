@@ -65,13 +65,13 @@ le_int32 MarkToLigaturePositioningSubtable::process(GlyphIterator *glyphIterator
     le_int32 markPosition = glyphIterator->getCurrStreamPosition();
     Offset ligatureAttachOffset = SWAPW(ligatureArray->ligatureAttachTableOffsetArray[ligatureCoverage]);
     const LigatureAttachTable *ligatureAttachTable = (const LigatureAttachTable *) ((char *) ligatureArray + ligatureAttachOffset);
-	le_int32 componentCount = SWAPW(ligatureAttachTable->componentCount);
+    le_int32 componentCount = SWAPW(ligatureAttachTable->componentCount);
     le_int32 component = ligatureIterator.getMarkComponent(markPosition);
 
-	if (component >= componentCount) {
-		// should really just bail at this point...
-		component = componentCount - 1;
-	}
+    if (component >= componentCount) {
+        // should really just bail at this point...
+        component = componentCount - 1;
+    }
 
     const ComponentRecord *componentRecord = &ligatureAttachTable->componentRecordArray[component * mcCount];
     Offset anchorTableOffset = SWAPW(componentRecord->ligatureAnchorTableOffsetArray[markClass]);
