@@ -506,7 +506,7 @@ private:
     static void   loadZoneData(void);
 
     // See source file for documentation
-    static bool_t isDataAcceptable(void *context,
+    static bool_t U_CALLCONV isDataAcceptable(void *context,
                                    const char *type, const char *name,
                                    UDataInfo *pInfo);
 
