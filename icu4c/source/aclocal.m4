@@ -250,6 +250,14 @@ AC_DEFUN(AC_CHECK_STRICT_COMPILE,
             *-*-solaris*)
                 CFLAGS="$CFLAGS -D__STDC__=0";;
             esac
+        else
+            case "${host}" in
+            *-*-cygwin)
+                if test "`$CC /help 2>&1 | head -c9`" = "Microsoft"
+                then
+                    CFLAGS="$CFLAGS /W4"
+                fi
+            esac
         fi
         if test "$GXX" = yes
         then
@@ -258,15 +266,15 @@ AC_DEFUN(AC_CHECK_STRICT_COMPILE,
             *-*-solaris*)
                 CXXFLAGS="$CXXFLAGS -D__STDC__=0";;
             esac
+        else
+            case "${host}" in
+            *-*-cygwin)
+                if test "`$CXX /help 2>&1 | head -c9`" = "Microsoft"
+                then
+                    CXXFLAGS="$CXXFLAGS /W4"
+                fi
+            esac
         fi
-        case "${host}" in
-        *-*-cygwin)
-            if test `cl /? 2>&1 | head -c9` = "Microsoft"
-            then
-                CFLAGS="$CFLAGS /W4"
-                CXXFLAGS="$CXXFLAGS /W4"
-            fi
-        esac
     fi
 ])
 
