@@ -41,7 +41,7 @@ LDFLAGS += $(LDFLAGSICUTOOLUTIL)
 CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/tools/ctestfw $(LIBCPPFLAGS)
 LIBS = $(LIBICUUC) $(DEFAULT_LIBS)
 
-OBJECTS = toolutil.o unewdata.o ucm.o ucmstate.o ucmpwrit.o uoptions.o uparse.o ucbuf.o uperf.o
+OBJECTS = propsvec.o toolutil.o unewdata.o ucm.o ucmstate.o ucmpwrit.o uoptions.o uparse.o ucbuf.o uperf.o
 
 STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
 

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002, International Business Machines
+*   Copyright (C) 2002-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -39,31 +39,40 @@
  * but self-contained rows allow to later sort them by contents.
  */
 enum {
+    /* stores number of columns, plus two for start & limit values */
     UPVEC_COLUMNS,
     UPVEC_MAXROWS,
     UPVEC_ROWS,
-    UPVEC_RESERVED,
+    /* search optimization: remember last row seen */
+    UPVEC_PREV_ROW,
     UPVEC_HEADER_LENGTH
 };
 
-U_CFUNC uint32_t *
+U_CAPI uint32_t * U_EXPORT2
 upvec_open(int32_t columns, int32_t maxRows);
 
-U_CFUNC void
+U_CAPI void U_EXPORT2
 upvec_close(uint32_t *pv);
 
-U_CFUNC UBool
+U_CAPI UBool U_EXPORT2
 upvec_setValue(uint32_t *pv,
-               uint32_t start, uint32_t limit,
+               UChar32 start, UChar32 limit,
                int32_t column,
                uint32_t value, uint32_t mask,
                UErrorCode *pErrorCode);
 
-U_CFUNC uint32_t *
-upvec_getRow(uint32_t *pv, int32_t rowIndex,
-             uint32_t *pRangeStart, uint32_t *pRangeLimit);
+U_CAPI uint32_t U_EXPORT2
+upvec_getValue(uint32_t *pv, UChar32 c, int32_t column);
 
-U_CFUNC int32_t
+/*
+ * pRangeStart and pRangeLimit can be NULL.
+ * @return NULL if rowIndex out of range and for illegal arguments
+ */
+U_CAPI uint32_t * U_EXPORT2
+upvec_getRow(uint32_t *pv, int32_t rowIndex,
+             UChar32 *pRangeStart, UChar32 *pRangeLimit);
+
+U_CAPI int32_t U_EXPORT2
 upvec_toTrie(uint32_t *pv, UNewTrie *trie, UErrorCode *pErrorCode);
 
 #endif

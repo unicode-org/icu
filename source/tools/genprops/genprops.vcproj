@@ -149,9 +149,6 @@
 				RelativePath=".\props2.c">
 			</File>
 			<File
-				RelativePath=".\propsvec.c">
-			</File>
-			<File
 				RelativePath=".\store.c">
 			</File>
 		</Filter>
@@ -160,9 +157,6 @@
 			Filter="h">
 			<File
 				RelativePath=".\genprops.h">
-			</File>
-			<File
-				RelativePath=".\propsvec.h">
 			</File>
 		</Filter>
 		<Filter

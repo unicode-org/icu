@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002, International Business Machines
+*   Copyright (C) 2002-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -20,26 +20,49 @@
 #include "unicode/utypes.h"
 #include "cmemory.h"
 #include "utrie.h"
-#include "uprops.h"
+#include "uarrsort.h"
 #include "propsvec.h"
 
 static uint32_t *
-_findRow(uint32_t *pv, uint32_t rangeStart) {
+_findRow(uint32_t *pv, UChar32 rangeStart) {
     uint32_t *row;
-    int32_t columns, i, start, limit;
+    int32_t *hdr;
+    int32_t columns, i, start, limit, prevRow, rows;
 
-    columns=(int32_t)pv[UPVEC_COLUMNS];
-    limit=(int32_t)pv[UPVEC_ROWS];
+    hdr=(int32_t *)pv;
+    columns=hdr[UPVEC_COLUMNS];
+    limit=hdr[UPVEC_ROWS];
+    prevRow=hdr[UPVEC_PREV_ROW];
+    rows=hdr[UPVEC_ROWS];
     pv+=UPVEC_HEADER_LENGTH;
+
+    /* check the vicinity of the last-seen row */
+    if(prevRow<rows) {
+        row=pv+prevRow*columns;
+        if(rangeStart>=(UChar32)row[0]) {
+            if(rangeStart<(UChar32)row[1]) {
+                /* same row as last seen */
+                return row;
+            } else if(
+                ++prevRow<rows &&
+                rangeStart>=(UChar32)(row+=columns)[0] && rangeStart<(UChar32)row[1]
+            ) {
+                /* next row after the last one */
+                hdr[UPVEC_PREV_ROW]=prevRow;
+                return row;
+            }
+        }
+    }
 
     /* do a binary search for the start of the range */
     start=0;
     while(start<limit-1) {
         i=(start+limit)/2;
         row=pv+i*columns;
-        if(rangeStart<row[0]) {
+        if(rangeStart<(UChar32)row[0]) {
             limit=i;
-        } else if(rangeStart<row[1]) {
+        } else if(rangeStart<(UChar32)row[1]) {
+            hdr[UPVEC_PREV_ROW]=i;
             return row;
         } else {
             start=i;
@@ -47,10 +70,11 @@ _findRow(uint32_t *pv, uint32_t rangeStart) {
     }
 
     /* must be found because all ranges together always cover all of Unicode */
+    hdr[UPVEC_PREV_ROW]=start;
     return pv+start*columns;
 }
 
-U_CFUNC uint32_t *
+U_CAPI uint32_t * U_EXPORT2
 upvec_open(int32_t columns, int32_t maxRows) {
     uint32_t *pv, *row;
     int32_t length;
@@ -67,7 +91,7 @@ upvec_open(int32_t columns, int32_t maxRows) {
         pv[UPVEC_COLUMNS]=(uint32_t)columns;
         pv[UPVEC_MAXROWS]=(uint32_t)maxRows;
         pv[UPVEC_ROWS]=1;
-        pv[UPVEC_RESERVED]=0;
+        pv[UPVEC_PREV_ROW]=0;
 
         /* set initial row */
         row=pv+UPVEC_HEADER_LENGTH;
@@ -81,16 +105,16 @@ upvec_open(int32_t columns, int32_t maxRows) {
     return pv;
 }
 
-U_CFUNC void
+U_CAPI void U_EXPORT2
 upvec_close(uint32_t *pv) {
-    if(pv==NULL) {
+    if(pv!=NULL) {
         uprv_free(pv);
     }
 }
 
-U_CFUNC UBool
+U_CAPI UBool U_EXPORT2
 upvec_setValue(uint32_t *pv,
-               uint32_t start, uint32_t limit,
+               UChar32 start, UChar32 limit,
                int32_t column,
                uint32_t value, uint32_t mask,
                UErrorCode *pErrorCode) {
@@ -104,7 +128,7 @@ upvec_setValue(uint32_t *pv,
     }
 
     if( pv==NULL ||
-        start>limit || limit>0x110000 ||
+        start<0 || start>limit || limit>0x110000 ||
         column<0 || (uint32_t)(column+1)>=pv[UPVEC_COLUMNS]
     ) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
@@ -116,7 +140,7 @@ upvec_setValue(uint32_t *pv,
     }
 
     /* initialize */
-    columns=pv[UPVEC_COLUMNS];
+    columns=(int32_t)pv[UPVEC_COLUMNS];
     column+=2; /* skip range start and limit columns */
     value&=mask;
 
@@ -127,7 +151,7 @@ upvec_setValue(uint32_t *pv,
 
     /* find the last row, always successful */
     lastRow=firstRow;
-    while(limit>lastRow[1]) {
+    while(limit>(UChar32)lastRow[1]) {
         lastRow+=columns;
     }
 
@@ -136,8 +160,8 @@ upvec_setValue(uint32_t *pv,
      * input range (only possible for the first and last rows)
      * and if their value differs from the input value.
      */
-    splitFirstRow= (UBool)(start!=firstRow[0] && value!=(firstRow[column]&mask));
-    splitLastRow= (UBool)(limit!=lastRow[1] && value!=(lastRow[column]&mask));
+    splitFirstRow= (UBool)(start!=(UChar32)firstRow[0] && value!=(firstRow[column]&mask));
+    splitLastRow= (UBool)(limit!=(UChar32)lastRow[1] && value!=(lastRow[column]&mask));
 
     /* split first/last rows if necessary */
     if(splitFirstRow || splitLastRow) {
@@ -167,7 +191,7 @@ upvec_setValue(uint32_t *pv,
             lastRow+=columns;
 
             /* split the range and move the firstRow pointer */
-            firstRow[1]=firstRow[columns]=start;
+            firstRow[1]=firstRow[columns]=(uint32_t)start;
             firstRow+=columns;
         }
 
@@ -177,9 +201,12 @@ upvec_setValue(uint32_t *pv,
             uprv_memcpy(lastRow+columns, lastRow, columns*4);
 
             /* split the range and move the firstRow pointer */
-            lastRow[1]=lastRow[columns]=limit;
+            lastRow[1]=lastRow[columns]=(uint32_t)limit;
         }
     }
+
+    /* set the "row last seen" to the last row for the range */
+    pv[UPVEC_PREV_ROW]=(uint32_t)((lastRow-(pv+UPVEC_HEADER_LENGTH))/columns);
 
     /* set the input value in all remaining rows */
     firstRow+=column;
@@ -195,9 +222,20 @@ upvec_setValue(uint32_t *pv,
     return TRUE;
 }
 
-U_CFUNC uint32_t *
+U_CAPI uint32_t U_EXPORT2
+upvec_getValue(uint32_t *pv, UChar32 c, int32_t column) {
+    uint32_t *row;
+
+    if(pv==NULL || c<0 || c>=0x110000) {
+        return 0;
+    }
+    row=_findRow(pv, c);
+    return row[2+column];
+}
+
+U_CAPI uint32_t * U_EXPORT2
 upvec_getRow(uint32_t *pv, int32_t rowIndex,
-             uint32_t *pRangeStart, uint32_t *pRangeLimit) {
+             UChar32 *pRangeStart, UChar32 *pRangeLimit) {
     uint32_t *row;
     int32_t columns;
 
@@ -205,7 +243,7 @@ upvec_getRow(uint32_t *pv, int32_t rowIndex,
         return NULL;
     }
 
-    columns=pv[UPVEC_COLUMNS];
+    columns=(int32_t)pv[UPVEC_COLUMNS];
     row=pv+UPVEC_HEADER_LENGTH+rowIndex*columns;
     if(pRangeStart!=NULL) {
         *pRangeStart=row[0];
@@ -216,12 +254,13 @@ upvec_getRow(uint32_t *pv, int32_t rowIndex,
     return row+2;
 }
 
-static int
-upvec_compareRows(const void *l, const void *r) {
+static int32_t U_CALLCONV
+upvec_compareRows(const void *context, const void *l, const void *r) {
     const uint32_t *left=(const uint32_t *)l, *right=(const uint32_t *)r;
+    const uint32_t *pv=(const uint32_t *)context;
     int32_t i, count, columns;
 
-    count=columns=2+UPROPS_VECTOR_WORDS;
+    count=columns=(int32_t)pv[UPVEC_COLUMNS]; /* includes start/limit columns */
 
     /* start comparing after start/limit but wrap around to them */
     i=2;
@@ -237,7 +276,7 @@ upvec_compareRows(const void *l, const void *r) {
     return 0;
 }
 
-U_CFUNC int32_t
+U_CAPI int32_t U_EXPORT2
 upvec_toTrie(uint32_t *pv, UNewTrie *trie, UErrorCode *pErrorCode) {
     uint32_t *row;
     int32_t columns, valueColumns, rows, count;
@@ -258,7 +297,11 @@ upvec_toTrie(uint32_t *pv, UNewTrie *trie, UErrorCode *pErrorCode) {
 
     /* sort the properties vectors to find unique vector values */
     if(rows>1) {
-        qsort(pv+UPVEC_HEADER_LENGTH, rows, columns*4, upvec_compareRows);
+        uprv_sortArray(pv+UPVEC_HEADER_LENGTH, rows, columns*4,
+                       upvec_compareRows, pv, FALSE, pErrorCode);
+    }
+    if(U_FAILURE(*pErrorCode)) {
+        return 0;
     }
 
     /*

@@ -178,12 +178,13 @@ SOURCE="$(InputPath)"
 # Name "genprops - Win32 Debug"
 # Name "genprops - Win64 Release"
 # Name "genprops - Win64 Debug"
-# Begin Group "Source Files"
-
-# PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
 SOURCE=.\genprops.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\genprops.h
 # End Source File
 # Begin Source File
 
@@ -191,28 +192,7 @@ SOURCE=.\props2.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\propsvec.c
-# End Source File
-# Begin Source File
-
 SOURCE=.\store.c
 # End Source File
-# End Group
-# Begin Group "Header Files"
-
-# PROP Default_Filter "h;hpp;hxx;hm;inl"
-# Begin Source File
-
-SOURCE=.\genprops.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\propsvec.h
-# End Source File
-# End Group
-# Begin Group "Resource Files"
-
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
-# End Group
 # End Target
 # End Project
