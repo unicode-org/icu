@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
+<!DOCTYPE ldml SYSTEM " 	http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldmlICU.dtd"> 
+%icu;
+]
+>
 <ldml>
 	<identity>
 		<version number="5.0"/>
@@ -813,6 +818,11 @@
 	</layout>
 	<characters>
 		<exemplarCharacters>[]</exemplarCharacters>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Zyyy</icu:script>
+			</icu:scripts>
+		</special>
 	</characters>
 	<measurement>
 		<measurementSystem type="metric"/>
@@ -826,8 +836,9 @@
 		<calendars>
 			<calendar type="arabic">
 				<months>
-					<default type="default"/>
+					<default type="format"/>
 					<monthContext type="format">
+						<default type="wide"/>
 						<monthWidth type="abbreviated">
 							<month type="1">Muharram</month>
 							<month type="2">Safar</month>
@@ -841,9 +852,6 @@
 							<month type="10">Shawwal</month>
 							<month type="11">Dhu'l-Qi'dah</month>
 							<month type="12">Dhu'l-Hijjah</month>
-						</monthWidth>
-						<monthWidth type="default">
-							<month type="1">wide</month>
 						</monthWidth>
 						<monthWidth type="wide">
 							<month type="1">Muharram</month>
@@ -869,8 +877,9 @@
 			</calendar>
 			<calendar type="arabic-civil">
 				<months>
-					<default type="default"/>
+					<default type="format"/>
 					<monthContext type="format">
+						<default type="wide"/>
 						<monthWidth type="abbreviated">
 							<month type="1">Muharram</month>
 							<month type="2">Safar</month>
@@ -884,9 +893,6 @@
 							<month type="10">Shawwal</month>
 							<month type="11">Dhu'l-Qi'dah</month>
 							<month type="12">Dhu'l-Hijjah</month>
-						</monthWidth>
-						<monthWidth type="default">
-							<month type="1">wide</month>
 						</monthWidth>
 						<monthWidth type="wide">
 							<month type="1">Muharram</month>
@@ -972,8 +978,9 @@
 			</calendar>
 			<calendar type="gregorian">
 				<months>
-					<default type="default"/>
+					<default type="format"/>
 					<monthContext type="format">
+						<default type="wide"/>
 						<monthWidth type="abbreviated">
 							<month type="1">1</month>
 							<month type="2">2</month>
@@ -987,9 +994,6 @@
 							<month type="10">10</month>
 							<month type="11">11</month>
 							<month type="12">12</month>
-						</monthWidth>
-						<monthWidth type="default">
-							<month type="1">wide</month>
 						</monthWidth>
 						<monthWidth type="narrow">
 							<month type="1">1</month>
@@ -1021,7 +1025,7 @@
 						</monthWidth>
 					</monthContext>
 					<monthContext type="stand-alone">
-					        <default type="wide" />
+						<default type="wide"/>
 						<monthWidth type="abbreviated">
 							<month type="1">1</month>
 							<month type="2">2</month>
@@ -1069,7 +1073,7 @@
 				<days>
 					<default type="format"/>
 					<dayContext type="format">
-						<default type="default"/>
+						<default type="wide"/>
 						<dayWidth type="abbreviated">
 							<day type="sun">1</day>
 							<day type="mon">2</day>
@@ -1197,8 +1201,9 @@
 			</calendar>
 			<calendar type="hebrew">
 				<months>
-					<default type="default"/>
+					<default type="format"/>
 					<monthContext type="format">
+						<default type="wide"/>
 						<monthWidth type="abbreviated">
 							<month type="1">Tishri</month>
 							<month type="2">Heshvan</month>
@@ -1213,9 +1218,6 @@
 							<month type="11">Tamuz</month>
 							<month type="12">Av</month>
 							<month type="13">Elul</month>
-						</monthWidth>
-						<monthWidth type="default">
-							<month type="1">wide</month>
 						</monthWidth>
 						<monthWidth type="wide">
 							<month type="1">Tishri</month>
@@ -1624,4 +1626,20 @@
 			</currency>
 		</currencies>
 	</numbers>
+	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+		<icu:ruleBasedNumberFormats>
+			<icu:ruleBasedNumberFormat type="spellout">
+=#,##0.######=;
+
+			</icu:ruleBasedNumberFormat>
+			<icu:ruleBasedNumberFormat type="ordinal">
+=#,##0=;
+
+			</icu:ruleBasedNumberFormat>
+			<icu:ruleBasedNumberFormat type="duration">
+=#,##0=;
+
+			</icu:ruleBasedNumberFormat>
+		</icu:ruleBasedNumberFormats>
+	</special>
 </ldml>

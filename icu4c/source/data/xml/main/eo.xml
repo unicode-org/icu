@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
+<!DOCTYPE ldml SYSTEM " 	http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldmlICU.dtd"> 
+%icu;
+]
+>
 <ldml>
 	<identity>
 		<version number="4.0"/>
@@ -377,6 +382,11 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[a-z ŭ ĉ ĝ ĥ ĵ ŝ]</exemplarCharacters>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Latn</icu:script>
+			</icu:scripts>
+		</special>
 	</characters>
 	<dates>
 		<localizedPatternChars>GjMtkHmslTDUSnahKzJdugAZ</localizedPatternChars>
@@ -520,4 +530,29 @@
 			<nan>�</nan>
 		</symbols>
 	</numbers>
+	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+		<icu:ruleBasedNumberFormats>
+			<icu:ruleBasedNumberFormat type="spellout">
+-x: minus &gt;&gt;;
+x.x: &lt;&lt; komo &gt;&gt;;
+nulo; unu; du; tri; kvar; kvin; ses; sep; ok; naŭ;
+10: dek[ &gt;&gt;];
+20: &lt;&lt;dek[ &gt;&gt;];
+100: cent[ &gt;&gt;];
+200: &lt;&lt;cent[ &gt;&gt;];
+1000: mil[ &gt;&gt;];
+2000: &lt;&lt;mil[ &gt;&gt;];
+10000: dekmil[ &gt;&gt;];
+11000&gt;: &lt;&lt; mil[ &gt;&gt;];
+1,000,000: miliono[ &gt;&gt;];
+2,000,000: &lt;&lt; milionoj[ &gt;&gt;];
+1,000,000,000: miliardo[ &gt;&gt;];
+2,000,000,000: &lt;&lt; miliardoj[ &gt;&gt;];
+1,000,000,000,000: biliono[ &gt;&gt;];
+2,000,000,000,000: &lt;&lt; bilionoj[ &gt;&gt;];
+1,000,000,000,000,000: =#,##0=;
+
+			</icu:ruleBasedNumberFormat>
+		</icu:ruleBasedNumberFormats>
+	</special>
 </ldml>

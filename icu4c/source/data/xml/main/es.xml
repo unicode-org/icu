@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
+<!DOCTYPE ldml SYSTEM " 	http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldmlICU.dtd"> 
+%icu;
+]
+>
 <ldml>
 	<identity>
 		<version number="3.0"/>
@@ -448,6 +453,11 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[a-z ñ á é í ó ú ü]</exemplarCharacters>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Latn</icu:script>
+			</icu:scripts>
+		</special>
 	</characters>
 	<dates>
 		<localizedPatternChars>GuMtkHmsSEDFwWahKzUeygAZ</localizedPatternChars>
@@ -2150,4 +2160,40 @@
 			</currency>
 		</currencies>
 	</numbers>
+	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+		<icu:ruleBasedNumberFormats>
+			<icu:ruleBasedNumberFormat type="spellout">
+-x: menos &gt;&gt;;
+x.x: &lt;&lt; punto &gt;&gt;;
+cero; uno; dos; tres; cuatro; cinco; seis; siete; ocho; nueve;
+diez; once; doce; trece; catorce; quince; dieciséis;
+    diecisiete; dieciocho; diecinueve;
+veinte; veintiuno; veintidós; veintitrés; veinticuatro;
+    veinticinco; veintiséis; veintisiete; veintiocho;
+    veintinueve;
+30: treinta[ y &gt;&gt;];
+40: cuarenta[ y &gt;&gt;];
+50: cincuenta[ y &gt;&gt;];
+60: sesenta[ y &gt;&gt;];
+70: setenta[ y &gt;&gt;];
+80: ochenta[ y &gt;&gt;];
+90: noventa[ y &gt;&gt;];
+100: cien;
+101: ciento &gt;&gt;;
+200: doscientos[ &gt;&gt;];
+300: trescientos[ &gt;&gt;];
+400: cuatrocientos[ &gt;&gt;];
+500: quinientos[ &gt;&gt;];
+600: seiscientos[ &gt;&gt;];
+700: setecientos[ &gt;&gt;];
+800: ochocientos[ &gt;&gt;];
+900: novecientos[ &gt;&gt;];
+1000: mil[ &gt;&gt;];
+2000: &lt;&lt; mil[ &gt;&gt;];
+1,000,000: un millón[ &gt;&gt;];
+2,000,000: &lt;&lt; millón[ &gt;&gt;];
+1,000,000,000: =#,##0= (incomplete data);
+			</icu:ruleBasedNumberFormat>
+		</icu:ruleBasedNumberFormats>
+	</special>
 </ldml>
