@@ -176,7 +176,7 @@ class UnicodePropertySet /* not : public UObject because all methods are static 
      *
      * Callers MUST NOT MODIFY the returned set.
      */
-    static const UnicodeSet& getScriptSet(UScriptCode script,
+    static const UnicodeSet* getScriptSet(UScriptCode script,
                                           UErrorCode &status);
 
     /**
