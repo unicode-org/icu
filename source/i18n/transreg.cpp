@@ -61,6 +61,45 @@ CharString::~CharString() {
     }
 }
 
+//------------------------------------------------------------------
+// Alias
+//------------------------------------------------------------------
+
+TransliteratorAlias::TransliteratorAlias(const UnicodeString& theAliasID) :
+    ID(),
+    aliasID(theAliasID),
+    trans(0),
+    idSplitPoint(-1) {
+}
+
+TransliteratorAlias::TransliteratorAlias(const UnicodeString& theID,
+                                         const UnicodeString& idBlock,
+                                         Transliterator* adopted,
+                                         int32_t theIDSplitPoint) :
+    ID(theID),
+    aliasID(idBlock),
+    trans(adopted),
+    idSplitPoint(theIDSplitPoint) {
+}
+
+TransliteratorAlias::~TransliteratorAlias() {
+    delete trans;
+}
+
+
+Transliterator* TransliteratorAlias::create(UParseError& pe,
+                                                      UErrorCode& ec) {
+    if (trans != 0) {
+        return Transliterator::createInstance(aliasID, UTRANS_FORWARD, pe, ec);
+    } else {
+        Transliterator *t = trans;
+        trans = 0; // so we don't delete it later
+        return new CompoundTransliterator(ID, aliasID, idSplitPoint,
+                                          t, pe, ec);
+
+    }
+}
+
 //----------------------------------------------------------------------
 // class Spec
 //----------------------------------------------------------------------
@@ -305,7 +344,7 @@ TransliteratorRegistry::~TransliteratorRegistry() {
 }
 
 Transliterator* TransliteratorRegistry::get(const UnicodeString& ID,
-                                            UnicodeString& aliasReturn,
+                                            TransliteratorAlias*& aliasReturn,
                                             UParseError& parseError,
                                             UErrorCode& status) {
     Entry *entry = find(ID);
@@ -845,7 +884,7 @@ Entry* TransliteratorRegistry::find(UnicodeString& source,
  */
 Transliterator* TransliteratorRegistry::instantiateEntry(const UnicodeString& ID,
                                                          Entry *entry,
-                                                         UnicodeString &aliasReturn,
+                                                         TransliteratorAlias* &aliasReturn,
                                                          UParseError& parseError,
                                                          UErrorCode& status) {
 
@@ -855,21 +894,15 @@ Transliterator* TransliteratorRegistry::instantiateEntry(const UnicodeString& ID
         } else if (entry->entryType == Entry::PROTOTYPE) {
             return entry->u.prototype->clone();
         } else if (entry->entryType == Entry::ALIAS) {
-            aliasReturn = entry->stringArg;
+            aliasReturn = new TransliteratorAlias(entry->stringArg);
             return 0;
         } else if (entry->entryType == Entry::FACTORY) {
             return entry->u.factory();
         } else if (entry->entryType == Entry::COMPOUND_RBT) {
             UnicodeString id("_", "");
             Transliterator *t = new RuleBasedTransliterator(id, entry->u.data);
-            t = new CompoundTransliterator(ID, entry->stringArg,
-                                           entry->intArg, t, parseError, status);
-            if (U_FAILURE(status)) {
-                delete t;
-                t = 0;
-                remove(ID);
-            }
-            return t;
+            aliasReturn = new TransliteratorAlias(ID, entry->stringArg, t, entry->intArg);
+            return 0;
         }
 
         // At this point entry type must be either RULES_FORWARD or
