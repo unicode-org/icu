@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999, International Business Machines
+*   Copyright (C) 2000, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -107,7 +107,7 @@ struct UOption {
  * the parser returns with the negative index of the argv[] entry
  * where the error was detected.
  */
-int
+U_CAPI int U_EXPORT2
 u_parseArgs(int argc, const char *argv[],
             int optionCount, UOption options[]);
 
