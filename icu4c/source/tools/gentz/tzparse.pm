@@ -205,7 +205,8 @@ sub Postprocess {
         }
     }
 
-    # Check that each zone has a corresponding rule
+    # Check that each zone has a corresponding rule.  At the same
+    # time, build up a hash that marks each rule that is in use.
     foreach (sort keys %$ZONES) {
         my $ruleName = $ZONES->{$_}->{rule};
         next if ($ruleName eq $STANDARD);
@@ -229,7 +230,7 @@ sub Postprocess {
         } elsif (!$RULES->{$_}->[0] || !$RULES->{$_}->[1]) {
             print STDERR "Rule doesn't have both parts: $_\n";
         } else {
-            # Generate code
+            # Generate coded string
             # This has all the data about a rule; it can be used
             # to see if two rules behave identically
             $RULES->{$_}->[2] =
