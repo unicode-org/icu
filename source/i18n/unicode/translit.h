@@ -242,81 +242,12 @@ private:
 
     int32_t maximumContextLength;
 
-    /**
-     * Cache of public system transliterators.  Keys are UnicodeString
-     * names, values are CacheEntry objects.
-     */
-    static Hashtable* cache;
-
-    /**
-     * Like 'cache', but IDs are not public.  Internal transliterators
-     * are combined together and aliased to public IDs.
-     */
-    static Hashtable* internalCache;
-
-    /**
-     * The mutex controlling access to the caches.
-     */
-    static UMTX cacheMutex;
-
-    /**
-     * When set to TRUE, the cache has been initialized.  Any code must
-     * check this boolean before accessing the cache, and if the boolean
-     * is FALSE, it must call initializeCache().  We do this form of lazy
-     * evaluation for two reasons: (1) so we don't initialize if we don't
-     * have to (i.e., if no one is using Transliterator, but has included
-     * the code as part of a shared library, and (2) to avoid static
-     * intialization problems.
-     */
-    static UBool cacheInitialized;
-
  public:
 
     /**
      * A function that creates and returns a Transliterator.
      */
     typedef Transliterator* (*Factory)(void);
-
- private:
-
-    /**
-     * In Java, the cache stores objects of different types and
-     * singleton objects as placeholders for rule-based
-     * transliterators to be built as needed.  In C++ we use the
-     * following struct to achieve the same purpose.  Instances of
-     * this struct can be placeholders, can represent prototype
-     * transliterators to be cloned, or can represent
-     * RuleBasedTransliterator::Data objects.  We don't support
-     * storing classes in the cache because we don't have the rtti
-     * infrastructure for it.  We could easily add this if there is a
-     * need for it in the future.  The rbFile is the resource bundle
-     * file name for rule-based transliterators.
-     */
-    struct CacheEntry {
-        enum Type {
-            RULES_FORWARD,
-            RULES_REVERSE,
-            PROTOTYPE,
-            RBT_DATA,
-            COMPOUND_RBT,
-            ALIAS,
-            FACTORY,
-            NONE // Only used for uninitialized entries
-        } entryType;
-        // NOTE: stringArg cannot go inside the union because
-        // it has a copy constructor
-        UnicodeString stringArg; // For RULES_*, ALIAS, COMPOUND_RBT
-        int32_t intArg; // For COMPOUND_RBT
-        union {
-            Transliterator* prototype; // For PROTOTYPE
-            TransliterationRuleData* data; // For RBT_DATA
-            Factory factory; // For FACTORY
-        } u;
-        CacheEntry();
-        ~CacheEntry();
-        void adoptPrototype(Transliterator* adopted);
-        void setFactory(Factory factory);
-    };
 
 protected:
 
@@ -791,19 +722,6 @@ public:
     virtual UnicodeString& toRules(UnicodeString& result,
                                    UBool escapeUnprintable) const;
 
-private:
-
-    /**
-     * Returns a transliterator object given its ID.  Unlike getInstance(),
-     * this method returns null if it cannot make use of the given ID.
-     * @param aliasReturn if ID is an alias transliterator this is set
-     * the the parameter to be passed to createInstance() and 0 is
-     * returned; otherwise, this is unchanged
-     */
-    static Transliterator* _createInstance(const UnicodeString& ID,
-                                           UnicodeString& aliasReturn,
-                                           UParseError* parseError = 0);
-
 public:
 
     /**
@@ -814,8 +732,7 @@ public:
      * called later when the given ID is passed to createInstance()
      */
     static void registerFactory(const UnicodeString& id,
-                                Factory factory,
-                                UErrorCode& status);
+                                Factory factory);
 
     /**
      * Registers a instance <tt>obj</tt> of a subclass of
@@ -834,35 +751,14 @@ public:
      * @see #unregister
      * @draft
      */
-    static void registerInstance(Transliterator* adoptedObj,
-                                 UErrorCode& status);
+    static void registerInstance(Transliterator* adoptedObj);
 
 private:
 
-    /**
-     * This internal method registers a prototype instance in the cache.
-     * The CALLER MUST MUTEX using cacheMutex before calling this method.
-     */
-    static void _registerInstance(Transliterator* adoptedPrototype,
-                                  UErrorCode &status);
-
-    /**
-     * Registers a factory function that creates transliterators of
-     * a given ID.  To be called ONLY by Transliterator subclasses
-     * that register themselves within initializeCache().  These
-     * classes should be listed as friends immediately below.
-     */
-    static void _registerFactory(const UnicodeString& id,
-                                 Factory factory,
-                                 UErrorCode& status);
-
     friend class NormalizationTransliterator;
 
-    static void _registerID(const UnicodeString& id);
-
-    static void _registerSTV(const UnicodeString& source,
-                             const UnicodeString& target,
-                             const UnicodeString& variant);
+    static void _registerFactory(const UnicodeString& id,
+                                 Factory factory);
 
 public:
 
@@ -878,33 +774,6 @@ public:
      * @draft
      */
     static void unregister(const UnicodeString& ID);
-
-private:
-
-    /**
-     * Unregisters a transliterator or class.  Internal method.
-     * Prerequisites: The cache must be initialized, and the
-     * caller must own the cacheMutex.
-     */
-    static void _unregister(const UnicodeString& ID);
-
-    /**
-     * Returns an enumeration over the programmatic names of registered
-     * <code>Transliterator</code> objects.  This includes both system
-     * transliterators and user transliterators registered using
-     * <code>registerInstance()</code>.  The enumerated names may be
-     * passed to <code>getInstance()</code>.
-     *
-     * @return An <code>Enumeration</code> over <code>String</code> objects
-     * @see #getInstance
-     * @see #registerInstance
-     */
-    // virtual Enumeration getAvailableIDs();
-
-    /**
-     * Vector of registered IDs.
-     */
-    static UVector cacheIDs;
 
 public:
 
@@ -1047,7 +916,7 @@ protected:
     void setID(const UnicodeString& id);
 
 private:
-    static void initializeCache(void);
+    static void initializeRegistry(void);
 };
 
 inline int32_t Transliterator::getMaximumContextLength(void) const {

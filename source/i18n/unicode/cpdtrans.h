@@ -34,7 +34,7 @@ class U_I18N_API UVector;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: cpdtrans.h,v $ $Revision: 1.15 $ $Date: 2001/07/17 00:15:49 $
+ * @version $RCSfile: cpdtrans.h,v $ $Revision: 1.16 $ $Date: 2001/08/15 19:06:25 $
  * @draft
  */
 class U_I18N_API CompoundTransliterator : public Transliterator {
@@ -167,7 +167,8 @@ public:
 
 private:
 
-    friend Transliterator; // to access private ct
+    friend class Transliterator;
+    friend class TransliteratorRegistry; // to access private ct
 
     /**
      * Private constructor for compound RBTs.  Construct a compound

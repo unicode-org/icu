@@ -14,11 +14,10 @@
  * System registration hook.
  */
 void NormalizationTransliterator::registerIDs() {
-    UErrorCode status = U_ZERO_ERROR;
-    Transliterator::_registerFactory(UnicodeString("Any-NFC", ""), _createNFC, status);
-    Transliterator::_registerFactory(UnicodeString("Any-NFKC", ""), _createNFKC, status);
-    Transliterator::_registerFactory(UnicodeString("Any-NFD", ""), _createNFD, status);
-    Transliterator::_registerFactory(UnicodeString("Any-NFKD", ""), _createNFKD, status);
+    Transliterator::_registerFactory(UnicodeString("Any-NFC", ""), _createNFC);
+    Transliterator::_registerFactory(UnicodeString("Any-NFKC", ""), _createNFKC);
+    Transliterator::_registerFactory(UnicodeString("Any-NFD", ""), _createNFD);
+    Transliterator::_registerFactory(UnicodeString("Any-NFKD", ""), _createNFKD);
 }
 
 /**

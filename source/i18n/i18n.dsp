@@ -274,6 +274,10 @@ SOURCE=.\translit.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\transreg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\ubrk.cpp
 # End Source File
 # Begin Source File
