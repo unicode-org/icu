@@ -33,6 +33,7 @@ static void TestAmbiguous(void);
 static void TestSignatureDetection(void);
 static void TestUTF7(void);
 static void TestUTF8(void);
+static void TestCESU8(void);
 static void TestUTF16(void);
 static void TestUTF16BE(void);
 static void TestUTF16LE(void);
@@ -195,6 +196,7 @@ void addTestNewConvert(TestNode** root)
    addTest(root, &TestSignatureDetection, "tsconv/nucnvtst/TestSignatureDetection");
    addTest(root, &TestUTF7, "tsconv/nucnvtst/TestUTF7");
    addTest(root, &TestUTF8, "tsconv/nucnvtst/TestUTF8");
+   addTest(root, &TestCESU8, "tsconv/nucnvtst/TestCESU8");
    addTest(root, &TestUTF16, "tsconv/nucnvtst/TestUTF16");
    addTest(root, &TestUTF16BE, "tsconv/nucnvtst/TestUTF16BE");
    addTest(root, &TestUTF16LE, "tsconv/nucnvtst/TestUTF16LE");
@@ -1674,6 +1676,78 @@ static TestUTF8() {
 }
 
 void
+static TestCESU8() {
+    /* test input */
+    static const uint8_t in[]={
+        0x61,
+        0xc2, 0x80,
+        0xe0, 0xa0, 0x80,
+        0xed, 0xa0, 0x80, 0xed, 0xb0, 0x80,
+        0xed, 0xb0, 0x81, 0xed, 0xa0, 0x82,
+        0xed, 0xaf, 0xbf, 0xed, 0xbf, 0xbf,
+        0xef, 0xbf, 0xbc
+    };
+
+    /* expected test results */
+    static const uint32_t results[]={
+        /* number of bytes read, code point */
+        1, 0x61,
+        2, 0x80,
+        3, 0x800,
+        6, 0x10000,
+        3, 0xdc01,
+        3, 0xd802,
+        6, 0x10ffff,
+        3, 0xfffc
+    };
+
+    /* error test input */
+    static const uint8_t in2[]={
+        0x61,
+        0xc0, 0x80,                     /* illegal non-shortest form */
+        0xe0, 0x80, 0x80,               /* illegal non-shortest form */
+        0xf0, 0x80, 0x80, 0x80,         /* illegal non-shortest form */
+        0xc0, 0xc0,                     /* illegal trail byte */
+        0xf0, 0x90, 0x80, 0x80,         /* illegal 4-byte supplementary code point */
+        0xf4, 0x84, 0x8c, 0xa1,         /* illegal 4-byte supplementary code point */
+        0xf0, 0x90, 0x90, 0x81,         /* illegal 4-byte supplementary code point */
+        0xf4, 0x90, 0x80, 0x80,         /* 0x110000 out of range */
+        0xf8, 0x80, 0x80, 0x80, 0x80,   /* too long */
+        0xfe,                           /* illegal byte altogether */
+        0x62
+    };
+
+    /* expected error test results */
+    static const uint32_t results2[]={
+        /* number of bytes read, code point */
+        1, 0x61,
+        34, 0x62
+    };
+
+    UConverterToUCallback cb;
+    const void *p;
+
+    const char *source=(const char *)in,*limit=(const char *)in+sizeof(in);
+    UErrorCode errorCode=U_ZERO_ERROR;
+    UConverter *cnv=ucnv_open("CESU-8", &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("Unable to open a CESU-8 converter: %s\n", u_errorName(errorCode));
+        return;
+    }
+    TestNextUChar(cnv, source, limit, results, "CESU-8");
+    /* Test the condition when source >= sourceLimit */
+    TestNextUCharError(cnv, source, source, U_INDEX_OUTOFBOUNDS_ERROR, "sourceLimit <= source");
+
+    /* test error behavior with a skip callback */
+    ucnv_setToUCallBack(cnv, UCNV_TO_U_CALLBACK_SKIP, NULL, &cb, &p, &errorCode);
+    source=(const char *)in2;
+    limit=(const char *)(in2+sizeof(in2));
+    TestNextUChar(cnv, source, limit, results2, "CESU-8");
+
+    ucnv_close(cnv);
+}
+
+void
 static TestUTF16() {
     /* test input */
     static const uint8_t in1[]={
@@ -3117,6 +3191,8 @@ TestRoundTrippingAllUTF(void){
         TestFullRoundtrip("SCSU");
         log_verbose("Running exhaustive round trip test for UTF-8\n");
         TestFullRoundtrip("UTF-8");
+        log_verbose("Running exhaustive round trip test for CESU-8\n");
+        TestFullRoundtrip("CESU-8");
         log_verbose("Running exhaustive round trip test for UTF-16BE\n");
         TestFullRoundtrip("UTF-16BE");
         log_verbose("Running exhaustive round trip test for UTF-16LE\n");
