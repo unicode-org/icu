@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_InterIndic_Kannada.txt
-// Date: Tue Nov 20 21:43:01 2001
+// Date: Tue Nov 27 20:47:50 2001
 //--------------------------------------------------------------------
 
 // InterIndic_Kannada
@@ -31,6 +31,7 @@ translit_InterIndic_Kannada {
 //--------------------------------------------------------------------
 // InterIndic-Kannada
 //:: NFD (NFC) ;
+"\ue02b\ue03c>\u0cde;" // LETTER FA
 "\ue001>\u0c82;" // REMAP (indicExceptions.txt): \u0c81>\u0c82 = SIGN CANDRABINDU>SIGN ANUSVARA
 "\ue002>\u0c82;" // SIGN ANUSVARA
 "\ue003>\u0c83;" // SIGN VISARGA
