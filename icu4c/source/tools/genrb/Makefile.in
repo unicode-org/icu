@@ -61,8 +61,8 @@ OBJECTS = error.o genrb.o parse.o read.o reslist.o ustr.o util.o
 
 DEPS = $(OBJECTS:.o=.d)
 
-include genrbfiles.mk
--include reslocal.mk
+include $(srcdir)/genrbfiles.mk
+-include $(srcdir)/reslocal.mk
 
 ## List of resource bundles to build
 TXT_SOURCE = $(GENRB_SOURCE) $(TRANSLIT_SOURCE)
