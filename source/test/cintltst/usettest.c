@@ -6,12 +6,11 @@
 * $Source: /xsrl/Nsvn/icu/icu/source/test/cintltst/usettest.c,v $ 
 **********************************************************************
 */
+#include <malloc.h>
+#include <string.h>
 #include "unicode/uset.h"
-#include "cmemory.h"
-#include "cstring.h"
-#include "filestrm.h"
-#include "cintltst.h"
 #include "unicode/ustring.h"
+#include "cintltst.h"
 
 #define TEST(x) addTest(root, &x, "uset/" # x)
 
@@ -169,7 +168,7 @@ static void expectContainment(const USet* set,
 
             while (*p++ != '}') {}
             stringLength = p - stringStart - 1;
-            uprv_strncpy(strCopy, stringStart, stringLength);
+            strncpy(strCopy, stringStart, stringLength);
             strCopy[stringLength] = 0;
 
             u_charsToUChars(stringStart, ustr, stringLength);
@@ -265,14 +264,14 @@ static void expectItems(const USet* set,
     }
     u_UCharsToChars(ustr, pat, u_strlen(ustr)+1);
 
-    if (uset_isEmpty(set) != (uprv_strlen(items)==0)) {
+    if (uset_isEmpty(set) != (strlen(items)==0)) {
         log_err("FAIL: %s should return %s from isEmpty\n",
                 pat,
-                uprv_strlen(items)==0 ? "TRUE" : "FALSE");
+                strlen(items)==0 ? "TRUE" : "FALSE");
     }
 
     /* Don't test patterns starting with "[^" */
-    if (uprv_strlen(pat) > 2 && pat[1] == '^') {
+    if (strlen(pat) > 2 && pat[1] == '^') {
         return;
     }
 
@@ -314,7 +313,7 @@ static void expectItems(const USet* set,
 
             while (*p++ != '}') {}
             stringLength = p - stringStart - 1;
-            uprv_strncpy(strCopy, stringStart, stringLength);
+            strncpy(strCopy, stringStart, stringLength);
             strCopy[stringLength] = 0;
 
             u_charsToUChars(stringStart, ustr, stringLength);

@@ -18,6 +18,8 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include <malloc.h>
+#include <string.h>
 #include "unicode/uloc.h"
 #include "unicode/umsg.h"
 #include "unicode/udat.h"
@@ -26,8 +28,6 @@
 #include "cintltst.h"
 #include "cmsgtst.h"
 #include "cformtst.h"
-#include "cstring.h"
-#include "cmemory.h"
 
 static const char* const txt_testCasePatterns[] = {
    "Quotes '', '{', a {0,number,integer} '{'0}",
@@ -882,7 +882,7 @@ static void TestJ904(void) {
      * check to see that the machine doesn't have an unusual time zone
      * offset, that is, one with a non-zero minutes/seconds offset
      * from GMT -- see above. */
-    if (uprv_strcmp(cresult, EXP) == 0) {
+    if (strcmp(cresult, EXP) == 0) {
         log_verbose("Ok: \"%s\"\n", cresult);
     } else {
         log_err("FAIL: got \"%s\", expected \"%s\"\n", cresult, EXP);
