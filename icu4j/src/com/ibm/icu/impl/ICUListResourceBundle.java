@@ -55,14 +55,10 @@ public class ICUListResourceBundle extends ListResourceBundle {
 		    if (realContents == contents) {
 			realContents = (Object[][])contents.clone();
 		    }
-		    System.out.println("redirected " + contents[i][0] + " from " + contents[i][1] + " to " + newValue);
-
 		    realContents[i] = new Object[] { contents[i][0], newValue };
 		}
 	    }
 	}
-
-	System.out.println("returning contents for: " + this);
 
 	return realContents;
     }
@@ -110,17 +106,13 @@ public class ICUListResourceBundle extends ListResourceBundle {
 			// sigh, isn't there a better way to read the whole stream?
 			// could get url instead, I suppose, and get the length of the data
 			InputStream stream = this.getClass().getResourceAsStream(resName);
-			System.out.println("binary read of " + resName + ", stream: " + stream);
 			byte[] result = readToEOS(stream);
-			System.out.println("got: " + result + ", length: " + result.length);
 			return result;
 		    }
 		    else if (bValue[0] == RESOURCE_UNICODE) {
 			InputStream stream = this.getClass().getResourceAsStream(resName);
-			System.out.println("unicode read of " + resName + ", stream: " + stream);
 			InputStreamReader reader = new InputStreamReader(stream, "UTF-16");
 			char[] result = readToEOS(reader);
-			System.out.println("got: " + result + ", length: " + result.length);
 			return result;
 		    }
 		} 
@@ -137,6 +129,7 @@ public class ICUListResourceBundle extends ListResourceBundle {
     }
 
     private static byte[] readToEOS(InputStream stream) {
+
 	ArrayList vec = new ArrayList();
 	int count = 0;
 	int pos = 0;
