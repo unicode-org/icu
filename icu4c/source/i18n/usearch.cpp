@@ -937,7 +937,7 @@ inline UBool checkRepeatedMatch(UStringSearch *strsrch,
     else {
         result = start >= lastmatchindex;
     }
-    if (!strsrch->search->isOverlap) {
+    if (!result && !strsrch->search->isOverlap) {
         if (strsrch->search->isForwardSearching) {
             result = start < lastmatchindex + strsrch->search->matchedLength;
         }
@@ -2921,17 +2921,31 @@ U_CAPI int32_t U_EXPORT2 usearch_next(UStringSearch *strsrch,
                                           UErrorCode    *status)
 { 
     if (U_SUCCESS(*status) && strsrch) {
-        int32_t  offset     = usearch_getOffset(strsrch);
-        USearch     *search     = strsrch->search;
-        search->reset           = FALSE;
-        int32_t      textlength = search->textLength;
-        int32_t  matchedindex = search->matchedIndex;
+        // note offset is either equivalent to the start of the previous match
+        // or is set by the user
+        int32_t      offset       = usearch_getOffset(strsrch);
+        USearch     *search       = strsrch->search;
+        search->reset             = FALSE;
+        int32_t      textlength   = search->textLength;
+        int32_t      matchedindex = search->matchedIndex;
+        /*
         if (search->isForwardSearching) {
             if (offset == textlength || matchedindex == textlength || 
                 (!search->isOverlap && 
                     (offset + strsrch->pattern.defaultShiftSize > textlength ||
                     (matchedindex != USEARCH_DONE && 
                     matchedindex + search->matchedLength >= textlength)))) {
+                // not enough characters to match
+                setMatchNotFound(strsrch);
+                return USEARCH_DONE; 
+            }
+        }*/
+        if (search->isForwardSearching) {
+            if (offset == textlength
+                || (!search->isOverlap && 
+                    (offset + strsrch->pattern.defaultShiftSize > textlength ||
+                    (search->matchedIndex != USEARCH_DONE && 
+                     offset + search->matchedLength >= textlength)))) {
                 // not enough characters to match
                 setMatchNotFound(strsrch);
                 return USEARCH_DONE; 
@@ -2953,7 +2967,7 @@ U_CAPI int32_t U_EXPORT2 usearch_next(UStringSearch *strsrch,
 
         if (U_SUCCESS(*status)) {
             if (strsrch->pattern.CELength == 0) {
-                if (matchedindex == USEARCH_DONE) {
+                if (search->matchedIndex == USEARCH_DONE) {
                     search->matchedIndex = offset;
                 }
                 else { // moves by codepoints
@@ -2970,7 +2984,6 @@ U_CAPI int32_t U_EXPORT2 usearch_next(UStringSearch *strsrch,
             else {
 				if (search->matchedLength > 0) {
 					// if matchlength is 0 we are at the start of the iteration
-					int offset = ucol_getOffset(strsrch->textIter);
 					if (search->isOverlap) {
 						ucol_setOffset(strsrch->textIter, offset + 1, status);
 					}
@@ -2979,6 +2992,14 @@ U_CAPI int32_t U_EXPORT2 usearch_next(UStringSearch *strsrch,
 							           offset + search->matchedLength, status);
 					}
 				}
+                else {
+                    // for boundary check purposes. this will ensure that the
+                    // next match will not preceed the current offset
+                    // note search->matchedIndex will always be set to something
+                    // in the code
+                    search->matchedIndex = offset - 1;
+                }
+                
 				if (search->isCanonicalMatch) {
 					// can't use exact here since extra accents are allowed.
 					usearch_handleNextCanonical(strsrch, status);
@@ -2989,14 +3010,7 @@ U_CAPI int32_t U_EXPORT2 usearch_next(UStringSearch *strsrch,
 			}
             
             if (U_FAILURE(*status)) {
-                // bcos of the backwards iteration, we might have detected a 
-                // match too far front
                 return USEARCH_DONE;
-            }
-
-            if (search->matchedIndex < offset) {
-                setMatchNotFound(strsrch);
-                return USEARCH_DONE; 
             }
 
             return search->matchedIndex;
@@ -3240,7 +3254,7 @@ UBool usearch_handleNextCanonical(UStringSearch *strsrch, UErrorCode *status)
     int32_t             textlength      = strsrch->search->textLength;
     uint32_t           *patternce       = strsrch->pattern.CE;
     int32_t             patterncelength = strsrch->pattern.CELength;
-    int32_t         textoffset      = ucol_getOffset(coleiter);
+    int32_t             textoffset      = ucol_getOffset(coleiter);
     UBool               hasPatternAccents = 
        strsrch->pattern.hasSuffixAccents || strsrch->pattern.hasPrefixAccents;
     
