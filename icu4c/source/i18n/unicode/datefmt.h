@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1997-2001, International Business Machines
+*   Copyright (C) 1997-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -11,7 +11,7 @@
 *   Date        Name        Description
 *   02/19/97    aliu        Converted from java.
 *   04/01/97    aliu        Added support for centuries.
-*    07/23/98    stephen        JDK 1.2 sync
+*   07/23/98    stephen     JDK 1.2 sync
 *   11/15/99    weiv        Added support for week of year/day of week formatting
 ********************************************************************************
 */
@@ -572,7 +572,7 @@ public:
 
     /**
      * Allows you to set the number formatter.
-     * @param formatToAdopt     NumberFormat object to be set.
+     * @param newNumberFormat  NumberFormat object to be set.
      * @stable ICU 2.0
      */
     virtual void setNumberFormat(const NumberFormat& newNumberFormat);

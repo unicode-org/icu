@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1997-2002, International Business Machines
+*   Copyright (C) 1997-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -711,7 +711,7 @@ public:
      * Sets the calendar's time zone to be the same as the one passed in. The TimeZone
      * passed in is _not_ adopted; the client is still responsible for deleting it.
      *
-     * @param value  The given time zone.
+     * @param zone  The given time zone.
      * @stable ICU 2.0
      */
     void setTimeZone(const TimeZone& zone);

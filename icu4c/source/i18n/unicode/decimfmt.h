@@ -467,7 +467,7 @@ public:
      */
     virtual void parse(const UnicodeString& text, 
                        Formattable& result, 
-                       UErrorCode& error) const;
+                       UErrorCode& status) const;
 
     /**
      * Returns the decimal format symbols, which is generally not changed
