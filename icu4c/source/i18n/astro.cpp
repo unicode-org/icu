@@ -1219,11 +1219,11 @@ UDate CalendarAstronomer::timeOfAngle(AngleFunc& func, double desired,
   // Using the average period, estimate the next (or previous) time at
   // which the desired angle occurs.
   double deltaT =  (deltaAngle + (next ? 0.0 : - CalendarAstronomer_PI2 )) * (periodDays*DAY_MS) / CalendarAstronomer_PI2;
-        
+         
   double lastDeltaT = deltaT; // Liu
   UDate startTime = fTime; // Liu
         
-  setTime(fTime + (long)deltaT);
+  setTime(fTime + uprv_ceil(deltaT));
 
   // Now iterate until we get the error below epsilon.  Throughout
   // this loop we use normPI to get values in the range -Pi to Pi,
@@ -1260,7 +1260,7 @@ UDate CalendarAstronomer::timeOfAngle(AngleFunc& func, double desired,
     // or backward) and try again.
     // Liu 11/9/00
     if (uprv_fabs(deltaT) > uprv_fabs(lastDeltaT)) {
-      long delta = (long) (periodDays * DAY_MS / 8);
+      double delta = uprv_ceil (periodDays * DAY_MS / 8.0);
       setTime(startTime + (next ? delta : -delta));
       return timeOfAngle(func, desired, periodDays, epsilon, next);
     }
@@ -1268,7 +1268,7 @@ UDate CalendarAstronomer::timeOfAngle(AngleFunc& func, double desired,
     lastDeltaT = deltaT;
     lastAngle = angle;
 
-    setTime(fTime + (long)deltaT);
+    setTime(fTime + uprv_ceil(deltaT));
   }
   while (uprv_fabs(deltaT) > epsilon);
         
