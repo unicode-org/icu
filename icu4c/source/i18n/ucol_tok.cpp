@@ -228,19 +228,19 @@ ucolTokSuboption beforeSub[3] = {
 
 
 ucolTokOption rulesOptions[UTOK_OPTION_COUNT] = {
- {option_02,  9, alternateSub, 2, UCOL_ALTERNATE_HANDLING}, /*"alternate"      */   
- {option_03,  9, frenchSub, 1, UCOL_FRENCH_COLLATION}, /*"backwards"      */   
- {option_07,  9, onOffSub, 2, UCOL_CASE_LEVEL}, /*"caseLevel"      */   
- {option_08,  9, caseFirstSub, 3, UCOL_CASE_FIRST}, /*"caseFirst"      */   
- {option_06, 13, onOffSub, 2, UCOL_NORMALIZATION_MODE}, /*"normalization"  */
+ {option_02,  9, alternateSub, 2, UCOL_ALTERNATE_HANDLING}, /*"alternate" */
+ {option_03,  9, frenchSub, 1, UCOL_FRENCH_COLLATION}, /*"backwards"      */
+ {option_07,  9, onOffSub, 2, UCOL_CASE_LEVEL},  /*"caseLevel"      */
+ {option_08,  9, caseFirstSub, 3, UCOL_CASE_FIRST}, /*"caseFirst"   */
+ {option_06, 13, onOffSub, 2, UCOL_NORMALIZATION_MODE}, /*"normalization" */
  {option_04, 12, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"variable top"   */
- {option_01,  9, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"rearrange"      */   
- {option_05,  3, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"top"            */         
- {option_12,  6, beforeSub, 3, UCOL_ATTRIBUTE_COUNT}, /*"before"    */         
+ {option_01,  9, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"rearrange"      */
+ {option_05,  3, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"top"            */
+ {option_12,  6, beforeSub, 3, UCOL_ATTRIBUTE_COUNT}, /*"before"    */
  {option_00,  9, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"undefined"      */
- {option_09, 11, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"scriptOrder"    */ 
- {option_10, 11, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"charsetname"    */ 
- {option_11,  7, NULL, 0, UCOL_ATTRIBUTE_COUNT}  /*"charset"        */     
+ {option_09, 11, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"scriptOrder"    */
+ {option_10, 11, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"charsetname"    */
+ {option_11,  7, NULL, 0, UCOL_ATTRIBUTE_COUNT}  /*"charset"        */
 };
 
 int32_t  
@@ -258,9 +258,8 @@ u_strncmpNoCase(const UChar     *s1,
             ++s1;
             ++s2;
         }
-    } else {
-        return 0;
     }
+    return 0;
 }
 
 uint8_t ucol_uprv_tok_readAndSetOption(UColOptionSet *opts, const UChar* start, const UChar *end, UErrorCode *status) {
