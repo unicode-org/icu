@@ -199,105 +199,106 @@ UnicodeSet* UnicodePropertySet::createFromPattern(const UnicodeString& pattern,
                                                   ParsePosition& ppos,
                                                   UErrorCode &status) {
     init(status);
-
+    
     UnicodeSet* set = NULL;
 
-    int32_t pos = ppos.getIndex();
+    if(U_SUCCESS(status)){
+        int32_t pos = ppos.getIndex();
 
-    // On entry, ppos should point to one of the following locations:
+        // On entry, ppos should point to one of the following locations:
 
-    // Minimum length is 5 characters, e.g. \p{L}
-    if ((pos+5) > pattern.length()) {
-        return NULL;
-    }
-
-    UBool posix = FALSE; // true for [:pat:], false for \p{pat} \P{pat}
-    UBool invert = FALSE;
-
-    // Look for an opening [:, [:^, \p, or \P
-    if (0 == pattern.compare(pos, 2, POSIX_OPEN)) {
-        posix = TRUE;
-        pos = skipWhitespace(pattern, pos+2);
-        if (pos < pattern.length() && pattern.charAt(pos) == HAT) {
-            ++pos;
-            invert = TRUE;
-        }
-    } else if (0 == pattern.caseCompare(pos, 2, PERL_OPEN, U_FOLD_CASE_DEFAULT)) {
-        invert = (pattern.charAt(pos+1) == UPPER_P);
-        pos = skipWhitespace(pattern, pos+2);
-        if (pos == pattern.length() || pattern.charAt(pos++) != LEFT_BRACE) {
-            // Syntax error; "\p" or "\P" not followed by "{"
+        // Minimum length is 5 characters, e.g. \p{L}
+        if ((pos+5) > pattern.length()) {
             return NULL;
         }
-    } else {
-        // Open delimiter not seen
-        return NULL;
-    }
 
-    // Look for the matching close delimiter, either :] or }
-    int32_t close = pattern.indexOf(posix ? POSIX_CLOSE : PERL_CLOSE, pos);
-    if (close < 0) {
-        // Syntax error; close delimiter missing
-        return NULL;
-    }
+        UBool posix = FALSE; // true for [:pat:], false for \p{pat} \P{pat}
+        UBool invert = FALSE;
 
-    // Look for an '=' sign.  If this is present, we will parse a
-    // medium \p{gc=Cf} or long \p{GeneralCategory=Format}
-    // pattern.
-    int32_t equals = pattern.indexOf(EQUALS, pos);
-    if (equals >= 0 && equals < close) {
-        // Equals seen; parse medium/long pattern
-        UnicodeString typeName = munge(pattern, pos, equals);
-        UnicodeString valueName = munge(pattern, equals+1, close);
-        SetFactory factory;
-        factory = voidPtrToSetFactory(NAME_MAP->get(typeName));
-        if (factory == NULL) {
-            // Not a factory; try a binary property of the form
-            // \p{foo=true}, where the value can be 'true', 't',
-            // 'false', or 'f'.
-            int32_t v = BOOLEAN_VALUE_MAP->geti(valueName) - MAPVAL;
-            if (v >= 0) {
-                set = createBinaryPropertySet(typeName, status);
-                invert ^= !v;
+        // Look for an opening [:, [:^, \p, or \P
+        if (0 == pattern.compare(pos, 2, POSIX_OPEN)) {
+            posix = TRUE;
+            pos = skipWhitespace(pattern, pos+2);
+            if (pos < pattern.length() && pattern.charAt(pos) == HAT) {
+                ++pos;
+                invert = TRUE;
             }
-
-            if (set == NULL) {
-                // Syntax error; type name not recognized
+        } else if (0 == pattern.caseCompare(pos, 2, PERL_OPEN, U_FOLD_CASE_DEFAULT)) {
+            invert = (pattern.charAt(pos+1) == UPPER_P);
+            pos = skipWhitespace(pattern, pos+2);
+            if (pos == pattern.length() || pattern.charAt(pos++) != LEFT_BRACE) {
+                // Syntax error; "\p" or "\P" not followed by "{"
                 return NULL;
             }
         } else {
-            set = (*factory)(valueName, status);
+            // Open delimiter not seen
+            return NULL;
         }
-    } else {
-        // No equals seen; parse short format \p{Cf}
-        UnicodeString shortName = munge(pattern, pos, close);
 
-        // First try general category
-        set = createCategorySet(shortName, status);
+        // Look for the matching close delimiter, either :] or }
+        int32_t close = pattern.indexOf(posix ? POSIX_CLOSE : PERL_CLOSE, pos);
+        if (close < 0) {
+            // Syntax error; close delimiter missing
+            return NULL;
+        }
 
-        // If this fails, try script
+        // Look for an '=' sign.  If this is present, we will parse a
+        // medium \p{gc=Cf} or long \p{GeneralCategory=Format}
+        // pattern.
+        int32_t equals = pattern.indexOf(EQUALS, pos);
+        if (equals >= 0 && equals < close) {
+            // Equals seen; parse medium/long pattern
+            UnicodeString typeName = munge(pattern, pos, equals);
+            UnicodeString valueName = munge(pattern, equals+1, close);
+            SetFactory factory;
+            factory = voidPtrToSetFactory(NAME_MAP->get(typeName));
+            if (factory == NULL) {
+                // Not a factory; try a binary property of the form
+                // \p{foo=true}, where the value can be 'true', 't',
+                // 'false', or 'f'.
+                int32_t v = BOOLEAN_VALUE_MAP->geti(valueName) - MAPVAL;
+                if (v >= 0) {
+                    set = createBinaryPropertySet(typeName, status);
+                    invert ^= !v;
+                }
+
+                if (set == NULL) {
+                    // Syntax error; type name not recognized
+                    return NULL;
+                }
+            } else {
+                set = (*factory)(valueName, status);
+            }
+        } else {
+            // No equals seen; parse short format \p{Cf}
+            UnicodeString shortName = munge(pattern, pos, close);
+
+            // First try general category
+            set = createCategorySet(shortName, status);
+
+            // If this fails, try script
+            if (set == NULL && U_SUCCESS(status)) {
+                set = createScriptSet(shortName, status);
+            }
+
+            // If this fails, try binary property
+            if (set == NULL && U_SUCCESS(status)) {
+                set = createBinaryPropertySet(shortName, status);
+            }
+        }
+
+        // Upon failure, return NULL with ppos unchanged
         if (set == NULL) {
-            set = createScriptSet(shortName, status);
+            return NULL;
         }
 
-        // If this fails, try binary property
-        if (set == NULL) {
-            set = createBinaryPropertySet(shortName, status);
+        if (invert) {
+            set->complement();
         }
+
+        // Move to the limit position after the close delimiter
+        ppos.setIndex(close + (posix ? 2 : 1));
     }
-
-    // Upon failure, return NULL with ppos unchanged
-    if (set == NULL) {
-        return NULL;
-    }
-
-    if (invert) {
-        set->complement();
-    }
-
-    // Move to the limit position after the close delimiter
-    ppos.setIndex(close + (posix ? 2 : 1));
-
     return set;
 }
 
@@ -317,6 +318,9 @@ static UBool _numericValueFilter(UChar32 c, void* context) {
 UnicodeSet* UnicodePropertySet::createNumericValueSet(const UnicodeString& valueName,
                                                       UErrorCode &status)
 {
+    if(U_FAILURE(status)){
+        return NULL;
+    }
     CharString cvalueName(valueName);
     UnicodeSet* set = new UnicodeSet();
     char* end;
@@ -343,10 +347,12 @@ static UBool _combiningClassFilter(UChar32 c, void* context) {
 UnicodeSet* UnicodePropertySet::createCombiningClassSet(const UnicodeString& valueName,
                                                         UErrorCode &status)
 {
+
     init(status);
     if (U_FAILURE(status)) {
         return NULL;
     }
+
     CharString cvalueName(valueName);
     UnicodeSet* set = new UnicodeSet();
     char* end;
@@ -437,16 +443,18 @@ UnicodeSet* UnicodePropertySet::createCategorySet(const UnicodeString& valueName
 UnicodeSet* UnicodePropertySet::createScriptSet(const UnicodeString& valueName,
                                                 UErrorCode &status)
 {
+    if(U_FAILURE(status)){
+        return NULL;
+    }
     CharString cvalueName(valueName);
-    UErrorCode ec = U_ZERO_ERROR;
     const int32_t capacity = 10;
     UScriptCode script[capacity]={USCRIPT_INVALID_CODE};
 
     // Ignore the return value of uscript_getCode
     // since this is locale independent.
-    uscript_getCode(cvalueName,script,capacity, &ec);
+    uscript_getCode(cvalueName,script,capacity, &status);
 
-    if (script[0] == USCRIPT_INVALID_CODE || U_FAILURE(ec)) {
+    if (script[0] == USCRIPT_INVALID_CODE || U_FAILURE(status)) {
         // Syntax error; unknown short name
         return NULL;
     }
@@ -466,6 +474,10 @@ static UBool _binaryPropertyFilter(UChar32 c, void* context) {
 UnicodeSet* UnicodePropertySet::createBinaryPropertySet(const UnicodeString& name,
                                                         UErrorCode &status)
 {
+    if(U_FAILURE(status)){
+        return NULL;
+    }
+
     int32_t code = BINARY_PROPERTY_MAP->geti(name) - MAPVAL;
     if (code < 0) {
         return NULL;
@@ -485,14 +497,12 @@ UnicodePropertySet::getRuleWhiteSpaceSet(UErrorCode &status) {
     UnicodeSet set;
     int32_t code;
 
-    init(status);
-
     /* "white space" in the sense of ICU rule parsers: Cf+White_Space */
     code = UCHAR_WHITE_SPACE;
     initSetFromFilter(set, _binaryPropertyFilter, &code, status);
-
-    set.addAll(getCategorySet(U_FORMAT_CHAR));
-
+    if(U_SUCCESS(status)){
+        set.addAll(getCategorySet(U_FORMAT_CHAR));
+    }
     return set; /* return by value */
 }
 

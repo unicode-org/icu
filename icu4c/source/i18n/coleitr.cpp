@@ -49,11 +49,6 @@ CollationElementIterator::CollationElementIterator(
   m_data_ = ucol_openElements(other.m_data_->iteratordata_.coll, NULL, 0, 
                               &status);
 
-  /* Test for buffer overflows */
-  if (U_FAILURE(status)) {
-    return;
-  }
-
   *this = other;
 }
 

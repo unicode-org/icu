@@ -173,7 +173,9 @@ UnicodeSet::UnicodeSet() :
     buffer(0)
 {
     list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
-    list[0] = UNICODESET_HIGH;
+    if(list!=NULL){
+        list[0] = UNICODESET_HIGH;
+    }
     allocateStrings();
     _dbgct(this);
 }
@@ -190,7 +192,9 @@ UnicodeSet::UnicodeSet(UChar32 start, UChar32 end) :
     buffer(0)
 {
     list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
-    list[0] = UNICODESET_HIGH;
+    if(list!=NULL){
+        list[0] = UNICODESET_HIGH;
+    }
     allocateStrings();
     complement(start, end);
     _dbgct(this);
@@ -206,16 +210,17 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern,
                        UErrorCode& status) :
     len(0), capacity(START_EXTRA), bufferCapacity(0),
     buffer(0)
-{
-    list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
-    /* test for NULL */
-    if(list == NULL) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return;    
+{   
+    if(U_SUCCESS(status)){
+        list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
+        /* test for NULL */
+        if(list == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;  
+        }else{
+            allocateStrings();
+            applyPattern(pattern, status);
+        }
     }
-    
-    allocateStrings();
-    applyPattern(pattern, status);
     _dbgct(this);
 }
 
@@ -226,14 +231,16 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
     len(0), capacity(START_EXTRA), bufferCapacity(0),
     buffer(0)
 {
-    list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
-    /* test for NULL */
-    if(list == NULL) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return;    
+    if(U_SUCCESS(status)){
+        list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
+        /* test for NULL */
+        if(list == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;   
+        }else{
+            allocateStrings();
+            applyPattern(pattern, pos, &symbols, status);
+        }
     }
-    allocateStrings();
-    applyPattern(pattern, pos, &symbols, status);
     _dbgct(this);
 }
 
@@ -243,14 +250,16 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
     len(0), capacity(START_EXTRA), bufferCapacity(0),
     buffer(0)
 {
-    list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
-    /* test for NULL */
-    if(list == NULL) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return;    
+    if(U_SUCCESS(status)){
+        list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
+        /* test for NULL */
+        if(list == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR; 
+        }else{
+            allocateStrings();
+            applyPattern(pattern, pos, NULL, status);
+        }
     }
-    allocateStrings();
-    applyPattern(pattern, pos, NULL, status);
     _dbgct(this);
 }
 
@@ -277,10 +286,10 @@ UnicodeSet::UnicodeSet(int8_t category, UErrorCode& status) :
             /* test for NULL */
             if(list == NULL) {
                 status = U_MEMORY_ALLOCATION_ERROR;
-                return;    
+            }else{
+                allocateStrings();
+                applyPattern(pattern, status);
             }
-            allocateStrings();
-            applyPattern(pattern, status);
         }
     }
     _dbgct(this);
@@ -295,8 +304,10 @@ UnicodeSet::UnicodeSet(const UnicodeSet& o) :
     buffer(0)
 {
     list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
-    allocateStrings();
-    *this = o;
+    if(list!=NULL){
+        allocateStrings();
+        *this = o;
+    }
     _dbgct(this);
 }
 

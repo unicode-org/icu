@@ -127,7 +127,6 @@ MessageFormat::MessageFormat(const UnicodeString& pattern,
     /* test for NULL */
     if (fArgumentNumbers == 0) {
         success = U_MEMORY_ALLOCATION_ERROR;
-        uprv_free(fOffsets);
         fOffsets = NULL;
         return;
     }
@@ -157,7 +156,7 @@ MessageFormat::MessageFormat(const UnicodeString& pattern,
     /* test for NULL */
     if (fArgumentNumbers == 0) {
         success = U_MEMORY_ALLOCATION_ERROR;
-        uprv_free(fOffsets);
+        // leave cleaning up to the destructor
         fOffsets = NULL;
         return;
     }
