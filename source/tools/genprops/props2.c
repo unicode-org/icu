@@ -630,7 +630,7 @@ numericLineFn(void *context,
         }
 
         if(beVerbose) {
-            printf("adding U+%04x numeric type %d value %lu\n", start, type, value);
+            printf("adding U+%04x numeric type %d value %u\n", start, type, value);
         }
 
         /* reconstruct the properties and set the new numeric type and value */
