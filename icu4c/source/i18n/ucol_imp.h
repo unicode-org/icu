@@ -328,7 +328,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
         const    UChar        *source,
         int32_t        sourceLength,
         uint8_t        **result,
-        int32_t        resultLength,
+        uint32_t        resultLength,
         UBool allocatePrimary,
         UErrorCode *status);
 
@@ -474,7 +474,17 @@ typedef struct {
   uint32_t conts;
 } InverseTableHeader;
 
+typedef int32_t
+SortKeyGenerator(const    UCollator    *coll,
+        const    UChar        *source,
+        int32_t        sourceLength,
+        uint8_t        **result,
+        uint32_t        resultLength,
+        UBool allocatePrimary,
+        UErrorCode *status);
+
 struct UCollator {
+    SortKeyGenerator *sortKeyGen;
     UBool freeOnClose;
     UResourceBundle *rb;
     const UCATableHeader *image;
