@@ -168,7 +168,7 @@ main(int argc, char *argv[]) {
     ishelp = options[0].doesOccur || options[1].doesOccur;
     if (ishelp || argc != 2) {
         fprintf(stderr,
-                "%csage: %s [ -h, -?, --help ] [ -n ] [ -C, --comment ] [ -d, --destdir destination ] archive\n", ishelp ? 'U' : 'u', pname);
+                "%csage: %s [ -h, -?, --help ] [ -n ] [ -C, --comment ] [ --pkgdata ] [ -d, --destdir destination ] archive\n", ishelp ? 'U' : 'u', pname);
         if (ishelp) {
             fprintf(stderr, "\nOptions:\n"
                     "    -h, -?, --help   print this message and exit\n"
