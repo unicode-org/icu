@@ -1,20 +1,17 @@
-numfmt: a sample program which displays number formatting in C and C++
+ustring: Unicode String Manipulation
 
 This sample demonstrates
-         Formatting a number
-         Outputting text in the default codepage to the console
+         Using ICU to manipulate UnicodeString objects
+
          
 Files:
-    main.cpp                   Main source file in C++
-    capi.c                     C version 
-    util.cpp                   formatted output convenience implementation
-    util.h                     formatted output convenience header
-    numfmt.dsw                 Windows MSVC workspace.  Double-click this to get started.
-    numfmt.dsp                 Windows MSVC project file
+    ustring.cpp      Main source file in C++
+    ustring.dsw      Windows MSVC workspace.  Double-click this to get started.
+    ustring.dsp      Windows MSVC project file
 
-To Build on Windows
+To Build ustring on Windows
     1.  Install and build ICU
-    2.  In MSVC, open the workspace file icu\samples\numfmt\numfmt.dsw
+    2.  In MSVC, open the workspace file icu\samples\ustring\ustring.dsw
     3.  Choose a Debug or Release build.
     4.  Build.
 	
@@ -23,10 +20,10 @@ To Run on Windows
     2.  Add ICU's bin directory to the path, e.g.
             set PATH=c:\icu\bin;%PATH%
         (Use the path to where ever ICU is on your system.)
-    3.  cd into the numfmt directory, e.g.
-            cd c:\icu\source\samples\numfmt\debug
+    3.  cd into the ustring directory, e.g.
+            cd c:\icu\source\samples\ustring\debug
     4.  Run it
-            numfmt
+            ustring
 
 To Build on Unixes
     1.  Build ICU.  
@@ -41,20 +38,22 @@ To Build on Unixes
            gmake install
  
     3.  Compile
-           cd <icu directory>/source/samples/numfmt
+           cd <icu directory>/source/samples/ustring
            gmake ICU_PREFIX=<icu install directory)
            
  To Run on Unixes
-           cd <icu directory>/source/samples/numfmt
+           cd <icu directory>/source/samples/ustring
            
            gmake ICU_PREFIX=<icu install directory>  check
                -or- 
 
            export LD_LIBRARY_PATH=<icu install directory>/lib:.:$LD_LIBRARY_PATH
-           numfmt
+           ustring
+           
            
  Note:  The name of the LD_LIBRARY_PATH variable is different on some systems.
         If in doubt, run the sample using "gmake check", and note the name of
         the variable that is used there.  LD_LIBRARY_PATH is the correct name
         for Linux and Solaris.
+
 

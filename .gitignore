@@ -138,13 +138,13 @@ icu4c/source/samples/cal/*.pdb
 icu4c/source/samples/cal/Debug
 icu4c/source/samples/cal/Makefile
 icu4c/source/samples/cal/Release
-icu4c/source/samples/cal/cal
+icu4c/source/samples/cal/icucal
 icu4c/source/samples/date/*.d
 icu4c/source/samples/date/*.pdb
 icu4c/source/samples/date/Debug
 icu4c/source/samples/date/Makefile
 icu4c/source/samples/date/Release
-icu4c/source/samples/date/date
+icu4c/source/samples/date/icudate
 icu4c/source/samples/layout/Makefile
 icu4c/source/stubdata/*.ao
 icu4c/source/stubdata/*.d

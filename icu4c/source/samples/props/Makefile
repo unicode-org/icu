@@ -25,11 +25,10 @@ ICUPATH=
 include $(ICU_INC)
 
 # Name of your target
-TARGET=translit
+TARGET=props
 
 # All object files (C or C++)
-OBJECTS=main.o util.o
-# You can simply add 'unaccent.o'  to the above line for example.
+OBJECTS=props.o
 
 CLEANFILES=*~ $(TARGET).out
 
@@ -60,7 +59,7 @@ $(TARGET).report: check $(TARGET).cpp
 	more $(TARGET).cpp $(TARGET).out > $@
 
 $(ICU_INC):
-	@echo "Please read the directions at the top of this file (Makefile)"
+	@echo "Please read the directions at the top of this file (Makefile) and the README"
 	@echo "Can't open $(ICU_INC)"
 	@false
 
