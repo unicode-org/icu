@@ -138,6 +138,14 @@ public abstract class UnicodeProperty implements UCD_Types {
       }
       
       /**
+       * special hack for NFD/NFKD
+       */
+		public String getListingValue(int cp) {
+        	if (getValueType() != BINARY) return getValue(cp, LONG);
+        	return getProperty(LONG);
+		}
+      
+      /**
        * Does it have the propertyValue?
        */
       abstract boolean hasValue(int cp);

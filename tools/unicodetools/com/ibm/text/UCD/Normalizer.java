@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Normalizer.java,v $
-* $Date: 2002/03/15 01:57:01 $
-* $Revision: 1.7 $
+* $Date: 2002/03/20 00:21:42 $
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -68,6 +68,13 @@ public final class Normalizer implements UCD_Types {
     }
 
     /**
+     * Return string name
+     */
+    public String getUCDVersion() {
+        return data.getUCDVersion();
+    }
+
+    /**
      * Does compose?
      */
     public boolean isComposition() {
@@ -120,7 +127,6 @@ public final class Normalizer implements UCD_Types {
     }
 
     /**
-    */
     private StringBuffer hasDecompositionBuffer = new StringBuffer();
 
     public boolean hasDecomposition(int cp) {
@@ -129,6 +135,7 @@ public final class Normalizer implements UCD_Types {
         if (hasDecompositionBuffer.length() != 1) return true;
         return cp != hasDecompositionBuffer.charAt(0);
     }
+    */
 
     /**
      * Does a quick check to see if the string is in the current form. Checks canonical order and
@@ -427,6 +434,11 @@ public final class Normalizer implements UCD_Types {
                 if (ucd.
             */
         }
+        
+        String getUCDVersion() {
+        	return ucd.getVersion();
+        }
+        
         /*
 Problem: differs: true, call: false U+0385 GREEK DIALYTIKA TONOS
 Problem: differs: true, call: false U+03D3 GREEK UPSILON WITH ACUTE AND HOOK SYMBOL

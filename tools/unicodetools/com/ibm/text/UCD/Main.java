@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Main.java,v $
-* $Date: 2002/03/15 00:34:46 $
-* $Revision: 1.9 $
+* $Date: 2002/03/20 00:21:42 $
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
@@ -77,8 +77,11 @@ public final class Main implements UCD_Types {
             } else if (arg.equalsIgnoreCase("build")) ConvertUCD.main(new String[]{ucdVersion});
             else if (arg.equalsIgnoreCase("version")) ucdVersion = args[++i];
             else if (arg.equalsIgnoreCase("testskippable")) NFSkippable.main(null);
+            else if (arg.equalsIgnoreCase("diffIgnorable")) VerifyUCD.diffIgnorable();
             else if (arg.equalsIgnoreCase("generateXML")) VerifyUCD.generateXML();
             else if (arg.equalsIgnoreCase("checkSpeed")) VerifyUCD.checkSpeed();
+            else if (arg.equalsIgnoreCase("verifyNormalizationStability")) VerifyUCD.verifyNormalizationStability();
+            
             else if (arg.equalsIgnoreCase("generateHanTransliterator")) GenerateHanTransliterator.main();
             else if (arg.equalsIgnoreCase("compareBlueberry")) VerifyUCD.compareBlueberry();
 

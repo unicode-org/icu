@@ -48,10 +48,14 @@
 # I and i-dotless; I-dot and i are case pairs in Turkish and Azeri
 # The following rules handle those cases.
 
+0130; 0069; 0130; 0130; tr # LATIN CAPITAL LETTER I WITH DOT ABOVE
+0130; 0069; 0130; 0130; az # LATIN CAPITAL LETTER I WITH DOT ABOVE
+
 # When lowercasing, remove dot_above in the sequence I + dot_above, which will turn into i.
 # This matches the behavior of the canonically equivalent I-dot_above
 
-0307; ; 0307; 0307; After_Soft_Dotted; # COMBINING DOT ABOVE
+0307; ; 0307; 0307; tr After_Soft_Dotted; # COMBINING DOT ABOVE
+0307; ; 0307; 0307; az After_Soft_Dotted; # COMBINING DOT ABOVE
 
 # When lowercasing, unless an I is before a dot_above, it turns into a dotless i.
 
@@ -63,7 +67,6 @@
 0069; 0069; 0130; 0130; tr; # LATIN SMALL LETTER I
 0069; 0069; 0130; 0130; az; # LATIN SMALL LETTER I
 
-# Note: the following cases are already in the UnicodeData file.
+# Note: the following case is already in the UnicodeData file.
 
 # 0131; 0131; 0049; 0049; tr; # LATIN SMALL LETTER DOTLESS I
-# 0130; 0069; 0130; 0130; tr; # LATIN CAPITAL LETTER I WITH DOT ABOVE

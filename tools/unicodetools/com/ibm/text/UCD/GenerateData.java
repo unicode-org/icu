@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateData.java,v $
-* $Date: 2002/03/15 01:57:01 $
-* $Revision: 1.15 $
+* $Date: 2002/03/20 00:21:42 $
+* $Revision: 1.16 $
 *
 *******************************************************************************
 */
@@ -1183,7 +1183,7 @@ public class GenerateData implements UCD_Types {
             Utility.dot(i);
             if (!Main.ucd.isRepresented(i)) continue;
             
-            if (!Main.nfd.hasDecomposition(i)) {
+            if (!Main.nfd.normalizationDiffers(i)) {
                 if (Main.ucd.getScript(i) == LATIN_SCRIPT) {
                     int cp = i;
                     String hex = "u" + Utility.hex(cp, 4);

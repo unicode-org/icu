@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/MyPropertyLister.java,v $
-* $Date: 2001/12/13 23:35:57 $
-* $Revision: 1.7 $
+* $Date: 2002/03/20 00:21:42 $
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -85,7 +85,7 @@ final class MyPropertyLister extends PropertyLister {
 
         if (cat == Cn
             && propMask != (BINARY_PROPERTIES | Noncharacter_Code_Point)
-            && propMask != (BINARY_PROPERTIES | Reserved_Cf_Code_Point)
+            && propMask != (BINARY_PROPERTIES | Other_Default_Ignorable_Code_Point)
             && propMask != (CATEGORY | Cn)) {
             if (BRIDGE) return CONTINUE;
             else return EXCLUDE;

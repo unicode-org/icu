@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/ConvertUCD.java,v $
-* $Date: 2002/03/15 00:34:46 $
-* $Revision: 1.5 $
+* $Date: 2002/03/20 00:21:43 $
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -25,7 +25,7 @@ import java.io.*;
  */
 
 public final class ConvertUCD implements UCD_Types {
-    public static final boolean SHOW = true;
+    public static final boolean SHOW = false;
     public static final boolean DEBUG = false;
 
     public static int major;
@@ -201,7 +201,7 @@ public final class ConvertUCD implements UCD_Types {
     // MAIN!!
 
     public static void main (String[] args) throws Exception {
-        System.out.println("ConvertUCD");
+        System.out.println("Building binary version of UCD");
 
         log = new PrintWriter(new BufferedWriter(
             new OutputStreamWriter(
@@ -260,8 +260,17 @@ public final class ConvertUCD implements UCD_Types {
             UData value = (UData) charData.get(key);
             value.compact();
         }
-        UData ud = getEntry(0x2A6D6);
+        
+        UData ud;
+        ud = getEntry(0x5e);
+        System.out.println("SPOT-CHECK: 5e: " + ud);
+        
+        ud = getEntry(0x130);
+        System.out.println("SPOT-CHECK: 130: " + ud);
+        
+        ud = getEntry(0x2A6D6);
         System.out.println("SPOT-CHECK: 2A6D6: " + ud);
+        
         ud = getEntry(0xFFFF);
         System.out.println("SPOT-CHECK: FFFF: " + ud);
 
@@ -493,7 +502,16 @@ public final class ConvertUCD implements UCD_Types {
                                 if (type.equals("I")) {
                                     data.simpleCaseFolding = val;
                                     setBinaryProperty(cps, CaseFoldTurkishI);
-                                    System.out.println("SPOT-CHECK: <" + parts[i-1] + "> Setting " + Utility.hex(cps) + ": " + Utility.hex(val));
+                                    System.out.println("SPOT-CHECK: <" + parts[i-1] + "> Setting " 
+                                    	+ Utility.hex(cps) + ": " + Utility.hex(val));
+                                }
+                            } else if (labels[0].equals("SpecialCasing")   // special handling for special casing
+                            			&& labels[4].equals("sc")
+                                		&& parts[4].trim().length() > 0) {
+                                if (i < 4) {
+                                	if (DEBUG) System.out.println("Got special: " + Utility.hex(cps) + ", " 
+                                		+ Utility.hex(key) + ":" + Utility.hex(val));
+                                	addCharData(cps, "sc", parts[4].trim() + ":" + key + ":" + val);
                                 }
                             } else {
                                 /*if (key.equals("sn")) { // SKIP UNDEFINED!!
@@ -782,12 +800,16 @@ public final class ConvertUCD implements UCD_Types {
             } else if (fieldName.equals("su")) {
                 uData.fullUppercase = fieldValue;
             } else if (fieldName.equals("sl")) {
+            	if (DEBUG) System.out.println("Setting full lowercase to " + Utility.hex(fieldValue) + uData);
                 uData.fullLowercase = fieldValue;
             } else if (fieldName.equals("st")) {
                 uData.fullTitlecase = fieldValue;
 
             } else if (fieldName.equals("sc")) {
-                uData.specialCasing = fieldValue;
+            	if (uData.specialCasing.length() > 0) {
+            		uData.specialCasing += ";";
+            	}
+                uData.specialCasing += fieldValue;
 
             } else if (fieldName.equals("xp")) {
                 uData.binaryProperties |= 1 << Utility.lookup(fieldValue, UCD_Names.BP, true);

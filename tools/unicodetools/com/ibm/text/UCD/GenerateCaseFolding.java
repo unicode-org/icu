@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateCaseFolding.java,v $
-* $Date: 2002/03/15 01:57:01 $
-* $Revision: 1.6 $
+* $Date: 2002/03/20 00:21:43 $
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -24,6 +24,8 @@ public class GenerateCaseFolding implements UCD_Types {
     public static boolean COMMENT_DIFFS = false; // ON if we want a comment on mappings != lowercase
     public static boolean PICK_SHORT = false; // picks short value for SIMPLE if in FULL, changes weighting
     public static boolean NF_CLOSURE = false; // picks short value for SIMPLE if in FULL, changes weighting
+    static final int CHECK_CHAR = 0x130; // for debugging, change to actual character, otherwise -1
+     
     // PICK_SHORT & NF_CLOSURE = false for old style
     
     
@@ -83,8 +85,14 @@ public class GenerateCaseFolding implements UCD_Types {
             if (rFull != null && rFull.equals(rSimple) 
               || (PICK_SHORT && UTF16.countCodePoint(rFull) == 1)) {
                 String type = "C";
-                if (ch == 0x130 || ch == 0x131) type = "I";
-                drawLine(out, ch, type, rFull);
+                if (ch == 0x130) {
+                	drawLine(out, ch, "F", "i\u0307");
+                	drawLine(out, ch, "I", "\u0130");
+                } else if (ch == 0x131) {
+                	drawLine(out, ch, "I", "i");
+                } else {
+                	drawLine(out, ch, type, rFull);
+                }
             } else {
                 if (rFull != null) {
                     drawLine(out, ch, "F", rFull);
@@ -404,7 +412,7 @@ public class GenerateCaseFolding implements UCD_Types {
     }
     
     static boolean isExcluded(int ch) {
-        if (ch == 0x130) return true;                  // skip LATIN CAPITAL LETTER I WITH DOT ABOVE
+        // if (ch == 0x130) return true;                  // skip LATIN CAPITAL LETTER I WITH DOT ABOVE
         if (ch == 0x0132 || ch == 0x0133) return true; // skip IJ, ij
         if (ch == 0x037A) return true;                 // skip GREEK YPOGEGRAMMENI
         if (0x249C <= ch && ch <= 0x24B5) return true; // skip PARENTHESIZED LATIN SMALL LETTER A..
@@ -456,7 +464,7 @@ public class GenerateCaseFolding implements UCD_Types {
                 btitle = Main.nfc.normalize(btitle);
             }
             
-            if (ch == -1) {// for debugging, change to actual character
+            if (ch == CHECK_CHAR) {
                 System.out.println("Code: " + Main.ucd.getCodeAndName(ch));
                 System.out.println("Decomp: " + Main.ucd.getCodeAndName(decomp));
                 System.out.println("Base: " + Main.ucd.getCodeAndName(base));
@@ -474,11 +482,17 @@ public class GenerateCaseFolding implements UCD_Types {
             // presumably if there is a single code point, it would already be in the simple mappings
             
             if (UTF16.countCodePoint(flower) == 1 && UTF16.countCodePoint(fupper) == 1 
-                && UTF16.countCodePoint(title) == 1) continue;
+                	&& UTF16.countCodePoint(title) == 1) {
+            	if (ch == CHECK_CHAR) System.out.println("Skipping single code point: " + Main.ucd.getCodeAndName(ch));
+            	continue;
+            }
             
             // if there is no change from the base, skip
             
-            if (flower.equals(base) && fupper.equals(base) && ftitle.equals(base)) continue;
+            if (flower.equals(base) && fupper.equals(base) && ftitle.equals(base)) {
+            	if (ch == CHECK_CHAR) System.out.println("Skipping equals base: " + Main.ucd.getCodeAndName(ch));
+            	continue;
+            }
             
             // fix special cases
             // if (flower.equals(blower) && fupper.equals(bupper) && ftitle.equals(btitle)) continue;
@@ -488,20 +502,26 @@ public class GenerateCaseFolding implements UCD_Types {
             
             // if there are no changes from the original, or the expanded original, skip
             
-            if (flower.equals(lower) && fupper.equals(upper) && ftitle.equals(title)) continue;
+            if (flower.equals(lower) && fupper.equals(upper) && ftitle.equals(title)) {
+            	if (ch == CHECK_CHAR) System.out.println("Skipping unchanged: " + Main.ucd.getCodeAndName(ch));
+            	continue;
+            }
             
             String name = Main.ucd.getName(ch);
             
             int order = name.equals("LATIN SMALL LETTER SHARP S") ? 1
-                : name.indexOf("ARMENIAN SMALL LIGATURE") >= 0 ? 3
-                : name.indexOf("LIGATURE") >= 0 ? 2
-                : name.indexOf("GEGRAMMENI") < 0 ? 4
-                : UTF16.countCodePoint(ftitle) == 1 ? 5
-                : UTF16.countCodePoint(fupper) == 2 ? 6
-                : 7;
+                : ch == 0x130 ? 2
+                : name.indexOf("ARMENIAN SMALL LIGATURE") >= 0 ? 4
+                : name.indexOf("LIGATURE") >= 0 ? 3
+                : name.indexOf("GEGRAMMENI") < 0 ? 5
+                : UTF16.countCodePoint(ftitle) == 1 ? 6
+                : UTF16.countCodePoint(fupper) == 2 ? 7
+                : 8;
+            
+            if (ch == CHECK_CHAR) System.out.println("Order: " + order + " for " + Main.ucd.getCodeAndName(ch));
             
             // HACK
-            boolean denormalize = !normalize && order != 5 && order != 6;
+            boolean denormalize = !normalize && order != 6 && order != 7;
             
             String mapping = Utility.hex(ch)
                 + "; " + Utility.hex(flower.equals(base) ? chstr : denormalize ? Main.nfd.normalize(flower) : flower)
@@ -544,12 +564,15 @@ public class GenerateCaseFolding implements UCD_Types {
                     out.println("# The German es-zed is special--the normal mapping is to SS.");
                     out.println("# Note: the titlecase should never occur in practice. It is equal to titlecase(uppercase(<es-zed>))");
                     break;
-                case 2: out.println("# Ligatures"); break;
-                case 3: skipLine = true; break;
-                case 4: out.println("# No corresponding uppercase precomposed character"); break;
-                case 5: Utility.appendFile("SpecialCasingIota.txt", true, out); break;
-                case 6: out.println("# Some characters with YPOGEGRAMMENI are also have no corresponding titlecases"); break;
-                case 7: skipLine = true; break;
+                case 2:
+                    out.println("# Preserve canonical equivalence for I with dot. Turkic is handled below.");
+					break;                	
+                case 3: out.println("# Ligatures"); break;
+                case 4: skipLine = true; break;
+                case 5: out.println("# No corresponding uppercase precomposed character"); break;
+                case 6: Utility.appendFile("SpecialCasingIota.txt", true, out); break;
+                case 7: out.println("# Some characters with YPOGEGRAMMENI are also have no corresponding titlecases"); break;
+                case 8: skipLine = true; break;
                 }
                 if (!skipLine) out.println();
             }

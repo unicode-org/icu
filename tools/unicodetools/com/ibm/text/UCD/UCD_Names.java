@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Names.java,v $
-* $Date: 2002/03/15 00:34:46 $
-* $Revision: 1.12 $
+* $Date: 2002/03/20 00:21:42 $
+* $Revision: 1.13 $
 *
 *******************************************************************************
 */
@@ -636,6 +636,7 @@ final class UCD_Names implements UCD_Types {
         "TEH_MARBUTA",
         "TETH",
         "WAW",
+        "SYRIAC WAW",
         "YEH",
         "YEH_BARREE",
         "YEH_WITH_TAIL",
@@ -652,21 +653,21 @@ final class UCD_Names implements UCD_Types {
         "BEH",
         "BETH",
         "DAL",
-        "DALATH RISH",
+        "DALATH_RISH",
         "E",
         "FEH",
-        "FINAL SEMKATH",
+        "FINAL_SEMKATH",
         "GAF",
         "GAMAL",
         "HAH",
-        "HAMZA ON HEH GOAL",
+        "HAMZA_ON_HEH_GOAL",
         "HE",
         "HEH",
-        "HEH GOAL",
+        "HEH_GOAL",
         "HETH",
         "KAF",
         "KAPH",
-        "KNOTTED HEH",
+        "KNOTTED_HEH",
         "LAM",
         "LAMADH",
         "MEEM",
@@ -677,23 +678,24 @@ final class UCD_Names implements UCD_Types {
         "QAF",
         "QAPH",
         "REH",
-        "REVERSED PE",
+        "REVERSED_PE",
         "SAD",
         "SADHE",
         "SEEN",
         "SEMKATH",
         "SHIN",
-        "SWASH KAF",
+        "SWASH_KAF",
         "TAH",
         "TAW",
-        "TEH MARBUTA",
+        "TEH_MARBUTA",
         "TETH",
         "WAW",
+        "SYRIAC WAW",
         "YEH",
-        "YEH BARREE",
-        "YEH WITH TAIL",
+        "YEH_BARREE",
+        "YEH_WITH_TAIL",
         "YUDH",
-        "YUDH HE",
+        "YUDH_HE",
         "ZAIN",
     };
 

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/VerifyUCD.java,v $
-* $Date: 2002/03/15 01:57:01 $
-* $Revision: 1.10 $
+* $Date: 2002/03/20 00:21:42 $
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */
@@ -674,12 +674,12 @@ can help you narrow these down.
             if (cp == 0x3131) {
                 System.out.println("Debug: " + idnProhibited
                     + ", " + idnUnassigned
-                    + ", " + Main.nfkc.hasDecomposition(cp)
+                    + ", " + Main.nfkd.normalizationDiffers(cp)
                     + ", " + Main.ucd.getCodeAndName(Main.nfkc.normalize(cp))
                     + ", " + Main.ucd.getCodeAndName(Main.nfc.normalize(cp)));
             } 
             
-            if (!idnProhibited && ! idnUnassigned && Main.nfkc.hasDecomposition(cp)) {
+            if (!idnProhibited && ! idnUnassigned && Main.nfkd.normalizationDiffers(cp)) {
                 String kc = Main.nfkc.normalize(cp);
                 String c = Main.nfc.normalize(cp);
                 if (kc.equals(c)) continue;
@@ -1045,6 +1045,47 @@ E0020-E007F; [TAGGING CHARACTERS]
         }
         return result;
     }
+    
+    /*
+                    + "\r\n#  Generated from <2060..206F, FFF0..FFFB, E0000..E0FFF>"
+                    + "\r\n#    + Other_Default_Ignorable_Code_Point + (Cf + Cc + Cs - White_Space)";
+    */
+    
+    public static void diffIgnorable () {
+        Main.setUCD();
+    	
+    	UnicodeSet control = UnifiedBinaryProperty.make(CATEGORY + Cf, Main.ucd).getSet();
+    	
+    	System.out.println("Cf");
+    	Utility.showSetNames("", control, false, Main.ucd);
+    	
+    	control.addAll(UnifiedBinaryProperty.make(CATEGORY + Cc, Main.ucd).getSet());
+
+    	System.out.println("Cf + Cc");
+    	Utility.showSetNames("", control, false, Main.ucd);
+    	
+    	control.addAll(UnifiedBinaryProperty.make(CATEGORY + Cs, Main.ucd).getSet());
+
+    	System.out.println("Cf + Cc + Cs");
+    	Utility.showSetNames("", control, false, Main.ucd);
+    	
+    	control.removeAll(UnifiedBinaryProperty.make(BINARY_PROPERTIES + White_space, Main.ucd).getSet());
+    	
+    	System.out.println("Cf + Cc + Cs - WhiteSpace");
+    	Utility.showSetNames("", control, false, Main.ucd);
+
+    	control.add(0x2060,0x206f).add(0xFFF0,0xFFFB).add(0xE0000,0xE0FFF);
+    	
+    	System.out.println("(Cf + Cc + Cs - WhiteSpace) + ranges");
+    	Utility.showSetNames("", control, false, Main.ucd);
+
+    	UnicodeSet odicp = UnifiedBinaryProperty.make(BINARY_PROPERTIES + Other_Default_Ignorable_Code_Point, Main.ucd).getSet();
+    	
+    	odicp.removeAll(control);
+    	
+    	System.out.println("Minimal Default Ignorable Code Points");
+    	Utility.showSetNames("", odicp, true, Main.ucd);
+    }
 
 
     public static void IdentifierTest() {
@@ -1240,6 +1281,95 @@ E0020-E007F; [TAGGING CHARACTERS]
         byte cat = Main.ucd.getCategory(cp);
         if (cat == Lu || cat == Lt || cat == Ll) return "LC";
         return Main.ucd.getCategoryID(cp);
+    }
+    
+    static public void verifyNormalizationStability() {
+        Main.setUCD();
+		verifyNormalizationStability2("3.1.0");
+		verifyNormalizationStability2("3.0.0");
+    }
+    
+    static public void verifyNormalizationStability2(String version) {
+        
+        Main.nfd.normalizationDiffers(0x10300);
+        
+        UCD older = UCD.make(version); // Main.ucd.getPreviousVersion();
+        
+        Normalizer oldNFC = new Normalizer(Normalizer.NFC, older.getVersion());
+        Normalizer oldNFD = new Normalizer(Normalizer.NFD, older.getVersion());
+        Normalizer oldNFKC = new Normalizer(Normalizer.NFKC, older.getVersion());
+        Normalizer oldNFKD = new Normalizer(Normalizer.NFKD, older.getVersion());
+        
+        System.out.println("Testing " + Main.nfd.getUCDVersion() + " against " + oldNFD.getUCDVersion());
+        
+        for (int i = 0; i <= 0x10FFFF; ++i) {
+        	Utility.dot(i);
+            if (!Main.ucd.isAssigned(i)) continue;
+            byte cat = Main.ucd.getCategory(i);
+            if (cat == Cs || cat == PRIVATE_USE) continue;
+            
+            if (i == 0x5e) {
+            	System.out.println("debug");
+            	String test1 = Main.nfkd.normalize(i);
+            	String test2 = oldNFKD.normalize(i);
+        		System.out.println("Testing (new/old)" + Main.ucd.getCodeAndName(i));
+    			System.out.println("\t" + Main.ucd.getCodeAndName(test1));
+    			System.out.println("\t" + Main.ucd.getCodeAndName(test2));
+            }
+            	
+            if (older.isAssigned(i)) {
+            	
+            	int newCan = Main.ucd.getCombiningClass(i);
+            	int oldCan = older.getCombiningClass(i);
+            	if (newCan != oldCan) {
+            		System.out.println("FAILS CCC STABILITY: " + newCan + " != " + oldCan
+            			+ "; " + Main.ucd.getCodeAndName(i));
+            	}
+            	
+            	verifyEquals(i, "NFD STABILITY (new/old)", Main.nfd.normalize(i), oldNFD.normalize(i));
+            	verifyEquals(i, "NFC STABILITY (new/old)", Main.nfc.normalize(i), oldNFC.normalize(i));
+            	verifyEquals(i, "NFKD STABILITY (new/old)", Main.nfkd.normalize(i), oldNFKD.normalize(i));
+            	verifyEquals(i, "NFKC STABILITY (new/old)", Main.nfkc.normalize(i), oldNFKC.normalize(i));
+            	
+            } else {
+            	// not in older version. 
+            	// (1) If there is a decomp, and it is composed of all OLD characters, then it must NOT compose
+            	if (Main.nfd.normalizationDiffers(i)) {
+            		String decomp = Main.nfd.normalize(i);
+            		if (noneHaveCategory(decomp, Cn, older)) {
+            			String recomp = Main.nfc.normalize(decomp);
+            			if (recomp.equals(UTF16.valueOf(i))) {
+        					Utility.fixDot();
+            				System.out.println("FAILS COMP STABILITY: " + Main.ucd.getCodeAndName(i));
+    						System.out.println("\t" + Main.ucd.getCodeAndName(decomp));
+    						System.out.println("\t" + Main.ucd.getCodeAndName(recomp));
+    						System.out.println();
+    						throw new IllegalArgumentException("Comp stability");
+            			}
+            		}
+            	}
+            }
+        }
+    }
+    
+    public static boolean noneHaveCategory(String s, byte cat, UCD ucd) {
+    	int cp;
+    	for (int i = 0; i < s.length(); i += UTF16.getCharCount(cp)) {
+    		cp = UTF16.charAt(s, i);
+    		byte cat2 = ucd.getCategory(i);
+    		if (cat == cat2) return false;
+    	}
+    	return true;
+    }
+    
+    public static void verifyEquals(int cp, String message, String a, String b) {
+    	if (!a.equals(b)) {
+        	Utility.fixDot();
+    		System.out.println("FAILS " + message + ": " + Main.ucd.getCodeAndName(cp));
+    		System.out.println("\t" + Main.ucd.getCodeAndName(a));
+    		System.out.println("\t" + Main.ucd.getCodeAndName(b));
+    		System.out.println();
+    	}
     }
 
     public static void checkAgainstUInfo() {
