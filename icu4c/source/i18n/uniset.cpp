@@ -15,30 +15,63 @@
 #include "cmemory.h"
 #include "rbt_rule.h"
 
-#ifndef HPUX
-const UChar32 UnicodeSet::HIGH= 0x0110000; // HIGH_VALUE > all valid values. 110000 for codepoints
-#else
-# define HIGH (0x0110000)
-#endif
-const UChar32 UnicodeSet::LOW = 0x000000; // LOW <= all valid values. ZERO for codepoints
+// HIGH_VALUE > all valid values. 110000 for codepoints
+#define UNICODESET_HIGH 0x0110000
+
+// LOW <= all valid values. ZERO for codepoints
+#define UNICODESET_LOW 0x000000
 
 
 /**
  * Minimum value that can be stored in a UnicodeSet.
  */
-const UChar32 UnicodeSet::MIN_VALUE = UnicodeSet::LOW;
+const UChar32 UnicodeSet::MIN_VALUE = UNICODESET_LOW;
 
 /**
  * Maximum value that can be stored in a UnicodeSet.
  */
-const UChar32 UnicodeSet::MAX_VALUE = HIGH - 1;
+const UChar32 UnicodeSet::MAX_VALUE = UNICODESET_HIGH - 1;
 
 const int32_t UnicodeSet::START_EXTRA = 16; // initial storage. Must be >= 0
 const int32_t UnicodeSet::GROW_EXTRA = START_EXTRA; // extra amount for growth. Must be >= 0
 
 // N.B.: This mapping is different in ICU and Java
-const UnicodeString UnicodeSet::CATEGORY_NAMES(
-    "CnLuLlLtLmLoMnMeMcNdNlNoZsZlZpCcCfCoCsPdPsPePcPoSmScSkSoPiPf", "");
+//const UnicodeString UnicodeSet::CATEGORY_NAMES(
+//    "CnLuLlLtLmLoMnMeMcNdNlNoZsZlZpCcCfCoCsPdPsPePcPoSmScSkSoPiPf", "");
+
+const UChar UnicodeSet::CATEGORY_NAMES[] = {
+    0x43, 0x6E, /* "Cn" */
+    0x4C, 0x75, /* "Lu" */
+    0x4C, 0x6C, /* "Ll" */
+    0x4C, 0x74, /* "Lt" */
+    0x4C, 0x6D, /* "Lm" */
+    0x4C, 0x6F, /* "Lo" */
+    0x4D, 0x6E, /* "Mn" */
+    0x4D, 0x65, /* "Me" */
+    0x4D, 0x63, /* "Mc" */
+    0x4E, 0x64, /* "Nd" */
+    0x4E, 0x6C, /* "Nl" */
+    0x4E, 0x6F, /* "No" */
+    0x5A, 0x73, /* "Zs" */
+    0x5A, 0x6C, /* "Zl" */
+    0x5A, 0x70, /* "Zp" */
+    0x43, 0x63, /* "Cc" */
+    0x43, 0x66, /* "Cf" */
+    0x43, 0x6F, /* "Co" */
+    0x43, 0x73, /* "Cs" */
+    0x50, 0x64, /* "Pd" */
+    0x50, 0x73, /* "Ps" */
+    0x50, 0x65, /* "Pe" */
+    0x50, 0x63, /* "Pc" */
+    0x50, 0x6F, /* "Po" */
+    0x53, 0x6D, /* "Sm" */
+    0x53, 0x63, /* "Sc" */
+    0x53, 0x6B, /* "Sk" */
+    0x53, 0x6F, /* "So" */
+    0x50, 0x69, /* "Pi" */
+    0x50, 0x66, /* "Pf" */
+    0x00
+};
 
 /**
  * A cache mapping character category integers, as returned by
@@ -76,7 +109,7 @@ UnicodeSet::UnicodeSet() :
     buffer(0)
 {
     list = new UChar32[capacity];
-    list[0] = HIGH;
+    list[0] = UNICODESET_HIGH;
 }
 
 /**
@@ -91,7 +124,7 @@ UnicodeSet::UnicodeSet(UChar32 start, UChar32 end) :
     buffer(0)
 {
     list = new UChar32[capacity];
-    list[0] = HIGH;
+    list[0] = UNICODESET_HIGH;
     complement(start, end);
 }
 
@@ -555,7 +588,7 @@ UBool UnicodeSet::containsIndexValue(uint8_t v) const {
  */
 void UnicodeSet::add(UChar32 start, UChar32 end) {
     if (start <= end) {
-        UChar32 range[3] = { start, end+1, HIGH };
+        UChar32 range[3] = { start, end+1, UNICODESET_HIGH };
         add(range, 2, 0);
     }
 }
@@ -581,7 +614,7 @@ void UnicodeSet::add(UChar32 c) {
  */
 void UnicodeSet::retain(UChar32 start, UChar32 end) {
     if (start <= end) {
-        UChar32 range[3] = { start, end+1, HIGH };
+        UChar32 range[3] = { start, end+1, UNICODESET_HIGH };
         retain(range, 2, 0);
     } else {
         clear();
@@ -605,7 +638,7 @@ void UnicodeSet::retain(UChar32 c) {
  */
 void UnicodeSet::remove(UChar32 start, UChar32 end) {
     if (start <= end) {
-        UChar32 range[3] = { start, end+1, HIGH };
+        UChar32 range[3] = { start, end+1, UNICODESET_HIGH };
         retain(range, 2, 2);
     }
 }
@@ -632,7 +665,7 @@ void UnicodeSet::remove(UChar32 c) {
  */
 void UnicodeSet::complement(UChar32 start, UChar32 end) {
     if (start <= end) {
-        UChar32 range[3] = { start, end+1, HIGH };
+        UChar32 range[3] = { start, end+1, UNICODESET_HIGH };
         exclusiveOr(range, 2, 0);
     }
 }
@@ -721,14 +754,14 @@ void UnicodeSet::complementAll(const UnicodeSet& c) {
  * UnicodeSet.MAX_VALUE).removeAll(this)</code>.
  */
 void UnicodeSet::complement(void) {
-    if (list[0] == LOW) { 
+    if (list[0] == UNICODESET_LOW) { 
         ensureBufferCapacity(len-1);
         uprv_memcpy(buffer, list + 1, (len-1)*sizeof(UChar32));
         --len;
     } else {
         ensureBufferCapacity(len+1);
         uprv_memcpy(buffer + 1, list, len*sizeof(UChar32));
-        buffer[0] = LOW;
+        buffer[0] = UNICODESET_LOW;
         ++len;
     }
     swapBuffers();
@@ -740,7 +773,7 @@ void UnicodeSet::complement(void) {
  * empty after this call returns.
  */
 void UnicodeSet::clear(void) {
-    list[0] = HIGH;
+    list[0] = UNICODESET_HIGH;
     len = 1;
     pat.truncate(0);
 }
@@ -1225,11 +1258,19 @@ void UnicodeSet::applyCategory(const UnicodeString& catName,
     // code and either construct and return a UnicodeSet from the
     // data in the category map or throw an exception
     if (cat.length() == 2) {
-        int32_t i = CATEGORY_NAMES.indexOf(cat);
-        if (i>=0 && i%2==0) {
-            i /= 2;
-            *this = getCategorySet((int8_t)i);
-            match = TRUE;
+        int32_t i = 0;
+        int32_t numCategories = Unicode::GENERAL_TYPES_COUNT * 2;
+
+        while (i < numCategories)
+        {
+            if (CATEGORY_NAMES[i] == cat.charAt(0)
+                && CATEGORY_NAMES[i+1] == cat.charAt(1))
+            {
+                *this = getCategorySet((int8_t)(i/2));
+                match = TRUE;
+                break;
+            }
+            i += 2;
         }
     } else if (cat.length() == 1) {
         // if we have one character, search the category map for
@@ -1238,7 +1279,7 @@ void UnicodeSet::applyCategory(const UnicodeString& catName,
         // exception if there are no matches)
         clear();
         for (int32_t i=0; i<Unicode::GENERAL_TYPES_COUNT; ++i) {
-            if (CATEGORY_NAMES.charAt(2*i) == cat.charAt(0)) {
+            if (CATEGORY_NAMES[2*i] == cat.charAt(0)) {
                 addAll(getCategorySet((int8_t)i));
                 match = TRUE;
             }
@@ -1353,8 +1394,8 @@ void UnicodeSet::exclusiveOr(const UChar32* other, int32_t otherLen, int8_t pola
     UChar32 a = list[i++];
     UChar32 b;
     if (polarity == 1 || polarity == 2) {
-        b = LOW;
-        if (other[j] == LOW) { // skip base if already LOW
+        b = UNICODESET_LOW;
+        if (other[j] == UNICODESET_LOW) { // skip base if already LOW
             ++j;
             b = other[j];
         }
@@ -1370,12 +1411,12 @@ void UnicodeSet::exclusiveOr(const UChar32* other, int32_t otherLen, int8_t pola
         } else if (b < a) {
             buffer[k++] = b;
             b = other[j++];
-        } else if (a != HIGH) { // at this point, a == b
+        } else if (a != UNICODESET_HIGH) { // at this point, a == b
             // discard both values!
             a = list[i++];
             b = other[j++];
         } else { // DONE!
-            buffer[k++] = HIGH;
+            buffer[k++] = UNICODESET_HIGH;
             len = k;
             break;
         }
@@ -1421,7 +1462,7 @@ void UnicodeSet::add(const UChar32* other, int32_t otherLen, int8_t polarity) {
                 j++;
                 polarity ^= 2;
             } else { // a == b, take a, drop b
-                if (a == HIGH) goto loop_end;
+                if (a == UNICODESET_HIGH) goto loop_end;
                 // This is symmetrical; it doesn't matter if
                 // we backtrack with a or b. - liu
                 if (k > 0 && a <= buffer[k-1]) {
@@ -1433,46 +1474,57 @@ void UnicodeSet::add(const UChar32* other, int32_t otherLen, int8_t polarity) {
                 }
                 i++;
                 polarity ^= 1;
-                b = other[j++]; polarity ^= 2;
+                b = other[j++];
+                polarity ^= 2;
             }
             break;
           case 3: // both second; take higher if unequal, and drop other
             if (b <= a) { // take a
-                if (a == HIGH) goto loop_end;
+                if (a == UNICODESET_HIGH) goto loop_end;
                 buffer[k++] = a;
             } else { // take b
-                if (b == HIGH) goto loop_end;
+                if (b == UNICODESET_HIGH) goto loop_end;
                 buffer[k++] = b;
             }
-            a = list[i++]; polarity ^= 1;   // factored common code
-            b = other[j++]; polarity ^= 2;
+            a = list[i++];
+            polarity ^= 1;   // factored common code
+            b = other[j++];
+            polarity ^= 2;
             break;
           case 1: // a second, b first; if b < a, overlap
             if (a < b) { // no overlap, take a
                 buffer[k++] = a; a = list[i++]; polarity ^= 1;
             } else if (b < a) { // OVERLAP, drop b
-                b = other[j++]; polarity ^= 2;
+                b = other[j++];
+                polarity ^= 2;
             } else { // a == b, drop both!
-                if (a == HIGH) goto loop_end;
-                a = list[i++]; polarity ^= 1;
-                b = other[j++]; polarity ^= 2;
+                if (a == UNICODESET_HIGH) goto loop_end;
+                a = list[i++];
+                polarity ^= 1;
+                b = other[j++];
+                polarity ^= 2;
             }
             break;
           case 2: // a first, b second; if a < b, overlap
             if (b < a) { // no overlap, take b
-                buffer[k++] = b; b = other[j++]; polarity ^= 2;
+                buffer[k++] = b;
+                b = other[j++];
+                polarity ^= 2;
             } else  if (a < b) { // OVERLAP, drop a
-                a = list[i++]; polarity ^= 1;
+                a = list[i++];
+                polarity ^= 1;
             } else { // a == b, drop both!
-                if (a == HIGH) goto loop_end;
-                a = list[i++]; polarity ^= 1;
-                b = other[j++]; polarity ^= 2;
+                if (a == UNICODESET_HIGH) goto loop_end;
+                a = list[i++];
+                polarity ^= 1;
+                b = other[j++];
+                polarity ^= 2;
             }
             break;
         }
     }
  loop_end:
-    buffer[k++] = HIGH;    // terminate
+    buffer[k++] = UNICODESET_HIGH;    // terminate
     len = k;
     swapBuffers();
     pat.truncate(0);
@@ -1494,52 +1546,74 @@ void UnicodeSet::retain(const UChar32* other, int32_t otherLen, int8_t polarity)
         switch (polarity) {
           case 0: // both first; drop the smaller
             if (a < b) { // drop a
-                a = list[i++]; polarity ^= 1;
+                a = list[i++];
+                polarity ^= 1;
             } else if (b < a) { // drop b
-                b = other[j++]; polarity ^= 2;
+                b = other[j++];
+                polarity ^= 2;
             } else { // a == b, take one, drop other
-                if (a == HIGH) goto loop_end;
-                buffer[k++] = a; a = list[i++]; polarity ^= 1;
-                b = other[j++]; polarity ^= 2;
+                if (a == UNICODESET_HIGH) goto loop_end;
+                buffer[k++] = a;
+                a = list[i++];
+                polarity ^= 1;
+                b = other[j++];
+                polarity ^= 2;
             }
             break;
           case 3: // both second; take lower if unequal
             if (a < b) { // take a
-                buffer[k++] = a; a = list[i++]; polarity ^= 1;
+                buffer[k++] = a;
+                a = list[i++];
+                polarity ^= 1;
             } else if (b < a) { // take b
-                buffer[k++] = b; b = other[j++]; polarity ^= 2;
+                buffer[k++] = b;
+                b = other[j++];
+                polarity ^= 2;
             } else { // a == b, take one, drop other
-                if (a == HIGH) goto loop_end;
-                buffer[k++] = a; a = list[i++]; polarity ^= 1;
-                b = other[j++]; polarity ^= 2;
+                if (a == UNICODESET_HIGH) goto loop_end;
+                buffer[k++] = a;
+                a = list[i++];
+                polarity ^= 1;
+                b = other[j++];
+                polarity ^= 2;
             }
             break;
           case 1: // a second, b first;
             if (a < b) { // NO OVERLAP, drop a
-                a = list[i++]; polarity ^= 1;
+                a = list[i++];
+                polarity ^= 1;
             } else if (b < a) { // OVERLAP, take b
-                buffer[k++] = b; b = other[j++]; polarity ^= 2;
+                buffer[k++] = b;
+                b = other[j++];
+                polarity ^= 2;
             } else { // a == b, drop both!
-                if (a == HIGH) goto loop_end;
-                a = list[i++]; polarity ^= 1;
-                b = other[j++]; polarity ^= 2;
+                if (a == UNICODESET_HIGH) goto loop_end;
+                a = list[i++];
+                polarity ^= 1;
+                b = other[j++];
+                polarity ^= 2;
             }
             break;
           case 2: // a first, b second; if a < b, overlap
             if (b < a) { // no overlap, drop b
-                b = other[j++]; polarity ^= 2;
+                b = other[j++];
+                polarity ^= 2;
             } else  if (a < b) { // OVERLAP, take a
-                buffer[k++] = a; a = list[i++]; polarity ^= 1;
+                buffer[k++] = a;
+                a = list[i++];
+                polarity ^= 1;
             } else { // a == b, drop both!
-                if (a == HIGH) goto loop_end;
-                a = list[i++]; polarity ^= 1;
-                b = other[j++]; polarity ^= 2;
+                if (a == UNICODESET_HIGH) goto loop_end;
+                a = list[i++];
+                polarity ^= 1;
+                b = other[j++];
+                polarity ^= 2;
             }
             break;
         }
     }
  loop_end:
-    buffer[k++] = HIGH;    // terminate
+    buffer[k++] = UNICODESET_HIGH;    // terminate
     len = k;
     swapBuffers();
     pat.truncate(0);
