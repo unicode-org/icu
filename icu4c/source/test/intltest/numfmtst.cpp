@@ -1025,4 +1025,12 @@ void NumberFormatTest::TestSurrogateSupport(void) {
     status = U_ZERO_ERROR;
     expect(new DecimalFormat(patternStr, custom, status),
            int32_t(-20), expStr, status);
+
+    custom.setSymbol(DecimalFormatSymbols::kPercentSymbol, "percent");
+    patternStr = "'You''ve lost ' -0.00 %' of your money today'";
+    patternStr = patternStr.unescape();
+    expStr = UnicodeString(" minus You've lost   minus 2000decimal00 percent of your money today", "");
+    status = U_ZERO_ERROR;
+    expect(new DecimalFormat(patternStr, custom, status),
+           int32_t(-20), expStr, status);
 }
