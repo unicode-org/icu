@@ -23,7 +23,7 @@ import java.util.Vector;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.2 $ $Date: 2000/01/18 02:30:49 $
+ * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.3 $ $Date: 2000/01/18 17:51:08 $
  */
 public class CompoundTransliterator extends Transliterator {
 
@@ -51,6 +51,7 @@ public class CompoundTransliterator extends Transliterator {
         super(joinIDs(transliterators), filter);
         trans = new Transliterator[transliterators.length];
         System.arraycopy(transliterators, 0, trans, 0, trans.length);
+        computeMaximumContextLength();
     }
 
     /**
@@ -83,6 +84,7 @@ public class CompoundTransliterator extends Transliterator {
             trans[i] = getInstance(list[direction==FORWARD ? i : (list.length-1-i)],
                                    direction);
         }
+        computeMaximumContextLength();
     }
     
     public CompoundTransliterator(String ID, int direction) {
@@ -171,10 +173,10 @@ public class CompoundTransliterator extends Transliterator {
     }
 
     /**
-     * Implements {@link Transliterator#handleKeyboardTransliterate}.
+     * Implements {@link Transliterator#handleTransliterate}.
      */
-    protected void handleKeyboardTransliterate(Replaceable text,
-                                               int[] index) {
+    protected void handleTransliterate(Replaceable text,
+                                       int[] index) {
         /* Call each transliterator with the same start value and
          * initial cursor index, but with the limit index as modified
          * by preceding transliterators.  The cursor index must be
@@ -271,7 +273,7 @@ public class CompoundTransliterator extends Transliterator {
                         "\" -> \""));
                 }
 
-                trans[i].handleKeyboardTransliterate(text, index);
+                trans[i].handleTransliterate(text, index);
 
                 if (DEBUG) {
                     System.out.println(escape(
@@ -300,12 +302,10 @@ public class CompoundTransliterator extends Transliterator {
     }
 
     /**
-     * Returns the length of the longest context required by this transliterator.
+     * Compute and set the length of the longest context required by this transliterator.
      * This is <em>preceding</em> context.
-     * @return maximum number of preceding context characters this
-     * transliterator needs to examine
      */
-    protected int getMaximumContextLength() {
+    private void computeMaximumContextLength() {
         int max = 0;
         for (int i=0; i<trans.length; ++i) {
             int len = trans[i].getMaximumContextLength();
@@ -313,7 +313,7 @@ public class CompoundTransliterator extends Transliterator {
                 max = len;
             }
         }
-        return max;
+        setMaximumContextLength(max);
     }
 
     /**
