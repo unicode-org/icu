@@ -32,7 +32,7 @@
      <abbr title="International Components for Unicode">ICU</abbr> 2.6
     ReadMe</h1>
 
-    <p>Version: 2003-Feb-11<br>
+    <p>Version: 2003-Apr-14<br>
      Copyright &copy; 1997-2003 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -598,7 +598,7 @@
       </tr>
 
       <tr>
-        <td>HP/UX 11.01</td>
+        <td>HP-UX 11.01</td>
 
         <td>aCC A.12.10<br>
          cc A.11.01.00</td>
@@ -693,12 +693,12 @@
         <td>CygWin</td>
 
         <td>gcc 2.95.3</td>
-        
+
         <td>Rarely tested</td>
       </tr>
 
       <tr>
-        <td>HP/UX 11.01</td>
+        <td>HP-UX 11.01</td>
 
         <td>CC A.03.10</td>
 
@@ -1223,9 +1223,9 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
 
       <li>Change your current directory to icu/source.</li>
 
-      <li>Run <tt>'export CFLAGS=-O4 CXXFLAGS=-O4'</tt> to optimize your
-      build of ICU. If the build fails, rerun these build steps without this
-      step before asking the icu4c-support mailing list for help.</li>
+      <li>Run <tt>'export CFLAGS=-O4 CXXFLAGS=-O4'</tt> to optimize your build
+      of ICU. If the build fails, rerun these build steps without this step
+      before asking the icu4c-support mailing list for help.</li>
 
       <li>Run <tt>'cp ../as_is/os400/configure .'</tt></li>
 
@@ -1288,11 +1288,12 @@ del common/libicuuc.o
     products. Usually only the libraries need to be considered for
     packaging.</p>
 
-    <p>On Unix, you should have used "<tt>gmake install</tt>" to make it easier to
-    develop and package ICU. The bin, lib and include directories are needed to
-    develop applications that use ICU.  These directories will be created relative to the 
-    "<tt>--prefix=</tt><i>dir</i>" configure option (See <a href="#HowToBuildUnix">above</a>).
-     When ICU is built on Windows, a similar directory structure is built.</p>
+    <p>On Unix, you should have used "<tt>gmake install</tt>" to make it easier
+    to develop and package ICU. The bin, lib and include directories are needed
+    to develop applications that use ICU. These directories will be created
+    relative to the "<tt>--prefix=</tt><i>dir</i>" configure option (See <a
+    href="#HowToBuildUnix">above</a>). When ICU is built on Windows, a similar
+    directory structure is built.</p>
 
     <p>When changes have been made to the standard ICU distribution, it is
     recommended that at least one of the following guidelines be followed for
@@ -1403,8 +1404,18 @@ del common/libicuuc.o
     chance that the ICU global mutex is not initialized properly. Normally the
     ICU global mutex is initialized during C++ static initialization, but there
     are some compilers and linkers that do not properly perform C++ static
-    initialization in a library (this sometimes happens on HP/UX and on MacOS
-    10.1).</p>
+    initialization in a library. Here are some of the cases when the global
+    mutex is not initialized:</p>
+
+    <ul>
+      <li>ICU is used on Mac OS X</li>
+
+      <li>ICU is used on HP-UX and the program's main() function is not
+      declared in a C++ file.</li>
+
+      <li>Static ICU libraries are used and the program's main() function is
+      not declared in a C++ file.</li>
+    </ul>
 
     <p>Upon the first usage of most ICU APIs, the global mutex will get
     initialized. For example, you could call uloc_countAvailable() or
@@ -1416,8 +1427,9 @@ del common/libicuuc.o
     initialization works properly.</p>
 
     <p>ICU does not use C++ static initialization for anything else, and
-    disabling threads in ICU will disable all C++ static initialization in
-    ICU.</p>
+    disabling threads in ICU will disable all C++ static initialization in ICU.
+    If you do not have a multithreaded application, you do not need to worry
+    about the global mutex.</p>
 
     <h3><a name="MakeICUSmaller" href="#MakeICUSmaller">How to Make ICU
     Smaller</a></h3>
@@ -1588,9 +1600,9 @@ del common/libicuuc.o
           <li>U_EXPORT and U_IMPORT for specifying dynamic library import and
           export</li>
 
-          <li>int64_t and uint64_t. If the platform does not support 64 bit values, the macro
-          <tt>U_INT64_T_UNAVAILABLE</tt> must be defined.  For example, this will disable
-          Rule-based number formatting.</li>
+          <li>int64_t and uint64_t. If the platform does not support 64 bit
+          values, the macro <tt>U_INT64_T_UNAVAILABLE</tt> must be defined. For
+          example, this will disable Rule-based number formatting.</li>
         </ul>
         <br>
       </li>
