@@ -11,8 +11,12 @@
 # This is the debhelper compatability version to use.
 export DH_COMPAT=1
 
-# Where the source for ICU is
-srcdir=source
+# Where the source for ICU is.
+srcdir = source
+
+# ICU installation directories, w/o the initial slash
+icudatadir = usr/share/icu/$(version)
+datasrcdir = usr/share/icu/$(version)/src
 
 # shared library versions, option 1
 version:=$(shell sed -n 's/^[ 	]*\#[ 	]*define[ 	]*U_ICU_VERSION[ 	]*"\([^"]*\)".*/\1/p' $(srcdir)/common/unicode/utypes.h)
@@ -44,7 +48,7 @@ configure: configure-stamp
 configure-stamp:
 	dh_testdir
 	# Add here commands to configure the package.
-	cd $(srcdir); CFLAGS='$(CFLAGS)' CXXFLAGS='$(CFLAGS)' INSTALL_PROGRAM='$(INSTALL_PROGRAM)' ./configure --prefix=/usr --mandir=/usr/share/man --with-data-packaging=files --enable-rpath=no --enable-shared --enable-static --disable-samples
+	cd $(srcdir); CFLAGS='$(CFLAGS)' CXXFLAGS='$(CFLAGS)' INSTALL_PROGRAM='$(INSTALL_PROGRAM)' ./configure --prefix=/usr --mandir=/usr/share/man --sysconfdir=/etc --with-data-packaging=files --disable-rpath --enable-shared --enable-static --disable-samples
 	touch configure-stamp
 
 build: configure-stamp build-stamp
@@ -83,7 +87,7 @@ binary-indep: build install
 # Build some Debian files
 debian/%: debian/%.in
 	cd source \
-	  && CONFIG_FILES=../$< CONFIG_HEADERS= $(SHELL) ./config.status
+	  && CONFIG_FILES=../$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 # Build architecture-dependent files here.
 binary-arch: build install debian/icu.conffiles debian/icu.postinst
@@ -102,50 +106,48 @@ binary-arch: build install debian/icu.conffiles debian/icu.postinst
 	#
 	# build icu package by moving files from icu-dev
 	#
-	test -d debian/icu/etc/icu || \
-	    mkdir -p debian/icu/etc/icu
-	mv debian/tmp/usr/share/icu/$(version)/convrtrs.txt debian/icu/etc/icu
 	dh_movefiles -picu \
+	    etc/icu \
 	    usr/sbin \
-	    usr/share/icu/$(version)/*.cnv \
-	    usr/share/icu/$(version)/*.txt \
-	    usr/share/icu/$(version)/cnvalias.dat \
-	    usr/share/icu/$(version)/u*.dat \
-	    usr/share/icu/$(version)/tz.dat \
+	    $(icudatadir)/*.cnv \
+	    $(icudatadir)/*.txt \
+	    $(icudatadir)/u*.dat \
+	    $(icudatadir)/tz.dat \
 	    usr/share/man
+	rm debian/tmp/$(icudatadir)/cnvalias.dat
 	#
 	# build icu-locales package by moving files from icu-dev
 	#
 	dh_movefiles -picu-locales \
-	    usr/share/icu/$(version)
+	    $(icudatadir)
 	#
 	# build icu-data from the source data
 	#
-	test -d debian/icu-data/usr/share/icu/${version} || \
-	    mkdir -p debian/icu-data/usr/share/icu/${version}
+	test -d debian/icu-data/$(datasrcdir) || \
+	    mkdir -p debian/icu-data/$(datasrcdir)
 	install -m 644 $(srcdir)/../data/ucname.txt \
 	    $(srcdir)/../data/*.ucm \
-	    debian/icu-data/usr/share/icu/${version}
-	test -d debian/icu-data/usr/share/icu/${version}/unidata || \
-	    mkdir -p debian/icu-data/usr/share/icu/${version}/unidata
+	    debian/icu-data/$(datasrcdir)
+	test -d debian/icu-data/$(datasrcdir)/unidata || \
+	    mkdir -p debian/icu-data/$(datasrcdir)/unidata
 	install -m 644 $(srcdir)/../data/unidata/*.* \
-	    debian/icu-data/usr/share/icu/${version}/unidata
-	unidatafile=`(cd $(srcdir)/../data; ls UnicodeData*.txt)`; cd debian/icu-data/usr/share/icu/${version} && ln -s unidata/UnicodeData.txt $$unidatafile
+	    debian/icu-data/$(datasrcdir)/unidata
+	unidatafile=`(cd $(srcdir)/../data; ls UnicodeData*.txt)`; cd debian/icu-data/$(datasrcdir) && ln -s unidata/UnicodeData.txt $$unidatafile
 	#
 	# build icu-i18ndata from the source data
 	#
-	test -d debian/icu-i18ndata/usr/share/icu/${version} || \
-	    mkdir -p debian/icu-i18ndata/usr/share/icu/${version}
+	test -d debian/icu-i18ndata/$(datasrcdir) || \
+	    mkdir -p debian/icu-i18ndata/$(datasrcdir)
 	install -m 644 $(srcdir)/../data/*.txt \
 	    $(srcdir)/../data/*.brk \
-	    debian/icu-i18ndata/usr/share/icu/${version}
-	cd debian/icu-i18ndata/usr/share/icu/${version} && \
+	    debian/icu-i18ndata/$(datasrcdir)
+	cd debian/icu-i18ndata/$(datasrcdir) && \
 	    rm -f convrtrs.txt UnicodeData*.txt ucname.txt
 	#
 	# do a bit of cleanup
 	#
 	rm -rf debian/tmp/usr/sbin \
-	    debian/tmp/usr/share/icu/${version} \
+	    debian/tmp/usr/share/icu/$(version) \
 	    debian/tmp/usr/share/man
 	#
 	# continue to prepare packages

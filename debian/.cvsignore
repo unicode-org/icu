@@ -1,10 +1,12 @@
 *.debhelper
 docs
 *files
+*.substvars
 tmp
 libicu16
 icu
 icu-locales
 icu-data
 icu-i18ndata
+icu.postinst
 
