@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/CEList.java,v $ 
-* $Date: 2002/06/15 02:47:12 $ 
-* $Revision: 1.5 $
+* $Date: 2002/07/03 02:15:47 $ 
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -148,6 +148,8 @@ public final class CEList implements java.lang.Comparable, UCD_Types {
     
   
     public String toString() {
+        if (startOffset >= endOffset) return toString(0);
+        
         StringBuffer result = new StringBuffer();
         for (int i = startOffset; i < endOffset; ++i) {
             if (i != startOffset) result.append(' ');
@@ -157,6 +159,8 @@ public final class CEList implements java.lang.Comparable, UCD_Types {
     }
     
     public static String toString(int[] ces, int len) {
+        if (len <= 0) return toString(0);
+
         StringBuffer result = new StringBuffer();
         for (int i = 0; i < len; ++i) {
             if (i != 0) result.append(' ');
@@ -166,6 +170,8 @@ public final class CEList implements java.lang.Comparable, UCD_Types {
     }
     
     public static String toString(IntStack ces) {
+        if (ces.length() <= 0) return toString(0);
+        
         StringBuffer result = new StringBuffer();
         for (int i = 0; i < ces.length(); ++i) {
             if (i != 0) result.append(' ');

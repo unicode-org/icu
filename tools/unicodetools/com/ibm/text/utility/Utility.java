@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2002/06/24 15:25:10 $
-* $Revision: 1.20 $
+* $Date: 2002/07/03 02:15:47 $
+* $Revision: 1.21 $
 *
 *******************************************************************************
 */
@@ -605,6 +605,15 @@ public final class Utility {    // COMMON UTILITIES
         m.put(key, new Integer(oldCount.intValue() + count));
     }
     
+    public static void addToSet(Map m, Object key, Object value) {
+        Set set = (Set) m.get(key);
+        if (set == null) {
+            set = new TreeSet();
+            m.put(key, set);
+        }
+        set.add(value);
+    }
+        
     public static String readDataLine(BufferedReader br) throws IOException {
         String originalLine = "";
         String line = "";

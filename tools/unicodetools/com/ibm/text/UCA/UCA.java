@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/UCA.java,v $ 
-* $Date: 2002/06/28 01:59:58 $ 
-* $Revision: 1.16 $
+* $Date: 2002/07/03 02:15:47 $ 
+* $Revision: 1.17 $
 *
 *******************************************************************************
 */
@@ -23,8 +23,12 @@ import java.io.IOException;
 import com.ibm.text.UCD.Normalizer;
 import com.ibm.text.UCD.UCD;
 import com.ibm.text.utility.*;
+import com.ibm.text.UCD.UnifiedBinaryProperty;
+import com.ibm.text.UCD.UnicodeProperty;
+
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.text.UnicodeSetIterator;
 
 //import com.ibm.text.CollationData.*;
 
@@ -76,7 +80,7 @@ final public class UCA implements Comparator, UCA_Types {
      */
     //private static final String VERSION = "-3.0.1d3"; // ""; // "-2.1.9d7"; 
     public static final String UCA_BASE = "3.1.1"; // ""; // "-2.1.9d7"; 
-    public static final String VERSION = "-" + UCA_BASE + "d5"; // ""; // "-2.1.9d7"; 
+    public static final String VERSION = "-" + UCA_BASE + "d6"; // ""; // "-2.1.9d7"; 
     public static final String ALLFILES = "allkeys"; // null if not there
     
     /**
@@ -654,8 +658,6 @@ final public class UCA implements Comparator, UCA_Types {
     	return primary >= UNSUPPORTED_BASE && primary < UNSUPPORTED_LIMIT;
     }
     
-            
-
 /*
 The formula from the UCA:
 
@@ -924,7 +926,7 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
      */
     static final char EMPTY = '\uFFFF';
     char rearrangeBuffer = EMPTY;
-    String rearrangeList = "";
+    UnicodeSet rearrangeList = new UnicodeSet();
     int hangulBufferPosition = 0;
     StringBuffer hangulBuffer = new StringBuffer();
 
@@ -957,7 +959,7 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
         } else {
             if (index >= decompositionBuffer.length()) return TERMINATOR;
             ch = decompositionBuffer.charAt(index++); // get next
-            if (rearrangeList.indexOf(ch) != -1 && index < decompositionBuffer.length()) {// if in list
+            if (rearrangeList.contains(ch) && index < decompositionBuffer.length()) {// if in list
                 rearrangeBuffer = ch;   // store for later
                 ch = decompositionBuffer.charAt(index++);   // never rearrange twice!!
             }
@@ -1086,14 +1088,19 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
     }
     */
     
+            
     public UCAContents getContents(byte ceLimit, Normalizer skipDecomps) {
         return new UCAContents(ceLimit, skipDecomps, ucdVersion);
     }
     
+    static boolean haveUnspecified = false;
+    static UnicodeSet unspecified = new UnicodeSet();
+        
     public class UCAContents {
         int current = -1;
         Normalizer skipDecomps;
-        Normalizer nfd = skipDecomps;
+        Normalizer nfd;
+        Normalizer nfkd;
         Iterator enum = null;
         byte ceLimit;
         int currentRange = SAMPLE_RANGES.length; // set to ZERO to enable
@@ -1101,6 +1108,8 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
         int endOfRange = startOfRange;
         int itemInRange = startOfRange;
         int skip = 1;
+        boolean doSamples = false;
+        UnicodeSetIterator usi = new UnicodeSetIterator();
         
         /**
          * use FIXED_CE as the limit
@@ -1108,7 +1117,11 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
         UCAContents(byte ceLimit, Normalizer skipDecomps, String unicodeVersion) {
             this.ceLimit = ceLimit;
             this.nfd = new Normalizer(Normalizer.NFD, unicodeVersion);
+            this.nfkd = new Normalizer(Normalizer.NFKD, unicodeVersion);
             this.skipDecomps = skipDecomps;
+            currentRange = 0;
+            usi.reset(unspecified);
+            usi.setAbbreviated(true);
             
             // FIX SAMPLES
             if (SAMPLE_RANGES[0][0] == 0) {
@@ -1125,7 +1138,7 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
          * use FIXED_CE as the limit
          */
         public void enableSamples() {
-            currentRange = 0;
+            doSamples = true;
         }
         
         /**
@@ -1149,6 +1162,7 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
                 if (skipDecomps != null && !skipDecomps.isNormalized(current)) continue; // CHECK THIS
                 
                 result = UTF16.valueOf(current);
+                if (!haveUnspecified) unspecified.add(current);
                 return result;
             }
             
@@ -1160,6 +1174,48 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
                     //System.out.println("Skipping " + ucd.getCodeAndName(result));
                     continue; // try again
                 }
+                if (!haveUnspecified) {
+                    if (UTF16.countCodePoint(result) == 1) {
+                        unspecified.add(result);
+                    }
+                }
+                return result;
+            }
+            
+            if (!haveUnspecified) {
+                if (DEBUG) System.out.println("Specified = " + unspecified.toPattern(true));
+                UnicodeSet temp = new UnicodeSet();
+                for (int i = 0; i < 0x10ffff; ++i) {
+                    if (!ucd.isAllocated(i)) continue;
+                    if (!unspecified.contains(i)) {
+                        temp.add(i);
+                    }
+                    
+                    // add the following so that if a CJK is in a decomposition, we add it
+                    if (!nfkd.isNormalized(i)) {
+                        String decomp = nfkd.normalize(i);
+                        int cp2;
+                        for (int j = 0; j < decomp.length(); j += UTF16.getCharCount(cp2)) {
+                            cp2 = UTF16.charAt(decomp, j);
+                            if (!unspecified.contains(cp2)) {
+                                temp.add(cp2);
+                            }
+                        }
+                    }
+                }
+                unspecified = temp;
+                usi.reset(unspecified);
+                usi.setAbbreviated(true);
+                if (DEBUG) System.out.println("Unspecified = " + unspecified.toPattern(true));
+                haveUnspecified = true;
+             }
+            
+            if (!doSamples) return null;
+            
+            if (usi.next()) {
+                if (usi.codepoint == usi.IS_STRING) result = usi.string;
+                else result = UTF16.valueOf(usi.codepoint);
+                if (DEBUG) System.out.println("Unspecified: " + ucd.getCodeAndName(result));
                 return result;
             }
             
@@ -1264,17 +1320,22 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
             } 
 
             position[0] = 0;                    // start at front of line
-            if (line.startsWith("@version")) {
-                dataVersion = line.substring("@version".length()+1).trim();
-                continue;
-            }
-            
-            if (line.startsWith("@rearrange")) {
-                line = line.substring("@rearrange".length()+1).trim();
-                while (position[0] < line.length()) {
-                    rearrangeList += getChar(line, position);
+            if (line.startsWith("@")) {
+                if (line.startsWith("@version")) {
+                    dataVersion = line.substring("@version".length()+1).trim();
+                    continue;
                 }
-                continue;
+                
+                if (line.startsWith("@rearrange")) {
+                    line = line.substring("@rearrange".length()+1).trim();
+                    String[] list = Utility.split(line, ',');
+                    for (int i = 0; i < list.length; ++i) {
+                        rearrangeList.add(Integer.parseInt(list[i].trim(), 16));
+                    }
+                    continue;
+                }
+                
+                throw new IllegalArgumentException("Illegal @ command: " + line);
             }
             
             // collect characters
@@ -1356,6 +1417,15 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
      * Checks the internal tables corresponding to the UCA data.
      */
     private void cleanup() {
+        
+        UnicodeProperty ubp = UnifiedBinaryProperty.make(
+            UCD.BINARY_PROPERTIES + UCD.Logical_Order_Exception, ucd);
+        UnicodeSet desiredSet = ubp.getSet();
+        
+        if (!rearrangeList.equals(desiredSet)) {
+            throw new IllegalArgumentException("Rearrangement should be " + desiredSet.toPattern(true)
+                + ", but is " + rearrangeList.toPattern(true));
+        }
         
         ucaData.checkConsistency();
 

@@ -2,12 +2,12 @@
 <!--
 UCA Rules
 This file contains the UCA tables for the given version, but transformed into rule syntax.
-Generated:   2002-07-02,12:31:01 GMT [MD]
+Generated:   2002-07-02,18:49:19 GMT [MD]
 NOTE: Since UCA handles canonical equivalents, no composites are necessary
 (except in extensions).
 For syntax description, see: http://oss.software.ibm.com/icu/userguide/Collate_Intro.html
 -->
-<base uca='3.1.1d5/3.2.0'/>
+<base uca='3.1.1d6/3.2.0'/>
 <rules>
 <reset/><position at="last tertiary ignorable"/>
 
@@ -4231,7 +4231,6 @@ p<variableTop/>
   <t/>㏜<x/>v
   <s/>ß<x/>s
   <s/>ſ
-  <t/>ẛ<x/>̇
   <t/>ﬅ<x/>t
   <p/>ʂ
   <p/>ʃ
@@ -5329,11 +5328,9 @@ p<variableTop/>
   <p/>ט
   <p/>י
   <t/>ײ<x/>י
-  <t/>ײַ<x/>יַ
   <p/>כ
   <t/>ﬤ
   <t/>ך
-  <t/>ךּ<x/>ּ
   <p/>ל
   <t/>ﬥ
   <p/>מ
@@ -5346,7 +5343,6 @@ p<variableTop/>
   <t/>ﬠ
   <p/>פ
   <t/>ף
-  <t/>ףּ<x/>ּ
   <p/>צ
   <t/>ץ
   <p/>ק
@@ -6118,7 +6114,7 @@ p<variableTop/>
   <t/>ﮥ<x/>ٔ
   <t/>ﮤ<x/>ٔ
   <p/>و
-  <eq/>ۥ
+  <t/>ۥ
   <t/>ٶ<x/>ٴ
   <t/>ﻮ
   <t/>ﻭ
@@ -6154,7 +6150,7 @@ p<variableTop/>
   <t/>ﻯ
   <t/>ﱝ<x/>ٰ
   <p/>ي
-  <eq/>ۦ
+  <t/>ۦ
   <t/>ٸ<x/>ٴ
   <t/>ﻳ
   <t/>ﳚ<x/>ج
@@ -7090,9 +7086,7 @@ p<variableTop/>
   <p/>ೇ
   <p/>ೈ
   <p/>ೊ
-  <eq/>ೊ
   <p/>ೋ
-  <eq/>ೋ
   <p/>ೌ
   <p/>್
   <p/>ೕ
@@ -7235,9 +7229,7 @@ p<variableTop/>
   <p/>ේ
   <p/>ෛ
   <p/>ො
-  <eq/>ො
   <p/>ෝ
-  <eq/>ෝ
   <p/>ෞ
   <p/>ෟ
   <p/>ෲ

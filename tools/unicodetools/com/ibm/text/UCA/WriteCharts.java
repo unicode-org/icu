@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCharts.java,v $ 
-* $Date: 2002/06/02 05:07:08 $ 
-* $Revision: 1.10 $
+* $Date: 2002/07/03 02:15:47 $ 
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */
@@ -113,7 +113,11 @@ public class WriteCharts implements UCD_Types {
             else if (primary == 0) script = IGNORABLE_ORDER;
             else if (primary < variable) script = VARIABLE_ORDER;
             else if (primary < high) script = COMMON_SCRIPT;
-            else if (UCA.isImplicitLeadPrimary(primary)) script = UNSUPPORTED;
+            else if (UCA.isImplicitLeadPrimary(primary)) {
+                if (primary < UCA_Types.UNSUPPORTED_CJK_AB_BASE) script = CJK;
+                else if (primary < UCA_Types.UNSUPPORTED_OTHER_BASE) script = CJK_AB;
+                else script = UNSUPPORTED;
+            }
             
             if (script == KATAKANA_SCRIPT) script = HIRAGANA_SCRIPT;
             else if ((script == INHERITED_SCRIPT || script == COMMON_SCRIPT) && oldScript >= 0) script = oldScript;
@@ -174,13 +178,21 @@ public class WriteCharts implements UCD_Types {
             
             String comp = Default.nfc.normalize(s);
             
-            String outline = breaker + classname 
-                + " title='" + Utility.quoteXML(name, true) + ": " + UCA.toString(sortKey) + "'>"
+            String outline = breaker + classname
+                + " title='" 
+                + (script != UNSUPPORTED
+                    ? Utility.quoteXML(name, true) + ": "
+                    : "")
+                + UCA.toString(sortKey) + "'>"
                 + Utility.quoteXML(comp, true)
                 + "<br><tt>"
                 + Utility.hex(s)
                 //+ "<br>" + script
-                + "</tt></td>";
+                + "</tt></td>"
+                + (script == UNSUPPORTED
+                    ? "<td class='name'><tt>" + Utility.quoteXML(name, true) + "</td>"
+                    : "")
+                ;
             
             output.println(outline);
             ++columnCount;
@@ -635,7 +647,9 @@ public class WriteCharts implements UCD_Types {
     	IGNORABLE_ORDER = -2,
     	VARIABLE_ORDER = -1,
     	// scripts in here
-    	UNSUPPORTED = 120,
+    	CJK = 120,
+    	CJK_AB = 121,
+    	UNSUPPORTED = 122,
     	CAT_OFFSET = 128,
     	// categories in here
     	NO_CASE_MAPPING = 200;
@@ -646,6 +660,8 @@ public class WriteCharts implements UCD_Types {
         	case NULL_ORDER: return "Null";
         	case IGNORABLE_ORDER: return "Ignorable";
         	case VARIABLE_ORDER: return "Variable";
+        	case CJK: return "CJK";
+        	case CJK_AB: return "CJK-Extensions";
         	case UNSUPPORTED: return "Unsupported";
         	default: 
     		if (script >= CAT_OFFSET) return Default.ucd.getCategoryID_fromIndex((byte)(script - CAT_OFFSET), length);
