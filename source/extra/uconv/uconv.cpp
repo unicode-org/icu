@@ -49,8 +49,35 @@
 
 static const size_t buffsize = 4096;
 
+static UResourceBundle *gBundle = 0;
+
+static void initMsg(const char *pname) {
+    static int ps = 0;
+
+    if (!ps) {
+	char dataPath[500];
+	UErrorCode err = U_ZERO_ERROR;
+
+	ps = 1;
+
+	/* Get messages. */
+	
+	strcpy(dataPath, u_getDataDirectory());
+	strcat(dataPath, "uconvmsg");
+	
+	gBundle = u_wmsg_setPath(dataPath, &err);
+	if(U_FAILURE(err))
+	    {
+		fprintf(stderr, "%s: warning: couldn't open resource bundle %s: %s\n", 
+			pname,
+			dataPath,
+			u_errorName(err));
+	    }
+    }
+}
+
 // Print all available codepage converters
-static void printAllConverters()
+static void printAllConverters(const char *pname)
 {
     UErrorCode err = U_ZERO_ERROR;
     int32_t num;
@@ -61,6 +88,7 @@ static void printAllConverters()
     const char* const* convtable = UnicodeConverter::getAvailableNames(num, err);
     if (U_FAILURE(err))
     {
+      initMsg(pname);	
       u_wmsg("cantGetNames", u_wmsg_errorName(err));
       return;
     }
@@ -247,33 +275,6 @@ static UBool convertFile(const char* fromcpage,
     return ret;
 }
 
-static UResourceBundle *gBundle = 0;
-
-static void initMsg(const char *pname) {
-    static int ps = 0;
-
-    if (!ps) {
-	char dataPath[500];
-	UErrorCode err = U_ZERO_ERROR;
-
-	ps = 1;
-
-	/* Get messages. */
-	
-	strcpy(dataPath, u_getDataDirectory());
-	strcat(dataPath, "uconvmsg");
-	
-	gBundle = u_wmsg_setPath(dataPath, &err);
-	if(U_FAILURE(err))
-	    {
-		fprintf(stderr, "%s: warning: couldn't open resource bundle %s: %s\n", 
-			pname,
-			dataPath,
-			u_errorName(err));
-	    }
-    }
-}
-
 static void usage(const char *pname, int ecode)
 {
   const UChar *msg;
@@ -327,7 +328,7 @@ int main(int argc, char** argv)
         }
         else if (strcmp("-l", *iter) == 0 || !strcmp("--list", *iter))
         {
-            printAllConverters();
+            printAllConverters(pname);
             goto normal_exit;
         }
         else if (strcmp("-h", *iter) == 0 || !strcmp("--help", *iter))
