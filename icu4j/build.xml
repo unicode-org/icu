@@ -439,7 +439,7 @@
 		 source="1.4">
             <doclet name="com.ibm.icu.dev.tool.docs.CheckTags"
                     path="${build.dir}">
-<!--                <param name="-brief"/> -->
+		    <param name="-short"/>
             </doclet>
         </javadoc>
     </target>
