@@ -24,6 +24,8 @@ U_NAMESPACE_BEGIN
 static Hashtable * LocaleUtility_cache = NULL;
 
 #define UNDERSCORE_CHAR ((UChar)0x005f)
+#define AT_SIGN_CHAR    ((UChar)64)
+#define PERIOD_CHAR     ((UChar)46)
 
 /*
  ******************************************************************
@@ -35,11 +37,26 @@ LocaleUtility::canonicalLocaleString(const UnicodeString* id, UnicodeString& res
   if (id == NULL) {
     result.setToBogus();
   } else {
+    // Fix case only (no other changes) up to the first '@' or '.' or
+    // end of string, whichever comes first.  In 3.0 I changed this to
+    // stop at first '@' or '.'.  It used to run out to the end of
+    // string.  My fix makes the tests pass but is probably
+    // structurally incorrect.  See below.  [alan 3.0]
+
+    // TODO: Doug, you might want to revise this...
     result = *id;
     int32_t i = 0;
-    int32_t n = result.indexOf(UNDERSCORE_CHAR);
+    int32_t end = result.indexOf(AT_SIGN_CHAR);
+    int32_t n = result.indexOf(PERIOD_CHAR);
+    if (n >= 0 && n < end) {
+        end = n;
+    }
+    if (end < 0) {
+        end = result.length();
+    }
+    n = result.indexOf(UNDERSCORE_CHAR);
     if (n < 0) {
-      n = result.length();
+      n = end;
     }
     for (; i < n; ++i) {
       UChar c = result.charAt(i);
@@ -48,7 +65,7 @@ LocaleUtility::canonicalLocaleString(const UnicodeString* id, UnicodeString& res
         result.setCharAt(i, c);
       }
     }
-    for (n = result.length(); i < n; ++i) {
+    for (n = end; i < n; ++i) {
       UChar c = result.charAt(i);
       if (c >= 0x0061 && c <= 0x007a) {
         c -= 0x20;
@@ -57,6 +74,37 @@ LocaleUtility::canonicalLocaleString(const UnicodeString* id, UnicodeString& res
     }
   }
   return result;
+
+#if 0
+    // This code does a proper full level 2 canonicalization of id.
+    // It's nasty to go from UChar to char to char to UChar -- but
+    // that's what you have to do to use the uloc_canonicalize
+    // function on UnicodeStrings.
+
+    // I ended up doing the alternate fix (see above) not for
+    // performance reasons, although performance will certainly be
+    // better, but because doing a full level 2 canonicalization
+    // causes some tests to fail.  [alan 3.0]
+
+    // TODO: Doug, you might want to revisit this...
+    result.setToBogus();
+    if (id != 0) {
+        int32_t buflen = id->length() + 8; // space for NUL
+        char* buf = (char*) uprv_malloc(buflen);
+        char* canon = (buf == 0) ? 0 : (char*) uprv_malloc(buflen);
+        if (buf != 0 && canon != 0) {
+            U_ASSERT(id->extract(0, INT32_MAX, buf, buflen) < buflen);
+            UErrorCode ec = U_ZERO_ERROR;
+            uloc_canonicalize(buf, canon, buflen, &ec);
+            if (U_SUCCESS(ec)) {
+                result = UnicodeString(canon);
+            }
+        }
+        uprv_free(buf);
+        uprv_free(canon);
+    }
+    return result;
+#endif
 }
 
 Locale&
