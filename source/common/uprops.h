@@ -217,45 +217,6 @@ uprv_getMaxValues(int32_t column);
 U_CFUNC UHangulSyllableType
 uchar_getHST(UChar32 c);
 
-/**
- * Get internal UCaseProps pointer from uchar.c for uprops.c.
- * Other code should use ucase_getSingleton().
- */
-U_CFUNC UCaseProps *
-uchar_getCaseProps(UErrorCode *pErrorCode);
-
-/**
- * \var uprv_comparePropertyNames
- * Unicode property names and property value names are compared "loosely".
- *
- * UCD.html 4.0.1 says:
- *   For all property names, property value names, and for property values for
- *   Enumerated, Binary, or Catalog properties, use the following
- *   loose matching rule:
- *
- *   LM3. Ignore case, whitespace, underscore ('_'), and hyphens.
- *
- * This function does just that, for (char *) name strings.
- * It is almost identical to ucnv_compareNames() but also ignores
- * C0 White_Space characters (U+0009..U+000d, and U+0085 on EBCDIC).
- *
- * @internal
- */
-
-U_CAPI int32_t U_EXPORT2
-uprv_compareASCIIPropertyNames(const char *name1, const char *name2);
-
-U_CAPI int32_t U_EXPORT2
-uprv_compareEBCDICPropertyNames(const char *name1, const char *name2);
-
-#if U_CHARSET_FAMILY==U_ASCII_FAMILY
-#   define uprv_comparePropertyNames uprv_compareASCIIPropertyNames
-#elif U_CHARSET_FAMILY==U_EBCDIC_FAMILY
-#   define uprv_comparePropertyNames uprv_compareEBCDICPropertyNames
-#else
-#   error U_CHARSET_FAMILY is not valid
-#endif
-
 /** Turn a bit index into a bit flag. @internal */
 #define FLAG(n) ((uint32_t)1<<(n))
 
