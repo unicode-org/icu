@@ -524,7 +524,7 @@ ucol_getSortKey(const    UCollator    *coll,
  *          the sort key.
  */
 U_CAPI int32_t U_EXPORT2 
-ucol_nextSortKeyPart(UCollator *coll,
+ucol_nextSortKeyPart(const UCollator *coll,
                      UCharIterator *iter,
                      uint32_t state[2],
                      uint8_t *dest, int32_t count,
