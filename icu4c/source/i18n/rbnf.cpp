@@ -245,7 +245,7 @@ RuleBasedNumberFormat::findRuleSet(const UnicodeString& name, UErrorCode& status
 UnicodeString&
 RuleBasedNumberFormat::format(int32_t number,
                               UnicodeString& toAppendTo,
-                              FieldPosition& pos) const
+                              FieldPosition& /* pos */) const
 {
     if (defaultRuleSet) defaultRuleSet->format((int64_t)number, toAppendTo, toAppendTo.length());
     return toAppendTo;
@@ -255,7 +255,7 @@ RuleBasedNumberFormat::format(int32_t number,
 UnicodeString&
 RuleBasedNumberFormat::format(int64_t number,
                               UnicodeString& toAppendTo,
-                              FieldPosition& pos) const
+                              FieldPosition& /* pos */) const
 {
     if (defaultRuleSet) defaultRuleSet->format(number, toAppendTo, toAppendTo.length());
     return toAppendTo;
@@ -265,7 +265,7 @@ RuleBasedNumberFormat::format(int64_t number,
 UnicodeString&
 RuleBasedNumberFormat::format(double number,
                               UnicodeString& toAppendTo,
-                              FieldPosition& pos) const
+                              FieldPosition& /* pos */) const
 {
     if (defaultRuleSet) defaultRuleSet->format(number, toAppendTo, toAppendTo.length());
     return toAppendTo;
@@ -276,7 +276,7 @@ UnicodeString&
 RuleBasedNumberFormat::format(int32_t number,
                               const UnicodeString& ruleSetName,
                               UnicodeString& toAppendTo,
-                              FieldPosition& pos,
+                              FieldPosition& /* pos */,
                               UErrorCode& status) const
 {
     // return format((int64_t)number, ruleSetName, toAppendTo, pos, status);
@@ -299,7 +299,7 @@ UnicodeString&
 RuleBasedNumberFormat::format(int64_t number,
                               const UnicodeString& ruleSetName,
                               UnicodeString& toAppendTo,
-                              FieldPosition& pos,
+                              FieldPosition& /* pos */,
                               UErrorCode& status) const
 {
     if (U_SUCCESS(status)) {
@@ -331,7 +331,7 @@ UnicodeString&
 RuleBasedNumberFormat::format(double number,
                               const UnicodeString& ruleSetName,
                               UnicodeString& toAppendTo,
-                              FieldPosition& pos,
+                              FieldPosition& /* pos */,
                               UErrorCode& status) const
 {
     if (U_SUCCESS(status)) {
@@ -446,7 +446,7 @@ RuleBasedNumberFormat::initDefaultRuleSet()
 
 
 void
-RuleBasedNumberFormat::init(const UnicodeString& rules, UParseError& pErr, UErrorCode& status)
+RuleBasedNumberFormat::init(const UnicodeString& rules, UParseError& /* pErr */, UErrorCode& status)
 {
     // TODO: implement UParseError
     // Note: this can leave ruleSets == NULL, so remaining code should check

@@ -467,7 +467,7 @@ class TestStringService : public ICUService {
         return LocaleKey::createWithCanonicalFallback(id, NULL, status); // no fallback locale
     }
 
-    virtual ICUServiceFactory* createSimpleFactory(UObject* obj, const UnicodeString& id, UBool visible, UErrorCode& status) 
+  virtual ICUServiceFactory* createSimpleFactory(UObject* obj, const UnicodeString& id, UBool visible, UErrorCode& /* status */) 
     {
         if (obj && obj->getDynamicClassID() == UnicodeString::getStaticClassID()) {
             return new SimpleFactory((UnicodeString*)obj, id, visible);
@@ -484,7 +484,7 @@ class TestStringService : public ICUService {
 class AnonymousStringFactory : public ICUServiceFactory
 {
     public:
-    virtual UObject* create(const ICUServiceKey& key, const ICUService* service, UErrorCode& status) const {
+    virtual UObject* create(const ICUServiceKey& key, const ICUService* /* service */, UErrorCode& /* status */) const {
         return new UnicodeString(key.getID());
     }
 
@@ -530,12 +530,19 @@ class TestMultipleKeyStringFactory : public ICUServiceFactory {
     ~TestMultipleKeyStringFactory() {
     }
 
-    UObject* create(const ICUServiceKey& key, const ICUService* service, UErrorCode& status) const {
+    UObject* create(const ICUServiceKey& key, const ICUService* /* service */, UErrorCode& status) const {
+        if (U_FAILURE(status)) {
+	    return NULL;
+        }
         UnicodeString temp;
         key.currentID(temp);
-        if (U_SUCCESS(_status) && _ids.contains(&temp)) {
-            return new UnicodeString(_factoryID + temp);
-        }
+        if (U_SUCCESS(_status)) {
+	    if (_ids.contains(&temp)) {
+                return new UnicodeString(_factoryID + temp);
+	    }
+        } else {
+	    status = _status;
+	}
         return NULL;
     }
 
@@ -1208,7 +1215,7 @@ class WrapFactory : public ICUServiceFactory {
         }
     }
 
-    UnicodeString& getDisplayName(const UnicodeString& id, const Locale& locale, UnicodeString& result) const {
+    UnicodeString& getDisplayName(const UnicodeString& id, const Locale& /* locale */, UnicodeString& result) const {
         result.append("wrap '");
         result.append(id);
         result.append("'");
