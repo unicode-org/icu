@@ -4,7 +4,7 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-darwin,v 1.16 2000/11/02 22:49:10 yves Exp $
+## $Id: mh-darwin,v 1.17 2001/09/28 00:31:53 aheninger-oss Exp $
 
 ## Flags for position independent code
 SHAREDLIBCFLAGS = -dynamic
@@ -56,7 +56,7 @@ INSTALL-L = $(INSTALL_DATA)
 ## Link commands to link to ICU libs
 LIBICUUC= 	-L$(top_builddir)/common -l$(ICUPREFIX)uc
 LIBICUI18N= 	-L$(top_builddir)/i18n -l$(ICUPREFIX)i18n
-LIBCTESTFW= 	-L$(top_builddir)/tools/ctestfw -lctestfw
+LIBCTESTFW= 	-L$(top_builddir)/tools/ctestfw -l$(ICUPREFIX)ctestfw
 LIBICUTOOLUTIL=-L$(top_builddir)/tools/toolutil -l$(ICUPREFIX)toolutil
 LIBUSTDIO=      -L$(top_builddir)/extra/ustdio -lustdio
 

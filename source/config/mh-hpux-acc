@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-hpux-acc,v 1.23 2001/08/10 20:49:59 aheninger Exp $
+## $Id: mh-hpux-acc,v 1.24 2001/09/28 00:31:53 aheninger-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	:
@@ -57,7 +57,7 @@ INSTALL-L = $(INSTALL_DATA)
 LIBICUDT=       -L$(top_builddir)/data -L$(top_builddir)/stubdata -l$(ICUPREFIX)data
 LIBICUUC= 	-L$(top_builddir)/common -l$(ICUPREFIX)uc $(LIBICUDT)
 LIBICUI18N= 	-L$(top_builddir)/i18n -l$(ICUPREFIX)i18n
-LIBCTESTFW= 	-L$(top_builddir)/tools/ctestfw -lctestfw
+LIBCTESTFW= 	-L$(top_builddir)/tools/ctestfw -l$(ICUPREFIX)ctestfw
 LIBICUTOOLUTIL=-L$(top_builddir)/tools/toolutil -l$(ICUPREFIX)toolutil
 LIBUSTDIO=      -L$(top_builddir)/extra/ustdio -lustdio
 

@@ -3,6 +3,9 @@
 ## others. All Rights Reserved.
 ## Stephen F. Booth
 
+SO_TARGET_VERSION = @LIB_VERSION@
+SO_TARGET_VERSION_MAJOR = @LIB_VERSION_MAJOR@
+
 ## Source directory information
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
@@ -21,7 +24,26 @@ subdir = tools/ctestfw
 CLEANFILES = *~ $(DEPS)
 
 ## Target information
-TARGET = libctestfw.$(SO)
+#TARGET = libctestfw.$(SO)
+
+ENABLE_STATIC = @ENABLE_STATIC@
+ENABLE_SHARED = @ENABLE_SHARED@
+
+ifneq ($(ENABLE_STATIC),)
+TARGET = $(LIBICU)ctestfw$(ICULIBSUFFIX).a
+RANLIB = @RANLIB@
+endif
+
+ifneq ($(ENABLE_SHARED),)
+SO_TARGET = $(LIBICU)ctestfw$(ICULIBSUFFIX).$(SO)
+ALL_SO_TARGETS = $(SO_TARGET) $(MIDDLE_SO_TARGET) $(FINAL_SO_TARGET)
+endif
+
+ALL_TARGETS = $(TARGET) $(ALL_SO_TARGETS)
+
+DYNAMICCPPFLAGS = $(SHAREDLIBCPPFLAGS)
+DYNAMICCFLAGS = $(SHAREDLIBCFLAGS)
+DYNAMICCXXFLAGS = $(SHAREDLIBCXXFLAGS)
 
 DEFS = @DEFS@
 CPPFLAGS = @CPPFLAGS@
@@ -31,6 +53,8 @@ LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
 
 OBJECTS = ctest.o
+
+STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
 
 DEPS = $(OBJECTS:.o=.d)
 
@@ -49,15 +73,28 @@ distclean : distclean-local
 dist: dist-local
 check: all check-local
 
-all-local: $(TARGET)
+all-local: $(ALL_TARGETS)
 
-install-local: all-local
+install-local: install-library
+
+install-library: all-local
+	$(MKINSTALLDIRS) $(DESTDIR)$(libdir)
+ifneq ($(ENABLE_STATIC),)
+	$(INSTALL-L) $(TARGET) $(DESTDIR)$(libdir)/$(TARGET)
+endif
+ifneq ($(ENABLE_SHARED),)
+	$(INSTALL-L) $(FINAL_SO_TARGET) $(DESTDIR)$(libdir)/$(FINAL_SO_TARGET)
+ifneq ($(FINAL_SO_TARGET),$(SO_TARGET))
+	cd $(DESTDIR)$(libdir) && $(RM) $(MIDDLE_SO_TARGET) && ln -s $(FINAL_SO_TARGET) $(MIDDLE_SO_TARGET)
+	cd $(DESTDIR)$(libdir) && $(RM) $(SO_TARGET) && ln -s $(FINAL_SO_TARGET) $(SO_TARGET)
+endif
+endif
 
 dist-local:
 
 clean-local:
 	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
-	$(RMV) $(OBJECTS) $(TARGET)
+	$(RMV)  $(OBJECTS) $(STATIC_OBJECTS) $(ALL_TARGETS)
 
 distclean-local: clean-local
 	$(RMV) Makefile
@@ -68,8 +105,15 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
-$(TARGET) : $(OBJECTS)
-	$(SHLIB.c) -o $@ $^ $(LIBS)
+ifneq ($(ENABLE_STATIC),)
+$(TARGET): $(TARGET)($(STATIC_OBJECTS))
+	$(RANLIB) $@
+endif
+
+ifneq ($(ENABLE_SHARED),)
+$(FINAL_SO_TARGET): $(OBJECTS)
+	$(SHLIB.cc) $(LD_SONAME) -o $@ $^ $(LIBS)
+endif
 
 ifeq (,$(MAKECMDGOALS))
 -include $(DEPS)

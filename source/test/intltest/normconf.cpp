@@ -58,14 +58,9 @@ void NormalizerConformanceTest::TestConformance(void) {
     strcat(newPath, "unidata" U_FILE_SEP_STRING );
     strcat(newPath, TEST_SUITE_FILE);
 
-#if defined (U_SRCDATADIR) /* points to the icu/data directory */
-    /* If defined, we'll try an alternate directory second */
-    strcpy(backupPath, U_SRCDATADIR);
-#else
     strcpy(backupPath, u_getDataDirectory());
     strcat(backupPath, ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING "data");
     strcat(backupPath, U_FILE_SEP_STRING);
-#endif
     strcat(backupPath, "unidata" U_FILE_SEP_STRING );
     strcat(backupPath, TEST_SUITE_FILE);
 
