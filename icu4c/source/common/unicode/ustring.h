@@ -191,11 +191,13 @@ u_strspn(const UChar *string, const UChar *matchSet);
  * return successive tokens of that string, src must be specified as
  * NULL. The value saveState is set by this function to maintain the
  * function's position within the string, and on each subsequent call
- * you must return the same value. This function does handle surrogate
- * pairs. This function is similar to the strtok_r() the POSIX Threads
- * Extension (1003.1c-1995) version.
+ * you must give this argument the same variable. This function does
+ * handle surrogate pairs. This function is similar to the strtok_r()
+ * the POSIX Threads Extension (1003.1c-1995) version.
  *
- * @param src String containing token(s). This will be modified.
+ * @param src String containing token(s). This string will be modified.
+ *            After the first call to u_strtok_r(), this argument must
+ *            be NULL to get to the next token.
  * @param delim Set of delimiter characters (Unicode code points).
  * @param saveState The current pointer within the original string,
  *                which is set by this function.
