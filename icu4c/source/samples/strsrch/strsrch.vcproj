@@ -95,7 +95,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="icuind.lib icuucd.lib"
+				AdditionalDependencies="icuin.lib icuuc.lib"
 				OutputFile=".\Release/strsrch.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
