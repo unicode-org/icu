@@ -31,6 +31,10 @@
 #endif
 
 static char* _testDirectory=NULL;
+
+// Static list of errors found
+static UnicodeString errorList = UnicodeString("", "");
+
 //-----------------------------------------------------------------------------
 //convenience classes to ease porting code that uses the Java
 //string-concatenation operator (moved from findword test by rtg)
@@ -690,6 +694,12 @@ UBool IntlTest::runTestLoop( char* testname, char* par )
                 sprintf( msg, "---OK:   %s", name );
             }else{
                 sprintf( msg, "---ERRORS (%li) in %s", (errorCount-lastErrorCount), name );
+
+                for(int i=0;i<LL_indentlevel;i++) {
+                    errorList += " ";
+                }
+                errorList += name;
+                errorList += "\n";
             }
             LL_indentlevel -= 3;
             LL_message( "", TRUE); 
@@ -754,6 +764,11 @@ void IntlTest::errln( const UnicodeString &message )
 {
     IncErrorCount();
     if (!no_err_msg) LL_message( message, TRUE );
+}
+
+void IntlTest::printErrors()
+{
+     IntlTest::LL_message(errorList, TRUE);
 }
 
 void IntlTest::LL_message( UnicodeString message, UBool newline )
@@ -992,6 +1007,7 @@ main(int argc, char* argv[])
         fprintf(stdout, "OK: All tests passed without error.\n");
     }else{
         fprintf(stdout, "Errors in total: %ld.\n", major.getErrors());
+        major.printErrors();
     }
 
     fprintf(stdout, "--------------------------------------\n");
