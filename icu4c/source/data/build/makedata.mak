@@ -88,6 +88,7 @@ PATH = $(PATH);$(ICUP)\bin
 # the other is optional 'ucmlocal.mk'
 !IF EXISTS("$(ICUDATA)\ucmfiles.mk")
 !INCLUDE "$(ICUDATA)\ucmfiles.mk"
+UCM_SOURCE=$(UCM_SOURCE)
 !IF EXISTS("$(ICUDATA)\ucmebcdic.mk")
 !INCLUDE "$(ICUDATA)\ucmebcdic.mk"
 UCM_SOURCE=$(UCM_SOURCE) $(UCM_SOURCE_EBCDIC) 
@@ -98,8 +99,10 @@ UCM_SOURCE=$(UCM_SOURCE) $(UCM_SOURCE_EBCDIC) $(UCM_SOURCE_LOCAL)
 #!MESSAGE Warning: cannot find "ucmlocal.mk"
 !ENDIF
 !ELSE
-!ERROR ERROR: cannot find "ucmfiles.mk"
+!MESSAGE Warning: cannot find "ucmebcdic.mk".Not building EBCDIC converter files
 !ENDIF
+!ELSE
+!ERROR ERROR: cannot find "ucmfiles.mk"
 !ENDIF
 CNV_FILES=$(UCM_SOURCE:.ucm=.cnv)
 
