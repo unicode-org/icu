@@ -1,10 +1,5 @@
 /*
  * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved
- *
- * $Source: /xsrl/Nsvn/icu/icu/source/layout/IndicReordering.h,v $
- * $Date: 2004/02/26 17:43:27 $
- * $Revision: 1.13 $
- *
  */
 
 #ifndef __INDICREORDERING_H

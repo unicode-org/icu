@@ -2,8 +2,6 @@
  * HanLayoutEngine.cpp: OpenType processing for Han fonts.
  *
  * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved.
- *
- * $Source: /xsrl/Nsvn/icu/icu/source/layout/HanLayoutEngine.cpp,v $ $Date: 2003/10/07 02:23:19 $ $Revision: 1.5 $
  */
 
 #include "LETypes.h"

@@ -3,8 +3,6 @@
  * HanLayoutEngine.h: OpenType processing for Han fonts.
  *
  * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved.
- *
- * $Source: /xsrl/Nsvn/icu/icu/source/layout/HanLayoutEngine.h,v $ $Date: 2003/12/08 22:41:38 $ $Revision: 1.5 $
  */
 
 #ifndef __HANLAYOUTENGINE_H

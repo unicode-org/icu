@@ -3,8 +3,6 @@
 * Copyright (c) 2002-2003, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
-* $Source: /xsrl/Nsvn/icu/icu/source/test/cintltst/usettest.c,v $ 
-**********************************************************************
 */
 #include "unicode/uset.h"
 #include "unicode/ustring.h"

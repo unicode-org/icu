@@ -1,10 +1,5 @@
 /*
  * (C) Copyright IBM Corp. 2002-2003 - All Rights Reserved
- *
- * $Source: /xsrl/Nsvn/icu/icu/source/layout/MPreFixups.cpp,v $
- * $Date: 2003/06/03 20:58:22 $
- * $Revision: 1.3 $
- *
  */
 
 #include "LETypes.h"

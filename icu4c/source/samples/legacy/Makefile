@@ -1,5 +1,5 @@
 # Copyright (c) 2001 IBM, Inc. and others
-# conversion sample code $Revision: 1.2 $
+# conversion sample code
 
 
 # Usage:

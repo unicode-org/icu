@@ -4,10 +4,6 @@
  *
  * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS
  * YOU REALLY KNOW WHAT YOU'RE DOING.
- *
- * $Source: /xsrl/Nsvn/icu/icu/source/layout/ScriptAndLanguageTags.cpp,v $
- * $Date: 2003/06/03 20:58:22 $
- * $Revision: 1.8 $
  */
 
 #include "LETypes.h"

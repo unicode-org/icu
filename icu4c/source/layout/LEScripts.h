@@ -4,10 +4,6 @@
  *
  * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS
  * YOU REALLY KNOW WHAT YOU'RE DOING.
- *
- * $Source: /xsrl/Nsvn/icu/icu/source/layout/LEScripts.h,v $
- * $Date: 2003/12/10 22:30:48 $
- * $Revision: 1.10 $
  */
 
 #ifndef __LESCRIPTS_H

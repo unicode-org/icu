@@ -1,6 +1,5 @@
 ﻿// -*- Coding: utf-8; -*-  [all uconv resource files]
 // Copyright (c) 2000-2003 IBM, Inc. and Others.
-// $Revision: 1.3 $
 //
 // Root translation file for uconv messages.
 // So you want to translate this file??? Great!
