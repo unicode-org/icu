@@ -147,8 +147,6 @@ enum UNormalizationOption {
   UCOL_IGNORE_HANGUL    = 1
 };
 
-typedef enum UCollationOptions UCollationOptions;
-
 typedef enum UNormalizationOption UNormalizationOption;
     /**
      * Base letter represents a primary difference.  Set comparison
@@ -454,12 +452,6 @@ ucol_getStrength(const UCollator *coll);
 U_CAPI void
 ucol_setStrength(    UCollator            *coll,
             UCollationStrength        strength);
-
-U_CAPI UCollationOptions ucol_getDirection(const UCollator *coll);
-
-U_CAPI void ucol_setDirection(    UCollator            *coll,
-            UCollationOptions        direction);
-
 
 /**
  * Get the normalization mode used in a UCollator.
@@ -805,6 +797,8 @@ enum UColAttribute {
      UCOL_ATTRIBUTE_COUNT
 };
 
+typedef enum UColAttribute UColAttribute;
+
 enum UColAttributeValue {
      /* accepted by most attributes */
           UCOL_ATTR_DEFAULT,
@@ -846,6 +840,7 @@ enum UColAttributeValue {
 	    UCOL_ATTRIBUTE_VALUE_COUNT
 };
 
+typedef enum UColAttributeValue UColAttributeValue;
 
 /**
  * Universal attribute setter
@@ -902,6 +897,7 @@ enum UColRuleOption {
 	UCOL_FULL_RULES
 };
 
+typedef enum UColRuleOption UColRuleOption;
 
 /**
  * Returns current rules. Delta defines whether full rules are returned or just the tailoring. 
