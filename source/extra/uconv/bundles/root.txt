@@ -1,6 +1,6 @@
 ﻿// -*- Coding: utf-8; -*-  [all uconv resource files]
 // Copyright (c) 2000 IBM, Inc. and Others.
-// $Revision: 1.26 $
+// $Revision: 1.1 $
 //
 // Root translation file for uconv messages.
 // So you want to translate this file??? Great!
@@ -28,46 +28,50 @@ root
 
   lcUsageWord { "usage" }
   ucUsageWord { "Usage" }
-  usage { "{0}: {1} [ -h, -?, --help ] [ -V, --version ] [ -s, --silent ] [ -v, --verbose ] [ -l, --list | --list-code code | --default-code | -L, --list-transliterators ] [ --canon ] [ -x transliterator ] [ --to-callback callback | -c ] [ --from-callback callback | -i ] [ --callback callback ] [ --fallback | --no-fallback ] [ -b, --block-size size ] [ -f, --from-code code ] [ -t, --to-code code ] [ file ... ] [ -o, --output file ]\n" }
+  usage { "{0}: {1} [ -h, -?, --help ] [ -V, --version ] [ -s, --silent ] [ -v, --verbose ] [ -l, --list | --list-code code | --default-code | -L, --list-transliterators ] [ --canon ] [ -x transliteration ] [ --to-callback callback | -c ] [ --from-callback callback | -i ] [ --callback callback ] [ --fallback | --no-fallback ] [ -b, --block-size size ] [ -f, --from-code code ] [ -t, --to-code code ] [ file ... ] [ -o, --output file ]\n" }
 
   help {  "Options:  -h, --help                    print this message\n"
           "          -V, --version                 print the program version\n"
           "          -s, --silent                  suppress messages\n"
           "          -v, --verbose                 display progress information\n"
-	  "          -l, --list                    list all available encodings\n"
-	  "          --list-code code              list only the given encoding\n"
-	  "          --default-code                list only the default encoding\n"
-	  "          -L, --list-transliterators    list all available transliterators\n"
+	      "          -l, --list                    list all available encodings\n"
+	      "          --list-code code              list only the given encoding\n"
+	      "          --default-code                list only the default encoding\n"
+	      "          -L, --list-transliterators    list all available transliterators\n"
           "          --canon                       print list in cnvrtrs.txt(5) format\n"
-	  "          -x transliteration            run everything through transliteration\n" 
-	  "          --to-callback callback        use callback on destination encoding\n"
-	  "          -c                            omit invalid characters from the output\n"
-	  "          --from-callback callback      use callback on original encoding\n"
-	  "          -i                            ignore invalid sequences in the input\n"
+	      "          -x transliteration            run everything through transliteration\n" 
+	      "          --to-callback callback        use callback on destination encoding\n"
+	      "          -c                            omit invalid characters from the output\n"
+	      "          --from-callback callback      use callback on original encoding\n"
+	      "          -i                            ignore invalid sequences in the input\n"
           "          --callback callback           use callback on both encodings\n"
-	  "          -b, --block-size size         read size bytes blocks (default: 4096)\n"
-	  "          --fallback                    use fallback mapping\n"
-	  "          --no-fallback                 do not use fallback mapping\n"
-	  "          -f, --from-code code          set the original encoding\n"
-	  "          -t, --to-code code            set the destination encoding\n" 
+	      "          -b, --block-size size         read size bytes blocks (default: 4096)\n"
+	      "          --fallback                    use fallback mapping\n"
+	      "          --no-fallback                 do not use fallback mapping\n"
+	      "          -f, --from-code code          set the original encoding\n"
+	      "          -t, --to-code code            set the destination encoding\n" 
           "          -o, --output file             write output to file\n"
-	  "\n"
-	  "Callbacks:"
-}
+	      "\n"
+	      "Callbacks:"
+  }
 
-  cantGetNames   { "Couldn''t get available converter names.\n" } // 0: err  cantGetNames   { "Couldn''t get available converter names.\n" } // 0: err
+  cantGetNames   { "Couldn''t get available converter names.\n" } // 0: err 
   cantGetTag   { "Couldn''t get standard tag name: {0}.\n" } // 0: err
 
   noSuchCodeset  { "Couldn''t find encoding: {0}.\n" } // 0: name of the encoding
-  noFromCodeset  { "No conversion from encoding given (use -f).\n" }
-  noToCodeset    {  "No conversion to encoding given (use -t).\n"  }
+  noFromCodeset  { "No original encoding set (use -f).\n" }
+  noToCodeset    {  "No destination encoding set (use -t).\n" }
 
   badBlockSize	{ "Bad block size: {0}.\n" } // 0: size of the block
 
-  cantOpenFromCodeset { "Couldn''t open from encoding {0}.: {1}.\n" }  // 0:set, 1: err
-  cantOpenToCodeset { "Couldn''t open to encoding {0}: {1}.\n" } // 0: set, 1: err
+  cantSetInBinMode { "Couldn't set standard input to binary mode." }
+  cantSetOutBinMode { "Couldn't set standard output to binary mode." }
 
-  cantCreateTranslit { "Couldn''t create transliteration \"{0}\": {1}{2}.\n" } // 0: set, 1: err, 2: parse err details
+  cantOpenFromCodeset { "Couldn''t open converter for original encoding {0}: {1}.\n" }  // 0:set, 1: err
+  cantOpenToCodeset { "Couldn''t open converteur for destination encoding {0}: {1}.\n" } // 0: set, 1: err
+
+  cantCreateTranslit { "Couldn''t create transliteration \"{0}\": {1}.\n" } // 0: set, 1: err
+  cantCreateTranslitParseErr { "Couldn''t create transliteration \"{0}\": {1}, line {2}, offset {3}.\n" } // 0: set, 1: err, 2: line, 3: offset
 
   cantSetCallback { "Couldn''t set transcoding callback: {0}.\n" } // 0: err
 
@@ -77,10 +81,10 @@ root
   cantCreateOutputF  { "Couldn''t create output file {0}: {1}.\n" } // 0: file, 1: strerror [OS error string]
 
   cantWrite       { "The converted text couldn't be written: {0}.\n" } // 0: OS error string
-  cantRead        { "Error reading from input file {0}.\n" } // 0: OS error string
+  cantRead        { "Error reading from input file: {0}.\n" } // 0: OS error string
 
-  premEnd         { "Premature end of Unicode conversion to codepage at position {0}.\n" }
-  premEndInput    { "Premature end of input when converting from codepage to Unicode at position {0}.\n" }
+  premEnd         { "Premature end of Unicode to destination encoding conversion at position {0}.\n" }
+  premEndInput    { "Premature end of input when converting from original encoding to Unicode at position {0}.\n" }
 
   problemCvtToU   { "Conversion to Unicode from codepage failed at position {0}: {1}.\n" } // 0: position, 1: err
   problemCvtFromU { "Conversion from Unicode to codepage failed at position {0}: {1}.\n"} // 0: err, 1: pos

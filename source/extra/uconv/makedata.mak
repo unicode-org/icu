@@ -35,7 +35,7 @@ CFG=Debug
 !IF "$(ICUP)"==""
 !ERROR Can't find path!
 !ENDIF
-!MESSAGE icu path is $(ICUP)
+!MESSAGE ICU path is $(ICUP)
 RESNAME=uconvmsg
 RESDIR=.  #$(ICUP)\..\icuapps\uconv\$(RESNAME)
 RESFILES=resfiles.mk
@@ -108,18 +108,18 @@ GOBACK :
 # This is to remove all the data files
 CLEAN :
 	@cd "$(RESDIR)"
-	-@erase "*.cnv"
-	-@erase "*.res"f
-	-@erase "cnvalias*.*"
-	-@erase "icudata.*"
+	-@erase "*.res"
+	-@erase "uconvmsg*.*"
 	-@erase "*.obj"
 	-@erase "base*.*"
 	@cd "$(ICUTOOLS)"
+    -@erase "$(RB_FILES)"
+    -@"$(ICUTOOLS)\pkgdata" --clean -v -m static -c -p $(RESNAME) -O "$(PKGOPT)" -d "$(DLL_OUTPUT)" -s "$(RESDIR)" pkgdatain.txt
 
 # Inference rule for creating resource bundles
 .txt.res:
 	@echo Making Resource Bundle files
-	"$(ICUTOOLS)\genrb" -s$(@D) -d$(@D) $(?F)
+	"$(ICUTOOLS)\genrb" -s $(@D) -d $(@D) $(?F)
 
 
 $(RESSRC) : {"$(ICUTOOLS)"}genrb.exe
