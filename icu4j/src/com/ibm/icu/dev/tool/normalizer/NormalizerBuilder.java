@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/normalizer/Attic/NormalizerBuilder.java,v $ 
- * $Date: 2000/07/12 16:41:26 $ 
- * $Revision: 1.4 $
+ * $Date: 2000/07/12 16:49:22 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -529,7 +529,6 @@ public final class NormalizerBuilder
     {
         out.write("MAX_CANONICAL",  maxCanon        );
         out.write("MAX_COMPAT",     maxCompat       );
-        // No longer used [liu]:
         out.write("DECOMP_MASK",    DECOMP_MASK     );
         out.write("DECOMP_RECURSE", DECOMP_RECURSE  );
         out.write("BASE",           BASE            );
