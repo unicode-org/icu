@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Normalizer.java,v $ 
- * $Date: 2002/07/24 16:26:29 $ 
- * $Revision: 1.20 $
+ * $Date: 2002/07/25 21:23:56 $ 
+ * $Revision: 1.21 $
  *
  *******************************************************************************
  */
@@ -496,6 +496,13 @@ public final class Normalizer implements Cloneable{
      * format without further thorough checks.
      */
     public static QuickCheckResult MAYBE = new QuickCheckResult(2);
+    
+    /**
+     * Option bit for compare:
+     * Case sensitively compare the strings
+     * @since ICU 2.2
+     */
+    public static final int FOLD_CASE_DEFAULT    =      0x0000;
     
     /**
      * Option bit for compare:

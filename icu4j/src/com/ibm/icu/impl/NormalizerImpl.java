@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/NormalizerImpl.java,v $
- * $Date: 2002/07/24 01:04:10 $
- * $Revision: 1.7 $
+ * $Date: 2002/07/25 21:27:00 $
+ * $Revision: 1.8 $
  *******************************************************************************
  */
  
@@ -192,7 +192,7 @@ public final class NormalizerImpl {
 	    */
 
 	    public int getFoldingOffset(int value){
-			return 0;
+			return value;
 	    }
 	}
 	
@@ -417,14 +417,14 @@ public final class NormalizerImpl {
 	}
 
 	public static char	getFCD16(char c) {
-	    return  fcdTrieImpl.fcdTrie.getBMPValue(c);
+	    return  fcdTrieImpl.fcdTrie.getLeadValue(c);
 	}
 	
 	public static char getFCD16FromSurrogatePair(char fcd16, char c2) {
 	    /* the surrogate index in fcd16 is an absolute offset over the 
          * start of stage 1 
          * */
-	    return fcdTrieImpl.fcdTrie.getSurrogateValue(fcd16, c2);
+	    return fcdTrieImpl.fcdTrie.getTrailValue(fcd16, c2);
 	}
 	
 	private static int getExtraDataIndex(long norm32) {
@@ -839,7 +839,7 @@ public final class NormalizerImpl {
                     return true;
                 } else if((c=src[i++])<MIN_WITH_LEAD_CC) {
                     prevCC=(int)-c;
-                } else if((fcd16=fcdTrieImpl.fcdTrie.getBMPValue(c))==0) {
+                } else if((fcd16=getFCD16(c))==0) {
                     prevCC=0;
                 } else {
                     break;
@@ -851,7 +851,7 @@ public final class NormalizerImpl {
 	            // c is a lead surrogate, get the real fcd16 
 	            if(i!=length && UTF16.isTrailSurrogate(c2=src[i])) {
 	                ++i;
-	                fcd16=fcdTrieImpl.fcdTrie.getSurrogateValue(fcd16, c2);
+	                fcd16=getFCD16FromSurrogatePair(fcd16, c2);
 	            } else {
 	                fcd16=0;
 	            }
@@ -2951,10 +2951,10 @@ public final class NormalizerImpl {
                 }
     
                 // push current level pointers
-                stack1[level1].start=start1;
-                stack1[level1].s=s1Start;
-                stack1[level1].limit=limit1;
-                stack1[level1].source=cSource1;
+                stack1[0].start=start1;
+                stack1[0].s=s1Start;
+                stack1[0].limit=limit1;
+                stack1[0].source=cSource1;
                 ++level1;
     
                 cSource1 = fold1;
@@ -2987,10 +2987,10 @@ public final class NormalizerImpl {
                 }
     
                 // push current level pointers
-                stack2[level2].start=start2;
-                stack2[level2].s=s2Start;
-                stack2[level2].limit=limit2;
-                stack2[level2].source=cSource2;
+                stack2[0].start=start2;
+                stack2[0].s=s2Start;
+                stack2[0].limit=limit2;
+                stack2[0].source=cSource2;
                 ++level2;
                 
                 cSource2 = fold2;
@@ -3023,10 +3023,10 @@ public final class NormalizerImpl {
 	            }
 	
 	            // push current level pointers
-                stack1[0].start=start1;
-	            stack1[0].s=s1Start;
-	            stack1[0].limit=limit1;
-                stack1[0].source=cSource1;
+                stack1[level1].start=start1;
+	            stack1[level1].s=s1Start;
+	            stack1[level1].limit=limit1;
+                stack1[level1].source=cSource1;
 	            ++level1;
 	
 	            // set next level pointers to decomposition
@@ -3064,10 +3064,10 @@ public final class NormalizerImpl {
 	            }
 	
 	            // push current level pointers
-	            stack2[0].start=start2;
-	            stack2[0].s=s2Start;
-	            stack2[0].limit=limit2;
-                stack2[0].source=cSource2;
+	            stack2[level2].start=start2;
+	            stack2[level2].s=s2Start;
+	            stack2[level2].limit=limit2;
+                stack2[level2].source=cSource2;
 	            ++level2;
 	
 	            // set next level pointers to decomposition
