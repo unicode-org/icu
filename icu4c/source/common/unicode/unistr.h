@@ -3647,7 +3647,7 @@ UnicodeString::setRefCount(int32_t count)
 //========================================
 // class UCharReference
 //========================================
-class UCharReference
+class U_COMMON_API UCharReference
 {
 public:
   UCharReference();
