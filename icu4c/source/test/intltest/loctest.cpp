@@ -871,8 +871,9 @@ LocaleTest::TestGetLangsAndCountries()
     for(testCount = 0;test[testCount];testCount++)
       ;
 
-    if (testCount != 466)
-        errln("Expected getISOLanguages() to return 466 languages; it returned %d", testCount);
+    /* TODO: Change this test to be more like the cloctst version? */
+    if (testCount != 468)
+        errln("Expected getISOLanguages() to return 468 languages; it returned %d", testCount);
     else {
         for (i = 0; i < 15; i++) {
             int32_t j;

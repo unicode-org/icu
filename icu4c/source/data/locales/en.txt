@@ -1051,6 +1051,7 @@ en {
         nso { "Sotho, Northern" }
         nub { "Nubian Languages" }
         nv  { "Navajo"}
+        nwc { "Classical Newari" }
         ny  { "Nyanja; Chichewa; Chewa" }
         nym { "Nyamwezi" }
         nyn { "Nyankole" }
@@ -1157,6 +1158,7 @@ en {
         tk  { "Turkmen" }
         tkl { "Tokelau" }
         tl  { "Tagalog" }
+        tlh { "Klingon" } // From the Star Trek TV/movie series
         tli { "Tlingit" }
         tmh { "Tamashek" }
         tn  { "Tswana" }
