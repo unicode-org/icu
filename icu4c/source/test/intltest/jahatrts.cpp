@@ -70,7 +70,7 @@ static void pseudoHandleTransliterate(const Transliterator* t,
  * Used by TestConstruction() and TestTransliterate.
  */
 class TestJamoFilter : public UnicodeFilter {
-    virtual UnicodeFilter* clone() const {
+    virtual UnicodeMatcher* clone() const {
         return new TestJamoFilter(*this);
     }
     virtual UBool contains(UChar32 c) const {

@@ -36,7 +36,7 @@ void UnicodeFilterLogicTest::runIndexedTest( int32_t index, UBool exec, const ch
 }
 
 class Filter1: public UnicodeFilter{
-    virtual UnicodeFilter* clone() const{
+    virtual UnicodeMatcher* clone() const{
         return new Filter1(*this);
     }
     virtual UBool contains(UChar32 c) const {
@@ -47,7 +47,7 @@ class Filter1: public UnicodeFilter{
     }
 };
 class Filter2: public UnicodeFilter{
-    virtual UnicodeFilter* clone() const{
+    virtual UnicodeMatcher* clone() const{
         return new Filter2(*this);
     }
     virtual UBool contains(UChar32 c) const {

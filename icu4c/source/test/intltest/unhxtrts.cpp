@@ -68,7 +68,7 @@ static void pseudoHandleTransliterate(const Transliterator* t,
  * Used by TestConstruction() and TestTransliterate.
  */
 class TestUniFilter : public UnicodeFilter {
-    virtual UnicodeFilter* clone() const {
+    virtual UnicodeMatcher* clone() const {
         return new TestUniFilter(*this);
     }
     virtual UBool contains(UChar32 c) const {

@@ -161,16 +161,16 @@ void TransliterationRule::init(const UnicodeString& input,
     this->segments = adoptedSegs;
     // Find the position of the first segment index that is after the
     // anteContext (in the key).  Note that this may be a start or a
-    // limit index.
+    // limit index.  If all segments are in the ante context,
+    // firstKeySeg should point past the last segment -- that is, it
+    // should point at the end marker, which is -1.  This allows the
+    // code to back up by one to obtain the last ante context segment.
     firstKeySeg = -1;
     if (segments != 0) {
         do {
             ++firstKeySeg;
         } while (segments[firstKeySeg] >= 0 &&
                  segments[firstKeySeg] < anteContextLength);
-        if (segments[firstKeySeg] < 0) {
-            firstKeySeg = -1;
-        }
     }
 
     pattern = input;
@@ -221,7 +221,7 @@ int16_t TransliterationRule::getIndexValue() const {
         return -1;
     }
     UChar32 c = pattern.char32At(anteContextLength);
-    return (int16_t)(data.lookupSet(c) == NULL ? (c & 0xFF) : -1);
+    return (int16_t)(data.lookup(c) == NULL ? (c & 0xFF) : -1);
 }
 
 /**
@@ -241,8 +241,9 @@ UBool TransliterationRule::matchesIndexValue(uint8_t v) const {
         return TRUE;
     }
     UChar32 c = pattern.char32At(anteContextLength);
-    const UnicodeSet* set = data.lookupSet(c);
-    return set == NULL ? (uint8_t(c) == v) : set->containsIndexValue(v);
+    const UnicodeMatcher* matcher = data.lookup(c);
+    return matcher == NULL ? (uint8_t(c) == v) :
+        matcher->matchesIndexValue(v);
 }
 
 /**
@@ -367,17 +368,21 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
     // A mismatch in the ante context, or with the start anchor,
     // is an outright U_MISMATCH regardless of whether we are
     // incremental or not.
-    int32_t cursor = pos.start - UTF_CHAR_LENGTH(text.char32At(pos.start-1));
+    int32_t cursor = pos.start;
     int32_t newStart = 0;
     int32_t i;
+
+    // Backup cursor by one
+    if (cursor > 0) {
+        cursor -= UTF_CHAR_LENGTH(text.char32At(cursor-1));
+    } else {
+        --cursor;
+    }
+
     for (i=anteContextLength-1; i>=0; --i) {
-        while (i == nextSegPos) {
-            segPos[iSeg] = cursor;
-            nextSegPos == (--iSeg >= 0) ? segments[iSeg] : -1;
-        }
         UChar keyChar = pattern.charAt(i);
-        const UnicodeSet* set = data.lookupSet(keyChar);
-        if (set == 0) {
+        const UnicodeMatcher* matcher = data.lookup(keyChar);
+        if (matcher == 0) {
             if (cursor >= pos.contextStart &&
                 keyChar == text.charAt(cursor)) {
                 --cursor;
@@ -386,7 +391,7 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
             }
         } else {
             // Subtract 1 from contextStart to make it a reverse limit
-            if (set->matches(text, cursor, pos.contextStart-1, FALSE)
+            if (matcher->matches(text, cursor, pos.contextStart-1, FALSE)
                 != U_MATCH) {
                 return U_MISMATCH;
             }
@@ -394,6 +399,15 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
         if (cursorPos == (i - anteContextLength)) {
             // Record the position of the cursor
             newStart = cursor;
+        }
+        while (nextSegPos == i) {
+            segPos[iSeg] = cursor;
+            if (cursor >= 0) {
+                segPos[iSeg] += UTF_CHAR_LENGTH(text.char32At(cursor));
+            } else {
+                ++segPos[iSeg];
+            }
+            nextSegPos = (--iSeg >= 0) ? segments[iSeg] : -1;
         }
     }
 
@@ -405,8 +419,15 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
 
     // -------------------- Key and Post Context --------------------
 
+    // YUCKY OPTIMIZATION.  To make things a miniscule amount faster,
+    // subtract anteContextLength from all segments[i] with i >=
+    // firstKeySeg.  Then we don't have to do so here.  I only mention
+    // this here in order to say DO NOT DO THIS.  The gain is
+    // miniscule (how long does an integer subtraction take?) and the
+    // increase in confusion isn't worth it.
+
     iSeg = firstKeySeg;
-    nextSegPos = (iSeg >= 0) ? segments[iSeg] : -1;
+    nextSegPos = (iSeg >= 0) ? (segments[iSeg] - anteContextLength) : -1;
 
     i = 0;
     cursor = pos.start;
@@ -424,14 +445,14 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
         }
         while (i == nextSegPos) {
             segPos[iSeg] = cursor;
-            nextSegPos = segments[++iSeg];
+            nextSegPos = segments[++iSeg] - anteContextLength;
         }
         if (i == keyLength) {
             keyLimit = cursor;
         }
         UChar keyChar = pattern.charAt(anteContextLength + i++);
-        const UnicodeSet* set = data.lookupSet(keyChar);
-        if (set == 0) {
+        const UnicodeMatcher* matcher = data.lookup(keyChar);
+        if (matcher == 0) {
             // Don't need the cursor < pos.contextLimit check if
             // incremental is TRUE (because it's done above); do need
             // it otherwise.
@@ -443,7 +464,7 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
             }
         } else {
             UMatchDegree m =
-                set->matches(text, cursor, pos.contextLimit, incremental);
+                matcher->matches(text, cursor, pos.contextLimit, incremental);
             if (m != U_MATCH) {
                 return m;
             }
@@ -451,7 +472,7 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
     }
     while (i == nextSegPos) {
         segPos[iSeg] = cursor;
-        nextSegPos = segments[++iSeg];
+        nextSegPos = segments[++iSeg] - anteContextLength;
     }
 	if (i == keyLength) {
 		keyLimit = cursor;
@@ -686,11 +707,11 @@ UnicodeString& TransliterationRule::toRule(UnicodeString& rule,
         }
 
         UChar c = pattern.charAt(i);
-        const UnicodeSet *set = data.lookupSet(c);
-        if (set == 0) {
+        const UnicodeMatcher *matcher = data.lookup(c);
+        if (matcher == 0) {
             _appendToRule(rule, c, FALSE, escapeUnprintable, quoteBuf);
         } else {
-            _appendToRule(rule, set->toPattern(str, escapeUnprintable),
+            _appendToRule(rule, matcher->toPattern(str, escapeUnprintable),
                           TRUE, escapeUnprintable, quoteBuf);
         }
     }

@@ -13,7 +13,7 @@
 #include "unicode/parseerr.h"
 
 class TransliterationRuleData;
-class UnicodeSet;
+class UnicodeMatcher;
 class ParseData;
 class RuleHalf;
 class ParsePosition;
@@ -48,11 +48,11 @@ class TransliteratorParser {
     ParseData* parseData;
 
     /**
-     * Temporary vector of set variables.  When parsing is complete, this
-     * is copied into the array data.setVariables.  As with data.setVariables,
-     * element 0 corresponds to character data.setVariablesBase.
+     * Temporary vector of matcher variables.  When parsing is complete, this
+     * is copied into the array data.variables.  As with data.variables,
+     * element 0 corresponds to character data.variablesBase.
      */
-    UVector setVariablesVector;
+    UVector variablesVector;
 
     /**
      * The next available stand-in for variables.  This starts at some point in
@@ -168,6 +168,12 @@ private:
      */
     UChar parseSet(const UnicodeString& rule,
                    ParsePosition& pos);
+
+    /**
+     * Generate and return a stand-in for a new UnicodeMatcher.  Store
+     * the matcher (adopt it).
+     */
+    UChar generateStandInFor(UnicodeMatcher* adopted);
 
     /**
      * Append the value of the given variable name to the given

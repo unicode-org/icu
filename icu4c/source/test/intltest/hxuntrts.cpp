@@ -56,7 +56,7 @@ void HexToUniTransliteratorTest::runIndexedTest( int32_t index, UBool exec, cons
  * Used by TestConstruction() and TestTransliterate.
  */
 class TestHexFilter : public UnicodeFilter {
-    virtual UnicodeFilter* clone() const {
+    virtual UnicodeMatcher* clone() const {
         return new TestHexFilter(*this);
     }
     virtual UBool contains(UChar32 c) const {

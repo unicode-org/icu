@@ -615,7 +615,7 @@ void TransliteratorAPITest::TestRegisterUnregister(){
  * Used by TestFiltering().
  */
 class TestFilter1 : public UnicodeFilter {
-    virtual UnicodeFilter* clone() const {
+    virtual UnicodeMatcher* clone() const {
         return new TestFilter1(*this);
     }
     virtual UBool contains(UChar32 c) const {
@@ -626,7 +626,7 @@ class TestFilter1 : public UnicodeFilter {
     }
 };
 class TestFilter2 : public UnicodeFilter {
-    virtual UnicodeFilter* clone() const {
+    virtual UnicodeMatcher* clone() const {
         return new TestFilter2(*this);
     }
     virtual UBool contains(UChar32 c) const {
@@ -637,7 +637,7 @@ class TestFilter2 : public UnicodeFilter {
     }
 };
 class TestFilter3 : public UnicodeFilter {
-    virtual UnicodeFilter* clone() const {
+    virtual UnicodeMatcher* clone() const {
         return new TestFilter3(*this);
     }
     virtual UBool contains(UChar32 c) const {

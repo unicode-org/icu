@@ -172,6 +172,8 @@ class TransliteratorTest : public IntlTest {
 
     void TestSupplemental(void);
 
+    void TestQuantifier(void);
+
     //======================================================================
     // Support methods
     //======================================================================

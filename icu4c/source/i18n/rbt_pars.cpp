@@ -7,19 +7,21 @@
 *   11/17/99    aliu        Creation.
 **********************************************************************
 */
-#include "rbt_pars.h"
-#include "unicode/rbt.h"
-#include "rbt_rule.h"
-#include "unirange.h"
-#include "rbt_data.h"
-#include "unicode/uniset.h"
 #include "cstring.h"
-#include "unicode/parsepos.h"
-#include "symtable.h"
-#include "unicode/parseerr.h"
 #include "hash.h"
-#include "unicode/unicode.h"
+#include "quant.h"
+#include "rbt_data.h"
+#include "rbt_pars.h"
+#include "rbt_rule.h"
+#include "strmatch.h"
+#include "symtable.h"
+#include "unirange.h"
+#include "unicode/parseerr.h"
+#include "unicode/parsepos.h"
 #include "unicode/putil.h"
+#include "unicode/rbt.h"
+#include "unicode/unicode.h"
+#include "unicode/uniset.h"
 
 // Operators
 #define VARIABLE_DEF_OP ((UChar)0x003D) /*=*/
@@ -43,6 +45,8 @@
 #define CURSOR_POS         ((UChar)0x007C) /*|*/
 #define CURSOR_OFFSET      ((UChar)0x0040) /*@*/
 #define ANCHOR_START       ((UChar)0x005E) /*^*/
+#define KLEENE_STAR        ((UChar)0x002A) /***/
+#define ONE_OR_MORE        ((UChar)0x002B) /*+*/
 
 // By definition, the ANCHOR_END special character is a
 // trailing SymbolTable.SYMBOL_REF character.
@@ -61,17 +65,17 @@ static const UChar   ID_TOKEN[]   = { 0x3A, 0x3A }; // ':', ':'
 /**
  * This class implements the SymbolTable interface.  It is used
  * during parsing to give UnicodeSet access to variables that
- * have been defined so far.  Note that it uses setVariablesVector,
+ * have been defined so far.  Note that it uses variablesVector,
  * _not_ data.setVariables.
  */
 class ParseData : public SymbolTable {
 public:
     const TransliterationRuleData* data; // alias
 
-    const UVector* setVariablesVector; // alias
+    const UVector* variablesVector; // alias
 
     ParseData(const TransliterationRuleData* data = 0,
-              const UVector* setVariablesVector = 0);
+              const UVector* variablesVector = 0);
 
     virtual const UnicodeString* lookup(const UnicodeString& s) const;
 
@@ -83,7 +87,7 @@ public:
 
 ParseData::ParseData(const TransliterationRuleData* d,
                      const UVector* sets) :
-    data(d), setVariablesVector(sets) {}
+    data(d), variablesVector(sets) {}
 
 /**
  * Implement SymbolTable API.
@@ -99,11 +103,11 @@ const UnicodeSet* ParseData::lookupSet(UChar32 ch) const {
     // Note that we cannot use data.lookupSet() because the
     // set array has not been constructed yet.
     const UnicodeSet* set = NULL;
-    int32_t i = ch - data->setVariablesBase;
-    if (i >= 0 && i < setVariablesVector->size()) {
-        int32_t i = ch - data->setVariablesBase;
-        set = (i < setVariablesVector->size()) ?
-            (UnicodeSet*) setVariablesVector->elementAt(i) : 0;
+    int32_t i = ch - data->variablesBase;
+    if (i >= 0 && i < variablesVector->size()) {
+        int32_t i = ch - data->variablesBase;
+        set = (i < variablesVector->size()) ?
+            (UnicodeSet*) variablesVector->elementAt(i) : 0;
     }
     return set;
 }
@@ -276,7 +280,7 @@ int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit) {
             if (escaped == (UChar32) -1) {
                 return syntaxError(RuleBasedTransliterator::MALFORMED_UNICODE_ESCAPE, rule, start);
             }
-            buf.append((UChar) escaped);
+            buf.append(escaped);
             continue;
         }
         // Handle quoted matter
@@ -431,6 +435,40 @@ int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit) {
                 }
             }
             break;
+        case KLEENE_STAR:
+        case ONE_OR_MORE:
+            // Very limited initial implementation.  Note that this
+            // works strangely for quotes and variables --
+            //  'foo'* => fo o*
+            //  $a = foo; $a * => fo o*
+            // We will fix this later so that
+            //  'foo'* => (foo) *
+            //  $a = foo; $a * => (foo) *
+            // Implement with hidden segments, perhaps at # 10+.
+            {
+                int32_t start, limit;
+                if (segments != 0 &&
+                    segments->size() >= 2 &&
+                    segments->size() % 2 == 0 &&
+                    _voidPtr_to_int32(segments->elementAt(segments->size()-1)) == buf.length()) {
+                    // The * immediately follows a segment
+                    int32_t len = segments->size();
+                    start = _voidPtr_to_int32(segments->elementAt(len - 2));
+                    limit = _voidPtr_to_int32(segments->elementAt(len - 1));
+                    segments->setElementAt(_int32_to_voidPtr(start+1), len-1);
+                } else {
+                    // The * follows an isolated character
+                    // (or quote, or variable reference)
+                    start = buf.length() - 1;
+                    limit = start + 1;
+                }
+                UnicodeMatcher *m =
+                    new StringMatcher(buf, start, limit, *parser.data);
+                m = new Quantifier(m, (c == ONE_OR_MORE)?1:0, 0x7FFFFFFF);
+                buf.truncate(start);
+                buf.append(parser.generateStandInFor(m));
+            }
+            break;
         // case SET_CLOSE:
         default:
             // Disallow unquoted characters other than [0-9A-Za-z]
@@ -551,7 +589,7 @@ TransliteratorParser::TransliteratorParser(
                                      UTransDirection theDirection,
                                      UParseError* theParseError) :
     rules(theRules), direction(theDirection), data(0), parseError(theParseError) {
-    parseData = new ParseData(0, &setVariablesVector);
+    parseData = new ParseData(0, &variablesVector);
 }
 
 /**
@@ -589,7 +627,7 @@ void TransliteratorParser::parseRules(UnicodeString& idBlockResult,
     }
 
     parseData->data = data;
-    setVariablesVector.removeAllElements();
+    variablesVector.removeAllElements();
     if (parseError != 0) {
         parseError->code = 0;
     }
@@ -668,16 +706,16 @@ void TransliteratorParser::parseRules(UnicodeString& idBlockResult,
     }
     
     // Convert the set vector to an array
-    data->setVariablesLength = setVariablesVector.size();
-    data->setVariables = data->setVariablesLength == 0 ? 0 : new UnicodeSet*[data->setVariablesLength];
+    data->variablesLength = variablesVector.size();
+    data->variables = data->variablesLength == 0 ? 0 : new UnicodeMatcher*[data->variablesLength];
     // orphanElement removes the given element and shifts all other
     // elements down.  For performance (and code clarity) we work from
     // the end back to index 0.
     int32_t i;
-    for (i=data->setVariablesLength; i>0; ) {
+    for (i=data->variablesLength; i>0; ) {
         --i;
-        data->setVariables[i] =
-            (UnicodeSet*) setVariablesVector.orphanElementAt(i);
+        data->variables[i] =
+            (UnicodeSet*) variablesVector.orphanElementAt(i);
     }
 
     // Index the rules
@@ -894,14 +932,23 @@ int32_t TransliteratorParser::syntaxError(int32_t parseErrorCode,
 UChar TransliteratorParser::parseSet(const UnicodeString& rule,
                                           ParsePosition& pos) {
     UnicodeSet* set = new UnicodeSet(rule, pos, *parseData, status);
+    set->compact();
+    return generateStandInFor(set);
+}
+
+/**
+ * Generate and return a stand-in for a new UnicodeMatcher.  Store
+ * the matcher (adopt it).
+ */
+UChar TransliteratorParser::generateStandInFor(UnicodeMatcher* adopted) {
+    // assert(adopted != 0);
     if (variableNext >= variableLimit) {
         // throw new RuntimeException("Private use variables exhausted");
-        delete set;
+        delete adopted;
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
-    set->compact();
-    setVariablesVector.addElement(set);
+    variablesVector.addElement(adopted);
     return variableNext++;
 }
 
@@ -949,12 +996,12 @@ void TransliteratorParser::determineVariableRange(void) {
 
     UnicodeRange* r = privateUse.largestUnusedSubrange(rules);
 
-    data->setVariablesBase = variableNext = variableLimit = (UChar) 0;
+    data->variablesBase = variableNext = variableLimit = (UChar) 0;
     
     if (r != 0) {
         // Allocate 9 characters for segment references 1 through 9
         data->segmentBase = r->start;
-        data->setVariablesBase = variableNext = (UChar) (data->segmentBase + 9);
+        data->variablesBase = variableNext = (UChar) (data->segmentBase + 9);
         variableLimit = (UChar) (r->start + r->length);
         delete r;
     }
