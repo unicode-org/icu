@@ -289,7 +289,7 @@ public class TestIDNA extends TestFmwk {
         }
     }
     public void TestNamePrepConformance() throws Exception{
-        InputStream stream = ICUData.getRequiredStream(UResourceBundle.ICU_BUNDLE+"uidna.spp");
+        InputStream stream = ICUData.getRequiredStream(UResourceBundle.ICU_BUNDLE+"/uidna.spp");
         StringPrep namePrep = new StringPrep(stream);
         for(int i=0; i<TestData.conformanceTestCases.length;i++){
             TestData.ConformanceTestCase testCase = TestData.conformanceTestCases[i];
