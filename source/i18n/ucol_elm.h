@@ -81,11 +81,12 @@ typedef struct {
   const UCollator       *UCA;
 } tempUCATable; 
 
-U_CAPI tempUCATable * U_EXPORT2 uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts, const UCollator *UCA, UErrorCode *status);
-U_CAPI tempUCATable *uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status);
+U_CAPI tempUCATable * U_EXPORT2 uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts, const UCollator *UCA, UColCETags initTag, UErrorCode *status);
+U_CAPI tempUCATable * U_EXPORT2 uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status);
 U_CAPI void U_EXPORT2 uprv_uca_closeTempTable(tempUCATable *t);
 U_CAPI uint32_t U_EXPORT2 uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode *status);
-U_CAPI UCATableHeader U_EXPORT2 *uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status);
+U_CAPI UCATableHeader * U_EXPORT2 uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status);
+U_CAPI uint32_t U_EXPORT2 uprv_uca_setRange(tempUCATable *t, UChar32 rangeStart, UChar32 rangeEnd, int32_t value, UErrorCode *status);
 
 uint32_t uprv_uca_processContraction(CntTable *contractions, UCAElements *element, uint32_t existingCE, UErrorCode *status);
 int32_t uprv_uca_addExpansion(ExpansionTable *expansions, uint32_t value, UErrorCode *status);
