@@ -32,7 +32,9 @@ ustrenum_close(UEnumeration* en) {
  * Wrapper API to make StringEnumeration look like UEnumeration.
  */
 static int32_t U_CALLCONV
-ustrenum_count(UEnumeration* en, UErrorCode* ec) {
+ustrenum_count(UEnumeration* en,
+               UErrorCode* ec)
+{
     return THIS(en)->count(*ec);
 }
 
@@ -40,7 +42,10 @@ ustrenum_count(UEnumeration* en, UErrorCode* ec) {
  * Wrapper API to make StringEnumeration look like UEnumeration.
  */
 static const UChar* U_CALLCONV
-ustrenum_unext(UEnumeration* en, int32_t* resultLength, UErrorCode* ec) {
+ustrenum_unext(UEnumeration* en,
+               int32_t* resultLength,
+               UErrorCode* ec)
+{
     const UChar* result = THIS(en)->unext(*ec);
     *resultLength = (result != NULL) ? u_strlen(result) : 0;
     return result;
@@ -50,7 +55,10 @@ ustrenum_unext(UEnumeration* en, int32_t* resultLength, UErrorCode* ec) {
  * Wrapper API to make StringEnumeration look like UEnumeration.
  */
 static const char* U_CALLCONV
-ustrenum_next(UEnumeration* en, int32_t* resultLength, UErrorCode* ec) {
+ustrenum_next(UEnumeration* en,
+              int32_t* resultLength,
+              UErrorCode* ec)
+{
     const char* result = THIS(en)->next(*ec);
     *resultLength = (result != NULL) ? uprv_strlen(result) : 0;
     return result;
@@ -60,7 +68,9 @@ ustrenum_next(UEnumeration* en, int32_t* resultLength, UErrorCode* ec) {
  * Wrapper API to make StringEnumeration look like UEnumeration.
  */
 static void U_CALLCONV
-ustrenum_reset(UEnumeration* en, UErrorCode* ec) {
+ustrenum_reset(UEnumeration* en,
+               UErrorCode* ec)
+{
     THIS(en)->reset(*ec);
 }
 
