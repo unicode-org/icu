@@ -319,6 +319,12 @@ Locale::operator==( const   Locale& other) const
 /*This function initializes a Locale from a C locale ID*/
 Locale& Locale::init(const char* localeID)
 {
+    /* Free our current storage */
+    if(fullName != fullNameBuffer) {
+        delete [] fullName;
+        fullName = fullNameBuffer;
+    }
+
     // not a loop:
     // just an easy way to have a common error-exit
     // without goto and without another function
@@ -333,13 +339,13 @@ Locale& Locale::init(const char* localeID)
         }
 
         // "canonicalize" the locale ID to ICU/Java format
-        fullName = fullNameBuffer;
         err = U_ZERO_ERROR;
         length = uloc_getName(localeID, fullName, sizeof(fullNameBuffer), &err);
         if(U_FAILURE(err) || err == U_STRING_NOT_TERMINATED_WARNING) {
             /*Go to heap for the fullName if necessary*/
             fullName = new char[length + 1];
             if(fullName == 0) {
+                fullName = fullNameBuffer;
                 break;
             }
             err = U_ZERO_ERROR;
