@@ -1807,7 +1807,11 @@ UCollationResult TestCollator::compare(const UnicodeString& source,
                                         const UnicodeString& target,
 										UErrorCode& status) const
 {
+  if(U_SUCCESS(status)) {
     return UCollationResult(source.compare(target));
+  } else {
+    return UCOL_EQUAL;
+  }
 }
 
 UCollationResult TestCollator::compare(const UnicodeString& source,
@@ -1815,7 +1819,11 @@ UCollationResult TestCollator::compare(const UnicodeString& source,
                                         int32_t length,
 										UErrorCode& status) const
 {
-	return UCollationResult(source.compare(0, length, target));
+  if(U_SUCCESS(status)) {
+    return UCollationResult(source.compare(0, length, target));
+  } else {
+    return UCOL_EQUAL;
+  }
 }
 
 UCollationResult TestCollator::compare(const UChar* source, 

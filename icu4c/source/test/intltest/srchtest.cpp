@@ -2162,6 +2162,7 @@ UBool TestSearch::operator!=(const TestSearch &that) const
 
 int32_t TestSearch::handleNext(int32_t start, UErrorCode &status)
 {
+  if(U_SUCCESS(status)) {
     int match = m_text_.indexOf(m_pattern_, start);
     if (match < 0) {
         m_offset_ = m_text_.length();
@@ -2173,10 +2174,14 @@ int32_t TestSearch::handleNext(int32_t start, UErrorCode &status)
     m_offset_ = match;
     setMatchLength(m_pattern_.length());
     return match;
+  } else {
+    return USEARCH_DONE;
+  }
 }
 
 int32_t TestSearch::handlePrev(int32_t start, UErrorCode &status)
 {
+  if(U_SUCCESS(status)) {
     int match = m_text_.lastIndexOf(m_pattern_, 0, start);
     if (match < 0) {
         m_offset_ = 0;
@@ -2188,6 +2193,9 @@ int32_t TestSearch::handlePrev(int32_t start, UErrorCode &status)
     m_offset_ = match;
     setMatchLength(m_pattern_.length());
     return match;
+  } else {
+    return USEARCH_DONE;
+  }
 }
 
 TestSearch & TestSearch::operator=(const TestSearch &that)
@@ -2222,7 +2230,7 @@ void StringSearchTest::TestSubclass()
     search.reset();
     // comparing constructors
  
-    for (i = 0; i < sizeof(expected) / sizeof(int); i ++) {
+    for (i = 0; i < (int)(sizeof(expected) / sizeof(expected[0])); i ++) {
         if (search.next(status) != expected[i]) {
             errln("Error getting next match");
         }
@@ -2233,7 +2241,7 @@ void StringSearchTest::TestSubclass()
     if (search.next(status) != USEARCH_DONE) {
         errln("Error should have reached the end of the iteration");
     }
-    for (i = sizeof(expected) / sizeof(int) - 1; i >= 0; i --) {
+    for (i = sizeof(expected) / sizeof(expected[0]) - 1; i >= 0; i --) {
         if (search.previous(status) != expected[i]) {
             errln("Error getting previous match");
         }

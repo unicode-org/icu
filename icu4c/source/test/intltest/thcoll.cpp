@@ -137,7 +137,7 @@ void CollationThaiTest::TestNamesList(void) {
     //
     UnicodeString lastWord, word;
     int32_t line = 0;
-    int32_t failed = 0;
+    //int32_t failed = 0;
     int32_t wordCount = 0;
     while (readLine(in, word, "UTF16LE")) {
         line++;
