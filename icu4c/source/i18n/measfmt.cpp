@@ -17,6 +17,8 @@
 
 U_NAMESPACE_BEGIN
 
+MeasureFormat::MeasureFormat() {}
+
 MeasureFormat* MeasureFormat::createCurrencyFormat(const Locale& locale,
                                                    UErrorCode& ec) {
     CurrencyFormat* fmt = NULL;

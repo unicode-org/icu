@@ -26,6 +26,8 @@ U_NAMESPACE_BEGIN
  * object using a MeasureFormat factory method.  Then use that
  * object's format and parse methods.
  *
+ * <p>This is an abstract class.
+ *
  * @see Format
  * @author Alan Liu
  * @draft ICU 3.0
@@ -53,6 +55,14 @@ class U_I18N_API MeasureFormat : public Format {
      * @draft ICU 3.0
      */
     static MeasureFormat* createCurrencyFormat(UErrorCode& ec);
+
+ protected:
+
+    /**
+     * Default constructor.
+     * @draft ICU 3.0
+     */
+    MeasureFormat();
 };
 
 U_NAMESPACE_END
