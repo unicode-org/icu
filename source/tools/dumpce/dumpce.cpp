@@ -1358,8 +1358,7 @@ void outputHTMLHeader(const char *locale, UScriptCode script[],
     fprintf(OUTPUT_, "</table>\n");
 
     fprintf(OUTPUT_, "<p><a href=help.html>How to read the table</a><br>\n");
-    fprintf(OUTPUT_, "<a href=http://www.jtcsv.com/cgi-bin/icu-bugs/>Submit a bug</a></p>\n");
-
+    fprintf(OUTPUT_, "<a href=http://www.jtcsv.com/cgi-bin/icu-bugs/ target=new>Submit a bug</a></p>\n");
     fprintf(OUTPUT_, "\n<table>\n");
     fprintf(OUTPUT_, "\n<tr><th>Codepoint</th><th>Name</th></tr>\n");
 }
@@ -1380,6 +1379,7 @@ void outputListHTMLHeader(FILE *file)
     fprintf(file, "<body>\n");
     fprintf(file, "<h2 align=center>Collation Charts</h2>\n");
     fprintf(file, "<p align=center>\n");
+    fprintf(file, "<a href=http://www.unicode.org/charts/uca/ target=new>UCA Charts</a> | ");
 }
 
 /**
