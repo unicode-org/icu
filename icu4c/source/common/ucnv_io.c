@@ -33,6 +33,8 @@
 #include "unicode/udata.h"
 
 #include "umutex.h"
+#include "uarrsort.h"
+#include "udataswp.h"
 #include "cstring.h"
 #include "cmemory.h"
 #include "ucnv_io.h"
@@ -51,14 +53,18 @@
  * First there is the size of the Table of Contents (TOC). The TOC
  * entries contain the size of each section. In order to find the offset
  * you just need to sum up the previous offsets.
+ * The TOC length and entries are an array of uint32_t values.
+ * The first section after the TOC starts immediately after the TOC.
  *
  * 1) This section contains a list of converters. This list contains indexes
  * into the string table for the converter name. The index of this list is
  * also used by other sections, which are mentioned later on.
+ * This list is not sorted.
  *
  * 2) This section contains a list of tags. This list contains indexes
  * into the string table for the tag name. The index of this list is
  * also used by other sections, which are mentioned later on.
+ * This list is in priority order of standards.
  *
  * 3) This section contains a list of sorted unique aliases. This
  * list contains indexes into the string table for the alias name. The
@@ -157,6 +163,19 @@ static const char DATA_TYPE[] = "icu";
 
 static UDataMemory *gAliasData=NULL;
 
+enum {
+    tocLengthIndex=0,
+    converterListIndex=1,
+    tagListIndex=2,
+    aliasListIndex=3,
+    untaggedConvArrayIndex=4,
+    taggedAliasArrayIndex=5,
+    taggedAliasListsIndex=6,
+    reservedIndex1=7,
+    stringTableIndex=8,
+    minTocLength=8 /* does not count the tocLengthIndex! */
+};
+
 static const uint16_t *gConverterList = NULL;
 static const uint16_t *gTagList = NULL;
 static const uint16_t *gAliasList = NULL;
@@ -224,7 +243,7 @@ haveAliasData(UErrorCode *pErrorCode) {
         table = (const uint16_t *)udata_getMemory(data);
 
         tableStart      = ((const uint32_t *)(table))[0];
-        if (tableStart < 8) {
+        if (tableStart < minTocLength) {
             *pErrorCode = U_INVALID_FORMAT_ERROR;
             udata_close(data);
             return FALSE;
@@ -1061,6 +1080,253 @@ ucnv_io_setDefaultConverterName(const char *converterName) {
     }
 }
 
+/* alias table swapping ----------------------------------------------------- */
+
+typedef char * U_CALLCONV StripForCompareFn(char *dst, const char *name);
+
+/*
+ * row of a temporary array
+ *
+ * gets platform-endian charset string indexes and sorting indexes;
+ * after sorting this array by strings, the actual arrays are permutated
+ * according to the sorting indexes
+ */
+typedef struct Row {
+    uint16_t strIndex, sortIndex;
+} Row;
+
+typedef struct TempTable {
+    const char *chars;
+    Row *rows;
+    uint16_t *resort;
+    StripForCompareFn *stripForCompare;
+} TempTable;
+
+enum {
+    STACK_ROW_CAPACITY=500
+};
+
+static int32_t
+io_compareRows(const void *context, const void *left, const void *right) {
+    char strippedLeft[UCNV_MAX_CONVERTER_NAME_LENGTH],
+         strippedRight[UCNV_MAX_CONVERTER_NAME_LENGTH];
+
+    TempTable *tempTable=(TempTable *)context;
+    const char *chars=tempTable->chars;
+
+    return (int32_t)uprv_strcmp(tempTable->stripForCompare(strippedLeft, chars+2*((const Row *)left)->strIndex),
+                                tempTable->stripForCompare(strippedRight, chars+2*((const Row *)right)->strIndex));
+}
+
+U_CAPI int32_t U_EXPORT2
+ucnv_swapAliases(const UDataSwapper *ds,
+                 const void *inData, int32_t length, void *outData,
+                 UErrorCode *pErrorCode) {
+    const UDataInfo *pInfo;
+    int32_t headerSize;
+
+    const uint16_t *inTable;
+    uint32_t toc[1+minTocLength];
+    uint32_t offsets[1+minTocLength]; /* 16-bit-addressed offsets from inTable/outTable */
+    uint32_t i, count, tocLength, topOffset;
+
+    Row rows[STACK_ROW_CAPACITY];
+    uint16_t resort[STACK_ROW_CAPACITY];
+    TempTable tempTable;
+
+    /* udata_swapDataHeader checks the arguments */
+    headerSize=udata_swapDataHeader(ds, inData, length, outData, pErrorCode);
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+
+    /* check data format and format version */
+    pInfo=(const UDataInfo *)((const char *)inData+4);
+    if(!(
+        pInfo->dataFormat[0]==0x43 &&   /* dataFormat="CvAl" */
+        pInfo->dataFormat[1]==0x76 &&
+        pInfo->dataFormat[2]==0x41 &&
+        pInfo->dataFormat[3]==0x6c &&
+        pInfo->formatVersion[0]==3
+    )) {
+        udata_printError(ds, "ucnv_swapAliases(): data format %02x.%02x.%02x.%02x (format version %02x) is not an alias table\n",
+                         pInfo->dataFormat[0], pInfo->dataFormat[1],
+                         pInfo->dataFormat[2], pInfo->dataFormat[3],
+                         pInfo->formatVersion[0]);
+        *pErrorCode=U_UNSUPPORTED_ERROR;
+        return 0;
+    }
+
+    /* an alias table must contain at least the table of contents array */
+    if(length>=0 && length<4*(1+minTocLength)) {
+        udata_printError(ds, "ucnv_swapAliases(): too few bytes (%d after header) for an alias table\n",
+                         length-headerSize);
+        *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+        return 0;
+    }
+
+    inTable=(const uint16_t *)((const char *)inData+headerSize);
+    toc[tocLengthIndex]=tocLength=ds->readUInt32(((const uint32_t *)inTable)[tocLengthIndex]);
+    if(tocLength<minTocLength) {
+        udata_printError(ds, "ucnv_swapAliases(): table of contents too short (%u sections)\n", tocLength);
+        *pErrorCode=U_INVALID_FORMAT_ERROR;
+        return 0;
+    }
+
+    /* read the known part of the table of contents */
+    for(i=converterListIndex; i<=minTocLength; ++i) {
+        toc[i]=ds->readUInt32(((const uint32_t *)inTable)[i]);
+    }
+
+    /* compute offsets */
+    offsets[tocLengthIndex]=0;
+    offsets[converterListIndex]=2*(1+tocLength); /* count two 16-bit units per toc entry */
+    for(i=tagListIndex; i<=stringTableIndex; ++i) {
+        offsets[i]=offsets[i-1]+toc[i-1];
+    }
+
+    /* compute the overall size of the after-header data, in numbers of 16-bit units */
+    topOffset=offsets[i]=offsets[i-1]+toc[i-1];
+
+    if(length>=0) {
+        uint16_t *outTable;
+        const uint16_t *p, *p2;
+        uint16_t *q, *q2;
+        uint16_t oldIndex;
+
+        outTable=(uint16_t *)((char *)outData+headerSize);
+
+        /* swap the entire table of contents */
+        ds->swapArray32(ds, inTable, 4*(1+tocLength), outTable, pErrorCode);
+
+        /* swap strings */
+        ds->swapInvChars(ds, inTable+offsets[stringTableIndex], 2*(int32_t)toc[stringTableIndex],
+                             outTable+offsets[stringTableIndex], pErrorCode);
+        if(U_FAILURE(*pErrorCode)) {
+            udata_printError(ds, "ucnv_swapAliases().swapInvChars(charset names) failed - %s\n",
+                             u_errorName(*pErrorCode));
+            return 0;
+        }
+
+        /*
+         * ### TODO optimize
+         * After some testing, add a test
+         * if(inCharset==outCharset) {
+         *     only swap 16-bit units, do not sort;
+            -- swap all 16-bit values --
+            ds->swapArray16(ds,
+                            inTable+offsets[converterListIndex],
+                            2*(int32_t)(offsets[stringTableIndex]-offsets[converterListIndex]),
+                            outTable+offsets[converterListIndex],
+                            pErrorCode);
+         * } else { sort/copy/swap/permutate as below; }
+         */
+
+        /* allocate the temporary table for sorting */
+        count=toc[aliasListIndex];
+
+        tempTable.chars=(const char *)(outTable+offsets[stringTableIndex]); /* sort by outCharset */
+
+        if(count<=STACK_ROW_CAPACITY) {
+            tempTable.rows=rows;
+            tempTable.resort=resort;
+        } else {
+            tempTable.rows=(Row *)uprv_malloc(count*sizeof(Row)+count*2);
+            if(tempTable.rows==NULL) {
+                udata_printError(ds, "ucnv_swapAliases(): unable to allocate memory for sorting tables (max length: %u)\n",
+                                 count);
+                *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
+                return 0;
+            }
+            tempTable.resort=(uint16_t *)(tempTable.rows+count);
+        }
+
+        if(ds->outCharset==U_ASCII_FAMILY) {
+            tempTable.stripForCompare=ucnv_io_stripASCIIForCompare;
+        } else /* U_EBCDIC_FAMILY */ {
+            tempTable.stripForCompare=ucnv_io_stripEBCDICForCompare;
+        }
+
+        /*
+         * Sort unique aliases+mapped names.
+         *
+         * We need to sort the list again by outCharset strings because they
+         * sort differently for different charset families.
+         * First we set up a temporary table with the string indexes and
+         * sorting indexes and sort that.
+         * Then we permutate and copy/swap the actual values.
+         */
+        p=inTable+offsets[aliasListIndex];
+        q=outTable+offsets[aliasListIndex];
+
+        p2=inTable+offsets[untaggedConvArrayIndex];
+        q2=outTable+offsets[untaggedConvArrayIndex];
+
+        for(i=0; i<count; ++i) {
+            tempTable.rows[i].strIndex=ds->readUInt16(p[i]);
+            tempTable.rows[i].sortIndex=(uint16_t)i;
+        }
+
+        uprv_sortArray(tempTable.rows, (int32_t)count, sizeof(Row),
+                       io_compareRows, &tempTable,
+                       FALSE, pErrorCode);
+
+        if(U_SUCCESS(*pErrorCode)) {
+            /* copy/swap/permutate items */
+            if(p!=q) {
+                for(i=0; i<count; ++i) {
+                    oldIndex=tempTable.rows[i].sortIndex;
+                    ds->swapArray16(ds, p+oldIndex, 2, q+i, pErrorCode);
+                    ds->swapArray16(ds, p2+oldIndex, 2, q2+i, pErrorCode);
+                }
+            } else {
+                /*
+                 * If we swap in-place, then the permutation must use another
+                 * temporary array (tempTable.resort)
+                 * before the results are copied to the outBundle.
+                 */
+                uint16_t *r=tempTable.resort;
+
+                for(i=0; i<count; ++i) {
+                    oldIndex=tempTable.rows[i].sortIndex;
+                    ds->swapArray16(ds, p+oldIndex, 2, r+i, pErrorCode);
+                }
+                uprv_memcpy(q, r, 2*count);
+
+                for(i=0; i<count; ++i) {
+                    oldIndex=tempTable.rows[i].sortIndex;
+                    ds->swapArray16(ds, p2+oldIndex, 2, r+i, pErrorCode);
+                }
+                uprv_memcpy(q2, r, 2*count);
+            }
+        }
+
+        if(tempTable.rows!=rows) {
+            uprv_free(tempTable.rows);
+        }
+
+        if(U_FAILURE(*pErrorCode)) {
+            udata_printError(ds, "ucnv_swapAliases().uprv_sortArray(%u items) failed - %s\n",
+                             count, u_errorName(*pErrorCode));
+            return 0;
+        }
+
+        /* swap remaining 16-bit values */
+        ds->swapArray16(ds,
+                        inTable+offsets[converterListIndex],
+                        2*(int32_t)(offsets[aliasListIndex]-offsets[converterListIndex]),
+                        outTable+offsets[converterListIndex],
+                        pErrorCode);
+        ds->swapArray16(ds,
+                        inTable+offsets[taggedAliasArrayIndex],
+                        2*(int32_t)(offsets[stringTableIndex]-offsets[taggedAliasArrayIndex]),
+                        outTable+offsets[taggedAliasArrayIndex],
+                        pErrorCode);
+    }
+
+    return headerSize+2*(int32_t)topOffset;
+}
+
 /*
  * Hey, Emacs, please set the following:
  *
@@ -1069,4 +1335,3 @@ ucnv_io_setDefaultConverterName(const char *converterName) {
  * End:
  *
  */
-
