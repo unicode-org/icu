@@ -258,7 +258,13 @@ ILCID_POSIX_ELEMENT_ARRAY(0x0423, be, be_BY)
 ILCID_POSIX_ELEMENT_ARRAY(0x0402, bg, bg_BG)
 ILCID_POSIX_ELEMENT_ARRAY(0x0445, bn, bn_IN)
 ILCID_POSIX_ELEMENT_ARRAY(0x0403, ca, ca_ES)
-ILCID_POSIX_ELEMENT_ARRAY(0x0405, cs, cs_CZ)
+
+/* Declared as cs_CZ to get around compiler errors on z/OS, which defines cs as a function */
+static const ILcidPosixElement cs_CZ[] = {
+    {0x05,   "cs"},
+    {0x0405, "cs_CZ"},
+};
+
 ILCID_POSIX_ELEMENT_ARRAY(0x0406, da, da_DK)
 
 static const ILcidPosixElement de[] = {
@@ -500,7 +506,7 @@ static const ILcidPosixMap gPosixIDmap[] = {
     ILCID_POSIX_MAP(bg),    /*  bg  Bulgarian                 0x02 */
     ILCID_POSIX_MAP(bn),    /*  bn  Bengali; Bangla           0x45 */
     ILCID_POSIX_MAP(ca),    /*  ca  Catalan                   0x03 */
-    ILCID_POSIX_MAP(cs),    /*  cs  Czech                     0x05 */
+    ILCID_POSIX_MAP(cs_CZ), /*  cs  Czech                     0x05 */
     ILCID_POSIX_MAP(da),    /*  da  Danish                    0x06 */
     ILCID_POSIX_MAP(de),    /*  de  German                    0x07 */
     ILCID_POSIX_MAP(dv),    /*  dv Divehi                     0x65 */
@@ -522,7 +528,6 @@ static const ILcidPosixMap gPosixIDmap[] = {
     ILCID_POSIX_MAP(hu),    /*  hu  Hungarian                 0x0e */
     ILCID_POSIX_MAP(hy),    /*  hy  Armenian                  0x2b */
     ILCID_POSIX_MAP(id),    /*  id  Indonesian (formerly in)  0x21 */
-/*        ILCID_POSIX_MAP(in),    //  in  Indonesian                0x21 */
     ILCID_POSIX_MAP(is),    /*  is  Icelandic                 0x0f */
     ILCID_POSIX_MAP(it),    /*  it  Italian                   0x10 */
     ILCID_POSIX_MAP(iw),    /*  iw  Hebrew                    0x0d */
