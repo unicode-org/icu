@@ -57,6 +57,10 @@ U_NAMESPACE_BEGIN
 
 //-------------------------------------------
 
+CollatorFactory::~CollatorFactory() {}
+
+//-------------------------------------------
+
 UBool
 CollatorFactory::visible(void) const {
     return TRUE;

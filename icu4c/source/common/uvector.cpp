@@ -488,6 +488,8 @@ UStack::UStack(UObjectDeleter *d, UKeyComparator *c, int32_t initialCapacity, UE
 {
 }
 
+UStack::~UStack() {}
+
 void* UStack::pop(void) {
     int32_t n = size() - 1;
     void* result = 0;

@@ -90,6 +90,7 @@ const UChar * const NumberFormat::fgLastResortNumberPatterns[] =
 
 // -------------------------------------
 // default constructor
+SimpleNumberFormatFactory::~SimpleNumberFormatFactory() {}
 
 NumberFormat::NumberFormat()
 :   fGroupingUsed(TRUE),
