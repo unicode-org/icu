@@ -2011,7 +2011,7 @@ uchar_swapNames(const UDataSwapper *ds,
         }
 
         /* swap the group table */
-        count=*((const uint16_t *)(inBytes+groupsOffset));
+        count=ds->readUInt16(*((const uint16_t *)(inBytes+groupsOffset)));
         ds->swapArray16(ds, inBytes+groupsOffset, (int32_t)((1+count*3)*2),
                            outBytes+groupsOffset, pErrorCode);
 

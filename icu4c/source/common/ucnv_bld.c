@@ -1076,7 +1076,7 @@ ucnv_swap(const UDataSwapper *ds,
             size=(int32_t)(mbcsHeader.offsetFromUBytes+mbcsHeader.fromUBytesLength);
         } else {
             /* there is extension data after the base data, see ucnv_ext.h */
-            if(length<(extOffset+UCNV_EXT_INDEXES_MIN_LENGTH*4)) {
+            if(length>=0 && length<(extOffset+UCNV_EXT_INDEXES_MIN_LENGTH*4)) {
                 udata_printError(ds, "ucnv_swap(): too few bytes (%d after headers) for an ICU MBCS .cnv conversion table with extension data\n",
                                  length);
                 *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
