@@ -24,9 +24,15 @@ alpha*-*-linux-gnu)
 	else  
 		icu_cv_host_frag=mh-alpha-linux-cc
 	fi ;;
+powerpc*-*-linux*)
+	if test "$GCC" = yes; then
+	  	icu_cv_host_frag=mh-linux
+	else
+	  	icu_cv_host_frag=mh-linux-va
+	fi ;;
 *-*-linux*) icu_cv_host_frag=mh-linux ;;
 *-*-cygwin)
-	if test "$ac_cv_prog_gcc" = yes; then
+	if test "$GCC" = yes; then
 	  	icu_cv_host_frag=mh-cygwin
 	else
 	  	icu_cv_host_frag=mh-cygwin-msvc
@@ -174,7 +180,7 @@ AC_DEFUN(AC_CHECK_64BIT_LIBS,
                 ENABLE_64BIT_LIBS=no
             fi
             ;;
-        *-*-aix*)
+        *-*-aix*|powerpc64-*-linux*)
             if test "$ac_cv_prog_gcc" = no; then
                 # Note: Have not tested 64-bitness with gcc.
                 # Maybe the flag "-maix64" could be used with gcc?
