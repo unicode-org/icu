@@ -45,6 +45,7 @@ typedef struct  {
   UColToken* first;
   UColToken* last;
   UColToken* reset;
+  UBool indirect;
   uint32_t baseCE;
   uint32_t baseContCE;
   uint32_t nextCE;
@@ -92,7 +93,8 @@ typedef struct {
   uint32_t extensionLen;
   uint32_t prefixOffset;
   uint32_t prefixLen;
-  uint8_t flags;
+  uint16_t flags;
+  uint16_t indirectIndex;
 } UColParsedToken;
 
 
