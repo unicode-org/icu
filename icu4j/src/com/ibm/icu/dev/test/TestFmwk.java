@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestFmwk.java,v $
- * $Date: 2003/06/11 18:27:08 $
- * $Revision: 1.47 $
+ * $Date: 2003/08/21 23:42:03 $
+ * $Revision: 1.48 $
  *
  *****************************************************************************************
  */
@@ -820,7 +820,23 @@ public class TestFmwk extends AbstractTestLog {
     public static String hex(StringBuffer s) {
         return hex(s.toString());
     }
-
+    public static String prettify(String s) {
+        StringBuffer result = new StringBuffer();
+        for (int i = 0; i < s.length(); ++i) {
+            char ch =s.charAt(i);
+            if(ch > 0x7f){
+                result.append("\\u");
+                result.append(hex(ch));
+            }else{
+                result.append(ch);
+            }
+            
+        }
+        return result.toString();
+    }
+    public static String prettify(StringBuffer s) {
+        return prettify(s.toString());
+    }
     private static class ASCIIWriter extends PrintWriter {
         private Writer w;
         private StringBuffer buffer = new StringBuffer();

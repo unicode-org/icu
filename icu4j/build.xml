@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $
-* $Date: 2003/07/03 20:48:58 $
-* $Revision: 1.75 $
+* $Date: 2003/08/21 23:44:28 $
+* $Revision: 1.76 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -16,34 +16,44 @@
 
 <project name="ICU4J" default="core" basedir=".">
 
-    <!-- ### begin clover setup ### -->
-    <property name="icu4j.tempdir" value="tmp"/>
-    <property name="clover.initstring" value="${icu4j.tempdir}/icu4j.db"/>
-    <path id="clover.classpath">
-    <!-- ***** you will need to change the paths below to point
-               to clover.jar and velocity.jar on your filesystem ***** -->
-    <pathelement path="${java.class.path}/"/>
-    <pathelement location="clover.jar"/>
-    <pathelement location="velocity.jar"/>
-    </path>
+    <!-- ### Begin Clover 1.2 setup ### -->
+    <typedef resource="clovertypes"/>
+    <taskdef resource="clovertasks"/>
 
-    <!-- target to switch Clover on -->
     <target name="with.clover">
-        <property name="build.compiler" value="org.apache.tools.ant.taskdefs.CloverCompilerAdapter"/>
-
-        <!-- instruct clover to use a class-based instrumentation strategy when instrumenting SimpleTimeZone.java -->
-        <property name="clover.useclass.includes" value="**/SimpleTimeZone.java"/>
+    	<clover-setup initString="tmp/icu4j.db">
+    	     <files>
+       	     	<exclude name="**/dev/**/*.java"/>
+             </files>
+        </clover-setup>
+    </target>
+    <target name="clover.html" depends="with.clover">
+    	<clover-report >
+            <current outfile="icu4j_html" >
+                 <format type="html" /> 
+      	    </current>	 
+ 	</clover-report>
+    </target>
+    <target name="clover.log" depends="with.clover">
+        <clover-log level="method">
+             <package name="com.ibm.icu.text"/>
+ 	</clover-log>
+        <clover-log level="method">
+             <package name="com.ibm.icu.lang"/>
+ 	</clover-log>
+        <clover-log level="method">
+             <package name="com.ibm.icu.math"/>
+ 	</clover-log>
+        <clover-log level="method">
+             <package name="com.ibm.icu.util"/>
+ 	</clover-log>
+        <clover-log level="method">
+             <package name="com.ibm.icu.impl"/>
+ 	</clover-log>
     </target>
 
-    <!-- target to generate a Clover html report -->
-    <target name="clover.report">
-    <java classname="com.cortexeb.tools.clover.reporters.html.HtmlReporter" fork="yes">
-        <arg line="--outputdir ${icu4j.tempdir}/icu4j_html --showSrc --initstring ${clover.initstring} --title 'icu4j core'"/>
-        <classpath refid="clover.classpath"/>
-    </java>
-    </target>
-    <!-- ### end clover setup ### -->
-
+    <!-- ### End Clover 1.2 setup ### -->
+    
     <target name="anthack1">
         <!-- It's a real pain to set properties conditionally.
           Ant 1.5 isn't really any better than 1.4, in fact 1.5 enforces that
@@ -78,7 +88,6 @@
 
     <path id="build.classpath">
         <pathelement path="${build.dir}"/>
-        <path refid="clover.classpath"/>
     </path>
 
         <property name="richedit.dir" value="richedit"/>
@@ -121,7 +130,8 @@
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
-            debug="on" deprecation="off"/>
+            debug="on" deprecation="off"
+	    encoding="ascii"/>
     </target>
 
     <target name="tests" depends="core,testData">
@@ -182,7 +192,7 @@
     <target name ="coreData" depends="init">
         <copy todir="${build.dir}/com/ibm/icu/impl/data">
               <fileset dir="${src.dir}/com/ibm/icu/impl/data"
-                 includes="Transliterator_*.txt,*.icu"
+                 includes="Transliterator_*.txt,*.icu,*.spp"
                  excludes="**/CVS/**/*,Transliterator_Han_Latin_*.txt"/>
         </copy>
     </target>
@@ -196,6 +206,10 @@
                     destdir="${build.dir}"
                     classpathref="build.classpath"
             debug="on" deprecation="off"/>
+         <copy todir="${build.dir}/com/ibm/icu/dev/data">
+              <fileset dir="${src.dir}/com/ibm/icu/dev/data"
+                 includes="*.spp"/>
+        </copy>
     </target>
 
     <!-- builds richedit and richedit tests -->
