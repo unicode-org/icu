@@ -115,6 +115,10 @@ SOURCE=.\citrtest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\cpdtrtst.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\cppcnvt.cpp
 # End Source File
 # Begin Source File
@@ -175,6 +179,14 @@ SOURCE=.\g7coll.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\hajatrts.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\hxuntrts.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\intltest.cpp
 # End Source File
 # Begin Source File
@@ -216,6 +228,10 @@ SOURCE=.\itutil.cpp
 # Begin Source File
 
 SOURCE=.\jacoll.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\jahatrts.cpp
 # End Source File
 # Begin Source File
 
@@ -359,6 +375,14 @@ SOURCE=.\ucdtest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\ufltlgts.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\unhxtrts.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\usettest.cpp
 # End Source File
 # Begin Source File
@@ -396,6 +420,10 @@ SOURCE=.\caltztst.h
 # Begin Source File
 
 SOURCE=.\citrtest.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\cpdtrtst.h
 # End Source File
 # Begin Source File
 
@@ -459,6 +487,14 @@ SOURCE=.\g7coll.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\hajatrts.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\hxuntrts.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\intltest.h
 # End Source File
 # Begin Source File
@@ -496,6 +532,10 @@ SOURCE=.\itutil.h
 # Begin Source File
 
 SOURCE=.\jacoll.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\jahatrts.h
 # End Source File
 # Begin Source File
 
@@ -628,6 +668,14 @@ SOURCE=.\tzregts.h
 # Begin Source File
 
 SOURCE=.\ucdtest.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ufltlgts.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\unhxtrts.h
 # End Source File
 # Begin Source File
 
