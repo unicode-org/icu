@@ -48,10 +48,11 @@ u_cleanup(void)
         }
 
     }
-    upropset_cleanup();
+    uset_cleanup();
     unorm_cleanup();
     unames_cleanup();
     uchar_cleanup();
+    pname_cleanup();
     locale_cleanup();
     uloc_cleanup();
     ustring_cleanup();

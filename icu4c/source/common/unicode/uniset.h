@@ -13,6 +13,7 @@
 #include "unicode/unifilt.h"
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
+#include "unicode/uchar.h"
 
 U_NAMESPACE_BEGIN
 
@@ -391,6 +392,62 @@ public:
      */
     virtual UnicodeString& toPattern(UnicodeString& result,
                                      UBool escapeUnprintable = FALSE) const;
+
+    /**
+     * Modifies this set to contain those code points which have the given value
+     * for the given binary or enumerated property, as returned by
+     * u_getIntPropertyValue.  Prior contents of this set are lost.
+     *
+     * @param prop a property in the range UCHAR_BIN_START..UCHAR_BIN_LIMIT-1
+     * or UCHAR_INT_START..UCHAR_INT_LIMIT-1.
+     *
+     * @param value a value in the range u_getIntPropertyMinValue(prop)..
+     * u_getIntPropertyMaxValue(prop), with one exception.  If prop is
+     * UCHAR_GENERAL_CATEGORY, then value should not be a UCharCategory, but
+     * rather a mask value produced by U_GET_GC_MASK().  This allows grouped
+     * categories such as [:L:] to be represented.  Mask values range
+     * non-contiguously from 1..U_GC_P_MASK.
+     *
+     * @param ec error code input/output parameter
+     *
+     * @return a reference to this set
+     *
+     * @draft ICU 2.2
+     */
+    UnicodeSet& applyIntPropertyValue(UProperty prop,
+                                      int32_t value,
+                                      UErrorCode& ec);
+
+    /**
+     * Modifies this set to contain those code points which have the
+     * given value for the given property.  Prior contents of this
+     * set are lost.
+     *
+     * @param prop a property alias, either short or long.  The name is matched
+     * loosely.  See PropertyAliases.txt for names and a description of loose
+     * matching.  If the value string is empty, then this string is interpreted
+     * as either a General_Category value alias, a Script value alias, a binary
+     * property alias, or a special ID.  Special IDs are matched loosely and
+     * correspond to the following sets:
+     *
+     * "ANY" = [\u0000-\U0010FFFF],
+     * "ASCII" = [\u0000-\u007F].
+     *
+     * @param value a value alias, either short or long.  The name is matched
+     * loosely.  See PropertyValueAliases.txt for names and a description of
+     * loose matching.  In addition to aliases listed, numeric values and
+     * canonical combining classes may be expressed numerically, e.g., ("nv",
+     * "0.5") or ("ccc", "220").  The value string may also be empty.
+     *
+     * @param ec error code input/output parameter
+     *
+     * @return a reference to this set
+     *
+     * @draft ICU 2.2
+     */
+    UnicodeSet& applyPropertyAlias(const UnicodeString& prop,
+                                   const UnicodeString& value,
+                                   UErrorCode& ec);
 
     /**
      * Returns the number of elements in this set (its cardinality),
@@ -1053,6 +1110,80 @@ private:
     void add(const UChar32* other, int32_t otherLen, int8_t polarity);
 
     void retain(const UChar32* other, int32_t otherLen, int8_t polarity);
+
+    /**
+     * Return true if the given position, in the given pattern, appears
+     * to be the start of a property set pattern [:foo:], \p{foo}, or
+     * \P{foo}, or \N{name}.
+     */
+    static UBool resemblesPropertyPattern(const UnicodeString& pattern,
+                                          int32_t pos);
+
+    /**
+     * Parse the given property pattern at the given parse position
+     * and set this UnicodeSet to the result.
+     *
+     * The original design document is out of date, but still useful.
+     * Ignore the property and value names:
+     * http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/design/unicodeset_properties.html
+     *
+     * Recognized syntax:
+     *
+     * [:foo:] [:^foo:] - white space not allowed within "[:" or ":]"
+     * \p{foo} \P{foo}  - white space not allowed within "\p" or "\P"
+     * \N{name}         - white space not allowed within "\N"
+     *
+     * Other than the above restrictions, white space is ignored.  Case
+     * is ignored except in "\p" and "\P" and "\N".  In 'name' leading
+     * and trailing space is deleted, and internal runs of whitespace
+     * are collapsed to a single space.
+     *
+     * We support binary properties, enumerated properties, and the
+     * following non-enumerated properties:
+     *
+     *  Numeric_Value
+     *  Name
+     *  Unicode_1_Name
+     *
+     * @param pattern the pattern string
+     * @param ppos on entry, the position at which to begin parsing.
+     * This should be one of the locations marked '^':
+     *
+     *   [:blah:]     \p{blah}     \P{blah}     \N{name}
+     *   ^       %    ^       %    ^       %    ^       %
+     *
+     * On return, the position after the last character parsed, that is,
+     * the locations marked '%'.  If the parse fails, ppos is returned
+     * unchanged.
+     * @return a reference to this.
+     */
+    UnicodeSet& applyPropertyPattern(const UnicodeString& pattern,
+                                     ParsePosition& ppos,
+                                     UErrorCode &ec);
+
+    /**
+     * A filter that returns TRUE if the given code point should be
+     * included in the UnicodeSet being constructed.
+     */
+    typedef UBool (*Filter)(UChar32 codePoint, void* context);
+
+    /**
+     * Given a filter, set this UnicodeSet to the code points
+     * contained by that filter.  The filter MUST be
+     * property-conformant.  That is, if it returns value v for one
+     * code point, then it must return v for all affiliated code
+     * points, as defined by the inclusions list.  See
+     * uprv_getInclusions().
+     */
+    void applyFilter(Filter filter,
+                     void* context,
+                     UErrorCode &status);
+
+    /**
+     * Return a cached copy of the inclusions list that
+     * uprv_getInclusions() produces.
+     */
+    static const UnicodeSet* getInclusions();
 
     friend class UnicodeSetIterator;
 };
