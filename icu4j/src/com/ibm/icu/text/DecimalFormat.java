@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecimalFormat.java,v $ 
- * $Date: 2000/03/10 04:07:19 $ 
- * $Revision: 1.3 $
+ * $Date: 2000/04/05 17:04:30 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -641,7 +641,7 @@ public class DecimalFormat extends NumberFormat {
     /*
      * <strong><font face=helvetica color=red>NEW</font></strong>
      * Format a BigDecimal number.
-     *
+     */
     public StringBuffer format(com.ibm.math.BigDecimal number, StringBuffer result,
                                FieldPosition fieldPosition) {
         /* This method is just a copy of the corresponding java.math.BigDecimal
@@ -649,7 +649,7 @@ public class DecimalFormat extends NumberFormat {
          * conversion object to do math on the rounding increment.  In the
          * future we may try to clean this up, or even better, limit our support
          * to just one flavor of BigDecimal.
-         *
+         */
         if (multiplier != 1) {
             number = number.multiply(com.ibm.math.BigDecimal.valueOf(multiplier));
         }
@@ -670,7 +670,6 @@ public class DecimalFormat extends NumberFormat {
             return subformat(result, fieldPosition, number.signum() < 0, false);
         }        
     }
-    */
 
     /**
      * Complete the formatting of a finite number.  On entry, the digitList must
