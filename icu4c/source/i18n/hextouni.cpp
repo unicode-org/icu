@@ -243,9 +243,6 @@ void HexToUnicodeTransliterator::handleTransliterate(Replaceable& text, UTransPo
     int32_t limit = offsets.limit;
     int32_t i, j, ipat;
 
-    // This is a temporary one-character string
-    UnicodeString str = UNICODE_STRING("A", 1);
-
     while (cursor < limit) {
         // Loop over the specs in affixes.  If affixCount is zero (an
         // empty pattern), then we do nothing.  We exit this loop when
@@ -329,6 +326,9 @@ void HexToUnicodeTransliterator::handleTransliterate(Replaceable& text, UTransPo
                     }
                     
                     if (match) {
+                        // This is a temporary one-character string
+                        UnicodeString str = UNICODE_STRING("A", 1);
+
                         // At this point, we have a match
                         str.setCharAt(0, u);
                         text.handleReplaceBetween(cursor, curs, str);
