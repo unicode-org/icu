@@ -657,8 +657,8 @@ typedef struct {
       /*UColAttributeValue*/ int32_t normalizationMode; /* attribute for normalization */
       /*UColAttributeValue*/ int32_t strength;          /* attribute for strength */
       /*UColAttributeValue*/ int32_t hiraganaQ;         /* attribute for special Hiragana */
-      /*UColAttributeValue*/ int32_t numericCollation;
-      uint8_t reserved[64];                 /* for future use */
+      /*UColAttributeValue*/ int32_t numericCollation;  /* attribute for numeric collation */
+      uint32_t reserved[15];                 /* for future use */
 } UColOptionSet;
 
 typedef struct {
