@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedTransliterator.java,v $ 
- * $Date: 2000/04/25 17:38:00 $ 
- * $Revision: 1.28 $
+ * $Date: 2000/04/28 00:25:42 $ 
+ * $Revision: 1.29 $
  *
  *****************************************************************************************
  */
@@ -252,7 +252,7 @@ import com.ibm.util.Utility;
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
  * 
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.28 $ $Date: 2000/04/25 17:38:00 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.29 $ $Date: 2000/04/28 00:25:42 $
  */
 public class RuleBasedTransliterator extends Transliterator {
 
@@ -534,6 +534,10 @@ public class RuleBasedTransliterator extends Transliterator {
                     ++i;
                 }
                 if (i == start) { // No valid name chars
+                    if (start > 0) {
+                        --start;
+                    }
+                    limit = ruleEnd(text, start, limit);
                     throw new IllegalArgumentException("Illegal variable reference " +
                                                        text.substring(start, limit));
                 }
@@ -1339,6 +1343,9 @@ public class RuleBasedTransliterator extends Transliterator {
 
 /**
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.29  2000/04/28 00:25:42  alan
+ * Improve error reporting
+ *
  * Revision 1.28  2000/04/25 17:38:00  alan
  * Minor parser cleanup.
  *
