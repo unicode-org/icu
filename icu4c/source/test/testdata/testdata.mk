@@ -17,7 +17,7 @@ ALL : "$(TESTDATAOUT)\testdata.dat"
 "$(TESTDATAOUT)\testdata.dat" : "$(TESTDATABLD)\casing.res" "$(TESTDATABLD)\conversion.res" "$(TESTDATABLD)\mc.res" "$(TESTDATABLD)\root.res" "$(TESTDATABLD)\te.res" "$(TESTDATABLD)\te_IN.res" "$(TESTDATABLD)\testaliases.res" "$(TESTDATABLD)\testtypes.res" "$(TESTDATABLD)\testempty.res" "$(TESTDATABLD)\$(TESTDT)iscii.res" "$(TESTDATABLD)\$(TESTDT)idna_rules.res" "$(TESTDATABLD)\DataDrivenCollationTest.res" $(TESTDATABLD)\$(TESTDT)test.icu "$(TESTDATABLD)\$(TESTDT)test1.cnv" "$(TESTDATABLD)\$(TESTDT)test3.cnv" "$(TESTDATABLD)\$(TESTDT)test4.cnv" "$(TESTDATABLD)\$(TESTDT)ibm9027.cnv" "$(TESTDATABLD)\$(TESTDT)nfscsi.spp" "$(TESTDATABLD)\$(TESTDT)nfscss.spp" "$(TESTDATABLD)\$(TESTDT)nfscis.spp" "$(TESTDATABLD)\$(TESTDT)nfsmxs.spp" "$(TESTDATABLD)\$(TESTDT)nfsmxp.spp"
 	@echo Building test data
 	@copy "$(TESTDATABLD)\$(TESTDT)te.res" "$(TESTDATAOUT)\$(TESTDT)nam.typ"
-	@"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -f -v -m common -c -p"$(TESTPKG)"  -O "$(PKGOPT)" -d "$(TESTDATAOUT)" -T "$(TESTDATABLD)" -s "$(TESTDATABLD)" <<
+	@"$(ICUP)\bin\pkgdata" -f -v -m common -c -p"$(TESTPKG)" -d "$(TESTDATAOUT)" -T "$(TESTDATABLD)" -s "$(TESTDATABLD)" <<
 $(TESTDT)casing.res
 $(TESTDT)conversion.res
 $(TESTDT)mc.res

@@ -129,17 +129,6 @@ ICUTOOLS=$(ICUP)\source\tools
 
 PATH = $(PATH);$(ICUP)\bin
 
-
-# We have to prepare params for pkgdata - to help it find the tools
-!IF "$(CFG)" == "Debug" || "$(CFG)" == "debug"
-!MESSAGE makedata.mak: doing a Debug build.
-PKGOPT=D:$(ICUP)
-!ELSE
-!MESSAGE makedata.mak: doing a Release build.
-PKGOPT=R:$(ICUP)
-!ENDIF
-
-
 # Suffixes for data files
 .SUFFIXES : .ucm .cnv .dll .dat .res .txt .c
 
@@ -249,7 +238,7 @@ ALL : GODATA "$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" "$(TESTDATAOUT)\testdata.dat"
 "$(TESTDATAOUT)\testdata.dat": $(ICUDT)ucadata.icu $(TRANSLIT_FILES) $(MISC_FILES) $(RB_FILES) {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe
 	@cd "$(TESTDATA)"
 	@echo building testdata...
-	nmake /nologo /f "$(TESTDATA)\testdata.mk" TESTDATA=. ICUTOOLS="$(ICUTOOLS)" PKGOPT="$(PKGOPT)" CFG=$(CFG) TESTDATAOUT="$(TESTDATAOUT)" ICUDATA="$(ICUDATA)" TESTDATABLD="$(TESTDATABLD)"
+	nmake /nologo /f "$(TESTDATA)\testdata.mk" TESTDATA=. ICUTOOLS="$(ICUTOOLS)" ICUP="$(ICUP)" CFG=$(CFG) TESTDATAOUT="$(TESTDATAOUT)" ICUDATA="$(ICUDATA)" TESTDATABLD="$(TESTDATABLD)"
 
 #
 #  Break iterator data files.
@@ -261,10 +250,10 @@ BRK_FILES = $(ICUDT)sent.brk $(ICUDT)char.brk $(ICUDT)line.brk $(ICUDT)word.brk 
 #  move the .dll and .lib files to their final destination afterwards.
 #  The $(U_ICUDATA_NAME).lib and $(U_ICUDATA_NAME).exp should already be in the right place due to stubdata.
 #
-"$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" : "$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata.exe" $(CNV_FILES) $(BRK_FILES) "$(ICUBLD)\$(ICUDT)uprops.icu" "$(ICUBLD)\$(ICUDT)unames.icu" "$(ICUBLD)\$(ICUDT)pnames.icu" "$(ICUBLD)\$(ICUDT)unorm.icu" "$(ICUBLD)\$(ICUDT)cnvalias.icu" "$(ICUBLD)\$(ICUDT)ucadata.icu" "$(ICUBLD)\$(ICUDT)invuca.icu" "$(ICUBLD)\$(ICUDT)uidna.spp" $(ALL_RES) "$(ICUBLD)\$(ICUDT)icudata.res" "$(ICUP)\source\stubdata\stubdatabuilt.txt"
+"$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" : "$(ICUP)\bin\pkgdata.exe" $(CNV_FILES) $(BRK_FILES) "$(ICUBLD)\$(ICUDT)uprops.icu" "$(ICUBLD)\$(ICUDT)unames.icu" "$(ICUBLD)\$(ICUDT)pnames.icu" "$(ICUBLD)\$(ICUDT)unorm.icu" "$(ICUBLD)\$(ICUDT)cnvalias.icu" "$(ICUBLD)\$(ICUDT)ucadata.icu" "$(ICUBLD)\$(ICUDT)invuca.icu" "$(ICUBLD)\$(ICUDT)uidna.spp" $(ALL_RES) "$(ICUBLD)\$(ICUDT)icudata.res" "$(ICUP)\source\stubdata\stubdatabuilt.txt"
 	@echo Building icu data
 	@cd "$(ICUBLD)"
- 	@"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -f -e $(U_ICUDATA_NAME) -v -m dll -c -p $(ICUPKG) -O "$(PKGOPT)" -d "$(ICUBLD)" -s . <<pkgdatain.txt
+ 	@"$(ICUP)\bin\pkgdata" -f -e $(U_ICUDATA_NAME) -v -m dll -c -p $(ICUPKG) -d "$(ICUBLD)" -s . <<pkgdatain.txt
 $(ICUDT)unorm.icu
 $(ICUDT)uprops.icu
 $(ICUDT)pnames.icu
