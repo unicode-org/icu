@@ -325,6 +325,10 @@ SOURCE=.\chashtst.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\sorttest.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\trietest.c
 # End Source File
 # Begin Source File
