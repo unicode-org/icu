@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecimalFormat.java,v $ 
- * $Date: 2003/04/19 06:32:17 $ 
- * $Revision: 1.26 $
+ * $Date: 2003/04/19 07:13:36 $ 
+ * $Revision: 1.27 $
  *
  *****************************************************************************************
  */
@@ -1486,26 +1486,13 @@ public class DecimalFormat extends NumberFormat {
             int len = UTF16.getCharCount(c);
             i += len;
             if (UCharacterProperty.isRuleWhiteSpace(c)) {
-                // Advance over run in pattern
-                while (i < affix.length()) {
-                    c = UTF16.charAt(affix, i);
-                    if (!UCharacterProperty.isRuleWhiteSpace(c)) {
-                        break;
-                    }
-                    i += UTF16.getCharCount(c);
-                }
+                // Advance over run in affix
+                i = skipRuleWhiteSpace(affix, i);
                 
                 // Advance over run in input text
-                int s = pos;
-                while (pos < input.length()) {
-                    c = UTF16.charAt(input, pos);
-                    if (!UCharacter.isUWhiteSpace(c)) {
-                        break;
-                    }
-                    pos += UTF16.getCharCount(c);
-                }
-
                 // Must see at least one white space char in input
+                int s = pos;
+                pos = skipUWhiteSpace(input, pos);
                 if (pos == s) {
                     return -1;
                 }
@@ -1522,6 +1509,36 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
+     * Skip over a run of zero or more isRuleWhiteSpace() characters at
+     * pos in text.
+     */
+    private static int skipRuleWhiteSpace(String text, int pos) {
+        while (pos < text.length()) {
+            int c = UTF16.charAt(text, pos);
+            if (!UCharacterProperty.isRuleWhiteSpace(c)) {
+                break;
+            }
+            pos += UTF16.getCharCount(c);
+        }
+        return pos;
+    }
+
+    /**
+     * Skip over a run of zero or more isUWhiteSpace() characters at pos
+     * in text.
+     */
+    private static int skipUWhiteSpace(String text, int pos) {
+        while (pos < text.length()) {
+            int c = UTF16.charAt(text, pos);
+            if (!UCharacter.isUWhiteSpace(c)) {
+                break;
+            }
+            pos += UTF16.getCharCount(c);
+        }
+        return pos;
+    }
+
+    /**
      * Return the length matched by the given affix, or -1 if none.
      * @param affixPat pattern string
      * @param text input text
@@ -1529,8 +1546,6 @@ public class DecimalFormat extends NumberFormat {
      * @return length of input that matches, or -1 if match failure
      */
     private int compareComplexAffix(String affixPat, String text, int pos) {
-
-        // TODO make this handle space runs, just like compareSimpleAffix
 
         for (int i=0; i<affixPat.length() && pos >= 0; ) {
             char c = affixPat.charAt(i++);
@@ -1577,14 +1592,18 @@ public class DecimalFormat extends NumberFormat {
                 }
                 continue;
             case PATTERN_PERCENT:
-                pos = match(text, pos, symbols.getPercent());
+                c = symbols.getPercent();
                 break;
             case PATTERN_PER_MILLE:
-                pos = match(text, pos, symbols.getPerMill());
+                c = symbols.getPerMill();
                 break;
             case PATTERN_MINUS:
-                pos = match(text, pos, symbols.getMinusSign());
+                c = symbols.getMinusSign();
                 break;
+            }
+            pos = match(text, pos, c);
+            if (UCharacterProperty.isRuleWhiteSpace(c)) {
+                i = skipRuleWhiteSpace(affixPat, i);
             }
         }
 
@@ -1592,21 +1611,40 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Match a single character at text[pos] and return the index of the next
-     * character upon success.  Return -1 on failure.
+     * Match a single character at text[pos] and return the index of the
+     * next character upon success.  Return -1 on failure.  If
+     * isRuleWhiteSpace(ch) then match a run of white space in text.
      */
-    static final int match(String text, int pos, char ch) {
-        return (pos >= 0 && text.charAt(pos) == ch) ? (pos+1) : -1;
+    static final int match(String text, int pos, int ch) {
+        if (UCharacterProperty.isRuleWhiteSpace(ch)) {
+            // Advance over run of white space in input text
+            // Must see at least one white space char in input
+            int s = pos;
+            pos = skipUWhiteSpace(text, pos);
+            if (pos == s) {
+                return -1;
+            }
+            return pos;
+        }
+        return (pos >= 0 && UTF16.charAt(text, pos) == ch) ?
+            (pos + UTF16.getCharCount(ch)) : -1;
     }
 
     /**
-     * Match a string at text[pos] and return the index of the next character
-     * upon success.  Return -1 on failure.
+     * Match a string at text[pos] and return the index of the next
+     * character upon success.  Return -1 on failure.  Match a run of
+     * white space in str with a run of white space in text.
      */
     static final int match(String text, int pos, String str) {
-        int n = str.length();
-        return (pos >= 0 &&
-                text.regionMatches(pos, str, 0, n)) ? (pos+n) : -1;
+        for (int i=0; i<str.length() && pos >= 0; ) {
+            int ch = UTF16.charAt(str, i);
+            i += UTF16.getCharCount(ch);
+            pos = match(text, pos, ch);
+            if (UCharacterProperty.isRuleWhiteSpace(ch)) {
+                i = skipRuleWhiteSpace(str, i);
+            }
+        }
+        return pos;
     }
 
     /**
@@ -1686,7 +1724,7 @@ public class DecimalFormat extends NumberFormat {
      */
     public void setPositivePrefix (String newValue) {
         positivePrefix = newValue;
-        //TODO: posPrefixPattern = null;
+        posPrefixPattern = null;
     }
 
     /**
@@ -1705,7 +1743,7 @@ public class DecimalFormat extends NumberFormat {
      */
     public void setNegativePrefix (String newValue) {
         negativePrefix = newValue;
-        //TODO: negPrefixPattern = null;
+        negPrefixPattern = null;
     }
 
     /**
@@ -1724,7 +1762,7 @@ public class DecimalFormat extends NumberFormat {
      */
     public void setPositiveSuffix (String newValue) {
         positiveSuffix = newValue;
-        //TODO: posSuffixPattern = null;
+        posSuffixPattern = null;
     }
 
     /**
@@ -1743,7 +1781,7 @@ public class DecimalFormat extends NumberFormat {
      */
     public void setNegativeSuffix (String newValue) {
         negativeSuffix = newValue;
-        //TODO: negSuffixPattern = null;
+        negSuffixPattern = null;
     }
 
     /**
@@ -2208,7 +2246,6 @@ public class DecimalFormat extends NumberFormat {
          * posPrefixPattern, posSuffixPattern, negPrefixPattern, negSuffixPattern.
          * [Richard/GCL]
          */
-        // TODO fix this: == comparison is okay for null but o/w wrong
         return (((posPrefixPattern == other.posPrefixPattern &&
                  positivePrefix.equals(other.positivePrefix))
                 || (posPrefixPattern != null &&
@@ -2297,14 +2334,13 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * Expand an affix pattern into an affix string.  All characters in the
-     * pattern are literal unless prefixed by QUOTE.  The following characters
-     * after QUOTE are recognized: PATTERN_PERCENT, PATTERN_PER_MILLE,
-     * PATTERN_MINUS, and CURRENCY_SIGN.  If CURRENCY_SIGN is doubled (QUOTE +
-     * CURRENCY_SIGN + CURRENCY_SIGN), it is interpreted as an international
-     * currency sign.  Any other character after a QUOTE represents itself.
-     * QUOTE must be followed by another character; QUOTE may not occur by
-     * itself at the end of the pattern.
+     * Expand an affix pattern into an affix string.  All characters in
+     * the pattern are literal unless bracketed by QUOTEs.  The
+     * following characters outside QUOTE are recognized:
+     * PATTERN_PERCENT, PATTERN_PER_MILLE, PATTERN_MINUS, and
+     * CURRENCY_SIGN.  If CURRENCY_SIGN is doubled, it is interpreted as
+     * an international currency sign.  Any other character outside
+     * QUOTE represents itself.  Quoted text must be well-formed.
      *
      * This method is used in two distinct ways.  First, it is used to expand
      * the stored affix patterns into actual affixes.  For this usage, doFormat
@@ -2464,7 +2500,37 @@ public class DecimalFormat extends NumberFormat {
      * Append an affix pattern to the given StringBuffer.  Localize unquoted
      * specials.
      */
-    private void appendAffixPattern(StringBuffer buffer, String affixPat, boolean localized) {
+    private void appendAffixPattern(StringBuffer buffer,
+                                    boolean isNegative, boolean isPrefix,
+                                    boolean localized) {
+        String affixPat = null;
+        if (isPrefix) {
+            affixPat = isNegative ? negPrefixPattern : posPrefixPattern;
+        } else {
+            affixPat = isNegative ? negSuffixPattern : posSuffixPattern;
+        }
+
+        // When there is a null affix pattern, we use the affix itself.
+        if (affixPat == null) {
+            String affix = null;
+            if (isPrefix) {
+                affix = isNegative ? negativePrefix : positivePrefix;
+            } else {
+                affix = isNegative ? negativeSuffix : positiveSuffix;
+            }
+            // Do this crudely for now:  Wrap everything in quotes.
+            buffer.append(QUOTE);
+            for (int i=0; i<affix.length(); ++i) {
+                char ch = affix.charAt(i);
+                if (ch == QUOTE) {
+                    buffer.append(ch);
+                }
+                buffer.append(ch);
+            }
+            buffer.append(QUOTE);
+            return;
+        }
+
         if (!localized) {
             buffer.append(affixPat);
         } else {
@@ -2527,9 +2593,7 @@ public class DecimalFormat extends NumberFormat {
             /* Use original symbols read from resources in pattern
              * eg. use "\u00A4" instead of "$" in Locale.US [Richard/GCL]
              */
-            appendAffixPattern(result,
-                               (part==0 ? posPrefixPattern : negPrefixPattern),
-                               localized);
+            appendAffixPattern(result, part!=0, true, localized);
             if (padPos == PAD_AFTER_PREFIX) {
                 result.append(padSpec);
             }
@@ -2605,9 +2669,7 @@ public class DecimalFormat extends NumberFormat {
             /* Use original symbols read from resources in pattern
              * eg. use "\u00A4" instead of "$" in Locale.US [Richard/GCL]
              */
-            appendAffixPattern(result,
-                               (part==0 ? posSuffixPattern : negSuffixPattern),
-                               localized);
+            appendAffixPattern(result, part!=0, false, localized);
             if (padPos == PAD_AFTER_SUFFIX) {
                 result.append(padSpec);
             }
