@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/Transliterator.java,v $
- * $Date: 2001/11/15 22:12:04 $
- * $Revision: 1.51 $
+ * $Date: 2001/11/15 22:19:34 $
+ * $Revision: 1.52 $
  *
  *****************************************************************************************
  */
@@ -242,7 +242,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.51 $ $Date: 2001/11/15 22:12:04 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.52 $ $Date: 2001/11/15 22:19:34 $
  */
 public abstract class Transliterator {
     /**
@@ -1330,7 +1330,10 @@ public abstract class Transliterator {
                         id.append(target).append(ID_SEP).append(source);
                     }
                 }
-                id.append(variant);
+                // If the variant is empty ("/") then don't append it
+                if (variant.length() > 1) {
+                    id.append(variant);
+                }
             }
             
             // If we have a reverse part of the ID, e.g., Foo(Bar), then we
