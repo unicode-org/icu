@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/ConvertUCD.java,v $
-* $Date: 2002/06/13 21:14:05 $
-* $Revision: 1.8 $
+* $Date: 2002/10/05 01:28:58 $
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
@@ -331,7 +331,7 @@ public final class ConvertUCD implements UCD_Types {
 
     static void readBlocks() throws Exception {
         System.out.println("Reading 'Blocks'");
-        BufferedReader input = Utility.openUnicodeFile(blocksname, version, true, false);
+        BufferedReader input = Utility.openUnicodeFile(blocksname, version, true, Utility.LATIN1);
         String line = "";
         try {
     	    String[] parts = new String[20];
@@ -376,7 +376,7 @@ public final class ConvertUCD implements UCD_Types {
         }
         String tempVersion = version;
         if (version.equals(UCD.latestVersion)) tempVersion = "";
-        BufferedReader input = Utility.openUnicodeFile(labels[0], tempVersion, true, false);
+        BufferedReader input = Utility.openUnicodeFile(labels[0], tempVersion, true, Utility.LATIN1);
         if (input == null) {
             System.out.println("COULDN'T OPEN: " + labels[0]);
             return;
@@ -834,7 +834,7 @@ public final class ConvertUCD implements UCD_Types {
                 uData.numericType = Utility.lookup(fieldValue, UCD_Names.NT, true);
 
             } else if (fieldName.equals("ea")) {
-                uData.eastAsianWidth = Utility.lookup(fieldValue, UCD_Names.EA, true);
+                uData.eastAsianWidth = Utility.lookup(fieldValue, UCD_Names.SHORT_EA, true);
             } else if (fieldName.equals("lb")) {
                 uData.lineBreak = Utility.lookup(fieldValue, UCD_Names.LB, true);
 

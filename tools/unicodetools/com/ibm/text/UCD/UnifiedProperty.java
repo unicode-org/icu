@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UnifiedProperty.java,v $
-* $Date: 2002/08/08 15:38:16 $
-* $Revision: 1.1 $
+* $Date: 2002/10/05 01:28:57 $
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -175,12 +175,12 @@ public final class UnifiedProperty extends UnicodeProperty {
         case BIDI_CLASS>>8: return ucd.getBidiClassID_fromIndex(ucd.getBidiClass(cp), style);
         case DECOMPOSITION_TYPE>>8: return ucd.getDecompositionTypeID_fromIndex(ucd.getDecompositionType(cp), style);
         case NUMERIC_TYPE>>8: return ucd.getNumericTypeID_fromIndex(ucd.getNumericType(cp), style);
-        case EAST_ASIAN_WIDTH>>8: return ucd.getEastAsianWidthID_fromIndex(ucd.getEastAsianWidth(cp));
-        case LINE_BREAK>>8:  return ucd.getLineBreakID_fromIndex(ucd.getLineBreak(cp));
-        case JOINING_TYPE>>8: return ucd.getJoiningTypeID_fromIndex(ucd.getJoiningType(cp));
-        case JOINING_GROUP>>8: return ucd.getJoiningGroupID_fromIndex(ucd.getJoiningGroup(cp));
-        case SCRIPT>>8: return ucd.getScriptID_fromIndex(ucd.getScript(cp));
-        case AGE>>8: return ucd.getAgeID_fromIndex(ucd.getAge(cp));
+        case EAST_ASIAN_WIDTH>>8: return ucd.getEastAsianWidthID_fromIndex(ucd.getEastAsianWidth(cp), style);
+        case LINE_BREAK>>8:  return ucd.getLineBreakID_fromIndex(ucd.getLineBreak(cp), style);
+        case JOINING_TYPE>>8: return ucd.getJoiningTypeID_fromIndex(ucd.getJoiningType(cp), style);
+        case JOINING_GROUP>>8: return ucd.getJoiningGroupID_fromIndex(ucd.getJoiningGroup(cp), style);
+        case SCRIPT>>8: return ucd.getScriptID_fromIndex(ucd.getScript(cp), style);
+        case AGE>>8: return ucd.getAgeID_fromIndex(ucd.getAge(cp), style);
         default: throw new IllegalArgumentException("Internal Error");
         }
     }

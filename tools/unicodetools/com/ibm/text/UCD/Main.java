@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Main.java,v $
-* $Date: 2002/10/01 01:19:16 $
-* $Revision: 1.24 $
+* $Date: 2002/10/05 01:28:58 $
+* $Revision: 1.25 $
 *
 *******************************************************************************
 */
@@ -72,6 +72,8 @@ public final class Main implements UCD_Types {
             else if (arg.equalsIgnoreCase("hanproperties")) GenerateHanTransliterator.readUnihan();
             
             else if (arg.equalsIgnoreCase("compareBlueberry")) VerifyUCD.compareBlueberry();
+            
+            else if (arg.equalsIgnoreCase("testenum")) SampleEnum.test();
             
             else if (arg.equalsIgnoreCase("quicktest")) QuickTest.test();
             else if (arg.equalsIgnoreCase("TernaryStore")) TernaryStore.test();

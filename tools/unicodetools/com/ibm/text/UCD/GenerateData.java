@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateData.java,v $
-* $Date: 2002/07/30 09:56:41 $
-* $Revision: 1.22 $
+* $Date: 2002/10/05 01:28:58 $
+* $Revision: 1.23 $
 *
 *******************************************************************************
 */
@@ -545,6 +545,10 @@ public class GenerateData implements UCD_Types {
             if (i == (BINARY_PROPERTIES | CaseFoldTurkishI)) continue;
             if (i == (BINARY_PROPERTIES | Non_break)) continue;
             
+            if (type == NUMERIC_TYPE) {
+                //System.out.println("debug");
+            }
+            
             UnicodeProperty up = UnifiedBinaryProperty.make(i, Default.ucd);
             if (up == null) continue;
             if (!up.isStandard()) continue;
@@ -587,8 +591,9 @@ public class GenerateData implements UCD_Types {
             }
             
             valueAbb = up.getValue(SHORT);
-            if (valueAbb.length() == 0) valueAbb = "n/a";
             valueAbb = Utility.getUnskeleton(valueAbb, false);
+            if (valueAbb.length() == 0) valueAbb = "n/a";
+            //else if (valueAbb.equals(value)) valueAbb = "n/a";
 
             
             if (type == COMBINING_CLASS) {
@@ -643,6 +648,13 @@ public class GenerateData implements UCD_Types {
             }
         }
         
+        UCD.BlockData blockData = new UCD.BlockData();
+        
+        int blockId = 0;
+        while (Default.ucd.getBlockData(blockId++, blockData)) {
+            addLine(sorted, "blk", "n/a", blockData.name);
+        }
+        
         String filename = "PropertyAliases";
         String newFile = "DerivedData/" + filename + getFileSuffix(true);
         PrintWriter log = Utility.openPrintWriter(newFile, Utility.LATIN1_UNIX);
@@ -651,7 +663,7 @@ public class GenerateData implements UCD_Types {
         log.println("# " + filename + getFileSuffix(false));
         log.println(generateDateLine());
         log.println("#");
-        Utility.appendFile("PropertyAliasHeader.txt", false, log);
+        Utility.appendFile("PropertyAliasHeader.txt", Utility.LATIN1, log);
         log.println(HORIZONTAL_LINE);
         log.println();
         Utility.print(log, sorted, "\r\n", new MyBreaker(true));
@@ -667,7 +679,7 @@ public class GenerateData implements UCD_Types {
         log.println("# " + filename + getFileSuffix(false));
         log.println(generateDateLine());
         log.println("#");
-        Utility.appendFile("PropertyValueAliasHeader.txt", false, log);
+        Utility.appendFile("PropertyValueAliasHeader.txt", Utility.LATIN1, log);
         log.println(HORIZONTAL_LINE);
         log.println();
         Utility.print(log, sorted, "\r\n", new MyBreaker(false));

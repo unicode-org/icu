@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateCaseFolding.java,v $
-* $Date: 2002/07/30 09:56:41 $
-* $Revision: 1.11 $
+* $Date: 2002/10/05 01:28:58 $
+* $Revision: 1.12 $
 *
 *******************************************************************************
 */
@@ -63,7 +63,7 @@ public class GenerateCaseFolding implements UCD_Types {
         out.println("# CaseFolding" + GenerateData.getFileSuffix(false));
         out.println(GenerateData.generateDateLine());
         out.println("#");
-        Utility.appendFile("CaseFoldingHeader.txt", false, out);
+        Utility.appendFile("CaseFoldingHeader.txt", Utility.LATIN1, out);
         
         /*
         PrintWriter out = new PrintWriter(
@@ -561,7 +561,7 @@ public class GenerateCaseFolding implements UCD_Types {
         out.println("# SpecialCasing" + GenerateData.getFileSuffix(false));
         out.println(GenerateData.generateDateLine());
         out.println("#");
-        Utility.appendFile("SpecialCasingHeader.txt", true, out);
+        Utility.appendFile("SpecialCasingHeader.txt", Utility.UTF8, out);
 
         Iterator it = sorted.keySet().iterator();
         int lastOrder = -1;
@@ -584,7 +584,7 @@ public class GenerateCaseFolding implements UCD_Types {
                 case 3: out.println("# Ligatures"); break;
                 case 4: skipLine = true; break;
                 case 5: out.println("# No corresponding uppercase precomposed character"); break;
-                case 6: Utility.appendFile("SpecialCasingIota.txt", true, out); break;
+                case 6: Utility.appendFile("SpecialCasingIota.txt", Utility.UTF8, out); break;
                 case 7: out.println("# Some characters with YPOGEGRAMMENI are also have no corresponding titlecases"); break;
                 case 8: skipLine = true; break;
                 }
@@ -592,7 +592,7 @@ public class GenerateCaseFolding implements UCD_Types {
             }
             out.println(line);
         }
-        Utility.appendFile("SpecialCasingFooter.txt", true, out);
+        Utility.appendFile("SpecialCasingFooter.txt", Utility.UTF8, out);
         out.close();
         Utility.renameIdentical(mostRecent, Utility.getOutputName(newFile));
     }

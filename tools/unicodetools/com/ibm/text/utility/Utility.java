@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2002/09/25 06:40:14 $
-* $Revision: 1.25 $
+* $Date: 2002/10/05 01:28:56 $
+* $Revision: 1.26 $
 *
 *******************************************************************************
 */
@@ -26,7 +26,7 @@ import com.ibm.text.UCD.*;
 
 public final class Utility implements UCD_Types {    // COMMON UTILITIES
 
-    static final boolean UTF8 = true; // TODO -- make argument
+    // static final boolean UTF8 = true; // TODO -- make argument
     public static final char BOM = '\uFEFF';
     
     public static String[] append(String[] array1, String[] array2) {
@@ -521,7 +521,7 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
             return "<codepoint hex=\"" + hex(c,1) + "\"/>";
         }
 
-        if (c <= 0x7E || UTF8) {
+        if (c <= 0x7E) {
             return UTF32.valueOf32(c);
         }
 
@@ -634,17 +634,45 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
     }
     */
     
-    static final byte WINDOWS_MASK = 1, UTF8_MASK = 2;
-    public static final byte 
-        LATIN1_UNIX = 0,
-        LATIN1_WINDOWS = WINDOWS_MASK, 
-        UTF8_UNIX = UTF8_MASK, 
-        UTF8_WINDOWS = UTF8_MASK | WINDOWS_MASK;
+    public static final class Encoding extends PoorMansEnum {
+        private static PoorMansEnum.EnumStore store = new PoorMansEnum.EnumStore();
+        
+        /* Boilerplate */
+        public Encoding next() { return (Encoding) next; }
+        public void getAliases(Collection output) { store.getAliases(this, output); }
+        public static Encoding get(String s) { return (Encoding) store.get(s); }
+        public static Encoding get(int v) { return (Encoding) store.get(v); }
+        public static int getMax() { return store.getMax(); }
+        
+        private Encoding() {}
+        private static Encoding add(String name) { return (Encoding) store.add(new Encoding(), name);}
+    }
     
+    public static final Encoding
+        LATIN1_UNIX = Encoding.add("LATIN1_UNIX"),
+        LATIN1_WINDOWS = Encoding.add("LATIN1_WINDOWS"),
+        UTF8_UNIX = Encoding.add("UTF8_UNIX"),
+        UTF8_WINDOWS = Encoding.add("UTF8_WINDOWS"),
+        
+        UTF8 = Encoding.add("UTF8"), // for read-only
+        LATIN1 = Encoding.add("LATIN1"), // for read-only
+        
+        FIRST = LATIN1_UNIX;
+        
+    
+   /*
+    public static final Encoding 
+        LATIN1_UNIX = Encoding.LATIN1_UNIX,
+        LATIN1_WINDOWS = Encoding.LATIN1_WINDOWS, 
+        UTF8_UNIX = Encoding.UTF8_UNIX, 
+        UTF8_WINDOWS = Encoding.UTF8_WINDOWS;
+   */
+   
+   
     // Normally use false, false.
     // But for UCD files use true, true
     // Or if they are UTF8, use true, false
-    public static PrintWriter openPrintWriter(String filename, byte options) throws IOException {
+    public static PrintWriter openPrintWriter(String filename, Encoding options) throws IOException {
         File file = new File(getOutputName(filename));
         Utility.fixDot();
         System.out.println("Creating File: " + file.getCanonicalPath());
@@ -655,7 +683,8 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
                     new UTF8StreamWriter(
                         new FileOutputStream(file),
                         32*1024,
-                        (options & WINDOWS_MASK) == 0, (options & UTF8_MASK) == 0));
+                        options == LATIN1_UNIX || options == UTF8_UNIX,
+                        options == LATIN1_UNIX || options == LATIN1_WINDOWS));
     }
     
     public static String getOutputName(String filename) {
@@ -714,13 +743,9 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
         }
     }
     
-    public static void appendFile(String filename, boolean utf8, PrintWriter output) throws IOException {
-    	appendFile(filename, utf8, output, null);
-    }
-    
-    public static BufferedReader openReadFile(String filename, boolean UTF8) throws FileNotFoundException, UnsupportedEncodingException {
+    public static BufferedReader openReadFile(String filename, Encoding encoding) throws FileNotFoundException, UnsupportedEncodingException {
         FileInputStream fis = new FileInputStream(filename);
-        InputStreamReader isr = UTF8 ? new InputStreamReader(fis, "UTF8") : new InputStreamReader(fis);
+        InputStreamReader isr = (encoding == UTF8_UNIX || encoding == UTF8_WINDOWS) ? new InputStreamReader(fis, "UTF8") : new InputStreamReader(fis);
         BufferedReader br = new BufferedReader(isr, 32*1024);
         return br;
     }
@@ -769,10 +794,17 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
         return line;
     }
 
-    public static void appendFile(String filename, boolean utf8, PrintWriter output, String[] replacementList) throws IOException {
+    public static void appendFile(String filename, Encoding encoding, PrintWriter output) throws IOException {
+    	appendFile(filename, encoding, output, null);
+    }
+    
+    public static void appendFile(String filename, Encoding encoding, PrintWriter output, String[] replacementList) throws IOException {
+        BufferedReader br = openReadFile(filename, encoding);
+        /*
         FileInputStream fis = new FileInputStream(filename);
-        InputStreamReader isr = utf8 ? new InputStreamReader(fis, "UTF8") :  new InputStreamReader(fis);
+        InputStreamReader isr = (encoding == UTF8_UNIX || encoding == UTF8_WINDOWS) ? new InputStreamReader(fis, "UTF8") :  new InputStreamReader(fis);
         BufferedReader br = new BufferedReader(isr, 32*1024);
+        */
         while (true) {
             String line = br.readLine();
             if (line == null) break;
@@ -861,20 +893,20 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
         return -1;
     }
     
-    public static void copyTextFile(String filename, boolean utf8, String newName, String[] replacementList) throws IOException {
+    public static void copyTextFile(String filename, Encoding encoding, String newName, String[] replacementList) throws IOException {
         PrintWriter out = Utility.openPrintWriter(newName, UTF8_WINDOWS);
-        appendFile(filename, utf8, out, replacementList);
+        appendFile(filename, encoding, out, replacementList);
         out.close();
     }
 
-    public static void copyTextFile(String filename, boolean utf8, String newName) throws IOException {
-        copyTextFile(filename, utf8, newName, null);
+    public static void copyTextFile(String filename, Encoding encoding, String newName) throws IOException {
+        copyTextFile(filename, encoding, newName, null);
     }
 
-    public static BufferedReader openUnicodeFile(String filename, String version, boolean show, boolean UTF8) throws IOException {
+    public static BufferedReader openUnicodeFile(String filename, String version, boolean show, Encoding encoding) throws IOException {
         String name = getMostRecentUnicodeDataFile(filename, version, true, show);
         if (name == null) return null;
-        return openReadFile(name, UTF8); // new BufferedReader(new FileReader(name),32*1024);
+        return openReadFile(name, encoding); // new BufferedReader(new FileReader(name),32*1024);
     }
 
     public static String getMostRecentUnicodeDataFile(String filename, String version, 

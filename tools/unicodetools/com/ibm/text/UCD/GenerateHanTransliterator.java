@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateHanTransliterator.java,v $
-* $Date: 2002/08/04 21:38:45 $
-* $Revision: 1.9 $
+* $Date: 2002/10/05 01:28:58 $
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
@@ -45,7 +45,7 @@ public final class GenerateHanTransliterator implements UCD_Types {
         log = Utility.openPrintWriter("Unihan_log.html", Utility.UTF8_WINDOWS);
         log.println("<body>");
 
-        BufferedReader in = Utility.openUnicodeFile("Unihan", Default.ucdVersion, true, true); 
+        BufferedReader in = Utility.openUnicodeFile("Unihan", Default.ucdVersion, true, Utility.UTF8); 
         
         Map properties = new TreeMap();
         
@@ -502,7 +502,7 @@ public final class GenerateHanTransliterator implements UCD_Types {
             
             if (type == CHINESE) {
                 System.out.println("Reading chinese_frequency.txt");
-                br = Utility.openReadFile(BASE_DIR + "dict\\chinese_frequency.txt", true);
+                br = Utility.openReadFile(BASE_DIR + "dict\\chinese_frequency.txt", Utility.UTF8);
                 counter = 0;
                 while (true) {
                     line = Utility.readDataLine(br);
@@ -521,7 +521,7 @@ public final class GenerateHanTransliterator implements UCD_Types {
             if (type == JAPANESE) {
                 System.out.println("Reading japanese_frequency.txt");
          
-                br = Utility.openReadFile( BASE_DIR + "dict\\japanese_frequency.txt", true);
+                br = Utility.openReadFile( BASE_DIR + "dict\\japanese_frequency.txt", Utility.UTF8);
                 Map japaneseMap = new HashMap();
                 while (true) {
                     line = Utility.readDataLine(br);
@@ -704,7 +704,7 @@ public final class GenerateHanTransliterator implements UCD_Types {
         if (type == JAPANESE) fname = "edict.txt";
         
         System.out.println("Reading " + fname);
-        BufferedReader br = Utility.openReadFile(BASE_DIR + "dict\\" + fname, true);
+        BufferedReader br = Utility.openReadFile(BASE_DIR + "dict\\" + fname, Utility.UTF8);
         int counter = 0;
         String[] pieces = new String[50];
         String line = "";
@@ -751,7 +751,7 @@ public final class GenerateHanTransliterator implements UCD_Types {
         String fname = "Chinese_override.txt";
         
         System.out.println("Reading " + fname);
-        BufferedReader br = Utility.openReadFile(BASE_DIR + "dict\\" + fname, true);
+        BufferedReader br = Utility.openReadFile(BASE_DIR + "dict\\" + fname, Utility.UTF8);
         int counter = 0;
         String[] pieces = new String[50];
         String line = "";
@@ -997,7 +997,7 @@ public final class GenerateHanTransliterator implements UCD_Types {
     
     static void readCDICT() throws IOException {
         System.out.println("Reading cdict.txt");
-        BufferedReader br = Utility.openReadFile(BASE_DIR + "dict\\cdict.txt", true);
+        BufferedReader br = Utility.openReadFile(BASE_DIR + "dict\\cdict.txt", Utility.UTF8);
         int counter = 0;
         String[] pieces = new String[50];
         String line = "";
@@ -1075,7 +1075,7 @@ public final class GenerateHanTransliterator implements UCD_Types {
   
     static void readUnihanData(String key) throws java.io.IOException {
 
-        BufferedReader in = Utility.openUnicodeFile("Unihan", Default.ucdVersion, true, true); 
+        BufferedReader in = Utility.openUnicodeFile("Unihan", Default.ucdVersion, true, Utility.UTF8); 
 
         int count = 0;
         int lineCounter = 0;

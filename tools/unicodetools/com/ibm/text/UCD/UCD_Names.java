@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Names.java,v $
-* $Date: 2002/06/13 21:14:05 $
-* $Revision: 1.14 $
+* $Date: 2002/10/05 01:28:58 $
+* $Revision: 1.15 $
 *
 *******************************************************************************
 */
@@ -201,11 +201,11 @@ final class UCD_Names implements UCD_Types {
 
     static final String[] YN_TABLE = {"N", "Y"};
 
-    static String[] EA = {
+    static String[] SHORT_EA = {
         "N", "A", "H", "W", "F", "Na"
     };
 
-    static String[] SHORT_EA = {
+    static String[] EA = {
         "Neutral", "Ambiguous", "Halfwidth", "Wide", "Fullwidth", "Narrow"
     };
 
