@@ -360,31 +360,34 @@ RuleBasedNumberFormat::parse(const UnicodeString& text,
         return;
     }
 
-    ParsePosition high_pp;
+    UnicodeString workingText(text, parsePosition.getIndex());
+    ParsePosition workingPos(0);
+
+    ParsePosition high_pp(0);
     Formattable high_result;
 
     for (NFRuleSet** p = ruleSets; *p; ++p) {
         NFRuleSet *rp = *p;
         if (rp->isPublic()) {
-            ParsePosition working_pp = parsePosition;
+            ParsePosition working_pp(0);
             Formattable working_result;
 
-            rp->parse(text, working_pp, kMaxDouble, working_result);
+            rp->parse(workingText, working_pp, kMaxDouble, working_result);
             if (working_pp.getIndex() > high_pp.getIndex()) {
                 high_pp = working_pp;
                 high_result = working_result;
 
-                if (high_pp.getIndex() == text.length()) {
+                if (high_pp.getIndex() == workingText.length()) {
                     break;
                 }
             }
         }
     }
 
-    if (high_pp.getIndex() > parsePosition.getIndex()) {
-        high_pp.setErrorIndex(-1);
+    parsePosition.setIndex(parsePosition.getIndex() + high_pp.getIndex());
+    if (high_pp.getIndex() > 0) {
+        parsePosition.setErrorIndex(-1);
     }
-    parsePosition = high_pp;
     result = high_result;
     if (result.getType() == Formattable::kDouble) {
         int32_t r = (int32_t)result.getDouble();
