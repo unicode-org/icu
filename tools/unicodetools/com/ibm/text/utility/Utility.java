@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2002/07/03 02:15:47 $
-* $Revision: 1.21 $
+* $Date: 2002/07/21 08:43:39 $
+* $Revision: 1.22 $
 *
 *******************************************************************************
 */
@@ -806,7 +806,7 @@ public final class Utility {    // COMMON UTILITIES
             pos = source.indexOf(piece, pos);
             if (pos < 0) return source;
             source = source.substring(0,pos) + replacement + source.substring(pos + piece.length());
-            if (replacement.length() > 0) ++pos;
+            pos += replacement.length();
         }
     }
     
