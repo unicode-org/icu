@@ -6,6 +6,7 @@
  */
 
 #include "layout/LETypes.h"
+#include "layout/LELanguages.h"
 #include "layout/LayoutEngine.h"
 #include "layout/LEFontInstance.h"
 
@@ -180,7 +181,15 @@ le_bool ParagraphLayout::fComplexTable[] = {
     false,  /* Tglg */
     false,  /* Hano */
     false,  /* Buhd */
-    false   /* Tagb */
+    false,  /* Tagb */
+    false,  /* Brai */
+    false,  /* Cprt */
+    false,  /* Limb */
+    false,  /* Linb */
+    false,  /* Osma */
+    false,  /* Shaw */
+    false,  /* Tale */
+    false   /* Ugar */
 };
 
 
@@ -259,7 +268,7 @@ ParagraphLayout::ParagraphLayout(const LEUnicode chars[], le_int32 count,
         fStyleRunInfo[run].glyphBase = fGlyphCount;
 
         fStyleRunInfo[run].engine = LayoutEngine::layoutEngineFactory(fStyleRunInfo[run].font,
-            fStyleRunInfo[run].script, 0, layoutStatus);
+            fStyleRunInfo[run].script, nullLanguageCode, layoutStatus);
 
         fStyleRunInfo[run].glyphCount = fStyleRunInfo[run].engine->layoutChars(fChars, runStart, fStyleRunLimits[run] - runStart, fCharCount,
             fStyleRunInfo[run].level & 1, 0, 0, layoutStatus);

@@ -5,7 +5,9 @@
  * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS
  * YOU REALLY KNOW WHAT YOU'RE DOING.
  *
- * $Source: /xsrl/Nsvn/icu/icu/source/layout/ScriptAndLanguageTags.h,v $ $Date: 2003/04/12 00:37:12 $ $Revision: 1.7 $
+ * $Source: /xsrl/Nsvn/icu/icu/source/layout/ScriptAndLanguageTags.h,v $
+ * $Date: 2003/04/15 20:43:27 $
+ * $Revision: 1.8 $
  */
 
 #ifndef __SCRIPTANDLANGUAGES_H
@@ -78,6 +80,7 @@ const LETag ugarScriptTag = LE_MAKE_TAG('u', 'g', 'a', 'r'); /* UGARITIC */
 const LETag nullScriptTag = 0x00000000; /* ''     (NULL) */
 
 
+const LETag nullLanguageTag = 0x00000000; /* null */
 const LETag araLanguageTag = LE_MAKE_TAG('A', 'R', 'A', ' '); /* Arabic */
 const LETag asmLanguageTag = LE_MAKE_TAG('A', 'S', 'M', ' '); /* Assamese */
 const LETag benLanguageTag = LE_MAKE_TAG('B', 'E', 'N', ' '); /* Bengali */
@@ -108,7 +111,6 @@ const LETag zhpLanguageTag = LE_MAKE_TAG('Z', 'H', 'P', ' '); /* Chinese (Phonet
 const LETag zhsLanguageTag = LE_MAKE_TAG('Z', 'H', 'S', ' '); /* Chinese (Simplified) */
 const LETag zhtLanguageTag = LE_MAKE_TAG('Z', 'H', 'T', ' '); /* Chinese (Traditional) */
 
-const LETag noLanguageTag  = 0x00000000; /* ''     (NONE) */
 
 U_NAMESPACE_END
 #endif
