@@ -356,9 +356,6 @@ fi {
         "fi/MonthNames_islamic"
     }   
     // Civil is identical other than in calculations
-    Eras_islamic-civil:alias {
-        "fi/Eras_islamic"
-    }
     MonthNames_islamic-civil:alias {
         "fi/MonthNames_islamic"
     }
