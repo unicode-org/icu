@@ -18,7 +18,7 @@
 <mb_cur_min>                  1
 <uconv_class>                 "EBCDIC_STATEFUL"
 <subchar>                     \xFE\xFE
-#<subchar1>                   \x3F
+<subchar1>                    \x3F
 #
 CHARMAP
 #
