@@ -70,6 +70,8 @@ typedef enum UTraceLevel UTraceLevel;
  */
 #ifdef UTRACE_IMPL
 U_EXPORT int32_t
+#elif U_COMMON_IMPLEMENTATION
+U_CFUNC int32_t
 #else
 U_CFUNC U_IMPORT int32_t 
 #endif
@@ -432,7 +434,8 @@ utrace_setFunctions(const void *context,
   *                 data displayed from nested functions to be indented for readability.
   *  @param fmt     Format specification for the data to output
   *  @param args    Data to be formatted.
-  *  @return        Length of formatted output, including the terminating NULL if present.
+  *  @return        Length of formatted output, including the terminating NULL.
+  *                 If buffer capacity is insufficient, the required capacity is returned. 
   */
 U_CAPI int32_t U_EXPORT2
 utrace_format(char *outBuf, int32_t capacity,
