@@ -1156,7 +1156,7 @@ void TestMessageFormat::TestRBNF(void) {
                 FieldPosition fp(0);
                 UnicodeString result;
                 fmt->format(args, 1, result, fp, ec);
-                logln((UnicodeString)"value: " + toString(args[0]) + " --> " + result + " ec: " + ec);
+                logln((UnicodeString)"value: " + toString(args[0]) + " --> " + result + UnicodeString(" ec: ") + u_errorName(ec));
                
                 if (i != 3) { // TODO: fix this, for now skip ordinal parsing (format string at index 3)
                     int32_t count = 0;
@@ -1166,10 +1166,13 @@ void TestMessageFormat::TestRBNF(void) {
                     } else if (parseResult[0] != args[0]) {
                         errln((UnicodeString)"parsed argument " + toString(parseResult[0]) + " != " + toString(args[0]));
                     }
+                    delete []parseResult;
                 }
             }
         }
+        delete fmt;
     }
+    delete numFmt;
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
