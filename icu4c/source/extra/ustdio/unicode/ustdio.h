@@ -101,6 +101,8 @@
     better testing. This prevents buffer overflows.
  * u_fgetc() and u_fungetc() should use UChar32 instead of UChar, or at
     least 32-bit versions should be available.
+ * "%d % d %d" and "%d %+d %d" of a number doesn't work as expected.
+    The third %d will still have the sign attached.
  * More testing is needed.
 */
 
