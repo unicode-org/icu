@@ -361,8 +361,15 @@ public:
     { return (UClassID)(&fgClassID); }
 
 protected:
+  /**
+   * Protected constructor
+   * @stable ICU 2.0
+   */
   UCharCharacterIterator();
-        
+  /**
+   * Protected member text
+   * @statble ICU 2.0
+   */      
   const UChar*            text;
 
 private:
