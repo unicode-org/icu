@@ -132,7 +132,7 @@ public:
      * return the calendar type, "japanese".
      *
      * @return calendar type
-     * @draft ICU 2.6
+     * @internal
      */
     virtual const char * getType() const;
 
