@@ -149,12 +149,6 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name common
     End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name i18n
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name makeconv
-    End Project Dependency
 }}}
 
 ###############################################################################
@@ -311,6 +305,12 @@ Package=<5>
 
 Package=<4>
 {{{
+    Begin Project Dependency
+    Project_Dep_Name common
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name toolutil
+    End Project Dependency
 }}}
 
 ###############################################################################
@@ -439,9 +439,6 @@ Package=<4>
 {{{
     Begin Project Dependency
     Project_Dep_Name common
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name intltest
     End Project Dependency
 }}}
 
@@ -577,9 +574,6 @@ Package=<4>
 {{{
     Begin Project Dependency
     Project_Dep_Name common
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name i18n
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name toolutil
