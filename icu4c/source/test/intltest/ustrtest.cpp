@@ -336,7 +336,7 @@ UnicodeStringTest::TestExtract()
         int32_t length;
 
         errorCode=U_ZERO_ERROR;
-        length=s.extract(NULL, 0, errorCode);
+        length=s.extract((UChar *)NULL, 0, errorCode);
         if(errorCode!=U_BUFFER_OVERFLOW_ERROR || length!=s.length()) {
             errln("UnicodeString.extract(NULL, 0)==%d (%s) expected %d (U_BUFFER_OVERFLOW_ERROR)", length, s.length(), u_errorName(errorCode));
         }
