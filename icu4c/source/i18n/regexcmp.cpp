@@ -544,6 +544,9 @@ void    RegexCompile::compile(
 //  doParseAction        Do some action during regex pattern parsing.
 //                       Called by the parse state machine.
 //
+//                       Generation of the match engine PCode happens here, or
+//                       in functions called from the parse actions defined here.
+//
 //
 //----------------------------------------------------------------------------------------
 UBool RegexCompile::doParseActions(EParseAction action)
@@ -783,13 +786,108 @@ UBool RegexCompile::doParseActions(EParseAction action)
         break;
 
     case doOpenLookBehind:
-        // Open Paren.
-        error(U_REGEX_UNIMPLEMENTED);
+        {
+            //   Compile a (?<= look-behind open paren.
+            //
+            //          Compiles to
+            //              0       URX_LB_START     dataLoc
+            //              1       URX_LB_CONT      dataLoc
+            //              2                        MinMatchLen
+            //              3                        MaxMatchLen
+            //              4       URX_NOP          Standard '(' boilerplate.
+            //              5       URX_NOP          Reserved slot for use with '|' ops within (block).
+            //              6         <code for LookBehind expression>
+            //              7       URX_LB_END       dataLoc    # Check match len, restore input  len
+            //              8       URX_LA_END       dataLoc    # Restore stack, input pos
+            //
+            //          Allocate a block of matcher data, to contain (when running a match)
+            //              0:    Stack ptr on entry
+            //              1:    Input Index on entry
+            //              2:    Start index of match current match attempt.
+            //              3:    Original Input String len.  
+
+            // Allocate data space
+            int32_t dataLoc = fRXPat->fDataSize;
+            fRXPat->fDataSize += 4; 
+            
+            // Emit URX_LB_START
+            int32_t op = URX_BUILD(URX_LB_START, dataLoc);
+            fRXPat->fCompiledPat->addElement(op, *fStatus);
+            
+            // Emit URX_LB_CONT
+            op = URX_BUILD(URX_LB_CONT, dataLoc);
+            fRXPat->fCompiledPat->addElement(op, *fStatus);
+            fRXPat->fCompiledPat->addElement(0,  *fStatus);    // MinMatchLength.  To be filled later.
+            fRXPat->fCompiledPat->addElement(0,  *fStatus);    // MaxMatchLength.  To be filled later.
+            
+            // Emit the NOP
+            op = URX_BUILD(URX_NOP, 0);
+            fRXPat->fCompiledPat->addElement(op, *fStatus);
+            fRXPat->fCompiledPat->addElement(op, *fStatus);
+            
+            // On the Parentheses stack, start a new frame and add the postions
+            //   of the URX_LB_CONT and the NOP.  
+            fParenStack.push(fModeFlags, *fStatus);                       // Match mode state
+            fParenStack.push(lookBehind, *fStatus);                       // Frame type
+            fParenStack.push(fRXPat->fCompiledPat->size()-2, *fStatus);   // The first NOP location
+            fParenStack.push(fRXPat->fCompiledPat->size()-1, *fStatus);   // The 2nd   NOP location
+            
+            // The final two instructions will be added when the ')' is encountered.
+        }
+
         break;
 
     case doOpenLookBehindNeg:
-        // Open Paren.
-        error(U_REGEX_UNIMPLEMENTED);
+        {
+            //   Compile a (?<! negated look-behind open paren.
+            //
+            //          Compiles to
+            //              0       URX_LB_START     dataLoc    # Save entry stack, input len
+            //              1       URX_LBN_CONT     dataLoc    # Iterate possible match positions
+            //              2                        MinMatchLen
+            //              3                        MaxMatchLen
+            //              4                        continueLoc (9)
+            //              5       URX_NOP          Standard '(' boilerplate.
+            //              6       URX_NOP          Reserved slot for use with '|' ops within (block).
+            //              7         <code for LookBehind expression>
+            //              8       URX_LBN_END      dataLoc    # Check match len, cause a FAIL
+            //              9       ...
+            //
+            //          Allocate a block of matcher data, to contain (when running a match)
+            //              0:    Stack ptr on entry
+            //              1:    Input Index on entry
+            //              2:    Start index of match current match attempt.
+            //              3:    Original Input String len.  
+
+            // Allocate data space
+            int32_t dataLoc = fRXPat->fDataSize;
+            fRXPat->fDataSize += 4; 
+            
+            // Emit URX_LB_START
+            int32_t op = URX_BUILD(URX_LB_START, dataLoc);
+            fRXPat->fCompiledPat->addElement(op, *fStatus);
+            
+            // Emit URX_LBN_CONT
+            op = URX_BUILD(URX_LBN_CONT, dataLoc);
+            fRXPat->fCompiledPat->addElement(op, *fStatus);
+            fRXPat->fCompiledPat->addElement(0,  *fStatus);    // MinMatchLength.  To be filled later.
+            fRXPat->fCompiledPat->addElement(0,  *fStatus);    // MaxMatchLength.  To be filled later.
+            fRXPat->fCompiledPat->addElement(0,  *fStatus);    // Continue Loc.    To be filled later.
+            
+            // Emit the NOP
+            op = URX_BUILD(URX_NOP, 0);
+            fRXPat->fCompiledPat->addElement(op, *fStatus);
+            fRXPat->fCompiledPat->addElement(op, *fStatus);
+            
+            // On the Parentheses stack, start a new frame and add the postions
+            //   of the URX_LB_CONT and the NOP.  
+            fParenStack.push(fModeFlags, *fStatus);                       // Match mode state
+            fParenStack.push(lookBehindN, *fStatus);                      // Frame type
+            fParenStack.push(fRXPat->fCompiledPat->size()-2, *fStatus);   // The first NOP location
+            fParenStack.push(fRXPat->fCompiledPat->size()-1, *fStatus);   // The 2nd   NOP location
+            
+            // The final two instructions will be added when the ')' is encountered.
+        }
         break;
 
     case doConditionalExpr:
@@ -1773,6 +1871,76 @@ void  RegexCompile::handleCloseParen() {
         }
         break;
 
+    case lookBehind:
+        {
+            // See comment at doOpenLookBehind.
+            
+            // Append the URX_LB_END and URX_LA_END to the compiled pattern.
+            int32_t  startOp = fRXPat->fCompiledPat->elementAti(fMatchOpenParen-4);
+            U_ASSERT(URX_TYPE(startOp) == URX_LB_START);
+            int32_t dataLoc  = URX_VAL(startOp);
+            int32_t op       = URX_BUILD(URX_LB_END, dataLoc);
+            fRXPat->fCompiledPat->addElement(op, *fStatus);
+                    op       = URX_BUILD(URX_LA_END, dataLoc);
+            fRXPat->fCompiledPat->addElement(op, *fStatus);
+
+            // Determine the min and max bounds for the length of the
+            //  string that the pattern can match.
+            //  An unbounded upper limit is an error.
+            int32_t patEnd   = fRXPat->fCompiledPat->size() - 1;
+            int32_t minML    = minMatchLength(fMatchOpenParen, patEnd);
+            int32_t maxML    = maxMatchLength(fMatchOpenParen, patEnd);
+            if (maxML == INT32_MAX) {
+                error(U_REGEX_LOOK_BEHIND_LIMIT);
+                break;
+            }
+            U_ASSERT(minML <= maxML);
+
+            // Insert the min and max match len bounds into the URX_LB_CONT op that
+            //  appears at the top of the look-behind block, at location fMatchOpenParen+1
+            fRXPat->fCompiledPat->setElementAt(minML,  fMatchOpenParen-2);
+            fRXPat->fCompiledPat->setElementAt(maxML,  fMatchOpenParen-1);
+
+        }
+        break;
+
+
+
+    case lookBehindN:
+        {
+            // See comment at doOpenLookBehindNeg.
+            
+            // Append the URX_LBN_END to the compiled pattern.
+            int32_t  startOp = fRXPat->fCompiledPat->elementAti(fMatchOpenParen-5);
+            U_ASSERT(URX_TYPE(startOp) == URX_LB_START);
+            int32_t dataLoc  = URX_VAL(startOp);
+            int32_t op       = URX_BUILD(URX_LBN_END, dataLoc);
+            fRXPat->fCompiledPat->addElement(op, *fStatus);
+
+            // Determine the min and max bounds for the length of the
+            //  string that the pattern can match.
+            //  An unbounded upper limit is an error.
+            int32_t patEnd   = fRXPat->fCompiledPat->size() - 1;
+            int32_t minML    = minMatchLength(fMatchOpenParen, patEnd);
+            int32_t maxML    = maxMatchLength(fMatchOpenParen, patEnd);
+            if (maxML == INT32_MAX) {
+                error(U_REGEX_LOOK_BEHIND_LIMIT);
+                break;
+            }
+            U_ASSERT(minML <= maxML);
+
+            // Insert the min and max match len bounds into the URX_LB_CONT op that
+            //  appears at the top of the look-behind block, at location fMatchOpenParen+1
+            fRXPat->fCompiledPat->setElementAt(minML,  fMatchOpenParen-2);
+            fRXPat->fCompiledPat->setElementAt(maxML,  fMatchOpenParen-1);
+
+            // Insert the pattern location to continue at after a successful match
+            //  as the last operand of the URX_LBN_CONT
+            fRXPat->fCompiledPat->setElementAt(fRXPat->fCompiledPat->size(),  fMatchOpenParen-1);
+        }
+        break;
+
+
 
     default:
         U_ASSERT(FALSE);
@@ -1886,6 +2054,9 @@ void        RegexCompile::compileInterval(int32_t InitOp,  int32_t LoopOp)
 
 }
 
+
+
+
 //----------------------------------------------------------------------------------------
 //
 //  possibleNullMatch    Test a range of compiled pattern for the possibility that it
@@ -1914,17 +2085,20 @@ UBool  RegexCompile::possibleNullMatch(int32_t start, int32_t end) {
 //
 //----------------------------------------------------------------------------------------
 int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
+    if (U_FAILURE(*fStatus)) {
+        return 0;
+    }
+
     U_ASSERT(start <= end);
     U_ASSERT(end < fRXPat->fCompiledPat->size());
 
 
-    int32_t    patSegLen = end - start + 1;
     int32_t    loc;
     int32_t    op;
     int32_t    opType;
     int32_t    currentLen = 0;
-    UVector32  lengthSoFar(fRXPat->fCompiledPat->size(), *fStatus);
-    lengthSoFar.setSize(fRXPat->fCompiledPat->size());
+    UVector32  lengthSoFar(end+1, *fStatus);
+    lengthSoFar.setSize(end+1);
 
     for (loc=start; loc<=end; loc++) {
         lengthSoFar.setElementAt(INT32_MAX, loc);
@@ -2056,33 +2230,37 @@ int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
             
 
         case URX_LA_START:
+        case URX_LB_START:
             {
-                // Look-ahead.  Scan forward until the matching look-ahead end,
-                //   without processing the look-ahead block.  This is overly pessimistic.
+                // Look-around.  Scan forward until the matching look-ahead end,
+                //   without processing the look-around block.  This is overly pessimistic.
                 //   TODO:  Positive lookahead could recursively do the block, then continue
                 //          with the longer of the block or the value coming in.
                 int32_t  depth = 0;
                 for (;;) {
                     loc++;
                     op = fRXPat->fCompiledPat->elementAti(loc);
-                    if (URX_TYPE(op) == URX_LA_START) {
+                    if (URX_TYPE(op) == URX_LA_START || URX_TYPE(op) == URX_LB_START) {
                         depth++;
                     }
-                    if (URX_TYPE(op) == URX_LA_END) {
+                    if (URX_TYPE(op) == URX_LA_END || URX_TYPE(op)==URX_LBN_END) {
                         if (depth == 0) {
                             break;
                         }
                         depth--;
                     }
-                    U_ASSERT(loc < end);  
+                    U_ASSERT(loc <= end);  
                 }
             }
             break;
             
         case URX_LA_END:
-            // End of look-ahead ops should always be consumed by the processing at
-            //  the URX_LA_START op.
-            U_ASSERT(FALSE);
+        case URX_LB_CONT:
+        case URX_LB_END:
+        case URX_LBN_CONT:
+        case URX_LBN_END:
+            // Only come here if the matching URX_LA_START or URX_LB_START was not in the
+            //   range being sized, which happens when measuring size of look-behind blocks.
             break;
             
         default:
@@ -2108,17 +2286,19 @@ int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
 //
 //----------------------------------------------------------------------------------------
 int32_t   RegexCompile::maxMatchLength(int32_t start, int32_t end) {
+    if (U_FAILURE(*fStatus)) {
+        return 0;
+    }
     U_ASSERT(start <= end);
     U_ASSERT(end < fRXPat->fCompiledPat->size());
 
 
-    int32_t    patSegLen = end - start + 1;
     int32_t    loc;
     int32_t    op;
     int32_t    opType;
     int32_t    currentLen = 0;
-    UVector32  lengthSoFar(fRXPat->fCompiledPat->size(), *fStatus);
-    lengthSoFar.setSize(fRXPat->fCompiledPat->size());
+    UVector32  lengthSoFar(end+1, *fStatus);
+    lengthSoFar.setSize(end+1);
 
     for (loc=start; loc<=end; loc++) {
         lengthSoFar.setElementAt(0, loc);
@@ -2158,6 +2338,11 @@ int32_t   RegexCompile::maxMatchLength(int32_t start, int32_t end) {
 
         case URX_STO_SP:          // Setup for atomic or possessive blocks.  Doesn't change what can match.
         case URX_LD_SP:
+
+        case URX_LB_END:
+        case URX_LB_CONT:
+        case URX_LBN_CONT:
+        case URX_LBN_END:
             break;
             
 
@@ -2275,6 +2460,28 @@ int32_t   RegexCompile::maxMatchLength(int32_t start, int32_t end) {
             U_ASSERT(FALSE);
             break;
             
+        case URX_LB_START:
+            {
+                // Look-behind.  Scan forward until the matching look-around end,
+                //   without processing the look-behind block.  
+                int32_t  depth = 0;
+                for (;;) {
+                    loc++;
+                    op = fRXPat->fCompiledPat->elementAti(loc);
+                    if (URX_TYPE(op) == URX_LA_START || URX_TYPE(op) == URX_LB_START) {
+                        depth++;
+                    }
+                    if (URX_TYPE(op) == URX_LA_END || URX_TYPE(op)==URX_LBN_END) {
+                        if (depth == 0) {
+                            break;
+                        }
+                        depth--;
+                    }
+                    U_ASSERT(loc < end);  
+                }
+            }
+            break;
+
         default:
             U_ASSERT(FALSE);
         }

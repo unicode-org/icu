@@ -1364,6 +1364,181 @@ GC_Done:
             }
             break;
 
+        case URX_LB_START:
+            {
+                // Entering a look-behind block.
+                // Save Stack Ptr, Input Pos.
+                U_ASSERT(opValue>=0 && opValue+1<fPattern->fDataSize);
+                fData[opValue]   = fStack->size();
+                fData[opValue+1] = fp->fInputIdx;
+                // Init the variable containing the start index for attempted matches.
+                fData[opValue+2] = -1;
+                // Save input string length, then reset to pin any matches to end at
+                //   the current position.
+                fData[opValue+3] = inputLen;
+                inputLen         = fp->fInputIdx;
+            }
+            break;
+
+
+        case URX_LB_CONT:
+            {
+                // Positive Look-Behind, at top of loop checking for matches of LB expression
+                //    at all possible input starting positions.
+
+                // Fetch the min and max possible match lengths.  They are the operands
+                //   of this op in the pattern.
+                int32_t minML = pat[fp->fPatIdx++];
+                int32_t maxML = pat[fp->fPatIdx++];
+                U_ASSERT(minML <= maxML);
+                U_ASSERT(minML >= 0);
+
+                // Fetch (from data) the last input index where a match was attempted.
+                U_ASSERT(opValue>=0 && opValue+1<fPattern->fDataSize);
+                int32_t  *lbStartIdx = &fData[opValue+2];
+                if (*lbStartIdx < 0) {
+                    // First time through loop.
+                    *lbStartIdx = fp->fInputIdx - minML;
+                } else {
+                    // 2nd through nth time through the loop.
+                    // Back up start position for match by one.
+                    if (*lbStartIdx == 0) {
+                        (*lbStartIdx)--;   // Because U16_BACK is unsafe starting at 0.
+                    } else {
+                        U16_BACK_1(inputBuf, 0, *lbStartIdx);
+                    }
+                }
+
+                if (*lbStartIdx < 0 || *lbStartIdx < fp->fInputIdx - maxML) {
+                    // We have tried all potential match starting points without
+                    //  getting a match.  Backtrack out, and out of the
+                    //   Look Behind altogether.
+                    fp = (REStackFrame *)fStack->popFrame(frameSize);
+                    int32_t restoreInputLen = fData[opValue+3];
+                    U_ASSERT(restoreInputLen >= inputLen);
+                    U_ASSERT(restoreInputLen <= fInput->length());
+                    inputLen = restoreInputLen;
+                    break;
+                }
+
+                //    Save state to this URX_LB_CONT op, so failure to match will repeat the loop.
+                //      (successful match will fall off the end of the loop.)
+                fp = StateSave(fp, fp->fPatIdx-3, frameSize, status);
+                fp->fInputIdx =  *lbStartIdx;
+            }
+            break;
+
+        case URX_LB_END:
+            // End of a look-behind block, after a successful match.
+            {
+                U_ASSERT(opValue>=0 && opValue+1<fPattern->fDataSize);
+                if (fp->fInputIdx != inputLen) {
+                    //  The look-behind expression matched, but the match did not
+                    //    extend all the way to the point that we are looking behind from.
+                    //  FAIL out of here, which will take us back to the LB_CONT, which
+                    //     will retry the match starting at another position or fail
+                    //     the look-behind altogether, whichever is appropriate.
+                    fp = (REStackFrame *)fStack->popFrame(frameSize);
+                    break;
+                }
+
+                // Look-behind match is good.  Restore the orignal input string length,
+                //   which had been truncated to pin the end of the lookbehind match to the 
+                //   position being looked-behind.
+                int32_t originalInputLen = fData[opValue+3];
+                U_ASSERT(originalInputLen >= inputLen);
+                U_ASSERT(originalInputLen <= fInput->length());
+                inputLen = originalInputLen;
+            }
+            break;
+
+
+        case URX_LBN_CONT:
+            {
+                // Negative Look-Behind, at top of loop checking for matches of LB expression
+                //    at all possible input starting positions.
+
+                // Fetch the extra parameters of this op.
+                int32_t minML       = pat[fp->fPatIdx++];
+                int32_t maxML       = pat[fp->fPatIdx++];
+                int32_t continueLoc = pat[fp->fPatIdx++];
+                U_ASSERT(minML <= maxML);
+                U_ASSERT(minML >= 0);
+                U_ASSERT(continueLoc > fp->fPatIdx);
+
+                // Fetch (from data) the last input index where a match was attempted.
+                U_ASSERT(opValue>=0 && opValue+1<fPattern->fDataSize);
+                int32_t  *lbStartIdx = &fData[opValue+2];
+                if (*lbStartIdx < 0) {
+                    // First time through loop.
+                    *lbStartIdx = fp->fInputIdx - minML;
+                } else {
+                    // 2nd through nth time through the loop.
+                    // Back up start position for match by one.
+                    if (*lbStartIdx == 0) {
+                        (*lbStartIdx)--;   // Because U16_BACK is unsafe starting at 0.
+                    } else {
+                        U16_BACK_1(inputBuf, 0, *lbStartIdx);
+                    }
+                }
+
+                if (*lbStartIdx < 0 || *lbStartIdx < fp->fInputIdx - maxML) {
+                    // We have tried all potential match starting points without
+                    //  getting a match, which means that the negative lookbehind as
+                    //  a whole has succeeded.  Jump forward to the continue location
+                    int32_t restoreInputLen = fData[opValue+3];
+                    U_ASSERT(restoreInputLen >= inputLen);
+                    U_ASSERT(restoreInputLen <= fInput->length());
+                    inputLen = restoreInputLen;
+                    fp->fPatIdx = continueLoc;
+                    break;
+                }
+
+                //    Save state to this URX_LB_CONT op, so failure to match will repeat the loop.
+                //      (successful match will cause a FAIL out of the loop altogether.)
+                fp = StateSave(fp, fp->fPatIdx-4, frameSize, status);
+                fp->fInputIdx =  *lbStartIdx;
+            }
+            break;
+
+        case URX_LBN_END:
+            // End of a negative look-behind block, after a successful match.
+            {
+                U_ASSERT(opValue>=0 && opValue+1<fPattern->fDataSize);
+                if (fp->fInputIdx != inputLen) {
+                    //  The look-behind expression matched, but the match did not
+                    //    extend all the way to the point that we are looking behind from.
+                    //  FAIL out of here, which will take us back to the LB_CONT, which
+                    //     will retry the match starting at another position or succeed
+                    //     the look-behind altogether, whichever is appropriate.
+                    fp = (REStackFrame *)fStack->popFrame(frameSize);
+                    break;
+                }
+
+                // Look-behind expression matched, which means look-behind test as
+                //   a whole Fails
+                
+                //   Restore the orignal input string length, which had been truncated 
+                //   inorder to pin the end of the lookbehind match  
+                //   to the position being looked-behind.
+                int32_t originalInputLen = fData[opValue+3];
+                U_ASSERT(originalInputLen >= inputLen);
+                U_ASSERT(originalInputLen <= fInput->length());
+                inputLen = originalInputLen;
+
+                // Restore original stack position, discarding any state saved
+                //   by the successful pattern match.
+                U_ASSERT(opValue>=0 && opValue+1<fPattern->fDataSize);
+                int32_t newStackSize = fData[opValue];
+                U_ASSERT(fStack->size() > newStackSize);
+                fStack->setSize(newStackSize);
+                
+                //  FAIL, which will take control back to someplace 
+                //  prior to entering the look-behind test.
+                fp = (REStackFrame *)fStack->popFrame(frameSize);
+            }
+            break;
+
 
 
         default:
