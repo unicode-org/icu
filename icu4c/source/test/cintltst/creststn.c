@@ -15,8 +15,6 @@
 */
 
 
-#include <stdlib.h>
-#include <stdio.h>
 #include <time.h>
 #include "unicode/utypes.h"
 #include "cintltst.h"
@@ -24,6 +22,7 @@
 #include "unicode/ustring.h"
 #include "string.h"
 #include "cstring.h"
+#include "cmemory.h"
 
 #define RESTEST_HEAP_CHECK 0
 
@@ -928,7 +927,7 @@ static UBool testTag(const char* frag,
                     free(base);
                     base = NULL;
                 }
-                base=(UChar*)malloc(sizeof(UChar)*(strlen(NAME[j]) + 1));
+                base=(UChar*)uprv_malloc(sizeof(UChar)*(strlen(NAME[j]) + 1));
                 u_uastrcpy(base,NAME[j]);
 
                 break;
@@ -938,7 +937,7 @@ static UBool testTag(const char* frag,
                     free(base);
                     base = NULL;
                 }
-                base = (UChar*) malloc(sizeof(UChar) * 1);
+                base = (UChar*) uprv_malloc(sizeof(UChar) * 1);
                 *base = 0x0000;
             }
         }
@@ -959,11 +958,11 @@ static UBool testTag(const char* frag,
 
         string=ures_getStringByKey(theBundle, tag, &len, &status);
         if(U_SUCCESS(status)) {
-            expected_string=(UChar*)malloc(sizeof(UChar)*(u_strlen(base) + 4));
+            expected_string=(UChar*)uprv_malloc(sizeof(UChar)*(u_strlen(base) + 4));
             u_strcpy(expected_string,base);
             CONFIRM_INT_EQ(len, u_strlen(expected_string));
         }else{
-            expected_string = (UChar*)malloc(sizeof(UChar)*(u_strlen(kERROR) + 1));
+            expected_string = (UChar*)uprv_malloc(sizeof(UChar)*(u_strlen(kERROR) + 1));
             u_strcpy(expected_string,kERROR);
             string=kERROR;
         }
@@ -1311,12 +1310,21 @@ static void TestFallback()
     /* Temporary hack err actually should be U_USING_FALLBACK_ERROR */
     /* Test Jitterbug 552 fallback mechanism of aliased data */
     {
+        char tempChars[256];
         UErrorCode err =U_ZERO_ERROR;
         UResourceBundle* myResB = ures_open(NULL,"no_NO_NY",&err);
         const UChar*  myLocID = ures_getStringByKey(myResB, "LocaleID", &resultLen, &err);
-        UResourceBundle* tResB = ures_getByKey(myResB, "DayNames", NULL, &err);
-        if(err!= U_USING_FALLBACK_ERROR){
-            log_err("Expected U_USING_FALLBACK_ERROR when trying to test no_NO_NY aliased with nn_NO_NY  %s\n",u_errorName(err));
+        UResourceBundle* tResB;
+        if(err != U_ZERO_ERROR){
+            log_err("Expected U_ZERO_ERROR when trying to test no_NO_NY aliased to nn_NO for LocaleID err=%s\n",u_errorName(err));
+        }
+        u_UCharsToChars(myLocID, tempChars, u_strlen(myLocID) + 1);
+        if(uprv_strcmp(tempChars, "0814")){
+            log_err("Expected LocaleID=814, but got %s\n", tempChars);
+        }
+        tResB = ures_getByKey(myResB, "DayNames", NULL, &err);
+        if(err != U_USING_FALLBACK_ERROR){
+            log_err("Expected U_USING_FALLBACK_ERROR when trying to test no_NO_NY aliased with nn_NO_NY for DayNames err=%s\n",u_errorName(err));
         }
         ures_close(myResB);
         ures_close(tResB);
@@ -1328,7 +1336,7 @@ static void TestFallback()
 static void printUChars(UChar* uchars){
     int16_t i=0;
     for(i=0; i<u_strlen(uchars); i++){
-        printf("%04X ", *(uchars+i));
+        log_err("%04X ", *(uchars+i));
     }
 }
 
