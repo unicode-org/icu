@@ -18,6 +18,7 @@ static void TestAPI(void);
 static void Testj2269(void);
 static void TestSerialized(void);
 static void TestNonInvariantPattern(void);
+static void TestBadPattern(void);
 
 void addUSetTest(TestNode** root);
 
@@ -38,6 +39,7 @@ addUSetTest(TestNode** root) {
     TEST(Testj2269);
     TEST(TestSerialized);
     TEST(TestNonInvariantPattern);
+    TEST(TestBadPattern);
 }
 
 /*------------------------------------------------------------------
@@ -506,6 +508,17 @@ TestNonInvariantPattern() {
        assertion failure. */
     USet *set = uset_openPattern(buf, len, &ec);
     uset_close(set);
+}
+
+static void TestBadPattern(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    USet *pat;
+    U_STRING_DECL(pattern, "[", 1);
+    U_STRING_INIT(pattern, "[", 1);
+    pat = uset_openPatternOptions(pattern, u_strlen(pattern), 0, &status);
+    if (pat != NULL || U_SUCCESS(status)) {
+        log_err("uset_openPatternOptions did not fail as expected %s\n", u_errorName(status));
+    }
 }
 
 /*eof*/
