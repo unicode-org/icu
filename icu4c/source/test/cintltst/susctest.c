@@ -113,8 +113,8 @@ unescape(const char *s)
 
   retval = (UChar*) calloc(strlen(s) + 1, sizeof(UChar));
   if(retval == 0) {
-    printf("calloc error at line %d.\n", __LINE__);
-    exit(1);
+    log_err("calloc error at line %d - memory error..\n", __LINE__);
+    return 0; /* flag an error */
   }
 
   alias = retval;
@@ -365,8 +365,8 @@ randomChars(int32_t len)
 
   result = (UChar*) calloc(len, sizeof(UChar));
   if(result == 0) {
-    printf("calloc error at line %d.\n", __LINE__);
-    exit(1);
+    log_err("calloc error at line %d.\n", __LINE__);
+    return 0;
   }
 
   while(used < len) {
@@ -411,8 +411,8 @@ myTest(const UChar *chars,
   myDecompressed = (UChar*) calloc(myDTargetSize, sizeof(UChar));
   
   if(myCompressed == 0 || myDecompressed == 0) {
-    printf("calloc error at line %d.\n", __LINE__);
-    exit(1);
+    log_err("calloc error at line %d.\n", __LINE__);
+    return;
   }
   
   /* init compressor */
@@ -428,8 +428,8 @@ myTest(const UChar *chars,
 		&status);
 
   if(U_FAILURE(status)) {
-    printf("Failing status code at line %d.\n", __LINE__);
-    exit(1);
+    log_err("Failing status code at line %d.\n", __LINE__);
+    return;
   }
 
   myByteCount = (myCTarget - myCompressed);
@@ -448,8 +448,8 @@ myTest(const UChar *chars,
 		  &status);
 
   if(U_FAILURE(status)) {
-    printf("Failing status code at line %d.\n", __LINE__);
-    exit(1);
+    log_err("Failing status code at line %d.\n", __LINE__);
+    return;
   }
   
   myCharCount = (myDTarget - myDecompressed);
@@ -511,8 +511,8 @@ myMultipassTest(const UChar *chars,
   myDecompressed = (UChar*) calloc(myDTargetSize, sizeof(UChar));
   
   if(myCompressed == 0 || myDecompressed == 0) {
-    printf("calloc error at line %d.\n", __LINE__);
-    exit(1);
+    log_err("calloc error at line %d.\n", __LINE__);
+    return ;
   }
   
   /* init compressor */
@@ -532,8 +532,8 @@ myMultipassTest(const UChar *chars,
 		  &status);
     
     if(status != U_INDEX_OUTOFBOUNDS_ERROR && U_FAILURE(status)) {
-      printf("Failing status code at line %d.\n", __LINE__);
-      exit(1);
+      log_err("Failing status code at line %d.\n", __LINE__);
+      return;
     }
     
     /* copy the newly-compressed chunk to the target */
@@ -571,8 +571,8 @@ myMultipassTest(const UChar *chars,
 		    &status);
     
     if(status != U_INDEX_OUTOFBOUNDS_ERROR && U_FAILURE(status)) {
-      printf("Failing status code at line %d.\n", __LINE__);
-      exit(1);
+      log_err("Failing status code at line %d.\n", __LINE__);
+      return;
     }
     
     /* copy the newly-decompressed chunk to the target */
@@ -656,13 +656,6 @@ static char *fTestCases [] = {
 
 static unsigned long gTotalChars;
 
-/* unused unless this is run as a main in an infinite loop */
-void
-signal_handler(int signal)
-{
-  printf("total chars compressed = %llu\n", gTotalChars);
-  exit(0);
-}
 
 
 /* Decompress the two segments */
@@ -783,10 +776,6 @@ TestSCSU(void)
   }
   free(chars);
 
-  /* register to handle interrupts */
-  /*signal(SIGHUP, signal_handler);*/
-  /*signal(SIGINT, signal_handler);*/
-
   /* initialize char count */
   gTotalChars = 0;
 
@@ -796,6 +785,10 @@ TestSCSU(void)
   for(i = 0; fTestCases[i] != 0; i++) {
     
     chars = unescape(fTestCases[i]);
+    if(!chars) {
+      return; /* memory error */
+    }
+
     len = u_strlen(chars);
 
     /*printChars2(chars, len);*/
@@ -815,6 +808,11 @@ TestSCSU(void)
     if(len == 0) /* 0-length malloc will fail */
       len = 10;
     chars = randomChars(len);
+    if(!chars)
+    {
+      log_err("scsutest aborted.\n");
+      return; 
+    }
     myTest(chars, len);
     myMultipassTest(chars, len);
     free(chars);
