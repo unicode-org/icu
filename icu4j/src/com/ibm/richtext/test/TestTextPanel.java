@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TestTextPanel.java,v $ $Revision: 1.3 $ $Date: 2000/04/21 22:48:49 $
+ * @(#)$RCSfile: TestTextPanel.java,v $ $Revision: 1.4 $ $Date: 2000/04/22 03:31:34 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -270,22 +270,22 @@ public final class TestTextPanel extends TestFmwk {
                                               AttributeMap.EMPTY_ATTRIBUTE_MAP);
         MConstText text2 = new StyledText("Another test string.", bold);
 
-        testWithText(text1);
-        testWithText(text2);
-        testWithText(new StyledText());
+        _testWithText(text1);
+        _testWithText(text2);
+        _testWithText(new StyledText());
 
         StyledText big1 = new StyledText();
         for (int i=0; i < 50; i++) {
             big1.append(text1);
         }
 
-        testWithText(big1);
+        _testWithText(big1);
         StyledText big2 = new StyledText(text1);
         for (int i=0; i < 80; i++) {
             big2.append(text2);
         }
 
-        testWithText(big2);
+        _testWithText(big2);
     }
     
     private void setTextPanel(MTextPanel panel) {
@@ -294,20 +294,20 @@ public final class TestTextPanel extends TestFmwk {
         fListener = new TestListener(panel);
     }
     
-    private void testWithText(MConstText text) {
+    private void _testWithText(MConstText text) {
 
         setTextPanel(new TextPanel(text, fClipboard));
 
         for (int i=0; i < TEST_ITERS; i++) {
             _testSetSelection();
-            testModifications(MOD_TEXT, true);
-            testEditMenuOperations(fClipboard);
-            testModFlag(fTextPanel.getCommandLogSize());
+            _testModifications(MOD_TEXT, true);
+            _testEditMenuOperations(fClipboard);
+            _testModFlag(fTextPanel.getCommandLogSize());
             _testCommandLogControl();
         }
     }
 
-    private void testSelection(int function, 
+    private void _testSelection(int function, 
                                final int aStart,
                                final int aLimit) {
 
@@ -375,24 +375,24 @@ public final class TestTextPanel extends TestFmwk {
 
     private void setAndTestSelection(int start, int limit) {
         
-        testSelection(SELECT, start, limit);
+        _testSelection(SELECT, start, limit);
     }
 
     private void setAndTestCaret(int caretPos) {
 
-        testSelection(SET_CARET_POS, caretPos, caretPos);
+        _testSelection(SET_CARET_POS, caretPos, caretPos);
     }
 
     private void setAndTestSelectionStart(int selStart) {
 
         int limit = fTextPanel.getSelectionEnd();
-        testSelection(SET_START, selStart, limit);
+        _testSelection(SET_START, selStart, limit);
     }
 
     private void setAndTestSelectionEnd(int selEnd) {
 
         int start = fTextPanel.getSelectionStart();
-        testSelection(SET_END, start, selEnd);
+        _testSelection(SET_END, start, selEnd);
     }
 
     public void _testSetSelection() {
@@ -425,8 +425,8 @@ public final class TestTextPanel extends TestFmwk {
     /**
      * Text must be editable to pass this test.
      */
-    public void testModifications(MConstText insertionText,
-                                  boolean restoreOldText) {
+    public void _testModifications(MConstText insertionText,
+                                   boolean restoreOldText) {
 
         MConstText oldText = new StyledText(fTextPanel.getText());
         final int insLength = insertionText.length();
@@ -584,7 +584,7 @@ public final class TestTextPanel extends TestFmwk {
      * Test cut, copy, paste, undo, redo, clear, canUndo, canRedo.
      * Text must be editable to pass this test.
      */
-    public void testEditMenuOperations(Clipboard clipboard) {
+    public void _testEditMenuOperations(Clipboard clipboard) {
         
         if (clipboard != null) {
             // test paste and undo / redo
@@ -689,7 +689,7 @@ public final class TestTextPanel extends TestFmwk {
      * Set the modified flag on each operation, and then retrieve its
      * value.  Finally, undo the modifications.
      */
-    public void testModFlag(final int depth) {
+    public void _testModFlag(final int depth) {
 
         final int oldLength = fTextPanel.getTextLength();
 
@@ -788,7 +788,7 @@ public final class TestTextPanel extends TestFmwk {
 
         int selStart = randInt(-10, fTextPanel.getTextLength());
         int selLimit = randInt(0, fTextPanel.getTextLength() + 10);
-        testSelection(SELECT, selStart, selLimit);
+        _testSelection(SELECT, selStart, selLimit);
     }
 
     void undoRedo() {

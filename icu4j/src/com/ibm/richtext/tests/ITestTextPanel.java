@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: ITestTextPanel.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:46:57 $
+ * @(#)$RCSfile: ITestTextPanel.java,v $ $Revision: 1.2 $ $Date: 2000/04/22 03:31:34 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -151,20 +151,20 @@ public class ITestTextPanel extends Frame implements ActionListener {
         switch (op) {
 
             case 0:
-                fTest.testSetSelection();
+                fTest._testSetSelection();
                 break;
 
             case 1:
-                fTest.testModifications(fTest.MOD_TEXT,
+                fTest._testModifications(fTest.MOD_TEXT,
                                         true);
                 break;
 
             case 2:
-                fTest.testEditMenuOperations(fClipboard);
+                fTest._testEditMenuOperations(fClipboard);
                 break;
 
             case 3:
-                fTest.testModFlag(fTextPanel.getCommandLogSize());
+                fTest._testModFlag(fTextPanel.getCommandLogSize());
                 break;
 
             case 4:
@@ -201,7 +201,7 @@ public class ITestTextPanel extends Frame implements ActionListener {
                 break;
 
             case 14:
-                fTest.testCommandLogControl();
+                fTest._testCommandLogControl();
                 break;
 
             default:
