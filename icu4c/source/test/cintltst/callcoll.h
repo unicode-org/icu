@@ -45,7 +45,8 @@ static    void TestIdentical(void);
     /* perform extra tests */
     static void TestExtra(void);
 
-
+    /* Test jitterbug 581 */
+    static void TestJB581(void);
    
 
 

@@ -410,8 +410,7 @@ void addAllCollTest(TestNode** root)
     addTest(root, &TestTertiary, "tscoll/callcoll/TestTertiary");
     addTest(root, &TestIdentical, "tscoll/callcoll/TestIdentical");
     addTest(root, &TestExtra, "tscoll/callcoll/TestExtra");
-        
-
+    addTest(root, &TestJB581, "tscoll/callcoll/TestJB581");      
 }
 
 void doTest(UCollator* myCollation, const UChar source[], const UChar target[], UCollationResult result)
@@ -601,4 +600,54 @@ void TestExtra()
     myCollation = 0;
 }
 
+void TestJB581(void)
+{
+    UChar 		dispName	[100]; 
+    int32_t 	bufferLen 	= 0;
+    UChar 		source		[100];
+    UChar 		target		[100];
+    UCollationResult result 	= UCOL_EQUAL;
+    uint8_t 		sourceKeyArray	[100];
+    uint8_t 		targetKeyArray	[100]; 
+    int32_t 	sourceKeyOut 	= 0, 
+		    targetKeyOut 	= 0;
+    UCollator	*myCollator	= 0;
+    UErrorCode status = U_ZERO_ERROR;
+
+    u_uastrcpy(source, "This is a test.");
+    u_uastrcpy(target, "THISISATEST.");
+
+    myCollator = ucol_open("en_US", &status);
+    if (U_FAILURE(status)){
+        bufferLen = uloc_getDisplayName("en_US", 0, dispName, 100, &status);
+        /*Report the error with display name... */
+        log_err("ERROR: Failed to create the collator for : \"%s\"\n", dispName);
+        return;
+    }
+    result = ucol_strcoll(myCollator, source, -1, target, -1);
+    /* result is 1, secondary differences only for ignorable space characters*/
+    if (result != 1)
+    {
+        log_err("Comparing two strings with only secondary differences in C failed.\n");
+    }
+    /* To compare them with just primary differences */
+    ucol_setStrength(myCollator, UCOL_PRIMARY);
+    result = ucol_strcoll(myCollator, source, -1, target, -1);
+    /* result is 0 */
+    if (result != 0)
+    {
+        log_err("Comparing two strings with no differences in C failed.\n");
+    }
+    /* Now, do the same comparison with keys */
+    sourceKeyOut = ucol_getSortKey(myCollator, source, -1, sourceKeyArray, 100);
+    targetKeyOut = ucol_getSortKey(myCollator, target, -1, targetKeyArray, 100);
+    result = 0;
+    bufferLen = ((targetKeyOut > 100) ? 100 : targetKeyOut);
+    result = memcmp(sourceKeyArray, targetKeyArray, bufferLen);
+    if (result != 0)
+    {
+        log_err("Comparing two strings with sort keys in C failed.\n");
+    }
+    ucol_close(myCollator);
+}
 #endif
