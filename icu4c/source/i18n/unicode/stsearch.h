@@ -355,7 +355,7 @@ public:
      * <p>
      * Caller may modify but <b>must not</b> delete the <tt>RuleBasedCollator</tt>!
      * Modifications to this collator will affect the original collator passed in to 
-     * the <tt>StringSearch>/tt> constructor or to setCollator, if any.
+     * the <tt>StringSearch></tt> constructor or to setCollator, if any.
      * @return collator used for string search
      * @stable ICU 2.0
      */
