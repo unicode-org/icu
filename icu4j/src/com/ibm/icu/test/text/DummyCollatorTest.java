@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/DummyCollatorTest.java,v $ 
-* $Date: 2001/03/09 00:42:45 $ 
-* $Revision: 1.1 $
+* $Date: 2001/03/09 23:41:46 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */

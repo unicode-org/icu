@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/CollationElementIteratorTest.java,v $ 
-* $Date: 2001/03/09 00:42:46 $ 
-* $Revision: 1.1 $
+* $Date: 2001/03/09 23:41:46 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -16,6 +16,8 @@ package com.ibm.icu4jni.test.text;
 
 import java.util.Locale;
 import java.text.ParseException;
+import com.ibm.text.UCharacter;
+import com.ibm.icu4jni.test.TestFmwk;
 import com.ibm.icu4jni.text.Collator;
 import com.ibm.icu4jni.text.RuleBasedCollator;
 import com.ibm.icu4jni.text.CollationKey;
@@ -27,7 +29,7 @@ import com.ibm.icu4jni.text.CollationElementIterator;
 * @author Syn Wee Quek
 * @since jan 23 2001
 */
-public final class CollationElementIteratorTest 
+public final class CollationElementIteratorTest extends TestFmwk
 { 
   
   // constructor ===================================================
@@ -35,14 +37,43 @@ public final class CollationElementIteratorTest
   /**
   * Constructor
   */
-  public CollationElementIteratorTest(CollatorTest testprogram)
+  public CollationElementIteratorTest()
   {
-    m_test_ = testprogram;
     m_collator_ = (RuleBasedCollator)Collator.getInstance(Locale.US);
   }
   
   // public methods ================================================
 
+  /**
+  * Test for CollationElementIterator previous and next for the whole set of
+  * unicode characters.
+  */
+  public void TestUnicodeChar()
+  {
+    for (char codepoint = 1; codepoint < 0xFFFE;)
+    {
+      StringBuffer test = new StringBuffer(0xFF);   
+      while (codepoint % 0xFF != 0) 
+      {
+        if (UCharacter.isDefined(codepoint))
+          test.append(codepoint);
+        codepoint ++;
+      }
+
+      if (UCharacter.isDefined(codepoint))
+        test.append(codepoint);
+      
+      if (codepoint != 0xFFFF)
+        codepoint ++;
+
+      CollationElementIterator iter = 
+                    m_collator_.getCollationElementIterator(test.toString());
+      
+      // A basic test to see if it's working at all
+      previousNext(iter);
+    }
+  }
+  
   /**
   * Testing previous method
   * @exception thrown when error occurs while setting strength
@@ -53,29 +84,29 @@ public final class CollationElementIteratorTest
                        m_collator_.getCollationElementIterator(TEST_CASE_1_);
 
     // A basic test to see if it's working at all
-    testPreviousNext(iterator);
+    previousNext(iterator);
     
     try
     {
       // Test with a contracting character sequence
       RuleBasedCollator collator = new RuleBasedCollator(
-                                "< a,A < b,B < c,C, d,D < z,Z < ch,cH,Ch,CH");
+                                "&a,A < b,B < c,C, d,D < z,Z < ch,cH,Ch,CH");
 
       iterator = collator.getCollationElementIterator("abchdcba");
-      testPreviousNext(iterator);
+      previousNext(iterator);
       
       // Test with an expanding character sequence
-      collator = new RuleBasedCollator("< a < b < c/abd < d");
+      collator = new RuleBasedCollator("&a < b < c/abd < d");
 
       iterator = collator.getCollationElementIterator("abcd");
-      testPreviousNext(iterator);
+      previousNext(iterator);
       
       // Now try both
-      collator = new RuleBasedCollator("< a < b < c/aba < d < z < ch");
-
+      collator = new RuleBasedCollator("&a < b < c/aba < d < z < ch");
+            
       String source = "abcdbchdc";
       iterator = collator.getCollationElementIterator(source);
-      testPreviousNext(iterator);
+       previousNext(iterator);
       
       source= "\u0e41\u0e02\u0e27abc";
       
@@ -83,16 +114,16 @@ public final class CollationElementIteratorTest
                                                                       "TH"));
       
       iterator = collator.getCollationElementIterator(source);
-      testPreviousNext(iterator);
+      previousNext(iterator);
       
       collator = (RuleBasedCollator)Collator.getInstance();
       
       iterator = collator.getCollationElementIterator(source);
-      testPreviousNext(iterator);
+      previousNext(iterator);
     }
     catch (ParseException e)
     {
-      m_test_.errln("Failed : Rule parse error " + e.getMessage());
+      errln("Failed : Rule parse error " + e.getMessage());
     }
   }
   
@@ -110,7 +141,7 @@ public final class CollationElementIteratorTest
     int offset = iter.getOffset();
 
     if (offset != TEST_CASE_1_.length())
-      m_test_.errln("Failed : Collation element iterator offset is not " + 
+      errln("Failed : Collation element iterator offset is not " + 
                     "equals to " + TEST_CASE_1_.length());
 
     // Now set the offset back to the beginning and see if it works
@@ -122,12 +153,12 @@ public final class CollationElementIteratorTest
     for (int i = 0; i < offset; i ++)
       if (iter.next() != iter2.next())
       {
-        m_test_.errln("Failed : Offset reset should revert collation element"
+        errln("Failed : Offset reset should revert collation element"
                       + " to the previous state");
         break;
       }
   }
-
+  
   /**
   * Text setting test
   * @exception thrown when error occurs
@@ -154,7 +185,7 @@ public final class CollationElementIteratorTest
       c = iter1.next();
       if (c != iter2.next())
       {
-        m_test_.errln("Failed : Collation element iterator should be equal " 
+        errln("Failed : Collation element iterator should be equal " 
                       + "if the text string is the same");
         break;
       }
@@ -169,54 +200,38 @@ public final class CollationElementIteratorTest
   */
   public void TestMaxExpansion()
   {
-    // Try a simple one first:
-    // The only expansion ends with 'e' and has length 2
-    String rule = "< a & ae = \u00e4 < b < e";
-    
-    char testchar1[] = {0x61, 0x62, 0x65};
-    int testint1[] = {1, 1, 2};
-    
-    verifyExpansion(rule, testchar1, testint1);
-      
-    // Now a more complicated one:
-    //   "a1" --> "ae"
-    //   "z" --> "aeef"
-    //
-    rule = "< a & ae = a1 & aeef = z < b < e < f";
-    char testchar2[] = {0x61, 0x62, 0x65, 0x66};
-    int testint2[] = {1, 1, 2, 4};
-    verifyExpansion(rule, testchar2, testint2);
-  }
-
-  /**
-  * Clear buffer test.
-  * Testing @bug 4157299
-  * @exception thrown when error occurs
-  */
-  public void TestClearBuffers()
-  {
+    String rule = "&a < ab < c/aba < d < z < ch";
     try
     {
-      RuleBasedCollator collator = 
-                              new RuleBasedCollator("< a < b < c & ab = d");
+      RuleBasedCollator coll = new RuleBasedCollator(rule);
+      CollationElementIterator iter = coll.getCollationElementIterator("a");
+      char ch = 1;
+      
+      while (ch < 0xFFFF) {
+        int count = 1;
+        int order = 0;
+        ch ++;
+        iter.setText(String.valueOf(ch));
+        order = iter.previous();
 
-      CollationElementIterator iter = 
-                                  collator.getCollationElementIterator("abcd");
-        
-      int elem = iter.next();   // save the first collation element
-      iter.setOffset(3);        // go to the expanding character
-      iter.next();              // but only use up half of it
-      iter.setOffset(0);        // go back to the beginning
+        /* thai management */
+        if (order == 0)
+          order = iter.previous();
 
-      int elem2 = iter.next();  // and get this one again
+        while (iter.previous() != CollationElementIterator.NULLORDER) {
+          count ++; 
+        }
 
-      if (elem != elem2)
-        m_test_.errln("Failed : Clear buffers expected result " + elem + 
-                      " not " + elem2);
-    }
-    catch (ParseException e)
+        if (iter.getMaxExpansion(order) < count) {
+          errln("Failed : Maximum expansion count for 0x" + 
+                Integer.toHexString(order) + " < counted size " + 
+                Integer.toHexString(count));
+        }
+      }
+    } catch (ParseException e)
     {
-      m_test_.errln("Failed : Rule parse error " + e.getMessage());
+      errln("Failed : creation of RuleBasedCollator for rules " +
+            rule);
     }
   }
   
@@ -226,11 +241,6 @@ public final class CollationElementIteratorTest
   * RuleBasedCollator for testing
   */
   private RuleBasedCollator m_collator_;
-  
-  /**
-  * Main Collation test program
-  */
-  private CollatorTest m_test_;
   
   /**
   * Source strings for testing
@@ -251,29 +261,44 @@ public final class CollationElementIteratorTest
   * Testing if next and prev works.
   * @param iter collation element iterator to be tested
   */
-  private void testPreviousNext(CollationElementIterator iter)
+  private void previousNext(CollationElementIterator iter)
   {
     // Run through the iterator forwards and stick it into an array
     int orders[] = getOrders(iter);
     
     // Now go through it backwards and make sure we get the same values
+    iter.reset();
     int index = orders.length;
     int order = iter.previous();
     while (order != CollationElementIterator.NULLORDER)
     {
-      if (order != orders[--index])
-      {
-        m_test_.errln("Fail : CollationElementIterator previous element " 
+      if (order != orders[--index]) {
+        if (order == 0) {
+          index ++;
+        }
+        else {
+          while (index > 0 && orders[-- index] == 0)
+          {
+          }
+          if (order != orders[index])
+          {
+            errln("Fail : CollationElementIterator previous element " 
                       + "expected to be " + 
                       Integer.toHexString(orders[index]) + " not " +
                       Integer.toHexString(order));
-        break;
+            break;
+          }
+        }
       }
       order = iter.previous();
     }
 
+    while (index != 0 && orders[index - 1] == 0) {
+      index --;
+    }
+    
     if (index != 0)
-      m_test_.errln("Fail : CollationElementIterator has more previous " + 
+      errln("Fail : CollationElementIterator has more previous " + 
                     "elements than next");
   }
   
@@ -312,62 +337,6 @@ public final class CollationElementIteratorTest
     }
 
     return result;
-  }
-  
-  /**
-  * Verify that getMaxExpansion works on a given set of collation rules.
-  * The first row of the "tests" array contains the collation rules at index 
-  * 0, and the string at index 1 is ignored.
-  * Subsequent rows of the array contain a character and a number, both
-  * represented as strings.  The character's collation order is determined,
-  * and getMaxExpansion is called for that character.  If its value is
-  * not equal to the specified number, an error results.
-  * @param rules for constructing RuleBasedCollator
-  * @param chararray character array for testing
-  * @param countarray count array for testing corresponding to chararray
-  * @exception thrown when errors occurs
-  */
-  private void verifyExpansion(String rules, char chararray[], 
-                               int countarray[])
-  {
-    try
-    {
-      RuleBasedCollator collator = new RuleBasedCollator(rules);
-      CollationElementIterator iter = 
-                                      collator.getCollationElementIterator("");
-
-      int order,
-          expansion,
-          expect;
-      char test;
-      for (int i = 1; i < chararray.length; i += 1)
-      {
-        // First get the collation key that the test string expands to
-        test = chararray[i];
-        iter.setText("" + test);
-
-        order = iter.next();
-
-        if (order == CollationElementIterator.NULLORDER || 
-            iter.next() != CollationElementIterator.NULLORDER)
-        {
-          m_test_.errln("Failed : Collation element iterator nullorder " +
-                        "occuring at the wrong places");
-          break;
-        }
-            
-        expansion = iter.getMaxExpansion(order);
-        expect = countarray[i];
-            
-        if (expansion != expect)
-          m_test_.errln("Failed : Expansion for " + test + " expected " + 
-                        expect);
-      }
-    }
-    catch (ParseException e)
-    {
-      m_test_.errln("Failed : Rule parse error " + e.getMessage());
-    }
   }
 }
 

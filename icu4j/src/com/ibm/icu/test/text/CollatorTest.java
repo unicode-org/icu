@@ -5,17 +5,17 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/test/text/Attic/CollatorTest.java,v $ 
-* $Date: 2001/03/09 00:42:45 $ 
-* $Revision: 1.1 $
+* $Date: 2001/03/09 23:41:46 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
 
 package com.ibm.icu4jni.test.text;
 
-import com.ibm.test.TestFmwk;
 import com.ibm.icu4jni.text.Collator;
 import com.ibm.icu4jni.text.CollationKey;
+import com.ibm.icu4jni.test.TestFmwk;
 
 /**
 * Testing class for Collator
@@ -362,27 +362,6 @@ public final class CollatorTest extends TestFmwk
   }
   
   /**
-  * Testing collation iterator
-  */
-  public void TestCollationIterator()
-  {
-    try
-    {
-      CollationElementIteratorTest test = 
-                                   new CollationElementIteratorTest(this);
-      test.TestPrevious();
-      test.TestSetText();
-      test.TestClearBuffers();
-      test.TestMaxExpansion();
-      test.TestOffset();
-    }
-    catch (Exception e)
-    {
-      errln("Failed : " + e.getMessage());
-    }
-  }
-  
-  /**
   * Testing Thai rule collation
   */
   public void TestCollationThai()
@@ -396,21 +375,6 @@ public final class CollatorTest extends TestFmwk
     catch (Exception e)
     {
       errln("Failed : " + e.getMessage());
-    }
-  }
-  
-  public static void main(String[] arg)
-  {
-    try
-    {
-      CollatorTest test = new CollatorTest();
-      String args[] = new String[1];
-      args[0] = arg[1];
-      test.run(args);
-    }
-    catch (Exception e)
-    {
-      e.printStackTrace();
     }
   }
 }
