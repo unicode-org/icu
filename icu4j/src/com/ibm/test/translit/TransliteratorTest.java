@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/TransliteratorTest.java,v $
- * $Date: 2001/10/31 01:17:06 $
- * $Revision: 1.59 $
+ * $Date: 2001/10/31 20:56:40 $
+ * $Revision: 1.60 $
  *
  *****************************************************************************************
  */
@@ -1906,6 +1906,14 @@ public class TransliteratorTest extends TestFmwk {
 
         t = Transliterator.getInstance("en-el");
         expect(t, "a", "\u1F00");
+    }
+
+    /**
+     * Test title case handling of accent (should ignore accents)
+     */
+    public void TestTitleAccents() {
+        Transliterator t = Transliterator.getInstance("Title");
+        expect(t, "a\u0300b can't abe", "A\u0300b Can't Abe");
     }
 
     //======================================================================
