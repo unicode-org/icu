@@ -52,7 +52,7 @@ Latin-Greek/UNGEGN:alias:Latin-el/UNGEGN
 Greek-Latin/UNGEGN:alias:el-Latin/UNGEGN
 
 LowerLatin-Jamo:internal:Transliterator_Latin_Jamo.txt:UTF8:FORWARD
-Latin-Jamo:alias:[:Latin:]Any-Lower;LowerLatin-Jamo
+Latin-Jamo:alias:[\p{Latin}]Any-Lower;LowerLatin-Jamo
 Jamo-Latin:file:Transliterator_Latin_Jamo.txt:UTF8:REVERSE
 
 Latin-Katakana:file:Transliterator_Latin_Katakana.txt:UTF8:FORWARD
@@ -79,7 +79,7 @@ Kanji-OnRomaji:file:Transliterator_Kanji_OnRomaji.utf8.txt:UTF8:FORWARD
 # Compound rules
 
 Latin-Hangul:alias:[\p{Latin}];NFD;Latin-Jamo;NFC
-Hangul-Latin:alias:[:Hangul:];NFD;Jamo-Latin
+Hangul-Latin:alias:[\p{Hangul}];NFD;Jamo-Latin
 
 # Inter-Indic composed rules
 Latin-InterIndic:internal:Transliterator_Latin_InterIndic.txt:UTF8:FORWARD
@@ -105,15 +105,15 @@ InterIndic-Kannada:internal:Transliterator_InterIndic_Kannada.txt:UTF8:FORWARD
 InterIndic-Malayalam:internal:Transliterator_InterIndic_Malayalam.txt:UTF8:FORWARD
 
 #Latin-Indic transliterators
-Latin-Devanagari:alias:NFD;[:Latin:]Lower;Latin-InterIndic;InterIndic-Devanagari;NFC
-Latin-Bengali:alias:NFD;[:Latin:]Lower;Latin-InterIndic;InterIndic-Bengali;NFC
-Latin-Gurmukhi:alias:NFD;[:Latin:]Lower;Latin-InterIndic;InterIndic-Gurmukhi;NFC
-Latin-Gujarati:alias:NFD;[:Latin:]Lower;Latin-InterIndic;InterIndic-Gujarati;NFC
-Latin-Oriya:alias:NFD;[:Latin:]Lower;Latin-InterIndic;InterIndic-Oriya;NFC
-Latin-Tamil:alias:NFD;[:Latin:]Lower;Latin-InterIndic;InterIndic-Tamil;NFC
-Latin-Telugu:alias:NFD;[:Latin:]Lower;Latin-InterIndic;InterIndic-Telugu;NFC
-Latin-Kannada:alias:NFD;[:Latin:]Lower;Latin-InterIndic;InterIndic-Kannada;NFC
-Latin-Malayalam:alias:NFD;[:Latin:]Lower;Latin-InterIndic;InterIndic-Malayalam;NFC
+Latin-Devanagari:alias:NFD;[\p{Latin}]Lower;Latin-InterIndic;InterIndic-Devanagari;NFC
+Latin-Bengali:alias:NFD;[\p{Latin}]Lower;Latin-InterIndic;InterIndic-Bengali;NFC
+Latin-Gurmukhi:alias:NFD;[\p{Latin}]Lower;Latin-InterIndic;InterIndic-Gurmukhi;NFC
+Latin-Gujarati:alias:NFD;[\p{Latin}]Lower;Latin-InterIndic;InterIndic-Gujarati;NFC
+Latin-Oriya:alias:NFD;[\p{Latin}]Lower;Latin-InterIndic;InterIndic-Oriya;NFC
+Latin-Tamil:alias:NFD;[\p{Latin}]Lower;Latin-InterIndic;InterIndic-Tamil;NFC
+Latin-Telugu:alias:NFD;[\p{Latin}]Lower;Latin-InterIndic;InterIndic-Telugu;NFC
+Latin-Kannada:alias:NFD;[\p{Latin}]Lower;Latin-InterIndic;InterIndic-Kannada;NFC
+Latin-Malayalam:alias:NFD;[\p{Latin}]Lower;Latin-InterIndic;InterIndic-Malayalam;NFC
 
 #Indic-Latin transliterators
 Devanagari-Latin:alias:NFD;Devanagari-InterIndic;InterIndic-Latin;NFC
