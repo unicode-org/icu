@@ -104,8 +104,8 @@ class RBProjectItemPanel extends JPanel implements ActionListener {
 		JPanel centerPanel = new JPanel(new BorderLayout());
 		mainBox = new Box(BoxLayout.Y_AXIS);
 		JScrollPane scrollPane = new JScrollPane(mainBox,
-												 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-												 JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+												ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+												ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		centerPanel.add(scrollPane, BorderLayout.NORTH);
 		centerPanel.setBorder(BorderFactory.createEtchedBorder());
 		JPanel botPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));

@@ -11,6 +11,7 @@ import java.awt.event.*;
 import java.util.*;
 
 import javax.swing.*;
+import javax.swing.table.*;
 
 import com.ibm.rbm.*;
 
@@ -274,5 +275,65 @@ class RBSearchPanel extends JPanel {
 	
 	public void updateComponents() {
 		
+	}
+}
+
+// The table model for searched Items
+
+class SearchItemsTableModel extends AbstractTableModel {
+	Vector items;
+	
+	public SearchItemsTableModel(Vector items) {
+		this.items = items;
+	}
+	
+	public void setItems(Vector items) {
+		this.items = items;
+	}
+	
+	public int getColumnCount() { return 3; }
+		    
+	public int getRowCount() {
+		return items.size();
+	}
+	
+	public Object getValueAt(int row, int col) {
+		BundleItem item = (BundleItem)items.elementAt(row);
+		String retStr = null;
+				
+		switch(col) {
+		case 0:
+			retStr = item.getKey();
+			break;
+		case 1:
+			retStr = item.getTranslation();
+			break;
+		case 2:
+			retStr = (item.getParentGroup() == null ? "" : item.getParentGroup().getName());
+			break;
+		default:
+			retStr = Resources.getTranslation("table_cell_error");
+		}
+				
+		return retStr;
+	}
+			
+	public String getColumnName(int col) {
+		if (col == 0) return Resources.getTranslation("languageuntrans_column_key");
+		else if (col == 1) return Resources.getTranslation("languageuntrans_column_translation");
+		else if (col == 2) return Resources.getTranslation("languageuntrans_column_group");
+		else return Resources.getTranslation("table_column_error");
+	}
+	
+	public BundleItem getBundleItem(int row) {
+		return (BundleItem)items.elementAt(row);
+	}
+	
+	public Vector getBundleItems() {
+		return items;
+	}
+	
+	public void update() {
+		fireTableDataChanged();
 	}
 }
