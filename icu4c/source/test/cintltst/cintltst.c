@@ -57,67 +57,73 @@ int main(int argc, const char* const argv[])
     UResourceBundle *rb;
     UConverter *cnv;
 
+    while (REPEAT_TESTS > 0) {
+
 #ifdef CTST_LEAK_CHECK
-    ctst_init();
+        ctst_init();
 #endif
 
-    /* If no ICU_DATA environment was set, try to fake up one. */
-    ctest_setICU_DATA();
+        /* If no ICU_DATA environment was set, try to fake up one. */
+        ctest_setICU_DATA();
 
 #ifdef XP_MAC_CONSOLE
-    argc = ccommand((char***)&argv);
+        argc = ccommand((char***)&argv);
 #endif
 
-    cnv  = ucnv_open(NULL, &errorCode);
-    if(cnv != NULL) {
-        /* ok */
-        ucnv_close(cnv);
-    } else {
-        fprintf(stderr,
-            "*** Failure! The default converter cannot be opened.\n"
-            "*** Check the ICU_DATA environment variable and \n"
-            "*** check that the data files are present.\n");
-        return 1;
-    }
-
-    /* try more data */
-    cnv = ucnv_open("iso-8859-7", &errorCode);
-    if(cnv != 0) {
-        /* ok */
-        ucnv_close(cnv);
-    } else {
-        fprintf(stderr,
-                "*** Failure! The converter for iso-8859-7 cannot be opened.\n"
+        cnv  = ucnv_open(NULL, &errorCode);
+        if(cnv != NULL) {
+            /* ok */
+            ucnv_close(cnv);
+        } else {
+            fprintf(stderr,
+                "*** Failure! The default converter cannot be opened.\n"
                 "*** Check the ICU_DATA environment variable and \n"
                 "*** check that the data files are present.\n");
-        return 1;
-    }
+            return 1;
+        }
 
-    rb = ures_open(NULL, "en", &errorCode);
-    if(U_SUCCESS(errorCode)) {
-        /* ok */
-        ures_close(rb);
-    } else {
-        fprintf(stderr,
-                "*** Failure! The \"en\" locale resource bundle cannot be opened.\n"
-                "*** Check the ICU_DATA environment variable and \n"
-                "*** check that the data files are present.\n");
-        return 1;
-    }
+        /* try more data */
+        cnv = ucnv_open("iso-8859-7", &errorCode);
+        if(cnv != 0) {
+            /* ok */
+            ucnv_close(cnv);
+        } else {
+            fprintf(stderr,
+                    "*** Failure! The converter for iso-8859-7 cannot be opened.\n"
+                    "*** Check the ICU_DATA environment variable and \n"
+                    "*** check that the data files are present.\n");
+            return 1;
+        }
 
-    fprintf(stdout, "Default locale for this run is %s\n", uloc_getDefault());
+        rb = ures_open(NULL, "en", &errorCode);
+        if(U_SUCCESS(errorCode)) {
+            /* ok */
+            ures_close(rb);
+        } else {
+            fprintf(stderr,
+                    "*** Failure! The \"en\" locale resource bundle cannot be opened.\n"
+                    "*** Check the ICU_DATA environment variable and \n"
+                    "*** check that the data files are present.\n");
+            return 1;
+        }
 
-    root = NULL;
-    addAllTests(&root);
-    nerrors = processArgs(root, argc, argv);
-    cleanUpTestTree(root);
+        fprintf(stdout, "Default locale for this run is %s\n", uloc_getDefault());
+
+        root = NULL;
+        addAllTests(&root);
+        nerrors = processArgs(root, argc, argv);
+        if (--REPEAT_TESTS > 0) {
+            printf("Repeating tests %d more time(s)\n", REPEAT_TESTS);
+        }
+        cleanUpTestTree(root);
 #ifdef CTST_LEAK_CHECK
-    ctst_freeAll();
+        ctst_freeAll();
 
-    /* To check for leaks */
+        /* To check for leaks */
 
-    u_cleanup(); /* nuke the hashtable.. so that any still-open cnvs are leaked */
+        u_cleanup(); /* nuke the hashtable.. so that any still-open cnvs are leaked */
 #endif
+    }
 
     return nerrors ? 1 : 0;
 }
@@ -344,5 +350,6 @@ void ctst_freeAll() {
             free(ctst_allocated_stuff[i]);
         }
     }
+    _testDirectory=NULL;
 }
 #endif
