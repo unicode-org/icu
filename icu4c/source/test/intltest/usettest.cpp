@@ -27,7 +27,7 @@ UnicodeSetTest::runIndexedTest(int32_t index, bool_t exec,
     switch (index) {
         CASE(0,TestPatterns)
         CASE(1,TestAddRemove)
-
+        CASE(2,TestCategories)
         default: name = ""; break;
     }
 }
@@ -47,6 +47,18 @@ UnicodeSetTest::TestPatterns(void) {
     UnicodeString exp;
     exp.append((UChar)0x0000).append("aeeoouu").append((UChar)('z'+1)).append((UChar)0xFFFF);
     expectPairs(set, exp);
+}
+
+void
+UnicodeSetTest::TestCategories(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    const char* pat = " [:Lu:] "; // Whitespace ok outside [:..:]
+    UnicodeSet set(pat, status);
+    if (U_FAILURE(status)) {
+        errln((UnicodeString)"Fail: Can't construct set with " + pat);
+    } else {
+        expectContainment(set, pat, "ABC", "abc");
+    }
 }
 
 void
@@ -89,6 +101,41 @@ UnicodeSetTest::TestAddRemove(void) {
     expectPattern(set2, "[jackiemclean]", "aacceein");
     set.addAll(set2);
     expectPairs(set, "aacehort");
+}
+
+void
+UnicodeSetTest::expectContainment(const UnicodeSet& set,
+                                  const UnicodeString& setName,
+                                  const UnicodeString& charsIn,
+                                  const UnicodeString& charsOut) {
+    UnicodeString bad;
+    int32_t i;
+    for (i=0; i<charsIn.length(); ++i) {
+        UChar c = charsIn.charAt(i);
+        if (!set.contains(c)) {
+            bad.append(c);
+        }
+    }
+    if (bad.length() > 0) {
+        logln((UnicodeString)"Fail: set " + setName + " does not contain " + bad +
+              ", expected containment of " + charsIn);
+    } else {
+        logln((UnicodeString)"Ok: set " + setName + " contains " + charsIn);
+    }
+
+    bad.truncate(0);
+    for (i=0; i<charsOut.length(); ++i) {
+        UChar c = charsOut.charAt(i);
+        if (set.contains(c)) {
+            bad.append(c);
+        }
+    }
+    if (bad.length() > 0) {
+        logln((UnicodeString)"Fail: set " + setName + " contains " + bad +
+              ", expected non-containment of " + charsOut);
+    } else {
+        logln((UnicodeString)"Ok: set " + setName + " does not contain " + charsOut);
+    }
 }
 
 void

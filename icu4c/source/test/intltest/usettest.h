@@ -26,8 +26,13 @@ class UnicodeSetTest: public IntlTest {
 private:
 
     void TestPatterns(void);
+    void TestCategories(void);
     void TestAddRemove(void);
 
+    void expectContainment(const UnicodeSet& set,
+                           const UnicodeString& setName,
+                           const UnicodeString& charsIn,
+                           const UnicodeString& charsOut);
     void expectPattern(UnicodeSet& set,
                        const UnicodeString& pattern,
                        const UnicodeString& expectedPairs);
