@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/ICUListResourceBundle.java,v $
- * $Date: 2003/11/20 01:41:23 $
- * $Revision: 1.15 $
+ * $Date: 2003/11/20 19:31:07 $
+ * $Revision: 1.16 $
  *
  *******************************************************************************
  */
@@ -64,18 +64,21 @@ public class ICUListResourceBundle extends ListResourceBundle {
      */
     protected Object[][] getContents(){
         // we replace any redirected values with real values in a cloned array
-
-        if (realContents == null) {
-            realContents = contents;
-            for (int i = 0; i < contents.length; ++i) {
-                Object newValue = getRedirectedResource((String)contents[i][0],contents[i][1], -1);
-                if (newValue != null) {
-                    if (realContents == contents) {
-                         realContents = (Object[][])contents.clone();
+        try{
+            if (realContents == null) {
+                realContents = contents;
+                for (int i = 0; i < contents.length; ++i) {
+                    Object newValue = getRedirectedResource((String)contents[i][0],contents[i][1], -1);
+                    if (newValue != null) {
+                        if (realContents == contents) {
+                             realContents = (Object[][])contents.clone();
+                        }
+                        realContents[i] = new Object[] { contents[i][0], newValue };
                     }
-                    realContents[i] = new Object[] { contents[i][0], newValue };
                 }
             }
+        }catch (Exception e){
+            throw new MissingResourceException("Internal Program error: " + e.toString(), this.getClass().getName(),"");
         }
 
         return realContents;
@@ -85,7 +88,8 @@ public class ICUListResourceBundle extends ListResourceBundle {
      * Return null if value is already in existing contents array, otherwise fetch the
      * real value and return it.
      */
-    private Object getRedirectedResource(String key, Object value, int index) {
+    private Object getRedirectedResource(String key, Object value, int index) 
+                                        throws Exception{
 
         if (value instanceof Object[][]) {
             Object[][] aValue = (Object[][])value;
@@ -118,7 +122,7 @@ public class ICUListResourceBundle extends ListResourceBundle {
         return value;
     }
 
-    private static byte[] readToEOS(InputStream stream) {
+    private static byte[] readToEOS(InputStream stream)  throws Exception{
 
         ArrayList vec = new ArrayList();
         int count = 0;
@@ -129,17 +133,15 @@ public class ICUListResourceBundle extends ListResourceBundle {
             pos = 0;
             length = length >= MAXLENGTH ? MAXLENGTH : length * 2;
             byte[] buffer = new byte[length];
-            try {
-                do {
-                    int n = stream.read(buffer, pos, length - pos);
-                    if (n == -1) {
-                    break;
-                    }
-                    pos += n;
-                } while (pos < length);
-            }
-            catch (IOException e) {
-            }
+            
+            do {
+                int n = stream.read(buffer, pos, length - pos);
+                if (n == -1) {
+                break;
+                }
+                pos += n;
+            } while (pos < length);
+
             vec.add(buffer);
             count += pos;
         } while (pos == length);
@@ -229,7 +231,7 @@ public class ICUListResourceBundle extends ListResourceBundle {
 
     }
     private interface RedirectedResource{
-        public Object getResource(Object obj);
+        public Object getResource(Object obj) throws Exception;
     }
 
     public static class ResourceBinary implements RedirectedResource{
@@ -238,7 +240,7 @@ public class ICUListResourceBundle extends ListResourceBundle {
         public ResourceBinary(String name){
             resName=name;
         }
-        public Object getResource(Object obj){
+        public Object getResource(Object obj) throws Exception{
             if(expanded==null){
                 InputStream stream = obj.getClass().getResourceAsStream(resName);
                 if(stream!=null){
