@@ -60,9 +60,9 @@ StringSearch::StringSearch(const UnicodeString& pat,
                 UErrorCode& status) :
     SearchIterator(target, breaker),
     strength(coll->getStrength()),
-    pattern(pat),
     valueList(NULL),
     valueListLen(0),
+    pattern(pat),
     normLen(0),        // num. of collation elements in pattern.
     minLen(0),         // Min of composed, decomposed versions
     maxLen(0),         // Max
@@ -94,9 +94,9 @@ StringSearch::StringSearch(const UnicodeString& pat,
                  UErrorCode& status) :
     SearchIterator(),
     strength(collator->getStrength()),
-    pattern(pat),
     valueList(NULL),
     valueListLen(0),
+    pattern(pat),
     normLen(0),        // num. of collation elements in pattern.
     minLen(0),         // Min of composed, decomposed versions
     maxLen(0),          // Max
@@ -126,14 +126,14 @@ StringSearch::StringSearch(const UnicodeString& pat,
  */
 StringSearch::StringSearch(const StringSearch& that) :
     SearchIterator(that),    
+    iter(NULL),
+    collator(that.collator),
+    strength(that.strength),
     valueList(NULL),
     valueListLen(that.valueListLen),
     normLen(that.normLen),        // num. of collation elements in pattern.
     minLen(that.minLen),          // Min of composed, decomposed versions
     maxLen(that.maxLen),
-    collator(that.collator),
-    strength(that.strength),
-    iter(NULL),
     it(NULL)
 {
     valueList = new int32_t[valueListLen];
@@ -147,9 +147,9 @@ StringSearch::StringSearch(const UnicodeString& pat,
                  const Locale& loc,
                  UErrorCode& status) :
     SearchIterator(),
-    pattern(pat),
     valueList(NULL),
     valueListLen(0),
+    pattern(pat),
     normLen(0),        // num. of collation elements in pattern.
     minLen(0),         // Min of composed, decomposed versions
     maxLen(0)          // Max
@@ -165,7 +165,7 @@ StringSearch::StringSearch(const UnicodeString& pat,
     initialize(status);
 }
 
-bool_t
+UBool
 StringSearch::operator==(const SearchIterator& that) const
 {
     if (that.getDynamicClassID() != getDynamicClassID())
@@ -207,9 +207,9 @@ StringSearch::StringSearch(const UnicodeString& pat,
                  const UnicodeString& newText,
                  UErrorCode& status) :
     SearchIterator(),
-    pattern(pat),
     valueList(NULL),
     valueListLen(0),
+    pattern(pat),
     normLen(0),        // num. of collation elements in pattern.
     minLen(0),         // Min of composed, decomposed versions
     maxLen(0)          // Max
@@ -397,8 +397,9 @@ int32_t StringSearch::handleNext(int32_t start, UErrorCode& status)
     const CharacterIterator& target = getTarget();
     
     int mask = getMask(strength);
-    int done = CollationElementIterator::NULLORDER & mask;
+    
 #if 0
+    int done = CollationElementIterator::NULLORDER & mask;
     if (DEBUG) {
         debug("-------------------------handleNext-----------------------------------");
         debug("");
@@ -418,7 +419,7 @@ int32_t StringSearch::handleNext(int32_t start, UErrorCode& status)
     {
         int32_t patIndex = normLen;
         int32_t tval = 0, pval = 0;
-        bool_t getP = TRUE;
+        UBool getP = TRUE;
 
         iter->setOffset(index, status);
         matchEnd = index;
@@ -510,7 +511,7 @@ int32_t StringSearch::handlePrev(int32_t start, UErrorCode& status)
     int index = start - minLen;
 
     int mask = getMask(strength);
-    int done = CollationElementIterator.NULLORDER & mask;
+    int done = CollationElementIterator::NULLORDER & mask;
 #if 0
     if (DEBUG) {
         debug("-------------------------handlePrev-----------------------------------");
@@ -527,7 +528,7 @@ int32_t StringSearch::handlePrev(int32_t start, UErrorCode& status)
     while (index >= 0) {
         int patIndex = 0;
         int tval = 0, pval = 0;
-        bool_t getP = TRUE;
+        UBool getP = TRUE;
 
         iter->setOffset(index, status);
         if (U_FAILURE(status))
@@ -633,12 +634,17 @@ void StringSearch::initialize(UErrorCode& status) {
         }
     }
 
+    if (valueList != NULL) {
+        delete [] valueList;
+    }
+
     // Save them all
     valueList = new int32_t[normLen];
     int expandLen = 0;
     it->reset();
     
-    for (int32_t i = 0; i < normLen; i++)
+    int32_t i;
+    for (i = 0; i < normLen; i++)
     {
         elem = it->next(status);
         if (U_FAILURE(status)) {
@@ -755,4 +761,7 @@ int32_t StringSearch::hash(int32_t order)
 {
     return CollationElementIterator::primaryOrder(order) % 256;
 }
+
+
+
 
