@@ -180,8 +180,12 @@ static void loadZoneData() {
                 // zone objects, not the name table.  The name
                 // table is unindexed.
                 const char* name = (const char*)DATA + DATA->nameTableDelta;
+                int32_t length;
                 for (uint32_t i=0; i<DATA->count; ++i) {
                     ZONE_IDS[i] = UnicodeString(name, ""); // invariant converter
+                    length = ZONE_IDS[i].length();  // add a NUL but don't count it so that
+                    ZONE_IDS[i].append((UChar)0);   // getBuffer() gets a terminated string
+                    ZONE_IDS[i].truncate(length);
                     name += uprv_strlen(name) + 1;
                 }
 
