@@ -143,7 +143,7 @@ ucbuf_fillucbuf( UCHARBUF* buf,UErrorCode* err){
             int32_t stop =0;
             int32_t pos =0;
 
-            printf("###WARNING: Encountered error condition while converting input stream to target encoding: %s\n",u_errorName(*err));
+            printf("\n###WARNING: Encountered abnormal bytes while converting input stream to target encoding: %s\n",u_errorName(*err));
 
             *err = U_ZERO_ERROR;
 
@@ -173,6 +173,9 @@ ucbuf_fillucbuf( UCHARBUF* buf,UErrorCode* err){
             printf("\tContext: %s\n",context);
             printf("\tPost-context: %s\n", postContext);
             
+            /* reset the converter */
+            ucnv_reset(buf->conv);
+
             /* set the call back to substiture 
              * and restart conversion
              */
@@ -186,7 +189,7 @@ ucbuf_fillucbuf( UCHARBUF* buf,UErrorCode* err){
             /* reset source and target start positions */
             target = pTarget+offset;
             source = cbuf;
-            
+
             /* re convert */
             ucnv_toUnicode(buf->conv,&target,target+(MAX_U_BUF-offset),
                             &source,sourceLimit,NULL,
