@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2001, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) 1997-2003, International Business Machines Corporation and others. All Rights Reserved.
 * Modification History:
 *
 *   Date        Name        Description
@@ -41,9 +41,9 @@
  * \code
  *    UChar myString[20];
  *    double myNumber = 7.0;
- *    UErrorCode success = U_ZERO_ERROR;
- *    UNumberFormat* nf = unum_open(UNUM_DEFAULT, NULL, &success)
- *    unum_formatDouble(nf, myNumber, myString, u_strlen(myString), NULL, &status);
+ *    UErrorCode status = U_ZERO_ERROR;
+ *    UNumberFormat* nf = unum_open(UNUM_DEFAULT, NULL, -1, NULL, NULL, &status);
+ *    unum_formatDouble(nf, myNumber, myString, 20, NULL, &status);
  *    printf(" Example 1: %s\n", austrdup(myString) ); //austrdup( a function used to convert UChar* to char*)
  * \endcode
  * </pre>
@@ -53,39 +53,44 @@
  * conventions multiple times.
  * <pre>
  * \code
- *     UChar* myString;
- *     int32_t i, resultlength, reslenneeded;
- *     UErrorCode success = U_ZERO_ERROR;
- *     int32_t a[] = { 123, 3333, -1234567 };
- *     const int32_t a_len = sizeof(a) / sizeof(a[0]);
- *     UNumberFormat* nf = unum_open(UNUM_DEFAULT, NULL, &success)
- *     for (i = 0; i < a_len; i++) {
- *     resultlength=0;
- *     reslenneeded=unum_format(nf, a[i], NULL, resultlength, NULL, &status);
- *     if(status==U_BUFFER_OVERFLOW_ERROR){
- *         status=U_ZERO_ERROR;
- *         resultlength=resultlengthneeded+1;
- *         result=(UChar*)malloc(sizeof(UChar) * resultlength);
- *         unum_format(nf, a[i], result, resultlength, NULL, &status);
- *     }
- *     printf(" Example 2: %s\n", austrdup(result) );
- *     free(result);
- *     }
+ * uint32_t i, resultlength, reslenneeded;
+ * UErrorCode status = U_ZERO_ERROR;
+ * UFieldPosition pos;
+ * uint32_t a[] = { 123, 3333, -1234567 };
+ * const uint32_t a_len = sizeof(a) / sizeof(a[0]);
+ * UNumberFormat* nf;
+ * UChar* result = NULL;
+ *
+ * nf = unum_open(UNUM_DEFAULT, NULL, -1, NULL, NULL, &status);
+ * for (i = 0; i < a_len; i++) {
+ *    resultlength=0;
+ *    reslenneeded=unum_format(nf, a[i], NULL, resultlength, &pos, &status);
+ *    result = NULL;
+ *    if(status==U_BUFFER_OVERFLOW_ERROR){
+ *       status=U_ZERO_ERROR;
+ *       resultlength=reslenneeded+1;
+ *       result=(UChar*)malloc(sizeof(UChar) * resultlength);
+ *       unum_format(nf, a[i], result, resultlength, &pos, &status);
+ *    }
+ *    printf( " Example 2: %s\n", austrdup(result));
+ *    free(result);
+ * }
  * \endcode
  * </pre>
  * To format a number for a different Locale, specify it in the
  * call to unum_open().
  * <pre>
  * \code
- *     UNumberFormat* nf = unum_open(UNUM_DEFAULT, "fr_FR", &success)
+ *     UNumberFormat* nf = unum_open(UNUM_DEFAULT, NULL, -1, "fr_FR", NULL, &success)
  * \endcode
  * </pre>
  * You can use a NumberFormat API unum_parse() to parse.
  * <pre>
  * \code
- *    UErrorCode success;
+ *    UErrorCode status = U_ZERO_ERROR;
  *    int32_t pos=0;
- *    unum_parse(nf, result, u_strlen(result), &pos, &success);
+ *    int32_t num;
+ *    num = unum_parse(nf, str, u_strlen(str), &pos, &status);
  * \endcode
  * </pre>
  * Use UCAL_DECIMAL to get the normal number format for that country.
