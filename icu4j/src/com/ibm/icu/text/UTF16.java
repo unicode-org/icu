@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UTF16.java,v $ 
-* $Date: 2002/03/20 05:11:16 $ 
-* $Revision: 1.18 $
+* $Date: 2002/04/03 22:48:10 $ 
+* $Revision: 1.19 $
 *
 *******************************************************************************
 */
@@ -1538,7 +1538,7 @@ public final class UTF16
         }
         // non-surrogate bmp
         if (char32 < LEAD_SURROGATE_MIN_VALUE ||
-            (char32 > TRAIL_SURROGATE_MIN_VALUE && 
+            (char32 > TRAIL_SURROGATE_MAX_VALUE && 
              char32 < SUPPLEMENTARY_MIN_VALUE)) {
             return source.indexOf((char)char32);
         }
@@ -1646,7 +1646,7 @@ public final class UTF16
         }
         // non-surrogate bmp
         if (char32 < LEAD_SURROGATE_MIN_VALUE ||
-            (char32 > TRAIL_SURROGATE_MIN_VALUE && 
+            (char32 > TRAIL_SURROGATE_MAX_VALUE && 
              char32 < SUPPLEMENTARY_MIN_VALUE)) {
             return source.indexOf((char)char32, fromIndex);
         }
@@ -1714,7 +1714,7 @@ public final class UTF16
             // check last character
             if (isLeadSurrogate(str.charAt(strLength - 1)) && 
                 (result < source.length() - 1) && 
-                isTrailSurrogate(source.charAt(resultEnd + 1))) { 
+                isTrailSurrogate(source.charAt(resultEnd))) { 
                 return indexOf(source, str, resultEnd + 1);
             }
             // check first character which is a trail surrogate
@@ -1754,7 +1754,7 @@ public final class UTF16
         }
         // non-surrogate bmp
         if (char32 < LEAD_SURROGATE_MIN_VALUE ||
-            (char32 > TRAIL_SURROGATE_MIN_VALUE && 
+            (char32 > TRAIL_SURROGATE_MAX_VALUE && 
              char32 < SUPPLEMENTARY_MIN_VALUE)) {
             return source.lastIndexOf((char)char32);
         }
@@ -1832,18 +1832,19 @@ public final class UTF16
     }
     
     /**
-    * Returns the index within the argument UTF16 format Unicode string of 
-    * the last occurrence of the argument codepoint, that occurred before or  
-    * at the index fromIndex. I.e., the index returned 
-    * is the largest value i such that: <br>
-    * (UTF16.charAt(source, i) == char32 && (i <= fromIndex)) is true. 
+    * <p>Returns the index within the argument UTF16 format Unicode string of 
+    * the last occurrence of the argument codepoint, where the result is less
+    * than or equals to fromIndex.</p> 
+    * <p>This method is implemented based on codepoints, hence a single 
+    * surrogate character will not match a supplementary character.</p>
     * <p>source is searched backwards starting at the last character starting 
     * at the specified index.</p>
     * <p>
     * Examples:<br>
-    * UTF16.lastIndexOf("abc", 'c', 2) returns -1<br>
+    * UTF16.lastIndexOf("abc", 'c', 2) returns 2<br>
+    * UTF16.lastIndexOf("abc", 'c', 1) returns -1<br>
     * UTF16.lastIndexOf("abc\ud800\udc00", 0x10000, 5) returns 3<br>
-    * UTF16.lastIndexOf("abc\ud800\udc00", 0x10000, 3) returns -1<br>
+    * UTF16.lastIndexOf("abc\ud800\udc00", 0x10000, 3) returns 3<br>
     * UTF16.lastIndexOf("abc\ud800\udc00", 0xd800) returns -1<br>
     * </p>
     * Note this method is provided as support to jdk 1.3, which does not 
@@ -1869,7 +1870,7 @@ public final class UTF16
         }
         // non-surrogate bmp
         if (char32 < LEAD_SURROGATE_MIN_VALUE ||
-            (char32 > TRAIL_SURROGATE_MIN_VALUE && 
+            (char32 > TRAIL_SURROGATE_MAX_VALUE && 
              char32 < SUPPLEMENTARY_MIN_VALUE)) {
             return source.lastIndexOf((char)char32, fromIndex);
         }
@@ -1896,20 +1897,24 @@ public final class UTF16
     }
     
     /**
-    * Returns the index within the argument UTF16 format Unicode string of 
-    * the last occurrence of the argument string str. This method is 
-    * implemented based on codepoints, hence a "lead surrogate character +
-    * trail surrogate character" is treated as one entity.e
+    * <p>Returns the index within the argument UTF16 format Unicode string of 
+    * the last occurrence of the argument string str, where the result is less
+    * than or equals to fromIndex.</p> 
+    * <p>This method is implemented based on codepoints, hence a 
+    * "lead surrogate character + trail surrogate character" is treated as one 
+    * entity.
     * Hence if the str starts with trail surrogate character at index 0, a 
     * source with a leading a surrogate character before str found at in 
     * source will not have a valid match. Vice versa for lead surrogates 
     * that ends str.
+    * </p>
     * See example below.
     * <p>
     * Examples:<br>
-    * UTF16.lastIndexOf("abc", "c", 2) returns -1<br>
+    * UTF16.lastIndexOf("abc", "c", 2) returns 2<br>
+    * UTF16.lastIndexOf("abc", "c", 1) returns -1<br>
     * UTF16.lastIndexOf("abc\ud800\udc00", "\ud800\udc00", 5) returns 3<br>
-    * UTF16.lastIndexOf("abc\ud800\udc00", "\ud800\udc00", 3) returns -1<br>
+    * UTF16.lastIndexOf("abc\ud800\udc00", "\ud800\udc00", 3) returns 3<br>
     * UTF16.lastIndexOf("abc\ud800\udc00", "\ud800", 4) returns -1<br>
     * </p>
     * <p>source is searched backwards starting at the last character.</p> 
@@ -1942,7 +1947,7 @@ public final class UTF16
             // check last character
             if (isLeadSurrogate(str.charAt(strLength - 1)) && 
                 (result < source.length() - 1) && 
-                isTrailSurrogate(source.charAt(result + strLength + 1))) { 
+                isTrailSurrogate(source.charAt(result + strLength))) { 
                 return lastIndexOf(source, str, result - 1);
             }
             // check first character which is a trail surrogate
