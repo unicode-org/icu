@@ -169,13 +169,10 @@ void UniToHexTransliteratorTest::TestCloneEqual(){
 	
 
 	logln("Testing the =operator of the UnicodeToHexTransliterator");
-    UnicodeToHexTransliterator *transdefaultequal=new UnicodeToHexTransliterator();
-    UnicodeToHexTransliterator *trans1equal=new UnicodeToHexTransliterator();
-	UnicodeToHexTransliterator *trans2equal=new UnicodeToHexTransliterator();
-    *transdefaultequal=*transdefault;
-    *trans1equal=*trans1;
-    *trans2equal=*trans2;
-	//UnicodeToHexTransliterator value3=trans1assign;
+	UnicodeToHexTransliterator *transdefaultequal=transdefault;
+	UnicodeToHexTransliterator *trans1equal=trans1;
+	UnicodeToHexTransliterator *trans2equal=trans2;
+
 	if(transdefault->toPattern() != transdefaultequal->toPattern()      ||
 		transdefault->isUppercase() != transdefaultequal->isUppercase() ||
 		trans1->toPattern() != trans1equal->toPattern()      ||

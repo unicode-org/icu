@@ -694,17 +694,17 @@ UnicodeString& TimeZoneTest::formatMinutes(int32_t min, UnicodeString& rv)
 
         rv += UChar(sign);
         if(h > 10)
-            rv += UChar('0' + (h/10));
-        rv += UChar('0' + (h%10));
+            rv += UChar(0x0030 + (h/10));
+        rv += UChar(0x0030 + (h%10));
 
         rv += ":";
 
         if(min > 10)
-            rv += UChar('0' + (min/10));
+            rv += UChar(0x0030 + (min/10));
         else
             rv += "0";
 
-        rv += UChar('0' + (min%10));
+        rv += UChar(0x0030 + (min%10));
 
         return rv;
 }

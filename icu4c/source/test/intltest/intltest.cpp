@@ -106,7 +106,7 @@ UnicodeString toString(const Formattable& f) {
                 FieldPosition pos;
                 fmt.format(f.getDate(), s, pos);
                 s.insert(0, "[Date:");
-                s.insert(s.length(), (UChar)']');
+                s.insert(s.length(), (UChar)0x005d);
             } else {
                 s = UnicodeString("[Error creating date format]");
             }
@@ -121,7 +121,7 @@ UnicodeString toString(const Formattable& f) {
     case Formattable::kString:
         f.getString(s);
         s.insert(0, "[String:");
-        s.insert(s.length(), (UChar)']');
+        s.insert(s.length(), (UChar)0x005d);
         break;
     case Formattable::kArray:
         {
@@ -135,7 +135,7 @@ UnicodeString toString(const Formattable& f) {
                 }
                 s = s + toString(array[i]);
             }
-            s.append(UChar(']'));
+            s.append(UChar(0x005d));
         }
         break;
     }

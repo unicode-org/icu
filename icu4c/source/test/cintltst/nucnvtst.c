@@ -285,7 +285,7 @@ UBool testConvertFromU( const UChar *source, int sourceLen,  const char *expect,
         }
         
         log_verbose(junk);
-        printSeq(expect, expectLen);
+        printSeq((const unsigned char *)expect, expectLen);
         if ( checkOffsets )
           {
             log_verbose("\nOffsets:");
@@ -329,8 +329,8 @@ UBool testConvertFromU( const UChar *source, int sourceLen,  const char *expect,
     else
     {    
         log_err("String does not match. %s\n", gNuConvTestName);
-        printSeqErr(junkout, expectLen);
-        printSeqErr(expect, expectLen);
+        printSeqErr((const unsigned char *)junkout, expectLen);
+        printSeqErr((const unsigned char *)expect, expectLen);
         
         return FALSE;
     }
@@ -1783,7 +1783,7 @@ void TestJitterbug255()
     }
     while (testBuffer != testEnd)
     {
-        result = ucnv_getNextUChar (cnv, &testBuffer, testEnd , &status);
+        result = ucnv_getNextUChar (cnv, (const char **)&testBuffer, testEnd , &status);
         if (U_FAILURE(status))
         {
             log_err("Failed to convert the next UChar for SJIS.\n");

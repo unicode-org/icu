@@ -40,7 +40,7 @@ class Filter1: public UnicodeFilter{
 		return new Filter1(*this);
 	}
 	virtual UBool contains(UChar c) const {
-		if(c == 'a' || c == 'A' || c == 'c' || c == 'C')
+	if(c == 0x0061 || c == 0x0041 || c == 0x0063 || c == 0x0043)
 			return FALSE;
 		else
 			return TRUE;
@@ -51,7 +51,7 @@ class Filter2: public UnicodeFilter{
 		return new Filter2(*this);
 	}
 	virtual UBool contains(UChar c) const {
-		if(c == 'y' || c == 'Y' || c == 'z' || c == 'Z'  || c =='a' || c == 'c')
+	if(c == 0x0079 || c == 0x0059 || c == 0x007a || c == 0x005a  || c == 0x0061 || c == 0x0063)
 			return FALSE;
 		else
 			return TRUE;
