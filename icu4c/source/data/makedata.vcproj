@@ -20,8 +20,8 @@
 			ATLMinimizesCRunTimeLibraryUsage="FALSE">
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="NMAKE /f makedata.mak icumake=$(MAKEDIR)$(ProjectDir)  cfg=release"
-				ReBuildCommandLine="NMAKE /f makedata.mak icumake=$(MAKEDIR)$(ProjectDir)  cfg=release clean all"
+				BuildCommandLine="NMAKE /f makedata.mak icumake=$(ProjectDir)  cfg=release"
+				ReBuildCommandLine="NMAKE /f makedata.mak icumake=$(ProjectDir)  cfg=release clean all"
 				Output="makedata.exe"/>
 		</Configuration>
 		<Configuration
@@ -33,8 +33,8 @@
 			ATLMinimizesCRunTimeLibraryUsage="FALSE">
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="NMAKE /f makedata.mak icumake=$(MAKEDIR)$(ProjectDir) cfg=debug"
-				ReBuildCommandLine="NMAKE /f makedata.mak icumake=$(MAKEDIR)$(ProjectDir) cfg=debug clean all"
+				BuildCommandLine="NMAKE /f makedata.mak icumake=$(ProjectDir) cfg=debug"
+				ReBuildCommandLine="NMAKE /f makedata.mak icumake=$(ProjectDir) cfg=debug clean all"
 				Output="makedata.exe"/>
 		</Configuration>
 	</Configurations>
