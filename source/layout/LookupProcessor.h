@@ -44,7 +44,7 @@ protected:
 
     LookupProcessor();
 
-    LETag selectFeature(le_uint16 featureIndex, LETag tagOverride = notSelected) const;
+    le_int32 selectLookups(const FeatureTable *featureTable, LETag featureTag, le_int32 order);
 
     const LookupListTable	*lookupListTable;
     const FeatureListTable	*featureListTable;
