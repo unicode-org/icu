@@ -4,6 +4,5 @@ Release
 Makefile
 *.d
 *.pdb
-icupkg.inc
 *.plg
-
+genqchk
