@@ -482,13 +482,17 @@ static UBool extendICUData(UDataMemory *failedData, UErrorCode *pErr)
                FALSE,                     /*  Pretend we're not opening ICUData  */
                pErr);
 
+    /* How about if there is no pData, eh... */
 
-    pData->map = 0;                 /* The mapping for this data is owned by the hash table */
-    pData->mapAddr = 0;             /*   which will unmap it when ICU is shut down.         */
-                                    /* CommonICUData is also unmapped when ICU is shut down.*/
-                                    /* To avoid unmapping the data twice, zero out the map  */
-                                    /*   fields in the UDataMemory that we're assigning     */
-                                    /*   to CommonICUData.                                  */
+    if(pData != NULL) {
+      
+      pData->map = 0;                 /* The mapping for this data is owned by the hash table */
+      pData->mapAddr = 0;             /*   which will unmap it when ICU is shut down.         */
+                                      /* CommonICUData is also unmapped when ICU is shut down.*/
+                                      /* To avoid unmapping the data twice, zero out the map  */
+                                      /*   fields in the UDataMemory that we're assigning     */
+                                      /*   to CommonICUData.                                  */
+    }
     
 
     setCommonICUData(pData,         /*  The new common data.                              */
