@@ -96,7 +96,9 @@ void CollationCurrencyTest::currencyTest(/*char *par*/)
             }
 
             Collator::EComparisonResult compareResult = c->compare(source, target);
-            Collator::EComparisonResult incResult = c->compare(SimpleFwdCharIterator(source), SimpleFwdCharIterator(target));
+            SimpleFwdCharIterator src(source);
+            SimpleFwdCharIterator trg(target);
+            Collator::EComparisonResult incResult = c->compare(src, trg);
 
             CollationKey sourceKey, targetKey;
             UErrorCode status = U_ZERO_ERROR;
