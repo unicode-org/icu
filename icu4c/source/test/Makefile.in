@@ -63,7 +63,7 @@ install: install-recursive install-local
 clean: clean-recursive clean-local
 distclean : distclean-recursive distclean-local
 dist: dist-recursive dist-local
-check: check-recursive check-local
+check: all check-recursive check-local
 
 ## Recursive targets
 all-recursive install-recursive clean-recursive distclean-recursive dist-recursive check-recursive:
@@ -95,7 +95,7 @@ clean-local:
 distclean-local: clean-local
 	$(RMV) Makefile
 
-check-local:
+check-local: all-local
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \

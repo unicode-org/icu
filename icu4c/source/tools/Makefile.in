@@ -92,7 +92,7 @@ install: install-recursive
 clean: clean-local clean-recursive
 distclean : distclean-recursive
 dist: dist-recursive 
-check: check-recursive
+check: all check-recursive
 
 ## Recursive targets
 all-recursive install-recursive clean-recursive distclean-recursive dist-recursive check-recursive:
@@ -157,7 +157,7 @@ CLEANFILES = *~ $(BRK_FILES)  ./pkgdata/tmp/
 
 install-udata: install-pkgdata
 
-install-local: build-local install-udata
+install-local: all-local install-udata
 
 dist-local:
 
