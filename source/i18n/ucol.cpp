@@ -341,8 +341,13 @@ ucol_openRules(    const    UChar                  *rules,
   if(U_FAILURE(*status)) return 0;
 
   /*src.source = rules;*/
-  src.source = (UChar *)uprv_malloc((rulesLength+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
+  src.source = (UChar *)uprv_malloc((2*rulesLength+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
   nSize = unorm_normalize(rules, rulesLength, UNORM_NFD, 0, src.source, rulesLength+UCOL_TOK_EXTRA_RULE_SPACE_SIZE, status);
+  if(nSize > 2*rulesLength+UCOL_TOK_EXTRA_RULE_SPACE_SIZE || *status == U_BUFFER_OVERFLOW_ERROR) {
+    *status = U_ZERO_ERROR;
+    src.source = (UChar *)realloc(src.source, (nSize+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
+    nSize = unorm_normalize(rules, rulesLength, UNORM_NFD, 0, src.source, nSize+UCOL_TOK_EXTRA_RULE_SPACE_SIZE, status);
+  }
   //uprv_memcpy(src.source, rules, rulesLength*sizeof(UChar));
   src.current = src.source;
   src.end = src.source+nSize;
@@ -3991,11 +3996,18 @@ ucol_getRulesEx(const UCollator *coll, UColRuleOption delta, UChar *buffer, int3
   if(buffer){
       *buffer=0;
       if(bufferLen >= len + UCAlen) {
-        u_strcat(buffer, rules);
-        if(UCAlen >0)
-            u_strcat(buffer,ucaRules);
+        if(UCAlen >0) {
+            u_memcpy(buffer, ucaRules, UCAlen);
+        }
+        u_memcpy(buffer+UCAlen, rules, len);
       } else {
-        u_strncat(buffer, rules, (bufferLen-UCAlen)*sizeof(UChar));
+        if(bufferLen >= UCAlen) {
+          u_memcpy(buffer, ucaRules, UCAlen);
+          u_memcpy(buffer+UCAlen, rules, bufferLen-UCAlen);
+        } else {
+          u_memcpy(buffer, ucaRules, bufferLen);
+        }
+
       }
   }
   return len+UCAlen;
