@@ -291,11 +291,11 @@ inline int32_t ICULayoutEngine::layoutString(const UnicodeString &str,
     int32_t max = str.length();
     UChar *chars = new UChar[max];
     
-    //test for NULL
-    if(chars == NULL) {
-	success = (UErrorCode) LE_MEMORY_ALLOCATION_ERROR;
-	return 0;
-    }
+    /* test for NULL */
+	if(chars == 0) {
+		success = U_MEMORY_ALLOCATION_ERROR;
+		return 0;
+	}
     
     str.extract(0, max, chars);
 

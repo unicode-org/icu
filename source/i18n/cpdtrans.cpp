@@ -183,7 +183,7 @@ void CompoundTransliterator::init(UVector& list,
     if (U_SUCCESS(status)) {
         count = list.size();
         trans = new Transliterator*[count];
-        //test for NULL
+        /* test for NULL */
         if (trans == 0) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return;

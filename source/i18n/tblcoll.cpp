@@ -161,7 +161,7 @@ RuleBasedCollator::construct(const UnicodeString& rules,
     else {
         urulestring = new UnicodeString();
     }
-    //test for NULL
+    /* test for NULL */
     if (urulestring == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
@@ -604,7 +604,7 @@ RuleBasedCollator::RuleBasedCollator(const Locale& desiredLocale,
     else {
         urulestring = new UnicodeString();
     }
-    //test for NULL
+    /* test for NULL */
     if (urulestring == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;

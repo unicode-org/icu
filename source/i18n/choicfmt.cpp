@@ -270,20 +270,20 @@ ChoiceFormat::applyPattern(const UnicodeString& pattern,
 
     // Allocate the required storage.
     double *newLimits = (double*) uprv_malloc( sizeof(double) * count);
-    //test for NULL
+    /* test for NULL */
     if (newLimits == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
     UBool *newClosures = (UBool*) uprv_malloc( sizeof(UBool) * count);
-    //test for NULL
+    /* test for NULL */
     if (newClosures == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
         delete newLimits;
         return;
     }
     UnicodeString *newFormats = new UnicodeString[count];
-    //test for NULL
+    /* test for NULL */
     if (newFormats == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
         delete newLimits;

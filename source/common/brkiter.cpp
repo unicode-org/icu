@@ -61,18 +61,18 @@ BreakIterator::createWordInstance(const Locale& key, UErrorCode& status)
         if(!uprv_strcmp(filename, "word_th")) {
             filename = "thaidict.brk";
             result = new DictionaryBasedBreakIterator(file, filename, status);
-            //test for NULL
-			if(result == NULL) {
+            /* test for NULL */
+			if(result == 0) {
 				status = U_MEMORY_ALLOCATION_ERROR;
-				return NULL;
+				return 0;
 			}
         }
         else {
             result = new RuleBasedBreakIterator(file, status);
-            //test for NULL
-			if(result == NULL) {
+            /* test for NULL */
+			if(result == 0) {
 				status = U_MEMORY_ALLOCATION_ERROR;
-				return NULL;
+				return 0;
 			}
         }
     }
@@ -105,18 +105,18 @@ BreakIterator::createLineInstance(const Locale& key, UErrorCode& status)
         if (!uprv_strcmp(key.getLanguage(), "th")) {
             filename = "thaidict.brk";
             result = new DictionaryBasedBreakIterator(file, filename, status);
-            //test for NULL
-			if(result == NULL) {
+            /* test for NULL */
+			if(result == 0) {
 				status = U_MEMORY_ALLOCATION_ERROR;
-				return NULL;
+				return 0;
 			}
         }
         else {
             result = new RuleBasedBreakIterator(file, status);
-            //test for NULL
-			if(result == NULL) {
+            /* test for NULL */
+			if(result == 0) {
 				status = U_MEMORY_ALLOCATION_ERROR;
-				return NULL;
+				return 0;
 			}
         }
     }
@@ -142,10 +142,10 @@ BreakIterator::createCharacterInstance(const Locale& key, UErrorCode& status)
 
     if (!U_FAILURE(status)) {
         result = new RuleBasedBreakIterator(file, status);
-        //test for NULL
-		if(result == NULL) {
+        /* test for NULL */
+		if(result == 0) {
 			status = U_MEMORY_ALLOCATION_ERROR;
-			return NULL;
+			return 0;
 		}
     }
 
@@ -170,10 +170,10 @@ BreakIterator::createSentenceInstance(const Locale& key, UErrorCode& status)
 
     if (!U_FAILURE(status)) {
         result = new RuleBasedBreakIterator(file, status);
-        //test for NULL
-			if(result == NULL) {
+        /* test for NULL */
+			if(result == 0) {
 				status = U_MEMORY_ALLOCATION_ERROR;
-				return NULL;
+				return 0;
 			}
     }
 
@@ -198,10 +198,10 @@ BreakIterator::createTitleInstance(const Locale& key, UErrorCode& status)
 
     if (!U_FAILURE(status)) {
         result = new RuleBasedBreakIterator(file, status);
-        //test for NULL
-		if(result == NULL) {
+        /* test for NULL */
+		if(result == 0) {
 			status = U_MEMORY_ALLOCATION_ERROR;
-			return NULL;
+			return 0;
 		}
     }
 

@@ -251,7 +251,7 @@ UnicodeSet* TransliteratorIDParser::parseGlobalFilter(const UnicodeString& id, i
         ParsePosition ppos(pos);
         UErrorCode ec = U_ZERO_ERROR;
         filter = new UnicodeSet(id, ppos, ec);
-        //test for NULL
+        /* test for NULL */
         if (filter == 0) {
             pos = start;
             return 0;

@@ -186,7 +186,7 @@ Calendar::createInstance(UErrorCode& success)
     if (U_FAILURE(success)) return 0;
     // right now, createInstance will always return an instance of GregorianCalendar
     Calendar* c = new GregorianCalendar(success);
-    //test for NULL
+    /* test for NULL */
     if (c == 0) {
         success = U_MEMORY_ALLOCATION_ERROR;
         return 0;
@@ -203,7 +203,7 @@ Calendar::createInstance(const TimeZone& zone, UErrorCode& success)
     if (U_FAILURE(success)) return 0;
     // since the Locale isn't specified, use the default locale
     Calendar* c = new GregorianCalendar(zone, Locale::getDefault(), success);
-    //test for NULL
+    /* test for NULL */
     if (c == 0) {
         success = U_MEMORY_ALLOCATION_ERROR;
         return 0;
@@ -220,7 +220,7 @@ Calendar::createInstance(const Locale& aLocale, UErrorCode& success)
     if (U_FAILURE(success)) return 0;
     // since the TimeZone isn't specfied, use the default time zone
     Calendar* c = new GregorianCalendar(TimeZone::createDefault(), aLocale, success);
-    //test for NULL
+    /* test for NULL */
     if (c == 0) {
         success = U_MEMORY_ALLOCATION_ERROR;
         return 0;
@@ -256,7 +256,7 @@ Calendar::createInstance(const TimeZone& zone, const Locale& aLocale, UErrorCode
 {
     if (U_FAILURE(success)) return 0;
     Calendar* c = new GregorianCalendar(zone, aLocale, success);
-    //test for NULL
+    /* test for NULL */
     if (c == 0) {
         success = U_MEMORY_ALLOCATION_ERROR;
         return 0;
@@ -377,6 +377,11 @@ Calendar::getTimeInMillis(UErrorCode& status) const
 
     if ( ! fIsTimeSet) 
         ((Calendar*)this)->updateTime(status);
+
+    /* Test for buffer overflows */
+    if(U_FAILURE(status)) {
+        return 0.0;
+    }
     return fTime;
 }
 
@@ -397,6 +402,11 @@ Calendar::setTimeInMillis( double millis, UErrorCode& status ) {
     fAreFieldsSet = FALSE;
 
     computeFields(status);
+
+    /* Test for buffer overflows */
+    if(U_FAILURE(status)) {
+        return;
+    }
     fAreFieldsSet = TRUE;
     fAreAllFieldsSet = TRUE;
 }
@@ -502,10 +512,19 @@ Calendar::isSet(EDateFields field) const
 void
 Calendar::complete(UErrorCode& status)
 {
-    if (!fIsTimeSet) 
+    if (!fIsTimeSet) {
         updateTime(status);
+        /* Test for buffer overflows */
+        if(U_FAILURE(status)) {
+            return;
+        }
+    }
     if (!fAreFieldsSet) {
         computeFields(status); // fills in unset fields
+        /* Test for buffer overflows */
+        if(U_FAILURE(status)) {
+            return;
+        }
         fAreFieldsSet         = TRUE;
         fAreAllFieldsSet     = TRUE;
     }
@@ -593,6 +612,11 @@ int32_t Calendar::fieldDifference(UDate targetMs, EDateFields field, UErrorCode&
     // Set calendar to end point
     setTimeInMillis(startMs, ec);
     add(field, min, ec);
+    
+    /* Test for buffer overflows */
+    if(U_FAILURE(ec)) {
+        return 0;
+    }
     return min;
 }
 
@@ -602,10 +626,10 @@ void
 Calendar::adoptTimeZone(TimeZone* zone)
 {
     // Do nothing if passed-in zone is NULL
-    if (zone == 0) return;
+    if (zone == NULL) return;
 
     // fZone should always be non-null
-    if (fZone != 0) delete fZone;
+    if (fZone != NULL) delete fZone;
     fZone = zone;
 
     // if the zone changes, we need to recompute the time fields
@@ -721,6 +745,11 @@ Calendar::getActualMinimum(EDateFields field, UErrorCode& status) const
     } while (fieldValue >= endValue);
 
     delete work;
+
+    /* Test for buffer overflows */
+    if(U_FAILURE(status)) {
+        return 0;
+    }
     return result;
 }
 
@@ -764,6 +793,12 @@ Calendar::getActualMaximum(EDateFields field, UErrorCode& status) const
     } while (fieldValue <= endValue);
 
     delete work;
+
+    /* Test for buffer overflows */
+    if(U_FAILURE(status)) {
+        return 0;
+    }
+
     return result;
 }
 
@@ -787,7 +822,7 @@ Calendar::setWeekCountData(const Locale& desiredLocale, UErrorCode& status)
     fFirstDayOfWeek = Calendar::SUNDAY;
     fMinimalDaysInFirstWeek = 1;
 
-    UResourceBundle *resource = ures_open(0, desiredLocale.getName(), &status);
+    UResourceBundle *resource = ures_open(NULL, desiredLocale.getName(), &status);
 
     // If the resource data doesn't seem to be present at all, then use last-resort
     // hard-coded data.
@@ -799,7 +834,7 @@ Calendar::setWeekCountData(const Locale& desiredLocale, UErrorCode& status)
     }
 
     //dateTimeElements = resource.getStringArray(kDateTimeElements, count, status);
-    UResourceBundle *dateTimeElements = ures_getByKey(resource, kDateTimeElements, 0, &status);
+    UResourceBundle *dateTimeElements = ures_getByKey(resource, kDateTimeElements, NULL, &status);
     if (U_SUCCESS(status)) {
         int32_t arrLen;
         const int32_t *dateTimeElementsArr = ures_getIntVector(dateTimeElements, &arrLen, &status);

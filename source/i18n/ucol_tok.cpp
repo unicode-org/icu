@@ -148,7 +148,7 @@ void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint
   uprv_memset(src, 0, sizeof(UColTokenParser));
   
   src->source = (UChar *)uprv_malloc(estimatedSize*sizeof(UChar));
-  //Test for NULL
+  /* test for NULL */
   if (src->source == NULL) {
       *status = U_MEMORY_ALLOCATION_ERROR;
       return;
@@ -157,7 +157,7 @@ void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint
   if(nSize > estimatedSize || *status == U_BUFFER_OVERFLOW_ERROR) {
     *status = U_ZERO_ERROR;
     src->source = (UChar *)uprv_realloc(src->source, (nSize+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
-    //test for NULL
+    /* test for NULL */
     if (src->source == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         return;
@@ -193,7 +193,7 @@ void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint
   uhash_setValueDeleter(src->tailored, uhash_freeBlock);
 
   src->opts = (UColOptionSet *)uprv_malloc(sizeof(UColOptionSet));
-  //Test for NULL
+  /* test for NULL */
   if (src->opts == NULL) {
       *status = U_MEMORY_ALLOCATION_ERROR;
       return;
@@ -204,7 +204,7 @@ void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint
   // rulesToParse = src->source;
   src->lh = 0;
   src->lh = (UColTokListHeader *)uprv_malloc(512*sizeof(UColTokListHeader));
-  //Test for NULL
+  /* test for NULL */
   if (src->lh == NULL) {
       *status = U_MEMORY_ALLOCATION_ERROR;
       return;
@@ -966,7 +966,7 @@ static UColToken *ucol_tok_initAReset(UColTokenParser *src, UChar *expand, uint3
                                       UParseError *parseError, UErrorCode *status) {
   /* do the reset thing */
   UColToken *sourceToken = (UColToken *)uprv_malloc(sizeof(UColToken));
-  //test for NULL
+  /* test for NULL */
   if (sourceToken == NULL) {
       *status = U_MEMORY_ALLOCATION_ERROR;
       return NULL;
@@ -1164,7 +1164,7 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
         if(sourceToken == NULL) {
           /* If sourceToken is null, create new one, */
           sourceToken = (UColToken *)uprv_malloc(sizeof(UColToken));
-          //test for NULL
+          /* test for NULL */
           if (sourceToken == NULL) {
               *status = U_MEMORY_ALLOCATION_ERROR;
               return 0;

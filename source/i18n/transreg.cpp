@@ -90,7 +90,7 @@ Transliterator* TransliteratorAlias::create(UParseError& pe,
     } else {
         t = new CompoundTransliterator(ID, aliasID, idSplitPoint,
                                        trans, ec);
-        //test for NULL
+        /* test for NULL */
         if (t == 0) {
             ec = U_MEMORY_ALLOCATION_ERROR;
             return 0;
@@ -177,7 +177,7 @@ Spec::Spec(const UnicodeString& theSpec) : top(theSpec) {
     CharString topch(top);
     Locale toploc(topch);
     res = new ResourceBundle(u_getDataDirectory(), toploc, status);
-    //test for NULL
+    /* test for NULL */
     if (res == 0) {
         return;
     }
@@ -1021,7 +1021,7 @@ Transliterator* TransliteratorRegistry::instantiateEntry(const UnicodeString& ID
             return entry->u.prototype->clone();
         } else if (entry->entryType == Entry::ALIAS) {
             aliasReturn = new TransliteratorAlias(entry->stringArg);
-            //test for NULL
+            /* test for NULL */
             if (aliasReturn == 0) {
                 status = U_MEMORY_ALLOCATION_ERROR;
             }
@@ -1031,7 +1031,7 @@ Transliterator* TransliteratorRegistry::instantiateEntry(const UnicodeString& ID
         } else if (entry->entryType == Entry::COMPOUND_RBT) {
             UnicodeString id("_", "");
             Transliterator *t = new RuleBasedTransliterator(id, entry->u.data);
-            //test for NULL
+            /* test for NULL */
             if (t == 0) {
                 status = U_MEMORY_ALLOCATION_ERROR;
                 return 0;
