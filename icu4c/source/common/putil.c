@@ -1123,19 +1123,32 @@ static const mac_lc_rec mac_lc_recs[] = {
 /* Return just the POSIX id, whatever happens to be in it */
 static const char *uprv_getPOSIXID()
 {
-    const char* posixID = getenv("LC_ALL");
-    if (posixID == 0)
-        posixID = getenv("LANG");
-    if (posixID == 0)
-        posixID = setlocale(LC_ALL, NULL);
+    static const char* posixID = NULL;
+    if (posixID == 0) {
+        posixID = getenv("LC_ALL");
+        if (posixID == 0) {
+            posixID = getenv("LANG");
+            if (posixID == 0) {
+                /*
+                * On Solaris two different calls to setlocale can result in 
+                * different values. Only get this value once.
+                */
+                posixID = setlocale(LC_ALL, NULL);
+            }
+        }
+    }
 
     if (posixID==0)
     {
+        /* Nothing worked.  Give it a nice value. */
         posixID = "en_US";
     }
-    else if ((uprv_strcmp("C", posixID) == 0) ||
-        (uprv_strncmp("C ", posixID, 2) == 0))
-    {  /* HPUX returns 'C C C C C C C' */
+    else if ((uprv_strcmp("C", posixID) == 0)
+        || (uprv_strchr(posixID, ' ') != NULL)
+        || (uprv_strchr(posixID, '/') != NULL))
+    {   /* HPUX returns 'C C C C C C C' */
+        /* Solaris can return /en_US/C/C/C/C/C on the second try. */
+        /* Maybe we got some garbage.  Give it a nice value. */
         posixID = "en_US_POSIX";
     }
     return posixID;
