@@ -458,13 +458,13 @@ static void TestConvertFallBackWithBufferSizes(int32_t outsize, int32_t insize )
     UChar    DBCSText[] = 
      { 0x00a1, 0x00ad, 0x2010, 0x00b7, 0x30fb};
     const uint8_t expectedIBM1362[] = 
-     {  0xa2, 0xae, 0x7f, 0xa1, 0xa9,0x7f, 0xa1, 0xa4};
+     {  0xa2, 0xae, 0xa1 ,0xa9, 0xa1, 0xa9,0xa1 ,0xa4, 0xa1, 0xa4};
     UChar retrievedDBCSText[]=
-        { 0x00a1, 0x001A, 0x2010, 0x001A, 0x30fb };
+        { 0x00a1, 0x2010, 0x2010, 0x30fb, 0x30fb };
     int32_t  toIBM1362Offs    [] = 
-        {  0x00, 0x00, 0x01, 0x02, 0x02,  0x03, 0x04, 0x04};
+        {  0x00, 0x00, 0x01,0x01, 0x02, 0x02,  0x03, 0x03, 0x04, 0x04};
     int32_t fromIBM1362offs []  = 
-    {  0, 2, 3, 5, 6};
+    {  0, 2, 4, 6, 8};
 
 
     UChar    MBCSText[] = 
@@ -494,16 +494,16 @@ static void TestConvertFallBackWithBufferSizes(int32_t outsize, int32_t insize )
         0x07, 
         0x07, 
         0x7f, 
-        0x7f, 
+        0xa1, 0xa4,
         0xa1, 0xe0, 
         0xa1, 0xa4, 
         0xf5, 0xe2};
     UChar retrievedMBCSText1363[]=
-       { 0x0005, 0x0005, 0x0007, 0x0007, 0x001a, 0x001a, 0x25a1, 0x30fb, 0x9a36};
+       { 0x0005, 0x0005, 0x0007, 0x0007, 0x001a,  0x30fb, 0x25a1, 0x30fb, 0x9a36};
     int32_t  toIBM1363Offs    [] = 
-     {  0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x06, 0x07, 0x07, 0x08, 0x08};
+     {  0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x05, 0x06, 0x06, 0x07, 0x07, 0x08, 0x08};
     int32_t fromIBM1363offs []  = 
-    {  0, 1, 2, 3, 4, 5, 6, 8, 10};
+    {  0, 1, 2, 3, 4, 5, 7, 9, 11};
 
 
     
@@ -717,13 +717,12 @@ static void TestConvertFallBackWithBufferSizes(int32_t outsize, int32_t insize )
     }
     /* Test for jitterbug 509 EBCDIC_STATEFUL Converters*/
     {                                    
-        const UChar unicodeInput[]    = {0x00AF         ,0x2013    ,0x2223    ,0x004C    ,0x5F5D         ,0xFF5E };
-                                        
-        const uint8_t expectedtest1[] = {0x0E,0x42,0xA1 ,0x44,0x4A ,0x42,0x4F ,0x0F,0xD3 ,0x0E,0x65,0x60 ,0x43,0xA1};
-        int32_t  totest1Offs[]        = {0,0,0          ,1,1       ,2,2       ,3,3       ,4,4,4          ,5,5};         
-        const uint8_t test1input[]    ={0x0E,0x42,0xA1  ,0x44,0x4A ,0x42,0x4F ,0x0F,0xD3 ,0x0E,0x65,0x60 ,0x43,0xA1};
-        const UChar expectedUnicode[] = {0x203e         ,0x2014    ,0xff5c    ,0x004c    ,0x5f5e         ,0x223c };
-        int32_t fromtest1Offs[]       = {1              ,3         ,5         ,8         ,10              ,12};       
+        const UChar unicodeInput[]    = {0x00AF,         0x2013,     0x2223,    0x004C,    0x5F5D,         0xFF5E };
+        const uint8_t expectedtest1[] = {0x0E,0x42,0xA1, 0x44,0x4A,  0x42,0x4F, 0x0F,0xD3, 0x0E,0x65,0x60, 0x43,0xA1};
+        int32_t  totest1Offs[]        = {0,   0,   0,    1,   1,     2,   2,    3,   3,    4,   4,   4,    5,   5};         
+        const uint8_t test1input[]    = {0x0E,0x42,0xA1, 0x44,0x4A,  0x42,0x4F, 0x0F,0xD3, 0x0E,0x65,0x60, 0x43,0xA1};
+        const UChar expectedUnicode[] = {0x203e,         0x2014,     0xff5c,    0x004c,    0x5f5e,         0x223c };
+        int32_t fromtest1Offs[]       = {1,              3,          5,         8,         10,             12};       
         /*from Unicode*/
         if(!testConvertFromUnicode(unicodeInput, sizeof(unicodeInput)/sizeof(unicodeInput[0]),
                 expectedtest1, sizeof(expectedtest1), "ibm-1371", TRUE, totest1Offs ))
@@ -733,6 +732,5 @@ static void TestConvertFallBackWithBufferSizes(int32_t outsize, int32_t insize )
                expectedUnicode, sizeof(expectedUnicode)/sizeof(expectedUnicode[0]), "ibm-1371", TRUE, fromtest1Offs ))
             log_err("ibm-1371(MBCS conversion with single-byte) -> u  did not match.,\n");
     }
-
 
 }
