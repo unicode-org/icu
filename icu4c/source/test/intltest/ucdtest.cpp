@@ -7,6 +7,7 @@
 #include "ucdtest.h"
 #include "unicode/unicode.h"
 #include "unicode/ustring.h"
+#include "unicode/uchar.h"
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
@@ -31,6 +32,7 @@ void UnicodeTest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
         case 5: name = "TestCodePoint"; if(exec) TestCodePoint(); break;
         case 6: name = "TestCharLength"; if(exec) TestCharLength(); break;
         case 7: name = "TestIdentifier"; if(exec) TestIdentifier(); break;  
+        case 8: name = "TestScript"; if(exec) TestScript(); break;  
         default: name = ""; break; //needed to end loop
     }
 }
@@ -557,6 +559,7 @@ void UnicodeTest::TestCodePoint(){
     }
 
 }
+
 void UnicodeTest::TestCharLength()
 {
     const int32_t codepoint[]={
@@ -588,5 +591,41 @@ void UnicodeTest::TestCharLength()
         if(Unicode::needMultipleUChar(c) != multiple){
             errln("ERROR: Unicode::needMultipleUChar() failed for" + prettify(msg));
         }
+    }
+}
+
+/*
+Various script value testing.
+This makes sure that the Unicode::EUnicodeScript
+and UCharScript enum values are the same.
+*/
+void UnicodeTest::TestScript()
+{
+    if (Unicode::EUnicodeScript::kScriptCount != U_CHAR_SCRIPT_COUNT) {
+        errln("ERROR: Unicode::EUnicodeScript is not the same size as UCharScript");
+    }
+
+    if (Unicode::EUnicodeScript::kBasicLatin != U_BASIC_LATIN) {
+        errln("ERROR: Different Basic Latin values in EUnicodeScript and UCharScript");
+    }
+
+    if (Unicode::EUnicodeScript::kHighSurrogate != U_HIGH_SURROGATES) {
+        errln("ERROR: Different High Surrogate values in EUnicodeScript and UCharScript");
+    }
+
+    if (Unicode::EUnicodeScript::kLowSurrogate != U_LOW_SURROGATES) {
+        errln("ERROR: Different Low Surrogate values in EUnicodeScript and UCharScript");
+    }
+
+    if (Unicode::EUnicodeScript::kCJKRadicalsSupplement != U_CJK_RADICALS_SUPPLEMENT) {
+        errln("ERROR: Different CJK Radicals Supplement values in EUnicodeScript and UCharScript");
+    }
+
+    if (Unicode::EUnicodeScript::kGreek != U_GREEK) {
+        errln("ERROR: Different Greek values in EUnicodeScript and UCharScript");
+    }
+
+    if (Unicode::EUnicodeScript::kThai != U_THAI) {
+        errln("ERROR: Different Thai values in EUnicodeScript and UCharScript");
     }
 }
