@@ -1012,7 +1012,7 @@ int main(int argc, const char** argv) {
     //   Lines themselves are null terminated.
     //
     FILE *f;
-    f = fopen(opt_fName, "r");
+    f = fopen(opt_fName, "rb");
     if (f == NULL) {
         fprintf(stderr, "Can not open file \"%s\"\n", opt_fName);
         exit(-1);
