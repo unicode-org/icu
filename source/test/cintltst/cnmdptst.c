@@ -26,6 +26,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#define CHECK(status,str) if (U_FAILURE(status)) { log_err("FAIL: %s\n", str); return; }
+
 void addNumFrDepTest(TestNode** root)
 {
   addTest(root, &TestPatterns, "tsformat/cnmdptst/TestPatterns");
@@ -35,11 +37,11 @@ void addNumFrDepTest(TestNode** root)
   addTest(root, &TestCurrency,  "tsformat/cnmdptst/TestCurrency");
   addTest(root, &TestRounding487, "tsformat/cnmdptst/TestRounding487");
   addTest(root, &TestDoubleAttribute, "tsformat/cnmdptst/TestDoubleAttribute");
-
+  addTest(root, &TestSecondaryGrouping, "tsformat/cnmdptst/TestSecondaryGrouping");
 
 }
 /*Test Various format patterns*/
-void TestPatterns()
+void TestPatterns(void)
 {
   int32_t pat_length, i, lneed;
   UNumberFormat *fmt;
@@ -101,7 +103,7 @@ void TestPatterns()
     }
 }
 /* Test the handling of quotes*/
-void TestQuotes()
+void TestQuotes(void)
 {
   int32_t lneed;
   UErrorCode status;
@@ -167,7 +169,7 @@ void TestQuotes()
 }
 
 /* Test exponential pattern*/
-void TestExponential()
+void TestExponential(void)
 {
   int32_t pat_length, val_length, lval_length;
   int32_t ival, ilval, p, v, lneed;
@@ -316,7 +318,7 @@ void TestExponential()
 /**
  * Test the handling of the currency symbol in patterns.
  */
-void TestCurrencySign()
+void TestCurrencySign(void)
 {
   int32_t lneed;
   UNumberFormat *fmt;
@@ -382,7 +384,7 @@ void TestCurrencySign()
 /**
  * Test localized currency patterns.
  */
-void TestCurrency()
+void TestCurrency(void)
 {
   UNumberFormat *currencyFmt;
   UChar *str, *res;
@@ -419,7 +421,7 @@ void TestCurrency()
 /**
  * Test proper rounding by the format method.
  */
-void TestRounding487()
+void TestRounding487(void)
 {
   UNumberFormat *nnf;
   UErrorCode status = U_ZERO_ERROR;
@@ -474,7 +476,7 @@ void roundingTest(UNumberFormat* nf, double x, int32_t maxFractionDigits, const 
 /*
  * Testing unum_getDoubleAttribute and  unum_setDoubleAttribute() 
  */
-void TestDoubleAttribute()
+void TestDoubleAttribute(void)
 {
 	double mydata[] = { 1.11, 22.22, 333.33, 4444.44, 55555.55, 666666.66, 7777777.77, 88888888.88, 999999999.99};
 	double dvalue;
@@ -499,3 +501,99 @@ void TestDoubleAttribute()
 	unum_close(def);
 }
 
+/**
+ * Test the functioning of the secondary grouping value.
+ */
+void TestSecondaryGrouping(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    UNumberFormat *f = NULL, *g= NULL;
+    UNumberFormat *us = unum_open(UNUM_DECIMAL, "en_US", &status);
+    UNumberFormatSymbols usSymbols;
+    UFieldPosition pos;
+    UChar resultBuffer[512];
+    int32_t l = 1876543210L;
+    UBool ok = TRUE;
+    UChar buffer[512];
+    int32_t i;
+    UBool expectGroup = FALSE, isGroup = FALSE;
+
+    unum_getSymbols(us, &usSymbols);
+    CHECK(status, "DecimalFormatSymbols ct");
+
+    u_uastrcpy(buffer, "#,##,###");
+    f = unum_openPattern(buffer, -1, "en_US", &status);
+    CHECK(status, "DecimalFormat ct");
+
+    unum_format(f, (int32_t)123456789L, resultBuffer, 512 , &pos, &status);
+    u_uastrcpy(buffer, "12,34,56,789");
+    if ((u_strcmp(resultBuffer, buffer) != 0) || U_FAILURE(status))
+    {
+        log_err("Fail: Formatting \"#,##,###\" pattern with 123456789 got %s, expected %s\n", resultBuffer, "12,34,56,789");
+    }
+    memset(resultBuffer,0, sizeof(UChar)*512);
+    unum_toPattern(f, FALSE, resultBuffer, 512, &status);
+    u_uastrcpy(buffer, "#,##,###");
+    if ((u_strcmp(resultBuffer, buffer) != 0) || U_FAILURE(status))
+    {
+        log_err("Fail: toPattern() got %s, expected %s\n", resultBuffer, "#,##,###");
+    }
+    memset(resultBuffer,0, sizeof(UChar)*512);
+    u_uastrcpy(buffer, "#,###");
+    unum_applyPattern(f, FALSE, buffer, -1);
+    if (U_FAILURE(status))
+    {
+        log_err("Fail: applyPattern call failed\n");
+    }
+    unum_setAttribute(f, UNUM_SECONDARY_GROUPING_SIZE, 4);
+    unum_format(f, (int32_t)123456789L, resultBuffer, 512 , &pos, &status);
+    u_uastrcpy(buffer, "12,3456,789");
+    if ((u_strcmp(resultBuffer, buffer) != 0) || U_FAILURE(status))
+    {
+        log_err("Fail: Formatting \"#,###\" pattern with 123456789 got %s, expected %s\n", resultBuffer, "12,3456,789");
+    }
+    memset(resultBuffer,0, sizeof(UChar)*512);
+    unum_toPattern(f, FALSE, resultBuffer, 512, &status);
+    u_uastrcpy(buffer, "#,####,###");
+    if ((u_strcmp(resultBuffer, buffer) != 0) || U_FAILURE(status))
+    {
+        log_err("Fail: toPattern() got %s, expected %s\n", resultBuffer, "#,####,###");
+    }
+    memset(resultBuffer,0, sizeof(UChar)*512);
+    g = unum_open(UNUM_DECIMAL, "hi_IN", &status);
+    if (U_FAILURE(status))
+    {
+        log_err("Fail: Cannot create UNumberFormat for \"hi_IN\" locale.\n");
+    }
+
+    unum_format(g, l, resultBuffer, 512, &pos, &status);
+    unum_close(g);
+    // expect "1,87,65,43,210", but with Hindi digits
+    //         01234567890123
+    if (u_strlen(resultBuffer) != 14) {
+        ok = FALSE;
+    } else {
+        for (i=0; i<u_strlen(resultBuffer); ++i) {
+            expectGroup = FALSE;
+            switch (i) {
+            case 1:
+            case 4:
+            case 7:
+            case 10:
+                expectGroup = TRUE;
+                break;
+            }
+            // Later -- fix this to get the actual grouping
+            // character from the resource bundle.
+            isGroup = (resultBuffer[i] == 0x002C);
+            if (isGroup != expectGroup) {
+                ok = FALSE;
+                break;
+            }
+        }
+    }
+    if (!ok) {
+        log_err("FAIL  Expected %s x hi_IN -> \"1,87,65,43,210\" (with Hindi digits), got %s\n", "1876543210L", resultBuffer);
+    } 
+    unum_close(f);
+    unum_close(us);
+}
