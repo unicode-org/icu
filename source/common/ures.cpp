@@ -34,7 +34,7 @@ U_CAPI UResourceBundle* ures_open(    const char* myPath,
 
 
   if (myPath != 0) uPath = myPath;
-  else uPath = uloc_getDataDirectory();
+  else uPath = u_getDataDirectory();
 
   if (localeID == 0) localeID = uloc_getDefault();
 
