@@ -735,11 +735,11 @@ NFRule::shouldRollBack(double number) const
 
 static void dumpUS(FILE* f, const UnicodeString& us) {
   int len = us.length();
-  char* buf = new char[len+1];
+  char* buf = (char *)uprv_malloc((len+1)*sizeof(char)); //new char[len+1];
   us.extract(0, len, buf);
   buf[len] = 0;
   fprintf(f, "%s", buf);
-  delete[] buf;
+  uprv_free(buf); //delete[] buf;
 }
 #endif
 
