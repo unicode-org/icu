@@ -178,7 +178,8 @@ during the build of the packaged file.
 .BI "\-p\fP, \fB\-\-name" " name"
 Set the packaged file name to
 .IR name .
-This name is also used as the default entry point name.
+This name is also used as the default entry point name after having
+been turned into a valid C identifier.
 .TP
 .BI "\-e\fP, \fB\-\-entrypoint" " name"
 Set the data entry point (used for linking against the data in a

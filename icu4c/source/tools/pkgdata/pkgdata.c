@@ -211,6 +211,21 @@ main(int argc, char* argv[]) {
     }
 
     o.shortName = options[0].value;
+    /**/ {
+        int len = uprv_strlen(o.shortName);
+        char *csname, *cp;
+        const char *sp;
+
+        csname = (char *) uprv_malloc((len + 1 + 1) * sizeof(*o.cShortName));
+        *csname = '_';
+        for (sp = o.shortName, cp = csname + 1; *sp; ++sp) {
+            *cp++ = isalnum(*sp) ? *sp : '_';
+        }
+        *cp = 0;
+
+        o.cShortName = csname;
+    }
+
 #ifdef WIN32 /* format is R:pathtoICU or D:pathtoICU */
     {
         char *pathstuff = (char *)options[1].value;
@@ -272,7 +287,7 @@ main(int argc, char* argv[]) {
     if( options[15].doesOccur ) {
         o.entryName = options[15].value;
     } else {
-        o.entryName = o.shortName;
+        o.entryName = o.cShortName;
     }
 
     /* OK options are set up. Now the file lists. */
@@ -387,6 +402,7 @@ static int executeMakefile(const UPKGOptions *o)
     if(rc < 0) {
         fprintf(stderr, "# Failed, rc=%d\n", rc);
     }
+
     return rc < 128 ? rc : (rc >> 8);
 }
 
@@ -404,7 +420,6 @@ static void loadLists(UPKGOptions *o, UErrorCode *status)
         if(o->verbose) {
             fprintf(stdout, "# Reading %s..\n", l->str);
         }
-
         /* TODO: stdin */
         in = T_FileStream_open(l->str, "r");
 
