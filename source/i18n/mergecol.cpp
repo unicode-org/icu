@@ -393,15 +393,23 @@ void MergeCollation::fixEntry(PatternEntry* newEntry,
             oldIndex = patterns->lastIndexOf(newEntry);
         }
 
+        int32_t lastIndex = -1;
+
         if (oldIndex != -1) {
             PatternEntry *p = patterns->orphanAt(oldIndex);
+            if (lastEntry == p) {
+                lastEntry = 0; // Prevent double deletion
+                lastIndex = patterns->size();
+            }
             delete p;
         }
 
-        // Find the insertion point for the new entry.
-        int32_t lastIndex = findLastEntry(lastEntry, excess, success);
-        if (U_FAILURE(success)) {
-            return;
+        if (lastIndex < 0) {
+            // Find the insertion point for the new entry.
+            lastIndex = findLastEntry(lastEntry, excess, success);
+            if (U_FAILURE(success)) {
+                return;
+            }
         }
 
         // Do not change the last entry if the new entry is a expanding character
