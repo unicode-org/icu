@@ -508,7 +508,7 @@ static void CallParseMessage(const char* locale, UChar* pattern, int32_t pattern
 }
 
 /*test u_vparseMessage() with various test patterns */
-static void TestParseMessageWithValist()
+static void TestParseMessageWithValist(void)
 {
     UChar pattern[100];
     UChar source[100];

@@ -121,6 +121,13 @@ void MultithreadTest::runIndexedTest( int32_t index, UBool exec,
 #ifdef WIN32
 #define HAVE_IMP
 
+#   define VC_EXTRALEAN
+#   define WIN32_LEAN_AND_MEAN
+#   define NOGDI
+#   define NOUSER
+#   define NOSERVICE
+#   define NOIME
+#   define NOMCX
 #include <windows.h>
 
 struct Win32ThreadImplementation

@@ -19,6 +19,11 @@
 #ifdef WIN32
 #   define VC_EXTRALEAN
 #   define WIN32_LEAN_AND_MEAN
+#   define NOGDI
+#   define NOUSER
+#   define NOSERVICE
+#   define NOIME
+#   define NOMCX
 #   include <windows.h>
 #endif
 #include "unicode/utypes.h"

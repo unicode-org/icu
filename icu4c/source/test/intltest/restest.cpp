@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2001, International Business Machines Corporation and
+ * Copyright (c) 1997-2002, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -8,14 +8,7 @@
 #include <time.h>
 #include <string.h>
 
-#define RESTEST_HEAP_CHECK 0
-
 #include "unicode/utypes.h"
-
-#if defined(_WIN32) && !defined(__WINDOWS__)
-#define _CRTDBG_MAP_ALLOC
-#include <crtdbg.h>
-#endif
 
 #include "cstring.h"
 #include "unicode/unistr.h"
@@ -203,25 +196,6 @@ void ResourceBundleTest::runIndexedTest( int32_t index, UBool exec, const char* 
 void
 ResourceBundleTest::TestResourceBundles()
 {
-#if defined(_WIN32) && !defined(__WINDOWS__)
-#if defined(_DEBUG) && RESTEST_HEAP_CHECK
-    /*
-     * Set the debug-heap flag to keep freed blocks in the
-     * heap's linked list - This will allow us to catch any
-     * inadvertent use of freed memory
-     */
-    int tmpDbgFlag = _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG);
-    tmpDbgFlag |= _CRTDBG_DELAY_FREE_MEM_DF;
-    tmpDbgFlag |= _CRTDBG_LEAK_CHECK_DF;
-    tmpDbgFlag |= _CRTDBG_CHECK_ALWAYS_DF;
-    _CrtSetDbgFlag(tmpDbgFlag);
-
-    _CrtMemState memstate;
-    _CrtMemCheckpoint(&memstate);
-    {
-#endif
-#endif
-
     testTag("only_in_Root", TRUE, FALSE, FALSE);
     testTag("only_in_te", FALSE, TRUE, FALSE);
     testTag("only_in_te_IN", FALSE, FALSE, TRUE);
@@ -230,25 +204,7 @@ ResourceBundleTest::TestResourceBundles()
     testTag("in_Root_te_IN", TRUE, FALSE, TRUE);
     testTag("in_te_te_IN", FALSE, TRUE, TRUE);
     testTag("nonexistent", FALSE, FALSE, FALSE);
-    OUT << "Passed: " << pass << "\nFailed: " << fail << endl;
-
-#if defined(_WIN32) && !defined(__WINDOWS__)
-#if defined(_DEBUG) && RESTEST_HEAP_CHECK
-    }
-    _CrtMemDumpAllObjectsSince(&memstate);
-
-    /*
-     * Set the debug-heap flag to keep freed blocks in the
-     * heap's linked list - This will allow us to catch any
-     * inadvertent use of freed memory
-     */
-    tmpDbgFlag = _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG);
-    tmpDbgFlag |= _CRTDBG_DELAY_FREE_MEM_DF;
-    tmpDbgFlag &= ~_CRTDBG_LEAK_CHECK_DF;
-    tmpDbgFlag &= ~_CRTDBG_CHECK_ALWAYS_DF;
-    _CrtSetDbgFlag(tmpDbgFlag);
-#endif
-#endif
+    logln("Passed: %d\nFailed: %d", pass, fail);
 }
 
 void

@@ -566,7 +566,7 @@ checkRanges3[]={
 };
 
 static void
-TrieTest() {
+TrieTest(void) {
     testTrieRanges4("set1",
         setRanges1, ARRAY_LENGTH(setRanges1),
         checkRanges1, ARRAY_LENGTH(checkRanges1));
