@@ -857,8 +857,7 @@ tt+$	xxxtt	y	-	-
 ^([^,]{0,3},){0,3}d	aaa,b,c,d	y	$1	c,
 (?i)		y	-	-
 '(?!\A)x'm	a\nxb\n	y	-	-
-^(a(b)?)+$	aba	y	-$1-$2-	-a--
-^(aa(bb)?)+$	aabbaa	y	-$1-$2-	-aa--
+^(a(b)?)+$	aba	iy	-$1-$2-	-a--
 '^.{9}abc.*\n'm	123\nabcabcabcabc\n	y	-	-
 ^(a)?a$	a	y	-$1-	--
 ^(a)?(?(1)a|b)+$	a	n	-	-

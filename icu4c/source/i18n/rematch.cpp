@@ -733,31 +733,6 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
             U_ASSERT(fp->fExtra[opValue] <= fp->fExtra[opValue+1]);
             break;
 
-        case URX_END_CAPTURE_N:
-            {
-                U_ASSERT(opValue >= 0 && opValue < frameSize-3);
-                U_ASSERT(fp->fExtra[opValue+2] >= 0);            // Start pos for this group must be set.
-                fp->fExtra[opValue]   = fp->fExtra[opValue+2];   // Tentative start becomes real.
-                fp->fExtra[opValue+1] = fp->fInputIdx;           // End position
-                U_ASSERT(fp->fExtra[opValue] <= fp->fExtra[opValue+1]);
-                
-                int32_t lastNestedGroup = pat[fp->fPatIdx];
-                fp->fPatIdx++;
-                U_ASSERT(lastNestedGroup>1 && lastNestedGroup<=fPattern->fGroupMap->size());
-                int32_t nestedGroupNum;
-                for (nestedGroupNum=lastNestedGroup; ;nestedGroupNum--) {
-                    int32_t nestedGroupVarsIdx = fPattern->fGroupMap->elementAti(nestedGroupNum-1);
-                    if (nestedGroupVarsIdx == opValue) {
-                        break;
-                    }
-                    U_ASSERT(nestedGroupNum>=2);
-                    if (fp->fExtra[nestedGroupVarsIdx] < fp->fExtra[opValue]) {
-                        fp->fExtra[nestedGroupVarsIdx] = -1;
-                        fp->fExtra[nestedGroupVarsIdx+1] = -1;
-                    }
-                }
-            }
-            break;
             
         case URX_DOLLAR:                   //  $, test for End of line
                                            //     or for position before new line at end of input
