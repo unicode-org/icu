@@ -1,0 +1,35 @@
+/**
+*******************************************************************************
+* Copyright (C) 1996-2001, International Business Machines Corporation and    *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*
+* $Source: 
+*     /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterNameChoiceEnum.java $ 
+* $Date: 2002/02/16 03:05:57 $ 
+* $Revision: 1.4 $
+*
+*******************************************************************************
+*/
+
+package com.ibm.icu.lang;
+
+/**
+* Internal class containing selector constants for the unicode character names.
+* Constants representing the "modern" name of a Unicode character or the name 
+* that was defined in Unicode version 1.0, before the Unicode standard 
+* merged with ISO-10646.
+* Arguments for <a href=UCharacterName.html>UCharacterName</a>
+* @author Syn Wee Quek
+* @since oct0600
+*/
+
+interface UCharacterNameChoice
+{
+  // public variables =============================================
+  
+  static final int U_UNICODE_CHAR_NAME = 0;
+  static final int U_UNICODE_10_CHAR_NAME = 1;
+  static final int U_EXTENDED_CHAR_NAME = 2;
+  static final int U_CHAR_NAME_CHOICE_COUNT = 3;
+}
