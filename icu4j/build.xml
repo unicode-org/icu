@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $
-* $Date: 2003/06/13 19:27:24 $
-* $Revision: 1.73 $
+* $Date: 2003/07/03 20:47:33 $
+* $Revision: 1.74 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -116,8 +116,6 @@
 
     <!-- core does not build richedit or tests -->
     <target name="core" depends="init,coreData,_resources">
-        <copy file="${src.dir}/com/ibm/icu/impl/data/thai_dict"
-            todir="${build.dir}/com/ibm/icu/impl/data/"/><!-- only needed if you are using html reporter -->
         <javac includes="com/ibm/icu/util/**/*.java,com/ibm/icu/text/**/*.java,com/ibm/icu/math/**/*.java,com/ibm/icu/impl/**/*.java,com/ibm/icu/lang/*.java"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
@@ -290,6 +288,7 @@
     <java classname="com.ibm.icu.dev.test.TestAll" fork="yes">
         <classpath>
                 <pathelement path="${java.class.path}/"/>
+                <!-- pathelement location="clover.jar"--/>
                 <pathelement path="${build.dir}"/>
             </classpath>
     </java>
@@ -389,9 +388,6 @@
             Targets to build only Collation API and Collation tests
      -->
     <target name="collator" depends="init,_resources,copyAllICUData">
-
-         <copy file="${src.dir}/com/ibm/icu/impl/data/thai_dict"
-            todir="${build.dir}/com/ibm/icu/impl/data/"/>
 
          <javac includes="com/ibm/icu/text/*Collator*.java,com/ibm/icu/text/*Collation*.java,com/ibm/icu/text/*BreakIterator*.java,com/ibm/icu/text/Normalizer.java,com/ibm/icu/text/UTF16.java,com/ibm/icu/text/Replaceable.java,com/ibm/icu/text/ReplaceableString.java,com/ibm/icu/text/UnicodeFilter.java,com/ibm/icu/text/UnicodeSetIterator.java, com/ibm/icu/impl/data/*Break*.java"
             excludes="**/CVS/**/*, com/ibm/icu/lang/UScriptRun.java,com/ibm/icu/impl/UtilityExtensions.java,com/ibm/icu/impl/UnicodeCharacterIterator.java"
@@ -547,9 +543,6 @@
             Targets to build only BreakIterator API
      -->
     <target name="breakIterator" depends="init,_resources,copyICUPropsData">
-
-         <copy file="${src.dir}/com/ibm/icu/impl/data/thai_dict"
-            todir="${build.dir}/com/ibm/icu/impl/data/"/>
 
          <javac includes="com/ibm/icu/text/*BreakIterator*.java,com/ibm/icu/impl/data/*Break*.java,com/ibm/icu/lang/**/*,com/ibm/icu/impl/UCharacterName.java,com/ibm/icu/impl/ICUListResourceBundle.java,com/ibm/icu/text/UnicodeSetIterator.java"
             excludes="**/CVS/**/*, com/ibm/icu/lang/UScriptRun.java,com/ibm/icu/impl/UtilityExtensions.java,com/ibm/icu/impl/BOCU.java,com/ibm/icu/impl/TrieBuilder.java,com/ibm/icu/impl/IntTrieBuilder.java"
