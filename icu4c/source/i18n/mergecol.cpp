@@ -308,6 +308,7 @@ void MergeCollation::addPattern(const   UnicodeString&  pattern,
     }
 
       entry = parser->next(success);
+    }
 
   // WEIV tentatively - is there a leak at the end???
   delete parser;
