@@ -19,7 +19,7 @@ behavior, as well as the full set of Olson compatibility IDs.
 
 References:
 
-ICU4C:  http://oss.software.ibm.com/icu/
+ICU4C:  http://icu.sourceforge.net/
 Olson:  ftp://elsie.nci.nih.gov/pub/
 
 ----------------------------------------------------------------------

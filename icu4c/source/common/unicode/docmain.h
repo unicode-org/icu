@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2004, International Business Machines Corporation and
+ * Copyright (c) 1997-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  *
  *  FILE NAME: DOCMAIN.h
@@ -39,21 +39,20 @@
  *
  *
  * <h3>API References for Previous Releases</h3>
- * <p>The API References for the previous release are available
- *   <a href="http://oss.software.ibm.com/icu/apiref/previous/">online</a>.
- *   For each release there are also .zip and .tgz files for the API References
- *   on the <a href="http://oss.software.ibm.com/icu/download/">download page</a> of the release.</p>
+ * <p>The API References for each release of ICU are also available as
+ * a zip file from the ICU 
+ * <a href="http://www.ibm.com/software/globalization/icu/downloads.jsp">download page</a>.</p>
  *
  * <hr>
  *
  * <h2>Architecture (User's Guide)</h2>
  * <ul>
- *   <li><a href="http://oss.software.ibm.com/icu/userguide/index.html">Introduction</a></li>
- *   <li><a href="http://oss.software.ibm.com/icu/userguide/i18n.html">Internationalization</a></li>
- *   <li><a href="http://oss.software.ibm.com/icu/userguide/design.html">Locale Model</a></li>
- *   <li><a href="http://oss.software.ibm.com/icu/userguide/design.html">Multithreading</a></li>
- *   <li><a href="http://oss.software.ibm.com/icu/userguide/conversion.html">Conversion</a></li>
- *   <li><a href="http://oss.software.ibm.com/icu/userguide/design.html">Error Handling</a></li>
+ *   <li><a href="http://icu.sourceforge.net/userguide/">Introduction</a></li>
+ *   <li><a href="http://icu.sourceforge.net/userguide/i18n.html">Internationalization</a></li>
+ *   <li><a href="http://icu.sourceforge.net/userguide/design.html">Locale Model</a></li>
+ *   <li><a href="http://icu.sourceforge.net/userguide/design.html">Multithreading</a></li>
+ *   <li><a href="http://icu.sourceforge.net/userguide/conversion.html">Conversion</a></li>
+ *   <li><a href="http://icu.sourceforge.net/userguide/design.html">Error Handling</a></li>
  * </ul>
  *
  * <hr>

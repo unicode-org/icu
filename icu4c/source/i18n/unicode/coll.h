@@ -648,7 +648,7 @@ public:
      * applications who wish to cache collators, or otherwise reuse
      * collators when possible.  The functional equivalent may change
      * over time.  For more information, please see the <a
-     * href="http://oss.software.ibm.com/icu/userguide/locale.html#services">
+     * href="http://icu.sourceforge.net/userguide/locale.html#services">
      * Locales and Services</a> section of the ICU User Guide.
      * @param keyword a particular keyword as enumerated by
      * ucol_getKeywords.

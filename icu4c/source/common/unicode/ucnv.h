@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2004, International Business Machines
+*   Copyright (C) 1999-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
  *  ucnv.h:
@@ -40,7 +40,7 @@
  * many other callback actions that can be used instead of a character substitution.</p>
  *
  * <p>More information about this API can be found in our 
- * <a href="http://oss.software.ibm.com/icu/userguide/conversion.html">User's
+ * <a href="http://icu.sourceforge.net/userguide/conversion.html">User's
  * Guide</a>.</p>
  */
 
@@ -287,7 +287,7 @@ ucnv_compareNames(const char *name1, const char *name2);
  *
  * <p>The conversion behavior and names can vary between platforms. ICU may
  * convert some characters differently from other platforms. Details on this topic
- * are in the <a href="http://oss.software.ibm.com/icu/userguide/conversion.html">User's
+ * are in the <a href="http://icu.sourceforge.net/userguide/conversion.html">User's
  * Guide</a>.</p>
  *
  * @param converterName Name of the uconv table, may have options appended

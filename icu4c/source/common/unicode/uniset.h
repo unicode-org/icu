@@ -107,8 +107,8 @@ class RuleCharacterIterator;
  * "[:Lu:]" and the Perl-like syntax "\\p{Lu}" are recognized.  For a
  * complete list of supported property patterns, see the User's Guide
  * for UnicodeSet at
- * <a href="http://oss.software.ibm.com/icu/userguide/unicodeSet.html">
- * http://oss.software.ibm.com/icu/userguide/unicodeSet.html</a>.
+ * <a href="http://icu.sourceforge.net/userguide/unicodeSet.html">
+ * http://icu.sourceforge.net/userguide/unicodeSet.html</a>.
  * Actual determination of property data is defined by the underlying
  * Unicode database as implemented by UCharacter.
  *

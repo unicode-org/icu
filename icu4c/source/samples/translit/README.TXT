@@ -1,13 +1,13 @@
 Copyright (c) 2002, International Business Machines Corporation and others. All Rights Reserved.
 This is an exercise for the ICU Workshop (September 2000).
-  http://oss.software.ibm.com/icu/docs/workshop_2000/agenda.html
+  http://icu.sourceforge.net/docs/workshop_2000/agenda.html
 
   Day 2: September 12th 2000
   Pre-requisite:
   1. All the hardware and software requirements from Day 1.
   2. Attended or fully understand Day 1 material.
   3. Read through the ICU user's guide at
-  http://oss.software.ibm.com/icu/userguide/.
+  http://icu.sourceforge.net/userguide/.
 
   #Transformation Support
   10:45am - 12:00pm
