@@ -158,12 +158,25 @@ const LETag blwmFeatureTag = 0x626C776D; // 'blwm'
 const LETag abvmFeatureTag = 0x6162766D; // 'abvm'
 const LETag distFeatureTag = 0x64697374; // 'dist'
 
+// These are in the order in which the features need to be applied
+// for correct processing
+const LETag featureOrder[] =
+{
+    nuktFeatureTag, akhnFeatureTag, rphfFeatureTag, blwfFeatureTag, halfFeatureTag, pstfFeatureTag,
+    vatuFeatureTag, presFeatureTag, blwsFeatureTag, abvsFeatureTag, pstsFeatureTag, halnFeatureTag,
+    blwmFeatureTag, abvmFeatureTag, distFeatureTag, emptyTag
+};
+
+// The order of these is determined so that the tag array of each glyph can start
+// at an offset into this array 
 // FIXME: do we want a seperate tag array for each kind of character??
+// FIXME: are there cases where this ordering causes glyphs to get tags
+// that they shouldn't?
 const LETag tagArray[] =
 {
     rphfFeatureTag, blwfFeatureTag, halfFeatureTag, nuktFeatureTag, akhnFeatureTag, pstfFeatureTag,
     vatuFeatureTag, presFeatureTag, blwsFeatureTag, abvsFeatureTag, pstsFeatureTag, halnFeatureTag,
-    blwmFeatureTag, abvmFeatureTag, emptyTag
+    blwmFeatureTag, abvmFeatureTag, distFeatureTag, emptyTag
 };
 
 const le_int8 stateTable[][IndicClassTable::CC_COUNT] =
@@ -180,6 +193,11 @@ const le_int8 stateTable[][IndicClassTable::CC_COUNT] =
     {-1, -1, -1, -1,  3,  2, -1, -1, -1, -1}
 
 };
+
+const LETag *IndicReordering::getFeatureOrder()
+{
+    return featureOrder;
+}
 
 le_int32 IndicReordering::findSyllable(const IndicClassTable *classTable, const LEUnicode *chars, le_int32 prev, le_int32 charCount)
 {

@@ -28,7 +28,7 @@ struct GlyphPositioningTableHeader
                 const LETag **glyphTags, le_int32 glyphCount,
                 le_bool rightToLeft, LETag scriptTag, LETag languageTag,
                 const GlyphDefinitionTableHeader *glyphDefinitionTableHeader,
-                const LEFontInstance *fontInstance) const;
+                const LEFontInstance *fontInstance, const LETag *featureOrder) const;
 };
 
 enum GlyphPositioningSubtableTypes

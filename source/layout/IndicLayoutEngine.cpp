@@ -26,13 +26,13 @@ IndicOpenTypeLayoutEngine::IndicOpenTypeLayoutEngine(const LEFontInstance *fontI
                     const GlyphSubstitutionTableHeader *gsubTable)
     : OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, gsubTable)
 {
-    // nothing else to do...
+    fFeatureOrder = IndicReordering::getFeatureOrder();
 }
 
 IndicOpenTypeLayoutEngine::IndicOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode)
     : OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode)
 {
-    // nothing else to do...
+    fFeatureOrder = IndicReordering::getFeatureOrder();
 }
 
 IndicOpenTypeLayoutEngine::~IndicOpenTypeLayoutEngine()

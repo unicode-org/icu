@@ -34,13 +34,13 @@ typedef ChainingContextualSubstitutionSubtable ChainingContextualPositioningSubt
 
 GlyphPositioningLookupProcessor::GlyphPositioningLookupProcessor(
         const GlyphPositioningTableHeader *glyphPositioningTableHeader,
-        LETag scriptTag, LETag languageTag)
+        LETag scriptTag, LETag languageTag, const LETag *featureOrder)
     : LookupProcessor(
                       (char *) glyphPositioningTableHeader,
                       SWAPW(glyphPositioningTableHeader->scriptListOffset),
                       SWAPW(glyphPositioningTableHeader->featureListOffset),
                       SWAPW(glyphPositioningTableHeader->lookupListOffset),
-                      scriptTag, languageTag)
+                      scriptTag, languageTag, featureOrder)
 {
     // anything?
 }

@@ -21,7 +21,8 @@ U_NAMESPACE_BEGIN
 
 OpenTypeLayoutEngine::OpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
                         const GlyphSubstitutionTableHeader *gsubTable)
-    : LayoutEngine(fontInstance, scriptCode, languageCode), fFeatureTags(NULL), fGSUBTable(gsubTable), fSubstitutionFilter(NULL)
+    : LayoutEngine(fontInstance, scriptCode, languageCode), fFeatureTags(NULL), fGSUBTable(gsubTable),
+      fSubstitutionFilter(NULL), fFeatureOrder(NULL)
 {
     static le_uint32 gdefTableTag = 0x47444546; // "GDEF"
     static le_uint32 gposTableTag = 0x47504F53; // "GPOS"
@@ -52,7 +53,7 @@ void OpenTypeLayoutEngine::reset()
 
 OpenTypeLayoutEngine::OpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode)
     : LayoutEngine(fontInstance, scriptCode, languageCode), fFeatureTags(NULL), fGSUBTable(NULL), fGDEFTable(NULL), fGPOSTable(NULL),
-      fSubstitutionFilter(NULL)
+      fSubstitutionFilter(NULL), fFeatureOrder(NULL)
 {
     setScriptAndLanguageTags();
 }
@@ -104,7 +105,7 @@ le_int32 OpenTypeLayoutEngine::glyphProcessing(const LEUnicode chars[], le_int32
 	}
 
     if (fGSUBTable != NULL) {
-        fGSUBTable->process(glyphs, featureTags, count, rightToLeft, fScriptTag, fLangSysTag, fGDEFTable, fSubstitutionFilter);
+        fGSUBTable->process(glyphs, featureTags, count, rightToLeft, fScriptTag, fLangSysTag, fGDEFTable, fSubstitutionFilter, fFeatureOrder);
     }
 
     return count;
@@ -174,7 +175,7 @@ void OpenTypeLayoutEngine::adjustGlyphPositions(const LEUnicode chars[], le_int3
 			return;
 		}
 
-        fGPOSTable->process(glyphs, adjustments, fFeatureTags, glyphCount, reverse, fScriptTag, fLangSysTag, fGDEFTable, fFontInstance);
+        fGPOSTable->process(glyphs, adjustments, fFeatureTags, glyphCount, reverse, fScriptTag, fLangSysTag, fGDEFTable, fFontInstance, fFeatureOrder);
 
         float xAdjust = 0, yAdjust = 0;
         le_int32 i;

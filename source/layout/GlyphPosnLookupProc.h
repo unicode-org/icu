@@ -24,7 +24,7 @@ class GlyphPositioningLookupProcessor : public LookupProcessor
 {
 public:
     GlyphPositioningLookupProcessor(const GlyphPositioningTableHeader *glyphPositioningTableHeader,
-        LETag scriptTag, LETag languageTag);
+        LETag scriptTag, LETag languageTag, const LETag *featureOrder);
 
     virtual ~GlyphPositioningLookupProcessor();
 
