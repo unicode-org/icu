@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NumberFormat.java,v $ 
- * $Date: 2003/05/14 19:43:44 $ 
- * $Revision: 1.25 $
+ * $Date: 2003/05/15 20:54:40 $ 
+ * $Revision: 1.26 $
  *
  *****************************************************************************************
  */
@@ -508,7 +508,7 @@ public abstract class NumberFormat extends Format{
      * supports.  When registered, the locales it supports extend or override the
      * locale already supported by ICU.
      *
-     * @prototype
+     * @draft ICU 2.6
      */
     public static abstract class NumberFormatFactory {
         public static final int FORMAT_NUMBER = NUMBERSTYLE;
@@ -518,9 +518,11 @@ public abstract class NumberFormat extends Format{
         public static final int FORMAT_INTEGER = INTEGERSTYLE;
 
         /**
-         * Return true if this factory will be visible.  Default is true.
+         * Return true if this factory is visible.  Default is true.
          * If not visible, the locales supported by this factory will not
-         * be listed by getAvailableLocales.
+         * be listed by getAvailableLocales.  This value must not change.
+         * @return true if the factory is visible.
+         * @draft ICU 2.6
          */
         public boolean visible() {
             return true;
@@ -528,7 +530,10 @@ public abstract class NumberFormat extends Format{
 
         /**
          * Return an unmodifiable collection of the locale names directly 
-         * supported by this factory.
+         * supported by this factory.  This collection must not change once
+         * created.
+         * @return the supported locale names.
+         * @draft ICU 2.6
          */
          public abstract Set getSupportedLocaleNames();
 
@@ -537,13 +542,17 @@ public abstract class NumberFormat extends Format{
          * is not supported, return null.  If the locale is supported, but
          * the type is not provided by this service, return null.  Otherwise
          * return an appropriate instance of NumberFormat.
+         * @param loc the locale for which to create the format
+         * @param formatType the type of format
+         * @return the NumberFormat, or null.
+         * @draft ICU 2.6
          */
         public abstract NumberFormat createFormat(Locale loc, int formatType);
     }
 
     /**
      * A NumberFormatFactory that supports a single locale.  It can be visible or invisible.
-     * @prototype 
+     * @draft ICU 2.6
      */
     public static abstract class SimpleNumberFormatFactory extends NumberFormatFactory {
         final Set localeNames;
@@ -577,6 +586,10 @@ public abstract class NumberFormat extends Format{
 
     private static NumberFormatShim shim;
     private static NumberFormatShim getShim() {
+        // Note: this instantiation is safe on loose-memory-model configurations
+        // despite lack of synchronization, since the shim instance has no state--
+        // it's all in the class init.  The worst problem is we might instantiate
+        // two shim instances, but they'll share the same state so that's ok.
         if (shim == null) {
             try {
                 Class cls = Class.forName("com.ibm.icu.text.NumberFormatServiceShim");
@@ -603,10 +616,12 @@ public abstract class NumberFormat extends Format{
     }
 
     /**
-     * Registers a new NumberFormat for the provided locale of the defined
-     * type.  The returned object is a key that can be used to unregister this
-     * NumberFormat object.
-     * @prototype
+     * Registers a new NumberFormatFactory.  The factory is adopted by the service and
+     * must not be modified.  The returned object is a key that can be used to unregister this
+     * factory.
+     * @param factory the factory to register
+     * @return a key with which to unregister the factory
+     * @draft ICU 2.6
      */
     public static Object registerFactory(NumberFormatFactory factory) {
         if (factory == null) {
@@ -616,9 +631,11 @@ public abstract class NumberFormat extends Format{
     }
 
     /**
-     * Unregister the currency associated with this key (obtained from
-     * registerInstance).
-     * @prototype
+     * Unregister the factory or instance associated with this key (obtained from
+     * registerInstance or registerFactory).
+     * @param registryKey a key obtained from registerInstance or registerFactory
+     * @return true if the object was successfully unregistered
+     * @draft ICU 2.6
      */
     public static boolean unregister(Object registryKey) {
         if (registryKey == null) {

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/Currency.java,v $
- * $Date: 2003/05/14 19:03:48 $
- * $Revision: 1.14 $
+ * $Date: 2003/05/15 20:54:40 $
+ * $Revision: 1.15 $
  *
  *******************************************************************************
  */
@@ -73,6 +73,10 @@ public class Currency implements Serializable {
     
     private static ServiceShim shim;
     private static ServiceShim getShim() {
+        // Note: this instantiation is safe on loose-memory-model configurations
+        // despite lack of synchronization, since the shim instance has no state--
+        // it's all in the class init.  The worst problem is we might instantiate
+        // two shim instances, but they'll share the same state so that's ok.
         if (shim == null) {
             try {
                 Class cls = Class.forName("com.ibm.icu.util.CurrencyServiceShim");
