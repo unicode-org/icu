@@ -2589,8 +2589,8 @@ void TransliteratorTest::TestLocaleResource() {
         //"Latin-Greek/UNGEGN",    "b",               "\\u03bc\\u03c0",
         "Latin-el",              "b",               "\\u03bc\\u03c0",
         "Latin-Greek",           "b",               "\\u03B2",
-        "Greek-Latin/UNGEGN",    "\\u03bc\\u03c0",  "b",
-        "el-Latin",              "\\u03bc\\u03c0",  "b",
+        "Greek-Latin/UNGEGN",    "\\u03B2",         "v",
+        "el-Latin",              "\\u03B2",         "v",
         "Greek-Latin",           "\\u03B2",         "b",
     };
     const int32_t DATA_length = sizeof(DATA) / sizeof(DATA[0]);
