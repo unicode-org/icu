@@ -68,18 +68,19 @@ u_scanf_parse_spec (const UChar     *fmt,
 {
   const UChar *s = fmt;
   const UChar *backup;
+  u_scanf_spec_info *info = &(spec->fInfo);
 
   /* initialize spec to default values */  
-  spec->fArgPos            = -1;
-  spec->fSkipArg        = FALSE;
+  spec->fArgPos             = -1;
+  spec->fSkipArg            = FALSE;
 
-  spec->fInfo.fSpec         = 0x0000;
-  spec->fInfo.fWidth         = -1;
-  spec->fInfo.fPadChar         = 0x0020;
-  spec->fInfo.fIsLongDouble     = FALSE;
-  spec->fInfo.fIsShort         = FALSE;
-  spec->fInfo.fIsLong         = FALSE;
-  spec->fInfo.fIsLongLong    = FALSE;
+  info->fSpec         = 0x0000;
+  info->fWidth        = -1;
+  info->fPadChar      = 0x0020;
+  info->fIsLongDouble = FALSE;
+  info->fIsShort      = FALSE;
+  info->fIsLong       = FALSE;
+  info->fIsLongLong   = FALSE;
 
 
   /* skip over the initial '%' */
@@ -96,8 +97,8 @@ u_scanf_parse_spec (const UChar     *fmt,
       spec->fArgPos = (int) (*s++ - DIGIT_ZERO);
       
       while(ISDIGIT(*s)) {
-    spec->fArgPos *= 10;
-    spec->fArgPos += (int) (*s++ - DIGIT_ZERO);
+        spec->fArgPos *= 10;
+        spec->fArgPos += (int) (*s++ - DIGIT_ZERO);
       }
     }
     
@@ -124,13 +125,10 @@ u_scanf_parse_spec (const UChar     *fmt,
     case FLAG_PAREN:
 
       /* first four characters are hex values for pad char */
-      spec->fInfo.fPadChar = ufmt_digitvalue(*s++);
-      spec->fInfo.fPadChar *= 16;
-      spec->fInfo.fPadChar += ufmt_digitvalue(*s++);
-      spec->fInfo.fPadChar *= 16;
-      spec->fInfo.fPadChar += ufmt_digitvalue(*s++);
-      spec->fInfo.fPadChar *= 16;
-      spec->fInfo.fPadChar += ufmt_digitvalue(*s++);
+      info->fPadChar = (UChar)ufmt_digitvalue(*s++);
+      info->fPadChar = (UChar)((info->fPadChar * 16) + ufmt_digitvalue(*s++));
+      info->fPadChar = (UChar)((info->fPadChar * 16) + ufmt_digitvalue(*s++));
+      info->fPadChar = (UChar)((info->fPadChar * 16) + ufmt_digitvalue(*s++));
       
       /* final character is ignored */
       *s++;
@@ -141,11 +139,11 @@ u_scanf_parse_spec (const UChar     *fmt,
 
   /* Get the width */
   if(ISDIGIT(*s)){
-    spec->fInfo.fWidth = (int) (*s++ - DIGIT_ZERO);
+    info->fWidth = (int) (*s++ - DIGIT_ZERO);
     
     while(ISDIGIT(*s)) {
-      spec->fInfo.fWidth *= 10;
-      spec->fInfo.fWidth += (int) (*s++ - DIGIT_ZERO);
+      info->fWidth *= 10;
+      info->fWidth += (int) (*s++ - DIGIT_ZERO);
     }
   }
   
@@ -155,29 +153,29 @@ u_scanf_parse_spec (const UChar     *fmt,
 
       /* short */
     case MOD_H:
-      spec->fInfo.fIsShort = TRUE;
+      info->fIsShort = TRUE;
       break;
 
       /* long or long long */
     case MOD_LOWERL:
       if(*s == MOD_LOWERL) {
-    spec->fInfo.fIsLongLong = TRUE;
-    /* skip over the next 'l' */
-    *s++;
+        info->fIsLongLong = TRUE;
+        /* skip over the next 'l' */
+        *s++;
       }
       else
-    spec->fInfo.fIsLong = TRUE;
+        info->fIsLong = TRUE;
       break;
       
       /* long double */
     case MOD_L:
-      spec->fInfo.fIsLongDouble = TRUE;
+      info->fIsLongDouble = TRUE;
       break;
     }
   }
 
   /* finally, get the specifier letter */
-  spec->fInfo.fSpec = *s++;
+  info->fSpec = *s++;
 
   /* return # of characters in this specifier */
   return (s - fmt);
