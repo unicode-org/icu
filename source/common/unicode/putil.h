@@ -237,6 +237,31 @@ U_CAPI void U_EXPORT2
 u_UCharsToChars(const UChar *us, char *cs, UTextOffset length);
 
 /**
+ * Parse a string with dotted-decimal version information
+ * and fill in a UVersionInfo structure with the result.
+ *
+ * @param versionArray The destination structure for the version information.
+ * @param versionString A string with dotted-decimal version information,
+ *                      with up to four non-negative number fields with
+ *                      values of up to 255 each.
+ */
+U_CAPI void U_EXPORT2
+u_versionFromString(UVersionInfo versionArray, const char *versionString);
+
+/**
+ * Write a string with dotted-decimal version information according
+ * to the input UVersionInfo.
+ *
+ * @param versionArray The version information to be written as a string.
+ * @param versionString A string buffer that will be filled in with
+ *                      a string corresponding to the numeric version
+ *                      information in versionArray.
+ *                      The buffer size must be at least U_MAX_VERSION_STRING_LENGTH.
+ */
+U_CAPI void U_EXPORT2
+u_versionToString(UVersionInfo versionArray, char *versionString);
+
+/**
  * Gets the ICU release version.  The version array stores the version information
  * for ICU.  For example, release "1.3.31.2" is then represented as 0x01031F02.
  * @param versionArray the version # information, the result will be filled in
