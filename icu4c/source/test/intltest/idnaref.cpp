@@ -42,7 +42,7 @@ static const UChar ACE_PREFIX[] ={ 0x0058,0x004E,0x002d,0x002d } ;
 
 NamePrepTransform* TestIDNA::prep = NULL;
 
-static NamePrepTransform* getInstance(UErrorCode& status){
+NamePrepTransform* TestIDNA::getInstance(UErrorCode& status){
     if(TestIDNA::prep == NULL){
         UParseError parseError;
         TestIDNA::prep = NamePrepTransform::createInstance(parseError, status);
@@ -274,7 +274,7 @@ idnaref_toASCII(const UChar* src, int32_t srcLength,
     int32_t j=0;
 //    UParseError parseError;
     // step 2
-    NamePrepTransform* prep = getInstance(*status);
+    NamePrepTransform* prep = TestIDNA::getInstance(*status);
 
     if(U_FAILURE(*status)){
         goto CLEANUP;
@@ -414,7 +414,7 @@ idnaref_toUnicode(const UChar* src, int32_t srcLength,
             reqLength=0;
 //    UParseError parseError;
     
-    NamePrepTransform* prep = getInstance(*status);
+    NamePrepTransform* prep = TestIDNA::getInstance(*status);
     b1Len = 0;
     UBool* caseFlags = NULL;
 
@@ -620,7 +620,7 @@ idnaref_IDNToASCII(  const UChar* src, int32_t srcLength,
     int32_t reqLength = 0;
 //    UParseError parseError;
 
-    NamePrepTransform* prep = getInstance(*status);
+    NamePrepTransform* prep = TestIDNA::getInstance(*status);
     
     //initialize pointers to stack buffers
     UChar b1Stack[MAX_LABEL_BUFFER_SIZE];
@@ -775,7 +775,7 @@ idnaref_IDNToUnicode(  const UChar* src, int32_t srcLength,
     
     UBool done = FALSE;
 
-    NamePrepTransform* prep = getInstance(*status);
+    NamePrepTransform* prep = TestIDNA::getInstance(*status);
     
     //initialize pointers to stack buffers
     UChar b1Stack[MAX_LABEL_BUFFER_SIZE];
