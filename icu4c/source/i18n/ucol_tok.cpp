@@ -181,7 +181,7 @@ void syntaxError(const UChar* rules,
     //for post-context
     start = pos+1;
     stop  = ((pos+U_PARSE_CONTEXT_LEN)<= rulesLen )? (pos+(U_PARSE_CONTEXT_LEN-1)) : 
-                                                            u_strlen(rules);
+                                                            rulesLen;
 
     u_memcpy(parseError->postContext,rules+start,stop-start);
     //null terminate the buffer
