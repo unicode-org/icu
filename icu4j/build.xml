@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $
-* $Date: 2003/09/17 20:36:51 $
-* $Revision: 1.78 $
+* $Date: 2003/10/24 17:57:09 $
+* $Revision: 1.79 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -588,5 +588,17 @@
               <fileset dir="${src.dir}/com/ibm/icu/impl/data" includes="Transliterator_Han_Latin_*.txt"/>
         </copy>
     </target>
-
+	<!-- Taget for builing XLIFF2ICUConverter Jar -->
+	<target name="xliff" depends="init">
+	    <javac includes="com/ibm/icu/dev/tool/localeconverter/XLIFF2ICUConverter.java,com/ibm/icu/dev/tool/localeconverter/CalculateCRC32.java,com/ibm/icu/dev/tool/UOption.java"
+            srcdir="${src.dir}"
+            destdir="${build.dir}"
+            classpathref="build.classpath"
+            debug="on" deprecation="off"/>
+         <jar jarfile="xliff.jar"
+            compress="true"
+            includes="com/ibm/icu/dev/tool/localeconverter/XLIFF2ICUConverter*.class,com/ibm/icu/dev/tool/localeconverter/CalculateCRC32.class,com/ibm/icu/dev/tool/UOption.class"
+            basedir="${build.dir}"
+            manifest="${icu4j.module.manifest}"/>
+     </target>
 </project>
