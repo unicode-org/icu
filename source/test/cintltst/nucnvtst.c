@@ -1174,10 +1174,55 @@ static void TestConverterTypesAndStarters()
     ucnv_close(myConverter[2]);
 }
 
+static void
+TestAmbiguousConverter(UConverter *cnv) {
+    static const char inBytes[2]={ 0x61, 0x5c };
+    UChar outUnicode[20]={ 0, 0, 0, 0 };
+
+    const char *s;
+    UChar *u;
+    UErrorCode errorCode;
+    UBool isAmbiguous;
+
+    /* try to convert an 'a' and a US-ASCII backslash */
+    errorCode=U_ZERO_ERROR;
+    s=inBytes;
+    u=outUnicode;
+    ucnv_toUnicode(cnv, &u, u+20, &s, s+2, NULL, TRUE, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        /* we do not care about general failures in this test; the input may just not be mappable */
+        return;
+    }
+
+    if(outUnicode[0]!=0x61 || outUnicode[1]==0xfffd) {
+        /* not an ASCII-family encoding, or 0x5c is unassigned/illegal: this test is not applicable */
+        return;
+    }
+
+    isAmbiguous=ucnv_isAmbiguous(cnv);
+
+    /* check that outUnicode[1]!=0x5c is exactly the same as ucnv_isAmbiguous() */
+    if((outUnicode[1]!=0x5c)!=isAmbiguous) {
+        log_err("error: converter \"%s\" needs a backslash fix: %d but ucnv_isAmbiguous()==%d\n",
+            ucnv_getName(cnv, &errorCode), outUnicode[1]!=0x5c, isAmbiguous);
+        return;
+    }
+
+    if(outUnicode[1]!=0x5c) {
+        /* needs fixup, fix it */
+        ucnv_fixFileSeparator(cnv, outUnicode, (int32_t)(u-outUnicode));
+        if(outUnicode[1]!=0x5c) {
+            /* the fix failed */
+            log_err("error: ucnv_fixFileSeparator(%s) failed\n", ucnv_getName(cnv, &errorCode));
+            return;
+        }
+    }
+}
+
 static void TestAmbiguous()
 {
     UErrorCode status = U_ZERO_ERROR;
-    UConverter *ascii_cnv = 0, *sjis_cnv = 0;
+    UConverter *ascii_cnv = 0, *sjis_cnv = 0, *cnv;
     const char target[] = {
         /* "\\usr\\local\\share\\data\\icutest.txt" */
         0x5c, 0x75, 0x73, 0x72,
@@ -1188,8 +1233,22 @@ static void TestAmbiguous()
         0
     };
     UChar *asciiResult = 0, *sjisResult = 0;
-    int32_t asciiLength = 0, sjisLength = 0;
-    
+    int32_t asciiLength = 0, sjisLength = 0, i;
+    const char *name;
+
+    /* enumerate all converters */
+    status=U_ZERO_ERROR;
+    for(i=0; (name=ucnv_getAvailableName(i))!=NULL; ++i) {
+        cnv=ucnv_open(name, &status);
+        if(U_SUCCESS(status)) {
+            TestAmbiguousConverter(cnv);
+            ucnv_close(cnv);
+        } else {
+            log_err("error: unable to open available converter \"%s\"\n", name);
+            status=U_ZERO_ERROR;
+        }
+    }
+
     sjis_cnv = ucnv_open("ibm-943", &status);
     if (U_FAILURE(status))
     {
