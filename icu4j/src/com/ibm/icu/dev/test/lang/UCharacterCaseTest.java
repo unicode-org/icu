@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterCaseTest.java,v $ 
-* $Date: 2002/07/11 21:25:24 $ 
-* $Revision: 1.5 $
+* $Date: 2002/10/03 23:42:02 $ 
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -473,6 +473,77 @@ public final class UCharacterCaseTest extends TestFmwk
 	    }
 	}
 	
+    public void TestUpperLower()
+    {
+        int upper[] = {0x0041, 0x0042, 0x00b2, 0x01c4, 0x01c6, 0x01c9, 0x01c8, 
+                        0x01c9, 0x000c};
+        int lower[] = {0x0061, 0x0062, 0x00b2, 0x01c6, 0x01c6, 0x01c9, 0x01c9, 
+                        0x01c9, 0x000c};
+        String upperTest = "abcdefg123hij.?:klmno";
+        String lowerTest = "ABCDEFG123HIJ.?:KLMNO";
+      
+        // Checks LetterLike Symbols which were previously a source of 
+        // confusion [Bertrand A. D. 02/04/98]
+        for (int i = 0x2100; i < 0x2138; i ++) {
+            if (i != 0x2126 && i != 0x212a && i != 0x212b) {
+                if (i != UCharacter.toLowerCase(i)) { // itself
+                    errln("Failed case conversion with itself: \\u" 
+                            + Utility.hex(i, 4));
+                }
+                if (i != UCharacter.toUpperCase(i)) {
+                    errln("Failed case conversion with itself: \\u" 
+                            + Utility.hex(i, 4));
+                }
+            }
+        }
+        for (int i = 0; i < upper.length; i ++) {
+            if (UCharacter.toLowerCase(upper[i]) != lower[i]) {
+                errln("FAILED UCharacter.tolower() for \\u" 
+                        + Utility.hex(upper[i], 4)
+                        + " Expected \\u" + Utility.hex(lower[i], 4)
+                        + " Got \\u" 
+                        + Utility.hex(UCharacter.toLowerCase(upper[i]), 4));
+            }
+        }
+        logln("testing upper lower");
+        for (int i = 0; i < upperTest.length(); i ++) {
+            logln("testing to upper to lower");
+            if (UCharacter.isLetter(upperTest.charAt(i)) && 
+                !UCharacter.isLowerCase(upperTest.charAt(i))) {
+                errln("Failed isLowerCase test at \\u" 
+                        + Utility.hex(upperTest.charAt(i), 4));
+            }
+            else if (UCharacter.isLetter(lowerTest.charAt(i)) 
+                     && !UCharacter.isUpperCase(lowerTest.charAt(i))) {
+                errln("Failed isUpperCase test at \\u" 
+                      + Utility.hex(lowerTest.charAt(i), 4));
+            }
+            else if (upperTest.charAt(i) 
+                            != UCharacter.toLowerCase(lowerTest.charAt(i))) {
+                errln("Failed case conversion from \\u" 
+                        + Utility.hex(lowerTest.charAt(i), 4) + " To \\u"
+                        + Utility.hex(upperTest.charAt(i), 4));
+            }
+            else if (lowerTest.charAt(i) 
+                    != UCharacter.toUpperCase(upperTest.charAt(i))) {
+                errln("Failed case conversion : \\u" 
+                        + Utility.hex(upperTest.charAt(i), 4) + " To \\u"
+                        + Utility.hex(lowerTest.charAt(i), 4));
+            }
+            else if (upperTest.charAt(i) 
+                    != UCharacter.toLowerCase(upperTest.charAt(i))) {
+                errln("Failed case conversion with itself: \\u" 
+                        + Utility.hex(upperTest.charAt(i)));
+            }
+            else if (lowerTest.charAt(i) 
+                    != UCharacter.toUpperCase(lowerTest.charAt(i))) {
+                errln("Failed case conversion with itself: \\u"
+                        + Utility.hex(lowerTest.charAt(i)));
+            }
+        }
+        logln("done testing upper Lower");
+    }
+    
 	// private data members - test data --------------------------------------
 	
 	private static final Locale TURKISH_LOCALE_ = new Locale("tr", "TR");

@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacterTypeIterator.java,v $
-* $Date: 2002/03/15 22:48:07 $
-* $Revision: 1.5 $
+* $Date: 2002/10/03 23:42:02 $
+* $Revision: 1.6 $
 *
 ******************************************************************************
 */
@@ -68,7 +68,7 @@ class UCharacterTypeIterator extends TrieIterator
     	if (m_property_ == null) {
     		m_property_ = UCharacterProperty.getInstance().m_property_;
     	}
-    	return UCharacterProperty.getPropType(m_property_[value]);
+    	return m_property_[value] & UCharacterProperty.TYPE_MASK;
     }
     
     // private data members ---------------------------------------------

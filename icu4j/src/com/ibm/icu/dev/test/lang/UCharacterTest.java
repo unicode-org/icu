@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $ 
-* $Date: 2002/09/19 21:24:29 $ 
-* $Revision: 1.42 $
+* $Date: 2002/10/03 23:42:02 $ 
+* $Revision: 1.43 $
 *
 *******************************************************************************
 */
@@ -19,12 +19,14 @@ import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterCategory;
 import com.ibm.icu.lang.UCharacterDirection;
 import com.ibm.icu.lang.UProperty;
+import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.RangeValueIterator;
 import com.ibm.icu.util.ValueIterator;
 import com.ibm.icu.util.VersionInfo;
 import com.ibm.icu.impl.UCharacterName;
+import com.ibm.icu.impl.Utility;
 
 import java.io.BufferedReader;
 import java.util.Arrays;
@@ -59,10 +61,7 @@ public final class UCharacterTest extends TestFmwk
     	try
     	{
       		UCharacterTest test = new UCharacterTest();
-            long starttime = System.currentTimeMillis();
-      		test.run(arg);
-            System.out.println(System.currentTimeMillis() - starttime);
-      		// test.TestNames();
+            test.run(arg);
     	}
     	catch (Exception e)
     	{
@@ -243,7 +242,7 @@ public final class UCharacterTest extends TestFmwk
   	{
 		for (int i = '0'; i < '9'; i ++) {
 			int n1 = UCharacter.getNumericValue(i);
-			int n2 = UCharacter.getUnicodeNumericValue(i);
+			double n2 = UCharacter.getUnicodeNumericValue(i);
 			if (n1 != n2 ||  n1 != (i - '0')) {
 				errln("Numeric value of " + (char)i + " expected to be " +
 				      (i - '0'));
@@ -251,8 +250,8 @@ public final class UCharacterTest extends TestFmwk
 		}
 		for (int i = 'A'; i < 'F'; i ++) {
 			int n1 = UCharacter.getNumericValue(i);
-			int n2 = UCharacter.getUnicodeNumericValue(i);
-			if (n2 != -1 ||  n1 != (i - 'A' + 10)) {
+			double n2 = UCharacter.getUnicodeNumericValue(i);
+			if (n2 != UCharacter.NO_NUMERIC_VALUE ||  n1 != (i - 'A' + 10)) {
 				errln("Numeric value of " + (char)i + " expected to be " +
 				      (i - 'A' + 10));
 			}
@@ -260,8 +259,8 @@ public final class UCharacterTest extends TestFmwk
 		for (int i = 0xFF21; i < 0xFF26; i ++) {
 			// testing full wideth latin characters A-F
 			int n1 = UCharacter.getNumericValue(i);
-			int n2 = UCharacter.getUnicodeNumericValue(i);
-			if (n2 != -1 ||  n1 != (i - 0xFF21 + 10)) {
+			double n2 = UCharacter.getUnicodeNumericValue(i);
+			if (n2 != UCharacter.NO_NUMERIC_VALUE ||  n1 != (i - 0xFF21 + 10)) {
 				errln("Numeric value of " + (char)i + " expected to be " +
 				      (i - 0xFF21 + 10));
 			}
@@ -513,10 +512,32 @@ public final class UCharacterTest extends TestFmwk
         		index = s.indexOf(';', 5);
         		String t = s.substring(index + 1, index + 3);
         		index += 4;
-        		int cc = Integer.parseInt(s.substring(index, s.indexOf(';', 
-        		                                      index)));
-        		index = s.indexOf(';', index);
-        		String d = s.substring(index + 1, s.indexOf(';', index + 1));
+                int oldindex = index;
+                index = s.indexOf(';', index);
+        		int cc = Integer.parseInt(s.substring(oldindex, index));
+                oldindex = index + 1;
+                index = s.indexOf(';', oldindex);
+        		String d = s.substring(oldindex, index);
+                
+                for (int i = 0; i < 6; i ++) {
+                    index = s.indexOf(';', index + 1);
+                    // skipping to the 11th field
+                }
+                // iso comment
+                oldindex = index + 1;
+                index = s.indexOf(';', oldindex);
+                String isocomment = s.substring(oldindex, index);
+                // uppercase
+                oldindex = index + 1;
+                index = s.indexOf(';', oldindex);
+                String upper = s.substring(oldindex, index);
+                // lowercase
+                oldindex = index + 1;
+                index = s.indexOf(';', oldindex);
+                String lower = s.substring(oldindex, index);
+                // titlecase last element
+                oldindex = index + 1;
+                String title = s.substring(oldindex);
         
         		// testing the category
         		// we override the general category of some control 
@@ -552,6 +573,48 @@ public final class UCharacterTest extends TestFmwk
                 		" expected wrong direction " + dir);
           			break;
         		}
+                
+                // testing iso comment
+                String comment = UCharacter.getISOComment(ch);
+                if (comment == null) {
+                    comment = "";
+                }
+                if (!comment.equals(isocomment)) {
+                    errln("FAIL \\u" + hex(ch) + 
+                        " expected iso comment " + isocomment);
+                    break;
+                }
+                 
+                int tempchar = ch;
+                if (upper.length() > 0) {
+                    tempchar = Integer.parseInt(upper, 16);
+                }   
+                if (UCharacter.toUpperCase(ch) != tempchar) {
+                    errln("FAIL \\u" + Utility.hex(ch, 4) 
+                            + " expected uppercase \\u" 
+                            + Utility.hex(tempchar, 4));
+                    break;
+                }
+                tempchar = ch;
+                if (lower.length() > 0) {
+                    tempchar = Integer.parseInt(lower, 16);
+                }   
+                if (UCharacter.toLowerCase(ch) != tempchar) {
+                    errln("FAIL \\u" + Utility.hex(ch, 4) 
+                            + " expected lowercase \\u" 
+                            + Utility.hex(tempchar, 4));
+                    break;
+                }
+                tempchar = ch;
+                if (title.length() > 0) {
+                    tempchar = Integer.parseInt(title, 16);
+                }   
+                if (UCharacter.toTitleCase(ch) != tempchar) {
+                    errln("FAIL \\u" + Utility.hex(ch, 4) 
+                            + " expected titlecase \\u" 
+                            + Utility.hex(tempchar, 4));
+                    break;
+                }
       		}
       		input.close();
     	}
@@ -559,6 +622,55 @@ public final class UCharacterTest extends TestFmwk
     	{
       		e.printStackTrace();
     	}
+        
+        if (UCharacter.UnicodeBlock.of(0x0041) 
+                                        != UCharacter.UnicodeBlock.BASIC_LATIN 
+            || UCharacter.getIntPropertyValue(0x41, UProperty.BLOCK)
+                              != UCharacter.UnicodeBlock.BASIC_LATIN.getID()) {
+            errln("UCharacter.UnicodeBlock.of(\\u0041) property failed! " 
+                    + "Expected : " 
+                    + UCharacter.UnicodeBlock.BASIC_LATIN.getID() + " got " 
+                    + UCharacter.UnicodeBlock.of(0x0041));
+        }
+        
+        // sanity check on repeated properties 
+        for (ch = 0xfffe; ch <= 0x10ffff;) {
+            if (UCharacter.getType(ch) != UCharacterCategory.UNASSIGNED) {
+                errln("error: UCharacter.getType(\\u" + Utility.hex(ch, 4) 
+                        + " != UCharacterCategory.UNASSIGNED (returns "
+                        + UCharacterCategory.toString(UCharacter.getType(ch)) 
+                        + ")");
+            }
+            if ((ch & 0xffff) == 0xfffe) {
+                ++ ch;
+            } 
+            else {
+                ch += 0xffff;
+            }
+        }
+    
+        // test that PUA is not "unassigned"
+        for(ch = 0xe000; ch <= 0x10fffd;) {
+            type = UCharacter.getType(ch);
+            if (type == UCharacterCategory.UNASSIGNED) {
+                errln("error: UCharacter.getType(\\u" 
+                        + Utility.hex(ch, 4) 
+                        + ") == UCharacterCategory.UNASSIGNED");
+            } 
+            else if (type != UCharacterCategory.PRIVATE_USE) {
+                logln("PUA override: UCharacter.getType(\\u" 
+                      + Utility.hex(ch, 4) + ")=" + type);
+            }
+            if (ch == 0xf8ff) {
+                ch = 0xf0000;
+            } 
+            else if (ch == 0xffffd) {
+                ch = 0x100000;
+            } 
+            else {
+                ++ ch;
+            }
+        }
   	}
   
   
@@ -1073,18 +1185,18 @@ public final class UCharacterTest extends TestFmwk
             //
             // PUA characters are listed explicitly with "XX".
             // Verify that no assigned character has "XX".
-            /* synwee this is not ported to java yet
-             * if (result.value != UCharacterCategory.UNASSIGNED 
+            if (result.value != UCharacterCategory.UNASSIGNED 
                 && result.value != UCharacterCategory.PRIVATE_USE) {
                 int c = result.start;
                 while (c < result.limit) {
-                    if (0 == u_getIntPropertyValue(c, UCHAR_LINE_BREAK)) {
-                        log_err("error UCHAR_LINE_BREAK(assigned U+%04lx)=XX\n", c);
+                    if (0 == UCharacter.getIntPropertyValue(c, 
+                                                UProperty.LINE_BREAK)) {
+                        logln("error UProperty.LINE_BREAK(assigned \\u" 
+                              + Utility.hex(c, 4) + ")=XX");
                     }
-                    ++c;
+                    ++ c;
                 }
             }
-            */
         
             /*
              * Verify default Bidi classes.
@@ -1098,12 +1210,10 @@ public final class UCharacterTest extends TestFmwk
                      ++ i) {
                     if (c < defaultBidi[i][0]) {
                         while (c < result.limit && c < defaultBidi[i][0]) {
-                            if (UCharacter.getDirection(c) 
-                                != defaultBidi[i][1] 
-                                /* synwee this is not ported yet ||
-                                u_getIntPropertyValue(c, UCHAR_BIDI_CLASS) 
-                                != defaultBidi[i][1] */
-                            ) {
+                            if (UCharacter.getDirection(c) != defaultBidi[i][1] 
+                                || UCharacter.getIntPropertyValue(c, 
+                                                          UProperty.BIDI_CLASS) 
+                                   != defaultBidi[i][1]) {
                                 errln("error: getDirection(unassigned/PUA "
                                       + Integer.toHexString(c) 
                                       + ") should be " 
@@ -1280,33 +1390,229 @@ public final class UCharacterTest extends TestFmwk
 	        { 0x0049, UProperty.SOFT_DOTTED },
 	
 	        { 0xfa11, UProperty.UNIFIED_IDEOGRAPH },
-	        { 0xfa12, UProperty.UNIFIED_IDEOGRAPH }
+	        { 0xfa12, UProperty.UNIFIED_IDEOGRAPH },
+            
+            { 0x02AF, UProperty.BLOCK},
+            { 0x0C4E, UProperty.BLOCK},
+            { 0x155A, UProperty.BLOCK},
+            { 0x1717, UProperty.BLOCK},
+            { 0x1AFF, UProperty.BLOCK},
+            { 0x3040, UProperty.BLOCK},
+            { 0x1D0FF, UProperty.BLOCK},
+            { 0x10D0FF, UProperty.BLOCK},
+            { 0xEFFFF, UProperty.BLOCK},
+    
+            // UProperty.CANONICAL_COMBINING_CLASS tested for assigned 
+            // characters in TestUnicodeData()
+            { 0xd7d7, UProperty.CANONICAL_COMBINING_CLASS},
+    
+            { 0x00A0, UProperty.DECOMPOSITION_TYPE},
+            { 0x00A8, UProperty.DECOMPOSITION_TYPE},
+            { 0x00bf, UProperty.DECOMPOSITION_TYPE},
+            { 0x00c0, UProperty.DECOMPOSITION_TYPE},
+            { 0x1E9B, UProperty.DECOMPOSITION_TYPE},
+            { 0xBCDE, UProperty.DECOMPOSITION_TYPE},
+            { 0xFB5D, UProperty.DECOMPOSITION_TYPE},
+            { 0x1D736, UProperty.DECOMPOSITION_TYPE},
+            { 0xe0033, UProperty.DECOMPOSITION_TYPE},
+    
+            { 0x0009, UProperty.EAST_ASIAN_WIDTH},
+            { 0x0020, UProperty.EAST_ASIAN_WIDTH},
+            { 0x00B1, UProperty.EAST_ASIAN_WIDTH},
+            { 0x20A9, UProperty.EAST_ASIAN_WIDTH},
+            { 0x2FFB, UProperty.EAST_ASIAN_WIDTH},
+            { 0x3000, UProperty.EAST_ASIAN_WIDTH},
+            { 0x35bb, UProperty.EAST_ASIAN_WIDTH},
+            { 0x58bd, UProperty.EAST_ASIAN_WIDTH},
+            { 0xD7A3, UProperty.EAST_ASIAN_WIDTH},
+            { 0xEEEE, UProperty.EAST_ASIAN_WIDTH},
+            { 0x1D198, UProperty.EAST_ASIAN_WIDTH},
+            { 0x20000, UProperty.EAST_ASIAN_WIDTH},
+            { 0x2F8C7, UProperty.EAST_ASIAN_WIDTH},
+            { 0x3a5bd, UProperty.EAST_ASIAN_WIDTH},
+            { 0xFEEEE, UProperty.EAST_ASIAN_WIDTH},
+            { 0x10EEEE, UProperty.EAST_ASIAN_WIDTH},
+    
+            // UProperty.GENERAL_CATEGORY tested for assigned characters in 
+            // TestUnicodeData()
+            { 0xd7d7, UProperty.GENERAL_CATEGORY},
+    
+            { 0x0444, UProperty.JOINING_GROUP},
+            { 0x0639, UProperty.JOINING_GROUP},
+            { 0x072A, UProperty.JOINING_GROUP},
+            { 0x0647, UProperty.JOINING_GROUP},
+            { 0x06C1, UProperty.JOINING_GROUP},
+            { 0x06C3, UProperty.JOINING_GROUP},
+    
+            { 0x200C, UProperty.JOINING_TYPE},
+            { 0x200D, UProperty.JOINING_TYPE},
+            { 0x0639, UProperty.JOINING_TYPE},
+            { 0x0640, UProperty.JOINING_TYPE},
+            { 0x06C3, UProperty.JOINING_TYPE},
+            { 0x0300, UProperty.JOINING_TYPE},
+            { 0x070F, UProperty.JOINING_TYPE},
+            { 0xe0033, UProperty.JOINING_TYPE},
+    
+            // TestUnicodeData() verifies that no assigned character has "XX" 
+            // (unknown)
+            { 0xe7e7, UProperty.LINE_BREAK},
+            { 0x10fffd, UProperty.LINE_BREAK},
+            { 0x0028, UProperty.LINE_BREAK},
+            { 0x232A, UProperty.LINE_BREAK},
+            { 0x3401, UProperty.LINE_BREAK},
+            { 0x4e02, UProperty.LINE_BREAK},
+            { 0xac03, UProperty.LINE_BREAK},
+            { 0x20004, UProperty.LINE_BREAK},
+            { 0xf905, UProperty.LINE_BREAK},
+            { 0xdb7e, UProperty.LINE_BREAK},
+            { 0xdbfd, UProperty.LINE_BREAK},
+            { 0xdffc, UProperty.LINE_BREAK},
+            { 0x2762, UProperty.LINE_BREAK},
+            { 0x002F, UProperty.LINE_BREAK},
+            { 0x1D49C, UProperty.LINE_BREAK},
+            { 0x1731, UProperty.LINE_BREAK},
+    
+            // UCHAR_NUMERIC_TYPE tested in TestNumericProperties()
+    
+            // UCHAR_SCRIPT tested in TestUScriptCodeAPI()
+    
+            // undefined UProperty values
+            { 0x61, 0x4a7},
+            { 0x234bc, 0x15ed}
 	    };
 	    
-	    boolean expected[] = { true, true, false, true, false, 
-	    	                   true, false, true, false, true, 
-	    	                   false, true, false, true, false, 
-	    	                   true, true, false, true, true, 
-	    	                   false, true, false, true, true, 
-	    	                   false, true, true, false, true, 
-	    	                   true, false, true, false, true, 
-	    	                   true, false, true, true, false, 
-	    	                   true, true, false, true, true, 
-	    	                   false, true, false, true, true, 
-	    	                   false, true, true, false, true, 
-	    	                   true, false, true, true, false,
-	    	                   false, true, true, false, true, 
-	    	                   false, true, false, false, true, 
-	    	                   true, false, true, false, true, 
-	    	                   false, true, false, true, false, 
-	    	                   true, false, true, false, true, 
-	    	                   false};
+	    int expected[] = { 1, 1, 0, 1, 0, 
+	    	               1, 0, 1, 0, 1, 
+	    	               0, 1, 0, 1, 0, 
+	    	               1, 1, 0, 1, 1, 
+	    	               0, 1, 0, 1, 1, 
+	    	               0, 1, 1, 0, 1, 
+	    	               1, 0, 1, 0, 1, 
+	    	               1, 0, 1, 1, 0, 
+	    	               1, 1, 0, 1, 1, 
+	    	               0, 1, 0, 1, 1, 
+	    	               0, 1, 1, 0, 1, 
+	    	               1, 0, 1, 1, 0,
+	    	               0, 1, 1, 0, 1, 
+	    	               0, 1, 0, 0, 1, 
+	    	               1, 0, 1, 0, 1, 
+	    	               0, 1, 0, 1, 0, 
+	    	               1, 0, 1, 0, 1, 
+	    	               0,
+                           UCharacter.UnicodeBlock.IPA_EXTENSIONS_ID,
+                           UCharacter.UnicodeBlock.TELUGU_ID,
+                           UCharacter.UnicodeBlock.UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS_ID,
+                           UCharacter.UnicodeBlock.TAGALOG_ID,
+                           UCharacter.UnicodeBlock.INVALID_CODE_ID,
+                           UCharacter.UnicodeBlock.HIRAGANA_ID,
+                           UCharacter.UnicodeBlock.BYZANTINE_MUSICAL_SYMBOLS_ID,
+                           UCharacter.UnicodeBlock.SUPPLEMENTARY_PRIVATE_USE_AREA_B_ID,
+                           UCharacter.UnicodeBlock.INVALID_CODE_ID,
+                           // UProperty.CANONICAL_COMBINING_CLASS tested for 
+                           // assigned characters in TestUnicodeData()
+                           0,
+                           UCharacter.DecompositionType.NOBREAK,
+                           UCharacter.DecompositionType.COMPAT,
+                           UCharacter.DecompositionType.NONE,
+                           UCharacter.DecompositionType.CANONICAL,
+                           UCharacter.DecompositionType.CANONICAL,
+                           UCharacter.DecompositionType.CANONICAL,
+                           UCharacter.DecompositionType.MEDIAL,
+                           UCharacter.DecompositionType.FONT,
+                           UCharacter.DecompositionType.NONE,
+                           
+                           UCharacter.EastAsianWidth.NEUTRAL,
+                           UCharacter.EastAsianWidth.NARROW,
+                           UCharacter.EastAsianWidth.AMBIGUOUS,
+                           UCharacter.EastAsianWidth.HALFWIDTH,
+                           UCharacter.EastAsianWidth.WIDE,
+                           UCharacter.EastAsianWidth.FULLWIDTH,
+                           UCharacter.EastAsianWidth.WIDE,
+                           UCharacter.EastAsianWidth.WIDE,
+                           UCharacter.EastAsianWidth.WIDE,
+                           UCharacter.EastAsianWidth.AMBIGUOUS,
+                           UCharacter.EastAsianWidth.NEUTRAL,
+                           UCharacter.EastAsianWidth.WIDE,
+                           UCharacter.EastAsianWidth.WIDE,
+                           UCharacter.EastAsianWidth.NEUTRAL,
+                           UCharacter.EastAsianWidth.AMBIGUOUS,
+                           UCharacter.EastAsianWidth.AMBIGUOUS,
+                           
+                           // UProperty.GENERAL_CATEGORY tested for assigned 
+                           // characters in TestUnicodeData()
+                           0,
+                           UCharacter.JoiningGroup.NO_JOINING_GROUP,
+                           UCharacter.JoiningGroup.AIN,
+                           UCharacter.JoiningGroup.DALATH_RISH,
+                           UCharacter.JoiningGroup.HEH,
+                           UCharacter.JoiningGroup.HEH_GOAL,
+                           UCharacter.JoiningGroup.HAMZA_ON_HEH_GOAL,
+                           UCharacter.JoiningType.NON_JOINING,
+                           UCharacter.JoiningType.JOIN_CAUSING,
+                           UCharacter.JoiningType.DUAL_JOINING,
+                           UCharacter.JoiningType.JOIN_CAUSING,
+                           UCharacter.JoiningType.RIGHT_JOINING,
+                           UCharacter.JoiningType.TRANSPARENT,
+                           UCharacter.JoiningType.TRANSPARENT,
+                           UCharacter.JoiningType.TRANSPARENT,
+                           
+                           // TestUnicodeData() verifies that no assigned 
+                           // character has "XX" (unknown)
+                           UCharacter.LineBreak.UNKNOWN,
+                           UCharacter.LineBreak.UNKNOWN,
+                           UCharacter.LineBreak.OPEN_PUNCTUATION,
+                           UCharacter.LineBreak.CLOSE_PUNCTUATION,
+                           UCharacter.LineBreak.IDEOGRAPHIC,
+                           UCharacter.LineBreak.IDEOGRAPHIC,
+                           UCharacter.LineBreak.IDEOGRAPHIC,
+                           UCharacter.LineBreak.IDEOGRAPHIC,
+                           UCharacter.LineBreak.IDEOGRAPHIC,
+                           UCharacter.LineBreak.SURROGATE,
+                           UCharacter.LineBreak.SURROGATE,
+                           UCharacter.LineBreak.SURROGATE,
+                           UCharacter.LineBreak.EXCLAMATION,
+                           UCharacter.LineBreak.BREAK_SYMBOLS,
+                           UCharacter.LineBreak.ALPHABETIC,
+                           UCharacter.LineBreak.ALPHABETIC,
+                           
+                           // UCHAR_NUMERIC_TYPE tested in 
+                           // TestNumericProperties()
+                           // UCHAR_SCRIPT tested in TestUScriptCodeAPI()
+                           
+                           0,
+                           0
+        };
 
-	    VersionInfo version = UCharacter.getUnicodeVersion();
-	    
+	    if (UCharacter.getIntPropertyMinValue(UProperty.DASH) != 0 
+            || UCharacter.getIntPropertyMinValue(UProperty.BIDI_CLASS) != 0 
+            || UCharacter.getIntPropertyMinValue(UProperty.BLOCK)
+                            != UCharacter.UnicodeBlock.INVALID_CODE_ID 
+            || UCharacter.getIntPropertyMinValue(UProperty.SCRIPT)
+                            != UScript.INVALID_CODE 
+            || UCharacter.getIntPropertyMinValue(0x2345) != 0) {
+            errln("error: UCharacter.getIntPropertyMinValue() wrong");
+        }
+    
+        if (UCharacter.getIntPropertyMaxValue(UProperty.DASH) != 1 
+            || UCharacter.getIntPropertyMaxValue(UProperty.ID_CONTINUE) != 1 
+            || UCharacter.getIntPropertyMaxValue(UProperty.BINARY_LIMIT-1) != 1 
+            || UCharacter.getIntPropertyMaxValue(UProperty.BIDI_CLASS)
+                                != UCharacterDirection.CHAR_DIRECTION_COUNT - 1 
+            || UCharacter.getIntPropertyMaxValue(UProperty.BLOCK)
+                                        != UCharacter.UnicodeBlock.COUNT - 1 
+            || UCharacter.getIntPropertyMaxValue(UProperty.LINE_BREAK)
+                                        != UCharacter.LineBreak.COUNT - 1 
+            || UCharacter.getIntPropertyMaxValue(UProperty.SCRIPT)
+                                        != UScript.CODE_LIMIT - 1 
+            || UCharacter.getIntPropertyMaxValue(0x2345) != 0) {
+            errln("error: UCharacter.getIntPropertyMaxValue() wrong");
+        }
+        
+        VersionInfo version = UCharacter.getUnicodeVersion();
+            
 	    // test hasBinaryProperty() 
 	    for (int i = 0; i < props.length; ++ i) {
-	    	if (props[i][0] < 0) {
+            if (props[i][0] < 0) {
 				if (version.compareTo(VersionInfo.getInstance(props[i][1] >> 4, 
 	    	                                              props[i][1] & 0xF, 
 	    	                                              0, 0)) < 0) {
@@ -1314,39 +1620,53 @@ public final class UCharacterTest extends TestFmwk
 	    	    }
 	    	    continue;
 	        }
-            if (UCharacter.hasBinaryProperty(props[i][0], props[i][1])
-	            != expected[i]) {
-	            errln("error: UCharacter.hasBinaryProperty(\\u" + 
-	                  Integer.toHexString(props[i][0]) + ", " + 
-	                  Integer.toHexString(props[i][1]) + ") has an error expected " +
-	                  expected[i]);
-	        }
+            boolean expect = true;
+            if (expected[i] == 0) {
+                expect = false;
+            }
+            if (props[i][1] < UProperty.INT_START) {
+                if (UCharacter.hasBinaryProperty(props[i][0], props[i][1])
+    	            != expect) {
+    	            errln("error: UCharacter.hasBinaryProperty(\\u" + 
+    	                  Integer.toHexString(props[i][0]) + ", " + 
+    	                  Integer.toHexString(props[i][1]) 
+                          + ") has an error expected " + expected[i]);
+    	        }
+            }
 	
+            if (UCharacter.getIntPropertyValue(props[i][0], props[i][1])
+                != expected[i]) {
+                errln("error: UCharacter.getIntPropertyValue(\\u" +
+                      Utility.hex(props[i][0], 4) + 
+                      ", " + props[i][1] + " is wrong, should be "
+                      + expected[i]);
+            }
+        
 	        // test separate functions, too 
 	        switch (props[i][1]) {
 	        case UProperty.ALPHABETIC:
-	            if (UCharacter.isUAlphabetic(props[i][0]) != expected[i]) {
+	            if (UCharacter.isUAlphabetic(props[i][0]) != expect) {
 	                errln("error: UCharacter.isUAlphabetic(\\u" + 
 	                      Integer.toHexString(props[i][0]) + 
 	                      ") is wrong expected " + expected[i]);
 	            }
 	            break;
 	        case UProperty.LOWERCASE:
-	            if (UCharacter.isULowercase(props[i][0]) != expected[i]) {
+	            if (UCharacter.isULowercase(props[i][0]) != expect) {
 	                errln("error: UCharacter.isULowercase(\\u" + 
 	                      Integer.toHexString(props[i][0]) + 
 	                      ") is wrong expected " + expected[i]);
 	            }
 	            break;
 	        case UProperty.UPPERCASE:
-	            if (UCharacter.isUUppercase(props[i][0]) != expected[i]) {
+	            if (UCharacter.isUUppercase(props[i][0]) != expect) {
 	                errln("error: UCharacter.isUUppercase(\\u" + 
 	                      Integer.toHexString(props[i][0]) + 
 	                      ") is wrong expected " + expected[i]);
 	            }
 	            break;
 	        case UProperty.WHITE_SPACE:
-	            if (UCharacter.isUWhiteSpace(props[i][0]) != expected[i]) {
+	            if (UCharacter.isUWhiteSpace(props[i][0]) != expect) {
 	                errln("error: UCharacter.isUWhiteSpace(\\u" + 
 	                      Integer.toHexString(props[i][0]) + 
 	                      ") is wrong expected " + expected[i]);
@@ -1356,6 +1676,96 @@ public final class UCharacterTest extends TestFmwk
 	            break;
 	        }
 	    }
+    }
+    
+    public void TestNumericProperties() 
+    {
+        // see UnicodeData.txt, DerivedNumericValues.txt
+        int testvar[][] = {
+            { 0x0F33, UCharacter.NumericType.NUMERIC },
+            { 0x0C66, UCharacter.NumericType.DECIMAL },
+            { 0x2159, UCharacter.NumericType.NUMERIC },
+            { 0x00BD, UCharacter.NumericType.NUMERIC },
+            { 0x0031, UCharacter.NumericType.DECIMAL },
+            { 0x10320, UCharacter.NumericType.NUMERIC },
+            { 0x0F2B, UCharacter.NumericType.NUMERIC },
+            { 0x00B2, UCharacter.NumericType.DECIMAL },
+            { 0x1813, UCharacter.NumericType.DECIMAL },
+            { 0x2173, UCharacter.NumericType.NUMERIC },
+            { 0x278E, UCharacter.NumericType.DIGIT },
+            { 0x1D7F2, UCharacter.NumericType.DECIMAL },
+            { 0x247A, UCharacter.NumericType.DIGIT },
+            { 0x1372, UCharacter.NumericType.NUMERIC },
+            { 0x216B, UCharacter.NumericType.NUMERIC },
+            { 0x16EE, UCharacter.NumericType.NUMERIC },
+            { 0x249A, UCharacter.NumericType.NUMERIC },
+            { 0x303A, UCharacter.NumericType.NUMERIC },
+            { 0x32B2, UCharacter.NumericType.NUMERIC },
+            { 0x1375, UCharacter.NumericType.NUMERIC },
+            { 0x10323, UCharacter.NumericType.NUMERIC },
+            { 0x0BF1, UCharacter.NumericType.NUMERIC },
+            { 0x217E, UCharacter.NumericType.NUMERIC },
+            { 0x2180, UCharacter.NumericType.NUMERIC },
+            { 0x2181, UCharacter.NumericType.NUMERIC },
+            { 0x137C, UCharacter.NumericType.NUMERIC },
+            { 0x61, UCharacter.NumericType.NONE },
+            { 0x3000, UCharacter.NumericType.NONE },
+            { 0xfffe, UCharacter.NumericType.NONE },
+            { 0x10301, UCharacter.NumericType.NONE },
+            { 0xe0033, UCharacter.NumericType.NONE },
+            { 0x10ffff, UCharacter.NumericType.NONE }
+        };
+
+        double expected[] = {-1/(double)2,
+                             0,
+                             1/(double)6,
+                             1/(double)2,
+                             1,
+                             1,
+                             3/(double)2,
+                             2,
+                             3,
+                             4,
+                             5,
+                             6,
+                             7,
+                             10,
+                             12,
+                             17,
+                             19,
+                             30,
+                             37,
+                             40,
+                             50,
+                             100,
+                             500,
+                             1000,
+                             5000,
+                             10000,
+                             UCharacter.NO_NUMERIC_VALUE,
+                             UCharacter.NO_NUMERIC_VALUE,
+                             UCharacter.NO_NUMERIC_VALUE,
+                             UCharacter.NO_NUMERIC_VALUE,
+                             UCharacter.NO_NUMERIC_VALUE,
+                             UCharacter.NO_NUMERIC_VALUE
+        };
+
+    
+        for (int i = 0; i < testvar.length; ++ i) {
+            int c = testvar[i][0];
+            int type = UCharacter.getIntPropertyValue(c, 
+                                                      UProperty.NUMERIC_TYPE);
+            double nv = UCharacter.getUnicodeNumericValue(c);
+    
+            if (type != testvar[i][1]) {
+                errln("UProperty.NUMERIC_TYPE(\\u" + Utility.hex(c, 4) 
+                       + ") = " + type + " should be " + testvar[i][1]);
+            }
+            if (0.000001 <= Math.abs(nv - expected[i])) {
+                errln("UCharacter.getNumericValue(\\u" + Utility.hex(c, 4) 
+                        + ") = " + nv + " should be " + expected[i]);
+            }
+        }
     }
 }
 
