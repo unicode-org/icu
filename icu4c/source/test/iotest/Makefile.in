@@ -19,10 +19,8 @@ CLEANFILES = *~ $(DEPS)
 ## Target information
 TARGET = iotest
 
-BUILDDIR := $(shell pwd)/../..
-
-# we define ICU_UNICODE_VERSION so we can test it
-CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/tools/ctestfw -I$(top_srcdir)/tools/toolutil \
+DEFS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n \
+-I$(top_srcdir)/tools/ctestfw -I$(top_srcdir)/tools/toolutil \
 -I$(top_srcdir)/extra/ustdio
 LIBS = $(LIBCTESTFW) $(LIBICUI18N) $(LIBICUUC) $(LIBICUTOOLUTIL) $(LIBUSTDIO) $(DEFAULT_LIBS) $(LIB_M)
 
@@ -61,7 +59,7 @@ distclean-local: clean-local
 -include Makefile.local
 
 check-local: all-local
-	TZ=PST8PDT $(INVOKE) ./$(TARGET) $(CINTLTEST_OPTS)
+	TZ=PST8PDT $(INVOKE) ./$(TARGET) $(IOTEST_OPTS)
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
