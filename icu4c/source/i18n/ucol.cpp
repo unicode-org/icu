@@ -2971,7 +2971,7 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
               }
               source->pos = source->writableBuffer;
           }
-          CE = ucol_IGetNextCE(coll, source, status); // UCOL_IGNORABLE;
+          CE = UCOL_IGNORABLE;
       }
       break;
     case SPEC_PROC_TAG:
