@@ -237,7 +237,7 @@ nb {
         UA { "Ukraina" }
         //UG { "Uganda" }
         UM { "USAs mindre \u00F8yer" }
-        //US { "USA" } // Poor translation. USA -> United States
+        US { "Sambandsstatane" }
         //UY { "Uruguay" }
         UZ { "Usbekistan" }
         VA { "Vatikanstaten" }
