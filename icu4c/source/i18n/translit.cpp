@@ -890,8 +890,10 @@ void Transliterator::initializeCache(void) {
 
                 if (U_SUCCESS(status)) {
                     CacheEntry* entry = new CacheEntry();
+                    UBool isInternal = FALSE;
                     if (type == 0x0066 || type == 0x0069) { // 'f', 'i'
                         // 'file' or 'internal'; row[2]=resource, row[3]=direction
+                        isInternal = (type == 0x0069/*i*/);
                         if ((colBund.getStringEx(3, status).charAt(0)) == 0x0052) {// 'R'
                             entry->entryType = CacheEntry::RULES_REVERSE;
                         } else {
@@ -902,11 +904,15 @@ void Transliterator::initializeCache(void) {
                         entry->entryType = CacheEntry::ALIAS;
                     }
                     entry->stringArg = resource;
+
                     // Use internalCache for 'internal' entries
-                    Hashtable* c = (type == 0x0069/*i*/) ? internalCache : cache;
+                    Hashtable* c = isInternal ? internalCache : cache;
                     c->put(id, entry, status);
+
                     // cacheIDs owns & should delete the following string
-                    cacheIDs.addElement((void*) new UnicodeString(id));
+                    if (!isInternal) {
+                        cacheIDs.addElement((void*) new UnicodeString(id));
+                    }
                 }
             }
         }
