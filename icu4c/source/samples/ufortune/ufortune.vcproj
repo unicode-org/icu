@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding = "Windows-1252"?>
+<?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.00"
@@ -136,26 +136,6 @@
 			</File>
 			<File
 				RelativePath=".\resources\res-file-list.txt">
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="cd resources
-nmake -f fortune_resources.mak
-copy Fortune_Resources.DLL ..\$(TargetDir)
-"
-						Outputs="phony-output"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="cd resources
-nmake -f fortune_resources.mak
-copy Fortune_Resources.DLL ..\$(TargetDir)
-"
-						Outputs="phony-output"/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\resources\root.txt">
@@ -164,6 +144,31 @@ copy Fortune_Resources.DLL ..\$(TargetDir)
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl">
+		</Filter>
+		<Filter
+			Name="Makefile"
+			Filter="">
+			<File
+				RelativePath=".\resources\fortune_resources.mak">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="cd resources
+nmake -f fortune_resources.mak
+copy Fortune_Resources.DLL &quot;$(TargetDir)&quot;"
+						Outputs="resources\fortune_resources.DLL"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="cd resources
+nmake -f fortune_resources.mak
+copy Fortune_Resources.DLL &quot;$(TargetDir)&quot;"
+						Outputs="resources\fortune_resources.DLL"/>
+				</FileConfiguration>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>
