@@ -968,20 +968,11 @@ int getScriptElements(UScriptCode script[], int scriptcount,
         codepoint ++;
     }
 
-    UChar    ucarules[0x12000];
-    UChar   *rule;
-    int32_t  rulelength = 0;
-
-    rule      = ucarules;
-    rulelength = ucol_getRulesEx(COLLATOR_, UCOL_FULL_RULES, rule, 
-                                 0x12000);
-    if (rulelength + UCOL_TOK_EXTRA_RULE_SPACE_SIZE > 0x12000) {
-        rule = (UChar *)malloc(sizeof(UChar) * 
+    int32_t  rulelength = ucol_getRulesEx(COLLATOR_, UCOL_FULL_RULES, NULL, 0);
+    UChar   *rule       = (UChar *)malloc(sizeof(UChar) * 
                                 (rulelength + UCOL_TOK_EXTRA_RULE_SPACE_SIZE));
-        rulelength = ucol_getRulesEx(COLLATOR_, UCOL_FULL_RULES, rule, 
-                                     rulelength);
-    }
-    
+    rulelength = ucol_getRulesEx(COLLATOR_, UCOL_FULL_RULES, rule, 
+                                 rulelength);
     const UChar           *current  = NULL;
           uint32_t         strength = 0;
           uint32_t         chOffset = 0; 
@@ -1026,9 +1017,8 @@ int getScriptElements(UScriptCode script[], int scriptcount,
     if (U_FAILURE(error)) {
         fprintf(stdout, "Error parsing rules: %s\n", u_errorName(error));
     }
-    if (rule != ucarules) {
-       free(rule);
-    }
+	// rule might have been reallocated, so delete this instead
+    free(src.source); 
     return count;
 }
 
@@ -1431,13 +1421,7 @@ void serializeScripts() {
             }
             outputHTMLHeader(locale, scriptcode, scriptcount);
 			fprintf(stdout, "%s\n", locale);
-			if (*locale == 'j') {
-				fprintf(stdout, "japanese\n");
-                serializeScripts(scriptcode, scriptcount);
-            }
-            else {
-			    serializeScripts(scriptcode, scriptcount);
-            }
+			serializeScripts(scriptcode, scriptcount);
             fclose(OUTPUT_);
         }
         ucol_close(COLLATOR_);
