@@ -381,8 +381,8 @@ private:
     /** valid/actual locale information 
      *  these are always ICU locales, so the length should not be a problem
      */
-    char validLocale[50];
-    char actualLocale[50];
+    char validLocale[ULOC_FULLNAME_CAPACITY];
+    char actualLocale[ULOC_FULLNAME_CAPACITY];
 
 
     /* Sizes for the last resort string arrays */
