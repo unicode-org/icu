@@ -20,7 +20,7 @@
 #include "unicode/utypes.h"
 #include "unicode/ucnv.h"
 #include "unicode/ucnv_err.h"
-
+#include "udataswp.h"
 
 /* size of the overflow buffers in UConverter, enough for escaping callbacks */
 #define UCNV_ERROR_BUFFER_LENGTH 32
@@ -188,5 +188,14 @@ typedef struct
 UConverterDataLMBCS;
 
 #define CONVERTER_FILE_EXTENSION ".cnv"
+
+/**
+ * Swap ICU .cnv conversion tables. See udataswp.h.
+ * @internal
+ */
+U_CAPI int32_t U_EXPORT2
+ucnv_swap(const UDataSwapper *ds,
+          const void *inData, int32_t length, void *outData,
+          UErrorCode *pErrorCode);
 
 #endif /* _UCNV_BLD */
