@@ -349,12 +349,12 @@ int32_t StringSearch::handleNext(int32_t position, UErrorCode &status)
             // looking at usearch.cpp, this part is shifted out to 
             // StringSearch instead of SearchIterator because m_strsrch_ is
             // not accessible in SearchIterator
-            if (!m_search_->isOverlap &&
-                position + m_strsrch_->pattern.defaultShiftSize > 
-                m_search_->textLength) {
+            if (position + m_strsrch_->pattern.defaultShiftSize 
+				> m_search_->textLength) {
                 setMatchNotFound();
                 return USEARCH_DONE;
             }
+			ucol_setOffset(m_strsrch_->textIter, position, &status);
             while (TRUE) {
                 if (m_search_->isCanonicalMatch) {
                     // can't use exact here since extra accents are allowed.
@@ -375,6 +375,14 @@ int32_t StringSearch::handleNext(int32_t position, UErrorCode &status)
                                                   m_search_->matchedLength))
 #endif
                 ) {
+					if (m_search_->matchedIndex == USEARCH_DONE) {
+						ucol_setOffset(m_strsrch_->textIter, 
+							           m_search_->textLength, &status);
+					}
+					else {
+						ucol_setOffset(m_strsrch_->textIter, 
+							           m_search_->matchedIndex, &status);
+					}
                     return m_search_->matchedIndex;
                 }
             }
