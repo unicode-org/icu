@@ -661,7 +661,7 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
           uint32_t normSize = 0;
           uprv_memcpy(buff, expOffset + src->source, 1*sizeof(UChar));
           normSize = unorm_normalize(buff, 1, UNORM_NFD, 0, source, 256, status);
-          init_collIterate(src->UCA, source, normSize, &s, FALSE);
+          init_collIterate(src->UCA, source, normSize, &s);
 
           for(;;) {
             UCOL_GETNEXTCE(order, src->UCA, s, status);
@@ -690,7 +690,7 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
         uint32_t order = 0;
         uprv_memcpy(buff, (tok->expansion & 0x00FFFFFF) + src->source, len*sizeof(UChar));
         unorm_normalize(buff, len, UNORM_NFD, 0, source, 256, status);
-        init_collIterate(src->UCA, source, len, &s, FALSE);
+        init_collIterate(src->UCA, source, len, &s);
 
         for(;;) {
           UCOL_GETNEXTCE(order, src->UCA, s, status);
@@ -845,7 +845,7 @@ uint32_t ucol_getDynamicCEs(UColTokenParser *src, tempUCATable *t, UChar *decomp
         j = firstIndex;
       }
       if(firstFound == UCOL_NOT_FOUND) {
-        init_collIterate(src->UCA, decomp+j, 1, &colIt, TRUE);
+        init_collIterate(src->UCA, decomp+j, 1, &colIt);
         while(CE != UCOL_NO_MORE_CES) {
           CE = ucol_getNextCE(src->UCA, &colIt, status);
           if(CE != UCOL_NO_MORE_CES) {
@@ -1054,7 +1054,7 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
           el.cPoints = el.uchars;
           el.cSize = 1;
           el.noOfCEs = 0;
-          init_collIterate(src->UCA, decomp, 1, &colIt, TRUE);
+          init_collIterate(src->UCA, decomp, 1, &colIt);
           while(CE != UCOL_NO_MORE_CES) {
             CE = ucol_getNextCE(src->UCA, &colIt, status);
             /*UCOL_GETNEXTCE(CE, temp, colIt, status);*/

@@ -61,7 +61,8 @@ ucol_openElements(const UCollator  *coll,
   result->reset_   = TRUE;
   result->normalization_ = UNORM_DEFAULT;
 
-  init_collIterate(coll, text, textLength, &result->iteratordata_, FALSE);
+  result->isWritable = FALSE;
+  init_collIterate(coll, text, textLength, &result->iteratordata_);
 
   return result;
 }
@@ -73,7 +74,7 @@ ucol_closeElements(UCollationElements *elems)
   if (ci->writableBuffer != ci->stackWritableBuffer) {
     uprv_free(ci->writableBuffer);
   }
-  if (elems->iteratordata_.isWritable && elems->iteratordata_.string != NULL)
+  if (elems->isWritable && elems->iteratordata_.string != NULL)
   {
     uprv_free(elems->iteratordata_.string);
   }
@@ -87,10 +88,10 @@ ucol_reset(UCollationElements *elems)
   elems->reset_   = TRUE;
   ci->start       = ci->string;
   ci->pos         = ci->string;
-  ci->len         = ci->string + elems->length_;
+  ci->endp        = ci->string + elems->length_;
   ci->CEpos       = ci->toReturn = ci->CEs;
   
-  ci->isThai      = TRUE;
+  /* ci->isThai      = TRUE;  */
   if (ci->stackWritableBuffer != ci->writableBuffer) {
     uprv_free(ci->writableBuffer);
     ci->writableBuffer = ci->stackWritableBuffer;
@@ -108,6 +109,7 @@ ucol_next(UCollationElements *elems,
 
   elems->reset_ = FALSE;
 
+#if 0
 #ifdef _DEBUG
   if ((elems->iteratordata_).CEpos > (elems->iteratordata_).toReturn) 
     {                       
@@ -117,7 +119,7 @@ ucol_next(UCollationElements *elems,
         (elems->iteratordata_).CEs; 
     } 
     else 
-      if ((elems->iteratordata_).pos < (elems->iteratordata_).len) 
+      if ((elems->iteratordata_).pos < (elems->iteratordata_).endp) 
       {                        
         UChar ch = *(elems->iteratordata_).pos++;     
         if (ch <= 0xFF)
@@ -138,6 +140,9 @@ ucol_next(UCollationElements *elems,
 #else
       UCOL_GETNEXTCE(result, elems->iteratordata_.coll, elems->iteratordata_, status);
 #endif
+#endif
+      result = ucol_getNextCE(elems->iteratordata_.coll, &elems->iteratordata_, status);
+
   
   if (result == UCOL_NO_MORE_CES) {
     result = UCOL_NULLORDER;
@@ -158,11 +163,13 @@ ucol_previous(UCollationElements *elems,
 
     if (elems->reset_ && 
         (elems->iteratordata_.pos == elems->iteratordata_.string))
-      elems->iteratordata_.pos = elems->iteratordata_.len;
+      elems->iteratordata_.pos = elems->iteratordata_.endp;
 
     elems->reset_ = FALSE;
 
-#ifdef _DEBUG
+#if 1
+// #ifdef _DEBUG
+    // TODO:  Fix Thai for reworked iterators.
     const UCollator   *coll  = elems->iteratordata_.coll;
           collIterate *data  = &(elems->iteratordata_);
           int32_t     length = elems->length_;
@@ -190,11 +197,11 @@ ucol_previous(UCollationElements *elems,
         if (ch <= 0xFF)                                                
           (result) = (coll)->latinOneMapping[ch];                                                                                       
         else {
-          if (data->isThai && UCOL_ISTHAIBASECONSONANT(ch) && data->pos > data->start 
+          /* if (data->isThai &&  UCOL_ISTHAIBASECONSONANT(ch) && data->pos > data->start 
               && UCOL_ISTHAIPREVOWEL(*(data->pos -1))) {
             result = UCOL_THAI;                     
-          }
-          else {
+          } 
+          else */ {  
             (result) = ucmp32_get((coll)->mapping, ch);
           }
         }
@@ -246,12 +253,13 @@ ucol_setText(      UCollationElements *elems,
 
   elems->length_ = textLength;
 
-  if (elems->iteratordata_.isWritable && elems->iteratordata_.string != NULL)
+  if (elems->isWritable && elems->iteratordata_.string != NULL)
   {
     uprv_free(elems->iteratordata_.string);
   }
  
-  init_collIterate(elems->iteratordata_.coll, text, textLength, &elems->iteratordata_, FALSE);
+  elems->isWritable = FALSE;
+  init_collIterate(elems->iteratordata_.coll, text, textLength, &elems->iteratordata_);
 
   elems->reset_   = TRUE;
 }
@@ -277,7 +285,7 @@ ucol_setOffset(UCollationElements    *elems,
   collIterate *ci = &(elems->iteratordata_);
   ci->pos         = ci->string + offset;
   ci->CEpos       = ci->toReturn = ci->CEs;
-  ci->isThai      = TRUE;
+  /* ci->isThai      = TRUE; */
   if (ci->stackWritableBuffer != ci->writableBuffer)
   {
     uprv_free(ci->writableBuffer);
