@@ -185,11 +185,12 @@ class BreakIterator;
  */
 class U_COMMON_API RuleBasedBreakIterator : public BreakIterator {
 
-public:
+protected:
     /**
      * A token used as a character-category value to identify ignore characters
      */
-    static const int8_t IGNORE;
+    static const int8_t RBBI_IGNORE;
+    friend class DictionaryBasedBreakIteratorTables;
 
 private:
     /**
