@@ -40,6 +40,8 @@ The following names can be supplied as the argument for platform:
     HP/UX11CC               Use HP's C++ compiler on HP-UX 11
     HP/UX11ACC              Use the Advanced C++ compiler on HP-UX 11
     PTX                     Use C++ on Dynix/PTX v4.5
+    ALPHA/LINUXGCC	    Use GCC on Alpha/Linux systems
+    ALPHA/LINUXCCC	    Use Compaq C compiler on Alpha/Linux systems
 EOE
     fi
 
@@ -85,6 +87,9 @@ fi
 rm -f config.cache
 rm -f config.log
 rm -f config.status
+
+DEBUG_CFLAGS='-g'
+DEBUG_CXXFLAGS='-g'
 
 if test x$configure = x
 then
@@ -219,10 +224,23 @@ case $platform in
 		fi
 		configure="$configure --prefix=$XMLINSTALL"
 		;;
+	ALPHA/LINUXCCC)
+		THE_OS="Linux"
+		THE_COMP="Compaq's CC"
+		CC=ccc; export CC
+		CXX=cxx; export CXX
+		;;
+	ALPHA/LINUXGCC)
+		THE_OS="Linux"
+                THE_COMP="the GNU C++"
+                CXX=g++; export CXX
+                CC=gcc; export CC
+		;;
         *)
                 >&2 echo "$me: unrecognized platform \"$platform\" (use --help for help)"
                 exit 1;;
 esac
+
 
 # Tweak flags
 
@@ -230,28 +248,28 @@ if test $release -eq 1
 then
     if test "$RELEASE_CFLAGS" = ""
     then
-	case $CC in
-	    gcc|*/gcc|*-gcc-*|*/*-gcc-*)
-		RELEASE_CFLAGS=-O3
-		;;
-	esac
+        case $CC in
+            gcc|*/gcc|*-gcc-*|*/*-gcc-*)
+                RELEASE_CFLAGS=-O3
+                ;;
+        esac
     fi
     if test "$RELEASE_CFLAGS" != ""
     then
-	CFLAGS="$CFLAGS $RELEASE_CFLAGS"
+        CFLAGS="$CFLAGS $RELEASE_CFLAGS"
     fi
     export CFLAGS
     if test "$RELEASE_CXXFLAGS" = ""
     then
-	case $CXX in
-	    g++|*/g++|*-g++-*|*/*-g++-*)
-		RELEASE_CXXFLAGS=-O
-		;;
-	esac
+        case $CXX in
+            g++|*/g++|*-g++-*|*/*-g++-*)
+                RELEASE_CXXFLAGS=-O
+                ;;
+        esac
     fi
     if test "$RELEASE_CXXFLAGS" != ""
     then
-	CXXFLAGS="$CXXFLAGS $RELEASE_CXXFLAGS"
+        CXXFLAGS="$CXXFLAGS $RELEASE_CXXFLAGS"
     fi
     export CXXFLAGS
 fi
@@ -260,12 +278,12 @@ if test $debug -eq 1
 then
     if test "$DEBUG_CFLAGS" != ""
     then
-	CFLAGS="$CFLAGS $DEBUG_CFLAGS"
+        CFLAGS="$CFLAGS $DEBUG_CFLAGS"
     fi
     export CFLAGS
     if test "$DEBUG_CXXFLAGS" != ""
     then
-	CXXFLAGS="$CXXFLAGS $DEBUG_CXXFLAGS"
+        CXXFLAGS="$CXXFLAGS $DEBUG_CXXFLAGS"
     fi
     export CXXFLAGS
 fi
