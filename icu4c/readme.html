@@ -3,7 +3,7 @@
 <html>
   <head>
     <meta name="GENERATOR" content="HTML Tidy, see www.w3.org">
-    <meta name="COPYRIGHT" value=
+    <meta name="COPYRIGHT" content=
     "Copyright (c) IBM Corporation and others. All Rights Reserved.">
     <meta name="KEYWORDS" content=
     "ICU; International Components for Unicode; what's new; readme; read me; introduction; downloads; downloading; building; installation;">
@@ -40,7 +40,7 @@
       <li><a href="#Introduction">Introduction</a></li>
 
       <li>
-        <a href="#News">Late Breaking News And What Is New?</a>
+        <a href="#News">Late Breaking News And What Is New?</a> 
 
         <ul class="TOC">
           <li><a href="#NewsUnicodeVer">Support for Unicode 3.1</a></li>
@@ -58,7 +58,7 @@
       <li><a href="#PlatformDependencies">Platform Dependencies</a></li>
 
       <li>
-        <a href="#HowToBuild">How to Build And Install ICU</a>
+        <a href="#HowToBuild">How to Build And Install ICU</a> 
 
         <ul class="TOC">
           <li><a href="#HowToBuildSupported">Supported Platforms</a></li>
@@ -74,7 +74,7 @@
       </li>
 
       <li>
-        <a href="#ImportantNotes">Important Notes About Using ICU</a>
+        <a href="#ImportantNotes">Important Notes About Using ICU</a> 
 
         <ul class="TOC">
           <li><a href="#ImportantNotesWindows">Windows Platform</a></li>
@@ -98,7 +98,7 @@
     national languages. International Components for Unicode provides the
     following tools to help you write language independent applications:</p>
 
-    <ul type="disc">
+    <ul>
       <li>Support for the latest Unicode standard</li>
 
       <li>Resource bundles for storing and accessing localized
@@ -143,8 +143,8 @@
     committed to fixing any bugs, and will also use your feedback to help
     plan future releases.</p>
 
-    <p><strong><u>IMPORTANT</u>: Please make sure you understand the <a href=
-    "license.html">Copyright and License information</a>.</strong></p>
+    <p><strong>IMPORTANT:</strong> Please make sure you understand the <a
+    href="license.html">Copyright and License Information</a>.</p>
 
     <h2><a name="News">Late Breaking News And What Is New?</a></h2>
 
@@ -200,7 +200,7 @@
 
     <p>There are two ways to download the ICU releases,</p>
 
-    <ul type="disc">
+    <ul>
       <li><strong>Official Release Snapshot:</strong><br>
        If you want to use ICU (as opposed to developing it), you should
       download an official packaged version of the ICU source code. These
@@ -221,9 +221,9 @@
         for ICU, you should probably be working with the latest version of
         the ICU source code. You will need to check the code out of our CVS
         repository to ensure that you have the most recent version of all of
-        the files. There are several ways to do this:
+        the files. There are several ways to do this: 
 
-        <ul type="circle">
+        <ul>
           <li>WebCVS:<br>
            If you want to browse the code and only make occasional downloads,
           you may want to use WebCVS. It provides a convenient, web-based
@@ -239,7 +239,7 @@
             install a CVS client on your own machine so that you can do batch
             operations without going through the WebCVS interface. On
             Windows, we suggest the WinCVS client. The following is the
-            example instruction on how to download ICU via WinCVS:
+            example instruction on how to download ICU via WinCVS: 
 
             <ol>
               <li>Install the WinCVS client, which you can download from the
@@ -287,16 +287,16 @@
       </caption>
 
       <tr>
-        <td width="20%">readme.html</td>
+        <td>readme.html</td>
 
-        <td width="80%">Describes the International Components for Unicode
-        (this file)</td>
+        <td>Describes the International Components for Unicode (this
+        file)</td>
       </tr>
 
       <tr>
-        <td width="20%">license.html</td>
+        <td>license.html</td>
 
-        <td width="80%">Contains IBM's public license</td>
+        <td>Contains IBM's public license</td>
       </tr>
     </table>
 
@@ -309,44 +309,44 @@
       </caption>
 
       <tr>
-        <td width="20%">$Root/source/common/</td>
+        <td>$Root/source/common/</td>
 
-        <td width="80%">The core Unicode and support functionality, such as
-        resource bundles, character properties, locales, codepage conversion,
+        <td>The core Unicode and support functionality, such as resource
+        bundles, character properties, locales, codepage conversion,
         normalization, Unicode properties, Locale, and UnicodeString.</td>
       </tr>
 
       <tr>
-        <td width="20%">$Root/source/i18n/</td>
+        <td>$Root/source/i18n/</td>
 
-        <td width="80%">Modules in i18n are generally the more data-driven,
-        that is to say resource bundle driven, components. These deal with
-        higher level internationalization issues such as formatting,
-        collation, text break analysis, and transliteration.</td>
+        <td>Modules in i18n are generally the more data-driven, that is to
+        say resource bundle driven, components. These deal with higher level
+        internationalization issues such as formatting, collation, text break
+        analysis, and transliteration.</td>
       </tr>
 
       <tr>
-        <td width="20%">$Root/source/test/intltest/</td>
+        <td>$Root/source/test/intltest/</td>
 
-        <td width="80%">A test suite including all C++ APIs. For information
+        <td>A test suite including all C++ APIs. For information about
+        running the test suite, see the users' guide.</td>
+      </tr>
+
+      <tr>
+        <td>$Root/source/test/cintltst/</td>
+
+        <td>A test suite written in C, including all C APIs. For information
         about running the test suite, see the users' guide.</td>
       </tr>
 
       <tr>
-        <td width="20%">$Root/source/test/cintltst/</td>
+        <td>$Root/data/</td>
 
-        <td width="80%">A test suite written in C, including all C APIs. For
-        information about running the test suite, see the users' guide.</td>
-      </tr>
-
-      <tr>
-        <td width="20%">$Root/data/</td>
-
-        <td width="80%">
+        <td>
           This directory contains the source data in text format, which is
           compiled into binary form during the ICU build process. The output
           from these files is stored in $Root/source/data/build while
-          awaiting further packaging.
+          awaiting further packaging. 
 
           <ul>
             <li><b>unidata/</b> This directory contains the Unicode data
@@ -386,63 +386,62 @@
       </tr>
 
       <tr>
-        <td width="20%">$Root/source/data</td>
+        <td>$Root/source/data</td>
 
-        <td width="80%">This directory is where the final, packaged version
-        of the ICU binary data ends up. If the ICU_DATA environment variable
-        is used, then it should be set to this directory. The intermediate
-        individual data files (.res, .cnv) are kept in the subdirectory
+        <td>This directory is where the final, packaged version of the ICU
+        binary data ends up. If the ICU_DATA environment variable is used,
+        then it should be set to this directory. The intermediate individual
+        data files (.res, .cnv) are kept in the subdirectory
         "$Root/source/data/build" prior to packaging.</td>
       </tr>
 
       <tr>
-        <td width="20%">$Root/source/tools</td>
+        <td>$Root/source/tools</td>
 
-        <td width="80%">Tools for generating the data files. Data files are
-        generated by invoking $Root/source/data/build/makedata.bat on Win32
-        or $Root/source/make on Unix.</td>
+        <td>Tools for generating the data files. Data files are generated by
+        invoking $Root/source/data/build/makedata.bat on Win32 or
+        $Root/source/make on Unix.</td>
       </tr>
 
       <tr>
-        <td width="20%">$Root/source/samples</td>
+        <td>$Root/source/samples</td>
 
-        <td width="80%">Various sample programs that use ICU</td>
+        <td>Various sample programs that use ICU</td>
       </tr>
 
       <tr>
-        <td width="20%">$Root/source/extra</td>
+        <td>$Root/source/extra</td>
 
-        <td width="80%">Non-supported API additions. Currently, it contains
-        the 'ustdio' file i/o library</td>
+        <td>Non-supported API additions. Currently, it contains the 'ustdio'
+        file i/o library</td>
       </tr>
 
       <tr>
-        <td width="20%">$Root/source/layout</td>
+        <td>$Root/source/layout</td>
 
-        <td width="80%">Contains the ICU layout engine (not a
-        rasterizer).</td>
+        <td>Contains the ICU layout engine (not a rasterizer).</td>
       </tr>
 
       <tr>
-        <td width="20%">$Root/packaging<br>
+        <td>$Root/packaging<br>
          $Root/debian</td>
 
-        <td width="80%">These directories contain scripts and tools for
-        packaging the final ICU build for various release platforms.</td>
+        <td>These directories contain scripts and tools for packaging the
+        final ICU build for various release platforms.</td>
       </tr>
 
       <tr>
-        <td width="20%">$Root/source/config</td>
+        <td>$Root/source/config</td>
 
-        <td width="80%">Contains helper makefiles for platform specific build
-        commands. Used by 'configure'.</td>
+        <td>Contains helper makefiles for platform specific build commands.
+        Used by 'configure'.</td>
       </tr>
 
       <tr>
-        <td width="20%">$Root/source/allinone</td>
+        <td>$Root/source/allinone</td>
 
-        <td width="80%">Contains top-level ICU project files, for instance to
-        build all of ICU under one MSVC project.</td>
+        <td>Contains top-level ICU project files, for instance to build all
+        of ICU under one MSVC project.</td>
       </tr>
     </table>
     <!-- end of ICU structure ==================================== -->
@@ -450,20 +449,21 @@
     <h2><a name="PlatformDependencies">Platform Dependencies</a></h2>
 
     <p>The platform dependencies have been mostly isolated into the following
-    files:</p>
+    files in the common library. This information can be useful if you are
+    porting ICU to a new platform.</p>
 
-    <ul type="disc">
+    <ul>
       <li>
-        <u>platform.h.in</u>: (autoconf'ed platforms)<br>
-         <u>p<i>XXXX</i>.h</u> (others: pwin32.h, pos2.h, pmacos.h, ..):
-        Platform-dependent typedefs and defines:<br>
+        <strong>unicode/platform.h.in</strong> (autoconf'ed platforms)<br>
+         <strong>unicode/p<i>XXXX</i>.h</strong> (others: pwin32.h, pmacos.h,
+        ..): Platform-dependent typedefs and defines:<br>
         <br>
+         
 
-
-        <ul type="circle">
+        <ul>
           <li>XP_CPLUSPLUS for C++ only.</li>
 
-          <li>TRUE and FALSE, bool_t, int8_t, int16_t etc.</li>
+          <li>TRUE and FALSE, UBool, int8_t, int16_t etc.</li>
 
           <li>U_EXPORT and U_IMPORT for specifying dynamic library import and
           export</li>
@@ -472,40 +472,40 @@
       </li>
 
       <li>
-        <u>putil.c:</u> platform-dependent implementations of various
-        functions that are platform dependent: (declared in putil.h)<br>
+        <strong>unicode/putil.h, putil.c</strong>: platform-dependent
+        implementations of various functions that are platform dependent:<br>
         <br>
+         
 
+        <ul>
+          <li>uprv_isNaN, uprv_isInfinite, uprv_getNaN and uprv_getInfinity
+          for handling special floating point values.</li>
 
-        <ul type="circle">
-          <li>icu_isNaN, icu_isInfinite(double), icu_getNaN();
-          icu_getInfinity for handling special floating point values.</li>
-
-          <li>icu_tzset, icu_timezone, icu_tzname and time for reading
+          <li>uprv_tzset, uprv_timezone, uprv_tzname and time for getting
           platform specific time and timezone information.</li>
 
-          <li>icu_getDefaultDataDirectory, icu_getDefaultLocaleID for reading
-          the locale setting and data directory.</li>
+          <li>u_getDataDirectory for getting the default data directory.</li>
 
-          <li>icu_isBigEndian for finding the endianess of the platform.</li>
+          <li>uprv_getDefaultLocaleID for getting the default locale
+          setting.</li>
 
-          <li>icu_nextDouble is used specifically by the ChoiceFormat
-          API.</li>
+          <li>uprv_getDefaultCodepage for getting the default codepage
+          encoding.</li>
         </ul>
         <br>
       </li>
 
       <li>
-        <u>umutex.h and umutex.c</u>: Code for doing synchronization in
-        multithreaded applications. If you wish to use International
+        <strong>umutex.h, umutex.c</strong>: Code for doing synchronization
+        in multithreaded applications. If you wish to use International
         Components for Unicode in a multithreaded application, you must
         provide a synchronization primitive that the classes can use to
         protect their global data against simultaneous modifications. See
         Users' guide for more information.<br>
         <br>
+         
 
-
-        <ul type="circle">
+        <ul>
           <li>We supply sample implementations for WinNT, Win95, Win98,
           Sun/Solaris, RedHat/Linux, HP-UX and for AIX on an RS/6000.</li>
         </ul>
@@ -513,39 +513,39 @@
       </li>
 
       <li>
-        <u>udata.h</u> and <u>udata.c</u>: The data-accessing interface in
-        ICU is implemented such that there is a lot of flexibility for
-        reading a data file. Each platform can tune the performance of file
-        accessing for its environment by choosing to implement one of the
-        following options:<br>
+        <strong>unicode/udata.h, udata.c</strong>: The data-accessing
+        interface in ICU is implemented such that there is a lot of
+        flexibility for reading a data file. Each platform can tune the
+        performance of file accessing for its environment by choosing to
+        implement one of the following options:<br>
         <br>
+         
 
-
-        <ul type="circle">
+        <ul>
           <li>DLL</li>
 
           <li>Memory map</li>
 
-          <li>Plain text</li>
+          <li>Individual files</li>
         </ul>
         <br>
       </li>
 
-      <li>If you are changing the platform-dependent files, utypes.h and
-      putil.h may also be interesting, but they shouldn't have to be changed.
-      If you think any other files than the ones mentioned above have
-      platform dependencies, please contact us.</li>
-
       <li>For the Intltest test suite, intltest.cpp in
       "icu/source/test/intltest/" contains the method pathnameInContext,
       which must also be adapted to any new platform.</li>
+
+      <li>Using platform specific #ifdef macros are highly discouraged
+      outside of the scope of these files. When the source code gets updated
+      in the future, these #ifdef's can cause testing problems for your
+      platform.</li>
     </ul>
 
     <p>It is possible to build each library individually. They must be built
     in the following order:<br>
     </p>
 
-    <ol start="1" type="1">
+    <ol>
       <li>stubdata</li>
 
       <li>common</li>
@@ -738,7 +738,7 @@
 
     <p>Building International Components for Unicode requires:</p>
 
-    <ul type="disc">
+    <ul>
       <li>Microsoft NT 3.51 and above, or Windows 95 and above</li>
 
       <li>Microsoft Visual C++ 6.0 (Service Pack 2 is required to work with
@@ -747,7 +747,7 @@
 
     <p>The steps are:</p>
 
-    <ol start="1" type="1">
+    <ol>
       <li>Unzip the icu-XXXX.zip file, type "unzip -a icu-XXXX.zip -d
       drive:\directory" under command prompt or use WinZip.
       drive:\directory\icu is the root ($Root) directory (you may but don't
@@ -818,7 +818,7 @@
     Note:</strong></a> To set the active configuration, two different
     possibilities are:</p>
 
-    <ul type="disc">
+    <ul>
       <li>Choose "Build" menu, select "Set Active Configuration", and select
       "Win32 Release" or "Win32 Debug".</li>
 
@@ -852,7 +852,7 @@
 
     <p>The steps are:</p>
 
-    <ol start="1" type="1">
+    <ol>
       <li>Decompress the icuXXXX.tar (or icuXXXX.tgz) file and use pax.</li>
 
       <li>Before running the test programs or samples, please set the
@@ -927,8 +927,8 @@
         their original state. You can use the <a href=
         "as_is\os390\unpax-icu.sh">unpax-icu.sh</a> script to do this for you
         automatically. It will unpackage the tar file and convert all the
-        necessary files for you automatically.  The files that must not be
-        converted to ibm-1047 are the following:
+        necessary files for you automatically. The files that must not be
+        converted to ibm-1047 are the following: 
 
         <ul>
           <li>All UTF-8 files</li>
@@ -948,7 +948,7 @@
         DLL directories and the LIBPATH setting: Building and testing ICU
         needs the ICU libraries on the LIBPATH. In other words, the LIBPATH
         should contain (each path prepended with the root directory that
-        contains the icu directory):
+        contains the icu directory): 
 
         <ul>
           <li>icu/source/common</li>
@@ -1070,7 +1070,7 @@ Data set name type  : PDS
 
     <ul>
       <li>
-        Requirements:
+        Requirements: 
 
         <ul>
           <li>QSHELL interpreter installed (install base option 30, operating
@@ -1089,7 +1089,7 @@ Data set name type  : PDS
       </li>
 
       <li>
-        Build environment setup:
+        Build environment setup: 
 
         <ol>
           <li>
@@ -1097,6 +1097,7 @@ Data set name type  : PDS
             the resulting modules, programs and service programs. You will
             specify this library on the OUTPUTDIR environment variable in
             step 2.<br>
+             
 
             <div class="indent">
               CRTLIB LIB(<i>libraryname</i>)
@@ -1106,14 +1107,14 @@ Data set name type  : PDS
 
           <li>
             Set up the following environment variables in your build process
-            (use the <i>libraryname</i> from the previous step)
+            (use the <i>libraryname</i> from the previous step) 
 
             <div class="indent">
               ADDENVVAR ENVVAR(ICU_DATA) VALUE('/icu/source/data')<br>
-              ADDENVVAR ENVVAR(CC) VALUE('/usr/bin/icc')<br>
-              ADDENVVAR ENVVAR(CXX) VALUE('/usr/bin/icc')<br>
-              ADDENVVAR ENVVAR(MAKE) VALUE('/usr/bin/gmake')<br>
-              ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')
+               ADDENVVAR ENVVAR(CC) VALUE('/usr/bin/icc')<br>
+               ADDENVVAR ENVVAR(CXX) VALUE('/usr/bin/icc')<br>
+               ADDENVVAR ENVVAR(MAKE) VALUE('/usr/bin/gmake')<br>
+               ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')
               <i>identifies target as400 library for *module, *pgm and
               *srvpgm objects</i>
             </div>
@@ -1127,13 +1128,14 @@ Data set name type  : PDS
             In order to get the tests to run correctly, the QUTCOFFSET needs
             to be set to the Pacific Time Zone offset.<br>
             <br>
-             To check your QUTCOFFSET:
+             To check your QUTCOFFSET: 
 
             <div class="indent">
               DSPSYSVAL SYSVAL(QUTCOFFSET)
             </div>
             <br>
              To change your QUTCOFFSET:<br>
+             
 
             <div class="indent">
               CHGSYSVAL SYSVAL(QUTCOFFSET) VALUE('-0800') <i>or -0700 for
@@ -1157,7 +1159,7 @@ Data set name type  : PDS
           <li>
             Configure the Makefiles with the as/400 configure script from the
             ICU download page. <strong>Note:</strong> Verify that the
-            mh-os400 configure file is used.
+            mh-os400 configure file is used. 
 
             <ul>
               <li>Run 'configure --host=as400-os400'</li>
@@ -1185,20 +1187,23 @@ Data set name type  : PDS
     <h3><a name="ImportantNotesWindows">Windows Platform</a></h3>
 
     <p>If you are building on the Win32 platform, it is important that you
-    understand a few build details:</p>
+    understand a few of the following build details.</p>
 
-    <p><u>DLL directories and the PATH setting:</u> As delivered, the
-    International Components for Unicode build as several DLLs. These DLLs
-    are placed in the "icu\bin" directory. You must add this directory to the
-    PATH environment variable in your system, or any executables you build
-    will not be able to access International Components for Unicode
-    libraries. Alternatively, you can copy the DLL files into a directory
-    already in your PATH, but we do not recommend this. You can wind up with
-    multiple copies of the DLL and wind up using the wrong one.</p>
+    <h4><a name="ImportantNotesWindowsDLL">DLL directories and the PATH
+    setting</a></h4>
 
-    <p><u>To change your PATH:</u></p>
+    <p>As delivered, the International Components for Unicode build as
+    several DLLs. These DLLs are placed in the "icu\bin" directory. You must
+    add this directory to the PATH environment variable in your system, or
+    any executables you build will not be able to access International
+    Components for Unicode libraries. Alternatively, you can copy the DLL
+    files into a directory already in your PATH, but we do not recommend
+    this. You can wind up with multiple copies of the DLL and wind up using
+    the wrong one.</p>
 
-    <ul type="disk">
+    <h4><a name="ImportantNotesWindowsPath">Changing your PATH</a></h4>
+
+    <ul>
       <li><strong>Windows 2000</strong>: Use the System Icon in the Control
       Panel. Pick the "Advanced" tab. Select the "Environment Variables..."
       button. Select the variable PATH in the lower box, and select the lower
@@ -1217,13 +1222,16 @@ Data set name type  : PDS
       the following line to the end of file, "SET PATH=%PATH%;$Root\bin"</li>
     </ul>
 
-    <p><u>Link with Runtime libraries:</u> All the DLLs link with the C
-    runtime library "Debug Multithreaded DLL" or "Multithreaded DLL." (This
-    is changed through the Project Settings dialog, on the C/C++ tab, under
-    Code Generation.) It is important that any executable or other DLL you
-    build which uses the International Components for Unicode DLLs links with
-    these runtime libraries as well. If you do not do this, you will
-    seemingly get memory errors when you run the executable.<br>
+    <h4><a name="ImportantNotesWindowsLink">Linking with Runtime
+    libraries</a></h4>
+
+    <p>All the DLLs link with the C runtime library "Debug Multithreaded DLL"
+    or "Multithreaded DLL." (This is changed through the Project Settings
+    dialog, on the C/C++ tab, under Code Generation.) It is important that
+    any executable or other DLL you build which uses the International
+    Components for Unicode DLLs links with these runtime libraries as well.
+    If you do not do this, you will get random memory errors when you run the
+    executable.<br>
     </p>
 
     <h3><a name="ImportantNotesUnix">Unix Type Platform</a></h3>
@@ -1243,53 +1251,52 @@ Data set name type  : PDS
       </caption>
 
       <tr>
-        <td width="40%"><a href=
+        <td><a href=
         "http://oss.software.ibm.com/icu/">http://oss.software.ibm.com/icu/</a></td>
 
-        <td width="60%">International Components for Unicode homepage</td>
+        <td>International Components for Unicode homepage</td>
       </tr>
 
       <tr>
-        <td width="40%"><a href=
+        <td><a href=
         "http://oss.software.ibm.com/icu/userguide/icufaq.html">http://oss.software.ibm.com/icu/userguide/icufaq.html</a></td>
 
-        <td width="60%">Frequently asked questions about ICU</td>
+        <td>Frequently asked questions about ICU</td>
       </tr>
 
       <tr>
-        <td width="40%"><a href=
+        <td><a href=
         "http://oss.software.ibm.com/icu/download">http://oss.software.ibm.com/icu/download</a></td>
 
-        <td width="60%">Download the latest version of ICU and
-        documentation</td>
+        <td>Download the latest version of ICU and documentation</td>
       </tr>
 
       <tr>
-        <td width="40%"><a href=
+        <td><a href=
         "http://oss.software.ibm.com/icu/apiref/">http://oss.software.ibm.com/icu/apiref/</a></td>
 
-        <td width="60%">API Documentation in HTML form</td>
+        <td>API Documentation in HTML form</td>
       </tr>
 
       <tr>
-        <td width="40%"><a href=
+        <td><a href=
         "http://oss.software.ibm.com/icu/userguide/">http://oss.software.ibm.com/icu/userguide/</a></td>
 
-        <td width="60%">Draft User's Guide Documentation in HTML form</td>
+        <td>Draft User's Guide Documentation in HTML form</td>
       </tr>
 
       <tr>
-        <td width="40%"><a href=
+        <td><a href=
         "http://oss.software.ibm.com/icu/userguide/icu.pdf">http://oss.software.ibm.com/icu/userguide/icu.pdf</a></td>
 
-        <td width="60%">Draft User's Guide Documentation in PDF form</td>
+        <td>Draft User's Guide Documentation in PDF form</td>
       </tr>
 
       <tr>
-        <td width="40%"><a href=
+        <td><a href=
         "http://www.ibm.com/developer/unicode/">http://www.ibm.com/developer/unicode/</a></td>
 
-        <td width="60%">Information on how to make applications global.</td>
+        <td>Information on how to make applications global.</td>
       </tr>
     </table>
 
