@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2002/03/13 18:14:21 $ 
-* $Revision: 1.30 $
+* $Date: 2002/03/15 02:13:10 $ 
+* $Revision: 1.31 $
 *
 *******************************************************************************
 */
@@ -1082,6 +1082,9 @@ public final class UCharacter
     */
     public static String toUpperCase(Locale locale, String str)
     {
+    	if (locale == null) {
+    		locale = Locale.getDefault();
+    	}
         return UnicodeProperty.toUpperCase(locale, str, 0, str.length());
     }
       
@@ -1096,6 +1099,9 @@ public final class UCharacter
     {
     	int length = str.length();
     	StringBuffer result = new StringBuffer(length);
+    	if (locale == null) {
+    		locale = Locale.getDefault();
+    	}
         UnicodeProperty.toLowerCase(locale, str, 0, length, result);
         return result.toString();
     }
@@ -1123,6 +1129,9 @@ public final class UCharacter
                                      BreakIterator breakiter)
     {
         if (breakiter == null) {
+        	if (locale == null) {
+        		locale = Locale.getDefault();
+        	}
             breakiter = BreakIterator.getWordInstance(locale);
         }
         return UnicodeProperty.toTitleCase(locale, str, breakiter);
@@ -1750,30 +1759,6 @@ public final class UCharacter
             return PROPERTY_.getProperty(ch);
         }
         return 0;
-    }
-
-    /**
-    * Getting the locales used for case mapping
-    * @param locale to work with
-    * @return locale which the actual case mapping works with
-    */
-    private static Locale getCaseLocale(Locale locale) 
-    {
-        String language = locale.getLanguage();
-        
-        // the locale can have no language
-        if (language.length() != 2) {
-            return locale;
-        }
-
-        if (language.equals(UnicodeProperty.TURKISH_) || 
-            language.equals(UnicodeProperty.AZERBAIJANI_)) {
-            return new Locale("tr", "TR");
-        } 
-        if (language.equals(UnicodeProperty.LITHUANIAN_)) {
-            return new Locale("lt", "LT");
-        }
-        return locale;
     }
     
     private static boolean isEuropeanDigit(int ch) {
