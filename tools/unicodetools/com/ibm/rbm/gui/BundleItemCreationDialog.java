@@ -278,17 +278,20 @@ class BundleItemCreationDialog extends JDialog {
 			
 			createButton.setMnemonic(RBManagerMenuBar.getKeyEventKey(Resources.getTranslation("button_create_trigger")));
 			createMoreButton.setMnemonic(RBManagerMenuBar.getKeyEventKey(Resources.getTranslation("button_create_more_trigger")));
+			getRootPane().setDefaultButton(createButton);
 		}
 		box5.add(Box.createHorizontalGlue()); box5.add(lookupLabel); box5.add(Box.createHorizontalStrut(5));
 		if (noLookupLabel != null) {
 			noLookupLabel.setPreferredSize(rightDim);
 			box5.add(noLookupLabel);
 		}
-		else box5.add(lookupBox);
+		else
+			box5.add(lookupBox);
 		if (firstInit) {
 			box6.add(createButton);
 			box6.add(Box.createHorizontalStrut(5));
-			if (item == null) box6.add(createMoreButton);
+			if (item == null)
+				box6.add(createMoreButton);
 			box6.add(Box.createHorizontalStrut(5));
 			box6.add(cancelButton);
 		}
@@ -362,7 +365,8 @@ class BundleItemCreationDialog extends JDialog {
 		}
 		
 		// Complete the initialization of the frame
-		if (firstInit) setLocation(new java.awt.Point(50, 50));
+		if (firstInit)
+			setLocation(new java.awt.Point(50, 50));
 		mainBox.removeAll();
 		//mainBox.add(instructionsLabel);
 		mainBox.add(Box.createVerticalStrut(5));

@@ -168,6 +168,7 @@ class PreferencesDialog extends JDialog {
 				updatePreferences();
 			}
 		});
+		getRootPane().setDefaultButton(okButton);
 		
 		panel3.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
 														  Resources.getTranslation("dialog_preferences_locale")));
@@ -234,7 +235,10 @@ class PreferencesDialog extends JDialog {
 		String country = null;
 		String variant = null;
 		if (definedRadio.isSelected()) {
-			String encoding = definedCombo.getSelectedItem().toString();
+			String encoding = "";
+			if (definedCombo.getSelectedItem() != null) {
+				encoding = definedCombo.getSelectedItem().toString();
+			}
 			language = Resources.getLanguage(encoding);
 			country = Resources.getCountry(encoding);
 			variant = Resources.getVariant(encoding);
