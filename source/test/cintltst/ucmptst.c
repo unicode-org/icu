@@ -200,52 +200,52 @@ static void TestUCMPE32API(){
         log_err("ERROR: ucmpe32_open() failed\n");
         status = U_ZERO_ERROR;
     } else {
-      fillup(ucmpe32Array);
-      query(ucmpe32Array);
-
-      log_verbose("Testing ucmpe32_clone()\n");
-      ucmpe32Clone=ucmpe32_clone(ucmpe32Array, &status);
-      if(U_FAILURE(status) || ucmpe32Clone == NULL){
-          log_err("ERROR: ucmpe32_clone() failed\n");
-          status = U_ZERO_ERROR;
-      } else {
-        query(ucmpe32Clone);
-        ucmpe32_close(ucmpe32Clone);
-        ucmpe32Clone = NULL;
-      }
-
-      log_verbose("Testing ucmpe32_flattenMem()\n");
-      {
-        UMemoryStream *MS = uprv_mstrm_openNew(65536);
-        int32_t size = ucmpe32_flattenMem(ucmpe32Array, MS);
-        int32_t len = 0;
-        const uint8_t *buff = NULL; 
-        if(size > 0) {
-          log_err("Managed to flatten uncompacted array\n");
-        }
-        ucmpe32_compact(ucmpe32Array);
+        fillup(ucmpe32Array);
         query(ucmpe32Array);
 
-        /* try after compacting */
-        size = ucmpe32_flattenMem(ucmpe32Array, MS);
-        buff = uprv_mstrm_getBuffer(MS, &len);
-
-        if(size == 0 || len == 0 || buff == NULL) {
-          log_err("Unable to flatten!\n");
+        log_verbose("Testing ucmpe32_clone()\n");
+        ucmpe32Clone=ucmpe32_clone(ucmpe32Array, &status);
+        if(U_FAILURE(status) || ucmpe32Clone == NULL){
+            log_err("ERROR: ucmpe32_clone() failed\n");
+            status = U_ZERO_ERROR;
         } else {
-          log_verbose("Testing ucmpe32_openFromData()\n");
-          ucmpe32Clone = ucmpe32_openFromData(&buff, &status);
-          if(U_FAILURE(status) || ucmpe32Clone == NULL){
-              log_err("ERROR: ucmpe32_openFromData() failed\n");
-              status = U_ZERO_ERROR;
-          } else {
             query(ucmpe32Clone);
             ucmpe32_close(ucmpe32Clone);
             ucmpe32Clone = NULL;
-          }
         }
 
-      }
-      ucmpe32_close(ucmpe32Array);
+        log_verbose("Testing ucmpe32_flattenMem()\n");
+        {
+            UMemoryStream *MS = uprv_mstrm_openNew(65536);
+            int32_t size = ucmpe32_flattenMem(ucmpe32Array, MS);
+            int32_t len = 0;
+            const uint8_t *buff = NULL; 
+            if(size > 0) {
+                log_err("Managed to flatten uncompacted array\n");
+            }
+            ucmpe32_compact(ucmpe32Array);
+            query(ucmpe32Array);
+            
+            /* try after compacting */
+            size = ucmpe32_flattenMem(ucmpe32Array, MS);
+            buff = uprv_mstrm_getBuffer(MS, &len);
+            
+            if(size == 0 || len == 0 || buff == NULL) {
+                log_err("Unable to flatten!\n");
+            } else {
+                log_verbose("Testing ucmpe32_openFromData()\n");
+                ucmpe32Clone = ucmpe32_openFromData(&buff, &status);
+                if(U_FAILURE(status) || ucmpe32Clone == NULL){
+                    log_err("ERROR: ucmpe32_openFromData() failed\n");
+                    status = U_ZERO_ERROR;
+                } else {
+                    query(ucmpe32Clone);
+                    ucmpe32_close(ucmpe32Clone);
+                    ucmpe32Clone = NULL;
+                }
+            }
+            uprv_mstrm_close(MS);
+        }
+        ucmpe32_close(ucmpe32Array);
     }
 }

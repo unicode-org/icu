@@ -172,9 +172,9 @@ const static char cnt2[][10] = {
 static void IncompleteCntTest( )
 {
   UErrorCode status = U_ZERO_ERROR;
-  UChar *temp=(UChar*)malloc(sizeof(UChar) * 90);
-  UChar *t1 =(UChar*)malloc(sizeof(UChar) * 90);
-  UChar *t2 =(UChar*)malloc(sizeof(UChar) * 90);
+  UChar temp[90];
+  UChar t1[90];
+  UChar t2[90];
 
   UCollator *coll =  NULL;
   uint32_t i = 0, j = 0;
@@ -274,8 +274,8 @@ const static char nonignorable[][20] = {
 
 static void BlackBirdTest( ) {
   UErrorCode status = U_ZERO_ERROR;
-  UChar *t1 =(UChar*)malloc(sizeof(UChar) * 90);
-  UChar *t2 =(UChar*)malloc(sizeof(UChar) * 90);
+  UChar t1[90];
+  UChar t2[90];
 
   uint32_t i = 0, j = 0;
   uint32_t size = 0;
@@ -1447,6 +1447,10 @@ static void TestChMove(void) {
       }
     }
   }
+  else {
+    log_err("Can't open collator");
+  }
+  ucol_close(coll);
 }
 
 const static char impTest[][20] = {
@@ -1484,6 +1488,10 @@ static void TestImplicitTailoring(void) {
       }
     }
   }
+  else {
+    log_err("Can't open collator");
+  }
+  ucol_close(coll);
 }
 
 static void TestFCDProblem(void) {
@@ -1504,6 +1512,7 @@ static void TestFCDProblem(void) {
   ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
   doTest(coll, t1, t2, UCOL_EQUAL);
 
+  ucol_close(coll);
 }
 
 #define NORM_BUFFER_TEST_LEN 32
@@ -2362,6 +2371,8 @@ static void TestCompressOverlap() {
         }
         tempptr ++;
     }
+
+    ucol_close(coll);
 }
 
 static void TestCyrillicTailoring(void) {
@@ -2819,6 +2830,7 @@ static void TestVariableTopSetting() {
   if(status != U_INTERNAL_PROGRAM_ERROR) {
     log_err("Bad reaction to passed error!\n");
   }
+  uprv_free(rulesCopy);
   ucol_close(coll);
 }
 
@@ -3178,7 +3190,7 @@ static void TestPrefixCompose() {
     UErrorCode status = U_ZERO_ERROR;
     uint32_t i = 0;
     UCollationElements *it = NULL;
-    uint32_t CE;
+/*    uint32_t CE;*/
     UChar string[256];
     uint32_t uStringLen;
     UCollator *coll = NULL;
