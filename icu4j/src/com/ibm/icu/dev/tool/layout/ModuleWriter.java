@@ -7,8 +7,8 @@
  * Created on Dec 3, 2003
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/layout/ModuleWriter.java,v $
- * $Date: 2003/12/09 01:18:11 $
- * $Revision: 1.5 $
+ * $Date: 2003/12/17 04:54:41 $
+ * $Revision: 1.6 $
  * 
  *******************************************************************************
  */
@@ -18,7 +18,6 @@ package com.ibm.icu.dev.tool.layout;
 import java.io.PrintStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.*;
 
 public class ModuleWriter
 {

@@ -7,19 +7,15 @@
  * Created on Dec 09, 2003
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/layout/ThaiStateTable.java,v $
- * $Date: 2003/12/09 23:55:16 $
- * $Revision: 1.1 $
+ * $Date: 2003/12/17 04:54:39 $
+ * $Revision: 1.2 $
  * 
  *******************************************************************************
  */
 package com.ibm.icu.dev.tool.layout;
 
-import com.ibm.icu.impl.Utility;
-import java.io.*;
-import java.util.*;
-import java.lang.*;
-
-import java.awt.*;
+import java.io.PrintStream;
+import java.util.Vector;
 
 public class ThaiStateTable
 {

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/BagFormatter.java,v $
- * $Date: 2003/11/21 19:10:43 $
- * $Revision: 1.2 $
+ * $Date: 2003/12/17 04:55:27 $
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -14,7 +14,6 @@ package com.ibm.icu.dev.test.util;
 
 import com.ibm.icu.text.*;
 import com.ibm.icu.lang.*;
-import com.ibm.icu.util.*;
 import com.ibm.icu.impl.*;
 
 import java.io.*;
@@ -150,7 +149,7 @@ public class BagFormatter {
      * @internal
      */
     public void showSetNames(String filename, String title, Object c) throws IOException {
-        PrintWriter pw = new PrintWriter(
+      /*  PrintWriter pw = */new PrintWriter(
             new OutputStreamWriter(
                 new FileOutputStream(filename),"utf-8"));
     }

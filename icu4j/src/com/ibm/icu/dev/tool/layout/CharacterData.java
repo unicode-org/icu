@@ -7,8 +7,8 @@
  * Created on Dec 3, 2003
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/layout/Attic/CharacterData.java,v $
- * $Date: 2003/12/09 01:18:11 $
- * $Revision: 1.1 $
+ * $Date: 2003/12/17 04:54:40 $
+ * $Revision: 1.2 $
  * 
  *******************************************************************************
  */
@@ -18,8 +18,6 @@ import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.UnicodeSet;
-import com.ibm.icu.text.UnicodeSetIterator;
-import com.ibm.icu.text.UTF16;
 
 public class CharacterData
 {
@@ -56,11 +54,11 @@ public class CharacterData
             case UCharacter.DecompositionType.INITIAL:
             case UCharacter.DecompositionType.ISOLATED:
             case UCharacter.DecompositionType.MEDIAL:
-                decomposition = Normalizer.compose(UTF16.toString(character), true);
+                decomposition = Normalizer.compose(UCharacter.toString(character), true);
                 break;
                 
             case UCharacter.DecompositionType.CANONICAL:
-                decomposition = Normalizer.decompose(UTF16.toString(character), true);
+                decomposition = Normalizer.decompose(UCharacter.toString(character), true);
                 break;
                 
             default:

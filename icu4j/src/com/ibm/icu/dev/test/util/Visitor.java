@@ -6,8 +6,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/Visitor.java,v $
- * $Date: 2003/11/21 01:03:39 $
- * $Revision: 1.1 $
+ * $Date: 2003/12/17 04:55:28 $
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -94,7 +94,7 @@ public abstract class Visitor {
         CodePointRange cpr;
         
         while(it.nextRange()) {
-            if (it.codepoint == it.IS_STRING) {
+            if (it.codepoint == UnicodeSetIterator.IS_STRING) {
                 item = it.string;
             } else {
                 cpr = last == cpr0 ? cpr1 : cpr0;   // make sure we don't override last

@@ -5,15 +5,14 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/Pick.java,v $
- * $Date: 2003/11/21 01:03:38 $
- * $Revision: 1.1 $
+ * $Date: 2003/12/17 04:55:28 $
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.dev.test.util;
 
 import com.ibm.icu.text.UnicodeSet;
-import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.impl.Utility;
 
@@ -22,10 +21,6 @@ import java.util.Random;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.HashSet;
-import java.text.ParsePosition;
-import java.text.ParseException;
-import java.util.Map;
-import java.util.HashMap;
 
 abstract public class Pick {
     private static boolean DEBUG = false;
@@ -218,7 +213,7 @@ abstract public class Pick {
                 throw new ArrayIndexOutOfBoundsException(
                     "or lengths must be equal: " + newItems.length + " != " + itemWeights.length);
             }
-            int lastLen = this.items.length;
+           // int lastLen = this.items.length;
             addInternal(newItems);
             weightedIndex.add(itemWeights);
             return this; // for chaining
@@ -277,7 +272,7 @@ abstract public class Pick {
         }
         */
         protected void addTo(Target target) {
-            int count ;
+            //int count ;
             for (int i = weightedIndex.toIndex(target.nextDouble()); i > 0; --i) {
                 item.addTo(target);
             }

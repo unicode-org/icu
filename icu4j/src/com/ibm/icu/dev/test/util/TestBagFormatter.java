@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/TestBagFormatter.java,v $
- * $Date: 2003/11/21 19:10:43 $
- * $Revision: 1.2 $
+ * $Date: 2003/12/17 04:55:27 $
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -16,23 +16,15 @@ package com.ibm.icu.dev.test.util;
 
 import java.util.TreeSet;
 import java.util.Iterator;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.Collator;
 import java.util.Locale;
-
-import java.io.*;
-import java.util.Random;
-import java.text.ParseException;
 import java.util.Set;
-import java.util.Iterator;
-import java.util.TreeSet;
-import java.util.Locale;
-//import java.util.regex.*;
-
-import com.ibm.icu.text.*;
 
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.lang.UProperty;
-import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.text.Transliterator;
 import com.ibm.icu.text.UnicodeSet;
 
 public class TestBagFormatter {

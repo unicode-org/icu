@@ -7,21 +7,13 @@
  * Created on Dec 09, 2003
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/layout/ThaiStateTableBuilder.java,v $
- * $Date: 2003/12/09 23:55:16 $
- * $Revision: 1.1 $
+ * $Date: 2003/12/17 04:54:41 $
+ * $Revision: 1.2 $
  * 
  *******************************************************************************
  */
 package com.ibm.icu.dev.tool.layout;
 
-import com.ibm.icu.impl.Utility;
-import java.io.*;
-import java.util.*;
-import java.lang.*;
-
-import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 public class ThaiStateTableBuilder
 {
