@@ -22,7 +22,7 @@
 #include "GDEFMarkFilter.h"
 
 #include "ArabicShaping.h"
-#include "HebrewShaping.h"
+#include "CanonShaping.h"
 
 U_NAMESPACE_BEGIN
 
@@ -74,17 +74,7 @@ le_int32 ArabicOpenTypeLayoutEngine::characterProcessing(const LEUnicode chars[]
         return 0;
     }
 
-    switch (fScriptCode) {
-    case arabScriptCode:
-    {
-        ArabicShaping::shape(chars, offset, count, max, rightToLeft, glyphStorage);
-        break;
-    }
-
-    case hebrScriptCode:
-        HebrewShaping::shape(chars, offset, count, max, rightToLeft, glyphStorage);
-        break;
-    }
+    ArabicShaping::shape(chars, offset, count, max, rightToLeft, glyphStorage);
 
     return count;
 }
@@ -108,7 +98,7 @@ void ArabicOpenTypeLayoutEngine::adjustGlyphPositions(const LEUnicode chars[], l
 
         adjustMarkGlyphs(glyphStorage, &filter, success);
     } else {
-        GlyphDefinitionTableHeader *gdefTable = (GlyphDefinitionTableHeader *) ArabicShaping::glyphDefinitionTable;
+        GlyphDefinitionTableHeader *gdefTable = (GlyphDefinitionTableHeader *) CanonShaping::glyphDefinitionTable;
         GDEFMarkFilter filter(gdefTable);
 
         adjustMarkGlyphs(&chars[offset], count, reverse, glyphStorage, &filter, success);
@@ -118,18 +108,8 @@ void ArabicOpenTypeLayoutEngine::adjustGlyphPositions(const LEUnicode chars[], l
 UnicodeArabicOpenTypeLayoutEngine::UnicodeArabicOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode)
     : ArabicOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode)
 {
-    switch (scriptCode) {
-    case arabScriptCode:
-        fGSUBTable = (const GlyphSubstitutionTableHeader *) ArabicShaping::glyphSubstitutionTable;
-        fGDEFTable = (const GlyphDefinitionTableHeader *) ArabicShaping::glyphDefinitionTable;
-        break;
-
-    case hebrScriptCode:
-        fGSUBTable = (const GlyphSubstitutionTableHeader *) HebrewShaping::glyphSubstitutionTable;
-        fGDEFTable = (const GlyphDefinitionTableHeader *) HebrewShaping::glyphDefinitionTable;
-        break;
-    }
-
+    fGSUBTable = (const GlyphSubstitutionTableHeader *) CanonShaping::glyphSubstitutionTable;
+    fGDEFTable = (const GlyphDefinitionTableHeader *) CanonShaping::glyphDefinitionTable;
 
     fSubstitutionFilter = new CharSubstitutionFilter(fontInstance);
 }

@@ -49,10 +49,6 @@ public:
 
     static const LETag *getFeatureOrder();
 
-    static const le_uint8 glyphSubstitutionTable[];
-  //static le_uint8 ligatureSubstitutionSubtable[];
-    static const le_uint8 glyphDefinitionTable[];
-
 private:
     // forbid instantiation
     ArabicShaping();

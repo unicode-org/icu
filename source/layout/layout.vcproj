@@ -158,9 +158,6 @@
 				RelativePath=".\ArabicLayoutEngine.cpp">
 			</File>
 			<File
-				RelativePath=".\ArabicLigatureData.cpp">
-			</File>
-			<File
 				RelativePath=".\ArabicShaping.cpp">
 			</File>
 			<File
@@ -219,12 +216,6 @@
 			</File>
 			<File
 				RelativePath=".\HanLayoutEngine.cpp">
-			</File>
-			<File
-				RelativePath=".\HebrewLigatureData.cpp">
-			</File>
-			<File
-				RelativePath=".\HebrewShaping.cpp">
 			</File>
 			<File
 				RelativePath=".\IndicClassTables.cpp">
@@ -439,9 +430,6 @@
 			</File>
 			<File
 				RelativePath=".\HanLayoutEngine.h">
-			</File>
-			<File
-				RelativePath=".\HebrewShaping.h">
 			</File>
 			<File
 				RelativePath=".\HindiFeatureTags.h">

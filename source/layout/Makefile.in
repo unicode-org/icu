@@ -76,7 +76,6 @@ SubtableProcessor.o \
 TrimmedArrayProcessor.o \
 AlternateSubstSubtables.o \
 AnchorTables.o \
-ArabicLigatureData.o \
 ArabicShaping.o \
 CanonData.o \
 ClassDefinitionTables.o \
@@ -94,8 +93,6 @@ GlyphPosnLookupProc.o \
 GlyphPositioningTables.o \
 GlyphSubstLookupProc.o \
 GlyphSubstitutionTables.o \
-HebrewLigatureData.o \
-HebrewShaping.o \
 IndicClassTables.o \
 IndicReordering.o \
 LEInsertionList.o \
