@@ -139,7 +139,10 @@ static void TestBreakIteratorCAPI()
                                             
     /* Use french for fun */
     word         = ubrk_open(UBRK_WORD, "en_US", text, u_strlen(text), &status);
-    if(U_FAILURE(status)){
+    if(status = U_FILE_ACCESS_ERROR) {
+      log_data_err("Check your data - it doesn't seem to be around\n");
+      return;
+    } else if(U_FAILURE(status)){
         log_err("FAIL: Error in ubrk_open() for word breakiterator: %s\n", myErrorName(status));
     }
     else{
