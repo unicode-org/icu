@@ -74,16 +74,19 @@ if test $threads = true; then
    ICU_USE_THREADS=1
   fi
  fi
- if test $ac_cv_lib_pthread_pthread_create = no; then
- AC_PTHREAD_FREEBSD
+
+ dnl If all other thread tests fail, try BSD's -pthread
+ if test $ICU_USE_THREADS = 0; then
+  AC_PTHREAD_FREEBSD
  fi
 
- dnl FreeBSD needs a WCS library.
- AC_CHECK_LIB(wcs, wcscpy)
  AC_CHECK_FUNC(pthread_mutex_create)
 fi
 
 AC_SUBST(ICU_USE_THREADS)
+
+dnl FreeBSD needs a WCS library.
+AC_CHECK_LIB(wcs, wcscpy)
 
 # check for dlopen()
 
