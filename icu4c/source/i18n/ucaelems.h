@@ -63,6 +63,7 @@ typedef struct {
   struct CntTable   *contractions;
   UCATableHeader    *image;
   MaxExpansionTable *maxExpansions;
+  uint8_t           *unsafeCP;
 } tempUCATable; 
 
 U_CAPI tempUCATable * U_EXPORT2 uprv_uca_initTempTable(UCATableHeader *image, UErrorCode *status);
