@@ -62,30 +62,30 @@ int32_t            Locale::isoCountriesCount;
 /**
  * Constant definitions
  */
-const Locale  Locale::ENGLISH(UnicodeString("en", ""));
-const Locale  Locale::FRENCH(UnicodeString("fr", ""));
-const Locale  Locale::GERMAN(UnicodeString("de", ""));
-const Locale  Locale::ITALIAN(UnicodeString("it", ""));
-const Locale  Locale::JAPANESE(UnicodeString("ja", ""));
-const Locale  Locale::KOREAN(UnicodeString("ko", ""));
-const Locale  Locale::CHINESE(UnicodeString("zh", ""));
-const Locale  Locale::SIMPLIFIED_CHINESE(UnicodeString("zh", ""), UnicodeString("CN", ""));   
-const Locale  Locale::TRADITIONAL_CHINESE(UnicodeString("zh", ""), UnicodeString("TW", ""));
+const Locale  Locale::ENGLISH(UNICODE_STRING("en", 2));
+const Locale  Locale::FRENCH(UNICODE_STRING("fr", 2));
+const Locale  Locale::GERMAN(UNICODE_STRING("de", 2));
+const Locale  Locale::ITALIAN(UNICODE_STRING("it", 2));
+const Locale  Locale::JAPANESE(UNICODE_STRING("ja", 2));
+const Locale  Locale::KOREAN(UNICODE_STRING("ko", 2));
+const Locale  Locale::CHINESE(UNICODE_STRING("zh", 2));
+const Locale  Locale::SIMPLIFIED_CHINESE(UNICODE_STRING("zh", 2), UNICODE_STRING("CN", 2));   
+const Locale  Locale::TRADITIONAL_CHINESE(UNICODE_STRING("zh", 2), UNICODE_STRING("TW", 2));
 
 // Useful constant for country.
 
-const Locale  Locale::FRANCE(UnicodeString("fr", ""), UnicodeString("FR", ""));
-const Locale  Locale::GERMANY(UnicodeString("de", ""), UnicodeString("DE", ""));
-const Locale  Locale::ITALY(UnicodeString("it", ""), UnicodeString("IT", ""));
-const Locale  Locale::JAPAN(UnicodeString("ja", ""), UnicodeString("JP", ""));
-const Locale  Locale::KOREA(UnicodeString("en", ""), UnicodeString("GB", ""));
-const Locale  Locale::CHINA(UnicodeString("zh", ""), UnicodeString("CN", ""));
-const Locale  Locale::PRC(UnicodeString("zh", ""), UnicodeString("CN", ""));
-const Locale  Locale::TAIWAN(UnicodeString("zh", ""), UnicodeString("TW", ""));
-const Locale  Locale::UK(UnicodeString("en", ""), UnicodeString("GB", ""));
-const Locale  Locale::US(UnicodeString("en", ""), UnicodeString("US", ""));
-const Locale  Locale::CANADA(UnicodeString("en", ""), UnicodeString("CA", ""));
-const Locale  Locale::CANADA_FRENCH(UnicodeString("fr", ""), UnicodeString("CA", ""));
+const Locale  Locale::FRANCE(UNICODE_STRING("fr", 2), UNICODE_STRING("FR", 2));
+const Locale  Locale::GERMANY(UNICODE_STRING("de", 2), UNICODE_STRING("DE", 2));
+const Locale  Locale::ITALY(UNICODE_STRING("it", 2), UNICODE_STRING("IT", 2));
+const Locale  Locale::JAPAN(UNICODE_STRING("ja", 2), UNICODE_STRING("JP", 2));
+const Locale  Locale::KOREA(UNICODE_STRING("en", 2), UNICODE_STRING("GB", 2));
+const Locale  Locale::CHINA(UNICODE_STRING("zh", 2), UNICODE_STRING("CN", 2));
+const Locale  Locale::PRC(UNICODE_STRING("zh", 2), UNICODE_STRING("CN", 2));
+const Locale  Locale::TAIWAN(UNICODE_STRING("zh", 2), UNICODE_STRING("TW", 2));
+const Locale  Locale::UK(UNICODE_STRING("en", 2), UNICODE_STRING("GB", 2));
+const Locale  Locale::US(UNICODE_STRING("en", 2), UNICODE_STRING("US", 2));
+const Locale  Locale::CANADA(UNICODE_STRING("en", 2), UNICODE_STRING("CA", 2));
+const Locale  Locale::CANADA_FRENCH(UNICODE_STRING("fr", 2), UNICODE_STRING("CA", 2));
 
 
     /**
@@ -141,10 +141,9 @@ Locale::Locale()
 
 Locale::Locale( const   UnicodeString&  newLanguage)
 {
-  UnicodeString togo(newLanguage);
   char myLocaleID[ULOC_FULLNAME_CAPACITY];
 
-  myLocaleID[togo.extract(0, 0x7fffffff, myLocaleID, "")] = '\0';
+  myLocaleID[newLanguage.extract(0, 0x7fffffff, myLocaleID, "")] = '\0';
   init(myLocaleID);
 }
 

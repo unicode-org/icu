@@ -46,10 +46,10 @@ const int32_t NumberFormat::fgNumberPatternsCount = 3;
 // resort.
 const UnicodeString NumberFormat::fgLastResortNumberPatterns[] =
 {
-    UnicodeString("#0.###;-#0.###", ""),   // decimal pattern
-    UnicodeString("$#0.00;($#0.00)", ""),  // currency pattern
-    UnicodeString("#0%", ""),              // percent pattern
-	UnicodeString("#E0", "")               // scientific pattern
+    UNICODE_STRING("#0.###;-#0.###", 14),   // decimal pattern
+    UNICODE_STRING("$#0.00;($#0.00)", 15),  // currency pattern
+    UNICODE_STRING("#0%", 3),               // percent pattern
+	UNICODE_STRING("#E0", 3)                // scientific pattern
 };
 
 // -------------------------------------
