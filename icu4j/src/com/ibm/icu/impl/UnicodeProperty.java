@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Attic/UnicodeProperty.java,v $ 
-* $Date: 2002/03/02 02:04:06 $ 
-* $Revision: 1.2 $
+* $Date: 2002/03/12 17:49:15 $ 
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -876,13 +876,7 @@ public final class UnicodeProperty
     {
         int props = PROPERTY.getProperty(ch);
         if(!UCharacterProperty.isExceptionIndicator(props)) {
-        	if (UCharacterProperty.getPropType(props) == 
-                                        UCharacterCategory.NON_SPACING_MARK) {
-         	   return PROPERTY.getUnsignedValue(props);
-        	}
-        	else {
-         	   return 0;
-        	}
+			return NormalizerImpl.getCombiningClass(ch);
         }
         else {
             // the combining class is in bits 23..16 of the first exception value

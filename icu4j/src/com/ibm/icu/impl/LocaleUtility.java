@@ -1,3 +1,15 @@
+/*
+ *******************************************************************************
+ * Copyright (C) 1996-2000, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ *
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/LocaleUtility.java,v $
+ * $Date: 2002/03/12 17:49:15 $
+ * $Revision: 1.2 $
+ *  *****************************************************************************************
+ */
+ 
 package com.ibm.icu.impl;
 
 import java.util.Locale;

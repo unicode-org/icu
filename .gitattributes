@@ -76,6 +76,7 @@ icu4j/src/com/ibm/icu/dev/data/thai6.ucs -text
 icu4j/src/com/ibm/icu/dev/data/unicode/Draft-TestSuite.txt -text
 icu4j/src/com/ibm/icu/impl/data/thai_dict -text
 icu4j/src/com/ibm/icu/impl/data/unames.dat -text
+icu4j/src/com/ibm/icu/impl/data/unorm.dat -text
 icu4j/src/com/ibm/icu/impl/data/uprops.dat -text
 
 # The following file types are stored in Git-LFS.
