@@ -120,11 +120,18 @@ struct DSTZone {
  * index table is designed for sequential access, not random access.
  * Given the small number of distinct offsets (39 in 1999j), this
  * suffices.
+ *
+ * The value of default is the zone within this list that should be
+ * selected as the default zone in the absence of any other
+ * discriminating information.  This information comes from the file
+ * tz.default.  Note that this is itself a zone number, like
+ * those in the array starting at &zoneNumber.
  */
 struct OffsetIndex {
     uint16_t  nextEntryDelta;
-    uint16_t  count;
     int32_t   gmtOffset;  // in ms
+    uint16_t  defaultZone; // a zone number from 0..TZHeader.count-1
+    uint16_t  count;
     uint16_t  zoneNumber; // There are actually 'count' uint16_t's here
 };
 
