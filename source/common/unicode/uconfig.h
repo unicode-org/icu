@@ -119,7 +119,7 @@
 /* i18n library switches ---------------------------------------------------- */
 
 /**
- * \def 
+ * \def UCONFIG_NO_COLLATION
  * This switch turns off collation and collation-based string search.
  *
  * @stable ICU 2.4

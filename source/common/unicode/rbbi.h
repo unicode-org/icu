@@ -176,7 +176,7 @@ public:
      * Equality operator.  Returns TRUE if both BreakIterators are of the
      * same class, have the same behavior, and iterate over the same text.
      * @param that The BreakIterator to be compared for equality
-     * @Return TRUE if both BreakIterators are of the
+     * @return TRUE if both BreakIterators are of the
      * same class, have the same behavior, and iterate over the same text.
      *  @stable ICU 2.0
      */

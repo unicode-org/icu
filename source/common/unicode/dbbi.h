@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2003 IBM Corp. All rights reserved.
+*   Copyright (C) 1999-2004 IBM Corp. All rights reserved.
 **********************************************************************
 *   Date        Name        Description
 *   12/1/99    rgillam     Complete port from Java.
@@ -155,7 +155,7 @@ public:
     /**
      * Sets the iterator to refer to the first boundary position following
      * the specified position.
-     * @offset The position from which to begin searching for a break position.
+     * @param offset The position from which to begin searching for a break position.
      * @return The position of the first break after the current position.
      * @stable ICU 2.0
      */
@@ -164,7 +164,7 @@ public:
     /**
      * Sets the iterator to refer to the last boundary position before the
      * specified position.
-     * @offset The position to begin searching for a break from.
+     * @param offset The position to begin searching for a break from.
      * @return The position of the last boundary before the starting position.
      * @stable ICU 2.0
      */

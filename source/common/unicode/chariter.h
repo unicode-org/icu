@@ -112,7 +112,7 @@ public:
      * text-storage objects, or to different characters in the
      * same text-storage object.  
      * @param that The ForwardCharacterIterator to be compared for inequality
-     * @Returns true when the iterators refer to different
+     * @return true when the iterators refer to different
      * text-storage objects, or to different characters in the
      * same text-storage object
      * @stable ICU 2.0
@@ -130,7 +130,7 @@ public:
      * Returns a UClassID for this ForwardCharacterIterator ("poor man's
      * RTTI").<P> Despite the fact that this function is public,
      * DO NOT CONSIDER IT PART OF CHARACTERITERATOR'S API! 
-     * @Returns a UClassID for this ForwardCharacterIterator 
+     * @return a UClassID for this ForwardCharacterIterator 
      * @stable ICU 2.0
      */
     virtual UClassID getDynamicClassID(void) const = 0;
@@ -576,9 +576,9 @@ public:
      * iteration range, or relative to the current position itself.
      * The movement is expressed in numbers of code units forward
      * or backward by specifying a positive or negative delta.
-     * @delta the position relative to origin. A positive delta means forward;
+     * @param delta the position relative to origin. A positive delta means forward;
      * a negative delta means backward.
-     * @origin Origin enumeration {kStart, kCurrent, kEnd}
+     * @param origin Origin enumeration {kStart, kCurrent, kEnd}
      * @return the new position
      * @stable ICU 2.0
      */
@@ -589,9 +589,9 @@ public:
      * iteration range, or relative to the current position itself.
      * The movement is expressed in numbers of code points forward
      * or backward by specifying a positive or negative delta.
-     * @delta the position relative to origin. A positive delta means forward;
+     * @param delta the position relative to origin. A positive delta means forward;
      * a negative delta means backward.
-     * @origin Origin enumeration {kStart, kCurrent, kEnd}
+     * @param origin Origin enumeration {kStart, kCurrent, kEnd}
      * @return the new position
      * @stable ICU 2.0
      */
