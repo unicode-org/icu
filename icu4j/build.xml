@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $
-* $Date: 2002/12/02 17:04:21 $
-* $Revision: 1.57 $
+* $Date: 2002/12/02 20:06:32 $
+* $Revision: 1.58 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -277,7 +277,7 @@
     </target>
 
 
-    <target name="checktags" depends="tools" if="version1.4.or.higher">
+    <target name="checktags" depends="tools">
         <echo message="Execute with a JDK that provides access to com.sun.* packages"/>
         <javadoc sourcepath="${src.dir}" 
                  packagenames="com.ibm.icu.*"
