@@ -40,6 +40,9 @@
     the compiler dependent int.
  * We should consider using Microsoft's wprintf and wscanf format
     specification.
+ * %C and %S are aliases of %lc and %ls, which are used for wchar_t.
+    We should consider using this for UChar and replace %K and %U,
+    or we should make them use wchar_t.
  * + in printf format specification is incomplete.
  * Make sure that #, blank and precision in the printf format specification
     works.
@@ -48,11 +51,10 @@
  * This library does buffering. The OS should do this for us already. Check on
     this, and remove it from this library, if this is the case. Double buffering
     wastes a lot of time and space.
- * There is a locale cache.  It needs to be cleaned up when the library unloads.
  * Make sure that surrogates are supported.
- * More testing is needed.
  * The ustream header should also include operator<< and
-    operator>> for UDate (not double).
+    operator>> for UDate (not double). This may not work on some compilers
+    that use these operators on a double.
  * Testing should be done for reading and writing multi-byte encodings,
     and make sure that a character that is contained across buffer boundries
     works even for incomplete characters.
@@ -61,9 +63,14 @@
     return the number of characters (excluding the trailing '\0')
     which would have been written to the destination string regardless
     of available space. This is like pre-flighting.
- * %C and %S are aliases of %lc and %ls, which are used for wchar_t.
-    We should consider using this for UChar and replace %K and %U,
-    or we should make them use wchar_t.
+ * Everything that uses %s should do what operator>> does for UnicodeString.
+    It should convert one byte at a time, and once a character is
+    converted then check to see if it's whitespace or in the scanset.
+    If it's whitespace or in the scanset, put all the bytes back (do nothing
+    for sprintf/sscanf).
+ * If bad string data is encountered, make sure that the function fails
+    without memory leaks and the unconvertable characters are valid
+    substitution or are escaped characters.
  * u_fungetc() can't unget a character when it's at the beginning of the
     internal conversion buffer, and it shouldn't be writing new
     characters to this buffer because they might be different characters.
@@ -74,6 +81,7 @@
     a its called without a read operation.
  * u_fflush() and u_fclose should return an int32_t like C99 functions.
    0 is returned if the operation was successful and EOF otherwise.
+ * More testing is needed.
 */
 
 
