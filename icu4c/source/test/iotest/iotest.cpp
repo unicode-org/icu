@@ -206,6 +206,7 @@ static void DataDrivenPrintf(void) {
     int32_t i32;
     int64_t i64;
     double dbl;
+    int32_t uBufferLenReturned;
 
     errorCode=U_ZERO_ERROR;
     dataModule=TestDataModule::getTestDataModule("icuio", logger, errorCode);
@@ -219,6 +220,7 @@ static void DataDrivenPrintf(void) {
                     errorCode=U_ZERO_ERROR;
                     continue;
                 }
+                u_memset(uBuffer, 0x2A, sizeof(uBuffer)/sizeof(uBuffer[0]));
                 tempStr=testCase->getString("format", errorCode);
                 tempStr.extract(format, sizeof(format)/sizeof(format[0]), errorCode);
 //                tempStr=testCase->getString("locale", errorCode);
@@ -228,33 +230,35 @@ static void DataDrivenPrintf(void) {
                 tempStr.extract(expectedResult, sizeof(expectedResult)/sizeof(expectedResult[0]), errorCode);
                 tempStr=testCase->getString("argument", errorCode);
                 tempStr.extract(argument, sizeof(argument)/sizeof(argument[0]), errorCode);
+                u_austrncpy(cBuffer, format, sizeof(cBuffer));
+                log_verbose("Test %d: format=\"%s\"\n", i, cBuffer);
                 switch (testCase->getString("argumentType", errorCode)[0]) {
                 case 0x64:  // 'd' double
                     dbl = atof(u_austrcpy(cBuffer, argument));
-                    u_sprintf_u(uBuffer, "en_US_POSIX", format, dbl);
+                    uBufferLenReturned = u_sprintf_u(uBuffer, "en_US_POSIX", format, dbl);
                     break;
                 case 0x31:  // '1' int8_t
                     i8 = (int8_t)uto64(argument);
-                    u_sprintf_u(uBuffer, "en_US_POSIX", format, i8);
+                    uBufferLenReturned = u_sprintf_u(uBuffer, "en_US_POSIX", format, i8);
                     break;
                 case 0x32:  // '2' int16_t
                     i16 = (int16_t)uto64(argument);
-                    u_sprintf_u(uBuffer, "en_US_POSIX", format, i16);
+                    uBufferLenReturned = u_sprintf_u(uBuffer, "en_US_POSIX", format, i16);
                     break;
                 case 0x34:  // '4' int32_t
                     i32 = (int32_t)uto64(argument);
-                    u_sprintf_u(uBuffer, "en_US_POSIX", format, i32);
+                    uBufferLenReturned = u_sprintf_u(uBuffer, "en_US_POSIX", format, i32);
                     break;
                 case 0x38:  // '8' int64_t
                     i64 = uto64(argument);
-                    u_sprintf_u(uBuffer, "en_US_POSIX", format, i64);
+                    uBufferLenReturned = u_sprintf_u(uBuffer, "en_US_POSIX", format, i64);
                     break;
                 case 0x73:  // 's' char *
                     u_austrncpy(cBuffer, uBuffer, sizeof(cBuffer));
-                    u_sprintf_u(uBuffer, "en_US_POSIX", format, cBuffer);
+                    uBufferLenReturned = u_sprintf_u(uBuffer, "en_US_POSIX", format, cBuffer);
                     break;
                 case 0x53:  // 'S' UChar *
-                    u_sprintf_u(uBuffer, "en_US_POSIX", format, argument);
+                    uBufferLenReturned = u_sprintf_u(uBuffer, "en_US_POSIX", format, argument);
                     break;
                 }
                 if (u_strcmp(uBuffer, expectedResult) != 0) {
@@ -262,6 +266,16 @@ static void DataDrivenPrintf(void) {
                     cBuffer[sizeof(cBuffer)-1] = 0;
                     log_err("FAILURE test case %d - Got: %s\n",
                             i, cBuffer);
+                }
+                if (uBuffer[uBufferLenReturned-1] == 0
+                    || uBuffer[uBufferLenReturned] != 0
+                    || uBuffer[uBufferLenReturned+1] != 0x2A
+                    || uBuffer[uBufferLenReturned+2] != 0x2A)
+                {
+                    u_austrncpy(cBuffer, uBuffer, sizeof(cBuffer));
+                    cBuffer[sizeof(cBuffer)-1] = 0;
+                    log_err("FAILURE test case %d - \"%s\" wrong amount of characters was written. Got %d.\n",
+                            i, cBuffer, uBufferLenReturned);
                 }
                 if(U_FAILURE(errorCode)) {
                     log_err("error running icuio/printf test case %d - %s\n",
