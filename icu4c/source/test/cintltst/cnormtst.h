@@ -10,6 +10,7 @@
 * Modification History:
 *        Name                     Description            
 *     Madhu Katragadda            Converted to C
+*     synwee                      added test for quick check
 *********************************************************************************
 */
 #ifndef _NORMTST
@@ -27,6 +28,7 @@
     void TestCanonDecompCompose(void);
     void TestCompatDecompCompose(void);
     void TestNull(void);
+    void TestQuickCheck(void);
 
     /*internal functions*/
     
