@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/UnicodeSetTest.java,v $ 
- * $Date: 2000/05/26 20:57:44 $ 
- * $Revision: 1.9 $
+ * $Date: 2001/04/04 22:44:49 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -243,6 +243,29 @@ public class UnicodeSetTest extends TestFmwk {
             logln("bitsToSet(setToBits(c)): " + c);
         } else {
             errln("FAIL: bitsToSet(setToBits(c)) = " + c + ", expect " + exp);
+        }
+    }
+
+    /**
+     * Test the indexOf() and charAt() methods.
+     */
+    public void TestIndexOf() {
+        UnicodeSet set = new UnicodeSet("[a-cx-y3578]");
+        for (int i=0; i<set.size(); ++i) {
+            char c = set.charAt(i);
+            if (set.indexOf(c) != i) {
+                errln("FAIL: charAt(" + i + ") = " + c +
+                      " => indexOf() => " + set.indexOf(c));
+            }
+        }
+        char c = set.charAt(set.size());
+        if (c != '\uFFFE') {
+            errln("FAIL: charAt(<out of range>) = " +
+                  Utility.escape(String.valueOf(c)));
+        }
+        int j = set.indexOf('q');
+        if (j != -1) {
+            errln("FAIL: indexOf('q') = " + j);
         }
     }
 
