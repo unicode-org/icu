@@ -45,7 +45,7 @@ class TransliteratorAlias : public UMemory {
      * @param aliasID the given id.
      */
     TransliteratorAlias(const UnicodeString& aliasID);
-    
+
     /**
      * Construct a compound RBT alias (type == COMPOUND)
      */
@@ -61,7 +61,7 @@ class TransliteratorAlias : public UMemory {
                         UTransDirection dir);
 
     ~TransliteratorAlias();
-    
+
     /**
      * The whole point of create() is that the caller must invoke
      * it when the registry mutex is NOT held, to prevent deadlock.
@@ -93,7 +93,7 @@ class TransliteratorAlias : public UMemory {
      */
     void parse(TransliteratorParser& parser,
                UParseError& pe, UErrorCode& ec) const;
-    
+
  private:
     // We actually come in three flavors:
     // 1. Simple alias
@@ -168,7 +168,7 @@ class TransliteratorRegistry : public UMemory {
      * @param ID          the given ID
      * @param aliasReturn output param to receive TransliteratorAlias;
      *                    should be NULL on entry
-     * @param parseError  Struct to recieve information on position 
+     * @param parseError  Struct to recieve information on position
      *                    of error if an error is encountered
      * @param status      Output param set to success/failure code.
      */
@@ -282,7 +282,7 @@ class TransliteratorRegistry : public UMemory {
      * @return the number of registered source specifiers.
      */
     int32_t countAvailableSources(void) const;
-    
+
     /**
      * Return a registered source specifier.
      * @param index which specifier to return, from 0 to n-1, where
@@ -293,7 +293,7 @@ class TransliteratorRegistry : public UMemory {
      */
     UnicodeString& getAvailableSource(int32_t index,
                                       UnicodeString& result) const;
-    
+
     /**
      * Return the number of registered target specifiers for a given
      * source specifier.
@@ -302,7 +302,7 @@ class TransliteratorRegistry : public UMemory {
      *         source specifier.
      */
     int32_t countAvailableTargets(const UnicodeString& source) const;
-    
+
     /**
      * Return a registered target specifier for a given source.
      * @param index which specifier to return, from 0 to n-1, where
@@ -316,7 +316,7 @@ class TransliteratorRegistry : public UMemory {
     UnicodeString& getAvailableTarget(int32_t index,
                                       const UnicodeString& source,
                                       UnicodeString& result) const;
-    
+
     /**
      * Return the number of registered variant specifiers for a given
      * source-target pair.  There is always at least one variant: If
@@ -330,7 +330,7 @@ class TransliteratorRegistry : public UMemory {
      */
     int32_t countAvailableVariants(const UnicodeString& source,
                                    const UnicodeString& target) const;
-    
+
     /**
      * Return a registered variant specifier for a given source-target
      * pair.  If NO_VARIANT is one of the variants, then it will be
@@ -356,7 +356,7 @@ class TransliteratorRegistry : public UMemory {
     //----------------------------------------------------------------
 
     Entry* find(const UnicodeString& ID);
-    
+
     Entry* find(UnicodeString& source,
                 UnicodeString& target,
                 UnicodeString& variant);
@@ -415,7 +415,7 @@ class TransliteratorRegistry : public UMemory {
         virtual int32_t count(UErrorCode& status) const;
         virtual const UnicodeString* snext(UErrorCode& status);
         virtual void reset(UErrorCode& status);
-        static UClassID getStaticClassID();
+        static UClassID U_EXPORT2 getStaticClassID();
         virtual UClassID getDynamicClassID() const;
     private:
         int32_t index;
@@ -432,7 +432,7 @@ class TransliteratorRegistry : public UMemory {
      * specDAG or not.
      */
     Hashtable registry;
-    
+
     /**
      * DAG of visible IDs by spec.  Hashtable: source => (Hashtable:
      * target => (UVector: variant)) The UVector of variants is never
@@ -441,7 +441,7 @@ class TransliteratorRegistry : public UMemory {
      * the UVector.
      */
     Hashtable specDAG;
-    
+
     /**
      * Vector of public full IDs.
      */

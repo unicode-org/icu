@@ -232,7 +232,7 @@ public:
      * ICU "poor man's RTTI", returns a UClassID for this class.
      * @deprecated ICU 2.8 Use Collator::getSortKey(...) instead
      */
-    static UClassID getStaticClassID();
+    static UClassID U_EXPORT2 getStaticClassID();
 
 private:
     /**

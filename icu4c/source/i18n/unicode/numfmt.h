@@ -406,7 +406,7 @@ public:
      * the exact format accepted by the parse operation is locale
      * dependant and determined by sub-classes of NumberFormat.
      * @return    true if this format will parse numbers as integers
-     *            only. 
+     *            only.
      * @stable ICU 2.0
      */
     UBool isParseIntegerOnly(void) const;
@@ -428,7 +428,7 @@ public:
      * is locale dependant.
      * @stable ICU 2.0
      */
-    static NumberFormat* createInstance(UErrorCode&);
+    static NumberFormat* U_EXPORT2 createInstance(UErrorCode&);
 
     /**
      * Returns the default number format for the specified locale.
@@ -438,49 +438,49 @@ public:
      * @param inLocale    the given locale.
      * @stable ICU 2.0
      */
-    static NumberFormat* createInstance(const Locale& inLocale,
+    static NumberFormat* U_EXPORT2 createInstance(const Locale& inLocale,
                                         UErrorCode&);
 
     /**
      * Returns a currency format for the current default locale.
      * @stable ICU 2.0
      */
-    static NumberFormat* createCurrencyInstance(UErrorCode&);
+    static NumberFormat* U_EXPORT2 createCurrencyInstance(UErrorCode&);
 
     /**
      * Returns a currency format for the specified locale.
      * @param inLocale    the given locale.
      * @stable ICU 2.0
      */
-    static NumberFormat* createCurrencyInstance(const Locale& inLocale,
+    static NumberFormat* U_EXPORT2 createCurrencyInstance(const Locale& inLocale,
                                                 UErrorCode&);
 
     /**
      * Returns a percentage format for the current default locale.
      * @stable ICU 2.0
      */
-    static NumberFormat* createPercentInstance(UErrorCode&);
+    static NumberFormat* U_EXPORT2 createPercentInstance(UErrorCode&);
 
     /**
      * Returns a percentage format for the specified locale.
      * @param inLocale    the given locale.
      * @stable ICU 2.0
      */
-    static NumberFormat* createPercentInstance(const Locale& inLocale,
+    static NumberFormat* U_EXPORT2 createPercentInstance(const Locale& inLocale,
                                                UErrorCode&);
 
     /**
      * Returns a scientific format for the current default locale.
      * @stable ICU 2.0
      */
-    static NumberFormat* createScientificInstance(UErrorCode&);
+    static NumberFormat* U_EXPORT2 createScientificInstance(UErrorCode&);
 
     /**
      * Returns a scientific format for the specified locale.
      * @param inLocale    the given locale.
      * @stable ICU 2.0
      */
-    static NumberFormat* createScientificInstance(const Locale& inLocale,
+    static NumberFormat* U_EXPORT2 createScientificInstance(const Locale& inLocale,
                                                 UErrorCode&);
 
     /**
@@ -488,7 +488,7 @@ public:
      * @param count    Output param to receive the size of the locales
      * @stable ICU 2.0
      */
-    static const Locale* getAvailableLocales(int32_t& count);
+    static const Locale* U_EXPORT2 getAvailableLocales(int32_t& count);
 
 #if !UCONFIG_NO_SERVICE
     /**
@@ -498,7 +498,7 @@ public:
      * @return a registry key that can be used to unregister this factory
      * @draft ICU 2.6
      */
-    static URegistryKey registerFactory(NumberFormatFactory* toAdopt, UErrorCode& status);
+    static URegistryKey U_EXPORT2 registerFactory(NumberFormatFactory* toAdopt, UErrorCode& status);
 
     /**
      * Unregister a previously-registered NumberFormatFactory using the key returned from the
@@ -509,15 +509,15 @@ public:
      * @return TRUE if the factory for the key was successfully unregistered
      * @draft ICU 2.6
      */
-    static UBool unregister(URegistryKey key, UErrorCode& status);
+    static UBool U_EXPORT2 unregister(URegistryKey key, UErrorCode& status);
 
     /**
-     * Return a StringEnumeration over the locales available at the time of the call, 
+     * Return a StringEnumeration over the locales available at the time of the call,
      * including registered locales.
      * @return a StringEnumeration over the locales available at the time of the call
      * @draft ICU 2.6
      */
-    static StringEnumeration* getAvailableLocales(void);
+    static StringEnumeration* U_EXPORT2 getAvailableLocales(void);
 #endif /* UCONFIG_NO_SERVICE */
 
     /**
@@ -533,7 +533,7 @@ public:
 
     /**
      * Set whether or not grouping will be used in this format.
-     * @param newValue    True, grouping will be used in this format. 
+     * @param newValue    True, grouping will be used in this format.
      * @see getGroupingUsed
      * @stable ICU 2.0
      */
@@ -556,7 +556,7 @@ public:
      * of minimumIntegerDigits, then minimumIntegerDigits will also be set to
      * the new value.
      *
-     * @param newValue    the new value for the maximum number of digits 
+     * @param newValue    the new value for the maximum number of digits
      *                    allowed in the integer portion of a number.
      * @see getMaximumIntegerDigits
      * @stable ICU 2.0
@@ -662,7 +662,7 @@ public:
      * @return The class ID for all objects of this class.
      * @stable ICU 2.0
      */
-    static UClassID getStaticClassID(void);
+    static UClassID U_EXPORT2 getStaticClassID(void);
 
     /**
      * Returns a unique class ID POLYMORPHICALLY.  Pure virtual override.
@@ -720,17 +720,17 @@ private:
         kScientificStyle,
         kStyleCount // ALWAYS LAST ENUM: number of styles
     };
-    
+
     /**
      * Creates the specified decimal format style of the desired locale.
-	 * Hook for service registration, uses makeInstance directly if no services
-	 * registered.
+     * Hook for service registration, uses makeInstance directly if no services
+     * registered.
      * @param desiredLocale    the given locale.
      * @param choice           the given style.
      * @param success          Output param filled with success/failure status.
      * @return                 A new NumberFormat instance.
      */
-    static NumberFormat* createInstance(const Locale& desiredLocale, EStyles choice, UErrorCode& success);
+    static NumberFormat* U_EXPORT2 createInstance(const Locale& desiredLocale, EStyles choice, UErrorCode& success);
 
     /**
      * Creates the specified decimal format style of the desired locale.
@@ -739,7 +739,7 @@ private:
      * @param success          Output param filled with success/failure status.
      * @return                 A new NumberFormat instance.
      */
-	static NumberFormat* makeInstance(const Locale& desiredLocale, EStyles choice, UErrorCode& success);
+    static NumberFormat* makeInstance(const Locale& desiredLocale, EStyles choice, UErrorCode& success);
     static const int32_t    fgNumberPatternsCount;
     static const UChar* const fgLastResortNumberPatterns[];
 
@@ -802,7 +802,7 @@ public:
 
 /**
  * A NumberFormatFactory that supports a single locale.  It can be visible or invisible.
- * @draft ICU 3.0 
+ * @draft ICU 3.0
  */
 class U_I18N_API SimpleNumberFormatFactory : public NumberFormatFactory {
 protected:

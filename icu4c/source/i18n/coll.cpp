@@ -227,14 +227,12 @@ Collator::createUCollator(const char *loc,
 
 // Collator public methods -----------------------------------------------
 
-Collator* Collator::createInstance(UErrorCode& success) 
+Collator* U_EXPORT2 Collator::createInstance(UErrorCode& success) 
 {
-    if (U_FAILURE(success))
-        return 0;
     return createInstance(Locale::getDefault(), success);
 }
 
-Collator* Collator::createInstance(const Locale& desiredLocale,
+Collator* U_EXPORT2 Collator::createInstance(const Locale& desiredLocale,
                                    UErrorCode& status)
 {
     if (U_FAILURE(status)) 
@@ -379,12 +377,12 @@ UBool Collator::greater(const UnicodeString& source,
 
 // this API  ignores registered collators, since it returns an
 // array of indefinite lifetime
-const Locale* Collator::getAvailableLocales(int32_t& count) 
+const Locale* U_EXPORT2 Collator::getAvailableLocales(int32_t& count) 
 {
     return Locale::getAvailableLocales(count);
 }
 
-UnicodeString& Collator::getDisplayName(const Locale& objectLocale,
+UnicodeString& U_EXPORT2 Collator::getDisplayName(const Locale& objectLocale,
                                         const Locale& displayLocale,
                                         UnicodeString& name)
 {
@@ -396,7 +394,7 @@ UnicodeString& Collator::getDisplayName(const Locale& objectLocale,
     return objectLocale.getDisplayName(displayLocale, name);
 }
 
-UnicodeString& Collator::getDisplayName(const Locale& objectLocale,
+UnicodeString& U_EXPORT2 Collator::getDisplayName(const Locale& objectLocale,
                                         UnicodeString& name)
 {   
     return getDisplayName(objectLocale, Locale::getDefault(), name);
@@ -457,7 +455,7 @@ UBool Collator::operator!=(const Collator& other) const
     return (UBool)!(*this == other);
 }
 
-int32_t Collator::getBound(const uint8_t       *source,
+int32_t U_EXPORT2 Collator::getBound(const uint8_t       *source,
                            int32_t             sourceLength,
                            UColBoundMode       boundType,
                            uint32_t            noOfLevels,
@@ -484,7 +482,7 @@ UnicodeSet *Collator::getTailoredSet(UErrorCode &status) const
 // -------------------------------------
 
 #if !UCONFIG_NO_SERVICE
-URegistryKey
+URegistryKey U_EXPORT2
 Collator::registerInstance(Collator* toAdopt, const Locale& locale, UErrorCode& status) 
 {
     if (U_SUCCESS(status)) {
@@ -574,7 +572,7 @@ CFactory::getDisplayName(const UnicodeString& id, const Locale& locale, UnicodeS
     return result;
 }
 
-URegistryKey 
+URegistryKey U_EXPORT2
 Collator::registerFactory(CollatorFactory* toAdopt, UErrorCode& status)
 {
     if (U_SUCCESS(status)) {
@@ -589,7 +587,7 @@ Collator::registerFactory(CollatorFactory* toAdopt, UErrorCode& status)
 
 // -------------------------------------
 
-UBool 
+UBool U_EXPORT2
 Collator::unregister(URegistryKey key, UErrorCode& status) 
 {
     if (U_SUCCESS(status)) {
@@ -603,14 +601,14 @@ Collator::unregister(URegistryKey key, UErrorCode& status)
 
 // -------------------------------------
 
-StringEnumeration* 
+StringEnumeration* U_EXPORT2
 Collator::getAvailableLocales(void)
 {
     return getService()->getAvailableLocales();
 }
 #endif /* UCONFIG_NO_SERVICE */
 
-StringEnumeration*
+StringEnumeration* U_EXPORT2
 Collator::getKeywords(UErrorCode& status) {
     // This is a wrapper over ucol_getKeywords
     UEnumeration* uenum = ucol_getKeywords(&status);
@@ -621,7 +619,7 @@ Collator::getKeywords(UErrorCode& status) {
     return new UStringEnumeration(uenum);
 }
 
-StringEnumeration*
+StringEnumeration* U_EXPORT2
 Collator::getKeywordValues(const char *keyword, UErrorCode& status) {
     // This is a wrapper over ucol_getKeywordValues
     UEnumeration* uenum = ucol_getKeywordValues(keyword, &status);
@@ -632,7 +630,7 @@ Collator::getKeywordValues(const char *keyword, UErrorCode& status) {
     return new UStringEnumeration(uenum);
 }
 
-Locale
+Locale U_EXPORT2
 Collator::getFunctionalEquivalent(const char* keyword, const Locale& locale,
                                   UBool& isAvailable, UErrorCode& status) {
     // This is a wrapper over ucol_getFunctionalEquivalent

@@ -116,7 +116,7 @@ public:
      * @return   The class ID for all objects of this class.
      * @internal
      */
-    static inline UClassID getStaticClassID(void);
+    static UClassID U_EXPORT2 getStaticClassID(void);
 
     /**
      * return the calendar type, "buddhist".
@@ -175,8 +175,6 @@ public:
 
 private:
     BuddhistCalendar(); // default constructor not implemented
-
-    static const char fgClassID;
 
  protected:
     /**
@@ -303,15 +301,6 @@ private:
      */
     static void  initializeSystemDefaultCentury(void);
 };
-
-inline UClassID
-BuddhistCalendar::getStaticClassID(void)
-{ return (UClassID)&fgClassID; }
-
-inline UClassID
-BuddhistCalendar::getDynamicClassID(void) const
-{ return BuddhistCalendar::getStaticClassID(); }
-
 
 U_NAMESPACE_END
 

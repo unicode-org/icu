@@ -500,7 +500,7 @@ public:
    * @param status The status indicating whether the constructor succeeded.
    * @stable ICU 2.0
    */
-  RuleBasedNumberFormat(const UnicodeString& rules, const Locale& locale, 
+  RuleBasedNumberFormat(const UnicodeString& rules, const Locale& locale,
                         UParseError& perror, UErrorCode& status);
 
   /**
@@ -733,7 +733,7 @@ public:
                      Formattable& result,
                      ParsePosition& parsePosition) const;
 
-  
+
   /**
    * Redeclared Format method.
    * @param text   The string to parse
@@ -817,7 +817,7 @@ public:
      *
      * @stable ICU 2.8
      */
-    static UClassID getStaticClassID(void);
+    static UClassID U_EXPORT2 getStaticClassID(void);
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
@@ -890,16 +890,16 @@ RuleBasedNumberFormat::parse(const UnicodeString& text, Formattable& result, UEr
 
 #if !UCONFIG_NO_COLLATION
 
-inline UBool 
-RuleBasedNumberFormat::isLenient(void) const { 
-    return lenient; 
+inline UBool
+RuleBasedNumberFormat::isLenient(void) const {
+    return lenient;
 }
 
 #endif
 
-inline NFRuleSet* 
-RuleBasedNumberFormat::getDefaultRuleSet() const { 
-    return defaultRuleSet; 
+inline NFRuleSet*
+RuleBasedNumberFormat::getDefaultRuleSet() const {
+    return defaultRuleSet;
 }
 
 U_NAMESPACE_END

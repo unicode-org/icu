@@ -58,19 +58,19 @@ typedef int32_t UFieldResolutionTable[12][8];
  *
  * <p>
  * Subclasses of <code>Calendar</code> interpret a <code>UDate</code>
- * according to the rules of a specific calendar system. 
+ * according to the rules of a specific calendar system.
  * The most commonly used subclass of <code>Calendar</code> is
  * <code>GregorianCalendar</code>. Other subclasses could represent
  * the various types of lunar calendars in use in many parts of the world.
- * 
+ *
  * <p>
  * <b>NOTE</b>: (ICU 2.6) The subclass interface should be considered unstable
- * - it WILL change.  
+ * - it WILL change.
  *
  * <p>
  * Like other locale-sensitive classes, <code>Calendar</code> provides a
  * static method, <code>createInstance</code>, for getting a generally useful
- * object of this type. <code>Calendar</code>'s <code>createInstance</code> method 
+ * object of this type. <code>Calendar</code>'s <code>createInstance</code> method
  * returns the appropriate <code>Calendar</code> subclass whose
  * time fields have been initialized with the current date and time:
  * \htmlonly<blockquote>\endhtmlonly
@@ -189,7 +189,7 @@ public:
         MILLISECOND,          // Example: 0..999
         ZONE_OFFSET,          // Example: -12*U_MILLIS_PER_HOUR..12*U_MILLIS_PER_HOUR
         DST_OFFSET,           // Example: 0 or U_MILLIS_PER_HOUR
-        YEAR_WOY,             // 'Y' Example: 1..big number - Year of Week of Year 
+        YEAR_WOY,             // 'Y' Example: 1..big number - Year of Week of Year
         DOW_LOCAL,            // 'e' Example: 1..7 - Day of Week / Localized
 
         FIELD_COUNT = UCAL_FIELD_COUNT // See ucal.h for other fields.
@@ -265,7 +265,7 @@ public:
      * @return         A Calendar if created successfully. NULL otherwise.
      * @stable ICU 2.0
      */
-    static Calendar* createInstance(UErrorCode& success);
+    static Calendar* U_EXPORT2 createInstance(UErrorCode& success);
 
     /**
      * Creates a Calendar using the given timezone and the default locale.
@@ -279,7 +279,7 @@ public:
      * @return             A Calendar if created successfully. NULL otherwise.
      * @stable ICU 2.0
      */
-    static Calendar* createInstance(TimeZone* zoneToAdopt, UErrorCode& success);
+    static Calendar* U_EXPORT2 createInstance(TimeZone* zoneToAdopt, UErrorCode& success);
 
     /**
      * Creates a Calendar using the given timezone and the default locale.  The TimeZone
@@ -292,7 +292,7 @@ public:
      * @return             A Calendar if created successfully. NULL otherwise.
      * @stable ICU 2.0
      */
-    static Calendar* createInstance(const TimeZone& zone, UErrorCode& success);
+    static Calendar* U_EXPORT2 createInstance(const TimeZone& zone, UErrorCode& success);
 
     /**
      * Creates a Calendar using the default timezone and the given locale.
@@ -304,7 +304,7 @@ public:
      * @return         A Calendar if created successfully. NULL otherwise.
      * @stable ICU 2.0
      */
-    static Calendar* createInstance(const Locale& aLocale, UErrorCode& success);
+    static Calendar* U_EXPORT2 createInstance(const Locale& aLocale, UErrorCode& success);
 
     /**
      * Creates a Calendar using the given timezone and given locale.
@@ -319,7 +319,7 @@ public:
      * @return             A Calendar if created successfully. NULL otherwise.
      * @stable ICU 2.0
      */
-    static Calendar* createInstance(TimeZone* zoneToAdopt, const Locale& aLocale, UErrorCode& success);
+    static Calendar* U_EXPORT2 createInstance(TimeZone* zoneToAdopt, const Locale& aLocale, UErrorCode& success);
 
     /**
      * Gets a Calendar using the given timezone and given locale.  The TimeZone
@@ -333,7 +333,7 @@ public:
      * @return             A Calendar if created successfully. NULL otherwise.
      * @stable ICU 2.0
      */
-    static Calendar* createInstance(const TimeZone& zoneToAdopt, const Locale& aLocale, UErrorCode& success);
+    static Calendar* U_EXPORT2 createInstance(const TimeZone& zoneToAdopt, const Locale& aLocale, UErrorCode& success);
 
     /**
      * Returns a list of the locales for which Calendars are installed.
@@ -344,16 +344,16 @@ public:
      *               the caller must NOT delete it. Does not include user-registered Calendars.
      * @stable ICU 2.0
      */
-    static const Locale* getAvailableLocales(int32_t& count);
+    static const Locale* U_EXPORT2 getAvailableLocales(int32_t& count);
 
     /**
-     * Returns the current UTC (GMT) time measured in milliseconds since 0:00:00 on 1/1/70 
+     * Returns the current UTC (GMT) time measured in milliseconds since 0:00:00 on 1/1/70
      * (derived from the system time).
      *
      * @return   The current UTC time in milliseconds.
      * @stable ICU 2.0
      */
-    static UDate getNow(void);
+    static UDate U_EXPORT2 getNow(void);
 
     /**
      * Gets this Calendar's time as milliseconds. May involve recalculation of time due
@@ -412,7 +412,7 @@ public:
      * the operator==() method to return TRUE, the other Calendar must
      * be set to the same time.
      *
-     * @param other the Calendar to be compared with this Calendar   
+     * @param other the Calendar to be compared with this Calendar
      * @stable ICU 2.4
      */
     virtual UBool isEquivalentTo(const Calendar& other) const;
@@ -1144,7 +1144,7 @@ public:
     /**
      * Returns the resource key string used for this calendar type.
      * For example, prepending "Eras_" to this string could return "Eras_japanese"
-     * or "Eras_gregorian".  
+     * or "Eras_gregorian".
      *
      * @returns static string, for example, "gregorian" or "japanese"
      * @internal
@@ -1318,19 +1318,19 @@ protected:
      * @internal
      */
     virtual void prepareGetActual(UCalendarDateFields field, UBool isMinimum, UErrorCode &status);
-    
+
     /**
      * Limit enums. Not in sync with UCalendarLimitType (refers to internal fields).
-     * @internal  
+     * @internal
      */
-    enum ELimitType { 
-      UCAL_LIMIT_MINIMUM = 0, 
-      UCAL_LIMIT_GREATEST_MINIMUM, 
-      UCAL_LIMIT_LEAST_MAXIMUM, 
-      UCAL_LIMIT_MAXIMUM, 
+    enum ELimitType {
+      UCAL_LIMIT_MINIMUM = 0,
+      UCAL_LIMIT_GREATEST_MINIMUM,
+      UCAL_LIMIT_LEAST_MAXIMUM,
+      UCAL_LIMIT_MAXIMUM,
       UCAL_LIMIT_COUNT
     };
-    
+
     /**
      * Subclass API for defining limits of different types.
      * Subclasses must implement this method to return limits for the
@@ -1413,14 +1413,14 @@ protected:
      * Subclasses may override this.  This method calls
      * handleGetMonthLength() to obtain the calendar-specific month
      * length.
-     * @param bestField which field to use to calculate the date 
+     * @param bestField which field to use to calculate the date
      * @return julian day specified by calendar fields.
      * @internal
      */
     virtual int32_t handleComputeJulianDay(UCalendarDateFields bestField);
 
-    /** 
-     * Subclasses must override this to convert from week fields 
+    /**
+     * Subclasses must override this to convert from week fields
      * (YEAR_WOY and WEEK_OF_YEAR) to an extended year in the case
      * where YEAR, EXTENDED_YEAR are not set.
      * The Calendar implementation assumes yearWoy is in extended gregorian form
@@ -1436,7 +1436,7 @@ protected:
      * @internal
      */
     int32_t computeJulianDay();
-    
+
     /**
      * Compute the milliseconds in the day from the fields.  This is a
      * value from 0 to 23:59:59.999 inclusive, unless fields are out of
@@ -1543,8 +1543,8 @@ protected:
      */
     UCalendarDateFields newerField(UCalendarDateFields defaultField, UCalendarDateFields alternateField) const;
 
-    
-private:    
+
+private:
     /**
      * Helper function for calculating limits by trial and error
      * @param field The field being investigated
@@ -1905,8 +1905,8 @@ private:
      * The resource tag where the default calendar is stored.
      */
     static const char kDefaultCalendar[];
-    
-    
+
+
     /**
      * The Gregorian year, as computed by computeGregorianFields() and
      * returned by getGregorianYear().
@@ -1998,7 +1998,7 @@ private:
 
     /**
      * Validate a single field of this calendar given its minimum and
-     * maximum allowed value.  If the field is out of range, 
+     * maximum allowed value.  If the field is out of range,
      * <code>U_ILLEGAL_ARGUMENT_ERROR</code> will be set.  Subclasses may
      * use this method in their implementation of {@link
      * #validateField(int, int&)}.
@@ -2023,12 +2023,12 @@ private:
     char actualLocale[ULOC_FULLNAME_CAPACITY];
 
  public:
-    /** 
+    /**
      * INTERNAL FOR 2.6 --  Registration.
      */
 
     /**
-     * Return a StringEnumeration over the locales available at the time of the call, 
+     * Return a StringEnumeration over the locales available at the time of the call,
      * including registered locales.
      * @return a StringEnumeration over the locales available at the time of the call
      * @internal
@@ -2056,27 +2056,27 @@ private:
      * @internal
      */
     static UBool unregister(URegistryKey key, UErrorCode& status);
-    
+
     /**
      * Multiple Calendar Implementation
-     * @internal 
+     * @internal
      */
     friend class CalendarFactory;
 
     /**
      * Multiple Calendar Implementation
-     * @internal 
+     * @internal
      */
     friend class CalendarService;
 
     /**
      * Multiple Calendar Implementation
-     * @internal 
+     * @internal
      */
     friend class DefaultCalendarFactory;
 
     /**
-     * @internal 
+     * @internal
      * @return TRUE if this calendar has a default century (i.e. 03 -> 2003)
      */
     virtual UBool haveDefaultCentury() const = 0;
@@ -2087,13 +2087,13 @@ private:
      */
     virtual UDate defaultCenturyStart() const = 0;
     /**
-     * @internal 
+     * @internal
      * @return the beginning year of the default century, as a year
      */
     virtual int32_t defaultCenturyStartYear() const = 0;
-    
+
     /** Get the locale for this calendar object. You can choose between valid and actual locale.
-     *  @param type type of the locale we're looking for (valid or actual) 
+     *  @param type type of the locale we're looking for (valid or actual)
      *  @param status error code for the operation
      *  @return the locale
      *  @draft ICU 2.8 likely to change in ICU 3.0, based on feedback
@@ -2101,7 +2101,7 @@ private:
     Locale getLocale(ULocDataLocaleType type, UErrorCode &status) const;
 
     /** Get the locale for this calendar object. You can choose between valid and actual locale.
-     *  @param type type of the locale we're looking for (valid or actual) 
+     *  @param type type of the locale we're looking for (valid or actual)
      *  @param status error code for the operation
      *  @return the locale
      *  @internal
@@ -2121,7 +2121,7 @@ Calendar::createInstance(TimeZone* zone, UErrorCode& errorCode)
 
 // -------------------------------------
 
-inline void 
+inline void
 Calendar::roll(UCalendarDateFields field, UBool up, UErrorCode& status)
 {
     roll(field, (int32_t)(up ? +1 : -1), status);

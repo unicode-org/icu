@@ -566,7 +566,7 @@ public:
      * @return          The class ID for all objects of this class.
      * @stable ICU 2.0
      */
-    static UClassID getStaticClassID(void);
+    static UClassID U_EXPORT2 getStaticClassID(void);
 
     /**
      * Returns a unique class ID POLYMORPHICALLY. Pure virtual override. This
@@ -747,7 +747,7 @@ private:
      * @param translatedPattern Output param to receive the translited pattern.
      * @param from              the characters to be translited from.
      * @param to                the characters to be translited to.
-     * @param status            Receives a status code, which will be U_ZERO_ERROR 
+     * @param status            Receives a status code, which will be U_ZERO_ERROR
      *                          if the operation succeeds.
      */
     static void translatePattern(const UnicodeString& originalPattern,
@@ -760,7 +760,7 @@ private:
      * Sets the starting date of the 100-year window that dates with 2-digit years
      * are considered to fall within.
      * @param startDate the start date
-     * @param status    Receives a status code, which will be U_ZERO_ERROR 
+     * @param status    Receives a status code, which will be U_ZERO_ERROR
      *                  if the operation succeeds.
      */
     void         parseAmbiguousDatesAsAfter(UDate startDate, UErrorCode& status);
@@ -805,7 +805,7 @@ private:
      * See documentation for defaultCenturyStart.
      */
     /*transient*/ int32_t   fDefaultCenturyStartYear;
-    
+
     UBool fHaveDefaultCentury;
 };
 

@@ -232,11 +232,12 @@ UBool   RegexPattern::operator ==(const RegexPattern &other) const {
 //   compile        
 //
 //---------------------------------------------------------------------
-RegexPattern  *RegexPattern::compile(
-                             const UnicodeString &regex,
-                             uint32_t             flags,
-                             UParseError          &pe,
-                             UErrorCode           &status)  {
+RegexPattern * U_EXPORT2
+RegexPattern::compile(const UnicodeString &regex,
+                      uint32_t             flags,
+                      UParseError          &pe,
+                      UErrorCode           &status)
+{
 
     if (U_FAILURE(status)) {
         return NULL;
@@ -275,9 +276,10 @@ RegexPattern  *RegexPattern::compile(
 //
 //   compile with default flags.
 //
-RegexPattern *RegexPattern::compile( const UnicodeString &regex,
-        UParseError          &pe,
-        UErrorCode           &err) 
+RegexPattern * U_EXPORT2
+RegexPattern::compile(const UnicodeString &regex,
+                      UParseError         &pe,
+                      UErrorCode          &err) 
 {
     return compile(regex, 0, pe, err); 
 }
@@ -287,7 +289,8 @@ RegexPattern *RegexPattern::compile( const UnicodeString &regex,
 //
 //   compile with no UParseErr parameter.
 //
-RegexPattern *RegexPattern::compile( const UnicodeString &regex,
+RegexPattern * U_EXPORT2
+RegexPattern::compile( const UnicodeString &regex,
         uint32_t             flags,
         UErrorCode           &err) 
 {
@@ -355,7 +358,7 @@ RegexMatcher *RegexPattern::matcher(UErrorCode &status)  const {
 //                  with a pattern string and a data string.
 //
 //---------------------------------------------------------------------
-UBool RegexPattern::matches(const UnicodeString   &regex,
+UBool U_EXPORT2 RegexPattern::matches(const UnicodeString   &regex,
               const UnicodeString   &input,
                     UParseError     &pe,
                     UErrorCode      &status) {

@@ -7,7 +7,7 @@
 
 /**
 * File coll.h
-* 
+*
 * Created by: Helena Shih
 *
 * Modification History:
@@ -32,13 +32,13 @@
 * 02/10/98     damiba      Added compare() with length as parameter.
 * 04/23/99     stephen     Removed EDecompositionMode, merged with
 *                          Normalizer::EMode.
-* 11/02/99     helena      Collator performance enhancements.  Eliminates the 
+* 11/02/99     helena      Collator performance enhancements.  Eliminates the
 *                          UnicodeString construction and special case for NO_OP.
 * 11/23/99     srl         More performance enhancements. Inlining of
 *                          critical accessors.
-* 05/15/00     helena      Added version information API. 
-* 01/29/01     synwee      Modified into a C++ wrapper which calls C apis 
-*                          (ucoll.h). 
+* 05/15/00     helena      Added version information API.
+* 01/29/01     synwee      Modified into a C++ wrapper which calls C apis
+*                          (ucoll.h).
 */
 
 #ifndef COLL_H
@@ -76,30 +76,30 @@ class CollatorFactory;
 class CollationKey;
 
 /**
-* The <code>Collator</code> class performs locale-sensitive string 
+* The <code>Collator</code> class performs locale-sensitive string
 * comparison.<br>
-* You use this class to build searching and sorting routines for natural 
+* You use this class to build searching and sorting routines for natural
 * language text.<br>
-* <em>Important: </em>The ICU collation service has been reimplemented 
-* in order to achieve better performance and UCA compliance. 
-* For details, see the 
+* <em>Important: </em>The ICU collation service has been reimplemented
+* in order to achieve better performance and UCA compliance.
+* For details, see the
 * <a href="http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/design/collation/ICU_collation_design.htm">
 * collation design document</a>.
 * <p>
-* <code>Collator</code> is an abstract base class. Subclasses implement 
-* specific collation strategies. One subclass, 
-* <code>RuleBasedCollator</code>, is currently provided and is applicable 
-* to a wide set of languages. Other subclasses may be created to handle more 
+* <code>Collator</code> is an abstract base class. Subclasses implement
+* specific collation strategies. One subclass,
+* <code>RuleBasedCollator</code>, is currently provided and is applicable
+* to a wide set of languages. Other subclasses may be created to handle more
 * specialized needs.
 * <p>
-* Like other locale-sensitive classes, you can use the static factory method, 
-* <code>createInstance</code>, to obtain the appropriate 
-* <code>Collator</code> object for a given locale. You will only need to 
-* look at the subclasses of <code>Collator</code> if you need to 
-* understand the details of a particular collation strategy or if you need to 
+* Like other locale-sensitive classes, you can use the static factory method,
+* <code>createInstance</code>, to obtain the appropriate
+* <code>Collator</code> object for a given locale. You will only need to
+* look at the subclasses of <code>Collator</code> if you need to
+* understand the details of a particular collation strategy or if you need to
 * modify that strategy.
 * <p>
-* The following example shows how to compare two strings using the 
+* The following example shows how to compare two strings using the
 * <code>Collator</code> for the default locale.
 * \htmlonly<blockquote>\endhtmlonly
 * <pre>
@@ -115,55 +115,52 @@ class CollationKey;
 * </pre>
 * \htmlonly</blockquote>\endhtmlonly
 * <p>
-* You can set a <code>Collator</code>'s <em>strength</em> property to 
-* determine the level of difference considered significant in comparisons. 
-* Five strengths are provided: <code>PRIMARY</code>, <code>SECONDARY</code>, 
-* <code>TERTIARY</code>, <code>QUATERNARY</code> and <code>IDENTICAL</code>. The exact assignment of 
-* strengths to language features is locale dependant. For example, in Czech, 
-* "e" and "f" are considered primary differences, while "e" and "\u00EA" are 
-* secondary differences, "e" and "E" are tertiary differences and "e" and "e" 
-* are identical. The following shows how both case and accents could be 
-* ignored for US English.
+* You can set a <code>Collator</code>'s <em>strength</em> property to
+* determine the level of difference considered significant in comparisons.
+* Five strengths are provided: <code>PRIMARY</code>, <code>SECONDARY</code>,
+* <code>TERTIARY</code>, <code>QUATERNARY</code> and <code>IDENTICAL</code>.
+* The exact assignment of strengths to language features is locale dependant.
+* For example, in Czech, "e" and "f" are considered primary differences,
+* while "e" and "\u00EA" are secondary differences, "e" and "E" are tertiary
+* differences and "e" and "e" are identical. The following shows how both case
+* and accents could be ignored for US English.
 * \htmlonly<blockquote>\endhtmlonly
 * <pre>
 * \code
-* //Get the Collator for US English and set its strength to PRIMARY 
+* //Get the Collator for US English and set its strength to PRIMARY
 * UErrorCode success = U_ZERO_ERROR;
-* Collator* usCollator = 
-*                            Collator::createInstance(Locale::US, success);
+* Collator* usCollator = Collator::createInstance(Locale::US, success);
 * usCollator->setStrength(Collator::PRIMARY);
 * if (usCollator->compare("abc", "ABC") == 0)
-*   cout << 
-* "'abc' and 'ABC' strings are equivalent with strength PRIMARY" << 
-* endl;
+*     cout << "'abc' and 'ABC' strings are equivalent with strength PRIMARY" << endl;
 * \endcode
 * </pre>
 * \htmlonly</blockquote>\endhtmlonly
 * <p>
-* For comparing strings exactly once, the <code>compare</code> method 
-* provides the best performance. When sorting a list of strings however, it 
-* is generally necessary to compare each string multiple times. In this case, 
-* sort keys provide better performance. The <code>getSortKey</code> methods 
-* convert a string to a series of bytes that can be compared bitwise against 
-* other sort keys using <code>strcmp()</code>. Sort keys are written as 
-* zero-terminated byte strings. They consist of several substrings, one for 
+* For comparing strings exactly once, the <code>compare</code> method
+* provides the best performance. When sorting a list of strings however, it
+* is generally necessary to compare each string multiple times. In this case,
+* sort keys provide better performance. The <code>getSortKey</code> methods
+* convert a string to a series of bytes that can be compared bitwise against
+* other sort keys using <code>strcmp()</code>. Sort keys are written as
+* zero-terminated byte strings. They consist of several substrings, one for
 * each collation strength level, that are delimited by 0x01 bytes.
-* If the string code points are appended for UCOL_IDENTICAL, then they are 
-* processed for correct code point order comparison and may contain 0x01 
+* If the string code points are appended for UCOL_IDENTICAL, then they are
+* processed for correct code point order comparison and may contain 0x01
 * bytes but not zero bytes.
 * </p>
 * <p>
-* An older set of APIs returns a <code>CollationKey</code> object that wraps 
+* An older set of APIs returns a <code>CollationKey</code> object that wraps
 * the sort key bytes instead of returning the bytes themselves.
-* Its use is deprecated, but it is still available for compatibility with 
+* Its use is deprecated, but it is still available for compatibility with
 * Java.
 * </p>
 * <p>
 * <strong>Note:</strong> <code>Collator</code>s with different Locale,
-* and CollationStrength settings will return different sort 
-* orders for the same set of strings. Locales have specific collation rules, 
-* and the way in which secondary and tertiary differences are taken into 
-* account, for example, will result in a different sorting order for same 
+* and CollationStrength settings will return different sort
+* orders for the same set of strings. Locales have specific collation rules,
+* and the way in which secondary and tertiary differences are taken into
+* account, for example, will result in a different sorting order for same
 * strings.
 * </p>
 * @see         RuleBasedCollator
@@ -178,36 +175,36 @@ class U_I18N_API Collator : public UObject {
 public:
 
     // Collator public enums -----------------------------------------------
-  
+
     /**
-     * Base letter represents a primary difference. Set comparison level to 
+     * Base letter represents a primary difference. Set comparison level to
      * PRIMARY to ignore secondary and tertiary differences.<br>
      * Use this to set the strength of a Collator object.<br>
      * Example of primary difference, "abc" &lt; "abd"
-     * 
+     *
      * Diacritical differences on the same base letter represent a secondary
      * difference. Set comparison level to SECONDARY to ignore tertiary
      * differences. Use this to set the strength of a Collator object.<br>
      * Example of secondary difference, "ä" >> "a".
      *
      * Uppercase and lowercase versions of the same character represents a
-     * tertiary difference.  Set comparison level to TERTIARY to include all 
+     * tertiary difference.  Set comparison level to TERTIARY to include all
      * comparison differences. Use this to set the strength of a Collator
      * object.<br>
      * Example of tertiary difference, "abc" &lt;&lt;&lt; "ABC".
      *
-     * Two characters are considered "identical" when they have the same unicode 
+     * Two characters are considered "identical" when they have the same unicode
      * spellings.<br>
      * For example, "ä" == "ä".
      *
-     * UCollationStrength is also used to determine the strength of sort keys 
+     * UCollationStrength is also used to determine the strength of sort keys
      * generated from Collator objects.
      * @stable ICU 2.0
      */
-    enum ECollationStrength 
+    enum ECollationStrength
     {
         PRIMARY    = 0,
-        SECONDARY  = 1, 
+        SECONDARY  = 1,
         TERTIARY   = 2,
         QUATERNARY = 3,
         IDENTICAL  = 15
@@ -223,15 +220,15 @@ public:
      * @see Collator#compare
      * @deprecated ICU 2.6. Use C enum UCollationResult defined in ucol.h
      */
-    enum EComparisonResult 
+    enum EComparisonResult
     {
         LESS = -1,
         EQUAL = 0,
         GREATER = 1
     };
-  
+
     // Collator public destructor -----------------------------------------
-  
+
     /**
      * Destructor
      * @stable ICU 2.0
@@ -267,8 +264,8 @@ public:
      * Creates the Collator object for the current default locale.
      * The default locale is determined by Locale::getDefault.
      * The UErrorCode& err parameter is used to return status information to the user.
-     * To check whether the construction succeeded or not, you should check the 
-     * value of U_SUCCESS(err).  If you wish more detailed information, you can 
+     * To check whether the construction succeeded or not, you should check the
+     * value of U_SUCCESS(err).  If you wish more detailed information, you can
      * check for informational error results which still indicate success.
      * U_USING_FALLBACK_ERROR indicates that a fall back locale was used. For
      * example, 'de_CH' was requested, but nothing was found there, so 'de' was
@@ -282,12 +279,12 @@ public:
      * @see Locale#getDefault
      * @stable ICU 2.0
      */
-    static Collator* createInstance(UErrorCode&  err);
+    static Collator* U_EXPORT2 createInstance(UErrorCode&  err);
 
     /**
      * Gets the table-based collation object for the desired locale. The
-     * resource of the desired locale will be loaded by ResourceLoader. 
-     * Locale::ENGLISH is the base collation table and all other languages are 
+     * resource of the desired locale will be loaded by ResourceLoader.
+     * Locale::ENGLISH is the base collation table and all other languages are
      * built on top of it with additional language-specific modifications.
      * The UErrorCode& err parameter is used to return status information to the user.
      * To check whether the construction succeeded or not, you should check
@@ -307,7 +304,7 @@ public:
      * @see ResourceLoader
      * @stable ICU 2.2
      */
-    static Collator* createInstance(const Locale& loc, UErrorCode& err);
+    static Collator* U_EXPORT2 createInstance(const Locale& loc, UErrorCode& err);
 
 #ifdef U_USE_COLLATION_OBSOLETE_2_6
     /**
@@ -338,7 +335,7 @@ public:
 
     /**
      * The comparison function compares the character data stored in two
-     * different strings. Returns information about whether a string is less 
+     * different strings. Returns information about whether a string is less
      * than, greater than or equal to another string.
      * @param source the source string to be compared with.
      * @param target the string that is to be compared with the source string.
@@ -347,12 +344,12 @@ public:
      * than target
      * @deprecated ICU 2.6 use the overload with UErrorCode &
      */
-    virtual EComparisonResult compare(const UnicodeString& source, 
+    virtual EComparisonResult compare(const UnicodeString& source,
                                       const UnicodeString& target) const;
 
     /**
      * The comparison function compares the character data stored in two
-     * different strings. Returns information about whether a string is less 
+     * different strings. Returns information about whether a string is less
      * than, greater than or equal to another string.
      * @param source the source string to be compared with.
      * @param target the string that is to be compared with the source string.
@@ -362,37 +359,37 @@ public:
      * than target
      * @draft ICU 2.6
      */
-    virtual UCollationResult compare(const UnicodeString& source, 
+    virtual UCollationResult compare(const UnicodeString& source,
                                       const UnicodeString& target,
                                       UErrorCode &status) const = 0;
 
     /**
-     * Does the same thing as compare but limits the comparison to a specified 
+     * Does the same thing as compare but limits the comparison to a specified
      * length
      * @param source the source string to be compared with.
      * @param target the string that is to be compared with the source string.
      * @param length the length the comparison is limited to
-     * @return Returns a byte value. GREATER if source (up to the specified 
-     *         length) is greater than target; EQUAL if source (up to specified 
-     *         length) is equal to target; LESS if source (up to the specified 
-     *         length) is less  than target.   
+     * @return Returns a byte value. GREATER if source (up to the specified
+     *         length) is greater than target; EQUAL if source (up to specified
+     *         length) is equal to target; LESS if source (up to the specified
+     *         length) is less  than target.
      * @deprecated ICU 2.6 use the overload with UErrorCode &
      */
     virtual EComparisonResult compare(const UnicodeString& source,
                                       const UnicodeString& target,
                                       int32_t length) const;
-    
+
     /**
-     * Does the same thing as compare but limits the comparison to a specified 
+     * Does the same thing as compare but limits the comparison to a specified
      * length
      * @param source the source string to be compared with.
      * @param target the string that is to be compared with the source string.
      * @param length the length the comparison is limited to
      * @param status possible error code
-     * @return Returns an enum value. UCOL_GREATER if source (up to the specified 
-     *         length) is greater than target; UCOL_EQUAL if source (up to specified 
-     *         length) is equal to target; UCOL_LESS if source (up to the specified 
-     *         length) is less  than target.   
+     * @return Returns an enum value. UCOL_GREATER if source (up to the specified
+     *         length) is greater than target; UCOL_EQUAL if source (up to specified
+     *         length) is equal to target; UCOL_LESS if source (up to the specified
+     *         length) is less  than target.
      * @draft ICU 2.6
      */
     virtual UCollationResult compare(const UnicodeString& source,
@@ -402,7 +399,7 @@ public:
 
     /**
      * The comparison function compares the character data stored in two
-     * different string arrays. Returns information about whether a string array 
+     * different string arrays. Returns information about whether a string array
      * is less than, greater than or equal to another string array.
      * @param source the source string array to be compared with.
      * @param sourceLength the length of the source string array.  If this value
@@ -410,18 +407,18 @@ public:
      * @param target the string that is to be compared with the source string.
      * @param targetLength the length of the target string array.  If this value
      *        is equal to -1, the string array is null-terminated.
-     * @return Returns a byte value. GREATER if source is greater than target; 
-     *         EQUAL if source is equal to target; LESS if source is less than 
+     * @return Returns a byte value. GREATER if source is greater than target;
+     *         EQUAL if source is equal to target; LESS if source is less than
      *         target
      * @deprecated ICU 2.6 use the overload with UErrorCode &
      */
     virtual EComparisonResult compare(const UChar* source, int32_t sourceLength,
-                                      const UChar* target, int32_t targetLength) 
+                                      const UChar* target, int32_t targetLength)
                                       const;
 
     /**
      * The comparison function compares the character data stored in two
-     * different string arrays. Returns information about whether a string array 
+     * different string arrays. Returns information about whether a string array
      * is less than, greater than or equal to another string array.
      * @param source the source string array to be compared with.
      * @param sourceLength the length of the source string array.  If this value
@@ -439,10 +436,10 @@ public:
                                       const UChar* target, int32_t targetLength,
                                       UErrorCode &status) const = 0;
 
-    /** 
+    /**
      * Transforms the string into a series of characters that can be compared
      * with CollationKey::compareTo. It is not possible to restore the original
-     * string from the chars in the sort key.  The generated sort key handles 
+     * string from the chars in the sort key.  The generated sort key handles
      * only a limited number of ignorable characters.
      * <p>Use CollationKey::equals or CollationKey::compare to compare the
      * generated sort keys.
@@ -458,10 +455,10 @@ public:
                                           CollationKey& key,
                                           UErrorCode& status) const = 0;
 
-    /** 
+    /**
      * Transforms the string into a series of characters that can be compared
      * with CollationKey::compareTo. It is not possible to restore the original
-     * string from the chars in the sort key.  The generated sort key handles 
+     * string from the chars in the sort key.  The generated sort key handles
      * only a limited number of ignorable characters.
      * <p>Use CollationKey::equals or CollationKey::compare to compare the
      * generated sort keys.
@@ -474,7 +471,7 @@ public:
      * @see CollationKey#compare
      * @deprecated ICU 2.8 Use getSortKey(...) instead
      */
-    virtual CollationKey& getCollationKey(const UChar*source, 
+    virtual CollationKey& getCollationKey(const UChar*source,
                                           int32_t sourceLength,
                                           CollationKey& key,
                                           UErrorCode& status) const = 0;
@@ -507,26 +504,26 @@ public:
      * @see Collator#compare
      * @stable ICU 2.0
      */
-    UBool greater(const UnicodeString& source, const UnicodeString& target) 
+    UBool greater(const UnicodeString& source, const UnicodeString& target)
                   const;
 
     /**
      * Convenience method for comparing two strings based on the collation rules.
      * @param source the source string to be compared with.
      * @param target the target string to be compared with.
-     * @return true if the first string is greater than or equal to the second 
+     * @return true if the first string is greater than or equal to the second
      *         one, according to the collation rules. false, otherwise.
      * @see Collator#compare
      * @stable ICU 2.0
      */
-    UBool greaterOrEqual(const UnicodeString& source, 
+    UBool greaterOrEqual(const UnicodeString& source,
                          const UnicodeString& target) const;
 
     /**
      * Convenience method for comparing two strings based on the collation rules.
      * @param source the source string to be compared with.
      * @param target the target string to be compared with.
-     * @return true if the strings are equal according to the collation rules.  
+     * @return true if the strings are equal according to the collation rules.
      *         false, otherwise.
      * @see Collator#compare
      * @stable ICU 2.0
@@ -551,15 +548,13 @@ public:
      * <pre>
      *  \code
      *  UErrorCode status = U_ZERO_ERROR;
-     *  Collator*myCollation = Collator::createInstance(Locale::US, 
-     *                                                         status);
+     *  Collator*myCollation = Collator::createInstance(Locale::US, status);
      *  if (U_FAILURE(status)) return;
      *  myCollation->setStrength(Collator::PRIMARY);
      *  // result will be "abc" == "ABC"
      *  // tertiary differences will be ignored
-     *  Collator::ComparisonResult result = myCollation->compare("abc", 
-     *                                                              "ABC");
-     * \endcode 
+     *  Collator::ComparisonResult result = myCollation->compare("abc", "ABC");
+     * \endcode
      * </pre>
      * @see Collator#getStrength
      * @param newStrength the new comparison level.
@@ -576,7 +571,7 @@ public:
      *         desired language
      * @stable ICU 2.0
      */
-    static UnicodeString& getDisplayName(const Locale& objectLocale,
+    static UnicodeString& U_EXPORT2 getDisplayName(const Locale& objectLocale,
                                          const Locale& displayLocale,
                                          UnicodeString& name);
 
@@ -588,7 +583,7 @@ public:
     * @return name of the object for the desired locale in the default language
     * @stable ICU 2.0
     */
-    static UnicodeString& getDisplayName(const Locale& objectLocale,
+    static UnicodeString& U_EXPORT2 getDisplayName(const Locale& objectLocale,
                                          UnicodeString& name);
 
     /**
@@ -602,18 +597,18 @@ public:
      * @return the list of available locales for which collations are installed
      * @stable ICU 2.0
      */
-    static const Locale* getAvailableLocales(int32_t& count);
+    static const Locale* U_EXPORT2 getAvailableLocales(int32_t& count);
 
 #if !UCONFIG_NO_SERVICE
     /**
-     * Return a StringEnumeration over the locales available at the time of the call, 
+     * Return a StringEnumeration over the locales available at the time of the call,
      * including registered locales.  If a severe error occurs (such as out of memory
      * condition) this will return null. If there is no locale data, an empty enumeration
      * will be returned.
      * @return a StringEnumeration over the locales available at the time of the call
      * @draft ICU 2.6
      */
-    static StringEnumeration* getAvailableLocales(void);
+    static StringEnumeration* U_EXPORT2 getAvailableLocales(void);
 #endif
 
     /**
@@ -625,7 +620,7 @@ public:
      * responsible for closing the result.
      * @draft ICU 3.0
      */
-    static StringEnumeration* getKeywords(UErrorCode& status);
+    static StringEnumeration* U_EXPORT2 getKeywords(UErrorCode& status);
 
     /**
      * Given a keyword, create a string enumeration of all values
@@ -638,8 +633,8 @@ public:
      * upon error. The caller is responsible for deleting the result.
      * @draft ICU 3.0
      */
-    static StringEnumeration* getKeywordValues(const char *keyword, UErrorCode& status);
-    
+    static StringEnumeration* U_EXPORT2 getKeywordValues(const char *keyword, UErrorCode& status);
+
     /**
      * Return the functionally equivalent locale for the given
      * requested locale, with respect to given keyword, for the
@@ -667,7 +662,7 @@ public:
      * locale upon error.
      * @draft ICU 3.0
      */
-    static Locale getFunctionalEquivalent(const char* keyword, const Locale& locale,
+    static Locale U_EXPORT2 getFunctionalEquivalent(const char* keyword, const Locale& locale,
                                           UBool& isAvailable, UErrorCode& status);
 
 #if !UCONFIG_NO_SERVICE
@@ -679,7 +674,7 @@ public:
      * @return a registry key that can be used to unregister this collator
      * @draft ICU 2.6
      */
-    static URegistryKey registerInstance(Collator* toAdopt, const Locale& locale, UErrorCode& status);
+    static URegistryKey U_EXPORT2 registerInstance(Collator* toAdopt, const Locale& locale, UErrorCode& status);
 
     /**
      * Register a new CollatorFactory.  The factory will be adopted.
@@ -688,7 +683,7 @@ public:
      * @return a registry key that can be used to unregister this collator
      * @draft ICU 2.6
      */
-    static URegistryKey registerFactory(CollatorFactory* toAdopt, UErrorCode& status);
+    static URegistryKey U_EXPORT2 registerFactory(CollatorFactory* toAdopt, UErrorCode& status);
 
     /**
      * Unregister a previously-registered Collator or CollatorFactory
@@ -698,13 +693,13 @@ public:
      * @param key the registry key returned by a previous call to registerInstance
      * @param status the in/out status code, no special meanings are assigned
      * @return TRUE if the collator for the key was successfully unregistered
-     * @draft ICU 2.6 
+     * @draft ICU 2.6
      */
-    static UBool unregister(URegistryKey key, UErrorCode& status);
+    static UBool U_EXPORT2 unregister(URegistryKey key, UErrorCode& status);
 #endif /* UCONFIG_NO_SERVICE */
 
     /**
-     * Gets the version information for a Collator. 
+     * Gets the version information for a Collator.
      * @param info the version # information, the result will be filled in
      * @stable ICU 2.0
      */
@@ -712,11 +707,11 @@ public:
 
     /**
      * Returns a unique class ID POLYMORPHICALLY. Pure virtual method.
-     * This method is to implement a simple version of RTTI, since not all C++ 
-     * compilers support genuine RTTI. Polymorphic operator==() and clone() 
+     * This method is to implement a simple version of RTTI, since not all C++
+     * compilers support genuine RTTI. Polymorphic operator==() and clone()
      * methods call this method.
-     * @return The class ID for this object. All objects of a given class have 
-     *         the same class ID.  Objects of other classes have different class 
+     * @return The class ID for this object. All objects of a given class have
+     *         the same class ID.  Objects of other classes have different class
      *         IDs.
      * @stable ICU 2.0
      */
@@ -724,28 +719,28 @@ public:
 
     /**
      * Universal attribute setter
-     * @param attr attribute type 
+     * @param attr attribute type
      * @param value attribute value
-     * @param status to indicate whether the operation went on smoothly or 
+     * @param status to indicate whether the operation went on smoothly or
      *        there were errors
      * @stable ICU 2.2
      */
-    virtual void setAttribute(UColAttribute attr, UColAttributeValue value, 
+    virtual void setAttribute(UColAttribute attr, UColAttributeValue value,
                               UErrorCode &status) = 0;
 
     /**
      * Universal attribute getter
      * @param attr attribute type
-     * @param status to indicate whether the operation went on smoothly or 
+     * @param status to indicate whether the operation went on smoothly or
      *        there were errors
      * @return attribute value
      * @stable ICU 2.2
      */
-    virtual UColAttributeValue getAttribute(UColAttribute attr, 
+    virtual UColAttributeValue getAttribute(UColAttribute attr,
                                             UErrorCode &status) = 0;
 
-    /** 
-     * Sets the variable top to a collation element value of a string supplied. 
+    /**
+     * Sets the variable top to a collation element value of a string supplied.
      * @param varTop one or more (if contraction) UChars to which the variable top should be set
      * @param len length of variable top string. If -1 it is considered to be zero terminated.
      * @param status error code. If error code is set, the return value is undefined. Errors set by this function are: <br>
@@ -756,8 +751,8 @@ public:
      */
     virtual uint32_t setVariableTop(const UChar *varTop, int32_t len, UErrorCode &status) = 0;
 
-    /** 
-     * Sets the variable top to a collation element value of a string supplied. 
+    /**
+     * Sets the variable top to a collation element value of a string supplied.
      * @param varTop an UnicodeString size 1 or more (if contraction) of UChars to which the variable top should be set
      * @param status error code. If error code is set, the return value is undefined. Errors set by this function are: <br>
      *    U_CE_NOT_FOUND_ERROR if more than one character was passed and there is no such a contraction<br>
@@ -767,8 +762,8 @@ public:
      */
     virtual uint32_t setVariableTop(const UnicodeString varTop, UErrorCode &status) = 0;
 
-    /** 
-     * Sets the variable top to a collation element value supplied. Variable top is set to the upper 16 bits. 
+    /**
+     * Sets the variable top to a collation element value supplied. Variable top is set to the upper 16 bits.
      * Lower 16 bits are ignored.
      * @param varTop CE value, as returned by setVariableTop or ucol)getVariableTop
      * @param status error code (not changed by function)
@@ -776,8 +771,8 @@ public:
      */
     virtual void setVariableTop(const uint32_t varTop, UErrorCode &status) = 0;
 
-    /** 
-     * Gets the variable top value of a Collator. 
+    /**
+     * Gets the variable top value of a Collator.
      * Lower 16 bits are undefined and should be ignored.
      * @param status error code (not changed by function). If error code is set, the return value is undefined.
      * @stable ICU 2.0
@@ -785,10 +780,10 @@ public:
     virtual uint32_t getVariableTop(UErrorCode &status) const = 0;
 
     /**
-     * Get an UnicodeSet that contains all the characters and sequences 
+     * Get an UnicodeSet that contains all the characters and sequences
      * tailored in this collator.
      * @param status      error code of the operation
-     * @return a pointer to a UnicodeSet object containing all the 
+     * @return a pointer to a UnicodeSet object containing all the
      *         code points and sequences that may sort differently than
      *         in the UCA. The object must be disposed of by using delete
      * @stable ICU 2.4
@@ -805,13 +800,13 @@ public:
 
     /**
      * Get the sort key as an array of bytes from an UnicodeString.
-     * Sort key byte arrays are zero-terminated and can be compared using 
+     * Sort key byte arrays are zero-terminated and can be compared using
      * strcmp().
      * @param source string to be processed.
-     * @param result buffer to store result in. If NULL, number of bytes needed 
+     * @param result buffer to store result in. If NULL, number of bytes needed
      *        will be returned.
-     * @param resultLength length of the result buffer. If if not enough the 
-     *        buffer will be filled to capacity. 
+     * @param resultLength length of the result buffer. If if not enough the
+     *        buffer will be filled to capacity.
      * @return Number of bytes needed for storing the sort key
      * @stable ICU 2.2
      */
@@ -821,16 +816,16 @@ public:
 
     /**
      * Get the sort key as an array of bytes from an UChar buffer.
-     * Sort key byte arrays are zero-terminated and can be compared using 
+     * Sort key byte arrays are zero-terminated and can be compared using
      * strcmp().
      * @param source string to be processed.
-     * @param sourceLength length of string to be processed. 
-     *        If -1, the string is 0 terminated and length will be decided by the 
+     * @param sourceLength length of string to be processed.
+     *        If -1, the string is 0 terminated and length will be decided by the
      *        function.
-     * @param result buffer to store result in. If NULL, number of bytes needed 
+     * @param result buffer to store result in. If NULL, number of bytes needed
      *        will be returned.
-     * @param resultLength length of the result buffer. If if not enough the 
-     *        buffer will be filled to capacity. 
+     * @param resultLength length of the result buffer. If if not enough the
+     *        buffer will be filled to capacity.
      * @return Number of bytes needed for storing the sort key
      * @stable ICU 2.2
      */
@@ -839,11 +834,11 @@ public:
 
     /**
      * Produce a bound for a given sortkey and a number of levels.
-     * Return value is always the number of bytes needed, regardless of 
+     * Return value is always the number of bytes needed, regardless of
      * whether the result buffer was big enough or even valid.<br>
      * Resulting bounds can be used to produce a range of strings that are
      * between upper and lower bounds. For example, if bounds are produced
-     * for a sortkey of string "smith", strings between upper and lower 
+     * for a sortkey of string "smith", strings between upper and lower
      * bounds with one level would include "Smith", "SMITH", "sMiTh".<br>
      * There are two upper bounds that can be produced. If UCOL_BOUND_UPPER
      * is produced, strings matched would be as above. However, if bound
@@ -853,28 +848,28 @@ public:
      * TestBounds.
      * Sort keys may be compared using <TT>strcmp</TT>.
      * @param source The source sortkey.
-     * @param sourceLength The length of source, or -1 if null-terminated. 
-     *                     (If an unmodified sortkey is passed, it is always null 
+     * @param sourceLength The length of source, or -1 if null-terminated.
+     *                     (If an unmodified sortkey is passed, it is always null
      *                      terminated).
-     * @param boundType Type of bound required. It can be UCOL_BOUND_LOWER, which 
-     *                  produces a lower inclusive bound, UCOL_BOUND_UPPER, that 
-     *                  produces upper bound that matches strings of the same length 
-     *                  or UCOL_BOUND_UPPER_LONG that matches strings that have the 
+     * @param boundType Type of bound required. It can be UCOL_BOUND_LOWER, which
+     *                  produces a lower inclusive bound, UCOL_BOUND_UPPER, that
+     *                  produces upper bound that matches strings of the same length
+     *                  or UCOL_BOUND_UPPER_LONG that matches strings that have the
      *                  same starting substring as the source string.
-     * @param noOfLevels  Number of levels required in the resulting bound (for most 
-     *                    uses, the recommended value is 1). See users guide for 
+     * @param noOfLevels  Number of levels required in the resulting bound (for most
+     *                    uses, the recommended value is 1). See users guide for
      *                    explanation on number of levels a sortkey can have.
      * @param result A pointer to a buffer to receive the resulting sortkey.
      * @param resultLength The maximum size of result.
-     * @param status Used for returning error code if something went wrong. If the 
+     * @param status Used for returning error code if something went wrong. If the
      *               number of levels requested is higher than the number of levels
-     *               in the source key, a warning (U_SORT_KEY_TOO_SHORT_WARNING) is 
+     *               in the source key, a warning (U_SORT_KEY_TOO_SHORT_WARNING) is
      *               issued.
-     * @return The size needed to fully store the bound. 
+     * @return The size needed to fully store the bound.
      * @see ucol_keyHashCode
      * @stable ICU 2.1
      */
-    static int32_t getBound(const uint8_t       *source,
+    static int32_t U_EXPORT2 getBound(const uint8_t       *source,
             int32_t             sourceLength,
             UColBoundMode       boundType,
             uint32_t            noOfLevels,
@@ -890,7 +885,7 @@ protected:
     /**
     * Default constructor.
     * Constructor is different from the old default Collator constructor.
-    * The task for determing the default collation strength and normalization 
+    * The task for determing the default collation strength and normalization
     * mode is left to the child class.
     * @stable ICU 2.0
     */
@@ -900,23 +895,23 @@ protected:
     * Constructor.
     * Empty constructor, does not handle the arguments.
     * This constructor is done for backward compatibility with 1.7 and 1.8.
-    * The task for handling the argument collation strength and normalization 
+    * The task for handling the argument collation strength and normalization
     * mode is left to the child class.
     * @param collationStrength collation strength
-    * @param decompositionMode 
+    * @param decompositionMode
     * @deprecated ICU 2.4. Subclasses should use the default constructor
     * instead and handle the strength and normalization mode themselves.
     */
-    Collator(UCollationStrength collationStrength, 
+    Collator(UCollationStrength collationStrength,
              UNormalizationMode decompositionMode);
-  
+
     /**
     * Copy constructor.
     * @param other Collator object to be copied from
     * @stable ICU 2.0
     */
     Collator(const Collator& other);
-  
+
     // Collator protected methods -----------------------------------------
 
 
@@ -947,7 +942,7 @@ private:
     friend class SimpleCFactory;
     friend class ICUCollatorFactory;
     friend class ICUCollatorService;
-    static Collator* makeInstance(const Locale& desiredLocale, 
+    static Collator* makeInstance(const Locale& desiredLocale,
                                   UErrorCode& status);
 
     // Collator private data members ---------------------------------------
@@ -966,7 +961,7 @@ private:
  * A factory, used with registerFactory, the creates multiple collators and provides
  * display names for them.  A factory supports some number of locales-- these are the
  * locales for which it can create collators.  The factory can be visible, in which
- * case the supported locales will be enumerated by getAvailableLocales, or invisible, 
+ * case the supported locales will be enumerated by getAvailableLocales, or invisible,
  * in which they are not.  Invisible locales are still supported, they are just not
  * listed by getAvailableLocales.
  * <p>
@@ -1015,13 +1010,13 @@ public:
      * @return the display name
      * @draft ICU 2.6
      */
-    virtual  UnicodeString& getDisplayName(const Locale& objectLocale, 
+    virtual  UnicodeString& getDisplayName(const Locale& objectLocale,
                                            const Locale& displayLocale,
                                            UnicodeString& result);
-    
+
     /**
-     * Return an array of all the locale names directly supported by this factory.  
-     * The number of names is returned in count.  This array is owned by the factory.  
+     * Return an array of all the locale names directly supported by this factory.
+     * The number of names is returned in count.  This array is owned by the factory.
      * Its contents must never change.
      * @param count output parameter for the number of locales supported by the factory
      * @param status the in/out error code
