@@ -68,7 +68,7 @@ main(int argc, char* argv[]) {
 
 #ifndef U_HAVE_BIND_INTERNAL_REFERENCES
 
-    if( (options[4].doesOccur) && uprv_strcmp(options[4].value, "icudata")) /* be consistent with gencmn! */
+    if( (options[4].doesOccur) && uprv_strcmp(options[4].value, U_ICUDATA_NAME)) /* be consistent with gencmn! */
     {
       uprv_strcpy(symPrefix, options[4].value);
       uprv_strcat(symPrefix, "_");
