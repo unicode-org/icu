@@ -247,6 +247,7 @@ static UBool loadOlsonIDs() {
     if (OLSON_IDS == 0) {
         OLSON_IDS = ids;
         ids = 0;
+        ucln_i18n_registerCleanup();
     }
     umtx_unlock(&LOCK);
 
@@ -269,6 +270,7 @@ TimeZone::getGMT(void)
     // be valid even if we can't load the time zone UDataMemory.
     if (_GMT == 0) {
         _GMT = new SimpleTimeZone(0, UnicodeString(GMT_ID, GMT_ID_LENGTH));
+        ucln_i18n_registerCleanup();
     }
     return _GMT;
 }
@@ -469,6 +471,7 @@ TimeZone::initDefault()
     if (DEFAULT_ZONE == NULL) {
         DEFAULT_ZONE = default_zone;
         default_zone = NULL;
+        ucln_i18n_registerCleanup();
     }
     umtx_unlock(&LOCK);
 
@@ -508,6 +511,7 @@ TimeZone::adoptDefault(TimeZone* zone)
         umtx_unlock(&LOCK);
 
         delete old;
+        ucln_i18n_registerCleanup();
     }
 }
 // -------------------------------------
@@ -1109,3 +1113,4 @@ U_NAMESPACE_END
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 //eof
+
