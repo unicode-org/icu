@@ -23,6 +23,7 @@
  *                          based on performance data indicating that this_obj was slow.
  * 07/15/98        erm            Synched with Java 1.2 CompactShortArray.java.
  * 07/30/98        erm            Added changes from 07/29/98 code review.
+ * 11/01/99		weiv		Added getArray, getIndex and getCount based on Jitterbug 4
  *===============================================================================
  */
 #include "ucmp16.h"
@@ -378,6 +379,19 @@ bool_t blockTouched(const CompactShortArray* this_obj, int32_t i)
   return (this_obj->fHashes[i] != 0);
 }
 
+uint32_t ucmp16_getCount(const CompactShortArray* this_obj)
+{
+    return this_obj->fCount;
+}
 
+const int16_t* ucmp16_getArray(const CompactShortArray* this_obj)
+{
+    return this_obj->fArray;
+}
+
+const uint16_t* ucmp16_getIndex(const CompactShortArray* this_obj)
+{
+    return this_obj->fIndex;
+}
 
 
