@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2003, International Business Machines
+*   Copyright (C) 2002-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -16,15 +16,13 @@
 *   Test file for string casing C++ API functions.
 */
 
-#include "unicode/utypes.h"
 #include "unicode/uchar.h"
-#include "unicode/unistr.h"
 #include "unicode/ures.h"
 #include "unicode/uloc.h"
 #include "unicode/locid.h"
 #include "unicode/ubrk.h"
 #include "ustrtest.h"
-#include "tstdtmod.h"
+#include "unicode/tstdtmod.h"
 
 StringCaseTest::~StringCaseTest() {}
 
@@ -329,8 +327,7 @@ StringCaseTest::TestTitleCasing() {
     char cLocaleID[100];
     UnicodeString locale, input, result;
     int32_t type;
-    TestLog myLog;
-    TestDataModule *driver = TestDataModule::getTestDataModule("casing", myLog, status);
+    TestDataModule *driver = TestDataModule::getTestDataModule("casing", *this, status);
     if(U_SUCCESS(status)) {
         TestData *casingTest = driver->createTestData("titlecasing", status);
         const DataMap *myCase = NULL;

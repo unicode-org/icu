@@ -22,9 +22,9 @@ TARGET = intltest$(EXEEXT)
 BUILDDIR := $(shell pwd)/../../
 BUILDDIR := $(BUILDDIR:test/intltest/../../=)
 
-CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/tools/toolutil
+CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/tools/toolutil -I$(top_srcdir)/tools/ctestfw
 DEFS += -D'U_TOPSRCDIR="$(top_srcdir)/"' -D'U_TOPBUILDDIR="$(BUILDDIR)"'
-LIBS = $(LIBICUI18N) $(LIBICUUC) $(LIBICUTOOLUTIL) $(DEFAULT_LIBS) $(LIB_M)
+LIBS = $(LIBCTESTFW) $(LIBICUI18N) $(LIBICUUC) $(LIBICUTOOLUTIL) $(DEFAULT_LIBS) $(LIB_M)
 
 OBJECTS = allcoll.o apicoll.o astrotst.o callimts.o calregts.o caltest.o \
 caltztst.o canittst.o citrtest.o cntabcol.o convtest.o cputilst.o currcoll.o dacoll.o	\
@@ -39,7 +39,7 @@ tzregts.o tztest.o ucdtest.o usettest.o ustrtest.o strcase.o transtst.o strtest.
 itrbbi.o rbbiapts.o rbbitst.o ittrans.o transapi.o cpdtrtst.o \
 testutil.o transrt.o trnserr.o normconf.o sfwdchit.o \
 jamotest.o srchtest.o reptest.o regextst.o \
-itrbnf.o itrbnfrt.o tstdtmod.o testdata.o datamap.o ucaconf.o icusvtst.o \
+itrbnf.o itrbnfrt.o ucaconf.o icusvtst.o \
 uobjtest.o idnaref.o nptrans.o punyref.o testidn.o testidna.o incaltst.o \
 calcasts.o v32test.o
 

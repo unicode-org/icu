@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * Copyright (c) 1997-2004, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -1194,6 +1194,10 @@ const char* IntlTest::loadTestData(UErrorCode& err){
         return _testDataPath;
     }
     return _testDataPath;
+}
+
+const char* IntlTest::getTestDataPath(UErrorCode& err) {
+    return loadTestData(err);
 }
 
 const char* IntlTest::fgDataDir = NULL;

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2002-2003, International Business Machines Corporation and
+ * Copyright (c) 2002-2004, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -23,8 +23,9 @@
 #include "unicode/tblcoll.h"
 #include "unicode/sortkey.h"
 #include "unicode/schriter.h"
-#include "unicode/ures.h"
-#include "tstdtmod.h"
+
+class TestDataModule;
+class TestData;
 
 class SeqElement {
 public:
