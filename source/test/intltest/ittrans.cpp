@@ -20,9 +20,6 @@
 #include "transtst.h"
 #include "transapi.h"
 #include "cpdtrtst.h"
-#include "unhxtrts.h"
-#include "hxuntrts.h"
-#include "ufltlgts.h"
 #include "transrt.h"
 #include "usettest.h"
 #include "jamotest.h"
@@ -45,13 +42,11 @@ void IntlTestTransliterator::runIndexedTest( int32_t index, UBool exec, const ch
         CASE(0, TransliteratorTest);
         CASE(1, TransliteratorAPITest);
         CASE(2, CompoundTransliteratorTest);
-        CASE(3, UniToHexTransliteratorTest);
-        CASE(4, HexToUniTransliteratorTest);
-        CASE(5, TransliteratorRoundTripTest);
-        CASE(6, UnicodeSetTest);
-        CASE(7, JamoTest);
-        CASE(8, TransliteratorErrorTest);
-        CASE(9, ReplaceableTest);
+        CASE(3, TransliteratorRoundTripTest);
+        CASE(4, UnicodeSetTest);
+        CASE(5, JamoTest);
+        CASE(6, TransliteratorErrorTest);
+        CASE(7, ReplaceableTest);
 #if !UCONFIG_NO_TRANSLITERATION && defined(U_USE_UNICODE_FILTER_LOGIC_OBSOLETE_2_8)
         CASE(10, UnicodeFilterLogicTest);
 #endif

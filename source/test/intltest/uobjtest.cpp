@@ -130,8 +130,6 @@ UObject *UObjectTest::testClass(UObject *obj,
 #include "cpdtrans.h"
 #include "rbt.h"
 #include "rbt_data.h"
-#include "hextouni.h"
-#include "unitohex.h"
 #include "nultrans.h"
 #include "anytrans.h"
 #include "digitlst.h"
@@ -254,8 +252,6 @@ void UObjectTest::testIDs()
 #if !UCONFIG_NO_TRANSLITERATION
 
     
-    TESTCLASSID_DEFAULT(HexToUnicodeTransliterator);
-    TESTCLASSID_DEFAULT(UnicodeToHexTransliterator);
     TESTCLASSID_TRANSLIT(AnyTransliterator, "Any-Latin");
     TESTCLASSID_TRANSLIT(CompoundTransliterator, "Latin-Greek");
     TESTCLASSID_TRANSLIT(EscapeTransliterator, "Any-Hex");
