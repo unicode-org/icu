@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu/source/i18n/Attic/caniter.cpp,v $ 
- * $Date: 2002/03/13 18:29:24 $ 
- * $Revision: 1.7 $
+ * $Date: 2002/03/14 23:53:29 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -344,7 +344,7 @@ Hashtable *CanonicalIterator::getEquivalents2(UnicodeString segment, UErrorCode 
     
     // cycle through all the characters
     UChar32 cp, limit = 0;
-    int32_t i = 0, j = 0;
+    int32_t i = 0, j;
     for (i = 0; i < segment.length(); i += UTF16_CHAR_LENGTH(cp)) {
         // see if any character is at the start of some decomposition
         cp = segment.char32At(i);
@@ -352,7 +352,7 @@ Hashtable *CanonicalIterator::getEquivalents2(UnicodeString segment, UErrorCode 
           continue;
         }
         // if so, see which decompositions match 
-        for(cp = limit; cp < limit || uset_getSerializedRange(&starts, j++, &cp, &limit); ++cp) {
+        for(j = 0, cp = limit; cp < limit || uset_getSerializedRange(&starts, j++, &cp, &limit); ++cp) {
             Hashtable *remainder = extract(cp, segment, i, workingBuffer, status);
             if (remainder == NULL) continue;
             
