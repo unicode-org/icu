@@ -261,7 +261,7 @@ dist-local:
 clean-local:
 	test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
-distclean-local:
+distclean-local: clean-local
 	rm -f Makefile $(SRCDATAFILES) $(DATAFILES) $(TESTDATAD) $(BASETESTDATA)
 
 check-local:
