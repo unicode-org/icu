@@ -63,6 +63,21 @@
 # or names of algorithmic converters, and their case must not
 # be changed - or else code and/or file names must also be changed.
 
+# List of supported standard tags
+{   IANA MIME
+    #ICU             # Can also use ICU_FEATURE ICU_CANONICAL
+    #IBM AIX DB2
+    #WINDOWS MSIE    # MSIE is Internet Explorer, which is different from Windows
+    #GLIBC
+    #JAVA
+    #SOLARIS
+    #APPLE
+    #HPUX
+    #ZOS ZOS_USS     # Could be OS390 and OS390_USS instead
+    }
+
+
+
 # Fully algorithmic converters
 
 UTF-8 { IANA MIME }             ibm-1208 cp1208 
@@ -84,7 +99,6 @@ UTF-32LE { IANA }               UTF32_LittleEndian
 UTF32_PlatformEndian
 UTF32_OppositeEndian
 
-UTF-7 { IANA MIME }
 # On UTF-7:
 # RFC 2152 (http://www.imc.org/rfc2152) allows to encode some US-ASCII
 # characters directly or in base64. Especially, the characters in set O
@@ -94,9 +108,14 @@ UTF-7 { IANA MIME }
 # By choosing the option "version=1", set O will be escaped instead.
 # For example:
 #     utf7Converter=ucnv_open("UTF-7,version=1");
+UTF-7 { IANA MIME }
 
 SCSU { IANA }
 BOCU-1
+
+# See http://www.unicode.org/unicode/reports/tr26 for this Compatibility Encoding Scheme for UTF-16
+# The Unicode Consortium does not encourage the use of CESU-8
+CESU-8 { IANA }
 
 ISO-8859-1 { MIME }              LATIN_1 ibm-819 cp819 latin1 8859-1 csisolatin1 iso-ir-100 ISO_8859-1:1987 { IANA } l1 ANSI_X3.110-1983   819 #!!!!! There's whole lot of names for this
 US-ASCII { MIME }                ascii ascii-7 ANSI_X3.4-1968 { IANA } ANSI_X3.4-1986 ISO_646.irv:1991 iso646-us us csASCII 646 iso-ir-6 cp367
@@ -139,9 +158,6 @@ ISCII,version=8           iscii-mlm x-iscii-ma
 # Table-based
 
 ibm-367
-
-# Special mapping for S/390 new line characters
-ebcdic-xml-us
 
 # Interchange codepages
 ibm-912                 iso-8859-2 { MIME } latin2 cp912 8859-2 csisolatin2     iso-ir-101  ISO_8859-2:1987 { IANA } l2 912 # Central Europe
@@ -342,6 +358,8 @@ ibm-16804              cpibm16804 ebcdic-ar # EBCDIC Arabic
 # ibm-870 IBM870 { IANA } ebcdic-cp-roece ebcdic-cp-yu csIBM870 cp870 870
 
 # EBCDIC codepages for S/390, with LF and NL codes swapped
+
+ebcdic-xml-us
 
 # without Euro
 ibm-37-s390            ibm037-s390   # EBCDIC US
