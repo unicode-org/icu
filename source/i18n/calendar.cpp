@@ -469,7 +469,7 @@ Calendar::Calendar(UErrorCode& success)
 {
     clear();
     fZone = TimeZone::createDefault();
-    setWeekCountData(Locale::getDefault(), success);
+    setWeekCountData(Locale::getDefault(), NULL, success);
 }
 
 // -------------------------------------
@@ -497,7 +497,7 @@ Calendar::Calendar(TimeZone* zone, const Locale& aLocale, UErrorCode& success)
     clear();    
     fZone = zone;
     
-    setWeekCountData(aLocale, success);
+    setWeekCountData(aLocale, NULL, success);
 }
 
 // -------------------------------------
@@ -515,7 +515,7 @@ Calendar::Calendar(const TimeZone& zone, const Locale& aLocale, UErrorCode& succ
 {
     clear();
     fZone = zone.clone();
-    setWeekCountData(aLocale, success);
+    setWeekCountData(aLocale, NULL, success);
 }
 
 // -------------------------------------
@@ -666,9 +666,9 @@ Calendar::createInstance(TimeZone* zone, const Locale& aLocale, UErrorCode& succ
       return NULL;
     }
 #ifdef U_DEBUG_CALSVC
-    fprintf(stderr, "%p: setting to locale %s\n", c, (const char*)aLocale.getName());
+    fprintf(stderr, "%p: setting week count data to locale %s, actual locale %s\n", c, (const char*)aLocale.getName(), (const char *)actualLoc.getName());
 #endif
-    c->setWeekCountData(aLocale, success);  // set the correct locale (this was an indirected calendar)
+    c->setWeekCountData(aLocale, c->getType(), success);  // set the correct locale (this was an indirected calendar)
   } else {
     // a calendar was returned - we assume the factory did the right thing.
     c = (Calendar*)u;
@@ -678,9 +678,6 @@ Calendar::createInstance(TimeZone* zone, const Locale& aLocale, UErrorCode& succ
   c->adoptTimeZone(zone); //  Set the correct time zone
   c->setTimeInMillis(getNow(), success); // let the new calendar have the current time.
   
-  // pull up actual locale from registration
-  U_LOCALE_BASED(locBased, *c);
-  locBased.setLocaleIDs(0, actualLoc.getName());
   return c;
 }
 
@@ -2881,7 +2878,7 @@ int32_t Calendar::getActualHelper(UCalendarDateFields field, int32_t startValue,
 // -------------------------------------
 
 void
-Calendar::setWeekCountData(const Locale& desiredLocale, UErrorCode& status)
+Calendar::setWeekCountData(const Locale& desiredLocale, const char *type, UErrorCode& status)
 {
     // Read the week count data from the resource bundle.  This should
     // have the form:
@@ -2898,13 +2895,16 @@ Calendar::setWeekCountData(const Locale& desiredLocale, UErrorCode& status)
     fFirstDayOfWeek = UCAL_SUNDAY;
     fMinimalDaysInFirstWeek = 1;
 
-    CalendarData calData(desiredLocale, "gregorian", status); // TODO: fixme
+    CalendarData calData(desiredLocale, type, status);
     // If the resource data doesn't seem to be present at all, then use last-resort
     // hard-coded data.
     UResourceBundle *dateTimeElements = calData.getByKey(kDateTimeElements, status);
 
     if (U_FAILURE(status))
     {
+#if defined (U_DEBUG_CALDATA)
+      fprintf(stderr, " Failure loading dateTimeElements = %s\n", u_errorName(status));
+#endif
         status = U_USING_FALLBACK_WARNING;
         return;
     }
@@ -2913,6 +2913,9 @@ Calendar::setWeekCountData(const Locale& desiredLocale, UErrorCode& status)
     locBased.setLocaleIDs(ures_getLocaleByType(dateTimeElements, ULOC_VALID_LOCALE, &status),
                           ures_getLocaleByType(dateTimeElements, ULOC_ACTUAL_LOCALE, &status));
     if (U_SUCCESS(status)) {
+#if defined (U_DEBUG_CAL)
+      fprintf(stderr, " Valid=%s, Actual=%s\n", validLocale, actualLocale);
+#endif
         int32_t arrLen;
         const int32_t *dateTimeElementsArr = ures_getIntVector(dateTimeElements, &arrLen, &status);
 
