@@ -1372,7 +1372,7 @@ static void TestGetVersionColl(){
             ures_close(resB);
             return;
         }
-        /* test NUL termination of UCARules 
+        /* test NUL termination of UCARules */
         rules = ures_getStringByKey(resB,"%%UCARULES",&len, &status);
         if(!rules || U_FAILURE(status)) {
           log_data_err("Could not load %%UCARULES for locale %s\n", locName);
@@ -1381,7 +1381,6 @@ static void TestGetVersionColl(){
         if(u_strlen(rules) != len){
             log_err("UCARules string not nul terminated! \n");
         }
-        */
         ures_getVersion(resB, versionArray);
         for (i=0; i<4; ++i) {
             if (versionArray[i] < minVersionArray[i] ||
