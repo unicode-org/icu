@@ -153,7 +153,7 @@ class U_COMMON_API Normalizer
      * @see #setMode
      */
     COMPOSE         = COMPOSE_BIT,
-    
+
     /**
      * Compatibility decomposition followed by canonical composition.
      * Used with the {@link #Normalizer constructors} and the static
@@ -169,7 +169,7 @@ class U_COMMON_API Normalizer
      * @see #setMode
      */
     COMPOSE_COMPAT     = COMPOSE_BIT | COMPAT_BIT,
-    
+
     /**
      * Canonical decomposition.  This value is passed to the
      * {@link #Normalizer constructors} and the static 
@@ -185,7 +185,7 @@ class U_COMMON_API Normalizer
      * @see #setMode
      */
     DECOMP         = DECOMP_BIT,
-    
+
     /**
      * Compatibility decomposition.  This value is passed to the
      * {@link #Normalizer constructors} and the static 
@@ -227,7 +227,7 @@ class U_COMMON_API Normalizer
   };
 
   // Constructors
-  
+
   /**
    * Creates a new <tt>Normalizer</tt> object for iterating over the
    * normalized form of a given string.
@@ -262,7 +262,7 @@ class U_COMMON_API Normalizer
   Normalizer(const UnicodeString& str, 
          EMode mode, 
          int32_t opt);
-  
+
   /**
    * Creates a new <tt>Normalizer</tt> object for iterating over the
    * normalized form of a given UChar string.
@@ -298,7 +298,7 @@ class U_COMMON_API Normalizer
   Normalizer(const UChar* str,
          int32_t length,
          EMode mode,
-		 int32_t option);
+         int32_t option);
 
   /**
    * Creates a new <tt>Normalizer</tt> object for iterating over the
@@ -313,7 +313,7 @@ class U_COMMON_API Normalizer
    */
   Normalizer(const CharacterIterator& iter, 
          EMode mode);
-  
+
   /**
    * Creates a new <tt>Normalizer</tt> object for iterating over the
    * normalized form of the given text.
@@ -332,24 +332,24 @@ class U_COMMON_API Normalizer
   Normalizer(const CharacterIterator& iter, 
          EMode mode, 
          int32_t opt);
-  
+
   /**
    * Copy constructor.
    * @stable
    */
   Normalizer(const Normalizer& copy);
-  
+
   /**
    * Destructor
    * @stable
    */
   ~Normalizer();
-  
-  
+
+
   //-------------------------------------------------------------------------
   // Static utility methods
   //-------------------------------------------------------------------------
-  
+
   /**
    * Normalizes a <tt>String</tt> using the given normalization operation.
    * <p>
@@ -375,7 +375,7 @@ class U_COMMON_API Normalizer
             int32_t options,
             UnicodeString& result, 
             UErrorCode &status);
-  
+
   /**
    * Compose a <tt>String</tt>.
    * <p>
@@ -404,7 +404,7 @@ class U_COMMON_API Normalizer
               int32_t options,
               UnicodeString& result, 
               UErrorCode &status);
-  
+
   /**
    * Static method to decompose a <tt>String</tt>.
    * <p>
@@ -447,7 +447,7 @@ class U_COMMON_API Normalizer
    * @draft
    */
   UChar32              current(void) const;
-  
+
   /**
    * Return the first character in the normalized text.  This resets
    * the <tt>Normalizer's</tt> position to the beginning of the text.
@@ -462,7 +462,7 @@ class U_COMMON_API Normalizer
    * @draft
    */
   UChar32              last(void);
-  
+
   /**
    * Return the next character in the normalized text and advance
    * the iteration position by one.  If the end
@@ -470,7 +470,7 @@ class U_COMMON_API Normalizer
    * @draft
    */
   UChar32              next(void);
-  
+
   /**
    * Return the previous character in the normalized text and decrement
    * the iteration position by one.  If the beginning
@@ -478,7 +478,7 @@ class U_COMMON_API Normalizer
    * @draft
    */
   UChar32              previous(void);
-  
+
   /**
    * Set the iteration position in the input text that is being normalized
    * and return the first normalized character at that position.
@@ -497,7 +497,7 @@ class U_COMMON_API Normalizer
    * @draft
    */
   UChar32              setIndex(UTextOffset index);
-  
+
   /**
    * Reset the iterator so that it is in the same state that it was just after
    * it was constructed.  A subsequent call to <tt>next</tt> will return the first
@@ -507,7 +507,7 @@ class U_COMMON_API Normalizer
    * @stable
    */
   void                reset(void);
-  
+
   /**
    * Retrieve the current iteration position in the input text that is
    * being normalized.  This method is useful in applications such as
@@ -523,7 +523,7 @@ class U_COMMON_API Normalizer
    * @stable
    */
   UTextOffset            getIndex(void) const;
-  
+
   /**
    * Retrieve the index of the start of the input text.  This is the begin index
    * of the <tt>CharacterIterator</tt> or the start (i.e. 0) of the <tt>String</tt>
@@ -531,7 +531,7 @@ class U_COMMON_API Normalizer
    * @stable
    */
   UTextOffset            startIndex(void) const;
-  
+
   /**
    * Retrieve the index of the end of the input text.  This is the end index
    * of the <tt>CharacterIterator</tt> or the length of the <tt>String</tt>
@@ -539,8 +539,8 @@ class U_COMMON_API Normalizer
    * @stable
    */
   UTextOffset            endIndex(void) const;
-  
-  
+
+
   /**
    * Returns true when both iterators refer to the same character in the same
    * character-storage object.
@@ -549,14 +549,14 @@ class U_COMMON_API Normalizer
   //  virtual UBool    operator==(const CharacterIterator& that) const;
   UBool        operator==(const Normalizer& that) const;
   inline UBool        operator!=(const Normalizer& that) const;
-  
+
   /**
    * Returns a pointer to a new Normalizer that is a clone of this one.
    * The caller is responsible for deleting the new clone.
    * @stable
    */
   Normalizer*        clone(void) const;
-  
+
   /**
    * Generates a hash code for this iterator.
    * @stable
@@ -566,7 +566,7 @@ class U_COMMON_API Normalizer
   //-------------------------------------------------------------------------
   // Property access methods
   //-------------------------------------------------------------------------
-  
+
   /**
    * Set the normalization mode for this object.
    * <p>
@@ -594,7 +594,7 @@ class U_COMMON_API Normalizer
    * @stable
    */
   void setMode(EMode newMode);
-  
+
   /**
    * Return the basic operation performed by this <tt>Normalizer</tt>
    *
@@ -602,7 +602,7 @@ class U_COMMON_API Normalizer
    * @stable
    */
   EMode getMode(void) const;
-  
+
   /**
    * Set options that affect this <tt>Normalizer</tt>'s operation.
    * Options do not change the basic composition or decomposition operation
@@ -628,7 +628,7 @@ class U_COMMON_API Normalizer
    */
   void setOption(int32_t option, 
          UBool value);
-  
+
   /**
    * Determine whether an option is turned on or off.
    * <p>
@@ -636,7 +636,7 @@ class U_COMMON_API Normalizer
    * @stable
    */
   UBool getOption(int32_t option) const;
-  
+
   /**
    * Set the input text over which this <tt>Normalizer</tt> will iterate.
    * The iteration position is set to the beginning.
@@ -644,7 +644,7 @@ class U_COMMON_API Normalizer
    */
   void setText(const UnicodeString& newText, 
            UErrorCode &status);
-  
+
   /**
    * Set the input text over which this <tt>Normalizer</tt> will iterate.
    * The iteration position is set to the beginning.
@@ -652,7 +652,7 @@ class U_COMMON_API Normalizer
    */
   void setText(const CharacterIterator& newText, 
            UErrorCode &status);
-  
+
   /**
    * Set the input text over which this <tt>Normalizer</tt> will iterate.
    * The iteration position is set to the beginning.
@@ -668,7 +668,7 @@ class U_COMMON_API Normalizer
    * @draft should also return the result UnicodeString &
    */
   void            getText(UnicodeString&  result);
-  
+
   /**
    * Returns the text under iteration into the UChar* buffer pointer.
    * @param result Receives a copy of the text under iteration.
@@ -683,16 +683,16 @@ private:
   UChar prevCompose(void);
   UChar nextDecomp(void);
   UChar prevDecomp(void);
-  
+
   UChar curForward(void);
   UChar curBackward(void);
-  
+
   void    init(CharacterIterator* iter, 
          EMode mode, 
          int32_t option);
   void    initBuffer(void);
   void    clearBuffer(void);
-  
+
   // Utilities used by Compose
   static void        bubbleAppend(UnicodeString& target, 
                      UChar ch, 
@@ -705,11 +705,11 @@ private:
                 uint16_t index);
   static UChar    pairExplode(UnicodeString& target, 
                     uint16_t action);
-  
+
   // Utilities used by Decompose
   static void        fixCanonical(UnicodeString& result);    // Reorders combining marks
   static uint8_t    getClass(UChar ch);                    // Gets char's combining class
-  
+
   // Other static utility methods
   static void doAppend(const UChar source[], 
                uint16_t offset, 
@@ -722,7 +722,7 @@ private:
                uint16_t offset, 
                UnicodeString& dest, 
                UTextOffset pos);
-  
+
   static void hangulToJamo(UChar ch, 
                UnicodeString& result, 
                uint16_t decompLimit);
@@ -731,27 +731,27 @@ private:
              UnicodeString& dest);
   static void jamoToHangul(UnicodeString& buffer, 
                UTextOffset start);
-  
+
   //-------------------------------------------------------------------------
   // Private data
   //-------------------------------------------------------------------------
-  
+
   EMode         fMode;
   int32_t       fOptions;
   int16_t    minDecomp;
-  
+
   // The input text and our position in it
   CharacterIterator*  text;
-  
+
   // A buffer for holding intermediate results
   UnicodeString       buffer;
   UTextOffset          bufferPos;
   UTextOffset          bufferLimit;
   UChar             currentChar;
-  
+
   // Another buffer for use during iterative composition
   UnicodeString       explodeBuf;
-  
+
   enum {
     EMPTY = -1,
     STR_INDEX_SHIFT = 2, //Must agree with the constants used in NormalizerBuilder
@@ -769,7 +769,7 @@ private:
     JAMO_TCOUNT = 28,
     JAMO_NCOUNT = JAMO_VCOUNT * JAMO_TCOUNT
   };
-  
+
   friend class ComposedCharIter;
 };
 
