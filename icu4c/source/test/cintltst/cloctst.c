@@ -143,6 +143,7 @@ void addLocaleTest(TestNode** root)
     addTest(root, &TestSimpleDisplayNames,   "tsutil/cloctst/TestSimpleDisplayNames");
     addTest(root, &TestVariantParsing,       "tsutil/cloctst/TestVariantParsing");
     addTest(root, &TestLocaleStructure,      "tsutil/cloctst/TestLocaleStructure");
+    addTest(root, &TestConsistentCountryInfo,"tsutil/cloctst/TestConsistentCountryInfo");
 }
 
 
@@ -1303,7 +1304,10 @@ TestKeyInRootRecursive(UResourceBundle *root, UResourceBundle *currentBundle, co
                             locale);
                 }
             }
-            if (sameArray) {
+            /* Special exception es_US and DateTimeElements */
+            if (sameArray
+                && !(strcmp(locale, "es_US") == 0 && strcmp(subBundleKey, "DateTimeElements") == 0))
+            {
                 log_err("Arrays are the same with key \"%s\" in \"%s\" from root for locale \"%s\"\n",
                         subBundleKey,
                         ures_getKey(currentBundle),
@@ -1360,12 +1364,14 @@ TestKeyInRootRecursive(UResourceBundle *root, UResourceBundle *currentBundle, co
                             ures_getSize(subBundle));
                 }
 
-                for (idx = 0; idx < minSize && sameArray; idx++) {
+                for (idx = 0; idx < minSize; idx++) {
                     int32_t rootStrLen, localeStrLen;
                     const UChar *rootStr = ures_getStringByIndex(subRootBundle,idx,&rootStrLen,&errorCode);
                     const UChar *localeStr = ures_getStringByIndex(subBundle,idx,&localeStrLen,&errorCode);
                     if (rootStr && localeStr && U_SUCCESS(errorCode)) {
-                        sameArray = (u_strcmp(rootStr, localeStr) == 0);
+                        if (u_strcmp(rootStr, localeStr) != 0) {
+                            sameArray = FALSE;
+                        }
                     }
                     else {
                         log_err("Got a NULL string with key \"%s\" in \"%s\" at index %d for root or locale \"%s\"\n",
@@ -1655,5 +1661,182 @@ TestLocaleStructure(void) {
         testLCID(currentLocale, uloc_getAvailable(locIndex));
 #endif
         ures_close(currentLocale);
+    }
+}
+
+static void
+compareArrays(const char *keyName,
+              UResourceBundle *fromArray, const char *fromLocale,
+              UResourceBundle *toArray, const char *toLocale,
+              int32_t start, int32_t end)
+{
+    int32_t fromSize = ures_getSize(fromArray);
+    int32_t toSize = ures_getSize(fromArray);
+    int32_t idx;
+    UErrorCode errorCode = U_ZERO_ERROR;
+
+    if (fromSize > toSize) {
+        fromSize = toSize;
+        log_err("Arrays are different size from \"%s\" to \"%s\"\n",
+                fromLocale,
+                toLocale);
+    }
+
+    for (idx = start; idx <= end; idx++) {
+        const UChar *fromBundleStr = ures_getStringByIndex(fromArray, idx, NULL, &errorCode);
+        const UChar *toBundleStr = ures_getStringByIndex(toArray, idx, NULL, &errorCode);
+        if (u_strcmp(fromBundleStr, toBundleStr) != 0) {
+            log_err("Difference for %s at index %d from %s= \"%s\" to %s= \"%s\"\n",
+                    keyName,
+                    idx,
+                    fromLocale,
+                    austrdup(fromBundleStr),
+                    toLocale,
+                    austrdup(toBundleStr));
+        }
+    }
+}
+
+static void
+compareConsistentCountryInfo(const char *fromLocale, const char *toLocale) {
+    UErrorCode errorCode = U_ZERO_ERROR;
+    UResourceBundle *fromDateTimeElements, *toDateTimeElements;
+    UResourceBundle *fromArray, *toArray;
+    UResourceBundle *fromLocaleBund = ures_open(NULL, fromLocale, &errorCode);
+    UResourceBundle *toLocaleBund = ures_open(NULL, toLocale, &errorCode);
+
+    if(U_FAILURE(errorCode)) {
+        log_err("Can't open resource bundle %s or %s\n", fromLocale, toLocale);
+        return;
+    }
+
+    fromDateTimeElements = ures_getByKey(fromLocaleBund, "DateTimeElements", NULL, &errorCode);
+    toDateTimeElements = ures_getByKey(toLocaleBund, "DateTimeElements", NULL, &errorCode);
+    if (strcmp(fromLocale, "ar_IN") != 0)
+    {
+        int32_t fromSize;
+        int32_t toSize;
+        int32_t idx;
+        UBool sameArray = TRUE;
+        const int32_t *fromBundleArr = ures_getIntVector(fromDateTimeElements, &fromSize, &errorCode);
+        const int32_t *toBundleArr = ures_getIntVector(toDateTimeElements, &toSize, &errorCode);
+
+        if (fromSize > toSize) {
+            fromSize = toSize;
+            log_err("Arrays are different size with key \"DateTimeElements\" from \"%s\" to \"%s\"\n",
+                    fromLocale,
+                    toLocale);
+        }
+
+        for (idx = 0; idx < fromSize; idx++) {
+            if (fromBundleArr[idx] != toBundleArr[idx]) {
+                log_err("Difference with key \"DateTimeElements\" at index %d from \"%s\" to \"%s\"\n",
+                        idx,
+                        fromLocale,
+                        toLocale);
+            }
+        }
+    }
+    ures_close(fromDateTimeElements);
+    ures_close(toDateTimeElements);
+
+    fromArray = ures_getByKey(fromLocaleBund, "CurrencyElements", NULL, &errorCode);
+    toArray = ures_getByKey(toLocaleBund, "CurrencyElements", NULL, &errorCode);
+    {
+        /* The first one is probably localized. */
+        compareArrays("CurrencyElements", fromArray, fromLocale, toArray, toLocale, 1, 2);
+    }
+    ures_close(fromArray);
+    ures_close(toArray);
+
+    fromArray = ures_getByKey(fromLocaleBund, "NumberPatterns", NULL, &errorCode);
+    toArray = ures_getByKey(toLocaleBund, "NumberPatterns", NULL, &errorCode);
+    {
+        compareArrays("NumberPatterns", fromArray, fromLocale, toArray, toLocale, 0, 3);
+    }
+    ures_close(fromArray);
+    ures_close(toArray);
+
+    /* Difficult to test properly */
+/*
+    fromArray = ures_getByKey(fromLocaleBund, "DateTimePatterns", NULL, &errorCode);
+    toArray = ures_getByKey(toLocaleBund, "DateTimePatterns", NULL, &errorCode);
+    {
+        compareArrays("DateTimePatterns", fromArray, fromLocale, toArray, toLocale);
+    }
+    ures_close(fromArray);
+    ures_close(toArray);*/
+
+    fromArray = ures_getByKey(fromLocaleBund, "NumberElements", NULL, &errorCode);
+    toArray = ures_getByKey(toLocaleBund, "NumberElements", NULL, &errorCode);
+    {
+        compareArrays("NumberElements", fromArray, fromLocale, toArray, toLocale, 0, 3);
+        /* Index 4 is a script based 0 */
+        compareArrays("NumberElements", fromArray, fromLocale, toArray, toLocale, 5, 10);
+    }
+    ures_close(fromArray);
+    ures_close(toArray);
+
+    ures_close(fromLocaleBund);
+    ures_close(toLocaleBund);
+}
+
+static void
+TestConsistentCountryInfo(void) {
+/*    UResourceBundle *fromLocale, *toLocale;*/
+    int32_t locCount = uloc_countAvailable();
+    int32_t fromLocIndex, toLocIndex;
+
+    int32_t fromCountryLen, toCountryLen;
+    char fromCountry[ULOC_FULLNAME_CAPACITY], toCountry[ULOC_FULLNAME_CAPACITY];
+    
+    int32_t fromVariantLen, toVariantLen;
+    char fromVariant[ULOC_FULLNAME_CAPACITY], toVariant[ULOC_FULLNAME_CAPACITY];
+
+    UErrorCode errorCode = U_ZERO_ERROR;
+
+    for (fromLocIndex = 0; fromLocIndex < locCount; fromLocIndex++) {
+        const char *fromLocale = uloc_getAvailable(fromLocIndex);
+
+        errorCode=U_ZERO_ERROR;
+        fromCountryLen = uloc_getCountry(fromLocale, fromCountry, ULOC_FULLNAME_CAPACITY, &errorCode);
+        if (fromCountryLen <= 0) {
+            /* Ignore countryless locales */
+            continue;
+        }
+        fromVariantLen = uloc_getVariant(fromLocale, fromVariant, ULOC_FULLNAME_CAPACITY, &errorCode);
+        if (fromVariantLen > 0) {
+            /* Most variants are ignorable like PREEURO, or collation variants. */
+            continue;
+        }
+        /* Start comparing only after the current index.
+           Previous loop should have already compared fromLocIndex.
+        */
+        for (toLocIndex = fromLocIndex + 1; toLocIndex < locCount; toLocIndex++) {
+            const char *toLocale = uloc_getAvailable(toLocIndex);
+            
+            toCountryLen = uloc_getCountry(toLocale, toCountry, ULOC_FULLNAME_CAPACITY, &errorCode);
+            if(U_FAILURE(errorCode)) {
+                log_err("Unknown failure fromLocale=%s toLocale=%s errorCode=%s\n",
+                    fromLocale, toLocale, u_errorName(errorCode));
+                continue;
+            }
+
+            if (toCountryLen <= 0) {
+                /* Ignore countryless locales */
+                continue;
+            }
+            toVariantLen = uloc_getVariant(toLocale, toVariant, ULOC_FULLNAME_CAPACITY, &errorCode);
+            if (toVariantLen > 0) {
+                /* Most variants are ignorable like PREEURO, or collation variants. */
+                /* They're a variant for a reason. */
+                continue;
+            }
+            if (strcmp(fromCountry, toCountry) == 0) {
+                log_verbose("comparing fromLocale=%s toLocale=%s\n",
+                    fromLocale, toLocale);
+                compareConsistentCountryInfo(fromLocale, toLocale);
+            }
+        }
     }
 }

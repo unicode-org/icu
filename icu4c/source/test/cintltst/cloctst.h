@@ -61,7 +61,11 @@ static  void TestDisplayNames(void);
  **/
  static void TestVariantParsing(void);
 
+ /* Make sure that the locale data is good. */
  static void TestLocaleStructure(void);
+
+ /* Make sure that Country information is the same across locales, within reason. */
+ static void TestConsistentCountryInfo(void);
 
 /**
  * routine to perform subtests, used by TestDisplayNames

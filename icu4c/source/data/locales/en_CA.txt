@@ -16,7 +16,7 @@ en_CA {
 //        AU { "Australia" }
 //        NZ { "New Zealand" }
 //    }
-    CurrencyElements { 
+    CurrencyElements {
         "$",
         "CAD",
         ".",
@@ -31,6 +31,12 @@ en_CA {
         "d-MMM-yy",
         "dd/MM/yy",
         "{1} {0}",
+    }
+    NumberPatterns {
+        "#,##0.###;-#,##0.###",
+        "\u00A4#,##0.00;(\u00A4#,##0.00)",
+        "#,##0%",
+        "#E0",
     }
 //    Duplicated in parent
 //    Languages { 

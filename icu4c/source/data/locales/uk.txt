@@ -47,6 +47,10 @@ uk {
     Countries { 
         UA { "\u0423\u043A\u0440\u0430\u0457\u043D\u0430" }
     }
+    DateTimeElements:intvector { 
+        2,
+        1,
+    }
     DateTimePatterns {
         "HH:mm:ss z",
         "HH:mm:ss z",
