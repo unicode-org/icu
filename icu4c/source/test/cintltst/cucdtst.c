@@ -1336,6 +1336,23 @@ static void TestCodePoint(){
         }
     }
 
+    if(
+        !U_IS_BMP(0) || !U_IS_BMP(0x61) || !U_IS_BMP(0x20ac) ||
+        !U_IS_BMP(0xd9da) || !U_IS_BMP(0xdfed) || !U_IS_BMP(0xffff) ||
+        U_IS_BMP(U_SENTINEL) || U_IS_BMP(0x10000) || U_IS_BMP(0x50005) ||
+        U_IS_BMP(0x10ffff) || U_IS_BMP(0x110000) || U_IS_BMP(0x7fffffff)
+    ) {
+        log_err("error with U_IS_BMP()\n");
+    }
+
+    if(
+        U_IS_SUPPLEMENTARY(0) || U_IS_SUPPLEMENTARY(0x61) || U_IS_SUPPLEMENTARY(0x20ac) ||
+        U_IS_SUPPLEMENTARY(0xd9da) || U_IS_SUPPLEMENTARY(0xdfed) || U_IS_SUPPLEMENTARY(0xffff) ||
+        U_IS_SUPPLEMENTARY(U_SENTINEL) || !U_IS_SUPPLEMENTARY(0x10000) || !U_IS_SUPPLEMENTARY(0x50005) ||
+        !U_IS_SUPPLEMENTARY(0x10ffff) || U_IS_SUPPLEMENTARY(0x110000) || U_IS_SUPPLEMENTARY(0x7fffffff)
+    ) {
+        log_err("error with U_IS_SUPPLEMENTARY()\n");
+    }
 }
 
 static void TestCharLength()
