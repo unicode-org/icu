@@ -600,10 +600,10 @@ uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *sta
             UChar jamoString[3];
             uint32_t CE = UCOL_NOT_FOUND;
             const UCollator *collator = collationSource->coll;
-            jamoString[0] = L;
-            jamoString[1] = V;
+            jamoString[0] = (UChar)L;
+            jamoString[1] = (UChar)V;
             if (T != TBase) {
-              jamoString[2] = T;
+              jamoString[2] = (UChar)T;
               init_collIterate(collator, jamoString, 3, &jamos, TRUE);
             } else {
               init_collIterate(collator, jamoString, 2, &jamos, TRUE);
@@ -753,10 +753,10 @@ uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource,
         UChar jamoString[3];
         uint32_t CE = UCOL_NOT_FOUND;
         const UCollator *collator = collationSource->coll;
-        jamoString[0] = L;
-        jamoString[1] = V;
+        jamoString[0] = (UChar)L;
+        jamoString[1] = (UChar)V;
         if (T != TBase) {
-          jamoString[2] = T;
+          jamoString[2] = (UChar)T;
           init_collIterate(collator, jamoString, 3, &jamos, TRUE);
         } else {
           init_collIterate(collator, jamoString, 2, &jamos, TRUE);
@@ -1573,7 +1573,7 @@ ucol_calcSortKey(const    UCollator    *coll,
 
 
             order ^= caseSwitch;
-            caseBit = (order & UCOL_CASE_BIT_MASK);
+            caseBit = (UBool)(order & UCOL_CASE_BIT_MASK);
             if(notIsContinuation) {
               tertiary = (uint8_t)((order & tertiaryMask)); 
             } else {
@@ -3374,7 +3374,7 @@ ucol_strcoll(    const    UCollator    *coll,
     /*    if (result == UCOL_EQUAL && strength == UCOL_IDENTICAL) */
     if(checkIdent)
     {
-        int8_t comparison;
+        int32_t comparison;
         uint32_t sLen = sColl.len-sColl.string;
         uint32_t tLen = tColl.len-tColl.string;
         uint32_t compLen = 0;
@@ -4092,10 +4092,10 @@ uint32_t ucol_getIncrementalUCA(UChar ch, incrementalContext *collationSource, U
             UChar jamoString[3];
             uint32_t CE = UCOL_NOT_FOUND;
             const UCollator *collator = collationSource->coll;
-            jamoString[0] = L;
-            jamoString[1] = V;
+            jamoString[0] = (UChar)L;
+            jamoString[1] = (UChar)V;
             if (T != TBase) {
-              jamoString[2] = T;
+              jamoString[2] = (UChar)T;
               init_collIterate(collator, jamoString, 3, &jamos, TRUE);
             } else {
               init_collIterate(collator, jamoString, 2, &jamos, TRUE);

@@ -497,7 +497,7 @@ struct UCollator {
     uint8_t variableMax2;
     uint8_t caseSwitch;
     uint8_t tertiaryMask;
-    UChar variableTopValue;
+    UChar32 variableTopValue;
     UColAttributeValue frenchCollation;
     UColAttributeValue alternateHandling; /* attribute for handling variable elements*/
     UColAttributeValue caseFirst;         /* who goes first, lower case or uppercase */
