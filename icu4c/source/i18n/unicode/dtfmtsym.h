@@ -222,9 +222,15 @@ public:
 
     /**
      * Get the non-localized date-time pattern characters.
-     * @stable
+     * @deprecated remove after Aug 2002. Use getPatternUChars instead.
      */
     static const UnicodeString& getPatternChars(void);
+
+    /**
+     * Get the non-localized date-time pattern characters.
+     * @stable
+     */
+    static const UChar *getPatternUChars(void);
 
     /**
      * Gets localized date-time pattern characters. For example: 'u', 't', etc.
