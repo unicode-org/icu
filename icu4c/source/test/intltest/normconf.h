@@ -1,6 +1,6 @@
 /*
 ************************************************************************
-* Copyright (c) 1997-2001, International Business Machines
+* Copyright (c) 1997-2003, International Business Machines
 * Corporation and others.  All Rights Reserved.
 ************************************************************************
 */
@@ -9,6 +9,9 @@
 #define _NORMCONF
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_NORMALIZATION
+
 #include "unicode/normlzr.h"
 #include "intltest.h"
 
@@ -95,5 +98,7 @@ class NormalizerConformanceTest : public IntlTest {
     void _testOneLine(const char *line);
     void compare(const UnicodeString& s1,const UnicodeString& s2);
 };
+
+#endif /* #if !UCONFIG_NO_NORMALIZATION */
 
 #endif

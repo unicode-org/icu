@@ -52,11 +52,13 @@ void MajorTestLevel::runIndexedTest( int32_t index, UBool exec, const char* &nam
                 break;
 
         case 1: name = "normalize";
+#if !UCONFIG_NO_NORMALIZATION
                 if (exec) {
                     logln("TestSuite Normalize---"); logln();
                     IntlTestNormalize test;
                     callTest( test, par );
                 }
+#endif
                 break;
 
         case 2: name = "collate";
@@ -137,11 +139,13 @@ void MajorTestLevel::runIndexedTest( int32_t index, UBool exec, const char* &nam
 #endif
                 break;
         case 10: name = "idna";
+#if !UCONFIG_NO_IDNA
             if(exec){
                 logln("TestSuite IDNA----"); logln();
                 TestIDNA test;
                 callTest(test,par);
             }
+#endif
             break;
         default: name = ""; break;
     }
@@ -150,6 +154,9 @@ void MajorTestLevel::runIndexedTest( int32_t index, UBool exec, const char* &nam
 void IntlTestNormalize::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
     if(exec) logln("TestSuite Normalize:");
+#if UCONFIG_NO_NORMALIZATION
+    name="";
+#else
     switch (index) {
         CASE_SUITE(0, BasicNormalizerTest);
         CASE_SUITE(1, NormalizerConformanceTest); // this takes a long time
@@ -158,4 +165,5 @@ void IntlTestNormalize::runIndexedTest( int32_t index, UBool exec, const char* &
             name="";
             break;
     }
+#endif
 }

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2001, International Business Machines Corporation and
+ * Copyright (c) 1997-2003, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -10,6 +10,10 @@
 
 #ifndef _TSTNORM
 #define _TSTNORM
+
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_NORMALIZATION
 
 #include "unicode/normlzr.h"
 #include "intltest.h"
@@ -65,5 +69,7 @@ private:
     static UnicodeString hex(const UnicodeString& str);
 
 };
+
+#endif /* #if !UCONFIG_NO_NORMALIZATION */
 
 #endif // _TSTNORM

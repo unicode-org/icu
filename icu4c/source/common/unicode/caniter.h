@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2002, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -9,6 +9,9 @@
 #define CANITER_H
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_NORMALIZATION
+
 #include "unicode/uobject.h"
 #include "unicode/unistr.h"
 
@@ -200,4 +203,7 @@ CanonicalIterator::getDynamicClassID() const
 { return CanonicalIterator::getStaticClassID(); }
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_NORMALIZATION */
+
 #endif

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2002, International Business Machines Corporation and
+ * Copyright (c) 2003, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************
  *
@@ -8,6 +8,9 @@
  * @author Vladimir Weinstein
  */
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_NORMALIZATION
 
 #include "intltest.h"
 #include "cstring.h"
@@ -306,4 +309,4 @@ void CanonicalIteratorTest::TestAPI() {
   }
 }
 
-
+#endif /* #if !UCONFIG_NO_NORMALIZATION */

@@ -1,11 +1,11 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2002, International Business Machines
+ *   Copyright (C) 2003, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
- *   file name:  strprep.cpp
+ *   file name:  testidna.cpp
  *   encoding:   US-ASCII
  *   tab size:   8 (not used)
  *   indentation:4
@@ -13,6 +13,11 @@
  *   created on: 2003feb1
  *   created by: Ram Viswanadha
  */
+
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_IDNA
+
 #include "unicode/uidna.h"
 #include <time.h>
 #include <limits.h>
@@ -1408,4 +1413,4 @@ void TestIDNA::TestDataFile(){
      testData(*this);
 }
 
-
+#endif /* #if !UCONFIG_NO_IDNA */

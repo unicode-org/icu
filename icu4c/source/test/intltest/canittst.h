@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2002, International Business Machines Corporation and
+ * Copyright (c) 2002-2003, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************
  *
@@ -16,6 +16,9 @@
 #define _CANITTST
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_NORMALIZATION
+
 
 U_NAMESPACE_BEGIN
 
@@ -49,5 +52,7 @@ private:
         
     UnicodeString getReadable(const UnicodeString &obj);
 };
+
+#endif /* #if !UCONFIG_NO_NORMALIZATION */
 
 #endif // _CANITTST

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2001, International Business Machines Corporation and
+ * Copyright (c) 1997-2003, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -960,9 +960,11 @@ unicodeDataLineFn(void *context,
         log_err("error in UnicodeData.txt: combining class %lu out of range\n", value);
         return;
     }
+#if !UCONFIG_NO_NORMALIZATION
     if(value!=u_getCombiningClass(c) || value!=(uint32_t)u_getIntPropertyValue(c, UCHAR_CANONICAL_COMBINING_CLASS)) {
         log_err("error: u_getCombiningClass(U+%04lx)==%hu instead of %lu\n", c, u_getCombiningClass(c), value);
     }
+#endif
 
     /* get BiDi category, field 4 */
     *fields[4][1]=0;
@@ -2240,9 +2242,11 @@ TestAdditionalProperties() {
         { 0x0e46, UCHAR_EXTENDER, TRUE },
         { 0x0020, UCHAR_EXTENDER, FALSE },
 
+#if !UCONFIG_NO_NORMALIZATION
         { 0xfb1d, UCHAR_FULL_COMPOSITION_EXCLUSION, TRUE },
         { 0x1d15f, UCHAR_FULL_COMPOSITION_EXCLUSION, TRUE },
         { 0xfb1e, UCHAR_FULL_COMPOSITION_EXCLUSION, FALSE },
+#endif
 
         { 0x0044, UCHAR_HEX_DIGIT, TRUE },
         { 0xff46, UCHAR_HEX_DIGIT, TRUE },
@@ -2833,12 +2837,16 @@ _setAddSerialized(USet *set, const USerializedSet *sset) {
 /* various tests for consistency of UCD data and API behavior */
 static void
 TestConsistency() {
+#if !UCONFIG_NO_NORMALIZATION
     UChar buffer16[300];
+#endif
     char buffer[300];
     USet *set1, *set2, *set3, *set4;
     UErrorCode errorCode;
 
+#if !UCONFIG_NO_NORMALIZATION
     USerializedSet sset;
+#endif
     UChar32 start, end;
     int32_t i, length;
 
@@ -2938,6 +2946,8 @@ TestConsistency() {
     }
     uset_close(set1);
 
+#if !UCONFIG_NO_NORMALIZATION
+
     /*
      * Test for an example that unorm_getCanonStartSet() delivers
      * all characters that compose from the input one,
@@ -2965,4 +2975,6 @@ TestConsistency() {
                  TRUE);
     uset_close(set1);
     uset_close(set2);
+
+#endif
 }

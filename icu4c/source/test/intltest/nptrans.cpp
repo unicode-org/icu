@@ -1,11 +1,11 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2002, International Business Machines
+ *   Copyright (C) 2003, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
- *   file name:  nameprep.h
+ *   file name:  nptrans.h
  *   encoding:   US-ASCII
  *   tab size:   8 (not used)
  *   indentation:4
@@ -13,6 +13,10 @@
  *   created on: 2003feb1
  *   created by: Ram Viswanadha
  */
+
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_IDNA
 
 #include "nptrans.h"
 #include "unicode/resbund.h"
@@ -272,4 +276,4 @@ UBool NamePrepTransform::isLabelSeparator(UChar32 ch, UErrorCode& status){
     return labelSeparatorSet.contains(ch);
 }
 
-
+#endif /* #if !UCONFIG_NO_IDNA */
