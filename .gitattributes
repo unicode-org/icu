@@ -2,7 +2,6 @@
 icu4c/license.html svneol=native#text/html
 icu4c/readme.html svneol=native#text/html
 icu4c/source/data/brkitr/thaidict.brk -text
-icu4c/source/data/coll/root.txt svneol=native#unset
 icu4c/source/data/unidata/UCARules.txt -text svneol=unset#application/octet-stream
 icu4c/source/data/xml/main/aa.xml svneol=native#text/xml
 icu4c/source/data/xml/main/aa_DJ.xml svneol=native#text/xml
