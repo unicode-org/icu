@@ -24,6 +24,8 @@
 #include "itconv.h"
 #include "ittrans.h"
 #include "itrbbi.h"
+#include "itrbnf.h"
+#include "itrbnfrt.h"
 #include "normconf.h"
 #include "tstnorm.h"
 
@@ -102,6 +104,20 @@ void MajorTestLevel::runIndexedTest( int32_t index, UBool exec, const char* &nam
                     callTest( test, par );
                 }
                 break;
+		case 8: name = "rbnf";
+			if (exec) {
+					logln("TestSuite RuleBasedNumberFormat----"); logln();
+					IntlTestRBNF test;
+					callTest(test, par);
+			}
+			break;
+		case 9: name = "rbnfrt";
+			if (exec) {
+					logln("TestSuite RuleBasedNumberFormat RT----"); logln();
+					RbnfRoundTripTest test;
+					callTest(test, par);
+			}
+			break;
 
         default: name = ""; break;
     }
