@@ -9,8 +9,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/Attic/releasenotes.html,v $
-* $Date: 2002/08/14 07:10:52 $
-* $Revision: 1.1 $
+* $Date: 2002/08/15 06:09:05 $
+* $Revision: 1.2 $
 *
 *******************************************************************************
 -->
@@ -81,15 +81,15 @@
       or later, although some components work under earlier JVMs. All 
       components should be compiled using a Java2 compiler, as even components 
       that run under earlier JVMs can require language features that are only 
-      present in Java2. Currently 1.1.x and 1.2.x JVMs are unsupported and untested, and you use 
-      the components on these JVMs at your own risk.</P>
+      present in Java2. 1.1.x and 1.2.x JVMs are unsupported and untested. Specific to this release, there are 2 known non-reference platform compilers that fails compiling ICU4J source code, IBM JDK 1.3.1_02 and Jikes 1.16. Use ICU4J on the unsupported JVMs and non-reference platform compilers at your own risk.</P>
       <p>
-      The platforms on which we have built and tested ICU4J are:<ul>
-<li> Win98, WinNT, Win2000, WinXP / IBM JDK 1.3, Sun JDK 1.3.1, 1.4
-<li> Solaris 2.6, 2.7 / Sun JDK 1.3.1, 1.4
-<li> AIX 5.1 / IBM JDK 1.3
+      The reference platforms which we support and test ICU4J on are:<ul>
+<li> Win2000, IBM JDK 1.3
+<li> Solaris 2.7, Sun JDK 1.3.1
+<li> AIX 5.1, IBM JDK 1.3
 </ul>
-</p>
+      </p>
+
       <P><B>Installation Dependencies</B> </P>
       <UL>
         <LI>To install ICU4J as it is, simply place the prebuilt jar file 
@@ -113,7 +113,7 @@
 
       <p>
       For further detailed information about the ICU4J library, please refer to the
-      <A href="/developerworks/opensource/cvs/icu4j/~checkout~/icu4j/readme.html">
+      <A href="http://oss.software.ibm.com/developerworks/opensource/cvs/icu4j/~checkout~/icu4j/readme.html?only_with_tag=release-2-2">
       ReadMe.</A>
       </p>
 
@@ -198,10 +198,12 @@ releases can be different.  Two, the resources are now no longer
 accessible without explicit permission by the java user.
 </p>
 <p>
-For these reasons, ICU4J 2.1 now includes its own resource information
+For these reasons, releases ICU4J 2.1 and above now includes its own 
+resource information
 which is completely independent of the JDK resource information.  The
-ICU4J 2.1 information is equivalent to the information in ICU4C and
-ultimately derives from the same source.  This allows ICU4J 2.1 to be
+new ICU4J information is equivalent to the information in ICU4C and
+ultimately derives from the same source.  This allows ICU4J 2.1 and above 
+to be
 built on, and run on, JDK 1.4.
 </p>
 <p>
@@ -225,7 +227,8 @@ size.
 </p>
 <h3>How to Remove Unneeded Resource Information</h3>
 <p>
-This section will focus on the new information included in ICU4J 2.1.
+This section will focus on resource bundles included since ICU4J 
+release 2.1.
 </p>
 <p>
 By default the ICU4J distribution includes all of the new resource
@@ -293,8 +296,8 @@ present.
 
 <h3>Developing Resources to be used with ICU4J</h3>
 <p>
-ICU4J 2.1 uses the standard class lookup mechanism.  This means any
-appropriately named resource on the CLASSPATH will be located, in the
+ICU4J 2.1 and above uses the standard class lookup mechanism.  This means 
+any ppropriately named resource on the CLASSPATH will be located, in the
 order listed in the classpath.
 </p>
 <p>
@@ -333,7 +336,7 @@ contents of the resources.
 </p>
 
 <p>
-LocaleElements resource data in ICU4J 2.1 is checked in to the
+LocaleElements resource data in ICU4J is checked in to the
 repository as precompiled class files.  This means that inspecting the
 contents of these resources is difficult.  They are compiled from java
 files that in turn are machine-generated from ICU4C binary data, using
@@ -376,7 +379,7 @@ compiled and jar'd into the file ICULocaleData.jar.  The resulting jar
 file is then checked in to ICU4J as
 src/com/ibm/icu/dev/data/ICULocaleData.jar.  (This is not great but it
 allows ICU4J to be downloaded and built as one project, instead of
-two, one for locale data and one for ICU4J proper.  Given the 2.1
+two, one for locale data and one for ICU4J proper.  Given the 2.2
 schedule it wasn't possible to work out the larger data sharing
 problem in time, so we tried to limit the impact to just what was
 needed to get JDK 1.4 support up and running.)
