@@ -29,9 +29,15 @@
 /**
  * Construct a new empty rule set.
  */
+void deleteRule(void *rule) {
+    delete (TransliterationRule *)rule;
+}
+
 TransliterationRuleSet::TransliterationRuleSet() {
     maxContextLength = 0;
     ruleVector = new UVector();
+    ruleVector->setDeleter(&deleteRule);
+    isFrozen = FALSE;
     rules = NULL;
 }
 
@@ -40,7 +46,8 @@ TransliterationRuleSet::TransliterationRuleSet() {
  * has already been frozen.
  */
 TransliterationRuleSet::TransliterationRuleSet(const TransliterationRuleSet& other) :
-    ruleVector(0),
+    ruleVector(NULL),
+        isFrozen(TRUE),
     maxContextLength(other.maxContextLength) {
 
     uprv_memcpy(index, other.index, sizeof(index));
@@ -55,6 +62,9 @@ TransliterationRuleSet::TransliterationRuleSet(const TransliterationRuleSet& oth
  * Destructor.
  */
 TransliterationRuleSet::~TransliterationRuleSet() {
+    if(ruleVector != NULL) {
+        ruleVector->removeAllElements();
+    }
     delete ruleVector;
     delete[] rules;
 }
@@ -80,7 +90,8 @@ void TransliterationRuleSet::addRule(TransliterationRule* adoptedRule,
         delete adoptedRule;
         return;
     }
-    if (ruleVector == NULL) {
+    //if (ruleVector == NULL) {
+    if (isFrozen == TRUE) {
         // throw new IllegalArgumentException("Cannot add rules after freezing");
         status = U_ILLEGAL_ARGUMENT_ERROR;
         delete adoptedRule;
@@ -162,8 +173,9 @@ void TransliterationRuleSet::freeze(const TransliterationRuleData& data,
     for (j=0; j<v.size(); ++j) {
         rules[j] = (TransliterationRule*) v.elementAt(j);
     }
-    delete ruleVector;
-    ruleVector = NULL;
+    //delete ruleVector;
+    //ruleVector = NULL;
+    isFrozen = TRUE;
 
     // TODO Add error reporting that indicates the rules that
     //      are being masked.

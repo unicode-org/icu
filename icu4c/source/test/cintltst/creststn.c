@@ -310,6 +310,9 @@ void TestBinaryCollationData(){
 		log_err("ERROR: ures_getByKey(locale(te), CollationElements) failed");
 		return;
 	}
+    ures_close(binColl);
+    ures_close(coll);
+    ures_close(teRes);
 
 }
 void TestAPI(){
@@ -374,7 +377,7 @@ void TestAPI(){
         log_err("ERROR: ures_getByIndex on string resource fetched the key=%s, expected \"TE\" \n", austrdup(ures_getString(teFillin2, &len, &status)));
     }
     
-    ures_close(teRes);
+    /*ures_close(teRes);*/
     
     /*Test ures_openFillIn*/
     log_verbose("Testing ures_openFillIn......\n");
@@ -398,6 +401,8 @@ void TestAPI(){
                        myErrorName(status));
     }
    
+    ures_close(teFillin);
+    ures_close(teFillin2);
     ures_close(teRes);
 
 
@@ -603,6 +608,10 @@ void TestErrorConditions(){
         log_err("ERROR: ures_getInt() with errorCode != U_ZERO_ERROR should fail\n");
     }
 
+    ures_close(teFillin);
+    ures_close(teFillin2);
+    ures_close(coll);
+    ures_close(binColl);
     ures_close(teRes);
     
 

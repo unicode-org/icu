@@ -725,9 +725,6 @@ SimpleDateFormat::parse(const UnicodeString& text, ParsePosition& pos) const
     int32_t oldStart = start;
     UBool ambiguousYear[] = { FALSE };
 
-    char s[100];
-            s[text.extract(0, text.length(), s)]=0;
-
     fCalendar->clear();
 
     UBool inQuote = FALSE;

@@ -38,6 +38,11 @@ class TransliterationRuleSet {
     UVector* ruleVector;
 
     /**
+     * freeing vector after freeze leaks rules. It should not be freed until destruction time
+     */
+    UBool isFrozen;
+
+    /**
      * Length of the longest preceding context
      */
     int32_t maxContextLength;
