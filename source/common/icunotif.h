@@ -36,12 +36,12 @@ class U_COMMON_API EventListener : public UObject {
   virtual ~EventListener() {}
 
  public:
-    virtual UClassID getDynamicClassID() const {
-        return getStaticClassID();
+    static inline UClassID getStaticClassID() { 
+        return (UClassID)&fgClassID;
     }
 
-    static UClassID getStaticClassID() { 
-        return (UClassID)&fgClassID;
+    virtual UClassID getDynamicClassID() const {
+        return getStaticClassID();
     }
 
  public:
