@@ -130,6 +130,7 @@
  * For example, subtracting 5 days from the date <code>September 12, 1996</code>
  * results in <code>September 7, 1996</code>.
  *
+ * @stable
  */
 
 /** A calendar.
@@ -137,7 +138,9 @@
  */
 typedef void* UCalendar;
 
-/** Possible types of UCalendars */
+/** Possible types of UCalendars 
+ * @stable
+ */
 enum UCalendarType {
   /** A traditional calendar for the locale */
   UCAL_TRADITIONAL,
@@ -146,7 +149,9 @@ enum UCalendarType {
 };
 typedef enum UCalendarType UCalendarType;
 
-/** Possible fields in a UCalendar */
+/** Possible fields in a UCalendar 
+ * @stable
+ */
 enum UCalendarDateFields {
   /** Era field */
   UCAL_ERA,
@@ -195,7 +200,9 @@ typedef enum UCalendarDateFields UCalendarDateFields;
      * who create locale resources for the field of first-day-of-week should be aware of
      * this. For instance, in US locale, first-day-of-week is set to 1, i.e., UCAL_SUNDAY.
      */
-/** Possible days of the week in a UCalendar */
+/** Possible days of the week in a UCalendar 
+ * @stable
+ */
 enum UCalendarDaysOfWeek {
   /** Sunday */
   UCAL_SUNDAY = 1,
@@ -214,7 +221,9 @@ enum UCalendarDaysOfWeek {
 };
 typedef enum UCalendarDaysOfWeek UCalendarDaysOfWeek;
 
-/** Possible months in a UCalendar. Note: Calendar month is 0-based.*/
+/** Possible months in a UCalendar. Note: Calendar month is 0-based.
+ * @stable
+ */
 enum UCalendarMonths {
   /** January */
   UCAL_JANUARY,
@@ -245,7 +254,9 @@ enum UCalendarMonths {
 };
 typedef enum UCalendarMonths UCalendarMonths;
 
-/** Possible AM/PM values in a UCalendar */
+/** Possible AM/PM values in a UCalendar 
+ * @stable
+ */
 enum UCalendarAMPMs {
     /** AM */
   UCAL_AM,
@@ -333,7 +344,9 @@ ucal_setTimeZone(        UCalendar*      cal,
                 int32_t        len,
                 UErrorCode     *status);
 
-/** Possible formats for a UCalendar's display name */
+/** Possible formats for a UCalendar's display name 
+ * @stable
+ */
 enum UCalendarDisplayNameType {
   /** Standard display name */
   UCAL_STANDARD,
@@ -671,7 +684,9 @@ ucal_clearField(    UCalendar*        cal,
 U_CAPI void
 ucal_clear(UCalendar* calendar);
 
-/** Possible limit values for a UCalendar */
+/** Possible limit values for a UCalendar 
+ * @stable
+ */
 enum UCalendarLimitType {
   /** Minimum value */
   UCAL_MINIMUM,
