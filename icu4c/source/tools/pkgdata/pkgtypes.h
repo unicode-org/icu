@@ -119,6 +119,7 @@ typedef struct UPKGOptions_
   UBool      nooutput;
   UBool      verbose;
   UBool      hadStdin;     /* Stdin was a dependency - don't make anything depend on the file list coming in. */
+  UBool      numeric;      /* use numeric, short, temporary file names */
 
   UPKGMODE  *fcn;          /* Handler function */
 } UPKGOptions;

@@ -83,7 +83,8 @@ static UOption options[]={
     /*15*/    UOPTION_DEF( "entrypoint", 'e', UOPT_REQUIRES_ARG),
     /*16*/    UOPTION_DEF( "revision", 'r', UOPT_REQUIRES_ARG),
     /*17*/    UOPTION_DEF( 0, 'M', UOPT_REQUIRES_ARG),
-    /*18*/    UOPTION_DEF( "force-prefix", 'f', UOPT_NO_ARG)
+    /*18*/    UOPTION_DEF( "force-prefix", 'f', UOPT_NO_ARG),
+    /*19*/    UOPTION_DEF( "numerictmp", 'N', UOPT_NO_ARG)
 };
 
 const char options_help[][160]={
@@ -109,7 +110,8 @@ const char options_help[][160]={
     "Specify a custom entrypoint name (default: short name)",
     "Specify a version when packaging in DLL or static mode",
     "Pass the next argument to make(1)",
-    "Add package to all file names if not present"
+    "Add package to all file names if not present",
+    "Use short numeric temporary file names such as t1234.c"
 };
 
 const char  *progname = "PKGDATA";
@@ -292,6 +294,12 @@ main(int argc, char* argv[]) {
     o.clean     = options[9].doesOccur;
     o.nooutput  = options[10].doesOccur;
     o.rebuild   = options[11].doesOccur;
+
+    o.numeric   = options[19].doesOccur;
+    if(o.numeric) { 
+      o.rebuild = TRUE; /* force rebuild if numeric */
+    }
+
 
     if( options[12].doesOccur ) {
         o.tmpDir    = options[12].value;
