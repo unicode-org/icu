@@ -367,20 +367,20 @@ UCAElements *readAnElement(FILE *data, UErrorCode *status) {
     UCAElements *element = &le; //(UCAElements *)malloc(sizeof(UCAElements));
 
     if(buffer[0] == '[') {
-      const char *vt = "[variable top = ";
-      uint32_t vtLen = uprv_strlen(vt);
-      if(uprv_strncmp(buffer, vt, vtLen) == 0) {
-        element->variableTop = TRUE;
-        if(sscanf(buffer+vtLen, "%4x", &theValue) != 1) /* read first code point */
-        {
-          fprintf(stderr, " scanf(hex) failed!\n ");
+        const char *vt = "[variable top = ";
+        uint32_t vtLen = (uint32_t)uprv_strlen(vt);
+        if(uprv_strncmp(buffer, vt, vtLen) == 0) {
+            element->variableTop = TRUE;
+            if(sscanf(buffer+vtLen, "%4x", &theValue) != 1) /* read first code point */
+            {
+                fprintf(stderr, " scanf(hex) failed!\n ");
+            }
+            element->cPoints[0] = (UChar)theValue;
+            return element; // just a comment, skip whole line
+        } else {
+            *status = U_INVALID_FORMAT_ERROR;
+            return NULL;
         }
-        element->cPoints[0] = (UChar)theValue;
-        return element; // just a comment, skip whole line
-      } else {
-        *status = U_INVALID_FORMAT_ERROR;
-        return NULL;
-      }
     }
     element->variableTop = FALSE;
 
