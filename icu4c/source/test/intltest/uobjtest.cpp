@@ -166,91 +166,91 @@ UObject *UObjectTest::testClass(UObject *obj,
 
 void UObjectTest::testIDs()
 {
-  int i;
-  ids_count = 0;
-  UParseError parseError;
-  UErrorCode status = U_ZERO_ERROR;
-
-  
-  //TESTCLASSID_DEFAULT(AbbreviatedUnicodeSetIterator);
-  //TESTCLASSID_DEFAULT(AnonymousStringFactory);
-  TESTCLASSID_FACTORY(AnyTransliterator, Transliterator::createInstance(UnicodeString("Any-Latin"), UTRANS_FORWARD, parseError, status));
-  
-  TESTCLASSID_FACTORY(CanonicalIterator, new CanonicalIterator(UnicodeString("abc"), status));
-  //TESTCLASSID_DEFAULT(CollationElementIterator);
-  TESTCLASSID_DEFAULT(CollationKey);
-  //TESTCLASSID_FACTORY(CompoundTransliterator, Transliterator::createInstance(UnicodeString("Any-Jex;Hangul-Jamo"), UTRANS_FORWARD, parseError, status));
-
-  //TESTCLASSID_DEFAULT(DateFormatSymbols);
-  //TESTCLASSID_DEFAULT(DecimalFormatSymbols);
-  //TESTCLASSID_DEFAULT(DictionaryBasedBreakIterator);
-  //TESTCLASSID_DEFAULT(DigitList);
-  
-  //TESTCLASSID_DEFAULT(EscapeTransliterator);
-  //TESTCLASSID_DEFAULT(EventListener);
-  
-  //TESTCLASSID_DEFAULT(FieldPosition);
-  TESTCLASSID_DEFAULT(Formattable);
-  //TESTCLASSID_DEFAULT(FunctionReplacer);
-  
-  //TESTCLASSID_DEFAULT(GregorianCalendar);
-  
-  TESTCLASSID_FACTORY(EscapeTransliterator, Transliterator::createInstance(UnicodeString("Any-Hex"), UTRANS_FORWARD, parseError, status))
-  
-  //TESTCLASSID_DEFAULT(ICUResourceBundleFactory);
-  
-  // TESTCLASSID_DEFAULT(Key); // does ont exist?
-  
-  TESTCLASSID_FACTORY(Locale, new Locale("123"));
-  TESTCLASSID_ABSTRACT(LocaleKey);
-  //TESTCLASSID_DEFAULT(LocaleKeyFactory);
-  //TESTCLASSID_DEFAULT(LowercaseTransliterator);
-  
-  //TESTCLASSID_DEFAULT(NFSubstitution);
-  //TESTCLASSID_DEFAULT(NameUnicodeTransliterator);
-  //TESTCLASSID_DEFAULT(NormalizationTransliterator);
-  //TESTCLASSID_DEFAULT(Normalizer);
-  //TESTCLASSID_DEFAULT(NullTransliterator);
-  TESTCLASSID_ABSTRACT(NumberFormat);
-  //TESTCLASSID_DEFAULT(NumeratorSubstitution);
-  
-  TESTCLASSID_DEFAULT(ParsePosition);
-  
-  //TESTCLASSID_DEFAULT(Quantifier);
-  
-  //TESTCLASSID_DEFAULT(RegexCompile);
-  //TESTCLASSID_DEFAULT(RegexMatcher);
-  //TESTCLASSID_DEFAULT(RegexPattern);
-  //TESTCLASSID_DEFAULT(RemoveTransliterator);
-  //TESTCLASSID_DEFAULT(ReplaceableGlue);
-  TESTCLASSID_FACTORY(ResourceBundle, new ResourceBundle(UnicodeString(), status) );
-  //TESTCLASSID_DEFAULT(RuleBasedTransliterator);
-  
-  //TESTCLASSID_DEFAULT(SimpleFactory);
-  //TESTCLASSID_DEFAULT(SimpleFwdCharIterator);
-  //TESTCLASSID_DEFAULT(SimpleLocaleKeyFactory);
-  //TESTCLASSID_DEFAULT(StringMatcher);
-  //TESTCLASSID_DEFAULT(StringReplacer);
-  //TESTCLASSID_DEFAULT(StringSearch);
-  
-  //TESTCLASSID_DEFAULT(TempSearch);
-  //TESTCLASSID_DEFAULT(TestMultipleKeyStringFactory);
-  //TESTCLASSID_DEFAULT(TestReplaceable);
-  TESTCLASSID_ABSTRACT(TimeZone);
-  TESTCLASSID_FACTORY(TitlecaseTransliterator,  Transliterator::createInstance(UnicodeString("Any-Title"), UTRANS_FORWARD, parseError, status));
-  TESTCLASSID_ABSTRACT(Transliterator);
-
-  TESTCLASSID_DEFAULT(UnicodeString);
-  //TESTCLASSID_DEFAULT(UStack);
-  //TESTCLASSID_DEFAULT(UVector);
-
+    ids_count = 0;
+    UParseError parseError;
+    UErrorCode status = U_ZERO_ERROR;
+    
+    
+    //TESTCLASSID_DEFAULT(AbbreviatedUnicodeSetIterator);
+    //TESTCLASSID_DEFAULT(AnonymousStringFactory);
+    TESTCLASSID_FACTORY(AnyTransliterator, Transliterator::createInstance(UnicodeString("Any-Latin"), UTRANS_FORWARD, parseError, status));
+    
+    TESTCLASSID_FACTORY(CanonicalIterator, new CanonicalIterator(UnicodeString("abc"), status));
+    //TESTCLASSID_DEFAULT(CollationElementIterator);
+    TESTCLASSID_DEFAULT(CollationKey);
+    //TESTCLASSID_FACTORY(CompoundTransliterator, Transliterator::createInstance(UnicodeString("Any-Jex;Hangul-Jamo"), UTRANS_FORWARD, parseError, status));
+    
+    //TESTCLASSID_DEFAULT(DateFormatSymbols);
+    //TESTCLASSID_DEFAULT(DecimalFormatSymbols);
+    //TESTCLASSID_DEFAULT(DictionaryBasedBreakIterator);
+    //TESTCLASSID_DEFAULT(DigitList);
+    
+    //TESTCLASSID_DEFAULT(EscapeTransliterator);
+    //TESTCLASSID_DEFAULT(EventListener);
+    
+    //TESTCLASSID_DEFAULT(FieldPosition);
+    TESTCLASSID_DEFAULT(Formattable);
+    //TESTCLASSID_DEFAULT(FunctionReplacer);
+    
+    //TESTCLASSID_DEFAULT(GregorianCalendar);
+    
+    TESTCLASSID_FACTORY(EscapeTransliterator, Transliterator::createInstance(UnicodeString("Any-Hex"), UTRANS_FORWARD, parseError, status));
+        
+    //TESTCLASSID_DEFAULT(ICUResourceBundleFactory);
+    
+    //TESTCLASSID_DEFAULT(Key); // does ont exist?
+    
+    TESTCLASSID_FACTORY(Locale, new Locale("123"));
+    TESTCLASSID_ABSTRACT(LocaleKey);
+    //TESTCLASSID_DEFAULT(LocaleKeyFactory);
+    //TESTCLASSID_DEFAULT(LowercaseTransliterator);
+    
+    //TESTCLASSID_DEFAULT(NFSubstitution);
+    //TESTCLASSID_DEFAULT(NameUnicodeTransliterator);
+    //TESTCLASSID_DEFAULT(NormalizationTransliterator);
+    //TESTCLASSID_DEFAULT(Normalizer);
+    //TESTCLASSID_DEFAULT(NullTransliterator);
+    TESTCLASSID_ABSTRACT(NumberFormat);
+    //TESTCLASSID_DEFAULT(NumeratorSubstitution);
+    
+    TESTCLASSID_DEFAULT(ParsePosition);
+    
+    //TESTCLASSID_DEFAULT(Quantifier);
+    
+    //TESTCLASSID_DEFAULT(RegexCompile);
+    //TESTCLASSID_DEFAULT(RegexMatcher);
+    //TESTCLASSID_DEFAULT(RegexPattern);
+    //TESTCLASSID_DEFAULT(RemoveTransliterator);
+    //TESTCLASSID_DEFAULT(ReplaceableGlue);
+    TESTCLASSID_FACTORY(ResourceBundle, new ResourceBundle(UnicodeString(), status) );
+    //TESTCLASSID_DEFAULT(RuleBasedTransliterator);
+    
+    //TESTCLASSID_DEFAULT(SimpleFactory);
+    //TESTCLASSID_DEFAULT(SimpleFwdCharIterator);
+    //TESTCLASSID_DEFAULT(SimpleLocaleKeyFactory);
+    //TESTCLASSID_DEFAULT(StringMatcher);
+    //TESTCLASSID_DEFAULT(StringReplacer);
+    //TESTCLASSID_DEFAULT(StringSearch);
+    
+    //TESTCLASSID_DEFAULT(TempSearch);
+    //TESTCLASSID_DEFAULT(TestMultipleKeyStringFactory);
+    //TESTCLASSID_DEFAULT(TestReplaceable);
+    TESTCLASSID_ABSTRACT(TimeZone);
+    TESTCLASSID_FACTORY(TitlecaseTransliterator,  Transliterator::createInstance(UnicodeString("Any-Title"), UTRANS_FORWARD, parseError, status));
+    TESTCLASSID_ABSTRACT(Transliterator);
+    
+    TESTCLASSID_DEFAULT(UnicodeString);
+    //TESTCLASSID_DEFAULT(UStack);
+    //TESTCLASSID_DEFAULT(UVector);
+    
 #if 0
- for(i=0;i<ids_count;i++) {
-   char junk[800];
-   sprintf(junk, " %4d:\t%p\t%s\t%s\n", 
-	   i, ids[i], ids_class[i], ids_factory[i]);
-   logln(UnicodeString(junk));
- }
+    int i;
+    for(i=0;i<ids_count;i++) {
+        char junk[800];
+        sprintf(junk, " %4d:\t%p\t%s\t%s\n", 
+            i, ids[i], ids_class[i], ids_factory[i]);
+        logln(UnicodeString(junk));
+    }
 #endif
 }
 
@@ -261,10 +261,10 @@ void UObjectTest::testIDs()
 
 void UObjectTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /* par */ )
 {
-  switch (index) {
-    
+    switch (index) {
+
     CASE(0, testIDs);
 
-  default: name = ""; break; //needed to end loop
-  }
+    default: name = ""; break; //needed to end loop
+    }
 }
