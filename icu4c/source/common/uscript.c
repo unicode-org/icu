@@ -50,7 +50,6 @@ uscript_getCode(const char* nameOrAbbrOrLocale,
         UResourceBundle* resB = ures_open(u_getDataDirectory(),nameOrAbbrOrLocale,&localErrorCode);
         if(U_SUCCESS(localErrorCode)&& localErrorCode != U_USING_DEFAULT_WARNING){
             UResourceBundle* resD = ures_getByKey(resB,kLocaleScript,NULL,&localErrorCode);
-            int index =0;
             if(U_SUCCESS(localErrorCode) ){
                 len =0;
                 while(ures_hasNext(resD)){
