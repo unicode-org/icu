@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestFmwk.java,v $ 
- * $Date: 2002/03/10 19:40:12 $ 
- * $Revision: 1.29 $
+ * $Date: 2002/06/05 23:00:58 $ 
+ * $Revision: 1.30 $
  *
  *****************************************************************************************
  */
@@ -90,22 +90,29 @@ public class TestFmwk implements TestLog {
                                                  });
 
             // Run the list of tests given in the test arguments
+	    final Object[] NO_ARGS = new Object[0];
             while (methodsToRun.hasMoreElements()) {
                 int oldCount = params.errorCount;
                 int oldInvalidCount = params.invalidCount;
 
                 Method testMethod = (Method)methodsToRun.nextElement();
-                writeTestName(testMethod.getName());
+		String testName = testMethod.getName();
 
-                try {
-                    testMethod.invoke(this, new Object[0]);
-                } catch( IllegalAccessException e ) {
-                    errln("Can't access test method " + testMethod.getName());
-                } catch( InvocationTargetException e ) {
-                    errln("Uncaught exception \""+e+"\" thrown in test method "
-                          + testMethod.getName());
-                    e.getTargetException().printStackTrace(this.params.log);
-                }
+                writeTestName(testName);
+
+		if (validateMethod(testName)) {
+		    try {
+			testMethod.invoke(this, NO_ARGS);
+		    } catch( IllegalAccessException e ) {
+			errln("Can't access test method " + testName);
+		    } catch( InvocationTargetException e ) {
+			errln("Uncaught exception \""+e+"\" thrown in test method "
+			      + testName);
+			e.getTargetException().printStackTrace(this.params.log);
+		    }
+		} else {
+		    params.invalidCount++;
+		}
                 writeTestResult(params.errorCount - oldCount, params.invalidCount - oldInvalidCount);
             }
         } else {
@@ -122,6 +129,7 @@ public class TestFmwk implements TestLog {
         // Parse the test arguments.  They can be either the flag
         // "-verbose" or names of test methods. Create a list of
         // tests to be run.
+	boolean printUsage = false;
         testsToRun = new Vector(args.length);
         for (int i = 0; i < args.length; i++) {
             if (args[i].equals("-verbose") || args[i].equals("-v")) {
@@ -131,6 +139,8 @@ public class TestFmwk implements TestLog {
                 params.prompt = true;
             } else if (args[i].equals("-nothrow")) {
                 params.nothrow = true;
+	    } else if (args[i].equals("-describe")) {
+		params.describe = true;
             } else if (args[i].startsWith("-e")) {
                 params.inclusion = (args[i].length() == 2) ? 5 : Integer.parseInt(args[i].substring(2));
             } else if (args[i].toLowerCase().startsWith("-filter:")) {
@@ -140,11 +150,14 @@ public class TestFmwk implements TestLog {
                 if (m != null) {
                     testsToRun.addElement(m);
                 } else {
-                    usage();
-                    return;
+		    printUsage = true;
                 }
             }
         }
+	if (printUsage) {
+	    usage();
+	    return;
+	}
 
         _run();
 
@@ -166,6 +179,18 @@ public class TestFmwk implements TestLog {
      */
     protected boolean validate() {
         return true;
+    }
+
+    protected String getDescription() {
+	return null;
+    }
+
+    protected boolean validateMethod(String name) {
+	return true;
+    }
+
+    protected String getMethodDescription(String name) {
+	return null;
     }
 
     protected void run(TestFmwk childTest) throws Exception {
@@ -305,9 +330,8 @@ public class TestFmwk implements TestLog {
      */
     void usage() {
         System.out.println(getClass().getName() +
-                           ": [-verbose] [-nothrow] [-prompt] [test names]");
+                           ": [-verbose] [-nothrow] [-prompt] [-describe] [test names]");
 
-        System.out.println("test names:");
         Enumeration methodNames = new SortedEnumeration(testMethods.keys(),
                                                         new Comparator() {
                                                             public int compare(Object a, Object b) {
@@ -318,8 +342,24 @@ public class TestFmwk implements TestLog {
                                                                 return false;
                                                             }
                                                         });
+	boolean valid = params.describe && validate();
+	if (valid) {
+	    String testDescription = getDescription();
+	    if (testDescription != null) {
+		System.out.println("-- " + testDescription);
+	    }
+	}
+        System.out.println("test names:");
         while( methodNames.hasMoreElements() ) {
-            System.out.println("\t" + methodNames.nextElement() );
+	    String methodName = (String)methodNames.nextElement();
+            System.out.print("\t" + methodName );
+	    if (valid) {
+		String methodDescription = getMethodDescription(methodName);
+		if (methodDescription != null) {
+		    System.out.print(" -- " + methodDescription);
+		}
+	    }
+	    System.out.println();
         }
     }
 
@@ -408,6 +448,7 @@ public class TestFmwk implements TestLog {
         public boolean   prompt = false;
         public boolean   nothrow = false;
         public boolean   verbose = false;
+	public boolean   describe = false;
         public int      inclusion = 0;
         public String    filter = null;
 
