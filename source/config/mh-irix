@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2003, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-irix,v 1.23 2003/12/18 23:14:13 emader-oss Exp $
+## $Id: mh-irix,v 1.24 2004/03/26 18:07:36 grhoten-oss Exp $
 
 ## Flags for position independent code
 SHAREDLIBCFLAGS = -shared
@@ -30,7 +30,7 @@ LD_RPATH=
 LD_RPATH_PRE=  -Wl,-rpath,
 
 ## Compiler switch to embed a library name
-LD_SONAME = -Wl,-soname -Wl,$(MIDDLE_SO_TARGET)
+LD_SONAME = -Wl,-soname -Wl,$(notdir $(MIDDLE_SO_TARGET))
 
 ## Shared object suffix
 SO=		so
