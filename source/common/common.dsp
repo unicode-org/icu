@@ -269,6 +269,10 @@ SOURCE=.\ustring.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\utf_impl.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\uvector.cpp
 # End Source File
 # End Group
@@ -874,6 +878,33 @@ InputPath=.\unicode\uloc.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\unicode\umachine.h
+
+!IF  "$(CFG)" == "common - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\umachine.h
+
+"..\..\include\unicode\umachine.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(InputPath) ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "common - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\umachine.h
+
+"..\..\include\unicode\umachine.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(InputPath) ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\unicode\umisc.h
 
 !IF  "$(CFG)" == "common - Win32 Release"
@@ -1017,6 +1048,114 @@ InputPath=.\unicode\ustring.h
 
 "..\..\include\unicode\ustring.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy                              unicode\ustring.h                            ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\utf.h
+
+!IF  "$(CFG)" == "common - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\utf.h
+
+"..\..\include\unicode\utf.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(InputPath) ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "common - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\utf.h
+
+"..\..\include\unicode\utf.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(InputPath) ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\utf16.h
+
+!IF  "$(CFG)" == "common - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\utf16.h
+
+"..\..\include\unicode\utf16.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(InputPath) ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "common - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\utf16.h
+
+"..\..\include\unicode\utf16.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(InputPath) ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\utf32.h
+
+!IF  "$(CFG)" == "common - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\utf32.h
+
+"..\..\include\unicode\utf32.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(InputPath) ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "common - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\utf32.h
+
+"..\..\include\unicode\utf32.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(InputPath) ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\utf8.h
+
+!IF  "$(CFG)" == "common - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\utf8.h
+
+"..\..\include\unicode\utf8.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(InputPath) ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "common - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\utf8.h
+
+"..\..\include\unicode\utf8.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(InputPath) ..\..\include\unicode
 
 # End Custom Build
 
