@@ -80,29 +80,49 @@ UBool CollationElementIterator::operator!=(
 UBool CollationElementIterator::operator==(
                                     const CollationElementIterator& that) const
 {
-  if (this == &that)
-    return TRUE;
-  
-  if (m_data_ == that.m_data_)
-    return TRUE;
+    UBool result = TRUE;
 
-  int length = 0;
-  if (this->m_data_->iteratordata_.flags & UCOL_ITER_HASLEN > 0) {
-      length = this->m_data_->iteratordata_.endp -
-               this->m_data_->iteratordata_.string;
-  }
-  else {
-      length = u_strlen(this->m_data_->iteratordata_.string);
-  }
+    if (this == &that) {
+        return TRUE;
+    }
   
-  return (this->m_data_->normalization_ == that.m_data_->normalization_ &&
-    this->m_data_->reset_  == that.m_data_->reset_ &&
-    uprv_memcmp(this->m_data_->iteratordata_.string, 
-                that.m_data_->iteratordata_.string, length) == 0 &&
-    this->getOffset() == that.getOffset() &&  
-    /* this->m_data_->iteratordata_.isThai == 
-                                      that.m_data_->iteratordata_.isThai && */
-    this->m_data_->iteratordata_.coll == that.m_data_->iteratordata_.coll);
+    if (m_data_ == that.m_data_) {
+        return TRUE;
+    }
+
+    // option comparison
+    result = this->m_data_->normalization_ == that.m_data_->normalization_ 
+             && this->m_data_->reset_ == that.m_data_->reset_ &&  
+             this->m_data_->iteratordata_.coll == 
+             that.m_data_->iteratordata_.coll;
+
+    int thislength = 0;
+    if (this->m_data_->iteratordata_.flags & UCOL_ITER_HASLEN) {
+        thislength = this->m_data_->iteratordata_.endp -
+                     this->m_data_->iteratordata_.string;
+    }
+    else {
+        thislength = u_strlen(this->m_data_->iteratordata_.string);
+    }
+    int thatlength = 0;
+    if (that.m_data_->iteratordata_.endp != NULL) {
+        thatlength = that.m_data_->iteratordata_.endp -
+                     that.m_data_->iteratordata_.string;
+    }
+    else {
+        thatlength = u_strlen(that.m_data_->iteratordata_.string);
+    }
+
+    if (thislength != thatlength) {
+        return FALSE;
+    }
+
+    result = result && (uprv_memcmp(this->m_data_->iteratordata_.string, 
+                         that.m_data_->iteratordata_.string, 
+                         thislength * sizeof(UChar)) == 0);
+    result = result && (this->getOffset() == that.getOffset());
+  
+    return result;
 }
 
 /**
@@ -303,35 +323,60 @@ const CollationElementIterator& CollationElementIterator::operator=(
       UCollationElements *otherucolelem = other.m_data_;
       collIterate        *coliter       = &(ucolelem->iteratordata_);
       collIterate        *othercoliter  = &(otherucolelem->iteratordata_);
-      int                length         = othercoliter->endp == NULL ?
-                                          u_strlen(othercoliter->string) : 
-                                    othercoliter->endp - othercoliter->string;
+      int                length         = 0;
+      
+      // checking only UCOL_ITER_HASLEN is not enough here as we may be in 
+      // the normalization buffer
+      if (othercoliter->endp != NULL) {
+          length = othercoliter->endp - othercoliter->string;
+      }
+      else {
+          if (othercoliter->string == NULL) {
+              length = 0;
+          }
+          else {
+            length = u_strlen(othercoliter->string);
+          }
+      }
+                                    
 
       ucolelem->normalization_ = otherucolelem->normalization_;
       ucolelem->reset_         = otherucolelem->reset_;
       ucolelem->isWritable     = TRUE;
     
       /* create a duplicate of string */
-      coliter->string   = (UChar *)uprv_malloc(length * sizeof(UChar));
-      uprv_memcpy(coliter->string, othercoliter->string,
-                  length * sizeof(UChar));
-
-      /* start and end of string */
-      coliter->endp = coliter->endp = coliter->string + length;
-
-      /* handle writable buffer here */
-      coliter->writableBufSize = othercoliter->writableBufSize;
-      if (othercoliter->stackWritableBuffer == othercoliter->writableBuffer) {
-        uprv_memcpy(coliter->stackWritableBuffer, 
-                    othercoliter->stackWritableBuffer, 
-                    UCOL_WRITABLE_BUFFER_SIZE * sizeof(UChar));
-        coliter->writableBuffer = coliter->stackWritableBuffer;
+      if (length > 0) {
+          coliter->string = (UChar *)uprv_malloc(length * sizeof(UChar));
+          uprv_memcpy(coliter->string, othercoliter->string,
+                      length * sizeof(UChar));
       }
       else {
-        coliter->writableBuffer = (UChar *)uprv_malloc(
-                                     coliter->writableBufSize * sizeof(UChar));
-        uprv_memcpy(coliter->writableBuffer, othercoliter->writableBuffer,
-                    coliter->writableBufSize * sizeof(UChar));
+          coliter->string = NULL;
+      }
+
+      /* start and end of string */
+      coliter->endp = coliter->string + length;
+
+      /* handle writable buffer here */
+      
+      if (othercoliter->flags & UCOL_ITER_INNORMBUF) {
+          uint32_t wlength = u_strlen(othercoliter->writableBuffer) + 1;
+          if (wlength < coliter->writableBufSize) {
+              uprv_memcpy(coliter->stackWritableBuffer, 
+                        othercoliter->stackWritableBuffer, 
+                        othercoliter->writableBufSize * sizeof(UChar));
+          }
+          else {
+              if (coliter->writableBuffer != coliter->stackWritableBuffer) {
+                  delete coliter->writableBuffer;
+              }
+              coliter->writableBuffer = (UChar *)uprv_malloc(
+                                         wlength * sizeof(UChar));
+              uprv_memcpy(coliter->writableBuffer, 
+                          othercoliter->writableBuffer,
+                          wlength * sizeof(UChar));
+              coliter->writableBufSize = wlength;
+          }
       }
          
       /* current position */
