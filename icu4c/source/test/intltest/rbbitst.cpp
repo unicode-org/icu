@@ -3437,6 +3437,8 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name
     char             forwardBreaks[TESTSTRINGLEN*2 + 1];
     char             reverseBreaks[TESTSTRINGLEN*2+1];
     char             isBoundaryBreaks[TESTSTRINGLEN*2+1];
+    char             followingBreaks[TESTSTRINGLEN*2+1];
+    char             precedingBreaks[TESTSTRINGLEN*2+1];
     int              i;
     int              loopCount = 0;
 
@@ -3532,6 +3534,47 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name
         }
 
 
+        // Find the break positions using the following() function.
+        // printf(".");
+        memset(followingBreaks, 0, sizeof(followingBreaks));
+        int32_t   lastBreakPos = 0;
+        followingBreaks[0] = 1;
+        for (i=0; i<testText.length(); i++) {
+            breakPos = bi->following(i);
+            if (breakPos <= i ||
+                breakPos < lastBreakPos ||
+                breakPos > testText.length() ||
+                breakPos > lastBreakPos && lastBreakPos > i ) {
+                errln("%s break monkey test: "
+                    "Out of range value returned by BreakIterator::following().\n"
+                    "Random seed=%d",  name, seed);
+                break;
+            }
+            followingBreaks[breakPos] = 1;
+            lastBreakPos = breakPos;
+        }
+
+        // Find the break positions using the preceding() function.
+        memset(precedingBreaks, 0, sizeof(followingBreaks));
+        lastBreakPos = testText.length();
+        precedingBreaks[testText.length()] = 1;
+        for (i=testText.length(); i>0; i--) {
+            breakPos = bi->preceding(i);
+            if (breakPos >= i ||
+                breakPos > lastBreakPos ||
+                breakPos < 0 ||
+                breakPos < lastBreakPos && lastBreakPos < i ) {
+                errln("%s break monkey test: "
+                    "Out of range value returned by BreakIterator::preceding().\n"
+                    "index=%d;  prev returned %d; lastBreak=%d" ,
+                    name,  i, breakPos, lastBreakPos);
+                precedingBreaks[i] = 2;   // Forces an error.
+            } else {
+                precedingBreaks[breakPos] = 1;
+                lastBreakPos = breakPos;
+            }
+        }
+
         // Compare the expected and actual results.
         for (i=0; i<=testText.length(); i++) {
             const char *errorType = NULL;
@@ -3541,6 +3584,10 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name
                 errorType = "previous()";
             } else if (isBoundaryBreaks[i] != expectedBreaks[i]) {
                 errorType = "isBoundary()";
+            } else if (followingBreaks[i] != expectedBreaks[i]) {
+                errorType = "following()";
+            } else if (precedingBreaks[i] != expectedBreaks[i]) {
+                errorType = "preceding()";
             }
 
 

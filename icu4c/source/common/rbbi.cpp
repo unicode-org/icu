@@ -571,7 +571,7 @@ int32_t RuleBasedBreakIterator::preceding(int32_t offset) {
         // this handles offset being between a supplementary character
         fText->previous32();
         handleNext(fData->fSafeFwdTable);
-        int32_t result = previous();
+        int32_t result = /*previous(); */ fText->getIndex();
         while (result >= offset) {
             result = previous();
         }
