@@ -1,11 +1,11 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2002, International Business Machines
+ *   Copyright (C) 2003, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
- *   file name:  nameprep.h
+ *   file name:  nptrans.h
  *   encoding:   US-ASCII
  *   tab size:   8 (not used)
  *   indentation:4
@@ -18,6 +18,9 @@
 #define NPTRANS_H
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_IDNA
+
 #include "strprep.h"
 #include "unicode/uniset.h"
 #include "unicode/ures.h"
@@ -141,6 +144,9 @@ inline UBool NamePrepTransform::isLDHChar(UChar32 ch){
     }
     return FALSE;
 }
+
+#endif /* #if !UCONFIG_NO_IDNA */
+
 #endif
 
 /*

@@ -10,6 +10,9 @@
 #define NORMLZR_H
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_NORMALIZATION
+
 #include "unicode/uobject.h"
 #include "unicode/unistr.h"
 #include "unicode/chariter.h"
@@ -807,4 +810,7 @@ Normalizer::compare(const UnicodeString &s1, const UnicodeString &s2,
 }
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_NORMALIZATION */
+
 #endif // NORMLZR_H

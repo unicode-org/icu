@@ -1,9 +1,13 @@
 /*
  *****************************************************************************
- * Copyright (C) 1996-2002, International Business Machines Corporation and  *
+ * Copyright (C) 1996-2003, International Business Machines Corporation and  *
  * others. All Rights Reserved.                                              *
  *****************************************************************************
  */
+
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_NORMALIZATION
 
 #include "unicode/uset.h"
 #include "unicode/ustring.h"
@@ -687,3 +691,5 @@ Hashtable *CanonicalIterator::extract(UChar32 comp, const UChar *segment, int32_
 }
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_NORMALIZATION */

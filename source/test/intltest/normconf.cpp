@@ -1,11 +1,14 @@
 /*
 ************************************************************************
-* Copyright (c) 1997-2002, International Business Machines
+* Copyright (c) 1997-2003, International Business Machines
 * Corporation and others.  All Rights Reserved.
 ************************************************************************
 */
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_NORMALIZATION
+
 #include "unicode/uchar.h"
 #include "unicode/normlzr.h"
 #include "unicode/uniset.h"
@@ -556,3 +559,5 @@ void NormalizerConformanceTest::_testOneLine(const char *line) {
         checkConformance(fields, line, 0);
     }
 }
+
+#endif /* #if !UCONFIG_NO_NORMALIZATION */
