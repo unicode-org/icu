@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestFmwk.java,v $
- * $Date: 2003/10/09 20:02:22 $
- * $Revision: 1.53 $
+ * $Date: 2003/10/09 21:24:37 $
+ * $Revision: 1.54 $
  *
  *****************************************************************************************
  */
@@ -1116,7 +1116,7 @@ public class TestFmwk extends AbstractTestLog {
                 if (!nothrow) {
                     throw new RuntimeException(message);
                 }
-                if (!suppressIndent && errorSummary != null) {
+                if (!suppressIndent && errorSummary != null && (errorCount == stack.ec + 1)) {
                     stack.appendPath(errorSummary);
                     errorSummary.append("\n");
                 }
