@@ -55,7 +55,8 @@ enum {
     /**
      * Enable case insensitive matching.  E.g., "[ab]" with this flag
      * will match 'a', 'A', 'b', and 'B'.  "[^ab]" with this flag will
-     * match all except 'a', 'A', 'b', and 'B'.
+     * match all except 'a', 'A', 'b', and 'B'. This performs a full
+     * closure over case mappings, e.g. U+017F for s.
      * @stable ICU 2.4
      */
     USET_CASE_INSENSITIVE = 2,  
@@ -66,6 +67,17 @@ enum {
      * @internal
      */
     USET_CASE = 2,
+
+    /**
+     * Enable case insensitive matching.  E.g., "[ab]" with this flag
+     * will match 'a', 'A', 'b', and 'B'.  "[^ab]" with this flag will
+     * match all except 'a', 'A', 'b', and 'B'. This adds the lower-,
+     * title-, and uppercase mappings of each existing element in the
+     * set.
+     * @draft ICU 3.2
+     */
+    USET_ADD_CASE_MAPPINGS = 4,
+
     /**
      * Enough for any single-code point set
      * @internal
