@@ -36,7 +36,7 @@ case "${host}" in
 *-*-solaris*)
 	if test "$ac_cv_prog_gcc" = no; then
 		AC_MSG_CHECKING([if we have a 64-bit (sparcv9) compiler])
-		SOL64=`$CC -xarch=v9 2>&1`
+		SOL64=`$CXX -xarch=v9 2>&1`
 		if test -z "$SOL64"; then
 			AC_MSG_RESULT(yes)
 			SOL64=yes

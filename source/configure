@@ -1123,7 +1123,7 @@ case "${host}" in
 	if test "$ac_cv_prog_gcc" = no; then
 		echo $ac_n "checking if we have a 64-bit (sparcv9) compiler""... $ac_c" 1>&6
 echo "configure:1126: checking if we have a 64-bit (sparcv9) compiler" >&5
-		SOL64=`$CC -xarch=v9 2>&1`
+		SOL64=`$CXX -xarch=v9 2>&1`
 		if test -z "$SOL64"; then
 			echo "$ac_t""yes" 1>&6
 			SOL64=yes
