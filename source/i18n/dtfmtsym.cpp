@@ -435,6 +435,8 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, UBoo
 
     fIsOwned = 0; // Nothing is owned
 
+    int32_t i;
+
     /**
      * Retrieve the string arrays we need from the resource bundle file.
      * We cast away const here, but that's okay; we won't delete any of
@@ -499,7 +501,7 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, UBoo
     ResourceBundle zoneRow = zoneArray.get((int32_t)0, status);
     fZoneStringsColCount = zoneRow.getSize();
     fZoneStrings = new UnicodeString * [fZoneStringsRowCount];
-    for(int32_t i = 0; i<fZoneStringsRowCount; i++) {
+    for(i = 0; i<fZoneStringsRowCount; i++) {
         *(fZoneStrings+i) = new UnicodeString[fZoneStringsColCount];
         zoneRow = zoneArray.get(i, status);
         for(int32_t j = 0; j<fZoneStringsColCount; j++) {
@@ -512,7 +514,7 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, UBoo
     ResourceBundle data = resource.getByKey(SimpleDateFormat::fgErasTag, status);
     fErasCount = data.getSize();
     fEras = new UnicodeString[fErasCount];
-    for(int32_t i = 0; i<fErasCount; i++) {
+    for(i = 0; i<fErasCount; i++) {
         fEras[i] = data.getStringByIndex(i, status);
     }
     setIsOwned(kEras, TRUE);
