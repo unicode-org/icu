@@ -365,24 +365,68 @@ abstract public class TimeZone implements Serializable, Cloneable {
     }
 
     /**
-     * Gets the available IDs according to the given time zone offset.
-     * @param rawOffset the given time zone GMT offset.
-     * @return an array of IDs, where the time zone for that ID has
-     * the specified GMT offset. For example, "America/Phoenix" and "America/Denver"
-     * both have GMT-07:00, but differ in daylight savings behavior.
+     * Return a new String array containing all system TimeZone IDs
+     * with the given raw offset from GMT.  These IDs may be passed to
+     * <code>get()</code> to construct the corresponding TimeZone
+     * object.
+     * @param rawOffset the offset in milliseconds from GMT
+     * @return an array of IDs for system TimeZones with the given
+     * raw offset.  If there are none, return a zero-length array.
      */
-    public static synchronized String[] getAvailableIDs(int rawOffset) {
+    public static String[] getAvailableIDs(int rawOffset) {
         return TimeZoneData.getAvailableIDs(rawOffset);
     }
 
     /**
-     * Gets all the available IDs supported.
-     * @return an array of IDs.
+     * Return a new String array containing all system TimeZone IDs.
+     * These IDs (and only these IDs) may be passed to
+     * <code>get()</code> to construct the corresponding TimeZone
+     * object.
+     * @return an array of all system TimeZone IDs
      */
-    public static synchronized String[] getAvailableIDs() {
+    public static String[] getAvailableIDs() {
         return TimeZoneData.getAvailableIDs();
     }
     
+    /**
+     * Returns the number of IDs in the equivalency group that
+     * includes the given ID.  An equivalency group contains zones
+     * that have the same GMT offset and rules.
+     *
+     * <p>The returned count includes the given ID; it is always >= 1
+     * for valid IDs.  The given ID must be a system time zone.  If it
+     * is not, returns zero.
+     * @param id a system time zone ID
+     * @return the number of zones in the equivalency group containing
+     * 'id', or zero if 'id' is not a valid system ID
+     * @see #getEquivalentID
+     */
+    public static int countEquivalentIDs(String id) {
+        return TimeZoneData.countEquivalentIDs(id);
+    }
+
+    /**
+     * Returns an ID in the equivalency group that
+     * includes the given ID.  An equivalency group contains zones
+     * that have the same GMT offset and rules.
+     *
+     * <p>The given index must be in the range 0..n-1, where n is the
+     * value returned by <code>countEquivalentIDs(id)</code>.  For
+     * some value of 'index', the returned value will be equal to the
+     * given id.  If the given id is not a valid system time zone, or
+     * if 'index' is out of range, then returns an empty string.
+     * @param id a system time zone ID
+     * @param index a value from 0 to n-1, where n is the value
+     * returned by <code>countEquivalentIDs(id)</code>
+     * @return the ID of the index-th zone in the equivalency group
+     * containing 'id', or an empty string if 'id' is not a valid
+     * system ID or 'index' is out of range
+     * @see #countEquivalentIDs
+     */
+    public static String getEquivalentID(String id, int index) {
+        return TimeZoneData.getEquivalentID(id, index);
+    }
+
     /**
      * Gets the platform defined TimeZone ID.
      **/
