@@ -35,12 +35,17 @@ else
 ICUPKGDATA_OUTDIR = $(OUTDIR)
 endif
 
-ICUDATA_SOURCE_ARCHIVE = $(shell [ -e $(srcdir)/in/$(ICUDATA_PLATFORM_NAME).dat ] && echo -n $(srcdir)/in/$(ICUDATA_PLATFORM_NAME).dat)
-
-top_builddir_from_tmp = $(patsubst ..%,../..%,$(top_builddir))
 CURDIR:=$(CURR_FULL_DIR)
 PKGDATA = $(BINDIR)/pkgdata $(PKGDATA_OPTS) -q -c -s $(CURDIR)/out/build/$(ICUDATA_PLATFORM_NAME) -d $(ICUPKGDATA_OUTDIR) -M'PKGDATA_LDFLAGS="$(LDFLAGSICUDT)"'
 
+ifeq ($(OS390_STUBDATA),1)
+OS390PKG=package390
+OS390INSTALL=install390
+
+# Additional data for 390
+OS390LIST=$(OUTTMPDIR)/icudata390.lst
+OUTTMPDIR_390STUB=$(top_builddir)/data/out/tmp_390stub
+endif
 
 # OBJDATADIR must be a short path (with ..'s) to the data.
 
@@ -56,7 +61,7 @@ OUTDIR=$(top_builddir)/data/out
 endif
 
 OUTTMPDIR=$(OUTDIR)/tmp
-MAINBUILDDIR=$(OUTDIR)/build/
+MAINBUILDDIR=$(OUTDIR)/build
 BUILDDIR=$(MAINBUILDDIR)/$(ICUDATA_PLATFORM_NAME)
 UNICODEDATADIR=$(SRCDATADIR)/unidata
 LOCSRCDIR=$(SRCDATADIR)/locales
@@ -98,15 +103,6 @@ check: all
 distclean-local: clean
 	$(RMV) Makefile
 
-ifeq ($(OS390_STUBDATA),1)
-OS390PKG=package390
-OS390INSTALL=install390
-
-# Additional data for 390
-OS390LIST=$(OUTTMPDIR)/icudata390.lst
-OUTTMPDIR_390STUB=$(top_builddir)/data/out/tmp_390stub
-endif
-
 all-local: build-dir icupkg.inc build-local packagedata $(POST_DATA_BUILD) $(OS390PKG)
 
 dist-local:
@@ -124,6 +120,21 @@ cleanpackage:
 	$(RMV) $(LIBDIR)/$(LIB_ICUDATA_NAME)*.$(SO)* $(LIBDIR)/$(LIB_STATIC_ICUDATA_NAME).$(A)
 
 check-local:
+
+# Find out if we have a source archive.
+# If we have that, then use that instead of building everything from scratch.
+ICUDATA_SOURCE_ARCHIVE = $(wildcard $(srcdir)/in/$(ICUDATA_PLATFORM_NAME).dat)
+ifeq ($(ICUDATA_SOURCE_ARCHIVE),)
+ICUDATA_ARCHIVE = $(firstword $(wildcard $(srcdir)/in/$(ICUDATA_BASENAME_VERSION)*.dat))
+# We don't have the data in the current endianess or charset.
+# See if we can find data of any archive type,
+# and convert it to the current type.
+ifneq ($(ICUDATA_ARCHIVE),)
+ICUDATA_SOURCE_ARCHIVE = $(OUTDIR)/$(ICUDATA_PLATFORM_NAME).dat
+$(ICUDATA_SOURCE_ARCHIVE): $(ICUDATA_ARCHIVE) $(OUTDIR)
+	$(INVOKE) $(BINDIR)/icuswap -t$(ICUDATA_CHAR) $(ICUDATA_ARCHIVE) $(ICUDATA_SOURCE_ARCHIVE)
+endif
+endif
 
 # During this INVOKE we only want to use stubdata.
 # We don't want to try to write over files that we are using.
@@ -267,7 +278,7 @@ CLEANFILES = *~ icupkg.inc
 
 ifeq ($(ICUDATA_SOURCE_ARCHIVE),)
 build-local: build-dir $(SO_VERSION_DATA) $(ALL_FILES) $(OUTTMPDIR)/icudata.lst $(OS390LIST)
-$(OUTTMPDIR)/icudata.lst: $(SRCLISTDEPS) build-dir
+$(OUTTMPDIR)/icudata.lst: $(SRCLISTDEPS)
 	@echo "generating $@ (list of data files)"
 	@-$(RMV) $@
 	@for file in $(ALL_FILES_LIST); do \
@@ -275,7 +286,7 @@ $(OUTTMPDIR)/icudata.lst: $(SRCLISTDEPS) build-dir
 	done;
 else
 build-local: build-dir $(SO_VERSION_DATA) $(OUTTMPDIR)/icudata.lst $(OS390LIST)
-$(OUTTMPDIR)/icudata.lst: $(SRCLISTDEPS) build-dir
+$(OUTTMPDIR)/icudata.lst: $(SRCLISTDEPS) $(ICUDATA_SOURCE_ARCHIVE) $(MAINBUILDDIR)
 	@echo "Unpacking $(ICUDATA_SOURCE_ARCHIVE) and generating $@ (list of data files)"
 	@-$(RMV) $@
 	$(INVOKE) $(BINDIR)/decmn -d $(MAINBUILDDIR) --pkgdata $(ICUDATA_SOURCE_ARCHIVE) > $@
