@@ -1,667 +1,1789 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2000, International Business Machines Corporation and    *
+ * Copyright (C) 2002, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/search/SearchTest.java,v $ 
- * $Date: 2002/06/26 18:33:52 $ 
- * $Revision: 1.16 $
+ * $Source: 
+ * $Date: 
+ * $Revision: 
  *
  *****************************************************************************************
  */
+
+/** 
+ * Port From:   ICU4C v2.1 : collate/StringSearchTest
+ * Source File: $ICU4CRoot/source/test/intltest/srchtest.cpp
+ **/
+
 package com.ibm.icu.dev.test.search;
 
-import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.impl.ICUDebug;
-import com.ibm.icu.text.SearchIterator;
-import com.ibm.icu.text.StringSearch;
-import com.ibm.icu.util.VersionInfo;
-import com.ibm.icu.text.RuleBasedCollator;
-import com.ibm.icu.text.Collator;
-import com.ibm.icu.text.BreakIterator;
-
-import java.text.CharacterIterator;
-import java.text.ParseException;
-import java.text.StringCharacterIterator;
+import com.ibm.icu.dev.test.*;
+import com.ibm.icu.text.*;
 import java.util.Locale;
-import java.util.Vector;
 
-/**
- * Unit and regression tests for the StringSearch and SearchIterator classes.
- * This uses <code>IntlTest</code> as a framework for running the tests
- * and displaying the output.  Basically, any method here that starts with
- * <code>Test</code> is run as a test.
- */
 public class SearchTest extends TestFmwk {
-    public static void main(String[] args) 
-    {
-    	try {
-			new SearchTest().run(args);
-			String[] tests = new String[1];
-			tests[0] = "TestCases";
-			// new SearchTest().run(tests);
-    	}
-    	catch (Exception e) {
-    		e.printStackTrace();
-    	}
-    }
-
-    static private final boolean valid = ICUDebug.javaVersion != VersionInfo.getInstance("1.4");
-	
-	protected boolean validate() {
-		if (valid) {
-			return true;
-		}
-		logln("StringSearch does not work with JDK 1.4");
-		return false;
-	}
-
-    //-----------------------------------------------------------
-    // Static data: collators and break iterators to use for testing
-    //
-    static RuleBasedCollator enColl;        // Generic English collator
-    static RuleBasedCollator frColl;        // French accent rules
-    static RuleBasedCollator esColl;        // Has Spanish contracting "ch"
-    static RuleBasedCollator deColl;        // Has expansions, e.g. a-umlaut -> ae
     
-    static {
-        // try {
-            enColl = (RuleBasedCollator)Collator.getInstance(Locale.US);
-            frColl = (RuleBasedCollator)Collator.getInstance(Locale.FRANCE);
-            
-            esColl = (RuleBasedCollator)Collator.getInstance(new Locale("es", "ES"));
-            deColl = (RuleBasedCollator)Collator.getInstance(new Locale("de", "DE"));
-            /* esColl = new RuleBasedCollator(enColl.getRules() + " & C < ch ; cH ; Ch ; CH");
-            
-            deColl = new RuleBasedCollator(enColl.getRules() + " & ae ; \u00e4 & AE ; \u00c4"
-                                                             + " & oe ; \u00f6 & OE ; \u00d6"
-                                                             + " & ue ; \u00fc & UE ; \u00dc"); 
-            */
-        // }
-        // catch (ParseException e) {
-        //     System.out.print("");
-        // }
-    }
-    
-    static BreakIterator enWord = BreakIterator.getWordInstance(Locale.US);
-    
-    static String testString = 
-            "blackbirds Pat p\u00E9ch\u00E9 " +
-            "p\u00EAche p\u00E9cher p\u00EAcher " +
-            "Tod T\u00F6ne black Tofu blackbirds " +
-            "Ton PAT toehold " +
-            "blackbird " +
-            "blackbird pat " +
-            "toe big Toe";
-    
-    //-------------------------------------------------------------------------
-    // The primary test consists of running through all of the strings in this
-    // table and making sure we find the proper matches
-    //
-    static class TestCase {
-        TestCase(RuleBasedCollator c, int strength, BreakIterator breaker,
-                    String pattern, String target, int[] matches) {
-            this.collator = c;
+    //inner class
+    static class SearchData {
+        SearchData(String text, String pattern, String coll, int strength, String breaker,
+                   int[] offset, int[] size) {
+            this.text = text;
+            this.pattern = pattern;
+            this.collator = coll;
             this.strength = strength;
             this.breaker = breaker;
-            this.pattern = pattern;
-            this.target = target;
-            this.matches = matches;
+            this.offset = offset;
+            this.size = size;
         }
-        RuleBasedCollator   collator;
-        int                 strength;
-        BreakIterator       breaker;
+        String              text;
         String              pattern;
-        String              target;
-        int[]               matches;
+        String              collator;
+        int                 strength;
+        String              breaker;
+        int[]               offset;
+        int[]               size;
     };
-    static TestCase[] testCases = {
-        new TestCase(enColl, Collator.PRIMARY, null, "fox",
-                //   012345678901234567890123456789012345678901234567890123456789
-                    "The quick brown fox jumps over the lazy foxes",
-                    new int[] { 16, 40 }
-                    ),
+    
+    RuleBasedCollator m_en_us_; 
+    RuleBasedCollator m_fr_fr_;
+    RuleBasedCollator m_de_;
+    RuleBasedCollator m_es_; 
+    BreakIterator     m_en_wordbreaker_ = BreakIterator.getWordInstance();
+    BreakIterator     m_en_characterbreaker_ = BreakIterator.getCharacterInstance();
+    
+    static SearchData[] BASIC = {
+        new SearchData("xxxxxxxxxxxxxxxxxxxx",          "fisher",       null, Collator.TERTIARY, null, new int[] {-1},            new int[]{0}),
+        new SearchData("silly spring string",           "string",       null, Collator.TERTIARY, null, new int[]{13, -1},         new int[]{6}),
+        new SearchData("silly spring string string",    "string",       null, Collator.TERTIARY, null, new int[]{13, 20, -1},     new int[]{6, 6}),
+        new SearchData("silly string spring string",    "string",       null, Collator.TERTIARY, null, new int[]{6, 20, -1},      new int[]{6, 6}),
+        new SearchData("string spring string",          "string",       null, Collator.TERTIARY, null, new int[]{0, 14, -1},      new int[]{6, 6}),
+        new SearchData("Scott Ganyo",                   "c",            null, Collator.TERTIARY, null, new int[]{1, -1},          new int[]{1}),
+        new SearchData("Scott Ganyo",                   " ",            null, Collator.TERTIARY, null, new int[]{5, -1},          new int[]{1}),
+        new SearchData("\u0300\u0325",                  "\u0300",       null, Collator.TERTIARY, null, new int[]{-1},             new int[]{0}),
+        new SearchData("a\u0300\u0325",                 "\u0300",       null, Collator.TERTIARY, null, new int[]{-1},             new int[]{0}),
+        new SearchData("a\u0300\u0325",                 "\u0300\u0325", null, Collator.TERTIARY, null, new int[]{1, -1},          new int[]{2}),
+        new SearchData("a\u0300b",                      "\u0300",       null, Collator.TERTIARY, null, new int[]{1, -1},          new int[]{1}),
+        new SearchData(null,                            null,           null, Collator.TERTIARY, null, new int[]{-1},             new int[]{0})
+    };
+    
+    SearchData BREAKITERATOREXACT[] = {
+        new SearchData("foxy fox", "fox", null, Collator.TERTIARY, "characterbreaker", new int[] {0, 5, -1}, new int[] {3, 3}),
+        new SearchData("foxy fox", "fox", null, Collator.TERTIARY, "wordbreaker", new int[] {5, -1}, new int[] {3}),
+        new SearchData("This is a toe T\u00F6ne", "toe", "de", Collator.PRIMARY, "characterbreaker", new int[] {10, 14, -1}, new int[] {3, 2}),
+        new SearchData("This is a toe T\u00F6ne", "toe", "de", Collator.PRIMARY, "wordbreaker", new int[] {10, -1}, new int[] {3}),
+        new SearchData("Channel, another channel, more channels, and one last Channel", "Channel", "es", Collator.TERTIARY, 
+             "wordbreaker", new int[] {0, 54, -1}, new int[] {7, 7}),
+        /* jitterbug 1745 */
+        new SearchData("testing that \u00e9 does not match e", "e", null, Collator.TERTIARY, 
+            "characterbreaker", new int[] {1, 17, 30, -1}, new int[] {1, 1, 1}),
+        new SearchData("testing that string ab\u00e9cd does not match e", "e", null, Collator.TERTIARY, 
+            "characterbreaker", new int[] {1, 28, 41, -1}, new int[] {1, 1, 1}),
+        new SearchData(null, null, null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0})
+    };
+    
+    SearchData BREAKITERATORCANONICAL[] = {
+        new SearchData("foxy fox", "fox", null, Collator.TERTIARY, "characterbreaker", new int[] {0, 5, -1}, new int[] {3, 3}),
+        new SearchData("foxy fox", "fox", null, Collator.TERTIARY, "wordbreaker", new int[] {5, -1}, new int[] {3}),
+        new SearchData("This is a toe T\u00F6ne", "toe", "de", Collator.PRIMARY, "characterbreaker", new int[] {10, 14, -1}, new int[] {3, 2}),
+        new SearchData("This is a toe T\u00F6ne", "toe", "de", Collator.PRIMARY, "wordbreaker", new int[] {10, -1}, new int[] {3}), 
+        new SearchData("Channel, another channel, more channels, and one last Channel", "Channel", "es", Collator.TERTIARY, "wordbreaker", 
+                       new int[] {0, 54, -1}, new int[] {7, 7}),
+        /* jitterbug 1745 */
+        new SearchData("testing that \u00e9 does not match e", "e", null, Collator.TERTIARY, 
+            "characterbreaker", new int[] {1, 17, 30, -1}, new int[] {1, 1, 1}),
+        new SearchData("testing that string ab\u00e9cd does not match e", "e", null, 
+             Collator.TERTIARY, "characterbreaker", new int[] {1, 28, 41, -1}, new int[] {1, 1, 1}),
+        new SearchData(null, null, null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0})
+    };
+    
+    SearchData BASICCANONICAL[] = {
+        new SearchData("xxxxxxxxxxxxxxxxxxxx", "fisher", null, Collator.TERTIARY, null, new int[] {-1}, new int [] {0}),
+        new SearchData("silly spring string", "string", null, Collator.TERTIARY, null, new int[] {13, -1}, new int[] {6}),
+        new SearchData("silly spring string string", "string", null, Collator.TERTIARY, null, new int[] {13, 20, -1}, new int[] {6, 6}),
+        new SearchData("silly string spring string", "string", null, Collator.TERTIARY, null, new int[] {6, 20, -1}, new int[] {6, 6}),
+        new SearchData("string spring string", "string", null, Collator.TERTIARY, null, new int[] {0, 14, -1}, new int[] {6, 6}),
+        new SearchData("Scott Ganyo", "c", null, Collator.TERTIARY, null, new int[] {1, -1}, new int[] {1}),
+        new SearchData("Scott Ganyo", " ", null, Collator.TERTIARY, null, new int[] {5, -1}, new int[] {1}),
+        new SearchData("\u0300\u0325", "\u0300", null, Collator.TERTIARY, null, new int [] {0, -1}, new int[] {2}),
+        new SearchData("a\u0300\u0325", "\u0300", null, Collator.TERTIARY, null, new int [] {1, -1}, new int[] {2}),
+        new SearchData("a\u0300\u0325", "\u0300\u0325", null, Collator.TERTIARY, null, new int[] {1, -1}, new int[]{2}),
+        new SearchData("a\u0300b", "\u0300", null, Collator.TERTIARY, null, new int[]{1, -1}, new int[] {1}),
+        new SearchData("a\u0300\u0325b", "\u0300b", null, Collator.TERTIARY, null, new int[] {1, -1}, new int[] {3}),
+        new SearchData("\u0325\u0300A\u0325\u0300", "\u0300A\u0300", null, Collator.TERTIARY, null, new int[] {0, -1}, new int[] {5}),
+        new SearchData("\u0325\u0300A\u0325\u0300", "\u0325A\u0325", null, Collator.TERTIARY, null, new int[] {0, -1}, new int[] {5}),
+        new SearchData("a\u0300\u0325b\u0300\u0325c \u0325b\u0300 \u0300b\u0325", "\u0300b\u0325", null, Collator.TERTIARY, null, 
+            new int[] {1, 12, -1}, new int[] {5, 3}),
+        new SearchData(null, null, null, Collator.TERTIARY, null, new int[] {-1}, new int[]{0})
+    };
 
-        new TestCase(enColl, Collator.PRIMARY, enWord, "fox",
-                //   012345678901234567890123456789012345678901234567890123456789
-                    "The quick brown fox jumps over the lazy foxes",
-                    new int[] { 16 }
-                    ),
+    SearchData COLLATOR[] = {
+        /* english */
+        new SearchData("fox fpx", "fox", null, Collator.TERTIARY, null, new int[] {0, -1}, new int[] {3}), 
+        /* tailored */
+        new SearchData("fox fpx", "fox", null, Collator.PRIMARY, null, new int[] {0, 4, -1}, new int[] {3, 3}), 
+        new SearchData(null, null, null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0})
+    };
+    
+    String TESTCOLLATORRULE = "& o,O ; p,P";
+    String EXTRACOLLATIONRULE = " & ae ; \u00e4 & AE ; \u00c4 & oe ; \u00f6 & OE ; \u00d6 & ue ; \u00fc & UE ; \u00dc";
 
-        new TestCase(frColl, Collator.PRIMARY, null, "peche",
-                    testString,
-                    new int[] { 15, 21, 27, 34 }
-                    ),
-        new TestCase(frColl, Collator.PRIMARY, enWord, "blackbird",
-                    testString,
-                    new int[] { 88, 98 }
-                    ),
+    
+    SearchData COLLATORCANONICAL[] = {
+        /* english */
+        new SearchData("fox fpx", "fox", null, Collator.TERTIARY, null, new int[] {0, -1}, new int[] {3}), 
+        /* tailored */
+        new SearchData("fox fpx", "fox", null, Collator.PRIMARY, null, new int[] {0, 4, -1}, new int[] {3, 3}), 
+        new SearchData(null, null, null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0})
+    };
 
-        // NOTE: this case depends on a bug fix in JDK 1.2.2 ("Cricket")
-        /*new TestCase(deColl, Collator.PRIMARY, null, "toe",
-                //   012345678901234567890123456789012345678901234567890123456789
-                    "This is a toe T\u00F6ne",
-                    new int[] { 10, 14 }
-                    ),*/
+    SearchData COMPOSITEBOUNDARIES[] = {
+        new SearchData("\u00C0", "A", null, Collator.TERTIARY, null, new int[] {0, -1}, new int[] {1}),
+        new SearchData("A\u00C0C", "A", null, Collator.TERTIARY, null, new int[]  {0, 1, -1}, new int[]  {1, 1}),
+        new SearchData("\u00C0A", "A", null, Collator.TERTIARY, null, new int[] {0, 1, -1}, new int[] {1, 1}),
+        new SearchData("B\u00C0", "A", null, Collator.TERTIARY, null, new int[] {1, -1}, new int[] {1}),
+        new SearchData("\u00C0B", "A", null, Collator.TERTIARY, null, new int[] {0, -1}, new int[] {1}),
+        new SearchData("\u00C0", "\u0300", null, Collator.TERTIARY, null, new int[] {0, -1}, new int[] {1}),
+        new SearchData("\u0300\u00C0", "\u0300", null, Collator.TERTIARY, null, new int[] {0, 1, -1}, new int[] {1, 1}),
+        new SearchData("\u00C0\u0300", "\u0300", null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0}),
+        /* A + 030A + 0301 */
+        new SearchData("\u01FA", "\u01FA", null, Collator.TERTIARY, null, new int[] {0, -1}, new int[] {1}),
+        new SearchData("\u01FA", "\u030A", null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0}),
+        new SearchData("\u01FA", "A\u030A", null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0}),
+        new SearchData("\u01FA", "\u030AA", null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0}),
+        new SearchData("\u01FA", "\u0301", null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0}),
+        new SearchData("\u01FA", "A\u0301", null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0}),
+        new SearchData("\u01FA", "\u0301A", null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0}),
+        new SearchData("\u01FA", "\u030A\u0301", null, Collator.TERTIARY, null, new int[] {0, -1}, new int[] {1}),
+        new SearchData("A\u01FA", "A\u030A", null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0}),
+        new SearchData("\u01FAA", "\u0301A", null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0}),
+        new SearchData("\u0F73", "\u0F73", null, Collator.TERTIARY, null, new int[] {0, -1}, new int[] {1}),
+        new SearchData("\u0F73", "\u0F71", null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0}),
+        new SearchData("\u0F73", "\u0F72", null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0}),
+        new SearchData("\u0F73", "\u0F71\u0F72", null, Collator.TERTIARY, null, new int[] {0, -1}, new int[] {1}),
+        new SearchData("A\u0F73", "A\u0F71", null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0}),
+        new SearchData("\u0F73A", "\u0F72A", null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0}),
+        new SearchData(null, null, null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0})
+    };
 
-        /* Due to a bug in the JDK 1.2 FCS version of CollationElementIterator,
-         * searching through text containing contracting character sequences 
-         * isn't working properly right now.  This will probably be fixed in
-         * JDK 1.3 ("Kestrel").  When it is, uncomment these test cases.
-         *
-        new TestCase(esColl, Collator.PRIMARY, enWord, "channel",
-                //   0123456789012345678901234567890123456789012345678901234567890123456789
-                    "A channel, another CHANNEL, more Channels, and one last channel...",
-                    new int[] {  }
-                    ),
+    SearchData COMPOSITEBOUNDARIESCANONICAL[] = {
+        new SearchData("\u00C0", "A", null, Collator.TERTIARY, null, new int[] {0, -1}, new int[] {1}),
+        new SearchData("A\u00C0C", "A", null, Collator.TERTIARY, null, new int[] {0, 1, -1}, new int[] {1, 1}),
+        new SearchData("\u00C0A", "A", null, Collator.TERTIARY, null, new int[] {0, 1, -1}, new int[] {1, 1}),
+        new SearchData("B\u00C0", "A", null, Collator.TERTIARY, null, new int[] {1, -1}, new int[] {1}),
+        new SearchData("\u00C0B", "A", null, Collator.TERTIARY, null, new int[] {0, -1}, new int[] {1}),
+        new SearchData("\u00C0", "\u0300", null, Collator.TERTIARY, null, new int[] {0, -1}, new int[] {1}),
+        new SearchData("\u0300\u00C0", "\u0300", null, Collator.TERTIARY, null, new int[] {0, 1, -1}, new int[] {1, 1}),
+        /* \u0300 blocked by \u0300 */
+        new SearchData("\u00C0\u0300", "\u0300", null, Collator.TERTIARY, null, new int[] {0, -1}, new int[] {2}),
+        /* A + 030A + 0301 */
+        new SearchData("\u01FA", "\u01FA", null, Collator.TERTIARY, null, new int[] {0, -1}, new int[] {1}),
+        new SearchData("\u01FA", "\u030A", null, Collator.TERTIARY, null, new int[] {0, -1}, new int[] {1}),
+        new SearchData("\u01FA", "A\u030A", null, Collator.TERTIARY, null, new int[] {0, -1}, new int[] {1}),
+        new SearchData("\u01FA", "\u030AA", null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0}),
+        new SearchData("\u01FA", "\u0301", null, Collator.TERTIARY, null, new int[] {0, -1}, new int[] {1}),
+        /* blocked accent */
+        new SearchData("\u01FA", "A\u0301", null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0}),
+        new SearchData("\u01FA", "\u0301A", null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0}),
+        new SearchData("\u01FA", "\u030A\u0301", null, Collator.TERTIARY, null, new int[] {0, -1}, new int[] {1}),
+        new SearchData("A\u01FA", "A\u030A", null, Collator.TERTIARY, null, new int[] {1, -1}, new int[] {1}),
+        new SearchData("\u01FAA", "\u0301A", null, Collator.TERTIARY, null, new int[] {0, -1}, new int[] {2}),
+        new SearchData("\u0F73", "\u0F73", null, Collator.TERTIARY, null, new int[] {0, -1}, new int[] {1}),
+        new SearchData("\u0F73", "\u0F71", null, Collator.TERTIARY, null, new int[] {0, -1}, new int[] {1}),
+        new SearchData("\u0F73", "\u0F72", null, Collator.TERTIARY, null, new int[] {0, -1}, new int[] {1}),
+        new SearchData("\u0F73", "\u0F71\u0F72", null, Collator.TERTIARY, null, new int[] {0, -1}, new int[] {1}),
+        new SearchData("A\u0F73", "A\u0F71", null, Collator.TERTIARY, null, new int[] {0, -1}, new int[] {2}),
+        new SearchData("\u0F73A", "\u0F72A", null, Collator.TERTIARY, null, new int[] {0, -1}, new int[] {2}),
+        new SearchData("\u01FA A\u0301\u030A A\u030A\u0301 A\u030A \u01FA", "A\u030A", 
+            null, Collator.TERTIARY, null, new int[] {0, 6, 10, 13, -1}, new int[] {1, 3, 2, 1}),
+        new SearchData(null, null, null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0})
+    };
 
-        new TestCase(esColl, Collator.TERTIARY, enWord, "Channel",
-                //   0123456789012345678901234567890123456789012345678901234567890123456789
-                    "Channel, another channel, more channels, and one last Channel",
-                    new int[] {  }
-                    ),
-        */
+    SearchData SUPPLEMENTARY[] = {
+        /* 012345678901234567890123456789012345678901234567890012345678901234567890123456789012345678901234567890012345678901234567890123456789 */
+        new SearchData("abc \uD800\uDC00 \uD800\uDC01 \uD801\uDC00 \uD800\uDC00abc abc\uD800\uDC00 \uD800\uD800\uDC00 \uD800\uDC00\uDC00", 
+            "\uD800\uDC00", null, Collator.TERTIARY, null, new int[] {4, 13, 22, 26, 29, -1}, new int[] {2, 2, 2, 2, 2}),
+        new SearchData(null, null, null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0})
+    };
+
+    String CONTRACTIONRULE = "&z = ab/c < AB < X\u0300 < ABC < X\u0300\u0315";
+    
+    SearchData CONTRACTION[] = {
+        /* common discontiguous */
+        new SearchData("A\u0300\u0315", "\u0300", null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0}),
+        new SearchData("A\u0300\u0315", "\u0300\u0315", null, Collator.TERTIARY, null, new int[] {1, -1}, new int[] {2}),
+        /* contraction prefix */
+        new SearchData("AB\u0315C", "A", null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0}),
+        new SearchData("AB\u0315C", "AB", null, Collator.TERTIARY, null, new int[] {0, -1}, new int[] {2}),
+        new SearchData("AB\u0315C", "\u0315", null, Collator.TERTIARY, null, new int[] {2, -1}, new int[] {1}),
+        /* discontiguous problem here for backwards iteration. 
+        accents not found because discontiguous stores all information */
+        new SearchData("X\u0300\u0319\u0315", "\u0319", null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0}),
+         /* ends not with a contraction character */
+        new SearchData("X\u0315\u0300D", "\u0300\u0315", null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0}),
+        new SearchData("X\u0315\u0300D", "X\u0300\u0315", null, Collator.TERTIARY, null, new int[] {0, -1}, new int[] {3}),
+        new SearchData("X\u0300\u031A\u0315D", "X\u0300", null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0}),
+        /* blocked discontiguous */
+        new SearchData("X\u0300\u031A\u0315D", "\u031A\u0315D", null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0}),
+        new SearchData("ab", "z", null, Collator.TERTIARY, null, new int[] {0, -1}, new int[] {2}),
+        new SearchData(null, null, null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0})
+    };
+    
+    SearchData CONTRACTIONCANONICAL[] = {
+        /* common discontiguous */
+        new SearchData("A\u0300\u0315", "\u0300", null, Collator.TERTIARY, null, new int[] {1, -1}, new int[] {2}),
+        new SearchData("A\u0300\u0315", "\u0300\u0315", null, Collator.TERTIARY, null, new int[] {1, -1}, new int[] {2}),
+        /* contraction prefix */
+        new SearchData("AB\u0315C", "A", null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0}),
+        new SearchData("AB\u0315C", "AB", null, Collator.TERTIARY, null, new int[] {0, -1}, new int[] {2}),
+        new SearchData("AB\u0315C", "\u0315", null, Collator.TERTIARY, null, new int[] {2, -1}, new int[] {1}),
+        /* discontiguous problem here for backwards iteration. 
+        forwards gives 0, 4 but backwards give 1, 3 */
+        /* {"X\u0300\u0319\u0315", "\u0319", null, Collator.TERTIARY, null, {0, -1}, 
+        {4}}, */
+        
+         /* ends not with a contraction character */
+        new SearchData("X\u0315\u0300D", "\u0300\u0315", null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0}),
+        new SearchData("X\u0315\u0300D", "X\u0300\u0315", null, Collator.TERTIARY, null, 
+            new int[] {0, -1}, new int[] {3}),
+        new SearchData("X\u0300\u031A\u0315D", "X\u0300", null, Collator.TERTIARY, null, 
+            new int[] {0, -1}, new int[] {4}),
+        /* blocked discontiguous */
+        new SearchData("X\u0300\u031A\u0315D", "\u031A\u0315D", null, Collator.TERTIARY, null, 
+            new int[] {1, -1}, new int[] {4}),
+        new SearchData("ab", "z", null, Collator.TERTIARY, null, new int[] {0, -1}, new int[] {2}),
+        new SearchData(null, null, null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0})
+    };
+    
+    SearchData MATCH[] = {
+        new SearchData("a busy bee is a very busy beeee", "bee", null, Collator.TERTIARY, null, 
+        new int[] {7, 26, -1}, new int[] {3, 3}),
+        /* 012345678901234567890123456789012345678901234567890 */
+        new SearchData("a busy bee is a very busy beeee with no bee life", "bee", null, 
+            Collator.TERTIARY, null, new int[] {7, 26, 40, -1}, new int[] {3, 3, 3}),
+        new SearchData(null, null, null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0})
+    };
+    
+    String IGNORABLERULE = "&a = \u0300";
+    
+    SearchData IGNORABLE[] = {
+        new SearchData("\u0315\u0300 \u0315\u0300\u0315 ", "\u0300", null, Collator.PRIMARY, null, 
+            new int[] {0, 3, -1}, new int[] {2, 3}),
+        new SearchData(null, null, null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0})
+    };
+    
+    SearchData NORMCANONICAL[] = {
+        new SearchData("\u0300\u0325", "\u0300", null, Collator.TERTIARY, null, new int[] {0, -1}, new int[] {2}),
+        new SearchData("\u0300\u0325", "\u0325", null, Collator.TERTIARY, null, new int[] {0, -1}, new int[] {2}),
+        new SearchData("a\u0300\u0325", "\u0325\u0300", null, Collator.TERTIARY, null, new int[] {1, -1}, 
+            new int[] {2}),
+        new SearchData("a\u0300\u0325", "\u0300\u0325", null, Collator.TERTIARY, null, new int[] {1, -1}, 
+            new int[] {2}),
+        new SearchData("a\u0300\u0325", "\u0325", null, Collator.TERTIARY, null, new int[] {1, -1}, new int[] {2}),
+        new SearchData("a\u0300\u0325", "\u0300", null, Collator.TERTIARY, null, new int[] {1, -1}, new int[] {2}),
+        new SearchData(null, null, null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0})
+    };
+    
+    SearchData NORMEXACT[] = {
+        new SearchData("a\u0300\u0325", "\u0325\u0300", null, Collator.TERTIARY, null, new int[] {1, -1}, new int[] {2}),
+        new SearchData(null, null, null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0})
+    };
+
+    SearchData NONNORMEXACT[] = {
+        new SearchData("a\u0300\u0325", "\u0325\u0300", null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0}),
+        new SearchData(null, null, null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0})
+    };
+    
+    SearchData OVERLAP[] = {
+        new SearchData("abababab", "abab", null, Collator.TERTIARY, null, new int[] {0, 2, 4, -1}, new int[] {4, 4, 4}),
+        new SearchData(null, null, null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0})
+    };
+    
+    SearchData NONOVERLAP[] = {
+        new SearchData("abababab", "abab", null, Collator.TERTIARY, null, new int[] {0, 4, -1}, new int[] {4, 4}),
+        new SearchData(null, null, null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0})
+    };
+    
+    SearchData OVERLAPCANONICAL[] = {
+        new SearchData("abababab", "abab", null, Collator.TERTIARY, null, new int[] {0, 2, 4, -1}, 
+                        new int[] {4, 4, 4}),
+        new SearchData(null, null, null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0})
+    };
+    
+    SearchData NONOVERLAPCANONICAL[] = {
+        new SearchData("abababab", "abab", null, Collator.TERTIARY, null, new int[] {0, 4, -1}, new int[] {4, 4}),
+        new SearchData(null, null, null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0})
+    };
+    
+    SearchData PATTERNCANONICAL[] = {
+        new SearchData("The quick brown fox jumps over the lazy foxes", "the", null, 
+                       Collator.PRIMARY, null, new int[] {0, 31, -1}, new int[] {3, 3}),
+        new SearchData("The quick brown fox jumps over the lazy foxes", "fox", null, 
+                       Collator.PRIMARY, null, new int[] {16, 40, -1}, new int[] {3, 3}),
+        new SearchData(null, null, null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0})
+    };
+    
+    SearchData PATTERN[] = {
+        new SearchData("The quick brown fox jumps over the lazy foxes", "the", null, 
+                       Collator.PRIMARY, null, new int[] {0, 31, -1}, new int[] {3, 3}),
+        new SearchData("The quick brown fox jumps over the lazy foxes", "fox", null, 
+                       Collator.PRIMARY, null, new int[] {16, 40, -1}, new int[] {3, 3}),
+        new SearchData(null, null, null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0})
+    };
+    
+    SearchData STRENGTH[] = {
+        /*012345678901234567890123456789012345678901234567890123456789*/
+        new SearchData("The quick brown fox jumps over the lazy foxes", "fox", "en", 
+                       Collator.PRIMARY, null, new int[] {16, 40, -1}, new int[] {3, 3}),
+        new SearchData("The quick brown fox jumps over the lazy foxes", "fox", "en", 
+                       Collator.PRIMARY, "wordbreaker", new int[] {16, -1}, new int[] {3}),
+        new SearchData("blackbirds Pat p\u00E9ch\u00E9 p\u00EAche p\u00E9cher p\u00EAcher Tod T\u00F6ne black Tofu blackbirds Ton PAT toehold blackbird black-bird pat toe big Toe",
+                       "peche", "fr", Collator.PRIMARY, null, new int[] {15, 21, 27, 34, -1}, new int[] {5, 5, 5, 5}),
+        new SearchData("This is a toe T\u00F6ne", "toe", "de", Collator.PRIMARY, null, 
+                        new int[] {10, 14, -1}, new int[] {3, 2}),
+        new SearchData("A channel, another CHANNEL, more Channels, and one last channel...", "channel", "es", 
+                        Collator.PRIMARY, null, new int[] {2, 19, 33, 56, -1}, new int[] {7, 7, 7, 7}),
+        new SearchData(null, null, null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0})
+    };
+    
+    SearchData STRENGTHCANONICAL[] = {
+        /*012345678901234567890123456789012345678901234567890123456789 */
+        new SearchData("The quick brown fox jumps over the lazy foxes", "fox", "en", 
+                       Collator.PRIMARY, null, new int[] {16, 40, -1}, new int[] {3, 3}),
+        new SearchData("The quick brown fox jumps over the lazy foxes", "fox", "en", 
+                       Collator.PRIMARY, "wordbreaker", new int[] {16, -1}, new int[] {3}),
+        new SearchData("blackbirds Pat p\u00E9ch\u00E9 p\u00EAche p\u00E9cher p\u00EAcher Tod T\u00F6ne black Tofu blackbirds Ton PAT toehold blackbird black-bird pat toe big Toe",
+                       "peche", "fr", Collator.PRIMARY, null, new int[] {15, 21, 27, 34, -1}, new int[] {5, 5, 5, 5}),
+        new SearchData("This is a toe T\u00F6ne", "toe", "de", Collator.PRIMARY, null, 
+                       new int[] {10, 14, -1}, new int[] {3, 2}),
+        new SearchData("A channel, another CHANNEL, more Channels, and one last channel...", "channel", "es", 
+                       Collator.PRIMARY, null, new int[]{2, 19, 33, 56, -1}, new int[] {7, 7, 7, 7}),
+        new SearchData(null, null, null, Collator.TERTIARY, null, new int[] {-1}, new int[]{0})
+    };
+    
+    SearchData SUPPLEMENTARYCANONICAL[] = {
+        /*012345678901234567890123456789012345678901234567890012345678901234567890123456789012345678901234567890012345678901234567890123456789 */
+        new SearchData("abc \uD800\uDC00 \uD800\uDC01 \uD801\uDC00 \uD800\uDC00abc abc\uD800\uDC00 \uD800\uD800\uDC00 \uD800\uDC00\uDC00", 
+                       "\uD800\uDC00", null, Collator.TERTIARY, null, new int[] {4, 13, 22, 26, 29, -1}, 
+                       new int[] {2, 2, 2, 2, 2}),
+        new SearchData(null, null, null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0})
+    };
+    
+    static SearchData VARIABLE[] = {
+        /*012345678901234567890123456789012345678901234567890123456789*/
+        new SearchData("blackbirds black blackbirds blackbird black-bird", "blackbird", null, Collator.TERTIARY,   null, 
+        new int[] {0, 17, 28, 38, -1}, new int[] {9, 9, 9, 10}),
+        
+        /* to see that it doesn't go into an infinite loop if the start of text
+        is a ignorable character */
+        new SearchData(" on",                                              "go",        null, Collator.TERTIARY,   null, 
+                       new int[] {-1}, new int[]{0}),
+        new SearchData("abcdefghijklmnopqrstuvwxyz",                       "   ",       null, Collator.PRIMARY,    null, 
+                        new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, -1}, 
+                        new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}),
+        
+        /* testing tightest match */ 
+        new SearchData(" abc  a bc   ab c    a  bc     ab  c",             "abc",       null, Collator.QUATERNARY, null, 
+                       new int[]{1, -1}, new int[] {3}),
+        /*012345678901234567890123456789012345678901234567890123456789 */
+        new SearchData(" abc  a bc   ab c    a  bc     ab  c",             "abc",       null, Collator.SECONDARY,  null,
+                       new int[] {1, 6, 13, 21, 31, -1}, new int[] {3, 4, 4, 5, 5}),
+    
+        /* totally ignorable text */
+        new SearchData("           ---------------",                       "abc",       null, Collator.SECONDARY,  null, 
+                       new int[] {-1}, new int[] {0}),
+        new SearchData(null, null, null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0})
+    };
+    
+    static SearchData TEXTCANONICAL[] = {
+        new SearchData("the foxy brown fox",                               "fox",       null, Collator.TERTIARY,   null,
+                       new int[] {4, 15, -1}, new int[] {3, 3}),
+        new SearchData("the quick brown fox",                              "fox",       null, Collator.TERTIARY,   null,
+                       new int[] {16, -1}, new int[]{3}),
+        new SearchData(null, null, null, Collator.TERTIARY,null, new int[] {-1}, new int[] {0})
     };
     
     /**
-     * Test getInstance
+     * Constructor
      */
-    public void TestInstance() 
+    public SearchTest()
     {
-    	RuleBasedCollator encoll = (RuleBasedCollator)Collator.getInstance(
-    														Locale.ENGLISH);
-    	encoll.setStrength(Collator.TERTIARY);
-    	BreakIterator brk = null;
-    	CharacterIterator text = new StringCharacterIterator(
-    													"string spring string");
-    	String pattern = "string";
-    	//try { // Try/catch disabled; there's no way Exception can be thrown
-    		StringSearch strsrch = new StringSearch(pattern, text, encoll, brk);
-    		strsrch = new StringSearch(pattern, text, encoll);
-    	//}
-    	//catch (Exception e) {
-    	//	e.printStackTrace();
-    	//	errln("Error getting instance");
-        //}
-    }
-
-    /**
-     * Test using the test cases defined above
-     */
-    public void TestCases() {
-        for (int t = 0; t < testCases.length; t++)
-        {
-            logln("case " + t);
-            TestCase c = testCases[t];
-            c.collator.setStrength(c.strength);
-            StringSearch iter = new StringSearch(c.pattern,
-                                        new StringCharacterIterator(c.target),
-                                        c.collator, c.breaker);
-            doTestCase(iter, c.matches);
-        }
-    }
-    
-    /**
-     * Test for SearchIterator.setOverlapping()
-     */
-    public void TestOverlapping() {
-        // Create a search iterator. 
-        StringSearch iter = new StringSearch("abab",
-                                             new StringCharacterIterator("abababab"),
-                                             enColl);
-        
-        int[] overlap = new int[] { 0, 2, 4 };  // expected results
-        int[] novrlap = new int[] { 0, 4 };
-
-        
-        iter.setOverlapping(true);         // Turn 'em back on
-        doTestCase(iter, overlap);          // Overlapping is allowed by default
-        if (iter.isOverlapping() != true) {
-            errln("ERROR: isOverlapping returned " + iter.isOverlapping());
-        }
-        
-        iter.setOverlapping(false);         // Turn 'em back off
-        doTestCase(iter, novrlap);
-        if (iter.isOverlapping() != false) {
-            errln("ERROR: isOverlapping returned " + iter.isOverlapping());
-        }
-
-        iter.setOverlapping(true);
-        doTestCase(iter, overlap);
-        if (iter.isOverlapping() != true) {
-            errln("ERROR: isOverlapping returned " + iter.isOverlapping());
-        }
-    }
-    
-    /**
-     * Test for SearchIterator.setBreakIterator
-     */
-    public void TestBreakIterator() {
-        StringSearch iter = new StringSearch("fox",
-                                 new StringCharacterIterator("foxy fox"),
-                                 enColl);
-
-        BreakIterator charBreaker = BreakIterator.getCharacterInstance(Locale.US);
-        BreakIterator wordBreaker = BreakIterator.getWordInstance(Locale.US);
-        
-        int[] chars = new int[] { 0, 5 };   // expected results
-        int[] words = new int[] { 5 };
-        
-        doTestCase(iter, chars);            // character breaker by default
-        
-        iter.setBreakIterator(wordBreaker); // word break detection
-        doTestCase(iter, words);
-        if (iter.getBreakIterator() != wordBreaker) {
-            errln("ERROR: getBreakIterator returned wrong object");
-        }
-
-        iter.setBreakIterator(charBreaker); // char break detection
-        doTestCase(iter, chars);
-        if (iter.getBreakIterator() != charBreaker) {
-            errln("ERROR: getBreakIterator returned wrong object");
-        }
-
-        iter.setBreakIterator(null);
-        doTestCase(iter, chars);
-        if (iter.getBreakIterator() != null) {
-            errln("ERROR: getBreakIterator returned wrong object");
-        }
-    }
-    
-    /**
-     * Test for SearchIterator.setTarget
-     */
-    public void TestSetTarget() {
-        String  pat = "fox";
-        String  targ1 = "the foxy brown fox";
-        String  targ2 = "the quick brown fox";
-        
-        int[] match1 = new int[] { 4, 15 };   // expected results
-        int[] match2 = new int[] { 16 };
-
-        StringSearch iter = new StringSearch(pat, new StringCharacterIterator(targ1),
-                                 enColl, null);
-
-        logln("initial text...");
-        doTestCase(iter, match1);
-        assertEqual(iter.getTarget(), targ1);
-        
-        logln("target #2...");
-        iter.setTarget(new StringCharacterIterator(targ2));
-        doTestCase(iter, match2);
-        assertEqual(iter.getTarget(), targ2);
-        
-        logln("back to target #1...");
-        iter.setTarget(new StringCharacterIterator(targ1));
-        doTestCase(iter, match1);
-        assertEqual(iter.getTarget(), targ1);
-    }
-    
-    /**
-     * Test for StringSearch.setStrength
-     */
-    public void TestSetStrength() {
-        String  pat = "fox";
-        String  targ = "the foxy brown Fox";
-        
-        // not used int[] match1 = new int[] { 4, 15 };   // expected results
-        int[] match3 = new int[] { 4 };
-
-		enColl.setStrength(Collator.TERTIARY);
-        StringSearch iter = new StringSearch(pat, new StringCharacterIterator(targ),
-                                 enColl, null);
-
-       /* logln("Trying primary strength...");
-        iter.setStrength(Collator.PRIMARY);
-        doTestCase(iter, match1);
-        if (iter.getStrength() != Collator.PRIMARY) {
-            errln("ERROR: getStrength: expected PRIMARY, got " + iter.getStrength());
-        } */
-        
-        logln("Trying tertiary strength...");
-        doTestCase(iter, match3);
-        if (iter.getStrength() != Collator.TERTIARY) {
-            errln("ERROR: getStrength: expected PRIMARY, got " + iter.getStrength());
-        }
-        
-    }
-
-    /**
-     * Test for StringSearch.setCollator
-     */
-    public void TestSetCollator() throws ParseException {
-        String  pat = "fox";
-        String  targ = "fox fpx ";
-        
-        int[] match1 = new int[] { 0 };     // English results
-        int[] match2 = new int[] { 0, 4 };  // Test collator results
-
-		enColl.setStrength(Collator.PRIMARY);
-        StringSearch iter = new StringSearch(pat, 
-        									 new StringCharacterIterator(targ),
-                                 			 enColl);
-
-        logln("Trying English collator...");
-
-        doTestCase(iter, match1);
-        if (iter.getCollator() != enColl) {
-            errln("ERROR: getCollator returned wrong collator");
-        }
-        
-        logln("Trying test collator...");
-
-		// Create a test collator that thinks "o" and "p" are the same thing
-        /*
-         * RuleBasedCollator testColl = new RuleBasedCollator(enColl.getRules()
-                                            + "& o,O ; p,P" );*/
-		frColl.setStrength(Collator.PRIMARY);
-        iter.setCollator(frColl);
-        doTestCase(iter, match1);
-        if (iter.getCollator() != frColl) {
-            errln("ERROR: getCollator returned wrong collator");
-        }
-        
-        logln("Trying English collator again...");
-
-		enColl.setStrength(Collator.PRIMARY);
-        iter.setCollator(enColl);
-        doTestCase(iter, match1);
-        if (iter.getCollator() != enColl) {
-            errln("ERROR: getCollator returned wrong collator");
-        }
-        
-    }
-
-    /**
-     * Test for StringSearch.setPattern
-     */
-    public void TestSetPattern() {
-                      // 01234567890123456789012345678901234567890123456789
-        String target = "The quick brown fox jumps over the lazy foxes";
-        String pat1 = "the";
-        String pat2 = "fox";
-        
-        int[] match1 = new int[] { 0, 31 };
-        int[] match2 = new int[] { 16, 40 };
-
-		enColl.setStrength(Collator.PRIMARY);
-        StringSearch iter = new StringSearch(pat1, new StringCharacterIterator(target),
-                                 enColl);
-        
-        doTestCase(iter, match1);
-        if (!iter.getPattern().equals(pat1)) {
-            errln("getPattern returned '" + iter.getPattern() + "', expected '"
-                + pat1 + "'");
-        }
-        
-        iter.setPattern(pat2);
-        doTestCase(iter, match2);
-        if (!iter.getPattern().equals(pat2)) {
-            errln("getPattern returned '" + iter.getPattern() + "', expected '"
-                + pat1 + "'");
-        }
-        
-        iter.setPattern(pat1);
-        doTestCase(iter, match1);
-        if (!iter.getPattern().equals(pat1)) {
-            errln("getPattern returned '" + iter.getPattern() + "', expected '"
-                + pat1 + "'");
-        }
-    }
-    
-    /**
-     * Test for an infinite loop that happened when the target text started
-     * with an ignorable character.
-     * Reported by Muly Oved, <mulyoved@netvision.net.il>
-     */
-    public void TestIgnorableLoop() {
-        String pattern = "go";
-        String target  = "  on";
-
-        StringSearch search;
+        m_en_us_ = (RuleBasedCollator)Collator.getInstance(Locale.US); 
+        m_fr_fr_ = (RuleBasedCollator)Collator.getInstance(Locale.FRANCE);
+        m_de_ = (RuleBasedCollator)Collator.getInstance(new Locale("de", "DE"));
+        m_es_ = (RuleBasedCollator)Collator.getInstance(new Locale("es", "ES")); 
         
         try {
-            search=new StringSearch(pattern, new StringCharacterIterator(target), enColl);
-                                                
-            logln("searching... "+pattern);
-            search.first();
-            logln("Will never go here if searching for 'go'");
+            String rules = m_de_.getRules() + EXTRACOLLATIONRULE;
+            m_de_ = new RuleBasedCollator(rules);
+            rules = m_es_.getRules() + EXTRACOLLATIONRULE;
+            m_es_ = new RuleBasedCollator(rules);
+        }
+        catch (Exception e) {
+            errln("Error creating modified German and Spanish collators");
+        }
+    }
+    
+    public static void main(String[] args) throws Exception {
+        new SearchTest().run(args);
+        // new SearchTest().TestContraction();
+    }
+    
+    RuleBasedCollator getCollator(String collator) {
+        if (collator == null) {
+            return m_en_us_;
+        } if (collator.equals("fr")) {
+            return m_fr_fr_;
+        } else if (collator.equals("de")) {
+            return m_de_;
+        } else if (collator.equals("es")) {
+            return m_es_;
+        } else {
+            return m_en_us_;
+        }
+    }
+    
+    BreakIterator getBreakIterator(String breaker) {
+        if (breaker == null) {
+            return null;
+        } if (breaker.equals("wordbreaker")) {
+            return m_en_wordbreaker_;
+        } else {
+            return m_en_characterbreaker_;
+        }
+    }
+
+    boolean assertCanonicalEqual(SearchData search) {
+        Collator      collator = getCollator(search.collator);
+        BreakIterator breaker  = getBreakIterator(search.breaker);
+        StringSearch  strsrch; 
+        
+        String text = search.text;
+        String  pattern = search.pattern;
+    
+        if (breaker != null) {
+            breaker.setText(text);
+        }
+        collator.setStrength(search.strength);
+        try {
+            strsrch = new StringSearch(pattern, new StringCharacterIterator(text), (RuleBasedCollator)collator, breaker);
+            strsrch.setCanonical(true);
         } catch (Exception e) {
-            errln("Caught exception: " + e.toString());
+            errln("Error opening string search" + e.getMessage());
+            return false;
+        }   
+        
+        if (!assertEqualWithStringSearch(strsrch, search)) {
+            collator.setStrength(Collator.TERTIARY);
+            return false;
         }
-
-        logln("end");
+        collator.setStrength(Collator.TERTIARY);
+        return true;
     }
     
-    /**
-    * Tests jitterbug #11
-    */
-    public void TestJitterBug11() 
-    {
-        String pattern = "c";
-        String text = "Scott Ganyo";
+    boolean assertEqual(SearchData search) {
+        Collator      collator = getCollator(search.collator);
+        BreakIterator breaker  = getBreakIterator(search.breaker);
+        StringSearch  strsrch; 
         
-        StringSearch ss = new StringSearch(pattern, text);
-        Collator collator = ss.getCollator();
-        collator.setStrength(Collator.PRIMARY);
-        ss.reset();
-        if (ss.next() != 1) {
-            errln("Error finding character c at index 1 in \"Scott Ganyo\"");
-        }
+        String text = search.text;
+        String  pattern = search.pattern;
     
-        /* empty pattern not handled yet
-        pattern = " ";
-        ss.setPattern(pattern);
-        ss.setStrength(Collator.PRIMARY);
-        if (ss.next() != 5) {
-            errln("Error finding character ' ' at index 1 in \"Scott Ganyo\"");
+        if (breaker != null) {
+            breaker.setText(text);
         }
-        */
+        collator.setStrength(search.strength);
+        try {
+            strsrch = new StringSearch(pattern, new StringCharacterIterator(text), (RuleBasedCollator)collator, breaker);
+        } catch (Exception e) {
+            errln("Error opening string search " + e.getMessage());
+            return false;
+        }
+        
+        if (!assertEqualWithStringSearch(strsrch, search)) {
+            collator.setStrength(Collator.TERTIARY);
+            return false;
+        }
+        collator.setStrength(Collator.TERTIARY);
+        return true;
     }
     
-    /**
-    * Tests jitterbug #35
-    */
-    public void TestJitterBug35() 
-    {
-        String pattern = "dss";
-		String strings[] = {"<HTML xxx=\".dss\">", "<BODY>",
-			                "<A A=\".dss\">",      "<B B=\".dss\">",
-			                "<AB A=\".dss\">",     "<A A=\"dss\">",
-			                "<AB A=\"dss\">",      "<AB AB=\".dss\">",
-			                "<AB AB=\"dss\">",     " <A A=\".dss\">",
-			                "A A=\".dss\"",        "&lt;A A=\".dss\"&gt;"};
-		int result[] = {12, SearchIterator.DONE, 7, 7, 8, 6, 7, 9, 8, 8, 6, 
-		                10};
-
-        StringSearch ss = new StringSearch( pattern, "empty" );
-		for ( int i = 0; i < strings.length; i++ )
-	    {
-			StringCharacterIterator source = 
-			                          new StringCharacterIterator(strings[i]);
-		    ss.setTarget(source);
-			int offset = ss.first();
-			if ( offset != result[i] ) {
-			    errln("Error finding pattern \"" + pattern + 
-			    "\" match in text \"" + strings[i] + "\"");
-			}
+    boolean assertEqualWithAttribute(SearchData search, boolean canonical, boolean overlap) {
+        Collator      collator = getCollator(search.collator);
+        BreakIterator breaker  = getBreakIterator(search.breaker);
+        StringSearch  strsrch; 
+        
+        String text = search.text;
+        String  pattern = search.pattern;
+    
+        if (breaker != null) {
+            breaker.setText(text);
         }
+        collator.setStrength(search.strength);
+        try {
+            strsrch = new StringSearch(pattern, new StringCharacterIterator(text), (RuleBasedCollator)collator, breaker);
+            strsrch.setCanonical(canonical);
+            strsrch.setOverlapping(overlap);
+        } catch (Exception e) {
+            errln("Error opening string search " + e.getMessage());
+            return false;
+        }
+        
+        if (!assertEqualWithStringSearch(strsrch, search)) {
+            collator.setStrength(Collator.TERTIARY);
+            return false;
+        }
+        collator.setStrength(Collator.TERTIARY);
+        return true;
     }
     
-    public void TestJitterBug1513()
-    {
-        String contents ="<HTML>\n<HEAD>\n<TITLE>External Ano</TITLE>\n" +
-                   "</HEAD>\n<BODY>\n<B>Hello world.</B>\n\n<TABLE>\n" +
-                   "<TR><TH>Cars</TH><TH>Colors</TH><TH>Interiors</TH></TR>\n"
-                   + "<TR><TH>2\nDoor</TH><TH>Red</TH><TH>Leather</TH></TR>\n"
-                   + "<TR><TH>4\nDoor</TH><TH>Blue</TH><TH>Cloth</TH></TR>\n" 
-                   + "\n<TR><TD>Convertible</TD><TD>Black</TD>" +
-                   "<TD>Vinyl</TD></TR>\n\n</TABLE>\n\nRemove This text.\n" +
-                   "\n\n\n<TABLE>\n<TR><TH><B>Warranty</B></TH>" +
-                   "<TH><B>Length</B></TH><TH>Restrictions</TH></TR>\n" +
-                   "<TR><TH>Silver</TH><TH>2\nYears</TH><TH>Yes</TH></TR>\n" +
-                   "<TR><TH>Gold</TH><TH>5\nYears</TH><TH>No</TH></TR>\n" +
-                   "</TABLE>\n\n</BODY>\n</HTML>\n\n\n\n\n\n\n\n/B>\n" +
-                   "<TABLE>\n" +
-                   "<TR><TH>Cars</TH><TH>Colors</TH><TH>Interiors</TH></TR>\n"
-                   + "<TR><TH>2\nDoor</TH><TH>Red</TH><TH>Leather</TH></TR>\n"
-                   + "<TR><TH>4\nDoor</TH><TH>Blue</TH><TH>Cloth</TH></TR>\n" 
-                   + "<TR><TD>Convertible</TD><TD>Black</TD>" +
-                   "<TD>Vinyl</TD></TR>\n</TABLE>\n\nRemove This text.\n\n\n"
-                   + "\n<TABLE>\n" +
-                   "<TR><TH><B>Warranty</B></TH><TH><B>Length</B></TH>" +
-                   "<TH>Restrictions</TH></TR>\n<TR><TH>Silver</TH><TH>2\n" +
-                   "Years</TH><TH>Yes</TH></TR>\n<TR><TH>Gold</TH>";
-        String pattern = "HE";
-        int    offset[] = {8, 44};
-
-		logln("Searching for all occurrences of pattern " +
-			   pattern + " following contents:\n" + contents);
-
-	    StringSearch searcher = new StringSearch(pattern, contents);
-        int textoffset = searcher.next();
-        int count = 0;
+    boolean assertEqualWithStringSearch(StringSearch strsrch, SearchData search) {
+        int           count       = 0;
+        int   matchindex  = search.offset[count];
+        String matchtext;
         
-	    while (textoffset != SearchIterator.DONE && count < offset.length) {
-	        if (textoffset != offset[count]) {
-		        errln( "Found match not found at offset " + offset[count]);
-		    }
-		    if (searcher.getMatchLength() != pattern.length() ||
-		        !searcher.getMatchedText().equals(pattern)) {
-		        errln("Failed finding match for pattern " + pattern + " got " +
-		              searcher.getMatchedText()); 
-		    }
-		    count ++;
-		    textoffset = searcher.next();
-		}
-		if (textoffset != SearchIterator.DONE || count != offset.length) {
-		    errln("End of pattern " + pattern + " search encountering problems");
-		}
-    }
-    
-    //-------------------------------------------------------------------------
-    // Various internal utility methods....
-    //-------------------------------------------------------------------------
-
-    void assertEqual(CharacterIterator i1, String s2) {
-        CharacterIterator i2 = new StringCharacterIterator(s2);
-        char c1 = i1.first();
-        char c2 = i2.first();
-        int i = 0;
-        
-        while (c1 == c2 && c1 != CharacterIterator.DONE) {
-            c1 = i1.next();
-            c2 = i2.next();
+        if (strsrch.getMatchStart() != SearchIterator.DONE ||
+            strsrch.getMatchLength() != 0) {
+            errln("Error with the initialization of match start and length");
         }
-        if (c1 != CharacterIterator.DONE || c2 != CharacterIterator.DONE) {
-            errln("CharacterIterator mismatch at index " + i);
-        }
-    }
-    
-    void doTestCase(StringSearch iter, int[] expected) {
-        //
-        // The basic logic here is as follows...  We construct a search
-        // iterator and use it to find all of the matches in the target
-        // text.  Then we compare it to the expected matches
-        //
-        Vector matches = new Vector();
-		
-		iter.setCanonical(true);
-        for (int i = iter.first(); i != SearchIterator.DONE; i = iter.next()) {
-            matches.addElement(new Integer(i));
-        }
-        compareMatches(expected, matches);
-        
-        // Now do the same exact thing as above, but in reverse
-        logln("Now searching in reverse...");
-        matches.removeAllElements();
-        for (int i = iter.last(); i != SearchIterator.DONE; i = iter.previous()) {
-            matches.insertElementAt(new Integer(i), 0);
-        }
-        compareMatches(expected, matches);
-        
-        matches.removeAllElements();
-        iter.setCanonical(false);
-        for (int i = iter.first(); i != SearchIterator.DONE; i = iter.next()) {
-            matches.addElement(new Integer(i));
-        }
-        compareMatches(expected, matches); 
-        
-        // Now do the same exact thing as above, but in reverse
-        logln("Now searching in reverse...");
-        matches.removeAllElements();
-        for (int i = iter.last(); i != SearchIterator.DONE; i = iter.previous()) {
-            matches.insertElementAt(new Integer(i), 0);
-        }
-        compareMatches(expected, matches);
-    }
-    
-    /**
-     * Utility function used by TestCases to compare the matches that
-     * were found against the ones that were expected
-     */
-    void compareMatches(int[] expected, Vector found) {
-        // Step through the two arrays in parallel and make sure that they're
-        // the same
-        
-        int e=0, f=0;
-        
-        while (e < expected.length && f < found.size()) {
-            int eVal = expected[e];
-            int fVal = ((Integer)found.elementAt(f)).intValue();
+        // start of following matches 
+        while (matchindex >= 0) {
+            int matchlength = search.size[count];
+            strsrch.next();
+            //int x = strsrch.getMatchStart();
+            if (matchindex != strsrch.getMatchStart() || 
+                matchlength != strsrch.getMatchLength()) {
+                errln("Text: " + search.text);
+                errln("Pattern: " + strsrch.getPattern());
+                errln("Error following match found at " + strsrch.getMatchStart() + ", " + strsrch.getMatchLength());
+                return false;
+            }
+            count ++;
             
-            if (eVal < fVal) {
-                errln("Missed expected match at " + eVal);
-                e++;
-            } else if (eVal > fVal) {
-                errln("Found unexpected match at " + fVal);
-                f++;
-            } else {
-                e++;
-                f++;
+            matchtext = strsrch.getMatchedText();
+            String targetText = search.text;
+            if (matchlength > 0 &&
+                targetText.substring(matchindex, matchindex + matchlength).compareTo(matchtext) != 0) {
+                errln("Error getting following matched text");
             }
+    
+            matchindex = search.offset[count];
         }
-        while (e < expected.length) {
-            errln("Missed expected match at " + expected[e]);
-            e++;
+        strsrch.next();
+        if (strsrch.getMatchStart() != SearchIterator.DONE ||
+            strsrch.getMatchLength() != 0) {
+                errln("Text: " + search.text);
+                errln("Pattern: " + strsrch.getPattern());
+                errln("Error following match found at " + strsrch.getMatchStart() + ", " + strsrch.getMatchLength());
+                return false;
         }
-        while (f < found.size()) {
-            int fVal = ((Integer)found.elementAt(f)).intValue();
-            errln("Found unexpected match at " + fVal);
-            f++;
+        // start of preceding matches 
+        count = count == 0 ? 0 : count - 1;
+        matchindex = search.offset[count];
+        while (matchindex >= 0) {
+            int matchlength = search.size[count];
+            strsrch.previous();
+            if (matchindex != strsrch.getMatchStart() || 
+                matchlength != strsrch.getMatchLength()) {
+                errln("Text: " + search.text);
+                errln("Pattern: " + strsrch.getPattern());
+                errln("Error following match found at " + strsrch.getMatchStart() + ", " + strsrch.getMatchLength());
+                return false;
+            }
+            
+            matchtext = strsrch.getMatchedText();
+            String targetText = search.text;
+            if (matchlength > 0 && 
+                targetText.substring(matchindex, matchindex + matchlength).compareTo(matchtext) != 0) {
+                errln("Error getting following matched text");
+            }
+    
+            matchindex = count > 0 ? search.offset[count - 1] : -1;
+            count --;
+        }
+        strsrch.previous();
+        if (strsrch.getMatchStart() != SearchIterator.DONE ||
+            strsrch.getMatchLength() != 0) {
+                errln("Text: " + search.text);
+                errln("Pattern: " + strsrch.getPattern());
+                errln("Error following match found at " + strsrch.getMatchStart() + ", " + strsrch.getMatchLength());
+                return false;
+        }
+        return true;
+    }
+    
+    public void TestBasic() {
+        int count = 0;
+        while (BASIC[count].text != null) {
+            if (!assertEqual(BASIC[count])) {
+                errln("Error at test number " + count);
+            }
+            count ++;
         }
     }
-
-    /**
-     * ICU4J Jitterbug 11
-     */
-    /*
-    Bug to be solved in later release.
-    Commented away for successful testing.
-    TODO.
-    public void TestJ11() {
-        AuxJ11("c", "Scott Ganyo", 1);
-        AuxJ11(" ", "Scott Ganyo", 5);
-    }
-    */
-
-    private void AuxJ11(String pattern, String text, int expectedLoc) {
+    
+    public void TestBreakIterator() {
+        
+        String text = BREAKITERATOREXACT[0].text;
+        String pattern = BREAKITERATOREXACT[0].pattern;
+        StringSearch strsrch = null;
         try {
-            StringSearch ss = new StringSearch(pattern, text);
-            Collator collator = ss.getCollator();
-            collator.setStrength(Collator.PRIMARY);
-            ss.reset();
-            int loc = ss.next();
-            if (loc == expectedLoc) {
-                logln("Ok: StringSearch(\"" + pattern + "\", \"" + text + "\") = " + loc);
-            } else {
-                errln("FAIL: StringSearch(\"" + pattern + "\", \"" + text + "\") = " + loc +
-                      ", expected " + expectedLoc);
-            }
+            strsrch = new StringSearch(pattern, new StringCharacterIterator(text), m_en_us_, null);
         } catch (Exception e) {
-            errln("FAIL: StringSearch(\"" + pattern + "\", \"" + text + "\") threw ");
-            e.printStackTrace();
+            errln("Error opening string search");
+            return;
+        }
+        
+        strsrch.setBreakIterator(null);
+        if (strsrch.getBreakIterator() != null) {
+            errln("Error usearch_getBreakIterator returned wrong object");
+        }
+        
+        strsrch.setBreakIterator(m_en_characterbreaker_);
+        if (!strsrch.getBreakIterator().equals(m_en_characterbreaker_)) {
+            errln("Error usearch_getBreakIterator returned wrong object");
+        }
+        
+        strsrch.setBreakIterator(m_en_wordbreaker_);
+        if (!strsrch.getBreakIterator().equals(m_en_wordbreaker_)) {
+            errln("Error usearch_getBreakIterator returned wrong object");
+        }
+    
+        int count = 0;
+        while (count < 4) {
+            // special purposes for tests numbers 0-3
+            SearchData        search   = BREAKITERATOREXACT[count];     
+            RuleBasedCollator collator = getCollator(search.collator);
+            BreakIterator     breaker  = getBreakIterator(search.breaker);
+                  //StringSearch      strsrch; 
+        
+            text = search.text;
+            pattern = search.pattern; 
+            if (breaker != null) {
+                breaker.setText(text);
+            }
+            collator.setStrength(search.strength);
+            strsrch = new StringSearch(pattern, new StringCharacterIterator(text), collator, breaker);
+            if (strsrch.getBreakIterator() != breaker) {
+                errln("Error setting break iterator");
+            }
+            if (!assertEqualWithStringSearch(strsrch, search)) {
+                collator.setStrength(Collator.TERTIARY);
+            }
+            search   = BREAKITERATOREXACT[count + 1];
+            breaker  = getBreakIterator(search.breaker);
+            if (breaker != null) {
+                breaker.setText(text);
+            }
+            strsrch.setBreakIterator(breaker);
+            if (strsrch.getBreakIterator() != breaker) {
+                errln("Error setting break iterator");
+            }
+            strsrch.reset();
+            if (!assertEqualWithStringSearch(strsrch, search)) {
+                 errln("Error at test number " + count);
+            }
+            count += 2;
+        }
+        count = 0;
+        while (BREAKITERATOREXACT[count].text != null) {
+        	if (!assertEqual(BREAKITERATOREXACT[count])) {
+                errln("Error at test number " + count);
+            }
+             count++;
         }
     }
+    
+    public void TestBreakIteratorCanonical() {
+        int        count  = 0;
+        while (count < 4) {
+            // special purposes for tests numbers 0-3
+            SearchData     search   = BREAKITERATORCANONICAL[count];     
+        
+            String text = search.text;
+            String pattern = search.pattern;
+            RuleBasedCollator collator = getCollator(search.collator);
+            collator.setStrength(search.strength);
+    
+            BreakIterator breaker = getBreakIterator(search.breaker);
+            StringSearch  strsrch = null;
+            try {
+                strsrch = new StringSearch(pattern, new StringCharacterIterator(text), collator, breaker);
+            } catch (Exception e) {
+                errln("Error creating string search data");
+                return;
+            }
+            strsrch.setCanonical(true);
+            if (!strsrch.getBreakIterator().equals(breaker)) {
+                errln("Error setting break iterator");
+                return;
+            }
+            if (!assertEqualWithStringSearch(strsrch, search)) {
+                collator.setStrength(Collator.TERTIARY);
+                return;
+            }
+            search  = BREAKITERATOREXACT[count + 1];
+            breaker = getBreakIterator(search.breaker);
+            breaker.setText(strsrch.getTarget());
+            strsrch.setBreakIterator(breaker);
+            if (!strsrch.getBreakIterator().equals(breaker)) {
+                errln("Error setting break iterator");
+                return;
+            }
+            strsrch.reset();
+            strsrch.setCanonical(true);
+            if (!assertEqualWithStringSearch(strsrch, search)) {
+                 errln("Error at test number " + count);
+                 return;
+            }
+            count += 2;
+        }
+        count = 0;
+        while (BREAKITERATORCANONICAL[count].text != null) {
+             if (!assertEqual(BREAKITERATORCANONICAL[count])) {
+                 errln("Error at test number " + count);
+                 return;
+             }
+             count++;
+        }
+    }
+    
+    public void TestCanonical() {
+        int count = 0;
+        while (BASICCANONICAL[count].text != null) {
+        	if (!assertCanonicalEqual(BASICCANONICAL[count])) {
+                errln("Error at test number " + count);
+            }
+            count ++;
+        }
+    }
+    
+    public void TestCollator() {
+        // test collator that thinks "o" and "p" are the same thing
+        String text = COLLATOR[0].text;
+        String pattern  = COLLATOR[0].pattern;
+        StringSearch strsrch = null;
+        try {
+            strsrch = new StringSearch(pattern, new StringCharacterIterator(text), m_en_us_, null);    
+        } catch (Exception e) {
+            errln("Error opening string search ");
+            return;
+        }
+        if (!assertEqualWithStringSearch(strsrch, COLLATOR[0])) {
+            return;
+        }
+        String rules = TESTCOLLATORRULE;
+        RuleBasedCollator tailored = null;
+        try {
+            tailored = new RuleBasedCollator(rules);
+            tailored.setStrength(COLLATOR[1].strength); 
+        } catch (Exception e) {
+            errln("Error opening rule based collator ");
+            return;
+        }
+    
+        strsrch.setCollator(tailored);
+        if (!strsrch.getCollator().equals(tailored)) {
+            errln("Error setting rule based collator");
+        }
+        strsrch.reset();
+        if (!assertEqualWithStringSearch(strsrch, COLLATOR[1])) {
+            return;
+        } 
+        strsrch.setCollator(m_en_us_);
+        strsrch.reset();
+        if (!strsrch.getCollator().equals(m_en_us_)) {
+            errln("Error setting rule based collator");
+        }
+        if (!assertEqualWithStringSearch(strsrch, COLLATOR[0])) {
+           errln("Error searching collator test");
+        }
+    }
+    
+    public void TestCollatorCanonical() {
+        /* test collator that thinks "o" and "p" are the same thing */
+        String text = COLLATORCANONICAL[0].text;
+        String pattern = COLLATORCANONICAL[0].pattern;
+    
+        StringSearch strsrch = null;
+        try {
+            strsrch = new StringSearch(pattern, new StringCharacterIterator(text), m_en_us_, null);
+            strsrch.setCanonical(true);
+        } catch (Exception e) {
+            errln("Error opening string search ");
+        }
+        
+        if (!assertEqualWithStringSearch(strsrch, COLLATORCANONICAL[0])) {
+            return;
+        }
+    
+        String rules = TESTCOLLATORRULE;
+        RuleBasedCollator tailored = null;
+        try {
+            tailored = new RuleBasedCollator(rules);
+            tailored.setStrength(COLLATORCANONICAL[1].strength);
+            tailored.setDecomposition(Collator.CANONICAL_DECOMPOSITION);
+        } catch (Exception e) {
+            errln("Error opening rule based collator ");
+        }
+    
+        strsrch.setCollator(tailored);
+        if (!strsrch.getCollator().equals(tailored)) {
+            errln("Error setting rule based collator");
+        }
+        strsrch.reset();
+        strsrch.setCanonical(true);
+        if (!assertEqualWithStringSearch(strsrch, COLLATORCANONICAL[1])) {
+        }
+        strsrch.setCollator(m_en_us_);
+        strsrch.reset();
+        if (!strsrch.getCollator().equals(m_en_us_)) {
+            errln("Error setting rule based collator");
+        }
+        if (!assertEqualWithStringSearch(strsrch, COLLATORCANONICAL[0])) {
+        }
+    }
+    
+    public void TestCompositeBoundaries() {
+        int count = 0;
+        while (COMPOSITEBOUNDARIES[count].text != null) { 
+            // logln("composite " + count);
+            if (!assertEqual(COMPOSITEBOUNDARIES[count])) {
+                errln("Error at test number " + count);
+            }
+            count++;
+        }
+    }
+    
+    public void TestCompositeBoundariesCanonical() {
+        int count = 0;
+        while (COMPOSITEBOUNDARIESCANONICAL[count].text != null) { 
+            // logln("composite " + count);
+            if (!assertCanonicalEqual(COMPOSITEBOUNDARIESCANONICAL[count])) {
+                errln("Error at test number " + count);
+            }
+            count++;
+        } 
+    }
+    
+    public void TestContraction() {
+        String rules = CONTRACTIONRULE;
+        RuleBasedCollator collator = null;
+        try {
+            collator = new RuleBasedCollator(rules); 
+            collator.setStrength(Collator.TERTIARY);
+            collator.setDecomposition(Collator.CANONICAL_DECOMPOSITION);
+        } catch (Exception e) {
+            errln("Error opening collator ");
+        }
+        String text = "text";
+        String pattern = "pattern";
+        StringSearch strsrch = null;
+        try {
+            strsrch = new StringSearch(pattern, new StringCharacterIterator(text), collator, null);
+        } catch (Exception e) {
+            errln("Error opening string search ");
+        }   
+        
+        int count = 0;
+        while (CONTRACTION[count].text != null) {
+            text = CONTRACTION[count].text;
+            pattern = CONTRACTION[count].pattern;
+            strsrch.setTarget(new StringCharacterIterator(text));
+            strsrch.setPattern(pattern);
+            if (!assertEqualWithStringSearch(strsrch, CONTRACTION[count])) {
+                errln("Error at test number " + count);
+            }
+            count++;
+        }
+    }
+    
+    public void TestContractionCanonical() {
+        String rules = CONTRACTIONRULE;
+        RuleBasedCollator collator = null;
+        try {
+            collator = new RuleBasedCollator(rules);
+            collator.setStrength(Collator.TERTIARY);
+            collator.setDecomposition(Collator.CANONICAL_DECOMPOSITION);
+        } catch (Exception e) {
+            errln("Error opening collator ");
+        }
+        String text = "text";
+        String pattern = "pattern";
+        StringSearch strsrch = null;
+        try {
+            strsrch = new StringSearch(pattern, new StringCharacterIterator(text), collator, null);
+            strsrch.setCanonical(true);
+        } catch (Exception e) {
+            errln("Error opening string search");
+        }   
+        
+        int count = 0;
+        while (CONTRACTIONCANONICAL[count].text != null) {
+            text = CONTRACTIONCANONICAL[count].text;
+            pattern = CONTRACTIONCANONICAL[count].pattern;
+            strsrch.setTarget(new StringCharacterIterator(text));
+            strsrch.setPattern(pattern);
+            if (!assertEqualWithStringSearch(strsrch, CONTRACTIONCANONICAL[count])) {
+                errln("Error at test number " + count);
+            }
+            count++;
+        }
+    }
+    
+    public void TestGetMatch() {
+        SearchData search = MATCH[0];
+        String text = search.text;
+        String pattern = search.pattern;
+    
+        StringSearch strsrch = null;
+        try {
+            strsrch = new StringSearch(pattern, new StringCharacterIterator(text), m_en_us_, null);
+        } catch (Exception e) {
+            errln("Error opening string search ");
+            return;
+        }
+        
+        int           count      = 0;
+        int   matchindex = search.offset[count];
+        String matchtext;
+        while (matchindex >= 0) {
+            int matchlength = search.size[count];
+            strsrch.next();
+            if (matchindex != strsrch.getMatchStart() || 
+                matchlength != strsrch.getMatchLength()) {
+                errln("Text: " + search.text);
+                errln("Pattern: " + strsrch.getPattern());
+                errln("Error match found at " + strsrch.getMatchStart() + ", " + strsrch.getMatchLength());
+                return;
+            }
+            count++;
+            
+            matchtext = strsrch.getMatchedText();
+            if (matchtext.length() != matchlength){
+                errln("Error getting match text");
+            }
+            matchindex = search.offset[count];
+        }
+        strsrch.next();
+        if (strsrch.getMatchStart()  != StringSearch.DONE || 
+            strsrch.getMatchLength() != 0) {
+            errln("Error end of match not found");
+        }
+        matchtext = strsrch.getMatchedText();
+        if (matchtext != null) {
+            errln("Error getting null matches");
+        }
+    }
+    
+    public void TestGetSetAttribute() {
+        String  pattern = "pattern";
+        String  text = "text";
+        StringSearch  strsrch = null;
+        try {
+            strsrch = new StringSearch(pattern, new StringCharacterIterator(text), m_en_us_, null); 
+        } catch (Exception e) {
+            errln("Error opening search");
+            return;
+        }
+    
+        if (strsrch.isOverlapping()) {
+            errln("Error default overlaping should be false");
+        }
+        strsrch.setOverlapping(true);
+        if (!strsrch.isOverlapping()) {
+            errln("Error setting overlap true");
+        }
+        strsrch.setOverlapping(false);
+        if (strsrch.isOverlapping()) {
+            errln("Error setting overlap false");
+        }
+        
+        strsrch.setCanonical(true);
+        if (!strsrch.isCanonical()) {
+            errln("Error setting canonical match true");
+        }
+        strsrch.setCanonical(false);
+        if (strsrch.isCanonical()) {
+            errln("Error setting canonical match false");
+        }
+        
+    }
+    
+    public void TestGetSetOffset() {
+        String  pattern = "1234567890123456";
+        String  text  = "12345678901234567890123456789012";
+        StringSearch  strsrch = null;
+        try {
+            strsrch = new StringSearch(pattern, new StringCharacterIterator(text), m_en_us_, null);
+        } catch (Exception e) {
+            errln("Error opening search");
+            
+            return;
+        }
+        
+        /* testing out of bounds error */
+        try {
+            strsrch.setIndex(-1);
+            errln("Error expecting set offset error");
+        } catch (IndexOutOfBoundsException e) {}
+        
+        try {
+            strsrch.setIndex(128);
+            errln("Error expecting set offset error");
+        } catch (IndexOutOfBoundsException e) {}
+        
+        int index   = 0;
+        while (BASIC[index].text != null) {
+            SearchData  search      = BASIC[index ++];
+        
+            text =search.text;
+            pattern = search.pattern;
+            strsrch.setTarget(new StringCharacterIterator(text));
+            strsrch.setPattern(pattern);
+    
+            int count = 0;
+            int matchindex  = search.offset[count];
+            while (matchindex >= 0) {
+                int matchlength = search.size[count];
+                strsrch.next();
+                if (matchindex != strsrch.getMatchStart() || 
+                    matchlength != strsrch.getMatchLength()) {
+                    errln("Text: " + text);
+                    errln("Pattern: " + strsrch.getPattern());
+                    errln("Error match found at " + strsrch.getMatchStart() + ", " + strsrch.getMatchLength());
+                    return;
+                }
+                matchindex = search.offset[count + 1] == -1 ? -1 : 
+                             search.offset[count + 2];
+                if (search.offset[count + 1] != -1) {
+                    strsrch.setIndex(search.offset[count + 1] + 1);
+                    if (strsrch.getIndex() != search.offset[count + 1] + 1) {
+                        errln("Error setting offset\n");
+                        return;
+                    }
+                }
+                
+                count += 2;
+            }
+            strsrch.next();
+            if (strsrch.getMatchStart() != StringSearch.DONE) {
+                errln("Text: " + text);
+                errln("Pattern: " + strsrch.getPattern());
+                errln("Error match found at " + strsrch.getMatchStart() + ", " + strsrch.getMatchLength());
+                return;
+            }
+        }
+    }
+    
+    public void TestGetSetOffsetCanonical() {
+        
+        String  text = "text";
+        String  pattern = "pattern";
+        StringSearch  strsrch = null;
+        try {
+            strsrch = new StringSearch(pattern, new StringCharacterIterator(text), m_en_us_, null);
+        } catch (Exception e) {
+            errln("Fail to open StringSearch!");
+            return;
+        }
+        strsrch.setCanonical(true);
+        /* testing out of bounds error */
+        try {
+            strsrch.setIndex(-1);
+            errln("Error expecting set offset error");
+        } catch (IndexOutOfBoundsException e) {}
+        try {
+            strsrch.setIndex(128);
+            errln("Error expecting set offset error");
+        } catch (IndexOutOfBoundsException e) {}
+        
+        int   index   = 0;
+        while (BASICCANONICAL[index].text != null) {
+            SearchData  search      = BASICCANONICAL[index ++];
+            if (BASICCANONICAL[index].text == null) {
+                // skip the last one 
+                break;
+            }
+            
+            text = search.text;
+            pattern = search.pattern;
+            strsrch.setTarget(new StringCharacterIterator(text));
+            strsrch.setPattern(pattern);
+            int         count       = 0;
+            int matchindex  = search.offset[count];
+            while (matchindex >= 0) {
+                int matchlength = search.size[count];
+                strsrch.next();
+                if (matchindex != strsrch.getMatchStart() || 
+                    matchlength != strsrch.getMatchLength()) {
+                    errln("Text: " + text);
+                    errln("Pattern: " + strsrch.getPattern());
+                    errln("Error match found at " + strsrch.getMatchStart() + ", " + strsrch.getMatchLength());
+                    return;
+                }
+                matchindex = search.offset[count + 1] == -1 ? -1 : 
+                             search.offset[count + 2];
+                if (search.offset[count + 1] != -1) {
+                    strsrch.setIndex(search.offset[count + 1] + 1);
+                    if (strsrch.getIndex() != search.offset[count + 1] + 1) {
+                        errln("Error setting offset");
+                        return;
+                    }
+                }
+                
+                count += 2;
+            }
+            strsrch.next();
+            if (strsrch.getMatchStart() != StringSearch.DONE) {
+                errln("Text: " + text);
+                errln("Pattern: %s" + strsrch.getPattern());
+                errln("Error match found at " + strsrch.getMatchStart() + ", " + strsrch.getMatchLength());
+                return;
+            }
+        }
+    }
+    
+    public void TestIgnorable() {
+        String rules = IGNORABLERULE;
+        int        count  = 0;
+        RuleBasedCollator collator = null;
+        try {
+            collator = new RuleBasedCollator(rules);
+            collator.setStrength(IGNORABLE[count].strength);
+            collator.setDecomposition(Collator.CANONICAL_DECOMPOSITION);  
+        } catch (Exception e) {
+            errln("Error opening collator ");
+            return;
+        }
+        String pattern = "pattern";
+        String text = "text";
+        StringSearch strsrch = null;
+        try {
+            strsrch = new StringSearch(pattern, new StringCharacterIterator(text), collator, null); 
+        } catch (Exception e) {
+            errln("Error opening string search ");
+            return;
+        }
+        
+        while (IGNORABLE[count].text != null) {
+            text = IGNORABLE[count].text;
+            pattern = IGNORABLE[count].pattern;
+            strsrch.setTarget(new StringCharacterIterator(text));
+            strsrch.setPattern(pattern);
+            if (!assertEqualWithStringSearch(strsrch, IGNORABLE[count])) {
+                errln("Error at test number " + count);
+            }
+            count++;
+        }
+    }
+    
+    public void TestInitialization() {
+        String  pattern;
+        String  text;
+        String  temp = "a";
+        StringSearch  result;
+    
+        /* simple test on the pattern ce construction */
+        pattern = temp + temp;
+        text = temp + temp + temp;
+        try {
+            result = new StringSearch(pattern, new StringCharacterIterator(text), m_en_us_, null);
+        } catch (Exception e) {
+            errln("Error opening search ");
+            return;
+        }
+        
+        /* testing if an extremely large pattern will fail the initialization */
+        pattern = "";
+        for (int count = 0; count < 512; count ++) {
+            pattern += temp;
+        }
+        try {
+            result = new StringSearch(pattern, new StringCharacterIterator(text), m_en_us_, null);
+            logln("pattern:" + result.getPattern());
+        } catch (Exception e) {
+            errln("Fail: an extremely large pattern will fail the initialization");
+            return;
+        }
+        if (result != result) {
+            errln("Error: string search object expected to match itself");
+        }
+        
+    }
+    
+    public void TestNormCanonical() {
+        m_en_us_.setDecomposition(Collator.CANONICAL_DECOMPOSITION);
+        int count = 0;
+        while (NORMCANONICAL[count].text != null) {
+            if (!assertCanonicalEqual(NORMCANONICAL[count])) {
+                errln("Error at test number " + count);
+            }
+            count++;
+        }
+        m_en_us_.setDecomposition(Collator.NO_DECOMPOSITION);
+    }
+    
+    public void TestNormExact() {
+        int count = 0;
+        m_en_us_.setDecomposition(Collator.CANONICAL_DECOMPOSITION);
+        while (BASIC[count].text != null) {
+            if (!assertEqual(BASIC[count])) {
+                errln("Error at test number " + count);
+            }
+            count++;
+        }
+        count = 0;
+        while (NORMEXACT[count].text != null) {
+            if (!assertEqual(NORMEXACT[count])) {
+                errln("Error at test number " + count);
+            }
+            count++;
+        }
+        m_en_us_.setDecomposition(Collator.NO_DECOMPOSITION);
+        count = 0;
+        while (NONNORMEXACT[count].text != null) {
+            if (!assertEqual(NONNORMEXACT[count])) {
+                errln("Error at test number " + count);
+            }
+            count++;
+        }
+    }
+    
+    public void TestOpenClose() {
+        StringSearch            result;
+        BreakIterator           breakiter = m_en_wordbreaker_;
+        String           pattern = "";
+        String           text = "";
+        String           temp  = "a";
+        StringCharacterIterator  chariter= new StringCharacterIterator(text);
+    
+        /* testing null arguments */
+        try {
+            result = new StringSearch(pattern, new StringCharacterIterator(text), null, null);
+            errln("Error: null arguments should produce an error");
+        } catch (Exception e) {}
+    
+        chariter.setText(text);
+        try {
+            result = new StringSearch(pattern, chariter, null, null);
+            errln("Error: null arguments should produce an error");
+        } catch (Exception e) {}
+        
+        text  = String.valueOf(0x1);
+        try {
+            result = new StringSearch(pattern, new StringCharacterIterator(text), null, null);
+            errln("Error: Empty pattern should produce an error");
+        } catch (Exception e) {
+        }
+    
+        chariter.setText(text);
+        try {
+            result = new StringSearch(pattern, chariter, null, null);
+            errln("Error: Empty pattern should produce an error");
+        } catch (Exception e) {}
+    
+        text = "";
+        pattern =temp;
+        try {
+            result = new StringSearch(pattern, new StringCharacterIterator(text), null, null);
+            errln("Error: Empty text should produce an error");
+        } catch (Exception e) {}
+        
+        chariter.setText(text);
+        try {
+            result = new StringSearch(pattern, chariter, null, null);
+            errln("Error: Empty text should produce an error");
+        } catch (Exception e) {}
+    
+        text += temp;
+        try {
+            result = new StringSearch(pattern, new StringCharacterIterator(text), null, null);
+            errln("Error: null arguments should produce an error");
+        } catch (Exception e) {}
+    
+        chariter.setText(text);
+        try {
+            result = new StringSearch(pattern, chariter, null, null);
+            errln("Error: null arguments should produce an error");
+        } catch (Exception e) {}
+        
+        try {
+            result = new StringSearch(pattern, new StringCharacterIterator(text), m_en_us_, null);
+        } catch (Exception e) {
+            errln("Error: null break iterator is valid for opening search");
+        }
+    
+        try {
+            result = new StringSearch(pattern, chariter, m_en_us_, null);
+        } catch (Exception e) {
+            errln("Error: null break iterator is valid for opening search");
+        }
+        
+        try {
+            result = new StringSearch(pattern, new StringCharacterIterator(text), Locale.ENGLISH);
+        } catch (Exception e) {
+            errln("Error: null break iterator is valid for opening search");
+        }
+    
+        try {
+            result = new StringSearch(pattern, chariter, Locale.ENGLISH);
+        } catch (Exception e) {
+            errln("Error: null break iterator is valid for opening search");
+        }
+    
+        try {
+            result = new StringSearch(pattern, new StringCharacterIterator(text), m_en_us_, breakiter);
+        } catch (Exception e) {
+            errln("Error: Break iterator is valid for opening search");
+        }
+    
+        try {
+            result = new StringSearch(pattern, chariter, m_en_us_, null);
+            logln("pattern:" + result.getPattern());
+        } catch (Exception e) {
+            errln("Error: Break iterator is valid for opening search");
+        }
+    }
+
+    public void TestOverlap() {
+        int count = 0;
+        while (OVERLAP[count].text != null) {
+            if (!assertEqualWithAttribute(OVERLAP[count], false, true)) {
+                errln("Error at overlap test number " + count);
+            }
+            count++;
+        }    
+        count = 0;
+        while (NONOVERLAP[count].text != null) {
+            if (!assertEqual(NONOVERLAP[count])) {
+                errln("Error at non overlap test number " + count);
+            }
+            count++;
+        }
+    
+        count = 0;
+        while (count < 1) {
+            SearchData search = (OVERLAP[count]);     
+            String text = search.text;
+            String pattern = search.pattern;
+    
+            RuleBasedCollator collator = getCollator(search.collator);
+            StringSearch strsrch = null;   
+            try {
+                strsrch  = new StringSearch(pattern, new StringCharacterIterator(text), collator, null);
+            } catch (Exception e) {
+                errln("error open StringSearch");
+                return;
+            }
+            
+            strsrch.setOverlapping(true);
+            if (!strsrch.isOverlapping()) {
+                errln("Error setting overlap option");
+            }
+            if (!assertEqualWithStringSearch(strsrch, search)) {
+                return;
+            }
+            
+            search = NONOVERLAP[count];
+            strsrch.setOverlapping(false);
+            if (strsrch.isOverlapping()) {
+                errln("Error setting overlap option");
+            }
+            strsrch.reset();
+            if (!assertEqualWithStringSearch(strsrch, search)) {
+                errln("Error at test number " + count);
+             }
+            count ++;
+        }
+    }
+
+    public void TestOverlapCanonical() {
+        int count = 0;
+        while (OVERLAPCANONICAL[count].text != null) {
+            if (!assertEqualWithAttribute(OVERLAPCANONICAL[count], true, 
+                                          true)) {
+                errln("Error at overlap test number %d" + count);
+            }
+            count ++;
+        }    
+        count = 0;
+        while (NONOVERLAP[count].text != null) {
+            if (!assertCanonicalEqual(NONOVERLAPCANONICAL[count])) {
+                errln("Error at non overlap test number %d" + count);
+            }
+            count ++;
+        }
+    
+        count = 0;
+        while (count < 1) {
+                 /* UChar       temp[128];
+            const SearchData *search = &(OVERLAPCANONICAL[count]);     
+                  UErrorCode  status = U_ZERO_ERROR;*/
+            SearchData search = OVERLAPCANONICAL[count];
+        
+            /*u_unescape(search.text, temp, 128);
+            UnicodeString text;
+            text.setTo(temp, u_strlen(temp));
+            u_unescape(search.pattern, temp, 128);
+            UnicodeString pattern;
+            pattern.setTo(temp, u_strlen(temp));*/
+            RuleBasedCollator collator = getCollator(search.collator);
+            StringSearch strsrch = new StringSearch(search.pattern, new StringCharacterIterator(search.text), collator, null);
+            strsrch.setCanonical(true);
+            strsrch.setOverlapping(true);
+            if (strsrch.isOverlapping() != true) {
+                errln("Error setting overlap option");
+            }
+            if (!assertEqualWithStringSearch(strsrch, search)) {
+                strsrch = null;
+                return;
+            }
+            search = NONOVERLAPCANONICAL[count];
+            strsrch.setOverlapping(false);
+            if (strsrch.isOverlapping() != false) {
+                errln("Error setting overlap option");
+            }
+            strsrch.reset();
+            if (!assertEqualWithStringSearch(strsrch, search)) {
+                strsrch = null;
+                errln("Error at test number %d" + count);
+             }
+             
+            count ++;
+            strsrch = null;
+        }
+    }
+    
+    public void TestPattern() {  
+        m_en_us_.setStrength(PATTERN[0].strength);
+        StringSearch strsrch = new StringSearch(PATTERN[0].pattern, new StringCharacterIterator(PATTERN[0].text), m_en_us_, null);
+        
+        /*if (U_FAILURE(status)) {
+            errln("Error opening string search %s", u_errorName(status));
+            m_en_us_.setStrength(getECollationStrength(UCOL_TERTIARY));
+            if (strsrch != NULL) {
+                delete strsrch;
+            }
+            return;
+        }*/
+        
+        if (strsrch.getPattern() != PATTERN[0].pattern) {
+            errln("Error setting pattern");
+        }
+        if (!assertEqualWithStringSearch(strsrch, PATTERN[0])) {
+            m_en_us_.setStrength(Collator.TERTIARY);
+            if (strsrch != null) {
+                strsrch = null;
+            }
+            return;
+        }
+    
+        strsrch.setPattern(PATTERN[1].pattern);
+        if (PATTERN[1].pattern != strsrch.getPattern()) {
+            errln("Error setting pattern");
+            m_en_us_.setStrength(Collator.TERTIARY);
+            if (strsrch != null) {
+                strsrch = null;
+            }
+            return;
+        }
+        strsrch.reset();
+    
+        if (!assertEqualWithStringSearch(strsrch, PATTERN[1])) {
+            m_en_us_.setStrength(Collator.TERTIARY);
+            if (strsrch != null) {
+                strsrch = null;
+            }
+            return;
+        }
+    
+        strsrch.setPattern(PATTERN[0].pattern);
+        if (PATTERN[0].pattern != strsrch.getPattern()) {
+            errln("Error setting pattern");
+            m_en_us_.setStrength(Collator.TERTIARY);
+            if (strsrch != null) {
+                strsrch = null;
+            }
+            return;
+        }
+            strsrch.reset();
+       
+        if (!assertEqualWithStringSearch(strsrch, PATTERN[0])) {
+            m_en_us_.setStrength(Collator.TERTIARY);
+            if (strsrch != null) {
+                strsrch = null;
+            }
+            return;
+        }
+        /* enormous pattern size to see if this crashes */
+        String pattern = "";
+        for (int templength = 0; templength != 512; templength ++) {
+            pattern += 0x61;
+        }
+        try{
+            strsrch.setPattern(pattern);
+        }catch(Exception e) {
+            errln("Error setting pattern with size 512");
+        }
+    
+        m_en_us_.setStrength(Collator.TERTIARY);
+        if (strsrch != null) {
+            strsrch = null;
+        }
+    }
+    
+    public void TestPatternCanonical() {
+        //StringCharacterIterator text = new StringCharacterIterator(PATTERNCANONICAL[0].text);
+        m_en_us_.setStrength(PATTERNCANONICAL[0].strength);
+        StringSearch strsrch = new StringSearch(PATTERNCANONICAL[0].pattern, new StringCharacterIterator(PATTERNCANONICAL[0].text), 
+                                                m_en_us_, null);
+        strsrch.setCanonical(true);
+        
+        if (PATTERNCANONICAL[0].pattern != strsrch.getPattern()) {
+            errln("Error setting pattern");
+        }
+        if (!assertEqualWithStringSearch(strsrch, PATTERNCANONICAL[0])) {
+            m_en_us_.setStrength(Collator.TERTIARY);
+            strsrch = null;
+            return;
+        }
+    
+        strsrch.setPattern(PATTERNCANONICAL[1].pattern);
+        if (PATTERNCANONICAL[1].pattern != strsrch.getPattern()) {
+            errln("Error setting pattern");
+            m_en_us_.setStrength(Collator.TERTIARY);
+            strsrch = null;
+            return;
+        }
+        strsrch.reset();
+        strsrch.setCanonical(true);
+        
+        if (!assertEqualWithStringSearch(strsrch, PATTERNCANONICAL[1])) {
+            m_en_us_.setStrength(Collator.TERTIARY);
+            strsrch = null;
+            return;
+        }
+
+        strsrch.setPattern(PATTERNCANONICAL[0].pattern);
+        if (PATTERNCANONICAL[0].pattern != strsrch.getPattern()) {
+            errln("Error setting pattern");
+            m_en_us_.setStrength(Collator.TERTIARY);
+            strsrch = null;
+            return;
+        }
+        
+        strsrch.reset();
+        strsrch.setCanonical(true);
+        if (!assertEqualWithStringSearch(strsrch, PATTERNCANONICAL[0])) {
+            m_en_us_.setStrength(Collator.TERTIARY);
+            strsrch = null;
+            return;
+        }
+    }
+    
+    public void TestReset() {
+        StringCharacterIterator text = new StringCharacterIterator("fish fish");
+        String pattern = "s";
+        
+        StringSearch  strsrch = new StringSearch(pattern, text, m_en_us_, null); 
+        strsrch.setOverlapping(true);
+        strsrch.setCanonical(true);
+        strsrch.setIndex(9);
+        strsrch.reset();
+        if (strsrch.isCanonical() || strsrch.isOverlapping() ||
+            strsrch.getIndex() != 0 || strsrch.getMatchLength() != 0 ||
+            strsrch.getMatchStart() != SearchIterator.DONE) {
+                errln("Error resetting string search");
+        }
+        
+        strsrch.previous();
+        if (strsrch.getMatchStart() != 7 || strsrch.getMatchLength() != 1) {
+            errln("Error resetting string search\n");
+        }
+    }
+    
+    public void TestSetMatch() {
+        int count = 0;
+        while (MATCH[count].text != null) {
+            SearchData     search = MATCH[count];
+            StringSearch strsrch = new StringSearch(search.pattern, new StringCharacterIterator(search.text), 
+                                                    m_en_us_, null);
+            
+            int size = 0;
+            while (search.offset[size] != -1) {
+                size ++;
+            }
+    
+            if (strsrch.first() != search.offset[0]) {
+                errln("Error getting first match");
+            }
+            if (strsrch.last() != search.offset[size -1]) {
+                errln("Error getting last match");
+            }
+            
+            int index = 0;
+            while (index < size) {
+                if (index + 2 < size) {
+                    if (strsrch.following(search.offset[index + 2] - 1) != search.offset[index + 2]) {
+                        errln("Error getting following match at index " + (search.offset[index + 2]-1));
+                    }
+                }
+                if (index + 1 < size) {
+                    if (strsrch.preceding(search.offset[index + 1] + search.size[index + 1] + 1) != search.offset[index + 1]) {
+                        errln("Error getting preceeding match at index " + (search.offset[index + 1] + 1));
+                    }
+                }
+                index += 2;
+            }
+            
+            if (strsrch.following(search.text.length()) != SearchIterator.DONE) {
+                errln("Error expecting out of bounds match");
+            }
+            if (strsrch.preceding(0) != SearchIterator.DONE) {
+                errln("Error expecting out of bounds match");
+            }
+            count ++;
+            strsrch = null;
+        }
+    }
+    
+    public void TestStrength() {   
+        int count = 0;
+        while (STRENGTH[count].text != null) {
+            if (count == 3) count ++;
+            if (!assertEqual(STRENGTH[count])) {
+                errln("Error at test number " + count);
+            }
+            count ++;
+        }
+    }
+    
+    public void TestStrengthCanonical() {
+        int count = 0;
+        while (STRENGTHCANONICAL[count].text != null) {
+            if (count == 3) count ++;
+            if (!assertCanonicalEqual(STRENGTHCANONICAL[count])) {
+                errln("Error at test number" + count);
+            }
+            count ++;
+        }
+    }
+    
+    public void TestSupplementary() {
+        int count = 0;
+        while (SUPPLEMENTARY[count].text != null) {
+            if (!assertEqual(SUPPLEMENTARY[count])) {
+                errln("Error at test number" + count);
+            }
+            count ++;
+        }
+    }
+    
+    public void TestSupplementaryCanonical() {
+        int count = 0;
+        while (SUPPLEMENTARYCANONICAL[count].text != null) {
+            if (!assertCanonicalEqual(SUPPLEMENTARYCANONICAL[count])) {
+                errln("Error at test number" + count);
+            }
+            count ++;
+        }
+    }
+
+    public void TestText() {
+        SearchData TEXT[] = {
+            new SearchData("the foxy brown fox", "fox", null, Collator.TERTIARY, null, new int[] {4, 15, -1}, new int[] {3, 3}),
+            new SearchData("the quick brown fox", "fox", null, Collator.TERTIARY, null, new int[] {16, -1}, new int[] {3}),
+            new SearchData(null, null, null, Collator.TERTIARY, null, new int[] {-1}, new int[]{0})
+        };
+        StringCharacterIterator t = new StringCharacterIterator(TEXT[0].text);
+        StringSearch strsrch = new StringSearch(TEXT[0].pattern, t, m_en_us_, null);
+        
+        if (!t.equals(strsrch.getTarget())) {
+            errln("Error setting text");
+        }
+        if (!assertEqualWithStringSearch(strsrch, TEXT[0])) {
+            errln("Error at assertEqualWithStringSearch");
+            return;
+        }
+    
+        t = new StringCharacterIterator(TEXT[1].text);
+        strsrch.setTarget(t);
+        if (!t.equals(strsrch.getTarget())) {
+            errln("Error setting text");
+            return;
+        }
+        
+        if (!assertEqualWithStringSearch(strsrch, TEXT[1])) {
+            errln("Error at assertEqualWithStringSearch");
+            return;
+        }
+    }
+    
+    public void TestTextCanonical() {
+        StringCharacterIterator t = new StringCharacterIterator(TEXTCANONICAL[0].text);
+        StringSearch strsrch = new StringSearch(TEXTCANONICAL[0].pattern, t, m_en_us_, null);
+        strsrch.setCanonical(true);
+        
+        if (!t.equals(strsrch.getTarget())) {
+            errln("Error setting text");
+        }
+        if (!assertEqualWithStringSearch(strsrch, TEXTCANONICAL[0])) {
+            strsrch = null;
+            return;
+        }
+
+        t = new StringCharacterIterator(TEXTCANONICAL[1].text);
+        strsrch.setTarget(t);
+        if (!t.equals(strsrch.getTarget())) {
+            errln("Error setting text");
+            strsrch = null;
+            return;
+        }
+        
+        if (!assertEqualWithStringSearch(strsrch, TEXTCANONICAL[1])) {
+            strsrch = null;
+            return;
+        }
+
+        t = new StringCharacterIterator(TEXTCANONICAL[0].text);
+        strsrch.setTarget(t);
+        if (!t.equals(strsrch.getTarget())) {
+            errln("Error setting text");
+            strsrch = null;
+            return;
+        }
+        
+        if (!assertEqualWithStringSearch(strsrch, TEXTCANONICAL[0])) {
+            errln("Error at assertEqualWithStringSearch");
+            strsrch = null;
+            return;
+        }    
+    }
+    
+    public void TestVariable() {
+        int count = 0;
+        m_en_us_.setAlternateHandlingShifted(true);
+        while (VARIABLE[count].text != null) {
+            // logln("variable" + count);
+            if (!assertEqual(VARIABLE[count])) {
+                errln("Error at test number " + count);
+            }
+            count ++;
+        }
+        m_en_us_.setAlternateHandlingShifted(false);
+    }
+    
+    public void TestVariableCanonical() {
+        int count = 0;
+        m_en_us_.setAlternateHandlingShifted(true);
+        while (VARIABLE[count].text != null) {
+            // logln("variable " + count);
+            if (!assertCanonicalEqual(VARIABLE[count])) {
+                errln("Error at test number " + count);
+            }
+            count ++;
+        }
+        m_en_us_.setAlternateHandlingShifted(false);
+    }
+    
 }

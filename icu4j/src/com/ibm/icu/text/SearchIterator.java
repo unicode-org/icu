@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/SearchIterator.java,v $ 
- * $Date: 2002/06/24 20:58:37 $ 
- * $Revision: 1.10 $
+ * $Date: 2002/07/12 21:59:22 $ 
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */
@@ -45,7 +45,8 @@ import java.text.CharacterIterator;
  * matches will match the given pattern exactly, a potential match that 
  * passes the BreakIterator might still not produce a valid match. For 
  * instance the pattern "e" will not be found in the string 
- * "&#92;u00e9" if a CharacterBreakIterator is used. Even though "e" is
+ * "&#92;u00e9" (latin small letter e with acute) if a 
+ * CharacterBreakIterator is used. Even though "e" is
  * a part of the character "&#92;u00e9" and the potential match at
  * offset 0 length 1 passes the CharacterBreakIterator test, "&#92;u00e9"
  * is not equivalent to "e", hence the SearchIterator rejects the potential
@@ -66,9 +67,7 @@ import java.text.CharacterIterator;
  * <p>The APIs in SearchIterator are similar to that of other text
  * iteration classes such as BreakIterator. Using this class, it is
  * easy to scan through text looking for all occurances of a
- * match. The following example uses a StringSearch object to find all
- * instances of "fox" in the target string.</p>
- * 
+ * match.</p>
  * <p>
  * Example of use:<br>
  * <pre>

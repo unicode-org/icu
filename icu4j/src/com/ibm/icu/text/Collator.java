@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Collator.java,v $ 
-* $Date: 2002/06/22 07:23:45 $ 
-* $Revision: 1.8 $
+* $Date: 2002/07/12 21:59:22 $ 
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
@@ -208,7 +208,7 @@ public abstract class Collator
      * @see #setDecomposition
      * @draft 2.2 
      */
-    public final static int CANONICAL_DECOMPOSITION = 1;
+    public final static int CANONICAL_DECOMPOSITION = 17;
     
     // public methods --------------------------------------------------------
     
@@ -308,8 +308,8 @@ public abstract class Collator
      * @param locale the desired locale.
      * @return Collator for the desired locale if it is created successfully.
      *         Otherwise if there is no Collator
-     *         associated with the current locale, the default UCA collator 
-     *         will be returned.
+     *         associated with the current locale, a default UCA collator will 
+     *         be returned.
      * @see java.util.Locale
      * @see java.util.ResourceBundle
      * @see #getInstance()
@@ -317,12 +317,7 @@ public abstract class Collator
      */
     public static final Collator getInstance(Locale locale)
     {
-        try {
-            return new RuleBasedCollator(locale);
-        } 
-        catch(Exception e) {
-            return RuleBasedCollator.UCA_;
-        }
+        return new RuleBasedCollator(locale);
     }
     
     /**

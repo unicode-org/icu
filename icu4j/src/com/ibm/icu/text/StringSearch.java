@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/StringSearch.java,v $ 
- * $Date: 2002/06/22 07:46:59 $ 
- * $Revision: 1.8 $
+ * $Date: 2002/07/12 21:59:22 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -865,7 +865,7 @@ public final class StringSearch extends SearchIterator
 	    // we are only concerned with exact matches, we don't need that.
 	    ce &= m_ceMask_;
 	    
-	    if (m_collator_.isAlternateHandling(true)) {
+	    if (m_collator_.isAlternateHandlingShifted()) {
 	        // alternate handling here, since only the 16 most significant 
 	        // digits is only used, we can safely do a compare without masking
 	        // if the ce is a variable, we mask and get only the primary values
@@ -2732,7 +2732,7 @@ public final class StringSearch extends SearchIterator
 	   								  m_pattern_.m_CELength_);
 		int targetce = CollationElementIterator.IGNORABLE;
 	    while (textoffset <= m_textLimitOffset_) {
-	    	m_colEIter_.setExactOffset(textoffset);
+            	    	m_colEIter_.setExactOffset(textoffset);
 	        int patternceindex = m_pattern_.m_CELength_ - 1;
 	        boolean found = false;
 	        int lastce = CollationElementIterator.NULLORDER;

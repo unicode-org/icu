@@ -5,15 +5,13 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestAll.java,v $ 
- * $Date: 2002/06/20 23:20:36 $ 
- * $Revision: 1.27 $
+ * $Date: 2002/07/12 21:59:23 $ 
+ * $Revision: 1.28 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.dev.test;
 import com.ibm.icu.dev.test.TestFmwk;
-import java.text.*;
-import java.util.*;
 
 /**
  * Top level test used to run all other tests as a batch.
@@ -34,15 +32,6 @@ public class TestAll extends TestFmwk {
             new com.ibm.icu.dev.test.compression.DecompressionTest(),
             new com.ibm.icu.dev.test.compression.ExhaustiveTest()
                 });
-    }
-    
-    public void TestNormalizer() throws Exception{
-        run(new TestFmwk[] {
-            new com.ibm.icu.dev.test.normalizer.BasicTest(),
-            new com.ibm.icu.dev.test.normalizer.ExhaustiveTest(),
-            new com.ibm.icu.dev.test.normalizer.ConformanceTest(),
-            new com.ibm.icu.dev.test.normalizer.TestCanonicalIterator(),
-        });
     }
 
     public void TestRuleBasedNumberFormat() throws Exception {
@@ -77,7 +66,31 @@ public class TestAll extends TestFmwk {
     }
 
     public void TestSearch() throws Exception {
-        run(new com.ibm.icu.dev.test.search.SearchTest());
+        run(
+            new com.ibm.icu.dev.test.search.SearchTest());
+    }
+    
+    public void TestCollator() throws Exception {
+        run(new TestFmwk[] {
+            new com.ibm.icu.dev.test.collator.CollationAPITest(),
+            new com.ibm.icu.dev.test.collator.CollationCurrencyTest(),
+            new com.ibm.icu.dev.test.collator.CollationDanishTest(),
+            new com.ibm.icu.dev.test.collator.CollationDummyTest(),
+            new com.ibm.icu.dev.test.collator.CollationEnglishTest(),
+            new com.ibm.icu.dev.test.collator.CollationFinnishTest(),
+            new com.ibm.icu.dev.test.collator.CollationFrenchTest(),
+            new com.ibm.icu.dev.test.collator.CollationGermanTest(),
+            new com.ibm.icu.dev.test.collator.CollationIteratorTest(),
+            new com.ibm.icu.dev.test.collator.CollationKanaTest(),
+            new com.ibm.icu.dev.test.collator.CollationMonkeyTest(),
+            new com.ibm.icu.dev.test.collator.CollationRegressionTest(),
+            new com.ibm.icu.dev.test.collator.CollationSpanishTest(),
+            new com.ibm.icu.dev.test.collator.CollationThaiTest(),
+            new com.ibm.icu.dev.test.collator.CollationTurkishTest(),
+            new com.ibm.icu.dev.test.collator.G7CollationTest(),
+            new com.ibm.icu.dev.test.collator.LotusCollationKoreanTest(),
+            new com.ibm.icu.dev.test.collator.CollationMiscTest()
+                });
     }
 	
     public void TestArabicShaping() throws Exception {
