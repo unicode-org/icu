@@ -162,7 +162,7 @@ public:
      */
     UnicodeString toString() const {
       char tmp[400];
-      sprintf(tmp, "%lf,%lf", 
+      sprintf(tmp, "%f,%f", 
               (ascension*RAD_DEG), (declination*RAD_DEG));
       return UnicodeString(tmp);
     }

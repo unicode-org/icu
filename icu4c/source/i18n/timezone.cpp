@@ -174,11 +174,8 @@ static UBool getOlsonMeta() {
 
 static int32_t findInStringArray(UResourceBundle* array, const UnicodeString& id, UErrorCode &status)
 {
-#if 1
-    UResourceBundle *n = NULL;
     UnicodeString copy = id;
     const UChar* buf = copy.getTerminatedBuffer();
-    int32_t myLen = copy.length();
     const UChar* u = NULL;
     
     int32_t count = ures_getSize(array);
@@ -212,24 +209,6 @@ static int32_t findInStringArray(UResourceBundle* array, const UnicodeString& id
     }
     U_DEBUG_TZ_MSG(("fisa: not found\n"));
     return -1;
-    
-#else
-    // Linear search
-    if(U_FAILURE(status)) return -1;
-    int32_t idx=0;
-    UnicodeString check;
-    const char *key;
-    while(U_SUCCESS(status)) {
-        check = ures_getNextUnicodeString(array, &key, &status);
-        if(check==id) {
-            U_DEBUG_TZ_MSG(("fisa: %d\n", idx));
-            return idx;
-        }
-        idx++;
-    }
-    U_DEBUG_TZ_MSG(("fisa: -1\n"));
-    return -1;
-#endif
 }
 
 /**
@@ -297,8 +276,7 @@ static UResourceBundle* openOlsonResource(const UnicodeString& id,
 #endif
     UResourceBundle *top = ures_openDirect(0, kZONEINFO, &ec);
     U_DEBUG_TZ_MSG(("pre: res sz=%d\n", ures_getSize(&res)));
-    UResourceBundle *newRes = getZoneByName(top, id, &res, ec);
-    U_DEBUG_TZ_MSG(("NewRes=%p, &res=%p\n", newRes, &res));
+    /* &res = */ getZoneByName(top, id, &res, ec);
     // Dereference if this is an alias.  Docs say result should be 1
     // but it is 0 in 2.8 (?).
     U_DEBUG_TZ_MSG(("Loading zone '%s' (%s, size %d) - %s\n", buf, ures_getKey((UResourceBundle*)&res), ures_getSize(&res), u_errorName(ec)));
@@ -782,7 +760,7 @@ public:
         ures_close(top);
     }
 
-    TZEnumeration(const TZEnumeration &other) : map(NULL), len(0), pos(0) {
+  TZEnumeration(const TZEnumeration &other) : StringEnumeration(), map(NULL), len(0), pos(0) {
         if(other.len > 0) {
             if(other.map != NULL) {
                 map = (int32_t *)uprv_malloc(other.len * sizeof(int32_t));

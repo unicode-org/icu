@@ -21,6 +21,8 @@
 
 #include "unicode/calendar.h"
 
+U_NAMESPACE_BEGIN
+
 /**
  * <code>IslamicCalendar</code> is a subclass of <code>Calendar</code>
  * that that implements the Islamic civil and religious calendars.  It
@@ -450,6 +452,8 @@ class U_I18N_API IslamicCalendar : public Calendar {
    */
   static void  initializeSystemDefaultCentury(void);
 };
+
+U_NAMESPACE_END
 
 #endif
 #endif
