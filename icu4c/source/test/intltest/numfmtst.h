@@ -58,17 +58,39 @@ public:
     virtual void TestExponent(void);
     virtual void TestScientific(void);
     void expect(NumberFormat& fmt, const UnicodeString& str, int32_t n);
+    void expect(NumberFormat& fmt, const char *str, int32_t n) {
+        expect(fmt, UnicodeString(str, ""), n);
+    }
     void expect(NumberFormat& fmt, const Formattable& n,
                 const UnicodeString& exp);
+    void expect(NumberFormat& fmt, const Formattable& n,
+                const char *exp) {
+        expect(fmt, n, UnicodeString(exp, ""));
+    }
     void expect(NumberFormat* fmt, const Formattable& n,
                 const UnicodeString& exp, UErrorCode);
+    void expect(NumberFormat* fmt, const Formattable& n,
+                const char *exp, UErrorCode errorCode) {
+        expect(fmt, n, UnicodeString(exp, ""), errorCode);
+    }
     void TestPad(void);
     void TestPatterns2(void);
     void expectPad(DecimalFormat& fmt, const UnicodeString& pat,
                    int32_t pos);
+    void expectPad(DecimalFormat& fmt, const char *pat,
+                   int32_t pos) {
+        expectPad(fmt, pat, pos, 0, (UChar)0);
+    }
     void expectPad(DecimalFormat& fmt, const UnicodeString& pat,
                    int32_t pos, int32_t width, UChar pad);
+    void expectPad(DecimalFormat& fmt, const char *pat,
+                   int32_t pos, int32_t width, UChar pad) {
+        expectPad(fmt, UnicodeString(pat, ""), pos, width, pad);
+    }
     void expectPat(DecimalFormat& fmt, const UnicodeString& exp);
+    void expectPat(DecimalFormat& fmt, const char *exp) {
+        expectPat(fmt, UnicodeString(exp, ""));
+    }
     enum { ILLEGAL = -1 };
 
 public: // package
