@@ -316,6 +316,7 @@ typedef struct UTransEnumeration {
     int32_t index, count;
 } UTransEnumeration;
 
+U_CDECL_BEGIN
 static int32_t U_CALLCONV
 utrans_enum_count(UEnumeration *uenum, UErrorCode *pErrorCode) {
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
@@ -365,6 +366,7 @@ static void U_CALLCONV
 utrans_enum_close(UEnumeration *uenum) {
     uprv_free(uenum);
 }
+U_CDECL_END
 
 static const UEnumeration utransEnumeration={
     NULL,
