@@ -2571,7 +2571,8 @@ UnicodeString::extract(UTextOffset start,
                int32_t length,
                char *dst,
                const char *codepage) const
-{return extract(start, length, dst, INT32_MAX, codepage);}
+// This dstSize value should prevent pointer overflow
+{return extract(start, length, dst, 0x0FFFFFFF, codepage);}
 
 inline void  
 UnicodeString::extractBetween(UTextOffset start, 
