@@ -3120,7 +3120,7 @@ void TransliteratorTest::TestIncrementalProgress(void) {
 
 UnicodeString TransliteratorTest::CheckIncrementalAux(const Transliterator* t, 
                                                       const UnicodeString& input) {
-    
+    UErrorCode ec = U_ZERO_ERROR;
     UTransPosition pos;
     UnicodeString test = input;
 
@@ -3129,26 +3129,24 @@ UnicodeString TransliteratorTest::CheckIncrementalAux(const Transliterator* t,
     pos.start = 0;
     pos.limit = input.length();
 
-    t->transliterate(test, pos.start, pos.limit);
+    t->transliterate(test, pos, ec);
+    if (U_FAILURE(ec)) {
+        errln((UnicodeString)"FAIL: transliterate() error " + u_errorName(ec));
+        return test;
+    }
     UBool gotError = FALSE;
     if (pos.start == 0) {
-        log("No Progress, ");
-        log(t->getID());
-        log(": ");
-        errln(formatInput(test, input, pos));
+        errln((UnicodeString)"No Progress, " +
+              t->getID() + ": " + formatInput(test, input, pos));
         gotError = TRUE;
     } else {
-        log("PASS Progress, ");
-        log(t->getID());
-        log(": ");
-        logln(formatInput(test, input, pos));
+        logln((UnicodeString)"PASS Progress, " +
+              t->getID() + ": " + formatInput(test, input, pos));
     }
     t->finishTransliteration(test, pos);
     if (pos.start != pos.limit) {
-        log("Incomplete, ");
-        log(t->getID()); 
-        log(":  ");
-        errln(formatInput(test, input, pos));
+        errln((UnicodeString)"Incomplete, " +
+              t->getID() + ": " + formatInput(test, input, pos));
         gotError = TRUE;
     }
     return test;
