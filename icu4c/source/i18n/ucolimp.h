@@ -184,16 +184,15 @@ static uint8_t utf16fixup[32] = {
       if((collationSource).CEpos == (collationSource).toReturn) {                     \
         (collationSource).CEpos = (collationSource).toReturn = (collationSource).CEs; \
       }                                                                               \
-    } else if((collationSource).pos < (collationSource).len) {                       \
+    } else if((collationSource).pos < (collationSource).len) {                        \
       UChar ch = *(collationSource).pos;                                              \
-      if(ch <= 0xFF) {                                                                 \
+      if(ch <= 0xFF) {                                                                \
       (order) = (coll)->latinOneMapping[ch];                                          \
       } else {                                                                        \
       (order) = ucmp32_get((coll)->mapping, ch);                                      \
       }                                                                               \
       if((order) >= UCOL_NOT_FOUND) {                                                 \
-        *((collationSource).CEpos) = (order);                                         \
-        (order) = getSpecialCE((coll), &(collationSource), (status));                 \
+        (order) = getSpecialCE((coll), (order), &(collationSource), (status));        \
         if((order) == UCOL_NOT_FOUND) {                                               \
           (order) = ucol_getNextUCA(ch, &(collationSource), (status));                \
         }                                                                             \
@@ -204,7 +203,7 @@ static uint8_t utf16fixup[32] = {
     }                                                                                 \
 }
 
-uint32_t getSpecialCE(const UCollator *coll, collIterate *source, UErrorCode *status);
+uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, UErrorCode *status);
 U_CFUNC uint32_t ucol_getNextCE(const UCollator *coll, collIterate *collationSource, UErrorCode *status);
 uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *status);
 void incctx_cleanUpContext(incrementalContext *ctx);
