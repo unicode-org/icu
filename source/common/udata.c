@@ -804,11 +804,14 @@ openCommonData(UDataMemory *pData,
             *basename=0;
 
             /* try to find the Table of Contents */
+#if 0
             if(uprv_strcmp(inBasename, U_ICUDATA_NAME) == 0) {
                 uprv_strcpy(entryName, "icudata");
             } else {
                 uprv_strcpy(entryName, inBasename);
             }
+#endif
+            uprv_strcpy(entryName, inBasename);
 
             uprv_strcat(entryName, "_" DATA_TYPE);
             pHeader=normalizeDataPointer((const DataHeader *)GET_LIBRARY_ENTRY(lib, entryName));
