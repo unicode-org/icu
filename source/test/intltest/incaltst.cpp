@@ -446,7 +446,6 @@ void IntlCalendarTest::TestJapaneseFormat() {
         }
         delete fmt;
     }
-    delete fmt2;
 
     // Test parse with incomplete information
     fmt = new SimpleDateFormat(UnicodeString("G y"), Locale("en_US@calendar=japanese"), status);
@@ -480,6 +479,7 @@ void IntlCalendarTest::TestJapaneseFormat() {
     }
 
     delete cal2;
+    delete fmt2;
     CHECK(status, "Error occured");
     
     // Now, try in Japanese
