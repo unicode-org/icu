@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationParsedRuleBuilder.java,v $ 
-* $Date: 2002/12/11 07:13:26 $ 
-* $Revision: 1.12 $
+* $Date: 2002/12/13 23:14:50 $ 
+* $Revision: 1.13 $
 *
 *******************************************************************************
 */
@@ -700,7 +700,7 @@ final class CollationParsedRuleBuilder
 	    	m_endExpansionCE_ = new Vector();
 	    	m_isV_ = new Vector();
 	    	m_endExpansionCE_.add(new Integer(0));
-	    	m_isV_.add(new Integer(0));
+	    	m_isV_.add(new Boolean(false));
             m_maxLSize_ = 1;
             m_maxVSize_ = 1;
             m_maxTSize_ = 1;

@@ -94,7 +94,9 @@ public class CollationIteratorTest extends TestFmwk {
      * Test for getMaxExpansion()
      */
     public void TestMaxExpansion(/* char* par */) {
-        String rule = "&a < ab < c/aba < d < z < ch";
+        // added jamo characters
+        String rule = "&a < ab < c/aba < d < z < ch < \u1100/aba " 
+                      + "< \u1175/aba < \u11A8/aba";
         RuleBasedCollator coll = null;
         try {
             coll = new RuleBasedCollator(rule);
