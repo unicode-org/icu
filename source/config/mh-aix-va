@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2002, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-aix-va,v 1.26 2002/08/01 03:28:53 srl Exp $
+## $Id: mh-aix-va,v 1.27 2003/06/09 22:35:07 srl Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -E -M $(DEFS) $(CPPFLAGS)
@@ -17,18 +17,25 @@ CXXFLAGS += -qproto -qroconst
 
 LDFLAGS += -brtl -bh:5
 
+## We need to delete things prior to linking, or else we'll get
+## SEVERE ERROR: output file in use ..  on AIX. 
+## But, shell script version should NOT delete target as we don't
+## have $@ in that context.  (SH = only shell script, icu-config)
+AIX_PREDELETE=rm -f $@ ; 
+#SH# AIX_PREDELETE=
+
 ## Commands to link
 ## We need to use the C++ linker, even when linking C programs, since
 ##  our libraries contain C++ code (C++ static init not called)
-LINK.c=		$(CXX) $(CXXFLAGS) $(LDFLAGS)
-LINK.cc=	$(CXX) $(CXXFLAGS) $(LDFLAGS)
+LINK.c=		$(AIX_PREDELETE) $(CXX) $(CXXFLAGS) $(LDFLAGS)
+LINK.cc=	$(AIX_PREDELETE) $(CXX) $(CXXFLAGS) $(LDFLAGS)
 
 ## Commands to make a shared library
 ## -G means -berok -brtl -bnortllib -bnosymbolic -bnoautoexp
 ## -bh:8 means halt on errors or worse.  We don't display warnings about
 ##      duplicate inline symbols.
-SHLIB.c=	$(CXX) -qmkshrobj -G $(LDFLAGS)
-SHLIB.cc=	$(CXX) -qmkshrobj -G $(LDFLAGS)
+SHLIB.c=	$(AIX_PREDELETE) $(CXX) -qmkshrobj -G $(LDFLAGS)
+SHLIB.cc=	$(AIX_PREDELETE) $(CXX) -qmkshrobj -G $(LDFLAGS)
 
 ## Compiler switch to embed a runtime search path
 LD_RPATH=	-I
