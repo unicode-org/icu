@@ -8,8 +8,6 @@
 #
 #	12/10/1999	weiv	Created
 
-!CMDSWITCHES -D
-
 #If no config, we default to debug
 !IF "$(CFG)" == ""
 CFG=Debug
@@ -30,11 +28,6 @@ TESTDATA=$(ICUP)\source\test\testdata
 ICUTOOLS=$(ICUP)\source\tools
 !ENDIF
 
-LINK32 = link.exe
-LINK32_FLAGS = /out:"$(ICUDATA)/icudata.dll" /DLL /NOENTRY /base:"0x4ad00000" /comment:" Copyright (C) 1999-2000 International Business Machines Corporation and others.  All Rights Reserved. "
-#CPP_FLAGS = /I$(ICUP)\include /GD /c
-CPP_FLAGS = /I$(ICUP)\include /GD /c /Fo$@
-
 #Here we test if configuration is given
 !IF "$(CFG)" != "Release" && "$(CFG)" != "release" && "$(CFG)" != "Debug" && "$(CFG)" != "debug"
 !MESSAGE Invalid configuration "$(CFG)" specified.
@@ -51,6 +44,7 @@ CPP_FLAGS = /I$(ICUP)\include /GD /c /Fo$@
 !ERROR An invalid configuration is specified.
 !ENDIF
 
+# We have to prepare params for pkgdata - to help it find the tools
 !IF "$(CFG)" == "Debug" || "$(CFG)" == "debug"
 PKGOPT=D:$(ICUP)
 !ELSE
@@ -82,11 +76,7 @@ $(UCM_SOURCE)=$(UCM_SOURCE) $(UCM_SOURCE_LOCAL)
 !ELSE
 !ERROR ERROR: cannot find "ucmfiles.mk"
 !ENDIF
-
-# According to the read files, we will generate CNV and C files
 CNV_FILES=$(UCM_SOURCE:.ucm=.cnv)
-C_CNV_FILES = $(UCM_SOURCE:.ucm=_cnv.c)
-OBJ_CNV_FILES = $(C_CNV_FILES:.c=.obj)
 
 # Read list of resource bundle files
 !IF EXISTS("$(ICUTOOLS)\genrb\genrbfiles.mk")
@@ -102,26 +92,12 @@ GENRB_SOURCE=$(GENRB_SOURCE) $(GENRB_SOURCE_LOCAL)
 !ENDIF
 RB_FILES = $(GENRB_SOURCE:.txt=.res) 
 TRANSLIT_FILES = $(TRANSLIT_SOURCE:.txt=.res)
-#TRANSLIT_SOURCE = $(TRANSLIT_SOURCE: = translit\)
-C_RB_FILES = $(RB_FILES:.res=_res.c) $(TRANSLIT_FILES:.res=_res.c) 
-OBJ_RB_FILES = $(C_RB_FILES:.c=.obj)
 
 # This target should build all the data files
 ALL : GODATA  test.dat base_test.dat test_dat.dll base_test_dat.dll base_dat.dll $(TESTDATA)\testdata.dll icudata.dll GOBACK #icudata.dat 
 	@echo All targets are up to date
 
 BRK_FILES = $(ICUDATA)\sent.brk $(ICUDATA)\char.brk $(ICUDATA)\line.brk $(ICUDATA)\word.brk $(ICUDATA)\line_th.brk $(ICUDATA)\word_th.brk
-BRK_CSOURCES = $(BRK_FILES:.brk=_brk.c)
-
-CPP_SOURCES = $(C_CNV_FILES) uprops_dat.c unames_dat.c cnvalias_dat.c tz_dat.c $(BRK_CSOURCES) $(C_RB_FILES)
-LINK32_OBJS = $(CPP_SOURCES:.c=.obj)
-
-# target for DLL
-
-LINK32_TEST_FLAGS = /out:"$(ICUDATA)/test_dat.dll" /DLL /NOENTRY 
-LINK32_BASE_TEST_FLAGS = /out:"$(ICUDATA)/base_test_dat.dll" /DLL /NOENTRY 
-LINK32_BASE_FLAGS = /out:"$(ICUDATA)/base_dat.dll" /DLL /NOENTRY 
-LINK32_TESTDATA_FLAGS = /out:"$(TESTDATA)/testdata.dll" /DLL /NOENTRY
 
 #invoke pkgdata
 icudata.dll :  $(CNV_FILES) $(BRK_FILES) uprops.dat unames.dat cnvalias.dat tz.dat $(RB_FILES) $(TRANSLIT_FILES)
@@ -150,56 +126,35 @@ te_IN.res
 testtypes.res
 <<      
 
+test_dat.dll :  test.dat
+	@echo Building test_dat.dll
+ 	@$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata -v -m dll -c -p test_dat -O $(PKGOPT) -d $(ICUDATA) -s $(ICUDATA) <<
+test.dat
+<<
+
+base_test_dat.dll : test.dat
+	@echo Building base_test_dat.dll
+ 	@$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata -v -m dll -c -p base_test_dat -O $(PKGOPT) -d $(ICUDATA) -s $(ICUDATA) <<
+test.dat
+<<
+
+base_dat.dll : test.dat
+	@echo Building base_dat.dll
+ 	@$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata -v -m dll -c -p base_dat -O $(PKGOPT) -d $(ICUDATA) -s $(ICUDATA) <<
+test.dat
+<<
 
 # Targets for test.dat 
 test.dat : 
 	@echo Creating data file for test
 	@set ICU_DATA=$(ICUDATA)
 	@$(ICUTOOLS)\gentest\$(CFG)\gentest 
-test_dat.c : test.dat
-	@echo Creating C source file for test data
-        @set ICU_DATA=$(ICUDATA)
-	@$(ICUTOOLS)\genccode\$(CFG)\genccode $(ICUDATA)\$?
-test_dat.obj : test_dat.c
-        @echo creating the obj file for test data
-	@cd $(ICUDATA)
-	@$(CPP) @<<
-$(CPP_FLAGS) $(ICUDATA)\$?
-<<
-
 
 #Targets for base_test.dat
 base_test.dat :
 	@echo Creating base data file test
 	@set ICU_DATA=$(ICUDATA)
 	@copy $(ICUDATA)\test.dat $(ICUDATA)\base_test.dat 
-
-# According to the read files, we will generate C files
-# Target for test DLL
-test_dat.dll : test_dat.obj test.dat
-	@echo Creating DLL file
-	@cd $(ICUDATA)
-	@$(LINK32) @<<
-$(LINK32_TEST_FLAGS) test_dat.obj
-<<
-
-#Target for base test data DLL
-base_test_dat.dll : test_dat.obj test.dat
-	@echo Creating DLL file
-	@cd $(ICUDATA)
-	@$(LINK32) @<<
-$(LINK32_BASE_TEST_FLAGS) test_dat.obj
-<<
-
-#Target for base data DLL
-base_dat.dll : test_dat.obj test.dat
-	@echo Creating DLL file
-	@cd $(ICUDATA)
-	@$(LINK32) @<<
-$(LINK32_BASE_FLAGS) test_dat.obj
-<<
-
-
 
 $(ICUDATA)\sent.brk : $(ICUDATA)\sentLE.brk
     copy $(ICUDATA)\sentLE.brk $(ICUDATA)\sent.brk
@@ -256,8 +211,6 @@ CLEAN :
 # Inference rule for creating resource bundles
 .txt.res:
 	@echo Making Resource Bundle files
-	@echo cd $(ICUDATA)
-	@echo set ICU_DATA=$(ICUDATA)
 	$(ICUTOOLS)\genrb\$(CFG)\genrb -s$(@D) -d$(@D) $(?F)
 
 # Inference rule for creating converters, with a kludge to create
@@ -267,13 +220,6 @@ CLEAN :
 	@cd $(ICUDATA)
 	@set ICU_DATA=$(ICUDATA)
 	@$(ICUTOOLS)\makeconv\$(CFG)\makeconv $<
-
-# Inference rule for compiling :)
-.c.obj:
-	@cd $(ICUDATA)
-	@$(CPP) @<<
-$(CPP_FLAGS) $?
-<<
 
 # Targets for uprops.dat
 uprops.dat : unidata\UnicodeData.txt unidata\Mirror.txt $(ICUTOOLS)\genprops\$(CFG)\genprops.exe
