@@ -120,23 +120,6 @@ void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint
   src->resultLen = 0;
 }
 
-/* -1 off, 1 on, 0 neither */
-int32_t ucol_uprv_tok_isOnorOf(const UChar* onoff) {
-  if(onoff) {
-     if(u_tolower(*onoff) == 0x006F /*'o'*/) {
-       onoff++;
-       if(u_tolower(*onoff) == 0x006e /*'n'*/) {
-         return 1;
-       } else if(u_tolower(*onoff) == 0x0066 /*'f'*/) {
-         onoff++;
-         if(u_tolower(*onoff) == 0x0066 /*'f'*/) {
-           return -1;
-         }
-       }
-     }
-  }
-  return 0;
-}
 
 void ucol_uprv_tok_setOptionInImage(UColOptionSet *opts, UColAttribute attrib, UColAttributeValue value) {
   switch(attrib) {
