@@ -406,8 +406,11 @@ u_scanf_string_handler(UFILE             *stream,
         ucnv_fromUnicode(conv, &alias, limit, &source, source + 1,
             NULL, TRUE, &status);
 
-        if(U_FAILURE(status))
+        if(U_FAILURE(status)) {
+            /* clean up */
+            u_releaseDefaultConverter(conv);
             return -1;
+        }
 
         /* increment the count */
         ++count;
@@ -1187,14 +1190,20 @@ u_scanf_scanset_handler(UFILE             *stream,
             ucnv_fromUnicode(conv, &alias, limit, &source, source + 1,
                 NULL, TRUE, &status);
 
-            if(U_FAILURE(status))
+            if(U_FAILURE(status)) {
+                /* clean up */
+                u_releaseDefaultConverter(conv);
                 return -1;
+            }
         }
         /* if the character's not in the scanset, break out */
         else {
             break;
         }
     }
+
+    /* clean up */
+    u_releaseDefaultConverter(conv);
 
     /* put the final character we read back on the stream */
     if(c != U_EOF)
@@ -1206,9 +1215,6 @@ u_scanf_scanset_handler(UFILE             *stream,
     /* otherwise, add the terminator */
     else
         *alias = 0x00;
-
-    /* clean up */
-    u_releaseDefaultConverter(conv);
 
     /* we converted 1 arg */
     return 1;
