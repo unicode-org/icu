@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/collator/CollationTest.java,v $
- * $Date: 2002/08/13 21:55:25 $
- * $Revision: 1.4 $
+ * $Date: 2002/08/31 04:55:10 $
+ * $Revision: 1.5 $
  *
  *******************************************************************************
  */
@@ -21,7 +21,11 @@ import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.LocaleUtility;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Vector;
 
 public class CollationTest extends ModuleTest 
@@ -36,38 +40,12 @@ public class CollationTest extends ModuleTest
             test.TestCIgnorableContraction();
         }*/
     }
- 
-    public void TestCIgnorableContraction() {
-    	while (nextSettings()) {
-    	    processTest();
-    	}
+
+    public CollationTest() {
+        super("processModules");
     }
-    
-    public void TestCIgnorablePrefix() {
-        while (nextSettings()) {
-            processTest();
-        }
-    }
-    
-    public void TestNShiftedIgnorable() {
-        while (nextSettings()) {
-            processTest();
-        }
-    }
-    
-    public void TestSafeSurrogates() {
-        while (nextSettings()) {
-            processTest();
-        }
-    }
-    
-    public void TestPrimary() {
-        while (nextSettings()) {
-            processTest();
-        }
-    }
-    
-    public void TestTertiary() {
+
+    public void processModules() {
         while (nextSettings()) {
             processTest();
         }
