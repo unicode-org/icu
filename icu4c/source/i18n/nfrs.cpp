@@ -94,7 +94,7 @@ util_lcm(llong x, llong y)
 static const UChar gPercent = 0x0025;
 static const UChar gColon = 0x003a;
 static const UChar gSemicolon = 0x003b;
-static const UChar gLineFeed = 0x0010;
+static const UChar gLineFeed = 0x000a;
 
 static const UChar gFourSpaces[] =
 {

@@ -125,21 +125,15 @@ RuleBasedNumberFormat::clone(void) const
 {
     RuleBasedNumberFormat * result = NULL;
     UnicodeString rules = getRules();
-    int32_t len = rules.length();
-    UChar* rulestring = new UChar[len+1];
-    if (rulestring) {
-        rules.extract(0, len, rulestring);
-        UErrorCode status = U_ZERO_ERROR;
-        UParseError perror;
-        result = new RuleBasedNumberFormat(rulestring, locale, perror, status);
-        if (U_FAILURE(status)) {
-            delete result;
-            result = NULL;
-        } else {
-            result->lenient = lenient;
-        }
-        delete[] rulestring;
-    }
+    UErrorCode status = U_ZERO_ERROR;
+	UParseError perror;
+	result = new RuleBasedNumberFormat(rules, locale, perror, status);
+	if (U_FAILURE(status)) {
+		delete result;
+		result = NULL;
+	} else {
+		result->lenient = lenient;
+	}
     return result;
 }
 
@@ -548,11 +542,14 @@ RuleBasedNumberFormat::dispose()
         ruleSets = NULL;
     }
     
-    delete collator;
+    delete collator; 
+	collator = NULL;
     
-    delete decimalFormatSymbols;
+    delete decimalFormatSymbols; 
+	decimalFormatSymbols = NULL;
     
-    delete lenientParseRules;
+    delete lenientParseRules; 
+	lenientParseRules = NULL;
 }
 
 

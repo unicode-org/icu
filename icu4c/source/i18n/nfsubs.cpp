@@ -231,8 +231,11 @@ NFSubstitution::operator==(const NFSubstitution& rhs) const
     // this should be called by subclasses before their own equality tests
     return getDynamicClassID() == rhs.getDynamicClassID() 
         && pos == rhs.pos
-        && ruleSet == rhs.ruleSet
-        && *numberFormat == *rhs.numberFormat;
+		&& (ruleSet == NULL) == (rhs.ruleSet == NULL)
+        // && ruleSet == rhs.ruleSet causes circularity, other checks to make instead?
+		&& (numberFormat == NULL 
+		    ? (rhs.numberFormat == NULL)
+		    : (*numberFormat == *rhs.numberFormat)); 
 }
 
     /**
