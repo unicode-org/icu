@@ -40,7 +40,6 @@ en_IE {
     LocaleID { "1809" }
     LocaleString { "en_IE" }
     ShortCountry { "IRL" }
-    localPatternChars { "GyMdkHmsSEDFwWahKzYe" }
     zoneStrings { 
         {
                 "Europe/London",

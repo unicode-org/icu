@@ -91,7 +91,6 @@ is {
             "\uFFFD",
     }
     ShortLanguage { "isl" }
-    localPatternChars { "GyMdkHmsSEDFwWahKzYe" }
     zoneStrings { 
         {
                 "Africa/Casablanca",

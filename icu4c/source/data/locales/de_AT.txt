@@ -60,7 +60,6 @@ de_AT {
     }
     /* Discarding duplicate data for tag: NumberPatterns */
     ShortCountry { "AUT" }
-    localPatternChars { "GuMtkHmsSEDFwWahKzUe" }
     zoneStrings { 
         {
                 "Africa/Casablanca",

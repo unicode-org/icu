@@ -98,7 +98,6 @@ sv {
             "e.Kr.",
     }
     ShortLanguage { "swe" }
-    localPatternChars { "GyMdkHmsSEDFwWahKzYe" }
     zoneStrings { 
         {
                 "Europe/Stockholm",

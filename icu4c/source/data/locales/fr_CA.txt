@@ -34,7 +34,6 @@ fr_CA {
             "#,##0%",
     }
     ShortCountry { "CAN" }
-    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
     zoneStrings { 
         {
                 "Africa/Casablanca",

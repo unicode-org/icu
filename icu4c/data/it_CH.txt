@@ -43,7 +43,6 @@ it_CH {
             "#,##0%",
     }
     ShortCountry { "CHE" }
-    localPatternChars { "GuMtkHmsSEDFwWahKzUe" }
     zoneStrings { 
         {
                 "Europe/Zurich",

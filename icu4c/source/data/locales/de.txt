@@ -124,7 +124,7 @@ de {
             "\uFFFD",
     }
     ShortLanguage { "deu" }
-    localPatternChars { "GuMtkHmsSEDFwWahKzJe" }
+    localPatternChars { "GjMtkHmsSEDFwWahKzJe" }
     zoneStrings { 
         {
         "Europe/Berlin", 

@@ -36,7 +36,6 @@ en_CA {
     LocaleID { "1009" }
     LocaleString { "en_CA" }
     ShortCountry { "CAN" }
-    localPatternChars { "GyMdkHmsSEDFwWahKzYe" }
     zoneStrings { 
         {
                 "PST",
