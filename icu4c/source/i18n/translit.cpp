@@ -832,7 +832,8 @@ void Transliterator::initializeCache(void) {
     cache = uhash_open(uhash_hashUString, &status);
     cacheIDs.setComparer(compareIDs);
 
-    /* The following code is assuming an n x 3 table
+    /* The following code parses the index table located in
+     * icu/data/translit/index.txt.  The index is an n x 3 table
      * that looks like this:
      *
      * RuleBasedTransliteratorIDs {
@@ -842,9 +843,10 @@ void Transliterator::initializeCache(void) {
      * }
      */
 
-    ResourceBundle bundle(Locale::getDataDirectory(),
-                          Locale::getDefault(),
-                          status);
+    Locale indexLoc(UNICODE_STRING("index", 5));
+    ResourceBundle bundle(Transliterator::getDataDirectory(),
+                          indexLoc, status);
+
     int32_t rows, cols;
     const UnicodeString** ruleBasedIDs =
         bundle.get2dArray(RB_RULE_BASED_IDS, rows, cols, status);
