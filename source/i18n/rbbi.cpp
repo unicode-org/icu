@@ -166,22 +166,6 @@ RuleBasedBreakIterator::getText() const {
 }
 
 /**
- * Returns a newly-created CharacterIterator that the caller is to take
- * ownership of.
- * THIS FUNCTION SHOULD NOT BE HERE.  IT'S HERE BECAUSE BreakIterator DEFINES
- * IT AS PURE VIRTUAL, FORCING RBBI TO IMPLEMENT IT.  IT SHOULD BE REMOVED
- * FROM *BOTH* CLASSES.
- */
-CharacterIterator*
-RuleBasedBreakIterator::createText() const {
-    if (text == NULL)
-        return new StringCharacterIterator("");
-    else
-        return text->clone();
-}
-
-
-/**
  * Set the iterator to analyze a new piece of text.  This function resets
  * the current iteration position to the beginning of the text.
  * @param newText An iterator over the text to analyze.
@@ -213,6 +197,22 @@ RuleBasedBreakIterator::setText(const UnicodeString& newText) {
     }
 }
 
+#ifdef ICU_ENABLE_DEPRECATED_BREAKITERATOR
+/**
+ * Returns a newly-created CharacterIterator that the caller is to take
+ * ownership of.
+ * THIS FUNCTION SHOULD NOT BE HERE.  IT'S HERE BECAUSE BreakIterator DEFINES
+ * IT AS PURE VIRTUAL, FORCING RBBI TO IMPLEMENT IT.  IT SHOULD BE REMOVED
+ * FROM *BOTH* CLASSES.
+ */
+CharacterIterator*
+RuleBasedBreakIterator::createText() const {
+    if (text == NULL)
+        return new StringCharacterIterator("");
+    else
+        return text->clone();
+}
+
 /**
  * Set the iterator to analyze a new piece of text.  This function resets
  * the current iteration position to the beginning of the text.
@@ -225,6 +225,7 @@ void
 RuleBasedBreakIterator::setText(const UnicodeString* newText) {
     setText(*newText);
 }
+#endif
 
 /**
  * Sets the current iteration position to the beginning of the text.
