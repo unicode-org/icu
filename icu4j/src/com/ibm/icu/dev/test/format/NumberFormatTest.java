@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberFormatTest.java,v $ 
- * $Date: 2003/06/04 20:24:14 $ 
- * $Revision: 1.18 $
+ * $Date: 2003/06/11 18:49:38 $ 
+ * $Revision: 1.19 $
  *
  *****************************************************************************************
  */
@@ -768,6 +768,46 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 	int hash = fmt.hashCode();
 
 	logln("compare to string returns: " + fmt.equals(""));
+
+        // For ICU 2.6 - alan
+        DecimalFormatSymbols US = new DecimalFormatSymbols(Locale.US);
+        DecimalFormat df = new DecimalFormat("'*&'' '\u00A4' ''&*' #,##0.00", US);
+        df.setCurrency(Currency.getInstance("INR"));
+        expect2(df, 1.0, "*&' Re. '&* 1.00");
+        expect2(df, -2.0, "-*&' Rs. '&* 2.00");
+        df.applyPattern("#,##0.00 '*&'' '\u00A4' ''&*'");
+        expect2(df, 2.0, "2.00 *&' Rs. '&*");
+        expect2(df, -1.0, "-1.00 *&' Re. '&*");
+
+        java.math.BigDecimal r = df.getRoundingIncrement();
+        if (r != null) {
+            errln("FAIL: rounding = " + r + ", expect null");
+        }
+        
+        if (df.isScientificNotation()) {
+            errln("FAIL: isScientificNotation = true, expect false");
+        }
+
+        df.applyPattern("0.00000");
+        df.setScientificNotation(true);
+        if (!df.isScientificNotation()) {
+            errln("FAIL: isScientificNotation = false, expect true");
+        }
+        df.setMinimumExponentDigits((byte)2);
+        if (df.getMinimumExponentDigits() != 2) {
+            errln("FAIL: getMinimumExponentDigits = " +
+                  df.getMinimumExponentDigits() + ", expect 2");
+        }
+        df.setExponentSignAlwaysShown(true);
+        if (!df.isExponentSignAlwaysShown()) {
+            errln("FAIL: isExponentSignAlwaysShown = false, expect true");
+        }
+        df.setSecondaryGroupingSize(0);
+        if (df.getSecondaryGroupingSize() != 0) {
+            errln("FAIL: getSecondaryGroupingSize = " +
+                  df.getSecondaryGroupingSize() + ", expect 0");
+        }
+        expect2(df, 3.14159, "3.14159E+00");
     }
 
     public void TestWhiteSpaceParsing() {
