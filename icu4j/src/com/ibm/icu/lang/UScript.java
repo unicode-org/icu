@@ -334,11 +334,9 @@ public final class UScript {
      */
     private static int[] findCodeFromLocale(Locale locale) {
         ResourceBundle rb = ICULocaleData.getLocaleElements(locale);
-        if (rb==null) {
-            throw new MissingResourceException("Could not find data for {0} {1}", "com.ibm.icu.impl.dataLocaleElements", locale.toString());
-        }
+
         // if rb is not a strict fallback of the requested locale, return null
-        if(!LocaleUtility.isFallbackOf(rb.getLocale(), locale)){
+        if(rb==null || !LocaleUtility.isFallbackOf(rb.getLocale(), locale)){
             return null;
         }
         String[] scripts = rb.getStringArray("LocaleScript");
