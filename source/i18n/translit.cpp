@@ -14,6 +14,7 @@
 #include "rbt_data.h"
 #include "rbt_pars.h"
 #include "transreg.h"
+#include "ucln_in.h"
 #include "unicode/cpdtrans.h"
 #include "unicode/hangjamo.h"
 #include "unicode/hextouni.h"
@@ -1438,28 +1439,21 @@ void Transliterator::initializeRegistry(void) {
     registry->put(new UnicodeNameTransliterator(), TRUE);
     registry->put(new NameUnicodeTransliterator(), TRUE);
     NormalizationTransliterator::registerIDs();
+    ucln_i18n_registerCleanup();
 }
 
 // Defined in ucln_in.h:
 
 /**
- * Cleanup function for transliterator component; delegates to
- * Transliterator::cleanupRegistry().
- */
-U_CFUNC UBool transliterator_cleanup(void) {
-    Transliterator::cleanupRegistry();
-    return TRUE;
-}
-
-/**
  * Release all static memory held by transliterator.  This will
  * necessarily invalidate any rule-based transliterators held by the
  * user, because RBTs hold pointers to common data objects.
- */ 
-void Transliterator::cleanupRegistry() {
-    Mutex lock(&registryMutex);
+ */
+U_CFUNC UBool transliterator_cleanup(void) {
     delete registry;
     registry = 0;
+    umtx_destroy(&registryMutex);
+    return TRUE;
 }
 
 //eof

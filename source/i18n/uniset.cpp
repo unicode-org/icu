@@ -14,6 +14,8 @@
 #include "symtable.h"
 #include "cmemory.h"
 #include "rbt_rule.h"
+#include "umutex.h"
+#include "ucln_in.h"
 
 // HIGH_VALUE > all valid values. 110000 for codepoints
 #define UNICODESET_HIGH 0x0110000
@@ -92,8 +94,7 @@ static const UChar CATEGORY_NAMES[] = {
  * Unicode::getType(), to pairs strings.  Entries are initially
  * zero length and are filled in on demand.
  */
-UnicodeSet _CATEGORY_CACHE[Unicode::GENERAL_TYPES_COUNT];
-UnicodeSet* UnicodeSet::CATEGORY_CACHE = _CATEGORY_CACHE;
+static UnicodeSet* CATEGORY_CACHE = NULL;
 
 /**
  * Delimiter string used in patterns to close a category reference:
@@ -101,6 +102,18 @@ UnicodeSet* UnicodeSet::CATEGORY_CACHE = _CATEGORY_CACHE;
  */
 static const UChar CATEGORY_CLOSE[] = {COLON, SET_CLOSE, 0x0000}; /* ":]" */
 
+
+/**
+ * Cleanup function for transliterator component; delegates to
+ * Transliterator::cleanupRegistry().
+ */
+U_CFUNC UBool unicodeset_cleanup(void) {
+    if (CATEGORY_CACHE) {
+        delete []CATEGORY_CACHE;
+        CATEGORY_CACHE = NULL;
+    }
+    return TRUE;
+}
 
 //----------------------------------------------------------------
 // Constructors &c
@@ -1366,6 +1379,14 @@ const UnicodeSet& UnicodeSet::getCategorySet(int8_t cat) {
     // In order to tell what cache entries are empty, we assume
     // every category specifies at least one character.  Thus
     // sets in the cache that are empty are uninitialized.
+    if (CATEGORY_CACHE == NULL) {
+        umtx_lock(NULL);
+        if (CATEGORY_CACHE == NULL) {
+            CATEGORY_CACHE = new UnicodeSet[Unicode::GENERAL_TYPES_COUNT];
+            ucln_i18n_registerCleanup();
+        }
+        umtx_unlock(NULL);
+    }
     if (CATEGORY_CACHE[cat].isEmpty()) {
         // Walk through all Unicode characters, noting the start
         // and end of each range for which Character.getType(c)
