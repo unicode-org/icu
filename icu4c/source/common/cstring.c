@@ -32,19 +32,29 @@
 char*
 T_CString_toLowerCase(char* str)
 {
-    uint32_t i=0;
-    while(str[i]) 
-        str[i++] = (char)tolower(str[i]);
-    return str;
+    char* origPtr = str;
+
+    if (str) {
+        do
+            *str = (char)tolower(*str);
+        while (*(str++));
+    }
+
+    return origPtr;
 }
 
 char*
 T_CString_toUpperCase(char* str)
 {
-    uint32_t i=0;
-    while(str[i]) 
-        str[i++] = (char)toupper(str[i]);
-    return str;
+    char* origPtr = str;
+
+    if (str) {
+        do
+            *str = (char)toupper(*str);
+        while (*(str++));
+    }
+
+    return origPtr;
 }
 
 /*Takes a int32_t and     fills in  a char* string with that number "radix"-based*/
