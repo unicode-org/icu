@@ -384,8 +384,8 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * object.
      * @param a two-letter ISO 3166 country code, or <code>null</code>
      * to return zones not associated with any country
-     * @return an array of IDs for system TimeZones with the given
-     * raw offset.  If there are none, return a zero-length array.
+     * @return an array of IDs for system TimeZones in the given
+     * country.  If there are none, return a zero-length array.
      */
     public static String[] getAvailableIDs(String country) {
         return TimeZoneData.getAvailableIDs(country);
