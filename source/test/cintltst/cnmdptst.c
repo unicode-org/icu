@@ -108,12 +108,12 @@ static void TestPatterns(void)
 static void TestQuotes(void)
 {
   int32_t lneed;
-  UErrorCode status;
+  UErrorCode status=U_ZERO_ERROR;
   UChar pat[15];
   UChar res[15];
   UChar *str=NULL;
   UNumberFormat *fmt;
-  status=U_ZERO_ERROR;
+  char tempBuf[256];
   log_verbose("\nTestting the handling of quotes in number format\n");
   u_uastrcpy(pat, "a'fo''o'b#");
   fmt =unum_openPattern(pat, u_strlen(pat), "en_US", &status);
@@ -130,8 +130,8 @@ static void TestQuotes(void)
   if(U_FAILURE(status)) {
     log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
   }
-  log_verbose("Pattern \"%s\" \n", austrdup(pat) );
-  log_verbose("Format 123 -> %s\n", austrdup(str) );
+  log_verbose("Pattern \"%s\" \n", u_austrcpy(tempBuf, pat) );
+  log_verbose("Format 123 -> %s\n", u_austrcpy(tempBuf, str) );
   u_uastrcpy(res, "afo'ob123");
   if(u_strcmp(str, res) != 0)
     log_err("FAIL: Expected afo'ob123");
@@ -158,8 +158,8 @@ static void TestQuotes(void)
   if(U_FAILURE(status)) {
     log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
   }
-  log_verbose("Pattern \"%s\" \n", austrdup(pat) );
-  log_verbose("Format 123 -> %s\n", austrdup(str) );
+  log_verbose("Pattern \"%s\" \n", u_austrcpy(tempBuf, pat) );
+  log_verbose("Format 123 -> %s\n", u_austrcpy(tempBuf, str) );
   u_uastrcpy(res, "");
   u_uastrcpy(res, "a'b123");
   if(u_strcmp(str, res) != 0)
@@ -180,6 +180,7 @@ static void TestExponential(void)
   UChar pattern[20];
   UChar *str=NULL;
   UChar uvalfor[20], ulvalfor[20];
+  char tempMsgBug[256];
   double a;
   UErrorCode status = U_ZERO_ERROR;
 #ifdef OS390
@@ -243,7 +244,7 @@ static void TestExponential(void)
       }
       lneed= u_strlen(upat) + 1;
       unum_toPattern(fmt, FALSE, pattern, lneed, &status);
-      log_verbose("Pattern \" %s \" -toPattern-> \" %s \" \n", upat, austrdup(pattern) );
+      log_verbose("Pattern \" %s \" -toPattern-> \" %s \" \n", upat, u_austrcpy(tempMsgBug, pattern) );
       for (v=0; v<val_length; ++v)
         {
           /*format*/
@@ -262,7 +263,7 @@ static void TestExponential(void)
 
           u_uastrcpy(uvalfor, valFormat[v+ival]);
           if(u_strcmp(str, uvalfor) != 0)
-            log_verbose("FAIL: Expected %s ( %s )\n", valFormat[v+ival], austrdup(uvalfor) );
+            log_verbose("FAIL: Expected %s ( %s )\n", valFormat[v+ival], u_austrcpy(tempMsgBug, uvalfor) );
 
           /*parsing*/
           ppos=0;
@@ -327,6 +328,8 @@ static void TestCurrencySign(void)
   UChar *pat=NULL;
   UChar *res=NULL;
   UErrorCode status = U_ZERO_ERROR;
+  char tempBuf[256];
+
   pattern=(UChar*)malloc(sizeof(UChar) * (strlen("*#,##0.00;-*#,##0.00") + 1) );
   u_uastrcpy(pattern, "*#,##0.00;-*#,##0.00");
   pattern[0]=pattern[11]=0xa4; /* insert latin-1 currency symbol */
@@ -351,8 +354,8 @@ static void TestCurrencySign(void)
     pat=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
     unum_formatDouble(fmt, FALSE, pat, lneed+1, NULL, &status);
   }
-  log_verbose("Pattern \" %s \" \n", austrdup(pat));
-  log_verbose("Format 1234.56 -> %s\n", austrdup(str) );
+  log_verbose("Pattern \" %s \" \n", u_austrcpy(tempBuf, pat));
+  log_verbose("Format 1234.56 -> %s\n", u_austrcpy(tempBuf, str) );
 
   res=(UChar*)malloc(sizeof(UChar) * (strlen("$1,234.56")+1) );
   u_uastrcpy(res, "$1,234.56");
@@ -402,10 +405,11 @@ static void TestCurrency(void)
                   myErrorName(status));
       }
       lneed=0;
-      lneed= unum_formatDouble(currencyFmt, 1.50, NULL, lneed, &pos, &status);
+      lneed= unum_formatDouble(currencyFmt, 1.50, NULL, lneed, NULL, &status);
       if(status==U_BUFFER_OVERFLOW_ERROR){
         status=U_ZERO_ERROR;
         str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
+        pos.field = 0;
         unum_formatDouble(currencyFmt, 1.50, str, lneed+1, &pos, &status);
       }
       if(U_FAILURE(status)) {
@@ -455,10 +459,11 @@ static void roundingTest(UNumberFormat* nf, double x, int32_t maxFractionDigits,
   status=U_ZERO_ERROR;
   unum_setAttribute(nf, UNUM_MAX_FRACTION_DIGITS, maxFractionDigits);
   lneed=0;
-  lneed=unum_formatDouble(nf, x, NULL, lneed, &pos, &status);
+  lneed=unum_formatDouble(nf, x, NULL, lneed, NULL, &status);
   if(status==U_BUFFER_OVERFLOW_ERROR){
     status=U_ZERO_ERROR;
     out=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
+    pos.field=0;
     unum_formatDouble(nf, x, out, lneed+1, &pos, &status);
   }
   if(U_FAILURE(status)) {
@@ -468,7 +473,8 @@ static void roundingTest(UNumberFormat* nf, double x, int32_t maxFractionDigits,
   /*printf("%f format with %d fraction digits to %s\n", x, maxFractionDigits, austrdup(out) );*/
   res=(UChar*)malloc(sizeof(UChar) * (strlen(expected)+1) );
   u_uastrcpy(res, expected);
-  if (u_strcmp(out, res) != 0) log_err("FAIL: Expected: %s or %s\n", expected, austrdup(res) );
+  if (u_strcmp(out, res) != 0)
+    log_err("FAIL: Expected: %s or %s\n", expected, austrdup(res) );
   free(res);
   if(out != NULL) {
     free(out);
@@ -526,11 +532,15 @@ static void TestSecondaryGrouping(void) {
     f = unum_openPattern(buffer, -1, "en_US", &status);
     CHECK(status, "DecimalFormat ct");
 
+    pos.field = 0;
     unum_format(f, (int32_t)123456789L, resultBuffer, 512 , &pos, &status);
     u_uastrcpy(buffer, "12,34,56,789");
     if ((u_strcmp(resultBuffer, buffer) != 0) || U_FAILURE(status))
     {
         log_err("Fail: Formatting \"#,##,###\" pattern with 123456789 got %s, expected %s\n", resultBuffer, "12,34,56,789");
+    }
+    if (pos.beginIndex != 0 && pos.endIndex != 12) {
+        log_err("Fail: Formatting \"#,##,###\" pattern pos = (%d, %d) expected pos = (0, 12)\n", pos.beginIndex, pos.endIndex);
     }
     memset(resultBuffer,0, sizeof(UChar)*512);
     unum_toPattern(f, FALSE, resultBuffer, 512, &status);
