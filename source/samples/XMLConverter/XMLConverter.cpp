@@ -44,7 +44,7 @@ typedef unsigned char  BYTE;
 
 char firstLine[128];
 char encodingNameInFile[256];
-bool verbose = false;
+UBool verbose = FALSE;
 
 extern void convertFile(char*, char*, char*, UConverter*);
 extern void usage();
@@ -58,7 +58,7 @@ extern long convertFirstLine(FILE* inF,
                              char* ptrBuf, 
                              unsigned long toRead, 
                              UChar* uBuf);
-extern void catString(char* thisString, bool quote);
+extern void catString(char* thisString, UBool quote);
 extern int32_t  XMLUConvert( UConverter* inConverter,
                       UConverter* outConverter,
                       const char* inBuffer, 
@@ -139,7 +139,7 @@ int main(int argc, char** argv)
             exit(1);
         }
         if (!strcmp( argv[i], "-v"))
-            verbose = true;
+            verbose = TRUE;
         if (!strcmp( argv[i], "-e"))
         {
             if ( argc == i+4)
@@ -361,7 +361,7 @@ void convertFile(char* encName, char* iFN, char* oFN, UConverter* outConvrtr)
     
     char *outBuf = new char[RAWBUFSIZE];
     int  outBufSize = RAWBUFSIZE;
-    bool tFlush = false;
+    UBool tFlush = FALSE;
     err = U_ZERO_ERROR;
    
     if (verbose)
@@ -416,7 +416,7 @@ void convertFile(char* encName, char* iFN, char* oFN, UConverter* outConvrtr)
             bytesLeft = endPos - curPos;
         }
         toRead = (RAWBUFSIZE > bytesLeft) ? bytesLeft : RAWBUFSIZE;
-        if (toRead < RAWBUFSIZE) tFlush = true;
+        if (toRead < RAWBUFSIZE) tFlush = TRUE;
         if (err == U_BUFFER_OVERFLOW_ERROR)
             err = U_ZERO_ERROR;
     }
@@ -584,11 +584,11 @@ long convertFirstLine( FILE* inF, char* inEncName,
               exit(1);
         }
      
-        bool encString      = true;
-        bool stdString      = true;
-        bool encInsertMid   = false;
-        bool encInsertLast  = false;
-        bool dQuote         = true;
+        UBool encString      = TRUE;
+        UBool stdString      = TRUE;
+        UBool encInsertMid   = FALSE;
+        UBool encInsertLast  = FALSE;
+        UBool dQuote         = TRUE;
         char* doubleQuote   = "\"";
         char* singleQuote   = "\'";
         
@@ -601,14 +601,14 @@ long convertFirstLine( FILE* inF, char* inEncName,
     	      fclose(outF);
               exit(1);
             }
-            dQuote = false;
+            dQuote = FALSE;
         }
         
         char* newString     = strstr( (const char*) pFLB, "encoding");
         char* stringWithEnc = 0;
 
         if (!newString)
-            encString = false;
+            encString = FALSE;
         else 
 	  {
 	    stringWithEnc = new char[strlen(newString)+1];
@@ -618,7 +618,7 @@ long convertFirstLine( FILE* inF, char* inEncName,
         newString = strstr( (const char*) pFLB, "standalone");
         char* stringWithStd = 0;
         if (!newString) 
-            stdString = false;
+            stdString = FALSE;
         else
         {
 	    stringWithStd = new char[strlen(newString)+1];
@@ -626,9 +626,9 @@ long convertFirstLine( FILE* inF, char* inEncName,
        }
         
         if (!encString && !stdString)
-             encInsertLast = true;
+             encInsertLast = TRUE;
         if (!encString && stdString)
-             encInsertMid = true;
+             encInsertMid = TRUE;
 
         //Encodingname for the rest of the input file could be different. 
         //If its not specified in the  first line then assume it to be UTF8
@@ -1052,7 +1052,7 @@ void XMLU_fromCodepageToCodepage(    UConverter*    outConverter,
   return;
 }
 
-void catString(char* thisString, bool quote)
+void catString(char* thisString, UBool quote)
 {
     if (quote)
         strcat(thisString, "\"");
