@@ -1386,7 +1386,7 @@ static void genericRulesStarterWithOptions(const char *rules, const char *s[], u
   ucol_close(coll);
 }
 
-static void genericRulesStarter(const char *rules, const char *s[], uint32_t size) {
+static void genericRulesTestWithResult(const char *rules, const char *s[], uint32_t size, UCollationResult result) {
   UErrorCode status = U_ZERO_ERROR;
   UChar rlz[RULE_BUFFER_LEN] = { 0 };
   uint32_t rlen = u_unescape(rules, rlz, RULE_BUFFER_LEN);
@@ -1396,11 +1396,15 @@ static void genericRulesStarter(const char *rules, const char *s[], uint32_t siz
   log_verbose("Rules starter for %s\n", rules);
 
   if(U_SUCCESS(status)) {
-    genericOrderingTest(coll, s, size);
+    genericOrderingTestWithResult(coll, s, size, result);
     ucol_close(coll);
   } else {
     log_err("Unable to open collator with rules %s\n", rules);
   }
+}
+
+static void genericRulesStarter(const char *rules, const char *s[], uint32_t size) {
+  genericRulesTestWithResult(rules, s, size, UCOL_LESS);
 }
 
 const static char chTest[][20] = {
@@ -2953,7 +2957,7 @@ static void TestPrefix() {
 /* JIS X 4061 collation order implementation                                   */
 static void TestNewJapanese() {
 
-  static const char *test[] = {
+  static const char *test1[] = {
       "\\u30b7\\u30e3\\u30fc\\u30ec",
       "\\u30b7\\u30e3\\u30a4",
       "\\u30b7\\u30e4\\u30a3",
@@ -3031,7 +3035,44 @@ static void TestNewJapanese() {
       "\\u30d7\\u30fd",
       "\\u3077\\u3075",
   };
-  genericLocaleStarter("ja_JP_JIS", test, sizeof(test)/sizeof(test[0]));
+
+  static const char *test2[] = {
+    "\\u306f\\u309d", /* H\\u309d */
+    "\\u30cf\\u30fd", /* K\\u30fd */
+    "\\u306f\\u306f", /* HH */
+    "\\u306f\\u30cf", /* HK */
+    "\\u30cf\\u30cf", /* KK */
+    "\\u306f\\u309e", /* H\\u309e */
+    "\\u30cf\\u30fe", /* K\\u30fe */
+    "\\u306f\\u3070", /* HH\\u309b */
+    "\\u30cf\\u30d0", /* KK\\u309b */
+    "\\u306f\\u3071", /* HH\\u309c */
+    "\\u30cf\\u3071", /* KH\\u309c */
+    "\\u30cf\\u30d1", /* KK\\u309c */
+    "\\u3070\\u309d", /* H\\u309b\\u309d */
+    "\\u30d0\\u30fd", /* K\\u309b\\u30fd */
+    "\\u3070\\u306f", /* H\\u309bH */
+    "\\u30d0\\u30cf", /* K\\u309bK */
+    "\\u3070\\u309e", /* H\\u309b\\u309e */
+    "\\u30d0\\u30fe", /* K\\u309b\\u30fe */
+    "\\u3070\\u3070", /* H\\u309bH\\u309b */
+    "\\u30d0\\u3070", /* K\\u309bH\\u309b */
+    "\\u30d0\\u30d0", /* K\\u309bK\\u309b */
+    "\\u3070\\u3071", /* H\\u309bH\\u309c */
+    "\\u30d0\\u30d1", /* K\\u309bK\\u309c */
+    "\\u3071\\u309d", /* H\\u309c\\u309d */
+    "\\u30d1\\u30fd", /* K\\u309c\\u30fd */
+    "\\u3071\\u306f", /* H\\u309cH */
+    "\\u30d1\\u30cf", /* K\\u309cK */
+    "\\u3071\\u3070", /* H\\u309cH\\u309b */
+    "\\u3071\\u30d0", /* H\\u309cK\\u309b */
+    "\\u30d1\\u30d0", /* K\\u309cK\\u309b */
+    "\\u3071\\u3071", /* H\\u309cH\\u309c */
+    "\\u30d1\\u30d1", /* K\\u309cK\\u309c */
+  };
+
+  genericLocaleStarter("ja_JP_JIS", test1, sizeof(test1)/sizeof(test1[0]));
+ /*genericLocaleStarter("ja_JP_JIS", test2, sizeof(test2)/sizeof(test2[0]));*/
 }
 /* this peace of code should be in some sort of verbose mode     */
 /* it gets the collation elements for elements and prints them   */
@@ -3061,8 +3102,19 @@ static void TestNewJapanese() {
   ucol_close(coll);
 */
 
+static void TestStrCollIdenticalPrefix() {
+  const char* rule = "&\\ud9b0\\udc70=\\ud9b0\\udc71";
+  const char* test[] = {
+    "ab\\ud9b0\\udc70",
+    "ab\\ud9b0\\udc71"
+  };
+  genericRulesTestWithResult(rule, test, sizeof(test)/sizeof(test[0]), UCOL_EQUAL);
+}
+
+
 void addMiscCollTest(TestNode** root)
 {
+    addTest(root, &TestStrCollIdenticalPrefix, "tscoll/cmsccoll/TestStrCollIdenticalPrefix");
     addTest(root, &TestPrefix, "tscoll/cmsccoll/TestPrefix");
     addTest(root, &TestNewJapanese, "tscoll/cmsccoll/TestNewJapanese"); 
     /*addTest(root, &TestLimitations, "tscoll/cmsccoll/TestLimitations");*/
