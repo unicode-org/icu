@@ -46,7 +46,7 @@ class RBBIFrame extends Frame implements ItemListener
     final String right = "-->";
     final String left = "<--";
 
-    private BreakIterator enum;
+    private BreakIterator iter;
     private boolean       isctrldown_ = false;
 
 JTextArea text;
@@ -305,21 +305,21 @@ JTextArea text;
         String s = bound.getSelectedItem();
         if (s.equals("Char")) {
             errorText("getCharacterInstance");
-            enum = BreakIterator.getCharacterInstance();
+            iter = BreakIterator.getCharacterInstance();
         }
         else if (s.equals("Word")) {
             errorText("tWordBreak");
-            enum = BreakIterator.getWordInstance();
+            iter = BreakIterator.getWordInstance();
         }
         else if (s.equals("Line Break")) {
             errorText("getLineInstance");
-            enum = BreakIterator.getLineInstance();
+            iter = BreakIterator.getLineInstance();
         }
         else /* if (s.equals("Sentence")) */ {
             errorText("getSentenceInstance");
-            enum = BreakIterator.getSentenceInstance();
+            iter = BreakIterator.getSentenceInstance();
         }
-        enum.setText(text.getText());
+        iter.setText(text.getText());
         selectRange(0, 0);
         //text.select(0,0);
     }
@@ -328,18 +328,18 @@ JTextArea text;
     {
         try {
 //          System.out.println("entering handleForward");
-            enum.setText(text.getText());
+            iter.setText(text.getText());
             int oldStart = getSelectionStart();
             int oldEnd = getSelectionEnd();
 
 //          System.out.println("handleForward: oldStart=" + oldStart + ", oldEnd=" + oldEnd);
 
             if (oldEnd < 1) {
-                selectRange(0, enum.following(0));
+                selectRange(0, iter.following(0));
             }
             else {
-                int s = enum.following(oldEnd-1);
-                int e = enum.next();
+                int s = iter.following(oldEnd-1);
+                int e = iter.next();
                 if (e == -1) {
                     e = s;
                 }
@@ -357,15 +357,15 @@ JTextArea text;
     public void handleBackward()
     {
         try {
-            enum.setText(text.getText());
+            iter.setText(text.getText());
             int oldStart = getSelectionStart();
             int oldEnd = getSelectionEnd();
             if (oldStart < 1) {
                 selectRange(0, 0);
             }
             else {
-                int e = enum.following(oldStart-1);
-                int s = enum.previous();
+                int e = iter.following(oldStart-1);
+                int s = iter.previous();
                 selectRange(s, e);
             }
             //text.select(s, e);

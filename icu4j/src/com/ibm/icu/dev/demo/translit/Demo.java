@@ -1215,9 +1215,9 @@ public class Demo extends Frame {
         }
     }
     
-    Set add(Set s, Enumeration enum) {
-        while(enum.hasMoreElements()) {
-            s.add(enum.nextElement());
+    Set add(Set s, Enumeration enumeration) {
+        while(enumeration.hasMoreElements()) {
+            s.add(enumeration.nextElement());
         }
         return s;
     }

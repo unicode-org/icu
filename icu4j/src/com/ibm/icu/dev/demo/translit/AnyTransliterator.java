@@ -287,9 +287,9 @@ public class AnyTransliterator extends Transliterator {
         }
         
         // Nice little Utility for converting Enumeration to collection
-        static Set add(Set s, Enumeration enum) {
-            while(enum.hasMoreElements()) {
-                s.add(enum.nextElement());
+        static Set add(Set s, Enumeration enumeration) {
+            while(enumeration.hasMoreElements()) {
+                s.add(enumeration.nextElement());
             }
             return s;
         }
