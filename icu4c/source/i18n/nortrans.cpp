@@ -42,6 +42,8 @@ replaceableIteratorMove(UCharIterator *iter, int32_t delta, UCharIteratorOrigin 
         break;
     default:
         /* not a valid origin, no move */
+        /* Should never get here! */
+        pos = iter->start;
         break;
     }
 
@@ -175,23 +177,6 @@ NormalizationTransliterator& NormalizationTransliterator::operator=(const Normal
  */
 Transliterator* NormalizationTransliterator::clone(void) const {
     return new NormalizationTransliterator(*this);
-}
-
-// TODO
-// TODO
-// TODO
-// Get rid of this function and use the official Replaceable
-// extractBetween() method, when possible
-// TODO
-// TODO
-// TODO
-static void _Replaceable_extractBetween(const Replaceable& text,
-                                        int32_t start,
-                                        int32_t limit,
-                                        UChar* buffer) {
-    while (start < limit) {
-        *buffer++ = text.charAt(start++);
-    }
 }
 
 /**
