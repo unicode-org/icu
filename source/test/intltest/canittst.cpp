@@ -104,7 +104,7 @@ void CanonicalIteratorTest::TestExhaustive() {
         }
         
         if (!gotSource || !gotDecomp || !gotComp) {
-            errln("FAIL CanonicalIterator: " + s + i);
+            errln("FAIL CanonicalIterator: " + s + (int)i);
         }
     }
 }
