@@ -9,9 +9,13 @@
 
 ps_AF {
     Version { "1.0" }
-    DateTimeElements:intvector {
-        7,      // Saturday
-        1,
+    calendar{
+        gregorian{
+            DateTimeElements:intvector {
+                7,      // Saturday
+                1,
+            }
+        }
     }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",

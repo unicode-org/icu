@@ -636,10 +636,6 @@ zh {
         ZRZ { "ZRZ", "\u624E\u4F0A\u5C14\u5143" }
         ZWD { "Z$",  "\u6D25\u5DF4\u5E03\u97E6\u5143" }
     }
-    Eras { 
-        "\u516C\u5143\u524D",
-        "\u516C\u5143",
-    }
     Languages { 
         aa  { "\u963F\u6CD5\u6587" }
         ab  { "\u963F\u5E03\u54C8\u897F\u4E9A\u6587" }
@@ -1122,6 +1118,10 @@ zh {
                         "\u661F\u671F\u516D",
                     }
                 }
+            }
+            eras { 
+                "\u516C\u5143\u524D",
+                "\u516C\u5143",
             }
             monthNames{
                 format{

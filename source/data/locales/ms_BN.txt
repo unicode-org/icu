@@ -22,16 +22,20 @@ ms_BN{
         ",",
         "+",
     }
-    DateTimePatterns{
-        "h:mm:ss aa",
-        "H:mm:ss",
-        "H:mm:ss",
-        "H:mm:ss",
-        "dd MMMM yyyy",
-        "dd MMMM yyyy",
-        "dd/MM/yyyy",
-        "dd/MM/yyyy",
-        "{1} {0}",
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "h:mm:ss aa",
+                "H:mm:ss",
+                "H:mm:ss",
+                "H:mm:ss",
+                "dd MMMM yyyy",
+                "dd MMMM yyyy",
+                "dd/MM/yyyy",
+                "dd/MM/yyyy",
+                "{1} {0}",
+            }
+        }
     }
     Currencies {
         BND { "$", "BND" }
