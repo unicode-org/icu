@@ -239,12 +239,12 @@ CompoundTransliterator::~CompoundTransliterator() {
 }
 
 void CompoundTransliterator::freeTransliterators(void) {
-    for (int32_t i=0; i<count; ++i) {
-        if (trans != 0) {
+    if (trans != 0) {
+        for (int32_t i=0; i<count; ++i) {
             delete trans[i];
         }
+        delete[] trans;
     }
-    delete[] trans;
     trans = 0;
     count = 0;
 }
@@ -310,11 +310,9 @@ void CompoundTransliterator::adoptTransliterators(Transliterator* adoptedTransli
     // First free trans[] and set count to zero.  Once this is done,
     // orphan the filter.  Set up the new trans[].
     freeTransliterators();
-    UnicodeFilter *f = orphanFilter();
     trans = adoptedTransliterators;
     count = transCount;
     computeMaximumContextLength();
-    adoptFilter(f);
     setID(joinIDs(trans, count));
 }
 
