@@ -2144,7 +2144,7 @@ public final class ULocale implements Serializable {
                     ICUResourceBundle table = bundle.getWithFallback(tableName);
                     try {
                         if (subtableName != null) {
-                            table = bundle.getWithFallback(subtableName);
+                            table = table.getWithFallback(subtableName);
                         }
                         table = table.get(item); // no fallback?
                         return table.getString();
