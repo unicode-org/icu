@@ -390,7 +390,7 @@ static void udata_pathiter_init(UDataPathIterator *iter, const char *path,
             if (t != NULL) {
                 iter->itemPath = t;
             } else {
-                // Malloc failed.  Ignore the itemPath.
+                /* Malloc failed.  Ignore the itemPath. */
                 itemPathLen = 0;
             }
         }
