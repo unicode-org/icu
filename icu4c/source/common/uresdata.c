@@ -269,16 +269,16 @@ U_CFUNC Resource res_getArrayItem(const ResourceData *pResData, const Resource a
 }
 
 U_CFUNC Resource res_getTableItemByKey(const ResourceData *pResData, const Resource table, int32_t* indexR, const char* *  key) {
-  uint16_t tempIndex = 0;
+    uint16_t tempIndex;
     if(key != NULL) {
         tempIndex  = _res_findTableIndex(pResData->pRoot, table, *key);
-	if(tempIndex != URESDATA_ITEM_NOT_FOUND) {
-	  *key = _res_getTableKey(pResData->pRoot, table, tempIndex);
-	  return _res_getTableItem(pResData->pRoot, table, tempIndex);
-          *indexR = tempIndex;
-	} else {
-	  return RES_BOGUS;
-	}
+        if(tempIndex != URESDATA_ITEM_NOT_FOUND) {
+            *key = _res_getTableKey(pResData->pRoot, table, tempIndex);
+            *indexR = tempIndex;
+            return _res_getTableItem(pResData->pRoot, table, tempIndex);
+        } else {
+            return RES_BOGUS;
+        }
     } else {
         return RES_BOGUS;
     }
