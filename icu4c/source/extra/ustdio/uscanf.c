@@ -35,9 +35,9 @@
 #include <float.h>
 #include <limits.h>
 
-u_scanf_handler g_u_scanf_handlers     [256];
-u_scanf_info       g_u_scanf_infos     [256];
-UBool        g_u_scanf_inited    = FALSE;
+static u_scanf_handler g_u_scanf_handlers     [256];
+static u_scanf_info       g_u_scanf_infos     [256];
+static UBool        g_u_scanf_inited    = FALSE;
 
 int32_t 
 u_fscanf(    UFILE        *f,
