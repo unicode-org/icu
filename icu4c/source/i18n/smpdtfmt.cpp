@@ -40,6 +40,7 @@
 #include "unicode/uchar.h"
 #include "unicode/ustring.h"
 #include "uprops.h"
+#include "cstring.h"
 #include <float.h>
 
 #if defined( U_DEBUG_CALSVC ) || defined (U_DEBUG_CAL)
@@ -1559,6 +1560,39 @@ void SimpleDateFormat::adoptCalendar(Calendar* calendarToAdopt)
   fSymbols=NULL;
   initializeSymbols(fLocale, fCalendar, status);  // we need new symbols
   initializeDefaultCentury();  // we need a new century (possibly)
+}
+
+Locale 
+SimpleDateFormat::getLocale(ULocDataLocaleType type, UErrorCode& status) const 
+{
+  switch(type) {
+  case ULOC_VALID_LOCALE:
+    return Locale(fSymbols->validLocale);
+    break;
+  case ULOC_ACTUAL_LOCALE:
+    return Locale(fSymbols->actualLocale);
+    break;
+  default:
+    status = U_UNSUPPORTED_ERROR;
+    return Locale("");
+  }
+}
+
+const char* 
+SimpleDateFormat::getLocaleInternal(ULocDataLocaleType type, UErrorCode &status) const
+{
+  switch(type) {
+  case ULOC_VALID_LOCALE:
+    return fSymbols->validLocale;
+    break;
+  case ULOC_ACTUAL_LOCALE:
+    return fSymbols->actualLocale;
+    break;
+  default:
+    status = U_UNSUPPORTED_ERROR;
+    return NULL;
+    break;
+  }
 }
 
 

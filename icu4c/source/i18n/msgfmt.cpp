@@ -1396,7 +1396,35 @@ const DateFormat* MessageFormat::getDefaultDateFormat(UErrorCode& ec) const {
 Locale 
 MessageFormat::getLocale(ULocDataLocaleType type, UErrorCode& status) const 
 {
-  return Locale("");
+  switch(type) {
+  case ULOC_VALID_LOCALE:
+    return fLocale;
+    break;
+  case ULOC_ACTUAL_LOCALE:
+    return fLocale;
+    break;
+  default:
+    status = U_UNSUPPORTED_ERROR;
+    return Locale("");
+    break;
+  }
+}
+
+const char* 
+MessageFormat::getLocaleInternal(ULocDataLocaleType type, UErrorCode &status) const
+{
+  switch(type) {
+  case ULOC_VALID_LOCALE:
+    return fLocale.getName();
+    break;
+  case ULOC_ACTUAL_LOCALE:
+    return fLocale.getName();
+    break;
+  default:
+    status = U_UNSUPPORTED_ERROR;
+    return NULL;
+    break;
+  }
 }
 
 U_NAMESPACE_END

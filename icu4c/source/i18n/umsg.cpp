@@ -590,7 +590,10 @@ umsg_getLocaleByType(const UMessageFormat *fmt,
                      ULocDataLocaleType type,
                      UErrorCode* status)
 {
-  return NULL;
+  if(fmt==NULL){
+      return NULL;
+  }
+  return ((Format *)fmt)->getLocaleInternal(type, *status);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
