@@ -21,7 +21,8 @@
 #ifndef UCOL_CNTTABLE_H
 #define UCOL_CNTTABLE_H
 
-#include "ucmpe32.h"
+/*#include "ucmpe32.h"*/
+#include "utrie.h"
 #include "uhash.h"
 #include "ucol_elm.h"
 #include "ucol_imp.h"
@@ -43,7 +44,8 @@ struct ContractionTable {
 
 struct CntTable {
 	ContractionTable **elements;
-    CompactEIntArray *mapping;
+    /*CompactEIntArray *mapping;*/
+    UNewTrie *mapping;
     UChar *codePoints;
     uint32_t *CEs;
     int32_t *offsets;
@@ -54,7 +56,8 @@ struct CntTable {
 };
 
 U_CAPI CntTable* U_EXPORT2 
-uprv_cnttab_open(CompactEIntArray *mapping, UErrorCode *status);
+/*uprv_cnttab_open(CompactEIntArray *mapping, UErrorCode *status);*/
+uprv_cnttab_open(UNewTrie *mapping, UErrorCode *status);
 U_CAPI CntTable* U_EXPORT2 
 uprv_cnttab_clone(CntTable *table);
 U_CAPI void U_EXPORT2 

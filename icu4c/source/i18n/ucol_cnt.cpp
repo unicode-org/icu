@@ -42,7 +42,8 @@ void uprv_growTable(ContractionTable *tbl, UErrorCode *status) {
 }
 
 U_CAPI CntTable*  U_EXPORT2
-uprv_cnttab_open(CompactEIntArray *mapping, UErrorCode *status) {
+/*uprv_cnttab_open(CompactEIntArray *mapping, UErrorCode *status) {*/
+uprv_cnttab_open(UNewTrie *mapping, UErrorCode *status) {
     if(U_FAILURE(*status)) {
         return 0;
     }
@@ -162,10 +163,12 @@ uprv_cnttab_constructTable(CntTable *table, uint32_t mainOffset, UErrorCode *sta
 
     uint32_t CE;
     for(i = 0; i<=0x10FFFF; i++) {
-        CE = ucmpe32_get(table->mapping, i);
+        /*CE = ucmpe32_get(table->mapping, i);*/
+        CE = utrie_get32(table->mapping, i, NULL);
         if(isCntTableElement(CE)) {
             CE = constructContractCE(getCETag(CE), table->offsets[getContractOffset(CE)]);
-            ucmpe32_set(table->mapping, i, CE);
+            /*ucmpe32_set(table->mapping, i, CE);*/
+            utrie_set32(table->mapping, i, CE);
         }
     }
 
