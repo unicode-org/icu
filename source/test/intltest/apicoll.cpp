@@ -85,8 +85,12 @@ CollationAPITest::TestProperty(/* char* par */)
 {
     UErrorCode success = U_ZERO_ERROR;
     Collator *col = 0;
-    UVersionInfo minVersionArray = {0x01, 0x00, 0x00, 0x00};
-    UVersionInfo maxVersionArray = {0x01, 0x09, 0x09, 0x09};
+    /* 
+      All the collations have the same version in an ICU
+      version.
+      ICU 2.0 currVersionArray = {0x18, 0xC0, 0x02, 0x02};
+    */
+    UVersionInfo currVersionArray = {0x18, 0xC0, 0x02, 0x02};
     UVersionInfo versionArray;
     int i = 0;
 
@@ -99,12 +103,12 @@ CollationAPITest::TestProperty(/* char* par */)
         errln("Default Collator creation failed.");
         return;
     }
-    col->getVersion(versionArray);
 
+    col->getVersion(versionArray);
     for (i=0; i<4; ++i) {
-      if (versionArray[i] < minVersionArray[i] ||
-          versionArray[i] > maxVersionArray[i]) {
-              errln("Testing Collator::getVersion() failed - unexpected result received");
+      if (versionArray[i] != currVersionArray[i]) {
+        errln("Testing ucol_getVersion() - unexpected result: %d.%d.%d.%d", 
+            versionArray[0], versionArray[1], versionArray[2], versionArray[3]);
         break;
       }
     }
