@@ -529,6 +529,7 @@ UConverterSharedData* ucnv_data_unFlattenClone(UDataMemory *pData, UErrorCode *s
     if(data->impl->load != NULL) {
         data->impl->load(data, raw + source->structSize, status);
         if(U_FAILURE(*status)) {
+            uprv_free(data->table);
             uprv_free(data);
             return NULL;
         }
