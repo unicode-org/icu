@@ -100,7 +100,6 @@ clean-map:
 	-test -z *.map || $(RMV) *.map
 
 clean-local: cleanpackage cleanfiles clean-map
-	$(RMV) $(TESTOUTDIR)/testdata.dat
 
 cleanfiles:
 	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
@@ -188,7 +187,7 @@ INSTALLED_COL_FILES = $(COLLATION_SOURCE:%.txt=%)  $(COLLATION_SOURCE_LOCAL:%.tx
 RBNF_SRC= root.txt $(RBNF_SOURCE) $(RBNF_ALIAS_SOURCE) $(RBNF_SOURCE_LOCAL)
 RBNF_SRC_FILES = $(RBNF_SRC:%=$(RBNFSRCDIR)/%)
 INSTALLED_RBNF_FILES = $(RBNF_SOURCE:%.txt=%)  $(RBNF_SOURCE_LOCAL:%.txt=%)
-GENRBOPTS=-k -q
+GENRBOPTS=-k
 
 ## TRNS files
 -include $(TRNSSRCDIR)/trnsfiles.mk
@@ -351,13 +350,14 @@ $(OUTTMPDIR)/$(RBNF_TREE)/$(INDEX_NAME).txt: $(SRCLISTDEPS)
 all-RES:  $(RES_FILES)
 
 $(BUILDDIR)/%.res: $(LOCSRCDIR)/%.txt $(BINDIR)/genrb$(EXEEXT) $(DAT_FILES)
-	$(INVOKE) $(BINDIR)/genrb $(GENRBOPTS)  -i $(BUILDDIR) -s $(LOCSRCDIR) -d $(BUILDDIR) $(<F)
+	$(INVOKE) $(BINDIR)/genrb $(GENRBOPTS) -i $(BUILDDIR) -s $(LOCSRCDIR) -d $(BUILDDIR) $(<F)
 
 $(BUILDDIR)/%.res: $(TRNSSRCDIR)/%.txt $(BINDIR)/genrb$(EXEEXT) $(DAT_FILES)
-	$(INVOKE) $(BINDIR)/genrb $(GENRBOPTS)  -i $(BUILDDIR) -s $(TRNSSRCDIR) -d $(BUILDDIR) $(<F)
+	$(INVOKE) $(BINDIR)/genrb $(GENRBOPTS) -i $(BUILDDIR) -s $(TRNSSRCDIR) -d $(BUILDDIR) $(<F)
 
+# zoneinfo has some issues. Ignore some warnings with -q
 $(BUILDDIR)/%.res: $(MISCSRCDIR)/%.txt $(BINDIR)/genrb$(EXEEXT)
-	$(INVOKE) $(BINDIR)/genrb $(GENRBOPTS)  -i $(BUILDDIR) -s $(MISCSRCDIR) -d $(BUILDDIR) $(<F)
+	$(INVOKE) $(BINDIR)/genrb $(GENRBOPTS) -q -i $(BUILDDIR) -s $(MISCSRCDIR) -d $(BUILDDIR) $(<F)
 
 $(OUTTMPDIR)/$(INDEX_NAME).txt: $(SRCLISTDEPS)
 	@echo "generating $@ (list of installed locales)"; \
@@ -375,7 +375,7 @@ clean-resindex:
 	-$(RMV) $(BUILDDIR)/$(INDEX_NAME).txt $(OUTTMPDIR)/icudata.lst
 
 $(INDEX_RES_FILE): $(INDEX_FILE) $(BINDIR)/genrb$(EXEEXT)
-	$(INVOKE) $(BINDIR)/genrb $(GENRBOPTS)  -i $(BUILDDIR) -d $(BUILDDIR) $(INDEX_FILE)
+	$(INVOKE) $(BINDIR)/genrb $(GENRBOPTS) -i $(BUILDDIR) -d $(BUILDDIR) $(INDEX_FILE)
 
 ###################################################################
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
