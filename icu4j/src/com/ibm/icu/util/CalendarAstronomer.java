@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/Attic/CalendarAstronomer.java,v $ 
- * $Date: 2000/11/22 19:37:22 $ 
- * $Revision: 1.4 $
+ * $Date: 2000/11/28 22:17:06 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -825,25 +825,24 @@ public class CalendarAstronomer {
             // example, a new moon on the day of the new moon.  E.g.:
             // 
             // This result is correct:
-            //  newMoon(7508(Mon Jul 23 00:00:00 CST 1990,false)=Sun Jul 22 10:57:41 CST 1990
+            // newMoon(7508(Mon Jul 23 00:00:00 CST 1990,false))=
+            //   Sun Jul 22 10:57:41 CST 1990
             // 
             // But attempting to make the same call a day earlier causes deltaT
             // to diverge:
-            // CalendarAstronomer.timeOfAngle() diverging: 1.348508727575625E9 -> 1.3649828540224032E9
-            // newMoon(7507(Sun Jul 22 00:00:00 CST 1990,false)=Sun Jul 08 13:56:15 CST 1990
+            // CalendarAstronomer.timeOfAngle() diverging: 1.348508727575625E9 ->
+            //   1.3649828540224032E9
+            // newMoon(7507(Sun Jul 22 00:00:00 CST 1990,false))=
+            //   Sun Jul 08 13:56:15 CST 1990
             //
             // As a temporary solution, we catch this specific condition and
-            // adjust our start time back by one quarter period days and try again.
+            // adjust our start time by one eighth period days (either forward
+            // or backward) and try again.
             // Liu 11/9/00
             if (Math.abs(deltaT) > Math.abs(lastDeltaT)) {
-                if (!next) {
-                    setTime(startTime - (long) (periodDays * DAY_MS / 4));
-                    return timeOfAngle(func, desired, periodDays, epsilon, next);
-                } else {
-                    // We only have seen this with backward searches -- don't adjust
-                    // forward searches unless necessary.
-                    throw new RuntimeException("CalendarAstronomer.timeOfAngle diverging");
-                }
+                long delta = (long) (periodDays * DAY_MS / 8);
+                setTime(startTime + (next ? delta : -delta));
+                return timeOfAngle(func, desired, periodDays, epsilon, next);
             }
 
             lastDeltaT = deltaT;
