@@ -261,11 +261,13 @@ private:
 
     /**
      * Return a token containing an integer.
+     * @return a token containing an integer.
      */
     inline static Token integerToken(int32_t);
 
     /**
      * Return a token containing a pointer.
+     * @return a token containing a pointer.
      */
     inline static Token pointerToken(void*);
 
@@ -278,6 +280,10 @@ private:
      * functions that are registered to more than one ID may use the
      * ID or the context parameter to parameterize the transliterator
      * they create.
+     * @param ID      the string identifier for this transliterator
+     * @param context a context pointer that will be stored and
+     *                later passed to the factory function when an ID matching
+     *                the registration ID is being instantiated with this factory.
      */
     typedef Transliterator* (*Factory)(const UnicodeString& ID, Token context);
 
@@ -337,6 +343,7 @@ public:
      * using registerInstance(), then the default clone() implementation
      * will return null, and calls to createInstance() will fail.
      *
+     * @return a copy of the object.
      * @see #registerInstance
      * @stable
      */
@@ -424,6 +431,7 @@ public:
      * transliterated into the translation buffer at
      * <code>index.limit</code>.  If <code>null</code> then no text
      * is inserted.
+     * @param status    Output param to filled in with a success or an error.
      * @see #handleTransliterate
      * @exception IllegalArgumentException if <code>index</code>
      * is invalid
@@ -447,6 +455,7 @@ public:
      * @param insertion text to be inserted and possibly
      * transliterated into the translation buffer at
      * <code>index.limit</code>.
+     * @param status    Output param to filled in with a success or an error.
      * @see #transliterate(Replaceable, int[], String)
      * @stable
      */
@@ -463,6 +472,7 @@ public:
      * untransliterated text
      * @param index an array of three integers.  See {@link
      * #transliterate(Replaceable, int[], String)}.
+     * @param status    Output param to filled in with a success or an error.
      * @see #transliterate(Replaceable, int[], String)
      * @stable
      */
@@ -491,6 +501,14 @@ private:
      * proceeding.  This method calls through to the pure virtual
      * framework method handleTransliterate() to do the actual
      * work.
+     * @param text the buffer holding transliterated and
+     * untransliterated text
+     * @param index an array of three integers.  See {@link
+     * #transliterate(Replaceable, int[], String)}.
+     * @param insertion text to be inserted and possibly
+     * transliterated into the translation buffer at
+     * <code>index.limit</code>.
+     * @param status    Output param to filled in with a success or an error.
      */
     void _transliterate(Replaceable& text,
                         UTransPosition& index,
@@ -616,6 +634,7 @@ protected:
 
     /**
      * Method for subclasses to use to set the maximum context length.
+     * @param maxContextLength the new value to be set.
      * @see #getMaximumContextLength
      */
     void setMaximumContextLength(int32_t maxContextLength);
@@ -626,6 +645,7 @@ public:
      * Returns a programmatic identifier for this transliterator.
      * If this identifier is passed to <code>getInstance()</code>, it
      * will return this object, if it has been registered.
+     * @return a programmatic identifier for this transliterator.
      * @see #registerInstance
      * @see #registerClass
      * @see #getAvailableIDs
@@ -637,6 +657,9 @@ public:
      * Returns a name for this transliterator that is appropriate for
      * display to the user in the default locale.  See {@link
      * #getDisplayName(Locale)} for details.
+     * @param ID     the string identifier for this transliterator
+     * @param result Output param to receive the display name
+     * @return       A reference to 'result'.
      * @stable
      */
     static UnicodeString& getDisplayName(const UnicodeString& ID,
@@ -656,9 +679,11 @@ public:
      * The strings are formed by splitting the ID for this
      * transliterator at the first '-'.  If there is no '-', then the
      * entire ID forms the only string.
+     * @param ID       the string identifier for this transliterator
      * @param inLocale the Locale in which the display name should be
-     * localized.
-     * @see java.text.MessageFormat
+     *                 localized.
+     * @param result   Output param to receive the display name
+     * @return         A reference to 'result'.
      * @stable
      */
     static UnicodeString& getDisplayName(const UnicodeString& ID,
@@ -668,6 +693,8 @@ public:
     /**
      * Returns the filter used by this transliterator, or <tt>NULL</tt>
      * if this transliterator uses no filter.
+     * @return the filter used by this transliterator, or <tt>NULL</tt>
+     *         if this transliterator uses no filter.
      * @stable
      */
     const UnicodeFilter* getFilter(void) const;
@@ -677,6 +704,8 @@ public:
      * transliterator uses no filter.  The caller must eventually delete the
      * result.  After this call, this transliterator's filter is set to
      * <tt>NULL</tt>.
+     * @return the filter used by this transliterator, or <tt>NULL</tt> if this
+     *         transliterator uses no filter.
      */
     UnicodeFilter* orphanFilter(void);
 
@@ -700,6 +729,7 @@ public:
      * <p>Callers must take care if a transliterator is in use by
      * multiple threads.  The filter should not be changed by one
      * thread while another thread may be transliterating.
+     * @param adoptedFilter the new filter to be adopted.
      * @draft ICU 2.0
      */
     void adoptFilter(UnicodeFilter* adoptedFilter);
@@ -717,6 +747,7 @@ public:
      * <p>Subclasses with knowledge of their inverse may wish to
      * override this method.
      *
+     * @param status Output param to filled in with a success or an error.
      * @return a transliterator that is an inverse, not necessarily
      * exact, of this transliterator, or <code>null</code> if no such
      * transliterator is registered.
@@ -731,6 +762,10 @@ public:
      * using <code>registerInstance()</code>.
      *
      * @param ID a valid ID, as enumerated by <code>getAvailableIDs()</code>
+     * @param dir        either FORWARD or REVERSE.
+     * @param parseError Struct to recieve information on position 
+     *                   of error if an error is encountered
+     * @param status     Output param to filled in with a success or an error.
      * @return A <code>Transliterator</code> object with the given ID
      * @see #registerInstance
      * @see #getAvailableIDs
@@ -746,6 +781,10 @@ public:
      * Returns a <code>Transliterator</code> object given its ID.
      * The ID must be either a system transliterator ID or a ID registered
      * using <code>registerInstance()</code>.
+     * @param ID a valid ID, as enumerated by <code>getAvailableIDs()</code>
+     * @param dir        either FORWARD or REVERSE.
+     * @param status     Output param to filled in with a success or an error.
+     * @return A <code>Transliterator</code> object with the given ID
      * @draft ICU 2.0
      */
     static Transliterator* createInstance(const UnicodeString& ID,
@@ -758,6 +797,12 @@ public:
      * CompoundTransliterator, if it contains ID blocks, or a
      * NullTransliterator, if it contains ID blocks which parse as
      * empty for the given direction.
+     * @param id            the id for the transliterator.
+     * @param rules         rules, separated by ';'
+     * @param dir           either FORWARD or REVERSE.
+     * @param parseError    Struct to recieve information on position 
+     *                      of error if an error is encountered
+     * @param status        Output param set to success/failure code.
      * @draft ICU 2.0
      */
     static Transliterator* createFromRules(const UnicodeString& ID,
@@ -852,7 +897,7 @@ public:
      * After this call the Transliterator class owns the adoptedObj
      * and will delete it.
      *
-     * @param obj an instance of subclass of
+     * @param adoptedObj an instance of subclass of
      * <code>Transliterator</code> that defines <tt>clone()</tt>
      * @see #getInstance
      * @see #registerClass
@@ -865,6 +910,12 @@ protected:
 
     /**
      * @internal
+     * @param id the ID being registered
+     * @param factory a function pointer that will be copied and
+     * called later when the given ID is passed to createInstance()
+     * @param context a context pointer that will be stored and
+     * later passed to the factory function when an ID matching
+     * the registration ID is being instantiated with this factory.
      */
     static void _registerFactory(const UnicodeString& id,
                                  Factory factory,
@@ -935,6 +986,7 @@ public:
      * Return the number of IDs currently registered with the system.
      * To retrieve the actual IDs, call getAvailableID(i) with
      * i from 0 to countAvailableIDs() - 1.
+     * @return the number of IDs currently registered with the system. 
      * @stable
      */
     static int32_t countAvailableIDs(void);
@@ -943,12 +995,17 @@ public:
      * Return the index-th available ID.  index must be between 0
      * and countAvailableIDs() - 1, inclusive.  If index is out of
      * range, the result of getAvailableID(0) is returned.
+     * @param index the given ID index.
+     * @return      the index-th available ID.  index must be between 0
+     *              and countAvailableIDs() - 1, inclusive.  If index is out of
+     *              range, the result of getAvailableID(0) is returned.
      * @stable
      */
     static const UnicodeString& getAvailableID(int32_t index);
 
     /**
      * Return the number of registered source specifiers.
+     * @return the number of registered source specifiers.
      * @draft ICU 2.0
      */
     static int32_t countAvailableSources(void);
@@ -968,6 +1025,9 @@ public:
     /**
      * Return the number of registered target specifiers for a given
      * source specifier.
+     * @param source the given source specifier.
+     * @return the number of registered target specifiers for a given
+     *         source specifier.
      * @draft ICU 2.0
      */
     static int32_t countAvailableTargets(const UnicodeString& source);
@@ -990,6 +1050,8 @@ public:
     /**
      * Return the number of registered variant specifiers for a given
      * source-target pair.
+     * @param source    the source specifiers.
+     * @param target    the target specifiers.
      * @draft ICU 2.0
      */
     static int32_t countAvailableVariants(const UnicodeString& source,
@@ -1110,6 +1172,7 @@ protected:
     /**
      * Set the ID of this transliterators.  Subclasses shouldn't do
      * this, unless the underlying script behavior has changed.
+     * @param id the new id t to be set.
      */
     void setID(const UnicodeString& id);
 
@@ -1125,6 +1188,8 @@ public:
      * using <code>registerInstance()</code>.
      *
      * @param ID a valid ID, as enumerated by <code>getAvailableIDs()</code>
+     * @param dir           either FORWARD or REVERSE.
+     * @param parseError    Struct to recieve information on position
      * @return A <code>Transliterator</code> object with the given ID
      * @exception IllegalArgumentException if the given ID is invalid.
      * @see #registerInstance

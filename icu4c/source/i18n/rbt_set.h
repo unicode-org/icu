@@ -60,6 +60,7 @@ public:
 
     /**
      * Construct a new empty rule set.
+     * @param status    Output parameter filled in with success or failure status.
      */
     TransliterationRuleSet(UErrorCode& status);
 
@@ -76,6 +77,7 @@ public:
     /**
      * Change the data object that this rule belongs to.  Used
      * internally by the TransliterationRuleData copy constructor.
+     * @param data    the new data value to be set.
      */
     void setData(const TransliterationRuleData* data);
 
@@ -106,6 +108,9 @@ public:
      * invalidates this object, and this method must be called again.
      * That is, <code>freeze()</code> may be called multiple times,
      * although for optimal performance it shouldn't be.
+     * @param parseError A pointer to UParseError to receive information about errors
+     *                   occurred.
+     * @param status     Output parameter filled in with success or failure status.
      */
     virtual void freeze(UParseError& parseError, UErrorCode& status);
     
@@ -130,6 +135,8 @@ public:
      * Create rule strings that represents this rule set.
      * @param result string to receive the rule strings.  Current
      * contents will be deleted.
+     * @param escapeUnprintable  True, will escape the unprintable characters
+     * @return    A reference to 'result'.
      */
     virtual UnicodeString& toRules(UnicodeString& result,
                                    UBool escapeUnprintable) const;

@@ -34,6 +34,9 @@ class U_I18N_API NameUnicodeTransliterator : public Transliterator {
 
     /**
      * Constructs a transliterator.
+     * @param openDelimiter    the open delimiter character.
+     * @param closeDelimiter   the close delimiter character.
+     * @param adoptedFilter    the filter for this transliterator.
      * @draft ICU 2.0
      */
     NameUnicodeTransliterator(UChar32 openDelimiter, UChar32 closeDelimiter,
@@ -42,6 +45,7 @@ class U_I18N_API NameUnicodeTransliterator : public Transliterator {
     /**
      * Constructs a transliterator with the default delimiters '{' and
      * '}'.
+     * @param adoptedFilter    the filter for this transliterator.
      * @draft ICU 2.0
      */
     NameUnicodeTransliterator(UnicodeFilter* adoptedFilter = 0);
@@ -66,6 +70,7 @@ class U_I18N_API NameUnicodeTransliterator : public Transliterator {
 
     /**
      * Transliterator API.
+     * @return    A copy of the object.
      * @draft ICU 2.0
      */
     Transliterator* clone(void) const;
@@ -88,6 +93,12 @@ class U_I18N_API NameUnicodeTransliterator : public Transliterator {
 
     /**
      * Implements {@link Transliterator#handleTransliterate}.
+     * @param text          the buffer holding transliterated and
+     *                      untransliterated text
+     * @param offset        the start and limit of the text, the position
+     *                      of the cursor, and the start and limit of transliteration.
+     * @param incremental   if true, assume more text may be coming after
+     *                      pos.contextLimit. Otherwise, assume the text is complete.
      * @draft ICU 2.0
      */
     virtual void handleTransliterate(Replaceable& text, UTransPosition& offset,

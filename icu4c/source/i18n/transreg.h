@@ -39,6 +39,7 @@ class TransliteratorAlias : public UObject {
  public:
     /**
      * Construct a simple alias.
+     * @param aliasID the given id.
      */
     TransliteratorAlias(const UnicodeString& aliasID);
     
@@ -118,6 +119,10 @@ class TransliteratorRegistry : public UObject {
 
  public:
 
+    /**
+     * Contructor
+     * @param status Output param set to success/failure code.
+     */
     TransliteratorRegistry(UErrorCode& status);
 
     /**
@@ -138,6 +143,11 @@ class TransliteratorRegistry : public UObject {
      * We cannot instantiate it ourselves because the alias may contain
      * filters or compounds, which we do not understand.  Caller should
      * make aliasReturn NULL before calling.
+     * @param ID          the given ID
+     * @param aliasReturn the given TransliteratorAlias
+     * @param parseError  Struct to recieve information on position 
+     *                    of error if an error is encountered
+     * @param status      Output param set to success/failure code.
      */
     Transliterator* get(const UnicodeString& ID,
                         TransliteratorAlias*& aliasReturn,
@@ -185,6 +195,7 @@ class TransliteratorRegistry : public UObject {
      * Unregister an ID.  This removes an entry from the dynamic store
      * if there is one.  The static locale resource store is
      * unaffected.
+     * @param ID    the given ID.
      */
     void remove(const UnicodeString& ID);
 
@@ -196,6 +207,7 @@ class TransliteratorRegistry : public UObject {
      * Return the number of IDs currently registered with the system.
      * To retrieve the actual IDs, call getAvailableID(i) with
      * i from 0 to countAvailableIDs() - 1.
+     * @return the number of IDs currently registered with the system.
      * @draft
      */
     int32_t countAvailableIDs(void);
@@ -204,12 +216,17 @@ class TransliteratorRegistry : public UObject {
      * Return the index-th available ID.  index must be between 0
      * and countAvailableIDs() - 1, inclusive.  If index is out of
      * range, the result of getAvailableID(0) is returned.
+     * @param index the given index.
+     * @return the index-th available ID.  index must be between 0
+     *         and countAvailableIDs() - 1, inclusive.  If index is out of
+     *         range, the result of getAvailableID(0) is returned.
      * @draft
      */
     const UnicodeString& getAvailableID(int32_t index);
 
     /**
      * Return the number of registered source specifiers.
+     * @return the number of registered source specifiers.
      */
     int32_t countAvailableSources(void);
     
@@ -227,6 +244,9 @@ class TransliteratorRegistry : public UObject {
     /**
      * Return the number of registered target specifiers for a given
      * source specifier.
+     * @param source the given source specifier.
+     * @return the number of registered target specifiers for a given
+     *         source specifier.
      */
     int32_t countAvailableTargets(const UnicodeString& source);
     
@@ -250,6 +270,10 @@ class TransliteratorRegistry : public UObject {
      * just source-target is registered, then the single variant
      * NO_VARIANT is returned.  If source-target/variant is registered
      * then that variant is returned.
+     * @param source the source specifiers
+     * @param target the target specifiers
+     * @return the number of registered variant specifiers for a given
+     *         source-target pair.
      */
     int32_t countAvailableVariants(const UnicodeString& source,
                                    const UnicodeString& target);

@@ -33,6 +33,7 @@ class U_I18N_API TitlecaseTransliterator : public Transliterator {
 
     /**
      * Constructs a transliterator.
+     * @param loc the given locale.
      */
     TitlecaseTransliterator(const Locale& loc = Locale::getDefault());
 
@@ -53,6 +54,7 @@ class U_I18N_API TitlecaseTransliterator : public Transliterator {
 
     /**
      * Transliterator API.
+     * @return a copy of the object.
      */
     Transliterator* clone(void) const;
 
@@ -74,6 +76,12 @@ class U_I18N_API TitlecaseTransliterator : public Transliterator {
 
     /**
      * Implements {@link Transliterator#handleTransliterate}.
+     * @param text        the buffer holding transliterated and
+     *                    untransliterated text
+     * @param offset      the start and limit of the text, the position
+     *                    of the cursor, and the start and limit of transliteration.
+     * @param incremental if true, assume more text may be coming after
+     *                    pos.contextLimit.  Otherwise, assume the text is complete.
      */
     void handleTransliterate(Replaceable& text, UTransPosition& offset,
                              UBool isIncremental) const;

@@ -69,12 +69,14 @@ public:
 
     /**
      * Copy constructor
+     * @param source the object to be copied.
      * @stable
      */
     SimpleTimeZone(const SimpleTimeZone& source);
 
     /**
      * Default assignment operator
+     * @param right    the object to be copied.
      * @stable
      */
     SimpleTimeZone& operator=(const SimpleTimeZone& right);
@@ -126,7 +128,7 @@ public:
      * @param ID                The new SimpleTimeZone's time zone ID.
      * @param savingsStartMonth The daylight savings starting month. Month is
      *                          0-based. eg, 0 for January.
-     * @param savingsStartDay   The daylight savings starting
+     * @param savingsStartDayOfWeekInMonth   The daylight savings starting
      *                          day-of-week-in-month. See setStartRule() for a
      *                          complete explanation.
      * @param savingsStartDayOfWeek The daylight savings starting day-of-week.
@@ -137,7 +139,7 @@ public:
      *                          standard time, or UTC time. Default is local wall time.
      * @param savingsEndMonth   The daylight savings ending month. Month is
      *                          0-based. eg, 0 for January.
-     * @param savingsEndDay     The daylight savings ending day-of-week-in-month.
+     * @param savingsEndDayOfWeekInMonth     The daylight savings ending day-of-week-in-month.
      *                          See setStartRule() for a complete explanation.
      * @param savingsEndDayOfWeek The daylight savings ending day-of-week.
      *                          See setStartRule() for a complete explanation.
@@ -361,6 +363,7 @@ public:
      * @param day        The reference date's day-in-month (1-based)
      * @param dayOfWeek  The reference date's day-of-week (1-based; 1 is Sunday)
      * @param millis     The reference date's milliseconds in day, UTT (NOT local time).
+     * @param status     An UErrorCode to receive the status.
      * @return           The offset in milliseconds to add to GMT to get local time.
      * @stable
      */
@@ -382,6 +385,7 @@ public:
      * @param milliseconds the millis in day in <em>standard</em> local time.
      * @param monthLength the length of the given month in days.
      * @param prevMonthLength length of the previous month in days.
+     * @param status     An UErrorCode to receive the status.
      * @return the offset to add *to* GMT to get local time.
      * @stable
      */
@@ -417,6 +421,7 @@ public:
      * @param millisSavedDuringDST the number of milliseconds the time is
      * advanced with respect to standard time when the daylight savings rules
      * are in effect. A positive number, typically one hour (3600000).
+     * @param status  An UErrorCode to receive the status.
      * @stable
      */
     void setDSTSavings(int32_t millisSavedDuringDST, UErrorCode& status);
@@ -449,6 +454,7 @@ public:
      * is in effect; false otherwise.  If the TimeZone doesn't observe daylight savings
      * time, this functions always returns false.
      * @param date The date to test.
+     * @param status  An UErrorCode to receive the status.
      * @return true if the given date is in Daylight Savings Time;
      * false otherwise.
      * @stable
@@ -521,6 +527,22 @@ private:
 
     /**
      * Internal construction method.
+     * @param rawOffsetGMT    The new SimpleTimeZone's raw GMT offset
+     * @param startMonth      the month DST starts
+     * @param startDay        the day DST starts
+     * @param startDayOfWeek  the DOW DST starts
+     * @param startTime       the time DST starts
+     * @param startTimeMode   Whether the start time is local wall time, local
+     *                        standard time, or UTC time. Default is local wall time.
+     * @param endMonth        the month DST ends
+     * @param endDay          the day DST ends
+     * @param endDayOfWeek    the DOW DST ends
+     * @param endTime         the time DST ends
+     * @param endTimeMode     Whether the end time is local wall time, local
+     *                        standard time, or UTC time. Default is local wall time.
+     * @param savingsDST      The number of milliseconds added to standard time
+     *                        to get DST time. Default is one hour.
+     * @param status          An UErrorCode to receive the status.
      */
     void construct(int32_t rawOffsetGMT,
                    int8_t startMonth, int8_t startDay, int8_t startDayOfWeek,

@@ -222,7 +222,7 @@ public:
      * @param newLocale The locale to use for formatting dates and numbers.
      * @param parseError Struct to recieve information on position 
      *                   of error if an error is encountered
-     * @param status    Output param to receive success code.  If the
+     * @param success    Output param to receive success code.  If the
      *                  pattern cannot be parsed, set to failure code.
      * @stable
      */
@@ -258,6 +258,8 @@ public:
     /**
      * Return true if the given Format objects are semantically equal.
      * Objects of different subclasses are considered unequal.
+     * @param other  the object to be compared with.
+     * @return       true if the given Format objects are semantically equal.
      * @stable
      */
     virtual UBool operator==(const Format& other) const;
@@ -265,6 +267,7 @@ public:
     /**
      * Sets the locale. This locale is used for fetching default number or date
      * format information.
+     * @param theLocale    the new locale value to be set.
      * @stable
      */
     virtual void setLocale(const Locale& theLocale);
@@ -272,6 +275,7 @@ public:
     /**
      * Gets the locale. This locale is used for fetching default number or date
      * format information.
+     * @return    the locale of the object.
      * @stable
      */
     virtual const Locale& getLocale(void) const;
@@ -303,6 +307,8 @@ public:
 
     /**
      * Gets the pattern. See the class description.
+     * @param result    Output param which will receive the pattern.
+     * @return          A reference to 'result'.
      * @stable
      */
     virtual UnicodeString& toPattern(UnicodeString& result) const;
@@ -312,6 +318,8 @@ public:
      * See the class description about format numbering.
      * The caller should not delete the Format objects after this call.
      * @draft HSYS: possible semantic change on limitation of the size of array
+     * @param formatsToAdopt    the format to be adopted.
+     * @param count             the size of the array.
      */
     virtual void adoptFormats(Format** formatsToAdopt, int32_t count);
 
@@ -319,6 +327,8 @@ public:
      * Sets formats to use on parameters.
      * See the class description about format numbering.
      * @draft HSYS: possible semantic change on limitation of the size of array
+     * @param newFormats the new format to be set.
+     * @param cnt        the size of the array.
      */
     virtual void setFormats(const Format** newFormats,int32_t cnt);
 
@@ -328,21 +338,25 @@ public:
      * See the class description about format numbering.
      * The caller should not delete the Format object after this call.
      * @draft HSYS: possible semantic change on limitation of the size of array
+     * @param formatNumber     index of the parameter.
+     * @param formatToAdopt    the format to be adopted.
      */
     virtual void adoptFormat(int32_t formatNumber, Format* formatToAdopt);
 
     /**
      * Sets formats individually to use on parameters.
      * See the class description about format numbering.
+     * @param variable         index of the parameter.
+     * @param newFormat    the format to be set.
      * @stable
      */
     virtual void setFormat(int32_t variable, const Format& newFormat);
-
 
     /**
      * Gets formats that were set with setFormats.
      * See the class description about format numbering.
      * @draft HSYS: possible semantic change on limitation of the size of array
+     * @param count    the size of the array.
      */
     virtual const Format** getFormats(int32_t& count) const;
 
@@ -352,8 +366,10 @@ public:
      * the format string.
      *
      * @param source    An array of objects to be formatted & substituted.
+     * @param count     the size of the array.
      * @param result    Where text is appended.
      * @param ignore    No useful status is returned.
+     * @param success   Output param set to success/failure code
      * @stable
      */
     UnicodeString& format(  const Formattable* source,
@@ -365,6 +381,11 @@ public:
     /**
      * Convenience routine.  Avoids explicit creation of
      * MessageFormat, but doesn't allow future optimizations.
+     * @param pattern   the pattern.
+     * @param source    An array of objects to be formatted & substituted.
+     * @param count     the size of the array.
+     * @param result    Where text is appended.
+     * @param success   Output param set to success/failure code
      * @stable
      */
     static UnicodeString& format(   const UnicodeString& pattern,
@@ -395,6 +416,10 @@ public:
 
     /**
      * Redeclared Format method.
+     * @param obj           The object to format
+     * @param result        Output param which will receive the formatted string
+     * @param status        Output param filled with success/failure status.
+     * @return              A reference to 'result'.
      * @stable
      */
     UnicodeString& format(const Formattable& obj,
@@ -427,9 +452,6 @@ public:
      * @param source    String to be parsed.
      * @param status    On input, starting position for parse. On output,
      *                  final position after parse.
-     * @param count     Output param to receive size of returned array.
-     * @result          Array of Formattable objects, with length
-     *                  'count', owned by the caller.
      * @stable
      */
     virtual Formattable* parse( const UnicodeString& source,
@@ -443,8 +465,6 @@ public:
      * @param source    String to be parsed.
      * @param count     Output param to receive size of returned array.
      * @param status    Output param to receive success/error code.
-     * @result          Array of Formattable objects, with length
-     *                  'count', owned by the caller.
      * @stable
      */
     virtual Formattable* parse( const UnicodeString& source,
@@ -514,8 +534,8 @@ public:
     /**
      * Returns array of formattable types in the parsed pattern 
      * for use in C API
-     * @param count Output parameter to receive the size of array
-     * @return The array of formattable types in the pattern
+     * @param listCount  Output parameter to receive the size of array
+     * @return           The array of formattable types in the pattern
      * @internal
      */
     const Formattable::Type* getFormatTypeList(int32_t& listCount){
@@ -534,7 +554,10 @@ private:
     int32_t fListCount;
 
     // fgNumberFormat is held in a cache of one.
-
+    /**
+     * get the NumberFormat
+     * @param status    Output param to receive success/error code.
+     */
     static NumberFormat* getNumberFormat(UErrorCode &status); // call this function to 'check out' a numberformat from the cache.
     static void          releaseNumberFormat(NumberFormat *adopt); // call this function to 'return' the number format to the cache.
 
@@ -577,7 +600,6 @@ private:
     /**
      * Checks the segments for the closest matched format instance and
      * updates the format array with the new format instance.
-     * @param position the last processed offset in the pattern
      * @param offsetNumber the offset number of the last processed segment
      * @param segments the string that contains the parsed pattern segments.
      * @param success the error code

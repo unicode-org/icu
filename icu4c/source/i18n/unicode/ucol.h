@@ -532,6 +532,7 @@ ucol_getBound(const uint8_t       *source,
         
 /**
  * Gets the version information for a Collator. 
+ * @param coll The UCollator to query.
  * @param info the version # information, the result will be filled in
  * @stable
  */
@@ -622,6 +623,7 @@ ucol_setVariableTop(UCollator *coll,
  * @param coll collator which variable top needs to be retrieved
  * @param status error code (not changed by function). If error code is set, 
  *               the return value is undefined.
+ * @return the variable top value of a Collator.
  * @see ucol_setVariableTop
  * @see ucol_restoreVariableTop
  * @draft ICU 2.0
@@ -681,6 +683,7 @@ ucol_safeClone(const UCollator *coll,
  * @param delta one of UCOL_TAILORING_ONLY, UCOL_FULL_RULES. 
  * @param buffer buffer to store the result in. If NULL, you'll get no rules.
  * @param bufferLen lenght of buffer to store rules in. If less then needed you'll get only the part that fits in.
+ * @return current rules
  * @draft ICU 1.8
  */
 U_CAPI int32_t U_EXPORT2 

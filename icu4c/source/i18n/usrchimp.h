@@ -109,6 +109,7 @@ UBool usearch_handleNextCanonical(UStringSearch *strsrch, UErrorCode *status);
 * Comments follows from handleNextExact
 * @param strsrch string search data
 * @param status error status if any
+* @return True if a exact math is found, FALSE otherwise.
 */
 U_CFUNC
 UBool usearch_handlePreviousExact(UStringSearch *strsrch, UErrorCode *status);

@@ -536,11 +536,13 @@ public:
 
   /**
    * Copy constructor
+   * @param rhs    the object to be copied from.
    */
   RuleBasedNumberFormat(const RuleBasedNumberFormat& rhs);
 
   /**
    * Assignment operator
+   * @param rhs    the object to be copied from.
    */
   RuleBasedNumberFormat& operator=(const RuleBasedNumberFormat& rhs);
 
@@ -552,12 +554,15 @@ public:
   /**
    * Clone this object polymorphically.  The caller is responsible
    * for deleting the result when done.
+   * @return  A copy of the object.
    */
   virtual Format* clone(void) const;
 
   /**
    * Return true if the given Format objects are semantically equal.
    * Objects of different subclasses are considered unequal.
+   * @param other    the object to be compared with.
+   * @ return        true if the given Format objects are semantically equal.
    */
   virtual UBool operator==(const Format& other) const;
 
@@ -566,7 +571,7 @@ public:
 //-----------------------------------------------------------------------
 
   /**
-   * @return the rules that were provided to the RuleBasedNumberFormat.
+   * return the rules that were provided to the RuleBasedNumberFormat.
    * @return the result String that was passed in
    * @draft ICU 2.0
    */
@@ -687,6 +692,10 @@ public:
                                 UErrorCode& status) const;
   /**
    * Redeclared Format method.
+   * @param obj    the object to be formatted.
+   * @param result Output param which will receive the formatted string.
+   * @param status Output param set to success/failure code
+   * @return       A reference to 'result'.
    * @stable
    */
   UnicodeString& format(const Formattable& obj,
@@ -695,6 +704,9 @@ public:
 
   /**
    * Redeclared NumberFormat method.
+   * @param number    the double value to be formatted.
+   * @param output    Output param which will receive the formatted string.
+   * @return          A reference to 'output'.
    * @stable
    */
    UnicodeString& format(double number,
@@ -702,6 +714,9 @@ public:
 
   /**
    * Redeclared NumberFormat method.
+   * @param number    the long value to be formatted.
+   * @param output    Output param which will receive the formatted string.
+   * @return          A reference to 'output'.
    * @stable
    */
    UnicodeString& format(int32_t number,
@@ -728,6 +743,9 @@ public:
   
   /**
    * Redeclared Format method.
+   * @param text   The string to parse
+   * @param result the result of the parse, either a double or a long.
+   * @status       Output param set to success/failure code.
    * @stable
    */
   virtual inline void parse(const UnicodeString& text,

@@ -375,16 +375,14 @@ typedef enum UCalendarDisplayNameType UCalendarDisplayNameType;
 /**
 * Get the display name for a UCalendar's TimeZone.
 * A display name is suitable for presentation to a user.
-* @param cal The UCalendar to query.
-* @param type The desired display name format; one of UCAL_STANDARD, UCAL_SHORT_STANDARD,
-* UCAL_DST, UCAL_SHORT_DST
-* @param locale The desired locale for the display name.
-* @param status A pointer to an UErrorCode to receive any errors
-* @param result A pointer to a buffer to receive the formatted number.
+* @param cal          The UCalendar to query.
+* @param type         The desired display name format; one of UCAL_STANDARD, UCAL_SHORT_STANDARD,
+*                     UCAL_DST, UCAL_SHORT_DST
+* @param locale       The desired locale for the display name.
+* @param result       A pointer to a buffer to receive the formatted number.
 * @param resultLength The maximum size of result.
-* @param resultLengthNeeded If not 0, on output the number of characters actually
-* written to result.
-* @return The total buffer size needed; if greater than resultLength, the output was truncated.
+* @param status       A pointer to an UErrorCode to receive any errors
+* @return             The total buffer size needed; if greater than resultLength, the output was truncated.
 * @stable
 */
 U_CAPI int32_t U_EXPORT2 
@@ -659,7 +657,7 @@ ucal_set(    UCalendar*            cal,
 * UCAL_WEEK_OF_YEAR, UCAL_WEEK_OF_MONTH, UCAL_DATE, UCAL_DAY_OF_YEAR, UCAL_DAY_OF_WEEK,
 * UCAL_DAY_OF_WEEK_IN_MONTH, UCAL_AM_PM, UCAL_HOUR, UCAL_HOUR_OF_DAY, UCAL_MINUTE, UCAL_SECOND,
 * UCAL_MILLISECOND, UCAL_ZONE_OFFSET, UCAL_DST_OFFSET.
-* @param return TRUE if field is set, FALSE otherwise.
+* @return TRUE if field is set, FALSE otherwise.
 * @see ucal_get
 * @see ucal_set
 * @see ucal_clearField

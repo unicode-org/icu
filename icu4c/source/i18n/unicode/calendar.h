@@ -229,6 +229,8 @@ public:
 
     /**
      * Create and return a polymorphic copy of this calendar.
+     *
+     * @return    a polymorphic copy of this calendar.
      * @stable
      */
     virtual Calendar* clone(void) const = 0;
@@ -303,7 +305,7 @@ public:
      * Gets a Calendar using the given timezone and given locale.  The TimeZone
      * is _not_ adopted; the client is still responsible for deleting it.
      *
-     * @param zone  The timezone.
+     * @param zoneToAdopt  The given timezone to be adopted.
      * @param aLocale      The given locale.
      * @param success      Indicates the success/failure of Calendar creation. Filled in
      *                     with U_ZERO_ERROR if created successfully, set to a failure result
@@ -353,6 +355,9 @@ public:
      * be in non-local UTC (GMT) time.
      *
      * @param date  The given UDate in UTC (GMT) time.
+     * @param status  Output param set to success/failure code on exit. If any value
+     *                set in the time field is invalid or restricted by
+     *                leniency, this will be set to an error status.
      * @stable
      */
     inline void setTime(UDate date, UErrorCode& status) { setTimeInMillis(date, status); }
@@ -429,6 +434,8 @@ public:
     /**
      * Return true if another Calendar object is equivalent to this one.  An equivalent
      * Calendar will behave exactly as this one does, but may be set to a different time.
+     *
+     * @param other    The Calendar to be compared with this Calendar   
      * @deprecated not in Java API!
      */
     virtual UBool equivalentTo(const Calendar& other) const;
@@ -548,6 +555,9 @@ public:
      *
      * @param when the date to compare this calendar's time to
      * @param field the field in which to compute the result
+     * @param status  Output param set to success/failure code on exit. If any value
+     *                previously set in the time field is invalid, this will be set to
+     *                an error status.
      * @return the difference, either positive or negative, between
      * this calendar's time and <code>when</code>, in terms of
      * <code>field</code>.
@@ -713,8 +723,9 @@ public:
      * accomplish this (in most cases, you can simply return getMinimum()).  GregorianCalendar
      * overrides this function with a more efficient implementation.
      *
-     * @param field the field to determine the minimum of
-     * @return the minimum of the given field for the current date of this Calendar
+     * @param field    the field to determine the minimum of
+     * @param status   Fill-in parameter which receives the status of this operation.
+     * @return         the minimum of the given field for the current date of this Calendar
      * @stable
      */
     int32_t getActualMinimum(EDateFields field, UErrorCode& status) const;
@@ -730,8 +741,9 @@ public:
      * accomplish this (in most cases, you can simply return getMaximum()).  GregorianCalendar
      * overrides this function with a more efficient implementation.
      *
-     * @param field the field to determine the maximum of
-     * @return the maximum of the given field for the current date of this Calendar
+     * @param field    the field to determine the maximum of
+     * @param status   Fill-in parameter which receives the status of this operation.
+     * @return         the maximum of the given field for the current date of this Calendar
      * @stable
      */
     int32_t getActualMaximum(EDateFields field, UErrorCode& status) const;
@@ -755,6 +767,7 @@ public:
      * Determines if the given time field has a value set. This can affect in the
      * resolving of time in Calendar. Unset fields have a value of zero, by definition.
      *
+     * @param field  The given time field.
      * @return   True if the given time field has a value set; false otherwise.
      * @stable
      */
@@ -859,12 +872,16 @@ protected:
 
     /**
      * Copy constructor
+     *
+     * @param source    Calendar object to be copied from
      * @stable
      */
     Calendar(const Calendar& source);
 
     /**
      * Default assignment operator
+     *
+     * @param right    Calendar object to be copied
      * @stable
      */
     Calendar& operator=(const Calendar& right);
@@ -873,7 +890,7 @@ protected:
      * Constructs a Calendar with the given time zone and locale. Clients are no longer
      * responsible for deleting the given time zone object after it's adopted.
      *
-     * @param zoneToAdopt     The given time zone.
+     * @param zone     The given time zone.
      * @param aLocale  The given locale.
      * @param success  Indicates the status of Calendar object construction. Returns
      *                 U_ZERO_ERROR if constructed successfully.
@@ -907,12 +924,20 @@ protected:
      * time field values with a new time that is set for the calendar.  This method
      * does NOT recompute the time first; to recompute the time, then the fields, use
      * the method complete().
+     *
+     * @param status  Output param set to success/failure code on exit. If any value
+     *                previously set in the time field is invalid or restricted by
+     *                leniency, this will be set to an error status.
      * @stable
      */
     virtual void computeFields(UErrorCode& status) = 0;
 
     /**
      * Gets this Calendar's current time as a long.
+     *
+     * @param status  Output param set to success/failure code on exit. If any value
+     *                previously set in the time field is invalid or restricted by
+     *                leniency, this will be set to an error status.
      * @return the current time as UTC milliseconds from the epoch.
      * @stable
      */
@@ -920,7 +945,10 @@ protected:
 
     /**
      * Sets this Calendar's current time from the given long value.
-     * @param date the new time in UTC milliseconds from the epoch.
+     * @param millis  the new time in UTC milliseconds from the epoch.
+     * @param status  Output param set to success/failure code on exit. If any value
+     *                previously set in the time field is invalid or restricted by
+     *                leniency, this will be set to an error status.
      * @stable
      */
     void setTimeInMillis( double millis, UErrorCode& status );
@@ -950,6 +978,9 @@ protected:
      * Sets the value for a given time field.  This is a fast internal method for
      * subclasses.  It does not affect the areFieldsInSync, isTimeSet, or areAllFieldsSet
      * flags.
+     *
+     * @param field    The given time field.
+     * @param value    The value for the given time field.
      * @stable
      */
     void internalSet(EDateFields field, int32_t value);
@@ -982,12 +1013,17 @@ protected:
 
     /**
      * Get the current time without recomputing.
+     *
+     * @return     the current time without recomputing.
      * @stable
      */
     UDate        internalGetTime(void) const     { return fTime; }
 
     /**
      * Set the current time without affecting flags or fields.
+     *
+     * @param time    The time to be set
+     * @return        the current time without recomputing.
      * @stable
      */
     void        internalSetTime(UDate time)     { fTime = time; }
@@ -1068,6 +1104,10 @@ private:
      * Recompute the time and update the status fields isTimeSet
      * and areFieldsSet.  Callers should check isTimeSet and only
      * call this method if isTimeSet is false.
+     *
+     * @param status  Output param set to success/failure code on exit. If any value
+     *                previously set in the time field is invalid or restricted by
+     *                leniency, this will be set to an error status.
      */
     void updateTime(UErrorCode& status);
 

@@ -124,6 +124,8 @@ public:
 
   /**
   * Copy constructor.
+  *
+  * @param other    the object to be copied from
   * @stable
   */
   CollationElementIterator(const CollationElementIterator& other);
@@ -138,12 +140,18 @@ public:
 
   /**
   * Returns true if "other" is the same as "this"
+  *
+  * @param other    the object to be compared
+  * @return         true if "other" is the same as "this"
   * @stable
   */
   UBool operator==(const CollationElementIterator& other) const;
 
   /**
   * Returns true if "other" is not the same as "this".
+  *
+  * @param other    the object to be compared
+  * @return         true if "other" is not the same as "this"
   * @stable
   */
   UBool operator!=(const CollationElementIterator& other) const;
@@ -280,12 +288,9 @@ protected:
   * collation object. The cursor will walk thru the source string based on the 
   * predefined collation rules. If the source string is empty, NULLORDER will 
   * be returned on the calls to next().
-  * @param sourceText the source string.
-  * @param startOffset the beginning offset of the string where the cursor 
-  *        starts the iterating.
-  * @param endOffset the ending offset of the string where the cursor stops the 
-  *        iterating.
-  * @param order the collation object.
+  * @param sourceText    the source string.
+  * @param order         the collation object.
+  * @param status        the error code status.
   */
   CollationElementIterator(const UnicodeString& sourceText,
                            const RuleBasedCollator* order, UErrorCode& status);
@@ -295,12 +300,9 @@ protected:
   * collation object.  The cursor will walk thru the source string based on the 
   * predefined collation rules.  If the source string is empty, NULLORDER will 
   * be returned on the calls to next().
-  * @param sourceText the source string.
-  * @param startOffset the beginning offset of the string where the cursor 
-  *        starts the iterating.
-  * @param endOffset the ending offset of the string where the cursor stops the 
-  *        iterating.
-  * @param order the collation object.
+  * @param sourceText    the source string.
+  * @param order         the collation object.
+  * @param status        the error code status.
   */
   CollationElementIterator(const CharacterIterator& sourceText,
                            const RuleBasedCollator* order, UErrorCode& status);
@@ -309,6 +311,8 @@ protected:
 
   /**
   * Assignment operator
+  *
+  * @param other    the object to be copied
   */
   const CollationElementIterator&
                               operator=(const CollationElementIterator& other);

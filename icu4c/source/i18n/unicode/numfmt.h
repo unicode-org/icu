@@ -156,6 +156,7 @@ public:
     /**
      * Return true if the given Format objects are semantically equal.
      * Objects of different subclasses are considered unequal.
+     * @return    true if the given Format objects are semantically equal.
      * @stable
      */
     virtual UBool operator==(const Format& other) const;
@@ -269,6 +270,9 @@ public:
 
     /**
      * Redeclared Format method.
+     * @param obj      the object to be formatted.
+     * @param result   Output param with the formatted string. 
+     * @return         A reference to 'result'.
      * @stable
      */
     UnicodeString& format(const Formattable& obj,
@@ -325,12 +329,16 @@ public:
      * 1234 and parsing would stop at the "." character.  Of course,
      * the exact format accepted by the parse operation is locale
      * dependant and determined by sub-classes of NumberFormat.
+     * @return    true if this format will parse numbers as integers
+     *            only. 
      * @stable
      */
     UBool isParseIntegerOnly(void) const;
 
     /**
      * Sets whether or not numbers should be parsed as integers only.
+     * @param value    set True, this format will parse numbers as integers
+     *                 only.
      * @see isParseIntegerOnly
      * @stable
      */
@@ -351,6 +359,7 @@ public:
      * The default format is one of the styles provided by the other
      * factory methods: getNumberInstance, getCurrencyInstance or
      * getPercentInstance.  Exactly which one is locale dependant.
+     * @param inLocale    the given locale.
      * @stable
      */
     static NumberFormat* createInstance(const Locale& inLocale,
@@ -364,6 +373,7 @@ public:
 
     /**
      * Returns a currency format for the specified locale.
+     * @param inLocale    the given locale.
      * @stable
      */
     static NumberFormat* createCurrencyInstance(const Locale& inLocale,
@@ -377,6 +387,7 @@ public:
 
     /**
      * Returns a percentage format for the specified locale.
+     * @param inLocale    the given locale.
      * @stable
      */
     static NumberFormat* createPercentInstance(const Locale& inLocale,
@@ -390,6 +401,7 @@ public:
 
     /**
      * Returns a scientific format for the specified locale.
+     * @param inLocale    the given locale.
      * @stable
      */
     static NumberFormat* createScientificInstance(const Locale& inLocale,
@@ -397,6 +409,7 @@ public:
 
     /**
      * Get the set of Locales for which NumberFormats are installed.
+     * @param count    Output param to receive the size of the locales
      * @stable
      */
     static const Locale* getAvailableLocales(int32_t& count);
@@ -414,6 +427,7 @@ public:
 
     /**
      * Set whether or not grouping will be used in this format.
+     * @param newValue    True, grouping will be used in this format. 
      * @see getGroupingUsed
      * @stable
      */
@@ -422,6 +436,8 @@ public:
     /**
      * Returns the maximum number of digits allowed in the integer portion of a
      * number.
+     * @return     the maximum number of digits allowed in the integer portion of a
+     *             number.
      * @see setMaximumIntegerDigits
      * @stable
      */
@@ -434,6 +450,8 @@ public:
      * of minimumIntegerDigits, then minimumIntegerDigits will also be set to
      * the new value.
      *
+     * @param newValue    the new value for the maximum number of digits 
+     *                    allowed in the integer portion of a number.
      * @see getMaximumIntegerDigits
      * @stable
      */
@@ -442,6 +460,8 @@ public:
     /**
      * Returns the minimum number of digits allowed in the integer portion of a
      * number.
+     * @return    the minimum number of digits allowed in the integer portion of a
+     *            number.
      * @see setMinimumIntegerDigits
      * @stable
      */
@@ -453,6 +473,7 @@ public:
      * new value for minimumIntegerDigits exceeds the current value
      * of maximumIntegerDigits, then maximumIntegerDigits will also be set to
      * the new value.
+     * @param newValue    the new value to be set.
      * @see getMinimumIntegerDigits
      * @stable
      */
@@ -461,6 +482,8 @@ public:
     /**
      * Returns the maximum number of digits allowed in the fraction portion of a
      * number.
+     * @return    the maximum number of digits allowed in the fraction portion of a
+     *            number.
      * @see setMaximumFractionDigits
      * @stable
      */
@@ -472,6 +495,7 @@ public:
      * new value for maximumFractionDigits is less than the current value
      * of minimumFractionDigits, then minimumFractionDigits will also be set to
      * the new value.
+     * @param newValue    the new value to be set.
      * @see getMaximumFractionDigits
      * @stable
      */
@@ -480,6 +504,8 @@ public:
     /**
      * Returns the minimum number of digits allowed in the fraction portion of a
      * number.
+     * @return    the minimum number of digits allowed in the fraction portion of a
+     *            number.
      * @see setMinimumFractionDigits
      * @stable
      */
@@ -491,6 +517,7 @@ public:
      * new value for minimumFractionDigits exceeds the current value
      * of maximumFractionDigits, then maximumIntegerDigits will also be set to
      * the new value
+     * @param newValue    the new value to be set.
      * @see getMinimumFractionDigits
      * @stable
      */
@@ -559,7 +586,14 @@ private:
         kScientificStyle,
         kStyleCount // ALWAYS LAST ENUM: number of styles
     };
-
+    
+    /**
+     * Creates the specified decimal format style of the desired locale.
+     * @param desiredLocale    the given locale.
+     * @param choice           the given style.
+     * @param success          Output param filled with success/failure status.
+     * @return                 A new NumberFormat instance.
+     */
     static NumberFormat* createInstance(const Locale& desiredLocale, EStyles choice, UErrorCode& success);
 
     static const int32_t    fgNumberPatternsCount;

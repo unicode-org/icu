@@ -137,32 +137,37 @@ public:
 
     /**
      * Assignment operator
+     * @param copy the object to be copied from.
      * @stable
      */
     FieldPosition&      operator=(const FieldPosition& copy);
 
     /** 
      * Equality operator.
-     * @return TRUE if the two field positions are equal, FALSE otherwise.
+     * @param that    the object to be compared with.
+     * @return        TRUE if the two field positions are equal, FALSE otherwise.
      * @stable
      */
     UBool              operator==(const FieldPosition& that) const;
 
     /** 
      * Equality operator.
-     * @return TRUE if the two field positions are not equal, FALSE otherwise.
+     * @param that    the object to be compared with.
+     * @return        TRUE if the two field positions are not equal, FALSE otherwise.
      * @stable
      */
     UBool              operator!=(const FieldPosition& that) const;
 
     /**
      * Retrieve the field identifier.
+     * @return    the field identifier.
      * @stable
      */
     int32_t getField(void) const { return fField; }
 
     /**
      * Retrieve the index of the first character in the requested field.
+     * @return    the index of the first character in the requested field.
      * @stable
      */
     int32_t getBeginIndex(void) const { return fBeginIndex; }
@@ -170,24 +175,29 @@ public:
     /**
      * Retrieve the index of the character following the last character in the
      * requested field.
+     * @return    the index of the character following the last character in the
+     *            requested field.
      * @stable
      */
     int32_t getEndIndex(void) const { return fEndIndex; }
  
     /**
      * Set the field.
+     * @param f    the new value of the field.
      * @stable
      */
     void setField(int32_t f) { fField = f; }
 
     /**
      * Set the begin index.  For use by subclasses of Format.
+     * @param bi    the new value of the begin index
      * @stable
      */
     void setBeginIndex(int32_t bi) { fBeginIndex = bi; }
 
     /**
      * Set the end index.  For use by subclasses of Format.
+     * @param ei    the new value of the end index
      * @stable
      */
     void setEndIndex(int32_t ei) { fEndIndex = ei; }

@@ -297,12 +297,16 @@ public:
 
     /**
      * Copy constructor.
+     * 
+     * @param source    the DecimalFormat object to be copied from.
      * @stable
      */
     DecimalFormat(const DecimalFormat& source);
 
     /**
      * Assignment operator.
+     *
+     * @param rhs    the DecimalFormat object to be copied.
      * @stable
      */
     DecimalFormat& operator=(const DecimalFormat& rhs);
@@ -316,6 +320,8 @@ public:
     /**
      * Clone this Format object polymorphically. The caller owns the
      * result and should delete it when done.
+     *
+     * @return    a polymorphic copy of this DecimalFormat.
      * @stable
      */
     virtual Format* clone(void) const;
@@ -323,6 +329,9 @@ public:
     /**
      * Return true if the given Format objects are semantically equal.
      * Objects of different subclasses are considered unequal.
+     *
+     * @param other    the object to be compared with.
+     * @return         true if the given Format objects are semantically equal.
      * @stable
      */
     virtual UBool operator==(const Format& other) const;
@@ -374,6 +383,13 @@ public:
 
     /**
      * Redeclared NumberFormat method.
+     * Formats an object to produce a string.
+     *
+     * @param obj       The object to format.
+     * @param result    Output parameter which will be filled in with the
+     *                  formatted string.
+     * @param status    Output parameter filled in with success or failure status.
+     * @return          Reference to 'result' parameter.
      * @stable
      */
     UnicodeString& format(const Formattable& obj,
@@ -382,6 +398,11 @@ public:
 
     /**
      * Redeclared NumberFormat method.
+     * Format a double number.
+     *
+     * @param number    The value to be formatted.
+     * @param output    Output param with the formatted string.
+     * @return          A reference to 'output' param.
      * @stable
      */
     UnicodeString& format(double number,
@@ -389,6 +410,12 @@ public:
 
     /**
      * Redeclared NumberFormat method.
+     * Format a long number. These methods call the NumberFormat
+     * pure virtual format() methods with the default FieldPosition.
+     *
+     * @param number    The value to be formatted.
+     * @param output    Output param with the formatted string.
+     * @return          A reference to 'output' param.
      * @stable
      */
     UnicodeString& format(int32_t number,
@@ -418,7 +445,14 @@ public:
                        ParsePosition& parsePosition) const;
 
     // Declare here again to get rid of function hiding problems.
-    /** @stable */
+    /** 
+     * Parse the given string using this object's choices.
+     *
+     * @param text           The text to be parsed.
+     * @param result         Formattable to be set to the parse result.
+     * @param status    Output parameter filled in with success or failure status.
+     * @stable
+     */
     virtual void parse(const UnicodeString& text, 
                        Formattable& result, 
                        UErrorCode& error) const;
@@ -452,6 +486,8 @@ public:
     /**
      * Get the positive prefix.
      *
+     * @param result    Output param which will receive the positive prefix.
+     * @return          A reference to 'result'.
      * Examples: +123, $123, sFr123
      * @stable
      */
@@ -460,6 +496,7 @@ public:
     /**
      * Set the positive prefix.
      *
+     * @param newValue    the new value of the the positive prefix to be set.
      * Examples: +123, $123, sFr123
      * @stable
      */
@@ -468,6 +505,8 @@ public:
     /**
      * Get the negative prefix.
      *
+     * @param result    Output param which will receive the negative prefix.
+     * @return          A reference to 'result'.
      * Examples: -123, ($123) (with negative suffix), sFr-123
      * @stable
      */
@@ -476,6 +515,7 @@ public:
     /**
      * Set the negative prefix.
      *
+     * @param newValue    the new value of the the negative prefix to be set.
      * Examples: -123, ($123) (with negative suffix), sFr-123
      * @stable
      */
@@ -484,6 +524,8 @@ public:
     /**
      * Get the positive suffix.
      *
+     * @param result    Output param which will receive the positive suffix.
+     * @return          A reference to 'result'.
      * Example: 123%
      * @stable
      */
@@ -492,6 +534,7 @@ public:
     /**
      * Set the positive suffix.
      *
+     * @param newValue    the new value of the positive suffix to be set.
      * Example: 123%
      * @stable
      */
@@ -500,14 +543,17 @@ public:
     /**
      * Get the negative suffix.
      *
+     * @param result    Output param which will receive the negative suffix.
+     * @return          A reference to 'result'.
      * Examples: -123%, ($123) (with positive suffixes)
      * @stable
      */
     UnicodeString& getNegativeSuffix(UnicodeString& result) const;
 
     /**
-     * Set the positive suffix.
+     * Set the negative suffix.
      *
+     * @param newValue    the new value of the negative suffix to be set.
      * Examples: 123%
      * @stable
      */
@@ -519,6 +565,7 @@ public:
      * (For Arabic, use arabic percent symbol).
      * For a permill, set the suffixes to have "\u2031" and the multiplier to be 1000.
      *
+     * @return    the multiplier for use in percent, permill, etc.
      * Examples: with 100, 1.23 -> "123", and "123" -> 1.23
      * @stable
      */
@@ -530,6 +577,7 @@ public:
      * (For Arabic, use arabic percent symbol).
      * For a permill, set the suffixes to have "\u2031" and the multiplier to be 1000.
      *
+     * @param newValue    the new value of the multiplier for use in percent, permill, etc.
      * Examples: with 100, 1.23 -> "123", and "123" -> 1.23
      * @stable
      */
@@ -788,6 +836,8 @@ public:
      * Return the grouping size. Grouping size is the number of digits between
      * grouping separators in the integer portion of a number.  For example,
      * in the number "123,456.78", the grouping size is 3.
+     *
+     * @return    the grouping size.
      * @see setGroupingSize
      * @see NumberFormat::isGroupingUsed
      * @see DecimalFormatSymbols::getGroupingSeparator
@@ -799,6 +849,8 @@ public:
      * Set the grouping size. Grouping size is the number of digits between
      * grouping separators in the integer portion of a number.  For example,
      * in the number "123,456.78", the grouping size is 3.
+     *
+     * @param newValue    the new value of the grouping size.
      * @see getGroupingSize
      * @see NumberFormat::setGroupingUsed
      * @see DecimalFormatSymbols::setGroupingSeparator
@@ -829,6 +881,8 @@ public:
      * Set the secondary grouping size. If set to a value less than 1,
      * then secondary grouping is turned off, and the primary grouping
      * size is used for all intervals, not just the least significant.
+     *
+     * @param newValue    the new value of the secondary grouping size.
      * @see getSecondaryGroupingSize
      * @see NumberFormat#setGroupingUsed
      * @see DecimalFormatSymbols::setGroupingSeparator
@@ -839,6 +893,7 @@ public:
      * Allows you to get the behavior of the decimal separator with integers.
      * (The decimal separator will always appear with decimals.)
      *
+     * @return    TRUE if the decimal separator always appear with decimals.
      * Example: Decimal ON: 12345 -> 12345.; OFF: 12345 -> 12345
      * @stable
      */
@@ -848,6 +903,7 @@ public:
      * Allows you to set the behavior of the decimal separator with integers.
      * (The decimal separator will always appear with decimals.)
      *
+     * @param newValue    set TRUE if the decimal separator will always appear with decimals.
      * Example: Decimal ON: 12345 -> 12345.; OFF: 12345 -> 12345
      * @stable
      */
@@ -856,6 +912,9 @@ public:
     /**
      * Synthesizes a pattern string that represents the current state
      * of this Format object.
+     *
+     * @param result    Output param which will receive the pattern.
+     * @return          A reference to 'result'.
      * @see applyPattern
      * @stable
      */
@@ -865,6 +924,8 @@ public:
      * Synthesizes a localized pattern string that represents the current
      * state of this Format object.
      *
+     * @param result    Output param which will receive the localized pattern.
+     * @return          A reference to 'result'.
      * @see applyPattern
      * @stable
      */
@@ -891,7 +952,6 @@ public:
      * In negative patterns, the minimum and maximum counts are ignored;
      * these are presumed to be set in the positive pattern.
      *
-     * @param pattern    The pattern to be applied.
      * @param pattern    The pattern to be applied.
      * @param parseError Struct to recieve information on position 
      *                   of error if an error is encountered
@@ -937,6 +997,8 @@ public:
      * these are presumed to be set in the positive pattern.
      *
      * @param pattern   The localized pattern to be applied.
+     * @param parseError Struct to recieve information on position 
+     *                   of error if an error is encountered
      * @param status    Output param set to success/failure code on
      *                  exit. If the pattern is invalid, this will be
      *                  set to a failure result.
@@ -948,6 +1010,11 @@ public:
 
     /*
      * Apply the given pattern to this Format object.
+     *
+     * @param pattern   The localized pattern to be applied.
+     * @param status    Output param set to success/failure code on
+     *                  exit. If the pattern is invalid, this will be
+     *                  set to a failure result.
      * @stable
      */
     virtual void applyLocalizedPattern(const UnicodeString& pattern,
@@ -957,6 +1024,9 @@ public:
     /**
      * Sets the maximum number of digits allowed in the integer portion of a
      * number. This override limits the integer digit count to 309.
+     *
+     * @param newValue    the new value of the maximum number of digits 
+     *                      allowed in the integer portion of a number.
      * @see NumberFormat#setMaximumIntegerDigits
      * @stable
      */
@@ -965,6 +1035,9 @@ public:
     /**
      * Sets the minimum number of digits allowed in the integer portion of a
      * number. This override limits the integer digit count to 309.
+     * 
+     * @param newValue    the new value of the minimum number of digits 
+     *                      allowed in the integer portion of a number.
      * @see NumberFormat#setMinimumIntegerDigits
      * @stable
      */
@@ -973,6 +1046,9 @@ public:
     /**
      * Sets the maximum number of digits allowed in the fraction portion of a
      * number. This override limits the fraction digit count to 340.
+     *
+     * @param newValue    the new value of the maximum number of digits 
+     *                    allowed in the fraction portion of a number.
      * @see NumberFormat#setMaximumFractionDigits
      * @stable
      */
@@ -981,6 +1057,9 @@ public:
     /**
      * Sets the minimum number of digits allowed in the fraction portion of a
      * number. This override limits the fraction digit count to 340.
+     *
+     * @param newValue    the new value of the minimum number of digits 
+     *                    allowed in the fraction portion of a number.
      * @see NumberFormat#setMinimumFractionDigits
      * @stable
      */
@@ -1056,6 +1135,10 @@ private:
 
     /**
      * Does the real work of generating a pattern.
+     *
+     * @param result     Output param which will receive the pattern.
+     * @param localized  TRUE return localized pattern.
+     * @return           A reference to 'result'.
      */
     UnicodeString& toPattern(UnicodeString& result, UBool localized) const;
 
@@ -1075,6 +1158,13 @@ private:
                             UErrorCode& status);
     /**
      * Do the work of formatting a number, either a double or a long.
+     *
+     * @param result         Output param which will receive the formatted string.
+     * @param fieldPosition  On input: an alignment field, if desired.
+     *                       On output: the offsets of the alignment field.
+     * @param digits         the digits to be formatted.
+     * @param isInteger      if TRUE format the digits as Integer.
+     * @return               A reference to 'result'.
      */
     UnicodeString& subformat(UnicodeString& result,
                              FieldPosition& fieldPosition,
@@ -1091,12 +1181,12 @@ private:
      * parsePosition, until an unparseable character is seen.
      * @param text The string to parse.
      * @param parsePosition The position at which to being parsing.  Upon
-     * return, the first unparseable character.
-     * @param digits The DigitList to set to the parsed value.
-     * @param isExponent If true, parse an exponent.  This means no
-     * infinite values and integer only.
-     * @param status Upon return contains boolean status flags indicating
-     * whether the value was infinite and whether it was positive.
+     *                      return, the first unparseable character.
+     * @param digits        The DigitList to set to the parsed value.
+     * @param isExponent    If true, parse an exponent.  This means no
+     *                      infinite values and integer only.
+     * @param status        Upon return contains boolean status flags indicating
+     *                      whether the value was infinite and whether it was positive.
      */
     UBool subparse(const UnicodeString& text, ParsePosition& parsePosition,
                     DigitList& digits, UBool* status) const;
