@@ -71,19 +71,19 @@ Formally, the file contains the following structures:
     A1 const uint16_t STAGE_3_BITS(=4);
       (STAGE_1_BITS(=11) not stored, implicitly=21-(STAGE_2_BITS+STAGE_3_BITS))
     A2 const uint16_t exceptionsIndex;  -- 32-bit unit index
-    A3 const uint16_t stage2Top; -- number of elements in stage2, new in formatVersion 1.1
+    A3 const uint16_t stage3Index; -- 16-bit unit index of stage3, new in formatVersion 1.1
     A4 const uint16_t propsIndex; -- 32-bit unit index, new in formatVersion 1.1
-    A5 const uint16_t exceptionsTop; -- number of exceptions units, new in formatVersion 1.1
+    A5 const uint16_t exceptionsTopIndex; -- 32-bit unit index to the first unit after exceptions units, new in formatVersion 1.1
     A6 const uint16_t reservedIndex;
     A7 const uint16_t reservedIndex;
 
     S1 const uint16_t stage1[0x440];    -- 0x440=0x110000>>10
-    S2 const uint16_t stage2[variable size, stage2Top==A3];
+    S2 const uint16_t stage2[variable size];
     S3 const uint16_t stage3[variable size];
        (possible 1*uint16_t for padding to 4-alignment)
 
     P  const uint32_t props32[variable size];
-    E  const uint32_t exceptions[variable size, exceptionsTop==A5];
+    E  const uint32_t exceptions[variable size];
 
 3-stage lookup and properties:
 
@@ -1048,8 +1048,8 @@ generateData(const char *dataDir) {
         stage1[i]+=offset;
     }
 
-    indexes[3]=stage2Top;                   /* number of elements in stage2 */
     offset+=stage2Top;                      /* uint16_t offset to stage3[] */
+    indexes[3]=offset;
     for(i=0; i<stage2Top; ++i) {
         stage2[i]+=offset;
     }
@@ -1064,8 +1064,9 @@ generateData(const char *dataDir) {
     offset+=propsTop;
     indexes[2]=offset;                      /* uint32_t offset to exceptions[] */
 
-    indexes[5]=exceptionsTop;               /* number of exceptions units */
-    size=4*(offset+exceptionsTop);          /* total size of data */
+    offset+=exceptionsTop;                  /* uint32_t offset to the first unit after exceptions[] */
+    indexes[5]=offset;
+    size=4*offset;                          /* total size of data */
 
     if(beVerbose) {
         printf("number of stage 2 entries:              %5u\n", stage2Top);
