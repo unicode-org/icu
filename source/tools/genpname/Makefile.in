@@ -50,7 +50,7 @@ check: all check-local
 
 all-local: $(TARGET) build-data $(MAN_FILES)
 
-install-local: all-local install-man
+install-local: all-local 
 	$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
 	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
 
