@@ -858,12 +858,6 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
            break;
 
 
-        case URX_BACKSLASH_A:          // Test for start of input
-            if (fp->fInputIdx != 0) {
-                fp = (REStackFrame *)fStack->popFrame(frameSize);
-            }
-            break;
-
         case URX_BACKSLASH_B:          // Test for word boundaries
             {
                 UBool success = isWordBoundary(fp->fInputIdx);
