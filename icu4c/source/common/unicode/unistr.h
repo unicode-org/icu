@@ -2417,6 +2417,7 @@ private:
 
   friend class UnicodeStringStreamer;
   friend class UnicodeConverter;
+  friend class Normalizer;
 
 #if U_IOSTREAM_SOURCE >= 199711
   friend U_COMMON_API std::ostream &operator<<(std::ostream& stream, const UnicodeString& s);
