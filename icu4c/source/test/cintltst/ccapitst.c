@@ -1096,7 +1096,7 @@ static void TestConvertSafeClone()
     char  *pCharSource = charSourceBuffer;
     char  *pCharSourceLimit  = charSourceBuffer + sizeof(charSourceBuffer);
     UChar *pUCharTarget = uniCharBuffer;
-    UChar *pUCharTargetLimit = uniCharBuffer + sizeof(uniCharBuffer);
+    UChar *pUCharTargetLimit = uniCharBuffer + sizeof(uniCharBuffer)/sizeof(*uniCharBuffer);
     const UChar * pUniBuffer;
     const UChar *uniBufferLimit = uniBuffer + sizeof(uniBuffer)/sizeof(*uniBuffer);
     int index;

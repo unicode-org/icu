@@ -113,50 +113,50 @@ _MBCSToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
 
 /* Protos */
 /***************** ISO-2022 ********************************/
-U_CFUNC void 
+static void 
 T_UConverter_toUnicode_ISO_2022(UConverterToUnicodeArgs * args,
                                              UErrorCode * err);
-U_CFUNC void 
+static void 
 T_UConverter_toUnicode_ISO_2022_OFFSETS_LOGIC (UConverterToUnicodeArgs * args,
                                                             UErrorCode * err);
 
-U_CFUNC UChar32 
+static UChar32 
 T_UConverter_getNextUChar_ISO_2022 (UConverterToUnicodeArgs * args,
                                                     UErrorCode * err);
 
 /***************** ISO-2022-JP ********************************/
 
-U_CFUNC void 
+static void 
 UConverter_fromUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args, 
                                                 UErrorCode* err);
 
-U_CFUNC void 
+static void 
 UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeArgs* args, 
                                                             UErrorCode* err);
 
 /***************** ISO-2022-KR ********************************/
 
-U_CFUNC void 
+static void 
 UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args, 
                                                               UErrorCode* err);
 
-U_CFUNC void 
+static void 
 UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterToUnicodeArgs* args, 
                                                             UErrorCode* err);
 /* Special function for getting output from IBM-25546 code page*/
-U_CFUNC void 
+static void 
 UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC_IBM(UConverterToUnicodeArgs *args,
                                                             UErrorCode* err);
-U_CFUNC void 
+static void 
 UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC_IBM(UConverterFromUnicodeArgs* args,
                                                                   UErrorCode* err);
 /***************** ISO-2022-CN ********************************/
 
-U_CFUNC void 
+static void 
 UConverter_fromUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args, 
                                                 UErrorCode* err);
 
-U_CFUNC void 
+static void 
 UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeArgs* args, 
                                                             UErrorCode* err);
 
@@ -309,7 +309,7 @@ changeState_2022(UConverter* _this,
                     UErrorCode* err);
 
 
-UCNV_TableStates_2022 
+static UCNV_TableStates_2022 
 getKey_2022(char source,
                 int32_t* key,
                 int32_t* offset);
@@ -321,16 +321,16 @@ _ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t opti
 static void
  _ISO2022Close(UConverter *converter);
 
-U_CFUNC void 
+static void 
 _ISO2022Reset(UConverter *converter, UConverterResetChoice choice);
 
 static const char* 
 _ISO2022getName(const UConverter* cnv);
 
-U_CFUNC void 
+static void 
 _ISO_2022_WriteSub(UConverterFromUnicodeArgs *args, int32_t offsetIndex, UErrorCode *err);
 
-U_CFUNC UConverter * 
+static UConverter * 
 _ISO_2022_SafeClone(const UConverter *cnv, void *stackBuffer, int32_t *pBufferSize, UErrorCode *status);
 
 /************ protos of functions for setting the initial state *********************/
@@ -694,7 +694,7 @@ _ISO2022Close(UConverter *converter) {
     }
 }
 
-U_CFUNC void
+static void
 _ISO2022Reset(UConverter *converter, UConverterResetChoice choice) {
     UConverterDataISO2022 *myConverterData=(UConverterDataISO2022 *) (converter->extraInfo);
     if(! myConverterData->isLocaleSpecified){
@@ -939,7 +939,7 @@ MBCS_SINGLE_FROM_UCHAR32(UConverterSharedData* sharedData,
 *
 */
 
-U_CFUNC UChar32 
+static UChar32 
 T_UConverter_getNextUChar_ISO_2022(UConverterToUnicodeArgs* args,
                                                    UErrorCode* err){
     const char* mySourceLimit;
@@ -985,7 +985,7 @@ T_UConverter_getNextUChar_ISO_2022(UConverterToUnicodeArgs* args,
     return 0xffff;
 }
 
-U_CFUNC void 
+static void 
 T_UConverter_toUnicode_ISO_2022(UConverterToUnicodeArgs *args,
                                              UErrorCode* err){
 
@@ -1000,7 +1000,7 @@ T_UConverter_toUnicode_ISO_2022(UConverterToUnicodeArgs *args,
         return;
     }
     myData= ((UConverterDataISO2022*)(args->converter->extraInfo));
-    do{
+    while (args->source < args->sourceLimit) {
 
         /*Find the end of the buffer e.g : Next Escape Seq | end of Buffer*/
         mySourceLimit = getEndOfBuffer_2022(&(args->source), args->sourceLimit, args->flush);
@@ -1066,7 +1066,7 @@ T_UConverter_toUnicode_ISO_2022(UConverterToUnicodeArgs *args,
         /* args->source = sourceStart; */
 
 
-    }while(args->source < args->sourceLimit);
+    }
 
     myData->isFirstBuffer=FALSE;
     if( (args->source == args->sourceLimit) && args->flush){
@@ -1075,7 +1075,7 @@ T_UConverter_toUnicode_ISO_2022(UConverterToUnicodeArgs *args,
     
 }   
 
-U_CFUNC void 
+static void 
 T_UConverter_toUnicode_ISO_2022_OFFSETS_LOGIC(UConverterToUnicodeArgs* args,
                                                            UErrorCode* err){
 
@@ -1182,7 +1182,7 @@ T_UConverter_toUnicode_ISO_2022_OFFSETS_LOGIC(UConverterToUnicodeArgs* args,
     }
 }
 
-UCNV_TableStates_2022 
+static UCNV_TableStates_2022 
 getKey_2022(char c,int32_t* key,int32_t* offset){
     int32_t togo = *key;
     int32_t low = 0;
@@ -1502,7 +1502,7 @@ static  const int32_t escSeqCharsLen[MAX_VALID_CP_JP] ={
 * TODO: Implement a priority technique where the users are allowed to set the priority of code pages 
 */
 
-U_CFUNC void 
+static void 
 UConverter_fromUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args, UErrorCode* err){
 
     UConverterDataISO2022 *converterData;
@@ -1837,7 +1837,7 @@ static const StateEnum nextStateToUnicodeJP[5][MAX_STATES_2022]= {
     }
 };
 
-U_CFUNC void 
+static void 
 UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                                                             UErrorCode* err){
     char tempBuf[2];
@@ -2023,7 +2023,7 @@ CALLBACK:
 *  ii) There are only 2 shifting sequences SO to shift into double byte mode
 *      and SI to shift into single byte mode
 */
-U_CFUNC void 
+static void 
 UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC_IBM(UConverterFromUnicodeArgs* args, UErrorCode* err){
 
      UConverter* saveConv = args->converter;
@@ -2047,7 +2047,7 @@ UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC_IBM(UConverterFromUnicodeArgs* 
      args->converter=saveConv;
 }
 
-U_CFUNC void 
+static void 
 UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args, UErrorCode* err){
 
     const UChar *source = args->source;
@@ -2232,7 +2232,7 @@ getTrail:
 
 /************************ To Unicode ***************************************/
 
-U_CFUNC void 
+static void 
 UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC_IBM(UConverterToUnicodeArgs *args,
                                                             UErrorCode* err){
     const char* mySourceLimit;
@@ -2279,7 +2279,7 @@ UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC_IBM(UConverterToUnicodeArgs *args
     /* return*/
 }
 
-U_CFUNC void 
+static void 
 UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                                                             UErrorCode* err){
     char tempBuf[3];
@@ -2560,7 +2560,7 @@ static const Cnv2022Type myConverterTypeCN[4]={
 };
 
 
-U_CFUNC void 
+static void 
 UConverter_fromUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args, UErrorCode* err){
 
     UConverterDataISO2022 *converterData;
@@ -3051,7 +3051,7 @@ DONE:
 }
 
 
-U_CFUNC void 
+static void 
 UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                                                UErrorCode* err){
     char tempBuf[3];
@@ -3224,7 +3224,7 @@ UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
     args->source = mySource;
 }
 
-U_CFUNC void
+static void
 _ISO_2022_WriteSub(UConverterFromUnicodeArgs *args, int32_t offsetIndex, UErrorCode *err) {
     UConverter *cnv = args->converter;
     UConverterDataISO2022 *myConverterData=(UConverterDataISO2022 *) cnv->extraInfo;
@@ -3277,7 +3277,7 @@ struct cloneStruct
     UConverter currentCnv; /**< for ISO_2022 converter if the current converter is open */
 };
 
-U_CFUNC UConverter * 
+static UConverter * 
 _ISO_2022_SafeClone(
             const UConverter *cnv, 
             void *stackBuffer, 
@@ -3311,7 +3311,7 @@ _ISO_2022_SafeClone(
         /* KR version 1 also uses the state in currentConverter for preserving state
          * so we need to clone it too!
          */
-        (cnvData->locale[0]=='k' && cnvData->version==1)){
+        (cnvData->isLocaleSpecified && cnvData->locale[0]=='k' && cnvData->version==1)){
 
         uprv_memcpy(&localClone->currentCnv, cnvData->currentConverter, sizeof(UConverter));
         
