@@ -40,7 +40,7 @@ typedef struct ULocaleBundle {
  * @param loc The locale of the ULocaleBundle.
  * @return A pointer to a ULocaleBundle, or 0 if <TT>loc</TT> was invalid.
  */
-ULocaleBundle*        
+ULocaleBundle* 
 u_locbund_init(ULocaleBundle *result, const char *loc);
 
 /**

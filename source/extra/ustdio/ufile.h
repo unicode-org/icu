@@ -102,7 +102,7 @@ ufile_getch(UFILE *f, UChar *ch);
  * @return TRUE if the character is valid, or FALSE when EOF has been detected
  */
 U_CFUNC UBool U_EXPORT2
-ufile_getch32(UFILE *f, UChar *ch);
+ufile_getch32(UFILE *f, UChar32 *ch);
 
 /**
  * Close out the transliterator and flush any data therein.

@@ -1060,7 +1060,7 @@ static const u_printf_info g_u_printf_infos[UPRINTF_NUM_FMT_HANDLERS] = {
             (s) == MOD_L
 
 /* We parse the argument list in Unicode */
-int32_t
+U_CFUNC int32_t
 u_printf_print_spec(const u_printf_stream_handler *streamHandler,
                     const UChar     *fmt,
                     void            *context,
