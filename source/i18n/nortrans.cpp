@@ -327,9 +327,6 @@ void NormalizationTransliterator::initStatics() {
         if (SKIPPABLES == NULL) {
             SKIPPABLES = new UnicodeSet[4];
             UErrorCode ec = U_ZERO_ERROR;
-           
-            // (Technically, the invariant converter is not guaranteed to
-            // convert the backslash correctly, but in practice it does.)
 
             SKIPPABLES[D].applyPattern(UnicodeString(
 	        "[^\\u00C0-\\u00C5\\u00C7-\\u00CF\\u00D1-\\u00D6\\u00D9-\\u00DD\\u00E0-"
