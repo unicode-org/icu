@@ -112,8 +112,8 @@ translit_Gurmukhi_InterIndic {
 "\u0A72>\uE072;"  // IRI
 "\u0A73>\uE073;"  // URA
 "\u0A74>\uE074;"  // EK ONKAR
-"\u0964>.;"        // UNMAPPED Devanagari-InterIndic: DANDA
-"\u0965>.;"        // UNMAPPED Devanagari-InterIndic: DOUBLE DANDA
+"\u0964>'.';"        // UNMAPPED Devanagari-InterIndic: DANDA
+"\u0965>'.';"        // UNMAPPED Devanagari-InterIndic: DOUBLE DANDA
 //    :: NFC (NFD) ;
 // eof
 

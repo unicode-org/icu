@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_Latin_Jamo.txt
-// Date: Mon Nov 19 12:15:36 2001
+// Date: Wed Nov 21 18:58:49 2001
 //--------------------------------------------------------------------
 
 // Latin_Jamo
@@ -18,10 +18,11 @@ translit_Latin_Jamo {
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 
-// Latin-Jamo
+// note: a global filter is more efficient, but MUST include all source chars
+":: [\\u0000-\u00FF [:Latin:]] ;"
 
-":: [:Latin:] NFKD ();"
-":: [:Latin:] Lower ();"
+":: NFKD (NFC);"
+":: Lower ();"
 
 // Transliteration from Latin characters to Korean script is done in
 // two steps: Latin to Jamo, then Jamo to Hangul.  The Jamo-Hangul
@@ -525,7 +526,10 @@ translit_Latin_Jamo {
 // since these may also occur in text.
 
   "< $IEUNG;"
-":: ([[:Hangul:]&[\uFF00-\uFFFF]] NFKD);"
+":: NFC (NFKD);"
+
+// note: a global filter is more efficient, but MUST include all source chars!!
+":: ([:Hangul:]);"
 
 // eof
   }

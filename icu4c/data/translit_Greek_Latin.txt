@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_Greek_Latin.txt
-// Date: Mon Nov 19 12:15:35 2001
+// Date: Wed Nov 21 18:58:49 2001
 //--------------------------------------------------------------------
 
 // Greek_Latin
@@ -18,13 +18,13 @@ translit_Greek_Latin {
 // Corporation and others. All Rights Reserved.
 //--------------------------------------------------------------------
 // $Source: /xsrl/Nsvn/icu/icu/data/Attic/translit_Greek_Latin.txt,v $
-// $Date: 2001/11/19 22:23:33 $
-// $Revision: 1.4 $
+// $Date: 2001/11/22 05:50:50 $
+// $Revision: 1.5 $
 //--------------------------------------------------------------------
 
 // Rules are predicated on running NFD first, and NFC afterwards
-":: [\\u0000-\u007F \\\00B7 [:Greek:] [:Mark:]] ;"
-":: NFD (NFC) ;" 
+":: [\\u0000-\u007F \u00B7 [:Greek:] [:Latin:] [:nonspacing mark:]] ;"
+":: NFKD (NFC) ;" 
 
 // TEST CASES
 
@@ -64,10 +64,10 @@ translit_Greek_Latin {
 
 "$evowel_i = [$evowel-[iI]] ;"
 
-"$caron = \u030C;"
+"$underbar = \u0331;"
 
-"$afterLetter = [:^L:] [\\\'[:M:]]* ;"
-"$beforeLetter = [\\\'[:M:]]* [:^L:] ;"
+"$afterLetter = [:L:] [[:M:]\\\']* ;"
+"$beforeLetter = [[:M:]\\\']* [:L:] ;"
 
 // Fix punctuation
 
@@ -256,18 +256,18 @@ translit_Greek_Latin {
 "[Pp] { } ς > \\\' ;" 
 "[Pp] { } σ > \\\' ;"
 
-// Caron means exception
+// underbar means exception
 
 // before a letter, initial
-"ς } $beforeLetter <> s $caron } $beforeLetter;"
+"ς } $beforeLetter <> s $underbar } $beforeLetter;"
 "σ } $beforeLetter <> s } $beforeLetter;"
 
 // otherwise, after a letter = final 
-"$afterLetter { σ <> $afterLetter { s $caron;"
+"$afterLetter { σ <> $afterLetter { s $underbar;"
 "$afterLetter { ς <> $afterLetter { s ;"
 
 // otherwise (isolated) = initial
-"ς <> s $caron;"
+"ς <> s $underbar;"
 "σ <> s ;"
 
 "[Pp] { Σ <> \\\'S ;" 
@@ -333,7 +333,7 @@ translit_Greek_Latin {
  "< [Ππ] { \\\' } [Ss] ;"
  "< [Νν] { \\\' } $egammaLike ;"
 
-"::NFC (NFD) ;"
-":: ([\\u0000-\u007F [:Latin:] [:Mark:]]) ;"
+"::NFC (NFKD) ;"
+":: ([\\u0000-\u007F [:Latin:] [:Greek:] [:nonspacing mark:]]) ;"
   }
 }
