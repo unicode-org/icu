@@ -24,6 +24,7 @@
 #include "unicode/ustring.h"
 #include "unicode/uloc.h"
 
+
 /* prototypes --------------------------------------------------------------- */
 
 static void
@@ -268,7 +269,7 @@ void TestMisc()
     for (i = 0; i < U_MAX_VERSION_LENGTH; i++ )
     {
         int len = 0;
-        itoa(realVersion[i], temp, 10);
+        T_CString_integerToString(temp, realVersion[i], 10);
         strcat(icuVersion, temp);
         len = strlen(icuVersion);
         if (i != U_MAX_VERSION_LENGTH-1) 
