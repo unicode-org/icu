@@ -143,9 +143,9 @@ TESTDATAFILE=test.dat
 TESTDATAD=$(TESTDATAFILE:%=$(OBJDATADIR)/%)
 TESTDATAFILEC=$(TESTDATAD:.dat=_dat.c)
 OBJTESTFILE=$(TESTDATAFILEC:%.c=%.o)
-TESTDATADLL=$(SRCDATADIR)/libtest_dat.$(SO)
-BASEDATADLL=$(SRCDATADIR)/libbase_dat.$(SO)
-BASETESTDATADLL=$(SRCDATADIR)/libbase_test_dat.$(SO)
+TESTDATADLL=$(OBJDATADIR)/libtest_dat.$(SO)
+BASEDATADLL=$(OBJDATADIR)/libbase_dat.$(SO)
+BASETESTDATADLL=$(OBJDATADIR)/libbase_test_dat.$(SO)
 
 BASETESTDATA=base_test.dat
 build-basetestdata: 
@@ -227,7 +227,7 @@ srcs: $(SRCDATAFILES)
 
 
 ## Files to remove for 'make clean'
-CLEANFILES = *~ $(BRK_FILES)
+CLEANFILES = *~ $(BRK_FILES) $(OBJDATAFILES) $(HPUX_JUNK_OBJ)
 
 
 ### use the "--enable-mapped=" option to configure, to get mapped file behavior.
@@ -261,7 +261,7 @@ clean-local:
 	test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-local:
-	rm -f Makefile
+	rm -f Makefile $(SRCDATAFILES) $(DATFILES)
 
 check-local:
 
