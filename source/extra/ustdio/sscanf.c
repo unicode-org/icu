@@ -1169,7 +1169,7 @@ u_sscanf_scanset_handler(u_localized_string    *input,
 
   /* put the final character we read back on the stream */  
   if(c != 0xFFFF)
-    input->str[input->pos--];
+    input->pos--;
 
   /* if we didn't match at least 1 character, fail */
   if(alias == s)
