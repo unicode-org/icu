@@ -557,7 +557,7 @@ static void TestNewTypes() {
         const UChar* str = ures_getStringByKey(theBundle,"testescape",&len,&status);
         CONFIRM_ErrorCode(status, U_ZERO_ERROR);
         if(U_SUCCESS(status)){
-            u_charsToUChars(expect,uExpect,uprv_strlen(expect)+1);
+            u_charsToUChars(expect,uExpect,(int32_t)strlen(expect)+1);
             if(u_strcmp(uExpect,str)){
                 log_err("Did not get the expected string for testescape\n");
             }
@@ -591,7 +591,7 @@ static void TestNewTypes() {
             "]"
             );
 
-        patternLen = uprv_strlen(pattern);
+        patternLen = (int32_t)uprv_strlen(pattern);
         expectedEscaped = (UChar*)malloc(U_SIZEOF_UCHAR * patternLen);
         got = ures_getStringByKey(theBundle,"test_unescaping",&len,&status);
         expectedLen = u_unescape(pattern,expectedEscaped,patternLen);
@@ -612,7 +612,7 @@ static void TestNewTypes() {
     {
         const UChar* str = ures_getStringByKey(theBundle,"test_underscores",&len,&status);
         expect ="test message ....";
-        u_charsToUChars(expect,uExpect,uprv_strlen(expect)+1);
+        u_charsToUChars(expect,uExpect,(int32_t)strlen(expect)+1);
         CONFIRM_ErrorCode(status, U_ZERO_ERROR);
         if(u_strcmp(uExpect,str)){
             log_err("Did not get the expected string for test_underscores.\n");
@@ -637,9 +637,9 @@ static void TestNewTypes() {
     }
     {
         const char *sourcePath = ctest_dataSrcDir();
-        int32_t srcPathLen = strlen(sourcePath);
+        int32_t srcPathLen = (int32_t)strlen(sourcePath);
         const char *deltaPath = ".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING;
-        int32_t deltaPathLen = strlen(deltaPath);
+        int32_t deltaPathLen = (int32_t)strlen(deltaPath);
         char *testDataFileName = (char *) malloc( srcPathLen+ deltaPathLen + 50 );
         char *path = testDataFileName;
 
@@ -970,10 +970,10 @@ static void TestAPI() {
         log_err("Could not load testdata.dat %s \n",myErrorName(status));
         return;
     }
-    len =strlen(testdatapath);
+    len =(int32_t)strlen(testdatapath);
     utestdatapath = (UChar*) malloc((len+10)*sizeof(UChar));
 
-    u_charsToUChars(testdatapath, utestdatapath, strlen(testdatapath)+1);
+    u_charsToUChars(testdatapath, utestdatapath, (int32_t)strlen(testdatapath)+1);
     /*u_uastrcpy(utestdatapath, testdatapath);*/
 
     /*Test ures_openU */
@@ -1101,7 +1101,7 @@ static void TestErrorConditions(){
         log_err("Could not load testdata.dat %s \n",myErrorName(status));
         return;
     }
-    len = strlen(testdatapath);
+    len = (int32_t)strlen(testdatapath);
     utestdatapath = (UChar*) malloc(sizeof(UChar) *(len+10));
     u_uastrcpy(utestdatapath, testdatapath);
   
