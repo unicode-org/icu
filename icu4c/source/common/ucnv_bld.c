@@ -57,24 +57,24 @@ static struct {
   const char *name;
   const UConverterType type;
 } const cnvNameType[] = {
-  { "LATIN_1", UCNV_LATIN_1 },
-  { "UTF8", UCNV_UTF8 },
-  { "UTF16_BigEndian", UCNV_UTF16_BigEndian },
-  { "UTF16_LittleEndian", UCNV_UTF16_LittleEndian },
+  { "ISO-8859-1", UCNV_LATIN_1 },
+  { "UTF-8", UCNV_UTF8 },
+  { "UTF-16BE", UCNV_UTF16_BigEndian },
+  { "UTF-16LE", UCNV_UTF16_LittleEndian },
 #if U_IS_BIG_ENDIAN
-  { "UTF16_PlatformEndian", UCNV_UTF16_BigEndian },
+  { "UTF-16", UCNV_UTF16_BigEndian },
   { "UTF16_OppositeEndian", UCNV_UTF16_LittleEndian },
 #else
-  { "UTF16_PlatformEndian", UCNV_UTF16_LittleEndian },
+  { "UTF-16", UCNV_UTF16_LittleEndian },
   { "UTF16_OppositeEndian", UCNV_UTF16_BigEndian},
 #endif
-  { "UTF32_BigEndian", UCNV_UTF32_BigEndian },
-  { "UTF32_LittleEndian", UCNV_UTF32_LittleEndian },
+  { "UTF-32BE", UCNV_UTF32_BigEndian },
+  { "UTF-32LE", UCNV_UTF32_LittleEndian },
 #if U_IS_BIG_ENDIAN
-  { "UTF32_PlatformEndian", UCNV_UTF32_BigEndian },
+  { "UTF-32", UCNV_UTF32_BigEndian },
   { "UTF32_OppositeEndian", UCNV_UTF32_LittleEndian },
 #else
-  { "UTF32_PlatformEndian", UCNV_UTF32_LittleEndian },
+  { "UTF-32", UCNV_UTF32_LittleEndian },
   { "UTF32_OppositeEndian", UCNV_UTF32_BigEndian},
 #endif
   { "ISO_2022", UCNV_ISO_2022 },
