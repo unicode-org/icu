@@ -47,5 +47,6 @@ TestDataDriver::utoi(const UnicodeString &s)
   const UChar *u = s.getBuffer();
   int32_t len = s.length();
   u_UCharsToChars(u, ch, len);
+  ch[len] = 0; /* include terminating \0 */
   return atoi(ch);
 }
