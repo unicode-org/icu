@@ -22,7 +22,7 @@ U_NAMESPACE_BEGIN
  * in a {@link RuleBasedCollator} object.
  * StringSearch ensures that language eccentricity can be 
  * handled, e.g. for the German collator, characters ß and SS will be matched 
- * if case is chosen to be ignored. 
+ * if case is chosen to be ignored.
  * See the <a href=http://oss.software.ibm.com/icu/develop/collation/ICU_collation_design.htm>
  * "ICU Collation Design Document"</a> for more information.
  * <p> 
@@ -107,10 +107,10 @@ U_NAMESPACE_BEGIN
  * UnicodeString target("The quick brown fox jumped over the lazy fox");
  * UnicodeString pattern("fox");
  *
- * SearchIterator *iter = new StringSearch(pattern, target);
- *
- * for (int pos = iter->first(); pos != USEARCH_DONE; 
- *                               pos = iter->next()) {
+ * SearchIterator *iter  = new StringSearch(pattern, target);
+ * UErrorCode      error = U_ZERO_ERROR;
+ * for (int pos = iter->first(error); pos != USEARCH_DONE; 
+ *                               pos = iter->next(error)) {
  *     printf("Found match at %d pos, length is %d\n", pos, 
  *                                             iter.getMatchLength());
  * }

@@ -81,6 +81,8 @@ static const SearchData STRENGTH[] = {
     {"A channel, another CHANNEL, more Channels, and one last channel...",
     "channel", "es", UCOL_PRIMARY, NULL, {2, 19, 33, 56, -1},
     {7, 7, 7, 7}},
+    {"\\u00c0 should match but not A", "A\\u0300", "en", UCOL_IDENTICAL, 
+    NULL, {0, -1}, {1, 0}},
     {NULL, NULL, NULL, UCOL_TERTIARY, NULL, {-1}, {0}}
 };
 

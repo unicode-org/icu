@@ -861,12 +861,27 @@ inline UBool checkIdentical(const UStringSearch *strsrch, int32_t start,
         return TRUE;
     }
 
-    if (strsrch->pattern.textLength != length) {
-        return FALSE;
+    UErrorCode status = U_ZERO_ERROR;
+    int decomplength = unorm_decompose(NULL, -1, 
+                                       strsrch->search->text + start, length, 
+                                       FALSE, FALSE, &status);
+    if (decomplength != unorm_decompose(NULL, -1, strsrch->pattern.text, 
+                                        strsrch->pattern.textLength, FALSE, 
+                                        FALSE, &status)) {
+        return false;
     }
-
-    return (uprv_memcmp(strsrch->pattern.text, strsrch->search->text + start, 
-                        length * sizeof(UChar)) == 0);
+    decomplength ++;
+    UChar *text    = (UChar *)uprv_malloc(decomplength * sizeof(UChar));
+    UChar *pattern = (UChar *)uprv_malloc(decomplength * sizeof(UChar));
+    unorm_decompose(text, decomplength, strsrch->search->text + start, 
+                    length, FALSE, FALSE, &status);
+    unorm_decompose(pattern, decomplength, strsrch->pattern.text, 
+                    strsrch->pattern.textLength, FALSE, FALSE, &status);
+    UBool result = (uprv_memcmp(pattern, text, decomplength * sizeof(UChar)) 
+                    == 0);
+    uprv_free(text);
+    uprv_free(pattern);
+    return result;
 }
 
 /**
