@@ -704,52 +704,53 @@ static void TestFileStream(void){
     stream = T_FileStream_open(fileName, "r");
     if(stream==NULL){
         log_data_err("T_FileStream_open failed to open %s\n",fileName);
-    }
-    if(!T_FileStream_file_exists(fileName)){
+    } else {
+      if(!T_FileStream_file_exists(fileName)){
         log_data_err("T_FileStream_file_exists failed to verify existence of %s \n",fileName);
-    }
-
-    retLen=T_FileStream_read(stream,&c,1);
-    if(retLen==0){
+      }
+      
+      retLen=T_FileStream_read(stream,&c,1);
+      if(retLen==0){
         log_data_err("T_FileStream_read failed to read from %s \n",fileName);
-    }
-    retLen=0;
-    T_FileStream_rewind(stream);
-    T_FileStream_read(stream,&c1,1);
-    if(c!=c1){
+      }
+      retLen=0;
+      T_FileStream_rewind(stream);
+      T_FileStream_read(stream,&c1,1);
+      if(c!=c1){
         log_data_err("T_FileStream_rewind failed to rewind %s \n",fileName);
-    }
-    T_FileStream_rewind(stream);
-    c1 = T_FileStream_peek(stream);
-    if(c!=c1){
+      }
+      T_FileStream_rewind(stream);
+      c1 = T_FileStream_peek(stream);
+      if(c!=c1){
         log_data_err("T_FileStream_peek failed to peekd %s \n",fileName);
-    }
-    c = T_FileStream_getc(stream);
-    T_FileStream_ungetc(c,stream);
-    if(c!= T_FileStream_getc(stream)){
+      }
+      c = T_FileStream_getc(stream);
+      T_FileStream_ungetc(c,stream);
+      if(c!= T_FileStream_getc(stream)){
         log_data_err("T_FileStream_ungetc failed to d %s \n",fileName);
-    }
-
-    if(T_FileStream_size(stream)<=0){
+      }
+      
+      if(T_FileStream_size(stream)<=0){
         log_data_err("T_FileStream_size failed to d %s \n",fileName);
-    }
-    if(T_FileStream_error(stream)){
+      }
+      if(T_FileStream_error(stream)){
         log_data_err("T_FileStream_error shouldn't have an error %s\n",fileName);
-    }
-    if(!T_FileStream_error(NULL)){
+      }
+      if(!T_FileStream_error(NULL)){
         log_err("T_FileStream_error didn't get an error %s\n",fileName);
-    }
-    T_FileStream_putc(stream, 0x20);
-    if(!T_FileStream_error(stream)){
+      }
+      T_FileStream_putc(stream, 0x20);
+      if(!T_FileStream_error(stream)){
         /*
-         Warning 
-         writing to a read-only file may not consistently fail on all platforms
-         (e.g. HP-UX, FreeBSD, MacOSX)
+          Warning 
+          writing to a read-only file may not consistently fail on all platforms
+          (e.g. HP-UX, FreeBSD, MacOSX)
         */
         log_verbose("T_FileStream_error didn't get an error when writing to a readonly file %s\n",fileName);
-    }
+      }
 
-    T_FileStream_close(stream);
+      T_FileStream_close(stream);
+    }
     /* test writing function */
     stream=NULL;
     uprv_strcpy(fileName,testdatapath);
@@ -758,32 +759,32 @@ static void TestFileStream(void){
 
     if(stream == NULL){
         log_data_err("Could not open %s for writing\n",fileName);
-    }
-    c= '$';
-    T_FileStream_putc(stream,c);
-    T_FileStream_rewind(stream);
-    if(c != T_FileStream_getc(stream)){
+    } else {
+      c= '$';
+      T_FileStream_putc(stream,c);
+      T_FileStream_rewind(stream);
+      if(c != T_FileStream_getc(stream)){
         log_data_err("T_FileStream_putc failed %s\n",fileName);
-    }
+      }
 
-    T_FileStream_rewind(stream);
-    T_FileStream_writeLine(stream,testline);
-    T_FileStream_rewind(stream);
-    T_FileStream_readLine(stream,buf,bufLen);
-    if(uprv_strncmp(testline, buf,uprv_strlen(buf))!=0){
+      T_FileStream_rewind(stream);
+      T_FileStream_writeLine(stream,testline);
+      T_FileStream_rewind(stream);
+      T_FileStream_readLine(stream,buf,bufLen);
+      if(uprv_strncmp(testline, buf,uprv_strlen(buf))!=0){
         log_data_err("T_FileStream_writeLine failed %s\n",fileName);
-    }
+      }
 
-    T_FileStream_rewind(stream);
-    T_FileStream_write(stream,testline,uprv_strlen(testline));
-    T_FileStream_rewind(stream);
-    retLen = T_FileStream_read(stream, buf, bufLen);
-    if(uprv_strncmp(testline, buf,retLen)!=0){
+      T_FileStream_rewind(stream);
+      T_FileStream_write(stream,testline,uprv_strlen(testline));
+      T_FileStream_rewind(stream);
+      retLen = T_FileStream_read(stream, buf, bufLen);
+      if(uprv_strncmp(testline, buf,retLen)!=0){
         log_data_err("T_FileStream_write failed %s\n",fileName);
+      }
+
+      T_FileStream_close(stream);
     }
-
-    T_FileStream_close(stream);
-
     if(!T_FileStream_remove(fileName)){
         log_data_err("T_FileStream_remove failed to delete %s\n",fileName);
     }
