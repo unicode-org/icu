@@ -270,6 +270,11 @@ private:
     static UBool cacheInitialized;
 
     /**
+     * A method that creates and returns a Transliterator.
+     */
+    typedef Transliterator* (*TransliteratorFactory)();
+
+    /**
      * In Java, the cache stores objects of different types and
      * singleton objects as placeholders for rule-based
      * transliterators to be built as needed.  In C++ we use the
@@ -289,6 +294,7 @@ private:
             PROTOTYPE,
             RBT_DATA,
             ALIAS,
+            FACTORY,
             NONE // Only used for uninitialized entries
         } entryType;
         // NOTE: stringArg cannot go inside the union because
@@ -297,10 +303,12 @@ private:
         union {
             Transliterator* prototype; // For PROTOTYPE
             TransliterationRuleData* data; // For RBT_DATA
+            TransliteratorFactory* factory; // For FACTORY
         } u;
         CacheEntry();
         ~CacheEntry();
         void adoptPrototype(Transliterator* adopted);
+        void setFactory(TransliteratorFactory* factory);
     };
 
     /**
@@ -726,6 +734,17 @@ private:
 public:
 
     /**
+     * Registers a factory function that creates transliterators of
+     * a given ID.
+     * @param id the ID being registered
+     * @param factory a function pointer that will be copied and
+     * called later when the given ID is passed to createInstance()
+     */
+    static void registerFactory(const UnicodeString& id,
+                                TransliteratorFactory* factory,
+                                UErrorCode& status);
+
+    /**
      * Registers a instance <tt>obj</tt> of a subclass of
      * <code>Transliterator</code> with the system.  When
      * <tt>createInstance()</tt> is called with an ID string that is
@@ -875,12 +894,6 @@ protected:
     void setID(const UnicodeString& id);
 
 private:
-    /**
-     * Comparison function for UVector.  Compares two UnicodeString
-     * objects given void* pointers to them.
-     */
-    static UBool compareIDs(void* a, void* b);
-
     static void initializeCache(void);
 
     /* IDs take the form <source> ID_SEP <target>, where
