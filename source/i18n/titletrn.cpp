@@ -25,13 +25,13 @@ const char TitlecaseTransliterator::_ID[] = "Any-Title";
  * The set of characters we skip.  These are neither cased nor
  * non-cased, to us; we copy them verbatim.
  */
-static const UnicodeSet* SKIP = NULL;
+static UnicodeSet* SKIP = NULL;
 
 /**
  * The set of characters that cause the next non-SKIP character
  * to be lowercased.
  */
-static const UnicodeSet* CASED = NULL;
+static UnicodeSet* CASED = NULL;
 
 TitlecaseTransliterator::TitlecaseTransliterator(UnicodeFilter* adoptedFilter) :
     Transliterator(_ID, adoptedFilter) {
