@@ -6,8 +6,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/xmlcomparator/Attic/XMLValidator.java,v $ 
-* $Date: 2003/01/11 01:42:37 $ 
-* $Revision: 1.1 $
+* $Date: 2003/05/14 18:37:16 $ 
+* $Revision: 1.2 $
 *
 ******************************************************************************
 */
@@ -28,23 +28,14 @@ package com.ibm.icu.dev.tool.xmlcomparator;
  * This tool validates xml against DTD ... IE 6 does not do a good job
  */
 import java.io.*;
-import java.util.*;
-import java.io.PrintWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.BufferedReader;
-import java.text.DecimalFormat;
-import java.util.Calendar;
 
-import java.util.Locale;
 
 // DOM imports
-import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
 // Needed JAXP classes
@@ -64,7 +55,7 @@ public class XMLValidator {
 			return;
 		}
 		for (int i = 0; i < args.length; i++) {
-			Document doc = parse(args[i]);
+			/*Document doc =*/ parse(args[i]);
 			System.out.println("Processing file " + args[i]);
 		}
         

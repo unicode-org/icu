@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/docs/CheckTags.java,v $ 
-* $Date: 2003/04/25 01:39:15 $ 
-* $Revision: 1.14 $
+* $Date: 2003/05/14 18:36:20 $ 
+* $Revision: 1.15 $
 *
 *******************************************************************************
 */
@@ -117,7 +117,7 @@ public class CheckTags {
             }
 
             boolean show = !brief || last.reportError;
-            boolean nomsg = show && brief && error;
+           // boolean nomsg = show && brief && error;
             //            System.out.println(">>> " + last + " error: " + error + " show: " + show + " nomsg: " + nomsg);
 
             if (show) {

@@ -153,8 +153,8 @@ class UnicodeSetCloseOver {
             String[] a = new String[v.size()];
             v.toArray(a);
             nonpairs.add(a);
-            int singleCount = 0;
-            int stringCount = 0;
+            //int singleCount = 0;
+            //int stringCount = 0;
             // Make a string of the lengths, e.g., "111" means 3
             // single code points; "13" means a single code point
             // and a string of length 3.

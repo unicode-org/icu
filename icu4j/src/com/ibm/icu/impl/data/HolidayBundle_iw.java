@@ -5,15 +5,14 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/HolidayBundle_iw.java,v $ 
- * $Date: 2002/02/16 03:05:48 $ 
- * $Revision: 1.3 $
+ * $Date: 2003/05/14 18:37:40 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
 
 package com.ibm.icu.impl.data;
 
-import com.ibm.icu.util.*;
 import java.util.ListResourceBundle;
 
 public class HolidayBundle_iw extends ListResourceBundle {

@@ -5,14 +5,13 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/data/TestDataElements_testaliases.java,v $
-* $Date: 2002/08/13 21:39:01 $
-* $Revision: 1.4 $
+* $Date: 2003/05/14 18:35:27 $
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
 package com.ibm.icu.dev.data;
 
-import java.util.ListResourceBundle;
 import com.ibm.icu.impl.ICUListResourceBundle;
 
 public class TestDataElements_testaliases extends ICUListResourceBundle {

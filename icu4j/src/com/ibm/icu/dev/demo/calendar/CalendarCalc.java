@@ -5,17 +5,14 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/calendar/CalendarCalc.java,v $ 
- * $Date: 2002/02/19 04:10:23 $ 
- * $Revision: 1.11 $
+ * $Date: 2003/05/14 18:35:53 $ 
+ * $Revision: 1.12 $
  *
  *****************************************************************************************
  */
 
 package com.ibm.icu.dev.demo.calendar;
 
-import com.ibm.icu.dev.demo.*;
-
-import java.applet.Applet;
 import java.util.Date;
 import java.awt.*;
 import java.awt.event.*;
@@ -33,7 +30,6 @@ import com.ibm.icu.util.TimeZone;
 import java.util.Locale;
 
 import com.ibm.icu.util.*;
-import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
 import com.ibm.icu.dev.demo.impl.*;
 

@@ -5,41 +5,26 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/calendar/CalendarFrame.java,v $ 
- * $Date: 2002/02/19 04:10:23 $ 
- * $Revision: 1.10 $
+ * $Date: 2003/05/14 18:35:52 $ 
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */
 
 package com.ibm.icu.dev.demo.calendar;
 
-import com.ibm.icu.dev.demo.*;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.HebrewCalendar;
 import com.ibm.icu.util.BuddhistCalendar;
 import com.ibm.icu.util.JapaneseCalendar;
 import com.ibm.icu.util.IslamicCalendar;
-import com.ibm.icu.text.SimpleDateFormat;
-//import java.util.SimpleTimeZone;
 import com.ibm.icu.util.SimpleTimeZone;
-import java.applet.Applet;
 import java.awt.*;
 import java.awt.event.*;
-import java.net.*;
-import java.io.*;
-//import java.text.DateFormat;
 import com.ibm.icu.text.DateFormat;
-import java.text.MessageFormat;
-//import java.util.Calendar;
-import com.ibm.icu.util.Calendar;
 import java.util.Date;
-//import java.util.GregorianCalendar;
 import com.ibm.icu.util.GregorianCalendar;
 import java.util.Locale;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
-//import java.util.TimeZone;
-import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.dev.demo.impl.*;
 
 /**

@@ -5,18 +5,14 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/translit/TransliteratingTextComponent.java,v $ 
- * $Date: 2002/03/19 00:17:27 $ 
- * $Revision: 1.5 $
+ * $Date: 2003/05/14 18:35:53 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.dev.demo.translit;
 
-import java.awt.*;
 import java.awt.event.*;
-import java.text.*;
-import java.awt.datatransfer.*;
-import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
 import com.ibm.icu.dev.demo.impl.*;
 
@@ -27,7 +23,7 @@ import com.ibm.icu.dev.demo.impl.*;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliteratingTextComponent.java,v $ $Revision: 1.5 $ $Date: 2002/03/19 00:17:27 $
+ * @version $RCSfile: TransliteratingTextComponent.java,v $ $Revision: 1.6 $ $Date: 2003/05/14 18:35:53 $
  */
 public class TransliteratingTextComponent extends DumbTextComponent {
 
@@ -130,7 +126,7 @@ public class TransliteratingTextComponent extends DumbTextComponent {
         if (index.start == -1) index.start = getSelectionStart();
         index.limit = buf.length();
 
-        StringBuffer log = null;
+      //  StringBuffer log = null;
         if (DEBUG) {
             System.out.println("Transliterator: " + translit.getID());
             System.out.println("From:\t" + '"' + buf.toString() + '"'

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/ICUService.java,v $
- * $Date: 2003/05/05 23:42:18 $
- * $Revision: 1.16 $
+ * $Date: 2003/05/14 18:37:39 $
+ * $Revision: 1.17 $
  *
  *******************************************************************************
  */
@@ -15,8 +15,6 @@ package com.ibm.icu.impl;
 //import com.ibm.icu.text.Collator;
 
 import java.lang.ref.SoftReference;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -456,7 +454,7 @@ public class ICUService extends ICUNotifier {
                     // going to update the cache at all.
                     putInCache = cacheResult;
 
-                    int n = 0;
+                    //  int n = 0;
                     int index = startIndex;
                     while (index < limit) {
                         Factory f = (Factory)factories.get(index++);

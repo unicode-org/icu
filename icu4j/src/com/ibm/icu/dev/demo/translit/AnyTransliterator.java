@@ -5,13 +5,12 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/translit/AnyTransliterator.java,v $
- * $Date: 2002/08/13 21:50:44 $
- * $Revision: 1.3 $
+ * $Date: 2003/05/14 18:35:53 $
+ * $Revision: 1.4 $
  *
  *******************************************************************************
  */
 package com.ibm.icu.dev.demo.translit;
-import com.ibm.icu.dev.demo.impl.*;
 import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
 import java.util.*;
@@ -146,7 +145,7 @@ public class AnyTransliterator extends Transliterator {
     		
     	public void reset() {
     		done = false;
-    		this.expanse = expanse;
+    		//this.expanse = expanse;
     		script = UScript.INVALID_CODE;
     		// set up first range to be empty, at beginning
     		current.contextStart = expanse.contextStart;
@@ -177,7 +176,7 @@ public class AnyTransliterator extends Transliterator {
     		
     		// PHASE 2. Move up the LIMIT value through COMMON or single script until we get to expanse.limit
     		int lastScript = UScript.COMMON;
-    		int veryLastScript = UScript.COMMON;
+    		//int veryLastScript = UScript.COMMON;
     		limit = expanse.limit; 
     		for (i = current.limit; i < limit; i += UTF16.getCharCount(cp)) {
     			cp = text.char32At(i);

@@ -5,21 +5,20 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/translit/Demo.java,v $ 
- * $Date: 2003/04/09 20:03:44 $ 
- * $Revision: 1.25 $
+ * $Date: 2003/05/14 18:35:53 $ 
+ * $Revision: 1.26 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.dev.demo.translit;
-import java.applet.*;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import java.text.CharacterIterator;
-import com.ibm.icu.dev.demo.impl.*;
 import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
-import com.ibm.icu.impl.*;
+
 import java.io.*;
 
 /**
@@ -31,7 +30,7 @@ import java.io.*;
  * <p>Copyright (c) IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Demo.java,v $ $Revision: 1.25 $ $Date: 2003/04/09 20:03:44 $
+ * @version $RCSfile: Demo.java,v $ $Revision: 1.26 $ $Date: 2003/05/14 18:35:53 $
  */
 public class Demo extends Frame {
 
@@ -99,7 +98,7 @@ public class Demo extends Frame {
         MenuBar mbar;
         Menu menu;
         MenuItem mitem;
-        CheckboxMenuItem citem;
+        //CheckboxMenuItem citem;
         
         setMenuBar(mbar = new MenuBar());
         mbar.add(menu = new Menu("File"));
@@ -215,7 +214,7 @@ public class Demo extends Frame {
             	try {
                 	inv = translit.getInverse();
                 } catch (Exception x) {
-                	inv = new NullTransliterator();
+                	inv = Transliterator.getInstance("null");
                 }
             	setTransliterator(inv.getID(), null);
             }
@@ -503,7 +502,7 @@ public class Demo extends Frame {
         int lastPos = 0;
     	while (true) {
     	    int pos = bi.next();
-    	    if (pos == bi.DONE) break;
+    	    if (pos == BreakIterator.DONE) break;
     	    result += testSource.substring(lastPos, pos) + "&";
     	    lastPos = pos;
     	    System.out.println(pos);
@@ -515,7 +514,7 @@ public class Demo extends Frame {
         String result = "";
     	while (true) {
     	    char ch = ci.next();
-    	    if (ch == ci.DONE) break;
+    	    if (ch == CharacterIterator.DONE) break;
     	    result += ch + "(" + ci.getIndex() + ")";
     	}
     	System.out.println("Test" + num + ": " + result);
@@ -636,7 +635,7 @@ public class Demo extends Frame {
                     out.println("<tr><td colspan='2' class='title'><b>Characters</b></td></tr>");
                     UnicodeSetIterator it = new UnicodeSetIterator(s);
                     while (it.next()) {
-                        addSentenceToTable(out, it.codepoint != it.IS_STRING 
+                        addSentenceToTable(out, it.codepoint != UnicodeSetIterator.IS_STRING 
                             ? UTF16.valueOf(it.codepoint)
                             : it.string,
                             NONE, true, testRoundTrip, first, tl, lt);
@@ -648,7 +647,7 @@ public class Demo extends Frame {
                 int start = 0;
                 while (true) {
                     int end = sentenceBreak.next();
-                    if (end == sentenceBreak.DONE) break;
+                    if (end == BreakIterator.DONE) break;
                     String coreSentence = line.substring(start, end);
                     //System.out.println("Core: " + hex.transliterate(coreSentence));
                     end = start;
@@ -845,7 +844,7 @@ public class Demo extends Frame {
         if ((options & CLOSE_CASE) != 0) {
             while (it.next()) {
                 cp = it.codepoint;
-                if (cp == it.IS_STRING) continue;
+                if (cp == UnicodeSetIterator.IS_STRING) continue;
                 int type = UCharacter.getType(cp);
                 if (type == Character.UPPERCASE_LETTER || type == Character.LOWERCASE_LETTER || type == Character.TITLECASE_LETTER) {
                     additions.add(UCharacter.toLowerCase(UTF16.valueOf(cp)));
@@ -861,7 +860,7 @@ public class Demo extends Frame {
             additions.clear();
             CanonicalIterator ci = new CanonicalIterator(".");
             while (it.next()) {
-                if (it.codepoint == it.IS_STRING) base = it.string;
+                if (it.codepoint == UnicodeSetIterator.IS_STRING) base = it.string;
                 else base = UTF16.valueOf(it.codepoint);
                 ci.setSource(base);
                 while (true) {
@@ -879,7 +878,7 @@ public class Demo extends Frame {
             it.reset();
             additions.clear();
             while (it.next()) {
-                if (it.codepoint != it.IS_STRING) continue;
+                if (it.codepoint != UnicodeSetIterator.IS_STRING) continue;
                 additions.addAll(it.string);
                 removals.add(it.string);
                 //System.out.println("flattening '" + hex.transliterate(it.string) + "'");
@@ -893,7 +892,7 @@ public class Demo extends Frame {
             it.reset(source);
             additions.clear();
             while (it.next()) {
-                if (it.codepoint == it.IS_STRING) base = it.string;
+                if (it.codepoint == UnicodeSetIterator.IS_STRING) base = it.string;
                 else base = UTF16.valueOf(it.codepoint);
                 if (Normalizer.isNormalized(base, Normalizer.NFKD,0)) continue;
                 String decomp = Normalizer.normalize(base, Normalizer.NFKD);
@@ -934,7 +933,7 @@ public class Demo extends Frame {
         int start = 0;
         while (true) {
             int end = bi.next();
-            if (end == bi.DONE) break;
+            if (end == BreakIterator.DONE) break;
             int firstLetterType = getFirstLetterType(line, start, end);
             if (firstLetterType != Character.UNASSIGNED) {
                 if (firstLetterType != Character.LOWERCASE_LETTER) break;
@@ -1119,7 +1118,7 @@ public class Demo extends Frame {
         	translit = Transliterator.createFromRules(id, name, Transliterator.FORWARD);
         	if (DEBUG) {
         	    System.out.println("***Forward Rules");
-        	    System.out.println(((RuleBasedTransliterator)translit).toRules(true));
+        	    System.out.println(translit.toRules(true));
         	    System.out.println("***Source Set");
         	    System.out.println(translit.getSourceSet().toPattern(true));
         	}
@@ -1135,13 +1134,13 @@ public class Demo extends Frame {
         	Transliterator translit2 = Transliterator.createFromRules(reverseId, name, Transliterator.REVERSE);
         	if (DEBUG) {
         	    System.out.println("***Backward Rules");
-        	    System.out.println(((RuleBasedTransliterator)translit2).toRules(true));
+        	    System.out.println(translit2.toRules(true));
         	}
             DummyFactory.add(reverseId, translit2);
             
             Transliterator rev = translit.getInverse();
         	if (DEBUG) System.out.println("***Inverse Rules");
-        	if (DEBUG) System.out.println(((RuleBasedTransliterator)rev).toRules(true));
+        	if (DEBUG) System.out.println(rev.toRules(true));
             
         }
         text.flush();
@@ -1170,7 +1169,7 @@ public class Demo extends Frame {
         String name = translit.getID();
         MenuItem cmi = (MenuItem) historyMap.get(name);
         if (cmi == null) {
-            cmi = new MenuItem(translit.getDisplayName(name));
+            cmi = new MenuItem(Transliterator.getDisplayName(name));
             cmi.addActionListener(new TransliterationListener(name));
             historyMap.put(name, cmi);
             historySet.add(cmi);
@@ -1191,7 +1190,7 @@ public class Demo extends Frame {
             setTransliterator(name, null);
         }
         public void itemStateChanged(ItemEvent e) {
-            if (e.getStateChange() == e.SELECTED) {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
                 setTransliterator(name, null);
             } else {
                 setTransliterator("Any-Null", null);

@@ -5,14 +5,13 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/data/TestDataElements_testtypes.java,v $
- * $Date: 2002/08/13 21:47:30 $
- * $Revision: 1.2 $
+ * $Date: 2003/05/14 18:35:27 $
+ * $Revision: 1.3 $
  *
  *******************************************************************************
  */
 package com.ibm.icu.dev.data;
 
-import java.util.ListResourceBundle;
 import com.ibm.icu.impl.ICUListResourceBundle;
 
 public class TestDataElements_testtypes extends ICUListResourceBundle {

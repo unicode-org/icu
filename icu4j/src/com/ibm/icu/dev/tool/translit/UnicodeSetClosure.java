@@ -5,15 +5,14 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/translit/UnicodeSetClosure.java,v $
- * $Date: 2002/06/20 01:17:39 $
- * $Revision: 1.7 $
+ * $Date: 2003/05/14 18:36:59 $
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.dev.tool.translit;
 import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
-import com.ibm.icu.impl.Utility;
 //import java.text.*;
 import java.io.*;
 import java.util.Locale;
@@ -27,6 +26,8 @@ public class UnicodeSetClosure {
         UnicodeSet foo = 	    new UnicodeSet("[\u1FF6-\u1FFD\u2000-\u2001\u2126]");
         
         test();
+        if(foo==null){}
+        
         /* The following is superceded by Alan's tool
         
         File f = new File("UnicodeSetClosure.txt");

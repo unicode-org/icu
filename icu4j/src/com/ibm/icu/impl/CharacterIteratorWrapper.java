@@ -39,7 +39,7 @@ public class CharacterIteratorWrapper extends UCharacterIterator {
      */
     public int current() {
         int c = iterator.current();
-        if(c==iterator.DONE){
+        if(c==CharacterIterator.DONE){
 		  return DONE;
         }
         return c;
@@ -65,7 +65,7 @@ public class CharacterIteratorWrapper extends UCharacterIterator {
     public int next() {
         int i = iterator.current();
         iterator.next();
-        if(i==iterator.DONE){  
+        if(i==CharacterIterator.DONE){  
 		  return DONE;
         }
         return i;
@@ -76,7 +76,7 @@ public class CharacterIteratorWrapper extends UCharacterIterator {
      */
     public int previous() {
         int i = iterator.previous();
-        if(i==iterator.DONE){
+        if(i==CharacterIterator.DONE){
             return DONE;
         }
         return i;
@@ -110,7 +110,7 @@ public class CharacterIteratorWrapper extends UCharacterIterator {
             throw new IndexOutOfBoundsException(Integer.toString(length));
         }
 	
-        for (char ch = iterator.first(); ch != iterator.DONE; ch = iterator.next()) {
+        for (char ch = iterator.first(); ch != CharacterIterator.DONE; ch = iterator.next()) {
 	        fillIn[offset++] = ch;
 	    }
 	    iterator.setIndex(currentIndex);

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2003/04/09 21:39:15 $ 
-* $Revision: 1.72 $
+* $Date: 2003/05/14 18:38:09 $ 
+* $Revision: 1.73 $
 *
 *******************************************************************************
 */
@@ -2472,7 +2472,7 @@ public final class UCharacter
      */
     public static boolean isUnicodeIdentifierStart(int ch)
     {
-        int cat = getType(ch);
+        /*int cat = */getType(ch);
         // if props == 0, it will just fall through and return false
         return ((1 << getType(ch)) 
                  & ((1 << UCharacterCategory.UPPERCASE_LETTER) 
@@ -4117,7 +4117,7 @@ public final class UCharacter
             return 0; // undefined
         } 
         else if (type < UProperty.INT_LIMIT) {
-            int result = 0;
+            //int result = 0;
             switch (type) {
             case UProperty.BIDI_CLASS:
                 return getDirection(ch);

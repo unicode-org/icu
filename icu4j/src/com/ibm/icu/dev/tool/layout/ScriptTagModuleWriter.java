@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/layout/ScriptTagModuleWriter.java,v $
- * $Date: 2003/04/15 20:15:53 $
- * $Revision: 1.3 $
+ * $Date: 2003/05/14 18:36:30 $
+ * $Revision: 1.4 $
  *
  *******************************************************************************
  */
@@ -99,7 +99,7 @@ public class ScriptTagModuleWriter extends ModuleWriter
         max = languageData.getMaxLanguage();
         
         for (int language = min; language <= max; language += 1) {
-            String tag = languageData.getLanguageTag(language);
+            //String tag = languageData.getLanguageTag(language);
             
             output.print("    ");
             output.print(languageData.getLanguageTagLabel(language));
