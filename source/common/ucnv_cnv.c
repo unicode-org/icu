@@ -207,8 +207,8 @@ const char* escSeqStateTable_Result_2022[MAX_STATES_2022] = {
          NULL   ,NULL   ,NULL   ,NULL    ,"latin1"    ,"latin1"    ,"latin1"    ,"ibm-865"    ,"ibm-865"    ,"ibm-865"
     ,"ibm-865"    ,"ibm-865"    ,"ibm-865"    ,"ibm-895"    ,"ibm-943"    ,"latin1"    ,"latin1"        ,NULL    ,"ibm-955"    ,"ibm-367"
     ,"ibm-952"  ,NULL    ,"UTF8"        ,NULL    ,"ibm-955"    ,"bm-367"    ,"ibm-952"    ,"ibm-949"    ,"ibm-953"    ,"ibm-1383"
-    ,"ibm-952"    ,"ibm-964"    ,"ibm-964"    ,"ibm-964"    ,"ibm-964"    ,"ibm-964"    ,"ibm-964"    ,"UTF16"    ,"UTF16"    ,"UTF16"
-    ,"UTF16"    ,"UTF16"    ,"UTF16"    ,NULL    ,"latin1"    ,"ibm-912"    ,"ibm-913"    ,"ibm-914"    ,"ibm-813"    ,"ibm-1089"
+    ,"ibm-952"    ,"ibm-964"    ,"ibm-964"    ,"ibm-964"    ,"ibm-964"    ,"ibm-964"    ,"ibm-964"    ,"UTF16_PlatformEndian"    ,"UTF16_PlatformEndian"    ,"UTF16_PlatformEndian"
+    ,"UTF16_PlatformEndian"    ,"UTF16_PlatformEndian"    ,"UTF16_PlatformEndian"    ,NULL    ,"latin1"    ,"ibm-912"    ,"ibm-913"    ,"ibm-914"    ,"ibm-813"    ,"ibm-1089"
     ,"ibm-920"    ,"ibm-915"    ,"ibm-915"    ,"latin1"};
 
 UCNV_TableStates_2022 escSeqStateTable_Value_2022[MAX_STATES_2022] = {
@@ -2110,8 +2110,8 @@ void T_UConverter_fromUnicode_UTF8 (UConverter * _this,
   int8_t targetCharByteNum = 0;
   UChar mySourceChar = 0x0000;
   uint32_t ch;
-  int16_t bytesToWrite = 0;
-  uint32_t ch2, i;
+  int16_t i, bytesToWrite = 0;
+  uint32_t ch2;
   char temp[4];
 
   if (_this->fromUnicodeStatus)
@@ -2222,8 +2222,8 @@ void T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC (UConverter * _this,
   int8_t targetCharByteNum = 0;
   UChar mySourceChar = 0x0000;
   uint32_t ch;
-  int16_t bytesToWrite = 0;
-  uint32_t ch2, i;
+  int16_t i, bytesToWrite = 0;
+  uint32_t ch2;
   char temp[4];
 
   if (_this->fromUnicodeStatus)
