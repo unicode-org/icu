@@ -661,10 +661,13 @@ int32_t UnicodeSet::findCodePoint(UChar32 c) const {
     if (c < list[0]) return 0;
     int32_t lo = 0;
     int32_t hi = len - 1;
+    // High runner test.  c is often after the last range, so an
+    // initial check for this condition pays off. 
+    if (len >= 2 && c >= list[len-2]) return len-1;
     // invariant: c >= list[lo]
     // invariant: c < list[hi]
     for (;;) {
-        int32_t i = (lo + hi) / 2;
+        int32_t i = (lo + hi) >> 1;
         if (i == lo) return hi;
         if (c < list[i]) {
             hi = i;
@@ -1039,12 +1042,35 @@ UChar32 UnicodeSet::charAt(int32_t index) const {
  * to this set.
  */
 UnicodeSet& UnicodeSet::add(UChar32 start, UChar32 end) {
-    if (start <= end) {
+    if (start < end) {
         UChar32 range[3] = { start, end+1, UNICODESET_HIGH };
         add(range, 2, 0);
+    } else if (start == end) {
+        add(start);
     }
     return *this;
 }
+
+// #define DEBUG_US_ADD
+
+#ifdef DEBUG_US_ADD
+#include <stdio.h>
+void dump(UChar32 c) {
+    if (c <= 0xFF) {
+        printf("%c", (char)c);
+    } else {
+        printf((c<0x10000)?"U+%04X":"U+%06X", c);
+    }
+}
+void dump(const UChar32* list, int32_t len) {
+    printf("[");
+    for (int32_t i=0; i<len; ++i) {
+        if (i != 0) printf(", ");
+        dump(list[i]);
+    }
+    printf("]");
+}
+#endif
 
 /**
  * Adds the specified character to this set if it is not already
@@ -1052,7 +1078,111 @@ UnicodeSet& UnicodeSet::add(UChar32 start, UChar32 end) {
  * the call leaves this set unchanged.
  */
 UnicodeSet& UnicodeSet::add(UChar32 c) {
-    return add(c, c);
+    // find smallest i such that c < list[i]
+    // if odd, then it is IN the set
+    // if even, then it is OUT of the set
+    int32_t i = findCodePoint(c);
+
+    // already in set?
+    if ((i & 1) != 0) return *this;
+    
+    // HIGH is 0x110000
+    // assert(list[len-1] == HIGH);
+    
+    // empty = [HIGH]
+    // [start_0, limit_0, start_1, limit_1, HIGH]
+    
+    // [..., start_i-1, limit_i-1, start_i, limit_i, ..., HIGH]
+    //                             ^
+    //                             list[i]
+
+    // i == 0 means c is before the first range
+
+#ifdef DEBUG_US_ADD
+    printf("Add of ");
+    dump(c);
+    printf(" found at %d", i);
+    printf(": ");
+    dump(list, len);
+    printf(" => ");
+#endif
+
+    if (c == list[i]-1) {
+        // c is before start of next range
+        list[i] = c;
+        // if we touched the HIGH mark, then add a new one
+        if (c == (UNICODESET_HIGH - 1)) {
+            ensureCapacity(len+1);
+            list[len++] = UNICODESET_HIGH;
+        }
+        if (i > 0 && c == list[i-1]) {
+            // collapse adjacent ranges
+
+            // [..., start_i-1, c, c, limit_i, ..., HIGH]
+            //                     ^
+            //                     list[i]
+
+            //for (int32_t k=i-1; k<len-2; ++k) {
+            //    list[k] = list[k+2];
+            //}
+            UChar32* dst = list + i - 1;
+            UChar32* src = dst + 2;
+            UChar32* srclimit = list + len;
+            while (src < srclimit) *(dst++) = *(src++);
+
+            len -= 2;
+        }
+    }
+
+    else if (i > 0 && c == list[i-1]) {
+        // c is after end of prior range
+        list[i-1]++;
+        // no need to chcek for collapse here
+    }
+
+    else {
+        // At this point we know the new char is not adjacent to
+        // any existing ranges, and it is not 10FFFF.
+
+
+        // [..., start_i-1, limit_i-1, start_i, limit_i, ..., HIGH]
+        //                             ^
+        //                             list[i]
+
+        // [..., start_i-1, limit_i-1, c, c+1, start_i, limit_i, ..., HIGH]
+        //                             ^
+        //                             list[i]
+
+        ensureCapacity(len+2);
+
+        //for (int32_t k=len-1; k>=i; --k) {
+        //    list[k+2] = list[k];
+        //}
+        UChar32* src = list + len;
+        UChar32* dst = src + 2;
+        UChar32* srclimit = list + i;
+        while (src > srclimit) *(--dst) = *(--src);
+
+        list[i] = c;
+        list[i+1] = c+1;
+        len += 2;
+    }
+     
+#ifdef DEBUG_US_ADD
+    dump(list, len);
+    printf("\n");
+
+    for (i=1; i<len; ++i) {
+        if (list[i] <= list[i-1]) {
+            // Corrupt array!
+            printf("ERROR: list has been corrupted\n");
+            exit(1);
+        }
+    } 
+#endif
+  
+    pat.truncate(0);
+    return *this;
 }
 
 /**
