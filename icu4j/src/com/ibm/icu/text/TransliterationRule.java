@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliterationRule.java,v $ 
- * $Date: 2000/04/25 17:17:37 $ 
- * $Revision: 1.20 $
+ * $Date: 2000/04/28 01:22:01 $ 
+ * $Revision: 1.21 $
  *
  *****************************************************************************************
  */
@@ -44,7 +44,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.20 $ $Date: 2000/04/25 17:17:37 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.21 $ $Date: 2000/04/28 01:22:01 $
  */
 class TransliterationRule {
     /**
@@ -371,11 +371,11 @@ class TransliterationRule {
      */
     public String toString() {
         return getClass().getName() + '{'
-            + Utility.escape((anteContextLength > 0 ? ("(" + pattern.substring(0, anteContextLength) +
-                                              ") ") : "")
+            + Utility.escape((anteContextLength > 0 ? (pattern.substring(0, anteContextLength) +
+                                              " {") : "")
                      + pattern.substring(anteContextLength, anteContextLength + keyLength)
                      + (anteContextLength + keyLength < pattern.length() ?
-                        (" (" + pattern.substring(anteContextLength + keyLength) + ")") : "")
+                        ("} " + pattern.substring(anteContextLength + keyLength)) : "")
                      + " > "
                      + (cursorPos < output.length()
                         ? (output.substring(0, cursorPos) + '|' + output.substring(cursorPos))
@@ -517,6 +517,9 @@ class TransliterationRule {
 
 /**
  * $Log: TransliterationRule.java,v $
+ * Revision 1.21  2000/04/28 01:22:01  alan
+ * Update syntax displayed by toString
+ *
  * Revision 1.20  2000/04/25 17:17:37  alan
  * Add Replaceable.copy to retain out-of-band info during reordering.
  *
