@@ -25,8 +25,8 @@
 #include "uprint.h"
 
 /* Protos */
-static void usage();
-static void version();
+static void usage(void);
+static void version(void);
 static void cal(int32_t month, int32_t year,
 		UBool useLongNames, UErrorCode *status);
 static void get_days(const UChar *days [], UBool useLongNames, 

@@ -28,8 +28,8 @@
 #include "uprint.h"
 
 /* Protos */
-static void usage();
-static void version();
+static void usage(void);
+static void version(void);
 static void date(const UChar *tz, UDateFormatStyle style, UErrorCode *status);
 int main(int argc, char **argv);
 
