@@ -146,7 +146,7 @@ void pkg_mode_files(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
   }
     
   sprintf(tmp, "install: $(COPIEDDEST)\n"
-          "\t$(INSTALL-S) $(DATAFILEPATHS) $(INSTALLTO)\n\n");
+          "\t$(INSTALL_DATA) $(DATAFILEPATHS) $(INSTALLTO)\n\n");
 
   T_FileStream_writeLine(makefile, tmp);
 }
