@@ -361,6 +361,10 @@ SOURCE=.\trcoll.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\trnserr.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\tscoll.cpp
 # End Source File
 # Begin Source File
@@ -694,6 +698,10 @@ SOURCE=.\transtst.h
 # Begin Source File
 
 SOURCE=.\trcoll.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\trnserr.h
 # End Source File
 # Begin Source File
 
