@@ -14,6 +14,7 @@
 #include "unicode/ustring.h"
 #include "unicode/normlzr.h"
 #include "cpputils.h"
+#include "cstring.h"
 
 
 static uint8_t utf16fixup[32] = {
@@ -29,8 +30,15 @@ static uint8_t utf16fixup[32] = {
 #include "ucmp32.h"
 #include "tcoldata.h"
 #include "tables.h"
-#define UCOL_MAX_BUFFER 1000
+
+#define UCOL_DEBUG
+
+#define UCOL_MAX_BUFFER 512
+#define UCOL_MEM_FACTOR_PRIM 12
+#define UCOL_MEM_FACTOR_SEC_PLUS 8
 #define UCOL_WRITABLE_BUFFER_SIZE 256
+#define UCOL_BYTES_PER_PRIM 2
+#define UCOL_NORMALIZATION_GROWTH 2
 
 struct collIterate {
   UChar *string; // Original string
@@ -340,6 +348,47 @@ int32_t ucol_getNextCE(const UCollator *coll, collIterate *source, UErrorCode *s
   return getComplicatedCE(coll, source, status);
 }
 */
+UCollationResult ucol_compareUsingSortKeys(const    UCollator    *coll,
+        const    UChar        *source,
+        int32_t            sourceLength,
+        const    UChar        *target,
+        int32_t            targetLength)
+{
+    uint8_t sourceKey[UCOL_MAX_BUFFER], targetKey[UCOL_MAX_BUFFER];
+    uint8_t *sourceKeyP = sourceKey;
+    uint8_t *targetKeyP = targetKey;
+    int32_t sourceKeyLen = UCOL_MAX_BUFFER, targetKeyLen = UCOL_MAX_BUFFER;
+
+    sourceKeyLen = ucol_getSortKey(coll, source, sourceLength, sourceKeyP, sourceKeyLen);
+    if(sourceKeyLen > UCOL_MAX_BUFFER) {
+        sourceKeyP = (uint8_t*)uprv_malloc(sourceKeyLen*sizeof(uint8_t));
+        sourceKeyLen = ucol_getSortKey(coll, source, sourceLength, sourceKeyP, sourceKeyLen);
+    }
+
+    targetKeyLen = ucol_getSortKey(coll, target, targetLength, targetKeyP, targetKeyLen);
+    if(targetKeyLen > UCOL_MAX_BUFFER) {
+        targetKeyP = (uint8_t*)uprv_malloc(targetKeyLen*sizeof(uint8_t));
+        targetKeyLen = ucol_getSortKey(coll, target, targetLength, targetKeyP, targetKeyLen);
+    }
+
+    int32_t result = uprv_strcmp((const char*)sourceKeyP, (const char*)targetKeyP);
+
+    if(sourceKeyP != sourceKey) {
+        uprv_free(sourceKeyP);
+    }
+
+    if(targetKeyP != targetKey) {
+        uprv_free(targetKeyP);
+    }
+
+    if(result<0) {
+        return UCOL_LESS;
+    } else if(result>0) {
+        return UCOL_GREATER;
+    } else {
+        return UCOL_EQUAL;
+    }
+}
 
 #define UCOL_GETNEXTCE(order, coll, collationSource, status) { \
   if (U_FAILURE((status)) || ((collationSource).pos>=(collationSource).len \
@@ -841,6 +890,9 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
             {
                 sOrder = ucol_getIncrementalCE(coll, &sColl, &status);
                 *(--sFSBEnd) = UCOL_SECONDARYORDER(sOrder);
+                if(sFSBEnd == sourceFrenchSec) { /* overflowing the buffer, bail out */
+                    return alternateIncrementalProcessing(coll, &sColl, &tColl);
+                }
             }
  
             gets = TRUE;
@@ -849,6 +901,9 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
             {
                 tOrder = ucol_getIncrementalCE(coll, &tColl, &status);
                 *(--tFSBEnd) = UCOL_SECONDARYORDER(tOrder);
+                if(tFSBEnd == targetFrenchSec) { /* overflowing the buffer, bail out */
+                    return alternateIncrementalProcessing(coll, &sColl, &tColl);
+                }
             }
         
             gett = TRUE;
@@ -985,8 +1040,11 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
                             bufferFrenchSec = TRUE;
                     }
                 } 
-             sOrder = ucol_getIncrementalCE(coll, &sColl, &status);
-             *(--sFSBEnd) = UCOL_SECONDARYORDER(sOrder);
+                sOrder = ucol_getIncrementalCE(coll, &sColl, &status);
+                *(--sFSBEnd) = UCOL_SECONDARYORDER(sOrder);
+                if(sFSBEnd == sourceFrenchSec) { /* overflowing the buffer, bail out */
+                    return alternateIncrementalProcessing(coll, &sColl, &tColl);
+                }
             }
             //while ((sOrder = ucol_getIncrementalCE(coll, &sColl, &status)) != CollationElementIterator::NULLORDER);
             while (sOrder != UCOL_NULLORDER);
@@ -1013,6 +1071,9 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
                 } 
                 tOrder = ucol_getIncrementalCE(coll, &tColl, &status);
                 *(--tFSBEnd) = UCOL_SECONDARYORDER(tOrder);
+                if(tFSBEnd == targetFrenchSec) { /* overflowing the buffer, bail out */
+                    return alternateIncrementalProcessing(coll, &sColl, &tColl);
+                }
             }
             while ( tOrder != UCOL_NULLORDER);
         }
@@ -1090,6 +1151,8 @@ ucol_strcoll(    const    UCollator    *coll,
     UErrorCode status = U_ZERO_ERROR;
 
     UChar normSource[UCOL_MAX_BUFFER], normTarget[UCOL_MAX_BUFFER];
+    UChar *normSourceP = normSource;
+    UChar *normTargetP = normTarget;
     uint32_t normSourceLength = UCOL_MAX_BUFFER, normTargetLength = UCOL_MAX_BUFFER;
 
     collIterate sColl, tColl;
@@ -1097,10 +1160,42 @@ ucol_strcoll(    const    UCollator    *coll,
     if(cppColl->getDecomposition() == Normalizer::NO_OP) {
         init_collIterate(source, sourceLength, &sColl, FALSE);
         init_collIterate(target, targetLength, &tColl, FALSE);
-    } else {
+    } else { /* TODO: This is bad behaved if we're working with small buffers */
+             /* We really need the normalization quick check here*/
 	    UNormalizationMode normMode = ucol_getNormalization(coll);
         normSourceLength = u_normalize(source, sourceLength, normMode, 0, normSource, normSourceLength, &status);
+        if(U_FAILURE(status)) { /* This would be buffer overflow */
+            normSourceP = (UChar *)uprv_malloc((normSourceLength+1)*sizeof(UChar));
+            status = U_ZERO_ERROR;
+            normSourceLength = u_normalize(source, sourceLength, normMode, 0, normSourceP, normSourceLength+1, &status);
+            normTargetLength = u_normalize(target, targetLength, normMode, 0, normTargetP, normTargetLength, &status);
+            if(U_FAILURE(status)) { /* This would be buffer overflow */
+                normTargetP = (UChar *)uprv_malloc((normTargetLength+1)*sizeof(UChar));
+                status = U_ZERO_ERROR;
+                normTargetLength = u_normalize(target, targetLength, normMode, 0, normTargetP, normTargetLength+1, &status);
+            }
+            Normalizer::EMode mode = cppColl->getDecomposition();
+            cppColl->setDecomposition(Normalizer::NO_OP);
+            UCollationResult result = ucol_strcoll(coll, normSourceP, normSourceLength, normTargetP, normTargetLength);
+            cppColl->setDecomposition(mode);
+            uprv_free(normSourceP);
+            if(normTargetP != normTarget) {
+                uprv_free(normTargetP);
+            }
+            return result;
+        }
         normTargetLength = u_normalize(target, targetLength, normMode, 0, normTarget, normTargetLength, &status);
+        if(U_FAILURE(status)) { /* This would be buffer overflow */
+            normTargetP = (UChar *)uprv_malloc((normTargetLength+1)*sizeof(UChar));
+            status = U_ZERO_ERROR;
+            normTargetLength = u_normalize(target, targetLength, normMode, 0, normTargetP, normTargetLength+1, &status);
+            Normalizer::EMode mode = cppColl->getDecomposition();
+            cppColl->setDecomposition(Normalizer::NO_OP);
+            UCollationResult result = ucol_strcoll(coll, normSourceP, normSourceLength, normTargetP, normTargetLength);
+            cppColl->setDecomposition(mode);
+            uprv_free(normTargetP);
+            return result;
+        }
         init_collIterate(normSource, normSourceLength, &sColl, TRUE);
         init_collIterate(normTarget, normTargetLength, &tColl, TRUE);
 	}
@@ -1321,6 +1416,9 @@ ucol_strcoll(    const    UCollator    *coll,
             {
                 UCOL_GETNEXTCE(sOrder, coll, sColl, status);
                 *(--sFSBEnd) = UCOL_SECONDARYORDER(sOrder);
+                if(sFSBEnd == sourceFrenchSec) { /* overflowing the buffer, bail out */
+                    return ucol_compareUsingSortKeys(coll, source, sourceLength, target, targetLength);
+                }
             }
 
             gets = TRUE;
@@ -1329,6 +1427,9 @@ ucol_strcoll(    const    UCollator    *coll,
             {
                 UCOL_GETNEXTCE(tOrder, coll, tColl, status);
                 *(--tFSBEnd) = UCOL_SECONDARYORDER(tOrder);
+                if(tFSBEnd == targetFrenchSec) { /* overflowing the buffer, bail out */
+                    return ucol_compareUsingSortKeys(coll, source, sourceLength, target, targetLength);
+                }
             }
         
             gett = TRUE;
@@ -1465,8 +1566,11 @@ ucol_strcoll(    const    UCollator    *coll,
                             bufferFrenchSec = TRUE;
                     }
                 } 
-             UCOL_GETNEXTCE(sOrder, coll, sColl, status);
-             *(--sFSBEnd) = UCOL_SECONDARYORDER(sOrder);
+                UCOL_GETNEXTCE(sOrder, coll, sColl, status);
+                *(--sFSBEnd) = UCOL_SECONDARYORDER(sOrder);
+                if(sFSBEnd == sourceFrenchSec) { /* overflowing the buffer, bail out */
+                    return ucol_compareUsingSortKeys(coll, source, sourceLength, target, targetLength);
+                }
             }
             //while ((sOrder = ucol_getNextCE(coll, &sColl, &status)) != CollationElementIterator::NULLORDER);
             while (sOrder != UCOL_NULLORDER);
@@ -1493,6 +1597,9 @@ ucol_strcoll(    const    UCollator    *coll,
                 } 
                 UCOL_GETNEXTCE(tOrder, coll, tColl, status);
                 *(--tFSBEnd) = UCOL_SECONDARYORDER(tOrder);
+                if(tFSBEnd == targetFrenchSec) { /* overflowing the buffer, bail out */
+                    return ucol_compareUsingSortKeys(coll, source, sourceLength, target, targetLength);
+                }
             }
             while ( tOrder != UCOL_NULLORDER);
         }
@@ -1590,62 +1697,60 @@ ucol_getSortKey(const    UCollator    *coll,
 
 	UErrorCode status = U_ZERO_ERROR;
 
-    uint8_t prim[2*UCOL_MAX_BUFFER], second[UCOL_MAX_BUFFER], tert[UCOL_MAX_BUFFER];
+    uint8_t prim[UCOL_BYTES_PER_PRIM*UCOL_MAX_BUFFER], second[UCOL_MAX_BUFFER], tert[UCOL_MAX_BUFFER];
 
     uint8_t *primaries = prim, *secondaries = second, *tertiaries = tert;
 
-    UChar normBuffer[2*UCOL_MAX_BUFFER];
+    UChar normBuffer[UCOL_NORMALIZATION_GROWTH*UCOL_MAX_BUFFER];
     UChar *normSource = normBuffer;
-    int32_t normSourceLen = 2048;
-
-    for(i = 0; i<UCOL_MAX_BUFFER; i++) {
-        prim[i]=second[i]=tert[i]='\0';
-    }
-
-    for(i = UCOL_MAX_BUFFER; i<2*UCOL_MAX_BUFFER; i++) {
-        prim[i]=normBuffer[i]='\0';
-    }
-
+    int32_t normSourceLen = UCOL_NORMALIZATION_GROWTH*UCOL_MAX_BUFFER;
 
 	int32_t len = (sourceLength == -1 ? u_strlen(source) : sourceLength);
 
-    UBool  compareSec   = (((RuleBasedCollator *)coll)->getStrength() >= Collator::SECONDARY);
-    UBool  compareTer   = (((RuleBasedCollator *)coll)->getStrength() >= Collator::TERTIARY);
-    UBool  compareIdent = (((RuleBasedCollator *)coll)->getStrength() == Collator::IDENTICAL);
+    UColAttributeValue strength = ucol_getAttribute(coll, UCOL_STRENGTH, &status);
 
-    if(len > UCOL_MAX_BUFFER) {
-        primaries = (uint8_t *)uprv_malloc(6*len*sizeof(uint8_t));
+    UBool  compareSec   = (strength >= UCOL_SECONDARY);
+    UBool  compareTer   = (strength >= UCOL_TERTIARY);
+    UBool  compareQuad  = (strength >= UCOL_QUATERNARY);
+    UBool  compareIdent = (strength == UCOL_IDENTICAL);
+
+   collIterate s;
+   init_collIterate((UChar *)source, len, &s, FALSE);
+
+    // If we need to normalize, we'll do it all at once at the beggining!
+    UNormalizationMode normMode = ucol_getNormalization(coll);
+    if(normMode != UNORM_NONE) {
+        normSourceLen = u_normalize(source, sourceLength, normMode, 0, normSource, normSourceLen, &status);
+        if(U_FAILURE(status)) {
+            status=U_ZERO_ERROR;
+            normSource = (UChar *) uprv_malloc((normSourceLen+1)*sizeof(UChar));
+            normSourceLen = u_normalize(source, sourceLength, normMode, 0, normSource, (normSourceLen+1), &status);
+        }
+    	normSource[normSourceLen] = 0;
+		s.string = normSource;
+        s.pos = normSource;
+		s.len = normSource+normSourceLen;
+	}
+
+    len = s.len-s.pos;
+
+    /* TODO: logic for deciding whether we need to allocate memory should be better */
+    /* Generally, (and see below for the reason) we will never get more primaries than */
+    /* secondaries or tertiaries. Also, a primary strenght collation with a small stack buffer */
+    /* will suffer from additional allocations */
+    if(len*(UCOL_BYTES_PER_PRIM*UCOL_MEM_FACTOR_PRIM + 4*UCOL_MEM_FACTOR_SEC_PLUS)>= UCOL_BYTES_PER_PRIM*UCOL_MAX_BUFFER) {
+        primaries = (uint8_t *)uprv_malloc((UCOL_BYTES_PER_PRIM*UCOL_MEM_FACTOR_PRIM+4*UCOL_MEM_FACTOR_SEC_PLUS)*(len+1)*sizeof(uint8_t));
         if(compareSec) {
-            secondaries = (uint8_t *)uprv_malloc(2*len*sizeof(uint8_t));
+            secondaries = (uint8_t *)uprv_malloc(UCOL_MEM_FACTOR_SEC_PLUS*(len+1)*sizeof(uint8_t));
         }
         if(compareTer) {
-            tertiaries = (uint8_t *)uprv_malloc(2*len*sizeof(uint8_t));
+            tertiaries = (uint8_t *)uprv_malloc(UCOL_MEM_FACTOR_SEC_PLUS*(len+1)*sizeof(uint8_t));
         }
     }
 
     uint8_t *primstart = primaries;
     uint8_t *secstart = secondaries;
     uint8_t *terstart = tertiaries;
-
-   collIterate s;
-   init_collIterate((UChar *)source, len, &s, FALSE);
-
-    // If we need to normalize, we'll do it all at once at the beggining!
-    if(((RuleBasedCollator *)coll)->getDecomposition() != Normalizer::NO_OP) {
-		UnicodeString normalized;
-		Normalizer::normalize(UnicodeString(source, sourceLength), ((RuleBasedCollator *)coll)->getDecomposition(),
-			0, normalized, status);
-		normSourceLen = normalized.length();
-
-        if(normSourceLen > UCOL_MAX_BUFFER) {
-            normSource = (UChar *) uprv_malloc(normSourceLen*sizeof(UChar));
-        }
-		normalized.extract(0, normSourceLen, normSource);
-		normSource[normSourceLen] = 0;
-		s.string = normSource;
-        s.pos = normSource;
-		s.len = normSource+normSourceLen;
-	}
 
     uint32_t order = 0;
 
@@ -1679,8 +1784,10 @@ ucol_getSortKey(const    UCollator    *coll,
         UCOL_GETNEXTCE(order, coll, s, status);
     }
 
-
-
+    /* TODO: we shouldn't overuse primary buffer - it makes it hard to do proper allocation */
+    /* and guessing how much memory we need. Instead, it would be good to start stuffing data */
+    /* in the resulting buffer as soon as we get all the values. After an overflow, we return */
+    /* the memory needed */
     if(compareSec) {
     *(primaries++) = UCOL_LEVELTERMINATOR;
       uint32_t secsize = secondaries-secstart;
@@ -1849,8 +1956,7 @@ U_CAPI UColAttributeValue ucol_getAttribute(const UCollator *coll, UColAttribute
 }
 
 U_CAPI UCollator *ucol_safeClone(const UCollator *coll, void *stackBuffer, uint32_t bufferSize, UErrorCode *status) {
-	*status = U_UNSUPPORTED_ERROR;
-	return NULL;
+	return (UCollator *)(((RuleBasedCollator *)coll)->safeClone());
 }
 
 U_CAPI int32_t ucol_getRulesEx(const UCollator *coll, UColRuleOption delta, UChar *buffer, int32_t bufferLen) {

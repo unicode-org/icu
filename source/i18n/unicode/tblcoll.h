@@ -898,6 +898,8 @@ private:
                           const UnicodeString&    name,
                           const UnicodeString&    suffix);
 
+  static UBool initMutex(void);
+
   int32_t getStrengthOrder(NormalizerIterator* cursor, 
                                     UErrorCode status) const;
   VectorOfInt* makeReorderedBuffer(NormalizerIterator* cursor,
@@ -944,6 +946,9 @@ private:
   static       UnicodeString      DEFAULTRULES;
 
   static  const char*             kFilenameSuffix;
+
+  static UBool isMutexInited;
+  static UMTX collMutex;
 
         //--------------------------------------------------------------------------
         // Data Members
