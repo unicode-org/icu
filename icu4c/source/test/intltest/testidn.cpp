@@ -180,12 +180,6 @@ strprepProfileLineFn(void *context,
         /* store the mapping */
         compareMapping(code,mapping, length,USPREP_MAP);
 
-    }else if(uprv_strstr(typeName, usprepTypeNames[USPREP_LABEL_SEPARATOR])!=NULL){
-
-        u_parseCodePointRange(fields[0][0], &rangeStart,&rangeEnd, pErrorCode);
-
-        /* store the range */
-        compareFlagsForRange(rangeStart,rangeEnd,USPREP_LABEL_SEPARATOR);
     }else{
         *pErrorCode = U_INVALID_FORMAT_ERROR;
     }
@@ -297,9 +291,6 @@ testAllCodepoints(TestIDNA& test){
             }
             if(type == USPREP_MAP){
                 mapped++;
-            }
-            if(type == USPREP_LABEL_SEPARATOR){
-                mappedWithNorm++;
             }
         }else{
             noValueInTrie++;

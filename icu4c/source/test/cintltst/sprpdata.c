@@ -77,13 +77,6 @@ strprepProfileLineFn(void *context,
 
         /* compare the mapping */
         compareMapping(data, code,mapping, length,USPREP_MAP);
-
-    }else if(strstr(typeName, usprepTypeNames[USPREP_LABEL_SEPARATOR])!=NULL){
-
-        u_parseCodePointRange(fields[0][0], &rangeStart,&rangeEnd, pErrorCode);
-
-        /* compare the range */
-        compareFlagsForRange(data, rangeStart,rangeEnd,USPREP_LABEL_SEPARATOR);
     }else{
         *pErrorCode = U_INVALID_FORMAT_ERROR;
     }

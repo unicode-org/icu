@@ -120,21 +120,25 @@ compareCaseInsensitiveASCII(const UChar* s1, int32_t s1Len,
     return lengthResult;
 }
 
-static inline UBool 
-isLDHChar(UChar32 ch){
-    // high runner case
-    if(ch>0x007A){
-        return FALSE;
+
+/**
+ * Ascertain if the given code point is a label separator as 
+ * defined by the IDNA RFC
+ * 
+ * @param ch The code point to be ascertained
+ * @return true if the char is a label separator
+ * @draft ICU 2.8
+ */
+static inline UBool isLabelSeparator(UChar ch){
+    switch(ch){
+        case 0x002e:
+        case 0x3002:
+        case 0xFF0E:
+        case 0xFF61:
+            return TRUE;
+        default:
+            return FALSE;           
     }
-    //[\\u002D \\u0030-\\u0039 \\u0041-\\u005A \\u0061-\\u007A]
-    if( (ch==0x002D) || 
-        (0x0030 <= ch && ch <= 0x0039) ||
-        (0x0041 <= ch && ch <= 0x005A) ||
-        (0x0061 <= ch && ch <= 0x007A)
-      ){
-        return TRUE;
-    }
-    return FALSE;
 }
 
 // returns the length of the label excluding the separator
@@ -153,7 +157,7 @@ getNextSeparator(UChar *src,int32_t srcLength,UStringPrepProfile* nameprep,
                 *done = TRUE;
                 return i;
             }
-            if(usprep_isLabelSeparator(nameprep, src[i], status)){
+            if(isLabelSeparator(src[i])){
                 *limit = src + (i+1); // go past the delimiter
                 return i;
                 
@@ -162,7 +166,7 @@ getNextSeparator(UChar *src,int32_t srcLength,UStringPrepProfile* nameprep,
     }else{
         int32_t i;
         for(i=0;i<srcLength;i++){
-            if(usprep_isLabelSeparator(nameprep, src[i], status)){
+            if(isLabelSeparator(src[i])){
                 *limit = src + (i+1); // go past the delimiter
                 return i;
             }
@@ -174,6 +178,21 @@ getNextSeparator(UChar *src,int32_t srcLength,UStringPrepProfile* nameprep,
 
         return i;
     }
+}
+static inline UBool isLDHChar(UChar ch){
+    // high runner case
+    if(ch>0x007A){
+        return FALSE;
+    }
+    //[\\u002D \\u0030-\\u0039 \\u0041-\\u005A \\u0061-\\u007A]
+    if( (ch==0x002D) || 
+        (0x0030 <= ch && ch <= 0x0039) ||
+        (0x0041 <= ch && ch <= 0x005A) ||
+        (0x0061 <= ch && ch <= 0x007A)
+      ){
+        return TRUE;
+    }
+    return FALSE;
 }
 
 static int32_t 
