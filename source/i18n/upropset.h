@@ -4,8 +4,8 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/i18n/Attic/upropset.h,v $
-* $Date: 2001/10/18 17:20:02 $
-* $Revision: 1.2 $
+* $Date: 2002/01/23 02:01:19 $
+* $Revision: 1.3 $
 **********************************************************************
 */
 #ifndef _UPROPSET_H_
@@ -59,7 +59,7 @@ class Hashtable;
  * '+' indicates a supported property.
  *
  * @author Alan Liu
- * @version $RCSfile: upropset.h,v $ $Revision: 1.2 $ $Date: 2001/10/18 17:20:02 $
+ * @version $RCSfile: upropset.h,v $ $Revision: 1.3 $ $Date: 2002/01/23 02:01:19 $
  */
 class UnicodePropertySet {
 
@@ -205,9 +205,6 @@ class UnicodePropertySet {
                          int32_t value);
 
     static void init();
-
- public:
-    static void cleanup();
 
  private:
     //----------------------------------------------------------------
