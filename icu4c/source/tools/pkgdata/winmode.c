@@ -28,7 +28,7 @@
 #include "pkgtypes.h"
 #include "makefile.h"
 
-void writeObjRules(UPKGOptions *o,  FileStream *makefile, CharList **objects)
+void writeCmnRules(UPKGOptions *o,  FileStream *makefile, CharList **objects)
 {
   char *p, *baseName;
   char tmp[1024];
@@ -40,6 +40,7 @@ void writeObjRules(UPKGOptions *o,  FileStream *makefile, CharList **objects)
 
   infiles = o->filePaths;
 
+  sprintf(tmp, "$(CMNTARGET) : $(DATAFILEPATHS)\n");
 
   for(;infiles;infiles = infiles->next) {
     baseName = findBasename(infiles->str);
@@ -87,44 +88,46 @@ void writeObjRules(UPKGOptions *o,  FileStream *makefile, CharList **objects)
 
 void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) {
   char tmp[1024];
+  char tmp2[1024];
   CharList *tail = NULL;
   CharList *objects = NULL;
   CharList *iter;
+  UBool isDll = (uprv_strcmp(o->mode, "dll") == 0);
 
   if(U_FAILURE(*status)) { 
     return;
   }
 
-  uprv_strcpy(tmp, LIB_PREFIX);
-  uprv_strcat(tmp, o->shortName);
-  uprv_strcat(tmp, UDATA_SO_SUFFIX);
+  if(isDll) {
+      uprv_strcpy(tmp, LIB_PREFIX);
+      uprv_strcat(tmp, o->shortName);
+      uprv_strcat(tmp, UDATA_SO_SUFFIX);
 
-  /* We should be the only item. So we don't care about the order. */
-  o->outFiles = pkg_appendToList(o->outFiles, &tail, uprv_strdup(tmp));
+      if(o->nooutput || o->verbose) {
+        fprintf(stderr, "# Output %s file: %s%s%s\n", UDATA_SO_SUFFIX, o->targetDir, U_FILE_SEP_STRING, tmp);
+      }
 
-  if(o->nooutput || o->verbose) {
-    fprintf(stderr, "# Output %s file: %s%s%s\n", UDATA_SO_SUFFIX, o->targetDir, U_FILE_SEP_STRING, tmp);
+      if(o->nooutput) {
+        *status = U_ZERO_ERROR;
+        return;
+      }
+
+      sprintf(tmp2, "# DLL file to make:\nDLLTARGET=%s\n\n", tmp);
+      T_FileStream_writeLine(makefile, tmp2);
+
+      uprv_strcpy(tmp, UDATA_CMN_PREFIX);
+      uprv_strcat(tmp, o->shortName);
+      uprv_strcat(tmp, UDATA_CMN_INTERMEDIATE_SUFFIX);
+      uprv_strcat(tmp, OBJ_SUFFIX);
+
+      sprintf(tmp2, "# intermediate obj file:\nCMNOBJTARGET=%s\n\n", tmp);
+      T_FileStream_writeLine(makefile, tmp2);
   }
-
-  if(o->nooutput) {
-    *status = U_ZERO_ERROR;
-    return;
-  }
-
-  sprintf(tmp, "# DLL file to make:\nDLLTARGET=%s\n\n", o->outFiles->str);
-  T_FileStream_writeLine(makefile, tmp);
-
-  pkg_deleteList(o->outFiles);
-  tail = NULL;
-
   uprv_strcpy(tmp, UDATA_CMN_PREFIX);
   uprv_strcat(tmp, o->shortName);
   uprv_strcat(tmp, UDATA_CMN_SUFFIX);
   
    
-	/* We should be the only item. So we don't care about the order. */
-
-	o->outFiles = pkg_appendToList(o->outFiles, &tail, uprv_strdup(tmp));
 
 	if(o->nooutput || o->verbose) {
 	  fprintf(stderr, "# Output file: %s%s%s\n", o->targetDir, U_FILE_SEP_STRING, tmp);
@@ -135,40 +138,26 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
 	  return;
 	}
 
-/*
-	sprintf(tmp, "# File to make:\nTARGET=%s%s%s\n\nTARGETNAME=%s\n", o->targetDir,
-			U_FILE_SEP_STRING,
-			o->outFiles->str,
-			o->outFiles->str);
-	T_FileStream_writeLine(makefile, tmp);
-*/
-	sprintf(tmp, "# common file to make:\nCMNTARGET=%s\n\n", o->outFiles->str);
-  T_FileStream_writeLine(makefile, tmp);
+    sprintf(tmp2, "# common file to make:\nCMNTARGET=%s\n\n", tmp);
+    T_FileStream_writeLine(makefile, tmp2);
 
-  pkg_deleteList(o->outFiles);
- 	o->outFiles = pkg_appendToList(o->outFiles, &tail, uprv_strdup(tmp));
+  if(isDll) {
+      sprintf(tmp, "all: $(TARGETDIR)\\$(DLLTARGET)\n\n");
+      T_FileStream_writeLine(makefile, tmp);
 
-
-  uprv_strcpy(tmp, UDATA_CMN_PREFIX);
-  uprv_strcat(tmp, o->shortName);
-  uprv_strcat(tmp, UDATA_CMN_INTERMEDIATE_SUFFIX);
-  uprv_strcat(tmp, OBJ_SUFFIX);
-
-  sprintf(tmp, "# intermediate obj file:\nCMNOBJTARGET=%s\n\n", o->outFiles->str);
-
-  sprintf(tmp, "all: $(TARGETDIR)\\$(DLLTARGET)\n\n");
-  T_FileStream_writeLine(makefile, tmp);
-
-  sprintf(tmp, "$(DLLTARGET): $(CMNOBJTARGET)\n"
-				"\t@$(LINK32) $(LINK32_FLAGS) $?\n\n");
-  T_FileStream_writeLine(makefile, tmp);
-
-  sprintf(tmp, "$(CMNOBJTARGET): $(CMNTARGET)\n"
-				"\t@$(GENCCODE) $(GENCOPTIONS) -o $(TARGETDIR) $?\n\n");
-  T_FileStream_writeLine(makefile, tmp);
+      sprintf(tmp, "$(DLLTARGET): $(CMNOBJTARGET)\n"
+				    "\t@$(LINK32) $(LINK32_FLAGS) $?\n\n");
+      T_FileStream_writeLine(makefile, tmp);
+      sprintf(tmp, "$(CMNOBJTARGET): $(CMNTARGET)\n"
+				    "\t@$(GENCCODE) $(GENCOPTIONS) -o $(TARGETDIR) $?\n\n");
+      T_FileStream_writeLine(makefile, tmp);
+  } else {
+      sprintf(tmp, "all: $(TARGETDIR)\\$(CMNTARGET)\n\n");
+      T_FileStream_writeLine(makefile, tmp);
+  }
 
 	/* Write compile rules */
-  writeObjRules(o, makefile, &objects);
+  writeCmnRules(o, makefile, &objects);
 }
 
 void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
