@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedTransliterator.java,v $
- * $Date: 2001/10/03 00:14:22 $
- * $Revision: 1.47 $
+ * $Date: 2001/10/05 18:15:54 $
+ * $Revision: 1.48 $
  *
  *****************************************************************************************
  */
@@ -279,7 +279,7 @@ import com.ibm.text.resources.ResourceReader;
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
  *
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.47 $ $Date: 2001/10/03 00:14:22 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.48 $ $Date: 2001/10/05 18:15:54 $
  */
 public class RuleBasedTransliterator extends Transliterator {
 
@@ -352,7 +352,35 @@ public class RuleBasedTransliterator extends Transliterator {
                       int direction,
                       StringBuffer idBlockResult,
                       int[] idSplitPointResult) {
-        TransliteratorParser parser = new TransliteratorParser(new String[] { rules }, direction);
+        return _parse(new TransliteratorParser(new String[] { rules }, direction),
+                      idBlockResult, idSplitPointResult);
+    }
+
+    /**
+     * Parse a given set of rules.  Return up to three pieces of
+     * parsed data.  These are the header ::id block, the rule block,
+     * and the footer ::id block.  Any or all of these may be empty.
+     * If the ::id blocks are empty, their corresponding parameters
+     * are returned as the empty string.  If there are no rules, the
+     * TransliterationRuleData result is 0.
+     * @param ruleDataResult caller owns the pointer stored here.
+     * May be NULL.
+     * @param headerRule string including semicolons for the header
+     * ::id block.  May be empty.
+     * @param footerRule string including semicolons for the footer
+     * ::id block.  May be empty.
+     */
+    static Data parse(ResourceReader rules,
+                      int direction,
+                      StringBuffer idBlockResult,
+                      int[] idSplitPointResult) {
+        return _parse(new TransliteratorParser(rules, direction),
+                      idBlockResult, idSplitPointResult);
+    }
+
+    static Data _parse(TransliteratorParser parser,
+                       StringBuffer idBlockResult,
+                       int[] idSplitPointResult) {
         idBlockResult.setLength(0);
         idBlockResult.append(parser.idBlock);
         idSplitPointResult[0] = parser.idSplitPoint;
@@ -498,6 +526,9 @@ public class RuleBasedTransliterator extends Transliterator {
 
 /**
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.48  2001/10/05 18:15:54  alan
+ * jitterbug 74: finish port of Source-Target/Variant code incl. TransliteratorRegistry and tests
+ *
  * Revision 1.47  2001/10/03 00:14:22  alan
  * jitterbug 73: finish quantifier and supplemental char support
  *

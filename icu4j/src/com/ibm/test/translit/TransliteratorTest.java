@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/TransliteratorTest.java,v $
- * $Date: 2001/10/05 06:30:38 $
- * $Revision: 1.49 $
+ * $Date: 2001/10/05 18:16:59 $
+ * $Revision: 1.50 $
  *
  *****************************************************************************************
  */
@@ -1204,7 +1204,77 @@ public class TransliteratorTest extends TestFmwk {
                "bb x xb");
     }
 
-    public void TestSTV_TODO() {
+    static class TestFact implements Transliterator.Factory {
+        static class NameableNullTrans extends NullTransliterator {
+            public NameableNullTrans(String id) {
+                setID(id);
+            }
+        };
+        String id;
+        public TestFact(String theID) {
+            id = theID;
+        }
+        public Transliterator getInstance() {
+            return new NameableNullTrans(id);
+        }
+    };
+
+    public void TestSTV() {
+        Enumeration es = Transliterator.getAvailableSources();
+        for (int i=0; es.hasMoreElements(); ++i) {
+            String source = (String) es.nextElement();
+            logln("" + i + ": " + source);
+            if (source.length() == 0) {
+                errln("FAIL: empty source");
+                continue;
+            }
+            Enumeration et = Transliterator.getAvailableTargets(source);
+            for (int j=0; et.hasMoreElements(); ++j) {
+                String target = (String) et.nextElement();
+                logln(" " + j + ": " + target);
+                if (target.length() == 0) {
+                    errln("FAIL: empty target");
+                    continue;
+                }
+                Enumeration ev = Transliterator.getAvailableVariants(source, target);
+                for (int k=0; ev.hasMoreElements(); ++k) {
+                    String variant = (String) ev.nextElement();
+                    if (variant.length() == 0) { 
+                        logln("  " + k + ": <empty>");
+                    } else {
+                        logln("  " + k + ": " + variant);
+                    }
+                }
+            }
+        }
+
+        // Test registration
+        String[] IDS = { "Fieruwer", "Seoridf-Sweorie", "Oewoir-Oweri/Vsie" };
+        for (int i=0; i<3; ++i) {
+            Transliterator.registerFactory(IDS[i], new TestFact(IDS[i]));
+            try {
+                Transliterator t = Transliterator.getInstance(IDS[i]);
+                if (t.getID().equals(IDS[i])) {
+                    logln("Ok: Registration/creation succeeded for ID " +
+                          IDS[i]);
+                } else {
+                    errln("FAIL: Registration of ID " +
+                          IDS[i] + " creates ID " + t.getID());
+                }
+                Transliterator.unregister(IDS[i]);
+                try {
+                    t = Transliterator.getInstance(IDS[i]);
+                    errln("FAIL: Unregistration failed for ID " +
+                          IDS[i] + "; still receiving ID " + t.getID());
+                } catch (IllegalArgumentException e2) {
+                    // Good; this is what we expect
+                    logln("Ok; Unregistered " + IDS[i]);
+                }
+            } catch (IllegalArgumentException e) {
+                errln("FAIL: Registration/creation failed for ID " +
+                      IDS[i]);
+            }
+        }
     }
 
     /**
@@ -1225,6 +1295,16 @@ public class TransliteratorTest extends TestFmwk {
             errln("FAIL: inverse of \"Greek-Latin; Title()\" is \"" +
                   t.getID() + "\", expected \"" + exp + "\"");
         }
+    }
+
+    /**
+     * Test NFD chaining with RBT
+     */
+    public void TestNFDChainRBT() {
+        Transliterator t = Transliterator.createFromRules(
+                               "TEST", "::NFD; aa > Q; a > q;",
+                               Transliterator.FORWARD);
+        expect(t, "aa", "Q");
     }
 
     //======================================================================
