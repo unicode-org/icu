@@ -1146,7 +1146,7 @@ main(int argc, char* argv[])
     CalendarTimeZoneTest::cleanup();
 #endif
 
-    delete _testDataPath;
+    delete[] _testDataPath;
     _testDataPath = 0;
 
     fprintf(stdout, "\n--------------------------------------\n");
