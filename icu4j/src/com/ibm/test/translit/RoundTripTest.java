@@ -115,6 +115,8 @@ public class RoundTripTest extends TestFmwk {
                             || c == '\u0342' || c == '\u0345'
                             || c == '\u037A' || c == '\u03D2' || c == '\u03D3' || c == '\u03D4' || c == '\u03F2'
                             || c == '\u03F3' || c == '\u03F4' || c == '\u03F5'
+                            || c == '\u03D0' || c == '\u03D1' || c == '\u03D5'
+                            || c == '\u03D6' || c == '\u03F0' || c == '\u03F1'
                             ) return false;
                     }
                     return true;
@@ -133,7 +135,10 @@ public class RoundTripTest extends TestFmwk {
                 for (int i = 0; i < decomp.length(); ++i) {
                     char c = decomp.charAt(i);
                     if (c == '\u037A' || c == '\u03D2' || c == '\u03D3' || c == '\u03D4' || c == '\u03F2'
-                        || c == '\u03F3' || c == '\u03F4' || c == '\u03F5') return false;
+                        || c == '\u03F3' || c == '\u03F4' || c == '\u03F5'
+                        || c == '\u03D0' || c == '\u03D1' || c == '\u03D5'
+                        || c == '\u03D6' || c == '\u03F0' || c == '\u03F1'
+                        ) return false;
                     if (UCharacter.isLetter(c)) {
                         ++letterCount;
                         if (noLetterYet) {

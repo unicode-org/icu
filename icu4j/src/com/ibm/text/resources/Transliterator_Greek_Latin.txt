@@ -3,8 +3,8 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/resources/Attic/Transliterator_Greek_Latin.txt,v $
-# $Date: 2001/10/31 20:19:00 $
-# $Revision: 1.5 $
+# $Date: 2001/11/01 02:26:53 $
+# $Revision: 1.6 $
 #--------------------------------------------------------------------
 
 # Rules are predicated on running NFD first, and NFC afterwards
@@ -34,14 +34,23 @@ $ucgvowel = [ΑΕΗΙΟΥΩ] ;
 $gvowel = [$lcgvowel $ucgvowel] ; 
 $lcgvowelC = [$lcgvowel $accent] ; 
 
-$vowel = [ AEIOUaeiou $gvowel] ; 
+$evowel = [aeiouyAEIOUY];
+$vowel = [ $evowel $gvowel] ; 
 
 $beforeLower = $accent * $lower ; 
 
-$gammaLike = [ΓΚΞΧγκξχ] ; 
+$gammaLike = [ΓΚΞΧγκξχϰ] ; 
+$egammaLike = [GKXCgkxc] ; 
 $smooth = ̓ ; 
 $rough = ̔ ; 
 $iotasub = ͅ ; 
+
+$evowel_i = [$evowel-[iI]] ;
+
+$caron = \u030C;
+
+$afterLetter = [:^L:] [\'[:M:]]* ;
+$beforeLetter = [\'[:M:]]* [:^L:] ;
 
 # Fix punctuation
 
@@ -64,6 +73,7 @@ $upper $accent * { $iotasub > I ;
 $iotasub > i ; 
 
 | $1 $iotasub < ([:L:] $macron [:M:]*) i ;
+| $1 $iotasub < ([:L:] $macron [:M:]*) I ;
 
 # BREATHING
 
@@ -96,25 +106,37 @@ $iotasub > i ;
 
 # Go backwards with H
 
-| $1 $rough < h ([aeiouyAEIOUY] $macron? $ddot? [aeiouyAEIOUY] $macron?) ;
-| $1 $rough < h ([aeiouyAEIOUY] $macron? $ddot?) ;
+| $1 $rough < h ($evowel $macron $ddot? $evowel_i $macron?) ;
+| $1 $rough < h ($evowel $ddot? $evowel $macron?) ;
+| $1 $rough < h ($evowel $macron? $ddot?) ;
 
-| $1 $rough < H ([AEIOUY] $macron?  $ddot?[aeiouyAEIOUY] $macron?) ;
+| $1 $rough < H ([AEIOUY] $macron $ddot? $evowel_i $macron?) ;
+| $1 $rough < H ([AEIOUY] $ddot? $evowel $macron?) ;
 | $1 $rough < H ([AEIOUY] $macron? $ddot?) ;
 
 # titlecase, have to fix individually
-| $1 $rough < H (a $macron?  $ddot? [aeiouyAEIOUY] $macron?) ;
-| $1 $rough < H (e $macron?  $ddot? [aeiouyAEIOUY] $macron?) ;
-| $1 $rough < H (i $macron?  $ddot? [aeiouyAEIOUY] $macron?) ;
-| $1 $rough < H (o $macron?  $ddot? [aeiouyAEIOUY] $macron?) ;
-| $1 $rough < H (u $macron? $ddot? [aeiouyAEIOUY] $macron?) ;
-| $1 $rough < H (y $macron? [aeiouyAEIOUY] $macron?) ;
-| $1 $rough < H (a $macron? $ddot? ) ;
-| $1 $rough < H (e $macron? $ddot? ) ;
-| $1 $rough < H (i $macron? $ddot? ) ;
-| $1 $rough < H (o $macron? $ddot? ) ;
-| $1 $rough < H (u $macron? $ddot? ) ;
-| $1 $rough < H (y $macron? $ddot? ) ;
+# in the future, we should add &uppercase() to make this easier
+
+| A $1 $rough < H a ($macron  $ddot? $evowel_i $macron?) ;
+| E $1 $rough < H e ($macron  $ddot? $evowel_i $macron?) ;
+| I $1 $rough < H i ($macron  $ddot? $evowel_i $macron?) ;
+| O $1 $rough < H o ($macron  $ddot? $evowel_i $macron?) ;
+| U $1 $rough < H u ($macron $ddot? $evowel_i $macron?) ;
+| Y $1 $rough < H y ($macron $ddot? $evowel_i $macron?) ;
+
+| A $1 $rough < H a ($ddot? $evowel $macron?) ;
+| E $1 $rough < H e ($ddot? $evowel $macron?) ;
+| I $1 $rough < H i ($ddot? $evowel $macron?) ;
+| O $1 $rough < H o ($ddot? $evowel $macron?) ;
+| U $1 $rough < H u ($ddot? $evowel $macron?) ;
+| Y $1 $rough < H y ($ddot? $evowel $macron?) ;
+
+| A $1 $rough < H a ($macron? $ddot? ) ;
+| E $1 $rough < H e ($macron? $ddot? ) ;
+| I $1 $rough < H i ($macron? $ddot? ) ;
+| O $1 $rough < H o ($macron? $ddot? ) ;
+| U $1 $rough < H u ($macron? $ddot? ) ;
+| Y $1 $rough < H y ($macron? $ddot? ) ;
 
 # Now do smooth
 
@@ -122,8 +144,10 @@ $iotasub > i ;
 $smooth > ; 
 
 # insert in Greek
- | $1 $smooth < [:^L:] { ([aeiouyAEIOUY] $macron? [aeiouyAEIOUY] $macron?) } [^$smooth$rough] ;
- | $1 $smooth < [:^L:] { ([aeiouyAEIOUY] $macron?) } [^aeiouyAEIOUY$smooth$rough$macron] ;
+
+ | $1 $smooth < [^[:L:][:M:]] { ($evowel $macron? $evowel $macron?) } [^$smooth$rough] ;
+ | $1 $smooth < [^[:L:][:M:]] { ($evowel $macron?) } [^$evowel$smooth$rough] ;
+ | $1 $smooth < [^[:L:][:M:]] { [rR] } [^hH$smooth$rough] ;
 
 # TODO: preserve smooth/rough breathing if not 
 # on initial vowel sequence
@@ -152,9 +176,9 @@ $smooth > ;
 β <> b ; 
 Β <> B ; 
 
-γ } $gammaLike <> n } [gkc] ; 
+γ } $gammaLike <> n } $egammaLike ; 
 γ <> g ; 
-Γ } $gammaLike <> N } [gkc] ; 
+Γ } $gammaLike <> N } $egammaLike ; 
 Γ <> G ; 
 
 δ <> d ; 
@@ -202,11 +226,25 @@ $smooth > ;
 ρ <> r ; 
 Ρ <> R ; 
 
-[Pp] {ς > \'s ; 
-[Pp] {σ > \'s ; 
-σ < [:^L:] [:M:]* { s } [:^L:] ;
-ς <> s } [:^L:] ;
-σ <> s ; 
+# insert separator
+
+[Pp] { } ς > \' ; 
+[Pp] { } σ > \' ;
+
+# Caron means exception
+
+# before a letter, initial
+ς } $beforeLetter <> s $caron } $beforeLetter;
+σ } $beforeLetter <> s } $beforeLetter;
+
+# otherwise, after a letter = final 
+$afterLetter { σ <> $afterLetter { s $caron;
+$afterLetter { ς <> $afterLetter { s ;
+
+# otherwise (isolated) = initial
+ς <> s $caron;
+σ <> s ;
+
 [Pp] { Σ <> \'S ; 
 Σ <> S ; 
 
@@ -262,5 +300,10 @@ $rough <> h ;
 ϵ > | ε ;
 
  ͺ > i;
+
+# delete any trailing ' marks used for roundtripping
+
+ < [Ππ] { \' } [Ss] ;
+ < [Νν] { \' } $egammaLike ;
 
 ::NFC (NFD) ; 
