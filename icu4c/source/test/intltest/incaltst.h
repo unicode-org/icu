@@ -20,14 +20,18 @@ public:
     // IntlTest override
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par );
 public:
-    /** 
-     * Confirm that the registered calendars have the correct type. 
-     */
     void TestTypes(void);
 
+    void TestGregorian(void);
+
     void TestBuddhist(void);
+    void TestBuddhistFormat(void);
+
+    void TestJapanese(void);
+    void TestJapaneseFormat(void);
 
  protected:
+    // Test a Gregorian-Like calendar
     void quasiGregorianTest(Calendar& cal, const Locale& gregoLocale, const int32_t *data);
  
 public: // package

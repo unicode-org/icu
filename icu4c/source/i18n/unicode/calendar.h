@@ -38,7 +38,7 @@ U_NAMESPACE_BEGIN
 class ICUServiceFactory;
 
 /**
- * @draft ICU 2.6
+ * @internal
  */
 typedef const void* URegistryKey;
 
@@ -1139,7 +1139,7 @@ public:
      * or "Eras_gregorian".  
      *
      * @returns static string, for example, "gregorian" or "japanese"
-     * @draft ICU 2.6
+     * @internal
      */
     virtual const char * getType() const = 0;
 
@@ -1465,6 +1465,23 @@ private:
     friend class CalendarFactory;
     friend class CalendarService;
     friend class DefaultCalendarFactory;
+
+    /**
+     * @internal 
+     * @return TRUE if this calendar has the notion of a default century
+     */
+    virtual UBool haveDefaultCentury() const = 0;
+    /**
+     * @internal
+     * @return the start of the default century
+     */
+    virtual UDate defaultCenturyStart() const = 0;
+    /**
+     * @internal 
+     * @return the beginning year of the default century
+     */
+    virtual int32_t defaultCenturyStartYear() const = 0;
+    
 };
 
 // -------------------------------------

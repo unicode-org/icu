@@ -137,11 +137,12 @@ private:
  protected:
     virtual int32_t monthLength(int32_t month) const; 
     virtual int32_t monthLength(int32_t month, int32_t year) const; 
-    int32_t getGregorianYear(UErrorCode& status);
+    int32_t getGregorianYear(UErrorCode& status) const;
     int32_t getMaximum(UCalendarDateFields field) const;
     int32_t getLeastMaximum(UCalendarDateFields field) const;
     virtual int32_t internalGetEra() const;
     virtual void timeToFields(UDate theTime, UBool quick, UErrorCode& status);
+    virtual UBool haveDefaultCentury() const;
 };
 
 inline UClassID

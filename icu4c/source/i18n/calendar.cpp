@@ -36,6 +36,7 @@
 #include "cpputils.h"
 #include "iculserv.h"
 #include "ucln_in.h"
+#include "cstring.h"
 
 U_NAMESPACE_BEGIN
 
@@ -50,10 +51,6 @@ U_NAMESPACE_BEGIN
 #ifdef U_DEBUG_CALSVC
 #include <stdio.h>
 #endif
-
-// do NOT force a 'getService' (and thus, registration).
-// Define this if you do NOT want automatic registration.
-//#define U_DEBUG_CALSVC_NO_GETSVC 1
 
 static ICULocaleService* gService = NULL;
 
@@ -113,11 +110,11 @@ protected:
     fflush(stderr);
 #endif
 
-  if(!fType || !*fType || !strcmp(fType,"gregorian")) {  // Gregorian (default)
+  if(!fType || !*fType || !uprv_strcmp(fType,"gregorian")) {  // Gregorian (default)
     return new GregorianCalendar(canLoc, status);
-  } else if(!strcmp(fType, "japanese")) {
+  } else if(!uprv_strcmp(fType, "japanese")) {
     return new JapaneseCalendar(canLoc, status);
-  } else if(!strcmp(fType, "buddhist")) {
+  } else if(!uprv_strcmp(fType, "buddhist")) {
     return new BuddhistCalendar(canLoc, status);
   } else { 
     status = U_UNSUPPORTED_ERROR;
@@ -169,9 +166,12 @@ protected:
 
   int32_t len = 0;
 
-  const UChar *defCal = ures_getStringByKey(rb, Calendar::kDefaultCalendar, &len,  &status);
+  UnicodeString myString = ures_getUnicodeStringByKey(rb, Calendar::kDefaultCalendar, &status);
+
 #ifdef U_DEBUG_CALSVC
-  fprintf(stderr, "... get string(%d) -> %s\n", len, u_errorName(status));
+  UErrorCode debugStatus = U_ZERO_ERROR;
+  const UChar *defCal = ures_getStringByKey(rb, Calendar::kDefaultCalendar, &len,  &debugStatus);
+  fprintf(stderr, "... get string(%d) -> %s\n", len, u_errorName(debugStatus));
 #endif
 
   ures_close(rb);
@@ -180,18 +180,20 @@ protected:
     return NULL;
   }
  
-  char defCalStr[200];
-  if(len > 199) {
-    len = 199;
-  }
-  u_UCharsToChars(defCal, defCalStr, len);
-  defCalStr[len]=0;
 
 #ifdef U_DEBUG_CALSVC
-  fprintf(stderr, "DefaultCalendarFactory: looked up %s, got DefaultCalendar= %s\n",  (const char*)loc.getName(), defCalStr);
+   {
+     char defCalStr[200];
+     if(len > 199) {
+       len = 199;
+     }
+     u_UCharsToChars(defCal, defCalStr, len);
+     defCalStr[len]=0;
+     fprintf(stderr, "DefaultCalendarFactory: looked up %s, got DefaultCalendar= %s\n",  (const char*)loc.getName(), defCalStr);
+   }
 #endif
 
-  return new UnicodeString(defCalStr,"");  // Return indirection string 
+   return myString.clone();
  }
 };
 
@@ -483,12 +485,14 @@ Calendar::createInstance(const Locale& aLocale, UErrorCode& success)
 Calendar*
 Calendar::createInstance(TimeZone* zone, const Locale& aLocale, UErrorCode& success)
 {
-  // to do - put back non-service code.
   UObject* u = getService()->get(aLocale, LocaleKey::KIND_ANY, success);
   Calendar* c = NULL;
-  
+
   if(U_FAILURE(success) || !u) {
     delete zone;
+    if(U_SUCCESS(success)) { // Propagate some kind of err
+      success = U_INTERNAL_PROGRAM_ERROR;
+    }
     return NULL;
   }
   
@@ -496,11 +500,10 @@ Calendar::createInstance(TimeZone* zone, const Locale& aLocale, UErrorCode& succ
     // It's a unicode string telling us what type of calendar to load ("gregorian", etc)
     char tmp[200];
     const UnicodeString& str = *(UnicodeString*)u;
-
     // Extract a char* out of it..
     int32_t len = str.length();
-    if(len > 198) {
-      len = 198;
+    if(len > sizeof(tmp)-1) {
+      len = sizeof(tmp)-1;
     }
     str.extract(0,len,tmp);
     tmp[len]=0;
@@ -509,24 +512,27 @@ Calendar::createInstance(TimeZone* zone, const Locale& aLocale, UErrorCode& succ
     // fprintf(stderr, "createInstance(%s) told to look at %s..\n", (const char*)aLocale.getName(), tmp);
 #endif
 
-    // Create a Locale
-    Locale l(tmp,"");
+    // Create a Locale over this string
+    Locale l(tmp);
 
     delete u;
     u = NULL;
     
     c = (Calendar*)getService()->get(l, LocaleKey::KIND_ANY, success);
+
     if(U_FAILURE(success) || !c) {
       delete zone;
-      //delete u;
+      if(U_SUCCESS(success)) { 
+        success = U_INTERNAL_PROGRAM_ERROR; // Propagate some err
+      }
       return NULL;
     }
     
     if(c->getDynamicClassID() == UnicodeString::getStaticClassID()) {
-      // recursed!
+      // recursed! Second lookup returned a UnicodeString. 
+      // Perhaps DefaultCalendar{} was set to another locale.
       success = U_MISSING_RESOURCE_ERROR;  // requested a calendar type which could NOT be found.
       delete c;
-      //delete u;
       delete zone;
       return NULL;
     }
@@ -535,7 +541,7 @@ Calendar::createInstance(TimeZone* zone, const Locale& aLocale, UErrorCode& succ
 #endif
     c->setWeekCountData(aLocale, success);  // set the correct locale (this was an indirected calendar)
   } else {
-    // calendar was returned
+    // a calendar was returned - we assume the factory did the right thing.
     c = (Calendar*)u;
   }
   c->adoptTimeZone(zone); //  Set the correct time zone
@@ -547,26 +553,11 @@ Calendar::createInstance(TimeZone* zone, const Locale& aLocale, UErrorCode& succ
 Calendar*
 Calendar::createInstance(const TimeZone& zone, const Locale& aLocale, UErrorCode& success)
 {
-#ifndef U_DEBUG_CALSVC_NO_GETSVC
-  getService();
-#endif
-  if(gService != NULL) { 
-    Calendar* c = createInstance(aLocale, success);
-    if(U_SUCCESS(success) && c) {
-      c->setTimeZone(zone);
-    }
-    return c; 
-  } else {
-    // non service code
-    Calendar* c = new GregorianCalendar(zone, aLocale, success);
-    /* test for NULL */
-    if (c == 0) {
-        success = U_MEMORY_ALLOCATION_ERROR;
-        return 0;
-    }
-    if (U_FAILURE(success)) { delete c; c = 0; }
-    return c;
+  Calendar* c = createInstance(aLocale, success);
+  if(U_SUCCESS(success) && c) {
+    c->setTimeZone(zone);
   }
+  return c; 
 }
 
 // -------------------------------------
