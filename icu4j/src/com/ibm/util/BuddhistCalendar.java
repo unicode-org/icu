@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/util/Attic/BuddhistCalendar.java,v $ 
- * $Date: 2000/10/17 18:26:44 $ 
- * $Revision: 1.5 $
+ * $Date: 2000/11/18 00:30:54 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -35,6 +35,7 @@ import java.util.Locale;
  * @see com.ibm.util.GregorianCalendar
  *
  * @author Laura Werner
+ * @author Alan Liu
  */
 public class BuddhistCalendar extends GregorianCalendar {
     
@@ -99,8 +100,8 @@ public class BuddhistCalendar extends GregorianCalendar {
      * @param date      The date to which the new calendar is set.
      */
     public BuddhistCalendar(Date date) {
-        super(TimeZone.getDefault(), Locale.getDefault());
-        this.setTime(date);
+        this();
+        setTime(date);
     }
 
     /**
@@ -148,124 +149,42 @@ public class BuddhistCalendar extends GregorianCalendar {
     // take care of that....
     //-------------------------------------------------------------------------
     
-    /**
-     * Override of the <code>GregorianCalendar</code> method that computes the
-     * fields such as <code>YEAR</code>, <code>MONTH</code>, and <code>DATE</code>
-     * from the date in milliseconds since 1/1/1970 AD.
-     *
-     * This method calls {@link GregorianCalendar#computeFields} to do most
-     * of the work,
-     * then adjusts the {@link #YEAR YEAR} and {@link #ERA ERA} fields to use the
-     * Buddhist Era rather than the Gregorian {@link #AD AD} or {@link #BC BC}.
-     */
-    protected void computeFields() {
-        // Let GregorianCalendar do its thing.
-        super.computeFields();
-        
-        // Now adjust the year and era to the proper Buddhist values
-        fromGregorian();
-        
-        //
-        // If we're in strict mode and the year is less than 1, fail.
-        // But do this after setting both the year and era to the right values
-        // anyway, so that this object is in a consistent state.
-        //
-        if (!isLenient() && fields[YEAR] < 1) {
-            throw new IllegalArgumentException("Time before start of Buddhist era");
-        }
-    }
+    // Starts in -543 AD, ie 544 BC
+    private static final int BUDDHIST_ERA_START = -543;
     
-    /**
-     * Override of the <code>GregorianCalendar</code> method that computes the 
-     * elapsed time in milliseconds since 1/1/1970 AD from the fields such
-     * as <code>YEAR</code>, <code>MONTH</code>, and <code>DATE</code>.
-     *
-     * This method adjusts the {@link #YEAR YEAR} and {@link #ERA ERA} from their
-     * values in the Buddhist calendar to the corresponding Gregorian values, calls
-     * {@link GregorianCalendar#computeTime} to do the real millisecond
-     * calculation, and then restores the Buddhist <code>YEAR</code> and
-     * <code>ERA</code>.
-     */
-    protected void computeTime() {
-        int year = fields[YEAR];
-        int era = fields[ERA];
-        
-        if (!isLenient()) {
-            if (era != BE) {
-                throw new IllegalArgumentException("Illegal value for ERA");
-            }
-            if (year < 1) {
-                throw new IllegalArgumentException("YEAR must be greater than 0");
-            }
-        }
-
-        try {
-            toGregorian();
-            super.computeTime();
-        }
-        finally {
-            // Set the year and era back to the Buddhist values, even if
-            // GregorianCalendar fails because other fields are invalid.
-            fields[YEAR] = year;
-            fields[ERA] = era;
-        }
-    }
-    
-    public void add(int field, int amount) {
-        toGregorian();
-        try {
-            super.add(field, amount);
-        }
-        finally {
-            fromGregorian();
-        }
-    }
-    
-    public void roll(int field, int amount) {
-        toGregorian();
-        try {
-            super.roll(field, amount);
-        }
-        finally {
-            fromGregorian();
-        }
-    }
-    
-    //-------------------------------------------------------------------------
-    // Methods for converting between Gregorian and Buddhist calendars
-    //-------------------------------------------------------------------------
-
-    private static int BUDDHIST_ERA_START = -543;    // Starts in -543 AD, ie 544 BC
-    
-    /**
-     * Convert the YEAR and ERA fields from Buddhist to Gregorian values
-     * Return the (Buddhist) value of the YEAR field on input;
-     */
-    private void toGregorian() {
-        int year = fields[YEAR];
-        
-        if (year > 0) {
-            fields[YEAR] = year + BUDDHIST_ERA_START;
-            fields[ERA] = AD;
+    protected int handleGetExtendedYear() {
+        int year;
+        if (newerField(EXTENDED_YEAR, YEAR) == EXTENDED_YEAR) {
+            year = internalGet(EXTENDED_YEAR, 1);
         } else {
-            fields[YEAR] = 1 - year - BUDDHIST_ERA_START;
-            fields[ERA] = BC;
+            // Ignore the era, as there is only one
+            year = internalGet(YEAR, 1);
         }
+        return year;
     }
-    
+
+    // Return JD of start of given month/year
+    protected int handleComputeMonthStart(int eyear, int month) {
+        return super.handleComputeMonthStart(eyear + BUDDHIST_ERA_START, month);
+    }
+
+    protected void handleComputeFields(int julianDay) {
+        super.handleComputeFields(julianDay);
+        int y = internalGet(EXTENDED_YEAR) - BUDDHIST_ERA_START;
+        internalSet(EXTENDED_YEAR, y);
+        internalSet(ERA, 0);
+        internalSet(YEAR, y);
+    }
+
     /**
-     * Adjust the year and era from Gregorian to Buddhist values
+     * Override GregorianCalendar.  There is only one Buddhist ERA.  We
+     * should really handle YEAR, YEAR_WOY, and EXTENDED_YEAR here too to
+     * implement the 1..5000000 range, but it's not critical.
      */
-    private void fromGregorian() {
-        // Now adjust the year and era to the proper Buddhist values
-        int year = fields[YEAR];
-        
-        if (fields[ERA] == BC) {
-            fields[YEAR] = 1 - year - BUDDHIST_ERA_START;
-        } else {
-            fields[YEAR] = year - BUDDHIST_ERA_START;
+    protected int handleGetLimit(int field, int limitType) {
+        if (field == ERA) {
+            return BE;
         }
-        fields[ERA] = BE;
+        return super.handleGetLimit(field, limitType);
     }
-    
-};
+}

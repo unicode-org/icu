@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/util/Attic/IslamicCalendar.java,v $ 
- * $Date: 2000/10/27 22:25:52 $ 
- * $Revision: 1.7 $
+ * $Date: 2000/11/18 00:30:54 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -71,7 +71,7 @@ import com.ibm.util.CalendarAstronomer;
  * @see com.ibm.util.GregorianCalendar
  *
  * @author Laura Werner
- * @version 1.0
+ * @author Alan Liu
  */
 public class IslamicCalendar extends Calendar {
 
@@ -117,13 +117,6 @@ public class IslamicCalendar extends Calendar {
     /** Constant for Dhu al-Hijjah, the 12th month of the Islamic year. */
     public static final int DHU_AL_HIJJAH = 11;
 
-
-    // Useful millisecond constants
-    private static final int  SECOND_MS = 1000;
-    private static final int  MINUTE_MS = 60*SECOND_MS;
-    private static final int  HOUR_MS   = 60*MINUTE_MS;
-    private static final long DAY_MS    = 24*HOUR_MS;
-    private static final long WEEK_MS   = 7*DAY_MS;
 
     private static final long HIJRA_MILLIS = -42521587200000L;    // 7/16/622 AD 00:00
 
@@ -249,9 +242,10 @@ public class IslamicCalendar extends Calendar {
         if (civil != beCivil) {
             // The fields of the calendar will become invalid, because the calendar
             // rules are different
-            computeTime();
-            areFieldsSet = false;
+            long m = getTimeInMillis();
             civil = beCivil;
+            clear();
+            setTimeInMillis(m);
         }
     }
     
@@ -268,466 +262,35 @@ public class IslamicCalendar extends Calendar {
     // Minimum / Maximum access functions
     //-------------------------------------------------------------------------
 
-    // The minimum and maximum values for all of the fields, for validation
-    private static final int MinMax[][] = {
-        // Min         Greatest Min    Least Max            Max
-        {   0,              0,              0,              0           },  // ERA
-        {   1,              1,        5000000,        5000000           },  // YEAR
-        {   0,              0,             11,             11           },  // MONTH
-        {   0,              0,             51,             52           },  // WEEK_OF_YEAR
-        {   0,              0,              5,              6           },  // WEEK_OF_MONTH
-        {   1,              1,             29,             30           },  // DAY_OF_MONTH
-        {   1,              1,            354,            355           },  // DAY_OF_YEAR
-        {   1,              1,              7,              7           },  // DAY_OF_WEEK
-        {  -1,             -1,              4,              5           },  // DAY_OF_WEEK_IN_MONTH
-        {   0,              0,              1,              1           },  // AM_PM
-        {   0,              0,             11,             11           },  // HOUR
-        {   0,              0,             23,             23           },  // HOUR_OF_DAY
-        {   0,              0,             59,             59           },  // MINUTE
-        {   0,              0,             59,             59           },  // SECOND
-        {   0,              0,            999,            999           },  // MILLISECOND
-        {  -12*HOUR_MS,   -12*HOUR_MS,     12*HOUR_MS,     12*HOUR_MS   },  // ZONE_OFFSET
-        {   0,              0,              1*HOUR_MS,      1*HOUR_MS   },  // DST_OFFSET
+    private static final int LIMITS[][] = {
+        // Minimum  Greatest    Least  Maximum
+        //           Minimum  Maximum
+        {        0,        0,       0,       0 }, // ERA
+        {        1,        1, 5000000, 5000000 }, // YEAR
+        {        0,        0,      11,      11 }, // MONTH
+        {        1,        1,      51,      52 }, // WEEK_OF_YEAR
+        {        0,        0,       5,       6 }, // WEEK_OF_MONTH
+        {        1,        1,      29,      30 }, // DAY_OF_MONTH
+        {        1,        1,     354,     355 }, // DAY_OF_YEAR
+        {/*                                  */}, // DAY_OF_WEEK
+        {       -1,       -1,       4,       5 }, // DAY_OF_WEEK_IN_MONTH
+        {/*                                  */}, // AM_PM
+        {/*                                  */}, // HOUR
+        {/*                                  */}, // HOUR_OF_DAY
+        {/*                                  */}, // MINUTE
+        {/*                                  */}, // SECOND
+        {/*                                  */}, // MILLISECOND
+        {/*                                  */}, // ZONE_OFFSET
+        {/*                                  */}, // DST_OFFSET
+        { -5000001, -5000001, 5000001, 5000001 }, // YEAR_WOY
+        {/*                                  */}, // DOW_LOCAL
+        { -5000000, -5000000, 5000000, 5000000 }, // EXTENDED_YEAR
+        {/*                                  */}, // JULIAN_DAY
+        {/*                                  */}, // MILLISECONDS_IN_DAY
     };
 
-    /**
-     * Returns minimum value for the given field.
-     * For example, for {@link #DAY_OF_MONTH DAY_OF_MONTH} this method returns 1,
-     *
-     * @param field The field whose minimum value is desired.
-     *
-     * @see com.ibm.util.Calendar#getMinimum
-     */
-    public int getMinimum(int field)
-    {
-        return MinMax[field][0];
-    }
-
-    /**
-     * Returns highest minimum value for the given field.  For the Islamic
-     * calendar, this always returns the same result as {@link #getMinimum}.
-     *
-     * @param field The field whose greatest minimum value is desired.
-     *
-     * @see #getMinimum
-     */
-    public int getGreatestMinimum(int field)
-    {
-        return MinMax[field][1];
-    }
-
-    /**
-     * Returns maximum value for the given field
-     * For the {@link #DAY_OF_MONTH DAY_OF_MONTH} field, this method returns 30.
-     *
-     * @param field The field whose maximum value is desired.
-     *
-     * @see #getLeastMaximum
-     * @see #getActualMaximum
-     */
-    public int getMaximum(int field)
-    {
-        return MinMax[field][3];
-    }
-
-    /**
-     * Returns lowest maximum value for the given field.  For most fields,
-     * this returns the same result as {@link #getMaximum getMaximum}.  However,
-     * for some fields this can be a lower number. For example,
-     * the maximum {@link #DAY_OF_MONTH DAY_OF_MONTH} in the Islamic caleandar varies
-     * from month to month, so this method returns 29 while <code>getMaximum</code>
-     * returns 30.
-     *
-     * @param field The field whose least maximum value is desired.
-     *
-     * @see #getMaximum
-     * @see #getActualMaximum
-     */
-    public int getLeastMaximum(int field)
-    {
-        return MinMax[field][2];
-    }
-
-    /**
-     * Return the maximum value that a field could have, given the current date.
-     * For example, for the {@link #DAY_OF_MONTH DAY_OF_MONTH} field the actual maximum varies
-     * depending on the length of the month, which in turn varies according
-     * to either the civil calendar cycle or the actual time of the next new moon.
-     *
-     * @param field The field whose maximum value is desired.
-     *
-     * @see #getMaximum
-     * @see #getLeastMaximum
-     */
-    public int getActualMaximum(int field) {
-        if (!isSet(YEAR) || !isSet(MONTH)) {
-            complete();
-        }
-        switch (field) {
-          case DAY_OF_MONTH:
-            return monthLength(fields[YEAR], fields[MONTH]);
-
-          case DAY_OF_YEAR:
-            return yearLength(fields[YEAR]);
-          
-          default:
-            return super.getActualMaximum(field);
-        }   
-    }
-        
-
-    //-------------------------------------------------------------------------
-    // Functions for converting from field values to milliseconds....
-    //-------------------------------------------------------------------------
-
-    /**
-     * Converts time field values to UTC as milliseconds.
-     *
-     * @exception IllegalArgumentException if a field has an invalid value 
-     * and {@link #isLenient isLenient} returns <code>false</code>.
-     */
-    protected void computeTime()
-    {
-        if (isTimeSet) return;
-
-        if (!isLenient() && !validateFields())
-            throw new IllegalArgumentException();
-
-        if (isSet(ERA) && internalGet(ERA) != 0)
-            throw new IllegalArgumentException();
-
-        // We need the time zone offset for some of the calculations below.
-        // We use the TimeZone object, unless the user has explicitly set the
-        // ZONE_OFFSET field.
-        TimeZone zone = getTimeZone();
-        int zoneOffset = zone.getRawOffset();
-
-        // The year is required.  We don't have to check if it's unset,
-        // because if it is, by definition it will be 0.
-
-        int year = internalGet(YEAR);
-
-        if (year <= 0 && !isLenient())
-            throw new IllegalArgumentException();
-
-        long dayNumber = 0, date = 0;
-        
-        // The following code is somewhat convoluted. The various nested
-        //  if's handle the different cases of what fields are present.
-        if (isSet(MONTH) &&
-            (isSet(DATE) ||
-             (isSet(DAY_OF_WEEK) &&
-              (isSet(WEEK_OF_MONTH) ||
-               isSet(DAY_OF_WEEK_IN_MONTH))
-                 )
-                ))
-        {
-            // We have the month specified.  Figure out when that month starts
-            int month = internalGet(MONTH);
-            dayNumber = monthStart(year, month);
-
-            if (isSet(DATE))
-            {
-                date = internalGet(DATE);
-            }
-            else
-            {
-                // Compute from day of week plus week number or from the day of
-                // week plus the day of week in month.  The computations are
-                // almost identical.
-
-                // Find the day of the week for the first of this month.  This
-                // is zero-based, with 0 being the locale-specific first day of
-                // the week.  Add 1 to get the 1st day of month.  Subtract
-                // getFirstDayOfWeek() to make 0-based.
-
-                int fdm = absoluteDayToDayOfWeek(dayNumber + 1) - getFirstDayOfWeek();
-                if (fdm < 0) fdm += 7;
-
-                // Find the start of the first week.  This will be a date from
-                // 1..-6.  It represents the locale-specific first day of the
-                // week of the first day of the month, ignoring minimal days in
-                // first week.
-                date = 1 - fdm + internalGet(DAY_OF_WEEK) - getFirstDayOfWeek();
-
-                if (isSet(WEEK_OF_MONTH))
-                {
-                    // Adjust for minimal days in first week.
-                    if ((7 - fdm) < getMinimalDaysInFirstWeek()) date += 7;
-
-                    // Now adjust for the week number.
-                    date += 7 * (internalGet(WEEK_OF_MONTH) - 1);
-                }
-                else
-                {
-                    // Adjust into the month, if needed.
-                    if (date < 1) date += 7;
-
-                    // We are basing this on the day-of-week-in-month.  The only
-                    // trickiness occurs if the day-of-week-in-month is
-                    // negative.
-                    int dim = internalGet(DAY_OF_WEEK_IN_MONTH);
-                    if (dim >= 0) date += 7*(dim - 1);
-                    else
-                    {
-                        // Move date to the last of this day-of-week in this
-                        // month, then back up as needed.  If dim==-1, we don't
-                        // back up at all.  If dim==-2, we back up once, etc.
-                        // Don't back up past the first of the given day-of-week
-                        // in this month.  Note that we handle -2, -3,
-                        // etc. correctly, even though values < -1 are
-                        // technically disallowed.
-                        date += ((monthLength(year, month) - date) / 7 + dim + 1) * 7;
-                    }
-                }
-            }
-        }
-        else if (isSet(DAY_OF_YEAR)) {
-            dayNumber = yearStart(year) + internalGet(DAY_OF_YEAR);
-        }
-        else if (isSet(DAY_OF_WEEK) && isSet(WEEK_OF_YEAR))
-        {
-            dayNumber = yearStart(year);
-
-            // Compute from day of week plus week of year
-
-            // Find the day of the week for the first of this year.  This
-            // is zero-based, with 0 being the locale-specific first day of
-            // the week.  Add 1 to get the 1st day of month.  Subtract
-            // getFirstDayOfWeek() to make 0-based.
-            int fdy = absoluteDayToDayOfWeek(dayNumber + 1) - getFirstDayOfWeek();
-            if (fdy < 0) fdy += 7;
-
-            // Find the start of the first week.  This may be a valid date
-            // from 1..7, or a date before the first, from 0..-6.  It
-            // represents the locale-specific first day of the week
-            // of the first day of the year.
-
-            // First ignore the minimal days in first week.
-            date = 1 - fdy + internalGet(DAY_OF_WEEK) - getFirstDayOfWeek();
-
-            // Adjust for minimal days in first week.
-            if ((7 - fdy) < getMinimalDaysInFirstWeek()) date += 7;
-
-            // Now adjust for the week number.
-            date += 7 * (internalGet(WEEK_OF_YEAR) - 1);
-
-            dayNumber += date;
-        } else {    // Not enough information
-            throw new IllegalArgumentException();
-        }
-
-        long millis = dayNumber * DAY_MS + HIJRA_MILLIS;
-        
-        // Add in the days we calculated above
-        millis += (date - 1) * DAY_MS;
-
-        // Now we can do the time portion of the conversion.
-
-        int millisInDay = 0;
-
-        // Hours
-        if (isSet(HOUR_OF_DAY)) {
-            // Don't normalize here; let overflow bump into the next period.
-            // This is consistent with how we handle other fields.
-            millisInDay += internalGet(HOUR_OF_DAY);
-
-         } else if (isSet(HOUR))
-        {
-            // Don't normalize here; let overflow bump into the next period.
-            // This is consistent with how we handle other fields.
-            millisInDay += internalGet(HOUR);
-
-            millisInDay += 12 * internalGet(AM_PM);
-        }
-
-        // Minutes. We use the fact that unset == 0
-        millisInDay *= 60;
-        millisInDay += internalGet(MINUTE);
-
-        // Seconds. unset == 0
-        millisInDay *= 60;
-        millisInDay += internalGet(SECOND);
-
-        // Milliseconds. unset == 0
-        millisInDay *= 1000;
-        millisInDay += internalGet(MILLISECOND);
-
-        // Add millis and millisInDay together, to make millis contain the GMT time
-        // computed so far, with no DST adjustments
-        millis += millisInDay;
-
-        int dstOffset = 0;
-
-        //
-        // Compute the time zone offset and DST offset.
-        // Since the TimeZone API expects the Gregorian year, month, etc.,
-        // We have to convert to local Gregorian time in order to
-        // figure out the time zone calculations.  This is a bit slow, but
-        // it saves us from doing some *really* nasty calculations here.
-        //
-        if (getTimeZone().useDaylightTime())
-        {
-            synchronized(gregorian) {
-                gregorian.setTimeZone(zone);
-                gregorian.setTime(new Date(millis));
-                dstOffset = gregorian.get(DST_OFFSET);
-            }
-        }
-
-        // Store our final computed GMT time, with DST adjustments.
-        time = millis - zoneOffset - dstOffset;
-        isTimeSet = true;
-    }
-
-    /**
-     * Validates the values of the set time fields.
-     */
-    private boolean validateFields()
-    {
-        for (int field = 0; field < FIELD_COUNT; field++)
-        {
-            // Ignore DATE and DAY_OF_YEAR which are handled below
-            if (isSet(field) &&
-                !boundsCheck(internalGet(field), field))
-
-                return false;
-        }
-
-        if (isSet(YEAR))
-        {
-            int year = internalGet(YEAR);
-            if (year < 1)
-                return false;
-        }
-
-        // Handle DAY_OF_WEEK_IN_MONTH, which must not have the value zero.
-        // We've checked against minimum and maximum above already.
-        if (isSet(DAY_OF_WEEK_IN_MONTH) &&
-            0 == internalGet(DAY_OF_WEEK_IN_MONTH)) return false;
-
-        return true;
-    }
-
-    /**
-     * Validates the value of the given time field.
-     */
-    private boolean boundsCheck(int value, int field)
-    {
-        return value >= getMinimum(field) && value <= getMaximum(field);
-    }
-
-
-    //-------------------------------------------------------------------------
-    // Functions for converting from milliseconds to field values
-    //-------------------------------------------------------------------------
-
-    /**
-     * Converts UTC as milliseconds to time field values.
-     * The time is <em>not</em>
-     * recomputed first; to recompute the time, then the fields, call the
-     * {@link #complete} method.
-     */
-    protected void computeFields()
-    {
-        if (areFieldsSet) return;
-
-        // The following algorithm only works for dates after the Hijra (16 July AD 622)
-        if (time < HIJRA_MILLIS && !isLenient()) {
-            throw new IllegalArgumentException("IslamicCalendar does not handle dates before 1 AH");
-        }
-
-        //
-        // Compute the time zone offset and DST offset.
-        // Since the TimeZone API expects the Gregorian year, month, etc.,
-        // We have to convert to local Gregorian time in order to
-        // figure out the time zone calculations.  This is a bit slow, but
-        // it saves us from doing some *really* nasty calculations here.
-        //
-        TimeZone zone = getTimeZone();
-        int rawOffset = zone.getRawOffset();   // Not including DST
-        int dstOffset = 0;
-        if (zone.useDaylightTime())
-        {
-            synchronized (gregorian) {
-                gregorian.setTimeZone(zone);
-                gregorian.setTime(new Date(time));
-                dstOffset += gregorian.get(DST_OFFSET);
-            }
-        }
-        long localMillis = time + rawOffset + dstOffset;
-        
-        long days = (localMillis - HIJRA_MILLIS) / DAY_MS;
-        int millisInDay = (int)(localMillis % DAY_MS);
-        
-        if (civil) {
-            // Use the civil calendar approximation, which is just arithmetic
-            int year  = (int)Math.floor( (30 * days + 10646) / 10631.0 );
-            int month = (int)Math.ceil((days - 29 - yearStart(year)) / 29.5 );
-            month = Math.min(month, 11);
-            
-            int date = (int)(days - monthStart(year, month)) + 1;
-            
-            fields[YEAR] = year;
-            fields[MONTH] = month;
-            fields[DATE] = date;
-        } else {
-            // Guess at the number of elapsed full months since the epoch
-            int months = (int)Math.floor(days / CalendarAstronomer.SYNODIC_MONTH);
-
-            long start = (long)Math.floor(months * CalendarAstronomer.SYNODIC_MONTH - 1);
-
-            if ( days - start >= 28 && MoonAge(time) > 0) {
-                // If we're near the end of the month, assume next month and search backwards
-                months++;
-            }
-
-            // Find out the last time that the new moon was actually visible at this longitude
-            // This returns midnight the night that the moon was visible at sunset.
-            while ((start = trueMonthStart(months)) > days) {
-                // If it was after the date in question, back up a month and try again
-                months--;
-            }
-
-            fields[YEAR] = months / 12 + 1;
-            fields[MONTH] = months % 12;
-            fields[DATE] = (int)(days - start) + 1;
-
-        }
-        fields[ERA] = 0;
-
-        // Calculate the day of the week.
-        int dayOfWeek = absoluteDayToDayOfWeek(days);
-        fields[DAY_OF_WEEK] = dayOfWeek;
-        fields[WEEK_OF_MONTH] = weekNumber(fields[DATE], dayOfWeek);
-        fields[DAY_OF_WEEK_IN_MONTH] = (fields[DATE]-1) / 7 + 1;
-
-        // Now figure out the day of the year.
-        int dayOfYear = (int)(days - monthStart(fields[YEAR], fields[MONTH]) + 1);
-
-        fields[DAY_OF_YEAR] = dayOfYear;
-        fields[WEEK_OF_YEAR] = weekNumber(dayOfYear, dayOfWeek);
-
-        // Fill in all time-related fields based on millisInDay.
-
-        fields[MILLISECOND] = millisInDay % 1000;
-        millisInDay /= 1000;
-        fields[SECOND] = millisInDay % 60;
-        millisInDay /= 60;
-        fields[MINUTE] = millisInDay % 60;
-        millisInDay /= 60;
-        fields[HOUR_OF_DAY] = millisInDay;
-        fields[AM_PM] = millisInDay / 12;
-        fields[HOUR] = millisInDay % 12;
-
-        fields[ZONE_OFFSET] = rawOffset;
-        fields[DST_OFFSET] = dstOffset;
-
-        areFieldsSet = true;
-
-        // Careful here: We are manually setting the isSet flags to true, so we
-        // must be sure that the above code actually does set all these fields.
-        _TEMPORARY_markAllFieldsSet();
+    protected int handleGetLimit(int field, int limitType) {
+        return LIMITS[field][limitType];
     }
 
     //-------------------------------------------------------------------------
@@ -772,19 +335,6 @@ public class IslamicCalendar extends Calendar {
     }
     
     /**
-     * Return the number of days in the given Islamic year
-     */
-    private final int yearLength(int year)
-    {
-        if (civil) {
-            return 354 + (civilLeapYear(year) ? 1 : 0);
-        } else {
-            int month = 12*(year-1);
-            return (int)(trueMonthStart(month + 12) - trueMonthStart(month));
-        }
-    }
-
-    /**
      * Return the day # on which the given month starts.  Days are counted
      * from the Hijri epoch, origin 0.
      *
@@ -801,28 +351,6 @@ public class IslamicCalendar extends Calendar {
     }
     
     /**
-     * Return the length (in days) of the given month.
-     *
-     * @param year  The hijri year
-     * @param year  The hijri month, 0-based
-     */
-    private final int monthLength(int year, int month)
-    {
-        int length = 0;
-        
-        if (civil) {
-            length = 29 + (month+1) % 2;
-            if (month == DHU_AL_HIJJAH && civilLeapYear(year)) {
-                length++;
-            }
-        } else {
-            month = 12*(year-1) + month;
-            length = (int)( trueMonthStart(month+1) - trueMonthStart(month) );
-        }
-        return length;
-    }
-
-    /**
      * Find the day number on which a particular month of the true/lunar
      * Islamic calendar starts.
      *
@@ -838,26 +366,26 @@ public class IslamicCalendar extends Calendar {
         {
             // Make a guess at when the month started, using the average length
             long origin = HIJRA_MILLIS 
-                        + (long)Math.floor(month * CalendarAstronomer.SYNODIC_MONTH - 1) * DAY_MS;
+                        + (long)Math.floor(month * CalendarAstronomer.SYNODIC_MONTH - 1) * ONE_DAY;
 
-            double age = MoonAge(origin);
+            double age = moonAge(origin);
 
-            if (MoonAge(origin) >= 0) {
+            if (moonAge(origin) >= 0) {
                 // The month has already started
                 do {
-                    origin -= DAY_MS;
-                    age = MoonAge(origin);
+                    origin -= ONE_DAY;
+                    age = moonAge(origin);
                 } while (age >= 0);
             }
             else {
                 // Preceding month has not ended yet.
                 do {
-                    origin += DAY_MS;
-                    age = MoonAge(origin);
+                    origin += ONE_DAY;
+                    age = moonAge(origin);
                 } while (age < 0);
             }
 
-            start = (origin - HIJRA_MILLIS) / DAY_MS + 1;
+            start = (origin - HIJRA_MILLIS) / ONE_DAY + 1;
             
             cache.put(month, start);
         }
@@ -873,7 +401,7 @@ public class IslamicCalendar extends Calendar {
      * @param time  The time at which the moon's age is desired,
      *              in millis since 1/1/1970.
      */
-    static final double MoonAge(long time)
+    static final double moonAge(long time)
     {
         double age = 0;
         
@@ -893,9 +421,6 @@ public class IslamicCalendar extends Calendar {
     //-------------------------------------------------------------------------
     // Internal data....
     //
-
-    // We need a GregorianCalendar object for doing time zone calculations
-    private static GregorianCalendar gregorian = new GregorianCalendar();
     
     // And an Astronomer object for the moon age calculations
     private static CalendarAstronomer astro = new CalendarAstronomer();
@@ -911,9 +436,125 @@ public class IslamicCalendar extends Calendar {
      */
     private boolean civil = true;
 
-    static private void debug(String str) {
-        if (true) {
-            System.out.println(str);
+    //----------------------------------------------------------------------
+    // Calendar framework
+    //----------------------------------------------------------------------
+
+    /**
+     * Return the length (in days) of the given month.
+     *
+     * @param year  The hijri year
+     * @param year  The hijri month, 0-based
+     */
+    protected int handleGetMonthLength(int extendedYear, int month) {
+
+        int length = 0;
+        
+        if (civil) {
+            length = 29 + (month+1) % 2;
+            if (month == DHU_AL_HIJJAH && civilLeapYear(extendedYear)) {
+                length++;
+            }
+        } else {
+            month = 12*(extendedYear-1) + month;
+            length = (int)( trueMonthStart(month+1) - trueMonthStart(month) );
+        }
+        return length;
+    }
+
+    /**
+     * Return the number of days in the given Islamic year
+     */
+    protected int handleGetYearLength(int extendedYear) {
+        if (civil) {
+            return 354 + (civilLeapYear(extendedYear) ? 1 : 0);
+        } else {
+            int month = 12*(extendedYear-1);
+            return (int)(trueMonthStart(month + 12) - trueMonthStart(month));
         }
     }
+    
+    //-------------------------------------------------------------------------
+    // Functions for converting from field values to milliseconds....
+    //-------------------------------------------------------------------------
+
+    // Return JD of start of given month/year
+    protected int handleComputeMonthStart(int eyear, int month) {
+        return (int) monthStart(eyear, month) + 1948439;
+    }    
+
+    //-------------------------------------------------------------------------
+    // Functions for converting from milliseconds to field values
+    //-------------------------------------------------------------------------
+
+    protected int handleGetExtendedYear() {
+        int year;
+        if (newerField(EXTENDED_YEAR, YEAR) == EXTENDED_YEAR) {
+            year = internalGet(EXTENDED_YEAR, 1); // Default to year 1
+        } else {
+            year = internalGet(YEAR, 1); // Default to year 1
+        }
+        return year;
+    }
+
+    /**
+     * Override Calendar to compute several fields specific to the Islamic
+     * calendar system.  These are:
+     *
+     * <ul><li>ERA
+     * <li>YEAR
+     * <li>MONTH
+     * <li>DAY_OF_MONTH
+     * <li>DAY_OF_YEAR
+     * <li>EXTENDED_YEAR</ul>
+     * 
+     * The DAY_OF_WEEK and DOW_LOCAL fields are already set when this
+     * method is called. The getGregorianXxx() methods return Gregorian
+     * calendar equivalents for the given Julian day.
+     */
+    protected void handleComputeFields(int julianDay) {
+        int year, month, dayOfMonth, dayOfYear;
+        long monthStart;
+        long days = julianDay - 1948440;
+
+        if (civil) {
+            // Use the civil calendar approximation, which is just arithmetic
+            year  = (int)Math.floor( (30 * days + 10646) / 10631.0 );
+            month = (int)Math.ceil((days - 29 - yearStart(year)) / 29.5 );
+            month = Math.min(month, 11);
+            monthStart = monthStart(year, month);
+        } else {
+            // Guess at the number of elapsed full months since the epoch
+            int months = (int)Math.floor(days / CalendarAstronomer.SYNODIC_MONTH);
+
+            monthStart = (long)Math.floor(months * CalendarAstronomer.SYNODIC_MONTH - 1);
+
+            if ( days - monthStart >= 28 && moonAge(internalGetTimeInMillis()) > 0) {
+                // If we're near the end of the month, assume next month and search backwards
+                months++;
+            }
+
+            // Find out the last time that the new moon was actually visible at this longitude
+            // This returns midnight the night that the moon was visible at sunset.
+            while ((monthStart = trueMonthStart(months)) > days) {
+                // If it was after the date in question, back up a month and try again
+                months--;
+            }
+
+            year = months / 12 + 1;
+            month = months % 12;
+        }
+
+        dayOfMonth = (int)(days - monthStart(year, month)) + 1;
+
+        // Now figure out the day of the year.
+        dayOfYear = (int)(days - monthStart(year, 0) + 1);
+
+        internalSet(ERA, 0);
+        internalSet(YEAR, year);
+        internalSet(EXTENDED_YEAR, year);
+        internalSet(MONTH, month);
+        internalSet(DAY_OF_MONTH, dayOfMonth);
+        internalSet(DAY_OF_YEAR, dayOfYear);       
+    }    
 }
