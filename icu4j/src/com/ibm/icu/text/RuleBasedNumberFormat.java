@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedNumberFormat.java,v $ 
- * $Date: 2004/01/08 22:27:08 $ 
- * $Revision: 1.19 $
+ * $Date: 2004/01/29 19:29:05 $ 
+ * $Revision: 1.20 $
  *
  *****************************************************************************************
  */
@@ -475,7 +475,7 @@ import java.util.ResourceBundle;
  * using these features.</p>
  *
  * @author Richard Gillam
- * $RCSfile: RuleBasedNumberFormat.java,v $ $Revision: 1.19 $ $Date: 2004/01/08 22:27:08 $
+ * $RCSfile: RuleBasedNumberFormat.java,v $ $Revision: 1.20 $ $Date: 2004/01/29 19:29:05 $
  * @see NumberFormat
  * @see DecimalFormat
  * @stable ICU 2.0
@@ -999,7 +999,7 @@ public final class RuleBasedNumberFormat extends NumberFormat {
      * it will correctly parse "two hundred zero" and "fifteen hundred".
      *
      * @param enabled If true, turns lenient-parse mode on; if false, turns it off.
-     * @see java.text.RuleBasedCollator
+     * @see RuleBasedCollator
      * @stable ICU 2.0
      */
     public void setLenientParseMode(boolean enabled) {
