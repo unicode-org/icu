@@ -110,9 +110,14 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
   }
 
   /* begin writing makefile ========================= */
-  
 
+
+#ifdef OS390BATCH
+  /* sprintf(tmp, "# File to make (OS390BATCH):\nTARGET='${LOADMOD}(%s)'\n\n", o->shortName); */ 
+  sprintf(tmp, "# File to make (OS390BATCH):\nTARGET='${LOADMOD}(%s)'\"\n\n", o->shortName); 
+#else
   sprintf(tmp, "# File to make:\nTARGET=%s\n\n", o->outFiles->str);
+#endif
   T_FileStream_writeLine(makefile, tmp);
 
   sprintf(tmp, "all: $(TARGETDIR)/$(TARGET)\n\n");
@@ -172,11 +177,15 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
                                    "\t-ls -l $@\n\n");
 
   T_FileStream_writeLine(makefile, "$(TEMP_DIR)/hpux_junk_obj.cpp:\n"
-                                   "	echo \"void to_emit_cxx_stuff_in_the_linker(){}\" >> $(TEMP_DIR)/hpux_junk_obj.cpp\n"
+                                   "    echo \"void to_emit_cxx_stuff_in_the_linker(){}\" >> $(TEMP_DIR)/hpux_junk_obj.cpp\n"
                                    "\n"
                                    "$(TEMP_DIR)/hpux_junk_obj.o: $(TEMP_DIR)/hpux_junk_obj.cpp\n"
-                                   "	$(COMPILE.cc) -o $@ $<\n"
+                                   "    $(COMPILE.cc) -o $@ $<\n"
                                    "\n");
+#elif defined(OS390BATCH)
+  T_FileStream_writeLine(makefile, "$(TARGETDIR)/$(TARGET): $(OBJECTS) $(LISTFILES) $(BIR_DEPS)\n"
+                                   "\t$(SHLIB.c) -o $@ $(OBJECTS) $(BIR_LDFLAGS)\n"
+                                   "# \t-ls -l $@\n\n");
 #else
   T_FileStream_writeLine(makefile, "$(TARGETDIR)/$(TARGET): $(OBJECTS) $(LISTFILES) $(BIR_DEPS)\n"
                                    "\t$(SHLIB.c) -o $@ $(OBJECTS) $(BIR_LDFLAGS)\n"
