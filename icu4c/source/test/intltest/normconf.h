@@ -55,7 +55,7 @@ class NormalizerConformanceTest : public IntlTest {
                            const UnicodeString& line);
 
     void iterativeNorm(const UnicodeString& str,
-                       Normalizer::EMode mode,
+                       UNormalizationMode mode,
                        UnicodeString& result,
                        int8_t dir);
 
