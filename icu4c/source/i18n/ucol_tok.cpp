@@ -994,8 +994,15 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
 }
 
 void ucol_tok_closeTokenList(UColTokenParser *src) {
-  uhash_close(uchars2tokens);
-  uprv_free(src->lh);
-  uprv_free(src->source);
+  if(uchars2tokens != NULL) {
+    uhash_close(uchars2tokens);
+  }
+  if(src->lh != NULL) {
+    uprv_free(src->lh);
+  }
+
+  if(src->source != NULL) {
+    uprv_free(src->source);
+  }
 }
 
