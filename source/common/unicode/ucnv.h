@@ -551,7 +551,7 @@ U_CAPI
  *@stable
  */
 U_CAPI
-  UChar U_EXPORT2 ucnv_getNextUChar (UConverter * converter,
+  UChar32 U_EXPORT2 ucnv_getNextUChar (UConverter * converter,
 			   const char **source,
 			   const char *sourceLimit,
 			   UErrorCode * err);

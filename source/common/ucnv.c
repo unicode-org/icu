@@ -826,26 +826,29 @@ int32_t ucnv_toUChars (const UConverter * converter,
   return targetCapacity;
 }
 
-UChar ucnv_getNextUChar (UConverter * converter,
+UChar32 ucnv_getNextUChar (UConverter * converter,
 			 const char **source,
 			 const char *sourceLimit,
 			 UErrorCode * err)
 {
   /* In case internal data had been stored
-   * we return the first UChar in the internal buffer,
+   * we return the first UChar32 in the internal buffer,
    * and update the internal state accordingly
    */
   if (converter->UCharErrorBufferLength > 0)
     {
-      UChar myUChar = converter->UCharErrorBuffer[0];
+      UTextOffset i = 0;
+      UChar32 myUChar;
+      UTF_NEXT_CHAR(converter->UCharErrorBuffer, i, sizeof(converter->UCharErrorBuffer), myUChar);
       /*In this memmove we update the internal buffer by
        *popping the first character.
          *Note that in the call itself we decrement
          *UCharErrorBufferLength
        */
       uprv_memmove (converter->UCharErrorBuffer,
-		   converter->UCharErrorBuffer + 1,
-		   --(converter->UCharErrorBufferLength) * sizeof (UChar));
+		   converter->UCharErrorBuffer + i,
+		   (converter->UCharErrorBufferLength - i) * sizeof (UChar));
+      converter->UCharErrorBufferLength -= (int8_t)i;
       return myUChar;
     }
   /*calls the specific conversion routines */

@@ -176,7 +176,7 @@ void T_UConverter_fromUnicode_SBCS (UConverter * _this,
   return;
 }
 
-UChar T_UConverter_getNextUChar_SBCS(UConverter* converter,
+UChar32 T_UConverter_getNextUChar_SBCS(UConverter* converter,
                                                const char** source,
                                                const char* sourceLimit,
                                                UErrorCode* err)
@@ -450,7 +450,7 @@ void   T_UConverter_fromUnicode_DBCS (UConverter * _this,
   return;
 }
 
-UChar T_UConverter_getNextUChar_DBCS(UConverter* converter,
+UChar32 T_UConverter_getNextUChar_DBCS(UConverter* converter,
                                                const char** source,
                                                const char* sourceLimit,
                                                UErrorCode* err)

@@ -131,7 +131,7 @@ typedef void (*T_FromUnicodeFunction) (UConverter *,
 				       bool_t,
 				       UErrorCode *);
 
-typedef UChar (*T_GetNextUCharFunction) (UConverter *,
+typedef UChar32 (*T_GetNextUCharFunction) (UConverter *,
 					 const char **,
 					 const char *,
 					 UErrorCode *);

@@ -625,7 +625,7 @@ void T_UConverter_toUnicode_ISO_2022_OFFSETS_LOGIC(UConverter* _this,
   return;
 }
 
-UChar T_UConverter_getNextUChar_ISO_2022(UConverter* converter,
+UChar32 T_UConverter_getNextUChar_ISO_2022(UConverter* converter,
                                      const char** source,
                                      const char* sourceLimit,
                                      UErrorCode* err)
@@ -1192,7 +1192,7 @@ void T_UConverter_fromUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverter * _this,
   return;
 }
 
-UChar T_UConverter_getNextUChar_EBCDIC_STATEFUL(UConverter* converter,
+UChar32 T_UConverter_getNextUChar_EBCDIC_STATEFUL(UConverter* converter,
                                                 const char** source,
                                                 const char* sourceLimit,
                                                 UErrorCode* err)
