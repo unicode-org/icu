@@ -88,11 +88,14 @@ private:
     UChar32     nextCharLL();
     UChar32     peekCharLL();
     UnicodeSet  *scanSet();
+    UnicodeSet  *scanProp();
     void        handleCloseParen();
     int32_t     blockTopLoc(UBool reserve);          // Locate a position in the compiled pattern
                                                      //  at the top of the just completed block
                                                      //  or operation, and optionally ensure that
                                                      //  there is space to add an opcode there.
+    void        compileSet(UnicodeSet *theSet);      // Generate the compiled pattern for
+                                                     //   a reference to a UnicodeSet.
 
 
     UErrorCode                    *fStatus;

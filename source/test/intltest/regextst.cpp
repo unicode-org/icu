@@ -15,6 +15,7 @@
 #include "intltest.h"
 #include "regextst.h"
 #include "uvector.h"
+#include "stdlib.h"
 
 
 //---------------------------------------------------------------------------
@@ -220,6 +221,7 @@ void RegexTest::regex_find(char *pat, char *input, UErrorCode expectedStatus, in
         errln("Line %d: error %x compiling pattern.", line, status);
         goto cleanupAndReturn;
     }
+    // callerPattern->dump();
 
     //
     //  Find the tags in the input data, remove them, and record the group boundary
@@ -297,6 +299,154 @@ cleanupAndReturn:
     delete callerPattern;
 }
  
+
+//---------------------------------------------------------------------------
+//
+//      Basic      Check for basic functionality of regex pattern matching.
+//                 Avoid the use of REGEX_FIND test macro, which has
+//                 substantial dependencies on basic Regex functionality.
+//
+//---------------------------------------------------------------------------
+void RegexTest::Basic() {
+
+
+//
+// Debug - slide failing test cases early
+//
+#if 0
+    {
+    REGEX_FIND( "\\p{Lu}+", "here we go ... <0>ABC</0> and no more.")
+    }
+    exit(1);
+#endif
+
+
+    //
+    // Pattern with parentheses
+    //
+    REGEX_TESTLM("st(abc)ring", "stabcring thing", TRUE,  FALSE);
+    REGEX_TESTLM("st(abc)ring", "stabcring",       TRUE,  TRUE);
+    REGEX_TESTLM("st(abc)ring", "stabcrung",       FALSE, FALSE);
+
+    //
+    // Patterns with *
+    //
+    REGEX_TESTLM("st(abc)*ring", "string", TRUE, TRUE);
+    REGEX_TESTLM("st(abc)*ring", "stabcring", TRUE, TRUE);
+    REGEX_TESTLM("st(abc)*ring", "stabcabcring", TRUE, TRUE);
+    REGEX_TESTLM("st(abc)*ring", "stabcabcdring", FALSE, FALSE);
+    REGEX_TESTLM("st(abc)*ring", "stabcabcabcring etc.", TRUE, FALSE);
+
+    REGEX_TESTLM("a*", "",  TRUE, TRUE);
+    REGEX_TESTLM("a*", "b", TRUE, FALSE);
+
+
+    //
+    //  Patterns with "."
+    //
+    REGEX_TESTLM(".", "abc", TRUE, FALSE);
+    REGEX_TESTLM("...", "abc", TRUE, TRUE);
+    REGEX_TESTLM("....", "abc", FALSE, FALSE);
+    REGEX_TESTLM(".*", "abcxyz123", TRUE, TRUE);
+    REGEX_TESTLM("ab.*xyz", "abcdefghij", FALSE, FALSE);
+    REGEX_TESTLM("ab.*xyz", "abcdefg...wxyz", TRUE, TRUE);
+    REGEX_TESTLM("ab.*xyz", "abcde...wxyz...abc..xyz", TRUE, TRUE);
+    REGEX_TESTLM("ab.*xyz", "abcde...wxyz...abc..xyz...", TRUE, FALSE);
+
+    //
+    //  Patterns with * applied to chars at end of literal string
+    //
+    REGEX_TESTLM("abc*", "ab", TRUE, TRUE);
+    REGEX_TESTLM("abc*", "abccccc", TRUE, TRUE);
+
+    //
+    //  Supplemental chars match as single chars, not a pair of surrogates.
+    //
+    REGEX_TESTLM(".", "\\U00011000", TRUE, TRUE);
+    REGEX_TESTLM("...", "\\U00011000x\\U00012002", TRUE, TRUE);
+    REGEX_TESTLM("...", "\\U00011000x\\U00012002y", TRUE, FALSE);
+
+
+    //
+    //  UnicodeSets in the pattern
+    //
+    REGEX_TESTLM("[1-6]", "1", TRUE, TRUE);
+    REGEX_TESTLM("[1-6]", "3", TRUE, TRUE);
+    REGEX_TESTLM("[1-6]", "7", FALSE, FALSE);
+    REGEX_TESTLM("a[1-6]", "a3", TRUE, TRUE);
+    REGEX_TESTLM("a[1-6]", "a3", TRUE, TRUE);
+    REGEX_TESTLM("a[1-6]b", "a3b", TRUE, TRUE);
+
+    REGEX_TESTLM("a[0-9]*b", "a123b", TRUE, TRUE);
+    REGEX_TESTLM("a[0-9]*b", "abc", TRUE, FALSE);
+    REGEX_TESTLM("[\\p{Nd}]*", "123456", TRUE, TRUE);
+    REGEX_TESTLM("[\\p{Nd}]*", "a123456", TRUE, FALSE);   // note that * matches 0 occurences.
+    REGEX_TESTLM("[a][b][[:Zs:]]*", "ab   ", TRUE, TRUE);
+
+    //
+    //   OR operator in patterns
+    //
+    REGEX_TESTLM("(a|b)", "a", TRUE, TRUE);
+    REGEX_TESTLM("(a|b)", "b", TRUE, TRUE);
+    REGEX_TESTLM("(a|b)", "c", FALSE, FALSE);
+    REGEX_TESTLM("a|b", "b", TRUE, TRUE);
+
+    REGEX_TESTLM("(a|b|c)*", "aabcaaccbcabc", TRUE, TRUE);
+    REGEX_TESTLM("(a|b|c)*", "aabcaaccbcabdc", TRUE, FALSE);
+    REGEX_TESTLM("(a(b|c|d)(x|y|z)*|123)", "ac", TRUE, TRUE);
+    REGEX_TESTLM("(a(b|c|d)(x|y|z)*|123)", "123", TRUE, TRUE);
+    REGEX_TESTLM("(a|(1|2)*)(b|c|d)(x|y|z)*|123", "123", TRUE, TRUE);
+    REGEX_TESTLM("(a|(1|2)*)(b|c|d)(x|y|z)*|123", "222211111czzzzw", TRUE, FALSE);
+
+    //
+    //  +
+    //
+    REGEX_TESTLM("ab+", "abbc", TRUE, FALSE);
+    REGEX_TESTLM("ab+c", "ac", FALSE, FALSE);
+    REGEX_TESTLM("b+", "", FALSE, FALSE);
+    REGEX_TESTLM("(abc|def)+", "defabc", TRUE, TRUE);
+    REGEX_TESTLM(".+y", "zippity dooy dah ", TRUE, FALSE);
+    REGEX_TESTLM(".+y", "zippity dooy", TRUE, TRUE);
+
+    //
+    //   ?
+    //
+    REGEX_TESTLM("ab?", "ab", TRUE, TRUE);
+    REGEX_TESTLM("ab?", "a", TRUE, TRUE);
+    REGEX_TESTLM("ab?", "ac", TRUE, FALSE);
+    REGEX_TESTLM("ab?", "abb", TRUE, FALSE);
+    REGEX_TESTLM("a(b|c)?d", "abd", TRUE, TRUE);
+    REGEX_TESTLM("a(b|c)?d", "acd", TRUE, TRUE);
+    REGEX_TESTLM("a(b|c)?d", "ad", TRUE, TRUE);
+    REGEX_TESTLM("a(b|c)?d", "abcd", FALSE, FALSE);
+    REGEX_TESTLM("a(b|c)?d", "ab", FALSE, FALSE);
+
+    //
+    //  Escape sequences that become single literal chars, handled internally
+    //   by ICU's Unescape.
+    //
+    
+    // REGEX_TESTLM("\101\142", "Ab", TRUE, TRUE);      // Octal     TODO: not implemented yet.
+    REGEX_TESTLM("\\a", "\\u0007", TRUE, TRUE);        // BEL
+    REGEX_TESTLM("\\b", "\\u0008", TRUE, TRUE);        // BS
+    // REGEX_TESTLM("\\cL", "\\u000c", TRUE, TRUE);       // Control-L (or whatever) TODO: bug in Unescape
+    // REGEX_TESTLM("\\e", "\\u001b", TRUE, TRUE);        // Escape  TODO: bug in Unescape
+    REGEX_TESTLM("\\f", "\\u000c", TRUE, TRUE);        // Form Feed
+    REGEX_TESTLM("\\n", "\\u000a", TRUE, TRUE);        // new line
+    REGEX_TESTLM("\\r", "\\u000d", TRUE, TRUE);        //  CR
+    REGEX_TESTLM("\\t", "\\u0009", TRUE, TRUE);        // Tab
+    REGEX_TESTLM("\\u1234", "\\u1234", TRUE, TRUE);       
+    REGEX_TESTLM("\\U00001234", "\\u1234", TRUE, TRUE);       
+
+    REGEX_TESTLM(".*\\Ax", "xyz", TRUE, FALSE);  //  \A matches only at the beginning of input
+    REGEX_TESTLM(".*\\Ax", " xyz", FALSE, FALSE);  //  \A matches only at the beginning of input
+
+    // Escape of special chars in patterns
+    REGEX_TESTLM("\\\\\\|\\(\\)\\[\\{\\~\\$\\*\\+\\?\\.", "\\\\|()[{~$*+?.", TRUE, TRUE);       
+
+
+};
+
 
 //---------------------------------------------------------------------------
 //
@@ -576,154 +726,6 @@ void RegexTest::API_Match() {
 
 
 
-//---------------------------------------------------------------------------
-//
-//      Basic      Check for basic functionality of regex pattern matching.
-//                 Avoid the use of REGEX_FIND test macro, which has
-//                 substantial dependencies on basic Regex functionality.
-//
-//---------------------------------------------------------------------------
-void RegexTest::Basic() {
-
-
-//
-// Debug - slide failing test cases early
-//
-#if 0
-    {
-            REGEX_TESTLM(".*\\Ax", "xyz", TRUE, FALSE);  //  \A matches only at the beginning of input
-    }
-    return;
-#endif
-
-
-    //
-    // Pattern with parentheses
-    //
-    REGEX_TESTLM("st(abc)ring", "stabcring thing", TRUE,  FALSE);
-    REGEX_TESTLM("st(abc)ring", "stabcring",       TRUE,  TRUE);
-    REGEX_TESTLM("st(abc)ring", "stabcrung",       FALSE, FALSE);
-
-    //
-    // Patterns with *
-    //
-    REGEX_TESTLM("st(abc)*ring", "string", TRUE, TRUE);
-    REGEX_TESTLM("st(abc)*ring", "stabcring", TRUE, TRUE);
-    REGEX_TESTLM("st(abc)*ring", "stabcabcring", TRUE, TRUE);
-    REGEX_TESTLM("st(abc)*ring", "stabcabcdring", FALSE, FALSE);
-    REGEX_TESTLM("st(abc)*ring", "stabcabcabcring etc.", TRUE, FALSE);
-
-    REGEX_TESTLM("a*", "",  TRUE, TRUE);
-    REGEX_TESTLM("a*", "b", TRUE, FALSE);
-
-
-    //
-    //  Patterns with "."
-    //
-    REGEX_TESTLM(".", "abc", TRUE, FALSE);
-    REGEX_TESTLM("...", "abc", TRUE, TRUE);
-    REGEX_TESTLM("....", "abc", FALSE, FALSE);
-    REGEX_TESTLM(".*", "abcxyz123", TRUE, TRUE);
-    REGEX_TESTLM("ab.*xyz", "abcdefghij", FALSE, FALSE);
-    REGEX_TESTLM("ab.*xyz", "abcdefg...wxyz", TRUE, TRUE);
-    REGEX_TESTLM("ab.*xyz", "abcde...wxyz...abc..xyz", TRUE, TRUE);
-    REGEX_TESTLM("ab.*xyz", "abcde...wxyz...abc..xyz...", TRUE, FALSE);
-
-    //
-    //  Patterns with * applied to chars at end of literal string
-    //
-    REGEX_TESTLM("abc*", "ab", TRUE, TRUE);
-    REGEX_TESTLM("abc*", "abccccc", TRUE, TRUE);
-
-    //
-    //  Supplemental chars match as single chars, not a pair of surrogates.
-    //
-    REGEX_TESTLM(".", "\\U00011000", TRUE, TRUE);
-    REGEX_TESTLM("...", "\\U00011000x\\U00012002", TRUE, TRUE);
-    REGEX_TESTLM("...", "\\U00011000x\\U00012002y", TRUE, FALSE);
-
-
-    //
-    //  UnicodeSets in the pattern
-    //
-    REGEX_TESTLM("[1-6]", "1", TRUE, TRUE);
-    REGEX_TESTLM("[1-6]", "3", TRUE, TRUE);
-    REGEX_TESTLM("[1-6]", "7", FALSE, FALSE);
-    REGEX_TESTLM("a[1-6]", "a3", TRUE, TRUE);
-    REGEX_TESTLM("a[1-6]", "a3", TRUE, TRUE);
-    REGEX_TESTLM("a[1-6]b", "a3b", TRUE, TRUE);
-
-    REGEX_TESTLM("a[0-9]*b", "a123b", TRUE, TRUE);
-    REGEX_TESTLM("a[0-9]*b", "abc", TRUE, FALSE);
-    REGEX_TESTLM("[\\p{Nd}]*", "123456", TRUE, TRUE);
-    REGEX_TESTLM("[\\p{Nd}]*", "a123456", TRUE, FALSE);   // note that * matches 0 occurences.
-    REGEX_TESTLM("[a][b][[:Zs:]]*", "ab   ", TRUE, TRUE);
-
-    //
-    //   OR operator in patterns
-    //
-    REGEX_TESTLM("(a|b)", "a", TRUE, TRUE);
-    REGEX_TESTLM("(a|b)", "b", TRUE, TRUE);
-    REGEX_TESTLM("(a|b)", "c", FALSE, FALSE);
-    REGEX_TESTLM("a|b", "b", TRUE, TRUE);
-
-    REGEX_TESTLM("(a|b|c)*", "aabcaaccbcabc", TRUE, TRUE);
-    REGEX_TESTLM("(a|b|c)*", "aabcaaccbcabdc", TRUE, FALSE);
-    REGEX_TESTLM("(a(b|c|d)(x|y|z)*|123)", "ac", TRUE, TRUE);
-    REGEX_TESTLM("(a(b|c|d)(x|y|z)*|123)", "123", TRUE, TRUE);
-    REGEX_TESTLM("(a|(1|2)*)(b|c|d)(x|y|z)*|123", "123", TRUE, TRUE);
-    REGEX_TESTLM("(a|(1|2)*)(b|c|d)(x|y|z)*|123", "222211111czzzzw", TRUE, FALSE);
-
-    //
-    //  +
-    //
-    REGEX_TESTLM("ab+", "abbc", TRUE, FALSE);
-    REGEX_TESTLM("ab+c", "ac", FALSE, FALSE);
-    REGEX_TESTLM("b+", "", FALSE, FALSE);
-    REGEX_TESTLM("(abc|def)+", "defabc", TRUE, TRUE);
-    REGEX_TESTLM(".+y", "zippity dooy dah ", TRUE, FALSE);
-    REGEX_TESTLM(".+y", "zippity dooy", TRUE, TRUE);
-
-    //
-    //   ?
-    //
-    REGEX_TESTLM("ab?", "ab", TRUE, TRUE);
-    REGEX_TESTLM("ab?", "a", TRUE, TRUE);
-    REGEX_TESTLM("ab?", "ac", TRUE, FALSE);
-    REGEX_TESTLM("ab?", "abb", TRUE, FALSE);
-    REGEX_TESTLM("a(b|c)?d", "abd", TRUE, TRUE);
-    REGEX_TESTLM("a(b|c)?d", "acd", TRUE, TRUE);
-    REGEX_TESTLM("a(b|c)?d", "ad", TRUE, TRUE);
-    REGEX_TESTLM("a(b|c)?d", "abcd", FALSE, FALSE);
-    REGEX_TESTLM("a(b|c)?d", "ab", FALSE, FALSE);
-
-    //
-    //  Escape sequences that become single literal chars, handled internally
-    //   by ICU's Unescape.
-    //
-    
-    // REGEX_TESTLM("\101\142", "Ab", TRUE, TRUE);      // Octal     TODO: not implemented yet.
-    REGEX_TESTLM("\\a", "\\u0007", TRUE, TRUE);        // BEL
-    REGEX_TESTLM("\\b", "\\u0008", TRUE, TRUE);        // BS
-    // REGEX_TESTLM("\\cL", "\\u000c", TRUE, TRUE);       // Control-L (or whatever) TODO: bug in Unescape
-    // REGEX_TESTLM("\\e", "\\u001b", TRUE, TRUE);        // Escape  TODO: bug in Unescape
-    REGEX_TESTLM("\\f", "\\u000c", TRUE, TRUE);        // Form Feed
-    REGEX_TESTLM("\\n", "\\u000a", TRUE, TRUE);        // new line
-    REGEX_TESTLM("\\r", "\\u000d", TRUE, TRUE);        //  CR
-    REGEX_TESTLM("\\t", "\\u0009", TRUE, TRUE);        // Tab
-    REGEX_TESTLM("\\u1234", "\\u1234", TRUE, TRUE);       
-    REGEX_TESTLM("\\U00001234", "\\u1234", TRUE, TRUE);       
-
-    REGEX_TESTLM(".*\\Ax", "xyz", TRUE, FALSE);  //  \A matches only at the beginning of input
-    REGEX_TESTLM(".*\\Ax", " xyz", FALSE, FALSE);  //  \A matches only at the beginning of input
-
-    // Escape of special chars in patterns
-    REGEX_TESTLM("\\\\\\|\\(\\)\\[\\{\\~\\$\\*\\+\\?\\.", "\\\\|()[{~$*+?.", TRUE, TRUE);       
-
-
-};
-
-
 
 //---------------------------------------------------------------------------
 //
@@ -1001,6 +1003,15 @@ void RegexTest::Extended() {
 
     REGEX_FIND( "((ab)+?)((ab)*)", "<0><1><2>ab</2></1><3>ababababab<4>ab</4></3></0>");
     REGEX_FIND( "((ab)+)((ab)*)", "<0><1>abababababab<2>ab</2></1><3></3></0>");
+
+    // Non-greedy ?? quantifier
+    REGEX_FIND( "(ab)(ab)\?\?(ab)\?\?(ab)\?\?(ab)\?\?c", 
+                "<0><1>ab</1><4>ab</4><5>ab</5>c</0>");
+
+    // Unicode Properties as naked elements in a pattern
+    REGEX_FIND( "\\p{Lu}+", "here we go ... <0>ABC</0> and no more.");
+    REGEX_FIND( "(\\p{L}+)(\\P{L}*?) (\\p{Zs}*)",  "7999<0><1>letters</1><2>4949%^&*(</2> <3>   </3></0>");
+
 }
 
 

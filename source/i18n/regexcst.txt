@@ -166,9 +166,9 @@ quant-plus:
 #                  between plain '?', '??', '?+'
 #
 quant-opt:
-     '?'                 n  expr-cont                               doNGOpt                 #  *?
-     '+'                 n  expr-cont                               doPossesiveOpt          #  *+
-     default                expr-cont                               doOpt
+     '?'                 n  expr-cont                               doNGOpt                 #  ??
+     '+'                 n  expr-cont                               doPossesiveOpt          #  ?+
+     default                expr-cont                               doOpt                   #  ?
 
 
 #
@@ -215,6 +215,8 @@ backslash:
    'B'                   n  term                                    doBackslashB
    'b'                   n  term                                    doBackslashb
    'G'                   n  term                                    doBackslashG
+   'p'			    expr-quant                              doProperty       #   \p{Lu}  style property
+   'P'			    expr-quant                              doProperty
    'W'                   n  term                                    doBackslashW
    'w'                   n  term                                    doBackslashw
    'X'                   n  term                                    doBackslashX
