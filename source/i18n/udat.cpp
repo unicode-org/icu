@@ -57,10 +57,7 @@ udat_open(UDateFormatStyle  timeStyle,
       }
 
       if(tzID != 0) {
-        TimeZone *zone = 0;
-        int32_t length = (tzIDLength == -1 ? u_strlen(tzID) : tzIDLength);
-        zone = TimeZone::createTimeZone(UnicodeString((UChar*)tzID,
-                                      length, length));
+        TimeZone *zone = TimeZone::createTimeZone(UnicodeString((UBool)(tzIDLength == -1), tzID, tzIDLength));
         if(zone == 0) {
           *status = U_MEMORY_ALLOCATION_ERROR;
           delete fmt;
@@ -73,18 +70,13 @@ udat_open(UDateFormatStyle  timeStyle,
   }
   else
   {
-      int32_t len = (patternLength == -1 ? u_strlen(pattern) : patternLength);
+      const UnicodeString pat = UnicodeString((UBool)(patternLength == -1), pattern, patternLength);
       UDateFormat *retVal = 0;
 
       if(locale == 0)
-        retVal = (UDateFormat*)new SimpleDateFormat(UnicodeString((UChar*)pattern,
-                                      len, len),
-                            *status);
+        retVal = (UDateFormat*)new SimpleDateFormat(pat, *status);
       else
-        retVal = (UDateFormat*)new SimpleDateFormat(UnicodeString((UChar*)pattern,
-                                      len, len),
-                            Locale(locale),
-                            *status);
+        retVal = (UDateFormat*)new SimpleDateFormat(pat, Locale(locale), *status);
 
       if(retVal == 0) {
         *status = U_MEMORY_ALLOCATION_ERROR;
@@ -130,7 +122,13 @@ udat_format(    const    UDateFormat*    format,
 
   if(U_FAILURE(*status)) return -1;
 
-  UnicodeString res(result, 0, resultLength);
+  UnicodeString res;
+  if(!(result==NULL && resultLength==0)) {
+    // NULL destination for pure preflighting: empty dummy string
+    // otherwise, alias the destination buffer
+    res.setTo(result, 0, resultLength);
+  }
+
   FieldPosition fp;
   
   if(position != 0)
@@ -156,8 +154,7 @@ udat_parse(    const    UDateFormat*        format,
 
   if(U_FAILURE(*status)) return (UDate)0;
 
-  int32_t len = (textLength == -1 ? u_strlen(text) : textLength);
-  const UnicodeString src((UChar*)text, len, len);
+  const UnicodeString src((UBool)(textLength == -1), text, textLength);
   ParsePosition pp;
   UDate res;
 
@@ -189,8 +186,7 @@ udat_parseCalendar(const    UDateFormat*    format,
 
   if(U_FAILURE(*status)) return;
 
-  int32_t len = (textLength == -1 ? u_strlen(text) : textLength);
-  const UnicodeString src((UChar*)text, len, len);
+  const UnicodeString src((UBool)(textLength == -1), text, textLength);
   ParsePosition pp;
 
   if(parsePos != 0)
@@ -297,7 +293,12 @@ udat_toPattern(    const   UDateFormat     *fmt,
 
   if(U_FAILURE(*status)) return -1;
 
-  UnicodeString res(result, 0, resultLength);
+  UnicodeString res;
+  if(!(result==NULL && resultLength==0)) {
+    // NULL destination for pure preflighting: empty dummy string
+    // otherwise, alias the destination buffer
+    res.setTo(result, 0, resultLength);
+  }
 
   if(localized)
     ((SimpleDateFormat*)fmt)->toLocalizedPattern(res, *status);
@@ -315,8 +316,7 @@ udat_applyPattern(            UDateFormat     *format,
                     int32_t         patternLength)
 {
 
-  int32_t len = (patternLength == -1 ? u_strlen(pattern) : patternLength);
-  const UnicodeString pat((UChar*)pattern, len, len);
+  const UnicodeString pat((UBool)(patternLength == -1), pattern, patternLength);
   UErrorCode status = U_ZERO_ERROR;
 
   if(localized)
@@ -386,7 +386,12 @@ udat_getSymbols(const   UDateFormat             *fmt,
 
   case UDAT_LOCALIZED_CHARS:
     {
-      UnicodeString res1(result, 0, resultLength);
+      UnicodeString res1;
+      if(!(result==NULL && resultLength==0)) {
+        // NULL destination for pure preflighting: empty dummy string
+        // otherwise, alias the destination buffer
+        res1.setTo(result, 0, resultLength);
+      }
       syms->getLocalPatternChars(res1);
       return res1.extract(result, resultLength, *status);
     }
