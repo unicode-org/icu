@@ -2815,6 +2815,10 @@ static void TestVariableTopSetting() {
     log_err("Unexpected failure getting rules %s\n", u_errorName(status));
     return;
   }
+  if (U_FAILURE(status)) {
+      log_err("Error parsing rules %s\n", u_errorName(status));
+      return;
+  }
   status = U_ZERO_ERROR;
 
   log_verbose("Testing setting variable top to contractions\n");
