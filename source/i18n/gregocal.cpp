@@ -340,6 +340,11 @@ GregorianCalendar::setGregorianChange(UDate date, UErrorCode& status)
     // Normalize the year so BC values are represented as 0 and negative
     // values.
     GregorianCalendar *cal = new GregorianCalendar(getTimeZone(), status);
+    //test for NULL
+    if (cal == 0) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
     if(U_FAILURE(status))
         return;
     cal->setTime(date, status);

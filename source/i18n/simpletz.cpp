@@ -691,6 +691,11 @@ UBool SimpleTimeZone::inDaylightTime(UDate date, UErrorCode& status) const
     // and provided only for Java compatibility as of 8/6/97 [LIU].
     if (U_FAILURE(status)) return FALSE;
     GregorianCalendar *gc = new GregorianCalendar(*this, status);
+    //test for NULL
+    if (gc == 0) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return FALSE;
+    }
     gc->setTime(date, status);
     UBool result = gc->inDaylightTime(status);
     delete gc;

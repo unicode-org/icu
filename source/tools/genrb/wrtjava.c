@@ -40,8 +40,8 @@ static const char copyRight[] =
     " *\n"
     " *******************************************************************************\n"
     " * $Source: /xsrl/Nsvn/icu/icu/source/tools/genrb/wrtjava.c,v $ \n"
-    " * $Date: 2002/05/21 23:29:56 $ \n"
-    " * $Revision: 1.12 $ \n"
+    " * $Date: 2002/06/29 09:19:46 $ \n"
+    " * $Revision: 1.13 $ \n"
     " *******************************************************************************\n"
     " */\n\n";
 static const char warningMsg[] = 
@@ -256,6 +256,12 @@ str_write_java( uint16_t* src, int32_t srcLen, UErrorCode *status){
     uint32_t length = srcLen*8;
     uint32_t bufLen = 0;
     char* buf = (char*) malloc(sizeof(char)*length);
+    //test for NULL
+    if(buf == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+    
     memset(buf,0,length);
   
     bufLen = uCharsToChars(buf,length,src,srcLen,status);
@@ -318,6 +324,11 @@ string_write_java(struct SResource *res,UErrorCode *status) {
     str_write_java(res->u.fString.fChars,res->u.fString.fLength,status);
      if(uprv_strcmp(srBundle->fKeys+res->fKey,"Rule")==0){
         UChar* buf = (UChar*) uprv_malloc(sizeof(UChar)*res->u.fString.fLength);
+        //test for NULL
+		if(buf == NULL) {
+			*status = U_MEMORY_ALLOCATION_ERROR;
+			return;
+		}
         uprv_memcpy(buf,res->u.fString.fChars,res->u.fString.fLength);      
         uprv_free(buf);
      }
@@ -514,6 +525,12 @@ bin_write_java( struct SResource *res, UErrorCode *status) {
                         /***************** Test Roundtripping *********************/
                         int32_t myTargetLen = rleStringToUCharArray(target,tgtLen,NULL,0,status);
                         uint16_t* myTarget = (uint16_t*) malloc(sizeof(uint16_t) * myTargetLen);
+                        //test for NULL
+                        if(myTarget == NULL) {
+                            *status = U_MEMORY_ALLOCATION_ERROR;
+                            return;    
+                        }
+                        
                         int i=0;
                         int32_t retVal=0;
                         uint16_t* saveSrc = (uint16_t*)res->u.fBinaryValue.fData;
@@ -553,6 +570,11 @@ bin_write_java( struct SResource *res, UErrorCode *status) {
                     {
                         int32_t myTargetLen = rleStringToByteArray(target,tgtLen,NULL,0,status);
                         uint8_t* myTarget = (uint8_t*) malloc(sizeof(uint8_t) * myTargetLen);
+                        //test for NULL
+                        if(myTarget == NULL) {
+                            *status = U_MEMORY_ALLOCATION_ERROR;
+                            return; 
+                        }
                         int i=0;
                         int32_t retVal=0;
 

@@ -183,6 +183,11 @@ void CompoundTransliterator::init(UVector& list,
     if (U_SUCCESS(status)) {
         count = list.size();
         trans = new Transliterator*[count];
+        //test for NULL
+        if (trans == 0) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
     }
 
     if (U_FAILURE(status) || trans == 0) {
@@ -375,18 +380,18 @@ void CompoundTransliterator::handleGetSourceSet(UnicodeSet& result) const {
     UnicodeSet set;
     result.clear();
     for (int32_t i=0; i<count; ++i) {
-	result.addAll(trans[i]->getSourceSet(set));
-	// Take the example of Hiragana-Latin.  This is really
-	// Hiragana-Katakana; Katakana-Latin.  The source set of
-	// these two is roughly [:Hiragana:] and [:Katakana:].
-	// But the source set for the entire transliterator is
-	// actually [:Hiragana:] ONLY -- that is, the first
-	// non-empty source set.
+    result.addAll(trans[i]->getSourceSet(set));
+    // Take the example of Hiragana-Latin.  This is really
+    // Hiragana-Katakana; Katakana-Latin.  The source set of
+    // these two is roughly [:Hiragana:] and [:Katakana:].
+    // But the source set for the entire transliterator is
+    // actually [:Hiragana:] ONLY -- that is, the first
+    // non-empty source set.
 
-	// This is a heuristic, and not 100% reliable.
-	if (!result.isEmpty()) {
-	    break;
-	}
+    // This is a heuristic, and not 100% reliable.
+    if (!result.isEmpty()) {
+        break;
+    }
     }
 }
 
@@ -397,8 +402,8 @@ UnicodeSet& CompoundTransliterator::getTargetSet(UnicodeSet& result) const {
     UnicodeSet set;
     result.clear();
     for (int32_t i=0; i<count; ++i) {
-	// This is a heuristic, and not 100% reliable.
-	result.addAll(trans[i]->getTargetSet(set));
+    // This is a heuristic, and not 100% reliable.
+    result.addAll(trans[i]->getTargetSet(set));
     }
     return result;
 }

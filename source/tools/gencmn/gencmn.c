@@ -324,6 +324,11 @@ main(int argc, char* argv[]) {
         }
 
         symPrefix = (char *) uprv_malloc(uprv_strlen(entrypointName) + 2);
+        //test for NULL
+		if (symPrefix == NULL) {
+			sprintf(buffer, "U_MEMORY_ALLOCATION_ERROR");
+			exit(U_MEMORY_ALLOCATION_ERROR);
+		}
         uprv_strcpy(symPrefix, entrypointName);
         uprv_strcat(symPrefix, "_");
 

@@ -216,6 +216,11 @@ DecimalFormat::construct(UErrorCode&             status,
     if (fSymbols == NULL)
     {
         fSymbols = new DecimalFormatSymbols(Locale::getDefault(), status);
+        //test for NULL
+        if (fSymbols == 0) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
     }
 
     UnicodeString str;
@@ -2767,7 +2772,18 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
             delete fNegPrefixPattern;
             delete fNegSuffixPattern;
             fPosPrefixPattern = new UnicodeString(prefix);
+            //test for NULL
+            if (fPosPrefixPattern == 0) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                return;
+            }
             fPosSuffixPattern = new UnicodeString(suffix);
+            //test for NULL
+            if (fPosSuffixPattern == 0) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                delete fPosPrefixPattern;
+                return;
+            }
             fNegPrefixPattern = 0;
             fNegSuffixPattern = 0;
 
@@ -2816,6 +2832,13 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                     *fRoundingIncrement = roundingInc;
                 } else {
                     fRoundingIncrement = new DigitList(roundingInc);
+                    //test for NULL
+                    if (fRoundingIncrement == 0) {
+                        status = U_MEMORY_ALLOCATION_ERROR;
+                        delete fPosPrefixPattern;
+                        delete fPosSuffixPattern;
+                        return;
+                    }
                 }
                 fRoundingDouble = fRoundingIncrement->getDouble();
                 fRoundingMode = kRoundHalfEven;
@@ -2824,7 +2847,18 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
             }
         } else {
             fNegPrefixPattern = new UnicodeString(prefix);
+            //test for NULL
+            if (fNegPrefixPattern == 0) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                return;
+            }
             fNegSuffixPattern = new UnicodeString(suffix);
+            //test for NULL
+            if (fNegSuffixPattern == 0) {
+                delete fNegPrefixPattern;
+                status = U_MEMORY_ALLOCATION_ERROR;
+                return;
+            }
         }
     }
 
@@ -2837,11 +2871,22 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
             fPosPrefixPattern->remove();
         } else {
             fPosPrefixPattern = new UnicodeString();
+            //test for NULL
+            if (fPosPrefixPattern == 0) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                return;
+            }
         }
         if (fPosSuffixPattern != NULL) {
             fPosSuffixPattern->remove();
         } else {
             fPosSuffixPattern = new UnicodeString();
+            //test for NULL
+            if (fPosSuffixPattern == 0) {
+                delete fPosPrefixPattern;
+                status = U_MEMORY_ALLOCATION_ERROR;
+                return;
+            }
         }
 
         setMinimumIntegerDigits(0);
@@ -2869,6 +2914,11 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
         _copy_us_ptr(&fNegSuffixPattern, fPosSuffixPattern);
         if (fNegPrefixPattern == NULL) {
             fNegPrefixPattern = new UnicodeString();
+            //test for NULL
+            if (fNegPrefixPattern == 0) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                return;
+            }
         } else {
             fNegPrefixPattern->remove();
         }
