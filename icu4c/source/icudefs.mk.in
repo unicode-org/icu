@@ -36,7 +36,7 @@ SO_TARGET_VERSION = @LIB_VERSION@
 SO_TARGET_VERSION_MAJOR = @LIB_VERSION_MAJOR@
 
 # The ICU data external name is usually icudata; the entry point name is
-# the version-dependent name (for no particula reason except it was easier
+# the version-dependent name (for no particular reason except it was easier
 # to change the build this way). When building in common mode, the data
 # name is the versioned platform-dependent one. 
 
@@ -58,7 +58,7 @@ ICUDATA_NAME = $(ICUDATA_PLATFORM_NAME)
 PKGDATA_LIBNAME = -L $(ICUPREFIX)$(DATA_STUBNAME)$(ICULIBSUFFIX)
 ICUPKGDATA_DIR = $(libdir)
 else
-ICUDATA_NAME = $(ICUPREFIX)$(DATA_STUBNAME)
+ICUDATA_NAME = $(ICUDATA_PLATFORM_NAME)
 ICUPKGDATA_DIR = $(ICUDATA_DIR)
 endif
 endif
