@@ -135,7 +135,8 @@ struct UConverter {
     uint32_t options; /* options flags from UConverterOpen, may contain additional bits */
 
     UBool sharedDataIsCached;  /* TRUE:  shared data is in cache, don't destroy on ucnv_close() if 0 ref.  FALSE: shared data isn't in the cache, do attempt to clean it up if the ref is 0 */
-    UBool isCopyLocal;   /* TRUE if created by safeClone with no allocation - Don't free cnv memory on ucnv_close.  */
+    UBool isCopyLocal;  /* TRUE if UConverter is not owned and not released in ucnv_close() (stack-allocated, safeClone(), etc.) */
+    UBool isExtraLocal; /* TRUE if extraInfo is not owned and not released in ucnv_close() (stack-allocated, safeClone(), etc.) */
 
     UBool  useFallback;
     int8_t toULength;                   /* number of bytes in toUBytes */

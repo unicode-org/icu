@@ -206,17 +206,17 @@ _SCSUOpen(UConverter *cnv,
 
 static void
 _SCSUClose(UConverter *cnv) {
-    if(!cnv->isCopyLocal){
-        if(cnv->extraInfo!=NULL) {
+    if(cnv->extraInfo!=NULL) {
+        if(!cnv->isExtraLocal) {
             uprv_free(cnv->extraInfo);
-            cnv->extraInfo=NULL;
         }
+        cnv->extraInfo=NULL;
     }
 }
 
 /* SCSU-to-Unicode conversion functions ------------------------------------- */
 
-/* ### check operator precedence | << + < */
+/* ### TODO check operator precedence | << + < */
 
 static void
 _SCSUToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
@@ -2171,6 +2171,7 @@ _SCSUSafeClone(const UConverter *cnv,
 
     uprv_memcpy(&localClone->mydata, cnv->extraInfo, sizeof(SCSUData));
     localClone->cnv.extraInfo = &localClone->mydata;
+    localClone->cnv.isExtraLocal = TRUE;
 
     return &localClone->cnv;
 }
