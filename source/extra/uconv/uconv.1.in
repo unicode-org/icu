@@ -96,6 +96,11 @@ after the data have been transcoded to Unicode.
 .BR \-h\fP, \fB\-?\fP, \fB\-\-help
 Print help about usage and exit.
 .TP
+.BR \-V\fP, \fB\-\-version
+Print the version of
+.B uconv
+and exit.
+.TP
 .BI "\-s\fP, \fB\-\-silent"
 Suppress messages during execution.
 .TP
