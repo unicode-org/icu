@@ -1276,10 +1276,10 @@ static char *gDataDirectory = NULL;
 
 static UBool U_CALLCONV putil_cleanup(void)
 {
-    if (gDataDirectory) {
+    if (gDataDirectory && *gDataDirectory) {
         uprv_free(gDataDirectory);
-        gDataDirectory = NULL;
     }
+    gDataDirectory = NULL;
 #if U_POSIX_LOCALE
     if (gCorrectedPOSIXLocale) {
         uprv_free(gCorrectedPOSIXLocale);
@@ -1297,26 +1297,32 @@ static UBool U_CALLCONV putil_cleanup(void)
 U_CAPI void U_EXPORT2
 u_setDataDirectory(const char *directory) {
     char *newDataDir;
-#if (U_FILE_SEP_CHAR != U_FILE_ALT_SEP_CHAR)
-    char *p;
-#endif
     int32_t length;
 
-    if(directory==NULL) {
+    if(directory==NULL || *directory==0) {
+        /* A small optimization to prevent the malloc and copy when the
+        shared library is used, and this is a way to make sure that NULL
+        is never returned.
+        */
         directory = "";
     }
-    length=(int32_t)uprv_strlen(directory);
-    newDataDir = (char *)uprv_malloc(length + 2);
-    uprv_strcpy(newDataDir, directory);
+    else {
+        length=(int32_t)uprv_strlen(directory);
+        newDataDir = (char *)uprv_malloc(length + 2);
+        uprv_strcpy(newDataDir, directory);
 
 #if (U_FILE_SEP_CHAR != U_FILE_ALT_SEP_CHAR)
-    while(p = uprv_strchr(newDataDir, U_FILE_ALT_SEP_CHAR)) {
-       *p = U_FILE_SEP_CHAR;
-    }
+        {
+            char *p;
+            while(p = uprv_strchr(newDataDir, U_FILE_ALT_SEP_CHAR)) {
+                *p = U_FILE_SEP_CHAR;
+            }
+        }
 #endif
+    }
 
     umtx_lock(NULL);
-    if (gDataDirectory) {
+    if (gDataDirectory && *gDataDirectory) {
         uprv_free(gDataDirectory);
     }
     gDataDirectory = newDataDir;
