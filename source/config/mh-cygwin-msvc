@@ -3,7 +3,7 @@
 ## Copyright (c) 2001-2003, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-cygwin-msvc,v 1.11 2003/09/13 08:46:41 grhoten-oss Exp $
+## $Id: mh-cygwin-msvc,v 1.12 2003/09/13 09:06:09 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	:
@@ -28,7 +28,7 @@ THREADSCXXFLAGS += /MD
 CFLAGS += /MD /GF
 CXXFLAGS += /MD /GF
 CPPFLAGS+=/nologo
-DEFS+=/D"WIN32" /D"U_CYGWIN"
+DEFS+=/D"WIN32"
 LDFLAGS+=/nologo
 
 # Commands to compile
