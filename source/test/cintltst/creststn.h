@@ -48,6 +48,8 @@ static void TestErrorConditions(void);
 
 static void TestGetVersion(void);
 
+static void TestGetVersionColl(void);
+
 static void TestEmptyBundle(void);
 
 static void TestDirectAccess(void);

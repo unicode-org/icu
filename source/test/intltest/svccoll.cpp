@@ -21,6 +21,7 @@ void CollationServiceTest::TestRegister()
 {
   // register a singleton
     const Locale& FR = Locale::getFrance();
+    const Locale& FRENCH = Locale::getFrench();
     const Locale& US = Locale::getUS();
     const Locale US_FOO("en", "US", "FOO");
     
@@ -44,12 +45,12 @@ void CollationServiceTest::TestRegister()
         }
         // ensure original collator's params not touched
         Locale loc = frcol->getLocale(ULOC_REQUESTED_LOCALE, status);
-        if (loc != FR) {
-            errln(UnicodeString("fr collator's requested locale changed to ") + loc.getName());
+        if (loc != FRENCH) {
+          errln(UnicodeString("fr collator's requested locale changed to ") + loc.getName());
         }
         loc = frcol->getLocale(ULOC_VALID_LOCALE, status);
-        if (loc != FR) {
-            errln(UnicodeString("fr collator's valid locale changed to ") + loc.getName());
+        if (loc != FRENCH) {
+          errln(UnicodeString("fr collator's valid locale changed to ") + loc.getName());
         }
         
         loc = ncol->getLocale(ULOC_REQUESTED_LOCALE, status);
