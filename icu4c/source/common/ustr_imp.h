@@ -24,7 +24,7 @@
  * @internal
  */
 U_CFUNC UBool
-uprv_haveProperties();
+uprv_haveProperties(void);
 
 /**
  * Type of a function that may be passed to the internal case mapping functions
