@@ -1761,6 +1761,18 @@ _uRegexErrorName[U_REGEX_ERROR_LIMIT - U_REGEX_ERROR_START] = {
     "U_REGEX_INVALID_FLAG"
 };
 
+static const char * const
+_uIDNAErrorName[U_IDNA_ERROR_LIMIT - U_IDNA_ERROR_START] = {
+      "U_IDNA_ERROR_START",
+      "U_IDNA_PROHIBITED_CODEPOINT_FOUND_ERROR",
+      "U_IDNA_UNASSIGNED_CODEPOINT_FOUND_ERROR",
+      "U_IDNA_CHECK_BIDI_ERROR",
+      "U_IDNA_STD3_ASCII_RULES_ERROR",
+      "U_IDNA_ACE_PREFIX_ERROR",
+      "U_IDNA_VERIFICATION_ERROR",
+      "U_IDNA_LABEL_TOO_LONG_ERROR"
+};
+
 U_CAPI const char * U_EXPORT2
 u_errorName(UErrorCode code) {
     if(U_ZERO_ERROR <= code && code < U_STANDARD_ERROR_LIMIT) {
@@ -1775,6 +1787,8 @@ u_errorName(UErrorCode code) {
         return _uBrkErrorName[code - U_BRK_ERROR_START];
     } else if (U_REGEX_ERROR_START <= code && code < U_REGEX_ERROR_LIMIT) {
         return _uRegexErrorName[code - U_REGEX_ERROR_START];
+    } else if( U_IDNA_ERROR_START <= code && code <= U_IDNA_ERROR_LIMIT) {
+        return _uIDNAErrorName[code - U_IDNA_ERROR_START];
     } else {
         return "[BOGUS UErrorCode]";
     }

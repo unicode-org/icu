@@ -3246,5 +3246,64 @@ InputPath=.\unicode\utf_old.h
 
 # End Source File
 # End Group
+# Begin Group "idna"
+
+# PROP Default_Filter "*.c,*.h"
+# Begin Source File
+
+SOURCE=.\nameprep.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\nameprep.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\punycode.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\punycode.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\sprpimpl.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\strprep.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\strprep.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\uidna.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\uidna.h
+
+!IF  "$(CFG)" == "common - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "common - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\uidna.h
+
+"..\..\include\unicode\uidna.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "common - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "common - Win64 Debug"
+
+!ENDIF 
+
+# End Source File
+# End Group
 # End Target
 # End Project
