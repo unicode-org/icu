@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: FrameResources.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:52:46 $
+ * @(#)$RCSfile: FrameResources.java,v $ $Revision: 1.2 $ $Date: 2000/10/06 23:15:03 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -74,8 +74,8 @@ public final class FrameResources extends ListResourceBundle {
     // This is the only String which is not its own value:
     public static final String ABOUT_TEXT = "About text";
     private static final String ACTUAL_ABOUT_TEXT =
-        "Copyright © Taligent, Inc. 1996 All rights reserved.\n" +
-        "Copyright © IBM Corp. 1996-1998\n\n" +
+        "Copyright (C) Taligent, Inc. 1996 All rights reserved.\n" +
+        "Copyright (C) IBM Corp. 1996-1998\n\n" +
         "John Raley\n" +
         "Stephen F. Booth\n" +
         "Doug Felt\n" +
