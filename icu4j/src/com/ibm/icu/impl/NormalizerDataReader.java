@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/NormalizerDataReader.java,v $
- * $Date: 2002/08/01 19:50:26 $
- * $Revision: 1.7 $
+ * $Date: 2002/10/09 23:53:24 $
+ * $Revision: 1.8 $
  *******************************************************************************
  */
  
@@ -276,7 +276,7 @@ import com.ibm.icu.impl.ICUDebug;
 	 *     which is (((high16(cp)&0x1f00)<<8)|result;
 	 *     else there is a USerializedSet at canonStartSets+result
 	 */
-final class NormalizerDataReader {
+final class NormalizerDataReader implements ICUBinary.Authenticate {
 	private final static boolean debug = ICUDebug.enabled("NormalizerDataReader");
 	
    /**
@@ -289,8 +289,7 @@ final class NormalizerDataReader {
                                         throws IOException{
         if(debug) System.out.println("Bytes in inputStream " + inputStream.available());
         
-        ICUBinary.readHeader(inputStream, DATA_FORMAT_ID, 
-                             DATA_FORMAT_VERSION);
+        ICUBinary.readHeader(inputStream, DATA_FORMAT_ID, this);
         
         if(debug) System.out.println("Bytes left in inputStream " +inputStream.available());
         
@@ -377,6 +376,14 @@ final class NormalizerDataReader {
     public byte[] getDataFormatVersion(){
         return DATA_FORMAT_VERSION;
     }
+    
+    public boolean isDataVersionAcceptable(byte version[])
+    {
+        return version[0] == DATA_FORMAT_VERSION[0] 
+               && version[2] == DATA_FORMAT_VERSION[2] 
+               && version[3] == DATA_FORMAT_VERSION[3];
+    }
+    
     // private data members -------------------------------------------------
       
 

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/ICUBinary.java,v $
- * $Date: 2002/08/01 19:50:26 $
- * $Revision: 1.6 $
+ * $Date: 2002/10/09 23:53:24 $
+ * $Revision: 1.7 $
  *  *****************************************************************************************
  */
 package com.ibm.icu.impl;
@@ -18,6 +18,24 @@ import java.util.Arrays;
 
 public final class ICUBinary 
 {    
+    // public inner interface ------------------------------------------------
+    
+    /**
+     * Special interface for data authentication
+     */
+    public static interface Authenticate
+    {
+        /**
+         * Method used in ICUBinary.readHeader() to provide data format
+         * authentication. 
+         * @param version version of the current data
+         * @return true if dataformat is an acceptable version, false otherwise
+         */
+        public boolean isDataVersionAcceptable(byte version[]);
+    }
+    
+    // public methods --------------------------------------------------------
+    
     /**
     * <p>ICU data header reader method. 
     * Takes a ICU generated big-endian input stream, parse the ICU standard 
@@ -60,22 +78,15 @@ public final class ICUBinary
     *                     information about the data format.
     *                     E.g. data format ID 1.2.3.4. will became an array of 
     *                     {1, 2, 3, 4}
-    * @param dataVersionExpected Data version expected. An array of 4 bytes 
-    *                     information about the data version.
-    *                     E.g. data version 1.2.3.4. will became an array of 
-    *                     {1, 2, 3, 4}
-    * @param unicodeVersionExpected Unicode version expected. An array of 4 
-    *                     bytes information about the unicode
-    *                     version this set of data belongs to.
-    *                     E.g. unicode version 3.1.1.0. will became an array 
-    *                     of {3, 1, 1, 0}
+    * @param authenticate user defined extra data authentication. This value
+    *                     can be null, if no extra authentication is needed.
     * @exception IOException thrown if there is a read error or 
     *            when header authentication fails.
     * @draft 2.1
     */
     public static final byte[] readHeader(InputStream inputStream,
                                         byte dataFormatIDExpected[],
-                                        byte dataVersionExpected[]) 
+                                        Authenticate authenticate) 
                                                           throws IOException
     {
         DataInputStream input = new DataInputStream(inputStream);
@@ -114,10 +125,11 @@ public final class ICUBinary
         headersize -= 4;
         input.skipBytes(headersize);
 
-        if (bigendian != BIG_ENDIAN_ || charset != CHAR_SET_ || 
-            charsize != CHAR_SIZE_ ||
-            !Arrays.equals(dataFormatIDExpected, dataFormatID) ||
-            !Arrays.equals(dataVersionExpected, dataVersion)) {
+        if (bigendian != BIG_ENDIAN_ || charset != CHAR_SET_
+            || charsize != CHAR_SIZE_
+            || !Arrays.equals(dataFormatIDExpected, dataFormatID)
+            || (authenticate != null 
+                && !authenticate.isDataVersionAcceptable(dataVersion))) {
             throw new IOException(HEADER_AUTHENTICATION_FAILED_);
         }
         return unicodeVersion;
@@ -144,5 +156,5 @@ public final class ICUBinary
     private static final String MAGIC_NUMBER_AUTHENTICATION_FAILED_ = 
                        "ICU data file error: Not an ICU data file";
     private static final String HEADER_AUTHENTICATION_FAILED_ =
-        "ICU data file error: Header authentication failed, please check if you have the most updated ICU data file";
+        "ICU data file error: Header authentication failed, please check if you have a valid ICU data file";
 }
