@@ -195,6 +195,14 @@ icu4c/source/tools/gencnval/convrtrs.txt.[0-9]
 icu4c/source/tools/gencnval/gencnval
 icu4c/source/tools/gencnval/gencnval.[0-9]
 icu4c/source/tools/gencnval/tmp
+icu4c/source/tools/genfchk/*.d
+icu4c/source/tools/genfchk/*.pdb
+icu4c/source/tools/genfchk/*.plg
+icu4c/source/tools/genfchk/Debug
+icu4c/source/tools/genfchk/Makefile
+icu4c/source/tools/genfchk/Release
+icu4c/source/tools/genfchk/genfchk
+icu4c/source/tools/genfchk/tmp*
 icu4c/source/tools/gennames/*.d
 icu4c/source/tools/gennames/*.pdb
 icu4c/source/tools/gennames/Debug
@@ -209,6 +217,14 @@ icu4c/source/tools/genprops/Makefile
 icu4c/source/tools/genprops/Release
 icu4c/source/tools/genprops/genprops
 icu4c/source/tools/genprops/tmp
+icu4c/source/tools/genqchk/*.d
+icu4c/source/tools/genqchk/*.pdb
+icu4c/source/tools/genqchk/*.plg
+icu4c/source/tools/genqchk/Debug
+icu4c/source/tools/genqchk/Makefile
+icu4c/source/tools/genqchk/Release
+icu4c/source/tools/genqchk/genqchk
+icu4c/source/tools/genqchk/tmp*
 icu4c/source/tools/genrb/*.d
 icu4c/source/tools/genrb/*.pdb
 icu4c/source/tools/genrb/Debug
@@ -238,6 +254,7 @@ icu4c/source/tools/genuca/Debug
 icu4c/source/tools/genuca/Makefile
 icu4c/source/tools/genuca/Release
 icu4c/source/tools/genuca/genuca
+icu4c/source/tools/genuca/genuca.8
 icu4c/source/tools/genuca/tmp
 icu4c/source/tools/icupkg.inc
 icu4c/source/tools/makeconv/*.d
