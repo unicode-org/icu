@@ -30,66 +30,67 @@ void TestMessageFormat::testBug3()
 {
     double myNumber = -123456;
     DecimalFormat *form = 0;
-        Locale locale[] = {
-    Locale("ar", "", ""),
-    Locale("be", "", ""),
-    Locale("bg", "", ""),
-    Locale("ca", "", ""),
-    Locale("cs", "", ""),
-    Locale("da", "", ""),
-    Locale("de", "", ""),
-    Locale("de", "AT", ""),
-    Locale("de", "CH", ""),
-    Locale("el", "", ""),       // 10
-    Locale("en", "CA", ""),
-    Locale("en", "GB", ""),
-    Locale("en", "IE", ""),
-    Locale("en", "US", ""),
-    Locale("es", "", ""),
-    Locale("et", "", ""),
-    Locale("fi", "", ""),
-    Locale("fr", "", ""),
-    Locale("fr", "BE", ""),
-    Locale("fr", "CA", ""),     // 20
-    Locale("fr", "CH", ""),
-    Locale("he", "", ""),
-    Locale("hr", "", ""),
-    Locale("hu", "", ""),
-    Locale("is", "", ""),
-    Locale("it", "", ""),
-    Locale("it", "CH", ""),
-    Locale("ja", "", ""),
-    Locale("ko", "", ""),
-    Locale("lt", "", ""),       // 30
-    Locale("lv", "", ""),
-    Locale("mk", "", ""),
-    Locale("nl", "", ""),
-    Locale("nl", "BE", ""),
-    Locale("no", "", ""),
-    Locale("pl", "", ""),
-    Locale("pt", "", ""),
-    Locale("ro", "", ""),
-    Locale("ru", "", ""),
-    Locale("sh", "", ""),       // 40
-    Locale("sk", "", ""),
-    Locale("sl", "", ""),
-    Locale("sq", "", ""),
-    Locale("sr", "", ""),
-    Locale("sv", "", ""),
-    Locale("tr", "", ""),
-    Locale("uk", "", ""),
-    Locale("zh", "", ""),
-    Locale("zh", "TW", "") };   // 49
+    Locale locale[] = {
+        Locale("ar", "", ""),
+        Locale("be", "", ""),
+        Locale("bg", "", ""),
+        Locale("ca", "", ""),
+        Locale("cs", "", ""),
+        Locale("da", "", ""),
+        Locale("de", "", ""),
+        Locale("de", "AT", ""),
+        Locale("de", "CH", ""),
+        Locale("el", "", ""),       // 10
+        Locale("en", "CA", ""),
+        Locale("en", "GB", ""),
+        Locale("en", "IE", ""),
+        Locale("en", "US", ""),
+        Locale("es", "", ""),
+        Locale("et", "", ""),
+        Locale("fi", "", ""),
+        Locale("fr", "", ""),
+        Locale("fr", "BE", ""),
+        Locale("fr", "CA", ""),     // 20
+        Locale("fr", "CH", ""),
+        Locale("he", "", ""),
+        Locale("hr", "", ""),
+        Locale("hu", "", ""),
+        Locale("is", "", ""),
+        Locale("it", "", ""),
+        Locale("it", "CH", ""),
+        Locale("ja", "", ""),
+        Locale("ko", "", ""),
+        Locale("lt", "", ""),       // 30
+        Locale("lv", "", ""),
+        Locale("mk", "", ""),
+        Locale("nl", "", ""),
+        Locale("nl", "BE", ""),
+        Locale("no", "", ""),
+        Locale("pl", "", ""),
+        Locale("pt", "", ""),
+        Locale("ro", "", ""),
+        Locale("ru", "", ""),
+        Locale("sh", "", ""),       // 40
+        Locale("sk", "", ""),
+        Locale("sl", "", ""),
+        Locale("sq", "", ""),
+        Locale("sr", "", ""),
+        Locale("sv", "", ""),
+        Locale("tr", "", ""),
+        Locale("uk", "", ""),
+        Locale("zh", "", ""),
+        Locale("zh", "TW", "")      // 49
+    };
     int32_t i;
     for (i= 0; i < 49; i++) {
         UnicodeString buffer;
-        it_out << locale[i].getDisplayName(buffer) << endl;
+        logln(locale[i].getDisplayName(buffer));
         UErrorCode success = U_ZERO_ERROR;
 //        form = (DecimalFormat*)NumberFormat::createCurrencyInstance(locale[i], success);
         form = (DecimalFormat*)NumberFormat::createInstance(locale[i], success);
         if (U_FAILURE(success)) {
-            it_errln("Err: Number Format ");
-            it_out << "Number format creation failed.\n";
+            errln("Err: Number Format ");
+            logln("Number format creation failed.");
             continue;
         }
         Formattable result;
@@ -103,8 +104,8 @@ void TestMessageFormat::testBug3()
         it_out << " -> " /*<< dec*/ /*<< result*/ << "[supposed output for result]" <<endl;
 #endif
         if (U_FAILURE(success)) {
-            it_errln("Err: Number Format parse");
-            it_out << "Number format parse failed.\n";
+            errln("Err: Number Format parse");
+            logln("Number format parse failed.");
         }
         delete form;
     }
@@ -121,9 +122,9 @@ void TestMessageFormat::testBug1()
     UnicodeString toAppendTo;
     cf->format((int32_t)1, toAppendTo, status);
     if (toAppendTo != "1.0<=Arg<2.0") {
-        it_errln("ChoiceFormat cmp in testBug1");
+        errln("ChoiceFormat cmp in testBug1");
     }
-    it_out <<  toAppendTo << endl;
+    logln(toAppendTo);
     delete cf;
 }
 
@@ -133,21 +134,22 @@ void TestMessageFormat::testBug2()
     UnicodeString result;
     // {sfb} use double format in pattern, so result will match (not strictly necessary)
     const UnicodeString pattern = "There {0,choice,0.0#are no files|1.0#is one file|1.0<are {0, number} files} on disk {1}. ";
-    it_out << "The input pattern : " << pattern << endl;
+    logln("The input pattern : " + pattern);
     MessageFormat *fmt = new MessageFormat(pattern, status);
     if (U_FAILURE(status)) {
-        it_errln("MessageFormat pattern creation failed.\n");
-        it_out << "MessageFormat pattern creation failed.\n";
+        errln("MessageFormat pattern creation failed.");
+        logln("MessageFormat pattern creation failed.");
         return;
     }
-    it_out << "The output pattern is : " << fmt->toPattern(result) << endl;
+    logln("The output pattern is : " + fmt->toPattern(result));
     if (pattern != result) {
-        it_errln("MessageFormat::toPattern() failed.\n");
-        it_out << "MessageFormat::toPattern() failed.\n";
+        errln("MessageFormat::toPattern() failed.");
+        logln("MessageFormat::toPattern() failed.");
     }
     delete fmt;
 }
 
+#if 0
 #if defined(_DEBUG) && U_IOSTREAM_SOURCE!=0
 //----------------------------------------------------
 // console I/O
@@ -205,6 +207,7 @@ operator<<( IntlTest&           stream,
     }
     return stream;
 }
+#endif /* defined(_DEBUG) && U_IOSTREAM_SOURCE!=0 */
 #endif
 
 void TestMessageFormat::PatternTest() 
@@ -251,33 +254,33 @@ void TestMessageFormat::PatternTest()
 
 
     for (int32_t i = 0; i < 9; ++i) {
-        //it_out << "\nPat in:  " << testCases[i] << endl;
+        //it_out << "\nPat in:  " << testCases[i]);
 
         MessageFormat *form = 0;
         UErrorCode success = U_ZERO_ERROR;
         UnicodeString buffer;
         form = new MessageFormat(testCases[i], Locale::US, success);
         if (U_FAILURE(success)) {
-            it_errln ("MessageFormat creation failed.#1");
-            it_out << "MessageFormat for "<< testCases[i] << " creation failed.\n";
+            errln("MessageFormat creation failed.#1");
+            logln(((UnicodeString)"MessageFormat for ") + testCases[i] + " creation failed.\n");
             continue;
         }
         if (form->toPattern(buffer) != testResultPatterns[i]) {
             errln(UnicodeString("TestMessageFormat::PatternTest failed test #2, i = ") + i);
             //form->toPattern(buffer);
-            it_out << " Orig: " << testCases[i] << endl;
-            it_out << " Exp:  " << testResultPatterns[i] << endl;
-            it_out << " Got:  " << buffer << endl;
+            errln(((UnicodeString)" Orig: ") + testCases[i]);
+            errln(((UnicodeString)" Exp:  ") + testResultPatterns[i]);
+            errln(((UnicodeString)" Got:  ") + buffer);
         }
 
-        //it_out << "Pat out: " << form->toPattern(buffer) << endl;
+        //it_out << "Pat out: " << form->toPattern(buffer));
         UnicodeString result;
         int32_t count = 4;
         FieldPosition fieldpos(0);
         form->format(testArgs, count, result, fieldpos, success);
         if (U_FAILURE(success)) {
-            it_errln ("MessageFormat failed test #3");
-            it_out << "TestMessageFormat::PatternTest failed test #3" << endl;
+            errln("MessageFormat failed test #3");
+            logln("TestMessageFormat::PatternTest failed test #3");
             continue;
         }
         if (result != testResultStrings[i]) {
@@ -288,30 +291,32 @@ void TestMessageFormat::PatternTest()
         }
         
 
-        //it_out << "Result:  " << result << endl;
+        //it_out << "Result:  " << result);
 #if 0
-        it_out << "---------------- test parse ----------------" << endl;
+        /* TODO: Look at this test and see if this is still a valid test */
+        logln("---------------- test parse ----------------");
 
         form->toPattern(buffer);
-        it_out << "MSG pattern for parse: " << buffer << endl;
+        logln("MSG pattern for parse: " + buffer);
 
-        Formattable* values = form->parse(result, count, success);
+        int32_t parseCount = 0;
+        Formattable* values = form->parse(result, parseCount, success);
         if (U_FAILURE(success)) {
             errln("MessageFormat failed test #5");
             logln(UnicodeString("MessageFormat failed test #5 with error code ")+(int32_t)success);
-        }else
-        if (count != 4) {
-            errln("MSG count not 4 (as expected)");
+        } else if (parseCount != count) {
+            errln("MSG count not %d as expected. Got %d", count, parseCount);
         }
         UBool failed = FALSE;
-        for (int32_t j = 0; j < count; ++j) {
+        for (int32_t j = 0; j < parseCount; ++j) {
              if (values == 0 || testArgs[j] != values[j]) {
-                 it_out << "MSG testargs[" << j << "]: " << testArgs[j] << endl;
-                 it_out << "MSG values[" << j << "]  : " << values[j] << endl;
+                errln(((UnicodeString)"MSG testargs[") + j + "]: " + toString(testArgs[j]));
+                errln(((UnicodeString)"MSG values[") + j + "]  : " + toString(values[j]));
                 failed = TRUE;
              }
         }
-        if (failed) errln("MessageFormat failed test #6");
+        if (failed)
+            errln("MessageFormat failed test #6");
 #endif
         delete form;
     }
@@ -324,15 +329,15 @@ void TestMessageFormat::sample()
     UErrorCode success = U_ZERO_ERROR;
     form = new MessageFormat("There are {0} files on {1}", success);
     if (U_FAILURE(success)) {
-        it_errln("Err: Message format creation failed");
-        it_out << "Sample message format creation failed.\n";
+        errln("Err: Message format creation failed");
+        logln("Sample message format creation failed.");
         return;
     }
     UnicodeString abc("abc");
     UnicodeString def("def");
     Formattable testArgs1[] = { abc, def };
     FieldPosition fieldpos(0);
-    it_out << form->toPattern(buffer1) << "; " << form->format(testArgs1, 2, buffer2, fieldpos, success) << endl;
+    logln(form->toPattern(buffer1) + "; " + form->format(testArgs1, 2, buffer2, fieldpos, success));
     delete form;
 }
 
@@ -468,18 +473,18 @@ void TestMessageFormat::testCopyConstructor()
     if ( (*x == *y) && 
          (*x != *z) && 
          (*y != *z) )
-         it_out << "First test (operator ==): Passed!\n";
+         logln("First test (operator ==): Passed!");
     else {
-        it_errln( "TestMessageFormat::testCopyConstructor failed #1");
-        it_out << "First test (operator ==): Failed!\n";
+        errln("TestMessageFormat::testCopyConstructor failed #1");
+        logln("First test (operator ==): Failed!");
     }
     if ( ((*x == *y) && (*y == *x)) &&
          ((*x != *z) && (*z != *x)) &&
          ((*y != *z) && (*z != *y)) )
-        it_out << "Second test (equals): Passed!\n";
+        logln("Second test (equals): Passed!");
     else {
-        it_errln( "TestMessageFormat::testCopyConstructor failed #2");
-        it_out << "Second test (equals): Failed!\n";
+        errln("TestMessageFormat::testCopyConstructor failed #2");
+        logln("Second test (equals): Failed!");
     }
 
     delete x;
@@ -499,18 +504,18 @@ void TestMessageFormat::testAssignment()
     if ( (*x == *y) && 
          (*x != *z) && 
          (*y != *z) )
-         it_out << "First test (operator ==): Passed!\n";
+        logln("First test (operator ==): Passed!");
     else {
-        it_errln( "TestMessageFormat::testAssignment failed #1");
-        it_out << "First test (operator ==): Failed!\n";
+        errln( "TestMessageFormat::testAssignment failed #1");
+        logln("First test (operator ==): Failed!");
     }
     if ( ((*x == *y) && (*y == *x)) &&
          ((*x != *z) && (*z != *x)) &&
          ((*y != *z) && (*z != *y)) )
-        it_out << "Second test (equals): Passed!\n";
+        logln("Second test (equals): Passed!");
     else {
-        it_errln( "TestMessageFormat::testAssignment failed #2");
-        it_out << "Second test (equals): Failed!\n";
+        errln("TestMessageFormat::testAssignment failed #2");
+        logln("Second test (equals): Failed!");
     }
 
     delete x;
@@ -529,18 +534,18 @@ void TestMessageFormat::testClone()
     if ( (*x == *y) && 
          (*x != *z) && 
          (*y != *z) )
-         it_out << "First test (operator ==): Passed!\n";
+        logln("First test (operator ==): Passed!");
     else {
-        it_errln( "TestMessageFormat::testClone failed #1");
-        it_out << "First test (operator ==): Failed!\n";
+        errln("TestMessageFormat::testClone failed #1");
+        logln("First test (operator ==): Failed!");
     }
     if ( ((*x == *y) && (*y == *x)) &&
          ((*x != *z) && (*z != *x)) &&
          ((*y != *z) && (*z != *y)) )
-        it_out << "Second test (equals): Passed!\n";
+        logln("Second test (equals): Passed!");
     else {
-        it_errln( "TestMessageFormat::testClone failed #2");
-        it_out << "Second test (equals): Failed!\n";
+        errln("TestMessageFormat::testClone failed #2");
+        logln("Second test (equals): Failed!");
     }
 
     delete x;
@@ -555,8 +560,8 @@ void TestMessageFormat::testEquals()
     MessageFormat x("There are {0} files on {1}", success);
     MessageFormat y("There are {0} files on {1}", success);
     if (!(x == y)) {
-        it_errln( "TestMessageFormat::testEquals failed #1");
-        it_out << "First test (operator ==): Failed!\n";
+        errln( "TestMessageFormat::testEquals failed #1");
+        logln("First test (operator ==): Failed!");
     }
 
 }
@@ -568,14 +573,14 @@ void TestMessageFormat::testNotEquals()
     MessageFormat y(x);
     y.setLocale(Locale("fr"));
     if (!(x != y)) {
-        it_errln( "TestMessageFormat::testEquals failed #1");
-        it_out << "First test (operator !=): Failed!\n";
+        errln( "TestMessageFormat::testEquals failed #1");
+        logln("First test (operator !=): Failed!");
     }
     y = x;
     y.applyPattern("There are {0} files on {1} the disk", success);
     if (!(x != y)) {
-        it_errln( "TestMessageFormat::testEquals failed #1");
-        it_out << "First test (operator !=): Failed!\n";
+        errln( "TestMessageFormat::testEquals failed #1");
+        logln("First test (operator !=): Failed!");
     }
 }
 
@@ -619,20 +624,20 @@ void TestMessageFormat::testSetLocale()
 
     logln(result);
     if (result != compareStrEng) {
-        it_errln("***  MSG format err.");
+        errln("***  MSG format err.");
     }
 
     msg.setLocale(Locale::ENGLISH);
     UBool getLocale_ok = TRUE;
     if (msg.getLocale() != Locale::ENGLISH) {
-        it_errln("*** MSG getLocal err.");
+        errln("*** MSG getLocal err.");
         getLocale_ok = FALSE;
     }
 
     msg.setLocale(Locale::GERMAN);
 
     if (msg.getLocale() != Locale::GERMAN) {
-        it_errln("*** MSG getLocal err.");
+        errln("*** MSG getLocal err.");
         getLocale_ok = FALSE;
     }
 
@@ -649,13 +654,13 @@ void TestMessageFormat::testSetLocale()
 
     logln(result);
     if (result == compareStrGer) {
-        it_out << "MSG setLocale tested." << endl;
+        logln("MSG setLocale tested.");
     }else{
-        it_errln( "*** MSG setLocale err.");
+        errln( "*** MSG setLocale err.");
     }
 
     if (getLocale_ok) { 
-        it_out << "MSG getLocale tested." << endl;
+        logln("MSG getLocale tested.");
     }
 }
 
@@ -693,7 +698,7 @@ void TestMessageFormat::testFormat()
         err);
 
     if (err != U_ILLEGAL_ARGUMENT_ERROR) {
-        it_errln("*** MSG format without expected error code.");
+        errln("*** MSG format without expected error code.");
     }
     err = U_ZERO_ERROR;
 
@@ -706,12 +711,12 @@ void TestMessageFormat::testFormat()
         fp,
         err);
 
-    it_out << "MSG format( Formattable&, ... ) expected:" << compareStr << endl;
-    it_out << "MSG format( Formattable&, ... )   result:" << result << endl;
+    logln("MSG format( Formattable&, ... ) expected:" + compareStr);
+    logln("MSG format( Formattable&, ... )   result:" + result);
     if (result != compareStr) {
-        it_errln("***  MSG format( Formattable&, .... ) err.");
+        errln("***  MSG format( Formattable&, .... ) err.");
     }else{
-        it_out << "MSG format( Formattable&, ... ) tested." << endl;
+        logln("MSG format( Formattable&, ... ) tested.");
     }
 
     delete fmt;
@@ -729,19 +734,19 @@ void TestMessageFormat::testParse()
 
     Formattable* fmt_arr = msg.parse( source, count, err );
     if (U_FAILURE(err) || (!fmt_arr)) {
-        it_errln("*** MSG parse (ustring, count, err) error.");
+        errln("*** MSG parse (ustring, count, err) error.");
     }else{
-        it_out << "MSG parse -- count: " << count << endl;
+        logln("MSG parse -- count: %d", count);
         if (count != 2) {
-            it_errln("*** MSG parse (ustring, count, err) count err.");
+            errln("*** MSG parse (ustring, count, err) count err.");
         }else{
             if ((fmt_arr[0].getType() == Formattable::kString)
              && (fmt_arr[1].getType() == Formattable::kString)
              && (fmt_arr[0].getString(tmp1) == "abc")
              && (fmt_arr[1].getString(tmp2) == "def")) {
-                it_out << "MSG parse (ustring, count, err) tested." << endl;
+                logln("MSG parse (ustring, count, err) tested.");
             }else{
-                it_errln("*** MSG parse (ustring, count, err) result err.");
+                errln("*** MSG parse (ustring, count, err) result err.");
             }
         }
     }
@@ -751,19 +756,19 @@ void TestMessageFormat::testParse()
 
     fmt_arr = msg.parse( source, pp, count );
     if ((pp == 0) || (!fmt_arr)) {
-        it_errln("*** MSG parse (ustring, parsepos., count) error.");
+        errln("*** MSG parse (ustring, parsepos., count) error.");
     }else{
-        it_out << "MSG parse -- count: " << count << endl;
+        logln("MSG parse -- count: %d", count);
         if (count != 2) {
-            it_errln("*** MSG parse (ustring, parsepos., count) count err.");
+            errln("*** MSG parse (ustring, parsepos., count) count err.");
         }else{
             if ((fmt_arr[0].getType() == Formattable::kString)
              && (fmt_arr[1].getType() == Formattable::kString)
              && (fmt_arr[0].getString(tmp1) == "abc")
              && (fmt_arr[1].getString(tmp2) == "def")) {
-                it_out << "MSG parse (ustring, parsepos., count) tested." << endl;
+                logln("MSG parse (ustring, parsepos., count) tested.");
             }else{
-                it_errln("*** MSG parse (ustring, parsepos., count) result err.");
+                errln("*** MSG parse (ustring, parsepos., count) result err.");
             }
         }
     }
@@ -774,20 +779,20 @@ void TestMessageFormat::testParse()
 
     msg.parseObject( source, fmta, pp );
     if (pp == 0) {
-        it_errln("*** MSG parse (ustring, Formattable, parsepos ) error.");
+        errln("*** MSG parse (ustring, Formattable, parsepos ) error.");
     }else{
-        it_out << "MSG parse -- count: " << count << endl;
+        logln("MSG parse -- count: %d", count);
         fmta.getArray(count);
         if (count != 2) {
-            it_errln("*** MSG parse (ustring, Formattable, parsepos ) count err.");
+            errln("*** MSG parse (ustring, Formattable, parsepos ) count err.");
         }else{
             if ((fmta[0].getType() == Formattable::kString)
              && (fmta[1].getType() == Formattable::kString)
              && (fmta[0].getString(tmp1) == "abc")
              && (fmta[1].getString(tmp2) == "def")) {
-                it_out << "MSG parse (ustring, Formattable, parsepos ) tested." << endl;
+                logln("MSG parse (ustring, Formattable, parsepos ) tested.");
             }else{
-                it_errln("*** MSG parse (ustring, Formattable, parsepos ) result err.");
+                errln("*** MSG parse (ustring, Formattable, parsepos ) result err.");
             }
         }
     }
@@ -851,7 +856,7 @@ void TestMessageFormat::testAdopt()
         b = formatsCmp[i];
         if ((a != NULL) && (b != NULL)) {
             if (*a == *b) {
-                it_out << "formatsChg != formatsCmp at index " << i << endl;
+                logln("formatsChg != formatsCmp at index %d", i);
                 diff = FALSE;
             }
         }
@@ -861,7 +866,7 @@ void TestMessageFormat::testAdopt()
         return;
     }
 
-    it_out << "MSG getFormats tested." << endl;
+    logln("MSG getFormats tested.");
 
     msg.setFormats( formatsCmp, countCmp ); //tested function
 
@@ -873,9 +878,9 @@ void TestMessageFormat::testAdopt()
 
 #if 1
     msgCmp.toPattern( patCmp );
-    it_out << "MSG patCmp: " << patCmp << endl;
+    logln("MSG patCmp: " + patCmp);
     msg.toPattern( patAct );
-    it_out << "MSG patAct: " << patAct << endl;
+    logln("MSG patAct: " + patAct);
 #endif
 
     for (i = 0; i < countAct; i++) {
@@ -883,7 +888,7 @@ void TestMessageFormat::testAdopt()
         b = formatsCmp[i];
         if ((a != NULL) && (b != NULL)) {
             if (*a != *b) {
-                it_out << "formatsAct != formatsCmp at index " << i << endl;
+                logln("formatsAct != formatsCmp at index %d", i);
                 errln("a != b");
                 return;
             }
@@ -892,7 +897,7 @@ void TestMessageFormat::testAdopt()
             return;
         }
     }
-    it_out << "MSG setFormats tested." << endl;
+    logln("MSG setFormats tested.");
 
 
     //----
@@ -921,9 +926,9 @@ void TestMessageFormat::testAdopt()
 
 #if 1
     msgCmp.toPattern( patCmp );
-    it_out << "MSG patCmp: " << patCmp << endl;
+    logln("MSG patCmp: " + patCmp);
     msg.toPattern( patAct );
-    it_out << "MSG patAct: " << patAct << endl;
+    logln("MSG patAct: " + patAct);
 #endif
 
     formatsAct = msg.getFormats(countAct);
@@ -945,7 +950,7 @@ void TestMessageFormat::testAdopt()
             return;
         }
     }
-    it_out << "MSG adoptFormats tested." << endl;
+    logln("MSG adoptFormats tested.");
 
     //---- adoptFormat
 
@@ -976,9 +981,9 @@ void TestMessageFormat::testAdopt()
 
 #if 1
     msgCmp.toPattern( patCmp );
-    it_out << "MSG patCmp: " << patCmp << endl;
+    logln("MSG patCmp: " + patCmp);
     msg.toPattern( patAct );
-    it_out << "MSG patAct: " << patAct << endl;
+    logln("MSG patAct: " + patAct);
 #endif
 
     formatsAct = msg.getFormats(countAct);
@@ -1000,7 +1005,7 @@ void TestMessageFormat::testAdopt()
             return;
         }
     }
-    it_out << "MSG adoptFormat tested." << endl;
+    logln("MSG adoptFormat tested.");
 }
 
 // This test is a regression test for a fixed bug in the copy constructor.
