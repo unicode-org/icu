@@ -270,9 +270,9 @@ private:
     static UBool cacheInitialized;
 
     /**
-     * A method that creates and returns a Transliterator.
+     * A function that creates and returns a Transliterator.
      */
-    typedef Transliterator* (*TransliteratorFactory)();
+    typedef Transliterator* (*TransliteratorFactory)(void);
 
     /**
      * In Java, the cache stores objects of different types and
@@ -303,12 +303,12 @@ private:
         union {
             Transliterator* prototype; // For PROTOTYPE
             TransliterationRuleData* data; // For RBT_DATA
-            TransliteratorFactory* factory; // For FACTORY
+            TransliteratorFactory factory; // For FACTORY
         } u;
         CacheEntry();
         ~CacheEntry();
         void adoptPrototype(Transliterator* adopted);
-        void setFactory(TransliteratorFactory* factory);
+        void setFactory(TransliteratorFactory factory);
     };
 
     /**
@@ -741,7 +741,7 @@ public:
      * called later when the given ID is passed to createInstance()
      */
     static void registerFactory(const UnicodeString& id,
-                                TransliteratorFactory* factory,
+                                TransliteratorFactory factory,
                                 UErrorCode& status);
 
     /**
@@ -772,6 +772,18 @@ private:
      */
     static void _registerInstance(Transliterator* adoptedPrototype,
                                   UErrorCode &status);
+
+    /**
+     * Registers a factory function that creates transliterators of
+     * a given ID.  To be called ONLY by Transliterator subclasses
+     * that register themselves within initializeCache().  These
+     * classes should be listed as friends immediately below.
+     */
+    static void _registerFactory(const UnicodeString& id,
+                                 TransliteratorFactory factory,
+                                 UErrorCode& status);
+
+    friend class NormalizationTransliterator;
 
 public:
 
