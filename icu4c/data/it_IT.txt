@@ -7,14 +7,14 @@
 
 it_IT {
     CurrencyElements { 
-            "L.",
-            "ITL",
+            "\u20AC",
+            "EUR",
             ",",
     }
     LocaleString { "it_IT" }
     NumberPatterns { 
             "#,##0.###;-#,##0.###",
-            "\u00A4 #,##0;-\u00A4 #,##0",
+            "\u00A4 #,##0.00;-\u00A4 #,##0.00",
             "#,##0%",
     }
     ShortCountry { "ITA" }

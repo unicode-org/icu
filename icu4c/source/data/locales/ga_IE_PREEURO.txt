@@ -1,17 +1,14 @@
 // *******************************************************************************
 // *
-// *   Copyright (C) 1997-2000, International Business Machines
+// *   Copyright (C) 1997-2001, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
 // *******************************************************************************
 
-fr_LU {
+ga_IE_PREEURO {
     CurrencyElements { 
-            "\u20AC",
-            "EUR",
-            ",",
+            "\u00a3",
+            "IEP",
+            ".",
     }
-    LocaleString { "fr_LU" }
-    ShortCountry { "LUX" }
-    LocaleID { "140c" }
 }

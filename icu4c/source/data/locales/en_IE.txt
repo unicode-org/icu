@@ -15,8 +15,8 @@ en_IE {
         NZ { "New Zealand" }
     }
     CurrencyElements { 
-            "IR\u00A3",
-            "IEP",
+            "\u20AC",
+            "EUR",
             ".",
     }
     DateTimeElements { 

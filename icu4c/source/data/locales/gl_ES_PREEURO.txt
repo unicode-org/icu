@@ -1,22 +1,19 @@
 // *******************************************************************************
 // *
-// *   Copyright (C) 1997-2000, International Business Machines
+// *   Copyright (C) 1997-2001, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
 // *******************************************************************************
 
-es_ES {
-    LocaleString { "es_ES" }
+gl_ES_PREEURO {
     CurrencyElements { 
-            "\u20AC",
-            "EUR",
+            "Pta",
+            "ESP",
             ",",
     }
     NumberPatterns { 
-            "#,##0.###;-#,##0.###",
-            "#,##0.00 \u00A4;-#,##0.00 \u00A4",
-            "#,##0%",
+            "#,#0.##;-#,#0.##",
+            "\u00a4 #,##0.#;-\u00a4 #,##0.#",
+            "#,#0%",
     }
-    ShortCountry { "ESP" }
-    LocaleID { "0c0a" }
 }

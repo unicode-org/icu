@@ -7,10 +7,9 @@
 
 ga_IE {
     Version { "x0.1" }
-
     CurrencyElements { 
-            "\u00a3",
-            "IEP",
+            "\u20AC",
+            "EUR",
             ".",
     }
     DateTimePatterns { 
