@@ -529,7 +529,7 @@ unum_toPattern(    const    UNumberFormat*          fmt,
 #define UNFSYMBOLSMAXSIZE 10
 
 /** The UNumberFormatSymbols struct 
- * @deprecated remove after 2000-dec-31
+ * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
  */
 struct UNumberFormatSymbols{
   /** The decimal separator */
@@ -574,7 +574,7 @@ typedef struct UNumberFormatSymbols UNumberFormatSymbols;
 * @param fmt The formatter to query.
 * @param syms A pointer to a UNumberFormatSymbols to receive the symbols associated with fmt.
 * @see unum_setSymbols
-* @deprecated remove after 2000-dec-31
+* @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
 */
 U_CAPI void
 unum_getSymbols(    const    UNumberFormat            *fmt,
@@ -588,7 +588,7 @@ unum_getSymbols(    const    UNumberFormat            *fmt,
 * @param symbolsToSet The UNumberFormatSymbols to associate with fmt.
 * @param status A pointer to an UErrorCode to receive any errors.
 * @see unum_getSymbols
-* @deprecated remove after 2000-dec-31
+* @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
 */
 U_CAPI void
 unum_setSymbols(    UNumberFormat*          fmt,
