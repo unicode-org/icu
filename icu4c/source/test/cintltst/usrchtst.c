@@ -142,6 +142,7 @@ static char *toCharString(const UChar* unichars)
         }
         else {
             sprintf(temp, "\\u%04x", ch);
+            temp += 6; /* \uxxxx */
         }
     }
     *temp = 0;

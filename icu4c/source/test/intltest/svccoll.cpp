@@ -266,7 +266,7 @@ public:
   {
     CollatorInfo** p;
     for (p = info; *p; ++p) {}
-    count = p - info;
+    count = (int32_t)(p - info);
   }
 
   ~TestFactory() {
