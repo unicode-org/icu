@@ -661,7 +661,7 @@ de {
         IDR { "IDR", "Rupiah" }
         IEP { "IEP", "Irisches Pfund" }
         ILS { "ILS", "Schekel" }
-        INR { "INR", "Indische Rupie" }
+        INR { "=0#Rs.|1#Re.|1<Rs.", "Indische Rupie" }
         IQD { "IQD", "Irak Dinar" }
         IRR { "IRR", "Rial" }
         ISK { "ISK", "Isl\u00E4ndische Krone" }

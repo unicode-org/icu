@@ -856,15 +856,17 @@ root {
     }
 
     // Localized display names of currencies, analogous to Countries
-    // and Languages.  "Universal" display names are listed here in
+    // and Languages.  "Common usage" display names are listed here in
     // root.  Only a few unique symbols should be listed here.  "$",
     // for example, is used to indicate not only USD, but also ARS,
-    // AUD, BND, CAD, CLP, COP, JDF, ETB, MXN, NZD, and SOS, so it
-    // isn't listed here.
+    // AUD, BND, CAD, CLP, COP, JDF, ETB, MXN, NZD, and SOS.  Hoever,
+    // its default meaning in many locales is USD, so we list it here
+    // and override it in sublocales that use "$" for something else.
     // @since ICU 2.2
     Currencies {
         EUR { "\u20AC", "EUR" } // Euro
         GBP { "\u00A3", "GBP" } // British Pound Sterling
+        INR { "=0#Rs.|1#Re.|1<Rs.", "INR" } // Indian Rupee
         ITL { "\u20A4", "ITL" } // Italian Lira
         JPY { "\u00A5", "JPY" } // Japanese Yen
         USD { "$",      "USD" } // US Dollar

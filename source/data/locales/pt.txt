@@ -303,7 +303,7 @@ pt {
         IDR { "IDR", "Rupia Indon\u00E9sia" }
         IEP { "IEP", "Libra Irlandesa" }
         ILS { "ILS", "Scheckel Israelita" }
-        INR { "INR", "Rupia Indiana" }
+        INR { "=0#Rs.|1#Re.|1<Rs.", "Rupia Indiana" }
         IQD { "IQD", "Dinar Iraquiano" }
         IRR { "IRR", "Rial Iraniano" }
         ISK { "ISK", "Coroa Islandesa" }
