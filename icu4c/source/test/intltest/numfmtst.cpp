@@ -324,7 +324,7 @@ NumberFormatTest::TestExponential(void)
             if (af.getType() == Formattable::kLong ||
                 af.getType() == Formattable::kInt64) {
                 UErrorCode status = U_ZERO_ERROR;
-                int32_t a = af.getLong(&status);
+                int32_t a = af.getLong(status);
                 if (pos.getIndex() == s.length())
                 {
                     logln((UnicodeString)"  -parse-> " + a);

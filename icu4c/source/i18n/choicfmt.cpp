@@ -638,7 +638,7 @@ ChoiceFormat::format(const Formattable* objs,
 
     UnicodeString buffer;
     for (int32_t i = 0; i < cnt; i++) {
-        double objDouble = objs[i].getDouble(&status);
+        double objDouble = objs[i].getDouble(status);
         if (U_SUCCESS(status)) {
             buffer.remove();
             appendTo += format(objDouble, buffer, pos);
