@@ -216,7 +216,7 @@ static void TestCalendar()
 
     /*Testing the equality between calendar's*/
     log_verbose("\nTesting ucal_equivalentTo()\n");
-`    if(caldef && caldef2 && calfr && calit) {
+    if(caldef && caldef2 && calfr && calit) { 
       if(ucal_equivalentTo(caldef, caldef2) == FALSE || ucal_equivalentTo(caldef, calfr)== TRUE || 
         ucal_equivalentTo(caldef, calit)== TRUE) {
           log_err("FAIL: Error. equivalentTo test failed\n");
