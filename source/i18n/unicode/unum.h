@@ -310,12 +310,13 @@ unum_parseDouble(    const   UNumberFormat*  fmt,
 /**
 * Set the pattern used by an UNumberFormat.
 * The pattern should follow the pattern syntax rules.
-* @param fmt The formatter to set.
+* @param format The formatter to set.
 * @param localized TRUE if the pattern is localized, FALSE otherwise.
 * @param pattern The new pattern
 * @param parseError  A pointer to UParseError to recieve information about errors
 *                    occurred during parsing.
 * @param patternLength The length of pattern, or -1 if null-terminated.
+* @param status A pointer to an UErrorCode to receive any errors
 * @see unum_toPattern
 * @draft ICU 2.0
 */
@@ -594,6 +595,7 @@ typedef enum UNumberFormatSymbol {
 * @param buffer The string buffer that will receive the symbol string;
 *               if it is NULL, then only the length of the symbol is returned
 * @param size The size of the string buffer
+* @param status A pointer to an UErrorCode to receive any errors
 * @return The length of the symbol; the buffer is not modified if
 *         <code>length&gt;=size</code>
 * @see unum_setSymbol
