@@ -303,6 +303,7 @@ const UChar *ucol_tok_parseNextToken(UColTokenParser *src,
                         uint32_t *strength, 
                         uint32_t *chOffset, uint32_t *chLen, 
                         uint32_t *exOffset, uint32_t *exLen,
+                        uint32_t *prefixOffset, uint32_t *prefixLen,
                         uint8_t *specs,
                         UBool startOfRules,
                         UParseError *parseError,
@@ -320,6 +321,8 @@ const UChar *ucol_tok_parseNextToken(UColTokenParser *src,
   uint32_t newCharsLen = 0, newExtensionLen = 0;
   uint32_t charsOffset = 0, extensionOffset = 0;
   uint32_t newStrength = UCOL_TOK_UNSET; 
+
+  *prefixOffset = 0; *prefixLen = 0;
 
   while (src->current < src->end) {
       UChar ch = *(src->current);
@@ -472,7 +475,6 @@ const UChar *ucol_tok_parseNextToken(UColTokenParser *src,
           wasInQuote = FALSE; /* if we were copying source characters, we want to stop now */
           inChars = FALSE; /* we're now processing expansion */
           break;
-
         /* found a quote, we're gonna start copying */
         case 0x0027/*'\''*/:
           if (newStrength == UCOL_TOK_UNSET) { /* quote is illegal until we have a strength */
@@ -520,6 +522,35 @@ const UChar *ucol_tok_parseNextToken(UColTokenParser *src,
             break;
           }
 
+        case 0x007C /*|*/: /* this means we have actually been reading prefix part */
+          // we want to store read characters to the prefix part and continue reading
+          // the characters (proper way would be to restart reading the chars, but in
+          // that case we would have to complicate the token hasher, which I do not 
+          // intend to play with. Instead, we will do prefixes when prefixes are due
+          // (before adding the elements).
+          *prefixOffset = charsOffset;
+          *prefixLen = newCharsLen;
+
+          if(inChars) { /* we're doing characters */
+            if(wasInQuote == FALSE) {
+              charsOffset = src->extraCurrent - src->source;
+            }
+            if (newCharsLen != 0) {
+                uprv_memcpy(src->extraCurrent, src->current - newCharsLen, newCharsLen*sizeof(UChar));
+                src->extraCurrent += newCharsLen;
+            }
+            newCharsLen++;
+          }
+
+          wasInQuote = TRUE;
+
+          ch = *(++(src->current)); 
+          break;
+          
+          //charsOffset = 0;
+          //newCharsLen = 0;
+          //break; // We want to store the whole prefix/character sequence. If we break
+                   // the '|' is going to get lost.
         default:
           if (newStrength == UCOL_TOK_UNSET) {
             *status = U_INVALID_FORMAT_ERROR;
@@ -655,19 +686,22 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
 
   UColTokListHeader *ListList = NULL;
 
-  uint32_t newCharsLen = 0, newExtensionsLen = 0;
-  uint32_t charsOffset = 0, extensionOffset = 0;
+  uint32_t newCharsLen = 0, charsOffset = 0;
+  uint32_t newExtensionsLen = 0, extensionOffset = 0;
+  uint32_t prefixLen = 0, prefixOffset = 0;
   uint32_t newStrength = UCOL_TOK_UNSET; 
 
   UHashtable *uchars2tokens = src->tailored;
   ListList = src->lh;
 
   while(src->current < src->end) {
+    prefixOffset = 0; prefixLen = 0;
   
     parseEnd = ucol_tok_parseNextToken(src, 
                         &newStrength, 
                         &charsOffset, &newCharsLen, 
                         &extensionOffset, &newExtensionsLen,
+                        &prefixOffset, &prefixLen,
                         &specs,
                         (UBool)(lastToken == NULL),
                         parseError,
@@ -693,6 +727,7 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
       if(newStrength != UCOL_TOK_RESET) {
         if(lastToken == NULL) { /* this means that rules haven't started properly */
           *status = U_INVALID_FORMAT_ERROR;
+          syntaxError(src->source,0,(src->end-src->source),parseError);
           return 0;
         }
       /*  6 Otherwise (when relation != reset) */
@@ -702,6 +737,9 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
           sourceToken->source = newCharsLen << 24 | charsOffset;
 
           sourceToken->debugSource = *(src->source + charsOffset);
+
+          sourceToken->prefix = prefixLen << 24 | prefixOffset;
+          sourceToken->debugPrefix = *(src->source + prefixOffset);
 
           sourceToken->polarity = UCOL_TOK_POLARITY_POSITIVE; /* TODO: this should also handle reverse */
           sourceToken->next = NULL;
@@ -905,6 +943,15 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
           
           sourceToken->debugSource = *(src->source + charsOffset);
           sourceToken->debugExpansion = *(src->source + extensionOffset);
+
+          if(prefixOffset != 0) {
+            // this is a syntax error 
+            *status = U_INVALID_FORMAT_ERROR;
+            syntaxError(src->source,charsOffset-1,charsOffset+newCharsLen,parseError);
+            return 0;
+          } else {
+            sourceToken->prefix = 0;
+          }
 
 
           sourceToken->polarity = UCOL_TOK_POLARITY_POSITIVE; /* TODO: this should also handle reverse */

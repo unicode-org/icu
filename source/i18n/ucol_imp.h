@@ -335,7 +335,9 @@ ucol_cloneRuleData(const UCollator *coll, int32_t *length, UErrorCode *status);
 
 #define getCETag(CE) (((CE)&UCOL_TAG_MASK)>>UCOL_TAG_SHIFT)
 #define isContraction(CE) (isSpecial((CE)) && (getCETag((CE)) == CONTRACTION_TAG))
-#define constructContractCE(CE) (UCOL_SPECIAL_FLAG | (CONTRACTION_TAG<<UCOL_TAG_SHIFT) | ((CE))&0xFFFFFF)
+#define isPrefix(CE) (isSpecial((CE)) && (getCETag((CE)) == SPEC_PROC_TAG))
+#define constructContractCE(tag, CE) (UCOL_SPECIAL_FLAG | ((tag)<<UCOL_TAG_SHIFT) | ((CE))&0xFFFFFF)
+#define constructSpecProcCE(CE) (UCOL_SPECIAL_FLAG | (SPEC_PROC_TAG<<UCOL_TAG_SHIFT) | ((CE))&0xFFFFFF)
 #define getContractOffset(CE) ((CE)&0xFFFFFF)
 #define getExpansionOffset(CE) (((CE)&0x00FFFFF0)>>4)
 #define getExpansionCount(CE) ((CE)&0xF)
@@ -432,6 +434,7 @@ typedef enum {
     TRAIL_SURROGATE_TAG = 8,     /* DC00-DFFF*/
     CJK_IMPLICIT_TAG = 9,    /* 0x3400-0x4DB5, 0x4E00-0x9FA5, 0xF900-0xFA2D*/
     IMPLICIT_TAG = 10,
+    SPEC_PROC_TAG = 11,
     CE_TAGS_COUNT
 } UColCETags;
 

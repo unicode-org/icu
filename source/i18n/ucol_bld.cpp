@@ -760,15 +760,27 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
     }
 
     /* copy UChars */
-
-    //UChar buff[128];
-    //uint32_t decompSize;
-    //uprv_memcpy(buff, (tok->source & 0x00FFFFFF) + src->source, (tok->source >> 24)*sizeof(UChar));
-    //decompSize = unorm_normalize(buff, tok->source >> 24, UNORM_NFD, 0, el.uchars, 128, status);
-    //el.cSize = decompSize; /*(tok->source >> 24); *//* + (tok->expansion >> 24);*/
-    el.cSize = (tok->source >> 24); 
-    uprv_memcpy(el.uchars, (tok->source & 0x00FFFFFF) + src->source, el.cSize*sizeof(UChar));
+    // We kept prefix and source kind of together, as it is a kind of a contraction. 
+    // However, now we have to slice the prefix off the main thing - 
+    el.prefix = el.prefixChars;
     el.cPoints = el.uchars;
+    if(tok->prefix != 0) { // adjust the source if there is a prefix
+      el.prefixSize = (tok->prefix>>24);
+      for(i = 0; i < tok->prefix>>24; i++) { // prefixes are going to be looked up backwards
+        // therefore, we will promptly reverse the prefix buffer...
+        el.prefix[i] = *(src->source+(tok->prefix& 0x00FFFFFF)+(tok->prefix>>24)-i-1);
+      }
+      //uprv_memcpy(el.prefix, (tok->prefix & 0x00FFFFFF) + src->source, el.prefixSize*sizeof(UChar));
+
+      el.cSize = (tok->source >> 24)-(tok->prefix>>24); 
+      uprv_memcpy(el.uchars, (tok->source & 0x00FFFFFF)+(tok->prefix>>24) + src->source, el.cSize*sizeof(UChar));
+    } else {
+      el.prefixSize = 0;
+      *el.prefix = 0;
+
+      el.cSize = (tok->source >> 24); 
+      uprv_memcpy(el.uchars, (tok->source & 0x00FFFFFF) + src->source, el.cSize*sizeof(UChar));
+    }
 
     if(UCOL_ISTHAIPREVOWEL(el.cPoints[0])) {
       el.isThai = TRUE;
@@ -909,6 +921,8 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
     UChar u = 0;
     UCAElements el;
     el.isThai = FALSE;
+    el.prefixSize = 0;
+    el.prefixChars[0] = 0;
     collIterate colIt;
 
     /* add latin-1 stuff */

@@ -538,6 +538,76 @@ void uprv_uca_unsafeCPAddCCNZ(tempUCATable *t) {
     }
 }
 
+uint32_t uprv_uca_addPrefix(tempUCATable *t, uint32_t CE, 
+                                 UCAElements *element, UErrorCode *status) {
+  // currently the longest prefix we're supporting in Japanese is two characters
+  // long. Although this table could quite easily mimic complete contraction stuff
+  // there is no good reason to make a general solution, as it would require some 
+  // error prone messing.
+    CntTable *contractions = t->contractions;
+    UChar32 cp;
+    uint32_t cpsize = 0;
+    UChar *oldCP = element->cPoints;
+    uint32_t oldCPSize = element->cSize;
+
+    contractions->currentTag = SPEC_PROC_TAG;
+
+    // First we need to check if contractions starts with a surrogate
+    UTF_NEXT_CHAR(element->cPoints, cpsize, element->cSize, cp);
+    uint32_t j = 0;
+    for (j=1; j<element->prefixSize; j++) {   /* First add contraction chars to unsafe CP hash table */
+      // Unless it is a trail surrogate, which is handled algoritmically and 
+      // shouldn't take up space in the table.
+      if(!(UTF_IS_TRAIL(element->prefix[j]))) {
+        unsafeCPSet(t->unsafeCP, element->prefix[j]);
+      }
+    }
+    // Add the last char of the contraction to the contraction-end hash table.
+    // unless it is a trail surrogate, which is handled algorithmically and 
+    // shouldn't be in the table
+    if(!(UTF_IS_TRAIL(element->prefix[element->prefixSize -1]))) {
+      ContrEndCPSet(t->contrEndCP, element->prefix[element->prefixSize -1]);
+    }
+
+    // If there are any Jamos in the contraction, we should turn on special 
+    // processing for Jamos
+    if(UCOL_ISJAMO(element->prefix[0])) {
+      t->image->jamoSpecial = TRUE;
+    }
+    /* then we need to deal with it */
+    /* we could aready have something in table - or we might not */
+
+    element->cPoints = element->prefix;
+    element->cSize = element->prefixSize;
+
+    if(!isPrefix(CE)) { 
+      /* if it wasn't contraction, we wouldn't end up here*/
+      int32_t firstContractionOffset = 0;
+      int32_t contractionOffset = 0;
+      firstContractionOffset = uprv_cnttab_addContraction(contractions, UPRV_CNTTAB_NEWELEMENT, 0, CE, status);
+      uint32_t newCE = uprv_uca_processContraction(contractions, element, UCOL_NOT_FOUND, status);
+      contractionOffset = uprv_cnttab_addContraction(contractions, firstContractionOffset, *element->prefix, element->mapCE, status);
+      contractionOffset = uprv_cnttab_addContraction(contractions, firstContractionOffset, 0xFFFF, CE, status);
+      CE =  constructContractCE(SPEC_PROC_TAG, firstContractionOffset);
+    } else { /* we are adding to existing contraction */
+      /* there were already some elements in the table, so we need to add a new contraction */
+      /* Two things can happen here: either the codepoint is already in the table, or it is not */
+      int32_t position = uprv_cnttab_findCP(contractions, CE, *element->prefix, status);
+      if(position > 0) {       /* if it is we just continue down the chain */
+        uint32_t eCE = uprv_cnttab_getCE(contractions, CE, position, status);
+        uint32_t newCE = uprv_uca_processContraction(contractions, element, eCE, status);
+        uprv_cnttab_setContraction(contractions, CE, position, *(element->prefix), newCE, status);
+      } else {                  /* if it isn't, we will have to create a new sequence */
+        uint32_t newCE = uprv_uca_processContraction(contractions, element, UCOL_NOT_FOUND, status);
+        uprv_cnttab_insertContraction(contractions, CE, *(element->prefix), element->mapCE, status);
+      }
+    }
+
+    element->cPoints = oldCP;
+    element->cSize = oldCPSize;
+
+    return CE;
+}
 
 // Note regarding surrogate handling: We are interested only in the single
 // or leading surrogates in a contraction. If a surrogate is somewhere else
@@ -549,6 +619,8 @@ uint32_t uprv_uca_addContraction(tempUCATable *t, uint32_t CE,
     CntTable *contractions = t->contractions;
     UChar32 cp;
     uint32_t cpsize = 0;
+
+    contractions->currentTag = CONTRACTION_TAG;
 
     // First we need to check if contractions starts with a surrogate
     UTF_NEXT_CHAR(element->cPoints, cpsize, element->cSize, cp);
@@ -576,8 +648,6 @@ uint32_t uprv_uca_addContraction(tempUCATable *t, uint32_t CE,
       }
       /* then we need to deal with it */
       /* we could aready have something in table - or we might not */
-      /* The fact is that we want to add or modify an existing contraction */
-      /* and add it backwards then */
       element->cPoints+=cpsize;
       element->cSize-=cpsize;
       if(!isContraction(CE)) { 
@@ -588,7 +658,7 @@ uint32_t uprv_uca_addContraction(tempUCATable *t, uint32_t CE,
         uint32_t newCE = uprv_uca_processContraction(contractions, element, UCOL_NOT_FOUND, status);
         contractionOffset = uprv_cnttab_addContraction(contractions, firstContractionOffset, *element->cPoints, newCE, status);
         contractionOffset = uprv_cnttab_addContraction(contractions, firstContractionOffset, 0xFFFF, CE, status);
-        CE =  constructContractCE(firstContractionOffset);
+        CE =  constructContractCE(CONTRACTION_TAG, firstContractionOffset);
       } else { /* we are adding to existing contraction */
         /* there were already some elements in the table, so we need to add a new contraction */
         /* Two things can happen here: either the codepoint is already in the table, or it is not */
@@ -626,7 +696,7 @@ uint32_t uprv_uca_processContraction(CntTable *contractions, UCAElements *elemen
 
     /* end of recursion */
     if(element->cSize == 1) {
-      if(isContraction(existingCE)) {
+      if(isCntTableElement(existingCE)) {
         uprv_cnttab_changeContraction(contractions, existingCE, 0, element->mapCE, status);
         uprv_cnttab_changeContraction(contractions, existingCE, 0xFFFF, element->mapCE, status);
         return existingCE;
@@ -642,13 +712,13 @@ uint32_t uprv_uca_processContraction(CntTable *contractions, UCAElements *elemen
     /* this means we are constructing a new contraction sequence */
     element->cPoints++;
     element->cSize--;
-    if(!isContraction(existingCE)) { 
+    if(!isCntTableElement(existingCE)) { 
       /* if it wasn't contraction, we wouldn't end up here*/
       firstContractionOffset = uprv_cnttab_addContraction(contractions, UPRV_CNTTAB_NEWELEMENT, 0, existingCE, status);
       uint32_t newCE = uprv_uca_processContraction(contractions, element, UCOL_NOT_FOUND, status);
       contractionOffset = uprv_cnttab_addContraction(contractions, firstContractionOffset, *element->cPoints, newCE, status);
       contractionOffset = uprv_cnttab_addContraction(contractions, firstContractionOffset, 0xFFFF, existingCE, status);
-      existingCE =  constructContractCE(firstContractionOffset);
+      existingCE =  constructContractCE(contractions->currentTag, firstContractionOffset);
     } else { /* we are adding to existing contraction */
       /* there were already some elements in the table, so we need to add a new contraction */
       /* Two things can happen here: either the codepoint is already in the table, or it is not */
@@ -731,6 +801,15 @@ uint32_t uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode
                                t->maxJamoExpansions,
                                status);
     }
+  }
+
+  // here we want to add the prefix structure.
+  // I will try to process it as a reverse contraction, if possible.
+  // prefix buffer is already reversed.
+
+  if(element->prefixSize!=0) {
+    CE = ucmpe32_get(mapping, element->cPoints[0]);
+    element->mapCE = uprv_uca_addPrefix(t, CE, element, status);
   }
 
 

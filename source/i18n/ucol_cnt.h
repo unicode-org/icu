@@ -24,8 +24,12 @@
 #include "ucmpe32.h"
 #include "uhash.h"
 #include "ucol_elm.h"
+#include "ucol_imp.h"
 
 #define UPRV_CNTTAB_NEWELEMENT 0xFFFFFF
+
+#define isCntTableElement(CE) (isSpecial((CE)) && \
+((getCETag((CE)) == CONTRACTION_TAG)||(getCETag((CE)) == SPEC_PROC_TAG)))
 
 typedef struct ContractionTable ContractionTable;
 struct ContractionTable {
@@ -44,6 +48,7 @@ struct CntTable {
     int32_t position;
     int32_t size;
     int32_t capacity;
+    UColCETags currentTag;
 };
 
 CntTable *uprv_cnttab_open(CompactEIntArray *mapping, UErrorCode *status);
