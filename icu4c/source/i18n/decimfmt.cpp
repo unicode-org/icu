@@ -241,7 +241,7 @@ DecimalFormat::construct(UErrorCode&             status,
     }
 
     if (symbolsToAdopt == NULL) {
-	setCurrencyForLocale(uloc_getDefault(), status);
+        setCurrencyForLocale(uloc_getDefault(), status);
     } else {
         setCurrencyForSymbols();
     }
@@ -255,10 +255,10 @@ DecimalFormat::construct(UErrorCode&             status,
 void DecimalFormat::setCurrencyForLocale(const char* locale, UErrorCode& ec) {
     const UChar* c = ucurr_forLocale(locale, &ec);
     if (c == NULL) {
-	*currency = 0;
+        *currency = 0;
     } else {
-	u_strncpy(currency, c, 3);
-	currency[3] = 0;
+        u_strncpy(currency, c, 3);
+        currency[3] = 0;
     }
 }
 
@@ -1458,7 +1458,7 @@ DecimalFormat::setCurrencyForSymbols() {
         def.getSymbol(DecimalFormatSymbols::kCurrencySymbol) &&
         fSymbols->getSymbol(DecimalFormatSymbols::kIntlCurrencySymbol) ==
         def.getSymbol(DecimalFormatSymbols::kIntlCurrencySymbol)) {
-	setCurrencyForLocale(fSymbols->getLocale().getName(), ec);
+        setCurrencyForLocale(fSymbols->getLocale().getName(), ec);
     } else {
         currency[0] = 0; // Use DFS currency info
     }
@@ -1958,8 +1958,8 @@ void DecimalFormat::expandAffix(const UnicodeString& pattern,
                 }
                 UnicodeString s;
                 if (currency[0] != 0) {
-		    UErrorCode ec = U_ZERO_ERROR;
-		    int32_t len;
+                    UErrorCode ec = U_ZERO_ERROR;
+                    int32_t len;
                     s = UnicodeString(intl ? currency
                         : ucurr_getSymbol(currency, fSymbols->getLocale().getName(), &len, &ec));
                 } else {
