@@ -1066,11 +1066,11 @@ _LMBCSGetNextUCharWorker(UConverterToUnicodeArgs*   args,
             if (*args->source == group) {
                /* single byte */
                ++args->source;
-               uniChar = _MBCSSimpleGetNextUChar(cnv->sharedData, &args->source, args->source + 1);
+               uniChar = _MBCSSimpleGetNextUChar(cnv->sharedData, &args->source, args->source + 1, FALSE);
             } else {
                /* double byte */
                const char *newLimit = args->source + 2;
-               uniChar = _MBCSSimpleGetNextUChar(cnv->sharedData, &args->source, newLimit);
+               uniChar = _MBCSSimpleGetNextUChar(cnv->sharedData, &args->source, newLimit, FALSE);
                args->source = newLimit; /* set the correct limit even in case of an error */
             }
          }
@@ -1097,7 +1097,7 @@ _LMBCSGetNextUCharWorker(UConverterToUnicodeArgs*   args,
                bytes[0] = group;
                bytes[1] = CurByte;
                s = bytes;
-               uniChar = _MBCSSimpleGetNextUChar(cnv->sharedData, &s, bytes + 2);
+               uniChar = _MBCSSimpleGetNextUChar(cnv->sharedData, &s, bytes + 2, FALSE);
             }
          }
       }
@@ -1114,7 +1114,7 @@ _LMBCSGetNextUCharWorker(UConverterToUnicodeArgs*   args,
 
                /* let the MBCS conversion consume CurByte again */
                --args->source;
-               uniChar = _MBCSSimpleGetNextUChar(cnv->sharedData, &args->source, args->source + 1);
+               uniChar = _MBCSSimpleGetNextUChar(cnv->sharedData, &args->source, args->source + 1, FALSE);
             }
             else
             {
@@ -1124,7 +1124,7 @@ _LMBCSGetNextUCharWorker(UConverterToUnicodeArgs*   args,
                --args->source;
 
                /* since we know that we start at a lead byte, args->source _will_ be incremented by 2 */
-               uniChar = _MBCSSimpleGetNextUChar(cnv->sharedData, &args->source, args->source + 2);
+               uniChar = _MBCSSimpleGetNextUChar(cnv->sharedData, &args->source, args->source + 2, FALSE);
             }
          }
          else                                   /* single byte conversion */
