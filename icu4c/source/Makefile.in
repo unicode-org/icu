@@ -71,7 +71,9 @@ doc:
 	@echo you need Doxygen to generate documentation. Doxygen can be found on the Web
 	@echo at http://www.doxygen.org/
 else
-doc: Doxyfile
+doc: doc/html/index.html
+
+doc/html/index.html: Doxyfile $(wildcard ./common/unicode/*.h $(srcdir)/common/unicode/*.h $(srcdir)/i18n/unicode/*.h $(srcdir)/layout/unicode/*.h)
 	$(DOXYGEN)
 
 Doxyfile: $(srcdir)/Doxyfile.in
