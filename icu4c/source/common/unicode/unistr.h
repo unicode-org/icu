@@ -72,25 +72,6 @@ U_COMMON_API ostream &operator<<(ostream& stream, const UnicodeString& s);
 #endif
 
 /**
- * Unescape an entire string.
- * ### TBD
- */
-U_COMMON_API UnicodeString
-u_unescape(const UnicodeString &s);
-
-/**
- * Unescape one escape sequence in a string and return the code point.
- * <code>s[offset]</code> must be the beginning of an escape sequence.
- * <code>offset</code> is advanced to the first character after the
- * escape sequence.
- * If an error occurs, then U+ffff is returned and the offset is not
- * advanced.
- * ### TBD
- */
-U_COMMON_API UChar32
-u_unescape(const UnicodeString &s, int32_t &offset);
-
-/**
  * UnicodeString is a concrete implementation of the abstract class Replaceable.
  * It is a string class that stores Unicode characters directly and provides
  * similar functionality as the Java string class.
@@ -1835,6 +1816,58 @@ public:
 
 
   UCharReference operator[] (UTextOffset pos);
+
+  /**
+   * Unescape a string of characters and return a string containing
+   * the result.  The following escape sequences are recognized:
+   *
+   * \uhhhh       4 hex digits; h in [0-9A-Fa-f]
+   * \Uhhhhhhhh   8 hex digits
+   * \xhh         1-2 hex digits
+   * \ooo         1-3 octal digits; o in [0-7]
+   *
+   * as well as the standard ANSI C escapes:
+   *
+   * \a => U+0007, \b => U+0008, \t => U+0009, \n => U+000A,
+   * \v => U+000B, \f => U+000C, \r => U+000D,
+   * \" => U+0022, \' => U+0027, \? => U+003F, \\ => U+005C
+   *
+   * Anything else following a backslash is generically escaped.  For
+   * example, "[a\-z]" returns "[a-z]".
+   *
+   * If an escape sequence is ill-formed, this method returns an empty
+   * string.  An example of an ill-formed sequence is "\u" followed by
+   * fewer than 4 hex digits.
+   *
+   * This function is similar to u_unescape() but not identical to it.
+   * The latter takes a source char*, so it does escape recognition
+   * and also conversion.  It also recognizes a narrower set of
+   * hexadecimal and octal digit characters.
+   *
+   * @return a string with backslash escapes interpreted, or an
+   * empty string on error.
+   * @see unescapeAt()
+   * @see u_unescape()
+   */
+  UnicodeString unescape() const;
+
+  /**
+   * Unescape a single escape sequence and return the represented
+   * character.  See unescape() for a listing of the recognized escape
+   * sequences.  The character at offset-1 is assumed (without
+   * checking) to be a backslash.  If the escape sequence is
+   * ill-formed, (UChar32)0xFFFFFFFF is returned.
+   *
+   * @param offset an input output parameter.  On input, it is the
+   * offset into this string where the escape sequence is located,
+   * after the initial backslash.  On output, it is advanced after the
+   * last character parsed.  On error, it is not advanced at all.
+   * @return the character represented by the escape sequence at
+   * offset, or (UChar32)0xFFFFFFFF on error.
+   * @see unescape()
+   * @see u_unescape()
+   */
+  UChar32 unescapeAt(int32_t &offset) const;
 
   //========================================
   // Implementation methods
