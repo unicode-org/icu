@@ -834,9 +834,9 @@ zh {
         "< \u9EDC < \u9EDD < \u9EE0 < \u9EDF < \u9EE2 < \u9EE9 < \u9EE7< \u9EE5 < \u9EEA"
         " < \u9EEF < \u9F22 < \u9F2C < \u9F2F < \u9F39< \u9F37 < \u9F3D < \u9F3E < \u9F44"
         "" }
-    Countries { 
+    Countries {
         CN { "\u4E2D\u534E\u4EBA\u6C11\u5171\u548C\u56FD" }
-        TW { "\u4E2D\u83EF\u6C11\u570B" }
+        TW { "\u53F0\u6E7E" }
         HK { "\u9999\u6E2F" }
     }
     DateTimePatterns { 
