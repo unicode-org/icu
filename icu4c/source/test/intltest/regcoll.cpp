@@ -987,7 +987,9 @@ void CollationRegressionTest::Test4139572(char *par)
 
     delete col;
 }
-
+/* HSYS : RuleBasedCollator::compare() performance enhancements
+          compare() does not create CollationElementIterator() anymore.*/
+          
 class My4146160Collator : public RuleBasedCollator
 {
 public:
@@ -1030,6 +1032,7 @@ CollationElementIterator *My4146160Collator::createCollationElementIterator(cons
 //
 void CollationRegressionTest::Test4146160(char *par)
 {
+#if 0
     //
     // Use a custom collator class whose createCollationElementIterator
     // methods increment a count....
@@ -1072,8 +1075,8 @@ void CollationRegressionTest::Test4146160(char *par)
     }
 
     delete mc;
+#endif
 }
-
 void CollationRegressionTest::compareArray(Collator &c,
                                            const UChar tests[][CollationRegressionTest::MAX_TOKEN_LEN],
                                            int32_t testCount)
