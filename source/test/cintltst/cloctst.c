@@ -24,8 +24,12 @@
 #include "unicode/ustring.h"
 #include "unicode/uset.h"
 #include "unicode/ulocdata.h"
+#include "unicode/udat.h"
+#include "unicode/umsg.h"
+#include "unicode/uversion.h"
 #include "cintltst.h"
 #include "cstring.h"
+#include "cmemory.h"
 #include "unicode/ures.h"
 #include "locmap.h"
 
@@ -209,6 +213,7 @@ void addLocaleTest(TestNode** root)
     addTest(root, &TestDisplayKeywords,      "tsutil/cloctst/TestDisplayKeywords");
     addTest(root, &TestDisplayKeywordValues, "tsutil/cloctst/TestDisplayKeywordValues");
     addTest(root, &TestGetBaseName,          "tsutil/cloctst/TestGetBaseName");
+    addTest(root, &TestGetLocale,            "tsutil/cloctst/TestGetLocale");
 }
 
 
@@ -2643,4 +2648,160 @@ static void TestGetBaseName(void) {
 }
 
 
+/**
+ * Compare the ICU version against the given major/minor version.
+ */
+static int32_t _cmpversion(const char* version) {
+    UVersionInfo x, icu;
+    u_versionFromString(x, version);
+    u_getVersion(icu);
+    return uprv_memcmp(icu, x, U_MAX_VERSION_LENGTH);
+}
 
+
+/**
+ * Compare two locale IDs.  If they are equal, return 0.  If `string'
+ * starts with `prefix' plus an additional element, that is, string ==
+ * prefix + '_' + x, then return 1.  Otherwise return a value < 0.
+ */
+static UBool _loccmp(const char* string, const char* prefix) {
+    int32_t slen = uprv_strlen(string),
+            plen = uprv_strlen(prefix);
+    int32_t c = uprv_strncmp(string, prefix, plen);
+    if (c) return -1; /* mismatch */
+    if (slen == plen) return 0;
+    if (string[plen] == '_') return 1;
+    return -2; /* false match, e.g. "en_USX" cmp "en_US" */
+}
+
+
+static void TestGetLocale(void) {
+    UErrorCode ec = U_ZERO_ERROR;
+    UParseError pe;
+
+    /* === udat === */
+    {
+        UDateFormat *obj;
+        const char *req = "en_US_REDWOODSHORES", *valid, *actual;
+        obj = udat_open(UDAT_DEFAULT, UDAT_DEFAULT,
+                        req,
+                        NULL, 0,
+                        NULL, 0, &ec);
+        if (U_FAILURE(ec)) {
+            log_err("udat_open failed\n");
+            return;
+        }
+        valid = udat_getLocaleByType(obj, ULOC_VALID_LOCALE, &ec);
+        actual = udat_getLocaleByType(obj, ULOC_ACTUAL_LOCALE, &ec);
+        if (U_FAILURE(ec)) {
+            log_err("udat_getLocaleByType() failed\n");
+            return;
+        }
+        /* We want the valid to be strictly > the bogus requested locale,
+           and the valid to be >= the actual. */
+        if (_loccmp(req, valid) > 0 &&
+            _loccmp(valid, actual) >= 0) {
+            log_verbose("udat; req=%s, valid=%s, actual=%s\n", req, valid, actual);
+        } else {
+            log_err("FAIL: udat; req=%s, valid=%s, actual=%s\n", req, valid, actual);
+        }
+        udat_close(obj);
+    }
+
+    /* === ucal === */
+    {
+        UCalendar *obj;
+        const char *req = "fr_FR_PROVENCAL", *valid, *actual;
+        obj = ucal_open(NULL, 0,
+                        req,
+                        UCAL_GREGORIAN,
+                        &ec);
+        if (U_FAILURE(ec)) {
+            log_err("ucal_open failed\n");
+            return;
+        }
+        valid = ucal_getLocaleByType(obj, ULOC_VALID_LOCALE, &ec);
+        actual = ucal_getLocaleByType(obj, ULOC_ACTUAL_LOCALE, &ec);
+        if (U_FAILURE(ec)) {
+            log_err("ucal_getLocaleByType() failed\n");
+            return;
+        }
+        /* We want the valid to be strictly > the bogus requested locale,
+           and the valid to be >= the actual. */
+        if (_loccmp(req, valid) > 0 &&
+            _loccmp(valid, actual) >= 0) {
+            log_verbose("ucal; req=%s, valid=%s, actual=%s\n", req, valid, actual);
+        } else {
+            log_err("FAIL: ucal; req=%s, valid=%s, actual=%s\n", req, valid, actual);
+        }
+        ucal_close(obj);
+    }
+
+    /* === unum === */
+    {
+        UNumberFormat *obj;
+        const char *req = "zh_TW_TAINAN", *valid, *actual;
+        obj = unum_open(UNUM_DECIMAL,
+                        NULL, 0,
+                        req,
+                        &pe, &ec);
+        if (U_FAILURE(ec)) {
+            log_err("unum_open failed\n");
+            return;
+        }
+        valid = unum_getLocaleByType(obj, ULOC_VALID_LOCALE, &ec);
+        actual = unum_getLocaleByType(obj, ULOC_ACTUAL_LOCALE, &ec);
+        if (U_FAILURE(ec)) {
+            log_err("unum_getLocaleByType() failed\n");
+            return;
+        }
+        /* We want the valid to be strictly > the bogus requested locale,
+           and the valid to be >= the actual. */
+        if (_loccmp(req, valid) > 0 &&
+            _loccmp(valid, actual) >= 0) {
+            log_verbose("unum; req=%s, valid=%s, actual=%s\n", req, valid, actual);
+        } else {
+            log_err("FAIL: unum; req=%s, valid=%s, actual=%s\n", req, valid, actual);
+        }
+        unum_close(obj);
+    }
+
+    /* === umsg === */
+    {
+        UMessageFormat *obj;
+        const char *req = "ja_JP_TAKAYAMA", *valid, *actual;
+        UChar EMPTY[1] = {0};
+        UBool test;
+        obj = umsg_open(EMPTY, 0,
+                        req,
+                        &pe, &ec);
+        if (U_FAILURE(ec)) {
+            log_err("umsg_open failed\n");
+            return;
+        }
+        valid = umsg_getLocaleByType(obj, ULOC_VALID_LOCALE, &ec);
+        actual = umsg_getLocaleByType(obj, ULOC_ACTUAL_LOCALE, &ec);
+        if (U_FAILURE(ec)) {
+            log_err("umsg_getLocaleByType() failed\n");
+            return;
+        }
+        /* We want the valid to be strictly > the bogus requested locale,
+           and the valid to be >= the actual. */
+        /* TODO MessageFormat is currently just storing the locale it is given.
+           As a result, it will return whatever it was given, even if the
+           locale is invalid. */
+        test = (_cmpversion("2.8") <= 0) ?
+            /* Here is the weakened test for 2.8: */
+            (_loccmp(req, valid) >= 0) :
+            /* Here is what the test line SHOULD be: */
+            (_loccmp(req, valid) > 0);
+
+        if (test &&
+            _loccmp(valid, actual) >= 0) {
+            log_verbose("umsg; req=%s, valid=%s, actual=%s\n", req, valid, actual);
+        } else {
+            log_err("FAIL: umsg; req=%s, valid=%s, actual=%s\n", req, valid, actual);
+        }
+        umsg_close(obj);
+    }
+}
