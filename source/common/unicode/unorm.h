@@ -205,7 +205,7 @@ typedef enum {
  * @param status A pointer to a UErrorCode to receive any errors.
  * @return The total buffer size needed; if greater than resultLength,
  *         the output was truncated, and the error code is set to U_BUFFER_OVERFLOW_ERROR.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2 
 unorm_normalize(const UChar *source, int32_t sourceLength,
@@ -225,7 +225,7 @@ unorm_normalize(const UChar *source, int32_t sourceLength,
 /**
  * Result values for unorm_quickCheck().
  * For details see Unicode Technical Report 15.
- * @stable
+ * @stable ICU 2.0
  */
 typedef enum UNormalizationCheckResult {
   /** 
@@ -261,7 +261,7 @@ typedef enum UNormalizationCheckResult {
  * @return UNORM_YES, UNORM_NO or UNORM_MAYBE
  *
  * @see unorm_isNormalized
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UNormalizationCheckResult U_EXPORT2
 unorm_quickCheck(const UChar *source, int32_t sourcelength,

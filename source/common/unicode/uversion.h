@@ -121,7 +121,7 @@ u_versionToString(UVersionInfo versionArray, char *versionString);
  * Definition of this function lives in putil.c
  *
  * @param versionArray the version # information, the result will be filled in
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2
 u_getVersion(UVersionInfo versionArray);

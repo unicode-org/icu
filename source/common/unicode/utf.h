@@ -110,7 +110,7 @@
  * \def U_SIZEOF_WCHAR_T
  * U_SIZEOF_WCHAR_T==sizeof(wchar_t).
  *
- * @stable
+ * @stable ICU 2.0
  */
 #ifndef U_HAVE_WCHAR_H
 #   define U_HAVE_WCHAR_H 1
@@ -126,13 +126,13 @@
  * \def U_WCHAR_IS_UTF16
  * Defined if wchar_t uses UTF-16.
  *
- * @stable
+ * @stable ICU 2.0
  */
 /*!
  * \def U_WCHAR_IS_UTF32
  * Defined if wchar_t uses UTF-32.
  *
- * @stable
+ * @stable ICU 2.0
  */
 #if !defined(U_WCHAR_IS_UTF16) && !defined(U_WCHAR_IS_UTF32)
 #   ifdef __STDC_ISO_10646__ 
@@ -167,7 +167,7 @@
  * but allows direct string type compatibility with platforms with
  * 16-bit wchar_t types.
  *
- * @stable
+ * @stable ICU 2.0
  */
 
 /* Define UChar to be compatible with wchar_t if possible. */

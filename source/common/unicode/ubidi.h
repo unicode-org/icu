@@ -334,38 +334,38 @@
  * @see UBIDI_DEFAULT_RTL
  * @see UBIDI_LEVEL_OVERRIDE
  * @see UBIDI_MAX_EXPLICIT_LEVEL
- * @stable
+ * @stable ICU 2.0
  */
 typedef uint8_t UBiDiLevel;
 
 /** Paragraph level setting.
  *  If there is no strong character, then set the paragraph level to 0 (left-to-right).
- * @stable
+ * @stable ICU 2.0
  */
 #define UBIDI_DEFAULT_LTR 0xfe
 
 /** Paragraph level setting.
  *  If there is no strong character, then set the paragraph level to 1 (right-to-left).
- * @stable
+ * @stable ICU 2.0
  */
 #define UBIDI_DEFAULT_RTL 0xff
 
 /**
  * Maximum explicit embedding level.
  * (The maximum resolved level can be up to <code>UBIDI_MAX_EXPLICIT_LEVEL+1</code>).
- * @stable
+ * @stable ICU 2.0
  */
 #define UBIDI_MAX_EXPLICIT_LEVEL 61
 
 /** Bit flag for level input. 
  *  Overrides directional properties. 
- * @stable
+ * @stable ICU 2.0
  */
 #define UBIDI_LEVEL_OVERRIDE 0x80
 
 /**
  * @memo <code>UBiDiDirection</code> values indicate the text direction.
- * @stable
+ * @stable ICU 2.0
  */
 enum UBiDiDirection {
     /** @memo All left-to-right text. This is a 0 value. @stable */
@@ -387,7 +387,7 @@ typedef enum UBiDiDirection UBiDiDirection;
  * such a paragraph.<p>
  * Reordering can be done on a line, or on a paragraph which is
  * then interpreted as one single line.
- * @stable
+ * @stable ICU 2.0
  */
 struct UBiDi;
 
@@ -406,7 +406,7 @@ typedef struct UBiDi UBiDi;
  * internal structures as necessary.
  *
  * @return An empty <code>UBiDi</code> object.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UBiDi * U_EXPORT2
 ubidi_open(void);
@@ -444,7 +444,7 @@ ubidi_open(void);
  *        which must not indicate a failure before the function call.
  *
  * @return An empty <code>UBiDi</code> object with preallocated memory.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UBiDi * U_EXPORT2
 ubidi_openSized(int32_t maxLength, int32_t maxRunCount, UErrorCode *pErrorCode);
@@ -465,7 +465,7 @@ ubidi_openSized(int32_t maxLength, int32_t maxRunCount, UErrorCode *pErrorCode);
  *
  * @see ubidi_setPara
  * @see ubidi_setLine
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2
 ubidi_close(UBiDi *pBiDi);
@@ -504,7 +504,7 @@ ubidi_close(UBiDi *pBiDi);
  *
  * @see ubidi_setPara
  * @see ubidi_writeReordered
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2
 ubidi_setInverse(UBiDi *pBiDi, UBool isInverse);
@@ -516,7 +516,7 @@ ubidi_setInverse(UBiDi *pBiDi, UBool isInverse);
  * @return TRUE if the BiDi object set to perform the inverse BiDi algorithm
  *
  * @see ubidi_setInverse
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UBool U_EXPORT2
 ubidi_isInverse(UBiDi *pBiDi);
@@ -590,7 +590,7 @@ ubidi_isInverse(UBiDi *pBiDi);
  *
  * @param pErrorCode must be a valid pointer to an error code value,
  *        which must not indicate a failure before the function call.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2
 ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
@@ -638,7 +638,7 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
  *        which must not indicate a failure before the function call.
  *
  * @see ubidi_setPara
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2
 ubidi_setLine(const UBiDi *pParaBiDi,
@@ -656,7 +656,7 @@ ubidi_setLine(const UBiDi *pParaBiDi,
  *         and which direction, or if it is mixed-directional.
  *
  * @see UBiDiDirection
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UBiDiDirection U_EXPORT2
 ubidi_getDirection(const UBiDi *pBiDi);
@@ -670,7 +670,7 @@ ubidi_getDirection(const UBiDi *pBiDi);
  *
  * @see ubidi_setPara
  * @see ubidi_setLine
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI const UChar * U_EXPORT2
 ubidi_getText(const UBiDi *pBiDi);
@@ -681,7 +681,7 @@ ubidi_getText(const UBiDi *pBiDi);
  * @param pBiDi is the paragraph or line <code>UBiDi</code> object.
  *
  * @return The length of the text that the UBiDi object was created for.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2
 ubidi_getLength(const UBiDi *pBiDi);
@@ -694,7 +694,7 @@ ubidi_getLength(const UBiDi *pBiDi);
  * @return The paragraph level.
  *
  * @see UBiDiLevel
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UBiDiLevel U_EXPORT2
 ubidi_getParaLevel(const UBiDi *pBiDi);
@@ -709,7 +709,7 @@ ubidi_getParaLevel(const UBiDi *pBiDi);
  * @return The level for the character at charIndex.
  *
  * @see UBiDiLevel
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UBiDiLevel U_EXPORT2
 ubidi_getLevelAt(const UBiDi *pBiDi, int32_t charIndex);
@@ -729,7 +729,7 @@ ubidi_getLevelAt(const UBiDi *pBiDi, int32_t charIndex);
  *         or <code>NULL</code> if an error occurs.
  *
  * @see UBiDiLevel
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI const UBiDiLevel * U_EXPORT2
 ubidi_getLevels(UBiDi *pBiDi, UErrorCode *pErrorCode);
@@ -754,7 +754,7 @@ ubidi_getLevels(UBiDi *pBiDi, UErrorCode *pErrorCode);
  * @param pLevel will receive the level of the run.
  *        This pointer can be <code>NULL</code> if this
  *        value is not necessary.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2
 ubidi_getLogicalRun(const UBiDi *pBiDi, int32_t logicalStart,
@@ -774,7 +774,7 @@ ubidi_getLogicalRun(const UBiDi *pBiDi, int32_t logicalStart,
  *        which must not indicate a failure before the function call.
  *
  * @return The number of runs.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2
 ubidi_countRuns(UBiDi *pBiDi, UErrorCode *pErrorCode);
@@ -828,7 +828,7 @@ ubidi_countRuns(UBiDi *pBiDi, UErrorCode *pErrorCode);
  * Note that in right-to-left runs, code like this places
  * modifier letters before base characters and second surrogates
  * before first ones.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UBiDiDirection U_EXPORT2
 ubidi_getVisualRun(UBiDi *pBiDi, int32_t runIndex,
@@ -855,7 +855,7 @@ ubidi_getVisualRun(UBiDi *pBiDi, int32_t runIndex,
  *
  * @see ubidi_getLogicalMap
  * @see ubidi_getLogicalIndex
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2
 ubidi_getVisualIndex(UBiDi *pBiDi, int32_t logicalIndex, UErrorCode *pErrorCode);
@@ -879,7 +879,7 @@ ubidi_getVisualIndex(UBiDi *pBiDi, int32_t logicalIndex, UErrorCode *pErrorCode)
  *
  * @see ubidi_getVisualMap
  * @see ubidi_getVisualIndex
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2
 ubidi_getLogicalIndex(UBiDi *pBiDi, int32_t visualIndex, UErrorCode *pErrorCode);
@@ -900,7 +900,7 @@ ubidi_getLogicalIndex(UBiDi *pBiDi, int32_t visualIndex, UErrorCode *pErrorCode)
  *
  * @see ubidi_getVisualMap
  * @see ubidi_getVisualIndex
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2
 ubidi_getLogicalMap(UBiDi *pBiDi, int32_t *indexMap, UErrorCode *pErrorCode);
@@ -921,7 +921,7 @@ ubidi_getLogicalMap(UBiDi *pBiDi, int32_t *indexMap, UErrorCode *pErrorCode);
  *
  * @see ubidi_getLogicalMap
  * @see ubidi_getLogicalIndex
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2
 ubidi_getVisualMap(UBiDi *pBiDi, int32_t *indexMap, UErrorCode *pErrorCode);
@@ -944,7 +944,7 @@ ubidi_getVisualMap(UBiDi *pBiDi, int32_t *indexMap, UErrorCode *pErrorCode);
  *        indexes which will reflect the reordering of the characters.
  *        The array does not need to be initialized.<p>
  *        The index map will result in <code>indexMap[logicalIndex]==visualIndex</code>.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2
 ubidi_reorderLogical(const UBiDiLevel *levels, int32_t length, int32_t *indexMap);
@@ -967,7 +967,7 @@ ubidi_reorderLogical(const UBiDiLevel *levels, int32_t length, int32_t *indexMap
  *        indexes which will reflect the reordering of the characters.
  *        The array does not need to be initialized.<p>
  *        The index map will result in <code>indexMap[visualIndex]==logicalIndex</code>.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2
 ubidi_reorderVisual(const UBiDiLevel *levels, int32_t length, int32_t *indexMap);
@@ -984,7 +984,7 @@ ubidi_reorderVisual(const UBiDiLevel *levels, int32_t length, int32_t *indexMap)
  *        which will be filled with the inverse mapping.
  *
  * @param length is the length of each array.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2
 ubidi_invertMap(const int32_t *srcMap, int32_t *destMap, int32_t length);
@@ -996,7 +996,7 @@ ubidi_invertMap(const int32_t *srcMap, int32_t *destMap, int32_t length);
  * keep combining characters after their base characters in RTL runs
  *
  * @see ubidi_writeReordered
- * @stable
+ * @stable ICU 2.0
  */
 #define UBIDI_KEEP_BASE_COMBINING       1
 
@@ -1006,7 +1006,7 @@ ubidi_invertMap(const int32_t *srcMap, int32_t *destMap, int32_t length);
  * by their mirror-image mappings
  *
  * @see ubidi_writeReordered
- * @stable
+ * @stable ICU 2.0
  */
 #define UBIDI_DO_MIRRORING              2
 
@@ -1017,7 +1017,7 @@ ubidi_invertMap(const int32_t *srcMap, int32_t *destMap, int32_t length);
  *
  * @see ubidi_setInverse
  * @see ubidi_writeReordered
- * @stable
+ * @stable ICU 2.0
  */
 #define UBIDI_INSERT_LRM_FOR_NUMERIC    4
 
@@ -1027,7 +1027,7 @@ ubidi_invertMap(const int32_t *srcMap, int32_t *destMap, int32_t length);
  * (this does not affect UBIDI_INSERT_LRM_FOR_NUMERIC)
  *
  * @see ubidi_writeReordered
- * @stable
+ * @stable ICU 2.0
  */
 #define UBIDI_REMOVE_BIDI_CONTROLS      8
 
@@ -1043,7 +1043,7 @@ ubidi_invertMap(const int32_t *srcMap, int32_t *destMap, int32_t length);
  * is designed for RTL scripts and stores text in reverse order.</p>
  *
  * @see ubidi_writeReordered
- * @stable
+ * @stable ICU 2.0
  */
 #define UBIDI_OUTPUT_REVERSE            16
 
@@ -1102,7 +1102,7 @@ ubidi_invertMap(const int32_t *srcMap, int32_t *destMap, int32_t length);
  *        which must not indicate a failure before the function call.
  *
  * @return The length of the output string.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2
 ubidi_writeReordered(UBiDi *pBiDi,
@@ -1155,7 +1155,7 @@ ubidi_writeReordered(UBiDi *pBiDi,
  *        which must not indicate a failure before the function call.
  *
  * @return The length of the output string.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2
 ubidi_writeReverse(const UChar *src, int32_t srcLength,

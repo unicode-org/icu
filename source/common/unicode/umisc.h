@@ -25,7 +25,7 @@
  */
  
 /** A struct representing a range of text containing a specific field 
- *  @stable
+ *  @stable ICU 2.0
  */
 typedef struct UFieldPosition {
   /** The field */

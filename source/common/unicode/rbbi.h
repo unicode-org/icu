@@ -141,7 +141,7 @@ public:
      * Copy constructor.  Will produce a break iterator with the same behavior,
      * and which iterates over the same text, as the one passed in.
      * @param that The RuleBasedBreakIterator passed to be copied
-     * @stable
+     * @stable ICU 2.0
      */
     RuleBasedBreakIterator(const RuleBasedBreakIterator& that);
 
@@ -158,7 +158,7 @@ public:
                              UErrorCode            &status);
     /**
      * Destructor
-     *  @stable
+     *  @stable ICU 2.0
      */
     virtual ~RuleBasedBreakIterator();
 
@@ -167,7 +167,7 @@ public:
      * and iterate over the same text, as the one passed in.
      * @param that The RuleBasedBreakItertor passed in
      * @return the newly created RuleBasedBreakIterator
-     *  @stable
+     *  @stable ICU 2.0
      */
     RuleBasedBreakIterator& operator=(const RuleBasedBreakIterator& that);
 
@@ -177,7 +177,7 @@ public:
      * @param that The BreakIterator to be compared for equality
      * @Return TRUE if both BreakIterators are of the
      * same class, have the same behavior, and iterate over the same text.
-     *  @stable
+     *  @stable ICU 2.0
      */
     virtual UBool operator==(const BreakIterator& that) const;
 
@@ -186,7 +186,7 @@ public:
      * and vice versa.
      * @param that The BreakIterator to be compared for inequality
      * @return TRUE if both BreakIterators are not same.
-     *  @stable
+     *  @stable ICU 2.0
      */
     UBool operator!=(const BreakIterator& that) const;
 
@@ -197,21 +197,21 @@ public:
      *   will correctly clone (copy) a derived class.
      * clone() is thread safe.  Multiple threads may simultaeneously
      * clone the same source break iterator.
-     *  @stable
+     *  @stable ICU 2.0
      */
     virtual BreakIterator* clone() const;
 
     /**
      * Compute a hash code for this BreakIterator
      * @return A hash code
-     *  @stable
+     *  @stable ICU 2.0
      */
     virtual int32_t hashCode(void) const;
 
     /**
      * Returns the description used to create this iterator
      * @return the description used to create this iterator
-     *  @stable
+     *  @stable ICU 2.0
      */
     virtual const UnicodeString& getRules(void) const;
 
@@ -225,7 +225,7 @@ public:
      * Changing the state of this iterator can have undefined consequences.  If
      * you need to change it, clone it first.
      * @return An iterator over the text being analyzed.
-     *  @stable
+     *  @stable ICU 2.0
      */
     virtual const CharacterIterator& getText(void) const;
 
@@ -235,7 +235,7 @@ public:
      * the current iteration position to the beginning of the text.
      * @param newText An iterator over the text to analyze.  The BreakIterator
      * takes ownership of the character iterator.  The caller MUST NOT delete it!
-     *  @stable
+     *  @stable ICU 2.0
      */
     virtual void adoptText(CharacterIterator* newText);
 
@@ -243,7 +243,7 @@ public:
      * Set the iterator to analyze a new piece of text.  This function resets
      * the current iteration position to the beginning of the text.
      * @param newText The text to analyze.
-     *  @stable
+     *  @stable ICU 2.0
      */
     virtual void setText(const UnicodeString& newText);
 
@@ -251,7 +251,7 @@ public:
      * Sets the current iteration position to the beginning of the text.
      * (i.e., the CharacterIterator's starting offset).
      * @return The offset of the beginning of the text.
-     *  @stable
+     *  @stable ICU 2.0
      */
     virtual int32_t first(void);
 
@@ -259,7 +259,7 @@ public:
      * Sets the current iteration position to the end of the text.
      * (i.e., the CharacterIterator's ending offset).
      * @return The text's past-the-end offset.
-     *  @stable
+     *  @stable ICU 2.0
      */
     virtual int32_t last(void);
 
@@ -271,21 +271,21 @@ public:
      * (negative is backwards, and positive is forwards).
      * @return The character offset of the boundary position n boundaries away from
      * the current one.
-     *  @stable
+     *  @stable ICU 2.0
      */
     virtual int32_t next(int32_t n);
 
     /**
      * Advances the iterator to the next boundary position.
      * @return The position of the first boundary after this one.
-     *  @stable
+     *  @stable ICU 2.0
      */
     virtual int32_t next(void);
 
     /**
      * Moves the iterator backwards, to the last boundary preceding this one.
      * @return The position of the last boundary position preceding this one.
-     *  @stable
+     *  @stable ICU 2.0
      */
     virtual int32_t previous(void);
 
@@ -294,7 +294,7 @@ public:
      * the specified position.
      * @param offset The position from which to begin searching for a break position.
      * @return The position of the first break after the current position.
-     *  @stable
+     *  @stable ICU 2.0
      */
     virtual int32_t following(int32_t offset);
 
@@ -303,7 +303,7 @@ public:
      * specified position.
      * @param offset The position to begin searching for a break from.
      * @return The position of the last boundary before the starting position.
-     *  @stable
+     *  @stable ICU 2.0
      */
     virtual int32_t preceding(int32_t offset);
 
@@ -313,14 +313,14 @@ public:
      * or after "offset".
      * @param offset the offset to check.
      * @return True if "offset" is a boundary position.
-     *  @stable
+     *  @stable ICU 2.0
      */
     virtual UBool isBoundary(int32_t offset);
 
     /**
      * Returns the current iteration position.
      * @return The current iteration position.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual int32_t current(void) const;
 
@@ -345,7 +345,7 @@ public:
      * @return          The class ID for this object. All objects of a
      *                  given class have the same class ID.  Objects of
      *                  other classes have different class IDs.
-     * @stable
+     * @stable ICU 2.0
      */
     inline virtual UClassID getDynamicClassID(void) const;
 
@@ -358,7 +358,7 @@ public:
      *          Derived::getStaticClassID()) ...
      *
      * @return          The class ID for all objects of this class.
-     * @stable
+     * @stable ICU 2.0
      */
     inline static UClassID getStaticClassID(void);
 
@@ -384,7 +384,7 @@ public:
      * @return  Pointer to the clone object.  This may differ from the stackBuffer
      *          address if the byte alignment of the stack buffer was not suitable
      *          or if the stackBuffer was too small to hold the clone.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual BreakIterator *  createBufferClone(void *stackBuffer,
                                                int32_t &BufferSize,

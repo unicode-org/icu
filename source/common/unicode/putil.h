@@ -134,7 +134,7 @@ U_CAPI int32_t  U_EXPORT2 uprv_digitsAfterDecimal(double x);
  * information specified by the operating system. Under Windows NT
  * and Windows 95, this information is specified in the Control Panel’s
  * Date/Time application.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI void     U_EXPORT2 uprv_tzset(void);
 
@@ -157,7 +157,7 @@ U_CAPI char*    U_EXPORT2 uprv_tzname(int n);
 /**
  * Get UTC (GMT) time measured in seconds since 0:00 on 1/1/70.
  * @return the UTC time measured in seconds 
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t  U_EXPORT2 uprv_getUTCtime(void);
 
@@ -180,7 +180,7 @@ U_CAPI int32_t  U_EXPORT2 uprv_getUTCtime(void);
  * @return the data directory, or an empty string ("") if no data directory has
  *         been specified.
  *   
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI const char* U_EXPORT2 u_getDataDirectory(void);
 
@@ -195,7 +195,7 @@ U_CAPI const char* U_EXPORT2 u_getDataDirectory(void);
  * This function should be called at most once in a process, before the
  * first ICU operation that will require the loading of an ICU data file.
  * @param disrectory The directory to be set.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2 u_setDataDirectory(const char *directory);
 
@@ -204,7 +204,7 @@ U_CAPI void U_EXPORT2 u_setDataDirectory(const char *directory);
  * This function can call setlocale() on Unix platforms. Please read the
  * platform documentation on setlocale() before calling this function.
  * @return the default codepage for this platform 
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI const char*  U_EXPORT2 uprv_getDefaultCodepage(void);
 
@@ -214,7 +214,7 @@ U_CAPI const char*  U_EXPORT2 uprv_getDefaultCodepage(void);
  * This function can call setlocale() on Unix platforms. Please read the
  * platform documentation on setlocale() before calling this function.
  * @return the default locale ID string
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI const char*  U_EXPORT2 uprv_getDefaultLocaleID(void);
 
@@ -236,7 +236,7 @@ U_CAPI double       U_EXPORT2 uprv_nextDouble(double d, UBool positive);
 /**
  * Filesystem file and path separator characters.
  * Example: '/' and ':' on Unix, '\\' and ';' on Windows.
- * @stable
+ * @stable ICU 2.0
  */
 #ifdef XP_MAC
 #   define U_FILE_SEP_CHAR ':'
@@ -269,7 +269,7 @@ U_CAPI double       U_EXPORT2 uprv_nextDouble(double d, UBool positive);
  *           Unicode characters.
  * @param length The number of characters to convert; this may
  *               include the terminating <code>NUL</code>.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2
 u_charsToUChars(const char *cs, UChar *us, int32_t length);
@@ -289,7 +289,7 @@ u_charsToUChars(const char *cs, UChar *us, int32_t length);
  *           character bytes.
  * @param length The number of characters to convert; this may
  *               include the terminating <code>NUL</code>.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2
 u_UCharsToChars(const UChar *us, char *cs, int32_t length);
