@@ -466,8 +466,8 @@ U_CDECL_END
 //----------------------------------------------------------------------
 
 TransliteratorRegistry::TransliteratorRegistry(UErrorCode& status) :
-    registry(TRUE),
-    specDAG(TRUE),
+    registry(TRUE, status),
+    specDAG(TRUE, status),
     availableIDs(status)
 {
     registry.setValueDeleter(deleteEntry);
@@ -851,8 +851,8 @@ void TransliteratorRegistry::registerSTV(const UnicodeString& source,
     UErrorCode status = U_ZERO_ERROR;
     Hashtable *targets = (Hashtable*) specDAG.get(source);
     if (targets == 0) {
-        targets = new Hashtable(TRUE);
-        if (targets == 0) {
+        targets = new Hashtable(TRUE, status);
+        if (U_FAILURE(status) || targets == 0) {
             return;
         }
         targets->setValueDeleter(uhash_deleteUVector);
