@@ -331,12 +331,11 @@ static void TestTertiary()
     rules=(UChar*)malloc(sizeof(UChar*) * (len+1));
     u_uastrcpy(rules, str);
 
-    myCollation=ucol_openRules(rules, len, UCOL_NO_NORMALIZATION, UCOL_DEFAULT_STRENGTH, NULL, &status);
+    myCollation=ucol_openRules(rules, len, UCOL_OFF, UCOL_DEFAULT_STRENGTH, NULL, &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator :%s\n", myErrorName(status));
     }
    
-   /* ucol_setNormalization(myCollation, UCOL_DEFAULT_NORMALIZATION); */
     ucol_setStrength(myCollation, UCOL_TERTIARY);
     for (i = 0; i < 17 ; i++)
     {
@@ -358,7 +357,7 @@ static void TestPrimary( )
     rules=(UChar*)malloc(sizeof(UChar*) * (len+1));
     u_uastrcpy(rules, str);
 
-    myCollation=ucol_openRules(rules, len, UCOL_NO_NORMALIZATION, UCOL_DEFAULT_STRENGTH,NULL, &status);
+    myCollation=ucol_openRules(rules, len, UCOL_OFF, UCOL_DEFAULT_STRENGTH,NULL, &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator :%s\n", myErrorName(status));
     }
@@ -386,7 +385,7 @@ static void TestSecondary()
     rules=(UChar*)malloc(sizeof(UChar*) * (len+1));
     u_uastrcpy(rules, str);
 
-    myCollation=ucol_openRules(rules, len, UCOL_NO_NORMALIZATION, UCOL_DEFAULT_STRENGTH,NULL, &status);
+    myCollation=ucol_openRules(rules, len, UCOL_OFF, UCOL_DEFAULT_STRENGTH,NULL, &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator :%s\n", myErrorName(status));
     }
@@ -412,7 +411,7 @@ static void TestIdentical()
     rules=(UChar*)malloc(sizeof(UChar*) * (len+1));
     u_uastrcpy(rules, str);
 
-    myCollation=ucol_openRules(rules, len, UCOL_NO_NORMALIZATION, UCOL_IDENTICAL, NULL,&status);
+    myCollation=ucol_openRules(rules, len, UCOL_OFF, UCOL_IDENTICAL, NULL,&status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator :%s\n", myErrorName(status));
     }
@@ -437,11 +436,10 @@ static void TestExtra()
     rules=(UChar*)malloc(sizeof(UChar*) * (len+1));
     u_uastrcpy(rules, str);
 
-    myCollation=ucol_openRules(rules, len, UCOL_NO_NORMALIZATION, UCOL_DEFAULT_STRENGTH,NULL, &status);
+    myCollation=ucol_openRules(rules, len, UCOL_OFF, UCOL_DEFAULT_STRENGTH,NULL, &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator :%s\n", myErrorName(status));
     }
-    ucol_setNormalization(myCollation, UCOL_DEFAULT_NORMALIZATION); 
     ucol_setStrength(myCollation, UCOL_TERTIARY);
     for (i = 0; i < COUNT_TEST_CASES-1 ; i++)
     {
@@ -531,7 +529,7 @@ static void TestVariableTop(void)
     u_uastrcpy(rules, str);
 
     enCollation = ucol_open("en_US", &status);
-    myCollation = ucol_openRules(rules, len, UCOL_NO_NORMALIZATION, 
+    myCollation = ucol_openRules(rules, len, UCOL_OFF, 
                                  UCOL_PRIMARY,NULL, &status);
     if (U_FAILURE(status)) {
         log_err("ERROR: in creation of rule based collator :%s\n", 
@@ -606,7 +604,7 @@ static void TestSurrogates(void)
     rlen = u_unescape(str, rules, len);
     
     enCollation = ucol_open("en_US", &status);
-    myCollation = ucol_openRules(rules, rlen - 1, UCOL_NO_NORMALIZATION, 
+    myCollation = ucol_openRules(rules, rlen - 1, UCOL_OFF, 
                                  UCOL_TERTIARY,NULL, &status);
     if (U_FAILURE(status)) {
         log_err("ERROR: in creation of rule based collator :%s\n", 
@@ -684,7 +682,7 @@ TestInvalidRules(){
         u_memset(parseError.preContext,0x0000,U_PARSE_CONTEXT_LEN);      
         u_memset(parseError.postContext,0x0000,U_PARSE_CONTEXT_LEN);
         /* open the rules and test */
-        coll = ucol_openRules(rules,u_strlen(rules),UCOL_NO_NORMALIZATION,UCOL_DEFAULT_STRENGTH,&parseError,&status);
+        coll = ucol_openRules(rules,u_strlen(rules),UCOL_OFF,UCOL_DEFAULT_STRENGTH,&parseError,&status);
         if(u_strcmp(parseError.preContext,preContextExp)!=0){
             log_err("preContext in UParseError for ucol_openRules does not match\n");
         }

@@ -1389,7 +1389,7 @@ UCollator *openRulesCollator() {
     buf[i] = 0;
 
     UErrorCode    status = U_ZERO_ERROR;
-    UCollator *coll = ucol_openRules(buf, u_strlen(buf), UCOL_NO_NORMALIZATION,
+    UCollator *coll = ucol_openRules(buf, u_strlen(buf), UCOL_OFF,
                                          UCOL_DEFAULT_STRENGTH, NULL, &status);
     if (U_FAILURE(status)) {
         fprintf(stderr, "ICU ucol_openRules() open failed.: %d\n", status);
