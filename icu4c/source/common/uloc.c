@@ -463,11 +463,6 @@ uloc_setDefault(const char*   newDefaultLocale,
         return;
     /* the error code isn't currently used for anything by this function*/
     
-    if (newDefaultLocale == NULL) 
-    {
-        newDefaultLocale = uprv_getDefaultLocaleID();
-    }
-    
     /* propagate change to C++ */
     locale_set_default(newDefaultLocale);
 }
