@@ -12,6 +12,8 @@
 
 U_NAMESPACE_BEGIN
 
+const char GDEFMarkFilter::fgClassID=0;
+
 GDEFMarkFilter::GDEFMarkFilter(const GlyphDefinitionTableHeader *gdefTable)
 {
     classDefTable = gdefTable->getGlyphClassDefinitionTable();
