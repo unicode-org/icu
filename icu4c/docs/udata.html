@@ -1,0 +1,153 @@
+<html>
+
+<head>
+<title>ICU - Formats and API for Binary Data Files</title>
+</head>
+
+<body>
+
+<h1>ICU - Formats and API for Binary Data Files</h1>
+
+<p>This is a raw draft.</p>
+
+<h2>Finding ICU data</h2>
+
+<p>ICU data, when stored in files, is loaded from the file system
+directory that is returned by <code>u_getDataDirectory()</code>.
+That directory is determined sequentially by
+<ul>
+    <li><code>getenv("ICU_DATA")</code> -
+        the contents of the ICU_DATA environment variable</li>
+    <li>on Windows, by the value named <code>"Path"</code> of the registry key
+        <code>HKEY_LOCAL_MACHINE "SOFTWARE\\IBM\\Unicode\\Data"</code></li>
+    <li>relative to the path where <code>icuuc.dll</code> or <code>libicu-uc.so</code> or similar
+        is loaded from: if it is loaded from <code>/some/path/lib/libicu-uc.so</code>, then
+        the path will be <code>/some/path/lib/../share/icu/1.3.1/</code>
+        where <code>"1.3.1"</code> is an example for the version of the ICU library that
+        is trying to locate the data directory</li>
+    <li>relative to the path where <code>icuuc.dll</code> or <code>libicu-uc.so</code> or similar
+        is found by searching the <code>PATH</code> or <code>LIBPATH</code>
+        as appropriate; the relative path is determined as above</li>
+    <li>hardcoded to <code>(system drive)/share/icu/1.3.1/</code>,
+        where <code>(system drive)</code> is empty or a path to the system drive, like
+        <code>"D:\"</code> on Windows or OS/2</li>
+</ul></p>
+
+<p>When ICU data is loaded using the <code>udata</code> API functions, then
+there is a defined sequence of file locations and entry point names that are
+used to locate the data. See the description in <code>icu/source/common/udata.h</code> for
+details. Note that the exact data finding depends on the implementation
+of this API and may differ by platform and by build configuration.
+See also <code>icu/source/common/udata.c</code> for implementation details.</p>
+
+
+<h2>Binary Data File Formats</h2>
+
+<p>Data files for ICU and for applications loading their data with ICU,
+should have a memory-mappable format. This means that the data should be
+layed out in the file in an immediately useful way, so that the code that uses
+the data does not need to parse it or copy it to allocated memory and
+build additional structures (like Hashtables).
+Here are some points to consider:</p>
+
+<ul>
+    <li>The data memory starts at an offset within the data file
+        that is divisible by 16 if you use <code>unewdata.h/.c</code>
+        to write the data.</li>
+    <li>Write explicitly sized values: explicitly 32 bits with an
+        <code>int32_t</code>, not using an ambiguous <code>int</code>.</li>
+    <li>Align all values according to their data type size:
+        Align 16-bit integers on even offsets, 32-bit integers on
+        offsets divisible by 4, etc.</li>
+    <li>Align structures according to their largest field.</li>
+    <li>When writing structures directly, avoid implicit
+        field padding/alignment: if a field may not be aligned
+        within the structure according to its size, then
+        insert additional (reserved) fields to explicitly
+        size-align that field.</li>
+    <li>Avoid floating point values if possible. Their size and structure
+        may differ among platforms.</li>
+    <li>Avoid boolean (<code>bool_t</code>, <code>bool</code>) values
+        and use explictly sized integer values instead
+        because the size of the boolean type may vary.</li>
+    <li>Write offsets to sub-structures at the beginning of the data
+        so that those sub-structures can be accessed directly without
+        parsing the data that precedes them.</li>
+    <li>If data needs to be read linearly, then precede it with its length
+        rather than terminating it with a sentinel value.</li>
+    <li>When writing <code>char[]</code> strings, write only "invariant"
+        characters - avoid anything that is not common among all ASCII-
+        or EBCDIC-based encodings. This avoids incompatibilities and
+        real, heavyweight codepage conversions.
+        Even on the same platform, the default encoding may not always
+        be the same one, and every "non-invariant" character
+        may change.<br>
+        (The term "invariant characters" is from
+        <a href="http://www.unicode.org/unicode/reports/tr16/">
+        Unicode Technical Report 16 (UTF-EBCDIC)</a>.)</li>
+</ul>
+
+
+<h2>Platform-dependency of Binary Data Files</h2>
+
+<p>Data files with formats as described above should be portable among
+machines with the same set of relevant properties:</p>
+
+<ul>
+    <li>Byte ordering: If the data contains values other than byte arrays.<br>
+        Example: <code>uint16_t</code>, <code>int32_t</code>.</li>
+    <li>Character set family: Some data files contain <code>char[]</code>.
+        Such strings should contain only "invariant characters", but
+        are even so only portable among machines with the same character set
+        family, i.e., they must share for example the ASCII or EBCDIC
+        graphic characters.</li>
+    <li>Unicode Character size: Some data files contain <code>UChar[]</code>.
+        In principle, Unicode characters are stored using UTF-8, UTF-16, or UTF-32.
+        Thus, Unicode strings are directly compatible if the code unit size is the same.
+        ICU uses only UTF-16 at this point.</li>
+</ul>
+
+<p>All of these properties can be verified by checking the
+<code>UDataInfo</code> structure of the data, which is done
+best in a <code>UDataMemoryIsAcceptable()</code> function passed into
+the <code>udata_openChoice()</code> API function.</p>
+
+<p>If a data file is loaded on a machine with different relevant properties
+than the machine where the data file was generated, then the using
+code could adapt by detecting the differences and reformatting the
+data on the fly or in a copy in memory.
+This would improve portability of the data files but significantly
+decrease performance.</p>
+
+<p>"Relevant" properties are those that affect the portability of the
+data in the particular file.</p>
+
+<p>For example, a flat (memory-mapped) binary data file
+that contains 16-bit and 32-bit integers and is
+created for a typical, big-endian Unix machine, can be used
+on an OS/390 system or any other big-endian machine.<br>
+If the file also contains <code>char[]</code> strings,
+then it can be easily shared among all big-endian <em>and</em>
+ASCII-based machines, but not with (e.g.) an OS/390.<br>
+OS/390 and OS/400 systems, however, could easily share such
+a data file.</p>
+
+<p>To make sure that the relevant platform properties of
+the data file and the loading machine match, the
+<code>udata_openChoice()</code> API function should be used with a
+<code>UDataMemoryIsAcceptable()</code> function that checks for
+these properties.</p>
+
+<p>Some data file loading mechanisms prevent using data files generated on
+a different platform to begin with, especially data files packaged as DLLs
+(shared libraries).</p>
+
+
+<h2>Writing a binary data file</h2>
+
+<p>... Use <code>icu/source/tools/toolutil/unewdata.h|.c</code> to write data files,
+can include a copyright statement or other comment...</p>
+
+</body>
+
+</html>
