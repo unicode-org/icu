@@ -751,7 +751,7 @@ generateAlgorithmicData(UNewDataMemory *pData) {
         sizeof(AlgorithmicRange)+PREFIX_LENGTH_4
     };
 
-    static char jamo[]={
+    static char jamo[]=
         "HANGUL SYLLABLE \0"
 
         "G\0GG\0N\0D\0DD\0R\0M\0B\0BB\0"
@@ -764,7 +764,7 @@ generateAlgorithmicData(UNewDataMemory *pData) {
         "\0G\0GG\0GS\0N\0NJ\0NH\0D\0L\0LG\0LM\0"
         "LB\0LS\0LT\0LP\0LH\0M\0B\0BS\0"
         "S\0SS\0NG\0J\0C\0K\0T\0P\0H"
-    };
+    ;
 
     static AlgorithmicRange hangul={
         0xac00, 0xd7a3,
