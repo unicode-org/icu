@@ -394,14 +394,14 @@ static void TestMisc()
         if ((u_isbase(sampleNonBase[i])) ||
                 !(u_isbase(sampleBase[i])))
         {
-            log_err("Non-baseform char test error : %d or %d",(int32_t)sampleNonBase[i], (int32_t)sampleBase[i]);
+            log_err("Non-baseform char test error : U+%04x or U+%04x",(int32_t)sampleNonBase[i], (int32_t)sampleBase[i]);
         }
     }
     for (i = 0; i < 5; i++) {
       log_verbose("Testing for charcellwidth\n");
         if (u_charCellWidth(sampleChars[i]) != sampleCellWidth[i])
         {
-            log_err("Cell width char test error : %d  \n", (int32_t)sampleChars[i]);
+            log_err("Cell width char test error : U+%04x  \n", (int32_t)sampleChars[i]);
         }
     }
     for (i = 0; i < 4; i++) {
