@@ -222,6 +222,26 @@ _toTitle(UCaseProps *csp,
     return destIndex;
 }
 
+U_CFUNC int32_t
+ustr_toTitle(UCaseProps *csp,
+             UChar *dest, int32_t destCapacity,
+             const UChar *src, int32_t srcLength,
+             UBreakIterator *titleIter,
+             const char *locale,
+             UErrorCode *pErrorCode) {
+    UCaseContext csc={ NULL };
+    int32_t locCache;
+
+    csc.p=(void *)src;
+    csc.limit=srcLength;
+    locCache=0;
+
+    return _toTitle(csp,
+                    dest, destCapacity,
+                    src, &csc, srcLength,
+                    titleIter, locale, &locCache, pErrorCode);
+}
+
 #endif
 
 /* functions available in the common library (for unistr_case.cpp) */
@@ -262,26 +282,6 @@ ustr_toUpper(UCaseProps *csp,
                     dest, destCapacity,
                     src, &csc, 0, srcLength,
                     locale, &locCache, pErrorCode);
-}
-
-U_CFUNC int32_t
-ustr_toTitle(UCaseProps *csp,
-             UChar *dest, int32_t destCapacity,
-             const UChar *src, int32_t srcLength,
-             UBreakIterator *titleIter,
-             const char *locale,
-             UErrorCode *pErrorCode) {
-    UCaseContext csc={ NULL };
-    int32_t locCache;
-
-    csc.p=(void *)src;
-    csc.limit=srcLength;
-    locCache=0;
-
-    return _toTitle(csp,
-                    dest, destCapacity,
-                    src, &csc, srcLength,
-                    titleIter, locale, &locCache, pErrorCode);
 }
 
 U_CFUNC int32_t
