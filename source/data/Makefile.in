@@ -158,7 +158,7 @@ INDEX_FILES=$(BUILDDIR)/res_index.txt
 INDEX_RES_FILES=$(INDEX_FILES:$(BUILDDIR)/%.txt=$(BUILDDIR)/$(ICUDT)%.res)
 
 ## All generated files
-ALL_FILES = $(DAT_FILES) $(BRK_FILES) $(CNV_FILES) $(RES_FILES) $(INDEX_RES_FILES)
+ALL_FILES = $(DAT_FILES) $(CNV_FILES) $(BRK_FILES) $(RES_FILES) $(INDEX_RES_FILES)
 
 #####################################################
 # General data build rules
