@@ -52,9 +52,6 @@ typedef void * Mutex;
  * mistake which silently slips through the compiler!!  */
 
 
-/* Mutex data type. */
-typedef void *UMTX;
-
 /* Lock a mutex. Pass in NULL if you want the (ick) Single Global
    Mutex. */
 U_CAPI void  U_EXPORT2 umtx_lock   ( UMTX* mutex ); 
