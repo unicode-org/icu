@@ -128,7 +128,7 @@ UnicodeString* CompoundTransliterator::split(const UnicodeString& s,
  * Copy constructor.
  */
 CompoundTransliterator::CompoundTransliterator(const CompoundTransliterator& t) :
-    Transliterator(t), trans(0), count(0), filters(0) {
+    Transliterator(t), trans(0), filters(0), count(0) {
     *this = t;
 }
 
