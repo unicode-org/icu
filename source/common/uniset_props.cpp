@@ -1387,6 +1387,24 @@ const UnicodeSet* UnicodeSet::getInclusions(int32_t src, UErrorCode &status) {
 // Case folding API
 //----------------------------------------------------------------
 
+// add the result of a full case mapping to the set
+// use str as a temporary string to avoid constructing one
+static inline void
+addCaseMapping(UnicodeSet &set, int32_t result, const UChar *full, UnicodeString &str) {
+    if(result >= 0) {
+        if(result > UCASE_MAX_STRING_LENGTH) {
+            // add a single-code point case mapping
+            set.add(result);
+        } else {
+            // add a string case mapping from full with length result
+            str.setTo((UBool)FALSE, full, result);
+            set.add(str);
+        }
+    }
+    // result < 0: the code point mapped to itself, no need to add it
+    // see ucase.h
+}
+
 UnicodeSet& UnicodeSet::closeOver(int32_t attribute) {
     if ((attribute & USET_CASE) != 0) {
         UnicodeSet foldSet;
@@ -1410,38 +1428,60 @@ UnicodeSet& UnicodeSet::closeOver(int32_t attribute) {
         *this = foldSet;
     }
     else if ((attribute & USET_ADD_CASE_MAPPINGS)) {
-        UnicodeSet foldSet;
+        UnicodeSet foldSet(*this);
         UnicodeString str;
         UErrorCode status = U_ZERO_ERROR;
-        Locale root("");
-        BreakIterator *bi = BreakIterator::createWordInstance(root, status);
+        UCaseProps *csp = ucase_getSingleton(&status);
         if (U_SUCCESS(status)) {
             int32_t n = getRangeCount();
+            UChar32 result;
+            const UChar *full;
+            int32_t locCache = 0;
+
             for (int32_t i=0; i<n; ++i) {
                 UChar32 start = getRangeStart(i);
                 UChar32 end   = getRangeEnd(i);
+
                 for (UChar32 cp=start; cp<=end; ++cp) {
-                    str.setTo(cp);
-                    str.toLower(root);
-                    foldSet.add(str);
-                    str.toTitle(bi, root);
-                    foldSet.add(str);
-                    str.toUpper(root);
-                    foldSet.add(str);
+                    result = ucase_toFullLower(csp, cp, NULL, NULL, &full, "", &locCache);
+                    addCaseMapping(foldSet, result, full, str);
+
+                    result = ucase_toFullTitle(csp, cp, NULL, NULL, &full, "", &locCache);
+                    addCaseMapping(foldSet, result, full, str);
+
+                    result = ucase_toFullUpper(csp, cp, NULL, NULL, &full, "", &locCache);
+                    addCaseMapping(foldSet, result, full, str);
+
+                    result = ucase_toFullFolding(csp, cp, &full, 0);
+                    addCaseMapping(foldSet, result, full, str);
                 }
             }
             if (strings != NULL && strings->size() > 0) {
-                for (int32_t j=0; j<strings->size(); ++j) {
-                    str = * (const UnicodeString*) strings->elementAt(j);
-                    str.toLower(root);
-                    foldSet.add(str);
-                    str.toTitle(bi, root);
-                    foldSet.add(str);
-                    str.toUpper(root);
-                    foldSet.add(str);
+#if !UCONFIG_NO_BREAK_ITERATION
+                Locale root("");
+                BreakIterator *bi = BreakIterator::createWordInstance(root, status);
+#endif
+                if (U_SUCCESS(status)) {
+                    const UnicodeString *pStr;
+
+                    for (int32_t j=0; j<strings->size(); ++j) {
+                        pStr = (const UnicodeString *) strings->elementAt(j);
+                        (str = *pStr).toLower(root);
+                        foldSet.add(str);
+#if !UCONFIG_NO_BREAK_ITERATION
+                        (str = *pStr).toTitle(bi, root);
+                        foldSet.add(str);
+#endif
+                        (str = *pStr).toUpper(root);
+                        foldSet.add(str);
+                        (str = *pStr).foldCase();
+                        foldSet.add(str);
+                    }
                 }
+#if !UCONFIG_NO_BREAK_ITERATION
+                delete bi;
+#endif
             }
-            delete bi;
             *this = foldSet;
         }
     }
