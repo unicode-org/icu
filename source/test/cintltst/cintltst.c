@@ -87,6 +87,23 @@ int main(int argc, const char* const argv[])
 #ifdef CTST_LEAK_CHECK
         ctst_init();
 #endif
+
+        /* Check whether ICU will initialize without forcing the build data directory into
+         *  the ICU_DATA path.  Success here means either the data dll contains data, or that
+         *  this test program was run with ICU_DATA set externally.  Failure of this check
+         *  is normal when ICU data is not packaged into a shared library.
+         *
+         *  Whether or not this test succeeds, we want to cleanup and reinitialize
+         *  with a data path so that data loading from individual files can be tested.
+         */
+        u_init(&errorCode);
+        if (U_FAILURE(errorCode)) {
+            fprintf(stderr,
+                "#### Note:  ICU Init without build-specific setDataDirectory() failed.\n");
+        }
+        u_cleanup();
+        errorCode = U_ZERO_ERROR;
+
         /* Initialize ICU */
         ctest_setICU_DATA();    /* u_setDataDirectory() must happen Before u_init() */
         u_init(&errorCode);
