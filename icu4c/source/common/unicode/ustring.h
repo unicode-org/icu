@@ -75,7 +75,7 @@ u_strlen(const UChar *s);
  * A code point may occupy either one or two UChar code units.
  * Counting code points involves reading all code units.
  *
- * This functions is basically the inverse of the UTF_FWD_N() macro (see utf.h).
+ * This functions is basically the inverse of the U16_FWD_N() macro (see utf.h).
  *
  * @param s The input string.
  * @param length The number of UChar code units to be checked, or -1 to count all
