@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.176 2002/10/30 22:05:35 alan Exp $
+dnl $Id: configure.in,v 1.177 2002/11/01 19:12:24 grhoten-oss Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -831,21 +831,23 @@ dnl static constructors in C++ libs.  Hack around that here
 dnl by renaming some .c files to .cpp
 case "${host}" in
 	*-*-hpux*) 	
-		for file in samples/date/date \
-		  samples/cal/cal test/cintltst/cintltst \
-		  tools/makeconv/makeconv tools/genrb/genrb \
-		  tools/genrb/derb tools/genccode/genccode \
-		  tools/gencmn/gencmn tools/gencmn/decmn \
-		  tools/gencnval/gencnval tools/gennorm/gennorm \
-		  tools/gennames/gennames tools/gentest/gentest \
-		  tools/pkgdata/pkgdata tools/genprops/genprops
-		do
-		  if test -f $file.c; then
-		    mv $file.c $file.cpp
-		  else
-		    echo "# $file.c does not exist or is already renamed [warning]"
-		  fi
-		done
+		if test "$ac_cv_prog_gcc" != yes; then
+			for file in samples/date/date \
+			  samples/cal/cal test/cintltst/cintltst \
+			  tools/makeconv/makeconv tools/genrb/genrb \
+			  tools/genrb/derb tools/genccode/genccode \
+			  tools/gencmn/gencmn tools/gencmn/decmn \
+			  tools/gencnval/gencnval tools/gennorm/gennorm \
+			  tools/gennames/gennames tools/gentest/gentest \
+			  tools/pkgdata/pkgdata tools/genprops/genprops
+			do
+			  if test -f $file.c; then
+			    mv $file.c $file.cpp
+			  else
+			    echo "# $file.c does not exist or is already renamed [warning]"
+			  fi
+			done
+		fi
 	;;
 esac
 
