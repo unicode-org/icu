@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/stringprep/NFS4StringPrep.java,v $
- * $Date: 2003/08/27 21:14:23 $
- * $Revision: 1.4 $
+ * $Date: 2003/08/27 21:19:01 $
+ * $Revision: 1.5 $
  *
  *******************************************************************************
 */
@@ -42,40 +42,38 @@ public final class NFS4StringPrep {
     private StringPrep nfsmxp = null;
     private StringPrep nfsmxs = null;
     //singleton instance
-    private static NFS4StringPrep prep = null;
+    private static final NFS4StringPrep prep = new NFS4StringPrep();
     
 
-    private  NFS4StringPrep ()throws IOException{
+    private  NFS4StringPrep (){
+      try{
       
-      InputStream  nfscssFile = TestUtil.getDataStream(NFS4DataFileNames[0]);
-      nfscss = StringPrep.getInstance(nfscssFile);
-      nfscssFile.close();
-      
-      InputStream  nfscsiFile = TestUtil.getDataStream(NFS4DataFileNames[1]);
-      nfscsi = StringPrep.getInstance(nfscsiFile);
-      nfscsiFile.close();
-      
-      InputStream  nfscisFile = TestUtil.getDataStream(NFS4DataFileNames[2]);
-      nfscis = StringPrep.getInstance(nfscisFile);
-      nfscsiFile.close();
-      
-      InputStream  nfsmxpFile = TestUtil.getDataStream(NFS4DataFileNames[3]);
-      nfsmxp = StringPrep.getInstance(nfsmxpFile);
-      nfscsiFile.close();
-      
-      InputStream  nfsmxsFile = TestUtil.getDataStream(NFS4DataFileNames[4]);
-      nfsmxs = StringPrep.getInstance(nfsmxsFile);
-      nfsmxsFile.close();
+          InputStream  nfscssFile = TestUtil.getDataStream(NFS4DataFileNames[0]);
+          nfscss = StringPrep.getInstance(nfscssFile);
+          nfscssFile.close();
+          
+          InputStream  nfscsiFile = TestUtil.getDataStream(NFS4DataFileNames[1]);
+          nfscsi = StringPrep.getInstance(nfscsiFile);
+          nfscsiFile.close();
+          
+          InputStream  nfscisFile = TestUtil.getDataStream(NFS4DataFileNames[2]);
+          nfscis = StringPrep.getInstance(nfscisFile);
+          nfscsiFile.close();
+          
+          InputStream  nfsmxpFile = TestUtil.getDataStream(NFS4DataFileNames[3]);
+          nfsmxp = StringPrep.getInstance(nfsmxpFile);
+          nfscsiFile.close();
+          
+          InputStream  nfsmxsFile = TestUtil.getDataStream(NFS4DataFileNames[4]);
+          nfsmxs = StringPrep.getInstance(nfsmxsFile);
+          nfsmxsFile.close();
+      }catch(IOException e){
+          throw new RuntimeException(e.toString());
+      }
       
     }
     
-    public static synchronized final NFS4StringPrep getInstance()
-                        throws IOException{
-        if(prep==null){
-            prep = new NFS4StringPrep();
-        } 
-        return prep;
-    }
+
     
     private static byte[] prepare(byte[] src, StringPrep prep)
                 throws StringPrepParseException, UnsupportedEncodingException{
@@ -86,8 +84,7 @@ public final class NFS4StringPrep {
     }
     
     public static byte[] cs_prepare(byte[] src, boolean caseInsensitive)
-                         throws IOException, StringPrepParseException, UnsupportedEncodingException{
-        NFS4StringPrep prep = getInstance();
+                         throws StringPrepParseException, UnsupportedEncodingException{
         if(caseInsensitive){
             return prepare(src, prep.nfscsi);
         }else{
@@ -97,7 +94,6 @@ public final class NFS4StringPrep {
     
     public static byte[] cis_prepare(byte[] src)
                          throws IOException, StringPrepParseException, UnsupportedEncodingException{
-        NFS4StringPrep prep = getInstance();
         return prepare(src, prep.nfscis);
     }  
     
@@ -144,7 +140,7 @@ public final class NFS4StringPrep {
         String s = new String(src, "UTF-8");
         int index = s.indexOf(AT_SIGN);
         StringBuffer out = new StringBuffer();
-        NFS4StringPrep prep = getInstance();
+
         if(index > -1){
             /* special prefixes must not be followed by suffixes! */
             String prefixString = s.substring(0,index);
