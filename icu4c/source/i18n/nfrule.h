@@ -91,7 +91,7 @@ private:
 
 private:
     int64_t baseValue;
-    int16_t radix;
+    int32_t radix;
     int16_t exponent;
     UnicodeString ruleText;
     NFSubstitution* sub1;
