@@ -373,59 +373,54 @@ parseConverterOptions(const char *inName,
     *cnvName=0;
 
     /* parse options. No more name copying should occur. */
-    if (c == UCNV_OPTION_SEP_CHAR) {
-        ++inName;
-        for(;;) {
-            /* inName is behind an option separator */
-            if(uprv_strncmp(inName, "locale=", 7)==0) {
-                /* do not modify locale itself in case we have multiple locale options */
-                char *dest=locale;
+    while((c=*inName)!=0) {
+        if(c==UCNV_OPTION_SEP_CHAR) {
+            ++inName;
+        }
 
-                /* copy the locale option value */
-                inName+=7;
-                len=0;
-                for(;;) {
-                    c=*inName;
-                    if(c!=0) {
-                        len++;
-                        inName++;
-                        if (++len>=ULOC_FULLNAME_CAPACITY) {
-                            *err = U_ILLEGAL_ARGUMENT_ERROR;    /* bad name */
-                            *dest=0;
-                            return;
-                        }
-                        if(c!=UCNV_OPTION_SEP_CHAR) {
-                            *dest++=c;
-                        } else {
-                            *dest=0;
-                            break;
-                        }
-                    } else {
-                        *dest=0;
-                        return;
-                    }
+        /* inName is behind an option separator */
+        if(uprv_strncmp(inName, "locale=", 7)==0) {
+            /* do not modify locale itself in case we have multiple locale options */
+            char *dest=locale;
+
+            /* copy the locale option value */
+            inName+=7;
+            len=0;
+            while((c=*inName)!=0 && c!=UCNV_OPTION_SEP_CHAR) {
+                ++inName;
+
+                if(++len>=ULOC_FULLNAME_CAPACITY) {
+                    *err=U_ILLEGAL_ARGUMENT_ERROR;    /* bad name */
+                    *locale=0;
+                    return;
                 }
-            } else if(uprv_strncmp(inName, "version=", 8)==0) {
-                /* copy the version option value into bits 3..0 of *pFlags */
-                inName+=8;
-                c=*inName;
-                *pFlags=0;
+
+                *dest++=c;
+            }
+            *dest=0;
+        } else if(uprv_strncmp(inName, "version=", 8)==0) {
+            /* copy the version option value into bits 3..0 of *pFlags */
+            inName+=8;
+            c=*inName;
+            if(c==0) {
+                *pFlags&=~UCNV_OPTION_VERSION;
+                return;
+            } else if((uint8_t)(c-'0')<10) {
+                *pFlags=(*pFlags&~UCNV_OPTION_VERSION)|(uint32_t)(c-'0');
+                ++inName;
+            }
+        } else if(uprv_strncmp(inName, "swaplfnl", 8)==0) {
+            inName+=8;
+            *pFlags|=UCNV_OPTION_SWAP_LFNL;
+        /* add processing for new options here with another } else if(uprv_strncmp(inName, "option-name=", XX)==0) { */
+        } else {
+            /* ignore any other options until we define some */
+            do {
+                c=*inName++;
                 if(c==0) {
                     return;
-                } else if((uint8_t)(c-'0')<10) {
-                    *pFlags=c-'0';
-                    ++inName;
                 }
-            /* add processing for new options here with another } else if(uprv_strncmp(inName, "option-name=", XX)==0) { */
-            } else {
-                /* ignore any other options until we define some */
-                do {
-                    c=*inName++;
-                    if(c==0) {
-                        return;
-                    }
-                } while(c!=UCNV_OPTION_SEP_CHAR);
-            }
+            } while(c!=UCNV_OPTION_SEP_CHAR);
         }
     }
 }
@@ -592,6 +587,7 @@ ucnv_createConverterFromSharedData(UConverterSharedData *mySharedConverterData, 
     /* initialize the converter */
     uprv_memset(myUConverter, 0, sizeof(UConverter));
     myUConverter->sharedData = mySharedConverterData;
+    myUConverter->options = options;
     myUConverter->mode = UCNV_SI;
     myUConverter->fromCharErrorBehaviour = (UConverterToUCallback) UCNV_TO_U_CALLBACK_SUBSTITUTE;
     myUConverter->fromUCharErrorBehaviour = (UConverterFromUCallback) UCNV_FROM_U_CALLBACK_SUBSTITUTE;
@@ -641,13 +637,20 @@ ucnv_data_unFlattenClone(UDataMemory *pData, UErrorCode *status)
     /* copy initial values from the static structure for this type */
     uprv_memcpy(data, converterData[type], sizeof(UConverterSharedData));
 
-    /* ### it would be much more efficient if the table were a direct member, not a pointer */
+    /*
+     * It would be much more efficient if the table were a direct member, not a pointer.
+     * However, that would add to the size of all UConverterSharedData objects
+     * even if they do not use this table (especially algorithmic ones).
+     * If this changes, then the static templates from converterData[type]
+     * need more entries.
+     */
     data->table = (UConverterTable *)uprv_malloc(sizeof(UConverterTable));
     if(data->table == NULL) {
         uprv_free(data);
         *status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
+    uprv_memset(data->table, 0, sizeof(UConverterTable));
     
     data->staticData = source;
     
