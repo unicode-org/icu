@@ -1287,24 +1287,46 @@ u_growBufferFromStatic(void *context,
 
 /* NUL-termination of strings ----------------------------------------------- */
 
+/**
+ * NUL-terminate a string no matter what its type.
+ * Set warning and error codes accordingly.
+ */
+#define __TERMINATE_STRING(dest, destCapacity, length, pErrorCode)      \
+    if(pErrorCode!=NULL && U_SUCCESS(*pErrorCode)) {                    \
+        /* not a public function, so no complete argument checking */   \
+                                                                        \
+        if(length<destCapacity) {                                       \
+            /* NUL-terminate the string, the NUL fits */                \
+            dest[length]=0;                                             \
+        } else if(length==destCapacity) {                               \
+            /* unable to NUL-terminate, but the string itself fit - set a warning code */ \
+            *pErrorCode=U_STRING_NOT_TERMINATED_WARNING;                \
+        } else /* length>destCapacity */ {                              \
+            /* even the string itself did not fit - set an error code */ \
+            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;                        \
+        }                                                               \
+    }
+
 U_CAPI int32_t U_EXPORT2
 u_terminateUChars(UChar *dest, int32_t destCapacity, int32_t length, UErrorCode *pErrorCode) {
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
-        return length;
-    }
+    __TERMINATE_STRING(dest, destCapacity, length, pErrorCode);
+    return length;
+}
 
-    /* not a public function, so no complete argument checking */
+U_CAPI int32_t U_EXPORT2
+u_terminateChars(char *dest, int32_t destCapacity, int32_t length, UErrorCode *pErrorCode) {
+    __TERMINATE_STRING(dest, destCapacity, length, pErrorCode);
+    return length;
+}
 
-    if(length<destCapacity) {
-        /* NUL-terminate the string, the NUL fits */
-        dest[length]=0;
-    } else if(length==destCapacity) {
-        /* unable to NUL-terminate, but the string itself fit - set a warning code */
-        *pErrorCode=U_STRING_NOT_TERMINATED_WARNING;
-    } else /* length>destCapacity */ {
-        /* even the string itself did not fit - set an error code */
-        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-    }
+U_CAPI int32_t U_EXPORT2
+u_terminateUChar32s(UChar32 *dest, int32_t destCapacity, int32_t length, UErrorCode *pErrorCode) {
+    __TERMINATE_STRING(dest, destCapacity, length, pErrorCode);
+    return length;
+}
 
+U_CAPI int32_t U_EXPORT2
+u_terminateWChars(wchar_t *dest, int32_t destCapacity, int32_t length, UErrorCode *pErrorCode) {
+    __TERMINATE_STRING(dest, destCapacity, length, pErrorCode);
     return length;
 }
