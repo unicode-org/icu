@@ -29,6 +29,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 typedef struct UCMSubchar {
     const char *name;
@@ -48,13 +49,32 @@ typedef struct CCSIDStateTable {
     const char *table;
 } CCSIDStateTable;
 
+/*Year when the ucm files were produced using this tool*/
+#define YEAR "2000"
+/**/
+#define japanesePCDBCSStates  "<icu:state>                   0-ff:2, 81-9f:1, a0-fc:1\n"\
+                              "<icu:state>                   40-7e, 80-fc\n"\
+                              "<icu:state>\n"
+
 static const CCSIDStateTable
 knownStateTables[]={
-    367,   "<icu:state>                   0-7f\n",
-
-    941,   "<icu:state>                   0-80:2, 81-fe:1, ff:2\n"
+    
+    301,  "<icu:state>                   0-ff:2, 81-9f:1, e0-fc:1\n"
            "<icu:state>                   40-7e, 80-fc\n"
            "<icu:state>\n",
+    367,   "<icu:state>                   0-7f\n",
+    
+    927, japanesePCDBCSStates,
+    
+    926, japanesePCDBCSStates,
+
+    928, japanesePCDBCSStates,
+    
+    932, "<icu:state>                   0-7f,80,81-9f:1,a0-df,fd-ff, e0-fc:1\n"
+         "<icu:state>                   40-7e, 80-fc\n",
+
+
+    941,  japanesePCDBCSStates,
 
     942,   "<icu:state>                   0-80, 81-9f:1, a0-df, e0-fc:1, fd-ff\n"
            "<icu:state>                   40-7e, 80-fc\n",
@@ -65,11 +85,36 @@ knownStateTables[]={
     944,   "<icu:state>                   0-80, 81-bf:1, c0-ff\n"
            "<icu:state>                   40-7e, 80-fe\n",
 
+    946,   "<icu:state>                   0-80, 81-fb:1,fc:2,fd-ff\n"
+           "<icu:state>                   40-7e, 80-fe\n"
+           "<icu:state>                   80-fe.u,fc", 
+
+    947,   "<icu:state>                   0-7f, 80-fe:1\n"
+           "<icu:state>                   40-7e, 80-fe\n",
+    
+    948,   "<icu:state>                   0-80, 81-fb:1,fc:2,fd-fe\n"
+           "<icu:state>                   40-7e, 80-fe\n"
+           "<icu:state>                   80-fe.u,fc\n", 
+
     949,   "<icu:state>                   0-84, 8f-fe:1\n"
            "<icu:state>                   40-7e, 80-fe\n",
 
     950,   "<icu:state>                   0-7f, 81-fe:1\n"
            "<icu:state>                   40-7e, 81-fe\n",
+
+    954,   "<icu:state>                   0-8d, 8e:2, 8f:3, 90-9f, a1-fe:1\n"
+           "<icu:state>                   a1-fe\n"
+           "<icu:state>                   a1-e4\n"
+           "<icu:state>                   a1-fe:1, a1:4\n"
+           "<icu:state>                   a1-fe.u\n",
+
+    955,   "<icu:state>                   0-20:2, 21-7e:1, 7f-ff:2\n"
+           "<icu:state>                   21-7e\n"
+           "<icu:state>\n",
+    
+    963,   "<icu:state>                   0-20:2, 21-7e:1, 7f-ff:2\n"
+           "<icu:state>                   21-7e\n"
+           "<icu:state>\n",
 
     964,   "<icu:state>                   0-8d, 8e:2, 90-9f, a1-fe:1, aa-c1:5, c3:5, fe:5\n"
            "<icu:state>                   a1-fe\n"
@@ -86,31 +131,63 @@ knownStateTables[]={
 
     1363,  "<icu:state>                   0-7f, 81-fe:1\n"
            "<icu:state>                   40-7e, 80-fe\n",
+    1350,  "<icu:state>                   0-8d, 8e:2, 8f:3, 90-9f, a1-fe:1\n"
+           "<icu:state>                   a1-fe\n"
+           "<icu:state>                   a1-e4\n"
+           "<icu:state>                   a1-fe:1, a1:4, a3-a5:4, a8:4, ac-af:4, ee-f2:4\n"
+           "<icu:state>                   a1-fe.u\n",
 
+    1351,  "<icu:state>                   0-ff:2, 81-9f:1, e0-fc:1\n"
+           "<icu:state>                   40-7e, 80-fc\n"
+           "<icu:state>\n",
+    
     1370,  "<icu:state>                   0-80, 81-fe:1\n"
            "<icu:state>                   40-7e, 81-fe\n",
+
+    1381,  "<icu:state>                   0-84, 8c-fe:1\n"
+           "<icu:state>                   a1-fe\n",
 
     1383,  "<icu:state>                   0-9f, a1-fe:1\n"
            "<icu:state>                   a1-fe\n",
 
+    1385,  "<icu:state>                   0-ff:2,81-fe:1\n"
+           "<icu:state>                   40-7e, 80-fe\n"
+           "<icu:state>\n",
+
     1386,  "<icu:state>                   0-7f, 81-fe:1\n"
            "<icu:state>                   40-7e, 80-fe\n",
 
+    5039,   "<icu:state>                   0-80, 81-9f:1, a0-df, e0-fc:1, fd-ff\n"
+           "<icu:state>                   40-7e, 80-fc\n",
+    
     5050,  "<icu:state>                   0-8d, 8e:2, 8f:3, 90-9f, a1-fe:1\n"
            "<icu:state>                   a1-fe\n"
            "<icu:state>                   a1-e4\n"
            "<icu:state>                   a1-fe:1, a1:4, a3-af:4, b6:4, d6:4, da-db:4, ed-f2:4\n"
            "<icu:state>                   a1-fe.u\n",
+    5067,  "<icu:state>                   0-ff:2, 21-7e:1\n"
+           "<icu:state>                   21-7e\n"
+           "<icu:state>\n",
+    
+    5478,  "<icu:state>                   0-ff:2, 21-7e:1\n"
+           "<icu:state>                   21-7e\n"
+           "<icu:state>\n",                
 
     21427, "<icu:state>                   0-80:2, 81-fe:1, ff:2\n"
            "<icu:state>                   40-7e, 80-fe\n"
            "<icu:state>\n",
+    25546, "<icu:state>                   0-7f, e:1.s, f:0.s\n"
+           "<icu:state>                   initial, 0-20:3, e:1.s, f:0.s, 21-7e:2, 7f-ff:3\n"
+           "<icu:state>                   0-20:1.i, 21-7e:1., 7f-ff:1.i\n"
+           "<icu:state>                   0-ff:1.i\n",
 
     33722, "<icu:state>                   0-8d, 8e:2, 8f:3, 90-9f, a1-fe:1\n"
            "<icu:state>                   a1-fe\n"
            "<icu:state>                   a1-e4\n"
            "<icu:state>                   a1-fe:1, a1:4, a3-af:4, b6:4, d6:4, da-db:4, ed-f2:4\n"
            "<icu:state>                   a1-fe.u\n"
+
+
 };
 
 typedef struct Mapping {
@@ -817,8 +894,10 @@ processTable(const char *arg) {
     filename[length++]=toupper(basename[14]);  /* last 3 suffix characters */
     filename[length++]=toupper(basename[15]);
     filename[length++]=toupper(basename[16]);
+    filename[length++]='-';
     filename[length]=0;
-
+    /*concatenate year*/
+    strcat(filename,YEAR);
     /* find the subchar if still necessary - necessary before merging for correct |2 */
     if(subchar==0 && !getSubchar(filename+4)) {
         fprintf(stderr, "warning: missing subchar in \"%s\" (CCSID=0x%04X)\n", filename, ccsid);
